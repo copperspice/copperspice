@@ -53,6 +53,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 
    virtual QList<QVideoFrame::PixelFormat> supportedPixelFormats(
       QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle) const = 0;
+
    virtual bool isFormatSupported(const QVideoSurfaceFormat &format) const;
    virtual QVideoSurfaceFormat nearestFormat(const QVideoSurfaceFormat &format) const;
 
@@ -77,8 +78,8 @@ class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
    MULTI_CS_SIGNAL_1(Public, void supportedFormatsChanged())
    MULTI_CS_SIGNAL_2(supportedFormatsChanged)
 
-   MULTI_CS_SIGNAL_1(Public, void nativeResolutionChanged(const QSize &arg1))
-   MULTI_CS_SIGNAL_2(nativeResolutionChanged, arg1)
+   MULTI_CS_SIGNAL_1(Public, void nativeResolutionChanged(const QSize &resolution))
+   MULTI_CS_SIGNAL_2(nativeResolutionChanged, resolution)
 
  protected:
    QScopedPointer<QAbstractVideoSurfacePrivate> d_ptr;

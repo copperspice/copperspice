@@ -46,7 +46,7 @@ public:
     virtual QList<int> supportedSampleRates(const QAudioEncoderSettings &settings, bool *continuous = nullptr) const = 0;
 
     virtual QAudioEncoderSettings audioSettings() const = 0;
-    virtual void setAudioSettings(const QAudioEncoderSettings&) = 0;
+    virtual void setAudioSettings(const QAudioEncoderSettings &settings) = 0;
 
 protected:
     explicit QAudioEncoderSettingsControl(QObject *parent = nullptr);

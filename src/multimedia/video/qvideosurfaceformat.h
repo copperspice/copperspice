@@ -56,13 +56,13 @@ class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
    QVideoSurfaceFormat(const QSize &size, QVideoFrame::PixelFormat pixelFormat,
       QAbstractVideoBuffer::HandleType handleType = QAbstractVideoBuffer::NoHandle);
 
-   QVideoSurfaceFormat(const QVideoSurfaceFormat &format);
+   QVideoSurfaceFormat(const QVideoSurfaceFormat &other);
    ~QVideoSurfaceFormat();
 
-   QVideoSurfaceFormat &operator =(const QVideoSurfaceFormat &format);
+   QVideoSurfaceFormat &operator =(const QVideoSurfaceFormat &other);
 
-   bool operator ==(const QVideoSurfaceFormat &format) const;
-   bool operator !=(const QVideoSurfaceFormat &format) const;
+   bool operator ==(const QVideoSurfaceFormat &other) const;
+   bool operator !=(const QVideoSurfaceFormat &other) const;
 
    bool isValid() const;
 
@@ -87,7 +87,7 @@ class Q_MULTIMEDIA_EXPORT QVideoSurfaceFormat
 
    QSize pixelAspectRatio() const;
    void setPixelAspectRatio(const QSize &ratio);
-   void setPixelAspectRatio(int width, int height);
+   void setPixelAspectRatio(int horizontal, int vertical);
 
    YCbCrColorSpace yCbCrColorSpace() const;
    void setYCbCrColorSpace(YCbCrColorSpace colorSpace);

@@ -73,8 +73,8 @@ class Q_MULTIMEDIA_EXPORT QAudioInput : public QObject
    QAudio::Error error() const;
    QAudio::State state() const;
 
-   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State state))
+   MULTI_CS_SIGNAL_2(stateChanged, state)
 
    MULTI_CS_SIGNAL_1(Public, void notify())
    MULTI_CS_SIGNAL_2(notify)

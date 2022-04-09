@@ -39,8 +39,8 @@ class Q_MULTIMEDIA_EXPORT QCameraCaptureDestinationControl : public QMediaContro
    virtual QCameraImageCapture::CaptureDestinations captureDestination() const = 0;
    virtual void setCaptureDestination(QCameraImageCapture::CaptureDestinations destination) = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void captureDestinationChanged(QCameraImageCapture::CaptureDestinations un_named_arg1))
-   MULTI_CS_SIGNAL_2(captureDestinationChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void captureDestinationChanged(QCameraImageCapture::CaptureDestinations destination))
+   MULTI_CS_SIGNAL_2(captureDestinationChanged, destination)
 
  protected:
    explicit QCameraCaptureDestinationControl(QObject *parent = nullptr);

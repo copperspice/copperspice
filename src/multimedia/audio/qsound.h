@@ -44,7 +44,7 @@ class Q_MULTIMEDIA_EXPORT QSound : public QObject
 
    int loops() const;
    int loopsRemaining() const;
-   void setLoops(int);
+   void setLoops(int count);
    QString fileName() const;
 
    bool isFinished() const;

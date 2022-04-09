@@ -45,8 +45,8 @@ class Q_MULTIMEDIA_EXPORT QCameraImageCaptureControl : public QMediaControl
    virtual int capture(const QString &fileName) = 0;
    virtual void cancelCapture() = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void readyForCaptureChanged(bool un_named_arg1))
-   MULTI_CS_SIGNAL_2(readyForCaptureChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void readyForCaptureChanged(bool ready))
+   MULTI_CS_SIGNAL_2(readyForCaptureChanged, ready)
 
    MULTI_CS_SIGNAL_1(Public, void imageExposed(int id))
    MULTI_CS_SIGNAL_2(imageExposed, id)

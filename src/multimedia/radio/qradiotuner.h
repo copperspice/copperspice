@@ -98,7 +98,7 @@ class Q_MULTIMEDIA_EXPORT QRadioTuner : public QMediaObject
 
     Band band() const;
 
-    bool isBandSupported(Band b) const;
+    bool isBandSupported(Band band) const;
 
     int frequency() const;
     int frequencyStep(Band band) const;

@@ -225,9 +225,9 @@ double QCameraExposure::exposureCompensation() const
    return d_func()->actualExposureParameter<double>(QCameraExposureControl::ExposureCompensation, 0.0);
 }
 
-void QCameraExposure::setExposureCompensation(double ev)
+void QCameraExposure::setExposureCompensation(double value)
 {
-   d_func()->setExposureParameter<double>(QCameraExposureControl::ExposureCompensation, ev);
+   d_func()->setExposureParameter<double>(QCameraExposureControl::ExposureCompensation, value);
 }
 
 QCameraExposure::MeteringMode QCameraExposure::meteringMode() const
@@ -407,14 +407,14 @@ void QCameraExposure::setAutoShutterSpeed()
    d_func()->resetExposureParameter(QCameraExposureControl::ShutterSpeed);
 }
 
-void QCameraExposure::_q_exposureParameterChanged(int un_named_arg1)
+void QCameraExposure::_q_exposureParameterChanged(int value)
 {
    Q_D(QCameraExposure);
-   d->_q_exposureParameterChanged(un_named_arg1);
+   d->_q_exposureParameterChanged(value);
 }
 
-void QCameraExposure::_q_exposureParameterRangeChanged(int un_named_arg1)
+void QCameraExposure::_q_exposureParameterRangeChanged(int value)
 {
    Q_D(QCameraExposure);
-   d->_q_exposureParameterRangeChanged(un_named_arg1);
+   d->_q_exposureParameterRangeChanged(value);
 }

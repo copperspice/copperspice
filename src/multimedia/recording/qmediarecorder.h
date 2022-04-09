@@ -154,11 +154,10 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
 
    void setAudioSettings(const QAudioEncoderSettings &audioSettings);
    void setVideoSettings(const QVideoEncoderSettings &videoSettings);
-   void setContainerFormat(const QString &container);
+   void setContainerFormat(const QString &format);
 
    void setEncodingSettings(const QAudioEncoderSettings &audioSettings,
-      const QVideoEncoderSettings &videoSettings = QVideoEncoderSettings(),
-      const QString &containerMimeType = QString());
+      const QVideoEncoderSettings &videoSettings = QVideoEncoderSettings(), const QString &mimeType = QString());
 
    bool isMetaDataAvailable() const;
    bool isMetaDataWritable() const;

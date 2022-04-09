@@ -99,7 +99,7 @@ class Q_MULTIMEDIA_EXPORT QCameraImageCapture : public QObject, public QMediaBin
    CaptureDestinations captureDestination() const;
    void setCaptureDestination(CaptureDestinations destination);
 
-   MULTI_CS_SLOT_1(Public, int capture(const QString &location = QString()))
+   MULTI_CS_SLOT_1(Public, int capture(const QString &fileName = QString()))
    MULTI_CS_SLOT_2(capture)
 
    MULTI_CS_SLOT_1(Public, void cancelCapture())
@@ -108,14 +108,14 @@ class Q_MULTIMEDIA_EXPORT QCameraImageCapture : public QObject, public QMediaBin
    MULTI_CS_SIGNAL_1(Public, void error(int id, QCameraImageCapture::Error error, const QString &errorString))
    MULTI_CS_SIGNAL_OVERLOAD(error, (int, QCameraImageCapture::Error, const QString &), id, error, errorString)
 
-   MULTI_CS_SIGNAL_1(Public, void readyForCaptureChanged(bool un_named_arg1))
-   MULTI_CS_SIGNAL_2(readyForCaptureChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void readyForCaptureChanged(bool ready))
+   MULTI_CS_SIGNAL_2(readyForCaptureChanged, ready)
 
-   MULTI_CS_SIGNAL_1(Public, void bufferFormatChanged(QVideoFrame::PixelFormat un_named_arg1))
-   MULTI_CS_SIGNAL_2(bufferFormatChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void bufferFormatChanged(QVideoFrame::PixelFormat format))
+   MULTI_CS_SIGNAL_2(bufferFormatChanged, format)
 
-   MULTI_CS_SIGNAL_1(Public, void captureDestinationChanged(QCameraImageCapture::CaptureDestinations un_named_arg1))
-   MULTI_CS_SIGNAL_2(captureDestinationChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void captureDestinationChanged(QCameraImageCapture::CaptureDestinations destination))
+   MULTI_CS_SIGNAL_2(captureDestinationChanged, destination)
 
    MULTI_CS_SIGNAL_1(Public, void imageExposed(int id))
    MULTI_CS_SIGNAL_2(imageExposed, id)
@@ -126,14 +126,14 @@ class Q_MULTIMEDIA_EXPORT QCameraImageCapture : public QObject, public QMediaBin
    MULTI_CS_SIGNAL_1(Public, void imageMetadataAvailable(int id, const QString &key, const QVariant &value))
    MULTI_CS_SIGNAL_2(imageMetadataAvailable, id, key, value)
 
-   MULTI_CS_SIGNAL_1(Public, void imageAvailable(int id, const QVideoFrame &image))
-   MULTI_CS_SIGNAL_2(imageAvailable, id, image)
+   MULTI_CS_SIGNAL_1(Public, void imageAvailable(int id, const QVideoFrame &buffer))
+   MULTI_CS_SIGNAL_2(imageAvailable, id, buffer)
 
    MULTI_CS_SIGNAL_1(Public, void imageSaved(int id, const QString &fileName))
    MULTI_CS_SIGNAL_2(imageSaved, id, fileName)
 
  protected:
-   bool setMediaObject(QMediaObject *) override;
+   bool setMediaObject(QMediaObject *mediaObject) override;
    QCameraImageCapturePrivate *d_ptr;
 
  private:

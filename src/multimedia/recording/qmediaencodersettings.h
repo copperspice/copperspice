@@ -49,10 +49,10 @@ class Q_MULTIMEDIA_EXPORT QAudioEncoderSettings
    bool isNull() const;
 
    QMultimedia::EncodingMode encodingMode() const;
-   void setEncodingMode(QMultimedia::EncodingMode);
+   void setEncodingMode(QMultimedia::EncodingMode mode);
 
    QString codec() const;
-   void setCodec(const QString &codec);
+   void setCodec(const QString &codecName);
 
    int bitRate() const;
    void setBitRate(int bitrate);
@@ -91,13 +91,13 @@ class Q_MULTIMEDIA_EXPORT QVideoEncoderSettings
    bool isNull() const;
 
    QMultimedia::EncodingMode encodingMode() const;
-   void setEncodingMode(QMultimedia::EncodingMode);
+   void setEncodingMode(QMultimedia::EncodingMode mode);
 
    QString codec() const;
-   void setCodec(const QString &);
+   void setCodec(const QString &codecName);
 
    QSize resolution() const;
-   void setResolution(const QSize &);
+   void setResolution(const QSize &resolution);
    void setResolution(int width, int height);
 
    qreal frameRate() const;
@@ -134,10 +134,10 @@ class Q_MULTIMEDIA_EXPORT QImageEncoderSettings
    bool isNull() const;
 
    QString codec() const;
-   void setCodec(const QString &);
+   void setCodec(const QString &codecName);
 
    QSize resolution() const;
-   void setResolution(const QSize &);
+   void setResolution(const QSize &resolution);
    void setResolution(int width, int height);
 
    QMultimedia::EncodingQuality quality() const;

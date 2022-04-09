@@ -45,11 +45,11 @@ class Q_MULTIMEDIA_EXPORT QCameraZoomControl : public QMediaControl
 
    virtual void zoomTo(qreal optical, qreal digital) = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void maximumOpticalZoomChanged(qreal un_named_arg1))
-   MULTI_CS_SIGNAL_2(maximumOpticalZoomChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void maximumOpticalZoomChanged(qreal opticalZoom))
+   MULTI_CS_SIGNAL_2(maximumOpticalZoomChanged, opticalZoom)
 
-   MULTI_CS_SIGNAL_1(Public, void maximumDigitalZoomChanged(qreal un_named_arg1))
-   MULTI_CS_SIGNAL_2(maximumDigitalZoomChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void maximumDigitalZoomChanged(qreal digitalZoom))
+   MULTI_CS_SIGNAL_2(maximumDigitalZoomChanged, digitalZoom)
 
    MULTI_CS_SIGNAL_1(Public, void requestedOpticalZoomChanged(qreal opticalZoom))
    MULTI_CS_SIGNAL_2(requestedOpticalZoomChanged, opticalZoom)

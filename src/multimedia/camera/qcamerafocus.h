@@ -123,7 +123,7 @@ class Q_MULTIMEDIA_EXPORT QCameraFocus : public QObject
 
    QCameraFocus::FocusPointMode focusPointMode() const;
    void setFocusPointMode(QCameraFocus::FocusPointMode mode);
-   bool isFocusPointModeSupported(QCameraFocus::FocusPointMode) const;
+   bool isFocusPointModeSupported(QCameraFocus::FocusPointMode mode) const;
    QPointF customFocusPoint() const;
    void setCustomFocusPoint(const QPointF &point);
 
@@ -136,18 +136,18 @@ class Q_MULTIMEDIA_EXPORT QCameraFocus : public QObject
 
    void zoomTo(double opticalZoom, double digitalZoom);
 
-   MULTI_CS_SIGNAL_1(Public, void opticalZoomChanged(double un_named_arg1))
-   MULTI_CS_SIGNAL_2(opticalZoomChanged, un_named_arg1)
-   MULTI_CS_SIGNAL_1(Public, void digitalZoomChanged(double un_named_arg1))
-   MULTI_CS_SIGNAL_2(digitalZoomChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void opticalZoomChanged(double value))
+   MULTI_CS_SIGNAL_2(opticalZoomChanged, value)
+   MULTI_CS_SIGNAL_1(Public, void digitalZoomChanged(double value))
+   MULTI_CS_SIGNAL_2(digitalZoomChanged, value)
 
    MULTI_CS_SIGNAL_1(Public, void focusZonesChanged())
    MULTI_CS_SIGNAL_2(focusZonesChanged)
 
-   MULTI_CS_SIGNAL_1(Public, void maximumOpticalZoomChanged(double un_named_arg1))
-   MULTI_CS_SIGNAL_2(maximumOpticalZoomChanged, un_named_arg1)
-   MULTI_CS_SIGNAL_1(Public, void maximumDigitalZoomChanged(double un_named_arg1))
-   MULTI_CS_SIGNAL_2(maximumDigitalZoomChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void maximumOpticalZoomChanged(double value))
+   MULTI_CS_SIGNAL_2(maximumOpticalZoomChanged, value)
+   MULTI_CS_SIGNAL_1(Public, void maximumDigitalZoomChanged(double value))
+   MULTI_CS_SIGNAL_2(maximumDigitalZoomChanged, value)
 
  private:
    QCameraFocus(QCamera *camera);

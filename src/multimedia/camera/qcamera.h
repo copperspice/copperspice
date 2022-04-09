@@ -199,7 +199,7 @@ class Q_MULTIMEDIA_EXPORT QCamera : public QMediaObject
    }
 
    QCamera::LockStatus lockStatus() const;
-   QCamera::LockStatus lockStatus(QCamera::LockType lock) const;
+   QCamera::LockStatus lockStatus(QCamera::LockType lockType) const;
 
    MULTI_CS_SLOT_1(Public, void setCaptureMode(QCamera::CaptureModes mode))
    MULTI_CS_SLOT_2(setCaptureMode)
@@ -229,17 +229,17 @@ class Q_MULTIMEDIA_EXPORT QCamera : public QMediaObject
    MULTI_CS_SLOT_OVERLOAD(unlock, (QCamera::LockTypes))
 
 
-   MULTI_CS_SIGNAL_1(Public, void captureModeChanged(QCamera::CaptureModes un_named_arg1))
-   MULTI_CS_SIGNAL_2(captureModeChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void captureModeChanged(QCamera::CaptureModes mode))
+   MULTI_CS_SIGNAL_2(captureModeChanged, mode)
 
-   MULTI_CS_SIGNAL_1(Public, void error(QCamera::Error un_named_arg1))
-   MULTI_CS_SIGNAL_OVERLOAD(error, (QCamera::Error), un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void error(QCamera::Error error))
+   MULTI_CS_SIGNAL_OVERLOAD(error, (QCamera::Error), error)
 
-   MULTI_CS_SIGNAL_1(Public, void stateChanged(QCamera::State un_named_arg1))
-   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QCamera::State state))
+   MULTI_CS_SIGNAL_2(stateChanged, state)
 
-   MULTI_CS_SIGNAL_1(Public, void statusChanged(QCamera::Status un_named_arg1))
-   MULTI_CS_SIGNAL_2(statusChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void statusChanged(QCamera::Status status))
+   MULTI_CS_SIGNAL_2(statusChanged, status)
 
    MULTI_CS_SIGNAL_1(Public, void locked())
    MULTI_CS_SIGNAL_2(locked)
@@ -272,7 +272,7 @@ class Q_MULTIMEDIA_EXPORT QCamera : public QMediaObject
          QCamera::LockChangeReason un_named_arg3))
    MULTI_CS_SLOT_2(_q_updateLockStatus)
 
-   MULTI_CS_SLOT_1(Private, void _q_updateState(QCamera::State un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_updateState(QCamera::State state))
    MULTI_CS_SLOT_2(_q_updateState)
 
    friend class QCameraInfo;

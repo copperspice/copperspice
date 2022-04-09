@@ -90,10 +90,10 @@ class Q_MULTIMEDIA_EXPORT QCameraImageProcessing : public QObject
    void setSaturation(qreal value);
 
    qreal sharpeningLevel() const;
-   void setSharpeningLevel(qreal value);
+   void setSharpeningLevel(qreal level);
 
    qreal denoisingLevel() const;
-   void setDenoisingLevel(qreal value);
+   void setDenoisingLevel(qreal level);
 
    ColorFilter colorFilter() const;
    void setColorFilter(ColorFilter filter);

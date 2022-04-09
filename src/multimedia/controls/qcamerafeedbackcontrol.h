@@ -50,14 +50,14 @@ class Q_MULTIMEDIA_EXPORT QCameraFeedbackControl : public QMediaControl
 
    ~QCameraFeedbackControl();
 
-   virtual bool isEventFeedbackLocked(EventType) const = 0;
+   virtual bool isEventFeedbackLocked(EventType event) const = 0;
 
-   virtual bool isEventFeedbackEnabled(EventType) const = 0;
+   virtual bool isEventFeedbackEnabled(EventType event) const = 0;
 
-   virtual bool setEventFeedbackEnabled(EventType, bool) = 0;
-   virtual void resetEventFeedback(EventType) = 0;
+   virtual bool setEventFeedbackEnabled(EventType event, bool enabled) = 0;
+   virtual void resetEventFeedback(EventType event) = 0;
 
-   virtual bool setEventFeedbackSound(EventType, const QString &filePath) = 0;
+   virtual bool setEventFeedbackSound(EventType event, const QString &filePath) = 0;
 
  protected:
    explicit QCameraFeedbackControl(QObject *parent = nullptr);

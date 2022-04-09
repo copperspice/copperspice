@@ -413,10 +413,10 @@ void QCameraImageCapture::_q_error(int un_named_arg1, int un_named_arg2, const Q
    d->_q_error(un_named_arg1, un_named_arg2, un_named_arg3);
 }
 
-void QCameraImageCapture::_q_readyChanged(bool un_named_arg1)
+void QCameraImageCapture::_q_readyChanged(bool ready)
 {
    Q_D(QCameraImageCapture);
-   d->_q_readyChanged(un_named_arg1);
+   d->_q_readyChanged(ready);
 }
 
 void QCameraImageCapture::_q_serviceDestroyed()

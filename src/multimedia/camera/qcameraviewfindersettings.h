@@ -53,7 +53,7 @@ class Q_MULTIMEDIA_EXPORT QCameraViewfinderSettings
    bool isNull() const;
 
    QSize resolution() const;
-   void setResolution(const QSize &);
+   void setResolution(const QSize &resolution);
 
    void setResolution(int width, int height) {
       setResolution(QSize(width, height));

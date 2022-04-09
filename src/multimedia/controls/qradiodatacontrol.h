@@ -64,8 +64,8 @@ public:
     MULTI_CS_SIGNAL_1(Public, void alternativeFrequenciesEnabledChanged(bool enabled))
     MULTI_CS_SIGNAL_2(alternativeFrequenciesEnabledChanged,enabled)
 
-    MULTI_CS_SIGNAL_1(Public, void error(QRadioData::Error err))
-    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), err)
+    MULTI_CS_SIGNAL_1(Public, void error(QRadioData::Error error))
+    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioData::Error), error)
 
 protected:
     explicit QRadioDataControl(QObject *parent = nullptr);

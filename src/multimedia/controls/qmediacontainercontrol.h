@@ -38,7 +38,7 @@ public:
     virtual QString containerFormat() const = 0;
     virtual void setContainerFormat(const QString &format) = 0;
 
-    virtual QString containerDescription(const QString &formatMimeType) const = 0;
+    virtual QString containerDescription(const QString &format) const = 0;
 
 protected:
     explicit QMediaContainerControl(QObject *parent = nullptr);

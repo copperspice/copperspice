@@ -43,8 +43,8 @@ class Q_MULTIMEDIA_EXPORT QCameraFlashControl : public QMediaControl
 
    virtual bool isFlashReady() const = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void flashReady(bool un_named_arg1))
-   MULTI_CS_SIGNAL_2(flashReady, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void flashReady(bool ready))
+   MULTI_CS_SIGNAL_2(flashReady, ready)
 
  protected:
    explicit QCameraFlashControl(QObject *parent = nullptr);

@@ -143,8 +143,8 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
 
    static QStringList supportedMimeTypes(Flags flags = Flags());
 
-   void setVideoOutput(QVideoWidget *);
-   void setVideoOutput(QGraphicsVideoItem *);
+   void setVideoOutput(QVideoWidget *widget);
+   void setVideoOutput(QGraphicsVideoItem *item);
    void setVideoOutput(QAbstractVideoSurface *surface);
 
    QMediaContent media() const;

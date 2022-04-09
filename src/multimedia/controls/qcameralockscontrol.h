@@ -38,13 +38,13 @@ class Q_MULTIMEDIA_EXPORT QCameraLocksControl : public QMediaControl
 
    virtual QCamera::LockTypes supportedLocks() const = 0;
 
-   virtual QCamera::LockStatus lockStatus(QCamera::LockType lock) const = 0;
+   virtual QCamera::LockStatus lockStatus(QCamera::LockType lockType) const = 0;
 
    virtual void searchAndLock(QCamera::LockTypes locks) = 0;
    virtual void unlock(QCamera::LockTypes locks) = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void lockStatusChanged(QCamera::LockType type, QCamera::LockStatus status, QCamera::LockChangeReason reason))
-   MULTI_CS_SIGNAL_2(lockStatusChanged, type, status, reason)
+   MULTI_CS_SIGNAL_1(Public, void lockStatusChanged(QCamera::LockType lockType, QCamera::LockStatus status, QCamera::LockChangeReason reason))
+   MULTI_CS_SIGNAL_2(lockStatusChanged, lockType, status, reason)
 
  protected:
    explicit QCameraLocksControl(QObject *parent = nullptr);

@@ -35,7 +35,7 @@ class Q_MULTIMEDIA_EXPORT QAudioProbe : public QObject
 {
     MULTI_CS_OBJECT(QAudioProbe)
 
-public:
+ public:
     explicit QAudioProbe(QObject *parent = nullptr);
     ~QAudioProbe();
 
@@ -44,13 +44,13 @@ public:
 
     bool isActive() const;
 
-    MULTI_CS_SIGNAL_1(Public, void audioBufferProbed(const QAudioBuffer & audioBuffer))
-    MULTI_CS_SIGNAL_2(audioBufferProbed,audioBuffer)
+    MULTI_CS_SIGNAL_1(Public, void audioBufferProbed(const QAudioBuffer & buffer))
+    MULTI_CS_SIGNAL_2(audioBufferProbed, buffer)
 
     MULTI_CS_SIGNAL_1(Public, void flush())
     MULTI_CS_SIGNAL_2(flush)
 
-private:
+ private:
     QAudioProbePrivate *d;
 };
 

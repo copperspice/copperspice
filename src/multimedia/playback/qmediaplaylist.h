@@ -109,8 +109,8 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
    MULTI_CS_SIGNAL_2(currentIndexChanged, index)
    MULTI_CS_SIGNAL_1(Public, void playbackModeChanged(QMediaPlaylist::PlaybackMode mode))
    MULTI_CS_SIGNAL_2(playbackModeChanged, mode)
-   MULTI_CS_SIGNAL_1(Public, void currentMediaChanged(const QMediaContent &un_named_arg1))
-   MULTI_CS_SIGNAL_2(currentMediaChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void currentMediaChanged(const QMediaContent &content))
+   MULTI_CS_SIGNAL_2(currentMediaChanged, content)
 
    MULTI_CS_SIGNAL_1(Public, void mediaAboutToBeInserted(int start, int end))
    MULTI_CS_SIGNAL_2(mediaAboutToBeInserted, start, end)

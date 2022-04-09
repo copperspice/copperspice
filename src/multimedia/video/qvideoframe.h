@@ -104,7 +104,7 @@ class Q_MULTIMEDIA_EXPORT QVideoFrame
    int height() const;
 
    FieldType fieldType() const;
-   void setFieldType(FieldType);
+   void setFieldType(FieldType field);
 
    bool isMapped() const;
    bool isReadable() const;

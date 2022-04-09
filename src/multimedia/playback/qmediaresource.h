@@ -63,7 +63,7 @@ class Q_MULTIMEDIA_EXPORT QMediaResource
    void setAudioBitRate(int rate);
 
    int sampleRate() const;
-   void setSampleRate(int frequency);
+   void setSampleRate(int sampleRate);
 
    int channelCount() const;
    void setChannelCount(int channels);

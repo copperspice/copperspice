@@ -38,12 +38,12 @@ public:
     virtual QRadioTuner::State state() const = 0;
 
     virtual QRadioTuner::Band band() const = 0;
-    virtual void setBand(QRadioTuner::Band b) = 0;
-    virtual bool isBandSupported(QRadioTuner::Band b) const = 0;
+    virtual void setBand(QRadioTuner::Band band) = 0;
+    virtual bool isBandSupported(QRadioTuner::Band band) const = 0;
 
     virtual int frequency() const = 0;
-    virtual int frequencyStep(QRadioTuner::Band b) const = 0;
-    virtual QPair<int,int> frequencyRange(QRadioTuner::Band b) const = 0;
+    virtual int frequencyStep(QRadioTuner::Band band) const = 0;
+    virtual QPair<int,int> frequencyRange(QRadioTuner::Band band) const = 0;
     virtual void setFrequency(int frequency) = 0;
 
     virtual bool isStereo() const = 0;
@@ -90,8 +90,8 @@ public:
     MULTI_CS_SIGNAL_1(Public, void mutedChanged(bool muted))
     MULTI_CS_SIGNAL_2(mutedChanged,muted)
 
-    MULTI_CS_SIGNAL_1(Public, void error(QRadioTuner::Error err))
-    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioTuner::Error), err)
+    MULTI_CS_SIGNAL_1(Public, void error(QRadioTuner::Error error))
+    MULTI_CS_SIGNAL_OVERLOAD(error, (QRadioTuner::Error), error)
 
     MULTI_CS_SIGNAL_1(Public, void stationFound(int frequency,QString stationId))
     MULTI_CS_SIGNAL_2(stationFound,frequency,stationId)

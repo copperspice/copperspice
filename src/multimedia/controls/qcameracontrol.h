@@ -50,22 +50,22 @@ class Q_MULTIMEDIA_EXPORT QCameraControl : public QMediaControl
    virtual QCamera::Status status() const = 0;
 
    virtual QCamera::CaptureModes captureMode() const = 0;
-   virtual void setCaptureMode(QCamera::CaptureModes) = 0;
+   virtual void setCaptureMode(QCamera::CaptureModes mode) = 0;
    virtual bool isCaptureModeSupported(QCamera::CaptureModes mode) const = 0;
 
    virtual bool canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void stateChanged(QCamera::State un_named_arg1))
-   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QCamera::State state))
+   MULTI_CS_SIGNAL_2(stateChanged, state)
 
-   MULTI_CS_SIGNAL_1(Public, void statusChanged(QCamera::Status un_named_arg1))
-   MULTI_CS_SIGNAL_2(statusChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void statusChanged(QCamera::Status status))
+   MULTI_CS_SIGNAL_2(statusChanged, status)
 
    MULTI_CS_SIGNAL_1(Public, void error(int error, const QString &errorString))
    MULTI_CS_SIGNAL_2(error, error, errorString)
 
-   MULTI_CS_SIGNAL_1(Public, void captureModeChanged(QCamera::CaptureModes un_named_arg1))
-   MULTI_CS_SIGNAL_2(captureModeChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void captureModeChanged(QCamera::CaptureModes mode))
+   MULTI_CS_SIGNAL_2(captureModeChanged, mode)
 
  protected:
    explicit QCameraControl(QObject *parent = nullptr);

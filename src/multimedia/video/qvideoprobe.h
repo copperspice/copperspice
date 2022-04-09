@@ -45,7 +45,7 @@ public:
     bool isActive() const;
 
     MULTI_CS_SIGNAL_1(Public, void videoFrameProbed(const QVideoFrame & videoFrame))
-    MULTI_CS_SIGNAL_2(videoFrameProbed,videoFrame)
+    MULTI_CS_SIGNAL_2(videoFrameProbed, videoFrame)
 
     MULTI_CS_SIGNAL_1(Public, void flush())
     MULTI_CS_SIGNAL_2(flush)

@@ -52,24 +52,32 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorderControl : public QMediaControl
 
  public:
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QMediaRecorder::State state))
-   MULTI_CS_SIGNAL_2(stateChanged,state)
+   MULTI_CS_SIGNAL_2(stateChanged, state)
+
    MULTI_CS_SIGNAL_1(Public, void statusChanged(QMediaRecorder::Status status))
-   MULTI_CS_SIGNAL_2(statusChanged,status)
-   MULTI_CS_SIGNAL_1(Public, void durationChanged(qint64 position))
-   MULTI_CS_SIGNAL_2(durationChanged,position)
+   MULTI_CS_SIGNAL_2(statusChanged, status)
+
+   MULTI_CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
+   MULTI_CS_SIGNAL_2(durationChanged, duration)
+
    MULTI_CS_SIGNAL_1(Public, void mutedChanged(bool muted))
-   MULTI_CS_SIGNAL_2(mutedChanged,muted)
+   MULTI_CS_SIGNAL_2(mutedChanged, muted)
+
    MULTI_CS_SIGNAL_1(Public, void volumeChanged(qreal volume))
-   MULTI_CS_SIGNAL_2(volumeChanged,volume)
+   MULTI_CS_SIGNAL_2(volumeChanged, volume)
+
    MULTI_CS_SIGNAL_1(Public, void actualLocationChanged(const QUrl & location))
-   MULTI_CS_SIGNAL_2(actualLocationChanged,location)
+   MULTI_CS_SIGNAL_2(actualLocationChanged, location)
+
    MULTI_CS_SIGNAL_1(Public, void error(int error,const QString & errorString))
-   MULTI_CS_SIGNAL_2(error,error,errorString)
+   MULTI_CS_SIGNAL_2(error,error, errorString)
 
    MULTI_CS_SLOT_1(Public, virtual void setState(QMediaRecorder::State state)=0)
    MULTI_CS_SLOT_2(setState)
+
    MULTI_CS_SLOT_1(Public, virtual void setMuted(bool muted)=0)
    MULTI_CS_SLOT_2(setMuted)
+
    MULTI_CS_SLOT_1(Public, virtual void setVolume(qreal volume)=0)
    MULTI_CS_SLOT_2(setVolume)
 

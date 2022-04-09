@@ -221,14 +221,14 @@ void QAudioDecoder::setAudioFormat(const QAudioFormat &format)
    }
 }
 
-bool QAudioDecoder::bind(QObject *obj)
+bool QAudioDecoder::bind(QObject *object)
 {
-   return QMediaObject::bind(obj);
+   return QMediaObject::bind(object);
 }
 
-void QAudioDecoder::unbind(QObject *obj)
+void QAudioDecoder::unbind(QObject *object)
 {
-   QMediaObject::unbind(obj);
+   QMediaObject::unbind(object);
 }
 
 QMultimedia::SupportEstimate QAudioDecoder::hasSupport(const QString &mimeType, const QStringList &codecs)
@@ -281,14 +281,14 @@ QAudioBuffer QAudioDecoder::read() const
    }
 }
 
-void QAudioDecoder::_q_stateChanged(QAudioDecoder::State un_named_arg1)
+void QAudioDecoder::_q_stateChanged(QAudioDecoder::State state)
 {
    Q_D(QAudioDecoder);
-   d->_q_stateChanged(un_named_arg1);
+   d->_q_stateChanged(state);
 }
 
-void QAudioDecoder::_q_error(int un_named_arg1, const QString &un_named_arg2)
+void QAudioDecoder::_q_error(int error, const QString &errorString)
 {
    Q_D(QAudioDecoder);
-   d->_q_error(un_named_arg1, un_named_arg2);
+   d->_q_error(error, errorString);
 }

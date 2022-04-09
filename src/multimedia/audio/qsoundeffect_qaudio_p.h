@@ -65,7 +65,7 @@ class PrivateSoundSource : public QIODevice
    MULTI_CS_SLOT_1(Private, void decoderError())
    MULTI_CS_SLOT_2(decoderError)
 
-   MULTI_CS_SLOT_1(Private, void stateChanged(QAudio::State un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void stateChanged(QAudio::State state))
    MULTI_CS_SLOT_2(stateChanged)
 
    friend class QSoundEffectPrivate;

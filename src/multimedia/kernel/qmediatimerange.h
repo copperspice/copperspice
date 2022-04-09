@@ -34,7 +34,7 @@ class Q_MULTIMEDIA_EXPORT QMediaTimeInterval
  public:
    QMediaTimeInterval();
    QMediaTimeInterval(qint64 start, qint64 end);
-   QMediaTimeInterval(const QMediaTimeInterval &);
+   QMediaTimeInterval(const QMediaTimeInterval &other);
 
    qint64 start() const;
    qint64 end() const;
@@ -62,12 +62,13 @@ class Q_MULTIMEDIA_EXPORT QMediaTimeRange
 
    QMediaTimeRange();
    QMediaTimeRange(qint64 start, qint64 end);
-   QMediaTimeRange(const QMediaTimeInterval &);
-   QMediaTimeRange(const QMediaTimeRange &range);
+   QMediaTimeRange(const QMediaTimeInterval &interval);
+   QMediaTimeRange(const QMediaTimeRange &other);
+
    ~QMediaTimeRange();
 
-   QMediaTimeRange &operator=(const QMediaTimeRange &);
-   QMediaTimeRange &operator=(const QMediaTimeInterval &);
+   QMediaTimeRange &operator=(const QMediaTimeRange &other);
+   QMediaTimeRange &operator=(const QMediaTimeInterval &interval);
 
    qint64 earliestTime() const;
    qint64 latestTime() const;
@@ -80,16 +81,16 @@ class Q_MULTIMEDIA_EXPORT QMediaTimeRange
 
    void addInterval(qint64 start, qint64 end);
    void addInterval(const QMediaTimeInterval &interval);
-   void addTimeRange(const QMediaTimeRange &);
+   void addTimeRange(const QMediaTimeRange &range);
 
    void removeInterval(qint64 start, qint64 end);
    void removeInterval(const QMediaTimeInterval &interval);
-   void removeTimeRange(const QMediaTimeRange &);
+   void removeTimeRange(const QMediaTimeRange &range);
 
-   QMediaTimeRange &operator+=(const QMediaTimeRange &);
-   QMediaTimeRange &operator+=(const QMediaTimeInterval &);
-   QMediaTimeRange &operator-=(const QMediaTimeRange &);
-   QMediaTimeRange &operator-=(const QMediaTimeInterval &);
+   QMediaTimeRange &operator+=(const QMediaTimeRange &other);
+   QMediaTimeRange &operator+=(const QMediaTimeInterval &interval);
+   QMediaTimeRange &operator-=(const QMediaTimeRange &other);
+   QMediaTimeRange &operator-=(const QMediaTimeInterval &interval);
 
    void clear();
 

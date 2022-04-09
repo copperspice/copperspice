@@ -53,8 +53,8 @@ class Q_MULTIMEDIA_EXPORT QMediaObject : public QObject
    int notifyInterval() const;
    void setNotifyInterval(int milliSeconds);
 
-   virtual bool bind(QObject *);
-   virtual void unbind(QObject *);
+   virtual bool bind(QObject *object);
+   virtual void unbind(QObject *object);
 
    bool isMetaDataAvailable() const;
 

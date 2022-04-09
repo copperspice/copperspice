@@ -79,11 +79,11 @@ class Q_MULTIMEDIA_EXPORT QAbstractAudioOutput : public QObject
    }
    virtual void setCategory(const QString &) { }
 
-   MULTI_CS_SIGNAL_1(Public, void errorChanged(QAudio::Error un_named_arg1))
-   MULTI_CS_SIGNAL_2(errorChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void errorChanged(QAudio::Error error))
+   MULTI_CS_SIGNAL_2(errorChanged, error)
 
-   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State state))
+   MULTI_CS_SIGNAL_2(stateChanged, state)
 
    MULTI_CS_SIGNAL_1(Public, void notify())
    MULTI_CS_SIGNAL_2(notify)
@@ -115,11 +115,11 @@ class Q_MULTIMEDIA_EXPORT QAbstractAudioInput : public QObject
    virtual void setVolume(qreal) = 0;
    virtual qreal volume() const = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void errorChanged(QAudio::Error un_named_arg1))
-   MULTI_CS_SIGNAL_2(errorChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void errorChanged(QAudio::Error error))
+   MULTI_CS_SIGNAL_2(errorChanged, error)
 
-   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State un_named_arg1))
-   MULTI_CS_SIGNAL_2(stateChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void stateChanged(QAudio::State state))
+   MULTI_CS_SIGNAL_2(stateChanged, state)
 
    MULTI_CS_SIGNAL_1(Public, void notify())
    MULTI_CS_SIGNAL_2(notify)
