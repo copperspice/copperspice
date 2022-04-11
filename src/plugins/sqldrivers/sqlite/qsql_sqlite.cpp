@@ -35,7 +35,7 @@
 #include <qstringlist.h>
 #include <qvector.h>
 #include <qdebug.h>
-//  emerald       #include <QTimeZone>
+#include <qtimezone.h>
 
 #if defined Q_OS_WIN
 # include <qt_windows.h>
@@ -432,11 +432,8 @@ static QString timespecToString(const QDateTime &dateTime)
       case Qt::OffsetFromUTC:
          return secondsToOffset(dateTime.offsetFromUtc());
 
-      /* emerald - timezone
-
-          case Qt::TimeZone:
-              return secondsToOffset(dateTime.timeZone().offsetFromUtc(dateTime));
-      */
+      case Qt::TimeZone:
+         return secondsToOffset(dateTime.timeZone().offsetFromUtc(dateTime));
 
       default:
          return QString();
