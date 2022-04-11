@@ -502,10 +502,10 @@ bool QSQLiteResult::exec()
                   res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
+
                case QVariant::String: {
-                  // lifetime of string == lifetime of its qvariant
                   const QString str = value.getData<QString>();
-                  res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_STATIC, SQLITE_UTF8);
+                  res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
 
