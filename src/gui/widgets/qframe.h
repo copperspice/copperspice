@@ -95,24 +95,24 @@ class Q_GUI_EXPORT QFrame : public QWidget
    };
 
    Shape frameShape() const;
-   void setFrameShape(Shape);
+   void setFrameShape(Shape value);
    Shadow frameShadow() const;
-   void setFrameShadow(Shadow);
+   void setFrameShadow(Shadow value);
 
    int lineWidth() const;
-   void setLineWidth(int);
+   void setLineWidth(int width);
 
    int midLineWidth() const;
-   void setMidLineWidth(int);
+   void setMidLineWidth(int width);
 
    QRect frameRect() const;
-   void setFrameRect(const QRect &);
+   void setFrameRect(const QRect &rect);
 
  protected:
    bool event(QEvent *event) override;
    void paintEvent(QPaintEvent *event) override;
    void changeEvent(QEvent *event) override;
-   void drawFrame(QPainter *);
+   void drawFrame(QPainter *painter);
 
    QFrame(QFramePrivate &dd, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
    void initStyleOption(QStyleOptionFrame *option) const;
