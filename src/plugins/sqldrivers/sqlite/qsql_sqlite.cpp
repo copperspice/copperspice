@@ -49,28 +49,29 @@ class QSQLiteResultPrivate;
 
 static QString _q_escapeIdentifier(const QString &identifier)
 {
-   QString res = identifier;
-   if (!identifier.isEmpty() && identifier.left(1) != QString(QLatin1Char('"')) &&
-      identifier.right(1) != QString(QLatin1Char('"')) ) {
-      res.replace(QLatin1Char('"'), QLatin1String("\"\""));
-      res.prepend(QLatin1Char('"')).append(QLatin1Char('"'));
-      res.replace(QLatin1Char('.'), QLatin1String("\".\""));
+   QString retval = identifier;
+
+   if (! identifier.isEmpty() && ! identifier.startsWith('"') && ! identifier.endsWith('"')) {
+      retval.replace('"', "\"\"");
+
+      retval.prepend('"');
+      retval.append('"');
+
+      retval.replace('.', "\".\"");
    }
-   return res;
+
+   return retval;
 }
 
 static QVariant::Type qGetColumnType(const QString &tpName)
 {
    const QString typeName = tpName.toLower();
 
-   if (typeName == QLatin1String("integer") || typeName == QLatin1String("int")) {
+   if (typeName == "integer" || typeName == "int") {
       return QVariant::Int;
    }
 
-   if (typeName == QLatin1String("double")
-      || typeName == QLatin1String("float")
-      || typeName == QLatin1String("real")
-      || typeName.startsWith(QLatin1String("numeric"))) {
+   if (typeName == "double" || typeName == "float" || typeName == "real" || typeName.startsWith("numeric")) {
       return QVariant::Double;
    }
 
@@ -78,15 +79,15 @@ static QVariant::Type qGetColumnType(const QString &tpName)
       return QVariant::ByteArray;
    }
 
-   if (typeName == QLatin1String("boolean")
-      || typeName == QLatin1String("bool")) {
+   if (typeName == "boolean" || typeName == "bool") {
       return QVariant::Bool;
    }
+
    return QVariant::String;
 }
 
 static QSqlError qMakeError(sqlite3 *access, const QString &descr, QSqlError::ErrorType type,
-   int errorCode = -1)
+      int errorCode = -1)
 {
    return QSqlError(descr,
          QString::fromUtf8(sqlite3_errmsg(access)), type, QString::number(errorCode));
@@ -94,9 +95,6 @@ static QSqlError qMakeError(sqlite3 *access, const QString &descr, QSqlError::Er
 
 class QSQLiteResult : public QSqlCachedResult
 {
-   friend class QSQLiteDriver;
-   friend class QSQLiteResultPrivate;
-
  public:
    explicit QSQLiteResult(const QSQLiteDriver *db);
    ~QSQLiteResult();
@@ -116,6 +114,9 @@ class QSQLiteResult : public QSqlCachedResult
 
  private:
    QSQLiteResultPrivate *d;
+
+   friend class QSQLiteDriver;
+   friend class QSQLiteResultPrivate;
 };
 
 class QSQLiteDriverPrivate : public QSqlDriverPrivate
@@ -130,7 +131,6 @@ class QSQLiteDriverPrivate : public QSqlDriverPrivate
    sqlite3 *access;
    QList <QSQLiteResult *> results;
 };
-
 
 class QSQLiteResultPrivate
 {
@@ -147,8 +147,8 @@ class QSQLiteResultPrivate
 
    sqlite3_stmt *stmt;
 
-   bool skippedStatus; // the status of the fetchNext() that's skipped
-   bool skipRow; // skip the next fetchNext()?
+   bool skippedStatus;    // the status of the fetchNext() that's skipped
+   bool skipRow;          // skip the next fetchNext()?
    QSqlRecord rInf;
    QVector<QVariant> firstRow;
 };
@@ -171,7 +171,7 @@ void QSQLiteResultPrivate::cleanup()
 
 void QSQLiteResultPrivate::finalize()
 {
-   if (!stmt) {
+   if (! stmt) {
       return;
    }
 
@@ -397,14 +397,14 @@ bool QSQLiteResult::prepare(const QString &query)
 
    if (res != SQLITE_OK) {
       setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-               "Unable to execute statement"), QSqlError::StatementError, res));
+            "Unable to execute statement"), QSqlError::StatementError, res));
 
       d->finalize();
       return false;
 
    } else if (pzTail && ! QString::fromUtf8(pzTail).trimmed().isEmpty()) {
       setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-               "Unable to execute multiple statements at a time"), QSqlError::StatementError, SQLITE_MISUSE));
+            "Unable to execute multiple statements at a time"), QSqlError::StatementError, SQLITE_MISUSE));
 
       d->finalize();
       return false;
@@ -412,20 +412,24 @@ bool QSQLiteResult::prepare(const QString &query)
 
    return true;
 }
+
 static QString secondsToOffset(int seconds)
 {
    const QChar sign = ushort(seconds < 0 ? '-' : '+');
    seconds = qAbs(seconds);
 
-   const int hours = seconds / 3600;
+   const int hours   = seconds / 3600;
    const int minutes = (seconds % 3600) / 60;
+
    return QString("%1%2:%3").formatArg(sign).formatArg(hours, 2, 10, '0').formatArg(minutes, 2, 10, '0');
 }
+
 static QString timespecToString(const QDateTime &dateTime)
 {
    switch (dateTime.timeSpec()) {
       case Qt::LocalTime:
          return QString();
+
       case Qt::UTC:
          return QString("Z");
 
@@ -445,12 +449,14 @@ bool QSQLiteResult::exec()
    const QVector<QVariant> values = boundValues();
 
    d->skippedStatus = false;
-   d->skipRow = false;
+   d->skipRow       = false;
    d->rInf.clear();
+
    clearValues();
    setLastError(QSqlError());
 
    int res = sqlite3_reset(d->stmt);
+
    if (res != SQLITE_OK) {
       setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
                "Unable to reset statement"), QSqlError::StatementError, res));
@@ -492,13 +498,14 @@ bool QSQLiteResult::exec()
 
                case QVariant::DateTime: {
                   const QDateTime dateTime = value.toDateTime();
-                  const QString str = dateTime.toString(QString("yyyy-MM-ddThh:mm:ss.zzz") + timespecToString(dateTime));
+                  const QString str = dateTime.toString("yyyy-MM-ddThh:mm:ss.zzz" + timespecToString(dateTime));
                   res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
+
                case QVariant::Time: {
-                  const QTime time = value.toTime();
-                  const QString str = time.toString(QString("hh:mm:ss.zzz"));
+                  const QTime time  = value.toTime();
+                  const QString str = time.toString("hh:mm:ss.zzz");
                   res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
@@ -511,8 +518,7 @@ bool QSQLiteResult::exec()
 
                default: {
                   QString str = value.toString();
-                  // SQLITE_TRANSIENT makes sure that sqlite buffers the data
-                  res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
+                    res = sqlite3_bind_text64(d->stmt, i + 1, str.constData(), str.size_storage(), SQLITE_TRANSIENT, SQLITE_UTF8);
                   break;
                }
             }
@@ -520,12 +526,13 @@ bool QSQLiteResult::exec()
 
          if (res != SQLITE_OK) {
             setLastError(qMakeError(d->access, QCoreApplication::translate("QSQLiteResult",
-                     "Unable to bind parameters"), QSqlError::StatementError, res));
+                  "Unable to bind parameters"), QSqlError::StatementError, res));
 
             d->finalize();
             return false;
          }
       }
+
    } else {
       setLastError(QSqlError(QCoreApplication::translate("QSQLiteResult",
                "Parameter count mismatch"), QString(), QSqlError::StatementError));
@@ -540,8 +547,10 @@ bool QSQLiteResult::exec()
       setActive(false);
       return false;
    }
+
    setSelect(!d->rInf.isEmpty());
    setActive(true);
+
    return true;
 }
 
@@ -568,6 +577,7 @@ QVariant QSQLiteResult::lastInsertId() const
          return id;
       }
    }
+
    return QVariant();
 }
 
@@ -592,12 +602,9 @@ QVariant QSQLiteResult::handle() const
    return QVariant::fromValue(d->stmt);
 }
 
-/////////////////////////////////////////////////////////
-
 QSQLiteDriver::QSQLiteDriver(QObject *parent)
    : QSqlDriver(*new QSQLiteDriverPrivate, parent)
 {
-
 }
 
 QSQLiteDriver::QSQLiteDriver(sqlite3 *connection, QObject *parent)
@@ -658,7 +665,7 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
    QStringList opts = QString(conOpts).remove(' ').split(';');
 
    for (const QString &option : opts) {
-      if (option.startsWith(QLatin1String("QSQLITE_BUSY_TIMEOUT="))) {
+      if (option.startsWith("QSQLITE_BUSY_TIMEOUT=")) {
          bool ok;
          int nt = option.mid(21).toInteger<int>(&ok);
 
@@ -667,11 +674,13 @@ bool QSQLiteDriver::open(const QString &db, const QString &, const QString &, co
          }
 
 
-      } else if (option == QLatin1String("QSQLITE_OPEN_READONLY")) {
+      } else if (option == "QSQLITE_OPEN_READONLY") {
          openReadOnlyOption = true;
-      } else if (option == QLatin1String("QSQLITE_OPEN_URI")) {
+
+      } else if (option == "QSQLITE_OPEN_URI") {
          openUriOption = true;
-      } else if (option == QLatin1String("QSQLITE_ENABLE_SHARED_CACHE")) {
+
+      } else if (option == "QSQLITE_ENABLE_SHARED_CACHE") {
          sharedCache = true;
       }
    }
@@ -731,9 +740,10 @@ bool QSQLiteDriver::beginTransaction()
    }
 
    QSqlQuery q(createResult());
-   if (!q.exec(QLatin1String("BEGIN"))) {
+   if (! q.exec("BEGIN")) {
       setLastError(QSqlError(tr("Unable to begin transaction"),
             q.lastError().databaseText(), QSqlError::TransactionError));
+
       return false;
    }
 
@@ -747,9 +757,10 @@ bool QSQLiteDriver::commitTransaction()
    }
 
    QSqlQuery q(createResult());
-   if (!q.exec(QLatin1String("COMMIT"))) {
+   if (! q.exec("COMMIT")) {
       setLastError(QSqlError(tr("Unable to commit transaction"),
             q.lastError().databaseText(), QSqlError::TransactionError));
+
       return false;
    }
 
@@ -763,7 +774,7 @@ bool QSQLiteDriver::rollbackTransaction()
    }
 
    QSqlQuery q(createResult());
-   if (!q.exec(QLatin1String("ROLLBACK"))) {
+   if (!q.exec("ROLLBACK")) {
       setLastError(QSqlError(tr("Unable to rollback transaction"),
             q.lastError().databaseText(), QSqlError::TransactionError));
       return false;
@@ -816,38 +827,46 @@ static QSqlIndex qGetTableInfo(QSqlQuery &q, const QString &tableName, bool only
 {
    QString schema;
    QString table(tableName);
-   int indexOfSeparator = tableName.indexOf(QLatin1Char('.'));
+
+   int indexOfSeparator = tableName.indexOf('.');
+
    if (indexOfSeparator > -1) {
-      schema = tableName.left(indexOfSeparator).append(QLatin1Char('.'));
-      table = tableName.mid(indexOfSeparator + 1);
+      schema = tableName.left(indexOfSeparator).append('.');
+      table  = tableName.mid(indexOfSeparator + 1);
    }
-   q.exec(QLatin1String("PRAGMA ") + schema + QLatin1String("table_info (") + _q_escapeIdentifier(
-         table) + QLatin1String(")"));
+
+   q.exec("PRAGMA " + schema + "table_info (" + _q_escapeIdentifier(table) + ")");
 
    QSqlIndex ind;
+
    while (q.next()) {
       bool isPk = q.value(5).toInt();
+
       if (onlyPIndex && !isPk) {
          continue;
       }
+
       QString typeName = q.value(2).toString().toLower();
       QSqlField fld(q.value(1).toString(), qGetColumnType(typeName));
-      if (isPk && (typeName == QLatin1String("integer")))
+
+      if (isPk && (typeName == "integer")) {
          // INTEGER PRIMARY KEY fields are auto-generated in sqlite
-         // INT PRIMARY KEY is not the same as INTEGER PRIMARY KEY!
-      {
+         // INT PRIMARY KEY is not the same as INTEGER PRIMARY KEY
+
          fld.setAutoValue(true);
       }
+
       fld.setRequired(q.value(3).toInt() != 0);
       fld.setDefaultValue(q.value(4));
       ind.append(fld);
    }
+
    return ind;
 }
 
 QSqlIndex QSQLiteDriver::primaryIndex(const QString &tblname) const
 {
-   if (!isOpen()) {
+   if (! isOpen()) {
       return QSqlIndex();
    }
 
@@ -858,6 +877,7 @@ QSqlIndex QSQLiteDriver::primaryIndex(const QString &tblname) const
 
    QSqlQuery q(createResult());
    q.setForwardOnly(true);
+
    return qGetTableInfo(q, table, true);
 }
 
@@ -874,6 +894,7 @@ QSqlRecord QSQLiteDriver::record(const QString &tbl) const
 
    QSqlQuery q(createResult());
    q.setForwardOnly(true);
+
    return qGetTableInfo(q, table);
 }
 

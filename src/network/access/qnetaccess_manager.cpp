@@ -144,8 +144,11 @@ QNetworkAccessManager::QNetworkAccessManager(QObject *parent)
    // the QNetworkSession's signals if a request is already made.
    // we need to track current accessibility state by default
 
-   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::onlineStateChanged,   this, &QNetworkAccessManager::_q_onlineStateChanged);
-   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::configurationChanged, this, &QNetworkAccessManager::_q_configurationChanged);
+   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::onlineStateChanged,   this,
+         &QNetworkAccessManager::_q_onlineStateChanged);
+
+   connect(&d->networkConfigurationManager, &QNetworkConfigurationManager::configurationChanged, this,
+         &QNetworkAccessManager::_q_configurationChanged);
 
 #endif
 }

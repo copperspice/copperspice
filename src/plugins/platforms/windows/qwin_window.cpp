@@ -1412,19 +1412,21 @@ static bool relaxedEqual(const QRect &a, const QRect &b)
 void QWindowsWindow::setGeometry(const QRect &rectIn)
 {
    QRect rect = rectIn;
-   // This means it is a call from QWindow::setFramePosition() and
-   // the coordinates include the frame (size is still the contents rectangle).
+
+   // this is a call from QWindow::setFramePosition() and the coordinates include the
+   // frame, size is still the contents rectangle
+
    if (QWindowsGeometryHint::positionIncludesFrame(window())) {
       const QMargins margins = frameMargins();
       rect.moveTopLeft(rect.topLeft() + QPoint(margins.left(), margins.top()));
    }
 
    if (m_windowState == Qt::WindowMinimized) {
-      m_data.geometry = rect;   // Otherwise set by handleGeometryChange() triggered by event.
+      m_data.geometry = rect;   // Otherwise set by handleGeometryChange() triggered by event
    }
 
    if (m_data.hwnd) {
-      // ResizeEvent with resulting geometry will be sent, if we cannot achieve that size
+      // ResizeEvent with resulting geometry will be sent, if we can not achieve that size
       // (for example, window title minimal constraint) notify and warn
       setGeometry_sys(rect);
 
