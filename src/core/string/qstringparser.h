@@ -638,9 +638,8 @@ class Q_CORE_EXPORT QStringParser
          int abs_field_width = qAbs(fieldwidth);
          int repl_cnt        = 0;
 
-
          while (current != end) {
-            /* no need to check if we run off the end of the string with c, as long as d.occurrences > 0 we know
+            /* no need to check if we run off the end of the string, as long as d.occurrences > 0 we know
                there are valid escape sequences. */
 
             auto text_start = current;
@@ -649,7 +648,8 @@ class Q_CORE_EXPORT QStringParser
                ++current;
             }
 
-            auto escape_start = current++;
+            auto escape_start = current;
+            ++current;
 
             bool locale_arg = false;
             if (current->unicode() == 'L') {
@@ -666,9 +666,11 @@ class Q_CORE_EXPORT QStringParser
             }
 
             if (escape != d.min_escape) {
-               retval.append(text_start, current + 1);
+               retval.append(text_start, current);
 
             } else {
+               // replace %X with fillChar
+
                ++current;
                retval.append(text_start, escape_start);
 
