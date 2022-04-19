@@ -145,3 +145,26 @@ TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")
 
    REQUIRE(status == "Processing file 1 of 5: somefile.cpp");
 }
+
+TEST_CASE("QStringParser formatArg_chain", "[qstringparser]")
+{
+   QString str = "Values (A):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+
+   str = str.formatArg("apple").formatArg("pear").formatArg(5).formatArg(3.14).formatArg("grape").formatArg(0);
+
+   REQUIRE(str == "Values (A):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
+}
+
+TEST_CASE("QStringParser formatArg_no_chain", "[qstringparser]")
+{
+   QString str = "Values (B):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+
+   str = QStringParser::formatArg(str, "apple");
+   str = QStringParser::formatArg(str, "pear");
+   str = QStringParser::formatArg(str, 5);
+   str = QStringParser::formatArg(str, 3.14);
+   str = QStringParser::formatArg(str, "grape");
+   str = QStringParser::formatArg(str, 0);
+
+   REQUIRE(str == "Values (B):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
+}

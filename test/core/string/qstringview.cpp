@@ -45,6 +45,18 @@ TEST_CASE("QStringView8 contains", "[qstringview]")
    REQUIRE(! view.contains("lunch"));
 }
 
+TEST_CASE("QString8 compare", "[qstring]")
+{
+   QString str1 = "apple";
+   QString str2 = "APPLE";
+
+   QStringView view1 = str1;
+   QStringView view2 = str2;
+
+   REQUIRE(view1.compare(view2, Qt::CaseInsensitive) == 0);
+   REQUIRE(view1.compare(view2, Qt::CaseSensitive) == 1);
+}
+
 TEST_CASE("QStringView8 count", "[qstringview]")
 {
    QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";
