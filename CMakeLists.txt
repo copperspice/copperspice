@@ -61,8 +61,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 endif()
 
-# required library
-set(BUILD_COMPONENTS Core Xml)
+# required libraries
+set(BUILD_COMPONENTS "Core Xml")
 
 # unused at this time: DBus, Declarative, and ScriptTools
 set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit XmlPatterns)
