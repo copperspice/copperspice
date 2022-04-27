@@ -29,9 +29,6 @@ TEST_CASE("QRect traits", "[QRect]")
    REQUIRE(std::is_copy_assignable_v<QRect> == true);
    REQUIRE(std::is_move_assignable_v<QRect> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QRect> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QRect> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QRect> == false);
 }
 

@@ -29,9 +29,6 @@ TEST_CASE("QStringList traits", "[qstringlist]")
    REQUIRE(std::is_copy_assignable_v<QStringList> == true);
    REQUIRE(std::is_move_assignable_v<QStringList> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QStringList> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QStringList> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QStringList> == false);
 }
 

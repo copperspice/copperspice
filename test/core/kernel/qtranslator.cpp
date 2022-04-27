@@ -34,9 +34,6 @@ TEST_CASE("QTranslator traits", "[qtranslator]")
    REQUIRE(std::is_copy_assignable_v<QTranslator> == false);
    REQUIRE(std::is_move_assignable_v<QTranslator> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QTranslator> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QTranslator> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QTranslator> == true);
 }
 

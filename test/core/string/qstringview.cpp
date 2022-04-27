@@ -30,9 +30,6 @@ TEST_CASE("QStringView8 traits", "[qstringview8]")
    REQUIRE(std::is_copy_assignable_v<QStringView8> == true);
    REQUIRE(std::is_move_assignable_v<QStringView8> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QStringView8> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QStringView8> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QStringView8> == false);
 }
 

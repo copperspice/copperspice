@@ -29,14 +29,6 @@ TEST_CASE("QSet traits", "[qset]")
    REQUIRE(std::is_copy_assignable_v<QSet<int>> == true);
    REQUIRE(std::is_move_assignable_v<QSet<int>> == true);
 
-#ifdef Q_CC_MSVC
-   // msvc compiler does not support these operations
-
-#else
-   REQUIRE(std::is_nothrow_move_constructible_v<QSet<int>> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QSet<int>> == true);
-#endif
-
    REQUIRE(std::has_virtual_destructor_v<QSet<int>> == false);
 }
 

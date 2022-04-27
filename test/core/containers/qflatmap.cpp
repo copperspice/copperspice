@@ -29,9 +29,6 @@ TEST_CASE("QFlatMap traits", "[qflatmap]")
    REQUIRE(std::is_copy_assignable_v<QFlatMap<int, int>> == true);
    REQUIRE(std::is_move_assignable_v<QFlatMap<int, int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QFlatMap<int, int>> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QFlatMap<int, int>> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QFlatMap<int, int>> == false);
 }
 

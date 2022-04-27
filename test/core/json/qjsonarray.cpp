@@ -30,9 +30,6 @@ TEST_CASE("QJsonArray traits", "[qjsonoarray]")
    REQUIRE(std::is_copy_assignable_v<QJsonArray> == true);
    REQUIRE(std::is_move_assignable_v<QJsonArray> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QJsonArray> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QJsonArray> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QJsonArray> == false);
 }
 

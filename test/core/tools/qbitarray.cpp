@@ -29,9 +29,6 @@ TEST_CASE("QBitArray traits", "[QBitArray]")
    REQUIRE(std::is_copy_assignable_v<QBitArray> == true);
    REQUIRE(std::is_move_assignable_v<QBitArray> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QBitArray> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QBitArray> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QBitArray> == false);
 }
 

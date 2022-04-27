@@ -29,9 +29,6 @@ TEST_CASE("QUrl traits", "[qurl]")
    REQUIRE(std::is_copy_assignable_v<QUrl> == true);
    REQUIRE(std::is_move_assignable_v<QUrl> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QUrl> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QUrl> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QUrl> == false);
 }
 

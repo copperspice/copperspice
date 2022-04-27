@@ -29,14 +29,6 @@ TEST_CASE("QLinkedList traits", "[qlinkedlist]")
    REQUIRE(std::is_copy_assignable_v<QLinkedList<int>> == true);
    REQUIRE(std::is_move_assignable_v<QLinkedList<int>> == true);
 
-#ifdef Q_CC_MSVC
-   // msvc compiler does not support these operations
-
-#else
-   REQUIRE(std::is_nothrow_move_constructible_v<QLinkedList<int>> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QLinkedList<int>> == true);
-#endif
-
    REQUIRE(std::has_virtual_destructor_v<QLinkedList<int>> == false);
 }
 

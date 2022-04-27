@@ -29,9 +29,6 @@ TEST_CASE("QTimeZone traits", "[qtimezone]")
    REQUIRE(std::is_copy_assignable_v<QTimeZone> == true);
    REQUIRE(std::is_move_assignable_v<QTimeZone> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QTimeZone> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QTimeZone> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QTimeZone> == false);
 }
 

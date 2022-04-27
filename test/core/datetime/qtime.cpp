@@ -29,9 +29,6 @@ TEST_CASE("QTime traits", "[qtime]")
    REQUIRE(std::is_copy_assignable_v<QTime> == true);
    REQUIRE(std::is_move_assignable_v<QTime> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QTime> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QTime> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QTime> == false);
 }
 

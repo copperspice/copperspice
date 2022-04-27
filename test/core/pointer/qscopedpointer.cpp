@@ -30,8 +30,5 @@ TEST_CASE("QScopedPointer traits", "[qscopedpointer]")
    REQUIRE(std::is_copy_assignable_v<QScopedPointer<int>> == false);
    REQUIRE(std::is_move_assignable_v<QScopedPointer<int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QScopedPointer<int>> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QScopedPointer<int>> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QScopedPointer<int>> == false);
 }

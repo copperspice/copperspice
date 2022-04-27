@@ -29,9 +29,6 @@ TEST_CASE("QLockFile traits", "[qlockfile]")
    REQUIRE(std::is_copy_assignable_v<QLockFile> == false);
    REQUIRE(std::is_move_assignable_v<QLockFile> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QLockFile> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QLockFile> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QLockFile> == false);
 }
 

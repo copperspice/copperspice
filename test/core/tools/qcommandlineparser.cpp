@@ -32,9 +32,6 @@ TEST_CASE("QCommandLineParser traits", "[qcommandlineparser]")
    REQUIRE(std::is_copy_assignable_v<QCommandLineParser> == false);
    REQUIRE(std::is_move_assignable_v<QCommandLineParser> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QCommandLineParser> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QCommandLineParser> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QCommandLineParser> == false);
 }
 

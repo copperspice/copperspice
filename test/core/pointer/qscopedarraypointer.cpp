@@ -30,8 +30,5 @@ TEST_CASE("QScopedArrayPointer traits", "[qscopedarraypointer]")
    REQUIRE(std::is_copy_assignable_v<QScopedArrayPointer<int>> == false);
    REQUIRE(std::is_move_assignable_v<QScopedArrayPointer<int>> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QScopedArrayPointer<int>> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QScopedArrayPointer<int>> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QScopedArrayPointer<int>> == false);
 }

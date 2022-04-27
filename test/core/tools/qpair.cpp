@@ -30,9 +30,6 @@ TEST_CASE("QPair traits", "[qpair]")
    REQUIRE(std::is_copy_assignable_v<QPair<int, int>> == true);
    REQUIRE(std::is_move_assignable_v<QPair<int, int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QPair<int, int>> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QPair<int, int>> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QPair<int, int>> == false);
 }
 

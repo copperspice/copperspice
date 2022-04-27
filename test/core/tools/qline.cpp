@@ -29,9 +29,6 @@ TEST_CASE("QLine traits", "[QLine]")
    REQUIRE(std::is_copy_assignable_v<QLine> == true);
    REQUIRE(std::is_move_assignable_v<QLine> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QLine> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QLine> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QLine> == false);
 }
 

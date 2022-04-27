@@ -31,9 +31,6 @@ TEST_CASE("QMutex traits", "[qmutex]")
    REQUIRE(std::is_copy_assignable_v<QMutex> == false);
    REQUIRE(std::is_move_assignable_v<QMutex> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QMutex> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QMutex> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QMutex> == false);
 }
 
@@ -44,9 +41,6 @@ TEST_CASE("QRecursiveMutex traits", "[qrecursivemutex]")
 
    REQUIRE(std::is_copy_assignable_v<QRecursiveMutex> == false);
    REQUIRE(std::is_move_assignable_v<QRecursiveMutex> == false);
-
-   REQUIRE(std::is_nothrow_move_constructible_v<QRecursiveMutex> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QRecursiveMutex> == false);
 
    REQUIRE(std::has_virtual_destructor_v<QRecursiveMutex> == false);
 }

@@ -30,9 +30,6 @@ TEST_CASE("QTemporaryFile traits", "[qtemporaryfile]")
    REQUIRE(std::is_copy_assignable_v<QTemporaryFile> == false);
    REQUIRE(std::is_move_assignable_v<QTemporaryFile> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QTemporaryFile> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QTemporaryFile> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QTemporaryFile> == true);
 }
 

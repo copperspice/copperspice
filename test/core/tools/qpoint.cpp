@@ -30,9 +30,6 @@ TEST_CASE("QPoint traits", "[QPoint]")
    REQUIRE(std::is_copy_assignable_v<QPoint> == true);
    REQUIRE(std::is_move_assignable_v<QPoint> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QPoint> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QPoint> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QPoint> == false);
 }
 

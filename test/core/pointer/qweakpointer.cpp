@@ -29,9 +29,6 @@ TEST_CASE("QWeakPointer traits", "[qweakpointer]")
    REQUIRE(std::is_copy_assignable_v<QWeakPointer<int>> == true);
    REQUIRE(std::is_move_assignable_v<QWeakPointer<int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QWeakPointer<int>> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QWeakPointer<int>> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QWeakPointer<int>> == false);
 }
 

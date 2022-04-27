@@ -29,9 +29,6 @@ TEST_CASE("QReadWriteLock traits", "[qreadwritelock]")
    REQUIRE(std::is_copy_assignable_v<QReadWriteLock> == false);
    REQUIRE(std::is_move_assignable_v<QReadWriteLock> == false);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QReadWriteLock> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QReadWriteLock> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QReadWriteLock> == false);
 }
 

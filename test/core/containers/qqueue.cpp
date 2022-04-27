@@ -29,9 +29,6 @@ TEST_CASE("QQueue traits", "[qqueue]")
    REQUIRE(std::is_copy_assignable_v<QQueue<int>> == true);
    REQUIRE(std::is_move_assignable_v<QQueue<int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QQueue<int>> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QQueue<int>> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QQueue<int>> == false);
 }
 

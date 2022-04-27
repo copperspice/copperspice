@@ -29,9 +29,6 @@ TEST_CASE("QMarginsF traits", "[qmarginsf]")
    REQUIRE(std::is_copy_assignable_v<QMarginsF> == true);
    REQUIRE(std::is_move_assignable_v<QMarginsF> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QMarginsF> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QMarginsF> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QMarginsF> == false);
 }
 

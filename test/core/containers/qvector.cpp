@@ -29,9 +29,6 @@ TEST_CASE("QVector traits", "[qvector]")
    REQUIRE(std::is_copy_assignable_v<QVector<int>> == true);
    REQUIRE(std::is_move_assignable_v<QVector<int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QVector<int>> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QVector<int>> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QVector<int>> == false);
 }
 

@@ -29,9 +29,6 @@ TEST_CASE("QSharedPointer traits", "[qsharedpointer]")
    REQUIRE(std::is_copy_assignable_v<QSharedPointer<int>> == true);
    REQUIRE(std::is_move_assignable_v<QSharedPointer<int>> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QSharedPointer<int>> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QSharedPointer<int>> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QSharedPointer<int>> == false);
 }
 

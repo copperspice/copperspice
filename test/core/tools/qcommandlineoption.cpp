@@ -30,9 +30,6 @@ TEST_CASE("QCommandLineOption traits", "[qcommandlineoption]")
    REQUIRE(std::is_copy_assignable_v<QCommandLineOption> == true);
    REQUIRE(std::is_move_assignable_v<QCommandLineOption> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QCommandLineOption> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QCommandLineOption> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QCommandLineOption> == false);
 }
 

@@ -29,9 +29,6 @@ TEST_CASE("QChar traits", "[qchar]")
    REQUIRE(std::is_copy_assignable_v<QChar> == true);
    REQUIRE(std::is_move_assignable_v<QChar> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QChar> == false);
-   REQUIRE(std::is_nothrow_move_assignable_v<QChar> == false);
-
    REQUIRE(std::has_virtual_destructor_v<QChar> == false);
 }
 

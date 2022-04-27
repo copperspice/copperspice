@@ -29,9 +29,6 @@ TEST_CASE("QSize traits", "[qsize]")
    REQUIRE(std::is_copy_assignable_v<QSize> == true);
    REQUIRE(std::is_move_assignable_v<QSize> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QSize> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QSize> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QSize> == false);
 }
 

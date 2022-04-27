@@ -29,9 +29,6 @@ TEST_CASE("QElapsedTimer traits", "[qelapsedtimer]")
    REQUIRE(std::is_copy_assignable_v<QElapsedTimer> == true);
    REQUIRE(std::is_move_assignable_v<QElapsedTimer> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QElapsedTimer> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QElapsedTimer> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QElapsedTimer> == false);
 }
 

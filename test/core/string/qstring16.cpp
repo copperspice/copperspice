@@ -30,9 +30,6 @@ TEST_CASE("QString16 traits", "[qstring16]")
    REQUIRE(std::is_copy_assignable_v<QString16> == true);
    REQUIRE(std::is_move_assignable_v<QString16> == true);
 
-   REQUIRE(std::is_nothrow_move_constructible_v<QString16> == true);
-   REQUIRE(std::is_nothrow_move_assignable_v<QString16> == true);
-
    REQUIRE(std::has_virtual_destructor_v<QString16> == false);
 }
 
