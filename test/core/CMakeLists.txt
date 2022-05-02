@@ -49,6 +49,11 @@ target_sources(CsCoreTest
 
    ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfuture.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfuturewatcher.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qrunnable.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qthreadpool.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qcache.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qflatmap.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qhash.cpp
@@ -73,9 +78,12 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdir.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfo.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qiodevice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qlockfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qresource.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qsavefile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qsettings.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporarydir.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.cpp
 
