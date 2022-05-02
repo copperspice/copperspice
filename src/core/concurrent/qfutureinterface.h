@@ -263,19 +263,21 @@ template <>
 class QFutureInterface<void> : public QFutureInterfaceBase
 {
  public:
-   QFutureInterface<void>(State initialState = NoState)
-      : QFutureInterfaceBase(initialState) {
+   QFutureInterface(State initialState = State::NoState)
+      : QFutureInterfaceBase(initialState)
+   {
    }
 
-   QFutureInterface<void>(const QFutureInterface<void> &other)
-      : QFutureInterfaceBase(other) {
+   QFutureInterface(const QFutureInterface &other)
+      : QFutureInterfaceBase(other)
+   {
    }
 
-   static QFutureInterface<void> canceledResult() {
-      return QFutureInterface(State(Started | Finished | Canceled));
+   static QFutureInterface canceledResult() {
+      return QFutureInterface(State(State::Started | State::Finished | State::Canceled));
    }
 
-   QFutureInterface<void> &operator=(const QFutureInterface<void> &other) {
+   QFutureInterface &operator=(const QFutureInterface &other) {
       QFutureInterfaceBase::operator=(other);
       return *this;
    }
