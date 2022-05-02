@@ -45,6 +45,7 @@ class Q_CORE_EXPORT QTemporaryDir
    bool isValid() const;
 
    bool autoRemove() const;
+   QString errorString() const;
    void setAutoRemove(bool b);
    bool remove();
 

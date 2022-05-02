@@ -49,7 +49,7 @@ class QTemporaryDirPrivate
 
    void create(const QString &templateName);
 
-   QString path;
+   QString m_pathOrError;
    bool autoRemove;
    bool success;
 };
@@ -103,7 +103,7 @@ void QTemporaryDirPrivate::create(const QString &templateName)
       success = true;
 
       QFileSystemEntry entry(QString::fromStdWString(array), QFileSystemEntry::FromNativePath());
-      path = entry.filePath();
+      m_pathOrError = entry.filePath();
    }
 
 #else
@@ -116,7 +116,7 @@ void QTemporaryDirPrivate::create(const QString &templateName)
    if (mkdtemp(buffer.data())) {
       // modifies buffer
       success = true;
-      path = QFile::decodeName(buffer.constData());
+      m_pathOrError = QFile::decodeName(buffer.constData());
    }
 #endif
 }
@@ -151,7 +151,11 @@ bool QTemporaryDir::isValid() const
 
 QString QTemporaryDir::path() const
 {
-   return d_ptr->path;
+   if (d_ptr->success) {
+      return d_ptr->m_pathOrError;
+   } else {
+      return QString();
+   }
 }
 
 bool QTemporaryDir::autoRemove() const
@@ -164,23 +168,32 @@ void QTemporaryDir::setAutoRemove(bool b)
    d_ptr->autoRemove = b;
 }
 
-/*!
-    Removes the temporary directory, including all its contents.
-*/
+QString QTemporaryDir::errorString() const
+{
+   if (d_ptr->success) {
+      return QString();
+   }
+
+   return d_ptr->m_pathOrError;
+}
+
 bool QTemporaryDir::remove()
 {
-   if (!d_ptr->success) {
+   if (! d_ptr->success) {
       return false;
    }
-   Q_ASSERT(!path().isEmpty());
-   Q_ASSERT(path() != QLatin1String("."));
+
+   Q_ASSERT(! path().isEmpty());
+   Q_ASSERT(path() != ".");
 
    const bool result = QDir(path()).removeRecursively();
-   if (!result) {
+
+   if (! result) {
       qWarning() << "QTemporaryDir: Unable to remove"
                  << QDir::toNativeSeparators(path())
                  << "most likely due to the presence of read-only files.";
    }
+
    return result;
 }
 
