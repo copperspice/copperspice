@@ -484,6 +484,39 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
    return retval;
 }
 
+// signal & slot are both a nullptr
+bool QObject::disconnect(const QObject *sender, std::nullptr_t, const QObject *receiver, std::nullptr_t)
+{
+   if (sender == nullptr) {
+      qWarning("QObject::disconnect() Can not disconnect as sender is null");
+      return false;
+   }
+
+   const QMetaObject *senderMetaObject   = sender->metaObject();
+   const QMetaObject *receiverMetaObject = nullptr;
+
+   if (receiver) {
+      receiverMetaObject = receiver->metaObject();
+   }
+
+   const CSBentoAbstract *signalMethod_Bento = nullptr;
+   const CSBentoAbstract *slotMethod_Bento   = nullptr;
+
+   bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);
+
+   if (retval) {
+      QMetaMethod signalMetaMethod;
+
+      const QMetaObject *senderMetaObject = sender->metaObject();
+
+      if (senderMetaObject) {
+         const_cast<QObject *>(sender)->disconnectNotify(signalMetaMethod);
+      }
+   }
+
+   return retval;
+}
+
 // signal & slot QMetaMethods
 bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetaMethod,
                          const QObject *receiver, const QMetaMethod &slotMetaMethod)

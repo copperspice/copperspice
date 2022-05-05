@@ -135,6 +135,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    static bool disconnect(const QObject *sender, const QString &signalMethod,
                   const QObject *receiver, const QString &slotMethod);
 
+   static bool disconnect(const QObject *sender, std::nullptr_t, const QObject *receiver, std::nullptr_t);
+
    static bool disconnect(const QObject *sender, const QMetaMethod &signalMethod,
                   const QObject *receiver, const QMetaMethod &slotMethod);
 
