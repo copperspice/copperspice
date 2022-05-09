@@ -31,6 +31,8 @@ include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckTypeSize)
 include(FeatureSummary)
+include(CheckAtomics)
+include(CheckLibraryExists)
 
 include(ResourceMacros)
 include(TestLargeFiles)
@@ -203,6 +205,19 @@ check_include_file(sys/param.h   HAVE_SYS_PARAM_H)
 check_include_files("dlfcn.h;stdint.h;stddef.h;inttypes.h;stdlib.h;strings.h;string.h;float.h" STDC_HEADERS)
 check_type_size(size_t SIZEOF_SIZE_T)
 opj_test_large_files(HAVE_LARGEFILESUPPORT)
+
+# Raspberry Pi does not have built in atomic support
+check_working_cxx_atomics(HAVE_CXX_ATOMICS_WITHOUT_LIB)
+
+if (NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
+   check_library_exists(atomic __atomic_fetch_add_4 "" HAVE_LIBATOMIC)
+
+   if (HAVE_LIBATOMIC)
+      # handled in CsCore cmake file
+   else()
+      message(SEND_ERROR "Unable to configure, missing libatomic")
+   endif()
+endif()
 
 option(WITH_PSQL_PLUGIN "Build PostgreSQL database plugin (if possible)" ON)
 add_feature_info(PostgreSQL WITH_PSQL_PLUGIN "Popular open source database")

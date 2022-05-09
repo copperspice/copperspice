@@ -143,6 +143,14 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
 endif()
 
+# Raspberry Pi does not have built in atomic support
+if (HAVE_LIBATOMIC)
+   target_link_libraries(CsCore
+      PUBLIC
+      atomic
+   )
+endif()
+
 function_variable_fixup("${EXTRA_CORE_CXXFLAGS}" EXTRA_CORE_CXXFLAGS)
 function_variable_fixup("${EXTRA_CORE_LDFLAGS}"  EXTRA_CORE_LDFLAGS)
 
