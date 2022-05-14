@@ -1308,8 +1308,27 @@ class cs_number<0>
 
 #endif
 
-
 // ** 10
+#if defined(QT_BUILD_VULKAN_LIB) || defined(Q_OS_DARWIN)
+
+#define VULKAN_CS_OBJECT(className)                               CS_OBJECT(className)
+#define VULKAN_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
+
+#define VULKAN_CS_SIGNAL_1(access, ...)                           CS_SIGNAL_1(access, __VA_ARGS__)
+#define VULKAN_CS_SIGNAL_2(signalName, ...)                       CS_SIGNAL_2(signalName, ## __VA_ARGS__)
+#define VULKAN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+
+#else
+#define VULKAN_CS_OBJECT(className)                               CS_OBJECT_OUTSIDE(className)
+#define VULKAN_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE_OUTSIDE(className, parentX)
+
+#define VULKAN_CS_SIGNAL_1(access, ...)                           __VA_ARGS__;
+#define VULKAN_CS_SIGNAL_2(signalName, ...)
+#define VULKAN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
+
+#endif
+
+// ** 11
 #if defined(QT_BUILD_XMLPATTERNS_LIB) || defined(Q_OS_DARWIN)
 
 #define XMLP_CS_OBJECT(className)                                 CS_OBJECT(className)
@@ -1340,7 +1359,7 @@ class cs_number<0>
 #endif
 
 
-// ** 11
+// ** 12
 #if defined(BUILDING_WEBKIT) || defined(Q_OS_DARWIN)
 
 #define WEB_CS_OBJECT(className)                                  CS_OBJECT(className)
@@ -1417,7 +1436,7 @@ class cs_number<0>
 #endif
 
 
-// ** 12
+// ** 13
 #if defined(QT_BUILD_DECLARE_LIB) || defined(Q_OS_DARWIN)
 
 #define DECL_CS_OBJECT(className)                                 CS_OBJECT(className)
