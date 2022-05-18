@@ -47,6 +47,57 @@ VkResult QVulkanDeviceFunctions::vkAllocateMemory(VkDevice device, const VkMemor
    return m_dld.vkAllocateMemory(device, pAllocateInfo, pAllocator, pMemory);
 }
 
+VkResult QVulkanDeviceFunctions::vkBeginCommandBuffer(VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo *pBeginInfo)
+{
+   return m_dld.vkBeginCommandBuffer(commandBuffer, pBeginInfo);
+}
+
+void QVulkanDeviceFunctions::vkCmdDispatch(VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY,
+      uint32_t groupCountZ)
+{
+   m_dld.vkCmdDispatch(commandBuffer, groupCountX, groupCountY, groupCountZ);
+}
+
+void QVulkanDeviceFunctions::vkCmdDispatchIndirect(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset)
+{
+   m_dld.vkCmdDispatchIndirect(commandBuffer, buffer, offset);
+}
+
+void QVulkanDeviceFunctions::vkCmdDraw(VkCommandBuffer commandBuffer, uint32_t vertexCount, uint32_t instanceCount,
+      uint32_t firstVertex, uint32_t firstInstance)
+{
+   m_dld.vkCmdDraw(commandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
+}
+
+void QVulkanDeviceFunctions::vkCmdDrawIndexed(VkCommandBuffer commandBuffer, uint32_t indexCount, uint32_t instanceCount,
+      uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance)
+{
+   m_dld.vkCmdDrawIndexed(commandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+}
+
+void QVulkanDeviceFunctions::vkCmdDrawIndexedIndirect(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset,
+      uint32_t drawCount, uint32_t stride)
+{
+   m_dld.vkCmdDrawIndexedIndirect(commandBuffer, buffer, offset, drawCount, stride);
+}
+
+void QVulkanDeviceFunctions::vkCmdDrawIndirect(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset,
+      uint32_t drawCount, uint32_t stride)
+{
+   m_dld.vkCmdDrawIndirect(commandBuffer, buffer, offset, drawCount, stride);
+}
+
+void QVulkanDeviceFunctions::vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount,
+      const VkCommandBuffer *pCommandBuffers)
+{
+   m_dld.vkCmdExecuteCommands(commandBuffer, commandBufferCount,pCommandBuffers);
+}
+
+VkResult QVulkanDeviceFunctions::vkEndCommandBuffer(VkCommandBuffer commandBuffer)
+{
+   return m_dld.vkEndCommandBuffer(commandBuffer);
+}
+
 void QVulkanDeviceFunctions::vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount,
       const VkCommandBuffer *pCommandBuffers)
 {
@@ -62,4 +113,9 @@ VkResult QVulkanDeviceFunctions::vkFreeDescriptorSets(VkDevice device, VkDescrip
 void QVulkanDeviceFunctions::vkFreeMemory(VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkFreeMemory(device, memory, pAllocator);
+}
+
+VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags)
+{
+   return m_dld.vkResetCommandBuffer(commandBuffer, flags);
 }
