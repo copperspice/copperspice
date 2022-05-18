@@ -33,6 +33,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
  public:
 
  private:
+   QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk::DispatchLoaderDynamic dld);
+
+   vk::DispatchLoaderDynamic m_dld;
 
 };
 
