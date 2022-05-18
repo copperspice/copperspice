@@ -31,6 +31,23 @@
 class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 {
  public:
+   VkResult vkAllocateCommandBuffers(VkDevice device, const VkCommandBufferAllocateInfo *pAllocateInfo,
+      VkCommandBuffer *pCommandBuffers);
+
+   VkResult vkAllocateDescriptorSets(VkDevice device, const VkDescriptorSetAllocateInfo *pAllocateInfo,
+      VkDescriptorSet *pDescriptorSets);
+
+   VkResult vkAllocateMemory(VkDevice device, const VkMemoryAllocateInfo *pAllocateInfo,
+      const VkAllocationCallbacks *pAllocator, VkDeviceMemory *pMemory);
+
+
+   void vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount,
+      const VkCommandBuffer *pCommandBuffers);
+
+   VkResult vkFreeDescriptorSets(VkDevice device, VkDescriptorPool descriptorPool, uint32_t descriptorSetCount,
+      const VkDescriptorSet *pDescriptorSets);
+
+   void vkFreeMemory(VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks *pAllocator);
 
  private:
    QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk::DispatchLoaderDynamic dld);

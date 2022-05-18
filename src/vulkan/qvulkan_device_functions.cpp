@@ -28,3 +28,38 @@ QVulkanDeviceFunctions::QVulkanDeviceFunctions(vk::Instance instance, vk::Device
 {
    m_dld.init(instance, device);
 }
+
+VkResult QVulkanDeviceFunctions::vkAllocateCommandBuffers(VkDevice device, const VkCommandBufferAllocateInfo *pAllocateInfo,
+      VkCommandBuffer *pCommandBuffers)
+{
+   return m_dld.vkAllocateCommandBuffers(device, pAllocateInfo, pCommandBuffers);
+}
+
+VkResult QVulkanDeviceFunctions::vkAllocateDescriptorSets(VkDevice device, const VkDescriptorSetAllocateInfo *pAllocateInfo,
+      VkDescriptorSet *pDescriptorSets)
+{
+   return m_dld.vkAllocateDescriptorSets(device, pAllocateInfo, pDescriptorSets);
+}
+
+VkResult QVulkanDeviceFunctions::vkAllocateMemory(VkDevice device, const VkMemoryAllocateInfo *pAllocateInfo,
+      const VkAllocationCallbacks *pAllocator, VkDeviceMemory *pMemory)
+{
+   return m_dld.vkAllocateMemory(device, pAllocateInfo, pAllocator, pMemory);
+}
+
+void QVulkanDeviceFunctions::vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount,
+      const VkCommandBuffer *pCommandBuffers)
+{
+   m_dld.vkFreeCommandBuffers(device, commandPool, commandBufferCount, pCommandBuffers);
+}
+
+VkResult QVulkanDeviceFunctions::vkFreeDescriptorSets(VkDevice device, VkDescriptorPool descriptorPool, uint32_t descriptorSetCount,
+      const VkDescriptorSet *pDescriptorSets)
+{
+   return m_dld.vkFreeDescriptorSets(device, descriptorPool, descriptorSetCount, pDescriptorSets);
+}
+
+void QVulkanDeviceFunctions::vkFreeMemory(VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkFreeMemory(device, memory, pAllocator);
+}
