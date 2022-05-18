@@ -52,6 +52,41 @@ VkResult QVulkanDeviceFunctions::vkBeginCommandBuffer(VkCommandBuffer commandBuf
    return m_dld.vkBeginCommandBuffer(commandBuffer, pBeginInfo);
 }
 
+VkResult QVulkanDeviceFunctions::vkBindBufferMemory(VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset)
+{
+   return m_dld.vkBindBufferMemory(device, buffer, memory, memoryOffset);
+}
+
+VkResult QVulkanDeviceFunctions::vkBindImageMemory(VkDevice device, VkImage image, VkDeviceMemory memory, VkDeviceSize memoryOffset)
+{
+   return m_dld.vkBindImageMemory(device, image, memory, memoryOffset);
+}
+
+void QVulkanDeviceFunctions::vkCmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
+      VkPipelineLayout layout, uint32_t firstSet, uint32_t descriptorSetCount, const VkDescriptorSet *pDescriptorSets,
+      uint32_t dynamicOffsetCount, const uint32_t *pDynamicOffsets)
+{
+   m_dld.vkCmdBindDescriptorSets(commandBuffer, pipelineBindPoint, layout, firstSet, descriptorSetCount,
+      pDescriptorSets, dynamicOffsetCount, pDynamicOffsets);
+}
+
+void QVulkanDeviceFunctions::vkCmdBindIndexBuffer(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset, VkIndexType indexType)
+{
+   m_dld.vkCmdBindIndexBuffer(commandBuffer, buffer, offset, indexType);
+}
+
+void QVulkanDeviceFunctions::vkCmdBindPipeline(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
+      VkPipeline pipeline)
+{
+   m_dld.vkCmdBindPipeline(commandBuffer, pipelineBindPoint, pipeline);
+}
+
+void QVulkanDeviceFunctions::vkCmdBindVertexBuffers(VkCommandBuffer commandBuffer, uint32_t firstBinding,
+      uint32_t bindingCount, const VkBuffer *pBuffers, const VkDeviceSize *pOffsets)
+{
+   m_dld.vkCmdBindVertexBuffers(commandBuffer, firstBinding, bindingCount, pBuffers, pOffsets);
+}
+
 void QVulkanDeviceFunctions::vkCmdDispatch(VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY,
       uint32_t groupCountZ)
 {

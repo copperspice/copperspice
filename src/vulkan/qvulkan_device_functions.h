@@ -41,6 +41,22 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
       const VkAllocationCallbacks *pAllocator, VkDeviceMemory *pMemory);
 
    VkResult vkBeginCommandBuffer(VkCommandBuffer commandBuffer, const VkCommandBufferBeginInfo *pBeginInfo);
+   VkResult vkBindBufferMemory(VkDevice device, VkBuffer buffer, VkDeviceMemory memory, VkDeviceSize memoryOffset);
+   VkResult vkBindImageMemory(VkDevice device, VkImage image, VkDeviceMemory memory, VkDeviceSize memoryOffset);
+
+
+   void vkCmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
+      VkPipelineLayout layout, uint32_t firstSet, uint32_t descriptorSetCount, const VkDescriptorSet *pDescriptorSets,
+      uint32_t dynamicOffsetCount, const uint32_t *pDynamicOffsets);
+
+   void vkCmdBindIndexBuffer(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset, VkIndexType indexType);
+
+   void vkCmdBindPipeline(VkCommandBuffer commandBuffer,
+      VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
+
+   void vkCmdBindVertexBuffers(VkCommandBuffer commandBuffer, uint32_t firstBinding,
+      uint32_t bindingCount, const VkBuffer *pBuffers, const VkDeviceSize *pOffsets);
+
 
    void vkCmdDispatch(VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
 
