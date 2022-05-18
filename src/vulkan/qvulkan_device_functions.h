@@ -45,6 +45,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    VkResult vkBindImageMemory(VkDevice device, VkImage image, VkDeviceMemory memory, VkDeviceSize memoryOffset);
 
 
+   void vkCmdBeginRenderPass(VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo *pRenderPassBeginInfo,
+      VkSubpassContents contents);
+
    void vkCmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
       VkPipelineLayout layout, uint32_t firstSet, uint32_t descriptorSetCount, const VkDescriptorSet *pDescriptorSets,
       uint32_t dynamicOffsetCount, const uint32_t *pDynamicOffsets);
@@ -74,8 +77,19 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    void vkCmdDrawIndirect(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize offset, uint32_t drawCount,
       uint32_t stride);
 
+
+   void vkCmdEndRenderPass(VkCommandBuffer commandBuffer);
+
    void vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
 
+
+   void vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkSubpassContents contents);
+
+
+   VkResult vkCreateRenderPass(VkDevice device, const VkRenderPassCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkRenderPass *pRenderPass);
+
+   void vkDestroyRenderPass(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks *pAllocator);
    VkResult vkEndCommandBuffer(VkCommandBuffer commandBuffer);
 
    void vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount,

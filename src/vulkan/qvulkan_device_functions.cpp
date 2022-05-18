@@ -62,6 +62,12 @@ VkResult QVulkanDeviceFunctions::vkBindImageMemory(VkDevice device, VkImage imag
    return m_dld.vkBindImageMemory(device, image, memory, memoryOffset);
 }
 
+void QVulkanDeviceFunctions::vkCmdBeginRenderPass(VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo *pRenderPassBeginInfo,
+      VkSubpassContents contents)
+{
+   m_dld.vkCmdBeginRenderPass(commandBuffer, pRenderPassBeginInfo, contents);
+}
+
 void QVulkanDeviceFunctions::vkCmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindPoint,
       VkPipelineLayout layout, uint32_t firstSet, uint32_t descriptorSetCount, const VkDescriptorSet *pDescriptorSets,
       uint32_t dynamicOffsetCount, const uint32_t *pDynamicOffsets)
@@ -122,10 +128,31 @@ void QVulkanDeviceFunctions::vkCmdDrawIndirect(VkCommandBuffer commandBuffer, Vk
    m_dld.vkCmdDrawIndirect(commandBuffer, buffer, offset, drawCount, stride);
 }
 
+void QVulkanDeviceFunctions::vkCmdEndRenderPass(VkCommandBuffer commandBuffer)
+{
+   m_dld.vkCmdEndRenderPass(commandBuffer);
+}
+
 void QVulkanDeviceFunctions::vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount,
       const VkCommandBuffer *pCommandBuffers)
 {
    m_dld.vkCmdExecuteCommands(commandBuffer, commandBufferCount,pCommandBuffers);
+}
+
+void QVulkanDeviceFunctions::vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkSubpassContents contents)
+{
+   m_dld.vkCmdNextSubpass( commandBuffer, contents);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreateRenderPass(VkDevice device, const VkRenderPassCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkRenderPass *pRenderPass)
+{
+   return m_dld.vkCreateRenderPass(device, pCreateInfo, pAllocator, pRenderPass);
+}
+
+void QVulkanDeviceFunctions::vkDestroyRenderPass(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyRenderPass(device, renderPass, pAllocator);
 }
 
 VkResult QVulkanDeviceFunctions::vkEndCommandBuffer(VkCommandBuffer commandBuffer)
