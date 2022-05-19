@@ -296,7 +296,7 @@
 #  define Q_CC_GNU
 #  define Q_C_CALLBACKS
 
-#  define Q_FUNC_INFO       __FILE__ ":" QT_STRINGIFY1(__LINE__)
+#  define Q_FUNC_INFO       __func__
 
 #  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
@@ -348,6 +348,7 @@
 #  endif
 
 #  define Q_CC_MSVC         (_MSC_VER)
+
 #  define Q_FUNC_INFO       __FUNCSIG__
 
 #  define Q_ALIGNOF(type)   __alignof(type)
@@ -364,7 +365,7 @@
 #    define Q_CC_EDG
 #  endif
 
-#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
+#  define Q_FUNC_INFO      __func__
 
 
 #elif defined(__EDG) || defined(__EDG__)
@@ -381,7 +382,7 @@
 
 #  endif
 
-#  define Q_FUNC_INFO      __FILE__ ":" QT_STRINGIFY1(__LINE__)
+#  define Q_FUNC_INFO      __func__
 
 #else
 //  **
@@ -396,11 +397,6 @@
 
 #ifndef Q_UNLIKELY
 #  define Q_UNLIKELY(x) (x)
-#endif
-
-#ifndef QT_STRINGIFY1
-#  define QT_STRINGIFY2(x)  #x
-#  define QT_STRINGIFY1(x)  QT_STRINGIFY2(x)
 #endif
 
 #ifndef Q_CONSTRUCTOR_FUNCTION
