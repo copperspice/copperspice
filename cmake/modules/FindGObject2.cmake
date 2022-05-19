@@ -18,29 +18,26 @@
 #
 # ***********************************************************************
 
-#  Find the GObject2 libraries, will define
-#
 #  GOBJECT2_FOUND       - system has gobject2
 #  GOBJECT2_INCLUDE_DIR - the gobject2 include directory
 #  GOBJECT2_LIBRARIES   - gobject2 library
 
-
 if(GOBJECT2_INCLUDE_DIR AND GOBJECT2_LIBRARIES)
-    # Already in cache, be silent
-    set(GOBJECT2_FIND_QUIETLY TRUE)
+   # Already in cache
+   set(GOBJECT2_FIND_QUIETLY TRUE)
 endif()
 
 find_package(PkgConfig)
 pkg_check_modules(PC_LibGOBJECT2 QUIET gobject-2.0)
 
 find_path(GOBJECT2_MAIN_INCLUDE_DIR
-          NAMES gobject.h
-          HINTS ${PC_LibGOBJECT2_INCLUDEDIR}
-          PATH_SUFFIXES glib-2.0/gobject/)
+   NAMES gobject.h
+   HINTS ${PC_LibGOBJECT2_INCLUDEDIR}
+   PATH_SUFFIXES glib-2.0/gobject/)
 
 find_library(GOBJECT2_LIBRARY
-          NAMES gobject-2.0
-          HINTS ${PC_LibGOBJECT2_LIBDIR}
+   NAMES gobject-2.0
+   HINTS ${PC_LibGOBJECT2_LIBDIR}
 )
 
 set(GOBJECT2_LIBRARIES ${GOBJECT2_LIBRARY})
@@ -49,14 +46,14 @@ set(GOBJECT2_LIBRARIES ${GOBJECT2_LIBRARY})
 get_filename_component(gobject2LibDir "${GOBJECT2_LIBRARIES}" PATH)
 
 find_path(GOBJECT2_INTERNAL_INCLUDE_DIR glibconfig.h
-          PATH_SUFFIXES glib-2.0/include
-          HINTS ${PC_LibGOBJECT2_INCLUDEDIR} "${gobject2LibDir}" ${CMAKE_SYSTEM_LIBRARY_PATH})
+   PATH_SUFFIXES glib-2.0/include
+   HINTS ${PC_LibGOBJECT2_INCLUDEDIR} "${gobject2LibDir}" ${CMAKE_SYSTEM_LIBRARY_PATH})
 
 set(GOBJECT2_INCLUDE_DIR "${GOBJECT2_MAIN_INCLUDE_DIR}")
 
-# not sure if this include dir is optional or required, for now it is optional
+# for now, include dir is optional
 if(GOBJECT2_INTERNAL_INCLUDE_DIR)
-  set(GOBJECT2_INCLUDE_DIR ${GOBJECT2_INCLUDE_DIR} "${GOBJECT2_INTERNAL_INCLUDE_DIR}")
+   set(GOBJECT2_INCLUDE_DIR ${GOBJECT2_INCLUDE_DIR} "${GOBJECT2_INTERNAL_INCLUDE_DIR}")
 endif()
 
 include(FindPackageHandleStandardArgs)

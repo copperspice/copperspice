@@ -18,14 +18,12 @@
 #
 # ***********************************************************************
 
-#  Find GStreamer, will define
-#
 #  GSTREAMER_FOUND        - system has GStreamer
 #  GSTREAMER_INCLUDE_DIRS - the GStreamer include directories
 #  GSTREAMER_LIBRARY      - the libraries needed to use GStreamer
 #  GSTREAMER_DEFINITIONS  - Compiler switches required for using GStreamer
 #
-#  For plugin libraries specified in the COMPONENTS of find_package, this module will define:
+#  For plugin libraries specified in the COMPONENTS of find_package, defines the following
 #
 #  GSTREAMER_<plugin_lib>_LIBRARY_FOUND - system has <plugin_lib>
 #  GSTREAMER_<plugin_lib>_INCLUDE_DIRS  - the <plugin_lib> include directory
@@ -37,14 +35,15 @@ find_package(PkgConfig)
 #   _component_prefix is prepended to the _INCLUDE_DIRS and _LIBRARIES variables (eg. "GSTREAMER_AUDIO")
 #   _pkgconfig_name is the component pkg-config name (eg. "gstreamer-1.0", or "gstreamer-video-1.0").
 #   _library is the component library name (eg. "gstreamer-1.0" or "gstvideo-1.0")
-macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
-    pkg_check_modules(PKG_${_component_prefix} ${_pkgconfig_name})
-    set(${_component_prefix}_INCLUDE_DIRS ${PKG_${_component_prefix}_INCLUDE_DIRS})
 
-    find_library(${_component_prefix}_LIBRARIES
-        NAMES ${_library}
-        HINTS ${PKG_${_component_prefix}_LIBRARY_DIRS} ${PKG_${_component_prefix}_LIBDIR}
-    )
+macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _library)
+   pkg_check_modules(PKG_${_component_prefix} ${_pkgconfig_name})
+   set(${_component_prefix}_INCLUDE_DIRS ${PKG_${_component_prefix}_INCLUDE_DIRS})
+
+   find_library(${_component_prefix}_LIBRARIES
+      NAMES ${_library}
+       HINTS ${PKG_${_component_prefix}_LIBRARY_DIRS} ${PKG_${_component_prefix}_LIBDIR}
+   )
 endmacro()
 
 # find headers and libraries

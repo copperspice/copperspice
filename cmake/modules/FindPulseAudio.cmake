@@ -24,13 +24,14 @@
 # PULSEAUDIO_LIBRARY          - the libraries needed to use PulseAudio
 # PULSEAUDIO_MAINLOOP_LIBRARY - the libraries needed to use PulsAudio Mainloop
 
-# minimum version
+# default minimum version
 if(NOT PulseAudio_FIND_VERSION)
   set(PulseAudio_FIND_VERSION "0.9.9")
 endif()
 
 if (NOT WIN32)
    include(FindPkgConfig)
+
    pkg_check_modules(PC_PULSEAUDIO QUIET libpulse>=${PulseAudio_FIND_VERSION})
    pkg_check_modules(PC_PULSEAUDIO_MAINLOOP QUIET libpulse-mainloop-glib)
 endif()
