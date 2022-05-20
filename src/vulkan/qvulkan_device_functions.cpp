@@ -334,6 +334,11 @@ VkResult QVulkanDeviceFunctions::vkEndCommandBuffer(VkCommandBuffer commandBuffe
    return m_dld.vkEndCommandBuffer(commandBuffer);
 }
 
+VkResult QVulkanDeviceFunctions::vkFlushMappedMemoryRanges(VkDevice device, uint32_t memoryRangeCount, const VkMappedMemoryRange *pMemoryRanges)
+{
+   return m_dld.vkFlushMappedMemoryRanges(device, memoryRangeCount, pMemoryRanges);
+}
+
 void QVulkanDeviceFunctions::vkFreeCommandBuffers(VkDevice device, VkCommandPool commandPool, uint32_t commandBufferCount,
       const VkCommandBuffer *pCommandBuffers)
 {
@@ -351,6 +356,32 @@ void QVulkanDeviceFunctions::vkFreeMemory(VkDevice device, VkDeviceMemory memory
    m_dld.vkFreeMemory(device, memory, pAllocator);
 }
 
+void QVulkanDeviceFunctions::vkGetBufferMemoryRequirements(VkDevice device, VkBuffer buffer, VkMemoryRequirements *pMemoryRequirements)
+{
+   m_dld.vkGetBufferMemoryRequirements(device, buffer, pMemoryRequirements);
+}
+
+void QVulkanDeviceFunctions::vkGetDeviceMemoryCommitment(VkDevice device, VkDeviceMemory memory, VkDeviceSize *pCommittedMemoryInBytes)
+{
+   m_dld.vkGetDeviceMemoryCommitment(device, memory, pCommittedMemoryInBytes);
+}
+
+void QVulkanDeviceFunctions::vkGetImageMemoryRequirements(VkDevice device, VkImage image, VkMemoryRequirements *pMemoryRequirements)
+{
+   m_dld.vkGetImageMemoryRequirements(device, image, pMemoryRequirements);
+}
+
+void QVulkanDeviceFunctions::vkGetImageSparseMemoryRequirements(VkDevice device, VkImage image, uint32_t *pSparseMemoryRequirementCount,
+      VkSparseImageMemoryRequirements *pSparseMemoryRequirements)
+{
+   m_dld.vkGetImageSparseMemoryRequirements(device, image, pSparseMemoryRequirementCount, pSparseMemoryRequirements);
+}
+
+void QVulkanDeviceFunctions::vkGetImageSubresourceLayout(VkDevice device, VkImage image, const VkImageSubresource *pSubresource,
+      VkSubresourceLayout *pLayout)
+{
+   m_dld.vkGetImageSubresourceLayout(device, image, pSubresource, pLayout);
+}
 
 VkResult QVulkanDeviceFunctions::vkGetPipelineCacheData(VkDevice device, VkPipelineCache pipelineCache, size_t *pDataSize, void *pData)
 {
@@ -364,6 +395,18 @@ VkResult QVulkanDeviceFunctions::vkGetQueryPoolResults(VkDevice device, VkQueryP
 }
 
 
+VkResult QVulkanDeviceFunctions::vkInvalidateMappedMemoryRanges(VkDevice device, uint32_t memoryRangeCount,
+      const VkMappedMemoryRange *pMemoryRanges)
+{
+   return m_dld.vkInvalidateMappedMemoryRanges(device, memoryRangeCount, pMemoryRanges);
+}
+
+VkResult QVulkanDeviceFunctions::vkMapMemory(VkDevice device, VkDeviceMemory memory, VkDeviceSize offset, VkDeviceSize size,
+      VkMemoryMapFlags flags, void **ppData)
+{
+   return m_dld.vkMapMemory(device, memory, offset, size, flags, ppData);
+}
+
 VkResult QVulkanDeviceFunctions::vkMergePipelineCaches(VkDevice device, VkPipelineCache dstCache, uint32_t srcCacheCount,
       const VkPipelineCache *pSrcCaches)
 {
@@ -373,4 +416,9 @@ VkResult QVulkanDeviceFunctions::vkMergePipelineCaches(VkDevice device, VkPipeli
 VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags)
 {
    return m_dld.vkResetCommandBuffer(commandBuffer, flags);
+}
+
+void QVulkanDeviceFunctions::vkUnmapMemory(VkDevice device, VkDeviceMemory memory)
+{
+   m_dld.vkUnmapMemory(device, memory);
 }
