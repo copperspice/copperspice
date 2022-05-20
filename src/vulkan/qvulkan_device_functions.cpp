@@ -62,6 +62,11 @@ VkResult QVulkanDeviceFunctions::vkBindImageMemory(VkDevice device, VkImage imag
    return m_dld.vkBindImageMemory(device, image, memory, memoryOffset);
 }
 
+void QVulkanDeviceFunctions::vkCmdBeginQuery(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags)
+{
+   m_dld.vkCmdBeginQuery(commandBuffer, queryPool, query, flags);
+}
+
 void QVulkanDeviceFunctions::vkCmdBeginRenderPass(VkCommandBuffer commandBuffer, const VkRenderPassBeginInfo *pRenderPassBeginInfo,
       VkSubpassContents contents)
 {
@@ -91,6 +96,13 @@ void QVulkanDeviceFunctions::vkCmdBindVertexBuffers(VkCommandBuffer commandBuffe
       uint32_t bindingCount, const VkBuffer *pBuffers, const VkDeviceSize *pOffsets)
 {
    m_dld.vkCmdBindVertexBuffers(commandBuffer, firstBinding, bindingCount, pBuffers, pOffsets);
+}
+
+void QVulkanDeviceFunctions::vkCmdCopyQueryPoolResults(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery,
+      uint32_t queryCount, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize stride, VkQueryResultFlags flags)
+{
+   m_dld.vkCmdCopyQueryPoolResults(commandBuffer, queryPool, firstQuery, queryCount, dstBuffer,
+      dstOffset, stride, flags);
 }
 
 void QVulkanDeviceFunctions::vkCmdDispatch(VkCommandBuffer commandBuffer, uint32_t groupCountX, uint32_t groupCountY,
@@ -128,6 +140,11 @@ void QVulkanDeviceFunctions::vkCmdDrawIndirect(VkCommandBuffer commandBuffer, Vk
    m_dld.vkCmdDrawIndirect(commandBuffer, buffer, offset, drawCount, stride);
 }
 
+void QVulkanDeviceFunctions::vkCmdEndQuery(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t query)
+{
+   m_dld.vkCmdEndQuery(commandBuffer, queryPool, query);
+}
+
 void QVulkanDeviceFunctions::vkCmdEndRenderPass(VkCommandBuffer commandBuffer)
 {
    m_dld.vkCmdEndRenderPass(commandBuffer);
@@ -144,10 +161,27 @@ void QVulkanDeviceFunctions::vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkS
    m_dld.vkCmdNextSubpass( commandBuffer, contents);
 }
 
+void QVulkanDeviceFunctions::vkCmdResetQueryPool(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount)
+{
+   m_dld.vkCmdResetQueryPool(commandBuffer, queryPool, firstQuery, queryCount);
+}
+
+
+VkResult QVulkanDeviceFunctions::vkCreateQueryPool(VkDevice device, const VkQueryPoolCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkQueryPool *pQueryPool)
+{
+   return m_dld.vkCreateQueryPool(device, pCreateInfo, pAllocator, pQueryPool);
+}
+
 VkResult QVulkanDeviceFunctions::vkCreateRenderPass(VkDevice device, const VkRenderPassCreateInfo *pCreateInfo,
       const VkAllocationCallbacks *pAllocator, VkRenderPass *pRenderPass)
 {
    return m_dld.vkCreateRenderPass(device, pCreateInfo, pAllocator, pRenderPass);
+}
+
+void QVulkanDeviceFunctions::vkDestroyQueryPool(VkDevice device, VkQueryPool queryPool, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyQueryPool(device, queryPool, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyRenderPass(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks *pAllocator)
@@ -175,6 +209,12 @@ VkResult QVulkanDeviceFunctions::vkFreeDescriptorSets(VkDevice device, VkDescrip
 void QVulkanDeviceFunctions::vkFreeMemory(VkDevice device, VkDeviceMemory memory, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkFreeMemory(device, memory, pAllocator);
+}
+
+VkResult QVulkanDeviceFunctions::vkGetQueryPoolResults(VkDevice device, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount,
+      size_t dataSize, void *pData, VkDeviceSize stride, VkQueryResultFlags flags)
+{
+   return m_dld.vkGetQueryPoolResults(device, queryPool, firstQuery, queryCount, dataSize, pData, stride, flags);
 }
 
 VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags)
