@@ -116,6 +116,12 @@ void QVulkanDeviceFunctions::vkCmdClearDepthStencilImage(VkCommandBuffer command
    m_dld.vkCmdClearDepthStencilImage(commandBuffer, image, imageLayout, pDepthStencil, rangeCount, pRanges);
 }
 
+void QVulkanDeviceFunctions::vkCmdCopyBuffer(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkBuffer dstBuffer,
+      uint32_t regionCount, const VkBufferCopy *pRegions)
+{
+   m_dld.vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, regionCount, pRegions);
+}
+
 void QVulkanDeviceFunctions::vkCmdCopyBufferToImage(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkImage dstImage,
       VkImageLayout dstImageLayout, uint32_t regionCount, const VkBufferImageCopy *pRegions)
 {
@@ -193,6 +199,12 @@ void QVulkanDeviceFunctions::vkCmdExecuteCommands(VkCommandBuffer commandBuffer,
    m_dld.vkCmdExecuteCommands(commandBuffer, commandBufferCount,pCommandBuffers);
 }
 
+void QVulkanDeviceFunctions::vkCmdFillBuffer(VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize size,
+   uint32_t data)
+{
+   m_dld.vkCmdFillBuffer(commandBuffer, dstBuffer, dstOffset, size, data);
+}
+
 void QVulkanDeviceFunctions::vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkSubpassContents contents)
 {
    m_dld.vkCmdNextSubpass( commandBuffer, contents);
@@ -207,6 +219,19 @@ void QVulkanDeviceFunctions::vkCmdResolveImage(VkCommandBuffer commandBuffer, Vk
       VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageResolve *pRegions)
 {
    m_dld.vkCmdResolveImage(commandBuffer, srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount, pRegions);
+}
+
+
+VkResult QVulkanDeviceFunctions::vkCreateBuffer(VkDevice device, const VkBufferCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkBuffer *pBuffer)
+{
+   return m_dld.vkCreateBuffer(device, pCreateInfo, pAllocator, pBuffer);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreateBufferView(VkDevice device, const VkBufferViewCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkBufferView *pView)
+{
+   return m_dld.vkCreateBufferView(device, pCreateInfo, pAllocator, pView);
 }
 
 
@@ -257,6 +282,16 @@ VkResult QVulkanDeviceFunctions::vkCreateRenderPass(VkDevice device, const VkRen
       const VkAllocationCallbacks *pAllocator, VkRenderPass *pRenderPass)
 {
    return m_dld.vkCreateRenderPass(device, pCreateInfo, pAllocator, pRenderPass);
+}
+
+void QVulkanDeviceFunctions::vkDestroyBuffer(VkDevice device, VkBuffer buffer, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyBuffer(device, buffer, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyBufferView(VkDevice device, VkBufferView bufferView, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyBufferView(device, bufferView, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator)

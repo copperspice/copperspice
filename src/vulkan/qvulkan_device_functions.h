@@ -70,6 +70,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    void vkCmdClearDepthStencilImage(VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout,
       const VkClearDepthStencilValue *pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange *pRanges);
 
+   void vkCmdCopyBuffer(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkBuffer dstBuffer,
+      uint32_t regionCount, const VkBufferCopy *pRegions);
+
    void vkCmdCopyBufferToImage(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkImage dstImage,
       VkImageLayout dstImageLayout, uint32_t regionCount, const VkBufferImageCopy *pRegions);
 
@@ -104,6 +107,8 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    void vkCmdExecuteCommands(VkCommandBuffer commandBuffer, uint32_t commandBufferCount, const VkCommandBuffer *pCommandBuffers);
 
+   void vkCmdFillBuffer(VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize size,
+      uint32_t data);
 
    void vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkSubpassContents contents);
 
@@ -112,6 +117,13 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    void vkCmdResolveImage(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
       VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageResolve *pRegions);
+
+
+   VkResult vkCreateBuffer(VkDevice device, const VkBufferCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkBuffer *pBuffer);
+
+   VkResult vkCreateBufferView(VkDevice device, const VkBufferViewCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkBufferView *pView);
 
    VkResult vkCreateComputePipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
       const VkComputePipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines);
@@ -138,6 +150,8 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    VkResult vkCreateRenderPass(VkDevice device, const VkRenderPassCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkRenderPass *pRenderPass);
 
+   void vkDestroyBuffer(VkDevice device, VkBuffer buffer, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyBufferView(VkDevice device, VkBufferView bufferView, const VkAllocationCallbacks *pAllocator);
    void vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator);
    void vkDestroyImageView(VkDevice device, VkImageView imageView, const VkAllocationCallbacks *pAllocator);
    void vkDestroyPipeline(VkDevice device, VkPipeline pipeline, const VkAllocationCallbacks *pAllocator);
