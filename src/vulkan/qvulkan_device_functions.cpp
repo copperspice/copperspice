@@ -209,6 +209,20 @@ void QVulkanDeviceFunctions::vkCmdResolveImage(VkCommandBuffer commandBuffer, Vk
    m_dld.vkCmdResolveImage(commandBuffer, srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount, pRegions);
 }
 
+
+VkResult QVulkanDeviceFunctions::vkCreateComputePipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
+      const VkComputePipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines)
+{
+   return m_dld.vkCreateComputePipelines(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
+}
+
+
+VkResult QVulkanDeviceFunctions::vkCreateGraphicsPipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
+      const VkGraphicsPipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines)
+{
+   return m_dld.vkCreateGraphicsPipelines(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
+}
+
 VkResult QVulkanDeviceFunctions::vkCreateImage(VkDevice device, const VkImageCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkImage *pImage)
 {
@@ -219,6 +233,18 @@ VkResult QVulkanDeviceFunctions::vkCreateImageView(VkDevice device, const VkImag
       const VkAllocationCallbacks *pAllocator, VkImageView *pView)
 {
    return m_dld.vkCreateImageView(device, pCreateInfo, pAllocator, pView);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreatePipelineCache(VkDevice device, const VkPipelineCacheCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkPipelineCache *pPipelineCache)
+{
+   return m_dld.vkCreatePipelineCache(device, pCreateInfo, pAllocator, pPipelineCache);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreatePipelineLayout(VkDevice device, const VkPipelineLayoutCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkPipelineLayout *pPipelineLayout)
+{
+   return m_dld.vkCreatePipelineLayout(device, pCreateInfo, pAllocator, pPipelineLayout);
 }
 
 VkResult QVulkanDeviceFunctions::vkCreateQueryPool(VkDevice device, const VkQueryPoolCreateInfo *pCreateInfo,
@@ -241,6 +267,21 @@ void QVulkanDeviceFunctions::vkDestroyImage(VkDevice device, VkImage image, cons
 void QVulkanDeviceFunctions::vkDestroyImageView(VkDevice device, VkImageView imageView, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyImageView(device, imageView, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyPipeline(VkDevice device, VkPipeline pipeline, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyPipeline(device, pipeline, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyPipelineCache(VkDevice device, VkPipelineCache pipelineCache, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyPipelineCache(device,  pipelineCache, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyPipelineLayout(VkDevice device, VkPipelineLayout pipelineLayout, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyPipelineLayout(device, pipelineLayout, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyQueryPool(VkDevice device, VkQueryPool queryPool, const VkAllocationCallbacks *pAllocator)
@@ -275,10 +316,23 @@ void QVulkanDeviceFunctions::vkFreeMemory(VkDevice device, VkDeviceMemory memory
    m_dld.vkFreeMemory(device, memory, pAllocator);
 }
 
+
+VkResult QVulkanDeviceFunctions::vkGetPipelineCacheData(VkDevice device, VkPipelineCache pipelineCache, size_t *pDataSize, void *pData)
+{
+   return m_dld.vkGetPipelineCacheData(device, pipelineCache, pDataSize, pData);
+}
+
 VkResult QVulkanDeviceFunctions::vkGetQueryPoolResults(VkDevice device, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount,
       size_t dataSize, void *pData, VkDeviceSize stride, VkQueryResultFlags flags)
 {
    return m_dld.vkGetQueryPoolResults(device, queryPool, firstQuery, queryCount, dataSize, pData, stride, flags);
+}
+
+
+VkResult QVulkanDeviceFunctions::vkMergePipelineCaches(VkDevice device, VkPipelineCache dstCache, uint32_t srcCacheCount,
+      const VkPipelineCache *pSrcCaches)
+{
+   return m_dld.vkMergePipelineCaches(device, dstCache, srcCacheCount, pSrcCaches);
 }
 
 VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags)
