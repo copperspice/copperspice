@@ -61,6 +61,23 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    void vkCmdBindVertexBuffers(VkCommandBuffer commandBuffer, uint32_t firstBinding,
       uint32_t bindingCount, const VkBuffer *pBuffers, const VkDeviceSize *pOffsets);
 
+   void vkCmdBlitImage(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
+      VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageBlit *pRegions, VkFilter filter);
+
+   void vkCmdClearColorImage(VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout,
+      const VkClearColorValue *pColor, uint32_t rangeCount, const VkImageSubresourceRange *pRanges);
+
+   void vkCmdClearDepthStencilImage(VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout,
+      const VkClearDepthStencilValue *pDepthStencil, uint32_t rangeCount, const VkImageSubresourceRange *pRanges);
+
+   void vkCmdCopyBufferToImage(VkCommandBuffer commandBuffer, VkBuffer srcBuffer, VkImage dstImage,
+      VkImageLayout dstImageLayout, uint32_t regionCount, const VkBufferImageCopy *pRegions);
+
+   void vkCmdCopyImage(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
+      VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageCopy *pRegions);
+
+   void vkCmdCopyImageToBuffer(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
+      VkBuffer dstBuffer, uint32_t regionCount, const VkBufferImageCopy *pRegions);
 
    void vkCmdCopyQueryPoolResults(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery,
       uint32_t queryCount, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize stride, VkQueryResultFlags flags);
@@ -93,6 +110,15 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    void vkCmdResetQueryPool(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
 
+   void vkCmdResolveImage(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
+      VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageResolve *pRegions);
+
+   VkResult vkCreateImage(VkDevice device, const VkImageCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkImage *pImage);
+
+   VkResult vkCreateImageView(VkDevice device, const VkImageViewCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkImageView *pView);
+
 
    VkResult vkCreateQueryPool(VkDevice device, const VkQueryPoolCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkQueryPool *pQueryPool);
@@ -100,6 +126,8 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    VkResult vkCreateRenderPass(VkDevice device, const VkRenderPassCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkRenderPass *pRenderPass);
 
+   void vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyImageView(VkDevice device, VkImageView imageView, const VkAllocationCallbacks *pAllocator);
    void vkDestroyQueryPool(VkDevice device, VkQueryPool queryPool, const VkAllocationCallbacks *pAllocator);
    void vkDestroyRenderPass(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks *pAllocator);
    VkResult vkEndCommandBuffer(VkCommandBuffer commandBuffer);
