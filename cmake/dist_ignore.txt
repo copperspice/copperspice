@@ -4,7 +4,10 @@
 /src/imports
 /src/plugins/bearer
 /src/plugins/generic
-/src/plugins/imageformats
+/src/plugins/imageformats/gif
+/src/plugins/imageformats/jpeg
+/src/plugins/imageformats/tga
+/src/plugins/imageformats/tiff
 /src/plugins/sqldrivers/tds
 /src/scripttools
 /test/gui

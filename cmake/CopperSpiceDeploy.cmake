@@ -141,6 +141,27 @@ function(cs_copy_plugins LIB_NAME)
 
    endif()
 
+   if(LIB_NAME STREQUAL "CsImageFormatsSvg")
+
+      if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         set(file ${CS_PLUGIN_DIR}/CsImageFormatsSvg${COPPERSPICE_VERSION_API}.so)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         set(file ${CS_PLUGIN_DIR}/CsImageFormatsSvg${COPPERSPICE_VERSION_API}.so)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+         set(file ${CS_PLUGIN_DIR}/CsImageFormatsSvg${COPPERSPICE_VERSION_API}.dll)
+
+      endif()
+
+      if(NOT EXISTS ${file})
+         message(FATAL_ERROR " \n ** CopperSpice plugin: ${file} \n ** appears to be missing, please verify your installation\n")
+      endif()
+
+      install(FILES ${file} DESTINATION ${APP_INSTALL_DIR}/imageformats)
+
+   endif()
+
 endfunction()
 
 
