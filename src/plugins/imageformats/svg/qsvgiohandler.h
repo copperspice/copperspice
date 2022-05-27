@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_SVGRENDERER
 
-QT_BEGIN_NAMESPACE
-
 class QImage;
 class QByteArray;
 class QIODevice;
@@ -38,22 +36,23 @@ class QSvgIOHandlerPrivate;
 
 class QSvgIOHandler : public QImageIOHandler
 {
-public:
+ public:
     QSvgIOHandler();
     ~QSvgIOHandler();
-    virtual bool canRead() const;
-    virtual QByteArray name() const;
-    virtual bool read(QImage *image);
-    static bool canRead(QIODevice *device);
-    virtual QVariant option(ImageOption option) const;
-    virtual void setOption(ImageOption option, const QVariant & value);
-    virtual bool supportsOption(ImageOption option) const;
 
-private:
+    bool canRead() override;
+    QString name() const override;
+    bool read(QImage *image) override;
+
+    static bool canRead(QIODevice *device);
+
+    QVariant option(ImageOption option) override;
+    void setOption(ImageOption option, const QVariant & value) override;
+    bool supportsOption(ImageOption option) const override;
+
+ private:
     QSvgIOHandlerPrivate *d;
 };
 
-QT_END_NAMESPACE
-
 #endif // QT_NO_SVGRENDERER
-#endif // QSVGIOHANDLER_H
+#endif

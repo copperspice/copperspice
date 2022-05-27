@@ -609,6 +609,7 @@ if (WITH_GUI)
       set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
    endif()
 
+   add_subdirectory(src/plugins/imageformats)
    add_subdirectory(src/plugins/platforms)
    add_subdirectory(src/plugins/printerdrivers)
 endif()
