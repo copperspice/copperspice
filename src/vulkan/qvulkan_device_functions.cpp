@@ -329,6 +329,11 @@ void QVulkanDeviceFunctions::vkDestroyRenderPass(VkDevice device, VkRenderPass r
    m_dld.vkDestroyRenderPass(device, renderPass, pAllocator);
 }
 
+VkResult QVulkanDeviceFunctions::vkDeviceWaitIdle(VkDevice device)
+{
+   return m_dld.vkDeviceWaitIdle(device);
+}
+
 VkResult QVulkanDeviceFunctions::vkEndCommandBuffer(VkCommandBuffer commandBuffer)
 {
    return m_dld.vkEndCommandBuffer(commandBuffer);
@@ -364,6 +369,11 @@ void QVulkanDeviceFunctions::vkGetBufferMemoryRequirements(VkDevice device, VkBu
 void QVulkanDeviceFunctions::vkGetDeviceMemoryCommitment(VkDevice device, VkDeviceMemory memory, VkDeviceSize *pCommittedMemoryInBytes)
 {
    m_dld.vkGetDeviceMemoryCommitment(device, memory, pCommittedMemoryInBytes);
+}
+
+void QVulkanDeviceFunctions::vkGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue *pQueue)
+{
+   m_dld.vkGetDeviceQueue(device, queueFamilyIndex, queueIndex, pQueue);
 }
 
 void QVulkanDeviceFunctions::vkGetImageMemoryRequirements(VkDevice device, VkImage image, VkMemoryRequirements *pMemoryRequirements)
@@ -411,6 +421,21 @@ VkResult QVulkanDeviceFunctions::vkMergePipelineCaches(VkDevice device, VkPipeli
       const VkPipelineCache *pSrcCaches)
 {
    return m_dld.vkMergePipelineCaches(device, dstCache, srcCacheCount, pSrcCaches);
+}
+
+VkResult QVulkanDeviceFunctions::vkQueueBindSparse(VkQueue queue, uint32_t bindInfoCount, const VkBindSparseInfo *pBindInfo, VkFence fence)
+{
+   return m_dld.vkQueueBindSparse(queue, bindInfoCount, pBindInfo, fence);
+}
+
+VkResult QVulkanDeviceFunctions::vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence)
+{
+   return m_dld.vkQueueSubmit(queue, submitCount, pSubmits, fence);
+}
+
+VkResult QVulkanDeviceFunctions::vkQueueWaitIdle(VkQueue queue)
+{
+   return m_dld.vkQueueWaitIdle(queue);
 }
 
 VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags)
