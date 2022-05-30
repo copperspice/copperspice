@@ -127,6 +127,13 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    void vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask);
 
+
+   void vkCmdSetViewport(VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount,
+      const VkViewport *pViewports);
+
+   void vkCmdUpdateBuffer(VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize dataSize,
+      const void *pData);
+
    void vkCmdWaitEvents(VkCommandBuffer commandBuffer, uint32_t eventCount, const VkEvent* pEvents,
       VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, uint32_t memoryBarrierCount,
       const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers,
@@ -156,6 +163,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    VkResult vkCreateFence(VkDevice device, const VkFenceCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkFence *pFence);
+
+   VkResult vkCreateFramebuffer(VkDevice device, const VkFramebufferCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkFramebuffer *pFramebuffer);
 
    VkResult vkCreateGraphicsPipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
       const VkGraphicsPipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines);
@@ -194,6 +204,7 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    void vkDestroyDescriptorSetLayout(VkDevice device, VkDescriptorSetLayout descriptorSetLayout, const VkAllocationCallbacks *pAllocator);
    void vkDestroyEvent(VkDevice device, VkEvent event, const VkAllocationCallbacks *pAllocator);
    void vkDestroyFence(VkDevice device, VkFence fence, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyFramebuffer(VkDevice device, VkFramebuffer framebuffer, const VkAllocationCallbacks *pAllocator);
    void vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator);
    void vkDestroyImageView(VkDevice device, VkImageView imageView, const VkAllocationCallbacks *pAllocator);
    void vkDestroyPipeline(VkDevice device, VkPipeline pipeline, const VkAllocationCallbacks *pAllocator);

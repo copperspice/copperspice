@@ -241,6 +241,18 @@ void QVulkanDeviceFunctions::vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEven
    m_dld.vkCmdSetEvent(commandBuffer, event, stageMask);
 }
 
+void QVulkanDeviceFunctions::vkCmdSetViewport(VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount,
+      const VkViewport *pViewports)
+{
+   m_dld.vkCmdSetViewport(commandBuffer, firstViewport, viewportCount, pViewports);
+}
+
+void QVulkanDeviceFunctions::vkCmdUpdateBuffer(VkCommandBuffer commandBuffer, VkBuffer dstBuffer, VkDeviceSize dstOffset, VkDeviceSize dataSize,
+      const void *pData)
+{
+   m_dld.vkCmdUpdateBuffer(commandBuffer, dstBuffer, dstOffset, dataSize, pData);
+}
+
 void QVulkanDeviceFunctions::vkCmdWaitEvents(VkCommandBuffer commandBuffer, uint32_t eventCount, const VkEvent *pEvents,
       VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, uint32_t memoryBarrierCount,
       const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers,
@@ -296,6 +308,12 @@ VkResult QVulkanDeviceFunctions::vkCreateFence(VkDevice device, const VkFenceCre
    VkFence *pFence)
 {
    return m_dld.vkCreateFence(device, pCreateInfo, pAllocator, pFence);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreateFramebuffer(VkDevice device, const VkFramebufferCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkFramebuffer *pFramebuffer)
+{
+   return m_dld.vkCreateFramebuffer(device, pCreateInfo, pAllocator, pFramebuffer);
 }
 
 VkResult QVulkanDeviceFunctions::vkCreateGraphicsPipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
@@ -387,6 +405,16 @@ void QVulkanDeviceFunctions::vkDestroyDescriptorSetLayout(VkDevice device, VkDes
 void QVulkanDeviceFunctions::vkDestroyEvent(VkDevice device, VkEvent event, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyEvent(device, event, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyFence(VkDevice device, VkFence fence, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyFence(device, fence, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyFramebuffer(VkDevice device, VkFramebuffer framebuffer, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyFramebuffer(device, framebuffer, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator)
