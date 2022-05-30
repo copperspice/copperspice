@@ -210,6 +210,20 @@ void QVulkanDeviceFunctions::vkCmdNextSubpass(VkCommandBuffer commandBuffer, VkS
    m_dld.vkCmdNextSubpass( commandBuffer, contents);
 }
 
+void QVulkanDeviceFunctions::vkCmdPipelineBarrier(VkCommandBuffer commandBuffer, VkPipelineStageFlags srcStageMask,
+      VkPipelineStageFlags dstStageMask, VkDependencyFlags dependencyFlags, uint32_t memoryBarrierCount,
+      const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers,
+      uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *pImageMemoryBarriers)
+{
+   m_dld.vkCmdPipelineBarrier(commandBuffer, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount, pMemoryBarriers,
+      bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
+}
+
+void QVulkanDeviceFunctions::vkCmdResetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask)
+{
+   m_dld.vkCmdResetEvent(commandBuffer, event, stageMask);
+}
+
 void QVulkanDeviceFunctions::vkCmdResetQueryPool(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount)
 {
    m_dld.vkCmdResetQueryPool(commandBuffer, queryPool, firstQuery, queryCount);
@@ -221,6 +235,20 @@ void QVulkanDeviceFunctions::vkCmdResolveImage(VkCommandBuffer commandBuffer, Vk
    m_dld.vkCmdResolveImage(commandBuffer, srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount, pRegions);
 }
 
+
+void QVulkanDeviceFunctions::vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask)
+{
+   m_dld.vkCmdSetEvent(commandBuffer, event, stageMask);
+}
+
+void QVulkanDeviceFunctions::vkCmdWaitEvents(VkCommandBuffer commandBuffer, uint32_t eventCount, const VkEvent *pEvents,
+      VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, uint32_t memoryBarrierCount,
+      const VkMemoryBarrier *pMemoryBarriers, uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers,
+      uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *pImageMemoryBarriers)
+{
+   m_dld.vkCmdWaitEvents(commandBuffer, eventCount, pEvents, srcStageMask, dstStageMask, memoryBarrierCount, pMemoryBarriers,
+      bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
+}
 
 VkResult QVulkanDeviceFunctions::vkCreateBuffer(VkDevice device, const VkBufferCreateInfo *pCreateInfo,
       const VkAllocationCallbacks *pAllocator, VkBuffer *pBuffer)
@@ -241,6 +269,18 @@ VkResult QVulkanDeviceFunctions::vkCreateComputePipelines(VkDevice device, VkPip
    return m_dld.vkCreateComputePipelines(device, pipelineCache, createInfoCount, pCreateInfos, pAllocator, pPipelines);
 }
 
+
+VkResult QVulkanDeviceFunctions::vkCreateEvent(VkDevice device, const VkEventCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkEvent *pEvent)
+{
+   return m_dld.vkCreateEvent(device, pCreateInfo, pAllocator, pEvent);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreateFence(VkDevice device, const VkFenceCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+   VkFence *pFence)
+{
+   return m_dld.vkCreateFence(device, pCreateInfo, pAllocator, pFence);
+}
 
 VkResult QVulkanDeviceFunctions::vkCreateGraphicsPipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
       const VkGraphicsPipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines)
@@ -284,6 +324,12 @@ VkResult QVulkanDeviceFunctions::vkCreateRenderPass(VkDevice device, const VkRen
    return m_dld.vkCreateRenderPass(device, pCreateInfo, pAllocator, pRenderPass);
 }
 
+VkResult QVulkanDeviceFunctions::vkCreateSemaphore(VkDevice device, const VkSemaphoreCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkSemaphore *pSemaphore)
+{
+   return m_dld.vkCreateSemaphore(device, pCreateInfo, pAllocator, pSemaphore);
+}
+
 void QVulkanDeviceFunctions::vkDestroyBuffer(VkDevice device, VkBuffer buffer, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyBuffer(device, buffer, pAllocator);
@@ -292,6 +338,11 @@ void QVulkanDeviceFunctions::vkDestroyBuffer(VkDevice device, VkBuffer buffer, c
 void QVulkanDeviceFunctions::vkDestroyBufferView(VkDevice device, VkBufferView bufferView, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyBufferView(device, bufferView, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyEvent(VkDevice device, VkEvent event, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyEvent(device, event, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator)
@@ -327,6 +378,11 @@ void QVulkanDeviceFunctions::vkDestroyQueryPool(VkDevice device, VkQueryPool que
 void QVulkanDeviceFunctions::vkDestroyRenderPass(VkDevice device, VkRenderPass renderPass, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyRenderPass(device, renderPass, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroySemaphore(VkDevice device, VkSemaphore semaphore, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroySemaphore(device, semaphore, pAllocator);
 }
 
 VkResult QVulkanDeviceFunctions::vkDeviceWaitIdle(VkDevice device)
@@ -374,6 +430,16 @@ void QVulkanDeviceFunctions::vkGetDeviceMemoryCommitment(VkDevice device, VkDevi
 void QVulkanDeviceFunctions::vkGetDeviceQueue(VkDevice device, uint32_t queueFamilyIndex, uint32_t queueIndex, VkQueue *pQueue)
 {
    m_dld.vkGetDeviceQueue(device, queueFamilyIndex, queueIndex, pQueue);
+}
+
+VkResult QVulkanDeviceFunctions::vkGetEventStatus(VkDevice device, VkEvent event)
+{
+   return m_dld.vkGetEventStatus(device, event);
+}
+
+VkResult QVulkanDeviceFunctions::vkGetFenceStatus(VkDevice device, VkFence fence)
+{
+   return m_dld.vkGetFenceStatus(device, fence);
 }
 
 void QVulkanDeviceFunctions::vkGetImageMemoryRequirements(VkDevice device, VkImage image, VkMemoryRequirements *pMemoryRequirements)
@@ -443,7 +509,27 @@ VkResult QVulkanDeviceFunctions::vkResetCommandBuffer(VkCommandBuffer commandBuf
    return m_dld.vkResetCommandBuffer(commandBuffer, flags);
 }
 
+VkResult QVulkanDeviceFunctions::vkResetEvent(VkDevice device, VkEvent event)
+{
+   return m_dld.vkResetEvent(device, event);
+}
+
+VkResult QVulkanDeviceFunctions::vkResetFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences)
+{
+   return m_dld.vkResetFences(device, fenceCount, pFences);
+}
+
+VkResult QVulkanDeviceFunctions::vkSetEvent(VkDevice device, VkEvent event)
+{
+   return m_dld.vkSetEvent(device, event);
+}
+
 void QVulkanDeviceFunctions::vkUnmapMemory(VkDevice device, VkDeviceMemory memory)
 {
    m_dld.vkUnmapMemory(device, memory);
+}
+
+VkResult QVulkanDeviceFunctions::vkWaitForFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences, VkBool32 waitAll, uint64_t timeout)
+{
+   return m_dld.vkWaitForFences(device, fenceCount, pFences, waitAll, timeout);
 }
