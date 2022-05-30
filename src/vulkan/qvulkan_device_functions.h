@@ -139,9 +139,17 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    VkResult vkCreateBufferView(VkDevice device, const VkBufferViewCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkBufferView *pView);
 
+   VkResult vkCreateCommandPool(VkDevice device, const VkCommandPoolCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
+      VkCommandPool *pCommandPool);
+
    VkResult vkCreateComputePipelines(VkDevice device, VkPipelineCache pipelineCache, uint32_t createInfoCount,
       const VkComputePipelineCreateInfo *pCreateInfos, const VkAllocationCallbacks *pAllocator, VkPipeline *pPipelines);
 
+   VkResult vkCreateDescriptorPool(VkDevice device, const VkDescriptorPoolCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkDescriptorPool *pDescriptorPool);
+
+   VkResult vkCreateDescriptorSetLayout(VkDevice device, const VkDescriptorSetLayoutCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkDescriptorSetLayout *pSetLayout);
 
    VkResult vkCreateEvent(VkDevice device, const VkEventCreateInfo *pCreateInfo, const VkAllocationCallbacks *pAllocator,
       VkEvent *pEvent);
@@ -175,6 +183,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    void vkDestroyBuffer(VkDevice device, VkBuffer buffer, const VkAllocationCallbacks *pAllocator);
    void vkDestroyBufferView(VkDevice device, VkBufferView bufferView, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyCommandPool(VkDevice device, VkCommandPool commandPool, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyDescriptorPool(VkDevice device, VkDescriptorPool descriptorPool, const VkAllocationCallbacks *pAllocator);
+   void vkDestroyDescriptorSetLayout(VkDevice device, VkDescriptorSetLayout descriptorSetLayout, const VkAllocationCallbacks *pAllocator);
    void vkDestroyEvent(VkDevice device, VkEvent event, const VkAllocationCallbacks *pAllocator);
    void vkDestroyFence(VkDevice device, VkFence fence, const VkAllocationCallbacks *pAllocator);
    void vkDestroyImage(VkDevice device, VkImage image, const VkAllocationCallbacks *pAllocator);
@@ -224,11 +235,16 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    VkResult vkQueueSubmit(VkQueue queue, uint32_t submitCount, const VkSubmitInfo *pSubmits, VkFence fence);
    VkResult vkQueueWaitIdle(VkQueue queue);
    VkResult vkResetCommandBuffer(VkCommandBuffer commandBuffer, VkCommandBufferResetFlags flags);
+   VkResult vkResetCommandPool(VkDevice device, VkCommandPool commandPool, VkCommandPoolResetFlags flags);
+   VkResult vkResetDescriptorPool(VkDevice device, VkDescriptorPool descriptorPool, VkDescriptorPoolResetFlags flags);
    VkResult vkResetEvent(VkDevice device, VkEvent event);
    VkResult vkResetFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences);
    VkResult vkSetEvent(VkDevice device, VkEvent event);
 
    void vkUnmapMemory(VkDevice device, VkDeviceMemory memory);
+
+   void vkUpdateDescriptorSets(VkDevice device, uint32_t descriptorWriteCount, const VkWriteDescriptorSet *pDescriptorWrites,
+      uint32_t descriptorCopyCount, const VkCopyDescriptorSet *pDescriptorCopies);
 
    VkResult vkWaitForFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences, VkBool32 waitAll, uint64_t timeout);
 
