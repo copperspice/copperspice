@@ -340,10 +340,22 @@ VkResult QVulkanDeviceFunctions::vkCreateRenderPass(VkDevice device, const VkRen
    return m_dld.vkCreateRenderPass(device, pCreateInfo, pAllocator, pRenderPass);
 }
 
+VkResult QVulkanDeviceFunctions::vkCreateSampler(VkDevice device, const VkSamplerCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkSampler *pSampler)
+{
+   return m_dld.vkCreateSampler(device, pCreateInfo, pAllocator, pSampler);
+}
+
 VkResult QVulkanDeviceFunctions::vkCreateSemaphore(VkDevice device, const VkSemaphoreCreateInfo *pCreateInfo,
       const VkAllocationCallbacks *pAllocator, VkSemaphore *pSemaphore)
 {
    return m_dld.vkCreateSemaphore(device, pCreateInfo, pAllocator, pSemaphore);
+}
+
+VkResult QVulkanDeviceFunctions::vkCreateShaderModule(VkDevice device, const VkShaderModuleCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkShaderModule *pShaderModule)
+{
+   return m_dld.vkCreateShaderModule(device, pCreateInfo, pAllocator, pShaderModule);
 }
 
 void QVulkanDeviceFunctions::vkDestroyBuffer(VkDevice device, VkBuffer buffer, const VkAllocationCallbacks *pAllocator)
@@ -412,9 +424,19 @@ void QVulkanDeviceFunctions::vkDestroyRenderPass(VkDevice device, VkRenderPass r
    m_dld.vkDestroyRenderPass(device, renderPass, pAllocator);
 }
 
+void QVulkanDeviceFunctions::vkDestroySampler(VkDevice device, VkSampler sampler, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroySampler(device, sampler, pAllocator);
+}
+
 void QVulkanDeviceFunctions::vkDestroySemaphore(VkDevice device, VkSemaphore semaphore, const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroySemaphore(device, semaphore, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyShaderModule(VkDevice device, VkShaderModule shaderModule, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyShaderModule(device, shaderModule, pAllocator);
 }
 
 VkResult QVulkanDeviceFunctions::vkDeviceWaitIdle(VkDevice device)
