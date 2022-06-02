@@ -41,7 +41,6 @@ class QGraphicsWidget;
 class Q_GUI_EXPORT QAction : public QObject
 {
    GUI_CS_OBJECT(QAction)
-   Q_DECLARE_PRIVATE(QAction)
 
    GUI_CS_ENUM(MenuRole)
    GUI_CS_ENUM(Priority)
@@ -117,9 +116,17 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_PROPERTY_WRITE(priority, setPriority)
 
  public:
-   enum MenuRole { NoRole = 0, TextHeuristicRole, ApplicationSpecificRole, AboutCsRole,
-      AboutRole, PreferencesRole, QuitRole
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum MenuRole {
+         NoRole = 0,
+         TextHeuristicRole,
+         ApplicationSpecificRole,
+         AboutCsRole,
+         AboutRole,
+         PreferencesRole,
+         QuitRole
+      };
+   )
 
    enum Priority {
       LowPriority    = 0,
@@ -253,6 +260,8 @@ class Q_GUI_EXPORT QAction : public QObject
    QScopedPointer<QActionPrivate> d_ptr;
 
  private:
+   Q_DECLARE_PRIVATE(QAction)
+
    friend class QGraphicsWidget;
    friend class QWidget;
    friend class QActionGroup;
