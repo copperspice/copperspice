@@ -241,6 +241,27 @@ void QVulkanDeviceFunctions::vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEven
    m_dld.vkCmdSetEvent(commandBuffer, event, stageMask);
 }
 
+void QVulkanDeviceFunctions::vkCmdSetScissor(VkCommandBuffer commandBuffer, uint32_t firstScissor, uint32_t scissorCount,
+      const VkRect2D *pScissors)
+{
+   m_dld.vkCmdSetScissor(commandBuffer, firstScissor, scissorCount, pScissors);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetStencilCompareMask(VkCommandBuffer commandBuffer, VkStencilFaceFlags faceMask, uint32_t compareMask)
+{
+   m_dld.vkCmdSetStencilCompareMask(commandBuffer, faceMask, compareMask);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetStencilReference(VkCommandBuffer commandBuffer, VkStencilFaceFlags faceMask, uint32_t referenceId)
+{
+   m_dld.vkCmdSetStencilReference(commandBuffer, faceMask, referenceId);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetStencilWriteMask(VkCommandBuffer commandBuffer, VkStencilFaceFlags faceMask, uint32_t writeMask)
+{
+   m_dld.vkCmdSetStencilWriteMask(commandBuffer, faceMask, writeMask);
+}
+
 void QVulkanDeviceFunctions::vkCmdSetViewport(VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount,
       const VkViewport *pViewports)
 {
