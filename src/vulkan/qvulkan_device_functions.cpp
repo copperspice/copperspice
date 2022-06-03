@@ -104,6 +104,12 @@ void QVulkanDeviceFunctions::vkCmdBlitImage(VkCommandBuffer commandBuffer, VkIma
    m_dld.vkCmdBlitImage(commandBuffer, srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount, pRegions, filter);
 }
 
+void QVulkanDeviceFunctions::vkCmdClearAttachments(VkCommandBuffer commandBuffer, uint32_t attachmentCount,
+      const VkClearAttachment *pAttachments, uint32_t rectCount, const VkClearRect *pRects)
+{
+   m_dld.vkCmdClearAttachments(commandBuffer, attachmentCount, pAttachments, rectCount, pRects);
+}
+
 void QVulkanDeviceFunctions::vkCmdClearColorImage(VkCommandBuffer commandBuffer, VkImage image, VkImageLayout imageLayout,
       const VkClearColorValue *pColor, uint32_t rangeCount, const VkImageSubresourceRange *pRanges)
 {
@@ -309,6 +315,12 @@ void QVulkanDeviceFunctions::vkCmdWaitEvents(VkCommandBuffer commandBuffer, uint
       bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
 }
 
+void QVulkanDeviceFunctions::vkCmdWriteTimestamp(VkCommandBuffer commandBuffer, VkPipelineStageFlagBits pipelineStage,
+      VkQueryPool queryPool, uint32_t query)
+{
+   m_dld.vkCmdWriteTimestamp(commandBuffer, pipelineStage, queryPool, query);
+}
+
 VkResult QVulkanDeviceFunctions::vkCreateBuffer(VkDevice device, const VkBufferCreateInfo *pCreateInfo,
       const VkAllocationCallbacks *pAllocator, VkBuffer *pBuffer)
 {
@@ -447,6 +459,11 @@ void QVulkanDeviceFunctions::vkDestroyDescriptorSetLayout(VkDevice device, VkDes
       const VkAllocationCallbacks *pAllocator)
 {
    m_dld.vkDestroyDescriptorSetLayout(device, descriptorSetLayout, pAllocator);
+}
+
+void QVulkanDeviceFunctions::vkDestroyDevice(VkDevice device, const VkAllocationCallbacks *pAllocator)
+{
+   m_dld.vkDestroyDevice(device, pAllocator);
 }
 
 void QVulkanDeviceFunctions::vkDestroyEvent(VkDevice device, VkEvent event, const VkAllocationCallbacks *pAllocator)
@@ -599,6 +616,10 @@ VkResult QVulkanDeviceFunctions::vkGetQueryPoolResults(VkDevice device, VkQueryP
    return m_dld.vkGetQueryPoolResults(device, queryPool, firstQuery, queryCount, dataSize, pData, stride, flags);
 }
 
+void QVulkanDeviceFunctions::vkGetRenderAreaGranularity(VkDevice device, VkRenderPass renderPass, VkExtent2D *pGranularity)
+{
+   m_dld.vkGetRenderAreaGranularity(device, renderPass, pGranularity);
+}
 
 VkResult QVulkanDeviceFunctions::vkInvalidateMappedMemoryRanges(VkDevice device, uint32_t memoryRangeCount,
       const VkMappedMemoryRange *pMemoryRanges)
