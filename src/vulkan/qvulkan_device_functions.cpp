@@ -219,6 +219,12 @@ void QVulkanDeviceFunctions::vkCmdPipelineBarrier(VkCommandBuffer commandBuffer,
       bufferMemoryBarrierCount, pBufferMemoryBarriers, imageMemoryBarrierCount, pImageMemoryBarriers);
 }
 
+void QVulkanDeviceFunctions::vkCmdPushConstants(VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags,
+      uint32_t offset, uint32_t size, const void *pValues)
+{
+   m_dld.vkCmdPushConstants(commandBuffer, layout, stageFlags, offset, size, pValues);
+}
+
 void QVulkanDeviceFunctions::vkCmdResetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask)
 {
    m_dld.vkCmdResetEvent(commandBuffer, event, stageMask);
@@ -235,10 +241,30 @@ void QVulkanDeviceFunctions::vkCmdResolveImage(VkCommandBuffer commandBuffer, Vk
    m_dld.vkCmdResolveImage(commandBuffer, srcImage, srcImageLayout, dstImage, dstImageLayout, regionCount, pRegions);
 }
 
+void QVulkanDeviceFunctions::vkCmdSetBlendConstants(VkCommandBuffer commandBuffer, const float blendConstants[4])
+{
+   m_dld.vkCmdSetBlendConstants(commandBuffer, blendConstants);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetDepthBias(VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp,
+      float depthBiasSlopeFactor)
+{
+   m_dld.vkCmdSetDepthBias(commandBuffer, depthBiasConstantFactor, depthBiasClamp, depthBiasSlopeFactor);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetDepthBounds(VkCommandBuffer commandBuffer, float minDepthBounds, float maxDepthBounds)
+{
+   m_dld.vkCmdSetDepthBounds(commandBuffer, minDepthBounds, maxDepthBounds);
+}
 
 void QVulkanDeviceFunctions::vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask)
 {
    m_dld.vkCmdSetEvent(commandBuffer, event, stageMask);
+}
+
+void QVulkanDeviceFunctions::vkCmdSetLineWidth(VkCommandBuffer commandBuffer, float lineWidth)
+{
+   m_dld.vkCmdSetLineWidth(commandBuffer, lineWidth);
 }
 
 void QVulkanDeviceFunctions::vkCmdSetScissor(VkCommandBuffer commandBuffer, uint32_t firstScissor, uint32_t scissorCount,

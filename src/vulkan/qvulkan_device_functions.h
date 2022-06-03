@@ -117,6 +117,9 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
       uint32_t bufferMemoryBarrierCount, const VkBufferMemoryBarrier *pBufferMemoryBarriers,
       uint32_t imageMemoryBarrierCount, const VkImageMemoryBarrier *pImageMemoryBarriers);
 
+   void vkCmdPushConstants(VkCommandBuffer commandBuffer, VkPipelineLayout layout, VkShaderStageFlags stageFlags,
+      uint32_t offset, uint32_t size, const void *pValues);
+
    void vkCmdResetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask);
 
    void vkCmdResetQueryPool(VkCommandBuffer commandBuffer, VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
@@ -124,9 +127,16 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    void vkCmdResolveImage(VkCommandBuffer commandBuffer, VkImage srcImage, VkImageLayout srcImageLayout,
       VkImage dstImage, VkImageLayout dstImageLayout, uint32_t regionCount, const VkImageResolve *pRegions);
 
+   void vkCmdSetBlendConstants(VkCommandBuffer commandBuffer, const float blendConstants[4]);
+
+   void vkCmdSetDepthBias(VkCommandBuffer commandBuffer, float depthBiasConstantFactor, float depthBiasClamp,
+      float depthBiasSlopeFactor);
+
+   void vkCmdSetDepthBounds(VkCommandBuffer commandBuffer, float minDepthBounds, float maxDepthBounds);
 
    void vkCmdSetEvent(VkCommandBuffer commandBuffer, VkEvent event, VkPipelineStageFlags stageMask);
 
+   void vkCmdSetLineWidth(VkCommandBuffer commandBuffer, float lineWidth);
 
    void vkCmdSetScissor(VkCommandBuffer commandBuffer, uint32_t firstScissor, uint32_t scissorCount,
       const VkRect2D *pScissors);
