@@ -33,7 +33,9 @@ class Q_VULKAN_EXPORT QVulkanFunctions
  public:
 
  private:
+   QVulkanFunctions(vk::Instance instance, vk::DispatchLoaderDynamic dld);
 
+   vk::DispatchLoaderDynamic m_dld;
 };
 
 #endif

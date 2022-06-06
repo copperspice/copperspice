@@ -22,3 +22,9 @@
 ***********************************************************************/
 
 #include <qvulkan_functions.h>
+
+QVulkanFunctions::QVulkanFunctions(vk::Instance instance, vk::DispatchLoaderDynamic dld)
+   : m_dld(dld)
+{
+   m_dld.init(instance);
+}
