@@ -28,3 +28,58 @@ QVulkanFunctions::QVulkanFunctions(vk::Instance instance, vk::DispatchLoaderDyna
 {
    m_dld.init(instance);
 }
+
+VkResult QVulkanFunctions::vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo,
+   const VkAllocationCallbacks *pAllocator, VkDevice *pDevice)
+{
+   return m_dld.vkCreateDevice(physicalDevice, pCreateInfo, pAllocator, pDevice);
+}
+
+PFN_vkVoidFunction QVulkanFunctions::vkGetDeviceProcAddr(VkDevice device, const char *pName)
+{
+   return m_dld.vkGetDeviceProcAddr(device, pName);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceFeatures(VkPhysicalDevice physicalDevice, VkPhysicalDeviceFeatures *pFeatures)
+{
+   m_dld.vkGetPhysicalDeviceFeatures(physicalDevice, pFeatures);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format,
+   VkFormatProperties *pFormatProperties)
+{
+   m_dld.vkGetPhysicalDeviceFormatProperties(physicalDevice, format, pFormatProperties);
+}
+
+VkResult QVulkanFunctions::vkGetPhysicalDeviceImageFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format,
+   VkImageType type, VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
+   VkImageFormatProperties *pImageFormatProperties)
+{
+   return m_dld.vkGetPhysicalDeviceImageFormatProperties(physicalDevice, format, type, tiling, usage, flags,
+      pImageFormatProperties);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties)
+{
+   m_dld.vkGetPhysicalDeviceProperties(physicalDevice, pProperties);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceMemoryProperties(VkPhysicalDevice physicalDevice,
+   VkPhysicalDeviceMemoryProperties *pMemoryProperties)
+{
+   m_dld.vkGetPhysicalDeviceMemoryProperties(physicalDevice, pMemoryProperties);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceQueueFamilyProperties(VkPhysicalDevice physicalDevice,
+   uint32_t *pQueueFamilyPropertyCount, VkQueueFamilyProperties *pQueueFamilyProperties)
+{
+   m_dld.vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, pQueueFamilyPropertyCount, pQueueFamilyProperties);
+}
+
+void QVulkanFunctions::vkGetPhysicalDeviceSparseImageFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format,
+   VkImageType type, VkSampleCountFlagBits samples, VkImageUsageFlags usage, VkImageTiling tiling,
+   uint32_t *pPropertyCount, VkSparseImageFormatProperties *pProperties)
+{
+   m_dld.vkGetPhysicalDeviceSparseImageFormatProperties(physicalDevice, format, type, samples,
+      usage, tiling, pPropertyCount, pProperties);
+}

@@ -31,6 +31,27 @@
 class Q_VULKAN_EXPORT QVulkanFunctions
 {
  public:
+   VkResult vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo,
+      const VkAllocationCallbacks *pAllocator, VkDevice *pDevice);
+
+   PFN_vkVoidFunction vkGetDeviceProcAddr(VkDevice device, const char *pName);
+
+   void vkGetPhysicalDeviceFeatures(VkPhysicalDevice physicalDevice, VkPhysicalDeviceFeatures *pFeatures);
+   void vkGetPhysicalDeviceFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format, VkFormatProperties *pFormatProperties);
+
+   VkResult vkGetPhysicalDeviceImageFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format,
+      VkImageType type, VkImageTiling tiling, VkImageUsageFlags usage, VkImageCreateFlags flags,
+      VkImageFormatProperties *pImageFormatProperties);
+
+   void vkGetPhysicalDeviceMemoryProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceMemoryProperties *pMemoryProperties);
+   void vkGetPhysicalDeviceProperties(VkPhysicalDevice physicalDevice, VkPhysicalDeviceProperties *pProperties);
+
+   void vkGetPhysicalDeviceQueueFamilyProperties(VkPhysicalDevice physicalDevice,
+      uint32_t *pQueueFamilyPropertyCount, VkQueueFamilyProperties *pQueueFamilyProperties);
+
+   void vkGetPhysicalDeviceSparseImageFormatProperties(VkPhysicalDevice physicalDevice, VkFormat format,
+      VkImageType type, VkSampleCountFlagBits samples, VkImageUsageFlags usage, VkImageTiling tiling,
+      uint32_t *pPropertyCount, VkSparseImageFormatProperties *pProperties);
 
  private:
    QVulkanFunctions(vk::Instance instance, vk::DispatchLoaderDynamic dld);
