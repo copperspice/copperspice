@@ -35,6 +35,35 @@ VkResult QVulkanFunctions::vkCreateDevice(VkPhysicalDevice physicalDevice, const
    return m_dld.vkCreateDevice(physicalDevice, pCreateInfo, pAllocator, pDevice);
 }
 
+VkResult QVulkanFunctions::vkEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char *pLayerName,
+   uint32_t *pPropertyCount, VkExtensionProperties *pProperties)
+{
+   return m_dld.vkEnumerateDeviceExtensionProperties(physicalDevice, pLayerName, pPropertyCount, pProperties);
+}
+
+VkResult QVulkanFunctions::vkEnumerateInstanceExtensionProperties(const char *pLayerName, uint32_t *pPropertyCount,
+   VkExtensionProperties *pProperties)
+{
+   return m_dld.vkEnumerateInstanceExtensionProperties(pLayerName, pPropertyCount, pProperties);
+}
+
+VkResult QVulkanFunctions::vkEnumerateDeviceLayerProperties(VkPhysicalDevice physicalDevice, uint32_t *pPropertyCount,
+   VkLayerProperties *pProperties)
+{
+   return m_dld.vkEnumerateDeviceLayerProperties(physicalDevice, pPropertyCount, pProperties);
+}
+
+VkResult QVulkanFunctions::vkEnumerateInstanceLayerProperties(uint32_t *pPropertyCount, VkLayerProperties *pProperties)
+{
+   return m_dld.vkEnumerateInstanceLayerProperties(pPropertyCount, pProperties);
+}
+
+VkResult QVulkanFunctions::vkEnumeratePhysicalDevices(VkInstance instance, uint32_t *pPhysicalDeviceCount,
+   VkPhysicalDevice *pPhysicalDevices)
+{
+   return m_dld.vkEnumeratePhysicalDevices(instance, pPhysicalDeviceCount, pPhysicalDevices);
+}
+
 PFN_vkVoidFunction QVulkanFunctions::vkGetDeviceProcAddr(VkDevice device, const char *pName)
 {
    return m_dld.vkGetDeviceProcAddr(device, pName);

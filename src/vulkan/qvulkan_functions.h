@@ -34,6 +34,19 @@ class Q_VULKAN_EXPORT QVulkanFunctions
    VkResult vkCreateDevice(VkPhysicalDevice physicalDevice, const VkDeviceCreateInfo *pCreateInfo,
       const VkAllocationCallbacks *pAllocator, VkDevice *pDevice);
 
+   VkResult vkEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char *pLayerName,
+      uint32_t *pPropertyCount, VkExtensionProperties *pProperties);
+
+   VkResult vkEnumerateDeviceLayerProperties(VkPhysicalDevice physicalDevice, uint32_t *pPropertyCount,
+      VkLayerProperties *pProperties);
+
+   VkResult vkEnumerateInstanceExtensionProperties(const char *pLayerName, uint32_t *pPropertyCount,
+      VkExtensionProperties *pProperties);
+
+   VkResult vkEnumerateInstanceLayerProperties(uint32_t *pPropertyCount, VkLayerProperties *pProperties);
+
+   VkResult vkEnumeratePhysicalDevices(VkInstance instance, uint32_t *pPhysicalDeviceCount, VkPhysicalDevice *pPhysicalDevices);
+
    PFN_vkVoidFunction vkGetDeviceProcAddr(VkDevice device, const char *pName);
 
    void vkGetPhysicalDeviceFeatures(VkPhysicalDevice physicalDevice, VkPhysicalDeviceFeatures *pFeatures);
