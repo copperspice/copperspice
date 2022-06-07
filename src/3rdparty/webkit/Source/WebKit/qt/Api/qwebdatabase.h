@@ -44,7 +44,7 @@ public:
     QString fileName() const;
     QWebSecurityOrigin origin() const;
 
-    static void removeDatabase(const QWebDatabase&);
+    static void removeDatabase(const QWebDatabase &db);
     static void removeAllDatabases();
 
 private:

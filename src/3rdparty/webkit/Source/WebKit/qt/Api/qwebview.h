@@ -112,9 +112,8 @@ public:
 
     bool findText(const QString& subString, QWebPage::FindFlags options = 0);
 
-    bool event(QEvent*) override;
+    bool event(QEvent *event) override;
 
-public :
     WEB_CS_SLOT_1(Public, void stop())
     WEB_CS_SLOT_2(stop)
 
@@ -145,8 +144,8 @@ public :
     WEB_CS_SIGNAL_1(Public, void statusBarMessage(const QString & text))
     WEB_CS_SIGNAL_2(statusBarMessage,text)
 
-    WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & url))
+    WEB_CS_SIGNAL_2(linkClicked, url)
 
     WEB_CS_SIGNAL_1(Public, void selectionChanged())
     WEB_CS_SIGNAL_2(selectionChanged)
@@ -154,38 +153,38 @@ public :
     WEB_CS_SIGNAL_1(Public, void iconChanged())
     WEB_CS_SIGNAL_2(iconChanged)
 
-    WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & url))
+    WEB_CS_SIGNAL_2(urlChanged, url)
 
 protected:
-    void resizeEvent(QResizeEvent*) override;
-    void paintEvent(QPaintEvent*) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
     virtual QWebView *createWindow(QWebPage::WebWindowType type);
 
-    void changeEvent(QEvent*) override;
-    void mouseMoveEvent(QMouseEvent*) override;
-    void mousePressEvent(QMouseEvent*) override;
-    void mouseDoubleClickEvent(QMouseEvent*) override;
-    void mouseReleaseEvent(QMouseEvent*) override;
+    void changeEvent(QEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QContextMenuEvent*) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 #endif
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QWheelEvent*) override;
+    void wheelEvent(QWheelEvent *event) override;
 #endif
 
-    void keyPressEvent(QKeyEvent*) override;
-    void keyReleaseEvent(QKeyEvent*) override;
-    void dragEnterEvent(QDragEnterEvent*) override;
-    void dragLeaveEvent(QDragLeaveEvent*) override;
-    void dragMoveEvent(QDragMoveEvent*) override;
-    void dropEvent(QDropEvent*) override;
-    void focusInEvent(QFocusEvent*) override;
-    void focusOutEvent(QFocusEvent*) override;
-    void inputMethodEvent(QInputMethodEvent*) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+    void inputMethodEvent(QInputMethodEvent *event) override;
     bool focusNextPrevChild(bool next) override;
 
 private:
@@ -194,7 +193,6 @@ private:
 
     WEB_CS_SLOT_1(Private, void _q_pageDestroyed())
     WEB_CS_SLOT_2(_q_pageDestroyed)
-
 };
 
 #endif

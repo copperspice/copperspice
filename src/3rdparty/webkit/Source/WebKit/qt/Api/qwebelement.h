@@ -58,12 +58,12 @@ class QWebElementPrivate;
 class QWEBKIT_EXPORT QWebElement {
 public:
     QWebElement();
-    QWebElement(const QWebElement&);
-    QWebElement &operator=(const QWebElement&);
+    QWebElement(const QWebElement &other);
+    QWebElement &operator=(const QWebElement &other);
     ~QWebElement();
 
-    bool operator==(const QWebElement& o) const;
-    bool operator!=(const QWebElement& o) const;
+    bool operator==(const QWebElement &other) const;
+    bool operator!=(const QWebElement &other) const;
 
     bool isNull() const;
 
@@ -156,7 +156,7 @@ public:
     void setStyleProperty(const QString& name, const QString& value);
 
     void render(QPainter* painter);
-    void render(QPainter* painter, const QRect& clipRect);
+    void render(QPainter* painter, const QRect& rect);
 
 private:
     explicit QWebElement(WebCore::Element*);
@@ -190,8 +190,8 @@ public:
 
     QWebElementCollection();
     QWebElementCollection(const QWebElement &contextElement, const QString &query);
-    QWebElementCollection(const QWebElementCollection &);
-    QWebElementCollection &operator=(const QWebElementCollection &);
+    QWebElementCollection(const QWebElementCollection &other);
+    QWebElementCollection &operator=(const QWebElementCollection &other);
     ~QWebElementCollection();
 
     QWebElementCollection operator+(const QWebElementCollection &other) const;
@@ -200,7 +200,7 @@ public:
         append(other); return *this;
     }
 
-    void append(const QWebElementCollection &collection);
+    void append(const QWebElementCollection &other);
 
     int count() const;
     QWebElement at(int i) const;
@@ -214,16 +214,16 @@ public:
     class const_iterator {
        public:
            inline const_iterator(const QWebElementCollection* collection, int index) : i(index), collection(collection) {}
-           inline const_iterator(const const_iterator& o) : i(o.i), collection(o.collection) {}
+           inline const_iterator(const const_iterator &other) : i(other.i), collection(other.collection) {}
 
            inline const QWebElement operator*() const { return collection->at(i); }
 
-           inline bool operator==(const const_iterator& o) const { return i == o.i && collection == o.collection; }
-           inline bool operator!=(const const_iterator& o) const { return i != o.i || collection != o.collection; }
-           inline bool operator<(const const_iterator& o) const { return i < o.i; }
-           inline bool operator<=(const const_iterator& o) const { return i <= o.i; }
-           inline bool operator>(const const_iterator& o) const { return i > o.i; }
-           inline bool operator>=(const const_iterator& o) const { return i >= o.i; }
+           inline bool operator==(const const_iterator &other) const { return i == other.i && collection == other.collection; }
+           inline bool operator!=(const const_iterator &other) const { return i != other.i || collection != other.collection; }
+           inline bool operator<(const const_iterator &other) const { return i < other.i; }
+           inline bool operator<=(const const_iterator &other) const { return i <= other.i; }
+           inline bool operator>(const const_iterator &other) const { return i > other.i; }
+           inline bool operator>=(const const_iterator &other) const { return i >= other.i; }
 
            inline const_iterator& operator++() { ++i; return *this; }
            inline const_iterator operator++(int) { const_iterator n(collection, i); ++i; return n; }
@@ -233,7 +233,7 @@ public:
            inline const_iterator& operator-=(size_type n) { i -= n; return *this; }
            inline const_iterator operator+(size_type n) const { return const_iterator(collection, i + n); }
            inline const_iterator operator-(size_type n) const { return const_iterator(collection, i - n); }
-           inline size_type operator-(const_iterator n) const { return i - n.i; }
+           inline size_type operator-(const_iterator other) const { return i - other.i; }
 
        private:
             int i;
@@ -250,16 +250,16 @@ public:
     class iterator {
     public:
         inline iterator(const QWebElementCollection* collection, int index) : i(index), collection(collection) {}
-        inline iterator(const iterator& o) : i(o.i), collection(o.collection) {}
+        inline iterator(const iterator &other) : i(other.i), collection(other.collection) {}
 
         inline QWebElement operator*() const { return collection->at(i); }
 
-        inline bool operator==(const iterator& o) const { return i == o.i && collection == o.collection; }
-        inline bool operator!=(const iterator& o) const { return i != o.i || collection != o.collection; }
-        inline bool operator<(const iterator& o) const { return i < o.i; }
-        inline bool operator<=(const iterator& o) const { return i <= o.i; }
-        inline bool operator>(const iterator& o) const { return i > o.i; }
-        inline bool operator>=(const iterator& o) const { return i >= o.i; }
+        inline bool operator==(const iterator &other) const { return i == other.i && collection == other.collection; }
+        inline bool operator!=(const iterator &other) const { return i != other.i || collection != other.collection; }
+        inline bool operator<(const iterator &other) const { return i < other.i; }
+        inline bool operator<=(const iterator &other) const { return i <= other.i; }
+        inline bool operator>(const iterator &other) const { return i > other.i; }
+        inline bool operator>=(const iterator &other) const { return i >= other.i; }
 
         inline iterator& operator++() { ++i; return *this; }
         inline iterator operator++(int) { iterator n(collection, i); ++i; return n; }
@@ -269,7 +269,7 @@ public:
         inline iterator& operator-=(size_type n) { i -= n; return *this; }
         inline iterator operator+(size_type n) const { return iterator(collection, i + n); }
         inline iterator operator-(size_type n) const { return iterator(collection, i - n); }
-        inline size_type operator-(iterator n) const { return i - n.i; }
+        inline size_type operator-(iterator other) const { return i - other.i; }
 
     private:
         int i;

@@ -107,9 +107,9 @@ class QWEBKIT_EXPORT QWebSettings {
     int fontSize(FontSize type) const;
     void resetFontSize(FontSize type);
 
-    void setAttribute(WebAttribute attr, bool on);
-    bool testAttribute(WebAttribute attr) const;
-    void resetAttribute(WebAttribute attr);
+    void setAttribute(WebAttribute attribute, bool on);
+    bool testAttribute(WebAttribute attribute) const;
+    void resetAttribute(WebAttribute attribute);
 
     void setUserStyleSheetUrl(const QUrl &location);
     QUrl userStyleSheetUrl() const;
@@ -117,7 +117,7 @@ class QWEBKIT_EXPORT QWebSettings {
     void setDefaultTextEncoding(const QString &encoding);
     QString defaultTextEncoding() const;
 
-    static void setIconDatabasePath(const QString &location);
+    static void setIconDatabasePath(const QString &path);
     static QString iconDatabasePath();
     static void clearIconDatabase();
     static QIcon iconForUrl(const QUrl &url);

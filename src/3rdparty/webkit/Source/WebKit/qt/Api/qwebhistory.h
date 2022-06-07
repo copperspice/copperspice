@@ -106,8 +106,8 @@ private:
 
     friend class QWebPage;
     friend class QWebPagePrivate;
-    friend QWEBKIT_EXPORT QDataStream& operator>>(QDataStream&, QWebHistory&);
-    friend QWEBKIT_EXPORT QDataStream& operator<<(QDataStream&, const QWebHistory&);
+    friend QWEBKIT_EXPORT QDataStream& operator>>(QDataStream &stream, QWebHistory &history);
+    friend QWEBKIT_EXPORT QDataStream& operator<<(QDataStream &stream, const QWebHistory &history);
 
     QWebHistoryPrivate *d;
 };

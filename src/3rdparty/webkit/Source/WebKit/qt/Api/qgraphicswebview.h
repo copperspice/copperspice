@@ -66,7 +66,7 @@ public:
     ~QGraphicsWebView();
 
     QWebPage* page() const;
-    void setPage(QWebPage*);
+    void setPage(QWebPage *page);
 
     QUrl url() const;
     void setUrl(const QUrl&);
@@ -103,9 +103,9 @@ public:
 
     void setGeometry(const QRectF& rect) override;
     void updateGeometry() override;
-    void paint(QPainter*, const QStyleOptionGraphicsItem* options, QWidget* widget = 0) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *options, QWidget *widget = nullptr) override;
     QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-    bool event(QEvent*) override;
+    bool event(QEvent *event) override;
 
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint) const override;
 
@@ -113,7 +113,7 @@ public:
 
     QPainter::RenderHints renderHints() const;
     void setRenderHints(QPainter::RenderHints);
-    void setRenderHint(QPainter::RenderHint, bool enabled = true);
+    void setRenderHint(QPainter::RenderHint hint, bool enabled = true);
 
 public :
     WEB_CS_SLOT_1(Public, void stop())
@@ -127,51 +127,51 @@ public :
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())
     WEB_CS_SIGNAL_2(loadStarted)
-    WEB_CS_SIGNAL_1(Public, void loadFinished(bool un_named_arg1))
-    WEB_CS_SIGNAL_2(loadFinished,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void loadFinished(bool ok))
+    WEB_CS_SIGNAL_2(loadFinished, ok)
 
     WEB_CS_SIGNAL_1(Public, void loadProgress(int progress))
     WEB_CS_SIGNAL_2(loadProgress,progress)
-    WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(urlChanged,un_named_arg1)
-    WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & un_named_arg1))
-    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void urlChanged(const QUrl & url))
+    WEB_CS_SIGNAL_2(urlChanged, url)
+    WEB_CS_SIGNAL_1(Public, void titleChanged(const QString &title))
+    WEB_CS_SIGNAL_2(titleChanged, title)
     WEB_CS_SIGNAL_1(Public, void iconChanged())
     WEB_CS_SIGNAL_2(iconChanged)
     WEB_CS_SIGNAL_1(Public, void statusBarMessage(const QString & message))
     WEB_CS_SIGNAL_2(statusBarMessage,message)
-    WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & un_named_arg1))
-    WEB_CS_SIGNAL_2(linkClicked,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void linkClicked(const QUrl & url))
+    WEB_CS_SIGNAL_2(linkClicked, url)
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
-    void hoverMoveEvent(QGraphicsSceneHoverEvent*) override;
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
 #ifndef QT_NO_WHEELEVENT
-    void wheelEvent(QGraphicsSceneWheelEvent*) override;
+    void wheelEvent(QGraphicsSceneWheelEvent *event) override;
 #endif
 
-    void keyPressEvent(QKeyEvent*) override;
-    void keyReleaseEvent(QKeyEvent*) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 #ifndef QT_NO_CONTEXTMENU
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 #endif
 
-    void dragEnterEvent(QGraphicsSceneDragDropEvent*) override;
-    void dragLeaveEvent(QGraphicsSceneDragDropEvent*) override;
-    void dragMoveEvent(QGraphicsSceneDragDropEvent*) override;
-    void dropEvent(QGraphicsSceneDragDropEvent*) override;
-    void focusInEvent(QFocusEvent*) override;
-    void focusOutEvent(QFocusEvent*) override;
-    void inputMethodEvent(QInputMethodEvent*) override;
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dragMoveEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+    void inputMethodEvent(QInputMethodEvent *event) override;
     bool focusNextPrevChild(bool next) override;
 
-    bool sceneEvent(QEvent*) override;
+    bool sceneEvent(QEvent *event) override;
 
 private:
     WEB_CS_SLOT_1(Private, void _q_doLoadFinished(bool success))
@@ -180,12 +180,10 @@ private:
     WEB_CS_SLOT_1(Private, void _q_pageDestroyed())
     WEB_CS_SLOT_2(_q_pageDestroyed)
 
-    // we don't want to change the moc based on USE() macro, so this function is here
-    // but will be empty if ACCLERATED_COMPOSITING is disabled
     WEB_CS_SLOT_1(Private, void syncLayers())
     WEB_CS_SLOT_2(syncLayers)
 
-    WEB_CS_SLOT_1(Private, void _q_contentsSizeChanged(const QSize & un_named_arg1))
+    WEB_CS_SLOT_1(Private, void _q_contentsSizeChanged(const QSize &size))
     WEB_CS_SLOT_2(_q_contentsSizeChanged)
 
     WEB_CS_SLOT_1(Private, void _q_scaleChanged())

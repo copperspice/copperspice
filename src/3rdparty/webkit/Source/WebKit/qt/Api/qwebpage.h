@@ -305,7 +305,7 @@ public:
     void setPreferredContentsSize(const QSize &size);
     void setActualVisibleContentRect(const QRect& rect) const;
 
-    bool event(QEvent*) override;
+    bool event(QEvent *event) override;
     bool focusNextPrevChild(bool next);
 
     QVariant inputMethodQuery(Qt::InputMethodQuery property) const;
@@ -412,8 +412,8 @@ public:
     WEB_CS_SIGNAL_1(Public, void repaintRequested(const QRect & dirtyRect))
     WEB_CS_SIGNAL_2(repaintRequested,dirtyRect)
 
-    WEB_CS_SIGNAL_1(Public, void scrollRequested(int dx,int dy,const QRect & scrollViewRect))
-    WEB_CS_SIGNAL_2(scrollRequested,dx,dy,scrollViewRect)
+    WEB_CS_SIGNAL_1(Public, void scrollRequested(int dx,int dy,const QRect & rect))
+    WEB_CS_SIGNAL_2(scrollRequested, dx, dy, rect)
 
     WEB_CS_SIGNAL_1(Public, void windowCloseRequested())
     WEB_CS_SIGNAL_2(windowCloseRequested)
@@ -468,16 +468,17 @@ public:
 
 protected:
     virtual QWebPage *createWindow(WebWindowType type);
-    virtual QObject *createPlugin(const QString &classid, const QUrl &url, const QStringList &paramNames, const QStringList &paramValues);
+    virtual QObject *createPlugin(const QString &classid, const QUrl &url,
+          const QStringList &paramNames, const QStringList &paramValues);
 
     virtual bool acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type);
-    virtual QString chooseFile(QWebFrame *originatingFrame, const QString& oldFile);
-    virtual void javaScriptAlert(QWebFrame *originatingFrame, const QString& msg);
-    virtual bool javaScriptConfirm(QWebFrame *originatingFrame, const QString& msg);
-    virtual bool javaScriptPrompt(QWebFrame *originatingFrame, const QString& msg, const QString& defaultValue, QString* result);
-    virtual void javaScriptConsoleMessage(const QString& message, int lineNumber, const QString& sourceID);
+    virtual QString chooseFile(QWebFrame *frame, const QString &suggestedFile);
+    virtual void javaScriptAlert(QWebFrame *frame, const QString &msg);
+    virtual bool javaScriptConfirm(QWebFrame *frame, const QString &msg);
+    virtual bool javaScriptPrompt(QWebFrame *frame, const QString &msg, const QString &defaultValue, QString *result);
+    virtual void javaScriptConsoleMessage(const QString &message, int lineNumber, const QString &sourceID);
 
-    virtual QString userAgentForUrl(const QUrl& url) const;
+    virtual QString userAgentForUrl(const QUrl &url) const;
 
 private:
     WEB_CS_SLOT_1(Private, void _q_onLoadProgressChanged(int un_named_arg1))

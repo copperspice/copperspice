@@ -141,7 +141,7 @@ public:
     void setContent(const QByteArray &data, const QString &mimeType = QString(), const QUrl &baseUrl = QUrl());
 
     void addToJavaScriptWindowObject(const QString &name, QObject *object);
-    void addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership ownership);
+    void addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership owner);
 
     QString toHtml() const;
     QString toPlainText() const;
@@ -169,7 +169,7 @@ public:
     int scrollBarMaximum(Qt::Orientation orientation) const;
     QRect scrollBarGeometry(Qt::Orientation orientation) const;
 
-    void scroll(int, int);
+    void scroll(int dx, int dy);
     QPoint scrollPosition() const;
     void setScrollPosition(const QPoint &pos);
 
@@ -183,9 +183,9 @@ public:
         AllLayers = 0xff
     };
 
-    void render(QPainter*);
-    void render(QPainter*, const QRegion& clip);
-    void render(QPainter*, RenderLayer layer, const QRegion& clip = QRegion());
+    void render(QPainter *painter);
+    void render(QPainter *painter, const QRegion& clip);
+    void render(QPainter *painter, RenderLayer layer, const QRegion& clip = QRegion());
 
     void setTextSizeMultiplier(qreal factor);
     qreal textSizeMultiplier() const;
@@ -206,7 +206,7 @@ public:
 
     QWebHitTestResult hitTestContent(const QPoint &pos) const;
 
-    bool event(QEvent *) override;
+    bool event(QEvent *event) override;
 
     QWebSecurityOrigin securityOrigin() const;
 
