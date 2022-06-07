@@ -492,13 +492,6 @@ bool QObject::disconnect(const QObject *sender, std::nullptr_t, const QObject *r
       return false;
    }
 
-   const QMetaObject *senderMetaObject   = sender->metaObject();
-   const QMetaObject *receiverMetaObject = nullptr;
-
-   if (receiver) {
-      receiverMetaObject = receiver->metaObject();
-   }
-
    const CSBentoAbstract *signalMethod_Bento = nullptr;
    const CSBentoAbstract *slotMethod_Bento   = nullptr;
 
