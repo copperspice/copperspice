@@ -28,13 +28,32 @@
 
 #include <vulkan/vulkan.hpp>
 
+class QVulkanFunctions;
+
+template<typename T>
+using QDynamicUniqueHandle = vk::UniqueHandle<T, vk::DispatchLoaderDynamic>;
+
+template<typename T, typename U>
+QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk::DispatchLoaderDynamic& dld)
+{
+   return QDynamicUniqueHandle<T>(object, typename vk::UniqueHandleTraits<T, vk::DispatchLoaderDynamic>::deleter(nullptr, dld));
+}
 
 class Q_VULKAN_EXPORT QVulkanInstance
 {
  public:
+   QVulkanInstance();
+   ~QVulkanInstance();
+
+   QVulkanFunctions *functions() const;
 
  private:
+   vk::DynamicLoader m_dl;
+   vk::DispatchLoaderDynamic m_dld;
 
+   QDynamicUniqueHandle<vk::Instance> m_vkInstance;
+   VkResult m_errorCode;
+   mutable std::shared_ptr<QVulkanFunctions> m_functions;
 };
 
 #endif

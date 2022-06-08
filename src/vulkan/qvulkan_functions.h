@@ -70,6 +70,8 @@ class Q_VULKAN_EXPORT QVulkanFunctions
    QVulkanFunctions(vk::Instance instance, vk::DispatchLoaderDynamic dld);
 
    vk::DispatchLoaderDynamic m_dld;
+
+   friend class QVulkanInstance;
 };
 
 #endif

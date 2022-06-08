@@ -22,4 +22,24 @@
 ***********************************************************************/
 
 #include <qvulkan_instance.h>
+#include <qvulkan_functions.h>
 
+QVulkanInstance::QVulkanInstance()
+   : m_errorCode(VK_SUCCESS)
+{
+   PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr = m_dl.getProcAddress<PFN_vkGetInstanceProcAddr>("vkGetInstanceProcAddr");
+   m_dld.init(vkGetInstanceProcAddr);
+}
+
+QVulkanInstance::~QVulkanInstance()
+{
+}
+
+QVulkanFunctions *QVulkanInstance::functions() const
+{
+   if (m_functions == nullptr) {
+      m_functions.reset(new QVulkanFunctions(*m_vkInstance, m_dld));
+   }
+
+   return m_functions.get();
+}
