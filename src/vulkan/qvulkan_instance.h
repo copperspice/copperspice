@@ -24,11 +24,20 @@
 #ifndef QVULKAN_INSTANCE_H
 #define QVULKAN_INSTANCE_H
 
+#include <qstring.h>
 #include <qglobal.h>
 
 #include <vulkan/vulkan.hpp>
 
 class QVulkanFunctions;
+
+// Equivalent to VkExtensionProperties, with a QString instead of char array
+struct QVulkanExtensionProperties
+{
+   QString extensionName;
+   uint32_t extensionVersion;
+};
+using QExtension [[deprecated("Replace with QVulkanExtensionProperties")]] = QVulkanExtensionProperties;
 
 template<typename T>
 using QDynamicUniqueHandle = vk::UniqueHandle<T, vk::DispatchLoaderDynamic>;
@@ -46,6 +55,7 @@ class Q_VULKAN_EXPORT QVulkanInstance
    ~QVulkanInstance();
 
    QVulkanFunctions *functions() const;
+   VkInstance vkInstance() const;
 
  private:
    vk::DynamicLoader m_dl;

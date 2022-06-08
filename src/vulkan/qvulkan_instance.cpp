@@ -24,6 +24,8 @@
 #include <qvulkan_instance.h>
 #include <qvulkan_functions.h>
 
+#include <qapplication.h>
+
 QVulkanInstance::QVulkanInstance()
    : m_errorCode(VK_SUCCESS)
 {
@@ -42,4 +44,9 @@ QVulkanFunctions *QVulkanInstance::functions() const
    }
 
    return m_functions.get();
+}
+
+VkInstance QVulkanInstance::vkInstance() const
+{
+   return *m_vkInstance;
 }

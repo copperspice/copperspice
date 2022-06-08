@@ -47,26 +47,38 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QVulkanWindow(QWindow *parent = nullptr);
    ~QVulkanWindow();
 
+   QVector<VkPhysicalDeviceProperties> availablePhysicalDevices();
    QMatrix4x4 clipCorrectionMatrix();
    int concurrentFrameCount() const;
 
    virtual QVulkanWindowRenderer *createRenderer();
 
    int currentFrame() const;
+   VkDevice device() const;
 
    QVulkanWindow::VulkanFlags flags() const;
+   VkPhysicalDevice physicalDevice() const;
+   const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
    void setDeviceExtensions(const QStringList &extensions);
    void setFlags(QVulkanWindow::VulkanFlags flags);
+   void setPhysicalDeviceIndex(int idx);
    void setSampleCount(int sampleCount);
+   QVector<QVulkanExtensionProperties> supportedDeviceExtensions();
+
  private:
+   bool populatePhysicalDevices() const;
 
    int m_concurrentFrameCount;
    int m_currentFrame;
    int m_physicalDeviceIndex;
    int m_requestedSampleCount;
+   QStringList m_requestedDeviceExtensions;
+
+   VkDevice m_device;
    VulkanFlags m_vulkanFlags;
 
-   QStringList m_requestedDeviceExtensions;
+   mutable QVector<VkPhysicalDevice> m_physicalDevices;
+   mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
 };
 
 #endif
