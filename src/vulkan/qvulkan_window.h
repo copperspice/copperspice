@@ -35,23 +35,36 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VULKAN_CS_OBJECT(QVulkanWindow)
 
  public:
+   enum VulkanOptions : uint32_t {
+      PersistentResources = 0x0001
+   };
+
+   using VulkanFlags = QFlags<VulkanOptions>;
+   using Flags [[deprecated("Replace with QVulkanWindow::VulkanFlags")]] = VulkanFlags;
 
    static constexpr const int MAX_CONCURRENT_FRAME_COUNT = 10;
 
    QVulkanWindow(QWindow *parent = nullptr);
    ~QVulkanWindow();
 
+   QMatrix4x4 clipCorrectionMatrix();
    int concurrentFrameCount() const;
 
    virtual QVulkanWindowRenderer *createRenderer();
 
    int currentFrame() const;
 
+   QVulkanWindow::VulkanFlags flags() const;
    void setDeviceExtensions(const QStringList &extensions);
+   void setFlags(QVulkanWindow::VulkanFlags flags);
+   void setSampleCount(int sampleCount);
  private:
 
    int m_concurrentFrameCount;
    int m_currentFrame;
+   int m_physicalDeviceIndex;
+   int m_requestedSampleCount;
+   VulkanFlags m_vulkanFlags;
 
    QStringList m_requestedDeviceExtensions;
 };
