@@ -24,8 +24,9 @@
 #ifndef QVULKAN_WINDOW_H
 #define QVULKAN_WINDOW_H
 
-#include <qglobal.h>
 #include <qwindow.h>
+#include <qvulkan_instance.h>
+#include <qvulkan_window_renderer.h>
 
 #include <vulkan/vulkan.hpp>
 
@@ -35,8 +36,24 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
  public:
 
+   static constexpr const int MAX_CONCURRENT_FRAME_COUNT = 10;
+
+   QVulkanWindow(QWindow *parent = nullptr);
+   ~QVulkanWindow();
+
+   int concurrentFrameCount() const;
+
+   virtual QVulkanWindowRenderer *createRenderer();
+
+   int currentFrame() const;
+
+   void setDeviceExtensions(const QStringList &extensions);
  private:
 
+   int m_concurrentFrameCount;
+   int m_currentFrame;
+
+   QStringList m_requestedDeviceExtensions;
 };
 
 #endif

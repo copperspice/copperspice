@@ -24,4 +24,31 @@
 #include <qvulkan_window.h>
 
 
+QVulkanWindow::QVulkanWindow(QWindow* parent)
+   : QWindow(parent), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0)
+{
+}
+
+QVulkanWindow::~QVulkanWindow() = default;
+
+
+int QVulkanWindow::concurrentFrameCount() const
+{
+   return m_concurrentFrameCount;
+}
+
+QVulkanWindowRenderer *QVulkanWindow::createRenderer()
+{
+   return nullptr;
+}
+
+int QVulkanWindow::currentFrame() const
+{
+   return m_currentFrame;
+}
+
+void QVulkanWindow::setDeviceExtensions(const QStringList &extensions)
+{
+   m_requestedDeviceExtensions = extensions;
+}
 
