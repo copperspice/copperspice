@@ -123,12 +123,23 @@ TEST_CASE("QString8 contains", "[qstring]")
    REQUIRE(str.contains("jUmpeD", Qt::CaseInsensitive));
 }
 
+TEST_CASE("QString8 compare", "[qstring]")
+{
+   QString str1 = "apple";
+   QString str2 = "APPLE";
+
+   REQUIRE(str1.compare(str2, Qt::CaseInsensitive) == 0);
+   REQUIRE(str1.compare(str2, Qt::CaseSensitive) == 1);
+}
+
 TEST_CASE("QString8 count", "[qstring]")
 {
    QString str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
    REQUIRE(str.count("o") == 4);
    REQUIRE(str.count("q") == 0);
+
+   REQUIRE(str.count('a', Qt::CaseInsensitive) == 7);
 }
 
 TEST_CASE("QString8 empty", "[qstring]")
