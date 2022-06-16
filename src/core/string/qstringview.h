@@ -516,8 +516,17 @@ template <typename S>
 void QStringView<S>::chop(size_type numOfChars)
 {
    if (numOfChars > 0) {
-      auto iter = end() - numOfChars;
-      erase(iter, end());
+      auto iter = end();
+
+      for (size_type cnt = 0; cnt < numOfChars; ++cnt) {
+         if (iter == begin()) {
+            break;
+         }
+
+         --iter;
+      }
+
+      *this = QStringView<S>(begin(), iter);
    }
 }
 
