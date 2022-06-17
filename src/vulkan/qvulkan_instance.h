@@ -24,8 +24,9 @@
 #ifndef QVULKAN_INSTANCE_H
 #define QVULKAN_INSTANCE_H
 
-#include <qstring.h>
 #include <qglobal.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 #include <vulkan/vulkan.hpp>
 
@@ -39,11 +40,20 @@ struct QVulkanExtensionProperties
 };
 using QExtension [[deprecated("Replace with QVulkanExtensionProperties")]] = QVulkanExtensionProperties;
 
+struct QVulkanLayerProperties
+{
+   QString layerName;
+   uint32_t specVersion;
+   uint32_t implementationVersion;
+   QString description;
+};
+using QVulkanLayer [[deprecated("Replace with QVulkanLayerProperties")]] = QVulkanLayerProperties;
+
 template<typename T>
 using QDynamicUniqueHandle = vk::UniqueHandle<T, vk::DispatchLoaderDynamic>;
 
 template<typename T, typename U>
-QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk::DispatchLoaderDynamic& dld)
+QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk::DispatchLoaderDynamic &dld)
 {
    return QDynamicUniqueHandle<T>(object, typename vk::UniqueHandleTraits<T, vk::DispatchLoaderDynamic>::deleter(nullptr, dld));
 }
@@ -51,18 +61,53 @@ QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk::DispatchLoaderD
 class Q_VULKAN_EXPORT QVulkanInstance
 {
  public:
+   using DebugFilter = std::function<bool (VkDebugReportFlagsEXT, VkDebugReportObjectTypeEXT, uint64_t, size_t,
+      int32_t, const char *, const char *)>;
+
+   enum InstanceOptions : uint32_t {
+      NoDebugOutputRedirect = 0x0001
+   };
+
+   using InstanceFlags = QFlags<InstanceOptions>;
+   using Flags [[deprecated("Replace with QVulkanInstance::InstanceFlags")]] = InstanceFlags;
+
    QVulkanInstance();
    ~QVulkanInstance();
 
+   bool create();
+   void destroy();
+
+   VkResult errorCode() const;
+   QStringList extensions() const;
+
+   InstanceFlags flags() const;
    QVulkanFunctions *functions() const;
+   void setExtensions(const QStringList &extensions);
+   void setFlags(InstanceFlags flags);
+   void setLayers(const QStringList &layers);
+   QVector<QVulkanExtensionProperties> supportedExtensions() const;
+   QVector<QVulkanLayerProperties> supportedLayers() const;
    VkInstance vkInstance() const;
 
  private:
+   QSet<QString> supportedExtensionSet() const;
+   QSet<QString> supportedLayerSet() const;
+   static QStringList filterStringList(QStringList input, QSet<QString> validStrings);
+   static VkBool32 debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
+      uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData);
+
+   VkResult m_errorCode;
+   InstanceFlags m_flags;
+
+   QStringList m_layers;
+   QStringList m_extensions;
+
    vk::DynamicLoader m_dl;
    vk::DispatchLoaderDynamic m_dld;
 
    QDynamicUniqueHandle<vk::Instance> m_vkInstance;
-   VkResult m_errorCode;
+   QDynamicUniqueHandle<vk::DebugReportCallbackEXT> m_debugCallback;
+
    mutable std::shared_ptr<QVulkanFunctions> m_functions;
 };
 
