@@ -301,6 +301,7 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    vk::DispatchLoaderDynamic m_dld;
 
+   friend class QVulkanInstance;
 };
 
 #endif

@@ -30,6 +30,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+class QVulkanDeviceFunctions;
 class QVulkanFunctions;
 
 // Equivalent to VkExtensionProperties, with a QString instead of char array
@@ -76,15 +77,20 @@ class Q_VULKAN_EXPORT QVulkanInstance
 
    bool create();
    void destroy();
+   QVulkanDeviceFunctions *deviceFunctions(VkDevice device);
 
    VkResult errorCode() const;
    QStringList extensions() const;
 
    InstanceFlags flags() const;
    QVulkanFunctions *functions() const;
+   PFN_vkVoidFunction getInstanceProcAddr(const char *name);
+   void resetDeviceFunctions(VkDevice device);
    void setExtensions(const QStringList &extensions);
    void setFlags(InstanceFlags flags);
    void setLayers(const QStringList &layers);
+   void setVkInstance(VkInstance existingVkInstance);
+
    QVector<QVulkanExtensionProperties> supportedExtensions() const;
    QVector<QVulkanLayerProperties> supportedLayers() const;
    VkInstance vkInstance() const;
@@ -108,6 +114,7 @@ class Q_VULKAN_EXPORT QVulkanInstance
    QDynamicUniqueHandle<vk::Instance> m_vkInstance;
    QDynamicUniqueHandle<vk::DebugReportCallbackEXT> m_debugCallback;
 
+   QMap<VkDevice, std::shared_ptr<QVulkanDeviceFunctions>> m_deviceFunctions;
    mutable std::shared_ptr<QVulkanFunctions> m_functions;
 };
 

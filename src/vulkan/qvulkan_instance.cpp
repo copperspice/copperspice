@@ -23,6 +23,7 @@
 
 #include <qvulkan_instance.h>
 #include <qvulkan_functions.h>
+#include <qvulkan_device_functions.h>
 
 #include <qapplication.h>
 
@@ -142,6 +143,22 @@ void QVulkanInstance::destroy()
    m_vkInstance.reset();
 }
 
+QVulkanDeviceFunctions *QVulkanInstance::deviceFunctions(VkDevice device)
+{
+   auto iter = m_deviceFunctions.find(device);
+
+   if (iter == m_deviceFunctions.end()) {
+      std::shared_ptr<QVulkanDeviceFunctions> tmp(new QVulkanDeviceFunctions(*m_vkInstance, device, m_dld));
+      QVulkanDeviceFunctions *retval = tmp.get();
+
+      m_deviceFunctions.insert(device, std::move(tmp));
+
+      return retval;
+   } else {
+      return iter->get();
+   }
+}
+
 QStringList QVulkanInstance::extensions() const
 {
    return m_extensions;
@@ -180,6 +197,16 @@ QVulkanFunctions *QVulkanInstance::functions() const
    return m_functions.get();
 }
 
+PFN_vkVoidFunction QVulkanInstance::getInstanceProcAddr(const char *name)
+{
+   return m_vkInstance->getProcAddr(name, m_dld);
+}
+
+void QVulkanInstance::resetDeviceFunctions(VkDevice device)
+{
+   m_deviceFunctions.remove(device);
+}
+
 void QVulkanInstance::setFlags(QVulkanInstance::InstanceFlags flags)
 {
    m_flags = flags;
@@ -193,6 +220,11 @@ void QVulkanInstance::setExtensions(const QStringList &extensions)
 void QVulkanInstance::setLayers(const QStringList &layers)
 {
    m_layers = layers;
+}
+
+void QVulkanInstance::setVkInstance(VkInstance existingVkInstance)
+{
+   m_vkInstance = cs_makeDynamicUnique<vk::Instance>(existingVkInstance, m_dld);
 }
 
 QVector<QVulkanExtensionProperties> QVulkanInstance::supportedExtensions() const
