@@ -296,9 +296,18 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    VkResult vkWaitForFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences, VkBool32 waitAll, uint64_t timeout);
 
+   const vk::DispatchLoaderDynamic& dynamicLoader() const {
+      return m_dld;
+   }
+
+   const vk::Device device() const {
+      return m_device;
+   };
+
  private:
    QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk::DispatchLoaderDynamic dld);
 
+   vk::Device m_device;
    vk::DispatchLoaderDynamic m_dld;
 
    friend class QVulkanInstance;
