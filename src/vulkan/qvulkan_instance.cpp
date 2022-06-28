@@ -38,6 +38,11 @@ QVulkanInstance::~QVulkanInstance()
 {
 }
 
+QVersionNumber QVulkanInstance::apiVersion() const
+{
+   return m_apiVersion;
+}
+
 static const QStringList s_requiredExtensions = {
    "VK_KHR_SURFACE",
    "VK_KHR_win32_surface",
@@ -102,6 +107,7 @@ bool QVulkanInstance::create()
 
       debugCreateInfo.pfnCallback = &debugCallback;
       debugCreateInfo.flags       = vk::DebugReportFlagBitsEXT::eError | vk::DebugReportFlagBitsEXT::eWarning;
+      debugCreateInfo.pUserData   = this;
 
       m_debugCallback = m_vkInstance->createDebugReportCallbackEXTUnique(debugCreateInfo, nullptr, m_dld);
    }
@@ -113,7 +119,13 @@ VkBool32 QVulkanInstance::debugCallback(VkDebugReportFlagsEXT flags, VkDebugRepo
    size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData)
 {
    (void) flags;
-   (void) pUserData;
+   QVulkanInstance* self = static_cast<QVulkanInstance*>(pUserData);
+
+   for(auto& filter: self->m_debugFilters) {
+      if(filter.second(flags, objectType, object, location, messageCode, pLayerPrefix, pMessage)) {
+         return VK_FALSE;
+      }
+   }
 
    QString errorMessage;
 
@@ -154,9 +166,9 @@ QVulkanDeviceFunctions *QVulkanInstance::deviceFunctions(VkDevice device)
       m_deviceFunctions.insert(device, std::move(tmp));
 
       return retval;
-   } else {
-      return iter->get();
    }
+
+   return iter->get();
 }
 
 QStringList QVulkanInstance::extensions() const
@@ -177,11 +189,14 @@ QVulkanInstance::InstanceFlags QVulkanInstance::flags() const
 QStringList QVulkanInstance::filterStringList(QStringList input, QSet<QString> validStrings)
 {
    auto iter = input.begin();
+
    while (iter != input.end()) {
       if (validStrings.contains(*iter)) {
          ++iter;
+
       } else {
          iter = input.erase(iter);
+
       }
    }
 
@@ -202,9 +217,63 @@ PFN_vkVoidFunction QVulkanInstance::getInstanceProcAddr(const char *name)
    return m_vkInstance->getProcAddr(name, m_dld);
 }
 
+uint32_t QVulkanInstance::installDebugOutputFilter(QVulkanInstance::DebugFilter filter)
+{
+   uint32_t filterId = m_nextDebugFilterId;
+   ++m_nextDebugFilterId;
+
+   m_debugFilters.append({filterId, filter});
+
+   return filterId;
+}
+
+bool QVulkanInstance::isValid() const
+{
+   return static_cast<bool>(m_vkInstance);
+}
+
+QStringList QVulkanInstance::layers() const
+{
+   return m_layers;
+}
+
+void QVulkanInstance::presentAboutToBeQueued(QWindow* window)
+{
+   (void) window;
+
+   // platform specific hook
+}
+
+void QVulkanInstance::presentQueued(QWindow* window)
+{
+   (void) window;
+
+   // platform specific hook
+}
+
+void QVulkanInstance::removeDebugOutputFilter(uint32_t filterId)
+{
+   auto iter = m_debugFilters.begin();
+
+   while(iter != m_debugFilters.end()) {
+      if(iter->first == filterId) {
+         iter = m_debugFilters.erase(iter);
+
+      } else {
+         ++iter;
+
+      }
+   }
+}
+
 void QVulkanInstance::resetDeviceFunctions(VkDevice device)
 {
    m_deviceFunctions.remove(device);
+}
+
+void QVulkanInstance::setApiVersion(const QVersionNumber &version)
+{
+   m_apiVersion = version;
 }
 
 void QVulkanInstance::setFlags(QVulkanInstance::InstanceFlags flags)
@@ -225,6 +294,28 @@ void QVulkanInstance::setLayers(const QStringList &layers)
 void QVulkanInstance::setVkInstance(VkInstance existingVkInstance)
 {
    m_vkInstance = cs_makeDynamicUnique<vk::Instance>(existingVkInstance, m_dld);
+}
+
+QVersionNumber QVulkanInstance::supportedApiVersion() const {
+   static const auto enumerateFunctionPointer =
+         reinterpret_cast<PFN_vkEnumerateInstanceVersion>(vkGetInstanceProcAddr(nullptr, "vkEnumerateInstanceVersion"));
+
+   QVersionNumber retval = QVersionNumber(1, 0, 0);
+
+   if (enumerateFunctionPointer == nullptr) {
+      return retval;
+   }
+
+   uint32_t apiVersion;
+   VkResult result = enumerateFunctionPointer(&apiVersion);
+
+   if (result != VK_SUCCESS) {
+      return retval;
+   }
+
+   retval = QVersionNumber(VK_VERSION_MAJOR(apiVersion), VK_VERSION_MINOR(apiVersion), VK_VERSION_PATCH(apiVersion));
+
+   return retval;
 }
 
 QVector<QVulkanExtensionProperties> QVulkanInstance::supportedExtensions() const

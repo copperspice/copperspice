@@ -27,6 +27,8 @@
 #include <qglobal.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qwindow.h>
+#include <qversionnumber.h>
 
 #include <vulkan/vulkan.hpp>
 
@@ -75,6 +77,7 @@ class Q_VULKAN_EXPORT QVulkanInstance
    QVulkanInstance();
    ~QVulkanInstance();
 
+   QVersionNumber apiVersion() const;
    bool create();
    void destroy();
    QVulkanDeviceFunctions *deviceFunctions(VkDevice device);
@@ -85,7 +88,17 @@ class Q_VULKAN_EXPORT QVulkanInstance
    InstanceFlags flags() const;
    QVulkanFunctions *functions() const;
    PFN_vkVoidFunction getInstanceProcAddr(const char *name);
+
+   uint32_t installDebugOutputFilter(QVulkanInstance::DebugFilter filter);
+   bool isValid() const;
+   QStringList layers() const;
+
+   void presentAboutToBeQueued(QWindow *window);
+   void presentQueued(QWindow *window);
+
+   void removeDebugOutputFilter(uint32_t);
    void resetDeviceFunctions(VkDevice device);
+   void setApiVersion(const QVersionNumber &vulkanVersion);
    void setExtensions(const QStringList &extensions);
    void setFlags(InstanceFlags flags);
    void setLayers(const QStringList &layers);
@@ -93,6 +106,7 @@ class Q_VULKAN_EXPORT QVulkanInstance
 
    QVector<QVulkanExtensionProperties> supportedExtensions() const;
    QVector<QVulkanLayerProperties> supportedLayers() const;
+   QVersionNumber supportedApiVersion() const;
    VkInstance vkInstance() const;
 
  private:
@@ -102,8 +116,10 @@ class Q_VULKAN_EXPORT QVulkanInstance
    static VkBool32 debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
       uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData);
 
+   uint32_t m_nextDebugFilterId;
    VkResult m_errorCode;
    InstanceFlags m_flags;
+   QVersionNumber m_apiVersion;
 
    QStringList m_layers;
    QStringList m_extensions;
@@ -113,6 +129,7 @@ class Q_VULKAN_EXPORT QVulkanInstance
 
    QDynamicUniqueHandle<vk::Instance> m_vkInstance;
    QDynamicUniqueHandle<vk::DebugReportCallbackEXT> m_debugCallback;
+   QVector< std::pair<uint32_t,DebugFilter> > m_debugFilters;
 
    QMap<VkDevice, std::shared_ptr<QVulkanDeviceFunctions>> m_deviceFunctions;
    mutable std::shared_ptr<QVulkanFunctions> m_functions;
