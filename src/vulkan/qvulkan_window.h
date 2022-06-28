@@ -54,6 +54,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    virtual QVulkanWindowRenderer *createRenderer();
 
    int currentFrame() const;
+   VkRenderPass defaultRenderPass() const;
    VkDevice device() const;
 
    QVulkanWindow::VulkanFlags flags() const;
@@ -67,6 +68,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
  private:
    bool populatePhysicalDevices() const;
+   bool populateRenderPass() const;
 
    int m_concurrentFrameCount;
    int m_currentFrame;
@@ -76,9 +78,16 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    VkDevice m_device;
    VulkanFlags m_vulkanFlags;
+   mutable vk::UniqueHandle<vk::RenderPass, vk::DispatchLoaderDynamic> m_renderPass;
+
+   vk::Format m_colorFormat;
+   vk::Format m_depthFormat;
+   vk::SampleCountFlagBits m_sampleCount;
 
    mutable QVector<VkPhysicalDevice> m_physicalDevices;
    mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
+
+   QVulkanDeviceFunctions *m_deviceFunctions;
 };
 
 #endif

@@ -23,6 +23,7 @@
 
 #include <qvulkan_window.h>
 
+#include <qvulkan_device_functions.h>
 #include <qvulkan_functions.h>
 #include <qmatrix4x4.h>
 
@@ -79,6 +80,75 @@ bool QVulkanWindow::populatePhysicalDevices() const
    return true;
 }
 
+bool QVulkanWindow::populateRenderPass() const
+{
+   if (m_renderPass) {
+      // already populated
+      return true;
+   }
+
+   bool multisampleEnabled = false;
+
+   if (m_requestedSampleCount > 1) {
+      multisampleEnabled = true;
+   }
+
+   QVector<vk::AttachmentDescription> attachments;
+
+   attachments.append(vk::AttachmentDescription(
+                   vk::AttachmentDescriptionFlagBits{}, m_colorFormat, vk::SampleCountFlagBits::e1,
+                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
+                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+                   vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR));
+
+   attachments.append(vk::AttachmentDescription(
+                   vk::AttachmentDescriptionFlagBits{}, m_depthFormat, vk::SampleCountFlagBits::e1,
+                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
+                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+                   vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal));
+
+   uint32_t colorId = 0;
+
+   if (multisampleEnabled) {
+      attachments.append(vk::AttachmentDescription(
+                   vk::AttachmentDescriptionFlagBits{}, m_colorFormat, m_sampleCount,
+                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
+                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+                   vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal));
+      colorId = 2;
+   }
+
+   vk::AttachmentReference colorAttachment(colorId, vk::ImageLayout::eColorAttachmentOptimal);
+   vk::AttachmentReference depthAttachment(1, vk::ImageLayout::eDepthStencilAttachmentOptimal);
+   vk::AttachmentReference multisampleAttachment(0, vk::ImageLayout::eColorAttachmentOptimal);
+
+   vk::SubpassDescription subPass;
+   subPass.pipelineBindPoint       = vk::PipelineBindPoint::eGraphics;
+   subPass.colorAttachmentCount    = 1;
+   subPass.pColorAttachments       = &colorAttachment;
+   subPass.pDepthStencilAttachment = &depthAttachment;
+
+   if (multisampleEnabled) {
+      subPass.pResolveAttachments = &multisampleAttachment;
+   }
+
+   vk::RenderPassCreateInfo passInfo;
+   passInfo.attachmentCount = attachments.size();
+   passInfo.pAttachments    = attachments.data();
+   passInfo.subpassCount    = 1;
+   passInfo.pSubpasses      = &subPass;
+
+   auto pass = m_deviceFunctions->device().createRenderPassUnique(passInfo, nullptr, m_deviceFunctions->dynamicLoader());
+
+   if (! pass) {
+      qWarning("QVulkanWindow: unable to create render pass");
+   }
+
+   m_renderPass = std::move(pass);
+
+   return true;
+}
+
 QVector<VkPhysicalDeviceProperties> QVulkanWindow::availablePhysicalDevices()
 {
    if (! m_physicalDeviceProperties.empty()) {
@@ -114,6 +184,15 @@ QVulkanWindowRenderer *QVulkanWindow::createRenderer()
 int QVulkanWindow::currentFrame() const
 {
    return m_currentFrame;
+}
+
+VkRenderPass QVulkanWindow::defaultRenderPass() const
+{
+   if (! populateRenderPass()) {
+      return nullptr;
+   }
+
+   return m_renderPass.get();
 }
 
 VkDevice QVulkanWindow::device() const
