@@ -53,11 +53,14 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    virtual QVulkanWindowRenderer *createRenderer();
 
+   VkCommandBuffer currentCommandBuffer() const;
    int currentFrame() const;
+   VkFramebuffer currentFramebuffer() const;
    VkRenderPass defaultRenderPass() const;
    VkDevice device() const;
 
    QVulkanWindow::VulkanFlags flags() const;
+   bool isValid() const;
    VkPhysicalDevice physicalDevice() const;
    const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
    void setDeviceExtensions(const QStringList &extensions);
@@ -69,6 +72,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
  private:
    bool populatePhysicalDevices() const;
    bool populateRenderPass() const;
+
+   bool m_isValid;
 
    int m_concurrentFrameCount;
    int m_currentFrame;
@@ -88,6 +93,9 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
 
    QVulkanDeviceFunctions *m_deviceFunctions;
+
+   QVector<vk::CommandBuffer> m_commandbuffers;
+   QVector<vk::Framebuffer> m_framebuffers;
 };
 
 #endif

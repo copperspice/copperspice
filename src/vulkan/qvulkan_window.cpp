@@ -28,7 +28,7 @@
 #include <qmatrix4x4.h>
 
 QVulkanWindow::QVulkanWindow(QWindow *parent)
-   : QWindow(parent), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0),
+   : QWindow(parent), m_isValid(false), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0),
      m_physicalDeviceIndex(0), m_requestedSampleCount(1)
 {
    setSurfaceType(QSurface::VulkanSurface);
@@ -181,9 +181,27 @@ QVulkanWindowRenderer *QVulkanWindow::createRenderer()
    return nullptr;
 }
 
+VkCommandBuffer QVulkanWindow::currentCommandBuffer() const
+{
+   if(m_currentFrame < m_commandbuffers.size()) {
+      return nullptr;
+   }
+
+   return m_commandbuffers[m_currentFrame];
+}
+
 int QVulkanWindow::currentFrame() const
 {
    return m_currentFrame;
+}
+
+VkFramebuffer QVulkanWindow::currentFramebuffer() const
+{
+   if(m_currentFrame < m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return m_framebuffers[m_currentFrame];
 }
 
 VkRenderPass QVulkanWindow::defaultRenderPass() const
@@ -203,6 +221,11 @@ VkDevice QVulkanWindow::device() const
 QVulkanWindow::VulkanFlags QVulkanWindow::flags() const
 {
    return m_vulkanFlags;
+}
+
+bool QVulkanWindow::isValid() const
+{
+   return m_isValid;
 }
 
 VkPhysicalDevice QVulkanWindow::physicalDevice() const
