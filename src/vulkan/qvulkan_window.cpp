@@ -27,6 +27,49 @@
 #include <qvulkan_functions.h>
 #include <qmatrix4x4.h>
 
+namespace {
+
+template <typename T, typename Func, template<typename> typename Container_T>
+QVector<std::invoke_result_t<Func, T>> map_vector(const Container_T<T> &data, Func f)
+{
+   QVector<std::invoke_result_t<Func, T>> retval;
+   retval.reserve(data.size());
+
+   for (const auto &item : data) {
+      retval.push_back( f(item) );
+   }
+
+   return retval;
+}
+
+template <typename T, typename Func>
+QVector<T> filter_vector(QVector<T> data, Func f)
+{
+   data.erase(std::remove_if(data.begin(), data.end(),
+         [&f] (const T &item) { return ! f(item); }), data.end());
+
+   return data;
+}
+
+template <typename T, typename Flags>
+QVector<T> filter_sort_queues(QVector<T> data, Flags f)
+{
+   auto retval = filter_vector(std::move(data),
+         [f] (auto &item) {
+            auto &[properties, index] = item;
+            return (properties.queueFlags & f) != Flags{};
+         });
+
+   std::stable_sort(retval.begin(), retval.end(),
+         [] (auto &a, auto &b) {
+            return uint32_t(a.first.queueFlags) < uint32_t(b.first.queueFlags);
+         });
+
+   return retval;
+}
+
+};
+
 QVulkanWindow::QVulkanWindow(QWindow *parent)
    : QWindow(parent), m_isValid(false), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0),
      m_physicalDeviceIndex(0), m_requestedSampleCount(1)
