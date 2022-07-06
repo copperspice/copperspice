@@ -22,3 +22,33 @@
 ***********************************************************************/
 
 #include <qvulkan_window_renderer.h>
+
+QVulkanWindowRenderer::~QVulkanWindowRenderer() = default;
+
+void QVulkanWindowRenderer::initResources()
+{
+}
+
+void QVulkanWindowRenderer::initSwapChainResources()
+{
+}
+
+void QVulkanWindowRenderer::logicalDeviceLost()
+{
+}
+
+void QVulkanWindowRenderer::physicalDeviceLost()
+{
+}
+
+void QVulkanWindowRenderer::preInitResources()
+{
+}
+
+void QVulkanWindowRenderer::releaseResources()
+{
+}
+
+void QVulkanWindowRenderer::releaseSwapChainResources()
+{
+}
