@@ -27,27 +27,29 @@
 #include <qglobal.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qwindow.h>
 #include <qversionnumber.h>
+#include <qwindow.h>
 
 #include <vulkan/vulkan.hpp>
 
 class QVulkanDeviceFunctions;
 class QVulkanFunctions;
 
-// Equivalent to VkExtensionProperties, with a QString instead of char array
+// equivalent to VkExtensionProperties, with a QString instead of char array
 struct QVulkanExtensionProperties
 {
-   QString extensionName;
    uint32_t extensionVersion;
+
+   QString extensionName;
 };
 using QExtension [[deprecated("Replace with QVulkanExtensionProperties")]] = QVulkanExtensionProperties;
 
 struct QVulkanLayerProperties
 {
-   QString layerName;
    uint32_t specVersion;
    uint32_t implementationVersion;
+
+   QString layerName;
    QString description;
 };
 using QVulkanLayer [[deprecated("Replace with QVulkanLayerProperties")]] = QVulkanLayerProperties;
@@ -96,8 +98,9 @@ class Q_VULKAN_EXPORT QVulkanInstance
    void presentAboutToBeQueued(QWindow *window);
    void presentQueued(QWindow *window);
 
-   void removeDebugOutputFilter(uint32_t);
+   void removeDebugOutputFilter(uint32_t filter);
    void resetDeviceFunctions(VkDevice device);
+
    void setApiVersion(const QVersionNumber &vulkanVersion);
    void setExtensions(const QStringList &extensions);
    void setFlags(InstanceFlags flags);
@@ -107,12 +110,14 @@ class Q_VULKAN_EXPORT QVulkanInstance
    QVector<QVulkanExtensionProperties> supportedExtensions() const;
    QVector<QVulkanLayerProperties> supportedLayers() const;
    QVersionNumber supportedApiVersion() const;
+
    VkInstance vkInstance() const;
 
  private:
    QSet<QString> supportedExtensionSet() const;
    QSet<QString> supportedLayerSet() const;
    static QStringList filterStringList(QStringList input, QSet<QString> validStrings);
+
    static VkBool32 debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
       uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData);
 

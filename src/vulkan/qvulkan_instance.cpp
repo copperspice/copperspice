@@ -115,31 +115,60 @@ bool QVulkanInstance::create()
    return true;
 }
 
+static QString debugFlagsToString(VkDebugReportFlagsEXT flags)
+{
+   // default to error message type
+   QString retval = "error";
+
+   if (flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) {
+      // do nothing
+
+   } else if (flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) {
+      retval = "warning";
+
+   } else if (flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) {
+      retval = "debug";
+
+   } else if (flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) {
+      retval = "warning";
+
+   } else if (flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) {
+      retval = "performance warning";
+
+   } else if (flags & VK_DEBUG_REPORT_INFORMATION_BIT_EXT) {
+      retval = "information";
+
+   }
+
+   return retval;
+}
+
 VkBool32 QVulkanInstance::debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object,
    size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData)
 {
    (void) flags;
-   QVulkanInstance* self = static_cast<QVulkanInstance*>(pUserData);
+   QVulkanInstance *self = static_cast<QVulkanInstance*>(pUserData);
 
-   for(auto& filter: self->m_debugFilters) {
-      if(filter.second(flags, objectType, object, location, messageCode, pLayerPrefix, pMessage)) {
+   for (auto &filter: self->m_debugFilters) {
+      if (filter.second(flags, objectType, object, location, messageCode, pLayerPrefix, pMessage)) {
          return VK_FALSE;
       }
    }
 
+   QString errorType = debugFlagsToString(flags);
    QString errorMessage;
 
    if (objectType == VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT) {
-      errorMessage = QString("Vulkan error: object type = unknown, location = %1, messageCode = %2, layer = %3, message = %4")
-         .formatArg(location).formatArg(messageCode).formatArg(QString::fromUtf8(pLayerPrefix))
+      errorMessage = QString("Vulkan %1: object type = unknown, location = %2, messageCode = %3, layer = %4, message = %5")
+         .formatArg(errorType).formatArg(location).formatArg(messageCode).formatArg(QString::fromUtf8(pLayerPrefix))
          .formatArg(QString::fromUtf8(pMessage));
 
    } else {
       vk::DebugReportObjectTypeEXT type = static_cast<vk::DebugReportObjectTypeEXT>(objectType);
-      QString typeString                = QString::fromStdString(to_string(type));
+      QString typeString = QString::fromStdString(to_string(type));
 
-      errorMessage = QString("Vulkan error: object type = %1, object = %2, location = %3, messageCode = %4, layer = %5, message = %6")
-         .formatArg(typeString).formatArg(object).formatArg(location).formatArg(messageCode)
+      errorMessage = QString("Vulkan %1: object type = %2, object = %3, location = %4, messageCode = %5, layer = %6, message = %7")
+         .formatArg(errorType).formatArg(typeString).formatArg(object).formatArg(location).formatArg(messageCode)
          .formatArg(QString::fromUtf8(pLayerPrefix)).formatArg(QString::fromUtf8(pMessage));
    }
 
@@ -241,22 +270,36 @@ void QVulkanInstance::presentAboutToBeQueued(QWindow* window)
 {
    (void) window;
 
-   // platform specific hook
+#if defined(Q_OS_WIN)
+   // windows platform specific code
+
+#elif defined(Q_OS_UNIX)
+   // unix platform specific code
+
+#endif
+
 }
 
 void QVulkanInstance::presentQueued(QWindow* window)
 {
    (void) window;
 
-   // platform specific hook
+#if defined(Q_OS_WIN)
+   // windows platform specific code
+
+#elif defined(Q_OS_UNIX)
+   // unix platform specific code
+
+#endif
+
 }
 
 void QVulkanInstance::removeDebugOutputFilter(uint32_t filterId)
 {
    auto iter = m_debugFilters.begin();
 
-   while(iter != m_debugFilters.end()) {
-      if(iter->first == filterId) {
+   while (iter != m_debugFilters.end()) {
+      if (iter->first == filterId) {
          iter = m_debugFilters.erase(iter);
 
       } else {
@@ -340,7 +383,7 @@ QVector<QVulkanExtensionProperties> QVulkanInstance::supportedExtensions() const
    }
 
    for (const auto &item: properties) {
-      retval.append({QString::fromUtf8(item.extensionName), item.specVersion});
+      retval.append({item.specVersion, QString::fromUtf8(item.extensionName)});
    }
 
    return retval;
@@ -380,8 +423,8 @@ QVector<QVulkanLayerProperties> QVulkanInstance::supportedLayers() const
    }
 
    for (const auto &item: properties) {
-      retval.append({QString::fromUtf8(item.layerName), item.specVersion,
-            item.implementationVersion, QString::fromUtf8(item.description)});
+      retval.append({item.specVersion, item.implementationVersion,
+            QString::fromUtf8(item.layerName), QString::fromUtf8(item.description)});
    }
 
    return retval;

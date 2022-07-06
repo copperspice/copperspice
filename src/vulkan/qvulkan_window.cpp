@@ -23,9 +23,9 @@
 
 #include <qvulkan_window.h>
 
+#include <qmatrix4x4.h>
 #include <qvulkan_device_functions.h>
 #include <qvulkan_functions.h>
-#include <qmatrix4x4.h>
 
 namespace {
 
@@ -57,6 +57,7 @@ QVector<T> filter_sort_queues(QVector<T> data, Flags f)
    auto retval = filter_vector(std::move(data),
          [f] (auto &item) {
             auto &[properties, index] = item;
+            (void) index;
             return (properties.queueFlags & f) != Flags{};
          });
 
@@ -86,13 +87,13 @@ bool QVulkanWindow::populatePhysicalDevices() const
    uint32_t deviceCount;
 
    if (! m_physicalDevices.empty()) {
-      // Already populated
+      // already populated
       return true;
    }
 
    QVulkanInstance *instance = vulkanInstance();
    if (instance == nullptr) {
-      qWarning("QVulkanWindow: physical devices cannot be retrieved before an instance is created");
+      qWarning("QVulkanWindow: Unable to retrieve a physical device before an instance is created");
       return false;
    }
 
@@ -100,15 +101,15 @@ bool QVulkanWindow::populatePhysicalDevices() const
    VkResult result = f->vkEnumeratePhysicalDevices(instance->vkInstance(), &deviceCount, nullptr);
 
    if (result != VK_SUCCESS || deviceCount < 1) {
-      qWarning("QVulkanWindow: first call to vkEnumeratePhysicalDevices failed");
+      qWarning("QVulkanWindow: First call to vkEnumeratePhysicalDevices() failed");
       return false;
    }
 
    devices.resize(deviceCount);
    result = f->vkEnumeratePhysicalDevices(instance->vkInstance(), &deviceCount, devices.data());
 
-   if (result != VK_SUCCESS) {
-      qWarning("QVulkanWindow: vkEnumeratePhysicalDevices failed");
+   if (result != VK_SUCCESS || deviceCount == 0) {
+      qWarning("QVulkanWindow: Second call to vkEnumeratePhysicalDevices() failed");
       return false;
    }
 
@@ -184,7 +185,7 @@ bool QVulkanWindow::populateRenderPass() const
    auto pass = m_deviceFunctions->device().createRenderPassUnique(passInfo, nullptr, m_deviceFunctions->dynamicLoader());
 
    if (! pass) {
-      qWarning("QVulkanWindow: unable to create render pass");
+      qWarning("QVulkanWindow: Unable to create render pass");
    }
 
    m_renderPass = std::move(pass);
@@ -211,6 +212,7 @@ QMatrix4x4 QVulkanWindow::clipCorrectionMatrix()
                                      0.0, -1.0,  0.0,  0.0,
                                      0.0,  0.0,  0.5,  0.5,
                                      0.0,  0.0,  0.0,  1.0};
+
    return retval;
 }
 
@@ -226,7 +228,7 @@ QVulkanWindowRenderer *QVulkanWindow::createRenderer()
 
 VkCommandBuffer QVulkanWindow::currentCommandBuffer() const
 {
-   if(m_currentFrame < m_commandbuffers.size()) {
+   if (m_currentFrame < m_commandbuffers.size()) {
       return nullptr;
    }
 
@@ -240,7 +242,7 @@ int QVulkanWindow::currentFrame() const
 
 VkFramebuffer QVulkanWindow::currentFramebuffer() const
 {
-   if(m_currentFrame < m_framebuffers.size()) {
+   if (m_currentFrame < m_framebuffers.size()) {
       return nullptr;
    }
 
@@ -278,7 +280,7 @@ VkPhysicalDevice QVulkanWindow::physicalDevice() const
    }
 
    if ((m_physicalDeviceIndex < 0) || (m_physicalDeviceIndex >= m_physicalDevices.size())) {
-      qWarning("QVulkanWindow::physicalDevice() index %d out of range", m_physicalDeviceIndex);
+      qWarning("QVulkanWindow::physicalDevice() Index %d is out of range", m_physicalDeviceIndex);
    }
 
    return m_physicalDevices[m_physicalDeviceIndex];
@@ -291,7 +293,7 @@ const VkPhysicalDeviceProperties *QVulkanWindow::physicalDeviceProperties() cons
    }
 
    if ((m_physicalDeviceIndex < 0) || (m_physicalDeviceIndex >= m_physicalDeviceProperties.size())) {
-      qWarning("QVulkanWindow::physicalDeviceProperties() index %d out of range", m_physicalDeviceIndex);
+      qWarning("QVulkanWindow::physicalDeviceProperties() Index %d is out of range", m_physicalDeviceIndex);
       return nullptr;
    }
 
@@ -329,14 +331,15 @@ void QVulkanWindow::setSampleCount(int sampleCount)
 QVector<QVulkanExtensionProperties> QVulkanWindow::supportedDeviceExtensions()
 {
    QVector<QVulkanExtensionProperties> retval;
+
    if (! populatePhysicalDevices()) {
       return retval;
    }
 
-   auto &physicalDevice    = m_physicalDevices[m_physicalDeviceIndex];
-   uint32_t extensionCount = 0;
    QVector<VkExtensionProperties> extensionProperties;
 
+   auto &physicalDevice      = m_physicalDevices[m_physicalDeviceIndex];
+   uint32_t extensionCount   = 0;
    QVulkanInstance *instance = vulkanInstance();
    QVulkanFunctions *f       = instance->functions();
 
@@ -355,7 +358,7 @@ QVector<QVulkanExtensionProperties> QVulkanWindow::supportedDeviceExtensions()
    }
 
    for (const auto &item : extensionProperties) {
-      retval.append(QVulkanExtensionProperties{QString::fromUtf8(item.extensionName), item.specVersion});
+      retval.append(QVulkanExtensionProperties{item.specVersion, QString::fromUtf8(item.extensionName)});
    }
 
    return retval;
