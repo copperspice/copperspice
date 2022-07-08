@@ -291,6 +291,11 @@ set_package_properties(ALSA PROPERTIES
    TYPE RECOMMENDED
 )
 
+endif()
+
+
+if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+
 find_package(PulseAudio)
 set_package_properties(PulseAudio PROPERTIES
    PURPOSE "Required for pulseaudio support"
@@ -300,6 +305,7 @@ set_package_properties(PulseAudio PROPERTIES
 )
 
 endif()
+
 
 find_package(PostgreSQL QUIET)
 set_package_properties(PostgreSQL PROPERTIES
