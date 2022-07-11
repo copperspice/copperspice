@@ -80,6 +80,221 @@ QVulkanWindow::QVulkanWindow(QWindow *parent)
 
 QVulkanWindow::~QVulkanWindow() = default;
 
+bool QVulkanWindow::initialize()
+{
+   auto instance = vulkanInstance();
+
+   if (! instance) {
+      qWarning("QVulkanWindow::initialize() Called without a valid instance");
+      return false;
+   }
+
+   if (m_renderer == nullptr) {
+      m_renderer.reset(createRenderer());
+   }
+
+   if (! populatePhysicalDevices()) {
+      qWarning("QVulkanWindow::initialize() Unable to detect a physical device");
+      return false;
+   }
+
+   if ((m_physicalDeviceIndex < 0) || (m_physicalDeviceIndex >= m_physicalDeviceProperties.size())) {
+      m_physicalDeviceIndex = 0;
+   }
+
+   if (m_renderer != nullptr) {
+      m_renderer->preInitResources();
+   }
+
+   if (! m_surface && ! createSurface()) {
+      qWarning("QVulkanWindow::initialize() Unable to create surface");
+   }
+
+   auto supported = supportedDeviceExtensions();
+
+   QStringList deviceExtensions;
+
+   for (const QString &item : m_requestedDeviceExtensions) {
+      for (const auto& ext : supported) {
+
+         if (item == ext.extensionName) {
+            deviceExtensions.append(item);
+            break;
+         }
+      }
+   }
+
+   // load queues
+   auto queues = map_vector(m_physicalDevice.getQueueFamilyProperties(),
+         [id = 0] (auto item) mutable {
+            if (item.queueFlags & (vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute)) {
+               // any queue that supports graphics or compute is required to support transfer by the spec
+               item.queueFlags |= vk::QueueFlagBits::eTransfer;
+            }
+
+            return std::make_pair(std::move(item), id++);
+         });
+
+   auto graphicsQueues = filter_sort_queues(queues, vk::QueueFlagBits::eGraphics);
+   auto transferQueues = filter_sort_queues(std::move(queues), vk::QueueFlagBits::eTransfer);
+
+   if (graphicsQueues.empty()) {
+      qWarning("QVulkanWindow::initialize() Unable to select a graphics queue");
+      return false;
+   }
+
+   if (transferQueues.empty()) {
+      qWarning("QVulkanWindow::initialize() Unable to select a transfer queue");
+      return false;
+   }
+
+   try {
+
+      std::tie(m_graphicsDevice, m_graphicsQueues) =
+            createLogicalDevice(graphicsQueues.front(), deviceExtensions);
+
+      m_graphicsCommandQueueFamily = graphicsQueues.front().second;
+
+      if (graphicsQueues.front() == transferQueues.front()) {
+         // unified graphics and transfer queue
+         m_singleDevice = true;
+
+      } else {
+         // seperate graphics and transfer queues
+         std::tie(m_transferDevice, m_transferQueues) =
+               createLogicalDevice(transferQueues.front(), deviceExtensions);
+
+         m_transferCommandQueueFamily = transferQueues.front().second;
+      }
+
+   } catch (vk::DeviceLostError& err) {
+      m_graphicsDevice.reset();
+      m_graphicsQueues.clear();
+      m_transferDevice.reset();
+      m_transferQueues.clear();
+      m_physicalDevices.clear();
+      m_physicalDeviceProperties.clear();
+
+   } catch (vk::SystemError& err) {
+      qWarning("QVulkanWindow::initialize() unable to create device: %s", err.what());
+      return false;
+
+   }
+
+   vk::CommandPoolCreateInfo poolCreateInfo;
+
+   poolCreateInfo.queueFamilyIndex = m_graphicsCommandQueueFamily;
+   m_graphicsPool = m_graphicsDevice->createCommandPoolUnique(poolCreateInfo, nullptr, m_deviceFunctions->dynamicLoader());
+
+   vk::PhysicalDeviceMemoryProperties memoryProperties =
+         m_physicalDevice.getMemoryProperties(m_deviceFunctions->dynamicLoader());
+
+   uint32_t i = 0;
+   std::optional<uint32_t> hostMemIndex;
+   std::optional<uint32_t> hostCachedMemIndex;
+   std::optional<uint32_t> deviceMemIndex;
+
+   const auto hostBits = vk::MemoryPropertyFlagBits::eHostVisible
+         | vk::MemoryPropertyFlagBits::eHostCoherent;
+
+   const auto hostCachedBits = vk::MemoryPropertyFlagBits::eHostVisible
+         | vk::MemoryPropertyFlagBits::eHostCoherent;
+
+   const auto deviceBits = vk::MemoryPropertyFlagBits::eDeviceLocal;
+
+   for (const auto& memoryType : memoryProperties.memoryTypes) {
+
+      if (! hostMemIndex.has_value() && ((memoryType.propertyFlags & hostBits) == hostBits)) {
+         hostMemIndex = i;
+      }
+
+      if (! hostCachedMemIndex.has_value() && ((memoryType.propertyFlags & hostCachedBits) == hostCachedBits)) {
+         hostCachedMemIndex = i;
+      }
+
+      if (! deviceMemIndex.has_value() && ((memoryType.propertyFlags & deviceBits) == deviceBits)) {
+         deviceMemIndex = i;
+      }
+
+      ++i;
+   }
+
+   // default colorspace and format
+   m_colorSpace  = vk::ColorSpaceKHR::eSrgbNonlinear;
+   m_colorFormat = vk::Format::eR8G8B8A8Unorm;
+
+   auto surfaceFormats =
+         m_physicalDevice.getSurfaceFormatsKHR(m_surface.get(), m_deviceFunctions->dynamicLoader());
+
+   // use first available format for the surface, if there is one
+   for (const auto &item : surfaceFormats) {
+      if (item.format != vk::Format::eUndefined) {
+         m_colorFormat = item.format;
+         m_colorSpace  = item.colorSpace;
+         break;
+      }
+   }
+
+   // find the optimal depth stencil format
+   auto preferredFormatList = { vk::Format::eD24UnormS8Uint, vk::Format::eD16UnormS8Uint, vk::Format::eD32SfloatS8Uint };
+
+   m_depthFormat = vk::Format::eUndefined;
+
+   for (auto item : preferredFormatList) {
+      auto formatProperties = m_physicalDevice.getFormatProperties(item, m_deviceFunctions->dynamicLoader());
+
+      if (formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment) {
+         m_depthFormat = item;
+      }
+   }
+
+   if (! populateRenderPass()) {
+      return false;
+   }
+
+   if (m_renderer != nullptr) {
+      m_renderer->initResources();
+   }
+
+   return true;
+}
+
+std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
+QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions)
+{
+   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> device;
+   QVector<vk::Queue> queueVector;
+
+   auto &[properties, id] = deviceProperties;
+   const uint32_t count = properties.queueCount;
+
+   QVector<float> priorities(count, 1.0f);
+
+   vk::DeviceQueueCreateInfo createInfo({}, id, count, priorities.data());
+
+   QVector<const char *> extensionPointers;
+   for (const auto &extensionString : extensions) {
+      extensionPointers.append(extensionString.constData());
+   }
+
+   if (properties.queueFlags & vk::QueueFlagBits::eGraphics) {
+      extensionPointers.push_back("VK_KHR_swapchain");
+   }
+
+   device =  m_physicalDevice.createDeviceUnique(vk::DeviceCreateInfo(
+         {}, 1, &createInfo, 0, nullptr, extensionPointers.size(), extensionPointers.data()),
+         nullptr, m_deviceFunctions->dynamicLoader());
+
+   std::vector<vk::Queue> queues;
+   queues.reserve(count);
+
+   for (uint32_t i = 0; i < count; ++i) {
+      queues.push_back(device->getQueue(id, i));
+   }
+
+   return {std::move(device), std::move(queueVector)};
+}
+
 bool QVulkanWindow::createSurface() const
 {
 #if defined(Q_OS_WIN)
@@ -273,7 +488,7 @@ VkRenderPass QVulkanWindow::defaultRenderPass() const
 
 VkDevice QVulkanWindow::device() const
 {
-   return m_device;
+   return m_graphicsDevice.get();
 }
 
 QVulkanWindow::VulkanFlags QVulkanWindow::flags() const

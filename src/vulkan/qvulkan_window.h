@@ -71,6 +71,10 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VkSurfaceKHR vulkanSurface() const;
 
  private:
+   std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
+      createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions);
+
+   bool initialize();
    bool createSurface() const;
    bool populatePhysicalDevices() const;
    bool populateRenderPass() const;
@@ -83,21 +87,35 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    int m_requestedSampleCount;
    QStringList m_requestedDeviceExtensions;
 
-   VkDevice m_device;
+   vk::PhysicalDevice m_physicalDevice;
+   bool m_singleDevice;
+   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_graphicsDevice;
+   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_transferDevice;
+   QVector<vk::Queue> m_graphicsQueues;
+   QVector<vk::Queue> m_transferQueues;
+   uint32_t m_graphicsCommandQueueFamily;
+   uint32_t m_transferCommandQueueFamily;
    VulkanFlags m_vulkanFlags;
    mutable vk::UniqueHandle<vk::RenderPass, vk::DispatchLoaderDynamic> m_renderPass;
+   vk::UniqueHandle<vk::CommandPool, vk::DispatchLoaderDynamic> m_graphicsPool;
+
+   uint32_t m_hostVisibleIndex;
 
    vk::Format m_colorFormat;
    vk::Format m_depthFormat;
+   vk::ColorSpaceKHR m_colorSpace;
    vk::SampleCountFlagBits m_sampleCount;
 
+   QVector<VkFormat> m_requestedFormats;
    mutable QVector<VkPhysicalDevice> m_physicalDevices;
    mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
 
-   QVulkanDeviceFunctions *m_deviceFunctions;
+   std::unique_ptr<QVulkanDeviceFunctions> m_deviceFunctions;
 
    QVector<vk::CommandBuffer> m_commandbuffers;
    QVector<vk::Framebuffer> m_framebuffers;
+
+   std::unique_ptr<QVulkanWindowRenderer> m_renderer;
    vk::UniqueHandle<vk::SurfaceKHR, vk::DispatchLoaderDynamic> m_surface;
 };
 
