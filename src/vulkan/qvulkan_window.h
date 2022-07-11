@@ -68,8 +68,10 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    void setPhysicalDeviceIndex(int idx);
    void setSampleCount(int sampleCount);
    QVector<QVulkanExtensionProperties> supportedDeviceExtensions();
+   VkSurfaceKHR vulkanSurface() const;
 
  private:
+   bool createSurface() const;
    bool populatePhysicalDevices() const;
    bool populateRenderPass() const;
 
@@ -96,6 +98,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    QVector<vk::CommandBuffer> m_commandbuffers;
    QVector<vk::Framebuffer> m_framebuffers;
+   vk::UniqueHandle<vk::SurfaceKHR, vk::DispatchLoaderDynamic> m_surface;
 };
 
 #endif

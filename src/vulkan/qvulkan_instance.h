@@ -113,6 +113,8 @@ class Q_VULKAN_EXPORT QVulkanInstance
 
    VkInstance vkInstance() const;
 
+   static VkSurfaceKHR surfaceForWindow(QWindow *window);
+
  private:
    QSet<QString> supportedExtensionSet() const;
    QSet<QString> supportedLayerSet() const;

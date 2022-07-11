@@ -24,6 +24,7 @@
 #include <qvulkan_instance.h>
 #include <qvulkan_functions.h>
 #include <qvulkan_device_functions.h>
+#include <qvulkan_window.h>
 
 #include <qapplication.h>
 
@@ -440,6 +441,17 @@ QSet<QString> QVulkanInstance::supportedLayerSet() const
    }
 
    return retval;
+}
+
+VkSurfaceKHR QVulkanInstance::surfaceForWindow(QWindow* window)
+{
+   QVulkanWindow *tmp = dynamic_cast<QVulkanWindow*>(window);
+
+   if (tmp == nullptr) {
+      return nullptr;
+   }
+
+   return tmp->vulkanSurface();
 }
 
 VkInstance QVulkanInstance::vkInstance() const

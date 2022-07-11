@@ -80,6 +80,19 @@ QVulkanWindow::QVulkanWindow(QWindow *parent)
 
 QVulkanWindow::~QVulkanWindow() = default;
 
+bool QVulkanWindow::createSurface() const
+{
+#if defined(Q_OS_WIN)
+   // windows platform specific code
+
+#elif defined(Q_OS_UNIX)
+   // unix platform specific code
+
+#endif
+
+   return true;
+}
+
 bool QVulkanWindow::populatePhysicalDevices() const
 {
    QVector<VkPhysicalDeviceProperties> properties;
@@ -362,4 +375,13 @@ QVector<QVulkanExtensionProperties> QVulkanWindow::supportedDeviceExtensions()
    }
 
    return retval;
+}
+
+VkSurfaceKHR QVulkanWindow::vulkanSurface() const {
+
+   if (! m_surface) {
+      createSurface();
+   }
+
+   return m_surface.get();
 }
