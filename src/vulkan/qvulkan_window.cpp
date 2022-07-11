@@ -421,6 +421,92 @@ bool QVulkanWindow::populateRenderPass() const
    return true;
 }
 
+bool QVulkanWindow::populateSwapChain()
+{
+   m_swapChainImageSize = size() * devicePixelRatio();
+
+   if (m_swapChainImageSize.isEmpty()) {
+      return false;
+   }
+
+   m_deviceFunctions->device().waitIdle();
+
+   uint32_t numBuffers = 3;
+   auto capabilities   = m_physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
+
+   if (capabilities.maxImageCount != 0) {
+      numBuffers = std::min(numBuffers, capabilities.maxImageCount);
+   }
+
+   numBuffers   = std::max(numBuffers, capabilities.minImageCount);
+   auto vk_size = capabilities.currentExtent;
+
+   // compute Vulkan extent
+   if (vk_size.width == 0xFFFFFFFF) {
+      if (vk_size.height != 0xFFFFFFFF) {
+         qWarning("QVulkanWindow::populateSwapChain() Unable to set extent, width was invalid but height was not");
+         return false;
+      }
+
+      vk_size.width  = m_swapChainImageSize.width();
+      vk_size.height = m_swapChainImageSize.height();
+   }
+
+   // save extent back to QSize
+   m_swapChainImageSize = QSize(vk_size.width, vk_size.height);
+
+   vk::SwapchainCreateInfoKHR swapchainInfo;
+
+   swapchainInfo.surface          = m_surface.get();
+   swapchainInfo.minImageCount    = numBuffers;
+   swapchainInfo.imageFormat      = m_colorFormat;
+   swapchainInfo.imageColorSpace  = m_colorSpace;
+   swapchainInfo.imageExtent      = vk_size;
+   swapchainInfo.imageArrayLayers = 1;
+   swapchainInfo.imageUsage       = vk::ImageUsageFlagBits::eColorAttachment | vk::ImageUsageFlagBits::eTransferDst;
+   swapchainInfo.imageSharingMode = vk::SharingMode::eExclusive;
+   swapchainInfo.preTransform     = capabilities.currentTransform;
+   swapchainInfo.compositeAlpha   = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+   swapchainInfo.presentMode      = vk::PresentModeKHR::eFifo;
+   swapchainInfo.clipped          = true;
+   swapchainInfo.oldSwapchain     = m_swapchain.get();
+
+   try {
+      m_swapchain    = m_graphicsDevice->createSwapchainKHRUnique(swapchainInfo, nullptr, m_deviceFunctions->dynamicLoader());
+      auto vk_images = m_deviceFunctions->device().getSwapchainImagesKHR(m_swapchain.get());
+
+      auto createFramebuffer =
+         [this](auto vk_image) {
+            auto view = m_deviceFunctions->device().createImageViewUnique(
+                  vk::ImageViewCreateInfo{
+                     { }, vk_image, vk::ImageViewType::e2D, m_colorFormat,
+                     {vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
+                      vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+                     {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1} },
+                  nullptr, m_deviceFunctions->dynamicLoader());
+
+            std::vector<vk::ImageView> tmp_images;
+            tmp_images.push_back(*view);
+
+            auto framebuffer = m_deviceFunctions->device().createFramebufferUnique(vk::FramebufferCreateInfo(
+               {}, m_renderPass.get(), uint32_t(tmp_images.size()), tmp_images.data(),
+               m_swapChainImageSize.width(), m_swapChainImageSize.height(), 1),
+               nullptr, m_deviceFunctions->dynamicLoader());
+
+            return std::make_tuple(std::move(vk_image), std::move(view), std::move(framebuffer));
+         };
+
+      m_framebuffers = map_vector(vk_images, createFramebuffer);
+
+   } catch (vk::SystemError& err) {
+      qWarning("QVulkanWindow::populateSwapChain() Unable to create device: %s", err.what());
+      return false;
+
+   }
+
+   return true;
+}
+
 QVector<VkPhysicalDeviceProperties> QVulkanWindow::availablePhysicalDevices()
 {
    if (! m_physicalDeviceProperties.empty()) {
@@ -474,7 +560,7 @@ VkFramebuffer QVulkanWindow::currentFramebuffer() const
       return nullptr;
    }
 
-   return m_framebuffers[m_currentFrame];
+   return std::get<2>(m_framebuffers[m_currentFrame]).get();
 }
 
 VkRenderPass QVulkanWindow::defaultRenderPass() const
@@ -599,4 +685,32 @@ VkSurfaceKHR QVulkanWindow::vulkanSurface() const {
    }
 
    return m_surface.get();
+}
+
+VkImage QVulkanWindow::swapChainImage(int idx) const
+{
+   if (idx >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<0>(m_framebuffers[idx]);
+}
+
+int QVulkanWindow::swapChainImageCount() const
+{
+   return m_framebuffers.count();
+}
+
+QSize QVulkanWindow::swapChainImageSize() const
+{
+   return m_swapChainImageSize;
+}
+
+VkImageView QVulkanWindow::swapChainImageView(int idx) const
+{
+   if (idx >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<1>(m_framebuffers[idx]).get();
 }
