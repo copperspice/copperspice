@@ -52,8 +52,8 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void fillRect(const QRectF &rect, const QBrush &brush) override;
    void fillRect(const QRectF &rect, const QColor &color) override;
 
-   void drawRects(const QRect *rectPtr, int rectCount) override;
-   void drawRects(const QRectF *rectPtr, int rectCount) override;
+   void drawRects(const QRect *rects, int rectCount) override;
+   void drawRects(const QRectF *rects, int rectCount) override;
 
    void drawPixmap(const QPointF &point, const QPixmap &pixmap) override;
    void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &srcRect) override;
@@ -69,11 +69,11 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void transformChanged() override;
 
    // Override to lock the QBlittable before using raster
-   void drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode) override;
-   void drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode) override;
 
    void fillPath(const QPainterPath &path, QSpanData *fillData);
-   void fillPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode);
+   void fillPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
    void drawEllipse(const QRectF &rect) override;
 
    void drawImage(const QPointF &point, const QImage &image) override;
@@ -83,8 +83,8 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void drawTiledPixmap(const QRectF &rect, const QPixmap &pixmap, const QPointF &srcPoint) override;
    void drawTextItem(const QPointF &point, const QTextItem &textItem) override;
 
-   void drawPoints(const QPointF *pointPtr, int pointCount) override;
-   void drawPoints(const QPoint *pointPtr, int pointCount) override;
+   void drawPoints(const QPointF *points, int pointCount) override;
+   void drawPoints(const QPoint *points, int pointCount) override;
 
    void stroke(const QVectorPath &path, const QPen &pen) override;
    void drawStaticTextItem(QStaticTextItem *) override;

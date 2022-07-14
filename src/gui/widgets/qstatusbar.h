@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QStatusBar : public QWidget
    int insertPermanentWidget(int index, QWidget *widget, int stretch = 0);
    void removeWidget(QWidget *widget);
 
-   void setSizeGripEnabled(bool);
+   void setSizeGripEnabled(bool enabled);
    bool isSizeGripEnabled() const;
 
    QString currentMessage() const;

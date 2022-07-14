@@ -43,7 +43,7 @@ class QAlphaPaintEngine : public QPaintEngine
    void updateState(const QPaintEngineState &state) override;
 
    void drawPath(const QPainterPath &path) override;
-   void drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
 
    void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &srcRect) override;
    void drawTextItem(const QPointF &point, const QTextItem &textItem) override;

@@ -152,13 +152,13 @@ class Q_GUI_EXPORT QMenu : public QWidget
    QAction *insertMenu(QAction *action, QMenu *menu);
    QAction *insertSeparator(QAction *action);
 
-   QAction *insertSection(QAction *action, const QString &text);
-   QAction *insertSection(QAction *action, const QIcon &icon, const QString &text);
+   QAction *insertSection(QAction *location, const QString &text);
+   QAction *insertSection(QAction *location, const QIcon &icon, const QString &text);
 
    bool isEmpty() const;
    void clear();
 
-   void setTearOffEnabled(bool);
+   void setTearOffEnabled(bool enabled);
    bool isTearOffEnabled() const;
 
    bool isTearOffMenuVisible() const;

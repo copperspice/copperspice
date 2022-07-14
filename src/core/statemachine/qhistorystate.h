@@ -85,7 +85,7 @@ class Q_CORE_EXPORT QHistoryState : public QAbstractState
    void onEntry(QEvent *event) override;
    void onExit(QEvent *event) override;
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QHistoryState)

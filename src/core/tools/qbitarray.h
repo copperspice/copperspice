@@ -88,7 +88,7 @@ class Q_CORE_EXPORT QBitArray
 
    bool testBit(int i) const;
    void setBit(int i);
-   void setBit(int i, bool val);
+   void setBit(int i, bool value);
    void clearBit(int i);
    bool toggleBit(int i);
 
@@ -162,9 +162,9 @@ inline void QBitArray::clearBit(int i)
    *(reinterpret_cast<uchar *>(d.data()) + 1 + (i >> 3)) &= ~uchar(1 << (i & 7));
 }
 
-inline void QBitArray::setBit(int i, bool val)
+inline void QBitArray::setBit(int i, bool value)
 {
-   if (val) {
+   if (value) {
       setBit(i);
    } else {
       clearBit(i);

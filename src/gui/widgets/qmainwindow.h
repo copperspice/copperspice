@@ -168,14 +168,15 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 
 #ifndef QT_NO_TOOLBAR
    void addToolBarBreak(Qt::ToolBarArea area = Qt::TopToolBarArea);
-   void insertToolBarBreak(QToolBar *before);
+   void insertToolBarBreak(QToolBar *location);
 
    void addToolBar(Qt::ToolBarArea area, QToolBar *toolbar);
    void addToolBar(QToolBar *toolbar);
    QToolBar *addToolBar(const QString &title);
-   void insertToolBar(QToolBar *before, QToolBar *toolbar);
+
+   void insertToolBar(QToolBar *location, QToolBar *newToolbar);
    void removeToolBar(QToolBar *toolbar);
-   void removeToolBarBreak(QToolBar *before);
+   void removeToolBarBreak(QToolBar *location);
 
    bool unifiedTitleAndToolBarOnMac() const;
 

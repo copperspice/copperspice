@@ -56,7 +56,7 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
 
    qint64 size() const override;
    qint64 pos() const override;
-   bool seek(qint64 off) override;
+   bool seek(qint64 pos) override;
    bool atEnd() const override;
    bool canReadLine() const override;
 
@@ -64,7 +64,7 @@ class Q_CORE_EXPORT QBuffer : public QIODevice
    void connectNotify(const QMetaMethod &signalMethod) const override;
    void disconnectNotify(const QMetaMethod &signalMethod) const override;
 
-   qint64 readData(char *data, qint64 maxSize) override;
+   qint64 readData(char *data, qint64 size) override;
    qint64 writeData(const char *data, qint64 size) override;
 
  private:

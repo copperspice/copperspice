@@ -204,7 +204,7 @@ class Q_GUI_EXPORT QGradient
       return m_type;
    }
 
-   inline void setSpread(Spread spread);
+   inline void setSpread(Spread spreadType);
    Spread spread() const {
       return m_spread;
    }
@@ -254,9 +254,9 @@ class Q_GUI_EXPORT QGradient
    void *dummy;
 };
 
-inline void QGradient::setSpread(Spread spread)
+inline void QGradient::setSpread(Spread spreadType)
 {
-   m_spread = spread;
+   m_spread = spreadType;
 }
 
 class Q_GUI_EXPORT QLinearGradient : public QGradient

@@ -63,7 +63,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
  protected:
    bool eventTest(QEvent *event) override;
    void onTransition(QEvent *event) override;
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QSignalTransition)

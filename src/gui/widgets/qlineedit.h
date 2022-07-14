@@ -255,7 +255,7 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
 
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
    bool event(QEvent *event) override;
 
  protected:

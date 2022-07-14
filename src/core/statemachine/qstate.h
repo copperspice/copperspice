@@ -109,7 +109,7 @@ class Q_CORE_EXPORT QState : public QAbstractState
    void onEntry(QEvent *event) override;
    void onExit(QEvent *event) override;
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    QState(QStatePrivate &dd, QState *parent);
 

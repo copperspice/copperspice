@@ -59,7 +59,7 @@ class Q_CORE_EXPORT QSequentialAnimationGroup : public QAnimationGroup
    QSequentialAnimationGroup(QSequentialAnimationGroupPrivate &dd, QObject *parent);
 
    bool event(QEvent *event) override;
-   void updateCurrentTime(int) override;
+   void updateCurrentTime(int currentTime) override;
    void updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState) override;
    void updateDirection(QAbstractAnimation::Direction direction) override;
 

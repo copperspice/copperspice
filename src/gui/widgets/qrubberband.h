@@ -46,7 +46,7 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
 
    void setGeometry(const QRect &rect);
 
-   inline void setGeometry(int x, int y, int w, int h);
+   inline void setGeometry(int x, int y, int width, int height);
    inline void move(int x, int y);
 
    inline void move(const QPoint &point) {
@@ -74,9 +74,9 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
    Q_DECLARE_PRIVATE(QRubberBand)
 };
 
-void QRubberBand::setGeometry(int x, int y, int w, int h)
+void QRubberBand::setGeometry(int x, int y, int width, int height)
 {
-   setGeometry(QRect(x, y, w, h));
+   setGeometry(QRect(x, y, width, height));
 }
 
 void QRubberBand::move(int x, int y)

@@ -102,7 +102,7 @@ class QVector
       m_data.insert(m_data.end(), begin, end);
    }
 
-   const_reference at(size_type i) const;
+   const_reference at(size_type pos) const;
 
    reference back() {
       return m_data.back();
@@ -151,7 +151,7 @@ class QVector
       return ! isEmpty() && m_data.back()== value;
    }
 
-   QVector<T> &fill(const T &value, size_type newSize = -1);
+   QVector<T> &fill(const T &value, size_type size = -1);
 
    const_reference constFirst() const {
       Q_ASSERT(! isEmpty());
@@ -325,12 +325,12 @@ class QVector
       qSwap(m_data, other.m_data);
    }
 
-   T takeAt(size_type i);
+   T takeAt(size_type pos);
    T takeFirst();
    T takeLast();
 
-   T value(size_type i) const;
-   T value(size_type i, const T &defaultValue) const;
+   T value(size_type pos) const;
+   T value(size_type pos, const T &defaultValue) const;
 
    // to from
    static QVector<T> fromList(const QList<T> &list) {

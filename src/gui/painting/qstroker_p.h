@@ -155,7 +155,7 @@ class Q_GUI_EXPORT QStrokerOps
 
    void strokePath(const QPainterPath &path, void *data, const QTransform &matrix);
 
-   void strokePolygon(const QPointF *pointPtr, int pointCount, bool implicit_close,
+   void strokePolygon(const QPointF *points, int pointCount, bool implicit_close,
       void *data, const QTransform &matrix);
 
    void strokeEllipse(const QRectF &ellipse, void *data, const QTransform &matrix);

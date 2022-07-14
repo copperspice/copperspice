@@ -154,7 +154,7 @@ class Q_GUI_EXPORT QAction : public QObject
    void setIconText(const QString &text);
    QString iconText() const;
 
-   void setToolTip(const QString &tip);
+   void setToolTip(const QString &tooltip);
    QString toolTip() const;
 
    void setStatusTip(const QString &statusTip);
@@ -171,7 +171,7 @@ class Q_GUI_EXPORT QAction : public QObject
    void setMenu(QMenu *menu);
 #endif
 
-   void setSeparator(bool b);
+   void setSeparator(bool separator);
    bool isSeparator() const;
 
 #ifndef QT_NO_SHORTCUT
@@ -185,14 +185,14 @@ class Q_GUI_EXPORT QAction : public QObject
    void setShortcutContext(Qt::ShortcutContext context);
    Qt::ShortcutContext shortcutContext() const;
 
-   void setAutoRepeat(bool);
+   void setAutoRepeat(bool repeat);
    bool autoRepeat() const;
 #endif
 
    void setFont(const QFont &font);
    QFont font() const;
 
-   void setCheckable(bool);
+   void setCheckable(bool isChecked);
    bool isCheckable() const;
 
    QVariant data() const;
@@ -226,32 +226,32 @@ class Q_GUI_EXPORT QAction : public QObject
    GUI_CS_SLOT_1(Public, void hover())
    GUI_CS_SLOT_2(hover)
 
-   GUI_CS_SLOT_1(Public, void setChecked(bool checked))
+   GUI_CS_SLOT_1(Public, void setChecked(bool isChecked))
    GUI_CS_SLOT_2(setChecked)
 
    GUI_CS_SLOT_1(Public, void toggle())
    GUI_CS_SLOT_2(toggle)
 
-   GUI_CS_SLOT_1(Public, void setEnabled(bool b))
+   GUI_CS_SLOT_1(Public, void setEnabled(bool enabled))
    GUI_CS_SLOT_2(setEnabled)
 
-   GUI_CS_SLOT_1(Public, void setDisabled(bool b))
+   GUI_CS_SLOT_1(Public, void setDisabled(bool disabled))
    GUI_CS_SLOT_2(setDisabled)
 
-   GUI_CS_SLOT_1(Public, void setVisible(bool b))
+   GUI_CS_SLOT_1(Public, void setVisible(bool visible))
    GUI_CS_SLOT_2(setVisible)
 
    GUI_CS_SIGNAL_1(Public, void changed())
    GUI_CS_SIGNAL_2(changed)
 
-   GUI_CS_SIGNAL_1(Public, void triggered(bool checked = false))
-   GUI_CS_SIGNAL_2(triggered, checked)
+   GUI_CS_SIGNAL_1(Public, void triggered(bool isChecked = false))
+   GUI_CS_SIGNAL_2(triggered, isChecked)
 
    GUI_CS_SIGNAL_1(Public, void hovered())
    GUI_CS_SIGNAL_2(hovered)
 
-   GUI_CS_SIGNAL_1(Public, void toggled(bool checked))
-   GUI_CS_SIGNAL_2(toggled, checked)
+   GUI_CS_SIGNAL_1(Public, void toggled(bool isChecked))
+   GUI_CS_SIGNAL_2(toggled, isChecked)
 
  protected:
    bool event(QEvent *event) override;
@@ -286,8 +286,8 @@ inline void QAction::hover() {
    activate(ActionEvent::Hover);
 }
 
-inline void QAction::setDisabled(bool b) {
-   setEnabled(! b);
+inline void QAction::setDisabled(bool disabled) {
+   setEnabled(! disabled);
 }
 
 // recursive, leave here

@@ -94,7 +94,7 @@ class Q_GUI_EXPORT QRegion
    QRect boundingRect() const;
    QVector<QRect> rects() const;
 
-   void setRects(const QRect *rectPtr, int rectCount);
+   void setRects(const QRect *rects, int rectCount);
    int rectCount() const;
 
    QRegion operator|(const QRegion &other) const;

@@ -180,7 +180,7 @@ class Q_CORE_EXPORT QStateMachine : public QState
    virtual void beginMicrostep(QEvent *event);
    virtual void endMicrostep(QEvent *event);
 
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
 
    QStateMachine(QStateMachinePrivate &dd, QObject *parent);
 

@@ -59,7 +59,7 @@ class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
    { }
 
    QPolygon(const QRect &rect, bool closed = false);
-   QPolygon(int pointCount, const int *pointPtr);
+   QPolygon(int pointCount, const int *points);
 
    ~QPolygon()
    { }

@@ -60,7 +60,7 @@ class Q_CORE_EXPORT QReadWriteLock
 class Q_CORE_EXPORT QReadLocker
 {
  public:
-   inline QReadLocker(QReadWriteLock *readWriteLock);
+   inline QReadLocker(QReadWriteLock *lock);
 
    QReadLocker(const QReadLocker &) = delete;
    QReadLocker &operator=(const QReadLocker &) = delete;
@@ -95,8 +95,8 @@ class Q_CORE_EXPORT QReadLocker
    quintptr q_val;
 };
 
-inline QReadLocker::QReadLocker(QReadWriteLock *readWriteLock)
-   : q_val(reinterpret_cast<quintptr>(readWriteLock))
+inline QReadLocker::QReadLocker(QReadWriteLock *lock)
+   : q_val(reinterpret_cast<quintptr>(lock))
 {
    Q_ASSERT_X((q_val & quintptr(1u)) == quintptr(0), "QReadLocker", "QReadWriteLock pointer is misaligned");
    relock();
@@ -105,7 +105,7 @@ inline QReadLocker::QReadLocker(QReadWriteLock *readWriteLock)
 class Q_CORE_EXPORT QWriteLocker
 {
  public:
-   inline QWriteLocker(QReadWriteLock *readWriteLock);
+   inline QWriteLocker(QReadWriteLock *lock);
 
    QWriteLocker(const QWriteLocker &) = delete;
    QWriteLocker &operator=(const QWriteLocker &) = delete;
@@ -140,8 +140,8 @@ class Q_CORE_EXPORT QWriteLocker
    quintptr q_val;
 };
 
-inline QWriteLocker::QWriteLocker(QReadWriteLock *readWriteLock)
-   : q_val(reinterpret_cast<quintptr>(readWriteLock))
+inline QWriteLocker::QWriteLocker(QReadWriteLock *lock)
+   : q_val(reinterpret_cast<quintptr>(lock))
 {
    Q_ASSERT_X((q_val & quintptr(1u)) == quintptr(0), "QWriteLocker", "QReadWriteLock pointer is misaligned");
    relock();

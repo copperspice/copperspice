@@ -63,7 +63,7 @@ class QStylePainter : public QPainter
    inline void drawPrimitive(QStyle::PrimitiveElement pe, const QStyleOption &option);
    inline void drawControl(QStyle::ControlElement ce, const QStyleOption &option);
    inline void drawComplexControl(QStyle::ComplexControl cc, const QStyleOptionComplex &option);
-   inline void drawItemText(const QRect &rect, int flags, const QPalette &pal, bool enabled,
+   inline void drawItemText(const QRect &rect, int flags, const QPalette &palette, bool enabled,
       const QString &text, QPalette::ColorRole textRole = QPalette::NoRole);
 
    inline void drawItemPixmap(const QRect &rect, int flags, const QPixmap &pixmap);

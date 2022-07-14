@@ -215,7 +215,7 @@ class Q_CORE_EXPORT QLineF
    inline qreal dy() const;
 
    qreal length() const;
-   inline void setLength(qreal len);
+   inline void setLength(qreal length);
 
    qreal angle() const;
    qreal angle(const QLineF &lineF) const;
@@ -231,7 +231,7 @@ class Q_CORE_EXPORT QLineF
    IntersectType intersect(const QLineF &lineF, QPointF *intersectionPoint) const;
 
    inline QPointF pointAt(qreal pos) const;
-   inline void translate(const QPointF &point);
+   inline void translate(const QPointF &offset);
    inline void translate(qreal dx, qreal dy);
 
    inline QLineF translated(const QPointF &offset) const;
@@ -298,10 +298,10 @@ inline QLineF QLineF::normalVector() const
    return QLineF(p1(), p1() + QPointF(dy(), -dx()));
 }
 
-inline void QLineF::translate(const QPointF &point)
+inline void QLineF::translate(const QPointF &offset)
 {
-   pt1 += point;
-   pt2 += point;
+   pt1 += offset;
+   pt2 += offset;
 }
 
 inline void QLineF::translate(qreal dx, qreal dy)

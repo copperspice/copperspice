@@ -206,7 +206,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    T findChild(const QString &childName = QString()) const;
 
    template<class T>
-   QList<T> findChildren(const QString &objName = QString(), Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;
+   QList<T> findChildren(const QString &childName = QString(), Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;
 
    template<class T>
    QList<T> findChildren(const QRegularExpression &regExp, Qt::FindChildOptions options = Qt::FindChildrenRecursively) const;
@@ -335,10 +335,10 @@ T QObject::findChild(const QString &childName) const
 }
 
 template<class T>
-QList<T> QObject::findChildren(const QString &objName, Qt::FindChildOptions options) const
+QList<T> QObject::findChildren(const QString &childName, Qt::FindChildOptions options) const
 {
    QList<T> list;
-   this->findChildren_helper<T>(objName, nullptr, list, options);
+   this->findChildren_helper<T>(childName, nullptr, list, options);
 
    return list;
 }

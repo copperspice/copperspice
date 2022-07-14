@@ -110,7 +110,7 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    QValidator::State validate(QString &input, int &pos) const override;
    virtual int valueFromText(const QString &text) const;
    virtual QString textFromValue(int value) const;
-   void fixup(QString &str) const override;
+   void fixup(QString &input) const override;
 
  private:
    Q_DECLARE_PRIVATE(QSpinBox)

@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QDataWidgetMapper : public QObject
    void setRootIndex(const QModelIndex &index);
    QModelIndex rootIndex() const;
 
-   void setOrientation(Qt::Orientation aOrientation);
+   void setOrientation(Qt::Orientation newOrientation);
    Qt::Orientation orientation() const;
 
    void setSubmitPolicy(SubmitPolicy policy);

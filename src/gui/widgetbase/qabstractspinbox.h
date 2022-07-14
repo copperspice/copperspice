@@ -27,8 +27,6 @@
 #include <qwidget.h>
 #include <qvalidator.h>
 
-
-
 #ifndef QT_NO_SPINBOX
 
 class QLineEdit;
@@ -140,7 +138,7 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    void interpretText();
    bool event(QEvent *event) override;
 
-   QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
+   QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
    virtual QValidator::State validate(QString &input, int &pos) const;
    virtual void fixup(QString &input) const;

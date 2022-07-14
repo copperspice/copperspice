@@ -45,15 +45,15 @@ class QMargins
    void setRight(int right);
    void setBottom(int bottom);
 
-   QMargins &operator+=(const QMargins &margins);
-   QMargins &operator-=(const QMargins &margins);
+   QMargins &operator+=(const QMargins &other);
+   QMargins &operator-=(const QMargins &other);
 
    QMargins &operator+=(int delta);
    QMargins &operator-=(int delta);
-   QMargins &operator*=(int delta);
-   QMargins &operator/=(int delta);
-   QMargins &operator*=(qreal delta);
-   QMargins &operator/=(qreal delta);
+   QMargins &operator*=(int factor);
+   QMargins &operator/=(int factor);
+   QMargins &operator*=(qreal factor);
+   QMargins &operator/=(qreal factor);
 
  private:
    int m_left;
@@ -61,12 +61,12 @@ class QMargins
    int m_right;
    int m_bottom;
 
-   friend inline bool operator==(const QMargins &, const QMargins &);
-   friend inline bool operator!=(const QMargins &, const QMargins &);
+   friend inline bool operator==(const QMargins &m1, const QMargins &m2);
+   friend inline bool operator!=(const QMargins &m1, const QMargins &m2);
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QMargins &margin);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QMargins &margin);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QMargins &margins);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QMargins &margins);
 
 inline QMargins::QMargins()
  :  m_left(0), m_top(0), m_right(0), m_bottom(0)
@@ -151,58 +151,58 @@ inline QMargins operator-(const QMargins &m1, const QMargins &m2)
                     m1.right() - m2.right(), m1.bottom() - m2.bottom());
 }
 
-inline QMargins operator+(const QMargins &lhs, int rhs)
+inline QMargins operator+(const QMargins &margins, int delta)
 {
-    return QMargins(lhs.left() + rhs, lhs.top() + rhs,
-                    lhs.right() + rhs, lhs.bottom() + rhs);
+    return QMargins(margins.left() + delta, margins.top() + delta,
+                    margins.right() + delta, margins.bottom() + delta);
 }
 
-inline QMargins operator+(int lhs, const QMargins &rhs)
+inline QMargins operator+(int delta, const QMargins &margins)
 {
-    return QMargins(rhs.left() + lhs, rhs.top() + lhs,
-                    rhs.right() + lhs, rhs.bottom() + lhs);
+    return QMargins(margins.left() + delta, margins.top() + delta,
+                    margins.right() + delta, margins.bottom() + delta);
 }
 
-inline QMargins operator-(const QMargins &lhs, int rhs)
+inline QMargins operator-(const QMargins &margins, int delta)
 {
-    return QMargins(lhs.left() - rhs, lhs.top() - rhs,
-                    lhs.right() - rhs, lhs.bottom() - rhs);
+    return QMargins(margins.left() - delta, margins.top() - delta,
+                    margins.right() - delta, margins.bottom() - delta);
 }
 
-inline QMargins operator*(const QMargins &margins, int delta)
+inline QMargins operator*(const QMargins &margins, int factor)
 {
-    return QMargins(margins.left() * delta, margins.top() * delta,
-                    margins.right() * delta, margins.bottom() * delta);
+    return QMargins(margins.left() * factor, margins.top() * factor,
+                    margins.right() * factor, margins.bottom() * factor);
 }
 
-inline QMargins operator*(int delta, const QMargins &margins)
+inline QMargins operator*(int factor, const QMargins &margins)
 {
-    return QMargins(margins.left() * delta, margins.top() * delta,
-                    margins.right() * delta, margins.bottom() * delta);
+    return QMargins(margins.left() * factor, margins.top() * factor,
+                    margins.right() * factor, margins.bottom() * factor);
 }
 
-inline QMargins operator*(const QMargins &margins, qreal delta)
+inline QMargins operator*(const QMargins &margins, qreal factor)
 {
-    return QMargins(qRound(margins.left() * delta), qRound(margins.top() * delta),
-                    qRound(margins.right() * delta), qRound(margins.bottom() * delta));
+    return QMargins(qRound(margins.left() * factor), qRound(margins.top() * factor),
+                    qRound(margins.right() * factor), qRound(margins.bottom() * factor));
 }
 
-inline QMargins operator*(qreal delta, const QMargins &margins)
+inline QMargins operator*(qreal factor, const QMargins &margins)
 {
-    return QMargins(qRound(margins.left() * delta), qRound(margins.top() * delta),
-                    qRound(margins.right() * delta), qRound(margins.bottom() * delta));
+    return QMargins(qRound(margins.left() * factor), qRound(margins.top() * factor),
+                    qRound(margins.right() * factor), qRound(margins.bottom() * factor));
 }
 
-inline QMargins operator/(const QMargins &margins, int delta)
+inline QMargins operator/(const QMargins &margins, int factor)
 {
-    return QMargins(margins.left() / delta, margins.top() / delta,
-                    margins.right() / delta, margins.bottom() / delta);
+    return QMargins(margins.left() / factor, margins.top() / factor,
+                    margins.right() / factor, margins.bottom() / factor);
 }
 
-inline QMargins operator/(const QMargins &margins, qreal delta)
+inline QMargins operator/(const QMargins &margins, qreal factor)
 {
-    return QMargins(qRound(margins.left() / delta), qRound(margins.top() / delta),
-                    qRound(margins.right() / delta), qRound(margins.bottom() / delta));
+    return QMargins(qRound(margins.left() / factor), qRound(margins.top() /factor),
+                    qRound(margins.right() / factor), qRound(margins.bottom() / factor));
 }
 
 inline QMargins &QMargins::operator+=(const QMargins &margins)
@@ -287,12 +287,13 @@ public:
      void setRight(qreal right);
      void setBottom(qreal bottom);
 
-     QMarginsF &operator+=(const QMarginsF &margins);
-     QMarginsF &operator-=(const QMarginsF &margins);
+     QMarginsF &operator+=(const QMarginsF &other);
+     QMarginsF &operator-=(const QMarginsF &other);
+
      QMarginsF &operator+=(qreal delta);
      QMarginsF &operator-=(qreal delta);
-     QMarginsF &operator*=(qreal delta);
-     QMarginsF &operator/=(qreal delta);
+     QMarginsF &operator*=(qreal factor);
+     QMarginsF &operator/=(qreal factor);
 
     inline QMargins toMargins() const;
 
@@ -303,8 +304,8 @@ private:
     qreal m_bottom;
 };
 
-Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QMarginsF &marginF);
-Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QMarginsF &marginF);
+Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QMarginsF &margins);
+Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QMarginsF &margins);
 
 inline QMarginsF::QMarginsF()
     : m_left(0), m_top(0), m_right(0), m_bottom(0)

@@ -182,22 +182,22 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    int bytesPerLine() const;
 
    bool valid(int x, int y) const;
-   inline bool valid(const QPoint &pt) const;
+   inline bool valid(const QPoint &pos) const;
 
    int pixelIndex(int x, int y) const;
-   inline int pixelIndex(const QPoint &pt) const;
+   inline int pixelIndex(const QPoint &pos) const;
 
    QRgb pixel(int x, int y) const;
-   inline QRgb pixel(const QPoint &pt) const;
+   inline QRgb pixel(const QPoint &pos) const;
 
    void setPixel(int x, int y, uint index_or_rgb);
-   inline void setPixel(const QPoint &pt, uint index_or_rgb);
+   inline void setPixel(const QPoint &pos, uint index_or_rgb);
 
    QColor pixelColor(int x, int y) const;
-   QColor pixelColor(const QPoint &pt) const;
+   QColor pixelColor(const QPoint &pos) const;
 
    void setPixelColor(int x, int y, const QColor &color);
-   void setPixelColor(const QPoint &pt, const QColor &color);
+   void setPixelColor(const QPoint &pos, const QColor &color);
    QVector<QRgb> colorTable() const;
    void setColorTable(const QVector<QRgb> &colors);
 
@@ -323,36 +323,35 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    friend struct QSpanData;
 };
 
-inline bool QImage::valid(const QPoint &pt) const
+inline bool QImage::valid(const QPoint &pos) const
 {
-   return valid(pt.x(), pt.y());
+   return valid(pos.x(), pos.y());
 }
 
-inline int QImage::pixelIndex(const QPoint &pt) const
+inline int QImage::pixelIndex(const QPoint &pos) const
 {
-   return pixelIndex(pt.x(), pt.y());
+   return pixelIndex(pos.x(), pos.y());
 }
 
-inline QRgb QImage::pixel(const QPoint &pt) const
+inline QRgb QImage::pixel(const QPoint &pos) const
 {
-   return pixel(pt.x(), pt.y());
+   return pixel(pos.x(), pos.y());
 }
 
-inline void QImage::setPixel(const QPoint &pt, uint index_or_rgb)
+inline void QImage::setPixel(const QPoint &pos, uint index_or_rgb)
 {
-   setPixel(pt.x(), pt.y(), index_or_rgb);
+   setPixel(pos.x(), pos.y(), index_or_rgb);
 }
 
-inline QColor QImage::pixelColor(const QPoint &pt) const
+inline QColor QImage::pixelColor(const QPoint &pos) const
 {
-   return pixelColor(pt.x(), pt.y());
+   return pixelColor(pos.x(), pos.y());
 }
 
-inline void QImage::setPixelColor(const QPoint &pt, const QColor &color)
+inline void QImage::setPixelColor(const QPoint &pos, const QColor &color)
 {
-   setPixelColor(pt.x(), pt.y(), color);
+   setPixelColor(pos.x(), pos.y(), color);
 }
-
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QImage &image);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QImage &image);

@@ -124,9 +124,9 @@ class Q_GUI_EXPORT QPainterPath
    QPointF currentPosition() const;
 
    void addRect(const QRectF &rect);
-   inline void addRect(qreal x, qreal y, qreal w, qreal h);
+   inline void addRect(qreal x, qreal y, qreal width, qreal height);
    void addEllipse(const QRectF &rect);
-   inline void addEllipse(qreal x, qreal y, qreal w, qreal h);
+   inline void addEllipse(qreal x, qreal y, qreal width, qreal height);
    inline void addEllipse(const QPointF &center, qreal rx, qreal ry);
    void addPolygon(const QPolygonF &polygon);
    void addText(const QPointF &point, const QFont &font, const QString &text);
@@ -135,11 +135,11 @@ class Q_GUI_EXPORT QPainterPath
    void addRegion(const QRegion &region);
 
    void addRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
-   inline void addRoundedRect(qreal x, qreal y, qreal w, qreal h,  qreal xRadius,
+   inline void addRoundedRect(qreal x, qreal y, qreal width, qreal height,  qreal xRadius,
          qreal yRadius, Qt::SizeMode mode = Qt::AbsoluteSize);
 
-   void addRoundRect(const QRectF &rect, int xRnd, int yRnd);
-   inline void addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRnd, int yRnd);
+   void addRoundRect(const QRectF &rect, int xRound, int yRound);
+   inline void addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRound, int yRound);
    inline void addRoundRect(const QRectF &rect, int roundness);
    inline void addRoundRect(qreal x, qreal y, qreal width, qreal height, int roundness);
 
@@ -311,9 +311,9 @@ inline void QPainterPath::quadTo(qreal x1, qreal y1, qreal x2, qreal y2)
    quadTo(QPointF(x1, y1), QPointF(x2, y2));
 }
 
-inline void QPainterPath::addEllipse(qreal x, qreal y, qreal w, qreal h)
+inline void QPainterPath::addEllipse(qreal x, qreal y, qreal width, qreal height)
 {
-   addEllipse(QRectF(x, y, w, h));
+   addEllipse(QRectF(x, y, width, height));
 }
 
 inline void QPainterPath::addEllipse(const QPointF &center, qreal rx, qreal ry)
@@ -321,34 +321,34 @@ inline void QPainterPath::addEllipse(const QPointF &center, qreal rx, qreal ry)
    addEllipse(QRectF(center.x() - rx, center.y() - ry, 2 * rx, 2 * ry));
 }
 
-inline void QPainterPath::addRect(qreal x, qreal y, qreal w, qreal h)
+inline void QPainterPath::addRect(qreal x, qreal y, qreal width, qreal height)
 {
-   addRect(QRectF(x, y, w, h));
+   addRect(QRectF(x, y, width, height));
 }
 
-inline void QPainterPath::addRoundedRect(qreal x, qreal y, qreal w, qreal h,
+inline void QPainterPath::addRoundedRect(qreal x, qreal y, qreal width, qreal height,
    qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
-   addRoundedRect(QRectF(x, y, w, h), xRadius, yRadius, mode);
+   addRoundedRect(QRectF(x, y, width, height), xRadius, yRadius, mode);
 }
 
-inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRnd, int yRnd)
+inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal width, qreal height, int xRound, int yRound)
 {
-   addRoundRect(QRectF(x, y, width, height), xRnd, yRnd);
+   addRoundRect(QRectF(x, y, width, height), xRound, yRound);
 }
 
 inline void QPainterPath::addRoundRect(const QRectF &rect, int roundness)
 {
-   int xRnd = roundness;
-   int yRnd = roundness;
+   int xRound = roundness;
+   int yRound = roundness;
 
    if (rect.width() > rect.height()) {
-      xRnd = int(roundness * rect.height() / rect.width());
+      xRound = int(roundness * rect.height() / rect.width());
    } else {
-      yRnd = int(roundness * rect.width() / rect.height());
+      yRound = int(roundness * rect.width() / rect.height());
    }
 
-   addRoundRect(rect, xRnd, yRnd);
+   addRoundRect(rect, xRound, yRound);
 }
 
 inline void QPainterPath::addRoundRect(qreal x, qreal y, qreal width, qreal height, int roundness)

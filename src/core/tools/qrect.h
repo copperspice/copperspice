@@ -85,23 +85,23 @@ class Q_CORE_EXPORT QRect
    inline void moveTop(int pos);
    inline void moveRight(int pos);
    inline void moveBottom(int pos);
-   inline void moveTopLeft(const QPoint &p);
-   inline void moveBottomRight(const QPoint &p);
-   inline void moveTopRight(const QPoint &p);
-   inline void moveBottomLeft(const QPoint &p);
+   inline void moveTopLeft(const QPoint &point);
+   inline void moveBottomRight(const QPoint &point);
+   inline void moveTopRight(const QPoint &point);
+   inline void moveBottomLeft(const QPoint &point);
 
-   inline void moveCenter(const QPoint &p);
+   inline void moveCenter(const QPoint &point);
 
    inline void translate(int x, int y);
-   inline void translate(const QPoint &p);
+   inline void translate(const QPoint &offset);
    inline QRect translated(int x, int y) const;
-   inline QRect translated(const QPoint &p) const;
+   inline QRect translated(const QPoint &offset) const;
 
    inline void moveTo(int x, int y);
-   inline void moveTo(const QPoint &position);
+   inline void moveTo(const QPoint &point);
 
-   inline void setRect(int x, int y, int w, int h);
-   inline void getRect(int *x, int *y, int *w, int *h) const;
+   inline void setRect(int x, int y, int width, int height);
+   inline void getRect(int *x, int *y, int *width, int *height) const;
 
    inline void setCoords(int x1, int y1, int x2, int y2);
    inline void getCoords(int *x1, int *y1, int *x2, int *y2) const;
@@ -135,8 +135,8 @@ class Q_CORE_EXPORT QRect
    inline QRect &operator+=(const QMargins &margins);
    inline QRect &operator-=(const QMargins &margins);
 
-   friend inline bool operator==(const QRect &, const QRect &);
-   friend inline bool operator!=(const QRect &, const QRect &);
+   friend inline bool operator==(const QRect &rect1, const QRect &rect2);
+   friend inline bool operator!=(const QRect &rect1, const QRect &rect2);
 
  private:
    int m_x1;
@@ -145,8 +145,8 @@ class Q_CORE_EXPORT QRect
    int m_y2;
 };
 
-inline bool operator==(const QRect &, const QRect &);
-inline bool operator!=(const QRect &, const QRect &);
+inline bool operator==(const QRect &rect1, const QRect &rect2);
+inline bool operator!=(const QRect &rect1, const QRect &rect2);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QRect &rect);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QRect &rect);
@@ -322,12 +322,12 @@ inline void QRect::translate(int x, int y)
    m_y2 += y;
 }
 
-inline void QRect::translate(const QPoint &p)
+inline void QRect::translate(const QPoint &offset)
 {
-   m_x1 += p.x();
-   m_y1 += p.y();
-   m_x2 += p.x();
-   m_y2 += p.y();
+   m_x1 += offset.x();
+   m_y1 += offset.y();
+   m_x2 += offset.x();
+   m_y2 += offset.y();
 }
 
 inline QRect QRect::translated(int x, int y) const
@@ -335,9 +335,9 @@ inline QRect QRect::translated(int x, int y) const
    return QRect(QPoint(m_x1 + x, m_y1 + y), QPoint(m_x2 + x, m_y2 + y));
 }
 
-inline QRect QRect::translated(const QPoint &p) const
+inline QRect QRect::translated(const QPoint &offset) const
 {
-   return QRect(QPoint(m_x1 + p.x(), m_y1 + p.y()), QPoint(m_x2 + p.x(), m_y2 + p.y()));
+   return QRect(QPoint(m_x1 + offset.x(), m_y1 + offset.y()), QPoint(m_x2 + offset.x(), m_y2 + offset.y()));
 }
 
 inline void QRect::moveTo(int x, int y)
@@ -348,12 +348,12 @@ inline void QRect::moveTo(int x, int y)
    m_y1 =  y;
 }
 
-inline void QRect::moveTo(const QPoint &position)
+inline void QRect::moveTo(const QPoint &point)
 {
-   m_x2 += position.x() - m_x1;
-   m_y2 += position.y() - m_y1;
-   m_x1 =  position.x();
-   m_y1 =  position.y();
+   m_x2 += point.x() - m_x1;
+   m_y2 += point.y() - m_y1;
+   m_x1 =  point.x();
+   m_y1 =  point.y();
 }
 
 inline void QRect::moveLeft(int pos)
@@ -380,55 +380,55 @@ inline void QRect::moveBottom(int pos)
    m_y2 = pos;
 }
 
-inline void QRect::moveTopLeft(const QPoint &p)
+inline void QRect::moveTopLeft(const QPoint &point)
 {
-   moveLeft(p.x());
-   moveTop(p.y());
+   moveLeft(point.x());
+   moveTop(point.y());
 }
 
-inline void QRect::moveBottomRight(const QPoint &p)
+inline void QRect::moveBottomRight(const QPoint &point)
 {
-   moveRight(p.x());
-   moveBottom(p.y());
+   moveRight(point.x());
+   moveBottom(point.y());
 }
 
-inline void QRect::moveTopRight(const QPoint &p)
+inline void QRect::moveTopRight(const QPoint &point)
 {
-   moveRight(p.x());
-   moveTop(p.y());
+   moveRight(point.x());
+   moveTop(point.y());
 }
 
-inline void QRect::moveBottomLeft(const QPoint &p)
+inline void QRect::moveBottomLeft(const QPoint &point)
 {
-   moveLeft(p.x());
-   moveBottom(p.y());
+   moveLeft(point.x());
+   moveBottom(point.y());
 }
 
-inline void QRect::moveCenter(const QPoint &p)
+inline void QRect::moveCenter(const QPoint &point)
 {
     int w = m_x2 - m_x1;
     int h = m_y2 - m_y1;
 
-    m_x1 = p.x() - w/2;
-    m_y1 = p.y() - h/2;
+    m_x1 = point.x() - w/2;
+    m_y1 = point.y() - h/2;
     m_x2 = m_x1 + w;
     m_y2 = m_y1 + h;
 }
 
-inline void QRect::getRect(int *x, int *y, int *w, int *h) const
+inline void QRect::getRect(int *x, int *y, int *width, int *height) const
 {
    *x = m_x1;
    *y = m_y1;
-   *w = m_x2 - m_x1 + 1;
-   *h = m_y2 - m_y1 + 1;
+   *width  = m_x2 - m_x1 + 1;
+   *height = m_y2 - m_y1 + 1;
 }
 
-inline void QRect::setRect(int x, int y, int w, int h)
+inline void QRect::setRect(int x, int y, int width, int height)
 {
    m_x1 = x;
    m_y1 = y;
-   m_x2 = (x + w - 1);
-   m_y2 = (y + h - 1);
+   m_x2 = (x + width - 1);
+   m_y2 = (y + height - 1);
 }
 
 inline void QRect::getCoords(int *x1, int *y1, int *x2, int *y2) const
@@ -630,32 +630,32 @@ class Q_CORE_EXPORT QRectF
 
    inline QPointF center() const;
 
-   inline void setTopLeft(const QPointF &p);
-   inline void setBottomRight(const QPointF &p);
-   inline void setTopRight(const QPointF &p);
-   inline void setBottomLeft(const QPointF &p);
+   inline void setTopLeft(const QPointF &point);
+   inline void setBottomRight(const QPointF &point);
+   inline void setTopRight(const QPointF &point);
+   inline void setBottomLeft(const QPointF &point);
 
    inline void moveLeft(qreal pos);
    inline void moveTop(qreal pos);
    inline void moveRight(qreal pos);
    inline void moveBottom(qreal pos);
-   inline void moveTopLeft(const QPointF &p);
-   inline void moveBottomRight(const QPointF &p);
-   inline void moveTopRight(const QPointF &p);
-   inline void moveBottomLeft(const QPointF &p);
-   inline void moveCenter(const QPointF &p);
+
+   inline void moveTopLeft(const QPointF &point);
+   inline void moveBottomRight(const QPointF &point);
+   inline void moveTopRight(const QPointF &point);
+   inline void moveBottomLeft(const QPointF &point);
+   inline void moveCenter(const QPointF &point);
 
    inline void translate(qreal x, qreal y);
-   inline void translate(const QPointF &p);
-
+   inline void translate(const QPointF &offset);
    inline QRectF translated(qreal x, qreal y) const;
-   inline QRectF translated(const QPointF &p) const;
+   inline QRectF translated(const QPointF &offset) const;
 
    inline void moveTo(qreal x, qreal y);
-   inline void moveTo(const QPointF &p);
+   inline void moveTo(const QPointF &point);
 
-   inline void setRect(qreal x, qreal y, qreal w, qreal h);
-   inline void getRect(qreal *x, qreal *y, qreal *w, qreal *h) const;
+   inline void setRect(qreal x, qreal y, qreal width, qreal height);
+   inline void getRect(qreal *x, qreal *y, qreal *width, qreal *height) const;
 
    inline void setCoords(qreal x1, qreal y1, qreal x2, qreal y2);
    inline void getCoords(qreal *x1, qreal *y1, qreal *x2, qreal *y2) const;
@@ -687,8 +687,8 @@ class Q_CORE_EXPORT QRectF
    inline QRectF &operator+=(const QMarginsF &margins);
    inline QRectF &operator-=(const QMarginsF &margins);
 
-   friend inline bool operator==(const QRectF &, const QRectF &);
-   friend inline bool operator!=(const QRectF &, const QRectF &);
+   friend inline bool operator==(const QRectF &rect1, const QRectF &rect2);
+   friend inline bool operator!=(const QRectF &rect1, const QRectF &rect2);
 
    inline QRect toRect() const;
    QRect toAlignedRect() const;
@@ -700,8 +700,8 @@ class Q_CORE_EXPORT QRectF
    qreal m_h;
 };
 
-inline bool operator==(const QRectF &, const QRectF &);
-inline bool operator!=(const QRectF &, const QRectF &);
+inline bool operator==(const QRectF &rect1, const QRectF &rect2);
+inline bool operator!=(const QRectF &rect1, const QRectF &rect2);
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QRectF &rectF);
 Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QRectF &rectF);
@@ -781,28 +781,28 @@ inline void QRectF::setBottom(qreal pos)
    m_h = pos - m_y;
 }
 
-inline void QRectF::setTopLeft(const QPointF &p)
+inline void QRectF::setTopLeft(const QPointF &point)
 {
-   setLeft(p.x());
-   setTop(p.y());
+   setLeft(point.x());
+   setTop(point.y());
 }
 
-inline void QRectF::setTopRight(const QPointF &p)
+inline void QRectF::setTopRight(const QPointF &point)
 {
-   setRight(p.x());
-   setTop(p.y());
+   setRight(point.x());
+   setTop(point.y());
 }
 
-inline void QRectF::setBottomLeft(const QPointF &p)
+inline void QRectF::setBottomLeft(const QPointF &point)
 {
-   setLeft(p.x());
-   setBottom(p.y());
+   setLeft(point.x());
+   setBottom(point.y());
 }
 
-inline void QRectF::setBottomRight(const QPointF &p)
+inline void QRectF::setBottomRight(const QPointF &point)
 {
-   setRight(p.x());
-   setBottom(p.y());
+   setRight(point.x());
+   setBottom(point.y());
 }
 
 inline QPointF QRectF::center() const
@@ -830,34 +830,34 @@ inline void QRectF::moveBottom(qreal pos)
    m_y = pos - m_h;
 }
 
-inline void QRectF::moveTopLeft(const QPointF &p)
+inline void QRectF::moveTopLeft(const QPointF &point)
 {
-   moveLeft(p.x());
-   moveTop(p.y());
+   moveLeft(point.x());
+   moveTop(point.y());
 }
 
-inline void QRectF::moveTopRight(const QPointF &p)
+inline void QRectF::moveTopRight(const QPointF &point)
 {
-   moveRight(p.x());
-   moveTop(p.y());
+   moveRight(point.x());
+   moveTop(point.y());
 }
 
-inline void QRectF::moveBottomLeft(const QPointF &p)
+inline void QRectF::moveBottomLeft(const QPointF &point)
 {
-   moveLeft(p.x());
-   moveBottom(p.y());
+   moveLeft(point.x());
+   moveBottom(point.y());
 }
 
-inline void QRectF::moveBottomRight(const QPointF &p)
+inline void QRectF::moveBottomRight(const QPointF &point)
 {
-   moveRight(p.x());
-   moveBottom(p.y());
+   moveRight(point.x());
+   moveBottom(point.y());
 }
 
-inline void QRectF::moveCenter(const QPointF &p)
+inline void QRectF::moveCenter(const QPointF &point)
 {
-   m_x = p.x() - m_w / 2;
-   m_y = p.y() - m_h / 2;
+   m_x = point.x() - m_w / 2;
+   m_y = point.y() - m_h / 2;
 }
 
 inline qreal QRectF::width() const
@@ -881,10 +881,10 @@ inline void QRectF::translate(qreal x, qreal y)
    m_y += y;
 }
 
-inline void QRectF::translate(const QPointF &p)
+inline void QRectF::translate(const QPointF &offset)
 {
-   m_x += p.x();
-   m_y += p.y();
+   m_x += offset.x();
+   m_y += offset.y();
 }
 
 inline void QRectF::moveTo(qreal x, qreal y)
@@ -893,10 +893,10 @@ inline void QRectF::moveTo(qreal x, qreal y)
    m_y = y;
 }
 
-inline void QRectF::moveTo(const QPointF &p)
+inline void QRectF::moveTo(const QPointF &point)
 {
-   m_x = p.x();
-   m_y = p.y();
+   m_x = point.x();
+   m_y = point.y();
 }
 
 inline QRectF QRectF::translated(qreal x, qreal y) const
@@ -904,9 +904,9 @@ inline QRectF QRectF::translated(qreal x, qreal y) const
    return QRectF(m_x + x, m_y + y, m_w, m_h);
 }
 
-inline QRectF QRectF::translated(const QPointF &p) const
+inline QRectF QRectF::translated(const QPointF &offset) const
 {
-   return QRectF(m_x + p.x(), m_y + p.y(), m_w, m_h);
+   return QRectF(m_x + offset.x(), m_y + offset.y(), m_w, m_h);
 }
 
 inline void QRectF::getRect(qreal *x, qreal *y, qreal *w, qreal *h) const
@@ -917,12 +917,12 @@ inline void QRectF::getRect(qreal *x, qreal *y, qreal *w, qreal *h) const
    *h = m_h;
 }
 
-inline void QRectF::setRect(qreal x, qreal y, qreal w, qreal h)
+inline void QRectF::setRect(qreal x, qreal y, qreal width, qreal height)
 {
    m_x = x;
    m_y = y;
-   m_w = w;
-   m_h = h;
+   m_w = width;
+   m_h = height;
 }
 
 inline void QRectF::getCoords(qreal *x1, qreal *y1, qreal *x2, qreal *y2) const
@@ -1056,6 +1056,6 @@ inline QRectF &QRectF::operator-=(const QMarginsF &margins)
     return *this;
 }
 
-Q_CORE_EXPORT QDebug operator<<(QDebug, const QRectF &);
+Q_CORE_EXPORT QDebug operator<<(QDebug, const QRectF &rect);
 
 #endif // QRECT_H

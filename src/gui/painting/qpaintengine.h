@@ -168,22 +168,22 @@ class Q_GUI_EXPORT QPaintEngine
 
    virtual void updateState(const QPaintEngineState &state) = 0;
 
-   virtual void drawRects(const QRect *rectPtr, int rectCount);
-   virtual void drawRects(const QRectF *rectPtr, int rectCount);
+   virtual void drawRects(const QRect *rects, int rectCount);
+   virtual void drawRects(const QRectF *rects, int rectCount);
 
-   virtual void drawLines(const QLine *linePtr, int lineCount);
-   virtual void drawLines(const QLineF *linePtr, int lineCount);
+   virtual void drawLines(const QLine *lines, int lineCount);
+   virtual void drawLines(const QLineF *lines, int lineCount);
 
    virtual void drawEllipse(const QRectF &rect);
    virtual void drawEllipse(const QRect &rect);
 
    virtual void drawPath(const QPainterPath &path);
 
-   virtual void drawPoints(const QPointF *pointPtr, int pointCount);
-   virtual void drawPoints(const QPoint *pointPtr, int pointCount);
+   virtual void drawPoints(const QPointF *points, int pointCount);
+   virtual void drawPoints(const QPoint *points, int pointCount);
 
-   virtual void drawPolygon(const QPointF *pointPtr, int pointCount, PolygonDrawMode mode);
-   virtual void drawPolygon(const QPoint *pointPtr, int pointCount, PolygonDrawMode mode);
+   virtual void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
+   virtual void drawPolygon(const QPoint *points, int pointCount, PolygonDrawMode mode);
 
    virtual void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &srcRect) = 0;
    virtual void drawTextItem(const QPointF &point, const QTextItem &textItem);

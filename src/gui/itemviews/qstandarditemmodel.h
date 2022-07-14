@@ -87,7 +87,7 @@ class Q_GUI_EXPORT QStandardItem
    inline QSize sizeHint() const {
       return (data(Qt::SizeHintRole)).value<QSize>();
    }
-   inline void setSizeHint(const QSize &sizeHint);
+   inline void setSizeHint(const QSize &size);
 
    inline QFont font() const {
       return (data(Qt::FontRole)).value<QFont>();
@@ -97,7 +97,7 @@ class Q_GUI_EXPORT QStandardItem
    inline Qt::Alignment textAlignment() const {
       return Qt::Alignment((data(Qt::TextAlignmentRole)).value<int>());
    }
-   inline void setTextAlignment(Qt::Alignment textAlignment);
+   inline void setTextAlignment(Qt::Alignment alignment);
 
    inline QBrush background() const {
       return (data(Qt::BackgroundRole)).value<QBrush>();
@@ -112,7 +112,7 @@ class Q_GUI_EXPORT QStandardItem
    inline Qt::CheckState checkState() const {
       return Qt::CheckState((data(Qt::CheckStateRole)).value<int>());
    }
-   inline void setCheckState(Qt::CheckState checkState);
+   inline void setCheckState(Qt::CheckState state);
 
    inline QString accessibleText() const {
       return (data(Qt::AccessibleTextRole)).value<QString>();

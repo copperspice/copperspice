@@ -121,7 +121,7 @@ class QCache
       return mx;
    }
 
-   void setMaxCost(int m);
+   void setMaxCost(int cost);
    int totalCost() const {
       return total;
    }
@@ -181,9 +181,9 @@ inline void QCache<Key, T>::clear()
 }
 
 template <class Key, class T>
-inline void QCache<Key, T>::setMaxCost(int m)
+inline void QCache<Key, T>::setMaxCost(int cost)
 {
-   mx = m;
+   mx = cost;
    trim(mx);
 }
 

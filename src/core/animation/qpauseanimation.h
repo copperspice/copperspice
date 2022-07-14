@@ -50,7 +50,7 @@ class Q_CORE_EXPORT QPauseAnimation : public QAbstractAnimation
    void setDuration(int msecs);
 
  protected:
-   bool event(QEvent *e) override;
+   bool event(QEvent *event) override;
    void updateCurrentTime(int) override;
 
  private:

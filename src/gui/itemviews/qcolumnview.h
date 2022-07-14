@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QColumnView : public QAbstractItemView
    QSize sizeHint() const override;
    QRect visualRect(const QModelIndex &index) const override;
    void setModel(QAbstractItemModel *model) override;
-   void setSelectionModel(QItemSelectionModel *selectionModel) override;
+   void setSelectionModel(QItemSelectionModel *newSelectionModel) override;
    void setRootIndex(const QModelIndex &index) override;
    void selectAll() override;
 

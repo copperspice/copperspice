@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QDialog : public QWidget
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
 
-   void setSizeGripEnabled(bool);
+   void setSizeGripEnabled(bool enabled);
    bool isSizeGripEnabled() const;
 
    void setModal(bool modal);

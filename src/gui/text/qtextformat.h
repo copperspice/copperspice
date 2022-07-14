@@ -972,7 +972,7 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
       return static_cast<Position>(intProperty(CssFloat));
    }
 
-   inline void setBorder(qreal border);
+   inline void setBorder(qreal width);
    inline qreal border() const {
       return doubleProperty(FrameBorder);
    }
@@ -1008,7 +1008,7 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
    inline void setRightMargin(qreal margin);
    qreal rightMargin() const;
 
-   inline void setPadding(qreal padding);
+   inline void setPadding(qreal width);
    inline qreal padding() const {
       return doubleProperty(FramePadding);
    }
@@ -1039,14 +1039,14 @@ class Q_GUI_EXPORT QTextFrameFormat : public QTextFormat
    friend class QTextFormat;
 };
 
-inline void QTextFrameFormat::setBorder(qreal border)
+inline void QTextFrameFormat::setBorder(qreal width)
 {
-   setProperty(FrameBorder, border);
+   setProperty(FrameBorder, width);
 }
 
-inline void QTextFrameFormat::setPadding(qreal padding)
+inline void QTextFrameFormat::setPadding(qreal width)
 {
-   setProperty(FramePadding, padding);
+   setProperty(FramePadding, width);
 }
 
 inline void QTextFrameFormat::setWidth(qreal width)
