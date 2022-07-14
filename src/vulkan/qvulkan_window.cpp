@@ -421,6 +421,15 @@ bool QVulkanWindow::populateRenderPass() const
    return true;
 }
 
+bool QVulkanWindow::recreateSwapChain()
+{
+   // trigger a recreation of all resources
+
+   m_swapChainImageSize = QSize();
+
+   return populateSwapChain();
+}
+
 bool QVulkanWindow::populateSwapChain()
 {
    m_swapChainImageSize = size() * devicePixelRatio();
@@ -638,7 +647,80 @@ void QVulkanWindow::startFrame()
       frameData->commandBuffer->beginRenderPass(renderPassInfo, vk::SubpassContents::eInline,  m_deviceFunctions->dynamicLoader());
       frameData->commandBuffer->endRenderPass(m_deviceFunctions->dynamicLoader());
 
+      endFrame();
    }
+}
+
+void QVulkanWindow::endFrame()
+{
+   auto frameData = m_frameData.begin() + m_currentFrame;
+   frameData->commandBuffer->end();
+
+   vk::SubmitInfo submitInfo;
+   submitInfo.commandBufferCount   = 1;
+   submitInfo.signalSemaphoreCount = 1;
+   submitInfo.pCommandBuffers      = &(frameData->commandBuffer.get());
+   submitInfo.pWaitSemaphores      = &(frameData->imageSemaphore);
+
+   vk::PipelineStageFlags pipelineFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
+   submitInfo.pWaitDstStageMask         = &pipelineFlags;
+
+   if (frameData->imageSemaphoreActive) {
+      submitInfo.waitSemaphoreCount = 1;
+      submitInfo.pWaitSemaphores    = &(frameData->imageSemaphore);
+   }
+
+   vk::Result result = m_graphicsQueues.first().submit(1, &submitInfo, frameData->imageFence);
+
+   if (result == vk::Result::eErrorDeviceLost) {
+      handleDeviceLost();
+      return;
+
+   } else if (result != vk::Result::eSuccess) {
+      return;
+
+   }
+
+   frameData->imageSemaphoreActive = false;
+   frameData->imageFenceActive     = true;
+
+   vk::PresentInfoKHR presentInfo;
+   presentInfo.swapchainCount     = 1;
+   presentInfo.waitSemaphoreCount = 1;
+   presentInfo.pSwapchains        = &(m_swapchain.get());
+   uint32_t tmpImageIndex         = m_currentFrame;
+   presentInfo.pImageIndices      = &tmpImageIndex;
+   presentInfo.pWaitSemaphores    = &(frameData->frameSemaphore);
+
+   vulkanInstance()->presentAboutToBeQueued(this);
+
+   result = m_graphicsQueues.first().presentKHR(presentInfo);
+
+   if (result == vk::Result::eErrorOutOfDateKHR) {
+      recreateSwapChain();
+      return;
+
+   } else if (result == vk::Result::eErrorDeviceLost) {
+      handleDeviceLost();
+      return;
+
+   } else if (result != vk::Result::eSuccess) {
+      return;
+
+   }
+
+   frameData->imageAcquired = false;
+   vulkanInstance()->presentQueued(this);
+   m_currentFrame = (m_currentFrame + 1) % m_concurrentFrameCount;
+}
+
+bool QVulkanWindow::handleDeviceLost()
+{
+   if (m_renderer != nullptr) {
+      m_renderer->logicalDeviceLost();
+   }
+
+   return recreateSwapChain();
 }
 
 QMatrix4x4 QVulkanWindow::clipCorrectionMatrix()
@@ -701,6 +783,11 @@ VkDevice QVulkanWindow::device() const
 QVulkanWindow::VulkanFlags QVulkanWindow::flags() const
 {
    return m_vulkanFlags;
+}
+
+void QVulkanWindow::frameReady()
+{
+   endFrame();
 }
 
 bool QVulkanWindow::isValid() const

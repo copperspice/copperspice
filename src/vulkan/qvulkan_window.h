@@ -60,6 +60,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VkDevice device() const;
 
    QVulkanWindow::VulkanFlags flags() const;
+   void frameReady();
    bool isValid() const;
    VkPhysicalDevice physicalDevice() const;
    const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
@@ -82,6 +83,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
       bool imageSemaphoreActive = false;
       vk::Fence frameFence;
       vk::Fence imageFence;
+      vk::Semaphore frameSemaphore;
       vk::Semaphore imageSemaphore;
       QDynamicUniqueHandle<vk::CommandBuffer> commandBuffer;
    };
@@ -90,10 +92,14 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
       createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions);
 
    void startFrame();
+   void endFrame();
+   bool handleDeviceLost();
+
    bool initialize();
    bool createSurface() const;
    bool populatePhysicalDevices() const;
    bool populateRenderPass() const;
+   bool recreateSwapChain();
    bool populateSwapChain();
 
    bool m_isValid;
