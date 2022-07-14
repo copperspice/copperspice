@@ -75,9 +75,21 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VkImageView swapChainImageView(int idx) const;
 
  private:
+   struct FrameData {
+      bool frameFenceActive = false;
+      bool imageFenceActive = false;
+      bool imageAcquired = false;
+      bool imageSemaphoreActive = false;
+      vk::Fence frameFence;
+      vk::Fence imageFence;
+      vk::Semaphore imageSemaphore;
+      QDynamicUniqueHandle<vk::CommandBuffer> commandBuffer;
+   };
+
    std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
       createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions);
 
+   void startFrame();
    bool initialize();
    bool createSurface() const;
    bool populatePhysicalDevices() const;
@@ -105,6 +117,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    mutable vk::UniqueHandle<vk::RenderPass, vk::DispatchLoaderDynamic> m_renderPass;
    vk::UniqueHandle<vk::CommandPool, vk::DispatchLoaderDynamic> m_graphicsPool;
 
+   vk::Image m_currentImage;
+
    uint32_t m_hostVisibleIndex;
 
    vk::Format m_colorFormat;
@@ -121,6 +135,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QVector<vk::CommandBuffer> m_commandbuffers;
    QVector<std::tuple<vk::Image, QDynamicUniqueHandle<vk::ImageView>, QDynamicUniqueHandle<vk::Framebuffer>>> m_framebuffers;
    QDynamicUniqueHandle<vk::SwapchainKHR> m_swapchain;
+   QVector<FrameData> m_frameData;
 
    std::unique_ptr<QVulkanWindowRenderer> m_renderer;
    QDynamicUniqueHandle<vk::SurfaceKHR> m_surface;

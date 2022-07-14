@@ -520,6 +520,127 @@ QVector<VkPhysicalDeviceProperties> QVulkanWindow::availablePhysicalDevices()
    return m_physicalDeviceProperties;
 }
 
+void QVulkanWindow::startFrame()
+{
+   // ensure we have a working swapchain
+   if (! m_swapchain) {
+      return;
+   }
+
+   // see if the size has changed since last frame
+   if (size() * devicePixelRatio() != m_swapChainImageSize) {
+      if (! populateSwapChain()) {
+         return;
+      }
+   }
+
+   auto frameData = m_frameData.begin() + m_currentFrame;
+
+   if (! frameData->imageAcquired) {
+      if (frameData->frameFenceActive) {
+         // make sure previous operations on this frame have completed
+
+         vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->frameFence, true, std::numeric_limits<uint64_t>::max());
+         if (result != vk::Result::eSuccess) {
+            return;
+         }
+
+         result = m_deviceFunctions->device().resetFences(1, &frameData->imageFence);
+         if (result != vk::Result::eSuccess) {
+            return;
+         }
+
+         frameData->frameFenceActive = false;
+
+         // get next image
+         auto imageResult = m_deviceFunctions->device().acquireNextImageKHR(
+               m_swapchain.get(), std::numeric_limits<uint64_t>::max(), frameData->imageSemaphore, frameData->frameFence);
+
+         switch (imageResult.result) {
+            case vk::Result::eSuccess:
+            case vk::Result::eSuboptimalKHR:
+               frameData->imageSemaphoreActive = true;
+               frameData->imageAcquired        = true;
+               frameData->frameFenceActive     = true;
+               break;
+
+            case vk::Result::eErrorOutOfDateKHR:
+               // stale swapchain, regenerate and try again next frame
+               populateSwapChain();
+               requestUpdate();
+               break;
+
+            default:
+               // some other error occurred, drop this frame
+               requestUpdate();
+               break;
+         }
+      }
+   }
+
+   if (frameData->imageFenceActive)  {
+      // make sure previous operations on this image have completed
+
+      vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->imageFence, true, std::numeric_limits<uint64_t>::max());
+      if (result != vk::Result::eSuccess) {
+         return;
+      }
+
+      result = m_deviceFunctions->device().resetFences(1, &frameData->imageFence);
+      if (result != vk::Result::eSuccess) {
+         return;
+      }
+
+      frameData->imageFenceActive = false;
+   }
+
+   vk::CommandBufferAllocateInfo allocateInfo;
+   allocateInfo.commandPool        = m_graphicsPool.get();
+   allocateInfo.level              = vk::CommandBufferLevel::ePrimary;
+   allocateInfo.commandBufferCount = 1;
+
+   try {
+      auto commandBufferList = m_deviceFunctions->device().allocateCommandBuffersUnique(allocateInfo, m_deviceFunctions->dynamicLoader());
+      frameData->commandBuffer = std::move(commandBufferList[0]);
+
+   } catch (vk::SystemError &err) {
+      return;
+
+   }
+
+   frameData->commandBuffer->begin(vk::CommandBufferBeginInfo{});
+
+   if (m_renderer) {
+      m_renderer->startNextFrame();
+
+   } else {
+      // no renderer available, clear the images
+      vk::ClearValue clearColor[3];
+      vk::ClearColorValue clearBlack{std::array{0.0f, 0.0f, 0.0f, 1.0f}};
+      vk::ClearDepthStencilValue clearDepth{1.0f, 0};
+
+      clearColor[0].color        = clearBlack;
+      clearColor[1].depthStencil = clearDepth;
+      clearColor[2].color        = clearBlack;
+
+      vk::RenderPassBeginInfo renderPassInfo;
+      renderPassInfo.renderPass               = m_renderPass.get();
+      renderPassInfo.framebuffer              = std::get<2>(m_framebuffers[m_currentFrame]).get();
+      renderPassInfo.renderArea.extent.width  = m_swapChainImageSize.width();
+      renderPassInfo.renderArea.extent.height = m_swapChainImageSize.height();
+      renderPassInfo.pClearValues             = clearColor;
+      renderPassInfo.clearValueCount          = 2;
+
+      if (m_requestedSampleCount > 1) {
+         renderPassInfo.clearValueCount = 3;
+      }
+
+      frameData->commandBuffer->beginRenderPass(renderPassInfo, vk::SubpassContents::eInline,  m_deviceFunctions->dynamicLoader());
+      frameData->commandBuffer->endRenderPass(m_deviceFunctions->dynamicLoader());
+
+   }
+}
+
 QMatrix4x4 QVulkanWindow::clipCorrectionMatrix()
 {
    static const QMatrix4x4 retval = {1.0,  0.0,  0.0,  0.0,
