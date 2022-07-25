@@ -119,6 +119,8 @@ class Q_GUI_EXPORT QPlatformScreen
    // The platform screen's geometry in device independent coordinates
    QRect deviceIndependentGeometry() const;
 
+   virtual void * nativeHandle();
+
  protected:
    void resizeMaximizedWindows();
 

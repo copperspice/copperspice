@@ -123,6 +123,11 @@ qreal QPlatformScreen::devicePixelRatio() const
    return 1.0;
 }
 
+void *QPlatformScreen::nativeHandle()
+{
+   return nullptr;
+}
+
 qreal QPlatformScreen::pixelDensity()  const
 {
    return 1.0;

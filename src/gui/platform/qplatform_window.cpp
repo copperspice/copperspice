@@ -143,6 +143,11 @@ QPoint QPlatformWindow::mapFromGlobal(const QPoint &pos) const
 
 }
 
+void * QPlatformWindow::nativeHandle()
+{
+   return nullptr;
+}
+
 void QPlatformWindow::setWindowState(Qt::WindowState)
 {
 }
