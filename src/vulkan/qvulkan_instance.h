@@ -113,6 +113,18 @@ class Q_VULKAN_EXPORT QVulkanInstance
 
    VkInstance vkInstance() const;
 
+   const vk::Instance &apiInstance() const {
+      return m_vkInstance.get();
+   }
+
+   const vk::DynamicLoader &dynamicLoader() const {
+      return m_dl;
+   }
+
+   const vk::DispatchLoaderDynamic &dispatchLoader() const {
+      return m_dld;
+   }
+
    static VkSurfaceKHR surfaceForWindow(QWindow *window);
 
  private:
