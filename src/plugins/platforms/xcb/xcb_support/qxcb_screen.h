@@ -224,6 +224,8 @@ class Q_XCB_EXPORT QXcbScreen : public QXcbObject, public QPlatformScreen
 
    QXcbXSettings *xSettings() const;
 
+   void *nativeHandle() override;
+
  private:
    static bool xResource(const QByteArray &identifier, const QByteArray &expectedIdentifier, QByteArray &stringValue);
    void sendStartupMessage(const QByteArray &message) const;
