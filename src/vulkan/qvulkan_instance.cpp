@@ -45,7 +45,7 @@ QVersionNumber QVulkanInstance::apiVersion() const
 }
 
 static const QStringList s_requiredExtensions = {
-   "VK_KHR_SURFACE",
+   "VK_KHR_surface",
    "VK_KHR_win32_surface",
    "VK_KHR_xcb_surface",
    "VK_EXT_debug_report"
