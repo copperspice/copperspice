@@ -83,6 +83,19 @@ set_target_properties(CsVulkan
    LINK_FLAGS ${EXTRA_VULKAN_LDFLAGS}
 )
 
+if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+  target_compile_definitions(CsVulkan
+    PUBLIC
+    -DVK_USE_PLATFORM_XCB_KHR
+  )
+
+  target_link_libraries(CsVulkan
+      PRIVATE
+      ${XCB_LIB}
+  )
+
+endif()
+
 function_generate_resources(CsVulkan)
 
 macro_generate_package(
