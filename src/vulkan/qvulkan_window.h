@@ -111,7 +111,6 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QStringList m_requestedDeviceExtensions;
    QSize m_swapChainImageSize;
 
-   vk::PhysicalDevice m_physicalDevice;
    bool m_singleDevice;
    vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_graphicsDevice;
    vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_transferDevice;
@@ -133,7 +132,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    vk::SampleCountFlagBits m_sampleCount;
 
    QVector<VkFormat> m_requestedFormats;
-   mutable QVector<VkPhysicalDevice> m_physicalDevices;
+   mutable QVector<vk::PhysicalDevice> m_physicalDevices;
    mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
 
    std::unique_ptr<QVulkanDeviceFunctions> m_deviceFunctions;

@@ -124,8 +124,10 @@ bool QVulkanWindow::initialize()
       }
    }
 
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+
    // load queues
-   auto queues = map_vector(m_physicalDevice.getQueueFamilyProperties(),
+   auto queues = map_vector(physicalDevice.getQueueFamilyProperties(),
          [id = 0] (auto item) mutable {
             if (item.queueFlags & (vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute)) {
                // any queue that supports graphics or compute is required to support transfer by the spec
@@ -186,8 +188,7 @@ bool QVulkanWindow::initialize()
    poolCreateInfo.queueFamilyIndex = m_graphicsCommandQueueFamily;
    m_graphicsPool = m_graphicsDevice->createCommandPoolUnique(poolCreateInfo, nullptr, m_deviceFunctions->dynamicLoader());
 
-   vk::PhysicalDeviceMemoryProperties memoryProperties =
-         m_physicalDevice.getMemoryProperties(m_deviceFunctions->dynamicLoader());
+   vk::PhysicalDeviceMemoryProperties memoryProperties = physicalDevice.getMemoryProperties(m_deviceFunctions->dynamicLoader());
 
    uint32_t i = 0;
    std::optional<uint32_t> hostMemIndex;
@@ -223,8 +224,7 @@ bool QVulkanWindow::initialize()
    m_colorSpace  = vk::ColorSpaceKHR::eSrgbNonlinear;
    m_colorFormat = vk::Format::eR8G8B8A8Unorm;
 
-   auto surfaceFormats =
-         m_physicalDevice.getSurfaceFormatsKHR(m_surface.get(), m_deviceFunctions->dynamicLoader());
+   auto surfaceFormats = physicalDevice.getSurfaceFormatsKHR(m_surface.get());
 
    // use first available format for the surface, if there is one
    for (const auto &item : surfaceFormats) {
@@ -241,7 +241,7 @@ bool QVulkanWindow::initialize()
    m_depthFormat = vk::Format::eUndefined;
 
    for (auto item : preferredFormatList) {
-      auto formatProperties = m_physicalDevice.getFormatProperties(item, m_deviceFunctions->dynamicLoader());
+      auto formatProperties = physicalDevice.getFormatProperties(item, m_deviceFunctions->dynamicLoader());
 
       if (formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment) {
          m_depthFormat = item;
@@ -265,8 +265,9 @@ QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, 
    vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> device;
    QVector<vk::Queue> queueVector;
 
+   auto &physicalDevice   = m_physicalDevices[m_physicalDeviceIndex];
    auto &[properties, id] = deviceProperties;
-   const uint32_t count = properties.queueCount;
+   const uint32_t count   = properties.queueCount;
 
    QVector<float> priorities(count, 1.0f);
 
@@ -281,7 +282,7 @@ QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, 
       extensionPointers.push_back("VK_KHR_swapchain");
    }
 
-   device =  m_physicalDevice.createDeviceUnique(vk::DeviceCreateInfo(
+   device = physicalDevice.createDeviceUnique(vk::DeviceCreateInfo(
          {}, 1, &createInfo, 0, nullptr, extensionPointers.size(), extensionPointers.data()),
          nullptr, m_deviceFunctions->dynamicLoader());
 
@@ -311,8 +312,7 @@ bool QVulkanWindow::createSurface() const
 bool QVulkanWindow::populatePhysicalDevices() const
 {
    QVector<VkPhysicalDeviceProperties> properties;
-   QVector<VkPhysicalDevice> devices;
-   uint32_t deviceCount;
+   QVector<vk::PhysicalDevice> devices;
 
    if (! m_physicalDevices.empty()) {
       // already populated
@@ -325,25 +325,20 @@ bool QVulkanWindow::populatePhysicalDevices() const
       return false;
    }
 
-   QVulkanFunctions *f = instance->functions();
-   VkResult result = f->vkEnumeratePhysicalDevices(instance->vkInstance(), &deviceCount, nullptr);
+   try {
+      auto tmp = instance->apiInstance().enumeratePhysicalDevices(instance->dispatchLoader());
 
-   if (result != VK_SUCCESS || deviceCount < 1) {
-      qWarning("QVulkanWindow: First call to vkEnumeratePhysicalDevices() failed");
+      for (auto & item : tmp) {
+         devices.append(std::move(item));
+      }
+
+   } catch (vk::SystemError &err) {
+      qWarning("QVulkanWindow: Call to enumeratePhysicalDevices() failed, %s", err.what());
       return false;
    }
 
-   devices.resize(deviceCount);
-   result = f->vkEnumeratePhysicalDevices(instance->vkInstance(), &deviceCount, devices.data());
-
-   if (result != VK_SUCCESS || deviceCount == 0) {
-      qWarning("QVulkanWindow: Second call to vkEnumeratePhysicalDevices() failed");
-      return false;
-   }
-
-   properties.resize(deviceCount);
-   for (uint32_t i = 0; i < deviceCount; ++i) {
-      f->vkGetPhysicalDeviceProperties(devices[i], properties.data() + i);
+   for (auto &item : devices) {
+      properties.append(item.getProperties(instance->dispatchLoader()));
    }
 
    m_physicalDevices = devices;
@@ -441,7 +436,8 @@ bool QVulkanWindow::populateSwapChain()
    m_deviceFunctions->device().waitIdle();
 
    uint32_t numBuffers = 3;
-   auto capabilities   = m_physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+   auto capabilities    = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
 
    if (capabilities.maxImageCount != 0) {
       numBuffers = std::min(numBuffers, capabilities.maxImageCount);
