@@ -85,7 +85,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
       vk::Fence imageFence;
       vk::Semaphore frameSemaphore;
       vk::Semaphore imageSemaphore;
-      QDynamicUniqueHandle<vk::CommandBuffer> commandBuffer;
+      std::optional<QDynamicUniqueHandle<vk::CommandBuffer>> commandBuffer;
    };
 
    std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>

@@ -443,7 +443,18 @@ bool QVulkanWindow::populateSwapChain()
       numBuffers = std::min(numBuffers, capabilities.maxImageCount);
    }
 
-   numBuffers   = std::max(numBuffers, capabilities.minImageCount);
+   numBuffers = std::max(numBuffers, capabilities.minImageCount);
+   m_frameData.resize(numBuffers);
+
+
+   for (auto & item : m_frameData) {
+      item.frameFence = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
+      item.imageFence = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
+      item.frameSemaphore = m_graphicsDevice->createSemaphore(vk::SemaphoreCreateInfo{});
+      item.imageSemaphore = m_graphicsDevice->createSemaphore(vk::SemaphoreCreateInfo{});
+
+   }
+
    auto vk_size = capabilities.currentExtent;
 
    // compute Vulkan extent
@@ -608,12 +619,12 @@ void QVulkanWindow::startFrame()
       auto commandBufferList = m_deviceFunctions->device().allocateCommandBuffersUnique(allocateInfo, m_deviceFunctions->dynamicLoader());
       frameData->commandBuffer = std::move(commandBufferList[0]);
 
+      frameData->commandBuffer.value()->begin(vk::CommandBufferBeginInfo{});
+
    } catch (vk::SystemError &err) {
       return;
 
    }
-
-   frameData->commandBuffer->begin(vk::CommandBufferBeginInfo{});
 
    if (m_renderer) {
       m_renderer->startNextFrame();
@@ -640,8 +651,8 @@ void QVulkanWindow::startFrame()
          renderPassInfo.clearValueCount = 3;
       }
 
-      frameData->commandBuffer->beginRenderPass(renderPassInfo, vk::SubpassContents::eInline,  m_deviceFunctions->dynamicLoader());
-      frameData->commandBuffer->endRenderPass(m_deviceFunctions->dynamicLoader());
+      frameData->commandBuffer.value()->beginRenderPass(renderPassInfo, vk::SubpassContents::eInline,  m_deviceFunctions->dynamicLoader());
+      frameData->commandBuffer.value()->endRenderPass(m_deviceFunctions->dynamicLoader());
 
       endFrame();
    }
@@ -650,13 +661,13 @@ void QVulkanWindow::startFrame()
 void QVulkanWindow::endFrame()
 {
    auto frameData = m_frameData.begin() + m_currentFrame;
-   frameData->commandBuffer->end();
+   frameData->commandBuffer.value()->end();
 
    vk::SubmitInfo submitInfo;
    submitInfo.commandBufferCount   = 1;
    submitInfo.signalSemaphoreCount = 1;
-   submitInfo.pCommandBuffers      = &(frameData->commandBuffer.get());
-   submitInfo.pWaitSemaphores      = &(frameData->imageSemaphore);
+   submitInfo.pCommandBuffers      = &(frameData->commandBuffer.value().get());
+   submitInfo.pSignalSemaphores      = &(frameData->imageSemaphore);
 
    vk::PipelineStageFlags pipelineFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
    submitInfo.pWaitDstStageMask         = &pipelineFlags;
@@ -745,7 +756,7 @@ VkCommandBuffer QVulkanWindow::currentCommandBuffer() const
       return nullptr;
    }
 
-   return m_commandbuffers[m_currentFrame];
+   return m_frameData[m_currentFrame].commandBuffer.value().get();
 }
 
 int QVulkanWindow::currentFrame() const
