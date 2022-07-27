@@ -741,7 +741,7 @@ QVulkanWindowRenderer *QVulkanWindow::createRenderer()
 
 VkCommandBuffer QVulkanWindow::currentCommandBuffer() const
 {
-   if (m_currentFrame < m_commandbuffers.size()) {
+   if (m_currentFrame >= m_frameData.size()) {
       return nullptr;
    }
 
@@ -755,7 +755,7 @@ int QVulkanWindow::currentFrame() const
 
 VkFramebuffer QVulkanWindow::currentFramebuffer() const
 {
-   if (m_currentFrame < m_framebuffers.size()) {
+   if (m_currentFrame >= m_framebuffers.size()) {
       return nullptr;
    }
 
