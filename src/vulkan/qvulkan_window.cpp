@@ -262,8 +262,8 @@ bool QVulkanWindow::initialize()
 std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
 QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions)
 {
+   auto instance = vulkanInstance();
    vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> device;
-   QVector<vk::Queue> queueVector;
 
    auto &physicalDevice   = m_physicalDevices[m_physicalDeviceIndex];
    auto &[properties, id] = deviceProperties;
@@ -284,13 +284,13 @@ QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, 
 
    device = physicalDevice.createDeviceUnique(vk::DeviceCreateInfo(
          {}, 1, &createInfo, 0, nullptr, extensionPointers.size(), extensionPointers.data()),
-         nullptr, m_deviceFunctions->dynamicLoader());
+         nullptr, instance->dispatchLoader());
 
-   std::vector<vk::Queue> queues;
-   queues.reserve(count);
+   QVector<vk::Queue> queueVector;
+   queueVector.reserve(count);
 
    for (uint32_t i = 0; i < count; ++i) {
-      queues.push_back(device->getQueue(id, i));
+      queueVector.push_back(device->getQueue(id, i));
    }
 
    return {std::move(device), std::move(queueVector)};
