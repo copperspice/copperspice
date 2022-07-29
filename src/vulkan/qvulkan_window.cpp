@@ -257,6 +257,8 @@ bool QVulkanWindow::initialize()
       m_renderer->initResources();
    }
 
+   requestUpdate();
+
    return true;
 }
 
@@ -721,6 +723,13 @@ void QVulkanWindow::endFrame()
    frameData->imageAcquired = false;
    vulkanInstance()->presentQueued(this);
    m_currentFrame = (m_currentFrame + 1) % m_concurrentFrameCount;
+}
+
+void QVulkanWindow::exposeEvent(QExposeEvent* )
+{
+   if (m_graphicsQueues.isEmpty()) {
+      initialize();
+   }
 }
 
 bool QVulkanWindow::handleDeviceLost()
