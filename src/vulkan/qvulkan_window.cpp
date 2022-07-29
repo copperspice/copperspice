@@ -176,6 +176,7 @@ bool QVulkanWindow::initialize()
       m_transferQueues.clear();
       m_physicalDevices.clear();
       m_physicalDeviceProperties.clear();
+      return false;
 
    } catch (vk::SystemError& err) {
       qWarning("QVulkanWindow::initialize() unable to create device: %s", err.what());
@@ -409,6 +410,7 @@ bool QVulkanWindow::populateRenderPass() const
 
    if (! pass) {
       qWarning("QVulkanWindow: Unable to create render pass");
+      return false;
    }
 
    m_renderPass = std::move(pass);
@@ -460,7 +462,7 @@ bool QVulkanWindow::populateSwapChain()
    // compute Vulkan extent
    if (vk_size.width == 0xFFFFFFFF) {
       if (vk_size.height != 0xFFFFFFFF) {
-         qWarning("QVulkanWindow::populateSwapChain() Unable to set extent, width was invalid but height was not");
+         qWarning("QVulkanWindow::populateSwapChain() Unable to set extent, height was valid but width was invalid");
          return false;
       }
 
@@ -810,6 +812,7 @@ VkPhysicalDevice QVulkanWindow::physicalDevice() const
 
    if ((m_physicalDeviceIndex < 0) || (m_physicalDeviceIndex >= m_physicalDevices.size())) {
       qWarning("QVulkanWindow::physicalDevice() Index %d is out of range", m_physicalDeviceIndex);
+      return nullptr;
    }
 
    return m_physicalDevices[m_physicalDeviceIndex];
