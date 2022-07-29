@@ -26,6 +26,12 @@
 #include <qmatrix4x4.h>
 #include <qvulkan_device_functions.h>
 #include <qvulkan_functions.h>
+#include <qplatform_window.h>
+#include <qplatform_screen.h>
+
+#if defined(Q_OS_UNIX)
+#include <xcb/xcb.h>
+#endif
 
 namespace {
 
@@ -306,6 +312,13 @@ bool QVulkanWindow::createSurface() const
 
 #elif defined(Q_OS_UNIX)
    // unix platform specific code
+
+   vk::XcbSurfaceCreateInfoKHR createInfo;
+
+   createInfo.connection = reinterpret_cast<xcb_connection_t*>(handle()->screen()->nativeHandle());
+   createInfo.window     = *reinterpret_cast<xcb_window_t*>(handle()->nativeHandle());
+
+   m_surface = vulkanInstance()->apiInstance().createXcbSurfaceKHRUnique(createInfo, nullptr, vulkanInstance()->dispatchLoader());
 
 #endif
 

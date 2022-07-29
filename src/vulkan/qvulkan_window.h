@@ -145,7 +145,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QVector<FrameData> m_frameData;
 
    std::unique_ptr<QVulkanWindowRenderer> m_renderer;
-   QDynamicUniqueHandle<vk::SurfaceKHR> m_surface;
+   mutable QDynamicUniqueHandle<vk::SurfaceKHR> m_surface;
 };
 
 #endif
