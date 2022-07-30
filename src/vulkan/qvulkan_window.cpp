@@ -379,25 +379,25 @@ bool QVulkanWindow::populateRenderPass() const
    QVector<vk::AttachmentDescription> attachments;
 
    attachments.append(vk::AttachmentDescription(
-                   vk::AttachmentDescriptionFlagBits{}, m_colorFormat, vk::SampleCountFlagBits::e1,
-                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
-                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
-                   vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR));
+      vk::AttachmentDescriptionFlagBits{}, m_colorFormat, vk::SampleCountFlagBits::e1,
+      vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+      vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+      vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR));
 
    attachments.append(vk::AttachmentDescription(
-                   vk::AttachmentDescriptionFlagBits{}, m_depthFormat, vk::SampleCountFlagBits::e1,
-                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
-                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
-                   vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal));
+      vk::AttachmentDescriptionFlagBits{}, m_depthFormat, vk::SampleCountFlagBits::e1,
+      vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+      vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
+      vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal));
 
    uint32_t colorId = 0;
 
    if (multisampleEnabled) {
       attachments.append(vk::AttachmentDescription(
-                   vk::AttachmentDescriptionFlagBits{}, m_colorFormat, m_sampleCount,
-                   vk::AttachmentLoadOp::eLoad, vk::AttachmentStoreOp::eStore,
-                   vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
-                   vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal));
+         vk::AttachmentDescriptionFlagBits{}, m_colorFormat, m_sampleCount,
+         vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
+         vk::AttachmentLoadOp::eDontCare, vk::AttachmentStoreOp::eDontCare,
+         vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal));
       colorId = 2;
    }
 
