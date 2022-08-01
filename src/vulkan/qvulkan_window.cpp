@@ -436,7 +436,6 @@ bool QVulkanWindow::populateRenderPass() const
 bool QVulkanWindow::recreateSwapChain()
 {
    // trigger a recreation of all resources
-
    m_swapChainImageSize = QSize();
 
    return populateSwapChain();
@@ -452,7 +451,7 @@ bool QVulkanWindow::populateSwapChain()
 
    m_deviceFunctions->device().waitIdle();
 
-   uint32_t numBuffers = 3;
+   uint32_t numBuffers  = 3;
    auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
    auto capabilities    = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
 
@@ -570,10 +569,12 @@ void QVulkanWindow::startFrame()
    auto frameData = m_frameData.begin() + m_currentFrame;
 
    if (! frameData->imageAcquired) {
+
       if (frameData->frameFenceActive) {
          // make sure previous operations on this frame have completed
 
-         vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->frameFence, true, std::numeric_limits<uint64_t>::max());
+         vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->frameFence, true,
+               std::numeric_limits<uint64_t>::max());
          if (result != vk::Result::eSuccess) {
             return;
          }
@@ -621,6 +622,7 @@ void QVulkanWindow::startFrame()
 
       result = m_deviceFunctions->device().resetFences(1, &frameData->imageFence);
       if (result != vk::Result::eSuccess) {
+
          return;
       }
 
