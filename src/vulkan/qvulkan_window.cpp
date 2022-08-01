@@ -633,10 +633,14 @@ void QVulkanWindow::startFrame()
    allocateInfo.commandBufferCount = 1;
 
    try {
-      auto commandBufferList = m_deviceFunctions->device().allocateCommandBuffersUnique(allocateInfo, m_deviceFunctions->dynamicLoader());
+      auto commandBufferList   = m_deviceFunctions->device().allocateCommandBuffersUnique(allocateInfo, m_deviceFunctions->dynamicLoader());
       frameData->commandBuffer = std::move(commandBufferList[0]);
 
       frameData->commandBuffer.value()->begin(vk::CommandBufferBeginInfo{});
+
+   } catch (vk::DeviceLostError& err) {
+      handleDeviceLost();
+      return;
 
    } catch (vk::SystemError &err) {
       return;
