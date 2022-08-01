@@ -243,7 +243,7 @@ bool QVulkanWindow::initialize()
    }
 
    // find the optimal depth stencil format
-   auto preferredFormatList = { vk::Format::eD24UnormS8Uint, vk::Format::eD16UnormS8Uint, vk::Format::eD32SfloatS8Uint };
+   std::array preferredFormatList = { vk::Format::eD24UnormS8Uint, vk::Format::eD16UnormS8Uint, vk::Format::eD32SfloatS8Uint };
 
    m_depthFormat = vk::Format::eUndefined;
 
