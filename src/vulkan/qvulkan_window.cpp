@@ -305,6 +305,56 @@ QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, 
    return {std::move(device), std::move(queueVector)};
 }
 
+std::pair<QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>>
+QVulkanWindow::createTransientImage(vk::ImageCreateFlags imageFlags, vk::ImageUsageFlags usageFlags, vk::Format imageFormat,
+                                    uint32_t imageWidth, uint32_t imageHeight)
+{
+   auto instance        = vulkanInstance();
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+   std::pair<QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>> retval;
+
+   vk::ImageCreateInfo createInfo;
+
+   createInfo.flags         = imageFlags;
+   createInfo.format        = imageFormat;
+   createInfo.imageType     = vk::ImageType::e2D;
+   createInfo.extent.width  = imageWidth;
+   createInfo.extent.height = imageHeight;
+   createInfo.extent.depth  = 1;
+   createInfo.mipLevels     = 1;
+   createInfo.arrayLayers   = 1;
+   createInfo.samples       = m_sampleCount;
+   createInfo.tiling        = vk::ImageTiling::eOptimal;
+   createInfo.usage         = usageFlags | vk::ImageUsageFlagBits::eTransientAttachment;
+
+   retval.first = m_graphicsDevice->createImageUnique(createInfo, nullptr, instance->dispatchLoader());
+
+   auto memoryRequirements = m_graphicsDevice->getImageMemoryRequirements(retval.first.get());
+   auto memoryInfo         = physicalDevice.getMemoryProperties();
+
+   uint32_t memoryIndex;
+   for (memoryIndex = 0; memoryIndex < memoryInfo.memoryTypeCount; ++memoryIndex) {
+      if (memoryRequirements.memoryTypeBits & (1 << memoryIndex)) {
+         break;
+      }
+   }
+
+   if(memoryIndex == memoryInfo.memoryTypeCount) {
+      qWarning("QVulkanWindow::createTransientImage() Unable to find a valid memory type");
+      return retval;
+   }
+
+   vk::MemoryAllocateInfo allocateInfo;
+   allocateInfo.allocationSize  = memoryRequirements.size;
+   allocateInfo.memoryTypeIndex = memoryIndex;
+
+   retval.second = m_graphicsDevice->allocateMemoryUnique(allocateInfo, nullptr, instance->dispatchLoader());
+
+   m_graphicsDevice->bindImageMemory(retval.first.get(), retval.second.get(), 0);
+
+   return retval;
+}
+
 bool QVulkanWindow::createSurface() const
 {
 #if defined(Q_OS_WIN)

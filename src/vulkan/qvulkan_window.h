@@ -98,6 +98,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    bool handleDeviceLost();
 
    bool initialize();
+   std::pair<QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>> createTransientImage(vk::ImageCreateFlags imageFlags, vk::ImageUsageFlags usageFlags, vk::Format imageFormat, uint32_t imageWidth, uint32_t imageHeight);
    bool createSurface() const;
    bool populatePhysicalDevices() const;
    bool populateRenderPass() const;
