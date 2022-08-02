@@ -106,6 +106,8 @@ class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWi
       return &m_window;
    }
 
+   void syncIfNeeded() override;
+
    xcb_window_t xcb_window() const {
       return m_window;
    }

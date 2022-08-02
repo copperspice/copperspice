@@ -797,6 +797,13 @@ void QXcbWindow::setVisible(bool visible)
    }
 }
 
+void QXcbWindow::syncIfNeeded()
+{
+   if (needsSync()) {
+      postSyncWindowRequest();
+   }
+}
+
 static inline bool testShowWithoutActivating(const QWindow *window)
 {
    // QWidget-attribute Qt::WA_ShowWithoutActivating.

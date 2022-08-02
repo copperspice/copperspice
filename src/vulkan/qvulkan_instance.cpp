@@ -27,6 +27,7 @@
 #include <qvulkan_window.h>
 
 #include <qapplication.h>
+#include <qplatform_window.h>
 
 QVulkanInstance::QVulkanInstance()
    : m_errorCode(VK_SUCCESS)
@@ -283,16 +284,7 @@ void QVulkanInstance::presentAboutToBeQueued(QWindow* window)
 
 void QVulkanInstance::presentQueued(QWindow* window)
 {
-   (void) window;
-
-#if defined(Q_OS_WIN)
-   // windows platform specific code
-
-#elif defined(Q_OS_UNIX)
-   // unix platform specific code
-
-#endif
-
+   window->handle()->syncIfNeeded();
 }
 
 void QVulkanInstance::removeDebugOutputFilter(uint32_t filterId)
