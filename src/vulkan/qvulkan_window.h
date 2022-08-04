@@ -109,6 +109,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    int m_concurrentFrameCount;
    int m_currentFrame;
+   uint32_t m_imageIndex;
    int m_physicalDeviceIndex;
    int m_requestedSampleCount;
    QStringList m_requestedDeviceExtensions;

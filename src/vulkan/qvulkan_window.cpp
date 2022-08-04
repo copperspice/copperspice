@@ -605,66 +605,67 @@ QVector<VkPhysicalDeviceProperties> QVulkanWindow::availablePhysicalDevices()
 void QVulkanWindow::startFrame()
 {
    // ensure we have a working swapchain
-   if (! m_swapchain) {
-      return;
-   }
-
-   // see if the size has changed since last frame
-   if (size() * devicePixelRatio() != m_swapChainImageSize) {
-      if (! populateSwapChain()) {
+   if (! m_swapchain || (size() * devicePixelRatio() != m_swapChainImageSize)) {
+      if (! recreateSwapChain()) {
          return;
       }
    }
 
    auto frameData = m_frameData.begin() + m_currentFrame;
 
+   if (frameData->frameFenceActive) {
+      // make sure previous operations on this frame have completed
+
+      vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->frameFence, true,
+            std::numeric_limits<uint64_t>::max());
+      if (result != vk::Result::eSuccess) {
+         return;
+      }
+
+      result = m_deviceFunctions->device().resetFences(1, &frameData->frameFence);
+      if (result != vk::Result::eSuccess) {
+         return;
+      }
+
+      frameData->frameFenceActive = false;
+
+   }
+
    if (! frameData->imageAcquired) {
 
-      if (frameData->frameFenceActive) {
-         // make sure previous operations on this frame have completed
+      // get next image
+      auto imageResult = m_deviceFunctions->device().acquireNextImageKHR
+         (m_swapchain.get(), std::numeric_limits<uint64_t>::max(), frameData->imageSemaphore, frameData->frameFence);
 
-         vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->frameFence, true,
-               std::numeric_limits<uint64_t>::max());
-         if (result != vk::Result::eSuccess) {
-            return;
-         }
+      switch (imageResult.result) {
+         case vk::Result::eSuccess:
+         case vk::Result::eSuboptimalKHR:
+            frameData->imageSemaphoreActive = true;
+            frameData->imageAcquired        = true;
+            frameData->frameFenceActive     = true;
+            m_imageIndex                    = imageResult.value;
+            break;
 
-         result = m_deviceFunctions->device().resetFences(1, &frameData->imageFence);
-         if (result != vk::Result::eSuccess) {
-            return;
-         }
+         case vk::Result::eErrorOutOfDateKHR:
+            // stale swapchain, regenerate and try again next frame
+            recreateSwapChain();
+            requestUpdate();
+            break;
 
-         frameData->frameFenceActive = false;
+         case vk::Result::eErrorDeviceLost:
+            handleDeviceLost();
+            break;
 
-         // get next image
-         auto imageResult = m_deviceFunctions->device().acquireNextImageKHR(
-               m_swapchain.get(), std::numeric_limits<uint64_t>::max(), frameData->imageSemaphore, frameData->frameFence);
+         default:
+            // some other error occurred, drop this frame
+            requestUpdate();
+            break;
 
-         switch (imageResult.result) {
-            case vk::Result::eSuccess:
-            case vk::Result::eSuboptimalKHR:
-               frameData->imageSemaphoreActive = true;
-               frameData->imageAcquired        = true;
-               frameData->frameFenceActive     = true;
-               break;
-
-            case vk::Result::eErrorOutOfDateKHR:
-               // stale swapchain, regenerate and try again next frame
-               populateSwapChain();
-               requestUpdate();
-               break;
-
-            default:
-               // some other error occurred, drop this frame
-               requestUpdate();
-               break;
-         }
       }
    }
 
    if (frameData->imageFenceActive)  {
       // make sure previous operations on this image have completed
-
       vk::Result result = m_deviceFunctions->device().waitForFences(1, &frameData->imageFence, true, std::numeric_limits<uint64_t>::max());
       if (result != vk::Result::eSuccess) {
          return;
@@ -740,7 +741,7 @@ void QVulkanWindow::endFrame()
    submitInfo.commandBufferCount   = 1;
    submitInfo.signalSemaphoreCount = 1;
    submitInfo.pCommandBuffers      = &(frameData->commandBuffer.value().get());
-   submitInfo.pSignalSemaphores      = &(frameData->imageSemaphore);
+   submitInfo.pSignalSemaphores    = &(frameData->frameSemaphore);
 
    vk::PipelineStageFlags pipelineFlags = vk::PipelineStageFlagBits::eColorAttachmentOutput;
    submitInfo.pWaitDstStageMask         = &pipelineFlags;
@@ -768,30 +769,29 @@ void QVulkanWindow::endFrame()
    presentInfo.swapchainCount     = 1;
    presentInfo.waitSemaphoreCount = 1;
    presentInfo.pSwapchains        = &(m_swapchain.get());
-   uint32_t tmpImageIndex         = m_currentFrame;
-   presentInfo.pImageIndices      = &tmpImageIndex;
+   presentInfo.pImageIndices      = &m_imageIndex;
    presentInfo.pWaitSemaphores    = &(frameData->frameSemaphore);
 
    vulkanInstance()->presentAboutToBeQueued(this);
+   try {
+      m_graphicsQueues.first().presentKHR(presentInfo);
 
-   result = m_graphicsQueues.first().presentKHR(presentInfo);
-
-   if (result == vk::Result::eErrorOutOfDateKHR) {
+   } catch (vk::OutOfDateKHRError &err) {
       recreateSwapChain();
       return;
 
-   } else if (result == vk::Result::eErrorDeviceLost) {
+   } catch (vk::DeviceLostError& err) {
       handleDeviceLost();
       return;
 
-   } else if (result != vk::Result::eSuccess) {
+   } catch (vk::SystemError &err) {
       return;
 
    }
 
    frameData->imageAcquired = false;
    vulkanInstance()->presentQueued(this);
-   m_currentFrame = (m_currentFrame + 1) % m_concurrentFrameCount;
+   m_currentFrame = (m_currentFrame + 1) % m_frameData.size();
 }
 
 void QVulkanWindow::exposeEvent(QExposeEvent* )
