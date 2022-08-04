@@ -141,7 +141,6 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    std::unique_ptr<QVulkanDeviceFunctions> m_deviceFunctions;
 
-   QVector<vk::CommandBuffer> m_commandbuffers;
    QVector<std::tuple<vk::Image, QDynamicUniqueHandle<vk::ImageView>, QDynamicUniqueHandle<vk::Framebuffer>,
          QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>, QDynamicUniqueHandle<vk::ImageView>>> m_framebuffers;
    QDynamicUniqueHandle<vk::SwapchainKHR> m_swapchain;

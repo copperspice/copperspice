@@ -122,7 +122,6 @@ bool QVulkanWindow::initialize()
 
    for (const QString &item : m_requestedDeviceExtensions) {
       for (const auto& ext : supported) {
-
          if (item == ext.extensionName) {
             deviceExtensions.append(item);
             break;
@@ -157,7 +156,6 @@ bool QVulkanWindow::initialize()
    }
 
    try {
-
       std::tie(m_graphicsDevice, m_graphicsQueues) =
             createLogicalDevice(graphicsQueues.front(), deviceExtensions);
 
@@ -307,7 +305,7 @@ QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, 
 
 std::pair<QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>>
 QVulkanWindow::createTransientImage(vk::ImageCreateFlags imageFlags, vk::ImageUsageFlags usageFlags, vk::Format imageFormat,
-                                    uint32_t imageWidth, uint32_t imageHeight)
+      uint32_t imageWidth, uint32_t imageHeight)
 {
    auto instance        = vulkanInstance();
    auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
@@ -530,13 +528,11 @@ bool QVulkanWindow::populateSwapChain()
    numBuffers = std::max(numBuffers, capabilities.minImageCount);
    m_frameData.resize(numBuffers);
 
-
    for (auto & item : m_frameData) {
-      item.frameFence = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
-      item.imageFence = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
+      item.frameFence     = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
+      item.imageFence     = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
       item.frameSemaphore = m_graphicsDevice->createSemaphore(vk::SemaphoreCreateInfo{});
       item.imageSemaphore = m_graphicsDevice->createSemaphore(vk::SemaphoreCreateInfo{});
-
    }
 
    auto vk_size = capabilities.currentExtent;
@@ -705,7 +701,6 @@ void QVulkanWindow::startFrame()
 
       result = m_deviceFunctions->device().resetFences(1, &frameData->imageFence);
       if (result != vk::Result::eSuccess) {
-
          return;
       }
 
