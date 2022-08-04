@@ -499,11 +499,29 @@ bool QVulkanWindow::populateSwapChain()
       return false;
    }
 
-   m_deviceFunctions->device().waitIdle();
+   try {
+      m_deviceFunctions->device().waitIdle();
+
+   } catch (vk::OutOfDateKHRError &err) {
+      return false;
+
+   } catch (vk::DeviceLostError& err) {
+      return false;
+
+   } catch (vk::SystemError &err) {
+      return false;
+
+   }
+
 
    uint32_t numBuffers  = 3;
    auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
-   auto capabilities    = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
+
+   if (! physicalDevice.getSurfaceSupportKHR(m_graphicsCommandQueueFamily, m_surface.get())) {
+      return false;
+   }
+
+   auto capabilities = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
 
    if (capabilities.maxImageCount != 0) {
       numBuffers = std::min(numBuffers, capabilities.maxImageCount);
@@ -558,25 +576,39 @@ bool QVulkanWindow::populateSwapChain()
       auto vk_images = m_deviceFunctions->device().getSwapchainImagesKHR(m_swapchain.get());
 
       auto createFramebuffer =
-         [this](auto vk_image) {
-            auto view = m_deviceFunctions->device().createImageViewUnique(
-                  vk::ImageViewCreateInfo{
+            [this, vk_size](auto vk_image) {
+               auto view = m_deviceFunctions->device().createImageViewUnique(
+                     vk::ImageViewCreateInfo{
                      { }, vk_image, vk::ImageViewType::e2D, m_colorFormat,
                      {vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
-                      vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+                     vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
                      {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1} },
-                  nullptr, m_deviceFunctions->dynamicLoader());
+                     nullptr, m_deviceFunctions->dynamicLoader());
 
-            std::vector<vk::ImageView> tmp_images;
-            tmp_images.push_back(*view);
+               auto depthPair = createTransientImage(vk::ImageCreateFlags{},
+                     vk::ImageUsageFlagBits::eDepthStencilAttachment, m_depthFormat, vk_size.width, vk_size.height);
 
-            auto framebuffer = m_deviceFunctions->device().createFramebufferUnique(vk::FramebufferCreateInfo(
-               {}, m_renderPass.get(), uint32_t(tmp_images.size()), tmp_images.data(),
-               m_swapChainImageSize.width(), m_swapChainImageSize.height(), 1),
-               nullptr, m_deviceFunctions->dynamicLoader());
+               auto depthView = m_deviceFunctions->device().createImageViewUnique(
+                     vk::ImageViewCreateInfo{
+                     { }, depthPair.first.get(), vk::ImageViewType::e2D, m_depthFormat,
+                     {vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
+                     vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+                     {vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1} },
+                     nullptr, m_deviceFunctions->dynamicLoader());
 
-            return std::make_tuple(std::move(vk_image), std::move(view), std::move(framebuffer));
-         };
+
+               std::vector<vk::ImageView> tmp_images;
+               tmp_images.push_back(*view);
+               tmp_images.push_back(*depthView);
+
+               auto framebuffer = m_deviceFunctions->device().createFramebufferUnique(vk::FramebufferCreateInfo(
+                     {}, m_renderPass.get(), uint32_t(tmp_images.size()), tmp_images.data(),
+                     m_swapChainImageSize.width(), m_swapChainImageSize.height(), 1),
+                     nullptr, m_deviceFunctions->dynamicLoader());
+
+               return std::make_tuple(std::move(vk_image), std::move(view), std::move(framebuffer),
+                     std::move(depthPair.first), std::move(depthPair.second), std::move(depthView) );
+            };
 
       m_framebuffers = map_vector(vk_images, createFramebuffer);
 
