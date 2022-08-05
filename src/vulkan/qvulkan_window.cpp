@@ -250,6 +250,7 @@ bool QVulkanWindow::initialize()
 
       if (formatProperties.optimalTilingFeatures & vk::FormatFeatureFlagBits::eDepthStencilAttachment) {
          m_depthFormat = item;
+         break;
       }
    }
 
@@ -434,9 +435,9 @@ bool QVulkanWindow::populateRenderPass() const
 
    attachments.append(vk::AttachmentDescription(
       vk::AttachmentDescriptionFlagBits{}, m_depthFormat, vk::SampleCountFlagBits::e1,
-      vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eStore,
       vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
-      vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal));
+      vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
+      vk::ImageLayout::eUndefined,  vk::ImageLayout::eDepthStencilAttachmentOptimal));
 
    uint32_t colorId = 0;
 
