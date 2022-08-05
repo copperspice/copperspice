@@ -86,7 +86,7 @@ bool QVulkanInstance::create()
    applicationInfo.applicationVersion = 0;
    applicationInfo.pEngineName        = "CsVulkan";
    applicationInfo.engineVersion      = 0;
-   applicationInfo.apiVersion         = VK_API_VERSION_1_1;
+   applicationInfo.apiVersion         = 0;
 
    createInfo.pApplicationInfo = &applicationInfo;
 
