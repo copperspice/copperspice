@@ -971,6 +971,11 @@ void QVulkanWindow::setPhysicalDeviceIndex(int idx)
    }
 }
 
+void QVulkanWindow::setPreferredColorFormats(const QVector<VkFormat> &formats)
+{
+   m_requestedFormats = formats;
+}
+
 void QVulkanWindow::setSampleCount(int sampleCount)
 {
    m_requestedSampleCount = sampleCount;

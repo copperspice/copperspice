@@ -67,6 +67,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    void setDeviceExtensions(const QStringList &extensions);
    void setFlags(QVulkanWindow::VulkanFlags flags);
    void setPhysicalDeviceIndex(int idx);
+   void setPreferredColorFormats(const QVector<VkFormat> &formats);
    void setSampleCount(int sampleCount);
    QVector<QVulkanExtensionProperties> supportedDeviceExtensions();
    VkSurfaceKHR vulkanSurface() const;
