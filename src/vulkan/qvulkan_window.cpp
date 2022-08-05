@@ -630,6 +630,20 @@ QVector<VkPhysicalDeviceProperties> QVulkanWindow::availablePhysicalDevices()
    return m_physicalDeviceProperties;
 }
 
+bool QVulkanWindow::event(QEvent *e)
+{
+   switch(e->type()) {
+      case QEvent::UpdateRequest:
+         startFrame();
+         break;
+
+      default:
+         break;
+   }
+
+   return QWindow::event(e);
+}
+
 void QVulkanWindow::startFrame()
 {
    // ensure we have a working swapchain
