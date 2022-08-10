@@ -35,8 +35,8 @@
 
 #include <stdlib.h>                // for RAND_MAX
 
-template <class Char, class Integral>
-void _q_toHex(Char *&dst, Integral value)
+template <class Integral>
+void cs_internal_toHex(QByteArray &retval, Integral value)
 {
    static const char digits[] = "0123456789abcdef";
 
@@ -44,12 +44,12 @@ void _q_toHex(Char *&dst, Integral value)
 
    const char *p = reinterpret_cast<const char *>(&value);
 
-   for (uint i = 0; i < sizeof(Integral); ++i, dst += 2) {
+   for (uint i = 0; i < sizeof(Integral); ++i) {
       uint j = (p[i] >> 4) & 0xf;
-      dst[0] = Char(digits[j]);
+      retval.append(digits[j]);
 
-      j      = p[i] & 0xf;
-      dst[1] = Char(digits[j]);
+      j = p[i] & 0xf;
+      retval.append(digits[j]);
    }
 }
 
@@ -82,31 +82,34 @@ bool _q_fromHex(const Char *&src, Integral &value)
    return true;
 }
 
-template <class T>
-void _q_uuidToHex(T *&dst, const uint &d1, const ushort &d2, const ushort &d3, const uchar (&d4)[8])
+QByteArray cs_internal_uuidToHex(const uint &d1, const ushort &d2, const ushort &d3, const uchar (&d4)[8])
 {
-   *dst++ = T('{');
+   QByteArray retval;
 
-   _q_toHex(dst, d1);
-   *dst++ = T('-');
+   retval.append('{');
 
-   _q_toHex(dst, d2);
-   *dst++ = T('-');
+   cs_internal_toHex(retval, d1);
+   retval.append('-');
 
-   _q_toHex(dst, d3);
-   *dst++ = T('-');
+   cs_internal_toHex(retval, d2);
+   retval.append('-');
 
-   for (int i = 0; i < 2; i++) {
-      _q_toHex(dst, d4[i]);
+   cs_internal_toHex(retval, d3);
+   retval.append('-');
+
+   for (int i = 0; i < 2; ++i) {
+      cs_internal_toHex(retval, d4[i]);
    }
 
-   *dst++ = T('-');
+   retval.append('-');
 
    for (int i = 2; i < 8; i++) {
-      _q_toHex(dst, d4[i]);
+      cs_internal_toHex(retval, d4[i]);
    }
 
-   *dst = T('}');
+   retval.append('}');
+
+   return retval;
 }
 
 bool _q_uuidFromHex(const char *src, uint &d1, ushort &d2, ushort &d3, uchar (&d4)[8])
@@ -120,7 +123,7 @@ bool _q_uuidFromHex(const char *src, uint &d1, ushort &d2, ushort &d3, uchar (&d
       || *src++ != '-'  || ! _q_fromHex(src, d3)
       || *src++ != '-'  || ! _q_fromHex(src, d4[0]) || ! _q_fromHex(src, d4[1])
       || *src++ != '-'  || ! _q_fromHex(src, d4[2]) || ! _q_fromHex(src, d4[3])
-      || !_q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
+      || ! _q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
 
       return false;
    }
@@ -244,12 +247,8 @@ QString QUuid::toString() const
 
 QByteArray QUuid::toByteArray() const
 {
-   QByteArray result(38, Qt::NoData);
-   char *data = result.data();
-
-   _q_uuidToHex(data, data1, data2, data3, data4);
-
-   return result;
+   QByteArray retval = cs_internal_uuidToHex(data1, data2, data3, data4);
+   return retval;
 }
 
 QByteArray QUuid::toRfc4122() const
