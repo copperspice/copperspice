@@ -141,7 +141,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    mutable QVector<vk::PhysicalDevice> m_physicalDevices;
    mutable QVector<VkPhysicalDeviceProperties> m_physicalDeviceProperties;
 
-   std::unique_ptr<QVulkanDeviceFunctions> m_deviceFunctions;
+   QVulkanDeviceFunctions* m_deviceFunctions;
 
    QVector<std::tuple<vk::Image, QDynamicUniqueHandle<vk::ImageView>, QDynamicUniqueHandle<vk::Framebuffer>,
          QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>, QDynamicUniqueHandle<vk::ImageView>>> m_framebuffers;

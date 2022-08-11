@@ -79,7 +79,7 @@ QVector<T> filter_sort_queues(QVector<T> data, Flags f)
 
 QVulkanWindow::QVulkanWindow(QWindow *parent)
    : QWindow(parent), m_isValid(false), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0),
-     m_physicalDeviceIndex(0), m_requestedSampleCount(1)
+     m_physicalDeviceIndex(0), m_requestedSampleCount(1), m_singleDevice(false), m_sampleCount(vk::SampleCountFlagBits::e1)
 {
    setSurfaceType(QSurface::VulkanSurface);
 }
@@ -160,6 +160,7 @@ bool QVulkanWindow::initialize()
             createLogicalDevice(graphicsQueues.front(), deviceExtensions);
 
       m_graphicsCommandQueueFamily = graphicsQueues.front().second;
+      m_deviceFunctions = instance->deviceFunctions(m_graphicsDevice.get());
 
       if (graphicsQueues.front() == transferQueues.front()) {
          // unified graphics and transfer queue
