@@ -920,6 +920,35 @@ void QVulkanWindow::frameReady()
    endFrame();
 }
 
+
+uint32_t QVulkanWindow::hostVisibleMemoryIndex() const
+{
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+   auto memoryInfo      = physicalDevice.getMemoryProperties();
+   uint32_t memoryIndex;
+   uint32_t retval = 0;
+
+   const auto desiredFlags  = vk::MemoryPropertyFlagBits::eHostCoherent | vk::MemoryPropertyFlagBits::eHostVisible
+      | vk::MemoryPropertyFlagBits::eHostCached;
+   const auto requiredFlags = vk::MemoryPropertyFlagBits::eHostCoherent | vk::MemoryPropertyFlagBits::eHostVisible;
+
+   for (memoryIndex = 0; memoryIndex < memoryInfo.memoryTypeCount; ++memoryIndex) {
+      if ((memoryInfo.memoryTypes[memoryIndex].propertyFlags & desiredFlags) == desiredFlags) {
+         // found a memory type with all desired flags
+         retval = memoryIndex;
+         break;
+
+      } else if ((memoryInfo.memoryTypes[memoryIndex].propertyFlags & requiredFlags) == requiredFlags) {
+         // found a memory type with required flags, store and keep looking
+         retval = memoryIndex;
+
+      }
+
+   }
+
+   return retval;
+}
+
 bool QVulkanWindow::isValid() const
 {
    return m_isValid;

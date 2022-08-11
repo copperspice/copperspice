@@ -61,6 +61,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    QVulkanWindow::VulkanFlags flags() const;
    void frameReady();
+   uint32_t hostVisibleMemoryIndex() const;
    bool isValid() const;
    VkPhysicalDevice physicalDevice() const;
    const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
