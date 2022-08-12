@@ -76,7 +76,7 @@ static void *resolveFunc(HMODULE lib, const char *name)
 void *QWindowsLibEGL::resolve(const char *name)
 {
    void *proc = m_lib ? resolveFunc(m_lib, name) : 0;
-   if (!proc) {
+   if (! proc) {
       qErrnoWarning(::GetLastError(), "Failed to resolve EGL function %s", name);
    }
 
@@ -92,7 +92,7 @@ void *QWindowsLibEGL::resolve(const char *name)
 
 bool QWindowsLibEGL::init()
 {
-   const wchar_t dllName[] = L QT_STRINGIFY(LIBEGL_NAME);
+   const wchar_t dllName[] = L "libEGL";
 
 #if ! defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
    m_lib = ::LoadLibraryW(dllName);
@@ -103,32 +103,32 @@ bool QWindowsLibEGL::init()
    }
 #endif
 
-   eglGetError = RESOLVE((EGLint (EGLAPIENTRY *)(void)), eglGetError);
-   eglGetDisplay = RESOLVE((EGLDisplay (EGLAPIENTRY *)(EGLNativeDisplayType)), eglGetDisplay);
-   eglInitialize = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLint *, EGLint *)), eglInitialize);
-   eglTerminate = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay)), eglTerminate);
-   eglChooseConfig = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, const EGLint *, EGLConfig *, EGLint, EGLint *)), eglChooseConfig);
-   eglGetConfigAttrib = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLint, EGLint *)), eglGetConfigAttrib);
-   eglCreateWindowSurface = RESOLVE((EGLSurface (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLNativeWindowType, const EGLint *)),
-         eglCreateWindowSurface);
+   eglGetError             = RESOLVE((EGLint (EGLAPIENTRY *)(void)), eglGetError);
+   eglGetDisplay           = RESOLVE((EGLDisplay (EGLAPIENTRY *)(EGLNativeDisplayType)), eglGetDisplay);
+   eglInitialize           = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLint *, EGLint *)), eglInitialize);
+   eglTerminate            = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay)), eglTerminate);
+   eglChooseConfig         = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, const EGLint *, EGLConfig *, EGLint, EGLint *)), eglChooseConfig);
+   eglGetConfigAttrib      = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLint, EGLint *)), eglGetConfigAttrib);
+   eglCreateWindowSurface  = RESOLVE((EGLSurface (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLNativeWindowType, const EGLint *)), eglCreateWindowSurface);
    eglCreatePbufferSurface = RESOLVE((EGLSurface (EGLAPIENTRY *)(EGLDisplay, EGLConfig, const EGLint *)), eglCreatePbufferSurface);
-   eglDestroySurface = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface )), eglDestroySurface);
-   eglBindAPI = RESOLVE((EGLBoolean (EGLAPIENTRY * )(EGLenum )), eglBindAPI);
-   eglSwapInterval = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLint )), eglSwapInterval);
-   eglCreateContext = RESOLVE((EGLContext (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLContext, const EGLint *)), eglCreateContext);
-   eglDestroyContext = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLContext)), eglDestroyContext);
-   eglMakeCurrent  = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface, EGLSurface, EGLContext )), eglMakeCurrent);
-   eglGetCurrentContext = RESOLVE((EGLContext (EGLAPIENTRY *)(void)), eglGetCurrentContext);
-   eglGetCurrentSurface = RESOLVE((EGLSurface (EGLAPIENTRY *)(EGLint )), eglGetCurrentSurface);
-   eglGetCurrentDisplay = RESOLVE((EGLDisplay (EGLAPIENTRY *)(void)), eglGetCurrentDisplay);
-   eglSwapBuffers = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface)), eglSwapBuffers);
-   eglGetProcAddress = RESOLVE((FP_Void (EGLAPIENTRY * )(const char *)), eglGetProcAddress);
+   eglDestroySurface       = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface )), eglDestroySurface);
+   eglBindAPI              = RESOLVE((EGLBoolean (EGLAPIENTRY * )(EGLenum )), eglBindAPI);
+   eglSwapInterval         = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLint )), eglSwapInterval);
+   eglCreateContext        = RESOLVE((EGLContext (EGLAPIENTRY *)(EGLDisplay, EGLConfig, EGLContext, const EGLint *)), eglCreateContext);
+   eglDestroyContext       = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLContext)), eglDestroyContext);
+   eglMakeCurrent          = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface, EGLSurface, EGLContext )), eglMakeCurrent);
+   eglGetCurrentContext    = RESOLVE((EGLContext (EGLAPIENTRY *)(void)), eglGetCurrentContext);
+   eglGetCurrentSurface    = RESOLVE((EGLSurface (EGLAPIENTRY *)(EGLint )), eglGetCurrentSurface);
+   eglGetCurrentDisplay    = RESOLVE((EGLDisplay (EGLAPIENTRY *)(void)), eglGetCurrentDisplay);
+   eglSwapBuffers          = RESOLVE((EGLBoolean (EGLAPIENTRY *)(EGLDisplay, EGLSurface)), eglSwapBuffers);
+   eglGetProcAddress       = RESOLVE((FP_Void (EGLAPIENTRY * )(const char *)), eglGetProcAddress);
 
-   if (!eglGetError || !eglGetDisplay || !eglInitialize || !eglGetProcAddress) {
+   if (! eglGetError || ! eglGetDisplay || ! eglInitialize || ! eglGetProcAddress) {
       return false;
    }
 
    eglGetPlatformDisplayEXT = 0;
+
 #ifdef EGL_ANGLE_platform_angle
    eglGetPlatformDisplayEXT = reinterpret_cast<EGLDisplay (EGLAPIENTRY *)(EGLenum, void *, const EGLint *)>
       (eglGetProcAddress("eglGetPlatformDisplayEXT"));
@@ -141,33 +141,29 @@ bool QWindowsLibEGL::init()
 void *QWindowsLibGLESv2::resolve(const char *name)
 {
    void *proc = m_lib ? resolveFunc(m_lib, name) : 0;
-   if (!proc) {
+
+   if (! proc) {
       qWarning() << "Failed to resolve OpenGL ES function" << name;
    }
 
    return proc;
 }
-#endif // !QT_STATIC
+#endif // ! QT_STATIC
 
 bool QWindowsLibGLESv2::init()
 {
-
-   const char dllName[] = QT_STRINGIFY(LIBGLESV2_NAME)
-#if defined(QT_DEBUG)
-      "d"
-#endif
-      "";
+   const char dllName[] = "libGLESv2";
 
    qDebug() << "Using OpenGL ES 2.0 from" << dllName;
 
-#if !defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
+#if ! defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
    m_lib = ::LoadLibraryW(reinterpret_cast<LPCWSTR>(QString::fromLatin1(dllName).utf16()));
 
-   if (!m_lib) {
+   if (! m_lib) {
       qErrnoWarning(int(GetLastError()), "Failed to load %s", dllName);
       return false;
    }
-#endif // !QT_STATIC
+#endif
 
    glBindTexture = RESOLVE((void (APIENTRY *)(GLenum, GLuint )), glBindTexture);
    glBlendFunc = RESOLVE((void (APIENTRY *)(GLenum, GLenum )), glBlendFunc);
