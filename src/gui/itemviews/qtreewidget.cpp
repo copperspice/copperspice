@@ -2388,12 +2388,6 @@ Qt::DropActions QTreeWidget::supportedDropActions() const
    return model()->QAbstractItemModel::supportedDropActions() | Qt::MoveAction;
 }
 
-QList<QTreeWidgetItem *> QTreeWidget::items(const QMimeData *data) const
-{
-   (void) data;
-   return QList<QTreeWidgetItem *>();
-}
-
 QModelIndex QTreeWidget::indexFromItem(QTreeWidgetItem *item, int column) const
 {
    Q_D(const QTreeWidget);
