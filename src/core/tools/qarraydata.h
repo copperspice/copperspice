@@ -32,17 +32,15 @@ struct Q_CORE_EXPORT QArrayData {
    uint alloc : 31;
    uint capacityReserved : 1;
 
-   qptrdiff offset; // in bytes from beginning of header
+   qptrdiff offset;             // in bytes from beginning of header
 
    void *data() {
-      Q_ASSERT(size == 0
-               || offset < 0 || size_t(offset) >= sizeof(QArrayData));
+      Q_ASSERT(size == 0 || offset < 0 || size_t(offset) >= sizeof(QArrayData));
       return reinterpret_cast<char *>(this) + offset;
    }
 
    const void *data() const {
-      Q_ASSERT(size == 0
-               || offset < 0 || size_t(offset) >= sizeof(QArrayData));
+      Q_ASSERT(size == 0 || offset < 0 || size_t(offset) >= sizeof(QArrayData));
       return reinterpret_cast<const char *>(this) + offset;
    }
 
@@ -75,9 +73,11 @@ struct Q_CORE_EXPORT QArrayData {
       if (!ref.isSharable()) {
          result |= Unsharable;
       }
+
       if (capacityReserved) {
          result |= CapacityReserved;
       }
+
       return result;
    }
 
@@ -86,11 +86,12 @@ struct Q_CORE_EXPORT QArrayData {
       if (capacityReserved) {
          result |= CapacityReserved;
       }
+
       return result;
    }
 
    [[nodiscard]] static QArrayData *allocate(size_t objectSize, size_t alignment,
-                               size_t capacity, AllocationOptions options = Default);
+         size_t capacity, AllocationOptions options = Default);
 
    static void deallocate(QArrayData *data, size_t objectSize, size_t alignment);
 
@@ -107,6 +108,7 @@ struct QTypedArrayData : QArrayData {
    T *data() {
       return static_cast<T *>(QArrayData::data());
    }
+
    const T *data() const {
       return static_cast<const T *>(QArrayData::data());
    }
@@ -144,13 +146,14 @@ struct QTypedArrayData : QArrayData {
 
    static QTypedArrayData *fromRawData(const T *data, size_t n, AllocationOptions options = Default) {
       QTypedArrayData *result = allocate(0, options | RawData);
-      if (result) {
-         Q_ASSERT(!result->ref.isShared()); // No shared empty, please!
 
-         result->offset = reinterpret_cast<const char *>(data)
-                          - reinterpret_cast<const char *>(result);
+      if (result) {
+         Q_ASSERT(! result->ref.isShared());       // dissallow using the special "shared empty value"
+
+         result->offset = reinterpret_cast<const char *>(data) - reinterpret_cast<const char *>(result);
          result->size = n;
       }
+
       return result;
    }
 
@@ -159,11 +162,11 @@ struct QTypedArrayData : QArrayData {
    }
 
    static QTypedArrayData *sharedEmpty() {
-      return allocate(/* capacity */ 0);
+      return allocate(0);
    }
 
    static QTypedArrayData *unsharableEmpty() {
-      return allocate(/* capacity */ 0, Unsharable);
+      return allocate(0, Unsharable);
    }
 };
 
@@ -181,8 +184,6 @@ struct QArrayDataPointerRef {
 
 #define Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER(type, size) { \
     Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, \
-    (sizeof(QArrayData) + (Q_ALIGNOF(type) - 1)) \
-        & ~(Q_ALIGNOF(type) - 1) } \
-    /**/
+       (sizeof(QArrayData) + (Q_ALIGNOF(type) - 1)) & ~(Q_ALIGNOF(type) - 1) }
 
 #endif

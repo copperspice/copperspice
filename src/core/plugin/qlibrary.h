@@ -65,7 +65,7 @@ class Q_CORE_EXPORT QLibrary : public QObject
    static void *resolve(const QString &fileName, int verNum, const QString &symbol);
    static void *resolve(const QString &fileName, const QString &version, const QString &symbol);
 
-  static bool isLibrary(const QString &fileName);
+   static bool isLibrary(const QString &fileName);
 
    bool load();
    bool unload();

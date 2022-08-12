@@ -70,11 +70,11 @@ typedef struct  QT_FT_Bitmap_ {
 } QT_FT_Bitmap;
 
 typedef struct  QT_FT_Outline_ {
-   int       n_contours;      /* number of contours in glyph        */
-   int       n_points;        /* number of points in the glyph      */
+   int      n_contours;       /* number of contours in glyph        */
+   int      n_points;         /* number of points in the glyph      */
 
    QT_FT_Vector  *points;     /* the outline's points               */
-   char       *tags;          /* the points flags                   */
+   char     *tags;            /* the points flags                   */
    int      *contours;        /* the contour end points             */
 
    int         flags;         /* outline masks                      */

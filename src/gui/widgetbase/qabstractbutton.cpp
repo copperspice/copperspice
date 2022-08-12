@@ -451,19 +451,12 @@ QString QAbstractButton::text() const
    return d->text;
 }
 
-
-/*!
-  \property QAbstractButton::icon
-  \brief the icon shown on the button
-
-  The icon's default size is defined by the GUI style, but can be
-  adjusted by setting the \l iconSize property.
-*/
 void QAbstractButton::setIcon(const QIcon &icon)
 {
    Q_D(QAbstractButton);
    d->icon = icon;
    d->sizeHint = QSize();
+
    update();
    updateGeometry();
 }
@@ -475,10 +468,6 @@ QIcon QAbstractButton::icon() const
 }
 
 #ifndef QT_NO_SHORTCUT
-/*!
-\property QAbstractButton::shortcut
-\brief the mnemonic associated with the button
-*/
 
 void QAbstractButton::setShortcut(const QKeySequence &key)
 {
@@ -486,6 +475,7 @@ void QAbstractButton::setShortcut(const QKeySequence &key)
    if (d->shortcutId != 0) {
       releaseShortcut(d->shortcutId);
    }
+
    d->shortcut = key;
    d->shortcutId = grabShortcut(key);
 }

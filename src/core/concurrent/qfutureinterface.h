@@ -284,7 +284,9 @@ class QFutureInterface<void> : public QFutureInterfaceBase
 
    inline QFuture<void> future(); // implemented in qfuture.h
 
-   void reportResult(const void *, int) { }
+   void reportResult(const void *, int) {
+   }
+
    void reportResults(const QVector<void> &, int) {
    }
 

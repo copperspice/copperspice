@@ -196,11 +196,14 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    static void aboutCs(QWidget *parent, const QString &title = QString());
    static void aboutQt(QWidget *parent, const QString &title = QString());
 
+
+   // some of the following are obsolete since they use button and StandardButton
+   // emerald - consider removing
+
    QMessageBox(const QString &title, const QString &text, Icon icon,
       int button0, int button1, int button2, QWidget *parent = nullptr,
       Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
-   // following are obsolete
    static int information(QWidget *parent, const QString &title, const QString &text,
       int button0, int button1 = 0, int button2 = 0);
 

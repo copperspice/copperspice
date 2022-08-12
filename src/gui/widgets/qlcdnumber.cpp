@@ -123,7 +123,6 @@ static QString int2string(int num, int base, int ndigits, bool *oflow)
    return s;
 }
 
-
 static QString double2string(double num, int base, int ndigits, bool *oflow)
 {
    QString s;
@@ -160,7 +159,6 @@ static QString double2string(double num, int base, int ndigits, bool *oflow)
 
    return s;
 }
-
 
 static const char *getSegments(char ch)               // gets list of segments for ch
 {
@@ -212,18 +210,23 @@ static const char *getSegments(char ch)               // gets list of segments f
       case '-':
          n = 10;
          break;
+
       case 'O':
          n = 0;
          break;
+
       case 'g':
          n = 9;
          break;
+
       case '.':
          n = 11;
          break;
+
       case 'h':
          n = 18;
          break;
+
       case 'H':
          n = 19;
          break;
@@ -231,41 +234,52 @@ static const char *getSegments(char ch)               // gets list of segments f
       case 'L':
          n = 20;
          break;
+
       case 'o':
          n = 21;
          break;
+
       case 'p':
       case 'P':
          n = 22;
          break;
+
       case 'r':
       case 'R':
          n = 23;
          break;
+
       case 's':
       case 'S':
          n = 5;
          break;
+
       case 'u':
          n = 24;
          break;
+
       case 'U':
          n = 25;
          break;
+
       case 'y':
       case 'Y':
          n = 26;
          break;
+
       case ':':
          n = 27;
          break;
+
       case '\'':
          n = 28;
          break;
+
       default:
          n = 29;
          break;
    }
+
    return segments[n];
 }
 
@@ -407,11 +421,13 @@ double QLCDNumber::value() const
    Q_D(const QLCDNumber);
    return d->val;
 }
+
 void QLCDNumber::display(double num)
 {
    Q_D(QLCDNumber);
 
    d->val = num;
+
    bool of;
    QString s = double2string(d->val, d->base, d->ndigits, &of);
 
@@ -422,37 +438,21 @@ void QLCDNumber::display(double num)
    }
 }
 
-/*!
-    \property QLCDNumber::intValue
-    \brief the displayed value rounded to the nearest integer
-
-    This property corresponds to the nearest integer to the current
-    value displayed by the LCDNumber. This is the value used for
-    hexadecimal, octal and binary modes.
-
-    If the displayed value is not a number, the property has a value
-    of 0.
-
-    By default, this property contains a value of 0.
-*/
 int QLCDNumber::intValue() const
 {
    Q_D(const QLCDNumber);
    return qRound(d->val);
 }
 
-
-/*!
-    \overload
-
-    Displays the number \a num.
-*/
 void QLCDNumber::display(int num)
 {
    Q_D(QLCDNumber);
+
    d->val = (double)num;
+
    bool of;
    QString s = int2string(num, d->base, d->ndigits, &of);
+
    if (of) {
       emit overflow();
    } else {
@@ -463,80 +463,38 @@ void QLCDNumber::display(int num)
 void QLCDNumber::display(const QString &s)
 {
    Q_D(QLCDNumber);
+
    d->val = 0;
+
    bool ok = false;
    double v = s.toDouble(&ok);
+
    if (ok) {
       d->val = v;
    }
+
    d->internalSetString(s);
 }
-
-/*!
-    Calls setMode(Hex). Provided for convenience (e.g. for
-    connecting buttons to it).
-
-    \sa setMode(), setDecMode(), setOctMode(), setBinMode(), mode()
-*/
 
 void QLCDNumber::setHexMode()
 {
    setMode(Hex);
 }
 
-
-/*!
-    Calls setMode(Dec). Provided for convenience (e.g. for
-    connecting buttons to it).
-
-    \sa setMode(), setHexMode(), setOctMode(), setBinMode(), mode()
-*/
-
 void QLCDNumber::setDecMode()
 {
    setMode(Dec);
 }
-
-
-/*!
-    Calls setMode(Oct). Provided for convenience (e.g. for
-    connecting buttons to it).
-
-    \sa setMode(), setHexMode(), setDecMode(), setBinMode(), mode()
-*/
 
 void QLCDNumber::setOctMode()
 {
    setMode(Oct);
 }
 
-
-/*!
-    Calls setMode(Bin). Provided for convenience (e.g. for
-    connecting buttons to it).
-
-    \sa setMode(), setHexMode(), setDecMode(), setOctMode(), mode()
-*/
-
 void QLCDNumber::setBinMode()
 {
    setMode(Bin);
 }
-
-
-/*!
-    \property QLCDNumber::smallDecimalPoint
-    \brief the style of the decimal point
-
-    If true the decimal point is drawn between two digit positions.
-    Otherwise it occupies a digit position of its own, i.e. is drawn
-    in a digit position. The default is false.
-
-    The inter-digit space is made slightly wider when the decimal
-    point is drawn between the digits.
-
-    \sa mode
-*/
 
 void QLCDNumber::setSmallDecimalPoint(bool b)
 {
@@ -551,18 +509,15 @@ bool QLCDNumber::smallDecimalPoint() const
    return d->smallPoint;
 }
 
-
-
-/*!\reimp
-*/
-
-
 void QLCDNumber::paintEvent(QPaintEvent *)
 {
    Q_D(QLCDNumber);
+
    QPainter p(this);
    drawFrame(&p);
+
    p.setRenderHint(QPainter::Antialiasing);
+
    if (d->shadow) {
       p.translate(0.5, 0.5);
    }
@@ -573,7 +528,6 @@ void QLCDNumber::paintEvent(QPaintEvent *)
       d->drawString(d->digitStr, p, nullptr, false);
    }
 }
-
 
 void QLCDNumberPrivate::internalSetString(const QString &s)
 {
@@ -695,11 +649,7 @@ void QLCDNumberPrivate::drawString(const QString &s, QPainter &p, QBitArray *new
    }
 }
 
-
-/*!
-  \internal
-*/
-
+// internal
 void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
    char newCh, char oldCh)
 {
@@ -722,8 +672,10 @@ void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
       updates[nErases][0] = erase;            // get segments to erase to
       updates[nErases][1] = segs[nErases];    // remove old char
    }
+
    nUpdates = nErases;
    segs = getSegments(newCh);
+
    for (i = 0 ; segs[i] != 99 ; i++) {
       for (j = 0;  j < nErases; j++)
          if (segs[i] == updates[j][1]) {   // same segment ?
@@ -736,6 +688,7 @@ void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
          nUpdates++;
       }
    }
+
    for (i = 0; i < nUpdates; i++) {
       if (updates[i][0] == draw) {
          drawSegment(pos, updates[i][1], p, segLen);
@@ -746,7 +699,6 @@ void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
    }
 }
 
-
 static void addPoint(QPolygon &a, const QPoint &p)
 {
    uint n = a.size();
@@ -754,10 +706,7 @@ static void addPoint(QPolygon &a, const QPoint &p)
    a.setPoint(n, p);
 }
 
-/*!
-  \internal
-*/
-
+// internal
 void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter &p,
    int segLen, bool erase)
 {
@@ -797,6 +746,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(width, width);
             LINETO(0, 0);
             break;
+
          case 1 :
             pt += QPoint(0, 1);
             ppt = pt;
@@ -808,6 +758,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LIGHT;
             LINETO(0, 0);
             break;
+
          case 2 :
             pt += QPoint(segLen - 1, 1);
             ppt = pt;
@@ -818,6 +769,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(-width, width);
             LINETO(0, 0);
             break;
+
          case 3 :
             pt += QPoint(0, segLen);
             ppt = pt;
@@ -835,6 +787,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             }
             LINETO(0, 0);
             break;
+
          case 4 :
             pt += QPoint(0, segLen + 1);
             ppt = pt;
@@ -846,6 +799,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LIGHT;
             LINETO(0, 0);
             break;
+
          case 5 :
             pt += QPoint(segLen - 1, segLen + 1);
             ppt = pt;
@@ -866,6 +820,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             DARK;
             LINETO(0, 0);
             break;
+
          case 7 :
             if (smallPoint) {
                // if smallpoint place'.' between other digits
@@ -882,6 +837,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          case 8 :
             pt += QPoint(segLen / 2 - width / 2 + 1, segLen / 2 + width);
             ppt = pt;
@@ -892,6 +848,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          case 9 :
             pt += QPoint(segLen / 2 - width / 2 + 1, 3 * segLen / 2 + width);
             ppt = pt;
@@ -902,9 +859,11 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          default :
             qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n", csPrintable(q->objectName()), segmentNo);
       }
+
       // End exact copy
       p.setPen(Qt::NoPen);
       p.setBrush(fgColor);
@@ -934,6 +893,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(width, width);
             LINETO(0, 0);
             break;
+
          case 1 :
             pt += QPoint(0, 1);
             ppt = pt;
@@ -945,6 +905,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LIGHT;
             LINETO(0, 0);
             break;
+
          case 2 :
             pt += QPoint(segLen - 1, 1);
             ppt = pt;
@@ -955,6 +916,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(-width, width);
             LINETO(0, 0);
             break;
+
          case 3 :
             pt += QPoint(0, segLen);
             ppt = pt;
@@ -972,6 +934,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             }
             LINETO(0, 0);
             break;
+
          case 4 :
             pt += QPoint(0, segLen + 1);
             ppt = pt;
@@ -983,6 +946,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LIGHT;
             LINETO(0, 0);
             break;
+
          case 5 :
             pt += QPoint(segLen - 1, segLen + 1);
             ppt = pt;
@@ -993,6 +957,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(-width, width / 2);
             LINETO(0, 0);
             break;
+
          case 6 :
             pt += QPoint(0, segLen * 2);
             ppt = pt;
@@ -1003,6 +968,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             DARK;
             LINETO(0, 0);
             break;
+
          case 7 :
             if (smallPoint) { // if smallpoint place'.' between other digits
                pt += QPoint(segLen + width / 2, segLen * 2);
@@ -1017,6 +983,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          case 8 :
             pt += QPoint(segLen / 2 - width / 2 + 1, segLen / 2 + width);
             ppt = pt;
@@ -1027,6 +994,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          case 9 :
             pt += QPoint(segLen / 2 - width / 2 + 1, 3 * segLen / 2 + width);
             ppt = pt;
@@ -1037,6 +1005,7 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
             LINETO(0, -width);
             LINETO(0, 0);
             break;
+
          default :
             qWarning("QLCDNumber::drawSegment: (%s) Illegal segment id: %d\n", csPrintable(q->objectName()), segmentNo);
       }
@@ -1046,26 +1015,6 @@ void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter 
 #undef DARK
 }
 
-
-
-/*!
-    \property QLCDNumber::segmentStyle
-    \brief the style of the LCDNumber
-
-    \table
-    \header \i Style \i Result
-    \row \i \c Outline
-         \i Produces raised segments filled with the background color
-    \row \i \c Filled
-            (this is the default).
-         \i Produces raised segments filled with the foreground color.
-    \row \i \c Flat
-         \i Produces flat segments filled with the foreground color.
-    \endtable
-
-    \c Outline and \c Filled will additionally use
-    QPalette::light() and QPalette::dark() for shadow effects.
-*/
 void QLCDNumber::setSegmentStyle(SegmentStyle s)
 {
    Q_D(QLCDNumber);
@@ -1078,24 +1027,23 @@ QLCDNumber::SegmentStyle QLCDNumber::segmentStyle() const
 {
    Q_D(const QLCDNumber);
    Q_ASSERT(d->fill || d->shadow);
+
    if (!d->fill && d->shadow) {
       return Outline;
    }
+
    if (d->fill && d->shadow) {
       return Filled;
    }
+
    return Flat;
 }
 
-
-/*!\reimp
-*/
 QSize QLCDNumber::sizeHint() const
 {
    return QSize(10 + 9 * (digitCount() + (smallDecimalPoint() ? 0 : 1)), 23);
 }
 
-/*! \reimp */
 bool QLCDNumber::event(QEvent *e)
 {
    return QFrame::event(e);
