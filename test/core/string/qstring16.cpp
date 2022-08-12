@@ -73,7 +73,7 @@ TEST_CASE("QString16 begin_end", "[qstring16]")
 
 TEST_CASE("QString16 clear", "[qstring16]")
 {
-   QString16 str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+   QString16 str = "On a clear day you can see forever";
 
    str.clear();
 
@@ -123,12 +123,22 @@ TEST_CASE("QString16 contains", "[qstring16]")
    REQUIRE(str.contains("jUmpeD", Qt::CaseInsensitive));
 }
 
+TEST_CASE("QString16 compare", "[qstring16]")
+{
+   QString16 str1 = "apple";
+   QString16 str2 = "APPLE";
+
+   REQUIRE(str1.compare(str2, Qt::CaseInsensitive) == 0);
+   REQUIRE(str1.compare(str2, Qt::CaseSensitive) == 1);
+}
 TEST_CASE("QString16 count", "[qstring16]")
 {
    QString16 str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
    REQUIRE(str.count("o") == 4);
    REQUIRE(str.count("q") == 0);
+
+   REQUIRE(str.count('a', Qt::CaseInsensitive) == 7);
 }
 
 TEST_CASE("QString16 empty", "[qstring16]")
@@ -345,6 +355,11 @@ TEST_CASE("QString16 remove", "[qstring16]")
    SECTION ("remove d") {
       str = str.remove(QChar32('a'));
       REQUIRE(str == "A wcky fox nd sizeble pig jumped hlfwy over  blue moon");
+   }
+
+   SECTION ("remove e") {
+      str = str.remove(QRegularExpression16("[aeiou]."));
+      REQUIRE(str == "A wky f d sblp jp hfw  bl mn");
    }
 }
 

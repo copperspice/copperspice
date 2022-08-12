@@ -22,7 +22,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QWrong traits", "[qstring8]")
+TEST_CASE("QString8 traits", "[qstring]")
 {
    REQUIRE(std::is_copy_constructible_v<QString8> == true);
    REQUIRE(std::is_move_constructible_v<QString8> == true);
