@@ -944,6 +944,25 @@ VkDevice QVulkanWindow::device() const
    return m_graphicsDevice.get();
 }
 
+uint32_t QVulkanWindow::deviceLocalMemoryIndex() const
+{
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+   auto memoryInfo      = physicalDevice.getMemoryProperties();
+   uint32_t memoryIndex;
+   uint32_t retval = 0;
+
+   const auto flags  = vk::MemoryPropertyFlagBits::eDeviceLocal;
+
+   for (memoryIndex = 0; memoryIndex < memoryInfo.memoryTypeCount; ++memoryIndex) {
+      if ((memoryInfo.memoryTypes[memoryIndex].propertyFlags & flags) == flags) {
+         retval = memoryIndex;
+         break;
+      }
+   }
+
+   return retval;
+}
+
 QVulkanWindow::VulkanFlags QVulkanWindow::flags() const
 {
    return m_vulkanFlags;

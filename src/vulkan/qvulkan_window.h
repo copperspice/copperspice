@@ -58,6 +58,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VkFramebuffer currentFramebuffer() const;
    VkRenderPass defaultRenderPass() const;
    VkDevice device() const;
+   uint32_t deviceLocalMemoryIndex() const;
 
    QVulkanWindow::VulkanFlags flags() const;
    void frameReady();
