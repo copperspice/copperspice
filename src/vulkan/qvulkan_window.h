@@ -65,12 +65,15 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    bool isValid() const;
    VkPhysicalDevice physicalDevice() const;
    const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
+
+   VkSampleCountFlagBits sampleCountFlagBits() const;
    void setDeviceExtensions(const QStringList &extensions);
    void setFlags(QVulkanWindow::VulkanFlags flags);
    void setPhysicalDeviceIndex(int idx);
    void setPreferredColorFormats(const QVector<VkFormat> &formats);
    void setSampleCount(int sampleCount);
    QVector<QVulkanExtensionProperties> supportedDeviceExtensions();
+   QVector<int> supportedSampleCounts();
    VkSurfaceKHR vulkanSurface() const;
    VkImage swapChainImage(int idx) const;
    int swapChainImageCount() const;
@@ -145,6 +148,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QVulkanDeviceFunctions* m_deviceFunctions;
 
    QVector<std::tuple<vk::Image, QDynamicUniqueHandle<vk::ImageView>, QDynamicUniqueHandle<vk::Framebuffer>,
+         QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>, QDynamicUniqueHandle<vk::ImageView>,
          QDynamicUniqueHandle<vk::Image>, QDynamicUniqueHandle<vk::DeviceMemory>, QDynamicUniqueHandle<vk::ImageView>>> m_framebuffers;
    QDynamicUniqueHandle<vk::SwapchainKHR> m_swapchain;
    QVector<FrameData> m_frameData;

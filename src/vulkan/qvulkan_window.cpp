@@ -435,7 +435,7 @@ bool QVulkanWindow::populateRenderPass() const
       vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR));
 
    attachments.append(vk::AttachmentDescription(
-      vk::AttachmentDescriptionFlagBits{}, m_depthFormat, vk::SampleCountFlagBits::e1,
+      vk::AttachmentDescriptionFlagBits{}, m_depthFormat, m_sampleCount,
       vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
       vk::AttachmentLoadOp::eClear, vk::AttachmentStoreOp::eDontCare,
       vk::ImageLayout::eUndefined,  vk::ImageLayout::eDepthStencilAttachmentOptimal));
@@ -578,8 +578,8 @@ bool QVulkanWindow::populateSwapChain()
                auto view = m_deviceFunctions->device().createImageViewUnique(
                      vk::ImageViewCreateInfo{
                      { }, vk_image, vk::ImageViewType::e2D, m_colorFormat,
-                     {vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
-                     vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+                     {vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG,
+                     vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA},
                      {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1} },
                      nullptr, m_deviceFunctions->dynamicLoader());
 
@@ -589,15 +589,33 @@ bool QVulkanWindow::populateSwapChain()
                auto depthView = m_deviceFunctions->device().createImageViewUnique(
                      vk::ImageViewCreateInfo{
                      { }, depthPair.first.get(), vk::ImageViewType::e2D, m_depthFormat,
-                     {vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
-                     vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity},
+                     {vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG,
+                     vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA},
                      {vk::ImageAspectFlagBits::eDepth | vk::ImageAspectFlagBits::eStencil, 0, 1, 0, 1} },
                      nullptr, m_deviceFunctions->dynamicLoader());
 
+               decltype(depthPair) multisamplePair;
+               decltype(depthView) multisampleView;
 
                std::vector<vk::ImageView> tmp_images;
                tmp_images.push_back(*view);
                tmp_images.push_back(*depthView);
+
+               if (m_requestedSampleCount > 1) {
+                  multisamplePair = createTransientImage(vk::ImageCreateFlags{},
+                        vk::ImageUsageFlagBits::eColorAttachment, m_colorFormat, vk_size.width, vk_size.height);
+
+                  multisampleView = m_deviceFunctions->device().createImageViewUnique(
+                     vk::ImageViewCreateInfo{
+                     { }, multisamplePair.first.get(), vk::ImageViewType::e2D, m_colorFormat,
+                     {vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG,
+                     vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA},
+                     {vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1} },
+                     nullptr, m_deviceFunctions->dynamicLoader());
+
+
+                  tmp_images.push_back(*multisampleView);
+               }
 
                auto framebuffer = m_deviceFunctions->device().createFramebufferUnique(vk::FramebufferCreateInfo(
                      {}, m_renderPass.get(), uint32_t(tmp_images.size()), tmp_images.data(),
@@ -605,7 +623,8 @@ bool QVulkanWindow::populateSwapChain()
                      nullptr, m_deviceFunctions->dynamicLoader());
 
                return std::make_tuple(std::move(vk_image), std::move(view), std::move(framebuffer),
-                     std::move(depthPair.first), std::move(depthPair.second), std::move(depthView) );
+                     std::move(depthPair.first), std::move(depthPair.second), std::move(depthView),
+                     std::move(multisamplePair.first), std::move(multisamplePair.second), std::move(multisampleView));
             };
 
       m_framebuffers = map_vector(vk_images, createFramebuffer);
@@ -982,6 +1001,11 @@ const VkPhysicalDeviceProperties *QVulkanWindow::physicalDeviceProperties() cons
    return &(m_physicalDeviceProperties[m_physicalDeviceIndex]);
 }
 
+VkSampleCountFlagBits QVulkanWindow::sampleCountFlagBits() const
+{
+   return static_cast<VkSampleCountFlagBits>(m_sampleCount);
+}
+
 void QVulkanWindow::setDeviceExtensions(const QStringList &extensions)
 {
    m_requestedDeviceExtensions = extensions;
@@ -1012,6 +1036,36 @@ void QVulkanWindow::setSampleCount(int sampleCount)
 
    if (m_requestedSampleCount < 1) {
       m_requestedSampleCount = 1;
+   }
+
+   switch (m_requestedSampleCount) {
+      case 1:
+         m_sampleCount = vk::SampleCountFlagBits::e1;
+         break;
+
+      case 2:
+         m_sampleCount = vk::SampleCountFlagBits::e2;
+         break;
+
+      case 4:
+         m_sampleCount = vk::SampleCountFlagBits::e4;
+         break;
+
+      case 8:
+         m_sampleCount = vk::SampleCountFlagBits::e8;
+         break;
+
+      case 16:
+         m_sampleCount = vk::SampleCountFlagBits::e16;
+         break;
+
+      case 32:
+         m_sampleCount = vk::SampleCountFlagBits::e32;
+         break;
+
+      case 64:
+         m_sampleCount = vk::SampleCountFlagBits::e64;
+         break;
    }
 }
 
@@ -1046,6 +1100,40 @@ QVector<QVulkanExtensionProperties> QVulkanWindow::supportedDeviceExtensions()
 
    for (const auto &item : extensionProperties) {
       retval.append(QVulkanExtensionProperties{item.specVersion, QString::fromUtf8(item.extensionName)});
+   }
+
+   return retval;
+}
+
+QVector<int> QVulkanWindow::supportedSampleCounts()
+{
+   QVector<int> retval;
+
+   if (! populatePhysicalDevices()) {
+      qWarning("QVulkanWindow::supportedSampleCounts() Unable to detect a physical device");
+      return retval;
+   }
+
+
+   auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
+   auto properties = physicalDevice.getProperties();
+   static const QVector<std::pair<vk::SampleCountFlagBits, int>> supportedSampleBits =
+      { {vk::SampleCountFlagBits::e1, 1},
+        {vk::SampleCountFlagBits::e2, 2},
+        {vk::SampleCountFlagBits::e4, 4},
+        {vk::SampleCountFlagBits::e8, 8},
+        {vk::SampleCountFlagBits::e16, 16},
+        {vk::SampleCountFlagBits::e32, 32},
+        {vk::SampleCountFlagBits::e64, 64},
+      };
+
+   for (const auto &item : supportedSampleBits) {
+      if (((properties.limits.framebufferColorSampleCounts & item.first) == item.first) &&
+          ((properties.limits.framebufferDepthSampleCounts & item.first) == item.first) &&
+          ((properties.limits.framebufferStencilSampleCounts & item.first) == item.first)) {
+
+         retval.append(item.second);
+      }
    }
 
    return retval;
