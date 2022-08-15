@@ -521,7 +521,22 @@ bool QVulkanWindow::populateSwapChain()
       return false;
    }
 
-   auto capabilities = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
+   vk::SurfaceCapabilitiesKHR capabilities;
+
+   try {
+      capabilities = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
+
+
+   } catch (vk::OutOfDateKHRError &err) {
+      return false;
+
+   } catch (vk::DeviceLostError& err) {
+      return false;
+
+   } catch (vk::SystemError &err) {
+      return false;
+
+   }
 
    if (capabilities.maxImageCount != 0) {
       numBuffers = std::min(numBuffers, capabilities.maxImageCount);
@@ -834,8 +849,8 @@ void QVulkanWindow::endFrame()
    presentInfo.pImageIndices      = &m_imageIndex;
    presentInfo.pWaitSemaphores    = &(frameData->frameSemaphore);
 
-   vulkanInstance()->presentAboutToBeQueued(this);
    try {
+      vulkanInstance()->presentAboutToBeQueued(this);
       m_graphicsQueues.first().presentKHR(presentInfo);
 
    } catch (vk::OutOfDateKHRError &err) {
