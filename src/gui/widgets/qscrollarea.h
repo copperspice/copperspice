@@ -59,7 +59,7 @@ class Q_GUI_EXPORT QScrollArea : public QAbstractScrollArea
    bool focusNextPrevChild(bool next) override;
 
    Qt::Alignment alignment() const;
-   void setAlignment(Qt::Alignment);
+   void setAlignment(Qt::Alignment alignment);
 
    void ensureVisible(int x, int y, int xmargin = 50, int ymargin = 50);
    void ensureWidgetVisible(QWidget *childWidget, int xmargin = 50, int ymargin = 50);

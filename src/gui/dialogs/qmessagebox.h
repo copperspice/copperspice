@@ -165,7 +165,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    void setText(const QString &text);
 
    Icon icon() const;
-   void setIcon(Icon);
+   void setIcon(QMessageBox::Icon icon);
 
    QPixmap iconPixmap() const;
    void setIconPixmap(const QPixmap &pixmap);

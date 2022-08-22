@@ -50,7 +50,7 @@ class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
    ~QItemDelegate();
 
    bool hasClipping() const;
-   void setClipping(bool clip);
+   void setClipping(bool enabled);
 
    // painting
    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;

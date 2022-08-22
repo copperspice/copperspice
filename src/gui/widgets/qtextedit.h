@@ -141,7 +141,7 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    QTextCursor textCursor() const;
 
    bool isReadOnly() const;
-   void setReadOnly(bool ro);
+   void setReadOnly(bool readOnly);
 
    void setTextInteractionFlags(Qt::TextInteractionFlags flags);
    Qt::TextInteractionFlags textInteractionFlags() const;
@@ -165,19 +165,19 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    void setAutoFormatting(AutoFormatting features);
 
    bool tabChangesFocus() const;
-   void setTabChangesFocus(bool b);
+   void setTabChangesFocus(bool enabled);
 
    inline void setDocumentTitle(const QString &title);
    inline QString documentTitle() const;
 
    inline bool isUndoRedoEnabled() const;
-   inline void setUndoRedoEnabled(bool enable);
+   inline void setUndoRedoEnabled(bool enabled);
 
    LineWrapMode lineWrapMode() const;
    void setLineWrapMode(LineWrapMode mode);
 
    int lineWrapColumnOrWidth() const;
-   void setLineWrapColumnOrWidth(int w);
+   void setLineWrapColumnOrWidth(int width);
 
    QTextOption::WrapMode wordWrapMode() const;
    void setWordWrapMode(QTextOption::WrapMode policy);
@@ -418,9 +418,9 @@ bool QTextEdit::isUndoRedoEnabled() const
    return document()->isUndoRedoEnabled();
 }
 
-void QTextEdit::setUndoRedoEnabled(bool enable)
+void QTextEdit::setUndoRedoEnabled(bool enabled)
 {
-   document()->setUndoRedoEnabled(enable);
+   document()->setUndoRedoEnabled(enabled);
 }
 
 #endif // QT_NO_TEXTEDIT

@@ -93,7 +93,7 @@ class Q_GUI_EXPORT QLCDNumber : public QFrame
    void setMode(Mode);
 
    SegmentStyle segmentStyle() const;
-   void setSegmentStyle(SegmentStyle);
+   void setSegmentStyle(SegmentStyle style);
 
    double value() const;
    int intValue() const;

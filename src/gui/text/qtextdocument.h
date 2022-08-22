@@ -133,7 +133,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
    bool isEmpty() const;
    virtual void clear();
 
-   void setUndoRedoEnabled(bool enable);
+   void setUndoRedoEnabled(bool enabled);
    bool isUndoRedoEnabled() const;
 
    bool isUndoAvailable() const;
@@ -220,7 +220,7 @@ class Q_GUI_EXPORT QTextDocument : public QObject
 
    void markContentsDirty(int position, int length);
 
-   void setUseDesignMetrics(bool b);
+   void setUseDesignMetrics(bool enabled);
    bool useDesignMetrics() const;
 
    void drawContents(QPainter *painter, const QRectF &rect = QRectF());

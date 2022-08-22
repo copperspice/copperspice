@@ -26,7 +26,6 @@
 
 #include <qabstractbutton.h>
 
-
 class QPushButtonPrivate;
 class QMenu;
 class QStyleOptionButton;
@@ -56,11 +55,11 @@ class Q_GUI_EXPORT QPushButton : public QAbstractButton
    QSize minimumSizeHint() const override;
 
    bool autoDefault() const;
-   void setAutoDefault(bool);
+   void setAutoDefault(bool enabled);
    bool isDefault() const;
-   void setDefault(bool);
+   void setDefault(bool enabled);
 
-   void setFlat(bool);
+   void setFlat(bool enabled);
    bool isFlat() const;
 
 #ifndef QT_NO_MENU

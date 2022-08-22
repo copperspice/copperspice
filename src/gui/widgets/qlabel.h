@@ -87,22 +87,22 @@ class Q_GUI_EXPORT QLabel : public QFrame
 #endif
 
    Qt::TextFormat textFormat() const;
-   void setTextFormat(Qt::TextFormat);
+   void setTextFormat(Qt::TextFormat format);
 
    Qt::Alignment alignment() const;
-   void setAlignment(Qt::Alignment);
+   void setAlignment(Qt::Alignment alignment);
 
-   void setWordWrap(bool on);
+   void setWordWrap(bool enabled);
    bool wordWrap() const;
 
    int indent() const;
-   void setIndent(int);
+   void setIndent(int indent);
 
    int margin() const;
-   void setMargin(int);
+   void setMargin(int margin);
 
    bool hasScaledContents() const;
-   void setScaledContents(bool);
+   void setScaledContents(bool enabled);
    QSize sizeHint() const override;
    QSize minimumSizeHint() const override;
 

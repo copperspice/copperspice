@@ -64,12 +64,12 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
    ~QAbstractScrollArea();
 
    Qt::ScrollBarPolicy verticalScrollBarPolicy() const;
-   void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy);
+   void setVerticalScrollBarPolicy(Qt::ScrollBarPolicy policy);
    QScrollBar *verticalScrollBar() const;
    void setVerticalScrollBar(QScrollBar *scrollBar);
 
    Qt::ScrollBarPolicy horizontalScrollBarPolicy() const;
-   void setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy);
+   void setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy policy);
    QScrollBar *horizontalScrollBar() const;
    void setHorizontalScrollBar(QScrollBar *scrollBar);
 

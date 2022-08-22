@@ -56,7 +56,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
 
    ~QFontComboBox();
 
-   void setWritingSystem(QFontDatabase::WritingSystem);
+   void setWritingSystem(QFontDatabase::WritingSystem script);
    QFontDatabase::WritingSystem writingSystem() const;
 
    enum FontFilter {

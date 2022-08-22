@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    QAction *activeAction() const;
    void setActiveAction(QAction *action);
 
-   void setDefaultUp(bool);
+   void setDefaultUp(bool enabled);
    bool isDefaultUp() const;
 
    QSize sizeHint() const override;
