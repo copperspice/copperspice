@@ -94,6 +94,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       ${XCB_LIB}
   )
 
+else()
+  target_compile_definitions(CsVulkan
+     PUBLIC
+     -DVK_USE_PLATFORM_WIN32_KHR
+  )
+
 endif()
 
 function_generate_resources(CsVulkan)

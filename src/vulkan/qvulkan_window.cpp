@@ -360,6 +360,13 @@ bool QVulkanWindow::createSurface() const
 #if defined(Q_OS_WIN)
    // windows platform specific code
 
+   vk::Win32SurfaceCreateInfoKHR createInfo;
+
+   createInfo.hinstance = GetModuleHandle(nullptr);
+   createInfo.hwnd = *reinterpret_cast<HWND*>(handle()->nativeHandle());
+
+   m_surface = vulkanInstance()->apiInstance().createWin32SurfaceKHRUnique(createInfo, nullptr, vulkanInstance()->dispatchLoader());
+
 #elif defined(Q_OS_UNIX)
    // unix platform specific code
 
