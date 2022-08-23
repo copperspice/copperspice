@@ -657,6 +657,10 @@ bool QVulkanWindow::populateSwapChain()
 
    }
 
+   if (m_renderer != nullptr) {
+      m_renderer->initSwapChainResources();
+   }
+
    return true;
 }
 
