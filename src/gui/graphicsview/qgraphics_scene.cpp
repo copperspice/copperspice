@@ -101,7 +101,7 @@ QGraphicsScenePrivate::QGraphicsScenePrivate()
      processDirtyItemsEmitted(false), needSortTopLevelItems(true), holesInTopLevelSiblingIndex(false),
      topLevelSequentialOrdering(true), scenePosDescendantsUpdatePending(false), stickyFocus(false),
      hasFocus(false), lastMouseGrabberItemHasImplicitMouseGrab(false), allItemsIgnoreHoverEvents(true),
-     allItemsUseDefaultCursor(true), painterStateProtection(true), sortCacheEnabled(false),
+     allItemsUseDefaultCursor(true), painterStateProtection(true),
      allItemsIgnoreTouchEvents(true), minimumRenderSize(0.0), selectionChanging(0), rectAdjust(2),
      focusItem(nullptr), lastFocusItem(nullptr), passiveFocusItem(nullptr), tabFocusFirst(nullptr),
      activePanel(nullptr), lastActivePanel(nullptr), activationRefCount(0), childExplicitActivation(0),
@@ -1719,20 +1719,6 @@ void QGraphicsScene::setBspTreeDepth(int depth)
    bspTree->setBspTreeDepth(depth);
 }
 
-bool QGraphicsScene::isSortCacheEnabled() const
-{
-    Q_D(const QGraphicsScene);
-    return d->sortCacheEnabled;
-}
-
-void QGraphicsScene::setSortCacheEnabled(bool enabled)
-{
-    Q_D(QGraphicsScene);
-    if (d->sortCacheEnabled == enabled)
-        return;
-    d->sortCacheEnabled = enabled;
-}
-
 QRectF QGraphicsScene::itemsBoundingRect() const
 {
    // Does not take untransformable items into account.
@@ -1755,7 +1741,6 @@ QList<QGraphicsItem *> QGraphicsScene::items(const QPointF &pos, Qt::ItemSelecti
    Q_D(const QGraphicsScene);
    return d->index->items(pos, mode, order, deviceTransform);
 }
-
 
 QList<QGraphicsItem *> QGraphicsScene::items(const QRectF &rect, Qt::ItemSelectionMode mode,
    Qt::SortOrder order, const QTransform &deviceTransform) const

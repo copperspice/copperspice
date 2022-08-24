@@ -101,9 +101,6 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
    GUI_CS_PROPERTY_READ(font, font)
    GUI_CS_PROPERTY_WRITE(font, setFont)
 
-   GUI_CS_PROPERTY_READ(sortCacheEnabled, isSortCacheEnabled)
-   GUI_CS_PROPERTY_WRITE(sortCacheEnabled, setSortCacheEnabled)
-
    GUI_CS_PROPERTY_READ(stickyFocus, stickyFocus)
    GUI_CS_PROPERTY_WRITE(stickyFocus, setStickyFocus)
 
@@ -156,9 +153,6 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    ItemIndexMethod itemIndexMethod() const;
    void setItemIndexMethod(ItemIndexMethod method);
-
-   bool isSortCacheEnabled() const;
-   void setSortCacheEnabled(bool enabled);
 
    int bspTreeDepth() const;
    void setBspTreeDepth(int depth);
