@@ -218,17 +218,13 @@ struct QGlyphLayout {
          last = numGlyphs;
       }
 
-      if (first == 0 && last == numGlyphs && reinterpret_cast<char *>(offsets + numGlyphs) == reinterpret_cast<char *>(glyphs)) {
-         memset(offsets, 0, numGlyphs * SpaceRequired);
+      const int num = last - first;
 
-      } else {
-         const int num = last - first;
-         memset(offsets + first, 0,        num * sizeof(QFixedPoint));
-         memset(glyphs + first, 0,         num * sizeof(glyph_t));
-         memset(advances + first, 0,       num * sizeof(QFixed));
-         memset(justifications + first, 0, num * sizeof(QGlyphJustification));
-         memset(attributes + first, 0,     num * sizeof(QGlyphAttributes));
-      }
+      std::fill(offsets + first, offsets + first + num, QFixedPoint());
+      memset(glyphs + first, 0, num * sizeof(glyph_t));
+      std::fill(advances + first, advances + first + num, QFixed());
+      std::fill(justifications + first, justifications + first + num, QGlyphJustification());
+      memset(attributes + first, 0, num * sizeof(QGlyphAttributes));
    }
 
    inline char *data() {
