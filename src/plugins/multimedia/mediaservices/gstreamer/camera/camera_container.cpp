@@ -56,7 +56,7 @@ QString CameraBinContainer::containerDescription(const QString &formatMimeType) 
 #ifdef HAVE_GST_ENCODING_PROFILES
    return m_supportedContainers.codecDescription(formatMimeType);
 #else
-   Q_UNUSED(formatMimeType)
+   (void) formatMimeType;
    return QString();
 #endif
 }
@@ -74,6 +74,8 @@ void CameraBinContainer::setContainerFormat(const QString &format)
       m_actualFormat = format;
       emit settingsChanged();
    }
+#else
+   (void) format;
 #endif
 }
 
@@ -86,6 +88,8 @@ void CameraBinContainer::setActualContainerFormat(const QString &containerFormat
 {
 #ifdef HAVE_GST_ENCODING_PROFILES
    m_actualFormat = containerFormat;
+#else
+   (void) containerFormat;
 #endif
 }
 
