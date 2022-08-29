@@ -495,6 +495,10 @@ bool QVulkanWindow::recreateSwapChain()
    // trigger a recreation of all resources
    m_swapChainImageSize = QSize();
 
+   if (m_renderer) {
+      m_renderer->releaseSwapChainResources();
+   }
+
    return populateSwapChain();
 }
 
@@ -884,8 +888,17 @@ void QVulkanWindow::endFrame()
 
 void QVulkanWindow::exposeEvent(QExposeEvent* )
 {
-   if (m_graphicsQueues.isEmpty()) {
-      initialize();
+   if (isExposed()) {
+      if (m_graphicsQueues.isEmpty()) {
+         initialize();
+      }
+
+   } else {
+      if (m_renderer) {
+         m_renderer->releaseSwapChainResources();
+         m_renderer->releaseResources();
+      }
+
    }
 }
 
@@ -893,6 +906,8 @@ bool QVulkanWindow::handleDeviceLost()
 {
    if (m_renderer != nullptr) {
       m_renderer->logicalDeviceLost();
+      m_renderer->releaseSwapChainResources();
+      m_renderer->releaseResources();
    }
 
    return recreateSwapChain();
