@@ -57,6 +57,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    VkCommandBuffer currentCommandBuffer() const;
    int currentFrame() const;
    VkFramebuffer currentFramebuffer() const;
+   int currentSwapChainImageIndex() const;
+
    VkRenderPass defaultRenderPass() const;
    VkFormat depthStencilFormat() const;
    VkDevice device() const;

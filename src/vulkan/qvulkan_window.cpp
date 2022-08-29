@@ -961,6 +961,11 @@ VkFramebuffer QVulkanWindow::currentFramebuffer() const
    return std::get<2>(m_framebuffers[m_currentFrame]).get();
 }
 
+int QVulkanWindow::currentSwapChainImageIndex() const
+{
+   return m_imageIndex;
+}
+
 VkRenderPass QVulkanWindow::defaultRenderPass() const
 {
    if (! populateRenderPass()) {
