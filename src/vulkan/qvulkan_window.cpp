@@ -923,6 +923,11 @@ QMatrix4x4 QVulkanWindow::clipCorrectionMatrix()
    return retval;
 }
 
+VkFormat QVulkanWindow::colorFormat() const
+{
+   return VkFormat(m_colorFormat);
+}
+
 int QVulkanWindow::concurrentFrameCount() const
 {
    return m_concurrentFrameCount;
@@ -963,6 +968,11 @@ VkRenderPass QVulkanWindow::defaultRenderPass() const
    }
 
    return m_renderPass.get();
+}
+
+VkFormat QVulkanWindow::depthStencilFormat() const
+{
+   return VkFormat(m_depthFormat);
 }
 
 VkDevice QVulkanWindow::device() const

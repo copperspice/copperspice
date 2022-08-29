@@ -49,6 +49,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    QVector<VkPhysicalDeviceProperties> availablePhysicalDevices();
    QMatrix4x4 clipCorrectionMatrix();
+   VkFormat colorFormat() const;
    int concurrentFrameCount() const;
 
    virtual QVulkanWindowRenderer *createRenderer();
@@ -57,6 +58,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    int currentFrame() const;
    VkFramebuffer currentFramebuffer() const;
    VkRenderPass defaultRenderPass() const;
+   VkFormat depthStencilFormat() const;
    VkDevice device() const;
    uint32_t deviceLocalMemoryIndex() const;
 
