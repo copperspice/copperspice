@@ -980,6 +980,24 @@ VkFormat QVulkanWindow::depthStencilFormat() const
    return VkFormat(m_depthFormat);
 }
 
+VkImage QVulkanWindow::depthStencilImage() const
+{
+   if (m_imageIndex >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<3>(m_framebuffers[m_imageIndex]).get();
+}
+
+VkImageView QVulkanWindow::depthStencilImageView() const
+{
+   if (m_imageIndex >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<5>(m_framebuffers[m_imageIndex]).get();
+}
+
 VkDevice QVulkanWindow::device() const
 {
    return m_graphicsDevice.get();

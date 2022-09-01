@@ -61,6 +61,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    VkRenderPass defaultRenderPass() const;
    VkFormat depthStencilFormat() const;
+   VkImage depthStencilImage() const;
+   VkImageView depthStencilImageView() const;
    VkDevice device() const;
    uint32_t deviceLocalMemoryIndex() const;
 
