@@ -1032,6 +1032,24 @@ void QVulkanWindow::frameReady()
    endFrame();
 }
 
+VkCommandPool QVulkanWindow::graphicsCommandPool() const
+{
+   return VkCommandPool(m_graphicsPool.get());
+}
+
+VkQueue QVulkanWindow::graphicsQueue() const
+{
+   if (m_graphicsQueues.empty()) {
+      return nullptr;
+   }
+
+   return VkQueue(m_graphicsQueues.first());
+}
+
+uint32_t QVulkanWindow::graphicsQueueFamilyIndex() const
+{
+   return m_graphicsCommandQueueFamily;
+}
 
 uint32_t QVulkanWindow::hostVisibleMemoryIndex() const
 {

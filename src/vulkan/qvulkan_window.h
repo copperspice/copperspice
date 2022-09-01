@@ -68,6 +68,9 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
 
    QVulkanWindow::VulkanFlags flags() const;
    void frameReady();
+   VkCommandPool graphicsCommandPool() const;
+   VkQueue graphicsQueue() const;
+   uint32_t graphicsQueueFamilyIndex() const;
    uint32_t hostVisibleMemoryIndex() const;
    bool isValid() const;
    VkImage msaaColorImage(int idx) const;
