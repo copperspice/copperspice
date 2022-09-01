@@ -121,7 +121,7 @@ bool QVulkanWindow::initialize()
    QStringList deviceExtensions;
 
    for (const QString &item : m_requestedDeviceExtensions) {
-      for (const auto& ext : supported) {
+      for (const auto &ext : supported) {
          if (item == ext.extensionName) {
             deviceExtensions.append(item);
             break;
@@ -174,7 +174,7 @@ bool QVulkanWindow::initialize()
          m_transferCommandQueueFamily = transferQueues.front().second;
       }
 
-   } catch (vk::DeviceLostError& err) {
+   } catch (vk::DeviceLostError &err) {
       m_graphicsDevice.reset();
       m_graphicsQueues.clear();
       m_transferDevice.reset();
@@ -183,7 +183,7 @@ bool QVulkanWindow::initialize()
       m_physicalDeviceProperties.clear();
       return false;
 
-   } catch (vk::SystemError& err) {
+   } catch (vk::SystemError &err) {
       qWarning("QVulkanWindow::initialize() unable to create device: %s", err.what());
       return false;
 
@@ -209,7 +209,7 @@ bool QVulkanWindow::initialize()
 
    const auto deviceBits = vk::MemoryPropertyFlagBits::eDeviceLocal;
 
-   for (const auto& memoryType : memoryProperties.memoryTypes) {
+   for (const auto &memoryType : memoryProperties.memoryTypes) {
 
       if (! hostMemIndex.has_value() && ((memoryType.propertyFlags & hostBits) == hostBits)) {
          hostMemIndex = i;
@@ -339,7 +339,7 @@ QVulkanWindow::createTransientImage(vk::ImageCreateFlags imageFlags, vk::ImageUs
       }
    }
 
-   if(memoryIndex == memoryInfo.memoryTypeCount) {
+   if (memoryIndex == memoryInfo.memoryTypeCount) {
       qWarning("QVulkanWindow::createTransientImage() Unable to find a valid memory type");
       return retval;
    }
@@ -516,14 +516,13 @@ bool QVulkanWindow::populateSwapChain()
    } catch (vk::OutOfDateKHRError &err) {
       return false;
 
-   } catch (vk::DeviceLostError& err) {
+   } catch (vk::DeviceLostError &err) {
       return false;
 
    } catch (vk::SystemError &err) {
       return false;
 
    }
-
 
    uint32_t numBuffers  = 3;
    auto &physicalDevice = m_physicalDevices[m_physicalDeviceIndex];
@@ -537,11 +536,10 @@ bool QVulkanWindow::populateSwapChain()
    try {
       capabilities = physicalDevice.getSurfaceCapabilitiesKHR(m_surface.get());
 
-
    } catch (vk::OutOfDateKHRError &err) {
       return false;
 
-   } catch (vk::DeviceLostError& err) {
+   } catch (vk::DeviceLostError &err) {
       return false;
 
    } catch (vk::SystemError &err) {
@@ -556,7 +554,7 @@ bool QVulkanWindow::populateSwapChain()
    numBuffers = std::max(numBuffers, capabilities.minImageCount);
    m_frameData.resize(numBuffers);
 
-   for (auto & item : m_frameData) {
+   for (auto &item : m_frameData) {
       item.frameFence     = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
       item.imageFence     = m_graphicsDevice->createFence(vk::FenceCreateInfo{});
       item.frameSemaphore = m_graphicsDevice->createSemaphore(vk::SemaphoreCreateInfo{});
@@ -655,7 +653,7 @@ bool QVulkanWindow::populateSwapChain()
 
       m_framebuffers = map_vector(vk_images, createFramebuffer);
 
-   } catch (vk::SystemError& err) {
+   } catch (vk::SystemError &err) {
       qWarning("QVulkanWindow::populateSwapChain() Unable to create device: %s", err.what());
       return false;
 
@@ -783,7 +781,7 @@ void QVulkanWindow::startFrame()
 
       frameData->commandBuffer.value()->begin(vk::CommandBufferBeginInfo{});
 
-   } catch (vk::DeviceLostError& err) {
+   } catch (vk::DeviceLostError &err) {
       handleDeviceLost();
       return;
 
@@ -866,13 +864,13 @@ void QVulkanWindow::endFrame()
 
    try {
       vulkanInstance()->presentAboutToBeQueued(this);
-      m_graphicsQueues.first().presentKHR(presentInfo);
+      (void) m_graphicsQueues.first().presentKHR(presentInfo);
 
    } catch (vk::OutOfDateKHRError &err) {
       recreateSwapChain();
       return;
 
-   } catch (vk::DeviceLostError& err) {
+   } catch (vk::DeviceLostError &err) {
       handleDeviceLost();
       return;
 
@@ -886,7 +884,7 @@ void QVulkanWindow::endFrame()
    m_currentFrame = (m_currentFrame + 1) % m_frameData.size();
 }
 
-void QVulkanWindow::exposeEvent(QExposeEvent* )
+void QVulkanWindow::exposeEvent(QExposeEvent *)
 {
    if (isExposed()) {
       if (m_graphicsQueues.isEmpty()) {

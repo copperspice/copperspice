@@ -268,7 +268,7 @@ QStringList QVulkanInstance::layers() const
    return m_layers;
 }
 
-void QVulkanInstance::presentAboutToBeQueued(QWindow* window)
+void QVulkanInstance::presentAboutToBeQueued(QWindow *window)
 {
    (void) window;
 
@@ -282,7 +282,7 @@ void QVulkanInstance::presentAboutToBeQueued(QWindow* window)
 
 }
 
-void QVulkanInstance::presentQueued(QWindow* window)
+void QVulkanInstance::presentQueued(QWindow *window)
 {
    window->handle()->syncIfNeeded();
 }
@@ -435,7 +435,7 @@ QSet<QString> QVulkanInstance::supportedLayerSet() const
    return retval;
 }
 
-VkSurfaceKHR QVulkanInstance::surfaceForWindow(QWindow* window)
+VkSurfaceKHR QVulkanInstance::surfaceForWindow(QWindow *window)
 {
    QVulkanWindow *tmp = dynamic_cast<QVulkanWindow*>(window);
 
