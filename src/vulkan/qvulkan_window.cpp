@@ -1066,6 +1066,24 @@ bool QVulkanWindow::isValid() const
    return m_isValid;
 }
 
+VkImage QVulkanWindow::msaaColorImage(int idx) const
+{
+   if (idx >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<6>(m_framebuffers[idx]).get();
+}
+
+VkImageView QVulkanWindow::msaaColorImageView(int idx) const
+{
+   if (idx >= m_framebuffers.size()) {
+      return nullptr;
+   }
+
+   return std::get<8>(m_framebuffers[idx]).get();
+}
+
 VkPhysicalDevice QVulkanWindow::physicalDevice() const
 {
    if (! populatePhysicalDevices()) {

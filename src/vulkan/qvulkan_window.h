@@ -70,6 +70,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    void frameReady();
    uint32_t hostVisibleMemoryIndex() const;
    bool isValid() const;
+   VkImage msaaColorImage(int idx) const;
+   VkImageView msaaColorImageView(int idx) const;
    VkPhysicalDevice physicalDevice() const;
    const VkPhysicalDeviceProperties *physicalDeviceProperties() const;
 
