@@ -30,7 +30,7 @@ if(FONTCONFIG_INCLUDES AND FONTCONFIG_LIBRARIES)
 endif()
 
 if(NOT WIN32)
-    include(FindPkgConfig)
+    find_package(PkgConfig)
     pkg_check_modules(PC_FONTCONFIG QUIET fontconfig)
 endif()
 

@@ -30,7 +30,7 @@ if(NOT PulseAudio_FIND_VERSION)
 endif()
 
 if (NOT WIN32)
-   include(FindPkgConfig)
+   find_package(PkgConfig)
 
    pkg_check_modules(PC_PULSEAUDIO QUIET libpulse>=${PulseAudio_FIND_VERSION})
    pkg_check_modules(PC_PULSEAUDIO_MAINLOOP QUIET libpulse-mainloop-glib)
