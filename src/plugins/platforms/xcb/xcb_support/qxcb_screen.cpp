@@ -425,6 +425,11 @@ QDpi QXcbScreen::logicalDpi() const
    return virtualDpi();
 }
 
+void * QXcbScreen::nativeHandle()
+{
+   return connection()->xcb_connection();
+}
+
 qreal QXcbScreen::pixelDensity() const
 {
    return m_pixelDensity;

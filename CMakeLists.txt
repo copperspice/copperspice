@@ -67,7 +67,7 @@ endif()
 set(BUILD_COMPONENTS "Core Xml")
 
 # unused at this time: DBus, Declarative, and ScriptTools
-set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg WebKit XmlPatterns)
+set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg Vulkan WebKit XmlPatterns)
 
 set(PACKAGE           "copperspice")
 set(PACKAGE_NAME      "CopperSpice")
@@ -371,6 +371,27 @@ elseif (NOT MySQL_FOUND)
 
 endif()
 
+if (WITH_VULKAN)
+   find_package(Vulkan 1.1)
+   set_package_properties(Vulkan PROPERTIES
+      PURPOSE "Required for Vulkan support"
+      DESCRIPTION "The Vulkan SDK"
+      URL "https://www.lunarg.com/"
+      TYPE REQUIRED
+   )
+
+   if (NOT TARGET Vulkan::Vulkan)
+      set(WITH_VULKAN NO)
+
+      if (Vulkan_FOUND)
+         message(STATUS "Partial Vulkan installation exists however the SDK was not found, CsVulkan library will not be built\n")
+      else()
+         message(STATUS "Vulkan SDK was not found, CsVulkan library will not be built\n")
+      endif()
+
+   endif()
+
+endif()
 
 # emerald - temporarily turn off GTK as a workaround, conflicts with freetype version in Harfbuzz
 set(CMAKE_DISABLE_FIND_PACKAGE_GTK2 TRUE)

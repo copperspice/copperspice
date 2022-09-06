@@ -1646,6 +1646,15 @@ bool QWindowPrivate::applyCursor()
 }
 #endif // QT_NO_CURSOR
 
+QVulkanInstance* QWindow::vulkanInstance() const{
+   return m_vulkanInstance;
+}
+
+void QWindow::setVulkanInstance(QVulkanInstance* instance)
+{
+   m_vulkanInstance = instance;
+}
+
 QDebug operator<<(QDebug debug, const QWindow *window)
 {
    QDebugStateSaver saver(debug);

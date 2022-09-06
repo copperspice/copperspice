@@ -133,6 +133,12 @@
 #      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_IMPORT
 #    endif
 
+#    if defined(QT_BUILD_VULKAN_LIB)
+#      define Q_VULKAN_EXPORT        Q_DECL_EXPORT
+#    else
+#      define Q_VULKAN_EXPORT        Q_DECL_IMPORT
+#    endif
+
 #    if defined(QT_BUILD_XML_LIB)
 #      define Q_XML_EXPORT           Q_DECL_EXPORT
 #    else
@@ -170,6 +176,7 @@
 #    define Q_DECLARATIVE_EXPORT    Q_DECL_EXPORT
 #    define Q_OPENGL_EXPORT         Q_DECL_EXPORT
 #    define Q_MULTIMEDIA_EXPORT     Q_DECL_EXPORT
+#    define Q_VULKAN_EXPORT         Q_DECL_EXPORT
 #    define Q_XML_EXPORT            Q_DECL_EXPORT
 #    define Q_XMLPATTERNS_EXPORT    Q_DECL_EXPORT
 #    define Q_SCRIPT_EXPORT         Q_DECL_EXPORT
@@ -184,6 +191,7 @@
 #    define Q_DECLARATIVE_EXPORT
 #    define Q_OPENGL_EXPORT
 #    define Q_MULTIMEDIA_EXPORT
+#    define Q_VULKAN_EXPORT
 #    define Q_XML_EXPORT
 #    define Q_XMLPATTERNS_EXPORT
 #    define Q_SCRIPT_EXPORT

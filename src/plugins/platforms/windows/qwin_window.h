@@ -166,6 +166,11 @@ class QWindowsWindow : public QPlatformWindow
    WId winId() const override {
       return WId(m_data.hwnd);
    }
+
+   void *nativeHandle() {
+      return &m_data.hwnd;
+   }
+
    void setParent(const QPlatformWindow *window) override;
 
    void setWindowTitle(const QString &title) override;

@@ -65,6 +65,7 @@ class QScreen;
 class QAccessibleInterface;
 class QWindowContainer;
 class QDebug;
+class QVulkanInstance;
 
 class Q_GUI_EXPORT QWindow : public QObject, public QSurface
 {
@@ -297,6 +298,9 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    void unsetCursor();
 #endif
 
+   void setVulkanInstance(QVulkanInstance* instance);
+   QVulkanInstance* vulkanInstance() const;
+
    void cs_internal_updateTimer(int value);
 
    static QWindow *fromWinId(WId id);
@@ -441,6 +445,8 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    Q_DECLARE_PRIVATE(QWindow)
 
    QPlatformSurface *surfaceHandle() const override;
+
+   QVulkanInstance* m_vulkanInstance;
 
    GUI_CS_SLOT_1(Private, void _q_clearAlert())
    GUI_CS_SLOT_2(_q_clearAlert)
