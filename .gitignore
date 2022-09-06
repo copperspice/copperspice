@@ -1,11 +1,3 @@
-
-/test/gui/
-/test/network/
-
-/translations/generate_ts_files
-/translations/hold_1
-/translations/hold_2
-
 /utilities/cldr/__pycache__/*
 /utilities/cldr/data
 /utilities/cldr/output
