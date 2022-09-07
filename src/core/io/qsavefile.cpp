@@ -91,8 +91,9 @@ void QSaveFile::setFileName(const QString &name)
 bool QSaveFile::open(OpenMode mode)
 {
    Q_D(QSaveFile);
+
    if (isOpen()) {
-      qWarning("QSaveFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QSaveFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
    unsetError();
@@ -100,15 +101,16 @@ bool QSaveFile::open(OpenMode mode)
       qWarning("QSaveFile::open: Open mode not specified");
       return false;
    }
-   // In the future we could implement ReadWrite by copying from the existing file to the temp file...
-   if ((mode & ReadOnly) || (mode & Append)) {
+
+   // In the future we could implement ReadWrite by copying from the existing file to the temp file
+   if ((mode & QIODevice::ReadOnly) || (mode & QIODevice::Append)) {
       qWarning("QSaveFile::open: Unsupported open mode 0x%x", int(mode));
       return false;
    }
 
    // check if existing file is writable
    QFileInfo existingFile(d->fileName);
-   if (existingFile.exists() && !existingFile.isWritable()) {
+   if (existingFile.exists() && ! existingFile.isWritable()) {
       d->setError(QFileDevice::WriteError, QSaveFile::tr("Existing file %1 is not writable").formatArg(d->fileName));
       d->writeError = QFileDevice::WriteError;
       return false;
@@ -123,6 +125,7 @@ bool QSaveFile::open(OpenMode mode)
       if (d->directWriteFallback && err == QFileDevice::OpenError && errno == EACCES) {
          delete d->fileEngine;
          d->fileEngine = QAbstractFileEngine::create(d->fileName);
+
          if (d->fileEngine->open(mode | QIODevice::Unbuffered)) {
             d->useTemporaryFile = false;
             QFileDevice::open(mode);

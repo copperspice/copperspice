@@ -26,10 +26,11 @@
 #include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qfilesystemengine_p.h>
 #include <qhash.h>
 #include <qtextstream.h>
 #include <qregularexpression.h>
+
+#include <qfilesystemengine_p.h>
 
 #include <errno.h>
 #include <stdlib.h>
@@ -41,12 +42,13 @@ static void appendOrganizationAndApp(QString &path)
    const QString org = QCoreApplication::organizationName();
 
    if (! org.isEmpty()) {
-      path += QChar('/') + org;
+      path += '/' + org;
    }
+
    const QString appName = QCoreApplication::applicationName();
 
-   if (!appName.isEmpty()) {
-      path += QChar('/') + appName;
+   if (! appName.isEmpty()) {
+      path += '/' + appName;
    }
 }
 
@@ -74,6 +76,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          if (type == QStandardPaths::CacheLocation) {
             appendOrganizationAndApp(xdgCacheHome);
          }
+
          return xdgCacheHome;
       }
 
@@ -117,6 +120,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case RuntimeLocation: {
          const uid_t myUid = geteuid();
          // http://standards.freedesktop.org/basedir-spec/latest/
+
          QFileInfo fileInfo;
 
          QString xdgRuntimeDir = QFile::decodeName(qgetenv("XDG_RUNTIME_DIR"));
@@ -145,7 +149,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
                 return QString();
             }
 
-            if (!fileInfo.isDir()) {
+            if (! fileInfo.isDir()) {
                 qWarning("QStandardPaths: XDG_RUNTIME_DIR points to '%s' which is not a directory",
                          csPrintable(xdgRuntimeDir));
 
@@ -193,7 +197,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 
    QFile file(xdgConfigHome + "/user-dirs.dirs");
 
-   if (!isTestModeEnabled() && file.open(QIODevice::ReadOnly)) {
+   if (! isTestModeEnabled() && file.open(QIODevice::ReadOnly)) {
       QHash<QString, QString> lines;
       QTextStream stream(&file);
 
@@ -365,15 +369,16 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
    switch (type) {
       case ConfigLocation:
       case GenericConfigLocation:
-        dirs = xdgConfigDirs();
-        break;
+         dirs = xdgConfigDirs();
+         break;
 
-       case AppConfigLocation:
-        dirs = xdgConfigDirs();
+      case AppConfigLocation:
+         dirs = xdgConfigDirs();
 
-        for (int i = 0; i < dirs.count(); ++i)
+         for (int i = 0; i < dirs.count(); ++i) {
             appendOrganizationAndApp(dirs[i]);
-        break;
+         }
+         break;
 
       case GenericDataLocation:
          dirs = xdgDataDirs();

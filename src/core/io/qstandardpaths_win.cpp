@@ -27,10 +27,12 @@
 #include <qstringlist.h>
 #include <qcoreapplication.h>
 #include <qt_windows.h>
+
+#include <qsystemlibrary_p.h>
+
 #include <shlobj.h>
 #include <intshcut.h>
 
-#include <qsystemlibrary_p.h>
 
 #ifndef CSIDL_MYMUSIC
 #define CSIDL_MYMUSIC 13

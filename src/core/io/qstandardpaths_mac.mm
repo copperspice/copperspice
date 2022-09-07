@@ -157,7 +157,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
         case GenericConfigLocation:
         case ConfigLocation:
         case AppConfigLocation:
-            path = qttestDir + QLatin1String("/Preferences");
+            path = qttestDir + "/Preferences";
             if (type == AppConfigLocation)
                 appendOrganizationAndApp(path);
             return path;
@@ -170,15 +170,18 @@ QString QStandardPaths::writableLocation(StandardLocation type)
    switch (type) {
       case HomeLocation:
          return QDir::homePath();
+
       case TempLocation:
          return QDir::tempPath();
+
       case GenericDataLocation:
-     case AppDataLocation:
-     case AppLocalDataLocation:
+      case AppDataLocation:
+      case AppLocalDataLocation:
       case GenericCacheLocation:
       case CacheLocation:
       case RuntimeLocation:
          return macLocation(type, kUserDomain);
+
       default:
          return macLocation(type, kOnAppropriateDisk);
    }
@@ -190,8 +193,9 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
 
     if (type == GenericDataLocation || type == AppDataLocation || type == AppLocalDataLocation || type == GenericCacheLocation || type == CacheLocation) {
         const QString path = macLocation(type, kOnAppropriateDisk);
-        if (!path.isEmpty())
-            dirs.append(path);
+        if (! path.isEmpty()) {
+         dirs.append(path);
+        }
     }
 
     if (type == AppDataLocation || type == AppLocalDataLocation) {
@@ -240,8 +244,10 @@ QString QStandardPaths::displayName(StandardLocation type)
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
 
-        if (!url)
+        if (!url) {
             return QString();
+        }
+
         return QString::fromNSString([fileManager displayNameAtPath: [url absoluteString]]);
    }
 

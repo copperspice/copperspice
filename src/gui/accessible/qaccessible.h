@@ -877,8 +877,8 @@ class Q_GUI_EXPORT QAccessibleTableModelChangeEvent : public QAccessibleEvent
       ColumnsRemoved
    };
 
-   inline QAccessibleTableModelChangeEvent(QObject *obj, ModelChangeType changeType)
-      : QAccessibleEvent(obj, QAccessible::InvalidEvent), m_modelChangeType(changeType),
+   inline QAccessibleTableModelChangeEvent(QObject *object, ModelChangeType changeType)
+      : QAccessibleEvent(object, QAccessible::InvalidEvent), m_modelChangeType(changeType),
         m_firstRow(-1), m_firstColumn(-1), m_lastRow(-1), m_lastColumn(-1)
    {
       m_type = QAccessible::TableModelChanged;
@@ -904,14 +904,14 @@ class Q_GUI_EXPORT QAccessibleTableModelChangeEvent : public QAccessibleEvent
    void setFirstRow(int row) {
       m_firstRow = row;
    }
-   void setFirstColumn(int col) {
-      m_firstColumn = col;
+   void setFirstColumn(int column) {
+      m_firstColumn = column;
    }
    void setLastRow(int row) {
       m_lastRow = row;
    }
-   void setLastColumn(int col) {
-      m_lastColumn = col;
+   void setLastColumn(int column) {
+      m_lastColumn = column;
    }
    int firstRow() const {
       return m_firstRow;

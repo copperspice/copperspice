@@ -45,7 +45,7 @@ class Q_CORE_EXPORT QEvent           // event base class
  public:
    enum Type {
       // if a compiler error occurs on the following line, ensure X11 headers
-      // are  included after the CS headers
+      // are included after the CS headers
 
       None                   = 0,             // invalid event
       Timer                  = 1,             // timer event

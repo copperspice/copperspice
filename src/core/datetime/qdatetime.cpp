@@ -400,10 +400,12 @@ QString QDate::shortMonthName(int month, QDate::MonthNameType type)
       switch (type) {
          case QDate::DateFormat:
             return QLocale::system().monthName(month, QLocale::ShortFormat);
+
          case QDate::StandaloneFormat:
             return QLocale::system().standaloneMonthName(month, QLocale::ShortFormat);
       }
    }
+
    return QString();
 }
 
@@ -418,6 +420,7 @@ QString QDate::longMonthName(int month, MonthNameType type)
             return QLocale::system().standaloneMonthName(month, QLocale::LongFormat);
       }
    }
+
    return QString();
 }
 
@@ -448,7 +451,7 @@ QString QDate::longDayName(int weekday, MonthNameType type)
 
    return QString();
 }
-#endif //QT_NO_TEXTDATE
+#endif
 
 #ifndef QT_NO_TEXTDATE
 static QString toStringTextDate(QDate date)
