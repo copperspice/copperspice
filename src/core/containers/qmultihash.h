@@ -492,6 +492,21 @@ class QMultiHash
       return result;
    }
 
+   Val &operator[](const Key &key) {
+      auto iter = m_data.find(key);
+
+      if (iter == m_data.end()) {
+         // default constructed element, emplace returns an iterator
+         iter = m_data.emplace(key, Val());
+      }
+
+      return iter->second;
+   }
+
+   const Val operator[](const Key &key) const  {
+      return value(key);
+   }
+
    // iterators
    inline iterator begin() {
       return m_data.begin();

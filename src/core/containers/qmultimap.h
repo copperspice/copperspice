@@ -555,18 +555,6 @@ class QMultiMap
    }
 
    // operators
-   QMultiMap &operator+=(const QMultiMap &other) {
-      this->unite(other);
-      return *this;
-   }
-
-   QMultiMap operator+(const QMultiMap &other) const {
-      QMultiMap result = *this;
-      result += other;
-      return result;
-   }
-
-   // operators
    QMultiMap<Key, Val, C> &operator=(const QMultiMap<Key, Val, C> &other) = default;
    QMultiMap<Key, Val, C> &operator=(QMultiMap<Key, Val, C> &&other)      = default;
 
@@ -578,8 +566,22 @@ class QMultiMap
       return m_data != other.m_data;
    }
 
+   QMultiMap &operator+=(const QMultiMap &other) {
+      this->unite(other);
+      return *this;
+   }
+
+   QMultiMap operator+(const QMultiMap &other) const {
+      QMultiMap result = *this;
+      result += other;
+      return result;
+   }
+
    Val &operator[](const Key &key);
-   const Val operator[](const Key &key) const;
+
+   const Val operator[](const Key &key) const {
+      return value(key);
+   }
 
  private:
    std::multimap<Key, Val, C> m_data;
@@ -754,6 +756,26 @@ QList<Val> QMultiMap<Key, Val, C>::values(const Key &key) const
    }
 
    return retval;
+}
+
+// operators
+
+template <class Key, class Val, class C>
+Val &QMultiMap<Key, Val, C>::operator[](const Key &key)
+{
+   auto range = m_data.equal_range(key);
+
+   if (range.first == range.second) {
+      // default constructed element, emplace returns an iterator
+      auto iter = m_data.emplace(key, Val());
+
+      return iter->second;
+   }
+
+   // get last key in the range
+   auto iter = --range.second;
+
+   return iter->second;
 }
 
 // java style iterators

@@ -513,7 +513,10 @@ class QMap
    }
 
    Val &operator[](const Key &key);
-   const Val operator[](const Key &key) const;
+
+   const Val operator[](const Key &key) const {
+      return value(key);
+   }
 
  private:
    std::map<Key, Val, C> m_data;
@@ -629,18 +632,12 @@ QList<Val> QMap<Key, Val, C>::values() const
 // operators
 
 template <class Key, class Val, class C>
-const Val QMap<Key, Val, C>::operator[](const Key &key) const
-{
-   return value(key);
-}
-
-template <class Key, class Val, class C>
 Val &QMap<Key, Val, C>::operator[](const Key &key)
 {
    auto range = m_data.equal_range(key);
 
    if (range.first == range.second) {
-      // default constructed element, emplace returns an std::pair, first is the iterator
+      // default constructed element, emplace returns an std::pair where first is the iterator
       auto iter = m_data.emplace(key, Val()).first;
 
       return iter->second;
@@ -651,7 +648,6 @@ Val &QMap<Key, Val, C>::operator[](const Key &key)
 
    return iter->second;
 }
-
 
 // to from
 
