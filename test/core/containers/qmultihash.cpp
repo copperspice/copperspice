@@ -151,6 +151,20 @@ TEST_CASE("QMultiHash insert", "[qmultihash]")
    REQUIRE(hash.size() == 6);
 }
 
+TEST_CASE("QMultiHash operator_bracket", "[qmultihash]")
+{
+   QMultiHash<int, QString> hash = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(hash[4] == "grapefruit");
+   REQUIRE(hash[5] == "");
+
+   REQUIRE(hash.contains(5) == true);
+   REQUIRE(hash[5] == "");
+}
+
 TEST_CASE("QMultiHash remove", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},

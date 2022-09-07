@@ -197,6 +197,21 @@ TEST_CASE("QMultiMap last", "[qmultimap]")
    REQUIRE(map.last() == "grapefruit");
 }
 
+TEST_CASE("QMultiMap operator_bracket", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 3, "quince"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(map[4] == "grapefruit");
+   REQUIRE(map[5] == "");
+
+   REQUIRE(map.contains(5) == true);
+   REQUIRE(map[5] == "");
+}
+
 TEST_CASE("QMultiMap remove", "[qmultimap]")
 {
    QMultiMap<int, QString> map = { { 1, "watermelon"},
