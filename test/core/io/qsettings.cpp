@@ -17,8 +17,11 @@
 *
 ***********************************************************************/
 
+#include <qdir.h>
+#include <qfileinfo.h>
 #include <qsize.h>
 #include <qsettings.h>
+#include <qstandardpaths.h>
 #include <qstringlist.h>
 
 #include <cs_catch2.h>
@@ -124,3 +127,32 @@ TEST_CASE("QSettings allkeys", "[qsettings]")
    settings1.remove("food");
 }
 
+TEST_CASE("QSettings filename", "[qsettings]")
+{
+   QCoreApplication::setOrganizationName("CopperSpice");
+   QCoreApplication::setApplicationName("CsCoreTest");
+
+   REQUIRE(QCoreApplication::applicationName() == "CsCoreTest");
+
+   QString targetLocation = QDir::tempPath();
+
+   // A
+   QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, targetLocation);
+   QSettings data1(targetLocation + "/TestSettings.ini", QSettings::IniFormat);
+
+   QFileInfo fileInfo1 = data1.fileName();
+
+   REQUIRE(fileInfo1.fileName() == "TestSettings.ini");
+   REQUIRE(fileInfo1.path() == targetLocation);
+
+   // B
+   QSettings data2(QSettings::IniFormat, QSettings::UserScope, "CopperSpice");
+
+   QFileInfo fileInfo2 = data2.fileName();
+
+   REQUIRE(fileInfo2.fileName() == "CopperSpice.ini");
+   REQUIRE(fileInfo2.path() == targetLocation);
+
+   QCoreApplication::setOrganizationName("");
+   QCoreApplication::setApplicationName("");
+}

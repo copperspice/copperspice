@@ -32,7 +32,18 @@ TEST_CASE("QTemporaryDir traits", "[qtemporarydir]")
    REQUIRE(std::has_virtual_destructor_v<QTemporaryDir> == false);
 }
 
-TEST_CASE("QTemporaryDi constructor", "[qtemporarydir]")
+TEST_CASE("QTemporaryDir auto_remove", "[qtemporarydir]")
+{
+   QTemporaryDir tmpDir;
+
+   tmpDir.setAutoRemove(false);
+   REQUIRE(tmpDir.autoRemove() == false);
+
+   tmpDir.setAutoRemove(true);
+   REQUIRE(tmpDir.autoRemove() == true);
+}
+
+TEST_CASE("QTemporaryDir constructor", "[qtemporarydir]")
 {
    QTemporaryDir tmpDir;
    QString tmpPath = QDir::tempPath();
@@ -42,4 +53,10 @@ TEST_CASE("QTemporaryDi constructor", "[qtemporarydir]")
    REQUIRE(tmpDir.errorString() == QString());
 }
 
+TEST_CASE("QTemporaryDir remove", "[qtemporarydir]")
+{
+   QTemporaryDir tmpDir;
 
+   REQUIRE(tmpDir.isValid() == true);
+   REQUIRE(tmpDir.remove() == true);
+}

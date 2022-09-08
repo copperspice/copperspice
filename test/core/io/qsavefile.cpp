@@ -32,18 +32,18 @@ TEST_CASE("QSaveFile traits", "[qsavefile]")
    REQUIRE(std::has_virtual_destructor_v<QSaveFile> == true);
 }
 
-TEST_CASE("QSaveFile exists", "[qsavefile]")
+TEST_CASE("QSaveFile open", "[qsavefile]")
 {
    QSaveFile file;
 
-   REQUIRE(file.open(QIODevice::ReadOnly) == false);
+   REQUIRE(file.open(QIODevice::WriteOnly) == true);
 
    REQUIRE(file.pos() == 0);
    REQUIRE(file.size() == 0);
-   REQUIRE(file.resize(10) == false);
+   REQUIRE(file.resize(10) == true);
 }
 
-TEST_CASE("QSaveFile file_name", "[qsavefile]")
+TEST_CASE("QSaveFile filename", "[qsavefile]")
 {
    QSaveFile file("c:/machine/path1/dir1/file1");
 
