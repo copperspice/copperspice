@@ -28,6 +28,7 @@
 #ifndef QT_NO_SETTINGS
 
 #include <qsettings_p.h>
+
 #include <qcache.h>
 #include <qfile.h>
 #include <qdir.h>
@@ -45,9 +46,12 @@
 #include <qstringparser.h>
 #include <qpoint.h>
 #include <qrect.h>
+#include <qsavefile.h>
+#include <qlockfile.h>
 
 #ifdef Q_OS_WIN                        // for homedirpath reading from registry
 #include <qt_windows.h>
+#include <shlobj.h>
 #include <qsystemlibrary_p.h>
 #endif
 
@@ -60,6 +64,10 @@
 
 #ifndef CSIDL_APPDATA
 #define CSIDL_APPDATA      0x001a      // <username>\Application Data
+#endif
+
+#if defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
+#define Q_XDG_PLATFORM
 #endif
 
 /*
@@ -550,6 +558,10 @@ QVariant QSettingsPrivate::stringToVariant(const QString &s)
 
          if (s.startsWith("@ByteArray(")) {
             return QVariant(s.toLatin1().mid(11, s.size() - 12));
+
+         } else if (s.startsWith("@String(")) {
+            return QVariant(s.mid(8, s.size() - 9));
+
          } else if (s.startsWith("@Variant(")) {
 
             QByteArray a(s.toLatin1().mid(9));
@@ -782,12 +794,12 @@ void QSettingsPrivate::iniEscapedString(const QString &str, QByteArray &result, 
    }
 }
 
-inline static void iniChopTrailingSpaces(QString &str)
+inline static void iniChopTrailingSpaces(QString &str, int limit)
 {
    int n = str.size() - 1;
    QChar ch;
 
-   while (n >= 0 && ((ch = str.at(n)) == ' ' || ch == '\t')) {
+   while (n >= limit && ((ch = str.at(n)) == ' ' || ch == '\t')) {
       str.truncate(n--);
    }
 }
@@ -816,10 +828,6 @@ void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray 
 bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, int to,
                   QString &stringResult, QStringList &stringListResult, QTextCodec *codec)
 {
-#ifdef QT_NO_TEXTCODEC
-   (void) codec;
-#endif
-
    static const char escapeCodes[][2] = {
       { 'a', '\a'  },
       { 'b', '\b'  },
@@ -846,9 +854,10 @@ StSkipSpaces:
    while (i < to && ((ch = str.at(i)) == ' ' || ch == '\t')) {
       ++i;
    }
-   // fallthrough
 
 StNormal:
+   int chopLimit = stringResult.length();
+
    while (i < to) {
 
       switch (str.at(i)) {
@@ -895,6 +904,8 @@ StNormal:
             } else {
                // the character is skipped
             }
+
+            chopLimit = stringResult.length();
             break;
 
          case '"':
@@ -911,7 +922,7 @@ StNormal:
          case ',':
             if (! inQuotedString) {
                if (! currentValueIsQuoted) {
-                  iniChopTrailingSpaces(stringResult);
+                  iniChopTrailingSpaces(stringResult, chopLimit);
                }
 
                if (! isStringList) {
@@ -951,6 +962,9 @@ StNormal:
             i = j;
          }
       }
+   }
+   if (! currentValueIsQuoted) {
+      iniChopTrailingSpaces(stringResult, chopLimit);
    }
 
    goto end;
@@ -996,9 +1010,6 @@ StOctEscape:
    }
 
 end:
-   if (!currentValueIsQuoted) {
-      iniChopTrailingSpaces(stringResult);
-   }
    if (isStringList) {
       stringListResult.append(stringResult);
    }
@@ -1082,14 +1093,9 @@ void QConfFileSettingsPrivate::initAccess()
 static QString windowsConfigPath(int type)
 {
    QString result;
-   QSystemLibrary library("shell32");
 
-   typedef BOOL (WINAPI * GetSpecialFolderPath)(HWND, LPWSTR, int, BOOL);
-   GetSpecialFolderPath SHGetSpecialFolderPath = (GetSpecialFolderPath)library.resolve("SHGetSpecialFolderPathW");
-
-   if (SHGetSpecialFolderPath) {
-      std::wstring path(MAX_PATH, L'\0');
-      SHGetSpecialFolderPath(nullptr, &path[0], type, FALSE);
+   std::wstring path(MAX_PATH, L'\0');
+   if (SHGetSpecialFolderPath(nullptr, &path[0], type, FALSE)) {
       result = QString::fromStdWString(path);
    }
 
@@ -1145,13 +1151,13 @@ static void initDefaultPaths(QMutexLocker *locker)
                        windowsConfigPath(CSIDL_COMMON_APPDATA) + QDir::separator());
 #else
       QString userPath;
-      char *env = getenv("XDG_CONFIG_HOME");
+      QByteArray env = qgetenv("XDG_CONFIG_HOME");
 
-      if (env == nullptr) {
+      if (env.isEmpty()) {
          userPath = homePath;
          userPath += QString("/.config");
 
-      } else if (*env == '/') {
+      } else if (env.startsWith('/')) {
          userPath = QFile::decodeName(env);
 
       } else {
@@ -1489,99 +1495,26 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       }
    }
 
-   /*
-       Open the configuration file and try to use it using a named
-       semaphore on Windows and an advisory lock on Unix-based
-       systems. This protect us against other QSettings instances
-       trying to access the same file from other threads or
-       processes.
+   //  Use a lockfile in order to protect us against other QSettings instances
+   //  trying to write the same settings at the same time.
 
-       As it stands now, the locking mechanism doesn't work for
-       .plist files.
-   */
-   QFile file(confFile->name);
-   bool createFile = !file.exists();
-   if ((!readOnly && confFile->isWritable()) || createFile) {
-      file.open(QFile::ReadWrite);
-   }
-   if (!file.isOpen()) {
-      file.open(QFile::ReadOnly);
-   }
+   //  We only need to lock if we are actually writing as only concurrent writes are a problem.
+   //  Concurrent read and write are not a problem because the writing operation is atomic.
 
-   if (!createFile && !file.isOpen()) {
-      setStatus(QSettings::AccessError);
-   }
+   QLockFile lockFile(confFile->name + ".lock");
 
-#ifdef Q_OS_WIN
-   HANDLE readSemaphore  = nullptr;
-   HANDLE writeSemaphore = nullptr;
-
-   static const int FileLockSemMax = 50;
-   int numReadLocks = readOnly ? 1 : FileLockSemMax;
-
-   if (file.isOpen()) {
-      // Acquire the write lock if we will be writing
-      if (!readOnly) {
-         QString writeSemName = "QSettingsWriteSem ";
-         writeSemName.append(file.fileName());
-
-         writeSemaphore = CreateSemaphore(nullptr, 1, 1, &writeSemName.toStdWString()[0]);
-
-         if (writeSemaphore) {
-            WaitForSingleObject(writeSemaphore, INFINITE);
-         } else {
-            setStatus(QSettings::AccessError);
-            return;
-         }
-      }
-
-      // Acquire all the read locks if we will be writing, to make sure nobody
-      // reads while we're writing. If we are only reading, acquire a single read lock
-      QString readSemName("QSettingsReadSem ");
-      readSemName.append(file.fileName());
-
-      readSemaphore = CreateSemaphore(nullptr, FileLockSemMax, FileLockSemMax, &readSemName.toStdWString()[0]);
-
-      if (readSemaphore) {
-         for (int i = 0; i < numReadLocks; ++i) {
-            WaitForSingleObject(readSemaphore, INFINITE);
-         }
-
-      } else {
+   if (! readOnly) {
+      if (! confFile->isWritable() || ! lockFile.lock() ) {
          setStatus(QSettings::AccessError);
-
-         if (writeSemaphore != nullptr) {
-            ReleaseSemaphore(writeSemaphore, 1, nullptr);
-            CloseHandle(writeSemaphore);
-         }
          return;
       }
    }
-#else
-   if (file.isOpen()) {
-      unixLock(file.handle(), readOnly ? F_RDLCK : F_WRLCK);
-   }
-#endif
 
-   // If we have created the file, apply the file perms
-   if (file.isOpen()) {
-      if (createFile) {
-         QFile::Permissions perms = file.permissions() | QFile::ReadOwner | QFile::WriteOwner;
+   // hold the lock, reread the file if it has changed since last time we read it
 
-         if (!confFile->userPerms) {
-            perms |= QFile::ReadGroup | QFile::ReadOther;
-         }
-
-         file.setPermissions(perms);
-      }
-   }
-
-   /*
-       We hold the lock. Let's reread the file if it has changed
-       since last time we read it.
-   */
    QFileInfo fileInfo(confFile->name);
    bool mustReadFile = true;
+   bool createFile   = ! fileInfo.exists();
 
    if (! readOnly)
       mustReadFile = (confFile->size != fileInfo.size()
@@ -1591,10 +1524,15 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       confFile->unparsedIniSections.clear();
       confFile->originalKeys.clear();
 
-      /*
-          Files that we can't read (because of permissions or
-          because they don't exist) are treated as empty files.
-      */
+      QFile file(confFile->name);
+      if (! createFile && !file.open(QFile::ReadOnly)) {
+         setStatus(QSettings::AccessError);
+         return;
+      }
+
+      // Files that we ca not read because of permissions or
+      // because they do not exist are treated as empty files
+
       if (file.isReadable() && fileInfo.size() != 0) {
 
 #ifdef Q_OS_DARWIN
@@ -1642,43 +1580,43 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       ensureAllSectionsParsed(confFile);
       ParsedSettingsMap mergedKeys = confFile->mergedKeyMap();
 
-      if (file.isWritable()) {
-
 #ifdef Q_OS_DARWIN
-         if (format == QSettings::NativeFormat) {
-            ok = writePlistFile(confFile->name, mergedKeys);
-         } else
+      if (format == QSettings::NativeFormat) {
+         ok = writePlistFile(confFile->name, mergedKeys);
+
+      } else
 #endif
-         {
-            file.seek(0);
-            file.resize(0);
 
-            if (format <= QSettings::IniFormat) {
-               ok = writeIniFile(file, mergedKeys);
-               if (!ok) {
-                  // try to restore old data; might work if the disk was full and the new data
-                  // was larger than the old data
-                  file.seek(0);
-                  file.resize(0);
-                  writeIniFile(file, confFile->originalKeys);
+      {
+         QSaveFile sf(confFile->name);
+
+         if (! sf.open(QIODevice::WriteOnly)) {
+             setStatus(QSettings::AccessError);
+             ok = false;
+
+         } else if (format <= QSettings::IniFormat) {
+             ok = writeIniFile(sf, mergedKeys);
+
+         } else {
+            if (writeFunc) {
+               QSettings::SettingsMap tempOriginalKeys;
+
+               ParsedSettingsMap::const_iterator i = mergedKeys.constBegin();
+               while (i != mergedKeys.constEnd()) {
+                  tempOriginalKeys.insert(i.key(), i.value());
+                  ++i;
                }
+
+               ok = writeFunc(sf, tempOriginalKeys);
+
             } else {
-               if (writeFunc) {
-                  QSettings::SettingsMap tempOriginalKeys;
-
-                  ParsedSettingsMap::const_iterator i = mergedKeys.constBegin();
-                  while (i != mergedKeys.constEnd()) {
-                     tempOriginalKeys.insert(i.key(), i.value());
-                     ++i;
-                  }
-                  ok = writeFunc(file, tempOriginalKeys);
-               } else {
-                  ok = false;
-               }
+               ok = false;
             }
          }
-      } else {
-         ok = false;
+
+         if (ok) {
+            ok = sf.commit();
+         }
       }
 
       if (ok) {
@@ -1690,24 +1628,21 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
          QFileInfo fileInfo(confFile->name);
          confFile->size = fileInfo.size();
          confFile->timeStamp = fileInfo.lastModified();
+
+         if (createFile) {
+            QFile::Permissions perms = fileInfo.permissions() | QFile::ReadOwner | QFile::WriteOwner;
+
+            if (!confFile->userPerms) {
+               perms |= QFile::ReadGroup | QFile::ReadOther;
+            }
+
+            QFile(confFile->name).setPermissions(perms);
+         }
+
       } else {
          setStatus(QSettings::AccessError);
       }
    }
-
-   /*
-       Release the file lock.
-   */
-#ifdef Q_OS_WIN
-   if (readSemaphore != nullptr) {
-      ReleaseSemaphore(readSemaphore, numReadLocks, nullptr);
-      CloseHandle(readSemaphore);
-   }
-   if (writeSemaphore != nullptr) {
-      ReleaseSemaphore(writeSemaphore, 1, nullptr);
-      CloseHandle(writeSemaphore);
-   }
-#endif
 }
 
 enum { Space = 0x1, Special = 0x2 };
@@ -2373,6 +2308,12 @@ bool QSettings::isWritable() const
 void QSettings::setValue(const QString &key, const QVariant &value)
 {
    Q_D(QSettings);
+
+   if (key.isEmpty()) {
+      qWarning("QSettings::setValue: Empty key passed");
+      return;
+   }
+
    QString k = d->actualKey(key);
    d->set(k, value);
    d->requestUpdate();
@@ -2436,6 +2377,11 @@ bool QSettings::event(QEvent *event)
 QVariant QSettings::value(const QString &key, const QVariant &defaultValue) const
 {
    Q_D(const QSettings);
+   if (key.isEmpty()) {
+      qWarning("QSettings::value: Empty key passed");
+      return QVariant();
+   }
+
    QVariant result = defaultValue;
    QString k = d->actualKey(key);
    d->get(k, &result);

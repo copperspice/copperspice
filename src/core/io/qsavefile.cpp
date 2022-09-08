@@ -96,8 +96,9 @@ bool QSaveFile::open(OpenMode mode)
       qWarning("QSaveFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
+
    unsetError();
-   if ((mode & (ReadOnly | WriteOnly)) == 0) {
+   if ((mode & (QIODevice::ReadOnly | QIODevice::WriteOnly)) == 0) {
       qWarning("QSaveFile::open: Open mode not specified");
       return false;
    }

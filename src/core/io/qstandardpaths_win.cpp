@@ -33,6 +33,7 @@
 #include <shlobj.h>
 #include <intshcut.h>
 
+const GUID qCLSID_FOLDERID_Downloads = { 0x374de290, 0x123f, 0x4565, { 0x91, 0x64,  0x39,  0xc4,  0x92,  0x5e,  0x46,  0x7b } };
 
 #ifndef CSIDL_MYMUSIC
 #define CSIDL_MYMUSIC 13
@@ -41,103 +42,119 @@
 
 #ifndef QT_NO_STANDARDPATHS
 
-using GetSpecialFolderPath = BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL);
-
-static GetSpecialFolderPath resolveGetSpecialFolderPath()
-{
-   static GetSpecialFolderPath gsfp = nullptr;
-
-   if (! gsfp) {
-      QSystemLibrary library("shell32");
-      gsfp = (GetSpecialFolderPath)library.resolve("SHGetSpecialFolderPathW");
-   }
-
-   return gsfp;
-}
-
 static QString convertCharArray(const std::wstring &path)
 {
    return QDir::fromNativeSeparators(QString::fromStdWString(path));
+}
+
+static inline bool isGenericConfigLocation(QStandardPaths::StandardLocation type)
+{
+   return type == QStandardPaths::GenericConfigLocation || type == QStandardPaths::GenericDataLocation;
+}
+
+static inline bool isConfigLocation(QStandardPaths::StandardLocation type)
+{
+   return type == QStandardPaths::ConfigLocation || type == QStandardPaths::AppConfigLocation
+      || type == QStandardPaths::AppDataLocation || type == QStandardPaths::AppLocalDataLocation
+      || isGenericConfigLocation(type);
+}
+
+static void appendOrganizationAndApp(QString &path)
+{
+    const QString &org = QCoreApplication::organizationName();
+    if (! org.isEmpty()) {
+       path += '/' + org;
+    }
+
+    const QString &appName = QCoreApplication::applicationName();
+
+    if (! appName.isEmpty()) {
+       path += '/' + appName;
+    }
+}
+
+// Map QStandardPaths::StandardLocation to CLSID of SHGetSpecialFolderPath()
+static int writableSpecialFolderClsid(QStandardPaths::StandardLocation type)
+{
+   static const int clsids[] = {
+      CSIDL_DESKTOPDIRECTORY, // DesktopLocation
+      CSIDL_PERSONAL,         // DocumentsLocation
+      CSIDL_FONTS,            // FontsLocation
+      CSIDL_PROGRAMS,         // ApplicationsLocation
+      CSIDL_MYMUSIC,          // MusicLocation
+      CSIDL_MYVIDEO,          // MoviesLocation
+      CSIDL_MYPICTURES,       // PicturesLocation
+      -1, -1,                 // TempLocation/HomeLocation
+      CSIDL_LOCAL_APPDATA,    // AppLocalDataLocation ("Local" path), AppLocalDataLocation = DataLocation
+      -1,                     // CacheLocation
+      CSIDL_LOCAL_APPDATA,    // GenericDataLocation ("Local" path)
+      -1,                     // RuntimeLocation
+      CSIDL_LOCAL_APPDATA,    // ConfigLocation ("Local" path)
+      -1, -1,                 // DownloadLocation/GenericCacheLocation
+      CSIDL_LOCAL_APPDATA,    // GenericConfigLocation ("Local" path)
+      CSIDL_APPDATA,          // AppDataLocation ("Roaming" path)
+      CSIDL_LOCAL_APPDATA,    // AppConfigLocation ("Local" path)
+   };
+
+
+   static_assert(std::size(clsids) == size_t(QStandardPaths::AppConfigLocation + 1));
+
+   return size_t(type) < sizeof(clsids) / sizeof(clsids[0]) ? clsids[type] : -1;
+};
+
+static QString sHGetSpecialFolderPath(int clsid, QStandardPaths::StandardLocation type, bool warn = false)
+{
+   QString result;
+   std::wstring path(MAX_PATH, L'\0');
+
+   if (clsid >= 0 && SHGetSpecialFolderPath(nullptr, path.data(), clsid, FALSE)) {
+      result = convertCharArray(path);
+
+   } else {
+     if (warn) {
+        qErrnoWarning("SHGetSpecialFolderPath() failed for standard location \"%s\", clsid=0x%x.",
+            csPrintable(QStandardPaths::displayName(type)), clsid);
+     }
+   }
+
+   return result;
+}
+
+static QString sHGetKnownFolderPath(const GUID &clsid, QStandardPaths::StandardLocation type, bool warn = false)
+{
+   QString result;
+
+   using GetKnownFolderPath = HRESULT (WINAPI *)(const GUID&, DWORD, HANDLE, LPWSTR*);
+
+   // vista and newer
+   static const GetKnownFolderPath sHGetKnownFolderPath =
+      reinterpret_cast<GetKnownFolderPath>(QSystemLibrary::resolve("shell32", "SHGetKnownFolderPath"));
+
+   LPWSTR path;
+   if (sHGetKnownFolderPath && SUCCEEDED(sHGetKnownFolderPath(clsid, 0, nullptr, &path))) {
+      result = convertCharArray(path);
+      CoTaskMemFree(path);
+
+   } else {
+      if (warn) {
+         qErrnoWarning("SHGetKnownFolderPath() failed for standard location \"%s\".",
+               csPrintable(QStandardPaths::displayName(type)));
+     }
+   }
+   return result;
 }
 
 QString QStandardPaths::writableLocation(StandardLocation type)
 {
    QString result;
 
-   static GetSpecialFolderPath SHGetSpecialFolderPath = resolveGetSpecialFolderPath();
-
-   if (! SHGetSpecialFolderPath) {
-      return QString();
-   }
-
-   std::wstring path(MAX_PATH, L'\0');
-
    switch (type) {
-      case ConfigLocation:           // same as DataLocation, on Windows (oversight, but too late to fix it)
-      case GenericConfigLocation:    // same as GenericDataLocation, on Windows
-      case DataLocation:
-      case GenericDataLocation:
 
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_LOCAL_APPDATA, FALSE)) {
-            result = convertCharArray(path);
-         }
+      case DownloadLocation:
+         result = sHGetKnownFolderPath(qCLSID_FOLDERID_Downloads, type);
 
-         if (isTestModeEnabled()) {
-            result += "/qttest";
-         }
-
-         if (type != GenericDataLocation && type != GenericConfigLocation) {
-            if (! QCoreApplication::organizationName().isEmpty()) {
-               result += '/' + QCoreApplication::organizationName();
-            }
-
-            if (! QCoreApplication::applicationName().isEmpty()) {
-               result += '/' + QCoreApplication::applicationName();
-            }
-         }
-
-         break;
-
-      case DesktopLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_DESKTOPDIRECTORY, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case DownloadLocation: // TODO implement with SHGetKnownFolderPath(FOLDERID_Downloads) (starting from Vista)
-      case DocumentsLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_PERSONAL, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case FontsLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_FONTS, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case ApplicationsLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_PROGRAMS, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case MusicLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYMUSIC, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case MoviesLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYVIDEO, FALSE)) {
-            result = convertCharArray(path);
-         }
-         break;
-
-      case PicturesLocation:
-         if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_MYPICTURES, FALSE)) {
-            result = convertCharArray(path);
+         if (result.isEmpty()) {
+            result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
          }
          break;
 
@@ -145,10 +162,22 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          // Although Microsoft has a Cache key it is a pointer to IE's cache, not a cache
          // location for everyone.  Most applications seem to be using a
          // cache directory located in their AppData directory
-         return writableLocation(DataLocation) + "/cache";
+
+         result = sHGetSpecialFolderPath(writableSpecialFolderClsid(AppLocalDataLocation), type, /* warn */ true);
+
+         if (! result.isEmpty()) {
+            appendOrganizationAndApp(result);
+            result += "/cache";
+         }
+         break;
 
       case GenericCacheLocation:
-         return writableLocation(GenericDataLocation) + "/cache";
+         result = sHGetSpecialFolderPath(writableSpecialFolderClsid(GenericDataLocation), type, /* warn */ true);
+
+         if (! result.isEmpty()) {
+            result += "/cache";
+         }
+         break;
 
       case RuntimeLocation:
       case HomeLocation:
@@ -160,6 +189,14 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          break;
 
       default:
+         result = sHGetSpecialFolderPath(writableSpecialFolderClsid(type), type, /* warn */ isConfigLocation(type));
+
+         if (! result.isEmpty() && isConfigLocation(type)) {
+
+            if (! isGenericConfigLocation(type)) {
+                appendOrganizationAndApp(result);
+            }
+         }
          break;
    }
 
@@ -169,50 +206,27 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 QStringList QStandardPaths::standardLocations(StandardLocation type)
 {
    QStringList dirs;
+   const QString localDir = writableLocation(type);
 
-   // type-specific handling goes here
-   static GetSpecialFolderPath SHGetSpecialFolderPath = resolveGetSpecialFolderPath();
-
-   if (SHGetSpecialFolderPath) {
-      std::wstring path(MAX_PATH, L'\0');
-
-      switch (type) {
-         case ConfigLocation:             // same as DataLocation, on Windows (oversight, but too late to fix it)
-         case GenericConfigLocation:      // same as GenericDataLocation, on Windows
-         case DataLocation:
-         case GenericDataLocation:
-
-            if (SHGetSpecialFolderPath(nullptr, &path[0], CSIDL_COMMON_APPDATA, FALSE)) {
-               QString result = convertCharArray(path);
-
-               if (type != GenericDataLocation && type != GenericConfigLocation) {
-
-                  if (!QCoreApplication::organizationName().isEmpty()) {
-                     result += '/' + QCoreApplication::organizationName();
-                  }
-                  if (!QCoreApplication::applicationName().isEmpty()) {
-                     result += '/' + QCoreApplication::applicationName();
-                  }
-
-               }
-
-               dirs.append(result);
-
-               if (type != GenericDataLocation) {
-                  dirs.append(QCoreApplication::applicationDirPath());
-                  dirs.append(QCoreApplication::applicationDirPath() + "/data");
-               }
-            }
-
-            break;
-
-         default:
-            break;
-      }
+   if (! localDir.isEmpty()) {
+      dirs.append(localDir);
    }
 
-   const QString localDir = writableLocation(type);
-   dirs.prepend(localDir);
+   // type-specific handling goes here
+   if (isConfigLocation(type)) {
+      QString programData = sHGetSpecialFolderPath(CSIDL_COMMON_APPDATA, type);
+
+      if (! programData.isEmpty()) {
+         if (! isGenericConfigLocation(type)) {
+             appendOrganizationAndApp(programData);
+         }
+         dirs.append(programData);
+      }
+     dirs.append(QCoreApplication::applicationDirPath());
+     dirs.append(QCoreApplication::applicationDirPath() + "/data");
+   }
+
+
 
    return dirs;
 }

@@ -65,9 +65,6 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case GenericCacheLocation: {
          // http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html
          QString xdgCacheHome = QFile::decodeName(qgetenv("XDG_CACHE_HOME"));
-         if (isTestModeEnabled()) {
-            xdgCacheHome = QDir::homePath() + "/.qttest/cache";
-         }
 
          if (xdgCacheHome.isEmpty()) {
             xdgCacheHome = QDir::homePath() + "/.cache";
@@ -84,9 +81,6 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case AppLocalDataLocation:
       case GenericDataLocation: {
          QString xdgDataHome = QFile::decodeName(qgetenv("XDG_DATA_HOME"));
-         if (isTestModeEnabled()) {
-            xdgDataHome = QDir::homePath() + "/.qttest/share";
-         }
 
          if (xdgDataHome.isEmpty()) {
             xdgDataHome = QDir::homePath() + "/.local/share";
@@ -103,9 +97,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
       case GenericConfigLocation:  {
          // http://standards.freedesktop.org/basedir-spec/latest/
          QString xdgConfigHome = QFile::decodeName(qgetenv("XDG_CONFIG_HOME"));
-         if (isTestModeEnabled()) {
-            xdgConfigHome = QDir::homePath() + "/.qttest/config";
-         }
+
 
          if (xdgConfigHome.isEmpty()) {
             xdgConfigHome = QDir::homePath() + "/.config";
