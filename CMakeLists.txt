@@ -17,8 +17,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 project(copperspice)
 
 set(BUILD_MAJOR "1")
-set(BUILD_MINOR "7")
-set(BUILD_MICRO "4")
+set(BUILD_MINOR "8")
+set(BUILD_MICRO "0")
 
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
