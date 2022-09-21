@@ -34,7 +34,6 @@
 #include <qxmlstream.h>
 #include <QScopedPointer>
 
-
 class QSvgRendererPrivate;
 class QPainter;
 class QByteArray;
@@ -65,11 +64,11 @@ class Q_SVG_EXPORT QSvgRenderer : public QObject
 
    QRect viewBox() const;
    QRectF viewBoxF() const;
-   void setViewBox(const QRect &viewbox);
-   void setViewBox(const QRectF &viewbox);
+   void setViewBox(const QRect &viewBox);
+   void setViewBox(const QRectF &viewBox);
 
    // wrapper for overloaded method
-   inline void cs_setViewBox(const QRectF &viewbox);
+   inline void cs_setViewBox(const QRectF &viewBox);
 
    bool animated() const;
    int framesPerSecond() const;

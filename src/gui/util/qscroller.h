@@ -123,8 +123,8 @@ class Q_GUI_EXPORT QScroller : public QObject
    GUI_CS_SLOT_1(Public, void resendPrepareEvent())
    GUI_CS_SLOT_2(resendPrepareEvent)
 
-   GUI_CS_SIGNAL_1(Public, void stateChanged(QScroller::State newstate))
-   GUI_CS_SIGNAL_2(stateChanged, newstate)
+   GUI_CS_SIGNAL_1(Public, void stateChanged(QScroller::State newState))
+   GUI_CS_SIGNAL_2(stateChanged, newState)
 
    GUI_CS_SIGNAL_1(Public, void scrollerPropertiesChanged(const QScrollerProperties &un_named_arg1))
    GUI_CS_SIGNAL_2(scrollerPropertiesChanged, un_named_arg1)

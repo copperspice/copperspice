@@ -672,8 +672,8 @@ bool QWebView::event(QEvent *e)
             if (cursor().shape() == Qt::ArrowCursor)
                 d->page->d->client->resetCursor();
 #endif
-        } else if (e->type() == QEvent::TouchBegin 
-                   || e->type() == QEvent::TouchEnd 
+        } else if (e->type() == QEvent::TouchBegin
+                   || e->type() == QEvent::TouchEnd
                    || e->type() == QEvent::TouchUpdate) {
             d->page->event(e);
 

@@ -224,7 +224,7 @@ class Q_GUI_EXPORT QGraphicsWidget : public QGraphicsObject, public QGraphicsLay
    void updateGeometry() override;
 
    // Notification
-   QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+   QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value) override;
    virtual QVariant propertyChange(const QString &propertyName, const QVariant &value);
 
    // Scene events

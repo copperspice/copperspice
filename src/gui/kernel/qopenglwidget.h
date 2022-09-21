@@ -93,7 +93,7 @@ class Q_GUI_EXPORT QOpenGLWidget : public QWidget
     QPaintEngine *paintEngine() const override;
 
  private:
-      Q_DECLARE_PRIVATE(QOpenGLWidget)
+    Q_DECLARE_PRIVATE(QOpenGLWidget)
 };
 
 #endif // QT_NO_OPENGL

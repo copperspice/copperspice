@@ -192,7 +192,9 @@ std::pair<T, bool> convertFromQVariant(QVariant data);
 class JarReadAbstract
 {
  public:
-   virtual ~JarReadAbstract() {}
+   virtual ~JarReadAbstract()
+   {
+   }
 
    virtual QVariant runV(const QObject *) const = 0;
 
