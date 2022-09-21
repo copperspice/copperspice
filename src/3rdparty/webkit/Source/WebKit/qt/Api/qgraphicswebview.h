@@ -69,7 +69,7 @@ public:
     void setPage(QWebPage *page);
 
     QUrl url() const;
-    void setUrl(const QUrl&);
+    void setUrl(const QUrl &url);
 
     QString title() const;
     QIcon icon() const;
