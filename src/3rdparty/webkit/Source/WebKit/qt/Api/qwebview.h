@@ -126,7 +126,7 @@ public:
     WEB_CS_SLOT_1(Public, void reload())
     WEB_CS_SLOT_2(reload)
 
-    WEB_CS_SLOT_1(Public, void print(QPrinter * printer) const)
+    WEB_CS_SLOT_1(Public, void print(QPrinter * printer))
     WEB_CS_SLOT_2(print)
 
     WEB_CS_SIGNAL_1(Public, void loadStarted())

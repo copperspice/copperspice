@@ -691,7 +691,7 @@ bool QWebView::event(QEvent *e)
 
     \sa QWebFrame::print(), QPrintPreviewDialog
 */
-void QWebView::print(QPrinter *printer) const
+void QWebView::print(QPrinter *printer)
 {
 #ifndef QT_NO_PRINTER
     page()->mainFrame()->print(printer);

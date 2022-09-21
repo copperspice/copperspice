@@ -1414,7 +1414,7 @@ bool QWebFrame::event(QEvent *e)
 
     \sa render()
 */
-void QWebFrame::print(QPrinter *printer) const
+void QWebFrame::print(QPrinter *printer)
 {
     QPainter painter;
     if (!painter.begin(printer))

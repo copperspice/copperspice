@@ -215,7 +215,7 @@ public :
     WEB_CS_SLOT_2(evaluateJavaScript)
 
 #ifndef QT_NO_PRINTER
-    WEB_CS_SLOT_1(Public, void print(QPrinter * printer) const)
+    WEB_CS_SLOT_1(Public, void print(QPrinter * printer))
     WEB_CS_SLOT_2(print)
 #endif
 
