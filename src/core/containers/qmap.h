@@ -432,8 +432,8 @@ class QMap
       return *this;
    }
 
-   const Val value(const Key &key) const;
-   const Val value(const Key &key, const Val &defaultValue) const;
+   Val value(const Key &key) const;
+   Val value(const Key &key, const Val &defaultValue) const;
 
    QList<Val> values() const;
 
@@ -514,7 +514,7 @@ class QMap
 
    Val &operator[](const Key &key);
 
-   const Val operator[](const Key &key) const {
+   Val operator[](const Key &key) const {
       return value(key);
    }
 
@@ -590,7 +590,7 @@ QList<Key> QMap<Key, Val, C>::uniqueKeys() const
 }
 
 template <class Key, class Val, class C>
-const Val QMap<Key, Val, C>::value(const Key &key) const
+Val QMap<Key, Val, C>::value(const Key &key) const
 {
    auto iter = m_data.find(key);
 
@@ -603,7 +603,7 @@ const Val QMap<Key, Val, C>::value(const Key &key) const
 }
 
 template <class Key, class Val, class C>
-const Val QMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
+Val QMap<Key, Val, C>::value(const Key &key, const Val &defaultValue) const
 {
    auto iter = m_data.find(key);
 
