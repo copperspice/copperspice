@@ -1266,12 +1266,16 @@ class Q_CORE_EXPORT Qt
       UniqueConnection =  0x80
    };
 
-   enum ShortcutContext {
-      WidgetShortcut,
-      WindowShortcut,
-      ApplicationShortcut,
-      WidgetWithChildrenShortcut
-   };
+   CORE_CS_ENUM(ShortcutContext)
+
+   CORE_CS_REGISTER_ENUM(
+      enum ShortcutContext {
+         WidgetShortcut,
+         WindowShortcut,
+         ApplicationShortcut,
+         WidgetWithChildrenShortcut
+      };
+   )
 
    enum FillRule {
       OddEvenFill,
