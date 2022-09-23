@@ -106,12 +106,8 @@ const QString &cs_argName(const CSArgument<T1> &data1, const CSArgument<T2> &dat
 class CSGenericReturnArgument
 {
  public:
-   virtual ~CSGenericReturnArgument();
+   virtual ~CSGenericReturnArgument() = default;
 };
-
-inline CSGenericReturnArgument::~CSGenericReturnArgument()
-{
-}
 
 template <typename T>
 class CSReturnArgument : public CSGenericReturnArgument
