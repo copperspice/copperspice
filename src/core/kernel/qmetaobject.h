@@ -211,8 +211,7 @@ QMetaMethod QMetaObject::method(MethodReturn (MethodClass::*methodPtr)(MethodArg
 
       if (ok) {
          // found QMetaMethod match
-         retval = metaMethod;
-         break;
+         return metaMethod;
       }
    }
 
