@@ -250,23 +250,23 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 {
  public:
    void register_classInfo(const QString &name, const QString &value);
-   QMetaClassInfo classInfo(int index) const override;
+   QMetaClassInfo classInfo(int index) const final;
 
-   int classInfoCount() const override;
+   int classInfoCount() const final;
 
-   QMetaMethod constructor(int index) const override;
-   int constructorCount() const override;
+   QMetaMethod constructor(int index) const final;
+   int constructorCount() const final;
 
    void register_enum_data(const QString &args);
 
-   QMetaEnum enumerator(int index) const override;
-   int enumeratorCount() const override;
+   QMetaEnum enumerator(int index) const final;
+   int enumeratorCount() const final;
 
-   QMetaMethod method(int index) const override;
-   int methodCount() const override;
+   QMetaMethod method(int index) const final;
+   int methodCount() const final;
 
-   QMetaProperty property(int index) const override;
-   int propertyCount() const override;
+   QMetaProperty property(int index) const final;
+   int propertyCount() const final;
 
    //
    int  register_enum(const QString &name, std::type_index id, const QString &scope);
