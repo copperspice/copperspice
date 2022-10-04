@@ -29,6 +29,14 @@
 
 #include <catch2/catch.hpp>
 
+inline std::unique_ptr<QCoreApplication> initCoreApp()
+{
+   int argc    = 0;
+   auto retval = std::make_unique<QCoreApplication>(argc, nullptr);
+
+   return retval;
+}
+
 namespace Catch {
 
    template <>
