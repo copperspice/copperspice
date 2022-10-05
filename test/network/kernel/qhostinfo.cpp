@@ -34,3 +34,16 @@ TEST_CASE("QHostInfo traits", "[qhostinfo]")
 
    REQUIRE(std::has_virtual_destructor_v<QHostInfo> == false);
 }
+
+TEST_CASE("QHostInfo basic_methods", "[qhostinfo]")
+{
+   auto testApp = initCoreApp();
+
+   QHostInfo data = QHostInfo::fromName("copperspice.com");
+   QList<QHostAddress> list = data.addresses();
+
+   REQUIRE(data.hostName()  == "copperspice.com");
+
+   REQUIRE(list.size() == 1);
+   REQUIRE(list[0].toString() == "69.89.11.103");
+}
