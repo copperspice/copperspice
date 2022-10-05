@@ -21,7 +21,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QTcpSocket traits", "[QTcpSocket]")
+TEST_CASE("QTcpSocket traits", "[qtcpsocket]")
 {
    REQUIRE(std::is_copy_constructible_v<QTcpSocket> == false);
    REQUIRE(std::is_move_constructible_v<QTcpSocket> == false);
