@@ -100,6 +100,154 @@ TEST_CASE("QHostAddress assignment", "[qhostaddress]")
    }
 }
 
+TEST_CASE("QHostAddress convertv4v6", "[qhostaddress]")
+{
+   auto testApp = initCoreApp();
+
+   QHostAddress hostAddr;
+
+   {
+      hostAddr = QHostAddress::AnyIPv4;
+      REQUIRE(QHostAddress(QHostAddress::AnyIPv6) == QHostAddress(hostAddr.toIPv6Address()));
+   }
+
+   {
+      hostAddr = QHostAddress::LocalHost;
+      REQUIRE(QHostAddress("::ffff:127.0.0.1") == QHostAddress(hostAddr.toIPv6Address()));
+   }
+
+   {
+      hostAddr = "192.0.2.1";
+      REQUIRE(QHostAddress("::ffff:192.0.2.1") == QHostAddress(hostAddr.toIPv6Address()));
+   }
+}
+
+TEST_CASE("QHostAddress isInSubnet", "[qhostaddress]")
+{
+   auto testApp = initCoreApp();
+
+   QHostAddress hostAddr;
+   QHostAddress prefix;
+   int prefixLen;
+
+   // ipv4
+   {
+      hostAddr  = QHostAddress();
+      prefix    = QHostAddress();
+      prefixLen = 32;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == false);
+   }
+
+   {
+      hostAddr  = QHostAddress(QHostAddress::LocalHost);
+      prefix    = QHostAddress(QHostAddress::AnyIPv4);
+      prefixLen = 0;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   {
+      hostAddr  = QHostAddress("224.0.0.1");
+      prefix    = QHostAddress("128.0.0.0");
+      prefixLen = 1;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   {
+      hostAddr  = QHostAddress("10.0.1.255");
+      prefix    = QHostAddress("10.0.0.0");
+      prefixLen = 15;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   {
+      hostAddr  = QHostAddress("172.16.0.1");
+      prefix    = QHostAddress("172.16.0.0");
+      prefixLen = 16;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   // ipv6
+   {
+      hostAddr  = QHostAddress("fec0::1");
+      prefix    = QHostAddress("8000::");
+      prefixLen = 1;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   {
+      hostAddr  = QHostAddress("fec0::1");
+      prefix    = QHostAddress("::");
+      prefixLen = 1;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == false);
+   }
+
+   {
+      hostAddr  = QHostAddress("2:3:4:5::1");
+      prefix    = QHostAddress("2:3:4:5::1");
+      prefixLen = 128;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == true);
+   }
+
+   {
+      hostAddr  = QHostAddress("2:3:4:5::1");
+      prefix    = QHostAddress("2:3:4:5::0");
+      prefixLen = 128;
+
+      REQUIRE(hostAddr.isInSubnet(prefix, prefixLen) == false);
+   }
+}
+
+TEST_CASE("QHostAddress isLoopback", "[qhostaddress]")
+{
+   auto testApp = initCoreApp();
+
+   QHostAddress hostAddr;
+
+   // ipv4
+   {
+      hostAddr  = "127.0.0.1";
+      REQUIRE(hostAddr.isLoopback() == true);
+   }
+
+   {
+      hostAddr  = "127.1.2.3";
+      REQUIRE(hostAddr.isLoopback() == true);
+   }
+
+   {
+      hostAddr  = "192.168.3.4";
+      REQUIRE(hostAddr.isLoopback() == false);
+   }
+
+   // ipv6
+   {
+      hostAddr  = "::1";
+      REQUIRE(hostAddr.isLoopback() == true);
+   }
+
+   {
+      hostAddr  = "::ffff:127.0.0.1";
+      REQUIRE(hostAddr.isLoopback() == true);
+   }
+
+   {
+      hostAddr  = "::ffff:127.1.2.3";
+      REQUIRE(hostAddr.isLoopback() == true);
+   }
+
+   {
+      hostAddr  = "fff:ffff:ffff:ffff:ffff:ffff:ffff:ffff";
+      REQUIRE(hostAddr.isLoopback() == false);
+   }
+}
 
 TEST_CASE("QHostAddress protocol", "[qhostaddress]")
 {
@@ -114,7 +262,6 @@ TEST_CASE("QHostAddress protocol", "[qhostaddress]")
       REQUIRE(hostAddr.protocol() != QAbstractSocket::UnknownNetworkLayerProtocol);
       REQUIRE(hostAddr.protocol() != QAbstractSocket::IPv6Protocol);
    }
-
 
    {
       hostAddr = "127.0.0.1";
