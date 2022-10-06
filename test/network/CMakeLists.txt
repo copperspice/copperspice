@@ -58,6 +58,7 @@ target_sources(CsNetworkTest
 
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpserver.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpsocket.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/socket/qudpsocket.cpp
 )
 
 include(ParseAndAddCatchTests)
