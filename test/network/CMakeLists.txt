@@ -53,6 +53,9 @@ target_sources(CsNetworkTest
 
    ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_reply.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_request.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress.cpp
 
