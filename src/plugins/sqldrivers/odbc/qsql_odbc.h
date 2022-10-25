@@ -83,7 +83,7 @@ class QODBCResult : public QSqlResult
 
 class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
 {
-   SQL_CS_OBJECT(QODBCDriver)
+   CS_OBJECT(QODBCDriver)
 
  public:
    explicit QODBCDriver(QObject *parent = nullptr);
