@@ -285,7 +285,8 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const
 {
    int nativeCode = -1;
    QString message = qODBCWarn(p, &nativeCode);
-   return QSqlError(QLatin1String("QODBC3: ") + err, message, type, nativeCode);
+
+   return QSqlError("QODBC: " + err, message, type, QString::number(nativeCode));
 }
 
 static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
@@ -293,7 +294,8 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
 {
    int nativeCode = -1;
    QString message = qODBCWarn(p, &nativeCode);
-   return QSqlError(QLatin1String("QODBC3: ") + err, qODBCWarn(p), type, nativeCode);
+
+   return QSqlError("QODBC: " + err, qODBCWarn(p), type, QString::number(nativeCode));
 }
 
 template<class T>

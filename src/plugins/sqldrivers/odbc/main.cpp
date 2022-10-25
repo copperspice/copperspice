@@ -30,7 +30,7 @@ class QODBCDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QODBCDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QODBC, QODBC3")
+   CS_PLUGIN_KEY("QODBC")
 
  public:
    QODBCDriverPlugin();
@@ -47,7 +47,7 @@ QODBCDriverPlugin::QODBCDriverPlugin()
 
 QSqlDriver *QODBCDriverPlugin::create(const QString &name)
 {
-   if (name == "QODBC" || name == "QODBC3") {
+   if (name == "QODBC") {
       QODBCDriver *driver = new QODBCDriver();
       return driver;
    }
