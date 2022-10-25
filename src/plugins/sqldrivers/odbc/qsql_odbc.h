@@ -38,7 +38,7 @@
 #endif
 
 #ifdef Q_OS_UNIX
-#define HAVE_LONG_LONG 1 // force UnixODBC NOT to fall back to a struct for BIGINTs
+#define HAVE_LONG_LONG 1   // force UnixODBC NOT to fall back to a struct for BIGINTs
 #endif
 
 #include <sql.h>
@@ -55,26 +55,27 @@ class QODBCResult : public QSqlResult
    QODBCResult(const QODBCDriver *db, QODBCDriverPrivate *p);
    virtual ~QODBCResult();
 
-   bool prepare(const QString &query);
-   bool exec();
+   bool prepare(const QString &query) override;
+   bool exec() override;
 
    QVariant handle() const;
-   virtual void setForwardOnly(bool forward);
+   void setForwardOnly(bool forward) override;
 
  protected:
-   bool fetchNext();
-   bool fetchFirst();
-   bool fetchLast();
-   bool fetchPrevious();
-   bool fetch(int i);
-   bool reset (const QString &query);
-   QVariant data(int field);
-   bool isNull(int field);
-   int size();
-   int numRowsAffected();
-   QSqlRecord record() const;
-   void virtual_hook(int id, void *data);
-   bool nextResult();
+   bool fetchNext() override;
+   bool fetchFirst() override;
+   bool fetchLast() override;
+   bool fetchPrevious() override;
+   bool fetch(int i) override;
+   bool reset (const QString &query) override;
+   QVariant data(int field) override;
+   bool isNull(int field) override;
+   int size() override;
+   int numRowsAffected() override;
+   QSqlRecord record() const override;
+
+   void virtual_hook(int id, void *data) override;
+   bool nextResult() override;
 
  private:
    QODBCPrivate *d;
@@ -87,31 +88,29 @@ class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
  public:
    explicit QODBCDriver(QObject *parent = nullptr);
    QODBCDriver(SQLHANDLE env, SQLHANDLE con, QObject *parent = nullptr);
-   virtual ~QODBCDriver();
-   bool hasFeature(DriverFeature f) const;
-   void close();
-   QSqlResult *createResult() const;
-   QStringList tables(QSql::TableType) const;
-   QSqlRecord record(const QString &tablename) const;
-   QSqlIndex primaryIndex(const QString &tablename) const;
-   QVariant handle() const;
-   QString formatValue(const QSqlField &field,
-      bool trimStrings) const;
-   bool open(const QString &db,
-      const QString &user,
-      const QString &password,
-      const QString &host,
-      int port,
-      const QString &connOpts);
 
-   QString escapeIdentifier(const QString &identifier, IdentifierType type) const;
+   ~QODBCDriver();
 
- protected :
-   isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const;
+   bool hasFeature(DriverFeature f) const override;
+   void close() override;
+   QSqlResult *createResult() const override;
+   QStringList tables(QSql::TableType) const override;
+   QSqlRecord record(const QString &tablename) const override;
+   QSqlIndex primaryIndex(const QString &tablename) const override;
+   QVariant handle() const override;
+   QString formatValue(const QSqlField &field, bool trimStrings) const override;
 
-   bool beginTransaction();
-   bool commitTransaction();
-   bool rollbackTransaction();
+   bool open(const QString &db, const QString &user, const QString &password, const QString &host,
+         int port, const QString &connOpts) override;
+
+   QString escapeIdentifier(const QString &identifier, IdentifierType type) const override;
+
+ protected:
+   bool isIdentifierEscapedImplementation(const QString &identifier, IdentifierType type) const;
+
+   bool beginTransaction() override;
+   bool commitTransaction() override;
+   bool rollbackTransaction() override;
 
  private:
    void init();
@@ -122,4 +121,4 @@ class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
    friend class QODBCPrivate;
 };
 
-#endif // QSQL_ODBC_H
+#endif

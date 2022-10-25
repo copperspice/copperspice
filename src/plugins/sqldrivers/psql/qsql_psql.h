@@ -24,8 +24,9 @@
 #ifndef QSQL_PSQL_H
 #define QSQL_PSQL_H
 
-#include <qsqlresult.h>
 #include <qsqldriver.h>
+#include <qsqlresult.h>
+
 
 #ifdef QT_PLUGIN
 #define Q_EXPORT_SQLDRIVER_PSQL
@@ -50,7 +51,7 @@ class QPSQLResult : public QSqlResult
    ~QPSQLResult();
 
    QVariant handle() const;
-   void virtual_hook(int id, void *data);
+   void virtual_hook(int id, void *data) override;
 
  protected:
    void cleanup();

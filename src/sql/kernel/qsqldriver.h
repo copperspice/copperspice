@@ -121,7 +121,7 @@ class Q_SQL_EXPORT QSqlDriver : public QObject
    SQL_CS_SIGNAL_2(notification, name, source, payload)
 
  protected:
-   QSqlDriver(QSqlDriverPrivate &dd, QObject *parent = nullptr);
+   QSqlDriver(QSqlDriverPrivate &obj, QObject *parent = nullptr);
 
    virtual void setOpen(bool open);
    virtual void setOpenError(bool error);

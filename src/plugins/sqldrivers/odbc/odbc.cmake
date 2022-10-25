@@ -1,12 +1,12 @@
 list(APPEND SQL_PUBLIC_INCLUDES
-    QODBCDriver
-    QODBCResult
+   QODBCDriver
+   QODBCResult
 )
 
 list(APPEND SQL_INCLUDES
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcdriver.h
-    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcdriver.h
+   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
 )
 
 # if(WITH_ODBC_PLUGIN AND ODBC_FOUND), unsupported at this time

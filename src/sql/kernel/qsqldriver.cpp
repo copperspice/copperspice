@@ -48,8 +48,8 @@ QSqlDriver::QSqlDriver(QObject *parent)
    : QObject(parent), d_ptr(new QSqlDriverPrivate)
 {
 }
-QSqlDriver::QSqlDriver(QSqlDriverPrivate &dd, QObject *parent)
-   : QObject(parent), d_ptr(&dd)
+QSqlDriver::QSqlDriver(QSqlDriverPrivate &obj, QObject *parent)
+   : QObject(parent), d_ptr(&obj)
 {
 }
 
