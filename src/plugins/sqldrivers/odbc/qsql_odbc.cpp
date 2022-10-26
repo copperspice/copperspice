@@ -289,10 +289,8 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type,
    return QSqlError("QODBC: " + err, qODBCWarn(p), type, QString::number(nativeCode));
 }
 
-template<class T>
-static QVariant::Type qDecodeODBCType(SQLSMALLINT sqltype, const T *p, bool isSigned = true)
+static QVariant::Type qDecodeODBCType(SQLSMALLINT sqltype, bool isSigned = true)
 {
-   Q_UNUSED(p);
    QVariant::Type type = QVariant::Invalid;
 
    switch (sqltype) {
