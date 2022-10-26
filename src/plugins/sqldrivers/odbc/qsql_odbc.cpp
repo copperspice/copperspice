@@ -348,6 +348,7 @@ static QVariant::Type qDecodeODBCType(SQLSMALLINT sqltype, bool isSigned = true)
 
 #if (ODBCVER >= 0x0350)
       case SQL_GUID:
+         [[fallthrough]];
 #endif
 
       case SQL_LONGVARCHAR:
