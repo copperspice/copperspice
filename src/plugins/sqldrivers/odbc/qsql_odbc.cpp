@@ -229,12 +229,9 @@ static QString qWarnODBCHandle(int handleType, SQLHANDLE handle, int *nativeCode
          if (nativeCode) {
             *nativeCode = nativeCode_;
          }
-         QString tmpstore;
-#ifdef UNICODE
-         tmpstore = fromSQLTCHAR(description_, msgLen);
-#else
-         tmpstore = QString::fromUtf8((const char *)description_.constData(), msgLen);
-#endif
+
+         const QString tmpstore = fromSQLTCHAR(description_, msgLen);
+
          if (result != tmpstore) {
             if (! result.isEmpty()) {
                result += ' ';
@@ -667,11 +664,8 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
       qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").formatArg(i), p);
    }
 
-#ifdef UNICODE
    QString qColName(fromSQLTCHAR(colName, colNameLen));
-#else
-   QString qColName = QString::fromUtf8((const char *)colName.constData());
-#endif
+
    // nullable can be SQL_NO_NULLS, SQL_NULLABLE or SQL_NULLABLE_UNKNOWN
    int required = -1;
    if (nullable == SQL_NO_NULLS) {
@@ -1032,17 +1026,8 @@ bool QODBCResult::reset (const QString &query)
                "Please check your ODBC driver configuration"), QSqlError::StatementError, d));
       return false;
    }
+   r = SQLExecDirect(d->hStmt, toSQLTCHAR(query).data(), (SQLINTEGER) query.length());
 
-#ifdef UNICODE
-   r = SQLExecDirect(d->hStmt,
-         toSQLTCHAR(query).data(),
-         (SQLINTEGER) query.length());
-#else
-   QByteArray query8 = query.toUtf8();
-   r = SQLExecDirect(d->hStmt,
-         (SQLCHAR *) query8.data(),
-         (SQLINTEGER) query8.length());
-#endif
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO && r != SQL_NO_DATA) {
       setLastError(qMakeError(QCoreApplication::translate("QODBCResult",
                "Unable to execute statement"), QSqlError::StatementError, d));
@@ -1438,16 +1423,8 @@ bool QODBCResult::prepare(const QString &query)
       return false;
    }
 
-#ifdef UNICODE
-   r = SQLPrepare(d->hStmt,
-         toSQLTCHAR(query).data(),
-         (SQLINTEGER) query.length());
-#else
-   QByteArray query8 = query.toUtf8();
-   r = SQLPrepare(d->hStmt,
-         (SQLCHAR *) query8.data(),
-         (SQLINTEGER) query8.length());
-#endif
+   r = SQLPrepare(d->hStmt, toSQLTCHAR(query).data(), (SQLINTEGER) query.length());
+
 
    if (r != SQL_SUCCESS) {
       setLastError(qMakeError(QCoreApplication::translate("QODBCResult",
@@ -2056,18 +2033,9 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
    SQLSMALLINT cb;
    QVarLengthArray<SQLTCHAR> connOut(1024);
    memset(connOut.data(), 0, connOut.size() * sizeof(SQLTCHAR));
-   r = SQLDriverConnect(d->hDbc,
-         NULL,
-#ifdef UNICODE
-         toSQLTCHAR(connQStr).data(),
-#else
-         (SQLCHAR *)connQStr.toUtf8().data(),
-#endif
-         (SQLSMALLINT)connQStr.length(),
-         connOut.data(),
-         1024,
-         &cb,
-         /*SQL_DRIVER_NOPROMPT*/0);
+
+   r = SQLDriverConnect(d->hDbc, nullptr, toSQLTCHAR(connQStr).data(),
+         (SQLSMALLINT)connQStr.length(), connOut.data(), 1024, &cb, 0);
 
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       setLastError(qMakeError(tr("Unable to connect"), QSqlError::ConnectionError, d));
@@ -2285,13 +2253,9 @@ void QODBCDriverPrivate::checkSqlServer()
          serverString.size() * sizeof(SQLTCHAR),
          &t);
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
-      QString serverType;
-#ifdef UNICODE
-      serverType = fromSQLTCHAR(serverString, t / sizeof(SQLTCHAR));
-#else
-      serverType = QString::fromUtf8((const char *)serverString.constData(), t);
-#endif
-      isFreeTDSDriver = serverType.contains(QLatin1String("tdsodbc"), Qt::CaseInsensitive);
+      const QString serverType = fromSQLTCHAR(serverString, t / sizeof(SQLTCHAR));
+
+      isFreeTDSDriver = serverType.contains("tdsodbc", Qt::CaseInsensitive);
       unicode = unicode && !isFreeTDSDriver;
    }
 }
@@ -2318,11 +2282,7 @@ void QODBCDriverPrivate::checkHasMultiResults()
          driverResponse.size() * sizeof(SQLTCHAR),
          &length);
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO)
-#ifdef UNICODE
-      hasMultiResultSets = fromSQLTCHAR(driverResponse, length / sizeof(SQLTCHAR)).startsWith(QLatin1Char('Y'));
-#else
-      hasMultiResultSets = QString::fromUtf8((const char *)driverResponse.constData(), length).startsWith(QLatin1Char('Y'));
-#endif
+      hasMultiResultSets = fromSQLTCHAR(driverResponse, length / sizeof(SQLTCHAR)).startsWith('Y');
 }
 
 void QODBCDriverPrivate::checkDateTimePrecision()
@@ -2463,18 +2423,8 @@ QStringList QODBCDriver::tables(QSql::TableType type) const
 
    QString joinedTableTypeString = tableType.join(",");
 
-   r = SQLTables(hStmt,
-         NULL,
-         0,
-         NULL,
-         0,
-         NULL,
-         0,
-#ifdef UNICODE
+   r = SQLTables(hStmt, nullptr, 0, nullptr, 0, nullptr, 0,
          toSQLTCHAR(joinedTableTypeString).data(),
-#else
-         (SQLCHAR *)joinedTableTypeString.toUtf8().data(),
-#endif
          joinedTableTypeString.length() /* characters, not bytes */);
 
    if (r != SQL_SUCCESS) {
@@ -2559,52 +2509,21 @@ QSqlIndex QODBCDriver::primaryIndex(const QString &tablename) const
          (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
          SQL_IS_UINTEGER);
    r = SQLPrimaryKeys(hStmt,
-#ifdef UNICODE
-         catalog.length() == 0 ? NULL : toSQLTCHAR(catalog).data(),
-#else
-         catalog.length() == 0 ? NULL : (SQLCHAR *)catalog.toUtf8().data(),
-#endif
+         catalog.length() == 0 ? nullptr : toSQLTCHAR(catalog).data(),
          catalog.length(),
-#ifdef UNICODE
-         schema.length() == 0 ? NULL : toSQLTCHAR(schema).data(),
-#else
-         schema.length() == 0 ? NULL : (SQLCHAR *)schema.toUtf8().data(),
-#endif
-         schema.length(),
-#ifdef UNICODE
-         toSQLTCHAR(table).data(),
-#else
-         (SQLCHAR *)table.toUtf8().data(),
-#endif
-         table.length() /* in characters, not in bytes */);
+         schema.length() == 0 ? nullptr : toSQLTCHAR(schema).data(),
+         schema.length(), toSQLTCHAR(table).data(), table.length() );
 
    // if the SQLPrimaryKeys() call does not succeed (e.g the driver
    // does not support it) - try an alternative method to get hold of
    // the primary index (e.g MS Access and FoxPro)
 
    if (r != SQL_SUCCESS) {
-      r = SQLSpecialColumns(hStmt,
-            SQL_BEST_ROWID,
-#ifdef UNICODE
-            catalog.length() == 0 ? NULL : toSQLTCHAR(catalog).data(),
-#else
-            catalog.length() == 0 ? NULL : (SQLCHAR *)catalog.toUtf8().data(),
-#endif
+      r = SQLSpecialColumns(hStmt, SQL_BEST_ROWID,
+            catalog.length() == 0 ? nullptr : toSQLTCHAR(catalog).data(),
             catalog.length(),
-#ifdef UNICODE
-            schema.length() == 0 ? NULL : toSQLTCHAR(schema).data(),
-#else
-            schema.length() == 0 ? NULL : (SQLCHAR *)schema.toUtf8().data(),
-#endif
-            schema.length(),
-#ifdef UNICODE
-            toSQLTCHAR(table).data(),
-#else
-            (SQLCHAR *)table.toUtf8().data(),
-#endif
-            table.length(),
-            SQL_SCOPE_CURROW,
-            SQL_NULLABLE);
+            schema.length() == 0 ? nullptr : toSQLTCHAR(schema).data(),
+            schema.length(), toSQLTCHAR(table).data(), table.length(), SQL_SCOPE_CURROW, SQL_NULLABLE);
 
       if (r != SQL_SUCCESS) {
          qSqlWarning("QODBCDriver::primaryIndex: Unable to execute primary key list", d);
@@ -2697,26 +2616,11 @@ QSqlRecord QODBCDriver::record(const QString &tablename) const
          (SQLPOINTER)SQL_CURSOR_FORWARD_ONLY,
          SQL_IS_UINTEGER);
    r =  SQLColumns(hStmt,
-#ifdef UNICODE
-         catalog.length() == 0 ? NULL : toSQLTCHAR(catalog).data(),
-#else
-         catalog.length() == 0 ? NULL : (SQLCHAR *)catalog.toUtf8().data(),
-#endif
+         catalog.length() == 0 ? nullptr : toSQLTCHAR(catalog).data(),
          catalog.length(),
-#ifdef UNICODE
-         schema.length() == 0 ? NULL : toSQLTCHAR(schema).data(),
-#else
-         schema.length() == 0 ? NULL : (SQLCHAR *)schema.toUtf8().data(),
-#endif
-         schema.length(),
-#ifdef UNICODE
-         toSQLTCHAR(table).data(),
-#else
-         (SQLCHAR *)table.toUtf8().data(),
-#endif
-         table.length(),
-         NULL,
-         0);
+         schema.length() == 0 ? nullptr : toSQLTCHAR(schema).data(),
+         schema.length(), toSQLTCHAR(table).data(), table.length(), nullptr, 0);
+
    if (r != SQL_SUCCESS) {
       qSqlWarning("QODBCDriver::record: Unable to execute column list", d);
    }
