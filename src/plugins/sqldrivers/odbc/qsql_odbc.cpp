@@ -282,17 +282,14 @@ static QString cs_warnODBC(const SQLHANDLE hStmt, const SQLHANDLE envHandle = nu
    return result;
 }
 
-static QString qODBCWarn(const QODBCPrivate *odbc, int *nativeCode = 0)
+static QString cs_warnODBC(const QODBCPrivate *odbc, int *nativeCode = nullptr)
 {
-   return QString(qWarnODBCHandle(SQL_HANDLE_ENV, odbc->dpEnv()) + QLatin1Char(' ')
-         + qWarnODBCHandle(SQL_HANDLE_DBC, odbc->dpDbc()) + QLatin1Char(' ')
-         + qWarnODBCHandle(SQL_HANDLE_STMT, odbc->hStmt, nativeCode)).simplified();
+   return cs_warnODBC(odbc->hStmt, odbc->dpEnv(), odbc->dpDbc(), nativeCode);
 }
 
-static QString qODBCWarn(const QODBCDriverPrivate *odbc, int *nativeCode = nullptr)
+static QString cs_warnODBC(const QODBCDriverPrivate *odbc, int *nativeCode = nullptr)
 {
-   return QString(qWarnODBCHandle(SQL_HANDLE_ENV, odbc->hEnv) + QLatin1Char(' ')
-         + qWarnODBCHandle(SQL_HANDLE_DBC, odbc->hDbc, nativeCode)).simplified();
+   return cs_warnODBC(nullptr, odbc->hEnv, odbc->hDbc, nativeCode);
 }
 
 static void qSqlWarning(const QString &message, const QODBCPrivate *odbc)
