@@ -2404,8 +2404,12 @@ QSqlIndex QODBCDriver::primaryIndex(const QString &tablename) const
       qSqlWarning("QODBCDriver::primaryIndex: Unable to list primary key", d);
       return index;
    }
-   QString catalog, schema, table;
-   d->splitTableQualifier(tablename, catalog, schema, table);
+
+   QString catalog;
+   QString schema;
+   QString table;
+
+   const_cast<QODBCDriverPrivate*>(d)->splitTableQualifier(tablename, catalog, schema, table);
 
    if (isIdentifierEscaped(catalog, QSqlDriver::TableName)) {
       catalog = stripDelimiters(catalog, QSqlDriver::TableName);
@@ -2498,8 +2502,12 @@ QSqlRecord QODBCDriver::record(const QString &tablename) const
    }
 
    SQLHANDLE hStmt;
-   QString catalog, schema, table;
-   d->splitTableQualifier(tablename, catalog, schema, table);
+
+   QString catalog;
+   QString schema;
+   QString table;
+
+   const_cast<QODBCDriverPrivate*>(d)->splitTableQualifier(tablename, catalog, schema, table);
 
    if (isIdentifierEscaped(catalog, QSqlDriver::TableName)) {
       catalog = stripDelimiters(catalog, QSqlDriver::TableName);
