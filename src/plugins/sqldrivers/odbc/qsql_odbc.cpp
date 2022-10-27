@@ -198,7 +198,7 @@ void QODBCPrivate::updateStmtHandleState(const QSqlDriver *driver)
    disconnectCount = odbcdriver->d->disconnectCount;
 }
 
-static QString qWarnODBCHandle(int handleType, SQLHANDLE handle, int *nativeCode = nullptr)
+static QString cs_warnHandle(int handleType, SQLHANDLE handle, int *nativeCode = nullptr)
 {
    SQLINTEGER nativeCode_ = 0;
    SQLSMALLINT msgLen     = 0;
@@ -242,6 +242,43 @@ static QString qWarnODBCHandle(int handleType, SQLHANDLE handle, int *nativeCode
       ++i;
 
    } while (r != SQL_NO_DATA);
+
+   return result;
+}
+
+static QString cs_warnODBC(const SQLHANDLE hStmt, const SQLHANDLE envHandle = nullptr,
+      const SQLHANDLE pDbC = nullptr, int *nativeCode = nullptr)
+{
+   QString result;
+
+   if (envHandle != nullptr) {
+      result += cs_warnHandle(SQL_HANDLE_ENV, envHandle, nativeCode);
+   }
+
+   if (pDbC != nullptr) {
+     const QString dMessage = cs_warnHandle(SQL_HANDLE_DBC, pDbC, nativeCode);
+
+     if (! dMessage.isEmpty()) {
+         if (! result.isEmpty()) {
+            result += ' ';
+         }
+
+         result += dMessage;
+      }
+   }
+
+   if (hStmt != nullptr) {
+      const QString hMessage = cs_warnHandle(SQL_HANDLE_STMT, hStmt, nativeCode);
+
+      if (! hMessage.isEmpty()) {
+         if (! result.isEmpty()) {
+            result += ' ';
+         }
+
+         result += hMessage;
+      }
+   }
+
    return result;
 }
 
