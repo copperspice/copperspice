@@ -310,6 +310,11 @@ static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const
    return QSqlError("QODBC: " + err, message, type, QString::number(nativeCode));
 }
 
+static void qSqlWarning(const QString &message, const SQLHANDLE hStmt)
+{
+   qWarning() << message << " Error:" << cs_warnODBC(hStmt);
+}
+
 static QSqlError qMakeError(const QString& err, QSqlError::ErrorType type, const QODBCDriverPrivate *p)
 {
    int nativeCode = -1;
