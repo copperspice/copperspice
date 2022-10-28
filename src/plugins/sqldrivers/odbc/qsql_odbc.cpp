@@ -1360,7 +1360,8 @@ bool QODBCResult::isNull(int field)
       // no good way to find out whether the value is NULL without fetching the field
       data(field);
    }
-   return d->fieldCache.at(field).isNull();
+
+   return ! d->fieldCache.at(field).isValid();
 }
 
 int QODBCResult::size()
@@ -1461,7 +1462,7 @@ bool QODBCResult::exec()
       }
       const QVariant &val = values.at(i);
       SQLLEN *ind = &indicators[i];
-      if (val.isNull()) {
+      if (! val.isValid()) {
          *ind = SQL_NULL_DATA;
       }
       switch (val.type()) {
