@@ -109,6 +109,104 @@ TEST_CASE("QStringParser number_b", "[qstringparser]")
    }
 }
 
+TEST_CASE("QStringParser section", "[qstringparser]")
+{
+   QString str = "apple,pear,grape,orange";
+   QString result;
+
+   //
+   result = QStringParser::section(str, ',', 2, 2);
+   REQUIRE(result == "grape");
+
+   result = QStringParser::section(str, ',', -3, -2);
+   REQUIRE(result == "pear,grape");
+
+   result = QStringParser::section(str, ',', -3, 3);
+   REQUIRE(result == "pear,grape,orange");
+
+   //
+   str = "/usr/local/bin/uic";
+
+   result = QStringParser::section(str, '/', 3, 4);
+   REQUIRE(result == "bin/uic");
+
+   result = QStringParser::section(str, '/', 3, 3);
+   REQUIRE(result == "bin");
+
+   result = QStringParser::section(str, '/', 3, 3, QStringParser::SectionFlag::SectionSkipEmpty);
+   REQUIRE(result == "uic");
+
+   result = QStringParser::section(str, '/', 2, 2, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == "/local");
+
+   result = QStringParser::section(str, '/', 5, 5, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == "");
+
+   result = QStringParser::section(str, '/', 2, 2, QStringParser::SectionFlag::SectionIncludeTrailingSep);
+   REQUIRE(result == "local/");
+
+   result = QStringParser::section(str, '/', 2, 2,
+         QStringParser::SectionFlag::SectionIncludeLeadingSep | QStringParser::SectionFlag::SectionIncludeTrailingSep);
+   REQUIRE(result == "/local/");
+
+   result = QStringParser::section(str, '/', -1);
+   REQUIRE(result == "uic");
+
+   //
+   str = "*one*two*";
+
+   result = QStringParser::section(str, '*', 1, 2, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == "*one*two");
+
+   result = QStringParser::section(str, '*', 2, 2, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == "*two");
+
+   result = QStringParser::section(str, '*', 3, 3, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == "*");
+
+   result = QStringParser::section(str, '*', 0, 0, QStringParser::SectionFlag::SectionIncludeTrailingSep);
+   REQUIRE(result == "*");
+}
+
+TEST_CASE("QStringParser section_regex", "[qstringparser]")
+{
+   QString str = "apple   pear grape    orange";
+   QString result;
+
+   QRegularExpression regExp("(\\s)+");
+
+   result = QStringParser::section(str, regExp, 0, 0);
+   REQUIRE(result == "apple");
+
+   result = QStringParser::section(str, regExp, 0, 1);
+   REQUIRE(result == "apple   pear");
+
+   result = QStringParser::section(str, regExp, 0, 10);
+   REQUIRE(result == "apple   pear grape    orange");
+
+   result = QStringParser::section(str, regExp, 10, 10);
+   REQUIRE(result == "");
+
+   result = QStringParser::section(str, regExp, -1, -1);
+   REQUIRE(result == "orange");
+
+   result = QStringParser::section(str, regExp, -2, -1);
+   REQUIRE(result == "grape    orange");
+
+   result = QStringParser::section(str, regExp, -1, -2);
+   REQUIRE(result == "");
+
+   result = QStringParser::section(str, regExp, 2, 2, QStringParser::SectionFlag::SectionIncludeLeadingSep);
+   REQUIRE(result == " grape");
+
+   result = QStringParser::section(str, regExp, 2, 2, QStringParser::SectionFlag::SectionIncludeTrailingSep);
+   REQUIRE(result == "grape    ");
+
+   result = QStringParser::section(str, regExp, 2, 2,
+         QStringParser::SectionFlag::SectionIncludeLeadingSep | QStringParser::SectionFlag::SectionIncludeTrailingSep);
+   REQUIRE(result == " grape    ");
+}
+
 TEST_CASE("QStringParser split", "[qstringparser]")
 {
    QString str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
