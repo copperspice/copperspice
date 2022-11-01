@@ -31,6 +31,7 @@
 #include <qlog.h>
 #include <qmap.h>
 #include <qnamespace.h>
+#include <qregularexpression.h>
 
 #include <cctype>
 #include <ios>
@@ -339,26 +340,38 @@ class Q_CORE_EXPORT QStringParser
       }
 
       template <typename T>
-      static T section(const T &str, QChar32 separator, int firstSection, int lastSection = -1, SectionFlags flags = SectionDefault) {
+      static T section(const T &str, QChar32 separator, int firstSection, int lastSection = -1,
+               SectionFlags flags = SectionDefault) {
          return section(str, T(separator), firstSection, lastSection, flags);
       }
 
       template <typename T, int N>
       static T section(const T &str, const char (&separator)[N], int firstSection, int lastSection = -1,
-                  SectionFlags flags = SectionDefault) {
+               SectionFlags flags = SectionDefault) {
          return section(str, T(separator), firstSection, lastSection, flags);
       }
 
       template <typename T>
-      static T section(const T &str, const T &separator, int firstSection, int lastSection = -1, SectionFlags flags = SectionDefault);
+      static T section(const T &str, const T &separator, int firstSection, int lastSection = -1,
+               SectionFlags flags = SectionDefault);
+
+#if defined (CS_DOXYPRESS)
+      template <typename T>
+      static T section(const T &str, const QRegularExpression &separator, int firstSection, int lastSection = -1,
+               SectionFlags flags = SectionDefault);
+#else
+      template <typename T>
+      static T section(const T &str, const Cs::QRegularExpression<T> &separator, int firstSection, int lastSection = -1,
+               SectionFlags flags = SectionDefault);
+#endif
 
       template <typename T>
       static QList<T> split(const T &str, QChar32 separator, SplitBehavior behavior = KeepEmptyParts,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
+               Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
       template <typename T>
       static QList<T> split(const T &str, const T &separator, SplitBehavior behavior = KeepEmptyParts,
-                  Qt::CaseSensitivity cs = Qt::CaseSensitive);
+               Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
 #if defined (CS_DOXYPRESS)
       template <typename T>
@@ -752,8 +765,7 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
 
    }
 
-   // QVector<QStringView>
-   auto sections = split(str, separator, SplitBehavior::KeepEmptyParts, cs);
+   QList<T> sections = split(str, separator, SplitBehavior::KeepEmptyParts, cs);
 
    const auto sectionsSize = sections.count();
 
@@ -775,7 +787,7 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
 
       for (const auto &item : sections) {
          if (item.isEmpty()) {
-            skip++;
+            ++skip;
          }
       }
 
@@ -819,7 +831,7 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
       }
 
       if (! empty || ! (flags & SectionFlag::SectionSkipEmpty)) {
-         tmp ++;
+         ++tmp;
       }
    }
 
@@ -830,6 +842,80 @@ T QStringParser::section(const T &str, const T &separator, int firstSection, int
    if ( (flags & SectionFlag::SectionIncludeTrailingSep) && last_index < sectionsSize - 1) {
       retval += separator;
    }
+
+   return retval;
+}
+
+template <typename T>
+T QStringParser::section(const T &str, const Cs::QRegularExpression<T> &separator,
+      int firstSection, int lastSection, SectionFlags flags)
+{
+   Cs::QRegularExpression<T> regExp = separator;
+
+   if (flags & SectionCaseInsensitiveSeps) {
+      regExp.setPatternOptions(regExp.patternOptions() | QPatternOption::CaseInsensitiveOption);
+   }
+
+   auto matchList = regExp.globalMatch(str);
+
+   if (flags & SectionFlag::SectionSkipEmpty) {
+      auto iter = matchList.begin();
+
+      while (iter != matchList.end()) {
+         if (iter->capturedView().isEmpty()) {
+            iter = matchList.erase(iter);
+
+         } else {
+            ++iter;
+         }
+      }
+   }
+
+   T retval;
+
+   const auto matchSize = matchList.count();
+
+   if (matchSize == 0) {
+      return retval;
+   }
+
+   // handle negative values
+   if (firstSection < 0)  {
+      firstSection = matchSize + 1 + firstSection;
+   }
+
+   if (lastSection < 0)  {
+      lastSection = matchSize + 1 + lastSection;
+   }
+
+   auto iter_begin = str.begin();
+
+   if (firstSection > matchSize || firstSection > lastSection) {
+      return retval;
+
+   } else if (firstSection > 0) {
+
+      if (flags & SectionFlag::SectionIncludeLeadingSep) {
+         iter_begin = matchList[firstSection-1].capturedStart();
+
+      } else {
+         iter_begin = matchList[firstSection-1].capturedEnd();
+      }
+   }
+
+   auto iter_end = str.end();
+
+   if (lastSection < matchSize) {
+
+      if (flags & SectionFlag::SectionIncludeTrailingSep) {
+         iter_end = matchList[lastSection].capturedEnd();
+
+      } else {
+         iter_end = matchList[lastSection].capturedStart();
+      }
+   }
+
+   retval = T(iter_begin, iter_end);
 
    return retval;
 }
