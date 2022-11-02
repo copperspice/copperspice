@@ -11,15 +11,20 @@ target_compile_definitions(CsNetwork
 set(EXTRA_NETWORK_CXXFLAGS)
 set(EXTRA_NETWORK_LDFLAGS)
 
-# these lines must come before the other includes since there is an OS X ordering issue
 if (SECURETRANSPORT_FOUND)
-   add_definitions(-DQT_SSL)
-   add_definitions(-DQT_SECURETRANSPORT)
+   # darwin
+   target_compile_definitions(CsNetwork
+      PUBLIC
+      -DQT_SSL
+      -DQT_SECURETRANSPORT
+   )
 
 elseif (OPENSSL_FOUND)
-   add_definitions(-DQT_SSL)
-   add_definitions(-DQT_OPENSSL)
-
+   target_compile_definitions(CsNetwork
+      PUBLIC
+      -DQT_SSL
+      -DQT_OPENSSL
+   )
    include_directories(${OPENSSL_INCLUDE_DIR})
 
    target_link_libraries(CsNetwork
