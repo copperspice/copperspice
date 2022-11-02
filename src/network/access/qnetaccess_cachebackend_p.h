@@ -45,8 +45,6 @@ class QNetworkAccessCacheBackend : public QNetworkAccessBackend
 
  private:
    bool sendCacheContents();
-
 };
 
-
-#endif // QNETWORKACCESSCACHEBACKEND_P_H
+#endif

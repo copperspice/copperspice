@@ -37,9 +37,6 @@ QSslKey::QSslKey()
 {
 }
 
-/*!
-    \internal
-*/
 QByteArray QSslKeyPrivate::pemHeader() const
 {
    if (type == QSsl::PublicKey) {
@@ -59,9 +56,6 @@ QByteArray QSslKeyPrivate::pemHeader() const
    return QByteArray();
 }
 
-/*!
-    \internal
-*/
 QByteArray QSslKeyPrivate::pemFooter() const
 {
    if (type == QSsl::PublicKey) {
@@ -77,11 +71,6 @@ QByteArray QSslKeyPrivate::pemFooter() const
    return QByteArray();
 }
 
-/*!
-    \internal
-
-    Returns a DER key formatted as PEM.
-*/
 QByteArray QSslKeyPrivate::pemFromDer(const QByteArray &der, const QMap<QByteArray, QByteArray> &headers) const
 {
    QByteArray pem(der.toBase64());
@@ -113,11 +102,6 @@ QByteArray QSslKeyPrivate::pemFromDer(const QByteArray &der, const QMap<QByteArr
    return pem;
 }
 
-/*!
-    \internal
-
-    Returns a PEM key formatted as DER.
-*/
 QByteArray QSslKeyPrivate::derFromPem(const QByteArray &pem, QMap<QByteArray, QByteArray> *headers) const
 {
    const QByteArray header = pemHeader();

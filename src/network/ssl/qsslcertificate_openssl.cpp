@@ -309,9 +309,7 @@ QSslKey QSslCertificate::publicKey() const
    return key;
 }
 
-/*
- * Convert unknown extensions to a QVariant.
- */
+// Convert unknown extensions to a QVariant.
 static QVariant x509UnknownExtensionToValue(X509_EXTENSION *ext)
 {
    // Get the extension specific method object if available
@@ -380,11 +378,9 @@ static QVariant x509UnknownExtensionToValue(X509_EXTENSION *ext)
    return QVariant();
 }
 
-/*
- * Convert extensions to a variant. The naming of the keys of the map are
- * taken from RFC 5280, however we decided the capitalisation in the RFC
- * was too silly for the real world.
- */
+
+// Convert extensions to a variant. The naming of the keys of the map are
+//  taken from RFC 5280, however capitalisation was changed
 static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 {
    ASN1_OBJECT *obj = q_X509_EXTENSION_get_object(ext);
@@ -404,6 +400,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
          return result;
       }
       break;
+
       case NID_info_access: {
          AUTHORITY_INFO_ACCESS *info = reinterpret_cast<AUTHORITY_INFO_ACCESS *>(q_X509V3_EXT_d2i(ext));
 
@@ -439,6 +436,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
          return result;
       }
       break;
+
       case NID_subject_key_identifier: {
          void *ext_internal = q_X509V3_EXT_d2i(ext);
 
@@ -450,6 +448,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
          return QVariant(QString::fromUtf8(meth->i2s(meth, ext_internal)));
       }
       break;
+
       case NID_authority_key_identifier: {
          AUTHORITY_KEYID *auth_key = reinterpret_cast<AUTHORITY_KEYID *>(q_X509V3_EXT_d2i(ext));
 
@@ -646,7 +645,6 @@ QByteArray QSslCertificatePrivate::asn1ObjectId(ASN1_OBJECT *object)
    return QByteArray(buf);
 }
 
-
 QByteArray QSslCertificatePrivate::asn1ObjectName(ASN1_OBJECT *object)
 {
    int nid = q_OBJ_obj2nid(object);
@@ -739,7 +737,7 @@ QList<QSslCertificate> QSslCertificatePrivate::certificatesFromPem(const QByteAr
       }
 
       QByteArray decoded = QByteArray::fromBase64(
-                              QByteArray::fromRawData(pem.data() + startPos, endPos - startPos));
+            QByteArray::fromRawData(pem.data() + startPos, endPos - startPos));
 
       const unsigned char *data = (const unsigned char *)decoded.data();
 
@@ -772,4 +770,3 @@ QList<QSslCertificate> QSslCertificatePrivate::certificatesFromDer(const QByteAr
 
    return certificates;
 }
-

@@ -104,7 +104,6 @@ QSslEllipticCurve QSslEllipticCurve::fromLongName(const QString &name)
    return result;
 }
 
-
 // The brainpool curve NIDs (RFC 7027) have been introduced in OpenSSL 1.0.2,
 // redefine them here to make it compile with previous versions of OpenSSL
 // (yet correctly recognize them as TLS named curves). See crypto/objects/obj_mac.h

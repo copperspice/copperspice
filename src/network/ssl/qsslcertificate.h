@@ -50,8 +50,7 @@ Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed = 0);
 
 class Q_NETWORK_EXPORT QSslCertificate
 {
-
-public:
+ public:
    enum SubjectInfo {
       Organization,
       CommonName,
@@ -128,7 +127,7 @@ public:
 
    Qt::HANDLE handle() const;
 
-private:
+ private:
    QExplicitlySharedDataPointer<QSslCertificatePrivate> d;
    friend class QSslCertificatePrivate;
    friend class QSslSocketBackendPrivate;

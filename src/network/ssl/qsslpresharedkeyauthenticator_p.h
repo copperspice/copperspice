@@ -28,16 +28,16 @@
 
 class QSslPreSharedKeyAuthenticatorPrivate : public QSharedData
 {
-public:
-    QSslPreSharedKeyAuthenticatorPrivate();
+ public:
+   QSslPreSharedKeyAuthenticatorPrivate();
 
-    QByteArray identityHint;
+   QByteArray identityHint;
 
-    QByteArray identity;
-    int maximumIdentityLength;
+   QByteArray identity;
+   int maximumIdentityLength;
 
-    QByteArray preSharedKey;
-    int maximumPreSharedKeyLength;
+   QByteArray preSharedKey;
+   int maximumPreSharedKeyLength;
 };
 
 #endif

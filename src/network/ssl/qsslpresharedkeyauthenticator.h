@@ -34,7 +34,6 @@ class QSslPreSharedKeyAuthenticator
 {
  public:
     Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator();
-
     Q_NETWORK_EXPORT QSslPreSharedKeyAuthenticator(const QSslPreSharedKeyAuthenticator &other);
 
     Q_NETWORK_EXPORT ~QSslPreSharedKeyAuthenticator();
@@ -71,4 +70,4 @@ inline bool operator!=(const QSslPreSharedKeyAuthenticator &lhs, const QSslPreSh
     return !operator==(lhs, rhs);
 }
 
-#endif // QSSLPRESHAREDKEYAUTHENTICATOR_H
+#endif

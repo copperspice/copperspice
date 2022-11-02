@@ -36,9 +36,11 @@ bool QSslCertificate::operator==(const QSslCertificate &other) const
    if (d == other.d) {
       return true;
    }
+
    if (d->null && other.d->null) {
       return true;
    }
+
    return d->derData == other.d->derData;
 }
 
@@ -362,7 +364,6 @@ bool QSslCertificatePrivate::parse(const QByteArray &data)
       return false;
    }
 
-
    // key algorithm
    if (!elem.read(elem.value()) || elem.type() != QAsn1Element::ObjectIdentifierType) {
       return false;
@@ -371,12 +372,16 @@ bool QSslCertificatePrivate::parse(const QByteArray &data)
    const QByteArray oid = elem.toObjectId();
    if (oid == RSA_ENCRYPTION_OID) {
       publicKeyAlgorithm = QSsl::Rsa;
+
    } else if (oid == DSA_ENCRYPTION_OID) {
       publicKeyAlgorithm = QSsl::Dsa;
+
    } else if (oid == EC_ENCRYPTION_OID) {
       publicKeyAlgorithm = QSsl::Ec;
+
    } else {
       publicKeyAlgorithm = QSsl::Opaque;
+
    }
 
    certStream.device()->seek(keyStart);
@@ -387,8 +392,10 @@ bool QSslCertificatePrivate::parse(const QByteArray &data)
       if (elem.type() == QAsn1Element::Context3Type) {
          if (elem.read(elem.value()) && elem.type() == QAsn1Element::SequenceType) {
             QDataStream extStream(elem.value());
+
             while (elem.read(extStream) && elem.type() == QAsn1Element::SequenceType) {
                QSslCertificateExtension extension;
+
                if (!parseExtension(elem.value(), &extension)) {
                   return false;
                }
@@ -397,9 +404,11 @@ bool QSslCertificatePrivate::parse(const QByteArray &data)
                if (extension.oid() == QLatin1String("2.5.29.17")) {
                   // subjectAltName
                   QAsn1Element sanElem;
+
                   if (sanElem.read(extension.value().toByteArray()) && sanElem.type() == QAsn1Element::SequenceType) {
                      QDataStream nameStream(sanElem.value());
                      QAsn1Element nameElem;
+
                      while (nameElem.read(nameStream)) {
                         if (nameElem.type() == QAsn1Element::Rfc822NameType) {
                            subjectAlternativeNames.insert(QSsl::EmailEntry, nameElem.toString());
@@ -428,21 +437,23 @@ bool QSslCertificatePrivate::parseExtension(const QByteArray &data, QSslCertific
    QDataStream seqStream(data);
 
    // oid
-   if (!oidElem.read(seqStream) || oidElem.type() != QAsn1Element::ObjectIdentifierType) {
+   if (! oidElem.read(seqStream) || oidElem.type() != QAsn1Element::ObjectIdentifierType) {
       return false;
    }
    const QByteArray oid = oidElem.toObjectId();
 
    // critical and value
-   if (!valElem.read(seqStream)) {
+   if (! valElem.read(seqStream)) {
       return false;
    }
+
    if (valElem.type() == QAsn1Element::BooleanType) {
       critical = valElem.toBool(&ok);
       if (!ok || !valElem.read(seqStream)) {
          return false;
       }
    }
+
    if (valElem.type() != QAsn1Element::OctetStringType) {
       return false;
    }
@@ -474,12 +485,14 @@ bool QSslCertificatePrivate::parseExtension(const QByteArray &data, QSslCertific
          }
       }
       value = result;
+
    } else if (oid == "2.5.29.14") {
       // subjectKeyIdentifier
       if (!val.read(valElem.value()) || val.type() != QAsn1Element::OctetStringType) {
          return false;
       }
       value = colonSeparatedHex(val.value()).toUpper();
+
    } else if (oid == "2.5.29.19") {
       // basicConstraints
       if (!val.read(valElem.value()) || val.type() != QAsn1Element::SequenceType) {
@@ -534,4 +547,3 @@ bool QSslCertificatePrivate::parseExtension(const QByteArray &data, QSslCertific
 
    return true;
 }
-

@@ -26,8 +26,6 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
-
-
 class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
 {
  public:
@@ -46,9 +44,7 @@ class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
    }
 };
 
-
-
-#endif // QT_NO_NETWORKINTERFACE
+#endif
 
 #endif
 

@@ -149,8 +149,7 @@ void QAsn1Element::write(QDataStream &stream) const
 
 QAsn1Element QAsn1Element::fromBool(bool val)
 {
-   return QAsn1Element(QAsn1Element::BooleanType,
-                       QByteArray(1, val ? 0xff : 0x00));
+   return QAsn1Element(QAsn1Element::BooleanType, QByteArray(1, val ? 0xff : 0x00));
 }
 
 QAsn1Element QAsn1Element::fromInteger(unsigned int val)
@@ -169,9 +168,11 @@ QAsn1Element QAsn1Element::fromVector(const QVector<QAsn1Element> &items)
    QAsn1Element seq;
    seq.mType = SequenceType;
    QDataStream stream(&seq.mValue, QIODevice::WriteOnly);
+
    for (QVector<QAsn1Element>::const_iterator it = items.cbegin(), end = items.cend(); it != end; ++it) {
       it->write(stream);
    }
+
    return seq;
 }
 
@@ -205,11 +206,13 @@ bool QAsn1Element::toBool(bool *ok) const
          *ok = true;
       }
       return true;
+
    } else if (*this == fromBool(false)) {
       if (ok) {
          *ok = true;
       }
       return false;
+
    } else {
       if (ok) {
          *ok = false;
@@ -229,6 +232,7 @@ QDateTime QAsn1Element::toDateTime() const
                                 mValue.mid(8, 2).toInt(),
                                 mValue.mid(10, 2).toInt()),
                           Qt::UTC);
+
       else if (mType == GeneralizedTimeType && mValue.size() == 15)
          return QDateTime(QDate(mValue.mid(0, 4).toInt(),
                                 mValue.mid(4, 2).toInt(),

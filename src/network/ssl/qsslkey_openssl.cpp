@@ -36,7 +36,7 @@ void QSslKeyPrivate::clear(bool deep)
 {
    isNull = true;
 
-   if (!QSslSocket::supportsSsl()) {
+   if (! QSslSocket::supportsSsl()) {
       return;
    }
 

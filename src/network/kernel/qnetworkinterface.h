@@ -38,7 +38,6 @@ class QNetworkAddressEntryPrivate;
 
 class Q_NETWORK_EXPORT QNetworkAddressEntry
 {
-
  public:
    QNetworkAddressEntry();
    QNetworkAddressEntry(const QNetworkAddressEntry &other);
@@ -128,6 +127,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QNetworkInterface::InterfaceFlags)
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QNetworkInterface &networkInterface);
 
-#endif // QT_NO_NETWORKINTERFACE
+#endif
 
 #endif

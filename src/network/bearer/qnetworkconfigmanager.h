@@ -29,7 +29,6 @@
 
 #ifndef QT_NO_BEARERMANAGEMENT
 
-
 class QNetworkConfigurationManagerPrivate;
 
 class Q_NETWORK_EXPORT QNetworkConfigurationManager : public QObject

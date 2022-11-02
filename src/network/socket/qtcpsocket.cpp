@@ -45,9 +45,6 @@ QTcpSocket::~QTcpSocket()
 #endif
 }
 
-/*!
-    \internal
-*/
 QTcpSocket::QTcpSocket(QTcpSocketPrivate &dd, QObject *parent)
    : QAbstractSocket(TcpSocket, dd, parent)
 {

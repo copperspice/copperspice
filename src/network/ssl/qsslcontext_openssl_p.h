@@ -40,7 +40,7 @@ class QSslContext
    ~QSslContext();
 
    static QSslContext* fromConfiguration(QSslSocket::SslMode mode,
-                  const QSslConfiguration &configuration, bool allowRootCertOnDemandLoading);
+         const QSslConfiguration &configuration, bool allowRootCertOnDemandLoading);
 
    QSslError::SslError error() const;
    QString errorString() const;

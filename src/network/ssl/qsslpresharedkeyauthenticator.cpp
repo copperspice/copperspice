@@ -66,7 +66,6 @@ QByteArray QSslPreSharedKeyAuthenticator::identity() const
    return d->identity;
 }
 
-
 int QSslPreSharedKeyAuthenticator::maximumIdentityLength() const
 {
    return d->maximumIdentityLength;

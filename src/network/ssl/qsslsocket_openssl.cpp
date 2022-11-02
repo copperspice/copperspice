@@ -229,8 +229,9 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSL_CIPHER(SSL_CIPHER *ciph
    return ciph;
 }
 
-// ### This list is shared between all threads, and protected by a
-// mutex. Investigate using thread local storage instead.
+// ### This list is shared between all threads and protected by a mutex.
+// Investigate using thread local storage instead
+
 struct QSslErrorList {
    QMutex mutex;
    QList<QPair<int, int> > errors;
@@ -239,7 +240,7 @@ Q_GLOBAL_STATIC(QSslErrorList, _q_sslErrorList)
 
 int q_X509Callback(int ok, X509_STORE_CTX *ctx)
 {
-   if (!ok) {
+   if (! ok) {
       // Store the error and at which depth the error was detected.
       _q_sslErrorList()->errors << qMakePair<int, int>(q_X509_STORE_CTX_get_error(ctx), q_X509_STORE_CTX_get_error_depth(ctx));
 
@@ -436,9 +437,6 @@ void QSslSocketBackendPrivate::destroySslContext()
    sslContextPointer.clear();
 }
 
-/*!
-    \internal
-*/
 void QSslSocketPrivate::deinitialize()
 {
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
@@ -447,13 +445,6 @@ void QSslSocketPrivate::deinitialize()
    q_ERR_free_strings();
 #endif
 }
-
-/*!
-    \internal
-
-    Does the minimum amount of initialization to determine whether SSL
-    is supported or not.
-*/
 
 bool QSslSocketPrivate::supportsSsl()
 {
@@ -600,13 +591,6 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
 #endif
 }
 
-/*!
-    \internal
-
-    Declared static in QSslSocketPrivate, makes sure the SSL libraries have
-    been initialized.
-*/
-
 void QSslSocketPrivate::ensureInitialized()
 {
    if (!supportsSsl()) {
@@ -651,15 +635,10 @@ QString QSslSocketPrivate::sslLibraryBuildVersionString()
    return OPENSSL_VERSION_TEXT;
 }
 
-/*!
-    \internal
-
-    Declared static in QSslSocketPrivate, backend-dependent loading of
-    application-wide global ciphers.
-*/
 void QSslSocketPrivate::resetDefaultCiphers()
 {
    SSL_CTX *myCtx;
+
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    myCtx = q_SSL_CTX_new(q_SSLv23_client_method());
 #else
@@ -873,11 +852,6 @@ void QSslSocketBackendPrivate::startServerEncryption()
    transmit();
 }
 
-/*!
-    \internal
-
-    Transmits encrypted data between the BIOs and the socket.
-*/
 void QSslSocketBackendPrivate::transmit()
 {
    Q_Q(QSslSocket);

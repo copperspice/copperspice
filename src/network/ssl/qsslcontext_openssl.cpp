@@ -329,7 +329,9 @@ init_context:
 
       // Check if the certificate matches the private key.
       if (! q_SSL_CTX_check_private_key(sslContext->ctx)) {
-         sslContext->errorStr = QSslSocket::tr("Private key does not certify public key, %1").formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+         sslContext->errorStr = QSslSocket::tr("Private key does not certify public key, %1")
+               .formatArg(QSslSocketBackendPrivate::getErrorsFromOpenSsl());
+
          sslContext->errorCode = QSslError::UnspecifiedError;
          return sslContext;
       }
@@ -411,7 +413,7 @@ init_context:
 
       } else
 
-#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
+#endif
       {
          // specific curves requested, but not possible to set -> error
          sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));
@@ -423,7 +425,7 @@ init_context:
    return sslContext;
 }
 
-#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && !defined(OPENSSL_NO_NEXTPROTONEG)
+#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && ! defined(OPENSSL_NO_NEXTPROTONEG)
 
 static int next_proto_cb(SSL *, unsigned char **out, unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg)
 {
@@ -463,7 +465,7 @@ QSslContext::NPNContext QSslContext::npnContext() const
 {
    return m_npnContext;
 }
-#endif // OPENSSL_VERSION_NUMBER >= 0x1000100fL ...
+#endif
 
 // Needs to be deleted by caller
 SSL *QSslContext::createSsl()
@@ -514,7 +516,7 @@ SSL *QSslContext::createSsl()
    return ssl;
 }
 
-// We cache exactly one session here
+// cache exactly one session here
 bool QSslContext::cacheSession(SSL *ssl)
 {
    // don't cache the same session again

@@ -65,5 +65,4 @@ class QNetworkAccessFileBackendFactory: public QNetworkAccessBackendFactory
     QNetworkAccessBackend *create(QNetworkAccessManager::Operation op, const QNetworkRequest &request) const override;
 };
 
-
 #endif

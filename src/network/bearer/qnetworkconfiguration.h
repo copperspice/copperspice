@@ -33,7 +33,6 @@ class QNetworkConfigurationPrivate;
 
 class Q_NETWORK_EXPORT QNetworkConfiguration
 {
-
  public:
   enum Type {
       InternetAccessPoint = 0,

@@ -27,7 +27,7 @@
 #include <CommonCrypto/CommonCrypto.h>
 
 static QByteArray wrapCCCrypt(CCOperation ccOp, QSslKeyPrivate::Cipher cipher, const QByteArray &data,
-                              const QByteArray &key, const QByteArray &iv)
+      const QByteArray &key, const QByteArray &iv)
 {
    int blockSize;
    CCAlgorithm ccAlgorithm;
@@ -52,12 +52,8 @@ static QByteArray wrapCCCrypt(CCOperation ccOp, QSslKeyPrivate::Cipher cipher, c
    size_t plainLength = 0;
    QByteArray plain(data.size() + blockSize, 0);
 
-   CCCryptorStatus status = CCCrypt(
-                               ccOp, ccAlgorithm, kCCOptionPKCS7Padding,
-                               key.constData(), key.size(),
-                               iv.constData(),
-                               data.constData(), data.size(),
-                               plain.data(), plain.size(), &plainLength);
+   CCCryptorStatus status = CCCrypt(ccOp, ccAlgorithm, kCCOptionPKCS7Padding, key.constData(), key.size(),
+         iv.constData(), data.constData(), data.size(), plain.data(), plain.size(), &plainLength);
 
    if (status == kCCSuccess) {
       return plain.left(plainLength);

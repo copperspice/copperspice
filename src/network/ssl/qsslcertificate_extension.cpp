@@ -68,4 +68,3 @@ bool QSslCertificateExtension::isSupported() const
 {
    return d->supported;
 }
-

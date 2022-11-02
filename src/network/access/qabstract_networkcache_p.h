@@ -27,7 +27,9 @@
 class QAbstractNetworkCachePrivate
 {
  public:
-   virtual ~QAbstractNetworkCachePrivate() {}
+   virtual ~QAbstractNetworkCachePrivate()
+   {
+   }
 
  protected:
    Q_DECLARE_PUBLIC(QAbstractNetworkCache)

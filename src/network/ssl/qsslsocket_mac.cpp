@@ -661,15 +661,19 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_RSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("DES-CBC3-SHA");
          break;
+
       case TLS_RSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("AES128-SHA");
          break;
+
       case TLS_RSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("AES128-SHA256");
          break;
+
       case TLS_RSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("AES256-SHA");
          break;
+
       case TLS_RSA_WITH_AES_256_CBC_SHA256:
          ciph.d->name = QLatin1String("AES256-SHA256");
          break;
@@ -677,15 +681,19 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_DHE_RSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("DHE-RSA-DES-CBC3-SHA");
          break;
+
       case TLS_DHE_RSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("DHE-RSA-AES128-SHA");
          break;
+
       case TLS_DHE_RSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("DHE-RSA-AES128-SHA256");
          break;
+
       case TLS_DHE_RSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("DHE-RSA-AES256-SHA");
          break;
+
       case TLS_DHE_RSA_WITH_AES_256_CBC_SHA256:
          ciph.d->name = QLatin1String("DHE-RSA-AES256-SHA256");
          break;
@@ -693,21 +701,27 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_ECDH_ECDSA_WITH_NULL_SHA:
          ciph.d->name = QLatin1String("ECDH-ECDSA-NULL-SHA");
          break;
+
       case TLS_ECDH_ECDSA_WITH_RC4_128_SHA:
          ciph.d->name = QLatin1String("ECDH-ECDSA-RC4-SHA");
          break;
+
       case TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-ECDSA-DES-CBC3-SHA");
          break;
+
       case TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-ECDSA-AES128-SHA");
          break;
+
       case TLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("ECDH-ECDSA-AES128-SHA256");
          break;
+
       case TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-ECDSA-AES256-SHA");
          break;
+
       case TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384:
          ciph.d->name = QLatin1String("ECDH-ECDSA-AES256-SHA384");
          break;
@@ -715,21 +729,27 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_ECDH_RSA_WITH_NULL_SHA:
          ciph.d->name = QLatin1String("ECDH-RSA-NULL-SHA");
          break;
+
       case TLS_ECDH_RSA_WITH_RC4_128_SHA:
          ciph.d->name = QLatin1String("ECDH-RSA-AES256-SHA");
          break;
+
       case TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-RSA-DES-CBC3-SHA");
          break;
+
       case TLS_ECDH_RSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-RSA-AES128-SHA");
          break;
+
       case TLS_ECDH_RSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("ECDH-RSA-AES128-SHA256");
          break;
+
       case TLS_ECDH_RSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("ECDH-RSA-AES256-SHA");
          break;
+
       case TLS_ECDH_RSA_WITH_AES_256_CBC_SHA384:
          ciph.d->name = QLatin1String("ECDH-RSA-AES256-SHA384");
          break;
@@ -737,21 +757,27 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_ECDHE_ECDSA_WITH_NULL_SHA:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-NULL-SHA");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_RC4_128_SHA:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-RC4-SHA");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-DES-CBC3-SHA");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-AES128-SHA");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-AES128-SHA256");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-AES256-SHA");
          break;
+
       case TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
          ciph.d->name = QLatin1String("ECDHE-ECDSA-AES256-SHA384");
          break;
@@ -759,24 +785,31 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       case TLS_ECDHE_RSA_WITH_NULL_SHA:
          ciph.d->name = QLatin1String("ECDHE-RSA-NULL-SHA");
          break;
+
       case TLS_ECDHE_RSA_WITH_RC4_128_SHA:
          ciph.d->name = QLatin1String("ECDHE-RSA-AES256-SHA");
          break;
+
       case TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-RSA-DES-CBC3-SHA");
          break;
+
       case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-RSA-AES128-SHA");
          break;
+
       case TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256:
          ciph.d->name = QLatin1String("ECDHE-RSA-AES128-SHA256");
          break;
+
       case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA:
          ciph.d->name = QLatin1String("ECDHE-RSA-AES256-SHA");
          break;
+
       case TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384:
          ciph.d->name = QLatin1String("ECDHE-RSA-AES256-SHA384");
          break;
+
       default:
          return ciph;
    }
@@ -834,6 +867,7 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
          qWarning() << "Unknown Enc" << ciph.d->name;
       }
    }
+
    return ciph;
 }
 
@@ -1042,10 +1076,13 @@ bool QSslSocketBackendPrivate::verifySessionProtocol() const
    bool protocolOk = false;
    if (configuration.protocol == QSsl::AnyProtocol) {
       protocolOk = true;
+
    } else if (configuration.protocol == QSsl::TlsV1SslV3) {
       protocolOk = (sessionProtocol() >= QSsl::SslV3);
+
    } else if (configuration.protocol == QSsl::SecureProtocols) {
       protocolOk = (sessionProtocol() >= QSsl::TlsV1_0);
+
    } else {
       protocolOk = (sessionProtocol() == configuration.protocol);
    }
@@ -1147,6 +1184,7 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
             }
          }
       }
+
    } else {
       // No peer certificate presented. Report as error if the socket expected one.
       if (doVerifyPeer && !canIgnoreVerify) {
@@ -1171,10 +1209,12 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
 
    SecTrustResultType trustResult = kSecTrustResultInvalid;
    SecTrustEvaluate(trust, &trustResult);
+
    switch (trustResult) {
       case kSecTrustResultUnspecified:
       case kSecTrustResultProceed:
          break;
+
       default:
          if (!canIgnoreVerify) {
             const QSslError error(QSslError::CertificateUntrusted, configuration.peerCertificate);
@@ -1198,9 +1238,7 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
    return true;
 }
 
-/*
-    Copied verbatim from qsslsocket_openssl.cpp
-*/
+// copied verbatim from qsslsocket_openssl.cpp
 bool QSslSocketBackendPrivate::checkSslErrors()
 {
    Q_Q(QSslSocket);
@@ -1211,17 +1249,17 @@ bool QSslSocketBackendPrivate::checkSslErrors()
    emit q->sslErrors(sslErrors);
 
    const bool doVerifyPeer = configuration.peerVerifyMode == QSslSocket::VerifyPeer
-                             || (configuration.peerVerifyMode == QSslSocket::AutoVerifyPeer
-                                 && mode == QSslSocket::SslClientMode);
+      || (configuration.peerVerifyMode == QSslSocket::AutoVerifyPeer && mode == QSslSocket::SslClientMode);
+
    const bool doEmitSslError = !verifyErrorsHaveBeenIgnored();
    // check whether we need to emit an SSL handshake error
    if (doVerifyPeer && doEmitSslError) {
       if (q->pauseMode() & QAbstractSocket::PauseOnSslErrors) {
          pauseSocketNotifiers(q);
          paused = true;
+
       } else {
-         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError,
-                         sslErrors.first().errorString());
+         setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, sslErrors.first().errorString());
          plainSocket->disconnectFromHost();
       }
       return false;
@@ -1240,6 +1278,7 @@ bool QSslSocketBackendPrivate::startHandshake()
    if (err == errSSLWouldBlock) {
       // startHandshake has to be called again ... later.
       return false;
+
    } else if (err == errSSLServerAuthCompleted) {
       // errSSLServerAuthCompleted is a define for errSSLPeerAuthCompleted,
       // it works for both server/client modes.
@@ -1248,10 +1287,12 @@ bool QSslSocketBackendPrivate::startHandshake()
       // if (!verifyPeerTrust())
       //      ...
       return startHandshake();
+
    } else if (err == errSSLClientCertRequested) {
       Q_ASSERT(mode == QSslSocket::SslClientMode);
       QString errorDescription;
       QAbstractSocket::SocketError errorCode = QAbstractSocket::UnknownSocketError;
+
       // setSessionCertificate does not fail if we have no certificate.
       // Failure means a real error (invalid certificate, no private key, etc).
       if (!setSessionCertificate(errorDescription, errorCode)) {
@@ -1262,6 +1303,7 @@ bool QSslSocketBackendPrivate::startHandshake()
          // local certificates ... (up to server to deal with our failure).
          return startHandshake();
       }
+
    } else if (err != errSecSuccess) {
       if (err == errSSLBadCert && canIgnoreTrustVerificationFailure()) {
          // We're on the server side and client did not provide any
@@ -1284,8 +1326,7 @@ bool QSslSocketBackendPrivate::startHandshake()
    // check protocol version ourselves, as Secure Transport does not enforce
    // the requested min / max versions.
    if (!verifySessionProtocol()) {
-      setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError,
-                      "Protocol version mismatch");
+      setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, "Protocol version mismatch");
       plainSocket->disconnectFromHost();
       return false;
    }
@@ -1298,10 +1339,8 @@ bool QSslSocketBackendPrivate::startHandshake()
    }
 }
 
-/*
-    PKCS12 helpers.
-*/
 
+// PKCS12 helpers.
 static QAsn1Element wrap(quint8 type, const QAsn1Element &child)
 {
    QByteArray value;
@@ -1319,12 +1358,8 @@ static QAsn1Element _q_PKCS7_data(const QByteArray &data)
    return QAsn1Element::fromVector(items);
 }
 
-/*!
-    PKCS #12 key derivation.
-
-    Some test vectors:
-    http://www.drh-consultancy.demon.co.uk/test.txt
-*/
+// PKCS #12 key derivation.
+// http://www.drh-consultancy.demon.co.uk/test.txt
 static QByteArray _q_PKCS12_keygen(char id, const QByteArray &salt, const QString &passPhrase, int n, int r)
 {
    const int u = 20;
@@ -1347,6 +1382,7 @@ static QByteArray _q_PKCS12_keygen(char id, const QByteArray &salt, const QStrin
    for (int i = 0; i < sSize; ++i) {
       S[i] = salt[i % salt.size()];
    }
+
    const int pSize = v * ((passUnicode.size() + v - 1) / v);
    P.resize(pSize);
    for (int i = 0; i < pSize; ++i) {
@@ -1360,6 +1396,7 @@ static QByteArray _q_PKCS12_keygen(char id, const QByteArray &salt, const QStrin
    QByteArray B;
    B.resize(v);
    QCryptographicHash hash(QCryptographicHash::Sha1);
+
    for (int i = 0; i < c; ++i) {
       // hash r iterations
       QByteArray Ai = D + I;
@@ -1384,6 +1421,7 @@ static QByteArray _q_PKCS12_keygen(char id, const QByteArray &salt, const QStrin
       }
       A += Ai;
    }
+
    return A.left(n);
 }
 
@@ -1391,9 +1429,11 @@ static QByteArray _q_PKCS12_salt()
 {
    QByteArray salt;
    salt.resize(8);
+
    for (int i = 0; i < salt.size(); ++i) {
       salt[i] = (qrand() & 0xff);
    }
+
    return salt;
 }
 
@@ -1412,17 +1452,19 @@ static QByteArray _q_PKCS12_certBag(const QSslCertificate &cert)
 
    // local key id
    const QByteArray localKeyId = cert.digest(QCryptographicHash::Sha1);
+
    QVector<QAsn1Element> idItems;
    idItems << QAsn1Element::fromObjectId("1.2.840.113549.1.9.21");
-   idItems << wrap(QAsn1Element::SetType,
-                   QAsn1Element(QAsn1Element::OctetStringType, localKeyId));
-   items << wrap(QAsn1Element::SetType, QAsn1Element::fromVector(idItems));
+   idItems << wrap(QAsn1Element::SetType, QAsn1Element(QAsn1Element::OctetStringType, localKeyId));
+   items   << wrap(QAsn1Element::SetType, QAsn1Element::fromVector(idItems));
 
    // dump
    QAsn1Element root = wrap(QAsn1Element::SequenceType, QAsn1Element::fromVector(items));
    QByteArray ba;
+
    QDataStream stream(&ba, QIODevice::WriteOnly);
    root.write(stream);
+
    return ba;
 }
 
@@ -1438,6 +1480,7 @@ static QAsn1Element _q_PKCS12_key(const QSslKey &key)
    } else if (key.algorithm() == QSsl::Dsa) {
       algoItems << QAsn1Element::fromObjectId(DSA_ENCRYPTION_OID);
    }
+
    algoItems << QAsn1Element(QAsn1Element::NullType);
    keyItems << QAsn1Element::fromVector(algoItems);
    keyItems << QAsn1Element(QAsn1Element::OctetStringType, key.toDer());
@@ -1465,22 +1508,20 @@ static QByteArray _q_PKCS12_shroudedKeyBag(const QSslKey &key, const QString &pa
    QVector<QAsn1Element> keyItems;
    QVector<QAsn1Element> algoItems;
    algoItems << QAsn1Element::fromObjectId("1.2.840.113549.1.12.1.3");
+
    QVector<QAsn1Element> paramItems;
    paramItems << QAsn1Element(QAsn1Element::OctetStringType, salt);
    paramItems << QAsn1Element::fromInteger(iterations);
-   algoItems << QAsn1Element::fromVector(paramItems);
-   keyItems << QAsn1Element::fromVector(algoItems);
-   keyItems << QAsn1Element(QAsn1Element::OctetStringType, crypted);
-   items << wrap(QAsn1Element::Context0Type,
-                 QAsn1Element::fromVector(keyItems));
+   algoItems  << QAsn1Element::fromVector(paramItems);
+   keyItems   << QAsn1Element::fromVector(algoItems);
+   keyItems   << QAsn1Element(QAsn1Element::OctetStringType, crypted);
+   items      << wrap(QAsn1Element::Context0Type, QAsn1Element::fromVector(keyItems));
 
    // local key id
    QVector<QAsn1Element> idItems;
    idItems << QAsn1Element::fromObjectId("1.2.840.113549.1.9.21");
-   idItems << wrap(QAsn1Element::SetType,
-                   QAsn1Element(QAsn1Element::OctetStringType, localKeyId));
-   items << wrap(QAsn1Element::SetType,
-                 QAsn1Element::fromVector(idItems));
+   idItems << wrap(QAsn1Element::SetType, QAsn1Element(QAsn1Element::OctetStringType, localKeyId));
+   items   << wrap(QAsn1Element::SetType, QAsn1Element::fromVector(idItems));
 
    // dump
    QAsn1Element root = wrap(QAsn1Element::SequenceType, QAsn1Element::fromVector(items));

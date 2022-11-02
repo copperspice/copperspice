@@ -40,25 +40,18 @@
     } } while (false)
 
 
-/*! \internal
-*/
 QTcpServerPrivate::QTcpServerPrivate()
    : port(0), state(QAbstractSocket::UnconnectedState), socketEngine(nullptr),
      serverSocketError(QAbstractSocket::UnknownSocketError), maxConnections(30)
 {
 }
 
-/*! \internal
-*/
 QTcpServerPrivate::~QTcpServerPrivate()
 {
 }
 
 #ifndef QT_NO_NETWORKPROXY
-/*! \internal
 
-    Resolve the proxy to its final value.
-*/
 QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint16 port)
 {
    if (address.isLoopback()) {
@@ -89,7 +82,6 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
 }
 #endif
 
-// internal
 void QTcpServerPrivate::configureCreatedSocket()
 {
 #if defined(Q_OS_UNIX)
@@ -107,19 +99,21 @@ void QTcpServerPrivate::configureCreatedSocket()
 #endif
 }
 
-// internal
 void QTcpServerPrivate::readNotification()
 {
    Q_Q(QTcpServer);
 
    for (;;) {
       if (pendingConnections.count() >= maxConnections) {
+
 #if defined (QTCPSERVER_DEBUG)
          qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
 #endif
+
          if (socketEngine->isReadNotificationEnabled()) {
             socketEngine->setReadNotificationEnabled(false);
          }
+
          return;
       }
 
@@ -133,9 +127,11 @@ void QTcpServerPrivate::readNotification()
          }
          break;
       }
+
 #if defined (QTCPSERVER_DEBUG)
       qDebug("QTcpServerPrivate::_q_processIncomingConnection() accepted socket %i", descriptor);
 #endif
+
       q->incomingConnection(descriptor);
 
       QPointer<QTcpServer> that = q;
@@ -158,7 +154,6 @@ QTcpServer::QTcpServer(QObject *parent)
 
 }
 
-// internal
 QTcpServer::QTcpServer(QTcpServerPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
@@ -243,7 +238,6 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
    return true;
 }
 
-
 bool QTcpServer::isListening() const
 {
    Q_D(const QTcpServer);
@@ -251,12 +245,6 @@ bool QTcpServer::isListening() const
    return d->socketEngine->state() == QAbstractSocket::ListeningState;
 }
 
-/*!
-    Closes the server. The server will no longer listen for incoming
-    connections.
-
-    \sa listen()
-*/
 void QTcpServer::close()
 {
    Q_D(QTcpServer);
@@ -278,14 +266,12 @@ void QTcpServer::close()
    d->state = QAbstractSocket::UnconnectedState;
 }
 
-
 qintptr QTcpServer::socketDescriptor() const
 {
    Q_D(const QTcpServer);
    Q_CHECK_SOCKETENGINE(-1);
    return d->socketEngine->socketDescriptor();
 }
-
 
 bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
 {
@@ -333,6 +319,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
 #if defined (QTCPSERVER_DEBUG)
    qDebug("QTcpServer::setSocketDescriptor(%i) succeeded.", socketDescriptor);
 #endif
+
    return true;
 }
 
@@ -374,12 +361,10 @@ bool QTcpServer::waitForNewConnection(int msec, bool *timedOut)
    return true;
 }
 
-
 bool QTcpServer::hasPendingConnections() const
 {
    return !d_func()->pendingConnections.isEmpty();
 }
-
 
 QTcpSocket *QTcpServer::nextPendingConnection()
 {
@@ -395,7 +380,6 @@ QTcpSocket *QTcpServer::nextPendingConnection()
    return d->pendingConnections.takeFirst();
 }
 
-
 void QTcpServer::incomingConnection(qintptr socketDescriptor)
 {
 #if defined (QTCPSERVER_DEBUG)
@@ -407,34 +391,20 @@ void QTcpServer::incomingConnection(qintptr socketDescriptor)
    addPendingConnection(socket);
 }
 
-/*!
-    This function is called by QTcpServer::incomingConnection()
-    to add the \a socket to the list of pending incoming connections.
-
-    \note Don't forget to call this member from reimplemented
-    incomingConnection() if you do not want to break the
-    Pending Connections mechanism.
-
-    \sa incomingConnection()
-    \since 4.7
-*/
 void QTcpServer::addPendingConnection(QTcpSocket *socket)
 {
    d_func()->pendingConnections.append(socket);
 }
-
 
 void QTcpServer::setMaxPendingConnections(int numConnections)
 {
    d_func()->maxConnections = numConnections;
 }
 
-
 int QTcpServer::maxPendingConnections() const
 {
    return d_func()->maxConnections;
 }
-
 
 QAbstractSocket::SocketError QTcpServer::serverError() const
 {
@@ -464,11 +434,11 @@ void QTcpServer::setProxy(const QNetworkProxy &networkProxy)
    d->proxy = networkProxy;
 }
 
-
 QNetworkProxy QTcpServer::proxy() const
 {
    Q_D(const QTcpServer);
    return d->proxy;
 }
-#endif // QT_NO_NETWORKPROXY
+
+#endif
 

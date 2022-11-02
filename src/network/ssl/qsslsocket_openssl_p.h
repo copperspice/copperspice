@@ -59,7 +59,7 @@
 #include <openssl/tls1.h>
 
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
-typedef _STACK STACK;
+   typedef _STACK STACK;
 #endif
 
 class QSslSocketBackendPrivate : public QSslSocketPrivate
@@ -119,7 +119,7 @@ public:
 #ifdef Q_OS_WIN
 class QWindowsCaRootFetcher : public QObject
 {
-    NET_CS_OBJECT(QWindowsCaRootFetcher);
+   NET_CS_OBJECT(QWindowsCaRootFetcher);
 
  public:
    QWindowsCaRootFetcher(const QSslCertificate &certificate, QSslSocket::SslMode sslMode);
@@ -136,6 +136,5 @@ class QWindowsCaRootFetcher : public QObject
     QSslSocket::SslMode mode;
 };
 #endif
-
 
 #endif

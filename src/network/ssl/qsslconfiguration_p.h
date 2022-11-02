@@ -35,15 +35,12 @@ class QSslConfigurationPrivate : public QSharedData
 {
 public:
    QSslConfigurationPrivate()
-      : sessionProtocol(QSsl::UnknownProtocol),
-      protocol(QSsl::SecureProtocols),
-      peerVerifyMode(QSslSocket::AutoVerifyPeer),
-      peerVerifyDepth(0),
-      allowRootCertOnDemandLoading(true),
-      peerSessionShared(false),
-      sslOptions(QSslConfigurationPrivate::defaultSslOptions),
-      sslSessionTicketLifeTimeHint(-1),
-      nextProtocolNegotiationStatus(QSslConfiguration::NextProtocolNegotiationNone)
+      : sessionProtocol(QSsl::UnknownProtocol), protocol(QSsl::SecureProtocols),
+        peerVerifyMode(QSslSocket::AutoVerifyPeer), peerVerifyDepth(0),
+        allowRootCertOnDemandLoading(true), peerSessionShared(false),
+        sslOptions(QSslConfigurationPrivate::defaultSslOptions),
+        sslSessionTicketLifeTimeHint(-1),
+        nextProtocolNegotiationStatus(QSslConfiguration::NextProtocolNegotiationNone)
    {
    }
 

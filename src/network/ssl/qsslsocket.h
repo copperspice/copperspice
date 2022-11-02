@@ -65,21 +65,21 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 
    ~QSslSocket();
 
-   void resume() override; // to continue after proxy authentication required, SSL errors etc.
+   void resume() override;
 
    // Autostarting the SSL client handshake.
    void connectToHostEncrypted(const QString &hostName, quint16 port, OpenMode mode = ReadWrite,
-                  NetworkLayerProtocol protocol = AnyIPProtocol);
+         NetworkLayerProtocol protocol = AnyIPProtocol);
 
    void connectToHostEncrypted(const QString &hostName, quint16 port, const QString &sslPeerName,
-                  OpenMode mode = ReadWrite, NetworkLayerProtocol protocol = AnyIPProtocol);
+         OpenMode mode = ReadWrite, NetworkLayerProtocol protocol = AnyIPProtocol);
 
    bool setSocketDescriptor(qintptr socketDescriptor, SocketState state = ConnectedState,
-                  OpenMode openMode = ReadWrite) override;
+         OpenMode openMode = ReadWrite) override;
 
    using QAbstractSocket::connectToHost;
    void connectToHost(const QString &hostName, quint16 port, OpenMode openMode = ReadWrite,
-                  NetworkLayerProtocol protocol = AnyIPProtocol) override;
+         NetworkLayerProtocol protocol = AnyIPProtocol) override;
 
    void disconnectFromHost() override;
 
@@ -136,21 +136,20 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 
    // Private keys, for server sockets
    void setPrivateKey(const QSslKey &key);
-   void setPrivateKey(const QString &fileName,
-                  QSsl::KeyAlgorithm algorithm = QSsl::Rsa,QSsl::EncodingFormat format = QSsl::Pem,
-                  const QByteArray &passPhrase = QByteArray());
+   void setPrivateKey(const QString &fileName, QSsl::KeyAlgorithm algorithm = QSsl::Rsa,
+         QSsl::EncodingFormat format = QSsl::Pem, const QByteArray &passPhrase = QByteArray());
 
    QSslKey privateKey() const;
 
-   // CA settings.
+   // CA settings
    bool addCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QPatternOption syntax = QPatternOption::FixedStringOption);
+         QPatternOption syntax = QPatternOption::FixedStringOption);
 
    void addCaCertificate(const QSslCertificate &certificate);
    void addCaCertificates(const QList<QSslCertificate> &certificates);
 
    static bool addDefaultCaCertificates(const QString &path, QSsl::EncodingFormat format = QSsl::Pem,
-                  QPatternOption syntax = QPatternOption::FixedStringOption);
+         QPatternOption syntax = QPatternOption::FixedStringOption);
 
    static void addDefaultCaCertificate(const QSslCertificate &certificate);
    static void addDefaultCaCertificates(const QList<QSslCertificate> &certificates);

@@ -1172,9 +1172,6 @@ qint64 QNetworkReplyImpl::readData(char *data, qint64 maxlen)
    return d->readBuffer.read(data, maxlen);
 }
 
-/*!
-   \internal Reimplemented for internal purposes
-*/
 bool QNetworkReplyImpl::event(QEvent *e)
 {
    if (e->type() == QEvent::NetworkReplyUpdated) {
@@ -1185,10 +1182,6 @@ bool QNetworkReplyImpl::event(QEvent *e)
    return QObject::event(e);
 }
 
-/*
-    Migrates the backend of the QNetworkReply to a new network connection if required.  Returns
-    true if the reply is migrated or it is not required; otherwise returns false.
-*/
 bool QNetworkReplyImplPrivate::migrateBackend()
 {
    Q_Q(QNetworkReplyImpl);
@@ -1254,7 +1247,6 @@ QDisabledNetworkReply::~QDisabledNetworkReply()
 {
 }
 #endif
-
 
 void QNetworkReplyImpl::_q_startOperation()
 {

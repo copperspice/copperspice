@@ -36,7 +36,7 @@ class QSslCipherPrivate;
 class Q_NETWORK_EXPORT QSslCipher
 {
 
-public:
+ public:
    QSslCipher();
    explicit QSslCipher(const QString &name);
    QSslCipher(const QString &name, QSsl::SslProtocol protocol);
@@ -59,7 +59,6 @@ public:
       qSwap(d, other.d);
    }
 
-
    QSslCipher &operator=(QSslCipher &&other) {
       swap(other);
       return *this;
@@ -72,7 +71,7 @@ public:
       return !operator==(other);
    }
 
-private:
+ private:
    QScopedPointer<QSslCipherPrivate> d;
    friend class QSslSocketBackendPrivate;
 };

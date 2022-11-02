@@ -28,10 +28,10 @@
 
 class QSslCipherPrivate
 {
-public:
+ public:
    QSslCipherPrivate()
-      : isNull(true), supportedBits(0), bits(0),
-      exportable(false), protocol(QSsl::UnknownProtocol) {
+      : isNull(true), supportedBits(0), bits(0), exportable(false), protocol(QSsl::UnknownProtocol)
+   {
    }
 
    bool isNull;

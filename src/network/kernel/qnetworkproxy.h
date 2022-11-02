@@ -37,7 +37,6 @@ class QNetworkProxyPrivate;
 
 class Q_NETWORK_EXPORT QNetworkProxyQuery
 {
-
  public:
    enum QueryType {
       TcpSocket,
@@ -113,7 +112,6 @@ class Q_NETWORK_EXPORT QNetworkProxyQuery
  private:
    QSharedDataPointer<QNetworkProxyQueryPrivate> d;
 };
-
 
 class Q_NETWORK_EXPORT QNetworkProxy
 {
@@ -214,6 +212,7 @@ class Q_NETWORK_EXPORT QNetworkProxyFactory
 };
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QNetworkProxy &proxy);
-#endif // QT_NO_NETWORKPROXY
 
-#endif // QHOSTINFO_H
+#endif
+
+#endif
