@@ -21,6 +21,7 @@ The libraries available in CopperSpice include:
  * CsScript
  * CsSql
  * CsSvg
+ * CsVulkan
  * CsWebKit
  * CsXml
  * CsXmlPatterns
@@ -122,8 +123,7 @@ https://www.youtube.com/copperspice
 Links to technical presentations recorded at CppCon, CppNow, embBO++, MeetingC++, and code::dive, can be
 found on our presentation page.
 
-www.copperspice.com/presentations.html
-
+https://www.copperspice.com/presentations.html
 
 
 ### Authors / Key Contributors
@@ -145,7 +145,6 @@ www.copperspice.com/presentations.html
 * **Zbigniew Skowron**
 
 
-
 ### License
 
 This library is released under the LGPL V2.1 license. For more information refer to the LICENSE file provided with
@@ -162,5 +161,3 @@ this project.
 
 * Forum:    https://forum.copperspice.com
 * Journal:  https://journal.copperspice.com
-
-
