@@ -28,7 +28,6 @@
 #include <qobject.h>
 #include <qdebug.h>
 
-class QAbstractSocketPrivate;
 class QAuthenticator;
 class QHostAddress;
 class QHostInfo;
@@ -38,7 +37,7 @@ class QHostInfo;
 #endif
 
 class QAbstractSocketPrivate;
-class QAuthenticator;
+class QAbstractSocketPrivate;
 
 class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
 {

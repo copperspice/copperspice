@@ -24,9 +24,9 @@
 #ifndef QABSTRACTSOCKETENGINE_P_H
 #define QABSTRACTSOCKETENGINE_P_H
 
-#include <qhostaddress.h>
 #include <qabstractsocket.h>
-#include <QScopedPointer>
+#include <qhostaddress.h>
+#include <qscopedpointer.h>
 
 class QAuthenticator;
 class QAbstractSocketEnginePrivate;

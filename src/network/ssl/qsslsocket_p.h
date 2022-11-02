@@ -25,14 +25,15 @@
 #define QSSLSOCKET_P_H
 
 #include <qsslsocket.h>
-#include <qtcpsocket_p.h>
 #include <qsslkey.h>
+
+#include <qtcpsocket_p.h>
 #include <qsslconfiguration_p.h>
 
 #ifdef QT_OPENSSL
-#include <qsslcontext_openssl_p.h>
+#   include <qsslcontext_openssl_p.h>
 #else
-class QSslContext;
+   class QSslContext;
 #endif
 
 #include <qstringlist.h>

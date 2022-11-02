@@ -24,9 +24,7 @@
 #include <qsslpresharedkeyauthenticator.h>
 #include <qsslpresharedkeyauthenticator_p.h>
 
-#include <QSharedData>
-
-// internal
+#include <qshareddata.h>
 
 QSslPreSharedKeyAuthenticatorPrivate::QSslPreSharedKeyAuthenticatorPrivate()
    : maximumIdentityLength(0), maximumPreSharedKeyLength(0)

@@ -21,16 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qsslcertificate.h>
-#include <qsslcertificate_p.h>
-
-#include <qsslkey.h>
-#include <qsslcertificate_extension.h>
 #include <qdatastream.h>
+#include <qsslkey.h>
+#include <qsslcertificate.h>
+#include <qsslcertificate_extension.h>
 
-#include <qsslkey_p.h>
-#include <qsslcertificate_extension_p.h>
 #include <qasn1element_p.h>
+#include <qsslkey_p.h>
+#include <qsslcertificate_p.h>
+#include <qsslcertificate_extension_p.h>
 
 bool QSslCertificate::operator==(const QSslCertificate &other) const
 {

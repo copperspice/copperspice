@@ -25,6 +25,7 @@
 #define QNETWORK_DISKCACHE_P_H
 
 #include <qabstract_networkcache_p.h>
+
 #include <qbuffer.h>
 #include <qhash.h>
 #include <qtemporaryfile.h>

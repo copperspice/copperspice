@@ -24,11 +24,11 @@
 #ifndef QSSLSOCKET_MAC_P_H
 #define QSSLSOCKET_MAC_P_H
 
+#include <qabstractsocket.h>
 #include <qglobal.h>
 #include <qstring.h>
 #include <qlist.h>
 
-#include <qabstractsocket.h>
 #include <qsslsocket_p.h>
 
 #include <Security/Security.h>

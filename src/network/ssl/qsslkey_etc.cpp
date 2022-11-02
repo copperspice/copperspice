@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qsslkey.h"
-#include "qsslkey_p.h"
-#include "qasn1element_p.h"
-
 #include <qdatastream.h>
 #include <qcryptographichash.h>
+#include <qsslkey.h>
+
+#include <qsslkey_p.h>
+#include <qasn1element_p.h>
 
 static const quint8 bits_table[256] = {
    0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4,

@@ -25,11 +25,12 @@
 #define QTCPSERVER_P_H
 
 #include <qtcpserver.h>
-#include <qabstractsocketengine_p.h>
 #include <qabstractsocket.h>
 #include <qnetworkproxy.h>
 #include <qlist.h>
 #include <qhostaddress.h>
+
+#include <qabstractsocketengine_p.h>
 
 class QTcpServerPrivate : public QAbstractSocketEngineReceiver
 {

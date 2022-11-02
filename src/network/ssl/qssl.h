@@ -25,7 +25,7 @@
 #define QSSL_H
 
 #include <qglobal.h>
-#include <QFlags>
+#include <qflags.h>
 
 namespace QSsl {
 enum KeyType {

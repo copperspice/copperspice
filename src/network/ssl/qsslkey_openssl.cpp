@@ -21,19 +21,16 @@
 *
 ***********************************************************************/
 
-#include <qsslkey.h>
-#include <qsslkey_p.h>
-#include <qsslsocket_openssl_symbols_p.h>
-#include <qsslsocket.h>
-#include <qsslsocket_p.h>
-
 #include <qatomic.h>
 #include <qbytearray.h>
-#include <qiodevice.h>
-
-#ifndef QT_NO_DEBUG_STREAM
 #include <qdebug.h>
-#endif
+#include <qiodevice.h>
+#include <qsslkey.h>
+#include <qsslsocket.h>
+
+#include <qsslkey_p.h>
+#include <qsslsocket_openssl_symbols_p.h>
+#include <qsslsocket_p.h>
 
 void QSslKeyPrivate::clear(bool deep)
 {

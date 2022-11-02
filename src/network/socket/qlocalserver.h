@@ -25,7 +25,7 @@
 #define QLOCALSERVER_H
 
 #include <qabstractsocket.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_LOCALSERVER
 

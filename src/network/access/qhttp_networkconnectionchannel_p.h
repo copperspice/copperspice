@@ -27,7 +27,6 @@
 #include <qnetwork_request.h>
 #include <qnetwork_reply.h>
 #include <qabstractsocket.h>
-
 #include <qauthenticator.h>
 #include <qnetworkproxy.h>
 #include <qbuffer.h>

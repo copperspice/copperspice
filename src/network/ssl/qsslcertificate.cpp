@@ -22,6 +22,11 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qdiriterator.h>
+#include <qfile.h>
+#include <qsslcertificate.h>
 
 #ifdef QT_OPENSSL
 #include <qsslsocket_openssl_symbols_p.h>
@@ -31,14 +36,8 @@
 #include <qsslsocket_mac_p.h>
 #endif
 
-#include <qsslcertificate.h>
 #include <qsslcertificate_p.h>
 #include <qsslkey_p.h>
-
-#include <qdebug.h>
-#include <qdir.h>
-#include <qdiriterator.h>
-#include <qfile.h>
 
 QSslCertificate::QSslCertificate(QIODevice *device, QSsl::EncodingFormat format)
    : d(new QSslCertificatePrivate)

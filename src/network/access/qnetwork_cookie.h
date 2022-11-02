@@ -31,10 +31,10 @@
 
 class QByteArray;
 class QDateTime;
-class QUrl;
-class QNetworkCookiePrivate;
-
 class QDebug;
+class QUrl;
+
+class QNetworkCookiePrivate;
 
 class Q_NETWORK_EXPORT QNetworkCookie
 {

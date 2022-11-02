@@ -27,8 +27,9 @@
 #ifndef QT_NO_LOCALSOCKET
 
 #include <qlocalsocket.h>
-#include <qiodevice_p.h>
 #include <qtimer.h>
+
+#include <qiodevice_p.h>
 
 #if defined(QT_LOCALSOCKET_TCP)
 #   include <qtcpsocket.h>

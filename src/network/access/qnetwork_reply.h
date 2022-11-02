@@ -35,6 +35,7 @@ class QVariant;
 class QAuthenticator;
 class QSslConfiguration;
 class QSslError;
+
 class QNetworkReplyPrivate;
 
 class Q_NETWORK_EXPORT QNetworkReply : public QIODevice

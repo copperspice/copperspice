@@ -26,6 +26,7 @@
 
 #include <qshareddata.h>
 #include <qhttp_part.h>
+
 #include <qnetwork_request_p.h>       // for deriving QHttpPartPrivate from QNetworkHeadersPrivate
 
 class QHttpMultiPartPrivate;

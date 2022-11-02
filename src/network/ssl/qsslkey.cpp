@@ -23,14 +23,14 @@
 
 #include <qsslkey.h>
 #include <qsslkey_p.h>
-#include <qsslsocket.h>
-#include <qsslsocket_p.h>
 
 #include <qatomic.h>
 #include <qbytearray.h>
-#include <qiodevice.h>
-
 #include <qdebug.h>
+#include <qiodevice.h>
+#include <qsslsocket.h>
+
+#include <qsslsocket_p.h>
 
 QSslKey::QSslKey()
    : d(new QSslKeyPrivate)

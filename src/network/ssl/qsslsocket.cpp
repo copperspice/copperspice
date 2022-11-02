@@ -22,6 +22,13 @@
 ***********************************************************************/
 
 #include <qsslsocket.h>
+
+#include <qdebug.h>
+#include <qdir.h>
+#include <qmutex.h>
+#include <qelapsedtimer.h>
+#include <qhostaddress.h>
+#include <qhostinfo.h>
 #include <qsslcipher.h>
 
 #ifdef QT_OPENSSL
@@ -33,13 +40,6 @@
 #endif
 
 #include <qsslconfiguration_p.h>
-
-#include <qdebug.h>
-#include <qdir.h>
-#include <qmutex.h>
-#include <qelapsedtimer.h>
-#include <qhostaddress.h>
-#include <qhostinfo.h>
 
 class QSslSocketGlobalData
 {

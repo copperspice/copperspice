@@ -23,15 +23,16 @@
 
 #include <qsslsocket_openssl_symbols_p.h>
 
+#include <qmutex.h>
+#include <qdatetime.h>
+
+#include <qmutexpool_p.h>
+
 #ifdef Q_OS_WIN
 # include <qsystemlibrary_p.h>
 #else
 # include <qlibrary.h>
 #endif
-
-#include <qmutex.h>
-#include <qmutexpool_p.h>
-#include <qdatetime.h>
 
 #if defined(Q_OS_UNIX)
 #include <qdir.h>
@@ -42,7 +43,7 @@
 #endif
 
 #ifdef Q_OS_DARWIN
-#include "qcore_mac_p.h"
+#include <qcore_mac_p.h>
 #endif
 
 #include <algorithm>

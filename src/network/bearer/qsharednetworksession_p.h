@@ -24,12 +24,12 @@
 #ifndef QSHAREDNETWORKSESSION_P_H
 #define QSHAREDNETWORKSESSION_P_H
 
+#include <qhash.h>
+#include <qsharedpointer.h>
+#include <qweakpointer.h>
+#include <qmutex.h>
 #include <qnetworksession.h>
 #include <qnetworkconfiguration.h>
-#include <QHash>
-#include <QSharedPointer>
-#include <QWeakPointer>
-#include <QMutex>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

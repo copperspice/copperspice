@@ -22,8 +22,7 @@
 ***********************************************************************/
 
 #include <qsslellipticcurve.h>
-#include <QDebug>
-
+#include <qdebug.h>
 
 QDebug operator<<(QDebug debug, QSslEllipticCurve curve)
 {

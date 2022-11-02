@@ -25,8 +25,9 @@
 #define QNETWORKSESSION_P_H
 
 #include <qnetworksession.h>
-#include <qnetworkconfiguration_p.h>
 #include <qsharedpointer.h>
+
+#include <qnetworkconfiguration_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

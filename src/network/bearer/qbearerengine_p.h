@@ -24,10 +24,6 @@
 #ifndef QBEARERENGINE_P_H
 #define QBEARERENGINE_P_H
 
-#include <qnetworkconfiguration_p.h>
-#include <qnetworksession.h>
-#include <qnetworkconfigmanager.h>
-
 #include <qobject.h>
 #include <qglobal.h>
 #include <qlist.h>
@@ -35,6 +31,10 @@
 #include <qhash.h>
 #include <qsharedpointer.h>
 #include <qmutex.h>
+#include <qnetworksession.h>
+#include <qnetworkconfigmanager.h>
+
+#include <qnetworkconfiguration_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

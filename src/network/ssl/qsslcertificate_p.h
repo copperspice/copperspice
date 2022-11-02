@@ -24,10 +24,11 @@
 #ifndef QSSLCERTIFICATE_P_H
 #define QSSLCERTIFICATE_P_H
 
-#include <qsslsocket_p.h>
 #include <qsslcertificate_extension.h>
 #include <qdatetime.h>
 #include <qmultimap.h>
+
+#include <qsslsocket_p.h>
 
 #ifdef QT_OPENSSL
 #include <openssl/x509.h>

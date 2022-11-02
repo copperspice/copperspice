@@ -28,13 +28,13 @@
 #include <qnetworkproxy.h>
 #include <qnetworksession.h>
 
-#include <qnetaccess_cache_p.h>
-#include <qnetaccess_backend_p.h>
-#include <qnetaccess_authenticationmanager_p.h>
-
 #ifndef QT_NO_BEARERMANAGEMENT
 #include <qnetworkconfigmanager.h>
 #endif
+
+#include <qnetaccess_cache_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_authenticationmanager_p.h>
 
 class QAuthenticator;
 class QAbstractNetworkCache;

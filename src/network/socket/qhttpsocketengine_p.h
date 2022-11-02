@@ -25,8 +25,10 @@
 #define QHTTPSOCKETENGINE_P_H
 
 #include <qabstractsocketengine_p.h>
+
 #include <qabstractsocket.h>
 #include <qnetworkproxy.h>
+
 #include <qauthenticator_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)

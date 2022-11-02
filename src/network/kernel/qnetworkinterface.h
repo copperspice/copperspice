@@ -30,7 +30,8 @@
 
 #ifndef QT_NO_NETWORKINTERFACE
 
-template<typename T> class QList;
+template<typename T>
+class QList;
 
 class QNetworkInterfacePrivate;
 class QNetworkAddressEntryPrivate;

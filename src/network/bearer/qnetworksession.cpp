@@ -21,15 +21,14 @@
 *
 ***********************************************************************/
 
+#include <qeventloop.h>
 #include <qnetworksession.h>
+#include <qtimer.h>
+#include <qthread.h>
 
 #include <qnetworksession_p.h>
 #include <qbearerengine_p.h>
 #include <qnetworkconfigmanager_p.h>
-
-#include <QEventLoop>
-#include <QTimer>
-#include <QThread>
 
 #ifdef interface
    // avoid conflict with our method named interface()

@@ -29,8 +29,8 @@
 #include <qvariant.h>
 #include <qsslcertificate.h>
 
-class QSslErrorPrivate;
 class QDebug;
+class QSslErrorPrivate;
 
 class Q_NETWORK_EXPORT QSslError
 {

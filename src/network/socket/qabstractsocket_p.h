@@ -28,10 +28,11 @@
 #include <qbytearray.h>
 #include <qlist.h>
 #include <qtimer.h>
+#include <qnetworkproxy.h>
+
 #include <qringbuffer_p.h>
 #include <qiodevice_p.h>
 #include <qabstractsocketengine_p.h>
-#include <qnetworkproxy.h>
 
 class QHostInfo;
 

@@ -21,10 +21,9 @@
 *
 ***********************************************************************/
 
+#include <qbytearray.h>
 #include <qnetworkproxy.h>
-
-#include <QByteArray>
-#include <QUrl>
+#include <qurl.h>
 
 #ifndef QT_NO_NETWORKPROXY
 

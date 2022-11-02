@@ -30,6 +30,7 @@
 
 #ifdef QT_SSL
 
+class QDebug;
 class QSslCipherPrivate;
 
 class Q_NETWORK_EXPORT QSslCipher
@@ -76,7 +77,6 @@ private:
    friend class QSslSocketBackendPrivate;
 };
 
-class QDebug;
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCipher &cipher);
 
 #endif

@@ -25,6 +25,7 @@
 #define QNATIVESOCKETENGINE_P_H
 
 #include <qhostaddress.h>
+
 #include <qabstractsocketengine_p.h>
 
 #ifndef Q_OS_WIN

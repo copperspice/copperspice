@@ -23,10 +23,12 @@
 
 #include <qsslconfiguration.h>
 #include <qsslconfiguration_p.h>
-#include <qsslsocket.h>
-#include <qsslsocket_p.h>
-#include <qmutex.h>
+
 #include <qdebug.h>
+#include <qmutex.h>
+#include <qsslsocket.h>
+
+#include <qsslsocket_p.h>
 
 const QSsl::SslOptions QSslConfigurationPrivate::defaultSslOptions = QSsl::SslOptionDisableEmptyFragments
       | QSsl::SslOptionDisableLegacyRenegotiation
