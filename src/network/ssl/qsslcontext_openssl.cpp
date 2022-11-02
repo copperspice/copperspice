@@ -24,7 +24,6 @@
 #include <qsslsocket.h>
 #include <qmutex.h>
 
-#include <qssl_p.h>
 #include <qsslcontext_openssl_p.h>
 #include <qsslsocket_p.h>
 #include <qsslsocket_openssl_p.h>

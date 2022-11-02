@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qssl_p.h>
 #include <qsslsocket_openssl_symbols_p.h>
 
 #ifdef Q_OS_WIN

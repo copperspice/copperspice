@@ -31,7 +31,6 @@
 #include <qsslsocket_mac_p.h>
 #endif
 
-#include <qssl_p.h>
 #include <qsslcertificate.h>
 #include <qsslcertificate_p.h>
 #include <qsslkey_p.h>

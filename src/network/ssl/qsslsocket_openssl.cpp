@@ -42,7 +42,6 @@
 
 #include <qsslcertificate_p.h>
 #include <qsslcipher_p.h>
-#include <qssl_p.h>
 #include <qsslkey_p.h>
 #include <qsslpresharedkeyauthenticator_p.h>
 #include <qsslsocket_openssl_symbols_p.h>

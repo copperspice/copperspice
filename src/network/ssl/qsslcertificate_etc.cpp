@@ -28,7 +28,6 @@
 #include <qsslcertificate_extension.h>
 #include <qdatastream.h>
 
-#include <qssl_p.h>
 #include <qsslkey_p.h>
 #include <qsslcertificate_extension_p.h>
 #include <qasn1element_p.h>

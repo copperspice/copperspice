@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qsslsocket.h>
-#include <qssl_p.h>
 #include <qsslsocket_mac_p.h>
 #include <qasn1element_p.h>
 #include <qsslcertificate_p.h>

@@ -25,7 +25,6 @@ list(APPEND NETWORK_INCLUDES
 )
 
 list(APPEND NETWORK_PRIVATE_INCLUDES
-    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qssl_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate_extension_p.h
     ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslconfiguration_p.h

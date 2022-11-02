@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qssl_p.h>
 #include <qsslsocket.h>
 #include <qsslcipher.h>
 
