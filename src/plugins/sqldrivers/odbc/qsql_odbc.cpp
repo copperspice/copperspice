@@ -1878,6 +1878,15 @@ void QODBCResult::virtual_hook(int id, void *data)
    }
 }
 
+void QODBCResult::detachFromResultSet()
+{
+   Q_D(QODBCResult);
+
+   if (d->hStmt) {
+      SQLCloseCursor(d->hStmt);
+   }
+}
+
 void QODBCResult::setForwardOnly(bool forward)
 {
    d->userForwardOnly = forward;

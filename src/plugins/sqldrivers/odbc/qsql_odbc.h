@@ -75,6 +75,7 @@ class QODBCResult : public QSqlResult
    QSqlRecord record() const override;
 
    void virtual_hook(int id, void *data) override;
+   void detachFromResultSet() override;
    bool nextResult() override;
 
  private:
