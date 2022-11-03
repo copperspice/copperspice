@@ -679,7 +679,7 @@ static QSqlField qMakeFieldInfo(const SQLHANDLE hStmt, const QODBCDriverPrivate 
    return f;
 }
 
-static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
+static QSqlField qMakeFieldInfo(const SQLHANDLE hStmt, int i, QString *errorMessage)
 {
    SQLSMALLINT colNameLen;
    SQLSMALLINT colType;
@@ -690,11 +690,14 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
    SQLRETURN r = SQL_ERROR;
 
    QVarLengthArray<SQLTCHAR> colName(COLNAMESIZE);
+   errorMessage->clear();
+
    r = SQLDescribeCol(hStmt, i + 1, colName.data(), (SQLSMALLINT)COLNAMESIZE, &colNameLen,
          &colType, &colSize, &colScale, &nullable);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to describe column %1").formatArg(i), p);
+      *errorMessage = "qMakeField: Unable to describe column " + QString::number(i);
+
       return QSqlField();
    }
 
@@ -702,19 +705,14 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
    r = SQLColAttribute (hStmt, i + 1, SQL_DESC_UNSIGNED, nullptr, 0, nullptr, &unsignedFlag);
 
    if (r != SQL_SUCCESS) {
-      qSqlWarning(QString::fromLatin1("qMakeField: Unable to get column attributes for column %1").formatArg(i), p);
+      qSqlWarning(QString("qMakeField: Unable to get column attributes for column %1").formatArg(i), hStmt);
    }
 
    QString qColName(fromSQLTCHAR(colName, colNameLen));
 
    // nullable can be SQL_NO_NULLS, SQL_NULLABLE or SQL_NULLABLE_UNKNOWN
-   int required = -1;
-   if (nullable == SQL_NO_NULLS) {
-      required = 1;
-   } else if (nullable == SQL_NULLABLE) {
-      required = 0;
-   }
-   QVariant::Type type = qDecodeODBCType(colType, p, unsignedFlag == SQL_FALSE);
+   QVariant::Type type = qDecodeODBCType(colType, unsignedFlag == SQL_FALSE);
+
    QSqlField f(qColName, type);
    f.setSqlType(colType);
    f.setLength(colSize == 0 ? -1 : int(colSize));
@@ -727,6 +725,8 @@ static QSqlField qMakeFieldInfo(const QODBCPrivate *p, int i )
    }
 
    // else we do not know
+   f.setAutoValue(isAutoValue(hStmt, i));
+
    return f;
 }
 
