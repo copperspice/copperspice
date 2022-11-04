@@ -68,11 +68,15 @@ inline static QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int s
          break;
 
       case 2:
-         result = QString::fromUtf16((const ushort *)input.constData(), realsize);
+         result = QString::fromUtf16((const char16_t *)input.constData(), realsize);
          break;
 
       case 4:
-         result = QString::fromUcs4((const uint *)input.constData(), realsize);
+         // ucs-4
+         for (SQLTCHAR ch : input) {
+            result.append(QChar32(ch));
+         }
+
          break;
 
       default:
@@ -85,17 +89,38 @@ inline static QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int s
 inline static QVarLengthArray<SQLTCHAR> toSQLTCHAR(const QString &input)
 {
    QVarLengthArray<SQLTCHAR> result;
-   result.resize(input.size());
+
    switch (sizeof(SQLTCHAR)) {
       case 1:
-         memcpy(result.data(), input.toUtf8().data(), input.size());
+         // utf-8
+         result.resize(input.size_storage());
+
+         memcpy(result.data(), input.constData(), input.size_storage());
          break;
-      case 2:
-         memcpy(result.data(), input.unicode(), input.size() * 2);
+
+      case 2: {
+         // utf-16
+         QString16 tmp = input.toUtf16();
+         result.resize(tmp.size_storage() * 2);
+
+         memcpy(result.data(), tmp.constData(), tmp.size_storage() * 2);
          break;
-      case 4:
-         memcpy(result.data(), input.toUcs4().data(), input.size() * 4);
+      }
+
+      case 4: {
+         // ucs-4
+         QVector<char32_t> tmp;
+
+         for (QChar32 ch : input) {
+            tmp.append(ch.unicode());
+         }
+
+         result.resize(tmp.size() * 4);
+
+         memcpy(result.data(), tmp.constData(), tmp.size() * 4);
          break;
+      }
+
       default:
          qCritical() << "sizeof(SQLTCHAR) is " << sizeof(SQLTCHAR) << "Unable to handle this data type";
    }
