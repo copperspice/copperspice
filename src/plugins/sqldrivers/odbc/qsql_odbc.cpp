@@ -945,33 +945,42 @@ void QODBCDriverPrivate::splitTableQualifier(const QString &qualifier, QString &
       table = qualifier;
       return;
    }
-   QStringList l = qualifier.split(QLatin1Char('.'));
-   if (l.count() > 3) {
-      return;   // can't possibly be a valid table qualifier
+
+   QStringList list = qualifier.split(QChar('.'));
+   int count = list.count();
+
+   if (count > 3) {
+      return;   // can not be a valid table qualifier
    }
 
-   int i = 0, n = l.count();
+   int index = 0;
 
-   if (n == 1) {
+   if (count == 1) {
       table = qualifier;
+
    } else {
-      for (QStringList::iterator it = l.begin(); it != l.end(); ++it) {
-         if (n == 3) {
-            if (i == 0) {
-               catalog = *it;
-            } else if (i == 1) {
-               schema = *it;
-            } else if (i == 2) {
-               table = *it;
+      for (const auto &item : list) {
+         if (count == 3) {
+            if (index == 0) {
+               catalog = item;
+
+            } else if (index == 1) {
+               schema = item;
+
+            } else if (index == 2) {
+               table = item;
             }
-         } else if (n == 2) {
-            if (i == 0) {
-               schema = *it;
-            } else if (i == 1) {
-               table = *it;
+
+         } else if (count == 2) {
+            if (index == 0) {
+               schema = item;
+
+            } else if (index == 1) {
+               table = item;
             }
          }
-         i++;
+
+         ++index;
       }
    }
 }
