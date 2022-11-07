@@ -118,7 +118,7 @@ class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
    bool endTrans();
    void cleanup();
 
-   QODBCDriverPrivate *d;
+   Q_DECLARE_PRIVATE(QODBCDriver)
    friend class QODBCPrivate;
 };
 

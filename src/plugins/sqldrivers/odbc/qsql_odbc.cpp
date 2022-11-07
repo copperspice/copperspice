@@ -41,6 +41,7 @@
 #include <qdebug.h>
 #include <qsqlquery.h>
 
+#include <qsqldriver_p.h>
 // undefine this to prevent initial check of the ODBC driver
 #define ODBC_CHECK_DRIVER
 
@@ -130,7 +131,7 @@ inline static QVarLengthArray<SQLTCHAR> toSQLTCHAR(const QString &input)
    return result;
 }
 
-class QODBCDriverPrivate
+class QODBCDriverPrivate : public QSqlDriverPrivate
 {
  public:
    enum DefaultCase {Lower, Mixed, Upper, Sensitive};
@@ -1929,15 +1930,15 @@ void QODBCResult::setForwardOnly(bool forward)
 }
 
 QODBCDriver::QODBCDriver(QObject *parent)
-   : QSqlDriver(parent)
+   : QSqlDriver(*new QODBCDriverPrivate(), parent)
 {
-   init();
 }
 
 QODBCDriver::QODBCDriver(SQLHANDLE env, SQLHANDLE con, QObject *parent)
-   : QSqlDriver(parent)
+   : QSqlDriver(*new QODBCDriverPrivate(), parent)
 {
-   init();
+   Q_D(QODBCDriver);
+
    d->hEnv = env;
    d->hDbc = con;
 
@@ -1947,19 +1948,15 @@ QODBCDriver::QODBCDriver(SQLHANDLE env, SQLHANDLE con, QObject *parent)
    }
 }
 
-void QODBCDriver::init()
-{
-   d = new QODBCDriverPrivate();
-}
-
 QODBCDriver::~QODBCDriver()
 {
    cleanup();
-   delete d;
 }
 
 bool QODBCDriver::hasFeature(DriverFeature f) const
 {
+   Q_D(const QODBCDriver);
+
    switch (f) {
       case Transactions: {
          if (! d->hDbc) {
@@ -2011,6 +2008,8 @@ bool QODBCDriver::hasFeature(DriverFeature f) const
 bool QODBCDriver::open(const QString &db, const QString &user, const QString &password,
       const QString &, int, const QString &connOpts)
 {
+   Q_D(QODBCDriver);
+
    if (isOpen()) {
       close();
    }
@@ -2104,10 +2103,9 @@ void QODBCDriver::close()
 
 void QODBCDriver::cleanup()
 {
+   Q_D(QODBCDriver);
+
    SQLRETURN r;
-   if (!d) {
-      return;
-   }
 
    if (d->hDbc) {
       // Open statements/descriptors handles are automatically cleaned up by SQLDisconnect
@@ -2343,11 +2341,14 @@ void QODBCDriverPrivate::checkDateTimePrecision()
 
 QSqlResult *QODBCDriver::createResult() const
 {
-   return new QODBCResult(this, d);
+   Q_D(const QODBCDriver);
+   return new QODBCResult(this, const_cast<QODBCDriverPrivate *>(d));
 }
 
 bool QODBCDriver::beginTransaction()
 {
+   Q_D(QODBCDriver);
+
    if (! isOpen()) {
       qWarning() << "QODBCDriver::beginTransaction: Database not open";
       return false;
@@ -2368,6 +2369,8 @@ bool QODBCDriver::beginTransaction()
 
 bool QODBCDriver::commitTransaction()
 {
+   Q_D(QODBCDriver);
+
    if (! isOpen()) {
       qWarning() << "QODBCDriver::commitTransaction: Database not open";
       return false;
@@ -2385,6 +2388,8 @@ bool QODBCDriver::commitTransaction()
 
 bool QODBCDriver::rollbackTransaction()
 {
+   Q_D(QODBCDriver);
+
    if (! isOpen()) {
       qWarning() << "QODBCDriver::rollbackTransaction: Database not open";
       return false;
@@ -2402,6 +2407,8 @@ bool QODBCDriver::rollbackTransaction()
 
 bool QODBCDriver::endTrans()
 {
+   Q_D(QODBCDriver);
+
    SQLUINTEGER ac(SQL_AUTOCOMMIT_ON);
    SQLRETURN r  = SQLSetConnectAttr(d->hDbc,
          SQL_ATTR_AUTOCOMMIT,
@@ -2417,6 +2424,8 @@ bool QODBCDriver::endTrans()
 
 QStringList QODBCDriver::tables(QSql::TableType type) const
 {
+   Q_D(const QODBCDriver);
+
    QStringList list;
    if (! isOpen()) {
       return list;
@@ -2492,6 +2501,8 @@ QStringList QODBCDriver::tables(QSql::TableType type) const
 
 QSqlIndex QODBCDriver::primaryIndex(const QString &tablename) const
 {
+   Q_D(const QODBCDriver);
+
    QSqlIndex index(tablename);
    if (! isOpen()) {
       return index;
@@ -2599,6 +2610,7 @@ QSqlIndex QODBCDriver::primaryIndex(const QString &tablename) const
 
 QSqlRecord QODBCDriver::record(const QString &tablename) const
 {
+   Q_D(const QODBCDriver);
 
    QSqlRecord retval;
 
@@ -2723,11 +2735,15 @@ QString QODBCDriver::formatValue(const QSqlField &field, bool trimStrings) const
 
 QVariant QODBCDriver::handle() const
 {
+   Q_D(const QODBCDriver);
+
    return QVariant::fromValue<SQLHANDLE>(d->hDbc);
 }
 
 QString QODBCDriver::escapeIdentifier(const QString &identifier, IdentifierType) const
 {
+   Q_D(const QODBCDriver);
+
    QChar quote    = d->quoteChar();
    QString retval = identifier;
 
@@ -2742,6 +2758,8 @@ QString QODBCDriver::escapeIdentifier(const QString &identifier, IdentifierType)
 
 bool QODBCDriver::isIdentifierEscapedImplementation(const QString &identifier, IdentifierType) const
 {
+   Q_D(const QODBCDriver);
+
    QChar quote = d->quoteChar();
 
    return identifier.size() > 2
