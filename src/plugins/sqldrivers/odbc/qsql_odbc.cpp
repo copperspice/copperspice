@@ -139,7 +139,7 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
    QODBCDriverPrivate()
       : hEnv(nullptr), hDbc(nullptr), unicode(false), useSchema(false),
         isFreeTDSDriver(false), hasSQLFetchScroll(true), hasMultiResultSets(false),
-        disconnectCount(0), datetime_precision(19), isQuoteInitialized(false), quote('"')
+        disconnectCount(0), datetime_precision(19), isQuoteInitialized(false), m_quote('"')
    {
    }
 
@@ -168,10 +168,11 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
    DefaultCase defaultCase() const;
 
    QString adjustCase(const QString &) const;
-   QChar quoteChar();
+   QChar quoteChar() const;
+
  private:
-   bool isQuoteInitialized;
-   QChar quote;
+   mutable bool isQuoteInitialized;
+   mutable QChar m_quote;
 };
 
 class QODBCPrivate
@@ -767,30 +768,26 @@ static size_t qGetODBCVersion(const QString &connOpts)
    return SQL_OV_ODBC2;
 }
 
-QChar QODBCDriverPrivate::quoteChar()
+QChar QODBCDriverPrivate::quoteChar() const
 {
    if (! isQuoteInitialized) {
       SQLTCHAR driverResponse[4];
       SQLSMALLINT length;
-      int r = SQLGetInfo(hDbc,
-            SQL_IDENTIFIER_QUOTE_CHAR,
-            &driverResponse,
-            sizeof(driverResponse),
-            &length);
-      if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO)
-#ifdef UNICODE
-         quote = QChar(driverResponse[0]);
-#else
-         quote = QLatin1Char(driverResponse[0]);
-#endif
-      else {
-         quote = QLatin1Char('"');
+
+      int r = SQLGetInfo(hDbc, SQL_IDENTIFIER_QUOTE_CHAR, &driverResponse, sizeof(driverResponse), &length);
+
+      if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
+         m_quote = QChar(driverResponse[0]);
+
+      } else {
+         m_quote = '"';
       }
+
       isQuoteInitialized = true;
    }
-   return quote;
-}
 
+   return m_quote;
+}
 
 bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
 {
