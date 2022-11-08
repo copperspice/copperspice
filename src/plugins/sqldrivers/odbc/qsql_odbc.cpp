@@ -833,17 +833,8 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_LOGIN_TIMEOUT, (SQLPOINTER) static_cast<std::uintptr_t>(v), 0);
 
       } else if (opt.toUpper() == "SQL_ATTR_CURRENT_CATALOG") {
-         // 0 terminate
-         val.utf16();
-
-         r = SQLSetConnectAttr(hDbc, SQL_ATTR_CURRENT_CATALOG,
-
-#ifdef UNICODE
-               toSQLTCHAR(val).data(),
-#else
-               (SQLCHAR *) val.toUtf8().data(),
-#endif
-               val.length() * sizeof(SQLTCHAR));
+         QVarLengthArray<SQLTCHAR> tmp = toSQLTCHAR(val);
+         r = SQLSetConnectAttr(hDbc, SQL_ATTR_CURRENT_CATALOG, tmp.data(), tmp.length() * sizeof(SQLTCHAR));
 
       } else if (opt.toUpper() == "SQL_ATTR_METADATA_ID") {
          if (val.toUpper() == "SQL_TRUE") {
@@ -862,17 +853,13 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
       } else if (opt.toUpper() == "SQL_ATTR_PACKET_SIZE") {
          v = val.toInteger<uint>();
          r = SQLSetConnectAttr(hDbc, SQL_ATTR_PACKET_SIZE, (SQLPOINTER) static_cast<std::uintptr_t>(v), 0);
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_TRACEFILE")) {
-         val.utf16(); // 0 terminate
-         r = SQLSetConnectAttr(hDbc, SQL_ATTR_TRACEFILE,
-#ifdef UNICODE
-               toSQLTCHAR(val).data(),
-#else
-               (SQLCHAR *) val.toUtf8().data(),
-#endif
-               val.length() * sizeof(SQLTCHAR));
-      } else if (opt.toUpper() == QLatin1String("SQL_ATTR_TRACE")) {
-         if (val.toUpper() == QLatin1String("SQL_OPT_TRACE_OFF")) {
+
+      } else if (opt.toUpper() == "SQL_ATTR_TRACEFILE") {
+         QVarLengthArray<SQLTCHAR> tmp = toSQLTCHAR(val);
+         r = SQLSetConnectAttr(hDbc, SQL_ATTR_TRACEFILE, tmp.data(), tmp.length() * sizeof(SQLTCHAR));
+
+      } else if (opt.toUpper() == "SQL_ATTR_TRACE") {
+         if (val.toUpper() == "SQL_OPT_TRACE_OFF") {
             v = SQL_OPT_TRACE_OFF;
 
          } else if (val.toUpper() == "SQL_OPT_TRACE_ON") {
