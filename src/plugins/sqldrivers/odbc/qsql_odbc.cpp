@@ -157,7 +157,7 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
 
    bool checkDriver() const;
    void checkUnicode();
-   void checkSqlServer();
+   void checkDBMS();
    void checkHasSQLFetchScroll();
    void checkHasMultiResults();
    void checkSchemaUsage();
@@ -2092,7 +2092,7 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
 
    d->checkUnicode();
    d->checkSchemaUsage();
-   d->checkSqlServer();
+   d->checkDBMS();
    d->checkHasSQLFetchScroll();
    d->checkHasMultiResults();
    d->checkDateTimePrecision();
@@ -2269,7 +2269,7 @@ void QODBCDriverPrivate::checkSchemaUsage()
    }
 }
 
-void QODBCDriverPrivate::checkSqlServer()
+void QODBCDriverPrivate::checkDBMS()
 {
    SQLRETURN r;
    QVarLengthArray<SQLTCHAR> serverString(200);
@@ -2280,20 +2280,27 @@ void QODBCDriverPrivate::checkSqlServer()
    r = SQLGetInfo(hDbc, SQL_DBMS_NAME, serverString.data(), serverString.size() * sizeof(SQLTCHAR), &t);
 
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
-      QString serverType;
-#ifdef UNICODE
-      serverType = fromSQLTCHAR(serverString, t / sizeof(SQLTCHAR));
-#else
-      serverType = QString::fromUtf8((const char *)serverString.constData(), t);
-#endif
-      isMySqlServer = serverType.contains(QLatin1String("mysql"), Qt::CaseInsensitive);
-      isMSSqlServer = serverType.contains(QLatin1String("Microsoft SQL Server"), Qt::CaseInsensitive);
+      const QString serverType = fromSQLTCHAR(serverString, t / sizeof(SQLTCHAR));
+
+      if (serverType.contains("PostgreSQL", Qt::CaseInsensitive)) {
+         dbmsType = QSqlDriver::PostgreSQL;
+
+      } else if (serverType.contains("Oracle", Qt::CaseInsensitive)) {
+         dbmsType = QSqlDriver::Oracle;
+
+      } else if (serverType.contains("MySql", Qt::CaseInsensitive)) {
+         dbmsType = QSqlDriver::MySqlServer;
+
+      } else if (serverType.contains("Microsoft SQL Server", Qt::CaseInsensitive))  {
+         dbmsType = QSqlDriver::MSSqlServer;
+
+      } else if (serverType.contains("Sybase", Qt::CaseInsensitive))  {
+         dbmsType = QSqlDriver::Sybase;
+      }
    }
-   r = SQLGetInfo(hDbc,
-         SQL_DRIVER_NAME,
-         serverString.data(),
-         serverString.size() * sizeof(SQLTCHAR),
-         &t);
+
+   r = SQLGetInfo(hDbc, SQL_DRIVER_NAME, serverString.data(), SQLSMALLINT(serverString.size() * sizeof(SQLTCHAR)), &t);
+
    if (r == SQL_SUCCESS || r == SQL_SUCCESS_WITH_INFO) {
       const QString serverType = fromSQLTCHAR(serverString, t / sizeof(SQLTCHAR));
 
