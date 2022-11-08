@@ -2026,10 +2026,14 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       qSqlWarning(QString("QODBCDriver::open: Unable to allocate connection"), d);
       setOpenError(true);
+      cleanup();
+
       return false;
    }
 
    if (! d->setConnectionOptions(connOpts)) {
+      cleanup();
+
       return false;
    }
 
@@ -2065,6 +2069,8 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
    if (r != SQL_SUCCESS && r != SQL_SUCCESS_WITH_INFO) {
       setLastError(qMakeError(tr("Unable to connect"), QSqlError::ConnectionError, d));
       setOpenError(true);
+      cleanup();
+
       return false;
    }
 
@@ -2072,6 +2078,8 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
       setLastError(qMakeError(tr("Unable to connect - Driver does not support all "
                "functionality required"), QSqlError::ConnectionError, d));
       setOpenError(true);
+      cleanup();
+
       return false;
    }
 
@@ -2081,6 +2089,7 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
    d->checkHasSQLFetchScroll();
    d->checkHasMultiResults();
    d->checkDateTimePrecision();
+
    setOpen(true);
    setOpenError(false);
 
