@@ -135,10 +135,12 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
 {
  public:
    enum DefaultCase {Lower, Mixed, Upper, Sensitive};
+
    QODBCDriverPrivate()
-      : hEnv(0), hDbc(0), unicode(false), useSchema(false), disconnectCount(0), datetime_precision(19), isMySqlServer(false),
-        isMSSqlServer(false), isFreeTDSDriver(false), hasSQLFetchScroll(true),
-        hasMultiResultSets(false), isQuoteInitialized(false), quote(QLatin1Char('"')) {
+      : hEnv(nullptr), hDbc(nullptr), unicode(false), useSchema(false),
+        isFreeTDSDriver(false), hasSQLFetchScroll(true), hasMultiResultSets(false),
+        disconnectCount(0), datetime_precision(19), isQuoteInitialized(false), quote('"')
+   {
    }
 
    SQLHANDLE hEnv;
@@ -146,8 +148,6 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
 
    bool unicode;
    bool useSchema;
-   bool isMySqlServer;
-   bool isMSSqlServer;
    bool isFreeTDSDriver;
    bool hasSQLFetchScroll;
    bool hasMultiResultSets;
@@ -2005,8 +2005,9 @@ bool QODBCDriver::hasFeature(DriverFeature f) const
          return false;
       case MultipleResultSets:
          return d->hasMultiResultSets;
+
       case BLOB: {
-         if (d->isMySqlServer) {
+         if (d->dbmsType == MySqlServer) {
             return true;
          } else {
             return false;
@@ -2098,7 +2099,8 @@ bool QODBCDriver::open(const QString &db, const QString &user, const QString &pa
    d->checkDateTimePrecision();
    setOpen(true);
    setOpenError(false);
-   if (d->isMSSqlServer) {
+
+   if (d->dbmsType == MSSqlServer) {
       QSqlQuery i(createResult());
       i.exec("SET QUOTED_IDENTIFIER ON");
    }
