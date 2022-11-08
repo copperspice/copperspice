@@ -1986,6 +1986,7 @@ bool QODBCDriver::hasFeature(DriverFeature f) const
       case BatchOperations:
       case SimpleLocking:
       case EventNotifications:
+      case CancelQuery:
          return false;
       case MultipleResultSets:
          return d->hasMultiResultSets;
