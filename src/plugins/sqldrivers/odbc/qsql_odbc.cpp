@@ -42,6 +42,8 @@
 #include <qsqlquery.h>
 
 #include <qsqldriver_p.h>
+#include <qsqlresult_p.h>
+
 // undefine this to prevent initial check of the ODBC driver
 #define ODBC_CHECK_DRIVER
 
@@ -175,14 +177,15 @@ class QODBCDriverPrivate : public QSqlDriverPrivate
    mutable QChar m_quote;
 };
 
-class QODBCPrivate
+class QODBCResultPrivate : public QSqlResultPrivate
 {
  public:
-   QODBCPrivate(QODBCDriverPrivate *dpp)
-      : hStmt(0), useSchema(false), hasSQLFetchScroll(true), driverPrivate(dpp), userForwardOnly(false) {
-      unicode = dpp->unicode;
-      useSchema = dpp->useSchema;
-      disconnectCount = dpp->disconnectCount;
+   QODBCResultPrivate(QODBCDriverPrivate *dpp)
+      : hStmt(nullptr), useSchema(false), hasSQLFetchScroll(true), userForwardOnly(false), driverPrivate(dpp)
+   {
+      unicode           = dpp->unicode;
+      useSchema         = dpp->useSchema;
+      disconnectCount   = dpp->disconnectCount;
       hasSQLFetchScroll = dpp->hasSQLFetchScroll;
    }
 
@@ -217,16 +220,20 @@ class QODBCPrivate
    void updateStmtHandleState(const QSqlDriver *driver);
 };
 
-bool QODBCPrivate::isStmtHandleValid(const QSqlDriver *driver)
+bool QODBCResultPrivate::isStmtHandleValid(const QSqlDriver *driver)
 {
    const QODBCDriver *odbcdriver = static_cast<const QODBCDriver *> (driver);
-   return disconnectCount == odbcdriver->d->disconnectCount;
+   const QODBCDriverPrivate *obj = odbcdriver->d_func();
+
+   return disconnectCount == obj->disconnectCount;
 }
 
-void QODBCPrivate::updateStmtHandleState(const QSqlDriver *driver)
+void QODBCResultPrivate::updateStmtHandleState(const QSqlDriver *driver)
 {
    const QODBCDriver *odbcdriver = static_cast<const QODBCDriver *> (driver);
-   disconnectCount = odbcdriver->d->disconnectCount;
+   const QODBCDriverPrivate *obj = odbcdriver->d_func();
+
+   disconnectCount = obj->disconnectCount;
 }
 
 static QString cs_warnHandle(int handleType, SQLHANDLE handle, int *nativeCode = nullptr)
@@ -313,7 +320,7 @@ static QString cs_warnODBC(const SQLHANDLE hStmt, const SQLHANDLE envHandle = nu
    return result;
 }
 
-static QString cs_warnODBC(const QODBCPrivate *odbc, int *nativeCode = nullptr)
+static QString cs_warnODBC(const QODBCResultPrivate *odbc, int *nativeCode = nullptr)
 {
    return cs_warnODBC(odbc->hStmt, odbc->dpEnv(), odbc->dpDbc(), nativeCode);
 }
@@ -323,7 +330,7 @@ static QString cs_warnODBC(const QODBCDriverPrivate *odbc, int *nativeCode = nul
    return cs_warnODBC(nullptr, odbc->hEnv, odbc->hDbc, nativeCode);
 }
 
-static void qSqlWarning(const QString &message, const QODBCPrivate *odbc)
+static void qSqlWarning(const QString &message, const QODBCResultPrivate *odbc)
 {
    qWarning() << message << " Error:" << cs_warnODBC(odbc);
 }
@@ -338,7 +345,7 @@ static void qSqlWarning(const QString &message, const SQLHANDLE hStmt)
    qWarning() << message << " Error:" << cs_warnODBC(hStmt);
 }
 
-static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QODBCPrivate *p)
+static QSqlError qMakeError(const QString &err, QSqlError::ErrorType type, const QODBCResultPrivate *p)
 {
    int nativeCode  = -1;
    QString message = cs_warnODBC(p, &nativeCode);
@@ -1028,13 +1035,14 @@ QString QODBCDriverPrivate::adjustCase(const QString &identifier) const
 }
 
 QODBCResult::QODBCResult(const QODBCDriver *db, QODBCDriverPrivate *p)
-   : QSqlResult(db)
+   : QSqlResult(*new QODBCResultPrivate(p), db)
 {
-   d = new QODBCPrivate(p);
 }
 
 QODBCResult::~QODBCResult()
 {
+   Q_D(QODBCResult);
+
    if (d->hStmt && d->isStmtHandleValid(driver()) && driver()->isOpen()) {
       SQLRETURN r = SQLFreeHandle(SQL_HANDLE_STMT, d->hStmt);
 
@@ -1042,11 +1050,12 @@ QODBCResult::~QODBCResult()
          qSqlWarning(QString("QODBCDriver: Unable to free statement handle ") + QString::number(r), d);
       }
    }
-   delete d;
 }
 
 bool QODBCResult::reset (const QString &query)
 {
+   Q_D(QODBCResult);
+
    setActive(false);
    setAt(QSql::BeforeFirstRow);
    d->rInf.clear();
@@ -1122,6 +1131,8 @@ bool QODBCResult::reset (const QString &query)
 
 bool QODBCResult::fetch(int i)
 {
+   Q_D(QODBCResult);
+
    if (! driver()->isOpen()) {
       return false;
    }
@@ -1170,6 +1181,8 @@ bool QODBCResult::fetch(int i)
 
 bool QODBCResult::fetchNext()
 {
+   Q_D(QODBCResult);
+
    SQLRETURN r;
    d->clearValues();
 
@@ -1193,6 +1206,8 @@ bool QODBCResult::fetchNext()
 
 bool QODBCResult::fetchFirst()
 {
+   Q_D(QODBCResult);
+
    if (isForwardOnly() && at() != QSql::BeforeFirstRow) {
       return false;
    }
@@ -1218,6 +1233,8 @@ bool QODBCResult::fetchFirst()
 
 bool QODBCResult::fetchPrevious()
 {
+   Q_D(QODBCResult);
+
    if (isForwardOnly()) {
       return false;
    }
@@ -1240,6 +1257,8 @@ bool QODBCResult::fetchPrevious()
 
 bool QODBCResult::fetchLast()
 {
+   Q_D(QODBCResult);
+
    SQLRETURN r;
    d->clearValues();
 
@@ -1285,6 +1304,8 @@ bool QODBCResult::fetchLast()
 
 QVariant QODBCResult::data(int field)
 {
+   Q_D(QODBCResult);
+
    if (field >= d->rInf.count() || field < 0) {
       qWarning() << "QODBCResult::data: column" << field << "out of range";
       return QVariant();
@@ -1393,6 +1414,8 @@ QVariant QODBCResult::data(int field)
 
 bool QODBCResult::isNull(int field)
 {
+   Q_D(QODBCResult);
+
    if (field < 0 || field > d->fieldCache.size()) {
       return true;
    }
@@ -1412,6 +1435,8 @@ int QODBCResult::size()
 
 int QODBCResult::numRowsAffected()
 {
+   Q_D(QODBCResult);
+
    SQLLEN affectedRowCount = 0;
    SQLRETURN r = SQLRowCount(d->hStmt, &affectedRowCount);
 
@@ -1426,6 +1451,8 @@ int QODBCResult::numRowsAffected()
 
 bool QODBCResult::prepare(const QString &query)
 {
+   Q_D(QODBCResult);
+
    setActive(false);
    setAt(QSql::BeforeFirstRow);
    SQLRETURN r;
@@ -1474,6 +1501,8 @@ bool QODBCResult::prepare(const QString &query)
 
 bool QODBCResult::exec()
 {
+   Q_D(QODBCResult);
+
    setActive(false);
    setAt(QSql::BeforeFirstRow);
    d->rInf.clear();
@@ -1845,6 +1874,8 @@ bool QODBCResult::exec()
 
 QSqlRecord QODBCResult::record() const
 {
+   Q_D(const QODBCResult);
+
    if (! isActive() || ! isSelect()) {
       return QSqlRecord();
    }
@@ -1854,11 +1885,15 @@ QSqlRecord QODBCResult::record() const
 
 QVariant QODBCResult::handle() const
 {
+   Q_D(const QODBCResult);
+
    return QVariant::fromValue<SQLHANDLE>(d->hStmt);
 }
 
 bool QODBCResult::nextResult()
 {
+   Q_D(QODBCResult);
+
    setActive(false);
    setAt(QSql::BeforeFirstRow);
    d->rInf.clear();
@@ -1921,6 +1956,8 @@ void QODBCResult::detachFromResultSet()
 
 void QODBCResult::setForwardOnly(bool forward)
 {
+   Q_D(QODBCResult);
+
    d->userForwardOnly = forward;
    QSqlResult::setForwardOnly(forward);
 }

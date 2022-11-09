@@ -44,7 +44,7 @@
 #include <sql.h>
 #include <sqlext.h>
 
-class QODBCPrivate;
+class QODBCResultPrivate;
 class QODBCDriverPrivate;
 class QODBCDriver;
 class QSqlRecordInfo;
@@ -79,7 +79,7 @@ class QODBCResult : public QSqlResult
    bool nextResult() override;
 
  private:
-   QODBCPrivate *d;
+   Q_DECLARE_PRIVATE(QODBCResult)
 };
 
 class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
@@ -119,7 +119,8 @@ class Q_EXPORT_SQLDRIVER_ODBC QODBCDriver : public QSqlDriver
    void cleanup();
 
    Q_DECLARE_PRIVATE(QODBCDriver)
-   friend class QODBCPrivate;
+
+   friend class QODBCResultPrivate;
 };
 
 #endif
