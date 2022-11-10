@@ -59,6 +59,8 @@ class QODBCResult : public QSqlResult
    bool exec() override;
 
    QVariant handle() const;
+   QVariant lastInsertId() const;
+
    void setForwardOnly(bool forward) override;
 
  protected:
