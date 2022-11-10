@@ -766,6 +766,18 @@ static QSqlField qMakeFieldInfo(const SQLHANDLE hStmt, int i, QString *errorMess
    return f;
 }
 
+static QSqlField qMakeFieldInfo(const QODBCResultPrivate *p, int i)
+{
+   QString errorMessage;
+   const QSqlField result = qMakeFieldInfo(p->hStmt, i, &errorMessage);
+
+   if (! errorMessage.isEmpty()) {
+      qSqlWarning(errorMessage, p);
+   }
+
+   return result;
+}
+
 static size_t qGetODBCVersion(const QString &connOpts)
 {
    if (connOpts.contains("SQL_ATTR_ODBC_VERSION=SQL_OV_ODBC3", Qt::CaseInsensitive)) {
