@@ -1540,9 +1540,6 @@ bool QODBCResult::exec()
 
    SQLRETURN r;
    for (i = 0; i < values.count(); ++i) {
-      if (bindValueType(i) & QSql::Out) {
-         values[i].detach();
-      }
       const QVariant &val = values.at(i);
 
       SQLLEN *ind = &indicators[i];
@@ -1554,7 +1551,9 @@ bool QODBCResult::exec()
          case QVariant::Date: {
             QByteArray &ba = tmpStorage[i];
             ba.resize(sizeof(DATE_STRUCT));
-            DATE_STRUCT *dt = (DATE_STRUCT *)ba.constData();
+
+            DATE_STRUCT *dt = (DATE_STRUCT *)const_cast<char *>(ba.constData());
+
             QDate qdt = val.toDate();
             dt->year  = qdt.year();
             dt->month = qdt.month();
@@ -1569,7 +1568,9 @@ bool QODBCResult::exec()
          case QVariant::Time: {
             QByteArray &ba = tmpStorage[i];
             ba.resize(sizeof(TIME_STRUCT));
-            TIME_STRUCT *dt = (TIME_STRUCT *)ba.constData();
+
+            TIME_STRUCT *dt = (TIME_STRUCT *)const_cast<char *>(ba.constData());
+
             QTime qdt = val.toTime();
             dt->hour = qdt.hour();
             dt->minute = qdt.minute();
@@ -1584,7 +1585,9 @@ bool QODBCResult::exec()
          case QVariant::DateTime: {
             QByteArray &ba = tmpStorage[i];
             ba.resize(sizeof(TIMESTAMP_STRUCT));
-            TIMESTAMP_STRUCT *dt = (TIMESTAMP_STRUCT *)ba.constData();
+
+            TIMESTAMP_STRUCT * dt = (TIMESTAMP_STRUCT *)const_cast<char *>(ba.constData());
+
             QDateTime qdt = val.toDateTime();
             dt->year = qdt.date().year();
             dt->month = qdt.date().month();
@@ -1601,7 +1604,7 @@ bool QODBCResult::exec()
             } else {
                dt->fraction = qdt.time().msec() * 1000000;
 
-               // (How many leading digits do we want to keep?  With SQL Server 2005, this should be 3: 123000000)
+               // How many leading digits do we want to keep? With SQL Server 2005, this should be 3: 123000000
                int keep = (int)qPow(10.0, 9 - qMin(9, precision));
                dt->fraction = (dt->fraction / keep) * keep;
             }
@@ -1612,93 +1615,67 @@ bool QODBCResult::exec()
 
             break;
          }
-         case QVariant::Int:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_SLONG,
-                  SQL_INTEGER,
-                  0,
-                  0,
-                  (void *) val.constData(),
-                  0,
+
+         case QVariant::Int: {
+            int tmp = val.toInt();
+
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_SLONG, SQL_INTEGER, 0, 0, &tmp, 0,
+                  *ind == SQL_NULL_DATA ? ind : NULL);
+
+            break;
+         }
+
+         case QVariant::UInt: {
+            uint tmp = val.toUInt();
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_ULONG, SQL_NUMERIC, 15, 0, &tmp, 0,
                   *ind == SQL_NULL_DATA ? ind : NULL);
             break;
-         case QVariant::UInt:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_ULONG,
-                  SQL_NUMERIC,
-                  15,
-                  0,
-                  (void *) val.constData(),
-                  0,
+         }
+
+         case QVariant::Double: {
+            double tmp = val.toDouble();
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_DOUBLE, SQL_DOUBLE, 0, 0, &tmp, 0,
                   *ind == SQL_NULL_DATA ? ind : NULL);
             break;
-         case QVariant::Double:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_DOUBLE,
-                  SQL_DOUBLE,
-                  0,
-                  0,
-                  (void *) val.constData(),
-                  0,
+         }
+
+         case QVariant::LongLong: {
+            qint64 tmp = val.toLongLong();
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_SBIGINT, SQL_BIGINT, 0, 0, &tmp, 0,
                   *ind == SQL_NULL_DATA ? ind : NULL);
             break;
-         case QVariant::LongLong:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_SBIGINT,
-                  SQL_BIGINT,
-                  0,
-                  0,
-                  (void *) val.constData(),
-                  0,
+         }
+
+         case QVariant::ULongLong:  {
+            quint64 tmp = val.toULongLong();
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_UBIGINT, SQL_BIGINT, 0, 0, &tmp, 0,
                   *ind == SQL_NULL_DATA ? ind : NULL);
             break;
-         case QVariant::ULongLong:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_UBIGINT,
-                  SQL_BIGINT,
-                  0,
-                  0,
-                  (void *) val.constData(),
-                  0,
-                  *ind == SQL_NULL_DATA ? ind : NULL);
-            break;
+         }
+
          case QVariant::ByteArray:
             if (*ind != SQL_NULL_DATA) {
                *ind = val.toByteArray().size();
             }
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_BINARY,
-                  SQL_LONGVARBINARY,
-                  val.toByteArray().size(),
-                  0,
-                  (void *) val.toByteArray().constData(),
-                  val.toByteArray().size(),
-                  ind);
+
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_BINARY, SQL_LONGVARBINARY, val.toByteArray().size(), 0,
+                  (void *) val.toByteArray().constData(), val.toByteArray().size(), ind);
             break;
-         case QVariant::Bool:
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_BIT,
-                  SQL_BIT,
-                  0,
-                  0,
-                  (void *) val.constData(),
-                  0,
-                  *ind == SQL_NULL_DATA ? ind : NULL);
+
+         case QVariant::Bool: {
+            bool tmp = val.toBool();
+
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut], SQL_C_BIT,
+                  SQL_BIT, 0, 0, &tmp, 0, *ind == SQL_NULL_DATA ? ind : NULL);
             break;
+         }
+
          case QVariant::String:
             if (d->unicode) {
                QByteArray &ba = tmpStorage[i];
@@ -1711,31 +1688,20 @@ bool QODBCResult::exec()
                int strSize = str.length() * sizeof(SQLTCHAR);
 
                if (bindValueType(i) & QSql::Out) {
-                  QVarLengthArray<SQLTCHAR> a(toSQLTCHAR(str));
-                  a.reserve(str.capacity());
-                  r = SQLBindParameter(d->hStmt,
-                        i + 1,
-                        qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                        SQL_C_TCHAR,
-                        strSize > 254 ? SQL_WLONGVARCHAR : SQL_WVARCHAR,
+                  const QVarLengthArray<SQLTCHAR> a(toSQLTCHAR(str));
+                  ba = QByteArray((const char *)a.constData(), a.size() * sizeof(SQLTCHAR));
+
+                  r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                        SQL_C_TCHAR, strSize > 254 ? SQL_WLONGVARCHAR : SQL_WVARCHAR,
                         0,    // do not change this value
-                        0,
-                        (void *)a.constData(),
-                        a.size(),
-                        ind);
+                        0, (void *)a.constData(), a.size(), ind);
                   break;
                }
+
                ba = QByteArray((const char *)toSQLTCHAR(str).constData(), str.size() * sizeof(SQLTCHAR));
-               r = SQLBindParameter(d->hStmt,
-                     i + 1,
-                     qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                     SQL_C_TCHAR,
-                     strSize > 254 ? SQL_WLONGVARCHAR : SQL_WVARCHAR,
-                     strSize,
-                     0,
-                     (SQLPOINTER)ba.constData(),
-                     ba.size(),
-                     ind);
+               r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                     SQL_C_TCHAR, strSize > 254 ? SQL_WLONGVARCHAR : SQL_WVARCHAR,
+                     strSize, 0, (SQLPOINTER)ba.constData(), ba.size(), ind);
                break;
 
             } else {
@@ -1747,16 +1713,9 @@ bool QODBCResult::exec()
                }
                int strSize = str.length();
 
-               r = SQLBindParameter(d->hStmt,
-                     i + 1,
-                     qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                     SQL_C_CHAR,
-                     strSize > 254 ? SQL_LONGVARCHAR : SQL_VARCHAR,
-                     strSize,
-                     0,
-                     (void *)str.constData(),
-                     strSize,
-                     ind);
+               r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                     SQL_C_CHAR, strSize > 254 ? SQL_LONGVARCHAR : SQL_VARCHAR,
+                     strSize, 0, (void *)str.constData(), strSize, ind);
                break;
             }
             [[fallthrough]];
@@ -1767,16 +1726,10 @@ bool QODBCResult::exec()
             if (*ind != SQL_NULL_DATA) {
                *ind = ba.size();
             }
-            r = SQLBindParameter(d->hStmt,
-                  i + 1,
-                  qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
-                  SQL_C_BINARY,
-                  SQL_VARBINARY,
-                  ba.length() + 1,
-                  0,
-                  (void *) ba.constData(),
-                  ba.length() + 1,
-                  ind);
+
+            r = SQLBindParameter(d->hStmt, i + 1, qParamType[(QFlag)(bindValueType(i)) & QSql::InOut],
+                  SQL_C_BINARY, SQL_VARBINARY, ba.length() + 1, 0,
+                  (void *) ba.constData(), ba.length() + 1, ind);
             break;
          }
       }
@@ -1861,7 +1814,7 @@ bool QODBCResult::exec()
                if (bindValueType(i) & QSql::Out) {
                   const QByteArray &first = tmpStorage.at(i);
                   QVarLengthArray<SQLTCHAR> array;
-                  array.append((SQLTCHAR *)first.constData(), first.size());
+                  array.append((const SQLTCHAR *)first.constData(), first.size());
                   values[i] = fromSQLTCHAR(array, first.size() / sizeof(SQLTCHAR *));
                }
                break;
