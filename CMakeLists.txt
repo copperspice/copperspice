@@ -371,6 +371,24 @@ else()
 
 endif()
 
+find_package(ODBC QUIET)
+set_package_properties(ODBC PROPERTIES
+   PURPOSE "Required for ODBC SQL database support"
+   DESCRIPTION "ODBC SQL driver implementation"
+   TYPE RECOMMENDED
+)
+
+if (CMAKE_DISABLE_FIND_PACKAGE_ODBC)
+   message(STATUS "ODBC SQL Driver disabled, CopperSpice plugin will not be built\n")
+
+elseif (NOT ODBC_FOUND)
+   message(STATUS "ODBC SQL Driver was not found, CopperSpice plugin will not be built\n")
+
+else()
+   message(STATUS "ODBC SQL Driver was found, CopperSpice plugin will be built\n")
+
+endif()
+
 if (WITH_VULKAN)
    find_package(Vulkan 1.1)
    set_package_properties(Vulkan PROPERTIES

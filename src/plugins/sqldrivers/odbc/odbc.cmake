@@ -9,9 +9,7 @@ list(APPEND SQL_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
 )
 
-# if(WITH_ODBC_PLUGIN AND ODBC_FOUND), unsupported at this time
-if (FALSE)
-
+if (WITH_ODBC_PLUGIN AND ODBC_FOUND)
    add_library(CsSqlOdbc MODULE "")
    add_library(CopperSpice::CsSqlOdbc ALIAS CsSqlOdbc)
 
@@ -39,4 +37,17 @@ if (FALSE)
 
    install(TARGETS CsSqlOdbc DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
+   if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
+      target_compile_definitions(CsSqlOdbc
+         PRIVATE
+         -DUNICODE
+      )
+
+   elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+      target_compile_definitions(CsSqlOdbc
+         PRIVATE
+         -DUNICODE
+      )
+
+   endif()
 endif()

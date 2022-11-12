@@ -106,6 +106,20 @@ function(cs_copy_plugins LIB_NAME)
       endif()
    endif()
 
+   if(LIB_NAME STREQUAL "CsSqlOdbc")
+
+      if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlOdbc${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlOdbc${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+         install(FILES ${CS_PLUGIN_DIR}/CsSqlOdbc${COPPERSPICE_VERSION_API}.dll DESTINATION ${APP_INSTALL_DIR}/sqldrivers)
+
+      endif()
+   endif()
+
    if(LIB_NAME STREQUAL "CsSqlPsql")
 
       if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
