@@ -389,6 +389,15 @@ else()
 
 endif()
 
+find_package(SQLite3 QUIET)
+set_package_properties(SQLite3 PROPERTIES
+   PURPOSE "Required for SQLite3 database support"
+   DESCRIPTION "Popular open source database"
+   URL "https://www.sqlite.org"
+   TYPE RECOMMENDED
+)
+
+
 if (WITH_VULKAN)
    find_package(Vulkan 1.1)
    set_package_properties(Vulkan PROPERTIES
