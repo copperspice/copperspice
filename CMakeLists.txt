@@ -243,6 +243,12 @@ set_package_properties(OpenSSL PROPERTIES
    TYPE RECOMMENDED
 )
 
+if (OpenSSL_FOUND)
+   message(STATUS "OpenSSL was found \n"
+      " * Version: ${OPENSSL_VERSION}\n"
+      " * Path: ${OPENSSL_CRYPTO_LIBRARY}\n")
+endif()
+
 find_package(ZLIB QUIET)
 set_package_properties(ZLIB PROPERTIES
    PURPOSE "Required for compression support"

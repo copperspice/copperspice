@@ -757,17 +757,16 @@ static QPair<QSystemLibrary *, QSystemLibrary *> loadOpenSslWin32()
 
    QList<QPair<QString, QString>> fileNames =
       {
-//       not enabled at this time
-//       {"libssl-3-x64",   "libcrypto-3-x64"},      // version 3, 64 bit
-//       {"libssl-3",       "libcrypto-3"},          // version 3, 32 bit
+         {"libssl-3-x64",   "libcrypto-3-x64"},      // version 3.x, 64 bit
+         {"libssl-3",       "libcrypto-3"},          // version 3.x, 32 bit
 
          {"libssl-1_1-x64", "libcrypto-1_1-x64"},    // version 1.1, 64 bit
          {"libssl-1_1",     "libcrypto-1_1"},        // version 1.1, 32 bit
 
-         {"ssleay32",   "libeay32"},                 // version 1.0.x
-         {"libssl-10",  "libcrypto-10"},
-         {"libssl-8",   "libcrypto-8"},
-         {"libssl-7",   "libcrypto-7"}
+         {"ssleay32",       "libeay32"},             // version 1.0.x
+         {"libssl-10",      "libcrypto-10"},
+         {"libssl-8",       "libcrypto-8"},
+         {"libssl-7",       "libcrypto-7"}
       };
 
    for (auto item : fileNames) {
