@@ -58,7 +58,6 @@ include(locale/locale.cmake)
 include(kernel/kernel.cmake)
 include(plugin/plugin.cmake)
 include(pointer/pointer.cmake)
-include(signal/signal.cmake)
 include(statemachine/statemachine.cmake)
 include(string/string.cmake)
 include(thread/thread.cmake)
@@ -75,6 +74,25 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_guarded.h
    ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_list.h
    ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_shared_guarded.h
+)
+
+# use annex headers
+target_include_directories(CsCore
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_signal>
+)
+
+list(APPEND CORE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_internal.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_macro.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.h
+)
+
+target_sources(CsCore
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.cpp
 )
 
 if (ZLIB_FOUND)
