@@ -7,7 +7,7 @@
 * CsLibGuarded is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
 *
-* CopperSpice is distributed in the hope that it will be useful,
+* CsLibGuarded is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
@@ -230,8 +230,8 @@ class rcu_list<T, M, Alloc>::rcu_guard
       void rcu_read_lock(const rcu_list<T, M, Alloc> &list);
       void rcu_read_unlock(const rcu_list<T, M, Alloc> &list);
 
-      void rcu_write_lock(const rcu_list<T, M, Alloc> &list);
-      void rcu_write_unlock(const rcu_list<T, M, Alloc> &list);
+      void rcu_write_lock(rcu_list<T, M, Alloc> &list);
+      void rcu_write_unlock(rcu_list<T, M, Alloc> &list);
 
    private:
       void unlock();
@@ -303,14 +303,16 @@ void rcu_list<T, M, Alloc>::rcu_guard::unlock()
 }
 
 template <typename T, typename M, typename Alloc>
-void rcu_list<T, M, Alloc>::rcu_guard::rcu_write_lock(const rcu_list<T, M, Alloc> &list)
+void rcu_list<T, M, Alloc>::rcu_guard::rcu_write_lock(rcu_list<T, M, Alloc> &list)
 {
    rcu_read_lock(list);
+   list.m_write_mutex.lock();
 }
 
 template <typename T, typename M, typename Alloc>
-void rcu_list<T, M, Alloc>::rcu_guard::rcu_write_unlock(const rcu_list<T, M, Alloc> &list)
+void rcu_list<T, M, Alloc>::rcu_guard::rcu_write_unlock(rcu_list<T, M, Alloc> &list)
 {
+   list.m_write_mutex.unlock();
    rcu_read_unlock(list);
 }
 
@@ -553,9 +555,50 @@ auto rcu_list<T, M, Alloc>::end() const -> end_iterator
 }
 
 template <typename T, typename M, typename Alloc>
+template <typename... Us>
+auto rcu_list<T, M, Alloc>::emplace(const_iterator iter, Us &&...vs) -> iterator
+{
+   auto newNode = detail::allocate_unique<node>(m_node_alloc, std::forward<Us>(vs)...);
+
+   node *oldHead = m_head.load();
+   node *oldTail = m_tail.load();
+
+   if (oldHead == nullptr) {
+      // inserting into an empty list
+      m_head.store(newNode.get());
+      m_tail.store(newNode.get());
+
+   } else if (oldHead == iter.m_current) {
+      // inserting at the beginning of a non-empty list
+      newNode->next.store(oldHead);
+      oldHead->back.store(newNode.get());
+      m_head.store(newNode.get());
+
+   } else if (oldTail == iter.m_current) {
+      // inserting at the end of a non-empty list
+      newNode->back.store(oldTail);
+      oldTail->next.store(newNode.get());
+      m_tail.store(newNode.get());
+
+   } else {
+      // inserting in the middle of a non-empty list
+      node *oldBack = iter.m_current->back.load();
+
+      newNode->next.store(iter.m_current);
+      newNode->back.store(oldBack);
+      iter.m_current->back.store(newNode.get());
+
+      if (oldBack != nullptr) {
+         oldBack->next.store(newNode.get());
+      }
+   }
+
+   return iterator(newNode.release());
+}
+
+template <typename T, typename M, typename Alloc>
 void rcu_list<T, M, Alloc>::push_front(T data)
 {
-   std::lock_guard<M> guard(m_write_mutex);
    auto newNode = detail::allocate_unique<node>(m_node_alloc, std::move(data));
 
    node *oldHead = m_head.load();
@@ -574,7 +617,6 @@ template <typename T, typename M, typename Alloc>
 template <typename... Us>
 void rcu_list<T, M, Alloc>::emplace_front(Us &&... vs)
 {
-   std::lock_guard<M> guard(m_write_mutex);
    auto newNode = detail::allocate_unique<node>(m_node_alloc, std::forward<Us>(vs)...);
 
    node *oldHead = m_head.load();
@@ -592,7 +634,6 @@ void rcu_list<T, M, Alloc>::emplace_front(Us &&... vs)
 template <typename T, typename M, typename Alloc>
 void rcu_list<T, M, Alloc>::push_back(T data)
 {
-   std::lock_guard<M> guard(m_write_mutex);
    auto newNode = detail::allocate_unique<node>(m_node_alloc, std::move(data));
 
    node *oldTail = m_tail.load(std::memory_order_relaxed);
@@ -611,7 +652,6 @@ template <typename T, typename M, typename Alloc>
 template <typename... Us>
 void rcu_list<T, M, Alloc>::emplace_back(Us &&... vs)
 {
-   std::lock_guard<M> guard(m_write_mutex);
    auto newNode = detail::allocate_unique<node>(m_node_alloc, std::forward<Us>(vs)...);
 
    node *oldTail = m_tail.load(std::memory_order_relaxed);
@@ -629,8 +669,6 @@ void rcu_list<T, M, Alloc>::emplace_back(Us &&... vs)
 template <typename T, typename M, typename Alloc>
 auto rcu_list<T, M, Alloc>::erase(const_iterator iter) -> iterator
 {
-   std::lock_guard<M> guard(m_write_mutex);
-
    // make sure the node has not already been marked for deletion
    node *oldNext = iter.m_current->next.load();
 

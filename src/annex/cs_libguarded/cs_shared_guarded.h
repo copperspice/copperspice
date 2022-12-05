@@ -7,7 +7,7 @@
 * CsLibGuarded is free software, released under the BSD 2-Clause license.
 * For license details refer to LICENSE provided with this project.
 *
-* CopperSpice is distributed in the hope that it will be useful,
+* CsLibGuarded is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
@@ -19,6 +19,7 @@
 #define CSLIBGUARDED_SHARED_GUARDED_H
 
 #include <memory>
+#include <mutex>
 #include <shared_mutex>
 
 namespace libguarded
@@ -82,6 +83,7 @@ class shared_guarded<T, M, L>::deleter
    public:
       using pointer = T *;
 
+      deleter() = default;
       deleter(std::unique_lock<M> lock);
 
       void operator()(T *ptr);
@@ -110,6 +112,7 @@ class shared_guarded<T, M, L>::shared_deleter
 public:
    using pointer = const T *;
 
+   shared_deleter() = default;
    shared_deleter(L lock);
 
    void operator()(const T *ptr);

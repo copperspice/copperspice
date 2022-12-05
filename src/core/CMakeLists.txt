@@ -34,7 +34,6 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/codecs
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent
    ${CMAKE_CURRENT_SOURCE_DIR}/global
-   ${CMAKE_CURRENT_SOURCE_DIR}/guarded
    ${CMAKE_CURRENT_SOURCE_DIR}/io
    ${CMAKE_CURRENT_SOURCE_DIR}/json
    ${CMAKE_CURRENT_SOURCE_DIR}/locale
@@ -53,7 +52,6 @@ include(concurrent/concurrent.cmake)
 include(containers/containers.cmake)
 include(datetime/datetime.cmake)
 include(global/global.cmake)
-include(guarded/guarded.cmake)
 include(io/io.cmake)
 include(json/json.cmake)
 include(locale/locale.cmake)
@@ -67,10 +65,17 @@ include(thread/thread.cmake)
 include(tools/tools.cmake)
 include(xml/xml.cmake)
 
-macro_generate_public("${CORE_PUBLIC_INCLUDES}" QtCore)
-macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
-macro_generate_misc("${CORE_INCLUDES}" QtCore)
-macro_generate_misc("${CORE_REGEX_INCLUDES}" QtCore/regex)
+# use annex headers
+target_include_directories(CsCore
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_libguarded>
+)
+
+list(APPEND CORE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_guarded.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_list.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_shared_guarded.h
+)
 
 if (ZLIB_FOUND)
    target_link_libraries(CsCore
@@ -105,6 +110,11 @@ else()
 
    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty)
 endif()
+
+macro_generate_public("${CORE_PUBLIC_INCLUDES}" QtCore)
+macro_generate_private("${CORE_PRIVATE_INCLUDES}" QtCore)
+macro_generate_misc("${CORE_INCLUDES}" QtCore)
+macro_generate_misc("${CORE_REGEX_INCLUDES}" QtCore/regex)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
    list(APPEND EXTRA_CORE_LDFLAGS
