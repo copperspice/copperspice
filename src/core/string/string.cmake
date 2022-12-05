@@ -9,12 +9,20 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QRegularExpression
 )
 
+# use annex headers
+target_include_directories(CsCore
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_string>
+)
+
 list(APPEND CORE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_iterator.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_encoding.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_char.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string_view.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_iterator.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_encoding.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_char.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_view.h
+)
+list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.h
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring.h
