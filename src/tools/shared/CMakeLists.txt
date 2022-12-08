@@ -34,6 +34,11 @@ function_variable_fixup("${SHAREDTOOLS_EXTRA_LDFLAGS}"  SHAREDTOOLS_EXTRA_LDFLAG
 target_compile_definitions(sharedtools PRIVATE ${SHAREDTOOLS_DEFINITIONS})
 target_include_directories(sharedtools PRIVATE ${SHAREDTOOLS_INCLUDES})
 
+target_link_libraries(sharedtools
+   CsCore
+   CsXml
+)
+
 set_target_properties(sharedtools
    PROPERTIES
    COMPILE_FLAGS ${SHAREDTOOLS_EXTRA_CXXFLAGS}
