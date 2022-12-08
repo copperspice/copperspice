@@ -14,8 +14,6 @@ set(EXTRA_MULTIMEDIA_LDFLAGS)
 include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
-    ${CMAKE_BINARY_DIR}/include/QtGui
-
     ${CMAKE_BINARY_DIR}/include/QtNetwork
 
     ${CMAKE_BINARY_DIR}/include/QtMultimedia
