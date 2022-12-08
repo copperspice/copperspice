@@ -33,10 +33,14 @@ elseif (OPENSSL_FOUND)
    )
 endif()
 
+target_include_directories(CsNetwork
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtNetwork>
+   $<INSTALL_INTERFACE:include/QtNetwork>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-   ${CMAKE_BINARY_DIR}/include/QtNetwork
    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}/access
@@ -87,13 +91,8 @@ target_sources(CsNetwork
 )
 
 target_link_libraries(CsNetwork
-   PRIVATE
-   CsCore
-)
-
-target_include_directories(CsNetwork
    PUBLIC
-   $<INSTALL_INTERFACE:include/QtNetwork>
+   CsCore
 )
 
 set_target_properties(CsNetwork

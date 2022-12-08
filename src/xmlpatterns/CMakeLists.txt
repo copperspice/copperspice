@@ -13,9 +13,6 @@ set(EXTRA_XMLPATTERNS_LDFLAGS)
 include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
-    ${CMAKE_BINARY_DIR}/include/QtNetwork
-    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
-
     ${CMAKE_BINARY_DIR}/include/QtXmlPatterns
     ${CMAKE_BINARY_DIR}/privateinclude/QtXmlPatterns/private
 
