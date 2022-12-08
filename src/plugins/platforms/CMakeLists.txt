@@ -1,8 +1,4 @@
 include_directories(
-   ${CMAKE_BINARY_DIR}/include
-   ${CMAKE_BINARY_DIR}/privateinclude
-
-   ${CMAKE_BINARY_DIR}/include/QtCore
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
    ${CMAKE_BINARY_DIR}/include/QtGui

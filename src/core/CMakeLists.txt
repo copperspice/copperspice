@@ -22,11 +22,15 @@ else()
 
 endif()
 
-include_directories(
-   ${CMAKE_BINARY_DIR}/include
-   ${CMAKE_BINARY_DIR}/privateinclude
+target_include_directories(CsCore
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtCore>
+   $<INSTALL_INTERFACE:include>
+   $<INSTALL_INTERFACE:include/QtCore>
+)
 
-   ${CMAKE_BINARY_DIR}/include/QtCore
+include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}/animation
@@ -186,12 +190,6 @@ target_sources(CsCore
    PRIVATE
    ${CORE_INCLUDES}
    ${CORE_REGEX_INCLUDES}
-)
-
-target_include_directories(CsCore
-   PUBLIC
-   $<INSTALL_INTERFACE:include>
-   $<INSTALL_INTERFACE:include/QtCore>
 )
 
 if(MSVC)
