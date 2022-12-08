@@ -10,10 +10,14 @@ add_definitions(
 set(EXTRA_XML_CXXFLAGS)
 set(EXTRA_XML_LDFLAGS)
 
+target_include_directories(CsXml
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtXml>
+   $<INSTALL_INTERFACE:include/QtXml>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-   ${CMAKE_BINARY_DIR}/include/QtXml
    ${CMAKE_BINARY_DIR}/privateinclude/QtXml/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}/dom
@@ -38,14 +42,9 @@ target_sources(CsXml
    ${XML_INCLUDES}
 )
 
-target_include_directories(CsXml
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtXml>
-)
-
 target_link_libraries(CsXml
-   PRIVATE
-    CsCore
+   PUBLIC
+   CsCore
 )
 
 set_target_properties(CsXml

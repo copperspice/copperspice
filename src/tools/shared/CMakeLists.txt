@@ -2,8 +2,6 @@ add_library(sharedtools OBJECT "")
 
 list(APPEND SHAREDTOOLS_INCLUDES
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-   ${CMAKE_BINARY_DIR}/include/QtXml
    ${CMAKE_BINARY_DIR}/privateinclude/QtXml/private
 
    ${CMAKE_SOURCE_DIR}/src/tools/shared
