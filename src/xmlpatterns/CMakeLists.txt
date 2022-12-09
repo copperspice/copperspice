@@ -10,10 +10,14 @@ add_definitions(
 set(EXTRA_XMLPATTERNS_CXXFLAGS)
 set(EXTRA_XMLPATTERNS_LDFLAGS)
 
+target_include_directories(CsXmlPatterns
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtXmlPatterns>
+   $<INSTALL_INTERFACE:include/QtXmlPatterns>
+)
+
 include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-    ${CMAKE_BINARY_DIR}/include/QtXmlPatterns
     ${CMAKE_BINARY_DIR}/privateinclude/QtXmlPatterns/private
 
     ${CMAKE_CURRENT_SOURCE_DIR}/acceltree
@@ -56,11 +60,6 @@ function_variable_fixup("${EXTRA_XMLPATTERNS_LDFLAGS}" EXTRA_XMLPATTERNS_LDFLAGS
 target_sources(CsXmlPatterns
    PRIVATE
    ${XMLPATTERNS_INCLUDES}
-)
-
-target_include_directories(CsXmlPatterns
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtXmlPatterns>
 )
 
 target_link_libraries(CsXmlPatterns

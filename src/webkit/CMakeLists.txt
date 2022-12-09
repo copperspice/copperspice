@@ -36,15 +36,17 @@ if(NOT MSVC)
    set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC)
 endif()
 
+target_include_directories(CsWebKit
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtWebKit>
+   $<INSTALL_INTERFACE:include/QtWebKit>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
-
-   ${CMAKE_BINARY_DIR}/include/QtScript
    ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
-
-   ${CMAKE_BINARY_DIR}/include/QtWebKit
    ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit/private
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore
@@ -2421,11 +2423,6 @@ macro_generate_misc("${WEBKIT_INCLUDES}" QtWebKit)
 
 function_variable_fixup("${EXTRA_WEBKIT_CXXFLAGS}" EXTRA_WEBKIT_CXXFLAGS)
 function_variable_fixup("${EXTRA_WEBKIT_LDFLAGS}"  EXTRA_WEBKIT_LDFLAGS)
-
-target_include_directories(CsWebKit
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtWebKit>
-)
 
 target_link_libraries(CsWebKit
    PRIVATE

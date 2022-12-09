@@ -12,11 +12,15 @@ target_compile_definitions(CsOpenGL
 set(EXTRA_OPENGL_CXXFLAGS)
 set(EXTRA_OPENGL_LDFLAGS)
 
+target_include_directories(CsOpenGL
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtOpenGL>
+   $<INSTALL_INTERFACE:include/QtOpenGL>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
-
-   ${CMAKE_BINARY_DIR}/include/QtOpenGL
    ${CMAKE_BINARY_DIR}/privateinclude/QtOpenGL/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}
@@ -121,11 +125,6 @@ endif()
 
 function_variable_fixup("${EXTRA_OPENGL_CXXFLAGS}" EXTRA_OPENGL_CXXFLAGS)
 function_variable_fixup("${EXTRA_OPENGL_LDFLAGS}"  EXTRA_OPENGL_LDFLAGS)
-
-target_include_directories(CsOpenGL
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtOpenGL>
-)
 
 target_link_libraries(CsOpenGL
    PUBLIC

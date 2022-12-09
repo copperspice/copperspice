@@ -10,11 +10,15 @@ add_definitions(
 set(EXTRA_SVG_CXXFLAGS)
 set(EXTRA_SVG_LDFLAGS)
 
+target_include_directories(CsSvg
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtSvg>
+   $<INSTALL_INTERFACE:include/QtSvg>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
-
-   ${CMAKE_BINARY_DIR}/include/QtSvg
    ${CMAKE_BINARY_DIR}/privateinclude/QtSvg/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}
@@ -79,11 +83,6 @@ function_variable_fixup("${EXTRA_SVG_LDFLAGS}"  EXTRA_SVG_LDFLAGS)
 target_sources(CsSvg
    PRIVATE
    ${SVG_INCLUDES}
-)
-
-target_include_directories(CsSvg
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtSvg>
 )
 
 target_link_libraries(CsSvg

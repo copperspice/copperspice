@@ -11,11 +11,15 @@ target_compile_definitions(CsVulkan
 set(EXTRA_VULKAN_CXXFLAGS)
 set(EXTRA_VULKAN_LDFLAGS)
 
+target_include_directories(CsVulkan
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtVulkan>
+   $<INSTALL_INTERFACE:include/QtVulkan>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
-
-   ${CMAKE_BINARY_DIR}/include/QtVulkan
    ${CMAKE_BINARY_DIR}/privateinclude/QtVulkan/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}
@@ -58,11 +62,6 @@ macro_generate_misc("${VULKAN_INCLUDES}" QtVulkan)
 
 function_variable_fixup("${EXTRA_VULKAN_CXXFLAGS}" EXTRA_VULKAN_CXXFLAGS)
 function_variable_fixup("${EXTRA_VULKAN_LDFLAGS}"  EXTRA_VULKAN_LDFLAGS)
-
-target_include_directories(CsVulkan
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtVulkan>
-)
 
 target_link_libraries(CsVulkan
    PUBLIC

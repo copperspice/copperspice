@@ -11,13 +11,15 @@ target_compile_definitions(CsMultimedia
 set(EXTRA_MULTIMEDIA_CXXFLAGS)
 set(EXTRA_MULTIMEDIA_LDFLAGS)
 
+target_include_directories(CsMultimedia
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtMultimedia>
+   $<INSTALL_INTERFACE:include/QtMultimedia>
+)
+
 include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-    ${CMAKE_BINARY_DIR}/include/QtMultimedia
     ${CMAKE_BINARY_DIR}/privateinclude/QtMultimedia/private
-
-    ${CMAKE_BINARY_DIR}/include/QtOpenGL
 
     ${CMAKE_CURRENT_SOURCE_DIR}/audio
     ${CMAKE_CURRENT_SOURCE_DIR}/camera
@@ -74,7 +76,6 @@ target_link_libraries(CsMultimedia
 target_include_directories(CsMultimedia
    PUBLIC
    ${GSTREAMER_INCLUDE_DIRS}
-   $<INSTALL_INTERFACE:include/QtMultimedia>
 )
 
 set_target_properties(CsMultimedia

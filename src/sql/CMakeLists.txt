@@ -12,10 +12,14 @@ target_compile_definitions(CsSql
 set(EXTRA_SQL_CXXFLAGS)
 set(EXTRA_SQL_LDFLAGS)
 
+target_include_directories(CsSql
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtSql>
+   $<INSTALL_INTERFACE:include/QtSql>
+)
+
 include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-   ${CMAKE_BINARY_DIR}/include/QtSql
    ${CMAKE_BINARY_DIR}/privateinclude/QtSql/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}
@@ -68,11 +72,6 @@ target_sources(CsSql
 target_link_libraries(CsSql
    PRIVATE
    CsCore
-)
-
-target_include_directories(CsSql
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtSql>
 )
 
 set_target_properties(CsSql

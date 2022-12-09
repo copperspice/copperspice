@@ -34,10 +34,14 @@ endif()
 set(EXTRA_SCRIPT_CXXFLAGS)
 set(EXTRA_SCRIPT_LDFLAGS)
 
+target_include_directories(CsScript
+   PUBLIC
+   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/QtScript>
+   $<INSTALL_INTERFACE:include/QtScript>
+)
+
 include_directories(
     ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
-
-    ${CMAKE_BINARY_DIR}/include/QtScript
     ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
 
     ${CMAKE_CURRENT_SOURCE_DIR}/api
@@ -561,11 +565,6 @@ function_variable_fixup("${EXTRA_SCRIPT_LDFLAGS}"  EXTRA_SCRIPT_LDFLAGS)
 target_sources(CsScript
    PRIVATE
    ${SCRIPT_INCLUDES}
-)
-
-target_include_directories(CsScript
-   PUBLIC
-   $<INSTALL_INTERFACE:include/QtScript>
 )
 
 target_link_libraries(CsScript
