@@ -42,7 +42,9 @@ endif()
 function_variable_fixup("${EXTRA_LRELEASE_CXXFLAGS}" EXTRA_LRELEASE_CXXFLAGS)
 function_variable_fixup("${EXTRA_LRELEASE_LDFLAGS}"  EXTRA_LRELEASE_LDFLAGS)
 
-target_link_libraries(lrelease${TOOLS_SUFFIX} ${EXTRA_LRELEASE_LIBS})
+target_link_libraries(lrelease${TOOLS_SUFFIX}
+   ${EXTRA_LRELEASE_LIBS}
+)
 
 set_target_properties(lrelease${TOOLS_SUFFIX}
    PROPERTIES

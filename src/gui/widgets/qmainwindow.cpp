@@ -75,12 +75,12 @@ class QMainWindowPrivate : public QWidgetPrivate
    QList<int> hoverSeparator;
    QPoint hoverPos;
 
-#if !defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
+#if ! defined(QT_NO_DOCKWIDGET) && !defined(QT_NO_CURSOR)
    QCursor separatorCursor(const QList<int> &path) const;
    void adjustCursor(const QPoint &pos);
    QCursor oldCursor;
    QCursor adjustedCursor;
-   uint hasOldCursor : 1;
+   uint hasOldCursor   : 1;
    uint cursorAdjusted : 1;
 #endif
 
@@ -128,6 +128,7 @@ Q_GUI_EXPORT void qt_setMainWindowTitleWidget(QMainWindow *mainWindow, Qt::DockW
    if (QLayoutItem *oldItem = topLayout->itemAtPosition(row, column)) {
       delete oldItem->widget();
    }
+
    topLayout->addWidget(widget, row, column);
 }
 #endif
@@ -263,21 +264,26 @@ void QMainWindow::setMenuBar(QMenuBar *menuBar)
    if (topLayout->menuBar() && topLayout->menuBar() != menuBar) {
       // Reparent corner widgets before we delete the old menu bar.
       QMenuBar *oldMenuBar = qobject_cast<QMenuBar *>(topLayout->menuBar());
+
       if (menuBar) {
          // TopLeftCorner widget.
          QWidget *cornerWidget = oldMenuBar->cornerWidget(Qt::TopLeftCorner);
+
          if (cornerWidget) {
             menuBar->setCornerWidget(cornerWidget, Qt::TopLeftCorner);
          }
+
          // TopRightCorner widget.
          cornerWidget = oldMenuBar->cornerWidget(Qt::TopRightCorner);
          if (cornerWidget) {
             menuBar->setCornerWidget(cornerWidget, Qt::TopRightCorner);
          }
       }
+
       oldMenuBar->hide();
       oldMenuBar->deleteLater();
    }
+
    topLayout->setMenuBar(menuBar);
 }
 
@@ -290,10 +296,12 @@ QWidget *QMainWindow::menuWidget() const
 void QMainWindow::setMenuWidget(QWidget *menuBar)
 {
    Q_D(QMainWindow);
+
    if (d->layout->menuBar() && d->layout->menuBar() != menuBar) {
       d->layout->menuBar()->hide();
       d->layout->menuBar()->deleteLater();
    }
+
    d->layout->setMenuBar(menuBar);
 }
 #endif // QT_NO_MENUBAR
@@ -303,12 +311,13 @@ QStatusBar *QMainWindow::statusBar() const
 {
    QStatusBar *statusbar = d_func()->layout->statusBar();
 
-   if (!statusbar) {
+   if (! statusbar) {
       QMainWindow *self = const_cast<QMainWindow *>(this);
       statusbar = new QStatusBar(self);
       statusbar->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
       self->setStatusBar(statusbar);
    }
+
    return statusbar;
 }
 
@@ -320,9 +329,10 @@ void QMainWindow::setStatusBar(QStatusBar *statusbar)
       d->layout->statusBar()->hide();
       d->layout->statusBar()->deleteLater();
    }
+
    d->layout->setStatusBar(statusbar);
 }
-#endif // QT_NO_STATUSBAR
+#endif
 
 QWidget *QMainWindow::centralWidget() const
 {
@@ -357,34 +367,32 @@ QWidget *QMainWindow::takeCentralWidget()
 void QMainWindow::setCorner(Qt::Corner corner, Qt::DockWidgetArea area)
 {
    bool valid = false;
+
    switch (corner) {
       case Qt::TopLeftCorner:
          valid = (area == Qt::TopDockWidgetArea || area == Qt::LeftDockWidgetArea);
          break;
+
       case Qt::TopRightCorner:
          valid = (area == Qt::TopDockWidgetArea || area == Qt::RightDockWidgetArea);
          break;
+
       case Qt::BottomLeftCorner:
          valid = (area == Qt::BottomDockWidgetArea || area == Qt::LeftDockWidgetArea);
          break;
+
       case Qt::BottomRightCorner:
          valid = (area == Qt::BottomDockWidgetArea || area == Qt::RightDockWidgetArea);
          break;
    }
 
-   if (!valid) {
+   if (! valid) {
       qWarning("QMainWindow::setCorner(): 'area' is not valid for 'corner'");
    } else {
       d_func()->layout->setCorner(corner, area);
    }
 }
 
-/*!
-    Returns the dock widget area that occupies the specified \a
-    corner.
-
-    \sa setCorner()
-*/
 Qt::DockWidgetArea QMainWindow::corner(Qt::Corner corner) const
 {
    return d_func()->layout->corner(corner);
@@ -401,43 +409,35 @@ static bool checkToolBarArea(Qt::ToolBarArea area, const char *where)
       case Qt::TopToolBarArea:
       case Qt::BottomToolBarArea:
          return true;
+
       default:
          break;
    }
+
    qWarning("%s: invalid 'area' argument", where);
+
    return false;
 }
 
-/*!
-    Adds a toolbar break to the given \a area after all the other
-    objects that are present.
-*/
 void QMainWindow::addToolBarBreak(Qt::ToolBarArea area)
 {
-   if (!checkToolBarArea(area, "QMainWindow::addToolBarBreak")) {
+   if (! checkToolBarArea(area, "QMainWindow::addToolBarBreak")) {
       return;
    }
+
    d_func()->layout->addToolBarBreak(area);
 }
 
-/*!
-    Inserts a toolbar break before the toolbar specified by \a before.
-*/
 void QMainWindow::insertToolBarBreak(QToolBar *before)
 {
    d_func()->layout->insertToolBarBreak(before);
 }
-
-/*!
-    Removes a toolbar break previously inserted before the toolbar specified by \a before.
-*/
 
 void QMainWindow::removeToolBarBreak(QToolBar *before)
 {
    Q_D(QMainWindow);
    d->layout->removeToolBarBreak(before);
 }
-
 
 void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 {
@@ -466,7 +466,7 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 
    }
 
-   if (!d->layout->usesHIToolBar(toolbar)) {
+   if (! d->layout->usesHIToolBar(toolbar)) {
       d->layout->removeWidget(toolbar);
    } else {
       d->layout->removeToolBar(toolbar);
@@ -481,7 +481,6 @@ void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
    d->layout->addToolBar(area, toolbar);
 }
 
-
 void QMainWindow::addToolBar(QToolBar *toolbar)
 {
    addToolBar(Qt::TopToolBarArea, toolbar);
@@ -492,6 +491,7 @@ QToolBar *QMainWindow::addToolBar(const QString &title)
    QToolBar *toolBar = new QToolBar(this);
    toolBar->setWindowTitle(title);
    addToolBar(toolBar);
+
    return toolBar;
 }
 
@@ -523,7 +523,6 @@ Qt::ToolBarArea QMainWindow::toolBarArea(QToolBar *toolbar) const
    return d_func()->layout->toolBarArea(toolbar);
 }
 
-
 bool QMainWindow::toolBarBreak(QToolBar *toolbar) const
 {
    return d_func()->layout->toolBarBreak(toolbar);
@@ -532,7 +531,6 @@ bool QMainWindow::toolBarBreak(QToolBar *toolbar) const
 #endif // QT_NO_TOOLBAR
 
 #ifndef QT_NO_DOCKWIDGET
-
 
 bool QMainWindow::isAnimated() const
 {
@@ -575,7 +573,6 @@ void QMainWindow::setDockNestingEnabled(bool enabled)
    d->layout->setDockOptions(opts);
 }
 
-
 static bool checkDockWidgetArea(Qt::DockWidgetArea area, const char *where)
 {
    switch (area) {
@@ -584,10 +581,13 @@ static bool checkDockWidgetArea(Qt::DockWidgetArea area, const char *where)
       case Qt::TopDockWidgetArea:
       case Qt::BottomDockWidgetArea:
          return true;
+
       default:
          break;
    }
+
    qWarning("%s: invalid 'area' argument", where);
+
    return false;
 }
 
@@ -602,18 +602,10 @@ void QMainWindow::setDocumentMode(bool enabled)
 {
    d_func()->layout->setDocumentMode(enabled);
 }
-#endif // QT_NO_TABBAR
+#endif
 
 #ifndef QT_NO_TABWIDGET
-/*!
-    \property QMainWindow::tabShape
-    \brief the tab shape used for tabbed dock widgets.
-    \since 4.5
 
-    The default is \l QTabWidget::Rounded.
-
-    \sa setTabPosition()
-*/
 QTabWidget::TabShape QMainWindow::tabShape() const
 {
    return d_func()->layout->tabShape();
@@ -624,25 +616,23 @@ void QMainWindow::setTabShape(QTabWidget::TabShape tabShape)
    d_func()->layout->setTabShape(tabShape);
 }
 
-
 QTabWidget::TabPosition QMainWindow::tabPosition(Qt::DockWidgetArea area) const
 {
-   if (!checkDockWidgetArea(area, "QMainWindow::tabPosition")) {
+   if (! checkDockWidgetArea(area, "QMainWindow::tabPosition")) {
       return QTabWidget::South;
    }
    return d_func()->layout->tabPosition(area);
 }
 
-
 void QMainWindow::setTabPosition(Qt::DockWidgetAreas areas, QTabWidget::TabPosition tabPosition)
 {
    d_func()->layout->setTabPosition(areas, tabPosition);
 }
-#endif // QT_NO_TABWIDGET
+#endif
 
 void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget)
 {
-   if (!checkDockWidgetArea(area, "QMainWindow::addDockWidget")) {
+   if (! checkDockWidgetArea(area, "QMainWindow::addDockWidget")) {
       return;
    }
 
@@ -652,12 +642,13 @@ void QMainWindow::addDockWidget(Qt::DockWidgetArea area, QDockWidget *dockwidget
       case Qt::BottomDockWidgetArea:
          orientation = Qt::Horizontal;
          break;
+
       default:
          break;
    }
+
    d_func()->layout->removeWidget(dockwidget); // in case it was already in here
    addDockWidget(area, dockwidget, orientation);
-
 }
 
 bool QMainWindow::restoreDockWidget(QDockWidget *dockwidget)
@@ -693,11 +684,14 @@ QList<QDockWidget *> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) c
 
 #if defined(QT_NO_TABBAR)
    (void) dockwidget;
+
 #else
    const QDockAreaLayoutInfo *info = d_func()->layout->layoutState.dockAreaLayout.info(dockwidget);
+
    if (info && info->tabbed && info->tabBar) {
       for (int i = 0; i < info->item_list.count(); ++i) {
          const QDockAreaLayoutItem &item = info->item_list.at(i);
+
          if (item.widgetItem) {
             if (QDockWidget *dock = qobject_cast<QDockWidget *>(item.widgetItem->widget())) {
                if (dock != dockwidget) {
@@ -708,6 +702,7 @@ QList<QDockWidget *> QMainWindow::tabifiedDockWidgets(QDockWidget *dockwidget) c
       }
    }
 #endif
+
    return ret;
 }
 
@@ -839,6 +834,7 @@ void QMainWindowPrivate::adjustCursor(const QPoint &pos)
                   q->unsetCursor();
                }
             }
+
          } else {
             q->update(layout->layoutState.dockAreaLayout.separatorRect(hoverSeparator));
             if (!cursorAdjusted) {
@@ -854,7 +850,6 @@ void QMainWindowPrivate::adjustCursor(const QPoint &pos)
 }
 #endif
 
-/*! \reimp */
 bool QMainWindow::event(QEvent *event)
 {
    Q_D(QMainWindow);
@@ -874,17 +869,19 @@ bool QMainWindow::event(QEvent *event)
          break;
       }
 
-      // We don't want QWidget to call update() on the entire QMainWindow
+      // do not want QWidget to call update() on the entire QMainWindow
       // on HoverEnter and HoverLeave, hence accept the event (return true).
       case QEvent::HoverEnter:
          return true;
+
       case QEvent::HoverLeave:
          d->adjustCursor(QPoint(0, 0));
          return true;
+
       case QEvent::ShortcutOverride: // when a menu pops up
          d->adjustCursor(QPoint(0, 0));
          break;
-#endif // QT_NO_CURSOR
+#endif
 
       case QEvent::MouseButtonPress: {
          QMouseEvent *e = static_cast<QMouseEvent *>(event);
@@ -893,6 +890,7 @@ bool QMainWindow::event(QEvent *event)
             e->accept();
             return true;
          }
+
          break;
       }
 
@@ -1002,7 +1000,6 @@ void QMainWindow::setUnifiedTitleAndToolBarOnMac(bool set)
 #else
    (void) set;
 #endif
-
 }
 
 bool QMainWindow::unifiedTitleAndToolBarOnMac() const
@@ -1035,6 +1032,7 @@ void QMainWindow::contextMenuEvent(QContextMenuEvent *event)
    // only show the context menu for direct QDockWidget and QToolBar
    // children and for the menu bar as well
    QWidget *child = childAt(event->pos());
+
    while (child && child != this) {
 #ifndef QT_NO_MENUBAR
       if (QMenuBar *mb = qobject_cast<QMenuBar *>(child)) {
@@ -1102,36 +1100,45 @@ QMenu *QMainWindow::createPopupMenu()
    QList<QDockWidget *> dockwidgets = findChildren<QDockWidget *>();
    if (dockwidgets.size()) {
       menu = new QMenu(this);
+
       for (int i = 0; i < dockwidgets.size(); ++i) {
          QDockWidget *dockWidget = dockwidgets.at(i);
          // filter to find out if we own this QDockWidget
+
          if (dockWidget->parentWidget() == this) {
             if (d->layout->layoutState.dockAreaLayout.indexOf(dockWidget).isEmpty()) {
                continue;
             }
+
          } else if (QDockWidgetGroupWindow *dwgw =
                qobject_cast<QDockWidgetGroupWindow *>(dockWidget->parentWidget())) {
             if (dwgw->parentWidget() != this) {
                continue;
             }
+
             if (dwgw->layoutInfo()->indexOf(dockWidget).isEmpty()) {
                continue;
             }
+
          } else {
             continue;
          }
+
          menu->addAction(dockwidgets.at(i)->toggleViewAction());
       }
+
       menu->addSeparator();
    }
 #endif
 
 #ifndef QT_NO_TOOLBAR
    QList<QToolBar *> toolbars = findChildren<QToolBar *>();
+
    if (toolbars.size()) {
       if (!menu) {
          menu = new QMenu(this);
       }
+
       for (int i = 0; i < toolbars.size(); ++i) {
          QToolBar *toolBar = toolbars.at(i);
 

@@ -539,6 +539,7 @@ void q_EC_KEY_free(EC_KEY *ecdh);
 
 // EC curves management
 size_t q_EC_get_builtin_curves(EC_builtin_curve *r, size_t nitems);
+
 #if OPENSSL_VERSION_NUMBER >= 0x10002000L
 int q_EC_curve_nist2nid(const char *name);
 #endif // OPENSSL_VERSION_NUMBER >= 0x10002000L
@@ -595,22 +596,20 @@ long q_SSL_CTX_set_options(SSL_CTX *ctx, long options);
 #define q_sk_SSL_CIPHER_value(st, i) q_SKM_sk_value(SSL_CIPHER, (st), (i))
 
 #define q_SSL_CTX_add_extra_chain_cert(ctx,x509) \
-   q_SSL_CTX_ctrl(ctx,SSL_CTRL_EXTRA_CHAIN_CERT,0,(char *)x509)
+      q_SSL_CTX_ctrl(ctx,SSL_CTRL_EXTRA_CHAIN_CERT,0,(char *)x509)
 
+#define q_EVP_PKEY_assign_RSA(pkey,rsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_RSA,(char *)(rsa))
+#define q_EVP_PKEY_assign_DSA(pkey,dsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_DSA,(char *)(dsa))
+#define q_OpenSSL_add_all_algorithms()  q_OPENSSL_add_all_algorithms_conf()
 
 ASN1_TIME * q_X509_getm_notAfter(const X509 *x);
 ASN1_TIME * q_X509_getm_notBefore(const X509 *x);
-#define q_EVP_PKEY_assign_RSA(pkey,rsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_RSA,\
-                                        (char *)(rsa))
-#define q_EVP_PKEY_assign_DSA(pkey,dsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_DSA,\
-                                        (char *)(dsa))
-#define q_OpenSSL_add_all_algorithms() q_OPENSSL_add_all_algorithms_conf()
 
 void q_X509_STORE_set_verify_cb(X509_STORE *ctx, X509_STORE_CTX_verify_cb verify_cb);
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
-void q_OPENSSL_add_all_algorithms_noconf();
-void q_OPENSSL_add_all_algorithms_conf();
+   void q_OPENSSL_add_all_algorithms_noconf();
+   void q_OPENSSL_add_all_algorithms_conf();
 #endif
 
 int q_SSL_CTX_load_verify_locations(SSL_CTX *ctx, const char *CAfile, const char *CApath);
@@ -619,19 +618,15 @@ const char *q_SSLeay_version(int type);
 int q_i2d_SSL_SESSION(SSL_SESSION *in, unsigned char **pp);
 SSL_SESSION *q_d2i_SSL_SESSION(SSL_SESSION **a, const unsigned char **pp, long length);
 
-#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && !defined(OPENSSL_NO_NEXTPROTONEG)
+#if OPENSSL_VERSION_NUMBER >= 0x1000100fL && ! defined(OPENSSL_NO_NEXTPROTONEG)
 int q_SSL_select_next_proto(unsigned char **out, unsigned char *outlen,
-                            const unsigned char *in, unsigned int inlen,
-                            const unsigned char *client, unsigned int client_len);
-void q_SSL_CTX_set_next_proto_select_cb(SSL_CTX *s,
-                                        int (*cb) (SSL *ssl, unsigned char **out,
-                                                   unsigned char *outlen,
-                                                   const unsigned char *in,
-                                                   unsigned int inlen, void *arg),
-                                        void *arg);
-void q_SSL_get0_next_proto_negotiated(const SSL *s, const unsigned char **data,
-                                      unsigned *len);
-#endif // OPENSSL_VERSION_NUMBER >= 0x1000100fL ...
+      const unsigned char *in, unsigned int inlen, const unsigned char *client, unsigned int client_len);
+
+void q_SSL_CTX_set_next_proto_select_cb(SSL_CTX *s, int (*cb) (SSL *ssl, unsigned char **out,
+      unsigned char *outlen, const unsigned char *in, unsigned int inlen, void *arg), void *arg);
+void q_SSL_get0_next_proto_negotiated(const SSL *s, const unsigned char **data, unsigned *len);
+
+#endif
 
 // Helper function
 class QDateTime;

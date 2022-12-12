@@ -481,7 +481,7 @@ static QEvent *cloneEvent(QEvent *e)
          break;
 
       default:
-         ;
+         break;
    }
 
    return qcoreStateMachineHandler()->cloneEvent(e);

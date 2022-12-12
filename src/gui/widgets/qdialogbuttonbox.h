@@ -85,6 +85,8 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
          Apply              = 0x02000000,
          Reset              = 0x04000000,
          RestoreDefaults    = 0x08000000,
+
+         // internal
          FirstButton        = Ok,
          LastButton         = RestoreDefaults
       };

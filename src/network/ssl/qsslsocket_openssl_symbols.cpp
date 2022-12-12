@@ -49,8 +49,7 @@
 #include <algorithm>
 
 /*
-
-    We load OpenSSL symbols dynamically. Because symbols are known to
+    Load OpenSSL symbols dynamically. Because symbols are known to
     disappear, and signatures sometimes change, between releases, we need to
     be careful about how this is done. To ensure we don't end up dereferencing
     null function pointers, and continue running even if certain functions are
@@ -114,6 +113,7 @@ DEFINEFUNC3(int, BIO_read, BIO *a, a, void *b, b, int c, c, return -1, return)
 DEFINEFUNC(BIO_METHOD *, BIO_s_mem, void, DUMMYARG, return nullptr, return)
 DEFINEFUNC3(int, BIO_write, BIO *a, a, const void *b, b, int c, c, return -1, return)
 DEFINEFUNC(int, BN_num_bits, const BIGNUM *a, a, return 0, return)
+
 #ifndef OPENSSL_NO_EC
 DEFINEFUNC(const EC_GROUP *, EC_KEY_get0_group, const EC_KEY *k, k, return nullptr, return)
 DEFINEFUNC(int, EC_GROUP_get_degree, const EC_GROUP *g, g, return 0, return)
@@ -151,9 +151,12 @@ DEFINEFUNC(void, EVP_CIPHER_CTX_reset, EVP_CIPHER_CTX *a, a, return, DUMMYARG)
 
 DEFINEFUNC4(int, EVP_CIPHER_CTX_ctrl, EVP_CIPHER_CTX *ctx, ctx, int type, type, int arg, arg, void *ptr, ptr, return 0, return);
 DEFINEFUNC2(int, EVP_CIPHER_CTX_set_key_length, EVP_CIPHER_CTX *ctx, ctx, int keylen, keylen, return 0, return)
-DEFINEFUNC5(int, EVP_CipherInit, EVP_CIPHER_CTX *ctx, ctx, const EVP_CIPHER *type, type, const unsigned char *key, key, const unsigned char *iv, iv, int enc, enc,
-            return 0, return);
-DEFINEFUNC5(int, EVP_CipherUpdate, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl, const unsigned char *in, in, int inl, inl, return 0, return);
+DEFINEFUNC5(int, EVP_CipherInit, EVP_CIPHER_CTX *ctx, ctx, const EVP_CIPHER *type, type, const unsigned char *key, key,
+      const unsigned char *iv, iv, int enc, enc, return 0, return);
+
+DEFINEFUNC5(int, EVP_CipherUpdate, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl,
+      const unsigned char *in, in, int inl, inl, return 0, return);
+
 DEFINEFUNC3(int, EVP_CipherFinal, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl, return 0, return);
 DEFINEFUNC(const EVP_CIPHER *, EVP_des_cbc, DUMMYARG, DUMMYARG, return nullptr, return)
 DEFINEFUNC(const EVP_CIPHER *, EVP_des_ede3_cbc, DUMMYARG, DUMMYARG, return nullptr, return)
@@ -161,15 +164,18 @@ DEFINEFUNC(const EVP_CIPHER *, EVP_rc2_cbc, DUMMYARG, DUMMYARG, return nullptr, 
 DEFINEFUNC3(int, EVP_PKEY_assign, EVP_PKEY *a, a, int b, b, char *c, c, return -1, return)
 DEFINEFUNC2(int, EVP_PKEY_set1_RSA, EVP_PKEY *a, a, RSA *b, b, return -1, return)
 DEFINEFUNC2(int, EVP_PKEY_set1_DSA, EVP_PKEY *a, a, DSA *b, b, return -1, return)
+
 #ifndef OPENSSL_NO_EC
 DEFINEFUNC2(int, EVP_PKEY_set1_EC_KEY, EVP_PKEY *a, a, EC_KEY *b, b, return -1, return)
 #endif
 DEFINEFUNC(void, EVP_PKEY_free, EVP_PKEY *a, a, return, DUMMYARG)
 DEFINEFUNC(DSA *, EVP_PKEY_get1_DSA, EVP_PKEY *a, a, return nullptr, return)
 DEFINEFUNC(RSA *, EVP_PKEY_get1_RSA, EVP_PKEY *a, a, return nullptr, return)
+
 #ifndef OPENSSL_NO_EC
 DEFINEFUNC(EC_KEY *, EVP_PKEY_get1_EC_KEY, EVP_PKEY *a, a, return nullptr, return)
 #endif
+
 DEFINEFUNC(EVP_PKEY *, EVP_PKEY_new, DUMMYARG, DUMMYARG, return nullptr, return)
 DEFINEFUNC(int, EVP_PKEY_type, int a, a, return NID_undef, return)
 DEFINEFUNC2(int, i2d_X509, X509 *a, a, unsigned char **b, b, return -1, return)
@@ -183,8 +189,10 @@ DEFINEFUNC4(int, OBJ_obj2txt, char *a, a, int b, b, ASN1_OBJECT *c, c, int d, d,
 DEFINEFUNC(int, OBJ_obj2nid, const ASN1_OBJECT *a, a, return NID_undef, return)
 
 #ifdef SSLEAY_MACROS
-DEFINEFUNC6(void *, PEM_ASN1_read_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e, e, void *f, f, return nullptr, return)
-DEFINEFUNC6(void *, PEM_ASN1_write_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d, pem_password_cb *e, e, void *f, f, return nullptr, return)
+DEFINEFUNC6(void *, PEM_ASN1_read_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d,
+      pem_password_cb *e, e, void *f, f, return nullptr, return)
+DEFINEFUNC6(void *, PEM_ASN1_write_bio, d2i_of_void *a, a, const char *b, b, BIO *c, c, void **d, d,
+      pem_password_cb *e, e, void *f, f, return nullptr, return)
 #else
 DEFINEFUNC4(DSA *, PEM_read_bio_DSAPrivateKey, BIO *a, a, DSA **b, b, pem_password_cb *c, c, void *d, d, return nullptr, return)
 DEFINEFUNC4(RSA *, PEM_read_bio_RSAPrivateKey, BIO *a, a, RSA **b, b, pem_password_cb *c, c, void *d, d, return nullptr, return)
@@ -193,13 +201,14 @@ DEFINEFUNC4(RSA *, PEM_read_bio_RSAPrivateKey, BIO *a, a, RSA **b, b, pem_passwo
 DEFINEFUNC4(EC_KEY *, PEM_read_bio_ECPrivateKey, BIO *a, a, EC_KEY **b, b, pem_password_cb *c, c, void *d, d, return nullptr, return)
 #endif
 
-DEFINEFUNC7(int, PEM_write_bio_DSAPrivateKey, BIO *a, a, DSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e, e, pem_password_cb *f, f, void *g, g,
-            return 0, return)
-DEFINEFUNC7(int, PEM_write_bio_RSAPrivateKey, BIO *a, a, RSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e, e, pem_password_cb *f, f, void *g, g,
-            return 0, return)
+DEFINEFUNC7(int, PEM_write_bio_DSAPrivateKey, BIO *a, a, DSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d,
+      int e, e, pem_password_cb *f, f, void *g, g, return 0, return)
+DEFINEFUNC7(int, PEM_write_bio_RSAPrivateKey, BIO *a, a, RSA *b, b, const EVP_CIPHER *c, c, unsigned char *d, d,
+      int e, e, pem_password_cb *f, f, void *g, g, return 0, return)
+
 #ifndef OPENSSL_NO_EC
-DEFINEFUNC7(int, PEM_write_bio_ECPrivateKey, BIO *a, a, EC_KEY *b, b, const EVP_CIPHER *c, c, unsigned char *d, d, int e, e, pem_password_cb *f, f, void *g, g,
-            return 0, return)
+DEFINEFUNC7(int, PEM_write_bio_ECPrivateKey, BIO *a, a, EC_KEY *b, b, const EVP_CIPHER *c, c, unsigned char *d, d,
+      int e, e, pem_password_cb *f, f, void *g, g, return 0, return)
 #endif
 
 #endif
@@ -268,7 +277,7 @@ DEFINEFUNC(SSL_CTX *, SSL_CTX_new, const SSL_METHOD *a, a, return nullptr, retur
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
 DEFINEFUNC(int, SSL_session_reused, SSL *a, a, return -1, return)
-#endif // OPENSSL_VERSION_NUMBER >= 0x10100000L
+#endif
 
 #else
 DEFINEFUNC(SSL_CTX *, SSL_CTX_new, SSL_METHOD *a, a, return nullptr, return)
@@ -340,12 +349,13 @@ DEFINEFUNC(SSL_SESSION *, SSL_get_session, const SSL *ssl, ssl, return nullptr, 
 
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L && OPENSSL_VERSION_NUMBER < 0x10100000L
    DEFINEFUNC5(int, SSL_get_ex_new_index, long argl, argl, void *argp, argp, CRYPTO_EX_new *new_func,
-      new_func, CRYPTO_EX_dup *dup_func, dup_func, CRYPTO_EX_free *free_func, free_func, return -1, return)
+         new_func, CRYPTO_EX_dup *dup_func, dup_func, CRYPTO_EX_free *free_func, free_func, return -1, return)
 #elif OPENSSL_VERSION_NUMBER >= 0x10100000L
 
 // The function above became a macro after 1.1.0.
-DEFINEFUNC6(int, CRYPTO_get_ex_new_index, int class_index, class_index, long argl, argl, void *argp, argp, CRYPTO_EX_new *new_func,
-      new_func, CRYPTO_EX_dup *dup_func, dup_func, CRYPTO_EX_free *free_func, free_func, return -1, return)
+   DEFINEFUNC6(int, CRYPTO_get_ex_new_index, int class_index, class_index, long argl, argl, void *argp, argp,
+         CRYPTO_EX_new *new_func, new_func, CRYPTO_EX_dup *dup_func, dup_func, CRYPTO_EX_free *free_func,
+         free_func, return -1, return)
 #endif
 
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
@@ -384,7 +394,7 @@ DEFINEFUNC(const SSL_METHOD *, TLSv1_client_method, DUMMYARG, DUMMYARG, return n
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
 DEFINEFUNC(const SSL_METHOD *, TLSv1_1_client_method, DUMMYARG, DUMMYARG, return nullptr, return)
 DEFINEFUNC(const SSL_METHOD *, TLSv1_2_client_method, DUMMYARG, DUMMYARG, return nullptr, return)
-#endif // OPENSSL_VERSION_NUMBER >= 0x10001000L
+#endif       // OPENSSL_VERSION_NUMBER >= 0x10001000L
 
 #ifndef OPENSSL_NO_SSL2
 
@@ -576,8 +586,9 @@ DEFINEFUNC(int, EC_curve_nist2nid, const char *name, name, return 0, return)
 
 #endif      // OPENSSL_NO_EC
 
-DEFINEFUNC5(int, PKCS12_parse, PKCS12 *p12, p12, const char *pass, pass, EVP_PKEY **pkey, pkey, \
-            X509 **cert, cert, STACK_OF(X509) **ca, ca, return 1, return);
+DEFINEFUNC5(int, PKCS12_parse, PKCS12 *p12, p12, const char *pass, pass, EVP_PKEY **pkey, pkey,
+      X509 **cert, cert, STACK_OF(X509) **ca, ca, return 1, return);
+
 DEFINEFUNC2(PKCS12 *, d2i_PKCS12_bio, BIO *bio, bio, PKCS12 **pkcs12, pkcs12, return nullptr, return);
 DEFINEFUNC(void, PKCS12_free, PKCS12 *pkcs12, pkcs12, return, DUMMYARG)
 
@@ -621,8 +632,8 @@ struct LibGreaterThan {
    typedef bool result_type;
 
    result_type operator()(const QString &lhs, const QString &rhs) const {
-      const QStringList lhsparts = lhs.split(QLatin1Char('.'));
-      const QStringList rhsparts = rhs.split(QLatin1Char('.'));
+      const QStringList lhsparts = lhs.split(QChar('.'));
+      const QStringList rhsparts = rhs.split(QChar('.'));
 
       Q_ASSERT(lhsparts.count() > 1 && rhsparts.count() > 1);
 
@@ -682,7 +693,7 @@ static QStringList libraryPathList()
    paths << QString("/lib32") << QString("/usr/lib32") << QString("/usr/local/lib32");
 
 #if defined(Q_OS_ANDROID)
-   paths << QLatin1String("/system/lib");
+   paths << QString("/system/lib");
 
 #elif defined(Q_OS_LINUX)
    // discover paths of already loaded libraries
@@ -717,7 +728,7 @@ static QStringList findAllLibs(QString filter)
 
 static QStringList findAllLibSsl()
 {
-   return findAllLibs(QLatin1String("libssl.*"));
+   return findAllLibs(QString("libssl.*"));
 }
 
 static QStringList findAllLibCrypto()
@@ -808,8 +819,8 @@ static QPair<QLibrary *, QLibrary *> loadOpenSsl()
 #if defined(SHLIB_VERSION_NUMBER)
    // first attempt: the canonical name is libssl.so.<SHLIB_VERSION_NUMBER>
 
-   libssl->setFileNameAndVersion(QLatin1String("ssl"), QString(SHLIB_VERSION_NUMBER));
-   libcrypto->setFileNameAndVersion(QLatin1String("crypto"), QString(SHLIB_VERSION_NUMBER));
+   libssl->setFileNameAndVersion("ssl", QString(SHLIB_VERSION_NUMBER));
+   libcrypto->setFileNameAndVersion(QString("crypto"), QString(SHLIB_VERSION_NUMBER));
 
    if (libcrypto->load() && libssl->load()) {
       // libssl.so.<SHLIB_VERSION_NUMBER> and libcrypto.so.<SHLIB_VERSION_NUMBER> found

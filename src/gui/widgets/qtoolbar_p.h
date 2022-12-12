@@ -29,7 +29,6 @@
 #include <qwidget_p.h>
 #include <qbasictimer.h>
 
-
 #ifndef QT_NO_TOOLBAR
 
 class QToolBarLayout;

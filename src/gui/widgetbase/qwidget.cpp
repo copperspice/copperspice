@@ -8480,6 +8480,7 @@ void QWidgetPrivate::setWindowModified_helper()
    if (! platformWindow) {
       return;
    }
+
    bool on = q->testAttribute(Qt::WA_WindowModified);
    if (! platformWindow->setWindowModified(on)) {
 
@@ -8491,6 +8492,7 @@ void QWidgetPrivate::setWindowModified_helper()
       setWindowIconText_helper(q->windowIconText());
    }
 }
+
 #ifndef QT_NO_TOOLTIP
 
 void QWidget::setToolTip(const QString &s)
@@ -8507,6 +8509,7 @@ QString QWidget::toolTip() const
    Q_D(const QWidget);
    return d->toolTip;
 }
+
 void QWidget::setToolTipDuration(int msec)
 {
    Q_D(QWidget);

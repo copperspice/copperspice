@@ -1156,7 +1156,7 @@ class Q_CORE_EXPORT Qt
 
          DockWidgetArea_Mask   = 0xf,
          AllDockWidgetAreas    = DockWidgetArea_Mask,
-         NoDockWidgetArea     = 0
+         NoDockWidgetArea      = 0
       };
    )
 
@@ -1591,7 +1591,7 @@ class Q_CORE_EXPORT Qt
       BottomRightSection,
       BottomSection,
       BottomLeftSection,
-      TitleBarArea                // For move
+      TitleBarArea                 // For move
    };
 
    // internal

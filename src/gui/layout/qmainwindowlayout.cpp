@@ -1225,7 +1225,7 @@ void QMainWindowLayout::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar, bool
       }
       invalidate();
 
-      //this ensures that the toolbar has the right window flags (not floating any more)
+      // this ensures that the toolbar has the right window flags (not floating any more)
       toolbar->d_func()->updateWindowFlags(false /*floating*/);
    }
 }
@@ -1261,6 +1261,7 @@ Qt::ToolBarArea QMainWindowLayout::toolBarArea(QToolBar *toolbar) const
 
       case QInternal::RightDock:
          return Qt::RightToolBarArea;
+
       case QInternal::TopDock:
          return Qt::TopToolBarArea;
 
@@ -1270,6 +1271,7 @@ Qt::ToolBarArea QMainWindowLayout::toolBarArea(QToolBar *toolbar) const
       default:
          break;
    }
+
    return Qt::NoToolBarArea;
 }
 

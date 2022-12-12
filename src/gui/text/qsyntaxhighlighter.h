@@ -42,7 +42,6 @@ class QTextBlockUserData;
 class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 {
    GUI_CS_OBJECT(QSyntaxHighlighter)
-   Q_DECLARE_PRIVATE(QSyntaxHighlighter)
 
  public:
    explicit QSyntaxHighlighter(QObject *parent);
@@ -88,6 +87,7 @@ class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
    GUI_CS_SLOT_1(Private, void _q_delayedRehighlight())
    GUI_CS_SLOT_2(_q_delayedRehighlight)
 
+   Q_DECLARE_PRIVATE(QSyntaxHighlighter)
 };
 
 #endif // QT_NO_SYNTAXHIGHLIGHTER

@@ -6,7 +6,10 @@ add_definitions(
    -DQT_UIC_CPP_GENERATOR
 )
 
-set(EXTRA_UIC_LIBS CsCore)
+set(EXTRA_UIC_LIBS
+   CsCore
+)
+
 set(EXTRA_UIC_CXXFLAGS)
 set(EXTRA_UIC_LDFLAGS)
 
@@ -70,7 +73,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD)")
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-   list(APPEND EXTRA_UIC_LIBS uuid)
+   list(APPEND EXTRA_UIC_LIBS
+      uuid
+   )
 endif()
 
 function_variable_fixup("${EXTRA_UIC_CXXFLAGS}" EXTRA_UIC_CXXFLAGS)
