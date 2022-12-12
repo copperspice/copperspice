@@ -55,5 +55,8 @@ target_sources(CsNetworkTest
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qudpsocket.cpp
 )
 
+# sets working dir for CTest
+set(CMAKE_CURRENT_BINARY_DIR "${CMAKE_BINARY_DIR}/bin/")
+
 include(ParseAndAddCatchTests)
 ParseAndAddCatchTests(CsNetworkTest)
