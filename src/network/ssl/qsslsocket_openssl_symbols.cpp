@@ -501,6 +501,12 @@ DEFINEFUNC(void, X509_STORE_CTX_free, X509_STORE_CTX *a, a, return, DUMMYARG)
 DEFINEFUNC4(int, X509_STORE_CTX_init, X509_STORE_CTX *a, a, X509_STORE *b, b, X509 *c, c,
       STACK_OF(X509) * d, d, return -1, return)
 
+DEFINEFUNC(ASN1_TIME *, X509_getm_notAfter,  const X509 *x, x, return nullptr, return);
+DEFINEFUNC(ASN1_TIME *, X509_getm_notBefore, const X509 *x, x, return nullptr, return);
+
+DEFINEFUNC2(void, X509_STORE_set_verify_cb, X509_STORE *ctx, ctx, X509_STORE_CTX_verify_cb verify_cb,
+      verify_cb, return, DUMMYARG)
+
 DEFINEFUNC2(int, X509_STORE_CTX_set_purpose, X509_STORE_CTX *a, a, int b, b, return -1, return)
 
 DEFINEFUNC(int, X509_STORE_CTX_get_error, X509_STORE_CTX *a, a, return -1, return)
@@ -1220,6 +1226,10 @@ bool q_resolveOpenSslSymbols()
    RESOLVEFUNC(X509_STORE_CTX_get_error)
    RESOLVEFUNC(X509_STORE_CTX_get_error_depth)
    RESOLVEFUNC(X509_STORE_CTX_get_current_cert)
+
+   RESOLVEFUNC(X509_getm_notAfter)
+   RESOLVEFUNC(X509_getm_notBefore)
+   RESOLVEFUNC(X509_STORE_set_verify_cb)
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
    RESOLVEFUNC(X509_STORE_CTX_get_chain)

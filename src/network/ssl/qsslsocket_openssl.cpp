@@ -1830,7 +1830,7 @@ QList<QSslError> QSslSocketBackendPrivate::verify(const QList<QSslCertificate> &
    QMutexLocker sslErrorListMutexLocker(&_q_sslErrorList()->mutex);
 
    // Register a custom callback to get all verification errors.
-   X509_STORE_set_verify_cb_func(certStore, q_X509Callback);
+   q_X509_STORE_set_verify_cb(certStore, q_X509Callback);
 
    // Build the chain of intermediate certificates
    STACK_OF(X509) *intermediates = nullptr;

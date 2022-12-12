@@ -680,8 +680,8 @@ QSslCertificate QSslCertificatePrivate::QSslCertificate_from_X509(X509 *x509)
       return certificate;
    }
 
-   ASN1_TIME *nbef = q_X509_get_notBefore(x509);
-   ASN1_TIME *naft = q_X509_get_notAfter(x509);
+   ASN1_TIME *nbef = q_X509_getm_notBefore(x509);
+   ASN1_TIME *naft = q_X509_getm_notAfter(x509);
    certificate.d->notValidBefore = q_getTimeFromASN1(nbef);
    certificate.d->notValidAfter = q_getTimeFromASN1(naft);
    certificate.d->null = false;

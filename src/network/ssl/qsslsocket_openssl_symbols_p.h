@@ -597,14 +597,16 @@ long q_SSL_CTX_set_options(SSL_CTX *ctx, long options);
 #define q_SSL_CTX_add_extra_chain_cert(ctx,x509) \
    q_SSL_CTX_ctrl(ctx,SSL_CTRL_EXTRA_CHAIN_CERT,0,(char *)x509)
 
-#define q_X509_get_notAfter(x) X509_get_notAfter(x)
-#define q_X509_get_notBefore(x) X509_get_notBefore(x)
+
+ASN1_TIME * q_X509_getm_notAfter(const X509 *x);
+ASN1_TIME * q_X509_getm_notBefore(const X509 *x);
 #define q_EVP_PKEY_assign_RSA(pkey,rsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_RSA,\
                                         (char *)(rsa))
 #define q_EVP_PKEY_assign_DSA(pkey,dsa) q_EVP_PKEY_assign((pkey),EVP_PKEY_DSA,\
                                         (char *)(dsa))
 #define q_OpenSSL_add_all_algorithms() q_OPENSSL_add_all_algorithms_conf()
 
+void q_X509_STORE_set_verify_cb(X509_STORE *ctx, X509_STORE_CTX_verify_cb verify_cb);
 
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
 void q_OPENSSL_add_all_algorithms_noconf();
