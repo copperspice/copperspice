@@ -233,7 +233,34 @@ endforeach()
 # start output messages
 message("")
 message("Configuring CMake for CopperSpice\n\n")
-message("Searching for required packages\n")
+message("-- Searching for required packages\n")
+
+find_package(CsLibGuarded QUIET)
+
+if (CsLibGuarded_FOUND)
+   message(STATUS "CsLibGuarded was found \n"
+      " * Path is ${CsLibGuarded_INCLUDES}\n")
+else()
+   message(STATUS "CsLibGuarded was not found, bundled library will be used\n")
+endif()
+
+find_package(CsString QUIET)
+
+if (CsString_FOUND)
+   message(STATUS "CsString was found \n"
+      " * Path is ${CsString_LIBRARIES}\n")
+else()
+   message(STATUS "CsString was not found, bundled library will be used\n")
+endif()
+
+find_package(CsSignal QUIET)
+
+if (CsSignal_FOUND)
+   message(STATUS "CsSignal was found \n"
+      " * Path is ${CsSignal_LIBRARIES}\n")
+else()
+   message(STATUS "CsSignal was not found, bundled library will be used\n")
+endif()
 
 find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
