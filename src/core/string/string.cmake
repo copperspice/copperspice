@@ -9,19 +9,80 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QRegularExpression
 )
 
-# use annex headers
-target_include_directories(CsCore
-   PUBLIC
-   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_string>
-)
+if (CsString_FOUND)
+   # use system headers
 
-list(APPEND CORE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_iterator.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_encoding.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_char.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_view.h
-)
+   if (CS_INSTALL_MODE STREQUAL "Package")
+      # package mode, do not copy install headers
+
+      target_link_libraries(CsCore
+         PUBLIC
+         CsString::CsString
+      )
+
+   elseif (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         target_link_libraries(CsCore
+            PUBLIC
+            $<BUILD_INTERFACE:CsString::CsString>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsString.dylib>
+         )
+
+      elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         target_link_libraries(CsCore
+            PUBLIC
+            $<BUILD_INTERFACE:CsString::CsString>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsString.so>
+         )
+
+      elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         if (MSVC)
+            target_link_libraries(CsCore
+               PUBLIC
+               $<BUILD_INTERFACE:CsString::CsString>
+
+               # link with import library in CS install lib directory
+               $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsString.lib>
+            )
+
+         else()
+            target_link_libraries(CsCore
+               PUBLIC
+               $<BUILD_INTERFACE:CsString::CsString>
+
+               # link with import library in CS install lib directory
+               $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsString.dll.a>
+            )
+         endif()
+
+      endif()
+
+      list(APPEND CORE_INCLUDES
+         ${CsString_INCLUDE_DIR}/cs_string.h
+         ${CsString_INCLUDE_DIR}/cs_string_iterator.h
+         ${CsString_INCLUDE_DIR}/cs_encoding.h
+         ${CsString_INCLUDE_DIR}/cs_char.h
+         ${CsString_INCLUDE_DIR}/cs_string_view.h
+      )
+   endif()
+
+else()
+   # use annex headers
+   target_include_directories(CsCore
+      PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_string>
+   )
+
+   list(APPEND CORE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_iterator.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_encoding.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_char.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_string/cs_string_view.h
+   )
+endif()
+
 list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.h
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar32.h
