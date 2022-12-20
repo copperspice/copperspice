@@ -327,3 +327,49 @@ install(
 )
 
 install(FILES ${CMAKE_BINARY_DIR}/include/cs-config.h  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
+
+if (CsSignal_FOUND)
+
+   if (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         # install system library to CS install directory
+         install(FILES ${CsSignal_LIBRARIES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+         # install import library to CS install lib directory
+         set(CsSignal_ImportLib $<TARGET_LINKER_FILE:CsSignal::CsSignal>)
+
+         install(FILES ${CsSignal_ImportLib} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+      else()
+         # darwin and unix
+
+         # install system library to CS install directory
+         install(FILES ${CsSignal_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+      endif()
+
+   endif()
+endif()
+
+if (CsString_FOUND)
+
+   if (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         # install system library to CS install directory
+         install(FILES ${CsString_LIBRARIES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+         # install import library to CS install lib directory
+         set(CsString_ImportLib $<TARGET_LINKER_FILE:CsString::CsString>)
+
+         install(FILES ${CsString_ImportLib} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+      else()
+         # darwin and unix
+
+         # install system library to CS install directory
+         install(FILES ${CsString_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+      endif()
+
+   endif()
+endif()
