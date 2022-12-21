@@ -26,6 +26,17 @@ else()
    get_filename_component(CS_PLUGIN_DIR  "${CS_CORE_LIB}" DIRECTORY)
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+   set(CS_LIB_SUFFIX ".so")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+   set(CS_LIB_SUFFIX ".so")
+
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+   set(CS_LIB_SUFFIX ".dll")
+
+endif()
+
 
 function(cs_copy_library LIB_NAME)
    # location of the cs library
@@ -38,6 +49,27 @@ function(cs_copy_library LIB_NAME)
    endif()
 
    install(FILES ${CS_${LIB_NAME}_LIB} DESTINATION ${APP_INSTALL_DIR})
+
+   if(LIB_NAME STREQUAL "CsCore")
+
+      if ("${CsSignal_Deploy}")
+         # install system library since CS was built with the system library
+
+         if (CS_INSTALL_MODE STREQUAL "Deploy")
+            install(FILES ${CS_INSTALLED_LIB_DIR}/libCsSignal${CS_LIB_SUFFIX} DESTINATION ${APP_INSTALL_DIR})
+         endif()
+      endif()
+
+      if ("${CsString_Deploy}")
+         # install system library since CS was built with the system library
+
+         if (CS_INSTALL_MODE STREQUAL "Deploy")
+            install(FILES ${CS_INSTALLED_LIB_DIR}/libCsString${CS_LIB_SUFFIX} DESTINATION ${APP_INSTALL_DIR})
+         endif()
+      endif()
+
+   endif()
+
 endfunction()
 
 
