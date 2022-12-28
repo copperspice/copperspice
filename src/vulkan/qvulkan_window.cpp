@@ -35,8 +35,8 @@
 
 namespace {
 
-template <typename T, typename Func, template<typename> typename Container_T>
-QVector<std::invoke_result_t<Func, T>> map_vector(const Container_T<T> &data, Func f)
+template <typename T, typename Func, typename... ExtraArgs, template<typename> typename Container_T>
+QVector<std::invoke_result_t<Func, T>> map_vector(const Container_T<T, ExtraArgs...> &data, Func f)
 {
    QVector<std::invoke_result_t<Func, T>> retval;
    retval.reserve(data.size());
