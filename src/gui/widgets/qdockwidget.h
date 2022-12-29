@@ -26,7 +26,6 @@
 
 #include <qwidget.h>
 
-
 #ifndef QT_NO_DOCKWIDGET
 
 class QDockAreaLayout;
@@ -38,6 +37,7 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
 {
    GUI_CS_OBJECT(QDockWidget)
 
+   GUI_CS_ENUM(DockWidgetFeature)
    GUI_CS_FLAG(DockWidgetFeature, DockWidgetFeatures)
 
    GUI_CS_PROPERTY_READ(floating, isFloating)
@@ -56,16 +56,18 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
    GUI_CS_PROPERTY_DESIGNABLE(windowTitle, true)
 
  public:
-   enum DockWidgetFeature {
-      DockWidgetClosable         = 0x01,
-      DockWidgetMovable          = 0x02,
-      DockWidgetFloatable        = 0x04,
-      DockWidgetVerticalTitleBar = 0x08,
-      DockWidgetFeatureMask      = 0x0f,
-      AllDockWidgetFeatures      = DockWidgetClosable | DockWidgetMovable | DockWidgetFloatable, // ### remove in 5.0
-      NoDockWidgetFeatures       = 0x00,
-      Reserved                   = 0xff
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum DockWidgetFeature {
+         DockWidgetClosable         = 0x01,
+         DockWidgetMovable          = 0x02,
+         DockWidgetFloatable        = 0x04,
+         DockWidgetVerticalTitleBar = 0x08,
+         DockWidgetFeatureMask      = 0x0f,
+         AllDockWidgetFeatures      = DockWidgetClosable | DockWidgetMovable | DockWidgetFloatable,
+         NoDockWidgetFeatures       = 0x00,
+         Reserved                   = 0xff
+      };
+   )
    using DockWidgetFeatures = QFlags<DockWidgetFeature>;
 
    explicit QDockWidget(const QString &title, QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);
