@@ -43,7 +43,10 @@ endif()
 function_variable_fixup("${EXTRA_RCC_CXXFLAGS}" EXTRA_RCC_CXXFLAGS)
 function_variable_fixup("${EXTRA_RCC_LDFLAGS}"  EXTRA_RCC_LDFLAGS)
 
-target_link_libraries(rcc${TOOLS_SUFFIX} ${EXTRA_RCC_LIBS})
+target_link_libraries(rcc${TOOLS_SUFFIX}
+   PRIVATE
+   ${EXTRA_RCC_LIBS}
+)
 
 set_target_properties(rcc${TOOLS_SUFFIX}
    PROPERTIES

@@ -43,6 +43,7 @@ function_variable_fixup("${EXTRA_LRELEASE_CXXFLAGS}" EXTRA_LRELEASE_CXXFLAGS)
 function_variable_fixup("${EXTRA_LRELEASE_LDFLAGS}"  EXTRA_LRELEASE_LDFLAGS)
 
 target_link_libraries(lrelease${TOOLS_SUFFIX}
+   PRIVATE
    ${EXTRA_LRELEASE_LIBS}
 )
 

@@ -55,7 +55,10 @@ endif()
 function_variable_fixup("${EXTRA_LUPDATE_CXXFLAGS}" EXTRA_LUPDATE_CXXFLAGS)
 function_variable_fixup("${EXTRA_LUPDATE_LDFLAGS}" EXTRA_LUPDATE_LDFLAGS)
 
-target_link_libraries(lupdate${TOOLS_SUFFIX} ${EXTRA_LUPDATE_LIBS})
+target_link_libraries(lupdate${TOOLS_SUFFIX}
+   PRIVATE
+   ${EXTRA_LUPDATE_LIBS}
+)
 
 set_target_properties(lupdate${TOOLS_SUFFIX}
    PROPERTIES

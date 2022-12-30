@@ -81,7 +81,10 @@ endif()
 function_variable_fixup("${EXTRA_UIC_CXXFLAGS}" EXTRA_UIC_CXXFLAGS)
 function_variable_fixup("${EXTRA_UIC_LDFLAGS}"  EXTRA_UIC_LDFLAGS)
 
-target_link_libraries(uic${TOOLS_SUFFIX} ${EXTRA_UIC_LIBS})
+target_link_libraries(uic${TOOLS_SUFFIX}
+   PRIVATE
+   ${EXTRA_UIC_LIBS}
+)
 
 set_target_properties(uic${TOOLS_SUFFIX}
    PROPERTIES
