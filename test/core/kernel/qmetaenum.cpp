@@ -100,10 +100,10 @@ TEST_CASE("QMetaEnum enum_count_c", "[qmetaenum]")
    REQUIRE(enumObj.isFlag() == false);
 
    // enum values are *not* registered
-   CHECK(enumObj.keyCount() == 0);
+   REQUIRE(enumObj.keyCount() == 0);
 
-   CHECK(enumObj.key(0)   == "");
-   CHECK(enumObj.value(0) == -1);
+   REQUIRE(enumObj.key(0)   == "");
+   REQUIRE(enumObj.value(0) == -1);
 }
 
 TEST_CASE("QMetaEnum enum_count_d", "[qmetaenum]")
@@ -126,4 +126,17 @@ TEST_CASE("QMetaEnum enum_count_d", "[qmetaenum]")
    REQUIRE(enumObj.keyToValue("ClickFocus") == 2);
 }
 
+TEST_CASE("QMetaEnum flag_value", "[qmetaenum]")
+{
+   const QMetaObject &metaObject = Qt::staticMetaObject();
 
+   int index = metaObject.indexOfEnumerator("InputMethodHint");
+   QMetaEnum enumObj = metaObject.enumerator(index);
+
+   REQUIRE(enumObj.keyToValue("ImhNone") == 0);
+   REQUIRE(enumObj.keyToValue("ImhDate") == 0x80);
+   REQUIRE(enumObj.keyToValue("ImhTime") == 0x100);
+
+   REQUIRE(enumObj.keyToValue("ImhLatinOnly")          == 0x800000);
+   REQUIRE(enumObj.keyToValue("ImhExclusiveInputMask") == static_cast<int>(0xffff0000));
+}

@@ -232,6 +232,35 @@ TEST_CASE("QStringParser split_regex", "[qstringparser]")
    REQUIRE(list[3] == "orange");
 }
 
+TEST_CASE("QStringParser toInteger", "[qstringparser]")
+{
+   bool ok;
+
+   {
+      QString str = "0x80";
+
+      int value = QStringParser::toInteger<int>(str, &ok, 0);
+      REQUIRE(value == 128);
+      REQUIRE(ok == true);
+   }
+
+   {
+      QString str = "0xffff0000";
+
+      int value = QStringParser::toInteger<int>(str, &ok, 0);
+      REQUIRE(value == 0);
+      REQUIRE(ok == false);
+   }
+
+   {
+      QString str = "0xffff0000";
+
+      uint value = QStringParser::toInteger<uint>(str, &ok, 0);
+      REQUIRE(value == 0xffff0000);
+      REQUIRE(ok == true);
+   }
+}
+
 TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")
 {
    QString count = "1";
