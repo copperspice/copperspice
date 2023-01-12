@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -3410,8 +3410,8 @@ int main(int, char **)
    QByteArray header =
       "/***********************************************************************\n"
       "*\n"
-      "* Copyright (c) 2012-2022 Barbara Geller\n"
-      "* Copyright (c) 2012-2022 Ansel Sermersheim\n"
+      "* Copyright (c) 2012-2023 Barbara Geller\n"
+      "* Copyright (c) 2012-2023 Ansel Sermersheim\n"
       "*\n"
       "* Copyright (c) 2015 The Qt Company Ltd.\n"
       "* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).\n"
