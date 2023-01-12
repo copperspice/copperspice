@@ -1,0 +1,19 @@
+#!/bin/bash -e
+#echo "$0 called with $1"
+
+logger copperspice postinst called with "$1"
+
+
+if [ "$1" != "configure" ]
+then
+    exit 0
+fi
+
+set +e  #cheat to get around lintian complaining about missing -e above
+        #if you don't turn off exit on error the first -f file.name test which
+        #fails to find a file (not a fatal condition, hence our test) fatals out of the script.
+
+ldconfig
+
+set -e
+exit 0

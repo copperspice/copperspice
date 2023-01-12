@@ -1,0 +1,14 @@
+#!/bin/bash -e
+echo "$0 called with $1"
+
+set +e  #cheat to get around lintian complaining about missing -e above
+        #if you don't turn off exit on error the first -f file.name test which
+        #fails to find a file (not a fatal condition, hence our test) fatals out of the script.
+
+    rm -rf /usr/include/copperspice
+    rm -rf /usr/lib/copperspice
+    rm -rf /usr/lib/cmake/CopperSpice
+
+set -e
+
+exit 0

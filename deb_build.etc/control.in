@@ -1,0 +1,9 @@
+Package: @CPACK_PACKAGE_NAME@
+Priority: optional
+Section: libs
+Maintainer: @CPACK_PACKAGE_CONTACT@
+Installed-Size: @CPACK_PACKAGE_INSTALLED_SIZE@
+Architecture: @CPACK_PACKAGE_ARCHITECTURE@
+Version: @PACKAGE_VERSION@
+Depends: libc6 (>= 2.27), libstdc++6 (>= 8.4), zlib1g, libopengl0, libxcb-xinerama0, libxcb-xinput0
+Description: @CPACK_PACKAGE_DESCRIPTION_TEXT@
