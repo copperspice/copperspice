@@ -52,9 +52,9 @@ QVector<QVariantBase *> QVariant::m_variantClients;
 namespace {
 
 template <typename T>
-T safe_cast(qint64 data, bool *ok)
+T safe_cast(int64_t data, bool *ok)
 {
-   if constexpr(std::is_same_v<T, quint64>) {
+   if constexpr(std::is_same_v<T, uint64_t>) {
       // uint64
 
       *ok = true;
@@ -76,7 +76,7 @@ T safe_cast(qint64 data, bool *ok)
    } else {
       // T is unsigned
 
-      if (data >= 0 && static_cast<quint64>(data) <= std::numeric_limits<T>::max()) {
+      if (data >= 0 && static_cast<uint64_t>(data) <= std::numeric_limits<T>::max()) {
          // value in data will fit in the current T
          *ok = true;
          return static_cast<T>(data);
@@ -469,62 +469,62 @@ static bool cs_internal_isFloatingPoint(uint type)
    return type == QVariant::Double || type == QVariant::Float;
 }
 
-static qint64 cs_internal_convertToNumber(const QVariant &data, bool *ok)
+static int64_t cs_internal_convertToInt64(const QVariant &data, bool *ok)
 {
    *ok = true;
 
    switch (data.type()) {
 
       case QVariant::Bool:
-         return qint64(data.getData<bool>());
+         return int64_t(data.getData<bool>());
 
       case QVariant::Int:
-         return qint64(data.getData<int>());
+         return int64_t(data.getData<int>());
 
       case QVariant::UInt:
-         return qint64(data.getData<uint>());
+         return int64_t(int(data.getData<uint>()));
 
       case QVariant::Short:
-         return qint64(data.getData<short>());
+         return int64_t(data.getData<short>());
 
       case QVariant::UShort:
-         return qint64(data.getData<ushort>());
+         return int64_t(short(data.getData<ushort>()));
 
       case QVariant::Long:
-         return qint64(data.getData<long>());
+         return int64_t(data.getData<long>());
 
       case QVariant::ULong:
-         return qint64(data.getData<ulong>());
+         return int64_t(long(data.getData<ulong>()));
 
       case QVariant::LongLong:
-         return qint64(data.getData<qint64>());
+         return int64_t(data.getData<qint64>());
 
       case QVariant::ULongLong:
-         return qint64(data.getData<quint64>());
+         return int64_t(data.getData<quint64>());
 
       case QVariant::Double:
-         return qint64(data.getData<double>());
+         return int64_t(data.getData<double>());
 
       case QVariant::Float:
-         return qint64(data.getData<float>());
+         return int64_t(data.getData<float>());
 
       case QVariant::Char:
-        return qint64(data.getData<char>());
+        return int64_t(static_cast<signed char>(data.getData<char>()));
 
       case QVariant::SChar:
-         return qint64(data.getData<signed char>());
+         return int64_t(data.getData<signed char>());
 
       case QVariant::UChar:
-         return qint64(data.getData<uchar>());
+         return int64_t(static_cast<signed char>(data.getData<uchar>()));
 
       case QVariant::QChar:
-         return qint64(data.getData<QChar32>().unicode());
+         return int64_t(static_cast<int32_t>(data.getData<QChar32>().unicode()));
 
       case QVariant::String8:
-         return data.getData<QString>().toInteger<qint64>(ok);
+         return data.getData<QString>().toInteger<int64_t>(ok);
 
       case QVariant::String16:
-         return data.getData<QString16>().toInteger<qint64>(ok);
+         return data.getData<QString16>().toInteger<int64_t>(ok);
 
       case QVariant::ByteArray:
          return data.getData<QByteArray>().toLongLong(ok);
@@ -533,7 +533,7 @@ static qint64 cs_internal_convertToNumber(const QVariant &data, bool *ok)
          QJsonValue tmp = data.getData<QJsonValue>();
 
          if (tmp.isDouble()) {
-           return qint64(tmp.toDouble());
+           return int64_t(tmp.toDouble());
 
          } else {
             break;
@@ -542,7 +542,91 @@ static qint64 cs_internal_convertToNumber(const QVariant &data, bool *ok)
 
       default:
          if (data.isEnum()) {
-            return data.enumToInteger();
+            return data.enumToInt();
+         }
+
+         break;
+   }
+
+   *ok = false;
+
+   return 0;
+}
+
+static uint64_t cs_internal_convertToUInt64(const QVariant &data, bool *ok)
+{
+   *ok = true;
+
+   switch (data.type()) {
+
+      case QVariant::Bool:
+         return uint64_t(data.getData<bool>());
+
+      case QVariant::Int:
+         return uint64_t(uint(data.getData<int>()));
+
+      case QVariant::UInt:
+         return uint64_t(data.getData<uint>());
+
+      case QVariant::Short:
+         return uint64_t(ushort(data.getData<short>()));
+
+      case QVariant::UShort:
+         return uint64_t(data.getData<ushort>());
+
+      case QVariant::Long:
+         return uint64_t(ulong(data.getData<long>()));
+
+      case QVariant::ULong:
+         return uint64_t(data.getData<ulong>());
+
+      case QVariant::LongLong:
+         return uint64_t(data.getData<qint64>());
+
+      case QVariant::ULongLong:
+         return uint64_t(data.getData<quint64>());
+
+      case QVariant::Double:
+         return uint64_t(data.getData<double>());
+
+      case QVariant::Float:
+         return uint64_t(data.getData<float>());
+
+      case QVariant::Char:
+        return uint64_t(static_cast<unsigned char>(data.getData<char>()));
+
+      case QVariant::SChar:
+         return uint64_t(static_cast<unsigned char>(data.getData<signed char>()));
+
+      case QVariant::UChar:
+         return uint64_t(data.getData<uchar>());
+
+      case QVariant::QChar:
+         return uint64_t(data.getData<QChar32>().unicode());
+
+      case QVariant::String8:
+         return data.getData<QString>().toInteger<uint64_t>(ok);
+
+      case QVariant::String16:
+         return data.getData<QString16>().toInteger<uint64_t>(ok);
+
+      case QVariant::ByteArray:
+         return data.getData<QByteArray>().toULongLong(ok);
+
+      case QVariant::JsonValue: {
+         QJsonValue tmp = data.getData<QJsonValue>();
+
+         if (tmp.isDouble()) {
+           return uint64_t(tmp.toDouble());
+
+         } else {
+            break;
+         }
+      }
+
+      default:
+         if (data.isEnum()) {
+            return data.enumToUInt();
          }
 
          break;
@@ -575,7 +659,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::Char:
             case QVariant::SChar:
             case QVariant::UChar: {
-               bool tmp = cs_internal_convertToNumber(*this, &retval) != 0;
+               bool tmp = cs_internal_convertToUInt64(*this, &retval) != 0;
                setValue(tmp);
                break;
             }
@@ -665,8 +749,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
          break;
 
       case QVariant::Int: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-         int data     = 0;
+         int64_t tmp = cs_internal_convertToInt64(*this, &retval);
+         int data    = 0;
 
          if (retval) {
             data = safe_cast<int>(tmp, &retval);
@@ -677,7 +761,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::UInt: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
          uint data    = 0;
 
          if (retval) {
@@ -689,7 +773,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::Short: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         int64_t tmp = cs_internal_convertToInt64(*this, &retval);
          short data  = 0;
 
          if (retval) {
@@ -701,7 +785,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::UShort: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
          ushort data  = 0;
 
          if (retval) {
@@ -713,8 +797,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::Long: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-         long data    = 0;
+         int64_t tmp = cs_internal_convertToInt64(*this, &retval);
+         long data   = 0;
 
          if (retval) {
             data = safe_cast<long>(tmp, &retval);
@@ -725,7 +809,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::ULong: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
          ulong data   = 0;
 
          if (retval) {
@@ -737,8 +821,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::LongLong:  {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-         qint64 data  = 0;
+         int64_t tmp = cs_internal_convertToInt64(*this, &retval);
+         qint64 data = 0;
 
          if (retval) {
             data = safe_cast<qint64>(tmp, &retval);
@@ -749,7 +833,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::ULongLong: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
          quint64 data = 0;
 
          if (retval) {
@@ -781,7 +865,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::Char:
             case QVariant::SChar:
             case QVariant::UChar: {
-               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               int64_t tmp = cs_internal_convertToInt64(*this, &retval);
                double data  = 0;
 
                if (retval) {
@@ -863,7 +947,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::Char:
             case QVariant::SChar:
             case QVariant::UChar:  {
-               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               int64_t tmp = cs_internal_convertToInt64(*this, &retval);
                float data  = 0;
 
                if (retval) {
@@ -925,11 +1009,21 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::Char:  {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-         char data    = 0;
+         char data = 0;
 
-         if (retval) {
-            data = safe_cast<char>(tmp, &retval);
+         if constexpr (std::is_signed_v<char>) {
+            int64_t tmp = cs_internal_convertToInt64(*this, &retval);
+
+            if (retval) {
+               data = safe_cast<char>(tmp, &retval);
+            }
+
+         } else  {
+            uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
+
+            if (retval) {
+               data = safe_cast<char>(tmp, &retval);
+            }
          }
 
          setValue(data);
@@ -937,8 +1031,8 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::SChar: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
-         signed char data   = 0;
+         int64_t tmp = cs_internal_convertToInt64(*this, &retval);
+         signed char data = 0;
 
          if (retval) {
             data = safe_cast<signed char>(tmp, &retval);
@@ -949,7 +1043,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
       }
 
       case QVariant::UChar: {
-         uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+         uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
          uchar data   = 0;
 
          if (retval) {
@@ -980,7 +1074,7 @@ bool QVariant::cs_internal_convert(uint current_userType, uint new_userType)
             case QVariant::String8:
             case QVariant::String16:
             case QVariant::JsonValue: {
-               uint64_t tmp = cs_internal_convertToNumber(*this, &retval);
+               uint64_t tmp = cs_internal_convertToUInt64(*this, &retval);
                QChar32 data = 0;
 
                if (retval) {
@@ -3770,7 +3864,7 @@ bool QVariant::isEnum()  const {
    }
 }
 
-quint64 QVariant::enumToInteger() const {
+int64_t QVariant::enumToInt() const {
 
    // get a ptr to the requested alternative
    auto ptr = std::get_if<std::shared_ptr<CustomType>>(&(m_data));
@@ -3781,7 +3875,22 @@ quint64 QVariant::enumToInteger() const {
 
    } else {
       // custom type
-      return (*ptr)->enumToInteger();
+      return (*ptr)->enumToInt();
+   }
+}
+
+uint64_t QVariant::enumToUInt() const {
+
+   // get a ptr to the requested alternative
+   auto ptr = std::get_if<std::shared_ptr<CustomType>>(&(m_data));
+
+   if (ptr == nullptr) {
+      // simple type
+      return false;
+
+   } else {
+      // custom type
+      return (*ptr)->enumToUInt();
    }
 }
 
