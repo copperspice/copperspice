@@ -1235,7 +1235,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    aboutBox->setWindowIcon(icon);
 
    QLabel *msg1 = new QLabel;
-   msg1->setText(tr("CopperSpice libraries Version %1").formatArg(CS_VERSION_STR));
+   msg1->setText(tr("CopperSpice Version %1").formatArg(CS_VERSION_STR));
 
    QFont font = msg1->font();
    font.setWeight(QFont::Bold);
@@ -1243,15 +1243,17 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
    msg1->setFont(font);
 
    QLabel *msg2 = new QLabel;
-   msg2->setText(tr("CopperSpice is a set of C++ libraries for developing cross platform applications on X11, <br>"
-                     "Windows, and Mac OS X\n"));
+   msg2->setText(tr("CopperSpice is a set of C++ libraries for developing cross platform applications <br>"
+                     "on X11, Windows, and Mac OS X\n"));
 
    font = msg2->font();
    font.setPointSize(10);
    msg2->setFont(font);
 
    QLabel *msg3 = new QLabel;
-   msg3->setText("Copyright (c) 2012-2022 BG Consulting, released under the terms of the GNU LGPL version 2.1\n"
+
+   msg3->setText("Copyright (c) 2012-2023 Ansel Sermersheim & Barbara Geller\n"
+         "CopperSpice is released under the terms of the GNU LGPL version 2.1\n"
          "\n"
          "Copyright (c) 2015 The Qt Company Ltd\n"
          "Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies)\n"
