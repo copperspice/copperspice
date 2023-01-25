@@ -43,6 +43,20 @@ echo "BUILD_DIR   $BUILD_DIR"
 echo "RELEASE_DIR $RELEASE_DIR"
 echo "DEBIAN_DIR  $DEBIAN_DIR"
 
+function create_debian_tree()
+{
+    if [ -d "$DEBIAN_DIR" ]; then
+      rm -rf "$DEBIAN_DIR"
+    fi
+
+    mkdir -p "$DEBIAN_DIR"/DEBIAN
+    mkdir -p "$DEBIAN_DIR"/usr/include/copperspice
+    mkdir -p "$DEBIAN_DIR"/usr/lib/copperspice/bin
+    mkdir -p "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice
+    mkdir -p "$DEBIAN_DIR"/usr/share/pkgconfig
+    mkdir -p "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license
+}
+
 function build_from_source()
 {
     #  nuke the directories we will use if they already exist
@@ -55,20 +69,10 @@ function build_from_source()
       rm -rf "$RELEASE_DIR"
     fi
 
-    if [ -d "$DEBIAN_DIR" ]; then
-      rm -rf "$DEBIAN_DIR"
-    fi
-
     #  create the directories we will use so they are fresh and clean
     #
     mkdir -p "$BUILD_DIR"
     mkdir -p "$RELEASE_DIR"
-    mkdir -p "$DEBIAN_DIR"/DEBIAN
-    mkdir -p "$DEBIAN_DIR"/usr/include/copperspice
-    mkdir -p "$DEBIAN_DIR"/usr/lib/copperspice/bin
-    mkdir -p "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice
-    mkdir -p "$DEBIAN_DIR"/usr/lib/pkgconfig
-    mkdir -p "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license
 
     #  Step 2 : Prepare build directory
     #
@@ -84,10 +88,58 @@ function build_from_source()
     echo "*** Building CopperSpice"
     ninja install
 
+    #**********************
+    # These sed calls are a hack until the CopperSpice project fixes the names
+    # of their binaries so they don't conflict with Qt. After that
+    # they can go directly in /usr/bin. Until then they have
+    # to be placed elsewhere.
+    #**********************
+
+    cd "$RELEASE_DIR"/lib/cmake/CopperSpice
+    if [ -f "CopperSpiceBinaryTargets-release.cmake" ]; then
+        echo "*** "
+        echo "*** Fixing where cmake looks for binaries during RELEASE"
+        echo "*** "
+        sed -i 's#${_IMPORT_PREFIX}/bin#${_IMPORT_PREFIX}/lib/copperspice/bin#g' CopperSpiceBinaryTargets-release.cmake
+    fi
+
+    if [ -f "CopperSpiceBinaryTargets-debug.cmake" ]; then
+        echo "*** "
+        echo "*** Fixing where cmake looks for binaries during DEBUG if there ever is a debug version"
+        echo "*** "
+        sed -i 's#${_IMPORT_PREFIX}/bin#${_IMPORT_PREFIX}/lib/copperspice/bin#g' CopperSpiceBinaryTargets-debug.cmake
+    fi
+
+    if [ -f "CopperSpiceLibraryTargets.cmake" ]; then
+        echo "*** "
+        echo "*** Fixing where cmake looks for Qt and other headers"
+        echo "*** "
+        sed -i 's#${_IMPORT_PREFIX}/include;#${_IMPORT_PREFIX}/include/copperspice;#g' CopperSpiceLibraryTargets.cmake
+        sed -i 's#${_IMPORT_PREFIX}/include/Qt#${_IMPORT_PREFIX}/include/copperspice/Qt#g' CopperSpiceLibraryTargets.cmake
+    fi
+
+
+    #**********************
+    # Sadly we end up with the RELEASE_DIR path in the CopperSpiceConfig.cmake
+    # For a package install it needs to be /usr/include/copperspice
+    # first we need to get rid of any potential .. in directory path
+    #**********************
+    WRONG_INCLUDE="$RELEASE_DIR/include"
+    cd "$WRONG_INCLUDE"
+    BAD_INCLUDE_PATH=$PWD
+    cd "$RELEASE_DIR"/lib/cmake/CopperSpice
+    if [ -f "CopperSpiceConfig.cmake" ]; then
+        echo "*** "
+        echo "*** Fixing where cmake looks for include files"
+        echo "*** "
+        echo "BAD_INCLUDE_PATH = $BAD_INCLUDE_PATH"
+        sed -i "s#$BAD_INCLUDE_PATH#/usr/include/copperspice#g" CopperSpiceConfig.cmake
+    fi
 }
 
 function dev_deb()
 {
+    create_debian_tree
 
     #  Step 5 : Move files to the debian tree
     #
@@ -109,10 +161,10 @@ function dev_deb()
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
     cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/lib/copperspice/bin/
-    cp -Prv "$RELEASE_DIR"/include/* "$DEBIAN_DIR"/usr/include/copperspice/
-    cp -Prv "$RELEASE_DIR"/lib/pkgconfig/* "$DEBIAN_DIR"/usr/lib/pkgconfig
-    cp -Prv "$RELEASE_DIR"/lib/cmake/* "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/copperspice/
+    cp -Prv "$RELEASE_DIR"/include/copperspice/* "$DEBIAN_DIR"/usr/include/copperspice/
+    cp -Prv "$RELEASE_DIR"/lib/pkgconfig/* "$DEBIAN_DIR"/usr/share/pkgconfig
+    cp -Prv "$RELEASE_DIR"/lib/cmake/CopperSpice/* "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice/
+    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
@@ -140,7 +192,7 @@ function dev_deb()
     #
     D_VERSION=$(grep -i "Version:" "$DEBIAN_DIR"/DEBIAN/control | cut -d' ' -f2)
     D_ARCH=$(grep -i "Architecture:" "$DEBIAN_DIR"/DEBIAN/control | cut -d' ' -f2)
-    DEB_NAME="copperspice-$D_VERSION-$D_ARCH-dev.deb"
+    DEB_NAME="LS-CS-$D_VERSION-$D_ARCH-dev.deb"
     echo "look for:  $DEB_NAME"
 
     mv copperspice_debian.deb "$DEB_NAME"
@@ -149,6 +201,7 @@ function dev_deb()
 
 function runtime_deb()
 {
+    create_debian_tree
 
     #  Step 5 : Move files to the debian tree
     #
@@ -170,7 +223,7 @@ function runtime_deb()
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
     cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/lib/copperspice/bin/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/copperspice/
+    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
@@ -198,7 +251,7 @@ function runtime_deb()
     #
     D_VERSION=$(grep -i "Version:" "$DEBIAN_DIR"/DEBIAN/control | cut -d' ' -f2)
     D_ARCH=$(grep -i "Architecture:" "$DEBIAN_DIR"/DEBIAN/control | cut -d' ' -f2)
-    DEB_NAME="copperspice-$D_VERSION-$D_ARCH.deb"
+    DEB_NAME="LS-CS-$D_VERSION-$D_ARCH.deb"
     echo "look for:  $DEB_NAME"
 
     mv copperspice_debian.deb "$DEB_NAME"

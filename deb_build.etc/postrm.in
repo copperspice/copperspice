@@ -8,6 +8,9 @@ set +e  #cheat to get around lintian complaining about missing -e above
     rm -rf /usr/include/copperspice
     rm -rf /usr/lib/copperspice
     rm -rf /usr/lib/cmake/CopperSpice
+    rm -rf /usr/share/doc/CopperSpice
+    # sadly we cannot clean up pkgconfig unless we generate a file list
+    # during install
 
 set -e
 

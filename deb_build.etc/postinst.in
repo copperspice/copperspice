@@ -1,7 +1,7 @@
 #!/bin/bash -e
 #echo "$0 called with $1"
 
-logger copperspice postinst called with "$1"
+logger @CPACK_PACKAGE_NAME@ postinst called with "$1"
 
 
 if [ "$1" != "configure" ]

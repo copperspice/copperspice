@@ -52,9 +52,10 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
    # rpath used for rcc and uic when compiling a user application
    file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
-                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin")
 
-   set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin:$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   set(CMAKE_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include/copperspice")
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
@@ -109,9 +110,9 @@ else()
    set(target "${CMAKE_SYSTEM}")
 endif()
 
-set(CPACK_PACKAGE_NAME    ${PROJECT_NAME})
-set(CPACK_PACKAGE_VENDOR  "CopperSpice")
-set(CPACK_PACKAGE_CONTACT "info@copperspice.com")
+set(CPACK_PACKAGE_NAME    "LS-CS")
+set(CPACK_PACKAGE_VENDOR  "Logikal Solutions")
+set(CPACK_PACKAGE_CONTACT "originalseasonedgeek@gmail.com")
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
@@ -710,7 +711,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
     #  Update files needed for Debian
     #  Note: You need to update CPACK_PACKAGE_INSTALLED_SIZE to reflect current installed size
     #
-   set(CPACK_PACKAGE_INSTALLED_SIZE "150000")
+   set(CPACK_PACKAGE_INSTALLED_SIZE "173793313")
 
    # this architecture value is only used on the control file for a debian package.
    # if the value is bogus or empty on other platforms it simply doesn't matter.
@@ -738,11 +739,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
        COPYONLY
     )
 
-    #  postinst has some heavy syntax - just copy
+    #  postinst needs to know package name for logging
     configure_file(
        ${CMAKE_SOURCE_DIR}/deb_build.etc/postinst.in
        deb_build.etc/postinst
-       COPYONLY
     )
 
     #  hopefully we never need to replace values in rules
