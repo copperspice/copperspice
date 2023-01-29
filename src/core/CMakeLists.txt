@@ -68,36 +68,122 @@ include(thread/thread.cmake)
 include(tools/tools.cmake)
 include(xml/xml.cmake)
 
-# use annex headers
-target_include_directories(CsCore
-   PUBLIC
-   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_libguarded>
-)
+if (CsLibGuarded_FOUND)
+   # use system headers
 
-list(APPEND CORE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_guarded.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_list.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_shared_guarded.h
-)
+   if (CS_INSTALL_MODE STREQUAL "Package")
+      # package mode, do not copy install headers
+      target_link_libraries(CsCore
+         PUBLIC
+         CsLibGuarded::CsLibGuarded
+      )
 
-# use annex headers
-target_include_directories(CsCore
-   PUBLIC
-   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_signal>
-)
+   elseif (CS_INSTALL_MODE STREQUAL "Deploy")
+      target_link_libraries(CsCore
+         PUBLIC
+         $<BUILD_INTERFACE:CsLibGuarded::CsLibGuarded>
+      )
 
-list(APPEND CORE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_internal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_macro.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.h
-)
+      list(APPEND CORE_INCLUDES
+         ${CsLibGuarded_INCLUDE_DIR}/cs_rcu_guarded.h
+         ${CsLibGuarded_INCLUDE_DIR}/cs_rcu_list.h
+         ${CsLibGuarded_INCLUDE_DIR}/cs_shared_guarded.h
+      )
+   endif()
 
-target_sources(CsCore
-   PRIVATE
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.cpp
-)
+else()
+   # use annex headers
+   target_include_directories(CsCore
+      PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_libguarded>
+   )
+
+   list(APPEND CORE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_guarded.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_rcu_list.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_libguarded/cs_shared_guarded.h
+   )
+endif()
+
+if (CsSignal_FOUND)
+   # use system headers
+
+   if (CS_INSTALL_MODE STREQUAL "Package")
+      # package mode, do not copy install headers
+      target_link_libraries(CsCore
+         PUBLIC
+         CsSignal::CsSignal
+      )
+
+   elseif (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+         target_link_libraries(CsCore
+            PUBLIC
+            $<BUILD_INTERFACE:CsSignal::CsSignal>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsSignal.dylib>
+         )
+
+      elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+         target_link_libraries(CsCore
+            PUBLIC
+            $<BUILD_INTERFACE:CsSignal::CsSignal>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsSignal.so>
+         )
+
+      elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         # link with import library in CS install lib directory
+
+         if (MSVC)
+            target_link_libraries(CsCore
+               PUBLIC
+               $<BUILD_INTERFACE:CsSignal::CsSignal>
+
+               # link with import library in CS install lib directory
+               $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsSignal.lib>
+            )
+
+         else()
+            target_link_libraries(CsCore
+               PUBLIC
+               $<BUILD_INTERFACE:CsSignal::CsSignal>
+
+               # link with import library in CS install lib directory
+               $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libCsSignal.dll.a>
+            )
+         endif()
+
+      endif()
+
+      list(APPEND CORE_INCLUDES
+         ${CsSignal_INCLUDE_DIR}/cs_internal.h
+         ${CsSignal_INCLUDE_DIR}/cs_macro.h
+         ${CsSignal_INCLUDE_DIR}/cs_signal.h
+         ${CsSignal_INCLUDE_DIR}/cs_slot.h
+      )
+
+   endif()
+
+else()
+   # use annex headers
+   target_include_directories(CsCore
+      PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src/annex/cs_signal>
+   )
+
+   list(APPEND CORE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_internal.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_macro.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.h
+   )
+
+   target_sources(CsCore
+      PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_signal.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_signal/cs_slot.cpp
+   )
+endif()
 
 if (ZLIB_FOUND)
    target_link_libraries(CsCore
@@ -241,3 +327,49 @@ install(
 )
 
 install(FILES ${CMAKE_BINARY_DIR}/include/cs-config.h  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} )
+
+if (CsSignal_FOUND)
+
+   if (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         # install system library to CS install directory
+         install(FILES ${CsSignal_LIBRARIES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+         # install import library to CS install lib directory
+         set(CsSignal_ImportLib $<TARGET_LINKER_FILE:CsSignal::CsSignal>)
+
+         install(FILES ${CsSignal_ImportLib} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+      else()
+         # darwin and unix
+
+         # install system library to CS install directory
+         install(FILES ${CsSignal_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+      endif()
+
+   endif()
+endif()
+
+if (CsString_FOUND)
+
+   if (CS_INSTALL_MODE STREQUAL "Deploy")
+
+      if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+         # install system library to CS install directory
+         install(FILES ${CsString_LIBRARIES} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+         # install import library to CS install lib directory
+         set(CsString_ImportLib $<TARGET_LINKER_FILE:CsString::CsString>)
+
+         install(FILES ${CsString_ImportLib} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+      else()
+         # darwin and unix
+
+         # install system library to CS install directory
+         install(FILES ${CsString_LIBRARIES} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+      endif()
+
+   endif()
+endif()

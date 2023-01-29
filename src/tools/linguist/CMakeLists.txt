@@ -104,7 +104,10 @@ endif()
 function_variable_fixup("${EXTRA_LINGUIST_CXXFLAGS}" EXTRA_LINGUIST_CXXFLAGS)
 function_variable_fixup("${EXTRA_LINGUIST_LDFLAGS}"  EXTRA_LINGUIST_LDFLAGS)
 
-target_link_libraries(linguist${TOOLS_SUFFIX} ${EXTRA_LINGUIST_LIBS})
+target_link_libraries(linguist${TOOLS_SUFFIX}
+   PRIVATE
+   ${EXTRA_LINGUIST_LIBS}
+)
 
 set_target_properties(linguist${TOOLS_SUFFIX}
    PROPERTIES

@@ -84,13 +84,13 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
          Help               = 0x01000000,
          Apply              = 0x02000000,
          Reset              = 0x04000000,
-         RestoreDefaults    = 0x08000000,
-
-         // internal
-         FirstButton        = Ok,
-         LastButton         = RestoreDefaults
+         RestoreDefaults    = 0x08000000
       };
    )
+
+   // internal values
+   static const auto FirstButton = StandardButton::Ok;
+   static const auto LastButton  = StandardButton::RestoreDefaults;
 
    using StandardButtons = QFlags<StandardButton>;
 

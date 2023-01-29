@@ -22,9 +22,34 @@ if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
    endif()
 endif()
 
-file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
-   "@SET PATH=..;%PATH%\n@CsCoreTest\n"
-)
+if (CS_INSTALL_MODE STREQUAL "Deploy" AND CMAKE_SYSTEM_NAME MATCHES "Windows")
+
+   STRING(CONCAT CORE_BATCH_FILE
+      "@SET PATH=..;%PATH% \n"
+      "\n"
+      "REM   @CsCoreTest   \n"
+      "\n"
+      "@ECHO OFF           \n"
+      "\n"
+      "ECHO:               \n"
+      "ECHO CopperSpice was built in Deploy Mode.\n"
+      "ECHO    Running CsCoreTest may require some of the following libraries. \n"
+      "ECHO    Either modify your PATH or copy these libraries to the current folder. \n"
+      "ECHO:               \n"
+      "ECHO CsSignal       \n"
+      "ECHO CsString"
+   )
+
+   file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
+      ${CORE_BATCH_FILE}
+   )
+
+else()
+   file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
+      "@SET PATH=..;%PATH%\n@CsCoreTest\n"
+   )
+
+endif()
 
 target_link_libraries(CsCoreTest
    PUBLIC

@@ -49,7 +49,10 @@ endif()
 function_variable_fixup("${EXTRA_LCONVERT_CXXFLAGS}" EXTRA_LCONVERT_CXXFLAGS)
 function_variable_fixup("${EXTRA_LCONVERT_LDFLAGS}"  EXTRA_LCONVERT_LDFLAGS)
 
-target_link_libraries(lconvert${TOOLS_SUFFIX} ${EXTRA_LCONVERT_LIBS})
+target_link_libraries(lconvert${TOOLS_SUFFIX}
+   PRIVATE
+   ${EXTRA_LCONVERT_LIBS}
+)
 
 set_target_properties(lconvert${TOOLS_SUFFIX}
    PROPERTIES
