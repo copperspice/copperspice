@@ -46,6 +46,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_ENUM(ScrollMode)
    GUI_CS_ENUM(DragDropMode)
 
+   GUI_CS_ENUM(EditTrigger)
    GUI_CS_FLAG(EditTrigger, EditTriggers)
 
    GUI_CS_PROPERTY_READ(autoScroll, hasAutoScroll)
@@ -124,15 +125,17 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
       PositionAtCenter
    };
 
-   enum EditTrigger {
-      NoEditTriggers = 0,
-      CurrentChanged = 1,
-      DoubleClicked = 2,
-      SelectedClicked = 4,
-      EditKeyPressed = 8,
-      AnyKeyPressed = 16,
-      AllEditTriggers = 31
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum EditTrigger {
+         NoEditTriggers  = 0,
+         CurrentChanged  = 1,
+         DoubleClicked   = 2,
+         SelectedClicked = 4,
+         EditKeyPressed  = 8,
+         AnyKeyPressed   = 16,
+         AllEditTriggers = 31
+      };
+   )
 
    using EditTriggers = QFlags<EditTrigger>;
 

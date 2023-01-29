@@ -18,44 +18,103 @@
 
 macro(COPPERSPICE_RESOURCES RESOURCES)
 
-   foreach(resource ${RESOURCES} ${ARGN})
-      get_filename_component(rscext ${resource}  EXT)
-      get_filename_component(rscname ${resource} NAME_WE)
+   set(T_PATH "")
 
-      if("${rscext}" STREQUAL ".qrc")
-         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qrc_${rscname}.cpp)
+   if ("${CS_INSTALL_MODE}" STREQUAL "Package")
 
-         add_custom_command(
-            OUTPUT ${rscout}
+      if (CsSignal_FOUND)
+         # cs was built in package mode
 
-            COMMAND CopperSpice::rcc "${resource}" -o "${rscout}" -name ${rscname}
-            MAIN_DEPENDENCY "${resource}"
-         )
+         if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+            set(EXTRA_PATH "$<TARGET_FILE_DIR:CsSignal::CsSignal>;$<TARGET_FILE_DIR:CsString::CsString>")
+            set(T_PATH "DYLD_LIBRARY_PATH=$<JOIN:$ENV{DYLD_LIBRARY_PATH};${EXTRA_PATH},:>")
 
-         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})
+         elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+            set(T_PATH "LD_LIBRARY_PATH=$<JOIN:$ENV{LD_LIBRARY_PATH};$<TARGET_FILE_DIR:CsSignal::CsSignal>,:>")
 
-      elseif("${rscext}" STREQUAL ".ts")
+         elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+            set(T_PATH "PATH=$<JOIN:$ENV{PATH};$<TARGET_FILE_DIR:CsSignal::CsSignal>,;>")
 
-         if("${TS_OUTPUT_DIR}" STREQUAL "")
-            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.qm)
-         else()
-            set(rscout ${TS_OUTPUT_DIR}/${rscname}.qm)
          endif()
+      endif()
 
-         add_custom_command(
-            OUTPUT ${rscout}
-            COMMAND CopperSpice::lrelease "${resource}" -qm "${rscout}"
-            MAIN_DEPENDENCY "${resource}"
-         )
+   endif()
+
+      foreach(resource ${RESOURCES} ${ARGN})
+         get_filename_component(rscext ${resource}  EXT)
+         get_filename_component(rscname ${resource} NAME_WE)
+
+         if("${rscext}" STREQUAL ".qrc")
+            set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qrc_${rscname}.cpp)
+
+            if ("${T_PATH}" STREQUAL "")
+               add_custom_command(
+                  OUTPUT ${rscout}
+                  COMMAND CopperSpice::rcc "${resource}" -o "${rscout}" -name ${rscname}
+                  MAIN_DEPENDENCY "${resource}"
+               )
+
+            else()
+               # cs was built in package mode
+
+               add_custom_command(
+                  OUTPUT ${rscout}
+                  COMMAND cmake -E env "${T_PATH}" "$<TARGET_FILE:CopperSpice::rcc>"
+                        "${resource}" -o "${rscout}" -name ${rscname}
+                  MAIN_DEPENDENCY "${resource}"
+               )
+            endif()
+
+            set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${rscout})
+
+         elseif("${rscext}" STREQUAL ".ts")
+
+            if("${TS_OUTPUT_DIR}" STREQUAL "")
+               set(rscout ${CMAKE_CURRENT_BINARY_DIR}/${rscname}.qm)
+            else()
+               set(rscout ${TS_OUTPUT_DIR}/${rscname}.qm)
+            endif()
+
+            if ("${T_PATH}" STREQUAL "")
+               add_custom_command(
+                  OUTPUT ${rscout}
+                  COMMAND CopperSpice::lrelease "${resource}" -qm "${rscout}"
+                  MAIN_DEPENDENCY "${resource}"
+               )
+
+            else()
+               # cs was built in package mode
+
+               add_custom_command(
+                  OUTPUT ${rscout}
+                  COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::lrelease>"
+                        "${resource}" -qm "${rscout}"
+                  MAIN_DEPENDENCY "${resource}"
+               )
+
+            endif()
 
       elseif("${rscext}" STREQUAL ".ui")
          set(rscout ${CMAKE_CURRENT_BINARY_DIR}/ui_${rscname}.h)
 
-         add_custom_command(
-            OUTPUT ${rscout}
-            COMMAND CopperSpice::uic "${resource}" -o "${rscout}"
-            MAIN_DEPENDENCY "${resource}"
-         )
+         if ("${T_PATH}" STREQUAL "")
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND CopperSpice::uic "${resource}" -o "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         else()
+            # cs was built in package mode
+
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::uic>"
+                     "${resource}" -o "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         endif()
 
       endif()
 

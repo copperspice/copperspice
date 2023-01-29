@@ -116,11 +116,13 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
       };
    )
 
-   enum AutoFormattingFlag {
-      AutoNone = 0,
-      AutoBulletList = 0x00000001,
-      AutoAll = 0xffffffff
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum AutoFormattingFlag {
+         AutoNone       = 0,
+         AutoBulletList = 0x00000001,
+         AutoAll        = 0xffffffff
+      };
+   )
 
    using AutoFormatting = QFlags<AutoFormattingFlag>;
 

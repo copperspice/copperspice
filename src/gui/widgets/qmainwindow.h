@@ -76,14 +76,16 @@ class Q_GUI_EXPORT QMainWindow : public QWidget
 #endif
 
  public:
-   enum DockOption {
-      AnimatedDocks = 0x01,
-      AllowNestedDocks = 0x02,
-      AllowTabbedDocks = 0x04,
-      ForceTabbedDocks = 0x08,  // implies AllowTabbedDocks, !AllowNestedDocks
-      VerticalTabs = 0x10,      // implies AllowTabbedDocks
-      GroupedDragging = 0x20    // implies AllowTabbedDocks
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum DockOption {
+         AnimatedDocks    = 0x01,
+         AllowNestedDocks = 0x02,
+         AllowTabbedDocks = 0x04,
+         ForceTabbedDocks = 0x08,   // implies AllowTabbedDocks, !AllowNestedDocks
+         VerticalTabs     = 0x10,   // implies AllowTabbedDocks
+         GroupedDragging  = 0x20    // implies AllowTabbedDocks
+      };
+   )
    using DockOptions = QFlags<DockOption>;
 
    explicit QMainWindow(QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::EmptyFlag);

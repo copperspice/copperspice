@@ -59,13 +59,15 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
    void setWritingSystem(QFontDatabase::WritingSystem script);
    QFontDatabase::WritingSystem writingSystem() const;
 
-   enum FontFilter {
-      AllFonts = 0,
-      ScalableFonts = 0x1,
-      NonScalableFonts = 0x2,
-      MonospacedFonts = 0x4,
-      ProportionalFonts = 0x8
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum FontFilter {
+         AllFonts          = 0,
+         ScalableFonts     = 0x1,
+         NonScalableFonts  = 0x2,
+         MonospacedFonts   = 0x4,
+         ProportionalFonts = 0x8
+      };
+   )
    using FontFilters = QFlags<FontFilter>;
 
    void setFontFilters(FontFilters filters);

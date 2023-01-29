@@ -236,7 +236,34 @@ endforeach()
 # start output messages
 message("")
 message("Configuring CMake for CopperSpice\n\n")
-message("Searching for required packages\n")
+message("-- Searching for required packages\n")
+
+find_package(CsLibGuarded QUIET)
+
+if (CsLibGuarded_FOUND)
+   message(STATUS "CsLibGuarded was found \n"
+      " * Path is ${CsLibGuarded_INCLUDES}\n")
+else()
+   message(STATUS "CsLibGuarded was not found, bundled library will be used\n")
+endif()
+
+find_package(CsString QUIET)
+
+if (CsString_FOUND)
+   message(STATUS "CsString was found \n"
+      " * Path is ${CsString_LIBRARIES}\n")
+else()
+   message(STATUS "CsString was not found, bundled library will be used\n")
+endif()
+
+find_package(CsSignal QUIET)
+
+if (CsSignal_FOUND)
+   message(STATUS "CsSignal was found \n"
+      " * Path is ${CsSignal_LIBRARIES}\n")
+else()
+   message(STATUS "CsSignal was not found, bundled library will be used\n")
+endif()
 
 find_package(OpenSSL 1.0)
 set_package_properties(OpenSSL PROPERTIES
@@ -293,10 +320,9 @@ find_package(ALSA)
 set_package_properties(ALSA PROPERTIES
    PURPOSE "Required for ALSA audio support"
    DESCRIPTION "Advanced Linux Sound Architecture"
-   URL "http://www.alsa-project.org"
+   URL "https://www.alsa-project.org"
    TYPE RECOMMENDED
 )
-
 endif()
 
 
@@ -306,10 +332,9 @@ find_package(PulseAudio)
 set_package_properties(PulseAudio PROPERTIES
    PURPOSE "Required for pulseaudio support"
    DESCRIPTION "Sound processing daemon for Unix"
-   URL "http://www.pulseaudio.org"
+   URL "https://www.pulseaudio.org"
    TYPE RECOMMENDED
 )
-
 endif()
 
 
@@ -317,7 +342,7 @@ find_package(PostgreSQL QUIET)
 set_package_properties(PostgreSQL PROPERTIES
    PURPOSE "Required for PostgreSQL database support"
    DESCRIPTION "Popular open source database"
-   URL "http://www.postgresql.org"
+   URL "https://www.postgresql.org"
    TYPE RECOMMENDED
 )
 
@@ -365,7 +390,7 @@ find_package(MySQL QUIET)
 set_package_properties(MySQL PROPERTIES
    PURPOSE "Required for MySQL database support"
    DESCRIPTION "Popular open source database"
-   URL "http://www.mysql.com"
+   URL "https://www.mysql.com"
    TYPE RECOMMENDED
 )
 
@@ -406,7 +431,6 @@ set_package_properties(SQLite3 PROPERTIES
    TYPE RECOMMENDED
 )
 
-
 if (WITH_VULKAN)
    find_package(Vulkan 1.1)
    set_package_properties(Vulkan PROPERTIES
@@ -420,13 +444,13 @@ if (WITH_VULKAN)
       set(WITH_VULKAN NO)
 
       if (Vulkan_FOUND)
-         message(STATUS "Partial Vulkan installation exists however the SDK was not found, CsVulkan library will not be built\n")
+         message(STATUS "Partial Vulkan installation exists however the SDK was not found, "
+            "CsVulkan library will not be built\n")
       else()
          message(STATUS "Vulkan SDK was not found, CsVulkan library will not be built\n")
       endif()
 
    endif()
-
 endif()
 
 # emerald - temporarily turn off GTK as a workaround, conflicts with freetype version in Harfbuzz

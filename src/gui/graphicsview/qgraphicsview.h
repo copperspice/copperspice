@@ -99,10 +99,12 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
       };
    )
 
-   enum CacheModeFlag {
-      CacheNone = 0x0,
-      CacheBackground = 0x1
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum CacheModeFlag {
+         CacheNone       = 0x0,
+         CacheBackground = 0x1
+      };
+   )
    using CacheMode = QFlags<CacheModeFlag>;
 
    GUI_CS_REGISTER_ENUM(
@@ -123,12 +125,14 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
       };
    )
 
-   enum OptimizationFlag {
-      DontClipPainter           = 0x1, // obsolete
-      DontSavePainterState      = 0x2,
-      DontAdjustForAntialiasing = 0x4,
-      IndirectPainting          = 0x8
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum OptimizationFlag {
+         DontClipPainter           = 0x1, // obsolete
+         DontSavePainterState      = 0x2,
+         DontAdjustForAntialiasing = 0x4,
+         IndirectPainting          = 0x8
+      };
+   )
    using OptimizationFlags = QFlags<OptimizationFlag>;
 
    QGraphicsView(QWidget *parent = nullptr);
