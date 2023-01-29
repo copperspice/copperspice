@@ -38,10 +38,18 @@ RELEASE_DIR="$SCRIPT_DIR/../copperspice_debian_release"
 DEBIAN_DIR="$SCRIPT_DIR/../copperspice_debian"
 DEBIAN_WORK_DIR="$SCRIPT_DIR/../copperspice_debian_work"
 
+#
+# Placed here so it can be hacked for those unfortunate distros that default to lib
+# containing 32-bit libraries and lib64 for 64-bit even though they are 64-bit platforms
+# themselves.
+#
+LIB_DIR="lib"
+
 echo "SCRIPT_DIR  $SCRIPT_DIR"
 echo "BUILD_DIR   $BUILD_DIR"
 echo "RELEASE_DIR $RELEASE_DIR"
 echo "DEBIAN_DIR  $DEBIAN_DIR"
+echo "LIB_DIR     $LIB_DIR"
 
 function create_debian_tree()
 {
@@ -51,10 +59,134 @@ function create_debian_tree()
 
     mkdir -p "$DEBIAN_DIR"/DEBIAN
     mkdir -p "$DEBIAN_DIR"/usr/include/copperspice
-    mkdir -p "$DEBIAN_DIR"/usr/lib/copperspice/bin
-    mkdir -p "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/bin
+    #
+    #  The plugins should always be here, not copied into the binary install dir
+    #
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/platforms
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/printerdrivers
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/xcbglintegrations
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/mediaservices
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/playlistformats
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/iconengines
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/imageformats
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/pictureformats
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/plugins/sqldrivers
+    mkdir -p "$DEBIAN_DIR"/usr/"${LIB_DIR}"/cmake/CopperSpice
     mkdir -p "$DEBIAN_DIR"/usr/share/pkgconfig
     mkdir -p "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license
+
+}
+
+function copy_plugins()
+{
+    # Yes, duplicating these files sucks. Saddling the postinst file with
+    # creating links sucks worse because nobody will think to maintain that.
+    # At least the duplication here might have a novice maintainer deciding to
+    # fix the official CopperSpice build procedure to build a propper directory
+    # tree for Debian and RPM and most other platforms.
+
+    pushd "$DEBAIN_DIR"/usr/"${LIB_DIR}"/copperspice
+
+    files=( $(find . -type f) )
+
+    #*****
+    #       platforms
+    #*****
+
+    # MAC stuff just because it "could" exist
+    #
+   if [[ " ${#files[*]} " =~ "CsGuiCocoa" ]]; then
+        cp CsGuiCocoa* plugins/platforms/
+    fi
+
+    # Windows shouldn't exist at all
+    #
+    if [[ " ${#files[*]} " =~ "CsGuiWin" ]]; then
+        cp CsGuiWin* plugins/platforms/
+    fi
+
+    if [[ " ${#files[*]} " =~ "CsGuiXcb" ]]; then
+        cp CsGuiXcb* plugins/platforms/
+    fi
+
+    #*****
+    #       mediaServices
+    #*****
+    if [[ " ${#files[*]} " =~ "CsMultimedia_avf_camera" ]]; then
+        cp CsMultimedia_avf_camera* plugins/mediaservices/
+    fi
+
+    if [[ " ${#files[*]} " =~ "CsMultimedia_avf_mediaplayer" ]]; then
+        cp CsMultimedia_avf_mediaplayer* plugins/mediaservices/
+    fi
+
+    if [[ " ${#files[*]} " =~ "CsMultimedia_DirectShow" ]]; then
+        cp CsMultimedia_DirectShow* plugins/mediaservices/
+    fi
+
+    #*****
+    #       playlistformats
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsMultimedia_m3u" ]]; then
+        cp CsMultimedia_m3u* plugins/playlistformats/
+    fi
+
+    #*****
+    #       audio
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsMultimedia_gst_audiodecoder" ]]; then
+        cp CsMultimedia_gst_audiodecoder* plugins/audio/
+    fi
+
+    #*****
+    #       xcbglintegrations
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsGuiXcb_Glx" ]]; then
+        cp CsGuiXcb_Glx* plugins/xcbglintegrations/
+    fi
+
+
+    #*****
+    #       sqldrivers
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsSqlMySql" ]]; then
+        cp CsSqlMySql* plugins/sqldrivers/
+    fi
+
+    if [[ " ${#files[*]} " =~ "CsSqlOdbc" ]]; then
+        cp CsSqlOdbc* plugins/sqldrivers/
+    fi
+
+    if [[ " ${#files[*]} " =~ "CsSqlPsql" ]]; then
+        cp CsSqlPsql* plugins/sqldrivers/
+    fi
+
+    #*****
+    #       printerdrivers
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsPrinterDriver" ]]; then
+        cp CsPrinterDriver* plugins/printerdrivers/
+    fi
+
+    #*****
+    #       imageformats
+    #*****
+
+    if [[ " ${#files[*]} " =~ "CsImageFormatsSvg" ]]; then
+        cp CsImageFormatsSvg* plugins/imageformats/
+    fi
+
+    #
+    # iconengineplugin isn't supported by cs_copy_plugins() WTF???
+    #
+
+    popd
 }
 
 function build_from_source()
@@ -160,11 +292,13 @@ function dev_deb()
     cp "$SCRIPT_DIR"/changelog "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog.Debian
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
-    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/lib/copperspice/bin/
+    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/bin/
     cp -Prv "$RELEASE_DIR"/include/copperspice/* "$DEBIAN_DIR"/usr/include/copperspice/
     cp -Prv "$RELEASE_DIR"/lib/pkgconfig/* "$DEBIAN_DIR"/usr/share/pkgconfig
-    cp -Prv "$RELEASE_DIR"/lib/cmake/CopperSpice/* "$DEBIAN_DIR"/usr/lib/cmake/CopperSpice/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/
+    cp -Prv "$RELEASE_DIR"/lib/cmake/CopperSpice/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/cmake/CopperSpice/
+    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/"${LIB_DIR}"/
+
+    copy_plugins
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
@@ -222,8 +356,10 @@ function runtime_deb()
     cp "$SCRIPT_DIR"/changelog "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog.Debian
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
-    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/lib/copperspice/bin/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/lib/
+    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/bin/
+    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/"${LIB_DIR}"/
+
+    copy_plugins
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
