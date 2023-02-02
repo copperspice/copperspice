@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -1792,7 +1792,7 @@ void QMetaObject_X::register_enum_data(const QString &args)
 
    QString enumName = word;
 
-   // part 2, get the enum data
+   // part 2, parse the enum keys and values
    QMap<QString, int> valueMap;
 
    int value = 0;
@@ -1820,8 +1820,15 @@ void QMetaObject_X::register_enum_data(const QString &args)
                value = t_value;
 
             } else  {
-               value = this->enum_calculate(t_word, valueMap);
+               // test if the value is too large for an int
+               uint u_value = QStringParser::toInteger<uint>(t_word, &ok, 0);
 
+               if (ok) {
+                  value = static_cast<int>(u_value);
+
+               } else {
+                  value = this->enum_calculate(t_word, valueMap);
+               }
             }
 
             word = word.left(index);

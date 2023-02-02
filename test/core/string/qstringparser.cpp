@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * This file is part of CopperSpice.
 *
@@ -230,6 +230,35 @@ TEST_CASE("QStringParser split_regex", "[qstringparser]")
    REQUIRE(list[1] == "pear");
    REQUIRE(list[2] == "grape");
    REQUIRE(list[3] == "orange");
+}
+
+TEST_CASE("QStringParser toInteger", "[qstringparser]")
+{
+   bool ok;
+
+   {
+      QString str = "0x80";
+
+      int value = QStringParser::toInteger<int>(str, &ok, 0);
+      REQUIRE(value == 128);
+      REQUIRE(ok == true);
+   }
+
+   {
+      QString str = "0xffff0000";
+
+      int value = QStringParser::toInteger<int>(str, &ok, 0);
+      REQUIRE(value == 0);
+      REQUIRE(ok == false);
+   }
+
+   {
+      QString str = "0xffff0000";
+
+      uint value = QStringParser::toInteger<uint>(str, &ok, 0);
+      REQUIRE(value == 0xffff0000);
+      REQUIRE(ok == true);
+   }
 }
 
 TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")

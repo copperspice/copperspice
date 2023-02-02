@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * This file is part of CopperSpice.
 *
@@ -810,6 +810,63 @@ TEST_CASE("QVariant copy_constructor_string16", "[qvariant]")
 
    REQUIRE(data1.toString16() == "pineapple");
    REQUIRE(data2.toString16() == "apple");
+}
+
+TEST_CASE("QVariant convert_int", "[qvariant]")
+{
+   {
+      QVariant data = -65536;
+
+      REQUIRE(data.toUInt() == 0xFFFF0000);
+      REQUIRE(data.toUInt() == 4294901760);
+
+      REQUIRE(data.type() == QVariant::Int);
+      REQUIRE(data.type() != QVariant::UInt);
+
+      REQUIRE(data.canConvert(QVariant::Int));
+      REQUIRE(data.canConvert(QVariant::UInt));
+      REQUIRE(! data.canConvert(QVariant::Date));
+      REQUIRE(! data.canConvert(QVariant::JsonValue));
+   }
+
+   {
+      QVariant data = QVariant::fromValue<char>('a');
+
+      REQUIRE(data.toInt()  == 97);
+      REQUIRE(data.toUInt() == 97);
+      REQUIRE(data.type() == QVariant::Char);
+   }
+
+   {
+      QVariant data = QVariant::fromValue<char>('\xF0');
+
+      REQUIRE(data.toInt()  == -16);
+      REQUIRE(data.toUInt() == 240);
+      REQUIRE(data.type() == QVariant::Char);
+   }
+
+   {
+      QVariant data = QVariant::fromValue<long long>(4294967297);
+
+      REQUIRE(data.toUInt() == 0);
+      REQUIRE(data.type() == QVariant::LongLong);
+   }
+}
+
+TEST_CASE("QVariant convert_uint", "[qvariant]")
+{
+   {
+      QVariant data = 0xFFFF0000;
+
+      REQUIRE(data.toInt() == -65536);
+      REQUIRE(data.type() != QVariant::Int);
+      REQUIRE(data.type() == QVariant::UInt);
+
+      REQUIRE(data.canConvert(QVariant::Int));
+      REQUIRE(data.canConvert(QVariant::UInt));
+      REQUIRE(! data.canConvert(QVariant::Date));
+      REQUIRE(! data.canConvert(QVariant::JsonValue));
+   }
 }
 
 TEST_CASE("QVariant can_convert_string8", "[qvariant]")

@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -35,7 +35,7 @@
 
 namespace {
 
-template <typename T, typename Func, typename... ExtraArgs, template<typename> typename Container_T>
+template <typename T, typename Func, typename... ExtraArgs, template<typename...> typename Container_T>
 QVector<std::invoke_result_t<Func, T>> map_vector(const Container_T<T, ExtraArgs...> &data, Func f)
 {
    QVector<std::invoke_result_t<Func, T>> retval;

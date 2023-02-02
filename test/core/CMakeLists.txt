@@ -45,6 +45,7 @@ if (CS_INSTALL_MODE STREQUAL "Deploy" AND CMAKE_SYSTEM_NAME MATCHES "Windows")
    )
 
 else()
+
    file(WRITE ${CMAKE_BINARY_DIR}/bin/test/run_coretest.bat
       "@SET PATH=..;%PATH%\n@CsCoreTest\n"
    )
