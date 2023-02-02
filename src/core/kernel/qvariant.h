@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2022 Barbara Geller
-* Copyright (c) 2012-2022 Ansel Sermersheim
+* Copyright (c) 2012-2023 Barbara Geller
+* Copyright (c) 2012-2023 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -339,7 +339,8 @@ class Q_CORE_EXPORT QVariant
    }
 
    bool isEnum() const;
-   quint64 enumToInteger() const;
+   int64_t enumToInt() const;
+   uint64_t enumToUInt() const;
 
    std::optional<QVariant> maybeConvert(uint requested_type) const;
 
@@ -456,7 +457,9 @@ class Q_CORE_EXPORT QVariant
          virtual std::shared_ptr<CustomType> clone() const = 0;
          virtual bool compare(const CustomType &other) const = 0;
          virtual bool isEnum() const = 0;
-         virtual quint64 enumToInteger() const = 0;
+
+         virtual int64_t enumToInt() const = 0;
+         virtual uint64_t enumToUInt() const = 0;
 
          virtual void loadFromStream() = 0;
          virtual void saveToStream()   = 0;
@@ -537,6 +540,19 @@ template <class T>
 constexpr const bool cs_is_flag_v = cs_is_flag<T>::value;
 
 //
+template <class T>
+struct cs_flagEnum {
+};
+
+template <class T>
+struct cs_flagEnum<QFlags<T>> {
+   using type = T;
+};
+
+template <class T>
+using cs_flagEnum_t = typename cs_flagEnum<T>::type;
+
+//
 template <typename T>
 class CustomType_T : public QVariant::CustomType
 {
@@ -576,12 +592,27 @@ class CustomType_T : public QVariant::CustomType
       return std::is_enum_v<T> || cs_is_flag_v<T>;
    }
 
-   quint64 enumToInteger() const override {
+   int64_t enumToInt() const override {
       if constexpr (std::is_enum_v<T>) {
-         return static_cast<quint64>(m_value);
+         using SType = std::make_signed_t<std::underlying_type_t<T>>;
+         return static_cast<int64_t>(static_cast<SType>(m_value));
 
       } else if constexpr (cs_is_flag_v<T>) {
-         return static_cast<quint64>(m_value);
+         using SType = std::make_signed_t<std::underlying_type_t<cs_flagEnum_t<T>>>;
+         return static_cast<int64_t>(static_cast<SType>(m_value));
+
+      } else {
+         return 0;
+
+      }
+   }
+
+   uint64_t enumToUInt() const override {
+      if constexpr (std::is_enum_v<T>) {
+         return static_cast<uint64_t>(m_value);
+
+      } else if constexpr (cs_is_flag_v<T>) {
+         return static_cast<uint64_t>(m_value);
 
       } else {
          return 0;

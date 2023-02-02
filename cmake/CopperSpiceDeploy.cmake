@@ -1,6 +1,7 @@
+# ***********************************************************************
 #
-# Copyright (c) 2012-2022 Barbara Geller
-# Copyright (c) 2012-2022 Ansel Sermersheim
+# Copyright (c) 2012-2023 Barbara Geller
+# Copyright (c) 2012-2023 Ansel Sermersheim
 #
 # This file is part of CopperSpice.
 #
@@ -14,6 +15,7 @@
 #
 # https://www.gnu.org/licenses/
 #
+# ***********************************************************************
 
 # location of CsCore
 get_target_property(CS_CORE_LIB CopperSpice::CsCore LOCATION)
