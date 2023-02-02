@@ -86,67 +86,61 @@ function copy_plugins()
     # fix the official CopperSpice build procedure to build a propper directory
     # tree for Debian and RPM and most other platforms.
 
-    pushd "$DEBAIN_DIR"/usr/"${LIB_DIR}"/copperspice
+    pushd "$DEBIAN_DIR"/usr/"${LIB_DIR}"
 
-    files=( $(find . -type f) )
-
+    echo `ls`
+    echo "current directory: ${PWD}"
+    files=( $(find . -maxdepth 1 -type f) )
+    echo "files = ${files[@]}"
     #*****
     #       platforms
     #*****
 
     # MAC stuff just because it "could" exist
     #
-   if [[ " ${#files[*]} " =~ "CsGuiCocoa" ]]; then
-        cp CsGuiCocoa* plugins/platforms/
+    if [[ " ${files[@]} " =~ "CsGuiCocoa" ]]; then
+        cp -v CsGuiCocoa* copperspice/plugins/platforms/
     fi
 
     # Windows shouldn't exist at all
     #
-    if [[ " ${#files[*]} " =~ "CsGuiWin" ]]; then
-        cp CsGuiWin* plugins/platforms/
+    if [[ " ${files[@]} " =~ "CsGuiWin" ]]; then
+        cp -v CsGuiWin* copperspice/plugins/platforms/
     fi
 
-    if [[ " ${#files[*]} " =~ "CsGuiXcb" ]]; then
-        cp CsGuiXcb* plugins/platforms/
+    if [[ " ${files[@]} " =~ "CsGuiXcb" ]]; then
+        cp -v CsGuiXcb* copperspice/plugins/platforms/
     fi
 
     #*****
     #       mediaServices
     #*****
-    if [[ " ${#files[*]} " =~ "CsMultimedia_avf_camera" ]]; then
-        cp CsMultimedia_avf_camera* plugins/mediaservices/
+    if [[ " ${files[@]} " =~ "CsMultimedia_avf" ]]; then
+        cp -v CsMultimedia_avf* copperspice/plugins/mediaservices/
     fi
 
-    if [[ " ${#files[*]} " =~ "CsMultimedia_avf_mediaplayer" ]]; then
-        cp CsMultimedia_avf_mediaplayer* plugins/mediaservices/
+    if [[ " ${files[@]} " =~ "CsMultimedia_gst" ]]; then
+        cp -v CsMultimedia_gst* copperspice/plugins/mediaservices/
     fi
 
-    if [[ " ${#files[*]} " =~ "CsMultimedia_DirectShow" ]]; then
-        cp CsMultimedia_DirectShow* plugins/mediaservices/
+    if [[ " ${files[@]} " =~ "CsMultimedia_DirectShow" ]]; then
+        cp -v CsMultimedia_DirectShow* copperspice/plugins/mediaservices/
     fi
 
     #*****
     #       playlistformats
     #*****
 
-    if [[ " ${#files[*]} " =~ "CsMultimedia_m3u" ]]; then
-        cp CsMultimedia_m3u* plugins/playlistformats/
-    fi
-
-    #*****
-    #       audio
-    #*****
-
-    if [[ " ${#files[*]} " =~ "CsMultimedia_gst_audiodecoder" ]]; then
-        cp CsMultimedia_gst_audiodecoder* plugins/audio/
+    if [[ " ${files[@]} " =~ "CsMultimedia_m3u" ]]; then
+        cp -v CsMultimedia_m3u* copperspice/plugins/playlistformats/
     fi
 
     #*****
     #       xcbglintegrations
     #*****
 
-    if [[ " ${#files[*]} " =~ "CsGuiXcb_Glx" ]]; then
-        cp CsGuiXcb_Glx* plugins/xcbglintegrations/
+    if [[ " ${files[@]} " =~ "CsGuiXcb_Glx" ]]; then
+        cp -v CsGuiXcb_Glx* copperspice/plugins/xcbglintegrations/
     fi
 
 
@@ -154,32 +148,24 @@ function copy_plugins()
     #       sqldrivers
     #*****
 
-    if [[ " ${#files[*]} " =~ "CsSqlMySql" ]]; then
-        cp CsSqlMySql* plugins/sqldrivers/
-    fi
-
-    if [[ " ${#files[*]} " =~ "CsSqlOdbc" ]]; then
-        cp CsSqlOdbc* plugins/sqldrivers/
-    fi
-
-    if [[ " ${#files[*]} " =~ "CsSqlPsql" ]]; then
-        cp CsSqlPsql* plugins/sqldrivers/
+    if [[ " ${files[@]} " =~ "CsSql" ]]; then
+        cp -v CsSql* copperspice/plugins/sqldrivers/
     fi
 
     #*****
     #       printerdrivers
     #*****
 
-    if [[ " ${#files[*]} " =~ "CsPrinterDriver" ]]; then
-        cp CsPrinterDriver* plugins/printerdrivers/
+    if [[ " ${files[@]} " =~ "CsPrinterDriver" ]]; then
+        cp -v CsPrinterDriver* copperspice/plugins/printerdrivers/
     fi
 
     #*****
     #       imageformats
     #*****
 
-    if [[ " ${#files[*]} " =~ "CsImageFormatsSvg" ]]; then
-        cp CsImageFormatsSvg* plugins/imageformats/
+    if [[ " ${files[@]} " =~ "CsImageFormat" ]]; then
+        cp -v CsImageFormat* copperspice/plugins/imageformats/
     fi
 
     #
