@@ -30,7 +30,7 @@
 // this define must come before including windows.h
 
 #ifndef WINVER
-#define WINVER 0x500         // Windows 2000
+#define WINVER 0x601         // Windows 7
 #endif
 
 #endif
@@ -110,4 +110,4 @@
 #define CLEARTYPE_QUALITY 5
 #endif
 
-#endif // QT_WINDOWS_H
+#endif
