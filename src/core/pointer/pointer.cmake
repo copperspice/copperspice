@@ -29,10 +29,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.h
 )
 
-list(APPEND CORE_PRIVATE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qscopedpointer_p.h
-)
-
 target_sources(CsCore
    PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qpointer.cpp
