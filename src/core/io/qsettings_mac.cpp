@@ -426,11 +426,11 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    suiteId = javaPackageName;
 
    if (scope == QSettings::SystemScope) {
-      spec |= F_System;
+      m_spec |= F_System;
    }
 
    if (application.isEmpty()) {
-      spec |= F_Organization;
+      m_spec |= F_Organization;
    } else {
       javaPackageName += '.';
       javaPackageName += application;
@@ -439,8 +439,8 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
 
    numDomains = 0;
 
-   for (int i = (spec & F_System) ? 1 : 0; i < 2; ++i) {
-      for (int j = (spec & F_Organization) ? 1 : 0; j < 3; ++j) {
+   for (int i = (m_spec & F_System) ? 1 : 0; i < 2; ++i) {
+      for (int j = (m_spec & F_Organization) ? 1 : 0; j < 3; ++j) {
          SearchDomain &domain = domains[numDomains++];
          domain.userName = (i == 0) ? kCFPreferencesCurrentUser : kCFPreferencesAnyUser;
 
@@ -594,7 +594,7 @@ QString QMacSettingsPrivate::fileName() const
 {
    QString result;
 
-   if ((spec & F_System) == 0) {
+   if ((m_spec & F_System) == 0) {
       result = QDir::homePath();
    }
 
