@@ -47,15 +47,17 @@
 #define PM_MEASURE(x)
 #define PM_DISPLAY
 
-struct QPainterPathPrivateDeleter {
-   static inline void cleanup(QPainterPathPrivate *d) {
-      // note - we must up-cast to QPainterPathData since QPainterPathPrivate
-      // has a non-virtual destructor!
-      if (d && !d->ref.deref()) {
+namespace cs_internal {
+  void QPainterPathPrivateDeleter::operator()(QPainterPathPrivate *d) const {
+      // need to up-cast to QPainterPathData since QPainterPathPrivate
+      // has a non-virtual destructor
+
+      if (d != nullptr && ! d->ref.deref()) {
          delete static_cast<QPainterPathData *>(d);
       }
    }
-};
+}
+
 
 // This value is used to determine the length of control point vectors
 // when approximating arc segments as curves. The factor is multiplied

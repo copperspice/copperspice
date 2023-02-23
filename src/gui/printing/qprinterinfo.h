@@ -35,6 +35,13 @@
 class QPrinterInfoPrivate;
 class QPrinterInfoPrivateDeleter;
 class QDebug;
+
+namespace cs_internal {
+   struct QPrinterInfoPrivateDeleter {
+      void operator()(QPrinterInfoPrivate *d) const;
+   };
+}
+
 class Q_GUI_EXPORT QPrinterInfo
 {
  public:
@@ -82,7 +89,8 @@ class Q_GUI_EXPORT QPrinterInfo
    friend class QPlatformPrinterSupport;
    friend Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QPrinterInfo &);
    Q_DECLARE_PRIVATE(QPrinterInfo)
-   QScopedPointer<QPrinterInfoPrivate, QPrinterInfoPrivateDeleter> d_ptr;
+
+   QScopedPointer<QPrinterInfoPrivate, cs_internal::QPrinterInfoPrivateDeleter> d_ptr;
 };
 
 #endif // QT_NO_PRINTER

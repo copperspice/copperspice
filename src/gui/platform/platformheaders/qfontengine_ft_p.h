@@ -103,7 +103,6 @@ class QFreetypeFace
 
    friend class QFontEngineFT;
    friend class QtFreetypeData;
-   friend struct QScopedPointerDeleter<QFreetypeFace>;
 };
 
 class QFontEngineFT : public QFontEngine

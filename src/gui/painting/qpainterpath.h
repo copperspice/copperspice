@@ -34,7 +34,6 @@
 class QFont;
 
 class QPainterPathPrivate;
-struct QPainterPathPrivateDeleter;
 
 class QPainterPathData;
 class QPainterPathStrokerPrivate;
@@ -42,6 +41,12 @@ class QPen;
 class QPolygonF;
 class QRegion;
 class QVectorPath;
+
+namespace cs_internal {
+   struct QPainterPathPrivateDeleter {
+      void operator()(QPainterPathPrivate *d) const;
+   };
+}
 
 class Q_GUI_EXPORT QPainterPath
 {
@@ -203,7 +208,7 @@ class Q_GUI_EXPORT QPainterPath
    QPainterPath &operator-=(const QPainterPath &other);
 
  private:
-   QScopedPointer<QPainterPathPrivate, QPainterPathPrivateDeleter> d_ptr;
+   QScopedPointer<QPainterPathPrivate, cs_internal::QPainterPathPrivateDeleter> d_ptr;
 
    void ensureData() {
       if (! d_ptr) {

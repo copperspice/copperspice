@@ -41,7 +41,13 @@ class QVariant;
 class QGradientPrivate;
 
 struct QBrushData;
-struct QBrushDataPointerDeleter;
+
+namespace cs_internal {
+   struct QBrushDataPointerDeleter {
+      static void deleteData(QBrushData *d);
+      void operator()(QBrushData *d) const;
+   };
+}
 
 class Q_GUI_EXPORT QBrush
 {
@@ -105,7 +111,8 @@ class Q_GUI_EXPORT QBrush
 
    inline bool isDetached() const;
 
-   typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
+   using DataPtr = QScopedPointer<QBrushData, cs_internal::QBrushDataPointerDeleter>;
+
    inline DataPtr &data_ptr() {
       return d;
    }
@@ -115,11 +122,12 @@ class Q_GUI_EXPORT QBrush
    friend class QRasterPaintEnginePrivate;
    friend class QPainter;
    friend struct QSpanData;
+
    friend bool Q_GUI_EXPORT qHasPixmapTexture(const QBrush &brush);
 
    void detach(Qt::BrushStyle newStyle);
    void init(const QColor &color, Qt::BrushStyle style);
-   QScopedPointer<QBrushData, QBrushDataPointerDeleter> d;
+   QScopedPointer<QBrushData, cs_internal::QBrushDataPointerDeleter> d;
    void cleanUp(QBrushData *data);
 };
 

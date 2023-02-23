@@ -50,10 +50,9 @@ static res_ninit_proto local_res_ninit = nullptr;
 typedef int (*res_nquery_proto)(res_state, const char *, int, int, unsigned char *, int);
 static res_nquery_proto local_res_nquery = nullptr;
 
-// Custom deleter to close resolver state.
-
+// Custom deleter to close resolver state
 struct QDnsLookupStateDeleter {
-   static inline void cleanup(struct __res_state *pointer) {
+   void operator() (struct __res_state *pointer) const {
       local_res_nclose(pointer);
    }
 };
