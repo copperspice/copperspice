@@ -62,8 +62,8 @@ class AVFConfigurationLock
 };
 
 struct AVFObjectDeleter {
-   static void cleanup(NSObject *obj) {
-      if (obj) {
+   void operator()(NSObject *obj) const {
+      if (obj != nullptr) {
          [obj release];
       }
    }
@@ -73,24 +73,23 @@ template<class T>
 class AVFScopedPointer : public QScopedPointer<NSObject, AVFObjectDeleter>
 {
  public:
-   AVFScopedPointer()
-   {}
+   AVFScopedPointer() = default;
 
    explicit AVFScopedPointer(T *ptr)
-      : QScopedPointer(ptr)
-   {}
+      : QScopedPointer<NSObject, AVFObjectDeleter>(ptr)
+   {
+   }
 
    operator T *() const {
-      // Quite handy operator to enable Obj-C messages: [ptr someMethod];
       return data();
    }
 
    T *data() const {
-      return static_cast<T *>(QScopedPointer::data());
+      return static_cast<T *>(QScopedPointer<NSObject, AVFObjectDeleter>::data());
    }
 
    T *take() {
-      return static_cast<T *>(QScopedPointer::take());
+      return static_cast<T *>(QScopedPointer<NSObject, AVFObjectDeleter>::take());
    }
 };
 
