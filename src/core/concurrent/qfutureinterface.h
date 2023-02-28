@@ -97,7 +97,7 @@ class Q_CORE_EXPORT QFutureInterfaceBase
    void waitForResume();
 
    QMutex *mutex() const;
-   QtConcurrent::internal::ExceptionStore &exceptionStore();
+   QtConcurrent::cs_internal::ExceptionStore &exceptionStore();
    QtConcurrent::ResultStoreBase &resultStoreBase();
    const QtConcurrent::ResultStoreBase &resultStoreBase() const;
 

@@ -2053,7 +2053,7 @@ void QStateMachinePrivate::startupHook()
 {
 }
 
-namespace CS_QStateMachine_Internal {
+namespace cs_internal_stateMachine {
 
 class GoToStateTransition : public QAbstractTransition
 {
@@ -2078,12 +2078,12 @@ class GoToStateTransition : public QAbstractTransition
 } // namespace
 
 
-using namespace CS_QStateMachine_Internal;
+using namespace cs_internal_stateMachine;
 
 void QStateMachinePrivate::goToState(QAbstractState *targetState)
 {
    if (! targetState) {
-      qWarning("QStateMachine::goToState(): cannot go to null state");
+      qWarning("QStateMachine::goToState(): unable to transition to a null state");
       return;
    }
 

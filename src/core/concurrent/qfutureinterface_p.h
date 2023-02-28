@@ -113,7 +113,7 @@ class QFutureInterfaceBasePrivate
    QtConcurrent::ResultStoreBase m_results;
    bool manualProgress;
    int m_expectedResultCount;
-   QtConcurrent::internal::ExceptionStore m_exceptionStore;
+   QtConcurrent::cs_internal::ExceptionStore m_exceptionStore;
    QString m_progressText;
    QRunnable *runnable;
 
