@@ -25,13 +25,12 @@
 #define QPRINTERINFO_H
 
 #include <qprinter.h>
-#include <QList>
-#include <QPair>
+#include <qlist.h>
+#include <qpair.h>
 #include <qpagesize.h>
 
-
-
 #ifndef QT_NO_PRINTER
+
 class QPrinterInfoPrivate;
 class QPrinterInfoPrivateDeleter;
 class QDebug;
@@ -48,6 +47,7 @@ class Q_GUI_EXPORT QPrinterInfo
    QPrinterInfo();
    QPrinterInfo(const QPrinterInfo &other);
    explicit QPrinterInfo(const QPrinter &printer);
+
    ~QPrinterInfo();
 
    QPrinterInfo &operator=(const QPrinterInfo &other);
@@ -83,6 +83,7 @@ class Q_GUI_EXPORT QPrinterInfo
    static QPrinterInfo defaultPrinter();
 
    static QPrinterInfo printerInfo(const QString &printerName);
+
  private:
    explicit QPrinterInfo(const QString &name);
 
@@ -96,4 +97,4 @@ class Q_GUI_EXPORT QPrinterInfo
 #endif // QT_NO_PRINTER
 
 
-#endif // QPRINTERINFO_H
+#endif

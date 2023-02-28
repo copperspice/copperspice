@@ -84,13 +84,8 @@ class QFreetypeFace
    static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
  private:
-   QFreetypeFace()
-   {
-   }
-
-   ~QFreetypeFace()
-   {
-   }
+   QFreetypeFace()  = default;
+   ~QFreetypeFace() = default;
 
    void cleanup();
 

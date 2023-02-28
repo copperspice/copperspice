@@ -88,7 +88,6 @@ QPropertyAnimation::QPropertyAnimation(QObject *target, const QString &propertyN
    setPropertyName(propertyName);
 }
 
-
 QPropertyAnimation::~QPropertyAnimation()
 {
    stop();
@@ -112,7 +111,9 @@ void QPropertyAnimation::setTargetObject(QObject *target)
       return;
    }
 
-   d->target = d->targetValue = target;
+   d->target      = target;
+   d->targetValue = target;
+
    d->updateMetaProperty();
 }
 

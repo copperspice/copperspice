@@ -104,9 +104,11 @@ class Q_CORE_EXPORT QFutureInterfaceBase
    inline bool operator==(const QFutureInterfaceBase &other) const {
       return d == other.d;
    }
+
    inline bool operator!=(const QFutureInterfaceBase &other) const {
       return d != other.d;
    }
+
    QFutureInterfaceBase &operator=(const QFutureInterfaceBase &other);
 
  protected:

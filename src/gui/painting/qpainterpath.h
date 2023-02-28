@@ -32,15 +32,14 @@
 #include <qscopedpointer.h>
 
 class QFont;
-
-class QPainterPathPrivate;
-
-class QPainterPathData;
-class QPainterPathStrokerPrivate;
 class QPen;
 class QPolygonF;
 class QRegion;
 class QVectorPath;
+
+class QPainterPathData;
+class QPainterPathPrivate;
+class QPainterPathStrokerPrivate;
 
 namespace cs_internal {
    struct QPainterPathPrivateDeleter {

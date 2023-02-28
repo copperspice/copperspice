@@ -429,13 +429,6 @@ QBrush::QBrush(const QBrush &other)
    d->ref.ref();
 }
 
-/*!
-    Constructs a brush based on the given \a gradient.
-
-    The brush style is set to the corresponding gradient style (either
-    Qt::LinearGradientPattern, Qt::RadialGradientPattern or
-    Qt::ConicalGradientPattern).
-*/
 QBrush::QBrush(const QGradient &gradient)
 {
    Q_ASSERT_X(gradient.type() != QGradient::NoGradient, "QBrush::QBrush",
@@ -453,10 +446,6 @@ QBrush::QBrush(const QGradient &gradient)
    grad->gradient = gradient;
 }
 
-/*!
-    Destroys the brush.
-*/
-
 QBrush::~QBrush()
 {
 }
@@ -465,7 +454,6 @@ void QBrush::cleanUp(QBrushData *x)
 {
    cs_internal::QBrushDataPointerDeleter::deleteData(x);
 }
-
 
 void QBrush::detach(Qt::BrushStyle newStyle)
 {
@@ -478,8 +466,10 @@ void QBrush::detach(Qt::BrushStyle newStyle)
    switch (newStyle) {
       case Qt::TexturePattern: {
          QTexturedBrushData *tbd = new QTexturedBrushData;
+
          if (d->style == Qt::TexturePattern) {
             QTexturedBrushData *data = static_cast<QTexturedBrushData *>(d.data());
+
             if (data->m_has_pixmap_texture) {
                tbd->setPixmap(data->pixmap());
             } else {
@@ -489,10 +479,12 @@ void QBrush::detach(Qt::BrushStyle newStyle)
          x.reset(tbd);
          break;
       }
+
       case Qt::LinearGradientPattern:
       case Qt::RadialGradientPattern:
       case Qt::ConicalGradientPattern: {
          QGradientBrushData *gbd = new QGradientBrushData;
+
          switch (d->style) {
             case Qt::LinearGradientPattern:
             case Qt::RadialGradientPattern:
@@ -503,9 +495,11 @@ void QBrush::detach(Qt::BrushStyle newStyle)
             default:
                break;
          }
+
          x.reset(gbd);
          break;
       }
+
       default:
          x.reset(new QBrushData);
          break;
