@@ -700,7 +700,7 @@ QMargins QXcbWindow::frameMargins() const
          xcb_get_property_cookie_t cookie = xcb_get_property(xcb_connection(), false, m_window,
                atom(QXcbAtom::_NET_FRAME_EXTENTS), XCB_ATOM_CARDINAL, 0, 4);
 
-         QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter> reply(
+         QScopedPointer<xcb_get_property_reply_t, QMallocDeleter> reply(
             xcb_get_property_reply(xcb_connection(), cookie, nullptr));
 
          if (reply && reply->type == XCB_ATOM_CARDINAL && reply->format == 32 && reply->value_len == 4) {
