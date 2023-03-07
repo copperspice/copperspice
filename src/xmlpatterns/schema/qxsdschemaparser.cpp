@@ -215,7 +215,7 @@ static XsdParticle::List collectGroupRef(const XsdModelGroup::Ptr &group)
  * Helper function that works around the limited facilities of
  * QUrl/AnyURI::fromLexical to detect invalid URIs
  */
-inline static bool isValidUri(const QString &string)
+static inline bool isValidUri(const QString &string)
 {
    // an empty URI points to the current document as defined in RFC 2396 (4.2)
    if (string.isEmpty()) {

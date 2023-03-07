@@ -55,7 +55,7 @@ static const SQLSMALLINT qParamType[4] = {
    SQL_PARAM_INPUT_OUTPUT
 };
 
-inline static QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int size = -1)
+static inline QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int size = -1)
 {
    QString result;
 
@@ -89,7 +89,7 @@ inline static QString fromSQLTCHAR(const QVarLengthArray<SQLTCHAR> &input, int s
    return result;
 }
 
-inline static QVarLengthArray<SQLTCHAR> toSQLTCHAR(const QString &input)
+static inline QVarLengthArray<SQLTCHAR> toSQLTCHAR(const QString &input)
 {
    QVarLengthArray<SQLTCHAR> result;
 

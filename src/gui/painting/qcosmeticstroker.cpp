@@ -37,7 +37,7 @@ static inline uint sourceOver(uint d, uint color)
    return color + BYTE_MUL(d, qAlpha(~color));
 }
 
-inline static int F16Dot16FixedDiv(int x, int y)
+static inline int F16Dot16FixedDiv(int x, int y)
 {
    if (qAbs(x) > 0x7fff) {
       return (((qint64)x) << 16) / y;

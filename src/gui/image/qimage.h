@@ -267,7 +267,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    static QImage fromData(const uchar *data, int size, const QString &format = QString());
 
-   inline static QImage fromData(const QByteArray &data, const QString &format = QString()) {
+   static inline QImage fromData(const QByteArray &data, const QString &format = QString()) {
       return fromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 

@@ -86,7 +86,7 @@ class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
       return state & QStyle::State_Open ? QIcon::On : QIcon::Off;
    }
 
-   inline static QString replaceNewLine(QString text) {
+   static inline QString replaceNewLine(QString text) {
       const QChar ch = QChar::LineSeparator;
       text.replace('\n', ch);
 

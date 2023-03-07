@@ -794,7 +794,7 @@ void QSettingsPrivate::iniEscapedString(const QString &str, QByteArray &result, 
    }
 }
 
-inline static void iniChopTrailingSpaces(QString &str, int limit)
+static inline void iniChopTrailingSpaces(QString &str, int limit)
 {
    int n = str.size() - 1;
    QChar ch;
