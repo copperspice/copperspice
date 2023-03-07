@@ -592,14 +592,12 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
    return QFileSystemEntry(retval, QFileSystemEntry::FromInternalPath());
 }
 
-
 // FILE_INFO_BY_HANDLE_CLASS has been extended by FileIdInfo = 18
 enum Q_FILE_INFO_BY_HANDLE_CLASS {
    Q_FileIdInfo = 18
 };
 
-
-#ifdef Q_CC_MINGW
+#if defined(Q_CC_MINGW) && ! defined(STORAGE_INFO_OFFSET_UNKNOWN)
 
 #ifndef FILE_SUPPORTS_INTEGRITY_STREAMS
 
@@ -614,7 +612,6 @@ typedef struct _FILE_ID_INFO {
 } FILE_ID_INFO, *PFILE_ID_INFO;
 
 #endif
-
 
 // File ID for Windows up to version 7
 static inline QByteArray fileId(HANDLE handle)
