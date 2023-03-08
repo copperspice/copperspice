@@ -42,5 +42,9 @@ if(WITH_MYSQL_PLUGIN AND MySQL_FOUND)
       -DQT_PLUGIN
    )
 
-   install(TARGETS CsSqlMySql DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   if(BUILDING_RPM)
+      install(TARGETS CsSqlMySql DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/sqldrivers)
+   else()
+      install(TARGETS CsSqlMySql DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
 endif()

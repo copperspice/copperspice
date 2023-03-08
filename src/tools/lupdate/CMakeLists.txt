@@ -69,8 +69,19 @@ set_target_properties(lupdate${TOOLS_SUFFIX}
 
 function_generate_resources(lupdate${TOOLS_SUFFIX})
 
-install(
-    TARGETS lupdate${TOOLS_SUFFIX}
-    EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+#
+#   If the files in bin didn't name collide with Qt binaries we could just leave them.
+#
+if(BUILDING_RPM)
+    install(
+        TARGETS lupdate${TOOLS_SUFFIX}
+        EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/bin
+    )
+else()
+    install(
+        TARGETS lupdate${TOOLS_SUFFIX}
+        EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()

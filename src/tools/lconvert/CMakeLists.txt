@@ -61,8 +61,19 @@ set_target_properties(lconvert${TOOLS_SUFFIX}
    EXPORT_NAME lconvert
 )
 
-install(
-   TARGETS lconvert${TOOLS_SUFFIX}
-   EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-   DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+#
+#   If the files in bin didn't name collide with Qt binaries we could just leave them.
+#
+if(BUILDING_RPM)
+    install(
+       TARGETS lconvert${TOOLS_SUFFIX}
+       EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+       DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/bin
+    )
+else()
+    install(
+       TARGETS lconvert${TOOLS_SUFFIX}
+       EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+       DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()

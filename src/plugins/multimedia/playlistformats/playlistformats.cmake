@@ -24,4 +24,8 @@ target_compile_definitions(CsMultimedia_m3u
    -DQT_PLUGIN
 )
 
-install(TARGETS CsMultimedia_m3u DESTINATION ${CMAKE_INSTALL_LIBDIR})
+if(BUILDING_RPM)
+  install(TARGETS CsMultimedia_m3u DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/playlistformats)
+else()
+  install(TARGETS CsMultimedia_m3u DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif()

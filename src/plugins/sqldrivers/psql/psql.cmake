@@ -36,5 +36,9 @@ if(WITH_PSQL_PLUGIN AND PostgreSQL_FOUND)
       -DQT_PLUGIN
    )
 
-   install(TARGETS CsSqlPsql DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   if(BUILDING_RPM)
+      install(TARGETS CsSqlPsql DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/sqldrivers)
+   else()
+      install(TARGETS CsSqlPsql DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
 endif()

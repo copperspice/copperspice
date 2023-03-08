@@ -37,5 +37,9 @@ if (FALSE)
       -DQT_PLUGIN
    )
 
-   install(TARGETS CsSqlOci DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   if(BUILDING_RPM)
+      install(TARGETS CsSqlOci DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/sqldrivers)
+   else()
+      install(TARGETS CsSqlOci DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
 endif()

@@ -1,17 +1,16 @@
 Name:       @PACKAGE@
 Version:    @RPM_VERSION@
 Release:    @RPM_RELEASE@
-Summary:    RedDiamond text editor
+Summary:    @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
 License:    GPL V2 + restriction
-Group:      Applications/Editors
-URL:        https://sourceforge.net/projects/reddiamond/
+Group:      Development/Libraries
+URL:        https://github.com/RolandHughes/copperspice
 Vendor:     @CPACK_PACKAGE_VENDOR@
 Packager:   Roland Hughes <roland@logikalsolutions.com>
-Provides:   libCsCore1.7.so()(64bit), libCsGui1.7.so()(64bit), libCsNetwork1.7.so()(64bit)
 
 
 %description
-@REDDIAMOND_DESCRIPTION@
+@CPACK_PACKAGE_DESCRIPTION_TEXT@
 
 %prep
 # Cleanup any left over build files
@@ -19,10 +18,11 @@ Provides:   libCsCore1.7.so()(64bit), libCsGui1.7.so()(64bit), libCsNetwork1.7.s
 rm -rf *
 
 # Populate the build directory
-# -DENABLE_RPATH_ORIGIN=ON \
+
 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_PREFIX_PATH="@CMAKE_PREFIX_PATH@" \
-      -DCMAKE_INSTALL_PREFIX="%{buildroot}/opt/reddiamond" \
+      -DCMAKE_SKIP_BUILD_RPATH=TRUE \
+      -DBUILDING_RPM=ON \
+      -DCMAKE_INSTALL_PREFIX="%{buildroot}/usr" \
       "@CMAKE_SOURCE_DIR@"
 
 %build
@@ -31,50 +31,69 @@ ninja
 %install
 # This variable gets rid of bogus RPATH error message
 #
-QA_RPATHS=\$[0x0003]
-rm -rf %{buildroot}/opt/reddiamond
-mkdir -p %{buildroot}/opt/reddiamond
-mkdir -p %{buildroot}/usr/local/cs_lib/lib64
-mkdir -p %{buildroot}/usr/local/lib/Lexilla
-cp -Prv /usr/local/cs_lib/lib64/* %{buildroot}/usr/local/cs_lib/lib64/
-cp -Prv /usr/local/lib/Lexilla/* %{buildroot}/usr/local/lib/Lexilla/
+# The default CopperSpice build has .. in RPATH for lconvert and other binaries.
+# This QA_RPATHS variable is a bitmask override for certain checks.
+#
+# TODO:: See if we cannot completely remove $ORIGIN for BUILDING_RPM
+#        Should be able to 
+#
+QA_RPATHS=\$[0x0023]
+
 ninja install
 
+#
+# Next really bad thing standard CMakeLists.txt does is thump the build path
+# into the .pc and .cmake files. This is a hack every package developer does
+# early on when they do not want to completely trash their DEV system by
+# directly installing in the /usr tree. Very bad thing for actual packages.
+#
+# If you try this and use quotes to protect from space in directory paths
+# for i in "%{buildroot}/usr/%{_lib}/pkgconfig/*.pc"; do sed -i 's#%{buildroot}/usr#/usr#g' "$i"; done
+# You will only get the path to *.pc returned.
+#
+# Sadly this creates a bit of a maintenance headache when adding new .pc or .cmake to project
+
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsCore.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsGui.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsMultimedia.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsNetwork.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsOpenGL.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsScript.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSql.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSvg.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsWebKit.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXmlPatterns.pc"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXml.pc"
+
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/include/copperspice/QtCore/cs_build_info.h"
+
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceBinaryTargets.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceBinaryTargets-release.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfig.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfigVersion.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceDeploy.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets-release.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceMacros.cmake"
+sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/InstallMinGW.cmake"
+
+
 %files
-/opt/reddiamond
-/usr/local/cs_lib
-/usr/local/lib/Lexilla
+/usr
+
+# TODO:: See where license files end up and flag them as DOC. 
+%doc README.md
 
 %post
-# no matter install or upgrade, create and copy
-#
-ln -s /opt/reddiamond/reddiamond /usr/local/bin
-#
-# We cannot use RPATH under Fedora and a few other RPM based distros
-#
-echo "/usr/local/cs_lib/lib64" > /etc/ld.so.conf.d/reddiamond_x86_64.conf
-echo "/usr/local/lib/Lexilla" >> /etc/ld.so.conf.d/reddiamond_x86_64.conf
-cp /opt/reddiamond/net.projects.reddiamond.desktop /usr/share/applications
-cp /opt/reddiamond/reddiamond.png /usr/share/pixmaps
+
 ldconfig
 
 
 %postun
 # No difference between upgrade and uninstall for these
 #
-rm /usr/local/bin/reddiamond
-rm /usr/share/applications/net.projects.reddiamond.desktop
-rm /usr/share/pixmaps/reddiamond.png
-
-if [ $1 -gt 0 ] ; then
-    # removing - need to completely remove the directory
-    rm -rf /opt/reddiamond
-    rm -rf /usr/local/cs_lib
-    rm -rf /usr/local/lib/Lexilla
-    rm /etc/ld.so.conf.d/reddiamond_x86_64.conf
-    ldconfig
-fi
-
+# We did not do anything kinky like create links or files for ldconfig to consume
+# May have to force an entry in $PATH but unknown right now. cmake files should already look there
 
 %changelog
 # let's skip this for now

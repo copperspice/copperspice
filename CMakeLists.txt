@@ -20,6 +20,9 @@ set(BUILD_MAJOR "1")
 set(BUILD_MINOR "8")
 set(BUILD_MICRO "1")
 
+# only used to control RPATH when building RPM
+option(BUILDING_RPM "Are we building RPM" OFF)
+
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
 # enable catch2 unit tests in config
@@ -54,8 +57,16 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
                                    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin")
 
-   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin:$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   if (BUILDING_RPM)
+       set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   else()
+       set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin:$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   endif()
    set(CMAKE_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include/copperspice")
+
+   message( STATUS, "CMAKE_INSTALL_RPATH   ${CMAKE_INSTALL_RPATH}" )
+   message( STATUS, "CS_BIN_RPATH          ${CS_BIN_RPATH}" )
+   message( STATUS, "CMAKE_INSTALL_BINDIR  ${CMAKE_INSTALL_BINDIR}" )
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
@@ -77,6 +88,10 @@ set(PACKAGE_STRING    "copperspice ${BUILD_MAJOR}.${BUILD_MINOR}.${BUILD_MICRO}"
 set(PACKAGE_TARNAME   "copperspice")
 set(PACKAGE_BUGREPORT "info@copperspice.com")
 set(PACKAGE_URL       "https://www.copperspice.com/")
+
+set(RPM_VERSION       "${BUILD_MAJOR}.${BUILD_MINOR}")
+set(RPM_RELEASE       "${BUILD_MICRO}")
+
 
 # values used in cs_build_info.h.in
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
@@ -753,7 +768,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
     configure_file(
        ${CMAKE_SOURCE_DIR}/copperspice.spec.in
-       reddiamond.spec
+       copperspice.spec
     )
 
     #  postrm has some heavy syntax - just copy
@@ -776,6 +791,12 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
        COPYONLY
     )
 
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/README.md
+        README.md
+        COPYONLY
+    )
+
 endif()
 
 
@@ -789,6 +810,14 @@ install(
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
       ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
    DESTINATION ${PKG_PREFIX}
+)
+
+install(
+    FILES
+       ${CMAKE_SOURCE_DIR}/license/LGPL_EXCEPTION.txt
+       ${CMAKE_SOURCE_DIR}/license/LICENSE.FDL
+       ${CMAKE_SOURCE_DIR}/license/LICENSE.LGPL
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}/${PROJECT_NAME}/LICENSE
 )
 
 install(

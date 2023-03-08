@@ -35,7 +35,11 @@ if (WITH_ODBC_PLUGIN AND ODBC_FOUND)
       -DQT_PLUGIN
    )
 
-   install(TARGETS CsSqlOdbc DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   if(BUILDING_RPM)
+      install(TARGETS CsSqlOdbc DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/sqldrivers)
+   else()
+      install(TARGETS CsSqlOdbc DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
 
    if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD)")
       target_compile_definitions(CsSqlOdbc

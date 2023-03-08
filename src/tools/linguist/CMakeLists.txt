@@ -118,11 +118,22 @@ set_target_properties(linguist${TOOLS_SUFFIX}
 
 function_generate_resources(linguist${TOOLS_SUFFIX})
 
-install(
-   TARGETS linguist${TOOLS_SUFFIX}
-   EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
-   DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+#
+#   If the files in bin didn't name collide with Qt binaries we could just leave them.
+#
+if(BUILDING_RPM)
+    install(
+       TARGETS linguist${TOOLS_SUFFIX}
+       EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+       DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/bin
+    )
+else()
+    install(
+       TARGETS linguist${TOOLS_SUFFIX}
+       EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+       DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()
 
 #   mac {
 #    static:CONFIG -= global_init_link_order
