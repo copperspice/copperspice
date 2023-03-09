@@ -26,7 +26,7 @@
 
 #include <qstring.h>
 #include <qnamespace.h>
-#include <qsharedpointer.h>
+#include <qshareddatapointer.h>
 
 #include <limits>
 

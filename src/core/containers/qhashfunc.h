@@ -25,6 +25,7 @@
 #define Q_HASHFUNC_H
 
 #include <qchar.h>
+#include <qhashfwd.h>
 #include <qpair.h>
 #include <qstring.h>
 #include <qstring16.h>
