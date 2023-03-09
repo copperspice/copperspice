@@ -36,7 +36,6 @@ alone libraries for anyone developing C++ applications.
  * CsString
 
 
-
 ### System Requirements
 
 To use the CopperSpice libraries a C++17 compiler and a C++17 standard library are required.
@@ -153,11 +152,13 @@ this project.
 
 ### References
 
-* Website:  https://www.copperspice.com
-* Twitter:  https://twitter.com/copperspice_cpp
-* Email:    info@copperspice.com
+ * Website:  https://www.copperspice.com
+ * Twitter:  https://twitter.com/copperspice_cpp
+ * Email:    info@copperspice.com
 
-* Github:   https://github.com/copperspice
+<!-- -->
+ * Github:   https://github.com/copperspice
 
-* Forum:    https://forum.copperspice.com
-* Journal:  https://journal.copperspice.com
+<!-- -->
+ * Forum:    https://forum.copperspice.com
+ * Journal:  https://journal.copperspice.com
