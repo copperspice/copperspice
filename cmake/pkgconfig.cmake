@@ -17,14 +17,14 @@
 #
 # ***********************************************************************
 
-prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=@CMAKE_INSTALL_PREFIX@
-libdir=@CMAKE_INSTALL_FULL_LIBDIR@
-includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@/@PC_REALNAME@
+prefix=@CS_INST_PREFIX@
+exec_prefix=@CS_INST_PREFIX@
+libdir=@CS_INST_LIB@
+includedir=@CS_INST_INCLUDE@/@PC_REALNAME@
 
 Name: @PC_NAME@
 Description: @PC_NAME@ library
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -l@PC_NAME@
-Cflags: @PC_CFLAGS@ -I@CMAKE_INSTALL_FULL_INCLUDEDIR@ -I${includedir}
+Cflags: @PC_CFLAGS@ -I@CS_INST_INCLUDE@ -I${includedir}
 Requires: @PC_REQUIRES@

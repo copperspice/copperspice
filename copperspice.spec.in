@@ -47,42 +47,24 @@ ninja install
 # early on when they do not want to completely trash their DEV system by
 # directly installing in the /usr tree. Very bad thing for actual packages.
 #
-# If you try this and use quotes to protect from space in directory paths
-# for i in "%{buildroot}/usr/%{_lib}/pkgconfig/*.pc"; do sed -i 's#%{buildroot}/usr#/usr#g' "$i"; done
-# You will only get the path to *.pc returned.
-#
 # Sadly this creates a bit of a maintenance headache when adding new .pc or .cmake to project
 
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsCore.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsGui.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsMultimedia.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsNetwork.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsOpenGL.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsScript.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSql.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSvg.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsWebKit.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXmlPatterns.pc"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXml.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsCore.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsGui.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsMultimedia.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsNetwork.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsOpenGL.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsScript.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSql.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSvg.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsWebKit.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXmlPatterns.pc"
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXml.pc"
 
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/include/copperspice/QtCore/cs_build_info.h"
-
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceBinaryTargets.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceBinaryTargets-release.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfig.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfigVersion.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceDeploy.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets-release.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceMacros.cmake"
-sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/InstallMinGW.cmake"
-
+#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfigVersion.cmake"
 
 %files
 /usr
-
-# TODO:: See where license files end up and flag them as DOC. 
-%doc README.md
 
 %post
 

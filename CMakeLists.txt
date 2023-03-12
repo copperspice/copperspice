@@ -20,8 +20,9 @@ set(BUILD_MAJOR "1")
 set(BUILD_MINOR "8")
 set(BUILD_MICRO "1")
 
-# only used to control RPATH when building RPM
+# used to control RPATH and cmake/pc variables when building RPM
 option(BUILDING_RPM "Are we building RPM" OFF)
+option(BUILDING_DEBIAN "Are we building DEBIAN" OFF)
 
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
@@ -40,6 +41,8 @@ include(CheckLibraryExists)
 include(ResourceMacros)
 include(TestLargeFiles)
 
+
+
 # location for install or package
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    include(GNUInstallDirs)
@@ -57,7 +60,7 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
                                    "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin")
 
-   if (BUILDING_RPM)
+   if (BUILDING_RPM OR BUILDING_DEBIAN)
        set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
    else()
        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin:$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
@@ -74,6 +77,35 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_INCLUDEDIR include)
 
 endif()
+
+#
+# When building for a package we install to /usr under a 
+# fakeroot or buildroot during build. We don't want
+# the build install path but the system target path.
+#
+if (BUILDING_RPM OR BUILDING_DEBIAN)
+    message(STATUS "** We are building a package ***")
+    #
+    # wish I could get around the hard code 
+    # 
+    set(CS_INST_PREFIX  "/usr")    
+    set(CS_INST_LIB     "${CS_INST_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+    set(CS_INST_INCLUDE "${CS_INST_PREFIX}/include/copperspice")
+else()
+    set(CS_INST_PREFIX  "${CMAKE_INSTALL_PREFIX}")    
+    set(CS_INST_LIB     "${CMAKE_INSTALL_FULL_LIBDIR}")
+    set(CS_INST_INCLUDE "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+endif()
+
+# Note: webkit2.pc.in also uses prefix
+#
+set(prefix "${CS_INST_PREFIX}")
+
+
+message(STATUS "   ***   ")
+message(STATUS "   CS_INST_PREFIX     ${CS_INST_PREFIX}")
+message(STATUS "   CS_INST_LIB        ${CS_INST_LIB}")
+message(STATUS "   CS_INST_INCLUDE    ${CS_INST_INCLUDE}")
 
 # required libraries
 set(BUILD_COMPONENTS "Core Xml")
@@ -96,7 +128,7 @@ set(RPM_RELEASE       "${BUILD_MICRO}")
 # values used in cs_build_info.h.in
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION     "${PACKAGE_VERSION}")
-set(prefix      "${CMAKE_INSTALL_PREFIX}")
+
 
 if (MSVC)
    enable_language(ASM_MASM)
@@ -853,4 +885,5 @@ message("")
 message("CopperSpice configured to run on:  ${CMAKE_SYSTEM_NAME} ${TARGETBITS} bit, ${CMAKE_BUILD_TYPE} Mode")
 message("CopperSpice will be built in:      ${CMAKE_BINARY_DIR}")
 message("CopperSpice will be installed in:  ${CMAKE_INSTALL_PREFIX}")
+message("prefix:                            ${prefix}")
 message("\n")

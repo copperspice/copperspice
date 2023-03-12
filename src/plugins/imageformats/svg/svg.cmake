@@ -28,7 +28,7 @@ if(WITH_SVG)
    function_generate_resources(CsImageFormatsSvg)
 
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsImageFormatsSvg DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/imageformats)
    else()
       install(TARGETS CsImageFormatsSvg DESTINATION ${CMAKE_INSTALL_LIBDIR})

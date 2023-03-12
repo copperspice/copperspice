@@ -51,7 +51,7 @@ if(BUILD_PLATFORMS_XCB_PLUGIN AND XCB_GLX_LIB)
       -DXCB_USE_XINPUT2
    )
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsGuiXcb_Glx DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/xcbglintegrations)
    else()
       install(TARGETS CsGuiXcb_Glx DESTINATION ${CMAKE_INSTALL_LIBDIR})

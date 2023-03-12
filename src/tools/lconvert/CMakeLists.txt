@@ -64,7 +64,7 @@ set_target_properties(lconvert${TOOLS_SUFFIX}
 #
 #   If the files in bin didn't name collide with Qt binaries we could just leave them.
 #
-if(BUILDING_RPM)
+if(BUILDING_RPM OR BUILDING_DEBIAN)
     install(
        TARGETS lconvert${TOOLS_SUFFIX}
        EXPORT CopperSpiceBinaryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}

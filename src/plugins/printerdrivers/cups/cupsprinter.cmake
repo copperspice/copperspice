@@ -37,7 +37,7 @@ if(Cups_FOUND)
 
    function_generate_resources(CsPrinterDriverCups)
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsPrinterDriverCups DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/printerdrivers)
    else()
       install(TARGETS CsPrinterDriverCups DESTINATION ${CMAKE_INSTALL_LIBDIR})

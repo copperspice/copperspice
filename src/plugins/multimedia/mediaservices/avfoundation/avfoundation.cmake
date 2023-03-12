@@ -132,7 +132,7 @@ if(WITH_MULTIMEDIA AND CMAKE_SYSTEM_NAME MATCHES "Darwin")
       -DQMEDIA_AVF_MEDIAPLAYER
    )
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsMultimedia_avf_camera       DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
       install(TARGETS CsMultimedia_avf_mediaplayer  DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
    else()

@@ -195,6 +195,7 @@ macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS PC_REQUIRES)
          DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
          COMPONENT Devel
       )
+
    endif()
 endmacro()
 

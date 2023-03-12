@@ -93,7 +93,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
        -DNO_DSHOW_STRSAFE
     )
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsMultimedia_DirectShow DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
    else()
       install(TARGETS CsMultimedia_DirectShow DESTINATION ${CMAKE_INSTALL_LIBDIR})

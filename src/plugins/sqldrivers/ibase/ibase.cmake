@@ -37,7 +37,7 @@ if (FALSE)
       -DQT_PLUGIN
    )
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsSqlIBase  DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/sqldrivers)
    else()
       install(TARGETS CsSqlIBase  DESTINATION ${CMAKE_INSTALL_LIBDIR})

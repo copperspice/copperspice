@@ -284,7 +284,7 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
    set_target_properties(CsMultimedia_gst_camerabin    PROPERTIES PREFIX "")
    set_target_properties(CsMultimedia_gst_mediaplayer  PROPERTIES PREFIX "")
 
-   if(BUILDING_RPM)
+   if(BUILDING_RPM OR BUILDING_DEBIAN)
       install(TARGETS CsMultimedia_gst_audiodecoder DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
       install(TARGETS CsMultimedia_gst_camerabin    DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
       install(TARGETS CsMultimedia_gst_mediaplayer  DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/mediaservices)
