@@ -3,7 +3,7 @@ Version:    @RPM_VERSION@
 Release:    @RPM_RELEASE@
 Summary:    @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
 License:    GPL V2 + restriction
-Group:      Development/Libraries
+Group:      Development/Libraries/C and C++
 URL:        https://github.com/RolandHughes/copperspice
 Vendor:     @CPACK_PACKAGE_VENDOR@
 Packager:   Roland Hughes <roland@logikalsolutions.com>
@@ -25,6 +25,13 @@ cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="%{buildroot}/usr" \
       "@CMAKE_SOURCE_DIR@"
 
+%package devel
+Summary: Development files for @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+
+%description devel
+Development files for
+@CPACK_PACKAGE_DESCRIPTION_TEXT@
+
 %build
 ninja
 
@@ -41,29 +48,16 @@ QA_RPATHS=\$[0x0023]
 
 ninja install
 
-#
-# Next really bad thing standard CMakeLists.txt does is thump the build path
-# into the .pc and .cmake files. This is a hack every package developer does
-# early on when they do not want to completely trash their DEV system by
-# directly installing in the /usr tree. Very bad thing for actual packages.
-#
-# Sadly this creates a bit of a maintenance headache when adding new .pc or .cmake to project
-
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsCore.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsGui.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsMultimedia.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsNetwork.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsOpenGL.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsScript.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSql.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsSvg.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsWebKit.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXmlPatterns.pc"
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/pkgconfig/CsXml.pc"
-
-#sed -i 's#%{buildroot}/usr#/usr#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceConfigVersion.cmake"
 
 %files
+/usr
+%exclude %dir %{_libdir}/cmake
+%exclude %dir %{_libdir}/pkgconfig
+%exclude %dir %{_libdir}/copperspice/bin
+%exclude %dir /usr/include
+%exclude %dir /usr/lib/.build-id
+
+%files devel
 /usr
 
 %post
