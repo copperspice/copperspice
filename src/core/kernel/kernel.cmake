@@ -4,20 +4,15 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QAbstractListModel
    QAbstractTableModel
    QBasicTimer
-   QArgument
    QChildEvent
    QCoreApplication
    QCustomEvent
    QDynamicPropertyChangeEvent
    QEventLoop
-   QGenericArgument
-   QGenericReturnArgument
    QMetaClassInfo
    QMetaEnum
    QMetaMethod
    QMetaObject
-   QMetaObjectAccessor
-   QMetaObjectExtraData
    QMetaProperty
    QMimeData
    QModelIndex
@@ -28,7 +23,6 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QObjectData
    QObjectUserData
    QObjectList
-   QReturnArgument
    QSharedMemory
    QSignalMapper
    QSocketNotifier
@@ -48,7 +42,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractlistmodel.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstracttablemodel.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qabstractnativeeventfilter.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qargument.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qbasictimer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qchildevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcoreapplication.h
@@ -56,15 +49,11 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qcustomevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdynamicpropertychangeevent.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qeventloop.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericargument.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qgenericreturnargument.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmath.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaclassinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaenum.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetamethod.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobject.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobjectaccessor.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaobjectextradata.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmetaproperty.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmimedata.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qmodelindex.h
@@ -76,7 +65,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobjectlist.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qobjectcleanuphandler.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qpersistentmodelindex.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qreturnargument.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsharedmemory.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsignalmapper.h
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qsocketnotifier.h
