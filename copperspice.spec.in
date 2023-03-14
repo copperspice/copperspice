@@ -51,11 +51,11 @@ ninja install
 
 %files
 /usr
-%exclude %dir %{_libdir}/cmake
-%exclude %dir %{_libdir}/pkgconfig
-%exclude %dir %{_libdir}/copperspice/bin
-%exclude %dir /usr/include
-%exclude %dir /usr/lib/.build-id
+%exclude %{_libdir}/cmake
+%exclude %{_libdir}/pkgconfig
+%exclude %{_libdir}/copperspice/bin
+%exclude /usr/include
+%exclude /usr/lib/.build-id
 
 %files devel
 /usr
