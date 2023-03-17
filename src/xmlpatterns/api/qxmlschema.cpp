@@ -69,10 +69,6 @@ QXmlSchema::QXmlSchema()
   instance will share resources with the existing schema
   to the extent possible.
  */
-QXmlSchema::QXmlSchema(const QXmlSchema &other)
-   : d(other.d)
-{
-}
 
 /*!
   Destroys this QXmlSchema.

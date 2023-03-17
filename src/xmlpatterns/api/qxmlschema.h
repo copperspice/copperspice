@@ -44,8 +44,10 @@ class Q_XMLPATTERNS_EXPORT QXmlSchema
 
  public:
    QXmlSchema();
-   QXmlSchema(const QXmlSchema &other);
    ~QXmlSchema();
+
+   QXmlSchema(const QXmlSchema &other) = default;
+   QXmlSchema &operator=(const QXmlSchema &other) = default;
 
    bool load(const QUrl &source);
    bool load(QIODevice *source, const QUrl &documentUri = QUrl());
