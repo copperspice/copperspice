@@ -54,11 +54,6 @@ PtrSecCertificateCopyData QSslSocketPrivate::ptrSecCertificateCopyData = 0;
 PtrSecTrustSettingsCopyCertificates QSslSocketPrivate::ptrSecTrustSettingsCopyCertificates = 0;
 PtrSecTrustCopyAnchorCertificates QSslSocketPrivate::ptrSecTrustCopyAnchorCertificates = 0;
 
-#elif defined(Q_OS_WIN)
-PtrCertOpenSystemStoreW QSslSocketPrivate::ptrCertOpenSystemStoreW = nullptr;
-PtrCertFindCertificateInStore QSslSocketPrivate::ptrCertFindCertificateInStore = nullptr;
-PtrCertCloseStore QSslSocketPrivate::ptrCertCloseStore = nullptr;
-
 #endif
 
 bool QSslSocketPrivate::s_libraryLoaded = false;
@@ -545,20 +540,6 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
       qWarning("could not load security library");
    }
 
-#elif defined(Q_OS_WIN)
-   HINSTANCE hLib = LoadLibraryW(L"Crypt32");
-   if (hLib) {
-
-      ptrCertOpenSystemStoreW = (PtrCertOpenSystemStoreW)GetProcAddress(hLib, "CertOpenSystemStoreW");
-      ptrCertFindCertificateInStore = (PtrCertFindCertificateInStore)GetProcAddress(hLib, "CertFindCertificateInStore");
-      ptrCertCloseStore = (PtrCertCloseStore)GetProcAddress(hLib, "CertCloseStore");
-
-      if (!ptrCertOpenSystemStoreW || !ptrCertFindCertificateInStore || !ptrCertCloseStore) {
-         qWarning("could not resolve symbols in crypt32 library");   // should never happen
-      }
-   } else {
-      qWarning("could not load crypt32 library"); // should never happen
-   }
 
 #elif defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
    // check whether we can enable on-demand root-cert loading (i.e. check whether the sym links are there)
@@ -755,26 +736,26 @@ QList<QSslCertificate> QSslSocketPrivate::systemCaCertificates()
    }
 
 #elif defined(Q_OS_WIN)
-   if (ptrCertOpenSystemStoreW && ptrCertFindCertificateInStore && ptrCertCloseStore) {
-      HCERTSTORE hSystemStore;
 
-      hSystemStore = ptrCertOpenSystemStoreW(0, L"ROOT");
+   HCERTSTORE hSystemStore;
+   hSystemStore = CertOpenSystemStoreW(0, L"ROOT");
 
-      if (hSystemStore) {
-         PCCERT_CONTEXT pc = nullptr;
+   if (hSystemStore) {
+      PCCERT_CONTEXT pc = nullptr;
 
-         while (true) {
-            pc = ptrCertFindCertificateInStore( hSystemStore, X509_ASN_ENCODING, 0, CERT_FIND_ANY, nullptr, pc);
-            if (!pc) {
-               break;
-            }
+      while (true) {
+         pc = CertFindCertificateInStore( hSystemStore, X509_ASN_ENCODING, 0, CERT_FIND_ANY, nullptr, pc);
 
-            QByteArray der((const char *)(pc->pbCertEncoded), static_cast<int>(pc->cbCertEncoded));
-            QSslCertificate cert(der, QSsl::Der);
-            systemCerts.append(cert);
+         if (!pc) {
+            break;
          }
-         ptrCertCloseStore(hSystemStore, 0);
+
+         QByteArray der((const char *)(pc->pbCertEncoded), static_cast<int>(pc->cbCertEncoded));
+         QSslCertificate cert(der, QSsl::Der);
+         systemCerts.append(cert);
       }
+
+      CertCloseStore(hSystemStore, 0);
    }
 
 #elif defined(Q_OS_UNIX)

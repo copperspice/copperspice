@@ -390,62 +390,50 @@ QByteArray qUncompress(const uchar *data, int nbytes)
       if (nbytes < 4 || (data[0] != 0 || data[1] != 0 || data[2] != 0 || data[3] != 0)) {
          qWarning("qUncompress(): Input data is corrupted");
       }
+
       return QByteArray();
    }
 
-   ulong expectedSize = (data[0] << 24) | (data[1] << 16) |
-                        (data[2] <<  8) | (data[3]      );
+   ulong expectedSize = (data[0] << 24) | (data[1] << 16) | (data[2] <<  8) | (data[3]);
+
    ulong len = qMax(expectedSize, 1ul);
    QScopedPointer<QByteArray::Data, QMallocDeleter> d;
 
    while (true) {
       ulong alloc = len;
-      if (len  >= (1u << 31u) - sizeof(QByteArray::Data))
-      {
-         // QByteArray does not support that huge size anyway.
+
+      if (len >= (1u << 31u) - sizeof(QByteArray::Data)) {
+         // does not support a huge size
          qWarning("qUncompress(): Input data is corrupted");
          return QByteArray();
       }
 
-      // emerald - review code
-      QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + alloc + 1));
+      QByteArray::Data *tmpPtr = static_cast<QByteArray::Data *>(::malloc(sizeof(QByteArray::Data) + alloc + 1));
 
-      if (p == nullptr) {
+      if (tmpPtr == nullptr) {
          // may want to throw an exception
-         qWarning("qUncompress(): Unable to not allocate enough memory to uncompress data");
+         qWarning("qUncompress(): Unable to allocate enough memory to uncompress data");
          return QByteArray();
       }
 
-      d.take(); // realloc was successful
-      d.reset(p);
+      d.reset(new (tmpPtr) QByteArray::Data);
       d->offset = sizeof(QByteArrayData);
 
-      int res = ::uncompress((uchar *)d->data(), &len,
-      (uchar *)data + 4, nbytes - 4);
+      // recalcuate len
+      int res   = ::uncompress((uchar *)d->data(), &len, (uchar *)data + 4, nbytes - 4);
 
-      switch (res)
-      {
+      switch (res) {
          case Z_OK:
             if (len != alloc) {
-               if (len  >= (1u << 31u) - sizeof(QByteArray::Data)) {
-                  //QByteArray does not support that huge size anyway.
+               if (len >= (1u << 31u) - sizeof(QByteArray::Data)) {
+                  // does not support a huge size
                   qWarning("qUncompress: Input data is corrupted");
                   return QByteArray();
                }
-
-               QByteArray::Data *p = static_cast<QByteArray::Data *>(::realloc(d.data(), sizeof(QByteArray::Data) + len + 1));
-                if (p == nullptr) {
-                  // may want to throw an exception
-                  qWarning("qUncompress: could not allocate enough memory to uncompress data");
-                  return QByteArray();
-               }
-
-               d.take(); // realloc was successful
-               d.reset(p);
             }
 
             d->ref.initializeOwned();
-            d->size = len;
+            d->size  = len;
             d->alloc = uint(len) + 1u;
             d->capacityReserved = false;
             d->offset = sizeof(QByteArrayData);
@@ -646,19 +634,25 @@ void QByteArray::reallocData(uint alloc, Data::AllocationOptions options)
    if (d->ref.isShared() || IS_RAW_DATA(d)) {
       Data *x = Data::allocate(alloc, options);
       Q_CHECK_PTR(x);
+
       x->size = qMin(int(alloc) - 1, d->size);
       ::memcpy(x->data(), d->data(), x->size);
       x->data()[x->size] = '\0';
-      if (!d->ref.deref()) {
+
+      if (! d->ref.deref()) {
          Data::deallocate(d);
       }
+
       d = x;
+
    } else {
       if (options & Data::Grow) {
          alloc = qAllocMore(alloc, sizeof(Data));
       }
-      Data *x = static_cast<Data *>(::realloc(d, sizeof(Data) + alloc));
+
+      Data *x = static_cast<Data *>(::realloc(static_cast<void *>(d), sizeof(Data) + alloc));
       Q_CHECK_PTR(x);
+
       x->alloc = alloc;
       x->capacityReserved = (options & Data::CapacityReserved) ? 1 : 0;
       d = x;

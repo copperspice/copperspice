@@ -752,6 +752,10 @@ void QNetworkAccessManagerPrivate::_q_replyPreSharedKeyAuthenticationRequired(QS
    if (reply) {
       emit q->preSharedKeyAuthenticationRequired(reply, authenticator);
    }
+
+#else
+   (void) authenticator;
+
 #endif
 }
 

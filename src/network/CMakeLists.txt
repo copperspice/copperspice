@@ -77,6 +77,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
       PRIVATE
       ws2_32
       crypt32
+      secur32
       dnsapi
       iphlpapi
     )

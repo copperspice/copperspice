@@ -1347,7 +1347,6 @@ static QByteArray qNtlmPhase3(QAuthenticatorPrivate *ctx, const QByteArray &phas
 
 #if defined(Q_OS_WIN)
 
-static HMODULE securityDLLHandle = nullptr;
 static PSecurityFunctionTable pSecurityFunctionTable = nullptr;
 
 static bool q_NTLM_SSPI_library_load()
@@ -1355,16 +1354,7 @@ static bool q_NTLM_SSPI_library_load()
    QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet((void *) &pSecurityFunctionTable));
 
    if (pSecurityFunctionTable == nullptr) {
-      securityDLLHandle = LoadLibrary(L"secur32.dll");
-
-      if (securityDLLHandle != nullptr) {
-         INIT_SECURITY_INTERFACE pInitSecurityInterface =
-            (INIT_SECURITY_INTERFACE)GetProcAddress(securityDLLHandle, "InitSecurityInterfaceW");
-
-         if (pInitSecurityInterface != nullptr) {
-            pSecurityFunctionTable = pInitSecurityInterface();
-         }
-      }
+      pSecurityFunctionTable = InitSecurityInterfaceW();
    }
 
    if (pSecurityFunctionTable == nullptr) {
