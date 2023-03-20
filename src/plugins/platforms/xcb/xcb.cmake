@@ -29,7 +29,7 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
    )
 
    if(BUILDING_RPM OR BUILDING_DEBIAN)
-      install(TARGETS CsGuiXcb DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/platform)
+      install(TARGETS CsGuiXcb DESTINATION ${CMAKE_INSTALL_LIBDIR}/copperspice/plugins/platforms)
    else()
       install(TARGETS CsGuiXcb DESTINATION ${CMAKE_INSTALL_LIBDIR})
    endif()

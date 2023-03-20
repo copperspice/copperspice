@@ -78,103 +78,6 @@ function create_debian_tree()
 
 }
 
-function copy_plugins()
-{
-    # Yes, duplicating these files sucks. Saddling the postinst file with
-    # creating links sucks worse because nobody will think to maintain that.
-    # At least the duplication here might have a novice maintainer deciding to
-    # fix the official CopperSpice build procedure to build a propper directory
-    # tree for Debian and RPM and most other platforms.
-
-    pushd "$DEBIAN_DIR"/usr/"${LIB_DIR}"
-
-    echo `ls`
-    echo "current directory: ${PWD}"
-    files=( $(find . -maxdepth 1 -type f) )
-    echo "files = ${files[@]}"
-    #*****
-    #       platforms
-    #*****
-
-    # MAC stuff just because it "could" exist
-    #
-    if [[ " ${files[@]} " =~ "CsGuiCocoa" ]]; then
-        cp -v CsGuiCocoa* copperspice/plugins/platforms/
-    fi
-
-    # Windows shouldn't exist at all
-    #
-    if [[ " ${files[@]} " =~ "CsGuiWin" ]]; then
-        cp -v CsGuiWin* copperspice/plugins/platforms/
-    fi
-
-    if [[ " ${files[@]} " =~ "CsGuiXcb" ]]; then
-        cp -v CsGuiXcb* copperspice/plugins/platforms/
-    fi
-
-    #*****
-    #       mediaServices
-    #*****
-    if [[ " ${files[@]} " =~ "CsMultimedia_avf" ]]; then
-        cp -v CsMultimedia_avf* copperspice/plugins/mediaservices/
-    fi
-
-    if [[ " ${files[@]} " =~ "CsMultimedia_gst" ]]; then
-        cp -v CsMultimedia_gst* copperspice/plugins/mediaservices/
-    fi
-
-    if [[ " ${files[@]} " =~ "CsMultimedia_DirectShow" ]]; then
-        cp -v CsMultimedia_DirectShow* copperspice/plugins/mediaservices/
-    fi
-
-    #*****
-    #       playlistformats
-    #*****
-
-    if [[ " ${files[@]} " =~ "CsMultimedia_m3u" ]]; then
-        cp -v CsMultimedia_m3u* copperspice/plugins/playlistformats/
-    fi
-
-    #*****
-    #       xcbglintegrations
-    #*****
-
-    if [[ " ${files[@]} " =~ "CsGuiXcb_Glx" ]]; then
-        cp -v CsGuiXcb_Glx* copperspice/plugins/xcbglintegrations/
-    fi
-
-
-    #*****
-    #       sqldrivers
-    #*****
-
-    if [[ " ${files[@]} " =~ "CsSql" ]]; then
-        cp -v CsSql* copperspice/plugins/sqldrivers/
-    fi
-
-    #*****
-    #       printerdrivers
-    #*****
-
-    if [[ " ${files[@]} " =~ "CsPrinterDriver" ]]; then
-        cp -v CsPrinterDriver* copperspice/plugins/printerdrivers/
-    fi
-
-    #*****
-    #       imageformats
-    #*****
-
-    if [[ " ${files[@]} " =~ "CsImageFormat" ]]; then
-        cp -v CsImageFormat* copperspice/plugins/imageformats/
-    fi
-
-    #
-    # iconengineplugin isn't supported by cs_copy_plugins() WTF???
-    #
-
-    popd
-}
-
 function build_from_source()
 {
     #  nuke the directories we will use if they already exist
@@ -207,28 +110,9 @@ function build_from_source()
     echo "*** Building CopperSpice"
     ninja install
 
-    #**********************
-    # These sed calls are a hack until the CopperSpice project fixes the names
-    # of their binaries so they don't conflict with Qt. After that
-    # they can go directly in /usr/bin. Until then they have
-    # to be placed elsewhere.
-    #**********************
-
+    #  Step 5: Sweep up what CopperSpice project gets wrong in their
+    #          default build.
     cd "$RELEASE_DIR"/lib/cmake/CopperSpice
-    if [ -f "CopperSpiceBinaryTargets-release.cmake" ]; then
-        echo "*** "
-        echo "*** Fixing where cmake looks for binaries during RELEASE"
-        echo "*** "
-        sed -i 's#${_IMPORT_PREFIX}/bin#${_IMPORT_PREFIX}/lib/copperspice/bin#g' CopperSpiceBinaryTargets-release.cmake
-    fi
-
-    if [ -f "CopperSpiceBinaryTargets-debug.cmake" ]; then
-        echo "*** "
-        echo "*** Fixing where cmake looks for binaries during DEBUG if there ever is a debug version"
-        echo "*** "
-        sed -i 's#${_IMPORT_PREFIX}/bin#${_IMPORT_PREFIX}/lib/copperspice/bin#g' CopperSpiceBinaryTargets-debug.cmake
-    fi
-
     if [ -f "CopperSpiceLibraryTargets.cmake" ]; then
         echo "*** "
         echo "*** Fixing where cmake looks for Qt and other headers"
@@ -236,24 +120,7 @@ function build_from_source()
         sed -i 's#${_IMPORT_PREFIX}/include;#${_IMPORT_PREFIX}/include/copperspice;#g' CopperSpiceLibraryTargets.cmake
         sed -i 's#${_IMPORT_PREFIX}/include/Qt#${_IMPORT_PREFIX}/include/copperspice/Qt#g' CopperSpiceLibraryTargets.cmake
     fi
-
-
-    #**********************
-    # Sadly we end up with the RELEASE_DIR path in the CopperSpiceConfig.cmake
-    # For a package install it needs to be /usr/include/copperspice
-    # first we need to get rid of any potential .. in directory path
-    #**********************
-    WRONG_INCLUDE="$RELEASE_DIR/include"
-    cd "$WRONG_INCLUDE"
-    BAD_INCLUDE_PATH=$PWD
-    cd "$RELEASE_DIR"/lib/cmake/CopperSpice
-    if [ -f "CopperSpiceConfig.cmake" ]; then
-        echo "*** "
-        echo "*** Fixing where cmake looks for include files"
-        echo "*** "
-        echo "BAD_INCLUDE_PATH = $BAD_INCLUDE_PATH"
-        sed -i "s#$BAD_INCLUDE_PATH#/usr/include/copperspice#g" CopperSpiceConfig.cmake
-    fi
+    
 }
 
 function dev_deb()
@@ -279,13 +146,7 @@ function dev_deb()
     cp "$SCRIPT_DIR"/changelog "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog.Debian
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
-    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/bin/
-    cp -Prv "$RELEASE_DIR"/include/copperspice/* "$DEBIAN_DIR"/usr/include/copperspice/
-    cp -Prv "$RELEASE_DIR"/lib/pkgconfig/* "$DEBIAN_DIR"/usr/share/pkgconfig
-    cp -Prv "$RELEASE_DIR"/lib/cmake/CopperSpice/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/cmake/CopperSpice/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/"${LIB_DIR}"/
-
-    copy_plugins
+    rsync -av "$RELEASE_DIR"/ "$DEBIAN_DIR"/usr/
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
@@ -343,10 +204,7 @@ function runtime_deb()
     cp "$SCRIPT_DIR"/changelog "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog.Debian
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
-    cp -Prv "$RELEASE_DIR"/bin/* "$DEBIAN_DIR"/usr/"${LIB_DIR}"/copperspice/bin/
-    cp -Prv "$RELEASE_DIR"/lib/*.so "$DEBIAN_DIR"/usr/"${LIB_DIR}"/
-
-    copy_plugins
+    rsync -av --exclude cmake/ --exclude copperspice/bin "$RELEASE_DIR"/lib/  "$DEBIAN_DIR"/usr/lib/
 
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 

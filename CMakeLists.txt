@@ -106,6 +106,7 @@ message(STATUS "   ***   ")
 message(STATUS "   CS_INST_PREFIX     ${CS_INST_PREFIX}")
 message(STATUS "   CS_INST_LIB        ${CS_INST_LIB}")
 message(STATUS "   CS_INST_INCLUDE    ${CS_INST_INCLUDE}")
+message(STATUS "   CMAKE_BINARY_DIR   ${CMAKE_BINARY_DIR}")
 
 # required libraries
 set(BUILD_COMPONENTS "Core Xml")
