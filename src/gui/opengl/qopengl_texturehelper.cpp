@@ -28,6 +28,19 @@
 
 #include <qopengl_extensions_p.h>
 
+template <typename T, typename U>
+std::enable_if_t<sizeof(T) == sizeof(U) &&
+   std::is_trivially_copyable_v<T> && std::is_trivially_copyable_v<U>, T>
+cs_bitCast(const U &input) noexcept
+{
+   static_assert(std::is_trivially_constructible_v<T>);
+
+   T retval;
+   std::memcpy(&retval, &input, sizeof(U));
+
+   return retval;
+}
+
 QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
 {
     // Resolve EXT_direct_state_access entry points if present.
@@ -151,42 +164,46 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
         handle = GetModuleHandleA("opengl32.dll");
 
     // OpenGL 1.0
-    GetIntegerv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint *)>(GetProcAddress(handle, "glGetIntegerv"));
-    GetBooleanv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLboolean *)>(GetProcAddress(handle, "glGetBooleanv"));
+    GetIntegerv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint *)>(GetProcAddress(handle, "glGetIntegerv"));
+    GetBooleanv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLboolean *)>(GetProcAddress(handle, "glGetBooleanv"));
+    PixelStorei = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint )>(GetProcAddress(handle, "glPixelStorei"));
 
-    PixelStorei = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint )>(GetProcAddress(handle, "glPixelStorei"));
+    GetTexLevelParameteriv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLenum,
+          GLint *)>(GetProcAddress(handle, "glGetTexLevelParameteriv"));
 
-    GetTexLevelParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint *)>(GetProcAddress(handle, "glGetTexLevelParameteriv"));
+    GetTexLevelParameterfv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLenum,
+          GLfloat *)>(GetProcAddress(handle, "glGetTexLevelParameterfv"));
 
-    GetTexLevelParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLfloat *)>(GetProcAddress(handle, "glGetTexLevelParameterfv"));
+    GetTexParameteriv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum,
+           GLint *)>(GetProcAddress(handle, "glGetTexParameteriv"));
 
-    GetTexParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLint *)>(GetProcAddress(handle, "glGetTexParameteriv"));
+    GetTexParameterfv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum,
+           GLfloat *)>(GetProcAddress(handle, "glGetTexParameterfv"));
 
-    GetTexParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLfloat *)>(GetProcAddress(handle, "glGetTexParameterfv"));
+    GetTexImage = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLenum, GLenum,
+           GLvoid *)>(GetProcAddress(handle, "glGetTexImage"));
 
-    GetTexImage = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLenum , GLvoid *)>(GetProcAddress(handle, "glGetTexImage"));
+    TexImage2D = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLint, GLsizei,
+           GLsizei, GLint, GLenum, GLenum, const GLvoid *)>(GetProcAddress(handle, "glTexImage2D"));
 
-    TexImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(GetProcAddress(handle, "glTexImage2D"));
+    TexImage1D = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLint, GLsizei, GLint, GLenum,
+           GLenum, const GLvoid *)>(GetProcAddress(handle, "glTexImage1D"));
 
-    TexImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(GetProcAddress(handle, "glTexImage1D"));
-
-    TexParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , const GLint *)>(GetProcAddress(handle, "glTexParameteriv"));
-
-    TexParameteri = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLint )>(GetProcAddress(handle, "glTexParameteri"));
-
-    TexParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , const GLfloat *)>(GetProcAddress(handle, "glTexParameterfv"));
-
-    TexParameterf = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLfloat )>(GetProcAddress(handle, "glTexParameterf"));
+    TexParameteriv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum, const GLint *)>(GetProcAddress(handle, "glTexParameteriv"));
+    TexParameteri  = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum, GLint )>(GetProcAddress(handle, "glTexParameteri"));
+    TexParameterfv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum, const GLfloat *)>(GetProcAddress(handle, "glTexParameterfv"));
+    TexParameterf  = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLenum, GLfloat )>(GetProcAddress(handle, "glTexParameterf"));
 
     // OpenGL 1.1
-    GenTextures = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLsizei , GLuint *)>(GetProcAddress(handle, "glGenTextures"));
+    GenTextures    = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLsizei, GLuint *)>(GetProcAddress(handle, "glGenTextures"));
+    DeleteTextures = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLsizei, const GLuint *)>(GetProcAddress(handle, "glDeleteTextures"));
+    BindTexture    = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLuint )>(GetProcAddress(handle, "glBindTexture"));
 
-    DeleteTextures = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLsizei , const GLuint *)>(GetProcAddress(handle, "glDeleteTextures"));
+    TexSubImage2D  = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLint, GLint,
+           GLsizei, GLsizei, GLenum, GLenum, const GLvoid *)>(GetProcAddress(handle, "glTexSubImage2D"));
 
-    BindTexture = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLuint )>(GetProcAddress(handle, "glBindTexture"));
-    TexSubImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *)>(GetProcAddress(handle, "glTexSubImage2D"));
-
-    TexSubImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLenum , GLenum , const GLvoid *)>(GetProcAddress(handle, "glTexSubImage1D"));
+    TexSubImage1D  = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLint, GLsizei,
+           GLenum, GLenum, const GLvoid *)>(GetProcAddress(handle, "glTexSubImage1D"));
 
 #elif defined(QT_OPENGL_ES_2)
     // Here we are targeting OpenGL ES 2.0+ only. This is likely using EGL, where,

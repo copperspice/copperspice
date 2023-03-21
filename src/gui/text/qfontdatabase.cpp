@@ -235,10 +235,6 @@ struct QtFontStyle {
       {
       }
 
-      Key(const Key &o)
-         : style(o.style), weight(o.weight), stretch(o.stretch)
-      {
-      }
 
       uint style         : 2;
       signed int weight  : 8;

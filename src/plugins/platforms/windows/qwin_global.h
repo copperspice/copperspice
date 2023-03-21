@@ -191,11 +191,16 @@ inline QtWindows::WindowsEventType windowsEventType(UINT message, WPARAM wParamI
          switch (int(wParamIn)) {
             case IMN_OPENCANDIDATE:
                return QtWindows::InputMethodOpenCandidateWindowEvent;
+
             case IMN_CLOSECANDIDATE:
                return QtWindows::InputMethodCloseCandidateWindowEvent;
+
             default:
                break;
          }
+
+         break;
+
       case WM_GETOBJECT:
          return QtWindows::AccessibleObjectFromWindowRequest;
       case WM_SETFOCUS:

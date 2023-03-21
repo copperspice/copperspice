@@ -3054,6 +3054,10 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    POINTBLOCK *tmpPtBlock;
    int numFullPtBlocks = 0;
 
+   ET.scanlines.next = nullptr;
+   ET.ymax = SMALL_COORDINATE;
+   ET.ymin = LARGE_COORDINATE;
+
    region = new QRegionPrivate;
 
    /* special case a rectangle */

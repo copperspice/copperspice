@@ -178,6 +178,18 @@ typedef void (QOPENGLF_APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint i
 
 #endif /* USE_MANUAL_DEFS */
 
+template <typename T, typename U>
+std::enable_if_t<sizeof(T) == sizeof(U) &&
+   std::is_trivially_copyable_v<T> && std::is_trivially_copyable_v<U>, T>
+cs_bitCast(const U &input) noexcept
+{
+   static_assert(std::is_trivially_constructible_v<T>);
+
+   T retval;
+   std::memcpy(&retval, &input, sizeof(U));
+
+   return retval;
+}
 
 /*!
     \internal
@@ -956,10 +968,14 @@ bool QOpenGLDebugLogger::initialize()
 #if defined(Q_OS_WIN) && !defined(QT_OPENGL_ES_2)
     {
         HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-        if (!handle)
-            handle = GetModuleHandleA("opengl32.dll");
-        d->glGetPointerv = reinterpret_cast<qt_glGetPointerv_t>(GetProcAddress(handle, "glGetPointerv"));
+
+        if (! handle) {
+           handle = GetModuleHandleA("opengl32.dll");
+        }
+
+        d->glGetPointerv = cs_bitCast<qt_glGetPointerv_t>(GetProcAddress(handle, "glGetPointerv"));
     }
+
 #else
     GET_DEBUG_PROC_ADDRESS(glGetPointerv)
 #endif

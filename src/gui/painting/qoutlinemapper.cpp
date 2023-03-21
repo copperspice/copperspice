@@ -144,11 +144,15 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
       }
 
    } else {
-      // ### We can kill this copying and just use the buffer straight...
-
       m_elements.resize(count);
-      if (count) {
-         memcpy(m_elements.data(), path.points(), count * sizeof(QPointF));
+
+      if (count != 0) {
+         auto data   = m_elements.data();
+         auto points = path.points();
+
+         for (int i = 0; i < count; ++i) {
+            data[i] = QPointF(points[i * 2], points[(i * 2) + 1]);
+         }
       }
 
       m_element_types.resize(0);
