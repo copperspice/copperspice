@@ -1,4 +1,4 @@
-# Script to build a rpm package for reddiamond
+# Script to build a rpm package for CopperSpice
 #
 set -e
 
@@ -20,7 +20,7 @@ echo ""
 echo "This script ASSUMES it can create and use copperspice_rpm_build"
 echo "directory one level up from where this script is being run. If directory"
 echo "exist it will be deleted and recreated. The only reason the build directory is"
-echo "created is so cmake can populate variable values in the reddiamond.spec file."
+echo "created is so cmake can populate variable values in the copperspice.spec file."
 echo ""
 echo "Script also ASSUMES you are running from the root of the Git project directory"
 echo "where all source is in a directory named src at the same level as this file."
