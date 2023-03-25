@@ -77,45 +77,20 @@ sed -i 's#${_IMPORT_PREFIX}/include/Qt#${_IMPORT_PREFIX}/include/copperspice/Qt#
 %exclude /usr/include
 %exclude /usr/lib
 
-/usr/lib64/copperspice
-/usr/lib64/libCsCore1.8.so
-/usr/lib64/libCsGui1.8.so
-/usr/lib64/libCsMultimedia1.8.so
-/usr/lib64/libCsNetwork1.8.so
-/usr/lib64/libCsOpenGL1.8.so
-/usr/lib64/libCsScript1.8.so
-/usr/lib64/libCsSql1.8.so
-/usr/lib64/libCsSvg1.8.so
-/usr/lib64/libCsWebKit1.8.so
-/usr/lib64/libCsXcbSupport1.8.so
-/usr/lib64/libCsXml1.8.so
-/usr/lib64/libCsXmlPatterns1.8.so
-/usr/share
+%{_libdir}/copperspice
+%{_libdir}/*
+%{_datadir}
 
 #
 #  Development
 #
 %files devel
-/usr/include
-/usr/lib/.build-id
-/usr/lib64/cmake
-/usr/lib64/copperspice
-
-/usr/lib64/libCsCore1.8.so
-/usr/lib64/libCsGui1.8.so
-/usr/lib64/libCsMultimedia1.8.so
-/usr/lib64/libCsNetwork1.8.so
-/usr/lib64/libCsOpenGL1.8.so
-/usr/lib64/libCsScript1.8.so
-/usr/lib64/libCsSql1.8.so
-/usr/lib64/libCsSvg1.8.so
-/usr/lib64/libCsWebKit1.8.so
-/usr/lib64/libCsXcbSupport1.8.so
-/usr/lib64/libCsXml1.8.so
-/usr/lib64/libCsXmlPatterns1.8.so
-/usr/share
-
-
+%{_includedir}
+%{_prefix}/lib/.build-id
+%{_libdir}/cmake
+%{_libdir}/copperspice
+%{_libdir}/*
+%{_datadir}
 
 %post
 

@@ -74,13 +74,6 @@ echo ""
 echo "If this completed without errors you will find the RPM in {$HOME}/rpmbuild/RPMS"
 echo ""
 
-# assume x86_64, otherwise need to pass arch
-#
-cd $HOME/rpmbuild/RPMS/x86_64
-
-for f in copperspice*; do fred=$(echo "$f" | sed s/copperspice/LS_CS/);  mv "$f" "$fred"; done
-
-
 popd
 
 
