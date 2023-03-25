@@ -402,8 +402,8 @@ void QAbstractAnimationPrivate::setState(QAbstractAnimation::State newState)
    state = newState;
    QWeakPointer<QAbstractAnimation> guard(q);
 
-   //(un)registration of the animation must always happen before calls to
-   //virtual function (updateState) to ensure a correct state of the timer
+   // (un)registration of the animation must always happen before calls to
+   // virtual function (updateState) to ensure a correct state of the timer
 
    bool isTopLevel = ! group || group->state() == QAbstractAnimation::Stopped;
 
@@ -422,7 +422,7 @@ void QAbstractAnimationPrivate::setState(QAbstractAnimation::State newState)
 
    q->updateState(newState, oldState);
    if (! guard || newState != state)  {
-      // this is to be safe if updateState changes the state
+      // do nothing if updateState changes the state
       return;
    }
 
@@ -430,7 +430,7 @@ void QAbstractAnimationPrivate::setState(QAbstractAnimation::State newState)
    emit q->stateChanged(newState, oldState);
 
    if (! guard || newState != state)  {
-      //this is to be safe if updateState changes the state
+      // do nothing if the updateState changes the state
       return;
    }
 

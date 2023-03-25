@@ -68,9 +68,11 @@ class QWindowsDialogHelperBase : public BaseClass
  protected:
    QWindowsDialogHelperBase();
    QWindowsNativeDialogBase *nativeDialog() const;
-   inline bool hasNativeDialog() const {
-      return m_nativeDialog;
+
+   bool hasNativeDialog() const {
+      return m_nativeDialog != nullptr;
    }
+
    void timerEvent(QTimerEvent *) override;
 
  private:

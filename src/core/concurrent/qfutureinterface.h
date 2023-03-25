@@ -97,16 +97,18 @@ class Q_CORE_EXPORT QFutureInterfaceBase
    void waitForResume();
 
    QMutex *mutex() const;
-   QtConcurrent::internal::ExceptionStore &exceptionStore();
+   QtConcurrent::cs_internal::ExceptionStore &exceptionStore();
    QtConcurrent::ResultStoreBase &resultStoreBase();
    const QtConcurrent::ResultStoreBase &resultStoreBase() const;
 
    inline bool operator==(const QFutureInterfaceBase &other) const {
       return d == other.d;
    }
+
    inline bool operator!=(const QFutureInterfaceBase &other) const {
       return d != other.d;
    }
+
    QFutureInterfaceBase &operator=(const QFutureInterfaceBase &other);
 
  protected:

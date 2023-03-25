@@ -417,12 +417,7 @@ QNetworkAccessManager::NetworkAccessibility QNetworkAccessManager::networkAccess
    }
 }
 
-/*!
-    \internal
-
-    Returns the network session currently in use.
-    This can be changed at any time, ownership remains with the QNetworkAccessManager
-*/
+// internal
 const QWeakPointer<const QNetworkSession> QNetworkAccessManagerPrivate::getNetworkSession(const QNetworkAccessManager *q)
 {
    return q->d_func()->networkSessionWeakRef;

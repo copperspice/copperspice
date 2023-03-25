@@ -24,11 +24,11 @@
 #ifndef QSSLKEY_H
 #define QSSLKEY_H
 
-#include <qnamespace.h>
 #include <qbytearray.h>
-#include <qsharedpointer.h>
-#include <qssl.h>
 #include <qcontainerfwd.h>
+#include <qnamespace.h>
+#include <qshareddata.h>
+#include <qssl.h>
 
 #ifdef QT_SSL
 
@@ -38,7 +38,6 @@ class QSslKeyPrivate;
 
 class Q_NETWORK_EXPORT QSslKey
 {
-
  public:
    QSslKey();
    QSslKey(const QByteArray &encoded, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format = QSsl::Pem,
@@ -82,6 +81,7 @@ class Q_NETWORK_EXPORT QSslKey
 
  private:
    QExplicitlySharedDataPointer<QSslKeyPrivate> d;
+
    friend class QSslCertificate;
    friend class QSslSocketBackendPrivate;
 };

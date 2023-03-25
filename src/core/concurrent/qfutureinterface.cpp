@@ -384,7 +384,7 @@ QMutex *QFutureInterfaceBase::mutex() const
    return &d->m_mutex;
 }
 
-QtConcurrent::internal::ExceptionStore &QFutureInterfaceBase::exceptionStore()
+QtConcurrent::cs_internal::ExceptionStore &QFutureInterfaceBase::exceptionStore()
 {
    return d->m_exceptionStore;
 }

@@ -47,23 +47,24 @@
 #define PM_MEASURE(x)
 #define PM_DISPLAY
 
-struct QPainterPathPrivateDeleter {
-   static inline void cleanup(QPainterPathPrivate *d) {
-      // note - we must up-cast to QPainterPathData since QPainterPathPrivate
-      // has a non-virtual destructor!
-      if (d && !d->ref.deref()) {
+namespace cs_internal {
+  void QPainterPathPrivateDeleter::operator()(QPainterPathPrivate *d) const {
+      // need to up-cast to QPainterPathData since QPainterPathPrivate
+      // has a non-virtual destructor
+
+      if (d != nullptr && ! d->ref.deref()) {
          delete static_cast<QPainterPathData *>(d);
       }
    }
-};
+}
 
-// This value is used to determine the length of control point vectors
-// when approximating arc segments as curves. The factor is multiplied
-// with the radius of the circle.
+
+// This value is used to determine the length of control point vectors when approximating
+// arc segments as curves. The factor is multiplied with the radius of the circle.
 
 // #define QPP_DEBUG
 // #define QPP_STROKE_DEBUG
-//#define QPP_FILLPOLYGONS_DEBUG
+// #define QPP_FILLPOLYGONS_DEBUG
 
 QPainterPath qt_stroke_dash(const QPainterPath &path, qreal *dashes, int dashCount);
 
@@ -74,9 +75,11 @@ void qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
       if (startPoint) {
          *startPoint = QPointF();
       }
+
       if (endPoint) {
          *endPoint = QPointF();
       }
+
       return;
    }
 
@@ -87,12 +90,13 @@ void qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
    QPointF *points[2] = { startPoint, endPoint };
 
    for (int i = 0; i < 2; ++i) {
-      if (!points[i]) {
+      if (! points[i]) {
          continue;
       }
 
       qreal theta = angles[i] - 360 * qFloor(angles[i] / 360);
       qreal t = theta / 90;
+
       // truncate
       int quadrant = int(t);
       t -= quadrant;

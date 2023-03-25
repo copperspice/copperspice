@@ -97,7 +97,7 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    QFutureInterfaceBase *futureInterface;
    QThreadPool *threadPool;
    ThreadEngineBarrier barrier;
-   QtConcurrent::internal::ExceptionStore exceptionStore;
+   QtConcurrent::cs_internal::ExceptionStore exceptionStore;
 
  private:
    bool startThreadInternal();

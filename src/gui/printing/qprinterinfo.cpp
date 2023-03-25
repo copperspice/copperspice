@@ -38,15 +38,13 @@ static QPrinterInfoPrivate *shared_null()
    return &retval;
 }
 
-class QPrinterInfoPrivateDeleter
-{
- public:
-   static inline void cleanup(QPrinterInfoPrivate *d) {
+namespace cs_internal {
+   void QPrinterInfoPrivateDeleter::operator()(QPrinterInfoPrivate *d) const {
       if (d != shared_null()) {
          delete d;
       }
    }
-};
+}
 
 QPrinterInfoPrivate::QPrinterInfoPrivate(const QString &id)
 {

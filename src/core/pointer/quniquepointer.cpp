@@ -21,4 +21,4 @@
 *
 ***********************************************************************/
 
-#include <qscopedpointer.h>
+#include <quniquepointer.h>

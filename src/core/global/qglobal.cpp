@@ -116,7 +116,7 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
      return false;
    }
 
-   QScopedArrayPointer<BYTE> versionInfo(new BYTE[size]);
+   QUniqueArrayPointer<BYTE[]> versionInfo(new BYTE[size]);
 
    if (! getFileVersionInfoW(kernel32Dll, handle, size, versionInfo.data())) {
      return false;

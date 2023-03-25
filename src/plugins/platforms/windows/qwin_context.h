@@ -81,7 +81,7 @@ struct QWindowsUser32DLL {
    UpdateLayeredWindowIndirect updateLayeredWindowIndirect;
    IsHungAppWindow isHungAppWindow;
 
-   // Touch functions from Windows 7 onwards (also for use with Q_CC_MSVC).
+   // Touch functions from Windows 7 (also for use with Q_CC_MSVC)
    IsTouchWindow isTouchWindow;
    RegisterTouchWindow registerTouchWindow;
    UnregisterTouchWindow unregisterTouchWindow;

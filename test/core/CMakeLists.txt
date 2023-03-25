@@ -168,7 +168,7 @@ target_sources(CsCoreTest
 
 function_generate_resources(CsCoreTest)
 
-# generate new qrc if required (adds to existinig cusom command)
+# generate new qrc if required (adds to existinig custom command)
 set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qrc_test.cpp)
 
 add_custom_command(

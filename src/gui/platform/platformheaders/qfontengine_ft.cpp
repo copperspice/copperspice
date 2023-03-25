@@ -212,7 +212,9 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
       freetype->ref.ref();
 
    } else {
-      QScopedPointer<QFreetypeFace> newFreetype(new QFreetypeFace);
+      auto FreeTypeDeleter = [](auto ptr){ delete ptr; };
+      QUniquePointer<QFreetypeFace, decltype(FreeTypeDeleter)> newFreetype(new QFreetypeFace, FreeTypeDeleter);
+
       FT_Face face;
 
       if (! face_id.filename.isEmpty()) {
