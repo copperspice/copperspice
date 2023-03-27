@@ -268,32 +268,33 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
    }
 
    if (!data.exists()) {
-     ret = 0;
+     ret   = nullptr;
      errno = ENOENT;
 
    } else {
      ret = (char*)malloc(PATH_MAX + 1);
-     if (realpath(entry.nativeFilePath().constData(), (char*)ret) == 0) {
+     if (realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
          const int savedErrno = errno; // errno is checked below, and free() might change it
          free(ret);
+
          errno = savedErrno;
-         ret = 0;
+         ret   = nullptr;
      }
    }
 
 # else
 
 #if _POSIX_VERSION >= 200801L
-   ret = realpath(entry.nativeFilePath().constData(), (char *)0);
+   ret = realpath(entry.nativeFilePath().constData(), (char *)nullptr);
 
 #else
    ret = (char*)malloc(PATH_MAX + 1);
 
-   if (realpath(entry.nativeFilePath().constData(), (char*)ret) == 0) {
+   if (realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
       const int savedErrno = errno; // errno is checked below, and free() might change it
       free(ret);
       errno = savedErrno;
-      ret = 0;
+      ret = nullptr;
    }
 
 #endif

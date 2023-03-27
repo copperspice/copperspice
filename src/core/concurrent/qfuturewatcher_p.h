@@ -46,7 +46,7 @@ class QFutureWatcherBasePrivate : public QFutureCallOutInterface
    QAtomicInt pendingResultsReady;
    int maximumPendingResultsReady;
 
-   QAtomicInt resultAtConnected;
+   mutable QAtomicInt resultAtConnected;
    bool finished;
 
  protected:

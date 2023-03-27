@@ -696,6 +696,10 @@ void QThreadPrivate::setPriority(QThread::Priority threadPriority)
       param.sched_priority = sched_get_priority_min(sched_policy);
         pthread_setschedparam(from_HANDLE<pthread_t>(data->threadId), sched_policy, &param);
    }
+
+# else
+   (void) status;
+
 # endif
 
 #endif

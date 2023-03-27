@@ -50,14 +50,11 @@ class QXmlSimpleReader;
 
 class QXmlSimpleReaderPrivate;
 class QXmlNamespaceSupportPrivate;
-class QXmlAttributesPrivate;
+
 class QXmlInputSourcePrivate;
 class QXmlParseExceptionPrivate;
 class QXmlLocatorPrivate;
-class QXmlDefaultHandlerPrivate;
 
-
-//
 // SAX Namespace Support
 //
 
@@ -125,8 +122,6 @@ class Q_XML_EXPORT QXmlAttributes
 
    typedef QList<Attribute> AttributeList;
    AttributeList attList;
-
-   QXmlAttributesPrivate *d;
 };
 
 class Q_XML_EXPORT QXmlInputSource
@@ -390,9 +385,6 @@ class Q_XML_EXPORT QXmlDefaultHandler : public QXmlContentHandler, public QXmlEr
    bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) override;
 
    QString errorString() const override;
-
- private:
-   QXmlDefaultHandlerPrivate *d;
 };
 
 inline int QXmlAttributes::count() const

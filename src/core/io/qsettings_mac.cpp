@@ -636,11 +636,6 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
    }
 }
 
-static QCFType<CFURLRef> urlFromFileName(const QString &fileName)
-{
-   return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, QCFString(fileName).toCFStringRef(), kCFURLPOSIXPathStyle, false);
-}
-
 bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSettingsMap *map) const
 {
    QFile file(fileName);

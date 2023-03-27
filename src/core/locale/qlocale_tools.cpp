@@ -1004,8 +1004,8 @@ static Bigint *diff(Bigint *a, Bigint *b)
 
 static double ulp(double x)
 {
-   Long L;
-   double a;
+   qint32 L;
+   double a = 0.00;
 
    L = (getWord0(x) & Exp_mask) - (P - 1) * Exp_msk1;
 
@@ -1040,7 +1040,7 @@ static double b2d(Bigint *a, int *e)
 {
    ULong *xa, *xa0, w, y, z;
    int k;
-   double d;
+   double d = 0.00;
 
    xa0 = a->x;
    xa = xa0 + a->wds;
@@ -1204,7 +1204,9 @@ static Bigint *d2b(double d, int *e, int *bits)
 
 static double ratio(Bigint *a, Bigint *b)
 {
-   double da, db;
+   double da = 0.00;
+   double db = 0.00;
+
    int k, ka, kb;
 
    da = b2d(a, &ka);

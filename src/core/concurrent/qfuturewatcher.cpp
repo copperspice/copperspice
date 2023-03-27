@@ -248,38 +248,31 @@ void QFutureWatcherBase::setPendingResultsLimit(int limit)
    d->maximumPendingResultsReady = limit;
 }
 
-void QFutureWatcherBase::connectNotify(const char *signal)
+void QFutureWatcherBase::connectNotify(const QMetaMethod &signal) const
 {
-   Q_D(QFutureWatcherBase);
+   Q_D(const QFutureWatcherBase);
 
-   const char *resultSignal = "resultReadyAt(int)";
+   static QMetaMethod resultSignal   = QMetaMethod::fromSignal(&QFutureWatcherBase::resultReadyAt);
+   static QMetaMethod finishedSignal = QMetaMethod::fromSignal(&QFutureWatcherBase::finished);
 
-   if (qstrcmp(signal, resultSignal) == 0) {
+   if (signal == resultSignal) {
       d->resultAtConnected.ref();
    }
 
-#ifndef QT_NO_DEBUG
-   const char *finishedSignal = "finished()";
-
-   if (qstrcmp(signal, finishedSignal) == 0) {
+   if (signal == finishedSignal) {
       if (futureInterface().isRunning()) {
-         //connections should be established before calling stFuture to avoid race.
-         // (The future could finish before the connection is made.)
-         qWarning("QFutureWatcher::connect: connecting after calling setFuture() is likely to produce race");
+         qWarning("QFutureWatcher::connect: Connecting after calling setFuture() is likely to produce a race condition");
       }
    }
-
-#endif
-
 }
 
-void QFutureWatcherBase::disconnectNotify(const char *signal)
+void QFutureWatcherBase::disconnectNotify(const QMetaMethod &signal) const
 {
-   Q_D(QFutureWatcherBase);
+   Q_D(const QFutureWatcherBase);
 
-   const char *resultSignal = "resultReadyAt(int)";
+   static QMetaMethod resultSignal = QMetaMethod::fromSignal(&QFutureWatcherBase::resultReadyAt);
 
-   if (qstrcmp(signal, resultSignal) == 0) {
+   if (signal == resultSignal) {
       d->resultAtConnected.deref();
    }
 }
