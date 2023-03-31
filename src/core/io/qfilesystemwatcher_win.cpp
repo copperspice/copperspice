@@ -114,6 +114,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       QWindowsFileSystemWatcherEngineThread *thread = nullptr;
       QWindowsFileSystemWatcherEngine::Handle handle;
       QList<QWindowsFileSystemWatcherEngineThread *>::const_iterator jt, end;
+
       end = threads.constEnd();
 
       for (jt = threads.constBegin(); jt != end; ++jt) {
@@ -121,20 +122,23 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          QMutexLocker locker(&(thread->mutex));
 
          handle = thread->handleForDir.value(absolutePath);
+
          if (handle.handle != INVALID_HANDLE_VALUE && handle.flags == flags) {
-            // found a thread now insert...
-            // qDebug()<<"  Found a thread"<<thread;
+            // found a thread now insert
 
             QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> &h
                = thread->pathInfoForHandle[handle.handle];
-            if (!h.contains(fileInfo.absoluteFilePath())) {
+
+            if (! h.contains(fileInfo.absoluteFilePath())) {
                thread->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
+
                if (isDir) {
                   directories->append(path);
                } else {
                   files->append(path);
                }
             }
+
             it.remove();
             thread->wakeup();
             break;

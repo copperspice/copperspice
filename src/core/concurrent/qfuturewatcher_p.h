@@ -31,8 +31,6 @@ class QFutureWatcherBase;
 
 class QFutureWatcherBasePrivate : public QFutureCallOutInterface
 {
-   Q_DECLARE_PUBLIC(QFutureWatcherBase)
-
  public:
    QFutureWatcherBasePrivate();
    virtual ~QFutureWatcherBasePrivate() {}
@@ -52,6 +50,7 @@ class QFutureWatcherBasePrivate : public QFutureCallOutInterface
  protected:
    QFutureWatcherBase *q_ptr;
 
+   Q_DECLARE_PUBLIC(QFutureWatcherBase)
 };
 
 #endif

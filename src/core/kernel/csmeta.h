@@ -158,26 +158,26 @@ class Q_CORE_EXPORT QMetaMethod
    QString m_tag;
    const CSBentoAbstract *m_bento;
 
-   friend bool operator==(const QMetaMethod &m1, const QMetaMethod &m2);
-   friend bool operator!=(const QMetaMethod &m1, const QMetaMethod &m2);
+   friend bool operator==(const QMetaMethod &method1, const QMetaMethod &method2);
+   friend bool operator!=(const QMetaMethod &method1, const QMetaMethod &method2);
 };
 
-inline bool operator==(const QMetaMethod &m1, const QMetaMethod &m2)
+inline bool operator==(const QMetaMethod &method1, const QMetaMethod &method2)
 {
-   if (m1.m_metaObject != m2.m_metaObject)  {
+   if (method1.m_metaObject != method2.m_metaObject)  {
       return false;
    }
 
-   if (m1.m_signature != m2.m_signature) {
+   if (method1.m_signature != method2.m_signature) {
       return false;
    }
 
    return true;
 }
 
-inline bool operator!=(const QMetaMethod &m1, const QMetaMethod &m2)
+inline bool operator!=(const QMetaMethod &method1, const QMetaMethod &method2)
 {
-   return !(m1 == m2);
+   return !(method1 == method2);
 }
 
 class Q_CORE_EXPORT QMetaProperty

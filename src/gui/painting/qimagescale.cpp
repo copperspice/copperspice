@@ -29,7 +29,6 @@
  * (C) Daniel M. Duley.
 */
 
-
 #include <qimagescale_p.h>
 #include <qdrawhelper_p.h>
 #include <qimage.h>
@@ -221,16 +220,21 @@ static void qt_qimageScaleAARGBA_down_xy(QImageScaleInfo *isi, unsigned int *des
    int dw, int dh, int dow, int sow);
 
 #if defined(QT_COMPILER_SUPPORTS_SSE4_1)
+
 template<bool RGB>
 void qt_qimageScaleAARGBA_up_x_down_y_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
+
 template<bool RGB>
 void qt_qimageScaleAARGBA_down_x_up_y_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
+
 template<bool RGB>
 void qt_qimageScaleAARGBA_down_xy_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
+
 #endif
+
 static void qt_qimageScaleAARGBA_up_xy(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow)
 {
@@ -241,7 +245,7 @@ static void qt_qimageScaleAARGBA_up_xy(QImageScaleInfo *isi, unsigned int *dest,
 
    /* go through every scanline in the output buffer */
    for (int y = 0; y < dh; y++) {
-      /* calculate the source line we'll scan from */
+      /* calculate the source line scan from */
       const unsigned int *sptr = ypoints[y];
       unsigned int *dptr = dest + (y * dow);
       const int yap = yapoints[y];
@@ -270,6 +274,7 @@ static void qt_qimageScaleAARGBA_up_xy(QImageScaleInfo *isi, unsigned int *dest,
       }
    }
 }
+
 /* scale by area sampling */
 static void qt_qimageScaleAARGBA(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow)
@@ -279,7 +284,7 @@ static void qt_qimageScaleAARGBA(QImageScaleInfo *isi, unsigned int *dest,
       qt_qimageScaleAARGBA_up_xy(isi, dest, dw, dh, dow, sow);
    }
 
-   /* if we're scaling down vertically */
+   // if we are scaling down vertically
    else if (isi->xup_yup == 1) {
 
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
@@ -291,8 +296,9 @@ static void qt_qimageScaleAARGBA(QImageScaleInfo *isi, unsigned int *dest,
          qt_qimageScaleAARGBA_up_x_down_y(isi, dest, dw, dh, dow, sow);
    }
 
-   /* if we're scaling down horizontally */
+   // if we are scaling down horizontally
    else if (isi->xup_yup == 2) {
+
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
       if (qCpuHasFeature(SSE4_1)) {
          qt_qimageScaleAARGBA_down_x_up_y_sse4<false>(isi, dest, dw, dh, dow, sow);
@@ -301,8 +307,9 @@ static void qt_qimageScaleAARGBA(QImageScaleInfo *isi, unsigned int *dest,
          qt_qimageScaleAARGBA_down_x_up_y(isi, dest, dw, dh, dow, sow);
    }
 
-   /* if we're scaling down horizontally & vertically */
+   // if we are scaling down horizontally & vertically
    else {
+
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
       if (qCpuHasFeature(SSE4_1)) {
          qt_qimageScaleAARGBA_down_xy_sse4<false>(isi, dest, dw, dh, dow, sow);
@@ -320,6 +327,7 @@ static inline void qt_qimageScaleAARGBA_helper(const unsigned int *pix, int xyap
    b = qBlue(*pix)  * xyap;
    a = qAlpha(*pix) * xyap;
    int j;
+
    for (j = (1 << 14) - xyap; j > Cxy; j -= Cxy) {
       pix += step;
       r += qRed(*pix)   * Cxy;
@@ -327,6 +335,7 @@ static inline void qt_qimageScaleAARGBA_helper(const unsigned int *pix, int xyap
       b += qBlue(*pix)  * Cxy;
       a += qAlpha(*pix) * Cxy;
    }
+
    pix += step;
    r += qRed(*pix)   * j;
    g += qGreen(*pix) * j;
@@ -477,8 +486,10 @@ static void qt_qimageScaleAARGB(QImageScaleInfo *isi, unsigned int *dest,
    if (isi->xup_yup == 3) {
       qt_qimageScaleAARGBA_up_xy(isi, dest, dw, dh, dow, sow);
    }
-   /* if we're scaling down vertically */
+
+   // if we are scaling down vertically
    else if (isi->xup_yup == 1) {
+
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
       if (qCpuHasFeature(SSE4_1)) {
          qt_qimageScaleAARGBA_up_x_down_y_sse4<true>(isi, dest, dw, dh, dow, sow);
@@ -486,8 +497,10 @@ static void qt_qimageScaleAARGB(QImageScaleInfo *isi, unsigned int *dest,
 #endif
          qt_qimageScaleAARGB_up_x_down_y(isi, dest, dw, dh, dow, sow);
    }
-   /* if we're scaling down horizontally */
+
+   // if we are scaling down horizontally
    else if (isi->xup_yup == 2) {
+
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
       if (qCpuHasFeature(SSE4_1)) {
          qt_qimageScaleAARGBA_down_x_up_y_sse4<true>(isi, dest, dw, dh, dow, sow);
@@ -495,8 +508,10 @@ static void qt_qimageScaleAARGB(QImageScaleInfo *isi, unsigned int *dest,
 #endif
          qt_qimageScaleAARGB_down_x_up_y(isi, dest, dw, dh, dow, sow);
    }
-   /* if we're scaling down horizontally & vertically */
+
+   // if we are scaling down horizontally & vertically
    else {
+
 #ifdef QT_COMPILER_SUPPORTS_SSE4_1
       if (qCpuHasFeature(SSE4_1)) {
          qt_qimageScaleAARGBA_down_xy_sse4<true>(isi, dest, dw, dh, dow, sow);

@@ -2671,10 +2671,7 @@ static void CreateETandAET(int count, const QPoint *pts,
    EdgeTable *ET, EdgeTableEntry *AET, EdgeTableEntry *pETEs,
    ScanLineListBlock *pSLLBlock)
 {
-   const QPoint *top,
-         *bottom,
-         *PrevPt,
-         *CurrPt;
+   const QPoint *top, *bottom, *PrevPt, *CurrPt;
    int iSLLBlock = 0;
    int dy;
 
@@ -3100,14 +3097,14 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    pSLL = ET.scanlines.next;
    curPtBlock = &FirstPtBlock;
 
-   // sanity check that the region won't become too big...
+   // sanity check that the region will not become too big
    if (ET.ymax - ET.ymin > 100000) {
 
-      // clean up region ptr
 #ifndef QT_NO_DEBUG
-      qWarning("QRegion: creating region from big polygon failed...!");
+      qWarning("QRegion: Creating a region from big polygon failed");
 #endif
 
+      // clean up region ptr
       delete AET;
       delete region;
       return nullptr;

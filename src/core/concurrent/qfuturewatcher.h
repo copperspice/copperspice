@@ -57,7 +57,6 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 
    bool event(QEvent *event) override;
 
- public:
    CORE_CS_SIGNAL_1(Public, void started())
    CORE_CS_SIGNAL_2(started)
    CORE_CS_SIGNAL_1(Public, void finished())

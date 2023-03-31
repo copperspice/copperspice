@@ -48,48 +48,78 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
     // However, disable it on some systems where DSA is known to be unreliable.
     bool allowDSA = true;
     const char *renderer = reinterpret_cast<const char *>(context->functions()->glGetString(GL_RENDERER));
+
     // QTBUG-40653, QTBUG-44988
     if (renderer && strstr(renderer, "AMD Radeon HD"))
         allowDSA = false;
 
-    if (allowDSA && !context->isOpenGLES()
-        && context->hasExtension("GL_EXT_direct_state_access")) {
-        TextureParameteriEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLenum , GLint )>(context->getProcAddress("glTextureParameteriEXT"));
-        TextureParameterivEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLenum , const GLint *)>(context->getProcAddress("glTextureParameterivEXT"));
-        TextureParameterfEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLenum , GLfloat )>(context->getProcAddress("glTextureParameterfEXT"));
-        TextureParameterfvEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLenum , const GLfloat *)>(context->getProcAddress("glTextureParameterfvEXT"));
+    if (allowDSA && ! context->isOpenGLES() && context->hasExtension("GL_EXT_direct_state_access")) {
+        TextureParameteriEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLenum,
+              GLint )>(context->getProcAddress("glTextureParameteriEXT"));
 
-        GenerateTextureMipmapEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum )>(context->getProcAddress("glGenerateTextureMipmapEXT"));
-        TextureStorage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLsizei )>(context->getProcAddress("glTextureStorage3DEXT"));
+        TextureParameterivEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLenum,
+              const GLint *)>(context->getProcAddress("glTextureParameterivEXT"));
 
-        TextureStorage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei )>(context->getProcAddress("glTextureStorage2DEXT"));
-        TextureStorage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLenum , GLsizei )>(context->getProcAddress("glTextureStorage1DEXT"));
-        TextureStorage3DMultisampleEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLsizei , GLboolean )>(context->getProcAddress("glTextureStorage3DMultisampleEXT"));
-        TextureStorage2DMultisampleEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLenum , GLsizei , GLsizei , GLboolean )>(context->getProcAddress("glTextureStorage2DMultisampleEXT"));
+        TextureParameterfEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLenum,
+              GLfloat )>(context->getProcAddress("glTextureParameterfEXT"));
 
-        TextureImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureImage3DEXT"));
-        TextureImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureImage2DEXT"));
+        TextureParameterfvEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLenum,
+              const GLfloat *)>(context->getProcAddress("glTextureParameterfvEXT"));
 
-        TextureImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureImage1DEXT"));
+        GenerateTextureMipmapEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint,
+              GLenum )>(context->getProcAddress("glGenerateTextureMipmapEXT"));
 
-        TextureSubImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureSubImage3DEXT"));
+        TextureStorage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei,
+              GLenum, GLsizei, GLsizei, GLsizei )>(context->getProcAddress("glTextureStorage3DEXT"));
 
-        TextureSubImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureSubImage2DEXT"));
+        TextureStorage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei,
+              GLenum, GLsizei, GLsizei )>(context->getProcAddress("glTextureStorage2DEXT"));
 
-        TextureSubImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTextureSubImage1DEXT"));
+        TextureStorage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei,
+              GLenum, GLsizei )>(context->getProcAddress("glTextureStorage1DEXT"));
 
-        CompressedTextureSubImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLsizei , GLenum , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage1DEXT"));
+        TextureStorage3DMultisampleEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei, GLenum,
+              GLsizei, GLsizei, GLsizei, GLboolean )>(context->getProcAddress("glTextureStorage3DMultisampleEXT"));
 
-        CompressedTextureSubImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage2DEXT"));
+        TextureStorage2DMultisampleEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei,
+              GLenum, GLsizei, GLsizei, GLboolean )>(context->getProcAddress("glTextureStorage2DMultisampleEXT"));
 
-        CompressedTextureSubImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLint , GLint , GLint , GLsizei , GLsizei , GLsizei , GLenum , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage3DEXT"));
+        TextureImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLenum, GLsizei,
+               GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureImage3DEXT"));
 
-        CompressedTextureImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLint , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureImage1DEXT"));
+        TextureImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLenum, GLsizei,
+               GLsizei, GLint, GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureImage2DEXT"));
 
-        CompressedTextureImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureImage2DEXT"));
+        TextureImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLenum, GLsizei,
+               GLint, GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureImage1DEXT"));
 
-        CompressedTextureImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum , GLsizei , GLsizei , GLsizei , GLint , GLsizei , const GLvoid *)>(context->getProcAddress("glCompressedTextureImage3DEXT"));
+        TextureSubImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint, GLint, GLint,
+               GLsizei, GLsizei, GLsizei, GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureSubImage3DEXT"));
 
+        TextureSubImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint, GLint,
+               GLsizei, GLsizei, GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureSubImage2DEXT"));
+
+        TextureSubImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint, GLsizei,
+               GLenum, GLenum, const GLvoid *)>(context->getProcAddress("glTextureSubImage1DEXT"));
+
+        CompressedTextureSubImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint,
+               GLsizei, GLenum, GLsizei, const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage1DEXT"));
+
+        CompressedTextureSubImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint,
+               GLint, GLsizei, GLsizei, GLenum, GLsizei, const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage2DEXT"));
+
+        CompressedTextureSubImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLint,
+               GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLsizei,
+               const GLvoid *)>(context->getProcAddress("glCompressedTextureSubImage3DEXT"));
+
+        CompressedTextureImage1DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLenum,
+               GLsizei, GLint, GLsizei, const GLvoid *)>(context->getProcAddress("glCompressedTextureImage1DEXT"));
+
+        CompressedTextureImage2DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLint , GLenum,
+               GLsizei, GLsizei, GLint, GLsizei, const GLvoid *)>(context->getProcAddress("glCompressedTextureImage2DEXT"));
+
+        CompressedTextureImage3DEXT = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLint, GLenum,
+               GLsizei, GLsizei, GLsizei, GLint, GLsizei, const GLvoid *)>(context->getProcAddress("glCompressedTextureImage3DEXT"));
 
         // Use the real DSA functions
         TextureParameteri = &QOpenGLTextureHelper::dsa_TextureParameteri;
@@ -141,15 +171,18 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
     }
 
     // Some DSA functions are part of NV_texture_multisample instead
-    if (!context->isOpenGLES()
+    if (! context->isOpenGLES()
         && context->hasExtension("GL_NV_texture_multisample")) {
 
-        TextureImage3DMultisampleNV = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLint , GLsizei , GLsizei , GLsizei , GLboolean )>(context->getProcAddress("glTextureImage3DMultisampleNV"));
+        TextureImage3DMultisampleNV = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei, GLint,
+              GLsizei, GLsizei, GLsizei, GLboolean )>(context->getProcAddress("glTextureImage3DMultisampleNV"));
 
-        TextureImage2DMultisampleNV = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint , GLenum , GLsizei , GLint , GLsizei , GLsizei , GLboolean )>(context->getProcAddress("glTextureImage2DMultisampleNV"));
+        TextureImage2DMultisampleNV = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLuint, GLenum, GLsizei, GLint,
+              GLsizei, GLsizei, GLboolean )>(context->getProcAddress("glTextureImage2DMultisampleNV"));
 
         TextureImage3DMultisample = &QOpenGLTextureHelper::dsa_TextureImage3DMultisample;
         TextureImage2DMultisample = &QOpenGLTextureHelper::dsa_TextureImage2DMultisample;
+
     } else {
         TextureImage3DMultisample = &QOpenGLTextureHelper::qt_TextureImage3DMultisample;
         TextureImage2DMultisample = &QOpenGLTextureHelper::qt_TextureImage2DMultisample;
@@ -158,10 +191,12 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
     // wglGetProcAddress should not be used to (and indeed will not) load OpenGL <= 1.1 functions.
     // Hence, we resolve them "the hard way"
 
-#if defined(Q_OS_WIN) && !defined(QT_OPENGL_ES_2)
+#if defined(Q_OS_WIN) && ! defined(QT_OPENGL_ES_2)
     HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-    if (!handle)
+
+    if (! handle) {
         handle = GetModuleHandleA("opengl32.dll");
+    }
 
     // OpenGL 1.0
     GetIntegerv = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum, GLint *)>(GetProcAddress(handle, "glGetIntegerv"));
@@ -219,7 +254,10 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
     GetTexParameteriv = ::glGetTexParameteriv;
     GetTexParameterfv = ::glGetTexParameterfv;
     GetTexImage = 0;
-    TexImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLsizei , GLint , GLenum , GLenum , const GLvoid *)>(::glTexImage2D);
+
+    TexImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum, GLint, GLint, GLsizei, GLsizei,
+           GLint, GLenum, GLenum, const GLvoid *)>(::glTexImage2D);
+
     TexImage1D = 0;
     TexParameteriv = ::glTexParameteriv;
     TexParameteri = ::glTexParameteri;

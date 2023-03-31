@@ -6099,9 +6099,7 @@ static void qt_gradient_quint16(int count, const QSpan *spans, void *userData)
 }
 
 static inline void qt_bitmapblit_argb32(QRasterBuffer *rasterBuffer,
-   int x, int y, const QRgba64 &color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride)
+   int x, int y, const QRgba64 &color, const uchar *map, int mapWidth, int mapHeight, int mapStride)
 {
    qt_bitmapblit_template<quint32>(rasterBuffer, x,  y, color.toArgb32(),
       map, mapWidth, mapHeight, mapStride);
@@ -6118,28 +6116,22 @@ static inline void qt_bitmapblit_rgba8888(QRasterBuffer *rasterBuffer,
 
 template<QtPixelOrder PixelOrder>
 static void qt_bitmapblit_rgb30(QRasterBuffer *rasterBuffer,
-   int x, int y, const QRgba64 &color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride)
+   int x, int y, const QRgba64 &color, const uchar *map, int mapWidth, int mapHeight, int mapStride)
 {
    qt_bitmapblit_template<quint32>(rasterBuffer, x, y, qConvertRgb64ToRgb30<PixelOrder>(color),
       map, mapWidth, mapHeight, mapStride);
 }
 
 static inline void qt_bitmapblit_quint16(QRasterBuffer *rasterBuffer,
-   int x, int y, const QRgba64 &color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride)
+   int x, int y, const QRgba64 &color, const uchar *map, int mapWidth, int mapHeight, int mapStride)
 {
    qt_bitmapblit_template<quint16>(rasterBuffer, x,  y, color.toRgb16(),
       map, mapWidth, mapHeight, mapStride);
 }
 
 static void qt_alphamapblit_quint16(QRasterBuffer *rasterBuffer,
-   int x, int y, const QRgba64 &color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride,
-   const QClipData *)
+   int x, int y, const QRgba64 &color, const uchar *map, int mapWidth,
+   int mapHeight, int mapStride, const QClipData *)
 {
    const quint16 c = color.toRgb16();
    quint16 *dest = reinterpret_cast<quint16 *>(rasterBuffer->scanLine(y)) + x;
@@ -6164,7 +6156,8 @@ static void qt_alphamapblit_quint16(QRasterBuffer *rasterBuffer,
    }
 }
 
-static inline void rgbBlendPixel(quint32 *dst, int coverage, int sr, int sg, int sb, const uchar *gamma, const uchar *invgamma)
+static inline void rgbBlendPixel(quint32 *dst, int coverage, int sr, int sg, int sb,
+      const uchar *gamma, const uchar *invgamma)
 {
    // Do a gray alphablend...
    int da = qAlpha(*dst);
@@ -6214,7 +6207,8 @@ static inline void rgbBlendPixel(quint32 *dst, int coverage, int sr, int sg, int
 #if defined(Q_OS_WIN)
 Q_GUI_EXPORT bool qt_needs_a8_gamma_correction = false;
 
-static inline void grayBlendPixel(quint32 *dst, int coverage, int sr, int sg, int sb, const uint *gamma, const uchar *invgamma)
+static inline void grayBlendPixel(quint32 *dst, int coverage, int sr, int sg, int sb,
+      const uint *gamma, const uchar *invgamma)
 {
    // Do a gammacorrected gray alphablend...
    int dr = qRed(*dst);
@@ -6240,9 +6234,7 @@ static inline void grayBlendPixel(quint32 *dst, int coverage, int sr, int sg, in
 #endif
 
 static void qt_alphamapblit_uint32(QRasterBuffer *rasterBuffer,
-   int x, int y, quint32 color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride,
+   int x, int y, quint32 color, const uchar *map, int mapWidth, int mapHeight, int mapStride,
    const QClipData *clip)
 {
    const quint32 c = color;
@@ -6293,6 +6285,7 @@ static void qt_alphamapblit_uint32(QRasterBuffer *rasterBuffer,
          dest += destStride;
          map += mapStride;
       }
+
    } else {
       int bottom = qMin(y + mapHeight, rasterBuffer->height());
 

@@ -235,11 +235,6 @@ struct QtFontStyle {
       {
       }
 
-
-      uint style         : 2;
-      signed int weight  : 8;
-      signed int stretch : 12;
-
       bool operator==(const Key &other) const {
          return (style == other.style && weight == other.weight &&
                   (stretch == 0 || other.stretch == 0 || stretch == other.stretch));
@@ -255,6 +250,10 @@ struct QtFontStyle {
 
          return (x < y);
       }
+
+      uint style         : 2;
+      signed int weight  : 8;
+      signed int stretch : 12;
    };
 
    explicit QtFontStyle(const Key &k)

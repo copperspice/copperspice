@@ -30,16 +30,15 @@ class QAbstractNativeEventFilterPrivate;
 
 class Q_CORE_EXPORT QAbstractNativeEventFilter
 {
-   public:
-      QAbstractNativeEventFilter();
+ public:
+   QAbstractNativeEventFilter();
 
-      QAbstractNativeEventFilter(const QAbstractNativeEventFilter &) = delete;
-      QAbstractNativeEventFilter &operator=(const QAbstractNativeEventFilter &) = delete;
+   QAbstractNativeEventFilter(const QAbstractNativeEventFilter &) = delete;
+   QAbstractNativeEventFilter &operator=(const QAbstractNativeEventFilter &) = delete;
 
-      virtual ~QAbstractNativeEventFilter();
+   virtual ~QAbstractNativeEventFilter();
 
-      virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) = 0;
-
+   virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) = 0;
 };
 
 #endif

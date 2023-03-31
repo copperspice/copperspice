@@ -27,7 +27,6 @@
 #include <qutfcodec_p.h>
 #include <qtools_p.h>
 
-// ### move to qurl_p.h
 enum EncodingAction {
    DecodeCharacter = 0,
    LeaveCharacter  = 1,
@@ -95,7 +94,7 @@ static const uchar defaultActionTable[96] = {
 
 // mask tables, in negative polarity
 // 0x00 if it belongs to this category
-// 0xff if it doesn't
+// 0xff if it does not
 
 static const uchar reservedMask[96] = {
    0xff, // space

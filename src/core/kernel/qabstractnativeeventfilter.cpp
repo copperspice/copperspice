@@ -21,20 +21,20 @@
 *
 ***********************************************************************/
 
-#include "qabstractnativeeventfilter.h"
-#include "qabstracteventdispatcher.h"
+#include <qabstractnativeeventfilter.h>
+#include <qabstracteventdispatcher.h>
 
 QAbstractNativeEventFilter::QAbstractNativeEventFilter()
 {
-
 }
-
 
 QAbstractNativeEventFilter::~QAbstractNativeEventFilter()
 {
-    QAbstractEventDispatcher *eventDispatcher = QAbstractEventDispatcher::instance();
-    if (eventDispatcher)
-        eventDispatcher->removeNativeEventFilter(this);
+   QAbstractEventDispatcher *eventDispatcher = QAbstractEventDispatcher::instance();
+
+   if (eventDispatcher) {
+      eventDispatcher->removeNativeEventFilter(this);
+   }
 }
 
 

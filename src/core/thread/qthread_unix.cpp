@@ -686,13 +686,15 @@ void QThreadPrivate::setPriority(QThread::Priority threadPriority)
    }
 
    param.sched_priority = prio;
-    int status = pthread_setschedparam(from_HANDLE<pthread_t>(data->threadId), sched_policy, &param);
+   int status = pthread_setschedparam(from_HANDLE<pthread_t>(data->threadId), sched_policy, &param);
 
 # ifdef SCHED_IDLE
-   // were we trying to set to idle priority and failed?
+   // trying to set to idle priority and failed?
+
    if (status == -1 && sched_policy == SCHED_IDLE && errno == EINVAL) {
       // reset to lowest priority possible
-        pthread_getschedparam(from_HANDLE<pthread_t>(data->threadId), &sched_policy, &param);
+      pthread_getschedparam(from_HANDLE<pthread_t>(data->threadId), &sched_policy, &param);
+
       param.sched_priority = sched_get_priority_min(sched_policy);
         pthread_setschedparam(from_HANDLE<pthread_t>(data->threadId), sched_policy, &param);
    }

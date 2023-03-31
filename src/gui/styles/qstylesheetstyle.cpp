@@ -3018,7 +3018,8 @@ static inline bool verticalTabs(QTabBar::Shape shape)
       || shape == QTabBar::TriangularWest
       || shape == QTabBar::TriangularEast;
 }
-#endif // QT_NO_TABBAR
+
+#endif
 
 void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
    const QWidget *w) const

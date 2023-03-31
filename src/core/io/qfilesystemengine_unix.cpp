@@ -29,14 +29,13 @@
 #include <qfileinfo.h>
 #include <qvarlengtharray.h>
 
-// for realpath()
+#include <stdio.h>
 #include <stdlib.h>
 
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
 
 #ifdef Q_OS_DARWIN
 #include <qcore_mac_p.h>
@@ -47,6 +46,7 @@
 
 #else
 #include <MobileCoreServices/MobileCoreServices.h>
+
 #endif
 
 // unable to include <Foundation/Foundation.h> (it is an Objective-C header), but we need these declarations:
@@ -126,7 +126,6 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
 }
 #endif  // Q_OS_DARWIN
 
-//static
 QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data)
 {
 
@@ -237,7 +236,6 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
    return QFileSystemEntry();
 }
 
-//static
 QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry, QFileSystemMetaData &data)
 {
    if (entry.isEmpty() || entry.isRoot()) {
@@ -267,7 +265,7 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
      fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute);
    }
 
-   if (!data.exists()) {
+   if (! data.exists()) {
      ret   = nullptr;
      errno = ENOENT;
 
@@ -315,12 +313,12 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
       data.entryFlags &= ~(QFileSystemMetaData::ExistsAttribute);
       return QFileSystemEntry();
    }
+
    return entry;
 #endif
 
 }
 
-//static
 QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
 {
    if (entry.isAbsolute() && entry.isClean()) {
@@ -336,7 +334,7 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
    }
 
    if (! orig.isEmpty() && ! (orig.length() == 1 && orig[0] == '.')) {
-      if (!result.isEmpty() && ! result.endsWith('/')) {
+      if (! result.isEmpty() && ! result.endsWith('/')) {
          result.append('/');
       }
 
@@ -363,7 +361,6 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
    return QFileSystemEntry(stringVersion);
 }
 
-//static
 QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
    struct stat statResult;
@@ -380,7 +377,6 @@ QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
    return result;
 }
 
-//static
 QString QFileSystemEngine::resolveUserName(uint userId)
 {
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && ! defined(Q_OS_OPENBSD)
@@ -408,7 +404,6 @@ QString QFileSystemEngine::resolveUserName(uint userId)
    return QString();
 }
 
-//static
 QString QFileSystemEngine::resolveGroupName(uint groupId)
 {
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
@@ -439,6 +434,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
          break;
       }
    }
+
 #else
    gr = getgrgid(groupId);
 #endif
@@ -469,7 +465,6 @@ QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 }
 #endif
 
-//static
 bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data,
                                      QFileSystemMetaData::MetaDataFlags what)
 {
@@ -543,7 +538,6 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
    }
 
 #ifdef Q_OS_DARWIN
-
     if (what & QFileSystemMetaData::AliasType) {
         if (entryExists && hasResourcePropertyFlag(data, entry, kCFURLIsAliasFileKey)) {
             data.entryFlags |= QFileSystemMetaData::AliasType;
@@ -654,7 +648,6 @@ static bool createDirectoryWithParents(const QByteArray &nativeName, bool should
    return errno == EEXIST && pathIsDir(nativeName);
 }
 
-//static
 bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool createParents)
 {
    QString dirName = entry.filePath();
@@ -692,7 +685,6 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
     return createDirectoryWithParents(nativeName, pathChanged);
 }
 
-//static
 bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool removeEmptyParents)
 {
    if (removeEmptyParents) {
@@ -721,7 +713,6 @@ bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool remo
    return rmdir(QFile::encodeName(entry.filePath()).constData()) == 0;
 }
 
-//static
 bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    if (::symlink(source.nativeFilePath().constData(), target.nativeFilePath().constData()) == 0) {
@@ -732,7 +723,6 @@ bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSy
    return false;
 }
 
-//static
 bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    Q_UNUSED(source);
@@ -741,7 +731,6 @@ bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSyst
    return false;
 }
 
-//static
 bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    if (::rename(source.nativeFilePath().constData(), target.nativeFilePath().constData()) == 0) {
@@ -751,7 +740,6 @@ bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSy
    return false;
 }
 
-//static
 bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &error)
 {
    if (unlink(entry.nativeFilePath().constData()) == 0) {
@@ -762,9 +750,8 @@ bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &
 
 }
 
-//static
 bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
-                                       QSystemError &error, QFileSystemMetaData *data)
+         QSystemError &error, QFileSystemMetaData *data)
 {
    mode_t mode = 0;
    if (permissions & (QFile::ReadOwner | QFile::ReadUser)) {

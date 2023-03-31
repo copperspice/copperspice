@@ -174,7 +174,8 @@
 #define GL_STACK_UNDERFLOW                0x0504
 #endif
 
-typedef void (QOPENGLF_APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const GLvoid *userParam);
+typedef void (QOPENGLF_APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,
+   GLsizei length,const GLchar *message,const GLvoid *userParam);
 
 #endif /* USE_MANUAL_DEFS */
 
@@ -191,272 +192,294 @@ cs_bitCast(const U &input) noexcept
    return retval;
 }
 
-/*!
-    \internal
-*/
 static QOpenGLDebugMessage::Source qt_messageSourceFromGL(GLenum source)
 {
-    switch (source) {
-    case GL_DEBUG_SOURCE_API:
-        return QOpenGLDebugMessage::APISource;
-    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-        return QOpenGLDebugMessage::WindowSystemSource;
-    case GL_DEBUG_SOURCE_SHADER_COMPILER:
-        return QOpenGLDebugMessage::ShaderCompilerSource;
-    case GL_DEBUG_SOURCE_THIRD_PARTY:
-        return QOpenGLDebugMessage::ThirdPartySource;
-    case GL_DEBUG_SOURCE_APPLICATION:
-        return QOpenGLDebugMessage::ApplicationSource;
-    case GL_DEBUG_SOURCE_OTHER:
-        return QOpenGLDebugMessage::OtherSource;
+   switch (source) {
+      case GL_DEBUG_SOURCE_API:
+         return QOpenGLDebugMessage::APISource;
+
+      case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+         return QOpenGLDebugMessage::WindowSystemSource;
+
+      case GL_DEBUG_SOURCE_SHADER_COMPILER:
+         return QOpenGLDebugMessage::ShaderCompilerSource;
+
+      case GL_DEBUG_SOURCE_THIRD_PARTY:
+          return QOpenGLDebugMessage::ThirdPartySource;
+
+      case GL_DEBUG_SOURCE_APPLICATION:
+         return QOpenGLDebugMessage::ApplicationSource;
+
+      case GL_DEBUG_SOURCE_OTHER:
+         return QOpenGLDebugMessage::OtherSource;
     }
 
     Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message source from GL");
+
     return QOpenGLDebugMessage::OtherSource;
 }
 
-/*!
-    \internal
-*/
 static GLenum qt_messageSourceToGL(QOpenGLDebugMessage::Source source)
 {
-    switch (source) {
-    case QOpenGLDebugMessage::InvalidSource:
-        break;
-    case QOpenGLDebugMessage::APISource:
-        return GL_DEBUG_SOURCE_API;
-    case QOpenGLDebugMessage::WindowSystemSource:
-        return GL_DEBUG_SOURCE_WINDOW_SYSTEM;
-    case QOpenGLDebugMessage::ShaderCompilerSource:
-        return GL_DEBUG_SOURCE_SHADER_COMPILER;
-    case QOpenGLDebugMessage::ThirdPartySource:
-        return GL_DEBUG_SOURCE_THIRD_PARTY;
-    case QOpenGLDebugMessage::ApplicationSource:
-        return GL_DEBUG_SOURCE_APPLICATION;
-    case QOpenGLDebugMessage::OtherSource:
-        return GL_DEBUG_SOURCE_OTHER;
-    case QOpenGLDebugMessage::AnySource:
-        break;
-    }
+   switch (source) {
+      case QOpenGLDebugMessage::InvalidSource:
+         break;
+
+      case QOpenGLDebugMessage::APISource:
+         return GL_DEBUG_SOURCE_API;
+
+      case QOpenGLDebugMessage::WindowSystemSource:
+         return GL_DEBUG_SOURCE_WINDOW_SYSTEM;
+
+      case QOpenGLDebugMessage::ShaderCompilerSource:
+         return GL_DEBUG_SOURCE_SHADER_COMPILER;
+
+      case QOpenGLDebugMessage::ThirdPartySource:
+         return GL_DEBUG_SOURCE_THIRD_PARTY;
+
+      case QOpenGLDebugMessage::ApplicationSource:
+         return GL_DEBUG_SOURCE_APPLICATION;
+
+      case QOpenGLDebugMessage::OtherSource:
+         return GL_DEBUG_SOURCE_OTHER;
+
+      case QOpenGLDebugMessage::AnySource:
+         break;
+   }
 
     Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message source");
     return GL_DEBUG_SOURCE_OTHER;
 }
 
-/*!
-    \internal
-*/
 static QString qt_messageSourceToString(QOpenGLDebugMessage::Source source)
 {
-    switch (source) {
-       case QOpenGLDebugMessage::InvalidSource:
-           return QString("InvalidSource");
+   switch (source) {
+      case QOpenGLDebugMessage::InvalidSource:
+         return QString("InvalidSource");
 
-       case QOpenGLDebugMessage::APISource:
-           return QString("APISource");
+      case QOpenGLDebugMessage::APISource:
+         return QString("APISource");
 
-       case QOpenGLDebugMessage::WindowSystemSource:
-           return QString("WindowSystemSource");
+      case QOpenGLDebugMessage::WindowSystemSource:
+         return QString("WindowSystemSource");
 
-       case QOpenGLDebugMessage::ShaderCompilerSource:
-           return QString("ShaderCompilerSource");
+      case QOpenGLDebugMessage::ShaderCompilerSource:
+         return QString("ShaderCompilerSource");
 
-       case QOpenGLDebugMessage::ThirdPartySource:
-           return QString("ThirdPartySource");
+      case QOpenGLDebugMessage::ThirdPartySource:
+         return QString("ThirdPartySource");
 
-       case QOpenGLDebugMessage::ApplicationSource:
-           return QString("ApplicationSource");
+      case QOpenGLDebugMessage::ApplicationSource:
+         return QString("ApplicationSource");
 
-       case QOpenGLDebugMessage::OtherSource:
-           return QString("OtherSource");
+      case QOpenGLDebugMessage::OtherSource:
+         return QString("OtherSource");
 
-       case QOpenGLDebugMessage::AnySource:
-           return QString("AnySource");
+      case QOpenGLDebugMessage::AnySource:
+         return QString("AnySource");
     }
 
     Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message source");
     return QString();
 }
 
-/*!
-    \internal
-*/
 static QOpenGLDebugMessage::Type qt_messageTypeFromGL(GLenum type)
 {
-    switch (type) {
-    case GL_DEBUG_TYPE_ERROR:
-        return QOpenGLDebugMessage::ErrorType;
-    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-    return QOpenGLDebugMessage::DeprecatedBehaviorType;
-    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-        return QOpenGLDebugMessage::UndefinedBehaviorType;
-    case GL_DEBUG_TYPE_PORTABILITY:
-        return QOpenGLDebugMessage::PortabilityType;
-    case GL_DEBUG_TYPE_PERFORMANCE:
-        return QOpenGLDebugMessage::PerformanceType;
-    case GL_DEBUG_TYPE_OTHER:
-        return QOpenGLDebugMessage::OtherType;
-    case GL_DEBUG_TYPE_MARKER:
-        return QOpenGLDebugMessage::MarkerType;
-    case GL_DEBUG_TYPE_PUSH_GROUP:
-        return QOpenGLDebugMessage::GroupPushType;
-    case GL_DEBUG_TYPE_POP_GROUP:
-        return QOpenGLDebugMessage::GroupPopType;
-    }
+   switch (type) {
+      case GL_DEBUG_TYPE_ERROR:
+         return QOpenGLDebugMessage::ErrorType;
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type from GL");
-    return QOpenGLDebugMessage::OtherType;
+      case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+         return QOpenGLDebugMessage::DeprecatedBehaviorType;
+
+      case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+         return QOpenGLDebugMessage::UndefinedBehaviorType;
+
+      case GL_DEBUG_TYPE_PORTABILITY:
+         return QOpenGLDebugMessage::PortabilityType;
+
+      case GL_DEBUG_TYPE_PERFORMANCE:
+         return QOpenGLDebugMessage::PerformanceType;
+
+      case GL_DEBUG_TYPE_OTHER:
+         return QOpenGLDebugMessage::OtherType;
+
+      case GL_DEBUG_TYPE_MARKER:
+         return QOpenGLDebugMessage::MarkerType;
+
+      case GL_DEBUG_TYPE_PUSH_GROUP:
+         return QOpenGLDebugMessage::GroupPushType;
+
+      case GL_DEBUG_TYPE_POP_GROUP:
+         return QOpenGLDebugMessage::GroupPopType;
+   }
+
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type from GL");
+
+   return QOpenGLDebugMessage::OtherType;
 }
 
-/*!
-    \internal
-*/
 static GLenum qt_messageTypeToGL(QOpenGLDebugMessage::Type type)
 {
-    switch (type) {
-    case QOpenGLDebugMessage::InvalidType:
-        break;
-    case QOpenGLDebugMessage::ErrorType:
-        return GL_DEBUG_TYPE_ERROR;
-    case QOpenGLDebugMessage::DeprecatedBehaviorType:
-        return GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR;
-    case QOpenGLDebugMessage::UndefinedBehaviorType:
-        return GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR;
-    case QOpenGLDebugMessage::PortabilityType:
-        return GL_DEBUG_TYPE_PORTABILITY;
-    case QOpenGLDebugMessage::PerformanceType:
-        return GL_DEBUG_TYPE_PERFORMANCE;
-    case QOpenGLDebugMessage::OtherType:
-        return GL_DEBUG_TYPE_OTHER;
-    case QOpenGLDebugMessage::MarkerType:
-        return GL_DEBUG_TYPE_MARKER;
-    case QOpenGLDebugMessage::GroupPushType:
-        return GL_DEBUG_TYPE_PUSH_GROUP;
-    case QOpenGLDebugMessage::GroupPopType:
-        return GL_DEBUG_TYPE_POP_GROUP;
-    case QOpenGLDebugMessage::AnyType:
-        break;
-    }
+   switch (type) {
+      case QOpenGLDebugMessage::InvalidType:
+         break;
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message type");
-    return GL_DEBUG_TYPE_OTHER;
+      case QOpenGLDebugMessage::ErrorType:
+         return GL_DEBUG_TYPE_ERROR;
+
+      case QOpenGLDebugMessage::DeprecatedBehaviorType:
+         return GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR;
+
+      case QOpenGLDebugMessage::UndefinedBehaviorType:
+         return GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR;
+
+      case QOpenGLDebugMessage::PortabilityType:
+         return GL_DEBUG_TYPE_PORTABILITY;
+
+      case QOpenGLDebugMessage::PerformanceType:
+         return GL_DEBUG_TYPE_PERFORMANCE;
+
+      case QOpenGLDebugMessage::OtherType:
+         return GL_DEBUG_TYPE_OTHER;
+
+      case QOpenGLDebugMessage::MarkerType:
+         return GL_DEBUG_TYPE_MARKER;
+
+      case QOpenGLDebugMessage::GroupPushType:
+         return GL_DEBUG_TYPE_PUSH_GROUP;
+
+      case QOpenGLDebugMessage::GroupPopType:
+         return GL_DEBUG_TYPE_POP_GROUP;
+
+      case QOpenGLDebugMessage::AnyType:
+         break;
+   }
+
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message type");
+   return GL_DEBUG_TYPE_OTHER;
 }
 
-/*!
-    \internal
-*/
 static QString qt_messageTypeToString(QOpenGLDebugMessage::Type type)
 {
-    switch (type) {
-    case QOpenGLDebugMessage::InvalidType:
-        return QString("InvalidType");
+   switch (type) {
+      case QOpenGLDebugMessage::InvalidType:
+         return QString("InvalidType");
 
-    case QOpenGLDebugMessage::ErrorType:
-        return QString("ErrorType");
+      case QOpenGLDebugMessage::ErrorType:
+         return QString("ErrorType");
 
-    case QOpenGLDebugMessage::DeprecatedBehaviorType:
-        return QString("DeprecatedBehaviorType");
+      case QOpenGLDebugMessage::DeprecatedBehaviorType:
+         return QString("DeprecatedBehaviorType");
 
-    case QOpenGLDebugMessage::UndefinedBehaviorType:
-        return QString("UndefinedBehaviorType");
+      case QOpenGLDebugMessage::UndefinedBehaviorType:
+         return QString("UndefinedBehaviorType");
 
-    case QOpenGLDebugMessage::PortabilityType:
-        return QString("PortabilityType");
+      case QOpenGLDebugMessage::PortabilityType:
+         return QString("PortabilityType");
 
-    case QOpenGLDebugMessage::PerformanceType:
-        return QString("PerformanceType");
+      case QOpenGLDebugMessage::PerformanceType:
+         return QString("PerformanceType");
 
-    case QOpenGLDebugMessage::OtherType:
-        return QString("OtherType");
+      case QOpenGLDebugMessage::OtherType:
+         return QString("OtherType");
 
-    case QOpenGLDebugMessage::MarkerType:
-        return QString("MarkerType");
+      case QOpenGLDebugMessage::MarkerType:
+         return QString("MarkerType");
 
-    case QOpenGLDebugMessage::GroupPushType:
-        return QString("GroupPushType");
+      case QOpenGLDebugMessage::GroupPushType:
+         return QString("GroupPushType");
 
-    case QOpenGLDebugMessage::GroupPopType:
-        return QString("GroupPopType");
+      case QOpenGLDebugMessage::GroupPopType:
+         return QString("GroupPopType");
 
-    case QOpenGLDebugMessage::AnyType:
-        return QString("AnyType");
-    }
+      case QOpenGLDebugMessage::AnyType:
+         return QString("AnyType");
+      }
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type");
-    return QString();
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type");
+
+   return QString();
 }
 
-/*!
-    \internal
-*/
 static QOpenGLDebugMessage::Severity qt_messageSeverityFromGL(GLenum severity)
 {
-    switch (severity) {
-    case GL_DEBUG_SEVERITY_HIGH:
-        return QOpenGLDebugMessage::HighSeverity;
-    case GL_DEBUG_SEVERITY_MEDIUM:
-        return QOpenGLDebugMessage::MediumSeverity;
-    case GL_DEBUG_SEVERITY_LOW:
-        return QOpenGLDebugMessage::LowSeverity;
-    case GL_DEBUG_SEVERITY_NOTIFICATION:
-        return QOpenGLDebugMessage::NotificationSeverity;
-    }
+   switch (severity) {
+      case GL_DEBUG_SEVERITY_HIGH:
+         return QOpenGLDebugMessage::HighSeverity;
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity from GL");
-    return QOpenGLDebugMessage::NotificationSeverity;
+      case GL_DEBUG_SEVERITY_MEDIUM:
+         return QOpenGLDebugMessage::MediumSeverity;
+
+      case GL_DEBUG_SEVERITY_LOW:
+         return QOpenGLDebugMessage::LowSeverity;
+
+      case GL_DEBUG_SEVERITY_NOTIFICATION:
+         return QOpenGLDebugMessage::NotificationSeverity;
+   }
+
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity from GL");
+
+   return QOpenGLDebugMessage::NotificationSeverity;
 }
 
-/*!
-    \internal
-*/
 static GLenum qt_messageSeverityToGL(QOpenGLDebugMessage::Severity severity)
 {
-    switch (severity) {
-    case QOpenGLDebugMessage::InvalidSeverity:
-        break;
-    case QOpenGLDebugMessage::HighSeverity:
-        return GL_DEBUG_SEVERITY_HIGH;
-    case QOpenGLDebugMessage::MediumSeverity:
-        return GL_DEBUG_SEVERITY_MEDIUM;
-    case QOpenGLDebugMessage::LowSeverity:
-        return GL_DEBUG_SEVERITY_LOW;
-    case QOpenGLDebugMessage::NotificationSeverity:
-        return GL_DEBUG_SEVERITY_NOTIFICATION;
-    case QOpenGLDebugMessage::AnySeverity:
-        break;
-    }
+   switch (severity) {
+      case QOpenGLDebugMessage::InvalidSeverity:
+         break;
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message severity");
-    return GL_DEBUG_SEVERITY_NOTIFICATION;
+      case QOpenGLDebugMessage::HighSeverity:
+         return GL_DEBUG_SEVERITY_HIGH;
+
+      case QOpenGLDebugMessage::MediumSeverity:
+         return GL_DEBUG_SEVERITY_MEDIUM;
+
+      case QOpenGLDebugMessage::LowSeverity:
+         return GL_DEBUG_SEVERITY_LOW;
+
+      case QOpenGLDebugMessage::NotificationSeverity:
+         return GL_DEBUG_SEVERITY_NOTIFICATION;
+
+      case QOpenGLDebugMessage::AnySeverity:
+         break;
+   }
+
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message severity");
+
+   return GL_DEBUG_SEVERITY_NOTIFICATION;
 }
 
-/*!
-    \internal
-*/
 static QString qt_messageSeverityToString(QOpenGLDebugMessage::Severity severity)
 {
-    switch (severity) {
-    case QOpenGLDebugMessage::InvalidSeverity:
-        return QString("InvalidSeverity");
-    case QOpenGLDebugMessage::HighSeverity:
-        return QString("HighSeverity");
-    case QOpenGLDebugMessage::MediumSeverity:
-        return QString("MediumSeverity");
-    case QOpenGLDebugMessage::LowSeverity:
-        return QString("LowSeverity");
-    case QOpenGLDebugMessage::NotificationSeverity:
-        return QString("NotificationSeverity");
-    case QOpenGLDebugMessage::AnySeverity:
-        return QString("AnySeverity");
-    }
+   switch (severity) {
+      case QOpenGLDebugMessage::InvalidSeverity:
+         return QString("InvalidSeverity");
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity");
-    return QString();
+      case QOpenGLDebugMessage::HighSeverity:
+         return QString("HighSeverity");
+
+      case QOpenGLDebugMessage::MediumSeverity:
+         return QString("MediumSeverity");
+
+      case QOpenGLDebugMessage::LowSeverity:
+         return QString("LowSeverity");
+
+      case QOpenGLDebugMessage::NotificationSeverity:
+         return QString("NotificationSeverity");
+
+      case QOpenGLDebugMessage::AnySeverity:
+         return QString("AnySeverity");
+   }
+
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity");
+
+   return QString();
 }
 
 class QOpenGLDebugMessagePrivate : public QSharedData
 {
-public:
+ public:
     QOpenGLDebugMessagePrivate();
 
     QString message;
@@ -466,126 +489,60 @@ public:
     QOpenGLDebugMessage::Severity severity;
 };
 
-/*!
-    \internal
-*/
+// internal
 QOpenGLDebugMessagePrivate::QOpenGLDebugMessagePrivate()
-    : message(),
-      id(0),
-      source(QOpenGLDebugMessage::InvalidSource),
-      type(QOpenGLDebugMessage::InvalidType),
-      severity(QOpenGLDebugMessage::InvalidSeverity)
+    : message(), id(0), source(QOpenGLDebugMessage::InvalidSource),
+      type(QOpenGLDebugMessage::InvalidType), severity(QOpenGLDebugMessage::InvalidSeverity)
 {
 }
 
-
-/*!
-    Constructs a debug message with an empty message string, id set to 0,
-    source set to InvalidSource, type set to InvalidType, and severity set to
-    InvalidSeverity.
-
-    \note This constructor should not be used to create a debug message;
-    instead, use the createApplicationMessage() or the createThirdPartyMessage()
-    static functions.
-
-    \sa createApplicationMessage(), createThirdPartyMessage()
-*/
 QOpenGLDebugMessage::QOpenGLDebugMessage()
     : d(new QOpenGLDebugMessagePrivate)
 {
 }
 
-/*!
-    Constructs a debug message as a copy of \a debugMessage.
-
-    \sa operator=()
-*/
 QOpenGLDebugMessage::QOpenGLDebugMessage(const QOpenGLDebugMessage &debugMessage)
     : d(debugMessage.d)
 {
 }
 
-/*!
-    Destroys this debug message.
-*/
 QOpenGLDebugMessage::~QOpenGLDebugMessage()
 {
 }
 
-/*!
-    Assigns the message \a debugMessage to this object, and returns a reference
-    to the copy.
-*/
 QOpenGLDebugMessage &QOpenGLDebugMessage::operator=(const QOpenGLDebugMessage &debugMessage)
 {
     d = debugMessage.d;
     return *this;
 }
 
-/*!
-   \fn QOpenGLDebugMessage &QOpenGLDebugMessage::operator=(QOpenGLDebugMessage &&debugMessage)
-
-   Move-assigns \a debugMessage to this object.
-*/
-
-/*!
-    \fn void QOpenGLDebugMessage::swap(QOpenGLDebugMessage &debugMessage)
-
-    Swaps the message \a debugMessage with this message. This operation is very
-    fast and never fails.
-*/
-
-/*!
-    Returns the source of the debug message.
-*/
 QOpenGLDebugMessage::Source QOpenGLDebugMessage::source() const
 {
     return d->source;
 }
 
-/*!
-    Returns the type of the debug message.
-*/
 QOpenGLDebugMessage::Type QOpenGLDebugMessage::type() const
 {
     return d->type;
 }
 
-/*!
-    Returns the severity of the debug message.
-*/
 QOpenGLDebugMessage::Severity QOpenGLDebugMessage::severity() const
 {
     return d->severity;
 }
 
-/*!
-    Returns the id of the debug message. Ids are generally vendor-specific.
-*/
 GLuint QOpenGLDebugMessage::id() const
 {
     return d->id;
 }
 
-/*!
-    Returns the textual message contained by this debug message.
-*/
 QString QOpenGLDebugMessage::message() const
 {
     return d->message;
 }
 
-/*!
-    Constructs and returns a debug message with \a text as its text, \a id
-    as id, \a severity as severity, and \a type as type. The message source
-    will be set to ApplicationSource.
-
-    \sa QOpenGLDebugLogger::logMessage(), createThirdPartyMessage()
-*/
 QOpenGLDebugMessage QOpenGLDebugMessage::createApplicationMessage(const QString &text,
-                                                                  GLuint id,
-                                                                  QOpenGLDebugMessage::Severity severity,
-                                                                  QOpenGLDebugMessage::Type type)
+      GLuint id, QOpenGLDebugMessage::Severity severity, QOpenGLDebugMessage::Type type)
 {
     QOpenGLDebugMessage m;
     m.d->message = text;
@@ -593,20 +550,12 @@ QOpenGLDebugMessage QOpenGLDebugMessage::createApplicationMessage(const QString 
     m.d->severity = severity;
     m.d->type = type;
     m.d->source = ApplicationSource;
+
     return m;
 }
 
-/*!
-    Constructs and returns a debug message with \a text as its text, \a id
-    as id, \a severity as severity, and \a type as type. The message source
-    will be set to ThirdPartySource.
-
-    \sa QOpenGLDebugLogger::logMessage(), createApplicationMessage()
-*/
 QOpenGLDebugMessage QOpenGLDebugMessage::createThirdPartyMessage(const QString &text,
-                                                                 GLuint id,
-                                                                 QOpenGLDebugMessage::Severity severity,
-                                                                 QOpenGLDebugMessage::Type type)
+      GLuint id, QOpenGLDebugMessage::Severity severity, QOpenGLDebugMessage::Type type)
 {
     QOpenGLDebugMessage m;
     m.d->message = text;
@@ -614,19 +563,13 @@ QOpenGLDebugMessage QOpenGLDebugMessage::createThirdPartyMessage(const QString &
     m.d->severity = severity;
     m.d->type = type;
     m.d->source = ThirdPartySource;
+
     return m;
 }
 
-/*!
-    Returns \c true if this debug message is equal to \a debugMessage, or false
-    otherwise. Two debugging messages are equal if they have the same textual
-    message, the same id, the same source, the same type and the same severity.
-
-    \sa operator!=()
-*/
 bool QOpenGLDebugMessage::operator==(const QOpenGLDebugMessage &debugMessage) const
 {
-    return (d == debugMessage.d)
+   return (d == debugMessage.d)
             || (d->id == debugMessage.d->id
                 && d->source == debugMessage.d->source
                 && d->type == debugMessage.d->type
@@ -696,16 +639,15 @@ class QOpenGLDebugLoggerPrivate
 {
     Q_DECLARE_PUBLIC(QOpenGLDebugLogger)
 
-public:
+ public:
     QOpenGLDebugLoggerPrivate();
 
     void handleMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *rawMessage);
-    void controlDebugMessages(QOpenGLDebugMessage::Sources sources,
-                              QOpenGLDebugMessage::Types types,
-                              QOpenGLDebugMessage::Severities severities,
-                              const QVector<GLuint> &ids,
-                              const QByteArray &callerName,
-                              bool enable);
+
+    void controlDebugMessages(QOpenGLDebugMessage::Sources sources, QOpenGLDebugMessage::Types types,
+          QOpenGLDebugMessage::Severities severities, const QVector<GLuint> &ids,
+          const QByteArray &callerName, bool enable);
+
     void _q_contextAboutToBeDestroyed();
 
     qt_glDebugMessageControl_t glDebugMessageControl;
@@ -730,9 +672,7 @@ public:
    QOpenGLDebugLogger *q_ptr;
 };
 
-/*!
-    \internal
-*/
+// internal
 QOpenGLDebugLoggerPrivate::QOpenGLDebugLoggerPrivate()
     : glDebugMessageControl(nullptr), glDebugMessageInsert(nullptr), glDebugMessageCallback(nullptr),
       glGetDebugMessageLog(nullptr), glPushDebugGroup(nullptr), glPopDebugGroup(nullptr),
@@ -742,18 +682,13 @@ QOpenGLDebugLoggerPrivate::QOpenGLDebugLoggerPrivate()
 {
 }
 
-/*!
-    \internal
-*/
-void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source,
-                                              GLenum type,
-                                              GLuint id,
-                                              GLenum severity,
-                                              GLsizei length,
-                                              const GLchar *rawMessage)
+// internal
+void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source, GLenum type, GLuint id,
+      GLenum severity, GLsizei length, const GLchar *rawMessage)
 {
-    if (oldDebugCallbackFunction)
-        oldDebugCallbackFunction(source, type, id, severity, length, rawMessage, oldDebugCallbackParameter);
+    if (oldDebugCallbackFunction) {
+       oldDebugCallbackFunction(source, type, id, severity, length, rawMessage, oldDebugCallbackParameter);
+    }
 
     QOpenGLDebugMessage message;
 
@@ -762,6 +697,7 @@ void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source,
     messagePrivate->type = qt_messageTypeFromGL(type);
     messagePrivate->id = id;
     messagePrivate->severity = qt_messageSeverityFromGL(severity);
+
     // not passing the length to fromUtf8, as some bugged OpenGL drivers
     // do not handle the length correctly. Just rely on the message to be NUL terminated.
     messagePrivate->message = QString::fromUtf8(rawMessage);
@@ -770,28 +706,26 @@ void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source,
     emit q->messageLogged(message);
 }
 
-/*!
-    \internal
-*/
+// internal
 void QOpenGLDebugLoggerPrivate::controlDebugMessages(QOpenGLDebugMessage::Sources sources,
-                                                     QOpenGLDebugMessage::Types types,
-                                                     QOpenGLDebugMessage::Severities severities,
-                                                     const QVector<GLuint> &ids,
-                                                     const QByteArray &callerName,
-                                                     bool enable)
+      QOpenGLDebugMessage::Types types, QOpenGLDebugMessage::Severities severities,
+      const QVector<GLuint> &ids, const QByteArray &callerName, bool enable)
 {
-    if (!initialized) {
+    if (! initialized) {
         qWarning("QOpenGLDebugLogger::%s(): object must be initialized before enabling/disabling messages", callerName.constData());
         return;
     }
+
     if (sources == QOpenGLDebugMessage::InvalidSource) {
         qWarning("QOpenGLDebugLogger::%s(): invalid source specified", callerName.constData());
         return;
     }
+
     if (types == QOpenGLDebugMessage::InvalidType) {
         qWarning("QOpenGLDebugLogger::%s(): invalid type specified", callerName.constData());
         return;
     }
+
     if (severities == QOpenGLDebugMessage::InvalidSeverity) {
         qWarning("QOpenGLDebugLogger::%s(): invalid severity specified", callerName.constData());
         return;
@@ -856,9 +790,7 @@ void QOpenGLDebugLoggerPrivate::controlDebugMessages(QOpenGLDebugMessage::Source
     }
 }
 
-/*!
-    \internal
-*/
+// internal
 void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
 {
     Q_ASSERT(context);
@@ -887,7 +819,7 @@ void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
     q->stopLogging();
 
     if (offscreenSurface) {
-        // We did change the current context: set it back
+        // we did change the current context: set it back
         if (currentContext)
             currentContext->makeCurrent(currentSurface);
         else
@@ -901,7 +833,7 @@ void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
 
 extern "C" {
 static void QOPENGLF_APIENTRY qt_opengl_debug_callback(GLenum source, GLenum type, GLuint id,
-                  GLenum severity, GLsizei length, const GLchar *rawMessage, const GLvoid *userParam)
+      GLenum severity, GLsizei length, const GLchar *rawMessage, const GLvoid *userParam)
 {
     QOpenGLDebugLoggerPrivate *loggerPrivate = static_cast<QOpenGLDebugLoggerPrivate *>(const_cast<GLvoid *>(userParam));
     loggerPrivate->handleMessage(source, type, id, severity, length, rawMessage);
@@ -963,9 +895,10 @@ bool QOpenGLDebugLogger::initialize()
     GET_DEBUG_PROC_ADDRESS(glPushDebugGroup);
     GET_DEBUG_PROC_ADDRESS(glPopDebugGroup);
 
-    // Windows' Desktop GL doesn't allow resolution of "basic GL entry points"
+    // Windows Desktop GL does not allow resolution of "basic GL entry points"
     // through wglGetProcAddress
-#if defined(Q_OS_WIN) && !defined(QT_OPENGL_ES_2)
+
+#if defined(Q_OS_WIN) && ! defined(QT_OPENGL_ES_2)
     {
         HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
 
@@ -985,58 +918,32 @@ bool QOpenGLDebugLogger::initialize()
     QOpenGLContext::currentContext()->functions()->glGetIntegerv(GL_MAX_DEBUG_MESSAGE_LENGTH, &d->maxMessageLength);
 
 #ifndef QT_NO_DEBUG
-    if (!d->context->format().testOption(QSurfaceFormat::DebugContext)) {
+    if (! d->context->format().testOption(QSurfaceFormat::DebugContext)) {
         qWarning("QOpenGLDebugLogger::initialize(): the current context is not a debug context:\n"
                  "    this means that the GL may not generate any debug output at all.\n"
                  "    To avoid this warning, try creating the context with the\n"
                  "    QSurfaceFormat::DebugContext surface format option.");
     }
-#endif // QT_NO_DEBUG
+#endif
 
     d->initialized = true;
     return true;
 }
 
-/*!
-    Returns \c true if this object is currently logging, false otherwise.
-
-    \sa startLogging()
-*/
 bool QOpenGLDebugLogger::isLogging() const
 {
     Q_D(const QOpenGLDebugLogger);
     return d->isLogging;
 }
 
-/*!
-    Starts logging messages coming from the OpenGL server. When a new message
-    is received, the signal messageLogged() is emitted, carrying the logged
-    message as argument.
-
-    \a loggingMode specifies whether the logging must be asynchronous (the default)
-    or synchronous.
-
-    QOpenGLDebugLogger will record the values of \c{GL_DEBUG_OUTPUT} and
-    \c{GL_DEBUG_OUTPUT_SYNCHRONOUS} when logging is started, and set them back
-    when logging is stopped. Moreover, any user-defined OpenGL debug callback
-    installed when this function is invoked will be restored when logging is
-    stopped; QOpenGLDebugLogger will ensure that the pre-existing callback will
-    still be invoked when logging.
-
-    \note It's not possible to change the logging mode without stopping and
-    starting logging again. This might change in a future version of Qt.
-
-    \note The object must be initialized before logging can happen.
-
-    \sa stopLogging(), initialize()
-*/
 void QOpenGLDebugLogger::startLogging(QOpenGLDebugLogger::LoggingMode loggingMode)
 {
     Q_D(QOpenGLDebugLogger);
-    if (!d->initialized) {
+    if (! d->initialized) {
         qWarning("QOpenGLDebugLogger::startLogging(): object must be initialized before logging can start");
         return;
     }
+
     if (d->isLogging) {
         qWarning("QOpenGLDebugLogger::startLogging(): this object is already logging");
         return;
@@ -1062,30 +969,20 @@ void QOpenGLDebugLogger::startLogging(QOpenGLDebugLogger::LoggingMode loggingMod
     funcs->glEnable(GL_DEBUG_OUTPUT);
 }
 
-/*!
-    Returns the logging mode of the object.
-
-    \sa startLogging()
-*/
 QOpenGLDebugLogger::LoggingMode QOpenGLDebugLogger::loggingMode() const
 {
     Q_D(const QOpenGLDebugLogger);
     return d->loggingMode;
 }
 
-/*!
-    Stops logging messages from the OpenGL server.
-
-    \sa startLogging()
-*/
 void QOpenGLDebugLogger::stopLogging()
 {
     Q_D(QOpenGLDebugLogger);
-    if (!d->isLogging)
+    if (! d->isLogging)
         return;
 
     QOpenGLContext *currentContext = QOpenGLContext::currentContext();
-    if (!currentContext || currentContext != d->context) {
+    if (! currentContext || currentContext != d->context) {
         qWarning("QOpenGLDebugLogger::stopLogging(): attempting to stop logging with the wrong OpenGL context current");
         return;
     }
@@ -1104,19 +1001,6 @@ void QOpenGLDebugLogger::stopLogging()
         funcs->glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 }
 
-/*!
-    Inserts the message \a debugMessage into the OpenGL debug log. This provides
-    a way for applications or libraries to insert custom messages that can
-    ease the debugging of OpenGL applications.
-
-    \note \a debugMessage must have QOpenGLDebugMessage::ApplicationSource or
-    QOpenGLDebugMessage::ThirdPartySource as its source, and a valid
-    type and severity, otherwise it will not be inserted into the log.
-
-    \note The object must be initialized before logging can happen.
-
-    \sa initialize()
-*/
 void QOpenGLDebugLogger::logMessage(const QOpenGLDebugMessage &debugMessage)
 {
     Q_D(QOpenGLDebugLogger);
@@ -1124,12 +1008,14 @@ void QOpenGLDebugLogger::logMessage(const QOpenGLDebugMessage &debugMessage)
         qWarning("QOpenGLDebugLogger::logMessage(): object must be initialized before logging messages");
         return;
     }
+
     if (debugMessage.source() != QOpenGLDebugMessage::ApplicationSource
             && debugMessage.source() != QOpenGLDebugMessage::ThirdPartySource) {
         qWarning("QOpenGLDebugLogger::logMessage(): using a message source different from ApplicationSource\n"
                  "    or ThirdPartySource is not supported by GL_KHR_debug. The message will not be logged.");
         return;
     }
+
     if (debugMessage.type() == QOpenGLDebugMessage::InvalidType
             || debugMessage.type() == QOpenGLDebugMessage::AnyType
             || debugMessage.severity() == QOpenGLDebugMessage::InvalidSeverity
@@ -1154,39 +1040,18 @@ void QOpenGLDebugLogger::logMessage(const QOpenGLDebugMessage &debugMessage)
     // Don't pass rawMessage.length(), as unfortunately bugged
     // OpenGL drivers will eat the trailing NUL in the message. Just rely
     // on the message being NUL terminated.
-    d->glDebugMessageInsert(source,
-                            type,
-                            debugMessage.id(),
-                            severity,
-                            -1,
-                            rawMessage.constData());
+    d->glDebugMessageInsert(source, type, debugMessage.id(), severity, -1, rawMessage.constData());
 }
 
-/*!
-    Pushes a debug group with name \a name, id \a id, and source \a source onto
-    the debug groups stack. If the group is successfully pushed, OpenGL will
-    automatically log a message with message \a name, id \a id, source \a
-    source, type QOpenGLDebugMessage::GroupPushType and severity
-    QOpenGLDebugMessage::NotificationSeverity.
-
-    The newly pushed group will inherit the same filtering settings of the
-    group that was on the top of the stack; that is, the filtering will not be
-    changed by pushing a new group.
-
-    \note The \a source must either be QOpenGLDebugMessage::ApplicationSource or
-    QOpenGLDebugMessage::ThirdPartySource, otherwise the group will not be pushed.
-
-    \note The object must be initialized before managing debug groups.
-
-    \sa popGroup(), enableMessages(), disableMessages()
-*/
 void QOpenGLDebugLogger::pushGroup(const QString &name, GLuint id, QOpenGLDebugMessage::Source source)
 {
     Q_D(QOpenGLDebugLogger);
-    if (!d->initialized) {
+
+    if (! d->initialized) {
         qWarning("QOpenGLDebugLogger::pushGroup(): object must be initialized before pushing a debug group");
         return;
     }
+
     if (source != QOpenGLDebugMessage::ApplicationSource
             && source != QOpenGLDebugMessage::ThirdPartySource) {
         qWarning("QOpenGLDebugLogger::pushGroup(): using a source different from ApplicationSource\n"
@@ -1209,24 +1074,10 @@ void QOpenGLDebugLogger::pushGroup(const QString &name, GLuint id, QOpenGLDebugM
     d->glPushDebugGroup(qt_messageSourceToGL(source), id, -1, rawName.constData());
 }
 
-/*!
-    Pops the topmost debug group from the debug groups stack. If the group is
-    successfully popped, OpenGL will automatically log a message with message,
-    id and source matching those of the popped group, type
-    QOpenGLDebugMessage::GroupPopType and severity
-    QOpenGLDebugMessage::NotificationSeverity.
-
-    Popping a debug group will restore the message filtering settings of the
-    group that becomes the top of the debug groups stack.
-
-    \note The object must be initialized before managing debug groups.
-
-    \sa pushGroup()
-*/
 void QOpenGLDebugLogger::popGroup()
 {
     Q_D(QOpenGLDebugLogger);
-    if (!d->initialized) {
+    if (! d->initialized) {
         qWarning("QOpenGLDebugLogger::pushGroup(): object must be initialized before popping a debug group");
         return;
     }
@@ -1234,94 +1085,39 @@ void QOpenGLDebugLogger::popGroup()
     d->glPopDebugGroup();
 }
 
-/*!
-    Enables the logging of messages from the given \a sources, of the given \a
-    types and with the given \a severities and any message id.
-
-    The logging will be enabled in the current control group.
-
-    \sa disableMessages(), pushGroup(), popGroup()
-*/
 void QOpenGLDebugLogger::enableMessages(QOpenGLDebugMessage::Sources sources,
-                                        QOpenGLDebugMessage::Types types,
-                                        QOpenGLDebugMessage::Severities severities)
+      QOpenGLDebugMessage::Types types, QOpenGLDebugMessage::Severities severities)
 {
     Q_D(QOpenGLDebugLogger);
-    d->controlDebugMessages(sources,
-                            types,
-                            severities,
-                            QVector<GLuint>(),
-                            "enableMessages",
-                            true);
+    d->controlDebugMessages(sources, types, severities, QVector<GLuint>(), "enableMessages", true);
 }
 
-/*!
-    Enables the logging of messages with the given \a ids, from the given \a
-    sources and of the given \a types and any severity.
-
-    The logging will be enabled in the current control group.
-
-    \sa disableMessages(), pushGroup(), popGroup()
-*/
 void QOpenGLDebugLogger::enableMessages(const QVector<GLuint> &ids,
-                                        QOpenGLDebugMessage::Sources sources,
-                                        QOpenGLDebugMessage::Types types)
+      QOpenGLDebugMessage::Sources sources, QOpenGLDebugMessage::Types types)
 {
     Q_D(QOpenGLDebugLogger);
-    d->controlDebugMessages(sources,
-                            types,
-                            QOpenGLDebugMessage::AnySeverity,
-                            ids,
-                            "enableMessages",
-                            true);
+    d->controlDebugMessages(sources, types, QOpenGLDebugMessage::AnySeverity, ids, "enableMessages", true);
 }
 
-/*!
-    Disables the logging of messages with the given \a sources, of the given \a
-    types and with the given \a severities and any message id.
-
-    The logging will be disabled in the current control group.
-
-    \sa enableMessages(), pushGroup(), popGroup()
-*/
 void QOpenGLDebugLogger::disableMessages(QOpenGLDebugMessage::Sources sources,
-                                         QOpenGLDebugMessage::Types types,
-                                         QOpenGLDebugMessage::Severities severities)
+      QOpenGLDebugMessage::Types types, QOpenGLDebugMessage::Severities severities)
 {
     Q_D(QOpenGLDebugLogger);
-    d->controlDebugMessages(sources,
-                            types,
-                            severities,
-                            QVector<GLuint>(),
-                            "disableMessages",
-                            false);
+    d->controlDebugMessages(sources, types, severities, QVector<GLuint>(), "disableMessages", false);
 }
 
-/*!
-    Disables the logging of messages with the given \a ids, from the given \a
-    sources and of the given \a types and any severity.
-
-    The logging will be disabled in the current control group.
-
-    \sa enableMessages(), pushGroup(), popGroup()
-*/
 void QOpenGLDebugLogger::disableMessages(const QVector<GLuint> &ids,
-                                         QOpenGLDebugMessage::Sources sources,
-                                         QOpenGLDebugMessage::Types types)
+      QOpenGLDebugMessage::Sources sources, QOpenGLDebugMessage::Types types)
 {
     Q_D(QOpenGLDebugLogger);
-    d->controlDebugMessages(sources,
-                            types,
-                            QOpenGLDebugMessage::AnySeverity,
-                            ids,
-                            "disableMessages",
-                            false);
+    d->controlDebugMessages(sources, types, QOpenGLDebugMessage::AnySeverity, ids, "disableMessages", false);
 }
 
 QList<QOpenGLDebugMessage> QOpenGLDebugLogger::loggedMessages() const
 {
     Q_D(const QOpenGLDebugLogger);
-    if (!d->initialized) {
+
+    if (! d->initialized) {
         qWarning("QOpenGLDebugLogger::loggedMessages(): object must be initialized before reading logged messages");
         return QList<QOpenGLDebugMessage>();
     }
@@ -1339,16 +1135,12 @@ QList<QOpenGLDebugMessage> QOpenGLDebugLogger::loggedMessages() const
 
     QList<QOpenGLDebugMessage> messages;
     do {
-        messagesRead = d->glGetDebugMessageLog(maxMessageCount,
-                                               GLsizei(messagesBuffer.size()),
-                                               messageSources,
-                                               messageTypes,
-                                               messageIds,
-                                               messageSeverities,
-                                               messageLengths,
-                                               messagesBuffer.data());
+        messagesRead = d->glGetDebugMessageLog(maxMessageCount, GLsizei(messagesBuffer.size()),
+              messageSources, messageTypes, messageIds, messageSeverities,
+              messageLengths, messagesBuffer.data());
 
         const char *messagesBufferPtr = messagesBuffer.constData();
+
         for (GLuint i = 0; i < messagesRead; ++i) {
             QOpenGLDebugMessage message;
 
@@ -1362,6 +1154,7 @@ QList<QOpenGLDebugMessage> QOpenGLDebugLogger::loggedMessages() const
             messagesBufferPtr += messageLengths[i];
             messages << message;
         }
+
     } while (messagesRead == maxMessageCount);
 
     return messages;
@@ -1370,10 +1163,13 @@ QList<QOpenGLDebugMessage> QOpenGLDebugLogger::loggedMessages() const
 qint64 QOpenGLDebugLogger::maximumMessageLength() const
 {
     Q_D(const QOpenGLDebugLogger);
-    if (!d->initialized) {
-        qWarning("QOpenGLDebugLogger::maximumMessageLength(): object must be initialized before reading the maximum message length");
+
+    if (! d->initialized) {
+        qWarning("QOpenGLDebugLogger::maximumMessageLength(): "
+              "Object must be initialized before reading the maximum message length");
         return -1;
     }
+
     return d->maxMessageLength;
 }
 

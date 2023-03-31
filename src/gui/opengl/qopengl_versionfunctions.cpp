@@ -41,15 +41,14 @@ cs_bitCast(const U &input) noexcept
 }
 
 QOpenGLVersionFunctionsBackend *QAbstractOpenGLFunctionsPrivate::functionsBackend(QOpenGLContext *context,
-                                                                                  const QOpenGLVersionStatus &v)
+      const QOpenGLVersionStatus &v)
 {
     Q_ASSERT(context);
     return context->functionsBackend(v);
 }
 
 void QAbstractOpenGLFunctionsPrivate::insertFunctionsBackend(QOpenGLContext *context,
-                                                             const QOpenGLVersionStatus &v,
-                                                             QOpenGLVersionFunctionsBackend *backend)
+   const QOpenGLVersionStatus &v, QOpenGLVersionFunctionsBackend *backend)
 {
     Q_ASSERT(context);
     context->insertFunctionsBackend(v, backend);
@@ -73,124 +72,11 @@ void QAbstractOpenGLFunctionsPrivate::removeExternalFunctions(QOpenGLContext *co
     context->removeExternalFunctions(f);
 }
 
-/*!
-    \class QAbstractOpenGLFunctions
-    \inmodule QtGui
-    \since 5.1
-    \brief The QAbstractOpenGLFunctions class is the base class of a family of
-           classes that expose all functions for each OpenGL version and
-           profile.
-
-    OpenGL implementations on different platforms are able to link to a variable
-    number of OpenGL functions depending upon the OpenGL ABI on that platform.
-    For example, on Microsoft Windows only functions up to those in OpenGL 1.1
-    can be linked to at build time. All other functions must be resolved at
-    runtime. The traditional solution to this has been to use either
-    QOpenGLContext::getProcAddress() or QOpenGLFunctions. The former is tedious
-    and error prone and means dealing directly with function pointers. The
-    latter only exposes those functions common to OpenGL ES 2 and desktop
-    OpenGL. There is however much new OpenGL functionality that is useful when
-    writing real world OpenGL applications.
-
-    Qt now provides a family of classes which all inherit from
-    QAbstractOpenGLFunctions which expose every core OpenGL function by way of a
-    corresponding member function. There is a class for every valid combination
-    of OpenGL version and profile. Each class follows the naming convention:
-    \badcode
-    QOpenGLFunctions_<MAJOR VERSION>_<MINOR VERSION>[_PROFILE]
-    \endcode
-
-    For OpenGL versions 1.0 through to 3.0 there are no profiles, leading to the
-    classes:
-
-    \list
-        \li QOpenGLFunctions_1_0
-        \li QOpenGLFunctions_1_1
-        \li QOpenGLFunctions_1_2
-        \li QOpenGLFunctions_1_3
-        \li QOpenGLFunctions_1_4
-        \li QOpenGLFunctions_1_5
-        \li QOpenGLFunctions_2_0
-        \li QOpenGLFunctions_2_1
-        \li QOpenGLFunctions_3_0
-    \endlist
-
-    where each class inherits from QAbstractOpenGLFunctions.
-
-    OpenGL version 3.1 removed many deprecated functions leading to a much
-    simpler and generic API.
-
-    With OpenGL 3.2 the concept of profiles was introduced. Two profiles are
-    currently defined for OpenGL: Core and Compatibility.
-
-    The Core profile does not include any of the functions that were removed
-    in OpenGL 3.1. The Compatibility profile contains all functions in the
-    Core profile of the same version plus all of the functions that were
-    removed in OpenGL 3.1. In this way the Compatibility profile classes allow
-    use of newer OpenGL functionality but also allows you to keep using your
-    legacy OpenGL code. For new OpenGL code the Core profile should be
-    preferred.
-
-    Please note that some vendors, notably Apple, do not implement the
-    Compatibility profile. Therefore if you wish to target new OpenGL features
-    on \macos then you should ensure that you request a Core profile context via
-    QSurfaceFormat::setProfile().
-
-    Qt provides classes for all version and Core and Compatibility profile
-    combinations. The classes for OpenGL versions 3.1 through to 4.3 are:
-
-    \list
-        \li QOpenGLFunctions_3_1
-        \li QOpenGLFunctions_3_2_Core
-        \li QOpenGLFunctions_3_2_Compatibility
-        \li QOpenGLFunctions_3_3_Core
-        \li QOpenGLFunctions_3_3_Compatibility
-        \li QOpenGLFunctions_4_0_Core
-        \li QOpenGLFunctions_4_0_Compatibility
-        \li QOpenGLFunctions_4_1_Core
-        \li QOpenGLFunctions_4_1_Compatibility
-        \li QOpenGLFunctions_4_2_Core
-        \li QOpenGLFunctions_4_2_Compatibility
-        \li QOpenGLFunctions_4_3_Core
-        \li QOpenGLFunctions_4_3_Compatibility
-    \endlist
-
-    where each class inherits from QAbstractOpenGLFunctions.
-
-    A pointer to an object of the class corresponding to the version and
-    profile of OpenGL in use can be obtained from
-    QOpenGLContext::versionFunctions(). If obtained in this way, note that
-    the QOpenGLContext retains ownership of the object. This is so that only
-    one instance need be created.
-
-    Before calling any of the exposed OpenGL functions you must ensure that the
-    object has resolved the function pointers to the OpenGL functions. This
-    only needs to be done once per instance with initializeOpenGLFunctions().
-    Once initialized, the object can be used to call any OpenGL function for
-    the corresponding version and profile. Note that initializeOpenGLFunctions()
-    can fail in some circumstances so check the return value. Situations in
-    which initialization can fail are if you have a functions object for a version
-    or profile that contains functions that are not part of the context being
-    used to resolve the function pointers.
-
-    If you exclusively use function objects then you will get compile time
-    errors if you attempt to use a function not included in that version and
-    profile. This is obviously a lot easier to debug than undefined behavior
-    at run time.
-
-    \sa QOpenGLContext::versionFunctions()
-*/
-/*!
-   Constructs a QAbstractOpenGLFunctions object.
-*/
 QAbstractOpenGLFunctions::QAbstractOpenGLFunctions()
     : d_ptr(new QAbstractOpenGLFunctionsPrivate)
 {
 }
 
-/*!
-   Destroys a QAbstractOpenGLFunctions object.
-*/
 QAbstractOpenGLFunctions::~QAbstractOpenGLFunctions()
 {
     Q_D(QAbstractOpenGLFunctions);
@@ -199,8 +85,7 @@ QAbstractOpenGLFunctions::~QAbstractOpenGLFunctions()
     delete d_ptr;
 }
 
-/*! \internal
- */
+// internal
 bool QAbstractOpenGLFunctions::initializeOpenGLFunctions()
 {
     Q_D(QAbstractOpenGLFunctions);
@@ -220,24 +105,21 @@ bool QAbstractOpenGLFunctions::initializeOpenGLFunctions()
     return true;
 }
 
-/*! \internal
- */
+// internal
 bool QAbstractOpenGLFunctions::isInitialized() const
 {
     Q_D(const QAbstractOpenGLFunctions);
     return d->initialized;
 }
 
-/*! \internal
- */
+// internal
 void QAbstractOpenGLFunctions::setOwningContext(const QOpenGLContext *context)
 {
     Q_D(QAbstractOpenGLFunctions);
     d->owningContext = const_cast<QOpenGLContext*>(context);
 }
 
-/*! \internal
- */
+// internal
 QOpenGLContext *QAbstractOpenGLFunctions::owningContext() const
 {
     Q_D(const QAbstractOpenGLFunctions);
@@ -252,8 +134,10 @@ QOpenGLFunctions_1_0_CoreBackend::QOpenGLFunctions_1_0_CoreBackend(QOpenGLContex
     // OpenGL 1.0 core functions
 #if defined(Q_OS_WIN)
     HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-    if (!handle)
+
+    if (! handle) {
         handle = GetModuleHandleA("opengl32.dll");
+    }
 
     Viewport   = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLint , GLint , GLsizei , GLsizei )>(GetProcAddress(handle, "glViewport"));
     DepthRange = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLdouble , GLdouble )>(GetProcAddress(handle, "glDepthRange"));
@@ -331,11 +215,16 @@ QOpenGLFunctions_1_0_CoreBackend::QOpenGLFunctions_1_0_CoreBackend(QOpenGLContex
     CullFace    = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLenum )>(GetProcAddress(handle, "glCullFace"));
 
 #else
-    Viewport = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLint , GLint , GLsizei , GLsizei )>(context->getProcAddress("glViewport"));
+    Viewport   = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLint , GLint , GLsizei , GLsizei )>(context->getProcAddress("glViewport"));
     DepthRange = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLdouble , GLdouble )>(context->getProcAddress("glDepthRange"));
-    IsEnabled = reinterpret_cast<GLboolean (QOPENGLF_APIENTRYP)(GLenum )>(context->getProcAddress("glIsEnabled"));
-    GetTexLevelParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint *)>(context->getProcAddress("glGetTexLevelParameteriv"));
-    GetTexLevelParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLfloat *)>(context->getProcAddress("glGetTexLevelParameterfv"));
+    IsEnabled  = reinterpret_cast<GLboolean (QOPENGLF_APIENTRYP)(GLenum )>(context->getProcAddress("glIsEnabled"));
+
+    GetTexLevelParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum ,
+          GLint *)>(context->getProcAddress("glGetTexLevelParameteriv"));
+
+    GetTexLevelParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint ,
+          GLenum , GLfloat *)>(context->getProcAddress("glGetTexLevelParameterfv"));
+
     GetTexParameteriv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLint *)>(context->getProcAddress("glGetTexParameteriv"));
     GetTexParameterfv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLenum , GLfloat *)>(context->getProcAddress("glGetTexParameterfv"));
     GetTexImage = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLenum , GLvoid *)>(context->getProcAddress("glGetTexImage"));
@@ -394,8 +283,10 @@ QOpenGLFunctions_1_1_CoreBackend::QOpenGLFunctions_1_1_CoreBackend(QOpenGLContex
     // OpenGL 1.1 core functions
 #if defined(Q_OS_WIN)
     HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-    if (!handle)
+    if (! handle) {
         handle = GetModuleHandleA("opengl32.dll");
+    }
+
     Indexubv       = cs_bitCast<void (QOPENGLF_APIENTRYP)(const GLubyte *)>(GetProcAddress(handle, "glIndexubv"));
     Indexub        = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLubyte )>(GetProcAddress(handle, "glIndexub"));
     IsTexture      = cs_bitCast<GLboolean (QOPENGLF_APIENTRYP)(GLuint )>(GetProcAddress(handle, "glIsTexture"));
@@ -434,22 +325,42 @@ QOpenGLFunctions_1_1_CoreBackend::QOpenGLFunctions_1_1_CoreBackend(QOpenGLContex
           GLsizei )>(GetProcAddress(handle, "glDrawArrays"));
 
 #else
-    Indexubv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(const GLubyte *)>(context->getProcAddress("glIndexubv"));
-    Indexub = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLubyte )>(context->getProcAddress("glIndexub"));
-    IsTexture = reinterpret_cast<GLboolean (QOPENGLF_APIENTRYP)(GLuint )>(context->getProcAddress("glIsTexture"));
-    GenTextures = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLsizei , GLuint *)>(context->getProcAddress("glGenTextures"));
+    Indexubv       = reinterpret_cast<void (QOPENGLF_APIENTRYP)(const GLubyte *)>(context->getProcAddress("glIndexubv"));
+    Indexub        = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLubyte )>(context->getProcAddress("glIndexub"));
+    IsTexture      = reinterpret_cast<GLboolean (QOPENGLF_APIENTRYP)(GLuint )>(context->getProcAddress("glIsTexture"));
+    GenTextures    = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLsizei , GLuint *)>(context->getProcAddress("glGenTextures"));
     DeleteTextures = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLsizei , const GLuint *)>(context->getProcAddress("glDeleteTextures"));
-    BindTexture = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLuint )>(context->getProcAddress("glBindTexture"));
-    TexSubImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLsizei , GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTexSubImage2D"));
-    TexSubImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTexSubImage1D"));
-    CopyTexSubImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLint , GLint , GLsizei , GLsizei )>(context->getProcAddress("glCopyTexSubImage2D"));
-    CopyTexSubImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLint , GLsizei )>(context->getProcAddress("glCopyTexSubImage1D"));
-    CopyTexImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint , GLint , GLsizei , GLsizei , GLint )>(context->getProcAddress("glCopyTexImage2D"));
-    CopyTexImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint , GLint , GLsizei , GLint )>(context->getProcAddress("glCopyTexImage1D"));
-    PolygonOffset = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLfloat , GLfloat )>(context->getProcAddress("glPolygonOffset"));
-    GetPointerv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLvoid * *)>(context->getProcAddress("glGetPointerv"));
-    DrawElements = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLsizei , GLenum , const GLvoid *)>(context->getProcAddress("glDrawElements"));
-    DrawArrays = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLsizei )>(context->getProcAddress("glDrawArrays"));
+    BindTexture    = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLuint )>(context->getProcAddress("glBindTexture"));
+
+    TexSubImage2D  = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLsizei ,
+          GLsizei , GLenum , GLenum , const GLvoid *)>(context->getProcAddress("glTexSubImage2D"));
+
+    TexSubImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLsizei , GLenum ,
+          GLenum , const GLvoid *)>(context->getProcAddress("glTexSubImage1D"));
+
+    CopyTexSubImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint , GLint ,
+          GLint , GLsizei , GLsizei )>(context->getProcAddress("glCopyTexSubImage2D"));
+
+    CopyTexSubImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLint , GLint ,
+          GLint , GLsizei )>(context->getProcAddress("glCopyTexSubImage1D"));
+
+    CopyTexImage2D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint , GLint ,
+          GLsizei , GLsizei , GLint )>(context->getProcAddress("glCopyTexImage2D"));
+
+    CopyTexImage1D = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint , GLenum , GLint , GLint ,
+          GLsizei , GLint )>(context->getProcAddress("glCopyTexImage1D"));
+
+    PolygonOffset = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLfloat ,
+          GLfloat )>(context->getProcAddress("glPolygonOffset"));
+
+    GetPointerv = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum ,
+          GLvoid * *)>(context->getProcAddress("glGetPointerv"));
+
+    DrawElements = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLsizei ,
+          GLenum , const GLvoid *)>(context->getProcAddress("glDrawElements"));
+
+    DrawArrays = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLint ,
+          GLsizei )>(context->getProcAddress("glDrawArrays"));
 #endif
 
 }
@@ -469,7 +380,6 @@ QOpenGLFunctions_1_2_CoreBackend::QOpenGLFunctions_1_2_CoreBackend(QOpenGLContex
     DrawRangeElements = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum , GLuint , GLuint , GLsizei , GLenum , const GLvoid *)>(context->getProcAddress("glDrawRangeElements"));
     BlendEquation = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLenum )>(context->getProcAddress("glBlendEquation"));
     BlendColor = reinterpret_cast<void (QOPENGLF_APIENTRYP)(GLfloat , GLfloat , GLfloat , GLfloat )>(context->getProcAddress("glBlendColor"));
-
 }
 
 QOpenGLVersionStatus QOpenGLFunctions_1_2_CoreBackend::versionStatus()
@@ -1274,8 +1184,10 @@ QOpenGLFunctions_1_0_DeprecatedBackend::QOpenGLFunctions_1_0_DeprecatedBackend(Q
     // OpenGL 1.0 deprecated functions
 #if defined(Q_OS_WIN)
     HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-    if (!handle)
+
+    if (!handle) {
         handle = GetModuleHandleA("opengl32.dll");
+    }
 
     Translatef = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLfloat , GLfloat , GLfloat )>(GetProcAddress(handle, "glTranslatef"));
     Translated = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLdouble , GLdouble , GLdouble )>(GetProcAddress(handle, "glTranslated"));
@@ -1856,8 +1768,10 @@ QOpenGLFunctions_1_1_DeprecatedBackend::QOpenGLFunctions_1_1_DeprecatedBackend(Q
     // OpenGL 1.1 deprecated functions
 #if defined(Q_OS_WIN)
     HMODULE handle = static_cast<HMODULE>(QOpenGLContext::openGLModuleHandle());
-    if (!handle)
+
+    if (! handle) {
         handle = GetModuleHandleA("opengl32.dll");
+    }
 
     PushClientAttrib = cs_bitCast<void (QOPENGLF_APIENTRYP)(GLbitfield )>(GetProcAddress(handle, "glPushClientAttrib"));
     PopClientAttrib = cs_bitCast<void (QOPENGLF_APIENTRYP)()>(GetProcAddress(handle, "glPopClientAttrib"));
@@ -2198,5 +2112,3 @@ QOpenGLVersionStatus QOpenGLFunctions_4_5_DeprecatedBackend::versionStatus()
 // No backends for OpenGL ES 2
 
 #endif // !QT_OPENGL_ES_2
-
-

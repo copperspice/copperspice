@@ -64,15 +64,6 @@ QXmlSchema::QXmlSchema()
 {
 }
 
-/*!
-  Constructs a QXmlSchema that is a copy of \a other. The new
-  instance will share resources with the existing schema
-  to the extent possible.
- */
-
-/*!
-  Destroys this QXmlSchema.
- */
 QXmlSchema::~QXmlSchema()
 {
 }

@@ -27,7 +27,6 @@
 #include <qbezier_p.h>
 #include <stdlib.h>
 
-
 #define qreal_to_fixed_26_6(f) (qRound(f * 64))
 
 static const QRectF boundingRect(const QPointF *points, int pointCount)
@@ -111,12 +110,10 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
 {
    int count = path.elementCount();
 
-
    beginOutline(path.hasWindingFill() ? Qt::WindingFill : Qt::OddEvenFill);
 
    if (path.elements()) {
-      // TODO: if we do closing of subpaths in convertElements instead we
-      // could avoid this loop
+      // TODO: if we do closing of subpaths in convertElements instead we could avoid this loop
       const QPainterPath::ElementType *elements = path.elements();
       const QPointF *points = reinterpret_cast<const QPointF *>(path.points());
 
@@ -139,7 +136,7 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
                break;
 
             default:
-               break; // This will never hit..
+               break; // this will never happen
          }
       }
 
@@ -159,9 +156,9 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
    }
 
    endOutline();
+
    return outline();
 }
-
 
 void QOutlineMapper::endOutline()
 {

@@ -57,9 +57,6 @@ QWindowsPipeReader::~QWindowsPipeReader()
    stop();
 }
 
-/*!
-    Sets the handle to read from. The handle must be valid.
- */
 void QWindowsPipeReader::setHandle(HANDLE hPipeReadEnd)
 {
    readBuffer.clear();
@@ -68,10 +65,6 @@ void QWindowsPipeReader::setHandle(HANDLE hPipeReadEnd)
    pipeBroken = false;
 }
 
-/*!
-    Stops the asynchronous read sequence.
-    If the read sequence is running then the I/O operation is canceled.
- */
 void QWindowsPipeReader::stop()
 {
    stopped = true;
@@ -89,17 +82,11 @@ void QWindowsPipeReader::stop()
    }
 }
 
-/*!
-    Returns the number of bytes we've read so far.
- */
 qint64 QWindowsPipeReader::bytesAvailable() const
 {
    return actualReadBufferSize;
 }
 
-/*!
-    Copies at most \c{maxlen} bytes from the internal read buffer to \c{data}.
- */
 qint64 QWindowsPipeReader::read(char *data, qint64 maxlen)
 {
    if (pipeBroken && actualReadBufferSize == 0) {
