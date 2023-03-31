@@ -210,7 +210,7 @@ bool QHttpNetworkConnectionPrivate::shouldEmitChannelError(QAbstractSocket *sock
             emitError = false;
          }
          if (networkLayerState == QHttpNetworkConnectionPrivate::Unknown) {
-            qWarning() << "We got a connection error when networkLayerState is Unknown";
+            qWarning() << "Connection error when networkLayerState is Unknown";
          }
       }
    }

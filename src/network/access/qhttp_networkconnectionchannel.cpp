@@ -378,7 +378,7 @@ void QHttpNetworkConnectionChannel::allDone()
    Q_ASSERT(reply);
 
    if (! reply) {
-      qWarning() << "QHttpNetworkConnectionChannel::allDone() called without reply. Please report at http://github.com/copperspice/copperspice";
+      qWarning() << "QHttpNetworkConnectionChannel::allDone() called without reply. Please report at https://github.com/copperspice/copperspice";
       return;
    }
 

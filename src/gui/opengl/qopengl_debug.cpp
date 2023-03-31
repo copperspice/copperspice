@@ -811,8 +811,11 @@ void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
         offscreenSurface.reset(new QOffscreenSurface);
         offscreenSurface->setFormat(context->format());
         offscreenSurface->create();
-        if (!context->makeCurrent(offscreenSurface.data()))
-            qWarning("QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed(): could not make the owning GL context current for cleanup");
+
+        if (! context->makeCurrent(offscreenSurface.data())) {
+            qWarning("QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed(): "
+               "Unable to make the owning GL context current for cleanup");
+        }
     }
 
     Q_Q(QOpenGLDebugLogger);
@@ -920,8 +923,8 @@ bool QOpenGLDebugLogger::initialize()
 #ifndef QT_NO_DEBUG
     if (! d->context->format().testOption(QSurfaceFormat::DebugContext)) {
         qWarning("QOpenGLDebugLogger::initialize(): the current context is not a debug context:\n"
-                 "    this means that the GL may not generate any debug output at all.\n"
-                 "    To avoid this warning, try creating the context with the\n"
+                 "    which means the GL may not generate any debug output.\n"
+                 "    To avoid this warning try creating the context with the\n"
                  "    QSurfaceFormat::DebugContext surface format option.");
     }
 #endif

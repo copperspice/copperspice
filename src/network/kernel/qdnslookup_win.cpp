@@ -78,7 +78,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
 
       case DNS_ERROR_RCODE_FORMAT_ERROR:
          reply->error = QDnsLookup::InvalidRequestError;
-         reply->errorString = tr("Server could not process query");
+         reply->errorString = tr("Server was unable to process query");
          return;
 
       case DNS_ERROR_RCODE_SERVER_FAILURE:

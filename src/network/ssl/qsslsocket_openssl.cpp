@@ -390,8 +390,8 @@ bool QSslSocketBackendPrivate::initSslContext()
             ace.chop(1);
          }
 
-         if (!q_SSL_ctrl(ssl, SSL_CTRL_SET_TLSEXT_HOSTNAME, TLSEXT_NAMETYPE_host_name, ace.data())) {
-            qWarning("could not set SSL_CTRL_SET_TLSEXT_HOSTNAME, Server Name Indication disabled");
+         if (! q_SSL_ctrl(ssl, SSL_CTRL_SET_TLSEXT_HOSTNAME, TLSEXT_NAMETYPE_host_name, ace.data())) {
+            qWarning("Unable to set SSL_CTRL_SET_TLSEXT_HOSTNAME, Server Name Indication disabled");
          }
       }
    }
@@ -535,8 +535,8 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
    if (securityLib.load()) {
       ptrSecCertificateCopyData = (PtrSecCertificateCopyData) securityLib.resolve("SecCertificateCopyData");
 
-      if (!ptrSecCertificateCopyData) {
-         qWarning("could not resolve symbols in security library");   // should never happen
+      if (! ptrSecCertificateCopyData) {
+         qWarning("Unable to resolve symbols in security library");   // should never happen
       }
 
       ptrSecTrustSettingsCopyCertificates = (PtrSecTrustSettingsCopyCertificates)
@@ -548,12 +548,12 @@ void QSslSocketPrivate::ensureCiphersAndCertsLoaded()
                securityLib.resolve("SecTrustCopyAnchorCertificates");
 
          if (!ptrSecTrustCopyAnchorCertificates) {
-            qWarning("could not resolve symbols in security library"); // should never happen
+            qWarning("Unable to resolve symbols in security library"); // should never happen
          }
       }
 
    } else {
-      qWarning("could not load security library");
+      qWarning("Unable to load security library");
    }
 
 
@@ -754,7 +754,7 @@ QList<QSslCertificate> QSslSocketPrivate::systemCaCertificates()
 
       } else {
          // no detailed error handling here
-         qWarning("could not retrieve system CA certificates");
+         qWarning("Unable to retrieve system CA certificates");
       }
    }
 
@@ -1779,7 +1779,7 @@ void QSslSocketBackendPrivate::continueHandshake()
       file.close();
 
    } else {
-      qWarning("could not decrypt SSL traffic");
+      qWarning("Unable to decrypt SSL traffic");
    }
 #endif
 
