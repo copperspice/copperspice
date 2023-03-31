@@ -1352,7 +1352,7 @@ static Qt::DockWidgetArea toDockWidgetArea(QInternal::DockPosition pos)
    return Qt::NoDockWidgetArea;
 }
 
-inline static Qt::DockWidgetArea toDockWidgetArea(int pos)
+static inline Qt::DockWidgetArea toDockWidgetArea(int pos)
 {
    return toDockWidgetArea(static_cast<QInternal::DockPosition>(pos));
 }

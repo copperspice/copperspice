@@ -312,7 +312,8 @@ static void qt_qimageScaleAARGBA(QImageScaleInfo *isi, unsigned int *dest,
    }
 }
 
-inline static void qt_qimageScaleAARGBA_helper(const unsigned int *pix, int xyap, int Cxy, int step, int &r, int &g, int &b, int &a)
+static inline void qt_qimageScaleAARGBA_helper(const unsigned int *pix, int xyap, int Cxy,
+      int step, int &r, int &g, int &b, int &a)
 {
    r = qRed(*pix)   * xyap;
    g = qGreen(*pix) * xyap;
@@ -504,7 +505,9 @@ static void qt_qimageScaleAARGB(QImageScaleInfo *isi, unsigned int *dest,
          qt_qimageScaleAARGB_down_xy(isi, dest, dw, dh, dow, sow);
    }
 }
-inline static void qt_qimageScaleAARGB_helper(const unsigned int *pix, int xyap, int Cxy, int step, int &r, int &g, int &b)
+
+static inline void qt_qimageScaleAARGB_helper(const unsigned int *pix, int xyap, int Cxy,
+      int step, int &r, int &g, int &b)
 {
    r = qRed(*pix)   * xyap;
    g = qGreen(*pix) * xyap;

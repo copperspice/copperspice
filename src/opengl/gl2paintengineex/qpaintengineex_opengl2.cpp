@@ -70,7 +70,7 @@
 # include <qopenglfunctions_1_1.h>
 #endif
 
-inline static bool isPowerOfTwo(uint x)
+static inline bool isPowerOfTwo(uint x)
 {
    return x && !(x & (x - 1));
 }

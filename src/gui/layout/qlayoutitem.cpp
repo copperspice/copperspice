@@ -33,24 +33,24 @@
 #include <qlayoutengine_p.h>
 #include <qwidget_p.h>
 
-inline static QRect fromLayoutItemRect(QWidgetPrivate *priv, const QRect &rect)
+static inline QRect fromLayoutItemRect(QWidgetPrivate *priv, const QRect &rect)
 {
    return rect.adjusted(priv->leftLayoutItemMargin, priv->topLayoutItemMargin,
          -priv->rightLayoutItemMargin, -priv->bottomLayoutItemMargin);
 }
 
-inline static QSize fromLayoutItemSize(QWidgetPrivate *priv, const QSize &size)
+static inline QSize fromLayoutItemSize(QWidgetPrivate *priv, const QSize &size)
 {
    return fromLayoutItemRect(priv, QRect(QPoint(0, 0), size)).size();
 }
 
-inline static QRect toLayoutItemRect(QWidgetPrivate *priv, const QRect &rect)
+static inline QRect toLayoutItemRect(QWidgetPrivate *priv, const QRect &rect)
 {
    return rect.adjusted(-priv->leftLayoutItemMargin, -priv->topLayoutItemMargin,
          priv->rightLayoutItemMargin, priv->bottomLayoutItemMargin);
 }
 
-inline static QSize toLayoutItemSize(QWidgetPrivate *priv, const QSize &size)
+static inline QSize toLayoutItemSize(QWidgetPrivate *priv, const QSize &size)
 {
    return toLayoutItemRect(priv, QRect(QPoint(0, 0), size)).size();
 }

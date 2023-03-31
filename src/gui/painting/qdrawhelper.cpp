@@ -6098,7 +6098,7 @@ static void qt_gradient_quint16(int count, const QSpan *spans, void *userData)
    }
 }
 
-inline static void qt_bitmapblit_argb32(QRasterBuffer *rasterBuffer,
+static inline void qt_bitmapblit_argb32(QRasterBuffer *rasterBuffer,
    int x, int y, const QRgba64 &color,
    const uchar *map,
    int mapWidth, int mapHeight, int mapStride)
@@ -6107,7 +6107,7 @@ inline static void qt_bitmapblit_argb32(QRasterBuffer *rasterBuffer,
       map, mapWidth, mapHeight, mapStride);
 }
 
-inline static void qt_bitmapblit_rgba8888(QRasterBuffer *rasterBuffer,
+static inline void qt_bitmapblit_rgba8888(QRasterBuffer *rasterBuffer,
    int x, int y, const QRgba64 &color,
    const uchar *map,
    int mapWidth, int mapHeight, int mapStride)
@@ -6117,7 +6117,7 @@ inline static void qt_bitmapblit_rgba8888(QRasterBuffer *rasterBuffer,
 }
 
 template<QtPixelOrder PixelOrder>
-inline static void qt_bitmapblit_rgb30(QRasterBuffer *rasterBuffer,
+static void qt_bitmapblit_rgb30(QRasterBuffer *rasterBuffer,
    int x, int y, const QRgba64 &color,
    const uchar *map,
    int mapWidth, int mapHeight, int mapStride)
@@ -6126,7 +6126,7 @@ inline static void qt_bitmapblit_rgb30(QRasterBuffer *rasterBuffer,
       map, mapWidth, mapHeight, mapStride);
 }
 
-inline static void qt_bitmapblit_quint16(QRasterBuffer *rasterBuffer,
+static inline void qt_bitmapblit_quint16(QRasterBuffer *rasterBuffer,
    int x, int y, const QRgba64 &color,
    const uchar *map,
    int mapWidth, int mapHeight, int mapStride)

@@ -49,12 +49,12 @@ QDataStream &operator>>(QDataStream &stream, QLine &line)
    return stream;
 }
 
-inline static qreal q_deg2rad(qreal x)
+static inline qreal q_deg2rad(qreal x)
 {
    return x * qreal(0.01745329251994329576923690768489);    /* pi/180 */
 }
 
-inline static qreal q_rad2deg(qreal x)
+static inline qreal q_rad2deg(qreal x)
 {
    return x * qreal(57.295779513082320876798154814105);    /* 180/pi */
 }

@@ -51,7 +51,7 @@ int minPositive(int value1, int value2)
    return retval;
 }
 
-inline static bool isHex(char c)
+static inline bool isHex(char c)
 {
    c |= 0x20;
    return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');

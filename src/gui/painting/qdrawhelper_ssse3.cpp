@@ -27,7 +27,7 @@
 
 #include <qdrawingprimitive_sse2_p.h>
 
-inline static void blend_pixel(quint32 &dst, const quint32 src)
+static inline void blend_pixel(quint32 &dst, const quint32 src)
 {
    if (src >= 0xff000000) {
       dst = src;

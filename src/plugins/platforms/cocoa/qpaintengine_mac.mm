@@ -173,7 +173,7 @@ CGImageRef qt_mac_create_imagemask(const QPixmap &pixmap, const QRectF &sr)
 }
 
 //conversion
-inline static float qt_mac_convert_color_to_cg(int c)
+static inline float qt_mac_convert_color_to_cg(int c)
 {
    return ((float)c * 1000 / 255) / 1000;
 }
@@ -183,7 +183,7 @@ CGAffineTransform qt_mac_convert_transform_to_cg(const QTransform &t)
    return CGAffineTransformMake(t.m11(), t.m12(), t.m21(), t.m22(), t.dx(),  t.dy());
 }
 
-inline static QCFType<CGColorRef> cgColorForQColor(const QColor &col, QPaintDevice *pdev)
+static inline QCFType<CGColorRef> cgColorForQColor(const QColor &col, QPaintDevice *pdev)
 {
    CGFloat components[] = {
       qt_mac_convert_color_to_cg(col.red()),
@@ -564,7 +564,7 @@ static void qt_mac_dispose_pattern(void *info)
   QCoreGraphicsPaintEngine member functions
  *****************************************************************************/
 
-inline static QPaintEngine::PaintEngineFeatures qt_mac_cg_features()
+static inline QPaintEngine::PaintEngineFeatures qt_mac_cg_features()
 {
    return QPaintEngine::PaintEngineFeatures(QPaintEngine::AllFeatures & ~QPaintEngine::PaintOutsidePaintEvent
          & ~QPaintEngine::PerspectiveTransform

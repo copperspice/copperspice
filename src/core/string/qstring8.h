@@ -296,16 +296,14 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       ~QString8() = default;
 
-
 #if defined(__cpp_char8_t)
       // support new data type added in C++20
 
-      QString8(const char8_t *str);
-      QString8(const char8_t *str, size_type size);
+      inline QString8(const char8_t *str);
+      inline QString8(const char8_t *str, size_type size);
 
-      static QString8 fromUtf8(const char8_t *str, size_type numOfChars = -1);
+      static inline QString8 fromUtf8(const char8_t *str, size_type numOfChars = -1);
 #endif
-
 
       using CsString::CsString::append;          // internal
       using CsString::CsString::operator=;      // internal

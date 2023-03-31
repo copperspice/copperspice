@@ -173,7 +173,7 @@ inline my_jpeg_source_mgr::my_jpeg_source_mgr(QIODevice *device)
    next_input_byte = buffer;
 }
 
-inline static bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
+static inline bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
 {
    (void) jpeg_calc_output_dimensions(cinfo);
 
@@ -185,7 +185,7 @@ inline static bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
 
 #define HIGH_QUALITY_THRESHOLD 50
 
-inline static bool read_jpeg_format(QImage::Format &format, j_decompress_ptr cinfo)
+static inline bool read_jpeg_format(QImage::Format &format, j_decompress_ptr cinfo)
 {
 
    bool result = true;

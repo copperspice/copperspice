@@ -3010,7 +3010,8 @@ void QStyleSheetStyle::unpolish(QApplication *app)
 }
 
 #ifndef QT_NO_TABBAR
-inline static bool verticalTabs(QTabBar::Shape shape)
+
+static inline bool verticalTabs(QTabBar::Shape shape)
 {
    return shape == QTabBar::RoundedWest
       || shape == QTabBar::RoundedEast

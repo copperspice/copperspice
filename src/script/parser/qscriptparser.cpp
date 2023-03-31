@@ -42,7 +42,7 @@
 // Changes will be lost.
 //
 
-inline static bool automatic(QScriptEnginePrivate *driver, int token)
+static inline bool automatic(QScriptEnginePrivate *driver, int token)
 {
    return token == QScriptGrammar::T_RBRACE
           || token == 0

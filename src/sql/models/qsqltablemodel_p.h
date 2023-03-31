@@ -152,7 +152,7 @@ class QSqlTableModelPrivate: public QSqlQueryModelPrivate
          return m_db_values.keyValues(pi);
       }
     private:
-      inline static void setGenerated(QSqlRecord &r, bool g) {
+      static inline void setGenerated(QSqlRecord &r, bool g) {
          for (int i = r.count() - 1; i >= 0; --i) {
             r.setGenerated(i, g);
          }

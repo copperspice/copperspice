@@ -95,7 +95,7 @@ class QVideoSurfaceFormatPrivate : public QSharedData
       }
    }
 
-   inline static bool frameRatesEqual(qreal r1, qreal r2) {
+   static inline bool frameRatesEqual(qreal r1, qreal r2) {
       return qAbs(r1 - r2) <= 0.00001 * qMin(qAbs(r1), qAbs(r2));
    }
 

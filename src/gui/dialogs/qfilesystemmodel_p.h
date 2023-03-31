@@ -342,7 +342,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       return row;
    }
 
-   inline static QString myComputer() {
+   static inline QString myComputer() {
       // ### TODO We should query the system to find out what the string should be
       // XP == "My Computer",
       // Vista == "Computer",

@@ -208,7 +208,7 @@ QXcbScreen::QXcbScreen(QXcbConnection *connection, QXcbVirtualDesktop *virtualDe
 
    readXResources();
 
-   QScopedPointer<xcb_get_window_attributes_reply_t, QScopedPointerPodDeleter> rootAttribs(
+   QScopedPointer<xcb_get_window_attributes_reply_t, QMallocDeleter> rootAttribs(
       xcb_get_window_attributes_reply(xcb_connection(),
          xcb_get_window_attributes_unchecked(xcb_connection(), screen()->root), NULL));
    const quint32 existingEventMask = rootAttribs.isNull() ? 0 : rootAttribs->your_event_mask;

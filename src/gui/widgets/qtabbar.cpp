@@ -67,7 +67,7 @@ void QMovableTabWidget::paintEvent(QPaintEvent *e)
    p.drawPixmap(0, 0, m_pixmap);
 }
 
-inline static bool verticalTabs(QTabBar::Shape shape)
+static inline bool verticalTabs(QTabBar::Shape shape)
 {
    return shape == QTabBar::RoundedWest
       || shape == QTabBar::RoundedEast
