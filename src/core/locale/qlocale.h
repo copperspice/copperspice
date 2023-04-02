@@ -24,6 +24,7 @@
 #ifndef QLOCALE_H
 #define QLOCALE_H
 
+#include <qshareddatapointer.h>
 #include <qvariant.h>
 
 class QLocale;

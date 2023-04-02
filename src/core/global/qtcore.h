@@ -87,7 +87,6 @@
 #include <qresource.h>
 #include <qrunnable.h>
 #include <qsavefile.h>
-#include <qscopedpointer.h>
 #include <qscopedvaluerollback.h>
 #include <qsemaphore.h>
 #include <qsequentialanimationgroup.h>
@@ -110,6 +109,7 @@
 #include <qstringparser.h>
 #include <qstringview.h>
 #include <qsystemsemaphore.h>
+#include <quniquepointer.h>
 
 #include <qtconcurrentcompilertest.h>
 #include <qtconcurrentexception.h>
