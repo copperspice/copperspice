@@ -63,10 +63,8 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
       uint flags;
 
       Handle()
-         : handle(INVALID_HANDLE_VALUE), flags(0u) {
-      }
-      Handle(const Handle &other)
-         : handle(other.handle), flags(other.flags) {
+         : handle(INVALID_HANDLE_VALUE), flags(0u)
+      {
       }
    };
 

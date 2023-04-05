@@ -382,9 +382,9 @@ static HWND qt_create_internal_window(const QEventDispatcherWin32 *eventDispatch
                            0,                 // style
                            0, 0, 0, 0,        // geometry
                            parent,            // parent
-                           0,                 // menu handle
+                           nullptr,          // menu handle
                            qWinAppInst(),     // application
-                           0);                // windows creation data.
+                           nullptr);         // windows creation data.
 
    if (! wnd) {
       qWarning("QEventDispatcher: Failed to create QEventDispatcherWin32 internal window: %d\n", (int)GetLastError());

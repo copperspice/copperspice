@@ -62,6 +62,9 @@ class Q_XMLPATTERNS_EXPORT QXmlName
    QXmlName(QXmlNamePool &namePool, const QString &localName, const QString &namespaceURI = QString(),
             const QString &prefix = QString());
 
+   QXmlName(const QXmlName &other) = default;
+   QXmlName &operator=(const QXmlName &other) = default;
+
    QString namespaceUri(const QXmlNamePool &namePool) const;
    QString prefix(const QXmlNamePool &namePool) const;
    QString localName(const QXmlNamePool &namePool) const;
@@ -69,7 +72,6 @@ class Q_XMLPATTERNS_EXPORT QXmlName
 
    bool operator==(const QXmlName &other) const;
    bool operator!=(const QXmlName &other) const;
-   QXmlName &operator=(const QXmlName &other);
    bool isNull() const;
 
    static bool isNCName(const QString &candidate);

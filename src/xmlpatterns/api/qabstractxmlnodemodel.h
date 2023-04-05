@@ -63,23 +63,12 @@ typedef QVector<QXmlName> QXmlNameVector;
 class NodeIndexStorage
 {
  public:
-   typedef qint64 Data;
-
-   //  ** Changing the order of these two members, ptr and data is a binary incompatible on Mac Power PC.
-   union {
-      void *ptr;    // Do not use ptr directly, use pointer() instead.
-      Data data;
-   };
-
    void *pointer() const {
       // Constructing to qptrdiff means we avoid the warning "cast to pointer  from integer of different size.
       return (void *)qptrdiff(data);
    }
 
-   Data additionalData;
-   const QAbstractXmlNodeModel *model;
-
-   // Implementation is in qabstractxmlnodemodel.cpp.
+   // Implementation is in qabstractxmlnodemodel.cpp
    inline bool operator!=(const NodeIndexStorage &other) const;
 
    void reset() {
@@ -87,8 +76,19 @@ class NodeIndexStorage
       additionalData = 0;
       model = nullptr;
    }
+
+   qint64 additionalData = 0;
+   const QAbstractXmlNodeModel *model = nullptr;
+
+   // ** Changing the order of these two members, ptr and data is a binary incompatible on Mac Power PC
+   // Do not use ptr directly, use pointer() instead
+   union {
+      void *ptr;
+      qint64 data;
+   };
 };
-}
+
+}  // end namespace
 
 class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
 {
@@ -98,18 +98,18 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    };
 
  public:
+   typedef QAbstractXmlForwardIterator<QXmlNodeModelIndex> Iterator;
+   typedef QList<QXmlNodeModelIndex> List;
+
    inline QXmlNodeModelIndex() {
       reset();
    }
 
-   inline QXmlNodeModelIndex(const QXmlNodeModelIndex &other) : m_storage(other.m_storage) {
-   }
+   QXmlNodeModelIndex(const QXmlNodeModelIndex &other) = default;
+   QXmlNodeModelIndex &operator=(const QXmlNodeModelIndex &other) = default;
 
    bool operator==(const QXmlNodeModelIndex &other) const;
    bool operator!=(const QXmlNodeModelIndex &other) const;
-
-   typedef QAbstractXmlForwardIterator<QXmlNodeModelIndex> Iterator;
-   typedef QList<QXmlNodeModelIndex> List;
 
    enum NodeKind {
       Attribute               = 1,

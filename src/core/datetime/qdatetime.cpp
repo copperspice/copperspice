@@ -1271,8 +1271,9 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
 #else
    // Returns shared static data which may be overwritten at any time
    // So copy the result asap
-   tm *res = 0;
+   tm *res = nullptr;
    res = localtime(&secsSinceEpoch);
+
    if (res) {
       local = *res;
       valid = true;
