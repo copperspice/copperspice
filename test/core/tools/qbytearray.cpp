@@ -32,6 +32,42 @@ TEST_CASE("QByteArray traits", "[qbytearray]")
    REQUIRE(std::has_virtual_destructor_v<QByteArray> == false);
 }
 
+TEST_CASE("QByteArray append", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox and sizeable pig";
+
+   str.append(" went to lunch");
+
+   REQUIRE(str == "A wacky fox and sizeable pig went to lunch");
+}
+
+TEST_CASE("QByteArray clear", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon.";
+
+   str.clear();
+
+   REQUIRE(str.length() == 0);
+}
+
+TEST_CASE("QByteArray compress", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+
+   QByteArray data   = qCompress(str);
+   QByteArray output = qUncompress(data);
+
+   REQUIRE(str == output);
+}
+
+TEST_CASE("QByteArray contains", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+
+   REQUIRE(str.contains("jumped"));
+   REQUIRE(! str.contains("lunch"));
+}
+
 TEST_CASE("QByteArray empty", "[qbytearray]")
 {
    QByteArray str;
@@ -44,32 +80,6 @@ TEST_CASE("QByteArray length", "[qbytearray]")
    QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
    REQUIRE(str.length() == 60);
-}
-
-TEST_CASE("QByteArray clear", "[qbytearray]")
-{
-   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon.";
-
-   str.clear();
-
-   REQUIRE(str.length() == 0);
-}
-
-TEST_CASE("QByteArray contains", "[qbytearray]")
-{
-   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
-
-   REQUIRE(str.contains("jumped"));
-   REQUIRE(! str.contains("lunch"));
-}
-
-TEST_CASE("QByteArray append", "[qbytearray]")
-{
-   QByteArray str = "A wacky fox and sizeable pig";
-
-   str.append(" went to lunch");
-
-   REQUIRE(str == "A wacky fox and sizeable pig went to lunch");
 }
 
 TEST_CASE("QByteArray replace", "[qbytearray]")

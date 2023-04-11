@@ -117,7 +117,7 @@ TEST_CASE("QScopedArrayPointer release", "[qscopedarraypointer]")
    REQUIRE(p1 == p2);
    REQUIRE(ptr == nullptr);
 
-   delete p2;
+   delete[] p2;
 
    REQUIRE(ptr.release() == nullptr);
 }
