@@ -106,6 +106,11 @@ TEST_CASE("QScopedArrayPointer move_construct", "[qscopedarraypointer]")
 
    REQUIRE(ptr1.isNull() == true);
    REQUIRE(ptr2.isNull() == false);
+
+   QScopedArrayPointer<int[]> ptr3(std::move(ptr2));
+
+   REQUIRE(ptr2.isNull() == true);
+   REQUIRE(ptr3.isNull() == false);
 }
 
 TEST_CASE("QScopedArrayPointer release", "[qscopedarraypointer]")
@@ -163,4 +168,3 @@ TEST_CASE("QScopedArrayPointer swap", "[qscopedarraypointer]")
    REQUIRE(*ptr1 == 8);
    REQUIRE(ptr2 == nullptr);
 }
-
