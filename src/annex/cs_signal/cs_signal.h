@@ -113,7 +113,7 @@ class LIB_SIG_EXPORT SignalBase
 
       void addConnection(std::unique_ptr<const Internal::BentoAbstract> signalMethod, const SlotBase *,
                   std::unique_ptr<const Internal::BentoAbstract> slotMethod, ConnectionKind type,
-                  libguarded::SharedList<ConnectStruct>::write_handle senderListHandle) const;
+                  libguarded::SharedList<ConnectStruct>::write_handle &senderListHandle) const;
 
       virtual void handleException(std::exception_ptr data);
 
