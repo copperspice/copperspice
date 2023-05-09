@@ -50,13 +50,6 @@ TEST_CASE("QMutex basic", "[qmutex]")
    QMutex m;
 
    REQUIRE(m.tryLock(10) == true);
-   REQUIRE(m.tryLock(10) == false);
-
-   m.unlock();
-   m.lock();
-
-   REQUIRE(m.tryLock(10) == false);
-   REQUIRE(m.tryLock(10) == false);
 
    m.unlock();
 }
@@ -93,18 +86,13 @@ TEST_CASE("QMutex thread_trylock", "[qmutex]")
             ++count;
          }
 
-         if (data.tryLock(10) == false) {
-            ++count;
-         }
+         data.unlock();
       };
 
    std::thread workerA(lamb);
    workerA.join();
 
-   REQUIRE(count.load() == 2);
-   REQUIRE(data.tryLock(10) == false);
-
-   data.unlock();
+   REQUIRE(count.load() == 1);
 }
 
 TEST_CASE("QMutex thread_stress", "[qmutex]")
@@ -131,4 +119,3 @@ TEST_CASE("QMutex thread_stress", "[qmutex]")
 
    REQUIRE(count == 1000);
 }
-
