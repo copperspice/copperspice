@@ -36,15 +36,15 @@ class CameraBinZoom  : public QCameraZoomControl
    CameraBinZoom(CameraBinSession *session);
    virtual ~CameraBinZoom();
 
-   qreal maximumOpticalZoom() const;
-   qreal maximumDigitalZoom() const;
+   qreal maximumOpticalZoom() const override;
+   qreal maximumDigitalZoom() const override;
 
-   qreal requestedOpticalZoom() const;
-   qreal requestedDigitalZoom() const;
-   qreal currentOpticalZoom() const;
-   qreal currentDigitalZoom() const;
+   qreal requestedOpticalZoom() const override;
+   qreal requestedDigitalZoom() const override;
+   qreal currentOpticalZoom() const override;
+   qreal currentDigitalZoom() const override;
 
-   void zoomTo(qreal optical, qreal digital);
+   void zoomTo(qreal optical, qreal digital) override;
 
  private:
    CameraBinSession *m_session;
@@ -52,4 +52,4 @@ class CameraBinZoom  : public QCameraZoomControl
    qreal m_requestedDigitalZoom;
 };
 
-#endif // CAMERABINZOOMCONTROL_H
+#endif

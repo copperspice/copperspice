@@ -104,7 +104,7 @@ class QXcbXSettingsPrivate
                _xsettings_atom,
                offset / 4,
                8192);
-         xcb_get_property_reply_t *reply = xcb_get_property_reply(screen->xcb_connection(), get_prop_cookie, NULL);
+         xcb_get_property_reply_t *reply = xcb_get_property_reply(screen->xcb_connection(), get_prop_cookie, nullptr);
          bool more = false;
          if (!reply) {
             return settings;

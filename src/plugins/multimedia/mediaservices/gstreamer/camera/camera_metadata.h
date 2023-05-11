@@ -35,20 +35,20 @@ class CameraBinMetaData : public QMetaDataWriterControl
    virtual ~CameraBinMetaData() {
    }
 
-   bool isMetaDataAvailable() const {
-      return true;
-   }
-   bool isWritable() const {
+   bool isMetaDataAvailable() const override {
       return true;
    }
 
-   QVariant metaData(const QString &key) const;
-   void setMetaData(const QString &key, const QVariant &value);
-   QStringList availableMetaData() const;
+   bool isWritable() const override {
+      return true;
+   }
 
- public:
-   CS_SIGNAL_1(Public, void metaDataChanged(const QMap <QByteArray, QVariant> &un_named_arg1))
-   CS_SIGNAL_2(metaDataChanged, un_named_arg1)
+   QVariant metaData(const QString &key) const override;
+   void setMetaData(const QString &key, const QVariant &value) override;
+   QStringList availableMetaData() const override;
+
+   CS_SIGNAL_1(Public, void metaDataChanged(const QMap <QByteArray, QVariant> &metaData))
+   CS_SIGNAL_2(metaDataChanged, metaData)
 
  private:
    QMap<QByteArray, QVariant> m_values;

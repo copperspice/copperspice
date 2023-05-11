@@ -41,15 +41,14 @@ class CameraBinImageEncoder : public QImageEncoderControl
    virtual ~CameraBinImageEncoder();
 
    QList<QSize> supportedResolutions(const QImageEncoderSettings &settings = QImageEncoderSettings(),
-                                     bool *continuous = nullptr) const;
+         bool *continuous = nullptr) const override;
 
-   QStringList supportedImageCodecs() const;
-   QString imageCodecDescription(const QString &formatName) const;
+   QStringList supportedImageCodecs() const override;
+   QString imageCodecDescription(const QString &formatName) const override;
 
-   QImageEncoderSettings imageSettings() const;
-   void setImageSettings(const QImageEncoderSettings &settings);
+   QImageEncoderSettings imageSettings() const override;
+   void setImageSettings(const QImageEncoderSettings &settings) override;
 
- public:
    CS_SIGNAL_1(Public, void settingsChanged())
    CS_SIGNAL_2(settingsChanged)
 
@@ -58,7 +57,6 @@ class CameraBinImageEncoder : public QImageEncoderControl
 
    CameraBinSession *m_session;
 
-   // Added
    QStringList m_codecs;
    QMap<QString, QByteArray> m_elementNames;
    QMap<QString, QString> m_codecDescriptions;

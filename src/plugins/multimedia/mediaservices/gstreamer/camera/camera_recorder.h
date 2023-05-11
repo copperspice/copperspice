@@ -39,30 +39,30 @@ class CameraBinRecorder : public QMediaRecorderControl
    CameraBinRecorder(CameraBinSession *session);
    virtual ~CameraBinRecorder();
 
-   QUrl outputLocation() const;
-   bool setOutputLocation(const QUrl &sink);
+   QUrl outputLocation() const override;
+   bool setOutputLocation(const QUrl &sink) override;
 
-   QMediaRecorder::State state() const;
-   QMediaRecorder::Status status() const;
+   QMediaRecorder::State state() const override;
+   QMediaRecorder::Status status() const override;
 
-   qint64 duration() const;
+   qint64 duration() const override;
 
-   bool isMuted() const;
-   qreal volume() const;
+   bool isMuted() const override;
+   qreal volume() const override;
 
-   void applySettings();
+   void applySettings() override;
 
 #ifdef HAVE_GST_ENCODING_PROFILES
    GstEncodingContainerProfile *videoProfile();
 #endif
 
-   CS_SLOT_1(Public, void setState(QMediaRecorder::State state))
+   CS_SLOT_1(Public, void setState(QMediaRecorder::State state) override)
    CS_SLOT_2(setState)
 
-   CS_SLOT_1(Public, void setMuted(bool un_named_arg1))
+   CS_SLOT_1(Public, void setMuted(bool muted) override)
    CS_SLOT_2(setMuted)
 
-   CS_SLOT_1(Public, void setVolume(qreal volume))
+   CS_SLOT_1(Public, void setVolume(qreal volume) override)
    CS_SLOT_2(setVolume)
 
    CS_SLOT_1(Public, void updateStatus())

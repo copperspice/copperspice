@@ -320,7 +320,7 @@ QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QL
    if (notation == QDoubleValidator::StandardNotation) {
       double max = qMax(qAbs(q->b), qAbs(q->t));
 
-      if (max < LLONG_MAX) {
+      if (max < double(LLONG_MAX)) {
          qint64 n = pow10(numDigits(qint64(max))) - 1;
 
          if (qAbs(i) > n) {

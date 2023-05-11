@@ -50,20 +50,20 @@ class PhraseModel : public QAbstractTableModel
    void setPhrase(const QModelIndex &indx, Phrase *ph);
    QModelIndex index(Phrase *const phr) const;
 
-   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const {
+   QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override {
       return QAbstractTableModel::index(row, column, parent);
    }
 
    // from qabstracttablemodel
-   int rowCount(const QModelIndex &) const;
-   int columnCount(const QModelIndex &) const;
-   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-   Qt::ItemFlags flags(const QModelIndex &index) const;
-   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+   int rowCount(const QModelIndex &) const override;
+   int columnCount(const QModelIndex &) const override;
+   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
+   bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
    // This model will be displayed in a _TreeView_  which has a tendency to expand 'children' on double click
-   bool hasChildren(const QModelIndex &parent) const {
+   bool hasChildren(const QModelIndex &parent) const override {
       return ! parent.isValid();
    }
 

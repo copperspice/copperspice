@@ -80,8 +80,8 @@ class MainWindow : public QMainWindow
  protected:
    void readConfig();
    void writeConfig();
-   void closeEvent(QCloseEvent *);
-   bool eventFilter(QObject *object, QEvent *event);
+   void closeEvent(QCloseEvent *) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
 
  private:
    // file

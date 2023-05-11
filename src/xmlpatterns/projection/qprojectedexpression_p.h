@@ -69,9 +69,11 @@ class ProjectedNodeTest
 class ProjectedStep : public ProjectedExpression
 {
  public:
-   ProjectedStep(const ProjectedNodeTest::Ptr test,
-                 const QXmlNodeModelIndex::Axis axis) : m_test(test),
-      m_axis(axis) {
+   ProjectedStep(const ProjectedNodeTest::Ptr test, const QXmlNodeModelIndex::Axis axis)
+      : m_test(test)
+   {
+      (void) axis;
+
       Q_ASSERT(m_test);
    }
 
@@ -84,7 +86,6 @@ class ProjectedStep : public ProjectedExpression
 
  private:
    const ProjectedNodeTest::Ptr    m_test;
-   const QXmlNodeModelIndex::Axis  m_axis;
 };
 
 class ProjectedPath : public ProjectedExpression

@@ -188,8 +188,8 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
       return m_inputDevice;
    }
 
-   bool processSyncMessage(const QGstreamerMessage &message);
-   bool processBusMessage(const QGstreamerMessage &message);
+   bool processSyncMessage(const QGstreamerMessage &message) override;
+   bool processBusMessage(const QGstreamerMessage &message) override;
 
  public:
    CS_SIGNAL_1(Public, void statusChanged(QCamera::Status status))

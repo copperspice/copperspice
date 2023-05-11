@@ -50,21 +50,21 @@ class CameraBinAudioEncoder : public QAudioEncoderSettingsControl
    CameraBinAudioEncoder(QObject *parent);
    virtual ~CameraBinAudioEncoder();
 
-   QStringList supportedAudioCodecs() const;
-   QString codecDescription(const QString &codecName) const;
+   QStringList supportedAudioCodecs() const override;
+   QString codecDescription(const QString &codecName) const override;
 
    QStringList supportedEncodingOptions(const QString &codec) const;
    QVariant encodingOption(const QString &codec, const QString &name) const;
    void setEncodingOption(const QString &codec, const QString &name, const QVariant &value);
 
    QList<int> supportedSampleRates(const QAudioEncoderSettings &settings = QAudioEncoderSettings(),
-                                   bool *isContinuous = nullptr) const;
+                                   bool *isContinuous = nullptr) const override;
 
    QList<int> supportedChannelCounts(const QAudioEncoderSettings &settings = QAudioEncoderSettings()) const;
    QList<int> supportedSampleSizes(const QAudioEncoderSettings &settings = QAudioEncoderSettings()) const;
 
-   QAudioEncoderSettings audioSettings() const;
-   void setAudioSettings(const QAudioEncoderSettings &);
+   QAudioEncoderSettings audioSettings() const override;
+   void setAudioSettings(const QAudioEncoderSettings &) override;
 
    QAudioEncoderSettings actualAudioSettings() const;
    void setActualAudioSettings(const QAudioEncoderSettings &);

@@ -418,7 +418,7 @@ void QIdentityProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<QPe
 {
    Q_Q(QIdentityProxyModel);
 
-   for (const QPersistentModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
+   for (const QModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
       proxyIndexes << proxyPersistentIndex;
       Q_ASSERT(proxyPersistentIndex.isValid());
       const QPersistentModelIndex srcPersistentIndex = q->mapToSource(proxyPersistentIndex);
