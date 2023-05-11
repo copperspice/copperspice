@@ -29,12 +29,10 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
-class Driver;
-
 class DatabaseInfo : public TreeWalker
 {
  public:
-   DatabaseInfo(Driver *driver);
+   DatabaseInfo();
 
    void acceptUI(DomUI *node) override;
    void acceptWidget(DomWidget *node) override;
@@ -52,7 +50,6 @@ class DatabaseInfo : public TreeWalker
    }
 
  private:
-   Driver *driver;
    QStringList m_connections;
    QMap<QString, QStringList> m_cursors;
    QMap<QString, QStringList> m_fields;
