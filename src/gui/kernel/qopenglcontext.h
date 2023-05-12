@@ -172,7 +172,7 @@ class Q_GUI_EXPORT QOpenGLContext : public QObject
 
    QAbstractOpenGLFunctions *versionFunctions(const QOpenGLVersionProfile &versionProfile = QOpenGLVersionProfile()) const;
 
-   template<class TYPE>
+   template <class TYPE>
    TYPE *versionFunctions() const {
       QOpenGLVersionProfile v = TYPE::versionProfile();
       return static_cast<TYPE *>(versionFunctions(v));

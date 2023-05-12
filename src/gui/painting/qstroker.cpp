@@ -165,7 +165,8 @@ class QSubpathFlatIterator
    qreal m_curve_threshold;
 };
 
-template <class Iterator> bool qt_stroke_side(Iterator *it, QStroker *stroker,
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker,
    bool capFirst, QLineF *startTangent);
 
 static inline qreal adapted_angle_on_x(const QLineF &line)
@@ -613,10 +614,9 @@ void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine
    connect the first segment, other segments will be joined using joinPoints.
    This is to put capping in order...
 */
-template <class Iterator> bool qt_stroke_side(Iterator *it,
-   QStroker *stroker,
-   bool capFirst,
-   QLineF *startTangent)
+
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *startTangent)
 {
    // Used in CurveToElement section below.
    const int MAX_OFFSET = 16;

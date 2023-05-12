@@ -581,7 +581,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return *this;
       }
 
-      template<typename Iterator>
+      template <typename Iterator>
       QString16 &insert(const_iterator first, Iterator begin, Iterator end) {
          CsString::CsString_utf16::insert(first, begin, end);
          return *this;

@@ -131,16 +131,16 @@ class Q_CORE_EXPORT QMetaMethod
    void setTag(const QString &data);
    const QString &tag() const;
 
-   template<class R, class ...Ts>
+   template <class R, class ...Ts>
    bool invoke(QObject *object, Qt::ConnectionType type, CSReturnArgument<R> retval, Ts &&... Vs) const;
 
-   template<class R, class ...Ts>
+   template <class R, class ...Ts>
    bool invoke(QObject *object, CSReturnArgument<R> retval, Ts &&... Vs) const;
 
-   template<class ...Ts>
+   template <class ...Ts>
    bool invoke(QObject *object, Qt::ConnectionType type, Ts &&... Vs) const;
 
-   template<class ...Ts>
+   template <class ...Ts>
    bool invoke(QObject *object, Ts &&... Vs) const;
 
  private:
@@ -220,7 +220,7 @@ class Q_CORE_EXPORT QMetaProperty
    //!
    //! Reads the property's value from the given \a obj. Returns the property value if
    //! valid, otherwise returns a default constructed T.
-   template<class T>
+   template <class T>
    T read(const QObject *obj) const;
 
    bool reset(QObject *obj) const;
@@ -240,10 +240,10 @@ class Q_CORE_EXPORT QMetaProperty
    void setReadMethod(std::type_index returnTypeId, QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead);
    void setWriteMethod(JarWriteAbstract *method);
 
-   template<class T>
+   template <class T>
    void setNotifyMethod(T method);
 
-   template<class T>
+   template <class T>
    void setResetMethod(void (T::*method)());
 
    void setDesignable(JarReadAbstract *method);
@@ -301,17 +301,17 @@ QMetaMethod QMetaMethod::fromSignal(void (SignalClass::* signalMethod)(SignalArg
 }
 
 // QMetaMethod::invoke moved to csobject_internal.h becasue invoke() calls methods in QObject
-// template<class ...Ts>
+// template <class ...Ts>
 // bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgument<R> retval, Ts&&...Vs)
 
-template<class R, class ...Ts>
+template <class R, class ...Ts>
 bool QMetaMethod::invoke(QObject *object, CSReturnArgument<R> retval, Ts &&...Vs) const
 {
    // calls first overload
    return this->invoke(object, Qt::AutoConnection, retval, std::forward<Ts>(Vs)...);
 }
 
-template<class ...Ts>
+template <class ...Ts>
 bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 {
    // calls third overload, no return value from the invoked method
@@ -347,13 +347,13 @@ class CS_ReturnType
 
 // specialization of a templated class
 #define CS_REGISTER_TEMPLATE(dataType)                   \
-   template<class... Ts>                                 \
+   template <class... Ts>                                 \
    class CS_ReturnType<dataType<Ts...>>                  \
    {                                                     \
       public:                                            \
          static const QString &getName();                \
    };                                                    \
-   template<class... Ts>                                 \
+   template <class... Ts>                                 \
    const QString &CS_ReturnType< dataType<Ts...> >::getName()                               \
    {                                                                                        \
       static const QString retval(QString(#dataType) + "<" + cs_typeToName<Ts...>() + ">"); \
@@ -363,14 +363,14 @@ class CS_ReturnType
 #endif // doxypress
 
 // methods for these 2 class, located in csmeta_internal2.h around line 113
-template<class E>
+template <class E>
 class CS_ReturnType<E, typename std::enable_if<std::is_enum_v<E>>::type>
 {
  public:
    static const QString &getName();
 };
 
-template<class E>
+template <class E>
 class CS_ReturnType<QFlags<E>>
 {
  public:
@@ -379,7 +379,7 @@ class CS_ReturnType<QFlags<E>>
 
 
 // QObject and children
-template<class T>
+template <class T>
 class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
    typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
@@ -387,7 +387,7 @@ class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
    static const QString &getName();
 };
 
-template<class T>
+template <class T>
 const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject ,
        typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::getName()
 {
@@ -396,7 +396,7 @@ const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaO
 
 
 // standard template function   ( class T1 = cs_internalEmpty, default value located in csmetafwd.h )
-template<class T1>
+template <class T1>
 const QString &cs_typeToName()
 {
    if constexpr (std::is_same_v<T1, cs_internalEmpty>) {
@@ -433,7 +433,7 @@ const QString &cs_typeToName()
    }
 }
 
-template<class T>
+template <class T>
 const QString &cs_typeToName_fold()
 {
    static const QString retval = "," + cs_typeToName<T>();
@@ -441,7 +441,7 @@ const QString &cs_typeToName_fold()
    return retval;
 }
 
-template<class T1, class T2, class ...Ts>
+template <class T1, class T2, class ...Ts>
 const QString &cs_typeToName()
 {
    // fold expression
@@ -555,7 +555,7 @@ CS_REGISTER_TEMPLATE(std::pair)
 #if ! defined (CS_DOXYPRESS)
 
 // next 8 function are specializations for containers to omit the Compare template when it is not specified
-template<class Key, class Value>
+template <class Key, class Value>
 class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
 {
    public:
@@ -565,7 +565,7 @@ class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
       }
 };
 
-template<class Key, class Value>
+template <class Key, class Value>
 class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>
 {
    public:
@@ -575,7 +575,7 @@ class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>
       }
 };
 
-template<class Key, class Value>
+template <class Key, class Value>
 class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
@@ -585,7 +585,7 @@ class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
       }
 };
 
-template<class Key, class Value>
+template <class Key, class Value>
 class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 {
    public:
@@ -598,7 +598,7 @@ class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
 #endif // doxypress
 
 // **
-template<class T>
+template <class T>
 T QMetaProperty::read(const QObject *object) const
 {
    if (! object || ! m_readJar) {
@@ -608,7 +608,7 @@ T QMetaProperty::read(const QObject *object) const
    return m_readJar->run<T>(object);
 }
 
-template<class T>
+template <class T>
 void QMetaProperty::setNotifyMethod(T method)
 {
    if (! method)  {
@@ -621,7 +621,7 @@ void QMetaProperty::setNotifyMethod(T method)
    m_notify_able = true;
 }
 
-template<class T>
+template <class T>
 void QMetaProperty::setResetMethod( void (T::*method)() )
 {
    if (! method)  {

@@ -278,7 +278,7 @@ class QMap
    explicit QMap(const std::map<Key, Val, C> &other)
       : m_data(other) {}
 
-   template<typename Input_Iterator>
+   template <typename Input_Iterator>
    QMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
       : m_data(first, last, compare) {}
 

@@ -221,15 +221,15 @@ static void qt_qimageScaleAARGBA_down_xy(QImageScaleInfo *isi, unsigned int *des
 
 #if defined(QT_COMPILER_SUPPORTS_SSE4_1)
 
-template<bool RGB>
+template <bool RGB>
 void qt_qimageScaleAARGBA_up_x_down_y_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
 
-template<bool RGB>
+template <bool RGB>
 void qt_qimageScaleAARGBA_down_x_up_y_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
 
-template<bool RGB>
+template <bool RGB>
 void qt_qimageScaleAARGBA_down_xy_sse4(QImageScaleInfo *isi, unsigned int *dest,
    int dw, int dh, int dow, int sow);
 

@@ -43,7 +43,7 @@ struct regex_traits : public implementationT {
 
 namespace cs_regex_detail_ns {
 
-template<class T>
+template <class T>
 struct has_boost_extensions_tag {
    static const bool value = false;
 };

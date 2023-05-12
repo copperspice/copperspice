@@ -94,7 +94,8 @@ Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 // qChecksum: Internet checksum
 Q_CORE_EXPORT quint16 qChecksum(const char *s, uint len);
 
-template<int N> struct QStaticByteArrayData {
+template <int N>
+struct QStaticByteArrayData {
    QByteArrayData value;
    char data[N + 1];
 

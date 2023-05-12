@@ -216,7 +216,7 @@ inline bool QPixmap::loadFromData(const QByteArray &data, const QString &format,
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPixmap &pixmap);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap);
 
-template<>
+template <>
 inline bool CustomType_T<QPixmap>::compare(const CustomType &other) const {
 
    auto ptr = dynamic_cast<const CustomType_T<QPixmap>*>(&other);

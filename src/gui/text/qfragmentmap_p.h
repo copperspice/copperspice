@@ -222,7 +222,8 @@ void QFragmentMapData<Fragment>::init()
    F(head->freelist).right = 0;
 }
 
-template <class Fragment> QFragmentMapData<Fragment>::~QFragmentMapData()
+template <class Fragment>
+QFragmentMapData<Fragment>::~QFragmentMapData()
 {
    free(fragments);
 }

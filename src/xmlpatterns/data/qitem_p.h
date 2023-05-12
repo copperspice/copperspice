@@ -31,9 +31,14 @@
 #include <QUrl>
 #include <QVariant>
 
-template<typename T> class QList;
-template<typename T> class QVector;
-template<typename T> class QAbstractXmlForwardIterator;
+template<typename T>
+class QList;
+
+template<typename T>
+class QVector;
+
+template<typename T>
+class QAbstractXmlForwardIterator;
 
 class QSourceLocation;
 class QAbstractXmlReceiver;

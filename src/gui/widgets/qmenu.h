@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QMenu : public QWidget
                   const QKeySequence &shortcut = 0);
 
    // connect to a slot or function pointer (with context)
-   template<class Obj, typename Func1>
+   template <class Obj, typename Func1>
    typename std::enable_if < ! std::is_convertible<Func1, QString>::value &&
          ! std::is_convertible<Func1, const char *>::value &&
          std::is_base_of<QObject, Obj>::value, QAction * >::type
@@ -114,7 +114,7 @@ class Q_GUI_EXPORT QMenu : public QWidget
    }
 
    // addAction(QIcon, QString): Connect to a QObject slot / functor or function pointer (with context)
-   template<class Obj, typename Func1>
+   template <class Obj, typename Func1>
    typename std::enable_if < ! std::is_convertible<Func1, QString>::value &&
       std::is_base_of<QObject, Obj>::value, QAction * >::type addAction(const QIcon &actionIcon, const QString &text,
       const Obj *object, Func1 slot, const QKeySequence &shortcut = QKeySequence()) {

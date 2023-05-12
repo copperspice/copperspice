@@ -27,7 +27,8 @@
 #include <qglobal.h>
 #include <qatomic.h>
 
-template <class T> class QSharedDataPointer;
+template <class T>
+class QSharedDataPointer;
 
 class Q_CORE_EXPORT QSharedData
 {
@@ -272,7 +273,7 @@ class QExplicitlySharedDataPointer
       }
    }
 
-   template<class X>
+   template <class X>
    inline QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<X> &other)
       : d(static_cast<T *>(other.data()))
    {

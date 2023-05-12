@@ -149,10 +149,11 @@ QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery
 
 namespace {
 
-template<bool>
+template <bool>
 struct StaticAssertTest;
 
-template<> struct StaticAssertTest<true> {
+template <>
+struct StaticAssertTest<true> {
    enum { Value = 1 };
 };
 
@@ -226,7 +227,8 @@ class QNetworkProxyPrivate: public QSharedData
    }
 };
 
-template<> void QSharedDataPointer<QNetworkProxyPrivate>::detach()
+template <>
+void QSharedDataPointer<QNetworkProxyPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {
       return;
@@ -449,7 +451,8 @@ class QNetworkProxyQueryPrivate: public QSharedData
 #endif
 };
 
-template<> void QSharedDataPointer<QNetworkProxyQueryPrivate>::detach()
+template <>
+void QSharedDataPointer<QNetworkProxyQueryPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {
       return;

@@ -71,7 +71,7 @@ static void rowLengthsFromRange(const QItemSelectionRange &range, QVector<QPair<
    }
 }
 
-template<typename ModelIndexContainer>
+template <typename ModelIndexContainer>
 static void indexesFromRange(const QItemSelectionRange &range, ModelIndexContainer &result)
 {
    if (range.isValid() && range.model()) {

@@ -30,10 +30,11 @@
 
 #include <qdatastream.h>
 
-template <class T> class QVector;
 class QVariant;
 struct QRegionPrivate;
 
+template <class T>
+class QVector;
 
 class QBitmap;
 

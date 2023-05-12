@@ -451,7 +451,7 @@ inline int qt_static_shift(int value)
    }
 }
 
-template<int aprec, int zprec>
+template <int aprec, int zprec>
 inline void qt_blurinner(uchar *bptr, int &zR, int &zG, int &zB, int &zA, int alpha)
 {
    QRgb *pixel = (QRgb *)bptr;
@@ -484,7 +484,7 @@ inline void qt_blurinner(uchar *bptr, int &zR, int &zG, int &zB, int &zA, int al
 
 const int alphaIndex = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
 
-template<int aprec, int zprec>
+template <int aprec, int zprec>
 inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
 {
    const int A_zprec = int(*(bptr)) << zprec;
@@ -493,7 +493,7 @@ inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
    *(bptr) = z >> (zprec + aprec);
 }
 
-template<int aprec, int zprec, bool alphaOnly>
+template <int aprec, int zprec, bool alphaOnly>
 inline void qt_blurrow(QImage &im, int line, int alpha)
 {
    uchar *bptr = im.scanLine(line);

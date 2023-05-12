@@ -51,7 +51,7 @@ struct padding3 {
    };
 };
 
-template<>
+template <>
 struct padding3<2> {
    enum {
       padding_size = 2,
@@ -59,7 +59,7 @@ struct padding3<2> {
    };
 };
 
-template<>
+template <>
 struct padding3<4> {
    enum {
       padding_size = 4,
@@ -67,7 +67,7 @@ struct padding3<4> {
    };
 };
 
-template<>
+template <>
 struct padding3<8> {
    enum {
       padding_size = 8,
@@ -75,7 +75,7 @@ struct padding3<8> {
    };
 };
 
-template<>
+template <>
 struct padding3<16> {
    enum {
       padding_size = 16,

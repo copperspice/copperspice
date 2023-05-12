@@ -84,7 +84,7 @@ inline bool is_combining<QChar32>(QChar32 c)
 
 
 // type traits, internal only
-template<typename S>
+template <typename S>
 class QRegexTraits
 {
    public:
@@ -131,29 +131,29 @@ class QRegexTraits
          return c;
       }
 
-      template<typename C = QChar32>
+      template <typename C = QChar32>
       QChar32 translate_nocase(QChar32 c) const {
          // broom - modify for case insensitive when multiple chars are returned
          return C(c).toCaseFolded()[0];
       }
 
-      template<typename Iter>
+      template <typename Iter>
       string_type transform(Iter first, Iter last)  const {
          return S(first, last);
       }
 
-      template<typename Iter>
+      template <typename Iter>
       string_type transform_primary(Iter first, Iter last)  const {
          return S(first, last).toCaseFolded();
       }
 
-      template<typename Iter>
+      template <typename Iter>
       string_type lookup_collatename(Iter first, Iter last)  const {
          string_type retval(first, last);
          return retval;
       }
 
-      template<typename Iter>
+      template <typename Iter>
       char_class_type lookup_classname(Iter first, Iter last)  const {
          S cName{first, last};
 
@@ -212,7 +212,7 @@ class QRegexTraits
          return Char_Category::categoryNone;
       }
 
-      template<typename C = QChar32>
+      template <typename C = QChar32>
       bool isctype(QChar32 c, char_class_type cType) const {
          // does the character c belong to the class_type t
          bool retval = false;
@@ -1036,7 +1036,7 @@ QMatchOptionFlags QRegularExpressionMatch<S>::matchOptions() const
    return m_matchOptions;
 }
 
-template<typename S>
+template <typename S>
 S QRegularExpression<S>::convert_wildcard(const S &str, const bool enableEscaping)
 {
    S retval;

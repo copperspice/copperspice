@@ -80,8 +80,8 @@ class QStandardItemEditorCreator: public QItemEditorCreatorBase
    QString propertyName;
 };
 
-
-template <class T> QItemEditorCreator<T>::QItemEditorCreator(const QString &valuePropertyName)
+template <class T>
+QItemEditorCreator<T>::QItemEditorCreator(const QString &valuePropertyName)
    : propertyName(valuePropertyName)
 {
 }

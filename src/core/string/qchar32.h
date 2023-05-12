@@ -550,7 +550,7 @@ inline uint qHash(const QChar32 &key, uint seed)
 }
 
 namespace std {
-   template<>
+   template <>
    struct hash<QChar32> {
       size_t operator()(const QChar32 &key) const {
          return key.unicode();

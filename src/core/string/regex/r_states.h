@@ -57,17 +57,17 @@ struct _wide_type {};
 template <class charT>
 struct is_byte;
 
-template<>
+template <>
 struct is_byte<char>         {
    typedef _narrow_type width_type;
 };
 
-template<>
+template <>
 struct is_byte<unsigned char> {
    typedef _narrow_type width_type;
 };
 
-template<>
+template <>
 struct is_byte<signed char>  {
    typedef _narrow_type width_type;
 };
@@ -282,7 +282,7 @@ enum re_jump_size_type {
 
 
 // Forward declaration: we'll need this one later
-template<class charT, class traits>
+template <class charT, class traits>
 struct regex_data;
 
 template <class iterator, class charT, class traits_type, class char_classT>

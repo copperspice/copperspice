@@ -237,7 +237,7 @@ void QSvgRendererPrivate::callRepaintNeeded(QSvgRenderer *const q)
    q->repaintNeeded();
 }
 
-template<typename TInputType>
+template <typename TInputType>
 static bool loadDocument(QSvgRenderer *const q, QSvgRendererPrivate *const d, const TInputType &in)
 {
    delete d->render;

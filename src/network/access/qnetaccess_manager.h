@@ -52,7 +52,9 @@ class QHttpMultiPart;
 class QNetworkReplyImplPrivate;
 class QNetworkAccessManagerPrivate;
 
-template<typename T> class QList;
+template <typename T>
+class QList;
+
 class QNetworkCookie;
 
 class Q_NETWORK_EXPORT QNetworkAccessManager : public QObject

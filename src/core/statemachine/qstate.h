@@ -72,7 +72,7 @@ class Q_CORE_EXPORT QState : public QAbstractState
 
    void addTransition(QAbstractTransition *transition);
 
-   template<class SignalClass, class ...SignalArgs>
+   template <class SignalClass, class ...SignalArgs>
    QSignalTransition *addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QAbstractState *target);
 
    QAbstractTransition *addTransition(QAbstractState *target);

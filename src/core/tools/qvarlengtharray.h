@@ -35,11 +35,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-template<class T, int Prealloc>
+template <class T, int Prealloc>
 class QPodList;
 
 // Prealloc = 256 by default, specified in qcontainerfwd.h
-template<class T, int Prealloc>
+template <class T, int Prealloc>
 class QVarLengthArray
 {
  public:

@@ -1787,6 +1787,7 @@ QImage QImage::createMaskFromColor(QRgb color, Qt::MaskMode mode) const
          s += maskImage.bytesPerLine();
       }
    }
+
    if  (mode == Qt::MaskOutColor) {
       maskImage.invertPixels();
    }
@@ -1794,7 +1795,8 @@ QImage QImage::createMaskFromColor(QRgb color, Qt::MaskMode mode) const
    return maskImage;
 }
 
-template<class T> inline void do_mirror_data(QImageData *dst, QImageData *src,
+template <class T>
+inline void do_mirror_data(QImageData *dst, QImageData *src,
    int dstX0, int dstY0, int dstXIncr, int dstYIncr, int w, int h)
 {
    if (dst == src) {

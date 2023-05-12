@@ -169,9 +169,12 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     void updateCompositionMode();
 
     enum TextureUpdateMode { UpdateIfNeeded, ForceUpdate };
-    template<typename T>
-    void updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode, GLenum filterMode, TextureUpdateMode updateMode = UpdateIfNeeded);
-    template<typename T>
+
+    template <typename T>
+    void updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode, GLenum filterMode,
+          TextureUpdateMode updateMode = UpdateIfNeeded);
+
+    template <typename T>
     GLuint bindTexture(const T &texture);
     void activateTextureUnit(GLenum textureUnit);
 

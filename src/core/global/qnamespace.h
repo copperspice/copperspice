@@ -32,7 +32,7 @@ class CSGadget_Fake_Parent;
 class QMetaObject;
 class QTextCodec;
 
-template<class T>
+template <class T>
 class QMetaObject_T;
 
 class Q_CORE_EXPORT Qt
@@ -46,7 +46,7 @@ class Q_CORE_EXPORT Qt
       static const char *cs_className();
       static const QMetaObject_T<Qt> &staticMetaObject();
 
-      template<int N>
+      template <int N>
       static void cs_regTrigger(cs_number<N>)
       { }
 

@@ -865,7 +865,7 @@ class QIncompatibleFlag
 
 #ifndef Q_NO_TYPESAFE_FLAGS
 
-template<typename E>
+template <typename E>
 class QFlags
 {
    public:

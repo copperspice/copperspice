@@ -70,7 +70,8 @@ class QUrlQueryPrivate : public QSharedData
    QChar pairDelimiter;
 };
 
-template<> void QSharedDataPointer<QUrlQueryPrivate>::detach()
+template <>
+void QSharedDataPointer<QUrlQueryPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {
       return;

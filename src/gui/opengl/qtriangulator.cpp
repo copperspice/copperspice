@@ -44,7 +44,7 @@
 
 #define Q_FIXED_POINT_SCALE 32
 
-template<typename T>
+template <typename T>
 struct QVertexSet
 {
     inline QVertexSet() { }
@@ -562,7 +562,7 @@ inline void QInt64Set::clear()
 //============================================================================//
 //                               QTriangulator                                //
 //============================================================================//
-template<typename T>
+template <typename T>
 class QTriangulator
 {
 public:

@@ -42,7 +42,7 @@ class QMouseEvent;
 
 namespace QMdi {
 
-template<typename T>
+template <typename T>
 class ControlElement : public T
 {
  public:

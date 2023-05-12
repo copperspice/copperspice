@@ -41,7 +41,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
  public:
    QSignalTransition(QState *sourceState = nullptr);
 
-   template<class SignalClass, class ...SignalArgs>
+   template <class SignalClass, class ...SignalArgs>
    QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState = nullptr);
 
    QSignalTransition(const QSignalTransition &) = delete;
@@ -73,7 +73,7 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
 };
 
 
-template<class SignalClass, class ...SignalArgs>
+template <class SignalClass, class ...SignalArgs>
 QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
    : QAbstractTransition(sourceState)
 {
@@ -83,7 +83,7 @@ QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal
    m_signalBento.reset(new CSBento<void (SignalClass::*)(SignalArgs...)> {signal});
 }
 
-template<class SignalClass, class ...SignalArgs>
+template <class SignalClass, class ...SignalArgs>
 QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...),
       QAbstractState *target)
 {

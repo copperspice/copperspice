@@ -56,7 +56,7 @@ static inline bool qtransform_equals_no_translate(const QTransform &a, const QTr
    }
 }
 
-template<typename T>
+template <typename T>
 static inline bool qSafeFromBigEndian(const uchar *source, const uchar *end, T *output)
 {
    if (source + sizeof(T) > end) {
