@@ -81,7 +81,7 @@ class CsUniqueArrayPointer : public CsUniquePointer<cs_add_missing_extent_t<T>, 
    }
 };
 
-template <class T, class = typename std::enable_if_t<std::is_array_v<T>>>
+template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
 CsUniqueArrayPointer<T> make_unique(std::size_t size)
 {
    return std::make_unique<T>(size);
