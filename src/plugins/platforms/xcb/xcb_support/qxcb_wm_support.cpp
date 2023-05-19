@@ -37,8 +37,6 @@ bool QXcbWMSupport::isSupportedByWM(xcb_atom_t atom) const
    return net_wm_atoms.contains(atom);
 }
 
-
-
 void QXcbWMSupport::updateNetWMAtoms()
 {
    net_wm_atoms.clear();

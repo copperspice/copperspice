@@ -115,6 +115,7 @@ class QHashableLatin1Literal
    int size() const {
       return m_size;
    }
+
    const char *data() const {
       return m_data;
    }

@@ -636,15 +636,18 @@ QVariant QTiffHandler::option(ImageOption option)
          imageSize = QSize(width, height);
          TIFFClose(tiff);
       }
+
       device()->seek(pos);
       if (imageSize.isValid()) {
          return imageSize;
       }
+
    } else if (option == CompressionRatio) {
       return compression;
    } else if (option == ImageFormat) {
       return QImage::Format_ARGB32;
    }
+
    return QVariant();
 }
 

@@ -27,9 +27,8 @@
 #include <qprojectedexpression_p.h>
 #include <qabstractxmlreceiver.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class DocumentProjector : public QAbstractXmlReceiver
 {
  public:
@@ -60,8 +59,7 @@ class DocumentProjector : public QAbstractXmlReceiver
 
    QAbstractXmlReceiver *const m_receiver;
 };
-}
 
-QT_END_NAMESPACE
+}   // end namespace
 
 #endif

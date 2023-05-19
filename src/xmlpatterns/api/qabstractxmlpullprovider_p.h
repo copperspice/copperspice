@@ -70,6 +70,7 @@ class AbstractXmlPullProvider
    AbstractXmlPullProvider(const AbstractXmlPullProvider &) = delete;
    AbstractXmlPullProvider &operator=(const AbstractXmlPullProvider &) = delete;
 };
-}
+
+}   // end namespace
 
 #endif

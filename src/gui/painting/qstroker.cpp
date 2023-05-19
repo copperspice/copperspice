@@ -635,9 +635,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 #endif
 
    qfixed2d prev = start;
-
-   bool first = true;
-
+   bool first    = true;
    qfixed offset = stroker->strokeWidth() / 2;
 
    while (it->hasNext()) {
@@ -645,11 +643,14 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
       // LineToElement
       if (e.isLineTo()) {
+
 #ifdef QPP_STROKE_DEBUG
          qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
 #endif
+
          QLineF line(qt_fixed_to_real(prev.x), qt_fixed_to_real(prev.y),
             qt_fixed_to_real(e.x), qt_fixed_to_real(e.y));
+
          if (line.p1() != line.p2()) {
             QLineF normal = line.normalVector();
             normal.setLength(offset);

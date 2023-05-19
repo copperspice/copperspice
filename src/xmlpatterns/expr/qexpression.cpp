@@ -21,19 +21,17 @@
 *
 ***********************************************************************/
 
-#include "qboolean_p.h"
-#include "qcommonvalues_p.h"
-#include "qemptysequence_p.h"
-#include "qliteral_p.h"
-#include "qliteralsequence_p.h"
-#include "qoperandsiterator_p.h"
-#include "qoptimizerframework_p.h"
-#include "qstaticfocuscontext_p.h"
-#include "qtypechecker_p.h"
+#include <qboolean_p.h>
+#include <qcommonvalues_p.h>
+#include <qemptysequence_p.h>
+#include <qliteral_p.h>
+#include <qliteralsequence_p.h>
+#include <qoperandsiterator_p.h>
+#include <qoptimizerframework_p.h>
+#include <qstaticfocuscontext_p.h>
+#include <qtypechecker_p.h>
 
-#include "qexpression_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qexpression_p.h>
 
 using namespace QPatternist;
 
@@ -49,8 +47,7 @@ StaticContext::Ptr Expression::finalizeStaticContext(const StaticContext::Ptr &c
    return StaticContext::Ptr(new StaticFocusContext(focusType, context));
 }
 
-Expression::Ptr Expression::typeCheck(const StaticContext::Ptr &context,
-                                      const SequenceType::Ptr &reqType)
+Expression::Ptr Expression::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    Q_ASSERT(reqType);
    typeCheckOperands(context);
@@ -63,7 +60,7 @@ void Expression::typeCheckOperands(const StaticContext::Ptr &context)
 
    /* Check if this expression has any operands at all. */
    if (ops.isEmpty()) {
-      return;   /* We're done, early exit. */
+      return;
    }
 
    const SequenceType::List opTypes(expectedOperandTypes());
@@ -103,14 +100,13 @@ void Expression::typeCheckOperands(const StaticContext::Ptr &context)
    setOperands(result);
 }
 
-Expression::Ptr Expression::invokeOptimizers(const Expression::Ptr &expr,
-      const StaticContext::Ptr &context)
+Expression::Ptr Expression::invokeOptimizers(const Expression::Ptr &expr, const StaticContext::Ptr &context)
 {
    Q_ASSERT(expr);
 
    const OptimizationPass::List opts(expr->optimizationPasses());
 
-   if (opts.isEmpty()) { /* Early exit. */
+   if (opts.isEmpty()) {
       return expr;
    }
 
@@ -153,17 +149,20 @@ Expression::Ptr Expression::invokeOptimizers(const Expression::Ptr &expr,
                continue;
             }
          }
+
          case OptimizationPass::AnyOrder: {
             Q_ASSERT_X(ops.count() == 2, Q_FUNC_INFO,
                        "AnyOrder is currently only supported for Expressions with two operands.");
             if (pass->operandIdentifiers.first()->matches(ops.first()) &&
                   pass->operandIdentifiers.last()->matches(ops.last())) {
                break;
+
             } else if (pass->operandIdentifiers.first()->matches(ops.last()) &&
                        pass->operandIdentifiers.last()->matches(ops.first())) {
                sourceMarker.first() = 1;
                sourceMarker[1] = 0;
                break; /* This pass matched. */
+
             } else {
                continue;   /* This pass didn't match, let's loop through the next pass. */
             }
@@ -241,11 +240,14 @@ Expression::Ptr Expression::constantPropagate(const StaticContext::Ptr &context)
       switch (result.count()) {
          case 0:
             return EmptySequence::create(this, context);
+
          case 1:
             return rewrite(Expression::Ptr(new Literal(result.first())), context);
+
          default:
             return rewrite(Expression::Ptr(new LiteralSequence(result)), context);
       }
+
    } else {
       const Item item(evaluateSingleton(context->dynamicContext()));
 
@@ -369,5 +371,3 @@ PatternPriority Expression::patternPriority() const
 {
    return 0.5;
 }
-
-QT_END_NAMESPACE

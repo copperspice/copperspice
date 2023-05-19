@@ -26,17 +26,16 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ProjectedExpression
 {
  public:
    typedef ProjectedExpression *Ptr;
    typedef QVector<ProjectedExpression::Ptr> Vector;
 
-   virtual ~ProjectedExpression() {
-   }
+   virtual ~ProjectedExpression()
+   { }
 
    enum Action {
       Move = 0,
@@ -57,11 +56,12 @@ class ProjectedNodeTest
 {
  public:
    typedef ProjectedNodeTest *Ptr;
-   virtual ~ProjectedNodeTest() {
-   }
+
+   virtual ~ProjectedNodeTest()
+   { }
 
    virtual bool isMatch(const QXmlNodeModelIndex::NodeKind kind) const {
-      Q_UNUSED(kind);
+      (void) kind;
       return false;
    }
 };
@@ -80,19 +80,21 @@ class ProjectedStep : public ProjectedExpression
    Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const override {
       Q_UNUSED(name);
       Q_UNUSED(next);
+
       // TODO
       return Skip;
    }
 
  private:
-   const ProjectedNodeTest::Ptr    m_test;
+   const ProjectedNodeTest::Ptr m_test;
 };
 
 class ProjectedPath : public ProjectedExpression
 {
  public:
-   ProjectedPath(const ProjectedExpression::Ptr left, const ProjectedExpression::Ptr right) : m_left(left),
-      m_right(right) {
+   ProjectedPath(const ProjectedExpression::Ptr left, const ProjectedExpression::Ptr right)
+      : m_left(left), m_right(right)
+   {
       Q_ASSERT(m_left);
       Q_ASSERT(m_right);
    }
@@ -113,8 +115,7 @@ class ProjectedPath : public ProjectedExpression
    const ProjectedExpression::Ptr  m_left;
    const ProjectedExpression::Ptr  m_right;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

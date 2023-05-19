@@ -24,11 +24,9 @@
 #ifndef QXMLSCHEMA_H
 #define QXMLSCHEMA_H
 
-#include <QSharedDataPointer>
-#include <QUrl>
-#include <QXmlNamePool>
-
-QT_BEGIN_NAMESPACE
+#include <qshareddatapointer.h>
+#include <qurl.h>
+#include <qxmlnamepool.h>
 
 class QAbstractMessageHandler;
 class QAbstractUriResolver;
@@ -70,7 +68,5 @@ class Q_XMLPATTERNS_EXPORT QXmlSchema
  private:
    QSharedDataPointer<QXmlSchemaPrivate> d;
 };
-
-QT_END_NAMESPACE
 
 #endif

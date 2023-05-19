@@ -27,16 +27,15 @@
 #include <qatomic.h>
 #include <qrect.h>
 #include <qwindowdefs.h>
-
 #include <qdatastream.h>
 
+class QBitmap;
 class QVariant;
+
 struct QRegionPrivate;
 
 template <class T>
 class QVector;
-
-class QBitmap;
 
 class Q_GUI_EXPORT QRegion
 {
@@ -50,6 +49,7 @@ class Q_GUI_EXPORT QRegion
 
    QRegion(const QRegion &other);
    QRegion(const QBitmap &bitmap);
+
    ~QRegion();
 
    QRegion &operator=(const QRegion &other);
@@ -87,7 +87,6 @@ class Q_GUI_EXPORT QRegion
 
    QRegion subtracted(const QRegion &region) const;
    QRegion xored(const QRegion &region) const;
-
 
    bool intersects(const QRegion &region) const;
    bool intersects(const QRect &rect) const;

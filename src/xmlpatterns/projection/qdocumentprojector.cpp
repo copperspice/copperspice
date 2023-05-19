@@ -25,20 +25,17 @@
 
 using namespace QPatternist;
 
-DocumentProjector::DocumentProjector(const ProjectedExpression::Vector &paths,
-                  QAbstractXmlReceiver *const receiver)
+DocumentProjector::DocumentProjector(const ProjectedExpression::Vector &paths, QAbstractXmlReceiver *const receiver)
    : m_paths(paths), m_pathCount(paths.count()), m_action(ProjectedExpression::Move),
      m_nodesInProcess(0), m_receiver(receiver)
 {
    Q_ASSERT_X(paths.count() > 0, Q_FUNC_INFO,
-              "Using DocumentProjector with no paths is an overhead and has also undefined behavior.");
+              "Using DocumentProjector with no paths is undefined behavior.");
    Q_ASSERT(m_receiver);
 }
 
 void DocumentProjector::startElement(const QXmlName &name)
 {
-   (void) name;
-
    switch (m_action) {
       case ProjectedExpression::KeepSubtree: {
          m_receiver->startElement(name);
@@ -52,8 +49,8 @@ void DocumentProjector::startElement(const QXmlName &name)
 
       default: {
          Q_ASSERT_X(m_action == ProjectedExpression::Move, Q_FUNC_INFO,
-                    "We're not supposed to receive Keep here, because "
-                    "endElement() should always end that state.");
+                    "Not to supposed to receive Keep because "
+                    "endElement() should always end the Keep state.");
 
          for (int i = 0; i < m_pathCount; ++i) {
             m_action = m_paths.at(i)->actionForElement(name, m_paths[i]);
@@ -63,13 +60,14 @@ void DocumentProjector::startElement(const QXmlName &name)
                   m_action = ProjectedExpression::Keep;
                   continue;
                }
+
                case ProjectedExpression::KeepSubtree: {
-                  /* Ok, at least one path wanted this node. Pass it on,
-                   * and exit. */
+                  // Ok, at least one path wanted this node. Pass it on, * and exit.
                   m_receiver->startElement(name);
                   ++m_nodesInProcess;
                   return;
                }
+
                case ProjectedExpression::Skip: {
                   /* This particular path doesn't need it, but
                    * some other path might, so continue looping. */
@@ -155,7 +153,7 @@ void DocumentProjector::characters(QStringView value)
 
 void DocumentProjector::processingInstruction(const QXmlName &name, const QString &value)
 {
-   Q_ASSERT_X(! value.contains(QLatin1String("?>")), Q_FUNC_INFO,
+   Q_ASSERT_X(! value.contains(QString("?>")), Q_FUNC_INFO,
               "Invalid input, caller is responsible to supply valid input.");
 
    Q_UNUSED(name);
@@ -174,4 +172,3 @@ void DocumentProjector::startDocument()
 void DocumentProjector::endDocument()
 {
 }
-

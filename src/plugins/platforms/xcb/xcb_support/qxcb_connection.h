@@ -711,8 +711,10 @@ class QXcbConnection : public QObject
       }
 
       int deviceId;
-      int verticalIndex, horizontalIndex;
-      double verticalIncrement, horizontalIncrement;
+      int verticalIndex;
+      int horizontalIndex;
+      double verticalIncrement;
+      double horizontalIncrement;
       Qt::Orientations orientations;
       Qt::Orientations legacyOrientations;
       QPointF lastScrollPosition;

@@ -654,7 +654,7 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
     is more efficient as it eliminates QRegion operations/allocations and can
     use the rect more precisely for additional cut-offs.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    UpdateTime updateTime, BufferState bufferState)
@@ -668,7 +668,7 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
 
 #ifndef QT_NO_GRAPHICSEFFECT
    widget->d_func()->invalidateGraphicsEffectsRecursively();
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
    if (widget->d_func()->paintOnScreen()) {
       if (widget->d_func()->dirty.isEmpty()) {
@@ -1719,7 +1719,7 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
     all widgets intersecting with the region will be repainted when the backing store
     is synced.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
 {
@@ -1748,7 +1748,7 @@ void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
     is more efficient as it eliminates QRegion operations/allocations and can
     use the rect more precisely for additional cut-offs.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetPrivate::invalidateBuffer(const QRect &rect)
 {

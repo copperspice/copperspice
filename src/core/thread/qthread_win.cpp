@@ -508,7 +508,8 @@ bool QThread::wait(unsigned long time)
       qWarning("QThread::wait: Thread tried to wait on itself");
       return false;
    }
-   if (d->finished || !d->running) {
+
+   if (d->finished || ! d->running) {
       return true;
    }
 
@@ -520,9 +521,11 @@ bool QThread::wait(unsigned long time)
       case WAIT_OBJECT_0:
          ret = true;
          break;
+
       case WAIT_FAILED:
          qErrnoWarning("QThread::wait: Thread wait failure");
          break;
+
       case WAIT_ABANDONED:
       case WAIT_TIMEOUT:
       default:
@@ -532,13 +535,12 @@ bool QThread::wait(unsigned long time)
    locker.mutex()->lock();
    --d->waiters;
 
-   if (ret && !d->finished) {
+   if (ret && ! d->finished) {
       // thread was terminated by someone else
-
       QThreadPrivate::finish(this, false);
    }
 
-   if (d->finished && !d->waiters) {
+   if (d->finished && ! d->waiters) {
       CloseHandle(d->handle);
       d->handle = nullptr;
    }

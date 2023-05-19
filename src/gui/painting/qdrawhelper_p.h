@@ -1042,6 +1042,7 @@ inline int qBlue565(quint16 rgb)
    const int b = (rgb & 0x001f);
    return (b << 3) | (b >> 2);
 }
+
 static inline const uint *qt_convertARGB32ToARGB32PM(uint *buffer, const uint *src, int count)
 {
    for (int i = 0; i < count; ++i) {
@@ -1057,6 +1058,7 @@ static inline const uint *qt_convertRGBA8888ToARGB32PM(uint *buffer, const uint 
    }
    return buffer;
 }
+
 const uint qt_bayer_matrix[16][16] = {
    {
       0x1, 0xc0, 0x30, 0xf0, 0xc, 0xcc, 0x3c, 0xfc,
