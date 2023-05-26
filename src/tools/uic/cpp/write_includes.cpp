@@ -167,7 +167,7 @@ void WriteIncludes::acceptProperty(DomProperty *node)
 void WriteIncludes::insertIncludeForClass(const QString &className, QString header, bool global)
 {
    if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), qPrintable(header), global);
+      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), csPrintable(header), global);
    }
 
    do {
@@ -224,7 +224,7 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 void WriteIncludes::add(const QString &className, bool determineHeader, const QString &header, bool global)
 {
    if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, qPrintable(className), qPrintable(header), global);
+      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), csPrintable(header), global);
    }
 
    if (className.isEmpty() || m_knownClasses.contains(className)) {

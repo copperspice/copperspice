@@ -33,14 +33,14 @@ QPlatformServices::QPlatformServices()
 bool QPlatformServices::openUrl(const QUrl &url)
 {
    qWarning("This plugin does not support QPlatformServices::openUrl() for '%s'.",
-      qPrintable(url.toString()));
+      csPrintable(url.toString()));
    return false;
 }
 
 bool QPlatformServices::openDocument(const QUrl &url)
 {
    qWarning("This plugin does not support QPlatformServices::openDocument() for '%s'.",
-      qPrintable(url.toString()));
+      csPrintable(url.toString()));
    return false;
 }
 

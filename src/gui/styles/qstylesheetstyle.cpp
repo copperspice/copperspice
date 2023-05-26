@@ -765,7 +765,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
             }
          }
          if (! knownStyleHint) {
-            qDebug("Unknown property %s", qPrintable(decl.d->property));
+            qDebug("Unknown property %s", csPrintable(decl.d->property));
          }
       }
    }

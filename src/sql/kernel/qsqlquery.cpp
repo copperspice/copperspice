@@ -184,7 +184,7 @@ bool QSqlQuery::isNull(const QString &name) const
    if (index > -1) {
       return isNull(index);
    }
-   qWarning("QSqlQuery::isNull: unknown field name '%s'", qPrintable(name));
+   qWarning("QSqlQuery::isNull: unknown field name '%s'", csPrintable(name));
    return true;
 }
 
@@ -239,7 +239,7 @@ QVariant QSqlQuery::value(const QString &name) const
       return value(index);
    }
 
-   qWarning("QSqlQuery::value: unknown field name '%s'", qPrintable(name));
+   qWarning("QSqlQuery::value: unknown field name '%s'", csPrintable(name));
 
    return QVariant();
 }

@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
    tr.setLanguageCode(Translator::guessLanguageCodeFromFileName(inFiles[0].name));
 
    if (!tr.load(inFiles[0].name, cd, inFiles[0].format)) {
-      std::cerr << qPrintable(cd.error());
+      std::cerr << csPrintable(cd.error());
       return 2;
    }
    tr.reportDuplicates(tr.resolveDuplicates(), inFiles[0].name, verbose);
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
    for (int i = 1; i < inFiles.size(); ++i) {
       Translator tr2;
       if (!tr2.load(inFiles[i].name, cd, inFiles[i].format)) {
-         std::cerr << qPrintable(cd.error());
+         std::cerr << csPrintable(cd.error());
          return 2;
       }
       tr2.reportDuplicates(tr2.resolveDuplicates(), inFiles[i].name, verbose);

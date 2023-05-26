@@ -547,7 +547,7 @@ JSC::JSValue JSC_HOST_CALL functionPrint(JSC::ExecState *exec, JSC::JSObject *, 
    if (exec->hadException()) {
       return exec->exception();
    }
-   qDebug("%s", qPrintable(result));
+   qDebug("%s", csPrintable(result));
    return JSC::jsUndefined();
 }
 
@@ -1814,7 +1814,7 @@ void QScriptEnginePrivate::setProperty(JSC::ExecState *exec, JSC::JSValue object
       // setting the value
       if (getter && getter.isObject() && !(setter && setter.isObject())) {
          qWarning("QScriptValue::setProperty() failed: "
-            "property '%s' has a getter but no setter", csPrintable(id.ustring()));
+            "property '%s' has a getter but no setter", csPrintable(QString(id.ustring())));
          return;
       }
 

@@ -51,18 +51,18 @@ class TraceCallback : public QSharedData
       ++m_position;
       if (m_position == 1) {
          if (item) {
-            out << qPrintable(m_msg)
+            out << csPrintable(m_msg)
                 << " : "
-                << qPrintable(item.stringValue());
+                << csPrintable(item.stringValue());
          } else {
-            out << qPrintable(m_msg)
+            out << csPrintable(m_msg)
                 << " : ("
-                << qPrintable(formatType(context->namePool(), CommonSequenceTypes::Empty))
+                << csPrintable(formatType(context->namePool(), CommonSequenceTypes::Empty))
                 << ")\n";
             return Item();
          }
       } else {
-         out << qPrintable(item.stringValue())
+         out << csPrintable(item.stringValue())
              << '['
              << m_position
              << "]\n";

@@ -86,7 +86,7 @@ class AnyURI : public AtomicString
    ItemType::Ptr type() const override;
 
    inline QUrl toQUrl() const {
-      Q_ASSERT_X(QUrl(m_value).isValid(), Q_FUNC_INFO, qPrintable(QString("%1 is not a valid QUrl").formatArg(m_value)));
+      Q_ASSERT_X(QUrl(m_value).isValid(), Q_FUNC_INFO, csPrintable(QString("%1 is not a valid QUrl").formatArg(m_value)));
       return QUrl(m_value);
    }
 

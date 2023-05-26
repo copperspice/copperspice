@@ -491,8 +491,8 @@ QTextHtmlParserNode::QTextHtmlParserNode()
 void QTextHtmlParser::dumpHtml()
 {
    for (int i = 0; i < count(); ++i) {
-      qDebug().nospace() << qPrintable(QString(depth(i) * 4, QLatin1Char(' ')))
-         << qPrintable(at(i).tag) << ':'
+      qDebug().nospace() << csPrintable(QString(depth(i) * 4, QLatin1Char(' ')))
+         << csPrintable(at(i).tag) << ':'
          << quoteNewline(at(i).text);
       ;
    }

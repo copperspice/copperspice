@@ -591,7 +591,7 @@ void QAbstractSocketPrivate::startConnectingByName(const QString &host)
    }
 
 #if defined(QABSTRACTSOCKET_DEBUG)
-   qDebug("QAbstractSocketPrivate::startConnectingByName(host == %s)", qPrintable(host));
+   qDebug("QAbstractSocketPrivate::startConnectingByName(host == %s)", csPrintable(host));
 #endif
 
    // ### Let the socket engine drive this?
@@ -1174,14 +1174,14 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
    Q_D(QAbstractSocket);
 
 #if defined(QABSTRACTSOCKET_DEBUG)
-   qDebug("QAbstractSocket::connectToHost(\"%s\", %i, %i)...", qPrintable(hostName), port, (int) openMode);
+   qDebug("QAbstractSocket::connectToHost(\"%s\", %i, %i)...", csPrintable(hostName), port, (int) openMode);
 #endif
 
    if (d->state == ConnectedState || d->state == ConnectingState
          || d->state == ClosingState || d->state == HostLookupState) {
 
       qWarning("QAbstractSocket::connectToHost() called when already looking up or connecting/connected to \"%s\"",
-               qPrintable(hostName));
+               csPrintable(hostName));
 
       d->setErrorAndEmit(OperationError, tr("Trying to connect while connection is in progress"));
       return;
