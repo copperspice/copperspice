@@ -29,6 +29,7 @@
 
 #include <limits>
 #include <type_traits>
+#include <stdint.h>
 
 #include "regex/r_config.h"
 
