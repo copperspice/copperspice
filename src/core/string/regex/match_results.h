@@ -27,10 +27,10 @@
 #ifndef CS_MATCH_RESULTS_H
 #define CS_MATCH_RESULTS_H
 
+#include <regex/regex_sub_match.h>
+
 #include <cassert>
 #include <vector>
-
-#include "regex/regex_sub_match.h"
 
 namespace cs_regex_ns {
 

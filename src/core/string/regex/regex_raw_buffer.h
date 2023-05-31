@@ -27,10 +27,10 @@
 #ifndef CS_REGEX_RAW_BUFFER_H
 #define CS_REGEX_RAW_BUFFER_H
 
+#include <regex/r_config.h>
+
 #include <algorithm>
 #include <cstddef>
-
-#include "regex/r_config.h"
 
 namespace cs_regex_ns {
 

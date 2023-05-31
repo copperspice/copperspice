@@ -27,10 +27,10 @@
 #ifndef CS_PATTERN_EXCEPT_H
 #define CS_PATTERN_EXCEPT_H
 
+#include <regex/r_config.h>
+
 #include <stdexcept>
 #include <cstddef>
-
-#include "regex/r_config.h"
 
 namespace cs_regex_ns {
 

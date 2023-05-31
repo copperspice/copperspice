@@ -27,9 +27,9 @@
 #ifndef CS_STATES_H
 #define CS_STATES_H
 
-#include <climits>
+#include <regex/regex_raw_buffer.h>
 
-#include "regex/regex_raw_buffer.h"
+#include <climits>
 
 namespace cs_regex_ns {
 

@@ -27,10 +27,10 @@
 #ifndef CS_REGEX_TRAITS_H
 #define CS_REGEX_TRAITS_H
 
-#include <string>
+#include <regex/regex_fwd.h>
+#include <regex/regex_traits_defaults.h>
 
-#include "regex/regex_fwd.h"
-#include "regex/regex_traits_defaults.h"
+#include <string>
 
 namespace cs_regex_ns {
 
