@@ -67,13 +67,13 @@ namespace JSC {
 
         void fillArgList(ExecState*, MarkedArgumentBuffer&);
 
-        uint32_t numProvidedArguments(ExecState* exec) const 
+        uint32_t numProvidedArguments(ExecState* exec) const
         {
             if (UNLIKELY(d->overrodeLength))
                 return get(exec, exec->propertyNames().length).toUInt32(exec);
-            return d->numArguments; 
+            return d->numArguments;
         }
-        
+
         void copyToRegisters(ExecState* exec, Register* buffer, uint32_t maxSize);
         void copyRegisters();
         bool isTornOff() const { return d->registerArray; }
@@ -83,9 +83,9 @@ namespace JSC {
             d->registers = &activation->registerAt(0);
         }
 
-        static PassRefPtr<Structure> createStructure(JSValue prototype) 
-        { 
-            return Structure::create(prototype, TypeInfo(ObjectType, StructureFlags)); 
+        static PassRefPtr<Structure> createStructure(JSValue prototype)
+        {
+            return Structure::create(prototype, TypeInfo(ObjectType, StructureFlags));
         }
 
     protected:
@@ -155,12 +155,12 @@ namespace JSC {
         d->firstParameterIndex = firstParameterIndex;
         d->numArguments = numArguments;
 
-        d->activation = 0;
+        d->activation = nullptr;
         d->registers = callFrame->registers();
 
         Register* extraArguments;
         if (d->numArguments <= d->numParameters)
-            extraArguments = 0;
+            extraArguments = nullptr;
         else {
             unsigned numExtraArguments = d->numArguments - d->numParameters;
             if (numExtraArguments > sizeof(d->extraArgumentsFixedBuffer) / sizeof(Register))
@@ -189,7 +189,7 @@ namespace JSC {
 
         d->numParameters = 0;
         d->numArguments = numArguments;
-        d->activation = 0;
+        d->activation = nullptr;
 
         Register* extraArguments;
         if (numArguments > sizeof(d->extraArgumentsFixedBuffer) / sizeof(Register))
@@ -250,10 +250,10 @@ namespace JSC {
     ALWAYS_INLINE Arguments* Register::arguments() const
     {
         if (jsValue() == JSValue())
-            return 0;
+            return nullptr;
         return asArguments(jsValue());
     }
-    
+
 
 } // namespace JSC
 

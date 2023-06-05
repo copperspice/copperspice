@@ -34,21 +34,21 @@ namespace JSC {
 // A smart pointer whose get() function returns 0 for cells awaiting destruction.
 template <typename T> class WeakGCPtr : Noncopyable {
 public:
-    WeakGCPtr() : m_ptr(0) { }
+    WeakGCPtr() : m_ptr(nullptr) { }
     WeakGCPtr(T* ptr) { assign(ptr); }
 
     T* get() const
     {
         if (!m_ptr || !Heap::isCellMarked(m_ptr))
-            return 0;
+            return nullptr;
         return m_ptr;
     }
-    
-    void clear() { m_ptr = 0; }
+
+    void clear() { m_ptr = nullptr; }
 
     T& operator*() const { return *get(); }
     T* operator->() const { return get(); }
-    
+
     bool operator!() const { return !get(); }
 
     // This conversion operator allows implicit conversion to bool but not to other integer types.
@@ -56,7 +56,7 @@ public:
     operator bool() const { return m_ptr; }
 #else
     typedef T* WeakGCPtr::*UnspecifiedBoolType;
-    operator UnspecifiedBoolType() const { return get() ? &WeakGCPtr::m_ptr : 0; }
+    operator UnspecifiedBoolType() const { return get() ? &WeakGCPtr::m_ptr : nullptr; }
 #endif
 
     WeakGCPtr& operator=(T*);
@@ -79,43 +79,43 @@ template <typename T> inline WeakGCPtr<T>& WeakGCPtr<T>::operator=(T* optr)
 }
 
 template <typename T, typename U> inline bool operator==(const WeakGCPtr<T>& a, const WeakGCPtr<U>& b)
-{ 
-    return a.get() == b.get(); 
+{
+    return a.get() == b.get();
 }
 
 template <typename T, typename U> inline bool operator==(const WeakGCPtr<T>& a, U* b)
-{ 
-    return a.get() == b; 
+{
+    return a.get() == b;
 }
 
-template <typename T, typename U> inline bool operator==(T* a, const WeakGCPtr<U>& b) 
+template <typename T, typename U> inline bool operator==(T* a, const WeakGCPtr<U>& b)
 {
-    return a == b.get(); 
+    return a == b.get();
 }
 
 template <typename T, typename U> inline bool operator!=(const WeakGCPtr<T>& a, const WeakGCPtr<U>& b)
-{ 
-    return a.get() != b.get(); 
+{
+    return a.get() != b.get();
 }
 
 template <typename T, typename U> inline bool operator!=(const WeakGCPtr<T>& a, U* b)
 {
-    return a.get() != b; 
+    return a.get() != b;
 }
 
 template <typename T, typename U> inline bool operator!=(T* a, const WeakGCPtr<U>& b)
-{ 
-    return a != b.get(); 
+{
+    return a != b.get();
 }
 
 template <typename T, typename U> inline WeakGCPtr<T> static_pointer_cast(const WeakGCPtr<U>& p)
-{ 
-    return WeakGCPtr<T>(static_cast<T*>(p.get())); 
+{
+    return WeakGCPtr<T>(static_cast<T*>(p.get()));
 }
 
 template <typename T, typename U> inline WeakGCPtr<T> const_pointer_cast(const WeakGCPtr<U>& p)
-{ 
-    return WeakGCPtr<T>(const_cast<T*>(p.get())); 
+{
+    return WeakGCPtr<T>(const_cast<T*>(p.get()));
 }
 
 template <typename T> inline T* getPtr(const WeakGCPtr<T>& p)

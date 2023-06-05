@@ -36,43 +36,43 @@ namespace JSC {
 
         Identifier(ExecState* exec, const char* s) : _ustring(add(exec, s)) { } // Only to be used with string literals.
         Identifier(ExecState* exec, const UChar* s, int length) : _ustring(add(exec, s, length)) { }
-        Identifier(ExecState* exec, UString::Rep* rep) : _ustring(add(exec, rep)) { } 
+        Identifier(ExecState* exec, UString::Rep* rep) : _ustring(add(exec, rep)) { }
         Identifier(ExecState* exec, const UString& s) : _ustring(add(exec, s.rep())) { }
 
         Identifier(JSGlobalData* globalData, const char* s) : _ustring(add(globalData, s)) { } // Only to be used with string literals.
         Identifier(JSGlobalData* globalData, const UChar* s, int length) : _ustring(add(globalData, s, length)) { }
-        Identifier(JSGlobalData* globalData, UString::Rep* rep) : _ustring(add(globalData, rep)) { } 
+        Identifier(JSGlobalData* globalData, UString::Rep* rep) : _ustring(add(globalData, rep)) { }
         Identifier(JSGlobalData* globalData, const UString& s) : _ustring(add(globalData, s.rep())) { }
 
         // Special constructor for cases where we overwrite an object in place.
         Identifier(PlacementNewAdoptType) : _ustring(PlacementNewAdopt) { }
-        
+
         const UString& ustring() const { return _ustring; }
-        
+
         const UChar* data() const { return _ustring.data(); }
         int size() const { return _ustring.size(); }
-        
+
         const char* ascii() const { return _ustring.ascii(); }
-        
+
         static Identifier from(ExecState* exec, unsigned y) { return Identifier(exec, UString::from(y)); }
         static Identifier from(ExecState* exec, int y) { return Identifier(exec, UString::from(y)); }
         static Identifier from(ExecState* exec, double y) { return Identifier(exec, UString::from(y)); }
-        
+
         bool isNull() const { return _ustring.isNull(); }
         bool isEmpty() const { return _ustring.isEmpty(); }
-        
+
         uint32_t toUInt32(bool* ok) const { return _ustring.toUInt32(ok); }
         uint32_t toUInt32(bool* ok, bool tolerateEmptyString) const { return _ustring.toUInt32(ok, tolerateEmptyString); };
         uint32_t toStrictUInt32(bool* ok) const { return _ustring.toStrictUInt32(ok); }
         unsigned toArrayIndex(bool* ok) const { return _ustring.toArrayIndex(ok); }
         double toDouble() const { return _ustring.toDouble(); }
-        
+
         friend bool operator==(const Identifier&, const Identifier&);
         friend bool operator!=(const Identifier&, const Identifier&);
 
         friend bool operator==(const Identifier&, const char*);
         friend bool operator!=(const Identifier&, const char*);
-    
+
         static void remove(UString::Rep*);
 
         static bool equal(const UString::Rep*, const char*);
@@ -84,7 +84,7 @@ namespace JSC {
 
     private:
         UString _ustring;
-        
+
         static bool equal(const Identifier& a, const Identifier& b) { return a._ustring.rep() == b._ustring.rep(); }
         static bool equal(const Identifier& a, const char* b) { return equal(a._ustring.rep(), b); }
 
@@ -118,7 +118,7 @@ namespace JSC {
         static void checkSameIdentifierTable(ExecState*, UString::Rep*);
         static void checkSameIdentifierTable(JSGlobalData*, UString::Rep*);
     };
-    
+
     inline bool operator==(const Identifier& a, const Identifier& b)
     {
         return Identifier::equal(a, b);
@@ -144,8 +144,7 @@ namespace JSC {
 
     struct ThreadIdentifierTableData {
         ThreadIdentifierTableData()
-            : defaultIdentifierTable(0)
-            , currentIdentifierTable(0)
+            : defaultIdentifierTable(nullptr), currentIdentifierTable(nullptr)
         {
         }
 

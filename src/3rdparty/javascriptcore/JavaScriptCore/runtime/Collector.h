@@ -58,7 +58,7 @@ namespace JSC {
         size_t nextBlock;
         size_t nextCell;
         CollectorBlock** blocks;
-        
+
         void* nextNumber;
 
         size_t numBlocks;
@@ -116,7 +116,7 @@ namespace JSC {
 
         JSGlobalData* globalData() const { return m_globalData; }
         static bool isNumber(JSCell*);
-        
+
         LiveObjectIterator primaryHeapBegin();
         LiveObjectIterator primaryHeapEnd();
 
@@ -175,7 +175,7 @@ namespace JSC {
         // Allocates collector blocks with correct alignment
         WTF::AlignedBlockAllocator& m_blockallocator;
 #endif
-        
+
         JSGlobalData* m_globalData;
     };
 
@@ -206,15 +206,15 @@ namespace JSC {
     const size_t CELL_MASK = CELL_SIZE - 1;
     const size_t CELL_ALIGN_MASK = ~CELL_MASK;
     const size_t CELLS_PER_BLOCK = (BLOCK_SIZE - sizeof(Heap*)) * 8 * CELL_SIZE / (8 * CELL_SIZE + 1) / CELL_SIZE; // one bitmap byte can represent 8 cells.
-    
+
     const size_t BITMAP_SIZE = (CELLS_PER_BLOCK + 7) / 8;
     const size_t BITMAP_WORDS = (BITMAP_SIZE + 3) / sizeof(uint32_t);
 
     struct CollectorBitmap {
         uint32_t bits[BITMAP_WORDS];
-        bool get(size_t n) const { return !!(bits[n >> 5] & (1 << (n & 0x1F))); } 
-        void set(size_t n) { bits[n >> 5] |= (1 << (n & 0x1F)); } 
-        void clear(size_t n) { bits[n >> 5] &= ~(1 << (n & 0x1F)); } 
+        bool get(size_t n) const { return !!(bits[n >> 5] & (1 << (n & 0x1F))); }
+        void set(size_t n) { bits[n >> 5] |= (1 << (n & 0x1F)); }
+        void clear(size_t n) { bits[n >> 5] &= ~(1 << (n & 0x1F)); }
         void clearAll() { memset(bits, 0, sizeof(bits)); }
         size_t count(size_t startCell = 0)
         {
@@ -235,7 +235,7 @@ namespace JSC {
             return true;
         }
     };
-  
+
     struct CollectorCell {
         double memory[CELL_ARRAY_LENGTH];
     };
@@ -276,14 +276,14 @@ namespace JSC {
 
     inline void Heap::reportExtraMemoryCost(size_t cost)
     {
-        if (cost > minExtraCost) 
+        if (cost > minExtraCost)
             recordExtraCost(cost);
     }
-    
+
     inline void* Heap::allocateNumber(size_t s)
     {
         if (void* result = m_heap.nextNumber) {
-            m_heap.nextNumber = 0;
+            m_heap.nextNumber = nullptr;
             return result;
         }
 

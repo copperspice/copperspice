@@ -73,7 +73,7 @@ namespace JSC {
         UString getString(ExecState* exec) const; // null string if not a string
         JSObject* getObject(); // NULL if not an object
         const JSObject* getObject() const; // NULL if not an object
-        
+
         virtual CallType getCallData(CallData&);
         virtual ConstructType getConstructData(ConstructData&);
 
@@ -118,7 +118,7 @@ namespace JSC {
         bool fastGetOwnPropertySlot(ExecState*, const Identifier& propertyName, PropertySlot&);
         virtual bool getOwnPropertySlot(ExecState*, const Identifier& propertyName, PropertySlot&);
         virtual bool getOwnPropertySlot(ExecState*, unsigned propertyName, PropertySlot&);
-        
+
         Structure* m_structure;
     };
 
@@ -196,7 +196,7 @@ namespace JSC {
 
     inline JSObject* JSValue::getObject() const
     {
-        return isCell() ? asCell()->getObject() : 0;
+        return isCell() ? asCell()->getObject() : nullptr;
     }
 
     inline CallType JSValue::getCallData(CallData& callData)
@@ -343,7 +343,7 @@ namespace JSC {
     inline Heap* Heap::heap(JSValue v)
     {
         if (!v.isCell())
-            return 0;
+            return nullptr;
         return heap(v.asCell());
     }
 
@@ -351,7 +351,7 @@ namespace JSC {
     {
         return cellBlock(c)->heap;
     }
-    
+
 #if ENABLE(JSC_ZOMBIES)
     inline bool JSValue::isZombie() const
     {

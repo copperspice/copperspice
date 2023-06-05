@@ -43,27 +43,27 @@ namespace WTF {
         TryMallocReturnValue(const TryMallocReturnValue& source)
             : m_data(source.m_data)
         {
-            source.m_data = 0;
+            source.m_data = nullptr;
         }
         ~TryMallocReturnValue() { ASSERT(!m_data); }
         template <typename T> bool getValue(T& data) WARN_UNUSED_RETURN;
         template <typename T> operator PossiblyNull<T>()
-        { 
-            T value; 
-            getValue(value); 
+        {
+            T value;
+            getValue(value);
             return PossiblyNull<T>(value);
-        } 
+        }
     private:
         mutable void* m_data;
     };
-    
+
     template <typename T> bool TryMallocReturnValue::getValue(T& data)
     {
         union u { void* data; T target; } res;
         res.data = m_data;
         data = res.target;
         bool returnValue = !!m_data;
-        m_data = 0;
+        m_data = nullptr;
         return returnValue;
     }
 
@@ -74,13 +74,13 @@ namespace WTF {
 
     void fastFree(void*);
 
-#ifndef NDEBUG    
+#ifndef NDEBUG
     void fastMallocForbid();
     void fastMallocAllow();
 #endif
 
     void releaseFastMallocFreeMemory();
-    
+
     struct FastMallocStatistics {
         size_t heapSize;
         size_t freeSizeInHeap;
@@ -191,7 +191,7 @@ using WTF::tryFastRealloc;
 using WTF::fastFree;
 using WTF::fastStrDup;
 
-#ifndef NDEBUG    
+#ifndef NDEBUG
 using WTF::fastMallocForbid;
 using WTF::fastMallocAllow;
 #endif
