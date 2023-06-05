@@ -33,7 +33,7 @@ namespace JSC {
     class MarkStack;
     class ScopeChainIterator;
     typedef MarkStack SlotVisitor;
-    
+
     class ScopeChainNode : public JSCell {
     public:
         ScopeChainNode(ScopeChainNode* next, JSObject* object, JSGlobalData* globalData, JSGlobalObject* globalObject, JSObject* globalThis)
@@ -62,10 +62,10 @@ namespace JSC {
 
         int localDepth();
 
-#ifndef NDEBUG        
+#ifndef NDEBUG
         void print();
 #endif
-        
+
         static Structure* createStructure(JSGlobalData& globalData, JSValue proto) { return Structure::create(globalData, proto, TypeInfo(CompoundType, StructureFlags), AnonymousSlotCount, &s_info); }
         virtual void visitChildren(SlotVisitor&);
     private:
@@ -94,7 +94,7 @@ namespace JSC {
 
         WriteBarrier<JSObject> const & operator*() const { return m_node->object; }
         WriteBarrier<JSObject> const * operator->() const { return &(operator*()); }
-    
+
         ScopeChainIterator& operator++() { m_node = m_node->next.get(); return *this; }
 
         // postfix ++ intentionally omitted
@@ -108,12 +108,12 @@ namespace JSC {
 
     inline ScopeChainIterator ScopeChainNode::begin()
     {
-        return ScopeChainIterator(this); 
+        return ScopeChainIterator(this);
     }
 
     inline ScopeChainIterator ScopeChainNode::end()
-    { 
-        return ScopeChainIterator(0); 
+    {
+        return ScopeChainIterator(nullptr);
     }
 
     ALWAYS_INLINE JSGlobalData& ExecState::globalData() const
@@ -126,17 +126,17 @@ namespace JSC {
     {
         return scopeChain()->globalObject.get();
     }
-    
+
     ALWAYS_INLINE JSObject* ExecState::globalThisValue() const
     {
         return scopeChain()->globalThis.get();
     }
-    
+
     ALWAYS_INLINE ScopeChainNode* Register::scopeChain() const
     {
         return static_cast<ScopeChainNode*>(jsValue().asCell());
     }
-    
+
     ALWAYS_INLINE Register& Register::operator=(ScopeChainNode* scopeChain)
     {
         *this = JSValue(scopeChain);

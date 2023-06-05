@@ -68,7 +68,7 @@ public:
             return;
         setSlot(HandleHeap::heapFor(other.slot())->copyWeak(other.slot()));
     }
-    
+
     enum HashTableDeletedValueTag { HashTableDeletedValue };
     bool isHashTableDeletedValue() const { return slot() == hashTableDeletedValue(); }
     Weak(HashTableDeletedValueTag)
@@ -87,16 +87,16 @@ public:
     }
 
     ExternalType get() const { return  HandleTypes<T>::getFromSlot(slot()); }
-    
+
     void clear()
     {
         if (!slot())
             return;
         HandleHeap::heapFor(slot())->deallocate(slot());
-        setSlot(0);
+        setSlot(nullptr);
     }
-    
-    void set(JSGlobalData& globalData, ExternalType value, WeakHandleOwner* weakOwner = 0, void* context = 0)
+
+    void set(JSGlobalData& globalData, ExternalType value, WeakHandleOwner* weakOwner = nullptr, void* context = nullptr)
     {
         if (!slot()) {
             setSlot(globalData.allocateGlobalHandle());

@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef StructureTransitionTable_h
@@ -72,7 +72,7 @@ class StructureTransitionTable {
     struct WeakGCMapFinalizerCallback {
         static void* finalizerContextFor(Hash::Key)
         {
-            return 0;
+            return nullptr;
         }
 
         static inline Hash::Key keyForFinalizer(void* context, Structure* structure)
@@ -125,7 +125,7 @@ private:
     void setMap(TransitionMap* map)
     {
         ASSERT(isUsingSingleSlot());
-        
+
         if (HandleSlot slot = this->slot())
             HandleHeap::heapFor(slot)->deallocate(slot);
 
@@ -142,23 +142,23 @@ private:
             if (*slot)
                 return reinterpret_cast<Structure*>(slot->asCell());
         }
-        return 0;
+        return nullptr;
     }
-    
+
     void clearSingleTransition()
     {
         ASSERT(isUsingSingleSlot());
         if (HandleSlot slot = this->slot())
             HandleHeap::heapFor(slot)->deallocate(slot);
     }
-    
+
     void setSingleTransition(JSGlobalData& globalData, Structure* structure)
     {
         ASSERT(isUsingSingleSlot());
         HandleSlot slot = this->slot();
         if (!slot) {
             slot = globalData.allocateGlobalHandle();
-            HandleHeap::heapFor(slot)->makeWeak(slot, 0, 0);
+            HandleHeap::heapFor(slot)->makeWeak(slot, nullptr, nullptr);
             m_data = reinterpret_cast<intptr_t>(slot) | UsingSingleSlotFlag;
         }
         HandleHeap::heapFor(slot)->writeBarrier(slot, reinterpret_cast<JSCell*>(structure));

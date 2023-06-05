@@ -77,7 +77,7 @@ private:
     StringImpl(const UChar* characters, unsigned length, StaticStringConstructType)
         : StringImplBase(length, ConstructStaticString)
         , m_data(characters)
-        , m_buffer(0)
+        , m_buffer(nullptr)
         , m_hash(0)
     {
         // Ensure that the hash is computed so that AtomicStringHash can call existingHash()
@@ -90,7 +90,7 @@ private:
     StringImpl(unsigned length)
         : StringImplBase(length, BufferInternal)
         , m_data(reinterpret_cast<const UChar*>(this + 1))
-        , m_buffer(0)
+        , m_buffer(nullptr)
         , m_hash(0)
     {
         ASSERT(m_data);
@@ -101,7 +101,7 @@ private:
     StringImpl(const UChar* characters, unsigned length)
         : StringImplBase(length, BufferOwned)
         , m_data(characters)
-        , m_buffer(0)
+        , m_buffer(nullptr)
         , m_hash(0)
     {
         ASSERT(m_data);
@@ -163,18 +163,18 @@ public:
     static ALWAYS_INLINE PassRefPtr<StringImpl> tryCreateUninitialized(unsigned length, UChar*& output)
     {
         if (!length) {
-            output = 0;
+            output = nullptr;
             return empty();
         }
 
         if (length > ((std::numeric_limits<unsigned>::max() - sizeof(StringImpl)) / sizeof(UChar))) {
-            output = 0;
-            return 0;
+            output = nullptr;
+            return nullptr;
         }
         StringImpl* resultImpl;
         if (!tryFastMalloc(sizeof(UChar) * length + sizeof(StringImpl)).getValue(resultImpl)) {
-            output = 0;
-            return 0;
+            output = nullptr;
+            return nullptr;
         }
         output = reinterpret_cast<UChar*>(resultImpl + 1);
         return adoptRef(new(resultImpl) StringImpl(length));
@@ -266,20 +266,20 @@ public:
 
     bool containsOnlyWhitespace();
 
-    int toIntStrict(bool* ok = 0, int base = 10);
-    unsigned toUIntStrict(bool* ok = 0, int base = 10);
-    int64_t toInt64Strict(bool* ok = 0, int base = 10);
-    uint64_t toUInt64Strict(bool* ok = 0, int base = 10);
-    intptr_t toIntPtrStrict(bool* ok = 0, int base = 10);
+    int toIntStrict(bool* ok = nullptr, int base = 10);
+    unsigned toUIntStrict(bool* ok = nullptr, int base = 10);
+    int64_t toInt64Strict(bool* ok = nullptr, int base = 10);
+    uint64_t toUInt64Strict(bool* ok = nullptr, int base = 10);
+    intptr_t toIntPtrStrict(bool* ok = nullptr, int base = 10);
 
-    int toInt(bool* ok = 0); // ignores trailing garbage
-    unsigned toUInt(bool* ok = 0); // ignores trailing garbage
-    int64_t toInt64(bool* ok = 0); // ignores trailing garbage
-    uint64_t toUInt64(bool* ok = 0); // ignores trailing garbage
-    intptr_t toIntPtr(bool* ok = 0); // ignores trailing garbage
+    int toInt(bool* ok = nullptr); // ignores trailing garbage
+    unsigned toUInt(bool* ok = nullptr); // ignores trailing garbage
+    int64_t toInt64(bool* ok = nullptr); // ignores trailing garbage
+    uint64_t toUInt64(bool* ok = nullptr); // ignores trailing garbage
+    intptr_t toIntPtr(bool* ok = nullptr); // ignores trailing garbage
 
-    double toDouble(bool* ok = 0, bool* didReadNumber = 0);
-    float toFloat(bool* ok = 0, bool* didReadNumber = 0);
+    double toDouble(bool* ok = nullptr, bool* didReadNumber = nullptr);
+    float toFloat(bool* ok = nullptr, bool* didReadNumber = nullptr);
 
     PassRefPtr<StringImpl> lower();
     PassRefPtr<StringImpl> upper();
@@ -311,7 +311,7 @@ public:
     PassRefPtr<StringImpl> replace(StringImpl*, StringImpl*);
     PassRefPtr<StringImpl> replace(unsigned index, unsigned len, StringImpl*);
 
-    WTF::Unicode::Direction defaultWritingDirection(bool* hasStrongDirectionality = 0);
+    WTF::Unicode::Direction defaultWritingDirection(bool* hasStrongDirectionality = nullptr);
 
 #if USE(CF)
     CFStringRef createCFString();
@@ -325,7 +325,7 @@ private:
     static const unsigned s_copyCharsInlineCutOff = 20;
 
     static PassRefPtr<StringImpl> createStrippingNullCharactersSlowCase(const UChar*, unsigned length);
-    
+
     BufferOwnership bufferOwnership() const { return static_cast<BufferOwnership>(m_refCountAndFlags & s_refCountMaskBufferOwnership); }
     bool isStatic() const { return m_refCountAndFlags & s_refCountFlagStatic; }
     const UChar* m_data;
@@ -377,7 +377,7 @@ inline PassRefPtr<StringImpl> StringImpl::createStrippingNullCharacters(const UC
     // Optimize for the case where there are no Null characters by quickly
     // searching for nulls, and then using StringImpl::create, which will
     // memcpy the whole buffer.  This is faster than assigning character by
-    // character during the loop. 
+    // character during the loop.
 
     // Fast case.
     int foundNull = 0;
