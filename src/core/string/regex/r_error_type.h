@@ -97,8 +97,8 @@ inline const char *get_default_error_string(cs_regex_ns::regex_constants::error_
           s_default_error_messages[n];
 }
 
+}   // end namespace
 
-} // namespace
-} // namespace
+}   // end namespace
 
 #endif

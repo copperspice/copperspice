@@ -169,7 +169,7 @@ using regex_constants::format_first_only;
 
 /*using regex_constants::format_is_if;*/
 
-} // namespace
+}   // end namespace
 
 #endif
 

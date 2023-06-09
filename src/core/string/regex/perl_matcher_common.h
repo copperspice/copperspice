@@ -962,9 +962,9 @@ bool perl_matcher<BidiIterator, Allocator, traits>::find_restart_lit()
    return false;
 }
 
-} // namespace
+}   // end namespace
 
-} // namespace
+}   // end namespace
 
 #endif
 

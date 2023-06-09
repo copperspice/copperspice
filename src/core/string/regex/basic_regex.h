@@ -585,7 +585,7 @@ std::basic_ostream<charT, traits> &operator << (std::basic_ostream<charT, traits
    return (os << e.str());
 }
 
-} // namespace
+}   // end namespace
 
 #endif
 

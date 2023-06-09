@@ -66,7 +66,7 @@ struct is_random_imp_selector<true> {
 
 };
 
-}
+}   // end namespace
 
 template <class I>
 struct is_random_access_iterator {
@@ -83,7 +83,7 @@ struct is_random_access_iterator {
 template <class I>
 const bool is_random_access_iterator<I>::value;
 
-}
+}   // end namespace
 
 #endif
 

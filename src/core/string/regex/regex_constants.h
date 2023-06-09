@@ -220,9 +220,8 @@ static const escape_syntax_type escape_type_line_ending = 59;             // for
 
 static const escape_syntax_type syntax_max = 60;
 
-} // namespace
+}   // end namespace
 
-} // namespace
-
+}   // end namespace
 #endif
 
