@@ -27,10 +27,10 @@
 #ifndef CS_PERL_MATCHER_H
 #define CS_PERL_MATCHER_H
 
+#include <regex/iterator_category.h>
+
 #include <memory>
 #include <vector>
-
-#include "regex/iterator_category.h"
 
 namespace cs_regex_ns {
 
@@ -134,7 +134,7 @@ inline int string_compare(const Seq &s, const C *p)
    }
 }
 
-template<class charT>
+template <class charT>
 inline const charT *re_skip_past_null(const charT *p)
 {
    while (*p != static_cast<charT>(0)) {

@@ -656,8 +656,6 @@ void XSLTTokenizer::handleStandardAttributes(const bool isXSLTElement)
       const QXmlStreamAttribute &att = m_currentAttributes.at(i);
 
       if (att.qualifiedName() == "xml:space") {
-         const QStringView val(m_currentAttributes.value(CommonNamespaces::XML, "space"));
-
          /* We raise an error if the value is not recognized.
           *
           * Extensible Markup Language (XML) 1.0 (Fourth Edition), 2.10

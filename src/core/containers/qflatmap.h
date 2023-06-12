@@ -306,7 +306,7 @@ class QFlatMap
    explicit QFlatMap(const std::map<Key, Val, C> &other)
       : m_data(other.begin(), other.end()), m_compare(other.key_comp()) {}
 
-   template<typename Input_Iterator>
+   template <typename Input_Iterator>
    QFlatMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
       : m_data(first, last), m_compare(compare) {
 

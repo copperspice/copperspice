@@ -35,7 +35,7 @@
 // template implementation of the parsing algorithm
 // used from qcoreapplication_win.cpp and the tools (rcc, uic...)
 
-template<typename Char>
+template <typename Char>
 static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
 {
    QVector<Char *> argv(8);

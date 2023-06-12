@@ -214,14 +214,14 @@ bool QOpenGLShaderPrivate::compile(QOpenGLShader *q)
             log = QLatin1String("failed");
 
         if (name.isEmpty())
-            qWarning("QOpenGLShader::compile(%s): %s", type, qPrintable(log));
+            qWarning("QOpenGLShader::compile(%s): %s", type, csPrintable(log));
         else
-            qWarning("QOpenGLShader::compile(%s)[%s]: %s", type, qPrintable(name), qPrintable(log));
+            qWarning("QOpenGLShader::compile(%s)[%s]: %s", type, csPrintable(name), csPrintable(log));
 
         // Dump the source code if we got it
         if (sourceCodeBuffer) {
             qWarning("*** Problematic %s shader source code ***", type);
-            qWarning() << qPrintable(QString::fromLatin1(sourceCodeBuffer));
+            qWarning() << csPrintable(QString::fromLatin1(sourceCodeBuffer));
             qWarning("***");
         }
 

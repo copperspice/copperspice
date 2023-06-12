@@ -44,7 +44,7 @@
 
 #define Q_FIXED_POINT_SCALE 32
 
-template<typename T>
+template <typename T>
 struct QVertexSet
 {
     inline QVertexSet() { }
@@ -56,13 +56,11 @@ struct QVertexSet
     QVector<T> indices; // [i[0], j[0], k[0], i[1], j[1], k[1], i[2], ...]
 };
 
-//============================================================================//
-//                                 QFraction                                  //
-//============================================================================//
-
-// Fraction must be in the range [0, 1)
+// ***
 struct QFraction
 {
+    // Fraction must be in the range [0, 1)
+
     // Comparison operators must not be called on invalid fractions.
     inline bool operator < (const QFraction &other) const;
     inline bool operator == (const QFraction &other) const;
@@ -84,6 +82,7 @@ static inline quint64 gcd(quint64 x, quint64 y)
         y = x % y;
         x = z;
     }
+
     return x;
 }
 
@@ -126,6 +125,7 @@ static int qCompareFractions(quint64 a, quint64 b, quint64 c, quint64 d)
 // Assume input is valid.
 static QFraction qFraction(quint64 n, quint64 d) {
     QFraction result;
+
     if (n == 0) {
         result.numerator = 0;
         result.denominator = 1;
@@ -147,10 +147,7 @@ inline bool QFraction::operator == (const QFraction &other) const
     return numerator == other.numerator && denominator == other.denominator;
 }
 
-//============================================================================//
-//                                 QPodPoint                                  //
-//============================================================================//
-
+// ***
 struct QPodPoint
 {
     inline bool operator < (const QPodPoint &other) const
@@ -201,10 +198,7 @@ static inline bool qPointIsLeftOfLine(const QPodPoint &p, const QPodPoint &v1, c
     return QT_PREPEND_NAMESPACE(qPointDistanceFromLine)(p, v1, v2) < 0;
 }
 
-//============================================================================//
-//                             QIntersectionPoint                             //
-//============================================================================//
-
+// ***
 struct QIntersectionPoint
 {
     inline bool isValid() const {return xOffset.isValid() && yOffset.isValid();}
@@ -359,17 +353,13 @@ bool QIntersectionPoint::isOnLine(const QPodPoint &u, const QPodPoint &v) const
     return qFraction(quint64(qAbs(q.x)) * xOffset.denominator, quint64(qAbs(q.y)) * yOffset.denominator) == qFraction(nx, ny);
 }
 
-//============================================================================//
-//                                  QMaxHeap                                  //
-//============================================================================//
-
+// ***
 template <class T>
 class QMaxHeap
 {
 public:
     QMaxHeap()
-    {
-    }
+    { }
 
     inline int size() const {return m_data.size();}
     inline bool empty() const {return m_data.isEmpty();}
@@ -392,6 +382,7 @@ void QMaxHeap<T>::push(const T &x)
     int current = m_data.size();
     int parent = QMaxHeap::parent(current);
     m_data.append(x);
+
     while (current != 0 && m_data[parent] < x) {
         m_data[current] = m_data[parent];
         current = parent;
@@ -427,10 +418,6 @@ T QMaxHeap<T>::pop()
     return result;
 }
 
-//============================================================================//
-//                                 QInt64Hash                                 //
-//============================================================================//
-
 // Copied from qhash.cpp
 static const uchar prime_deltas[] = {
     0,  0,  1,  3,  1,  5,  3,  3,  1,  9,  7,  5,  3, 17, 27,  3,
@@ -445,8 +432,9 @@ static inline int primeForNumBits(int numBits)
 
 static inline int primeForCount(int count)
 {
-    int low = 0;
+    int low  = 0;
     int high = 32;
+
     for (int i = 0; i < 5; ++i) {
         int mid = (high + low) / 2;
         if (uint(count) >= (1u << mid))
@@ -454,6 +442,7 @@ static inline int primeForCount(int count)
         else
             high = mid;
     }
+
     return primeForNumBits(high);
 }
 
@@ -468,6 +457,7 @@ public:
     void insert(quint64 key);
     bool contains(quint64 key) const;
     inline void clear();
+
 private:
     bool rehash(int capacity);
 
@@ -520,6 +510,7 @@ void QInt64Set::insert(quint64 key)
         rehash(primeForCount(2 * m_capacity));
     Q_ASSERT_X(m_array, "QInt64Hash<T>::insert", "Hash set not allocated.");
     int index = int(key % m_capacity);
+
     for (int i = 0; i < m_capacity; ++i) {
         index += i;
         if (index >= m_capacity)
@@ -559,22 +550,16 @@ inline void QInt64Set::clear()
     m_count = 0;
 }
 
-//============================================================================//
-//                               QTriangulator                                //
-//============================================================================//
-template<typename T>
+// ***
+template <typename T>
 class QTriangulator
 {
 public:
     typedef QVarLengthArray<int, 6> ShortArray;
 
-    //================================//
-    // QTriangulator::ComplexToSimple //
-    //================================//
     friend class ComplexToSimple;
 
-    class ComplexToSimple
-    {
+    class ComplexToSimple {
     public:
         inline ComplexToSimple(QTriangulator<T> *parent)
            : m_parent(parent)
@@ -653,7 +638,10 @@ public:
         QRBTree<int>::Node *searchEdgeLeftOf(int edgeIndex, QRBTree<int>::Node *after) const;
         QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> bounds(const QPodPoint &point) const;
         QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> outerBounds(const QPodPoint &point) const;
-        void splitEdgeListRange(QRBTree<int>::Node *leftmost, QRBTree<int>::Node *rightmost, int vertex, const QIntersectionPoint &intersectionPoint);
+
+        void splitEdgeListRange(QRBTree<int>::Node *leftmost, QRBTree<int>::Node *rightmost, int vertex,
+              const QIntersectionPoint &intersectionPoint);
+
         void reorderEdgeListRange(QRBTree<int>::Node *leftmost, QRBTree<int>::Node *rightmost);
         void sortEdgeList(const QPodPoint eventPoint);
         void fillPriorityQueue();
@@ -678,10 +666,8 @@ public:
     friend class ComplexToSimple::DebugDialog;
 #endif
 
-    //=================================//
-    // QTriangulator::SimpleToMonotone //
-    //=================================//
     friend class SimpleToMonotone;
+
     class SimpleToMonotone
     {
     public:
@@ -712,6 +698,7 @@ public:
         public:
             CompareVertices(SimpleToMonotone *parent) : m_parent(parent) { }
             bool operator () (int i, int j) const;
+
         private:
             SimpleToMonotone *m_parent;
         };
@@ -739,10 +726,8 @@ public:
         bool m_clockwiseOrder;
     };
 
-    //====================================//
-    // QTriangulator::MonotoneToTriangles //
-    //====================================//
     friend class MonotoneToTriangles;
+
     class MonotoneToTriangles
     {
     public:
@@ -756,10 +741,16 @@ public:
     private:
         inline T indices(int index) const {return m_parent->m_indices.at(index + m_first);}
         inline int next(int index) const {return (index + 1) % m_length;}
-        inline int previous(int index) const {return (index + m_length - 1) % m_length;}
-        inline bool less(int i, int j) const {return m_parent->m_vertices.at((qint32)indices(i)) < m_parent->m_vertices.at(indices(j));}
-        inline bool leftOfEdge(int i, int j, int k) const
-        {
+
+        inline int previous(int index) const {
+           return (index + m_length - 1) % m_length;
+        }
+
+        inline bool less(int i, int j) const {
+           return m_parent->m_vertices.at((qint32)indices(i)) < m_parent->m_vertices.at(indices(j));
+        }
+
+        inline bool leftOfEdge(int i, int j, int k) const {
             return qPointIsLeftOfLine(m_parent->m_vertices.at((qint32)indices(i)),
                 m_parent->m_vertices.at((qint32)indices(j)), m_parent->m_vertices.at((qint32)indices(k)));
         }
@@ -769,16 +760,18 @@ public:
         int m_length;
     };
 
-    inline QTriangulator()
-    {
+    inline QTriangulator() {
     }
 
     // Call this only once.
     void initialize(const qreal *polygon, int count, uint hint, const QTransform &matrix);
+
     // Call this only once.
     void initialize(const QVectorPath &path, const QTransform &matrix, qreal lod);
+
     // Call this only once.
     void initialize(const QPainterPath &path, const QTransform &matrix, qreal lod);
+
     // Call either triangulate() or polyline() only once.
     QVertexSet<T> triangulate();
     QVertexSet<T> polyline();
@@ -789,10 +782,7 @@ private:
     uint m_hint;
 };
 
-//============================================================================//
-//                               QTriangulator                                //
-//============================================================================//
-
+// ***
 template <typename T>
 QVertexSet<T> QTriangulator<T>::triangulate()
 {
@@ -810,6 +800,7 @@ QVertexSet<T> QTriangulator<T>::triangulate()
         SimpleToMonotone s2m(this);
         s2m.decompose();
     }
+
     MonotoneToTriangles m2t(this);
     m2t.decompose();
 
@@ -944,9 +935,7 @@ void QTriangulator<T>::initialize(const QPainterPath &path, const QTransform &ma
     initialize(qtVectorPathForPath(path), matrix, lod);
 }
 
-//============================================================================//
-//                       QTriangulator::ComplexToSimple                       //
-//============================================================================//
+// ***
 template <typename T>
 void QTriangulator<T>::ComplexToSimple::decompose()
 {
@@ -1201,20 +1190,28 @@ QPair<QRBTree<int>::Node *, QRBTree<int>::Node *> QTriangulator<T>::ComplexToSim
 }
 
 template <typename T>
-void QTriangulator<T>::ComplexToSimple::splitEdgeListRange(QRBTree<int>::Node *leftmost, QRBTree<int>::Node *rightmost, int vertex, const QIntersectionPoint &intersectionPoint)
+void QTriangulator<T>::ComplexToSimple::splitEdgeListRange(QRBTree<int>::Node *leftmost,
+      QRBTree<int>::Node *rightmost, int vertex, const QIntersectionPoint &intersectionPoint)
 {
     Q_ASSERT(leftmost && rightmost);
 
-    // Split.
+    // Split
     for (;;) {
         const QPodPoint &u = m_parent->m_vertices.at(m_edges.at(leftmost->data).from);
         const QPodPoint &v = m_parent->m_vertices.at(m_edges.at(leftmost->data).to);
         Q_ASSERT(intersectionPoint.isOnLine(u, v));
+
         const Split split = {vertex, leftmost->data, intersectionPoint.isAccurate()};
-        if (intersectionPoint.xOffset.numerator != 0 || intersectionPoint.yOffset.numerator != 0 || (intersectionPoint.upperLeft != u && intersectionPoint.upperLeft != v))
+
+        if (intersectionPoint.xOffset.numerator != 0 || intersectionPoint.yOffset.numerator != 0 ||
+              (intersectionPoint.upperLeft != u && intersectionPoint.upperLeft != v)) {
             m_splits.append(split);
-        if (leftmost == rightmost)
+        }
+
+        if (leftmost == rightmost) {
             break;
+        }
+
         leftmost = m_edgeList.next(leftmost);
     }
 }
@@ -1654,11 +1651,9 @@ inline bool QTriangulator<T>::ComplexToSimple::Event::operator < (const Event &o
     return other.point < point;
 }
 
-//============================================================================//
-//                QTriangulator::ComplexToSimple::DebugDialog                 //
-//============================================================================//
 
 #ifdef Q_TRIANGULATOR_DEBUG
+
 template <typename T>
 QTriangulator<T>::ComplexToSimple::DebugDialog::DebugDialog(ComplexToSimple *parent, int currentVertex)
     : m_parent(parent), m_vertex(currentVertex)
@@ -1785,9 +1780,7 @@ void QTriangulator<T>::ComplexToSimple::DebugDialog::mousePressEvent(QMouseEvent
 
 #endif
 
-//============================================================================//
-//                      QTriangulator::SimpleToMonotone                       //
-//============================================================================//
+// ***
 template <typename T>
 void QTriangulator<T>::SimpleToMonotone::decompose()
 {
@@ -2209,9 +2202,7 @@ bool QTriangulator<T>::SimpleToMonotone::CompareVertices::operator () (int i, in
         m_parent->m_parent->m_vertices.at(m_parent->m_edges.at(j).from);
 }
 
-//============================================================================//
-//                     QTriangulator::MonotoneToTriangles                     //
-//============================================================================//
+// ***
 template <typename T>
 void QTriangulator<T>::MonotoneToTriangles::decompose()
 {
@@ -2320,10 +2311,7 @@ void QTriangulator<T>::MonotoneToTriangles::decompose()
     m_parent->m_indices = result;
 }
 
-//============================================================================//
-//                                qTriangulate                                //
-//============================================================================//
-
+// ***
 static bool hasElementIndexUint()
 {
     QOpenGLContext *context = QOpenGLContext::currentContext();
@@ -2353,8 +2341,7 @@ Q_GUI_EXPORT QTriangleSet qTriangulate(const qreal *polygon,
     return triangleSet;
 }
 
-Q_GUI_EXPORT QTriangleSet qTriangulate(const QVectorPath &path,
-                          const QTransform &matrix, qreal lod)
+Q_GUI_EXPORT QTriangleSet qTriangulate(const QVectorPath &path, const QTransform &matrix, qreal lod)
 {
     QTriangleSet triangleSet;
     if (hasElementIndexUint()) {
@@ -2373,10 +2360,10 @@ Q_GUI_EXPORT QTriangleSet qTriangulate(const QVectorPath &path,
     return triangleSet;
 }
 
-QTriangleSet qTriangulate(const QPainterPath &path,
-                          const QTransform &matrix, qreal lod)
+QTriangleSet qTriangulate(const QPainterPath &path, const QTransform &matrix, qreal lod)
 {
     QTriangleSet triangleSet;
+
     if (hasElementIndexUint()) {
         QTriangulator<quint32> triangulator;
         triangulator.initialize(path, matrix, lod);
@@ -2432,4 +2419,3 @@ QPolylineSet qPolyline(const QPainterPath &path,
     }
     return polyLineSet;
 }
-

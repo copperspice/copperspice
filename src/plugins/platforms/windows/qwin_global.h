@@ -111,24 +111,33 @@ inline QtWindows::WindowsEventType windowsEventType(UINT message, WPARAM wParamI
       case WM_PAINT:
       case WM_ERASEBKGND:
          return QtWindows::ExposeEvent;
+
       case WM_CLOSE:
          return QtWindows::CloseEvent;
+
       case WM_DESTROY:
          return QtWindows::DestroyEvent;
+
       case WM_ACTIVATEAPP:
          return (int)wParamIn ?
             QtWindows::ActivateApplicationEvent : QtWindows::DeactivateApplicationEvent;
+
       case WM_MOUSEACTIVATE:
          return QtWindows::MouseActivateWindowEvent;
+
       case WM_ACTIVATE:
          return  LOWORD(wParamIn) == WA_INACTIVE ?
             QtWindows::DeactivateWindowEvent : QtWindows::ActivateWindowEvent;
+
       case WM_SETCURSOR:
          return QtWindows::CursorEvent;
+
       case WM_MOUSELEAVE:
          return QtWindows::MouseEvent;
+
       case WM_HSCROLL:
          return QtWindows::ScrollEvent;
+
       case WM_MOUSEWHEEL:
       case WM_MOUSEHWHEEL:
          return QtWindows::MouseWheelEvent;
@@ -138,6 +147,7 @@ inline QtWindows::WindowsEventType windowsEventType(UINT message, WPARAM wParamI
 
       case WM_MOVE:
          return QtWindows::MoveEvent;
+
       case WM_SHOWWINDOW:
          if (wParamIn) {
             return lParamIn == SW_PARENTOPENING ? QtWindows::ShowEventOnParentRestoring : QtWindows::ShowEvent;
@@ -154,15 +164,19 @@ inline QtWindows::WindowsEventType windowsEventType(UINT message, WPARAM wParamI
 
       case WM_GETMINMAXINFO:
          return QtWindows::QuerySizeHints;
+
       case WM_KEYDOWN:                        // keyboard event
       case WM_SYSKEYDOWN:
          return QtWindows::KeyDownEvent;
+
       case WM_KEYUP:
       case WM_SYSKEYUP:
       case WM_CHAR:
          return QtWindows::KeyEvent;
+
       case WM_IME_CHAR:
          return QtWindows::InputMethodKeyEvent;
+
       case WM_IME_KEYDOWN:
          return QtWindows::InputMethodKeyDownEvent;
 
@@ -173,35 +187,49 @@ inline QtWindows::WindowsEventType windowsEventType(UINT message, WPARAM wParamI
 
       case WM_TOUCH:
          return QtWindows::TouchEvent;
+
       case WM_CHANGECBCHAIN:
       case WM_DRAWCLIPBOARD:
       case WM_RENDERFORMAT:
       case WM_RENDERALLFORMATS:
       case WM_DESTROYCLIPBOARD:
          return QtWindows::ClipboardEvent;
+
       case WM_IME_STARTCOMPOSITION:
          return QtWindows::InputMethodStartCompositionEvent;
+
       case WM_IME_ENDCOMPOSITION:
          return QtWindows::InputMethodEndCompositionEvent;
+
       case WM_IME_COMPOSITION:
          return QtWindows::InputMethodCompositionEvent;
+
       case WM_IME_REQUEST:
          return QtWindows::InputMethodRequest;
+
       case WM_IME_NOTIFY:
          switch (int(wParamIn)) {
             case IMN_OPENCANDIDATE:
                return QtWindows::InputMethodOpenCandidateWindowEvent;
+
             case IMN_CLOSECANDIDATE:
                return QtWindows::InputMethodCloseCandidateWindowEvent;
+
             default:
                break;
          }
+
+         break;
+
       case WM_GETOBJECT:
          return QtWindows::AccessibleObjectFromWindowRequest;
+
       case WM_SETFOCUS:
          return QtWindows::FocusInEvent;
+
       case WM_KILLFOCUS:
          return QtWindows::FocusOutEvent;
+
       // Among other things, WM_SETTINGCHANGE happens when the taskbar is moved
       // and therefore the "working area" changes.
       // http://msdn.microsoft.com/en-us/library/ms695534(v=vs.85).aspx

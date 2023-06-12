@@ -144,7 +144,7 @@ void QOpenGL2PaintEngineExPrivate::useSimpleShader()
     internally in the paint engine care must be taken to not call
     functions that may activate or bind under our feet.
 */
-template<typename T>
+template <typename T>
 void QOpenGL2PaintEngineExPrivate::updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode,
       GLenum filterMode, TextureUpdateMode updateMode)
 {
@@ -181,7 +181,7 @@ void QOpenGL2PaintEngineExPrivate::activateTextureUnit(GLenum textureUnit)
    }
 }
 
-template<>
+template <>
 GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const GLuint &textureId)
 {
    if (textureId != lastTextureUsed) {
@@ -191,19 +191,19 @@ GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const GLuint &textureId)
    return textureId;
 }
 
-template<>
+template <>
 GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const QImage &image)
 {
    return QOpenGLTextureCache::cacheForContext(ctx)->bindTexture(ctx, image);
 }
 
-template<>
+template <>
 GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const QPixmap &pixmap)
 {
    return QOpenGLTextureCache::cacheForContext(ctx)->bindTexture(ctx, pixmap);
 }
 
-template<>
+template <>
 GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const QGradient &gradient)
 {
    // We apply global opacity in the fragment shaders, so we always pass 1.0
@@ -222,7 +222,7 @@ struct ImageWithBindOptions {
    QOpenGLTextureCache::BindOptions options;
 };
 
-template<>
+template <>
 GLuint QOpenGL2PaintEngineExPrivate::bindTexture(const ImageWithBindOptions &imageWithOptions)
 {
    return QOpenGLTextureCache::cacheForContext(ctx)->bindTexture(ctx, imageWithOptions.image, imageWithOptions.options);

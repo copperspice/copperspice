@@ -71,7 +71,7 @@ class CsUniquePointer
    }
 
    explicit operator bool() const noexcept {
-      return ! isNull();
+      return ! is_null();
    }
 
    operator std::unique_ptr<T, Deleter>() && noexcept
@@ -95,7 +95,7 @@ class CsUniquePointer
       return m_ptr.get_deleter();
    }
 
-   bool isNull() const noexcept {
+   bool is_null() const noexcept {
       return m_ptr == nullptr;
    }
 
@@ -122,104 +122,104 @@ class CsUniquePointer
  private:
    std::unique_ptr<T, Deleter> m_ptr;
 
-   template <class U, class D>
+   template <typename U, typename D>
    friend class CsUniqueArrayPointer;
 };
 
-template <class T, class... Args, class = typename std::enable_if_t<! std::is_array_v<T>>>
+template <typename T, typename... Args, typename = typename std::enable_if_t<! std::is_array_v<T>>>
 CsUniquePointer<T> make_unique(Args &&... args)
 {
    return std::make_unique<T>(std::forward<Args>(args)...);
 }
 
 // equal
-template <class T1, class Deleter1, class T2, class Deleter2>
+template <typename T1, typename Deleter1, typename T2, typename Deleter2>
 bool operator==(const CsUniquePointer<T1, Deleter1> &ptr1, const CsUniquePointer<T2, Deleter2> &ptr2) noexcept
 {
    return ptr1.get() == ptr2.get();
 }
 
-template <class T1, class Deleter1, class T2>
+template <typename T1, typename Deleter1, typename T2>
 bool operator==(const CsUniquePointer<T1, Deleter1> &ptr1, const T2 *ptr2) noexcept
 {
    return ptr1.get() == ptr2;
 }
 
-template <class T1, class T2, class Deleter2>
+template <typename T1, typename T2, typename Deleter2>
 bool operator==(const T1 *ptr1, const CsUniquePointer<T2, Deleter2> &ptr2) noexcept
 {
    return ptr1 == ptr2.get();
 }
 
-template <class T, class Deleter>
+template <typename T, typename Deleter>
 bool operator==(const CsUniquePointer<T, Deleter> &ptr1, std::nullptr_t) noexcept
 {
    return ptr1.get() == nullptr;
 }
 
-template <class T, class Deleter>
+template <typename T, typename Deleter>
 bool operator==(std::nullptr_t, const CsUniquePointer<T, Deleter> &ptr2) noexcept
 {
    return nullptr == ptr2.get();
 }
 
 // not equal
-template <class T1, class Deleter1, class T2, class Deleter2>
+template <typename T1, typename Deleter1, typename T2, typename Deleter2>
 bool operator!=(const CsUniquePointer<T1, Deleter1> &ptr1, const CsUniquePointer<T2, Deleter2> &ptr2) noexcept
 {
    return ptr1.get() != ptr2.get();
 }
 
-template <class T1, class Deleter1, class T2>
+template <typename T1, typename Deleter1, typename T2>
 bool operator!=(const CsUniquePointer<T1, Deleter1> &ptr1, const T2 *ptr2) noexcept
 {
    return ptr1.get() != ptr2;
 }
 
-template <class T1, class T2, class Deleter2>
+template <typename T1, typename T2, typename Deleter2>
 bool operator!=(const T1 *ptr1, const CsUniquePointer<T2, Deleter2> &ptr2) noexcept
 {
    return ptr1 != ptr2.get();
 }
 
-template <class T, class Deleter>
+template <typename T, typename Deleter>
 bool operator!=(const CsUniquePointer<T, Deleter> &ptr1, std::nullptr_t) noexcept
 {
    return ptr1.get() != nullptr;
 }
 
-template <class T, class Deleter>
+template <typename T, typename Deleter>
 bool operator!=(std::nullptr_t, const CsUniquePointer<T, Deleter> &ptr2) noexcept
 {
    return nullptr != ptr2.get();
 }
 
-template <class T, class Deleter>
+template <typename T, typename Deleter>
 void swap(CsUniquePointer<T, Deleter> &ptr1, CsUniquePointer<T, Deleter> &ptr2) noexcept
 {
    ptr1.swap(ptr2);
 }
 
 // compare
-template <class T1, class T2>
+template <typename T1, typename T2>
 bool operator<(const CsUniquePointer<T1> &ptr1, const CsUniquePointer<T2> &ptr2) noexcept
 {
    return ptr1.get() < ptr2.get();
 }
 
-template <class T1, class T2>
+template <typename T1, typename T2>
 bool operator<=(const CsUniquePointer<T1> &ptr1, const CsUniquePointer<T2> &ptr2) noexcept
 {
    return ptr1.get() <= ptr2.get();
 }
 
-template <class T1, class T2>
+template <typename T1, typename T2>
 bool operator>(const CsUniquePointer<T1> &ptr1, const CsUniquePointer<T2> &ptr2) noexcept
 {
    return ptr1.get() > ptr2.get();
 }
 
-template <class T1, class T2>
+template <typename T1, typename T2>
 bool operator>=(const CsUniquePointer<T1> &ptr1, const CsUniquePointer<T2> &ptr2) noexcept
 {
    return ptr1.get() >= ptr2.get();

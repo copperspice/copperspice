@@ -115,6 +115,7 @@ class QHashableLatin1Literal
    int size() const {
       return m_size;
    }
+
    const char *data() const {
       return m_data;
    }
@@ -123,7 +124,8 @@ class QHashableLatin1Literal
    QHashableLatin1Literal(const char *str)
       : m_size(strlen(str)), m_data(str) {}
 #else
-   template <int N> QHashableLatin1Literal(const char (&str)[N])
+   template <int N>
+   QHashableLatin1Literal(const char (&str)[N])
       : m_size(N - 1), m_data(str) {}
 #endif
 

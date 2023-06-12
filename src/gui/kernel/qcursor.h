@@ -114,7 +114,7 @@ class Q_GUI_EXPORT QCursor
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);
 
-template<>
+template <>
 inline bool CustomType_T<QCursor>::compare(const CustomType &other) const {
    auto ptr = dynamic_cast<const CustomType_T<QCursor>*>(&other);
 

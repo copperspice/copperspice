@@ -64,19 +64,25 @@ class QGenericMatrix
       return *m;
    }
 
-   template<int NN, int MM, typename TT>
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator+(const QGenericMatrix<NN, MM, TT> &m1, const QGenericMatrix<NN, MM, TT> &m2);
-   template<int NN, int MM, typename TT>
+
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator-(const QGenericMatrix<NN, MM, TT> &m1, const QGenericMatrix<NN, MM, TT> &m2);
-   template<int NN, int M1, int M2, typename TT>
+
+   template <int NN, int M1, int M2, typename TT>
    friend QGenericMatrix<M1, M2, TT> operator*(const QGenericMatrix<NN, M2, TT> &m1, const QGenericMatrix<M1, NN, TT> &m2);
-   template<int NN, int MM, typename TT>
+
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator-(const QGenericMatrix<NN, MM, TT> &matrix);
-   template<int NN, int MM, typename TT>
+
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator*(TT factor, const QGenericMatrix<NN, MM, TT> &matrix);
-   template<int NN, int MM, typename TT>
+
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator*(const QGenericMatrix<NN, MM, TT> &matrix, TT factor);
-   template<int NN, int MM, typename TT>
+
+   template <int NN, int MM, typename TT>
    friend QGenericMatrix<NN, MM, TT> operator/(const QGenericMatrix<NN, MM, TT> &matrix, TT divisor);
 
  private:

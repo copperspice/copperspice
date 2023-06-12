@@ -178,7 +178,7 @@ QXcbScreen::QXcbScreen(QXcbConnection *connection, QXcbVirtualDesktop *virtualDe
       xcb_randr_get_crtc_info_cookie_t crtcCookie =
          xcb_randr_get_crtc_info_unchecked(xcb_connection(), m_crtc, output ? output->timestamp : 0);
       xcb_randr_get_crtc_info_reply_t *crtc =
-         xcb_randr_get_crtc_info_reply(xcb_connection(), crtcCookie, NULL);
+         xcb_randr_get_crtc_info_reply(xcb_connection(), crtcCookie, nullptr);
       if (crtc) {
          updateGeometry(QRect(crtc->x, crtc->y, crtc->width, crtc->height), crtc->rotation);
          updateRefreshRate(crtc->mode);
@@ -210,7 +210,7 @@ QXcbScreen::QXcbScreen(QXcbConnection *connection, QXcbVirtualDesktop *virtualDe
 
    QScopedPointer<xcb_get_window_attributes_reply_t, QMallocDeleter> rootAttribs(
       xcb_get_window_attributes_reply(xcb_connection(),
-         xcb_get_window_attributes_unchecked(xcb_connection(), screen()->root), NULL));
+         xcb_get_window_attributes_unchecked(xcb_connection(), screen()->root), nullptr));
    const quint32 existingEventMask = rootAttribs.isNull() ? 0 : rootAttribs->your_event_mask;
 
    const quint32 mask = XCB_CW_EVENT_MASK;
@@ -229,7 +229,7 @@ QXcbScreen::QXcbScreen(QXcbConnection *connection, QXcbVirtualDesktop *virtualDe
       xcb_get_property_reply(xcb_connection(),
          xcb_get_property_unchecked(xcb_connection(), false, screen()->root,
             atom(QXcbAtom::_NET_SUPPORTING_WM_CHECK),
-            XCB_ATOM_WINDOW, 0, 1024), NULL);
+            XCB_ATOM_WINDOW, 0, 1024), nullptr);
 
    if (reply && reply->format == 32 && reply->type == XCB_ATOM_WINDOW) {
       xcb_window_t windowManager = *((xcb_window_t *)xcb_get_property_value(reply));
@@ -239,7 +239,7 @@ QXcbScreen::QXcbScreen(QXcbConnection *connection, QXcbVirtualDesktop *virtualDe
             xcb_get_property_reply(xcb_connection(),
                xcb_get_property_unchecked(xcb_connection(), false, windowManager,
                   atom(QXcbAtom::_NET_WM_NAME),
-                  atom(QXcbAtom::UTF8_STRING), 0, 1024), NULL);
+                  atom(QXcbAtom::UTF8_STRING), 0, 1024), nullptr);
          if (windowManagerReply && windowManagerReply->format == 8 && windowManagerReply->type == atom(QXcbAtom::UTF8_STRING)) {
             m_windowManagerName = QString::fromUtf8((const char *)xcb_get_property_value(windowManagerReply),
                   xcb_get_property_value_length(windowManagerReply));
@@ -317,7 +317,7 @@ QWindow *QXcbScreen::topLevelWindowAt(const QPoint &p) const
          xcb_translate_coordinates_unchecked(xcb_connection(), parent, child, x, y);
 
       xcb_translate_coordinates_reply_t *translate_reply =
-         xcb_translate_coordinates_reply(xcb_connection(), translate_cookie, NULL);
+         xcb_translate_coordinates_reply(xcb_connection(), translate_cookie, nullptr);
 
       if (!translate_reply) {
          return nullptr;
@@ -527,7 +527,7 @@ void QXcbScreen::updateGeometry(xcb_timestamp_t timestamp)
    xcb_randr_get_crtc_info_cookie_t crtcCookie =
       xcb_randr_get_crtc_info_unchecked(xcb_connection(), m_crtc, timestamp);
    xcb_randr_get_crtc_info_reply_t *crtc =
-      xcb_randr_get_crtc_info_reply(xcb_connection(), crtcCookie, NULL);
+      xcb_randr_get_crtc_info_reply(xcb_connection(), crtcCookie, nullptr);
    if (crtc) {
       updateGeometry(QRect(crtc->x, crtc->y, crtc->width, crtc->height), crtc->rotation);
       free(crtc);
@@ -594,7 +594,7 @@ void QXcbScreen::updateRefreshRate(xcb_randr_mode_t mode)
    xcb_randr_get_screen_resources_current_cookie_t resourcesCookie =
       xcb_randr_get_screen_resources_current_unchecked(xcb_connection(), screen()->root);
    xcb_randr_get_screen_resources_current_reply_t *resources =
-      xcb_randr_get_screen_resources_current_reply(xcb_connection(), resourcesCookie, NULL);
+      xcb_randr_get_screen_resources_current_reply(xcb_connection(), resourcesCookie, nullptr);
    if (resources) {
       xcb_randr_mode_info_iterator_t modesIter =
          xcb_randr_get_screen_resources_current_modes_iterator(resources);
@@ -630,7 +630,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
    xcb_get_geometry_cookie_t geometry_cookie = xcb_get_geometry_unchecked(xcb_connection(), window);
 
    xcb_get_geometry_reply_t *reply =
-      xcb_get_geometry_reply(xcb_connection(), geometry_cookie, NULL);
+      xcb_get_geometry_reply(xcb_connection(), geometry_cookie, nullptr);
 
    if (!reply) {
       return QPixmap();
@@ -645,7 +645,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
 
    geometry_cookie = xcb_get_geometry_unchecked(xcb_connection(), root);
    xcb_get_geometry_reply_t *root_reply =
-      xcb_get_geometry_reply(xcb_connection(), geometry_cookie, NULL);
+      xcb_get_geometry_reply(xcb_connection(), geometry_cookie, nullptr);
 
    if (!root_reply) {
       free(reply);
@@ -662,7 +662,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
          xcb_translate_coordinates_unchecked(xcb_connection(), window, root, x, y);
 
       xcb_translate_coordinates_reply_t *translate_reply =
-         xcb_translate_coordinates_reply(xcb_connection(), translate_cookie, NULL);
+         xcb_translate_coordinates_reply(xcb_connection(), translate_cookie, nullptr);
 
       if (!translate_reply) {
          free(reply);
@@ -685,7 +685,7 @@ QPixmap QXcbScreen::grabWindow(WId window, int x, int y, int width, int height) 
    }
 
    xcb_get_window_attributes_reply_t *attributes_reply =
-      xcb_get_window_attributes_reply(xcb_connection(), xcb_get_window_attributes_unchecked(xcb_connection(), window), NULL);
+      xcb_get_window_attributes_reply(xcb_connection(), xcb_get_window_attributes_unchecked(xcb_connection(), window), nullptr);
 
    if (!attributes_reply) {
       free(reply);
@@ -775,7 +775,7 @@ void QXcbScreen::readXResources()
          xcb_get_property_reply(xcb_connection(),
             xcb_get_property_unchecked(xcb_connection(), false, screen()->root,
                XCB_ATOM_RESOURCE_MANAGER,
-               XCB_ATOM_STRING, offset / 4, 8192), NULL);
+               XCB_ATOM_STRING, offset / 4, 8192), nullptr);
       bool more = false;
       if (reply && reply->format == 8 && reply->type == XCB_ATOM_STRING) {
          resources += QByteArray((const char *)xcb_get_property_value(reply), xcb_get_property_value_length(reply));

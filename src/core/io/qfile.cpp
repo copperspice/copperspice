@@ -158,7 +158,7 @@ void QFile::setFileName(const QString &name)
 
    if (isOpen()) {
       qWarning("QFile::setFileName: File (%s) is already opened",
-               qPrintable(fileName()));
+               csPrintable(fileName()));
       close();
    }
 
@@ -628,7 +628,7 @@ bool QFile::open(FILE *fh, OpenMode mode, FileHandleFlags handleFlags)
 {
    Q_D(QFile);
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
    if (mode & Append) {
@@ -659,7 +659,7 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
 

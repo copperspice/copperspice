@@ -231,7 +231,7 @@ class QProcessEnvironmentPrivate: public QSharedData
 
 #if ! defined (CS_DOXYPRESS)
 
-template<>
+template <>
 inline void QSharedDataPointer<QProcessEnvironmentPrivate>::detach()
 {
    if (d && d->ref.load() == 1) {

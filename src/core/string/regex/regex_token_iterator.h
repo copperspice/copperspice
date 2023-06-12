@@ -127,22 +127,18 @@ class regex_token_iterator_implementation
 
 template <class BidirectionalIterator, class charT, class traits>
 class regex_token_iterator
-   : public std::iterator <std::forward_iterator_tag, sub_match<BidirectionalIterator>,
-     typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type,
-     const sub_match<BidirectionalIterator> *, const sub_match<BidirectionalIterator> & >
 {
  private:
    typedef regex_token_iterator_implementation<BidirectionalIterator, charT, traits> impl;
    typedef std::shared_ptr<impl> pimpl;
 
  public:
-   typedef          basic_regex<charT, traits>                   regex_type;
-   typedef          sub_match<BidirectionalIterator>             value_type;
-   typedef          const value_type                             *pointer;
-   typedef          const value_type                             &reference;
-   typedef          std::forward_iterator_tag                    iterator_category;
-
-   typedef typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type   difference_type;
+   using regex_type        = basic_regex<charT, traits>;
+   using difference_type   = typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type;
+   using value_type        = sub_match<BidirectionalIterator>;
+   using iterator_category = std::forward_iterator_tag;
+   using pointer           = const value_type *;
+   using reference         = const value_type &;
 
    regex_token_iterator() {}
    regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type &re,

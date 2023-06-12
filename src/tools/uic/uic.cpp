@@ -45,7 +45,7 @@
 #include <qdatetime.h>
 
 Uic::Uic(Driver *d)
-   : drv(d), out(d->output()), opt(d->option()), info(d), externalPix(true)
+   : drv(d), out(d->output()), opt(d->option()), externalPix(true)
 {
 }
 

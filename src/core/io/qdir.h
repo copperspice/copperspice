@@ -157,10 +157,12 @@ class Q_CORE_EXPORT QDir
    static inline bool isAbsolutePath(const QString &path) {
       return !isRelativePath(path);
    }
+
    bool isRelative() const;
    inline bool isAbsolute() const {
       return !isRelative();
    }
+
    bool makeAbsolute();
 
    bool operator==(const QDir &dir) const;

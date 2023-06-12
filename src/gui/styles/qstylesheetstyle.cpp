@@ -765,7 +765,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
             }
          }
          if (! knownStyleHint) {
-            qDebug("Unknown property %s", qPrintable(decl.d->property));
+            qDebug("Unknown property %s", csPrintable(decl.d->property));
          }
       }
    }
@@ -3018,7 +3018,8 @@ static inline bool verticalTabs(QTabBar::Shape shape)
       || shape == QTabBar::TriangularWest
       || shape == QTabBar::TriangularEast;
 }
-#endif // QT_NO_TABBAR
+
+#endif
 
 void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt, QPainter *p,
    const QWidget *w) const

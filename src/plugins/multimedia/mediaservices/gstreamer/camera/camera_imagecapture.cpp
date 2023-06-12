@@ -282,7 +282,7 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
 #endif
 
 #if GST_CHECK_VERSION(1,0,0)
-            gst_pad_add_probe(sinkpad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, encoderEventProbe, this, NULL);
+            gst_pad_add_probe(sinkpad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, encoderEventProbe, this, nullptr);
 #else
             gst_pad_add_event_probe(sinkpad, G_CALLBACK(encoderEventProbe), this);
 #endif

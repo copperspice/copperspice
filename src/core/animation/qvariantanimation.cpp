@@ -49,7 +49,7 @@ static QVariant cs_defaultFormula(const QVariant &, const QVariant &, double)
    return QVariant();
 }
 
-template<>
+template <>
 inline QRect cs_genericFormula(const QRect &from, const QRect &to, double progress)
 {
    QRect retval;
@@ -62,7 +62,7 @@ inline QRect cs_genericFormula(const QRect &from, const QRect &to, double progre
    return retval;
 }
 
-template<>
+template <>
 inline QRectF cs_genericFormula(const QRectF &from, const QRectF &to, double progress)
 {
    double x1, y1, w1, h1;
@@ -75,13 +75,13 @@ inline QRectF cs_genericFormula(const QRectF &from, const QRectF &to, double pro
                  cs_genericFormula(w1, w2, progress), cs_genericFormula(h1, h2, progress));
 }
 
-template<>
+template <>
 inline QLine cs_genericFormula(const QLine &from, const QLine &to, double progress)
 {
    return QLine( cs_genericFormula(from.p1(), to.p1(), progress), cs_genericFormula(from.p2(), to.p2(), progress));
 }
 
-template<>
+template <>
 inline QLineF cs_genericFormula(const QLineF &from, const QLineF &to, double progress)
 {
    return QLineF(cs_genericFormula(from.p1(), to.p1(), progress), cs_genericFormula(from.p2(), to.p2(), progress));

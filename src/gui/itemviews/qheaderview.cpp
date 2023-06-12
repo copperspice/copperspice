@@ -420,7 +420,7 @@ int QHeaderView::sectionViewportPosition(int logicalIndex) const
    return offsetPosition;
 }
 
-template<typename Container>
+template <typename Container>
 static void qMoveRange(Container &c, typename Container::size_type rangeStart,
    typename Container::size_type rangeEnd, typename Container::size_type targetPosition)
 {

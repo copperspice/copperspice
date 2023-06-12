@@ -538,7 +538,7 @@ re_syntax_base *basic_regex_creator<charT, traits>::append_set(const basic_char_
    return result;
 }
 
-template<class T>
+template <class T>
 inline bool char_less(T t1, T t2)
 {
    return t1 < t2;

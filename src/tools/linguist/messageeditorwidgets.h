@@ -51,8 +51,8 @@ class ExpandingTextEdit : public QTextEdit
 
  public:
    ExpandingTextEdit(QWidget *parent = nullptr);
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
  private:
    int m_minimumHeight;
@@ -173,7 +173,7 @@ class FormMultiWidget : public QWidget
    CS_SIGNAL_2(cursorPositionChanged)
 
  protected:
-   bool eventFilter(QObject *watched, QEvent *event);
+   bool eventFilter(QObject *watched, QEvent *event) override;
 
  private:
    void addEditor(int idx);

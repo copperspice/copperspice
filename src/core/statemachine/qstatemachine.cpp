@@ -1372,7 +1372,7 @@ void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractSta
 
    } else {
       qWarning("Unrecoverable error detected in running state machine: %s",
-         qPrintable(errorString));
+         csPrintable(errorString));
       q->stop();
    }
 }

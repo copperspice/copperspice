@@ -41,7 +41,7 @@ class PhraseBookBox : public QDialog, public Ui::PhraseBookBox
    PhraseBookBox(PhraseBook *phraseBook, QWidget *parent = nullptr);
 
  protected:
-   bool eventFilter(QObject *obj, QEvent *event);
+   bool eventFilter(QObject *obj, QEvent *event) override;
 
  private:
    CS_SLOT_1(Private, void newPhrase())

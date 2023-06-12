@@ -313,7 +313,7 @@ QDataStream &operator<<(QDataStream &stream, const QLinkedList<T> &list)
    return stream;
 }
 
-template<typename T>
+template <typename T>
 QDataStream &operator>>(QDataStream &stream, QVector<T> &vector)
 {
    vector.clear();
@@ -331,7 +331,7 @@ QDataStream &operator>>(QDataStream &stream, QVector<T> &vector)
    return stream;
 }
 
-template<typename T>
+template <typename T>
 QDataStream &operator<<(QDataStream &stream, const QVector<T> &vector)
 {
    stream << quint32(vector.size());

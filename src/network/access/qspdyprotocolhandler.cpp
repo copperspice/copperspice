@@ -1046,7 +1046,7 @@ void QSpdyProtocolHandler::handleRST_STREAM(char, quint32 length, const QByteArr
          break;
 
       default:
-         qWarning("could not understand servers RST_STREAM status code");
+         qWarning("Unable to parse servers RST_STREAM status code");
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "got SPDY RST_STREAM message with unknown error code";
    }

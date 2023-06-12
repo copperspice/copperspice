@@ -27,7 +27,7 @@
 #ifndef CS_REGEX_FWD_H
 #define CS_REGEX_FWD_H
 
-#include "regex/r_config.h"
+#include <regex/r_config.h>
 
 namespace cs_regex_ns {
 

@@ -208,9 +208,9 @@ bool QGLShaderPrivate::compile(QGLShader *q)
       }
 
       if (name.isEmpty()) {
-         qWarning("QGLShader::compile(%s): %s", type, qPrintable(log));
+         qWarning("QGLShader::compile(%s): %s", type, csPrintable(log));
       } else {
-         qWarning("QGLShader::compile(%s)[%s]: %s", type, qPrintable(name), qPrintable(log));
+         qWarning("QGLShader::compile(%s)[%s]: %s", type, csPrintable(name), csPrintable(log));
       }
 
       delete[] logbuf;

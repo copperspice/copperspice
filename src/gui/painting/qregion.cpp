@@ -1072,11 +1072,12 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
    OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func, NonOverlapFunc nonOverlap2Func);
 
-#define RectangleOut 0
-#define RectangleIn 1
+#define RectangleOut  0
+#define RectangleIn   1
 #define RectanglePart 2
-#define EvenOddRule 0
-#define WindingRule 1
+
+#define EvenOddRule   0
+#define WindingRule   1
 
 // START OF region.h extract
 /* $XConsortium: region.h,v 11.14 94/04/17 20:22:20 rws Exp $ */
@@ -2088,6 +2089,7 @@ static void XorRegion(QRegionPrivate *sra, QRegionPrivate *srb, QRegionPrivate &
    if (!srb->contains(*sra)) {
       SubtractRegion(sra, srb, tra);
    }
+
    if (!sra->contains(*srb)) {
       SubtractRegion(srb, sra, trb);
    }
@@ -2117,15 +2119,20 @@ static bool EqualRegion(const QRegionPrivate *r1, const QRegionPrivate *r2)
 {
    if (r1->numRects != r2->numRects) {
       return false;
+
    } else if (r1->numRects == 0) {
       return true;
+
    } else if (r1->extents != r2->extents) {
       return false;
+
    } else if (r1->numRects == 1 && r2->numRects == 1) {
       return true; // equality tested in previous if-statement
+
    } else {
       const QRect *rr1 = (r1->numRects == 1) ? &r1->extents : r1->rects.constData();
       const QRect *rr2 = (r2->numRects == 1) ? &r2->extents : r2->rects.constData();
+
       for (int i = 0; i < r1->numRects; ++i, ++rr1, ++rr2) {
          if (*rr1 != *rr2) {
             return false;
@@ -2168,7 +2175,7 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
    QRect *prect = &rect;
    int partIn, partOut;
 
-   if (!region || region->numRects == 0 || !EXTENTCHECK(&region->extents, prect)) {
+   if (! region || region->numRects == 0 || ! EXTENTCHECK(&region->extents, prect)) {
       return RectangleOut;
    }
 
@@ -2178,6 +2185,7 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
    /* can stop when both partOut and partIn are true, or we reach prect->y2 */
    pbox = (region->numRects == 1) ? &region->extents : region->rects.constData();
    pboxEnd = pbox + region->numRects;
+
    for (; pbox < pboxEnd; ++pbox) {
       if (pbox->bottom() < ry) {
          continue;
@@ -2211,10 +2219,13 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
 
       if (pbox->right() >= prect->right()) {
          ry = pbox->bottom() + 1;     /* finished with this band */
+
          if (ry > prect->bottom()) {
             break;
          }
+
          rx = prect->left();  /* reset x out to left again */
+
       } else {
          /*
           * Because boxes in a band are maximal width, if the first box
@@ -2226,9 +2237,26 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
          break;
       }
    }
-   return partIn ? ((ry <= prect->bottom()) ? RectanglePart : RectangleIn) : RectangleOut;
+
+   bool retval;
+
+   if (partIn) {
+      if (ry <= prect->bottom()) {
+         retval = RectanglePart;
+
+      } else {
+         retval = RectangleIn;
+      }
+
+   } else {
+      retval = RectangleOut;
+
+   }
+
+   return retval;
 }
 // END OF Region.c extract
+
 // START OF poly.h extract
 /* $XConsortium: poly.h,v 1.4 94/04/17 20:22:19 rws Exp $ */
 /************************************************************************
@@ -2671,10 +2699,7 @@ static void CreateETandAET(int count, const QPoint *pts,
    EdgeTable *ET, EdgeTableEntry *AET, EdgeTableEntry *pETEs,
    ScanLineListBlock *pSLLBlock)
 {
-   const QPoint *top,
-         *bottom,
-         *PrevPt,
-         *CurrPt;
+   const QPoint *top, *bottom, *PrevPt, *CurrPt;
    int iSLLBlock = 0;
    int dy;
 
@@ -3054,6 +3079,10 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    POINTBLOCK *tmpPtBlock;
    int numFullPtBlocks = 0;
 
+   ET.scanlines.next = nullptr;
+   ET.ymax = SMALL_COORDINATE;
+   ET.ymin = LARGE_COORDINATE;
+
    region = new QRegionPrivate;
 
    /* special case a rectangle */
@@ -3096,14 +3125,14 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    pSLL = ET.scanlines.next;
    curPtBlock = &FirstPtBlock;
 
-   // sanity check that the region won't become too big...
+   // sanity check that the region will not become too big
    if (ET.ymax - ET.ymin > 100000) {
 
-      // clean up region ptr
 #ifndef QT_NO_DEBUG
-      qWarning("QRegion: creating region from big polygon failed...!");
+      qWarning("QRegion: Creating a region from big polygon failed");
 #endif
 
+      // clean up region ptr
       delete AET;
       delete region;
       return nullptr;

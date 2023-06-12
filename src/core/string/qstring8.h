@@ -583,7 +583,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return *this;
       }
 
-      template<typename Iterator>
+      template <typename Iterator>
       QString8 &insert(const_iterator first, Iterator begin, Iterator end) {
          CsString::CsString::insert(first, begin, end);
          return *this;

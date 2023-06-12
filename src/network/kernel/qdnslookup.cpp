@@ -137,7 +137,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
             if (summedWeight >= weightThreshold) {
 #ifdef QDNSLOOKUP_DEBUG
                qDebug("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
-                      qPrintable(slice[j].target()), slice[j].port(),
+                      csPrintable(slice[j].target()), slice[j].port(),
                       slice[j].weight());
 #endif
                // Adjust the slice weight and take the current record.
@@ -837,7 +837,7 @@ void QDnsLookupPrivate::_q_lookupFinished(const QDnsLookupReply &_reply)
    Q_Q(QDnsLookup);
    if (runnable == q->sender()) {
 #ifdef QDNSLOOKUP_DEBUG
-      qDebug("DNS reply for %s: %i (%s)", qPrintable(name), _reply.error, qPrintable(_reply.errorString));
+      qDebug("DNS reply for %s: %i (%s)", csPrintable(name), _reply.error, csPrintable(_reply.errorString));
 #endif
       reply = _reply;
       runnable = nullptr;

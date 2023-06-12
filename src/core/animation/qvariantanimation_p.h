@@ -75,13 +75,13 @@ class QVariantAnimationPrivate : public QAbstractAnimationPrivate
    Q_DECLARE_PUBLIC(QVariantAnimation)
 };
 
-template<typename T>
+template <typename T>
 T cs_genericFormula(const T &from, const T &to, double progress)
 {
    return T(from + (to - from) * progress);
 }
 
-template<typename T>
+template <typename T>
 QVariant cs_variantFormula(const QVariant &from, const QVariant &to, double progress)
 {
    return cs_genericFormula(from.getData<T>(), to.getData<T>(), progress);

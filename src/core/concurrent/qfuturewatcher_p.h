@@ -31,8 +31,6 @@ class QFutureWatcherBase;
 
 class QFutureWatcherBasePrivate : public QFutureCallOutInterface
 {
-   Q_DECLARE_PUBLIC(QFutureWatcherBase)
-
  public:
    QFutureWatcherBasePrivate();
    virtual ~QFutureWatcherBasePrivate() {}
@@ -46,12 +44,13 @@ class QFutureWatcherBasePrivate : public QFutureCallOutInterface
    QAtomicInt pendingResultsReady;
    int maximumPendingResultsReady;
 
-   QAtomicInt resultAtConnected;
+   mutable QAtomicInt resultAtConnected;
    bool finished;
 
  protected:
    QFutureWatcherBase *q_ptr;
 
+   Q_DECLARE_PUBLIC(QFutureWatcherBase)
 };
 
 #endif

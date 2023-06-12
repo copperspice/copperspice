@@ -494,7 +494,6 @@ void QFileSystemEngine::clearWinStatData(QFileSystemMetaData &data)
    data.lastWriteTime_  = FILETIME();
 }
 
-//static
 QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data)
 {
    if (data.missingFlags(QFileSystemMetaData::LinkType)) {
@@ -512,7 +511,6 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
    return QFileSystemEntry(retval);
 }
 
-//static
 QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry, QFileSystemMetaData &data)
 {
    if (data.missingFlags(QFileSystemMetaData::ExistsAttribute)) {
@@ -526,7 +524,6 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
    }
 }
 
-//static
 QString QFileSystemEngine::nativeAbsoluteFilePath(const QString &path)
 {
    // can be //server or //server/share
@@ -559,7 +556,6 @@ QString QFileSystemEngine::nativeAbsoluteFilePath(const QString &path)
    return absPath;
 }
 
-//static
 QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
 {
    QString retval;
@@ -655,7 +651,6 @@ QByteArray fileIdWin8(HANDLE handle)
    return result;
 }
 
-//static
 QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
    QByteArray result;
@@ -670,7 +665,6 @@ QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
    return result;
 }
 
-//static
 QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEngine::FileOwner own)
 {
    QString name;
@@ -729,7 +723,6 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
    return name;
 }
 
-//static
 bool QFileSystemEngine::fillPermissions(const QFileSystemEntry &entry, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
    if ((qt_ntfs_permission_lookup > 0) && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)) {
@@ -971,8 +964,6 @@ static bool tryFindFallback(const QFileSystemEntry &fname, QFileSystemMetaData &
    return filledData;
 }
 
-
-//static
 bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
    HANDLE fHandle = (HANDLE)_get_osfhandle(fd);
@@ -983,7 +974,6 @@ bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data, QFileSys
    return false;
 }
 
-//static
 bool QFileSystemEngine::fillMetaData(HANDLE fHandle, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
    data.entryFlags &= ~what;
@@ -1002,9 +992,8 @@ bool QFileSystemEngine::fillMetaData(HANDLE fHandle, QFileSystemMetaData &data, 
 
 static bool isDirPath(const QString &dirPath, bool *existed);
 
-//static
 bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data,
-                                     QFileSystemMetaData::MetaDataFlags what)
+         QFileSystemMetaData::MetaDataFlags what)
 {
    what |= QFileSystemMetaData::WinLnkType | QFileSystemMetaData::WinStatFlags;
    data.entryFlags &= ~what;
@@ -1115,7 +1104,6 @@ static bool isDirPath(const QString &dirPath, bool *existed)
    return fileAttrib & FILE_ATTRIBUTE_DIRECTORY;
 }
 
-//static
 bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool createParents)
 {
    QString dirName = entry.filePath();
@@ -1168,7 +1156,6 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
    return mkDir(entry.filePath());
 }
 
-//static
 bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool removeEmptyParents)
 {
    QString dirName = entry.filePath();
@@ -1199,7 +1186,6 @@ bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool remo
    return rmDir(entry.filePath());
 }
 
-//static
 QString QFileSystemEngine::rootPath()
 {
    QString retval = "/" + QString::fromLatin1(qgetenv("SystemDrive"));
@@ -1213,7 +1199,6 @@ QString QFileSystemEngine::rootPath()
    return retval;
 }
 
-//static
 QString QFileSystemEngine::homePath()
 {
    QString retval;
@@ -1350,7 +1335,6 @@ bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSy
    return false; // TODO implement - code needs to be moved from qfsfileengine_win.cpp
 }
 
-//static
 bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    bool retval = ::CopyFile(&source.nativeFilePath().toStdWString()[0],
@@ -1363,7 +1347,6 @@ bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSyst
    return retval;
 }
 
-//static
 bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    bool retval = ::MoveFile(&source.nativeFilePath().toStdWString()[0], &target.nativeFilePath().toStdWString()[0]) != 0;
@@ -1374,7 +1357,6 @@ bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSy
    return retval;
 }
 
-//static
 bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &error)
 {
    bool retval = ::DeleteFile(&entry.nativeFilePath().toStdWString()[0]) != 0;
@@ -1386,7 +1368,6 @@ bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &
    return retval;
 }
 
-//static
 bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
                   QSystemError &error, QFileSystemMetaData *data)
 {

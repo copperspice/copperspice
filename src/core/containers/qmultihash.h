@@ -266,7 +266,7 @@ class QMultiHash
    explicit QMultiHash(std::unordered_multimap<Key, Val, Hash, KeyEqual> &&other)
        : m_data(std::move(other)) {}
 
-   template<typename Input_Iterator>
+   template <typename Input_Iterator>
    QMultiHash(Input_Iterator first, Input_Iterator last, const Hash & hash = Hash(),
                   const KeyEqual &key_equal = KeyEqual())
       : m_data(first, last, hash, key_equal) {}

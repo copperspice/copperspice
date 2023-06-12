@@ -39,15 +39,7 @@ const int QT_RASTER_COORD_LIMIT = 32767;
 //#define QT_DEBUG_CONVERT
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
-/**
- * Used to map between QPainterPath and the QT_FT_Outline structure used by the
- * freetype scanconvertor.
- *
- * The outline mapper uses a path iterator to get points from the path,
- * so that it is possible to transform the points as they are converted. The
- * callback can be a noop, translate or full-fledged xform. (Tests indicated
- * that using a C callback was low cost).
- */
+
 class QOutlineMapper
 {
  public:

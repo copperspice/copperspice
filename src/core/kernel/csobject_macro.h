@@ -32,10 +32,8 @@
 
 class QMetaObject;
 
-#define qPrintable(string)          QString8(string).constData()
-#define csPrintable(string)         QString8(string).constData()
-#define csPrintable8(string)        QString8(string).constData()
-#define csPrintable16(string)       QString16(string).toUtf8().constData()
+#define qPrintable(string)          QString(string).constData()
+#define csPrintable(string)         (string).constData()
 
 #define Q_EMIT
 #define Q_ARG(type, data)           CSArgument<type>{data, #type}

@@ -430,13 +430,16 @@ QString QDateTimeEdit::displayFormat() const
    return isRightToLeft() ? d->unreversedFormat : d->displayFormat;
 }
 
-template<typename C> static inline C reverse(const C &l)
+template <typename R>
+static inline R reverse(const R &data)
 {
-   C ret;
-   for (int i = l.size() - 1; i >= 0; --i) {
-      ret.append(l.at(i));
+   R retval;
+
+   for (int i = data.size() - 1; i >= 0; --i) {
+      retval.append(data.at(i));
    }
-   return ret;
+
+   return retval;
 }
 
 void QDateTimeEdit::setDisplayFormat(const QString &format)

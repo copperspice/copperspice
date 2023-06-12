@@ -174,13 +174,13 @@ def findAlias(file):
 
 lookup_chain_cache = {}
 parent_locales = {}
-def _fixedLookupChain(dirname, name):
+def _fixedLookupChain(cldr_input, filedir, name):
     if name in lookup_chain_cache:
         return lookup_chain_cache[name]
 
     # see http://www.unicode.org/reports/tr35/#Parent_Locales
     if not parent_locales:
-        for ns in findTagsInFile(dirname + "supplemental/supplementalData.xml", "parentLocales"):
+        for ns in findTagsInFile(cldr_input + "supplemental/supplementalData.xml", "parentLocales"):
             tmp = {}
             parent_locale = ""
             for data in ns[1:][0]: # ns looks like this: [u'parentLocale', [(u'parent', u'root'), (u'locales', u'az_Cyrl bs_Cyrl en_Dsrt ..')]]
@@ -202,7 +202,7 @@ def _fixedLookupChain(dirname, name):
                     if parent_locale == u"root":
                         items = items[:i+1]
                     else:
-                        items = items[:i+1] + _fixedLookupChain(dirname, parent_locale)
+                        items = items[:i+1] + _fixedLookupChain(cldr_input, filedir, parent_locale)
                     lookup_chain_cache[name] = items
                     return items
 
@@ -216,15 +216,17 @@ def _findEntry(cldr_input, base, path, draft=None, attribute=None):
         base = base[:-4]
     else:
         file = base + ".xml"
-        (notused, filename) = os.path.split(base)
 
-    items = _fixedLookupChain(cldr_input, filename)
+    (filedir, filename) = os.path.split(base)
+
+    items = _fixedLookupChain(cldr_input, filedir, filename)
 
     for item in items:
-        file = cldr_input + "/" + item + ".xml"
+        file = filedir + "/" + item + ".xml"
 
         if os.path.isfile(file):
             alias = findAlias(file)
+
             if alias:
                 # if alias is found we should follow it and stop processing current file
                 # see http://www.unicode.org/reports/tr35/#Common_Elements
@@ -235,7 +237,9 @@ def _findEntry(cldr_input, base, path, draft=None, attribute=None):
                 # found an alias, recurse into parsing it
                 result = _findEntry(cldr_input, aliasfile, path, draft, attribute)
                 return result
+
             (result, aliaspath) = _findEntryInFile(file, path, draft, attribute)
+
             if aliaspath:
                 # start lookup again because of the alias source="locale"
                 return _findEntry(cldr_input, base, aliaspath, draft, attribute)
@@ -258,6 +262,7 @@ def findEntry(cldr_input, base, path, draft=None, attribute=None):
         result = _findEntry(cldr_input, base, path, draft, attribute)
         if result:
             return result
+
         (result, aliaspath) = _findEntryInFile(filedir + "/root.xml", path, draft, attribute)
         if result:
             return result

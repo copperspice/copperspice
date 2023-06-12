@@ -57,7 +57,6 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
 
    bool event(QEvent *event) override;
 
- public:
    CORE_CS_SIGNAL_1(Public, void started())
    CORE_CS_SIGNAL_2(started)
    CORE_CS_SIGNAL_1(Public, void finished())
@@ -91,8 +90,8 @@ class Q_CORE_EXPORT QFutureWatcherBase : public QObject
    CORE_CS_SLOT_2(togglePaused)
 
  protected:
-   void connectNotify (const char *signal);
-   void disconnectNotify (const char *signal);
+   void connectNotify (const QMetaMethod &signal) const override;
+   void disconnectNotify (const QMetaMethod &signal) const override;
 
    // called from setFuture() implemented in template sub-classes
    void connectOutputInterface();

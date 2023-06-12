@@ -38,7 +38,7 @@ void showHelp(const QString &argv0, const QString &error)
    fprintf(stderr, "CopperSpice resource compiler\n");
 
    if (! error.isEmpty()) {
-      fprintf(stderr, "%s: %s\n", qPrintable(argv0), qPrintable(error));
+      fprintf(stderr, "%s: %s\n", csPrintable(argv0), csPrintable(error));
    }
 
    fprintf(stderr, "Usage: %s  [options] <inputs>\n\n"
@@ -53,7 +53,7 @@ void showHelp(const QString &argv0, const QString &error)
       "  -project             generate resource file containing all files from the current directory\n"
       "  -version             display rcc version\n"
       "  -help                display this information\n",
-      qPrintable(argv0));
+      csPrintable(argv0));
 }
 
 void dumpRecursive(const QDir &dir, QTextStream &out)
@@ -200,7 +200,7 @@ int runRcc(int argc, char *argv[])
 
       } else {
          if (! QFile::exists(args[i])) {
-            qWarning("%s: File does not exist '%s'", csPrintable(args[0]), qPrintable(args[i]));
+            qWarning("%s: File does not exist '%s'", csPrintable(args[0]), csPrintable(args[i]));
             return 1;
          }
 

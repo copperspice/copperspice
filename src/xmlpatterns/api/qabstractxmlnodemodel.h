@@ -88,28 +88,18 @@ class NodeIndexStorage
    };
 };
 
-}  // end namespace
+}   // end namespace
 
 class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
 {
    enum Constants {
-      ForwardAxis         = 8192,
-      ReverseAxis         = 16384
+      ForwardAxis = 8192,
+      ReverseAxis = 16384
    };
 
  public:
    typedef QAbstractXmlForwardIterator<QXmlNodeModelIndex> Iterator;
    typedef QList<QXmlNodeModelIndex> List;
-
-   inline QXmlNodeModelIndex() {
-      reset();
-   }
-
-   QXmlNodeModelIndex(const QXmlNodeModelIndex &other) = default;
-   QXmlNodeModelIndex &operator=(const QXmlNodeModelIndex &other) = default;
-
-   bool operator==(const QXmlNodeModelIndex &other) const;
-   bool operator!=(const QXmlNodeModelIndex &other) const;
 
    enum NodeKind {
       Attribute               = 1,
@@ -141,11 +131,20 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
       AxisPrecedingSibling    = 1024 | ReverseAxis,
       AxisPreceding           = 2048 | ReverseAxis,
       AxisAncestorOrSelf      = 4096 | ReverseAxis,
-      /* Note that we cannot clash with the values of ForwardAxis and
-       * ReverseAxis. */
+      /* Note, can not clash with the values of ForwardAxis and ReverseAxis. */
       AxisChildOrTop          = 32768 | ForwardAxis,
       AxisAttributeOrTop      = 65536 | ForwardAxis
    };
+
+   inline QXmlNodeModelIndex() {
+      reset();
+   }
+
+   QXmlNodeModelIndex(const QXmlNodeModelIndex &other) = default;
+   QXmlNodeModelIndex &operator=(const QXmlNodeModelIndex &other) = default;
+
+   bool operator==(const QXmlNodeModelIndex &other) const;
+   bool operator!=(const QXmlNodeModelIndex &other) const;
 
    inline qint64 data() const {
       return m_storage.data;
@@ -331,11 +330,11 @@ class QVariant;
 class QXmlItemPrivate;
 
 namespace QPatternist {
-class AtomicValue;
-class VariableLoader;
-class IteratorBridge;
-class ToQXmlItemMapper;
-class ToItemMapper;
+   class AtomicValue;
+   class VariableLoader;
+   class IteratorBridge;
+   class ToQXmlItemMapper;
+   class ToItemMapper;
 }
 
 class Q_XMLPATTERNS_EXPORT QXmlItem
@@ -371,11 +370,9 @@ class Q_XMLPATTERNS_EXPORT QXmlItem
 
    union {
       QPatternist::NodeIndexStorage   m_node;
-
-      /* These two sits at the position of NodeIndexStorage::data.
-       * NodeIndexStorage::{additionalData,model} are free. */
       const QPatternist::AtomicValue *m_atomicValue;
-      QXmlItemPrivate                *m_ptr; /* Not currently used. */
+
+      QXmlItemPrivate *m_ptr;    // not currently used.
    };
 };
 

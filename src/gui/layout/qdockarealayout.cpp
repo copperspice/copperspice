@@ -1976,7 +1976,7 @@ void QDockAreaLayoutInfo::saveState(QDataStream &stream) const
 
          if (name.isEmpty()) {
             qWarning("QMainWindow::saveState(): 'objectName' not set for QDockWidget %p '%s;",
-               w, qPrintable(w->windowTitle()));
+               w, csPrintable(w->windowTitle()));
          }
          stream << name;
 

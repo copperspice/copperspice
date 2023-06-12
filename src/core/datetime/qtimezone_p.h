@@ -142,7 +142,7 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
    QByteArray m_id;
 };
 
-template<>
+template <>
 inline QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone() {
    return d->clone();
 }

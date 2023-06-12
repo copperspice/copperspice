@@ -18,7 +18,7 @@ project(copperspice)
 
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "8")
-set(BUILD_MICRO "1")
+set(BUILD_MICRO "2")
 
 # used to control RPATH and cmake/pc variables when building RPM
 option(BUILDING_RPM "Are we building RPM" OFF)

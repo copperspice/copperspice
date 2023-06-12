@@ -534,6 +534,9 @@ template<class T>
 void CSBento<T>::invoke(QObject *receiver, const CsSignal::Internal::TeaCupAbstract *dataPack,
                   CSGenericReturnArgument *retval) const
 {
+   (void) receiver;
+   (void) retval;
+
    // T must be a callable class
    auto methodPtr = &T::operator();
 

@@ -87,7 +87,6 @@ class Q_CORE_EXPORT QTextBoundaryFinder
    bool m_valid = true;
 
    uint freePrivate : 1;
-   uint unused      : 31;
 
    QTextBoundaryFinderPrivate *d;
 };

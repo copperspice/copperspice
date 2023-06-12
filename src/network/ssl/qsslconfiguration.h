@@ -30,7 +30,7 @@
 
 #ifdef QT_SSL
 
-template<typename T>
+template <typename T>
 class QList;
 
 class QSslCertificate;

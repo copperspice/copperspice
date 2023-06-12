@@ -29,7 +29,6 @@
 #include <qcursor.h>
 #include <qdrawutil.h>
 #include <qelapsedtimer.h>
-
 #include <qlabel.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
@@ -42,10 +41,6 @@
 #include <qdialog_p.h>
 
 #include <limits.h>
-
-// If the operation is expected to take this long (as predicted by progress time),
-// show the progress dialog
-static const int defaultShowTime = 1500;
 
 // wait at least the minWaitTime long before attempting to make a prediction
 static const int minWaitTime         = 50;

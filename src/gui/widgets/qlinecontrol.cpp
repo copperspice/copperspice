@@ -167,7 +167,6 @@ void QLineControl::backspace()
          m_cursor = prevMaskBlank(m_cursor);
       }
 
-      QChar uc = m_text.at(m_cursor);
       internalDelete(true);
    }
 

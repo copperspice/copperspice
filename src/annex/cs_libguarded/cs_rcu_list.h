@@ -227,6 +227,27 @@ template <typename T, typename M, typename Alloc>
 class rcu_list<T, M, Alloc>::rcu_guard
 {
    public:
+      rcu_guard() = default;
+
+      rcu_guard(const rcu_guard &other) = delete;
+      rcu_guard &operator=(const rcu_guard &other) = delete;
+
+      rcu_guard(rcu_guard &&other) {
+         m_zombie = other.m_zombie;
+         m_list   = other.m_list;
+
+         other.m_zombie = nullptr;
+         other.m_list   = nullptr;
+      }
+
+      rcu_guard &operator=(rcu_guard &&other) {
+         m_zombie = other.m_zombie;
+         m_list   = other.m_list;
+
+         other.m_zombie = nullptr;
+         other.m_list   = nullptr;
+      }
+
       void rcu_read_lock(const rcu_list<T, M, Alloc> &list);
       void rcu_read_unlock(const rcu_list<T, M, Alloc> &list);
 

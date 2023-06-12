@@ -27,7 +27,6 @@
 #include <qbezier_p.h>
 #include <stdlib.h>
 
-
 #define qreal_to_fixed_26_6(f) (qRound(f * 64))
 
 static const QRectF boundingRect(const QPointF *points, int pointCount)
@@ -111,12 +110,10 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
 {
    int count = path.elementCount();
 
-
    beginOutline(path.hasWindingFill() ? Qt::WindingFill : Qt::OddEvenFill);
 
    if (path.elements()) {
-      // TODO: if we do closing of subpaths in convertElements instead we
-      // could avoid this loop
+      // TODO: if we do closing of subpaths in convertElements instead we could avoid this loop
       const QPainterPath::ElementType *elements = path.elements();
       const QPointF *points = reinterpret_cast<const QPointF *>(path.points());
 
@@ -139,25 +136,29 @@ QT_FT_Outline *QOutlineMapper::convertPath(const QVectorPath &path)
                break;
 
             default:
-               break; // This will never hit..
+               break; // this will never happen
          }
       }
 
    } else {
-      // ### We can kill this copying and just use the buffer straight...
-
       m_elements.resize(count);
-      if (count) {
-         memcpy(m_elements.data(), path.points(), count * sizeof(QPointF));
+
+      if (count != 0) {
+         auto data   = m_elements.data();
+         auto points = path.points();
+
+         for (int i = 0; i < count; ++i) {
+            data[i] = QPointF(points[i * 2], points[(i * 2) + 1]);
+         }
       }
 
       m_element_types.resize(0);
    }
 
    endOutline();
+
    return outline();
 }
-
 
 void QOutlineMapper::endOutline()
 {

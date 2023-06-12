@@ -60,7 +60,7 @@ class MessageEditor : public QScrollArea
    void showNothing();
    void showMessage(const MultiDataIndex &index);
    void setNumerusForms(int model, const QStringList &numerusForms);
-   bool eventFilter(QObject *, QEvent *);
+   bool eventFilter(QObject *, QEvent *) override;
    void setTranslationNumerus(int model, const QString &translation, int numerus);
 
    int activeModel() const {

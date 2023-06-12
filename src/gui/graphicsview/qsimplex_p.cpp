@@ -210,9 +210,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    }
    artificialList.clear();
 
-   /////////////////////////////
-   // Fill the Simplex matrix //
-   /////////////////////////////
+   // Fill the Simplex matrix
 
    // One for each variable plus the Basic and BFS columns (first and last)
    columns = variableIndex + 2;
@@ -345,7 +343,9 @@ void QSimplex::dumpMatrix()
    for (int j = 0; j < columns; ++j) {
       str += QString::fromLatin1("  <%1 >").formatArg(j, 2);
    }
-   qDebug("%s", qPrintable(str));
+
+   qDebug("%s", csPrintable(str));
+
    for (int i = 0; i < rows; ++i) {
       str = QString::fromLatin1("Row %1:").formatArg(i, 2);
 
@@ -353,8 +353,9 @@ void QSimplex::dumpMatrix()
       for (int j = 0; j < columns; ++j) {
          str += QString::fromLatin1("%1").formatArg(row[j], 7, 'f', 2);
       }
-      qDebug("%s", qPrintable(str));
+      qDebug("%s", csPrintable(str));
    }
+
    qDebug("------------------------\n");
 }
 

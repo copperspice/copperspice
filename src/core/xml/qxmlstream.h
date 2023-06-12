@@ -65,9 +65,9 @@ class Q_CORE_EXPORT QXmlStreamAttribute
       }
 
       auto iter = m_qualifiedName.end() - 1;
+      auto max  = m_name.size();
 
-      for (auto c : m_name) {
-
+      for (int i = 0; i < max; ++i) {
          if (iter == m_qualifiedName.begin()) {
             break;
          }

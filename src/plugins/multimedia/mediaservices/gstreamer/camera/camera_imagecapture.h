@@ -43,22 +43,23 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
    CameraBinImageCapture(CameraBinSession *session);
    virtual ~CameraBinImageCapture();
 
-   QCameraImageCapture::DriveMode driveMode() const {
+   QCameraImageCapture::DriveMode driveMode() const override {
       return QCameraImageCapture::SingleImageCapture;
    }
-   void setDriveMode(QCameraImageCapture::DriveMode) {}
 
-   bool isReadyForCapture() const;
-   int capture(const QString &fileName);
-   void cancelCapture();
+   void setDriveMode(QCameraImageCapture::DriveMode) override {
+   }
 
-   bool processBusMessage(const QGstreamerMessage &message);
+   bool isReadyForCapture() const override;
+   int capture(const QString &fileName) override;
+   void cancelCapture() override;
 
- private :
+   bool processBusMessage(const QGstreamerMessage &message) override;
+
+ private:
    CS_SLOT_1(Private, void updateState())
    CS_SLOT_2(updateState)
 
- private:
 #if GST_CHECK_VERSION(1,0,0)
    static GstPadProbeReturn encoderEventProbe(GstPad *, GstPadProbeInfo *info, gpointer user_data);
 #else
@@ -104,4 +105,4 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
    bool m_ready;
 };
 
-#endif // CAMERABINCAPTURECORNTROL_H
+#endif

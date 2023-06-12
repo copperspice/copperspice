@@ -28,13 +28,13 @@
 
 namespace QtPrivate {
 
-template<class T>
+template <class T>
 class HasResultType
 {
-   template<typename U>
+   template <typename U>
    static char test(int, const typename U::result_type * = nullptr);
 
-   template<typename U>
+   template <typename U>
    static void * test(double);
 
  public:

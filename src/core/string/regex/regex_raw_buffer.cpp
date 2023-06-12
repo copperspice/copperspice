@@ -24,12 +24,12 @@
  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 */
 
+#include <regex/r_config.h>
+#include <regex/regex_raw_buffer.h>
+
 #include <cassert>
 #include <cstring>
 #include <memory>
-
-#include "regex/r_config.h"
-#include "regex/regex_raw_buffer.h"
 
 namespace cs_regex_ns {
 

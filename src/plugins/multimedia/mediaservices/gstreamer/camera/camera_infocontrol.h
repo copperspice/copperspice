@@ -36,8 +36,8 @@ class CameraBinInfoControl : public QCameraInfoControl
    CameraBinInfoControl(GstElementFactory *sourceFactory, QObject *parent);
    ~CameraBinInfoControl();
 
-   QCamera::Position cameraPosition(const QString &deviceName) const;
-   int cameraOrientation(const QString &deviceName) const;
+   QCamera::Position cameraPosition(const QString &deviceName) const override;
+   int cameraOrientation(const QString &deviceName) const override;
 
  private:
    GstElementFactory *const m_sourceFactory;

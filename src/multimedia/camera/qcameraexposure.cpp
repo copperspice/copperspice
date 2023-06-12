@@ -39,9 +39,15 @@ class QCameraExposurePrivate
    void initControls();
    QCameraExposure *q_ptr;
 
-   template<typename T> T actualExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const;
-   template<typename T> T requestedExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const;
-   template<typename T> void setExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &value);
+   template <typename T>
+   T actualExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const;
+
+   template <typename T>
+   T requestedExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const;
+
+   template <typename T>
+   void setExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &value);
+
    void resetExposureParameter(QCameraExposureControl::ExposureParameter parameter);
 
    QCamera *camera;
@@ -78,23 +84,25 @@ void QCameraExposurePrivate::initControls()
    }
 }
 
-template<typename T>
-T QCameraExposurePrivate::actualExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const
+template <typename T>
+T QCameraExposurePrivate::actualExposureParameter(QCameraExposureControl::ExposureParameter parameter,
+      const T &defaultValue) const
 {
    QVariant value = exposureControl ? exposureControl->actualValue(parameter) : QVariant();
 
    return value.isValid() ? value.value<T>() : defaultValue;
 }
 
-template<typename T>
-T QCameraExposurePrivate::requestedExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &defaultValue) const
+template <typename T>
+T QCameraExposurePrivate::requestedExposureParameter(QCameraExposureControl::ExposureParameter parameter,
+      const T &defaultValue) const
 {
    QVariant value = exposureControl ? exposureControl->requestedValue(parameter) : QVariant();
 
    return value.isValid() ? value.value<T>() : defaultValue;
 }
 
-template<typename T>
+template <typename T>
 void QCameraExposurePrivate::setExposureParameter(QCameraExposureControl::ExposureParameter parameter, const T &value)
 {
    if (exposureControl) {

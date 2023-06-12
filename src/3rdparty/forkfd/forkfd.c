@@ -165,7 +165,7 @@ static ProcessInfo *tryAllocateInSection(Header *header, ProcessInfo entries[], 
 
     /* there isn't an available entry, undo our increment */
     ffd_atomic_add_fetch(&header->busyCount, -1, FFD_ATOMIC_RELAXED);
-    return NULL;
+    return nullptr;
 }
 
 static ProcessInfo *allocateInfo(Header **header)
@@ -177,13 +177,13 @@ static ProcessInfo *allocateInfo(Header **header)
             tryAllocateInSection(currentHeader, children.entries, sizeofarray(children.entries));
 
     /* go on to the next arrays */
-    while (info == NULL) {
+    while (info == nullptr) {
         BigArray *array = ffd_atomic_load(&currentHeader->nextArray, FFD_ATOMIC_ACQUIRE);
-        if (array == NULL) {
+        if (array == nullptr) {
             /* allocate an array and try to use it */
             BigArray *allocatedArray = (BigArray *)calloc(1, sizeof(BigArray));
-            if (allocatedArray == NULL)
-                return NULL;
+            if (allocatedArray == nullptr)
+                return nullptr;
 
             if (ffd_atomic_compare_exchange(&currentHeader->nextArray, &array, allocatedArray,
                                              FFD_ATOMIC_RELEASE, FFD_ATOMIC_ACQUIRE)) {
@@ -339,7 +339,7 @@ search_next_child:
 
         /* try the arrays */
         array = ffd_atomic_load(&children.header.nextArray, FFD_ATOMIC_ACQUIRE);
-        while (array != NULL) {
+        while (array != nullptr) {
             for (i = 0; i < (int)sizeofarray(array->entries); ++i) {
                 int pid = info.si_pid;
                 if (ffd_atomic_compare_exchange(&array->entries[i].pid, &pid, -1,
@@ -385,7 +385,7 @@ search_arrays:
 
         /* try the arrays */
         array = ffd_atomic_load(&children.header.nextArray, FFD_ATOMIC_ACQUIRE);
-        while (array != NULL) {
+        while (array != nullptr) {
             for (i = 0; i < (int)sizeofarray(array->entries); ++i) {
                 int pid = ffd_atomic_load(&array->entries[i].pid, FFD_ATOMIC_ACQUIRE);
                 if (pid <= 0)
@@ -430,7 +430,7 @@ static void ignore_sigpipe()
     sigemptyset(&action.sa_mask);
     action.sa_handler = SIG_IGN;
     action.sa_flags = 0;
-    sigaction(SIGPIPE, &action, NULL);
+    sigaction(SIGPIPE, &action, nullptr);
 
 #ifdef O_NOSIGPIPE
     ffd_atomic_store(&done, 1, FFD_ATOMIC_RELAXED);
@@ -509,7 +509,7 @@ static void cleanup()
 
     /* free any arrays we might have */
     array = children.header.nextArray;
-    while (array != NULL) {
+    while (array != nullptr) {
         BigArray *next = array->header.nextArray;
         free(array);
         array = next;
@@ -659,7 +659,7 @@ int forkfd(int flags, pid_t *ppid)
     (void) pthread_once(&forkfd_initialization, forkfd_initialize);
 
     info = allocateInfo(&header);
-    if (info == NULL) {
+    if (info == nullptr) {
         errno = ENOMEM;
         return -1;
     }
@@ -784,7 +784,7 @@ int spawnfd(int flags, pid_t *ppid, const char *path, const posix_spawn_file_act
     (void) pthread_once(&forkfd_initialization, forkfd_initialize);
 
     info = allocateInfo(&header);
-    if (info == NULL) {
+    if (info == nullptr) {
         errno = ENOMEM;
         goto out;
     }

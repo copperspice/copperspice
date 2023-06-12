@@ -165,7 +165,8 @@ class QSubpathFlatIterator
    qreal m_curve_threshold;
 };
 
-template <class Iterator> bool qt_stroke_side(Iterator *it, QStroker *stroker,
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker,
    bool capFirst, QLineF *startTangent);
 
 static inline qreal adapted_angle_on_x(const QLineF &line)
@@ -613,10 +614,9 @@ void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine
    connect the first segment, other segments will be joined using joinPoints.
    This is to put capping in order...
 */
-template <class Iterator> bool qt_stroke_side(Iterator *it,
-   QStroker *stroker,
-   bool capFirst,
-   QLineF *startTangent)
+
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *startTangent)
 {
    // Used in CurveToElement section below.
    const int MAX_OFFSET = 16;
@@ -635,9 +635,7 @@ template <class Iterator> bool qt_stroke_side(Iterator *it,
 #endif
 
    qfixed2d prev = start;
-
-   bool first = true;
-
+   bool first    = true;
    qfixed offset = stroker->strokeWidth() / 2;
 
    while (it->hasNext()) {
@@ -645,11 +643,14 @@ template <class Iterator> bool qt_stroke_side(Iterator *it,
 
       // LineToElement
       if (e.isLineTo()) {
+
 #ifdef QPP_STROKE_DEBUG
          qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
 #endif
+
          QLineF line(qt_fixed_to_real(prev.x), qt_fixed_to_real(prev.y),
             qt_fixed_to_real(e.x), qt_fixed_to_real(e.y));
+
          if (line.p1() != line.p2()) {
             QLineF normal = line.normalVector();
             normal.setLength(offset);

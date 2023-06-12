@@ -93,51 +93,51 @@ QString QSslError::errorString() const
          break;
 
       case UnableToGetIssuerCertificate:
-         errStr = QSslSocket::tr("The issuer certificate could not be found");
+         errStr = QSslSocket::tr("Issuer certificate could not be found");
          break;
 
       case UnableToDecryptCertificateSignature:
-         errStr = QSslSocket::tr("The certificate signature could not be decrypted");
+         errStr = QSslSocket::tr("Certificate signature could not be decrypted");
          break;
 
       case UnableToDecodeIssuerPublicKey:
-         errStr = QSslSocket::tr("The public key in the certificate could not be read");
+         errStr = QSslSocket::tr("Public key in the certificate could not be read");
          break;
 
       case CertificateSignatureFailed:
-         errStr = QSslSocket::tr("The signature of the certificate is invalid");
+         errStr = QSslSocket::tr("Signature of the certificate is invalid");
          break;
 
       case CertificateNotYetValid:
-         errStr = QSslSocket::tr("The certificate is not yet valid");
+         errStr = QSslSocket::tr("Certificate is not valid yet");
          break;
 
       case CertificateExpired:
-         errStr = QSslSocket::tr("The certificate has expired");
+         errStr = QSslSocket::tr("Certificate has expired");
          break;
 
       case InvalidNotBeforeField:
-         errStr = QSslSocket::tr("The certificate's notBefore field contains an invalid time");
+         errStr = QSslSocket::tr("Certificate's notBefore field contains an invalid time");
          break;
 
       case InvalidNotAfterField:
-         errStr = QSslSocket::tr("The certificate's notAfter field contains an invalid time");
+         errStr = QSslSocket::tr("Certificate's notAfter field contains an invalid time");
          break;
 
       case SelfSignedCertificate:
-         errStr = QSslSocket::tr("The certificate is self-signed, and untrusted");
+         errStr = QSslSocket::tr("Certificate is self-signed, and untrusted");
          break;
 
       case SelfSignedCertificateInChain:
-         errStr = QSslSocket::tr("The root certificate of the certificate chain is self-signed, and untrusted");
+         errStr = QSslSocket::tr("Root certificate of the chain is self-signed and untrusted");
          break;
 
       case UnableToGetLocalIssuerCertificate:
-         errStr = QSslSocket::tr("The issuer certificate of a locally looked up certificate could not be found");
+         errStr = QSslSocket::tr("Issuer certificate of a local certificate could not be found");
          break;
 
       case UnableToVerifyFirstCertificate:
-         errStr = QSslSocket::tr("No certificates could be verified");
+         errStr = QSslSocket::tr("Unable to verify first certificate");
          break;
 
       case InvalidCaCertificate:
@@ -145,45 +145,45 @@ QString QSslError::errorString() const
          break;
 
       case PathLengthExceeded:
-         errStr = QSslSocket::tr("The basicConstraints path length parameter has been exceeded");
+         errStr = QSslSocket::tr("BasicConstraints path length parameter has been exceeded");
          break;
 
       case InvalidPurpose:
-         errStr = QSslSocket::tr("The supplied certificate is unsuitable for this purpose");
+         errStr = QSslSocket::tr("Supplied certificate is unsuitable for this purpose");
          break;
 
       case CertificateUntrusted:
-         errStr = QSslSocket::tr("The root CA certificate is not trusted for this purpose");
+         errStr = QSslSocket::tr("Root CA certificate is not trusted for this purpose");
          break;
 
       case CertificateRejected:
-         errStr = QSslSocket::tr("The root CA certificate is marked to reject the specified purpose");
+         errStr = QSslSocket::tr("Root CA certificate is marked to reject the specified purpose");
          break;
 
       case SubjectIssuerMismatch:    // hostname mismatch
-         errStr = QSslSocket::tr("The current candidate issuer certificate was rejected because its"
-                                 " subject name did not match the issuer name of the current certificate");
+         errStr = QSslSocket::tr("Current candidate issuer certificate was rejected because its"
+               " subject name did not match the issuer name of the current certificate");
          break;
 
       case AuthorityIssuerSerialNumberMismatch:
-         errStr = QSslSocket::tr("The current candidate issuer certificate was rejected because"
-                                 " its issuer name and serial number was present and did not match the"
-                                 " authority key identifier of the current certificate");
+         errStr = QSslSocket::tr("Current candidate issuer certificate was rejected because its"
+               " issuer name and serial number was present and did not match the"
+               " authority key identifier of the current certificate");
          break;
 
       case NoPeerCertificate:
-         errStr = QSslSocket::tr("The peer did not present any certificate");
+         errStr = QSslSocket::tr("Peer did not present any certificate");
          break;
 
       case HostNameMismatch:
-         errStr = QSslSocket::tr("The host name did not match any of the valid hosts for this certificate");
+         errStr = QSslSocket::tr("Host name did not match any of the valid hosts for this certificate");
          break;
 
       case NoSslSupport:
          break;
 
       case CertificateBlacklisted:
-         errStr = QSslSocket::tr("The peer certificate is blacklisted");
+         errStr = QSslSocket::tr("Peer certificate is blacklisted");
          break;
 
       default:

@@ -23,6 +23,4 @@
 
 #include <qabstractlayoutstyleinfo_p.h>
 
-
 // no source code
-

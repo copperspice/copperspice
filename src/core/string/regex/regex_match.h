@@ -27,7 +27,7 @@
 #ifndef CS_REGEX_MATCH_H
 #define CS_REGEX_MATCH_H
 
-#include "regex/perl_matcher.h"
+#include <regex/perl_matcher.h>
 
 namespace cs_regex_ns {
 

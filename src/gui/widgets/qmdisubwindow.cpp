@@ -117,7 +117,7 @@ static inline bool isChildOfTabbedQMdiArea(const QMdiSubWindow *child)
    return false;
 }
 
-template<typename T>
+template <typename T>
 static inline ControlElement<T> *ptr(QWidget *widget)
 {
    if (widget) {

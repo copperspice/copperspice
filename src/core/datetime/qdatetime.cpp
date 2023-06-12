@@ -1068,6 +1068,7 @@ int QTime::restart()
 int QTime::elapsed() const
 {
    int n = msecsTo(currentTime());
+
    if (n < 0) {                              // passed midnight
       n += 86400 * 1000;
    }
@@ -1078,22 +1079,19 @@ int QTime::elapsed() const
 // Calls the platform variant of tzset
 static void qt_tzset()
 {
-
 #if defined(Q_OS_WIN)
    _tzset();
 #else
+   // tzname, timezone, daylight
    tzset();
 #endif
 }
 
-// Returns the platform variant of timezone, i.e. the standard time offset
-// The timezone external variable is documented as always holding the
-// Standard Time offset as seconds west of Greenwich, i.e. UTC+01:00 is -3600
-// Note this may not be historicaly accurate.
+// Returns the platform timezone which is the standard time offset
 // Relies on tzset, mktime, or localtime having been called to populate timezone
 static int qt_timezone()
 {
-#if defined(_MSC_VER)
+#if defined(Q_CC_MSVC)
    long offset;
    _get_timezone(&offset);
 
@@ -1104,16 +1102,6 @@ static int qt_timezone()
    struct tm t;
    localtime_r(&clock, &t);
 
-   // QTBUG-36080 Workaround for systems without the POSIX timezone
-   // variable. This solution is not very efficient but fixing it is up to
-   // the libc implementations.
-   //
-   // tm_gmtoff has some important differences compared to the timezone
-   // variable:
-   // - It returns the number of seconds east of UTC, and we want the
-   //   number of seconds west of UTC.
-   // - It also takes DST into account, so we need to adjust it to always
-   //   get the Standard Time offset.
    return -t.tm_gmtoff + (t.tm_isdst ? (long)SECS_PER_HOUR : 0L);
 
 #else
@@ -1127,9 +1115,10 @@ static QString qt_tzname(QDateTimePrivate::DaylightStatus daylightStatus)
 {
    int isDst = (daylightStatus == QDateTimePrivate::DaylightTime) ? 1 : 0;
 
-#if defined(_MSC_VER)
+#if defined(Q_CC_MSVC)
    size_t s = 0;
    char name[512];
+
    if (_get_tzname(&s, name, 512, isDst)) {
       return QString();
    }
@@ -1138,6 +1127,7 @@ static QString qt_tzname(QDateTimePrivate::DaylightStatus daylightStatus)
 
 #else
    return QString::fromUtf8(tzname[isDst]);
+
 #endif
 
 }
@@ -1147,6 +1137,7 @@ static QString qt_tzname(QDateTimePrivate::DaylightStatus daylightStatus)
 // If the date falls outside the 1970 to 2037 range supported by mktime / time_t
 // then null date/time will be returned, you should adjust the date first if
 // you need a guaranteed result.
+
 static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStatus *daylightStatus,
    QString *abbreviation, bool *ok = nullptr)
 {
@@ -1181,35 +1172,43 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
 
 #if defined(Q_OS_WIN)
       // Windows mktime for the missing hour subtracts 1 hour from the time
-      // instead of adding 1 hour.  If time differs and is standard time then
+      // instead of adding 1 hour. If time differs and is standard time then
       // this has happened, so add 2 hours to the time and 1 hour to the msecs
+
       if (local.tm_isdst == 0 && local.tm_hour != hh) {
          if (time->hour() >= 22) {
             *date = date->addDays(1);
          }
+
          *time = time->addSecs(2 * SECS_PER_HOUR);
          secsSinceEpoch += SECS_PER_HOUR;
          local.tm_isdst = 1;
       }
 #endif
+
       if (local.tm_isdst >= 1) {
          if (daylightStatus) {
             *daylightStatus = QDateTimePrivate::DaylightTime;
          }
+
          if (abbreviation) {
             *abbreviation = qt_tzname(QDateTimePrivate::DaylightTime);
          }
+
       } else if (local.tm_isdst == 0) {
          if (daylightStatus) {
             *daylightStatus = QDateTimePrivate::StandardTime;
          }
+
          if (abbreviation) {
             *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
          }
+
       } else {
          if (daylightStatus) {
             *daylightStatus = QDateTimePrivate::UnknownDaylightTime;
          }
+
          if (abbreviation) {
             *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
          }
@@ -1264,8 +1263,8 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
       valid = true;
    }
 
-#elif defined(_MSC_VER)
-   if (!_localtime64_s(&local, &secsSinceEpoch)) {
+#elif defined(Q_CC_MSVC)
+   if (! _localtime64_s(&local, &secsSinceEpoch)) {
       valid = true;
    }
 #else
@@ -1283,6 +1282,7 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
    if (valid) {
       *localDate = QDate(local.tm_year + 1900, local.tm_mon + 1, local.tm_mday);
       *localTime = QTime(local.tm_hour, local.tm_min, local.tm_sec, msec);
+
       if (daylightStatus) {
          if (local.tm_isdst > 0) {
             *daylightStatus = QDateTimePrivate::DaylightTime;
@@ -1292,13 +1292,17 @@ static bool qt_localtime(qint64 msecsSinceEpoch, QDate *localDate, QTime *localT
             *daylightStatus = QDateTimePrivate::StandardTime;
          }
       }
+
       return true;
+
    } else {
       *localDate = QDate();
       *localTime = QTime();
+
       if (daylightStatus) {
          *daylightStatus = QDateTimePrivate::UnknownDaylightTime;
       }
+
       return false;
    }
 }
@@ -1344,20 +1348,23 @@ static bool epochMSecsToLocalTime(qint64 msecs, QDate *localDate, QTime *localTi
    QDateTimePrivate::DaylightStatus *daylightStatus = nullptr)
 {
    if (msecs < 0) {
-      // Docs state any LocalTime before 1970-01-01 will *not* have any Daylight Time applied
+      // any LocalTime before 1970-01-01 will *not* have any Daylight Time applied
       // Instead just use the standard offset from UTC to convert to UTC time
+
       qt_tzset();
       msecsToTime(msecs - qt_timezone() * 1000, localDate, localTime);
+
       if (daylightStatus) {
          *daylightStatus = QDateTimePrivate::StandardTime;
       }
+
       return true;
+
    } else if (msecs > (qint64(TIME_T_MAX) * 1000)) {
       // Docs state any LocalTime after 2037-12-31 *will* have any DST applied
-      // but this may fall outside the supported time_t range, so need to fake it.
-      // Use existing method to fake the conversion, but this is deeply flawed as it may
-      // apply the conversion from the wrong day number, e.g. if rule is last Sunday of month
-      // TODO Use QTimeZone when available to apply the future rule correctly
+      // but this may fall outside the supported time_t range
+
+      // emerald: use QTimeZone when available to apply the future rule correctly
 
       QDate utcDate;
       QTime utcTime;
@@ -1369,11 +1376,15 @@ static bool epochMSecsToLocalTime(qint64 msecs, QDate *localDate, QTime *localTi
       if (month == 2 && day == 29) {
          --day;
       }
+
       QDate fakeDate(2037, month, day);
       qint64 fakeMsecs = QDateTime(fakeDate, utcTime, Qt::UTC).toMSecsSinceEpoch();
+
       bool res = qt_localtime(fakeMsecs, localDate, localTime, daylightStatus);
       *localDate = localDate->addDays(fakeDate.daysTo(utcDate));
+
       return res;
+
    } else {
       // Falls inside time_t suported range so can use localtime
       return qt_localtime(msecs, localDate, localTime, daylightStatus);
@@ -1384,9 +1395,8 @@ static bool epochMSecsToLocalTime(qint64 msecs, QDate *localDate, QTime *localTi
 // DST status into a UTC epoch msecs. Optionally populate the returned
 // values from mktime for the adjusted local date and time.
 static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
-   QDateTimePrivate::DaylightStatus *daylightStatus,
-   QDate *localDate = nullptr, QTime *localTime = nullptr,
-   QString *abbreviation = nullptr)
+   QDateTimePrivate::DaylightStatus *daylightStatus, QDate *localDate = nullptr,
+   QTime *localTime = nullptr, QString *abbreviation = nullptr)
 {
    QDate dt;
    QTime tm;
@@ -1403,14 +1413,17 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
       if (localMsecs >= -qint64(MSECS_PER_DAY)) {
          bool valid;
          qint64 utcMsecs = qt_mktime(&dt, &tm, daylightStatus, abbreviation, &valid);
+
          if (valid && utcMsecs >= 0) {
             // mktime worked and falls in valid range, so use it
             if (localDate) {
                *localDate = dt;
             }
+
             if (localTime) {
                *localTime = tm;
             }
+
             return utcMsecs;
          }
 
@@ -1418,14 +1431,17 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
          // If we don't call mktime then need to call tzset to get offset
          qt_tzset();
       }
+
       // Time is clearly before 1970-01-01 so just use standard offset to convert
       qint64 utcMsecs = localMsecs + qt_timezone() * 1000;
       if (localDate || localTime) {
          msecsToTime(localMsecs, localDate, localTime);
       }
+
       if (daylightStatus) {
          *daylightStatus = QDateTimePrivate::StandardTime;
       }
+
       if (abbreviation) {
          *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
       }
@@ -1434,11 +1450,11 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
 
    } else if (localMsecs >= msecsMax - MSECS_PER_DAY) {
 
-      // Docs state any LocalTime after 2037-12-31 *will* have any DST applied
-      // but this may fall outside the supported time_t range, so need to fake it.
-
+      // Any LocalTime after 2037-12-31 *will* have any DST applied
+      // but this may fall outside the supported time_t range
       // First, if localMsecs is within +/- 1 day of maximum time_t try mktime in case it does
       // fall before maximum and can use proper DST conversion
+
       if (localMsecs <= msecsMax + MSECS_PER_DAY) {
          bool valid;
          qint64 utcMsecs = qt_mktime(&dt, &tm, daylightStatus, abbreviation, &valid);
@@ -1453,9 +1469,9 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
             return utcMsecs;
          }
       }
-      // Use existing method to fake the conversion, but this is deeply flawed as it may
-      // apply the conversion from the wrong day number, e.g. if rule is last Sunday of month
-      // TODO Use QTimeZone when available to apply the future rule correctly
+
+      // emerald -Use QTimeZone when available to apply the future rule correctly
+
       int year, month, day;
       dt.getDate(&year, &month, &day);
 
@@ -1500,7 +1516,7 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs,
 }
 
 QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec,
-   int offsetSeconds)
+      int offsetSeconds)
    : m_msecs(0), m_spec(Qt::LocalTime), m_offsetFromUtc(0), m_status(Qt::EmptyFlag)
 {
    setTimeSpec(toSpec, offsetSeconds);
@@ -1640,7 +1656,6 @@ qint64 QDateTimePrivate::toMSecsSinceEpoch() const
       }
 
       case Qt::TimeZone:
-
          return zoneMSecsToEpochMSecs(m_msecs, m_timeZone);
 
    }
@@ -1655,7 +1670,7 @@ void QDateTimePrivate::checkValidDateTime()
    switch (m_spec) {
       case Qt::OffsetFromUTC:
       case Qt::UTC:
-         // for these, a valid date and a valid time imply a valid QDateTime
+         // for these a valid date and a valid time imply a valid QDateTime
          if (isValidDate() && isValidTime()) {
             setValidDateTime();
          } else {
@@ -2761,7 +2776,7 @@ uint qHash(const QDateTime &key, uint seed)
 {
    // Use to toMSecsSinceEpoch instead of individual qHash functions for
    // QDate/QTime/spec/offset because QDateTime::operator== converts both arguments
-   // to the same timezone. If we don't, qHash would return different hashes for
+   // to the same timezone. If we don't qHash would return different hashes for
    // two QDateTimes that are equivalent once converted to the same timezone.
    return qHash(key.toMSecsSinceEpoch(), seed);
 }

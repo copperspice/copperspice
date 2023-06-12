@@ -220,9 +220,11 @@ QT_FUNCTION_TARGET(SSE4_1)
 inline QRgb qUnpremultiply_sse4(QRgb p)
 {
    const uint alpha = qAlpha(p);
+
    if (alpha == 255 || alpha == 0) {
       return p;
    }
+
    const uint invAlpha = qt_inv_premul_factor[alpha];
    const __m128i via = _mm_set1_epi32(invAlpha);
    const __m128i vr = _mm_set1_epi32(0x8000);
@@ -235,7 +237,8 @@ inline QRgb qUnpremultiply_sse4(QRgb p)
    vl = _mm_packus_epi16(vl, vl);
    return _mm_cvtsi128_si32(vl);
 }
-template<enum QtPixelOrder PixelOrder>
+
+template <enum QtPixelOrder PixelOrder>
 QT_FUNCTION_TARGET(SSE4_1)
 inline uint qConvertArgb32ToA2rgb30_sse4(QRgb p)
 {

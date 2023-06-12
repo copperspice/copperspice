@@ -27,10 +27,11 @@
 #ifndef CS_REGEX_TRAITS_DEFAULTS_H
 #define CS_REGEX_TRAITS_DEFAULTS_H
 
+#include <regex/r_config.h>
+
 #include <limits>
 #include <type_traits>
-
-#include "regex/r_config.h"
+#include <stdint.h>
 
 namespace cs_regex_ns {
 

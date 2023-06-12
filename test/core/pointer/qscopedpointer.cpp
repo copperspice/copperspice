@@ -77,6 +77,21 @@ TEST_CASE("QScopedPointer empty", "[qscopedpointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
+TEST_CASE("QScopedPointer equality", "[qscopedpointer]")
+{
+   QScopedPointer<int> ptr1 = QMakeScoped<int>();
+   QScopedPointer<int> ptr2(nullptr);
+
+   REQUIRE((ptr1 == ptr2) == false);
+   REQUIRE((ptr1 != ptr2) == true);
+
+   REQUIRE((ptr1 == ptr2.get()) == false);
+   REQUIRE((ptr1.get() == ptr2) == false);
+
+   REQUIRE((ptr1 != ptr2.get()) == true);
+   REQUIRE((ptr1.get() != ptr2) == true);
+}
+
 TEST_CASE("QScopedPointer move_assign", "[qscopedpointer]")
 {
    QScopedPointer<int> ptr1;
@@ -118,7 +133,11 @@ TEST_CASE("QScopedPointer release", "[qscopedpointer]")
 
 TEST_CASE("QScopedPointer reset", "[qscopedpointer]")
 {
-   QScopedPointer<int> ptr = QMakeUnique<int>();
+   QScopedPointer<int> ptr = QMakeScoped<int>();
+   int *rawPtr = ptr.get();
+
+   ptr.reset(rawPtr);
+   REQUIRE(ptr == rawPtr);
    ptr.reset();
 
    REQUIRE(ptr == nullptr);
@@ -155,3 +174,11 @@ TEST_CASE("QScopedPointer swap", "[qscopedpointer]")
    REQUIRE(ptr2 == nullptr);
 }
 
+TEST_CASE("QScopedPointer take", "[qscopedpointer]")
+{
+   QScopedPointer<int> ptr1 = QMakeScoped<int>(42);
+   QScopedPointer<int> ptr2(ptr1.take());
+
+   REQUIRE(ptr1 == nullptr);
+   REQUIRE(*ptr2 == 42);
+}

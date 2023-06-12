@@ -909,7 +909,7 @@ int QSoundEffectPrivate::writeToStream(const void *data, int size)
     if (volume < 1.0f) {
         // Don't use PulseAudio volume, as it might affect all other streams of the same category
         // or even affect the system volume if flat volumes are enabled
-        void *dest    = NULL;
+        void *dest    = nullptr;
         size_t nbytes = size;
 
         if (pa_stream_begin_write(m_pulseStream, &dest, &nbytes) < 0) {
@@ -921,7 +921,7 @@ int QSoundEffectPrivate::writeToStream(const void *data, int size)
         size = int(nbytes);
         QAudioHelperInternal::qMultiplySamples(volume, m_sample->format(), data, dest, size);
         data = dest;
-        writeDoneCb = NULL;
+        writeDoneCb = nullptr;
     }
 
     if (pa_stream_write(m_pulseStream, data, size, writeDoneCb, 0, PA_SEEK_RELATIVE) < 0) {

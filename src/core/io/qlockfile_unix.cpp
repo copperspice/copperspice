@@ -226,7 +226,7 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
    if (qt_write_loop(fd, fileData.constData(), fileData.size()) < fileData.size()) {
       close(fd);
       if (!QFile::remove(fileName)) {
-         qWarning("QLockFile: Could not remove our own lock file %s.", qPrintable(fileName));
+         qWarning("QLockFile: Could not remove our own lock file %s.", csPrintable(fileName));
       }
       return QLockFile::UnknownError; // partition full
    }

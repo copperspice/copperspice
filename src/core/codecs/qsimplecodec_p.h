@@ -28,7 +28,8 @@
 
 #ifndef QT_NO_TEXTCODEC
 
-template <typename T> class QAtomicPointer;
+template <typename T>
+class QAtomicPointer;
 
 class QSimpleTextCodec: public QTextCodec
 {

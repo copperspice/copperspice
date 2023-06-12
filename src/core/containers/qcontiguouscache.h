@@ -65,7 +65,7 @@ struct QContiguousCacheTypedData: private QContiguousCacheData {
    }
 };
 
-template<typename T>
+template <typename T>
 class QContiguousCache
 {
    typedef QContiguousCacheTypedData<T> Data;
@@ -476,7 +476,7 @@ void QContiguousCache<T>::append(const T &value)
    }
 }
 
-template<typename T>
+template <typename T>
 void QContiguousCache<T>::prepend(const T &value)
 {
    if (!d->alloc) {
@@ -505,7 +505,7 @@ void QContiguousCache<T>::prepend(const T &value)
    }
 }
 
-template<typename T>
+template <typename T>
 void QContiguousCache<T>::insert(int pos, const T &value)
 {
    Q_ASSERT_X(pos >= 0 && pos < INT_MAX, "QContiguousCache<T>::insert", "index out of range");

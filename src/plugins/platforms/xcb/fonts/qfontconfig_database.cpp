@@ -593,7 +593,7 @@ void QFontconfigDatabase::populateFontDatabase()
 #if FC_VERSION >= 20297
          FC_CAPABILITY,
 #endif
-         (const char *)0
+         (const char *)nullptr
       };
 
       const char **p = properties;

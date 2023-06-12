@@ -70,13 +70,6 @@
 #define Q_XDG_PLATFORM
 #endif
 
-/*
-    QConfFile objects are explicitly shared within the application.
-    This ensures that modification to the settings done through one
-    QSettings object are immediately reflected in other setting
-    objects of the same application.
-*/
-
 struct QConfFileCustomFormat {
    QString extension;
    QSettings::ReadFunc readFunc;

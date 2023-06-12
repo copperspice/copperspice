@@ -403,6 +403,7 @@ void QIdentityProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &topLeft
 {
    Q_ASSERT(topLeft.isValid() ? topLeft.model() == model : true);
    Q_ASSERT(bottomRight.isValid() ? bottomRight.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
    q->dataChanged(q->mapFromSource(topLeft), q->mapFromSource(bottomRight), roles);
 }
@@ -418,26 +419,28 @@ void QIdentityProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<QPe
 {
    Q_Q(QIdentityProxyModel);
 
-   for (const QPersistentModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
+   for (const QModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
       proxyIndexes << proxyPersistentIndex;
       Q_ASSERT(proxyPersistentIndex.isValid());
+
       const QPersistentModelIndex srcPersistentIndex = q->mapToSource(proxyPersistentIndex);
       Q_ASSERT(srcPersistentIndex.isValid());
+
       layoutChangePersistentIndexes << srcPersistentIndex;
    }
 
    QList<QPersistentModelIndex> parents;
 
    for (const QPersistentModelIndex &parent : sourceParents) {
-      if (!parent.isValid()) {
+      if (! parent.isValid()) {
          parents << QPersistentModelIndex();
          continue;
       }
+
       const QModelIndex mappedParent = q->mapFromSource(parent);
       Q_ASSERT(mappedParent.isValid());
       parents << mappedParent;
    }
-
 
    q->layoutAboutToBeChanged(parents, hint);
 }
@@ -457,14 +460,16 @@ void QIdentityProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersistentM
    QList<QPersistentModelIndex> parents;
 
    for (const QPersistentModelIndex &parent : sourceParents) {
-      if (!parent.isValid()) {
+      if (! parent.isValid()) {
          parents << QPersistentModelIndex();
          continue;
       }
+
       const QModelIndex mappedParent = q->mapFromSource(parent);
       Q_ASSERT(mappedParent.isValid());
       parents << mappedParent;
    }
+
    q->layoutChanged(parents, hint);
 }
 

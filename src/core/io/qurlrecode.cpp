@@ -27,7 +27,6 @@
 #include <qutfcodec_p.h>
 #include <qtools_p.h>
 
-// ### move to qurl_p.h
 enum EncodingAction {
    DecodeCharacter = 0,
    LeaveCharacter  = 1,
@@ -95,7 +94,7 @@ static const uchar defaultActionTable[96] = {
 
 // mask tables, in negative polarity
 // 0x00 if it belongs to this category
-// 0xff if it doesn't
+// 0xff if it does not
 
 static const uchar reservedMask[96] = {
    0xff, // space
@@ -150,13 +149,6 @@ static const uchar reservedMask[96] = {
    0xff  // BSKP
 };
 
-static inline bool isHex(ushort c)
-{
-   return (c >= 'a' && c <= 'f') ||
-          (c >= 'A' && c <= 'F') ||
-          (c >= '0' && c <= '9');
-}
-
 static inline bool isHex(QChar c)
 {
    return (c >= 'a' && c <= 'f') ||
@@ -164,31 +156,14 @@ static inline bool isHex(QChar c)
           (c >= '0' && c <= '9');
 }
 
-static inline bool isUpperHex(ushort c)
-{
-   // undefined behaviour if c is not a hex char
-   return c < 0x60;
-}
-
 static inline bool isUpperHex(QChar c)
 {
    return c < 0x60;
 }
 
-static inline ushort toUpperHex(ushort c)
-{
-   return isUpperHex(c) ? c : c - 0x20;
-}
-
 static inline QChar toUpperHex(QChar c)
 {
    return isUpperHex(c) ? c : QChar( char32_t(c.unicode() - 0x20) );
-}
-
-static inline ushort decodeNibble(ushort c)
-{
-   return c >= 'a' ? c - 'a' + 0xA :
-          c >= 'A' ? c - 'A' + 0xA : c - '0';
 }
 
 static inline int decodeNibble(QChar c)

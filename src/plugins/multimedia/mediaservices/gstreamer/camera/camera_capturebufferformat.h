@@ -40,10 +40,10 @@ class Q_MULTIMEDIA_EXPORT CameraBinCaptureBufferFormat : public QCameraCaptureBu
    CameraBinCaptureBufferFormat(CameraBinSession *session);
    virtual ~CameraBinCaptureBufferFormat();
 
-   QList<QVideoFrame::PixelFormat> supportedBufferFormats() const;
+   QList<QVideoFrame::PixelFormat> supportedBufferFormats() const override;
 
-   QVideoFrame::PixelFormat bufferFormat() const;
-   void setBufferFormat(QVideoFrame::PixelFormat format);
+   QVideoFrame::PixelFormat bufferFormat() const override;
+   void setBufferFormat(QVideoFrame::PixelFormat format) override;
 
  private:
    CameraBinSession *m_session;

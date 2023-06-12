@@ -78,7 +78,7 @@ class QList
    QList(std::initializer_list<T> args)
       :  m_data(args) { }
 
-   template<class Input_Iterator>
+   template <class Input_Iterator>
    QList(Input_Iterator first, Input_Iterator last)
       : m_data(first, last) {}
 
@@ -491,7 +491,7 @@ inline void QList<T>::insert(size_type i, const T &value)
    m_data.insert(m_data.begin() + i, value);
 }
 
-template<typename T>
+template <typename T>
 QList<T> QList<T>::mid(size_type pos, size_type length) const
 {
    Q_ASSERT_X(pos < size(), "QList<T>::mid", "pos out of range");
@@ -601,7 +601,7 @@ inline T QList<T>::takeLast()
    return value;
 }
 
-template<typename T>
+template <typename T>
 T QList<T>::value(size_type i) const
 {
    if (i < 0 || i >= size()) {
@@ -611,7 +611,7 @@ T QList<T>::value(size_type i) const
    return m_data[i];
 }
 
-template<typename T>
+template <typename T>
 T QList<T>::value(size_type i, const T &defaultValue) const
 {
    return ((i < 0 || i >= size()) ? defaultValue : m_data[i]);

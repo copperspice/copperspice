@@ -119,7 +119,7 @@ class Graph
       if (edgeData(first, second)) {
 
 #ifdef QT_DEBUG
-         qWarning("%s-%s already has an edge", qPrintable(first->toString()), qPrintable(second->toString()));
+         qWarning("%s-%s already has an edge", csPrintable(first->toString()), csPrintable(second->toString()));
 #endif
       }
       createDirectedEdge(first, second, data);

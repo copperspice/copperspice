@@ -186,10 +186,6 @@ static bool stripTextDecl(QString &str)
    return true;
 }
 
-class QXmlAttributesPrivate
-{
-};
-
 class QXmlInputSourcePrivate
 {
  public:
@@ -233,10 +229,6 @@ class QXmlParseExceptionPrivate
 };
 
 class QXmlLocatorPrivate
-{
-};
-
-class QXmlDefaultHandlerPrivate
 {
 };
 

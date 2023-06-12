@@ -37,8 +37,6 @@ bool QXcbWMSupport::isSupportedByWM(xcb_atom_t atom) const
    return net_wm_atoms.contains(atom);
 }
 
-
-
 void QXcbWMSupport::updateNetWMAtoms()
 {
    net_wm_atoms.clear();
@@ -49,7 +47,7 @@ void QXcbWMSupport::updateNetWMAtoms()
    do {
       xcb_get_property_cookie_t cookie = xcb_get_property(xcb_connection(), false, root, atom(QXcbAtom::_NET_SUPPORTED), XCB_ATOM_ATOM,
             offset, 1024);
-      xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, NULL);
+      xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
       if (!reply) {
          break;
       }
@@ -86,7 +84,7 @@ void QXcbWMSupport::updateVirtualRoots()
    do {
       xcb_get_property_cookie_t cookie = xcb_get_property(xcb_connection(), false, root, atom(QXcbAtom::_NET_VIRTUAL_ROOTS), XCB_ATOM_WINDOW,
             offset, 1024);
-      xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, NULL);
+      xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
       if (!reply) {
          break;
       }
