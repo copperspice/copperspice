@@ -341,7 +341,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
          clear();
    }
 #else
-   Q_UNUSED(entry)
+   (void) entry;
 
 #endif
 
@@ -354,7 +354,7 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
 {
 
 #if defined(Q_OS_WIN)
-   Q_UNUSED(metaData);
+   (void) metaData;
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
 
 #else
@@ -370,7 +370,7 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
 {
 
 #if defined(Q_OS_WIN)
-   Q_UNUSED(metaData);
+   (void) metaData;
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
 
 #else

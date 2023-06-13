@@ -72,8 +72,9 @@ QFilePrivate::~QFilePrivate()
 bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
-   Q_UNUSED(flags);
-   Q_UNUSED(fd);
+   (void) flags;
+   (void) fd;
+
    return false;
 
 #else
@@ -89,8 +90,9 @@ bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags ha
 bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
-   Q_UNUSED(flags);
-   Q_UNUSED(fh);
+   (void) flags;
+   (void) fh;
+
    return false;
 #else
    delete fileEngine;

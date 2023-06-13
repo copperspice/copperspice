@@ -185,8 +185,8 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
    appCmdShow = cmdShow;
 
    // Ignore Windows parameters
-   Q_UNUSED(instance);
-   Q_UNUSED(prevInstance);
+   (void) instance;
+   (void) prevInstance;
 }
 
 void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerId)

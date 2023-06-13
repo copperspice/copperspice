@@ -137,7 +137,7 @@ QAbstractFileEngine::~QAbstractFileEngine()
 
 bool QAbstractFileEngine::open(QIODevice::OpenMode openMode)
 {
-   Q_UNUSED(openMode);
+   (void) openMode;
    return false;
 }
 
@@ -193,7 +193,8 @@ qint64 QAbstractFileEngine::pos() const
 */
 bool QAbstractFileEngine::seek(qint64 pos)
 {
-   Q_UNUSED(pos);
+   (void) pos;
+
    return false;
 }
 
@@ -228,7 +229,8 @@ bool QAbstractFileEngine::remove()
 */
 bool QAbstractFileEngine::copy(const QString &newName)
 {
-   Q_UNUSED(newName);
+   (void) newName;
+
    return false;
 }
 
@@ -243,26 +245,30 @@ bool QAbstractFileEngine::copy(const QString &newName)
  */
 bool QAbstractFileEngine::rename(const QString &newName)
 {
-   Q_UNUSED(newName);
+   (void) newName;
+
    return false;
 }
 
 bool QAbstractFileEngine::renameOverwrite(const QString &newName)
 {
-   Q_UNUSED(newName);
+   (void) newName;
+
    return false;
 }
 
 bool QAbstractFileEngine::link(const QString &newName)
 {
-   Q_UNUSED(newName);
+   (void) newName;
+
    return false;
 }
 
 bool QAbstractFileEngine::mkdir(const QString &dirName, bool createParentDirectories) const
 {
-   Q_UNUSED(dirName);
-   Q_UNUSED(createParentDirectories);
+   (void) dirName;
+   (void) createParentDirectories;
+
    return false;
 }
 
@@ -281,8 +287,9 @@ bool QAbstractFileEngine::mkdir(const QString &dirName, bool createParentDirecto
  */
 bool QAbstractFileEngine::rmdir(const QString &dirName, bool recurseParentDirectories) const
 {
-   Q_UNUSED(dirName);
-   Q_UNUSED(recurseParentDirectories);
+   (void) dirName;
+   (void) recurseParentDirectories;
+
    return false;
 }
 
@@ -298,7 +305,8 @@ bool QAbstractFileEngine::rmdir(const QString &dirName, bool recurseParentDirect
 */
 bool QAbstractFileEngine::setSize(qint64 size)
 {
-   Q_UNUSED(size);
+   (void) size;
+
    return false;
 }
 
@@ -383,7 +391,8 @@ QAbstractFileEngine::FileFlags QAbstractFileEngine::fileFlags(FileFlags) const
 */
 bool QAbstractFileEngine::setPermissions(uint perms)
 {
-   Q_UNUSED(perms);
+   (void) perms;
+
    return false;
 }
 
@@ -401,7 +410,8 @@ bool QAbstractFileEngine::setPermissions(uint perms)
  */
 QString QAbstractFileEngine::fileName(FileName file) const
 {
-   Q_UNUSED(file);
+   (void) file;
+
    return QString();
 }
 
@@ -416,7 +426,8 @@ QString QAbstractFileEngine::fileName(FileName file) const
  */
 uint QAbstractFileEngine::ownerId(FileOwner owner) const
 {
-   Q_UNUSED(owner);
+   (void) owner;
+
    return 0;
 }
 
@@ -432,7 +443,8 @@ uint QAbstractFileEngine::ownerId(FileOwner owner) const
  */
 QString QAbstractFileEngine::owner(FileOwner owner) const
 {
-   Q_UNUSED(owner);
+   (void) owner;
+
    return QString();
 }
 
@@ -450,7 +462,8 @@ QString QAbstractFileEngine::owner(FileOwner owner) const
  */
 QDateTime QAbstractFileEngine::fileTime(FileTime time) const
 {
-   Q_UNUSED(time);
+   (void) time;
+
    return QDateTime();
 }
 
@@ -464,7 +477,7 @@ QDateTime QAbstractFileEngine::fileTime(FileTime time) const
  */
 void QAbstractFileEngine::setFileName(const QString &file)
 {
-   Q_UNUSED(file);
+   (void) file;
 }
 
 /*!
@@ -669,8 +682,9 @@ QFileInfo QAbstractFileEngineIterator::currentFileInfo() const
 QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters filters,
       const QStringList &filterNames)
 {
-   Q_UNUSED(filters);
-   Q_UNUSED(filterNames);
+   (void) filters;
+   (void) filterNames;
+
    return nullptr;
 }
 
@@ -684,15 +698,17 @@ QAbstractFileEngine::Iterator *QAbstractFileEngine::endEntryList()
 
 qint64 QAbstractFileEngine::read(char *data, qint64 maxlen)
 {
-   Q_UNUSED(data);
-   Q_UNUSED(maxlen);
+   (void) data;
+   (void) maxlen;
+
    return -1;
 }
 
 qint64 QAbstractFileEngine::write(const char *data, qint64 len)
 {
-   Q_UNUSED(data);
-   Q_UNUSED(len);
+   (void) data;
+   (void) len;
+
    return -1;
 }
 
@@ -721,16 +737,17 @@ qint64 QAbstractFileEngine::readLine(char *data, qint64 maxlen)
 
 bool QAbstractFileEngine::extension(Extension extension, const ExtensionOption *option, ExtensionReturn *output)
 {
-   Q_UNUSED(extension);
-   Q_UNUSED(option);
-   Q_UNUSED(output);
+   (void) extension;
+   (void) option;
+   (void) output;
 
    return false;
 }
 
 bool QAbstractFileEngine::supportsExtension(Extension extension) const
 {
-   Q_UNUSED(extension);
+   (void) extension;
+
    return false;
 }
 

@@ -120,7 +120,8 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
       QEventLoop *eventLoop = threadData->eventLoops.pop();
       Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-      Q_UNUSED(eventLoop);
+
+      (void) eventLoop;
 
       d->inExec = false;
       --threadData->loopLevel;
@@ -133,7 +134,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
    QEventLoop *eventLoop = threadData->eventLoops.pop();
    Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-   Q_UNUSED(eventLoop);
+   (void) eventLoop;
 
    d->inExec = false;
    --threadData->loopLevel;

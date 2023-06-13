@@ -686,7 +686,8 @@ QDateTime QFSFileEngine::fileTime(FileTime time) const
 uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags)
 {
    Q_Q(QFSFileEngine);
-   Q_UNUSED(flags);
+   (void) flags;
+
    if (openMode == QIODevice::NotOpen) {
       q->setError(QFile::PermissionsError, qt_error_string(int(EACCES)));
       return nullptr;

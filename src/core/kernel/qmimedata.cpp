@@ -367,7 +367,7 @@ QStringList QMimeData::formats() const
 
 QVariant QMimeData::retrieveData(const QString &mimeType, QVariant::Type type) const
 {
-   Q_UNUSED(type);
+   (void) type;
    Q_D(const QMimeData);
 
    return d->getData(mimeType);

@@ -33,9 +33,9 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
       const QStringList &nameFilters, QDirIterator::IteratorFlags flags)
    : nativePath(entry.nativeFilePath()), dir(nullptr), dirEntry(nullptr), lastError(0)
 {
-   Q_UNUSED(filters)
-   Q_UNUSED(nameFilters)
-   Q_UNUSED(flags)
+   (void) filters;
+   (void)  nameFilters;
+   (void)  flags;
 
    if ((dir = QT_OPENDIR(nativePath.constData())) == nullptr) {
       lastError = errno;

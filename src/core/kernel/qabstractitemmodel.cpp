@@ -419,7 +419,7 @@ void QAbstractItemModelPrivate::removePersistentIndexData(QPersistentModelIndexD
 
       // This assert may happen if the model use changePersistentIndex in a way that could result on two
       // QPersistentModelIndex pointing to the same index.
-      Q_UNUSED(removed);
+      (void) removed;
    }
 
    // make sure our optimization still works
@@ -437,14 +437,14 @@ void QAbstractItemModelPrivate::removePersistentIndexData(QPersistentModelIndexD
          persistent.invalidated[i].remove(idx);
       }
    }
-
 }
 
 void QAbstractItemModelPrivate::rowsAboutToBeInserted(const QModelIndex &parent,
       int first, int last)
 {
    Q_Q(QAbstractItemModel);
-   Q_UNUSED(last);
+
+   (void) last;
 
    QVector<QPersistentModelIndexData *> persistent_moved;
 

@@ -146,16 +146,17 @@ class IterateKernel : public ThreadEngine<T>
    virtual ~IterateKernel() { }
 
    virtual bool runIteration(Iterator it, int index , T *result) {
-      Q_UNUSED(it);
-      Q_UNUSED(index);
-      Q_UNUSED(result);
+      (void) it;
+      (void) index;
+      (void) result;
       return false;
    }
+
    virtual bool runIterations(Iterator _begin, int beginIndex, int endIndex, T *results) {
-      Q_UNUSED(_begin);
-      Q_UNUSED(beginIndex);
-      Q_UNUSED(endIndex);
-      Q_UNUSED(results);
+      (void) _begin;
+      (void) beginIndex;
+      (void) endIndex;
+      (void) results;
       return false;
    }
 

@@ -178,7 +178,7 @@ void QDnotifySignalThread::readFromDnotify()
    // Only expect EAGAIN or EINTR.  Other errors are assumed to be impossible.
    if (readrv != -1) {
       Q_ASSERT(readrv == sizeof(int));
-      Q_UNUSED(readrv);
+      (void) readrv;
 
       if (0 == fd) {
          quit();

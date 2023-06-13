@@ -187,15 +187,17 @@ QString QTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
    QTimeZone::NameType nameType,
    const QLocale &locale) const
 {
-   Q_UNUSED(timeType)
-   Q_UNUSED(nameType)
-   Q_UNUSED(locale)
+   (void) timeType;
+   (void) nameType;
+   (void) locale;
+
    return QString();
 }
 
 QString QTimeZonePrivate::abbreviation(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
+
    return QString();
 }
 
@@ -206,13 +208,14 @@ int QTimeZonePrivate::offsetFromUtc(qint64 atMSecsSinceEpoch) const
 
 int QTimeZonePrivate::standardTimeOffset(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
+
    return invalidSeconds();
 }
 
 int QTimeZonePrivate::daylightTimeOffset(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
    return invalidSeconds();
 }
 
@@ -223,13 +226,13 @@ bool QTimeZonePrivate::hasDaylightTime() const
 
 bool QTimeZonePrivate::isDaylightTime(qint64 atMSecsSinceEpoch) const
 {
-   Q_UNUSED(atMSecsSinceEpoch)
+   (void) atMSecsSinceEpoch;
    return false;
 }
 
 QTimeZonePrivate::Data QTimeZonePrivate::data(qint64 forMSecsSinceEpoch) const
 {
-   Q_UNUSED(forMSecsSinceEpoch)
+   (void) forMSecsSinceEpoch;
    return invalidData();
 }
 
@@ -305,13 +308,13 @@ bool QTimeZonePrivate::hasTransitions() const
 
 QTimeZonePrivate::Data QTimeZonePrivate::nextTransition(qint64 afterMSecsSinceEpoch) const
 {
-   Q_UNUSED(afterMSecsSinceEpoch)
+   (void) afterMSecsSinceEpoch;
    return invalidData();
 }
 
 QTimeZonePrivate::Data QTimeZonePrivate::previousTransition(qint64 beforeMSecsSinceEpoch) const
 {
-   Q_UNUSED(beforeMSecsSinceEpoch)
+   (void) beforeMSecsSinceEpoch;
    return invalidData();
 }
 
