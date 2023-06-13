@@ -432,14 +432,14 @@ char QSocks5Authenticator::methodId()
 
 bool QSocks5Authenticator::beginAuthenticate(QTcpSocket *socket, bool *completed)
 {
-   Q_UNUSED(socket);
+   (void) socket;
    *completed = true;
    return true;
 }
 
 bool QSocks5Authenticator::continueAuthenticate(QTcpSocket *socket, bool *completed)
 {
-   Q_UNUSED(socket);
+   (void) socket;
    *completed = true;
    return true;
 }
@@ -1923,7 +1923,7 @@ bool QSocks5SocketEngine::waitForReadOrWrite(bool *readyToRead, bool *readyToWri
       bool checkRead, bool checkWrite,
       int msecs, bool *timedOut)
 {
-   Q_UNUSED(checkRead);
+   (void) checkRead;
    if (!checkWrite) {
       bool canRead = waitForRead(msecs, timedOut);
       if (readyToRead) {
@@ -2012,7 +2012,7 @@ QAbstractSocketEngine *
 QSocks5SocketEngineHandler::createSocketEngine(QAbstractSocket::SocketType socketType,
       const QNetworkProxy &proxy, QObject *parent)
 {
-   Q_UNUSED(socketType);
+   (void) socketType;
 
    // proxy type must have been resolved by now
    if (proxy.type() != QNetworkProxy::Socks5Proxy) {

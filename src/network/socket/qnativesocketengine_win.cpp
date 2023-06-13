@@ -243,7 +243,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 #define WS_ERROR_DEBUG(x) verboseWSErrorDebug(x);
 
 #else
-#define WS_ERROR_DEBUG(x) Q_UNUSED(x)
+#define WS_ERROR_DEBUG(x) (void) (x);
 
 #endif
 
@@ -465,7 +465,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
 #ifdef QNATIVESOCKETENGINE_DEBUG
          qDebug() << "QNativeSocketEnginePrivate::createNewSocket - set inheritable" << handleFlags;
 #else
-         Q_UNUSED(handleFlags);
+         (void) handleFlags;
 #endif
       }
 #endif

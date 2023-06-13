@@ -118,7 +118,7 @@ bool QMediaNetworkPlaylistProvider::isReadOnly() const
 
 bool QMediaNetworkPlaylistProvider::load(const QNetworkRequest &request, const char *format)
 {
-   Q_UNUSED(format);
+   (void) format;
    return d_func()->load(request);
 }
 

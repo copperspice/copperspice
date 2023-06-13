@@ -613,7 +613,7 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
       return;
    }
 
-   Q_UNUSED(userName);
+   (void) userName;
 
    QString name = tokens.at(3);
    info->setName(name);

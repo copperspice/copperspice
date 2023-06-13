@@ -443,9 +443,11 @@ void QNativeSocketEngine::connectionNotification()
 */
 bool QNativeSocketEngine::connectToHostByName(const QString &name, quint16 port)
 {
-   Q_UNUSED(name);
-   Q_UNUSED(port);
    Q_D(QNativeSocketEngine);
+
+   (void) name;
+   (void) port;
+
    d->setError(QAbstractSocket::UnsupportedSocketOperationError,
                QNativeSocketEnginePrivate::OperationUnsupportedErrorString);
    return false;

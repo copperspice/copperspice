@@ -147,8 +147,9 @@ class QNetworkAccessBackend : public QObject
    virtual bool canResume() const {
       return false;
    }
+
    virtual void setResumeOffset(quint64 offset) {
-      Q_UNUSED(offset);
+      (void) offset;
    }
 
    virtual bool processRequestSynchronously() {

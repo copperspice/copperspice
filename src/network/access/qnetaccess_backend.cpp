@@ -349,7 +349,7 @@ void QNetworkAccessBackend::sslErrors(const QList<QSslError> &errors)
 #ifdef QT_SSL
    reply->sslErrors(errors);
 #else
-   Q_UNUSED(errors);
+   (void) errors;
 #endif
 }
 

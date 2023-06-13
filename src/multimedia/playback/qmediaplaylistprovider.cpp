@@ -42,29 +42,29 @@ QMediaPlaylistProvider::~QMediaPlaylistProvider()
 
 bool QMediaPlaylistProvider::load(const QNetworkRequest &request, const char *format)
 {
-   Q_UNUSED(request);
-   Q_UNUSED(format);
+   (void) request;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::load(QIODevice *device, const char *format)
 {
-   Q_UNUSED(device);
-   Q_UNUSED(format);
+   (void) device;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::save(const QUrl &location, const char *format)
 {
-   Q_UNUSED(location);
-   Q_UNUSED(format);
+   (void) location;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::save(QIODevice *device, const char *format)
 {
-   Q_UNUSED(device);
-   Q_UNUSED(format);
+   (void) device;
+   (void) format;
    return false;
 }
 
@@ -75,7 +75,7 @@ bool QMediaPlaylistProvider::isReadOnly() const
 
 bool QMediaPlaylistProvider::addMedia(const QMediaContent &media)
 {
-   Q_UNUSED(media);
+   (void) media;
    return false;
 }
 
@@ -102,8 +102,8 @@ bool QMediaPlaylistProvider::addMedia(const QList<QMediaContent> &items)
 */
 bool QMediaPlaylistProvider::insertMedia(int position, const QMediaContent &media)
 {
-   Q_UNUSED(position);
-   Q_UNUSED(media);
+   (void) position;
+   (void) media;
    return false;
 }
 
@@ -131,7 +131,7 @@ bool QMediaPlaylistProvider::insertMedia(int position, const QList<QMediaContent
 */
 bool QMediaPlaylistProvider::removeMedia(int position)
 {
-   Q_UNUSED(position);
+   (void) position;
    return false;
 }
 

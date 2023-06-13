@@ -420,7 +420,7 @@ void QNetworkReplyHttpImpl::setSslConfigurationImplementation(const QSslConfigur
 {
    // Setting a SSL configuration on a reply is not supported. The user needs to set
    // her/his QSslConfiguration on the QNetworkRequest.
-   Q_UNUSED(newconfig);
+   (void) newconfig;
 }
 
 void QNetworkReplyHttpImpl::sslConfigurationImplementation(QSslConfiguration &configuration) const
@@ -1099,7 +1099,7 @@ QNetworkAccessManager::Operation QNetworkReplyHttpImplPrivate::getRedirectOperat
    // HTTP status code can be used to decide if we can redirect with a GET
    // operation or not. See http://www.ietf.org/rfc/rfc2616.txt [Sec 10.3] for
    // more details
-   Q_UNUSED(httpStatus);
+   (void) httpStatus;
 
    switch (currentOp) {
       case QNetworkAccessManager::HeadOperation:
@@ -1184,7 +1184,8 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
  qint64 contentLength, bool spdyWasUsed)
 {
    Q_Q(QNetworkReplyHttpImpl);
-   Q_UNUSED(contentLength);
+
+   (void) contentLength;
 
    statusCode = sc;
    reasonPhrase = rp;

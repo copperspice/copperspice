@@ -417,7 +417,7 @@ bool QHttpSocketEngine::waitForReadOrWrite(bool *readyToRead, bool *readyToWrite
       bool checkRead, bool checkWrite,
       int msecs, bool *timedOut)
 {
-   Q_UNUSED(checkRead);
+   (void) checkRead;
 
    if (!checkWrite) {
       // Not interested in writing? Then we wait for read notifications.
@@ -802,7 +802,7 @@ void QHttpSocketEngine::slotSocketError(QAbstractSocket::SocketError error)
 
 void QHttpSocketEngine::slotSocketStateChanged(QAbstractSocket::SocketState state)
 {
-   Q_UNUSED(state);
+   (void) state;
 }
 
 void QHttpSocketEngine::emitPendingReadNotification()

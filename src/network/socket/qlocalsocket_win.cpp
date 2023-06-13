@@ -416,7 +416,7 @@ void QLocalSocket::setReadBufferSize(qint64 size)
 
 bool QLocalSocket::waitForConnected(int msecs)
 {
-   Q_UNUSED(msecs);
+   (void) msecs;
    return (state() == ConnectedState);
 }
 

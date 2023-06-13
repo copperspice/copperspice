@@ -40,8 +40,9 @@ static QAtomicInt appShutdown;
 static void connManager_prepare()
 {
    int shutdown = appShutdown.fetchAndStoreAcquire(0);
+
    Q_ASSERT(shutdown == 0 || shutdown == 1);
-   Q_UNUSED(shutdown);
+   (void) shutdown;
 }
 
 static void connManager_cleanup()

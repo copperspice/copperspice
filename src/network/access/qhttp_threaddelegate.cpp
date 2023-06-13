@@ -156,7 +156,7 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
    }
 
 #else
-   Q_UNUSED(proxy)
+   (void) proxy;
 #endif
 
    return "http-connection:" + result.toLatin1();

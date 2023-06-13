@@ -746,7 +746,7 @@ void QNetworkReplyImplPrivate::appendDownstreamData(QIODevice *data)
 
 void QNetworkReplyImplPrivate::appendDownstreamData(const QByteArray &data)
 {
-   Q_UNUSED(data)
+   (void) data;
    // TODO implement
 
    // TODO call
@@ -976,7 +976,7 @@ void QNetworkReplyImplPrivate::sslErrors(const QList<QSslError> &errors)
    Q_Q(QNetworkReplyImpl);
    emit q->sslErrors(errors);
 #else
-   Q_UNUSED(errors);
+   (void) errors;
 #endif
 }
 

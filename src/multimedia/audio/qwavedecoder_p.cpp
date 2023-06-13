@@ -80,8 +80,8 @@ qint64 QWaveDecoder::readData(char *data, qint64 maxlen)
 
 qint64 QWaveDecoder::writeData(const char *data, qint64 len)
 {
-   Q_UNUSED(data);
-   Q_UNUSED(len);
+   (void) data;
+   (void) len;
 
    return -1;
 }

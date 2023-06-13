@@ -214,7 +214,7 @@ void QLocalServerPrivate::init()
 
 bool QLocalServerPrivate::removeServer(const QString &name)
 {
-   Q_UNUSED(name);
+   (void) name;
    return true;
 }
 

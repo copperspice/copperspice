@@ -723,18 +723,19 @@ bool QHttpNetworkConnectionChannel::isSocketReading() const
 
 void QHttpNetworkConnectionChannel::_q_bytesWritten(qint64 bytes)
 {
-   Q_UNUSED(bytes);
+   (void) bytes;
+
    if (ssl) {
       // In the SSL case we want to send data from encryptedBytesWritten signal since that one
       // is the one going down to the actual network, not only into some SSL buffer.
       return;
    }
 
-
    // bytes have been written to the socket. write even more of them :)
    if (isSocketWriting()) {
       sendRequest();
    }
+
    // otherwise we do nothing
 }
 
