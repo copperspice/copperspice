@@ -26,5 +26,5 @@ Name: @PC_NAME@
 Description: @PC_NAME@ library
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -l@PC_NAME@@BUILD_ABI@
-Cflags: @PC_CFLAGS@ -I@CMAKE_INSTALL_FULL_INCLUDEDIR@ -I${includedir}
+Cflags: @PC_CFLAGS@ -I@CS_INST_INCLUDE@ -I${includedir}
 Requires: @PC_REQUIRES@
