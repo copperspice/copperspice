@@ -151,13 +151,13 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
 
 - (void)windowDidResize: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    [self relayout];
 }
 
 - (void)colorChanged: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    [self updateQtColor];
    if (mHelper) {
       emit mHelper->colorSelected(mQtColor);
@@ -166,7 +166,7 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
 
 - (void)windowWillClose: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (mCancelButton && mHelper && !mClosingDueToKnownButton) {
       mClosingDueToKnownButton = true; // prevent repeating emit
       emit mHelper->reject();
@@ -332,7 +332,7 @@ static NSButton *macCreateButton(const char *text, NSView *superview)
 
 - (BOOL)windowShouldClose: (id)window
 {
-   Q_UNUSED(window);
+   (void) window;
    if (!mOkButton) {
       [self updateQtColor];
    }
@@ -405,7 +405,7 @@ class QCocoaColorPanel
    }
 
    bool show(Qt::WindowModality windowModality, QWindow *parent) {
-      Q_UNUSED(parent);
+      (void) parent;
       if (windowModality != Qt::WindowModal) {
          [mDelegate showModelessPanel];
       }

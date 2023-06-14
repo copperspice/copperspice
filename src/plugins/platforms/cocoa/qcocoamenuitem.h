@@ -82,7 +82,7 @@ class QCocoaMenuItem : public QPlatformMenuItem, public QCocoaMenuObject
    void setShortcut(const QKeySequence &shortcut) override;
 
    void setCheckable(bool checkable) override {
-      Q_UNUSED(checkable)
+      (void) checkable;
    }
 
    void setChecked(bool isChecked) override;

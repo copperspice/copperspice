@@ -75,7 +75,7 @@ void QCocoaAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
 
 void QCocoaAccessibility::setRootObject(QObject *o)
 {
-   Q_UNUSED(o)
+   (void) o;
 }
 
 void QCocoaAccessibility::initialize()

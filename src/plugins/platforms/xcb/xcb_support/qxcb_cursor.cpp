@@ -587,8 +587,8 @@ bool updateCursorTheme(void *dpy, const QByteArray &theme)
 
 void QXcbCursor::cursorThemePropertyChanged(QXcbVirtualDesktop *screen, const QByteArray &name, const QVariant &property, void *handle)
 {
-   Q_UNUSED(screen);
-   Q_UNUSED(name);
+   (void) screen;
+   (void) name;
 
    QXcbCursor *self = static_cast<QXcbCursor *>(handle);
    updateCursorTheme(self->connection()->xlib_display(), property.toByteArray());

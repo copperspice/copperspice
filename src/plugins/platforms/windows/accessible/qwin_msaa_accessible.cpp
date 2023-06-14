@@ -749,7 +749,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accParent(IDispatch** ppdi
 */
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accDoDefaultAction(VARIANT varID)
 {
-    Q_UNUSED(varID);
+    (void) varID;
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
     if (!accessible)
@@ -767,7 +767,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accDoDefaultAction(VARIANT var
 
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accDefaultAction(VARIANT varID, BSTR* pszDefaultAction)
 {
-    Q_UNUSED(varID);
+    (void) varID;
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
     if (!accessible)
@@ -848,7 +848,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accHelpTopic(BSTR *, VARIA
 
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accKeyboardShortcut(VARIANT varID, BSTR *pszKeyboardShortcut)
 {
-    Q_UNUSED(varID);
+    (void) varID;
 
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
@@ -1092,8 +1092,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::put_accValue(VARIANT, BSTR)
 // moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VARIANT varID)
 {
-    Q_UNUSED(flagsSelect);
-    Q_UNUSED(varID);
+    (void) flagsSelect;
+    (void) varID;
 
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);

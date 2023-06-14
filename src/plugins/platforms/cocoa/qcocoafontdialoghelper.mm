@@ -187,7 +187,7 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
 
 - (void)windowDidResize: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    [self relayout];
 }
 
@@ -281,7 +281,7 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
 
 - (void)changeFont: (id)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    [self updateQtFont];
 }
 
@@ -331,7 +331,7 @@ static QFont qfontForCocoaFont(NSFont *cocoaFont, const QFont &resolveFont)
 
 - (BOOL)windowShouldClose: (id)window
 {
-   Q_UNUSED(window);
+   (void) window;
    if (!mOkButton) {
       [self updateQtFont];
    }
@@ -405,7 +405,7 @@ class QCocoaFontPanel
    }
 
    bool show(Qt::WindowModality windowModality, QWindow *parent) {
-      Q_UNUSED(parent);
+      (void) parent;
       if (windowModality != Qt::WindowModal) {
          [mDelegate showModelessPanel];
       }

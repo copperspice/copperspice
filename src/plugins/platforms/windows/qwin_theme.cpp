@@ -720,8 +720,8 @@ static QPixmap pixmapFromShellImageList(int iImageList, const SHFILEINFO &info)
    }
    imageList->Release();
 #else
-   Q_UNUSED(iImageList)
-   Q_UNUSED(info)
+   (void) iImageList;
+   (void) info;
 #endif // USE_IIMAGELIST
    return result;
 }
@@ -732,7 +732,7 @@ QPixmap QWindowsTheme::fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &s
    /* We don't use the variable, but by storing it statically, we
     * ensure CoInitialize is only called once. */
    static HRESULT comInit = CoInitialize(nullptr);
-   Q_UNUSED(comInit);
+   (void) comInit;
 
    static QCache<QString, FakePointer<int>> dirIconEntryCache(1000);
    static QMutex mx;

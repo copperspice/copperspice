@@ -172,7 +172,7 @@ class QXcbXSettingsPrivate
 
          VALIDATE_LENGTH(4);
          int last_change_serial = ADJUST_BO(byteOrder, qint32, data + offset + local_offset);
-         Q_UNUSED(last_change_serial);
+         (void) last_change_serial;
          local_offset += 4;
 
          QVariant value;

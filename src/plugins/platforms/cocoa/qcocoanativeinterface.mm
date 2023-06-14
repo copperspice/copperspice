@@ -225,7 +225,7 @@ void QCocoaNativeInterface::clearCurrentThreadCocoaEventDispatcherInterruptFlag(
 
 void QCocoaNativeInterface::onAppFocusWindowChanged(QWindow *window)
 {
-   Q_UNUSED(window);
+   (void) window;
    QCocoaMenuBar::updateMenuBarImmediately();
 }
 

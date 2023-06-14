@@ -848,8 +848,8 @@ void printXcbEvent(const char *message, xcb_generic_event_t *event)
             int(event->sequence));
    }
 #else
-   Q_UNUSED(message);
-   Q_UNUSED(event);
+   (void) message;
+   (void) event;
 #endif
 }
 

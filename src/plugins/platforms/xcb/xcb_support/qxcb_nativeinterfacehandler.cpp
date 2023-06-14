@@ -38,38 +38,38 @@ QXcbNativeInterfaceHandler::~QXcbNativeInterfaceHandler()
 QPlatformNativeInterface::FP_Integration QXcbNativeInterfaceHandler::nativeResourceFunctionForIntegration(
    const QByteArray &resource) const
 {
-   Q_UNUSED(resource);
+   (void) resource;
    return nullptr;
 }
 
 QPlatformNativeInterface::FP_Context QXcbNativeInterfaceHandler::nativeResourceFunctionForContext(const QByteArray &resource) const
 {
-   Q_UNUSED(resource);
+   (void) resource;
    return nullptr;
 }
 
 QPlatformNativeInterface::FP_Screen QXcbNativeInterfaceHandler::nativeResourceFunctionForScreen(const QByteArray &resource) const
 {
-   Q_UNUSED(resource);
+   (void) resource;
    return nullptr;
 }
 
 QPlatformNativeInterface::FP_Window QXcbNativeInterfaceHandler::nativeResourceFunctionForWindow(const QByteArray &resource) const
 {
-   Q_UNUSED(resource);
+   (void) resource;
    return nullptr;
 }
 
 QPlatformNativeInterface::FP_BackingStore QXcbNativeInterfaceHandler::nativeResourceFunctionForBackingStore(
    const QByteArray &resource) const
 {
-   Q_UNUSED(resource);
+   (void) resource;
    return nullptr;
 }
 
 QXcbNativeInterfaceHandler::FP_Void QXcbNativeInterfaceHandler::platformFunction(const QByteArray &function) const
 {
-   Q_UNUSED(function);
+   (void) function;
    return nullptr;
 }
 

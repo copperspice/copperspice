@@ -40,7 +40,7 @@
 
 - (void)windowDidBecomeKey: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow->m_windowUnderMouse) {
       QPointF windowPoint;
       QPointF screenPoint;
@@ -51,7 +51,7 @@
 
 - (void)windowDidResize: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow) {
       m_cocoaWindow->windowDidResize();
    }
@@ -59,7 +59,7 @@
 
 - (void)windowDidEndLiveResize: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow) {
       m_cocoaWindow->windowDidEndLiveResize();
    }
@@ -67,7 +67,7 @@
 
 - (void)windowWillMove: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow) {
       m_cocoaWindow->windowWillMove();
    }
@@ -75,7 +75,7 @@
 
 - (void)windowDidMove: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow) {
       m_cocoaWindow->windowDidMove();
    }
@@ -83,7 +83,7 @@
 
 - (BOOL)windowShouldClose: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (m_cocoaWindow) {
       return m_cocoaWindow->windowShouldClose();
    }
@@ -102,18 +102,18 @@
 
 - (BOOL)window: (NSWindow *)window shouldPopUpDocumentPathMenu: (NSMenu *)menu
 {
-   Q_UNUSED(window);
-   Q_UNUSED(menu);
+   (void) window;
+   (void) menu;
    return m_cocoaWindow && m_cocoaWindow->m_hasWindowFilePath;
 }
 
 - (BOOL)window: (NSWindow *)window shouldDragDocumentWithEvent: (NSEvent *)event from: (NSPoint)dragImageLocation withPasteboard:
    (NSPasteboard *)pasteboard
 {
-   Q_UNUSED(window);
-   Q_UNUSED(event);
-   Q_UNUSED(dragImageLocation);
-   Q_UNUSED(pasteboard);
+   (void) window;
+   (void) event;
+   (void) dragImageLocation;
+   (void) pasteboard;
    return m_cocoaWindow && m_cocoaWindow->m_hasWindowFilePath;
 }
 @end
