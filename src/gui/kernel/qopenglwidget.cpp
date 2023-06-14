@@ -530,7 +530,8 @@ QOpenGLWidget::UpdateBehavior QOpenGLWidget::updateBehavior() const
  */
 void QOpenGLWidget::setFormat(const QSurfaceFormat &format)
 {
-   Q_UNUSED(format);
+   (void) format;
+
    Q_D(QOpenGLWidget);
    if (d->initialized) {
       qWarning("QOpenGLWidget: Already initialized, setting the format has no effect");
@@ -676,8 +677,8 @@ void QOpenGLWidget::initializeGL()
 */
 void QOpenGLWidget::resizeGL(int w, int h)
 {
-   Q_UNUSED(w);
-   Q_UNUSED(h);
+   (void) w;
+   (void) h;
 }
 
 /*!
@@ -739,7 +740,7 @@ void QOpenGLWidget::resizeEvent(QResizeEvent *e)
 */
 void QOpenGLWidget::paintEvent(QPaintEvent *e)
 {
-   Q_UNUSED(e);
+   (void) e;
    Q_D(QOpenGLWidget);
    if (!d->initialized) {
       return;

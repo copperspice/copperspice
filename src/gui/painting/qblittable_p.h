@@ -64,30 +64,33 @@ class Q_GUI_EXPORT QBlittable
    virtual void fillRect(const QRectF &rect, const QColor &color) = 0;
    virtual void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect) = 0;
    virtual void alphaFillRect(const QRectF &rect, const QColor &color, QPainter::CompositionMode cmode) {
-      Q_UNUSED(rect);
-      Q_UNUSED(color);
-      Q_UNUSED(cmode);
+      (void) rect;
+      (void) color;
+      (void) cmode;
+
       qWarning("Please implement alphaFillRect function in your platform or remove AlphaFillRectCapability from it");
    }
 
    virtual void drawPixmapOpacity(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect,
       QPainter::CompositionMode cmode, qreal opacity) {
-      Q_UNUSED(rect);
-      Q_UNUSED(pixmap);
-      Q_UNUSED(subrect);
-      Q_UNUSED(cmode);
-      Q_UNUSED(opacity);
+      (void) rect;
+      (void) pixmap;
+      (void) subrect;
+      (void) cmode;
+      (void) opacity;
+
       qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
    }
 
    virtual bool drawCachedGlyphs(const QPaintEngineState *state, QFontEngine::GlyphFormat glyphFormat, int numGlyphs,
       const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine) {
-      Q_UNUSED(state);
-      Q_UNUSED(glyphFormat);
-      Q_UNUSED(numGlyphs);
-      Q_UNUSED(glyphs);
-      Q_UNUSED(positions);
-      Q_UNUSED(fontEngine);
+      (void) state;
+      (void) glyphFormat;
+      (void) numGlyphs;
+      (void) glyphs;
+      (void) positions;
+      (void) fontEngine;
+
       qWarning("Please implement drawCachedGlyphs function in your platform or remove DrawCachedGlyphsCapability from it");
       return true;
    }

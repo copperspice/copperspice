@@ -461,7 +461,7 @@ QMimeData *QListModel::mimeData(const QModelIndexList &indexes) const
 bool QListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
    int row, int column, const QModelIndex &index)
 {
-   Q_UNUSED(column);
+   (void) column;
    QListWidget *view = qobject_cast<QListWidget *>(QObject::parent());
    if (index.isValid()) {
       row = index.row();

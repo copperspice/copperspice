@@ -821,7 +821,7 @@ void QTableViewPrivate::drawAndClipSpans(const QRegion &area, QPainter *painter,
 */
 void QTableViewPrivate::_q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateInsertedRows(start, end);
 }
 
@@ -831,7 +831,7 @@ void QTableViewPrivate::_q_updateSpanInsertedRows(const QModelIndex &parent, int
 */
 void QTableViewPrivate::_q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateInsertedColumns(start, end);
 }
 
@@ -841,7 +841,7 @@ void QTableViewPrivate::_q_updateSpanInsertedColumns(const QModelIndex &parent, 
 */
 void QTableViewPrivate::_q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateRemovedRows(start, end);
 }
 
@@ -851,7 +851,7 @@ void QTableViewPrivate::_q_updateSpanRemovedRows(const QModelIndex &parent, int 
 */
 void QTableViewPrivate::_q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateRemovedColumns(start, end);
 }
 
@@ -1443,7 +1443,7 @@ int QTableView::verticalOffset() const
 QModelIndex QTableView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QTableView);
-   Q_UNUSED(modifiers);
+   (void) modifiers;
 
    int bottom = d->model->rowCount(d->root) - 1;
 

@@ -130,7 +130,8 @@ void QOpenGLWindowPrivate::initialize()
 
 void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
 {
-   Q_UNUSED(region);
+   (void) region;
+
    Q_Q(QOpenGLWindow);
 
    initialize();
@@ -223,8 +224,10 @@ void QOpenGLWindowPrivate::bindFBO()
 
 void QOpenGLWindowPrivate::flush(const QRegion &region)
 {
-   Q_UNUSED(region);
+   (void) region;
+
    Q_Q(QOpenGLWindow);
+
    context->swapBuffers(q);
    emit q->frameSwapped();
 }

@@ -60,7 +60,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
    QWidgetBackingStore *widgetBackingStore)
 {
 #ifdef QT_NO_OPENGL
-   Q_UNUSED(widgetTextures);
+   (void) widgetTextures;
    Q_ASSERT(!region.isEmpty());
 #else
    Q_ASSERT(!region.isEmpty() || widgetTextures);
@@ -214,7 +214,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
    }
 
 #if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
-   Q_UNUSED(unclipped);
+   (void) unclipped;
    showYellowThing_win(widget, paintRegion, msec);
 
 #else

@@ -860,7 +860,7 @@ int QListView::verticalOffset() const
 QModelIndex QListView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QListView);
-   Q_UNUSED(modifiers);
+   (void) modifiers;
 
    QModelIndex current = currentIndex();
    if (!current.isValid()) {

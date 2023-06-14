@@ -731,7 +731,7 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
 // internal
 QVariant QGraphicsWidget::propertyChange(const QString &propertyName, const QVariant &value)
 {
-   Q_UNUSED(propertyName);
+   (void) propertyName;
    return value;
 }
 
@@ -968,7 +968,7 @@ void QGraphicsWidget::closeEvent(QCloseEvent *event)
 
 void QGraphicsWidget::focusInEvent(QFocusEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
    if (focusPolicy() != Qt::NoFocus) {
       update();
    }
@@ -999,7 +999,7 @@ bool QGraphicsWidget::focusNextPrevChild(bool next)
 
 void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
    if (focusPolicy() != Qt::NoFocus) {
       update();
    }
@@ -1007,15 +1007,14 @@ void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 
 void QGraphicsWidget::hideEvent(QHideEvent *event)
 {
-   ///### focusNextPrevChild(true), don't lose focus when the focus widget
-   // is hidden.
-   Q_UNUSED(event);
+   ///### focusNextPrevChild(true), don't lose focus when the focus widget is hidden.
+   (void) event;
 }
 
 void QGraphicsWidget::moveEvent(QGraphicsSceneMoveEvent *event)
 {
    // ### Last position is always == current position
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::polishEvent()
@@ -1024,17 +1023,17 @@ void QGraphicsWidget::polishEvent()
 
 void QGraphicsWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::showEvent(QShowEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -1044,22 +1043,22 @@ void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void QGraphicsWidget::grabMouseEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::ungrabMouseEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::grabKeyboardEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::ungrabKeyboardEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 Qt::WindowType QGraphicsWidget::windowType() const
@@ -1347,9 +1346,9 @@ int QGraphicsWidget::type() const
 
 void QGraphicsWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-   Q_UNUSED(painter);
-   Q_UNUSED(option);
-   Q_UNUSED(widget);
+   (void) painter;
+   (void) option;
+   (void) widget;
 }
 
 void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,

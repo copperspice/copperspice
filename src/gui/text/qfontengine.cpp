@@ -604,7 +604,7 @@ void QFontEngine::addBitmapFontToPath(qreal x, qreal y, const QGlyphLayout &glyp
    QPainterPath *path, QTextItem::RenderFlags flags)
 {
    // TODO what to do with 'flags' ??
-   Q_UNUSED(flags);
+   (void) flags;
 
    QFixed advanceX = QFixed::fromReal(x);
    QFixed advanceY = QFixed::fromReal(y);

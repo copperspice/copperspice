@@ -126,7 +126,7 @@ QTextControlPrivate::QTextControlPrivate()
 bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 {
 #ifdef QT_NO_SHORTCUT
-   Q_UNUSED(e);
+   (void) e;
 #endif
 
    Q_Q(QTextControl);
@@ -1429,14 +1429,15 @@ accept:
 QVariant QTextControl::loadResource(int type, const QUrl &name)
 {
 #ifdef QT_NO_TEXTEDIT
-   Q_UNUSED(type);
-   Q_UNUSED(name);
+   (void) type;
+   (void) name;
 #else
    if (QTextEdit *textEdit = qobject_cast<QTextEdit *>(parent())) {
       QUrl resolvedName = textEdit->d_func()->resolveUrl(name);
       return textEdit->loadResource(type, resolvedName);
    }
 #endif
+
    return QVariant();
 }
 
@@ -2502,8 +2503,9 @@ int QTextControl::cursorWidth() const
 void QTextControl::setCursorWidth(int width)
 {
    Q_D(QTextControl);
+
 #ifdef QT_NO_PROPERTIES
-   Q_UNUSED(width);
+   (void) width;
 #else
    if (width == -1) {
       width = QApplication::style()->pixelMetric(QStyle::PM_TextCursorWidth);

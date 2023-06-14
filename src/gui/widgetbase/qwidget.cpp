@@ -4572,10 +4572,12 @@ void QWidgetPrivate::setWindowFilePath_helper(const QString &filePath)
       setWindowTitle_helper(QFileInfo(filePath).fileName());
 #else
       Q_Q(QWidget);
-      Q_UNUSED(filePath);
+      (void) filePath;
+
       setWindowTitle_helper(q->windowTitle());
 #endif
    }
+
 #ifdef Q_OS_DARWIN
    setWindowFilePath_sys(filePath);
 #endif
@@ -5937,7 +5939,7 @@ void QWidgetPrivate::hide_helper()
 #if !defined QT_NO_GRAPHICSVIEW
    isEmbedded = q->isWindow() && !bypassGraphicsProxyWidget(q) && nearestGraphicsProxyWidget(q->parentWidget()) != nullptr;
 #else
-   Q_UNUSED(isEmbedded);
+   (void) isEmbedded;
 #endif
 
    if (! isEmbedded && (q->windowType() == Qt::Popup)) {

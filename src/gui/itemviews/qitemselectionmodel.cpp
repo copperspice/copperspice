@@ -495,7 +495,8 @@ void QItemSelectionModelPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &p
 void QItemSelectionModelPrivate::_q_columnsAboutToBeInserted(const QModelIndex &parent,
    int start, int end)
 {
-   Q_UNUSED(end);
+   (void) end;
+
    finalize();
    QList<QItemSelectionRange> split;
    QList<QItemSelectionRange>::iterator it = ranges.begin();
@@ -520,7 +521,8 @@ void QItemSelectionModelPrivate::_q_columnsAboutToBeInserted(const QModelIndex &
 void QItemSelectionModelPrivate::_q_rowsAboutToBeInserted(const QModelIndex &parent,
    int start, int end)
 {
-   Q_UNUSED(end);
+   (void) end;
+
    finalize();
    QList<QItemSelectionRange> split;
    QList<QItemSelectionRange>::iterator it = ranges.begin();

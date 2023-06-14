@@ -275,7 +275,7 @@ void QWindowPrivate::clearFocusObject()
 // implement heightForWidth().
 QRectF QWindowPrivate::closestAcceptableGeometry(const QRectF &rect) const
 {
-   Q_UNUSED(rect)
+   (void) rect;
    return QRectF();
 }
 
@@ -1439,9 +1439,10 @@ void QWindow::tabletEvent(QTabletEvent *ev)
 
 bool QWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-   Q_UNUSED(eventType);
-   Q_UNUSED(message);
-   Q_UNUSED(result);
+   (void) eventType;
+   (void) message;
+   (void) result;
+
    return false;
 }
 

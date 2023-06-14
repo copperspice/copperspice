@@ -1962,7 +1962,7 @@ int QTreeView::verticalOffset() const
 QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QTreeView);
-   Q_UNUSED(modifiers);
+   (void) modifiers;
 
    d->executePostedLayout();
 

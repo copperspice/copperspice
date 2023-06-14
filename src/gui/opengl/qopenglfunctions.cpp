@@ -1225,8 +1225,9 @@ static void QOPENGLF_APIENTRY qopenglfResolveGetShaderInfoLog(GLuint shader, GLs
 
 static void QOPENGLF_APIENTRY qopenglfSpecialGetShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint* range, GLint* precision)
 {
-    Q_UNUSED(shadertype);
-    Q_UNUSED(precisiontype);
+    (void) shadertype;
+    (void) precisiontype;
+
     range[0] = range[1] = precision[0] = 0;
 }
 

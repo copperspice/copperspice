@@ -216,7 +216,7 @@ int QTreeModel::rowCount(const QModelIndex &parent) const
 
 int QTreeModel::columnCount(const QModelIndex &index) const
 {
-   Q_UNUSED(index);
+   (void) index;
    if (!headerItem) {
       return 0;
    }

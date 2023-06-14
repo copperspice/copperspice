@@ -150,7 +150,7 @@ void QColumnView::setRootIndex(const QModelIndex &index)
 */
 bool QColumnView::isIndexHidden(const QModelIndex &index) const
 {
-   Q_UNUSED(index);
+   (void) index;
    return false;
 }
 
@@ -215,7 +215,8 @@ void QColumnView::scrollContentsBy(int dx, int dy)
 void QColumnView::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
    Q_D(QColumnView);
-   Q_UNUSED(hint);
+   (void) hint;
+
    if (!index.isValid() || d->columns.isEmpty()) {
       return;
    }
@@ -311,7 +312,8 @@ QModelIndex QColumnView::moveCursor(CursorAction cursorAction, Qt::KeyboardModif
 {
    // the child views which have focus get to deal with this first and if
    // they don't accept it then it comes up this view and we only grip left/right
-   Q_UNUSED(modifiers);
+   (void) modifiers;
+
    if (!model()) {
       return QModelIndex();
    }
@@ -463,8 +465,8 @@ QRegion QColumnView::visualRegionForSelection(const QItemSelection &selection) c
 */
 void QColumnView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
 {
-   Q_UNUSED(rect);
-   Q_UNUSED(command);
+   (void) rect;
+   (void) command;
 }
 
 /*!

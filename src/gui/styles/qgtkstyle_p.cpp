@@ -763,7 +763,8 @@ void QGtkStylePrivate::addWidgetToMap(GtkWidget *widget)
 
 void QGtkStylePrivate::addAllSubWidgets(GtkWidget *widget, gpointer v)
 {
-   Q_UNUSED(v);
+   (void) v;
+
    addWidgetToMap(widget);
 
    if (G_TYPE_CHECK_INSTANCE_TYPE ((widget), gtk_container_get_type())) {

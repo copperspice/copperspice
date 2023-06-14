@@ -2532,8 +2532,8 @@ bool QSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
 */
 bool QSortFilterProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
-   Q_UNUSED(source_column);
-   Q_UNUSED(source_parent);
+   (void) source_column;
+   (void) source_parent;
    return true;
 }
 

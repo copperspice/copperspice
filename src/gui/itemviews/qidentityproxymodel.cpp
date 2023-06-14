@@ -369,9 +369,11 @@ void QIdentityProxyModelPrivate::_q_sourceColumnsInserted(const QModelIndex &par
 {
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(parent)
-   Q_UNUSED(start)
-   Q_UNUSED(end)
+
+   (void) parent;
+   (void) start;
+   (void) end;
+
    q->endInsertColumns();
 }
 
@@ -381,11 +383,13 @@ void QIdentityProxyModelPrivate::_q_sourceColumnsMoved(const QModelIndex &source
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
    Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(sourceParent)
-   Q_UNUSED(sourceStart)
-   Q_UNUSED(sourceEnd)
-   Q_UNUSED(destParent)
-   Q_UNUSED(dest)
+
+   (void) sourceParent;
+   (void) sourceStart;
+   (void) sourceEnd;
+   (void) destParent;
+   (void) dest;
+
    q->endMoveColumns();
 }
 
@@ -393,9 +397,11 @@ void QIdentityProxyModelPrivate::_q_sourceColumnsRemoved(const QModelIndex &pare
 {
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(parent)
-   Q_UNUSED(start)
-   Q_UNUSED(end)
+
+   (void) parent;
+   (void) start;
+   (void) end;
+
    q->endRemoveColumns();
 }
 

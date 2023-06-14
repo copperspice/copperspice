@@ -100,7 +100,7 @@ static QWindow *qt_getWindow(const QWidget *widget)
 
 - (void)scrollBarStyleDidChange: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    QEvent event(QEvent::StyleChange);
    QMutableVectorIterator<QPointer<QObject> > it(QMacStylePrivate::scrollBars);
    while (it.hasNext()) {
@@ -1333,9 +1333,11 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
    if (insz) {
       *insz = QSize();
    }
-   Q_UNUSED(widg);
-   Q_UNUSED(ct);
-   Q_UNUSED(szHint);
+
+   (void) widg;
+   (void) ct;
+   (void) szHint;
+
    return QAquaSizeUnknown;
 #endif
 }
@@ -1716,7 +1718,7 @@ void QMacStylePrivate::drawTableHeader(const HIRect &outerBounds,
 {
    static SInt32 headerHeight = 0;
    static OSStatus err = CS_GetThemeMetric(kThemeMetricListHeaderHeight, &headerHeight);
-   Q_UNUSED(err);
+   (void) err;
 
    QPixmap buffer;
    QString key = QString("$qt_tableh%1-%2-%3").formatArg(int(bdi.state)).formatArg(int(bdi.adornment)).formatArg(int(bdi.value));
