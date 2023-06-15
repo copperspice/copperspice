@@ -149,7 +149,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 }
 
 #ifndef QT_NO_PAINT_DEBUG
-#if defined(Q_OS_WIN) && ! defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
 
 static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec)
 {
@@ -213,7 +213,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
       widget = nativeParent;
    }
 
-#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
    (void) unclipped;
    showYellowThing_win(widget, paintRegion, msec);
 

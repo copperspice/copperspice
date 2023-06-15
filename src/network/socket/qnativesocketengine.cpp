@@ -74,7 +74,7 @@ QNativeSocketEnginePrivate::QNativeSocketEnginePrivate()
    : socketDescriptor(-1), readNotifier(nullptr), writeNotifier(nullptr), exceptNotifier(nullptr)
 {
 
-#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
    QSysInfo::machineHostName();        // this initializes ws2_32.dll
 #endif
 }
