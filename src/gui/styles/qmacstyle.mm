@@ -4511,7 +4511,6 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
             QStyleOptionTab myTab = *tab;
             ThemeTabDirection ttd = getTabDirection(myTab.shape);
             bool verticalTabs = ttd == kThemeTabWest || ttd == kThemeTabEast;
-            bool selected = (myTab.state & QStyle::State_Selected);
 
             // Check to see if we use have the same as the system font
             // (QComboMenuItem is internal and should never be seen by the
