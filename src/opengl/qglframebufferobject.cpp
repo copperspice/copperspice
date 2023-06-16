@@ -963,7 +963,6 @@ QImage QGLFramebufferObject::toImage() const
 
 Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_buffer_2_engine)
 
-/*! \reimp */
 QPaintEngine *QGLFramebufferObject::paintEngine() const
 {
    Q_D(const QGLFramebufferObject);

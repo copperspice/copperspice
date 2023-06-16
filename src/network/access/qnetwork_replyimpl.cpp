@@ -747,8 +747,8 @@ void QNetworkReplyImplPrivate::appendDownstreamData(QIODevice *data)
 void QNetworkReplyImplPrivate::appendDownstreamData(const QByteArray &data)
 {
    (void) data;
-   // TODO implement
 
+   // TODO implement
    // TODO call
 
    qFatal("QNetworkReplyImplPrivate::appendDownstreamData not implemented");

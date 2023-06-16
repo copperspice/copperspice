@@ -96,8 +96,10 @@ QOpenGLTextureCache *QOpenGLTextureCache::cacheForContext(QOpenGLContext *contex
 void QOpenGLTextureCacheWrapper::cleanupTexturesForCacheKey(qint64 key)
 {
     QList<QOpenGLSharedResource *> resources = qt_texture_caches()->m_resource.resources();
-    for (QList<QOpenGLSharedResource *>::iterator it = resources.begin(); it != resources.end(); ++it)
+
+    for (auto it = resources.begin(); it != resources.end(); ++it) {
         static_cast<QOpenGLTextureCache *>(*it)->invalidate(key);
+    }
 }
 
 void QOpenGLTextureCacheWrapper::cleanupTexturesForPixmapData(QPlatformPixmap *pmd)

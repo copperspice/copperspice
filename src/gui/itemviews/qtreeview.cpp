@@ -1955,10 +1955,6 @@ int QTreeView::verticalOffset() const
    return verticalScrollBar()->value();
 }
 
-/*!
-    Move the cursor in the way described by \a cursorAction, using the
-    information provided by the button \a modifiers.
-*/
 QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QTreeView);

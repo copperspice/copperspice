@@ -358,9 +358,10 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
 
 #else
-   if (!metaData.hasFlags(QFileSystemMetaData::UserId)) {
+   if (! metaData.hasFlags(QFileSystemMetaData::UserId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::UserId);
    }
+
    return resolveUserName(metaData.userId());
 #endif
 }
@@ -378,8 +379,8 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
    if (!metaData.hasFlags(QFileSystemMetaData::GroupId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);
    }
+
    return resolveGroupName(metaData.groupId());
 
 #endif
 }
-

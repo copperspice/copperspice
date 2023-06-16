@@ -87,10 +87,6 @@ void QColumnViewGrip::paintEvent(QPaintEvent *event)
    event->accept();
 }
 
-/*!
-    \reimp
-    Resize the parent window to the sizeHint
-*/
 void QColumnViewGrip::mouseDoubleClickEvent(QMouseEvent *event)
 {
    (void) event;

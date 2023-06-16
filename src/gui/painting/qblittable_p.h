@@ -94,17 +94,17 @@ class Q_GUI_EXPORT QBlittable
       qWarning("Please implement drawCachedGlyphs function in your platform or remove DrawCachedGlyphsCapability from it");
       return true;
    }
+
    QImage *lock();
    void unlock();
 
    bool isLocked() const;
+
  protected:
    virtual QImage *doLock() = 0;
    virtual void doUnlock() = 0;
    QBlittablePrivate *d_ptr;
 };
-
-
 
 #endif //QT_NO_BLITTABLE
 #endif //QBLITTABLE_P_H

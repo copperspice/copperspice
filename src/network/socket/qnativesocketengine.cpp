@@ -433,14 +433,6 @@ void QNativeSocketEngine::connectionNotification()
    }
 }
 
-/*!
-    Connects to the remote host name given by \a name on port \a
-    port. When this function is called, the upper-level will not
-    perform a hostname lookup.
-
-    The native socket engine does not support this operation,
-    but some other socket engines (notably proxy-based ones) do.
-*/
 bool QNativeSocketEngine::connectToHostByName(const QString &name, quint16 port)
 {
    Q_D(QNativeSocketEngine);
@@ -450,6 +442,7 @@ bool QNativeSocketEngine::connectToHostByName(const QString &name, quint16 port)
 
    d->setError(QAbstractSocket::UnsupportedSocketOperationError,
                QNativeSocketEnginePrivate::OperationUnsupportedErrorString);
+
    return false;
 }
 

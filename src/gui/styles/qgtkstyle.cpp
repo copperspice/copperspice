@@ -3642,7 +3642,8 @@ void QGtkStyle::drawControl(ControlElement element,
 
             GtkWidget *gtkProgressBar = d->gtkWidget("GtkProgressBar");
             GtkStateType state = qt_gtk_state(option);
-            gtkPainter->paintBox(gtkProgressBar, "trough", option->rect, state, GTK_SHADOW_IN, d->gtk_widget_get_style(gtkProgressBar));
+            gtkPainter->paintBox(gtkProgressBar, "trough", option->rect, state, GTK_SHADOW_IN,
+                  d->gtk_widget_get_style(gtkProgressBar));
          }
 
          break;

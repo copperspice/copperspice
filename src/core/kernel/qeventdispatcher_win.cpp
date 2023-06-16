@@ -321,8 +321,6 @@ LRESULT QT_WIN_CALLBACK qt_GetMessageHook(int code, WPARAM wp, LPARAM lp)
    return q->d_func()->getMessageHook ? CallNextHookEx(nullptr, code, wp, lp) : 0;
 }
 
-// Provide class name and atom for the message window used by
-// QEventDispatcherWin32Private via Q_GLOBAL_STATIC shared between threads.
 struct QWindowsMessageWindowClassContext
 {
     QWindowsMessageWindowClassContext();

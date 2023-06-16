@@ -50,6 +50,7 @@ QGL2GradientCache::~QGL2GradientCache()
 {
     cache.clear();
 }
+
 QGL2GradientCache *QGL2GradientCache::cacheForContext(const QGLContext *context)
 {
    return qt_gradient_caches()->cacheForContext(context);
@@ -65,6 +66,7 @@ void QGL2GradientCache::freeResource(QOpenGLContext *)
 {
     cleanCache();
 }
+
 void QGL2GradientCache::cleanCache()
 {
     QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
@@ -104,7 +106,6 @@ GLuint QGL2GradientCache::getBuffer(const QGradient &gradient, qreal opacity)
       return addCacheElement(hash_val, gradient, opacity);
    }
 }
-
 
 GLuint QGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity)
 {

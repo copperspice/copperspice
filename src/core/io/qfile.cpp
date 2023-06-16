@@ -94,11 +94,14 @@ bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags 
    (void) fh;
 
    return false;
+
 #else
    delete fileEngine;
    fileEngine = nullptr;
+
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
+
    return fe->open(QIODevice::OpenMode(flags), fh, handleFlags);
 #endif
 }

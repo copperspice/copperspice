@@ -88,24 +88,28 @@ Q_GLOBAL_STATIC(QGraphicsItemCustomDataStore, qt_dataStore)
 // internal
 static QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath &path, const QPen &pen)
 {
-   // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
+   // We unfortunately need this adjustment since QPainterPathStroker will set a width of 1.0
    // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
    const qreal penWidthZero = qreal(0.00000001);
 
    if (path == QPainterPath() || pen == Qt::NoPen) {
       return path;
    }
+
    QPainterPathStroker ps;
    ps.setCapStyle(pen.capStyle());
+
    if (pen.widthF() <= 0.0) {
       ps.setWidth(penWidthZero);
    } else {
       ps.setWidth(pen.widthF());
    }
+
    ps.setJoinStyle(pen.joinStyle());
    ps.setMiterLimit(pen.miterLimit());
    QPainterPath p = ps.createStroke(path);
    p.addPath(path);
+
    return p;
 }
 

@@ -151,11 +151,13 @@ Q_GLOBAL_STATIC(QGLSignalProxy, theSignalProxy)
 QGLSignalProxy *QGLSignalProxy::instance()
 {
    QGLSignalProxy *proxy = theSignalProxy();
+
    if (proxy && qApp && proxy->thread() != qApp->thread()) {
       if (proxy->thread() == QThread::currentThread()) {
          proxy->moveToThread(qApp->thread());
       }
    }
+
    return proxy;
 }
 
@@ -943,6 +945,7 @@ QGLContextGroup::~QGLContextGroup()
 {
    qt_context_groups()->remove(this);
 }
+
 const QGLContext *qt_gl_transfer_context(const QGLContext *ctx)
 {
    if (! ctx) {
@@ -1144,11 +1147,13 @@ QImage qt_gl_read_texture(const QSize &size, bool alpha_format, bool include_alp
    int h = size.height();
 
 #ifndef QT_OPENGL_ES
-   if (!QOpenGLContext::currentContext()->isOpenGLES()) {
+   if (! QOpenGLContext::currentContext()->isOpenGLES()) {
       qgl1_functions()->glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
    }
 #endif
+
    convertFromGLImage(img, w, h, alpha_format, include_alpha);
+
    return img;
 }
 

@@ -32,15 +32,18 @@ class QEventLoopPrivate
    Q_DECLARE_PUBLIC(QEventLoop)
 
  public:
-   inline QEventLoopPrivate() : exit(true), inExec(false), returnCode(-1)   {  }
-   virtual ~QEventLoopPrivate() {}
+   inline QEventLoopPrivate()
+      : exit(true), inExec(false), returnCode(-1)
+   { }
+
+   virtual ~QEventLoopPrivate()
+   { }
 
    bool exit, inExec;
    int returnCode;
 
  protected:
    QEventLoop *q_ptr;
-
 };
 
 QEventLoop::QEventLoop(QObject *parent)

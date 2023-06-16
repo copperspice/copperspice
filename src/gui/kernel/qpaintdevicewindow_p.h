@@ -48,6 +48,7 @@ class Q_GUI_EXPORT QPaintDeviceWindowPrivate : public QWindowPrivate
    bool paint(const QRegion &region) {
       Q_Q(QPaintDeviceWindow);
       QRegion toPaint = region & dirtyRegion;
+
       if (toPaint.isEmpty()) {
          return false;
       }
@@ -67,6 +68,7 @@ class Q_GUI_EXPORT QPaintDeviceWindowPrivate : public QWindowPrivate
 
    void doFlush(const QRegion &region) {
       QRegion toFlush = region;
+
       if (paint(toFlush)) {
          flush(toFlush);
       }

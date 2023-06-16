@@ -84,28 +84,27 @@ QOpenGLPaintDevicePrivate::~QOpenGLPaintDevicePrivate()
 
 class QOpenGLEngineThreadStorage
 {
-public:
+ public:
     QPaintEngine *engine() {
         QPaintEngine *&localEngine = storage.localData();
-        if (!localEngine)
+        if (! localEngine) {
             localEngine = new QOpenGL2PaintEngineEx;
+        }
+
         return localEngine;
     }
 
-private:
+ private:
     QThreadStorage<QPaintEngine *> storage;
 };
 
 Q_GLOBAL_STATIC(QOpenGLEngineThreadStorage, qt_opengl_engine)
 
-/*!
-    \reimp
-*/
-
 QPaintEngine *QOpenGLPaintDevice::paintEngine() const
 {
-    if (d_ptr->engine)
+    if (d_ptr->engine) {
         return d_ptr->engine;
+    }
 
     QPaintEngine *engine = qt_opengl_engine()->engine();
     if (engine->isActive() && engine->paintDevice() != this) {

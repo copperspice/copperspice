@@ -1543,9 +1543,11 @@ QWindowsCaRootFetcher::QWindowsCaRootFetcher(const QSslCertificate &certificate,
 {
    moveToThread(windowsCaRootFetcherThread());
 }
+
 QWindowsCaRootFetcher::~QWindowsCaRootFetcher()
 {
 }
+
 void QWindowsCaRootFetcher::start()
 {
    QByteArray der = cert.toDer();
@@ -1662,6 +1664,7 @@ void QSslSocketBackendPrivate::disconnectFromHost()
          transmit();
       }
    }
+
    plainSocket->disconnectFromHost();
 }
 
@@ -1725,6 +1728,7 @@ QSsl::SslProtocol QSslSocketBackendPrivate::sessionProtocol() const
 
    return QSsl::UnknownProtocol;
 }
+
 void QSslSocketBackendPrivate::continueHandshake()
 {
    Q_Q(QSslSocket);

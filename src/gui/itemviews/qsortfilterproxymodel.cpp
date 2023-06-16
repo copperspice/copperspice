@@ -96,9 +96,10 @@ class QSortFilterProxyModelGreaterThan
 };
 
 
-//this struct is used to store what are the rows that are removed
-//between a call to rowsAboutToBeRemoved and rowsRemoved
-//it avoids readding rows to the mapping that are currently being removed
+// this struct is used to store which rows are removed
+// between a call to rowsAboutToBeRemoved and rowsRemoved
+// it avoids re-adding rows to the mapping that are currently being removed
+
 struct QRowsRemoval {
    QRowsRemoval(const QModelIndex &parent_source, int start, int end) : parent_source(parent_source), start(start),
       end(end) {
@@ -117,6 +118,7 @@ struct QRowsRemoval {
       } while (row >= 0);
       return false;
    }
+
  private:
    QModelIndex parent_source;
    int start;
@@ -189,8 +191,11 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
    void _q_sourceAboutToBeReset();
    void _q_sourceReset();
 
-   void _q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents, QAbstractItemModel::LayoutChangeHint hint);
-   void _q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents, QAbstractItemModel::LayoutChangeHint hint);
+   void _q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents,
+      QAbstractItemModel::LayoutChangeHint hint);
+
+   void _q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents,
+      QAbstractItemModel::LayoutChangeHint hint);
 
    void _q_sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end);
    void _q_sourceRowsInserted(const QModelIndex &source_parent, int start, int end);
@@ -2517,19 +2522,6 @@ bool QSortFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
    return key.contains(d->filter_regexp);
 }
 
-/*!
-    Returns true if the item in the column indicated by the given \a source_column
-    and \a source_parent should be included in the model; otherwise returns false.
-
-    The default implementation returns true if the value held by the relevant item
-    matches the filter string, wildcard string or regular expression.
-
-    \note By default, the Qt::DisplayRole is used to determine if the row
-    should be accepted or not. This can be changed by setting the \l
-    filterRole property.
-
-    \sa filterAcceptsRow(), setFilterFixedString(), setFilterRegExp(), setFilterWildcard()
-*/
 bool QSortFilterProxyModel::filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const
 {
    (void) source_column;
@@ -2537,41 +2529,23 @@ bool QSortFilterProxyModel::filterAcceptsColumn(int source_column, const QModelI
    return true;
 }
 
-/*!
-   Returns the source model index corresponding to the given \a
-   proxyIndex from the sorting filter model.
-
-   \sa mapFromSource()
-*/
 QModelIndex QSortFilterProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
    Q_D(const QSortFilterProxyModel);
    return d->proxy_to_source(proxyIndex);
 }
 
-/*!
-    Returns the model index in the QSortFilterProxyModel given the \a
-    sourceIndex from the source model.
-
-    \sa mapToSource()
-*/
 QModelIndex QSortFilterProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
    Q_D(const QSortFilterProxyModel);
    return d->source_to_proxy(sourceIndex);
 }
 
-/*!
-  \reimp
-*/
 QItemSelection QSortFilterProxyModel::mapSelectionToSource(const QItemSelection &proxySelection) const
 {
    return QAbstractProxyModel::mapSelectionToSource(proxySelection);
 }
 
-/*!
-  \reimp
-*/
 QItemSelection QSortFilterProxyModel::mapSelectionFromSource(const QItemSelection &sourceSelection) const
 {
    return QAbstractProxyModel::mapSelectionFromSource(sourceSelection);

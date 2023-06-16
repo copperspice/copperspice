@@ -223,7 +223,6 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
 #endif
 }
 
-
 bool QWindowSystemInterface::handleKeyEvent(QWindow *w, QEvent::Type t, int k, Qt::KeyboardModifiers mods,
       const QString &text, bool autorep, ushort count)
 {
@@ -235,7 +234,8 @@ bool QWindowSystemInterface::handleKeyEvent(QWindow *tlw, ulong timestamp, QEven
       const QString &text, bool autorep, ushort count)
 {
 #if defined(Q_OS_DARWIN)
-   if (t == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw, timestamp, k, mods, 0, 0, 0, text, autorep, count)) {
+   if (t == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw, timestamp, k, mods,
+         0, 0, 0, text, autorep, count)) {
       return true;
    }
 #endif

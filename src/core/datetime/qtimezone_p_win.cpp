@@ -187,7 +187,8 @@ static TIME_ZONE_INFORMATION getRegistryTzi(const QByteArray &windowsId, bool *o
 
    return tzi;
 }
-#else // QT_USE_REGISTRY_TIMEZONE
+#else
+// QT_USE_REGISTRY_TIMEZONE
 struct QWinDynamicTimeZone {
    QString standardName;
    QString daylightName;

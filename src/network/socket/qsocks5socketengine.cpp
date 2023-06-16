@@ -434,6 +434,7 @@ bool QSocks5Authenticator::beginAuthenticate(QTcpSocket *socket, bool *completed
 {
    (void) socket;
    *completed = true;
+
    return true;
 }
 
@@ -441,6 +442,7 @@ bool QSocks5Authenticator::continueAuthenticate(QTcpSocket *socket, bool *comple
 {
    (void) socket;
    *completed = true;
+
    return true;
 }
 
@@ -480,12 +482,15 @@ bool QSocks5PasswordAuthenticator::beginAuthenticate(QTcpSocket *socket, bool *c
    QByteArray dataBuf(3 + uname.size() + passwd.size(), 0);
    char *buf = dataBuf.data();
    int pos = 0;
+
    buf[pos++] = S5_PASSWORDAUTH_VERSION;
    buf[pos++] = uname.size();
+
    memcpy(&buf[pos], uname.data(), uname.size());
    pos += uname.size();
    buf[pos++] = passwd.size();
    memcpy(&buf[pos], passwd.data(), passwd.size());
+
    return socket->write(dataBuf) == dataBuf.size();
 }
 
@@ -1924,6 +1929,7 @@ bool QSocks5SocketEngine::waitForReadOrWrite(bool *readyToRead, bool *readyToWri
       int msecs, bool *timedOut)
 {
    (void) checkRead;
+
    if (!checkWrite) {
       bool canRead = waitForRead(msecs, timedOut);
       if (readyToRead) {
@@ -2008,9 +2014,8 @@ void QSocks5SocketEngine::setExceptionNotificationEnabled(bool enable)
    d->exceptNotificationEnabled = enable;
 }
 
-QAbstractSocketEngine *
-QSocks5SocketEngineHandler::createSocketEngine(QAbstractSocket::SocketType socketType,
-      const QNetworkProxy &proxy, QObject *parent)
+QAbstractSocketEngine * QSocks5SocketEngineHandler::createSocketEngine(
+      QAbstractSocket::SocketType socketType, const QNetworkProxy &proxy, QObject *parent)
 {
    (void) socketType;
 
@@ -2019,8 +2024,10 @@ QSocks5SocketEngineHandler::createSocketEngine(QAbstractSocket::SocketType socke
       QSOCKS5_DEBUG << "not proxying";
       return nullptr;
    }
+
    QScopedPointer<QSocks5SocketEngine> engine(new QSocks5SocketEngine(parent));
    engine->setProxy(proxy);
+
    return engine.take();
 }
 

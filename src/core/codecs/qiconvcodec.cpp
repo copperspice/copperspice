@@ -180,8 +180,7 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
       QThreadStorage<QIconvCodec::IconvState *> *ts = toUnicodeState();
 
       if (! qt_locale_initialized || ! ts) {
-         // running after Q_GLOBAL_STATIC has been deleted
-         // or before the QCoreApplication initialization
+         // might be running before the QCoreApplication initialization
 
          pstate = &temporaryState;
 

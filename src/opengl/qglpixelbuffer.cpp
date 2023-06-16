@@ -235,13 +235,11 @@ bool QGLPixelBuffer::isValid() const
 
 Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_buffer_2_engine)
 
-/*! \reimp */
 QPaintEngine *QGLPixelBuffer::paintEngine() const
 {
    return qt_buffer_2_engine()->engine();
 }
 
-/*! \reimp */
 int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
 {
    Q_D(const QGLPixelBuffer);

@@ -21,16 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qpair.h>
 #include <qthreadpool.h>
 #include <qthreadpool_p.h>
+
+#include <qpair.h>
 #include <qelapsedtimer.h>
 
 Q_GLOBAL_STATIC(QThreadPool, theInstance)
 
-/*
-    QThread wrapper provides synchronization against a ThreadPool
-*/
 class QThreadPoolThread : public QThread
 {
  public:
@@ -43,14 +41,11 @@ class QThreadPoolThread : public QThread
    QRunnable *runnable;
 };
 
-
 QThreadPoolThread::QThreadPoolThread(QThreadPoolPrivate *manager)
    : manager(manager), runnable(nullptr)
 { }
 
-/* \internal
-
-*/
+// internal
 void QThreadPoolThread::run()
 {
    QMutexLocker locker(&manager->mutex);

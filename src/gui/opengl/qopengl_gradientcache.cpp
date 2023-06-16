@@ -38,13 +38,13 @@
 
 class QOpenGL2GradientCacheWrapper
 {
-public:
+ public:
     QOpenGL2GradientCache *cacheForContext(QOpenGLContext *context) {
         QMutexLocker lock(&m_mutex);
         return m_resource.value<QOpenGL2GradientCache>(context);
     }
 
-private:
+ private:
     QOpenGLMultiGroupSharedResource m_resource;
     QMutex m_mutex;
 };

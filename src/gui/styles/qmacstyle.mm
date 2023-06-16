@@ -4510,27 +4510,25 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
             QStyleOptionTab myTab = *tab;
             ThemeTabDirection ttd = getTabDirection(myTab.shape);
-            bool verticalTabs = ttd == kThemeTabWest || ttd == kThemeTabEast;
 
-            // Check to see if we use have the same as the system font
-            // (QComboMenuItem is internal and should never be seen by the
-            // outside world, unless they read the source, in which case, it's
-            // their own fault).
+            bool verticalTabs = (ttd == kThemeTabWest || ttd == kThemeTabEast);
 
             bool nonDefaultFont = p->font() != cs_app_fonts_hash()->value("QComboMenuItem");
             bool isSelectedAndNeedsShadow = false;
 
-            if (isSelectedAndNeedsShadow || verticalTabs || nonDefaultFont || !tab->icon.isNull()
-                || !myTab.leftButtonSize.isEmpty() || !myTab.rightButtonSize.isEmpty()) {
+            if (isSelectedAndNeedsShadow || verticalTabs || nonDefaultFont || ! tab->icon.isNull()
+                || ! myTab.leftButtonSize.isEmpty() || ! myTab.rightButtonSize.isEmpty()) {
                int heightOffset = 0;
 
                if (verticalTabs) {
                   heightOffset = -1;
+
                } else if (nonDefaultFont) {
                   if (p->fontMetrics().height() == myTab.rect.height()) {
                      heightOffset = 2;
                   }
                }
+
                myTab.rect.setHeight(myTab.rect.height() + heightOffset);
 
                if (myTab.documentMode || isSelectedAndNeedsShadow) {
@@ -4551,6 +4549,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                }
 
                QCommonStyle::drawControl(ce, &myTab, p, w);
+
             } else {
                p->save();
                CGContextSetShouldAntialias(cg, true);

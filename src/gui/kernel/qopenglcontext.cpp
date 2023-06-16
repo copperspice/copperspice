@@ -135,11 +135,13 @@ class QGuiGLThreadContext
       : context(nullptr)
    {
    }
+
    ~QGuiGLThreadContext() {
       if (context) {
          context->doneCurrent();
       }
    }
+
    QOpenGLContext *context;
 };
 
@@ -147,16 +149,16 @@ Q_GLOBAL_STATIC(QThreadStorage<QGuiGLThreadContext *>, qwindow_context_storage);
 static QOpenGLContext *global_share_context = nullptr;
 
 #ifndef QT_NO_DEBUG
-QHash<QOpenGLContext *, bool> QOpenGLContextPrivate::makeCurrentTracker;
-QMutex QOpenGLContextPrivate::makeCurrentTrackerMutex;
+   QHash<QOpenGLContext *, bool> QOpenGLContextPrivate::makeCurrentTracker;
+   QMutex QOpenGLContextPrivate::makeCurrentTrackerMutex;
 #endif
 
 /*!
     \internal
 
-    This function is used by Qt::AA_ShareOpenGLContexts and the Qt
-    WebEngine to set up context sharing across multiple windows. Do
-    not use it for any other purpose.
+    This function is used by Qt::AA_ShareOpenGLContexts and the
+    WebEngine to set up context sharing across multiple windows.
+    Do not use it for any other purpose.
 
     Please maintain the binary compatibility of these functions.
 */
@@ -175,8 +177,9 @@ QOpenGLContext *qt_gl_global_share_context()
 QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context)
 {
    QGuiGLThreadContext *threadContext = qwindow_context_storage()->localData();
-   if (!threadContext) {
-      if (!QThread::currentThread()) {
+
+  if (! threadContext) {
+      if (! QThread::currentThread()) {
          qWarning("No QTLS available. currentContext will not work");
          return nullptr;
       }
@@ -184,6 +187,7 @@ QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context
       threadContext = new QGuiGLThreadContext;
       qwindow_context_storage()->setLocalData(threadContext);
    }
+
    QOpenGLContext *previous = threadContext->context;
    threadContext->context = context;
    return previous;

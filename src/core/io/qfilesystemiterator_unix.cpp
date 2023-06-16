@@ -34,14 +34,14 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
    : nativePath(entry.nativeFilePath()), dir(nullptr), dirEntry(nullptr), lastError(0)
 {
    (void) filters;
-   (void)  nameFilters;
-   (void)  flags;
+   (void) nameFilters;
+   (void) flags;
 
    if ((dir = QT_OPENDIR(nativePath.constData())) == nullptr) {
       lastError = errno;
    } else {
 
-      if (!nativePath.endsWith('/')) {
+      if (! nativePath.endsWith('/')) {
          nativePath.append('/');
       }
    }

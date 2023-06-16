@@ -72,11 +72,15 @@ Q_GLOBAL_STATIC(QOpenGLMultiGroupSharedResource, qt_gl_functions_resource)
 
 static QOpenGLFunctionsPrivateEx *qt_gl_functions(QOpenGLContext *context = nullptr)
 {
-    if (!context)
+    if (! context) {
         context = QOpenGLContext::currentContext();
+    }
+
     Q_ASSERT(context);
+
     QOpenGLFunctionsPrivateEx *funcs =
         qt_gl_functions_resource()->value<QOpenGLFunctionsPrivateEx>(context);
+
     return funcs;
 }
 
@@ -88,10 +92,11 @@ QOpenGLFunctions::QOpenGLFunctions()
 QOpenGLFunctions::QOpenGLFunctions(QOpenGLContext *context)
     : d_ptr(nullptr)
 {
-    if (context && QOpenGLContextGroup::currentContextGroup() == context->shareGroup())
+    if (context && QOpenGLContextGroup::currentContextGroup() == context->shareGroup()) {
         d_ptr = qt_gl_functions(context);
-    else
+    } else {
         qWarning() << "QOpenGLFunctions created with non-current context";
+    }
 }
 
 QOpenGLExtensions::QOpenGLExtensions()
@@ -106,6 +111,7 @@ QOpenGLExtensions::QOpenGLExtensions(QOpenGLContext *context)
 static int qt_gl_resolve_features()
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
+
     if (ctx->isOpenGLES()) {
         // OpenGL ES
         int features = QOpenGLFunctions::Multitexture |

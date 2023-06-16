@@ -114,11 +114,13 @@ qint64 QHttpPartPrivate::bytesAvailable() const
 {
    checkHeaderCreated();
    qint64 bytesAvailable = header.count();
+
    if (bodyDevice) {
       bytesAvailable += bodyDevice->bytesAvailable() - readPointer;
    } else {
       bytesAvailable += body.count() - readPointer;
    }
+
    // the device might have closed etc., so make sure we do not return a negative value
    return qMax(bytesAvailable, (qint64) 0);
 }
@@ -136,6 +138,7 @@ qint64 QHttpPartPrivate::readData(char *data, qint64 maxSize)
       memcpy(data, headerData + readPointer, bytesRead);
       readPointer += bytesRead;
    }
+
    // read content if there is still space
    if (bytesRead < maxSize) {
       if (bodyDevice) {
@@ -155,6 +158,7 @@ qint64 QHttpPartPrivate::readData(char *data, qint64 maxSize)
          readPointer += contentBytesRead;
       }
    }
+
    return bytesRead;
 }
 
@@ -162,34 +166,41 @@ qint64 QHttpPartPrivate::size() const
 {
    checkHeaderCreated();
    qint64 size = header.count();
+
    if (bodyDevice) {
       size += bodyDevice->size();
    } else {
       size += body.count();
    }
+
    return size;
 }
 
 bool QHttpPartPrivate::reset()
 {
    bool ret = true;
-   if (bodyDevice)
-      if (!bodyDevice->reset()) {
+   if (bodyDevice) {
+      if (! bodyDevice->reset()) {
          ret = false;
       }
+   }
+
    readPointer = 0;
+
    return ret;
 }
 
 void QHttpPartPrivate::checkHeaderCreated() const
 {
-   if (!headerCreated) {
+   if (! headerCreated) {
       // copied from QHttpNetworkRequestPrivate::header() and adapted
       QList<QPair<QByteArray, QByteArray> > fields = allRawHeaders();
       QList<QPair<QByteArray, QByteArray> >::const_iterator it = fields.constBegin();
+
       for (; it != fields.constEnd(); ++it) {
          header += it->first + ": " + it->second + "\r\n";
       }
+
       header += "\r\n";
       headerCreated = true;
    }
@@ -317,6 +328,7 @@ qint64 QHttpMultiPartIODevice::readData(char *data, qint64 maxSize)
       bytesRead += lastBoundaryBytesRead;
       readPointer += lastBoundaryBytesRead;
    }
+
    return bytesRead;
 }
 

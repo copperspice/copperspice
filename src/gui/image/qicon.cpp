@@ -48,12 +48,14 @@ static QAtomicInt serialNumCounter = QAtomicInt { 1 };
 static void qt_cleanup_icon_cache();
 
 namespace {
+
 struct IconCache : public QCache<QString, QIcon> {
    IconCache() {
-      // ### note: will not re-add if QApplication is re-created!
+      // will not re-add if QApplication is re-created
       qAddPostRoutine(qt_cleanup_icon_cache);
    }
 };
+
 }
 
 Q_GLOBAL_STATIC(IconCache, qtIconCache)

@@ -64,7 +64,6 @@ QNetworkCacheMetaData::QNetworkCacheMetaData()
 {
 }
 
-
 QNetworkCacheMetaData::~QNetworkCacheMetaData()
 {
    // QSharedDataPointer takes care of freeing d
@@ -75,20 +74,12 @@ QNetworkCacheMetaData::QNetworkCacheMetaData(const QNetworkCacheMetaData &other)
 {
 }
 
-/*!
-    Makes a copy of the \a other QNetworkCacheMetaData and returns a reference to the copy.
- */
 QNetworkCacheMetaData &QNetworkCacheMetaData::operator=(const QNetworkCacheMetaData &other)
 {
    d = other.d;
    return *this;
 }
 
-/*!
-    Returns true if this meta data is equal to the \a other meta data; otherwise returns false.
-
-    \sa operator!=()
- */
 bool QNetworkCacheMetaData::operator==(const QNetworkCacheMetaData &other) const
 {
    if (d == other.d) {
@@ -100,67 +91,26 @@ bool QNetworkCacheMetaData::operator==(const QNetworkCacheMetaData &other) const
    return false;
 }
 
-/*!
-    \fn bool QNetworkCacheMetaData::operator!=(const QNetworkCacheMetaData &other) const
-
-    Returns true if this meta data is not equal to the \a other meta data; otherwise returns false.
-
-    \sa operator==()
- */
-
-/*!
-    Returns true if this network cache meta data has attributes that have been set otherwise false.
- */
 bool QNetworkCacheMetaData::isValid() const
 {
    return !(*d == *metadata_shared_invalid());
 }
 
-/*!
-    Returns is this cache should be allowed to be stored on disk.
-
-    Some cache implementations can keep these cache items in memory for performance reasons,
-    but for security reasons they should not be written to disk.
-
-    Specifically with http, documents marked with Pragma: no-cache, or have a Cache-control set to
-    no-store or no-cache or any https document that doesn't have "Cache-control: public" set will
-    set the saveToDisk to false.
-
-    \sa setSaveToDisk()
- */
 bool QNetworkCacheMetaData::saveToDisk() const
 {
    return d->saveToDisk;
 }
 
-/*!
-    Sets whether this network cache meta data and associated content should be
-    allowed to be stored on disk to \a allow.
-
-    \sa saveToDisk()
- */
 void QNetworkCacheMetaData::setSaveToDisk(bool allow)
 {
    d->saveToDisk = allow;
 }
 
-/*!
-    Returns the URL this network cache meta data is referring to.
-
-    \sa setUrl()
- */
 QUrl QNetworkCacheMetaData::url() const
 {
    return d->url;
 }
 
-/*!
-    Sets the URL this network cache meta data to to be \a url.
-
-    The password and fragment are removed from the url.
-
-    \sa url()
- */
 void QNetworkCacheMetaData::setUrl(const QUrl &url)
 {
    d->url = url;
@@ -168,91 +118,46 @@ void QNetworkCacheMetaData::setUrl(const QUrl &url)
    d->url.setFragment(QString());
 }
 
-/*!
-    Returns a list of all raw headers that are set in this meta data.
-    The list is in the same order that the headers were set.
-
-    \sa setRawHeaders()
- */
 QNetworkCacheMetaData::RawHeaderList QNetworkCacheMetaData::rawHeaders() const
 {
    return d->headers;
 }
 
-/*!
-    Sets the raw headers to \a list.
-
-    \sa rawHeaders()
- */
 void QNetworkCacheMetaData::setRawHeaders(const RawHeaderList &list)
 {
    d->headers = list;
 }
 
-/*!
-    Returns the date and time when the meta data was last modified.
- */
 QDateTime QNetworkCacheMetaData::lastModified() const
 {
    return d->lastModified;
 }
 
-/*!
-    Sets the date and time when the meta data was last modified to \a dateTime.
- */
 void QNetworkCacheMetaData::setLastModified(const QDateTime &dateTime)
 {
    d->lastModified = dateTime;
 }
 
-/*!
-    Returns the date and time when the meta data expires.
- */
 QDateTime QNetworkCacheMetaData::expirationDate() const
 {
    return d->expirationDate;
 }
 
-/*!
-    Sets the date and time when the meta data expires to \a dateTime.
- */
 void QNetworkCacheMetaData::setExpirationDate(const QDateTime &dateTime)
 {
    d->expirationDate = dateTime;
 }
 
-/*!
-    \since 4.6
-
-    Returns all the attributes stored with this cache item.
-
-    \sa setAttributes(), QNetworkRequest::Attribute
-*/
 QNetworkCacheMetaData::AttributesMap QNetworkCacheMetaData::attributes() const
 {
    return d->attributes;
 }
 
-/*!
-    \since 4.6
-
-    Sets all attributes of this cache item to be the map \a attributes.
-
-    \sa attributes(), QNetworkRequest::setAttribute()
-*/
 void QNetworkCacheMetaData::setAttributes(const AttributesMap &attributes)
 {
    d->attributes = attributes;
 }
 
-/*!
-    \relates QNetworkCacheMetaData
-    \since 4.5
-
-    Writes \a metaData to the \a out stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 QDataStream &operator<<(QDataStream &out, const QNetworkCacheMetaData &metaData)
 {
    QNetworkCacheMetaDataPrivate::save(out, metaData);

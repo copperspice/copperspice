@@ -729,6 +729,7 @@ bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSyst
    (void) target;
 
    error = QSystemError(ENOSYS, QSystemError::StandardLibraryError); //Function not implemented
+
    return false;
 }
 
@@ -737,7 +738,9 @@ bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSy
    if (::rename(source.nativeFilePath().constData(), target.nativeFilePath().constData()) == 0) {
       return true;
    }
+
    error = QSystemError(errno, QSystemError::StandardLibraryError);
+
    return false;
 }
 

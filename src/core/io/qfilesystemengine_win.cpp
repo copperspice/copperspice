@@ -184,7 +184,8 @@ Q_GLOBAL_STATIC(SidCleanup, initSidCleanup)
 static void resolveLibs()
 {
    static bool triedResolve = false;
-   if (!triedResolve) {
+
+   if (! triedResolve) {
       // need to resolve the security info functions
 
       // protect initialization

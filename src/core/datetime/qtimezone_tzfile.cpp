@@ -40,31 +40,32 @@ struct QTzTimeZone {
    QByteArray comment;
 };
 
-// Define as a type as Q_GLOBAL_STATIC does not like it
 typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
 
-// Parse zone.tab table, assume lists all installed zones, if not will need to read directories
+// Parse zone.tab table, assume it contains all installed zones, if not will need to read directories
 static QTzTimeZoneHash loadTzTimeZones()
 {
    QString path = "/usr/share/zoneinfo/zone.tab";
 
-   if (!QFile::exists(path)) {
+   if (! QFile::exists(path)) {
       path = "/usr/lib/zoneinfo/zone.tab";
    }
 
    QFile tzif(path);
-   if (!tzif.open(QIODevice::ReadOnly)) {
+   if (! tzif.open(QIODevice::ReadOnly)) {
       return QTzTimeZoneHash();
    }
 
    QTzTimeZoneHash zonesHash;
+
    // TODO QTextStream inefficient, replace later
    QTextStream ts(&tzif);
+
    while (!ts.atEnd()) {
       const QString line = ts.readLine();
 
       // Comment lines are prefixed with a #
-      if (!line.isEmpty() && line.at(0) != '#') {
+      if (! line.isEmpty() && line.at(0) != '#') {
          // Data rows are tab-separated columns Region, Coordinates, ID, Optional Comments
          const QStringList parts = line.split('\t');
          QTzTimeZone zone;
@@ -76,6 +77,7 @@ static QTzTimeZoneHash loadTzTimeZones()
          zonesHash.insert(parts.at(2).toUtf8(), zone);
       }
    }
+
    return zonesHash;
 }
 

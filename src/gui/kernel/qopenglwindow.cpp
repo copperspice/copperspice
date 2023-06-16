@@ -237,11 +237,6 @@ void QOpenGLWindowPaintDevice::ensureActiveTarget()
    QOpenGLWindowPrivate::get(m_window)->bindFBO();
 }
 
-/*!
-  Constructs a new QOpenGLWindow with the given \a parent and \a updateBehavior.
-
-  \sa QOpenGLWindow::UpdateBehavior
- */
 QOpenGLWindow::QOpenGLWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QWindow *parent)
    : QPaintDeviceWindow(*(new QOpenGLWindowPrivate(nullptr, updateBehavior)), parent)
 {

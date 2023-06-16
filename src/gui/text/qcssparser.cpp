@@ -2472,6 +2472,7 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
 
    int i = 0;
    while (i < output.size()) {
+
       if (output.at(i) == QLatin1Char('\\')) {
          ++i;
 
@@ -2501,6 +2502,7 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
          } else {
             i = hexStart;
          }
+
 
       } else {
          ++i;

@@ -815,50 +815,30 @@ void QTableViewPrivate::drawAndClipSpans(const QRegion &area, QPainter *painter,
    painter->setClipRegion(region);
 }
 
-/*!
-  \internal
-  Updates spans after row insertion.
-*/
 void QTableViewPrivate::_q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end)
 {
    (void) parent;
    spans.updateInsertedRows(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after column insertion.
-*/
 void QTableViewPrivate::_q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end)
 {
    (void) parent;
    spans.updateInsertedColumns(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after row removal.
-*/
 void QTableViewPrivate::_q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end)
 {
    (void) parent;
    spans.updateRemovedRows(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after column removal.
-*/
 void QTableViewPrivate::_q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end)
 {
    (void) parent;
    spans.updateRemovedColumns(start, end);
 }
 
-/*!
-  \internal
-  Draws a table cell.
-*/
 void QTableViewPrivate::drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
    Q_Q(QTableView);
