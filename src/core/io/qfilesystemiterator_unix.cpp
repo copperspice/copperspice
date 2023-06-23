@@ -37,7 +37,7 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
    (void) nameFilters;
    (void) flags;
 
-   if ((dir = QT_OPENDIR(nativePath.constData())) == nullptr) {
+   if ((dir = ::opendir(nativePath.constData())) == nullptr) {
       lastError = errno;
    } else {
 
@@ -50,7 +50,7 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
 QFileSystemIterator::~QFileSystemIterator()
 {
    if (dir) {
-      QT_CLOSEDIR(dir);
+      ::closedir(dir);
    }
 }
 
