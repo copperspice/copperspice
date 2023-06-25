@@ -137,7 +137,7 @@ bool QMetaProperty::isScriptable(const QObject *object) const
    bool retval = m_scriptJar;
 
    if (m_scriptJar == nullptr) {
-retval = true;
+      retval = true;
 
    } else if (object == nullptr) {
 
@@ -160,7 +160,7 @@ bool QMetaProperty::isStored(const QObject *object) const
    bool retval = m_storedJar;
 
    if (m_storedJar == nullptr) {
-     retval = true;
+      retval = true;
 
    } else if (object == nullptr) {
 
@@ -389,7 +389,7 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
    return  m_writeJar->runV(object, value);
 }
 
-// ** internal
+// internal
 void QMetaProperty::setReadMethod(std::type_index returnTypeId,
          QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead)
 {

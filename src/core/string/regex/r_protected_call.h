@@ -64,8 +64,8 @@ bool concrete_protected_call<T>::call()const
    return (obj->*proc)();
 }
 
-}
-} // namespace
+}   // end namespace
 
+}   // end namespace
 
 #endif

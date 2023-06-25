@@ -89,7 +89,7 @@ static CFStringRef runLoopMode(NSDictionary *dictionary)
         if (CFStringRef mode = runLoopMode(notification.userInfo))
             m_runLoopModes.push(mode);
         else
-            qWarning("Encountered run loop push notification without run loop mode!");
+            qWarning("Encountered run loop push notification without run loop mode");
 
      } else if (CFStringHasSuffix((CFStringRef)notification.name, CFSTR("RunLoopModePopNotification"))) {
         CFStringRef mode = runLoopMode(notification.userInfo);

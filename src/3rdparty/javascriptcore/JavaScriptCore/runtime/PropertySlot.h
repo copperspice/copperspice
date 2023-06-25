@@ -32,7 +32,7 @@ namespace JSC {
     class ExecState;
     class JSObject;
 
-#define JSC_VALUE_SLOT_MARKER 0
+#define JSC_VALUE_SLOT_MARKER    nullptr
 #define JSC_REGISTER_SLOT_MARKER reinterpret_cast<GetValueFunc>(1)
 
     class PropertySlot {
@@ -57,8 +57,10 @@ namespace JSC {
         {
             if (m_getValue == JSC_VALUE_SLOT_MARKER)
                 return *m_data.valueSlot;
+
             if (m_getValue == JSC_REGISTER_SLOT_MARKER)
                 return (*m_data.registerSlot).jsValue();
+
             return m_getValue(exec, propertyName, *this);
         }
 
@@ -66,8 +68,10 @@ namespace JSC {
         {
             if (m_getValue == JSC_VALUE_SLOT_MARKER)
                 return *m_data.valueSlot;
+
             if (m_getValue == JSC_REGISTER_SLOT_MARKER)
                 return (*m_data.registerSlot).jsValue();
+
             return m_getValue(exec, Identifier::from(exec, propertyName), *this);
         }
 
@@ -78,7 +82,7 @@ namespace JSC {
             return m_offset;
         }
 
-        void setValueSlot(JSValue* valueSlot) 
+        void setValueSlot(JSValue* valueSlot)
         {
             ASSERT(valueSlot);
             clearBase();
@@ -86,7 +90,7 @@ namespace JSC {
             m_getValue = JSC_VALUE_SLOT_MARKER;
             m_data.valueSlot = valueSlot;
         }
-        
+
         void setValueSlot(JSValue slotBase, JSValue* valueSlot)
         {
             ASSERT(valueSlot);
@@ -94,7 +98,7 @@ namespace JSC {
             m_slotBase = slotBase;
             m_data.valueSlot = valueSlot;
         }
-        
+
         void setValueSlot(JSValue slotBase, JSValue* valueSlot, size_t offset)
         {
             ASSERT(valueSlot);
@@ -103,7 +107,7 @@ namespace JSC {
             m_data.valueSlot = valueSlot;
             m_offset = offset;
         }
-        
+
         void setValue(JSValue value)
         {
             ASSERT(value);
@@ -139,14 +143,14 @@ namespace JSC {
             m_slotBase = slotBase;
             m_data.index = index;
         }
-        
+
         void setGetterSlot(JSObject* getterFunc)
         {
             ASSERT(getterFunc);
             m_getValue = functionGetter;
             m_data.getterFunc = getterFunc;
         }
-        
+
         void setUndefined()
         {
             setValue(jsUndefined());
@@ -191,7 +195,7 @@ namespace JSC {
         static JSValue functionGetter(ExecState*, const Identifier&, const PropertySlot&);
 
         GetValueFunc m_getValue;
-        
+
         JSValue m_slotBase;
         union {
             JSObject* getterFunc;

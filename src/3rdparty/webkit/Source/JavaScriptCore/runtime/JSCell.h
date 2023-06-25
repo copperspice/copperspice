@@ -98,7 +98,7 @@ namespace JSC {
         UString getString(ExecState* exec) const; // null string if not a string
         JSObject* getObject(); // NULL if not an object
         const JSObject* getObject() const; // NULL if not an object
-        
+
         virtual CallType getCallData(CallData&);
         virtual ConstructType getConstructData(ConstructData&);
 
@@ -154,7 +154,7 @@ namespace JSC {
         // Base implementation; for non-object classes implements getPropertySlot.
         virtual bool getOwnPropertySlot(ExecState*, const Identifier& propertyName, PropertySlot&);
         virtual bool getOwnPropertySlot(ExecState*, unsigned propertyName, PropertySlot&);
-        
+
         WriteBarrier<Structure> m_structure;
     };
 
@@ -213,7 +213,7 @@ namespace JSC {
 
     inline JSObject* JSValue::getObject() const
     {
-        return isCell() ? asCell()->getObject() : 0;
+        return isCell() ? asCell()->getObject() : nullptr;
     }
 
     inline CallType getCallData(JSValue value, CallData& callData)
@@ -331,7 +331,7 @@ namespace JSC {
     inline Heap* Heap::heap(JSValue v)
     {
         if (!v.isCell())
-            return 0;
+            return nullptr;
         return heap(v.asCell());
     }
 
@@ -339,7 +339,7 @@ namespace JSC {
     {
         return MarkedSpace::heap(c);
     }
-    
+
 #if ENABLE(JSC_ZOMBIES)
     inline bool JSValue::isZombie() const
     {
@@ -359,9 +359,9 @@ namespace JSC {
             m_nextAtom += m_atomsPerCell;
         }
 
-        return 0;
+        return nullptr;
     }
-    
+
     inline MarkedSpace::SizeClass& MarkedSpace::sizeClassFor(size_t bytes)
     {
         ASSERT(bytes && bytes < maxCellSize);
@@ -375,7 +375,7 @@ namespace JSC {
         SizeClass& sizeClass = sizeClassFor(bytes);
         return allocateFromSizeClass(sizeClass);
     }
-    
+
     inline void* Heap::allocate(size_t bytes)
     {
         ASSERT(globalData()->identifierTable == wtfThreadData().currentIdentifierTable());

@@ -31,24 +31,20 @@
 
 namespace cs_regex_ns {
 
-
 template <class charT, class implementationT>
 struct regex_traits;
 
 template <class charT, class traits>
 class basic_regex;
 
-
 namespace cs_regex_detail_ns {
 
 template <class T>
 struct regex_iterator_traits : public std::iterator_traits<T> {};
 
-} // namespace
+}   // end namespace
 
-
-} // namespace
-
+}   // end namespace
 
 #endif
 

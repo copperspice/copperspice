@@ -3217,11 +3217,12 @@ regex_constants::syntax_option_type basic_regex_parser<charT, traits>::parse_opt
 
    if (*m_position == static_cast<charT>('-')) {
       if (++m_position == m_end) {
-         // Rewind to start of (? sequence:
+         // Rewind to start of (? sequence
          --m_position;
          while (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) {
             --m_position;
          }
+
          fail(regex_constants::error_paren, m_position - m_base);
          return false;
       }
@@ -3248,7 +3249,7 @@ regex_constants::syntax_option_type basic_regex_parser<charT, traits>::parse_opt
          }
 
          if (++m_position == m_end) {
-            // Rewind to start of (? sequence:
+            // Rewind to start of (? sequence
             --m_position;
             while (this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) {
                --m_position;
@@ -3271,20 +3272,21 @@ bool basic_regex_parser<charT, traits>::unwind_alts(std::ptrdiff_t last_paren_st
 
    if ((this->m_alt_insert_point == static_cast<std::ptrdiff_t>(this->m_pdata->m_data.size()))
          && m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start) &&
-         !( ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group) &&
+         ! ( ((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group) &&
             ((this->flags() & regbase::no_empty_expressions) == 0)) ) {
 
-      fail(regex_constants::error_empty, this->m_position - this->m_base, "Can not terminate a sub-expression with an alternation operator |.");
+      fail(regex_constants::error_empty, this->m_position - this->m_base,
+            "Can not terminate a sub-expression with an alternation operator |.");
+
       return false;
    }
 
-   // Fix up our alternatives
+   // Fix our alternatives
    while (m_alt_jumps.size() && (m_alt_jumps.back() > last_paren_start)) {
-      //
-      // fix up the jump to point to the end of the states
-      // that we've just added:
-      //
+
+      // fix the jump to point to the end of the states that were just added
       std::ptrdiff_t jump_offset = m_alt_jumps.back();
+
       m_alt_jumps.pop_back();
       this->m_pdata->m_data.align();
       re_jump *jmp = static_cast<re_jump *>(this->getaddress(jump_offset));
@@ -3296,8 +3298,8 @@ bool basic_regex_parser<charT, traits>::unwind_alts(std::ptrdiff_t last_paren_st
    return true;
 }
 
-} // namespace
+}   // end namespace
 
-} // namespace
+}   // end namespace
 
 #endif

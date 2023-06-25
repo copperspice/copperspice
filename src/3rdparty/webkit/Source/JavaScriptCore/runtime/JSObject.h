@@ -44,9 +44,9 @@ namespace JSC {
     {
         if (value.isCell() && (value.asCell()->vptr() == globalData.jsFunctionVPtr))
             return value.asCell();
-        return 0;
+        return nullptr;
     }
-    
+
     class HashEntry;
     class InternalFunction;
     class PropertyDescriptor;
@@ -89,7 +89,7 @@ namespace JSC {
         JSValue prototype() const;
         void setPrototype(JSGlobalData&, JSValue prototype);
         bool setPrototypeWithCycleCheck(JSGlobalData&, JSValue prototype);
-        
+
         void setStructure(JSGlobalData&, Structure*);
         Structure* inheritorID(JSGlobalData&);
 
@@ -155,14 +155,14 @@ namespace JSC {
         WriteBarrierBase<Unknown>* getDirectLocation(JSGlobalData& globalData, const Identifier& propertyName)
         {
             size_t offset = m_structure->get(globalData, propertyName);
-            return offset != WTF::notFound ? locationForOffset(offset) : 0;
+            return offset != WTF::notFound ? locationForOffset(offset) : nullptr;
         }
 
         WriteBarrierBase<Unknown>* getDirectLocation(JSGlobalData& globalData, const Identifier& propertyName, unsigned& attributes)
         {
             JSCell* specificFunction;
             size_t offset = m_structure->get(globalData, propertyName, attributes, specificFunction);
-            return offset != WTF::notFound ? locationForOffset(offset) : 0;
+            return offset != WTF::notFound ? locationForOffset(offset) : nullptr;
         }
 
         size_t offsetForLocation(WriteBarrierBase<Unknown>* location) const
@@ -245,7 +245,7 @@ namespace JSC {
         }
 
         static size_t offsetOfInlineStorage();
-        
+
         static JS_EXPORTDATA const ClassInfo s_info;
 
     protected:
@@ -279,7 +279,7 @@ namespace JSC {
         void getString(ExecState* exec);
         void isObject();
         void isString();
-        
+
         ConstPropertyStorage propertyStorage() const { return m_propertyStorage; }
         PropertyStorage propertyStorage() { return m_propertyStorage; }
 
@@ -334,7 +334,7 @@ COMPILE_ASSERT((JSFinalObject_inlineStorageCapacity >= JSNonFinalObject_inlineSt
             : JSObject(VPtrStealingHack, m_inlineStorage)
         {
         }
-    
+
         explicit JSNonFinalObject(JSGlobalData& globalData, Structure* structure)
             : JSObject(globalData, structure, m_inlineStorage)
         {
@@ -545,7 +545,7 @@ inline JSValue JSObject::get(ExecState* exec, const Identifier& propertyName) co
     PropertySlot slot(this);
     if (const_cast<JSObject*>(this)->getPropertySlot(exec, propertyName, slot))
         return slot.getValue(exec, propertyName);
-    
+
     return jsUndefined();
 }
 
@@ -605,7 +605,7 @@ inline bool JSObject::putDirectInternal(JSGlobalData& globalData, const Identifi
 
     size_t offset;
     size_t currentCapacity = m_structure->propertyStorageCapacity();
-    if (Structure* structure = Structure::addPropertyTransitionToExistingStructure(m_structure.get(), propertyName, attributes, specificFunction, offset)) {    
+    if (Structure* structure = Structure::addPropertyTransitionToExistingStructure(m_structure.get(), propertyName, attributes, specificFunction, offset)) {
         if (currentCapacity != structure->propertyStorageCapacity())
             allocatePropertyStorage(currentCapacity, structure->propertyStorageCapacity());
 
@@ -688,18 +688,18 @@ inline bool JSObject::putDirect(JSGlobalData& globalData, const Identifier& prop
     ASSERT(value);
     ASSERT(!Heap::heap(value) || Heap::heap(value) == Heap::heap(this));
 
-    return putDirectInternal(globalData, propertyName, value, attributes, checkReadOnly, slot, 0);
+    return putDirectInternal(globalData, propertyName, value, attributes, checkReadOnly, slot, nullptr);
 }
 
 inline void JSObject::putDirect(JSGlobalData& globalData, const Identifier& propertyName, JSValue value, unsigned attributes)
 {
     PutPropertySlot slot;
-    putDirectInternal(globalData, propertyName, value, attributes, false, slot, 0);
+    putDirectInternal(globalData, propertyName, value, attributes, false, slot, nullptr);
 }
 
 inline bool JSObject::putDirect(JSGlobalData& globalData, const Identifier& propertyName, JSValue value, PutPropertySlot& slot)
 {
-    return putDirectInternal(globalData, propertyName, value, 0, false, slot, 0);
+    return putDirectInternal(globalData, propertyName, value, 0, false, slot, nullptr);
 }
 
 inline void JSObject::putDirectFunction(JSGlobalData& globalData, const Identifier& propertyName, JSCell* value, unsigned attributes, bool checkReadOnly, PutPropertySlot& slot)
@@ -716,7 +716,7 @@ inline void JSObject::putDirectFunction(JSGlobalData& globalData, const Identifi
 inline void JSObject::putDirectWithoutTransition(JSGlobalData& globalData, const Identifier& propertyName, JSValue value, unsigned attributes)
 {
     size_t currentCapacity = m_structure->propertyStorageCapacity();
-    size_t offset = m_structure->addPropertyWithoutTransition(globalData, propertyName, attributes, 0);
+    size_t offset = m_structure->addPropertyWithoutTransition(globalData, propertyName, attributes, nullptr);
     if (currentCapacity != m_structure->propertyStorageCapacity())
         allocatePropertyStorage(currentCapacity, m_structure->propertyStorageCapacity());
     putDirectOffset(globalData, offset, value);
@@ -853,7 +853,7 @@ inline JSValue JSValue::toStrictThisObject(ExecState* exec) const
 ALWAYS_INLINE JSObject* Register::function() const
 {
     if (!jsValue())
-        return 0;
+        return nullptr;
     return asObject(jsValue());
 }
 

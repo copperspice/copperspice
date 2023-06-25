@@ -140,7 +140,7 @@ static QTextCodec *createForName(QStringView name)
    QFactoryLoader *obj  = loader();
    QSet<QString> keySet = obj->keySet();
 
-   for (auto key : keySet) {
+   for (const auto &key : keySet) {
       if (nameMatch(make_view(name), key)) {
          if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
             return factory->create(key);
@@ -161,11 +161,11 @@ static QTextCodec *createForMib(int mib)
    QFactoryLoader *obj  = loader();
    QSet<QString> keySet = obj->keySet();
 
-   for (auto key : keySet) {
-      if (name == key) {
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
-            return factory->create(key);
-         }
+   if (keySet.contains(name)) {
+      // current name is supported
+
+      if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(name))) {
+         return factory->create(name);
       }
    }
 
@@ -186,16 +186,15 @@ class QTextCodecCleanup
 
 QTextCodecCleanup::~QTextCodecCleanup()
 {
-   if (! all) {
+   if (all == nullptr) {
       return;
    }
 
    QList<QTextCodec *> *myAll = all;
+   all = nullptr;
 
-   all = nullptr; // Otherwise the d'tor destroys the iterator
-
-   for (QList<QTextCodec *>::const_iterator it = myAll->constBegin(); it != myAll->constEnd(); ++it) {
-      delete *it;
+   for (auto item : *myAll) {
+      delete item;
    }
 
    delete myAll;
@@ -691,15 +690,16 @@ QTextCodec *QTextCodec::codecForMib(int mib)
 
    codec = createForMib(mib);
 
-   // Qt 3 used 1000 (mib for UCS2) as its identifier for the utf16 codec. Map
-   // this correctly for compatibility.
-   if (!codec && mib == 1000) {
+   // legacy code used used 1000 (mib for UCS2) as its identifier for the utf16 codec.
+   // map this correctly for compatibility.
+   if (! codec && mib == 1000) {
       return codecForMib(1015);
    }
 
    if (codec && cache) {
       cache->insert(key, codec);
    }
+
    return codec;
 }
 

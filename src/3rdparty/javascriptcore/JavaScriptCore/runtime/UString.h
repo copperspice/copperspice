@@ -49,7 +49,7 @@ namespace JSC {
     public:
         CString()
             : m_length(0)
-            , m_data(0)
+            , m_data(nullptr)
         {
         }
 
@@ -94,7 +94,7 @@ namespace JSC {
         }
 #endif
         typedef UStringImpl Rep;
-    
+
     public:
         // UString constructors passed char*s assume ISO Latin-1 encoding; for UTF8 use 'createFromUTF8', below.
         UString();
@@ -106,6 +106,13 @@ namespace JSC {
         UString(const UString& s)
             : m_rep(s.m_rep)
         {
+        }
+
+        // CS fix warning
+        const UString &operator=(const UString& s)
+        {
+           m_rep = s.m_rep;
+           return *this;
         }
 
         // Special constructor for cases where we overwrite an object in place.
@@ -185,11 +192,11 @@ namespace JSC {
         double toDouble(bool tolerateTrailingJunk) const;
         double toDouble() const;
 
-        uint32_t toUInt32(bool* ok = 0) const;
+        uint32_t toUInt32(bool* ok = nullptr) const;
         uint32_t toUInt32(bool* ok, bool tolerateEmptyString) const;
-        uint32_t toStrictUInt32(bool* ok = 0) const;
+        uint32_t toStrictUInt32(bool* ok = nullptr) const;
 
-        unsigned toArrayIndex(bool* ok = 0) const;
+        unsigned toArrayIndex(bool* ok = nullptr) const;
 
         int find(const UString& f, int pos = 0) const;
         int find(UChar, int pos = 0) const;

@@ -59,12 +59,12 @@ public:
     const String& string() const { return m_string; };
 
     AtomicStringImpl* impl() const { return static_cast<AtomicStringImpl *>(m_string.impl()); }
-    
+
     const UChar* characters() const { return m_string.characters(); }
     unsigned length() const { return m_string.length(); }
-    
+
     UChar operator[](unsigned int i) const { return m_string[i]; }
-    
+
     bool contains(UChar c) const { return m_string.contains(c); }
     bool contains(const char* s, bool caseSensitive = true) const
         { return m_string.contains(s, caseSensitive); }
@@ -76,29 +76,29 @@ public:
         { return m_string.find(s, start, caseSentitive); }
     size_t find(const String& s, size_t start = 0, bool caseSentitive = true) const
         { return m_string.find(s, start, caseSentitive); }
-    
+
     bool startsWith(const String& s, bool caseSensitive = true) const
         { return m_string.startsWith(s, caseSensitive); }
     bool endsWith(const String& s, bool caseSensitive = true) const
         { return m_string.endsWith(s, caseSensitive); }
-    
+
     AtomicString lower() const;
     AtomicString upper() const { return AtomicString(impl()->upper()); }
-    
-    int toInt(bool* ok = 0) const { return m_string.toInt(ok); }
-    double toDouble(bool* ok = 0) const { return m_string.toDouble(ok); }
-    float toFloat(bool* ok = 0) const { return m_string.toFloat(ok); }
+
+    int toInt(bool* ok = nullptr) const { return m_string.toInt(ok); }
+    double toDouble(bool* ok = nullptr) const { return m_string.toDouble(ok); }
+    float toFloat(bool* ok = nullptr) const { return m_string.toFloat(ok); }
     bool percentage(int& p) const { return m_string.percentage(p); }
 
     bool isNull() const { return m_string.isNull(); }
     bool isEmpty() const { return m_string.isEmpty(); }
 
     static void remove(StringImpl*);
-    
+
 #if USE(CF)
     AtomicString(CFStringRef s) :  m_string(add(String(s).impl())) { }
     CFStringRef createCFString() const { return m_string.createCFString(); }
-#endif    
+#endif
 #ifdef __OBJC__
     AtomicString(NSString* s) : m_string(add(String(s).impl())) { }
     operator NSString*() const { return m_string; }
@@ -125,7 +125,7 @@ public:
 
 private:
     String m_string;
-    
+
     static PassRefPtr<StringImpl> add(const char*);
     static PassRefPtr<StringImpl> add(const UChar*, unsigned length);
     static PassRefPtr<StringImpl> add(const UChar*, unsigned length, unsigned existingHash);
@@ -207,7 +207,7 @@ inline AtomicString AtomicString::fromUTF8(const char* characters)
         return nullAtom;
     if (!*characters)
         return emptyAtom;
-    return fromUTF8Internal(characters, 0);
+    return fromUTF8Internal(characters, nullptr);
 }
 #endif
 

@@ -57,14 +57,14 @@ public:
 
     // This conversion operator allows implicit conversion to bool but not to other integer types.
     typedef JSValue (HandleBase::*UnspecifiedBoolType);
-    operator UnspecifiedBoolType*() const { return (m_slot && *m_slot) ? reinterpret_cast<UnspecifiedBoolType*>(1) : 0; }
+    operator UnspecifiedBoolType*() const { return (m_slot && *m_slot) ? reinterpret_cast<UnspecifiedBoolType*>(1) : nullptr; }
 
 protected:
     HandleBase(HandleSlot slot)
         : m_slot(slot)
     {
     }
-    
+
     void swap(HandleBase& other) { std::swap(m_slot, other.m_slot); }
 
     HandleSlot slot() const { return m_slot; }
@@ -79,7 +79,7 @@ private:
 
 template <typename T> struct HandleTypes {
     typedef T* ExternalType;
-    static ExternalType getFromSlot(HandleSlot slot) { return (slot && *slot) ? reinterpret_cast<ExternalType>(slot->asCell()) : 0; }
+    static ExternalType getFromSlot(HandleSlot slot) { return (slot && *slot) ? reinterpret_cast<ExternalType>(slot->asCell()) : nullptr; }
     static JSValue toJSValue(T* cell) { return reinterpret_cast<JSCell*>(cell); }
     template <typename U> static void validateUpcast() { T* temp; temp = (U*)0; }
 };
@@ -155,11 +155,11 @@ public:
     ExternalType get() const { return HandleTypes<T>::getFromSlot(this->slot()); }
 
 protected:
-    Handle(HandleSlot slot = 0)
+    Handle(HandleSlot slot = nullptr)
         : HandleBase(slot)
     {
     }
-    
+
 private:
     friend class HandleHeap;
 
@@ -175,43 +175,43 @@ template <typename Base> Handle<JSObject> HandleConverter<Base, Unknown>::asObje
 }
 
 template <typename T, typename U> inline bool operator==(const Handle<T>& a, const Handle<U>& b)
-{ 
-    return a.get() == b.get(); 
+{
+    return a.get() == b.get();
 }
 
 template <typename T, typename U> inline bool operator==(const Handle<T>& a, U* b)
-{ 
-    return a.get() == b; 
+{
+    return a.get() == b;
 }
 
-template <typename T, typename U> inline bool operator==(T* a, const Handle<U>& b) 
+template <typename T, typename U> inline bool operator==(T* a, const Handle<U>& b)
 {
-    return a == b.get(); 
+    return a == b.get();
 }
 
 template <typename T, typename U> inline bool operator!=(const Handle<T>& a, const Handle<U>& b)
-{ 
-    return a.get() != b.get(); 
+{
+    return a.get() != b.get();
 }
 
 template <typename T, typename U> inline bool operator!=(const Handle<T>& a, U* b)
 {
-    return a.get() != b; 
+    return a.get() != b;
 }
 
 template <typename T, typename U> inline bool operator!=(T* a, const Handle<U>& b)
-{ 
-    return a != b.get(); 
+{
+    return a != b.get();
 }
 
 template <typename T, typename U> inline bool operator!=(const Handle<T>& a, JSValue b)
 {
-    return a.get() != b; 
+    return a.get() != b;
 }
 
 template <typename T, typename U> inline bool operator!=(JSValue a, const Handle<U>& b)
-{ 
-    return a != b.get(); 
+{
+    return a != b.get();
 }
 
 }

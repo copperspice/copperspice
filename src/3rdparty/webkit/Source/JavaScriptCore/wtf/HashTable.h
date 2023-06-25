@@ -1056,11 +1056,11 @@ namespace WTF {
         const_iterator* next;
         for (const_iterator* p = m_iterators; p; p = next) {
             next = p->m_next;
-            p->m_table = 0;
-            p->m_next = 0;
-            p->m_previous = 0;
+            p->m_table = nullptr;
+            p->m_next  = nullptr;
+            p->m_previous = nullptr;
         }
-        m_iterators = 0;
+        m_iterators = nullptr;
     }
 
     template<typename Key, typename Value, typename Extractor, typename HashFunctions, typename Traits, typename KeyTraits>
@@ -1068,11 +1068,11 @@ namespace WTF {
         HashTableConstIterator<Key, Value, Extractor, HashFunctions, Traits, KeyTraits>* it)
     {
         it->m_table = table;
-        it->m_previous = 0;
+        it->m_previous = nullptr;
 
         // Insert iterator at head of doubly-linked list of iterators.
         if (!table) {
-            it->m_next = 0;
+            it->m_next = nullptr;
         } else {
             MutexLocker lock(table->m_mutex);
             ASSERT(table->m_iterators != it);
@@ -1088,9 +1088,6 @@ namespace WTF {
     template<typename Key, typename Value, typename Extractor, typename HashFunctions, typename Traits, typename KeyTraits>
     void removeIterator(HashTableConstIterator<Key, Value, Extractor, HashFunctions, Traits, KeyTraits>* it)
     {
-        typedef HashTable<Key, Value, Extractor, HashFunctions, Traits, KeyTraits> HashTableType;
-        typedef HashTableConstIterator<Key, Value, Extractor, HashFunctions, Traits, KeyTraits> const_iterator;
-
         // Delete iterator from doubly-linked list of iterators.
         if (!it->m_table) {
             ASSERT(!it->m_next);
@@ -1111,9 +1108,9 @@ namespace WTF {
             }
         }
 
-        it->m_table = 0;
-        it->m_next = 0;
-        it->m_previous = 0;
+        it->m_table = nullptr;
+        it->m_next  = nullptr;
+        it->m_previous = nullptr;
     }
 
 #endif // CHECK_HASHTABLE_ITERATORS

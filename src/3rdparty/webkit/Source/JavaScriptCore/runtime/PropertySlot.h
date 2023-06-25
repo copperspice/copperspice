@@ -32,8 +32,8 @@ namespace JSC {
     class ExecState;
     class JSObject;
 
-#define JSC_VALUE_MARKER 0
-#define INDEX_GETTER_MARKER reinterpret_cast<GetValueFunc>(2)
+#define JSC_VALUE_MARKER       nullptr
+#define INDEX_GETTER_MARKER    reinterpret_cast<GetValueFunc>(2)
 #define GETTER_FUNCTION_MARKER reinterpret_cast<GetValueFunc>(3)
 
     class PropertySlot {
@@ -103,7 +103,7 @@ namespace JSC {
             m_slotBase = slotBase;
             m_value = value;
         }
-        
+
         void setValue(JSValue slotBase, JSValue value, size_t offset)
         {
             ASSERT(value);
@@ -128,16 +128,16 @@ namespace JSC {
             ASSERT(slotBase);
             ASSERT(getValue);
             m_getValue = getValue;
-            m_getIndexValue = 0;
+            m_getIndexValue = nullptr;
             m_slotBase = slotBase;
         }
-        
+
         void setCacheableCustom(JSValue slotBase, GetValueFunc getValue)
         {
             ASSERT(slotBase);
             ASSERT(getValue);
             m_getValue = getValue;
-            m_getIndexValue = 0;
+            m_getIndexValue = nullptr;
             m_slotBase = slotBase;
             m_cachedPropertyType = Custom;
         }
@@ -224,7 +224,7 @@ namespace JSC {
 
         GetValueFunc m_getValue;
         GetIndexValueFunc m_getIndexValue;
-        
+
         JSValue m_slotBase;
         union {
             JSObject* getterFunc;

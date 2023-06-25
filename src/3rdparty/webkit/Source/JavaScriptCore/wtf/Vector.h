@@ -314,16 +314,15 @@ namespace WTF {
 
         T* releaseBuffer()
         {
-            T* buffer = m_buffer;
-            m_buffer = 0;
+            T* buffer  = m_buffer;
+            m_buffer   = nullptr;
             m_capacity = 0;
             return buffer;
         }
 
     protected:
         VectorBufferBase()
-            : m_buffer(0)
-            , m_capacity(0)
+            : m_buffer(nullptr), m_capacity(0)
         {
         }
 
@@ -475,7 +474,7 @@ namespace WTF {
         T* releaseBuffer()
         {
             if (buffer() == inlineBuffer())
-                return 0;
+                return nullptr;
             return Base::releaseBuffer();
         }
 
@@ -822,12 +821,12 @@ namespace WTF {
     {
         if (ptr < begin() || ptr >= end()) {
             if (!tryExpandCapacity(newMinCapacity))
-                return 0;
+                return nullptr;
             return ptr;
         }
         size_t index = ptr - begin();
         if (!tryExpandCapacity(newMinCapacity))
-            return 0;
+            return nullptr;
         return begin() + index;
     }
 

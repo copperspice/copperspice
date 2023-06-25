@@ -30,7 +30,7 @@ namespace JSC {
     class JSObject;
     class MarkStack;
     class ScopeChainIterator;
-    
+
     class ScopeChainNode : public FastAllocBase {
     public:
         ScopeChainNode(ScopeChainNode* next, JSObject* object, JSGlobalData* globalData, JSGlobalObject* globalObject, JSObject* globalThis)
@@ -86,7 +86,7 @@ namespace JSC {
         ScopeChainIterator begin() const;
         ScopeChainIterator end() const;
 
-#ifndef NDEBUG        
+#ifndef NDEBUG
         void print() const;
 #endif
     };
@@ -132,7 +132,7 @@ namespace JSC {
 
         JSObject* const & operator*() const { return m_node->object; }
         JSObject* const * operator->() const { return &(operator*()); }
-    
+
         ScopeChainIterator& operator++() { m_node = m_node->next; return *this; }
 
         // postfix ++ intentionally omitted
@@ -146,12 +146,12 @@ namespace JSC {
 
     inline ScopeChainIterator ScopeChainNode::begin() const
     {
-        return ScopeChainIterator(this); 
+        return ScopeChainIterator(this);
     }
 
     inline ScopeChainIterator ScopeChainNode::end() const
-    { 
-        return ScopeChainIterator(0); 
+    {
+        return ScopeChainIterator(nullptr);
     }
 
     class NoScopeChain {};
@@ -160,12 +160,12 @@ namespace JSC {
         friend class JIT;
     public:
         ScopeChain(NoScopeChain)
-            : m_node(0)
+            : m_node(nullptr)
         {
         }
 
         ScopeChain(JSObject* o, JSGlobalData* globalData, JSGlobalObject* globalObject, JSObject* globalThis)
-            : m_node(new ScopeChainNode(0, o, globalData, globalObject, globalThis))
+            : m_node(new ScopeChainNode(nullptr, o, globalData, globalObject, globalThis))
         {
         }
 
@@ -186,7 +186,7 @@ namespace JSC {
             if (m_node)
                 m_node->deref();
 #ifndef NDEBUG
-            m_node = 0;
+            m_node = nullptr;
 #endif
         }
 
@@ -202,8 +202,8 @@ namespace JSC {
         void push(JSObject* o) { m_node = m_node->push(o); }
 
         void pop() { m_node = m_node->pop(); }
-        void clear() { m_node->deref(); m_node = 0; }
-        
+        void clear() { m_node->deref(); m_node = nullptr; }
+
         JSGlobalObject* globalObject() const { return m_node->globalObject; }
 
         void markAggregate(MarkStack&) const;
@@ -215,7 +215,7 @@ namespace JSC {
         // Returns the depth of the current call frame's scope chain
         int localDepth() const;
 
-#ifndef NDEBUG        
+#ifndef NDEBUG
         void print() const { m_node->print(); }
 #endif
 

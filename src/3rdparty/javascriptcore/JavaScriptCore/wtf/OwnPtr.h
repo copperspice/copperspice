@@ -39,7 +39,10 @@ namespace WTF {
         typedef typename RemovePointer<T>::Type ValueType;
         typedef ValueType* PtrType;
 
-        explicit OwnPtr(PtrType ptr = 0) : m_ptr(ptr) { }
+        explicit OwnPtr(PtrType ptr = nullptr)
+           : m_ptr(ptr)
+        { }
+
         OwnPtr(std::unique_ptr<ValueType> autoPtr) : m_ptr(autoPtr.release()) { }
 
         // See comment in PassOwnPtr.h for why this takes a const reference.
@@ -54,7 +57,7 @@ namespace WTF {
         ~OwnPtr() { deleteOwnedPtr(m_ptr); }
 
         PtrType get() const { return m_ptr; }
-        PtrType release() { PtrType ptr = m_ptr; m_ptr = 0; return ptr; }
+        PtrType release() { PtrType ptr = m_ptr; m_ptr = nullptr; return ptr; }
 
         // FIXME: This should be renamed to adopt.
         void set(PtrType ptr) { ASSERT(!ptr || m_ptr != ptr); deleteOwnedPtr(m_ptr); m_ptr = ptr; }
@@ -64,7 +67,7 @@ namespace WTF {
             deleteOwnedPtr(m_ptr); m_ptr = autoPtr.release();
         }
 
-        void clear() { deleteOwnedPtr(m_ptr); m_ptr = 0; }
+        void clear() { deleteOwnedPtr(m_ptr); m_ptr = nullptr; }
 
         ValueType& operator*() const { ASSERT(m_ptr); return *m_ptr; }
         PtrType operator->() const { ASSERT(m_ptr); return m_ptr; }
@@ -73,7 +76,7 @@ namespace WTF {
 
         // This conversion operator allows implicit conversion to bool but not to other integer types.
         typedef PtrType OwnPtr::*UnspecifiedBoolType;
-        operator UnspecifiedBoolType() const { return m_ptr ? &OwnPtr::m_ptr : 0; }
+        operator UnspecifiedBoolType() const { return m_ptr ? &OwnPtr::m_ptr : nullptr; }
 
         OwnPtr& operator=(const PassOwnPtr<T>&);
         template <typename U> OwnPtr& operator=(const PassOwnPtr<U>&);

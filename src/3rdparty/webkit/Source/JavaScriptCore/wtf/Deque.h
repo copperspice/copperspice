@@ -292,11 +292,11 @@ namespace WTF {
         IteratorBase* next;
         for (IteratorBase* p = m_iterators; p; p = next) {
             next = p->m_next;
-            p->m_deque = 0;
-            p->m_next = 0;
-            p->m_previous = 0;
+            p->m_deque = nullptr;
+            p->m_next  = nullptr;
+            p->m_previous = nullptr;
         }
-        m_iterators = 0;
+        m_iterators = nullptr;
     }
 #endif
 
@@ -305,7 +305,7 @@ namespace WTF {
         : m_start(0)
         , m_end(0)
 #ifndef NDEBUG
-        , m_iterators(0)
+        , m_iterators(nullptr)
 #endif
     {
         checkValidity();
@@ -317,7 +317,7 @@ namespace WTF {
         , m_end(other.m_end)
         , m_buffer(other.m_buffer.capacity())
 #ifndef NDEBUG
-        , m_iterators(0)
+        , m_iterators(nullptr)
 #endif
     {
         const T* otherBuffer = other.m_buffer.buffer();
@@ -548,14 +548,14 @@ namespace WTF {
     void DequeIteratorBase<T, inlineCapacity>::addToIteratorsList()
     {
         if (!m_deque)
-            m_next = 0;
+            m_next = nullptr;
         else {
             m_next = m_deque->m_iterators;
             m_deque->m_iterators = this;
             if (m_next)
                 m_next->m_previous = this;
         }
-        m_previous = 0;
+        m_previous = nullptr;
     }
 
     template<typename T, size_t inlineCapacity>
@@ -578,14 +578,14 @@ namespace WTF {
                 m_deque->m_iterators = m_next;
             }
         }
-        m_next = 0;
-        m_previous = 0;
+        m_next = nullptr;
+        m_previous = nullptr;
     }
 #endif
 
     template<typename T, size_t inlineCapacity>
     inline DequeIteratorBase<T, inlineCapacity>::DequeIteratorBase()
-        : m_deque(0)
+        : m_deque(nullptr)
     {
     }
 
@@ -626,7 +626,7 @@ namespace WTF {
     {
 #ifndef NDEBUG
         removeFromIteratorsList();
-        m_deque = 0;
+        m_deque = nullptr;
 #endif
     }
 

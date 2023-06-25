@@ -146,6 +146,6 @@ std::shared_ptr<Object const> object_cache<Key, Object>::do_get(const Key &k, si
    return result;
 }
 
-}
+}   // end namespace
 
 #endif

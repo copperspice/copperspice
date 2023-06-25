@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef Executable_h
@@ -47,7 +47,7 @@ namespace JSC {
     protected:
         static const int NUM_PARAMETERS_IS_HOST = 0;
         static const int NUM_PARAMETERS_NOT_COMPILED = -1;
-    
+
     public:
         ExecutableBase(int numParameters)
             : m_numParameters(numParameters)
@@ -179,8 +179,7 @@ namespace JSC {
 
     private:
         EvalExecutable(ExecState* exec, const SourceCode& source)
-            : ScriptExecutable(exec, source)
-            , m_evalCodeBlock(0)
+            : ScriptExecutable(exec, source), m_evalCodeBlock(nullptr)
         {
         }
         EvalCodeBlock* m_evalCodeBlock;
@@ -221,12 +220,11 @@ namespace JSC {
         JSObject* compile(ExecState*, ScopeChainNode*);
 
         // CodeBlocks for program code are transient and therefore do not gain from from throwing out there exception information.
-        ExceptionInfo* reparseExceptionInfo(JSGlobalData*, ScopeChainNode*, CodeBlock*) { ASSERT_NOT_REACHED(); return 0; }
+        ExceptionInfo* reparseExceptionInfo(JSGlobalData*, ScopeChainNode*, CodeBlock*) { ASSERT_NOT_REACHED(); return nullptr; }
 
     private:
         ProgramExecutable(ExecState* exec, const SourceCode& source)
-            : ScriptExecutable(exec, source)
-            , m_programCodeBlock(0)
+            : ScriptExecutable(exec, source), m_programCodeBlock(nullptr)
         {
         }
         ProgramCodeBlock* m_programCodeBlock;
@@ -265,7 +263,7 @@ namespace JSC {
             return new (exec) JSFunction(exec, this, scopeChain);
         }
 
-        CodeBlock& bytecode(ExecState* exec, ScopeChainNode* scopeChainNode) 
+        CodeBlock& bytecode(ExecState* exec, ScopeChainNode* scopeChainNode)
         {
             ASSERT(scopeChainNode);
             if (!m_codeBlock)
@@ -288,6 +286,7 @@ namespace JSC {
         size_t parameterCount() const { return m_parameters->size(); }
         size_t variableCount() const { return m_numVariables; }
         UString paramString() const;
+
 #ifdef QT_BUILD_SCRIPT_LIB
         UString parameterName(int i) const { return (*m_parameters)[i].ustring(); }
 #endif
@@ -295,14 +294,15 @@ namespace JSC {
         void recompile(ExecState*);
         ExceptionInfo* reparseExceptionInfo(JSGlobalData*, ScopeChainNode*, CodeBlock*);
         void markAggregate(MarkStack& markStack);
-        static PassRefPtr<FunctionExecutable> fromGlobalCode(const Identifier&, ExecState*, Debugger*, const SourceCode&, int* errLine = 0, UString* errMsg = 0);
+        static PassRefPtr<FunctionExecutable> fromGlobalCode(const Identifier&, ExecState*, Debugger*,
+              const SourceCode&, int* errLine = nullptr, UString* errMsg = nullptr);
 
     private:
         FunctionExecutable(JSGlobalData* globalData, const Identifier& name, const SourceCode& source, bool forceUsesArguments, FunctionParameters* parameters, int firstLine, int lastLine)
             : ScriptExecutable(globalData, source)
             , m_forceUsesArguments(forceUsesArguments)
             , m_parameters(parameters)
-            , m_codeBlock(0)
+            , m_codeBlock(nullptr)
             , m_name(name)
             , m_numVariables(0)
         {
@@ -314,7 +314,7 @@ namespace JSC {
             : ScriptExecutable(exec, source)
             , m_forceUsesArguments(forceUsesArguments)
             , m_parameters(parameters)
-            , m_codeBlock(0)
+            , m_codeBlock(nullptr)
             , m_name(name)
             , m_numVariables(0)
         {

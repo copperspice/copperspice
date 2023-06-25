@@ -29,14 +29,14 @@ namespace WTF {
 
     template <typename T> class OwnArrayPtr : public Noncopyable {
     public:
-        explicit OwnArrayPtr(T* ptr = 0) : m_ptr(ptr) { }
+        explicit OwnArrayPtr(T* ptr = nullptr) : m_ptr(ptr) { }
         ~OwnArrayPtr() { safeDelete(); }
 
         T* get() const { return m_ptr; }
-        T* release() { T* ptr = m_ptr; m_ptr = 0; return ptr; }
+        T* release() { T* ptr = m_ptr; m_ptr = nullptr; return ptr; }
 
         void set(T* ptr) { ASSERT(m_ptr != ptr); safeDelete(); m_ptr = ptr; }
-        void clear() { safeDelete(); m_ptr = 0; }
+        void clear() { safeDelete(); m_ptr = nullptr; }
 
         T& operator*() const { ASSERT(m_ptr); return *m_ptr; }
         T* operator->() const { ASSERT(m_ptr); return m_ptr; }
@@ -50,7 +50,7 @@ namespace WTF {
         operator bool() const { return m_ptr; }
 #else
         typedef T* OwnArrayPtr::*UnspecifiedBoolType;
-        operator UnspecifiedBoolType() const { return m_ptr ? &OwnArrayPtr::m_ptr : 0; }
+        operator UnspecifiedBoolType() const { return m_ptr ? &OwnArrayPtr::m_ptr : nullptr; }
 #endif
 
         void swap(OwnArrayPtr& o) { std::swap(m_ptr, o.m_ptr); }
@@ -60,7 +60,7 @@ namespace WTF {
 
         T* m_ptr;
     };
-    
+
     template <typename T> inline void swap(OwnArrayPtr<T>& a, OwnArrayPtr<T>& b) { a.swap(b); }
 
     template <typename T> inline T* getPtr(const OwnArrayPtr<T>& p)

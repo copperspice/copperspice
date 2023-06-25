@@ -7,13 +7,13 @@
  * are met:
  *
  * 1.  Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer. 
+ *     notice, this list of conditions and the following disclaimer.
  * 2.  Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution. 
+ *     documentation and/or other materials provided with the distribution.
  * 3.  Neither the name of Apple Computer, Inc. ("Apple") nor the names of
  *     its contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission. 
+ *     from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -79,7 +79,7 @@ private:
     // have exited). It's unlikely that any user of this call will be in that situation - and having
     // a destructor defined can be confusing, given that it has such strong pre-requisites to work correctly.
     ~ThreadSpecific();
-    
+
     T* get();
     void set(T*);
     void static destroy(void* ptr);
@@ -119,7 +119,7 @@ private:
 #if ENABLE(SINGLE_THREADED)
 template<typename T>
 inline ThreadSpecific<T>::ThreadSpecific()
-    : m_value(0)
+    : m_value(nullptr)
 {
 }
 
@@ -149,7 +149,7 @@ template<typename T>
 inline T* ThreadSpecific<T>::get()
 {
     Data* data = static_cast<Data*>(pthread_getspecific(m_key));
-    return data ? data->value : 0;
+    return data ? data->value : nullptr;
 }
 
 template<typename T>
@@ -170,7 +170,7 @@ template<typename T>
 inline T* ThreadSpecific<T>::get()
 {
     Data* data = static_cast<Data*>(m_key.localData());
-    return data ? data->value : 0;
+    return data ? data->value : nullptr;
 }
 
 template<typename T>
@@ -193,7 +193,7 @@ template<typename T>
 inline T* ThreadSpecific<T>::get()
 {
     Data* data = static_cast<Data*>(g_static_private_get(&m_key));
-    return data ? data->value : 0;
+    return data ? data->value : nullptr;
 }
 
 template<typename T>
@@ -244,7 +244,7 @@ template<typename T>
 inline T* ThreadSpecific<T>::get()
 {
     Data* data = static_cast<Data*>(TlsGetValue(tlsKeys()[m_index]));
-    return data ? data->value : 0;
+    return data ? data->value : nullptr;
 }
 
 template<typename T>

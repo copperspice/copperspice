@@ -75,7 +75,7 @@ public:
     static PassRefPtr<UStringImpl> createUninitialized(unsigned length, UChar*& output)
     {
         if (!length) {
-            output = 0;
+            output = nullptr;
             return &empty();
         }
 
@@ -89,15 +89,15 @@ public:
     static PassRefPtr<UStringImpl> tryCreateUninitialized(unsigned length, UChar*& output)
     {
         if (!length) {
-            output = 0;
+            output = nullptr;
             return &empty();
         }
 
         if (length > (unsigned)((std::numeric_limits<size_t>::max() - sizeof(UStringImpl)) / sizeof(UChar)))
-            return 0;
+            return nullptr;
         UStringImpl* resultImpl;
         if (!tryFastMalloc(sizeof(UChar) * length + sizeof(UStringImpl)).getValue(resultImpl))
-            return 0;
+            return nullptr;
         output = reinterpret_cast<UChar*>(resultImpl + 1);
         return adoptRef(new(resultImpl) UStringImpl(output, length, BufferInternal));
     }
@@ -169,7 +169,7 @@ private:
     // Used to construct normal strings with an internal or external buffer.
     UStringImpl(UChar* data, int length, BufferOwnership ownership)
         : m_data(data)
-        , m_buffer(0)
+        , m_buffer(nullptr)
         , m_length(length)
         , m_refCountAndFlags(s_refCountIncrement | ownership)
         , m_hash(0)
@@ -184,7 +184,7 @@ private:
     enum StaticStringConstructType { ConstructStaticString };
     UStringImpl(UChar* data, int length, StaticStringConstructType)
         : m_data(data)
-        , m_buffer(0)
+        , m_buffer(nullptr)
         , m_length(length)
         , m_refCountAndFlags(s_refCountFlagStatic | BufferOwned)
         , m_hash(0)

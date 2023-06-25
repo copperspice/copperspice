@@ -36,7 +36,7 @@ template <typename T> class OwnArrayPtr {
 public:
     typedef T* PtrType;
 
-    OwnArrayPtr() : m_ptr(0) { }
+    OwnArrayPtr() : m_ptr(nullptr) { }
 
     // See comment in PassOwnArrayPtr.h for why this takes a const reference.
     template<typename U> OwnArrayPtr(const PassOwnArrayPtr<U>& o);
@@ -67,7 +67,7 @@ public:
     operator bool() const { return m_ptr; }
 #else
     typedef T* OwnArrayPtr::*UnspecifiedBoolType;
-    operator UnspecifiedBoolType() const { return m_ptr ? &OwnArrayPtr::m_ptr : 0; }
+    operator UnspecifiedBoolType() const { return m_ptr ? &OwnArrayPtr::m_ptr : nullptr; }
 #endif
 
     OwnArrayPtr& operator=(const PassOwnArrayPtr<T>&);
@@ -93,21 +93,21 @@ template<typename T> template<typename U> inline OwnArrayPtr<T>::OwnArrayPtr(con
 template<typename T> inline void OwnArrayPtr<T>::clear()
 {
     PtrType ptr = m_ptr;
-    m_ptr = 0;
+    m_ptr = nullptr;
     deleteOwnedArrayPtr(ptr);
 }
 
 template<typename T> inline PassOwnArrayPtr<T> OwnArrayPtr<T>::release()
 {
     PtrType ptr = m_ptr;
-    m_ptr = 0;
+    m_ptr = nullptr;
     return adoptArrayPtr(ptr);
 }
 
 template<typename T> inline typename OwnArrayPtr<T>::PtrType OwnArrayPtr<T>::leakPtr()
 {
     PtrType ptr = m_ptr;
-    m_ptr = 0;
+    m_ptr = nullptr;
     return ptr;
 }
 
@@ -146,22 +146,22 @@ template <typename T> inline void swap(OwnArrayPtr<T>& a, OwnArrayPtr<T>& b)
 
 template<typename T, typename U> inline bool operator==(const OwnArrayPtr<T>& a, U* b)
 {
-    return a.get() == b; 
+    return a.get() == b;
 }
 
-template<typename T, typename U> inline bool operator==(T* a, const OwnArrayPtr<U>& b) 
+template<typename T, typename U> inline bool operator==(T* a, const OwnArrayPtr<U>& b)
 {
-    return a == b.get(); 
+    return a == b.get();
 }
 
 template<typename T, typename U> inline bool operator!=(const OwnArrayPtr<T>& a, U* b)
 {
-    return a.get() != b; 
+    return a.get() != b;
 }
 
 template<typename T, typename U> inline bool operator!=(T* a, const OwnArrayPtr<U>& b)
 {
-    return a != b.get(); 
+    return a != b.get();
 }
 
 template <typename T> inline T* getPtr(const OwnArrayPtr<T>& p)

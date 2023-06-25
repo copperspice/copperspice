@@ -46,7 +46,7 @@ namespace JSC {
         // FIXME: Remove all clients of this API, then remove this API.
         MarkedArgumentBuffer()
             : m_isUsingInlineBuffer(true)
-            , m_markSet(0)
+            , m_markSet(nullptr)
 #ifndef NDEBUG
             , m_isReadOnly(false)
 #endif
@@ -60,7 +60,7 @@ namespace JSC {
             : m_buffer(buffer)
             , m_size(size)
             , m_isUsingInlineBuffer(true)
-            , m_markSet(0)
+            , m_markSet(nullptr)
 #ifndef NDEBUG
             , m_isReadOnly(true)
 #endif
@@ -98,7 +98,7 @@ namespace JSC {
         void clear()
         {
             m_vector.clear();
-            m_buffer = 0;
+            m_buffer = nullptr;
             m_size = 0;
         }
 
@@ -189,7 +189,7 @@ namespace JSC {
         typedef const JSValue* const_iterator;
 
         ArgList()
-            : m_args(0)
+            : m_args(nullptr)
             , m_argCount(0)
         {
         }

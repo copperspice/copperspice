@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef BumpPointerAllocator_h
@@ -97,8 +97,8 @@ private:
     BumpPointerPool(const PageAllocation& allocation)
         : m_current(allocation.base())
         , m_start(allocation.base())
-        , m_next(0)
-        , m_previous(0)
+        , m_next(nullptr)
+        , m_previous(nullptr)
         , m_allocation(allocation)
     {
     }
@@ -108,7 +108,7 @@ private:
         // Add size of BumpPointerPool object, check for overflow.
         minimumCapacity += sizeof(BumpPointerPool);
         if (minimumCapacity < sizeof(BumpPointerPool))
-            return 0;
+            return nullptr;
 
         size_t poolSize = MINIMUM_BUMP_POOL_SIZE;
         while (poolSize < minimumCapacity) {
@@ -116,13 +116,13 @@ private:
             // The following if check relies on MINIMUM_BUMP_POOL_SIZE being a power of 2!
             ASSERT(!(MINIMUM_BUMP_POOL_SIZE & (MINIMUM_BUMP_POOL_SIZE - 1)));
             if (!poolSize)
-                return 0;
+                return nullptr;
         }
 
         PageAllocation allocation = PageAllocation::allocate(poolSize);
         if (!!allocation)
             return new(allocation) BumpPointerPool(allocation);
-        return 0;
+        return nullptr;
     }
 
     void shrink()
@@ -158,7 +158,7 @@ private:
                 return pool;
             }
 
-            // 
+            //
             void* current = pool->m_current;
             void* allocationEnd = static_cast<char*>(current) + size;
             ASSERT(allocationEnd > current); // check for overflow
@@ -216,7 +216,7 @@ private:
 class BumpPointerAllocator {
 public:
     BumpPointerAllocator()
-        : m_head(0)
+        : m_head(nullptr)
     {
     }
 

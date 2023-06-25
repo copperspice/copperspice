@@ -38,7 +38,7 @@ public:
     PageBlock();
     PageBlock(const PageBlock&);
     PageBlock(void*, size_t);
-    
+
     void* base() const { return m_base; }
     size_t size() const { return m_size; }
 
@@ -56,7 +56,7 @@ private:
 };
 
 inline PageBlock::PageBlock()
-    : m_base(0)
+    : m_base(nullptr)
     , m_size(0)
 {
 }

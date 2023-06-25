@@ -238,6 +238,7 @@ inline T qToBigEndian(T source)
 {
    return source;
 }
+
 template <typename T>
 inline T qFromBigEndian(T source)
 {
