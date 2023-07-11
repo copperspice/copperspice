@@ -52,7 +52,11 @@ struct QGLFunctionsPrivateEx : public QGLFunctionsPrivate, public QOpenGLSharedR
    int m_features;
 };
 
-Q_GLOBAL_STATIC(QOpenGLMultiGroupSharedResource, qt_gl_functions_resource)
+static QOpenGLMultiGroupSharedResource *qt_gl_functions_resource()
+{
+   static QOpenGLMultiGroupSharedResource retval;
+   return &retval;
+}
 
 static QGLFunctionsPrivateEx *qt_gl_functions(const QGLContext *context = nullptr)
 {

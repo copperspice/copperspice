@@ -39,7 +39,11 @@ class QGL2GradientCacheWrapper
     QMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QGL2GradientCacheWrapper, qt_gradient_caches)
+static QGL2GradientCacheWrapper *qt_gradient_caches()
+{
+   static QGL2GradientCacheWrapper retval;
+   return &retval;
+}
 
 QGL2GradientCache::QGL2GradientCache(QOpenGLContext *ctx)
     : QOpenGLSharedResource(ctx->shareGroup())

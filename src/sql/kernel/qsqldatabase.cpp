@@ -120,7 +120,11 @@ class QConnectionDict: public QHash<QString, QSqlDatabase>
    mutable QReadWriteLock lock;
 };
 
-Q_GLOBAL_STATIC(QConnectionDict, dbDict)
+static QConnectionDict *dbDict()
+{
+   static QConnectionDict retval;
+   return &retval;
+}
 
 class QSqlDatabasePrivate
 {

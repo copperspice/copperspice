@@ -117,7 +117,12 @@ class QOpenSslLocks
    QRecursiveMutex **locks;
 };
 
-Q_GLOBAL_STATIC(QOpenSslLocks, openssl_locks)
+static QOpenSslLocks *openssl_locks()
+{
+   static QOpenSslLocks retval;
+   return &retval;
+}
+
 #endif
 
 QString QSslSocketBackendPrivate::getErrorsFromOpenSsl()
@@ -243,7 +248,12 @@ struct QSslErrorList {
    QMutex mutex;
    QList<QPair<int, int> > errors;
 };
-Q_GLOBAL_STATIC(QSslErrorList, _q_sslErrorList)
+
+static QSslErrorList *_q_sslErrorList()
+{
+   static QSslErrorList retval;
+   return &retval;
+}
 
 int q_X509Callback(int ok, X509_STORE_CTX *ctx)
 {
@@ -1536,7 +1546,12 @@ class QWindowsCaRootFetcherThread : public QThread
       wait(15500); // worst case, a running request can block for 15 seconds
    }
 };
-Q_GLOBAL_STATIC(QWindowsCaRootFetcherThread, windowsCaRootFetcherThread);
+
+static QWindowsCaRootFetcherThread *windowsCaRootFetcherThread()
+{
+   static QWindowsCaRootFetcherThread retval;
+   return &retval;
+}
 
 QWindowsCaRootFetcher::QWindowsCaRootFetcher(const QSslCertificate &certificate, QSslSocket::SslMode sslMode)
    : cert(certificate), mode(sslMode)

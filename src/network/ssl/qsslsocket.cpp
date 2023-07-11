@@ -53,7 +53,12 @@ class QSslSocketGlobalData
    QVector<QSslEllipticCurve> supportedEllipticCurves;
    QExplicitlySharedDataPointer<QSslConfigurationPrivate> config;
 };
-Q_GLOBAL_STATIC(QSslSocketGlobalData, globalData)
+
+static QSslSocketGlobalData *globalData()
+{
+   static QSslSocketGlobalData retval;
+   return &retval;
+}
 
 QSslSocket::QSslSocket(QObject *parent)
    : QTcpSocket(*new QSslSocketBackendPrivate, parent)

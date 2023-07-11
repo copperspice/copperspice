@@ -57,7 +57,12 @@ class QNetworkAccessBackendFactoryData: public QList<QNetworkAccessBackendFactor
    static QAtomicInt valid;
 };
 
-Q_GLOBAL_STATIC(QNetworkAccessBackendFactoryData, factoryData)
+static QNetworkAccessBackendFactoryData *factoryData()
+{
+   static QNetworkAccessBackendFactoryData retval;
+   return &retval;
+}
+
 QAtomicInt QNetworkAccessBackendFactoryData::valid = 0;
 
 QNetworkAccessBackendFactory::QNetworkAccessBackendFactory()

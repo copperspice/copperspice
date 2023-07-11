@@ -961,7 +961,11 @@ QImage QGLFramebufferObject::toImage() const
    return image;
 }
 
-Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_buffer_2_engine)
+static QGLEngineThreadStorage<QGL2PaintEngineEx> *qt_buffer_2_engine()
+{
+   static QGLEngineThreadStorage<QGL2PaintEngineEx> retval;
+   return &retval;
+}
 
 QPaintEngine *QGLFramebufferObject::paintEngine() const
 {

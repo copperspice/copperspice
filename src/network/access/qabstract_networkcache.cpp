@@ -56,8 +56,12 @@ class QNetworkCacheMetaDataPrivate : public QSharedData
    static void save(QDataStream &out, const QNetworkCacheMetaData &metaData);
    static void load(QDataStream &in, QNetworkCacheMetaData &metaData);
 };
-Q_GLOBAL_STATIC(QNetworkCacheMetaDataPrivate, metadata_shared_invalid)
 
+static QNetworkCacheMetaDataPrivate *metadata_shared_invalid()
+{
+   static QNetworkCacheMetaDataPrivate retval;
+   return &retval;
+}
 
 QNetworkCacheMetaData::QNetworkCacheMetaData()
    : d(new QNetworkCacheMetaDataPrivate)

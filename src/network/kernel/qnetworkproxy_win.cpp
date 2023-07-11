@@ -468,7 +468,11 @@ class QWindowsSystemProxy
    bool isAutoConfig;
 };
 
-Q_GLOBAL_STATIC(QWindowsSystemProxy, systemProxy)
+static QWindowsSystemProxy *systemProxy()
+{
+   static QWindowsSystemProxy retval;
+   return &retval;
+}
 
 QWindowsSystemProxy::QWindowsSystemProxy()
    : hHttpSession(nullptr), initialized(false), functional(false), isAutoConfig(false)

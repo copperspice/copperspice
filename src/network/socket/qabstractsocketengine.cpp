@@ -32,7 +32,11 @@ class QSocketEngineHandlerList : public QList<QSocketEngineHandler *>
    QMutex mutex;
 };
 
-Q_GLOBAL_STATIC(QSocketEngineHandlerList, socketHandlers)
+static QSocketEngineHandlerList *socketHandlers()
+{
+   static QSocketEngineHandlerList retval;
+   return &retval;
+}
 
 QSocketEngineHandler::QSocketEngineHandler()
 {

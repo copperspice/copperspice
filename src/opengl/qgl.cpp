@@ -75,7 +75,11 @@ class QGLDefaultExtensions
    QOpenGLExtensions::OpenGLExtensions extensions;
 };
 
-Q_GLOBAL_STATIC(QGLDefaultExtensions, qtDefaultExtensions)
+static QGLDefaultExtensions *qtDefaultExtensions()
+{
+   static QGLDefaultExtensions retval;
+   return &retval;
+}
 
 bool qgl_hasFeature(QOpenGLFunctions::OpenGLFeature feature)
 {
@@ -133,7 +137,11 @@ struct QGLThreadContext {
    QGLContext *context;
 };
 
-Q_GLOBAL_STATIC(QGLFormat, qgl_default_format)
+static QGLFormat *qgl_default_format()
+{
+   static QGLFormat retval;
+   return &retval;
+}
 
 class QGLDefaultOverlayFormat: public QGLFormat
 {
@@ -145,8 +153,17 @@ class QGLDefaultOverlayFormat: public QGLFormat
    }
 };
 
-Q_GLOBAL_STATIC(QGLDefaultOverlayFormat, defaultOverlayFormatInstance)
-Q_GLOBAL_STATIC(QGLSignalProxy, theSignalProxy)
+static QGLDefaultOverlayFormat *defaultOverlayFormatInstance()
+{
+   static QGLDefaultOverlayFormat retval;
+   return &retval;
+}
+
+static QGLSignalProxy *theSignalProxy()
+{
+   static QGLSignalProxy retval;
+   return &retval;
+}
 
 QGLSignalProxy *QGLSignalProxy::instance()
 {
@@ -933,7 +950,11 @@ struct QGLContextGroupList {
    QRecursiveMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QGLContextGroupList, qt_context_groups)
+static QGLContextGroupList *qt_context_groups()
+{
+   static QGLContextGroupList retval;
+   return &retval;
+}
 
 QGLContextGroup::QGLContextGroup(const QGLContext *context)
    : m_context(context), m_refs(1)
@@ -1157,7 +1178,11 @@ QImage qt_gl_read_texture(const QSize &size, bool alpha_format, bool include_alp
    return img;
 }
 
-Q_GLOBAL_STATIC(QGLTextureCache, qt_gl_texture_cache)
+static QGLTextureCache *qt_gl_texture_cache()
+{
+   static QGLTextureCache retval;
+   return &retval;
+}
 
 QGLTextureCache::QGLTextureCache()
    : m_cache(64 * 1024) // cache ~64 MB worth of textures - this is not accurate though
@@ -3198,7 +3223,11 @@ void QGLWidget::drawTexture(const QPointF &point, GLuint textureId, GLenum textu
    d->glcx->drawTexture(point, textureId, textureTarget);
 }
 
-Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_gl_2_engine)
+static QGLEngineThreadStorage<QGL2PaintEngineEx> *qt_gl_2_engine()
+{
+   static QGLEngineThreadStorage<QGL2PaintEngineEx> retval;
+   return &retval;
+}
 
 Q_OPENGL_EXPORT QPaintEngine *qt_qgl_paint_engine()
 {
@@ -3243,7 +3272,11 @@ void QGLWidgetPrivate::cleanupColormaps()
 {
 }
 
-Q_GLOBAL_STATIC(QString, qt_gl_lib_name)
+static QString *qt_gl_lib_name()
+{
+   static QString retval;
+   return &retval;
+}
 
 void qt_set_gl_library_name(const QString &name)
 {

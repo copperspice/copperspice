@@ -206,7 +206,11 @@ void QHttpPartPrivate::checkHeaderCreated() const
    }
 }
 
-Q_GLOBAL_STATIC(QThreadStorage<bool *>, seedCreatedStorage);
+static QThreadStorage<bool *> *seedCreatedStorage()
+{
+   static QThreadStorage<bool *> retval;
+   return &retval;
+}
 
 QHttpMultiPartPrivate::QHttpMultiPartPrivate() : contentType(QHttpMultiPart::MixedType),
    device(new QHttpMultiPartIODevice(this))

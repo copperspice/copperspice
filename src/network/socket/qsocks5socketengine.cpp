@@ -335,7 +335,11 @@ class QSocks5BindStore : public QObject
    QHash<int, QSocks5BindData *> store;
 };
 
-Q_GLOBAL_STATIC(QSocks5BindStore, socks5BindStore)
+static QSocks5BindStore *socks5BindStore()
+{
+   static QSocks5BindStore retval;
+   return &retval;
+}
 
 QSocks5BindStore::QSocks5BindStore()
    : sweepTimerId(-1)
