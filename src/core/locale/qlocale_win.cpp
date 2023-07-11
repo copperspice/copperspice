@@ -122,7 +122,12 @@ struct QSystemLocalePrivate {
    static QString fromWinFormat(const QString &sys_fmt);
 
 };
-Q_GLOBAL_STATIC(QSystemLocalePrivate, systemLocalePrivate)
+
+static QSystemLocalePrivate *systemLocalePrivate()
+{
+   static QSystemLocalePrivate retval;
+   return &retval;
+}
 
 QSystemLocalePrivate::QSystemLocalePrivate()
    : substitutionType(SUnknown)

@@ -202,8 +202,13 @@ QString QPluginLoader::errorString() const
    return (! mp_handle || mp_handle->errorString.isEmpty()) ? tr("Unknown error") : mp_handle->errorString;
 }
 
-typedef QVector<QMetaObject *> StaticPluginList;
-Q_GLOBAL_STATIC(StaticPluginList, staticPluginList)
+using StaticPluginList = QVector<QMetaObject *>;
+
+static StaticPluginList *staticPluginList()
+{
+   static StaticPluginList retval;
+   return &retval;
+}
 
 void QPluginLoader::setLoadHints(QLibrary::LoadHints loadHints)
 {

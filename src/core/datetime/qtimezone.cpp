@@ -98,7 +98,11 @@ class QTimeZoneSingleton
    QSharedDataPointer<QTimeZonePrivate> backend;
 };
 
-Q_GLOBAL_STATIC(QTimeZoneSingleton, global_tz);
+static QTimeZoneSingleton *global_tz()
+{
+   static QTimeZoneSingleton retval;
+   return &retval;
+}
 
 QTimeZone::QTimeZone()
    : d(nullptr)

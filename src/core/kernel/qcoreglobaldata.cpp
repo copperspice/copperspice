@@ -23,7 +23,11 @@
 
 #include <qcoreglobaldata_p.h>
 
-Q_GLOBAL_STATIC(QCoreGlobalData, globalInstance)
+static QCoreGlobalData *globalInstance()
+{
+   static QCoreGlobalData retval;
+   return &retval;
+}
 
 QCoreGlobalData *QCoreGlobalData::instance()
 {

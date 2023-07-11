@@ -331,11 +331,16 @@ class QEmptyItemModel : public QAbstractItemModel
    }
 };
 
-Q_GLOBAL_STATIC(QEmptyItemModel, qEmptyModel)
+static QEmptyItemModel *qEmptyModel()
+{
+   static QEmptyItemModel retval;
+   return &retval;
+}
 
 QAbstractItemModelPrivate::~QAbstractItemModelPrivate()
 {
 }
+
 QAbstractItemModel *QAbstractItemModelPrivate::staticEmptyModel()
 {
    return qEmptyModel();
@@ -355,7 +360,11 @@ namespace {
    };
 }
 
-Q_GLOBAL_STATIC(DefaultRoleNames, qDefaultRoleNames)
+static DefaultRoleNames *qDefaultRoleNames()
+{
+   static DefaultRoleNames retval;
+   return &retval;
+}
 
 const QMultiHash<int, QString> &QAbstractItemModelPrivate::defaultRoleNames()
 {

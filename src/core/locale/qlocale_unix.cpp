@@ -81,7 +81,13 @@ struct QSystemLocaleData {
    QByteArray lc_messages_var;
    QByteArray lc_measurement_var;
 };
-Q_GLOBAL_STATIC(QSystemLocaleData, qSystemLocaleData)
+
+static QSystemLocaleData *qSystemLocaleData()
+{
+   static QSystemLocaleData retval;
+   return &retval;
+}
+
 #endif
 
 #ifndef QT_NO_SYSTEMLOCALE

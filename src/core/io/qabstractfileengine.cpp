@@ -53,7 +53,12 @@ class QAbstractFileEngineHandlerList : public QList<QAbstractFileEngineHandler *
       qt_abstractfileenginehandlerlist_shutDown = true;
    }
 };
-Q_GLOBAL_STATIC(QAbstractFileEngineHandlerList, fileEngineHandlers)
+
+static QAbstractFileEngineHandlerList *fileEngineHandlers()
+{
+   static QAbstractFileEngineHandlerList retval;
+   return &retval;
+}
 
 QAbstractFileEngineHandler::QAbstractFileEngineHandler()
 {

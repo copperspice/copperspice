@@ -77,16 +77,40 @@ struct QConfFileCustomFormat {
    Qt::CaseSensitivity caseSensitivity;
 };
 
-typedef QHash<QString, QConfFile *> ConfFileHash;
-typedef QCache<QString, QConfFile> ConfFileCache;
-typedef QHash<int, QString> PathHash;
-typedef QVector<QConfFileCustomFormat> CustomFormatVector;
+using ConfFileHash       = QHash<QString, QConfFile *>;
+using ConfFileCache      = QCache<QString, QConfFile>;
+using PathHash           = QHash<int, QString>;
+using CustomFormatVector = QVector<QConfFileCustomFormat>;
 
-Q_GLOBAL_STATIC(ConfFileHash, usedHashFunc)
-Q_GLOBAL_STATIC(ConfFileCache, unusedCacheFunc)
-Q_GLOBAL_STATIC(PathHash, pathHashFunc)
-Q_GLOBAL_STATIC(CustomFormatVector, customFormatVectorFunc)
-Q_GLOBAL_STATIC(QMutex, globalMutex)
+static ConfFileHash *usedHashFunc()
+{
+   static ConfFileHash retval;
+   return &retval;
+}
+
+static ConfFileCache *unusedCacheFunc()
+{
+   static ConfFileCache retval;
+   return &retval;
+}
+
+static PathHash *pathHashFunc()
+{
+   static PathHash retval;
+   return &retval;
+}
+
+static CustomFormatVector *customFormatVectorFunc()
+{
+   static CustomFormatVector retval;
+   return &retval;
+}
+
+static QMutex *globalMutex()
+{
+   static QMutex retval;
+   return &retval;
+}
 
 static QSettings::Format globalDefaultFormat = QSettings::NativeFormat;
 

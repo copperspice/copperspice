@@ -179,7 +179,11 @@ SidCleanup::~SidCleanup()
    }
 }
 
-Q_GLOBAL_STATIC(SidCleanup, initSidCleanup)
+static SidCleanup *initSidCleanup()
+{
+   static SidCleanup retval;
+   return &retval;
+}
 
 static void resolveLibs()
 {

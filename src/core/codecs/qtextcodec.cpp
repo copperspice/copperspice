@@ -87,7 +87,12 @@
 
 // Cache for QTextCodec::codecForName and codecForMib.
 using QTextCodecCache = QHash<QString, QTextCodec *>;
-Q_GLOBAL_STATIC(QTextCodecCache, qTextCodecCache)
+
+static QTextCodecCache *qTextCodecCache()
+{
+   static QTextCodecCache retval;
+   return &retval;
+}
 
 static bool nameMatch(QStringView name, QStringView test)
 {
@@ -201,7 +206,11 @@ QTextCodecCleanup::~QTextCodecCleanup()
    localeMapper = nullptr;
 }
 
-Q_GLOBAL_STATIC(QTextCodecCleanup, createQTextCodecCleanup)
+static QTextCodecCleanup *createQTextCodecCleanup()
+{
+   static QTextCodecCleanup retval;
+   return &retval;
+}
 
 bool QTextCodec::validCodecs()
 {

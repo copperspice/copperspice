@@ -146,7 +146,11 @@ static void qIconvCodecStateFree(QTextCodec::ConverterState *state)
    delete reinterpret_cast<QIconvCodec::IconvState *>(state->m_data);
 }
 
-Q_GLOBAL_STATIC(QThreadStorage<QIconvCodec::IconvState *>, toUnicodeState)
+static QThreadStorage<QIconvCodec::IconvState *> *toUnicodeState()
+{
+   static QThreadStorage<QIconvCodec::IconvState *> retval;
+   return &retval;
+}
 
 QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState *convState) const
 {
@@ -303,7 +307,11 @@ QString QIconvCodec::convertToUnicode(const char *chars, int len, ConverterState
    return s;
 }
 
-Q_GLOBAL_STATIC(QThreadStorage<QIconvCodec::IconvState *>, fromUnicodeState)
+static QThreadStorage<QIconvCodec::IconvState *> *fromUnicodeState()
+{
+   static QThreadStorage<QIconvCodec::IconvState *> retval;
+   return &retval;
+}
 
 static bool setByteOrder(iconv_t cd)
 {

@@ -155,7 +155,11 @@ bool QCoreApplicationPrivate::checkInstance(const char *function)
    return b;
 }
 
-Q_GLOBAL_STATIC(QString, qmljs_debug_arguments);
+static QString *qmljs_debug_arguments()
+{
+   static QString retval;
+   return &retval;
+}
 
 void QCoreApplicationPrivate::processCommandLineArguments()
 {
@@ -197,11 +201,20 @@ extern "C" void Q_CORE_EXPORT qt_startup_hook()
 {
 }
 
-using QStartUpFuncList  = QList<QtStartUpFunction>;
-Q_GLOBAL_STATIC(QStartUpFuncList, preRList)
+using QStartUpFuncList = QList<QtStartUpFunction>;
+using QVFuncList       = QList<QtCleanUpFunction>;
 
-using QVFuncList = QList<QtCleanUpFunction>;
-Q_GLOBAL_STATIC(QVFuncList, postRList)
+static QStartUpFuncList *preRList()
+{
+   static QStartUpFuncList retval;
+   return &retval;
+}
+
+static QVFuncList *postRList()
+{
+   static QVFuncList retval;
+   return &retval;
+}
 
 static QMutex globalPreRoutinesMutex;
 

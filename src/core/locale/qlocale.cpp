@@ -64,7 +64,11 @@ static QSystemLocale *QSystemLocale_globalSystemLocale()
    return &retval;
 }
 
-Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
+static QLocaleData *globalLocaleData()
+{
+   static QLocaleData retval;
+   return &retval;
+}
 
 #endif
 

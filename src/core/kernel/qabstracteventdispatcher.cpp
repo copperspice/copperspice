@@ -68,8 +68,13 @@ const int QtTimerIdFreeListConstants::Sizes[QtTimerIdFreeListConstants::BlockCou
     Size5
 };
 
-typedef QFreeList<void, QtTimerIdFreeListConstants> QtTimerIdFreeList;
-Q_GLOBAL_STATIC(QtTimerIdFreeList, timerIdFreeList)
+using QtTimerIdFreeList = QFreeList<void, QtTimerIdFreeListConstants>;
+
+static QtTimerIdFreeList *timerIdFreeList()
+{
+   static QtTimerIdFreeList retval;
+   return &retval;
+}
 
 int QAbstractEventDispatcherPrivate::allocateTimerId()
 {

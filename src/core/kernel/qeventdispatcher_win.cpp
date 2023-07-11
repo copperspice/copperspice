@@ -365,7 +365,12 @@ QWindowsMessageWindowClassContext::~QWindowsMessageWindowClassContext()
    }
 }
 
-Q_GLOBAL_STATIC(QWindowsMessageWindowClassContext, qWindowsMessageWindowClassContext)
+static QWindowsMessageWindowClassContext *qWindowsMessageWindowClassContext()
+{
+   static QWindowsMessageWindowClassContext retval;
+   return &retval;
+}
+
 static HWND qt_create_internal_window(const QEventDispatcherWin32 *eventDispatcher)
 {
     QWindowsMessageWindowClassContext *ctx = qWindowsMessageWindowClassContext();

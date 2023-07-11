@@ -136,8 +136,17 @@ static QRecursiveMutex *resourceMutex()
 
 using ResourceList = QList<QResourceRoot *>;
 
-Q_GLOBAL_STATIC(ResourceList, resourceList)
-Q_GLOBAL_STATIC(QStringList,  resourceSearchPaths)
+static ResourceList *resourceList()
+{
+   static ResourceList retval;
+   return &retval;
+}
+
+static QStringList *resourceSearchPaths()
+{
+   static QStringList retval;
+   return &retval;
+}
 
 class QResourcePrivate
 {

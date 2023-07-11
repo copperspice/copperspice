@@ -197,9 +197,13 @@ struct QWinDynamicTimeZone {
    bool daylightTime;
 };
 
-typedef QHash<QByteArray, QWinDynamicTimeZone> QWinRTTimeZoneHash;
+using QWinRTTimeZoneHash = QHash<QByteArray, QWinDynamicTimeZone>;
 
-Q_GLOBAL_STATIC(QWinRTTimeZoneHash, gTimeZones)
+static QWinRTTimeZoneHash *gTimeZones()
+{
+   static QWinRTTimeZoneHash retval;
+   return &retval;
+}
 
 static void enumerateTimeZones()
 {

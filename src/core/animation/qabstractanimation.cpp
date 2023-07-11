@@ -36,7 +36,11 @@
 #define DEFAULT_TIMER_INTERVAL 16
 #define STARTSTOP_TIMER_DELAY 0
 
-Q_GLOBAL_STATIC(QThreadStorage<QUnifiedTimer *>, unifiedTimer)
+static QThreadStorage<QUnifiedTimer *> *unifiedTimer()
+{
+   static QThreadStorage<QUnifiedTimer *> retval;
+   return &retval;
+}
 
 QUnifiedTimer::QUnifiedTimer() :
    QObject(), defaultDriver(this), lastTick(0), timingInterval(DEFAULT_TIMER_INTERVAL),

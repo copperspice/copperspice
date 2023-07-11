@@ -104,7 +104,11 @@ class QDnotifySignalThread : public QThread
 
 };
 
-Q_GLOBAL_STATIC(QDnotifySignalThread, dnotifySignal)
+static QDnotifySignalThread *dnotifySignal()
+{
+   static QDnotifySignalThread retval;
+   return &retval;
+}
 
 QDnotifySignalThread::QDnotifySignalThread()
    : isExecing(false)

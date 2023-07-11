@@ -27,7 +27,11 @@
 #include <qpair.h>
 #include <qelapsedtimer.h>
 
-Q_GLOBAL_STATIC(QThreadPool, theInstance)
+static QThreadPool *theInstance()
+{
+   static QThreadPool retval;
+   return &retval;
+}
 
 class QThreadPoolThread : public QThread
 {
