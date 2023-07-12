@@ -496,7 +496,11 @@ class QFontDatabasePrivate
    void invalidate();
 };
 
-Q_GLOBAL_STATIC(QFontDatabasePrivate, privateDb)
+static QFontDatabasePrivate *privateDb()
+{
+   static QFontDatabasePrivate retval;
+   return &retval;
+}
 
 static QRecursiveMutex *fontDatabaseMutex()
 {

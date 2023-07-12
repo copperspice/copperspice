@@ -61,7 +61,11 @@ class QOpenUrlHandlerRegistry : public QObject
    GUI_CS_SLOT_2(handlerDestroyed)
 };
 
-Q_GLOBAL_STATIC(QOpenUrlHandlerRegistry, handlerRegistry)
+static QOpenUrlHandlerRegistry *handlerRegistry()
+{
+   static QOpenUrlHandlerRegistry retval;
+   return &retval;
+}
 
 void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 {

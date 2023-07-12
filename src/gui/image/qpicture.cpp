@@ -1141,8 +1141,13 @@ QPictureHandler::QPictureHandler(const QString &f, const QString &h, const QStri
    write_picture = w;
 }
 
-typedef QList<QPictureHandler *> QPHList;
-Q_GLOBAL_STATIC(QPHList, pictureHandlers)
+using QPHList  = QList<QPictureHandler *>;
+
+static QPHList *pictureHandlers()
+{
+   static QPHList retval;
+   return &retval;
+}
 
 void qt_init_picture_plugins()
 {

@@ -145,7 +145,12 @@ class QGuiGLThreadContext
    QOpenGLContext *context;
 };
 
-Q_GLOBAL_STATIC(QThreadStorage<QGuiGLThreadContext *>, qwindow_context_storage);
+static QThreadStorage<QGuiGLThreadContext *> *qwindow_context_storage()
+{
+   static QThreadStorage<QGuiGLThreadContext *> retval;
+   return &retval;
+}
+
 static QOpenGLContext *global_share_context = nullptr;
 
 #ifndef QT_NO_DEBUG

@@ -86,7 +86,11 @@ private:
     QMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QOpenGLTextureCacheWrapper, qt_texture_caches)
+static QOpenGLTextureCacheWrapper *qt_texture_caches()
+{
+   static QOpenGLTextureCacheWrapper retval;
+   return &retval;
+}
 
 QOpenGLTextureCache *QOpenGLTextureCache::cacheForContext(QOpenGLContext *context)
 {

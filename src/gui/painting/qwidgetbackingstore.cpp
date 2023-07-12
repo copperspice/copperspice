@@ -47,7 +47,13 @@
 extern QRegion qt_dirtyRegion(QWidget *);
 
 #ifndef QT_NO_OPENGL
-Q_GLOBAL_STATIC(QPlatformTextureList, qt_dummy_platformTextureList)
+
+static QPlatformTextureList *qt_dummy_platformTextureList()
+{
+   static QPlatformTextureList retval;
+   return &retval;
+}
+
 #endif
 
 /**

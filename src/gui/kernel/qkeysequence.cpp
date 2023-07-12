@@ -617,8 +617,17 @@ struct QModifKeyName {
    QString name;
 };
 
-Q_GLOBAL_STATIC(QVector<QModifKeyName>, globalModifs)
-Q_GLOBAL_STATIC(QVector<QModifKeyName>, globalPortableModifs)
+static QVector<QModifKeyName> *globalModifs()
+{
+   static QVector<QModifKeyName> retval;
+   return &retval;
+}
+
+static QVector<QModifKeyName> *globalPortableModifs()
+{
+   static QVector<QModifKeyName> retval;
+   return &retval;
+}
 
 int QKeySequence::decodeString(const QString &str)
 {

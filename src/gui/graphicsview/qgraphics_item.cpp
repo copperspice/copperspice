@@ -83,7 +83,11 @@ class QGraphicsItemCustomDataStore
    QHash<const QGraphicsItem *, QMap<int, QVariant>> data;
 };
 
-Q_GLOBAL_STATIC(QGraphicsItemCustomDataStore, qt_dataStore)
+static QGraphicsItemCustomDataStore *qt_dataStore()
+{
+   static QGraphicsItemCustomDataStore retval;
+   return &retval;
+}
 
 // internal
 static QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath &path, const QPen &pen)

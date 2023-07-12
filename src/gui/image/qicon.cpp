@@ -58,7 +58,11 @@ struct IconCache : public QCache<QString, QIcon> {
 
 }
 
-Q_GLOBAL_STATIC(IconCache, qtIconCache)
+static IconCache *qtIconCache()
+{
+   static IconCache retval;
+   return &retval;
+}
 
 static void qt_cleanup_icon_cache()
 {

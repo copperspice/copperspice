@@ -76,7 +76,11 @@ void QKeyMapper::changeKeyboard()
 
 }
 
-Q_GLOBAL_STATIC(QKeyMapper, keymapper)
+static QKeyMapper *keymapper()
+{
+   static QKeyMapper retval;
+   return &retval;
+}
 
 QKeyMapper *QKeyMapper::instance()
 {

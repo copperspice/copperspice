@@ -140,7 +140,11 @@ class QBrushPatternImageCache
    bool m_initialized;
 };
 
-Q_GLOBAL_STATIC(QBrushPatternImageCache, qt_brushPatternImageCache)
+static QBrushPatternImageCache *qt_brushPatternImageCache()
+{
+   static QBrushPatternImageCache retval;
+   return &retval;
+}
 
 static void qt_cleanup_brush_pattern_image_cache()
 {
@@ -261,7 +265,11 @@ class QNullBrushData
    }
 };
 
-Q_GLOBAL_STATIC(QNullBrushData, nullBrushInstance_holder)
+static QNullBrushData *nullBrushInstance_holder()
+{
+   static QNullBrushData retval;
+   return &retval;
+}
 
 static QBrushData *nullBrushInstance()
 {

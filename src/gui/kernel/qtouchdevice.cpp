@@ -82,9 +82,14 @@ void QTouchDevice::setName(const QString &name)
    d->name = name;
 }
 
-typedef QList<const QTouchDevice *> TouchDevices;
+using TouchDevices = QList<const QTouchDevice *>;
 
-Q_GLOBAL_STATIC(TouchDevices, deviceList)
+static TouchDevices *deviceList()
+{
+   static TouchDevices retval;
+   return &retval;
+}
+
 static QMutex devicesMutex;
 
 static void cleanupDevicesList()

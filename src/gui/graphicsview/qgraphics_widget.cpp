@@ -88,7 +88,11 @@ class QGraphicsWidgetStyles
    mutable QMutex mutex;
 };
 
-Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
+static QGraphicsWidgetStyles *widgetStyles()
+{
+   static QGraphicsWidgetStyles retval;
+   return &retval;
+}
 
 QGraphicsWidget::~QGraphicsWidget()
 {

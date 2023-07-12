@@ -124,7 +124,11 @@ QtFreetypeData::~QtFreetypeData()
    library = nullptr;
 }
 
-Q_GLOBAL_STATIC(QThreadStorage<QtFreetypeData *>, theFreetypeData)
+static QThreadStorage<QtFreetypeData *> *theFreetypeData()
+{
+   static QThreadStorage<QtFreetypeData *> retval;
+   return &retval;
+}
 
 QtFreetypeData *qt_getFreetypeData()
 {

@@ -120,7 +120,11 @@ class QPMCache : public QObject, public QCache<QPixmapCache::Key, QPixmapCacheEn
    bool t;
 };
 
-Q_GLOBAL_STATIC(QPMCache, pm_cache)
+static QPMCache *pm_cache()
+{
+   static QPMCache retval;
+   return &retval;
+}
 
 uint qHash(const QPixmapCache::Key &k)
 {

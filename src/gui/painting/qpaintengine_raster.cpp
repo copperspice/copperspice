@@ -4439,7 +4439,11 @@ void QGradientCache::generateGradientColorTable(const QGradient &gradient, QRgba
    colorTable[size - 1] = current_color;
 }
 
-Q_GLOBAL_STATIC(QGradientCache, qt_gradient_cache)
+static QGradientCache *qt_gradient_cache()
+{
+   static QGradientCache retval;
+   return &retval;
+}
 
 void QSpanData::init(QRasterBuffer *rb, const QRasterPaintEngine *pe)
 {

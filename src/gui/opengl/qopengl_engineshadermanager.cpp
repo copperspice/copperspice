@@ -83,7 +83,11 @@ private:
     QThreadStorage<QOpenGLMultiGroupSharedResource *> m_storage;
 };
 
-Q_GLOBAL_STATIC(QOpenGLShaderStorage, qt_shader_storage);
+static QOpenGLShaderStorage *qt_shader_storage()
+{
+   static QOpenGLShaderStorage retval;
+   return &retval;
+}
 
 QOpenGLEngineSharedShaders *QOpenGLEngineSharedShaders::shadersForContext(QOpenGLContext *context)
 {

@@ -98,7 +98,11 @@ class QOpenGLEngineThreadStorage
     QThreadStorage<QPaintEngine *> storage;
 };
 
-Q_GLOBAL_STATIC(QOpenGLEngineThreadStorage, qt_opengl_engine)
+static QOpenGLEngineThreadStorage *qt_opengl_engine()
+{
+   static QOpenGLEngineThreadStorage retval;
+   return &retval;
+}
 
 QPaintEngine *QOpenGLPaintDevice::paintEngine() const
 {

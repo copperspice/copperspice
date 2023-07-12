@@ -40,7 +40,11 @@
 #include <qicon_p.h>
 #include <qhexstring_p.h>
 
-Q_GLOBAL_STATIC(QIconLoader, iconLoaderInstance)
+static QIconLoader *iconLoaderInstance()
+{
+   static QIconLoader retval;
+   return &retval;
+}
 
 /* Theme to use in last resort, if the theme does not have the icon, neither the parents  */
 static QString fallbackTheme()

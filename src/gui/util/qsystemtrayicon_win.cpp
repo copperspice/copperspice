@@ -138,9 +138,13 @@ static bool allowsMessages()
 #endif
 }
 
-typedef QHash<HWND, QSystemTrayIconSys *> HandleTrayIconHash;
+using HandleTrayIconHash = QHash<HWND, QSystemTrayIconSys *>;
 
-Q_GLOBAL_STATIC(HandleTrayIconHash, handleTrayIconHash)
+static HandleTrayIconHash *handleTrayIconHash()
+{
+   static HandleTrayIconHash retval;
+   return &retval;
+}
 
 extern "C" LRESULT QT_WIN_CALLBACK qWindowsTrayconWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

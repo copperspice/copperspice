@@ -80,8 +80,11 @@
 #undef XSetIMValues
 #endif
 
-
-Q_GLOBAL_STATIC(QGtkStyleUpdateScheduler, styleScheduler)
+static QGtkStyleUpdateScheduler *styleScheduler()
+{
+   static QGtkStyleUpdateScheduler retval;
+   return &retval;
+}
 
 Ptr_gtk_container_forall QGtkStylePrivate::gtk_container_forall = 0;
 Ptr_gtk_init QGtkStylePrivate::gtk_init = 0;

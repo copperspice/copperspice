@@ -68,7 +68,11 @@ struct QOpenGLFunctionsPrivateEx : public QOpenGLExtensionsPrivate, public QOpen
     int m_extensions;
 };
 
-Q_GLOBAL_STATIC(QOpenGLMultiGroupSharedResource, qt_gl_functions_resource)
+static QOpenGLMultiGroupSharedResource *qt_gl_functions_resource()
+{
+   static QOpenGLMultiGroupSharedResource retval;
+   return &retval;
+}
 
 static QOpenGLFunctionsPrivateEx *qt_gl_functions(QOpenGLContext *context = nullptr)
 {
@@ -1778,7 +1782,11 @@ QOpenGLFunctionsPrivate::QOpenGLFunctionsPrivate(QOpenGLContext *)
 // not have these symbols, and vice versa. Until ES3 becomes universally available, they
 // have to be dlsym'ed.
 
-Q_GLOBAL_STATIC(QOpenGLES3Helper, qgles3Helper)
+static QOpenGLES3Helper *qgles3Helper()
+{
+   static QOpenGLES3Helper retval;
+   return &retval;
+}
 
 bool QOpenGLES3Helper::init()
 {

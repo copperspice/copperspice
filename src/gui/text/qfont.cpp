@@ -1078,8 +1078,13 @@ QFont QFont::resolve(const QFont &other) const
    return font;
 }
 
-typedef QHash<QString, QStringList> QFontSubst;
-Q_GLOBAL_STATIC(QFontSubst, globalFontSubst)
+using QFontSubst = QHash<QString, QStringList>;
+
+static QFontSubst *globalFontSubst()
+{
+   static QFontSubst retval;
+   return &retval;
+}
 
 QString QFont::substitute(const QString &familyName)
 {
@@ -1585,7 +1590,11 @@ static const int slow_timeout = 300000;  //  5m
 
 const uint QFontCache::min_cost = 4 * 1024; // 4mb
 
-Q_GLOBAL_STATIC(QThreadStorage<QFontCache *>, theFontCache)
+static QThreadStorage<QFontCache *> *theFontCache()
+{
+   static QThreadStorage<QFontCache *> retval;
+   return &retval;
+}
 
 QFontCache *QFontCache::instance()
 {
@@ -1594,6 +1603,7 @@ QFontCache *QFontCache::instance()
    if (! fontCache) {
       fontCache = new QFontCache;
    }
+
    return fontCache;
 }
 

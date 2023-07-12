@@ -210,11 +210,20 @@ class QScrollTimer : public QAbstractAnimation
 };
 #endif // QT_NO_ANIMATION
 
-typedef QMap<QObject *, QScroller *> ScrollerHash;
-typedef QSet<QScroller *> ScrollerSet;
+using ScrollerHash = QMap<QObject *, QScroller *>;
+using ScrollerSet  = QSet<QScroller *>;
 
-Q_GLOBAL_STATIC(ScrollerHash, qt_allScrollers)
-Q_GLOBAL_STATIC(ScrollerSet, qt_activeScrollers)
+static ScrollerHash *qt_allScrollers()
+{
+   static ScrollerHash retval;
+   return &retval;
+}
+
+static ScrollerSet *qt_activeScrollers()
+{
+   static ScrollerSet retval;
+   return &retval;
+}
 
 bool QScroller::hasScroller(QObject *target)
 {

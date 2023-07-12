@@ -400,7 +400,11 @@ int QSurfaceFormat::swapInterval() const
    return d->swapInterval;
 }
 
-Q_GLOBAL_STATIC(QSurfaceFormat, qt_default_surface_format)
+static QSurfaceFormat *qt_default_surface_format()
+{
+   static QSurfaceFormat retval;
+   return &retval;
+}
 
 void QSurfaceFormat::setDefaultFormat(const QSurfaceFormat &format)
 {

@@ -394,7 +394,11 @@ QString QToolTip::text()
    return QString();
 }
 
-Q_GLOBAL_STATIC(QPalette, tooltip_palette)
+static QPalette *tooltip_palette()
+{
+   static QPalette retval;
+   return &retval;
+}
 
 QPalette QToolTip::palette()
 {

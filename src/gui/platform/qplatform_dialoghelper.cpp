@@ -291,7 +291,11 @@ void QColorDialogStaticData::writeSettings() const
 #endif
 }
 
-Q_GLOBAL_STATIC(QColorDialogStaticData, qColorDialogStaticData)
+static QColorDialogStaticData *qColorDialogStaticData()
+{
+   static QColorDialogStaticData retval;
+   return &retval;
+}
 
 class QColorDialogOptionsPrivate : public QSharedData
 {
