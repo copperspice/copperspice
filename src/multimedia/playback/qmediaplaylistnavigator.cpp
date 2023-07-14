@@ -44,7 +44,11 @@ class QMediaPlaylistNullProvider : public QMediaPlaylistProvider
    }
 };
 
-Q_GLOBAL_STATIC(QMediaPlaylistNullProvider, _q_nullMediaPlaylist)
+static QMediaPlaylistNullProvider *_q_nullMediaPlaylist()
+{
+   static QMediaPlaylistNullProvider retval;
+   return &retval;
+}
 
 class QMediaPlaylistNavigatorPrivate
 {

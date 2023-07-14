@@ -450,7 +450,11 @@ class QCocoaColorPanel
    QNSColorPanelDelegate *mDelegate;
 };
 
-Q_GLOBAL_STATIC(QCocoaColorPanel, sharedColorPanel)
+static QCocoaColorPanel *sharedColorPanel()
+{
+   static QCocoaColorPanel retval;
+   return &retval;
+}
 
 QCocoaColorDialogHelper::QCocoaColorDialogHelper()
 {

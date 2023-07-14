@@ -42,8 +42,13 @@ struct ContainerInfo
     }
 };
 
-typedef QMap<QString, ContainerInfo> SupportedContainers;
-Q_GLOBAL_STATIC(SupportedContainers, containers);
+using SupportedContainers = QMap<QString, ContainerInfo>;
+
+static SupportedContainers *containers()
+{
+   static SupportedContainers retval;
+   return &retval;
+}
 
 AVFMediaContainerControl::AVFMediaContainerControl(AVFCameraService *)
     : QMediaContainerControl(), m_format("mov") // .mov is the default container format on Apple platforms

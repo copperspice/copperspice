@@ -519,7 +519,12 @@ QMultimedia::SupportEstimate QGstUtils::hasSupport(const QString &mimeType, cons
 namespace {
 
 using FactoryCameraInfoMap = QHash<GstElementFactory *, QVector<QGstUtils::CameraInfo>>;
-Q_GLOBAL_STATIC(FactoryCameraInfoMap, qt_camera_device_info);
+
+static FactoryCameraInfoMap *qt_camera_device_info()
+{
+   static FactoryCameraInfoMap retval;
+   return &retval;
+}
 
 }
 

@@ -217,8 +217,17 @@ void PulseDaemon::prepare()
 
 } // namespace
 
-Q_GLOBAL_STATIC(PulseDaemon, pulseDaemon)
-Q_GLOBAL_STATIC(QSampleCache, sampleCache)
+static PulseDaemon *pulseDaemon()
+{
+   static PulseDaemon retval;
+   return &retval;
+}
+
+static QSampleCache *sampleCache()
+{
+   static QSampleCache retval;
+   return &retval;
+}
 
 namespace {
 

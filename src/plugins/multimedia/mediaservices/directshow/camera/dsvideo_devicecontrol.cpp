@@ -37,7 +37,11 @@
 
 extern const CLSID CLSID_VideoInputDeviceCategory;
 
-Q_GLOBAL_STATIC(QList<DSVideoDeviceInfo>, deviceList)
+static QList<DSVideoDeviceInfo> *deviceList()
+{
+   static QList<DSVideoDeviceInfo> retval;
+   return &retval;
+}
 
 DSVideoDeviceControl::DSVideoDeviceControl(QObject *parent)
    : QVideoDeviceSelectorControl(parent)

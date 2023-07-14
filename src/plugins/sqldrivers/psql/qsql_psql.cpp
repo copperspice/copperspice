@@ -674,7 +674,12 @@ static QString qCreateParamString(const QVector<QVariant> &boundValues, const QS
    return params;
 }
 
-Q_GLOBAL_STATIC(QMutex, qMutex)
+static QMutex *qMutex()
+{
+   static QMutex retval;
+   return &retval;
+}
+
 QString qMakePreparedStmtId()
 {
    qMutex()->lock();

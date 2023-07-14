@@ -449,7 +449,11 @@ class QCocoaFontPanel
    QNSFontPanelDelegate *mDelegate;
 };
 
-Q_GLOBAL_STATIC(QCocoaFontPanel, sharedFontPanel)
+static QCocoaFontPanel *sharedFontPanel()
+{
+   static QCocoaFontPanel retval;
+   return &retval;
+}
 
 QCocoaFontDialogHelper::QCocoaFontDialogHelper()
 {

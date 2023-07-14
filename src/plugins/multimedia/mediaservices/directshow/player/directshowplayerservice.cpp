@@ -55,7 +55,11 @@
 #include <qthread.h>
 #include <qvarlengtharray.h>
 
-Q_GLOBAL_STATIC(DirectShowEventLoop, qt_directShowEventLoop)
+static DirectShowEventLoop *qt_directShowEventLoop()
+{
+   static DirectShowEventLoop retval;
+   return &retval;
+}
 
 // QMediaPlayer uses millisecond time units, direct show uses 100 nanosecond units.
 static const int qt_directShowTimeScale = 10000;

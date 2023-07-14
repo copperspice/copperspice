@@ -226,10 +226,16 @@ static inline QString resolveBugListFile(const QString &fileName)
 }
 
 #ifndef QT_NO_OPENGL
-typedef QHash<QOpenGLConfig::Gpu, QWindowsOpenGLTester::Renderers> SupportedRenderersCache;
-Q_GLOBAL_STATIC(SupportedRenderersCache, supportedRenderersCache)
-#endif
 
+using SupportedRenderersCache = QHash<QOpenGLConfig::Gpu, QWindowsOpenGLTester::Renderers> ;
+
+static SupportedRenderersCache *supportedRenderersCache()
+{
+   static SupportedRenderersCache retval;
+   return &retval;
+}
+
+#endif
 
 QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(const GpuDescription &gpu, bool glesOnly)
 {
