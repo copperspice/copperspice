@@ -107,7 +107,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static bool isSetuidAllowed();
 
    static QCoreApplication *instance() {
-      return self;
+      return m_self;
    }
 
    static int exec();
@@ -182,7 +182,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
 
    void init();
 
-   static QCoreApplication *self;
+   static QCoreApplication *m_self;
 
    friend class QApplication;
    friend class QApplicationPrivate;
@@ -254,7 +254,7 @@ inline bool QCoreApplication::sendEvent(QObject *receiver, QEvent *event)
       event->spont = false;
    }
 
-   return self ? self->notifyInternal(receiver, event) : false;
+   return m_self ? m_self->notifyInternal(receiver, event) : false;
 }
 
 inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *event)
@@ -263,7 +263,7 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
       event->spont = true;
    }
 
-   return self ? self->notifyInternal(receiver, event) : false;
+   return m_self ? m_self->notifyInternal(receiver, event) : false;
 }
 
 #define Q_DECLARE_TR_FUNCTIONS(context) \
