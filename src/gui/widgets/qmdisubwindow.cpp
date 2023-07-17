@@ -90,9 +90,17 @@ static inline int getResizeDeltaComponent(uint cflags, uint resizeFlag, uint res
    return 0;
 }
 
+#if (defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)) ||  \
+   (defined(QT_NO_MENUBAR) || defined(QT_NO_MAINWINDOW))
+
+   // do not implement
+
+#else
+
 static inline bool isChildOfQMdiSubWindow(const QWidget *child)
 {
    Q_ASSERT(child);
+
    QWidget *parent = child->parentWidget();
 
    while (parent) {
@@ -102,8 +110,11 @@ static inline bool isChildOfQMdiSubWindow(const QWidget *child)
       parent = parent->parentWidget();
 
    }
+
    return false;
 }
+
+#endif
 
 static inline bool isChildOfTabbedQMdiArea(const QMdiSubWindow *child)
 {
@@ -1718,9 +1729,6 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
    *minWidth = tempWidth;
 }
 
-/*!
-    \internal
-*/
 bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
 {
    Q_Q(const QMdiSubWindow);
@@ -1732,8 +1740,9 @@ bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
       return false;
    }
 
-#if defined(Q_OS_DARWIN) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
    return true;
+
 #else
    if (q->style()->styleHint(QStyle::SH_Workspace_FillSpaceOnMaximize, nullptr, q)) {
       return true;
@@ -1741,15 +1750,18 @@ bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
 
 #if defined(QT_NO_MENUBAR) || defined(QT_NO_MAINWINDOW)
    return true;
+
 #else
    QMainWindow *mainWindow = qobject_cast<QMainWindow *>(q->window());
-   if (!mainWindow || !qobject_cast<QMenuBar *>(mainWindow->menuWidget())
-      || mainWindow->menuWidget()->isHidden()) {
+
+   if (! mainWindow || !qobject_cast<QMenuBar *>(mainWindow->menuWidget())
+         || mainWindow->menuWidget()->isHidden()) {
       return true;
    }
 
    return isChildOfQMdiSubWindow(q);
 #endif
+
 #endif
 }
 
