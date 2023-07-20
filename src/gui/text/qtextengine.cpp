@@ -1493,13 +1493,6 @@ int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, Q
    return glyphs_shaped;
 }
 
-static inline void moveGlyphData(const QGlyphLayout &destination, const QGlyphLayout &source, int num)
-{
-   if (num > 0 && destination.glyphs != source.glyphs) {
-      memmove(destination.glyphs, source.glyphs, num * sizeof(glyph_t));
-   }
-}
-
 void QTextEngine::init(QTextEngine *e)
 {
    e->ignoreBidi         = false;
