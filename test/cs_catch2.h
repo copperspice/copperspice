@@ -47,6 +47,13 @@ namespace Catch {
    };
 
    template <>
+   struct StringMaker<QChar> {
+      static std::string convert(const QChar &value) {
+         return QString("\\U%1").formatArg(value.unicode(), 8, 16, '0').toStdString();
+      }
+   };
+
+   template <>
    struct StringMaker<QDate> {
       static std::string convert(const QDate &value) {
          return value.toString().toStdString();
@@ -57,6 +64,15 @@ namespace Catch {
    struct StringMaker<QLocale> {
       static std::string convert(const QLocale &value) {
          return value.name().toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QMargins> {
+      static std::string convert(const QMargins &value) {
+         QString retval = QString8("%1 %2 %3 %4")
+               .formatArgs(value.left(), value.top(), value.right(), value.bottom());
+         return retval.toStdString();
       }
    };
 
@@ -78,15 +94,6 @@ namespace Catch {
    struct StringMaker<QStringView> {
       static std::string convert(const QStringView &value) {
          return value.toString().toStdString();
-      }
-   };
-
-   template <>
-   struct StringMaker<QMargins> {
-      static std::string convert(const QMargins &value) {
-         QString retval = QString8("%1 %2 %3 %4")
-               .formatArgs(value.left(), value.top(), value.right(), value.bottom());
-         return retval.toStdString();
       }
    };
 
