@@ -31,8 +31,12 @@
 
 inline std::unique_ptr<QCoreApplication> initCoreApp()
 {
-   int argc    = 0;
-   auto retval = std::make_unique<QCoreApplication>(argc, nullptr);
+   int argc     = 1;
+
+   char tmp[]   = "dummy";
+   char *argv[] = {tmp};
+
+   auto retval = std::make_unique<QCoreApplication>(argc, argv);
 
    return retval;
 }
