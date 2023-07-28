@@ -42,19 +42,19 @@ void myMessageTest(QtMsgType type, QStringView msg) {
       case QtDebugMsg:
          fputs("Debug: ", handle);
 
-         CHECK(msg.size_storage() == 23);
+         REQUIRE(msg.size_storage() == 23);
          break;
 
       case QtWarningMsg:
          fputs("Warning: ", handle);
 
-         CHECK(msg.size_storage() == 27);
+         REQUIRE(msg.size_storage() == 27);
          break;
 
       case QtCriticalMsg:
          fputs("Critical: ", handle);
 
-         CHECK(msg.size_storage() == 15);
+         REQUIRE(msg.size_storage() == 15);
          break;
 
       case QtFatalMsg:
