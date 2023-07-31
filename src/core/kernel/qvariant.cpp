@@ -3783,10 +3783,23 @@ uint QVariant::getTypeId(const std::type_index &index)
    uint retval = QVariant::Invalid;
 
    for (const auto &item : builtinTypes) {
+
+#if defined(Q_OS_DARWIN) || defined(Q_OS_FREEBSD)
+      // does not support comparing hash_code()
+
+      if (strcmp(item.meta_typeT.name(), index.name()) == 0) {
+         retval = item.meta_typeId;
+         break;
+      }
+
+#else
       if (item.meta_typeT == index)  {
          retval = item.meta_typeId;
          break;
       }
+
+#endif
+
    }
 
    if (retval == QVariant::Invalid) {
