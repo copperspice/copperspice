@@ -28,22 +28,21 @@ class QCssScanner_Generated
    QCssScanner_Generated(const QString &inp);
 
    inline QChar next() {
-      return (pos < input.length()) ? input.at(pos++) : QChar();
+      return (pos != input.end()) ? *pos++ : QChar();
    }
    int handleCommentStart();
    int lex();
 
-   QString input;
-   int pos;
-   int lexemStart;
+   const QString& input;
+   QString::const_iterator pos;
+   QString::const_iterator lexemStart;
    int lexemLength;
 };
 
-QCssScanner_Generated::QCssScanner_Generated(const QString &inp)
+QCssScanner_Generated::QCssScanner_Generated(const QString &inp) : input(inp)
 {
-   input = inp;
-   pos = 0;
-   lexemStart = 0;
+   pos = input.begin();
+   lexemStart = input.begin();
    lexemLength = 0;
 }
 
@@ -52,7 +51,7 @@ int QCssScanner_Generated::lex()
 {
    lexemStart = pos;
    lexemLength = 0;
-   int lastAcceptingPos = -1;
+   QString::const_iterator lastAcceptingPos = input.end();
    int token = -1;
    QChar ch;
 
@@ -1511,7 +1510,7 @@ found:
    lastAcceptingPos = pos;
 
 out:
-   if (lastAcceptingPos != -1) {
+   if (lastAcceptingPos != input.end()) {
       lexemLength = lastAcceptingPos - lexemStart;
       pos = lastAcceptingPos;
    }

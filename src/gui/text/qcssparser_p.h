@@ -650,10 +650,9 @@ enum TokenType {
 };
 
 struct Symbol {
-   inline Symbol() : token(NONE), start(0), len(-1) {}
+   inline Symbol() : token(NONE) {}
    TokenType token;
    QString text;
-   int start, len;
    Q_GUI_EXPORT QString lexem() const;
 };
 

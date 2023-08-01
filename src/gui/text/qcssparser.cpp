@@ -2470,16 +2470,14 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
       *hasEscapeSequences = false;
    }
 
-   int i = 0;
-   while (i < output.size()) {
-      if (output.at(i) == QLatin1Char('\\')) {
-         ++i;
-
+   QString::const_iterator i = output.begin();
+   while (i != output.end()) {
+      if ((*i) == QLatin1Char('\\')) {
          // test for unicode hex escape
          int hexCount = 0;
-         const int hexStart = i;
+         const QString::const_iterator hexStart = i++;
 
-         while (i < output.size() && isHexDigit(output.at(i).toLatin1()) && hexCount < 7) {
+         while (i != output.end() && isHexDigit(i->toLatin1()) && hexCount < 7) {
             ++hexCount;
             ++i;
          }
@@ -2496,12 +2494,9 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
          ushort code = output.mid(hexStart, hexCount).toInteger<ushort>(&ok, 16);
 
          if (ok) {
-            output.replace(hexStart - 1, hexCount + 1, QChar(code));
-            i = hexStart;
-         } else {
-            i = hexStart;
+            output.replace(hexStart, i + 1, QChar(code));
          }
-
+         i = hexStart;
       } else {
          ++i;
       }
@@ -2511,14 +2506,18 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
 
 int QCssScanner_Generated::handleCommentStart()
 {
-   while (pos < input.size() - 1) {
-      if (input.at(pos) == '*' && input.at(pos + 1) == '/') {
-         pos += 2;
-         break;
-      }
-      ++pos;
-   }
-   return S;
+  QString::const_iterator it1 = pos;
+  QString::const_iterator it2 = ++pos;
+  while (it2 != input.end()) {
+    if ((*it1 == '*') && (*it2 == '/')) {
+      pos = ++it2;
+      break;
+    }
+    it1 = it2;
+    ++it2;
+  }
+
+  return S;
 }
 
 void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
@@ -2530,9 +2529,7 @@ void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 
    while (tok != -1) {
       sym.token = static_cast<QCss::TokenType>(tok);
-      sym.text = scanner.input;
-      sym.start = scanner.lexemStart;
-      sym.len = scanner.lexemLength;
+      sym.text.assign(scanner.lexemStart, scanner.lexemStart + scanner.lexemLength);
       symbols->append(sym);
       tok = scanner.lex();
    }
@@ -2541,15 +2538,9 @@ void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 QString Symbol::lexem() const
 {
    QString result;
-
-   for (int i = 0; i < len; ++i) {
-      if (text.at(start + i) == '\\' && i < len - 1) {
-         ++i;
-      }
-
-      result += text.at(start + i);
+   for (QString::value_type ch : text) {
+     if (ch != '\\') result.append(ch);
    }
-
    return result;
 }
 
