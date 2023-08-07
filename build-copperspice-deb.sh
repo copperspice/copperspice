@@ -146,15 +146,17 @@ function dev_deb()
     cp "$SCRIPT_DIR"/changelog "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog.Debian
     cp -Prv "$SCRIPT_DIR"/license/* "$DEBIAN_DIR"/usr/share/doc/CopperSpice/license/
 
+    echo "*** rsync release_dir with debian"
     rsync -av "$RELEASE_DIR"/ "$DEBIAN_DIR"/usr/
 
+    echo "***  chmod changelog"
     chmod 0664 "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
     gzip --best --force "$DEBIAN_DIR"/usr/share/doc/CopperSpice/changelog*
 
     #  Step 6 : generate md5sum
     #
-    echo "Generating md5sums"
+    echo "Generating md5sums - must have md5deep installed or will fail"
     cd "$DEBIAN_DIR"
     md5deep -r  usr/share/doc/CopperSpice/* 2>/dev/null >DEBIAN/md5sums
     # don't currently have any pre files
