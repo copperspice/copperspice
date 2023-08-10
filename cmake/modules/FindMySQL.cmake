@@ -19,28 +19,34 @@
 
 # Provides the following variables:
 #
-#  `MySQL_INCLUDE_DIRS`: Include directories necessary to use MySQL.
-#  `MySQL_LIBRARIES`: Libraries necessary to use MySQL.
-#  A `MySQL::MySQL` imported target.
+#  MySQL_FOUND        : True if the MySQL libraray is available
+#  MySQL_INCLUDE_DIRS : Include directories necessary to use MySQL
+#  MySQL_LIBRARIES    : Libraries necessary to use MySQL
+#  MySQL::MySQL       : Imported target for the MySQL libraray
 
+if (WIN32)
+   # disable using pkgcongig
+   set(_use_pkgconfig 0)
 
-# windows does not normally include MySQL
-set(_MySQL_use_pkgconfig 0)
-if (NOT WIN32)
+else()
    find_package(PkgConfig)
 
    if (PkgConfig_FOUND)
-      set(_MySQL_use_pkgconfig 1)
+      set(_use_pkgconfig 1)
+   else()
+      set(_use_pkgconfig 0)
    endif()
 
 endif()
 
-if (_MySQL_use_pkgconfig)
+if (_use_pkgconfig)
+
    pkg_check_modules(_libmariadb "libmariadb" QUIET IMPORTED_TARGET)
    unset(_mysql_target)
 
    if (_libmariadb_FOUND)
       set(_mysql_target "_libmariadb")
+
    else ()
       pkg_check_modules(_mariadb "mariadb" QUIET IMPORTED_TARGET)
 
@@ -49,6 +55,13 @@ if (_MySQL_use_pkgconfig)
 
          if (_mysql_FOUND)
             set(_mysql_target "_mysql")
+
+         else()
+            pkg_check_modules(_mysqlclient "mysqlclient" QUIET IMPORTED_TARGET)
+
+            if (_mysqlclient_FOUND)
+               set(_mysql_target "_mysqlclient")
+            endif()
          endif ()
 
       else ()
@@ -90,7 +103,8 @@ if (_MySQL_use_pkgconfig)
 
    unset(_mysql_target)
 
-else ()
+elseif (WIN32)
+
    set(_MySQL_mariadb_versions 10.2 10.3)
    set(_MySQL_versions 5.0)
    set(_MySQL_paths)
@@ -113,7 +127,6 @@ else ()
    unset(_MySQL_version)
    unset(_MySQL_versions)
    unset(_MySQL_mariadb_versions)
-
 
    find_path(MySQL_INCLUDE_DIR
       NAMES mysql.h
@@ -154,7 +167,31 @@ else ()
          )
       endif()
    endif()
+
+else ()
+   # pkgconfig was not installed
+
+   if (DEFINED MySQL_INCLUDE_DIRS AND DEFINED MySQL_LIBRARIES)
+      # user provided file locations
+
+      find_path(MySQL_INCLUDE_DIR
+         NAMES mysql.h
+         HINTS "${MySQL_INCLUDE_DIRS}"
+         PATH_SUFFIXES mysql mariadb include include/mysql include/mariadb)
+
+      find_library(MySQL_LIBRARY
+         NO_PACKAGE_ROOT_PATH
+         NAMES libmysql mysql mysqlclient libmariadb mariadb
+         HINTS "${MySQL_LIBRARIES}")
+
+      include(FindPackageHandleStandardArgs)
+      find_package_handle_standard_args(MySQL DEFAULT_MSG MySQL_LIBRARY MySQL_INCLUDE_DIR)
+   else()
+      message(STATUS "PkgConfig was not installed, MySQL_INCLUDE_DIRS and MySQL_LIBRARIES
+         were not defined, MySQL can not be found\n")
+   endif()
+
 endif()
 
-unset(_MySQL_use_pkgconfig)
+unset(_use_pkgconfig)
 
