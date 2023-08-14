@@ -2472,10 +2472,13 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
 
    QString::const_iterator i = output.begin();
    while (i != output.end()) {
-      if ((*i) == QLatin1Char('\\')) {
+
+      if ((*i) == '\\') {
+         ++i;
+
          // test for unicode hex escape
          int hexCount = 0;
-         const QString::const_iterator hexStart = i++;
+         const QString::const_iterator hexStart = i;
 
          while (i != output.end() && isHexDigit(i->toLatin1()) && hexCount < 7) {
             ++hexCount;
@@ -2494,7 +2497,7 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
          ushort code = output.mid(hexStart, hexCount).toInteger<ushort>(&ok, 16);
 
          if (ok) {
-            output.replace(hexStart, i + 1, QChar(code));
+            output.replace(hexStart - 1, i + 1, QChar(code));
          }
          i = hexStart;
       } else {
@@ -2538,9 +2541,32 @@ void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 QString Symbol::lexem() const
 {
    QString result;
-   for (QString::value_type ch : text) {
-     if (ch != '\\') result.append(ch);
+
+   bool prevChIsBackslash = false;
+
+   for (QChar ch : text) {
+
+      if (ch == '\\') {
+
+         if (prevChIsBackslash) {
+            result.append(ch);
+            prevChIsBackslash = false;
+
+         } else {
+            prevChIsBackslash = true;
+
+         }
+
+      } else {
+         result.append(ch);
+         prevChIsBackslash = false;
+      }
    }
+
+   if (prevChIsBackslash) {
+      result.append('\\');
+   }
+
    return result;
 }
 

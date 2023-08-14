@@ -51,7 +51,8 @@ int QCssScanner_Generated::lex()
 {
    lexemStart = pos;
    lexemLength = 0;
-   QString::const_iterator lastAcceptingPos = input.end();
+
+   std::optional<QString::const_iterator> tmpIter;
    int token = -1;
    QChar ch;
 
@@ -163,7 +164,7 @@ int QCssScanner_Generated::lex()
    }
    goto out;
 state_1:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::S;
    ch = next();
    if (ch.unicode() >= 9 && ch.unicode() <= 10) {
@@ -189,7 +190,7 @@ state_1:
    }
    goto out;
 state_3:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -241,7 +242,7 @@ state_4:
    }
    goto out;
 state_5:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -274,15 +275,15 @@ state_5:
    }
    goto out;
 state_9:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::PLUS;
    goto out;
 state_10:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::COMMA;
    goto out;
 state_11:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::MINUS;
    ch = next();
    if (ch.unicode() == 45) {
@@ -300,7 +301,7 @@ state_11:
    }
    goto out;
 state_12:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::DOT;
    ch = next();
    if (ch.unicode() >= 48 && ch.unicode() <= 57) {
@@ -308,7 +309,7 @@ state_12:
    }
    goto out;
 state_13:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::SLASH;
    ch = next();
    if (ch.unicode() == 42) {
@@ -317,7 +318,7 @@ state_13:
    }
    goto out;
 state_14:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::NUMBER;
    ch = next();
    if (ch.unicode() == 37) {
@@ -350,7 +351,7 @@ state_17:
    }
    goto out;
 state_19:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::GREATER;
    goto out;
 state_20:
@@ -388,7 +389,7 @@ state_22:
    }
    goto out;
 state_24:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::IDENT;
    ch = next();
    if (ch.unicode() == 40) {
@@ -412,11 +413,11 @@ state_24:
    }
    goto out;
 state_25:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::LBRACE;
    goto out;
 state_26:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::OR;
    ch = next();
    if (ch.unicode() == 61) {
@@ -432,7 +433,7 @@ state_28:
    }
    goto out;
 state_29:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::S;
    ch = next();
    if (ch.unicode() >= 9 && ch.unicode() <= 10) {
@@ -458,7 +459,7 @@ state_29:
    }
    goto out;
 state_30:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -491,7 +492,7 @@ state_30:
    }
    goto out;
 state_31:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::STRING;
    goto out;
 state_32:
@@ -522,7 +523,7 @@ state_32:
    }
    goto out;
 state_33:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::HASH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -561,7 +562,7 @@ state_34:
    }
    goto out;
 state_35:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -594,7 +595,7 @@ state_35:
    }
    goto out;
 state_36:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::STRING;
    goto out;
 state_37:
@@ -632,7 +633,7 @@ state_38:
    }
    goto out;
 state_39:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::NUMBER;
    ch = next();
    if (ch.unicode() == 37) {
@@ -656,7 +657,7 @@ state_39:
    }
    goto out;
 state_41:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::PERCENTAGE;
    goto out;
 state_42:
@@ -679,7 +680,7 @@ state_43:
    }
    goto out;
 state_44:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::NUMBER;
    ch = next();
    if (ch.unicode() == 37) {
@@ -724,7 +725,7 @@ state_45:
    }
    goto out;
 state_46:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::LENGTH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -782,7 +783,7 @@ state_49:
    }
    goto out;
 state_50:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::ATKEYWORD_SYM;
    ch = next();
    if (ch.unicode() == 45) {
@@ -803,7 +804,7 @@ state_50:
    }
    goto out;
 state_51:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::IDENT;
    ch = next();
    if (ch.unicode() == 40) {
@@ -827,11 +828,11 @@ state_51:
    }
    goto out;
 state_52:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::FUNCTION;
    goto out;
 state_53:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::IDENT;
    ch = next();
    if (ch.unicode() == 40) {
@@ -873,7 +874,7 @@ state_54:
    }
    goto out;
 state_57:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -906,7 +907,7 @@ state_57:
    }
    goto out;
 state_58:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -939,7 +940,7 @@ state_58:
    }
    goto out;
 state_59:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -972,7 +973,7 @@ state_59:
    }
    goto out;
 state_60:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1008,7 +1009,7 @@ state_60:
    }
    goto out;
 state_61:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::HASH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1047,7 +1048,7 @@ state_62:
    }
    goto out;
 state_63:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::HASH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1068,7 +1069,7 @@ state_63:
    }
    goto out;
 state_64:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1101,7 +1102,7 @@ state_64:
    }
    goto out;
 state_65:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1134,7 +1135,7 @@ state_65:
    }
    goto out;
 state_66:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1167,7 +1168,7 @@ state_66:
    }
    goto out;
 state_67:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1203,7 +1204,7 @@ state_67:
    }
    goto out;
 state_69:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::NUMBER;
    ch = next();
    if (ch.unicode() == 37) {
@@ -1227,7 +1228,7 @@ state_69:
    }
    goto out;
 state_70:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::LENGTH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1248,7 +1249,7 @@ state_70:
    }
    goto out;
 state_71:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::LENGTH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1294,7 +1295,7 @@ state_73:
    }
    goto out;
 state_74:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::ATKEYWORD_SYM;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1315,7 +1316,7 @@ state_74:
    }
    goto out;
 state_75:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::ATKEYWORD_SYM;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1354,7 +1355,7 @@ state_76:
    }
    goto out;
 state_77:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::IDENT;
    ch = next();
    if (ch.unicode() == 40) {
@@ -1378,7 +1379,7 @@ state_77:
    }
    goto out;
 state_78:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1411,7 +1412,7 @@ state_78:
    }
    goto out;
 state_79:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::HASH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1432,7 +1433,7 @@ state_79:
    }
    goto out;
 state_80:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::INVALID;
    ch = next();
    if (ch.unicode() >= 1 && ch.unicode() <= 9) {
@@ -1465,7 +1466,7 @@ state_80:
    }
    goto out;
 state_81:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::LENGTH;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1486,7 +1487,7 @@ state_81:
    }
    goto out;
 state_83:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
    token = QCss::ATKEYWORD_SYM;
    ch = next();
    if (ch.unicode() == 45) {
@@ -1507,12 +1508,12 @@ state_83:
    }
    goto out;
 found:
-   lastAcceptingPos = pos;
+   tmpIter = pos;
 
 out:
-   if (lastAcceptingPos != input.end()) {
-      lexemLength = lastAcceptingPos - lexemStart;
-      pos = lastAcceptingPos;
+   if (tmpIter.has_value()) {
+      lexemLength = tmpIter.value() - lexemStart;
+      pos = tmpIter.value();
    }
    return token;
 }
