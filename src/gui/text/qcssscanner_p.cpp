@@ -28,7 +28,14 @@ class QCssScanner_Generated
    QCssScanner_Generated(const QString &inp);
 
    inline QChar next() {
-      return (pos != input.end()) ? *pos++ : QChar();
+      QChar retval;
+
+      if (pos != input.end()) {
+         retval = *pos;
+         ++pos;
+      }
+
+      return retval;
    }
    int handleCommentStart();
    int lex();
