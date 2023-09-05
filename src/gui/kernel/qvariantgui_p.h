@@ -26,7 +26,7 @@
 
 #include <qvariant.h>
 
-class QVariantGui : public QVariantBase
+class Q_GUI_EXPORT QVariantGui : public QVariantBase
 {
  public:
    bool cs_internal_convert(uint current_userType, uint new_userType, QVariant &self) const override;
