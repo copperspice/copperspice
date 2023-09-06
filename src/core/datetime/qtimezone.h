@@ -26,8 +26,8 @@
 
 #include <qshareddata.h>
 #include <qlocale.h>
-#include <qdatetime.h>
 
+class QDateTime;
 class QTimeZonePrivate;
 
 class Q_CORE_EXPORT QTimeZone

@@ -27,10 +27,10 @@
 #include <qstring.h>
 #include <qnamespace.h>
 #include <qshareddatapointer.h>
+#include <qtimezone.h>
 
 #include <limits>
 
-class QTimeZone;
 class QDateTimePrivate;
 
 #ifdef Q_OS_DARWIN
