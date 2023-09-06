@@ -426,22 +426,7 @@ static QString secondsToOffset(int seconds)
 
 static QString timespecToString(const QDateTime &dateTime)
 {
-   switch (dateTime.timeSpec()) {
-      case Qt::LocalTime:
-         return QString();
-
-      case Qt::UTC:
-         return QString("Z");
-
-      case Qt::OffsetFromUTC:
-         return secondsToOffset(dateTime.offsetFromUtc());
-
-      case Qt::TimeZone:
-         return secondsToOffset(dateTime.timeZone().offsetFromUtc(dateTime));
-
-      default:
-         return QString();
-   }
+   return secondsToOffset(dateTime.timeZone().offsetFromUtc(dateTime));
 }
 
 bool QSQLiteResult::exec()

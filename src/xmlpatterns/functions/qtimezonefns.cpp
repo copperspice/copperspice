@@ -90,18 +90,21 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          /* "If $arg does not have a timezone component and $timezone is not
           * the empty sequence, then the result is $arg with $timezone as
           * the timezone component." */
-         //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-            dt.setOffsetFromUtc(tzSecs);
+
+         dt.setTimeZone(QTimeZone(tzSecs));
+
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       } else {
          /* "If $arg has a timezone component and $timezone is not the empty sequence,
           * then the result is an xs:dateTime value with a timezone component of
           * $timezone that is equal to $arg." */
+
          dt = dt.toUTC();
          dt = dt.addSecs(tzSecs);
-         //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-            dt.setOffsetFromUtc(tzSecs);
+
+         dt.setTimeZone(QTimeZone(tzSecs));
+
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       }
