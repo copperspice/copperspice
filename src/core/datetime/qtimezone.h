@@ -48,7 +48,7 @@ class Q_CORE_EXPORT QTimeZone
 
    struct OffsetData {
       QString abbreviation;
-      QDateTime atUtc;
+      qint64 atUtcMSecs;
       int offsetFromUtc;
       int standardTimeOffset;
       int daylightTimeOffset;

@@ -418,22 +418,25 @@ QTimeZonePrivate::Data QTimeZonePrivate::invalidData()
 QTimeZone::OffsetData QTimeZonePrivate::invalidOffsetData()
 {
    QTimeZone::OffsetData offsetData;
-   offsetData.atUtc = QDateTime();
-   offsetData.offsetFromUtc = invalidSeconds();
+
+   offsetData.atUtcMSecs         = invalidMSecs();
+   offsetData.offsetFromUtc      = invalidSeconds();
    offsetData.standardTimeOffset = invalidSeconds();
    offsetData.daylightTimeOffset = invalidSeconds();
+
    return offsetData;
 }
 
 QTimeZone::OffsetData QTimeZonePrivate::toOffsetData(const QTimeZonePrivate::Data &data)
 {
    QTimeZone::OffsetData offsetData = invalidOffsetData();
+
    if (data.atMSecsSinceEpoch != invalidMSecs()) {
-      offsetData.atUtc = QDateTime::fromMSecsSinceEpoch(data.atMSecsSinceEpoch, Qt::UTC);
-      offsetData.offsetFromUtc = data.offsetFromUtc;
+      offsetData.atUtcMSecs         = data.atMSecsSinceEpoch;
+      offsetData.offsetFromUtc      = data.offsetFromUtc;
       offsetData.standardTimeOffset = data.standardTimeOffset;
       offsetData.daylightTimeOffset = data.daylightTimeOffset;
-      offsetData.abbreviation = data.abbreviation;
+      offsetData.abbreviation       = data.abbreviation;
    }
    return offsetData;
 }
