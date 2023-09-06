@@ -1171,7 +1171,7 @@ static QByteArray qEncodeNtlmv2Response(const QAuthenticatorPrivate *ctx,
       ds.writeRawData(timeArray.constData(), timeArray.size());
 
    } else {
-      QDateTime currentTime(QDate::currentDate(), QTime::currentTime(), Qt::UTC);
+      QDateTime currentTime(QDate::currentDate(), QTime::currentTime(), QTimeZone::utc());
 
       // number of seconds between 1601 and epoc(1970)
       // 369 years, 89 leap years

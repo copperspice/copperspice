@@ -245,12 +245,14 @@ void AbstractDateTime::setUtcOffset(QDateTime &result,
                                     const int zoOffset)
 {
    if (zoResult == UTC) {
-      result.setTimeSpec(Qt::UTC);
+      result.setTimeZone(QTimeZone::utc());
+
    } else if (zoResult == LocalTime) {
-      result.setTimeSpec(Qt::LocalTime);
+      result.setTimeZone(QTimeZone::systemTimeZone());
+
    } else {
       Q_ASSERT(zoResult == Offset);
-      result.setOffsetFromUtc(zoOffset);
+      result.setTimeZone(QTimeZone(zoOffset));
    }
 }
 

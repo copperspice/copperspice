@@ -705,7 +705,7 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
    }
 
    if (dt.isValid()) {
-      dt.setTimeSpec(Qt::UTC);
+      dt.setTimeZone(QTimeZone::utc());
    }
    return dt;
 }

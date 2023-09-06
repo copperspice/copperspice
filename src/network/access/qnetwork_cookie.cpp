@@ -687,7 +687,7 @@ static QDateTime parseDateString(const QString &dateString)
       date = QDate(day + y2k, month, year);
    }
 
-   QDateTime dateTime(date, time, Qt::UTC);
+   QDateTime dateTime(date, time, QTimeZone::utc());
 
    if (zoneOffset != -1) {
       dateTime = dateTime.addSecs(zoneOffset);

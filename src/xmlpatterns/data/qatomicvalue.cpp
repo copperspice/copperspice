@@ -151,7 +151,7 @@ Item AtomicValue::toXDM(const QVariant &value)
          return SchemaTime::fromDateTime(value.toDateTime());
 
       case QVariant::Date:
-         return Date::fromDateTime(QDateTime(value.toDate(), QTime(), Qt::UTC));
+         return Date::fromDateTime(QDateTime(value.toDate(), QTime(), QTimeZone::utc()));
 
       case QVariant::DateTime:
          return DateTime::fromDateTime(value.toDateTime());

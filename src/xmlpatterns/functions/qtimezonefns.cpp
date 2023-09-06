@@ -85,7 +85,8 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
 
       const SecondCountProperty tzSecs = tzMSecs / 1000;
 
-      if (dt.timeSpec() == Qt::LocalTime) { /* $arg has no time zone. */
+      if (dt.timeZone() == QTimeZone::systemTimeZone()) {
+         /* $arg has no time zone. */
          /* "If $arg does not have a timezone component and $timezone is not
           * the empty sequence, then the result is $arg with $timezone as
           * the timezone component." */
@@ -106,14 +107,18 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
       }
    } else {
       /* $timezone is the empty sequence. */
-      if (dt.timeSpec() == Qt::LocalTime) { /* $arg has no time zone. */
+
+      if (dt.timeZone() == QTimeZone::systemTimeZone()) {
+         /* $arg has no time zone. */
          /* "If $arg does not have a timezone component and $timezone is
           * the empty sequence, then the result is $arg." */
          return arg;
       } else {
          /* "If $arg has a timezone component and $timezone is the empty sequence,
           * then the result is the localized value of $arg without its timezone component." */
-         dt.setTimeSpec(Qt::LocalTime);
+
+         dt.setTimeZone(QTimeZone::systemTimeZone());
+
          return createValue(dt);
       }
    }

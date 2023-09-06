@@ -232,7 +232,7 @@ QDateTime QAsn1Element::toDateTime() const
                           QTime(mValue.mid(6, 2).toInt(),
                                 mValue.mid(8, 2).toInt(),
                                 mValue.mid(10, 2).toInt()),
-                          Qt::UTC);
+                          QTimeZone::utc());
 
       else if (mType == GeneralizedTimeType && mValue.size() == 15)
          return QDateTime(QDate(mValue.mid(0, 4).toInt(),
@@ -241,7 +241,7 @@ QDateTime QAsn1Element::toDateTime() const
                           QTime(mValue.mid(8, 2).toInt(),
                                 mValue.mid(10, 2).toInt(),
                                 mValue.mid(12, 2).toInt()),
-                          Qt::UTC);
+                          QTimeZone::utc());
    }
 
    return QDateTime();
