@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
+
 #include "qatomiccomparator_p.h"
 #include "qcommonvalues_p.h"
 #include "qschemadatetime_p.h"

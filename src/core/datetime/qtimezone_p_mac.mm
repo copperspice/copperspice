@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qdatetime.h>
 #include <qtimezone.h>
 
 #include <qtimezone_p.h>

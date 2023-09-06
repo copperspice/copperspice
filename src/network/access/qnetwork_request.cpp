@@ -28,6 +28,7 @@
 #include <qnetwork_cookie.h>
 #include <qsslconfiguration.h>
 #include <qshareddata.h>
+#include <qtimezone.h>
 #include <qlocale.h>
 #include <qdatetime.h>
 

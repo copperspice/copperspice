@@ -35,6 +35,7 @@
 #include <qlayout.h>
 #include <qset.h>
 #include <qstyle.h>
+#include <qtimezone.h>
 
 #ifndef QT_NO_DATETIMEEDIT
 

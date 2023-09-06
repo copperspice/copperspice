@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <QStringList>
-#include <QTimeZone>
+#include <qtimezone.h>
 
 #include "qbuiltintypes_p.h"
 #include "qitem_p.h"

@@ -25,6 +25,7 @@
 
 #include <qmutex.h>
 #include <qdatetime.h>
+#include <qtimezone.h>
 
 #include <qmutexpool_p.h>
 

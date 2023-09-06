@@ -39,6 +39,7 @@
 #include <qpluginloader.h>
 #include <qset.h>
 #include <qtextstream.h>
+#include <qtimezone.h>
 #include <qscriptextensioninterface.h>
 
 #include <qscriptsyntaxchecker_p.h>

@@ -29,6 +29,7 @@
 #include <qresource.h>
 #include <qregularexpression.h>
 #include <qstring.h>
+#include <qtimezone.h>
 #include <qvector.h>
 #include <qvarlengtharray.h>
 

@@ -28,6 +28,7 @@
 #include <qatomic.h>
 #include <qdatetime.h>
 #include <qstringlist.h>
+#include <qtimezone.h>
 #include <qlocale.h>
 #include <qvariant.h>
 

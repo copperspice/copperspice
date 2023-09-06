@@ -32,6 +32,7 @@
 #include <qlocale.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtimezone.h>
 #include <qurl.h>
 
 #include <stdlib.h>

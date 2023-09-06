@@ -24,6 +24,8 @@
 #ifndef QDateTimeFNs_P_H
 #define QDateTimeFNs_P_H
 
+#include <qtimezone.h>
+
 #include <qatomiccomparator_p.h>
 #include <qcommonvalues_p.h>
 #include <qschemadatetime_p.h>

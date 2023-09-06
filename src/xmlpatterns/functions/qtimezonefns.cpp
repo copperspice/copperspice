@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
+
 #include "qabstractdatetime_p.h"
 #include "qcontextfns_p.h"
 #include "qdate_p.h"

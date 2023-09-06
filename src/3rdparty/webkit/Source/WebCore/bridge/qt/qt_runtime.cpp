@@ -59,6 +59,7 @@
 #include <runtime_array.h>
 #include <runtime_object.h>
 #include <qstring16.h>
+#include <qtimezone.h>
 
 using namespace WebCore;
 

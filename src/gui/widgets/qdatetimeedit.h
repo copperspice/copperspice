@@ -25,6 +25,7 @@
 #define QDATETIMEEDIT_H
 
 #include <qdatetime.h>
+#include <qtimezone.h>
 #include <qvariant.h>
 #include <qabstractspinbox.h>
 

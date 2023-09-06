@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
+
 #include "qcommonvalues_p.h"
 #include "qfocus_p.h"
 #include "qtemplatemode_p.h"

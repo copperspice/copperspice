@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qvariant.h>
+#include <qtimezone.h>
 
 #include "qabstractdatetime_p.h"
 #include "qabstractfloat_p.h"

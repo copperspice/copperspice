@@ -26,6 +26,7 @@
 #include <qdatastream.h>
 #include <qdatetime.h>
 #include <qdebug.h>
+#include <qtimezone.h>
 #include <qvector.h>
 
 static QMap<QByteArray, QByteArray> createOidMap()

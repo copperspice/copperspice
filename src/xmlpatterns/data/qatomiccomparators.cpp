@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
 #include "qabstractduration_p.h"
 #include "qabstractdatetime_p.h"
 #include "qbase64binary_p.h"

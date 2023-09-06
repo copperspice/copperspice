@@ -35,6 +35,7 @@
 #include <qstring16.h>
 #include <qdatetime.h>
 #include <qtextcodec.h>
+#include <qtimezone.h>
 
 #ifdef Q_OS_WIN
 #include <qmutex.h>
