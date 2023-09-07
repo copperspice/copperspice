@@ -380,7 +380,7 @@ void qt_check_pointer(const char *n, int l)
 */
 void qBadAlloc()
 {
-   QT_THROW(std::bad_alloc());
+   throw(std::bad_alloc());
 }
 
 /*

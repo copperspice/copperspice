@@ -3604,7 +3604,7 @@ QImage QRasterBuffer::colorizeBitmap(const QImage &image, const QColor &color)
       QRgb *target = reinterpret_cast<QRgb *>(dest.scanLine(y));
 
       if (! source || !target) {
-         QT_THROW(std::bad_alloc());   // we must have run out of memory
+         throw(std::bad_alloc());   // we must have run out of memory
       }
 
       for (int x = 0; x < width; ++x) {

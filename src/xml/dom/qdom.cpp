@@ -2916,7 +2916,7 @@ QDomDocumentTypePrivate::~QDomDocumentTypePrivate()
 void QDomDocumentTypePrivate::init()
 {
    entities = new QDomNamedNodeMapPrivate(this);
-   QT_TRY {
+   try {
       notations = new QDomNamedNodeMapPrivate(this);
       publicId.clear();
       systemId.clear();
@@ -2924,9 +2924,9 @@ void QDomDocumentTypePrivate::init()
 
       entities->setAppendToParent(true);
       notations->setAppendToParent(true);
-   } QT_CATCH(...) {
+   } catch(...) {
       delete entities;
-      QT_RETHROW;
+      throw;
    }
 }
 

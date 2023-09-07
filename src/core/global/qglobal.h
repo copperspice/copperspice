@@ -581,11 +581,6 @@ class Q_CORE_EXPORT QMacAutoReleasePool
 
 #endif
 
-#define QT_TRY       try
-#define QT_CATCH(A)  catch (A)
-#define QT_THROW(A)  throw A
-#define QT_RETHROW   throw
-
 // System information
 class Q_CORE_EXPORT QSysInfo
 {
