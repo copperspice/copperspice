@@ -232,35 +232,50 @@
 #endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_9)
-#     define MAC_OS_X_VERSION_10_9  MAC_OS_X_VERSION_10_8 + 10
+#     define MAC_OS_X_VERSION_10_9   MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_10)
-#     define MAC_OS_X_VERSION_10_10 101000
+#     define MAC_OS_X_VERSION_10_10  101000
 #  endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_11)
-#     define MAC_OS_X_VERSION_10_11 101100
+#     define MAC_OS_X_VERSION_10_11  101100
 #  endif
 
+// Sierra
 #  if ! defined(MAC_OS_X_VERSION_10_12)
-#     define MAC_OS_X_VERSION_10_12 101200
+#     define MAC_OS_X_VERSION_10_12  101200
 #  endif
 
+// High Sierra
 #  if ! defined(MAC_OS_X_VERSION_10_13)
-#     define MAC_OS_X_VERSION_10_13 101300
+#     define MAC_OS_X_VERSION_10_13  101300
 #  endif
 
+// Mojave
 #  if ! defined(MAC_OS_X_VERSION_10_14)
-#     define MAC_OS_X_VERSION_10_14 101400
+#     define MAC_OS_X_VERSION_10_14  101400
 #  endif
 
+// Catalina
 #  if ! defined(MAC_OS_X_VERSION_10_15)
-#     define MAC_OS_X_VERSION_10_15 101500
+#     define MAC_OS_X_VERSION_10_15  101500
 #  endif
 
+// Big Sur Mac OS 11
 #  if ! defined(MAC_OS_X_VERSION_10_16)
-#     define MAC_OS_X_VERSION_10_16 101600
+#     define MAC_OS_X_VERSION_10_16  101600
+#  endif
+
+// Monterey OS 12
+#  if ! defined(MAC_OS_X_VERSION_12)
+#     define MAC_OS_X_VERSION_12     120000
+#  endif
+
+// Ventura OS 13
+#  if ! defined(MAC_OS_X_VERSION_13)
+#     define MAC_OS_X_VERSION_13     130000
 #  endif
 
 #endif
@@ -609,6 +624,7 @@ class Q_CORE_EXPORT QSysInfo
       WV_WINDOWS8   = 0x00a0,
       WV_WINDOWS8_1 = 0x00b0,
       WV_WINDOWS10  = 0x00c0,
+      WV_WINDOWS11  = 0x00d0,
       WV_NT_based   = 0x00f0,
 
       WV_4_0        = WV_NT,
@@ -619,7 +635,8 @@ class Q_CORE_EXPORT QSysInfo
       WV_6_1        = WV_WINDOWS7,
       WV_6_2        = WV_WINDOWS8,
       WV_6_3        = WV_WINDOWS8_1,
-      WV_10_0       = WV_WINDOWS10
+      WV_10_0       = WV_WINDOWS10,
+      WV_11_0       = WV_WINDOWS11
    };
 
    static const WinVersion WindowsVersion;
@@ -635,8 +652,10 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_13 = 0x000F,
       MV_10_14 = 0x0010,
       MV_10_15 = 0x0011,
+      MV_10_16 = 0x0012,                         // both 10_16 and 11
       MV_11    = 0x0012,
       MV_12    = 0x0013,
+      MV_13    = 0x0014,
 
       MV_EL_CAPITAN   = MV_10_11,                // current mimimum version
       MV_SIERRA       = MV_10_12,
@@ -646,6 +665,7 @@ class Q_CORE_EXPORT QSysInfo
 
       MV_BIGSUR       = MV_11,
       MV_MONTEREY     = MV_12,
+      MV_VENTURA      = MV_13,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0

@@ -255,6 +255,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
           } else if (osver.dwMajorVersion == 10 && osver.dwMinorVersion == 0) {
              winver = QSysInfo::WV_WINDOWS10;
 
+          } else if (osver.dwMajorVersion == 11 && osver.dwMinorVersion == 0) {
+             winver = QSysInfo::WV_WINDOWS11;
+
           } else {
              qWarning("Untested Windows version %d.%d detected", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
                    winver = QSysInfo::WV_NT_based;
@@ -296,6 +299,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
       } else if (forceWinVer == "WINDOWS10") {
          winver = QSysInfo::WV_WINDOWS10;
+
+      } else if (forceWinVer == "WINDOWS11") {
+         winver = QSysInfo::WV_WINDOWS11;
 
       }
    }
