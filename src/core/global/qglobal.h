@@ -1109,15 +1109,6 @@ Q_CORE_EXPORT QByteArray qgetenv(const char *varName);
 Q_CORE_EXPORT bool       qputenv(const char *varName, const QByteArray &value);
 Q_CORE_EXPORT bool       qunsetenv(const char *varName);
 
-inline int qIntCast(double f)
-{
-   return int(f);
-}
-
-inline int qIntCast(float f)
-{
-   return int(f);
-}
 
 Q_CORE_EXPORT void qsrand(uint seed);
 Q_CORE_EXPORT int qrand();
