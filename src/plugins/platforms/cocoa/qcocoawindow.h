@@ -37,7 +37,7 @@
 #include <qnsview.h>
 #include <qt_mac_p.h>
 
-QT_FORWARD_DECLARE_CLASS(QCocoaWindow)
+class QCocoaWindow;
 
 class QCocoaWindowPointer
 {

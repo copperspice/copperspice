@@ -48,7 +48,6 @@
 #include <type_traits>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
-#define QT_FORWARD_DECLARE_CLASS(name)   class name;
 #define QT_MANGLE_NAMESPACE(name)        name
 
 #endif
@@ -221,18 +220,6 @@
 #  define Q_OS_UNIX
 
 #endif
-
-// **
-#if defined(Q_OS_DARWIN) && ! defined(Q_CC_INTEL)
-#define QT_BEGIN_INCLUDE_HEADER     }
-#define QT_END_INCLUDE_HEADER     extern "C++" {
-
-#else
-#define QT_BEGIN_INCLUDE_HEADER
-#define QT_END_INCLUDE_HEADER     extern "C++"
-
-#endif
-
 
 #if defined(Q_OS_DARWIN) && ! defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
