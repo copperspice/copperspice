@@ -121,7 +121,8 @@ class UserFunctionCallsite : public CallSite
  */
 static inline QString formatFunction(const UserFunctionCallsite::Ptr &func)
 {
-   Q_UNUSED(func);
+   (void) func;
+
    // TODO TODO TODO
    // TODO Make UserFunctionCallsite always use a FunctionSignature
    return QLatin1String("<span class='XQuery-function'>")  +

@@ -180,7 +180,8 @@ HRESULT DirectShowIOSource::GetClassID(CLSID *pClassID)
 // IMediaFilter
 HRESULT DirectShowIOSource::Run(REFERENCE_TIME tStart)
 {
-   Q_UNUSED(tStart)
+   (void) tStart;
+
    QMutexLocker locker(&m_mutex);
 
    m_state = State_Running;
@@ -208,7 +209,7 @@ HRESULT DirectShowIOSource::Stop()
 
 HRESULT DirectShowIOSource::GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *pState)
 {
-   Q_UNUSED(dwMilliSecsTimeout);
+   (void) dwMilliSecsTimeout;
 
    if (!pState) {
       return E_POINTER;
@@ -572,8 +573,8 @@ HRESULT DirectShowIOSource::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 
 HRESULT DirectShowIOSource::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
-   Q_UNUSED(apPin);
-   Q_UNUSED(nPin);
+   (void) apPin;
+   (void) nPin;
 
    return E_NOTIMPL;
 }
@@ -595,9 +596,9 @@ HRESULT DirectShowIOSource::EndFlush()
 
 HRESULT DirectShowIOSource::NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate)
 {
-   Q_UNUSED(tStart);
-   Q_UNUSED(tStop);
-   Q_UNUSED(dRate);
+   (void) tStart;
+   (void) tStop;
+   (void) dRate;
 
    return S_OK;
 }

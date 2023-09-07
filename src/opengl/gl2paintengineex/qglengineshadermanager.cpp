@@ -549,7 +549,7 @@ GLuint QGLEngineShaderManager::getUniformLocation(Uniform id)
 
 void QGLEngineShaderManager::optimiseForBrushTransform(QTransform::TransformationType transformType)
 {
-   Q_UNUSED(transformType); // Currently ignored
+   (void) transformType;
 }
 
 void QGLEngineShaderManager::setDirty()

@@ -379,7 +379,7 @@ bool QGLPixelBufferPrivate::cleanup()
 
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 {
-   Q_UNUSED(texture_id);
+   (void) texture_id;
    return false;
 }
 

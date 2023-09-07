@@ -88,7 +88,7 @@ QString AVFAudioEncoderSettingsControl::codecDescription(const QString &codecNam
 
 QList<int> AVFAudioEncoderSettingsControl::supportedSampleRates(const QAudioEncoderSettings &settings, bool *continuous) const
 {
-    Q_UNUSED(settings)
+    (void) settings;
 
     if (continuous)
         *continuous = true;

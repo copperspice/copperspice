@@ -429,7 +429,6 @@ void freeRenderbufferFunc(QGLContext *ctx, GLuint id)
 
 void freeTextureFunc(QGLContext *ctx, GLuint id)
 {
-   Q_UNUSED(ctx);
    ctx->contextHandle()->functions()->glDeleteTextures(1, &id);
 }
 }

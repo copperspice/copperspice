@@ -122,7 +122,8 @@ void OutputValidator::endDocument()
 
 void OutputValidator::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
+
    // TODO
 }
 

@@ -39,8 +39,9 @@ Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
    Q_ASSERT(operandNode);
    Q_ASSERT(validationMode == Lax || validationMode == Strict);
    Q_ASSERT(context);
-   Q_UNUSED(validationMode);
-   Q_UNUSED(context);
+
+   (void) validationMode;
+   (void) context;
 
    ItemType::List tList;
    tList.append(BuiltinTypes::element);

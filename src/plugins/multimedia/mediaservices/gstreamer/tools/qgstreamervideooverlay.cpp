@@ -242,10 +242,10 @@ void QGstreamerVideoOverlay::setRenderRectangle(const QRect &rect)
       gst_x_overlay_set_render_rectangle(GST_X_OVERLAY(m_videoSink), x, y, w, h);
    }
 #else
-   Q_UNUSED(x)
-   Q_UNUSED(y)
-   Q_UNUSED(w)
-   Q_UNUSED(h)
+   (void) x;
+   (void) y;
+   (void) w;
+   (void) h;
 #endif
 }
 

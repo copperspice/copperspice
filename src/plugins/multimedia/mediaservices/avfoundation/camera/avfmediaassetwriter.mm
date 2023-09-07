@@ -294,7 +294,7 @@ enum WriterState
         didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         fromConnection:(AVCaptureConnection *)connection
 {
-    Q_UNUSED(connection)
+    (void) connection;
 
     if (m_state.loadAcquire() != WriterStateActive)
         return;

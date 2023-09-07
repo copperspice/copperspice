@@ -84,7 +84,8 @@ Item AxisStep::mapToItem(const QXmlNodeModelIndex &node,
    Q_ASSERT(!node.isNull());
    Q_ASSERT(Item(node).isNode());
    Q_ASSERT(Item(node));
-   Q_UNUSED(context);
+
+   (void) context;
 
    if (m_nodeTest->itemMatches(Item(node))) {
       return Item(node);

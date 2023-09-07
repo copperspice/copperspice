@@ -45,11 +45,11 @@ class ProjectedExpression
    };
 
    virtual Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const {
-      Q_UNUSED(name);
-      Q_UNUSED(next);
+      (void) name;
+      (void) next;
+
       return Skip;
    }
-
 };
 
 class ProjectedNodeTest
@@ -78,8 +78,8 @@ class ProjectedStep : public ProjectedExpression
    }
 
    Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const override {
-      Q_UNUSED(name);
-      Q_UNUSED(next);
+      (void) name;
+      (void) next;
 
       // TODO
       return Skip;

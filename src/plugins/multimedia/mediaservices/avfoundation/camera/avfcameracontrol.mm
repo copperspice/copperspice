@@ -30,7 +30,7 @@ AVFCameraControl::AVFCameraControl(AVFCameraService *service, QObject *parent)
    : QCameraControl(parent), m_session(service->session()), m_state(QCamera::UnloadedState),
      m_lastStatus(QCamera::UnloadedStatus) , m_captureMode(QCamera::CaptureStillImage)
 {
-    Q_UNUSED(service);
+    (void) service;
     connect(m_session, SIGNAL(stateChanged(QCamera::State)), SLOT(updateStatus()));
     connect(this, &AVFCameraControl::captureModeChanged, m_session, &AVFCameraSession::onCaptureModeChanged);
 }
@@ -104,8 +104,8 @@ bool AVFCameraControl::isCaptureModeSupported(QCamera::CaptureModes mode) const
 
 bool AVFCameraControl::canChangeProperty(QCameraControl::PropertyChangeType changeType, QCamera::Status status) const
 {
-    Q_UNUSED(changeType);
-    Q_UNUSED(status);
+    (void) changeType;
+    (void) status;
 
     return true;
 }

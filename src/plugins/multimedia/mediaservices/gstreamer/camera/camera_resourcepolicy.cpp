@@ -154,7 +154,7 @@ void CamerabinResourcePolicy::setResourceSet(CamerabinResourcePolicy::ResourceSe
       }
    }
 #else
-   Q_UNUSED(oldSet);
+   (void) oldSet;
    updateCanCapture();
 #endif
 }

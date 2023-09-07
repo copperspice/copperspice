@@ -115,7 +115,7 @@ void DocumentContentValidator::endDocument()
 
 void DocumentContentValidator::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
 }
 
 void DocumentContentValidator::startOfSequence()

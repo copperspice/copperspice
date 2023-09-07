@@ -381,7 +381,8 @@ Expression::Ptr createNumericLiteral(const QString &in,
  */
 static int XPatherror(YYLTYPE *sourceLocator, const ParserContext *const parseInfo, const char *const msg)
 {
-   Q_UNUSED(sourceLocator);
+   (void) sourceLocator;
+
    Q_ASSERT(parseInfo);
 
    parseInfo->staticContext->error(escape(QString::fromLatin1(msg)), ReportContext::XPST0003, fromYYLTYPE(*sourceLocator, parseInfo));

@@ -1360,7 +1360,7 @@ QVideoFrame::PixelFormat QGstUtils::structurePixelFormat(const GstStructure *str
    }
 
 #if GST_CHECK_VERSION(1,0,0)
-   Q_UNUSED(bpp);
+   (void) bpp;
 
    if (gst_structure_has_name(structure, "video/x-raw")) {
       const gchar *s = gst_structure_get_string(structure, "format");

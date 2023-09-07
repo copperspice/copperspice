@@ -228,7 +228,7 @@ void CameraBinControl::delayedReload()
 
 bool CameraBinControl::canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const
 {
-   Q_UNUSED(status);
+   (void) status;
 
    switch (changeType) {
       case QCameraControl::Viewfinder:

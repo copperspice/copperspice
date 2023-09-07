@@ -119,7 +119,7 @@ ExpressionVisitorResult::Ptr CallTemplate::accept(const ExpressionVisitor::Ptr &
 
 bool CallTemplate::configureRecursion(const CallTargetDescription::Ptr &sign)
 {
-   Q_UNUSED(sign);
+   (void) sign;
    return false;
 }
 

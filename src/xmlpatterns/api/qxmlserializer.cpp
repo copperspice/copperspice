@@ -348,7 +348,6 @@ void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
    }
 
    if (atDocumentRoot()) {
-      Q_UNUSED(d);
       d->query.d->staticContext()->error(QtXmlPatterns::tr("Attribute %1 can not be serialized because it appears at "
                   "the top level.").formatArg(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
    } else {
@@ -521,7 +520,7 @@ void QXmlSerializer::item(const QPatternist::Item &outputItem)
  */
 void QXmlSerializer::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
 }
 
 /*!

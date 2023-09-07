@@ -130,25 +130,25 @@ void DocumentProjector::endElement()
 
 void DocumentProjector::attribute(const QXmlName &name, QStringView value)
 {
-   Q_UNUSED(name);
-   Q_UNUSED(value);
+   (void) name;
+   (void) value;
 }
 
 void DocumentProjector::namespaceBinding(const QXmlName &nb)
 {
-   Q_UNUSED(nb);
+   (void) nb;
 }
 
 void DocumentProjector::comment(const QString &value)
 {
    Q_ASSERT_X(! value.contains(QString("--")), Q_FUNC_INFO,
               "Invalid input, caller is responsible to supply valid input.");
-   Q_UNUSED(value);
+   (void) value;
 }
 
 void DocumentProjector::characters(QStringView value)
 {
-   Q_UNUSED(value);
+   (void) value;
 }
 
 void DocumentProjector::processingInstruction(const QXmlName &name, const QString &value)
@@ -156,13 +156,13 @@ void DocumentProjector::processingInstruction(const QXmlName &name, const QStrin
    Q_ASSERT_X(! value.contains(QString("?>")), Q_FUNC_INFO,
               "Invalid input, caller is responsible to supply valid input.");
 
-   Q_UNUSED(name);
-   Q_UNUSED(value);
+   (void) name;
+   (void) value;
 }
 
 void DocumentProjector::item(const Item &outputItem)
 {
-   Q_UNUSED(outputItem);
+   (void) outputItem;
 }
 
 void DocumentProjector::startDocument()

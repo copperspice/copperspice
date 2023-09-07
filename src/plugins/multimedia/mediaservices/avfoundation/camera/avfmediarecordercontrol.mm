@@ -67,9 +67,9 @@
          didStartRecordingToOutputFileAtURL:(NSURL *)fileURL
          fromConnections:(NSArray *)connections
 {
-    Q_UNUSED(captureOutput);
-    Q_UNUSED(fileURL);
-    Q_UNUSED(connections)
+    (void) captureOutput;
+    (void) fileURL;
+    (void) connections;
 
     QMetaObject::invokeMethod(m_recorder, "handleRecordingStarted", Qt::QueuedConnection);
 }
@@ -79,9 +79,9 @@
          fromConnections:(NSArray *)connections
          error:(NSError *)error
 {
-    Q_UNUSED(captureOutput);
-    Q_UNUSED(fileURL);
-    Q_UNUSED(connections)
+    (void) captureOutput;
+    (void) fileURL;
+    (void) connections;
 
     if (error) {
         QStringList messageParts;

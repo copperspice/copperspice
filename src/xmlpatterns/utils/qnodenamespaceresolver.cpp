@@ -37,7 +37,7 @@ NodeNamespaceResolver::NodeNamespaceResolver(const Item &item) : m_node(item.asN
 
 void NodeNamespaceResolver::addBinding(const QXmlName nb)
 {
-   Q_UNUSED(nb);
+   (void) nb;
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
 }
 

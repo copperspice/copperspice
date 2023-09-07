@@ -379,7 +379,8 @@ void DirectShowPlayerService::doSetUrlSource(QMutexLocker *locker)
 
 void DirectShowPlayerService::doSetStreamSource(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
+   (void) locker;
+
    DirectShowIOSource *source = new DirectShowIOSource(m_loop);
    source->setDevice(m_stream);
 
@@ -544,7 +545,7 @@ void DirectShowPlayerService::doRender(QMutexLocker *locker)
 
 void DirectShowPlayerService::doFinalizeLoad(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
+   (void) locker;
 
    if (m_graphStatus != Loaded) {
       if (IMediaEvent *event = com_cast<IMediaEvent>(m_graph, IID_IMediaEvent)) {
@@ -605,7 +606,7 @@ void DirectShowPlayerService::releaseGraph()
 
 void DirectShowPlayerService::doReleaseGraph(QMutexLocker *locker)
 {
-   Q_UNUSED(locker);
+   (void) locker;
 
    if (IMediaControl *control = com_cast<IMediaControl>(m_graph, IID_IMediaControl)) {
       control->Stop();
@@ -844,7 +845,7 @@ void DirectShowPlayerService::stop()
 
 void DirectShowPlayerService::doStop(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
+   (void) locker;
 
    if (m_executedTasks & (Play | Pause)) {
       if (IMediaControl *control = com_cast<IMediaControl>(m_graph, IID_IMediaControl)) {
@@ -1160,7 +1161,8 @@ void DirectShowPlayerService::setVideoOutput(IBaseFilter *filter)
 
 void DirectShowPlayerService::doReleaseVideoOutput(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
+   (void) locker;
+
    m_pendingTasks |= m_executedTasks & (Play | Pause);
 
    if (IMediaControl *control = com_cast<IMediaControl>(m_graph, IID_IMediaControl)) {
@@ -1265,7 +1267,7 @@ void DirectShowPlayerService::videoOutputChanged()
 
 void DirectShowPlayerService::graphEvent(QMutexLocker *locker)
 {
-   Q_UNUSED(locker)
+   (void) locker;
 
    if (IMediaEvent *event = com_cast<IMediaEvent>(m_graph, IID_IMediaEvent)) {
       long eventCode;

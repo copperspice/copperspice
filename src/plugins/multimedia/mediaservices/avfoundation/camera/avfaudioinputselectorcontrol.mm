@@ -30,7 +30,7 @@
 AVFAudioInputSelectorControl::AVFAudioInputSelectorControl(AVFCameraService *service, QObject *parent)
    : QAudioInputSelectorControl(parent), m_dirty(true)
 {
-    Q_UNUSED(service);
+    (void) service;
     NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     for (AVCaptureDevice *device in videoDevices) {
         QString deviceId = QString::fromUtf8([[device uniqueID] UTF8String]);
