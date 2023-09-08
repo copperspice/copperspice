@@ -470,6 +470,8 @@ void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 
       if (ep == AlwaysEmit || value != old) {
          emit q->valueChanged(edit->displayText());
+
+         emit q->cs_valueChanged(value.toInt());
          emit q->valueChanged(value.toInt());
       }
    }
@@ -587,6 +589,8 @@ void QDoubleSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
       pendingEmit = false;
       if (ep == AlwaysEmit || value != old) {
          emit q->valueChanged(edit->displayText());
+
+         emit q->cs_valueChanged(value.toDouble());
          emit q->valueChanged(value.toDouble());
       }
    }
