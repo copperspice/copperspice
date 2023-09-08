@@ -143,8 +143,9 @@ void QWidgetBackingStoreTracker::unregisterWidget(QWidget *w)
 void QWidgetBackingStoreTracker::unregisterWidgetSubtree(QWidget *widget)
 {
    unregisterWidget(widget);
+
    for (QObject *child : widget->children())  {
-      if (QWidget *childWidget = qobject_cast<QWidget *>(child)) {
+      if (QWidget *childWidget = dynamic_cast<QWidget *>(child)) {
          unregisterWidgetSubtree(childWidget);
       }
    }
@@ -222,11 +223,11 @@ void QWidgetPrivate::scrollChildren(int dx, int dy)
       QPoint pd(dx, dy);
       QObjectList childObjects = q->children();
 
-      for (int i = 0; i < childObjects.size(); ++i) {
+      for (auto item : childObjects) {
          // move all children
-         QWidget *w = qobject_cast<QWidget *>(childObjects.at(i));
+         QWidget *w = dynamic_cast<QWidget *>(item);
 
-         if (w && !w->isWindow()) {
+         if (w != nullptr && ! w->isWindow()) {
             QPoint oldp = w->pos();
             QRect  r(w->pos() + pd, w->size());
             w->data->crect = r;
@@ -479,8 +480,8 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 {
    Q_Q(QWidget);
 
-   if (! qobject_cast<QApplication *>(QCoreApplication::instance())) {
-      qFatal("QWidget: Can not create a QWidget without QApplication");
+   if (! dynamic_cast<QApplication *>(QCoreApplication::instance())) {
+      qFatal("QWidget: Must construct a QApplication before a QWidget");
    }
 
    Q_ASSERT(allWidgets);
@@ -490,9 +491,15 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 
    int targetScreen = -1;
 
-   if (parentWidget && parentWidget->windowType() == Qt::Desktop) {
-      const QDesktopScreenWidget *sw = qobject_cast<const QDesktopScreenWidget *>(parentWidget);
-      targetScreen = sw ? sw->screenNumber() : 0;
+   if (parentWidget != nullptr && parentWidget->windowType() == Qt::Desktop) {
+      const QDesktopScreenWidget *sw = dynamic_cast<const QDesktopScreenWidget *>(parentWidget);
+
+      if (sw == nullptr) {
+         targetScreen = 0;
+      } else {
+         targetScreen = sw->screenNumber();
+      }
+
       parentWidget = nullptr;
    }
 
@@ -582,13 +589,14 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
 void QWidgetPrivate::createRecursively()
 {
    Q_Q(QWidget);
+
    q->create(0, true, true);
 
-   for (int i = 0; i < q->children().size(); ++i) {
+   for (auto item : q->children()) {
+      QWidget *child = dynamic_cast<QWidget *>(item);
 
-      QWidget *child = qobject_cast<QWidget *>(q->children().at(i));
-
-      if (child && ! child->isHidden() && !child->isWindow() && ! child->testAttribute(Qt::WA_WState_Created)) {
+      if (child != nullptr && ! child->isHidden() && ! child->isWindow()
+            && ! child->testAttribute(Qt::WA_WState_Created)) {
          child->d_func()->createRecursively();
       }
    }
@@ -712,11 +720,12 @@ void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
 {
    QObjectList children = parentWidget->children();
 
-   for (int i = 0; i < children.size(); i++) {
-      if (children.at(i)->isWidgetType()) {
-         const QWidget *childWidget = qobject_cast<const QWidget *>(children.at(i));
+   for (auto item : children) {
 
-         if (childWidget) { // should not be necessary
+      if (item->isWidgetType()) {
+         const QWidget *childWidget = dynamic_cast<const QWidget *>(item);
+
+         if (childWidget != nullptr) {
             if (childWidget->testAttribute(Qt::WA_NativeWindow)) {
                if (!childWidget->internalWinId()) {
                   childWidget->winId();
@@ -919,8 +928,8 @@ QWidget::~QWidget()
 
 #ifndef QT_NO_ACTION
    // remove all actions from this widget
-   for (int i = 0; i < d->actions.size(); ++i) {
-      QActionPrivate *apriv = d->actions.at(i)->d_func();
+   for (auto item : d->actions) {
+      QActionPrivate *apriv = item->d_func();
       apriv->widgets.removeAll(this);
    }
 
@@ -1158,7 +1167,7 @@ void QWidgetPrivate::createSysExtra()
 // internal
 void QWidgetPrivate::deleteExtra()
 {
-   if (extra) {                                // if exists
+   if (extra != nullptr) {
 
 #ifndef QT_NO_CURSOR
       delete extra->curs;
@@ -1168,12 +1177,14 @@ void QWidgetPrivate::deleteExtra()
 
 #ifndef QT_NO_STYLE_STYLESHEET
       // dereference the stylesheet style
-      if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(extra->style)) {
+      QStyleSheetStyle *proxy = dynamic_cast<QStyleSheetStyle *>(extra->style.data());
+
+      if (proxy != nullptr) {
          proxy->deref();
       }
 #endif
 
-      if (extra->topextra) {
+      if (extra->topextra != nullptr) {
          deleteTLSysExtra();
 
          delete extra->topextra->icon;
@@ -1260,7 +1271,7 @@ bool QWidgetPrivate::isOverlapped(const QRect &rect) const
    const QWidget *w = q;
    QRect r = rect;
 
-   while (w) {
+   while (w != nullptr) {
       if (w->isWindow()) {
          return false;
       }
@@ -1270,10 +1281,10 @@ bool QWidgetPrivate::isOverlapped(const QRect &rect) const
 
       bool above = false;
 
-      for (int i = 0; i < parent->children().size(); ++i) {
-         QWidget *sibling = qobject_cast<QWidget *>(parent->children().at(i));
+      for (auto item : parent->children()) {
+         QWidget *sibling = dynamic_cast<QWidget *>(item);
 
-         if (! sibling || !sibling->isVisible() || sibling->isWindow()) {
+         if (sibling == nullptr || ! sibling->isVisible() || sibling->isWindow()) {
             continue;
          }
 
@@ -1339,10 +1350,10 @@ void QWidgetPrivate::setUpdatesEnabled_helper(bool enable)
 
    Qt::WidgetAttribute attribute = enable ? Qt::WA_ForceUpdatesDisabled : Qt::WA_UpdatesDisabled;
 
-   for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+   for (auto item : q->children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
 
-      if (w && !w->isWindow() && ! w->testAttribute(attribute)) {
+      if (w != nullptr && ! w->isWindow() && ! w->testAttribute(attribute)) {
          w->d_func()->setUpdatesEnabled_helper(enable);
       }
    }
@@ -1371,11 +1382,11 @@ void QWidgetPrivate::propagatePaletteChange()
    QEvent pc(QEvent::PaletteChange);
    QApplication::sendEvent(q, &pc);
 
-   for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+   for (auto item : q->children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
 
-      if (w && !w->testAttribute(Qt::WA_StyleSheet)
-         && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
+      if (w != nullptr && ! w->testAttribute(Qt::WA_StyleSheet)
+            && (! w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
          QWidgetPrivate *wd = w->d_func();
          wd->inheritedPaletteResolveMask = mask;
          wd->resolvePalette();
@@ -1433,11 +1444,14 @@ QRegion QWidgetPrivate::clipRegion() const
       while (w->children().at(i++) != static_cast<const QObject *>(ignoreUpTo)) {
       }
 
-      while ( i < w->children().size()) {
-         if (QWidget *sibling = qobject_cast<QWidget *>(w->children().at(i))) {
-            if (sibling->isVisible() && !sibling->isWindow()) {
+      while (i < w->children().size()) {
+         QWidget *sibling = dynamic_cast<QWidget *>(w->children().at(i));
 
+         if (sibling != nullptr) {
+
+            if (sibling->isVisible() && ! sibling->isWindow()) {
                QRect siblingRect(ox + sibling->x(), oy + sibling->y(), sibling->width(), sibling->height());
+
                if (qRectIntersects(siblingRect, q->rect())) {
                   r -= QRegion(siblingRect);
                }
@@ -1470,7 +1484,8 @@ void QWidgetPrivate::invalidateGraphicsEffectsRecursively()
       if (w->graphicsEffect()) {
          QWidgetEffectSourcePrivate *sourced =
             static_cast<QWidgetEffectSourcePrivate *>(w->graphicsEffect()->source()->d_func());
-         if (!sourced->updateDueToGraphicsEffect) {
+
+         if (sourced != nullptr && ! sourced->updateDueToGraphicsEffect) {
             w->graphicsEffect()->source()->d_func()->invalidateCache();
          }
       }
@@ -1516,9 +1531,10 @@ const QRegion &QWidgetPrivate::getOpaqueChildren() const
    QWidgetPrivate *that = const_cast<QWidgetPrivate *>(this);
    that->opaqueChildren = QRegion();
 
-   for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *child = qobject_cast<QWidget *>(q->children().at(i));
-      if (!child || !child->isVisible() || child->isWindow()) {
+   for (auto item : q->children()) {
+      QWidget *child = dynamic_cast<QWidget *>(item);
+
+      if (child == nullptr || ! child->isVisible() || child->isWindow()) {
          continue;
       }
 
@@ -1587,9 +1603,9 @@ void QWidgetPrivate::subtractOpaqueSiblings(QRegion &sourceRegion, bool *hasDirt
       const QRect widgetGeometry = w->d_func()->effectiveRectFor(w->data->crect);
 
       for (int i = myIndex + 1; i < parent->children().size(); ++i) {
-         QWidget *sibling = qobject_cast<QWidget *>(parent->children().at(i));
+         QWidget *sibling = dynamic_cast<QWidget *>(parent->children().at(i));
 
-         if (!sibling || !sibling->isVisible() || sibling->isWindow()) {
+         if (sibling  == nullptr || ! sibling->isVisible() || sibling->isWindow()) {
             continue;
          }
 
@@ -1794,8 +1810,9 @@ static inline void fillRegion(QPainter *painter, const QRegion &rgn, const QBrus
 
    } else {
       const QVector<QRect> &rects = rgn.rects();
-      for (int i = 0; i < rects.size(); ++i) {
-         painter->fillRect(rects.at(i), brush);
+
+      for (auto item : rects) {
+         painter->fillRect(item, brush);
       }
    }
 }
@@ -1808,17 +1825,18 @@ void QWidgetPrivate::paintBackground(QPainter *painter, const QRegion &rgn, int 
    bool resetBrushOrigin = false;
    QPointF oldBrushOrigin;
 
-   //If we are painting the viewport of a scrollarea, we must apply an offset to the brush in case we are drawing a texture
-   QAbstractScrollArea *scrollArea = qobject_cast<QAbstractScrollArea *>(q->parent());
+   // If we are painting the viewport of a scrollarea, we must apply an offset to the brush
+   // in case we are drawing a texture
 
-   if (scrollArea && scrollArea->viewport() == q) {
-      QWidgetPrivate *scrollPrivate = static_cast<QWidget *>(scrollArea)->d_ptr.data();
+   QAbstractScrollArea *scrollArea = dynamic_cast<QAbstractScrollArea *>(q->parent());
+
+   if (scrollArea != nullptr && scrollArea->viewport() == q) {
+      QWidgetPrivate *scrollPrivate    = static_cast<QWidget *>(scrollArea)->d_ptr.data();
       QAbstractScrollAreaPrivate *priv = static_cast<QAbstractScrollAreaPrivate *>(scrollPrivate);
 
-      oldBrushOrigin = painter->brushOrigin();
+      oldBrushOrigin   = painter->brushOrigin();
       resetBrushOrigin = true;
-      painter->setBrushOrigin(-priv->contentsOffset());
-
+      painter->setBrushOrigin(- (priv->contentsOffset()) );
    }
 #endif
 
@@ -1928,11 +1946,11 @@ void QWidgetPrivate::createWinId()
             pd->createWinId();
          }
 
-         for (int i = 0; i < parent->children().size(); ++i) {
-            QWidget *w = qobject_cast<QWidget *>(parent->children().at(i));
+         for (auto item : parent->children()) {
+            QWidget *w = dynamic_cast<QWidget *>(item);
 
-            if (w && !w->isWindow() && (!w->testAttribute(Qt::WA_WState_Created)
-                  || (!w->internalWinId() && w->testAttribute(Qt::WA_NativeWindow)))) {
+            if (w != nullptr && ! w->isWindow() && (!w->testAttribute(Qt::WA_WState_Created)
+                  || (! w->internalWinId() && w->testAttribute(Qt::WA_NativeWindow)))) {
 
                w->create();
             }
@@ -2005,10 +2023,13 @@ void QWidget::setStyleSheet(const QString &styleSheet)
 
    d->createExtra();
 
-   QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(d->extra->style);
-   d->extra->styleSheet = styleSheet;
-   if (styleSheet.isEmpty()) { // stylesheet removed
-      if (!proxy) {
+   QStyleSheetStyle *proxy = dynamic_cast<QStyleSheetStyle *>(d->extra->style.data());
+   d->extra->styleSheet    = styleSheet;
+
+   if (styleSheet.isEmpty()) {
+      // stylesheet removed
+
+      if (! proxy) {
          return;
       }
 
@@ -2050,15 +2071,15 @@ void QWidget::setStyle(QStyle *style)
    d->createExtra();
 
 #ifndef QT_NO_STYLE_STYLESHEET
-   if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(style)) {
+   if (QStyleSheetStyle *proxy = dynamic_cast<QStyleSheetStyle *>(style)) {
 
-      //if for some reason someone try to set a QStyleSheetStyle, ref it
-      //(this may happen for exemple in QButtonDialogBox which propagates its style)
+      // if someone tries to set a QStyleSheetStyle, increment the ref count
+      // (this may happen in QButtonDialogBox which propagates its style)
 
       proxy->ref();
       d->setStyle_helper(style, false);
 
-   } else if (qobject_cast<QStyleSheetStyle *>(d->extra->style) || !qApp->styleSheet().isEmpty()) {
+   } else if (dynamic_cast<QStyleSheetStyle *>(d->extra->style.data()) || ! qApp->styleSheet().isEmpty()) {
       // if we have an application stylesheet or have a proxy already, propagate
       d->setStyle_helper(new QStyleSheetStyle(style), true);
 
@@ -2099,18 +2120,20 @@ void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
       // copy the list because the order may be modified
       const QObjectList childrenList = q->children();
 
-      for (int i = 0; i < childrenList.size(); ++i) {
-         QWidget *tmp = qobject_cast<QWidget *>(childrenList.at(i));
+      for (auto item : childrenList) {
+         QWidget *tmp = dynamic_cast<QWidget *>(item);
 
-         if (tmp) {
+         if (tmp != nullptr) {
             tmp->d_func()->inheritStyle();
          }
       }
    }
 
 #ifndef QT_NO_STYLE_STYLESHEET
-   if (!qobject_cast<QStyleSheetStyle *>(newStyle)) {
-      if (const QStyleSheetStyle *cssStyle = qobject_cast<QStyleSheetStyle *>(origStyle.data())) {
+   if (! dynamic_cast<QStyleSheetStyle *>(newStyle)) {
+      const QStyleSheetStyle *cssStyle = dynamic_cast<QStyleSheetStyle *>(origStyle.data());
+
+      if (cssStyle != nullptr) {
          cssStyle->clearWidgetFont(q);
       }
    }
@@ -2121,7 +2144,9 @@ void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
 
 #ifndef QT_NO_STYLE_STYLESHEET
    // dereference the old stylesheet style
-   if (QStyleSheetStyle *proxy = qobject_cast<QStyleSheetStyle *>(origStyle.data())) {
+   QStyleSheetStyle *proxy = dynamic_cast<QStyleSheetStyle *>(origStyle.data());
+
+   if (proxy != nullptr) {
       proxy->deref();
    }
 #endif
@@ -2133,7 +2158,7 @@ void QWidgetPrivate::inheritStyle()
 #ifndef QT_NO_STYLE_STYLESHEET
    Q_Q(QWidget);
 
-   QStyleSheetStyle *proxy = extra ? qobject_cast<QStyleSheetStyle *>(extra->style) : nullptr;
+   QStyleSheetStyle *proxy = extra ? dynamic_cast<QStyleSheetStyle *>(extra->style.data()) : nullptr;
 
    if (!q->styleSheet().isEmpty()) {
       Q_ASSERT(proxy);
@@ -2141,18 +2166,18 @@ void QWidgetPrivate::inheritStyle()
       return;
    }
 
-   QStyle *origStyle = proxy ? proxy->base : (extra ? (QStyle *)extra->style : nullptr);
-   QWidget *parent = q->parentWidget();
+   QStyle *origStyle   = proxy ? proxy->base : (extra ? static_cast<QStyle *>(extra->style.data()) : nullptr);
+   QWidget *parent     = q->parentWidget();
    QStyle *parentStyle = (parent && parent->d_func()->extra) ? (QStyle *)parent->d_func()->extra->style : nullptr;
 
    // If we have stylesheet on app or parent has stylesheet style, we need
    // to be running a proxy
-   if (!qApp->styleSheet().isEmpty() || qobject_cast<QStyleSheetStyle *>(parentStyle)) {
+   if (! qApp->styleSheet().isEmpty() || dynamic_cast<QStyleSheetStyle *>(parentStyle)) {
       QStyle *newStyle = parentStyle;
 
       if (q->testAttribute(Qt::WA_SetStyle)) {
          newStyle = new QStyleSheetStyle(origStyle);
-      } else if (QStyleSheetStyle *newProxy = qobject_cast<QStyleSheetStyle *>(parentStyle)) {
+      } else if (QStyleSheetStyle *newProxy = dynamic_cast<QStyleSheetStyle *>(parentStyle)) {
          newProxy->ref();
       }
 
@@ -2349,8 +2374,8 @@ void QWidget::addAction(QAction *action)
 
 void QWidget::addActions(const QList<QAction *> &actions)
 {
-   for (int i = 0; i < actions.count(); i++) {
-      insertAction(nullptr, actions.at(i));
+   for (auto item : actions) {
+      insertAction(nullptr, item);
    }
 }
 
@@ -2382,8 +2407,8 @@ void QWidget::insertAction(QAction *before, QAction *action)
 
 void QWidget::insertActions(QAction *before, QList<QAction *> actions)
 {
-   for (int i = 0; i < actions.count(); ++i) {
-      insertAction(before, actions.at(i));
+   for (auto item : actions) {
+      insertAction(before, item);
    }
 }
 
@@ -2441,10 +2466,11 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
    }
 
    Qt::WidgetAttribute attribute = enable ? Qt::WA_ForceDisabled : Qt::WA_Disabled;
-   for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
 
-      if (w && !w->testAttribute(attribute)) {
+   for (auto item : q->children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
+
+      if (w != nullptr && ! w->testAttribute(attribute)) {
          w->d_func()->setEnabled_helper(enable);
       }
    }
@@ -2563,10 +2589,10 @@ QRect QWidget::childrenRect() const
 {
    QRect r(0, 0, 0, 0);
 
-   for (int i = 0; i < children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(children().at(i));
+   for (auto item : children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
 
-      if (w && ! w->isWindow() && !w->isHidden()) {
+      if (w != nullptr && ! w->isWindow() && ! w->isHidden()) {
          r |= w->geometry();
       }
    }
@@ -2578,10 +2604,10 @@ QRegion QWidget::childrenRegion() const
 {
    QRegion r;
 
-   for (int i = 0; i < children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(children().at(i));
+   for (auto item : children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
 
-      if (w && !w->isWindow() && ! w->isHidden()) {
+      if (w != nullptr && ! w->isWindow() && ! w->isHidden()) {
          QRegion mask = w->mask();
          if (mask.isEmpty()) {
             r |= w->geometry();
@@ -3138,7 +3164,7 @@ void QWidget::setFont(const QFont &font)
 
 #ifndef QT_NO_STYLE_STYLESHEET
    const QStyleSheetStyle *style;
-   if (d->extra && (style = qobject_cast<const QStyleSheetStyle *>(d->extra->style))) {
+   if (d->extra && (style = dynamic_cast<const QStyleSheetStyle *>(d->extra->style.data()))) {
       style->saveWidgetFont(this, font);
    }
 #endif
@@ -3212,7 +3238,7 @@ void QWidgetPrivate::updateFont(const QFont &font)
 
 #ifndef QT_NO_STYLE_STYLESHEET
    const QStyleSheetStyle *cssStyle;
-   cssStyle = extra ? qobject_cast<const QStyleSheetStyle *>(extra->style) : nullptr;
+   cssStyle = extra ? dynamic_cast<const QStyleSheetStyle *>(extra->style.data()) : nullptr;
 #endif
 
    data.fnt = QFont(font, q);
@@ -3233,7 +3259,7 @@ void QWidgetPrivate::updateFont(const QFont &font)
    uint newMask = data.fnt.resolve() | inheritedFontResolveMask;
 
    for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+      QWidget *w = dynamic_cast<QWidget *>(q->children().at(i));
 
       if (w != nullptr) {
 
@@ -3288,10 +3314,10 @@ void QWidgetPrivate::setLayoutDirection_helper(Qt::LayoutDirection direction)
 
    if (! q->children().isEmpty()) {
 
-      for (int i = 0; i < q->children().size(); ++i) {
-         QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+      for (auto item : q->children()) {
+         QWidget *w = dynamic_cast<QWidget *>(item);
 
-         if (w && !w->isWindow() && !w->testAttribute(Qt::WA_SetLayoutDirection)) {
+         if (w != nullptr && !w->isWindow() && !w->testAttribute(Qt::WA_SetLayoutDirection)) {
             w->d_func()->setLayoutDirection_helper(direction);
          }
       }
@@ -3561,13 +3587,13 @@ static void sendResizeEvents(QWidget *target)
 
    const QObjectList children = target->children();
 
-   for (int i = 0; i < children.size(); ++i) {
-      if (!children.at(i)->isWidgetType()) {
+   for (auto item :children) {
+      if (! item->isWidgetType()) {
          continue;
       }
 
-      QWidget *child = static_cast<QWidget *>(children.at(i));
-      if (!child->isWindow() && child->testAttribute(Qt::WA_PendingResizeEvent)) {
+      QWidget *child = static_cast<QWidget *>(item);
+      if (! child->isWindow() && child->testAttribute(Qt::WA_PendingResizeEvent)) {
          sendResizeEvents(child);
       }
    }
@@ -3701,8 +3727,8 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
       topLevel->d_func()->activateChildLayoutsRecursively();
 
       // We're not cheating with WA_WState_Hidden anymore.
-      for (int i = 0; i < hiddenWidgets.size(); ++i) {
-         QWidget *widget = hiddenWidgets.at(i);
+      for (auto item : hiddenWidgets) {
+         QWidget *widget = item;
          widget->setAttribute(Qt::WA_WState_Hidden);
          if (!widget->isWindow() && widget->parentWidget()->d_func()->layout) {
             widget->parentWidget()->d_func()->layout->invalidate();
@@ -4127,9 +4153,9 @@ void QWidgetPrivate::paintSiblingsRecursive(QPaintDevice *pdev, const QObjectLis
    const bool excludeNativeChildren = (flags & DontDrawNativeChildren);
 
    do {
-      QWidget *x =  qobject_cast<QWidget *>(siblings.at(index));
+      QWidget *x =  dynamic_cast<QWidget *>(siblings.at(index));
 
-      if (x && !(exludeOpaqueChildren && x->d_func()->isOpaque) && !x->isHidden() && !x->isWindow()
+      if (x != nullptr && !(exludeOpaqueChildren && x->d_func()->isOpaque) && !x->isHidden() && !x->isWindow()
          && !(excludeNativeChildren && x->internalWinId())) {
 
          if (dirtyBoundingRect) {
@@ -4296,10 +4322,10 @@ void QWidgetPrivate::setLocale_helper(const QLocale &loc, bool forceUpdate)
    locale = loc;
 
    if (! q->children().isEmpty()) {
-      for (int i = 0; i < q->children().size(); ++i) {
-         QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+      for (auto item : q->children()) {
+         QWidget *w = dynamic_cast<QWidget *>(item);
 
-         if (!w) {
+         if (w == nullptr) {
             continue;
          }
 
@@ -4506,10 +4532,10 @@ void QWidgetPrivate::setWindowIcon_helper()
       QApplication::sendEvent(q_func(), &e);
    }
 
-   for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+   for (auto item : q->children()) {
+      QWidget *w = dynamic_cast<QWidget *>(item);
 
-      if (w && !w->isWindow()) {
+      if (w != nullptr && ! w->isWindow()) {
          QApplication::sendEvent(w, &e);
       }
    }
@@ -4971,10 +4997,12 @@ bool QWidget::isActiveWindow() const
       }
    }
    if (QWindow *ww = QGuiApplication::focusWindow()) {
-      while (ww) {
-         QWidgetWindow *qww = qobject_cast<QWidgetWindow *>(ww);
-         QWindowContainer *qwc = qww ? qobject_cast<QWindowContainer *>(qww->widget()) : nullptr;
-         if (qwc && qwc->topLevelWidget() == tlw) {
+
+      while (ww != nullptr) {
+         QWidgetWindow *qww    = dynamic_cast<QWidgetWindow *>(ww);
+         QWindowContainer *qwc = qww ? dynamic_cast<QWindowContainer *>(qww->widget()) : nullptr;
+
+         if (qwc != nullptr && qwc->topLevelWidget() == tlw) {
             return true;
          }
          ww = ww->parent();
@@ -5726,7 +5754,7 @@ void QWidgetPrivate::sendPendingMoveAndResizeEvents(bool recursive, bool disable
    }
 
    for (int i = 0; i < q->children().size(); ++i) {
-      if (QWidget *child = qobject_cast<QWidget *>(q->children().at(i))) {
+      if (QWidget *child = dynamic_cast<QWidget *>(q->children().at(i))) {
          child->d_func()->sendPendingMoveAndResizeEvents(recursive, disableUpdates);
       }
    }
@@ -5739,9 +5767,9 @@ void QWidgetPrivate::activateChildLayoutsRecursively()
    sendPendingMoveAndResizeEvents(false, true);
 
    for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *child = qobject_cast<QWidget *>(q->children().at(i));
+      QWidget *child = dynamic_cast<QWidget *>(q->children().at(i));
 
-      if (!child || child->isHidden() || child->isWindow()) {
+      if (child == nullptr || child->isHidden() || child->isWindow()) {
          continue;
       }
 
@@ -6174,10 +6202,9 @@ void QWidgetPrivate::showChildren(bool spontaneous)
    QList<QObject *> childList = q->children();
 
    for (int i = 0; i < childList.size(); ++i) {
-      QWidget *widget = qobject_cast<QWidget *>(childList.at(i));
-      if (!widget
-         || widget->isWindow()
-         || widget->testAttribute(Qt::WA_WState_Hidden)) {
+      QWidget *widget = dynamic_cast<QWidget *>(childList.at(i));
+
+      if (widget == nullptr || widget->isWindow() || widget->testAttribute(Qt::WA_WState_Hidden)) {
          continue;
       }
 
@@ -6203,9 +6230,9 @@ void QWidgetPrivate::hideChildren(bool spontaneous)
    QList<QObject *> childList = q->children();
 
    for (int i = 0; i < childList.size(); ++i) {
-      QWidget *widget = qobject_cast<QWidget *>(childList.at(i));
+      QWidget *widget = dynamic_cast<QWidget *>(childList.at(i));
 
-      if (!widget || widget->isWindow() || widget->testAttribute(Qt::WA_WState_Hidden)) {
+      if (widget == nullptr || widget->isWindow() || widget->testAttribute(Qt::WA_WState_Hidden)) {
          continue;
       }
 
@@ -6801,8 +6828,9 @@ bool QWidget::event(QEvent *event)
          QList<QObject *> childList = children();
 
          for (int i = 0; i < childList.size(); ++i) {
-            QWidget *w = qobject_cast<QWidget *>(childList.at(i));
-            if (w && w->isVisible() && !w->isWindow()) {
+            QWidget *w = dynamic_cast<QWidget *>(childList.at(i));
+
+            if (w != nullptr && w->isVisible() && !w->isWindow()) {
                QApplication::sendEvent(w, event);
             }
          }
@@ -6862,13 +6890,12 @@ bool QWidget::event(QEvent *event)
 
             for (auto obj : childList) {
 
-               if (obj && obj != modalWidget && obj->isWidgetType()) {
+               if (obj != nullptr && obj != modalWidget && obj->isWidgetType()) {
+                  QWidget *w = dynamic_cast<QWidget *>(obj);
 
-                  QWidget *w  = dynamic_cast<QWidget *>(obj);
-                  // do not forward the event to child windows; QApplication does this for us
-                  if (! w->isWindow()) {
+                  // do not forward the event to child windows since QApplication will do this
+                  if (w  != nullptr && ! w->isWindow()) {
                      QApplication::sendEvent(w, event);
-
                   }
                }
             }
@@ -6923,8 +6950,9 @@ bool QWidget::event(QEvent *event)
          QList<QObject *> childList = children();
 
          for (int i = 0; i < childList.size(); ++i) {
-            QWidget *w = qobject_cast<QWidget *>(childList.at(i));
-            if (w && w->isVisible() && ! w->isWindow()) {
+            QWidget *w = dynamic_cast<QWidget *>(childList.at(i));
+
+            if (w != nullptr && w->isVisible() && ! w->isWindow()) {
                QApplication::sendEvent(w, event);
             }
          }
@@ -7303,7 +7331,7 @@ void QWidget::ensurePolished() const
          continue;
       }
 
-      if (QWidget *w = qobject_cast<QWidget *>(o)) {
+      if (QWidget *w = dynamic_cast<QWidget *>(o)) {
          w->ensurePolished();
       }
    }
@@ -7463,10 +7491,11 @@ QWidget *QWidgetPrivate::childAtRecursiveHelper(const QPoint &p, bool ignoreChil
    Q_Q(const QWidget);
 
    for (int i = q->children().size() - 1; i >= 0; --i) {
-      QWidget *child = qobject_cast<QWidget *>(q->children().at(i));
+      QWidget *child = dynamic_cast<QWidget *>(q->children().at(i));
 
-      if (!child || child->isWindow() || child->isHidden() || child->testAttribute(Qt::WA_TransparentForMouseEvents)
-         || (ignoreChildrenInDestructor && child->data->in_destructor)) {
+      if (child == nullptr || child->isWindow() || child->isHidden() ||
+            child->testAttribute(Qt::WA_TransparentForMouseEvents) ||
+            (ignoreChildrenInDestructor && child->data->in_destructor)) {
          continue;
       }
 
@@ -7586,9 +7615,9 @@ static void sendWindowChangeToTextureChildrenRecursively(QWidget *widget)
    }
 
    for (int i = 0; i < widget->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(widget->children().at(i));
+      QWidget *w = dynamic_cast<QWidget *>(widget->children().at(i));
 
-      if (w && ! w->isWindow() && ! w->isHidden() && QWidgetPrivate::get(w)->textureChildSeen) {
+      if (w != nullptr && ! w->isWindow() && ! w->isHidden() && QWidgetPrivate::get(w)->textureChildSeen) {
          sendWindowChangeToTextureChildrenRecursively(w);
       }
    }
@@ -7785,7 +7814,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
    if (newparent && newparent->windowType() == Qt::Desktop) {
       // make sure the widget is created on the same screen as the
       // programmer specified desktop widget
-      const QDesktopScreenWidget *sw = qobject_cast<const QDesktopScreenWidget *>(newparent);
+      const QDesktopScreenWidget *sw = dynamic_cast<const QDesktopScreenWidget *>(newparent);
       targetScreen = sw ? sw->screenNumber() : 0;
       newparent = nullptr;
    }
@@ -7844,13 +7873,15 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
          }
 
       for (QObject *child : q->windowHandle()->children()) {
-         QWindow *childWindow = qobject_cast<QWindow *>(child);
-         if (! childWindow) {
+         QWindow *childWindow = dynamic_cast<QWindow *>(child);
+
+         if (childWindow == nullptr) {
             continue;
          }
 
-         QWidgetWindow *childWW = qobject_cast<QWidgetWindow *>(childWindow);
-         QWidget *childWidget = childWW ? childWW->widget() : nullptr;
+         QWidgetWindow *childWW = dynamic_cast<QWidgetWindow *>(childWindow);
+         QWidget *childWidget   = childWW ? childWW->widget() : nullptr;
+
          if (! childWW || (childWidget && childWidget->testAttribute(Qt::WA_NativeWindow))) {
             childWindow->setParent(newParentWindow);
          }
@@ -8123,12 +8154,12 @@ void QWidgetPrivate::macUpdateSizeAttribute()
    QApplication::sendEvent(q, &event);
 
    for (int i = 0; i < q->children().size(); ++i) {
-      QWidget *w = qobject_cast<QWidget *>(q->children().at(i));
+      QWidget *w = dynamic_cast<QWidget *>(q->children().at(i));
 
-      if (w && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))
-         && !q->testAttribute(Qt::WA_MacMiniSize) // no attribute set? inherit from parent
-         && !w->testAttribute(Qt::WA_MacSmallSize)
-         && !w->testAttribute(Qt::WA_MacNormalSize)) {
+      if (w != nullptr && (!w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))
+            && ! q->testAttribute(Qt::WA_MacMiniSize)    // no attribute set? inherit from parent
+            && ! w->testAttribute(Qt::WA_MacSmallSize)
+            && ! w->testAttribute(Qt::WA_MacNormalSize)) {
          w->d_func()->macUpdateSizeAttribute();
       }
    }
@@ -8189,8 +8220,10 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
          d->registerDropSite(on);
 
          for (int i = 0; i < children().size(); ++i) {
-            QWidget *w = qobject_cast<QWidget *>(children().at(i));
-            if (w && !w->isWindow() && !w->testAttribute(Qt::WA_AcceptDrops) && w->testAttribute(Qt::WA_DropSiteRegistered) != on) {
+            QWidget *w = dynamic_cast<QWidget *>(children().at(i));
+
+            if (w != nullptr && ! w->isWindow() && ! w->testAttribute(Qt::WA_AcceptDrops) &&
+                  w->testAttribute(Qt::WA_DropSiteRegistered) != on) {
                w->setAttribute(Qt::WA_DropSiteRegistered, on);
             }
          }
@@ -8905,8 +8938,8 @@ bool QWidgetPrivate::canKeypadNavigate(Qt::Orientation orientation)
 // internal
 bool QWidgetPrivate::inTabWidget(QWidget *widget)
 {
-   for (QWidget *tabWidget = widget; tabWidget; tabWidget = tabWidget->parentWidget())
-      if (qobject_cast<const QTabWidget *>(tabWidget)) {
+   for (QWidget *tabWidget = widget; tabWidget; tabWidget = tabWidget->parentWidget()) {
+      if (dynamic_cast<const QTabWidget *>(tabWidget)) {
          return true;
       }
    return false;
@@ -9078,9 +9111,9 @@ void QWidgetPrivate::sendComposeStatus(QWidget *widget, bool end)
    }
 
    for (int i = 0; i < widget->children().size(); ++i) {
-      QWidget *tmp = qobject_cast<QWidget *>(widget->children().at(i));
+      QWidget *tmp = dynamic_cast<QWidget *>(widget->children().at(i));
 
-      if (tmp && ! tmp->isWindow() && ! tmp->isHidden() && QWidgetPrivate::get(tmp)->textureChildSeen) {
+      if (tmp != nullptr && ! tmp->isWindow() && ! tmp->isHidden() && QWidgetPrivate::get(tmp)->textureChildSeen) {
          sendComposeStatus(tmp, end);
       }
    }
@@ -9162,8 +9195,9 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
          QObjectList childList(children());
 
          for (int i = 0; i < childList.size(); i++) {
-            QWidget *widget = qobject_cast<QWidget *>(childList.at(i));
-            if (widget && widget->testAttribute(Qt::WA_NativeWindow)) {
+            QWidget *widget = dynamic_cast<QWidget *>(childList.at(i));
+
+            if (widget != nullptr && widget->testAttribute(Qt::WA_NativeWindow)) {
                if (widget->windowHandle()) {
                   widget->destroy();
                }
@@ -9221,7 +9255,7 @@ static MapToGlobalTransformResult mapToGlobalTransform(const QWidget *w)
    MapToGlobalTransformResult result;
    result.window = nullptr;
 
-   for ( ; w ; w = w->parentWidget()) {
+   while (w != nullptr) {
 
 #ifndef QT_NO_GRAPHICSVIEW
       if (QGraphicsProxyWidget *qgpw = graphicsProxyWidget(w)) {
@@ -9237,7 +9271,7 @@ static MapToGlobalTransformResult mapToGlobalTransform(const QWidget *w)
 #endif
 
       QWindow *window = w->windowHandle();
-      if (window && canMapPosition(window)) {
+      if (window != nullptr && canMapPosition(window)) {
          result.window = window;
          break;
       }
@@ -9248,6 +9282,8 @@ static MapToGlobalTransformResult mapToGlobalTransform(const QWidget *w)
       if (w->isWindow()) {
          break;
       }
+
+      w = w->parentWidget();
    }
    return result;
 }

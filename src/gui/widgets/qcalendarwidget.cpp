@@ -1443,8 +1443,9 @@ QCalendarView::QCalendarView(QWidget *parent)
 
 QModelIndex QCalendarView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       return QTableView::moveCursor(cursorAction, modifiers);
    }
 
@@ -1501,7 +1502,7 @@ void QCalendarView::keyPressEvent(QKeyEvent *event)
       }
    } else if (event->key() == Qt::Key_Back) {
       if (QApplication::keypadNavigationEnabled() && hasEditFocus()) {
-         if (qobject_cast<QCalendarModel *>(model())) {
+         if (dynamic_cast<QCalendarModel *>(model())) {
             emit changeDate(origDate, true); //changes selection back to origDate, but doesn't activate
             setEditFocus(false);
             return;
@@ -1540,7 +1541,7 @@ bool QCalendarView::event(QEvent *event)
 {
 #ifdef QT_KEYPAD_NAVIGATION
    if (event->type() == QEvent::FocusIn) {
-      if (QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model())) {
+      if (QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model())) {
          origDate = calendarModel->m_date;
       }
    }
@@ -1551,8 +1552,9 @@ bool QCalendarView::event(QEvent *event)
 
 QDate QCalendarView::handleMouseEvent(QMouseEvent *event)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       return QDate();
    }
 
@@ -1568,8 +1570,9 @@ QDate QCalendarView::handleMouseEvent(QMouseEvent *event)
 
 void QCalendarView::mouseDoubleClickEvent(QMouseEvent *event)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       QTableView::mouseDoubleClickEvent(event);
       return;
    }
@@ -1587,8 +1590,9 @@ void QCalendarView::mouseDoubleClickEvent(QMouseEvent *event)
 
 void QCalendarView::mousePressEvent(QMouseEvent *event)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       QTableView::mousePressEvent(event);
       return;
    }
@@ -1617,8 +1621,9 @@ void QCalendarView::mousePressEvent(QMouseEvent *event)
 
 void QCalendarView::mouseMoveEvent(QMouseEvent *event)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       QTableView::mouseMoveEvent(event);
       return;
    }
@@ -1643,8 +1648,9 @@ void QCalendarView::mouseMoveEvent(QMouseEvent *event)
 
 void QCalendarView::mouseReleaseEvent(QMouseEvent *event)
 {
-   QCalendarModel *calendarModel = qobject_cast<QCalendarModel *>(model());
-   if (!calendarModel) {
+   QCalendarModel *calendarModel = dynamic_cast<QCalendarModel *>(model());
+
+   if (calendarModel == nullptr) {
       QTableView::mouseReleaseEvent(event);
       return;
    }
