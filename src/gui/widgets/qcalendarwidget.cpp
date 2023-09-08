@@ -3032,18 +3032,23 @@ bool QCalendarWidget::event(QEvent *event)
 bool QCalendarWidget::eventFilter(QObject *watched, QEvent *event)
 {
    Q_D(QCalendarWidget);
+
    if (event->type() == QEvent::MouseButtonPress && d->yearEdit->hasFocus()) {
-      QWidget *tlw = window();
-      QWidget *widget = static_cast<QWidget *>(watched);
-      //as we have a event filter on the whole application we first make sure that the top level widget
-      //of both this and the watched widget are the same to decide if we should finish the year edition.
-      if (widget->window() == tlw) {
+      QWidget *tlw    = window();
+      QWidget *widget = dynamic_cast<QWidget *>(watched);
+
+      // have an event filter on the whole application, first make sure the top level widget
+      // of both this and the watched widget are the same to decide if we should finish the year edition
+
+      if (widget != nullptr && widget->window() == tlw) {
          QPoint mousePos = widget->mapTo(tlw, static_cast<QMouseEvent *>(event)->pos());
-         QRect geom = QRect(d->yearEdit->mapTo(tlw, QPoint(0, 0)), d->yearEdit->size());
-         if (!geom.contains(mousePos)) {
+         QRect geom      = QRect(d->yearEdit->mapTo(tlw, QPoint(0, 0)), d->yearEdit->size());
+
+         if (! geom.contains(mousePos)) {
             event->accept();
             d->_q_yearEditingFinished();
             setFocus();
+
             return true;
          }
       }
