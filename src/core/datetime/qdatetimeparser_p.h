@@ -54,6 +54,7 @@ class Q_CORE_EXPORT QDateTimeParser
       FromString,
       DateTimeEdit
    };
+
    QDateTimeParser(QVariant::Type t, Context ctx)
       : currentSectionIndex(-1), display(Qt::EmptyFlag), cachedDay(-1), parserType(t),
         fixday(false), spec(Qt::LocalTime), context(ctx)
@@ -104,10 +105,10 @@ class Q_CORE_EXPORT QDateTimeParser
       LastSection           = 0x40000 | Internal,
       CalendarPopupSection  = 0x80000 | Internal,
 
-      NoSectionIndex     = -1,
-      FirstSectionIndex  = -2,
-      LastSectionIndex   = -3,
-      CalendarPopupIndex = -4
+      NoSectionIndex        = -1,
+      FirstSectionIndex     = -2,
+      LastSectionIndex      = -3,
+      CalendarPopupIndex    = -4
    };
 
    using Sections = QFlags<Section>;
@@ -119,21 +120,26 @@ class Q_CORE_EXPORT QDateTimeParser
       int zeroesAdded;
 
       static QString name(Section s);
+
       QString name() const {
          return name(type);
       }
+
       QString format() const;
       int maxChange() const;
    };
 
-   enum State { // duplicated from QValidator
+   enum State {
       Invalid,
       Intermediate,
       Acceptable
    };
 
    struct StateNode {
-      StateNode() : state(Invalid), conflicts(false) {}
+      StateNode()
+         : state(Invalid), conflicts(false)
+      { }
+
       QString input;
       State state;
       bool conflicts;
@@ -191,11 +197,14 @@ class Q_CORE_EXPORT QDateTimeParser
 
    bool skipToNextSection(int section, const QDateTime &current, const QString &sectionText) const;
    QString stateName(State s) const;
+
    virtual QDateTime getMinimum() const;
    virtual QDateTime getMaximum() const;
+
    virtual int cursorPosition() const {
       return -1;
    }
+
    virtual QString getAmPmText(AmPm ap, Case cs) const;
    virtual QLocale locale() const {
       return defaultLocale;
@@ -219,6 +228,7 @@ class Q_CORE_EXPORT QDateTimeParser
 
    mutable int cachedDay;
    mutable QString text;
+
    QVector<SectionNode> sectionNodes;
    SectionNode first, last, none, popup;
    QStringList separators;
@@ -244,13 +254,11 @@ class Q_CORE_EXPORT QDateTimeParser
    int parseSection(const QDateTime &currentValue, int sectionIndex, QString &txt, int &cursorPosition,
       int index, QDateTimeParser::State &state, int *used = nullptr) const;
 
-#ifndef QT_NO_TEXTDATE
    int findMonth(const QString &str1, int monthstart, int sectionIndex,
       QString *monthName = nullptr, int *used = nullptr) const;
 
    int findDay(const QString &str1, int intDaystart, int sectionIndex,
       QString *dayName = nullptr, int *used = nullptr) const;
-#endif
 
    AmPmFinder findAmPm(QString &str, int index, int *used = nullptr) const;
    bool potentialValue(const QString &str, int min, int max, int index,
