@@ -48,6 +48,8 @@ class NSTimeZone;
 #include <qjni_p.h>
 #endif
 
+static constexpr const qint64 MSECS_PER_SEC  = 1000;
+
 class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 {
  public:

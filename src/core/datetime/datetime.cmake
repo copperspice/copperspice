@@ -24,7 +24,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qdatetime.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qdatetimeparser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qtimezone.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/datetime/qtimezone_p.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
