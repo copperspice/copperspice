@@ -67,7 +67,7 @@ static const QArrayData &qt_array_unsharable_empty()
 QArrayData *QArrayData::allocate(size_t objectSize, size_t alignment, size_t capacity, AllocationOptions options)
 {
    // alignment is a power of two
-   Q_ASSERT(alignment >= Q_ALIGNOF(QArrayData) && ! (alignment & (alignment - 1)));
+   Q_ASSERT(alignment >= alignof(QArrayData) && ! (alignment & (alignment - 1)));
 
    // do not allocate empty headers
    if (! (options & RawData) && ! capacity) {
@@ -83,12 +83,12 @@ QArrayData *QArrayData::allocate(size_t objectSize, size_t alignment, size_t cap
 
    size_t headerSize = sizeof(QArrayData);
 
-   // Allocate extra (alignment - Q_ALIGNOF(QArrayData)) padding bytes so we
+   // Allocate extra (alignment - alignof(QArrayData)) padding bytes so we
    // can properly align the data array. This assumes malloc is able to
    // provide appropriate alignment for the header -- as it should!
    // Padding is skipped when allocating a header for RawData.
    if (! (options & RawData))  {
-      headerSize += (alignment - Q_ALIGNOF(QArrayData));
+      headerSize += (alignment - alignof(QArrayData));
    }
 
    // Allocate additional space if array is growing
@@ -118,7 +118,7 @@ QArrayData *QArrayData::allocate(size_t objectSize, size_t alignment, size_t cap
 void QArrayData::deallocate(QArrayData *data, size_t objectSize, size_t alignment)
 {
    // Alignment is a power of two
-   Q_ASSERT(alignment >= Q_ALIGNOF(QArrayData) && ! (alignment & (alignment - 1)));
+   Q_ASSERT(alignment >= alignof(QArrayData) && ! (alignment & (alignment - 1)));
 
    (void) objectSize;
    (void) alignment;
