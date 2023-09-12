@@ -300,7 +300,6 @@
 
 #  define Q_CC_CLANG
 #  define Q_CC_GNU
-#  define Q_C_CALLBACKS
 
 #  define Q_FUNC_INFO       __func__
 
@@ -320,7 +319,6 @@
 #  endif
 
 #  define Q_CC_GNU
-#  define Q_C_CALLBACKS
 
 #  if defined(__MINGW32__)
 #    define Q_CC_MINGW
@@ -374,10 +372,7 @@
 #elif defined(__EDG) || defined(__EDG__)
 //  **
 
-#  if defined(__COMO__)
-#    define Q_C_CALLBACKS
-
-#  elif defined(__INTEL_COMPILER)
+#  if defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
 
 #  elif defined(__sgi)
