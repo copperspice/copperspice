@@ -1354,7 +1354,7 @@ void QTableWidget::setItem(int row, int column, QTableWidgetItem *item)
    Q_D(QTableWidget);
    if (item) {
       if (item->view != nullptr) {
-         qWarning("QTableWidget: cannot insert an item that is already owned by another QTableWidget");
+         qWarning("QTableWidget::setItem() Unable to insert an item which is already owned by another QTableWidget");
       } else {
          item->view = this;
          d->tableModel()->setItem(row, column, item);

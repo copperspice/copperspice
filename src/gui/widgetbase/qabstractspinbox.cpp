@@ -1426,8 +1426,8 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
    QVariant ret;
 
    if (arg1.type() != arg2.type())
-      qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+      qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
+         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
 
    switch (arg1.type()) {
       case QVariant::Int:  {
@@ -1474,8 +1474,8 @@ QVariant operator-(const QVariant &arg1, const QVariant &arg2)
    QVariant ret;
 
    if (arg1.type() != arg2.type())
-      qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+      qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
+         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
 
    switch (arg1.type()) {
       case QVariant::Int:

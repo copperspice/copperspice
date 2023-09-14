@@ -371,8 +371,7 @@ QModelIndex QSortFilterProxyModelPrivate::proxy_to_source(const QModelIndex &pro
       return QModelIndex();   // for now; we may want to be able to set a root index later
    }
    if (proxy_index.model() != q_func()) {
-      qWarning() << "QSortFilterProxyModel: index from wrong model passed to mapToSource";
-      Q_ASSERT(!"QSortFilterProxyModel: index from wrong model passed to mapToSource");
+      qWarning("QSortFilterProxyModel:QListView::setBatchSize() Index from a different model passed to mapToSource");
       return QModelIndex();
    }
    IndexMap::const_iterator it = index_to_iterator(proxy_index);
@@ -391,7 +390,7 @@ QModelIndex QSortFilterProxyModelPrivate::source_to_proxy(const QModelIndex &sou
       return QModelIndex();   // for now; we may want to be able to set a root index later
    }
    if (source_index.model() != model) {
-      qWarning() << "QSortFilterProxyModel: index from wrong model passed to mapFromSource";
+      qWarning("QSortFilterProxyModel::source_to_proxy() Index from a different model passed to mapFromSource");
       Q_ASSERT(!"QSortFilterProxyModel: index from wrong model passed to mapFromSource");
       return QModelIndex();
    }
@@ -796,7 +795,7 @@ void QSortFilterProxyModelPrivate::source_items_inserted(
 
    // Expand source-to-proxy mapping to account for new items
    if (start < 0 || start > source_to_proxy.size()) {
-      qWarning("QSortFilterProxyModel: invalid inserted rows reported by source model");
+      qWarning("QSortFilterProxyModel::source_items_inserted() Inserted rows rejected by source model");
       remove_from_mapping(source_parent);
       return;
    }
@@ -926,7 +925,7 @@ void QSortFilterProxyModelPrivate::source_items_removed(
    int proxy_count = proxy_to_source.size();
    if (proxy_count > source_to_proxy.size()) {
       // mapping is in an inconsistent state -- redo the whole mapping
-      qWarning("QSortFilterProxyModel: inconsistent changes reported by source model");
+      qWarning("QSortFilterProxyModel::source_items_removed() Inconsistent changes reported by source model");
 
       Q_Q(QSortFilterProxyModel);
       q->beginResetModel();

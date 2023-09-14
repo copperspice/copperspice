@@ -1247,8 +1247,7 @@ void QComboBox::setMaxVisibleItems(int maxItems)
    Q_D(QComboBox);
 
    if (maxItems < 0) {
-      qWarning("QComboBox::setMaxVisibleItems: "
-         "Invalid max visible items (%d) must be >= 0", maxItems);
+      qWarning("QComboBox::setMaxVisibleItems() Invalid number of items (%d) must be >= 0", maxItems);
       return;
    }
    d->maxVisibleItems = maxItems;
@@ -1265,7 +1264,7 @@ void QComboBox::setMaxCount(int max)
 {
    Q_D(QComboBox);
    if (max < 0) {
-      qWarning("QComboBox::setMaxCount: Invalid count (%d) must be >= 0", max);
+      qWarning("QComboBox::setMaxCount() Invalid count (%d) must be >= 0", max);
       return;
    }
 
@@ -1296,7 +1295,8 @@ void QComboBox::setAutoCompletion(bool enable)
 
 #ifdef QT_KEYPAD_NAVIGATION
    if (QApplication::keypadNavigationEnabled() && ! enable && isEditable()) {
-      qWarning("QComboBox::setAutoCompletion: auto completion is mandatory when combo box editable");
+      qWarning("QComboBox::setAutoCompletion() Auto completion must be enabled when "
+            "the values in a combo box can be modified");
    }
 #endif
 
@@ -1523,8 +1523,8 @@ void QComboBox::setLineEdit(QLineEdit *edit)
 {
    Q_D(QComboBox);
 
-   if (! edit) {
-      qWarning("QComboBox::setLineEdit: Unable to set a null line edit");
+   if (edit == nullptr) {
+      qWarning("QComboBox::setLineEdit() Unable to set a line edit to an invalid value (nullptr)");
       return;
    }
 
@@ -1644,8 +1644,8 @@ QAbstractItemDelegate *QComboBox::itemDelegate() const
 
 void QComboBox::setItemDelegate(QAbstractItemDelegate *delegate)
 {
-   if (!delegate) {
-      qWarning("QComboBox::setItemDelegate: cannot set a 0 delegate");
+   if (! delegate) {
+      qWarning("QComboBox::setItemDelegate() Unable to set a delegate to an invalid value (nullptr)");
       return;
    }
    delete view()->itemDelegate();
@@ -1668,7 +1668,7 @@ void QComboBox::setModel(QAbstractItemModel *model)
    Q_D(QComboBox);
 
    if (! model) {
-      qWarning("QComboBox::setModel: Can not set a null model");
+      qWarning("QComboBox::setModel() Unable to set a model to an invalid value (nullptr)");
       return;
    }
 
@@ -2013,8 +2013,9 @@ QAbstractItemView *QComboBox::view() const
 void QComboBox::setView(QAbstractItemView *itemView)
 {
    Q_D(QComboBox);
-   if (!itemView) {
-      qWarning("QComboBox::setView: cannot set a 0 view");
+
+   if (! itemView) {
+      qWarning("QComboBox::setView() Unable to set a view to an invalid value (nullptr)");
       return;
    }
 

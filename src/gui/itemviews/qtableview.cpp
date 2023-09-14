@@ -609,14 +609,14 @@ void QTableViewPrivate::trimHiddenSelections(QItemSelectionRange *range) const
 void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan)
 {
    if (row < 0 || column < 0 || rowSpan <= 0 || columnSpan <= 0) {
-      qWarning("QTableView::setSpan: invalid span given: (%d, %d, %d, %d)",
-         row, column, rowSpan, columnSpan);
+      qWarning("QTableView::setSpan() Invalid span (%d, %d, %d, %d)",
+            row, column, rowSpan, columnSpan);
       return;
    }
    QSpanCollection::Span *sp = spans.spanAt(column, row);
    if (sp) {
       if (sp->top() != row || sp->left() != column) {
-         qWarning("QTableView::setSpan: span cannot overlap");
+         qWarning("QTableView::setSpan() Span can not overlap");
          return;
       }
       if (rowSpan == 1 && columnSpan == 1) {
@@ -629,7 +629,7 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
       return;
 
    } else if (rowSpan == 1 && columnSpan == 1) {
-      qWarning("QTableView::setSpan: Single cell span will not be added");
+      qWarning("QTableView::setSpan() Unable to add a single cell span");
       return;
    }
 

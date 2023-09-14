@@ -322,7 +322,7 @@ QVariant QDirModel::data(const QModelIndex &index, int role) const
          case 3:
             return d->time(index);
          default:
-            qWarning("data: invalid display value column %d", index.column());
+            qWarning("QDirModel::data() Display value column %d is invalid", index.column());
             return QVariant();
       }
    }
@@ -1001,7 +1001,7 @@ bool QDirModel::rmdir(const QModelIndex &index)
 
    QDirModelPrivate::QDirNode *n = d_func()->node(index);
    if (!n->info.isDir()) {
-      qWarning("rmdir: the node is not a directory");
+      qWarning("QDirModel::rmdir() Node is not a directory");
       return false;
    }
 
@@ -1165,7 +1165,7 @@ QDirModelPrivate::QDirNode *QDirModelPrivate::node(int row, QDirNode *parent) co
    }
 
    if (row >= p->children.count()) {
-      qWarning("QDirNode: row does not exist");
+      qWarning("QDirNode::node() Specified row does not exist");
       return nullptr;
    }
 

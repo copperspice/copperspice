@@ -2280,7 +2280,7 @@ void QMdiSubWindow::setWidget(QWidget *widget)
    }
 
    if (widget == d->baseWidget) {
-      qWarning("QMdiSubWindow::setWidget: widget is already set");
+      qWarning("QMdiSubWindow::setWidget() Current widget was already set");
       return;
    }
 
@@ -2442,7 +2442,7 @@ void QMdiSubWindow::setSystemMenu(QMenu *systemMenu)
 {
    Q_D(QMdiSubWindow);
    if (systemMenu && systemMenu == d->systemMenu) {
-      qWarning("QMdiSubWindow::setSystemMenu: system menu is already set");
+      qWarning("QMdiSubWindow::setSystemMenu() System menu was already set");
       return;
    }
 

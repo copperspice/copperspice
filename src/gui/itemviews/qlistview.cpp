@@ -163,7 +163,7 @@ void QListView::setBatchSize(int batchSize)
 {
    Q_D(QListView);
    if (batchSize <= 0) {
-      qWarning("Invalid batchSize (%d)", batchSize);
+      qWarning("QListView::setBatchSize() Invalid batchSize (%d)", batchSize);
       return;
    }
    d->batchSize = batchSize;

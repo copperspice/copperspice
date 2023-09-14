@@ -2040,14 +2040,14 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
       for (int i = 0; i < items.count(); ++i) {
          QTreeWidgetItem *item = items.at(i);
          if (!item) {
-            qWarning("QTreeWidget::mimeData: Null-item passed");
+            qWarning("QTreeWidget::mimeData() Item %d was invalid (nullptr)", i);
             return nullptr;
          }
 
          for (int c = 0; c < item->values.count(); ++c) {
             const QModelIndex index = indexFromItem(item, c);
             if (!index.isValid()) {
-               qWarning() << "QTreeWidget::mimeData: No index associated with item :" << item;
+               qWarning("QTreeWidget::mimeData() No index associated with item %p at element %d", item, i);
                return nullptr;
             }
             indexes << index;

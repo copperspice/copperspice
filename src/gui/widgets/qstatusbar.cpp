@@ -187,7 +187,7 @@ int QStatusBar::insertWidget(int index, QWidget *widget, int stretch)
 
    int idx = d->indexToLastNonPermanentWidget();
    if (index < 0 || index > d->items.size() || (idx >= 0 && index > idx + 1)) {
-      qWarning("QStatusBar::insertWidget: Index out of range (%d), appending widget", index);
+      qWarning("QStatusBar::insertWidget() Index (%d) is out of range, appending widget instead", index);
       index = idx + 1;
    }
    d->items.insert(index, item);
@@ -238,7 +238,7 @@ int QStatusBar::insertPermanentWidget(int index, QWidget *widget, int stretch)
 
    int idx = d->indexToLastNonPermanentWidget();
    if (index < 0 || index > d->items.size() || (idx >= 0 && index <= idx)) {
-      qWarning("QStatusBar::insertPermanentWidget: Index out of range (%d), appending widget", index);
+      qWarning("QStatusBar::insertPermanentWidget() Index (%d) is out of range, appending widget instead", index);
       index = d->items.size();
    }
    d->items.insert(index, item);

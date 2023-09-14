@@ -131,7 +131,7 @@ void QItemSelection::select(const QModelIndex &topLeft, const QModelIndex &botto
 
    if ((topLeft.model() != bottomRight.model())
       || topLeft.parent() != bottomRight.parent()) {
-      qWarning("Unable to select indexes from different model or with different parents");
+      qWarning("QItemSelection::select() Unable to make a selection from a different model or with different parents");
       return;
    }
 
@@ -777,7 +777,8 @@ void QItemSelectionModel::select(const QItemSelection &selection, QItemSelection
 {
    Q_D(QItemSelectionModel);
    if (!d->model) {
-      qWarning("QItemSelectionModel: Selecting when no model has been set will result in a no-op.");
+
+      qWarning("QItemSelectionModel::select() No model is set, no items will be selected");
       return;
    }
    if (command == NoUpdate) {
@@ -872,7 +873,7 @@ void QItemSelectionModel::setCurrentIndex(const QModelIndex &index, QItemSelecti
    Q_D(QItemSelectionModel);
 
    if (!d->model) {
-      qWarning("QItemSelectionModel: Setting the current index when no model has been set will result in a no-op.");
+      qWarning("QItemSelectionModel::setCurrentIndex() Unable to set the current index without a model");
       return;
    }
 

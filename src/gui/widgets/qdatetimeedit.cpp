@@ -383,18 +383,19 @@ QCalendarWidget *QDateTimeEdit::calendarWidget() const
 void QDateTimeEdit::setCalendarWidget(QCalendarWidget *calendarWidget)
 {
    Q_D(QDateTimeEdit);
-   if (!calendarWidget) {
-      qWarning("QDateTimeEdit::setCalendarWidget: Cannot set a null calendar widget");
+
+   if (! calendarWidget) {
+      qWarning("QDateTimeEdit::setCalendarWidget() Unable to set the calendar widget to an invalid value (nullptr)");
       return;
    }
 
-   if (!d->calendarPopup) {
-      qWarning("QDateTimeEdit::setCalendarWidget: calendarPopup is set to false");
+   if (! d->calendarPopup) {
+      qWarning("QDateTimeEdit::setCalendarWidget() Calendar Popup is disabled");
       return;
    }
 
    if (!(d->display & QDateTimeParser::DateSectionMask)) {
-      qWarning("QDateTimeEdit::setCalendarWidget: no date sections specified");
+      qWarning("QDateTimeEdit::setCalendarWidget() No calendar date section was specified");
       return;
    }
    d->initCalendarPopup(calendarWidget);
@@ -1271,7 +1272,9 @@ int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
          return i;
       }
    }
-   qWarning("QDateTimeEdit: Internal Error: closestSection returned NoSection");
+
+   qWarning("QDateTimeEdit::closestSection() No calendar section found");
+
    return NoSectionIndex;
 }
 
@@ -1329,7 +1332,7 @@ void QDateTimeEditPrivate::clearSection(int index)
    const int pos = sectionPos(index);
 
    if (pos == -1) {
-      qWarning("QDateTimeEdit: Internal error (%s:%d)", __FILE__, __LINE__);
+      qWarning("QDateTimeEdit::clearSection() No section found");
       return;
    }
 

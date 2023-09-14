@@ -419,7 +419,7 @@ void QSystemTrayIconPrivate::install_sys()
          sys->createIcon();
          sys->trayMessage(NIM_ADD);
       } else {
-         qWarning("The platform plugin failed to create a message window.");
+         qWarning("QSystemTrayIcon::install_sys() Platform plugin failed to create a message window");
       }
    }
 }

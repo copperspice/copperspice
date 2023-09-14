@@ -147,7 +147,7 @@ static qreal progressForValue(const QEasingCurve &curve, qreal value)
 {
    if (curve.type() >= QEasingCurve::InElastic &&
       curve.type() < QEasingCurve::Custom) {
-      qWarning("progressForValue(): QEasingCurves of type %d do not have an inverse, since they are not injective.", curve.type());
+      qWarning("progressForValue() QEasingCurves of type %d do not have an inverse", curve.type());
       return value;
    }
    if (value < qreal(0) || value > qreal(1)) {
@@ -233,7 +233,7 @@ bool QScroller::hasScroller(QObject *target)
 QScroller *QScroller::scroller(QObject *target)
 {
    if (!target) {
-      qWarning("QScroller::scroller() was called with a null target.");
+      qWarning("QScroller::scroller() Target is an invalid value (nullptr)");
       return nullptr;
    }
 

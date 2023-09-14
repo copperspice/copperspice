@@ -207,7 +207,7 @@ void QSpinBox::setDisplayIntegerBase(int base)
    Q_D(QSpinBox);
 
    if (base < 2 || base > 36) {
-      qWarning("QSpinBox::setDisplayIntegerBase: Invalid base (%d)", base);
+      qWarning("QSpinBox::setDisplayIntegerBase() Base (%d) is not a valid integer base", base);
       base = 10;
    }
 

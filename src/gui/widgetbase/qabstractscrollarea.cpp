@@ -494,7 +494,7 @@ void QAbstractScrollArea::setVerticalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
    if (!scrollBar) {
-      qWarning("QAbstractScrollArea::setVerticalScrollBar: Cannot set a null scroll bar");
+      qWarning("QAbstractScrollArea::setVerticalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }
 
@@ -532,7 +532,7 @@ void QAbstractScrollArea::setHorizontalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
    if (!scrollBar) {
-      qWarning("QAbstractScrollArea::setHorizontalScrollBar: Can not set a null scroll bar");
+      qWarning("QAbstractScrollArea::setHorizontalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }
 

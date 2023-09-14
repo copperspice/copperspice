@@ -687,7 +687,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
       }
 
       default:
-         qWarning("doLayout: decoration position is invalid");
+         qWarning("QItemDelegate::doLayout() Decoration position is invalid");
          decoration = *pixmapRect;
          break;
    }

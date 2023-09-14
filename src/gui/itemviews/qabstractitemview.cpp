@@ -300,8 +300,8 @@ void QAbstractItemView::setSelectionModel(QItemSelectionModel *selectionModel)
    Q_D(QAbstractItemView);
 
    if (selectionModel->model() != d->model) {
-      qWarning("QAbstractItemView::setSelectionModel() failed: "
-         "Trying to set a selection model, which works on a different model than the view.");
+      qWarning("QAbstractItemView::setSelectionModel() Setting a selection model failed, "
+         "because this model did not match the view");
       return;
    }
 
@@ -535,7 +535,7 @@ void QAbstractItemView::setRootIndex(const QModelIndex &index)
 {
    Q_D(QAbstractItemView);
    if (index.isValid() && index.model() != d->model) {
-      qWarning("QAbstractItemView::setRootIndex failed : index must be from the currently set model");
+      qWarning("QAbstractItemView::setRootIndex() Model index must be from the current model");
       return;
    }
 
@@ -569,11 +569,11 @@ void QAbstractItemView::edit(const QModelIndex &index)
    Q_D(QAbstractItemView);
 
    if (! d->isIndexValid(index)) {
-      qWarning("edit() Index was invalid");
+      qWarning("QAbstractItemView::edit() Model index was invalid");
    }
 
    if (! edit(index, AllEditTriggers, nullptr)) {
-      qWarning("edit() Editing failed");
+      qWarning("QAbstractItemView::edit() Editing failed");
    }
 }
 

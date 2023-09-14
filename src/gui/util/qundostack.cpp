@@ -330,7 +330,7 @@ void QUndoStack::setClean()
 {
    Q_D(QUndoStack);
    if (!d->macro_stack.isEmpty()) {
-      qWarning("QUndoStack::setClean(): cannot set clean in the middle of a macro");
+      qWarning("QUndoStack::setClean() Unable to clean the stack while executing a macro");
       return;
    }
 
@@ -366,7 +366,7 @@ void QUndoStack::undo()
    }
 
    if (!d->macro_stack.isEmpty()) {
-      qWarning("QUndoStack::undo(): cannot undo in the middle of a macro");
+      qWarning("QUndoStack::undo() Unable to undo the stack while executing a macro");
       return;
    }
 
@@ -383,7 +383,7 @@ void QUndoStack::redo()
    }
 
    if (!d->macro_stack.isEmpty()) {
-      qWarning("QUndoStack::redo(): cannot redo in the middle of a macro");
+      qWarning("QUndoStack::redo() Unable to redo the stack while executing a macro");
       return;
    }
 
@@ -408,7 +408,7 @@ void QUndoStack::setIndex(int idx)
 {
    Q_D(QUndoStack);
    if (!d->macro_stack.isEmpty()) {
-      qWarning("QUndoStack::setIndex(): cannot set index in the middle of a macro");
+      qWarning("QUndoStack::setIndex() Unable to set the index on the stack while executing a macro");
       return;
    }
 
@@ -541,7 +541,7 @@ void QUndoStack::endMacro()
 {
    Q_D(QUndoStack);
    if (d->macro_stack.isEmpty()) {
-      qWarning("QUndoStack::endMacro(): no matching beginMacro()");
+      qWarning("QUndoStack::endMacro() No matching beginMacro()");
       return;
    }
 
@@ -580,7 +580,7 @@ void QUndoStack::setUndoLimit(int limit)
    Q_D(QUndoStack);
 
    if (!d->command_list.isEmpty()) {
-      qWarning("QUndoStack::setUndoLimit(): an undo limit can only be set when the stack is empty");
+      qWarning("QUndoStack::setUndoLimit() Stack undo limit can only be set when the stack is empty");
       return;
    }
 

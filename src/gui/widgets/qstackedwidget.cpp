@@ -91,10 +91,12 @@ QWidget *QStackedWidget::currentWidget() const
 void QStackedWidget::setCurrentWidget(QWidget *widget)
 {
    Q_D(QStackedWidget);
+
    if (d->layout->indexOf(widget) == -1) {
-      qWarning("QStackedWidget::setCurrentWidget: widget %p not contained in stack", widget);
+      qWarning("QStackedWidget::setCurrentWidget() Current widget (%p) is not in this stack", widget);
       return;
    }
+
    d->layout->setCurrentWidget(widget);
 }
 

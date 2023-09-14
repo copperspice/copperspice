@@ -1823,12 +1823,12 @@ void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
    }
 
    if (d->childWindows.isEmpty()) {
-      qWarning("QMdiArea::setActiveSubWindow: workspace is empty");
+      qWarning("QMdiArea::setActiveSubWindow() No child windows are available");
       return;
    }
 
    if (d->childWindows.indexOf(window) == -1) {
-      qWarning("QMdiArea::setActiveSubWindow: window is not inside workspace");
+      qWarning("QMdiArea::setActiveSubWindow() Window is not inside this MDI area");
       return;
    }
 
@@ -1904,7 +1904,7 @@ void QMdiArea::activatePreviousSubWindow()
 QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags flags)
 {
    if (! widget) {
-      qWarning("QMdiArea::addSubWindow(): Widget was a null pointer to widget");
+      qWarning("QMdiArea::addSubWindow() Unable to add a sub-window with an invalid value (nullptr)");
       return nullptr;
    }
 
@@ -1917,7 +1917,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags flags)
    // Widget is already a QMdiSubWindow
    if (child) {
       if (d->childWindows.indexOf(child) != -1) {
-         qWarning("QMdiArea::addSubWindow(): Window was already added");
+         qWarning("QMdiArea::addSubWindow() Unable to add Window since it has already been added");
          return child;
       }
 
@@ -1944,7 +1944,7 @@ QMdiSubWindow *QMdiArea::addSubWindow(QWidget *widget, Qt::WindowFlags flags)
 void QMdiArea::removeSubWindow(QWidget *widget)
 {
    if (! widget) {
-      qWarning("QMdiArea::removeSubWindow(): null pointer to widget");
+      qWarning("QMdiArea::removeSubWindow() Unable to remove a sub-window with an invalid value (nullptr)");
       return;
    }
 
@@ -1956,7 +1956,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
    if (QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(widget)) {
       int index = d->childWindows.indexOf(child);
       if (index == -1) {
-         qWarning("QMdiArea::removeSubWindow: window is not inside workspace");
+         qWarning("QMdiArea::removeSubWindow() Window is not inside this MDI area");
          return;
       }
       d->disconnectSubWindow(child);
@@ -1982,7 +1982,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
    }
 
    if (!found) {
-      qWarning("QMdiArea::removeSubWindow: widget is not child of any window inside QMdiArea");
+      qWarning("QMdiArea::removeSubWindow() Window is not a child of any window inside this MDI area");
    }
 }
 
@@ -2335,7 +2335,7 @@ bool QMdiArea::viewportEvent(QEvent *event)
          d->isSubWindowsTiled = false;
          d->resetActiveWindow();
          d->childWindows.clear();
-         qWarning("QMdiArea: Deleting the view port is undefined, use setViewport instead.");
+         qWarning("QMdiArea::viewportEvent() Use setViewport() to delete the viewport");
          break;
 
       default:

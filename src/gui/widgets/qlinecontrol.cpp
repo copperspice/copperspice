@@ -241,7 +241,7 @@ void QLineControl::setSelection(int start, int length)
 {
    commitPreedit();
    if (start < 0 || start > (int)m_text.length()) {
-      qWarning("QLineControl::setSelection: Invalid start position");
+      qWarning("QLineControl::setSelection() Invalid start position");
       return;
    }
 

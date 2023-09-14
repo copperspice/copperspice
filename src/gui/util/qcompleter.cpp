@@ -1124,7 +1124,7 @@ void QCompleter::setFilterMode(Qt::MatchFlags filterMode)
    }
 
    if (filterMode != Qt::MatchStartsWith && filterMode != Qt::MatchContains && filterMode != Qt::MatchEndsWith) {
-      qWarning("Unhandled QCompleter::filterMode flag is used.");
+      qWarning("QCompleter::setFilterMode() QCompleter::filterMode flag is not supported");
       return;
    }
 
@@ -1567,8 +1567,7 @@ void QCompleter::setMaxVisibleItems(int maxItems)
 {
    Q_D(QCompleter);
    if (maxItems < 0) {
-      qWarning("QCompleter::setMaxVisibleItems: "
-         "Invalid max visible items (%d) must be >= 0", maxItems);
+      qWarning("QCompleter::setMaxVisibleItems() Invalid max visible items (%d) must be >= 0", maxItems);
       return;
    }
    d->maxVisibleItems = maxItems;
