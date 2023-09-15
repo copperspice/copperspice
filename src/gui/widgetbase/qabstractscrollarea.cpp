@@ -1195,16 +1195,16 @@ void QAbstractScrollArea::setupViewport(QWidget *viewport)
    (void) viewport;
 }
 
-void QAbstractScrollArea::_q_hslide(int un_named_arg1)
+void QAbstractScrollArea::_q_hslide(int x)
 {
    Q_D(QAbstractScrollArea);
-   d->_q_hslide(un_named_arg1);
+   d->_q_hslide(x);
 }
 
-void QAbstractScrollArea::_q_vslide(int un_named_arg1)
+void QAbstractScrollArea::_q_vslide(int y)
 {
    Q_D(QAbstractScrollArea);
-   d->_q_vslide(un_named_arg1);
+   d->_q_vslide(y);
 }
 
 void QAbstractScrollArea::_q_showOrHideScrollBars()

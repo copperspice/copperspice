@@ -3529,10 +3529,10 @@ QScriptSyntaxCheckResult &QScriptSyntaxCheckResult::operator=(const QScriptSynta
    return *this;
 }
 
-void QScriptEngine::_q_objectDestroyed(QObject *un_named_arg1)
+void QScriptEngine::_q_objectDestroyed(QObject *object)
 {
    Q_D(QScriptEngine);
-   d->_q_objectDestroyed(un_named_arg1);
+   d->_q_objectDestroyed(object);
 }
 
 QScriptEnginePrivate *QScriptEnginePrivate::cs_getPrivate(QScriptEngine *object)

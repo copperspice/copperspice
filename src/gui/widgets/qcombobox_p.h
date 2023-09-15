@@ -215,8 +215,8 @@ class QComboBoxPrivateContainer : public QFrame
    GUI_CS_SLOT_1(Public, void viewDestroyed())
    GUI_CS_SLOT_2(viewDestroyed)
 
-   GUI_CS_SIGNAL_1(Public, void itemSelected(const QModelIndex &un_named_arg1))
-   GUI_CS_SIGNAL_2(itemSelected, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void itemSelected(const QModelIndex &index))
+   GUI_CS_SIGNAL_2(itemSelected, index)
 
    GUI_CS_SIGNAL_1(Public, void resetButton())
    GUI_CS_SIGNAL_2(resetButton)

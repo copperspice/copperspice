@@ -3067,40 +3067,40 @@ int QTableView::visualIndex(const QModelIndex &index) const
    return index.row();
 }
 
-void QTableView::_q_selectRow(int un_named_arg1)
+void QTableView::_q_selectRow(int row)
 {
    Q_D(QTableView);
-   d->_q_selectRow(un_named_arg1);
+   d->_q_selectRow(row);
 }
 
-void QTableView::_q_selectColumn(int un_named_arg1)
+void QTableView::_q_selectColumn(int column)
 {
    Q_D(QTableView);
-   d->_q_selectColumn(un_named_arg1);
+   d->_q_selectColumn(column);
 }
 
-void QTableView::_q_updateSpanInsertedRows(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanInsertedRows(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanInsertedRows(parent, start, end);
 }
 
-void QTableView::_q_updateSpanInsertedColumns(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanInsertedColumns(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanInsertedColumns(parent, start, end);
 }
 
-void QTableView::_q_updateSpanRemovedRows(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanRemovedRows(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanRemovedRows(parent, start, end);
 }
 
-void QTableView::_q_updateSpanRemovedColumns(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanRemovedColumns(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanRemovedColumns(parent, start, end);
 }
 
 #endif // QT_NO_TABLEVIEW

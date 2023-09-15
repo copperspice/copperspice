@@ -48,8 +48,8 @@ class QTabWidgetPrivate : public QWidgetPrivate
    ~QTabWidgetPrivate();
 
    void updateTabBarPosition();
-   void _q_showTab(int);
-   void _q_removeTab(int);
+   void _q_showTab(int index);
+   void _q_removeTab(int index);
    void _q_tabMoved(int from, int to);
    void init();
 
@@ -890,22 +890,22 @@ void QTabWidget::clear()
    }
 }
 
-void QTabWidget::_q_showTab(int un_named_arg1)
+void QTabWidget::_q_showTab(int index)
 {
    Q_D(QTabWidget);
-   d->_q_showTab(un_named_arg1);
+   d->_q_showTab(index);
 }
 
-void QTabWidget::_q_removeTab(int un_named_arg1)
+void QTabWidget::_q_removeTab(int index)
 {
    Q_D(QTabWidget);
-   d->_q_removeTab(un_named_arg1);
+   d->_q_removeTab(index);
 }
 
-void QTabWidget::_q_tabMoved(int un_named_arg1, int un_named_arg2)
+void QTabWidget::_q_tabMoved(int from, int to)
 {
    Q_D(QTabWidget);
-   d->_q_tabMoved(un_named_arg1, un_named_arg2);
+   d->_q_tabMoved(from, to);
 }
 
 #endif //QT_NO_TABWIDGET

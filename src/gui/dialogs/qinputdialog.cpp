@@ -108,8 +108,8 @@ class QInputDialogSpinBox : public QSpinBox
       connect(this,       &QInputDialogSpinBox::editingFinished, this, &QInputDialogSpinBox::notifyTextChanged);
    }
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(bool isChanged))
+   GUI_CS_SIGNAL_2(textChanged, isChanged)
 
  private:
    GUI_CS_SLOT_1(Private, void notifyTextChanged())
@@ -150,8 +150,8 @@ class QInputDialogDoubleSpinBox : public QDoubleSpinBox
       connect(this,       &QInputDialogSpinBox::editingFinished, this, &QInputDialogDoubleSpinBox::notifyTextChanged);
    }
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(bool isChanged))
+   GUI_CS_SIGNAL_2(textChanged, isChanged)
 
    GUI_CS_SLOT_1(Private, void notifyTextChanged())
    GUI_CS_SLOT_2(notifyTextChanged)
@@ -1168,10 +1168,10 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    }
 }
 
-void QInputDialog::_q_textChanged(const QString &un_named_arg1)
+void QInputDialog::_q_textChanged(const QString &text)
 {
    Q_D(QInputDialog);
-   d->_q_textChanged(un_named_arg1);
+   d->_q_textChanged(text);
 }
 
 void QInputDialog::_q_plainTextEditTextChanged()
@@ -1180,10 +1180,10 @@ void QInputDialog::_q_plainTextEditTextChanged()
    d->_q_plainTextEditTextChanged();
 }
 
-void QInputDialog::_q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
+void QInputDialog::_q_currentRowChanged(const QModelIndex &newIndex, const QModelIndex &oldIndex)
 {
    Q_D(QInputDialog);
-   d->_q_currentRowChanged(un_named_arg1, un_named_arg2);
+   d->_q_currentRowChanged(newIndex, oldIndex);
 }
 
 #endif

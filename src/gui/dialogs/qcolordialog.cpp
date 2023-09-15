@@ -2265,22 +2265,22 @@ void QColorDialog::_q_newColorTypedIn(QRgb rgb)
    d->_q_newColorTypedIn(rgb);
 }
 
-void QColorDialog::_q_newCustom(int un_named_arg1, int un_named_arg2)
+void QColorDialog::_q_newCustom(int arg1, int arg2)
 {
    Q_D(QColorDialog);
-   d->_q_newCustom(un_named_arg1, un_named_arg2);
+   d->_q_newCustom(arg1, arg2);
 }
 
-void QColorDialog::_q_nextCustom(int un_named_arg1, int un_named_arg2)
+void QColorDialog::_q_nextCustom(int arg1, int arg2)
 {
    Q_D(QColorDialog);
-   d->_q_nextCustom(un_named_arg1, un_named_arg2);
+   d->_q_nextCustom(arg1, arg2);
 }
 
-void QColorDialog::_q_newStandard(int un_named_arg1, int un_named_arg2)
+void QColorDialog::_q_newStandard(int arg1, int arg2)
 {
    Q_D(QColorDialog);
-   d->_q_newStandard(un_named_arg1, un_named_arg2);
+   d->_q_newStandard(arg1, arg2);
 }
 
 void QColorDialog::_q_pickScreenColor()

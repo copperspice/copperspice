@@ -1862,10 +1862,10 @@ QStringList QFSCompleter::splitPath(const QString &path) const
 
 #endif // QT_NO_COMPLETER
 
-void QFileDialog::_q_pathChanged(const QString &un_named_arg1)
+void QFileDialog::_q_pathChanged(const QString &path)
 {
    Q_D(QFileDialog);
-   d->_q_pathChanged(un_named_arg1);
+   d->_q_pathChanged(path);
 }
 
 void QFileDialog::_q_navigateBackward()
@@ -1904,10 +1904,10 @@ void QFileDialog::_q_showDetailsView()
    d->_q_showDetailsView();
 }
 
-void QFileDialog::_q_showContextMenu(const QPoint &un_named_arg1)
+void QFileDialog::_q_showContextMenu(const QPoint &point)
 {
    Q_D(QFileDialog);
-   d->_q_showContextMenu(un_named_arg1);
+   d->_q_showContextMenu(point);
 }
 
 void QFileDialog::_q_renameCurrent()
@@ -2000,10 +2000,10 @@ void QFileDialog::_q_goHome()
    d->_q_goHome();
 }
 
-void QFileDialog::_q_showHeader(QAction *un_named_arg1)
+void QFileDialog::_q_showHeader(QAction *action)
 {
    Q_D(QFileDialog);
-   d->_q_showHeader(un_named_arg1);
+   d->_q_showHeader(action);
 }
 
 void QFileDialog::_q_autoCompleteFileName(const QString &text)

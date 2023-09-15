@@ -1772,31 +1772,31 @@ void QLineEdit::_q_handleWindowActivate()
    d->_q_handleWindowActivate();
 }
 
-void QLineEdit::_q_textEdited(const QString &un_named_arg1)
+void QLineEdit::_q_textEdited(const QString &newText)
 {
    Q_D(QLineEdit);
-   d->_q_textEdited(un_named_arg1);
+   d->_q_textEdited(newText);
 }
 
-void QLineEdit::_q_cursorPositionChanged(int un_named_arg1, int un_named_arg2)
+void QLineEdit::_q_cursorPositionChanged(int oldValue, int newValue)
 {
    Q_D(QLineEdit);
-   d->_q_cursorPositionChanged(un_named_arg1, un_named_arg2);
+   d->_q_cursorPositionChanged(oldValue, newValue);
 }
 
 #ifndef QT_NO_COMPLETER
-void QLineEdit::_q_completionHighlighted(const QString &un_named_arg1)
+void QLineEdit::_q_completionHighlighted(const QString &text)
 {
    Q_D(QLineEdit);
-   d->_q_completionHighlighted(un_named_arg1);
+   d->_q_completionHighlighted(text);
 }
 #endif
 
 #ifdef QT_KEYPAD_NAVIGATION
-void QLineEdit::_q_editFocusChange(bool un_named_arg1)
+void QLineEdit::_q_editFocusChange(bool isFocusChanged)
 {
    Q_D(QLineEdit);
-   d->_q_editFocusChange(un_named_arg1);
+   d->_q_editFocusChange(isFocusChanged);
 }
 #endif
 
@@ -1806,16 +1806,16 @@ void QLineEdit::_q_selectionChanged()
    d->_q_selectionChanged();
 }
 
-void QLineEdit::_q_updateNeeded(const QRect &un_named_arg1)
+void QLineEdit::_q_updateNeeded(const QRect &rect)
 {
    Q_D(QLineEdit);
-   d->_q_updateNeeded(un_named_arg1);
+   d->_q_updateNeeded(rect);
 }
 
-void QLineEdit::_q_textChanged(const QString &un_named_arg1)
+void QLineEdit::_q_textChanged(const QString &newText)
 {
    Q_D(QLineEdit);
-   d->_q_textChanged(un_named_arg1);
+   d->_q_textChanged(newText);
 }
 
 void QLineEdit::_q_clearButtonClicked()

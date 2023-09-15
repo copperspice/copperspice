@@ -2004,10 +2004,10 @@ void QFileSystemModel::_q_performDelayedSort()
    d->_q_performDelayedSort();
 }
 
-void QFileSystemModel::_q_fileSystemChanged(const QString &path, const QVector<QPair<QString, QFileInfo>> &un_named_arg2)
+void QFileSystemModel::_q_fileSystemChanged(const QString &path, const QVector<QPair<QString, QFileInfo>> &data)
 {
    Q_D(QFileSystemModel);
-   d->_q_fileSystemChanged(path, un_named_arg2);
+   d->_q_fileSystemChanged(path, data);
 }
 
 void QFileSystemModel::_q_resolvedName(const QString &fileName, const QString &resolvedName)

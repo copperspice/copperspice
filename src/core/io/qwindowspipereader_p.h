@@ -52,8 +52,8 @@ public:
 
     bool isReadOperationActive() const { return readSequenceStarted; }
 
-    CORE_CS_SIGNAL_1(Public, void winError(ulong un_named_arg1,const QString & un_named_arg2))
-    CORE_CS_SIGNAL_2(winError,un_named_arg1,un_named_arg2)
+    CORE_CS_SIGNAL_1(Public, void winError(ulong errorCode, const QString &text))
+    CORE_CS_SIGNAL_2(winError, errorCode, text)
 
     CORE_CS_SIGNAL_1(Public, void readyRead())
     CORE_CS_SIGNAL_2(readyRead)

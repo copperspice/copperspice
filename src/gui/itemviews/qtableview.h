@@ -197,26 +197,22 @@ class Q_GUI_EXPORT QTableView : public QAbstractItemView
 
    Q_DECLARE_PRIVATE(QTableView)
 
-   GUI_CS_SLOT_1(Private, void _q_selectRow(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_selectRow(int row))
    GUI_CS_SLOT_2(_q_selectRow)
 
-   GUI_CS_SLOT_1(Private, void _q_selectColumn(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_selectColumn(int column))
    GUI_CS_SLOT_2(_q_selectColumn)
 
-   GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedRows(const QModelIndex &un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_updateSpanInsertedRows)
 
-   GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedColumns(const QModelIndex &un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_updateSpanInsertedColumns)
 
-   GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedRows(const QModelIndex &un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_updateSpanRemovedRows)
 
-   GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedColumns(const QModelIndex &un_named_arg1, int un_named_arg2,
-         int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_updateSpanRemovedColumns)
 };
 

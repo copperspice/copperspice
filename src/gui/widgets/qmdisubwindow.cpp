@@ -835,13 +835,14 @@ void QMdiSubWindowPrivate::_q_enterInteractiveMode()
 #endif // QT_NO_ACTION
 }
 
-void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *old, QWidget *now)
+void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *oldWidget, QWidget *newWidget)
 {
-   (void) old;
+   (void) oldWidget;
 
    Q_Q(QMdiSubWindow);
-   if (now && (now == q || q->isAncestorOf(now))) {
-      if (now == q && !isInInteractiveMode) {
+
+   if (newWidget != nullptr && (newWidget == q || q->isAncestorOf(newWidget))) {
+      if (newWidget == q && ! isInInteractiveMode) {
          setFocusWidget();
       }
       setActive(true);
@@ -3605,10 +3606,10 @@ void QMdiSubWindow::_q_enterInteractiveMode()
    d->_q_enterInteractiveMode();
 }
 
-void QMdiSubWindow::_q_processFocusChanged(QWidget *un_named_arg1, QWidget *un_named_arg2)
+void QMdiSubWindow::_q_processFocusChanged(QWidget *oldWidget, QWidget *newWidget)
 {
    Q_D(QMdiSubWindow);
-   d->_q_processFocusChanged(un_named_arg1, un_named_arg2);
+   d->_q_processFocusChanged(oldWidget, newWidget);
 }
 
 #endif //QT_NO_MDIAREA

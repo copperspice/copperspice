@@ -3014,10 +3014,10 @@ QRectF QGraphicsViewPrivate::mapToScene(const QRectF &rect) const
 }
 
 #ifndef QT_NO_CURSOR
-void QGraphicsView::_q_setViewportCursor(const QCursor &un_named_arg1)
+void QGraphicsView::_q_setViewportCursor(const QCursor &cursor)
 {
    Q_D(QGraphicsView);
-   d->_q_setViewportCursor(un_named_arg1);
+   d->_q_setViewportCursor(cursor);
 }
 
 void QGraphicsView::_q_unsetViewportCursor()

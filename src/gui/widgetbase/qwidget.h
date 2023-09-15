@@ -391,14 +391,14 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setSizeIncrement(int w, int h);
 
    // wrapper for overloaded property
-   inline void cs_setSizeIncrement(const QSize &un_named_arg1);
+   inline void cs_setSizeIncrement(const QSize &size);
 
    QSize baseSize() const;
    inline void setBaseSize(const QSize &size);
    void setBaseSize(int basew, int baseh);
 
    // wrapper for overloaded property
-   inline void cs_setBaseSize(const QSize &un_named_arg1);
+   inline void cs_setBaseSize(const QSize &size);
 
    void setFixedSize(const QSize &size);
    void setFixedSize(int w, int h);

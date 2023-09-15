@@ -500,8 +500,8 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
       return &m_textLayout;
    }
 
-   GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int un_named_arg1, int un_named_arg2))
-   GUI_CS_SIGNAL_2(cursorPositionChanged, un_named_arg1, un_named_arg2)
+   GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int oldpos, int newpos))
+   GUI_CS_SIGNAL_2(cursorPositionChanged, oldpos, newpos)
 
    GUI_CS_SIGNAL_1(Public, void selectionChanged())
    GUI_CS_SIGNAL_2(selectionChanged)
@@ -527,12 +527,12 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    GUI_CS_SIGNAL_1(Public, void editingFinished())
    GUI_CS_SIGNAL_2(editingFinished)
 
-   GUI_CS_SIGNAL_1(Public, void updateNeeded(const QRect &un_named_arg1))
-   GUI_CS_SIGNAL_2(updateNeeded, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void updateNeeded(const QRect &rect))
+   GUI_CS_SIGNAL_2(updateNeeded, rect)
 
 #ifdef QT_KEYPAD_NAVIGATION
-   GUI_CS_SIGNAL_1(Public, void editFocusChange(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(editFocusChange, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void editFocusChange(bool isFocusChanged))
+   GUI_CS_SIGNAL_2(editFocusChange, isFocusChanged)
 #endif
 
  protected:

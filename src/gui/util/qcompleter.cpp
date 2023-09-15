@@ -1759,17 +1759,16 @@ QStringList QCompleter::splitPath(const QString &path) const
    return parts;
 }
 
-
-void QCompleter::_q_complete(const QModelIndex &un_named_arg1)
+void QCompleter::_q_complete(const QModelIndex &index)
 {
    Q_D(QCompleter);
-   d->_q_complete(un_named_arg1);
+   d->_q_complete(index);
 }
 
-void QCompleter::_q_completionSelected(const QItemSelection &un_named_arg1)
+void QCompleter::_q_completionSelected(const QItemSelection &selection)
 {
    Q_D(QCompleter);
-   d->_q_completionSelected(un_named_arg1);
+   d->_q_completionSelected(selection);
 }
 
 void QCompleter::_q_autoResizePopup()
@@ -1778,10 +1777,10 @@ void QCompleter::_q_autoResizePopup()
    d->_q_autoResizePopup();
 }
 
-void QCompleter::_q_fileSystemModelDirectoryLoaded(const QString &un_named_arg1)
+void QCompleter::_q_fileSystemModelDirectoryLoaded(const QString &path)
 {
    Q_D(QCompleter);
-   d->_q_fileSystemModelDirectoryLoaded(un_named_arg1);
+   d->_q_fileSystemModelDirectoryLoaded(path);
 }
 
 #endif // QT_NO_COMPLETER

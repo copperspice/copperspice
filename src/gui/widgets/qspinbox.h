@@ -102,8 +102,8 @@ class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
    GUI_CS_SIGNAL_OVERLOAD(valueChanged, (const QString &), text)
 
    // wrapper for property
-   GUI_CS_SIGNAL_1(Public, void cs_valueChanged(int un_named_arg1))
-   GUI_CS_SIGNAL_2(cs_valueChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void cs_valueChanged(int newValue))
+   GUI_CS_SIGNAL_2(cs_valueChanged, newValue)
 
  protected:
    bool event(QEvent *event) override;
@@ -192,8 +192,8 @@ class Q_GUI_EXPORT QDoubleSpinBox : public QAbstractSpinBox
    GUI_CS_SIGNAL_OVERLOAD(valueChanged, (const QString &), text)
 
    // wrapper for property
-   GUI_CS_SIGNAL_1(Public, void cs_valueChanged(double un_named_arg1))
-   GUI_CS_SIGNAL_2(cs_valueChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void cs_valueChanged(double newValue))
+   GUI_CS_SIGNAL_2(cs_valueChanged, newValue)
 
  private:
    Q_DECLARE_PRIVATE(QDoubleSpinBox)

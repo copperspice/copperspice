@@ -312,7 +312,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    Q_DECLARE_PRIVATE(QGraphicsView)
 
 #ifndef QT_NO_CURSOR
-   GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &cursor))
    GUI_CS_SLOT_2(_q_setViewportCursor)
 
    GUI_CS_SLOT_1(Private, void _q_unsetViewportCursor())

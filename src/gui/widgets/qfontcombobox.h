@@ -88,7 +88,7 @@ class Q_GUI_EXPORT QFontComboBox : public QComboBox
  private:
    Q_DECLARE_PRIVATE(QFontComboBox)
 
-   GUI_CS_SLOT_1(Private, void _q_currentChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_currentChanged(const QString &text))
    GUI_CS_SLOT_2(_q_currentChanged)
 
    GUI_CS_SLOT_1(Private, void _q_updateModel())

@@ -115,8 +115,8 @@ class QTextBrowserPrivate : public QTextEditPrivate
       forceLoadOnSourceChange = !currentURL.path().isEmpty();
    }
 
-   void _q_activateAnchor(const QString &href);
-   void _q_highlightLink(const QString &href);
+   void _q_activateAnchor(const QString &anchor);
+   void _q_highlightLink(const QString &anchor);
 
    void setSource(const QUrl &url);
 
@@ -202,9 +202,9 @@ QUrl QTextBrowserPrivate::resolveUrl(const QUrl &url) const
    return url;
 }
 
-void QTextBrowserPrivate::_q_activateAnchor(const QString &href)
+void QTextBrowserPrivate::_q_activateAnchor(const QString &anchor)
 {
-   if (href.isEmpty()) {
+   if (anchor.isEmpty()) {
       return;
    }
    Q_Q(QTextBrowser);
@@ -213,7 +213,7 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &href)
    viewport->setCursor(oldCursor);
 #endif
 
-   const QUrl url = resolveUrl(href);
+   const QUrl url = resolveUrl(anchor);
 
    if (!openLinks) {
       emit q->anchorClicked(url);
@@ -1034,16 +1034,16 @@ void QTextBrowser::_q_documentModified()
    d->_q_documentModified();
 }
 
-void QTextBrowser::_q_activateAnchor(const QString &un_named_arg1)
+void QTextBrowser::_q_activateAnchor(const QString &anchor)
 {
    Q_D(QTextBrowser);
-   d->_q_activateAnchor(un_named_arg1);
+   d->_q_activateAnchor(anchor);
 }
 
-void QTextBrowser::_q_highlightLink(const QString &un_named_arg1)
+void QTextBrowser::_q_highlightLink(const QString &anchor)
 {
    Q_D(QTextBrowser);
-   d->_q_highlightLink(un_named_arg1);
+   d->_q_highlightLink(anchor);
 }
 
 #endif // QT_NO_TEXTBROWSER

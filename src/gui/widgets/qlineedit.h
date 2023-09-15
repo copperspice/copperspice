@@ -237,11 +237,11 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SLOT_2(paste)
 #endif
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &str))
-   GUI_CS_SIGNAL_2(textChanged, str)
+   GUI_CS_SIGNAL_1(Public, void textChanged(const QString &newText))
+   GUI_CS_SIGNAL_2(textChanged, newText)
 
-   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &str))
-   GUI_CS_SIGNAL_2(textEdited, str)
+   GUI_CS_SIGNAL_1(Public, void textEdited(const QString &newText))
+   GUI_CS_SIGNAL_2(textEdited, newText)
 
    GUI_CS_SIGNAL_1(Public, void cursorPositionChanged(int oldValue, int newValue))
    GUI_CS_SIGNAL_2(cursorPositionChanged, oldValue, newValue)
@@ -300,30 +300,30 @@ class Q_GUI_EXPORT QLineEdit : public QWidget
    GUI_CS_SLOT_1(Private, void _q_handleWindowActivate())
    GUI_CS_SLOT_2(_q_handleWindowActivate)
 
-   GUI_CS_SLOT_1(Private, void _q_textEdited(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_textEdited(const QString &newText))
    GUI_CS_SLOT_2(_q_textEdited)
 
-   GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged(int oldValue, int newValue))
    GUI_CS_SLOT_2(_q_cursorPositionChanged)
 
 #ifndef QT_NO_COMPLETER
-   GUI_CS_SLOT_1(Private, void _q_completionHighlighted(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_completionHighlighted(const QString &text))
    GUI_CS_SLOT_2(_q_completionHighlighted)
 
 #endif
 
 #ifdef QT_KEYPAD_NAVIGATION
-   GUI_CS_SLOT_1(Private, void _q_editFocusChange(bool un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_editFocusChange(bool isFocusChanged))
    GUI_CS_SLOT_2(_q_editFocusChange)
 #endif
 
    GUI_CS_SLOT_1(Private, void _q_selectionChanged())
    GUI_CS_SLOT_2(_q_selectionChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_updateNeeded(const QRect &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_updateNeeded(const QRect &rect))
    GUI_CS_SLOT_2(_q_updateNeeded)
 
-   GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &newText))
    GUI_CS_SLOT_2(_q_textChanged)
 
    GUI_CS_SLOT_1(Private, void _q_clearButtonClicked())

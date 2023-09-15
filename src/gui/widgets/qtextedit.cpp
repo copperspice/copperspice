@@ -377,10 +377,10 @@ void QTextEdit::_q_repaintContents(const QRectF &r)
    d->_q_repaintContents(r);
 }
 
-void QTextEdit::_q_currentCharFormatChanged(const QTextCharFormat &un_named_arg1)
+void QTextEdit::_q_currentCharFormatChanged(const QTextCharFormat &textFormat)
 {
    Q_D(QTextEdit);
-   d->_q_currentCharFormatChanged(un_named_arg1);
+   d->_q_currentCharFormatChanged(textFormat);
 }
 
 void QTextEdit::_q_adjustScrollbars()
@@ -389,10 +389,10 @@ void QTextEdit::_q_adjustScrollbars()
    d->_q_adjustScrollbars();
 }
 
-void QTextEdit::_q_ensureVisible(const QRectF &un_named_arg1)
+void QTextEdit::_q_ensureVisible(const QRectF &rectF)
 {
    Q_D(QTextEdit);
-   d->_q_ensureVisible(un_named_arg1);
+   d->_q_ensureVisible(rectF);
 }
 
 void QTextEdit::_q_cursorPositionChanged()

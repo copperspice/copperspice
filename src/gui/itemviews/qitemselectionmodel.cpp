@@ -1316,32 +1316,28 @@ QDebug operator<<(QDebug dbg, const QItemSelectionRange &range)
 
 }
 
-void QItemSelectionModel::_q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QItemSelectionModel::_q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QItemSelectionModel);
-   d->_q_columnsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_columnsAboutToBeRemoved(parent, start, end);
 }
 
-void QItemSelectionModel::_q_rowsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QItemSelectionModel::_q_rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QItemSelectionModel);
-   d->_q_rowsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_rowsAboutToBeRemoved(parent, start, end);
 }
 
-void QItemSelectionModel::_q_columnsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QItemSelectionModel::_q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QItemSelectionModel);
-   d->_q_columnsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_columnsAboutToBeInserted(parent, start, end);
 }
 
-void QItemSelectionModel::_q_rowsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QItemSelectionModel::_q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QItemSelectionModel);
-   d->_q_rowsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_rowsAboutToBeInserted(parent, start, end);
 }
 
 void QItemSelectionModel::_q_layoutAboutToBeChanged()

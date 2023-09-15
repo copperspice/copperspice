@@ -166,16 +166,16 @@ class Q_GUI_EXPORT QCompleter : public QObject
  private:
    Q_DECLARE_PRIVATE(QCompleter)
 
-   GUI_CS_SLOT_1(Private, void _q_complete(const QModelIndex &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_complete(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_complete)
 
-   GUI_CS_SLOT_1(Private, void _q_completionSelected(const QItemSelection &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_completionSelected(const QItemSelection &selection))
    GUI_CS_SLOT_2(_q_completionSelected)
 
    GUI_CS_SLOT_1(Private, void _q_autoResizePopup())
    GUI_CS_SLOT_2(_q_autoResizePopup)
 
-   GUI_CS_SLOT_1(Private, void _q_fileSystemModelDirectoryLoaded(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_fileSystemModelDirectoryLoaded(const QString &path))
    GUI_CS_SLOT_2(_q_fileSystemModelDirectoryLoaded)
 };
 

@@ -1726,10 +1726,10 @@ void QMenuBar::_q_actionHovered()
    d->_q_actionHovered();
 }
 
-void QMenuBar::_q_internalShortcutActivated(int un_named_arg1)
+void QMenuBar::_q_internalShortcutActivated(int id)
 {
    Q_D(QMenuBar);
-   d->_q_internalShortcutActivated(un_named_arg1);
+   d->_q_internalShortcutActivated(id);
 }
 
 void QMenuBar::_q_updateLayout()

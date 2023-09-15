@@ -79,8 +79,8 @@ class QFontListView : public QListView
       return model()->stringList().at(i);
    }
 
-   GUI_CS_SIGNAL_1(Public, void highlighted(int un_named_arg1))
-   GUI_CS_SIGNAL_2(highlighted, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void highlighted(int data))
+   GUI_CS_SIGNAL_2(highlighted, data)
 };
 
 QFontListView::QFontListView(QWidget *parent)
@@ -915,34 +915,34 @@ bool QFontDialogPrivate::canBeNativeDialog() const
 }
 
 
-void QFontDialog::_q_sizeChanged(const QString &un_named_arg1)
+void QFontDialog::_q_sizeChanged(const QString &data)
 {
    Q_D(QFontDialog);
-   d->_q_sizeChanged(un_named_arg1);
+   d->_q_sizeChanged(data);
 }
 
-void QFontDialog::_q_familyHighlighted(int un_named_arg1)
+void QFontDialog::_q_familyHighlighted(int data)
 {
    Q_D(QFontDialog);
-   d->_q_familyHighlighted(un_named_arg1);
+   d->_q_familyHighlighted(data);
 }
 
-void QFontDialog::_q_writingSystemHighlighted(int un_named_arg1)
+void QFontDialog::_q_writingSystemHighlighted(int data)
 {
    Q_D(QFontDialog);
-   d->_q_writingSystemHighlighted(un_named_arg1);
+   d->_q_writingSystemHighlighted(data);
 }
 
-void QFontDialog::_q_styleHighlighted(int un_named_arg1)
+void QFontDialog::_q_styleHighlighted(int data)
 {
    Q_D(QFontDialog);
-   d->_q_styleHighlighted(un_named_arg1);
+   d->_q_styleHighlighted(data);
 }
 
-void QFontDialog::_q_sizeHighlighted(int un_named_arg1)
+void QFontDialog::_q_sizeHighlighted(int data)
 {
    Q_D(QFontDialog);
-   d->_q_sizeHighlighted(un_named_arg1);
+   d->_q_sizeHighlighted(data);
 }
 
 void QFontDialog::_q_updateSample()

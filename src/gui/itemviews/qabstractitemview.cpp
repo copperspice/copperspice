@@ -3588,30 +3588,29 @@ QModelIndexList QAbstractItemViewPrivate::selectedDraggableIndexes() const
    return indexes;
 }
 
-void QAbstractItemView::_q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QAbstractItemView::_q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);
-   d->_q_columnsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_columnsAboutToBeRemoved(parent, start, end);
 }
 
-void QAbstractItemView::_q_columnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QAbstractItemView::_q_columnsRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);
-   d->_q_columnsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_columnsRemoved(parent, start, end);
 }
 
-void QAbstractItemView::_q_columnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QAbstractItemView::_q_columnsInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);
-   d->_q_columnsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_columnsInserted(parent, start, end);
 }
 
-void QAbstractItemView::_q_columnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-         const QModelIndex &un_named_arg4, int un_named_arg5)
+void QAbstractItemView::_q_columnsMoved(const QModelIndex &source, int sourceStart, int sourceEnd,
+      const QModelIndex &destination, int destinationStart)
 {
    Q_D(QAbstractItemView);
-   d->_q_columnsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_columnsMoved(source, sourceStart, sourceEnd, destination, destinationStart);
 }
 
 void QAbstractItemView::_q_headerDataChanged()
@@ -3620,23 +3619,23 @@ void QAbstractItemView::_q_headerDataChanged()
    d->_q_headerDataChanged();
 }
 
-void QAbstractItemView::_q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QAbstractItemView::_q_rowsInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);
-   d->_q_rowsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_rowsInserted(parent, start, end);
 }
 
-void QAbstractItemView::_q_rowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QAbstractItemView::_q_rowsRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QAbstractItemView);
-   d->_q_rowsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_rowsRemoved(parent, start, end);
 }
 
-void QAbstractItemView::_q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-         const QModelIndex &un_named_arg4, int un_named_arg5)
+void QAbstractItemView::_q_rowsMoved(const QModelIndex &source, int sourceStart, int sourceEnd,
+      const QModelIndex &destination, int destinationStart)
 {
    Q_D(QAbstractItemView);
-   d->_q_rowsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_rowsMoved(source, sourceStart, sourceEnd, destination, destinationStart);
 }
 
 void QAbstractItemView::_q_modelDestroyed()

@@ -130,10 +130,10 @@ class Q_GUI_EXPORT QAbstractScrollArea : public QFrame
  private:
    Q_DECLARE_PRIVATE(QAbstractScrollArea)
 
-   GUI_CS_SLOT_1(Private, void _q_hslide(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_hslide(int x))
    GUI_CS_SLOT_2(_q_hslide)
 
-   GUI_CS_SLOT_1(Private, void _q_vslide(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_vslide(int y))
    GUI_CS_SLOT_2(_q_vslide)
 
    GUI_CS_SLOT_1(Private, void _q_showOrHideScrollBars())

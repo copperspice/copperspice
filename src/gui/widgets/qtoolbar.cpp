@@ -960,22 +960,22 @@ void QToolBar::initStyleOption(QStyleOptionToolBar *option) const
    layout->getStyleOptionInfo(option, const_cast<QToolBar *>(this));
 }
 
-void QToolBar::_q_toggleView(bool un_named_arg1)
+void QToolBar::_q_toggleView(bool isToggleView)
 {
    Q_D(QToolBar);
-   d->_q_toggleView(un_named_arg1);
+   d->_q_toggleView(isToggleView);
 }
 
-void QToolBar::_q_updateIconSize(const QSize &un_named_arg1)
+void QToolBar::_q_updateIconSize(const QSize &size)
 {
    Q_D(QToolBar);
-   d->_q_updateIconSize(un_named_arg1);
+   d->_q_updateIconSize(size);
 }
 
-void QToolBar::_q_updateToolButtonStyle(Qt::ToolButtonStyle un_named_arg1)
+void QToolBar::_q_updateToolButtonStyle(Qt::ToolButtonStyle style)
 {
    Q_D(QToolBar);
-   d->_q_updateToolButtonStyle(un_named_arg1);
+   d->_q_updateToolButtonStyle(style);
 }
 
 bool QToolBar::cs_isMainWindow() const

@@ -100,7 +100,7 @@ class Q_GUI_EXPORT QToolBox : public QFrame
    GUI_CS_SLOT_1(Private, void _q_buttonClicked())
    GUI_CS_SLOT_2(_q_buttonClicked)
 
-   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *object))
    GUI_CS_SLOT_2(_q_widgetDestroyed)
 };
 

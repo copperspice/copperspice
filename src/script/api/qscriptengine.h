@@ -234,7 +234,7 @@ class Q_SCRIPT_EXPORT QScriptEngine : public QObject
    friend inline QScriptValue qScriptValueFromValue_helper(QScriptEngine *, const QVariant &data);
    friend inline QVariant qscriptvalue_cast_helper(const QScriptValue &, uint);
 
-   SCRIPT_CS_SLOT_1(Private, void _q_objectDestroyed(QObject *un_named_arg1))
+   SCRIPT_CS_SLOT_1(Private, void _q_objectDestroyed(QObject *object))
    SCRIPT_CS_SLOT_2(_q_objectDestroyed)
 };
 

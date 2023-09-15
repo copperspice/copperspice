@@ -486,10 +486,10 @@ QSize QFontComboBox::sizeHint() const
    return sz;
 }
 
-void QFontComboBox::_q_currentChanged(const QString &un_named_arg1)
+void QFontComboBox::_q_currentChanged(const QString &text)
 {
    Q_D(QFontComboBox);
-   d->_q_currentChanged(un_named_arg1);
+   d->_q_currentChanged(text);
 }
 
 void QFontComboBox::_q_updateModel()

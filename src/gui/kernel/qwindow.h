@@ -332,7 +332,7 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SLOT_1(Public, void lower())
    GUI_CS_SLOT_2(lower)
 
-   GUI_CS_SLOT_1(Public, void setTitle(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Public, void setTitle(const QString &title))
    GUI_CS_SLOT_2(setTitle)
 
    GUI_CS_SLOT_1(Public, void setX(int arg))

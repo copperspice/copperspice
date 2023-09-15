@@ -1154,10 +1154,10 @@ void QColumnViewDelegate::paint(QPainter *painter,
    }
 }
 
-void QColumnView::_q_gripMoved(int un_named_arg1)
+void QColumnView::_q_gripMoved(int offset)
 {
    Q_D(QColumnView);
-   d->_q_gripMoved(un_named_arg1);
+   d->_q_gripMoved(offset);
 }
 
 void QColumnView::_q_changeCurrentColumn()
@@ -1166,12 +1166,10 @@ void QColumnView::_q_changeCurrentColumn()
    d->_q_changeCurrentColumn();
 }
 
-void QColumnView::_q_clicked(const QModelIndex &un_named_arg1)
+void QColumnView::_q_clicked(const QModelIndex &index)
 {
    Q_D(QColumnView);
-   d->_q_clicked(un_named_arg1);
+   d->_q_clicked(index);
 }
-
-
 
 #endif // QT_NO_COLUMNVIEW

@@ -1651,16 +1651,16 @@ QVariant QAbstractSpinBoxPrivate::variantBound(const QVariant &min, const QVaria
    }
 }
 
-void QAbstractSpinBox::_q_editorTextChanged(const QString &un_named_arg1)
+void QAbstractSpinBox::_q_editorTextChanged(const QString &text)
 {
    Q_D(QAbstractSpinBox);
-   d->_q_editorTextChanged(un_named_arg1);
+   d->_q_editorTextChanged(text);
 }
 
-void QAbstractSpinBox::_q_editorCursorPositionChanged(int un_named_arg1, int un_named_arg2)
+void QAbstractSpinBox::_q_editorCursorPositionChanged(int oldpos, int newpos)
 {
    Q_D(QAbstractSpinBox);
-   d->_q_editorCursorPositionChanged(un_named_arg1, un_named_arg2);
+   d->_q_editorCursorPositionChanged(oldpos, newpos);
 }
 
 #endif // QT_NO_SPINBOX

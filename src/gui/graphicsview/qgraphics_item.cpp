@@ -7120,19 +7120,19 @@ QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags)
    return debug;
 }
 
-void QGraphicsTextItem::_q_updateBoundingRect(const QSizeF &un_named_arg1)
+void QGraphicsTextItem::_q_updateBoundingRect(const QSizeF &sizeF)
 {
-   dd->_q_updateBoundingRect(un_named_arg1);
+   dd->_q_updateBoundingRect(sizeF);
 }
 
-void QGraphicsTextItem::_q_update(const QRectF &un_named_arg1)
+void QGraphicsTextItem::_q_update(const QRectF &rectF)
 {
-   dd->_q_update(un_named_arg1);
+   dd->_q_update(rectF);
 }
 
-void QGraphicsTextItem::_q_ensureVisible(const QRectF &un_named_arg1)
+void QGraphicsTextItem::_q_ensureVisible(const QRectF &rectF)
 {
-   dd->_q_ensureVisible(un_named_arg1);
+   dd->_q_ensureVisible(rectF);
 }
 
 // wrapper for overloaded method

@@ -333,7 +333,7 @@ class Q_GUI_EXPORT QPlainTextEdit : public QAbstractScrollArea
    GUI_CS_SLOT_1(Private, void _q_adjustScrollbars())
    GUI_CS_SLOT_2(_q_adjustScrollbars)
 
-   GUI_CS_SLOT_1(Private, void _q_verticalScrollbarActionTriggered(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_verticalScrollbarActionTriggered(int action))
    GUI_CS_SLOT_2(_q_verticalScrollbarActionTriggered)
 
    GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged())

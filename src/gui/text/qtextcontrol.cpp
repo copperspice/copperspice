@@ -3564,10 +3564,10 @@ void QTextControl::_q_updateCurrentCharFormatAndSelection()
    d->_q_updateCurrentCharFormatAndSelection();
 }
 
-void QTextControl::_q_emitCursorPosChanged(const QTextCursor &un_named_arg1)
+void QTextControl::_q_emitCursorPosChanged(const QTextCursor &cursor)
 {
    Q_D(QTextControl);
-   d->_q_emitCursorPosChanged(un_named_arg1);
+   d->_q_emitCursorPosChanged(cursor);
 }
 
 void QTextControl::_q_deleteSelected()
@@ -3582,10 +3582,10 @@ void QTextControl::_q_copyLink()
    d->_q_copyLink();
 }
 
-void QTextControl::_q_updateBlock(const QTextBlock &un_named_arg1)
+void QTextControl::_q_updateBlock(const QTextBlock &block)
 {
    Q_D(QTextControl);
-   d->_q_updateBlock(un_named_arg1);
+   d->_q_updateBlock(block);
 }
 
 void QTextControl::_q_documentLayoutChanged()

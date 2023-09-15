@@ -133,7 +133,7 @@ class Q_EXPORT_SQLDRIVER_PSQL QPSQLDriver : public QSqlDriver
    bool rollbackTransaction() override;
 
  private:
-   CS_SLOT_1(Private, void _q_handleNotification(int un_named_arg1))
+   CS_SLOT_1(Private, void _q_handleNotification(int handle))
    CS_SLOT_2(_q_handleNotification)
 
    friend class QPSQLResultPrivate;

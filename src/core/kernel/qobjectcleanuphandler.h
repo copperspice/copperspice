@@ -41,9 +41,9 @@ class Q_CORE_EXPORT QObjectCleanupHandler : public QObject
 
    QObjectList cleanupObjects;
 
- private :
-   CORE_CS_SLOT_1(Private, void objectDestroyed(QObject *un_named_arg1))
+ private:
+   CORE_CS_SLOT_1(Private, void objectDestroyed(QObject *object))
    CORE_CS_SLOT_2(objectDestroyed)
 };
 
-#endif 
+#endif

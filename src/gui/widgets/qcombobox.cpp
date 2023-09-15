@@ -3084,16 +3084,16 @@ void QComboBox::setModelColumn(int visibleColumn)
    setCurrentIndex(currentIndex()); //update the text to the text of the new column;
 }
 
-void QComboBox::_q_itemSelected(const QModelIndex &item)
+void QComboBox::_q_itemSelected(const QModelIndex &index)
 {
    Q_D(QComboBox);
-   d->_q_itemSelected(item);
+   d->_q_itemSelected(index);
 }
 
-void QComboBox::_q_emitHighlighted(const QModelIndex &un_named_arg1)
+void QComboBox::_q_emitHighlighted(const QModelIndex &index)
 {
    Q_D(QComboBox);
-   d->_q_emitHighlighted(un_named_arg1);
+   d->_q_emitHighlighted(index);
 }
 
 void QComboBox::_q_emitCurrentIndexChanged(const QModelIndex &index)
@@ -3120,10 +3120,10 @@ void QComboBox::_q_resetButton()
    d->_q_resetButton();
 }
 
-void QComboBox::_q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
+void QComboBox::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
    Q_D(QComboBox);
-   d->_q_dataChanged(un_named_arg1, un_named_arg2);
+   d->_q_dataChanged(topLeft, bottomRight);
 }
 
 void QComboBox::_q_updateIndexBeforeChange()
