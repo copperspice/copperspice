@@ -46,8 +46,8 @@ public:
     virtual void deviceOrientationControllerDestroyed();
 
 public :
-    WEB_CS_SLOT_1(Public, void changeDeviceOrientation(DeviceOrientation * un_named_arg1))
-    WEB_CS_SLOT_2(changeDeviceOrientation) 
+    WEB_CS_SLOT_1(Public, void changeDeviceOrientation(DeviceOrientation *orientation))
+    WEB_CS_SLOT_2(changeDeviceOrientation)
 
 private:
     QWebPage* m_page;

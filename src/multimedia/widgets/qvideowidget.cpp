@@ -875,34 +875,34 @@ void QVideoWidget::_q_serviceDestroyed()
    d->_q_serviceDestroyed();
 }
 
-void QVideoWidget::_q_brightnessChanged(int un_named_arg1)
+void QVideoWidget::_q_brightnessChanged(int brightness)
 {
    Q_D(QVideoWidget);
-   d->_q_brightnessChanged(un_named_arg1);
+   d->_q_brightnessChanged(brightness);
 }
 
-void QVideoWidget::_q_contrastChanged(int un_named_arg1)
+void QVideoWidget::_q_contrastChanged(int contrast)
 {
    Q_D(QVideoWidget);
-   d->_q_contrastChanged(un_named_arg1);
+   d->_q_contrastChanged(contrast);
 }
 
-void QVideoWidget::_q_hueChanged(int un_named_arg1)
+void QVideoWidget::_q_hueChanged(int hue)
 {
    Q_D(QVideoWidget);
-   d->_q_hueChanged(un_named_arg1);
+   d->_q_hueChanged(hue);
 }
 
-void QVideoWidget::_q_saturationChanged(int un_named_arg1)
+void QVideoWidget::_q_saturationChanged(int saturation)
 {
    Q_D(QVideoWidget);
-   d->_q_saturationChanged(un_named_arg1);
+   d->_q_saturationChanged(saturation);
 }
 
-void QVideoWidget::_q_fullScreenChanged(bool un_named_arg1)
+void QVideoWidget::_q_fullScreenChanged(bool fullScreen)
 {
    Q_D(QVideoWidget);
-   d->_q_fullScreenChanged(un_named_arg1);
+   d->_q_fullScreenChanged(fullScreen);
 }
 
 void QVideoWidget::_q_dimensionsChanged()

@@ -74,8 +74,8 @@ public:
     WEB_CS_SIGNAL_2(loadProgress,d)
     WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & title))
     WEB_CS_SIGNAL_2(titleChanged,title)
-    WEB_CS_SIGNAL_1(Public, void unsupportedContent(QNetworkReply * un_named_arg1))
-    WEB_CS_SIGNAL_2(unsupportedContent,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void unsupportedContent(QNetworkReply *reply))
+    WEB_CS_SIGNAL_2(unsupportedContent,reply)
 
 public:
     FrameLoaderClientQt();
@@ -274,7 +274,7 @@ public:
     static QMap<QString, QString> URLsToRedirect;
 
 private:
-    WEB_CS_SLOT_1(Private, void onIconLoadedForPageURL(const QString & un_named_arg1))
+    WEB_CS_SLOT_1(Private, void onIconLoadedForPageURL(const QString &url))
     WEB_CS_SLOT_2(onIconLoadedForPageURL)
 
     void emitLoadStarted();

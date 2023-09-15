@@ -1257,8 +1257,8 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
          // QHostInfo from cache or later calls the _q_startConnecting slot.
          bool immediateResultValid = false;
 
-         QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &)),
-                              &immediateResultValid, &d->hostLookupId);
+         QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &hostInfo)),
+               &immediateResultValid, &d->hostLookupId);
 
          if (immediateResultValid) {
             d->hostLookupId = -1;
@@ -2343,10 +2343,10 @@ void QAbstractSocket::_q_connectToNextAddress()
    d->_q_connectToNextAddress();
 }
 
-void QAbstractSocket::_q_startConnecting(const QHostInfo &un_named_arg1)
+void QAbstractSocket::_q_startConnecting(const QHostInfo &hostInfo)
 {
    Q_D(QAbstractSocket);
-   d->_q_startConnecting(un_named_arg1);
+   d->_q_startConnecting(hostInfo);
 }
 
 void QAbstractSocket::_q_abortConnectionAttempt()

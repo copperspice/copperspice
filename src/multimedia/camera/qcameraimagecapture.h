@@ -139,10 +139,10 @@ class Q_MULTIMEDIA_EXPORT QCameraImageCapture : public QObject, public QMediaBin
  private:
    Q_DECLARE_PRIVATE(QCameraImageCapture)
 
-   MULTI_CS_SLOT_1(Private, void _q_error(int un_named_arg1, int un_named_arg2, const QString &un_named_arg3))
+   MULTI_CS_SLOT_1(Private, void _q_error(int id, int error, const QString &errorString))
    MULTI_CS_SLOT_2(_q_error)
 
-   MULTI_CS_SLOT_1(Private, void _q_readyChanged(bool un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_readyChanged(bool ready))
    MULTI_CS_SLOT_2(_q_readyChanged)
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())

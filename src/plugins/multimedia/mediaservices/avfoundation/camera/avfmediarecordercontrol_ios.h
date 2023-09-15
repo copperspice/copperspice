@@ -87,7 +87,7 @@ class AVFMediaRecorderControlIOS : public QMediaRecorderControl
    Q_INVOKABLE void assetWriterStarted();
    Q_INVOKABLE void assetWriterFinished();
 
-   CS_SLOT_1(Private, void captureModeChanged(QCamera::CaptureModes un_named_arg1))
+   CS_SLOT_1(Private, void captureModeChanged(QCamera::CaptureModes newMode))
    CS_SLOT_2(captureModeChanged)
 
    CS_SLOT_1(Private, void cameraStatusChanged(QCamera::Status newStatus))

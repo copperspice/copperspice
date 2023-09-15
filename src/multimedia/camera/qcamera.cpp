@@ -765,10 +765,10 @@ void QCamera::unlock()
    unlock(d_func()->requestedLocks);
 }
 
-void QCamera::_q_preparePropertyChange(int un_named_arg1)
+void QCamera::_q_preparePropertyChange(int changeType)
 {
    Q_D(QCamera);
-   d->_q_preparePropertyChange(un_named_arg1);
+   d->_q_preparePropertyChange(changeType);
 }
 
 void QCamera::_q_restartCamera()
@@ -777,22 +777,22 @@ void QCamera::_q_restartCamera()
    d->_q_restartCamera();
 }
 
-void QCamera::_q_error(int un_named_arg1, const QString &un_named_arg2)
+void QCamera::_q_error(int error, const QString &errorString)
 {
    Q_D(QCamera);
-   d->_q_error(un_named_arg1, un_named_arg2);
+   d->_q_error(error, errorString);
 }
 
-void QCamera::_q_updateLockStatus(QCamera::LockType un_named_arg1,
-                                  QCamera::LockStatus un_named_arg2, QCamera::LockChangeReason un_named_arg3)
+void QCamera::_q_updateLockStatus(QCamera::LockType type, QCamera::LockStatus status,
+      QCamera::LockChangeReason reason)
 {
    Q_D(QCamera);
-   d->_q_updateLockStatus(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateLockStatus(type, status, reason);
 }
 
-void QCamera::_q_updateState(QCamera::State un_named_arg1)
+void QCamera::_q_updateState(QCamera::State state)
 {
    Q_D(QCamera);
-   d->_q_updateState(un_named_arg1);
+   d->_q_updateState(state);
 }
 

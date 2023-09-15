@@ -60,15 +60,15 @@ class QMediaRecorderPrivate
 
    QTimer *notifyTimer;
 
-   QMediaRecorder::State state;
-   QMediaRecorder::Error error;
-   QString errorString;
+   QMediaRecorder::State m_state;
+   QMediaRecorder::Error m_error;
+   QString m_errorString;
    QUrl actualLocation;
 
    void _q_stateChanged(QMediaRecorder::State state);
    void _q_error(int error, const QString &errorString);
    void _q_serviceDestroyed();
-   void _q_updateActualLocation(const QUrl &);
+   void _q_updateActualLocation(const QUrl &url);
    void _q_notify();
    void _q_updateNotifyInterval(int ms);
    void _q_applySettings();

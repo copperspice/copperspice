@@ -64,7 +64,7 @@ class QNetworkReplyPrivate: public QIODevicePrivate, public QNetworkHeadersPriva
    bool emitAllUploadProgressSignals;
    const static int progressSignalInterval;
    QNetworkAccessManager::Operation operation;
-   QNetworkReply::NetworkError errorCode;
+   QNetworkReply::NetworkError m_errorCode;
    bool isFinished;
 
    Q_DECLARE_PUBLIC(QNetworkReply)

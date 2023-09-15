@@ -575,7 +575,7 @@ void QNetworkReplyImplPrivate::setCachingEnabled(bool enable)
 void QNetworkReplyImplPrivate::completeCacheSave()
 {
    if (cacheEnabled) {
-      if (errorCode != QNetworkReplyImpl::NoError) {
+      if (m_errorCode != QNetworkReplyImpl::NoError) {
          networkCache()->remove(url);
 
       } else if (cacheSaveDevice) {
@@ -855,7 +855,7 @@ void QNetworkReplyImplPrivate::finished()
       QSharedPointer<QNetworkSession> session (manager->d_func()->getNetworkSession());
 
       if (session && session->state() == QNetworkSession::Roaming &&
-            state == ReplyState::Working && errorCode != QNetworkReply::OperationCanceledError) {
+            state == ReplyState::Working && m_errorCode != QNetworkReply::OperationCanceledError) {
 
          // only content with a known size will fail with a temporary network failure error
          if (totalSize.isValid()) {
@@ -916,20 +916,20 @@ void QNetworkReplyImplPrivate::finished()
    resumeNotificationHandling();
 }
 
-void QNetworkReplyImplPrivate::error(QNetworkReplyImpl::NetworkError code, const QString &errorMessage)
+void QNetworkReplyImplPrivate::error(QNetworkReplyImpl::NetworkError errorCode, const QString &errorMsg)
 {
    Q_Q(QNetworkReplyImpl);
 
    // unable to set and emit multiple errors
-   if (errorCode != QNetworkReply::NoError) {
+   if (m_errorCode != QNetworkReply::NoError) {
       qWarning("QNetworkReplyImplPrivate::error: Internal problem, this method must only be called once.");
       return;
    }
 
-   errorCode = code;
-   q->setErrorString(errorMessage);
+   m_errorCode = errorCode;
+   q->setErrorString(errorMsg);
 
-   emit q->error(code);
+   emit q->error(errorCode);
 }
 
 void QNetworkReplyImplPrivate::metaDataChanged()

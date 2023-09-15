@@ -85,17 +85,17 @@ class QFtpDTP : public QObject
 
    static bool parseDir(const QByteArray &buffer, const QString &userName, QUrlInfo *info);
 
-   NET_CS_SIGNAL_1(Public, void listInfo(const QUrlInfo &un_named_arg1))
-   NET_CS_SIGNAL_2(listInfo, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void listInfo(const QUrlInfo &urlInfo))
+   NET_CS_SIGNAL_2(listInfo, urlInfo)
 
    NET_CS_SIGNAL_1(Public, void readyRead())
    NET_CS_SIGNAL_2(readyRead)
 
-   NET_CS_SIGNAL_1(Public, void dataTransferProgress(qint64 un_named_arg1, qint64 un_named_arg2))
-   NET_CS_SIGNAL_2(dataTransferProgress, un_named_arg1, un_named_arg2)
+   NET_CS_SIGNAL_1(Public, void dataTransferProgress(qint64 bytesDone, qint64 bytesTotal))
+   NET_CS_SIGNAL_2(dataTransferProgress, bytesDone, bytesTotal)
 
-   NET_CS_SIGNAL_1(Public, void connectState(int un_named_arg1))
-   NET_CS_SIGNAL_2(connectState, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void connectState(int connectState))
+   NET_CS_SIGNAL_2(connectState, connectState)
 
    NET_CS_SLOT_1(Public, void dataReadyRead())
    NET_CS_SLOT_2(dataReadyRead)
@@ -107,13 +107,13 @@ class QFtpDTP : public QObject
    NET_CS_SLOT_1(Private, void socketReadyRead())
    NET_CS_SLOT_2(socketReadyRead)
 
-   NET_CS_SLOT_1(Private, void socketError(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void socketError(QAbstractSocket::SocketError errorCode))
    NET_CS_SLOT_2(socketError)
 
    NET_CS_SLOT_1(Private, void socketConnectionClosed())
    NET_CS_SLOT_2(socketConnectionClosed)
 
-   NET_CS_SLOT_1(Private, void socketBytesWritten(qint64 un_named_arg1))
+   NET_CS_SLOT_1(Private, void socketBytesWritten(qint64 bytes))
    NET_CS_SLOT_2(socketBytesWritten)
 
    NET_CS_SLOT_1(Private, void setupSocket())
@@ -176,17 +176,18 @@ class QFtpPI : public QObject
    QFtpDTP dtp; // the PI has a DTP which is not the design of RFC 959, but it
    // makes the design simpler this way
 
-   NET_CS_SIGNAL_1(Public, void connectState(int un_named_arg1))
-   NET_CS_SIGNAL_2(connectState, un_named_arg1)
 
-   NET_CS_SIGNAL_1(Public, void finished(const QString &un_named_arg1))
-   NET_CS_SIGNAL_2(finished, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void connectState(int connectState))
+   NET_CS_SIGNAL_2(connectState, connectState)
 
-   NET_CS_SIGNAL_1(Public, void error(int un_named_arg1, const QString &un_named_arg2))
-   NET_CS_SIGNAL_OVERLOAD(error, (int, const QString &), un_named_arg1, un_named_arg2)
+   NET_CS_SIGNAL_1(Public, void finished(const QString &textMsg))
+   NET_CS_SIGNAL_2(finished, textMsg)
 
-   NET_CS_SIGNAL_1(Public, void rawFtpReply(int un_named_arg1, const QString &un_named_arg2))
-   NET_CS_SIGNAL_2(rawFtpReply, un_named_arg1, un_named_arg2)
+   NET_CS_SIGNAL_1(Public, void error(int errorCode, const QString &textMsg))
+   NET_CS_SIGNAL_OVERLOAD(error, (int, const QString &), errorCode, textMsg)
+
+   NET_CS_SIGNAL_1(Public, void rawFtpReply(int replyCode, const QString &replyText))
+   NET_CS_SIGNAL_2(rawFtpReply, replyCode, replyText)
 
  private:
    NET_CS_SLOT_1(Private, void hostFound())
@@ -204,10 +205,10 @@ class QFtpPI : public QObject
    NET_CS_SLOT_1(Private, void readyRead())
    NET_CS_SLOT_2(readyRead)
 
-   NET_CS_SLOT_1(Private, void error(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void error(QAbstractSocket::SocketError errorCode))
    NET_CS_SLOT_OVERLOAD(error, (QAbstractSocket::SocketError))
 
-   NET_CS_SLOT_1(Private, void dtpConnectState(int un_named_arg1))
+   NET_CS_SLOT_1(Private, void dtpConnectState(int state))
    NET_CS_SLOT_2(dtpConnectState)
 
    // the states are modelled after the generalized state diagram of RFC 959, page 58
@@ -780,14 +781,14 @@ void QFtpDTP::socketReadyRead()
    }
 }
 
-void QFtpDTP::socketError(QAbstractSocket::SocketError e)
+void QFtpDTP::socketError(QAbstractSocket::SocketError errorCode)
 {
-   if (e == QTcpSocket::HostNotFoundError) {
+   if (errorCode == QTcpSocket::HostNotFoundError) {
 #if defined(QFTPDTP_DEBUG)
       qDebug("QFtpDTP::connectState(CsHostNotFound)");
 #endif
       emit connectState(QFtpDTP::CsHostNotFound);
-   } else if (e == QTcpSocket::ConnectionRefusedError) {
+   } else if (errorCode == QTcpSocket::ConnectionRefusedError) {
 #if defined(QFTPDTP_DEBUG)
       qDebug("QFtpDTP::connectState(CsConnectionRefused)");
 #endif
@@ -976,17 +977,17 @@ void QFtpPI::delayedCloseFinished()
    emit connectState(QFtp::Unconnected);
 }
 
-void QFtpPI::error(QAbstractSocket::SocketError e)
+void QFtpPI::error(QAbstractSocket::SocketError errorCode)
 {
-   if (e == QTcpSocket::HostNotFoundError) {
+   if (errorCode == QTcpSocket::HostNotFoundError) {
       emit connectState(QFtp::Unconnected);
       emit error(QFtp::HostNotFound, QFtp::tr("Host %1 not found").formatArg(commandSocket.peerName()));
 
-   } else if (e == QTcpSocket::ConnectionRefusedError) {
+   } else if (errorCode == QTcpSocket::ConnectionRefusedError) {
       emit connectState(QFtp::Unconnected);
       emit error(QFtp::ConnectionRefused, QFtp::tr("Connection refused to host %1").formatArg(commandSocket.peerName()));
 
-   } else if (e == QTcpSocket::SocketTimeoutError) {
+   } else if (errorCode == QTcpSocket::SocketTimeoutError) {
       emit connectState(QFtp::Unconnected);
       emit error(QFtp::ConnectionRefused, QFtp::tr("Connection timed out to host %1").formatArg(commandSocket.peerName()));
    }
@@ -1390,10 +1391,10 @@ class QFtpPrivate
 
    // private slots
    void _q_startNextCommand();
-   void _q_piFinished(const QString &);
-   void _q_piError(int, const QString &);
-   void _q_piConnectState(int);
-   void _q_piFtpReply(int, const QString &);
+   void _q_piFinished(const QString &textMsg);
+   void _q_piError(int errorCode, const QString &textMsg);
+   void _q_piConnectState(int connectState);
+   void _q_piFtpReply(int code, const QString &textMsg);
 
    int addCommand(QFtpCommand *cmd);
 
@@ -1752,8 +1753,10 @@ void QFtpPrivate::_q_startNextCommand()
 
 /*! \internal
 */
-void QFtpPrivate::_q_piFinished(const QString &)
+void QFtpPrivate::_q_piFinished(const QString &textMsg)
 {
+   (void) textMsg;
+
    if (pending.isEmpty()) {
       return;
    }
@@ -1783,7 +1786,7 @@ void QFtpPrivate::_q_piFinished(const QString &)
 
 /*! \internal
 */
-void QFtpPrivate::_q_piError(int errorCode, const QString &text)
+void QFtpPrivate::_q_piError(int errorCode, const QString &textMsg)
 {
    Q_Q(QFtp);
 
@@ -1805,43 +1808,43 @@ void QFtpPrivate::_q_piError(int errorCode, const QString &text)
    error = QFtp::Error(errorCode);
    switch (q->currentCommand()) {
       case QFtp::ConnectToHost:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Connecting to host failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Connecting to host failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Login:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Login failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Login failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::List:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Listing directory failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Listing directory failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Cd:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Changing directory failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Changing directory failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Get:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Downloading file failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Downloading file failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Put:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Uploading file failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Uploading file failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Remove:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Removing file failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Removing file failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Mkdir:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Creating directory failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Creating directory failed:\n%1")).formatArg(textMsg);
          break;
 
       case QFtp::Rmdir:
-         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Removing directory failed:\n%1")).formatArg(text);
+         errorString = QString::fromLatin1(cs_mark_tr("QFtp", "Removing directory failed:\n%1")).formatArg(textMsg);
          break;
 
       default:
-         errorString = text;
+         errorString = textMsg;
          break;
    }
 
@@ -1874,11 +1877,11 @@ void QFtpPrivate::_q_piConnectState(int connectState)
 
 /*! \internal
 */
-void QFtpPrivate::_q_piFtpReply(int code, const QString &text)
+void QFtpPrivate::_q_piFtpReply(int code, const QString &textMsg)
 {
    if (q_func()->currentCommand() == QFtp::RawCommand) {
       pi.rawCommand = true;
-      emit q_func()->rawCommandReply(code, text);
+      emit q_func()->rawCommandReply(code, textMsg);
    }
 }
 
@@ -1894,28 +1897,28 @@ void QFtp::_q_startNextCommand()
    d->_q_startNextCommand();
 }
 
-void QFtp::_q_piFinished(const QString &un_named_arg1)
+void QFtp::_q_piFinished(const QString &textMsg)
 {
    Q_D(QFtp);
-   d->_q_piFinished(un_named_arg1);
+   d->_q_piFinished(textMsg);
 }
 
-void QFtp::_q_piError(int un_named_arg1, const QString &un_named_arg2)
+void QFtp::_q_piError(int errorCode, const QString &textMsg)
 {
    Q_D(QFtp);
-   d->_q_piError(un_named_arg1, un_named_arg2);
+   d->_q_piError(errorCode, textMsg);
 }
 
-void QFtp::_q_piConnectState(int un_named_arg1)
+void QFtp::_q_piConnectState(int connectState)
 {
    Q_D(QFtp);
-   d->_q_piConnectState(un_named_arg1);
+   d->_q_piConnectState(connectState);
 }
 
-void QFtp::_q_piFtpReply(int un_named_arg1, const QString &un_named_arg2)
+void QFtp::_q_piFtpReply(int code, const QString &textMsg)
 {
    Q_D(QFtp);
-   d->_q_piFtpReply(un_named_arg1, un_named_arg2);
+   d->_q_piFtpReply(code, textMsg);
 }
 
 #endif // QT_NO_FTP

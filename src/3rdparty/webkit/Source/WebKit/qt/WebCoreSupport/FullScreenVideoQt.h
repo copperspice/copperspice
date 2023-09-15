@@ -74,8 +74,8 @@ public:
     bool requiresFullScreenForVideoPlayback() const;
 
 public :
-    WEB_CS_SLOT_1(Public, void enterFullScreen(QMediaPlayer * un_named_arg1))
-    WEB_CS_SLOT_2(enterFullScreen) 
+    WEB_CS_SLOT_1(Public, void enterFullScreen(QMediaPlayer *player))
+    WEB_CS_SLOT_2(enterFullScreen)
     WEB_CS_SLOT_1(Public, void exitFullScreen())
     WEB_CS_SLOT_2(exitFullScreen) 
 

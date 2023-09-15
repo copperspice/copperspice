@@ -134,8 +134,8 @@ public:
     WEB_CS_SIGNAL_1(Public, void fullScreenClosed())
     WEB_CS_SIGNAL_2(fullScreenClosed) 
 
-    WEB_CS_SLOT_1(Public, virtual void enterFullScreen(QMediaPlayer * un_named_arg1)=0)
-    WEB_CS_SLOT_2(enterFullScreen) 
+    WEB_CS_SLOT_1(Public, virtual void enterFullScreen(QMediaPlayer *player)=0)
+    WEB_CS_SLOT_2(enterFullScreen)
     WEB_CS_SLOT_1(Public, virtual void exitFullScreen())
     WEB_CS_SLOT_2(exitFullScreen) 
 };

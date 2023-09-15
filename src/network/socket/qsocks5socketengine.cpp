@@ -2057,10 +2057,10 @@ void QSocks5SocketEngine::_q_controlSocketReadNotification()
    d->_q_controlSocketReadNotification();
 }
 
-void QSocks5SocketEngine::_q_controlSocketError(QAbstractSocket::SocketError un_named_arg1)
+void QSocks5SocketEngine::_q_controlSocketError(QAbstractSocket::SocketError socketError)
 {
    Q_D(QSocks5SocketEngine);
-   d->_q_controlSocketError(un_named_arg1);
+   d->_q_controlSocketError(socketError);
 }
 
 #ifndef QT_NO_UDPSOCKET
@@ -2101,10 +2101,10 @@ void QSocks5SocketEngine::_q_controlSocketDisconnected()
    d->_q_controlSocketDisconnected();
 }
 
-void QSocks5SocketEngine::_q_controlSocketStateChanged(QAbstractSocket::SocketState un_named_arg1)
+void QSocks5SocketEngine::_q_controlSocketStateChanged(QAbstractSocket::SocketState socketState)
 {
    Q_D(QSocks5SocketEngine);
-   d->_q_controlSocketStateChanged(un_named_arg1);
+   d->_q_controlSocketStateChanged(socketState);
 }
 
 #endif // QT_NO_SOCKS5

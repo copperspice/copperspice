@@ -1258,6 +1258,7 @@ void QSslSocketPrivate::_q_readyReadSlot()
 void QSslSocketPrivate::_q_bytesWrittenSlot(qint64 written)
 {
    Q_Q(QSslSocket);
+
 #ifdef QSSLSOCKET_DEBUG
    qDebug() << "QSslSocket::_q_bytesWrittenSlot(" << written << ')';
 #endif
@@ -1498,16 +1499,16 @@ void QSslSocket::_q_disconnectedSlot()
    d->_q_disconnectedSlot();
 }
 
-void QSslSocket::_q_stateChangedSlot(QAbstractSocket::SocketState un_named_arg1)
+void QSslSocket::_q_stateChangedSlot(QAbstractSocket::SocketState socketState)
 {
    Q_D(QSslSocket);
-   d->_q_stateChangedSlot(un_named_arg1);
+   d->_q_stateChangedSlot(socketState);
 }
 
-void QSslSocket::_q_errorSlot(QAbstractSocket::SocketError un_named_arg1)
+void QSslSocket::_q_errorSlot(QAbstractSocket::SocketError socketError)
 {
    Q_D(QSslSocket);
-   d->_q_errorSlot(un_named_arg1);
+   d->_q_errorSlot(socketError);
 }
 
 void QSslSocket::_q_readyReadSlot()
@@ -1516,10 +1517,10 @@ void QSslSocket::_q_readyReadSlot()
    d->_q_readyReadSlot();
 }
 
-void QSslSocket::_q_bytesWrittenSlot(qint64 un_named_arg1)
+void QSslSocket::_q_bytesWrittenSlot(qint64 written)
 {
    Q_D(QSslSocket);
-   d->_q_bytesWrittenSlot(un_named_arg1);
+   d->_q_bytesWrittenSlot(written);
 }
 
 void QSslSocket::_q_flushWriteBuffer()
@@ -1541,10 +1542,10 @@ void QSslSocket::_q_resumeImplementation()
 }
 
 #if defined(Q_OS_WIN)
-void QSslSocket::_q_caRootLoaded(QSslCertificate arg1, QSslCertificate arg2)
+void QSslSocket::_q_caRootLoaded(QSslCertificate cert, QSslCertificate trustedRoot)
 {
    Q_D(QSslSocket);
-   d->_q_caRootLoaded(arg1, arg2);
+   d->_q_caRootLoaded(cert, trustedRoot);
 }
 #endif
 

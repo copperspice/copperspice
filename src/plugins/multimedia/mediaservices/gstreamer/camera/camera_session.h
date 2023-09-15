@@ -192,8 +192,8 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    bool processBusMessage(const QGstreamerMessage &message) override;
 
  public:
-   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status status))
-   CS_SIGNAL_2(statusChanged, status)
+   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status newStatus))
+   CS_SIGNAL_2(statusChanged, newStatus)
    CS_SIGNAL_1(Public, void pendingStateChanged(QCamera::State state))
    CS_SIGNAL_2(pendingStateChanged, state)
    CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
@@ -204,25 +204,31 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    CS_SIGNAL_2(imageExposed, requestId)
    CS_SIGNAL_1(Public, void imageCaptured(int requestId, const QImage &img))
    CS_SIGNAL_2(imageCaptured, requestId, img)
-   CS_SIGNAL_1(Public, void mutedChanged(bool un_named_arg1))
-   CS_SIGNAL_2(mutedChanged, un_named_arg1)
+
+   CS_SIGNAL_1(Public, void mutedChanged(bool muted))
+   CS_SIGNAL_2(mutedChanged, muted)
+
    CS_SIGNAL_1(Public, void viewfinderChanged())
    CS_SIGNAL_2(viewfinderChanged)
-   CS_SIGNAL_1(Public, void readyChanged(bool un_named_arg1))
-   CS_SIGNAL_2(readyChanged, un_named_arg1)
-   CS_SIGNAL_1(Public, void busyChanged(bool un_named_arg1))
-   CS_SIGNAL_2(busyChanged, un_named_arg1)
 
- public :
+   CS_SIGNAL_1(Public, void readyChanged(bool isReady))
+   CS_SIGNAL_2(readyChanged, isReady)
+
+   CS_SIGNAL_1(Public, void busyChanged(bool busy))
+   CS_SIGNAL_2(busyChanged, busy)
+
    CS_SLOT_1(Public, void setDevice(const QString &device))
    CS_SLOT_2(setDevice)
-   CS_SLOT_1(Public, void setState(QCamera::State un_named_arg1))
+   CS_SLOT_1(Public, void setState(QCamera::State start))
    CS_SLOT_2(setState)
+
    CS_SLOT_1(Public, void setCaptureDevice(const QString &deviceName))
    CS_SLOT_2(setCaptureDevice)
-   CS_SLOT_1(Public, void setMetaData(const QMap <QByteArray, QVariant> &un_named_arg1))
+
+   CS_SLOT_1(Public, void setMetaData(const QMap <QByteArray, QVariant> &value))
    CS_SLOT_2(setMetaData)
-   CS_SLOT_1(Public, void setMuted(bool un_named_arg1))
+
+   CS_SLOT_1(Public, void setMuted(bool value))
    CS_SLOT_2(setMuted)
 
  private :

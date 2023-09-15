@@ -27,10 +27,7 @@
 
 #ifndef QT_NO_COMBOBOX
 
-QT_BEGIN_NAMESPACE
 class QGraphicsProxyWidget;
-QT_END_NAMESPACE
-
 class QWebPageClient;
 
 namespace WebCore {
@@ -57,8 +54,8 @@ public:
     QFont font() const { return m_font; }
 
 private :
-    WEB_CS_SLOT_1(Private, void activeChanged(int un_named_arg1))
-    WEB_CS_SLOT_2(activeChanged) 
+    WEB_CS_SLOT_1(Private, void activeChanged(int index))
+    WEB_CS_SLOT_2(activeChanged)
 
     friend class QtFallbackWebPopupCombo;
     bool m_popupVisible;

@@ -315,9 +315,9 @@ void QNetworkAccessBackend::finished()
    reply->finished();
 }
 
-void QNetworkAccessBackend::error(QNetworkReply::NetworkError code, const QString &errorString)
+void QNetworkAccessBackend::error(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
-   reply->error(code, errorString);
+   reply->error(errorCode, errorMsg);
 }
 
 #ifndef QT_NO_NETWORKPROXY

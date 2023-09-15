@@ -665,7 +665,7 @@ void QHttpThreadDelegate::encryptedSlot()
    emit encrypted();
 }
 
-void QHttpThreadDelegate::sslErrorsSlot(const QList<QSslError> &errors)
+void QHttpThreadDelegate::sslErrorsSlot(const QList<QSslError> &errorList)
 {
    if (! httpReply) {
       return;
@@ -673,15 +673,15 @@ void QHttpThreadDelegate::sslErrorsSlot(const QList<QSslError> &errors)
    emit sslConfigurationChanged(httpReply->sslConfiguration());
 
    bool ignoreAll = false;
-   QList<QSslError> specificErrors;
-   emit sslErrors(errors, &ignoreAll, &specificErrors);
+   QList<QSslError> toBeIgnored;
+   emit sslErrors(errorList, &ignoreAll, &toBeIgnored);
 
    if (ignoreAll) {
       httpReply->ignoreSslErrors();
    }
 
-   if (! specificErrors.isEmpty()) {
-      httpReply->ignoreSslErrors(specificErrors);
+   if (! toBeIgnored.isEmpty()) {
+      httpReply->ignoreSslErrors(toBeIgnored);
    }
 }
 
@@ -716,18 +716,18 @@ void QHttpThreadDelegate::synchronousAuthenticationRequiredSlot(const QHttpNetwo
 }
 
 #ifndef QT_NO_NETWORKPROXY
-void QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &p, QAuthenticator *a)
+void QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
    if (! httpReply) {
       return;
    }
 
    // Ask the credential cache
-   QNetworkAuthenticationCredential credential = authenticationManager->fetchCachedProxyCredentials(p, a);
+   QNetworkAuthenticationCredential credential = authenticationManager->fetchCachedProxyCredentials(proxy, authenticator);
 
-   if (!credential.isNull()) {
-      a->setUser(credential.user);
-      a->setPassword(credential.password);
+   if (! credential.isNull()) {
+      authenticator->setUser(credential.user);
+      authenticator->setPassword(credential.password);
    }
 
    // Disconnect this connection now since we only want to ask the authentication cache once.

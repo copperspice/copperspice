@@ -39,8 +39,8 @@ class Q_MULTIMEDIA_EXPORT QCameraCaptureBufferFormatControl : public QMediaContr
    virtual QVideoFrame::PixelFormat bufferFormat() const = 0;
    virtual void setBufferFormat(QVideoFrame::PixelFormat format) = 0;
 
-   MULTI_CS_SIGNAL_1(Public, void bufferFormatChanged(QVideoFrame::PixelFormat un_named_arg1))
-   MULTI_CS_SIGNAL_2(bufferFormatChanged, un_named_arg1)
+   MULTI_CS_SIGNAL_1(Public, void bufferFormatChanged(QVideoFrame::PixelFormat format))
+   MULTI_CS_SIGNAL_2(bufferFormatChanged, format)
 
  protected:
    explicit QCameraCaptureBufferFormatControl(QObject *parent = nullptr);

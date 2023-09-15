@@ -673,17 +673,19 @@ void QNetworkAccessManagerPrivate::_q_replyEncrypted()
 #endif
 }
 
-void QNetworkAccessManagerPrivate::_q_replySslErrors(const QList<QSslError> &errors)
+void QNetworkAccessManagerPrivate::_q_replySslErrors(const QList<QSslError> &errorList)
 {
 #ifdef QT_SSL
    Q_Q(QNetworkAccessManager);
 
    QNetworkReply *reply = dynamic_cast<QNetworkReply *>(q->sender());
    if (reply) {
-      emit q->sslErrors(reply, errors);
+      emit q->sslErrors(reply, errorList);
    }
+
 #else
-   (void) errors;
+   (void) errorList;
+
 #endif
 }
 
@@ -1185,10 +1187,10 @@ void QNetworkAccessManager::_q_replyEncrypted()
 
 #ifdef QT_SSL
 
-void QNetworkAccessManager::_q_replySslErrors(const QList<QSslError> &errList)
+void QNetworkAccessManager::_q_replySslErrors(const QList<QSslError> &errorList)
 {
    Q_D(QNetworkAccessManager);
-   d->_q_replySslErrors(errList);
+   d->_q_replySslErrors(errorList);
 }
 
 void QNetworkAccessManager::_q_replyPreSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *data)

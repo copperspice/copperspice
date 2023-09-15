@@ -49,9 +49,9 @@ class QMediaPlaylistPrivate
 
    virtual ~QMediaPlaylistPrivate() {}
 
-   void _q_loadFailed(QMediaPlaylist::Error error, const QString &errorString) {
-      this->error = error;
-      this->errorString = errorString;
+   void _q_loadFailed(QMediaPlaylist::Error playlistError, const QString &errorMsg) {
+      this->error       = playlistError;
+      this->errorString = errorMsg;
 
       emit q_ptr->loadFailed();
    }

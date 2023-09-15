@@ -37,7 +37,7 @@ class QMediaNetworkPlaylistProviderPrivate: public QMediaPlaylistProviderPrivate
    QPlaylistFileParser parser;
    QList<QMediaContent> resources;
 
-   void _q_handleParserError(QPlaylistFileParser::ParserError err, const QString &);
+   void _q_handleParserError(QPlaylistFileParser::ParserError error, const QString &errorMsg);
    void _q_handleNewItem(const QVariant &content);
 
    QMediaNetworkPlaylistProvider *q_ptr;
@@ -51,13 +51,14 @@ bool QMediaNetworkPlaylistProviderPrivate::load(const QNetworkRequest &request)
    return true;
 }
 
-void QMediaNetworkPlaylistProviderPrivate::_q_handleParserError(QPlaylistFileParser::ParserError err, const QString &errorMessage)
+void QMediaNetworkPlaylistProviderPrivate::_q_handleParserError(QPlaylistFileParser::ParserError error,
+      const QString &errorMsg)
 {
    Q_Q(QMediaNetworkPlaylistProvider);
 
    QMediaPlaylist::Error playlistError = QMediaPlaylist::NoError;
 
-   switch (err) {
+   switch (error) {
       case QPlaylistFileParser::NoError:
          return;
 
@@ -76,7 +77,7 @@ void QMediaNetworkPlaylistProviderPrivate::_q_handleParserError(QPlaylistFilePar
 
    parser.stop();
 
-   emit q->loadFailed(playlistError, errorMessage);
+   emit q->loadFailed(playlistError, errorMsg);
 }
 
 void QMediaNetworkPlaylistProviderPrivate::_q_handleNewItem(const QVariant &content)
@@ -249,10 +250,10 @@ void QMediaNetworkPlaylistProvider::shuffle()
 
 }
 
-void QMediaNetworkPlaylistProvider::_q_handleParserError(QPlaylistFileParser::ParserError err, const QString &un_named_arg2)
+void QMediaNetworkPlaylistProvider::_q_handleParserError(QPlaylistFileParser::ParserError error, const QString &errorMsg)
 {
    Q_D(QMediaNetworkPlaylistProvider);
-   d->_q_handleParserError(err, un_named_arg2);
+   d->_q_handleParserError(error, errorMsg);
 }
 
 void QMediaNetworkPlaylistProvider::_q_handleNewItem(const QVariant &content)

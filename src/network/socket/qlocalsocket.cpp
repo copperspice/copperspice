@@ -167,16 +167,16 @@ QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketState state)
 
 #if defined(QT_LOCALSOCKET_TCP)
 
-void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState un_named_arg1)
+void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState socketState)
 {
    Q_D(QLocalSocket);
-   d->_q_stateChanged(un_named_arg1);
+   d->_q_stateChanged(socketState);
 }
 
-void QLocalSocket::_q_error(QAbstractSocket::SocketError un_named_arg1)
+void QLocalSocket::_q_error(QAbstractSocket::SocketError socketError)
 {
    Q_D(QLocalSocket);
-   d->_q_error(un_named_arg1);
+   d->_q_error(socketError);
 }
 
 #elif defined(Q_OS_WIN)
@@ -201,16 +201,16 @@ void QLocalSocket::_q_winError(ulong data1, const QString &data2)
 
 #else
 
-void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState un_named_arg1)
+void QLocalSocket::_q_stateChanged(QAbstractSocket::SocketState socketState)
 {
    Q_D(QLocalSocket);
-   d->_q_stateChanged(un_named_arg1);
+   d->_q_stateChanged(socketState);
 }
 
-void QLocalSocket::_q_error(QAbstractSocket::SocketError un_named_arg1)
+void QLocalSocket::_q_error(QAbstractSocket::SocketError socketError)
 {
    Q_D(QLocalSocket);
-   d->_q_error(un_named_arg1);
+   d->_q_error(socketError);
 }
 
 void QLocalSocket::_q_connectToSocket()

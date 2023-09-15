@@ -592,9 +592,9 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
    return sendCacheContents(metaData);
 }
 
-QHttpNetworkRequest::Priority QNetworkReplyHttpImplPrivate::convert(const QNetworkRequest::Priority &prio)
+QHttpNetworkRequest::Priority QNetworkReplyHttpImplPrivate::convert(const QNetworkRequest::Priority &priority)
 {
-   switch (prio) {
+   switch (priority) {
       case QNetworkRequest::LowPriority:
          return QHttpNetworkRequest::LowPriority;
 
@@ -1004,7 +1004,7 @@ void QNetworkReplyHttpImplPrivate::initCacheSaveDevice()
    }
 }
 
-void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
+void QNetworkReplyHttpImplPrivate::replyDownloadData(const QByteArray &data)
 {
    Q_Q(QNetworkReplyHttpImpl);
 
@@ -1013,6 +1013,8 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
       return;
    }
 
+   pendingDownloadData.append(data);
+
    int pendingSignals = (int)pendingDownloadDataEmissions->fetchAndAddAcquire(-1) - 1;
 
    if (pendingSignals > 0) {
@@ -1020,12 +1022,9 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(QByteArray d)
       // Instead of writing the downstream data, we wait
       // and do it in the next call we get
       // (signal comppression)
-      pendingDownloadData.append(d);
       return;
    }
 
-   pendingDownloadData.append(d);
-   d.clear();
    // We need to usa a copy for calling writeDownstreamData as we could
    // possibly recurse into this this function when we call
    // appendDownstreamDataSignalEmissions because the user might call
@@ -1127,7 +1126,7 @@ QNetworkRequest QNetworkReplyHttpImplPrivate::createRedirectRequest(const QNetwo
    return newRequest;
 }
 
-void QNetworkReplyHttpImplPrivate::onRedirected(QUrl redirectUrl, int httpStatus, int maxRedirectsRemaining)
+void QNetworkReplyHttpImplPrivate::onRedirected(const QUrl &redirectUrl, int httpStatus, int maxRedirectsRemaining)
 {
    Q_Q(QNetworkReplyHttpImpl);
 
@@ -1350,15 +1349,15 @@ void QNetworkReplyHttpImplPrivate::proxyAuthenticationRequired(const QNetworkPro
 }
 #endif
 
-void QNetworkReplyHttpImplPrivate::httpError(QNetworkReply::NetworkError errorCode, QString errorString)
+void QNetworkReplyHttpImplPrivate::httpError(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
 
 #if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
-   qDebug() << "http error!" << errorCode << errorString;
+   qDebug() << "http error!" << errorCode << errorMsg;
 #endif
 
    // FIXME?
-   error(errorCode, errorString);
+   error(errorCode, errorMsg);
 }
 
 #ifdef QT_SSL
@@ -1368,10 +1367,10 @@ void QNetworkReplyHttpImplPrivate::replyEncrypted()
    emit q->encrypted();
 }
 
-void QNetworkReplyHttpImplPrivate::replySslErrors(const QList<QSslError> &list, bool *ignoreAll, QList<QSslError> *toBeIgnored)
+void QNetworkReplyHttpImplPrivate::replySslErrors(const QList<QSslError> &errorList, bool *ignoreAll, QList<QSslError> *toBeIgnored)
 {
    Q_Q(QNetworkReplyHttpImpl);
-   emit q->sslErrors(list);
+   emit q->sslErrors(errorList);
 
    // Check if the callback set any ignore and return this here to http thread
    if (pendingIgnoreAllSslErrors) {
@@ -1382,10 +1381,10 @@ void QNetworkReplyHttpImplPrivate::replySslErrors(const QList<QSslError> &list, 
    }
 }
 
-void QNetworkReplyHttpImplPrivate::replySslConfigurationChanged(QSslConfiguration sslConfiguration)
+void QNetworkReplyHttpImplPrivate::replySslConfigurationChanged(QSslConfiguration sslConfig)
 {
    // Receiving the used SSL configuration from the HTTP thread
-   this->sslConfiguration = sslConfiguration;
+   this->sslConfiguration = sslConfig;
 }
 
 void QNetworkReplyHttpImplPrivate::replyPreSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *authenticator)
@@ -2144,7 +2143,7 @@ void QNetworkReplyHttpImplPrivate::finished()
 #ifndef QT_NO_BEARERMANAGEMENT
       QSharedPointer<QNetworkSession> session = managerPrivate->getNetworkSession();
       if (session && session->state() == QNetworkSession::Roaming &&
-            state == Working && errorCode != QNetworkReply::OperationCanceledError) {
+            state == Working && m_errorCode != QNetworkReply::OperationCanceledError) {
          // only content with a known size will fail with a temporary network failure error
 
          if (totalSize.isValid()) {
@@ -2175,7 +2174,7 @@ void QNetworkReplyHttpImplPrivate::finished()
 
    // We check for errorCode too as in case of SSL handshake failure, we still
    // get the HTTP redirect status code (301, 303 etc)
-   if (isHttpRedirectResponse() && errorCode == QNetworkReply::NoError) {
+   if (isHttpRedirectResponse() && m_errorCode == QNetworkReply::NoError) {
       return;
    }
 
@@ -2196,27 +2195,27 @@ void QNetworkReplyHttpImplPrivate::finished()
    emit q->finished();
 }
 
-void QNetworkReplyHttpImplPrivate::_q_error(QNetworkReplyImpl::NetworkError code, const QString &errorMessage)
+void QNetworkReplyHttpImplPrivate::_q_error(QNetworkReplyImpl::NetworkError errorCode, const QString &errorMsg)
 {
-   this->error(code, errorMessage);
+   this->error(errorCode, errorMsg);
 }
 
-void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError code, const QString &errorMessage)
+void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError errorCode, const QString &errorMsg)
 {
    Q_Q(QNetworkReplyHttpImpl);
    // Can't set and emit multiple errors.
-   if (errorCode != QNetworkReply::NoError) {
+   if (m_errorCode != QNetworkReply::NoError) {
       qWarning("QNetworkReplyImplPrivate::error: Internal problem, this method must only be called once.");
       return;
    }
 
-   errorCode = code;
-   q->setErrorString(errorMessage);
+   m_errorCode = errorCode;
+   q->setErrorString(errorMsg);
 
    // note: might not be a good idea, since users could decide to delete us
    // which would delete the backend too...
    // maybe we should protect the backend
-   emit q->error(code);
+   emit q->error(errorCode);
 }
 
 void QNetworkReplyHttpImplPrivate::_q_metaDataChanged()
@@ -2340,7 +2339,7 @@ bool QNetworkReplyHttpImplPrivate::isCachingAllowed() const
 
 void QNetworkReplyHttpImplPrivate::completeCacheSave()
 {
-   if (cacheEnabled && errorCode != QNetworkReplyImpl::NoError) {
+   if (cacheEnabled && m_errorCode != QNetworkReplyImpl::NoError) {
       managerPrivate->networkCache->remove(url);
    } else if (cacheEnabled && cacheSaveDevice) {
       managerPrivate->networkCache->insert(cacheSaveDevice);
@@ -2358,10 +2357,10 @@ void QNetworkReplyHttpImpl::_q_startOperation()
    d->_q_startOperation();
 }
 
-bool QNetworkReplyHttpImpl::start(const QNetworkRequest &un_named_arg1)
+bool QNetworkReplyHttpImpl::start(const QNetworkRequest &newHttpRequest)
 {
    Q_D(QNetworkReplyHttpImpl);
-   return d->start(un_named_arg1);
+   return d->start(newHttpRequest);
 }
 
 void QNetworkReplyHttpImpl::_q_cacheLoadReadyRead()
@@ -2396,16 +2395,16 @@ void QNetworkReplyHttpImpl::_q_networkSessionFailed()
    d->_q_networkSessionFailed();
 }
 
-void QNetworkReplyHttpImpl::_q_networkSessionStateChanged(QNetworkSession::State un_named_arg1)
+void QNetworkReplyHttpImpl::_q_networkSessionStateChanged(QNetworkSession::State sessionState)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->_q_networkSessionStateChanged(un_named_arg1);
+   d->_q_networkSessionStateChanged(sessionState);
 }
 
-void QNetworkReplyHttpImpl::_q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies un_named_arg1)
+void QNetworkReplyHttpImpl::_q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies newPolicies)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->_q_networkSessionUsagePoliciesChanged(un_named_arg1);
+   d->_q_networkSessionUsagePoliciesChanged(newPolicies);
 }
 #endif
 
@@ -2415,16 +2414,16 @@ void QNetworkReplyHttpImpl::_q_finished()
    d->_q_finished();
 }
 
-void QNetworkReplyHttpImpl::_q_error(QNetworkReply::NetworkError un_named_arg1, const QString &un_named_arg2)
+void QNetworkReplyHttpImpl::_q_error(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->_q_error(un_named_arg1, un_named_arg2);
+   d->_q_error(errorCode, errorMsg);
 }
 
-void QNetworkReplyHttpImpl::replyDownloadData(const QByteArray &un_named_arg1)
+void QNetworkReplyHttpImpl::replyDownloadData(const QByteArray &data)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replyDownloadData(un_named_arg1);
+   d->replyDownloadData(data);
 }
 
 void QNetworkReplyHttpImpl::replyFinished()
@@ -2433,31 +2432,29 @@ void QNetworkReplyHttpImpl::replyFinished()
    d->replyFinished();
 }
 
-void QNetworkReplyHttpImpl::replyDownloadMetaData(const QList <QPair <QByteArray, QByteArray>> &un_named_arg1,
-      int un_named_arg2, const QString &un_named_arg3, bool un_named_arg4, QSharedPointer <char> un_named_arg5,
-      qint64 un_named_arg6, bool un_named_arg7)
+void QNetworkReplyHttpImpl::replyDownloadMetaData(const QList <QPair <QByteArray,QByteArray>> &headers, int statusCode,
+      const QString &reason, bool isPipelined, QSharedPointer <char> downloadBuffer, qint64 contentLength, bool isSpdy)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replyDownloadMetaData(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5,
-            un_named_arg6, un_named_arg7);
+   d->replyDownloadMetaData(headers, statusCode, reason, isPipelined, downloadBuffer, contentLength, isSpdy);
 }
 
-void QNetworkReplyHttpImpl::replyDownloadProgressSlot(qint64 un_named_arg1, qint64 un_named_arg2)
+void QNetworkReplyHttpImpl::replyDownloadProgressSlot(qint64 bytesReceived, qint64 bytesTotal)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replyDownloadProgressSlot(un_named_arg1, un_named_arg2);
+   d->replyDownloadProgressSlot(bytesReceived, bytesTotal);
 }
 
-void QNetworkReplyHttpImpl::httpAuthenticationRequired(const QHttpNetworkRequest &un_named_arg1, QAuthenticator *un_named_arg2)
+void QNetworkReplyHttpImpl::httpAuthenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *auth)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->httpAuthenticationRequired(un_named_arg1, un_named_arg2);
+   d->httpAuthenticationRequired(request, auth);
 }
 
-void QNetworkReplyHttpImpl::httpError(QNetworkReply::NetworkError un_named_arg1, const QString &un_named_arg2)
+void QNetworkReplyHttpImpl::httpError(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->httpError(un_named_arg1, un_named_arg2);
+   d->httpError(errorCode, errorMsg);
 }
 
 #ifdef QT_SSL
@@ -2468,22 +2465,22 @@ void QNetworkReplyHttpImpl::replyEncrypted()
    d->replyEncrypted();
 }
 
-void QNetworkReplyHttpImpl::replySslErrors(const QList<QSslError> &un_named_arg1, bool *un_named_arg2, QList<QSslError> *un_named_arg3)
+void QNetworkReplyHttpImpl::replySslErrors(const QList<QSslError> &errorList, bool *ignoreAll, QList<QSslError> *toBeIgnored)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replySslErrors(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->replySslErrors(errorList, ignoreAll, toBeIgnored);
 }
 
-void QNetworkReplyHttpImpl::replySslConfigurationChanged(const QSslConfiguration &un_named_arg1)
+void QNetworkReplyHttpImpl::replySslConfigurationChanged(const QSslConfiguration &sslConfig)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replySslConfigurationChanged(un_named_arg1);
+   d->replySslConfigurationChanged(sslConfig);
 }
 
-void QNetworkReplyHttpImpl::replyPreSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *un_named_arg1)
+void QNetworkReplyHttpImpl::replyPreSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *authenticator)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->replyPreSharedKeyAuthenticationRequiredSlot(un_named_arg1);
+   d->replyPreSharedKeyAuthenticationRequiredSlot(authenticator);
 }
 
 #endif
@@ -2503,16 +2500,16 @@ void QNetworkReplyHttpImpl::resetUploadDataSlot(bool *r)
    d->resetUploadDataSlot(r);
 }
 
-void QNetworkReplyHttpImpl::wantUploadDataSlot(qint64 un_named_arg1)
+void QNetworkReplyHttpImpl::wantUploadDataSlot(qint64 maxSize)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->wantUploadDataSlot(un_named_arg1);
+   d->wantUploadDataSlot(maxSize);
 }
 
-void QNetworkReplyHttpImpl::sentUploadDataSlot(qint64 un_named_arg1, qint64 un_named_arg2)
+void QNetworkReplyHttpImpl::sentUploadDataSlot(qint64 pos, qint64 amount)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->sentUploadDataSlot(un_named_arg1, un_named_arg2);
+   d->sentUploadDataSlot(pos, amount);
 }
 
 void QNetworkReplyHttpImpl::uploadByteDeviceReadyReadSlot()
@@ -2521,10 +2518,10 @@ void QNetworkReplyHttpImpl::uploadByteDeviceReadyReadSlot()
    d->uploadByteDeviceReadyReadSlot();
 }
 
-void QNetworkReplyHttpImpl::emitReplyUploadProgress(qint64 un_named_arg1, qint64 un_named_arg2)
+void QNetworkReplyHttpImpl::emitReplyUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->emitReplyUploadProgress(un_named_arg1, un_named_arg2);
+   d->emitReplyUploadProgress(bytesSent, bytesTotal);
 }
 
 void QNetworkReplyHttpImpl::_q_cacheSaveDeviceAboutToClose()
@@ -2539,8 +2536,8 @@ void QNetworkReplyHttpImpl::_q_metaDataChanged()
    d->_q_metaDataChanged();
 }
 
-void QNetworkReplyHttpImpl::onRedirected(const QUrl &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QNetworkReplyHttpImpl::onRedirected(const QUrl &redirectUrl, int httpStatus, int maxRedirectsRemaining)
 {
    Q_D(QNetworkReplyHttpImpl);
-   d->onRedirected(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->onRedirected(redirectUrl, httpStatus, maxRedirectsRemaining);
 }

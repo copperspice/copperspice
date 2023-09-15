@@ -178,14 +178,18 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
    CS_SIGNAL_2(tagsChanged)
    CS_SIGNAL_1(Public, void streamsChanged())
    CS_SIGNAL_2(streamsChanged)
-   CS_SIGNAL_1(Public, void seekableChanged(bool un_named_arg1))
-   CS_SIGNAL_2(seekableChanged, un_named_arg1)
+
+   CS_SIGNAL_1(Public, void seekableChanged(bool seekable))
+   CS_SIGNAL_2(seekableChanged, seekable)
+
    CS_SIGNAL_1(Public, void error(int error, const QString &errorString))
    CS_SIGNAL_2(error, error, errorString)
+
    CS_SIGNAL_1(Public, void invalidMedia())
    CS_SIGNAL_2(invalidMedia)
-   CS_SIGNAL_1(Public, void playbackRateChanged(qreal un_named_arg1))
-   CS_SIGNAL_2(playbackRateChanged, un_named_arg1)
+
+   CS_SIGNAL_1(Public, void playbackRateChanged(qreal rate))
+   CS_SIGNAL_2(playbackRateChanged, rate)
 
  private:
    static void playbinNotifySource(GObject *o, GParamSpec *p, gpointer d);
@@ -279,7 +283,8 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    CS_SLOT_1(Private, void getStreamsInfo())
    CS_SLOT_2(getStreamsInfo)
-   CS_SLOT_1(Private, void setSeekable(bool un_named_arg1))
+
+   CS_SLOT_1(Private, void setSeekable(bool seekable))
    CS_SLOT_2(setSeekable)
    CS_SLOT_1(Private, void finishVideoOutputChange())
    CS_SLOT_2(finishVideoOutputChange)

@@ -77,7 +77,7 @@ class CameraBinControl : public QCameraControl
    CS_SLOT_1(Private, void handleResourcesLost())
    CS_SLOT_2(handleResourcesLost)
 
-   CS_SLOT_1(Private, void handleBusyChanged(bool un_named_arg1))
+   CS_SLOT_1(Private, void handleBusyChanged(bool busy))
    CS_SLOT_2(handleBusyChanged)
 
    CS_SLOT_1(Private, void handleCameraError(int error, const QString &errorString))

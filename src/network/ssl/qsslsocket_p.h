@@ -149,7 +149,7 @@ public:
    void _q_resumeImplementation();
 
 #if defined(Q_OS_WIN)
-   virtual void _q_caRootLoaded(QSslCertificate,QSslCertificate) = 0;
+   virtual void _q_caRootLoaded(QSslCertificate cert, QSslCertificate trustedRoot) = 0;
 #endif
 
    static QList<QByteArray> unixRootCertDirectories(); // used also by QSslContext

@@ -3906,10 +3906,10 @@ quint64 QWebPage::bytesReceived() const
 }
 
 //
-void QWebPage::_q_onLoadProgressChanged(int un_named_arg1)
+void QWebPage::_q_onLoadProgressChanged(int progress)
 {
 	//Q_D(ErrorPageExtensionReturn);
-	d->_q_onLoadProgressChanged(un_named_arg1);
+	d->_q_onLoadProgressChanged(progress);
 }
 
 void QWebPage::_q_cleanupLeakMessages()

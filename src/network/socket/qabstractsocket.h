@@ -231,7 +231,7 @@ class Q_NETWORK_EXPORT QAbstractSocket : public QIODevice
    NET_CS_SLOT_1(Private, void _q_connectToNextAddress())
    NET_CS_SLOT_2(_q_connectToNextAddress)
 
-   NET_CS_SLOT_1(Private, void _q_startConnecting(const QHostInfo &un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_startConnecting(const QHostInfo &hostInfo))
    NET_CS_SLOT_2(_q_startConnecting)
 
    NET_CS_SLOT_1(Private, void _q_abortConnectionAttempt())
