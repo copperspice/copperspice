@@ -1813,11 +1813,11 @@ QString QDateTimeParser::stateName(State s) const
 
 bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) const
 {
-   QDateTime val(QDate(1900, 1, 1), QDATETIMEEDIT_TIME_MIN);
+   QDateTime dt(QDate(1900, 1, 1), QDATETIME_TIME_MIN);
    QString text = t;
 
    int copy = -1;
-   const StateNode tmp = parse(text, copy, val, false);
+   const StateNode tmp = parse(text, copy, dt, false);
 
    if (tmp.state != Acceptable || tmp.conflicts) {
       return false;
@@ -1846,12 +1846,12 @@ bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) con
 
 QDateTime QDateTimeParser::getMinimum() const
 {
-   return QDateTime(QDATETIMEEDIT_DATE_MIN, QDATETIMEEDIT_TIME_MIN, spec);
+   return QDateTime(QDATETIME_DATE_MIN, QDATETIME_TIME_MIN, spec);
 }
 
 QDateTime QDateTimeParser::getMaximum() const
 {
-   return QDateTime(QDATETIMEEDIT_DATE_MAX, QDATETIMEEDIT_TIME_MAX, spec);
+   return QDateTime(QDATETIME_DATE_MAX, QDATETIME_TIME_MAX, spec);
 }
 
 QString QDateTimeParser::getAmPmText(AmPm ap, Case cs) const
