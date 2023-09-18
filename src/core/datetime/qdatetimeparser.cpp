@@ -167,7 +167,7 @@ bool QDateTimeParser::setDigit(QDateTime &v, int index, int newVal) const
    }
 
    if (QDate::isValid(year, month, day) && QTime::isValid(hour, minute, second, msec)) {
-      v = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), spec);
+      v = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), m_timeZone);
       return true;
    }
 
@@ -1147,7 +1147,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
             }
          }
 
-         newCurrentValue = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), spec);
+         newCurrentValue = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), m_timeZone);
          QDTPDEBUG << year << month << day << hour << minute << second << msec;
       }
 
@@ -1305,7 +1305,7 @@ end:
    node.input     = input;
    node.state     = state;
    node.conflicts = conflicts;
-   node.value = newCurrentValue.toTimeSpec(spec);
+   node.value     = newCurrentValue.toTimeZone(m_timeZone);
    text           = input;
 
    return node;
@@ -1846,12 +1846,12 @@ bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) con
 
 QDateTime QDateTimeParser::getMinimum() const
 {
-   return QDateTime(QDATETIME_DATE_MIN, QDATETIME_TIME_MIN, spec);
+   return QDateTime(QDATETIME_DATE_MIN, QDATETIME_TIME_MIN, m_timeZone);
 }
 
 QDateTime QDateTimeParser::getMaximum() const
 {
-   return QDateTime(QDATETIME_DATE_MAX, QDATETIME_TIME_MAX, spec);
+   return QDateTime(QDATETIME_DATE_MAX, QDATETIME_TIME_MAX, m_timeZone);
 }
 
 QString QDateTimeParser::getAmPmText(AmPm ap, Case cs) const

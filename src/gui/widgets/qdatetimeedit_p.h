@@ -99,9 +99,7 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
    void setSelected(int index, bool forward = false);
 
    void updateCache(const QVariant &val, const QString &str) const;
-
-   void updateTimeSpec();
-
+   void updateTimeZone();
 
    QString valueToText(const QVariant &var) const {
       return textFromValue(var);

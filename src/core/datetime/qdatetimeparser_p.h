@@ -58,8 +58,8 @@ class Q_CORE_EXPORT QDateTimeParser
    };
 
    QDateTimeParser(QVariant::Type t, Context ctx)
-      : currentSectionIndex(-1), display(Qt::EmptyFlag), cachedDay(-1), parserType(t),
-        fixday(false), spec(Qt::LocalTime), context(ctx)
+      : currentSectionIndex(-1), display(Qt::EmptyFlag), cachedDay(-1), parserType(t), fixday(false),
+        m_timeZone(QTimeZone::systemTimeZone()), context(ctx)
    {
       defaultLocale = QLocale::system();
       first.type        = FirstSection;
@@ -238,7 +238,7 @@ class Q_CORE_EXPORT QDateTimeParser
    QLocale defaultLocale;
    QVariant::Type parserType;
    bool fixday;
-   Qt::TimeSpec spec; // spec if used by QDateTimeEdit
+   QTimeZone m_timeZone;
    Context context;
 
  private:
