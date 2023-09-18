@@ -515,18 +515,6 @@ QString QDate::toString(const QString &format) const
    return QLocale::system().toString(*this, format);
 }
 
-bool QDate::setDate(int year, int month, int day)
-{
-   if (isValid(year, month, day)) {
-      jd = julianDayFromDate(year, month, day);
-
-   } else {
-      jd = nullJd();
-   }
-
-   return isValid();
-}
-
 void QDate::getDate(int *year, int *month, int *day)
 {
    ParsedDate pd = { 0, 0, 0 };
@@ -621,6 +609,18 @@ QDate QDate::addMonths(qint64 nmonths) const
    }
 
    return fixedDate(y, m, d);
+}
+
+bool QDate::setDate(int year, int month, int day)
+{
+   if (isValid(year, month, day)) {
+      jd = julianDayFromDate(year, month, day);
+
+   } else {
+      jd = INVALID_JD;
+   }
+
+   return isValid();
 }
 
 QDate QDate::addYears(qint64 nyears) const

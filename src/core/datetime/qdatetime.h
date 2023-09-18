@@ -47,6 +47,9 @@ class NSDate;
 
 #endif
 
+// extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
+static constexpr const qint64 INVALID_JD = (std::numeric_limits<qint64>::min)();
+
 class Q_CORE_EXPORT QDate
 {
  public:
@@ -56,7 +59,7 @@ class Q_CORE_EXPORT QDate
    };
 
    constexpr QDate()
-      : jd(nullJd())
+      : jd(INVALID_JD)
    {
    }
 
@@ -141,11 +144,6 @@ class Q_CORE_EXPORT QDate
    explicit constexpr QDate(qint64 julianDay)
       : jd(julianDay)
    {
-   }
-
-   // extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
-   static constexpr qint64 nullJd() {
-      return (std::numeric_limits<qint64>::min)();
    }
 
    static constexpr qint64 minJd() {
