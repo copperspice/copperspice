@@ -35,14 +35,6 @@
 static const char tzRegPath[]     = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones";
 static const char currTzRegPath[] = "SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation";
 
-enum {
-   MIN_YEAR      = -292275056,
-   MAX_YEAR      = 292278994,
-   MSECS_PER_DAY = 86400000,
-   TIME_T_MAX    = 2145916799,      // int maximum 2037-12-31T23:59:59 UTC
-   JULIAN_DAY_FOR_EPOCH = 2440588   // result of julianDayFromDate(1970, 1, 1)
-};
-
 // Copied from MSDN
 typedef struct _REG_TZI_FORMAT {
    LONG Bias;
@@ -56,7 +48,7 @@ typedef struct _REG_TZI_FORMAT {
 // Adapted from QDateTime msecsToDate
 static QDate msecsToDate(qint64 msecs)
 {
-   qint64 jd = JULIAN_DAY_FOR_EPOCH;
+   qint64 jd = EPOCH_JD;
 
    if (qAbs(msecs) >= MSECS_PER_DAY) {
       jd += (msecs / MSECS_PER_DAY);
@@ -275,7 +267,7 @@ static QDate calculateTransitionLocalDate(const SYSTEMTIME &rule, int year)
 // Converts a date/time value into msecs
 static inline qint64 timeToMSecs(const QDate &date, const QTime &time)
 {
-   return ((date.toJulianDay() - JULIAN_DAY_FOR_EPOCH) * MSECS_PER_DAY) + time.msecsSinceStartOfDay();
+   return ((date.toJulianDay() - EPOCH_JD) * MSECS_PER_DAY) + time.msecsSinceStartOfDay();
 }
 
 static void calculateTransitionsForYear(const QWinTimeZonePrivate::QWinTransitionRule &rule, int year,

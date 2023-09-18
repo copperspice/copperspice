@@ -50,6 +50,20 @@ class NSTimeZone;
 
 static constexpr const qint64 MSECS_PER_SEC  = 1000;
 
+static constexpr const qint64 SECS_PER_DAY   = 86400;
+static constexpr const qint64 MSECS_PER_DAY  = 86400000;
+
+static constexpr const qint64 SECS_PER_HOUR  = 3600;
+static constexpr const qint64 MSECS_PER_HOUR = 3600000;
+
+static constexpr const qint64 SECS_PER_MIN   = 60;
+static constexpr const qint64 MSECS_PER_MIN  = 60000;
+
+static constexpr const qint64 MIN_YEAR       = -292275056;
+static constexpr const qint64 MAX_YEAR       = 292278994;
+
+static constexpr const qint64 EPOCH_JD       = 2440588;         // julianDayFromDate(1970, 1, 1)
+
 class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 {
  public:
