@@ -355,6 +355,13 @@ int QDate::daysInYear() const
    return isLeapYear(getDateFromJulianDay(jd).year) ? 366 : 365;
 }
 
+// undocumented
+const QTimeZone & QDate::default_tz() {
+   static QTimeZone retval = QTimeZone::systemTimeZone();
+
+   return retval;
+}
+
 int QDate::weekNumber(int *yearNumber) const
 {
    if (! isValid()) {

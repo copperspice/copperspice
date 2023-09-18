@@ -130,6 +130,7 @@ class Q_CORE_EXPORT QDate
 
    static QDate currentDate();
 
+   static const QTimeZone &default_tz();
    static QDate fromString(const QString &str, Qt::DateFormat format = Qt::TextDate);
    static QDate fromString(const QString &str, const QString &format);
 
