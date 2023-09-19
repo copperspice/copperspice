@@ -40,7 +40,7 @@ struct QTzTimeZone {
    QByteArray comment;
 };
 
-typedef QHash<QByteArray, QTzTimeZone> QTzTimeZoneHash;
+using QTzTimeZoneHash = QHash<QByteArray, QTzTimeZone>;
 
 // Parse zone.tab table, assume it contains all installed zones, if not will need to read directories
 static QTzTimeZoneHash loadTzTimeZones()

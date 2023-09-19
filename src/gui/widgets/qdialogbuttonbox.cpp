@@ -354,7 +354,8 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
    }
 
    standardButtonHash.insert(button, sbutton);
-   QPlatformDialogHelper::ButtonRole role = QPlatformDialogHelper::buttonRole(static_cast<QPlatformDialogHelper::StandardButton>(sbutton));
+   QPlatformDialogHelper::ButtonRole role =
+         QPlatformDialogHelper::buttonRole(static_cast<QPlatformDialogHelper::StandardButton>(sbutton));
 
    if (role != QPlatformDialogHelper::InvalidRole) {
       addButton(button, static_cast<QDialogButtonBox::ButtonRole>(role), doLayout);

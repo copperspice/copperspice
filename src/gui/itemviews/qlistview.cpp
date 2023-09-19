@@ -162,10 +162,12 @@ int QListView::spacing() const
 void QListView::setBatchSize(int batchSize)
 {
    Q_D(QListView);
+
    if (batchSize <= 0) {
       qWarning("QListView::setBatchSize() Invalid batchSize (%d)", batchSize);
       return;
    }
+
    d->batchSize = batchSize;
 }
 

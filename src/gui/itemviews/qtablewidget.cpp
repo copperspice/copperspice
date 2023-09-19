@@ -1336,13 +1336,6 @@ int QTableWidget::column(const QTableWidgetItem *item) const
    return d->tableModel()->index(item).column();
 }
 
-
-/*!
-    Returns the item for the given \a row and \a column if one has been set; otherwise
-    returns 0.
-
-    \sa setItem()
-*/
 QTableWidgetItem *QTableWidget::item(int row, int column) const
 {
    Q_D(const QTableWidget);
@@ -1352,6 +1345,7 @@ QTableWidgetItem *QTableWidget::item(int row, int column) const
 void QTableWidget::setItem(int row, int column, QTableWidgetItem *item)
 {
    Q_D(QTableWidget);
+
    if (item) {
       if (item->view != nullptr) {
          qWarning("QTableWidget::setItem() Unable to insert an item which is already owned by another QTableWidget");
@@ -1359,14 +1353,12 @@ void QTableWidget::setItem(int row, int column, QTableWidgetItem *item)
          item->view = this;
          d->tableModel()->setItem(row, column, item);
       }
+
    } else {
       delete takeItem(row, column);
    }
 }
 
-/*!
-    Removes the item at \a row and \a column from the table without deleting it.
-*/
 QTableWidgetItem *QTableWidget::takeItem(int row, int column)
 {
    Q_D(QTableWidget);
@@ -1375,12 +1367,10 @@ QTableWidgetItem *QTableWidget::takeItem(int row, int column)
    if (item) {
       item->view = nullptr;
    }
+
    return item;
 }
 
-/*!
-  Returns the vertical header item for row \a row.
-*/
 QTableWidgetItem *QTableWidget::verticalHeaderItem(int row) const
 {
    Q_D(const QTableWidget);

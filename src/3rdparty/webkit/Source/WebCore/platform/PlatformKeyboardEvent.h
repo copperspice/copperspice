@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef PlatformKeyboardEvent_h
@@ -120,7 +120,7 @@ namespace WebCore {
 #endif
         {
         }
-        
+
         Type type() const { return m_type; }
         void disambiguateKeyDownEvent(Type, bool backwardCompatibilityMode = false); // Only used on platforms that need it, i.e. those that generate KeyDown events.
 
@@ -237,11 +237,11 @@ namespace WebCore {
         QKeyEvent* m_qtEvent;
 #endif
     };
-    
+
 #if PLATFORM(QT)
 // Used by WebKit2.
 String keyIdentifierForQtKeyCode(int keyCode);
-int windowsKeyCodeForKeyEvent(unsigned int keycode, bool isKeypad = false);    
+int windowsKeyCodeForKeyEvent(unsigned int keycode, bool isKeypad = false);
 #endif
 
 } // namespace WebCore

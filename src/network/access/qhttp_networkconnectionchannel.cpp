@@ -1127,6 +1127,7 @@ void QHttpNetworkConnectionChannel::emitFinishedWithError(QNetworkReply::Network
       emit currentReply->finishedWithError(error, QHttpNetworkConnectionChannel::tr(message));
    }
 }
+
 void QHttpNetworkConnectionChannel::_q_sslErrors(const QList<QSslError> &errors)
 {
    if (! socket) {

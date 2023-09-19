@@ -39,7 +39,7 @@ public:
     WEB_CS_SIGNAL_1(Public,void finished())
     WEB_CS_SIGNAL_2(finished)
 
-private:    
+private:
     WEB_CS_SLOT_1(Private,void trySniffing())
     WEB_CS_SLOT_2(trySniffing)
 

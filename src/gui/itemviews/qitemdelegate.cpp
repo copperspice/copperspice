@@ -555,10 +555,6 @@ void QItemDelegate::drawBackground(QPainter *painter, const QStyleOptionViewItem
    }
 }
 
-/*!
-    Code duplicated in QCommonStylePrivate::viewItemLayout
-*/
-
 void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
    QRect *checkRect, QRect *pixmapRect, QRect *textRect, bool hint) const
 {
@@ -692,7 +688,9 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
          break;
    }
 
-   if (!hint) { // we only need to do the internal layout if we are going to paint
+   if (! hint) {
+      // only need to do the internal layout if we are going to paint
+
       *checkRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
             checkRect->size(), check);
 
@@ -713,14 +711,6 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
       *textRect   = display;
    }
 }
-
-/*!
-    \internal
-
-    Returns the pixmap used to decorate the root of the item view.
-    The style \a option controls the appearance of the root; the \a variant
-    refers to the data associated with an item.
-*/
 
 QPixmap QItemDelegate::decoration(const QStyleOptionViewItem &option, const QVariant &variant) const
 {
@@ -860,9 +850,6 @@ QRect QItemDelegate::doCheck(const QStyleOptionViewItem &option,
    return QRect();
 }
 
-/*!
-  \internal
-*/
 QRect QItemDelegate::textRectangle(QPainter * /*painter*/, const QRect &rect,
    const QFont &font, const QString &text) const
 {
@@ -947,7 +934,7 @@ bool QItemDelegate::editorEvent(QEvent *event, QAbstractItemModel *model,
 }
 
 QStyleOptionViewItem QItemDelegate::setOptions(const QModelIndex &index,
-   const QStyleOptionViewItem &option) const
+      const QStyleOptionViewItem &option) const
 {
    QStyleOptionViewItem opt = option;
 

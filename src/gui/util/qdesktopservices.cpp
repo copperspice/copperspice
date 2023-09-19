@@ -93,7 +93,9 @@ bool QDesktopServices::openUrl(const QUrl &url)
       if (handler != registry->handlers.constEnd()) {
          insideOpenUrlHandler = true;
 
-         bool result = QMetaObject::invokeMethod(handler->receiver, handler->name, Qt::DirectConnection, Q_ARG(const QUrl &, url));
+         bool result = QMetaObject::invokeMethod(handler->receiver, handler->name,
+               Qt::DirectConnection, Q_ARG(const QUrl &, url));
+
          insideOpenUrlHandler = false;
          return result;
       }

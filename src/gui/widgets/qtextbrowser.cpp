@@ -207,6 +207,7 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &anchor)
    if (anchor.isEmpty()) {
       return;
    }
+
    Q_Q(QTextBrowser);
 
 #ifndef QT_NO_CURSOR
@@ -215,7 +216,7 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &anchor)
 
    const QUrl url = resolveUrl(anchor);
 
-   if (!openLinks) {
+   if (! openLinks) {
       emit q->anchorClicked(url);
       return;
    }
@@ -247,15 +248,19 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &anchor)
 void QTextBrowserPrivate::_q_highlightLink(const QString &anchor)
 {
    Q_Q(QTextBrowser);
+
    if (anchor.isEmpty()) {
+
 #ifndef QT_NO_CURSOR
       if (viewport->cursor().shape() != Qt::PointingHandCursor) {
          oldCursor = viewport->cursor();
       }
       viewport->setCursor(oldCursor);
 #endif
+
       emit q->highlighted(QUrl());
       emit q->highlighted(QString());
+
    } else {
 #ifndef QT_NO_CURSOR
       viewport->setCursor(Qt::PointingHandCursor);
@@ -263,6 +268,7 @@ void QTextBrowserPrivate::_q_highlightLink(const QString &anchor)
 
       const QUrl url = resolveUrl(anchor);
       emit q->highlighted(url);
+
       // convenience to ease connecting to QStatusBar::showMessage(const QString &)
       emit q->highlighted(url.toString());
    }
@@ -277,6 +283,7 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
       QApplication::setOverrideCursor(Qt::WaitCursor);
    }
 #endif
+
    textOrSourceChanged = true;
 
    QString txt;
@@ -288,12 +295,14 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
    QUrl newUrlWithoutFragment = currentURL.resolved(url);
    newUrlWithoutFragment.setFragment(QString());
 
-   if (url.isValid()
-      && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
+   if (url.isValid() && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
       QVariant data = q->loadResource(QTextDocument::HtmlResource, resolveUrl(url));
+
       if (data.type() == QVariant::String) {
          txt = data.toString();
+
       } else if (data.type() == QVariant::ByteArray) {
+
 #ifndef QT_NO_TEXTCODEC
          QByteArray ba = data.toByteArray();
          QTextCodec *codec = Qt::codecForHtml(ba);
@@ -302,6 +311,7 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
          txt = data.toString();
 #endif
       }
+
       if (txt.isEmpty()) {
          qWarning("QTextBrowser:setSource() No document for %s", csPrintable(url.toString()) );
       }
@@ -535,8 +545,10 @@ void QTextBrowserPrivate::keypadMove(bool next)
       // Ensure that the new selection is highlighted.
       const QString href = control->anchorAtCursor();
       QUrl url = resolveUrl(href);
+
       emit q->highlighted(url);
       emit q->highlighted(url.toString());
+
    } else {
       // Scroll
       vbar->setValue(scrollYOffset);
@@ -597,6 +609,7 @@ void QTextBrowserPrivate::restoreHistoryEntry(const HistoryEntry entry)
 
    const QString href = prevFocus.charFormat().anchorHref();
    QUrl url = resolveUrl(href);
+
    emit q->highlighted(url);
    emit q->highlighted(url.toString());
 #endif
@@ -781,15 +794,18 @@ void QTextBrowser::keyPressEvent(QKeyEvent *ev)
 {
 #ifdef QT_KEYPAD_NAVIGATION
    Q_D(QTextBrowser);
+
    switch (ev->key()) {
       case Qt::Key_Select:
          if (QApplication::keypadNavigationEnabled()) {
             if (!hasEditFocus()) {
                setEditFocus(true);
                return;
+
             } else {
                QTextCursor cursor = d->control->textCursor();
                QTextCharFormat charFmt = cursor.charFormat();
+
                if (!cursor.hasSelection() || charFmt.anchorHref().isEmpty()) {
                   ev->accept();
                   return;
@@ -797,6 +813,7 @@ void QTextBrowser::keyPressEvent(QKeyEvent *ev)
             }
          }
          break;
+
       case Qt::Key_Back:
          if (QApplication::keypadNavigationEnabled()) {
             if (hasEditFocus()) {
@@ -869,9 +886,6 @@ void QTextBrowser::mouseReleaseEvent(QMouseEvent *e)
    QTextEdit::mouseReleaseEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::focusOutEvent(QFocusEvent *ev)
 {
 #ifndef QT_NO_CURSOR
@@ -881,24 +895,25 @@ void QTextBrowser::focusOutEvent(QFocusEvent *ev)
    QTextEdit::focusOutEvent(ev);
 }
 
-/*!
-    \reimp
-*/
 bool QTextBrowser::focusNextPrevChild(bool next)
 {
    Q_D(QTextBrowser);
+
    if (d->control->setFocusToNextOrPreviousAnchor(next)) {
 #ifdef QT_KEYPAD_NAVIGATION
       // Might need to synthesize a highlight event.
       if (d->prevFocus != d->control->textCursor() && d->control->textCursor().hasSelection()) {
          const QString href = d->control->anchorAtCursor();
          QUrl url = d->resolveUrl(href);
+
          emit highlighted(url);
          emit highlighted(url.toString());
       }
+
       d->prevFocus = d->control->textCursor();
 #endif
       return true;
+
    } else {
 #ifdef QT_KEYPAD_NAVIGATION
       // We assume we have no highlight now.

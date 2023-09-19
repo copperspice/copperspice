@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef DragImage_h
@@ -59,7 +59,7 @@ typedef struct IImage IImage;
 #define DragLabelBorderYOffset 2
 
 namespace WebCore {
-    
+
     class CachedImage;
     class Frame;
     class Image;
@@ -83,18 +83,18 @@ namespace WebCore {
 #elif PLATFORM(EFL)
     typedef void* DragImageRef;
 #endif
-    
+
     IntSize dragImageSize(DragImageRef);
-    
-    //These functions should be memory neutral, eg. if they return a newly allocated image, 
+
+    //These functions should be memory neutral, eg. if they return a newly allocated image,
     //they should release the input image.  As a corollary these methods don't guarantee
     //the input image ref will still be valid after they have been called
     DragImageRef fitDragImageToMaxSize(DragImageRef image, const IntSize& srcSize, const IntSize& size);
     DragImageRef scaleDragImage(DragImageRef, FloatSize scale);
     DragImageRef dissolveDragImageToFraction(DragImageRef image, float delta);
-    
+
     DragImageRef createDragImageFromImage(Image*);
-    DragImageRef createDragImageForSelection(Frame*);    
+    DragImageRef createDragImageForSelection(Frame*);
     DragImageRef createDragImageIconForCachedImage(CachedImage*);
     DragImageRef createDragImageForLink(KURL&, const String& label, Frame*);
     void deleteDragImage(DragImageRef);

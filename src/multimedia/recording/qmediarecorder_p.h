@@ -42,7 +42,9 @@ class QMediaRecorderPrivate
 
  public:
    QMediaRecorderPrivate();
-   virtual ~QMediaRecorderPrivate() {}
+
+   virtual ~QMediaRecorderPrivate()
+   { }
 
    void applySettingsLater();
    void restartCamera();

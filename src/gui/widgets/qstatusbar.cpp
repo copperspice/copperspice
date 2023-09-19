@@ -175,7 +175,6 @@ void QStatusBar::addWidget(QWidget *widget, int stretch)
    insertWidget(d_func()->indexToLastNonPermanentWidget() + 1, widget, stretch);
 }
 
-
 int QStatusBar::insertWidget(int index, QWidget *widget, int stretch)
 {
    if (!widget) {
@@ -186,6 +185,7 @@ int QStatusBar::insertWidget(int index, QWidget *widget, int stretch)
    QStatusBarPrivate::SBItem *item = new QStatusBarPrivate::SBItem(widget, stretch, false);
 
    int idx = d->indexToLastNonPermanentWidget();
+
    if (index < 0 || index > d->items.size() || (idx >= 0 && index > idx + 1)) {
       qWarning("QStatusBar::insertWidget() Index (%d) is out of range, appending widget instead", index);
       index = idx + 1;
@@ -197,26 +197,12 @@ int QStatusBar::insertWidget(int index, QWidget *widget, int stretch)
    }
 
    reformat();
-   if (!widget->isHidden() || !widget->testAttribute(Qt::WA_WState_ExplicitShowHide)) {
+   if (! widget->isHidden() || !widget->testAttribute(Qt::WA_WState_ExplicitShowHide)) {
       widget->show();
    }
 
    return index;
 }
-
-/*!
-    Adds the given \a widget permanently to this status bar,
-    reparenting the widget if it isn't already a child of this
-    QStatusBar object. The \a stretch parameter is used to compute a
-    suitable size for the given \a widget as the status bar grows and
-    shrinks. The default stretch factor is 0, i.e giving the widget a
-    minimum of space.
-
-    Permanently means that the widget may not be obscured by temporary
-    messages. It is is located at the far right of the status bar.
-
-    \sa insertPermanentWidget(), removeWidget(), addWidget()
-*/
 
 void QStatusBar::addPermanentWidget(QWidget *widget, int stretch)
 {
@@ -225,7 +211,6 @@ void QStatusBar::addPermanentWidget(QWidget *widget, int stretch)
    }
    insertPermanentWidget(d_func()->items.size(), widget, stretch);
 }
-
 
 int QStatusBar::insertPermanentWidget(int index, QWidget *widget, int stretch)
 {
@@ -250,16 +235,6 @@ int QStatusBar::insertPermanentWidget(int index, QWidget *widget, int stretch)
 
    return index;
 }
-
-/*!
-    Removes the specified \a widget from the status bar.
-
-    \note This function does not delete the widget but \e hides it.
-    To add the widget again, you must call both the addWidget() and
-    show() functions.
-
-    \sa addWidget(), addPermanentWidget(), clearMessage()
-*/
 
 void QStatusBar::removeWidget(QWidget *widget)
 {

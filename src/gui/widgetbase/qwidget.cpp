@@ -247,6 +247,7 @@ void QWidgetPrivate::scrollChildren(int dx, int dy)
 void QWidgetPrivate::setWSGeometry()
 {
    Q_Q(QWidget);
+
    if (QWindow *window = q->windowHandle()) {
       window->setGeometry(data.crect);
    }
@@ -727,9 +728,10 @@ void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
 
          if (childWidget != nullptr) {
             if (childWidget->testAttribute(Qt::WA_NativeWindow)) {
-               if (!childWidget->internalWinId()) {
+               if (! childWidget->internalWinId()) {
                   childWidget->winId();
                }
+
                if (childWidget->windowHandle()) {
                   if (childWidget->isWindow()) {
                      childWidget->windowHandle()->setTransientParent(parentWidget->window()->windowHandle());
@@ -737,6 +739,7 @@ void q_createNativeChildrenAndSetParent(const QWidget *parentWidget)
                      childWidget->windowHandle()->setParent(childWidget->nativeParentWidget()->windowHandle());
                   }
                }
+
             } else {
                q_createNativeChildrenAndSetParent(childWidget);
             }
@@ -786,7 +789,7 @@ void QWidgetPrivate::create_sys(WId window, bool initializeWindow, bool destroyO
    fixPosIncludesFrame();
 
    if (q->testAttribute(Qt::WA_Moved)
-      || !QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::WindowManagement)) {
+      || ! QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::WindowManagement)) {
       win->setGeometry(q->geometry());
 
    } else {
@@ -904,6 +907,7 @@ void QWidgetPrivate::createTLSysExtra()
       if (activeXNativeParentHandle.isValid()) {
          extra->topextra->window->setProperty(activeXNativeParentHandleProperty, activeXNativeParentHandle);
       }
+
       if (q->inherits("QTipLabel") || q->inherits("QAlphaWidget")) {
          extra->topextra->window->setProperty("_q_windowsDropShadow", QVariant(true));
       }
@@ -1164,7 +1168,6 @@ void QWidgetPrivate::createSysExtra()
 {
 }
 
-// internal
 void QWidgetPrivate::deleteExtra()
 {
    if (extra != nullptr) {
@@ -1193,6 +1196,7 @@ void QWidgetPrivate::deleteExtra()
 
       delete extra;
       // extra->xic destroyed in QWidget::destroy()
+
       extra = nullptr;
    }
 }
@@ -1200,6 +1204,7 @@ void QWidgetPrivate::deleteExtra()
 void QWidgetPrivate::deleteSysExtra()
 {
 }
+
 static void deleteBackingStore(QWidgetPrivate *d)
 {
    QTLWExtra *topData = d->topData();
@@ -1296,10 +1301,11 @@ bool QWidgetPrivate::isOverlapped(const QRect &rect) const
          if (qRectIntersects(sibling->d_func()->effectiveRectFor(sibling->data->crect), r)) {
             const QWExtra *siblingExtra = sibling->d_func()->extra;
 
-            if (siblingExtra && siblingExtra->hasMask && !sibling->d_func()->graphicsEffect
-               && !siblingExtra->mask.translated(sibling->data->crect.topLeft()).intersects(r)) {
+            if (siblingExtra && siblingExtra->hasMask && ! sibling->d_func()->graphicsEffect
+                  && ! siblingExtra->mask.translated(sibling->data->crect.topLeft()).intersects(r)) {
                continue;
             }
+
             return true;
          }
       }
@@ -1335,7 +1341,7 @@ void QWidgetPrivate::setUpdatesEnabled_helper(bool enable)
 {
    Q_Q(QWidget);
 
-   if (enable && !q->isWindow() && q->parentWidget() && ! q->parentWidget()->updatesEnabled()) {
+   if (enable && ! q->isWindow() && q->parentWidget() && ! q->parentWidget()->updatesEnabled()) {
       return;   // nothing we can do
    }
 
@@ -1367,15 +1373,17 @@ void QWidgetPrivate::propagatePaletteChange()
    // Propagate a new inherited mask to all children.
 
 #ifndef QT_NO_GRAPHICSVIEW
-   if (!q->parentWidget() && extra && extra->proxyWidget) {
+   if (! q->parentWidget() && extra && extra->proxyWidget) {
       QGraphicsProxyWidget *p = extra->proxyWidget;
       inheritedPaletteResolveMask = p->d_func()->inheritedPaletteResolveMask | p->palette().resolve();
    } else
 #endif
 
-      if (q->isWindow() && !q->testAttribute(Qt::WA_WindowPropagation)) {
+   {
+      if (q->isWindow() && ! q->testAttribute(Qt::WA_WindowPropagation)) {
          inheritedPaletteResolveMask = 0;
       }
+   }
 
    int mask = data.pal.resolve() | inheritedPaletteResolveMask;
 
@@ -1422,7 +1430,7 @@ QRegion QWidgetPrivate::clipRegion() const
 {
    Q_Q(const QWidget);
 
-   if (!q->isVisible()) {
+   if (! q->isVisible()) {
       return QRegion();
    }
 
@@ -1478,10 +1486,12 @@ void QWidgetPrivate::setSystemClip(QPaintDevice *paintDevice, const QRegion &reg
 void QWidgetPrivate::invalidateGraphicsEffectsRecursively()
 {
    Q_Q(QWidget);
+
    QWidget *w = q;
 
    do {
       if (w->graphicsEffect()) {
+
          QWidgetEffectSourcePrivate *sourced =
             static_cast<QWidgetEffectSourcePrivate *>(w->graphicsEffect()->source()->d_func());
 
@@ -1489,7 +1499,9 @@ void QWidgetPrivate::invalidateGraphicsEffectsRecursively()
             w->graphicsEffect()->source()->d_func()->invalidateCache();
          }
       }
+
       w = w->parentWidget();
+
    } while (w);
 }
 #endif
@@ -1509,7 +1521,7 @@ void QWidgetPrivate::setDirtyOpaqueRegion()
    }
 
    QWidget *parent = q->parentWidget();
-   if (!parent) {
+   if (! parent) {
       return;
    }
 
@@ -1541,12 +1553,15 @@ const QRegion &QWidgetPrivate::getOpaqueChildren() const
       const QPoint offset = child->geometry().topLeft();
       QWidgetPrivate *childd = child->d_func();
       QRegion r = childd->isOpaque ? child->rect() : childd->getOpaqueChildren();
+
       if (childd->extra && childd->extra->hasMask) {
          r &= childd->extra->mask;
       }
+
       if (r.isEmpty()) {
          continue;
       }
+
       r.translate(offset);
       that->opaqueChildren += r;
    }
@@ -1566,7 +1581,7 @@ void QWidgetPrivate::subtractOpaqueChildren(QRegion &source, const QRect &clipRe
    }
 
    const QRegion &r = getOpaqueChildren();
-   if (!r.isEmpty()) {
+   if (! r.isEmpty()) {
       source -= (r & clipRect);
    }
 }
@@ -1610,7 +1625,7 @@ void QWidgetPrivate::subtractOpaqueSiblings(QRegion &sourceRegion, bool *hasDirt
          }
 
          const QRect siblingGeometry = sibling->d_func()->effectiveRectFor(sibling->data->crect);
-         if (!qRectIntersects(siblingGeometry, widgetGeometry)) {
+         if (! qRectIntersects(siblingGeometry, widgetGeometry)) {
             continue;
          }
 
@@ -1802,7 +1817,7 @@ static inline void fillRegion(QPainter *painter, const QRegion &rgn, const QBrus
 
 
    } else if (brush.gradient()
-      && brush.gradient()->coordinateMode() == QGradient::ObjectBoundingMode) {
+         && brush.gradient()->coordinateMode() == QGradient::ObjectBoundingMode) {
       painter->save();
       painter->setClipRegion(rgn);
       painter->fillRect(0, 0, painter->device()->width(), painter->device()->height(), brush);
@@ -1938,11 +1953,11 @@ void QWidgetPrivate::createWinId()
          QWidget *parent = q->parentWidget();
          QWidgetPrivate *pd = parent->d_func();
 
-         if (forceNativeWindow && !q->testAttribute(Qt::WA_DontCreateNativeAncestors)) {
+         if (forceNativeWindow && ! q->testAttribute(Qt::WA_DontCreateNativeAncestors)) {
             parent->setAttribute(Qt::WA_NativeWindow);
          }
 
-         if (!parent->internalWinId()) {
+         if (! parent->internalWinId()) {
             pd->createWinId();
          }
 
@@ -2007,9 +2022,11 @@ QWindow *QWidget::windowHandle() const
 QString QWidget::styleSheet() const
 {
    Q_D(const QWidget);
+
    if (!d->extra) {
       return QString();
    }
+
    return d->extra->styleSheet;
 }
 
@@ -2037,10 +2054,13 @@ void QWidget::setStyleSheet(const QString &styleSheet)
       return;
    }
 
-   if (proxy) { // style sheet update
+   if (proxy) {
+      // style sheet update
+
       if (d->polished) {
          proxy->repolish(this);
       }
+
       return;
    }
 
@@ -2060,6 +2080,7 @@ QStyle *QWidget::style() const
    if (d->extra && d->extra->style) {
       return d->extra->style;
    }
+
    return QApplication::style();
 }
 
@@ -2086,7 +2107,9 @@ void QWidget::setStyle(QStyle *style)
    } else
 #endif
 
+   {
       d->setStyle_helper(style, false);
+   }
 }
 
 void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
@@ -2104,8 +2127,8 @@ void QWidgetPrivate::setStyle_helper(QStyle *newStyle, bool propagate, bool)
 #ifndef QT_NO_STYLE_STYLESHEET
    origStyle = extra->style.data();
 #endif
-   extra->style = newStyle;
 
+   extra->style = newStyle;
 
    // repolish
    if (q->windowType() != Qt::Desktop) {
@@ -2160,9 +2183,10 @@ void QWidgetPrivate::inheritStyle()
 
    QStyleSheetStyle *proxy = extra ? dynamic_cast<QStyleSheetStyle *>(extra->style.data()) : nullptr;
 
-   if (!q->styleSheet().isEmpty()) {
+   if (! q->styleSheet().isEmpty()) {
       Q_ASSERT(proxy);
       proxy->repolish(q);
+
       return;
    }
 
@@ -2282,11 +2306,13 @@ Qt::WindowState effectiveState(Qt::WindowStates state)
 void QWidget::setWindowState(Qt::WindowStates newstate)
 {
    Q_D(QWidget);
+
    Qt::WindowStates oldstate = windowState();
    if (oldstate == newstate) {
       return;
    }
-   if (isWindow() && !testAttribute(Qt::WA_WState_Created)) {
+
+   if (isWindow() && ! testAttribute(Qt::WA_WState_Created)) {
       create();
    }
 
@@ -2294,9 +2320,11 @@ void QWidget::setWindowState(Qt::WindowStates newstate)
    data->in_set_window_state = 1;
    Qt::WindowState newEffectiveState = effectiveState(newstate);
    Qt::WindowState oldEffectiveState = effectiveState(oldstate);
+
    if (isWindow() && newEffectiveState != oldEffectiveState) {
-      // Ensure the initial size is valid, since we store it as normalGeometry below.
-      if (!testAttribute(Qt::WA_Resized) && !isVisible()) {
+      // ensure the initial size is valid, since we store it as normalGeometry below
+
+      if (! testAttribute(Qt::WA_Resized) && ! isVisible()) {
          adjustSize();
       }
 
@@ -2355,10 +2383,8 @@ void QWidget::showNormal()
 bool QWidget::isEnabledTo(const QWidget *ancestor) const
 {
    const QWidget *w = this;
-   while (!w->testAttribute(Qt::WA_ForceDisabled)
-      && !w->isWindow()
-      && w->parentWidget()
-      && w->parentWidget() != ancestor) {
+   while (! w->testAttribute(Qt::WA_ForceDisabled) && ! w->isWindow()
+         && w->parentWidget() && w->parentWidget() != ancestor) {
       w = w->parentWidget();
    }
 
@@ -2381,12 +2407,13 @@ void QWidget::addActions(const QList<QAction *> &actions)
 
 void QWidget::insertAction(QAction *before, QAction *action)
 {
-   if (! action) {
+   if (action == nullptr) {
       qWarning("QWidget::insertAction() New action has an invalid value (nullptr)");
       return;
    }
 
    Q_D(QWidget);
+
    if (d->actions.contains(action)) {
       removeAction(action);
    }
@@ -2414,7 +2441,7 @@ void QWidget::insertActions(QAction *before, QList<QAction *> actions)
 
 void QWidget::removeAction(QAction *action)
 {
-   if (!action) {
+   if (! action) {
       return;
    }
 
@@ -2447,7 +2474,7 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
 {
    Q_Q(QWidget);
 
-   if (enable && ! q->isWindow() && q->parentWidget() && !q->parentWidget()->isEnabled()) {
+   if (enable && ! q->isWindow() && q->parentWidget() && ! q->parentWidget()->isEnabled()) {
       return;   // nothing we can do
    }
 
@@ -2458,7 +2485,7 @@ void QWidgetPrivate::setEnabled_helper(bool enable)
    q->setAttribute(Qt::WA_Disabled, !enable);
    updateSystemBackground();
 
-   if (!enable && q->window()->focusWidget() == q) {
+   if (! enable && q->window()->focusWidget() == q) {
       bool parentIsEnabled = (! q->parentWidget() || q->parentWidget()->isEnabled());
       if (! parentIsEnabled || ! q->focusNextChild()) {
          q->clearFocus();
@@ -2541,15 +2568,18 @@ QRect QWidget::frameGeometry() const
 int QWidget::x() const
 {
    Q_D(const QWidget);
+
    if (isWindow() && ! (windowType() == Qt::Popup)) {
       return data->crect.x() - d->frameStrut().left();
    }
+
    return data->crect.x();
 }
 
 int QWidget::y() const
 {
    Q_D(const QWidget);
+
    if (isWindow() && ! (windowType() == Qt::Popup)) {
       return data->crect.y() - d->frameStrut().top();
    }
@@ -2563,10 +2593,11 @@ QPoint QWidget::pos() const
 
    QPoint result = data->crect.topLeft();
 
-   if (isWindow() && ! (windowType() == Qt::Popup))
-      if (!d->maybeTopData() || !d->maybeTopData()->posIncludesFrame) {
+   if (isWindow() && ! (windowType() == Qt::Popup)) {
+      if (! d->maybeTopData() || ! d->maybeTopData()->posIncludesFrame) {
          result -= d->frameStrut().topLeft();
       }
+   }
 
    return result;
 }
@@ -2574,11 +2605,12 @@ QPoint QWidget::pos() const
 QRect QWidget::normalGeometry() const
 {
    Q_D(const QWidget);
-   if (!d->extra || !d->extra->topextra) {
+
+   if (! d->extra || ! d->extra->topextra) {
       return QRect();
    }
 
-   if (!isMaximized() && !isFullScreen()) {
+   if (! isMaximized() && !isFullScreen()) {
       return geometry();
    }
 
@@ -2609,6 +2641,7 @@ QRegion QWidget::childrenRegion() const
 
       if (w != nullptr && ! w->isWindow() && ! w->isHidden()) {
          QRegion mask = w->mask();
+
          if (mask.isEmpty()) {
             r |= w->geometry();
          } else {
@@ -2623,12 +2656,14 @@ QRegion QWidget::childrenRegion() const
 QSize QWidget::minimumSize() const
 {
    Q_D(const QWidget);
+
    return d->extra ? QSize(d->extra->minw, d->extra->minh) : QSize(0, 0);
 }
 
 QSize QWidget::maximumSize() const
 {
    Q_D(const QWidget);
+
    return d->extra ? QSize(d->extra->maxw, d->extra->maxh)
       : QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }
@@ -2636,14 +2671,15 @@ QSize QWidget::maximumSize() const
 QSize QWidget::sizeIncrement() const
 {
    Q_D(const QWidget);
+
    return (d->extra && d->extra->topextra)
-      ? QSize(d->extra->topextra->incw, d->extra->topextra->inch)
-      : QSize(0, 0);
+      ? QSize(d->extra->topextra->incw, d->extra->topextra->inch) : QSize(0, 0);
 }
 
 QSize QWidget::baseSize() const
 {
    Q_D(const QWidget);
+
    return (d->extra != nullptr && d->extra->topextra != nullptr)
       ? QSize(d->extra->topextra->basew, d->extra->topextra->baseh) : QSize(0, 0);
 }
@@ -2651,6 +2687,7 @@ QSize QWidget::baseSize() const
 bool QWidgetPrivate::setMinimumSize_helper(int &minw, int &minh)
 {
    Q_Q(QWidget);
+
    int mw = minw;
    int mh = minh;
 
@@ -3154,6 +3191,7 @@ void QWidgetPrivate::setPalette_helper(const QPalette &palette)
    q->update();
    updateIsOpaque();
 }
+
 void QWidgetPrivate::updateSystemBackground()
 {
 }
@@ -3279,8 +3317,8 @@ void QWidgetPrivate::updateFont(const QFont &font)
             wd->inheritedFontResolveMask = newMask;
             wd->resolveFont();
          }
-#else
 
+#else
          if ((! w->isWindow() || w->testAttribute(Qt::WA_WindowPropagation))) {
             // Propagate font changes
 
@@ -3289,6 +3327,7 @@ void QWidgetPrivate::updateFont(const QFont &font)
             wd->resolveFont();
          }
 #endif
+
       }
    }
 
@@ -3330,7 +3369,8 @@ void QWidgetPrivate::setLayoutDirection_helper(Qt::LayoutDirection direction)
 void QWidgetPrivate::resolveLayoutDirection()
 {
    Q_Q(const QWidget);
-   if (!q->testAttribute(Qt::WA_SetLayoutDirection)) {
+
+   if (! q->testAttribute(Qt::WA_SetLayoutDirection)) {
       setLayoutDirection_helper(q->isWindow() ? QApplication::layoutDirection() : q->parentWidget()->layoutDirection());
    }
 }
@@ -3598,9 +3638,11 @@ static void sendResizeEvents(QWidget *target)
       }
    }
 }
+
 QPixmap QWidget::grab(const QRect &rectangle)
 {
    Q_D(QWidget);
+
    if (testAttribute(Qt::WA_PendingResizeEvent) || !testAttribute(Qt::WA_WState_Created)) {
       sendResizeEvents(this);
    }
@@ -3609,6 +3651,7 @@ QPixmap QWidget::grab(const QRect &rectangle)
 
    const bool oldDirtyOpaqueChildren =  d->dirtyOpaqueChildren;
    QRect r(rectangle);
+
    if (r.width() < 0 || r.height() < 0) {
       // For grabbing widgets that haven't been shown yet,
       // we trigger the layouting mechanism to determine the widget's size.
@@ -3616,7 +3659,7 @@ QPixmap QWidget::grab(const QRect &rectangle)
       r.setTopLeft(rectangle.topLeft());
    }
 
-   if (!r.intersects(rect())) {
+   if (! r.intersects(rect())) {
       return QPixmap();
    }
 
@@ -3730,10 +3773,12 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
       for (auto item : hiddenWidgets) {
          QWidget *widget = item;
          widget->setAttribute(Qt::WA_WState_Hidden);
-         if (!widget->isWindow() && widget->parentWidget()->d_func()->layout) {
+
+         if (! widget->isWindow() && widget->parentWidget()->d_func()->layout) {
             widget->parentWidget()->d_func()->layout->invalidate();
          }
       }
+
    } else if (isVisible) {
       q->window()->d_func()->sendPendingMoveAndResizeEvents(true, true);
    }
@@ -3741,7 +3786,7 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
    // Calculate the region to be painted.
    QRegion toBePainted = !region.isEmpty() ? region : QRegion(q->rect());
 
-   if (!(renderFlags & QWidget::IgnoreMask) && extra && extra->hasMask) {
+   if (! (renderFlags & QWidget::IgnoreMask) && extra && extra->hasMask) {
       toBePainted &= extra->mask;
    }
 
@@ -3755,7 +3800,6 @@ void QWidgetPrivate::render_helper(QPainter *painter, const QPoint &targetOffset
    Q_ASSERT(!toBePainted.isEmpty());
 
    Q_Q(QWidget);
-
 
    const QTransform originalTransform = painter->worldTransform();
    const bool useDeviceCoordinates = originalTransform.isScaling();
@@ -3881,15 +3925,15 @@ void QWidgetPrivate::drawWidget(QPaintDevice *pdev, const QRegion &rgn, const QP
    Q_ASSERT(sharedPainter ? sharedPainter->isActive() : true);
 
    QRegion toBePainted(rgn);
-   if (asRoot && !alsoInvisible) {
+   if (asRoot && ! alsoInvisible) {
       toBePainted &= clipRect();   //(rgn & visibleRegion());
    }
 
-   if (!(flags & DontSubtractOpaqueChildren)) {
+   if (! (flags & DontSubtractOpaqueChildren)) {
       subtractOpaqueChildren(toBePainted, q->rect());
    }
 
-   if (!toBePainted.isEmpty()) {
+   if (! toBePainted.isEmpty()) {
 
       if (!onScreen || alsoOnScreen) {
          //update the "in paint event" flag
@@ -4219,8 +4263,8 @@ QRectF QWidgetEffectSourcePrivate::boundingRect(Qt::CoordinateSystem system) con
       return m_widget->rect();
    }
 
-   if (!context) {
-      // Device coordinates without context not yet supported.
+   if (! context) {
+      // Device coordinates without context not yet supported
       qWarning("QGraphicsEffectSource::boundingRect() Device context is missing, unable to create the bounding rectangle");
       return QRectF();
    }
@@ -4254,7 +4298,7 @@ QPixmap QWidgetEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QPoint *
    QGraphicsEffect::PixmapPadMode mode) const
 {
    const bool deviceCoordinates = (system == Qt::DeviceCoordinates);
-   if (!context && deviceCoordinates) {
+   if (! context && deviceCoordinates) {
       // Device coordinates without context not yet supported.
       qWarning("QGraphicsEffectSource::pixmap() Device context is missing, unable to create the pixmap");
       return QPixmap();
@@ -4315,7 +4359,8 @@ QGraphicsProxyWidget *QWidgetPrivate::nearestGraphicsProxyWidget(const QWidget *
 void QWidgetPrivate::setLocale_helper(const QLocale &loc, bool forceUpdate)
 {
    Q_Q(QWidget);
-   if (locale == loc && !forceUpdate) {
+
+   if (locale == loc && ! forceUpdate) {
       return;
    }
 
@@ -4340,6 +4385,7 @@ void QWidgetPrivate::setLocale_helper(const QLocale &loc, bool forceUpdate)
          w->d_func()->setLocale_helper(loc, forceUpdate);
       }
    }
+
    QEvent e(QEvent::LocaleChange);
    QApplication::sendEvent(q, &e);
 }
@@ -4528,7 +4574,7 @@ void QWidgetPrivate::setWindowIcon_helper()
    Q_Q(QWidget);
 
    QEvent e(QEvent::WindowIconChange);
-   if (!q->windowHandle()) {
+   if (! q->windowHandle()) {
       QApplication::sendEvent(q_func(), &e);
    }
 
@@ -4548,7 +4594,7 @@ void QWidget::setWindowIcon(const QIcon &icon)
    setAttribute(Qt::WA_SetWindowIcon, !icon.isNull());
    d->createTLExtra();
 
-   if (!d->extra->topextra->icon) {
+   if (! d->extra->topextra->icon) {
       d->extra->topextra->icon = new QIcon();
    }
 
@@ -4562,10 +4608,12 @@ void QWidget::setWindowIcon(const QIcon &icon)
 void QWidgetPrivate::setWindowIcon_sys()
 {
    Q_Q(QWidget);
+
    if (QWindow *window = q->windowHandle()) {
       window->setIcon(q->windowIcon());
    }
 }
+
 QString QWidget::windowIconText() const
 {
    Q_D(const QWidget);
@@ -4636,7 +4684,6 @@ void QWidget::setWindowRole(const QString &role)
    if (windowHandle()) {
       QXcbWindowFunctions::setWmWindowRole(windowHandle(), role.toUtf8());
    }
-
 }
 
 void QWidget::setFocusProxy(QWidget *w)
@@ -4996,6 +5043,7 @@ bool QWidget::isActiveWindow() const
          }
       }
    }
+
    if (QWindow *ww = QGuiApplication::focusWindow()) {
 
       while (ww != nullptr) {
@@ -5005,6 +5053,7 @@ bool QWidget::isActiveWindow() const
          if (qwc != nullptr && qwc->topLevelWidget() == tlw) {
             return true;
          }
+
          ww = ww->parent();
       }
    }
@@ -5025,7 +5074,7 @@ bool QWidget::isActiveWindow() const
 
 void QWidget::setTabOrder(QWidget *first, QWidget *second)
 {
-   if (!first || !second || first->focusPolicy() == Qt::NoFocus || second->focusPolicy() == Qt::NoFocus) {
+   if (! first || !second || first->focusPolicy() == Qt::NoFocus || second->focusPolicy() == Qt::NoFocus) {
       return;
    }
 
@@ -5035,14 +5084,18 @@ void QWidget::setTabOrder(QWidget *first, QWidget *second)
    }
 
    QWidget *fp = first->focusProxy();
+
    if (fp) {
       // If first is redirected, set first to the last child of first
       // that can take keyboard focus so that second is inserted after
       // that last child, and the focus order within first is (more
       // likely to be) preserved.
+
       QList<QWidget *> l = first->findChildren<QWidget *>();
+
       for (int i = l.size() - 1; i >= 0; --i) {
          QWidget *next = l.at(i);
+
          if (next->window() == fp->window()) {
             fp = next;
             if (fp->focusPolicy() != Qt::NoFocus) {
@@ -6190,7 +6243,8 @@ void QWidget::setHidden(bool hidden)
 void QWidgetPrivate::_q_showIfNotHidden()
 {
    Q_Q(QWidget);
-   if ( !(q->isHidden() && q->testAttribute(Qt::WA_WState_ExplicitShowHide)) ) {
+
+   if ( ! (q->isHidden() && q->testAttribute(Qt::WA_WState_ExplicitShowHide)) ) {
       q->setVisible(true);
    }
 }
@@ -6213,6 +6267,7 @@ void QWidgetPrivate::showChildren(bool spontaneous)
          widget->d_func()->showChildren(true);
          QShowEvent e;
          QApplication::sendSpontaneousEvent(widget, &e);
+
       } else {
          if (widget->testAttribute(Qt::WA_WState_ExplicitShowHide)) {
             widget->d_func()->show_recursive();
@@ -6236,8 +6291,6 @@ void QWidgetPrivate::hideChildren(bool spontaneous)
          continue;
       }
 
-
-
       if (spontaneous) {
          widget->setAttribute(Qt::WA_Mapped, false);
       } else {
@@ -6246,6 +6299,7 @@ void QWidgetPrivate::hideChildren(bool spontaneous)
 
       widget->d_func()->hideChildren(spontaneous);
       QHideEvent e;
+
       if (spontaneous) {
          QApplication::sendSpontaneousEvent(widget, &e);
       } else {
@@ -6257,6 +6311,7 @@ void QWidgetPrivate::hideChildren(bool spontaneous)
             widget->d_func()->hide_sys();
          }
       }
+
       qApp->d_func()->sendSyntheticEnterLeave(widget);
 
 
@@ -6819,6 +6874,7 @@ bool QWidget::event(QEvent *event)
          changeEvent(event);
       }
       break;
+
       case QEvent::WindowActivate:
       case QEvent::WindowDeactivate: {
          if (isVisible() && !palette().isEqual(QPalette::Active, QPalette::Inactive)) {
@@ -7362,10 +7418,10 @@ void QWidget::setLayout(QLayout *l)
       return;
    }
 
-   if (layout()) {
-      if (layout() != l)
+   if (layout() && (layout() != l)) {
       qWarning("QWidget::setLayout() Attempting to set QLayout \"%s\" on %s \"%s\", which already has a layout",
          csPrintable(l->objectName()), csPrintable(metaObject()->className()), csPrintable(objectName()));
+
       return;
    }
 
@@ -7816,7 +7872,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
       // programmer specified desktop widget
       const QDesktopScreenWidget *sw = dynamic_cast<const QDesktopScreenWidget *>(newparent);
       targetScreen = sw ? sw->screenNumber() : 0;
-      newparent = nullptr;
+      newparent    = nullptr;
    }
 
    setWinId(0);
@@ -7886,6 +7942,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
             childWindow->setParent(newParentWindow);
          }
       }
+
       q->destroy();
    }
 
@@ -8174,6 +8231,7 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
    }
 
    Q_D(QWidget);
+
    static_assert(sizeof(d->high_attributes) * 8 >= (Qt::WA_AttributeCount - sizeof(uint) * 8),
       "QWidget::setAttribute(WidgetAttribute, bool): "
       "QWidgetPrivate::high_attributes[] too small to contain all attributes in WidgetAttribute");
@@ -8206,7 +8264,8 @@ void QWidget::setAttribute(Qt::WidgetAttribute attribute, bool on)
          if (on && ! testAttribute(Qt::WA_DropSiteRegistered)) {
             setAttribute(Qt::WA_DropSiteRegistered, true);
 
-         } else if (!on && (isWindow() || ! parentWidget() || ! parentWidget()->testAttribute(Qt::WA_DropSiteRegistered))) {
+         } else if (!on && (isWindow() || ! parentWidget() ||
+               ! parentWidget()->testAttribute(Qt::WA_DropSiteRegistered))) {
             setAttribute(Qt::WA_DropSiteRegistered, false);
 
          }
@@ -8898,34 +8957,35 @@ QWidget *QWidgetPrivate::widgetInNavigationDirection(Direction direction)
       }
 
       // Only navigate to a target widget that...
-      if (       targetCandidate != sourceWidget
-         // ...takes the focus,
-         && targetCandidate->focusPolicy() & Qt::TabFocus
-         // ...is above if DirectionNorth,
-         && !(direction == DirectionNorth && targetCandidateRect.bottom() > sourceRect.top())
-         // ...is on the right if DirectionEast,
-         && !(direction == DirectionEast  && targetCandidateRect.left()   < sourceRect.right())
-         // ...is below if DirectionSouth,
-         && !(direction == DirectionSouth && targetCandidateRect.top()    < sourceRect.bottom())
-         // ...is on the left if DirectionWest,
-         && !(direction == DirectionWest  && targetCandidateRect.right()  > sourceRect.left())
-         // ...is enabled,
-         && targetCandidate->isEnabled()
-         // ...is visible,
-         && targetCandidate->isVisible()
-         // ...is in the same window,
-         && targetCandidate->window() == sourceWindow) {
+      if (targetCandidate != sourceWidget
+            // ...takes the focus,
+            && targetCandidate->focusPolicy() & Qt::TabFocus
+            // ...is above if DirectionNorth,
+            && !(direction == DirectionNorth && targetCandidateRect.bottom() > sourceRect.top())
+            // ...is on the right if DirectionEast,
+            && !(direction == DirectionEast  && targetCandidateRect.left()   < sourceRect.right())
+            // ...is below if DirectionSouth,
+            && !(direction == DirectionSouth && targetCandidateRect.top()    < sourceRect.bottom())
+            // ...is on the left if DirectionWest,
+            && !(direction == DirectionWest  && targetCandidateRect.right()  > sourceRect.left())
+            // ...is enabled,
+            && targetCandidate->isEnabled()
+            // ...is visible,
+            && targetCandidate->isVisible()
+            // ...is in the same window,
+            && targetCandidate->window() == sourceWindow) {
          const int targetCandidateDistance = pointToRect(sourcePoint, targetCandidateRect);
+
          if (targetCandidateDistance < shortestDistance) {
             shortestDistance = targetCandidateDistance;
             targetWidget = targetCandidate;
          }
       }
    }
+
    return targetWidget;
 }
 
-// internal
 bool QWidgetPrivate::canKeypadNavigate(Qt::Orientation orientation)
 {
    return orientation == Qt::Horizontal ?
@@ -8935,13 +8995,14 @@ bool QWidgetPrivate::canKeypadNavigate(Qt::Orientation orientation)
          || QWidgetPrivate::widgetInNavigationDirection(QWidgetPrivate::DirectionSouth));
 }
 
-// internal
 bool QWidgetPrivate::inTabWidget(QWidget *widget)
 {
    for (QWidget *tabWidget = widget; tabWidget; tabWidget = tabWidget->parentWidget()) {
       if (dynamic_cast<const QTabWidget *>(tabWidget)) {
          return true;
       }
+   }
+
    return false;
 }
 #endif
@@ -8950,7 +9011,7 @@ void QWidget::setBackingStore(QBackingStore *store)
 {
    // ### createWinId() ??
 
-   if (!isTopLevel()) {
+   if (! isTopLevel()) {
       return;
    }
 
@@ -9028,7 +9089,8 @@ void QWidgetPrivate::setLayoutItemMargins(QStyle::SubElement element, const QSty
 {
    Q_Q(QWidget);
    QStyleOption myOpt;
-   if (!opt) {
+
+   if (! opt) {
       myOpt.initFrom(q);
       myOpt.rect.setRect(0, 0, 32768, 32768);     // arbitrary
       opt = &myOpt;
@@ -9172,6 +9234,7 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
    if (!isWindow() && parentWidget()) {
       parentWidget()->d_func()->invalidateBuffer(d->effectiveRectFor(geometry()));
    }
+
    d->deactivateWidgetCleanup();
 
    if ((windowType() == Qt::Popup) && qApp) {
@@ -9181,9 +9244,11 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
    if (this == QApplicationPrivate::active_window) {
       QApplication::setActiveWindow(nullptr);
    }
+
    if (QWidget::mouseGrabber() == this) {
       releaseMouse();
    }
+
    if (QWidget::keyboardGrabber() == this) {
       releaseKeyboard();
    }
@@ -9204,6 +9269,7 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
             }
          }
       }
+
       if (destroyWindow) {
          d->deleteTLSysExtra();
       } else {
@@ -9215,6 +9281,7 @@ void QWidget::destroy(bool destroyWindow, bool destroySubWindows)
       d->setWinId(0);
    }
 }
+
 QPaintEngine *QWidget::paintEngine() const
 {
    qWarning("QWidget::paintEngine() This method should not be called directly");
@@ -9225,7 +9292,8 @@ QPaintEngine *QWidget::paintEngine() const
 
    return nullptr;
 }
-// Do not call QWindow::mapToGlobal() until QPlatformWindow is properly showing.
+
+// Do not call QWindow::mapToGlobal() until QPlatformWindow is properly showing
 static inline bool canMapPosition(QWindow *window)
 {
    return window->handle() && !qt_window_private(window)->resizeEventPending;
@@ -9261,7 +9329,8 @@ static MapToGlobalTransformResult mapToGlobalTransform(const QWidget *w)
       if (QGraphicsProxyWidget *qgpw = graphicsProxyWidget(w)) {
          if (const QGraphicsScene *scene = qgpw->scene()) {
             const QList <QGraphicsView *> views = scene->views();
-            if (!views.isEmpty()) {
+
+            if (! views.isEmpty()) {
                result.transform *= qgpw->sceneTransform();
                result.transform *= views.first()->viewportTransform();
                w = views.first()->viewport();
@@ -9285,6 +9354,7 @@ static MapToGlobalTransformResult mapToGlobalTransform(const QWidget *w)
 
       w = w->parentWidget();
    }
+
    return result;
 }
 

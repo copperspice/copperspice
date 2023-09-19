@@ -544,7 +544,6 @@ void QMenuBarPrivate::activateAction(QAction *action, QAction::ActionEvent actio
    //         emit q->highlighted(action);
 }
 
-
 void QMenuBarPrivate::_q_actionTriggered()
 {
    Q_Q(QMenuBar);
@@ -572,13 +571,6 @@ void QMenuBarPrivate::_q_actionHovered()
    }
 }
 
-/*!
-    Initialize \a option with the values from the menu bar and information from \a action. This method
-    is useful for subclasses when they need a QStyleOptionMenuItem, but don't want
-    to fill in all the information themselves.
-
-    \sa QStyleOption::initFrom() QMenu::initStyleOption()
-*/
 void QMenuBar::initStyleOption(QStyleOptionMenuItem *option, const QAction *action) const
 {
    if (!option || !action) {
@@ -612,8 +604,6 @@ void QMenuBar::initStyleOption(QStyleOptionMenuItem *option, const QAction *acti
    option->text = action->text();
    option->icon = action->icon();
 }
-
-
 
 void QMenuBarPrivate::init()
 {
@@ -663,9 +653,6 @@ QAction *QMenuBarPrivate::getNextAction(const int _start, const int increment) c
    return nullptr;
 }
 
-/*!
-    Constructs a menu bar with parent \a parent.
-*/
 QMenuBar::QMenuBar(QWidget *parent) : QWidget(*new QMenuBarPrivate, parent, Qt::EmptyFlag)
 {
    Q_D(QMenuBar);
@@ -772,9 +759,6 @@ bool QMenuBar::isDefaultUp() const
    return !d->defaultPopDown;
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::resizeEvent(QResizeEvent *)
 {
    Q_D(QMenuBar);
@@ -782,9 +766,6 @@ void QMenuBar::resizeEvent(QResizeEvent *)
    d->updateGeometries();
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::paintEvent(QPaintEvent *e)
 {
    Q_D(QMenuBar);
@@ -809,6 +790,7 @@ void QMenuBar::paintEvent(QPaintEvent *e)
       p.setClipRect(adjustedActionRect);
       style()->drawControl(QStyle::CE_MenuBarItem, &opt, &p, this);
    }
+
    //draw border
    if (int fw = style()->pixelMetric(QStyle::PM_MenuBarPanelWidth, nullptr, this)) {
       QRegion borderReg;
@@ -839,9 +821,6 @@ void QMenuBar::paintEvent(QPaintEvent *e)
    style()->drawControl(QStyle::CE_MenuBarEmptyArea, &menuOpt, &p, this);
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::setVisible(bool visible)
 {
    if (isNativeMenuBar()) {
@@ -855,9 +834,6 @@ void QMenuBar::setVisible(bool visible)
    QWidget::setVisible(visible);
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QMenuBar);
@@ -892,12 +868,10 @@ void QMenuBar::mousePressEvent(QMouseEvent *e)
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QMenuBar);
+
    if (e->button() != Qt::LeftButton || !d->mouseDown) {
       return;
    }
@@ -915,14 +889,13 @@ void QMenuBar::mouseReleaseEvent(QMouseEvent *e)
    d->closePopupMode = 0;
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QMenuBar);
+
    d->updateGeometries();
    int key = e->key();
+
    if (isRightToLeft()) { // in reverse mode open/close key for submenues are reversed
       if (key == Qt::Key_Left) {
          key = Qt::Key_Right;
@@ -1045,9 +1018,6 @@ void QMenuBar::keyPressEvent(QKeyEvent *e)
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QMenuBar);
@@ -1064,9 +1034,6 @@ void QMenuBar::mouseMoveEvent(QMouseEvent *e)
    }
 }
 
-/*!
-  \reimp
-*/
 void QMenuBar::leaveEvent(QEvent *)
 {
    Q_D(QMenuBar);
@@ -1186,9 +1153,6 @@ void QMenuBar::focusOutEvent(QFocusEvent *)
    }
 }
 
-/*!
-  \reimp
- */
 void QMenuBar::timerEvent (QTimerEvent *e)
 {
    Q_D(QMenuBar);
@@ -1279,9 +1243,6 @@ void QMenuBar::changeEvent(QEvent *e)
    QWidget::changeEvent(e);
 }
 
-/*!
-  \reimp
-*/
 bool QMenuBar::event(QEvent *e)
 {
    Q_D(QMenuBar);
@@ -1295,6 +1256,7 @@ bool QMenuBar::event(QEvent *e)
 
       }
       break;
+
 #ifndef QT_NO_SHORTCUT
       case QEvent::Shortcut: {
          QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
@@ -1307,6 +1269,7 @@ bool QMenuBar::event(QEvent *e)
       }
       break;
 #endif
+
       case QEvent::Show:
          d->_q_updateLayout();
          break;
@@ -1331,6 +1294,7 @@ bool QMenuBar::event(QEvent *e)
          }
          return true;
 #endif
+
       case QEvent::LayoutDirectionChange:
          d->_q_updateLayout();
          break;
@@ -1340,9 +1304,6 @@ bool QMenuBar::event(QEvent *e)
    return QWidget::event(e);
 }
 
-/*!
-  \reimp
-*/
 bool QMenuBar::eventFilter(QObject *object, QEvent *event)
 {
    Q_D(QMenuBar);
@@ -1482,9 +1443,6 @@ QSize QMenuBar::minimumSizeHint() const
    return ret;
 }
 
-/*!
-  \reimp
-*/
 QSize QMenuBar::sizeHint() const
 {
    Q_D(const QMenuBar);
@@ -1545,9 +1503,6 @@ QSize QMenuBar::sizeHint() const
    return ret;
 }
 
-/*!
-  \reimp
-*/
 int QMenuBar::heightForWidth(int) const
 {
    Q_D(const QMenuBar);
@@ -1595,9 +1550,6 @@ int QMenuBar::heightForWidth(int) const
    return height;
 }
 
-/*!
-  \internal
-*/
 void QMenuBarPrivate::_q_internalShortcutActivated(int id)
 {
    Q_Q(QMenuBar);
@@ -1711,8 +1663,6 @@ QPlatformMenuBar *QMenuBar::platformMenuBar()
    Q_D(const QMenuBar);
    return d->platformMenuBar;
 }
-
-
 
 void QMenuBar::_q_actionTriggered()
 {

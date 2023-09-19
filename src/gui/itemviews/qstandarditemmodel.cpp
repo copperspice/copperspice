@@ -83,9 +83,6 @@ QStandardItemPrivate::~QStandardItemPrivate()
    }
 }
 
-/*!
-  \internal
-*/
 QPair<int, int> QStandardItemPrivate::position() const
 {
    if (QStandardItem *par = parent) {
@@ -100,23 +97,24 @@ QPair<int, int> QStandardItemPrivate::position() const
    return QPair<int, int>(-1, -1);
 }
 
-/*!
-  \internal
-*/
 void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
    bool emitChanged)
 {
    Q_Q(QStandardItem);
+
    if (item == q) {
       qWarning("QStandardItem::setChild() Unable to make an item a child of itself %p", item);
       return;
    }
+
    if ((row < 0) || (column < 0)) {
       return;
    }
+
    if (rows <= row) {
       q->setRowCount(row + 1);
    }
+
    if (columns <= column) {
       q->setColumnCount(column + 1);
    }
@@ -141,6 +139,7 @@ void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
          return;
       }
    }
+
    if (oldItem) {
       oldItem->d_func()->setModel(nullptr);
    }
@@ -452,6 +451,7 @@ bool QStandardItemPrivate::insertRows(int row, int count, const QList<QStandardI
          ++index;
       }
    }
+
    if (model) {
       model->d_func()->rowsInserted(q, row, count);
    }
@@ -1373,6 +1373,7 @@ QStandardItem *QStandardItemModel::invisibleRootItem() const
 void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item)
 {
    Q_D(QStandardItemModel);
+
    if (column < 0) {
       return;
    }
@@ -1397,27 +1398,32 @@ void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item
    if (oldItem) {
       oldItem->d_func()->setModel(nullptr);
    }
-   delete oldItem;
 
+   delete oldItem;
    d->columnHeaderItems.replace(column, item);
+
    emit headerDataChanged(Qt::Horizontal, column, column);
 }
 
 QStandardItem *QStandardItemModel::horizontalHeaderItem(int column) const
 {
    Q_D(const QStandardItemModel);
+
    if ((column < 0) || (column >= columnCount())) {
       return nullptr;
    }
+
    return d->columnHeaderItems.at(column);
 }
 
 void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
 {
    Q_D(QStandardItemModel);
+
    if (row < 0) {
       return;
    }
+
    if (rowCount() <= row) {
       setRowCount(row + 1);
    }
@@ -2006,8 +2012,8 @@ QMimeData *QStandardItemModel::mimeData(const QModelIndexList &indexes) const
       return nullptr;
    }
 
-   QString format = QLatin1String("application/x-qstandarditemmodeldatalist");
-   if (!mimeTypes().contains(format)) {
+   QString format = "application/x-qstandarditemmodeldatalist";
+   if (! mimeTypes().contains(format)) {
       return data;
    }
 
@@ -2029,24 +2035,29 @@ QMimeData *QStandardItemModel::mimeData(const QModelIndexList &indexes) const
       }
    }
 
-   //remove duplicates childrens
+   // remove duplicate children
    {
       QSet<QStandardItem *> seen;
+
       while (!stack.isEmpty()) {
          QStandardItem *itm = stack.pop();
+
          if (seen.contains(itm)) {
             continue;
          }
          seen.insert(itm);
 
          const QVector<QStandardItem *> &childList = itm->d_func()->children;
+
          for (int i = 0; i < childList.count(); ++i) {
             QStandardItem *chi = childList.at(i);
+
             if (chi) {
                QSet<QStandardItem *>::iterator it = itemsSet.find(chi);
                if (it != itemsSet.end()) {
                   itemsSet.erase(it);
                }
+
                stack.push(chi);
             }
          }

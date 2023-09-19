@@ -430,6 +430,7 @@ void QHttpThreadDelegate::readyReadSlot()
    if (readBufferMaxSize) {
       if (bytesEmitted < readBufferMaxSize) {
          qint64 sizeEmitted = 0;
+
          while (httpReply->readAnyAvailable() && (sizeEmitted < (readBufferMaxSize - bytesEmitted))) {
             if (httpReply->sizeNextBlock() > (readBufferMaxSize - bytesEmitted)) {
                sizeEmitted = readBufferMaxSize - bytesEmitted;
@@ -657,7 +658,7 @@ void QHttpThreadDelegate::cacheCredentialsSlot(const QHttpNetworkRequest &reques
 #ifdef QT_SSL
 void QHttpThreadDelegate::encryptedSlot()
 {
-   if (!httpReply) {
+   if (! httpReply) {
       return;
    }
 
@@ -687,7 +688,7 @@ void QHttpThreadDelegate::sslErrorsSlot(const QList<QSslError> &errorList)
 
 void QHttpThreadDelegate::preSharedKeyAuthenticationRequiredSlot(QSslPreSharedKeyAuthenticator *authenticator)
 {
-   if (!httpReply) {
+   if (! httpReply) {
       return;
    }
    emit preSharedKeyAuthenticationRequired(authenticator);
@@ -732,7 +733,7 @@ void QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot(const QNetw
 
    // Disconnect this connection now since we only want to ask the authentication cache once.
    QObject::disconnect(httpReply, &QHttpNetworkReply::proxyAuthenticationRequired, this,
-            &QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot);
+         &QHttpThreadDelegate::synchronousProxyAuthenticationRequiredSlot);
 }
 #endif
 

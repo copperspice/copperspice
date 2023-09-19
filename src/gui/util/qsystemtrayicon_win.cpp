@@ -413,6 +413,7 @@ QSystemTrayIconPrivate::~QSystemTrayIconPrivate()
 void QSystemTrayIconPrivate::install_sys()
 {
    Q_Q(QSystemTrayIcon);
+
    if (!sys) {
       if (const HWND hwnd = createTrayIconMessageWindow()) {
          sys = new QSystemTrayIconSys(hwnd, q);
@@ -424,11 +425,6 @@ void QSystemTrayIconPrivate::install_sys()
    }
 }
 
-/*
-* This function tries to determine the icon geometry from the tray
-*
-* If it fails an invalid rect is returned.
-*/
 QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
 {
    struct AppData {
@@ -612,6 +608,5 @@ bool QSystemTrayIconPrivate::supportsMessages_sys()
 {
    return allowsMessages();
 }
-
 
 #endif

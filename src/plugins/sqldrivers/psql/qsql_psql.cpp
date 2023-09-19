@@ -1704,6 +1704,7 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
          d->sn = new QSocketNotifier(socket, QSocketNotifier::Read);
          connect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
       }
+
    } else {
       qWarning("QPSQLDriver::subscribeToNotificationImplementation: PQsocket did not return a valid socket to listen on");
       return false;

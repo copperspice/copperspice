@@ -157,11 +157,6 @@ void QUndoAction::setTextFormat(const QString &textFormat, const QString &defaul
 
 #endif // QT_NO_ACTION
 
-/*! \internal
-    Sets the current index to \a idx, emitting appropriate signals. If \a clean is true,
-    makes \a idx the clean index as well.
-*/
-
 void QUndoStackPrivate::setIndex(int idx, bool clean)
 {
    Q_Q(QUndoStack);
@@ -186,13 +181,6 @@ void QUndoStackPrivate::setIndex(int idx, bool clean)
       emit q->cleanChanged(is_clean);
    }
 }
-
-/*! \internal
-    If the number of commands on the stack exceedes the undo limit, deletes commands from
-    the bottom of the stack.
-
-    Returns true if commands were deleted.
-*/
 
 bool QUndoStackPrivate::checkUndoLimit()
 {
@@ -325,11 +313,11 @@ void QUndoStack::push(QUndoCommand *cmd)
    }
 }
 
-
 void QUndoStack::setClean()
 {
    Q_D(QUndoStack);
-   if (!d->macro_stack.isEmpty()) {
+
+   if (! d->macro_stack.isEmpty()) {
       qWarning("QUndoStack::setClean() Unable to clean the stack while executing a macro");
       return;
    }
@@ -337,18 +325,14 @@ void QUndoStack::setClean()
    d->setIndex(d->index, true);
 }
 
-/*!
-    If the stack is in the clean state, returns true; otherwise returns false.
-
-    \sa setClean() cleanIndex()
-*/
-
 bool QUndoStack::isClean() const
 {
    Q_D(const QUndoStack);
-   if (!d->macro_stack.isEmpty()) {
+
+   if (! d->macro_stack.isEmpty()) {
       return false;
    }
+
    return d->clean_index == d->index;
 }
 
@@ -365,7 +349,7 @@ void QUndoStack::undo()
       return;
    }
 
-   if (!d->macro_stack.isEmpty()) {
+   if (! d->macro_stack.isEmpty()) {
       qWarning("QUndoStack::undo() Unable to undo the stack while executing a macro");
       return;
    }
@@ -382,7 +366,7 @@ void QUndoStack::redo()
       return;
    }
 
-   if (!d->macro_stack.isEmpty()) {
+   if (! d->macro_stack.isEmpty()) {
       qWarning("QUndoStack::redo() Unable to redo the stack while executing a macro");
       return;
    }
@@ -407,7 +391,7 @@ int QUndoStack::index() const
 void QUndoStack::setIndex(int idx)
 {
    Q_D(QUndoStack);
-   if (!d->macro_stack.isEmpty()) {
+   if (! d->macro_stack.isEmpty()) {
       qWarning("QUndoStack::setIndex() Unable to set the index on the stack while executing a macro");
       return;
    }
@@ -540,6 +524,7 @@ void QUndoStack::beginMacro(const QString &text)
 void QUndoStack::endMacro()
 {
    Q_D(QUndoStack);
+
    if (d->macro_stack.isEmpty()) {
       qWarning("QUndoStack::endMacro() No matching beginMacro()");
       return;
@@ -579,7 +564,7 @@ void QUndoStack::setUndoLimit(int limit)
 {
    Q_D(QUndoStack);
 
-   if (!d->command_list.isEmpty()) {
+   if (! d->command_list.isEmpty()) {
       qWarning("QUndoStack::setUndoLimit() Stack undo limit can only be set when the stack is empty");
       return;
    }

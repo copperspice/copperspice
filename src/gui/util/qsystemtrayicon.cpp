@@ -69,9 +69,6 @@ void QSystemTrayIcon::setContextMenu(QMenu *menu)
    d->updateMenu_sys();
 }
 
-/*!
-    Returns the current context menu for the system tray entry.
-*/
 QMenu *QSystemTrayIcon::contextMenu() const
 {
    Q_D(const QSystemTrayIcon);
@@ -80,13 +77,6 @@ QMenu *QSystemTrayIcon::contextMenu() const
 
 #endif // QT_NO_MENU
 
-/*!
-    \property QSystemTrayIcon::icon
-    \brief the system tray icon
-
-    On Windows, the system tray icon size is 16x16; on X11, the preferred size is
-    22x22. The icon will be scaled to the appropriate size as necessary.
-*/
 void QSystemTrayIcon::setIcon(const QIcon &icon)
 {
    Q_D(QSystemTrayIcon);
@@ -100,13 +90,6 @@ QIcon QSystemTrayIcon::icon() const
    return d->icon;
 }
 
-/*!
-    \property QSystemTrayIcon::toolTip
-    \brief the tooltip for the system tray entry
-
-    On some systems, the tooltip's length is limited. The tooltip will be truncated
-    if necessary.
-*/
 void QSystemTrayIcon::setToolTip(const QString &tooltip)
 {
    Q_D(QSystemTrayIcon);
@@ -123,9 +106,11 @@ QString QSystemTrayIcon::toolTip() const
 QRect QSystemTrayIcon::geometry() const
 {
    Q_D(const QSystemTrayIcon);
-   if (!d->visible) {
+
+   if (! d->visible) {
       return QRect();
    }
+
    return d->geometry_sys();
 }
 
@@ -156,22 +141,15 @@ bool QSystemTrayIcon::isVisible() const
    return d->visible;
 }
 
-/*!
-  \reimp
-*/
 bool QSystemTrayIcon::event(QEvent *e)
 {
    return QObject::event(e);
 }
 
-
-
-
 bool QSystemTrayIcon::isSystemTrayAvailable()
 {
    return QSystemTrayIconPrivate::isSystemTrayAvailable_sys();
 }
-
 
 bool QSystemTrayIcon::supportsMessages()
 {
@@ -208,6 +186,7 @@ void QBalloonTip::showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &
    if (timeout < 0) {
       timeout = 10000;   //10 s default
    }
+
    theSolitaryBalloonTip->balloon(pos, timeout, showArrow);
 }
 
@@ -223,7 +202,7 @@ void QBalloonTip::hideBalloon()
 
 void QBalloonTip::updateBalloonPosition(const QPoint &pos)
 {
-   if (!theSolitaryBalloonTip) {
+   if (! theSolitaryBalloonTip) {
       return;
    }
 
@@ -294,12 +273,15 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
       case QSystemTrayIcon::Warning:
          si = style()->standardIcon(QStyle::SP_MessageBoxWarning);
          break;
+
       case QSystemTrayIcon::Critical:
          si = style()->standardIcon(QStyle::SP_MessageBoxCritical);
          break;
+
       case QSystemTrayIcon::Information:
          si = style()->standardIcon(QStyle::SP_MessageBoxInformation);
          break;
+
       case QSystemTrayIcon::NoIcon:
       default:
          break;
@@ -499,28 +481,33 @@ void QSystemTrayIconPrivate::updateToolTip_sys_qpa()
 {
    qpa_sys->updateToolTip(toolTip);
 }
+
 void QSystemTrayIconPrivate::showMessage_sys_qpa(const QString &title,
-   const QString &message,
-   QSystemTrayIcon::MessageIcon icon,
-   int msecs)
+      const QString &message, QSystemTrayIcon::MessageIcon icon, int msecs)
 {
    QIcon notificationIcon;
+
    switch (icon) {
       case QSystemTrayIcon::Information:
          notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxInformation);
          break;
+
       case QSystemTrayIcon::Warning:
          notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning);
          break;
+
       case QSystemTrayIcon::Critical:
          notificationIcon = QApplication::style()->standardIcon(QStyle::SP_MessageBoxCritical);
          break;
+
       default:
          break;
    }
+
    qpa_sys->showMessage(title, message, notificationIcon,
       static_cast<QPlatformSystemTrayIcon::MessageIcon>(icon), msecs);
 }
+
 void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
 {
    if (menu->platformMenu()) {

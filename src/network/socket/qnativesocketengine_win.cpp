@@ -255,8 +255,8 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 #define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR)) /* disallow local address reuse */
 #endif
 
-static inline void qt_socket_getPortAndAddress(SOCKET socketDescriptor, const qt_sockaddr *sa, quint16 *port,
-      QHostAddress *address)
+static inline void qt_socket_getPortAndAddress(SOCKET socketDescriptor, const qt_sockaddr *sa,
+      quint16 *port, QHostAddress *address)
 {
 
    if (sa->a.sa_family == AF_INET6) {

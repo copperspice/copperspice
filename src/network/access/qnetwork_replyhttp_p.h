@@ -232,7 +232,7 @@ public:
     // incoming from user
     QNetworkAccessManager *manager;
     QNetworkAccessManagerPrivate *managerPrivate;
-    QHttpNetworkRequest httpRequest; // There is also a copy in the HTTP thread
+    QHttpNetworkRequest httpRequest;    // also a copy in the HTTP thread
     bool synchronous;
 
     ReplyState state;
@@ -245,7 +245,7 @@ public:
     QNonContiguousByteDevice *createUploadByteDevice();
     QSharedPointer<QNonContiguousByteDevice> uploadByteDevice;
     qint64 uploadByteDevicePosition;
-    bool uploadDeviceChoking;          // if we couldn't readPointer() any data at the moment
+    bool uploadDeviceChoking;          // if we could not readPointer() any data at the moment
     QIODevice *outgoingData;
     QSharedPointer<QRingBuffer> outgoingDataBuffer;
 

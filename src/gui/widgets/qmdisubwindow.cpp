@@ -845,9 +845,11 @@ void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *oldWidget, QWidget *n
       if (newWidget == q && ! isInInteractiveMode) {
          setFocusWidget();
       }
+
       setActive(true);
    }
 }
+
 void QMdiSubWindowPrivate::leaveInteractiveMode()
 {
    Q_Q(QMdiSubWindow);
@@ -857,20 +859,20 @@ void QMdiSubWindowPrivate::leaveInteractiveMode()
       leaveRubberBandMode();
    } else
 #endif
+   {
       q->releaseMouse();
+   }
 
    isInInteractiveMode = false;
    currentOperation = None;
    updateDirtyRegions();
    updateCursor();
+
    if (baseWidget && baseWidget->focusWidget()) {
       baseWidget->focusWidget()->setFocus();
    }
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::removeBaseWidget()
 {
    if (!baseWidget) {
@@ -2275,7 +2277,8 @@ QMdiSubWindow::~QMdiSubWindow()
 void QMdiSubWindow::setWidget(QWidget *widget)
 {
    Q_D(QMdiSubWindow);
-   if (!widget) {
+
+   if (widget == nullptr) {
       d->removeBaseWidget();
       return;
    }

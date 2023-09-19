@@ -115,6 +115,7 @@ QModelIndexList QItemSelectionRange::indexes() const
 {
    QModelIndexList result;
    indexesFromRange(*this, result);
+
    return result;
 }
 
@@ -125,12 +126,11 @@ QItemSelection::QItemSelection(const QModelIndex &topLeft, const QModelIndex &bo
 
 void QItemSelection::select(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
-   if (!topLeft.isValid() || !bottomRight.isValid()) {
+   if (! topLeft.isValid() || !bottomRight.isValid()) {
       return;
    }
 
-   if ((topLeft.model() != bottomRight.model())
-      || topLeft.parent() != bottomRight.parent()) {
+   if ((topLeft.model() != bottomRight.model()) || topLeft.parent() != bottomRight.parent()) {
       qWarning("QItemSelection::select() Unable to make a selection from a different model or with different parents");
       return;
    }
@@ -145,6 +145,7 @@ void QItemSelection::select(const QModelIndex &topLeft, const QModelIndex &botto
       append(QItemSelectionRange(tl, br));
       return;
    }
+
    append(QItemSelectionRange(topLeft, bottomRight));
 }
 
@@ -452,11 +453,7 @@ void QItemSelectionModelPrivate::_q_rowsAboutToBeRemoved(const QModelIndex &pare
    }
 }
 
-/*!
-    \internal
-*/
-void QItemSelectionModelPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &parent,
-   int start, int end)
+void QItemSelectionModelPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_Q(QItemSelectionModel);
 
@@ -492,8 +489,7 @@ void QItemSelectionModelPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &p
    finalize();
 }
 
-void QItemSelectionModelPrivate::_q_columnsAboutToBeInserted(const QModelIndex &parent,
-   int start, int end)
+void QItemSelectionModelPrivate::_q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    (void) end;
 
@@ -518,8 +514,7 @@ void QItemSelectionModelPrivate::_q_columnsAboutToBeInserted(const QModelIndex &
    ranges += split;
 }
 
-void QItemSelectionModelPrivate::_q_rowsAboutToBeInserted(const QModelIndex &parent,
-   int start, int end)
+void QItemSelectionModelPrivate::_q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    (void) end;
 
@@ -776,17 +771,19 @@ void QItemSelectionModel::select(const QModelIndex &index, QItemSelectionModel::
 void QItemSelectionModel::select(const QItemSelection &selection, QItemSelectionModel::SelectionFlags command)
 {
    Q_D(QItemSelectionModel);
-   if (!d->model) {
 
+   if (! d->model) {
       qWarning("QItemSelectionModel::select() No model is set, no items will be selected");
       return;
    }
+
    if (command == NoUpdate) {
       return;
    }
 
    // store old selection
    QItemSelection sel = selection;
+
    // If d->ranges is non-empty when the source model is reset the persistent indexes
    // it contains will be invalid. We can't clear them in a modelReset slot because that might already
    // be too late if another model observer is connected to the same modelReset slot and is invoked first
@@ -861,6 +858,7 @@ void QItemSelectionModel::reset()
 void QItemSelectionModel::clearSelection()
 {
    Q_D(QItemSelectionModel);
+
    if (d->ranges.count() == 0 && d->currentSelection.count() == 0) {
       return;
    }
@@ -883,16 +881,20 @@ void QItemSelectionModel::setCurrentIndex(const QModelIndex &index, QItemSelecti
       }
       return;
    }
+
    QPersistentModelIndex previous = d->currentIndex;
    d->currentIndex = index; // set current before emitting selection changed below
    if (command != NoUpdate) {
       select(d->currentIndex, command);   // select item
    }
+
    emit currentChanged(d->currentIndex, previous);
+
    if (d->currentIndex.row() != previous.row() ||
       d->currentIndex.parent() != previous.parent()) {
       emit currentRowChanged(d->currentIndex, previous);
    }
+
    if (d->currentIndex.column() != previous.column() ||
       d->currentIndex.parent() != previous.parent()) {
       emit currentColumnChanged(d->currentIndex, previous);

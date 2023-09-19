@@ -1101,6 +1101,7 @@ QDate QCalendarModel::dateForCell(int row, int column) const
       column < m_firstColumn || column > m_firstColumn + ColumnCount - 1) {
       return QDate();
    }
+
    const QDate refDate = referenceDate();
    if (!refDate.isValid()) {
       return QDate();
@@ -1455,38 +1456,50 @@ QModelIndex QCalendarView::moveCursor(CursorAction cursorAction, Qt::KeyboardMod
 
    QModelIndex index = currentIndex();
    QDate currentDate = static_cast<QCalendarModel *>(model())->dateForCell(index.row(), index.column());
+
    switch (cursorAction) {
       case QAbstractItemView::MoveUp:
          currentDate = currentDate.addDays(-7);
          break;
+
       case QAbstractItemView::MoveDown:
          currentDate = currentDate.addDays(7);
          break;
+
       case QAbstractItemView::MoveLeft:
          currentDate = currentDate.addDays(isRightToLeft() ? 1 : -1);
          break;
+
       case QAbstractItemView::MoveRight:
          currentDate = currentDate.addDays(isRightToLeft() ? -1 : 1);
          break;
+
       case QAbstractItemView::MoveHome:
          currentDate = QDate(currentDate.year(), currentDate.month(), 1);
          break;
+
       case QAbstractItemView::MoveEnd:
          currentDate = QDate(currentDate.year(), currentDate.month(), currentDate.daysInMonth());
          break;
+
       case QAbstractItemView::MovePageUp:
          currentDate = currentDate.addMonths(-1);
          break;
+
       case QAbstractItemView::MovePageDown:
          currentDate = currentDate.addMonths(1);
          break;
+
       case QAbstractItemView::MoveNext:
       case QAbstractItemView::MovePrevious:
          return currentIndex();
+
       default:
          break;
    }
+
    emit changeDate(currentDate, true);
+
    return currentIndex();
 }
 
@@ -1500,6 +1513,7 @@ void QCalendarView::keyPressEvent(QKeyEvent *event)
             return;
          }
       }
+
    } else if (event->key() == Qt::Key_Back) {
       if (QApplication::keypadNavigationEnabled() && hasEditFocus()) {
          if (dynamic_cast<QCalendarModel *>(model())) {
@@ -1518,10 +1532,12 @@ void QCalendarView::keyPressEvent(QKeyEvent *event)
          case Qt::Key_Select:
             emit editingFinished();
             return;
+
          default:
             break;
       }
    }
+
    QTableView::keyPressEvent(event);
 }
 
@@ -1531,8 +1547,10 @@ void QCalendarView::wheelEvent(QWheelEvent *event)
    const int numDegrees = event->delta() / 8;
    const int numSteps = numDegrees / 15;
    const QModelIndex index = currentIndex();
+
    QDate currentDate = static_cast<QCalendarModel *>(model())->dateForCell(index.row(), index.column());
    currentDate = currentDate.addMonths(-numSteps);
+
    emit showDate(currentDate);
 }
 #endif
@@ -1583,7 +1601,7 @@ void QCalendarView::mouseDoubleClickEvent(QMouseEvent *event)
 
    QDate date = handleMouseEvent(event);
    validDateClicked = false;
-   if (date == calendarModel->m_date && !style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)) {
+   if (date == calendarModel->m_date && ! style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)) {
       emit editingFinished();
    }
 }
@@ -1606,13 +1624,16 @@ void QCalendarView::mousePressEvent(QMouseEvent *event)
    }
 
    QDate date = handleMouseEvent(event);
+
    if (date.isValid()) {
       validDateClicked = true;
       int row = -1, col = -1;
       static_cast<QCalendarModel *>(model())->cellForDate(date, &row, &col);
+
       if (row != -1 && col != -1) {
          selectionModel()->setCurrentIndex(model()->index(row, col), QItemSelectionModel::NoUpdate);
       }
+
    } else {
       validDateClicked = false;
       event->ignore();
@@ -1634,13 +1655,16 @@ void QCalendarView::mouseMoveEvent(QMouseEvent *event)
 
    if (validDateClicked) {
       QDate date = handleMouseEvent(event);
+
       if (date.isValid()) {
          int row = -1, col = -1;
          static_cast<QCalendarModel *>(model())->cellForDate(date, &row, &col);
+
          if (row != -1 && col != -1) {
             selectionModel()->setCurrentIndex(model()->index(row, col), QItemSelectionModel::NoUpdate);
          }
       }
+
    } else {
       event->ignore();
    }
@@ -1665,6 +1689,7 @@ void QCalendarView::mouseReleaseEvent(QMouseEvent *event)
 
    if (validDateClicked) {
       QDate date = handleMouseEvent(event);
+
       if (date.isValid()) {
          emit changeDate(date, true);
          emit clicked(date);
@@ -1672,7 +1697,9 @@ void QCalendarView::mouseReleaseEvent(QMouseEvent *event)
             emit editingFinished();
          }
       }
+
       validDateClicked = false;
+
    } else {
       event->ignore();
    }
@@ -2925,18 +2952,6 @@ void QCalendarWidget::setDateEditEnabled(bool enable)
    d->setNavigatorEnabled(enable && (selectionMode() != QCalendarWidget::NoSelection));
 }
 
-/*!
-    \property QCalendarWidget::dateEditAcceptDelay
-    \brief the time an inactive date edit is shown before its contents are accepted
-    \since 4.3
-
-    If the calendar widget's \l{dateEditEnabled}{date edit is enabled}, this
-    property specifies the amount of time (in millseconds) that the date edit
-    remains open after the most recent user input. Once this time has elapsed,
-    the date specified in the date edit is accepted and the popup is closed.
-
-    By default, the delay is defined to be 1500 milliseconds (1.5 seconds).
-*/
 int QCalendarWidget::dateEditAcceptDelay() const
 {
    Q_D(const QCalendarWidget);
@@ -2949,19 +2964,19 @@ void QCalendarWidget::setDateEditAcceptDelay(int delay)
    d->m_navigator->setDateEditAcceptDelay(delay);
 }
 
-
 void QCalendarWidget::updateCell(const QDate &date)
 {
-   if (!date.isValid()) {
+   if (! date.isValid()) {
       qWarning("QCalendarWidget::updateCell: Invalid date");
       return;
    }
 
-   if (!isVisible()) {
+   if (! isVisible()) {
       return;
    }
 
    Q_D(QCalendarWidget);
+
    int row, column;
    d->m_model->cellForDate(date, &row, &column);
    if (row == -1 || column == -1) {
@@ -2984,13 +2999,11 @@ void QCalendarWidget::updateCells()
    }
 }
 
-
 bool QCalendarWidget::isNavigationBarVisible() const
 {
    Q_D(const QCalendarWidget);
    return d->navBarVisible;
 }
-
 
 void QCalendarWidget::setNavigationBarVisible(bool visible)
 {
@@ -3001,16 +3014,15 @@ void QCalendarWidget::setNavigationBarVisible(bool visible)
    updateGeometry();
 }
 
-/*!
-  \reimp
-*/
 bool QCalendarWidget::event(QEvent *event)
 {
    Q_D(QCalendarWidget);
+
    switch (event->type()) {
       case QEvent::LayoutDirectionChange:
          d->updateButtonIcons();
          break;
+
       case QEvent::LocaleChange:
          d->m_model->setFirstColumnDay(locale().firstDayOfWeek());
          d->cachedSizeHint = QSize();
@@ -3018,23 +3030,24 @@ bool QCalendarWidget::event(QEvent *event)
          d->updateNavigationBar();
          d->m_view->updateGeometry();
          break;
+
       case QEvent::FontChange:
       case QEvent::ApplicationFontChange:
          d->cachedSizeHint = QSize();
          d->m_view->updateGeometry();
          break;
+
       case QEvent::StyleChange:
          d->cachedSizeHint = QSize();
          d->m_view->updateGeometry();
+
       default:
          break;
    }
+
    return QWidget::event(event);
 }
 
-/*!
-  \reimp
-*/
 bool QCalendarWidget::eventFilter(QObject *watched, QEvent *event)
 {
    Q_D(QCalendarWidget);
@@ -3059,12 +3072,10 @@ bool QCalendarWidget::eventFilter(QObject *watched, QEvent *event)
          }
       }
    }
+
    return QWidget::eventFilter(watched, event);
 }
 
-/*!
-  \reimp
-*/
 void QCalendarWidget::mousePressEvent(QMouseEvent *event)
 {
    setAttribute(Qt::WA_NoMouseReplay);
@@ -3072,9 +3083,6 @@ void QCalendarWidget::mousePressEvent(QMouseEvent *event)
    setFocus();
 }
 
-/*!
-  \reimp
-*/
 void QCalendarWidget::resizeEvent(QResizeEvent *event)
 {
    Q_D(QCalendarWidget);

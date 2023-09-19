@@ -1425,9 +1425,10 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
 
-   if (arg1.type() != arg2.type())
+   if (arg1.type() != arg2.type()) {
       qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
          csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
+   }
 
    switch (arg1.type()) {
       case QVariant::Int:  {
@@ -1453,7 +1454,6 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
          ret = QVariant(arg1.toDouble() + arg2.toDouble());
          break;
 
-
       case QVariant::DateTime: {
          QDateTime a2 = arg2.toDateTime();
          QDateTime a1 = arg1.toDateTime().addDays(QDATETIMEEDIT_DATETIME_MIN.daysTo(a2));
@@ -1473,9 +1473,10 @@ QVariant operator-(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
 
-   if (arg1.type() != arg2.type())
+   if (arg1.type() != arg2.type()) {
       qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
          csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
+   }
 
    switch (arg1.type()) {
       case QVariant::Int:

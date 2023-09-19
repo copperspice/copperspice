@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef IntSize_h
@@ -63,7 +63,7 @@ class IntSize {
 public:
     IntSize() : m_width(0), m_height(0) { }
     IntSize(int width, int height) : m_width(width), m_height(height) { }
-    
+
     int width() const { return m_width; }
     int height() const { return m_height; }
 
@@ -74,19 +74,19 @@ public:
     bool isZero() const { return !m_width && !m_height; }
 
     float aspectRatio() const { return static_cast<float>(m_width) / static_cast<float>(m_height); }
-    
+
     void expand(int width, int height)
     {
         m_width += width;
         m_height += height;
     }
-    
+
     void scale(float scale)
     {
         m_width = static_cast<int>(static_cast<float>(m_width) * scale);
         m_height = static_cast<int>(static_cast<float>(m_height) * scale);
     }
-    
+
     IntSize expandedTo(const IntSize& other) const
     {
         return IntSize(m_width > other.m_width ? m_width : other.m_width,

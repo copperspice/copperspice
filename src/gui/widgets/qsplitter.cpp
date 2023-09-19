@@ -922,7 +922,6 @@ bool QSplitter::childrenCollapsible() const
    return d->childrenCollapsible;
 }
 
-
 void QSplitter::setCollapsible(int index, bool collapse)
 {
    Q_D(QSplitter);
@@ -931,61 +930,39 @@ void QSplitter::setCollapsible(int index, bool collapse)
       qWarning("QSplitter::setCollapsible() Index %d is out of range", index);
       return;
    }
+
    d->list.at(index)->collapsible = collapse ? 1 : 0;
 }
 
-/*!
-    Returns true if the widget at \a index is collapsible, otherwise returns false
-*/
 bool QSplitter::isCollapsible(int index) const
 {
    Q_D(const QSplitter);
+
    if (index < 0 || index >= d->list.size()) {
       qWarning("QSplitter::isCollapsible() Index %d is out of range", index);
       return false;
    }
+
    return d->list.at(index)->collapsible;
 }
 
-/*!
-    \reimp
-*/
 void QSplitter::resizeEvent(QResizeEvent *)
 {
    Q_D(QSplitter);
    d->doResize();
 }
 
-/*!
-    Adds the given \a widget to the splitter's layout after all the other
-    items.
-
-    If \a widget is already in the splitter, it will be moved to the new position.
-
-    \sa insertWidget() widget() indexOf()
-*/
 void QSplitter::addWidget(QWidget *widget)
 {
    Q_D(QSplitter);
    insertWidget(d->list.count(), widget);
 }
 
-/*!
-    Inserts the \a widget specified into the splitter's layout at the
-    given \a index.
-
-    If \a widget is already in the splitter, it will be moved to the new position.
-
-    if \a index is an invalid index, then the widget will be inserted at the end.
-
-    \sa addWidget() indexOf() widget()
-*/
 void QSplitter::insertWidget(int index, QWidget *widget)
 {
    Q_D(QSplitter);
    d->insertWidget_helper(index, widget, true);
 }
-
 
 int QSplitter::indexOf(QWidget *w) const
 {
@@ -999,7 +976,6 @@ int QSplitter::indexOf(QWidget *w) const
    }
    return -1;
 }
-
 
 QSplitterHandle *QSplitter::createHandle()
 {
@@ -1041,11 +1017,6 @@ QWidget *QSplitter::widget(int index) const
    return d->list.at(index)->widget;
 }
 
-/*!
-    Returns the number of widgets contained in the splitter's layout.
-
-    \sa widget(), handle()
-*/
 int QSplitter::count() const
 {
    Q_D(const QSplitter);

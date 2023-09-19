@@ -136,12 +136,16 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    CS_SLOT_1(Public, void loadFromUri(const QNetworkRequest &url))
    CS_SLOT_2(loadFromUri)
+
    CS_SLOT_1(Public, void loadFromStream(const QNetworkRequest &url, QIODevice *stream))
    CS_SLOT_2(loadFromStream)
+
    CS_SLOT_1(Public, bool play())
    CS_SLOT_2(play)
+
    CS_SLOT_1(Public, bool pause())
    CS_SLOT_2(pause)
+
    CS_SLOT_1(Public, void stop())
    CS_SLOT_2(stop)
 
@@ -150,6 +154,7 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    CS_SLOT_1(Public, void setVolume(int volume))
    CS_SLOT_2(setVolume)
+
    CS_SLOT_1(Public, void setMuted(bool muted))
    CS_SLOT_2(setMuted)
 
@@ -158,24 +163,34 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    CS_SIGNAL_2(durationChanged, duration)
+
    CS_SIGNAL_1(Public, void positionChanged(qint64 position))
    CS_SIGNAL_2(positionChanged, position)
+
    CS_SIGNAL_1(Public, void stateChanged(QMediaPlayer::State state))
    CS_SIGNAL_2(stateChanged, state)
+
    CS_SIGNAL_1(Public, void volumeChanged(int volume))
    CS_SIGNAL_2(volumeChanged, volume)
+
    CS_SIGNAL_1(Public, void mutedStateChanged(bool muted))
    CS_SIGNAL_2(mutedStateChanged, muted)
+
    CS_SIGNAL_1(Public, void audioAvailableChanged(bool audioAvailable))
    CS_SIGNAL_2(audioAvailableChanged, audioAvailable)
+
    CS_SIGNAL_1(Public, void videoAvailableChanged(bool videoAvailable))
    CS_SIGNAL_2(videoAvailableChanged, videoAvailable)
+
    CS_SIGNAL_1(Public, void bufferingProgressChanged(int percentFilled))
    CS_SIGNAL_2(bufferingProgressChanged, percentFilled)
+
    CS_SIGNAL_1(Public, void playbackFinished())
    CS_SIGNAL_2(playbackFinished)
+
    CS_SIGNAL_1(Public, void tagsChanged())
    CS_SIGNAL_2(tagsChanged)
+
    CS_SIGNAL_1(Public, void streamsChanged())
    CS_SIGNAL_2(streamsChanged)
 
@@ -286,16 +301,22 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    CS_SLOT_1(Private, void setSeekable(bool seekable))
    CS_SLOT_2(setSeekable)
+
    CS_SLOT_1(Private, void finishVideoOutputChange())
    CS_SLOT_2(finishVideoOutputChange)
+
    CS_SLOT_1(Private, void updateVideoRenderer())
    CS_SLOT_2(updateVideoRenderer)
+
    CS_SLOT_1(Private, void updateVideoResolutionTag())
    CS_SLOT_2(updateVideoResolutionTag)
+
    CS_SLOT_1(Private, void updateVolume())
    CS_SLOT_2(updateVolume)
+
    CS_SLOT_1(Private, void updateMuted())
    CS_SLOT_2(updateMuted)
+
    CS_SLOT_1(Private, void updateDuration())
    CS_SLOT_2(updateDuration)
 };

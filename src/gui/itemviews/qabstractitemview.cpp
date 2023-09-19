@@ -294,7 +294,7 @@ QAbstractItemModel *QAbstractItemView::model() const
 
 void QAbstractItemView::setSelectionModel(QItemSelectionModel *selectionModel)
 {
-   // ### if the given model is null, we should use the original selection model
+   // if the given model is null we should use the original selection model
    Q_ASSERT(selectionModel);
 
    Q_D(QAbstractItemView);
@@ -534,6 +534,7 @@ void QAbstractItemView::reset()
 void QAbstractItemView::setRootIndex(const QModelIndex &index)
 {
    Q_D(QAbstractItemView);
+
    if (index.isValid() && index.model() != d->model) {
       qWarning("QAbstractItemView::setRootIndex() Model index must be from the current model");
       return;
@@ -2548,14 +2549,17 @@ void QAbstractItemViewPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &par
       } else {
          int column = end;
          QModelIndex next;
-         do { // find the next visible and enabled item
+         do {
+            // find the next visible and enabled item
             next = model->index(current.row(), column++, current.parent());
-         } while (next.isValid() && (q->isIndexHidden(next) || !isIndexEnabled(next)));
+         } while (next.isValid() && (q->isIndexHidden(next) || ! isIndexEnabled(next)));
+
          q->setCurrentIndex(next);
       }
    }
 
-   // Remove all affected editors; this is more efficient than waiting for updateGeometries() to clean out editors for invalid indexes
+   // Remove all affected editors; this is more efficient than waiting for updateGeometries() to
+   // clean out editors for invalid indexes
    QEditorIndexHash::iterator it = editorIndexHash.begin();
 
    while (it != editorIndexHash.end()) {
@@ -2571,7 +2575,6 @@ void QAbstractItemViewPrivate::_q_columnsAboutToBeRemoved(const QModelIndex &par
          ++it;
       }
    }
-
 }
 
 void QAbstractItemViewPrivate::_q_columnsRemoved(const QModelIndex &index, int start, int end)
@@ -2597,7 +2600,6 @@ void QAbstractItemViewPrivate::_q_columnsRemoved(const QModelIndex &index, int s
    updateGeometry();
 }
 
-// internal
 void QAbstractItemViewPrivate::_q_rowsInserted(const QModelIndex &index, int start, int end)
 {
   (void) index;
@@ -2663,15 +2665,16 @@ void QAbstractItemViewPrivate::_q_rowsMoved(const QModelIndex &, int, int, const
 {
    _q_layoutChanged();
 }
+
 void QAbstractItemViewPrivate::_q_columnsMoved(const QModelIndex &, int, int, const QModelIndex &, int)
 {
    _q_layoutChanged();
 }
 
-void QAbstractItemView::selectionChanged(const QItemSelection &selected,
-   const QItemSelection &deselected)
+void QAbstractItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
    Q_D(QAbstractItemView);
+
    if (isVisible() && updatesEnabled()) {
       d->viewport->update(visualRegionForSelection(deselected) | visualRegionForSelection(selected));
    }
@@ -2684,7 +2687,8 @@ void QAbstractItemView::currentChanged(const QModelIndex &current, const QModelI
 
    if (previous.isValid()) {
       QModelIndex buddy = d->model->buddy(previous);
-      QWidget *editor = d->editorForIndex(buddy).widget.data();
+      QWidget *editor   = d->editorForIndex(buddy).widget.data();
+
       if (editor && !d->persistent.contains(editor)) {
          commitData(editor);
          if (current.row() != previous.row()) {
@@ -2693,6 +2697,7 @@ void QAbstractItemView::currentChanged(const QModelIndex &current, const QModelI
             closeEditor(editor, QAbstractItemDelegate::NoHint);
          }
       }
+
       if (isVisible()) {
          update(previous);
       }

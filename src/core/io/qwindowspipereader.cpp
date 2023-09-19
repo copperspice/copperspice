@@ -160,7 +160,7 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
          [[fallthrough]];
 
       default:
-         emit winError(errorCode, QLatin1String("QWindowsPipeReader::notified"));
+         emit winError(errorCode, QString("QWindowsPipeReader::notified"));
          pipeBroken = true;
          break;
    }
@@ -225,8 +225,9 @@ void QWindowsPipeReader::startAsyncRead()
             pipeBroken = true;
             emit pipeClosed();
             break;
+
          default:
-            emit winError(dwError, QLatin1String("QWindowsPipeReader::startAsyncRead"));
+            emit winError(dwError, QString("QWindowsPipeReader::startAsyncRead"));
             break;
       }
    }

@@ -44,38 +44,47 @@
 
 using namespace QMdi;
 
-// Asserts in debug mode, gives warning otherwise.
-static bool sanityCheck(const QMdiSubWindow *const child, const char *where)
+// Asserts in debug mode, gives warning otherwise
+static bool sanityCheck(const QMdiSubWindow *child, const char *location)
 {
-   if (!child) {
+   if (child == nullptr) {
       const char error[] = "null pointer";
-      Q_ASSERT_X(false, where, error);
-      qWarning("%s:%s", where, error);
+
+      Q_ASSERT_X(false, location, error);
+      qWarning("%s:%s", location, error);
+
       return false;
    }
+
    return true;
 }
 
-static bool sanityCheck(const QList<QWidget *> &widgets, const int index, const char *where)
+static bool sanityCheck(const QList<QWidget *> &widgets, const int index, const char *location)
 {
    if (index < 0 || index >= widgets.size()) {
       const char error[] = "index out of range";
-      Q_ASSERT_X(false, where, error);
-      qWarning("%s:%s", where, error);
+
+      Q_ASSERT_X(false, location, error);
+      qWarning("%s:%s", location, error);
+
       return false;
    }
-   if (!widgets.at(index)) {
+
+   if (widgets.at(index) == nullptr) {
       const char error[] = "null pointer";
-      Q_ASSERT_X(false, where, error);
-      qWarning("%s:%s", where, error);
+
+      Q_ASSERT_X(false, location, error);
+      qWarning("%s:%s", location, error);
+
       return false;
    }
+
    return true;
 }
 
 static void setIndex(int *index, int candidate, int min, int max, bool isIncreasing)
 {
-   if (!index) {
+   if (index == nullptr) {
       return;
    }
 
@@ -85,6 +94,7 @@ static void setIndex(int *index, int candidate, int min, int max, bool isIncreas
       } else {
          *index = qMax(candidate, min);
       }
+
    } else {
       if (candidate < min) {
          *index = max;
@@ -92,36 +102,42 @@ static void setIndex(int *index, int candidate, int min, int max, bool isIncreas
          *index = qMin(candidate, max);
       }
    }
+
    Q_ASSERT(*index >= min && *index <= max);
 }
 
 static inline bool useScrollBar(const QRect &childrenRect, const QSize &maxViewportSize,
    Qt::Orientation orientation)
 {
-   if (orientation == Qt::Horizontal)
+   if (orientation == Qt::Horizontal) {
       return  childrenRect.width() > maxViewportSize.width()
          || childrenRect.left() < 0
          || childrenRect.right() >= maxViewportSize.width();
-   else
+
+   } else {
       return childrenRect.height() > maxViewportSize.height()
          || childrenRect.top() < 0
          || childrenRect.bottom() >= maxViewportSize.height();
+   }
 }
 
 // Returns the closest mdi area containing the widget (if any).
 static inline QMdiArea *mdiAreaParent(QWidget *widget)
 {
-   if (!widget) {
+   if (widget == nullptr) {
       return nullptr;
    }
 
    QWidget *parent = widget->parentWidget();
-   while (parent) {
+
+   while (parent != nullptr) {
       if (QMdiArea *area = qobject_cast<QMdiArea *>(parent)) {
          return area;
       }
+
       parent = parent->parentWidget();
    }
+
    return nullptr;
 }
 
@@ -1817,7 +1833,7 @@ void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
 {
    Q_D(QMdiArea);
 
-   if (!window) {
+   if (window == nullptr) {
       d->activateWindow(nullptr);
       return;
    }
@@ -1838,6 +1854,7 @@ void QMdiArea::setActiveSubWindow(QMdiSubWindow *window)
 void QMdiArea::closeActiveSubWindow()
 {
    Q_D(QMdiArea);
+
    if (d->active) {
       d->active->close();
    }
@@ -1891,6 +1908,7 @@ void QMdiArea::activateNextSubWindow()
 void QMdiArea::activatePreviousSubWindow()
 {
    Q_D(QMdiArea);
+
    if (d->childWindows.isEmpty()) {
       return;
    }
@@ -1955,21 +1973,24 @@ void QMdiArea::removeSubWindow(QWidget *widget)
 
    if (QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(widget)) {
       int index = d->childWindows.indexOf(child);
+
       if (index == -1) {
          qWarning("QMdiArea::removeSubWindow() Window is not inside this MDI area");
          return;
       }
+
       d->disconnectSubWindow(child);
       d->childWindows.removeAll(child);
       d->indicesToActivatedChildren.removeAll(index);
       d->updateActiveWindow(index, d->active == child);
       child->setParent(nullptr);
+
       return;
    }
 
    bool found = false;
    for (QMdiSubWindow *child : d->childWindows) {
-      if (!sanityCheck(child, "QMdiArea::removeSubWindow")) {
+      if (! sanityCheck(child, "QMdiArea::removeSubWindow")) {
          continue;
       }
 
@@ -1981,7 +2002,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
       }
    }
 
-   if (!found) {
+   if (! found) {
       qWarning("QMdiArea::removeSubWindow() Window is not a child of any window inside this MDI area");
    }
 }
@@ -2291,9 +2312,6 @@ void QMdiArea::showEvent(QShowEvent *showEvent)
    QAbstractScrollArea::showEvent(showEvent);
 }
 
-/*!
-    \reimp
-*/
 bool QMdiArea::viewportEvent(QEvent *event)
 {
    Q_D(QMdiArea);
@@ -2345,27 +2363,21 @@ bool QMdiArea::viewportEvent(QEvent *event)
    return QAbstractScrollArea::viewportEvent(event);
 }
 
-/*!
-    \reimp
-*/
 void QMdiArea::scrollContentsBy(int dx, int dy)
 {
    Q_D(QMdiArea);
+
    const bool wasSubWindowsTiled = d->isSubWindowsTiled;
    d->ignoreGeometryChange = true;
    viewport()->scroll(isLeftToRight() ? dx : -dx, dy);
    d->arrangeMinimizedSubWindows();
    d->ignoreGeometryChange = false;
+
    if (wasSubWindowsTiled) {
       d->isSubWindowsTiled = true;
    }
 }
 
-/*!
-    Arranges all child windows in a tile pattern.
-
-    \sa cascadeSubWindows()
-*/
 void QMdiArea::tileSubWindows()
 {
    Q_D(QMdiArea);
@@ -2375,11 +2387,6 @@ void QMdiArea::tileSubWindows()
    d->rearrange(d->regularTiler);
 }
 
-/*!
-    Arranges all the child windows in a cascade pattern.
-
-    \sa tileSubWindows()
-*/
 void QMdiArea::cascadeSubWindows()
 {
    Q_D(QMdiArea);
@@ -2389,16 +2396,11 @@ void QMdiArea::cascadeSubWindows()
    d->rearrange(d->cascader);
 }
 
-/*!
-    \reimp
-*/
 bool QMdiArea::event(QEvent *event)
 {
    Q_D(QMdiArea);
 
    switch (event->type()) {
-
-
 
       case QEvent::WindowActivate: {
          d->isActivated = true;
@@ -2411,10 +2413,12 @@ bool QMdiArea::event(QEvent *event)
          d->setChildActivationEnabled(false, true);
          break;
       }
+
       case QEvent::WindowDeactivate:
          d->isActivated = false;
          d->setChildActivationEnabled(false, true);
          break;
+
       case QEvent::StyleChange:
          // Re-tile the views if we're in tiled mode. Re-tile means we will change
          // the geometry of the children, which in turn means 'isSubWindowsTiled'
@@ -2424,6 +2428,7 @@ bool QMdiArea::event(QEvent *event)
             d->isSubWindowsTiled = true;
          }
          break;
+
       case QEvent::WindowIconChange:
          for (QMdiSubWindow *window : d->childWindows) {
             if (sanityCheck(window, "QMdiArea::WindowIconChange")) {
@@ -2431,24 +2436,25 @@ bool QMdiArea::event(QEvent *event)
             }
          }
          break;
+
       case QEvent::Hide:
          d->setActive(d->active, false, false);
          d->setChildActivationEnabled(false);
          break;
+
 #ifndef QT_NO_TABBAR
       case QEvent::LayoutDirectionChange:
          d->updateTabBarGeometry();
          break;
 #endif
+
       default:
          break;
    }
+
    return QAbstractScrollArea::event(event);
 }
 
-/*!
-    \reimp
-*/
 bool QMdiArea::eventFilter(QObject *object, QEvent *event)
 {
    if (!object) {
@@ -2586,9 +2592,6 @@ bool QMdiArea::eventFilter(QObject *object, QEvent *event)
    return QAbstractScrollArea::eventFilter(object, event);
 }
 
-/*!
-    \reimp
-*/
 void QMdiArea::paintEvent(QPaintEvent *paintEvent)
 {
    Q_D(QMdiArea);

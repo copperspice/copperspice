@@ -571,7 +571,8 @@ Qt::SortOrder QSortedModelEngine::sortOrder(const QModelIndex &parent) const
    }
 
    QString first = model->data(model->index(0, m_completerPrivate->column, parent), m_completerPrivate->role).toString();
-   QString last  = model->data(model->index(rowCount - 1, m_completerPrivate->column, parent), m_completerPrivate->role).toString();
+   QString last  = model->data(model->index(rowCount - 1, m_completerPrivate->column, parent),
+         m_completerPrivate->role).toString();
 
    return QString::compare(first, last, m_completerPrivate->cs) <= 0 ? Qt::AscendingOrder : Qt::DescendingOrder;
 }
@@ -1082,7 +1083,6 @@ void QCompleter::setModel(QAbstractItemModel *model)
 #endif
 }
 
-
 QAbstractItemModel *QCompleter::model() const
 {
    Q_D(const QCompleter);
@@ -1115,6 +1115,7 @@ QCompleter::CompletionMode QCompleter::completionMode() const
    Q_D(const QCompleter);
    return d->mode;
 }
+
 void QCompleter::setFilterMode(Qt::MatchFlags filterMode)
 {
    Q_D(QCompleter);
@@ -1216,9 +1217,6 @@ bool QCompleter::event(QEvent *ev)
    return QObject::event(ev);
 }
 
-/*!
-  \reimp
-*/
 bool QCompleter::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QCompleter);
@@ -1244,7 +1242,7 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
          const int key = ke->key();
          // In UnFilteredPopup mode, select the current item
          if ((key == Qt::Key_Up || key == Qt::Key_Down) && selList.isEmpty() && curIndex.isValid()
-            && d->mode == QCompleter::UnfilteredPopupCompletion) {
+               && d->mode == QCompleter::UnfilteredPopupCompletion) {
             d->setCurrentIndex(curIndex);
             return true;
          }
@@ -1278,6 +1276,7 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
                   QModelIndex firstIndex = d->proxy->index(0, d->column);
                   d->setCurrentIndex(firstIndex);
                   return true;
+
                } else if (curIndex.row() == d->proxy->rowCount() - 1) {
                   if (d->wrap) {
                      d->setCurrentIndex(QModelIndex());
@@ -1296,20 +1295,24 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
          d->eatFocusOut = false;
          (static_cast<QObject *>(d->widget))->event(ke);
          d->eatFocusOut = true;
-         if (!d->widget || e->isAccepted() || !d->popup->isVisible()) {
+
+         if (! d->widget || e->isAccepted() || ! d->popup->isVisible()) {
             // widget lost focus, hide the popup
-            if (d->widget && (!d->widget->hasFocus()
+
 #ifdef QT_KEYPAD_NAVIGATION
-                  || (QApplication::keypadNavigationEnabled() && !d->widget->hasEditFocus())
+            if (d->widget && (!d->widget->hasFocus()
+                  || (QApplication::keypadNavigationEnabled() && ! d->widget->hasEditFocus()) )) {
+#else
+            if (d->widget && (!d->widget->hasFocus())) {
 #endif
-               )) {
+
                d->popup->hide();
             }
+
             if (e->isAccepted()) {
                return true;
             }
          }
-
 
          // default implementation for keys not handled by the widget when popup is open
          if (ke->matches(QKeySequence::Cancel)) {
@@ -1319,12 +1322,14 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
 
          // default implementation for keys not handled by the widget when popup is open
          switch (key) {
+
 #ifdef QT_KEYPAD_NAVIGATION
             case Qt::Key_Select:
                if (!QApplication::keypadNavigationEnabled()) {
                   break;
                }
 #endif
+
             case Qt::Key_Return:
             case Qt::Key_Enter:
             case Qt::Key_Tab:
@@ -1374,11 +1379,12 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
          if (QApplication::keypadNavigationEnabled()) {
             // if we've clicked in the widget (or its descendant), let it handle the click
             QWidget *source = qobject_cast<QWidget *>(o);
+
             if (source) {
                QPoint pos = source->mapToGlobal((static_cast<QMouseEvent *>(e))->pos());
                QWidget *target = QApplication::widgetAt(pos);
-               if (target && (d->widget->isAncestorOf(target) ||
-                     target == d->widget)) {
+
+               if (target && (d->widget->isAncestorOf(target) || target == d->widget)) {
                   d->eatFocusOut = false;
                   static_cast<QObject *>(target)->event(e);
                   d->eatFocusOut = true;
@@ -1405,16 +1411,6 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
    return false;
 }
 
-/*!
-    For QCompleter::PopupCompletion and QCompletion::UnfilteredPopupCompletion
-    modes, calling this function displays the popup displaying the current
-    completions. By default, if \a rect is not specified, the popup is displayed
-    on the bottom of the widget(). If \a rect is specified the popup is
-    displayed on the left edge of the rectangle.
-
-    For QCompleter::InlineCompletion mode, the highlighted() signal is fired
-    with the current completion.
-*/
 void QCompleter::complete(const QRect &rect)
 {
    Q_D(QCompleter);
@@ -1464,14 +1460,11 @@ int QCompleter::currentRow() const
    return d->proxy->currentRow();
 }
 
-
 int QCompleter::completionCount() const
 {
    Q_D(const QCompleter);
    return d->proxy->completionCount();
 }
-
-
 
 void QCompleter::setModelSorting(QCompleter::ModelSorting sorting)
 {
@@ -1493,14 +1486,17 @@ QCompleter::ModelSorting QCompleter::modelSorting() const
 void QCompleter::setCompletionColumn(int column)
 {
    Q_D(QCompleter);
+
    if (d->column == column) {
       return;
    }
+
 #ifndef QT_NO_LISTVIEW
    if (QListView *listView = qobject_cast<QListView *>(d->popup)) {
       listView->setModelColumn(column);
    }
 #endif
+
    d->column = column;
    d->proxy->invalidate();
 }
@@ -1510,7 +1506,6 @@ int QCompleter::completionColumn() const
    Q_D(const QCompleter);
    return d->column;
 }
-
 
 void QCompleter::setCompletionRole(int role)
 {
@@ -1528,13 +1523,6 @@ int QCompleter::completionRole() const
    return d->role;
 }
 
-/*!
-    \property QCompleter::wrapAround
-    \brief the completions wrap around when navigating through items
-    \since 4.3
-
-    The default is true.
-*/
 void QCompleter::setWrapAround(bool wrap)
 {
    Q_D(QCompleter);
@@ -1550,13 +1538,6 @@ bool QCompleter::wrapAround() const
    return d->wrap;
 }
 
-/*!
-    \property QCompleter::maxVisibleItems
-    \brief the maximum allowed size on screen of the completer, measured in items
-    \since 4.6
-
-    By default, this property has a value of 7.
-*/
 int QCompleter::maxVisibleItems() const
 {
    Q_D(const QCompleter);
@@ -1566,6 +1547,7 @@ int QCompleter::maxVisibleItems() const
 void QCompleter::setMaxVisibleItems(int maxItems)
 {
    Q_D(QCompleter);
+
    if (maxItems < 0) {
       qWarning("QCompleter::setMaxVisibleItems() Invalid max visible items (%d) must be >= 0", maxItems);
       return;
@@ -1573,14 +1555,6 @@ void QCompleter::setMaxVisibleItems(int maxItems)
    d->maxVisibleItems = maxItems;
 }
 
-/*!
-    \property QCompleter::caseSensitivity
-    \brief the case sensitivity of the matching
-
-    The default is Qt::CaseSensitive.
-
-    \sa completionColumn, completionRole, modelSorting
-*/
 void QCompleter::setCaseSensitivity(Qt::CaseSensitivity cs)
 {
    Q_D(QCompleter);
@@ -1598,13 +1572,6 @@ Qt::CaseSensitivity QCompleter::caseSensitivity() const
    return d->cs;
 }
 
-/*!
-    \property QCompleter::completionPrefix
-    \brief the completion prefix used to provide completions.
-
-    The completionModel() is updated to reflect the list of possible
-    matches for \a prefix.
-*/
 void QCompleter::setCompletionPrefix(const QString &prefix)
 {
    Q_D(QCompleter);
@@ -1647,6 +1614,7 @@ QString QCompleter::pathFromIndex(const QModelIndex &index) const
    if (!sourceModel) {
       return QString();
    }
+
    bool isDirModel = false;
    bool isFsModel = false;
 
@@ -1664,43 +1632,37 @@ QString QCompleter::pathFromIndex(const QModelIndex &index) const
 
    QModelIndex idx = index;
    QStringList list;
+
    do {
       QString t;
+
       if (isDirModel) {
          t = sourceModel->data(idx, Qt::EditRole).toString();
       }
+
 #ifndef QT_NO_FILESYSTEMMODEL
       else {
          t = sourceModel->data(idx, QFileSystemModel::FileNameRole).toString();
       }
 #endif
+
       list.prepend(t);
       QModelIndex parent = idx.parent();
       idx = parent.sibling(parent.row(), index.column());
    } while (idx.isValid());
 
-#if !defined(Q_OS_WIN)
-   if (list.count() == 1) { // only the separator or some other text
+#if ! defined(Q_OS_WIN)
+   if (list.count() == 1) {
+      // only the separator or some other text
       return list[0];
    }
+
    list[0].clear() ; // the join below will provide the separator
 #endif
 
    return list.join(QDir::separator());
 }
 
-/*!
-    Splits the given \a path into strings that are used to match at each level
-    in the model().
-
-    The default implementation of splitPath() splits a file system path based on
-    QDir::separator() when the sourceModel() is a QFileSystemModel.
-
-    When used with list models, the first item in the returned list is used for
-    matching.
-
-    \sa pathFromIndex(), {Handling Tree Models}
-*/
 QStringList QCompleter::splitPath(const QString &path) const
 {
    bool isDirModel = false;

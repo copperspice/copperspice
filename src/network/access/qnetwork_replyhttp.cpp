@@ -927,14 +927,14 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
 
       if (delegate->incomingErrorCode != QNetworkReply::NoError) {
          replyDownloadMetaData(delegate->incomingHeaders, delegate->incomingStatusCode, delegate->incomingReasonPhrase,
-                  delegate->isPipeliningUsed, QSharedPointer<char>(), delegate->incomingContentLength, delegate->isSpdyUsed);
+               delegate->isPipeliningUsed, QSharedPointer<char>(), delegate->incomingContentLength, delegate->isSpdyUsed);
 
          replyDownloadData(delegate->synchronousDownloadData);
          httpError(delegate->incomingErrorCode, delegate->incomingErrorDetail);
 
       } else {
          replyDownloadMetaData(delegate->incomingHeaders, delegate->incomingStatusCode, delegate->incomingReasonPhrase,
-                  delegate->isPipeliningUsed, QSharedPointer<char>(), delegate->incomingContentLength, delegate->isSpdyUsed);
+               delegate->isPipeliningUsed, QSharedPointer<char>(), delegate->incomingContentLength, delegate->isSpdyUsed);
          replyDownloadData(delegate->synchronousDownloadData);
       }
 
@@ -1008,8 +1008,8 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(const QByteArray &data)
 {
    Q_Q(QNetworkReplyHttpImpl);
 
-   // If we're closed just ignore this data
-   if (!q->isOpen()) {
+   // if we are closed just ignore the data
+   if (! q->isOpen()) {
       return;
    }
 
@@ -1018,43 +1018,45 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(const QByteArray &data)
    int pendingSignals = (int)pendingDownloadDataEmissions->fetchAndAddAcquire(-1) - 1;
 
    if (pendingSignals > 0) {
-      // Some more signal emissions to this slot are pending.
-      // Instead of writing the downstream data, we wait
-      // and do it in the next call we get
+      // Some more signal emissions to this slot are pending
+      // Instead of writing the downstream data wait and do it in the next call we get
       // (signal comppression)
+
       return;
    }
 
-   // We need to usa a copy for calling writeDownstreamData as we could
-   // possibly recurse into this this function when we call
-   // appendDownstreamDataSignalEmissions because the user might call
-   // processEvents() or spin an event loop when this occur.
+   // need a copy for calling writeDownstreamData() as we could
+   // possibly recurse into this method when we call appendDownstreamDataSignalEmissions()
+   // because the user might call processEvents() or spin an event loop when this occur
+
    QByteDataBuffer pendingDownloadDataCopy = pendingDownloadData;
    pendingDownloadData.clear();
 
-   if (cacheEnabled && isCachingAllowed() && !cacheSaveDevice) {
+   if (cacheEnabled && isCachingAllowed() && ! cacheSaveDevice) {
       initCacheSaveDevice();
    }
 
    qint64 bytesWritten = 0;
+
    for (int i = 0; i < pendingDownloadDataCopy.bufferCount(); i++) {
       QByteArray const &item = pendingDownloadDataCopy[i];
 
-      // This is going to look a little strange. When downloading data while a
-      // HTTP redirect is happening (and enabled), we write the redirect
+      // this may look a bit strange. When downloading data while a
+      // HTTP redirect is happening and enabled we write the redirect
       // response to the cache. However, we do not append it to our internal
-      // buffer as that will contain the response data only for the final
-      // response
-      if (cacheSaveDevice) {
+      // buffer as that will contain the response data only for the final response
+
+      if (cacheSaveDevice != nullptr) {
          cacheSaveDevice->write(item.constData(), item.size());
       }
 
-      if (!isHttpRedirectResponse()) {
+      if (! isHttpRedirectResponse()) {
          downloadMultiBuffer.append(item);
       }
 
       bytesWritten += item.size();
    }
+
    pendingDownloadDataCopy.clear();
 
    QVariant totalSize = cookedHeaders.value(QNetworkRequest::ContentLengthHeader);
@@ -1079,7 +1081,6 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(const QByteArray &data)
 
       emit q->downloadProgress(bytesDownloaded, ! totalSize.isValid() ? Q_INT64_C(-1) : totalSize.toLongLong());
    }
-
 }
 
 void QNetworkReplyHttpImplPrivate::replyFinished()
@@ -1262,13 +1263,17 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
 #if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
       qDebug() << "Received a 304 from" << request.url();
 #endif
+
       QAbstractNetworkCache *nc = managerPrivate->networkCache;
+
       if (nc) {
          QNetworkCacheMetaData oldMetaData = nc->metaData(httpRequest.url());
          QNetworkCacheMetaData metaData = fetchCacheMetaData(oldMetaData);
+
          if (oldMetaData != metaData) {
             nc->updateMetaData(metaData);
          }
+
          if (sendCacheContents(metaData)) {
             return;
          }
@@ -1284,7 +1289,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
    _q_metaDataChanged();
 }
 
-void QNetworkReplyHttpImplPrivate::replyDownloadProgressSlot(qint64 bytesReceived,  qint64 bytesTotal)
+void QNetworkReplyHttpImplPrivate::replyDownloadProgressSlot(qint64 bytesReceived, qint64 bytesTotal)
 {
    Q_Q(QNetworkReplyHttpImpl);
 
@@ -1376,7 +1381,8 @@ void QNetworkReplyHttpImplPrivate::replySslErrors(const QList<QSslError> &errorL
    if (pendingIgnoreAllSslErrors) {
       *ignoreAll = true;
    }
-   if (!pendingIgnoreSslErrorsList.isEmpty()) {
+
+   if (! pendingIgnoreSslErrorsList.isEmpty()) {
       *toBeIgnored = pendingIgnoreSslErrorsList;
    }
 }
@@ -2142,6 +2148,7 @@ void QNetworkReplyHttpImplPrivate::finished()
    if (manager) {
 #ifndef QT_NO_BEARERMANAGEMENT
       QSharedPointer<QNetworkSession> session = managerPrivate->getNetworkSession();
+
       if (session && session->state() == QNetworkSession::Roaming &&
             state == Working && m_errorCode != QNetworkReply::OperationCanceledError) {
          // only content with a known size will fail with a temporary network failure error
@@ -2203,7 +2210,8 @@ void QNetworkReplyHttpImplPrivate::_q_error(QNetworkReplyImpl::NetworkError erro
 void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError errorCode, const QString &errorMsg)
 {
    Q_Q(QNetworkReplyHttpImpl);
-   // Can't set and emit multiple errors.
+
+   // can not set and emit multiple errors
    if (m_errorCode != QNetworkReply::NoError) {
       qWarning("QNetworkReplyImplPrivate::error: Internal problem, this method must only be called once.");
       return;
@@ -2212,9 +2220,8 @@ void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError errorCo
    m_errorCode = errorCode;
    q->setErrorString(errorMsg);
 
-   // note: might not be a good idea, since users could decide to delete us
-   // which would delete the backend too...
-   // maybe we should protect the backend
+   // might not be a good idea since users could decide to delete us
+   // which would delete the backend too, maybe we should protect the backend
    emit q->error(errorCode);
 }
 
@@ -2245,10 +2252,6 @@ void QNetworkReplyHttpImplPrivate::_q_metaDataChanged()
    emit q->metaDataChanged();
 }
 
-/*
-    Migrates the backend of the QNetworkReply to a new network connection if required.  Returns
-    true if the reply is migrated or it is not required; otherwise returns \c false.
-*/
 bool QNetworkReplyHttpImplPrivate::migrateBackend()
 {
    Q_Q(QNetworkReplyHttpImpl);
@@ -2341,6 +2344,7 @@ void QNetworkReplyHttpImplPrivate::completeCacheSave()
 {
    if (cacheEnabled && m_errorCode != QNetworkReplyImpl::NoError) {
       managerPrivate->networkCache->remove(url);
+
    } else if (cacheEnabled && cacheSaveDevice) {
       managerPrivate->networkCache->insert(cacheSaveDevice);
    }
@@ -2348,7 +2352,6 @@ void QNetworkReplyHttpImplPrivate::completeCacheSave()
    cacheSaveDevice = nullptr;
    cacheEnabled    = false;
 }
-
 
 void QNetworkReplyHttpImpl::_q_startOperation()
 {

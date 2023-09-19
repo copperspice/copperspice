@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef DragData_h
@@ -36,7 +36,7 @@
 
 #if PLATFORM(MAC)
 #include <wtf/RetainPtr.h>
-#ifdef __OBJC__ 
+#ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #import <AppKit/NSDragging.h>
 typedef id <NSDraggingInfo> DragDataRef;
@@ -133,7 +133,7 @@ private:
     DragDataMap m_dragDataMap;
 #endif
 };
-    
+
 }
 
 #endif // !DragData_h

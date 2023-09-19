@@ -602,10 +602,6 @@ void QTableViewPrivate::trimHiddenSelections(QItemSelectionRange *range) const
    *range = QItemSelectionRange(topLeft, bottomRight);
 }
 
-/*!
-  \internal
-  Sets the span for the cell at (\a row, \a column).
-*/
 void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan)
 {
    if (row < 0 || column < 0 || rowSpan <= 0 || columnSpan <= 0) {
@@ -613,15 +609,18 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
             row, column, rowSpan, columnSpan);
       return;
    }
+
    QSpanCollection::Span *sp = spans.spanAt(column, row);
    if (sp) {
       if (sp->top() != row || sp->left() != column) {
          qWarning("QTableView::setSpan() Span can not overlap");
          return;
       }
+
       if (rowSpan == 1 && columnSpan == 1) {
          rowSpan = columnSpan = 0;
       }
+
       const int old_height = sp->height();
       sp->m_bottom = row + rowSpan - 1;
       sp->m_right = column + columnSpan - 1;
@@ -637,13 +636,10 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
    spans.addSpan(sp);
 }
 
-/*!
-  \internal
-  Gets the span information for the cell at (\a row, \a column).
-*/
 QSpanCollection::Span QTableViewPrivate::span(int row, int column) const
 {
    QSpanCollection::Span *sp = spans.spanAt(column, row);
+
    if (sp) {
       return *sp;
    }
@@ -651,13 +647,10 @@ QSpanCollection::Span QTableViewPrivate::span(int row, int column) const
    return QSpanCollection::Span(row, column, 1, 1);
 }
 
-/*!
-  \internal
-  Returns the logical index of the last section that's part of the span.
-*/
 int QTableViewPrivate::sectionSpanEndLogical(const QHeaderView *header, int logical, int span) const
 {
    int visual = header->visualIndex(logical);
+
    for (int i = 1; i < span; ) {
       if (++visual >= header->count()) {
          break;
@@ -2751,24 +2744,12 @@ void QTableView::columnMoved(int, int oldIndex, int newIndex)
    }
 }
 
-/*!
-    Selects the given \a row in the table view if the current
-    SelectionMode and SelectionBehavior allows rows to be selected.
-
-    \sa selectColumn()
-*/
 void QTableView::selectRow(int row)
 {
    Q_D(QTableView);
    d->selectRow(row, true);
 }
 
-/*!
-    Selects the given \a column in the table view if the current
-    SelectionMode and SelectionBehavior allows columns to be selected.
-
-    \sa selectRow()
-*/
 void QTableView::selectColumn(int column)
 {
    Q_D(QTableView);

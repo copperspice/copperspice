@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef Color_h
@@ -110,7 +110,7 @@ public:
     int green() const { return greenChannel(m_color); }
     int blue() const { return blueChannel(m_color); }
     int alpha() const { return alphaChannel(m_color); }
-    
+
     RGBA32 rgb() const { return m_color; } // Preserve the alpha.
     void setRGB(int r, int g, int b) { m_color = makeRGB(r, g, b); m_valid = true; }
     void setRGB(RGBA32 rgb) { m_color = rgb; m_valid = true; }

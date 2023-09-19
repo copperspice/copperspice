@@ -493,7 +493,8 @@ QScrollBar *QAbstractScrollArea::verticalScrollBar() const
 void QAbstractScrollArea::setVerticalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
-   if (!scrollBar) {
+
+   if (! scrollBar) {
       qWarning("QAbstractScrollArea::setVerticalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }
@@ -517,6 +518,7 @@ void QAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy polic
    if (isVisible()) {
       d->layoutChildren();
    }
+
    if (oldPolicy != d->hbarpolicy) {
       d->scrollBarPolicyChanged(Qt::Horizontal, d->hbarpolicy);
    }
@@ -531,7 +533,8 @@ QScrollBar *QAbstractScrollArea::horizontalScrollBar() const
 void QAbstractScrollArea::setHorizontalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
-   if (!scrollBar) {
+
+   if (! scrollBar) {
       qWarning("QAbstractScrollArea::setHorizontalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }

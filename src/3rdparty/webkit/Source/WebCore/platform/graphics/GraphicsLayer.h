@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GraphicsLayer_h
@@ -102,7 +102,7 @@ public:
         if (timingFunction)
             m_timingFunction = timingFunction;
     }
-    
+
     virtual ~AnimationValue() { }
 
     float keyTime() const { return m_keyTime; }
@@ -154,20 +154,20 @@ public:
         : m_property(property)
     {
     }
-    
+
     ~KeyframeValueList()
     {
         deleteAllValues(m_values);
     }
-    
+
     AnimatedPropertyID property() const { return m_property; }
 
     size_t size() const { return m_values.size(); }
     const AnimationValue* at(size_t i) const { return m_values.at(i); }
-    
+
     // Insert, sorted by keyTime. Takes ownership of the pointer.
     void insert(const AnimationValue*);
-    
+
 protected:
     Vector<const AnimationValue*> m_values;
     AnimatedPropertyID m_property;
@@ -182,7 +182,7 @@ class GraphicsLayer {
     WTF_MAKE_NONCOPYABLE(GraphicsLayer); WTF_MAKE_FAST_ALLOCATED;
 public:
     static PassOwnPtr<GraphicsLayer> create(GraphicsLayerClient*);
-    
+
     virtual ~GraphicsLayer();
 
     GraphicsLayerClient* client() const { return m_client; }
@@ -193,10 +193,10 @@ public:
 
     GraphicsLayer* parent() const { return m_parent; };
     void setParent(GraphicsLayer* layer) { m_parent = layer; } // Internal use only.
-    
+
     // Returns true if the layer has the given layer as an ancestor (excluding self).
     bool hasAncestor(GraphicsLayer*) const;
-    
+
     const Vector<GraphicsLayer*>& children() const { return m_children; }
     // Returns true if the child list changed.
     virtual bool setChildren(const Vector<GraphicsLayer*>&);
@@ -213,7 +213,7 @@ public:
 
     GraphicsLayer* maskLayer() const { return m_maskLayer; }
     virtual void setMaskLayer(GraphicsLayer* layer) { m_maskLayer = layer; }
-    
+
     // The given layer will replicate this layer and its children; the replica renders behind this layer.
     virtual void setReplicatedByLayer(GraphicsLayer*);
     // Whether this layer is being replicated by another layer.
@@ -231,7 +231,7 @@ public:
     // The position of the layer (the location of its top-left corner in its parent)
     const FloatPoint& position() const { return m_position; }
     virtual void setPosition(const FloatPoint& p) { m_position = p; }
-    
+
     // Anchor point: (0, 0) is top left, (1, 1) is bottom right. The anchor point
     // affects the origin of the transforms.
     const FloatPoint3D& anchorPoint() const { return m_anchorPoint; }
@@ -249,10 +249,10 @@ public:
 
     bool preserves3D() const { return m_preserves3D; }
     virtual void setPreserves3D(bool b) { m_preserves3D = b; }
-    
+
     bool masksToBounds() const { return m_masksToBounds; }
     virtual void setMasksToBounds(bool b) { m_masksToBounds = b; }
-    
+
     bool drawsContent() const { return m_drawsContent; }
     virtual void setDrawsContent(bool b) { m_drawsContent = b; }
 
@@ -282,16 +282,16 @@ public:
     virtual void setNeedsDisplay() = 0;
     // mark the given rect (in layer coords) as needing dispay. Never goes deep.
     virtual void setNeedsDisplayInRect(const FloatRect&) = 0;
-    
+
     virtual void setContentsNeedsDisplay() { };
 
     // Set that the position/size of the contents (image or video).
     IntRect contentsRect() const { return m_contentsRect; }
     virtual void setContentsRect(const IntRect& r) { m_contentsRect = r; }
-    
+
     // Transitions are identified by a special animation name that cannot clash with a keyframe identifier.
     static String animationNameForTransition(AnimatedPropertyID);
-    
+
     // Return true if the animation is handled by the compositing system. If this returns
     // false, the animation will be run by AnimationController.
     // These methods handle both transitions and keyframe animations.
@@ -301,7 +301,7 @@ public:
 
     virtual void suspendAnimations(double time);
     virtual void resumeAnimations();
-    
+
     // Layer contents
     virtual void setContentsToImage(Image*) { }
     virtual void setContentsToMedia(PlatformLayer*) { } // video or plug-in
@@ -313,10 +313,10 @@ public:
     void paintGraphicsLayerContents(GraphicsContext&, const IntRect& clip);
     // Callback from the underlying graphics system when the layer has been displayed
     virtual void layerDidDisplay(PlatformLayer*) { }
-    
+
     // For hosting this GraphicsLayer in a native layer hierarchy.
     virtual PlatformLayer* platformLayer() const { return 0; }
-    
+
     // Change the scale at which the contents are rendered. Note that contentsScale may not return
     // the same value passed to setContentsScale(), because of clamping and hysteresis.
     virtual float contentsScale() const { return 1; }
@@ -335,9 +335,9 @@ public:
 
     bool showDebugBorders() const { return m_client ? m_client->showDebugBorders() : false; }
     bool showRepaintCounter() const { return m_client ? m_client->showRepaintCounter() : false; }
-    
+
     void updateDebugIndicators();
-    
+
     virtual void setDebugBackgroundColor(const Color&) { }
     virtual void setDebugBorder(const Color&, float /*borderWidth*/) { }
     // z-position is the z-equivalent of position(). It's only used for debugging purposes.
@@ -352,8 +352,8 @@ public:
     // and descendant layers, and this layer only.
     virtual void syncCompositingState() { }
     virtual void syncCompositingStateForThisLayerOnly() { }
-    
-    // Return a string with a human readable form of the layer tree, If debug is true 
+
+    // Return a string with a human readable form of the layer tree, If debug is true
     // pointers for the layers and timing data will be included in the returned string.
     String layerTreeAsText(LayerTreeAsTextBehavior = LayerTreeAsTextBehaviorNormal) const;
 
@@ -367,7 +367,7 @@ protected:
     static void fetchTransformOperationList(const KeyframeValueList&, TransformOperationList&, bool& isValid, bool& hasBigRotation);
 
     virtual void setOpacityInternal(float) { }
-    
+
     // The layer being replicated.
     GraphicsLayer* replicatedLayer() const { return m_replicatedLayer; }
     virtual void setReplicatedLayer(GraphicsLayer* layer) { m_replicatedLayer = layer; }
@@ -378,10 +378,10 @@ protected:
 
     GraphicsLayerClient* m_client;
     String m_name;
-    
+
     // Offset from the owning renderer
     IntSize m_offsetFromRenderer;
-    
+
     // Position is relative to the parent GraphicsLayer
     FloatPoint m_position;
     FloatPoint3D m_anchorPoint;

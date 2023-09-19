@@ -184,8 +184,7 @@ QString QTimeZonePrivate::displayName(qint64 atMSecsSinceEpoch,
 }
 
 QString QTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
-   QTimeZone::NameType nameType,
-   const QLocale &locale) const
+   QTimeZone::NameType nameType, const QLocale &locale) const
 {
    (void) timeType;
    (void) nameType;

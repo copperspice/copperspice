@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef KURL_h
@@ -273,7 +273,7 @@ bool operator!=(const String&, const KURL&);
 
 bool equalIgnoringFragmentIdentifier(const KURL&, const KURL&);
 bool protocolHostAndPortAreEqual(const KURL&, const KURL&);
-    
+
 const KURL& blankURL();
 
 // Functions to do URL operations on strings.

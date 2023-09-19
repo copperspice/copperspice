@@ -1499,6 +1499,7 @@ void QSslSocketBackendPrivate::_q_caRootLoaded(QSslCertificate cert, QSslCertifi
 
       //Remove the broken chain ssl errors (as chain is verified by windows)
       for (int i = sslErrors.count() - 1; i >= 0; --i) {
+
          if (sslErrors.at(i).certificate() == cert) {
             switch (sslErrors.at(i).error()) {
                case QSslError::UnableToGetLocalIssuerCertificate:

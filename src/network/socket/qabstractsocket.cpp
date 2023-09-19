@@ -577,15 +577,10 @@ void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 port)
    proxyInUse = QNetworkProxy();
 }
 
-/*!
-    \internal
-
-    Starts the connection to \a host, like _q_startConnecting below,
-    but without hostname resolution.
-*/
 void QAbstractSocketPrivate::startConnectingByName(const QString &host)
 {
    Q_Q(QAbstractSocket);
+
    if (state == QAbstractSocket::ConnectingState || state == QAbstractSocket::ConnectedState) {
       return;
    }
@@ -659,24 +654,29 @@ void QAbstractSocketPrivate::_q_startConnecting(const QHostInfo &hostInfo)
       }
       s += addresses.at(i).toString();
    }
-   s += QLatin1Char('}');
+
+   s += '}';
    qDebug("QAbstractSocketPrivate::_q_startConnecting(hostInfo == %s)", s.toLatin1().constData());
+
 #endif
 
    // Try all addresses twice.
    addresses += addresses;
 
-   // If there are no addresses in the host list, report this to the
-   // user.
+   // If there are no addresses in the host list, report this to the user
+
    if (addresses.isEmpty()) {
+
 #if defined(QABSTRACTSOCKET_DEBUG)
       qDebug("QAbstractSocketPrivate::_q_startConnecting(), host not found");
 #endif
+
       state = QAbstractSocket::UnconnectedState;
       socketError = QAbstractSocket::HostNotFoundError;
       q->setErrorString(QAbstractSocket::tr("Host not found"));
       emit q->stateChanged(state);
       emit q->error(QAbstractSocket::HostNotFoundError);
+
       return;
    }
 
@@ -1253,8 +1253,9 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
       QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
       if (threadData->eventDispatcher) {
-         // this internal API for QHostInfo either immediately gives us the desired
-         // QHostInfo from cache or later calls the _q_startConnecting slot.
+         // internal API for QHostInfo either immediately gives us the desired
+         // QHostInfo from cache or later calls the _q_startConnecting slot
+
          bool immediateResultValid = false;
 
          QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &hostInfo)),
@@ -1268,23 +1269,20 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
    }
 
 #if defined(QABSTRACTSOCKET_DEBUG)
-   qDebug("QAbstractSocket::connectToHost(\"%s\", %i) == %s%s", hostName.toLatin1().constData(), port,
+   qDebug("QAbstractSocket::connectToHost(\"%s\", %i) == %s%s", csPrintable(hostName), port,
           (d->state == ConnectedState) ? "true" : "false",
           (d->state == ConnectingState || d->state == HostLookupState)
           ? " (connection in progress)" : "");
 #endif
 }
 
-/*! \overload
-
-    Attempts to make a connection to \a address on port \a port.
-*/
 void QAbstractSocket::connectToHost(const QHostAddress &address, quint16 port, OpenMode openMode)
 {
 #if defined(QABSTRACTSOCKET_DEBUG)
    qDebug("QAbstractSocket::connectToHost([%s], %i, %i)...",
-          address.toString().toLatin1().constData(), port, (int) openMode);
+          csPrintable(address.toString()), port, (int) openMode);
 #endif
+
    connectToHost(address.toString(), port, openMode);
 }
 
@@ -2321,15 +2319,19 @@ Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, QAbstractSocket::SocketState st
       case QAbstractSocket::ConnectedState:
          debug << "QAbstractSocket::ConnectedState";
          break;
+
       case QAbstractSocket::BoundState:
          debug << "QAbstractSocket::BoundState";
          break;
+
       case QAbstractSocket::ListeningState:
          debug << "QAbstractSocket::ListeningState";
          break;
+
       case QAbstractSocket::ClosingState:
          debug << "QAbstractSocket::ClosingState";
          break;
+
       default:
          debug << "QAbstractSocket::SocketState(" << int(state) << ')';
          break;

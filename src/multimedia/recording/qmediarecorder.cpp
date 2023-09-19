@@ -161,9 +161,6 @@ QMediaRecorder::QMediaRecorder(QMediaObject *mediaObject, QObject *parent)
    setMediaObject(mediaObject);
 }
 
-/*!
-    \internal
-*/
 QMediaRecorder::QMediaRecorder(QMediaRecorderPrivate &dd, QMediaObject *mediaObject, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
@@ -357,6 +354,7 @@ QUrl QMediaRecorder::outputLocation() const
 bool QMediaRecorder::setOutputLocation(const QUrl &location)
 {
    Q_D(QMediaRecorder);
+
    d->actualLocation.clear();
    return d->control ? d->control->setOutputLocation(location) : false;
 }
@@ -579,6 +577,7 @@ void QMediaRecorder::record()
 void QMediaRecorder::pause()
 {
    Q_D(QMediaRecorder);
+
    if (d->control) {
       d->control->setState(PausedState);
    }
@@ -597,8 +596,7 @@ bool QMediaRecorder::isMetaDataAvailable() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->isMetaDataAvailable()
-      : false;
+      ? d->metaDataControl->isMetaDataAvailable() : false;
 }
 
 bool QMediaRecorder::isMetaDataWritable() const
@@ -606,8 +604,7 @@ bool QMediaRecorder::isMetaDataWritable() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->isWritable()
-      : false;
+      ? d->metaDataControl->isWritable() : false;
 }
 
 QVariant QMediaRecorder::metaData(const QString &key) const
@@ -615,8 +612,7 @@ QVariant QMediaRecorder::metaData(const QString &key) const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->metaData(key)
-      : QVariant();
+      ? d->metaDataControl->metaData(key) : QVariant();
 }
 
 void QMediaRecorder::setMetaData(const QString &key, const QVariant &value)
@@ -633,8 +629,7 @@ QStringList QMediaRecorder::availableMetaData() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->availableMetaData()
-      : QStringList();
+      ? d->metaDataControl->availableMetaData() : QStringList();
 }
 
 void QMediaRecorder::_q_stateChanged(QMediaRecorder::State state)

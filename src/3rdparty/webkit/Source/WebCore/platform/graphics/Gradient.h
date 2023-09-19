@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef Gradient_h
@@ -105,7 +105,7 @@ namespace WebCore {
 
         void setStartRadius(float r) { m_r0 = r; }
         void setEndRadius(float r) { m_r1 = r; }
-        
+
         float aspectRatio() const { return m_aspectRatio; }
 
 #if OS(WINCE) && !PLATFORM(QT)
@@ -126,7 +126,7 @@ namespace WebCore {
         };
 
         void setStopsSorted(bool s) { m_stopsSorted = s; }
-        
+
         void setSpreadMethod(GradientSpreadMethod);
         GradientSpreadMethod spreadMethod() { return m_spreadMethod; }
         void setGradientSpaceTransform(const AffineTransform& gradientSpaceTransformation);

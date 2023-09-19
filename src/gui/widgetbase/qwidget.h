@@ -922,18 +922,20 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QWidget::RenderFlags)
 template <>
 inline QWidget *qobject_cast<QWidget *>(QObject *o)
 {
-   if (!o || !o->isWidgetType()) {
+   if (! o || ! o->isWidgetType()) {
       return nullptr;
    }
+
    return static_cast<QWidget *>(o);
 }
 
 template <>
 inline const QWidget *qobject_cast<const QWidget *>(const QObject *o)
 {
-   if (!o || !o->isWidgetType()) {
+   if (! o || ! o->isWidgetType()) {
       return nullptr;
    }
+
    return static_cast<const QWidget *>(o);
 }
 
@@ -1166,7 +1168,5 @@ void QWidget::cs_setGeometry(const QRect &rect)
 }
 
 #define QWIDGETSIZE_MAX ((1<<24)-1)
-
-
 
 #endif

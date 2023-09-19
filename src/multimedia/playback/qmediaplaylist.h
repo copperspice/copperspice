@@ -99,6 +99,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
 
    MULTI_CS_SLOT_1(Public, void next())
    MULTI_CS_SLOT_2(next)
+
    MULTI_CS_SLOT_1(Public, void previous())
    MULTI_CS_SLOT_2(previous)
 
@@ -107,24 +108,31 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
 
    MULTI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
    MULTI_CS_SIGNAL_2(currentIndexChanged, index)
+
    MULTI_CS_SIGNAL_1(Public, void playbackModeChanged(QMediaPlaylist::PlaybackMode mode))
    MULTI_CS_SIGNAL_2(playbackModeChanged, mode)
+
    MULTI_CS_SIGNAL_1(Public, void currentMediaChanged(const QMediaContent &content))
    MULTI_CS_SIGNAL_2(currentMediaChanged, content)
 
    MULTI_CS_SIGNAL_1(Public, void mediaAboutToBeInserted(int start, int end))
    MULTI_CS_SIGNAL_2(mediaAboutToBeInserted, start, end)
+
    MULTI_CS_SIGNAL_1(Public, void mediaInserted(int start, int end))
    MULTI_CS_SIGNAL_2(mediaInserted, start, end)
+
    MULTI_CS_SIGNAL_1(Public, void mediaAboutToBeRemoved(int start, int end))
    MULTI_CS_SIGNAL_2(mediaAboutToBeRemoved, start, end)
+
    MULTI_CS_SIGNAL_1(Public, void mediaRemoved(int start, int end))
    MULTI_CS_SIGNAL_2(mediaRemoved, start, end)
+
    MULTI_CS_SIGNAL_1(Public, void mediaChanged(int start, int end))
    MULTI_CS_SIGNAL_2(mediaChanged, start, end)
 
    MULTI_CS_SIGNAL_1(Public, void loaded())
    MULTI_CS_SIGNAL_2(loaded)
+
    MULTI_CS_SIGNAL_1(Public, void loadFailed())
    MULTI_CS_SIGNAL_2(loadFailed)
 
@@ -140,5 +148,3 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindable
 };
 
 #endif
-
-

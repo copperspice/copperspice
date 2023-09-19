@@ -1446,10 +1446,13 @@ void QXcbEventReader::start()
 
 void QXcbEventReader::registerForEvents()
 {
-   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()), QSocketNotifier::Read, this);
+   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()),
+         QSocketNotifier::Read, this);
+
    connect(notifier, SIGNAL(activated(int)),   m_connection, SLOT(processXcbEvents()));
 
    QAbstractEventDispatcher *dispatcher = QApplicationPrivate::eventDispatcher;
+
    connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(processXcbEvents()));
    connect(dispatcher, SIGNAL(awake()),        m_connection, SLOT(processXcbEvents()));
 }

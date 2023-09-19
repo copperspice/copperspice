@@ -371,12 +371,15 @@ void QDateTimeEdit::setCurrentSectionIndex(int index)
 QCalendarWidget *QDateTimeEdit::calendarWidget() const
 {
    Q_D(const QDateTimeEdit);
+
    if (!d->calendarPopup || !(d->sections & QDateTimeParser::DateSectionMask)) {
       return nullptr;
    }
+
    if (!d->monthCalendar) {
       const_cast<QDateTimeEditPrivate *>(d)->initCalendarPopup();
    }
+
    return d->monthCalendar->calendarWidget();
 }
 
@@ -398,11 +401,14 @@ void QDateTimeEdit::setCalendarWidget(QCalendarWidget *calendarWidget)
       qWarning("QDateTimeEdit::setCalendarWidget() No calendar date section was specified");
       return;
    }
+
    d->initCalendarPopup(calendarWidget);
 }
+
 void QDateTimeEdit::setSelectedSection(Section section)
 {
    Q_D(QDateTimeEdit);
+
    if (section == NoSection) {
       d->edit->setSelection(d->edit->cursorPosition(), 0);
    } else if (section & d->sections) {
@@ -1230,12 +1236,6 @@ int QDateTimeEditPrivate::sectionAt(int pos) const
    return -1;
 }
 
-/*!
-  \internal
-
-  Returns the closest section of index \a index. Searches forward
-  for a section if \a forward is true. Otherwise searches backwards.
-*/
 int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
 {
    Q_ASSERT(pos >= 0);
@@ -1323,10 +1323,10 @@ int QDateTimeEditPrivate::nextPrevSection(int current, bool forward) const
 
 void QDateTimeEditPrivate::clearSection(int index)
 {
-   const QLatin1Char space(' ');
+   const QChar space(' ');
    int cursorPos = edit->cursorPosition();
 
-   bool blocked = edit->blockSignals(true);
+   bool blocked  = edit->blockSignals(true);
 
    QString t = edit->text();
    const int pos = sectionPos(index);
@@ -1345,13 +1345,6 @@ void QDateTimeEditPrivate::clearSection(int index)
    edit->blockSignals(blocked);
 }
 
-
-/*!
-  \internal
-
-  updates the cached values
-*/
-
 void QDateTimeEditPrivate::updateCache(const QVariant &val, const QString &str) const
 {
    if (val != cachedValue || str != cachedText || cacheGuard) {
@@ -1363,12 +1356,6 @@ void QDateTimeEditPrivate::updateCache(const QVariant &val, const QString &str) 
       cacheGuard = false;
    }
 }
-
-/*!
-  \internal
-
-  parses and validates \a input
-*/
 
 QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &position,
    QValidator::State &state, bool fixup) const

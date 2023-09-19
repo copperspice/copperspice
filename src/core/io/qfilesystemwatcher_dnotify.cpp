@@ -194,7 +194,8 @@ void QDnotifySignalThread::readFromDnotify()
 
 QDnotifyFileSystemWatcherEngine::QDnotifyFileSystemWatcherEngine()
 {
-   QObject::connect(dnotifySignal(), &QDnotifySignalThread::fdChanged, this, &QDnotifyFileSystemWatcherEngine::refresh, Qt::DirectConnection);
+   QObject::connect(dnotifySignal(), &QDnotifySignalThread::fdChanged, this,
+         &QDnotifyFileSystemWatcherEngine::refresh, Qt::DirectConnection);
 }
 
 QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()

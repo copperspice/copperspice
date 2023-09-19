@@ -106,33 +106,43 @@ QDebug operator<<(QDebug debug, QLocalSocket::LocalSocketError error)
       case QLocalSocket::ConnectionRefusedError:
          debug << "QLocalSocket::ConnectionRefusedError";
          break;
+
       case QLocalSocket::PeerClosedError:
          debug << "QLocalSocket::PeerClosedError";
          break;
+
       case QLocalSocket::ServerNotFoundError:
          debug << "QLocalSocket::ServerNotFoundError";
          break;
+
       case QLocalSocket::SocketAccessError:
          debug << "QLocalSocket::SocketAccessError";
          break;
+
       case QLocalSocket::SocketResourceError:
          debug << "QLocalSocket::SocketResourceError";
          break;
+
       case QLocalSocket::SocketTimeoutError:
          debug << "QLocalSocket::SocketTimeoutError";
          break;
+
       case QLocalSocket::DatagramTooLargeError:
          debug << "QLocalSocket::DatagramTooLargeError";
          break;
+
       case QLocalSocket::ConnectionError:
          debug << "QLocalSocket::ConnectionError";
          break;
+
       case QLocalSocket::UnsupportedSocketOperationError:
          debug << "QLocalSocket::UnsupportedSocketOperationError";
          break;
+
       case QLocalSocket::UnknownSocketError:
          debug << "QLocalSocket::UnknownSocketError";
          break;
+
       default:
          debug << "QLocalSocket::SocketError(" << int(error) << ')';
          break;

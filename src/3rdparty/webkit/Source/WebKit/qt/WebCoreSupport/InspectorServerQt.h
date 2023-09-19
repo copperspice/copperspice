@@ -57,7 +57,7 @@ protected:
 
 private :
     WEB_CS_SLOT_1(Private, void newConnection())
-    WEB_CS_SLOT_2(newConnection) 
+    WEB_CS_SLOT_2(newConnection)
 
 private:
     QTcpServer* m_tcpServer;
@@ -90,11 +90,11 @@ public:
 
 private :
     WEB_CS_SLOT_1(Private, void tcpReadyRead())
-    WEB_CS_SLOT_2(tcpReadyRead) 
+    WEB_CS_SLOT_2(tcpReadyRead)
     WEB_CS_SLOT_1(Private, void tcpConnectionDisconnected())
-    WEB_CS_SLOT_2(tcpConnectionDisconnected) 
+    WEB_CS_SLOT_2(tcpConnectionDisconnected)
     WEB_CS_SLOT_1(Private, void webSocketReadyRead())
-    WEB_CS_SLOT_2(webSocketReadyRead) 
+    WEB_CS_SLOT_2(webSocketReadyRead)
 
     QTcpSocket* m_tcpConnection;
     InspectorServerQt* m_server;

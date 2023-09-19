@@ -149,7 +149,7 @@ bool QCoreApplicationPrivate::checkInstance(const char *function)
 {
    bool b = (QCoreApplication::m_self != nullptr);
 
-   if (!b) {
+   if (! b) {
       qWarning("QCoreApplication::%s: QApplication must be started before calling this method", function);
    }
 
@@ -561,7 +561,7 @@ void QCoreApplicationPrivate::init()
    Q_ASSERT_X(! QCoreApplication::m_self, "QCoreApplication", "There should be only one QApplication running");
    QCoreApplication::m_self = q;
 
-   // Store app name (so it's still available after QCoreApplication is destroyed)
+   // Store app name (so it is available after QCoreApplication is destroyed)
    if (! coreappdata()->applicationNameSet) {
       coreappdata()->application = appName();
    }
@@ -569,7 +569,7 @@ void QCoreApplicationPrivate::init()
    // emerald - may want to adjust the library path
 #if ! defined(QT_NO_SETTINGS)
    if (! coreappdata()->app_libpaths) {
-      // make sure that library paths is initialized
+      // make sure library paths is initialized
       q->libraryPaths();
 
    } else {
@@ -622,7 +622,7 @@ QCoreApplication::~QCoreApplication()
       globalThreadPool = QThreadPool::globalInstance();
 
    } catch (...) {
-      // swallow the exception, since destructors shouldn't throw
+      // consume the exception since destructors should not throw
    }
 
    if (globalThreadPool) {
@@ -864,7 +864,7 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
 
 int QCoreApplication::exec()
 {
-   if (!QCoreApplicationPrivate::checkInstance("exec")) {
+   if (! QCoreApplicationPrivate::checkInstance("exec")) {
       return -1;
    }
 
@@ -876,7 +876,7 @@ int QCoreApplication::exec()
       return -1;
    }
 
-   if (!threadData->eventLoops.isEmpty()) {
+   if (! threadData->eventLoops.isEmpty()) {
       qWarning("QCoreApplication::exec: Event loop is already running");
       return -1;
    }
@@ -930,7 +930,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
    QThreadData *data = CSInternalThreadData::get_m_ThreadData(receiver);
 
    if (! data) {
-      // posting during destruction? just delete the event to prevent a leak
+      // posting during destruction, delete the event to prevent a leak
       delete event;
       return;
    }
@@ -946,7 +946,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
       data = pdata.load();
 
       if (! data) {
-         // posting during destruction? just delete the event to prevent a leak
+         // posting during destruction, delete the event to prevent a leak
          delete event;
          return;
       }
@@ -1374,7 +1374,7 @@ void QCoreApplication::removeTranslator(QTranslator *translationFile)
 }
 
 QString QCoreApplication::translate(const char *context, const char *text, const char *comment,
-            std::optional<int> numArg)
+      std::optional<int> numArg)
 {
    QString retval;
 
@@ -1405,7 +1405,7 @@ QString QCoreApplication::translate(const char *context, const char *text, const
 }
 
 QString QCoreApplication::translate(const QString &context, const QString &text, const QString &comment,
-            std::optional<int> numArg)
+      std::optional<int> numArg)
 {
    QString retval;
 
@@ -1562,8 +1562,8 @@ QStringList QCoreApplication::arguments()
 #ifdef Q_OS_WIN
    list = qCmdLineArgs(0, nullptr);
 
-      // GUI app? Skip known - see qapplication.cpp
    if (m_self->d_func()->application_type) {
+      // GUI app? Skip known, refer to qapplication.cpp
       QStringList stripped;
 
       for (int a = 0; a < list.count(); ++a) {
@@ -1596,8 +1596,8 @@ QStringList QCoreApplication::arguments()
    const int ac = m_self->d_func()->argc;
    char **const av = m_self->d_func()->argv;
 
-   for (int a = 0; a < ac; ++a) {
-      list << QString::fromUtf8(av[a]);
+   for (int index = 0; index < ac; ++index) {
+      list << QString::fromUtf8(av[index]);
    }
 #endif
 

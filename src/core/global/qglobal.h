@@ -207,10 +207,8 @@
 #endif
 
 #if defined(Q_OS_DARWIN)
-
-// ensure it is not defined right now
+// ensure this is not defined yet
 #  undef Q_OS_IOS
-
 #endif
 
 #if defined(Q_OS_WIN)
