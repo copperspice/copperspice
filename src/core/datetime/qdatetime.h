@@ -100,8 +100,8 @@ class Q_CORE_EXPORT QDate
    QString toString(Qt::DateFormat format = Qt::TextDate) const;
    QString toString(const QString &format) const;
 
+   void getDate(int *year, int *month, int *day) const;
    bool setDate(int year, int month, int day);
-   void getDate(int *year, int *month, int *day);
 
 
    bool operator==(const QDate &value) const {

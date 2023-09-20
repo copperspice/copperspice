@@ -522,7 +522,7 @@ QString QDate::toString(const QString &format) const
    return QLocale::system().toString(*this, format);
 }
 
-void QDate::getDate(int *year, int *month, int *day)
+void QDate::getDate(int *year, int *month, int *day) const
 {
    ParsedDate pd = { 0, 0, 0 };
 
