@@ -2303,16 +2303,21 @@ QTime QTime::currentTime()
    return ct;
 }
 
-QDateTime QDateTime::currentDateTime()
+QDateTime QDateTime::currentDateTime(const QTimeZone &zone)
 {
-   QDate d;
-   QTime t;
-   SYSTEMTIME st;
-   memset(&st, 0, sizeof(SYSTEMTIME));
-   GetLocalTime(&st);
-   d.jd = julianDayFromDate(st.wYear, st.wMonth, st.wDay);
-   t.mds = msecsFromDecomposed(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-   return QDateTime(d, t);
+   SYSTEMTIME st = {};
+   GetSystemTime(&st);
+
+   QDate d(st.wYear, st.wMonth, st.wDay);
+   QTime t(msecsFromDecomposed(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds));
+
+   QDateTime retval(d, t, QTimeZone::utc());
+
+   if (zone != QTimeZone::utc()) {
+      retval = retval.toTimeZone(zone);
+   }
+
+   return retval;
 }
 
 QDateTime QDateTime::currentDateTimeUtc()
@@ -2350,9 +2355,9 @@ QTime QTime::currentTime()
    return QDateTime::currentDateTime().time();
 }
 
-QDateTime QDateTime::currentDateTime()
+QDateTime QDateTime::currentDateTime(const QTimeZone &zone)
 {
-   return fromMSecsSinceEpoch(currentMSecsSinceEpoch(), Qt::LocalTime);
+   return fromMSecsSinceEpoch(currentMSecsSinceEpoch(), zone);
 }
 
 QDateTime QDateTime::currentDateTimeUtc()

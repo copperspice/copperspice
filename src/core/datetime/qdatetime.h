@@ -359,7 +359,7 @@ class Q_CORE_EXPORT QDateTime
       return !(*this < value);
    }
 
-   static QDateTime currentDateTime();
+   static QDateTime currentDateTime(const QTimeZone &zone = QDate::default_tz());
    static QDateTime currentDateTimeUtc();
 
    static qint64 currentMSecsSinceEpoch();
