@@ -281,22 +281,113 @@ QDate::QDate(int y, int m, int d)
    setDate(y, m, d);
 }
 
-int QDate::year() const
+QDate QDate::addDays(qint64 ndays) const
 {
    if (isNull()) {
-      return 0;
+      return QDate();
    }
 
-   return getDateFromJulianDay(jd).year;
+   // Due to limits on minJd() and maxJd() any overflow
+   // will be invalid and caught by fromJulianDay()
+
+   return fromJulianDay(jd + ndays);
 }
 
-int QDate::month() const
+QDate QDate::addMonths(qint64 nmonths) const
 {
-   if (isNull()) {
+   if (! isValid()) {
+      return QDate();
+   }
+
+   if (! nmonths) {
+      return *this;
+   }
+
+   int old_y;
+   int y;
+   int m;
+   int d;
+
+   {
+      const ParsedDate pd = getDateFromJulianDay(jd);
+      y = pd.year;
+      m = pd.month;
+      d = pd.day;
+   }
+
+   old_y = y;
+
+   bool increasing = nmonths > 0;
+
+   while (nmonths != 0) {
+      if (nmonths < 0 && nmonths + 12 <= 0) {
+         --y;
+         nmonths += 12;
+
+      } else if (nmonths < 0) {
+         m += nmonths;
+         nmonths = 0;
+         if (m <= 0) {
+            --y;
+            m += 12;
+         }
+
+      } else if (nmonths - 12 >= 0) {
+         ++y;
+         nmonths -= 12;
+
+      } else if (m == 12) {
+         ++y;
+         m = 0;
+
+      } else {
+         m += nmonths;
+         nmonths = 0;
+
+         if (m > 12) {
+            ++y;
+            m -= 12;
+         }
+      }
+   }
+
+   // was there a sign change?
+   if ((old_y > 0 && y <= 0) || (old_y < 0 && y >= 0)) {
+      // adjust the date by plus 1 or minus 1 years
+      y += increasing ? +1 : -1;
+   }
+
+   return fixedDate(y, m, d);
+}
+
+QDate QDate::addYears(qint64 nyears) const
+{
+   if (! isValid()) {
+      return QDate();
+   }
+
+   ParsedDate pd = getDateFromJulianDay(jd);
+
+   int old_y = pd.year;
+   pd.year += nyears;
+
+   // was there a sign change?
+   if ((old_y > 0 && pd.year <= 0) || (old_y < 0 && pd.year >= 0)) {
+      // yes, adjust the date by +1 or -1 years
+      pd.year += nyears > 0 ? +1 : -1;
+   }
+
+   return fixedDate(pd.year, pd.month, pd.day);
+}
+
+qint64 QDate::daysTo(const QDate &d) const
+{
+   if (isNull() || d.isNull()) {
       return 0;
    }
 
-   return getDateFromJulianDay(jd).month;
+   // Due to limits on minJd() and maxJd() we know this will never overflow
+   return d.jd - jd;
 }
 
 int QDate::day() const
@@ -307,7 +398,6 @@ int QDate::day() const
 
    return getDateFromJulianDay(jd).day;
 }
-
 
 int QDate::dayOfWeek() const
 {
@@ -362,6 +452,15 @@ const QTimeZone & QDate::default_tz() {
    return retval;
 }
 
+int QDate::month() const
+{
+   if (isNull()) {
+      return 0;
+   }
+
+   return getDateFromJulianDay(jd).month;
+}
+
 int QDate::weekNumber(int *yearNumber) const
 {
    if (! isValid()) {
@@ -397,6 +496,15 @@ int QDate::weekNumber(int *yearNumber) const
    }
 
    return week;
+}
+
+int QDate::year() const
+{
+   if (isNull()) {
+      return 0;
+   }
+
+   return getDateFromJulianDay(jd).year;
 }
 
 QString QDate::shortMonthName(int month, QDate::MonthNameType type)
@@ -543,81 +651,6 @@ void QDate::getDate(int *year, int *month, int *day) const
    }
 }
 
-QDate QDate::addDays(qint64 ndays) const
-{
-   if (isNull()) {
-      return QDate();
-   }
-
-   // Due to limits on minJd() and maxJd() we know that any overflow
-   // will be invalid and caught by fromJulianDay().
-   return fromJulianDay(jd + ndays);
-}
-
-QDate QDate::addMonths(qint64 nmonths) const
-{
-   if (! isValid()) {
-      return QDate();
-   }
-   if (! nmonths) {
-      return *this;
-   }
-
-   int old_y, y, m, d;
-   {
-      const ParsedDate pd = getDateFromJulianDay(jd);
-      y = pd.year;
-      m = pd.month;
-      d = pd.day;
-   }
-
-   old_y = y;
-
-   bool increasing = nmonths > 0;
-
-   while (nmonths != 0) {
-      if (nmonths < 0 && nmonths + 12 <= 0) {
-         y--;
-         nmonths += 12;
-
-      } else if (nmonths < 0) {
-         m += nmonths;
-         nmonths = 0;
-         if (m <= 0) {
-            --y;
-            m += 12;
-         }
-
-      } else if (nmonths - 12 >= 0) {
-         y++;
-         nmonths -= 12;
-
-      } else if (m == 12) {
-         y++;
-         m = 0;
-
-      } else {
-         m += nmonths;
-         nmonths = 0;
-
-         if (m > 12) {
-            ++y;
-            m -= 12;
-         }
-      }
-   }
-
-   // was there a sign change?
-   if ((old_y > 0 && y <= 0) ||
-      (old_y < 0 && y >= 0))
-      // yes, adjust the date by +1 or -1 years
-   {
-      y += increasing ? +1 : -1;
-   }
-
-   return fixedDate(y, m, d);
-}
-
 bool QDate::setDate(int year, int month, int day)
 {
    if (isValid(year, month, day)) {
@@ -628,36 +661,6 @@ bool QDate::setDate(int year, int month, int day)
    }
 
    return isValid();
-}
-
-QDate QDate::addYears(qint64 nyears) const
-{
-   if (!isValid()) {
-      return QDate();
-   }
-
-   ParsedDate pd = getDateFromJulianDay(jd);
-
-   int old_y = pd.year;
-   pd.year += nyears;
-
-   // was there a sign change?
-   if ((old_y > 0 && pd.year <= 0) || (old_y < 0 && pd.year >= 0)) {
-      // yes, adjust the date by +1 or -1 years
-      pd.year += nyears > 0 ? +1 : -1;
-   }
-
-   return fixedDate(pd.year, pd.month, pd.day);
-}
-
-qint64 QDate::daysTo(const QDate &d) const
-{
-   if (isNull() || d.isNull()) {
-      return 0;
-   }
-
-   // Due to limits on minJd() and maxJd() we know this will never overflow
-   return d.jd - jd;
 }
 
 QDate QDate::fromString(const QString &string, Qt::DateFormat format)
