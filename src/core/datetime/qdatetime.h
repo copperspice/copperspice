@@ -49,6 +49,7 @@ class NSDate;
 
 // extra parentheses around min, avoids expanding if it is a macro (MSVC issue)
 static constexpr const qint64 INVALID_JD = (std::numeric_limits<qint64>::min)();
+static constexpr const qint64 MAX_C_TIME = (std::numeric_limits<time_t>::max)();
 
 class Q_CORE_EXPORT QDate
 {
