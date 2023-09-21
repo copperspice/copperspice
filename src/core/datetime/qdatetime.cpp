@@ -613,6 +613,7 @@ QString QDate::toString(Qt::DateFormat format) const
          return QLocale::c().toString(*this, "dd MMM yyyy");
 
       default:
+         [[fallthrough]];
 
       case Qt::TextDate:
          return toStringTextDate(*this);
@@ -685,6 +686,7 @@ QDate QDate::fromString(const QString &string, Qt::DateFormat format)
          return rfcDateImpl(string).date;
 
       default:
+         [[fallthrough]];
 
       case Qt::TextDate: {
          QList<QStringView> parts = QStringParser::split<QStringView>(string, ' ', QStringParser::SkipEmptyParts);
@@ -737,6 +739,7 @@ QDate QDate::fromString(const QString &string, const QString &format)
    QDate date;
 
    QDateTimeParser dt(QVariant::Date, QDateTimeParser::FromString);
+
    if (dt.parseFormat(format)) {
       dt.fromString(string, &date, nullptr);
    }
@@ -2068,6 +2071,8 @@ QString QDateTime::toString(Qt::DateFormat format) const
       }
 
       default:
+         [[fallthrough]];
+
       case Qt::TextDate: {
          const QPair<QDate, QTime> p = d->getDateTime();
          const QDate &dt = p.first;
