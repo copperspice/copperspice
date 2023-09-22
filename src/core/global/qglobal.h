@@ -855,8 +855,6 @@ class QIncompatibleFlag
     T i;
 };
 
-#ifndef Q_NO_TYPESAFE_FLAGS
-
 template <typename E>
 class QFlags
 {
@@ -993,7 +991,6 @@ template <typename T>  \
 inline QIncompatibleFlag<Flags::int_type> operator|(Flags::enum_type f1, T f2) \
    { return QIncompatibleFlag<Flags::int_type>(Flags::int_type(f1) | f2); }
 
-
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags) \
 constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, Flags::enum_type f2) \
    { return QFlags<Flags::enum_type>(f1) | f2; } \
@@ -1001,12 +998,6 @@ constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<
    { return f2 | f1; } \
 Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
-#else
-// Q_NO_TYPESAFE_FLAGS
-
-#define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags)
-
-#endif
 
 // raw pointer ( QEasingCurvePrivate, maybe a few other classes 12/28/2013 )
 template <typename T>

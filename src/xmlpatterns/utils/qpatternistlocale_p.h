@@ -220,7 +220,4 @@ static inline QString formatExpression(const QString &expr)
 
 }
 
-#ifdef Q_NO_TYPESAFE_FLAGS
-#error "Patternist does not compile with Q_NO_TYPESAFE_FLAGS set, because the code uses negative enum values. qglobal.h has typedef uint Flags."
-#endif
 #endif
