@@ -32,8 +32,6 @@
 #include <qxsdschemacontext_p.h>
 #include <qxsdwildcard_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdSchemaHelper
@@ -172,8 +170,7 @@ class XsdSchemaHelper
    XsdSchemaHelper(const XsdSchemaHelper &) = delete;
    XsdSchemaHelper &operator=(const XsdSchemaHelper &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

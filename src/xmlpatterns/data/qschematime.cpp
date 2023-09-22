@@ -26,8 +26,6 @@
 
 #include "qschematime_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SchemaTime::SchemaTime(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -99,5 +97,3 @@ ItemType::Ptr SchemaTime::type() const
 {
    return BuiltinTypes::xsTime;
 }
-
-QT_END_NAMESPACE

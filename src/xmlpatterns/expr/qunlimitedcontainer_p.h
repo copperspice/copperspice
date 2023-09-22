@@ -28,8 +28,6 @@
 #include <qexpression_p.h>
 #include <qgenericsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class UnlimitedContainer : public Expression
@@ -81,7 +79,5 @@ class UnlimitedContainer : public Expression
 
 
 }
-
-QT_END_NAMESPACE
 
 #endif

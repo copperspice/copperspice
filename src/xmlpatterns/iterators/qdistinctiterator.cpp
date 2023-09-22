@@ -23,8 +23,6 @@
 
 #include "qdistinctiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DistinctIterator::DistinctIterator(const Item::Iterator::Ptr &seq,
@@ -87,5 +85,3 @@ const SourceLocationReflection *DistinctIterator::actualReflection() const
 {
    return m_expr.data();
 }
-
-QT_END_NAMESPACE

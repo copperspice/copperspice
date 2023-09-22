@@ -25,8 +25,6 @@
 
 #include "qgenericnamespaceresolver_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GenericNamespaceResolver::GenericNamespaceResolver(const Bindings &list) : m_bindings(list)
@@ -75,5 +73,3 @@ NamespaceResolver::Bindings GenericNamespaceResolver::bindings() const
 {
    return m_bindings;
 }
-
-QT_END_NAMESPACE

@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class SimpleContentConstructor : public SingleContainer
 {
  public:
@@ -43,9 +42,7 @@ class SimpleContentConstructor : public SingleContainer
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
+
 }
-
-QT_END_NAMESPACE
-
 
 #endif

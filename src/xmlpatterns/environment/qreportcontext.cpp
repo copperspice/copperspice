@@ -28,8 +28,6 @@
 #include "qexpression_p.h"
 #include "qreportcontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ReportContext::~ReportContext()
@@ -1054,4 +1052,3 @@ QUrl ReportContext::resolveURI(const QUrl &relative, const QUrl &baseURI) const
    }
 }
 
-QT_END_NAMESPACE

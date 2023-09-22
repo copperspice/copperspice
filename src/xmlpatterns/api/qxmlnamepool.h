@@ -27,8 +27,6 @@
 #include <QSharedData>
 #include <QString>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class NamePool;
 class XsdSchemaParser;
@@ -63,7 +61,5 @@ class Q_XMLPATTERNS_EXPORT QXmlNamePool
    friend class QPatternistSDK::Global;
    QExplicitlySharedDataPointer<QPatternist::NamePool> d;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -26,8 +26,6 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ForClause : public PairContainer
 {
@@ -74,6 +72,5 @@ class ForClause : public PairContainer
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

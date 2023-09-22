@@ -35,8 +35,6 @@
 
 #include "qaggregatefns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item CountFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -276,5 +274,3 @@ SequenceType::Ptr SumFN::staticType() const
                                      t->cardinality().toWithoutMany());
    }
 }
-
-QT_END_NAMESPACE

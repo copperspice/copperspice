@@ -28,8 +28,6 @@
 #include <qsinglecontainer_p.h>
 #include <qcastingplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class UntypedAtomicConverter : public SingleContainer, public CastingPlatform<UntypedAtomicConverter, true>
@@ -69,7 +67,5 @@ Item UntypedAtomicConverter::mapToItem(const Item &item, const DynamicContext::P
    return cast(item, context);
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -35,8 +35,6 @@
 #include "qxmlutils_p.h"
 #include "qsequencegeneratingfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 IdFN::IdFN() : m_hasCreatedSorter(false)
@@ -260,5 +258,3 @@ Item::Iterator::Ptr CollectionFN::evaluateSequence(const DynamicContext::Ptr &co
       }
    }
 }
-
-QT_END_NAMESPACE

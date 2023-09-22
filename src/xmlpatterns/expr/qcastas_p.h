@@ -27,9 +27,8 @@
 #include <qsinglecontainer_p.h>
 #include <qcastingplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CastAs : public SingleContainer, public CastingPlatform<CastAs, true /* issueError */>
 {
  public:
@@ -88,8 +87,7 @@ class CastAs : public SingleContainer, public CastingPlatform<CastAs, true /* is
 
    const SequenceType::Ptr m_targetType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

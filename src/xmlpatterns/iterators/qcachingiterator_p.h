@@ -29,8 +29,6 @@
 #include <qdynamiccontext_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CachingIterator : public Item::Iterator
@@ -81,6 +79,5 @@ class CachingIterator : public Item::Iterator
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

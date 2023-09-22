@@ -32,8 +32,6 @@
 #include <qresourceloader_p.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 class QUrl;
 
 namespace QPatternist {
@@ -241,7 +239,5 @@ class StaticContext : public ReportContext
                            const QExplicitlySharedDataPointer<Expression> &newNode);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

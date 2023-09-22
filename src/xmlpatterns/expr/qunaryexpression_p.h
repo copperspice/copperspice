@@ -24,8 +24,6 @@
 #ifndef QUnaryExpression_P_H
 #define QUnaryExpression_P_H
 
-QT_BEGIN_NAMESPACE
-
 #include <qarithmeticexpression_p.h>
 
 namespace QPatternist {
@@ -42,8 +40,7 @@ class UnaryExpression : public ArithmeticExpression
    UnaryExpression(const UnaryExpression &) = delete;
    UnaryExpression &operator=(const UnaryExpression &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

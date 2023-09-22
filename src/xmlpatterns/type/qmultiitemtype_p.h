@@ -27,8 +27,6 @@
 #include <QList>
 #include <qitemtype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class MultiItemType : public ItemType
@@ -93,8 +91,7 @@ class MultiItemType : public ItemType
    const ItemType::List m_types;
    const ItemType::List::const_iterator m_end;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -23,8 +23,6 @@
 
 #include "qargumentreference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ArgumentReference::ArgumentReference(const SequenceType::Ptr &sourceType,
@@ -63,5 +61,3 @@ Expression::ID ArgumentReference::id() const
 {
    return IDArgumentReference;
 }
-
-QT_END_NAMESPACE

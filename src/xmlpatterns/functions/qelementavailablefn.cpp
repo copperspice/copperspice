@@ -25,8 +25,6 @@
 
 #include "qelementavailablefn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ElementAvailableFN::ElementAvailableFN() : m_xsltInstructions(allXSLTInstructions())
@@ -98,5 +96,3 @@ bool ElementAvailableFN::evaluateEBV(const DynamicContext::Ptr &context) const
 
    return m_xsltInstructions.contains(localName);
 }
-
-QT_END_NAMESPACE

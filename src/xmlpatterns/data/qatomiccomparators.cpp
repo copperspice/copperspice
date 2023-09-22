@@ -30,8 +30,6 @@
 
 #include "qatomiccomparators_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicComparator::ComparisonResult
@@ -356,4 +354,3 @@ AbstractDurationComparator::compare(const Item &o1,
 }
 
 /* -------------------------------------------------- */
-QT_END_NAMESPACE

@@ -39,9 +39,8 @@
 #include <qxsdsimpletype_p.h>
 #include <QExplicitlySharedDataPointer>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdSchemaContext;
 class XsdSchemaParserContext;
 
@@ -536,8 +535,7 @@ class XsdSchemaResolver : public QSharedData
    bool                                                 m_defaultOpenContentAppliesToEmpty;
    SchemaType::List                                     m_predefinedSchemaTypes;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

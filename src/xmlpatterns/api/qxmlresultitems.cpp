@@ -25,8 +25,6 @@
 #include "qxmlresultitems_p.h"
 #include "qitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
 /*!
   \class QXmlResultItems
   \brief The QXmlResultItems class iterates through the results of evaluating an XQuery in QXmlQuery.
@@ -128,6 +126,3 @@ bool QXmlResultItems::hasError() const
    Q_D(const QXmlResultItems);
    return d->hasError;
 }
-
-QT_END_NAMESPACE
-

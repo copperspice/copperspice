@@ -26,9 +26,8 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ProcessingInstructionConstructor : public PairContainer
 {
  public:
@@ -52,8 +51,8 @@ class ProcessingInstructionConstructor : public PairContainer
 
    QString data(const DynamicContext::Ptr &context) const;
 };
+
 }
 
-QT_END_NAMESPACE
 
 #endif

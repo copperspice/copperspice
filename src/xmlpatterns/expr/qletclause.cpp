@@ -25,10 +25,7 @@
 #include "qcommonsequencetypes_p.h"
 #include "qdynamiccontextstore_p.h"
 #include "qliteral_p.h"
-
 #include "qletclause_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -122,5 +119,3 @@ Expression::ID LetClause::id() const
 {
    return IDLetClause;
 }
-
-QT_END_NAMESPACE

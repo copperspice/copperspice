@@ -25,8 +25,6 @@
 
 #include "qgenericsequencetype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GenericSequenceType::GenericSequenceType(const ItemType::Ptr &iType,
@@ -50,5 +48,3 @@ ItemType::Ptr GenericSequenceType::itemType() const
 {
    return m_itemType;
 }
-
-QT_END_NAMESPACE

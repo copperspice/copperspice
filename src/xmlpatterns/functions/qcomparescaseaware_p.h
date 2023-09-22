@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ComparesCaseAware : public FunctionCall
@@ -45,7 +43,5 @@ class ComparesCaseAware : public FunctionCall
    Qt::CaseSensitivity m_caseSensitivity;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

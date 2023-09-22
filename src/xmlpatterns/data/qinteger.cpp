@@ -27,8 +27,6 @@
 
 #include "qinteger_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item Integer::fromValue(const xsInteger num)
@@ -143,5 +141,3 @@ quint64 Integer::toUnsignedInteger() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
-
-QT_END_NAMESPACE

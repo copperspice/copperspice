@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CurrentFN : public FunctionCall
@@ -41,8 +39,7 @@ class CurrentFN : public FunctionCall
  private:
    ItemType::Ptr m_itemType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

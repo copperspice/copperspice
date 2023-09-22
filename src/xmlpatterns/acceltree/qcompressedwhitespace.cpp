@@ -25,8 +25,6 @@
 
 #include "qcompressedwhitespace_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CompressedWhitespace::CharIdentifier CompressedWhitespace::toIdentifier(const QChar ch)

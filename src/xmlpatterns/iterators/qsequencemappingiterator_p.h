@@ -27,8 +27,6 @@
 #include <qabstractxmlforwarditerator_p.h>
 #include <qdynamiccontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename TResult, typename TSource, typename TMapper>
@@ -149,6 +147,5 @@ makeSequenceMappingIterator(const TMapper &mapper,
 }
 }
 
-QT_END_NAMESPACE
 
 #endif

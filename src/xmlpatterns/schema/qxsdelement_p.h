@@ -32,7 +32,6 @@
 #include <QList>
 #include <QSet>
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -349,6 +348,5 @@ class XsdElement : public XsdTerm
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

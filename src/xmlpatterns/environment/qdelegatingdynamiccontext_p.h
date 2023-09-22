@@ -27,8 +27,6 @@
 #include <qdynamiccontext_p.h>
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DelegatingDynamicContext : public DynamicContext
@@ -78,7 +76,5 @@ class DelegatingDynamicContext : public DynamicContext
    const DynamicContext::Ptr m_prevContext;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -33,8 +33,6 @@
 #include <qtokenizer_p.h>
 #include <qxslttokenlookup_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class SingleTokenContainer : public TokenSource
@@ -402,8 +400,7 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
 
    ParserContext::Ptr                          m_parseInfo;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

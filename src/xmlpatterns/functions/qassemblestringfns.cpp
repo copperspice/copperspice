@@ -29,8 +29,6 @@
 
 #include "qassemblestringfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /*
@@ -94,5 +92,3 @@ Item::Iterator::Ptr StringToCodepointsFN::evaluateSequence(const DynamicContext:
       return Item::Iterator::Ptr(new ToCodepointsIterator(str));
    }
 }
-
-QT_END_NAMESPACE

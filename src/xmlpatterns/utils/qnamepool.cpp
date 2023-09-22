@@ -26,8 +26,6 @@
 #include "qxpathhelper_p.h"
 #include "qnamepool_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NamePool::NamePool()
@@ -397,4 +395,3 @@ QXmlName NamePool::fromClarkName(const QString &clarkName)
       }
    }
 }
-QT_END_NAMESPACE

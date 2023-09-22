@@ -26,8 +26,6 @@
 
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Validate
@@ -56,8 +54,7 @@ class Validate
    Validate(const Validate &) = delete;
    Validate &operator=(const Validate &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

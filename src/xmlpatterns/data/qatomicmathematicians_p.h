@@ -27,8 +27,6 @@
 #include <qatomicmathematician_p.h>
 #include <qsourcelocationreflection_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DecimalMathematician : public AtomicMathematician
@@ -127,7 +125,5 @@ class AbstractDateTimeMathematician : public AtomicMathematician
                           const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

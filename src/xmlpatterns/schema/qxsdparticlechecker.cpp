@@ -32,8 +32,6 @@
 
 #include <QFile>
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 namespace QPatternist {
@@ -599,5 +597,3 @@ bool XsdParticleChecker::subsumes(const XsdParticle::Ptr &particle, const XsdPar
 
    return true;
 }
-
-QT_END_NAMESPACE

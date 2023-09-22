@@ -30,8 +30,6 @@
 
 #include "qattributenamevalidator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AttributeNameValidator::AttributeNameValidator(const Expression::Ptr &source) : SingleContainer(source)
@@ -79,5 +77,3 @@ ExpressionVisitorResult::Ptr AttributeNameValidator::accept(const ExpressionVisi
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

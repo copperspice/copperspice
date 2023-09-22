@@ -26,8 +26,6 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CopyOf : public SingleContainer
@@ -69,8 +67,7 @@ class CopyOf : public SingleContainer
    const bool                                      m_preserveNamespaces;
    const QAbstractXmlNodeModel::NodeCopySettings   m_settings;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

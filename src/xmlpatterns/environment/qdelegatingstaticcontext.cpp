@@ -30,8 +30,6 @@
 
 #include "qstaticfocuscontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DelegatingStaticContext::DelegatingStaticContext(const StaticContext::Ptr &context) : m_context(context)
@@ -239,5 +237,3 @@ void DelegatingStaticContext::setCompatModeEnabled(const bool newVal)
 {
    m_context->setCompatModeEnabled(newVal);
 }
-
-QT_END_NAMESPACE

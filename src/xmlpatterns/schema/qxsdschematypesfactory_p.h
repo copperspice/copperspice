@@ -27,8 +27,6 @@
 #include <QHash>
 #include <qschematypefactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdSchemaTypesFactory : public SchemaTypeFactory
@@ -63,8 +61,7 @@ class XsdSchemaTypesFactory : public SchemaTypeFactory
    NamePool::Ptr                  m_namePool;
    mutable SchemaTypeFactory::Ptr m_basicTypesFactory;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

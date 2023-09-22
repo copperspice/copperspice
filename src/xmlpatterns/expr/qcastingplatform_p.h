@@ -36,8 +36,6 @@
 #include <qstaticcontext_p.h>
 #include <qvalidationerror_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename TSubClass, const bool issueError>
@@ -95,7 +93,5 @@ class CastingPlatform
 #include "qcastingplatform.cpp"
 
 }
-
-QT_END_NAMESPACE
 
 #endif

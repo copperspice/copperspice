@@ -23,8 +23,6 @@
 
 #include "qxsdinstancereader_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdInstanceReader::XsdInstanceReader(const QAbstractXmlNodeModel *model, const XsdSchemaContext::Ptr &context)
@@ -177,5 +175,3 @@ QVector<QXmlName> XsdInstanceReader::namespaceBindings(const QXmlNodeModelIndex 
 {
    return index.namespaceBindings();
 }
-
-QT_END_NAMESPACE

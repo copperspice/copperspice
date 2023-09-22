@@ -26,8 +26,6 @@
 
 #include "qbuiltinatomictypes_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /* -------------------------------------------------------------- */
@@ -205,4 +203,3 @@ implementName(YearMonthDuration,    QLatin1String("yearMonthDuration"))
 #undef deployFull
 #undef deployMathComp
 
-QT_END_NAMESPACE

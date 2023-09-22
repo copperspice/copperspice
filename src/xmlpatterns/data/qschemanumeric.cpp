@@ -37,8 +37,6 @@
  * but was renamed to stay consistent with qschemanumeric_p.h
  */
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicValue::Ptr Numeric::fromLexical(const QString &number)
@@ -70,5 +68,3 @@ xsDouble Numeric::roundFloat(const xsDouble val)
 
    }
 }
-
-QT_END_NAMESPACE

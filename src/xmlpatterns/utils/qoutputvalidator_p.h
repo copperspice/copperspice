@@ -29,8 +29,6 @@
 #include <qabstractxmlreceiver.h>
 #include <qsourcelocationreflection_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLocationReflection
@@ -69,7 +67,5 @@ class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLoca
    const bool m_isXSLT;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -30,8 +30,6 @@
 #include <quserfunction_p.h>
 #include <qvariabledeclaration_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class UserFunctionCallsite : public CallSite
 {
@@ -131,7 +129,5 @@ static inline QString formatFunction(const UserFunctionCallsite::Ptr &func)
           QLatin1String("</span>");
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

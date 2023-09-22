@@ -27,8 +27,6 @@
 #include <qatomicmathematician_p.h>
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ArithmeticExpression : public PairContainer
@@ -73,7 +71,5 @@ inline AtomicMathematician::Operator ArithmeticExpression::operatorID() const
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

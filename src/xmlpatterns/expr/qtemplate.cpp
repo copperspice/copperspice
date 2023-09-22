@@ -23,10 +23,7 @@
 
 #include "qdynamiccontextstore_p.h"
 #include "qpatternistlocale_p.h"
-
 #include "qtemplate_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -198,5 +195,3 @@ Expression::Properties Template::dependencies() const
 
    return collect & (Expression::RequiresFocus | Expression::IsEvaluated | Expression::DisableElimination);
 }
-
-QT_END_NAMESPACE

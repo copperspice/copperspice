@@ -23,8 +23,4 @@
 
 #include "qnodebuilder_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
-
-QT_END_NAMESPACE

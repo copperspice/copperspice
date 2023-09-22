@@ -27,8 +27,6 @@
 #include <qatomictype_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class AnyNodeType : public ItemType
 {
@@ -65,8 +63,7 @@ class AnyNodeType : public ItemType
    }
 
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

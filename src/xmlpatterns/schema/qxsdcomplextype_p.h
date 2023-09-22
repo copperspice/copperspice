@@ -33,8 +33,6 @@
 #include <qxsdwildcard_p.h>
 #include <QSet>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdComplexType : public XsdUserSchemaType<AnyType>
@@ -349,8 +347,8 @@ class XsdComplexType : public XsdUserSchemaType<AnyType>
    BlockingConstraints       m_prohibitedSubstitutions;
    XsdAssertion::List        m_assertions;
 };
+
 }
 
-QT_END_NAMESPACE
 
 #endif

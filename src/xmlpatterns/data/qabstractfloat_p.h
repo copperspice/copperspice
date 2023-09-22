@@ -32,8 +32,6 @@
 #include <qvalidationerror_p.h>
 #include <qbuiltintypes_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 template <const bool isDouble>
 class AbstractFloat : public Numeric
@@ -128,8 +126,5 @@ typedef AbstractFloat<true> Double;
  */
 typedef AbstractFloat<false> Float;
 }
-
-QT_END_NAMESPACE
-
 
 #endif

@@ -26,9 +26,8 @@
 
 #include <QSharedData>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AnyAtomicType;
 class AnyURIType;
 class Base64BinaryType;
@@ -208,8 +207,7 @@ class ParameterizedAtomicTypeVisitor : public QSharedData
    virtual AtomicTypeVisitorResult::Ptr visit(const YearMonthDurationType *, const qint16 param,
          const SourceLocationReflection *const reflection) const = 0;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

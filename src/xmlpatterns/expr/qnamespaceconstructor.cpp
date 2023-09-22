@@ -25,8 +25,6 @@
 
 #include "qnamespaceconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NamespaceConstructor::NamespaceConstructor(const QXmlName nb) : m_binding(nb)
@@ -65,5 +63,3 @@ Expression::ID NamespaceConstructor::id() const
 {
    return IDNamespaceConstructor;
 }
-
-QT_END_NAMESPACE

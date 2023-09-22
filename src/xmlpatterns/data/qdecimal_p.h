@@ -26,8 +26,6 @@
 
 #include <qschemanumeric_p.h>
 
-QT_BEGIN_NAMESPACE
-
 Q_CORE_EXPORT char *qdtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve, char **resultp);
 
 namespace QPatternist {
@@ -91,7 +89,5 @@ class Decimal : public Numeric
    const xsDecimal m_value;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

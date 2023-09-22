@@ -28,8 +28,6 @@
 #include <qatomiccomparator_p.h>
 #include <qprimitives_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class StringComparator : public AtomicComparator
@@ -163,7 +161,5 @@ class AbstractDurationComparator : public AtomicComparator
          const AbstractDuration *const duration);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

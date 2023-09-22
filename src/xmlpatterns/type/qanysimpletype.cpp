@@ -25,8 +25,6 @@
 
 #include "qanysimpletype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AnySimpleType::AnySimpleType()
@@ -71,5 +69,3 @@ bool AnySimpleType::isComplexType() const
 {
    return false;
 }
-
-QT_END_NAMESPACE

@@ -22,10 +22,7 @@
 ***********************************************************************/
 
 #include "qbuiltintypes_p.h"
-
 #include "qpaircontainer_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -63,5 +60,3 @@ bool PairContainer::compressOperands(const StaticContext::Ptr &context)
 
    return m_operand1->isEvaluated() && m_operand2->isEvaluated();
 }
-
-QT_END_NAMESPACE

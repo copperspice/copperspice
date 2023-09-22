@@ -27,9 +27,8 @@
 #include <qsinglecontainer_p.h>
 #include <qcastingplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CastableAs : public SingleContainer, public CastingPlatform<CastableAs, false>
 {
  public:
@@ -58,8 +57,7 @@ class CastableAs : public SingleContainer, public CastingPlatform<CastableAs, fa
  private:
    const SequenceType::Ptr m_targetType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

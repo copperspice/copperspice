@@ -31,8 +31,6 @@
 #include <QStack>
 #include <QXmlStreamNamespaceDeclarations>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NamespaceSupport
@@ -123,8 +121,7 @@ class NamespaceSupport
    QStack<NamespaceHash> m_nsStack;
    NamespaceHash         m_ns;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

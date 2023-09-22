@@ -26,16 +26,13 @@
 
 #include <qstaticbaseuricontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class UnparsedTextAvailableFN : public StaticBaseUriContainer
 {
  public:
    bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

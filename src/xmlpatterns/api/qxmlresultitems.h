@@ -27,8 +27,6 @@
 #include <QString>
 #include <QScopedPointer>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlItem;
 class QXmlQuery;
 class QXmlResultItemsPrivate;
@@ -52,7 +50,5 @@ class Q_XMLPATTERNS_EXPORT QXmlResultItems
 
    QScopedPointer<QXmlResultItemsPrivate> d_ptr;
 };
-
-QT_END_NAMESPACE
 
 #endif

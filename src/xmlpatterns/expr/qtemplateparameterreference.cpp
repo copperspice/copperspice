@@ -25,8 +25,6 @@
 
 #include "qtemplateparameterreference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 TemplateParameterReference::TemplateParameterReference(const VariableDeclaration *varDecl) : m_varDecl(varDecl)
@@ -70,5 +68,3 @@ SequenceType::Ptr TemplateParameterReference::staticType() const
       return m_varDecl->sequenceType;
    }
 }
-
-QT_END_NAMESPACE

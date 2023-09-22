@@ -31,8 +31,6 @@
 
 #include "qelementconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ElementConstructor::ElementConstructor(const Expression::Ptr &op1, const Expression::Ptr &op2, const bool isXSLT)
@@ -133,5 +131,3 @@ ElementConstructor::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

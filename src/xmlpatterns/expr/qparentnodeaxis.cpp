@@ -23,10 +23,7 @@
 
 #include "qbuiltintypes_p.h"
 #include "qcommonsequencetypes_p.h"
-
 #include "qparentnodeaxis_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -55,5 +52,3 @@ SequenceType::Ptr ParentNodeAxis::staticType() const
    // Parentless node exists.
    return CommonSequenceTypes::ZeroOrOneNode;
 }
-
-QT_END_NAMESPACE

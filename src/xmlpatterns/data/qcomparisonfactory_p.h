@@ -30,8 +30,6 @@
 #include <qreportcontext_p.h>
 #include <qschematype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ComparisonFactory
@@ -75,7 +73,5 @@ class ComparisonFactory
    ComparisonFactory &operator=(const ComparisonFactory &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

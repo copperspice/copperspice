@@ -37,8 +37,6 @@
 
 #include "qcastas_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CastAs::CastAs(const Expression::Ptr &source,
@@ -181,4 +179,3 @@ ExpressionVisitorResult::Ptr CastAs::accept(const ExpressionVisitor::Ptr &visito
    return visitor->visit(this);
 }
 
-QT_END_NAMESPACE

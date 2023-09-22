@@ -24,10 +24,7 @@
 #include "qcommonsequencetypes_p.h"
 #include "qexpressionsequence_p.h"
 #include "qsorttuple_p.h"
-
 #include "qreturnorderby_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -109,5 +106,3 @@ Expression::ID ReturnOrderBy::id() const
 {
    return IDReturnOrderBy;
 }
-
-QT_END_NAMESPACE

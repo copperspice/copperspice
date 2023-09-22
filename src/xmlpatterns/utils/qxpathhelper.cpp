@@ -29,8 +29,6 @@
 #include "qnamepool_p.h"
 #include "qxpathhelper_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool XPathHelper::isReservedNamespace(const QXmlName::NamespaceCode ns)
@@ -113,5 +111,3 @@ QUrl XPathHelper::normalizeQueryURI(const QUrl &uri)
       return uri;
    }
 }
-
-QT_END_NAMESPACE

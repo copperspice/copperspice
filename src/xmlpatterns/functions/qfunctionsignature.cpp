@@ -25,8 +25,6 @@
 
 #include "qfunctionsignature_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 FunctionSignature::FunctionSignature(const QXmlName nameP,
@@ -136,5 +134,3 @@ Expression::ID FunctionSignature::id() const
 {
    return m_id;
 }
-
-QT_END_NAMESPACE

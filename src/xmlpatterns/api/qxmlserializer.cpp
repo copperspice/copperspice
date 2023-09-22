@@ -28,8 +28,6 @@
 #include "qxmlserializer_p.h"
 #include "qxmlserializer.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QXmlSerializerPrivate::QXmlSerializerPrivate(const QXmlQuery &query,
@@ -598,5 +596,3 @@ void QXmlSerializer::endOfSequence()
     * QXmlFormatter::endOfSequence().
     */
 }
-
-QT_END_NAMESPACE

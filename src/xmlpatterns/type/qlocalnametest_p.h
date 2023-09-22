@@ -27,8 +27,6 @@
 #include <qabstractnodetest_p.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class LocalNameTest : public AbstractNodeTest
@@ -56,8 +54,7 @@ class LocalNameTest : public AbstractNodeTest
 
    const QXmlName::LocalNameCode m_ncName;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

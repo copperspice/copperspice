@@ -23,8 +23,6 @@
 
 #include "qxsdattributeuse_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAttributeUse::ValueConstraint::setVariety(Variety variety)
@@ -120,4 +118,3 @@ XsdAttributeUse::ValueConstraint::Ptr XsdAttributeUse::valueConstraint() const
    return m_valueConstraint;
 }
 
-QT_END_NAMESPACE

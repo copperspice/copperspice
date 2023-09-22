@@ -28,8 +28,6 @@
 #include <qatomiccaster_p.h>
 #include <qschemanumeric_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template <const bool isDouble>
@@ -62,7 +60,5 @@ typedef StringToAbstractFloatCaster<false> StringToFloatCaster;
 typedef BooleanToAbstractFloatCaster<true> BooleanToDoubleCaster;
 typedef BooleanToAbstractFloatCaster<false> BooleanToFloatCaster;
 }
-
-QT_END_NAMESPACE
 
 #endif

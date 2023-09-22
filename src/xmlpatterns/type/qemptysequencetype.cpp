@@ -26,8 +26,6 @@
 
 #include "qemptysequencetype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 EmptySequenceType::EmptySequenceType()
@@ -79,5 +77,3 @@ ItemType::Ptr EmptySequenceType::atomizedType() const
 {
    return BuiltinTypes::xsAnyAtomicType;
 }
-
-QT_END_NAMESPACE

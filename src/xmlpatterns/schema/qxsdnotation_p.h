@@ -30,7 +30,6 @@
 #include <qxsdannotated_p.h>
 #include <QList>
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 class XsdNotation : public NamedSchemaComponent, public XsdAnnotated
@@ -69,6 +68,5 @@ class XsdNotation : public NamedSchemaComponent, public XsdAnnotated
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

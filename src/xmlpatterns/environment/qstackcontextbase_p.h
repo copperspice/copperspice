@@ -29,8 +29,6 @@
 #include <qdelegatingdynamiccontext_p.h>
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 template<typename TSuperClass>
 class StackContextBase : public TSuperClass
@@ -82,7 +80,5 @@ class StackContextBase : public TSuperClass
  */
 typedef StackContextBase<DelegatingDynamicContext> StackContext;
 }
-
-QT_END_NAMESPACE
 
 #endif

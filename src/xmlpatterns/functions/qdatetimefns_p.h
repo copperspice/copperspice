@@ -32,8 +32,6 @@
 #include <qinteger_p.h>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename TSubClass>
@@ -151,8 +149,5 @@ class MonthFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MonthFromAbstra
 #include "qdatetimefns.cpp"
 
 }
-
-QT_END_NAMESPACE
-
 
 #endif

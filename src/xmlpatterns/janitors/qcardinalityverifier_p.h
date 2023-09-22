@@ -26,8 +26,6 @@
 
 #include "qsinglecontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CardinalityVerifier : public SingleContainer
@@ -78,8 +76,7 @@ class CardinalityVerifier : public SingleContainer
    const bool m_allowsMany;
    const ReportContext::ErrorCode m_errorCode;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

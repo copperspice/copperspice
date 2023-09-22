@@ -23,8 +23,6 @@
 
 #include "qunlimitedcontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UnlimitedContainer::UnlimitedContainer(const Expression::List &ops) : m_operands(ops)
@@ -57,5 +55,3 @@ bool UnlimitedContainer::compressOperands(const StaticContext::Ptr &context)
 
    return evaled == m_operands.count();
 }
-
-QT_END_NAMESPACE

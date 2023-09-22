@@ -31,8 +31,6 @@
 #include <qinteger_p.h>
 #include <qvalidationerror_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<TypeOfDerivedString DerivedType>
@@ -373,7 +371,5 @@ class NumericToDerivedIntegerCaster : public AtomicCaster
    }
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

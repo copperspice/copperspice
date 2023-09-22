@@ -23,8 +23,6 @@
 
 #include "qstaticbaseuricontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticBaseURIContext::StaticBaseURIContext(const QUrl &bURI,
@@ -41,4 +39,3 @@ QUrl StaticBaseURIContext::baseURI() const
    return m_baseURI;
 }
 
-QT_END_NAMESPACE

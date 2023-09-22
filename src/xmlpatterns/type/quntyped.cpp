@@ -25,8 +25,6 @@
 
 #include "quntyped_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Untyped::Untyped()
@@ -57,5 +55,3 @@ SchemaType::DerivationMethod Untyped::derivationMethod() const
 {
    return NoDerivation;
 }
-
-QT_END_NAMESPACE

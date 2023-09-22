@@ -31,8 +31,6 @@
 
 #include "qcastableas_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CastableAs::CastableAs(const Expression::Ptr &operand,
@@ -133,4 +131,3 @@ ExpressionVisitorResult::Ptr CastableAs::accept(const ExpressionVisitor::Ptr &vi
    return visitor->visit(this);
 }
 
-QT_END_NAMESPACE

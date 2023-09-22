@@ -28,8 +28,6 @@
 
 #include "qdelegatingdynamiccontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DelegatingDynamicContext::DelegatingDynamicContext(const DynamicContext::Ptr &prevContext)
@@ -190,5 +188,3 @@ QExplicitlySharedDataPointer<TemplateMode> DelegatingDynamicContext::currentTemp
 {
    return m_prevContext->currentTemplateMode();
 }
-
-QT_END_NAMESPACE

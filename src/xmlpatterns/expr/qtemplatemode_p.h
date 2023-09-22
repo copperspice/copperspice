@@ -28,7 +28,6 @@
 #include <QXmlName>
 #include <qtemplatepattern_p.h>
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -71,6 +70,5 @@ void TemplateMode::addMode(const TemplateMode::Ptr &mode)
 
 }
 
-QT_END_NAMESPACE
 
 #endif

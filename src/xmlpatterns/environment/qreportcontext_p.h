@@ -31,14 +31,11 @@
 #include <qxmlname.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 class QAbstractMessageHandler;
 class QSourceLocation;
 
 namespace QPatternist {
 class SourceLocationReflection;
-
 
 class ReportContext : public QSharedData
 {
@@ -2367,7 +2364,5 @@ class ReportContext : public QSharedData
  */
 typedef bool Exception;
 }
-
-QT_END_NAMESPACE
 
 #endif

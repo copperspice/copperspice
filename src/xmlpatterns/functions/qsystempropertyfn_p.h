@@ -26,8 +26,6 @@
 
 #include <qstaticnamespacescontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class SystemPropertyFN : public StaticNamespacesContainer
 {
@@ -44,8 +42,7 @@ class SystemPropertyFN : public StaticNamespacesContainer
     */
    static QString retrieveProperty(const QXmlName name);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

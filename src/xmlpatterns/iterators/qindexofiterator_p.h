@@ -30,9 +30,8 @@
 #include <qdynamiccontext_p.h>
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class IndexOfIterator : public Item::Iterator
    , public ComparisonPlatform<IndexOfIterator, false>
    , public SourceLocationReflection
@@ -79,8 +78,7 @@ class IndexOfIterator : public Item::Iterator
    xsInteger                   m_position;
    xsInteger                   m_seqPos;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ItemVerifier : public SingleContainer
 {
  public:
@@ -55,8 +54,7 @@ class ItemVerifier : public SingleContainer
    const ItemType::Ptr             m_reqType;
    const ReportContext::ErrorCode  m_errorCode;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

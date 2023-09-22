@@ -26,9 +26,8 @@
 
 #include <qfunctionargument_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class WithParam : public FunctionArgument
 {
  public:
@@ -61,7 +60,5 @@ WithParam::WithParam(const QXmlName name,
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

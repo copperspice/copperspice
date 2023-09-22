@@ -25,8 +25,6 @@
 
 #include "qacceliterators_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 xsInteger AccelIterator::position() const
@@ -160,6 +158,3 @@ QXmlNodeModelIndex::Iterator::Ptr AttributeIterator::copy() const
 {
    return QXmlNodeModelIndex::Iterator::Ptr(new AttributeIterator(m_document, m_preNumber));
 }
-
-QT_END_NAMESPACE
-

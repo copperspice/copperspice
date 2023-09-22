@@ -25,8 +25,6 @@
 
 #include "qmultiitemtype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 MultiItemType::MultiItemType(const ItemType::List &list) : m_types(list),
@@ -124,5 +122,3 @@ ItemType::Ptr MultiItemType::atomizedType() const
 
    return result;
 }
-
-QT_END_NAMESPACE

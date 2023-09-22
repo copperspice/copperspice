@@ -28,8 +28,6 @@
 
 #include "qebvextractor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 EBVExtractor::EBVExtractor(const Expression::Ptr &operand) : SingleContainer(operand)
@@ -68,5 +66,3 @@ ExpressionVisitorResult::Ptr EBVExtractor::accept(const ExpressionVisitor::Ptr &
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

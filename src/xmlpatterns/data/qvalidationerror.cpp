@@ -23,8 +23,6 @@
 
 #include "qvalidationerror_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ValidationError::ValidationError(const QString &msg,
@@ -65,5 +63,3 @@ ReportContext::ErrorCode ValidationError::errorCode() const
 {
    return m_code;
 }
-
-QT_END_NAMESPACE

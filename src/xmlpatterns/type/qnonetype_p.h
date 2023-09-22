@@ -27,8 +27,6 @@
 #include <qatomictype_p.h>
 #include <qsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NoneType : public ItemType, public SequenceType
@@ -105,7 +103,5 @@ class NoneType : public ItemType, public SequenceType
    NoneType();
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

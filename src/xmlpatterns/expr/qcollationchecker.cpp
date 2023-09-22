@@ -23,10 +23,7 @@
 
 #include "qcommonsequencetypes_p.h"
 #include "qxpathhelper_p.h"
-
 #include "qcollationchecker_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -57,5 +54,3 @@ ExpressionVisitorResult::Ptr CollationChecker::accept(const ExpressionVisitor::P
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

@@ -27,8 +27,6 @@
 
 #include "qdynamiccontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DynamicContext::Ptr DynamicContext::createFocus()
@@ -46,5 +44,3 @@ DynamicContext::Ptr DynamicContext::createReceiverContext(QAbstractXmlReceiver *
    Q_ASSERT(receiver);
    return Ptr(new ReceiverDynamicContext(Ptr(this), receiver));
 }
-
-QT_END_NAMESPACE

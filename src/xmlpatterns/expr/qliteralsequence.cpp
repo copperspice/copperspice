@@ -24,10 +24,7 @@
 #include "qbuiltintypes_p.h"
 #include "qcommonsequencetypes_p.h"
 #include "qgenericsequencetype_p.h"
-
 #include "qliteralsequence_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -71,5 +68,3 @@ Expression::Properties LiteralSequence::properties() const
 {
    return IsEvaluated;
 }
-
-QT_END_NAMESPACE

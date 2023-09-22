@@ -28,8 +28,6 @@
 
 #include "qtextnodeconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 TextNodeConstructor::TextNodeConstructor(const Expression::Ptr &op) : SingleContainer(op)
@@ -95,5 +93,3 @@ TextNodeConstructor::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

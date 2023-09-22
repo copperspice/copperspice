@@ -26,16 +26,14 @@
 
 #include <qcontextnodechecker_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class UnparsedEntityPublicIDFN : public ContextNodeChecker
 {
  public:
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

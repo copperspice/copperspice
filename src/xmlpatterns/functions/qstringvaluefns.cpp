@@ -32,8 +32,6 @@
 
 #include "qstringvaluefns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item ConcatFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -369,5 +367,3 @@ EscapeHtmlURIFN::EscapeHtmlURIFN() : EncodeString(QByteArray::fromRawData(exclud
          QByteArray::fromRawData(include, 6))
 {
 }
-
-QT_END_NAMESPACE

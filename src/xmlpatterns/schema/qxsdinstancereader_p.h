@@ -28,8 +28,6 @@
 #include <qpullbridge_p.h>
 #include <qxsdschemacontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdInstanceReader
@@ -140,8 +138,7 @@ class XsdInstanceReader
    QSourceLocation           m_cachedSourceLocation;
    QXmlItem                  m_cachedItem;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

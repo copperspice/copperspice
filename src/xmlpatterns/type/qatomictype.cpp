@@ -29,8 +29,6 @@
 
 #include "qatomictype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicType::AtomicType()
@@ -95,5 +93,3 @@ SchemaType::DerivationMethod AtomicType::derivationMethod() const
 {
    return DerivationRestriction;
 }
-
-QT_END_NAMESPACE

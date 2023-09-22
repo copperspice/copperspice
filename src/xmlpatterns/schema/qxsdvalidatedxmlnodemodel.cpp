@@ -27,8 +27,6 @@
 #include <QVariant>
 #include <QVector>
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdValidatedXmlNodeModel::XsdValidatedXmlNodeModel(const QAbstractXmlNodeModel *model)
@@ -201,5 +199,3 @@ QSet<NamedSchemaComponent::Ptr> XsdValidatedXmlNodeModel::idIdRefBindings(const 
 {
    return m_idIdRefBindings.value(id);
 }
-
-QT_END_NAMESPACE

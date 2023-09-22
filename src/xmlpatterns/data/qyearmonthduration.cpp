@@ -23,10 +23,7 @@
 
 #include "qbuiltintypes_p.h"
 #include "qcommonvalues_p.h"
-
 #include "qyearmonthduration_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -157,6 +154,3 @@ MSecondProperty YearMonthDuration::mseconds() const
 {
    return 0;
 }
-
-
-QT_END_NAMESPACE

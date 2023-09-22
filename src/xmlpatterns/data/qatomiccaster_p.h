@@ -28,8 +28,6 @@
 #include <qitem_p.h>
 #include <qatomictypedispatch_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class AtomicCaster : public AtomicTypeVisitorResult
@@ -43,7 +41,5 @@ class AtomicCaster : public AtomicTypeVisitorResult
    virtual Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const = 0;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

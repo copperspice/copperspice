@@ -25,8 +25,6 @@
 
 #include "qcalltargetdescription_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CallTargetDescription::CallTargetDescription(const QXmlName &name) : m_name(name)
@@ -84,5 +82,3 @@ void CallTargetDescription::checkCallsiteCircularity(CallTargetDescription::List
 
    checkArgumentsCircularity(signList, expr); /* We're done in this case. */
 }
-
-QT_END_NAMESPACE

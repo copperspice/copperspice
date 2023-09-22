@@ -28,9 +28,8 @@
 #include <QUrl>
 #include <qdeviceresourceloader_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ResourceDelegator : public DeviceResourceLoader
 {
  public:
@@ -63,8 +62,7 @@ class ResourceDelegator : public DeviceResourceLoader
    const ResourceLoader::Ptr m_parentLoader;
    const ResourceDelegator::Ptr m_forDeviceLoader;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -26,9 +26,8 @@
 
 #include <QSharedData>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AndExpression;
 class ApplyTemplate;
 class ArgumentConverter;
@@ -186,8 +185,7 @@ class ExpressionVisitor : public QSharedData
    virtual ExpressionVisitorResult::Ptr visit(const ValidationError *) const = 0;
    virtual ExpressionVisitorResult::Ptr visit(const ValueComparison *) const = 0;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

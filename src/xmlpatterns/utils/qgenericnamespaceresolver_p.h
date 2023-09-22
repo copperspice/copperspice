@@ -27,8 +27,6 @@
 #include <QHash>
 #include <qnamespaceresolver_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class GenericNamespaceResolver : public NamespaceResolver
 {
@@ -67,7 +65,5 @@ class GenericNamespaceResolver : public NamespaceResolver
    Bindings m_bindings;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -27,8 +27,6 @@
 #include <qitem_p.h>
 #include <qabstractxmlreceiver.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NodeBuilder : public QAbstractXmlReceiver
@@ -43,7 +41,5 @@ class NodeBuilder : public QAbstractXmlReceiver
    virtual NodeBuilder::Ptr create(const QUrl &baseURI) const = 0;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

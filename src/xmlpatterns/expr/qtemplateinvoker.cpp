@@ -23,8 +23,6 @@
 
 #include "qtemplateinvoker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 TemplateInvoker::TemplateInvoker(const WithParam::Hash &withParams,
@@ -79,6 +77,3 @@ SequenceType::List TemplateInvoker::expectedOperandTypes() const
 
    return result;
 }
-
-QT_END_NAMESPACE
-

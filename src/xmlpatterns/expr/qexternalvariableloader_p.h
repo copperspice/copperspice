@@ -28,8 +28,6 @@
 #include <qsequencetype_p.h>
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class DynamicContext;
 
@@ -48,7 +46,5 @@ class ExternalVariableLoader : public QSharedData
    virtual bool evaluateEBV(const QXmlName name, const QExplicitlySharedDataPointer<DynamicContext> &context);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -27,8 +27,6 @@
 #include <QSet>
 #include <qtokenizer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class TokenRevealer : public Tokenizer
 {
@@ -46,9 +44,8 @@ class TokenRevealer : public Tokenizer
    QString                 m_result;
    QString                 m_indentationString;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif
 

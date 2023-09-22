@@ -28,10 +28,7 @@
 #include "qdaytimeduration_p.h"
 #include "qpatternistlocale_p.h"
 #include "qschematime_p.h"
-
 #include "qtimezonefns_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -134,4 +131,3 @@ Item AdjustTimeToTimezoneFN::createValue(const QDateTime &dt) const
    Q_ASSERT(dt.isValid());
    return SchemaTime::fromDateTime(dt);
 }
-

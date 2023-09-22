@@ -43,8 +43,6 @@
 
 #include "qxsdschemadebugger_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaSourceLocationReflection::XsdSchemaSourceLocationReflection(const QSourceLocation &location)
@@ -1463,5 +1461,3 @@ QXmlName XsdTypeChecker::convertToQName(const QString &name) const
 
    return QXmlName(namespaceCode, localNameCode, prefixCode);
 }
-
-QT_END_NAMESPACE

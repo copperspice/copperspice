@@ -25,8 +25,6 @@
 
 #include "qdelegatingnamespaceresolver_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DelegatingNamespaceResolver::DelegatingNamespaceResolver(const NamespaceResolver::Ptr &resolver) : m_nsResolver(
@@ -74,5 +72,3 @@ void DelegatingNamespaceResolver::addBinding(const QXmlName nb)
       m_bindings.insert(nb.prefix(), nb.namespaceURI());
    }
 }
-
-QT_END_NAMESPACE

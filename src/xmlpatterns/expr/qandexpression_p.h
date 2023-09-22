@@ -26,8 +26,6 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class AndExpression : public PairContainer
@@ -43,7 +41,5 @@ class AndExpression : public PairContainer
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

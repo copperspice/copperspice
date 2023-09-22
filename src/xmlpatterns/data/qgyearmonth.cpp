@@ -25,8 +25,6 @@
 
 #include "qgyearmonth_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GYearMonth::GYearMonth(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -81,5 +79,3 @@ ItemType::Ptr GYearMonth::type() const
 {
    return BuiltinTypes::xsGYearMonth;
 }
-
-QT_END_NAMESPACE

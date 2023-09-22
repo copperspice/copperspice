@@ -23,8 +23,6 @@
 
 #include "qxsdschemachecker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdSchemaChecker::setupAllowedAtomicFacets()
@@ -305,5 +303,3 @@ void XsdSchemaChecker::setupAllowedAtomicFacets()
       m_allowedAtomicFacets.insert(BuiltinTypes::xsNOTATION->name(m_namePool), facets);
    }
 }
-
-QT_END_NAMESPACE

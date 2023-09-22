@@ -29,9 +29,8 @@
 #include <qxsdannotated_p.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template<typename TSuperClass>
 class XsdUserSchemaType : public TSuperClass, public NamedSchemaComponent, public XsdAnnotated
 {
@@ -73,9 +72,7 @@ class XsdUserSchemaType : public TSuperClass, public NamedSchemaComponent, publi
 };
 
 #include "qxsduserschematype.cpp"
+
 }
-
-QT_END_NAMESPACE
-
 
 #endif

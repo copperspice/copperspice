@@ -23,8 +23,6 @@
 
 #include "qreceiverdynamiccontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ReceiverDynamicContext::
@@ -39,5 +37,3 @@ QAbstractXmlReceiver *ReceiverDynamicContext::outputReceiver() const
 {
    return m_receiver;
 }
-
-QT_END_NAMESPACE

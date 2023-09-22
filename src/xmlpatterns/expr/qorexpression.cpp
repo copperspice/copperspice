@@ -27,8 +27,6 @@
 
 #include "qorexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 OrExpression::OrExpression(const Expression::Ptr &operand1,
@@ -63,5 +61,3 @@ ExpressionVisitorResult::Ptr OrExpression::accept(const ExpressionVisitor::Ptr &
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

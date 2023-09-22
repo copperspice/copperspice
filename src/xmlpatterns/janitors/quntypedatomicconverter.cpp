@@ -28,8 +28,6 @@
 
 #include "quntypedatomicconverter_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UntypedAtomicConverter::UntypedAtomicConverter(const Expression::Ptr &operand,
@@ -92,5 +90,3 @@ const SourceLocationReflection *UntypedAtomicConverter::actualReflection() const
 {
    return m_operand.data();
 }
-
-QT_END_NAMESPACE

@@ -23,8 +23,6 @@
 
 #include "qvariabledeclaration_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool VariableDeclaration::contains(const VariableDeclaration::List &list,
@@ -41,5 +39,3 @@ bool VariableDeclaration::contains(const VariableDeclaration::List &list,
 
    return false;
 }
-
-QT_END_NAMESPACE

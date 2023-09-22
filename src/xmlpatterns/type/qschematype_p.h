@@ -29,9 +29,8 @@
 #include <qxmlname.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AtomicType;
 
 class SchemaType : public SchemaComponent
@@ -196,7 +195,5 @@ class SchemaType : public SchemaComponent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SchemaType::DerivationConstraints)
 }
-
-QT_END_NAMESPACE
 
 #endif

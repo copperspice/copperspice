@@ -30,8 +30,6 @@
 
 #include "qresolveurifn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item ResolveURIFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -63,5 +61,3 @@ Expression::Ptr ResolveURIFN::typeCheck(const StaticContext::Ptr &context,
 
    return FunctionCall::typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

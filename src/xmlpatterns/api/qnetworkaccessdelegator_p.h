@@ -28,8 +28,6 @@
 #include <QPointer>
 #include <QSharedData>
 
-QT_BEGIN_NAMESPACE
-
 class QNetworkAccessManager;
 class QUrl;
 
@@ -52,7 +50,5 @@ class NetworkAccessDelegator : public QObject, public QSharedData
    NetworkAccessDelegator &operator=(const NetworkAccessDelegator &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -30,8 +30,6 @@
 
 #include "qlocalnametest_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 LocalNameTest::LocalNameTest(const ItemType::Ptr &primaryType,
@@ -77,5 +75,3 @@ PatternPriority LocalNameTest::patternPriority() const
 {
    return -0.25;
 }
-
-QT_END_NAMESPACE

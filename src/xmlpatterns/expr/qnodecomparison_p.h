@@ -26,8 +26,6 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NodeComparison : public PairContainer
@@ -77,7 +75,5 @@ class NodeComparison : public PairContainer
    const QXmlNodeModelIndex::DocumentOrder m_op;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

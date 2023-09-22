@@ -31,9 +31,8 @@
 #include <qprimitives_p.h>
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FunctionFactory : public QSharedData
 {
  public:
@@ -92,8 +91,7 @@ class FunctionFactory : public QSharedData
    FunctionFactory(const FunctionFactory &) = delete;
    FunctionFactory &operator=(const FunctionFactory &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

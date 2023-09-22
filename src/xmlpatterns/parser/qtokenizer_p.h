@@ -32,9 +32,8 @@
 #include <qparsercontext_p.h>
 #include <qtokensource_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 typedef QPair<QString, Expression::Ptr> AttributeHolder;
 typedef QVector<AttributeHolder> AttributeHolderVector;
 
@@ -90,8 +89,6 @@ class TokenValue
 };
 }
 
-QT_END_NAMESPACE
-
 /**
  * Macro for the data type of semantic values; int by default.
  * See section Data Types of Semantic Values.
@@ -99,8 +96,6 @@ QT_END_NAMESPACE
 #define YYSTYPE QPatternist::TokenValue
 
 #include "qquerytransformparser_p.h" /* This inclusion must be after TokenValue. */
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -160,7 +155,5 @@ class Tokenizer : public TokenSource
 }
 
 #undef Patternist_DEBUG_PARSER // disable it for now
-
-QT_END_NAMESPACE
 
 #endif

@@ -28,8 +28,6 @@
 #include <qexpression_p.h>
 #include <qabstractxmlreceiver.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class DocumentContentValidator : public QAbstractXmlReceiver
 {
@@ -63,7 +61,5 @@ class DocumentContentValidator : public QAbstractXmlReceiver
    xsInteger                       m_elementDepth;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

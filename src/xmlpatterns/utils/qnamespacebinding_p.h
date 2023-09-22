@@ -28,8 +28,6 @@ template<typename T> class QVector;
 
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NamespaceBinding
@@ -92,7 +90,5 @@ static inline uint qHash(const NamespaceBinding nb)
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

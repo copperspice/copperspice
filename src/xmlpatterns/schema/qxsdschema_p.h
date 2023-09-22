@@ -38,8 +38,6 @@
 #include <QHash>
 #include <QReadWriteLock>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdSchema : public QSharedData, public XsdAnnotated
@@ -246,8 +244,7 @@ class XsdSchema : public QSharedData, public XsdAnnotated
    QHash<QXmlName, XsdIdentityConstraint::Ptr> m_identityConstraints;
    mutable QReadWriteLock                      m_lock;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

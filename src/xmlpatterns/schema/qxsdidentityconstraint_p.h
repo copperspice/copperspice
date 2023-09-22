@@ -29,8 +29,6 @@
 #include <qxsdxpathexpression_p.h>
 #include <QStringList>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdIdentityConstraint : public NamedSchemaComponent, public XsdAnnotated
@@ -119,8 +117,7 @@ class XsdIdentityConstraint : public NamedSchemaComponent, public XsdAnnotated
    XsdXPathExpression::List   m_fields;
    XsdIdentityConstraint::Ptr m_referencedKey;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

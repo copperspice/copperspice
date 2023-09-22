@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class NodeSortExpression : public SingleContainer
 {
  public:
@@ -49,8 +48,7 @@ class NodeSortExpression : public SingleContainer
  private:
    static inline bool lessThanUsingNodeModel(const Item &n1, const Item &n2);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

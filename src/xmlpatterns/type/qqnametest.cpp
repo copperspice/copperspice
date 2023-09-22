@@ -29,8 +29,6 @@
 
 #include "qqnametest_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QNameTest::QNameTest(const ItemType::Ptr &primaryType,
@@ -77,5 +75,3 @@ PatternPriority QNameTest::patternPriority() const
 {
    return 0;
 }
-
-QT_END_NAMESPACE

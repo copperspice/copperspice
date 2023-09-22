@@ -23,8 +23,6 @@
 
 #include "qxsdcomplextype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdComplexType::OpenContent::setMode(Mode mode)
@@ -210,4 +208,3 @@ bool XsdComplexType::isDefinedBySchema() const
    return true;
 }
 
-QT_END_NAMESPACE

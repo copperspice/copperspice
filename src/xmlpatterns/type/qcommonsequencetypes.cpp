@@ -31,8 +31,6 @@
  * the sequence types depends on them. */
 #include "qbuiltintypes.cpp"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 // STATIC DATA
@@ -110,5 +108,3 @@ const EmptySequenceType::Ptr    CommonSequenceTypes::Empty  (new EmptySequenceTy
 const NoneType::Ptr             CommonSequenceTypes::None   (new NoneType());
 const SequenceType::Ptr         CommonSequenceTypes::EBV    (new EBVType());
 
-
-QT_END_NAMESPACE

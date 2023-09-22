@@ -30,9 +30,8 @@
 #include <qxsdxpathexpression_p.h>
 #include <QList>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdAlternative : public NamedSchemaComponent, public XsdAnnotated
 {
  public:
@@ -67,8 +66,7 @@ class XsdAlternative : public NamedSchemaComponent, public XsdAnnotated
    XsdXPathExpression::Ptr m_test;
    SchemaType::Ptr         m_type;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

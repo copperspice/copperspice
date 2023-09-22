@@ -29,8 +29,6 @@
 #include <qliteral_p.h>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class BooleanFN : public FunctionCall
 {
@@ -225,6 +223,5 @@ class SubsequenceFN : public FunctionCall
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

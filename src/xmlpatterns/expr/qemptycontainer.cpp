@@ -25,8 +25,6 @@
 
 #include "qemptycontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::List EmptyContainer::operands() const
@@ -47,5 +45,3 @@ bool EmptyContainer::compressOperands(const StaticContext::Ptr &)
 {
    return true;
 }
-
-QT_END_NAMESPACE

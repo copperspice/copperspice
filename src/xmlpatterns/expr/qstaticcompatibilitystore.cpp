@@ -26,8 +26,6 @@
 
 #include "qstaticcompatibilitystore_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticCompatibilityStore::StaticCompatibilityStore(const Expression::Ptr &operand) : SingleContainer(operand)
@@ -57,5 +55,3 @@ ExpressionVisitorResult::Ptr StaticCompatibilityStore::accept(const ExpressionVi
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

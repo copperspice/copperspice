@@ -26,8 +26,6 @@
 
 #include "qdate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Date::Date(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -93,5 +91,3 @@ ItemType::Ptr Date::type() const
 {
    return BuiltinTypes::xsDate;
 }
-
-QT_END_NAMESPACE

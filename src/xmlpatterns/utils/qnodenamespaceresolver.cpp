@@ -26,8 +26,6 @@
 
 #include "qnodenamespaceresolver_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NodeNamespaceResolver::NodeNamespaceResolver(const Item &item) : m_node(item.asNode())
@@ -61,5 +59,3 @@ NamespaceResolver::Bindings NodeNamespaceResolver::bindings() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return NamespaceResolver::Bindings();
 }
-
-QT_END_NAMESPACE

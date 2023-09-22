@@ -27,8 +27,6 @@
 
 #include "qquantifiedexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QuantifiedExpression::QuantifiedExpression(const VariableSlotID varSlot,
@@ -114,5 +112,3 @@ ExpressionVisitorResult::Ptr QuantifiedExpression::accept(const ExpressionVisito
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

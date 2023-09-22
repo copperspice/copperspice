@@ -26,8 +26,6 @@
 
 #include "qfirstitempredicate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 FirstItemPredicate::FirstItemPredicate(const Expression::Ptr &source) : SingleContainer(source)
@@ -77,5 +75,3 @@ Expression::ID FirstItemPredicate::id() const
 {
    return IDFirstItemPredicate;
 }
-
-QT_END_NAMESPACE

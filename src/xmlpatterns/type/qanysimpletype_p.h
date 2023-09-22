@@ -26,9 +26,8 @@
 
 #include <qanytype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AtomicType;
 
 class AnySimpleType : public AnyType
@@ -84,7 +83,5 @@ class AnySimpleType : public AnyType
 };
 
 }
-
-QT_END_NAMESPACE
 
 #endif

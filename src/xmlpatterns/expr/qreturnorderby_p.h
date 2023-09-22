@@ -27,8 +27,6 @@
 #include "qorderby_p.h"
 #include "qunlimitedcontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ReturnOrderBy : public UnlimitedContainer
 {
@@ -86,6 +84,5 @@ class ReturnOrderBy : public UnlimitedContainer
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

@@ -30,8 +30,6 @@
 #include <qschematype_p.h>
 #include <qxsdelement_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
@@ -140,8 +138,7 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    QHash<QXmlNodeModelIndex, SchemaType::Ptr>                m_assignedTypes;
    QHash<QString, QSet<NamedSchemaComponent::Ptr> >          m_idIdRefBindings;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

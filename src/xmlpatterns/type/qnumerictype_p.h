@@ -26,8 +26,6 @@
 
 #include <qatomictype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class NumericType : public AtomicType
 {
@@ -126,7 +124,5 @@ class NumericType : public AtomicType
    NumericType();
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

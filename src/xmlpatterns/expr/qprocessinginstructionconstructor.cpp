@@ -28,8 +28,6 @@
 
 #include "qprocessinginstructionconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ProcessingInstructionConstructor::
@@ -121,5 +119,3 @@ ProcessingInstructionConstructor::accept(const ExpressionVisitor::Ptr &visitor) 
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

@@ -26,8 +26,6 @@
 
 #include "qargumentconverter_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ArgumentConverter::ArgumentConverter(const Expression::Ptr &operand,
@@ -82,5 +80,3 @@ SequenceType::Ptr ArgumentConverter::staticType() const
 {
    return CommonSequenceTypes::ZeroOrMoreAtomicTypes;
 }
-
-QT_END_NAMESPACE

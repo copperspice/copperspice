@@ -29,8 +29,6 @@
 
 #include "qaxisstep_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 namespace QPatternist {
@@ -258,5 +256,3 @@ Expression::ID AxisStep::id() const
 {
    return IDAxisStep;
 }
-
-QT_END_NAMESPACE

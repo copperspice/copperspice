@@ -30,8 +30,6 @@
 #include "qxsdsimpletype_p.h"
 #include "qxsdtypechecker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /*
@@ -904,5 +902,3 @@ bool XsdSchemaHelper::isValidAttributeUsesExtension(const XsdAttributeUse::List 
 
    return true;
 }
-
-QT_END_NAMESPACE

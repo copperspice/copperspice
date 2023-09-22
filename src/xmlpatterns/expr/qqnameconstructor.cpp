@@ -27,8 +27,6 @@
 
 #include "qqnameconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QNameConstructor::QNameConstructor(const Expression::Ptr &source, const NamespaceResolver::Ptr &nsResolver) : SingleContainer(source),
@@ -88,5 +86,3 @@ const SourceLocationReflection *QNameConstructor::actualReflection() const
 {
    return m_operand.data();
 }
-
-QT_END_NAMESPACE

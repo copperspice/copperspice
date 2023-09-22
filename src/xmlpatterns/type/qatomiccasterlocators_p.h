@@ -27,8 +27,6 @@
 #include <qatomiccasterlocator_p.h>
 #include <qatomiccasters_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ToStringCasterLocator : public AtomicCasterLocator
 {
@@ -634,7 +632,5 @@ class ToDerivedStringCasterLocator : public ToStringCasterLocator
    }
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

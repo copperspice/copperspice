@@ -26,8 +26,6 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class EBVExtractor : public SingleContainer
@@ -57,6 +55,5 @@ class EBVExtractor : public SingleContainer
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

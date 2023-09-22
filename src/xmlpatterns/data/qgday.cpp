@@ -25,8 +25,6 @@
 
 #include "qgday_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GDay::GDay(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -74,5 +72,3 @@ ItemType::Ptr GDay::type() const
 {
    return BuiltinTypes::xsGDay;
 }
-
-QT_END_NAMESPACE

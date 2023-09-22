@@ -26,8 +26,6 @@
 
 #include <qvariablereference_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class RangeVariableReference : public VariableReference
@@ -47,8 +45,7 @@ class RangeVariableReference : public VariableReference
  private:
    const Expression::Ptr m_sourceExpression;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

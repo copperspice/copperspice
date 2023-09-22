@@ -23,8 +23,6 @@
 
 #include "qxsdnotation_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdNotation::setPublicId(const DerivedString<TypeToken>::Ptr &id)
@@ -46,5 +44,3 @@ AnyURI::Ptr XsdNotation::systemId() const
 {
    return m_systemId;
 }
-
-QT_END_NAMESPACE

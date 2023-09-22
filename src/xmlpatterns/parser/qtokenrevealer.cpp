@@ -23,8 +23,6 @@
 
 #include "qtokenrevealer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 TokenRevealer::TokenRevealer(const QUrl &uri,
@@ -87,5 +85,3 @@ void TokenRevealer::resumeTokenizationFrom(const int position)
 {
    m_tokenizer->resumeTokenizationFrom(position);
 }
-
-QT_END_NAMESPACE

@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class DynamicContextStore : public SingleContainer
 {
  public:
@@ -49,8 +48,7 @@ class DynamicContextStore : public SingleContainer
  private:
    DynamicContext *m_context;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -27,9 +27,8 @@
 #include <qabstractfunctionfactory_p.h>
 #include <qschematypefactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ConstructorFunctionsFactory : public AbstractFunctionFactory
 {
  public:
@@ -44,8 +43,7 @@ class ConstructorFunctionsFactory : public AbstractFunctionFactory
  private:
    const SchemaTypeFactory::Ptr m_typeFactory;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

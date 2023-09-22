@@ -29,9 +29,8 @@
 #include <qxmlname.h>
 #include <qsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FunctionArgument : public QSharedData
 {
  public:
@@ -50,8 +49,7 @@ class FunctionArgument : public QSharedData
    const QXmlName m_name;
    const SequenceType::Ptr m_type;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

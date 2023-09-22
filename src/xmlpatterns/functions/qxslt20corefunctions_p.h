@@ -26,8 +26,6 @@
 
 #include <qabstractfunctionfactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class XSLT20CoreFunctions : public AbstractFunctionFactory
 {
@@ -39,6 +37,5 @@ class XSLT20CoreFunctions : public AbstractFunctionFactory
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

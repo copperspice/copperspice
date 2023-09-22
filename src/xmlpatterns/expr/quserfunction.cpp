@@ -23,8 +23,6 @@
 
 #include "quserfunction_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UserFunction::UserFunction(const FunctionSignature::Ptr &sign,
@@ -39,5 +37,3 @@ UserFunction::UserFunction(const FunctionSignature::Ptr &sign,
    Q_ASSERT(m_body);
    Q_ASSERT(m_slotOffset > -2);
 }
-
-QT_END_NAMESPACE

@@ -26,8 +26,6 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ExternalVariableReference : public EmptyContainer
 {
@@ -52,7 +50,5 @@ class ExternalVariableReference : public EmptyContainer
    const SequenceType::Ptr m_seqType;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

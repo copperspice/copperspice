@@ -25,8 +25,6 @@
 
 #include "qcalltemplate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CallTemplate::CallTemplate(const QXmlName &name,
@@ -132,5 +130,3 @@ CallTargetDescription::Ptr CallTemplate::callTargetDescription() const
 {
    return CallTargetDescription::Ptr();
 }
-
-QT_END_NAMESPACE

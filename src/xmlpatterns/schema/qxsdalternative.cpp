@@ -23,8 +23,6 @@
 
 #include "qxsdalternative_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAlternative::setTest(const XsdXPathExpression::Ptr &test)
@@ -46,5 +44,3 @@ SchemaType::Ptr XsdAlternative::type() const
 {
    return m_type;
 }
-
-QT_END_NAMESPACE

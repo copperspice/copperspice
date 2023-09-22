@@ -23,8 +23,6 @@
 
 #include "qexternalvariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ExternalVariableReference::ExternalVariableReference(const QXmlName &name,
@@ -66,4 +64,3 @@ ExpressionVisitorResult::Ptr ExternalVariableReference::accept(const ExpressionV
    return visitor->visit(this);
 }
 
-QT_END_NAMESPACE

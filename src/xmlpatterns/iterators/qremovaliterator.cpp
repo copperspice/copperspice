@@ -23,8 +23,6 @@
 
 #include "qremovaliterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 RemovalIterator::RemovalIterator(const Item::Iterator::Ptr &target,
@@ -86,5 +84,3 @@ Item::Iterator::Ptr RemovalIterator::copy() const
 {
    return Item::Iterator::Ptr(new RemovalIterator(m_target->copy(), m_removalPos));
 }
-
-QT_END_NAMESPACE

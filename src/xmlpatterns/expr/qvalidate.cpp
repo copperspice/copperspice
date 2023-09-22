@@ -28,8 +28,6 @@
 
 #include "qvalidate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
@@ -56,5 +54,3 @@ Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
           context,
           ReportContext::XQTY0030);
 }
-
-QT_END_NAMESPACE

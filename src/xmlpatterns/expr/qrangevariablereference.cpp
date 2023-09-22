@@ -26,8 +26,6 @@
 
 #include "qrangevariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 RangeVariableReference::RangeVariableReference(const Expression::Ptr &source,
@@ -70,5 +68,3 @@ Expression::Properties RangeVariableReference::properties() const
 {
    return DependsOnLocalVariable;
 }
-
-QT_END_NAMESPACE

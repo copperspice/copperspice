@@ -28,8 +28,6 @@
 
 #include "qitemverifier_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ItemVerifier::ItemVerifier(const Expression::Ptr &operand, const ItemType::Ptr &reqType,
@@ -96,5 +94,3 @@ ExpressionVisitorResult::Ptr ItemVerifier::accept(const ExpressionVisitor::Ptr &
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

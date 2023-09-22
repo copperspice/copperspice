@@ -33,8 +33,6 @@
 
 #include "qgeneralcomparison_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GeneralComparison::GeneralComparison(const Expression::Ptr &op1,
@@ -271,5 +269,3 @@ Expression::ID GeneralComparison::id() const
 {
    return IDGeneralComparison;
 }
-
-QT_END_NAMESPACE

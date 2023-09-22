@@ -24,8 +24,6 @@
 #include "qnamepool_p.h"
 #include "qxmlnamepool.h"
 
-QT_BEGIN_NAMESPACE
-
 /*!
   \class QXmlNamePool
   \brief The QXmlNamePool class is a table of shared strings referenced by instances of QXmlName.
@@ -91,6 +89,3 @@ QXmlNamePool &QXmlNamePool::operator=(const QXmlNamePool &other)
    d = other.d;
    return *this;
 }
-
-QT_END_NAMESPACE
-

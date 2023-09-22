@@ -25,8 +25,6 @@
 
 #include "qrangeiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 RangeIterator::RangeIterator(const xsInteger start,
@@ -103,4 +101,3 @@ Item::Iterator::Ptr RangeIterator::copy() const
    }
 }
 
-QT_END_NAMESPACE

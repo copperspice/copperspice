@@ -26,8 +26,6 @@
 #include "qpatternistlocale_p.h"
 #include "qiodevicedelegate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QIODeviceDelegate::QIODeviceDelegate(QIODevice *const source) : m_source(source)
@@ -143,6 +141,3 @@ qint64 QIODeviceDelegate::readData(char *data, qint64 maxSize)
 {
    return m_source->read(data, maxSize);
 }
-
-QT_END_NAMESPACE
-

@@ -26,8 +26,6 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ContextItem : public EmptyContainer
@@ -79,8 +77,7 @@ class ContextItem : public EmptyContainer
    ItemType::Ptr           m_itemType;
    const Expression::Ptr   m_expr;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

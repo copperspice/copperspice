@@ -24,8 +24,6 @@
 #include "qcommonsequencetypes_p.h"
 #include "qcurrentfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item CurrentFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -55,4 +53,3 @@ SequenceType::Ptr CurrentFN::staticType() const
    }
 }
 
-QT_END_NAMESPACE

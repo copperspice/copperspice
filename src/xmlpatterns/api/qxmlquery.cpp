@@ -793,5 +793,3 @@ void QXmlQuery::bindVariable(const QString &localName, const QXmlQuery &query)
 {
    return bindVariable(QXmlName(d->namePool, localName), query);
 }
-
-QT_END_NAMESPACE

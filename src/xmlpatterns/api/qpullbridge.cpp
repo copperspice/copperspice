@@ -31,8 +31,6 @@
 
 #include "qpullbridge_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /*!
@@ -190,6 +188,3 @@ QHash<QXmlName, QXmlItem> PullBridge::attributeItems()
 
    return attributes;
 }
-
-QT_END_NAMESPACE
-

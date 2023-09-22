@@ -26,8 +26,6 @@
 
 #include "qaggregator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SequenceType::Ptr Aggregator::staticType() const
@@ -46,5 +44,3 @@ SequenceType::Ptr Aggregator::staticType() const
    return makeGenericSequenceType(itemType,
                                   t->cardinality().toWithoutMany());
 }
-
-QT_END_NAMESPACE

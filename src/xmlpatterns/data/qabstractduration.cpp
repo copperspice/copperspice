@@ -29,8 +29,6 @@
 
 #include "qabstractduration_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AbstractDuration::AbstractDuration(const bool isPos) : m_isPositive(isPos)
@@ -204,4 +202,3 @@ bool AbstractDuration::isPositive() const
    return m_isPositive;
 }
 
-QT_END_NAMESPACE

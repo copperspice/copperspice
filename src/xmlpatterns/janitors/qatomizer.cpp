@@ -29,8 +29,6 @@
 
 #include "qatomizer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Atomizer::Atomizer(const Expression::Ptr &operand) : SingleContainer(operand)
@@ -105,5 +103,3 @@ const SourceLocationReflection *Atomizer::actualReflection() const
 {
    return m_operand->actualReflection();
 }
-
-QT_END_NAMESPACE

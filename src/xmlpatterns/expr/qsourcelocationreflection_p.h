@@ -24,11 +24,10 @@
 #ifndef QSourceLocationReflection_P_H
 #define QSourceLocationReflection_P_H
 
-QT_BEGIN_NAMESPACE
-
 #include <qstringfwd.h>
 
 namespace QPatternist {
+
 class SourceLocationReflection
 {
  public:
@@ -70,7 +69,5 @@ class DelegatingSourceLocationReflection : public SourceLocationReflection
 };
 
 }
-
-QT_END_NAMESPACE
 
 #endif

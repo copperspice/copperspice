@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class UnionIterator : public Item::Iterator
@@ -56,8 +54,7 @@ class UnionIterator : public Item::Iterator
    Item m_node1;
    Item m_node2;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

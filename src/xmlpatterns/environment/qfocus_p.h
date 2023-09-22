@@ -26,8 +26,6 @@
 
 #include <qdelegatingdynamiccontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Focus : public DelegatingDynamicContext
@@ -53,7 +51,5 @@ class Focus : public DelegatingDynamicContext
    xsInteger           m_contextSizeCached;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

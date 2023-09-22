@@ -23,8 +23,6 @@
 
 #include "qcallsite_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CallSite::CallSite(const QXmlName &name) : m_isRecursive(false)
@@ -46,5 +44,3 @@ void CallSite::setIsRecursive(const bool value)
 {
    m_isRecursive = value;
 }
-
-QT_END_NAMESPACE

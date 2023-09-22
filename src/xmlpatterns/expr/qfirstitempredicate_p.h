@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FirstItemPredicate : public SingleContainer
 {
  public:
@@ -65,8 +64,7 @@ class FirstItemPredicate : public SingleContainer
     */
    ID id() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

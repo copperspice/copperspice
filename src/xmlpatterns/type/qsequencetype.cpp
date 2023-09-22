@@ -23,8 +23,6 @@
 
 #include "qsequencetype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SequenceType::~SequenceType()
@@ -43,5 +41,3 @@ bool SequenceType::is(const SequenceType::Ptr &other) const
 {
    return matches(other) && other->matches(Ptr(this));
 }
-
-QT_END_NAMESPACE

@@ -26,8 +26,6 @@
 
 #include <qdelegatingstaticcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class StaticNamespaceContext : public DelegatingStaticContext
@@ -44,7 +42,5 @@ class StaticNamespaceContext : public DelegatingStaticContext
    const NamespaceResolver::Ptr m_namespaceBindings;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

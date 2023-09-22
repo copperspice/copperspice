@@ -27,8 +27,6 @@
 
 #include "qebvtype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 EBVType::EBVType()
@@ -101,5 +99,3 @@ ItemType::Ptr EBVType::atomizedType() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return AtomicType::Ptr();
 }
-
-QT_END_NAMESPACE

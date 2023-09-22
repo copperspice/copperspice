@@ -30,7 +30,6 @@
 #include <QSet>
 #include <QString>
 
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -55,6 +54,5 @@ class XsdIdCache : public QSharedData
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

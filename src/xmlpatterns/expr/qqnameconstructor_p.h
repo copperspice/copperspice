@@ -29,9 +29,8 @@
 #include <qpatternistlocale_p.h>
 #include <qxpathhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class QNameConstructor : public SingleContainer
 {
  public:
@@ -124,8 +123,7 @@ QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
       return QXmlName(); /* Silence compiler warning. */
    }
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

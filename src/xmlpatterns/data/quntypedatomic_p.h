@@ -26,8 +26,6 @@
 
 #include <qatomicstring_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class UntypedAtomic : public AtomicString
@@ -43,7 +41,5 @@ class UntypedAtomic : public AtomicString
    UntypedAtomic(const QString &value);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

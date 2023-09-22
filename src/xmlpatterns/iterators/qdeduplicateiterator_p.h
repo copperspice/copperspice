@@ -31,8 +31,6 @@
 #include <qcomparisonplatform_p.h>
 #include <qsourcelocationreflection_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DeduplicateIterator : public ListIterator<Item>
@@ -56,6 +54,5 @@ class DeduplicateIterator : public ListIterator<Item>
 };
 }
 
-QT_END_NAMESPACE
 
 #endif

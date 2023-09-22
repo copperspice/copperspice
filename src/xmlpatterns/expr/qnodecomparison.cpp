@@ -30,8 +30,6 @@
 
 #include "qnodecomparison_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NodeComparison::NodeComparison(const Expression::Ptr &operand1,
@@ -161,5 +159,3 @@ ExpressionVisitorResult::Ptr NodeComparison::accept(const ExpressionVisitor::Ptr
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

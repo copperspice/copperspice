@@ -27,8 +27,6 @@
 #include <QUrl>
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DocumentConstructor : public SingleContainer
@@ -54,7 +52,5 @@ class DocumentConstructor : public SingleContainer
    QUrl m_staticBaseURI;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

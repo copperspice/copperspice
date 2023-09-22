@@ -27,8 +27,6 @@
 #include <qstaticcontext_p.h>
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class TypeChecker
 {
@@ -139,7 +137,5 @@ class TypeChecker
    TypeChecker &operator=(const TypeChecker &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

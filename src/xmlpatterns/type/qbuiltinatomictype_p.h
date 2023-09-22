@@ -26,9 +26,8 @@
 
 #include <qatomictype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class BuiltinAtomicType : public AtomicType
 {
  public:
@@ -78,8 +77,8 @@ class BuiltinAtomicType : public AtomicType
    const AtomicMathematicianLocator::Ptr   m_mathematicianLocator;
    const AtomicCasterLocator::Ptr          m_casterLocator;
 };
+
 }
 
-QT_END_NAMESPACE
 
 #endif

@@ -277,6 +277,4 @@ qint64 QAbstractXmlForwardIterator<T>::sizeHint() const
    return -1;
 }
 
-QT_END_NAMESPACE
-
 #endif

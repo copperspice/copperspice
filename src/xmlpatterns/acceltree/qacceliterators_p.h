@@ -27,9 +27,8 @@
 #include "qacceltree_p.h"
 #include "qitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AccelIterator : public QXmlNodeModelIndex::Iterator
 {
  public:
@@ -306,8 +305,7 @@ class AttributeIterator : public AccelIterator
    QXmlNodeModelIndex next() override;
    QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

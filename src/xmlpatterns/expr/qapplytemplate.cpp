@@ -32,8 +32,6 @@
 
 #include "qapplytemplate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ApplyTemplate::ApplyTemplate(const TemplateMode::Ptr &mode,
@@ -182,5 +180,3 @@ CallTargetDescription::Ptr ApplyTemplate::callTargetDescription() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return CallTargetDescription::Ptr();
 }
-
-QT_END_NAMESPACE

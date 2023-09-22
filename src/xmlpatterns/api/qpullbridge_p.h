@@ -31,8 +31,6 @@
 #include <qabstractxmlpullprovider_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class PullBridge : public AbstractXmlPullProvider
 {
@@ -63,7 +61,5 @@ class PullBridge : public AbstractXmlPullProvider
    Event              m_current;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -25,8 +25,6 @@
 
 #include "qnonetype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NoneType::NoneType()
@@ -82,5 +80,3 @@ ItemType::Ptr NoneType::xdtSuperType() const
 {
    return BuiltinTypes::item;
 }
-
-QT_END_NAMESPACE

@@ -24,10 +24,7 @@
 #include "qxsdattribute_p.h"
 #include "qxsdcomplextype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
-
 
 void XsdAttribute::Scope::setVariety(Variety variety)
 {
@@ -108,5 +105,3 @@ XsdAttribute::ValueConstraint::Ptr XsdAttribute::valueConstraint() const
 {
    return m_valueConstraint;
 }
-
-QT_END_NAMESPACE

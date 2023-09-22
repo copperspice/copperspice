@@ -25,8 +25,6 @@
 
 #include "qoutputvalidator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 OutputValidator::OutputValidator(QAbstractXmlReceiver *const receiver,
@@ -134,5 +132,3 @@ void OutputValidator::endOfSequence()
 void OutputValidator::startOfSequence()
 {
 }
-
-QT_END_NAMESPACE

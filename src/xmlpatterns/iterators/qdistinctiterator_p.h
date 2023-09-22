@@ -31,8 +31,6 @@
 #include <qcomparisonplatform_p.h>
 #include <qsourcelocationreflection_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DistinctIterator : public Item::Iterator
@@ -71,7 +69,5 @@ class DistinctIterator : public Item::Iterator
    Item::List                  m_processed;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -27,9 +27,8 @@
 #include <qfunctioncall_p.h>
 #include <qcastingplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class NameFN : public FunctionCall
 {
  public:
@@ -77,8 +76,7 @@ class RootFN : public FunctionCall
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    SequenceType::Ptr staticType() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

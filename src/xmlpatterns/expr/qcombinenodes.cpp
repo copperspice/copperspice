@@ -28,10 +28,7 @@
 #include "qitemmappingiterator_p.h"
 #include "qnodesort_p.h"
 #include "qunioniterator_p.h"
-
 #include "qcombinenodes_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -146,5 +143,3 @@ Expression::ID CombineNodes::id() const
 {
    return IDCombineNodes;
 }
-
-QT_END_NAMESPACE

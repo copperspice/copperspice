@@ -26,8 +26,6 @@
 
 #include <qfunctionfactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class FunctionFactoryCollection: public FunctionFactory, public FunctionFactory::List
@@ -67,8 +65,7 @@ class FunctionFactoryCollection: public FunctionFactory, public FunctionFactory:
     */
    static FunctionFactory::Ptr xslt20Factory(const NamePool::Ptr &np);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

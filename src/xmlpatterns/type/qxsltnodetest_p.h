@@ -26,8 +26,6 @@
 
 #include <qanynodetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XSLTNodeTest : public AnyNodeType
@@ -49,7 +47,5 @@ class XSLTNodeTest : public AnyNodeType
    }
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

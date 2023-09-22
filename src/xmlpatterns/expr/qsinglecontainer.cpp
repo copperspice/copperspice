@@ -26,8 +26,6 @@
 
 #include "qsinglecontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SingleContainer::SingleContainer(const Expression::Ptr &operand) : m_operand(operand)
@@ -55,4 +53,3 @@ bool SingleContainer::compressOperands(const StaticContext::Ptr &context)
    return m_operand->isEvaluated();
 }
 
-QT_END_NAMESPACE

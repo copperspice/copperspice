@@ -25,8 +25,6 @@
 
 #include "qindexofiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 IndexOfIterator::IndexOfIterator(const Item::Iterator::Ptr &seq,
@@ -92,5 +90,3 @@ const SourceLocationReflection *IndexOfIterator::actualReflection() const
 {
    return m_expr.data();
 }
-
-QT_END_NAMESPACE

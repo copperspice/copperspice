@@ -28,8 +28,6 @@
 
 #include "qbuiltinatomictype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 BuiltinAtomicType::BuiltinAtomicType(const AtomicType::Ptr &base,
@@ -73,4 +71,3 @@ AtomicCasterLocator::Ptr BuiltinAtomicType::casterLocator() const
    return m_casterLocator;
 }
 
-QT_END_NAMESPACE
