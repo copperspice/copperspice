@@ -40,9 +40,7 @@ typedef struct CGImage* CGImageRef;
 typedef const struct __CFData* CFDataRef;
 #elif PLATFORM(QT)
 #include <qglobal.h>
-QT_BEGIN_NAMESPACE
 class QPixmap;
-QT_END_NAMESPACE
 #elif USE(CAIRO)
 struct _cairo_surface;
 typedef struct _cairo_surface cairo_surface_t;

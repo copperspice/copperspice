@@ -51,9 +51,7 @@ class QWebFrame;
 class QWebPage;
 class QWebHistoryItem;
 class QWebScriptWorld;
-QT_BEGIN_NAMESPACE
 class QUrl;
-QT_END_NAMESPACE
 
 extern QMap<int, QWebScriptWorld*> m_worldMap;
 

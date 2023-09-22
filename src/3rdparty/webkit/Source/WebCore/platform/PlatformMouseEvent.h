@@ -40,10 +40,8 @@ typedef struct _Evas_Event_Mouse_Move Evas_Event_Mouse_Move;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QInputEvent;
 class QGraphicsSceneMouseEvent;
-QT_END_NAMESPACE
 #endif
 
 #if PLATFORM(WIN)

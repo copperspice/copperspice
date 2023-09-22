@@ -31,9 +31,7 @@
 #include <QTimer>
 #include <QVideoWidget>
 
-QT_BEGIN_NAMESPACE
 class QMediaPlayer;
-QT_END_NAMESPACE
 
 namespace WebCore {
 

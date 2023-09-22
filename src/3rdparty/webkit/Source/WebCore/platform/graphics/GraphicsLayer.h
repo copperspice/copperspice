@@ -60,9 +60,7 @@ class TextureMapperPlatformLayer;
 typedef TextureMapperPlatformLayer PlatformLayer;
 };
 #else
-QT_BEGIN_NAMESPACE
 class QGraphicsObject;
-QT_END_NAMESPACE
 namespace WebCore {
 typedef QGraphicsObject PlatformLayer;
 }

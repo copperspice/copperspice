@@ -24,10 +24,8 @@
 #include <QObject>
 #include <wtf/Platform.h>
 
-QT_BEGIN_NAMESPACE
 class QGraphicsVideoItem;
 class QMediaPlayer;
-QT_END_NAMESPACE
 
 namespace WebCore {
 

@@ -67,9 +67,7 @@ typedef GtkWidget* PlatformWidget;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QWidget;
-QT_END_NAMESPACE
 typedef QWidget* PlatformWidget;
 #endif
 

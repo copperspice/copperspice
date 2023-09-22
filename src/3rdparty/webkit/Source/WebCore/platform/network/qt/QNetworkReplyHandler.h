@@ -27,10 +27,8 @@
 #include "FormData.h"
 #include "QtMIMETypeSniffer.h"
 
-QT_BEGIN_NAMESPACE
 class QFile;
 class QNetworkReply;
-QT_END_NAMESPACE
 
 namespace WebCore {
 

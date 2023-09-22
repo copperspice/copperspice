@@ -50,9 +50,7 @@ typedef CGGradientRef PlatformGradient;
 #endif
 
 #elif PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QGradient;
-QT_END_NAMESPACE
 typedef QGradient* PlatformGradient;
 #elif USE(CAIRO)
 typedef struct _cairo_pattern cairo_pattern_t;

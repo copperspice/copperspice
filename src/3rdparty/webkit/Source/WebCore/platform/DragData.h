@@ -46,9 +46,7 @@ typedef void* DragDataRef;
 class NSPasteboard;
 #endif
 #elif PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QMimeData;
-QT_END_NAMESPACE
 typedef const QMimeData* DragDataRef;
 #elif PLATFORM(WIN)
 typedef struct IDataObject* DragDataRef;

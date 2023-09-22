@@ -160,9 +160,7 @@
 using namespace WebCore;
 
 // from text/qfont.cpp
-QT_BEGIN_NAMESPACE
 extern Q_GUI_EXPORT int qt_defaultDpi();
-QT_END_NAMESPACE
 
 bool QWebPagePrivate::drtRun = false;
 

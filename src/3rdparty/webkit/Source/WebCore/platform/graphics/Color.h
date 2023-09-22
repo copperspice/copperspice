@@ -37,9 +37,7 @@ typedef struct CGColor* CGColorRef;
 
 #if PLATFORM(QT)
 #include <qglobal.h>
-QT_BEGIN_NAMESPACE
 class QColor;
-QT_END_NAMESPACE
 #endif
 
 #if PLATFORM(GTK)

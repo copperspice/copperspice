@@ -27,10 +27,8 @@
 #include <QString>
 #include <wtf/Forward.h>
 
-QT_BEGIN_NAMESPACE
 class QTcpServer;
 class QTcpSocket;
-QT_END_NAMESPACE
 class QWebPage;
 
 namespace WebCore {

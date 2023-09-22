@@ -60,9 +60,7 @@ typedef PlatformWidget PlatformPluginWidget;
 #if PLATFORM(QT)
 #include <QGraphicsItem>
 #include <QImage>
-QT_BEGIN_NAMESPACE
 class QPainter;
-QT_END_NAMESPACE
 #endif
 #if PLATFORM(QT) && USE(ACCELERATED_COMPOSITING) && ENABLE(NETSCAPE_PLUGIN_API) && (defined(XP_UNIX) || OS(SYMBIAN))
 #ifndef WTF_USE_ACCELERATED_COMPOSITING_PLUGIN_LAYER

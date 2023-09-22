@@ -47,10 +47,7 @@ namespace JSC {
 }
 #endif
 
-QT_BEGIN_NAMESPACE
 class QPainter;
-QT_END_NAMESPACE
-
 class QWebFrame;
 class QWebElementCollection;
 class QWebElementPrivate;

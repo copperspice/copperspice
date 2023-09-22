@@ -51,8 +51,6 @@
 #include <qglobal.h>
    class QMutex;
    class QWaitCondition;
-QT_BEGIN_NAMESPACE
-QT_END_NAMESPACE
 #endif
 
 namespace WTF {

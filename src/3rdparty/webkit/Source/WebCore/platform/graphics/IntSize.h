@@ -42,9 +42,7 @@ typedef struct _NSSize NSSize;
 typedef struct tagSIZE SIZE;
 #elif PLATFORM(QT)
 #include <qglobal.h>
-QT_BEGIN_NAMESPACE
 class QSize;
-QT_END_NAMESPACE
 #elif PLATFORM(HAIKU)
 class BSize;
 #endif

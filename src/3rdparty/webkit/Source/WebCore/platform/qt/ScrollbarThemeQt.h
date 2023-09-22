@@ -30,9 +30,7 @@
 
 #include <qglobal.h>
 
-QT_BEGIN_NAMESPACE
 class QStyle;
-QT_END_NAMESPACE
 
 namespace WebCore {
 

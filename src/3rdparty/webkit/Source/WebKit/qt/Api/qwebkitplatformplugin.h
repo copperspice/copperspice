@@ -157,8 +157,6 @@ public:
     virtual QObject* createExtension(Extension) const = 0;
 };
 
-QT_BEGIN_NAMESPACE
 CS_DECLARE_INTERFACE(QWebKitPlatformPlugin, "com.nokia.Qt.WebKit.PlatformPlugin/1.7");
-QT_END_NAMESPACE
 
 #endif // QWEBKITPLATFORMPLUGIN_H

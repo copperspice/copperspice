@@ -58,10 +58,8 @@ class CALayer;
 class WebGLLayer;
 #endif
 #elif PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QPainter;
 class QRect;
-QT_END_NAMESPACE
 #elif PLATFORM(GTK)
 typedef unsigned int GLuint;
 #endif

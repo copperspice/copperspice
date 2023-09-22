@@ -36,9 +36,7 @@
 #include "QtPlatformPlugin.h"
 #include <wtf/RefCounted.h>
 
-QT_BEGIN_NAMESPACE
 class QEventLoop;
-QT_END_NAMESPACE
 class QWebPage;
 
 namespace WebCore {

@@ -37,9 +37,7 @@
 #include <QPalette>
 #include <QRect>
 
-QT_BEGIN_NAMESPACE
 class QStyle;
-QT_END_NAMESPACE
 
 class QWebPageClient {
 public:

@@ -37,10 +37,8 @@ typedef struct _Evas_Event_Mouse_Wheel Evas_Event_Mouse_Wheel;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QWheelEvent;
 class QGraphicsSceneWheelEvent;
-QT_END_NAMESPACE
 #endif
 
 #if PLATFORM(WIN)
