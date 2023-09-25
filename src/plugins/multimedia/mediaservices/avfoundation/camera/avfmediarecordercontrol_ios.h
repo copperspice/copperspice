@@ -74,7 +74,7 @@ class AVFMediaRecorderControlIOS : public QMediaRecorderControl
    void stopWriter();
 
    AVFCameraService *m_service;
-   AVFScopedPointer<QT_MANGLE_NAMESPACE(AVFMediaAssetWriter)> m_writer;
+   AVFScopedPointer<AVFMediaAssetWriter> m_writer;
 
    QUrl m_outputLocation;
    AVFStorageLocation m_storageLocation;

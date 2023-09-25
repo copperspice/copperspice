@@ -72,7 +72,7 @@ AVFMediaRecorderControlIOS::AVFMediaRecorderControlIOS(AVFCameraService *service
 {
     Q_ASSERT(service);
 
-    m_writer.reset([[QT_MANGLE_NAMESPACE(AVFMediaAssetWriter) alloc] initWithDelegate:this]);
+    m_writer.reset([[AVFMediaAssetWriter alloc] initWithDelegate:this]);
     if (!m_writer) {
         qDebugCamera() << Q_FUNC_INFO << "failed to create an asset writer";
         return;

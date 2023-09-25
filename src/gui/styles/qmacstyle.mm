@@ -81,7 +81,7 @@ static QWindow *qt_getWindow(const QWidget *widget)
    return widget ? widget->window()->windowHandle() : nullptr;
 }
 
-@interface QT_MANGLE_NAMESPACE(NotificationReceiver) : NSObject
+@interface NotificationReceiver : NSObject
 {
                                                           QMacStylePrivate *mPrivate;
 }

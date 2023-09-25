@@ -34,7 +34,7 @@
 
 @class QCocoaPageLayoutDelegate;
 
-@interface QT_MANGLE_NAMESPACE(QCocoaPageLayoutDelegate) : NSObject
+@interface QCocoaPageLayoutDelegate : NSObject
 {
     NSPrintInfo *printInfo;
 }
@@ -43,7 +43,7 @@
               returnCode: (int)returnCode contextInfo: (void *)contextInfo;
 @end
 
-@implementation QT_MANGLE_NAMESPACE(QCocoaPageLayoutDelegate)
+@implementation QCocoaPageLayoutDelegate
 - (id)initWithNSPrintInfo:(NSPrintInfo *)nsPrintInfo
 {
    self = [super init];

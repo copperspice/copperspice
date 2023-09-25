@@ -63,14 +63,14 @@ enum WriterState
 
 } // unnamed namespace
 
-@interface QT_MANGLE_NAMESPACE(AVFMediaAssetWriter) (PrivateAPI)
+@interface AVFMediaAssetWriter (PrivateAPI)
 - (bool)addAudioCapture;
 - (bool)addWriterInputs;
 - (void)setQueues;
 - (void)updateDuration:(CMTime)newTimeStamp;
 @end
 
-@implementation QT_MANGLE_NAMESPACE(AVFMediaAssetWriter)
+@implementation AVFMediaAssetWriter
 
 - (id)initWithDelegate:(AVFMediaRecorderControlIOS *)delegate
 {

@@ -424,15 +424,15 @@
 #endif
 
 #define Q_INIT_RESOURCE_EXTERN(name) \
-   extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();
+   extern int qInitResources_ ## name ();
 
 #define Q_INIT_RESOURCE(name) \
-   do { extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();       \
-   QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (false)
+   do { extern int qInitResources_ ## name ();       \
+   qInitResources_ ## name (); } while (false)
 
 #define Q_CLEANUP_RESOURCE(name) \
-   do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
-   QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (false)
+   do { extern int qCleanupResources_ ## name ();    \
+   qCleanupResources_ ## name (); } while (false)
 
 // make sure to update QVariant when changing the following
 
