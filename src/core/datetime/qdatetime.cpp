@@ -2718,14 +2718,7 @@ QDataStream &operator<<(QDataStream &stream, const QDateTime &dateTime)
    QPair<QDate, QTime> dateAndTime;
 
    dateAndTime = dateTime.d->getDateTime();
-   stream << dateAndTime << qint8(dateTime.timeSpec());
-
-   if (dateTime.timeSpec() == Qt::OffsetFromUTC) {
-      stream << qint32(dateTime.offsetFromUtc());
-
-   } else if (dateTime.timeSpec() == Qt::TimeZone) {
-      stream << dateTime.timeZone();
-   }
+   stream << dateAndTime << dateTime.timeZone();
 
    return stream;
 }
@@ -2734,28 +2727,11 @@ QDataStream &operator>>(QDataStream &stream, QDateTime &dateTime)
 {
    QDate dt;
    QTime tm;
-   qint8 ts = 0;
-
-   Qt::TimeSpec spec = Qt::LocalTime;
-   qint32 offset = 0;
 
    QTimeZone tz;
 
-   // switched to using Qt::TimeSpec and added offset support
-   stream >> dt >> tm >> ts;
-   spec = static_cast<Qt::TimeSpec>(ts);
-
-   if (spec == Qt::OffsetFromUTC) {
-      stream >> offset;
-      dateTime = QDateTime(dt, tm, spec, offset);
-
-   } else if (spec == Qt::TimeZone) {
-      stream >> tz;
-      dateTime = QDateTime(dt, tm, tz);
-
-   } else {
-      dateTime = QDateTime(dt, tm, spec);
-   }
+   stream >> dt >> tm >> tz;
+   dateTime = QDateTime(dt, tm, tz);
 
    return stream;
 }
@@ -2778,25 +2754,12 @@ QDebug operator<<(QDebug dbg, const QTime &time)
 QDebug operator<<(QDebug dbg, const QDateTime &date)
 {
    QDebugStateSaver saver(dbg);
-   const Qt::TimeSpec ts = date.timeSpec();
 
    dbg.nospace() << "QDateTime(";
-   dbg.noquote() << date.toString("yyyy-MM-dd HH:mm:ss.zzz t")
-      << ' ' << ts;
+   dbg.noquote() << date.toString("yyyy-MM-dd HH:mm:ss.zzz t");
+   dbg << ' ' << date.timeZone().id() << ')';
 
-   switch (ts) {
-      case Qt::UTC:
-         break;
-      case Qt::OffsetFromUTC:
-         dbg << ' ' << date.offsetFromUtc() << 's';
-         break;
-      case Qt::TimeZone:
-         dbg << ' ' << date.timeZone().id();
-         break;
-      case Qt::LocalTime:
-         break;
-   }
-   return dbg << ')';
+   return dbg;
 }
 
 uint qHash(const QDateTime &key, uint seed)
