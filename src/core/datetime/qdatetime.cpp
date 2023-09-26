@@ -1157,8 +1157,8 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
    date->getDate(&yy, &mm, &dd);
 
    // All other platforms provide standard C library time functions
-   tm local;
-   memset(&local, 0, sizeof(local)); // tm_[wy]day plus any non-standard fields
+   tm local = {};
+
    local.tm_sec  = time->second();
    local.tm_min  = time->minute();
    local.tm_hour = time->hour();
@@ -2307,23 +2307,26 @@ static uint msecsFromDecomposed(int hour, int minute, int sec, int msec = 0)
 
 QDate QDate::currentDate()
 {
-   QDate d;
-   SYSTEMTIME st;
-   memset(&st, 0, sizeof(SYSTEMTIME));
+   QDate retval;
+
+   SYSTEMTIME st = {};
    GetLocalTime(&st);
-   d.jd = julianDayFromDate(st.wYear, st.wMonth, st.wDay);
-   return d;
+
+   retval.jd = julianDayFromDate(st.wYear, st.wMonth, st.wDay);
+
+   return retval;
 }
 
 QTime QTime::currentTime()
 {
-   QTime ct;
-   SYSTEMTIME st;
-   memset(&st, 0, sizeof(SYSTEMTIME));
-   GetLocalTime(&st);
-   ct.setHMS(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+   QTime retval;
 
-   return ct;
+   SYSTEMTIME st = {};
+   GetLocalTime(&st);
+
+   retval.setHMS(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+
+   return retval;
 }
 
 QDateTime QDateTime::currentDateTime(const QTimeZone &zone)
@@ -2357,8 +2360,7 @@ QDateTime QDateTime::currentDateTimeUtc()
 
 qint64 QDateTime::currentMSecsSinceEpoch()
 {
-   SYSTEMTIME st;
-   memset(&st, 0, sizeof(SYSTEMTIME));
+   SYSTEMTIME st = {};
    GetSystemTime(&st);
 
    return msecsFromDecomposed(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds) +
