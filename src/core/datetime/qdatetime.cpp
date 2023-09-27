@@ -1550,7 +1550,7 @@ QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt:
 }
 
 QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, const QTimeZone &toTimeZone)
-   : m_spec(Qt::TimeZone), m_offsetFromUtc(0), m_timeZone(toTimeZone), m_status(Qt::EmptyFlag)
+   : m_timeZone(toTimeZone), m_tzUserDefined(false), m_status(Qt::EmptyFlag)
 {
    setDateTime(toDate, toTime);
 }
@@ -1804,7 +1804,7 @@ QDateTime::QDateTime(const QDate &date, const QTime &time, const QTimeZone &time
 }
 
 QDateTime::QDateTime(const QDateTime &other)
-   : d(other.d)
+   : d(new QDateTimePrivate(*other.d))
 {
 }
 
@@ -1819,7 +1819,18 @@ QDateTime::~QDateTime()
 
 QDateTime &QDateTime::operator=(const QDateTime &other)
 {
-   d = other.d;
+   if (other.d == nullptr) {
+      d.reset();
+
+   } else {
+      if (d == nullptr) {
+         d = QMakeUnique<QDateTimePrivate>(*other.d);
+
+      } else {
+         *d = *other.d;
+      }
+   }
+
    return *this;
 }
 

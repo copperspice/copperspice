@@ -29,7 +29,7 @@
 #include <qplatformdefs.h>
 #include <qtimezone.h>
 
-class QDateTimePrivate : public QSharedData
+class QDateTimePrivate
 {
  public:
    enum Spec {
@@ -61,13 +61,10 @@ class QDateTimePrivate : public QSharedData
    };
    using StatusFlags = QFlags<StatusFlag>;
 
-   QDateTimePrivate() : m_msecs(0),
-      m_spec(Qt::LocalTime),
-      m_offsetFromUtc(0),
-      m_status(NullDate | NullTime)
-   {}
-
    QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec, int offsetSeconds);
+   QDateTimePrivate()
+      : m_msecs(0), m_tzUserDefined(false), m_status(NullDate | NullTime)
+   { }
 
    QDateTimePrivate(const QDate &toDate, const QTime &toTime, const QTimeZone &timeZone);
 
@@ -132,6 +129,7 @@ class QDateTimePrivate : public QSharedData
    qint64 m_msecs;
    QTimeZone m_timeZone;
 
+   bool m_tzUserDefined;
    StatusFlags m_status;
 };
 

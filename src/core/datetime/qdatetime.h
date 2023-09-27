@@ -385,9 +385,7 @@ class Q_CORE_EXPORT QDateTime
 #endif
 
  private:
-   QSharedDataPointer<QDateTimePrivate> d;
-
-   friend class QDateTimePrivate;
+   QUniquePointer<QDateTimePrivate> d;
 
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QDateTime &dateTime);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QDateTime &dateTime);
