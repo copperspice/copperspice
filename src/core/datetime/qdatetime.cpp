@@ -1982,6 +1982,10 @@ quint64 QDateTime::toTime_t() const
    return quint64(retval);
 }
 
+QDateTime QDateTime::toLocalTime() const {
+   return toTimeZone(QTimeZone::systemTimeZone());
+}
+
 void QDateTime::setMSecsSinceEpoch(qint64 msecs)
 {
    QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
@@ -2040,6 +2044,22 @@ void QDateTime::setMSecsSinceEpoch(qint64 msecs)
 void QDateTime::setTime_t(quint64  secsSince1Jan1970UTC)
 {
    setMSecsSinceEpoch((qint64)secsSince1Jan1970UTC * 1000);
+}
+
+QDateTime QDateTime::toOffsetFromUtc(qint64 offsetSeconds) const
+{
+   if (offsetFromUtc() == offsetSeconds) {
+      return *this;
+   }
+
+   if (! isValid()) {
+      QDateTime dt = *this;
+      dt.setTimeZone(QTimeZone(offsetSeconds));
+
+      return dt;
+   }
+
+   return fromMSecsSinceEpoch(toMSecsSinceEpoch(), QTimeZone(offsetSeconds));
 }
 
 QString QDateTime::toString(Qt::DateFormat format) const
@@ -2126,6 +2146,10 @@ QString QDateTime::toString(Qt::DateFormat format) const
 QString QDateTime::toString(const QString &format) const
 {
    return QLocale::system().toString(*this, format);
+}
+
+QDateTime QDateTime::toUTC() const {
+   return toTimeZone(QTimeZone::utc());
 }
 
 static void massageAdjustedDateTime(const QTimeZone &zone, QDate *date, QTime *time)
@@ -2227,36 +2251,6 @@ qint64 QDateTime::msecsTo(const QDateTime &other) const
    return other.d->toMSecsSinceEpoch() - d->toMSecsSinceEpoch();
 }
 
-QDateTime QDateTime::toTimeSpec(Qt::TimeSpec spec) const
-{
-   if (d->m_spec == spec && (spec == Qt::UTC || spec == Qt::LocalTime)) {
-      return *this;
-   }
-
-   if (! isValid()) {
-      QDateTime ret = *this;
-      ret.setTimeSpec(spec);
-      return ret;
-   }
-
-   return fromMSecsSinceEpoch(d->toMSecsSinceEpoch(), spec, 0);
-}
-
-QDateTime QDateTime::toOffsetFromUtc(qint64 offsetSeconds) const
-{
-   if (d->m_spec == Qt::OffsetFromUTC && d->m_offsetFromUtc == offsetSeconds) {
-      return *this;
-   }
-
-   if (!isValid()) {
-      QDateTime ret = *this;
-      ret.setOffsetFromUtc(offsetSeconds);
-      return ret;
-   }
-
-   return fromMSecsSinceEpoch(d->toMSecsSinceEpoch(), Qt::OffsetFromUTC, offsetSeconds);
-}
-
 QDateTime QDateTime::toTimeZone(const QTimeZone &timeZone) const
 {
    if (d->m_spec == Qt::TimeZone && d->m_timeZone == timeZone) {
@@ -2342,18 +2336,6 @@ QDateTime QDateTime::currentDateTime(const QTimeZone &zone)
    return retval;
 }
 
-QDateTime QDateTime::currentDateTimeUtc()
-{
-   QDate d;
-   QTime t;
-   SYSTEMTIME st;
-   memset(&st, 0, sizeof(SYSTEMTIME));
-   GetSystemTime(&st);
-   d.jd = julianDayFromDate(st.wYear, st.wMonth, st.wDay);
-   t.mds = msecsFromDecomposed(st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-   return QDateTime(d, t, Qt::UTC);
-}
-
 qint64 QDateTime::currentMSecsSinceEpoch()
 {
    SYSTEMTIME st = {};
@@ -2381,11 +2363,6 @@ QDateTime QDateTime::currentDateTime(const QTimeZone &zone)
    return fromMSecsSinceEpoch(currentMSecsSinceEpoch(), zone);
 }
 
-QDateTime QDateTime::currentDateTimeUtc()
-{
-   return fromMSecsSinceEpoch(currentMSecsSinceEpoch(), Qt::UTC);
-}
-
 qint64 QDateTime::currentMSecsSinceEpoch()
 {
    struct timeval tv;
@@ -2401,29 +2378,33 @@ qint64 QDateTime::currentMSecsSinceEpoch()
 
 // ** QDateTime
 
-QDateTime QDateTime::fromTime_t(quint64 seconds, Qt::TimeSpec spec, int offsetSeconds)
+QDateTime QDateTime::currentDateTimeUtc()
 {
-   return fromMSecsSinceEpoch((qint64)seconds * 1000, spec, offsetSeconds);
+   return currentDateTime(QTimeZone::utc());
 }
 
-QDateTime QDateTime::fromTime_t(quint64  seconds, const QTimeZone &timeZone)
+QDateTime QDateTime::fromTime_t(qint64 seconds, const QTimeZone &timeZone)
 {
-   return fromMSecsSinceEpoch((qint64)seconds * 1000, timeZone);
-}
-
-QDateTime QDateTime::fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec, int offsetSeconds)
-{
-   QDateTime dt;
-   dt.d->setTimeSpec(spec, offsetSeconds);
-   dt.setMSecsSinceEpoch(msecs);
-   return dt;
+   return fromMSecsSinceEpoch(seconds * MSECS_PER_SEC, timeZone);
 }
 
 QDateTime QDateTime::fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone)
 {
    QDateTime dt;
+
    dt.setTimeZone(timeZone);
    dt.setMSecsSinceEpoch(msecs);
+
+   return dt;
+}
+
+QDateTime QDateTime::fromSecsSinceEpoch(qint64 seconds, const QTimeZone &timeZone)
+{
+   QDateTime dt;
+
+   dt.setTimeZone(timeZone);
+   dt.setMSecsSinceEpoch(seconds * MSECS_PER_SEC);
+
    return dt;
 }
 

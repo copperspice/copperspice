@@ -322,16 +322,11 @@ class Q_CORE_EXPORT QDateTime
    QTimeZone timeZone() const;
    QString timeZoneAbbreviation() const;
 
+   QDateTime toLocalTime() const;
+
    qint64 toMSecsSinceEpoch() const;
-   QDateTime toTimeSpec(Qt::TimeSpec specification) const;
 
-   QDateTime toLocalTime() const {
-      return toTimeSpec(Qt::LocalTime);
-   }
 
-   QDateTime toUTC() const {
-      return toTimeSpec(Qt::UTC);
-   }
 
    QDateTime toOffsetFromUtc(qint64 offsetSeconds) const;
 
@@ -341,6 +336,7 @@ class Q_CORE_EXPORT QDateTime
    quint64 toTime_t() const;
    QDateTime toTimeZone(const QTimeZone &timeZone) const;
 
+   QDateTime toUTC() const;
 
    bool operator==(const QDateTime &value) const;
    bool operator!=(const QDateTime &value) const {
@@ -363,15 +359,16 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime currentDateTime(const QTimeZone &zone = QDate::default_tz());
    static QDateTime currentDateTimeUtc();
 
+   static QDateTime fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone = QDate::default_tz());
+   static QDateTime fromSecsSinceEpoch(qint64 seconds, const QTimeZone &timeZone = QDate::default_tz());
+
    static qint64 currentMSecsSinceEpoch();
+   static QDateTime fromTime_t(qint64 seconds, const QTimeZone &timeZone = QDate::default_tz());
+
    static QDateTime fromString(const QString &str, Qt::DateFormat format = Qt::TextDate);
    static QDateTime fromString(const QString &str, const QString &format);
 
-   static QDateTime fromTime_t(quint64 seconds, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
-   static QDateTime fromTime_t(quint64 seconds, const QTimeZone &timeZone);
 
-   static QDateTime fromMSecsSinceEpoch(qint64 msecs, Qt::TimeSpec spec = Qt::LocalTime, int offsetFromUtc = 0);
-   static QDateTime fromMSecsSinceEpoch(qint64 msecs, const QTimeZone &timeZone);
 
 #if defined(Q_OS_DARWIN)
    static QDateTime fromCFDate(CFDateRef date);
