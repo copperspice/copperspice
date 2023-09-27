@@ -1789,18 +1789,15 @@ QDateTime::QDateTime()
 }
 
 QDateTime::QDateTime(const QDate &date)
-   : d(new QDateTimePrivate(date, QTime(0, 0, 0), Qt::LocalTime, 0))
+   : d(new QDateTimePrivate(date, QTime(0, 0, 0), QTimeZone()))
 {
+   d->m_tzUserDefined = false;
 }
 
-QDateTime::QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec, int offsetSeconds)
-   : d(new QDateTimePrivate(date, time, spec, offsetSeconds))
+QDateTime::QDateTime(const QDate &date, const QTime &time, std::optional<QTimeZone> timeZone)
+   : d(new QDateTimePrivate(date, time, timeZone.value_or(QTimeZone())))
 {
-}
-
-QDateTime::QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone)
-   : d(new QDateTimePrivate(date, time, timeZone))
-{
+   d->m_tzUserDefined = timeZone.has_value();
 }
 
 QDateTime::QDateTime(const QDateTime &other)
@@ -2465,8 +2462,8 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
             return QDateTime();
          }
 
-         QDateTime dateTime(rfc.date, rfc.time, Qt::UTC);
-         dateTime.setOffsetFromUtc(rfc.utcOffset);
+         QDateTime dateTime(rfc.date, rfc.time, QTimeZone(rfc.utcOffset));
+
          return dateTime;
       }
 
@@ -2477,7 +2474,7 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          }
 
          QStringView isoString(string);
-         Qt::TimeSpec spec = Qt::LocalTime;
+         QTimeZone timeZone = QTimeZone::systemTimeZone();
 
          QDate date = QDate::fromString(string.left(10), Qt::ISODate);
 
@@ -2493,7 +2490,7 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          int offset = 0;
 
          if (isoString.endsWith('Z')) {
-            spec = Qt::UTC;
+            timeZone  = QTimeZone::utc();
             isoString = isoString.left(isoString.size() - 1);
 
          } else {
@@ -2523,7 +2520,7 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
                   return QDateTime();
                }
                isoString = isoString.left(signIndex);
-               spec = Qt::OffsetFromUTC;
+               timeZone = QTimeZone(offset);
             }
          }
 
@@ -2541,7 +2538,7 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
             date = date.addDays(1);
          }
 
-         return QDateTime(date, time, spec, offset);
+         return QDateTime(date, time, timeZone);
       }
 
       case Qt::TextDate: {
@@ -2654,7 +2651,7 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          }
 
          if (parts.count() == 5) {
-            return QDateTime(date, time, Qt::LocalTime);
+            return QDateTime(date, time, QTimeZone::systemTimeZone());
          }
 
          QStringView tz = parts.at(5);
@@ -2670,10 +2667,11 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
             if (! ok) {
                return QDateTime();
             }
-            return QDateTime(date, time, Qt::OffsetFromUTC, offset);
+
+            return QDateTime(date, time, QTimeZone(offset));
 
          } else {
-            return QDateTime(date, time, Qt::UTC);
+            return QDateTime(date, time, QTimeZone::utc());
          }
       }
    }

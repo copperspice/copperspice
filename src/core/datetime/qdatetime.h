@@ -32,6 +32,7 @@
 class QDateTimePrivate;
 
 #include <limits>
+#include <optional>
 
 #ifdef Q_OS_DARWIN
 
@@ -268,8 +269,7 @@ class Q_CORE_EXPORT QDateTime
    QDateTime();
 
    explicit QDateTime(const QDate &date);
-   QDateTime(const QDate &date, const QTime &time, Qt::TimeSpec spec = Qt::LocalTime, int offsetSeconds = 0);
-   QDateTime(const QDate &date, const QTime &time, const QTimeZone &timeZone);
+   QDateTime(const QDate &date, const QTime &time, std::optional<QTimeZone> timeZone = std::nullopt);
 
    QDateTime(const QDateTime &other);
    QDateTime(QDateTime &&other);
