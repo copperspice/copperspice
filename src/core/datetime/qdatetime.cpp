@@ -1541,13 +1541,6 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs, QDateTimePrivate::Daylig
 }
 
 // ** QDateTimePrivate
-QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec,
-      int offsetSeconds)
-   : m_msecs(0), m_spec(Qt::LocalTime), m_offsetFromUtc(0), m_status(Qt::EmptyFlag)
-{
-   setTimeSpec(toSpec, offsetSeconds);
-   setDateTime(toDate, toTime);
-}
 
 QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, const QTimeZone &toTimeZone)
    : m_timeZone(toTimeZone), m_tzUserDefined(false), m_status(Qt::EmptyFlag)

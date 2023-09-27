@@ -61,7 +61,6 @@ class QDateTimePrivate
    };
    using StatusFlags = QFlags<StatusFlag>;
 
-   QDateTimePrivate(const QDate &toDate, const QTime &toTime, Qt::TimeSpec toSpec, int offsetSeconds);
    QDateTimePrivate()
       : m_msecs(0), m_tzUserDefined(false), m_status(NullDate | NullTime)
    { }
