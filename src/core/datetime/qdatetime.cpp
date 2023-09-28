@@ -2030,10 +2030,10 @@ QDateTime QDateTime::toOffsetFromUtc(qint64 offsetSeconds) const
 
 QString QDateTime::toString(Qt::DateFormat format) const
 {
-   QString buf;
+   QString retval;
 
    if (! isValid()) {
-      return buf;
+      return retval;
    }
 
    switch (format) {
@@ -2052,9 +2052,10 @@ QString QDateTime::toString(Qt::DateFormat format) const
          return QLocale().toString(*this, QLocale::LongFormat);
 
       case Qt::RFC2822Date: {
-         buf = QLocale::c().toString(*this, "dd MMM yyyy hh:mm:ss ");
-         buf += toOffsetString(Qt::TextDate, d->m_offsetFromUtc);
-         return buf;
+         retval = QLocale::c().toString(*this, "dd MMM yyyy hh:mm:ss ");
+         retval += toOffsetString(Qt::TextDate, offsetFromUtc());
+
+         return retval;
       }
 
       default:
@@ -2066,45 +2067,54 @@ QString QDateTime::toString(Qt::DateFormat format) const
          const QTime &tm = p.second;
 
          // can not use date.toString(Qt::TextDate) since we need to insert the time before the year
-         buf = QString("%1 %2 %3 %4 %5").formatArg(dt.shortDayName(dt.dayOfWeek()))
+         retval = QString("%1 %2 %3 %4 %5").formatArg(dt.shortDayName(dt.dayOfWeek()))
             .formatArg(dt.shortMonthName(dt.month()))
             .formatArg(dt.day())
             .formatArg(tm.toString(Qt::TextDate))
             .formatArg(dt.year());
 
-         if (timeSpec() != Qt::LocalTime) {
-            buf += " GMT";
-            if (d->m_spec == Qt::OffsetFromUTC) {
-               buf += toOffsetString(Qt::TextDate, d->m_offsetFromUtc);
+         if (! d->m_tzUserDefined) {
+            // defaulted time zone
+
+         } else {
+            retval += " UTC";
+
+            int offset = offsetFromUtc();
+
+            if (offset != 0) {
+               retval += toOffsetString(Qt::TextDate, offset);
             }
          }
-         return buf;
+
+         return retval;
       }
 
       case Qt::ISODate: {
          const QPair<QDate, QTime> p = d->getDateTime();
          const QDate &dt = p.first;
          const QTime &tm = p.second;
-         buf = dt.toString(Qt::ISODate);
-         if (buf.isEmpty()) {
+
+         retval = dt.toString(Qt::ISODate);
+
+         if (retval.isEmpty()) {
             return QString();   // failed to convert
          }
-         buf += QLatin1Char('T');
-         buf += tm.toString(Qt::ISODate);
 
-         switch (d->m_spec) {
-            case Qt::UTC:
-               buf += QLatin1Char('Z');
-               break;
+         retval += 'T';
+         retval += tm.toString(Qt::ISODate);
 
-            case Qt::OffsetFromUTC:
-               buf += toOffsetString(Qt::ISODate, d->m_offsetFromUtc);
-               break;
+         if (! d->m_tzUserDefined) {
+            // defaulted time zone
 
-            default:
-               break;
+         } else if (timeZone() == QTimeZone::utc()) {
+            retval += 'Z';
+
+         } else  {
+            retval += toOffsetString(Qt::ISODate, offsetFromUtc());
+
          }
-         return buf;
+
+         return retval;
       }
    }
 }
