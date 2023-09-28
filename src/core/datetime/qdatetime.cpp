@@ -1962,10 +1962,6 @@ void QDateTime::setTimeZone(const QTimeZone &toZone)
    d->refreshDateTime();
 }
 
-qint64 QDateTime::toMSecsSinceEpoch() const
-{
-   return d->toMSecsSinceEpoch();
-}
 
 quint64 QDateTime::toTime_t() const
 {
@@ -2041,9 +2037,24 @@ void QDateTime::setMSecsSinceEpoch(qint64 msecs)
    }
 }
 
+qint64 QDateTime::toMSecsSinceEpoch() const
+{
+   if (d->m_tzUserDefined) {
+      return QDateTimePrivate::zoneMSecsToEpochMSecs(d->m_msecs, d->m_timeZone);
+
+   } else {
+      auto status = d->daylightStatus();
+      return localMSecsToEpochMSecs(d->m_msecs, &status);
+   }
+}
+
 void QDateTime::setTime_t(quint64  secsSince1Jan1970UTC)
 {
    setMSecsSinceEpoch((qint64)secsSince1Jan1970UTC * 1000);
+}
+
+qint64 QDateTime::toSecsSinceEpoch() const {
+   return toMSecsSinceEpoch() / MSECS_PER_SEC;
 }
 
 QDateTime QDateTime::toOffsetFromUtc(qint64 offsetSeconds) const

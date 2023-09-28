@@ -325,6 +325,7 @@ class Q_CORE_EXPORT QDateTime
    QDateTime toLocalTime() const;
 
    qint64 toMSecsSinceEpoch() const;
+   qint64 toSecsSinceEpoch() const;
 
 
 
