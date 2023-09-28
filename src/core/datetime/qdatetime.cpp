@@ -1883,28 +1883,10 @@ int QDateTime::offsetFromUtc() const
    return d->m_offsetFromUtc;
 }
 
-QString QDateTime::timeZoneAbbreviation() const
-{
-   switch (d->m_spec) {
-      case Qt::UTC:
-         return QTimeZonePrivate::utcQString();
 
-      case Qt::OffsetFromUTC:
-         return QTimeZonePrivate::utcQString() + toOffsetString(Qt::ISODate, d->m_offsetFromUtc);
 
-      case Qt::TimeZone:
-         return d->m_timeZone.d->abbreviation(d->toMSecsSinceEpoch());
 
-      case Qt::LocalTime:  {
-         QString abbrev;
-         QDateTimePrivate::DaylightStatus status = d->daylightStatus();
-         localMSecsToEpochMSecs(d->m_msecs, &status, nullptr, nullptr, &abbrev);
-         return abbrev;
-      }
-   }
 
-   return QString();
-}
 
 
 
@@ -1963,19 +1945,14 @@ void QDateTime::setTimeZone(const QTimeZone &toZone)
 }
 
 
-quint64 QDateTime::toTime_t() const
+QString QDateTime::timeZoneAbbreviation() const
 {
-   if (!isValid()) {
-      return quint64(-1);
-   }
+   Q_ASSERT_X(isValid(), "QDateTime::timeZoneAbbreviation()", "QDateTime is invalid");
 
-   qint64 retval = d->toMSecsSinceEpoch() / 1000;
+   Q_ASSERT_X(d->m_timeZone.isValid(), "QDateTime::timeZoneAbbreviation()",
+         "QDateTime timeZone is invalid");
 
-   if (quint64(retval) >= Q_UINT64_C(0xFFFFFFFF)) {
-      return quint64(-1);
-   }
-
-   return quint64(retval);
+   return d->m_timeZone.d->abbreviation(toMSecsSinceEpoch());
 }
 
 QDateTime QDateTime::toLocalTime() const {
@@ -2159,6 +2136,37 @@ QString QDateTime::toString(const QString &format) const
    return QLocale::system().toString(*this, format);
 }
 
+quint64 QDateTime::toTime_t() const
+{
+   if (! isValid()) {
+      return quint64(-1);
+   }
+
+   qint64 retval = toMSecsSinceEpoch() / MSECS_PER_SEC;
+
+   if (quint64(retval) >= Q_UINT64_C(0xFFFFFFFF)) {
+      return quint64(-1);
+   }
+
+   return quint64(retval);
+}
+
+QDateTime QDateTime::toTimeZone(const QTimeZone &timeZone) const
+{
+   if (d->m_timeZone == timeZone) {
+      return *this;
+   }
+
+   if (! isValid()) {
+      QDateTime dt = *this;
+      dt.setTimeZone(timeZone);
+
+      return dt;
+   }
+
+   return fromMSecsSinceEpoch(toMSecsSinceEpoch(), timeZone);
+}
+
 QDateTime QDateTime::toUTC() const {
    return toTimeZone(QTimeZone::utc());
 }
@@ -2230,15 +2238,8 @@ QDateTime QDateTime::addMSecs(qint64 msecs) const
 
    QDateTime dt(*this);
 
-   if (d->m_spec == Qt::LocalTime || d->m_spec == Qt::TimeZone) {
-      // Convert to real UTC first in case crosses DST transition
-
-      dt.setMSecsSinceEpoch(d->toMSecsSinceEpoch() + msecs);
-
-   } else {
-      // No need to convert, just add on  {
-      dt.d->m_msecs = dt.d->m_msecs + msecs;
-   }
+   // Convert to real UTC first in case it crosses DST transition
+   dt.setMSecsSinceEpoch(toMSecsSinceEpoch() + msecs);
 
    return dt;
 }
@@ -2259,22 +2260,7 @@ qint64 QDateTime::msecsTo(const QDateTime &other) const
       return 0;
    }
 
-   return other.d->toMSecsSinceEpoch() - d->toMSecsSinceEpoch();
-}
-
-QDateTime QDateTime::toTimeZone(const QTimeZone &timeZone) const
-{
-   if (d->m_spec == Qt::TimeZone && d->m_timeZone == timeZone) {
-      return *this;
-   }
-
-   if (!isValid()) {
-      QDateTime ret = *this;
-      ret.setTimeZone(timeZone);
-      return ret;
-   }
-
-   return fromMSecsSinceEpoch(d->toMSecsSinceEpoch(), timeZone);
+   return other.toMSecsSinceEpoch() - toMSecsSinceEpoch();
 }
 
 bool QDateTime::operator==(const QDateTime &other) const
