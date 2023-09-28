@@ -1665,28 +1665,6 @@ QDateTimePrivate::DaylightStatus QDateTimePrivate::daylightStatus() const
    return UnknownDaylightTime;
 }
 
-qint64 QDateTimePrivate::toMSecsSinceEpoch() const
-{
-   switch (m_spec) {
-      case Qt::OffsetFromUTC:
-      case Qt::UTC:
-         return (m_msecs - (m_offsetFromUtc * 1000));
-
-      case Qt::LocalTime: {
-         // recalculate the local timezone
-         DaylightStatus status = daylightStatus();
-         return localMSecsToEpochMSecs(m_msecs, &status);
-      }
-
-      case Qt::TimeZone:
-         return zoneMSecsToEpochMSecs(m_msecs, m_timeZone);
-
-   }
-
-   // error, may want to throw
-   return 0;
-}
-
 void QDateTimePrivate::checkValidDateTime()
 {
    switch (m_spec) {

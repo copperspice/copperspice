@@ -83,7 +83,6 @@ class QDateTimePrivate
    DaylightStatus daylightStatus() const;
 
    QPair<QDate, QTime> getDateTime() const;
-   inline qint64 toMSecsSinceEpoch() const;
 
    bool isNullDate() const {
       return m_status & NullDate;
