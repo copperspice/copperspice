@@ -297,7 +297,6 @@ class Q_CORE_EXPORT QDateTime
    qint64 msecsTo(const QDateTime &value) const;
    qint64 secsTo(const QDateTime &value) const;
 
-   Qt::TimeSpec timeSpec() const;
    bool isDaylightTime() const;
    bool isNull() const;
    bool isValid() const;
@@ -307,8 +306,6 @@ class Q_CORE_EXPORT QDateTime
    void setDate(const QDate &date);
    void setTime(const QTime &time);
 
-   void setTimeSpec(Qt::TimeSpec spec);
-   void setOffsetFromUtc(int offsetSeconds);
    void setTimeZone(const QTimeZone &toZone);
 
    void setMSecsSinceEpoch(qint64 msecs);

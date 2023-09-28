@@ -79,7 +79,6 @@ class QDateTimePrivate
       m_status &= ~ValidDateTime;
    }
 
-   void setTimeSpec(Qt::TimeSpec spec, int offsetSeconds);
    DaylightStatus daylightStatus() const;
 
    QPair<QDate, QTime> getDateTime() const;

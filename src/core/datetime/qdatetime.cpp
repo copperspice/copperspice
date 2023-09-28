@@ -1548,38 +1548,6 @@ QDateTimePrivate::QDateTimePrivate(const QDate &toDate, const QTime &toTime, con
    setDateTime(toDate, toTime);
 }
 
-void QDateTimePrivate::setTimeSpec(Qt::TimeSpec spec, int offsetSeconds)
-{
-   clearValidDateTime();
-   clearSetToDaylightStatus();
-
-   m_timeZone = QTimeZone();
-
-   switch (spec) {
-      case Qt::OffsetFromUTC:
-         if (offsetSeconds == 0) {
-            m_spec = Qt::UTC;
-            m_offsetFromUtc = 0;
-         } else {
-            m_spec = Qt::OffsetFromUTC;
-            m_offsetFromUtc = offsetSeconds;
-         }
-         break;
-
-      case Qt::TimeZone:
-         // Use system time zone instead
-         m_spec = Qt::LocalTime;
-         m_offsetFromUtc = 0;
-         break;
-
-      case Qt::UTC:
-      case Qt::LocalTime:
-         m_spec = spec;
-         m_offsetFromUtc = 0;
-         break;
-   }
-}
-
 void QDateTimePrivate::setDateTime(const QDate &date, const QTime &time)
 {
    // if the date is valid and the time is not, set time to 00:00:00
@@ -1835,10 +1803,6 @@ QTime QDateTime::time() const
    return tm;
 }
 
-Qt::TimeSpec QDateTime::timeSpec() const
-{
-   return d->m_spec;
-}
 
 QTimeZone QDateTime::timeZone() const
 {
@@ -1899,19 +1863,7 @@ void QDateTime::setTime(const QTime &time)
    d->setDateTime(date(), time);
 }
 
-void QDateTime::setTimeSpec(Qt::TimeSpec spec)
-{
-   QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
-   d->setTimeSpec(spec, 0);
-   d->checkValidDateTime();
-}
 
-void QDateTime::setOffsetFromUtc(int offsetSeconds)
-{
-   QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
-   d->setTimeSpec(Qt::OffsetFromUTC, offsetSeconds);
-   d->checkValidDateTime();
-}
 
 void QDateTime::setTimeZone(const QTimeZone &toZone)
 {
