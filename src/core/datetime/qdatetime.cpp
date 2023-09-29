@@ -1635,70 +1635,36 @@ QDateTimePrivate::DaylightStatus QDateTimePrivate::daylightStatus() const
 
 void QDateTimePrivate::checkValidDateTime()
 {
-   switch (m_spec) {
-      case Qt::OffsetFromUTC:
-      case Qt::UTC:
-         // for these a valid date and a valid time imply a valid QDateTime
-         if (isValidDate() && isValidTime()) {
-            setValidDateTime();
-         } else {
-            clearValidDateTime();
-         }
-         break;
-
-      case Qt::TimeZone:
-      case Qt::LocalTime:
-         // for these, we need to check whether the timezone is valid and whether
-         // the time is valid in that timezone. Expensive, but no other option.
-         refreshDateTime();
-         break;
-   }
+   refreshDateTime();
 }
 
-// Refresh the LocalTime validity and offset
 void QDateTimePrivate::refreshDateTime()
 {
-   switch (m_spec) {
-      case Qt::OffsetFromUTC:
-      case Qt::UTC:
-         // Always set by setDateTime so just return
-         return;
-
-      case Qt::TimeZone:
-      case Qt::LocalTime:
-         break;
-   }
-
    if (! isValidDate() || ! isValidTime()) {
       clearValidDateTime();
-      m_offsetFromUtc = 0;
       return;
    }
 
-   if (m_spec == Qt::TimeZone && !m_timeZone.isValid()) {
+   if (m_tzUserDefined && ! m_timeZone.isValid()) {
       clearValidDateTime();
-      m_offsetFromUtc = 0;
       return;
    }
 
    QDate testDate;
    QTime testTime;
-   qint64 epochMSecs = 0;
-   if (m_spec == Qt::LocalTime) {
-      DaylightStatus status = daylightStatus();
-      epochMSecs = localMSecsToEpochMSecs(m_msecs, &status, &testDate, &testTime);
+
+   if (m_tzUserDefined) {
+      zoneMSecsToEpochMSecs(m_msecs, m_timeZone, &testDate, &testTime);
 
    } else {
-      epochMSecs = zoneMSecsToEpochMSecs(m_msecs, m_timeZone, &testDate, &testTime);
-
+      auto status = daylightStatus();
+      localMSecsToEpochMSecs(m_msecs, &status, &testDate, &testTime);
    }
+
    if (timeToMSecs(testDate, testTime) == m_msecs) {
       setValidDateTime();
-      // Cache the offset to use in toMSecsSinceEpoch()
-      m_offsetFromUtc = (m_msecs - epochMSecs) / 1000;
    } else {
       clearValidDateTime();
-      m_offsetFromUtc = 0;
    }
 }
 
