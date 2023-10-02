@@ -26,46 +26,21 @@ TEST_CASE("QScopedArrayPointer traits", "[qscopedarraypointer]")
 {
    // without brackets
    REQUIRE(std::is_copy_constructible_v<QScopedArrayPointer<int>> == false);
-   REQUIRE(std::is_move_constructible_v<QScopedArrayPointer<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QScopedArrayPointer<int>> == false);
 
    REQUIRE(std::is_copy_assignable_v<QScopedArrayPointer<int>> == false);
-   REQUIRE(std::is_move_assignable_v<QScopedArrayPointer<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QScopedArrayPointer<int>> == false);
 
    REQUIRE(std::has_virtual_destructor_v<QScopedArrayPointer<int>> == false);
 
    // with brackets
    REQUIRE(std::is_copy_constructible_v<QScopedArrayPointer<int[]>> == false);
-   REQUIRE(std::is_move_constructible_v<QScopedArrayPointer<int[]>> == true);
+   REQUIRE(std::is_move_constructible_v<QScopedArrayPointer<int[]>> == false);
 
    REQUIRE(std::is_copy_assignable_v<QScopedArrayPointer<int[]>> == false);
-   REQUIRE(std::is_move_assignable_v<QScopedArrayPointer<int[]>> == true);
+   REQUIRE(std::is_move_assignable_v<QScopedArrayPointer<int[]>> == false);
 
    REQUIRE(std::has_virtual_destructor_v<QScopedArrayPointer<int[]>> == false);
-}
-
-TEST_CASE("QScopedArrayPointer convert", "[qscopedarraypointer]")
-{
-   QScopedArrayPointer<int[]> ptr1 = QMakeScoped<int[]>(1);
-   ptr1[0] = 42;
-
-   std::unique_ptr<int[]> ptr2 = std::move(ptr1);
-
-   REQUIRE(ptr1 == nullptr);
-   REQUIRE(ptr2 != nullptr);
-
-   REQUIRE(ptr2[0] == 42);
-
-
-   // no brackets
-   QScopedArrayPointer<double> ptr3 = QMakeScoped<double[]>(1);
-   ptr3[0] = 42.5;
-
-   std::unique_ptr<double[]> ptr4 = std::move(ptr3);
-
-   REQUIRE(ptr3 == nullptr);
-   REQUIRE(ptr4 != nullptr);
-
-   REQUIRE(ptr4[0] == 42.5);
 }
 
 TEST_CASE("QScopedArrayPointer empty", "[qscopedarraypointer]")
@@ -81,36 +56,6 @@ TEST_CASE("QScopedArrayPointer empty", "[qscopedarraypointer]")
    REQUIRE(! (ptr != ptr)) ;
 
    REQUIRE(ptr.isNull() == true);
-}
-
-TEST_CASE("QScopedArrayPointer move_assign", "[qscopedarraypointer]")
-{
-   QScopedArrayPointer<int[]> ptr1;
-   int *rawPointer = nullptr;
-
-   {
-      QScopedArrayPointer<int[]> ptr2(new int[1]);
-      rawPointer = ptr2.data();
-      ptr1 = std::move(ptr2);
-
-      REQUIRE(ptr2.isNull());
-   }
-
-   REQUIRE(rawPointer == ptr1.get());
-}
-
-TEST_CASE("QScopedArrayPointer move_construct", "[qscopedarraypointer]")
-{
-   QScopedArrayPointer<int[]> ptr1 = QMakeScoped<int[]>(1);
-   QScopedArrayPointer<int[]> ptr2(std::move(ptr1));
-
-   REQUIRE(ptr1.isNull() == true);
-   REQUIRE(ptr2.isNull() == false);
-
-   QScopedArrayPointer<int[]> ptr3(std::move(ptr2));
-
-   REQUIRE(ptr2.isNull() == true);
-   REQUIRE(ptr3.isNull() == false);
 }
 
 TEST_CASE("QScopedArrayPointer release", "[qscopedarraypointer]")
