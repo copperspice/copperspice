@@ -1258,7 +1258,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
 
          bool immediateResultValid = false;
 
-         QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &hostInfo)),
+         QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &)),
                &immediateResultValid, &d->hostLookupId);
 
          if (immediateResultValid) {
