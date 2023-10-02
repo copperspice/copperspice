@@ -25,6 +25,7 @@
 
 #include <qdrawhelper_p.h>
 #include <qapplication_p.h>
+#include <qscopedarraypointer.h>
 #include <qsimd_p.h>
 #include <qimage_p.h>
 
