@@ -72,13 +72,17 @@ QStandardItemPrivate::~QStandardItemPrivate()
    QVector<QStandardItem *>::const_iterator it;
    for (it = children.constBegin(); it != children.constEnd(); ++it) {
       QStandardItem *child = *it;
-      if (child) {
+
+      if (child != nullptr && model->d_func() != nullptr) {
          child->d_func()->setModel(nullptr);
       }
+
       delete child;
    }
+
    children.clear();
-   if (parent && model) {
+
+   if (parent != nullptr && model != nullptr && model->d_func() != nullptr) {
       parent->d_func()->childDeleted(q_func());
    }
 }
