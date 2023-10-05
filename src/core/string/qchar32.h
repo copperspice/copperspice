@@ -67,6 +67,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Null                           = 0x0000,
       Tabulation                     = 0x0009,
       LineFeed                       = 0x000a,
+      FormFeed                       = 0x000c,
       CarriageReturn                 = 0x000d,
       Space                          = 0x0020,
       Nbsp                           = 0x00a0,
@@ -77,6 +78,7 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       ByteOrderSwapped               = 0xfffe,
       ParagraphSeparator             = 0x2029,
       LineSeparator                  = 0x2028,
+      VisualTabCharacter             = 0x2192,
       LastValidCodePoint             = 0x10ffff
    };
 
@@ -310,11 +312,18 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Script_Yezidi,
 
       // Unicode 14.0
-      //   Script_Cypro_Minoan,
-      //   Script_Old_Uyghur,
-      //   Script_Tangsa,
-      //   Script_Toto,
-      //   Script_Vithkuqi,
+      Script_Cypro_Minoan,
+      Script_Old_Uyghur,
+      Script_Tangsa,
+      Script_Toto,
+      Script_Vithkuqi,
+
+      // Unicode 15.0
+      Script_Kawi,
+      Script_Nag_Mundari,
+
+      // Unicode 15.1
+      // nothing was added
 
       ScriptCount
    };
@@ -376,7 +385,13 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       Unicode_8_0,
       Unicode_9_0,
       Unicode_10_0,
-      Unicode_11_0
+      Unicode_11_0,
+      Unicode_12_0,
+      Unicode_12_1,
+      Unicode_13_0,
+      Unicode_14_0,
+      Unicode_15_0,
+      Unicode_15_1,
    };
 
    QChar32() = default;
