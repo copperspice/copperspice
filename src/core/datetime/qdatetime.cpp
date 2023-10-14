@@ -1834,8 +1834,6 @@ void QDateTime::setTime(const QTime &time)
    d->setDateTime(date(), time);
 }
 
-
-
 void QDateTime::setTimeZone(const QTimeZone &toZone)
 {
    QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
@@ -2167,7 +2165,7 @@ qint64 QDateTime::secsTo(const QDateTime &other) const
 
 qint64 QDateTime::msecsTo(const QDateTime &other) const
 {
-   if (! isValid() || !other.isValid()) {
+   if (! isValid() || ! other.isValid()) {
       return 0;
    }
 
@@ -2176,9 +2174,15 @@ qint64 QDateTime::msecsTo(const QDateTime &other) const
 
 bool QDateTime::operator==(const QDateTime &other) const
 {
-   if (d->m_spec == Qt::LocalTime
-      && other.d->m_spec == Qt::LocalTime
-      && d->m_status == other.d->m_status) {
+   if (! isValid() && ! other.isValid()) {
+      return true;
+   }
+
+   if (! isValid() || ! other.isValid()) {
+      return false;
+   }
+
+   if (d->m_timeZone == other.d->m_timeZone && d->m_status == other.d->m_status) {
       return (d->m_msecs == other.d->m_msecs);
    }
 
@@ -2186,10 +2190,9 @@ bool QDateTime::operator==(const QDateTime &other) const
    return (toMSecsSinceEpoch() == other.toMSecsSinceEpoch());
 }
 
-
 bool QDateTime::operator<(const QDateTime &other) const
 {
-   if (d->m_spec == Qt::LocalTime && other.d->m_spec == Qt::LocalTime && d->m_status == other.d->m_status) {
+   if (d->m_timeZone == other.d->m_timeZone && d->m_status == other.d->m_status) {
       return (d->m_msecs < other.d->m_msecs);
    }
 
@@ -2374,7 +2377,6 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          }
 
          isoString = isoString.right(isoString.length() - 11);
-         int offset = 0;
 
          if (isoString.endsWith('Z')) {
             timeZone  = QTimeZone::utc();
@@ -2402,10 +2404,12 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
 
             if (found) {
                bool ok;
-               offset = fromOffsetString(isoString.mid(signIndex), &ok);
+               int offset = fromOffsetString(isoString.mid(signIndex), &ok);
+
                if (! ok) {
                   return QDateTime();
                }
+
                isoString = isoString.left(signIndex);
                timeZone = QTimeZone(offset);
             }
