@@ -1824,6 +1824,11 @@ void QDateTime::setDate(const QDate &date)
    d->setDateTime(date, time());
 }
 
+void QDateTime::setSecsSinceEpoch(qint64 seconds)
+{
+   setMSecsSinceEpoch(seconds * MSECS_PER_SEC);
+}
+
 void QDateTime::setTime(const QTime &time)
 {
    d->setDateTime(date(), time);
@@ -2284,6 +2289,11 @@ qint64 QDateTime::currentMSecsSinceEpoch()
 QDateTime QDateTime::currentDateTimeUtc()
 {
    return currentDateTime(QTimeZone::utc());
+}
+
+qint64 QDateTime::currentSecsSinceEpoch()
+{
+   return currentMSecsSinceEpoch() / MSECS_PER_SEC;
 }
 
 QDateTime QDateTime::fromTime_t(qint64 seconds, const QTimeZone &timeZone)

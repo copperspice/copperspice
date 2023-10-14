@@ -309,6 +309,7 @@ class Q_CORE_EXPORT QDateTime
    void setTimeZone(const QTimeZone &toZone);
 
    void setMSecsSinceEpoch(qint64 msecs);
+   void setSecsSinceEpoch(qint64 seconds);
 
    void setTime_t(quint64 seconds);
 
@@ -337,6 +338,7 @@ class Q_CORE_EXPORT QDateTime
    QDateTime toUTC() const;
 
    bool operator==(const QDateTime &value) const;
+
    bool operator!=(const QDateTime &value) const {
       return !(*this == value);
    }
@@ -361,6 +363,8 @@ class Q_CORE_EXPORT QDateTime
    static QDateTime fromSecsSinceEpoch(qint64 seconds, const QTimeZone &timeZone = QDate::default_tz());
 
    static qint64 currentMSecsSinceEpoch();
+   static qint64 currentSecsSinceEpoch();
+
    static QDateTime fromTime_t(qint64 seconds, const QTimeZone &timeZone = QDate::default_tz());
 
    static QDateTime fromString(const QString &str, Qt::DateFormat format = Qt::TextDate);
