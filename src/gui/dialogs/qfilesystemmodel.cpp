@@ -616,7 +616,7 @@ QVariant QFileSystemModel::data(const QModelIndex &index, int role) const
                return d->time(index);
 
             default:
-               qWarning("QFileSystemModel:data() Invalid display value column %d", index.column());
+               qWarning("QFileSystemModel::data() Invalid display role for column %d", index.column());
                break;
          }
          break;

@@ -763,7 +763,7 @@ HWND QVistaHelper::wizardHWND() const
       }
    }
 
-   qWarning().nospace() << "Failed to obtain HWND for wizard.";
+   qWarning("QVistaHelper::wizardHWND() Unable to obtain HWND for this wizard");
 
    return nullptr;
 }

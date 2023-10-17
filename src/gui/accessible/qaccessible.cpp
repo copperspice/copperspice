@@ -488,7 +488,8 @@ QAccessibleInterface *QAccessibleEvent::accessibleInterface() const
       if (child) {
          iface = child;
       } else {
-         qWarning() << "Unable to create accessible child interface for object: " << m_object << " index: " << m_child;
+         qWarning() << "QAccessibleEvent::accessibleInterface() Unable to create accessible interface for child: "
+                    << m_object << " index: " << m_child;
       }
    }
    return iface;

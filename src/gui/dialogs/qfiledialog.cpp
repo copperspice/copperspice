@@ -411,7 +411,8 @@ void QFileDialog::setDirectoryUrl(const QUrl &directory)
       setDirectory(directory.toLocalFile());
 
    } else if (d->usingWidgets()) {
-      qWarning("Non-native QFileDialog supports only local files");
+      qWarning("QFileDialog::setDirectoryUrl() Internal file dialog does not support "
+            "a URL starting with %s", csPrintable(directory.scheme()));
    }
 }
 
@@ -519,7 +520,8 @@ void QFileDialog::selectUrl(const QUrl &url)
       selectFile(url.toLocalFile());
 
    } else {
-      qWarning("Non-native QFileDialog supports only local files");
+      qWarning("QFileDialog::selectUrl() Internal file dialog does not support "
+            "a URL starting with %s", csPrintable(url.scheme()));
    }
 }
 
