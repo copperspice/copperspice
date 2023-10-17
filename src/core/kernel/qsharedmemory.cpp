@@ -353,7 +353,7 @@ bool QSharedMemory::lock()
 {
    Q_D(QSharedMemory);
    if (d->lockedByMe) {
-      qWarning("QSharedMemory::lock: already locked");
+      qWarning("QSharedMemory::lock() Memory already locked");
       return true;
    }
    if (d->systemSemaphore.acquire()) {

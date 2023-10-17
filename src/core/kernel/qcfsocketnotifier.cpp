@@ -110,17 +110,18 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
     int type = notifier->type();
 #ifndef QT_NO_DEBUG
     if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
-        qWarning("QSocketNotifier: Internal error");
+        qWarning("QSocketNotifier::registerSocketNotifier() Internal error");
         return;
+
     } else if (notifier->thread() != eventDispatcher->thread()
                || eventDispatcher->thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: socket notifiers cannot be enabled from another thread");
+        qWarning("QSocketNotifier::registerSocketNotifier() Socket notifiers can not be enabled from another thread");
         return;
     }
 #endif
 
     if (type == QSocketNotifier::Exception) {
-        qWarning("QSocketNotifier::Exception is not supported on iOS");
+        qWarning("QSocketNotifier::registerSocketNotifier() Exception is not supported on this OS");
         return;
     }
 
@@ -135,7 +136,7 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
         CFSocketContext context = {0, this, nullptr, nullptr, nullptr};
         socketInfo->socket = CFSocketCreateWithNative(kCFAllocatorDefault, nativeSocket, callbackTypes, qt_mac_socket_callback, &context);
         if (CFSocketIsValid(socketInfo->socket) == false) {
-            qWarning("QEventDispatcherMac::registerSocketNotifier: Failed to create CFSocket");
+            qWarning("QEventDispatcher::registerSocketNotifier() Failed to create CFSocket");
             return;
         }
 
@@ -178,21 +179,22 @@ void QCFSocketNotifier::unregisterSocketNotifier(QSocketNotifier *notifier)
     int type = notifier->type();
 #ifndef QT_NO_DEBUG
     if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
-        qWarning("QSocketNotifier: Internal error");
+        qWarning("QSocketNotifier::unregisterSocketNotifier() Internal error");
         return;
+
     } else if (notifier->thread() != eventDispatcher->thread() || eventDispatcher->thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: socket notifiers cannot be disabled from another thread");
+        qWarning("QSocketNotifier::unregisterSocketNotifier Socket notifiers can not be disabled from another thread");
         return;
     }
 #endif
 
     if (type == QSocketNotifier::Exception) {
-        qWarning("QSocketNotifier::Exception is not supported on iOS");
+        qWarning("QSocketNotifier::unregisterSocketNotifier() Exception is not supported on this OS");
         return;
     }
     MacSocketInfo *socketInfo = macSockets.value(nativeSocket);
     if (!socketInfo) {
-        qWarning("QEventDispatcherMac::unregisterSocketNotifier: Tried to unregister a not registered notifier");
+        qWarning("QEventDispatcherMac::unregisterSocketNotifier() Unable to unregister an unknown notifier");
         return;
     }
 
@@ -263,7 +265,7 @@ void QCFSocketNotifier::enableSocketNotifiers(CFRunLoopObserverRef, CFRunLoopAct
         if (!socketInfo->runloop) {
             // Add CFSocket to runloop.
             if (!(socketInfo->runloop = qt_mac_add_socket_to_runloop(socketInfo->socket))) {
-                qWarning("QEventDispatcherMac::registerSocketNotifier: Failed to add CFSocket to runloop");
+                qWarning("QEventDispatcher::registerSocketNotifier() Failed to add CFSocket to runloop");
                 CFSocketInvalidate(socketInfo->socket);
                 continue;
             }

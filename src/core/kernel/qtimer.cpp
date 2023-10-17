@@ -170,7 +170,7 @@ void QTimer::singleShot(int msec, const QObject *receiver, const QString &slotMe
 void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject *receiver, const QString &slotMethod)
 {
    if (msec < 0) {
-      qWarning("QTimer::singleShot: Timers cannot have negative timeouts");
+      qWarning("QTimer::singleShot() Timer duration can not be negative");
       return;
    }
 
@@ -180,7 +180,7 @@ void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject *receiv
          int bracketPosition = slotMethod.indexOf('(');
 
          if (bracketPosition == -1) {
-            qWarning("QTimer::singleShot: Invalid slot specification");
+            qWarning("QTimer::singleShot Invalid slot specification");
             return;
          }
 

@@ -101,7 +101,7 @@ void QSocketNotifier::setEnabled(bool enable)
    }
 
    if (thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: Socket notifiers cannot be enabled or disabled from another thread");
+        qWarning("QSocketNotifier::setEnabled() Socket notifiers can not be enabled or disabled from another thread");
         return;
    }
 

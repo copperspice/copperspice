@@ -3079,7 +3079,7 @@ void QVariant::load(QDataStream &stream)
 
    if (! cs_internal_load(stream, userType()) ) {
       stream.setStatus(QDataStream::ReadCorruptData);
-      qWarning("QVariant::load(): Unable to load Variant::Type %d from stream", userType());
+      qWarning("QVariant::load() Unable to load Variant::Type %d from stream", userType());
    }
 }
 
@@ -3099,7 +3099,7 @@ void QVariant::save(QDataStream &stream) const
    }
 
    if (! cs_internal_save(stream, userType()) ) {
-      qWarning("QVariant::save(): Unable to save Variant::Type %d to data stream", userType());
+      qWarning("QVariant::save() Unable to save Variant::Type %d to data stream", userType());
    }
 }
 

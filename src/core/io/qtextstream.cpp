@@ -45,7 +45,7 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
 #define CHECK_VALID_STREAM(x) do { \
     if (! d->m_string && ! d->device) { \
-        qWarning("QTextStream: No device"); \
+        qWarning("QTextStream: No device was available"); \
         return x; \
     } } while (false)
 
@@ -959,7 +959,8 @@ qint64 QTextStream::pos() const
       return d->stringOffset;
    }
 
-   qWarning("QTextStream::pos: no device");
+   qWarning("QTextStream::pos() No device was provided");
+
    return qint64(-1);
 }
 
