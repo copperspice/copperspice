@@ -23,8 +23,8 @@
 
 #include <qsslsocket_openssl_symbols_p.h>
 
-#include <qmutex.h>
 #include <qdatetime.h>
+#include <qmutex.h>
 
 #include <qmutexpool_p.h>
 

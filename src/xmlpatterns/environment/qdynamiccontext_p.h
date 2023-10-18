@@ -34,7 +34,9 @@
 #include <qresourceloader_p.h>
 
 class QDateTime;
-template<typename T> class QVector;
+
+template<typename T>
+class QVector;
 
 namespace QPatternist {
 class DayTimeDuration;

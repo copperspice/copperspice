@@ -38,6 +38,11 @@
 #include <qpixmap.h>
 #include <qregion.h>
 
+#ifndef QT_NO_PICTUREIO
+#include <qregularexpression.h>
+#include <qpictureformatplugin.h>
+#endif
+
 #include <qfactoryloader_p.h>
 #include <qpaintengine_pic_p.h>
 #include <qfont_p.h>

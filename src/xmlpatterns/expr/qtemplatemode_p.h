@@ -26,8 +26,8 @@
 
 #include <QSharedData>
 #include <QXmlName>
-#include <qtemplatepattern_p.h>
 
+#include <qtemplatepattern_p.h>
 
 namespace QPatternist {
 
@@ -69,6 +69,5 @@ void TemplateMode::addMode(const TemplateMode::Ptr &mode)
 }
 
 }
-
 
 #endif

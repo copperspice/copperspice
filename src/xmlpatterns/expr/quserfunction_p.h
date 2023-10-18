@@ -24,9 +24,11 @@
 #ifndef QUserFunction_P_H
 #define QUserFunction_P_H
 
-template<typename T> class QList;
+template<typename T>
+class QList;
 
 #include <QSharedData>
+
 #include <qexpression_p.h>
 #include <qfunctionsignature_p.h>
 #include <qvariabledeclaration_p.h>

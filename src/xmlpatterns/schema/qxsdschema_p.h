@@ -24,6 +24,9 @@
 #ifndef QXsdSchema_P_H
 #define QXsdSchema_P_H
 
+#include <QHash>
+#include <QReadWriteLock>
+
 #include <qschematype_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdattribute_p.h>
@@ -34,9 +37,6 @@
 #include <qxsdmodelgroup_p.h>
 #include <qxsdnotation_p.h>
 #include <qxsdsimpletype_p.h>
-
-#include <QHash>
-#include <QReadWriteLock>
 
 namespace QPatternist {
 

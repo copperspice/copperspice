@@ -24,14 +24,14 @@
 #ifndef QXsdElement_P_H
 #define QXsdElement_P_H
 
+#include <QList>
+#include <QSet>
+
 #include <qschemacomponent_p.h>
 #include <qschematype_p.h>
 #include <qxsdalternative_p.h>
 #include <qxsdidentityconstraint_p.h>
 #include <qxsdcomplextype_p.h>
-#include <QList>
-#include <QSet>
-
 
 namespace QPatternist {
 

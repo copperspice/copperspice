@@ -24,12 +24,12 @@
 #include <qnetwork_request.h>
 #include <qnetwork_request_p.h>
 
-#include <qplatformdefs.h>
-#include <qnetwork_cookie.h>
-#include <qsslconfiguration.h>
-#include <qshareddata.h>
 #include <qlocale.h>
 #include <qdatetime.h>
+#include <qnetwork_cookie.h>
+#include <qplatformdefs.h>
+#include <qsslconfiguration.h>
+#include <qshareddata.h>
 
 #include <ctype.h>
 #include <stdio.h>

@@ -25,8 +25,9 @@
 #define QCOCOACLIPBOARD_H
 
 #include <qplatform_clipboard.h>
+
 #include <qmacclipboard.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QCocoaClipboard : public QObject, public QPlatformClipboard
 {

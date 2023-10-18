@@ -29,7 +29,7 @@
 #include <qsizepolicy.h>
 #include <qrect.h>
 #include <qmargins.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #include <limits.h>
 

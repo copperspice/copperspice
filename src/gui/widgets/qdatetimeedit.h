@@ -24,9 +24,9 @@
 #ifndef QDATETIMEEDIT_H
 #define QDATETIMEEDIT_H
 
+#include <qabstractspinbox.h>
 #include <qdatetime.h>
 #include <qvariant.h>
-#include <qabstractspinbox.h>
 
 #ifndef QT_NO_DATETIMEEDIT
 

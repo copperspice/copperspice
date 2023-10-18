@@ -25,10 +25,10 @@
 #define QSESSIONMANAGER_H
 
 #include <qobject.h>
-#include <qwindowdefs.h>
+#include <qscopedpointer.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <QScopedPointer>
+#include <qwindowdefs.h>
 
 #ifndef QT_NO_SESSIONMANAGER
 

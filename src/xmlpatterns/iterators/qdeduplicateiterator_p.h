@@ -24,7 +24,8 @@
 #ifndef QDeduplicateIterator_P_H
 #define QDeduplicateIterator_P_H
 
-#include <QList>
+#include <qlist.h>
+
 #include <qexpression_p.h>
 #include <qitem_p.h>
 #include <qatomiccomparator_p.h>

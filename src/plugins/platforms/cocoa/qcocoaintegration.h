@@ -26,18 +26,19 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include "qcocoacursor.h"
-#include "qcocoawindow.h"
-#include "qcocoanativeinterface.h"
-#include "qcocoainputcontext.h"
-#include "qcocoaaccessibility.h"
-#include "qcocoaclipboard.h"
-#include "qcocoadrag.h"
-#include "qcocoaservices.h"
-#include "qcocoakeymapper.h"
+#include <qcocoacursor.h>
+#include <qcocoawindow.h>
+#include <qcocoanativeinterface.h>
+#include <qcocoainputcontext.h>
+#include <qcocoaaccessibility.h>
+#include <qcocoaclipboard.h>
+#include <qcocoadrag.h>
+#include <qcocoaservices.h>"
+#include <qcocoakeymapper.h>
 
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 #include <qplatform_integration.h>
+
 #include <qcoretextfontdatabase_p.h>
 
 class QCocoaScreen : public QPlatformScreen

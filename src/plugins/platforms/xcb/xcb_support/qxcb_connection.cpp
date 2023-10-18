@@ -34,12 +34,12 @@
 #include <qxcb_gl_integrationfactory.h>
 #include <qxcb_gl_integration.h>
 
-#include <QDebug>
-#include <QSocketNotifier>
-#include <QAbstractEventDispatcher>
-#include <QTimer>
-#include <QByteArray>
-#include <QScopedPointer>
+#include <qdebug.h>
+#include <qsocketnotifier.h>
+#include <qabstracteventdispatcher.h>
+#include <qtimer.h>
+#include <qbytearray.h>
+#include <qscopedpointer.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>

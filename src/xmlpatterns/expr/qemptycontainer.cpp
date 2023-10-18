@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QList>
+#include <qlist.h>
 
 #include "qemptycontainer_p.h"
 

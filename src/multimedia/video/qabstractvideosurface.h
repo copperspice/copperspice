@@ -25,9 +25,9 @@
 #define QABSTRACTVIDEOSURFACE_H
 
 #include <qobject.h>
+#include <qscopedpointer.h>
 #include <qvideoframe.h>
-#include <QScopedPointer>
-#include <QVideoSurfaceFormat>
+#include <qvideosurfaceformat.h>
 
 class QRectF;
 class QAbstractVideoSurfacePrivate;

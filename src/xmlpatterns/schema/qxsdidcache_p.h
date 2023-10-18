@@ -24,12 +24,12 @@
 #ifndef QXsdIdCache_P_H
 #define QXsdIdCache_P_H
 
-#include <qschemacomponent_p.h>
 #include <QExplicitlySharedDataPointer>
 #include <QReadWriteLock>
 #include <QSet>
 #include <QString>
 
+#include <qschemacomponent_p.h>
 
 namespace QPatternist {
 

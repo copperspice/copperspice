@@ -24,12 +24,12 @@
 #include <qnetwork_cookie.h>
 #include <qnetwork_cookie_p.h>
 
-#include <qnetwork_request.h>
-#include <qnetwork_reply.h>
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qlist.h>
 #include <qlocale.h>
+#include <qnetwork_request.h>
+#include <qnetwork_reply.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qurl.h>

@@ -24,11 +24,11 @@
 #ifndef QXsdAttribute_P_H
 #define QXsdAttribute_P_H
 
+#include <qlist.h>
+
 #include <qanysimpletype_p.h>
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
-#include <QList>
-
 
 namespace QPatternist {
 class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated

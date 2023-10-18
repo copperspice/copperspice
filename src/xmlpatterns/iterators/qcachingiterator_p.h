@@ -24,8 +24,9 @@
 #ifndef QCachingIterator_P_H
 #define QCachingIterator_P_H
 
-#include <QList>
-#include <QVector>
+#include <qlist.h>
+#include <qvector.h>
+
 #include <qdynamiccontext_p.h>
 #include <qitem_p.h>
 

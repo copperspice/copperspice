@@ -24,7 +24,8 @@
 #ifndef QUnlimitedContainer_P_H
 #define QUnlimitedContainer_P_H
 
-#include <QList>
+#include <qlist.h>
+
 #include <qexpression_p.h>
 #include <qgenericsequencetype_p.h>
 

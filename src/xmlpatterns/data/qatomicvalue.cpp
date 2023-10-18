@@ -30,6 +30,7 @@
 #include "qboolean_p.h"
 #include "qbuiltintypes_p.h"
 #include "qdate_p.h"
+#include "qitem_p.h"
 #include "qschemadatetime_p.h"
 #include "qderivedinteger_p.h"
 #include "qdynamiccontext_p.h"
@@ -40,8 +41,6 @@
 #include "qqnamevalue_p.h"
 #include "qschematime_p.h"
 #include "qvalidationerror_p.h"
-
-#include "qitem_p.h"
 
 using namespace QPatternist;
 

@@ -24,8 +24,8 @@
 #ifndef QXMLRESULTITEMS_H
 #define QXMLRESULTITEMS_H
 
-#include <QString>
-#include <QScopedPointer>
+#include <qstring.h>
+#include <qscopedpointer.h>
 
 class QXmlItem;
 class QXmlQuery;

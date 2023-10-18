@@ -24,12 +24,12 @@
 #ifndef QXsdFacet_P_H
 #define QXsdFacet_P_H
 
+#include <qlist.h>
+
 #include <qitem_p.h>
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdassertion_p.h>
-#include <QList>
-
 
 namespace QPatternist {
 

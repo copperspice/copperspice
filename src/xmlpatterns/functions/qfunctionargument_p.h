@@ -24,7 +24,7 @@
 #ifndef QFunctionArgument_P_H
 #define QFunctionArgument_P_H
 
-#include <QList>
+#include <qlist.h>
 #include <QSharedData>
 #include <qxmlname.h>
 #include <qsequencetype_p.h>

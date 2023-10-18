@@ -24,22 +24,22 @@
 #ifndef QWIDGET_H
 #define QWIDGET_H
 
-#include <qwindowdefs.h>
-#include <qobject.h>
-#include <qmargins.h>
-#include <qpaintdevice.h>
-#include <qpalette.h>
+#include <qbrush.h>
+#include <qcursor.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qfontinfo.h>
-#include <qsizepolicy.h>
-#include <qregion.h>
-#include <qbrush.h>
-#include <qcursor.h>
-#include <qkeysequence.h>
 #include <qicon.h>
+#include <qkeysequence.h>
 #include <qlocale.h>
-#include <QScopedPointer>
+#include <qmargins.h>
+#include <qobject.h>
+#include <qpaintdevice.h>
+#include <qpalette.h>
+#include <qregion.h>
+#include <qsizepolicy.h>
+#include <qscopedpointer.h>
+#include <qwindowdefs.h>
 
 class QLayout;
 class QWSRegionManager;

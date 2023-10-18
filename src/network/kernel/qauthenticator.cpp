@@ -23,17 +23,16 @@
 
 #include <qauthenticator.h>
 #include <qauthenticator_p.h>
-#include <qdebug.h>
-#include <qhash.h>
 #include <qbytearray.h>
 #include <qcryptographichash.h>
-
-#include <qiodevice.h>
 #include <qdatastream.h>
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qendian.h>
+#include <qhash.h>
+#include <qiodevice.h>
 #include <qstring.h>
 #include <qstring16.h>
-#include <qdatetime.h>
 #include <qtextcodec.h>
 
 #ifdef Q_OS_WIN

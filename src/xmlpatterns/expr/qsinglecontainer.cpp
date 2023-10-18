@@ -21,8 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QList>
-
+#include <qlist.h>
 
 #include "qsinglecontainer_p.h"
 

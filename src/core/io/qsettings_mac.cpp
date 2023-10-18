@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qsettings.h>
-#include <qsettings_p.h>
+#include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qdir.h>
+#include <qsettings.h>
 #include <qvarlengtharray.h>
+
 #include <qcore_mac_p.h>
-#include <qcoreapplication.h>
+#include <qsettings_p.h>
 
 #include <Security/SecCode.h>
 #include <Security/SecRequirement.h>

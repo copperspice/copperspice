@@ -26,8 +26,8 @@
 
 #include <QPair>
 #include <QStack>
-#include <qexpression_p.h>
 
+#include <qexpression_p.h>
 
 namespace QPatternist {
 class OperandsIterator
