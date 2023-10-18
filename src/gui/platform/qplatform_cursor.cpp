@@ -61,7 +61,7 @@ void QPlatformCursor::setPos(const QPoint &pos)
 
    if (firstCall) {
       firstCall = false;
-      qWarning("This plugin does not support QCursor::setPos() emulating movement within the application.");
+      qWarning("QPlatformCursor::setPos() Plugin does not support emulating cursor movement");
    }
 
    QWindowSystemInterface::handleMouseEvent(nullptr, pos, pos, Qt::NoButton);
@@ -511,7 +511,7 @@ void QPlatformCursorImage::createSystemCursor(int id)
          break;
 
       default:
-         qWarning("Unknown system cursor %d", id);
+         qWarning("QPlatformCursorImage::createSystemCursor() Unknown system cursor %d", id);
    }
 }
 

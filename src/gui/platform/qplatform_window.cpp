@@ -168,7 +168,7 @@ WId QPlatformWindow::winId() const
 void QPlatformWindow::setParent(const QPlatformWindow *parent)
 {
    (void) parent;
-   qWarning("This plugin does not support setParent");
+   qWarning("QPlatformWindow::setParent() Plugin does not support this method");
 }
 
 void QPlatformWindow::setWindowTitle(const QString &title)
@@ -188,29 +188,29 @@ void QPlatformWindow::setWindowIcon(const QIcon &icon)
 
 void QPlatformWindow::raise()
 {
-   qWarning("This plugin does not support raise()");
+   qWarning("QPlatformWindow::raise() Plugin does not support this method");
 }
 
 void QPlatformWindow::lower()
 {
-   qWarning("This plugin does not support lower()");
+   qWarning("QPlatformWindow::lower() Plugin does not support this method");
 }
 
 void QPlatformWindow::propagateSizeHints()
 {
-   qWarning("This plugin does not support propagateSizeHints()");
+   qWarning("QPlatformWindow::propagateSizeHints() Plugin does not support this method");
 }
 
 void QPlatformWindow::setOpacity(qreal level)
 {
    (void) level;
-   qWarning("This plugin does not support setting window opacity");
+   qWarning("QPlatformWindow::setOpacity() Plugin does not support this method");
 }
 
 void QPlatformWindow::setMask(const QRegion &region)
 {
    (void) region;
-   qWarning("This plugin does not support setting window masks");
+   qWarning("QPlatformWindow::setMask() Plugin does not support this method");
 }
 
 void QPlatformWindow::requestActivateWindow()
@@ -232,7 +232,7 @@ bool QPlatformWindow::setKeyboardGrabEnabled(bool grab)
 {
    (void) grab;
 
-   qWarning("This plugin does not support grabbing the keyboard");
+   qWarning("QPlatformWindow::setKeyboardGrabEnabled() Plugin does not support this method");
    return false;
 }
 
@@ -240,7 +240,7 @@ bool QPlatformWindow::setMouseGrabEnabled(bool grab)
 {
    (void) grab;
 
-   qWarning("This plugin does not support grabbing the mouse");
+   qWarning("QPlatformWindow::setMouseGrabEnabled() Plugin does not support this method");
    return false;
 }
 

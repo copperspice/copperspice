@@ -900,7 +900,9 @@ static QImageIOHandler::Transformations exif2Qt(int exifOrientation)
       case 8: // rotate 270 CW
          return QImageIOHandler::TransformationRotate270;
    }
-   qWarning("Invalid EXIF orientation");
+
+   qWarning("QImageIOHandler::Transformations::exif2Qt() Invalid EXIF orientation");
+
    return QImageIOHandler::TransformationNone;
 }
 
@@ -1047,7 +1049,7 @@ bool QJpegHandler::canRead()
 bool QJpegHandler::canRead(QIODevice *device)
 {
    if (!device) {
-      qWarning("QJpegHandler::canRead() called with no device");
+      qWarning("QJpegHandler::canRead() No device");
       return false;
    }
 

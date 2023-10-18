@@ -901,7 +901,7 @@ extern void qt_imageTransform(QImage &src, QImageIOHandler::Transformations orie
 bool QImageReader::read(QImage *image)
 {
    if (! image) {
-      qWarning("QImageReader::read: cannot read into null pointer");
+      qWarning("QImageReader::read() Unable to read image (nullptr)");
       return false;
    }
 

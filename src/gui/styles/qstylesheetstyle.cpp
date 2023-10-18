@@ -1466,7 +1466,7 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
          parser.init(ss, qApp->styleSheet() != ss);
 
          if (!parser.parse(&appSs)) {
-            qWarning("Could not parse application stylesheet");
+            qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet");
          }
 
          appSs.origin = QCss::StyleSheetOrigin_Inline;
@@ -1498,7 +1498,7 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
             parser.init("* {" + styleSheet + '}');
 
             if (!parser.parse(&ss)) {
-               qWarning("Could not parse stylesheet of object %p", xx);
+               qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet for object %p", xx);
             }
          }
 
@@ -2620,13 +2620,13 @@ void QStyleSheetStyle::setProperties(QWidget *w)
       int index = metaObject->indexOfProperty(property);
 
       if (index == -1) {
-         qWarning() << w << " does not have a property named " << property;
+         qWarning() << "QStyleSheetStyle::setProperties() " << w << " does not have a property named " << property;
          continue;
       }
 
       const QMetaProperty metaProperty = metaObject->property(index);
       if (! metaProperty.isWritable() || ! metaProperty.isDesignable()) {
-         qWarning() << w << " Can not design property named " << property;
+         qWarning() << "QStyleSheetStyle::setProperties() " << w << " unable to write to design property named " << property;
          continue;
       }
 

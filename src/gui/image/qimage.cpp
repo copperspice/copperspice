@@ -62,7 +62,7 @@ static inline bool isLocked(QImageData *data)
 
 #define QIMAGE_SANITYCHECK_MEMORY(image) \
     if ((image).isNull()) { \
-        qWarning("QImage: out of memory, returning null image"); \
+        qWarning("QImage: Out of memory, returning empty image"); \
         return QImage(); \
     }
 
@@ -389,7 +389,7 @@ QImage::QImage(const char *const xpm[])
    }
 
    if (! qt_read_xpm_image_or_array(nullptr, xpm, *this)) {
-      qWarning("QImage::QImage(), XPM is not supported");
+      qWarning("QImage::QImage() XPM format is not supported");
    }
 }
 #endif
@@ -715,7 +715,7 @@ void QImage::setColor(int i, QRgb c)
    }
 
    if (i < 0 || d->depth > 8 || i >= 1 << d->depth) {
-      qWarning("QImage::setColor: Index out of bound %d", i);
+      qWarning("QImage::setColor() Index out of bound %d", i);
       return;
    }
    detach();
@@ -1031,7 +1031,7 @@ void QImage::invertPixels(InvertMode mode)
 void QImage::setColorCount(int colorCount)
 {
    if (!d) {
-      qWarning("QImage::setColorCount: null image");
+      qWarning("QImage::setColorCount() Image is empty");
       return;
    }
 
@@ -1229,7 +1229,7 @@ bool QImage::valid(int x, int y) const
 int QImage::pixelIndex(int x, int y) const
 {
    if (!d || x < 0 || x >= d->width || y < 0 || y >= height()) {
-      qWarning("QImage::pixelIndex: coordinate (%d,%d) out of range", x, y);
+      qWarning("QImage::pixelIndex() Coordinate (%d,%d) is out of range", x, y);
       return -12345;
    }
 
@@ -1243,7 +1243,7 @@ int QImage::pixelIndex(int x, int y) const
       case Format_Indexed8:
          return (int)s[x];
       default:
-         qWarning("QImage::pixelIndex: Not applicable for %d-bpp images (no palette)", d->depth);
+         qWarning("QImage::pixelIndex() No palette for %d bits per pixel images", d->depth);
    }
    return 0;
 }
@@ -1251,7 +1251,7 @@ int QImage::pixelIndex(int x, int y) const
 QRgb QImage::pixel(int x, int y) const
 {
    if (! d || x < 0 || x >= d->width || y < 0 || y >= d->height) {
-      qWarning("QImage::pixel: coordinate (%d,%d) out of range", x, y);
+      qWarning("QImage::pixel() Coordinate (%d,%d) is out of range", x, y);
       return 12345;
    }
 
@@ -1277,7 +1277,7 @@ QRgb QImage::pixel(int x, int y) const
 
    if (index >= 0) {    // Indexed format
       if (index >= d->colortable.size()) {
-         qWarning("QImage::pixel: color table index %d out of range.", index);
+         qWarning("QImage::pixel() Color table index %d is out of range.", index);
          return 0;
       }
       return d->colortable.at(index);
@@ -1315,7 +1315,7 @@ QRgb QImage::pixel(int x, int y) const
 void QImage::setPixel(int x, int y, uint index_or_rgb)
 {
    if (!d || x < 0 || x >= width() || y < 0 || y >= height()) {
-      qWarning("QImage::setPixel: coordinate (%d,%d) out of range", x, y);
+      qWarning("QImage::setPixel() Coordinate (%d,%d) is out of range", x, y);
       return;
    }
    // detach is called from within scanLine
@@ -1325,7 +1325,8 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
       case Format_Mono:
       case Format_MonoLSB:
          if (index_or_rgb > 1) {
-            qWarning("QImage::setPixel: Index %d out of range", index_or_rgb);
+            qWarning("QImage::setPixel() Index %d is out of range", index_or_rgb);
+
          } else if (format() == Format_MonoLSB) {
             if (index_or_rgb == 0) {
                *(s + (x >> 3)) &= ~(1 << (x & 7));
@@ -1343,7 +1344,7 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
 
       case Format_Indexed8:
          if (index_or_rgb >= (uint)d->colortable.size()) {
-            qWarning("QImage::setPixel: Index %d out of range", index_or_rgb);
+            qWarning("QImage::setPixel() Index %d is out of range", index_or_rgb);
             return;
          }
          s[x] = index_or_rgb;
@@ -1398,7 +1399,7 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
 QColor QImage::pixelColor(int x, int y) const
 {
    if (!d || x < 0 || x >= d->width || y < 0 || y >= height()) {
-      qWarning("QImage::pixelColor: coordinate (%d,%d) out of range", x, y);
+      qWarning("QImage::pixelColor() Coordinate (%d,%d) is out of range", x, y);
       return QColor();
    }
 
@@ -1426,7 +1427,7 @@ QColor QImage::pixelColor(int x, int y) const
 void QImage::setPixelColor(int x, int y, const QColor &color)
 {
    if (!d || x < 0 || x >= width() || y < 0 || y >= height() || !color.isValid()) {
-      qWarning("QImage::setPixelColor: coordinate (%d,%d) out of range", x, y);
+      qWarning("QImage::setPixelColor() Coordinate (%d,%d) is out of range", x, y);
       return;
    }
    // QColor is always unpremultiplied
@@ -1442,7 +1443,7 @@ void QImage::setPixelColor(int x, int y, const QColor &color)
       case Format_Mono:
       case Format_MonoLSB:
       case Format_Indexed8:
-         qWarning("QImage::setPixelColor: called on monochrome or indexed format");
+         qWarning("QImage::setPixelColor() Unable to set the color for a monochrome or indexed format");
          return;
       case Format_BGR30:
          ((uint *)s)[x] = qConvertRgb64ToRgb30<PixelOrderBGR>(c) | 0xc0000000;
@@ -1573,7 +1574,7 @@ bool QImage::isGrayscale() const
 QImage QImage::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::TransformationMode mode) const
 {
    if (!d) {
-      qWarning("QImage::scaled: Image is a null image");
+      qWarning("QImage::scaled() Image is empty");
       return QImage();
    }
    if (s.isEmpty()) {
@@ -1596,7 +1597,7 @@ QImage QImage::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Transf
 QImage QImage::scaledToWidth(int w, Qt::TransformationMode mode) const
 {
    if (!d) {
-      qWarning("QImage::scaleWidth: Image is a null image");
+      qWarning("QImage::scaleWidth() Image is empty");
       return QImage();
    }
    if (w <= 0) {
@@ -1611,7 +1612,7 @@ QImage QImage::scaledToWidth(int w, Qt::TransformationMode mode) const
 QImage QImage::scaledToHeight(int h, Qt::TransformationMode mode) const
 {
    if (!d) {
-      qWarning("QImage::scaleHeight: Image is a null image");
+      qWarning("QImage::scaleHeight() Image is empty");
       return QImage();
    }
    if (h <= 0) {
@@ -2215,7 +2216,7 @@ bool QImage::save(QIODevice *device, const QString &format, int quality) const
 bool QImageData::doImageIO(const QImage *image, QImageWriter *writer, int quality) const
 {
    if (quality > 100  || quality < -1) {
-      qWarning("QPixmap::save: Quality out of range [-1, 100]");
+      qWarning("QPixmap::save() Quality setting is out of range [-1, 100]");
    }
 
    if (quality >= 0) {
@@ -2478,7 +2479,7 @@ int QImage::metric(PaintDeviceMetric metric) const
 
 
       default:
-         qWarning("QImage::metric(): Unhandled metric type %d", metric);
+         qWarning("QImage::metric() Unhandled metric type %d", metric);
          break;
    }
    return 0;
@@ -2653,14 +2654,12 @@ void QImage::setAlphaChannel(const QImage &alphaChannel)
    int h = d->height;
 
    if (w != alphaChannel.d->width || h != alphaChannel.d->height) {
-      qWarning("QImage::setAlphaChannel: "
-         "Alpha channel must have same dimensions as the target image");
+      qWarning("QImage::setAlphaChannel() Alpha channel must have the same dimensions as the target image");
       return;
    }
 
    if (d->paintEngine && d->paintEngine->isActive()) {
-      qWarning("QImage::setAlphaChannel: "
-         "Unable to set alpha channel while image is being painted on");
+      qWarning("QImage::setAlphaChannel() Unable to set alpha channel while the image is being painted");
       return;
    }
 

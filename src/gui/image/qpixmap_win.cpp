@@ -215,7 +215,8 @@ Q_GUI_EXPORT QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat =
    QImage image(w, h, imageFormat);
    if (image.isNull()) { // failed to alloc?
       ReleaseDC(nullptr, display_dc);
-      qWarning("%s, failed create image of %dx%d", __FUNCTION__, w, h);
+      qWarning("QPixmap::qt_pixmapFromWinHBITMAP() Failed to create image of %d x %d", w, h);
+
       return QPixmap();
    }
 

@@ -289,7 +289,7 @@ int QRasterPlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) const
       case QPaintDevice::PdmDevicePixelRatioScaled:
          return image.devicePixelRatio() * QPaintDevice::devicePixelRatioFScale();
       default:
-         qWarning("QRasterPlatformPixmap::metric(): Unhandled metric type %d", metric);
+         qWarning("QRasterPlatformPixmap::metric() Unhandled metric type %d", metric);
          break;
    }
 

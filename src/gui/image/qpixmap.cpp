@@ -51,7 +51,7 @@
 static bool qt_pixmap_thread_test()
 {
    if (! qApp) {
-      qFatal("QPixmap: Must construct a QGuiApplication before a QPixmap");
+      qFatal("QPixmap::pixmap_thread() QApplication must be created before constructing a QPixmap");
       return false;
    }
 
@@ -59,12 +59,12 @@ static bool qt_pixmap_thread_test()
       bool fail = false;
 
       if (! QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::ThreadedPixmaps)) {
-         printf("Platform integration does not support threaded pixmaps\n");
+         printf("QPixmap::pixmap_thread() Platform does not support threaded pixmaps\n");
          fail = true;
       }
 
       if (fail) {
-         qWarning("QPixmap: It is not safe to use pixmaps outside the GUI thread");
+         qWarning("QPixmap::pixmap_thread() Unsafe to use pixmaps outside of a GUI thread");
          return false;
       }
    }
@@ -236,7 +236,7 @@ void QPixmap::scroll(int dx, int dy, const QRect &rect, QRegion *exposed)
 QPixmap &QPixmap::operator=(const QPixmap &pixmap)
 {
    if (paintingActive()) {
-      qWarning("QPixmap::operator=: Cannot assign to pixmap during painting");
+      qWarning("QPixmap::operator=() Unable to assign a pixmap to another pixmap during painting");
       return *this;
    }
    if (pixmap.paintingActive()) {                // make a deep copy
@@ -310,7 +310,7 @@ int QPixmap::depth() const
 void QPixmap::setMask(const QBitmap &mask)
 {
    if (paintingActive()) {
-      qWarning("QPixmap::setMask: Unable to set mask while pixmap is being painted on");
+      qWarning("QPixmap::setMask() Unable to set mask while pixmap is being painted");
       return;
    }
 
@@ -494,7 +494,7 @@ bool QPixmap::save(QIODevice *device, const QString &format, int quality) const
 bool QPixmap::doImageIO(QImageWriter *writer, int quality) const
 {
    if (quality > 100  || quality < -1) {
-      qWarning("QPixmap::save: quality out of range [-1,100]");
+      qWarning("QPixmap::save() Quality of pixmap is out of range [-1,100]");
    }
 
    if (quality >= 0) {
@@ -509,7 +509,7 @@ void QPixmap::fill(const QPaintDevice *device, const QPoint &p)
    (void) device;
    (void) p;
 
-   qWarning("This method has been deprecated.");
+   qWarning("QPixmap::fill() Method deprecated");
 }
 
 void QPixmap::fill(const QColor &color)
@@ -521,7 +521,7 @@ void QPixmap::fill(const QColor &color)
    // Some people are probably already calling fill while a painter is active, so to not break
    // their programs, only print a warning and return when the fill operation could cause a crash.
    if (paintingActive() && (color.alpha() != 255) && !hasAlphaChannel()) {
-      qWarning("QPixmap::fill: Cannot fill while pixmap is being painted on");
+      qWarning("QPixmap::fill() Unable to fill while pixmap is being painted");
       return;
    }
 
@@ -552,7 +552,7 @@ qint64 QPixmap::cacheKey() const
 QPixmap QPixmap::grabWidget(QObject *widget, const QRect &rectangle)
 {
    QPixmap pixmap;
-   qWarning("QPixmap::grabWidget is deprecated, use QWidget::grab() instead");
+   qWarning("QPixmap::grabWidget() Method is deprecated, use QWidget::grab()");
 
    if (! widget) {
       return pixmap;
@@ -606,7 +606,7 @@ bool QPixmap::convertFromImage(const QImage &image, Qt::ImageConversionFlags fla
 QPixmap QPixmap::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::TransformationMode mode) const
 {
    if (isNull()) {
-      qWarning("QPixmap::scaled: Pixmap is a null pixmap");
+      qWarning("QPixmap::scaled() Pixmap is empty");
       return QPixmap();
    }
 
@@ -633,7 +633,7 @@ QPixmap QPixmap::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Tran
 QPixmap QPixmap::scaledToWidth(int w, Qt::TransformationMode mode) const
 {
    if (isNull()) {
-      qWarning("QPixmap::scaleWidth: Pixmap is a null pixmap");
+      qWarning("QPixmap::scaleWidth() Pixmap is empty");
       return copy();
    }
 
@@ -649,7 +649,7 @@ QPixmap QPixmap::scaledToWidth(int w, Qt::TransformationMode mode) const
 QPixmap QPixmap::scaledToHeight(int h, Qt::TransformationMode mode) const
 {
    if (isNull()) {
-      qWarning("QPixmap::scaleHeight: Pixmap is a null pixmap");
+      qWarning("QPixmap::scaleHeight() Pixmap is empty");
       return copy();
    }
    if (h <= 0) {
@@ -810,8 +810,7 @@ QPixmap QPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionF
 
 QPixmap QPixmap::grabWindow(WId window, int x, int y, int w, int h)
 {
-   qWarning("QPixmap::grabWindow(): Deprecated method, use QScreen::grabWindow() instead."
-      " Defaulting to primary screen.");
+   qWarning("QPixmap::grabWindow() Method deprecated, use QScreen::grabWindow()");
 
    return QGuiApplication::primaryScreen()->grabWindow(window, x, y, w, h);
 }
