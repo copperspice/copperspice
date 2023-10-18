@@ -28,7 +28,7 @@
 
 #include <atomic>
 
-#if defined(__MINGW64_VERSION_MAJOR) || (defined(Q_CC_MSVC))
+#if defined(__MINGW64_VERSION_MAJOR) || defined(Q_CC_MSVC)
 #include <intrin.h>
 #endif
 

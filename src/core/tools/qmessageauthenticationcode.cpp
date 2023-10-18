@@ -24,45 +24,9 @@
 #include <qmessageauthenticationcode.h>
 #include <qvarlengtharray.h>
 
-/*
-   These #defines replace the typedefs needed by the RFC6234 code.
-   Normally these typedefs would come from from stdint.h, however since this header is not
-   available on all platforms define them here
+#include <stdint.h>
 
-*/
-
-#ifdef uint64_t
-#undef uint64_t
-#endif
-
-#define uint64_t QT_PREPEND_NAMESPACE(quint64)
-
-#ifdef uint32_t
-#undef uint32_t
-#endif
-
-#define uint32_t QT_PREPEND_NAMESPACE(quint32)
-
-#ifdef uint8_t
-#undef uint8_t
-#endif
-
-#define uint8_t QT_PREPEND_NAMESPACE(quint8)
-
-#ifdef int_least16_t
-#undef int_least16_t
-#endif
-
-#define int_least16_t QT_PREPEND_NAMESPACE(qint16)
-
-// Header from rfc6234 with 1 modification:
-// sha1.h - commented out '#include <stdint.h>' on line 74
 #include "../../3rdparty/rfc6234/sha.h"
-
-#undef uint64_t
-#undef uint32_t
-#undef uint68_t
-#undef int_least16_t
 
 static int qt_hash_block_size(QCryptographicHash::Algorithm method)
 {
