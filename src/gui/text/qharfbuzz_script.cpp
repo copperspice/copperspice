@@ -215,11 +215,18 @@ static const hb_script_t cs_internal_scriptTable[] = {
    HB_SCRIPT_YEZIDI,
 
    // Unicode 14.0
-   //   HB_SCRIPT_CYPRO_MINOAN,
-   //   HB_SCRIPT_OLD_UYGHUR,
-   //   HB_SCRIPT_TANGSA,
-   //   HB_SCRIPT_TOTO,
-   //   HB_SCRIPT_VITHKUQI
+   HB_SCRIPT_CYPRO_MINOAN,
+   HB_SCRIPT_OLD_UYGHUR,
+   HB_SCRIPT_TANGSA,
+   HB_SCRIPT_TOTO,
+   HB_SCRIPT_VITHKUQI,
+
+   // Unicode 15.0
+   HB_SCRIPT_KAWI,
+   HB_SCRIPT_NAG_MUNDARI,
+
+   // Unicode 15.1
+   // nothing was added
 };
 static_assert(QChar::ScriptCount == sizeof(cs_internal_scriptTable) / sizeof(cs_internal_scriptTable[0]), "QChar script count mismatch");
 
