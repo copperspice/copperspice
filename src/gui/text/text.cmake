@@ -225,14 +225,18 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-verify.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-draw.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face-builder.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-fallback-shape.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-map.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-number.cc
+
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-color.cc
@@ -244,22 +248,26 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-metrics.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-arabic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-default.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hangul.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-hebrew.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-indic-table.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-khmer.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-myanmar.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-syllabic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-thai.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-use.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-complex-vowel-constraints.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-arabic.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-default.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hangul.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hebrew.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic-table.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-khmer.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-myanmar.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-syllabic.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-thai.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-use.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-vowel-constraints.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
+
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-outline.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint-extents.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
@@ -270,8 +278,11 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff2.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-input.cc
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-instancer-solver.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-plan.cc
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
+
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/graph/gsubgpos-context.cc
 )
 
 if (GTK2_FOUND)
