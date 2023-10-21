@@ -809,11 +809,14 @@
    <tr><td><tt>QLocale::WesternSahara</tt></td>
        <td>253</td></tr>
 
-   <tr><td><tt>QLocale::Yemen</tt></td>
+   <tr><td><tt>QLocale::World</tt></td>
        <td>254</td></tr>
 
-   <tr><td><tt>QLocale::Zambia</tt></td>
+   <tr><td><tt>QLocale::Yemen</tt></td>
        <td>255</td></tr>
 
-   <tr><td><tt>QLocale::Zimbabwe</tt></td>
+   <tr><td><tt>QLocale::Zambia</tt></td>
        <td>256</td></tr>
+
+   <tr><td><tt>QLocale::Zimbabwe</tt></td>
+       <td>257</td></tr>
