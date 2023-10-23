@@ -1082,7 +1082,7 @@ QTimeZone QTimeZone::systemTimeZone()
 
 QTimeZone QTimeZone::utc()
 {
-   return QTimeZone(QTimeZonePrivate::utcQByteArray());
+   return QTimeZone("UTC");
 }
 
 QTimeZone &QTimeZone::operator=(const QTimeZone &other)

@@ -152,15 +152,6 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
    static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId);
    static QList<QByteArray> windowsIdToIanaIds(const QByteArray &windowsId, QLocale::Country country);
 
-   // returns "UTC" QString and QByteArray
-   static inline QString utcQString() {
-      return QString("UTC");
-   }
-
-   static inline QByteArray utcQByteArray() {
-      return QByteArray("UTC");
-   }
-
  protected:
    QByteArray m_id;
 };
