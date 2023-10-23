@@ -1736,16 +1736,6 @@ QDateTime &QDateTime::operator=(const QDateTime &other)
    return *this;
 }
 
-bool QDateTime::isNull() const
-{
-   return d->isNullDate() && d->isNullTime();
-}
-
-bool QDateTime::isValid() const
-{
-   return (d->isValidDateTime());
-}
-
 QDate QDateTime::date() const
 {
    if (d->isNullDate()) {
@@ -1758,32 +1748,19 @@ QDate QDateTime::date() const
    return dt;
 }
 
-QTime QDateTime::time() const
+bool QDateTime::isNull() const
 {
-   if (d->isNullTime()) {
-      return QTime();
-   }
-
-   QTime tm;
-   msecsToTime(d->m_msecs, nullptr, &tm);
-   return tm;
+   return d->isNullDate() && d->isNullTime();
 }
 
-
-QTimeZone QDateTime::timeZone() const
+bool QDateTime::isValid() const
 {
-   switch (d->m_spec) {
-      case Qt::UTC:
-         return QTimeZone::utc();
-      case Qt::OffsetFromUTC:
-         return QTimeZone(d->m_offsetFromUtc);
-      case Qt::TimeZone:
-         Q_ASSERT(d->m_timeZone.isValid());
-         return d->m_timeZone;
-      case Qt::LocalTime:
-         return QTimeZone::systemTimeZone();
-   }
-   return QTimeZone();
+   return (d->isValidDateTime());
+}
+
+bool QDateTime::isDaylightTime() const
+{
+   return d->m_timeZone.d->isDaylightTime(toMSecsSinceEpoch());
 }
 
 int QDateTime::offsetFromUtc() const
@@ -1791,38 +1768,16 @@ int QDateTime::offsetFromUtc() const
    return d->m_offsetFromUtc;
 }
 
-
-
-
-
-
-
-
-bool QDateTime::isDaylightTime() const
-{
-   switch (d->m_spec) {
-      case Qt::UTC:
-      case Qt::OffsetFromUTC:
-         return false;
-
-      case Qt::TimeZone:
-         return d->m_timeZone.d->isDaylightTime(toMSecsSinceEpoch());
-
-      case Qt::LocalTime: {
-         QDateTimePrivate::DaylightStatus status = d->daylightStatus();
-         if (status == QDateTimePrivate::UnknownDaylightTime) {
-            localMSecsToEpochMSecs(d->m_msecs, &status);
-         }
-         return (status == QDateTimePrivate::DaylightTime);
-      }
-   }
-   return false;
-}
-
 void QDateTime::setDate(const QDate &date)
 {
    d->setDateTime(date, time());
 }
+
+
+
+
+
+
 
 void QDateTime::setSecsSinceEpoch(qint64 seconds)
 {
@@ -1843,6 +1798,29 @@ void QDateTime::setTimeZone(const QTimeZone &toZone)
    d->refreshDateTime();
 }
 
+void QDateTime::setTime_t(quint64 seconds)
+{
+   setMSecsSinceEpoch((qint64)seconds * MSECS_PER_SEC);
+}
+
+QTime QDateTime::time() const
+{
+   if (d->isNullTime()) {
+      return QTime();
+   }
+
+   QTime tm;
+   msecsToTime(d->m_msecs, nullptr, &tm);
+
+   return tm;
+}
+
+QTimeZone QDateTime::timeZone() const
+{
+   Q_ASSERT_X(d->m_timeZone.isValid(), "QDateTime::timeZone()", "QDateTime timeZone is invalid");
+
+   return d->m_timeZone;
+}
 
 QString QDateTime::timeZoneAbbreviation() const
 {
@@ -1922,11 +1900,6 @@ qint64 QDateTime::toMSecsSinceEpoch() const
       auto status = d->daylightStatus();
       return localMSecsToEpochMSecs(d->m_msecs, &status);
    }
-}
-
-void QDateTime::setTime_t(quint64  secsSince1Jan1970UTC)
-{
-   setMSecsSinceEpoch((qint64)secsSince1Jan1970UTC * 1000);
 }
 
 qint64 QDateTime::toSecsSinceEpoch() const {
