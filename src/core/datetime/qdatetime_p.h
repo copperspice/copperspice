@@ -72,8 +72,6 @@ class QDateTimePrivate
    void clearSetToDaylightStatus() {
       m_status &= ~(SetToStandardTime | SetToDaylightTime);
    }
-   Qt::TimeSpec m_spec;
-   int m_offsetFromUtc;
 
    void clearValidDateTime() {
       m_status &= ~ValidDateTime;
