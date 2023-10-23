@@ -1765,7 +1765,7 @@ bool QDateTime::isDaylightTime() const
 
 int QDateTime::offsetFromUtc() const
 {
-   return d->m_offsetFromUtc;
+   return d->m_timeZone.offsetFromUtc(*this);
 }
 
 void QDateTime::setDate(const QDate &date)
@@ -1773,11 +1773,37 @@ void QDateTime::setDate(const QDate &date)
    d->setDateTime(date, time());
 }
 
+void QDateTime::setMSecsSinceEpoch(qint64 msecs)
+{
+   d->m_status = Qt::EmptyFlag;
 
+   if (d->m_tzUserDefined) {
+      int offset;
 
+      if (msecs >= 0) {
+         offset = d->m_timeZone.d->offsetFromUtc(msecs);
+      } else {
+         offset = d->m_timeZone.d->standardTimeOffset(msecs);
+      }
 
+      d->m_msecs = msecs + (offset * MSECS_PER_SEC);
 
+      d->m_status = d->m_status | QDateTimePrivate::ValidDate |
+         QDateTimePrivate::ValidTime | QDateTimePrivate::ValidDateTime;
 
+   } else {
+      QDate localDate;
+      QTime localTime;
+      QDateTimePrivate::DaylightStatus status;
+
+      epochMSecsToLocalTime(msecs, &localDate, &localTime, &status);
+
+      d->setDateTime(localDate, localTime);
+      d->setDaylightStatus(status);
+   }
+
+   d->refreshDateTime();
+}
 
 void QDateTime::setSecsSinceEpoch(qint64 seconds)
 {
@@ -1791,10 +1817,9 @@ void QDateTime::setTime(const QTime &time)
 
 void QDateTime::setTimeZone(const QTimeZone &toZone)
 {
-   QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
-   d->m_spec = Qt::TimeZone;
-   d->m_offsetFromUtc = 0;
    d->m_timeZone = toZone;
+   d->m_tzUserDefined = true;
+
    d->refreshDateTime();
 }
 
@@ -1834,61 +1859,6 @@ QString QDateTime::timeZoneAbbreviation() const
 
 QDateTime QDateTime::toLocalTime() const {
    return toTimeZone(QTimeZone::systemTimeZone());
-}
-
-void QDateTime::setMSecsSinceEpoch(qint64 msecs)
-{
-   QDateTimePrivate *d = this->d.data(); // detaches (and shadows d)
-
-   d->m_status = Qt::EmptyFlag;
-
-   switch (d->m_spec) {
-      case Qt::UTC:
-         d->m_msecs = msecs;
-         d->m_status = d->m_status
-            | QDateTimePrivate::ValidDate
-            | QDateTimePrivate::ValidTime
-            | QDateTimePrivate::ValidDateTime;
-         break;
-
-      case Qt::OffsetFromUTC:
-         d->m_msecs = msecs + (d->m_offsetFromUtc * 1000);
-         d->m_status = d->m_status
-            | QDateTimePrivate::ValidDate
-            | QDateTimePrivate::ValidTime
-            | QDateTimePrivate::ValidDateTime;
-         break;
-
-      case Qt::TimeZone:
-
-         // Docs state any LocalTime before 1970-01-01 will *not* have any DST applied
-         // but all affected times afterwards will have DST applied.
-         if (msecs >= 0) {
-            d->m_offsetFromUtc = d->m_timeZone.d->offsetFromUtc(msecs);
-         } else {
-            d->m_offsetFromUtc = d->m_timeZone.d->standardTimeOffset(msecs);
-         }
-
-         d->m_msecs = msecs + (d->m_offsetFromUtc * 1000);
-         d->m_status = d->m_status
-            | QDateTimePrivate::ValidDate
-            | QDateTimePrivate::ValidTime
-            | QDateTimePrivate::ValidDateTime;
-         d->refreshDateTime();
-
-         break;
-
-      case Qt::LocalTime: {
-         QDate dt;
-         QTime tm;
-         QDateTimePrivate::DaylightStatus status;
-         epochMSecsToLocalTime(msecs, &dt, &tm, &status);
-         d->setDateTime(dt, tm);
-         d->setDaylightStatus(status);
-         d->refreshDateTime();
-         break;
-      }
-   }
 }
 
 qint64 QDateTime::toMSecsSinceEpoch() const
