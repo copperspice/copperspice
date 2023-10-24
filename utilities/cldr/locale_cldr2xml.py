@@ -61,7 +61,7 @@ def parse_number_format(patterns, data):
     for pattern in patterns:
         pattern = skip_repeating_pattern(pattern)
         pattern = pattern.replace('#', "%1")
-        # according to http://www.unicode.org/reports/tr35/#Number_Format_Patterns
+        # according to https://www.unicode.org/reports/tr35/#Number_Format_Patterns
         # there can be doubled or trippled currency sign, however none of the
         # locales use that.
         pattern = pattern.replace(u'\xa4', "%2")
@@ -615,7 +615,7 @@ def main():
    # configure output for utf-8
    sys.stdout.reconfigure(encoding='utf-8')
 
-   # see http://www.unicode.org/reports/tr35/tr35-info.html#Default_Content
+   # refer to https://www.unicode.org/reports/tr35/tr35-info.html#Default_Content
 
    defaultContent_locales = {}
 
@@ -722,7 +722,7 @@ def main():
        except cs_findpath.Error as e:
            sys.stderr.write("skipping likelySubtag \"%s\" -> \"%s\" (%s)\n" % (tmp[u"from"], tmp[u"to"], str(e)))
            continue
-       # substitute according to http://www.unicode.org/reports/tr35/#Likely_Subtags
+       # substitute according to https://www.unicode.org/reports/tr35/#Likely_Subtags
        if to_country == "AnyCountry" and from_country != to_country:
            to_country = from_country
        if to_script == "AnyScript" and from_script != to_script:

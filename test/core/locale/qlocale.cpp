@@ -45,7 +45,7 @@ TEST_CASE("QLocale constructor_enum", "[qlocale]")
    REQUIRE(data.groupSeparator() == ",");
    REQUIRE(data.decimalPoint() == ".");
    REQUIRE(data.dateFormat(QLocale::ShortFormat) == "M/d/yy");
-   REQUIRE(data.timeFormat(QLocale::ShortFormat) == "h:mm AP");
+   REQUIRE(data.timeFormat(QLocale::ShortFormat) == QString("h:mm") + QChar(0x202f) + "AP");
 
    //
    data = QLocale(QLocale::French, QLocale::France);
