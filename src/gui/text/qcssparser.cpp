@@ -2626,7 +2626,7 @@ void Parser::init(const QString &css, bool isFile)
          styleSheet = stream.readAll();
 
       } else {
-         qWarning() << "QCss::Parser - Failed to load file " << css;
+         qWarning() << "QCss::Parser css file failed to open " << css;
          styleSheet.clear();
       }
 
@@ -3434,7 +3434,7 @@ bool Parser::parseHexColor(QColor *col)
    col->setNamedColor(lexem());
 
    if (! col->isValid()) {
-      qWarning("QCssParser::parseHexColor: Unknown color name '%s'", csPrintable(lexem()));
+      qWarning("QCssParser::parseHexColor() Unknown color name '%s'", csPrintable(lexem()));
       return false;
    }
 

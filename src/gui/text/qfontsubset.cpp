@@ -1199,7 +1199,7 @@ static QByteArray bindFont(const QVector<QTtfTable> &_tables)
    }
 
    if (!head_offset) {
-      qWarning("QFontSubset: Font misses 'head' table");
+      qWarning("bindFont() Font is missing the 'head' table");
       return QByteArray();
    }
 

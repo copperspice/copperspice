@@ -1068,7 +1068,7 @@ void QTextCursor::setPosition(int pos, MoveMode m)
    }
 
    if (pos < 0 || pos >= d->priv->length()) {
-      qWarning("QTextCursor::setPosition: Position '%d' out of range", pos);
+      qWarning("QTextCursor::setPosition() Position '%d' is out of range", pos);
       return;
    }
 
@@ -2072,9 +2072,10 @@ void QTextCursor::insertImage(const QString &name)
 void QTextCursor::insertImage(const QImage &image, const QString &name)
 {
    if (image.isNull()) {
-      qWarning("QTextCursor::insertImage: attempt to add an invalid image");
+      qWarning("QTextCursor::insertImage() Unable to add an invalid image");
       return;
    }
+
    QString imageName = name;
    if (name.isEmpty()) {
       imageName = QString::number(image.cacheKey());

@@ -683,10 +683,10 @@ void QGridLayoutPrivate::add(QGridBox *box, int row, int col)
 void QGridLayoutPrivate::add(QGridBox *box, int row1, int row2, int col1, int col2)
 {
    if (row2 >= 0 && row2 < row1) {
-      qWarning("QGridLayout: Multi-cell fromRow greater than toRow");
+      qWarning("QGridLayout:add() Multi cell fromRow is greater than toRow");
    }
    if (col2 >= 0 && col2 < col1) {
-      qWarning("QGridLayout: Multi-cell fromCol greater than toCol");
+      qWarning("QGridLayout:add() Multi cell fromCol is greater than toCol");
    }
    if (row1 == row2 && col1 == col2) {
       add(box, row1, col1);
@@ -1444,7 +1444,7 @@ void QGridLayout::addWidget(QWidget *widget, int row, int column, Qt::Alignment 
    }
 
    if (row < 0 || column < 0) {
-      qWarning("QGridLayout: Cannot add %s/%s to %s/%s at row %d column %d",
+      qWarning("QGridLayout::addWidget() Unable to add %s/%s to %s/%s at row %d column %d",
          csPrintable(widget->metaObject()->className()), csPrintable(widget->objectName()),
          csPrintable(metaObject()->className()), csPrintable(objectName()), row, column);
 

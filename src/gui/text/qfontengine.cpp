@@ -449,7 +449,7 @@ qreal QFontEngine::minRightBearing() const
       }
 
       if (m_minLeftBearing == kBearingNotInitialized || m_minRightBearing == kBearingNotInitialized) {
-         qWarning() << "Failed to compute left/right minimum bearings for" << fontDef.family;
+         qWarning() << "QFontEngine::minRightBearing() Failed to compute left/right minimum bearings for " << fontDef.family;
       }
    }
 

@@ -39,15 +39,16 @@
 
 #define ABORT_IF_ACTIVE(location) \
     if (d_ptr->printEngine->printerState() == QPrinter::Active) { \
-        qWarning("%s: Can not be changed while printer is active", location); \
+        qWarning("%s: Unable to change while printer is active", location); \
         return; \
     }
 
 #define ABORT_IF_ACTIVE_RETURN(location, retValue) \
     if (d_ptr->printEngine->printerState() == QPrinter::Active) { \
-        qWarning("%s: Can not be changed while printer is active", location); \
+        qWarning("%s: Unable to change while printer is active", location); \
         return retValue; \
     }
+
 extern qreal qt_pixelMultiplier(int resolution);
 extern QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::Unit fromUnits, QPageLayout::Unit toUnits);
 
@@ -215,7 +216,7 @@ void QPrinterPrivate::setProperty(QPrintEngine::PrintEnginePropertyKey key, cons
 bool QPrinter::setPageLayout(const QPageLayout &newPageLayout)
 {
    if (d_ptr->paintEngine->type() != QPaintEngine::Pdf && d_ptr->printEngine->printerState() == QPrinter::Active) {
-      qWarning("QPrinter::setPageLayout: Can not be changed while printer is active");
+      qWarning("QPrinter::setPageLayout() Unable to change page layout while printer is active");
       return false;
    }
 
@@ -228,7 +229,7 @@ bool QPrinter::setPageLayout(const QPageLayout &newPageLayout)
 bool QPrinter::setPageSize(const QPageSize &pageSize)
 {
    if (d_ptr->paintEngine->type() != QPaintEngine::Pdf && d_ptr->printEngine->printerState() == QPrinter::Active) {
-      qWarning("QPrinter::setPageLayout: Can not be changed while printer is active");
+      qWarning("QPrinter::setPageSize() Unable to change page size while printer is active");
       return false;
    }
 
@@ -849,7 +850,7 @@ int QPrinter::toPage() const
 void QPrinter::setFromTo(int from, int to)
 {
    if (from > to) {
-      qWarning() << "QPrinter::setFromTo: 'from' must be less than or equal to 'to'";
+      qWarning() << "QPrinter::setFromTo() Value 'from' must be less than or equal to the value 'to'";
       from = to;
    }
 

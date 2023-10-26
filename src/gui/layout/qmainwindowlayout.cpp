@@ -1845,7 +1845,7 @@ void QMainWindowLayout::raise(QDockWidget *widget)
 
 int QMainWindowLayout::count() const
 {
-   qWarning("QMainWindowLayout::count: Possible issue");
+   qWarning("QMainWindowLayout::count() Method is not supported");
    return 0;
 }
 
@@ -1935,7 +1935,7 @@ void QMainWindowLayout::setGeometry(const QRect &_r)
 
 void QMainWindowLayout::addItem(QLayoutItem *)
 {
-   qWarning("QMainWindowLayout::addItem: Please use the public QMainWindow API");
+   qWarning("QMainWindowLayout::addItem() Method is not supported");
 }
 
 QSize QMainWindowLayout::sizeHint() const

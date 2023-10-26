@@ -538,7 +538,7 @@ QFont::HintingPreference QFont::hintingPreference() const
 void QFont::setPointSize(int pointSize)
 {
    if (pointSize <= 0) {
-      qWarning("QFont::setPointSize: Point size <= 0 (%d), must be greater than 0", pointSize);
+      qWarning("QFont::setPointSize() Point size of %d must be greater than 0", pointSize);
       return;
    }
 
@@ -556,7 +556,7 @@ void QFont::setPointSize(int pointSize)
 void QFont::setPointSizeF(qreal pointSize)
 {
    if (pointSize <= 0) {
-      qWarning("QFont::setPointSizeF: Point size <= 0 (%f), must be greater than 0", pointSize);
+      qWarning("QFont::setPointSizeF() Point size of %f must be greater than 0", pointSize);
       return;
    }
 
@@ -586,7 +586,7 @@ qreal QFont::pointSizeF() const
 void QFont::setPixelSize(int pixelSize)
 {
    if (pixelSize <= 0) {
-      qWarning("QFont::setPixelSize: Pixel size <= 0 (%d)", pixelSize);
+      qWarning("QFont::setPixelSize() Pixel size of %d must be greater than 0", pixelSize);
       return;
    }
 
@@ -873,7 +873,7 @@ int QFont::stretch() const
 void QFont::setStretch(int factor)
 {
    if (factor < 1 || factor > 4000) {
-      qWarning("QFont::setStretch: Parameter '%d' out of range", factor);
+      qWarning("QFont::setStretch() Parameter '%d' is out of range", factor);
       return;
    }
 
@@ -1272,7 +1272,13 @@ bool QFont::fromString(const QString &descrip)
 
    int count = l.count();
    if (!count || (count > 2 && count < 9) || count > 11) {
-      qWarning("QFont::fromString: Invalid description '%s'", descrip.isEmpty() ? "(empty)" : csPrintable(descrip));
+
+      if (descrip.isEmpty()) {
+         qWarning("QFont::fromString() Font description was empty");
+      } else {
+         qWarning("QFont::fromString() Invalid font description of %s ", csPrintable(descrip));
+      }
+
       return false;
    }
 

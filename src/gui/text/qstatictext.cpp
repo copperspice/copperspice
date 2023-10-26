@@ -382,7 +382,7 @@ class DrawTextItemDevice: public QPaintDevice
             break;
          default:
             val = 0;
-            qWarning("DrawTextItemDevice::metric: Invalid metric command");
+            qWarning("DrawTextItemDevice::metric() Invalid metric command");
       }
       return val;
    }

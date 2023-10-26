@@ -1686,7 +1686,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                c.setNamedColor(value);
 
                if (!c.isValid()) {
-                  qWarning("QTextHtmlParser::applyAttributes: Unknown color name '%s'", value.toLatin1().constData());
+                  qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setForeground(c);
             }
@@ -1744,7 +1744,8 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                QColor c;
                c.setNamedColor(value);
                if (!c.isValid()) {
-                  qWarning("QTextHtmlParser::applyAttributes: Unknown color name '%s'", value.toLatin1().constData());
+
+                  qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setBackground(c);
             } else if (key == QLatin1String("background")) {
@@ -1759,7 +1760,8 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                QColor c;
                c.setNamedColor(value);
                if (!c.isValid()) {
-                  qWarning("QTextHtmlParser::applyAttributes: Unknown color name '%s'", value.toLatin1().constData());
+
+                  qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setBackground(c);
             } else if (key == QLatin1String("background")) {
@@ -1782,7 +1784,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                QColor c;
                c.setNamedColor(value);
                if (!c.isValid()) {
-                  qWarning("QTextHtmlParser::applyAttributes: Unknown color name '%s'", value.toLatin1().constData());
+                  qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setBackground(c);
 
