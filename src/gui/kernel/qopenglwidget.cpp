@@ -273,7 +273,7 @@ void QOpenGLWidgetPrivate::initialize()
    if (! shareContext) {
 
 #if defined(CS_SHOW_DEBUG)
-      qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context.");
+      qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context");
 #endif
 
       return;
@@ -292,7 +292,7 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setScreen(shareContext->screen());
 
    if (! ctx->create()) {
-      qWarning("QOpenGLWidget: Failed to create context");
+      qWarning("QOpenGLWidgetPrivate::initialize() Failed to create context");
       return;
    }
 
@@ -320,7 +320,7 @@ void QOpenGLWidgetPrivate::initialize()
    surface->create();
 
    if (!ctx->makeCurrent(surface)) {
-      qWarning("QOpenGLWidget: Failed to make context current");
+      qWarning("QOpenGLWidgetPrivate::initialize() Failed to make context current");
       return;
    }
 
@@ -464,7 +464,7 @@ QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags flags)
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)) {
       d->setRenderToTexture();
    } else {
-      qWarning("QOpenGLWidget is not supported on this platform.");
+      qWarning("QOpenGLWidget::QOpenGLWidget() Method not supported on this platform");
    }
 }
 
@@ -514,7 +514,7 @@ void QOpenGLWidget::setFormat(const QSurfaceFormat &format)
    Q_D(QOpenGLWidget);
 
    if (d->initialized) {
-      qWarning("QOpenGLWidget: Already initialized, setting the format has no effect");
+      qWarning("QOpenGLWidget::setFormat() Already initialized, setting the format again has no effect");
       return;
    }
 
@@ -715,7 +715,7 @@ int QOpenGLWidget::metric(QPaintDevice::PaintDeviceMetric metric) const
          }
 
       default:
-         qWarning("QOpenGLWidget::metric(): unknown metric %d", metric);
+         qWarning("QOpenGLWidget::metric() Unknown metric %d", metric);
          return 0;
    }
 }

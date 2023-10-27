@@ -112,7 +112,7 @@ Qt::DropAction QDragManager::drag(QDrag *objDrag)
    }
 
    if (m_object) {
-      qWarning("QDragManager::drag in possibly invalid state");
+      qWarning("QDragManager::drag() State may be invalid");
       return Qt::IgnoreAction;
    }
 
@@ -249,7 +249,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
             qreal(colBuf[3]) / qreal(0xFFFF));
          data = c;
       } else {
-         qWarning("Qt: Invalid color format");
+         qWarning("QMimeData::retrieveData() Invalid color format");
       }
    } else if (data.type() != type && data.type() == QVariant::ByteArray) {
       // try to use mime data's internal conversion stuf.

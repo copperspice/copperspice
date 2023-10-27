@@ -37,7 +37,7 @@
 static inline bool check_step_valid(qreal step, const char *method)
 {
    if (!(step >= 0 && step <= 1)) {
-      qWarning("QGraphicsItemAnimation::%s: invalid step = %f", method, step);
+      qWarning("QGraphicsItemAnimation::%s Invalid step value = %f", method, step);
       return false;
    }
    return true;

@@ -185,7 +185,7 @@ QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context
 
   if (! threadContext) {
       if (! QThread::currentThread()) {
-         qWarning("No QTLS available. currentContext will not work");
+         qWarning("QOpenGLContext::setCurrentContext() CurrentContext requires an active QThread");
          return nullptr;
       }
 
@@ -479,7 +479,7 @@ QAbstractOpenGLFunctions *QOpenGLContext::versionFunctions(const QOpenGLVersionP
 #ifndef QT_OPENGL_ES_2
 
    if (isOpenGLES()) {
-      qWarning("versionFunctions: Not supported on OpenGL ES");
+      qWarning("QOpenGLContext::versionFunctions() Method not supported on OpenGL ES");
       return nullptr;
    }
 #endif
@@ -580,7 +580,7 @@ bool QOpenGLContext::makeCurrent(QSurface *surface)
       return false;
    }
    if (!surface->supportsOpenGL()) {
-      qWarning() << "QOpenGLContext::makeCurrent() called with non-opengl surface" << surface;
+      qWarning() << "QOpenGLContext::makeCurrent() Called with a Non OpenGL surface" << surface;
       return false;
    }
 
@@ -634,18 +634,18 @@ void QOpenGLContext::swapBuffers(QSurface *surface)
    }
 
    if (!surface) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with null argument";
+      qWarning("QOpenGLContext::swapBuffers() Surface is invalid (nullptr)");
       return;
    }
 
    if (!surface->supportsOpenGL()) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with non-opengl surface";
+      qWarning("QOpenGLContext::swapBuffers() Called with a Non OpenGL surface");
       return;
    }
 
    if (surface->surfaceClass() == QSurface::Window
       && !qt_window_private(static_cast<QWindow *>(surface))->receivedExpose) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with non-exposed window, behavior is undefined";
+      qWarning("QOpenGLContext::swapBuffers() Called with a non exposed window");
    }
 
    QPlatformSurface *surfaceHandle = surface->surfaceHandle();

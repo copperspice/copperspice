@@ -583,9 +583,8 @@ bool QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ProcessEventsFl
    }
 
    if (! QGuiApplication::instance()) {
-      qWarning().nospace()
-            << "QWindowSystemInterface::flushWindowSystemEvents() invoked after "
-               "QGuiApplication destruction, discarding " << count << " events.";
+      qWarning("QWindowSystemInterface::flushWindowSystemEvents() Unable to call this method after "
+         "QApplication has been closed");
 
       QWindowSystemInterfacePrivate::windowSystemEventQueue.clear();
       return false;

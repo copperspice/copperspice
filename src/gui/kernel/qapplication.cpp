@@ -119,7 +119,7 @@
 #define CHECK_QAPP_INSTANCE(...) \
     if (QCoreApplication::instance()) { \
     } else { \
-        qWarning("Your application must construct a QApplication before calling this method."); \
+        qWarning("QApplication must be constructed before calling this method"); \
         return __VA_ARGS__; \
     }
 
@@ -1033,7 +1033,7 @@ static void init_plugins(const QList<QString> &pluginList)
          QGuiApplicationPrivate::generic_plugin_list.append(plugin);
 
       } else {
-         qWarning() << "No such plugin for spec " << pluginSpec;
+         qWarning() << "QApplication::init_plugins() " << "Plugin failed to load, " << pluginSpec;
       }
    }
 }
@@ -1380,7 +1380,7 @@ QApplication::FP_Void QApplication::platformFunction(const QByteArray &function)
    QPlatformIntegration *platform_interface = QGuiApplicationPrivate::platformIntegration();
 
    if (! platform_interface) {
-      qWarning() << "QGuiApplication::platformFunction(): Please construct a QGuiApplication before accessing a platform function";
+      qWarning("QApplication::platformFunction() Construct a QApplication before accessing platform functions");
       return nullptr;
    }
 
@@ -1544,7 +1544,7 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
          break;
 
       default:
-         qWarning() << "Unknown user input event type:" << e->type;
+         qWarning() << "QApplicationPrivate::processWindowSystemEvent() Unknown user input event type," << e->type;
          break;
    }
 }
@@ -2712,7 +2712,7 @@ QClipboard *QApplication::clipboard()
 {
    if (QGuiApplicationPrivate::qt_clipboard == nullptr) {
       if (! qApp) {
-         qWarning("QGuiApplication: Must construct a QGuiApplication before accessing a QClipboard");
+         qWarning("QApplication::clipboard() Construct a QApplication before accessing the clipboard");
          return nullptr;
       }
       QGuiApplicationPrivate::qt_clipboard = new QClipboard(nullptr);

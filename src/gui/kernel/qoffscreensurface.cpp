@@ -108,11 +108,13 @@ void QOffscreenSurface::create()
    Q_D(QOffscreenSurface);
    if (!d->platformOffscreenSurface && !d->offscreenWindow) {
       d->platformOffscreenSurface = QGuiApplicationPrivate::platformIntegration()->createPlatformOffscreenSurface(this);
+
       // No platform offscreen surface, fallback to an invisible window
       if (!d->platformOffscreenSurface) {
          if (QThread::currentThread() != qGuiApp->thread()) {
-            qWarning("Attempting to create QWindow-based QOffscreenSurface outside the gui thread. Expect failures.");
+            qWarning("QOffscreenSurface::create() Attempting to create an off screen surface outside of the GUI thread");
          }
+
          d->offscreenWindow = new QWindow(d->screen);
          d->offscreenWindow->setObjectName(QLatin1String("QOffscreenSurface"));
          // Remove this window from the global list since we do not want it to be destroyed when closing the app.

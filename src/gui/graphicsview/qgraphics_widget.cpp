@@ -485,7 +485,7 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
             sh = QSizeF(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
             break;
          default:
-            qWarning("QGraphicsWidget::sizeHint(): Value of 'which' is not valid");
+            qWarning("QGraphicsWidget::sizeHint() Value for size hint is not valid");
             break;
       }
    }
@@ -513,8 +513,8 @@ void QGraphicsWidget::setLayout(QGraphicsLayout *l)
    QGraphicsLayoutItem *oldParent = l->parentLayoutItem();
 
    if (oldParent && oldParent != this) {
-      qWarning("QGraphicsWidget::setLayout: Attempting to set a layout on %s"
-         " \"%s\", when the layout already has a parent", csPrintable(metaObject()->className()), csPrintable(objectName()));
+      qWarning("QGraphicsWidget::setLayout() Unable to set a layout on %s, current layout already has a parent",
+         csPrintable(metaObject()->className()));
       return;
    }
 
@@ -1215,7 +1215,7 @@ void QGraphicsWidget::addActions(const QList<QAction *> &actions)
 void QGraphicsWidget::insertAction(QAction *before, QAction *action)
 {
    if (!action) {
-      qWarning("QWidget::insertAction: Attempt to insert null action");
+      qWarning("QWidget::insertAction() Unable to to insert an invalid action (nullptr)");
       return;
    }
 
@@ -1275,18 +1275,18 @@ QList<QAction *> QGraphicsWidget::actions() const
 void QGraphicsWidget::setTabOrder(QGraphicsWidget *first, QGraphicsWidget *second)
 {
    if (!first && !second) {
-      qWarning("QGraphicsWidget::setTabOrder(0, 0) is undefined");
+      qWarning("QGraphicsWidget::setTabOrder() Both widgets are invalid (nullptr)");
       return;
    }
+
    if ((first && second) && first->scene() != second->scene()) {
-      qWarning("QGraphicsWidget::setTabOrder: scenes %p and %p are different",
-         first->scene(), second->scene());
+      qWarning("QGraphicsWidget::setTabOrder() Items belong to different QGraphicsScene");
       return;
    }
+
    QGraphicsScene *scene = first ? first->scene() : second->scene();
    if (!scene && (!first || !second)) {
-      qWarning("QGraphicsWidget::setTabOrder: assigning tab order from/to the"
-         " scene requires the item to be in a scene.");
+      qWarning("QGraphicsWidget::setTabOrder() Assigning a tab order requires both items to be in a QGraphicsScene");
       return;
    }
 

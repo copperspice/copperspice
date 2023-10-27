@@ -413,8 +413,8 @@ void QSurfaceFormat::setDefaultFormat(const QSurfaceFormat &format)
       QOpenGLContext *globalContext = QOpenGLContext::globalShareContext();
 
       if (globalContext && globalContext->isValid()) {
-         qWarning("Warning: Setting a new default format with a different version or profile "
-            "after the global shared context is created may cause issues with context sharing.");
+         qWarning("QSurfaceFormat::setDefaultFormat() Setting a new default format with a different version or profile, "
+            "after the global shared context is created, may cause issues with context sharing");
       }
    }
 #endif

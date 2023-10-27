@@ -213,10 +213,12 @@ void QWindowPrivate::emitScreenChangedRecursion(QScreen *newScreen)
 void QWindowPrivate::setTopLevelScreen(QScreen *newScreen, bool recreate)
 {
    Q_Q(QWindow);
+
    if (parentWindow) {
-      qWarning() << q << '(' << newScreen << "): Attempt to set a screen on a child window.";
+      qWarning("QWindow::setTopLevelScreen() Unable to connect the current (child) window since it already has a parent");
       return;
    }
+
    if (newScreen != topLevelScreen) {
       const bool shouldRecreate = recreate && windowRecreationRequired(newScreen);
       const bool shouldShow = visibilityOnDestroy && !topLevelScreen;
@@ -244,7 +246,7 @@ void QWindowPrivate::create(bool recursive)
    Q_ASSERT(platformWindow);
 
    if (!platformWindow) {
-      qWarning() << "Failed to create platform window for" << q << "with flags" << q->flags();
+      qWarning("QWindow::create() Failed to create a platform window");
       return;
    }
 
@@ -396,7 +398,7 @@ void QWindow::setParent(QWindow *parent)
 
    QScreen *newScreen = parent ? parent->screen() : screen();
    if (d->windowRecreationRequired(newScreen)) {
-      qWarning() << this << '(' << parent << "): Cannot change screens (" << screen() << newScreen << ')';
+      qWarning("QWindow::setParent() Unable to move current window to a new screen");
       return;
    }
 
@@ -609,7 +611,7 @@ void QWindow::requestActivate()
 {
    Q_D(QWindow);
    if (flags() & Qt::WindowDoesNotAcceptFocus) {
-      qWarning() << "requestActivate() called for " << this << " which has Qt::WindowDoesNotAcceptFocus set.";
+      qWarning("QWindow::requestActivate() Unable to activate a window with Qt::WindowDoesNotAcceptFocus set");
       return;
    }
    if (d->platformWindow) {
@@ -684,7 +686,7 @@ qreal QWindow::devicePixelRatio() const
 void QWindow::setWindowState(Qt::WindowState state)
 {
    if (state == Qt::WindowActive) {
-      qWarning() << "QWindow::setWindowState does not accept Qt::WindowActive";
+      qWarning("QWindow::setWindowState() Unable to set the state to Qt::WindowActive");
       return;
    }
 
@@ -707,7 +709,7 @@ void QWindow::setTransientParent(QWindow *parent)
 {
    Q_D(QWindow);
    if (parent && !parent->isTopLevel()) {
-      qWarning() << parent << "must be a top level window.";
+      qWarning("QWindow::setTransientParent() New parent must be a top level window");
       return;
    }
 
@@ -1542,7 +1544,7 @@ QWindow *QWindowPrivate::topLevelWindow() const
 QWindow *QWindow::fromWinId(WId id)
 {
    if (!QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::ForeignWindows)) {
-      qWarning() << "QWindow::fromWinId(): platform plugin does not support foreign windows.";
+      qWarning("QWindow::fromWinId() Platform plugin does not support foreign windows");
       return nullptr;
    }
 

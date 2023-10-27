@@ -37,7 +37,7 @@
 
 #define QAPP_CHECK(functionName) \
     if (! qApp) { \
-        qWarning("QAction: Initialize QApplication before calling '" functionName "'."); \
+        qWarning("QAction::%s() QApplication must be created before calling this method", functionName ); \
         return; \
     }
 
@@ -830,7 +830,7 @@ bool QAction::event(QEvent *e)
          "QAction::event", "Received shortcut event from incorrect shortcut");
 
       if (se->isAmbiguous()) {
-         qWarning("QAction::eventFilter: Ambiguous shortcut overload: %s",
+         qWarning("QAction::event() Current shortcut is an ambiguous overload: %s",
             se->key().toString(QKeySequence::NativeText).toLatin1().constData());
 
       } else {
