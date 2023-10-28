@@ -287,7 +287,7 @@ void QRasterPaintEngine::init()
 
    switch (d->device->devType()) {
       case QInternal::Pixmap:
-         qWarning("QRasterPaintEngine: unsupported for pixmaps");
+         qWarning("QRasterPaintEngine::init() Unsupported for pixmaps");
          break;
 
       case QInternal::Image:
@@ -295,7 +295,7 @@ void QRasterPaintEngine::init()
          break;
 
       default:
-         qWarning("QRasterPaintEngine: unsupported target device %d\n", d->device->devType());
+         qWarning("QRasterPaintEngine::init() Unsupported target device %d\n", d->device->devType());
          d->device = nullptr;
          return;
    }
@@ -1753,7 +1753,7 @@ void QRasterPaintEngine::fillPolygon(const QPointF *points, int pointCount, Poly
          fillPolygon(upper.constData(), upper.size(), mode);
          fillPolygon(lower.constData(), lower.size(), mode);
       } else {
-         qWarning("Polygon too complex for filling.");
+         qWarning("QRasterPaintEngine::fillPolygon() Polygon too complex");
       }
 
       return;
@@ -3542,7 +3542,7 @@ void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
       if (error == -6) { // ErrRaster_OutOfMemory from qgrayraster.c
          rasterPoolSize *= 2;
          if (rasterPoolSize > 1024 * 1024) {
-            qWarning("QPainter: Rasterization of primitive failed");
+            qWarning("QRasterPaintEngine::rasterize() Rasterization of primitive failed");
             break;
          }
 

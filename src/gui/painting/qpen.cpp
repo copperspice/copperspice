@@ -256,7 +256,7 @@ void QPen::setDashPattern(const QVector<qreal> &pattern)
    d->style = Qt::CustomDashLine;
 
    if ((dd->dashPattern.size() % 2) == 1) {
-      qWarning("QPen::setDashPattern: Pattern not of even length");
+      qWarning("QPen::setDashPattern() Pattern length must be an even number");
       dd->dashPattern << 1;
    }
 }
@@ -313,7 +313,7 @@ qreal QPen::widthF() const
 void QPen::setWidth(int width)
 {
    if (width < 0) {
-      qWarning("QPen::setWidth: Setting a pen width with a negative value is not defined");
+      qWarning("QPen::setWidth() Pen width must be zero or greater");
    }
    if ((qreal)width == d->width) {
       return;
@@ -327,7 +327,7 @@ void QPen::setWidth(int width)
 void QPen::setWidthF(qreal width)
 {
    if (width < 0.f) {
-      qWarning("QPen::setWidthF: Setting a pen width with a negative value is not defined");
+      qWarning("QPen::setWidthF() Pen width must be zero or greater");
    }
    if (qAbs(d->width - width) < 0.00000001f) {
       return;

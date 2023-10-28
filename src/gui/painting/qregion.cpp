@@ -81,7 +81,7 @@ void QRegion::exec(const QByteArray &buffer, int ver, QDataStream::ByteOrder byt
 
 #ifndef QT_NO_DEBUG
       if (test_cnt > 0 && id != QRGN_TRANSLATE) {
-         qWarning("QRegion::exec: Internal error");
+         qWarning("QRegion::exec() Internal error");
       }
       test_cnt++;
 #endif
@@ -3129,7 +3129,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    if (ET.ymax - ET.ymin > 100000) {
 
 #ifndef QT_NO_DEBUG
-      qWarning("QRegion: Creating a region from big polygon failed");
+      qWarning("QRegion::PolygonRegion() Polygon is too large");
 #endif
 
       // clean up region ptr

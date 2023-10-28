@@ -959,7 +959,7 @@ void QWidgetWindow::handleDragLeaveEvent(QDragLeaveEvent *event)
 void QWidgetWindow::handleDropEvent(QDropEvent *event)
 {
    if (m_dragTarget.isNull()) {
-      qWarning() << m_widget << ": No drag target set.";
+      qWarning() << m_widget << ": No drag target was set";
       event->ignore();
 
       return;

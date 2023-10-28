@@ -68,7 +68,7 @@ class Q_GUI_EXPORT QBlittable
       (void) color;
       (void) cmode;
 
-      qWarning("Please implement alphaFillRect function in your platform or remove AlphaFillRectCapability from it");
+      qWarning("QBlittable::alphaFillRect() Implement for your platform or disable the AlphaFillRectCapability flag");
    }
 
    virtual void drawPixmapOpacity(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect,
@@ -79,7 +79,7 @@ class Q_GUI_EXPORT QBlittable
       (void) cmode;
       (void) opacity;
 
-      qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
+      qWarning("QBlittable::drawPixmapOpacity() Implement for your platform or disable the OpacityPixmapCapability flag");
    }
 
    virtual bool drawCachedGlyphs(const QPaintEngineState *state, QFontEngine::GlyphFormat glyphFormat, int numGlyphs,
@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QBlittable
       (void) positions;
       (void) fontEngine;
 
-      qWarning("Please implement drawCachedGlyphs function in your platform or remove DrawCachedGlyphsCapability from it");
+      qWarning("QBlittable::drawCachedGlyphs() Implement for your platform or disable the DrawCachedGlyphsCapability flag");
       return true;
    }
 

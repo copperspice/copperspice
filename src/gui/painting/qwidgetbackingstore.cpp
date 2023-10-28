@@ -1827,7 +1827,6 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    drawWidget(q, toBePainted, QPoint(), QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawPaintOnScreen, nullptr);
 
    if (q->paintingActive()) {
-      qWarning("QWidget::repaint: It is dangerous to leave painters active on a widget outside of the PaintEvent");
+      qWarning("QWidget::repaint() Paint process should not be active after leaving the paint event");
    }
 }
-

@@ -36,7 +36,7 @@ void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2, const QPalette 
    bool sunken, int lineWidth, int midLineWidth)
 {
    if (!(p && lineWidth >= 0 && midLineWidth >= 0))        {
-      qWarning("qDrawShadeLine: Invalid parameters");
+      qWarning("qDrawShadeLine() Invalid parameters");
       return;
    }
 
@@ -130,7 +130,7 @@ void qDrawShadeRect(QPainter *p, int x, int y, int w, int h,
    }
 
    if (! (w > 0 && h > 0 && lineWidth >= 0 && midLineWidth >= 0)) {
-      qWarning("qDrawShadeRect: Invalid parameters");
+      qWarning("qDrawShadeRect() Invalid parameters");
       return;
    }
 
@@ -214,7 +214,7 @@ void qDrawShadePanel(QPainter *p, int x, int y, int w, int h,
    }
 
    if (! (w > 0 && h > 0 && lineWidth >= 0)) {
-      qWarning("qDrawShadePanel: Invalid parameters");
+      qWarning("qDrawShadePanel() Invalid parameters");
    }
 
    QColor shade = pal.dark().color();
@@ -364,7 +364,7 @@ void qDrawPlainRect(QPainter *p, int x, int y, int w, int h, const QColor &c,
    }
 
    if (!(w > 0 && h > 0 && lineWidth >= 0)) {
-      qWarning("qDrawPlainRect: Invalid parameters");
+      qWarning("qDrawPlainRect() Invalid parameters");
    }
    QPen   oldPen   = p->pen();
    QBrush oldBrush = p->brush();

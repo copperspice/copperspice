@@ -676,7 +676,7 @@ QImage qSmoothScaleImage(const QImage &src, int dw, int dh)
 
    buffer = QImage(dw, dh, src.format());
    if (buffer.isNull()) {
-      qWarning("QImage: out of memory, returning null");
+      qWarning("QImage::qSmoothScaleImage() Out of memory");
       qimageFreeScaleInfo(scaleinfo);
       return QImage();
    }

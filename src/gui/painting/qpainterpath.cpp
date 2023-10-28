@@ -254,7 +254,7 @@ void QPainterPath::moveTo(const QPointF &p)
 
    if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::moveTo: Adding point where x or y is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::moveTo() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -285,7 +285,7 @@ void QPainterPath::lineTo(const QPointF &p)
 
    if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::lineTo: Adding point where x or y is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::lineTo() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -316,7 +316,7 @@ void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &
    if (!qt_is_finite(c1.x()) || !qt_is_finite(c1.y()) || !qt_is_finite(c2.x()) || !qt_is_finite(c2.y())
       || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::cubicTo: Adding point where x or y is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::cubicTo() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -350,7 +350,7 @@ void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 
    if (!qt_is_finite(c.x()) || !qt_is_finite(c.y()) || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::quadTo: Adding point where x or y is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::quadTo() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -384,7 +384,7 @@ void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength
    if ((!qt_is_finite(rect.x()) && !qt_is_finite(rect.y())) || !qt_is_finite(rect.width()) || !qt_is_finite(rect.height())
       || !qt_is_finite(startAngle) || !qt_is_finite(sweepLength)) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::arcTo: Adding arc where a parameter is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::arcTo() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -428,7 +428,7 @@ void QPainterPath::addRect(const QRectF &r)
 {
    if (!qt_is_finite(r.x()) || !qt_is_finite(r.y()) || !qt_is_finite(r.width()) || !qt_is_finite(r.height())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::addRect: Adding rect where a parameter is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::addRect() Value for point x or y is invalid");
 #endif
       return;
    }
@@ -478,7 +478,7 @@ void QPainterPath::addEllipse(const QRectF &boundingRect)
    if (!qt_is_finite(boundingRect.x()) || !qt_is_finite(boundingRect.y())
       || !qt_is_finite(boundingRect.width()) || !qt_is_finite(boundingRect.height())) {
 #ifndef QT_NO_DEBUG
-      qWarning("QPainterPath::addEllipse: Adding ellipse where a parameter is NaN or Inf, ignoring call");
+      qWarning("QPainterPath::addEllipse() Value for ellipse is invalid");
 #endif
       return;
    }
@@ -1652,7 +1652,7 @@ QDataStream &operator>>(QDataStream &s, QPainterPath &p)
       if (!qt_is_finite(x) || !qt_is_finite(y)) {
 
 #ifndef QT_NO_DEBUG
-         qWarning("QDataStream::operator>>: NaN or Inf element found in path, skipping it");
+         qWarning("QDataStream::operator>>() Element in QPainterPath is invalid");
 #endif
 
          continue;
@@ -2070,7 +2070,7 @@ static inline QBezier bezierAtT(const QPainterPath &path, qreal t, qreal *starti
 QPointF QPainterPath::pointAtPercent(qreal t) const
 {
    if (t < 0 || t > 1) {
-      qWarning("QPainterPath::pointAtPercent accepts only values between 0 and 1");
+      qWarning("QPainterPath::pointAtPercent() Only values between 0 and 1 are valid");
       return QPointF();
    }
 
@@ -2106,7 +2106,7 @@ QPointF QPainterPath::pointAtPercent(qreal t) const
 qreal QPainterPath::angleAtPercent(qreal t) const
 {
    if (t < 0 || t > 1) {
-      qWarning("QPainterPath::angleAtPercent accepts only values between 0 and 1");
+      qWarning("QPainterPath::angleAtPercent() Only values between 0 and 1 are valid");
       return 0;
    }
 
@@ -2125,7 +2125,7 @@ qreal QPainterPath::angleAtPercent(qreal t) const
 qreal QPainterPath::slopeAtPercent(qreal t) const
 {
    if (t < 0 || t > 1) {
-      qWarning("QPainterPath::slopeAtPercent accepts only values between 0 and 1");
+      qWarning("QPainterPath::slopeAtPercent() Only values between 0 and 1 are valid");
       return 0;
    }
 

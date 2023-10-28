@@ -280,12 +280,12 @@ static bool qbrush_check_type(Qt::BrushStyle style)
 {
    switch (style) {
       case Qt::TexturePattern:
-         qWarning("QBrush: Incorrect use of TexturePattern");
+         qWarning("qbrush_check_type() Incorrect use of texture pattern");
          break;
       case Qt::LinearGradientPattern:
       case Qt::RadialGradientPattern:
       case Qt::ConicalGradientPattern:
-         qWarning("QBrush: Wrong use of a gradient pattern");
+         qWarning("qbrush_check_type() Incorrect use of a gradient pattern");
          break;
       default:
          return true;
@@ -973,7 +973,7 @@ QGradient::QGradient()
 void QGradient::setColorAt(qreal pos, const QColor &color)
 {
    if ((pos > 1 || pos < 0) && !qIsNaN(pos)) {
-      qWarning("QGradient::setColorAt: Color position must be specified in the range 0 to 1");
+      qWarning("QGradient::setColorAt() Color position must be specified in the range 0 to 1");
       return;
    }
 

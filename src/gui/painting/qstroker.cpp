@@ -97,7 +97,7 @@ class QSubpathBackwardIterator
             ce.type = QPainterPath::CurveToDataElement;
             break;
          default:
-            qWarning("QSubpathReverseIterator::next: Case %d unhandled", ce.type);
+            qWarning("QSubpathReverseIterator::next() Unhandled type, %d", ce.type);
             break;
       }
       --m_pos;
@@ -840,7 +840,8 @@ QPointF qt_curves_for_arc(const QRectF &rect, qreal startAngle, qreal sweepLengt
    *point_count = 0;
    if (qt_is_nan(rect.x()) || qt_is_nan(rect.y()) || qt_is_nan(rect.width()) || qt_is_nan(rect.height())
       || qt_is_nan(startAngle) || qt_is_nan(sweepLength)) {
-      qWarning("QPainterPath::arcTo: Adding arc where a parameter is NaN, results are undefined");
+      qWarning("QPainterPath::arcTo() Value for arc is invalid");
+
       return QPointF();
    }
 

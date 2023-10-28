@@ -186,7 +186,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
 
 #ifndef QT_NO_DEBUG
    if (qIsNaN(dx) | qIsNaN(dy)) {
-      qWarning() << "QTransform::translate with NaN called";
+      qWarning("QTransform::translate() Value for x or y is invalid");
       return *this;
    }
 #endif
@@ -228,7 +228,7 @@ QTransform QTransform::fromTranslate(qreal dx, qreal dy)
 {
 #ifndef QT_NO_DEBUG
    if (qIsNaN(dx) | qIsNaN(dy)) {
-      qWarning() << "QTransform::fromTranslate with NaN called";
+      qWarning("QTransform::fromTranslate() Value for x or y is invalid");
       return QTransform();
    }
 #endif
@@ -254,7 +254,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
 
 #ifndef QT_NO_DEBUG
    if (qIsNaN(sx) | qIsNaN(sy)) {
-      qWarning() << "QTransform::scale with NaN called";
+      qWarning("QTransform::scale() Value for x or y is invalid");
       return *this;
    }
 #endif
@@ -294,7 +294,7 @@ QTransform QTransform::fromScale(qreal sx, qreal sy)
 {
 #ifndef QT_NO_DEBUG
    if (qIsNaN(sx) | qIsNaN(sy)) {
-      qWarning() << "QTransform::fromScale with NaN called";
+      qWarning("QTransform::fromScale() Value for x or y is invalid");
       return QTransform();
    }
 #endif
@@ -320,7 +320,7 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
 
 #ifndef QT_NO_DEBUG
    if (qIsNaN(sh) | qIsNaN(sv)) {
-      qWarning() << "QTransform::shear with NaN called";
+      qWarning("QTransform::shear() Value for horizontal or vertical is invalid");
       return *this;
    }
 #endif
@@ -377,7 +377,7 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
 
 #if defined(CS_DEBUG)
    if (qIsNaN(a)) {
-      qWarning() << "QTransform::rotate with NaN called";
+      qWarning() << "QTransform::rotate() Value is invalid";
       return *this;
    }
 #endif
@@ -470,7 +470,7 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
 {
 #ifndef QT_NO_DEBUG
    if (qIsNaN(a)) {
-      qWarning() << "QTransform::rotateRadians with NaN called";
+      qWarning("QTransform::rotateRadians() Value is invalid");
       return *this;
    }
 #endif
