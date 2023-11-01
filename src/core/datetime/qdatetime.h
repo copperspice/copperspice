@@ -332,7 +332,15 @@ class Q_CORE_EXPORT QDateTime
    qint64 toMSecsSinceEpoch() const;
    qint64 toSecsSinceEpoch() const;
 
+   std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> toStdSysMilliseconds() const {
+      return std::chrono::time_point<std::chrono::system_clock,
+            std::chrono::milliseconds>(std::chrono::milliseconds(toMSecsSinceEpoch()));
+   }
 
+   std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> toStdSysSeconds() const {
+      return std::chrono::time_point<std::chrono::system_clock,
+            std::chrono::seconds>(std::chrono::seconds(toSecsSinceEpoch()));
+   }
 
    QDateTime toOffsetFromUtc(qint64 offsetSeconds) const;
 
