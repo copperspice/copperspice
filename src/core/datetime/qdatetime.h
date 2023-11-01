@@ -288,6 +288,7 @@ class Q_CORE_EXPORT QDateTime
       return *this;
    }
 
+   QDateTime addDuration(std::chrono::milliseconds msecs) const;
 
    [[nodiscard]] QDateTime addDays(qint64 days) const;
    [[nodiscard]] QDateTime addMonths(qint64 months) const;
@@ -322,6 +323,7 @@ class Q_CORE_EXPORT QDateTime
       d.swap(other.d);
    }
 
+   QTimeZone timeRepresentation() const;
    QTimeZone timeZone() const;
    QString timeZoneAbbreviation() const;
 

@@ -1776,6 +1776,11 @@ QDateTime &QDateTime::operator=(const QDateTime &other)
    return *this;
 }
 
+QDateTime QDateTime::addDuration(std::chrono::milliseconds msecs) const
+{
+   return addMSecs(msecs.count());
+}
+
 QDate QDateTime::date() const
 {
    if (d->isNullDate()) {
@@ -1878,6 +1883,11 @@ QTime QDateTime::time() const
    msecsToTime(d->m_msecs, nullptr, &tm);
 
    return tm;
+}
+
+QTimeZone QDateTime::timeRepresentation() const
+{
+   return timeZone();
 }
 
 QTimeZone QDateTime::timeZone() const
