@@ -31,6 +31,7 @@
 
 class QDateTimePrivate;
 
+#include <chrono>
 #include <limits>
 #include <optional>
 
@@ -78,6 +79,8 @@ class Q_CORE_EXPORT QDate
    int daysInMonth() const;
    int daysInYear() const;
 
+   QDateTime endOfDay(const QTimeZone &zone = default_tz()) const;
+
    bool isNull() const {
       return ! isValid();
    }
@@ -104,6 +107,8 @@ class Q_CORE_EXPORT QDate
 
    void getDate(int *year, int *month, int *day) const;
    bool setDate(int year, int month, int day);
+
+   QDateTime startOfDay(const QTimeZone &zone = default_tz()) const;
 
 
    bool operator==(const QDate &value) const {

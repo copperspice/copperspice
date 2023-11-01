@@ -449,6 +449,26 @@ const QTimeZone & QDate::default_tz() {
    return retval;
 }
 
+QDateTime QDate::endOfDay(const QTimeZone &zone) const
+{
+   if (! isValid() || ! zone.isValid()) {
+      return QDateTime();
+   }
+
+   QDateTime retval = QDateTime(*this, QTime(23, 59, 59, 999), zone);
+
+   if (retval.isValid()) {
+      return retval;
+   }
+
+/*
+   // need to look up more IANN information
+   // time zone has a DST change at midnight or not one hour
+*/
+
+   return retval;
+}
+
 int QDate::month() const
 {
    if (isNull()) {
@@ -659,6 +679,26 @@ bool QDate::setDate(int year, int month, int day)
    }
 
    return isValid();
+}
+
+QDateTime QDate::startOfDay(const QTimeZone &zone) const
+{
+   if (! isValid() || ! zone.isValid()) {
+      return QDateTime();
+   }
+
+   QDateTime retval = QDateTime(*this, QTime(0, 0, 0, 0), zone);
+
+   if (retval.isValid()) {
+      return retval;
+   }
+
+/*
+   // need to look up more IANN information
+   // time zone has a DST change at midnight or not one hour
+*/
+
+   return QDateTime();
 }
 
 QDate QDate::fromString(const QString &string, Qt::DateFormat format)
