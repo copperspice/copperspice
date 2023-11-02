@@ -37,7 +37,12 @@
 QMacTimeZonePrivate::QMacTimeZonePrivate()
     : m_nstz(nullptr)
 {
-    init(systemTimeZoneId());
+   // Reset the cached system timezone
+   [NSTimeZone resetSystemTimeZone];
+
+   // use system timezone
+   m_nstz = [NSTimeZone.systemTimeZone retain];
+   m_id   = QString::fromNSString(m_nstz.name).toUtf8();
 }
 
 // Create a named time zone
@@ -65,21 +70,18 @@ QTimeZonePrivate *QMacTimeZonePrivate::clone()
 
 void QMacTimeZonePrivate::init(const QByteArray &ianaId)
 {
-   if (ianaId.isEmpty()) {
-      // use system timezone
-      m_nstz = [NSTimeZone.systemTimeZone retain];
+   if (availableTimeZoneIds().contains(ianaId)) {
+      m_nstz = [[NSTimeZone timeZoneWithName:QCFString::toNSString(QString::fromUtf8(ianaId))] retain];
 
       if (m_nstz != nullptr) {
-         m_id = QString::fromNSString(m_nstz.name).toUtf8();
+         m_id = ianaId;
       }
    }
 
-   if (availableTimeZoneIds().contains(ianaId)) {
-     m_nstz = [[NSTimeZone timeZoneWithName:QCFString::toNSString(QString::fromUtf8(ianaId))] retain];
+   if (m_nstz == nullptr) {
+      m_nstz = [NSTimeZone.systemTimeZone retain];
+      m_id   = QString::fromNSString(m_nstz.name).toUtf8();
 
-     if (m_nstz != nullptr) {
-        m_id = ianaId;
-     }
    }
 }
 
@@ -92,7 +94,7 @@ QString QMacTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone
 {
     // TODO Mac doesn't support OffsetName yet so use standard offset name
     if (nameType == QTimeZone::OffsetName) {
-        const Data nowData = data(QDateTime::currentDateTimeUtc().toMSecsSinceEpoch());
+        const Data nowData = data(QDateTime::currentMSecsSinceEpoch());
 
         // TODO Cheat for now, assume if has dst the offset if 1 hour
         if (timeType == QTimeZone::DaylightTime && hasDaylightTime()) {
