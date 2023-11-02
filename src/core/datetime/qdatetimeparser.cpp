@@ -1285,9 +1285,9 @@ end:
       } else {
          if (context == FromString) {
             // optimization
-            Q_ASSERT(getMaximum().date().toJulianDay() == 4642999);
+            Q_ASSERT(getMaximum().date().toJulianDay() == 5373484);
 
-            if (newCurrentValue.date().toJulianDay() > 4642999) {
+            if (newCurrentValue.date().toJulianDay() > 5373484) {
                state = Invalid;
             }
 
