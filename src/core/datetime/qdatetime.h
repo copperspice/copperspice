@@ -53,6 +53,8 @@ class NSDate;
 static constexpr const qint64 INVALID_JD = (std::numeric_limits<qint64>::min)();
 static constexpr const qint64 MAX_C_TIME = (std::numeric_limits<time_t>::max)();
 
+static constexpr const qint64 EPOCH_JD   = 2440588;         // julianDayFromDate(1970, 1, 1)
+
 class Q_CORE_EXPORT QDate
 {
  public:

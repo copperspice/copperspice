@@ -62,8 +62,6 @@ static constexpr const qint64 MSECS_PER_MIN  = 60000;
 static constexpr const qint64 MIN_YEAR       = -292275056;
 static constexpr const qint64 MAX_YEAR       = 292278994;
 
-static constexpr const qint64 EPOCH_JD       = 2440588;         // julianDayFromDate(1970, 1, 1)
-
 class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 {
  public:
