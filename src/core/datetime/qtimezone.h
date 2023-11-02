@@ -64,6 +64,8 @@ class Q_CORE_EXPORT QTimeZone
       const QString &abbreviation, QLocale::Country country = QLocale::AnyCountry, const QString &comment = QString());
 
    QTimeZone(const QTimeZone &other);
+   QTimeZone(QTimeZone &&other);
+
    ~QTimeZone();
 
    QTimeZone &operator=(const QTimeZone &other);

@@ -904,6 +904,11 @@ QTimeZone::QTimeZone(const QTimeZone &other)
 {
 }
 
+QTimeZone::QTimeZone(QTimeZone &&other)
+   : d(std::move(other.d))
+{
+}
+
 QTimeZone::~QTimeZone()
 {
 }
