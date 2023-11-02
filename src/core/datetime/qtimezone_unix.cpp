@@ -1098,7 +1098,8 @@ QByteArray QTzTimeZonePrivate::systemTimeZoneId() const
    // to be a "default timezone", in which case it will be read
    // by one of the blocks below, so unset it here so it is not
    // considered as a valid/found ianaId
-   if (ianaId == "/etc/localtime") {
+
+   if (ianaId == ":/etc/localtime") {
       ianaId.clear();
    }
 
