@@ -35,7 +35,7 @@
 
 // Create the system default time zone
 QMacTimeZonePrivate::QMacTimeZonePrivate()
-    : m_nstz(nullptr)
+   : m_nstz(nullptr)
 {
    // Reset the cached system timezone
    [NSTimeZone resetSystemTimeZone];
@@ -49,7 +49,7 @@ QMacTimeZonePrivate::QMacTimeZonePrivate()
 QMacTimeZonePrivate::QMacTimeZonePrivate(const QByteArray &ianaId)
     : m_nstz(nullptr)
 {
-    init(ianaId);
+   init(ianaId);
 }
 
 QMacTimeZonePrivate::QMacTimeZonePrivate(const QMacTimeZonePrivate &other)
@@ -90,13 +90,14 @@ QString QMacTimeZonePrivate::comment() const
     return QCFString::toQString([m_nstz description]);
 }
 
-QString QMacTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType, const QLocale &locale) const
+QString QMacTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
+      QTimeZone::NameType nameType, const QLocale &locale) const
 {
-    // TODO Mac doesn't support OffsetName yet so use standard offset name
+    // Mac does not support OffsetName yet so use standard offset name
     if (nameType == QTimeZone::OffsetName) {
         const Data nowData = data(QDateTime::currentMSecsSinceEpoch());
 
-        // TODO Cheat for now, assume if has dst the offset if 1 hour
+        // assume if dst the offset if 1 hour
         if (timeType == QTimeZone::DaylightTime && hasDaylightTime()) {
             return isoOffsetFormat(nowData.standardTimeOffset + 3600);
         } else {
@@ -199,9 +200,6 @@ QTimeZonePrivate::Data QMacTimeZonePrivate::data(qint64 forMSecsSinceEpoch) cons
 
 bool QMacTimeZonePrivate::hasTransitions() const
 {
-    // TODO No direct Mac API, so return if has next after 1970, i.e. since start of tz
-    // TODO Not sure what is returned in event of no transitions, assume will be before requested date
-
     NSDate *epoch      = [NSDate dateWithTimeIntervalSince1970:0];
     const NSDate *date = [m_nstz nextDaylightSavingTimeTransitionAfterDate:epoch];
     const bool result  = ([date timeIntervalSince1970] > [epoch timeIntervalSince1970]);
@@ -235,7 +233,7 @@ QTimeZonePrivate::Data QMacTimeZonePrivate::nextTransition(qint64 afterMSecsSinc
 
 QTimeZonePrivate::Data QMacTimeZonePrivate::previousTransition(qint64 beforeMSecsSinceEpoch) const
 {
-    // No direct Mac API, so get all transitions since epoch and return the last one
+    // No direct Mac API, get all transitions since epoch and return the last one
     QList<int> secsList;
 
     if (beforeMSecsSinceEpoch > 0) {
@@ -267,6 +265,7 @@ QByteArray QMacTimeZonePrivate::systemTimeZoneId() const
 {
     // Reset the cached system tz then return the name
     [NSTimeZone resetSystemTimeZone];
+
     return QCFString::toQString([[NSTimeZone systemTimeZone] name]).toUtf8();
 }
 

@@ -24,16 +24,15 @@
 #ifndef QDATETIMEPARSER_P_H
 #define QDATETIMEPARSER_P_H
 
-#include <qplatformdefs.h>
 #include <qatomic.h>
+#include <qcoreapplication.h>
 #include <qdatetime.h>
+#include <qlocale.h>
+#include <qplatformdefs.h>
 #include <qstringlist.h>
 #include <qtimezone.h>
-#include <qlocale.h>
 #include <qvariant.h>
-
 #include <qvector.h>
-#include <qcoreapplication.h>
 
 #define QDATETIME_TIME_MIN            QTime(0, 0, 0, 0)
 #define QDATETIME_TIME_MAX            QTime(23, 59, 59, 999)

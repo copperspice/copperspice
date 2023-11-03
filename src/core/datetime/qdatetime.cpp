@@ -317,6 +317,7 @@ QDate QDate::addMonths(qint64 nmonths) const
    bool increasing = nmonths > 0;
 
    while (nmonths != 0) {
+
       if (nmonths < 0 && nmonths + 12 <= 0) {
          --y;
          nmonths += 12;
@@ -746,7 +747,7 @@ QDate QDate::fromString(const QString &string, Qt::DateFormat format)
          bool ok = false;
          int year = QStringParser::toInteger<int>(parts.at(3), &ok);
 
-         if (!ok) {
+         if (! ok) {
             return QDate();
          }
 
@@ -966,13 +967,13 @@ static QTime fromIsoTimeString(QStringView string, Qt::DateFormat format, bool *
    bool ok = false;
    int hour = QStringParser::toInteger<int>(string.mid(0, 2), &ok);
 
-   if (!ok) {
+   if (! ok) {
       return QTime();
    }
 
    const int minute = QStringParser::toInteger<int>(string.mid(3, 2), &ok);
 
-   if (!ok) {
+   if (! ok) {
       return QTime();
    }
 
@@ -1001,7 +1002,7 @@ static QTime fromIsoTimeString(QStringView string, Qt::DateFormat format, bool *
 
       const long minuteFractionInt = QStringParser::toInteger<long>(minuteFractionStr, &ok);
 
-      if (!ok) {
+      if (! ok) {
          return QTime();
       }
 
@@ -1018,7 +1019,7 @@ static QTime fromIsoTimeString(QStringView string, Qt::DateFormat format, bool *
       // HH:mm:ss or HH:mm:ss.zzz
       second = QStringParser::toInteger<int>(string.mid(6, 2), &ok);
 
-      if (!ok) {
+      if (! ok) {
          return QTime();
       }
 
@@ -1026,7 +1027,7 @@ static QTime fromIsoTimeString(QStringView string, Qt::DateFormat format, bool *
          const QStringView msecStr(string.mid(9, 4));
 
          int msecInt = msecStr.isEmpty() ? 0 : QStringParser::toInteger<int>(msecStr, &ok);
-         if (!ok) {
+         if (! ok) {
             return QTime();
          }
 
@@ -1239,29 +1240,29 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
 #endif
 
       if (local.tm_isdst >= 1) {
-         if (daylightStatus) {
+         if (daylightStatus != nullptr) {
             *daylightStatus = QDateTimePrivate::DaylightTime;
          }
 
-         if (abbreviation) {
+         if (abbreviation != nullptr) {
             *abbreviation = qt_tzname(QDateTimePrivate::DaylightTime);
          }
 
       } else if (local.tm_isdst == 0) {
-         if (daylightStatus) {
+         if (daylightStatus != nullptr) {
             *daylightStatus = QDateTimePrivate::StandardTime;
          }
 
-         if (abbreviation) {
+         if (abbreviation != nullptr) {
             *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
          }
 
       } else {
-         if (daylightStatus) {
+         if (daylightStatus != nullptr) {
             *daylightStatus = QDateTimePrivate::UnknownDaylightTime;
          }
 
-         if (abbreviation) {
+         if (abbreviation != nullptr) {
             *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
          }
       }
@@ -1274,11 +1275,11 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
       *date = QDate();
       *time = QTime();
 
-      if (daylightStatus) {
+      if (daylightStatus != nullptr) {
          *daylightStatus = QDateTimePrivate::UnknownDaylightTime;
       }
 
-      if (abbreviation) {
+      if (abbreviation != nullptr) {
          *abbreviation = QString();
       }
 
@@ -1493,11 +1494,11 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs, QDateTimePrivate::Daylig
          msecsToTime(localMsecs, localDate, localTime);
       }
 
-      if (daylightStatus) {
+      if (daylightStatus != nullptr) {
          *daylightStatus = QDateTimePrivate::StandardTime;
       }
 
-      if (abbreviation) {
+      if (abbreviation != nullptr) {
          *abbreviation = qt_tzname(QDateTimePrivate::StandardTime);
       }
 
