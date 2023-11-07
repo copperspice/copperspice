@@ -17,8 +17,12 @@
 *
 ***********************************************************************/
 
+#ifndef CS_CATCH2_H
+#define CS_CATCH2_H
+
 #include <qbytearray.h>
 #include <qdate.h>
+#include <qdatetime.h>
 #include <qlocale.h>
 #include <qmargins.h>
 #include <qstring8.h>
@@ -60,6 +64,13 @@ namespace Catch {
    template <>
    struct StringMaker<QDate> {
       static std::string convert(const QDate &value) {
+         return value.toString().toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QDateTime> {
+      static std::string convert(const QDateTime &value) {
          return value.toString().toStdString();
       }
    };
@@ -108,3 +119,5 @@ namespace Catch {
       }
    };
 }
+
+#endif
