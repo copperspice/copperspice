@@ -29,6 +29,7 @@
 #include <qresource.h>
 #include <qregularexpression.h>
 #include <qstring.h>
+#include <qtimezone.h>
 #include <qvector.h>
 #include <qvarlengtharray.h>
 
@@ -232,8 +233,8 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
         // find timezones, which is incredibly expensive. As we aren't
         // presenting these to the user, we don't care (at all) about the
         // local timezone, so force them to UTC to avoid that conversion.
-        firstModified.setTimeSpec(Qt::UTC);
-        secondModified.setTimeSpec(Qt::UTC);
+        firstModified.setTimeZone(QTimeZone::utc());
+        secondModified.setTimeZone(QTimeZone::utc());
 
         r = firstModified.msecsTo(secondModified);
         break;

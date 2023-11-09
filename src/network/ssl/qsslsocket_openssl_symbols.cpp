@@ -25,6 +25,7 @@
 
 #include <qdatetime.h>
 #include <qmutex.h>
+#include <qtimezone.h>
 
 #include <qmutexpool_p.h>
 
@@ -1419,7 +1420,7 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
       QDate resDate(lTime.tm_year + 1900, lTime.tm_mon + 1, lTime.tm_mday);
       QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
 
-      QDateTime result(resDate, resTime, Qt::UTC);
+      QDateTime result(resDate, resTime, QTimeZone::utc());
       result = result.addSecs(lSecondsFromUCT);
 
       return result;
@@ -1443,7 +1444,7 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
       QDate resDate(lTime.tm_year, lTime.tm_mon, lTime.tm_mday);
       QTime resTime(lTime.tm_hour, lTime.tm_min, lTime.tm_sec);
 
-      QDateTime result(resDate, resTime, Qt::UTC);
+      QDateTime result(resDate, resTime, QTimeZone::utc());
       return result;
 
    } else {

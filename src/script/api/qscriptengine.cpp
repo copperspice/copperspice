@@ -39,6 +39,7 @@
 #include <qpluginloader.h>
 #include <qset.h>
 #include <qtextstream.h>
+#include <qtimezone.h>
 #include <qscriptextensioninterface.h>
 
 #include <qscriptsyntaxchecker_p.h>
@@ -205,8 +206,10 @@ QDateTime MsToDateTime(JSC::ExecState *exec, qsreal t)
    JSC::GregorianDateTime tm;
    JSC::msToGregorianDateTime(exec, t, /*output UTC=*/true, tm);
    int ms = MsFromTime(t);
+
    QDateTime convertedUTC = QDateTime(QDate(tm.year + 1900, tm.month + 1, tm.monthDay),
-         QTime(tm.hour, tm.minute, tm.second, ms), Qt::UTC);
+         QTime(tm.hour, tm.minute, tm.second, ms), QTimeZone::utc());
+
    return convertedUTC.toLocalTime();
 }
 

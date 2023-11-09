@@ -99,14 +99,12 @@ Item SecondsFromAbstractDateTimeFN::extract(const QDateTime &dt) const
 
 Item TimezoneFromAbstractDateTimeFN::extract(const QDateTime &dt) const
 {
-   if (dt.timeSpec() == Qt::UTC) {
+   if (dt.timeZone() == QTimeZone::utc()) {
       return toItem(CommonValues::DayTimeDurationZero);
 
-   } else if (dt.timeSpec() == Qt::OffsetFromUTC) {
+   } else {
       return toItem(DayTimeDuration::fromSeconds(dt.offsetFromUtc()));
 
-   } else {
-      return Item();
    }
 }
 

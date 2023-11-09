@@ -25,6 +25,7 @@
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qsettings.h>
+#include <qtimezone.h>
 #include <qvarlengtharray.h>
 
 #include <qcore_mac_p.h>
@@ -163,12 +164,14 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
                                      &kCFTypeDictionaryValueCallBacks);
       }
       break;
+
       case QVariant::DateTime: {
          /*
              CFDate, unlike QDateTime, doesn't store timezone information.
          */
          QDateTime dt = value.toDateTime();
-         if (dt.timeSpec() == Qt::LocalTime) {
+
+         if (dt.timeZone() == QTimeZone::systemTimeZone()) {
             QDateTime reference;
             reference.setTime_t((uint)kCFAbsoluteTimeIntervalSince1970);
             result = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTime(reference.secsTo(dt)));
@@ -177,6 +180,7 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
          }
       }
       break;
+
       case QVariant::Bool:
          result = value.toBool() ? kCFBooleanTrue : kCFBooleanFalse;
          break;

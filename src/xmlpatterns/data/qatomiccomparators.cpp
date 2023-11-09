@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
 #include "qabstractduration_p.h"
 #include "qabstractdatetime_p.h"
 #include "qbase64binary_p.h"
@@ -259,9 +260,9 @@ bool AbstractDateTimeComparator::equals(const Item &o1,
    pDebug() << "DATE ONLY:"
        << o1->as<AbstractDateTime>()->toDateTime().isDateOnly()
           << o2->as<AbstractDateTime>()->toDateTime().isDateOnly();
-          */
-   return dt1 == dt2 &&
-          dt1.timeSpec() == dt2.timeSpec();
+   */
+
+   return dt1 == dt2 && dt1.timeZone() == dt2.timeZone();
 }
 
 AtomicComparator::ComparisonResult
@@ -321,10 +322,10 @@ AbstractDurationComparator::compare(const Item &o1,
    const AbstractDuration *const duration = o1.as<AbstractDuration>();
    const AbstractDuration *const otherDuration = o2.as<AbstractDuration>();
 
-   const QDateTime dateTime1(QDate(1696, 9, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime2(QDate(1697, 2, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime3(QDate(1903, 3, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime4(QDate(1903, 7, 1), QTime(0, 0, 0), Qt::UTC);
+   const QDateTime dateTime1(QDate(1696, 9, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime2(QDate(1697, 2, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime3(QDate(1903, 3, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime4(QDate(1903, 7, 1), QTime(0, 0, 0), QTimeZone::utc());
 
    const QDateTime durationDateTime1 = addDurationToDateTime(dateTime1, duration);
    const QDateTime durationDateTime2 = addDurationToDateTime(dateTime2, duration);

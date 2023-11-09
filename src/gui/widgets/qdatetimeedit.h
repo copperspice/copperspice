@@ -26,6 +26,7 @@
 
 #include <qabstractspinbox.h>
 #include <qdatetime.h>
+#include <qtimezone.h>
 #include <qvariant.h>
 
 #ifndef QT_NO_DATETIMEEDIT
@@ -94,8 +95,8 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 
    GUI_CS_PROPERTY_READ(sectionCount, sectionCount)
 
-   GUI_CS_PROPERTY_READ(timeSpec, timeSpec)
-   GUI_CS_PROPERTY_WRITE(timeSpec, setTimeSpec)
+   GUI_CS_PROPERTY_READ(timeZone, timeZone)
+   GUI_CS_PROPERTY_WRITE(timeZone, setTimeZone)
 
  public:
    GUI_CS_REGISTER_ENUM(
@@ -183,8 +184,8 @@ class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
    bool calendarPopup() const;
    void setCalendarPopup(bool enable);
 
-   Qt::TimeSpec timeSpec() const;
-   void setTimeSpec(Qt::TimeSpec spec);
+   QTimeZone timeZone() const;
+   void setTimeZone(QTimeZone tz);
 
    QSize sizeHint() const override;
 
