@@ -53,7 +53,7 @@ class DeduplicateIterator : public ListIterator<Item>
     */
    int m_listPos;
 };
-}
 
+}
 
 #endif

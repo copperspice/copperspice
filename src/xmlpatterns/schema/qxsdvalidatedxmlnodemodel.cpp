@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qxsdvalidatedxmlnodemodel_p.h"
+#include <qurl.h>
+#include <qvariant.h>
+#include <qvector.h>
 
-#include <QUrl>
-#include <QVariant>
-#include <QVector>
+#include <qxsdvalidatedxmlnodemodel_p.h>
 
 using namespace QPatternist;
 

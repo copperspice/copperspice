@@ -24,12 +24,11 @@
 #ifndef QABSTRACTXMLFORWARDITERATOR_P_H
 #define QABSTRACTXMLFORWARDITERATOR_P_H
 
-#include <QList>
-#include <QVector>
-#include <QSharedData>
-#include <QString>
 #include <qcontainerfwd.h>
-
+#include <qlist.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qvector.h>
 
 /* In this file we in some cases do not use QAbstractXmlForwardIterator's Ptr typedef.
  * This is a compiler workaround for MS VS 6.0. */

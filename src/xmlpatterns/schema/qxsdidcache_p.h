@@ -52,7 +52,7 @@ class XsdIdCache : public QSharedData
    QSet<QString>          m_ids;
    mutable QReadWriteLock m_lock;
 };
-}
 
+}
 
 #endif

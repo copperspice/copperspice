@@ -25,9 +25,9 @@ template<typename TSubClass>
 Item ExtractFromDurationFN<TSubClass>::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
    const Item item(m_operands.first()->evaluateSingleton(context));
+
    if (item) {
-      return static_cast<const TSubClass *>(this)->
-             extract(item.as<AbstractDuration>());
+      return static_cast<const TSubClass *>(this)->extract(item.as<AbstractDuration>());
    } else {
       return Item();
    }

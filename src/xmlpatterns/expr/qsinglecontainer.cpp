@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qlist.h>
+#include <qsinglecontainer_p.h>
 
-#include "qsinglecontainer_p.h"
+#include <qlist.h>
 
 using namespace QPatternist;
 

@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qboolean_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qgenericsequencetype_p.h"
-
 #include "qebvextractor_p.h"
+
+#include <qboolean_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qgenericsequencetype_p.h>
 
 using namespace QPatternist;
 

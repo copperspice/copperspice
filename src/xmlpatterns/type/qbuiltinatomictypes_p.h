@@ -97,7 +97,7 @@ class DateTimeType : public BuiltinAtomicType
    AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
          const SourceLocationReflection *const reflection) const override;
 
-   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor, 
+   AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
          const qint16 op, const SourceLocationReflection *const reflection) const override;
 
    QXmlName name(const NamePool::Ptr &np) const override;
@@ -229,7 +229,7 @@ class FloatType : public BuiltinAtomicType
    typedef QExplicitlySharedDataPointer<FloatType> Ptr;
 
    AtomicTypeVisitorResult::Ptr accept(const AtomicTypeVisitor::Ptr &visitor,
-         const SourceLocationReflection *const reflection) const override; 
+         const SourceLocationReflection *const reflection) const override;
 
    AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
          const qint16 op, const SourceLocationReflection *const reflection) const override;
@@ -598,7 +598,6 @@ class DerivedStringType : public StringType
    }
 
 };
-
 
 class NOTATIONType : public BuiltinAtomicType
 {

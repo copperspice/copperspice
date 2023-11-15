@@ -24,8 +24,8 @@
 #ifndef QXsdElement_P_H
 #define QXsdElement_P_H
 
-#include <QList>
-#include <QSet>
+#include <qlist.h>
+#include <qset.h>
 
 #include <qschemacomponent_p.h>
 #include <qschematype_p.h>
@@ -346,7 +346,7 @@ class XsdElement : public XsdTerm
    XsdElement::List                  m_substitutionGroupAffiliations;
    QSet<XsdElement *>                m_substitutionGroups;
 };
-}
 
+}
 
 #endif

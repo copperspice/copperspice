@@ -29,7 +29,7 @@
 
 namespace QPatternist {
 
-template<typename T> 
+template<typename T>
 class EmptyIterator : public QAbstractXmlForwardIterator<T>
 {
  public:

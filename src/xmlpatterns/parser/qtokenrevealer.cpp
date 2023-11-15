@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qtokenrevealer_p.h"
+#include <qtokenrevealer_p.h>
 
 using namespace QPatternist;
 

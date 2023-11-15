@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QDateTime>
+#include <qdatetime.h>
 
 #include "qdaytimeduration_p.h"
 #include "qtemplatemode_p.h"

@@ -146,7 +146,7 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
    XsdAssertion::List m_assertions;
    bool               m_fixed;
 };
-}
 
+}
 
 #endif

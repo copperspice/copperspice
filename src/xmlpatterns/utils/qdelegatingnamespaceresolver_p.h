@@ -24,8 +24,9 @@
 #ifndef QDelegatingNamespaceResolver_P_H
 #define QDelegatingNamespaceResolver_P_H
 
-#include <QHash>
-#include "qnamespaceresolver_p.h"
+#include <qhash.h>
+
+#include <qnamespaceresolver_p.h>
 
 namespace QPatternist {
 

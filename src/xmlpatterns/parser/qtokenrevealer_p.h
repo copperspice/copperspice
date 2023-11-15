@@ -24,14 +24,16 @@
 #ifndef QTokenRevealer_P_H
 #define QTokenRevealer_P_H
 
-#include <QSet>
+#include <qset.h>
+
 #include <qtokenizer_p.h>
 
 namespace QPatternist {
+
 class TokenRevealer : public Tokenizer
 {
  public:
-   TokenRevealer(const QUrl &uri, const Tokenizer::Ptr &other); 
+   TokenRevealer(const QUrl &uri, const Tokenizer::Ptr &other);
    virtual ~TokenRevealer();
 
    Token nextToken(YYLTYPE *const sourceLocator) override;

@@ -27,15 +27,16 @@
 #include <qabstractfunctionfactory_p.h>
 
 namespace QPatternist {
+
 class XSLT20CoreFunctions : public AbstractFunctionFactory
 {
  protected:
-   Expression::Ptr retrieveExpression(const QXmlName name, const Expression::List &args, 
+   Expression::Ptr retrieveExpression(const QXmlName name, const Expression::List &args,
                   const FunctionSignature::Ptr &sign) const override;
 
    FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) override;
 };
-}
 
+}
 
 #endif

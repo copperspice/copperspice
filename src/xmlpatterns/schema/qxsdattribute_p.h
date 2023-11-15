@@ -31,6 +31,7 @@
 #include <qxsdannotated_p.h>
 
 namespace QPatternist {
+
 class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
 {
  public:
@@ -186,6 +187,7 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
    Scope::Ptr           m_scope;
    ValueConstraint::Ptr m_valueConstraint;
 };
+
 }
 
 

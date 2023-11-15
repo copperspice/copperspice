@@ -28,6 +28,7 @@
 #include "qunlimitedcontainer_p.h"
 
 namespace QPatternist {
+
 class ReturnOrderBy : public UnlimitedContainer
 {
  public:
@@ -35,7 +36,7 @@ class ReturnOrderBy : public UnlimitedContainer
     * In @p operands the first item is the return expression, and the
     * rest, which is at least one, are the sort keys.
     */
-   ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs, 
+   ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs,
                   const Expression::List &operands);
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
@@ -82,7 +83,7 @@ class ReturnOrderBy : public UnlimitedContainer
     */
    bool                        m_flyAway;
 };
-}
 
+}
 
 #endif

@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QString>
+#include <qcompressedwhitespace_p.h>
 
-#include "qcompressedwhitespace_p.h"
+#include <qstring.h>
 
 using namespace QPatternist;
 
@@ -176,4 +176,3 @@ QString CompressedWhitespace::decompress(const QString &input)
 
    return retval;
 }
-

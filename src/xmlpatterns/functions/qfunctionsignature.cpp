@@ -27,18 +27,10 @@
 
 using namespace QPatternist;
 
-FunctionSignature::FunctionSignature(const QXmlName nameP,
-                                     const Arity minArgs,
-                                     const Arity maxArgs,
-                                     const SequenceType::Ptr &returnTypeP,
-                                     const Expression::Properties props,
-                                     const Expression::ID idP) : CallTargetDescription(nameP)
-   , m_minArgs(minArgs)
-   , m_maxArgs(maxArgs)
-   , m_returnType(returnTypeP)
-   , m_arguments()
-   , m_props(props)
-   , m_id(idP)
+FunctionSignature::FunctionSignature(const QXmlName nameP, const Arity minArgs, const Arity maxArgs,
+         const SequenceType::Ptr &returnTypeP, const Expression::Properties props, const Expression::ID idP)
+   : CallTargetDescription(nameP), m_minArgs(minArgs), m_maxArgs(maxArgs), m_returnType(returnTypeP),
+     m_arguments(), m_props(props), m_id(idP)
 {
    Q_ASSERT(minArgs <= maxArgs || maxArgs == FunctionSignature::UnlimitedArity);
    Q_ASSERT(m_maxArgs >= -1);

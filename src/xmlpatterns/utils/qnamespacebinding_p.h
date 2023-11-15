@@ -24,9 +24,10 @@
 #ifndef QNamespaceBinding_P_H
 #define QNamespaceBinding_P_H
 
-template<typename T> class QVector;
-
 #include <qxmlname.h>
+
+template<typename T>
+class QVector;
 
 namespace QPatternist {
 

@@ -24,10 +24,11 @@
 #ifndef QXsdIdentityConstraint_P_H
 #define QXsdIdentityConstraint_P_H
 
+#include <qstringlist.h>
+
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdxpathexpression_p.h>
-#include <QStringList>
 
 namespace QPatternist {
 

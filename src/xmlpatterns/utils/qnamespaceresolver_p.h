@@ -24,9 +24,9 @@
 #ifndef QNamespaceResolver_P_H
 #define QNamespaceResolver_P_H
 
-#include <QSharedData>
-#include <QXmlName>
 #include <qcontainerfwd.h>
+#include <qshareddata.h>
+#include <qxmlname.h>
 
 namespace QPatternist {
 

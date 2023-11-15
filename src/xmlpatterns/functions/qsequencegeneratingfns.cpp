@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QStack>
-#include <QStringList>
-#include <QFileInfo>
+#include <qstack.h>
+#include <qstringlist.h>
+#include <qfileinfo.h>
+
 #include "qanyuri_p.h"
 #include "qboolean_p.h"
 #include "qcommonsequencetypes_p.h"

@@ -27,6 +27,7 @@
 #include <qvariablereference_p.h>
 
 namespace QPatternist {
+
 class ArgumentReference : public VariableReference
 {
  public:
@@ -42,7 +43,7 @@ class ArgumentReference : public VariableReference
  private:
    const SequenceType::Ptr m_type;
 };
-}
 
+}
 
 #endif

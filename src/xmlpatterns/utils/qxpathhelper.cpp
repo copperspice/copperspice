@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
-#include <QStringList>
+#include <qxpathhelper_p.h>
 
-#include "qxmlutils_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonvalues_p.h"
-#include "qnamepool_p.h"
-#include "qxpathhelper_p.h"
+#include <qstringlist.h>
+
+#include <qxmlutils_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonvalues_p.h>
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 

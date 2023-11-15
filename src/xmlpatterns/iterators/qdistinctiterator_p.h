@@ -34,8 +34,8 @@
 
 namespace QPatternist {
 
-class DistinctIterator : public Item::Iterator
-   , public ComparisonPlatform<DistinctIterator, false>, public SourceLocationReflection
+class DistinctIterator : public Item::Iterator, public ComparisonPlatform<DistinctIterator, false>,
+      public SourceLocationReflection
 {
  public:
    /**

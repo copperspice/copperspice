@@ -24,8 +24,8 @@
 #ifndef QXMLFORMATTER_H
 #define QXMLFORMATTER_H
 
-#include <QXmlSerializer>
 #include <qstringfwd.h>
+#include <qxmlserializer.h>
 
 class QIODevice;
 class QTextCodec;

@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qtokensource_p.h"
+#include <qtokensource_p.h>
 
 using namespace QPatternist;
 

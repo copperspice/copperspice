@@ -24,14 +24,13 @@
 #ifndef QPatternistLocale_P_H
 #define QPatternistLocale_P_H
 
-#include <QCoreApplication>
-#include <QUrl>
+#include <qcoreapplication.h>
+#include <qstringfwd.h>
+#include <qurl.h>
 
 #include <qcardinality_p.h>
 #include <qnamepool_p.h>
 #include <qprimitives_p.h>
-
-#include <qstringfwd.h>
 
 namespace QPatternist {
 class QtXmlPatterns

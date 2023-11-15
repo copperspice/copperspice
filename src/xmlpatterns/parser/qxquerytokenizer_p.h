@@ -24,11 +24,11 @@
 #ifndef QXQueryTokenizer_P_H
 #define QXQueryTokenizer_P_H
 
-#include <QHash>
-#include <QSet>
-#include <QStack>
-#include <QString>
-#include <QUrl>
+#include <qhash.h>
+#include <qset.h>
+#include <qstack.h>
+#include <qstring.h>
+#include <qurl.h>
 
 #include <qtokenizer_p.h>
 

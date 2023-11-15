@@ -24,9 +24,9 @@
 #ifndef QXSLTTokenizer_P_H
 #define QXSLTTokenizer_P_H
 
-#include <QQueue>
-#include <QStack>
-#include <QUrl>
+#include <qqueue.h>
+#include <qstack.h>
+#include <qurl.h>
 
 #include <qmaintainingreader_p.h>
 #include <qreportcontext_p.h>

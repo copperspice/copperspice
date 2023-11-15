@@ -25,8 +25,8 @@
 
 using namespace QPatternist;
 
-CallSite::CallSite(const QXmlName &name) : m_isRecursive(false)
-   , m_name(name)
+CallSite::CallSite(const QXmlName &name)
+   : m_isRecursive(false), m_name(name)
 {
 }
 

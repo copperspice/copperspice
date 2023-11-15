@@ -21,13 +21,12 @@
 *
 ***********************************************************************/
 
-#include <QHash>
+#include <qhash.h>
 
 #include "qbuiltintypes_p.h"
 #include "qitem_p.h"
 #include "qitem_p.h"
 #include "qxpathhelper_p.h"
-
 #include "qlocalnametest_p.h"
 
 using namespace QPatternist;

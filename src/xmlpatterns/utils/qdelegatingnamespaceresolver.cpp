@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qnamepool_p.h"
+#include <qdelegatingnamespaceresolver_p.h>
 
-#include "qdelegatingnamespaceresolver_p.h"
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 

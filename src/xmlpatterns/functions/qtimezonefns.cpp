@@ -72,6 +72,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
                         .formatArg(formatData(tz->stringValue())),
                         ReportContext::FODT0003, this);
          return Item();
+
       } else if (tzMSecs > MSecLimit ||
                  tzMSecs < -MSecLimit) {
          context->error(QtXmlPatterns::tr("%1 is not a whole number of minutes.")
@@ -92,6 +93,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
 
          Q_ASSERT(dt.isValid());
          return createValue(dt);
+
       } else {
          /* "If $arg has a timezone component and $timezone is not the empty sequence,
           * then the result is an xs:dateTime value with a timezone component of
@@ -105,6 +107,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       }
+
    } else {
       /* $timezone is the empty sequence. */
 
@@ -113,6 +116,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          /* "If $arg does not have a timezone component and $timezone is
           * the empty sequence, then the result is $arg." */
          return arg;
+
       } else {
          /* "If $arg has a timezone component and $timezone is the empty sequence,
           * then the result is the localized value of $arg without its timezone component." */

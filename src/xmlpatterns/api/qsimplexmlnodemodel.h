@@ -24,8 +24,8 @@
 #ifndef QSIMPLEXMLNODEMODEL_H
 #define QSIMPLEXMLNODEMODEL_H
 
-#include <QAbstractXmlNodeModel>
-#include <QXmlQuery>
+#include <qabstractxmlnodemodel.h>
+#include <qxmlquery.h>
 
 template<typename T> class QExplicitlySharedDataPointer;
 class QSimpleXmlNodeModelPrivate;

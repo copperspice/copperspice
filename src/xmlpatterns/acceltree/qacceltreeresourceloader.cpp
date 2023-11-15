@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qacceltreeresourceloader_p.h>
+
 #include <qfile.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
@@ -29,12 +31,11 @@
 
 #include <qatomicstring_p.h>
 #include <qcommonsequencetypes_p.h>
-#include <qacceltreeresourceloader_p.h>
 
 using namespace QPatternist;
 
 AccelTreeResourceLoader::AccelTreeResourceLoader(const NamePool::Ptr &np,
-                  const NetworkAccessDelegator::Ptr &manager, AccelTreeBuilder<true>::Features features)
+      const NetworkAccessDelegator::Ptr &manager, AccelTreeBuilder<true>::Features features)
    : m_namePool(np), m_networkAccessDelegator(manager), m_features(features)
 {
    Q_ASSERT(m_namePool);

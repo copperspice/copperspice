@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
+#include <qdebug.h>
 
-#include "qpatternistlocale_p.h"
-#include "qiodevicedelegate_p.h"
+#include <qpatternistlocale_p.h>
+#include <qiodevicedelegate_p.h>
 
 using namespace QPatternist;
 

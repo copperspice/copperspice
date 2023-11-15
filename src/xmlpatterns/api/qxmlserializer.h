@@ -24,7 +24,7 @@
 #ifndef QXMLSERIALIZER_H
 #define QXMLSERIALIZER_H
 
-#include <QAbstractXmlReceiver>
+#include <qabstractxmlreceiver.h>
 
 class QIODevice;
 class QTextCodec;

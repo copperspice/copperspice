@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qitem_p.h"
-#include "qnamepool_p.h"
+#include <qnodenamespaceresolver_p.h>
 
-#include "qnodenamespaceresolver_p.h"
+#include <qitem_p.h>
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 

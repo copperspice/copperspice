@@ -24,8 +24,8 @@
 #ifndef QXMLNAMEPOOL_H
 #define QXMLNAMEPOOL_H
 
-#include <QSharedData>
-#include <QString>
+#include <qshareddata.h>
+#include <qstring.h>
 
 namespace QPatternist {
 class NamePool;

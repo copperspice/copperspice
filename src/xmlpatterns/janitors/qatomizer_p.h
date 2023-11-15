@@ -24,8 +24,8 @@
 #ifndef QAtomizer_P_H
 #define QAtomizer_P_H
 
-#include "qitem_p.h"
-#include "qsinglecontainer_p.h"
+#include <qitem_p.h>
+#include <qsinglecontainer_p.h>
 
 namespace QPatternist {
 

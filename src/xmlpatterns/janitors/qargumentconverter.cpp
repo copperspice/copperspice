@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qitemmappingiterator_p.h"
-#include "qsequencemappingiterator_p.h"
+#include <qargumentconverter_p.h>
 
-#include "qargumentconverter_p.h"
+#include <qitemmappingiterator_p.h>
+#include <qsequencemappingiterator_p.h>
 
 using namespace QPatternist;
 

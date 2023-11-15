@@ -24,10 +24,10 @@
 #ifndef QTokenizer_P_H
 #define QTokenizer_P_H
 
-#include <QPair>
-#include <QSharedData>
-#include <QString>
-#include <QUrl>
+#include <qpair.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qurl.h>
 
 #include <qparsercontext_p.h>
 #include <qtokensource_p.h>

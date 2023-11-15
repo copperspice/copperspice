@@ -21,7 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qxsdvalidatinginstancereader_p.h"
+#include <qxsdvalidatinginstancereader_p.h>
+
+#include <qfile.h>
+#include <qxmlquery.h>
+#include <qxmlresultitems.h>
 
 #include "qabstractdatetime_p.h"
 #include "qacceltreeresourceloader_p.h"
@@ -45,12 +49,7 @@
 #include "qxsdstatemachine_p.h"
 #include "qxsdstatemachinebuilder_p.h"
 #include "qxsdtypechecker_p.h"
-
 #include "qxsdschemadebugger_p.h"
-
-#include <QFile>
-#include <QXmlQuery>
-#include <QXmlResultItems>
 
 using namespace QPatternist;
 

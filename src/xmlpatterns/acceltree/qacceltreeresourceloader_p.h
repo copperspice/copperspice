@@ -27,13 +27,13 @@
 #include <qeventloop.h>
 #include <qnetwork_reply.h>
 
-#include "qabstractxmlreceiver.h"
-#include "qacceltree_p.h"
-#include "qacceltreebuilder_p.h"
-#include "qdeviceresourceloader_p.h"
-#include "qnamepool_p.h"
-#include "qnetworkaccessdelegator_p.h"
-#include "qreportcontext_p.h"
+#include <qabstractxmlreceiver.h>
+#include <qacceltree_p.h>
+#include <qacceltreebuilder_p.h>
+#include <qdeviceresourceloader_p.h>
+#include <qnamepool_p.h>
+#include <qnetworkaccessdelegator_p.h>
+#include <qreportcontext_p.h>
 
 class QIODevice;
 
@@ -120,6 +120,7 @@ class AccelTreeResourceLoader : public DeviceResourceLoader
    QHash<QPair<QUrl, QString>, QString>    m_unparsedTexts;
    AccelTreeBuilder<true>::Features        m_features;
 };
+
 }
 
 #endif

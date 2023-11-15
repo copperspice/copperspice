@@ -24,10 +24,11 @@
 #ifndef QXsdAssertion_P_H
 #define QXsdAssertion_P_H
 
+#include <qlist.h>
+
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdxpathexpression_p.h>
-#include <QList>
 
 namespace QPatternist {
 

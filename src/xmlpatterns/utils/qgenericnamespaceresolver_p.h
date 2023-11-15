@@ -24,7 +24,8 @@
 #ifndef QGenericNamespaceResolver_P_H
 #define QGenericNamespaceResolver_P_H
 
-#include <QHash>
+#include <qhash.h>
+
 #include <qnamespaceresolver_p.h>
 
 namespace QPatternist {

@@ -21,18 +21,19 @@
 *
 ***********************************************************************/
 
-#include <qstack.h>
-#include "qabstractxmlreceiver.h"
+#include <qacceltree_p.h>
 
-#include "qabstractxmlnodemodel_p.h"
-#include "qacceliterators_p.h"
-#include "qacceltree_p.h"
-#include "qatomicstring_p.h"
-#include "qcommonvalues_p.h"
-#include "qcompressedwhitespace_p.h"
-#include "qxmlpatterns_debug_p.h"
-#include "quntypedatomic_p.h"
-#include "qxpathhelper_p.h"
+#include <qabstractxmlreceiver.h>
+#include <qstack.h>
+
+#include <qabstractxmlnodemodel_p.h>
+#include <qacceliterators_p.h>
+#include <qatomicstring_p.h>
+#include <qcommonvalues_p.h>
+#include <qcompressedwhitespace_p.h>
+#include <qxmlpatterns_debug_p.h>
+#include <quntypedatomic_p.h>
+#include <qxpathhelper_p.h>
 
 using namespace QPatternist;
 
@@ -699,5 +700,3 @@ QVector<QXmlNodeModelIndex> AccelTree::nodesByIdref(const QXmlName &) const
 {
    return QVector<QXmlNodeModelIndex>();
 }
-
-

@@ -24,11 +24,12 @@
 #ifndef QXsdAlternative_P_H
 #define QXsdAlternative_P_H
 
+#include <qlist.h>
+
 #include <qnamedschemacomponent_p.h>
 #include <qschematype_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdxpathexpression_p.h>
-#include <QList>
 
 namespace QPatternist {
 

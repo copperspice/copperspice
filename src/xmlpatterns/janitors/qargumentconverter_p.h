@@ -24,7 +24,7 @@
 #ifndef QArgumentConverter_P_H
 #define QArgumentConverter_P_H
 
-#include "quntypedatomicconverter_p.h"
+#include <quntypedatomicconverter_p.h>
 
 namespace QPatternist {
 

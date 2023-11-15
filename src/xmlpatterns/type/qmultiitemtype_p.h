@@ -24,7 +24,8 @@
 #ifndef QMultiItemType_P_H
 #define QMultiItemType_P_H
 
-#include <QList>
+#include <qlist.h>
+
 #include <qitemtype_p.h>
 
 namespace QPatternist {

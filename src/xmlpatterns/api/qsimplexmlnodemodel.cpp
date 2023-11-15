@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
-#include <QVector>
-#include <QXmlNamePool>
+#include <qurl.h>
+#include <qvector.h>
+#include <qxmlnamepool.h>
 
 #include "qabstractxmlnodemodel_p.h"
 #include "qemptyiterator_p.h"

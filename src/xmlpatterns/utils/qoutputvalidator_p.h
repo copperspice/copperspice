@@ -24,9 +24,10 @@
 #ifndef QOutputValidator_P_H
 #define QOutputValidator_P_H
 
-#include <QSet>
-#include <qdynamiccontext_p.h>
 #include <qabstractxmlreceiver.h>
+#include <qset.h>
+
+#include <qdynamiccontext_p.h>
 #include <qsourcelocationreflection_p.h>
 
 namespace QPatternist {

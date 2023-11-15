@@ -27,6 +27,7 @@
 #include <qpaircontainer_p.h>
 
 namespace QPatternist {
+
 class ForClause : public PairContainer
 {
  public:
@@ -44,7 +45,7 @@ class ForClause : public PairContainer
 
    SequenceType::Ptr staticType() const override;
    SequenceType::List expectedOperandTypes() const override;
-   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override; 
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
@@ -70,7 +71,7 @@ class ForClause : public PairContainer
     */
    bool m_allowsMany;
 };
-}
 
+}
 
 #endif

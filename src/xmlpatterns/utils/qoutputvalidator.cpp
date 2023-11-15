@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qpatternistlocale_p.h"
+#include <qoutputvalidator_p.h>
 
-#include "qoutputvalidator_p.h"
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 

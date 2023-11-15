@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
+#include <qacceliterators_p.h>
 
-#include "qacceliterators_p.h"
+#include <qdebug.h>
 
 using namespace QPatternist;
 

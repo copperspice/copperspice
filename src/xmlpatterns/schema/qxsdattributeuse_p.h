@@ -24,9 +24,10 @@
 #ifndef QXsdAttributeUse_P_H
 #define QXsdAttributeUse_P_H
 
+#include <qlist.h>
+
 #include <qxsdattribute_p.h>
 #include <qxsdattributeterm_p.h>
-#include <QList>
 
 namespace QPatternist {
 

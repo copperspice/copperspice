@@ -24,7 +24,7 @@
 #ifndef QXsdNotation_P_H
 #define QXsdNotation_P_H
 
-#include <QList>
+#include <qlist.h>
 
 #include <qanyuri_p.h>
 #include <qderivedstring_p.h>
@@ -32,6 +32,7 @@
 #include <qxsdannotated_p.h>
 
 namespace QPatternist {
+
 class XsdNotation : public NamedSchemaComponent, public XsdAnnotated
 {
  public:
@@ -66,7 +67,7 @@ class XsdNotation : public NamedSchemaComponent, public XsdAnnotated
    DerivedString<TypeToken>::Ptr m_publicId;
    AnyURI::Ptr m_systemId;
 };
-}
 
+}
 
 #endif

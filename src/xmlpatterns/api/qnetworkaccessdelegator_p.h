@@ -24,9 +24,9 @@
 #ifndef QNETWORKACCESSDELEGATOR_P_H
 #define QNETWORKACCESSDELEGATOR_P_H
 
-#include <QObject>
-#include <QPointer>
-#include <QSharedData>
+#include <qobject.h>
+#include <qpointer.h>
+#include <qshareddata.h>
 
 class QNetworkAccessManager;
 class QUrl;

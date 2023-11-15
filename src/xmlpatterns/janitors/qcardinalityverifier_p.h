@@ -24,7 +24,7 @@
 #ifndef QCardinalityVerifier_P_H
 #define QCardinalityVerifier_P_H
 
-#include "qsinglecontainer_p.h"
+#include <qsinglecontainer_p.h>
 
 namespace QPatternist {
 

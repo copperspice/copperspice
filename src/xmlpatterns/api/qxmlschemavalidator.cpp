@@ -24,14 +24,14 @@
 #include "qxmlschemavalidator.h"
 #include "qxmlschemavalidator_p.h"
 
+#include <qbuffer.h>
+#include <qiodevice.h>
+#include <qurl.h>
+#include <qxmlschema.h>
+
 #include "qacceltreeresourceloader_p.h"
-#include "qxmlschema.h"
 #include "qxmlschema_p.h"
 #include "qxsdvalidatinginstancereader_p.h"
-
-#include <QBuffer>
-#include <QIODevice>
-#include <QUrl>
 
 /*!
   \class QXmlSchemaValidator

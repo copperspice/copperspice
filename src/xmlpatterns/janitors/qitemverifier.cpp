@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qcommonsequencetypes_p.h"
-#include "qgenericsequencetype_p.h"
-#include "qitemmappingiterator_p.h"
-#include "qpatternistlocale_p.h"
+#include <qitemverifier_p.h>
 
-#include "qitemverifier_p.h"
+#include <qcommonsequencetypes_p.h>
+#include <qgenericsequencetype_p.h>
+#include <qitemmappingiterator_p.h>
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 

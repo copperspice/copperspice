@@ -138,14 +138,14 @@ xsInteger SequenceMappingIterator<TResult, TSource, TMapper>::position() const
 
 template<typename TResult, typename TSource, typename TMapper>
 static inline typename QAbstractXmlForwardIterator<TResult>::Ptr
-makeSequenceMappingIterator(const TMapper &mapper, 
+makeSequenceMappingIterator(const TMapper &mapper,
                   const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
                   const DynamicContext::Ptr &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new SequenceMappingIterator<TResult, TSource, TMapper>(mapper, source, context));
 }
-}
 
+}
 
 #endif

@@ -78,7 +78,7 @@ class CachingIterator : public Item::Iterator
     */
    bool m_usingCache;
 };
-}
 
+}
 
 #endif

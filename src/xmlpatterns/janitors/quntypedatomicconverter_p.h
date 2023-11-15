@@ -24,9 +24,9 @@
 #ifndef QUntypedAtomicConverter_P_H
 #define QUntypedAtomicConverter_P_H
 
+#include <qcastingplatform_p.h>
 #include <qitem_p.h>
 #include <qsinglecontainer_p.h>
-#include <qcastingplatform_p.h>
 
 namespace QPatternist {
 

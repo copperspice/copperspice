@@ -24,8 +24,10 @@
 #ifndef QNodeNamespaceResolver_P_H
 #define QNodeNamespaceResolver_P_H
 
-#include <QHash>
 #include <qnamespaceresolver_p.h>
+
+#include <qhash.h>
+
 #include <qitem_p.h>
 
 namespace QPatternist {

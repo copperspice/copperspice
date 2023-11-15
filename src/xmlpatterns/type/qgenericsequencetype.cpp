@@ -27,9 +27,8 @@
 
 using namespace QPatternist;
 
-GenericSequenceType::GenericSequenceType(const ItemType::Ptr &iType,
-      const Cardinality &card) : m_itemType(iType),
-   m_cardinality(card)
+GenericSequenceType::GenericSequenceType(const ItemType::Ptr &iType, const Cardinality &card)
+   : m_itemType(iType), m_cardinality(card)
 {
    Q_ASSERT(m_itemType);
 }
