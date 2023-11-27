@@ -594,25 +594,18 @@ void QByteArray::resize(int size)
       d = x;
 
    } else if (d->size == 0 && d->ref.isStatic()) {
-      //
-      // Optimize the idiom:
-      //    QByteArray a;
-      //    a.resize(sz);
-      //    ...
-      // which is used in place of the Qt 3 idiom:
-      //    QByteArray a(sz);
-      //
       Data *x = Data::allocate(uint(size) + 1u);
       Q_CHECK_PTR(x);
       x->size = size;
       x->data()[size] = '\0';
       d = x;
+
    } else {
       if (d->ref.isShared() || uint(size) + 1u > d->alloc
-            || (!d->capacityReserved && size < d->size
-                && uint(size) + 1u < uint(d->alloc >> 1))) {
+            || (! d->capacityReserved && size < d->size && uint(size) + 1u < uint(d->alloc >> 1))) {
          reallocData(uint(size) + 1u, d->detachFlags() | Data::Grow);
       }
+
       if (d->alloc) {
          d->size = size;
          d->data()[size] = '\0';

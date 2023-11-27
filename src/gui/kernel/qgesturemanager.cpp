@@ -721,12 +721,8 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          } else {
             normalStartedGestures[target].append(gesture);
          }
-      } else {
 
-#if defined(CS_SHOW_DEBUG)
-         qDebug() << "QGestureManager::deliverEvents(): Could not find target for gesture"
-                  << gesture->gestureType();
-#endif
+      } else {
          qWarning("QGestureManager::deliverEvent() Unable to find the target for the given gesture");
          undeliveredGestures->insert(gesture);
       }

@@ -2382,10 +2382,11 @@ bool QGLContext::chooseContext(const QGLContext *shareContext)
 {
    Q_D(QGLContext);
    if (!d->paintDevice || d->paintDevice->devType() != QInternal::Widget) {
-      // Unlike in Qt 4, the only possible target is a widget backed by an OpenGL-based
-      // QWindow. Pixmaps in particular are not supported anymore as paint devices since
-      // starting from Qt 5 QPixmap is raster-backed on almost all platforms.
+      // Only possible target is a widget backed by an OpenGL-based QWindow.
+      // Pixmaps in particular are not supported as paint devices
+
       d->valid = false;
+
    } else {
       QWidget *widget = static_cast<QWidget *>(d->paintDevice);
       QGLFormat glformat = format();
@@ -3100,7 +3101,7 @@ void QGLWidget::renderText(double x, double y, double z, const QString &str, con
          funcs->glEnable(GL_DEPTH_TEST);
       }
 
-      // The only option in Qt 5 is the shader-based OpenGL 2 paint engine.
+      // The only option is the shader-based OpenGL 2 paint engine.
       // Setting fixed pipeline transformations is futile. Instead, pass the
       // extra values directly and let the engine figure the matrices out.
       static_cast<QGL2PaintEngineEx *>(p->paintEngine())->setTranslateZ(-win_z);

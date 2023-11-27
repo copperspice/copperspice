@@ -65,8 +65,7 @@ QAbstractXmlNodeModel::~QAbstractXmlNodeModel()
 }
 
 /*
-### Qt5:
-Add : virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &nodeIndex) const = 0;
+TODO: Add : virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &nodeIndex) const = 0;
 Such that the data model can communicate back source locations.
 */
 
@@ -629,7 +628,7 @@ void QAbstractXmlNodeModel::copyNodeTo(const QXmlNodeModelIndex &node,
 
 QSourceLocation QAbstractXmlNodeModel::sourceLocation(const QXmlNodeModelIndex &index) const
 {
-   // TODO: make this method virtual in Qt5 to allow source location support in custom models
+   // TODO: make this method virtual to allow source location support in custom models
 
    if (d_ptr) {
       return d_ptr->sourceLocation(index);

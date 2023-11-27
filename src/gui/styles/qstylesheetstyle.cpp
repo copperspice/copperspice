@@ -1465,7 +1465,7 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
 
          parser.init(ss, qApp->styleSheet() != ss);
 
-         if (!parser.parse(&appSs)) {
+         if (! parser.parse(&appSs)) {
             qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet");
          }
 
@@ -1476,6 +1476,7 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
       } else {
          appSs = appCacheIt.value();
       }
+
       styleSelector.styleSheets += appSs;
    }
 
@@ -1494,10 +1495,10 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
       if (objCacheIt == styleSheetCaches->styleSheetCache.constEnd()) {
          parser.init(styleSheet);
 
-         if (!parser.parse(&ss)) {
+         if (! parser.parse(&ss)) {
             parser.init("* {" + styleSheet + '}');
 
-            if (!parser.parse(&ss)) {
+            if (! parser.parse(&ss)) {
                qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet for object %p", xx);
             }
          }

@@ -139,9 +139,6 @@ QFile::QFile(const QString &name, QObject *parent)
    d->fileName = name;
 }
 
-/*!
-    \internal
-*/
 QFile::QFile(QFilePrivate &dd, QObject *parent)
    : QFileDevice(dd, parent)
 {
@@ -213,7 +210,6 @@ bool QFile::exists() const
          & QAbstractFileEngine::ExistsFlag);
 }
 
-
 bool QFile::exists(const QString &fileName)
 {
    return QFileInfo(fileName).exists();
@@ -230,8 +226,7 @@ QString QFile::readLink() const
 
     Use symLinkTarget() instead.
 */
-QString
-QFile::readLink(const QString &fileName)
+QString QFile::readLink(const QString &fileName)
 {
    return QFileInfo(fileName).readLink();
 }

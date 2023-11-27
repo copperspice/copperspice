@@ -1457,7 +1457,7 @@ bool QTabBar::event(QEvent *event)
             return true;
          }
       }
-#endif // QT_NO_WHATSTHIS
+#endif
 
 #ifndef QT_NO_SHORTCUT
    } else if (event->type() == QEvent::Shortcut) {
@@ -1473,12 +1473,14 @@ bool QTabBar::event(QEvent *event)
       }
 #endif
 
+   } else if (event->type() == QEvent::MouseButtonDblClick) {
+      // TODO: move to mouseDoubleClickEvent(), here for BC reasons.
 
-   } else if (event->type() == QEvent::MouseButtonDblClick) { // ### fixme Qt 6: move to mouseDoubleClickEvent(), here for BC reasons.
       const QPoint pos = static_cast<const QMouseEvent *>(event)->pos();
-      const bool isEventInCornerButtons = (!d->leftB->isHidden() && d->leftB->geometry().contains(pos))
-         || (!d->rightB->isHidden() && d->rightB->geometry().contains(pos));
-      if (!isEventInCornerButtons) {
+      const bool isEventInCornerButtons = (! d->leftB->isHidden() && d->leftB->geometry().contains(pos))
+         || (! d->rightB->isHidden() && d->rightB->geometry().contains(pos));
+
+      if (! isEventInCornerButtons) {
          emit tabBarDoubleClicked(tabAt(pos));
       }
    } else if (event->type() == QEvent::Move) {

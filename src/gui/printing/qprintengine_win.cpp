@@ -999,12 +999,14 @@ void QWin32PrintEnginePrivate::doReinit()
 
 bool QWin32PrintEnginePrivate::resetDC()
 {
-   if (!hdc) {
+   if (! hdc) {
       qWarning() << "resetDC() was called with an invalid hdc";
       return false;
    }
+
    const HDC oldHdc = hdc;
    const HDC hdc = ResetDC(oldHdc, devMode);
+
    if (!hdc) {
       const int lastError = GetLastError();
       qErrnoWarning(lastError, "ResetDC() on %p failed (%d)", oldHdc, lastError);

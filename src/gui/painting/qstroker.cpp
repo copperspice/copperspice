@@ -60,15 +60,15 @@ class QSubpathBackwardIterator
    QSubpathBackwardIterator(const QVector<QStrokerOps::Element> *path)
       : m_path(path), m_pos(path->size() - 1) { }
 
-   inline int position() const {
+   int position() const {
       return m_pos;
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return m_pos >= 0;
    }
 
-   inline QStrokerOps::Element next() {
+   QStrokerOps::Element next() {
       Q_ASSERT(hasNext());
 
       QStrokerOps::Element ce = m_path->at(m_pos);   // current element
@@ -85,6 +85,7 @@ class QSubpathBackwardIterator
          case QPainterPath::LineToElement:
             ce.type = QPainterPath::LineToElement;
             break;
+
          case QPainterPath::CurveToDataElement:
             // First control point?
             if (ce.type == QPainterPath::CurveToElement) {
@@ -93,9 +94,11 @@ class QSubpathBackwardIterator
                ce.type = QPainterPath::CurveToElement;
             }
             break;
+
          case QPainterPath::CurveToElement:
             ce.type = QPainterPath::CurveToDataElement;
             break;
+
          default:
             qWarning("QSubpathReverseIterator::next() Unhandled type, %d", ce.type);
             break;
@@ -819,18 +822,7 @@ qreal qt_t_for_arc_angle(qreal angle)
 Q_GUI_EXPORT void qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
    QPointF *startPoint, QPointF *endPoint);
 
-/*!
-    \internal
-
-    Creates a number of curves for a given arc definition. The arc is
-    defined an arc along the ellipses that fits into \a rect starting
-    at \a startAngle and an arc length of \a sweepLength.
-
-    The function has three out parameters. The return value is the
-    starting point of the arc. The \a curves array represents the list
-    of cubicTo elements up to a maximum of \a point_count. There are of course
-    3 points pr curve.
-*/
+// internal
 QPointF qt_curves_for_arc(const QRectF &rect, qreal startAngle, qreal sweepLength,
    QPointF *curves, int *point_count)
 {
@@ -838,8 +830,9 @@ QPointF qt_curves_for_arc(const QRectF &rect, qreal startAngle, qreal sweepLengt
    Q_ASSERT(curves);
 
    *point_count = 0;
+
    if (qt_is_nan(rect.x()) || qt_is_nan(rect.y()) || qt_is_nan(rect.width()) || qt_is_nan(rect.height())
-      || qt_is_nan(startAngle) || qt_is_nan(sweepLength)) {
+         || qt_is_nan(startAngle) || qt_is_nan(sweepLength)) {
       qWarning("QPainterPath::arcTo() Value for arc is invalid");
 
       return QPointF();

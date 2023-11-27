@@ -1347,6 +1347,7 @@ int QPdfEngine::metric(QPaintDevice::PaintDeviceMetric metricType) const
         qWarning("QPdfWriter::metric() nvalid metric command");
         return 0;
     }
+
     return val;
 }
 
@@ -1845,9 +1846,11 @@ int QPdfEnginePrivate::writeCompressed(QIODevice *dev)
             qWarning("QPdfStream::writeCompressed() Error in zlib deflateInit()");
             return sum;
         }
+
         zStruct.avail_in = 0;
         QByteArray in, out;
         out.resize(size);
+
         while (!dev->atEnd() || zStruct.avail_in != 0) {
             if (zStruct.avail_in == 0) {
                 in = dev->read(size);
@@ -2224,12 +2227,15 @@ int QPdfEnginePrivate::generateGradientShader(const QGradient *gradient, const Q
     switch (gradient->type()) {
     case QGradient::LinearGradient:
         return generateLinearGradientShader(static_cast<const QLinearGradient *>(gradient), matrix, alpha);
+
     case QGradient::RadialGradient:
         return generateRadialGradientShader(static_cast<const QRadialGradient *>(gradient), matrix, alpha);
+
     case QGradient::ConicalGradient:
     default:
         qWarning() << "generateGradientShader() Implementation is missing";
     }
+
     return 0;
 }
 

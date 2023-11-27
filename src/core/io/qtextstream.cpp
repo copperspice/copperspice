@@ -84,10 +84,10 @@ class QDeviceClosedNotifier : public QObject
   CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
-   inline QDeviceClosedNotifier() {
+   QDeviceClosedNotifier() {
    }
 
-   inline void setupDevice(QTextStream *stream, QIODevice *device) {
+   void setupDevice(QTextStream *stream, QIODevice *device) {
       disconnect();
 
       if (device) {
@@ -119,7 +119,6 @@ class QTextStreamPrivate
 
    void reset();
 
-   // device
    QIODevice *device;
 
    QDeviceClosedNotifier deviceClosedNotifier;
@@ -131,7 +130,6 @@ class QTextStreamPrivate
    QIODevice::OpenMode stringOpenMode;
 
 #ifndef QT_NO_TEXTCODEC
-   // codec
    QTextCodec *codec;
    QTextCodec::ConverterState readConverterState;
    QTextCodec::ConverterState writeConverterState;
@@ -173,7 +171,6 @@ class QTextStreamPrivate
    inline void putString(const QString &ch, bool number = false);
    void putNumber(quint64 number, bool negative);
 
-   // buffers
    bool fillReadBuffer(qint64 maxBytes = -1);
    void resetReadBuffer();
    void flushWriteBuffer();
@@ -194,7 +191,6 @@ class QTextStreamPrivate
    QTextStream::RealNumberNotation realNumberNotation;
    QTextStream::NumberFlags numberFlags;
 
-   // status
    QTextStream::Status status;
    QLocale locale;
    QTextStream *q_ptr;
@@ -221,6 +217,7 @@ QTextStreamPrivate::~QTextStreamPrivate()
       device->blockSignals(true);
       delete device;
    }
+
 #ifndef QT_NO_TEXTCODEC
    delete readConverterSavedState;
 #endif
@@ -235,7 +232,7 @@ static void resetCodecConverterStateHelper(QTextCodec::ConverterState *state)
 
 static void copyConverterStateHelper(QTextCodec::ConverterState *dest, const QTextCodec::ConverterState *src)
 {
-   // copies the structure manually.
+   // copies the structure manually
    Q_ASSERT(! src->m_data);
 
    dest->m_flags       = src->m_flags;
@@ -327,8 +324,8 @@ bool QTextStreamPrivate::fillReadBuffer(qint64 maxBytes)
    qint64 bytesRead = 0;
 
 #if defined(Q_OS_WIN)
-   // On Windows there is no non-blocking stdin so we fall back to reading lines instead.
-   // If there is no QOBJECT, we read lines for all sequential devices; otherwise, we read lines only for stdin.
+   // On Windows there is no non-blocking stdin so fall back to reading lines
+   // If there is no QOBJECT then read lines for all sequential devices, otherwise, we read lines only for stdin
 
    QFile *file = nullptr;
 
@@ -445,8 +442,6 @@ void QTextStreamPrivate::flushWriteBuffer()
 
    // write raw data to the device
    qint64 bytesWritten = device->write(data);
-
-
 
 #if defined (Q_OS_WIN)
    // replace the text flag
@@ -978,8 +973,8 @@ void QTextStream::setDevice(QIODevice *device)
    Q_D(QTextStream);
 
    flush();
-   if (d->deleteDevice) {
 
+   if (d->deleteDevice) {
       d->deviceClosedNotifier.disconnect();
       delete d->device;
       d->deleteDevice = false;
@@ -990,28 +985,14 @@ void QTextStream::setDevice(QIODevice *device)
    d->device = device;
    d->resetReadBuffer();
    d->deviceClosedNotifier.setupDevice(this, d->device);
-
 }
 
-/*!
-    Returns the current device associated with the QTextStream,
-    or 0 if no device has been assigned.
-
-    \sa setDevice(), string()
-*/
 QIODevice *QTextStream::device() const
 {
    Q_D(const QTextStream);
    return d->device;
 }
 
-/*!
-    Sets the current string to \a string, using the given \a
-    openMode. If a device has already been assigned, QTextStream will
-    call flush() before replacing it.
-
-    \sa string(), setDevice()
-*/
 void QTextStream::setString(QString *str, QIODevice::OpenMode openMode)
 {
    Q_D(QTextStream);
@@ -1031,191 +1012,84 @@ void QTextStream::setString(QString *str, QIODevice::OpenMode openMode)
    d->stringOpenMode = openMode;
 }
 
-/*!
-    Returns the current string assigned to the QTextStream, or 0 if no
-    string has been assigned.
-
-    \sa setString(), device()
-*/
 QString *QTextStream::string() const
 {
    Q_D(const QTextStream);
    return d->m_string;
 }
 
-/*!
-    Sets the field alignment to \a mode. When used together with
-    setFieldWidth(), this function allows you to generate formatted
-    output with text aligned to the left, to the right or center
-    aligned.
-
-    \sa fieldAlignment(), setFieldWidth()
-*/
 void QTextStream::setFieldAlignment(FieldAlignment mode)
 {
    Q_D(QTextStream);
    d->fieldAlignment = mode;
 }
 
-/*!
-    Returns the current field alignment.
-
-    \sa setFieldAlignment(), fieldWidth()
-*/
 QTextStream::FieldAlignment QTextStream::fieldAlignment() const
 {
    Q_D(const QTextStream);
    return d->fieldAlignment;
 }
 
-/*!
-    Sets the pad character to \a ch. The default value is the ASCII
-    space character (' '), or QChar(0x20). This character is used to
-    fill in the space in fields when generating text.
-
-    Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qtextstream.cpp 5
-
-    The string \c s contains:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qtextstream.cpp 6
-
-    \sa padChar(), setFieldWidth()
-*/
 void QTextStream::setPadChar(QChar ch)
 {
    Q_D(QTextStream);
    d->padChar = ch;
 }
 
-/*!
-    Returns the current pad character.
-
-    \sa setPadChar(), setFieldWidth()
-*/
 QChar QTextStream::padChar() const
 {
    Q_D(const QTextStream);
    return d->padChar;
 }
 
-/*!
-    Sets the current field width to \a width. If \a width is 0 (the
-    default), the field width is equal to the length of the generated
-    text.
-
-    \note The field width applies to every element appended to this
-    stream after this function has been called (e.g., it also pads
-    endl). This behavior is different from similar classes in the STL,
-    where the field width only applies to the next element.
-
-    \sa fieldWidth(), setPadChar()
-*/
 void QTextStream::setFieldWidth(int width)
 {
    Q_D(QTextStream);
    d->fieldWidth = width;
 }
 
-/*!
-    Returns the current field width.
-
-    \sa setFieldWidth()
-*/
 int QTextStream::fieldWidth() const
 {
    Q_D(const QTextStream);
    return d->fieldWidth;
 }
 
-/*!
-    Sets the current number flags to \a flags. \a flags is a set of
-    flags from the NumberFlag enum, and describes options for
-    formatting generated code (e.g., whether or not to always write
-    the base or sign of a number).
-
-    \sa numberFlags(), setIntegerBase(), setRealNumberNotation()
-*/
 void QTextStream::setNumberFlags(NumberFlags flags)
 {
    Q_D(QTextStream);
    d->numberFlags = flags;
 }
 
-/*!
-    Returns the current number flags.
-
-    \sa setNumberFlags(), integerBase(), realNumberNotation()
-*/
 QTextStream::NumberFlags QTextStream::numberFlags() const
 {
    Q_D(const QTextStream);
    return d->numberFlags;
 }
 
-/*!
-    Sets the base of integers to \a base, both for reading and for
-    generating numbers. \a base can be either 2 (binary), 8 (octal),
-    10 (decimal) or 16 (hexadecimal). If \a base is 0, QTextStream
-    will attempt to detect the base by inspecting the data on the
-    stream. When generating numbers, QTextStream assumes base is 10
-    unless the base has been set explicitly.
-
-    \sa integerBase(), QString::number(), setNumberFlags()
-*/
 void QTextStream::setIntegerBase(int base)
 {
    Q_D(QTextStream);
    d->integerBase = base;
 }
 
-/*!
-    Returns the current base of integers. 0 means that the base is
-    detected when reading, or 10 (decimal) when generating numbers.
-
-    \sa setIntegerBase(), QString::number(), numberFlags()
-*/
 int QTextStream::integerBase() const
 {
    Q_D(const QTextStream);
    return d->integerBase;
 }
 
-/*!
-    Sets the real number notation to \a notation (SmartNotation,
-    FixedNotation, ScientificNotation). When reading and generating
-    numbers, QTextStream uses this value to detect the formatting of
-    real numbers.
-
-    \sa realNumberNotation(), setRealNumberPrecision(), setNumberFlags(), setIntegerBase()
-*/
 void QTextStream::setRealNumberNotation(RealNumberNotation notation)
 {
    Q_D(QTextStream);
    d->realNumberNotation = notation;
 }
 
-/*!
-    Returns the current real number notation.
-
-    \sa setRealNumberNotation(), realNumberPrecision(), numberFlags(), integerBase()
-*/
 QTextStream::RealNumberNotation QTextStream::realNumberNotation() const
 {
    Q_D(const QTextStream);
    return d->realNumberNotation;
 }
 
-/*!
-    Sets the precision of real numbers to \a precision. This value
-    describes the number of fraction digits QTextStream should
-    write when generating real numbers.
-
-    The precision cannot be a negative value. The default value is 6.
-
-    \sa realNumberPrecision(), setRealNumberNotation()
-*/
 void QTextStream::setRealNumberPrecision(int precision)
 {
    Q_D(QTextStream);
@@ -1227,19 +1101,11 @@ void QTextStream::setRealNumberPrecision(int precision)
    d->realNumberPrecision = precision;
 }
 
-/*!
-    Returns the current real number precision, or the number of fraction
-    digits QTextStream will write when generating real numbers.
-
-    \sa setRealNumberNotation(), realNumberNotation(), numberFlags(), integerBase()
-*/
 int QTextStream::realNumberPrecision() const
 {
    Q_D(const QTextStream);
    return d->realNumberPrecision;
 }
-
-
 
 QTextStream::Status QTextStream::status() const
 {
@@ -1247,23 +1113,12 @@ QTextStream::Status QTextStream::status() const
    return d->status;
 }
 
-
 void QTextStream::resetStatus()
 {
    Q_D(QTextStream);
    d->status = Ok;
 }
 
-/*!
-    \since 4.1
-
-    Sets the status of the text stream to the \a status given.
-
-    Subsequent calls to setStatus() are ignored until resetStatus()
-    is called.
-
-    \sa Status status() resetStatus()
-*/
 void QTextStream::setStatus(Status status)
 {
    Q_D(QTextStream);
@@ -1504,10 +1359,12 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(quint64 *r
 
             } else if (locale != QLocale::c() && ch == locale.groupSeparator()) {
                continue;
+
             } else {
                ungetChar(ch);
                break;
             }
+
             ndigits++;
          }
 
@@ -1523,6 +1380,7 @@ QTextStreamPrivate::NumberParsingStatus QTextStreamPrivate::getNumber(quint64 *r
             }
             val = quint64(ival);
          }
+
          break;
       }
 
@@ -1694,7 +1552,7 @@ bool QTextStreamPrivate::getReal(double *f)
                input = InputSign;
 
             } else if (locale != QLocale::c() && lc == locale.groupSeparator().toLower()) {
-               // backward-compatibility, not a digit
+               // backward compatibility, not a digit
                input = InputDigit;
 
             } else {
@@ -1769,15 +1627,6 @@ QTextStream &QTextStream::operator>>(QChar &c)
    return *this;
 }
 
-/*!
-    \overload
-
-    Reads a character from the stream and stores it in \a c. The
-    character from the stream is converted to ISO-5589-1 before it is
-    stored.
-
-    \sa QChar::toLatin1()
-*/
 QTextStream &QTextStream::operator>>(char &c)
 {
    QChar ch;
@@ -1815,109 +1664,51 @@ QTextStream &QTextStream::operator>>(signed short &i)
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed short);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the unsigned short \a i.
-*/
 QTextStream &QTextStream::operator>>(unsigned short &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned short);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the signed int \a i.
-*/
 QTextStream &QTextStream::operator>>(signed int &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed int);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the unsigned int \a i.
-*/
 QTextStream &QTextStream::operator>>(unsigned int &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned int);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the signed long \a i.
-*/
 QTextStream &QTextStream::operator>>(signed long &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(signed long);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the unsigned long \a i.
-*/
 QTextStream &QTextStream::operator>>(unsigned long &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(unsigned long);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the qint64 \a i.
-*/
 QTextStream &QTextStream::operator>>(qint64 &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(qint64);
 }
 
-/*!
-    \overload
-
-    Stores the integer in the quint64 \a i.
-*/
 QTextStream &QTextStream::operator>>(quint64 &i)
 {
    IMPLEMENT_STREAM_RIGHT_INT_OPERATOR(quint64);
 }
 
-/*!
-    Reads a real number from the stream and stores it in \a f, then
-    returns a reference to the QTextStream. The number is cast to
-    the correct type. If no real number is detect on the stream, \a f
-    is set to 0.0.
-
-    As a special exception, QTextStream allows the strings "nan" and "inf" to
-    represent NAN and INF floats or doubles.
-
-    Leading whitespace is skipped.
-*/
 QTextStream &QTextStream::operator>>(float &f)
 {
    IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(float);
 }
 
-/*!
-    \overload
-
-    Stores the real number in the double \a f.
-*/
 QTextStream &QTextStream::operator>>(double &f)
 {
    IMPLEMENT_STREAM_RIGHT_REAL_OPERATOR(double);
 }
 
-/*!
-    Reads a word from the stream and stores it in \a str, then returns
-    a reference to the stream. Words are separated by whitespace
-    (i.e., all characters for which QChar::isSpace() returns true).
-
-    Leading whitespace is skipped.
-*/
 QTextStream &QTextStream::operator>>(QString &str)
 {
    Q_D(QTextStream);
@@ -2034,11 +1825,6 @@ QTextStream &QTextStream::operator<<(QChar c)
    return *this;
 }
 
-/*!
-    \overload
-
-    Converts \a c from ASCII to a QChar, then writes it to the stream.
-*/
 QTextStream &QTextStream::operator<<(char c)
 {
    Q_D(QTextStream);
@@ -2059,11 +1845,6 @@ QTextStream &QTextStream::operator<<(signed short i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the unsigned short \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(unsigned short i)
 {
    Q_D(QTextStream);
@@ -2074,11 +1855,6 @@ QTextStream &QTextStream::operator<<(unsigned short i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the signed int \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(signed int i)
 {
    Q_D(QTextStream);
@@ -2089,11 +1865,6 @@ QTextStream &QTextStream::operator<<(signed int i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the unsigned int \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(unsigned int i)
 {
    Q_D(QTextStream);
@@ -2102,11 +1873,6 @@ QTextStream &QTextStream::operator<<(unsigned int i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the signed long \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(signed long i)
 {
    Q_D(QTextStream);
@@ -2117,11 +1883,6 @@ QTextStream &QTextStream::operator<<(signed long i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the unsigned long \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(unsigned long i)
 {
    Q_D(QTextStream);
@@ -2132,24 +1893,15 @@ QTextStream &QTextStream::operator<<(unsigned long i)
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the qint64 \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(qint64 i)
 {
    Q_D(QTextStream);
+
    CHECK_VALID_STREAM(*this);
    d->putNumber((quint64)qAbs(i), i < 0);
    return *this;
 }
 
-/*!
-    \overload
-
-    Writes the quint64 \a i to the stream.
-*/
 QTextStream &QTextStream::operator<<(quint64 i)
 {
    Q_D(QTextStream);
@@ -2165,11 +1917,6 @@ QTextStream &QTextStream::operator<<(float f)
    return *this << double(f);
 }
 
-/*!
-    \overload
-
-    Writes the double \a f to the stream.
-*/
 QTextStream &QTextStream::operator<<(double f)
 {
    Q_D(QTextStream);
@@ -2242,6 +1989,7 @@ QTextStream &QTextStream::operator<<(const QStringView &str)
 
     return *this;
 }
+
 QTextStream &QTextStream::operator<<(const QByteArray &array)
 {
    Q_D(QTextStream);

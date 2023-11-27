@@ -159,8 +159,6 @@ void QTimer::singleShot_internal(int msec, Qt::TimerType timerType, const QObjec
    new QSingleShotTimer(msec, timerType, receiver, std::move(slotBento));
 }
 
-
-
 void QTimer::singleShot(int msec, const QObject *receiver, const QString &slotMethod)
 {
    singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);

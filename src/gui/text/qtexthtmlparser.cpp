@@ -1650,7 +1650,6 @@ QStringList QTextHtmlParser::parseAttributes()
 
 void QTextHtmlParser::applyAttributes(const QStringList &attributes)
 {
-   // local state variable for qt3 textedit mode
    bool seenQt3Richtext = false;
 
    QString linkHref;
@@ -1685,7 +1684,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                QColor c;
                c.setNamedColor(value);
 
-               if (!c.isValid()) {
+               if (! c.isValid()) {
                   qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setForeground(c);
@@ -1738,20 +1737,24 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                setFloatAttribute(&node->imageHeight, value);
             }
             break;
+
          case Html_tr:
          case Html_body:
             if (key == QLatin1String("bgcolor")) {
                QColor c;
                c.setNamedColor(value);
-               if (!c.isValid()) {
 
+               if (! c.isValid()) {
                   qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
+
                node->charFormat.setBackground(c);
+
             } else if (key == QLatin1String("background")) {
                node->applyBackgroundImage(value, resourceProvider);
             }
             break;
+
          case Html_th:
          case Html_td:
             if (key == QLatin1String("width")) {
@@ -1759,13 +1762,15 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
             } else if (key == QLatin1String("bgcolor")) {
                QColor c;
                c.setNamedColor(value);
-               if (!c.isValid()) {
 
+               if (! c.isValid()) {
                   qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
                node->charFormat.setBackground(c);
+
             } else if (key == QLatin1String("background")) {
                node->applyBackgroundImage(value, resourceProvider);
+
             } else if (key == QLatin1String("rowspan")) {
                if (setIntAttribute(&node->tableCellRowSpan, value)) {
                   node->tableCellRowSpan = qMax(1, node->tableCellRowSpan);

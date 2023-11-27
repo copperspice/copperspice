@@ -120,39 +120,6 @@ void QMessageAuthenticationCodePrivate::initMessageHash()
     messageHash.addData(iKeyPad.data(), iKeyPad.size());
 }
 
-/*!
-    \class QMessageAuthenticationCode
-    \inmodule QtCore
-
-    \brief The QMessageAuthenticationCode class provides a way to generate
-    hash-based message authentication codes.
-
-    \since 5.1
-
-    \ingroup tools
-    \reentrant
-
-    QMessageAuthenticationCode supports all cryptographic hashes which are supported by
-    QCryptographicHash.
-
-    To generate message authentication code, pass hash algorithm QCryptographicHash::Algorithm
-    to constructor, then set key and message by setKey() and addData() functions. Result
-    can be acquired by result() function.
-    \snippet qmessageauthenticationcode/main.cpp 0
-    \dots
-    \snippet qmessageauthenticationcode/main.cpp 1
-
-    Alternatively, this effect can be achieved by providing message,
-    key and method to hash() method.
-    \snippet qmessageauthenticationcode/main.cpp 2
-
-    \sa QCryptographicHash
-*/
-
-/*!
-    Constructs an object that can be used to create a cryptographic hash from data
-    using method \a method and key \a key.
-*/
 QMessageAuthenticationCode::QMessageAuthenticationCode(QCryptographicHash::Algorithm method,
                                                        const QByteArray &key)
     : d(new QMessageAuthenticationCodePrivate(method))
@@ -160,17 +127,11 @@ QMessageAuthenticationCode::QMessageAuthenticationCode(QCryptographicHash::Algor
     d->key = key;
 }
 
-/*!
-    Destroys the object.
-*/
 QMessageAuthenticationCode::~QMessageAuthenticationCode()
 {
     delete d;
 }
 
-/*!
-    Resets message data. Calling this method doesn't affect the key.
-*/
 void QMessageAuthenticationCode::reset()
 {
     d->result.clear();
@@ -178,50 +139,30 @@ void QMessageAuthenticationCode::reset()
     d->messageHashInited = false;
 }
 
-/*!
-    Sets secret \a key. Calling this method automatically resets the object state.
-*/
 void QMessageAuthenticationCode::setKey(const QByteArray &key)
 {
     reset();
     d->key = key;
 }
 
-/*!
-    Adds the first \a length chars of \a data to the message.
-*/
 void QMessageAuthenticationCode::addData(const char *data, int length)
 {
     d->initMessageHash();
     d->messageHash.addData(data, length);
 }
 
-/*!
-    \overload addData()
-*/
 void QMessageAuthenticationCode::addData(const QByteArray &data)
 {
     d->initMessageHash();
     d->messageHash.addData(data);
 }
 
-/*!
-    Reads the data from the open QIODevice \a device until it ends
-    and adds it to message. Returns \c true if reading was successful.
-
-    \note \a device must be already opened.
- */
 bool QMessageAuthenticationCode::addData(QIODevice *device)
 {
     d->initMessageHash();
     return d->messageHash.addData(device);
 }
 
-/*!
-    Returns the final authentication code.
-
-    \sa QByteArray::toHex()
-*/
 QByteArray QMessageAuthenticationCode::result() const
 {
     if (!d->result.isEmpty())
@@ -247,15 +188,11 @@ QByteArray QMessageAuthenticationCode::result() const
     return d->result;
 }
 
-/*!
-    Returns the authentication code for the message \a message using
-    the key \a key and the method \a method.
-*/
-QByteArray QMessageAuthenticationCode::hash(const QByteArray &message, const QByteArray &key, QCryptographicHash::Algorithm method)
+QByteArray QMessageAuthenticationCode::hash(const QByteArray &message,
+      const QByteArray &key, QCryptographicHash::Algorithm method)
 {
     QMessageAuthenticationCode mac(method);
     mac.setKey(key);
     mac.addData(message);
     return mac.result();
 }
-

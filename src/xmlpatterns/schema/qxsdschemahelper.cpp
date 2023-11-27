@@ -148,7 +148,6 @@ bool XsdSchemaHelper::wildcardAllowsExpandedName(const QXmlName &name, const Xsd
    return true;
 }
 
-// small helper function that should be available in Qt 4.6
 template<class T>
 static inline bool containsSet(const QSet<T> &super, const QSet<T> &sub)
 {

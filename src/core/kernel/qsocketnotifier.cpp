@@ -27,10 +27,6 @@
 #include <qcoreapplication.h>
 #include <qthread_p.h>
 
-
-
-
-
 QSocketNotifier::QSocketNotifier(qintptr socket, Type type, QObject *parent)
    : QObject(parent)
 {
@@ -76,8 +72,6 @@ bool QSocketNotifier::isEnabled() const
 
    return snenabled;
 }
-
-
 
 void QSocketNotifier::setEnabled(bool enable)
 {

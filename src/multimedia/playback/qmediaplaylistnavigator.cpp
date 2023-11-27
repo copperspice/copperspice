@@ -32,7 +32,11 @@
 class QMediaPlaylistNullProvider : public QMediaPlaylistProvider
 {
  public:
-   QMediaPlaylistNullProvider() : QMediaPlaylistProvider() {}
+   QMediaPlaylistNullProvider()
+      : QMediaPlaylistProvider()
+   {
+   }
+
    virtual ~QMediaPlaylistNullProvider() {}
 
    virtual int mediaCount() const {
@@ -78,7 +82,6 @@ class QMediaPlaylistNavigatorPrivate
 
    QMediaPlaylistNavigator *q_ptr;
 };
-
 
 int QMediaPlaylistNavigatorPrivate::nextItemPos(int steps) const
 {
@@ -143,20 +146,26 @@ int QMediaPlaylistNavigatorPrivate::previousItemPos(int steps) const
 
    switch (playbackMode) {
       case QMediaPlaylist::CurrentItemOnce:
-         return /*currentPos == -1 ? lastValidPos :*/ -1;
+         return -1;
+
       case QMediaPlaylist::CurrentItemInLoop:
          return currentPos;
+
       case QMediaPlaylist::Sequential: {
          int prevPos = currentPos == -1 ? playlist->mediaCount() - steps : currentPos - steps;
          return prevPos >= 0 ? prevPos : -1;
       }
+
       case QMediaPlaylist::Loop: {
          int prevPos = currentPos - steps;
+
          while (prevPos < 0) {
             prevPos += playlist->mediaCount();
          }
+
          return prevPos;
       }
+
       case QMediaPlaylist::Random: {
          //TODO: limit the history size
 
@@ -260,7 +269,7 @@ void QMediaPlaylistNavigator::setPlaylist(QMediaPlaylistProvider *playlist)
       emit currentIndexChanged(-1);
    }
 
-   if (!d->currentItem.isNull()) {
+   if (! d->currentItem.isNull()) {
       d->currentItem = QMediaContent();
       emit activated(d->currentItem); //stop playback
    }
@@ -424,4 +433,3 @@ void QMediaPlaylistNavigator::_q_mediaChanged(int start, int end)
    Q_D(QMediaPlaylistNavigator);
    d->_q_mediaChanged(start, end);
 }
-

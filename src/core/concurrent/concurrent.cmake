@@ -52,9 +52,7 @@ target_sources(CsCore
    PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfuture.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfutureinterface.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfuturesynchronizer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qfuturewatcher.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qrunnable.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qtconcurrentexception.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qtconcurrentfilter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qtconcurrentiteratekernel.cpp

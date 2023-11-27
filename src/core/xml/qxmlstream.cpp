@@ -405,10 +405,6 @@ void QXmlStreamReaderPrivate::init()
    error = QXmlStreamReader::NoError;
 }
 
-/*
-  Well-formed requires that we verify entity values. We do this with a
-  standard parser.
- */
 void QXmlStreamReaderPrivate::parseEntity(const QString &value)
 {
    Q_Q(QXmlStreamReader);
@@ -589,9 +585,11 @@ bool QXmlStreamReaderPrivate::scanString(const char *str, short tokenToInject, b
       }
       ++n;
    }
+
    for (int i = 0; i < n; ++i) {
       textBuffer += QChar(ushort(str[i]));
    }
+
    if (requireSpace) {
       int s = fastScanSpace();
       if (!s || atEnd) {
@@ -601,9 +599,11 @@ bool QXmlStreamReaderPrivate::scanString(const char *str, short tokenToInject, b
          return false;
       }
    }
+
    if (tokenToInject >= 0) {
       injectToken(tokenToInject);
    }
+
    return true;
 }
 
@@ -612,12 +612,16 @@ bool QXmlStreamReaderPrivate::scanAfterLangleBang()
    switch (peekChar()) {
       case '[':
          return scanString(spell[CDATA_START], CDATA_START, false);
+
       case 'D':
          return scanString(spell[DOCTYPE], DOCTYPE);
+
       case 'A':
          return scanString(spell[ATTLIST], ATTLIST);
+
       case 'N':
          return scanString(spell[NOTATION], NOTATION);
+
       case 'E':
          if (scanString(spell[ELEMENT], ELEMENT)) {
             return true;
@@ -626,7 +630,8 @@ bool QXmlStreamReaderPrivate::scanAfterLangleBang()
 
       default:
          ;
-   };
+   }
+
    return false;
 }
 
@@ -635,11 +640,14 @@ bool QXmlStreamReaderPrivate::scanPublicOrSystem()
    switch (peekChar()) {
       case 'S':
          return scanString(spell[SYSTEM], SYSTEM);
+
       case 'P':
          return scanString(spell[PUBLIC], PUBLIC);
+
       default:
          ;
    }
+
    return false;
 }
 
@@ -659,10 +667,13 @@ bool QXmlStreamReaderPrivate::scanAfterDefaultDecl()
    switch (peekChar()) {
       case 'R':
          return scanString(spell[REQUIRED], REQUIRED, false);
+
       case 'I':
          return scanString(spell[IMPLIED], IMPLIED, false);
+
       case 'F':
          return scanString(spell[FIXED], FIXED, false);
+
       default:
          ;
    }
@@ -674,6 +685,7 @@ bool QXmlStreamReaderPrivate::scanAttType()
    switch (peekChar()) {
       case 'C':
          return scanString(spell[CDATA], CDATA);
+
       case 'I':
          if (scanString(spell[ID], ID)) {
             return true;
@@ -682,11 +694,13 @@ bool QXmlStreamReaderPrivate::scanAttType()
             return true;
          }
          return scanString(spell[IDREFS], IDREFS);
+
       case 'E':
          if (scanString(spell[ENTITY], ENTITY)) {
             return true;
          }
          return scanString(spell[ENTITIES], ENTITIES);
+
       case 'N':
          if (scanString(spell[NOTATION], NOTATION)) {
             return true;
@@ -695,28 +709,18 @@ bool QXmlStreamReaderPrivate::scanAttType()
             return true;
          }
          return scanString(spell[NMTOKENS], NMTOKENS);
+
       default:
          ;
    }
    return false;
 }
 
-/*!
- \internal
-
- Scan strings with quotes or apostrophes surround them. For instance,
- attributes, the version and encoding field in the XML prolog and
- entity declarations.
-
- If normalizeLiterals is set to true, the function also normalizes
- whitespace. It is set to true when the first start tag is
- encountered.
-
- */
 inline int QXmlStreamReaderPrivate::fastScanLiteralContent()
 {
    int n = 0;
    uint c;
+
    while ((c = getChar())) {
       switch (ushort(c)) {
          case 0xfffe:
@@ -801,12 +805,6 @@ inline int QXmlStreamReaderPrivate::fastScanSpace()
    return n;
 }
 
-/*!
-  \internal
-
-  Used for text nodes essentially. That is, characters appearing
-  inside elements.
- */
 inline int QXmlStreamReaderPrivate::fastScanContentCharList()
 {
    int n = 0;
@@ -877,6 +875,7 @@ inline int QXmlStreamReaderPrivate::fastScanContentCharList()
             ++n;
       }
    }
+
    return n;
 }
 
@@ -1191,9 +1190,6 @@ QStringView QXmlStreamReaderPrivate::namespaceForPrefix(QStringView prefix)
    return QStringView();
 }
 
-/*
-  uses namespaceForPrefix and builds the attribute vector
- */
 void QXmlStreamReaderPrivate::resolveTag()
 {
    int n = attributeStack.size();
@@ -1442,6 +1438,7 @@ bool QXmlStreamReaderPrivate::checkStartDocument()
       hasCheckedStartDocument = false;
       raiseError(QXmlStreamReader::PrematureEndOfDocumentError);
    }
+
    return false;
 }
 
@@ -1622,53 +1619,30 @@ void QXmlStreamReaderPrivate::resume(int rule)
    }
 }
 
-/*! Returns the current line number, starting with 1.
-
-\sa columnNumber(), characterOffset()
- */
 qint64 QXmlStreamReader::lineNumber() const
 {
    Q_D(const QXmlStreamReader);
    return d->lineNumber + 1; // in public we start with 1
 }
 
-/*! Returns the current column number, starting with 0.
-
-\sa lineNumber(), characterOffset()
- */
 qint64 QXmlStreamReader::columnNumber() const
 {
    Q_D(const QXmlStreamReader);
    return d->characterOffset - d->lastLineStart + (d->readBuffer_Iter - d->readBuffer.cbegin());
 }
 
-/*! Returns the current character offset, starting with 0.
-
-\sa lineNumber(), columnNumber()
-*/
 qint64 QXmlStreamReader::characterOffset() const
 {
    Q_D(const QXmlStreamReader);
    return d->characterOffset + (d->readBuffer_Iter - d->readBuffer.cbegin());
 }
 
-
-/*!  Returns the text of \l Characters, \l Comment, \l DTD, or
-  EntityReference.
- */
 QStringView QXmlStreamReader::text() const
 {
    Q_D(const QXmlStreamReader);
    return d->text;
 }
 
-
-/*!  If the state() is \l DTD, this function returns the DTD's
-  notation declarations. Otherwise an empty vector is returned.
-
-  The QXmlStreamNotationDeclarations class is defined to be a QVector
-  of QXmlStreamNotationDeclaration.
- */
 QXmlStreamNotationDeclarations QXmlStreamReader::notationDeclarations() const
 {
    Q_D(const QXmlStreamReader);
@@ -1680,13 +1654,6 @@ QXmlStreamNotationDeclarations QXmlStreamReader::notationDeclarations() const
    return d->publicNotationDeclarations;
 }
 
-
-/*!  If the state() is \l DTD, this function returns the DTD's
-  unparsed (external) entity declarations. Otherwise an empty vector is returned.
-
-  The QXmlStreamEntityDeclarations class is defined to be a QVector
-  of QXmlStreamEntityDeclaration.
- */
 QXmlStreamEntityDeclarations QXmlStreamReader::entityDeclarations() const
 {
    Q_D(const QXmlStreamReader);
@@ -1696,13 +1663,6 @@ QXmlStreamEntityDeclarations QXmlStreamReader::entityDeclarations() const
    return d->publicEntityDeclarations;
 }
 
-/*!
-  \since 4.4
-
-  If the state() is \l DTD, this function returns the DTD's
-  name. Otherwise an empty string is returned.
-
- */
 QStringView QXmlStreamReader::dtdName() const
 {
    Q_D(const QXmlStreamReader);
@@ -1712,13 +1672,6 @@ QStringView QXmlStreamReader::dtdName() const
    return QStringView();
 }
 
-/*!
-  \since 4.4
-
-  If the state() is \l DTD, this function returns the DTD's
-  public identifier. Otherwise an empty string is returned.
-
- */
 QStringView QXmlStreamReader::dtdPublicId() const
 {
    Q_D(const QXmlStreamReader);
@@ -1730,13 +1683,6 @@ QStringView QXmlStreamReader::dtdPublicId() const
    return QStringView();
 }
 
-/*!
-  \since 4.4
-
-  If the state() is \l DTD, this function returns the DTD's
-  system identifier. Otherwise an empty string is returned.
-
- */
 QStringView QXmlStreamReader::dtdSystemId() const
 {
    Q_D(const QXmlStreamReader);
@@ -1819,6 +1765,7 @@ QString QXmlStreamReader::readElementText(ReadElementTextBehaviour behaviour)
          }
       }
    }
+
    return QString();
 }
 
@@ -1861,51 +1808,24 @@ QStringView QXmlStreamReader::processingInstructionTarget() const
    return d->processingInstructionTarget;
 }
 
-/*!
-  Returns the data of a ProcessingInstruction.
- */
 QStringView QXmlStreamReader::processingInstructionData() const
 {
    Q_D(const QXmlStreamReader);
    return d->processingInstructionData;
 }
 
-
-
-/*!
-  Returns the local name of a StartElement, EndElement, or an EntityReference.
-
-  \sa namespaceUri(), qualifiedName()
- */
 QStringView QXmlStreamReader::name() const
 {
    Q_D(const QXmlStreamReader);
    return d->name;
 }
 
-/*!
-  Returns the namespaceUri of a StartElement or EndElement.
-
-  \sa name(), qualifiedName()
- */
 QStringView QXmlStreamReader::namespaceUri() const
 {
    Q_D(const QXmlStreamReader);
    return d->namespaceUri;
 }
 
-/*!
-  Returns the qualified name of a StartElement or EndElement;
-
-  A qualified name is the raw name of an element in the XML data. It
-  consists of the namespace prefix, followed by colon, followed by the
-  element's local name. Since the namespace prefix is not unique (the
-  same prefix can point to different namespaces and different prefixes
-  can point to the same namespace), you shouldn't use qualifiedName(),
-  but the resolved namespaceUri() and the attribute's local name().
-
-   \sa name(), prefix(), namespaceUri()
- */
 QStringView QXmlStreamReader::qualifiedName() const
 {
    Q_D(const QXmlStreamReader);
@@ -1984,9 +1904,6 @@ QXmlStreamNotationDeclaration &QXmlStreamNotationDeclaration::operator=(const QX
    return *this;
 }
 
-/*!
-Destructs this notation declaration.
-*/
 QXmlStreamNotationDeclaration::~QXmlStreamNotationDeclaration()
 {
 }
@@ -1995,37 +1912,24 @@ QXmlStreamNamespaceDeclaration::QXmlStreamNamespaceDeclaration()
 {
 }
 
-/*!
-  \since 4.4
-
-  Creates a namespace declaration with \a prefix and \a namespaceUri.
-*/
 QXmlStreamNamespaceDeclaration::QXmlStreamNamespaceDeclaration(const QString &prefix, const QString &namespaceUri)
 {
    m_prefix = prefix;
    m_namespaceUri = namespaceUri;
 }
 
-/*!
-  Creates a copy of \a other.
- */
 QXmlStreamNamespaceDeclaration::QXmlStreamNamespaceDeclaration(const QXmlStreamNamespaceDeclaration &other)
 {
    *this = other;
 }
 
-/*!
-  Assigns \a other to this namespace declaration.
- */
 QXmlStreamNamespaceDeclaration &QXmlStreamNamespaceDeclaration::operator=(const QXmlStreamNamespaceDeclaration &other)
 {
    m_prefix = other.m_prefix;
    m_namespaceUri = other.m_namespaceUri;
    return *this;
 }
-/*!
-Destructs this namespace declaration.
-*/
+
 QXmlStreamNamespaceDeclaration::~QXmlStreamNamespaceDeclaration()
 {
 }
@@ -2035,17 +1939,11 @@ QXmlStreamEntityDeclaration::QXmlStreamEntityDeclaration()
 {
 }
 
-/*!
-  Creates a copy of \a other.
- */
 QXmlStreamEntityDeclaration::QXmlStreamEntityDeclaration(const QXmlStreamEntityDeclaration &other)
 {
    *this = other;
 }
 
-/*!
-  Assigns \a other to this entity declaration.
- */
 QXmlStreamEntityDeclaration &QXmlStreamEntityDeclaration::operator=(const QXmlStreamEntityDeclaration &other)
 {
    m_name = other.m_name;
@@ -2181,7 +2079,9 @@ class QXmlStreamWriterPrivate : public QXmlStreamPrivateTagStack
 
    void checkIfASCIICompatibleCodec();
 
-   NamespaceDeclaration &findNamespace(const QString &namespaceUri, bool writeDeclaration = false, bool noDefault = false);
+   NamespaceDeclaration &findNamespace(const QString &namespaceUri, bool writeDeclaration = false,
+         bool noDefault = false);
+
    void writeNamespaceDeclaration(const NamespaceDeclaration &namespaceDeclaration);
 
    int namespacePrefixCount;
@@ -2412,8 +2312,6 @@ QXmlStreamPrivateTagStack::NamespaceDeclaration &QXmlStreamWriterPrivate::findNa
    return namespaceDeclaration;
 }
 
-
-
 void QXmlStreamWriterPrivate::indent(int level)
 {
    write("\n");
@@ -2422,20 +2320,11 @@ void QXmlStreamWriterPrivate::indent(int level)
    }
 }
 
-
-/*!
-  Constructs a stream writer.
-
-  \sa setDevice()
- */
 QXmlStreamWriter::QXmlStreamWriter()
    : d_ptr(new QXmlStreamWriterPrivate(this))
 {
 }
 
-/*!
-  Constructs a stream writer that writes into \a device;
- */
 QXmlStreamWriter::QXmlStreamWriter(QIODevice *device)
    : d_ptr(new QXmlStreamWriterPrivate(this))
 {
@@ -2443,10 +2332,6 @@ QXmlStreamWriter::QXmlStreamWriter(QIODevice *device)
    d->device = device;
 }
 
-/*!  Constructs a stream writer that writes into \a array. This is the
-  same as creating an xml writer that operates on a QBuffer device
-  which in turn operates on \a array.
- */
 QXmlStreamWriter::QXmlStreamWriter(QByteArray *array)
    : d_ptr(new QXmlStreamWriterPrivate(this))
 {
@@ -2543,14 +2428,6 @@ bool QXmlStreamWriter::hasError() const
    return d->hasError;
 }
 
-/*!
-  \overload
-  Writes an attribute with \a qualifiedName and \a value.
-
-
-  This function can only be called after writeStartElement() before
-  any content is written, or after writeEmptyElement().
- */
 void QXmlStreamWriter::writeAttribute(const QString &qualifiedName, const QString &value)
 {
    Q_D(QXmlStreamWriter);
@@ -2565,14 +2442,6 @@ void QXmlStreamWriter::writeAttribute(const QString &qualifiedName, const QStrin
    d->write("\"");
 }
 
-/*!  Writes an attribute with \a name and \a value, prefixed for
-  the specified \a namespaceUri. If the namespace has not been
-  declared yet, QXmlStreamWriter will generate a namespace declaration
-  for it.
-
-  This function can only be called after writeStartElement() before
-  any content is written, or after writeEmptyElement().
- */
 void QXmlStreamWriter::writeAttribute(const QString &namespaceUri, const QString &name, const QString &value)
 {
    Q_D(QXmlStreamWriter);
@@ -2593,14 +2462,6 @@ void QXmlStreamWriter::writeAttribute(const QString &namespaceUri, const QString
    d->write("\"");
 }
 
-/*!
-  \overload
-
-  Writes the \a attribute.
-
-  This function can only be called after writeStartElement() before
-  any content is written, or after writeEmptyElement().
- */
 void QXmlStreamWriter::writeAttribute(const QXmlStreamAttribute &attribute)
 {
    if (attribute.namespaceUri().isEmpty()) {
@@ -2610,16 +2471,6 @@ void QXmlStreamWriter::writeAttribute(const QXmlStreamAttribute &attribute)
    }
 }
 
-
-/*!  Writes the attribute vector \a attributes. If a namespace
-  referenced in an attribute not been declared yet, QXmlStreamWriter
-  will generate a namespace declaration for it.
-
-  This function can only be called after writeStartElement() before
-  any content is written, or after writeEmptyElement().
-
-  \sa writeAttribute(), writeNamespace()
- */
 void QXmlStreamWriter::writeAttributes(const QXmlStreamAttributes &attributes)
 {
    Q_D(QXmlStreamWriter);
@@ -2632,15 +2483,6 @@ void QXmlStreamWriter::writeAttributes(const QXmlStreamAttributes &attributes)
    }
 }
 
-
-/*!  Writes \a text as CDATA section. If \a text contains the
-  forbidden character sequence "]]>", it is split into different CDATA
-  sections.
-
-  This function mainly exists for completeness. Normally you should
-  not need use it, because writeCharacters() automatically escapes all
-  non-content characters.
- */
 void QXmlStreamWriter::writeCDATA(const QString &text)
 {
    Q_D(QXmlStreamWriter);
@@ -2654,13 +2496,6 @@ void QXmlStreamWriter::writeCDATA(const QString &text)
    d->write("]]>");
 }
 
-
-/*!  Writes \a text. The characters "<", "&", and "\"" are escaped as entity
-  references "&lt;", "&amp;, and "&quot;". To avoid the forbidden sequence
-  "]]>", ">" is also escaped as "&gt;".
-
-  \sa writeEntityReference()
- */
 void QXmlStreamWriter::writeCharacters(const QString &text)
 {
    Q_D(QXmlStreamWriter);
@@ -2668,11 +2503,6 @@ void QXmlStreamWriter::writeCharacters(const QString &text)
    d->writeEscaped(text);
 }
 
-
-/*!  Writes \a text as XML comment, where \a text must not contain the
-     forbidden sequence "--" or end with "-". Note that XML does not
-     provide any way to escape "-" in a comment.
- */
 void QXmlStreamWriter::writeComment(const QString &text)
 {
    Q_D(QXmlStreamWriter);
@@ -2688,10 +2518,6 @@ void QXmlStreamWriter::writeComment(const QString &text)
    d->inStartElement = d->lastWasStartElement = false;
 }
 
-
-/*!  Writes a DTD section. The \a dtd represents the entire
-  doctypedecl production from the XML 1.0 specification.
- */
 void QXmlStreamWriter::writeDTD(const QString &dtd)
 {
    Q_D(QXmlStreamWriter);
@@ -2705,10 +2531,6 @@ void QXmlStreamWriter::writeDTD(const QString &dtd)
    }
 }
 
-/*!  \overload
-  Writes an empty element with qualified name \a qualifiedName.
-  Subsequent calls to writeAttribute() will add attributes to this element.
-*/
 void QXmlStreamWriter::writeEmptyElement(const QString &qualifiedName)
 {
    Q_D(QXmlStreamWriter);
@@ -2717,14 +2539,6 @@ void QXmlStreamWriter::writeEmptyElement(const QString &qualifiedName)
    d->inEmptyElement = true;
 }
 
-
-/*!  Writes an empty element with \a name, prefixed for the specified
-  \a namespaceUri. If the namespace has not been declared,
-  QXmlStreamWriter will generate a namespace declaration for it.
-  Subsequent calls to writeAttribute() will add attributes to this element.
-
-  \sa writeNamespace()
- */
 void QXmlStreamWriter::writeEmptyElement(const QString &namespaceUri, const QString &name)
 {
    Q_D(QXmlStreamWriter);
@@ -2733,15 +2547,6 @@ void QXmlStreamWriter::writeEmptyElement(const QString &namespaceUri, const QStr
    d->inEmptyElement = true;
 }
 
-
-/*!\overload
-  Writes a text element with \a qualifiedName and \a text.
-
-
-  This is a convenience function equivalent to:
-  \snippet doc/src/snippets/code/src_corelib_xml_qxmlstream.cpp 1
-
-*/
 void QXmlStreamWriter::writeTextElement(const QString &qualifiedName, const QString &text)
 {
    writeStartElement(qualifiedName);
@@ -2749,16 +2554,6 @@ void QXmlStreamWriter::writeTextElement(const QString &qualifiedName, const QStr
    writeEndElement();
 }
 
-/*!  Writes a text element with \a name, prefixed for the specified \a
-     namespaceUri, and \a text. If the namespace has not been
-     declared, QXmlStreamWriter will generate a namespace declaration
-     for it.
-
-
-  This is a convenience function equivalent to:
-  \snippet doc/src/snippets/code/src_corelib_xml_qxmlstream.cpp 2
-
-*/
 void QXmlStreamWriter::writeTextElement(const QString &namespaceUri, const QString &name, const QString &text)
 {
    writeStartElement(namespaceUri, name);
@@ -2766,12 +2561,6 @@ void QXmlStreamWriter::writeTextElement(const QString &namespaceUri, const QStri
    writeEndElement();
 }
 
-
-/*!
-  Closes all remaining open start elements and writes a newline.
-
-  \sa writeStartDocument()
- */
 void QXmlStreamWriter::writeEndDocument()
 {
    Q_D(QXmlStreamWriter);
@@ -2781,11 +2570,6 @@ void QXmlStreamWriter::writeEndDocument()
    d->write("\n");
 }
 
-/*!
-  Closes the previous start element.
-
-  \sa writeStartElement()
- */
 void QXmlStreamWriter::writeEndElement()
 {
    Q_D(QXmlStreamWriter);
@@ -2827,10 +2611,6 @@ void QXmlStreamWriter::writeEndElement()
    d->write(">");
 }
 
-
-/*!
-  Writes the entity reference \a name to the stream, as "&\a{name};".
- */
 void QXmlStreamWriter::writeEntityReference(const QString &name)
 {
    Q_D(QXmlStreamWriter);
@@ -2882,11 +2662,6 @@ void QXmlStreamWriter::writeDefaultNamespace(const QString &namespaceUri)
    }
 }
 
-
-/*!
-  Writes an XML processing instruction with \a target and \a data,
-  where \a data must not contain the sequence "?>".
- */
 void QXmlStreamWriter::writeProcessingInstruction(const QString &target, const QString &data)
 {
    Q_D(QXmlStreamWriter);
@@ -2906,27 +2681,11 @@ void QXmlStreamWriter::writeProcessingInstruction(const QString &target, const Q
    d->write("?>");
 }
 
-
-
-/*!\overload
-
-  Writes a document start with XML version number "1.0". This also
-  writes the encoding information.
-
-  \sa writeEndDocument(), setCodec()
-  \since 4.5
- */
 void QXmlStreamWriter::writeStartDocument()
 {
    writeStartDocument("1.0");
 }
 
-
-/*!
-  Writes a document start with the XML version number \a version.
-
-  \sa writeEndDocument()
- */
 void QXmlStreamWriter::writeStartDocument(const QString &version)
 {
    Q_D(QXmlStreamWriter);
@@ -2944,12 +2703,6 @@ void QXmlStreamWriter::writeStartDocument(const QString &version)
    d->write("\"?>");
 }
 
-/*!  Writes a document start with the XML version number \a version
-  and a standalone attribute \a standalone.
-
-  \sa writeEndDocument()
-  \since 4.5
- */
 void QXmlStreamWriter::writeStartDocument(const QString &version, bool standalone)
 {
    Q_D(QXmlStreamWriter);
@@ -2970,14 +2723,6 @@ void QXmlStreamWriter::writeStartDocument(const QString &version, bool standalon
    }
 }
 
-
-/*!\overload
-
-   Writes a start element with \a qualifiedName. Subsequent calls to
-   writeAttribute() will add attributes to this element.
-
-   \sa writeEndElement(), writeEmptyElement()
- */
 void QXmlStreamWriter::writeStartElement(const QString &qualifiedName)
 {
    Q_D(QXmlStreamWriter);

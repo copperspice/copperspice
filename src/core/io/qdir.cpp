@@ -226,13 +226,9 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
 
    switch (sortBy) {
       case QDir::Time: {
-        QDateTime firstModified = f1->item.lastModified();
+        QDateTime firstModified  = f1->item.lastModified();
         QDateTime secondModified = f2->item.lastModified();
 
-        // QDateTime by default will do all sorts of conversions on these to
-        // find timezones, which is incredibly expensive. As we aren't
-        // presenting these to the user, we don't care (at all) about the
-        // local timezone, so force them to UTC to avoid that conversion.
         firstModified.setTimeZone(QTimeZone::utc());
         secondModified.setTimeZone(QTimeZone::utc());
 
@@ -1359,7 +1355,7 @@ QDebug operator<<(QDebug debug, QDir::Filters filters)
          flags << "NoSymLinks";
       }
       if (filters & QDir::NoDotAndDotDot) {
-         flags << "AndDotDot";   // ### Qt5/remove (because NoDotAndDotDot=NoDot|NoDotDo  if (filters & QDir::NoDot){s << "NoDot";
+         flags << "AndDotDot";   // TODO: remove (because NoDotAndDotDot=NoDot|NoDotDo  if (filters & QDir::NoDot){s << "NoDot";
       }
       if (filters & QDir::NoDotDot) {
          flags << "NoDotDot";

@@ -103,7 +103,6 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
    uint inDrag : 1;
    uint clickCausedFocus : 1;
 
-   // Qt3 compatibility, only used in setText
    Qt::TextFormat textFormat;
    QString anchorToScrollToWhenVisible;
 

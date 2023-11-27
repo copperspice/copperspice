@@ -2192,8 +2192,10 @@ void QWizard::setField(const QString &name, const QVariant &value)
    int index = d->fieldIndexMap.value(name, -1);
    if (index != -1) {
       const QWizardField &field = d->fields.at(index);
-      if (!field.object->setProperty(field.property, value))
+
+      if (! field.object->setProperty(field.property, value)) {
          qWarning("QWizard::setField() Unable to write to property '%s'", field.property.constData());
+      }
 
       return;
    }

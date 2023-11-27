@@ -644,7 +644,7 @@ void QOpenGLContext::swapBuffers(QSurface *surface)
    }
 
    if (surface->surfaceClass() == QSurface::Window
-      && !qt_window_private(static_cast<QWindow *>(surface))->receivedExpose) {
+         && ! qt_window_private(static_cast<QWindow *>(surface))->receivedExpose) {
       qWarning("QOpenGLContext::swapBuffers() Called with a non exposed window");
    }
 
@@ -652,12 +652,6 @@ void QOpenGLContext::swapBuffers(QSurface *surface)
    if (!surfaceHandle) {
       return;
    }
-
-#if ! defined(QT_NO_DEBUG)
-   if (!QOpenGLContextPrivate::toggleMakeCurrentTracker(this, false)) {
-      qWarning() << "QOpenGLContext::swapBuffers() called without corresponding makeCurrent()";
-   }
-#endif
 
    if (surface->format().swapBehavior() == QSurfaceFormat::SingleBuffer) {
       functions()->glFlush();
@@ -991,14 +985,6 @@ QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
       m_groups.at(i)->d_func()->m_resources.remove(this);
       active.deref();
    }
-
-#ifndef QT_NO_DEBUG
-   if (active.load() != 0) {
-      qWarning("QtGui: Resources are still available at program shutdown.\n"
-         "          This is possibly caused by a leaked QOpenGLWidget, \n"
-         "          QOpenGLFramebufferObject or QOpenGLPixelBuffer.");
-   }
-#endif
 }
 
 void QOpenGLMultiGroupSharedResource::insert(QOpenGLContext *context, QOpenGLSharedResource *value)

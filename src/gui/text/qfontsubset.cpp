@@ -1178,15 +1178,19 @@ static QByteArray bindFont(const QVector<QTtfTable> &_tables)
          if (t.tag == MAKE_TAG('h', 'e', 'a', 'd')) {
             head_offset = table_offset;
          }
+
          f << t.tag
             << checksum(t.data)
             << table_offset
             << t.data.size();
+
          table_offset += size;
+
 #define TAG(x) char(t.tag >> 24) << char((t.tag >> 16) & 0xff) << char((t.tag >> 8) & 0xff) << char(t.tag & 0xff)
          //qDebug() << "table " << TAG(t.tag) << "has size " << t.data.size() << "stream at " << f.offset();
       }
    }
+
    for (int i = 0; i < tables.size(); ++i) {
       const QByteArray &t = tables.at(i).data;
       font += t;
@@ -1198,7 +1202,7 @@ static QByteArray bindFont(const QVector<QTtfTable> &_tables)
       }
    }
 
-   if (!head_offset) {
+   if (! head_offset) {
       qWarning("bindFont() Font is missing the 'head' table");
       return QByteArray();
    }

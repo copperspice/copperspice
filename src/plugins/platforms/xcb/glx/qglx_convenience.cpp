@@ -99,10 +99,11 @@ QVector<int> qglx_buildSpec(const QSurfaceFormat &format, int drawableBit)
 
 GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat &format, int drawableBit)
 {
-    // Allow forcing LIBGL_ALWAYS_SOFTWARE for Qt 5 applications only.
+    // Allow forcing LIBGL_ALWAYS_SOFTWARE for applications.
     // This is most useful with drivers that only support OpenGL 1.
     // We need OpenGL 2, but the user probably doesn't want
     // LIBGL_ALWAYS_SOFTWARE in OpenGL 1 apps.
+
     static bool checkedForceSoftwareOpenGL = false;
     static bool forceSoftwareOpenGL = false;
 

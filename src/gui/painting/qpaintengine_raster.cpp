@@ -3474,9 +3474,8 @@ static inline uchar *alignAddress(uchar *address, quintptr alignmentMask)
    return (uchar *)(((quintptr)address + alignmentMask) & ~alignmentMask);
 }
 
-void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
-   ProcessSpans callback,
-   void *userData, QRasterBuffer *)
+void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline, ProcessSpans callback,
+      void *userData, QRasterBuffer *)
 {
    if (!callback || !outline) {
       return;

@@ -173,6 +173,7 @@ QCameraExposure::QCameraExposure(QCamera *parent):
 QCameraExposure::~QCameraExposure()
 {
    Q_D(QCameraExposure);
+
    if (d->exposureControl) {
       d->camera->service()->releaseControl(d->exposureControl);
    }
@@ -219,11 +220,12 @@ void QCameraExposure::setExposureMode(QCameraExposure::ExposureMode mode)
 
 bool QCameraExposure::isExposureModeSupported(QCameraExposure::ExposureMode mode) const
 {
-   if (!d_func()->exposureControl) {
+   if (! d_func()->exposureControl) {
       return false;
    }
 
    bool continuous = false;
+
    return d_func()->exposureControl->supportedParameterRange(QCameraExposureControl::ExposureMode, &continuous)
           .contains(QVariant::fromValue<QCameraExposure::ExposureMode>(mode));
 }

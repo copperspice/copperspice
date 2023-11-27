@@ -4137,6 +4137,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
          break;
 #endif // QT_NO_GROUPBOX
+
       case CC_MdiControls: {
          QRect r;
          uint ctrl = SC_MdiMinButton;
@@ -4150,6 +4151,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
       }
       break;
+
       default:
          qWarning("QCommonStyle::hitTestComplexControl() Control %d was not handled", cc);
    }

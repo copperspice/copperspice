@@ -666,7 +666,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    inline bool isVisible() const;
    bool isVisibleTo(const QWidget *parent) const;
 
-   // ### Qt5/bool isVisibleTo(_const_ QWidget *) const
+   // TODO: bool isVisibleTo(_const_ QWidget *) const
    inline bool isHidden() const;
 
    bool isMinimized() const;

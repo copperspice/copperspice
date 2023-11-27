@@ -37,8 +37,6 @@ QIODeviceDelegate::QIODeviceDelegate(QIODevice *const source) : m_source(source)
    connect(source, SIGNAL(readChannelFinished()),  this, SLOT(readChannelFinished()));
    connect(source, SIGNAL(readyRead()),            this, SLOT(readyRead()));
 
-   /* According to Thiago these two signals are very similar, but QtNetworkAccess uses finished()
-    * instead for a minor but significant reason. */
    connect(source, SIGNAL(readChannelFinished()), this, SLOT(finished()));
 
    /* For instance QFile emits no signals, so how do we know if the device has all data available

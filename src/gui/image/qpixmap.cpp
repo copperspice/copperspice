@@ -239,6 +239,7 @@ QPixmap &QPixmap::operator=(const QPixmap &pixmap)
       qWarning("QPixmap::operator=() Unable to assign a pixmap to another pixmap during painting");
       return *this;
    }
+
    if (pixmap.paintingActive()) {                // make a deep copy
       pixmap.copy().swap(*this);
    } else {
@@ -520,6 +521,7 @@ void QPixmap::fill(const QColor &color)
 
    // Some people are probably already calling fill while a painter is active, so to not break
    // their programs, only print a warning and return when the fill operation could cause a crash.
+
    if (paintingActive() && (color.alpha() != 255) && !hasAlphaChannel()) {
       qWarning("QPixmap::fill() Unable to fill while pixmap is being painted");
       return;
@@ -536,6 +538,7 @@ void QPixmap::fill(const QColor &color)
       d->resize(data->width(), data->height());
       data = d;
    }
+
    data->fill(color);
 }
 
@@ -652,6 +655,7 @@ QPixmap QPixmap::scaledToHeight(int h, Qt::TransformationMode mode) const
       qWarning("QPixmap::scaleHeight() Pixmap is empty");
       return copy();
    }
+
    if (h <= 0) {
       return QPixmap();
    }

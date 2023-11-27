@@ -70,69 +70,6 @@ QXmlSerializerPrivate::QXmlSerializerPrivate(const QXmlQuery &query,
    converterState.m_flags = QTextCodec::IgnoreHeader;
 }
 
-/*!
-  \class QXmlSerializer
-  \brief The QXmlSerializer class is an implementation of QAbstractXmlReceiver for transforming XQuery output into unformatted XML.
-
-  \reentrant
-  \since 4.4
-  \ingroup xml-tools
-
-  QXmlSerializer translates an \l {XQuery Sequence} {XQuery sequence}, usually
-  the output of an QXmlQuery, into XML. Consider the example:
-
-  \snippet doc/src/snippets/code/src_xmlpatterns_api_qxmlserializer.cpp 0
-
-  First it constructs a \l {QXmlQuery} {query} that gets the
-  first paragraph from document \c index.html. Then it constructs
-  an instance of this class with the \l {QXmlQuery} {query} and
-  \l {QIODevice} {myOutputDevice}. Finally, it
-  \l {QXmlQuery::evaluateTo()} {evaluates} the
-  \l {QXmlQuery} {query}, producing an ordered sequence of calls
-  to the serializer's callback functions. The sequence of callbacks
-  transforms the query output to XML and writes it to
-  \l {QIODevice} {myOutputDevice}.
-
-  QXmlSerializer will:
-
-  \list
-  \o Declare namespaces when needed,
-
-  \o Use appropriate escaping, when characters can't be
-  represented in the XML,
-
-  \o Handle line endings appropriately,
-
-  \o Report errors, when it can't serialize the content, e.g.,
-  when asked to serialize an attribute that is a top-level node,
-  or when more than one top-level element is encountered.
-
-  \endlist
-
-  If an error occurs during serialization, result is undefined
-  unless the serializer is driven through a call to
-  QXmlQuery::evaluateTo().
-
-  If the generated XML should be indented and formatted for reading,
-  use QXmlFormatter.
-
-  \sa {http://www.w3.org/TR/xslt-xquery-serialization/}{XSLT 2.0 and XQuery 1.0 Serialization}
-
-  \sa QXmlFormatter
- */
-
-/*!
-  Constructs a serializer that uses the name pool and message
-  handler in \a query, and writes the output to \a outputDevice.
-
-  \a outputDevice must be a valid, non-null device that is open in
-  write mode, otherwise behavior is undefined.
-
-  \a outputDevice must not be opened with QIODevice::Text because it
-  will cause the output to be incorrect. This class will ensure line
-  endings are serialized as according with the XML specification.
-  QXmlSerializer does not take ownership of \a outputDevice.
- */
 QXmlSerializer::QXmlSerializer(const QXmlQuery &query,
                                QIODevice *outputDevice) : QAbstractXmlReceiver(new QXmlSerializerPrivate(query, outputDevice))
 {
@@ -147,16 +84,10 @@ QXmlSerializer::QXmlSerializer(const QXmlQuery &query,
    }
 }
 
-/*!
-  \internal
- */
 QXmlSerializer::QXmlSerializer(QAbstractXmlReceiverPrivate *d) : QAbstractXmlReceiver(d)
 {
 }
 
-/*!
-  \internal
- */
 bool QXmlSerializer::atDocumentRoot() const
 {
    Q_D(const QXmlSerializer);
@@ -164,9 +95,6 @@ bool QXmlSerializer::atDocumentRoot() const
           (d->state == InsideDocumentElement && d->hasClosedElement.size() == 1);
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::startContent()
 {
    Q_D(QXmlSerializer);
@@ -176,9 +104,6 @@ void QXmlSerializer::startContent()
    }
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::writeEscaped(const QString &toEscape)
 {
    if (toEscape.isEmpty()) { /* Early exit. */
@@ -205,9 +130,6 @@ void QXmlSerializer::writeEscaped(const QString &toEscape)
    write(result);
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::writeEscapedAttribute(const QString &toEscape)
 {
    if (toEscape.isEmpty()) { /* Early exit. */
@@ -236,18 +158,12 @@ void QXmlSerializer::writeEscapedAttribute(const QString &toEscape)
    write(result);
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::write(const QString &content)
 {
    Q_D(QXmlSerializer);
    d->device->write(d->codec->fromUnicode(content, &d->converterState));
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::write(const QXmlName &name)
 {
    Q_D(QXmlSerializer);
@@ -265,18 +181,12 @@ void QXmlSerializer::write(const QXmlName &name)
    }
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::write(const char *const chars)
 {
    Q_D(QXmlSerializer);
    d->device->write(chars);
 }
 
-/*!
-  \reimp
- */
 void QXmlSerializer::startElement(const QXmlName &name)
 {
    Q_D(QXmlSerializer);
@@ -293,7 +203,8 @@ void QXmlSerializer::startElement(const QXmlName &name)
 
       } else if (d->state != InsideDocumentElement) {
          d->query.d->staticContext()->error(QtXmlPatterns::tr("Element %1 can not be serialized because it appears outside "
-                  "the document element.").formatArgs(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
+            "the document element.").formatArgs(formatKeyword(d->np, name)), ReportContext::SENR0001,
+            d->query.d->expression().data());
       }
    }
 
@@ -308,9 +219,6 @@ void QXmlSerializer::startElement(const QXmlName &name)
    d->isPreviousAtomic = false;
 }
 
-/*!
-  \reimp
- */
 void QXmlSerializer::endElement()
 {
    Q_D(QXmlSerializer);
@@ -328,9 +236,6 @@ void QXmlSerializer::endElement()
    d->isPreviousAtomic = false;
 }
 
-/*!
-  \reimp
- */
 void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
 {
    Q_D(QXmlSerializer);
@@ -347,7 +252,9 @@ void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
 
    if (atDocumentRoot()) {
       d->query.d->staticContext()->error(QtXmlPatterns::tr("Attribute %1 can not be serialized because it appears at "
-                  "the top level.").formatArg(formatKeyword(d->np, name)), ReportContext::SENR0001, d->query.d->expression().data());
+            "the top level.").formatArg(formatKeyword(d->np, name)),
+            ReportContext::SENR0001, d->query.d->expression().data());
+
    } else {
       d->write(' ');
       write(name);
@@ -357,9 +264,6 @@ void QXmlSerializer::attribute(const QXmlName &name, QStringView value)
    }
 }
 
-/*!
-  \internal
- */
 bool QXmlSerializer::isBindingInScope(const QXmlName nb) const
 {
    Q_D(const QXmlSerializer);
@@ -378,6 +282,7 @@ bool QXmlSerializer::isBindingInScope(const QXmlName nb) const
             }
          }
       }
+
    } else {
       for (int lvl = 0; lvl < levelLen; ++lvl) {
          const QVector<QXmlName> &scope = d->namespaces.at(lvl);
@@ -396,9 +301,6 @@ bool QXmlSerializer::isBindingInScope(const QXmlName nb) const
    return false;
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::namespaceBinding(const QXmlName &nb)
 {
    /*
@@ -436,9 +338,6 @@ void QXmlSerializer::namespaceBinding(const QXmlName &nb)
    d->write('"');
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::comment(const QString &value)
 {
    Q_D(QXmlSerializer);
@@ -453,9 +352,6 @@ void QXmlSerializer::comment(const QString &value)
    d->isPreviousAtomic = false;
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::characters(QStringView value)
 {
    Q_D(QXmlSerializer);
@@ -465,11 +361,7 @@ void QXmlSerializer::characters(QStringView value)
    writeEscaped(QString(value));
 }
 
-/*!
- \reimp
- */
-void QXmlSerializer::processingInstruction(const QXmlName &name,
-      const QString &value)
+void QXmlSerializer::processingInstruction(const QXmlName &name, const QString &value)
 {
    Q_D(QXmlSerializer);
    Q_ASSERT_X(! value.contains(QLatin1String("?>")), Q_FUNC_INFO,
@@ -485,9 +377,6 @@ void QXmlSerializer::processingInstruction(const QXmlName &name,
    d->isPreviousAtomic = false;
 }
 
-/*!
-  \internal
- */
 void QXmlSerializer::item(const QPatternist::Item &outputItem)
 {
    Q_D(QXmlSerializer);
@@ -513,82 +402,45 @@ void QXmlSerializer::item(const QPatternist::Item &outputItem)
    }
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::atomicValue(const QVariant &value)
 {
    (void) value;
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::startDocument()
 {
    Q_D(QXmlSerializer);
    d->isPreviousAtomic = false;
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::endDocument()
 {
    Q_D(QXmlSerializer);
    d->isPreviousAtomic = false;
 }
 
-/*!
-
-  Returns a pointer to the output device. There is no corresponding
-  function to \e set the output device, because the output device must
-  be passed to the constructor. The serializer does not take ownership
-  of its IO device.
- */
 QIODevice *QXmlSerializer::outputDevice() const
 {
    Q_D(const QXmlSerializer);
    return d->device;
 }
 
-/*!
-  Sets the codec the serializer will use for encoding its XML output.
-  The output codec is set to \a outputCodec. By default, the output
-  codec is set to the one for \c UTF-8. The serializer does not take
-  ownership of the codec.
-
-  \sa codec()
-
- */
 void QXmlSerializer::setCodec(const QTextCodec *outputCodec)
 {
    Q_D(QXmlSerializer);
    d->codec = outputCodec;
 }
 
-/*!
-  Returns the codec being used by the serializer for encoding its
-  XML output.
-
-  \sa setCodec()
- */
 const QTextCodec *QXmlSerializer::codec() const
 {
    Q_D(const QXmlSerializer);
    return d->codec;
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::startOfSequence()
 {
 }
 
-/*!
- \reimp
- */
 void QXmlSerializer::endOfSequence()
 {
    /* If this function is changed to flush or close or something like that,

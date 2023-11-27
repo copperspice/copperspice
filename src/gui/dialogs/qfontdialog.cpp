@@ -27,20 +27,21 @@
 
 #include <qfontdialog.h>
 #include <qfontdialog_p.h>
+
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qdialogbuttonbox.h>
 #include <qevent.h>
 #include <qfontdatabase.h>
 #include <qgroupbox.h>
+#include <qheaderview.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qlistview.h>
 #include <qpushbutton.h>
 #include <qstyle.h>
-#include <qdialogbuttonbox.h>
-#include <qheaderview.h>
-#include <qlistview.h>
 #include <qstringlistmodel.h>
 #include <qvalidator.h>
 
@@ -53,28 +54,36 @@ class QFontListView : public QListView
 
  public:
    QFontListView(QWidget *parent);
-   inline QStringListModel *model() const {
+
+   QStringListModel *model() const {
       return static_cast<QStringListModel *>(QListView::model());
    }
-   inline void setCurrentItem(int item) {
+
+   void setCurrentItem(int item) {
       QListView::setCurrentIndex(static_cast<QAbstractListModel *>(model())->index(item));
    }
-   inline int currentItem() const {
+
+   int currentItem() const {
       return QListView::currentIndex().row();
    }
-   inline int count() const {
+
+   int count() const {
       return model()->rowCount();
    }
-   inline QString currentText() const {
+
+   QString currentText() const {
       int row = QListView::currentIndex().row();
       return row < 0 ? QString() : model()->stringList().at(row);
    }
+
    void currentChanged(const QModelIndex &current, const QModelIndex &previous)  override {
       QListView::currentChanged(current, previous);
+
       if (current.isValid()) {
          emit highlighted(current.row());
       }
    }
+
    QString text(int i) const {
       return model()->stringList().at(i);
    }
@@ -101,6 +110,7 @@ QFontDialogPrivate::QFontDialogPrivate()
 QFontDialogPrivate::~QFontDialogPrivate()
 {
 }
+
 QFontDialog::QFontDialog(QWidget *parent)
    : QDialog(*new QFontDialogPrivate, parent, DefaultWindowFlags)
 {
@@ -161,19 +171,23 @@ void QFontDialogPrivate::init()
    // effects box
    effects = new QGroupBox(q);
    QVBoxLayout *vbox = new QVBoxLayout(effects);
+
    strikeout = new QCheckBox(effects);
    vbox->addWidget(strikeout);
+
    underline = new QCheckBox(effects);
    vbox->addWidget(underline);
 
    sample = new QGroupBox(q);
+
    QHBoxLayout *hbox = new QHBoxLayout(sample);
+
    sampleEdit = new QLineEdit(sample);
    sampleEdit->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
    sampleEdit->setAlignment(Qt::AlignCenter);
 
-   // Note that the sample text is *not* translated with tr(), as the
-   // characters used depend on the charset encoding.
+   // sample text is *not* translated with tr(), since the
+   // characters depend on the charset encoding
 
    sampleEdit->setText("AaBbYyZz");
    hbox->addWidget(sampleEdit);
@@ -207,6 +221,7 @@ void QFontDialogPrivate::init()
       if (writingSystemName.isEmpty()) {
          break;
       }
+
       writingSystemCombo->addItem(writingSystemName);
    }
 
@@ -220,7 +235,9 @@ void QFontDialogPrivate::init()
    QGridLayout *mainGrid = new QGridLayout(q);
 
    int spacing = mainGrid->spacing();
-   if (spacing >= 0) {     // uniform spacing
+
+   if (spacing >= 0) {
+      // uniform spacing
       mainGrid->setSpacing(0);
 
       mainGrid->setColumnMinimumWidth(1, spacing);
@@ -275,14 +292,11 @@ void QFontDialogPrivate::init()
 
    familyList->setFocus();
    retranslateStrings();
+
    sampleEdit->setObjectName("qt_fontDialog_sampleEdit");
 }
 
-/*!
-  \internal
- Destroys the font dialog and frees up its storage.
-*/
-
+// internal
 QFontDialog::~QFontDialog()
 {
 }
@@ -417,13 +431,16 @@ void QFontDialogPrivate::updateFamilies()
             continue;
          }
       }
+
       if ((options & spacingMask) && (options & spacingMask) != spacingMask) {
          if (bool(options & QFontDialog::MonospacedFonts) != fdb.isFixedPitch(family)) {
             continue;
          }
       }
+
       familyNames << family;
    }
+
    familyList->model()->setStringList(familyNames);
 
    QString foundryName1, familyName1, foundryName2, familyName2;
@@ -432,7 +449,7 @@ void QFontDialogPrivate::updateFamilies()
 
    QFont f;
 
-   // ##### do the right thing for a list of family names in the font.
+   // do the right thing for a list of family names in the font.
    QFontDatabase::parseFontName(family, foundryName1, familyName1);
 
    QStringList::const_iterator it = familyNames.constBegin();
@@ -440,27 +457,30 @@ void QFontDialogPrivate::updateFamilies()
    for (; it != familyNames.constEnd(); ++it, ++i) {
       QFontDatabase::parseFontName(*it, foundryName2, familyName2);
 
-      //try to match...
+      // try to match
       if (familyName1 == familyName2) {
          bestFamilyType = MATCH_FAMILY;
          if (foundryName1 == foundryName2) {
             bestFamilyMatch = i;
             break;
          }
+
          if (bestFamilyMatch < MATCH_FAMILY) {
             bestFamilyMatch = i;
          }
       }
 
-      //and try some fall backs
+      // try some fall backs
       match_t type = MATCH_NONE;
       if (bestFamilyType <= MATCH_NONE && familyName2 == f.lastResortFamily()) {
          type = MATCH_LAST_RESORT;
       }
+
       if (bestFamilyType <= MATCH_LAST_RESORT && familyName2 == f.family()) {
          type = MATCH_APP;
       }
-      // ### add fallback for writingSystem
+
+      // add fallback for writingSystem
       if (type != MATCH_NONE) {
          bestFamilyType = type;
          bestFamilyMatch = i;
@@ -472,9 +492,11 @@ void QFontDialogPrivate::updateFamilies()
    } else {
       familyList->setCurrentItem(0);
    }
+
    familyEdit->setText(familyList->currentText());
+
    if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
-      && familyList->hasFocus()) {
+         && familyList->hasFocus()) {
       familyEdit->selectAll();
    }
 
@@ -494,6 +516,7 @@ void QFontDialogPrivate::updateStyles()
    if (styles.isEmpty()) {
       styleEdit->clear();
       smoothScalable = false;
+
    } else {
       if (!style.isEmpty()) {
          bool found = false;
@@ -508,7 +531,8 @@ void QFontDialogPrivate::updateStyles()
                break;
             }
          }
-         if (!found && first) {
+
+         if (! found && first) {
             if (cstyle.contains("Italic")) {
                cstyle.replace("Italic", "Oblique");
                first = false;
@@ -521,9 +545,10 @@ void QFontDialogPrivate::updateStyles()
             }
          }
 
-         if (!found) {
+         if (! found) {
             styleList->setCurrentItem(0);
          }
+
       } else {
          styleList->setCurrentItem(0);
       }
@@ -539,12 +564,6 @@ void QFontDialogPrivate::updateStyles()
 
    updateSizes();
 }
-
-/*!
-    \internal
-    Updates the contents of the "font size" list box. This
-  function can be reimplemented if you have special requirements.
-*/
 
 void QFontDialogPrivate::updateSizes()
 {
@@ -607,15 +626,13 @@ void QFontDialogPrivate::_q_updateSample()
 void QFontDialogPrivate::updateSampleFont(const QFont &newFont)
 {
    Q_Q(QFontDialog);
+
    if (newFont != sampleEdit->font()) {
       sampleEdit->setFont(newFont);
       emit q->currentFontChanged(newFont);
    }
 }
 
-/*!
-    \internal
-*/
 void QFontDialogPrivate::_q_writingSystemHighlighted(int index)
 {
    writingSystem = QFontDatabase::WritingSystem(index);
@@ -623,14 +640,13 @@ void QFontDialogPrivate::_q_writingSystemHighlighted(int index)
    updateFamilies();
 }
 
-/*!
-    \internal
-*/
 void QFontDialogPrivate::_q_familyHighlighted(int i)
 {
    Q_Q(QFontDialog);
+
    family = familyList->text(i);
    familyEdit->setText(family);
+
    if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
       && familyList->hasFocus()) {
       familyEdit->selectAll();
@@ -639,18 +655,15 @@ void QFontDialogPrivate::_q_familyHighlighted(int i)
    updateStyles();
 }
 
-
-/*!
-    \internal
-*/
-
 void QFontDialogPrivate::_q_styleHighlighted(int index)
 {
    Q_Q(QFontDialog);
+
    QString s = styleList->text(index);
    styleEdit->setText(s);
+
    if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
-      && styleList->hasFocus()) {
+         && styleList->hasFocus()) {
       styleEdit->selectAll();
    }
 
@@ -659,30 +672,21 @@ void QFontDialogPrivate::_q_styleHighlighted(int index)
    updateSizes();
 }
 
-
-/*!
-    \internal
-*/
-
 void QFontDialogPrivate::_q_sizeHighlighted(int index)
 {
    Q_Q(QFontDialog);
+
    QString s = sizeList->text(index);
    sizeEdit->setText(s);
+
    if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
-      && sizeEdit->hasFocus()) {
+         && sizeEdit->hasFocus()) {
       sizeEdit->selectAll();
    }
 
    size = s.toInteger<int>();
    _q_updateSample();
 }
-
-/*!
-    \internal
-    This slot is called if the user changes the font size.
-    The size is passed in the \a s argument as a \e string.
-*/
 
 void QFontDialogPrivate::_q_sizeChanged(const QString &s)
 {
@@ -728,28 +732,30 @@ void QFontDialogPrivate::retranslateStrings()
    writingSystemAccel->setText(QFontDialog::tr("Wr&iting System"));
 }
 
-/*!
-    \reimp
-*/
 void QFontDialog::changeEvent(QEvent *e)
 {
    Q_D(QFontDialog);
+
    if (e->type() == QEvent::LanguageChange) {
       d->retranslateStrings();
    }
+
    QDialog::changeEvent(e);
 }
 
 void QFontDialog::setCurrentFont(const QFont &font)
 {
    Q_D(QFontDialog);
+
    d->family = font.family();
-   d->style = d->fdb.styleString(font);
-   d->size = font.pointSize();
+   d->style  = d->fdb.styleString(font);
+   d->size   = font.pointSize();
+
    if (d->size == -1) {
       QFontInfo fi(font);
       d->size = fi.pointSize();
    }
+
    d->strikeout->setChecked(font.strikeOut());
    d->underline->setChecked(font.underline());
    d->updateFamilies();
@@ -759,12 +765,12 @@ void QFontDialog::setCurrentFont(const QFont &font)
          helper->setCurrentFont(font);
       }
    }
-
 }
 
 QFont QFontDialog::currentFont() const
 {
    Q_D(const QFontDialog);
+
    if (d->canBeNativeDialog()) {
       if (const QPlatformFontDialogHelper *helper = d->platformFontDialogHelper()) {
          return helper->currentFont();
@@ -789,18 +795,11 @@ void QFontDialog::setOption(FontDialogOption option, bool on)
    }
 }
 
-/*!
-    Returns true if the given \a option is enabled; otherwise, returns
-    false.
-
-    \sa options, setOption()
-*/
 bool QFontDialog::testOption(FontDialogOption option) const
 {
    Q_D(const QFontDialog);
    return d->options->testOption(static_cast<QFontDialogOptions::FontDialogOption>(option));
 }
-
 
 void QFontDialog::setOptions(FontDialogOptions options)
 {
@@ -811,7 +810,6 @@ void QFontDialog::setOptions(FontDialogOptions options)
    }
 
    d->options->setOptions(QFontDialogOptions::FontDialogOptions(int(options)));
-
    d->buttonBox->setVisible(!(options & NoButtons));
 }
 
@@ -832,10 +830,6 @@ void QFontDialog::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-
-/*!
-    \reimp
-*/
 void QFontDialog::setVisible(bool visible)
 {
    if (testAttribute(Qt::WA_WState_ExplicitShowHide) && testAttribute(Qt::WA_WState_Hidden) != visible) {
@@ -867,7 +861,7 @@ void QFontDialog::done(int result)
    QDialog::done(result);
 
    if (result == Accepted) {
-      // We check if this is the same font we had before, if so we emit currentFontChanged
+      // check if this is the same font we had before, if so we emit currentFontChanged
       QFont selectedFont = currentFont();
 
       if (selectedFont != d->selectedFont) {
@@ -886,12 +880,13 @@ void QFontDialog::done(int result)
 
       d->receiverToDisconnectOnClose = nullptr;
    }
+
    d->memberToDisconnectOnClose.clear();
 }
 
 bool QFontDialogPrivate::canBeNativeDialog() const
 {
-   // do not use Q_Q since this method is called from ~QDialog
+   // do not use Q_Q since this method is called from ~QDialog which
    // can result in undefined behavior (invalid cast in q_func()
 
    const QDialog *const q = static_cast<const QDialog *>(q_ptr);
@@ -913,7 +908,6 @@ bool QFontDialogPrivate::canBeNativeDialog() const
 
    return (staticName == dynamicName);
 }
-
 
 void QFontDialog::_q_sizeChanged(const QString &data)
 {

@@ -338,24 +338,16 @@ const void *QSharedMemory::data() const
 }
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
-/*!
-  This is a semaphore that locks the shared memory segment for access
-  by this process and returns true. If another process has locked the
-  segment, this function blocks until the lock is released. Then it
-  acquires the lock and returns true. If this function returns false,
-  it means that you have ignored a false return from create() or attach(),
-  that you have set the key with setNativeKey() or that
-  QSystemSemaphore::acquire() failed due to an unknown system error.
 
-  \sa unlock(), data(), QSystemSemaphore::acquire()
- */
 bool QSharedMemory::lock()
 {
    Q_D(QSharedMemory);
+
    if (d->lockedByMe) {
       qWarning("QSharedMemory::lock() Memory already locked");
       return true;
    }
+
    if (d->systemSemaphore.acquire()) {
       d->lockedByMe = true;
       return true;

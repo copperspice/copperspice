@@ -34,40 +34,42 @@
 class Q_CORE_EXPORT QSystemLocale
 {
  public:
-   class cs_internal_private_tag {
+   class cs_internal_tag {
       // empty
    };
 
    QSystemLocale();
-   QSystemLocale(cs_internal_private_tag unused);
+   QSystemLocale(cs_internal_tag unused);
 
    virtual ~QSystemLocale();
 
    struct CurrencyToStringArgument {
-      CurrencyToStringArgument() { }
+      CurrencyToStringArgument()
+      { }
 
       CurrencyToStringArgument(const QVariant &v, const QString &s)
-         : value(v), symbol(s) { }
+         : value(v), symbol(s)
+      { }
 
       QVariant value;
       QString symbol;
    };
 
    enum QueryType {
-      LanguageId, // uint
-      CountryId, // uint
-      DecimalPoint, // QString
-      GroupSeparator, // QString
-      ZeroDigit, // QString
-      NegativeSign, // QString
-      DateFormatLong, // QString
-      DateFormatShort, // QString
-      TimeFormatLong, // QString
-      TimeFormatShort, // QString
-      DayNameLong, // QString, in: int
-      DayNameShort, // QString, in: int
-      MonthNameLong, // QString, in: int
-      MonthNameShort, // QString, in: int
+      LanguageId,         // uint
+      CountryId,          // uint
+      DecimalPoint,       // QString
+      GroupSeparator,     // QString
+      ZeroDigit,          // QString
+      NegativeSign,       // QString
+      DateFormatLong,     // QString
+      DateFormatShort,    // QString
+      TimeFormatLong,     // QString
+      TimeFormatShort,    // QString
+      DayNameLong,        // QString, in: int
+      DayNameShort,       // QString, in: int
+      MonthNameLong,      // QString, in: int
+      MonthNameShort,     // QString, in: int
       DateToStringLong, // QString, in: QDate
       DateToStringShort, // QString in: QDate
       TimeToStringLong, // QString in: QTime
@@ -199,17 +201,17 @@ struct QLocaleData {
    qint64 stringToLongLong(const QString &number, int base, bool *ok, GroupSeparatorMode group_sep_mode) const;
    quint64 stringToUnsLongLong(const QString & number, int base, bool * ok, GroupSeparatorMode group_sep_mode) const;
 
-   // these are used in QIntValidator (QtGui)
-   Q_CORE_EXPORT static double bytearrayToDouble(const char *num, bool * ok, bool * overflow = nullptr);
-   Q_CORE_EXPORT static qint64 bytearrayToLongLong(const char *num, int base, bool * ok, bool * overflow = nullptr);
-   Q_CORE_EXPORT static quint64 bytearrayToUnsLongLong(const char *num, int base, bool * ok);
+   // used in QIntValidator (Gui)
+   Q_CORE_EXPORT static double bytearrayToDouble(const char *num, bool *ok, bool *overflow = nullptr);
+   Q_CORE_EXPORT static qint64 bytearrayToLongLong(const char *num, int base, bool *ok, bool *overflow = nullptr);
+   Q_CORE_EXPORT static quint64 bytearrayToUnsLongLong(const char *num, int base, bool *ok);
 
-   bool numberToCLocale(const QString &num, GroupSeparatorMode group_sep_mode, CharBuff * result) const;
+   bool numberToCLocale(const QString &num, GroupSeparatorMode group_sep_mode, CharBuff *result) const;
    inline char digitToCLocale(QChar c) const;
 
-   // this function is used in QIntValidator (QtGui)
-   Q_CORE_EXPORT bool validateChars(const QString & str, NumberMode numMode, QByteArray * buff, int decDigits = -1,
-                  bool rejectGroupSeparators = false) const;
+   //  used in QIntValidator (Gui)
+   Q_CORE_EXPORT bool validateChars(const QString &str, NumberMode numMode, QByteArray *buff,
+         int decDigits = -1, bool rejectGroupSeparators = false) const;
 
    quint16 m_language_id, m_script_id, m_country_id;
 
@@ -251,7 +253,6 @@ struct QLocaleData {
    quint16 m_first_day_of_week : 3;
    quint16 m_weekend_start : 3;
    quint16 m_weekend_end : 3;
-
 };
 
 class Q_CORE_EXPORT QLocalePrivate

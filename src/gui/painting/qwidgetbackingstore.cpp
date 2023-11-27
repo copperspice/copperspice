@@ -1795,9 +1795,11 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    }
 
    Q_Q(QWidget);
+
    if (discardSyncRequest(q, maybeTopData())) {
       return;
    }
+
    if (q->testAttribute(Qt::WA_StaticContents)) {
       if (!extra) {
          createExtra();
@@ -1812,8 +1814,8 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    // 2) The context is single buffered and auto-fill background is enabled.
 
    const bool noPartialUpdateSupport = (engine && (engine->type() == QPaintEngine::OpenGL
-            || engine->type() == QPaintEngine::OpenGL2))
-            && (usesDoubleBufferedGLContext || q->autoFillBackground());
+         || engine->type() == QPaintEngine::OpenGL2))
+         && (usesDoubleBufferedGLContext || q->autoFillBackground());
 
    QRegion toBePainted(noPartialUpdateSupport ? q->rect() : rgn);
 
@@ -1821,7 +1823,7 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    clipToEffectiveMask(toBePainted);
 
    if (toBePainted.isEmpty()) {
-      return;   // Nothing to repaint.
+      return;   // Nothing to repaint
    }
 
    drawWidget(q, toBePainted, QPoint(), QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawPaintOnScreen, nullptr);

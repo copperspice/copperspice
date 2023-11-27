@@ -654,16 +654,6 @@ QUrl QTextBrowser::source() const
    }
 }
 
-/*!
-    \property QTextBrowser::searchPaths
-    \brief the search paths used by the text browser to find supporting
-    content
-
-    QTextBrowser uses this list to locate images and documents.
-
-    By default, this property contains an empty string list.
-*/
-
 QStringList QTextBrowser::searchPaths() const
 {
    Q_D(const QTextBrowser);
@@ -676,9 +666,6 @@ void QTextBrowser::setSearchPaths(const QStringList &paths)
    d->searchPaths = paths;
 }
 
-/*!
-    Reloads the current set source.
-*/
 void QTextBrowser::reload()
 {
    Q_D(QTextBrowser);
@@ -728,7 +715,6 @@ void QTextBrowser::setSource(const QUrl &url)
    emit historyChanged();
 }
 
-
 void QTextBrowser::backward()
 {
    Q_D(QTextBrowser);
@@ -745,13 +731,6 @@ void QTextBrowser::backward()
    emit historyChanged();
 }
 
-/*!
-    Changes the document displayed to the next document in the list of
-    documents built by navigating links. Does nothing if there is no
-    next document.
-
-    \sa backward(), forwardAvailable()
-*/
 void QTextBrowser::forward()
 {
    Q_D(QTextBrowser);
@@ -769,10 +748,6 @@ void QTextBrowser::forward()
    emit historyChanged();
 }
 
-/*!
-    Changes the document displayed to be the first document from
-    the history.
-*/
 void QTextBrowser::home()
 {
    Q_D(QTextBrowser);
@@ -781,15 +756,6 @@ void QTextBrowser::home()
    }
 }
 
-/*!
-    The event \a ev is used to provide the following keyboard shortcuts:
-    \table
-    \header \i Keypress            \i Action
-    \row \i Alt+Left Arrow  \i \l backward()
-    \row \i Alt+Right Arrow \i \l forward()
-    \row \i Alt+Up Arrow    \i \l home()
-    \endtable
-*/
 void QTextBrowser::keyPressEvent(QKeyEvent *ev)
 {
 #ifdef QT_KEYPAD_NAVIGATION
@@ -862,25 +828,16 @@ void QTextBrowser::keyPressEvent(QKeyEvent *ev)
    QTextEdit::keyPressEvent(ev);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mouseMoveEvent(QMouseEvent *e)
 {
    QTextEdit::mouseMoveEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mousePressEvent(QMouseEvent *e)
 {
    QTextEdit::mousePressEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mouseReleaseEvent(QMouseEvent *e)
 {
    QTextEdit::mouseReleaseEvent(e);
@@ -920,13 +877,11 @@ bool QTextBrowser::focusNextPrevChild(bool next)
       emit highlighted(QUrl());
       emit highlighted(QString());
 #endif
+
    }
    return QTextEdit::focusNextPrevChild(next);
 }
 
-/*!
-  \reimp
-*/
 void QTextBrowser::paintEvent(QPaintEvent *e)
 {
    Q_D(QTextBrowser);
@@ -994,19 +949,12 @@ QString QTextBrowser::historyTitle(int i) const
    return d->history(i).title;
 }
 
-
-
 int QTextBrowser::forwardHistoryCount() const
 {
    Q_D(const QTextBrowser);
    return d->forwardStack.count();
 }
 
-/*!
-    Returns the number of locations backward in the history.
-
-    \since 4.4
-*/
 int QTextBrowser::backwardHistoryCount() const
 {
    Q_D(const QTextBrowser);
@@ -1037,7 +985,6 @@ void QTextBrowser::setOpenLinks(bool open)
    d->openLinks = open;
 }
 
-/*! \reimp */
 bool QTextBrowser::event(QEvent *e)
 {
    return QTextEdit::event(e);

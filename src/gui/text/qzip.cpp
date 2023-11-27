@@ -439,6 +439,7 @@ QZipReader::FileInfo QZipPrivate::fillFileInfo(int index) const
    FileHeader header = fileHeaders.at(index);
    quint32 mode = readUInt(header.h.external_file_attributes);
    const HostOS hostOS = HostOS(readUShort(header.h.version_made) >> 8);
+
    switch (hostOS) {
       case HostUnix:
          mode = (mode >> 16) & 0xffff;
@@ -480,7 +481,7 @@ QZipReader::FileInfo QZipPrivate::fillFileInfo(int index) const
 
       default:
          qWarning("QZip::fillFileInfo() Zip entry format at index %d is not supported.", index);
-         return fileInfo; // we don't support anything else
+         return fileInfo;       // we do not support anything else
    }
 
    ushort general_purpose_bits = readUShort(header.h.general_purpose_bits);
@@ -563,7 +564,8 @@ void QZipReaderPrivate::scanFiles()
       return;
    }
 
-   if ((device->openMode() & QIODevice::ReadOnly) == 0) { // only read the index from readable files.
+   if ((device->openMode() & QIODevice::ReadOnly) == 0) {
+      // only read the index from readable files.
       status = QZipReader::FileReadError;
       return;
    }
@@ -571,6 +573,7 @@ void QZipReaderPrivate::scanFiles()
    dirtyFileTree = false;
    uchar tmp[4];
    device->read((char *)tmp, 4);
+
    if (readUInt(tmp) != 0x04034b50) {
       qWarning() << "QZip::scanFiles() This is not a valid zip file";
       return;
@@ -601,9 +604,11 @@ void QZipReaderPrivate::scanFiles()
    num_dir_entries = readUShort(eod.num_dir_entries);
    ZDEBUG("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
    int comment_length = readUShort(eod.comment_length);
+
    if (comment_length != i) {
       qWarning() << "QZip::scanFiles() Failed to parse zip file";
    }
+
    comment = device->read(qMin(comment_length, i));
 
 
@@ -640,6 +645,7 @@ void QZipReaderPrivate::scanFiles()
       }
 
       ZDEBUG("Found file '%s'", header.file_name.data());
+
       fileHeaders.append(header);
    }
 }
@@ -710,7 +716,9 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
       } while (res == Z_BUF_ERROR);
    }
 
-   // TODO add a check if data.length() > contents.length().  Then try to store the original and revert the compression method to be uncompressed
+   // TODO add a check if data.length() > contents.length().
+   // Then try to store the original and revert the compression method to be uncompressed
+
    writeUInt(header.h.compressed_size, data.length());
    uint crc_32 = ::crc32(0, nullptr, 0);
    crc_32      = ::crc32(crc_32, (const uchar *)contents.constData(), contents.length());
@@ -866,6 +874,7 @@ QZipReader::FileInfo QZipReader::entryInfoAt(int index) const
    }
    return QZipReader::FileInfo();
 }
+
 QByteArray QZipReader::fileData(const QString &fileName) const
 {
    d->scanFiles();
@@ -943,6 +952,7 @@ QByteArray QZipReader::fileData(const QString &fileName) const
                break;
          }
       } while (res == Z_BUF_ERROR);
+
       return baunzip;
    }
 

@@ -42,25 +42,23 @@ QAudioProbe::QAudioProbe(QObject *parent)
 QAudioProbe::~QAudioProbe()
 {
     if (d->source) {
-        // Disconnect
         if (d->probee) {
             disconnect(d->probee.data(), SIGNAL(audioBufferProbed(QAudioBuffer)), this, SLOT(audioBufferProbed(QAudioBuffer)));
             disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
         }
+
         d->source.data()->service()->releaseControl(d->probee.data());
     }
 }
 
 bool QAudioProbe::setSource(QMediaObject *source)
 {
-    // Need to:
     // 1) disconnect from current source if necessary
     // 2) see if new one has the probe control
     // 3) connect if so
 
     // in case source was destroyed but probe control is still valid
-    if (!d->source && d->probee) {
-        disconnect(d->probee.data(), SIGNAL(audioBufferProbed(QAudioBuffer)), this, SLOT(audioBufferProbed(QAudioBuffer)));
+    if (! d->source && d->probee) {
         disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
         d->probee.clear();
     }

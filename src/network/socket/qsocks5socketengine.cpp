@@ -554,31 +554,39 @@ void QSocks5SocketEnginePrivate::initialize(Socks5Mode socks5Mode)
    Q_Q(QSocks5SocketEngine);
 
    mode = socks5Mode;
+
    if (mode == ConnectMode) {
       connectData = new QSocks5ConnectData;
       data = connectData;
+
 #ifndef QT_NO_UDPSOCKET
    } else if (mode == UdpAssociateMode) {
       udpData = new QSocks5UdpAssociateData;
-      data = udpData;
+      data    = udpData;
       udpData->udpSocket = new QUdpSocket(q);
+
 #ifndef QT_NO_BEARERMANAGEMENT
       udpData->udpSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
+
       udpData->udpSocket->setProxy(QNetworkProxy::NoProxy);
       QObject::connect(udpData->udpSocket, SIGNAL(readyRead()),
                        q, SLOT(_q_udpSocketReadNotification()),
                        Qt::DirectConnection);
-#endif // QT_NO_UDPSOCKET
+
+#endif
+
    } else if (mode == BindMode) {
       bindData = new QSocks5BindData;
       data = bindData;
    }
 
    data->controlSocket = new QTcpSocket(q);
+
 #ifndef QT_NO_BEARERMANAGEMENT
    data->controlSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
+
    data->controlSocket->setProxy(QNetworkProxy::NoProxy);
    QObject::connect(data->controlSocket, SIGNAL(connected()), q, SLOT(_q_controlSocketConnected()),
                     Qt::DirectConnection);
@@ -598,6 +606,7 @@ void QSocks5SocketEnginePrivate::initialize(Socks5Mode socks5Mode)
    if (!proxyInfo.user().isEmpty() || !proxyInfo.password().isEmpty()) {
       QSOCKS5_D_DEBUG << "using username/password authentication; user =" << proxyInfo.user();
       data->authenticator = new QSocks5PasswordAuthenticator(proxyInfo.user(), proxyInfo.password());
+
    } else {
       QSOCKS5_D_DEBUG << "not using authentication";
       data->authenticator = new QSocks5Authenticator();
@@ -1067,8 +1076,8 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
    }
 
    QSocks5BindData *bindData = socks5BindStore()->retrieve(socketDescriptor);
-   if (bindData) {
 
+   if (bindData) {
       d->socketState          = QAbstractSocket::ConnectedState;
       d->socketType           = QAbstractSocket::TcpSocket;
       d->connectData          = new QSocks5ConnectData;
@@ -1076,7 +1085,9 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
       d->mode                 = QSocks5SocketEnginePrivate::ConnectMode;
       d->data->controlSocket  = bindData->controlSocket;
       bindData->controlSocket = nullptr;
+
       d->data->controlSocket->setParent(this);
+
       d->socketProtocol       = d->data->controlSocket->localAddress().protocol();
       d->data->authenticator  = bindData->authenticator;
       bindData->authenticator = nullptr;
@@ -1084,6 +1095,7 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
       d->localAddress         = bindData->localAddress;
       d->peerPort             = bindData->peerPort;
       d->peerAddress          = bindData->peerAddress;
+
       delete bindData;
 
       QObject::connect(d->data->controlSocket, SIGNAL(connected()), this, SLOT(_q_controlSocketConnected()),
@@ -1106,6 +1118,7 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
       if (d->data->controlSocket->bytesAvailable() != 0) {
          d->_q_controlSocketReadNotification();
       }
+
       return true;
    }
    return false;
@@ -1774,6 +1787,7 @@ qint64 QSocks5SocketEngine::bytesToWrite() const
 int QSocks5SocketEngine::option(SocketOption option) const
 {
    Q_D(const QSocks5SocketEngine);
+
    if (d->data && d->data->controlSocket) {
       // convert the enum and call the real socket
       if (option == QAbstractSocketEngine::LowDelayOption) {
@@ -1790,6 +1804,7 @@ int QSocks5SocketEngine::option(SocketOption option) const
 bool QSocks5SocketEngine::setOption(SocketOption option, int value)
 {
    Q_D(QSocks5SocketEngine);
+
    if (d->data && d->data->controlSocket) {
       // convert the enum and call the real socket
       if (option == QAbstractSocketEngine::LowDelayOption) {

@@ -40,8 +40,7 @@ bool QGraphicsGridLayoutEngineItem::isHidden() const
    return false;
 }
 
-// internal
-// Qt6: Move to QGraphicsLayoutItem and make virtual
+// TODO: Move to QGraphicsLayoutItem and make virtual
 bool QGraphicsGridLayoutEngineItem::isIgnored() const
 {
    return isHidden() && ! q_layoutItem->sizePolicy().retainSizeWhenHidden();

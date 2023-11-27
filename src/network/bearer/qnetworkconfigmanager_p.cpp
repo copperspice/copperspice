@@ -411,7 +411,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
       }
 
       if (generic) {
-         if ( !envOK || skipGeneric <= 0) {
+         if (! envOK || skipGeneric <= 0) {
             sessionEngines.append(generic);
          } else {
             delete generic;
@@ -421,7 +421,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
 
    QBearerEngine *engine = dynamic_cast<QBearerEngine *>(sender());
 
-   if (engine && !updatingEngines.isEmpty()) {
+   if (engine && ! updatingEngines.isEmpty()) {
       updatingEngines.remove(engine);
    }
 
@@ -478,8 +478,9 @@ void QNetworkConfigurationManagerPrivate::startPolling()
 {
    QRecursiveMutexLocker locker(&mutex);
 
-   if (!pollTimer) {
+   if (! pollTimer) {
       pollTimer = new QTimer(this);
+
       bool ok;
       int interval = qgetenv("QT_BEARER_POLL_TIMEOUT").toInt(&ok);
 

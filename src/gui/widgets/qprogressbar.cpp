@@ -119,7 +119,7 @@ void QProgressBar::initStyleOption(QStyleOptionProgressBar *option) const
    option->textVisible = d->textVisible;
    option->text = text();
 
-   option->orientation = d->orientation;  // ### Qt 6: remove this member from QStyleOptionProgressBar
+   option->orientation = d->orientation;  // TODO: remove this member from QStyleOptionProgressBar
    option->invertedAppearance = d->invertedAppearance;
    option->bottomToTop = d->textDirection == QProgressBar::BottomToTop;
 }

@@ -1096,7 +1096,6 @@ QLayoutItem *QFormLayoutPrivate::replaceAt(int index, QLayoutItem *newitem)
 
    const int storageIndex = storageIndexFromLayoutItem(m_matrix, m_things.value(index));
    if (storageIndex == -1) {
-      // ### Qt6 - fix warning too when this class becomes public
       qWarning("QFormLayoutPrivate::replaceAt() Invalid index %d", index);
       return nullptr;
    }

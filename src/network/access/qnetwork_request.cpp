@@ -24,12 +24,12 @@
 #include <qnetwork_request.h>
 #include <qnetwork_request_p.h>
 
-#include <qdatetime.h>
 #include <qlocale.h>
+#include <qdatetime.h>
 #include <qnetwork_cookie.h>
 #include <qplatformdefs.h>
-#include <qshareddata.h>
 #include <qsslconfiguration.h>
+#include <qshareddata.h>
 #include <qtimezone.h>
 
 #include <ctype.h>
@@ -707,6 +707,7 @@ QDateTime QNetworkHeadersPrivate::fromHttpDate(const QByteArray &value)
    if (dt.isValid()) {
       dt.setTimeZone(QTimeZone::utc());
    }
+
    return dt;
 }
 

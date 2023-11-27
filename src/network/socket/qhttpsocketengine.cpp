@@ -23,14 +23,14 @@
 
 #include <qhttpsocketengine_p.h>
 
-#include <qtcpsocket.h>
+#include <qelapsedtimer.h>
 #include <qhostaddress.h>
 #include <qnetworkinterface.h>
-#include <qelapsedtimer.h>
-#include <qiodevice_p.h>
+#include <qtcpsocket.h>
 #include <qurl.h>
 
 #include <qhttp_networkreply_p.h>
+#include <qiodevice_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)
 
@@ -57,8 +57,9 @@ bool QHttpSocketEngine::initialize(QAbstractSocket::SocketType type, QAbstractSo
 
    setProtocol(protocol);
    setSocketType(type);
+
    d->socket = new QTcpSocket(this);
-   d->reply = new QHttpNetworkReply(QUrl(), this);
+   d->reply  = new QHttpNetworkReply(QUrl(), this);
 
 #ifndef QT_NO_BEARERMANAGEMENT
    d->socket->setProperty("_q_networkSession", property("_q_networkSession"));

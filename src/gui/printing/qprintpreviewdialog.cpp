@@ -403,10 +403,10 @@ void QPrintPreviewDialogPrivate::setupActions()
 
    // Display mode
    modeGroup = new QActionGroup(q);
-   singleModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show single page"));
-   facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show facing pages"));
-   overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",
-            "Show overview of all pages"));
+   singleModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",   "Show single page"));
+   facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",   "Show facing pages"));
+   overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show overview of all pages"));
+
    qt_setupActionIcon(singleModeAction, QLatin1String("view-page-one"));
    qt_setupActionIcon(facingModeAction, QLatin1String("view-page-sided"));
    qt_setupActionIcon(overviewModeAction, QLatin1String("view-page-multi"));

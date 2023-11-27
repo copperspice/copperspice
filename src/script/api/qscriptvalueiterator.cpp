@@ -88,11 +88,6 @@ class QScriptValueIteratorPrivate
    bool initialized;
 };
 
-/*!
-  Constructs an iterator for traversing \a object. The iterator is
-  set to be at the front of the sequence of properties (before the
-  first property).
-*/
 QScriptValueIterator::QScriptValueIterator(const QScriptValue &object)
    : d_ptr(nullptr)
 {
@@ -102,20 +97,10 @@ QScriptValueIterator::QScriptValueIterator(const QScriptValue &object)
    }
 }
 
-/*!
-  Destroys the iterator.
-*/
 QScriptValueIterator::~QScriptValueIterator()
 {
 }
 
-/*!
-  Returns true if there is at least one item ahead of the iterator
-  (i.e. the iterator is \e not at the back of the property sequence);
-  otherwise returns false.
-
-  \sa next(), hasPrevious()
-*/
 bool QScriptValueIterator::hasNext() const
 {
    Q_D(const QScriptValueIterator);
@@ -127,14 +112,6 @@ bool QScriptValueIterator::hasNext() const
    return d->it != d->propertyNames.end();
 }
 
-/*!
-  Advances the iterator by one position.
-
-  Calling this function on an iterator located at the back of the
-  container leads to undefined results.
-
-  \sa hasNext(), previous(), name()
-*/
 void QScriptValueIterator::next()
 {
    Q_D(QScriptValueIterator);
@@ -147,13 +124,6 @@ void QScriptValueIterator::next()
    ++(d->it);
 }
 
-/*!
-  Returns true if there is at least one item behind the iterator
-  (i.e. the iterator is \e not at the front of the property sequence);
-  otherwise returns false.
-
-  \sa previous(), hasNext()
-*/
 bool QScriptValueIterator::hasPrevious() const
 {
    Q_D(const QScriptValueIterator);
@@ -165,14 +135,6 @@ bool QScriptValueIterator::hasPrevious() const
    return d->it != d->propertyNames.begin();
 }
 
-/*!
-  Moves the iterator back by one position.
-
-  Calling this function on an iterator located at the front of the
-  container leads to undefined results.
-
-  \sa hasPrevious(), next(), name()
-*/
 void QScriptValueIterator::previous()
 {
    Q_D(QScriptValueIterator);
@@ -184,12 +146,6 @@ void QScriptValueIterator::previous()
    d->current = d->it;
 }
 
-/*!
-  Moves the iterator to the front of the QScriptValue (before the
-  first property).
-
-  \sa toBack(), next()
-*/
 void QScriptValueIterator::toFront()
 {
    Q_D(QScriptValueIterator);
@@ -200,12 +156,6 @@ void QScriptValueIterator::toFront()
    d->it = d->propertyNames.begin();
 }
 
-/*!
-  Moves the iterator to the back of the QScriptValue (after the
-  last property).
-
-  \sa toFront(), previous()
-*/
 void QScriptValueIterator::toBack()
 {
    Q_D(QScriptValueIterator);
@@ -216,12 +166,6 @@ void QScriptValueIterator::toBack()
    d->it = d->propertyNames.end();
 }
 
-/*!
-  Returns the name of the last property that was jumped over using
-  next() or previous().
-
-  \sa value(), flags()
-*/
 QString QScriptValueIterator::name() const
 {
    Q_D(const QScriptValueIterator);
@@ -231,12 +175,6 @@ QString QScriptValueIterator::name() const
    return d->current->ustring();
 }
 
-/*!
-  \since 4.4
-
-  Returns the name of the last property that was jumped over using
-  next() or previous().
-*/
 QScriptString QScriptValueIterator::scriptName() const
 {
    Q_D(const QScriptValueIterator);
@@ -246,12 +184,6 @@ QScriptString QScriptValueIterator::scriptName() const
    return d->engine()->toStringHandle(*d->current);
 }
 
-/*!
-  Returns the value of the last property that was jumped over using
-  next() or previous().
-
-  \sa setValue(), name()
-*/
 QScriptValue QScriptValueIterator::value() const
 {
    Q_D(const QScriptValueIterator);
@@ -263,12 +195,6 @@ QScriptValue QScriptValueIterator::value() const
    return d->engine()->scriptValueFromJSCValue(jsValue);
 }
 
-/*!
-  Sets the \a value of the last property that was jumped over using
-  next() or previous().
-
-  \sa value(), name()
-*/
 void QScriptValueIterator::setValue(const QScriptValue &value)
 {
    Q_D(QScriptValueIterator);
@@ -280,12 +206,6 @@ void QScriptValueIterator::setValue(const QScriptValue &value)
    d->object()->setProperty(*d->current, jsValue);
 }
 
-/*!
-  Returns the flags of the last property that was jumped over using
-  next() or previous().
-
-  \sa value()
-*/
 QScriptValue::PropertyFlags QScriptValueIterator::flags() const
 {
    Q_D(const QScriptValueIterator);
@@ -296,12 +216,6 @@ QScriptValue::PropertyFlags QScriptValueIterator::flags() const
    return d->object()->propertyFlags(*d->current);
 }
 
-/*!
-  Removes the last property that was jumped over using next()
-  or previous().
-
-  \sa setValue()
-*/
 void QScriptValueIterator::remove()
 {
    Q_D(QScriptValueIterator);
@@ -313,11 +227,6 @@ void QScriptValueIterator::remove()
    d->propertyNames.erase(d->current);
 }
 
-/*!
-  Makes the iterator operate on \a object. The iterator is set to be
-  at the front of the sequence of properties (before the first
-  property).
-*/
 QScriptValueIterator &QScriptValueIterator::operator=(QScriptValue &object)
 {
    d_ptr.reset();
@@ -327,4 +236,3 @@ QScriptValueIterator &QScriptValueIterator::operator=(QScriptValue &object)
    }
    return *this;
 }
-

@@ -132,7 +132,6 @@ class QDateTimeEditPrivate : public QAbstractSpinBoxPrivate, public QDateTimePar
 #endif
 };
 
-
 class QCalendarPopup : public QWidget
 {
    GUI_CS_OBJECT(QCalendarPopup)
@@ -175,7 +174,7 @@ class QCalendarPopup : public QWidget
    void mouseReleaseEvent(QMouseEvent *) override;
    bool event(QEvent *e) override;
 
- private :
+ private:
    GUI_CS_SLOT_1(Private, void dateSelected(const QDate &date))
    GUI_CS_SLOT_2(dateSelected)
 
@@ -188,8 +187,6 @@ class QCalendarPopup : public QWidget
    QDate oldDate;
    bool dateChanged;
 };
-
-
 
 #endif // QT_NO_DATETIMEEDIT
 

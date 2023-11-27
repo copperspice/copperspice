@@ -1318,6 +1318,7 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
       qWarning("QImage::setPixel() Coordinate (%d,%d) is out of range", x, y);
       return;
    }
+
    // detach is called from within scanLine
    uchar *s = scanLine(y);
 
@@ -1349,6 +1350,7 @@ void QImage::setPixel(int x, int y, uint index_or_rgb)
          }
          s[x] = index_or_rgb;
          return;
+
       case Format_RGB32:
          //make sure alpha is 255, we depend on it in qdrawhelper for cases
          // when image is set as a texture pattern on a qbrush
@@ -1430,13 +1432,16 @@ void QImage::setPixelColor(int x, int y, const QColor &color)
       qWarning("QImage::setPixelColor() Coordinate (%d,%d) is out of range", x, y);
       return;
    }
+
    // QColor is always unpremultiplied
    QRgba64 c = color.rgba64();
-   if (!hasAlphaChannel()) {
+
+   if (! hasAlphaChannel()) {
       c.setAlpha(65535);
    } else if (qPixelLayouts[d->format].premultiplied) {
       c = c.premultiplied();
    }
+
    // detach is called from within scanLine
    uchar *s = scanLine(y);
    switch (d->format) {
@@ -1445,18 +1450,23 @@ void QImage::setPixelColor(int x, int y, const QColor &color)
       case Format_Indexed8:
          qWarning("QImage::setPixelColor() Unable to set the color for a monochrome or indexed format");
          return;
+
       case Format_BGR30:
          ((uint *)s)[x] = qConvertRgb64ToRgb30<PixelOrderBGR>(c) | 0xc0000000;
          return;
+
       case Format_A2BGR30_Premultiplied:
          ((uint *)s)[x] = qConvertRgb64ToRgb30<PixelOrderBGR>(c);
          return;
+
       case Format_RGB30:
          ((uint *)s)[x] = qConvertRgb64ToRgb30<PixelOrderRGB>(c) | 0xc0000000;
          return;
+
       case Format_A2RGB30_Premultiplied:
          ((uint *)s)[x] = qConvertRgb64ToRgb30<PixelOrderRGB>(c);
          return;
+
       default:
          setPixel(x, y, c.toArgb32());
          return;
@@ -1465,7 +1475,7 @@ void QImage::setPixelColor(int x, int y, const QColor &color)
 
 bool QImage::allGray() const
 {
-   if (!d) {
+   if (! d) {
       return true;
    }
 
@@ -1552,6 +1562,7 @@ bool QImage::isGrayscale() const
    if (d->format == QImage::Format_Grayscale8) {
       return true;
    }
+
    switch (depth()) {
       case 32:
       case 24:
@@ -1577,6 +1588,7 @@ QImage QImage::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Transf
       qWarning("QImage::scaled() Image is empty");
       return QImage();
    }
+
    if (s.isEmpty()) {
       return QImage();
    }
@@ -1591,6 +1603,7 @@ QImage QImage::scaled(const QSize &s, Qt::AspectRatioMode aspectMode, Qt::Transf
 
    QTransform wm = QTransform::fromScale((qreal)newSize.width() / width(), (qreal)newSize.height() / height());
    QImage img = transformed(wm, mode);
+
    return img;
 }
 
@@ -1600,6 +1613,7 @@ QImage QImage::scaledToWidth(int w, Qt::TransformationMode mode) const
       qWarning("QImage::scaleWidth() Image is empty");
       return QImage();
    }
+
    if (w <= 0) {
       return QImage();
    }
@@ -1615,6 +1629,7 @@ QImage QImage::scaledToHeight(int h, Qt::TransformationMode mode) const
       qWarning("QImage::scaleHeight() Image is empty");
       return QImage();
    }
+
    if (h <= 0) {
       return QImage();
    }
@@ -2231,9 +2246,10 @@ QDataStream &operator<<(QDataStream &s, const QImage &image)
    if (image.isNull()) {
       s << (qint32) 0; // null image marker
       return s;
+
    } else {
       s << (qint32) 1;
-      // continue ...
+      // continue
    }
 
    QImageWriter writer(s.device(), "png");
@@ -2463,10 +2479,8 @@ int QImage::metric(PaintDeviceMetric metric) const
       case PdmDpiY:
          return qRound(d->dpmy * 0.0254);
 
-
       case PdmPhysicalDpiX:
          return qRound(d->dpmx * 0.0254);
-
 
       case PdmPhysicalDpiY:
          return qRound(d->dpmy * 0.0254);
@@ -2486,35 +2500,34 @@ int QImage::metric(PaintDeviceMetric metric) const
 }
 
 #undef IWX_MSB
-#define IWX_MSB(b)        if (trigx < maxws && trigy < maxhs) {                              \
-                            if (*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &                      \
-                                 (1 << (7-((trigx>>12)&7))))                              \
-                                *dptr |= b;                                              \
+#define IWX_MSB(b)        if (trigx < maxws && trigy < maxhs) {                        \
+                            if (*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &                 \
+                                 (1 << (7-((trigx>>12)&7))))                           \
+                                *dptr |= b;                                            \
                         }                                                              \
-                        trigx += m11;                                                      \
+                        trigx += m11;                                                  \
                         trigy += m12;
 // END OF MACRO
 #undef IWX_LSB
-#define IWX_LSB(b)        if (trigx < maxws && trigy < maxhs) {                              \
-                            if (*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &                      \
-                                 (1 << ((trigx>>12)&7)))                              \
-                                *dptr |= b;                                              \
+#define IWX_LSB(b)        if (trigx < maxws && trigy < maxhs) {                        \
+                            if (*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &                 \
+                                 (1 << ((trigx>>12)&7)))                               \
+                                *dptr |= b;                                            \
                         }                                                              \
-                        trigx += m11;                                                      \
+                        trigx += m11;                                                  \
                         trigy += m12;
 // END OF MACRO
 #undef IWX_PIX
-#define IWX_PIX(b)        if (trigx < maxws && trigy < maxhs) {                              \
-                            if ((*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &              \
-                                 (1 << (7-((trigx>>12)&7)))) == 0)                      \
-                                *dptr &= ~b;                                              \
+#define IWX_PIX(b)        if (trigx < maxws && trigy < maxhs) {                        \
+                            if ((*(sptr+sbpl*(trigy>>12)+(trigx>>15)) &                \
+                                 (1 << (7-((trigx>>12)&7)))) == 0)                     \
+                                *dptr &= ~b;                                           \
                         }                                                              \
-                        trigx += m11;                                                      \
+                        trigx += m11;                                                  \
                         trigy += m12;
 // END OF MACRO
 bool qt_xForm_helper(const QTransform &trueMat, int xoffset, int type, int depth,
-   uchar *dptr, int dbpl, int p_inc, int dHeight,
-   const uchar *sptr, int sbpl, int sWidth, int sHeight)
+      uchar *dptr, int dbpl, int p_inc, int dHeight, const uchar *sptr, int sbpl, int sWidth, int sHeight)
 {
    int m11 = int(trueMat.m11() * 4096.0);
    int m12 = int(trueMat.m12() * 4096.0);

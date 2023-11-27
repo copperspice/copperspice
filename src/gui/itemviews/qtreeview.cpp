@@ -1867,7 +1867,7 @@ void QTreeView::doItemsLayout()
    Q_D(QTreeView);
 
    if (!d->customIndent) {
-      // ### Qt 6: move to event()
+      // TODO: move to event()
       // QAbstractItemView calls this method in case of a style change,
       // so update the indentation here if it wasn't set manually.
       d->updateIndentationFromStyle();

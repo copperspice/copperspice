@@ -83,7 +83,7 @@ static QWindow *qt_getWindow(const QWidget *widget)
 
 @interface NotificationReceiver : NSObject
 {
-                                                          QMacStylePrivate *mPrivate;
+   QMacStylePrivate *mPrivate;
 }
 - (id)initWithPrivate: (QMacStylePrivate *)priv;
 - (void)scrollBarStyleDidChange: (NSNotification *)notification;
@@ -101,8 +101,10 @@ static QWindow *qt_getWindow(const QWidget *widget)
 - (void)scrollBarStyleDidChange: (NSNotification *)notification
 {
    (void) notification;
+
    QEvent event(QEvent::StyleChange);
    QMutableVectorIterator<QPointer<QObject> > it(QMacStylePrivate::scrollBars);
+
    while (it.hasNext()) {
       if (!it.next()) {
          it.remove();
@@ -501,6 +503,7 @@ static QString qt_mac_removeMnemonics(const QString &str)
 static CGContextRef qt_mac_cg_context(const QPaintDevice *pdev);
 
 namespace {
+
 class QMacCGContext
 {
    CGContextRef context;
@@ -561,7 +564,8 @@ public:
       return *this;
    }
 };
-} // anonymous namespace
+
+}   // end namespace
 
 OSStatus qt_mac_shape2QRegionHelper(int inMessage, HIShapeRef, const CGRect *inRect, void *inRefcon)
 {
@@ -7601,6 +7605,7 @@ void qt_mac_scale_region(QRegion *region, qreal scaleFactor)
 static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintDevice);
 
 namespace {
+
 QMacCGContext::QMacCGContext(QPainter *p)
 {
    QPaintEngine *pe = p->paintEngine();
@@ -7661,7 +7666,7 @@ QMacCGContext::QMacCGContext(QPainter *p)
    }
 }
 
-} // anonymous namespace
+}   // end namespace
 
 static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintDevice)
 {

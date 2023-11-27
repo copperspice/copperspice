@@ -106,24 +106,6 @@ void QKeySequenceEditPrivate::finishEditing()
    emit q->editingFinished();
 }
 
-/*!
-    \class QKeySequenceEdit
-    \brief The QKeySequenceEdit widget allows to input a QKeySequence.
-
-    \inmodule QtWidgets
-
-    \since 5.2
-
-    This widget lets the user choose a QKeySequence, which is usually used as
-    a shortcut. The recording is initiated when the widget receives the focus
-    and ends one second after the user releases the last key.
-
-    \sa QKeySequenceEdit::keySequence
-*/
-
-/*!
-    Constructs a QKeySequenceEdit widget with the given \a parent.
-*/
 QKeySequenceEdit::QKeySequenceEdit(QWidget *parent) :
    QWidget(*new QKeySequenceEditPrivate, parent, Qt::EmptyFlag)
 {
@@ -131,9 +113,6 @@ QKeySequenceEdit::QKeySequenceEdit(QWidget *parent) :
    d->init();
 }
 
-/*!
-    Constructs a QKeySequenceEdit widget with the given \a keySequence and \a parent.
-*/
 QKeySequenceEdit::QKeySequenceEdit(const QKeySequence &keySequence, QWidget *parent) :
    QWidget(*new QKeySequenceEditPrivate, parent, Qt::EmptyFlag)
 {
@@ -142,9 +121,7 @@ QKeySequenceEdit::QKeySequenceEdit(const QKeySequence &keySequence, QWidget *par
    setKeySequence(keySequence);
 }
 
-/*!
-    \internal
-*/
+// internal
 QKeySequenceEdit::QKeySequenceEdit(QKeySequenceEditPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(dd, parent, flags)
 {
@@ -156,13 +133,6 @@ QKeySequenceEdit::~QKeySequenceEdit()
 {
 }
 
-/*!
-    \property QKeySequenceEdit::keySequence
-
-    \brief This property contains the currently chosen key sequence.
-
-    The shortcut can be changed by the user or via setter function.
-*/
 QKeySequence QKeySequenceEdit::keySequence() const
 {
    Q_D(const QKeySequenceEdit);
@@ -193,44 +163,28 @@ void QKeySequenceEdit::setKeySequence(const QKeySequence &keySequence)
    emit keySequenceChanged(keySequence);
 }
 
-/*!
-    \fn void QKeySequenceEdit::editingFinished()
-
-    This signal is emitted when the user finishes entering the shortcut.
-
-    \note there is a one second delay before releasing the last key and
-    emitting this signal.
-*/
-
-/*!
-    \brief Clears the current key sequence.
-*/
 void QKeySequenceEdit::clear()
 {
    setKeySequence(QKeySequence());
 }
 
-/*!
-    \reimp
-*/
 bool QKeySequenceEdit::event(QEvent *e)
 {
    switch (e->type()) {
       case QEvent::Shortcut:
          return true;
+
       case QEvent::ShortcutOverride:
          e->accept();
          return true;
-      default :
+
+      default:
          break;
    }
 
    return QWidget::event(e);
 }
 
-/*!
-    \reimp
-*/
 void QKeySequenceEdit::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QKeySequenceEdit);
@@ -278,9 +232,6 @@ void QKeySequenceEdit::keyPressEvent(QKeyEvent *e)
    e->accept();
 }
 
-/*!
-    \reimp
-*/
 void QKeySequenceEdit::keyReleaseEvent(QKeyEvent *e)
 {
    Q_D(QKeySequenceEdit);
@@ -295,9 +246,6 @@ void QKeySequenceEdit::keyReleaseEvent(QKeyEvent *e)
    e->accept();
 }
 
-/*!
-    \reimp
-*/
 void QKeySequenceEdit::timerEvent(QTimerEvent *e)
 {
    Q_D(QKeySequenceEdit);

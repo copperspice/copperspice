@@ -107,10 +107,6 @@ class QTornOffMenu : public QMenu
       setWindowTitle(p->windowTitle());
       setEnabled(p->isEnabled());
 
-      // not used
-      // QObject::connect(this, SIGNAL(triggered(QAction*)), this, SLOT(onTrigger(QAction*)));
-      // QObject::connect(this, SIGNAL(hovered(QAction*)),   this, SLOT(onHovered(QAction*)));
-
       QList<QAction *> items = p->actions();
       for (int i = 0; i < items.count(); i++) {
          addAction(items.at(i));
@@ -136,8 +132,6 @@ class QTornOffMenu : public QMenu
       QMenu::actionEvent(e);
       setFixedSize(sizeHint());
    }
-
- public:
 
    GUI_CS_SLOT_1(Public, void onTrigger(QAction *action))
    GUI_CS_SLOT_2(onTrigger)

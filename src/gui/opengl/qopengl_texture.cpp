@@ -1778,401 +1778,11 @@ QOpenGLTexture *QOpenGLTexturePrivate::createTextureView(QOpenGLTexture::Target 
     return view;
 }
 
-
-/*!
-    \class QOpenGLTexture
-    \inmodule QtGui
-    \since 5.2
-    \wrapper
-    \brief The QOpenGLTexture class encapsulates an OpenGL texture object.
-
-    QOpenGLTexture makes it easy to work with OpenGL textures and the myriad features
-    and targets that they offer depending upon the capabilities of your OpenGL implementation.
-
-    The typical usage pattern for QOpenGLTexture is
-    \list
-        \li Instantiate the object specifying the texture target type
-        \li Set properties that affect the storage requirements e.g. storage format, dimensions
-        \li Allocate the server-side storage
-        \li Optionally upload pixel data
-        \li Optionally set any additional properties e.g. filtering and border options
-        \li Render with texture or render to texture
-    \endlist
-
-    In the common case of simply using a QImage as the source of texture pixel data
-    most of the above steps are performed automatically.
-
-    \code
-    // Prepare texture
-    QOpenGLTexture *texture = new QOpenGLTexture(QImage(fileName).mirrored());
-    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    ...
-    // Render with texture
-    texture->bind();
-    glDrawArrays(...);
-    \endcode
-
-    Note that the QImage is mirrored vertically to account for the fact that
-    OpenGL and QImage use opposite directions for the y axis. Another option
-    would be to transform your texture coordinates.
-*/
-
-/*!
-    \enum QOpenGLTexture::Filter
-    This enum defines the filtering parameters for a QOpenGLTexture object.
-    \value Nearest Equivalent to GL_NEAREST
-    \value Linear Equivalent to GL_LINEAR
-    \value NearestMipMapNearest Equivalent to GL_NEAREST_MIPMAP_NEAREST
-    \value NearestMipMapLinear Equivalent to GL_NEAREST_MIPMAP_LINEAR
-    \value LinearMipMapNearest Equivalent to GL_LINEAR_MIPMAP_NEAREST
-    \value LinearMipMapLinear Equivalent to GL_LINEAR_MIPMAP_LINEAR
-*/
-
-/*!
-    \enum QOpenGLTexture::Target
-    This enum defines the texture target of a QOpenGLTexture object.
-
-    \value Target1D A 1-dimensional texture.
-           Equivalent to GL_TEXTURE_1D.
-    \value Target1DArray An array of 1-dimensional textures.
-           Equivalent to GL_TEXTURE_1D_ARRAY
-    \value Target2D A 2-dimensional texture.
-           Equivalent to GL_TEXTURE_2D
-    \value Target2DArray An array of 1-dimensional textures.
-           Equivalent to GL_TEXTURE_2D_ARRAY
-    \value Target3D A 3-dimensional texture.
-           Equivalent to GL_TEXTURE_3D
-    \value TargetCubeMap A cubemap texture.
-           Equivalent to GL_TEXTURE_CUBE_MAP
-    \value TargetCubeMapArray An array of cubemap textures.
-           Equivalent to GL_TEXTURE_CUBE_MAP_ARRAY
-    \value Target2DMultisample A 2-dimensional texture with multisample support.
-           Equivalent to GL_TEXTURE_2D_MULTISAMPLE
-    \value Target2DMultisampleArray An array of 2-dimensional textures with multisample support.
-           Equivalent to GL_TEXTURE_2D_MULTISAMPLE_ARRAY
-    \value TargetRectangle A rectangular 2-dimensional texture.
-           Equivalent to GL_TEXTURE_RECTANGLE
-    \value TargetBuffer A texture with data from an OpenGL buffer object.
-           Equivalent to GL_TEXTURE_BUFFER
-*/
-
-/*!
-    \enum QOpenGLTexture::BindingTarget
-    This enum defines the possible binding targets of texture units.
-
-    \value BindingTarget1D Equivalent to GL_TEXTURE_BINDING_1D
-    \value BindingTarget1DArray Equivalent to GL_TEXTURE_BINDING_1D_ARRAY
-    \value BindingTarget2D Equivalent to GL_TEXTURE_BINDING_2D
-    \value BindingTarget2DArray Equivalent to GL_TEXTURE_BINDING_2D_ARRAY
-    \value BindingTarget3D Equivalent to GL_TEXTURE_BINDING_3D
-    \value BindingTargetCubeMap Equivalent to GL_TEXTURE_BINDING_CUBE_MAP
-    \value BindingTargetCubeMapArray Equivalent to GL_TEXTURE_BINDING_CUBE_MAP_ARRAY
-    \value BindingTarget2DMultisample Equivalent to GL_TEXTURE_BINDING_2D_MULTISAMPLE
-    \value BindingTarget2DMultisampleArray Equivalent to GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY
-    \value BindingTargetRectangle Equivalent to GL_TEXTURE_BINDING_RECTANGLE
-    \value BindingTargetBuffer Equivalent to GL_TEXTURE_BINDING_BUFFER
-*/
-
-/*!
-    \enum QOpenGLTexture::MipMapGeneration
-    This enum defines the options to control mipmap generation.
-
-    \value GenerateMipMaps Mipmaps should be generated
-    \value DontGenerateMipMaps Mipmaps should not be generated
-*/
-
-/*!
-    \enum QOpenGLTexture::TextureUnitReset
-    This enum defines options ot control texture unit activation.
-
-    \value ResetTextureUnit The previous active texture unit will be reset
-    \value DontResetTextureUnit The previous active texture unit will not be rest
-*/
-
-/*!
-    \enum QOpenGLTexture::TextureFormat
-    This enum defines the possible texture formats. Depending upon your OpenGL
-    implementation only a subset of these may be supported.
-
-    \value NoFormat Equivalent to GL_NONE
-
-    \value R8_UNorm Equivalent to GL_R8
-    \value RG8_UNorm Equivalent to GL_RG8
-    \value RGB8_UNorm Equivalent to GL_RGB8
-    \value RGBA8_UNorm Equivalent to GL_RGBA8
-
-    \value R16_UNorm Equivalent to GL_R16
-    \value RG16_UNorm Equivalent to GL_RG16
-    \value RGB16_UNorm Equivalent to GL_RGB16
-    \value RGBA16_UNorm Equivalent to GL_RGBA16
-
-    \value R8_SNorm Equivalent to GL_R8_SNORM
-    \value RG8_SNorm Equivalent to GL_RG8_SNORM
-    \value RGB8_SNorm Equivalent to GL_RGB8_SNORM
-    \value RGBA8_SNorm Equivalent to GL_RGBA8_SNORM
-
-    \value R16_SNorm Equivalent to GL_R16_SNORM
-    \value RG16_SNorm Equivalent to GL_RG16_SNORM
-    \value RGB16_SNorm Equivalent to GL_RGB16_SNORM
-    \value RGBA16_SNorm Equivalent to GL_RGBA16_SNORM
-
-    \value R8U Equivalent to GL_R8UI
-    \value RG8U Equivalent to GL_RG8UI
-    \value RGB8U Equivalent to GL_RGB8UI
-    \value RGBA8U Equivalent to GL_RGBA8UI
-
-    \value R16U Equivalent to GL_R16UI
-    \value RG16U Equivalent to GL_RG16UI
-    \value RGB16U Equivalent to GL_RGB16UI
-    \value RGBA16U Equivalent to GL_RGBA16UI
-
-    \value R32U Equivalent to GL_R32UI
-    \value RG32U Equivalent to GL_RG32UI
-    \value RGB32U Equivalent to GL_RGB32UI
-    \value RGBA32U Equivalent to GL_RGBA32UI
-
-    \value R8I Equivalent to GL_R8I
-    \value RG8I Equivalent to GL_RG8I
-    \value RGB8I Equivalent to GL_RGB8I
-    \value RGBA8I Equivalent to GL_RGBA8I
-
-    \value R16I Equivalent to GL_R16I
-    \value RG16I Equivalent to GL_RG16I
-    \value RGB16I Equivalent to GL_RGB16I
-    \value RGBA16I Equivalent to GL_RGBA16I
-
-    \value R32I Equivalent to GL_R32I
-    \value RG32I Equivalent to GL_RG32I
-    \value RGB32I Equivalent to GL_RGB32I
-    \value RGBA32I Equivalent to GL_RGBA32I
-
-    \value R16F Equivalent to GL_R16F
-    \value RG16F Equivalent to GL_RG16F
-    \value RGB16F Equivalent to GL_RGB16F
-    \value RGBA16F Equivalent to GL_RGBA16F
-
-    \value R32F Equivalent to GL_R32F
-    \value RG32F Equivalent to GL_RG32F
-    \value RGB32F Equivalent to GL_RGB32F
-    \value RGBA32F Equivalent to GL_RGBA32F
-
-    \value RGB9E5 Equivalent to GL_RGB9_E5
-    \value RG11B10F Equivalent to GL_R11F_G11F_B10F
-    \value RG3B2 Equivalent to GL_R3_G3_B2
-    \value R5G6B5 Equivalent to GL_RGB565
-    \value RGB5A1 Equivalent to GL_RGB5_A1
-    \value RGBA4 Equivalent to GL_RGBA4
-    \value RGB10A2 Equivalent to GL_RGB10_A2UI
-
-    \value D16 Equivalent to GL_DEPTH_COMPONENT16
-    \value D24 Equivalent to GL_DEPTH_COMPONENT24
-    \value D24S8 Equivalent to GL_DEPTH24_STENCIL8
-    \value D32 Equivalent to GL_DEPTH_COMPONENT32
-    \value D32F Equivalent to GL_DEPTH_COMPONENT32F
-    \value D32FS8X24 Equivalent to GL_DEPTH32F_STENCIL8
-    \value S8 Equivalent to GL_STENCIL_INDEX8. Introduced in Qt 5.4
-
-    \value RGB_DXT1 Equivalent to GL_COMPRESSED_RGB_S3TC_DXT1_EXT
-    \value RGBA_DXT1 Equivalent to GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
-    \value RGBA_DXT3 Equivalent to GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
-    \value RGBA_DXT5 Equivalent to GL_COMPRESSED_RGBA_S3TC_DXT5_EXT
-    \value R_ATI1N_UNorm Equivalent to GL_COMPRESSED_RED_RGTC1
-    \value R_ATI1N_SNorm Equivalent to GL_COMPRESSED_SIGNED_RED_RGTC1
-    \value RG_ATI2N_UNorm Equivalent to GL_COMPRESSED_RG_RGTC2
-    \value RG_ATI2N_SNorm Equivalent to GL_COMPRESSED_SIGNED_RG_RGTC2
-    \value RGB_BP_UNSIGNED_FLOAT Equivalent to GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB
-    \value RGB_BP_SIGNED_FLOAT Equivalent to GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB
-    \value RGB_BP_UNorm Equivalent to GL_COMPRESSED_RGBA_BPTC_UNORM_ARB
-    \value R11_EAC_UNorm Equivalent to GL_COMPRESSED_R11_EAC
-    \value R11_EAC_SNorm Equivalent to GL_COMPRESSED_SIGNED_R11_EAC
-    \value RG11_EAC_UNorm Equivalent to GL_COMPRESSED_RG11_EAC
-    \value RG11_EAC_SNorm Equivalent to GL_COMPRESSED_SIGNED_RG11_EAC
-    \value RGB8_ETC2 Equivalent to GL_COMPRESSED_RGB8_ETC2
-    \value SRGB8_ETC2 Equivalent to GL_COMPRESSED_SRGB8_ETC2
-    \value RGB8_PunchThrough_Alpha1_ETC2 Equivalent to GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2
-    \value SRGB8_PunchThrough_Alpha1_ETC2 Equivalent to GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2
-    \value RGBA8_ETC2_EAC Equivalent to GL_COMPRESSED_RGBA8_ETC2_EAC
-    \value SRGB8_Alpha8_ETC2_EAC Equivalent to GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC
-    \value RGB8_ETC1 Equivalent to GL_ETC1_RGB8_OES
-
-    \value SRGB8 Equivalent to GL_SRGB8
-    \value SRGB8_Alpha8 Equivalent to GL_SRGB8_ALPHA8
-    \value SRGB_DXT1 Equivalent to GL_COMPRESSED_SRGB_S3TC_DXT1_EXT
-    \value SRGB_Alpha_DXT1 Equivalent to GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT
-    \value SRGB_Alpha_DXT3 Equivalent to GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT
-    \value SRGB_Alpha_DXT5 Equivalent to GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT
-    \value SRGB_BP_UNorm Equivalent to GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB
-
-    \value DepthFormat Equivalent to GL_DEPTH_COMPONENT (only OpenGL ES 3 or ES 2 with OES_depth_texture)
-    \value AlphaFormat Equivalent to GL_ALPHA (OpenGL ES 2 only)
-    \value RGBFormat Equivalent to GL_RGB (OpenGL ES 2 only)
-    \value RGBAFormat Equivalent to GL_RGBA (OpenGL ES 2 only)
-    \value LuminanceFormat Equivalent to GL_LUMINANCE (OpenGL ES 2 only)
-    \value LuminanceAlphaFormat Equivalent to GL_LUMINANCE_ALPHA (OpenGL ES 2 only)
-*/
-
-/*!
-    \enum QOpenGLTexture::CubeMapFace
-    This enum defines the possible CubeMap faces.
-
-    \value CubeMapPositiveX Equivalent to GL_TEXTURE_CUBE_MAP_POSITIVE_X
-    \value CubeMapNegativeX Equivalent to GL_TEXTURE_CUBE_MAP_NEGATIVE_X
-    \value CubeMapPositiveY Equivalent to GL_TEXTURE_CUBE_MAP_POSITIVE_Y
-    \value CubeMapNegativeY Equivalent to GL_TEXTURE_CUBE_MAP_NEGATIVE_Y
-    \value CubeMapPositiveZ Equivalent to GL_TEXTURE_CUBE_MAP_POSITIVE_Z
-    \value CubeMapNegativeZ Equivalent to GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-*/
-
-/*!
-    \enum QOpenGLTexture::PixelFormat
-    This enum defines the possible client-side pixel formats for a pixel
-    transfer operation.
-
-    \value NoSourceFormat Equivalent to GL_NONE
-    \value Red Equivalent to GL_RED
-    \value RG Equivalent to GL_RG
-    \value RGB Equivalent to GL_RGB
-    \value BGR Equivalent to GL_BGR
-    \value RGBA Equivalent to GL_RGBA
-    \value BGRA Equivalent to GL_BGRA
-    \value Red_Integer Equivalent to GL_RED_INTEGER
-    \value RG_Integer Equivalent to GL_RG_INTEGER
-    \value RGB_Integer Equivalent to GL_RGB_INTEGER
-    \value BGR_Integer Equivalent to GL_BGR_INTEGER
-    \value RGBA_Integer Equivalent to GL_RGBA_INTEGER
-    \value BGRA_Integer Equivalent to GL_BGRA_INTEGER
-    \value Stencil Equivalent to GL_STENCIL_INDEX. Introduced in Qt 5.4
-    \value Depth Equivalent to GL_DEPTH_COMPONENT
-    \value DepthStencil Equivalent to GL_DEPTH_STENCIL
-    \value Alpha Equivalent to GL_ALPHA (OpenGL ES 2 only)
-    \value Luminance Equivalent to GL_LUMINANCE (OpenGL ES 2 only)
-    \value LuminanceAlpha Equivalent to GL_LUMINANCE_ALPHA (OpenGL ES 2 only)
-
-*/
-
-/*!
-    \enum QOpenGLTexture::PixelType
-    This enum defines the possible pixel data types for a pixel transfer operation
-
-    \value NoPixelType Equivalent to GL_NONE
-    \value Int8 Equivalent to GL_BYTE
-    \value UInt8 Equivalent to GL_UNSIGNED_BYTE
-    \value Int16 Equivalent to GL_SHORT
-    \value UInt16 Equivalent to GL_UNSIGNED_SHORT
-    \value Int32 Equivalent to GL_INT
-    \value UInt32 Equivalent to GL_UNSIGNED_INT
-    \value Float16 Equivalent to GL_HALF_FLOAT
-    \value Float16OES Equivalent to GL_HALF_FLOAT_OES
-    \value Float32 Equivalent to GL_FLOAT
-    \value UInt32_RGB9_E5 Equivalent to GL_UNSIGNED_INT_5_9_9_9_REV
-    \value UInt32_RG11B10F Equivalent to GL_UNSIGNED_INT_10F_11F_11F_REV
-    \value UInt8_RG3B2 Equivalent to GL_UNSIGNED_BYTE_3_3_2
-    \value UInt8_RG3B2_Rev Equivalent to GL_UNSIGNED_BYTE_2_3_3_REV
-    \value UInt16_RGB5A1 Equivalent to GL_UNSIGNED_SHORT_5_5_5_1
-    \value UInt16_RGB5A1_Rev Equivalent to GL_UNSIGNED_SHORT_1_5_5_5_REV
-    \value UInt16_R5G6B5 Equivalent to GL_UNSIGNED_SHORT_5_6_5
-    \value UInt16_R5G6B5_Rev Equivalent to GL_UNSIGNED_SHORT_5_6_5_REV
-    \value UInt16_RGBA4 Equivalent to GL_UNSIGNED_SHORT_4_4_4_4
-    \value UInt16_RGBA4_Rev Equivalent to GL_UNSIGNED_SHORT_4_4_4_4_REV
-    \value UInt32_RGBA8 Equivalent to GL_UNSIGNED_INT_8_8_8_8
-    \value UInt32_RGBA8_Rev Equivalent to GL_UNSIGNED_INT_8_8_8_8_REV
-    \value UInt32_RGB10A2 Equivalent to GL_UNSIGNED_INT_10_10_10_2
-    \value UInt32_RGB10A2_Rev Equivalent to GL_UNSIGNED_INT_2_10_10_10_REV
-    \value UInt32_D24S8 Equivalent to GL_UNSIGNED_INT_24_8. Introduced in Qt 5.4
-    \value Float32_D32_UInt32_S8_X24 Equivalent to GL_FLOAT_32_UNSIGNED_INT_24_8_REV. Introduced in Qt 5.4
-*/
-
-/*!
-    \enum QOpenGLTexture::Feature
-    This enum defines the OpenGL texture-related features that can be tested for.
-
-    \value ImmutableStorage Support for immutable texture storage
-    \value ImmutableMultisampleStorage Support for immutable texture storage with
-           multisample targets
-    \value TextureRectangle Support for the GL_TEXTURE_RECTANGLE target
-    \value TextureArrays Support for texture targets with array layers
-    \value Texture3D Support for the 3 dimensional texture target
-    \value TextureMultisample Support for texture targets that have multisample capabilities
-    \value TextureBuffer Support for textures that use OpenGL buffer objects
-           as their data source
-    \value TextureCubeMapArrays Support for cubemap array texture target
-    \value Swizzle Support for texture component swizzle masks
-    \value StencilTexturing Support for stencil texturing (i.e. looking up depth or stencil
-           components of a combined depth/stencil format texture in GLSL shaders).
-    \value AnisotropicFiltering Support for anisotropic texture filtering
-    \value NPOTTextures Basic support for non-power-of-two textures
-    \value NPOTTextureRepeat Full support for non-power-of-two textures including texture
-           repeat modes
-    \value Texture1D Support for the 1 dimensional texture target
-    \value TextureComparisonOperators Support for texture comparison operators
-    \value TextureMipMapLevel Support for setting the base and maximum mipmap levels
-*/
-
-/*!
-    \enum QOpenGLTexture::SwizzleComponent
-    This enum defines the texture color components that can be assigned a swizzle mask.
-
-    \value SwizzleRed The red component. Equivalent to GL_TEXTURE_SWIZZLE_R
-    \value SwizzleGreen The green component. Equivalent to GL_TEXTURE_SWIZZLE_G
-    \value SwizzleBlue The blue component. Equivalent to GL_TEXTURE_SWIZZLE_B
-    \value SwizzleAlpha The alpha component. Equivalent to GL_TEXTURE_SWIZZLE_A
-*/
-
-/*!
-    \enum QOpenGLTexture::SwizzleValue
-    This enum defines the possible mask values for texture swizzling.
-
-    \value RedValue Maps the component to the red channel. Equivalent to GL_RED
-    \value GreenValue Maps the component to the green channel. Equivalent to GL_GREEN
-    \value BlueValue Maps the component to the blue channel. Equivalent to GL_BLUE
-    \value AlphaValue Maps the component to the alpha channel. Equivalent to GL_ALPHA
-    \value ZeroValue Maps the component to a fixed value of 0. Equivalent to GL_ZERO
-    \value OneValue Maps the component to a fixed value of 1. Equivalent to GL_ONE
-*/
-
-/*!
-    \enum QOpenGLTexture::WrapMode
-    This enum defines the possible texture coordinate wrapping modes.
-
-    \value Repeat Texture coordinate is repeated. Equivalent to GL_REPEAT
-    \value MirroredRepeat Texture coordinate is reflected about 0 and 1. Equivalent to GL_MIRRORED_REPEAT
-    \value ClampToEdge Clamps the texture coordinates to [0,1]. Equivalent to GL_CLAMP_TO_EDGE
-    \value ClampToBorder As for ClampToEdge but also blends samples at 0 and 1 with a
-           fixed border color. Equivalent to GL_CLAMP_TO_BORDER
-*/
-
-/*!
-    \enum QOpenGLTexture::CoordinateDirection
-    This enum defines the possible texture coordinate directions
-
-    \value DirectionS The horizontal direction. Equivalent to GL_TEXTURE_WRAP_S
-    \value DirectionT The vertical direction. Equivalent to GL_TEXTURE_WRAP_T
-    \value DirectionR The depth direction. Equivalent to GL_TEXTURE_WRAP_R
-*/
-
-/*!
-    Creates a QOpenGLTexture object that can later be bound to \a target.
-
-    This does not create the underlying OpenGL texture object. Therefore,
-    construction using this constructor does not require a valid current
-    OpenGL context.
-*/
 QOpenGLTexture::QOpenGLTexture(Target target)
     : d_ptr(new QOpenGLTexturePrivate(target, this))
 {
 }
 
-/*!
-    Creates a QOpenGLTexture object that can later be bound to the 2D texture
-    target and contains the pixel data contained in \a image. If you wish
-    to have a chain of mipmaps generated then set \a genMipMaps to \c true (this
-    is the default).
-
-    This does create the underlying OpenGL texture object. Therefore,
-    construction using this constructor does require a valid current
-    OpenGL context.
-*/
 QOpenGLTexture::QOpenGLTexture(const QImage& image, MipMapGeneration genMipMaps)
     : d_ptr(new QOpenGLTexturePrivate(QOpenGLTexture::Target2D, this))
 {
@@ -2183,84 +1793,36 @@ QOpenGLTexture::~QOpenGLTexture()
 {
 }
 
-/*!
-    Returns the binding target of this texture.
-
-    \since 5.4
-*/
 QOpenGLTexture::Target QOpenGLTexture::target() const
 {
     Q_D(const QOpenGLTexture);
     return d->target;
 }
 
-/*!
-    Creates the underlying OpenGL texture object. This requires a current valid
-    OpenGL context. If the texture object already exists, this function does
-    nothing.
-
-    Once the texture object is created you can obtain the object
-    name from the textureId() function. This may be useful if you wish to make
-    some raw OpenGL calls related to this texture.
-
-    Normally it should not be necessary to call this function directly as all
-    functions that set properties of the texture object implicitly call create()
-    on your behalf.
-
-    Returns \c true if the creation succeeded, otherwise returns \c false.
-
-    \sa destroy(), isCreated(), textureId()
-*/
 bool QOpenGLTexture::create()
 {
     Q_D(QOpenGLTexture);
     return d->create();
 }
 
-/*!
-    Destroys the underlying OpenGL texture object. This requires a current valid
-    OpenGL context.
-
-    \sa create(), isCreated(), textureId()
-*/
 void QOpenGLTexture::destroy()
 {
     Q_D(QOpenGLTexture);
     return d->destroy();
 }
 
-/*!
-    Returns \c true if the underlying OpenGL texture object has been created.
-
-    \sa create(), destroy(), textureId()
-*/
 bool QOpenGLTexture::isCreated() const
 {
     Q_D(const QOpenGLTexture);
     return d->textureId != 0;
 }
 
-/*!
-    Returns the name of the underlying OpenGL texture object or 0 if it has
-    not yet been created.
-
-    \sa create(), destroy(), isCreated()
-*/
 GLuint QOpenGLTexture::textureId() const
 {
     Q_D(const QOpenGLTexture);
     return d->textureId;
 }
 
-/*!
-    Binds this texture to the currently active texture unit ready for
-    rendering. Note that you do not need to bind QOpenGLTexture objects
-    in order to modify them as the implementation makes use of the
-    EXT_direct_state_access extension where available and simulates it
-    where it is not.
-
-    \sa release()
-*/
 void QOpenGLTexture::bind()
 {
     Q_D(QOpenGLTexture);
@@ -2268,18 +1830,6 @@ void QOpenGLTexture::bind()
     d->bind();
 }
 
-/*!
-    Binds this texture to texture unit \a unit ready for
-    rendering. Note that you do not need to bind QOpenGLTexture objects
-    in order to modify them as the implementation makes use of the
-    EXT_direct_state_access extension where available and simulates it
-    where it is not.
-
-    If parameter \a reset is \c true then this function will restore
-    the active unit to the texture unit that was active upon entry.
-
-    \sa release()
-*/
 void QOpenGLTexture::bind(uint unit, TextureUnitReset reset)
 {
     Q_D(QOpenGLTexture);
@@ -2287,36 +1837,18 @@ void QOpenGLTexture::bind(uint unit, TextureUnitReset reset)
     d->bind(unit, reset);
 }
 
-/*!
-    Unbinds this texture from the currently active texture unit.
-
-    \sa bind()
-*/
 void QOpenGLTexture::release()
 {
     Q_D(QOpenGLTexture);
     d->release();
 }
 
-/*!
-    Unbinds this texture from texture unit \a unit.
-
-    If parameter \a reset is \c true then this function
-    will restore the active unit to the texture unit that was active
-    upon entry.
-*/
 void QOpenGLTexture::release(uint unit, TextureUnitReset reset)
 {
     Q_D(QOpenGLTexture);
     d->release(unit, reset);
 }
 
-/*!
-    Returns \c true if this texture is bound to the corresponding target
-    of the currently active texture unit.
-
-    \sa bind(), release()
-*/
 bool QOpenGLTexture::isBound() const
 {
     Q_D(const QOpenGLTexture);
@@ -2324,12 +1856,6 @@ bool QOpenGLTexture::isBound() const
     return d->isBound();
 }
 
-/*!
-    Returns \c true if this texture is bound to the corresponding target
-    of texture unit \a unit.
-
-    \sa bind(), release()
-*/
 bool QOpenGLTexture::isBound(uint unit)
 {
     Q_D(const QOpenGLTexture);
@@ -2337,10 +1863,6 @@ bool QOpenGLTexture::isBound(uint unit)
     return d->isBound(unit);
 }
 
-/*!
-    Returns the textureId of the texture that is bound to the \a target
-    of the currently active texture unit.
-*/
 GLuint QOpenGLTexture::boundTextureId(BindingTarget target)
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -2354,10 +1876,6 @@ GLuint QOpenGLTexture::boundTextureId(BindingTarget target)
     return static_cast<GLuint>(textureId);
 }
 
-/*!
-    Returns the textureId of the texture that is bound to the \a target
-    of the texture unit \a unit.
-*/
 GLuint QOpenGLTexture::boundTextureId(uint unit, BindingTarget target)
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -2380,15 +1898,6 @@ GLuint QOpenGLTexture::boundTextureId(uint unit, BindingTarget target)
     return static_cast<GLuint>(textureId);
 }
 
-/*!
-    Sets the format of this texture object to \a format. This function
-    must be called before texture storage is allocated.
-
-    Note that all formats may not be supported. The exact set of supported
-    formats is dependent upon your OpenGL implementation and version.
-
-    \sa format(), allocateStorage()
-*/
 void QOpenGLTexture::setFormat(TextureFormat format)
 {
     Q_D(QOpenGLTexture);
@@ -2555,26 +2064,12 @@ void QOpenGLTexture::setFormat(TextureFormat format)
     }
 }
 
-/*!
-    Returns the format of this texture object.
-
-    \sa setFormat()
-*/
 QOpenGLTexture::TextureFormat QOpenGLTexture::format() const
 {
     Q_D(const QOpenGLTexture);
     return d->format;
 }
 
-/*!
-    Sets the dimensions of this texture object to \a width,
-    \a height, and \a depth. The default for each dimension is 1.
-    The maximum allowable texture size is dependent upon your OpenGL
-    implementation. Allocating storage for a texture less than the
-    maximum size can still fail if your system is low on resources.
-
-    \sa width(), height(), depth()
-*/
 void QOpenGLTexture::setSize(int width, int height, int depth)
 {
     Q_D(QOpenGLTexture);
@@ -2670,40 +2165,18 @@ void QOpenGLTexture::setMipLevels(int levels)
     }
 }
 
-/*!
-    Returns the number of mipmap levels for this texture. If storage
-    has not yet been allocated for this texture it returns the
-    requested number of mipmap levels.
-
-    \sa setMipLevels(), maximumMipLevels(), isStorageAllocated()
-*/
 int QOpenGLTexture::mipLevels() const
 {
     Q_D(const QOpenGLTexture);
     return isStorageAllocated() ? d->mipLevels : d->requestedMipLevels;
 }
 
-/*!
-    Returns the maximum number of mipmap levels that this texture
-    can have given the current dimensions.
-
-    \sa setMipLevels(), mipLevels(), setSize()
-*/
 int QOpenGLTexture::maximumMipLevels() const
 {
     Q_D(const QOpenGLTexture);
     return d->maximumMipLevelCount();
 }
 
-/*!
-    Sets the number of array \a layers to allocate storage for. This
-    function should be called before storage is allocated for the texture.
-
-    For targets that do not support array layers this function has
-    no effect.
-
-    \sa layers(), isStorageAllocated()
-*/
 void QOpenGLTexture::setLayers(int layers)
 {
     Q_D(QOpenGLTexture);
@@ -2734,44 +2207,18 @@ void QOpenGLTexture::setLayers(int layers)
     }
 }
 
-/*!
-    Returns the number of array layers for this texture. If
-    storage has not yet been allocated for this texture then
-    this function returns the requested number of array layers.
-
-    For texture targets that do not support array layers this
-    will return 1.
-
-    \sa setLayers(), isStorageAllocated()
-*/
 int QOpenGLTexture::layers() const
 {
     Q_D(const QOpenGLTexture);
     return d->layers;
 }
 
-/*!
-    Returns the number of faces for this texture. For cubemap
-    and cubemap array type targets this will be 6.
-
-    For non-cubemap type targets this will return 1.
-*/
 int QOpenGLTexture::faces() const
 {
     Q_D(const QOpenGLTexture);
     return d->faces;
 }
 
-/*!
-    Sets the number of \a samples to allocate storage for when rendering to
-    a multisample capable texture target. This function should
-    be called before storage is allocated for the texture.
-
-    For targets that do not support multisampling this function has
-    no effect.
-
-    \sa samples(), isStorageAllocated()
-*/
 void QOpenGLTexture::setSamples(int samples)
 {
     Q_D(QOpenGLTexture);
@@ -2803,37 +2250,12 @@ void QOpenGLTexture::setSamples(int samples)
     }
 }
 
-/*!
-    Returns the number of multisample sample points for this texture.
-    If storage has not yet been allocated for this texture then
-    this function returns the requested number of samples.
-
-    For texture targets that do not support multisampling this
-    will return 0.
-
-    \sa setSamples(), isStorageAllocated()
-*/
 int QOpenGLTexture::samples() const
 {
     Q_D(const QOpenGLTexture);
     return d->samples;
 }
 
-/*!
-    Sets whether the sample positions and number of samples used with
-    a multisample capable texture target to \a fixed. If set to \c true
-    the sample positions and number of samples used are the same for
-    all texels in the image and will not depend upon the image size or
-    internal format. This function should be called before storage is allocated
-    for the texture.
-
-    For targets that do not support multisampling this function has
-    no effect.
-
-    The default value is \c true.
-
-    \sa isFixedSamplePositions(), isStorageAllocated()
-*/
 void QOpenGLTexture::setFixedSamplePositions(bool fixed)
 {
     Q_D(QOpenGLTexture);
@@ -2865,48 +2287,12 @@ void QOpenGLTexture::setFixedSamplePositions(bool fixed)
     }
 }
 
-/*!
-    Returns whether this texture uses a fixed pattern of multisample
-    samples. If storage has not yet been allocated for this texture then
-    this function returns the requested fixed sample position setting.
-
-    For texture targets that do not support multisampling this
-    will return \c true.
-
-    \sa setFixedSamplePositions(), isStorageAllocated()
-*/
 bool QOpenGLTexture::isFixedSamplePositions() const
 {
     Q_D(const QOpenGLTexture);
     return d->fixedSamplePositions;
 }
 
-/*!
-    Allocates server-side storage for this texture object taking
-    into account, the format, dimensions, mipmap levels, array
-    layers and cubemap faces.
-
-    Once storage has been allocated it is no longer possible to change
-    these properties.
-
-    If supported QOpenGLTexture makes use of immutable texture
-    storage.
-
-    Once storage has been allocated for the texture then pixel data
-    can be uploaded via one of the setData() overloads.
-
-    \note If immutable texture storage is not available,
-    then a default pixel format and pixel type will be used to
-    create the mutable storage. You can use the other
-    allocateStorage() overload to specify exactly the pixel format
-    and the pixel type to use when allocating mutable storage;
-    this is particulary useful under certain OpenGL ES implementations
-    (notably, OpenGL ES 2), where the pixel format and the pixel type
-    used at allocation time must perfectly match the format
-    and the type passed to any subsequent setData() call.
-
-    \sa isStorageAllocated(), setData()
-*/
 void QOpenGLTexture::allocateStorage()
 {
     Q_D(QOpenGLTexture);
@@ -2917,28 +2303,6 @@ void QOpenGLTexture::allocateStorage()
     }
 }
 
-/*!
-    \since 5.5
-
-    Allocates server-side storage for this texture object taking
-    into account, the format, dimensions, mipmap levels, array
-    layers and cubemap faces.
-
-    Once storage has been allocated it is no longer possible to change
-    these properties.
-
-    If supported QOpenGLTexture makes use of immutable texture
-    storage. However, if immutable texture storage is not available,
-    then the specified \a pixelFormat and \a pixelType will be used
-    to allocate mutable storage; note that in certain OpenGL implementations
-    (notably, OpenGL ES 2) they must perfectly match the format
-    and the type passed to any subsequent setData() call.
-
-    Once storage has been allocated for the texture then pixel data
-    can be uploaded via one of the setData() overloads.
-
-    \sa isStorageAllocated(), setData()
-*/
 void QOpenGLTexture::allocateStorage(QOpenGLTexture::PixelFormat pixelFormat, QOpenGLTexture::PixelType pixelType)
 {
     Q_D(QOpenGLTexture);
@@ -2946,76 +2310,30 @@ void QOpenGLTexture::allocateStorage(QOpenGLTexture::PixelFormat pixelFormat, QO
         d->allocateStorage(pixelFormat, pixelType);
 }
 
-/*!
-    Returns \c true if server-side storage for this texture as been
-    allocated.
-
-    The texture format, dimensions, mipmap levels and array layers
-    cannot be altered once storage ihas been allocated.
-
-    \sa allocateStorage(), setSize(), setMipLevels(), setLayers(), setFormat()
-*/
 bool QOpenGLTexture::isStorageAllocated() const
 {
     Q_D(const QOpenGLTexture);
     return d->storageAllocated;
 }
 
-/*!
-    Attempts to create a texture view onto this texture. A texture
-    view is somewhat analogous to a view in SQL in that it presents
-    a restricted or reinterpreted view of the original data. Texture
-    views do not allocate any more server-side storage, insted relying
-    on the storage buffer of the source texture.
-
-    Texture views are only available when using immutable storage. For
-    more information on texture views see
-    http://www.opengl.org/wiki/Texture_Storage#Texture_views.
-
-    The \a target argument specifies the target to use for the view.
-    Only some targets can be used depending upon the target of the original
-    target. For e.g. a view onto a Target1DArray texture can specify
-    either Target1DArray or Target1D but for the latter the number of
-    array layers specified with \a minimumLayer and \a maximumLayer must
-    be exactly 1.
-
-    Simpliar constraints apply for the \a viewFormat. See the above link
-    and the specification for more details.
-
-    The \a minimumMipmapLevel, \a maximumMipmapLevel, \a minimumLayer,
-    and \a maximumLayer arguments serve to restrict the parts of the
-    texture accessible by the texture view.
-
-    If creation of the texture view fails this function will return
-    0. If the function succeeds it will return a pointer to a new
-    QOpenGLTexture object that will return \c true from its isTextureView()
-    function.
-
-    \sa isTextureView()
-*/
 QOpenGLTexture *QOpenGLTexture::createTextureView(Target target,
-                                                  TextureFormat viewFormat,
-                                                  int minimumMipmapLevel, int maximumMipmapLevel,
-                                                  int minimumLayer, int maximumLayer) const
+      TextureFormat viewFormat, int minimumMipmapLevel, int maximumMipmapLevel,
+      int minimumLayer, int maximumLayer) const
 {
     Q_D(const QOpenGLTexture);
+
     if (!isStorageAllocated()) {
         qWarning("Cannot set create a texture view of a texture that does not have storage allocated.");
         return nullptr;
     }
+
     Q_ASSERT(maximumMipmapLevel >= minimumMipmapLevel);
     Q_ASSERT(maximumLayer >= minimumLayer);
-    return d->createTextureView(target, viewFormat,
-                                minimumMipmapLevel, maximumMipmapLevel,
-                                minimumLayer, maximumLayer);
+
+    return d->createTextureView(target, viewFormat, minimumMipmapLevel, maximumMipmapLevel,
+       minimumLayer, maximumLayer);
 }
 
-/*!
-    Returns \c true if this texture object is actually a view onto another
-    texture object.
-
-    \sa createTextureView()
-*/
 bool QOpenGLTexture::isTextureView() const
 {
     Q_D(const QOpenGLTexture);
@@ -3023,25 +2341,9 @@ bool QOpenGLTexture::isTextureView() const
     return d->textureView;
 }
 
-/*!
-    Uploads pixel \a data for this texture object \a mipLevel, array \a layer, and \a cubeFace.
-    Storage must have been allocated before uploading pixel data. Some overloads of setData()
-    will set appropriate dimensions, mipmap levels, and array layers and then allocate storage
-    for you if they have enough information to do so. This will be noted in the function
-    documentation.
-
-    The structure of the pixel data pointed to by \a data is specified by \a sourceFormat
-    and \a sourceType. The pixel data upload can optionally be controlled by \a options.
-
-    If using a compressed format() then you should use setCompressedData() instead of this
-    function.
-
-    \since 5.3
-    \sa setCompressedData()
-*/
 void QOpenGLTexture::setData(int mipLevel, int layer, CubeMapFace cubeFace,
-                             PixelFormat sourceFormat, PixelType sourceType,
-                             const void *data, const QOpenGLPixelTransferOptions * const options)
+   PixelFormat sourceFormat, PixelType sourceType,
+   const void *data, const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
@@ -3053,38 +2355,26 @@ void QOpenGLTexture::setData(int mipLevel, int layer, CubeMapFace cubeFace,
     d->setData(mipLevel, layer, cubeFace, sourceFormat, sourceType, data, options);
 }
 
-/*!
-    \since 5.3
-    \overload
-*/
 void QOpenGLTexture::setData(int mipLevel, int layer,
-                             PixelFormat sourceFormat, PixelType sourceType,
-                             const void *data, const QOpenGLPixelTransferOptions * const options)
+   PixelFormat sourceFormat, PixelType sourceType,
+   const void *data, const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
     d->setData(mipLevel, layer, QOpenGLTexture::CubeMapPositiveX, sourceFormat, sourceType, data, options);
 }
 
-/*!
-    \since 5.3
-    \overload
-*/
 void QOpenGLTexture::setData(int mipLevel,
-                             PixelFormat sourceFormat, PixelType sourceType,
-                             const void *data, const QOpenGLPixelTransferOptions * const options)
+   PixelFormat sourceFormat, PixelType sourceType,
+   const void *data, const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
     d->setData(mipLevel, 0, QOpenGLTexture::CubeMapPositiveX, sourceFormat, sourceType, data, options);
 }
 
-/*!
-    \since 5.3
-    \overload
-*/
 void QOpenGLTexture::setData(PixelFormat sourceFormat, PixelType sourceType,
-                             const void *data, const QOpenGLPixelTransferOptions * const options)
+   const void *data, const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
@@ -3120,44 +2410,29 @@ void QOpenGLTexture::setData(const QImage& image, MipMapGeneration genMipMaps)
     setData(0, QOpenGLTexture::RGBA, QOpenGLTexture::UInt8, glImage.constBits(), &uploadOptions);
 }
 
-/*!
-    Uploads compressed pixel \a data to \a mipLevel, array \a layer, and \a cubeFace.
-    The pixel transfer can optionally be controlled with \a options. The \a dataSize
-    argument should specify the size of the data pointed to by \a data.
-
-    If not using a compressed format() then you should use setData() instead of this
-    function.
-
-    \since 5.3
-*/
 void QOpenGLTexture::setCompressedData(int mipLevel, int layer, CubeMapFace cubeFace,
-                                       int dataSize, const void *data,
-                                       const QOpenGLPixelTransferOptions * const options)
+   int dataSize, const void *data, const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
+
     if (!isStorageAllocated()) {
         qWarning("Cannot set data on a texture that does not have storage allocated.\n"
                  "To do so call allocateStorage() before this function");
         return;
     }
+
     d->setCompressedData(mipLevel, layer, cubeFace, dataSize, data, options);
 }
 
-/*!
-    \overload
-*/
 void QOpenGLTexture::setCompressedData(int mipLevel, int layer, int dataSize, const void *data,
-                                       const QOpenGLPixelTransferOptions * const options)
+   const QOpenGLPixelTransferOptions * const options)
 {
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->textureId);
     d->setCompressedData(mipLevel, layer, QOpenGLTexture::CubeMapPositiveX, dataSize, data, options);
 }
 
-/*!
-    \overload
-*/
 void QOpenGLTexture::setCompressedData(int mipLevel, int dataSize, const void *data,
                                        const QOpenGLPixelTransferOptions * const options)
 {
@@ -3166,9 +2441,6 @@ void QOpenGLTexture::setCompressedData(int mipLevel, int dataSize, const void *d
     d->setCompressedData(mipLevel, 0, QOpenGLTexture::CubeMapPositiveX, dataSize, data, options);
 }
 
-/*!
-    \overload
-*/
 void QOpenGLTexture::setCompressedData(int dataSize, const void *data,
                                        const QOpenGLPixelTransferOptions * const options)
 {
@@ -3349,45 +2621,30 @@ bool QOpenGLTexture::hasFeature(Feature feature)
     return supported;
 }
 
-/*!
-    Sets the base mipmap level used for all texture lookups with this texture to \a baseLevel.
-
-    \note This function has no effect on Qt built for OpenGL ES 2.
-    \sa mipBaseLevel(), setMipMaxLevel(), setMipLevelRange()
-*/
 void QOpenGLTexture::setMipBaseLevel(int baseLevel)
 {
     Q_D(QOpenGLTexture);
     d->create();
+
     if (!d->features.testFlag(TextureMipMapLevel)) {
         qWarning("QOpenGLTexture::setMipBaseLevel: requires OpenGL >= 1.2 or OpenGL ES >= 3.0");
         return;
     }
+
     Q_ASSERT(d->textureId);
     Q_ASSERT(d->texFuncs);
     Q_ASSERT(baseLevel <= d->maxLevel);
+
     d->baseLevel = baseLevel;
     d->texFuncs->glTextureParameteri(d->textureId, d->target, d->bindingTarget, GL_TEXTURE_BASE_LEVEL, baseLevel);
 }
 
-/*!
-    Returns the mipmap base level used for all texture lookups with this texture.
-    The default is 0.
-
-    \sa setMipBaseLevel(), mipMaxLevel(), mipLevelRange()
-*/
 int QOpenGLTexture::mipBaseLevel() const
 {
     Q_D(const QOpenGLTexture);
     return d->baseLevel;
 }
 
-/*!
-    Sets the maximum mipmap level used for all texture lookups with this texture to \a maxLevel.
-
-    \note This function has no effect on Qt built for OpenGL ES 2.
-    \sa mipMaxLevel(), setMipBaseLevel(), setMipLevelRange()
-*/
 void QOpenGLTexture::setMipMaxLevel(int maxLevel)
 {
     Q_D(QOpenGLTexture);
@@ -3403,24 +2660,12 @@ void QOpenGLTexture::setMipMaxLevel(int maxLevel)
     d->texFuncs->glTextureParameteri(d->textureId, d->target, d->bindingTarget, GL_TEXTURE_MAX_LEVEL, maxLevel);
 }
 
-/*!
-    Returns the mipmap maximum level used for all texture lookups with this texture.
-
-    \sa setMipMaxLevel(), mipBaseLevel(), mipLevelRange()
-*/
 int QOpenGLTexture::mipMaxLevel() const
 {
     Q_D(const QOpenGLTexture);
     return d->maxLevel;
 }
 
-/*!
-    Sets the range of mipmap levels that can be used for texture lookups with this texture
-    to range from \a baseLevel to \a maxLevel.
-
-    \note This function has no effect on Qt built for OpenGL ES 2.
-    \sa setMipBaseLevel(), setMipMaxLevel(), mipLevelRange()
-*/
 void QOpenGLTexture::setMipLevelRange(int baseLevel, int maxLevel)
 {
     Q_D(QOpenGLTexture);
@@ -3436,55 +2681,24 @@ void QOpenGLTexture::setMipLevelRange(int baseLevel, int maxLevel)
     d->texFuncs->glTextureParameteri(d->textureId, d->target, d->bindingTarget, GL_TEXTURE_MAX_LEVEL, maxLevel);
 }
 
-/*!
-    Returns the range of mipmap levels that can be used for texture lookups with this texture.
-
-    \sa mipBaseLevel(), mipMaxLevel()
-*/
 QPair<int, int> QOpenGLTexture::mipLevelRange() const
 {
     Q_D(const QOpenGLTexture);
     return qMakePair(d->baseLevel, d->maxLevel);
 }
 
-/*!
-    If \a enabled is \c true, enables automatic mipmap generation for this texture object
-    to occur whenever the level 0 mipmap data is set via setData().
-
-    The automatic mipmap generation is enabled by default.
-
-    \note Mipmap generation is not supported for compressed textures with OpenGL ES 2.0.
-
-    \sa isAutoMipMapGenerationEnabled(), generateMipMaps()
-*/
 void QOpenGLTexture::setAutoMipMapGenerationEnabled(bool enabled)
 {
     Q_D(QOpenGLTexture);
     d->autoGenerateMipMaps = enabled;
 }
 
-/*!
-    Returns whether auto mipmap generation is enabled for this texture object.
-
-    \sa setAutoMipMapGenerationEnabled(), generateMipMaps()
-*/
 bool QOpenGLTexture::isAutoMipMapGenerationEnabled() const
 {
     Q_D(const QOpenGLTexture);
     return d->autoGenerateMipMaps;
 }
 
-/*!
-    Generates mipmaps for this texture object from mipmap level 0. If you are
-    using a texture target and filtering option that requires mipmaps and you
-    have disabled automatic mipmap generation then you need to call this function
-    or the overload to create the mipmap chain.
-
-    \note Mipmap generation is not supported for compressed textures with OpenGL
-    ES 2.0.
-
-    \sa setAutoMipMapGenerationEnabled(), setMipLevels(), mipLevels()
-*/
 void QOpenGLTexture::generateMipMaps()
 {
     Q_D(QOpenGLTexture);
@@ -3498,18 +2712,6 @@ void QOpenGLTexture::generateMipMaps()
     d->texFuncs->glGenerateTextureMipmap(d->textureId, d->target, d->bindingTarget);
 }
 
-/*!
-    Generates mipmaps for this texture object from mipmap level \a baseLevel. If you are
-    using a texture target and filtering option that requires mipmaps and you
-    have disabled automatic mipmap generation then you need to call this function
-    or the overload to create the mipmap chain.
-
-    The generation of mipmaps to above \a baseLevel is achieved by setting the mipmap
-    base level to \a baseLevel and then generating the mipmap chain. If \a resetBaseLevel
-    is \c true, then the baseLevel of the texture will be reset to its previous value.
-
-    \sa setAutoMipMapGenerationEnabled(), setMipLevels(), mipLevels()
-*/
 void QOpenGLTexture::generateMipMaps(int baseLevel, bool resetBaseLevel)
 {
     Q_D(QOpenGLTexture);
@@ -3721,23 +2923,12 @@ void QOpenGLTexture::setMaximumAnisotropy(float anisotropy)
     d->texFuncs->glTextureParameteri(d->textureId, d->target, d->bindingTarget, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 }
 
-/*!
-    Returns the maximum level of anisotropy to be accounted for when performing texture lookups.
-    This requires the GL_EXT_texture_filter_anisotropic extension.
-
-    \sa setMaximumAnisotropy()
-*/
 float QOpenGLTexture::maximumAnisotropy() const
 {
     Q_D(const QOpenGLTexture);
     return d->maxAnisotropy;
 }
 
-/*!
-    Sets the wrap (or repeat mode) for all texture dimentions to \a mode.
-
-    \sa wrapMode()
-*/
 void QOpenGLTexture::setWrapMode(QOpenGLTexture::WrapMode mode)
 {
     Q_D(QOpenGLTexture);
@@ -3747,10 +2938,6 @@ void QOpenGLTexture::setWrapMode(QOpenGLTexture::WrapMode mode)
     d->setWrapMode(mode);
 }
 
-/*!
-    Holds the texture dimension \a direction.
-    \overload
-*/
 void QOpenGLTexture::setWrapMode(QOpenGLTexture::CoordinateDirection direction, QOpenGLTexture::WrapMode mode)
 {
     Q_D(QOpenGLTexture);
@@ -3760,11 +2947,6 @@ void QOpenGLTexture::setWrapMode(QOpenGLTexture::CoordinateDirection direction, 
     d->setWrapMode(direction, mode);
 }
 
-/*!
-    Returns the wrap mode for the texture dimension \a direction.
-
-    \sa setWrapMode()
-*/
 QOpenGLTexture::WrapMode QOpenGLTexture::wrapMode(QOpenGLTexture::CoordinateDirection direction) const
 {
     Q_D(const QOpenGLTexture);
@@ -3902,12 +3084,6 @@ QColor QOpenGLTexture::borderColor() const
     return c;
 }
 
-/*!
-    Writes the texture border color into the first four elements
-    of the array pointed to by \a border.
-
-    \sa setBorderColor()
-*/
 void QOpenGLTexture::borderColor(float *border) const
 {
     Q_D(const QOpenGLTexture);
@@ -3921,12 +3097,6 @@ void QOpenGLTexture::borderColor(float *border) const
     }
 }
 
-/*!
-    Writes the texture border color into the first four elements
-    of the array pointed to by \a border.
-
-    \overload
-*/
 void QOpenGLTexture::borderColor(int *border) const
 {
     Q_D(const QOpenGLTexture);
@@ -3940,12 +3110,6 @@ void QOpenGLTexture::borderColor(int *border) const
     }
 }
 
-/*!
-    Writes the texture border color into the first four elements
-    of the array pointed to by \a border.
-
-    \overload
-*/
 void QOpenGLTexture::borderColor(unsigned int *border) const
 {
     Q_D(const QOpenGLTexture);
@@ -3959,13 +3123,6 @@ void QOpenGLTexture::borderColor(unsigned int *border) const
     }
 }
 
-/*!
-    Sets the minimum level of detail to \a value. This limits the selection of highest
-    resolution mipmap (lowest mipmap level). The default value is -1000.
-
-    \note This function has no effect on Qt built for OpenGL ES 2.
-    \sa minimumLevelOfDetail(), setMaximumLevelOfDetail(), setLevelOfDetailRange()
-*/
 void QOpenGLTexture::setMinimumLevelOfDetail(float value)
 {
 #if !defined(QT_OPENGL_ES_2)

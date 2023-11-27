@@ -646,8 +646,9 @@ int QApplication::colorSpec()
 
 void QApplication::setColorSpec(int spec)
 {
-   if (qApp)
+   if (qApp) {
       qWarning("QApplication::setColorSpec() Method must be called before QApplication is created");
+   }
 
    QApplicationPrivate::app_cspec = spec;
 }

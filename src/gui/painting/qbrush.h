@@ -235,10 +235,6 @@ class Q_GUI_EXPORT QGradient
    }
 
  private:
-   friend class QLinearGradient;
-   friend class QRadialGradient;
-   friend class QConicalGradient;
-   friend class QBrush;
 
    Type m_type;
    Spread m_spread;
@@ -259,6 +255,10 @@ class Q_GUI_EXPORT QGradient
 
    } m_data;
 
+   friend class QBrush;
+   friend class QLinearGradient;
+   friend class QRadialGradient;
+   friend class QConicalGradient;
    void *dummy;
 };
 

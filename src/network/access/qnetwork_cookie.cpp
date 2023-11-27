@@ -793,7 +793,6 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                      }
                   }
 
-
                } else if (field.first == "max-age") {
                   bool ok = false;
                   int secs = field.second.toInt(&ok);

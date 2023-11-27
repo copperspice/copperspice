@@ -275,95 +275,10 @@ QRectF QPageLayoutPrivate::paintRect() const
    return m_mode == QPageLayout::FullPageMode ? fullRect() : fullRect() - m_margins;
 }
 
-
-/*!
-    \class QPageLayout
-    \inmodule QtGui
-    \since 5.3
-    \brief Describes the size, orientation and margins of a page.
-
-    The QPageLayout class defines the layout of a page in a paged document, with the
-    page size, orientation and margins able to be set and the full page and paintable
-    page rectangles defined by those attributes able to be queried in a variety of units.
-
-    The page size is defined by the QPageSize class which can be queried for page size
-    attributes.  Note that the QPageSize itself is always defined in a Portrait
-    orientation.
-
-    The minimum margins can be defined for the layout but normally default to 0.
-    When used in conjunction with Qt's printing support the minimum margins
-    will reflect the minimum printable area defined by the printer.
-
-    In the default StandardMode the current margins and minimum margins are
-    always taken into account.  The paintable rectangle is the full page
-    rectangle less the current margins, and the current margins can only be set
-    to values between the minimum margins and the maximum margins allowed by
-    the full page size.
-
-    In FullPageMode the current margins and minimum margins are not taken
-    into account. The paintable rectangle is the full page rectangle, and the
-    current margins can be set to any values regardless of the minimum margins
-    and page size.
-
-    \sa QPageSize
-*/
-
-/*!
-    \enum QPageLayout::Unit
-
-    This enum type is used to specify the measurement unit for page layout and margins.
-
-    \value Millimeter
-    \value Point  1/72th of an inch
-    \value Inch
-    \value Pica  1/72th of a foot, 1/6th of an inch, 12 Points
-    \value Didot  1/72th of a French inch, 0.375 mm
-    \value Cicero  1/6th of a French inch, 12 Didot, 4.5mm
-*/
-
-/*!
-    \enum QPageLayout::Orientation
-
-    This enum type defines the page orientation
-
-    \value Portrait The page size is used in its default orientation
-    \value Landscape The page size is rotated through 90 degrees
-
-    Note that some standard page sizes are defined with a width larger than
-    their height, hence the orientation is defined relative to the standard
-    page size and not using the relative page dimensions.
-*/
-
-/*!
-    \enum QPageLayout::Mode
-
-    Defines the page layout mode
-
-    \value StandardMode Paint Rect includes margins, margins must fall between the minimum and maximum.
-    \value FullPageMode Paint Rect excludes margins, margins can be any value and must be managed manually.
-*/
-
-/*!
-    Creates an invalid QPageLayout.
-*/
-
 QPageLayout::QPageLayout()
    : d(new QPageLayoutPrivate())
 {
 }
-
-/*!
-    Creates a QPageLayout with the given \a pageSize, \a orientation and
-    \a margins in the given \a units.
-
-    Optionally define the minimum allowed margins \a minMargins, e.g. the minimum
-    margins able to be printed by a physical print device.
-
-    The constructed QPageLayout will be in StandardMode.
-
-    The \a margins given will be clamped to the minimum margins and the maximum
-    margins allowed by the page size.
-*/
 
 QPageLayout::QPageLayout(const QPageSize &pageSize, Orientation orientation,
    const QMarginsF &margins, Unit units,
@@ -372,26 +287,14 @@ QPageLayout::QPageLayout(const QPageSize &pageSize, Orientation orientation,
 {
 }
 
-/*!
-    Copy constructor, copies \a other to this.
-*/
-
 QPageLayout::QPageLayout(const QPageLayout &other)
    : d(other.d)
 {
 }
 
-/*!
-    Destroys the page layout.
-*/
-
 QPageLayout::~QPageLayout()
 {
 }
-
-/*!
-    Assignment operator, assigns \a other to this.
-*/
 
 QPageLayout &QPageLayout::operator=(const QPageLayout &other)
 {
@@ -399,74 +302,20 @@ QPageLayout &QPageLayout::operator=(const QPageLayout &other)
    return *this;
 }
 
-/*!
-    \fn void QPageLayout::swap(QPageLayout &other)
-
-    Swaps this page layout with \a other. This function is very fast and
-    never fails.
-*/
-
-/*!
-    \fn QPageLayout &QPageLayout::operator=(QPageLayout &&other)
-
-    Move-assigns \a other to this QPageLayout instance, transferring the
-    ownership of the managed pointer to this instance.
-*/
-
-/*!
-    \relates QPageLayout
-
-    Returns \c true if page layout \a lhs is equal to page layout \a rhs,
-    i.e. if all the attributes are exactly equal.
-
-    Note that this is a strict equality, especially for page size where the
-    QPageSize ID, name and size must exactly match, and the margins where the
-    units must match.
-
-    \sa QPageLayout::isEquivalentTo()
-*/
-
 bool operator==(const QPageLayout &lhs, const QPageLayout &rhs)
 {
    return lhs.d == rhs.d || *lhs.d == *rhs.d;
 }
-
-/*!
-    \fn bool operator!=(const QPageLayout &lhs, const QPageLayout &rhs)
-    \relates QPageLayout
-
-    Returns \c true if page layout \a lhs is not equal to page layout \a rhs,
-    i.e. if any of the attributes differ.
-
-    Note that this is a strict equality, especially for page size where the
-    QPageSize ID, name and size must exactly match, and the margins where the
-    units must match.
-
-    \sa QPageLayout::isEquivalentTo()
-*/
-
-/*!
-    Returns \c true if this page layout is equivalent to the \a other page layout,
-    i.e. if the page has the same size, margins and orientation.
-*/
 
 bool QPageLayout::isEquivalentTo(const QPageLayout &other) const
 {
    return d && other.d && d->isEquivalentTo(*other.d);
 }
 
-/*!
-    Returns \c true if this page layout is valid.
-*/
-
 bool QPageLayout::isValid() const
 {
    return d->isValid();
 }
-
-/*!
-    Sets a page layout mode to \a mode.
-*/
 
 void QPageLayout::setMode(Mode mode)
 {
@@ -474,26 +323,10 @@ void QPageLayout::setMode(Mode mode)
    d->m_mode = mode;
 }
 
-/*!
-    Returns the page layout mode.
-*/
-
 QPageLayout::Mode QPageLayout::mode() const
 {
    return d->m_mode;
 }
-
-/*!
-    Sets the page size of the page layout to \a pageSize.
-
-    Optionally define the minimum allowed margins \a minMargins, e.g. the minimum
-    margins able to be printed by a physical print device, otherwise the
-    minimum margins will default to 0.
-
-    If StandardMode is set then the existing margins will be clamped
-    to the new minimum margins and the maximum margins allowed by the page size.
-    If FullPageMode is set then the existing margins will be unchanged.
-*/
 
 void QPageLayout::setPageSize(const QPageSize &pageSize, const QMarginsF &minMargins)
 {
@@ -506,25 +339,10 @@ void QPageLayout::setPageSize(const QPageSize &pageSize, const QMarginsF &minMar
    d->setDefaultMargins(minMargins);
 }
 
-/*!
-    Returns the page size of the page layout.
-
-    Note that the QPageSize is always defined in a Portrait orientation.  To
-    obtain a size that takes the set orientation into account you must use
-    fullRect().
-*/
-
 QPageSize QPageLayout::pageSize() const
 {
    return d->m_pageSize;
 }
-
-/*!
-    Sets the page orientation of the page layout to \a orientation.
-
-    Changing the orientation does not affect the current margins or
-    the minimum margins.
-*/
 
 void QPageLayout::setOrientation(Orientation orientation)
 {
@@ -541,18 +359,10 @@ void QPageLayout::setOrientation(Orientation orientation)
    }
 }
 
-/*!
-    Returns the page orientation of the page layout.
-*/
-
 QPageLayout::Orientation QPageLayout::orientation() const
 {
    return d->m_orientation;
 }
-
-/*!
-    Sets the \a units used to define the page layout.
-*/
 
 void QPageLayout::setUnits(Unit units)
 {
@@ -566,30 +376,10 @@ void QPageLayout::setUnits(Unit units)
    }
 }
 
-/*!
-    Returns the units the page layout is currently defined in.
-*/
-
 QPageLayout::Unit QPageLayout::units() const
 {
    return d->m_units;
 }
-
-/*!
-    Sets the page margins of the page layout to \a margins
-    Returns true if the margins were successfully set.
-
-    The units used are those currently defined for the layout.  To use different
-    units then call setUnits() first.
-
-    If in the default StandardMode then all the new margins must fall between the
-    minimum margins set and the maximum margins allowed by the page size,
-    otherwise the margins will not be set.
-
-    If in FullPageMode then any margin values will be accepted.
-
-    \sa margins(), units()
-*/
 
 bool QPageLayout::setMargins(const QMarginsF &margins)
 {
@@ -612,22 +402,6 @@ bool QPageLayout::setMargins(const QMarginsF &margins)
    return false;
 }
 
-/*!
-    Sets the left page margin of the page layout to \a leftMargin.
-    Returns true if the margin was successfully set.
-
-    The units used are those currently defined for the layout.  To use different
-    units call setUnits() first.
-
-    If in the default StandardMode then the new margin must fall between the
-    minimum margin set and the maximum margin allowed by the page size,
-    otherwise the margin will not be set.
-
-    If in FullPageMode then any margin values will be accepted.
-
-    \sa setMargins(), margins()
-*/
-
 bool QPageLayout::setLeftMargin(qreal leftMargin)
 {
    if (d->m_mode == FullPageMode
@@ -638,22 +412,6 @@ bool QPageLayout::setLeftMargin(qreal leftMargin)
    }
    return false;
 }
-
-/*!
-    Sets the right page margin of the page layout to \a rightMargin.
-    Returns true if the margin was successfully set.
-
-    The units used are those currently defined for the layout.  To use different
-    units call setUnits() first.
-
-    If in the default StandardMode then the new margin must fall between the
-    minimum margin set and the maximum margin allowed by the page size,
-    otherwise the margin will not be set.
-
-    If in FullPageMode then any margin values will be accepted.
-
-    \sa setMargins(), margins()
-*/
 
 bool QPageLayout::setRightMargin(qreal rightMargin)
 {
@@ -666,22 +424,6 @@ bool QPageLayout::setRightMargin(qreal rightMargin)
    return false;
 }
 
-/*!
-    Sets the top page margin of the page layout to \a topMargin.
-    Returns true if the margin was successfully set.
-
-    The units used are those currently defined for the layout.  To use different
-    units call setUnits() first.
-
-    If in the default StandardMode then the new margin must fall between the
-    minimum margin set and the maximum margin allowed by the page size,
-    otherwise the margin will not be set.
-
-    If in FullPageMode then any margin values will be accepted.
-
-    \sa setMargins(), margins()
-*/
-
 bool QPageLayout::setTopMargin(qreal topMargin)
 {
    if (d->m_mode == FullPageMode
@@ -692,22 +434,6 @@ bool QPageLayout::setTopMargin(qreal topMargin)
    }
    return false;
 }
-
-/*!
-    Sets the bottom page margin of the page layout to \a bottomMargin.
-    Returns true if the margin was successfully set.
-
-    The units used are those currently defined for the layout.  To use different
-    units call setUnits() first.
-
-    If in the default StandardMode then the new margin must fall between the
-    minimum margin set and the maximum margin allowed by the page size,
-    otherwise the margin will not be set.
-
-    If in FullPageMode then any margin values will be accepted.
-
-    \sa setMargins(), margins()
-*/
 
 bool QPageLayout::setBottomMargin(qreal bottomMargin)
 {
@@ -720,62 +446,25 @@ bool QPageLayout::setBottomMargin(qreal bottomMargin)
    return false;
 }
 
-/*!
-    Returns the margins of the page layout using the currently set units.
-
-    \sa setMargins(), units()
-*/
-
 QMarginsF QPageLayout::margins() const
 {
    return d->m_margins;
 }
-
-/*!
-    Returns the margins of the page layout using the requested \a units.
-
-    \sa setMargins(), margins()
-*/
 
 QMarginsF QPageLayout::margins(Unit units) const
 {
    return d->margins(units);
 }
 
-/*!
-    Returns the margins of the page layout in Postscript Points (1/72 of an inch).
-
-    \sa setMargins(), margins()
-*/
-
 QMargins QPageLayout::marginsPoints() const
 {
    return d->marginsPoints();
 }
 
-/*!
-    Returns the margins of the page layout in device pixels for the given \a resolution.
-
-    \sa setMargins()
-*/
-
 QMargins QPageLayout::marginsPixels(int resolution) const
 {
    return d->marginsPixels(resolution);
 }
-
-/*!
-    Sets the minimum page margins of the page layout to \a minMargins.
-
-    It is not recommended to override the default values set for a page size
-    as this may be the minimum printable area for a physical print device.
-
-    If the StandardMode mode is set then the existing margins will be clamped
-    to the new \a minMargins and the maximum allowed by the page size.  If the
-    FullPageMode is set then the existing margins will be unchanged.
-
-    \sa minimumMargins(), setMargins()
-*/
 
 void QPageLayout::setMinimumMargins(const QMarginsF &minMargins)
 {
@@ -783,84 +472,30 @@ void QPageLayout::setMinimumMargins(const QMarginsF &minMargins)
    d->setDefaultMargins(minMargins);
 }
 
-/*!
-    Returns the minimum margins of the page layout.
-
-    \sa setMinimumMargins(), maximumMargins()
-*/
-
 QMarginsF QPageLayout::minimumMargins() const
 {
    return d->m_minMargins;
 }
-
-/*!
-    Returns the maximum margins that would be applied if the page layout was
-    in StandardMode.
-
-    The maximum margins allowed are calculated as the full size of the page
-    minus the minimum margins set. For example, if the page width is 100 points
-    and the minimum right margin is 10 points, then the maximum left margin
-    will be 90 points.
-
-    \sa setMinimumMargins(), minimumMargins()
-*/
 
 QMarginsF QPageLayout::maximumMargins() const
 {
    return d->m_maxMargins;
 }
 
-/*!
-    Returns the full page rectangle in the current layout units.
-
-    The page rectangle takes into account the page size and page orientation,
-    but not the page margins.
-
-    \sa paintRect(), units()
-*/
-
 QRectF QPageLayout::fullRect() const
 {
    return isValid() ? d->fullRect() : QRect();
 }
-
-/*!
-    Returns the full page rectangle in the required \a units.
-
-    The page rectangle takes into account the page size and page orientation,
-    but not the page margins.
-
-    \sa paintRect()
-*/
 
 QRectF QPageLayout::fullRect(Unit units) const
 {
    return isValid() ? d->fullRect(units) : QRect();
 }
 
-/*!
-    Returns the full page rectangle in Postscript Points (1/72 of an inch).
-
-    The page rectangle takes into account the page size and page orientation,
-    but not the page margins.
-
-    \sa paintRect()
-*/
-
 QRect QPageLayout::fullRectPoints() const
 {
    return isValid() ? d->fullRectPoints() : QRect();
 }
-
-/*!
-    Returns the full page rectangle in device pixels for the given \a resolution.
-
-    The page rectangle takes into account the page size and page orientation,
-    but not the page margins.
-
-    \sa paintRect()
-*/
 
 QRect QPageLayout::fullRectPixels(int resolution) const
 {
@@ -955,5 +590,3 @@ QDebug operator<<(QDebug dbg, const QPageLayout &layout)
 
    return dbg;
 }
-
-

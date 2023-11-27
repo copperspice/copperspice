@@ -123,12 +123,14 @@ void QAlphaWidget::run(int time)
    checkTime.start();
 
    showWidget = true;
+
 #if defined(Q_OS_WIN)
    qApp->installEventFilter(this);
    widget->setWindowOpacity(0.0);
    widget->show();
    connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
    anim.start(1);
+
 #else
    //This is roughly equivalent to calling setVisible(true) without actually showing the widget
    widget->setAttribute(Qt::WA_WState_ExplicitShowHide, true);
@@ -152,6 +154,7 @@ void QAlphaWidget::run(int time)
 
       connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
       anim.start(1);
+
    } else {
       duration = 0;
       render();
@@ -436,9 +439,11 @@ void QRollEffect::run(int time)
       if (orientation & (RightScroll | LeftScroll)) {
          dist += totalWidth - currentWidth;
       }
+
       if (orientation & (DownScroll | UpScroll)) {
          dist += totalHeight - currentHeight;
       }
+
       duration = qMin(qMax(dist / 3, 50), 120);
    }
 

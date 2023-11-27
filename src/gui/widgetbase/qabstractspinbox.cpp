@@ -1527,6 +1527,7 @@ QVariant operator*(const QVariant &arg1, double multiplier)
       case QVariant::Double:
          ret = QVariant(arg1.toDouble() * multiplier);
          break;
+
       case QVariant::DateTime: {
          double days = QDATETIME_DATE_MIN.daysTo(arg1.toDateTime().date()) * multiplier;
          int daysInt = (int)days;
@@ -1556,10 +1557,12 @@ double operator/(const QVariant &arg1, const QVariant &arg2)
          a1 = (double)arg1.toInt();
          a2 = (double)arg2.toInt();
          break;
+
       case QVariant::Double:
          a1 = arg1.toDouble();
          a2 = arg2.toDouble();
          break;
+
       case QVariant::DateTime:
          a1 = QDATETIME_DATE_MIN.daysTo(arg1.toDate());
          a2 = QDATETIME_DATE_MIN.daysTo(arg2.toDate());

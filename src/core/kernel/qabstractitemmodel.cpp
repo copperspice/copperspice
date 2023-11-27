@@ -665,8 +665,7 @@ void QAbstractItemModelPrivate::rowsAboutToBeRemoved(const QModelIndex &parent,
    persistent.invalidated.push(persistent_invalidated);
 }
 
-void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent,
-               int first, int last)
+void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent, int first, int last)
 {
    QVector<QPersistentModelIndexData *> persistent_moved = persistent.moved.pop();
    int count = (last - first) + 1; // it is important to only use the delta, because the change could be nested

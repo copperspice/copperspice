@@ -210,9 +210,7 @@ void QOpenGLVertexArrayObjectPrivate::destroy()
     vao = 0;
 }
 
-/*!
-    \internal
-*/
+// internal
 void QOpenGLVertexArrayObjectPrivate::_q_contextAboutToBeDestroyed()
 {
     destroy();
@@ -225,6 +223,7 @@ void QOpenGLVertexArrayObjectPrivate::bind()
     case Core_3_2:
         vaoFuncs.core_3_2->glBindVertexArray(vao);
         break;
+
     case Core_3_0:
         vaoFuncs.core_3_0->glBindVertexArray(vao);
         break;
@@ -234,6 +233,7 @@ void QOpenGLVertexArrayObjectPrivate::bind()
     case OES:
         vaoFuncs.helper->glBindVertexArray(vao);
         break;
+
     default:
         break;
     }
@@ -246,98 +246,36 @@ void QOpenGLVertexArrayObjectPrivate::release()
     case Core_3_2:
         vaoFuncs.core_3_2->glBindVertexArray(0);
         break;
+
     case Core_3_0:
         vaoFuncs.core_3_0->glBindVertexArray(0);
         break;
 #endif
+
     case ARB:
     case APPLE:
     case OES:
         vaoFuncs.helper->glBindVertexArray(0);
         break;
+
     default:
         break;
     }
 }
 
-
-/*!
-    \class QOpenGLVertexArrayObject
-    \brief The QOpenGLVertexArrayObject class wraps an OpenGL Vertex Array Object.
-    \inmodule QtGui
-    \since 5.1
-    \ingroup painting-3D
-
-    A Vertex Array Object (VAO) is an OpenGL container object that encapsulates
-    the state needed to specify per-vertex attribute data to the OpenGL pipeline.
-    To put it another way, a VAO remembers the states of buffer objects (see
-    QOpenGLBuffer) and their associated state (e.g. vertex attribute divisors).
-    This allows a very easy and efficient method of switching between OpenGL buffer
-    states for rendering different "objects" in a scene. The QOpenGLVertexArrayObject
-    class is a thin wrapper around an OpenGL VAO.
-
-    For the desktop, VAOs are supported as a core feature in OpenGL 3.0 or newer and by the
-    GL_ARB_vertex_array_object for older versions. On OpenGL ES 2, VAOs are provided by
-    the optional GL_OES_vertex_array_object extension. You can check the version of
-    OpenGL with QOpenGLContext::surfaceFormat() and check for the presence of extensions
-    with QOpenGLContext::hasExtension().
-
-    As with the other Qt OpenGL classes, QOpenGLVertexArrayObject has a create()
-    function to create the underlying OpenGL object. This is to allow the developer to
-    ensure that there is a valid current OpenGL context at the time.
-
-    Once you have successfully created a VAO the typical usage pattern is:
-
-    \list
-        \li In scene initialization function, for each visual object:
-        \list
-            \li Bind the VAO
-            \li Set vertex data state for this visual object (vertices, normals, texture coordinates etc.)
-            \li Unbind (release()) the VAO
-        \endlist
-        \li In render function, for each visual object:
-        \list
-            \li Bind the VAO (and shader program if needed)
-            \li Call a glDraw*() function
-            \li Unbind (release()) the VAO
-        \endlist
-    \endlist
-
-    The act of binding the VAO in the render function has the effect of restoring
-    all of the vertex data state setup in the initialization phase. In this way we can
-    set a great deal of state when setting up a VAO and efficiently switch between
-    state sets of objects to be rendered. Using VAOs also allows the OpenGL driver
-    to amortise the validation checks of the vertex data.
-
-    \note Vertex Array Objects, like all other OpenGL container objects, are specific
-    to the context for which they were created and cannot be shared amongst a
-    context group.
-
-    \sa QOpenGLVertexArrayObject::Binder, QOpenGLBuffer
-*/
-
-/*!
-    Creates a QOpenGLVertexArrayObject with the given \a parent. You must call create()
-    with a valid OpenGL context before using.
-*/
 QOpenGLVertexArrayObject::QOpenGLVertexArrayObject(QObject* parent)
     : QObject(parent), d_ptr(new QOpenGLVertexArrayObjectPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    \internal
-*/
+// internal
 QOpenGLVertexArrayObject::QOpenGLVertexArrayObject(QOpenGLVertexArrayObjectPrivate &dd)
     : d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Destroys the QOpenGLVertexArrayObject and the underlying OpenGL resource.
-*/
 QOpenGLVertexArrayObject::~QOpenGLVertexArrayObject()
 {
     QOpenGLContext* ctx = QOpenGLContext::currentContext();
@@ -374,76 +312,36 @@ QOpenGLVertexArrayObject::~QOpenGLVertexArrayObject()
     }
 }
 
-/*!
-    Creates the underlying OpenGL vertex array object. There must be a valid OpenGL context
-    that supports vertex array objects current for this function to succeed.
-
-    Returns \c true if the OpenGL vertex array object was successfully created.
-
-    When the return value is \c false, vertex array object support is not available. This
-    is not an error: on systems with OpenGL 2.x or OpenGL ES 2.0 vertex array objects may
-    not be supported. The application is free to continue execution in this case, but it
-    then has to be prepared to operate in a VAO-less manner too. This means that instead
-    of merely calling bind(), the value of isCreated() must be checked and the vertex
-    arrays has to be initialized in the traditional way when there is no vertex array
-    object present.
-
-    \sa isCreated()
-*/
 bool QOpenGLVertexArrayObject::create()
 {
     Q_D(QOpenGLVertexArrayObject);
     return d->create();
 }
 
-/*!
-    Destroys the underlying OpenGL vertex array object. There must be a valid OpenGL context
-    that supports vertex array objects current for this function to succeed.
-*/
 void QOpenGLVertexArrayObject::destroy()
 {
     Q_D(QOpenGLVertexArrayObject);
     d->destroy();
 }
 
-/*!
-    Returns \c true is the underlying OpenGL vertex array object has been created. If this
-    returns \c true and the associated OpenGL context is current, then you are able to bind()
-    this object.
-*/
 bool QOpenGLVertexArrayObject::isCreated() const
 {
     Q_D(const QOpenGLVertexArrayObject);
     return (d->vao != 0);
 }
 
-/*!
-    Returns the id of the underlying OpenGL vertex array object.
-*/
 GLuint QOpenGLVertexArrayObject::objectId() const
 {
     Q_D(const QOpenGLVertexArrayObject);
     return d->vao;
 }
 
-/*!
-    Binds this vertex array object to the OpenGL binding point. From this point on
-    and until release() is called or another vertex array object is bound, any
-    modifications made to vertex data state are stored inside this vertex array object.
-
-    If another vertex array object is then bound you can later restore the set of
-    state associated with this object by calling bind() on this object once again.
-    This allows efficient changes between vertex data states in rendering functions.
-*/
 void QOpenGLVertexArrayObject::bind()
 {
     Q_D(QOpenGLVertexArrayObject);
     d->bind();
 }
 
-/*!
-    Unbinds this vertex array object by binding the default vertex array object (id = 0).
-*/
 void QOpenGLVertexArrayObject::release()
 {
     Q_D(QOpenGLVertexArrayObject);

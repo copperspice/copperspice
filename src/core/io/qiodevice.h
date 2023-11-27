@@ -78,7 +78,7 @@ class Q_CORE_EXPORT QIODevice : public QObject
    virtual bool open(OpenMode mode);
    virtual void close();
 
-   // ### Qt5/pos() and seek() should not be virtual, and
+   // TODO: pos() and seek() should not be virtual, and
    // ### seek() should call a virtual seekData() function.
    virtual qint64 pos() const;
    virtual qint64 size() const;

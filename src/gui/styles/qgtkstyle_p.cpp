@@ -484,7 +484,7 @@ void QGtkStylePrivate::initGtkWidgets() const
       qWarning("\nThis process is currently running setuid or setgid.\nGTK+ does not allow this, "
          "the GTK+ integration will not be used.\nLaunch this app using \'gksudo\', "
          "\'kdesudo\' or a similar tool.\n\n"
-         "See http://www.gtk.org/setuid.html for more information.\n");
+         "Refer to https://www.gtk.org/setuid.html for more information.\n");
       return;
    }
 

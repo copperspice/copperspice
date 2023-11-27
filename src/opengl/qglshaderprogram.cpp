@@ -750,16 +750,6 @@ QString QGLShaderProgram::log() const
    return d->log;
 }
 
-/*!
-    Binds this shader program to the active QGLContext and makes
-    it the current shader program.  Any previously bound shader program
-    is released.  This is equivalent to calling \c{glUseProgram()} on
-    programId().  Returns true if the program was successfully bound;
-    false otherwise.  If the shader program has not yet been linked,
-    or it needs to be re-linked, this function will call link().
-
-    \sa link(), release()
-*/
 bool QGLShaderProgram::bind()
 {
    Q_D(QGLShaderProgram);
@@ -1266,24 +1256,11 @@ void QGLShaderProgram::setUniformValue(int location, const QVector3D &value)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QVector3D &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QVector4D &value)
 {
    Q_D(QGLShaderProgram);
@@ -1293,25 +1270,11 @@ void QGLShaderProgram::setUniformValue(int location, const QVector4D &value)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QVector4D &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the red, green, blue, and alpha components of \a color.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QColor &color)
 {
    Q_D(QGLShaderProgram);
@@ -1324,25 +1287,11 @@ void QGLShaderProgram::setUniformValue(int location, const QColor &color)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to
-    the red, green, blue, and alpha components of \a color.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QColor &color)
 {
    setUniformValue(uniformLocation(name), color);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QPoint &point)
 {
    Q_D(QGLShaderProgram);
@@ -1353,25 +1302,11 @@ void QGLShaderProgram::setUniformValue(int location, const QPoint &point)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QPoint &point)
 {
    setUniformValue(uniformLocation(name), point);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QPointF &point)
 {
    Q_D(QGLShaderProgram);
@@ -1382,25 +1317,11 @@ void QGLShaderProgram::setUniformValue(int location, const QPointF &point)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QPointF &point)
 {
    setUniformValue(uniformLocation(name), point);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QSize &size)
 {
    Q_D(QGLShaderProgram);
@@ -1411,25 +1332,11 @@ void QGLShaderProgram::setUniformValue(int location, const QSize &size)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QSize &size)
 {
    setUniformValue(uniformLocation(name), size);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QSizeF &size)
 {
    Q_D(QGLShaderProgram);
@@ -1440,19 +1347,11 @@ void QGLShaderProgram::setUniformValue(int location, const QSizeF &size)
    }
 }
 
-
 void QGLShaderProgram::setUniformValue(const char *name, const QSizeF &size)
 {
    setUniformValue(uniformLocation(name), size);
 }
 
-
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 2x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix2x2 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1466,25 +1365,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix2x2 &value)
    d->glfuncs->glUniformMatrix2fv(location, 1, GL_FALSE, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 2x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix2x2 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 2x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix2x3 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1498,25 +1383,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix2x3 &value)
    d->glfuncs->glUniform3fv(location, 2, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 2x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix2x3 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 2x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix2x4 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1530,25 +1401,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix2x4 &value)
    d->glfuncs->glUniform4fv(location, 2, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 2x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix2x4 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 3x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix3x2 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1562,25 +1419,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix3x2 &value)
    d->glfuncs->glUniform2fv(location, 3, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 3x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix3x2 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 3x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix3x3 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1594,25 +1437,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix3x3 &value)
    d->glfuncs->glUniformMatrix3fv(location, 1, GL_FALSE, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 3x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix3x3 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 3x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix3x4 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1626,25 +1455,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix3x4 &value)
    d->glfuncs->glUniform4fv(location, 3, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 3x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix3x4 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 4x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix4x2 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1658,25 +1473,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix4x2 &value)
    d->glfuncs->glUniform2fv(location, 4, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 4x2 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix4x2 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 4x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix4x3 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1690,25 +1491,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix4x3 &value)
    d->glfuncs->glUniform3fv(location, 4, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 4x3 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix4x3 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context
-    to a 4x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const QMatrix4x4 &value)
 {
    Q_D(QGLShaderProgram);
@@ -1722,29 +1509,11 @@ void QGLShaderProgram::setUniformValue(int location, const QMatrix4x4 &value)
    d->glfuncs->glUniformMatrix4fv(location, 1, GL_FALSE, tmp);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 4x4 matrix \a value.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const QMatrix4x4 &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable at \a location in the current context
-    to a 2x2 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-    \since 4.7
-*/
 void QGLShaderProgram::setUniformValue(int location, const GLfloat value[2][2])
 {
    Q_D(QGLShaderProgram);
@@ -1753,16 +1522,6 @@ void QGLShaderProgram::setUniformValue(int location, const GLfloat value[2][2])
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable at \a location in the current context
-    to a 3x3 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-    \since 4.7
-*/
 void QGLShaderProgram::setUniformValue(int location, const GLfloat value[3][3])
 {
    Q_D(QGLShaderProgram);
@@ -1771,15 +1530,6 @@ void QGLShaderProgram::setUniformValue(int location, const GLfloat value[3][3])
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable at \a location in the current context
-    to a 4x4 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(int location, const GLfloat value[4][4])
 {
    Q_D(QGLShaderProgram);
@@ -1788,58 +1538,21 @@ void QGLShaderProgram::setUniformValue(int location, const GLfloat value[4][4])
    }
 }
 
-
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 2x2 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-    \since 4.7
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const GLfloat value[2][2])
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 3x3 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-    \since 4.7
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const GLfloat value[3][3])
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 4x4 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValue(const char *name, const GLfloat value[4][4])
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to a
-    3x3 transformation matrix \a value that is specified as a QTransform value.
-
-    To set a QTransform value as a 4x4 matrix in a shader, use
-    \c{setUniformValue(location, QMatrix4x4(value))}.
-*/
 void QGLShaderProgram::setUniformValue(int location, const QTransform &value)
 {
    Q_D(QGLShaderProgram);
@@ -1854,27 +1567,12 @@ void QGLShaderProgram::setUniformValue(int location, const QTransform &value)
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to a
-    3x3 transformation matrix \a value that is specified as a QTransform value.
-
-    To set a QTransform value as a 4x4 matrix in a shader, use
-    \c{setUniformValue(name, QMatrix4x4(value))}.
-*/
 void QGLShaderProgram::setUniformValue
 (const char *name, const QTransform &value)
 {
    setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const GLint *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -1884,27 +1582,12 @@ void QGLShaderProgram::setUniformValueArray(int location, const GLint *values, i
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray
 (const char *name, const GLint *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.  This overload
-    should be used when setting an array of sampler values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const GLuint *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -1914,28 +1597,12 @@ void QGLShaderProgram::setUniformValueArray(int location, const GLuint *values, 
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.  This overload
-    should be used when setting an array of sampler values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray
 (const char *name, const GLuint *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.  Each element
-    has \a tupleSize components.  The \a tupleSize must be 1, 2, 3, or 4.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const GLfloat *values, int count, int tupleSize)
 {
    Q_D(QGLShaderProgram);
@@ -1955,27 +1622,12 @@ void QGLShaderProgram::setUniformValueArray(int location, const GLfloat *values,
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.  Each element
-    has \a tupleSize components.  The \a tupleSize must be 1, 2, 3, or 4.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray
 (const char *name, const GLfloat *values, int count, int tupleSize)
 {
    setUniformValueArray(uniformLocation(name), values, count, tupleSize);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QVector2D *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -1985,25 +1637,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QVector2D *value
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QVector2D *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QVector3D *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2013,25 +1651,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QVector3D *value
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QVector3D *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QVector4D *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2041,14 +1665,6 @@ void QGLShaderProgram::setUniformValueArray(int location, const QVector4D *value
    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
@@ -2090,13 +1706,6 @@ void QGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *v
         colfunc(location, count * cols, temp.constData()); \
     }
 
-
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2105,25 +1714,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 *valu
    (d->glfuncs->glUniformMatrix2fv, location, values, count, QMatrix2x2, 2, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x2 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2133,25 +1728,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 *valu
       QMatrix2x3, 2, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x3 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2161,25 +1742,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 *valu
       QMatrix2x4, 2, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x4 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2189,25 +1756,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 *valu
       QMatrix3x2, 3, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x2 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2216,25 +1769,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 *valu
    (d->glfuncs->glUniformMatrix3fv, location, values, count, QMatrix3x3, 3, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x3 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2244,25 +1783,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 *valu
       QMatrix3x4, 3, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x4 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2272,25 +1797,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 *valu
       QMatrix4x2, 4, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x2 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2300,25 +1811,11 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 *valu
       QMatrix4x3, 4, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x3 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x4 *values, int count)
 {
    Q_D(QGLShaderProgram);
@@ -2326,14 +1823,6 @@ void QGLShaderProgram::setUniformValueArray(int location, const QMatrix4x4 *valu
    setUniformMatrixArray(d->glfuncs->glUniformMatrix4fv, location, values, count, QMatrix4x4, 4, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x4 *values, int count)
 {
    setUniformValueArray(uniformLocation(name), values, count);
@@ -2341,34 +1830,20 @@ void QGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x4 *
 
 #undef ctx
 
-/*!
-    Returns the hardware limit for how many vertices a geometry shader
-    can output.
-
-    \since 4.7
-
-    \sa setGeometryOutputVertexCount()
-*/
 int QGLShaderProgram::maxGeometryOutputVertices() const
 {
    GLint n = 0;
+
 #if !defined(QT_OPENGL_ES_2)
    Q_D(const QGLShaderProgram);
    if (!QOpenGLContext::currentContext()->isOpenGLES()) {
       d->glfuncs->glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &n);
    }
 #endif
+
    return n;
 }
 
-/*!
-    Sets the maximum number of vertices the current geometry shader
-    program will produce, if active, to \a count.
-
-    \since 4.7
-
-    This parameter takes effect the next time the program is linked.
-*/
 void QGLShaderProgram::setGeometryOutputVertexCount(int count)
 {
 #ifndef QT_NO_DEBUG
@@ -2381,83 +1856,34 @@ void QGLShaderProgram::setGeometryOutputVertexCount(int count)
    d_func()->geometryVertexCount = count;
 }
 
-
-/*!
-    Returns the maximum number of vertices the current geometry shader
-    program will produce, if active.
-
-    \since 4.7
-
-    This parameter takes effect the ntext time the program is linked.
-*/
 int QGLShaderProgram::geometryOutputVertexCount() const
 {
    return d_func()->geometryVertexCount;
 }
 
-
-/*!
-    Sets the input type from \a inputType.
-
-    This parameter takes effect the next time the program is linked.
-*/
 void QGLShaderProgram::setGeometryInputType(GLenum inputType)
 {
    d_func()->geometryInputType = inputType;
 }
-
-
-/*!
-    Returns the geometry shader input type, if active.
-
-    This parameter takes effect the next time the program is linked.
-
-    \since 4.7
- */
 
 GLenum QGLShaderProgram::geometryInputType() const
 {
    return d_func()->geometryInputType;
 }
 
-
-/*!
-    Sets the output type from the geometry shader, if active, to
-    \a outputType.
-
-    This parameter takes effect the next time the program is linked.
-
-    \since 4.7
-*/
 void QGLShaderProgram::setGeometryOutputType(GLenum outputType)
 {
    d_func()->geometryOutputType = outputType;
 }
 
-
-/*!
-    Returns the geometry shader output type, if active.
-
-    This parameter takes effect the next time the program is linked.
-
-    \since 4.7
- */
 GLenum QGLShaderProgram::geometryOutputType() const
 {
    return d_func()->geometryOutputType;
 }
 
-
-/*!
-    Returns true if shader programs written in the OpenGL Shading
-    Language (GLSL) are supported on this system; false otherwise.
-
-    The \a context is used to resolve the GLSL extensions.
-    If \a context is null, then QGLContext::currentContext() is used.
-*/
 bool QGLShaderProgram::hasOpenGLShaderPrograms(const QGLContext *context)
 {
-#if !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_OPENGL_ES_2)
    if (!context) {
       context = QGLContext::currentContext();
    }
@@ -2474,9 +1900,6 @@ bool QGLShaderProgram::hasOpenGLShaderPrograms(const QGLContext *context)
 #endif
 }
 
-/*!
-    \internal
-*/
 void QGLShaderProgram::shaderDestroyed()
 {
    Q_D(QGLShaderProgram);
@@ -2488,7 +1911,6 @@ void QGLShaderProgram::shaderDestroyed()
 
 #undef ctx
 #undef context
-
 
 bool QGLShader::hasOpenGLShaders(ShaderType type, const QGLContext *context)
 {
@@ -2516,5 +1938,3 @@ bool QGLShader::hasOpenGLShaders(ShaderType type, const QGLContext *context)
 
    return true;
 }
-
-

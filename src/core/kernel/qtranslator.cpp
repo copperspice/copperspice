@@ -554,8 +554,6 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    QString realname;
    QStringList fuzzyLocales;
 
-   // see http://www.unicode.org/reports/tr35/#LanguageMatching for inspiration
-
    QStringList languages = locale.uiLanguages();
 
 #if defined(Q_OS_UNIX)

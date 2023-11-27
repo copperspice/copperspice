@@ -576,7 +576,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
    }
 
    if (QApplicationPrivate::testAttribute(Qt::AA_ImmediateWidgetCreation)) {
-      // ### fixme: Qt 6: Remove AA_ImmediateWidgetCreation.
+      // TODO: Remove AA_ImmediateWidgetCreation
       q->create();
    }
 
@@ -5656,7 +5656,7 @@ void QWidget::setContentsMargins(int left, int top, int right, int bottom)
       updateGeometry();
    }
 
-   // ### Qt5: compat, remove
+   // ### TODO: consider removing
    if (isVisible()) {
       update();
       QResizeEvent e(data->crect.size(), data->crect.size());

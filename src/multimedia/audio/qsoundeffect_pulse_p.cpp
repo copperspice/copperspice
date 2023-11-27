@@ -194,6 +194,7 @@ void PulseDaemon::prepare()
       pa_threaded_mainloop_free(m_mainLoop);
       m_mainLoop = nullptr;
       onContextFailed();
+
       return;
   }
 
@@ -249,7 +250,7 @@ class PulseDaemonLocker
 
 class QSoundEffectRef
 {
-public:
+ public:
     QSoundEffectRef(QSoundEffectPrivate *target)
         : m_ref(1), m_target(target)
     {
@@ -303,7 +304,7 @@ public:
         m_target = nullptr;
     }
 
-private:
+ private:
     int m_ref;
     mutable QMutex m_mutex;
     QSoundEffectPrivate *m_target;
@@ -333,8 +334,9 @@ void QSoundEffectPrivate::handleAvailabilityChanged(bool available)
     qDebug() << Q_FUNC_INFO << "Resource availability changed " << m_resourcesAvailable;
 #endif
 
-    if (!m_resourcesAvailable)
+    if (! m_resourcesAvailable) {
         stop();
+    }
 }
 
 void QSoundEffectPrivate::release()
@@ -468,7 +470,7 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
 
        default:
            break;
-       }
+    }
 }
 
 int QSoundEffectPrivate::loopCount() const
@@ -483,13 +485,15 @@ int QSoundEffectPrivate::loopsRemaining() const
 
 void QSoundEffectPrivate::setLoopCount(int loopCount)
 {
-    if (loopCount == 0)
+    if (loopCount == 0) {
         loopCount = 1;
+    }
 
     m_loopCount = loopCount;
 
-    if (m_playing)
+    if (m_playing) {
         setLoopsRemaining(loopCount);
+    }
 }
 
 qreal QSoundEffectPrivate::volume() const
@@ -950,6 +954,7 @@ void QSoundEffectPrivate::playSample()
 
     Q_ASSERT(m_pulseStream);
     Q_ASSERT(pa_stream_get_state(m_pulseStream) == PA_STREAM_READY);
+
     pa_operation *o = pa_stream_cork(m_pulseStream, 0, nullptr, nullptr);
 
     if (o) {
@@ -1162,7 +1167,7 @@ void QSoundEffectPrivate::stream_reset_buffer_callback(pa_stream *s, int success
         return;
     }
 
-    if (!success)
+    if (! success)
         qWarning("QSoundEffect(pulseaudio): failed to reset buffer attribute");
 
 #ifdef QT_PA_DEBUG
@@ -1177,10 +1182,13 @@ void QSoundEffectPrivate::stream_reset_buffer_callback(pa_stream *s, int success
         newBufferAttr = *bufferAttr;
         newBufferAttr.prebuf = self->m_sample->data().size();
         pa_operation *op = pa_stream_set_buffer_attr(self->m_pulseStream, &newBufferAttr, stream_adjust_prebuffer_callback, userdata);
-        if (op)
+
+        if (op) {
             pa_operation_unref(op);
-        else
+        } else {
             qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+        }
+
     } else {
         QMetaObject::invokeMethod(self, "streamReady", Qt::QueuedConnection);
     }

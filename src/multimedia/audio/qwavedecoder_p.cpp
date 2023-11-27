@@ -26,14 +26,9 @@
 #include <qtimer.h>
 #include <qendian.h>
 
-QWaveDecoder::QWaveDecoder(QIODevice *s, QObject *parent):
-   QIODevice(parent),
-   haveFormat(false),
-   dataSize(0),
-   source(s),
-   state(QWaveDecoder::InitialState),
-   junkToSkip(0),
-   bigEndian(false)
+QWaveDecoder::QWaveDecoder(QIODevice *s, QObject *parent)
+   : QIODevice(parent), haveFormat(false), dataSize(0), source(s),
+     state(QWaveDecoder::InitialState), junkToSkip(0), bigEndian(false)
 {
    open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 
@@ -172,6 +167,7 @@ void QWaveDecoder::handleData()
                format.setSampleRate(qFromBigEndian<quint32>(wave.sampleRate));
                format.setSampleSize(bps);
                format.setChannelCount(qFromBigEndian<quint16>(wave.numChannels));
+
             } else {
                int bps = qFromLittleEndian<quint16>(wave.bitsPerSample);
 
@@ -193,6 +189,7 @@ void QWaveDecoder::handleData()
 
          chunk descriptor;
          source->read(reinterpret_cast<char *>(&descriptor), sizeof(chunk));
+
          if (bigEndian) {
             descriptor.size = qFromBigEndian<quint32>(descriptor.size);
          } else {
@@ -227,6 +224,7 @@ bool QWaveDecoder::enoughDataAvailable()
    if (qstrncmp(descriptor.id, "RIFX", 4) == 0) {
       descriptor.size = qFromBigEndian<quint32>(descriptor.size);
    }
+
    if (qstrncmp(descriptor.id, "RIFF", 4) == 0) {
       descriptor.size = qFromLittleEndian<quint32>(descriptor.size);
    }
@@ -306,5 +304,3 @@ void QWaveDecoder::discardBytes(qint64 numBytes)
       junkToSkip = origPos + numBytes - source->pos();
    }
 }
-
-
