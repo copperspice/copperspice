@@ -33,7 +33,7 @@
 #include <qcocoaaccessibility.h>
 #include <qcocoaclipboard.h>
 #include <qcocoadrag.h>
-#include <qcocoaservices.h>"
+#include <qcocoaservices.h>
 #include <qcocoakeymapper.h>
 
 #include <qscopedpointer.h>
