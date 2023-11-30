@@ -120,10 +120,9 @@ class Q_CORE_EXPORT QStringParser
 
             QLocale locale;
 
-
             // add thousand marker
             bool thousands_group = !( locale.numberOptions() & QLocale::OmitGroupSeparator);
-            QChar32 separator    = static_cast<char32_t>(locale.groupSeparator().unicode());
+            T separator = locale.groupSeparator();
 
             if (thousands_group && base == 10) {
                int strLen = locale_arg.size();
@@ -216,7 +215,7 @@ class Q_CORE_EXPORT QStringParser
 
             // replace decimal with correct char
             int decimal_pos = locale_arg.indexOf('.');
-            QChar32 decimal = static_cast<char32_t>(locale.decimalPoint().unicode());
+            T decimal = locale.decimalPoint();
 
             if (decimal_pos != -1) {
                locale_arg.replace(decimal_pos, 1, decimal);
@@ -227,7 +226,7 @@ class Q_CORE_EXPORT QStringParser
 
             // add thousand marker
             bool thousands_group = !( locale.numberOptions() & QLocale::OmitGroupSeparator);
-            QChar32 separator    = static_cast<char32_t>(locale.groupSeparator().unicode());
+            T separator = locale.groupSeparator();
 
             if (thousands_group) {
                for (int i = decimal_pos - 3; i > 0; i -= 3) {

@@ -745,9 +745,16 @@ inline void QTextStreamPrivate::putString(const QString &s, bool number)
          tmp.prepend(QString(padSize, padChar));
 
          if (fieldAlignment == QTextStream::AlignAccountingStyle && number) {
-            const QChar sign = s.size() > 0 ? s.at(0) : QChar();
 
-            if (sign == locale.negativeSign() || sign == locale.positiveSign()) {
+            if (s.startsWith(locale.negativeSign()))  {
+               const QChar sign = s.at(0);
+
+               tmp.replace(padSize, 1, tmp.at(0));
+               tmp.replace(0, 1, sign);
+            }
+
+            if (s.startsWith(locale.positiveSign()))  {
+               const QChar sign = s.at(0);
 
                tmp.replace(padSize, 1, tmp.at(0));
                tmp.replace(0, 1, sign);
