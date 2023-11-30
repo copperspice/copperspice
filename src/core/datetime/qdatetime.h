@@ -134,28 +134,28 @@ class Q_CORE_EXPORT QDate
    }
 #endif
 
-   bool operator==(const QDate &value) const {
-      return jd == value.jd;
+   bool operator==(const QDate &other) const {
+      return jd == other.jd;
    }
 
-   bool operator!=(const QDate &value) const {
-      return jd != value.jd;
+   bool operator!=(const QDate &other) const {
+      return jd != other.jd;
    }
 
-   bool operator<(const QDate &value) const {
-      return jd < value.jd;
+   bool operator<(const QDate &other) const {
+      return jd < other.jd;
    }
 
-   bool operator<=(const QDate &value) const {
-      return jd <= value.jd;
+   bool operator<=(const QDate &other) const {
+      return jd <= other.jd;
    }
 
-   bool operator>(const QDate &value) const {
-      return jd > value.jd;
+   bool operator>(const QDate &other) const {
+      return jd > other.jd;
    }
 
-   bool operator>=(const QDate &value) const {
-      return jd >= value.jd;
+   bool operator>=(const QDate &other) const {
+      return jd >= other.jd;
    }
 
    static QDate currentDate();

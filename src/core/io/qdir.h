@@ -165,9 +165,9 @@ class Q_CORE_EXPORT QDir
 
    bool makeAbsolute();
 
-   bool operator==(const QDir &dir) const;
-   inline bool operator!=(const QDir &dir) const {
-      return !operator==(dir);
+   bool operator==(const QDir &other) const;
+   inline bool operator!=(const QDir &other) const {
+      return !operator==(other);
    }
 
    bool remove(const QString &fileName);
