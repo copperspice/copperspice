@@ -903,7 +903,9 @@ QDataStream &operator>>(QDataStream &s, QBrush &b)
 }
 
 QGradient::QGradient()
-   : m_type(NoGradient), dummy(nullptr)
+   : m_type(NoGradient),
+     m_CoordinateMode(QGradient::CoordinateMode::LogicalMode),
+     m_InterpolationMode(QGradient::InterpolationMode::ColorInterpolation)
 {
 }
 
@@ -948,71 +950,62 @@ QVector<QPair<qreal, QColor>> QGradient::stops() const
    return m_stops;
 }
 
-#define Q_DUMMY_ACCESSOR union {void *p; uint i;}; p = dummy;
-
 QGradient::CoordinateMode QGradient::coordinateMode() const
 {
-   Q_DUMMY_ACCESSOR
-   return CoordinateMode(i & 0x03);
+   return m_CoordinateMode;
 }
 
 void QGradient::setCoordinateMode(CoordinateMode mode)
 {
-   Q_DUMMY_ACCESSOR
-
-   i &= ~0x03;
-   i |= uint(mode);
-
-   dummy = p;
+   m_CoordinateMode = mode;
 }
 
 QGradient::InterpolationMode QGradient::interpolationMode() const
 {
-   Q_DUMMY_ACCESSOR
-   return InterpolationMode((i >> 2) & 0x01);
+   return m_InterpolationMode;
 }
 
 void QGradient::setInterpolationMode(InterpolationMode mode)
 {
-   Q_DUMMY_ACCESSOR
-
-   i &= ~(1 << 2);
-   i |= (uint(mode) << 2);
-
-   dummy = p;
+   m_InterpolationMode = mode;
 }
 
-bool QGradient::operator==(const QGradient &gradient) const
+bool QGradient::operator==(const QGradient &other) const
 {
-   if (gradient.m_type != m_type || gradient.m_spread != m_spread || gradient.dummy != dummy) {
+   if (other.m_type != m_type || other.m_spread != m_spread ||
+      other.m_CoordinateMode != m_CoordinateMode || other.m_InterpolationMode != m_InterpolationMode) {
       return false;
    }
 
    if (m_type == LinearGradient) {
-      if (m_data.linear.x1 != gradient.m_data.linear.x1
-            || m_data.linear.y1 != gradient.m_data.linear.y1
-            || m_data.linear.x2 != gradient.m_data.linear.x2
-            || m_data.linear.y2 != gradient.m_data.linear.y2) {
+      if (m_data.linear.x1 != other.m_data.linear.x1
+            || m_data.linear.y1 != other.m_data.linear.y1
+            || m_data.linear.x2 != other.m_data.linear.x2
+            || m_data.linear.y2 != other.m_data.linear.y2) {
          return false;
       }
 
    } else if (m_type == RadialGradient) {
-      if (m_data.radial.cx != gradient.m_data.radial.cx
-            || m_data.radial.cy != gradient.m_data.radial.cy
-            || m_data.radial.fx != gradient.m_data.radial.fx
-            || m_data.radial.fy != gradient.m_data.radial.fy
-            || m_data.radial.cradius != gradient.m_data.radial.cradius) {
+      if (m_data.radial.cx != other.m_data.radial.cx
+            || m_data.radial.cy != other.m_data.radial.cy
+            || m_data.radial.fx != other.m_data.radial.fx
+            || m_data.radial.fy != other.m_data.radial.fy
+            || m_data.radial.cradius != other.m_data.radial.cradius
+            || m_data.radial.fradius != other.m_data.radial.fradius) {
          return false;
       }
-   } else { // m_type == ConicalGradient
-      if (m_data.conical.cx != gradient.m_data.conical.cx
-            || m_data.conical.cy != gradient.m_data.conical.cy
-            || m_data.conical.angle != gradient.m_data.conical.angle) {
+
+   } else {
+      // m_type == ConicalGradient
+
+      if (m_data.conical.cx != other.m_data.conical.cx
+            || m_data.conical.cy != other.m_data.conical.cy
+            || m_data.conical.angle != other.m_data.conical.angle) {
          return false;
       }
    }
 
-   return stops() == gradient.stops();
+   return stops() == other.stops();
 }
 
 QLinearGradient::QLinearGradient()
@@ -1095,6 +1088,7 @@ QRadialGradient::QRadialGradient(const QPointF &center, qreal radius, const QPoi
    m_data.radial.cx = center.x();
    m_data.radial.cy = center.y();
    m_data.radial.cradius = radius;
+   m_data.radial.fradius = 0;
 
    QPointF adapted_focal = qt_radial_gradient_adapt_focal_point(center, radius, focalPoint);
    m_data.radial.fx = adapted_focal.x();
@@ -1108,6 +1102,8 @@ QRadialGradient::QRadialGradient(const QPointF &center, qreal radius)
    m_data.radial.cx = center.x();
    m_data.radial.cy = center.y();
    m_data.radial.cradius = radius;
+   m_data.radial.fradius = 0;
+
    m_data.radial.fx = center.x();
    m_data.radial.fy = center.y();
 }
@@ -1119,6 +1115,7 @@ QRadialGradient::QRadialGradient(qreal cx, qreal cy, qreal radius, qreal fx, qre
    m_data.radial.cx = cx;
    m_data.radial.cy = cy;
    m_data.radial.cradius = radius;
+   m_data.radial.fradius = 0;
 
    QPointF adapted_focal = qt_radial_gradient_adapt_focal_point(QPointF(cx, cy), radius, QPointF(fx, fy));
 
@@ -1133,6 +1130,8 @@ QRadialGradient::QRadialGradient(qreal cx, qreal cy, qreal radius)
    m_data.radial.cx = cx;
    m_data.radial.cy = cy;
    m_data.radial.cradius = radius;
+   m_data.radial.fradius = 0;
+
    m_data.radial.fx = cx;
    m_data.radial.fy = cy;
 }
@@ -1144,6 +1143,8 @@ QRadialGradient::QRadialGradient()
    m_data.radial.cx = 0;
    m_data.radial.cy = 0;
    m_data.radial.cradius = 1;
+   m_data.radial.fradius = 0;
+
    m_data.radial.fx = 0;
    m_data.radial.fy = 0;
 }
@@ -1156,6 +1157,7 @@ QRadialGradient::QRadialGradient(const QPointF &center, qreal centerRadius, cons
    m_data.radial.cx = center.x();
    m_data.radial.cy = center.y();
    m_data.radial.cradius = centerRadius;
+   m_data.radial.fradius = 0;
 
    m_data.radial.fx = focalPoint.x();
    m_data.radial.fy = focalPoint.y();
@@ -1169,6 +1171,7 @@ QRadialGradient::QRadialGradient(qreal cx, qreal cy, qreal centerRadius, qreal f
    m_data.radial.cx = cx;
    m_data.radial.cy = cy;
    m_data.radial.cradius = centerRadius;
+   m_data.radial.fradius = 0;
 
    m_data.radial.fx = fx;
    m_data.radial.fy = fy;
@@ -1216,39 +1219,14 @@ qreal QRadialGradient::focalRadius() const
 {
    Q_ASSERT(m_type == RadialGradient);
 
-   Q_DUMMY_ACCESSOR
-
-   // mask away low three bits
-   union {
-      float f;
-      quint32 i;
-   } u;
-
-   u.i = i & ~0x07;
-   return u.f;
+   return m_data.radial.fradius;
 }
 
 void QRadialGradient::setFocalRadius(qreal radius)
 {
    Q_ASSERT(m_type == RadialGradient);
 
-   Q_DUMMY_ACCESSOR
-
-   // Since there's no QGradientData, we only have the dummy void * to
-   // store additional data in. The three lowest bits are already
-   // taken, thus we cut the three lowest bits from the significand
-   // and store the radius as a float.
-
-   union {
-      float f;
-      quint32 i;
-   } u;
-
-   u.f = float(radius);
-
-   // add 0x04 to round up when we drop the three lowest bits
-   i |= (u.i + 0x04) & ~0x07;
-   dummy = p;
+   m_data.radial.fradius = radius;
 }
 
 QPointF QRadialGradient::focalPoint() const
