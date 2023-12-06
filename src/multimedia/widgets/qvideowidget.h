@@ -77,6 +77,21 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    QSize sizeHint() const override;
 
+   MULTI_CS_SIGNAL_1(Public, void fullScreenChanged(bool fullScreen))
+   MULTI_CS_SIGNAL_2(fullScreenChanged, fullScreen)
+
+   MULTI_CS_SIGNAL_1(Public, void brightnessChanged(int brightness))
+   MULTI_CS_SIGNAL_2(brightnessChanged, brightness)
+
+   MULTI_CS_SIGNAL_1(Public, void contrastChanged(int contrast))
+   MULTI_CS_SIGNAL_2(contrastChanged, contrast)
+
+   MULTI_CS_SIGNAL_1(Public, void hueChanged(int hue))
+   MULTI_CS_SIGNAL_2(hueChanged, hue)
+
+   MULTI_CS_SIGNAL_1(Public, void saturationChanged(int saturation))
+   MULTI_CS_SIGNAL_2(saturationChanged, saturation)
+
    MULTI_CS_SLOT_1(Public, void setFullScreen(bool fullScreen))
    MULTI_CS_SLOT_2(setFullScreen)
 
@@ -92,7 +107,7 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    MULTI_CS_SLOT_1(Public, void setHue(int hue))
    MULTI_CS_SLOT_2(setHue)
 
-   // these four slots were private
+   // these 6 slots were private
    MULTI_CS_SLOT_1(Public, void _q_brightnessChanged(int brightness))
    MULTI_CS_SLOT_2(_q_brightnessChanged)
 
@@ -108,20 +123,11 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
    MULTI_CS_SLOT_1(Public, void setSaturation(int saturation))
    MULTI_CS_SLOT_2(setSaturation)
 
-   MULTI_CS_SIGNAL_1(Public, void fullScreenChanged(bool fullScreen))
-   MULTI_CS_SIGNAL_2(fullScreenChanged, fullScreen)
+   MULTI_CS_SLOT_1(Public, void _q_fullScreenChanged(bool fullScreen))
+   MULTI_CS_SLOT_2(_q_fullScreenChanged)
 
-   MULTI_CS_SIGNAL_1(Public, void brightnessChanged(int brightness))
-   MULTI_CS_SIGNAL_2(brightnessChanged, brightness)
-
-   MULTI_CS_SIGNAL_1(Public, void contrastChanged(int contrast))
-   MULTI_CS_SIGNAL_2(contrastChanged, contrast)
-
-   MULTI_CS_SIGNAL_1(Public, void hueChanged(int hue))
-   MULTI_CS_SIGNAL_2(hueChanged, hue)
-
-   MULTI_CS_SIGNAL_1(Public, void saturationChanged(int saturation))
-   MULTI_CS_SIGNAL_2(saturationChanged, saturation)
+   MULTI_CS_SLOT_1(Public, void _q_dimensionsChanged())
+   MULTI_CS_SLOT_2(_q_dimensionsChanged)
 
  protected:
    bool event(QEvent *event) override;
@@ -146,12 +152,6 @@ class Q_MULTIMEDIA_EXPORT QVideoWidget : public QWidget, public QMediaBindableIn
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
    MULTI_CS_SLOT_2(_q_serviceDestroyed)
-
-   MULTI_CS_SLOT_1(Private, void _q_fullScreenChanged(bool fullScreen))
-   MULTI_CS_SLOT_2(_q_fullScreenChanged)
-
-   MULTI_CS_SLOT_1(Private, void _q_dimensionsChanged())
-   MULTI_CS_SLOT_2(_q_dimensionsChanged)
 };
 
 #endif

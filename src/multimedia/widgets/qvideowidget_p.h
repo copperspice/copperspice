@@ -76,7 +76,7 @@ class QVideoWidgetControlBackend : public QObject, public QVideoWidgetControlInt
    MULTI_CS_OBJECT_MULTIPLE(QVideoWidgetControlBackend, QObject)
 
  public:
-   QVideoWidgetControlBackend(QMediaService *service, QVideoWidgetControl *control, QWidget *widget);
+   QVideoWidgetControlBackend(QMediaService *service, QVideoWidgetControl *control, QVideoWidget *widget);
 
    void releaseControl();
 
@@ -164,7 +164,7 @@ class QWindowVideoWidgetBackend : public QVideoWidgetBackend
    MULTI_CS_OBJECT(QWindowVideoWidgetBackend)
 
  public:
-   QWindowVideoWidgetBackend(QMediaService *service, QVideoWindowControl *control, QWidget *widget);
+   QWindowVideoWidgetBackend(QMediaService *service, QVideoWindowControl *control, QVideoWidget *widget);
    ~QWindowVideoWidgetBackend();
 
    void releaseControl();
@@ -190,7 +190,7 @@ class QWindowVideoWidgetBackend : public QVideoWidgetBackend
  private:
    QMediaService *m_service;
    QVideoWindowControl *m_windowControl;
-   QWidget *m_widget;
+   QVideoWidget *m_widget;
    QSize m_pixelAspectRatio;
 };
 

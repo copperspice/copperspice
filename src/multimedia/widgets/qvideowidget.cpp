@@ -38,15 +38,15 @@
 
 #include <qpaintervideosurface_p.h>
 
-QVideoWidgetControlBackend::QVideoWidgetControlBackend(
-   QMediaService *service, QVideoWidgetControl *control, QWidget *widget)
+QVideoWidgetControlBackend::QVideoWidgetControlBackend(QMediaService *service,
+      QVideoWidgetControl *control, QVideoWidget *widget)
    : m_service(service), m_widgetControl(control)
 {
-   connect(control, SIGNAL(brightnessChanged(int)),  widget, SLOT(_q_brightnessChanged(int)));
-   connect(control, SIGNAL(contrastChanged(int)),    widget, SLOT(_q_contrastChanged(int)));
-   connect(control, SIGNAL(hueChanged(int)),         widget, SLOT(_q_hueChanged(int)));
-   connect(control, SIGNAL(saturationChanged(int)),  widget, SLOT(_q_saturationChanged(int)));
-   connect(control, SIGNAL(fullScreenChanged(bool)), widget, SLOT(_q_fullScreenChanged(bool)));
+   connect(control, &QVideoWidgetControl::brightnessChanged,  widget, &QVideoWidget::_q_brightnessChanged);
+   connect(control, &QVideoWidgetControl::contrastChanged,    widget, &QVideoWidget::_q_contrastChanged);
+   connect(control, &QVideoWidgetControl::hueChanged,         widget, &QVideoWidget::_q_hueChanged);
+   connect(control, &QVideoWidgetControl::saturationChanged,  widget, &QVideoWidget::_q_saturationChanged);
+   connect(control, &QVideoWidgetControl::fullScreenChanged,  widget, &QVideoWidget::_q_fullScreenChanged);
 
    QBoxLayout *layout = new QVBoxLayout;
    layout->setMargin(0);
@@ -284,16 +284,16 @@ void QRendererVideoWidgetBackend::updateRects()
    }
 }
 
-QWindowVideoWidgetBackend::QWindowVideoWidgetBackend(
-   QMediaService *service, QVideoWindowControl *control, QWidget *widget)
+QWindowVideoWidgetBackend::QWindowVideoWidgetBackend(QMediaService *service,
+      QVideoWindowControl *control, QVideoWidget *widget)
    : m_service(service), m_windowControl(control), m_widget(widget)
 {
-   connect(control, SIGNAL(brightnessChanged(int)),  m_widget, SLOT(_q_brightnessChanged(int)));
-   connect(control, SIGNAL(contrastChanged(int)),    m_widget, SLOT(_q_contrastChanged(int)));
-   connect(control, SIGNAL(hueChanged(int)),         m_widget, SLOT(_q_hueChanged(int)));
-   connect(control, SIGNAL(saturationChanged(int)),  m_widget, SLOT(_q_saturationChanged(int)));
-   connect(control, SIGNAL(fullScreenChanged(bool)), m_widget, SLOT(_q_fullScreenChanged(bool)));
-   connect(control, SIGNAL(nativeSizeChanged()),     m_widget, SLOT(_q_dimensionsChanged()));
+   connect(control, &QVideoWindowControl::brightnessChanged,  m_widget, &QVideoWidget::_q_brightnessChanged);
+   connect(control, &QVideoWindowControl::contrastChanged,    m_widget, &QVideoWidget::_q_contrastChanged);
+   connect(control, &QVideoWindowControl::hueChanged,         m_widget, &QVideoWidget::_q_hueChanged);
+   connect(control, &QVideoWindowControl::saturationChanged,  m_widget, &QVideoWidget::_q_saturationChanged);
+   connect(control, &QVideoWindowControl::fullScreenChanged,  m_widget, &QVideoWidget::_q_fullScreenChanged);
+   connect(control, &QVideoWindowControl::nativeSizeChanged,  m_widget, &QVideoWidget::_q_dimensionsChanged);
 
    control->setWinId(widget->winId());
 
@@ -405,7 +405,7 @@ void QVideoWidgetPrivate::setCurrentControl(QVideoWidgetControlInterface *contro
 void QVideoWidgetPrivate::clearService()
 {
    if (service) {
-      QObject::disconnect(service, SIGNAL(destroyed()), q_func(), SLOT(_q_serviceDestroyed()));
+      QObject::disconnect(service, &QMediaService::destroyed, q_func(), &QVideoWidget::_q_serviceDestroyed);
 
       if (widgetBackend) {
          QLayout *layout = q_func()->layout();
@@ -621,7 +621,7 @@ bool QVideoWidget::setMediaObject(QMediaObject *object)
          return false;
       }
 
-      connect(d->service, SIGNAL(destroyed()), this, SLOT(_q_serviceDestroyed()));
+      connect(d->service, &QMediaService::destroyed, this, &QVideoWidget::_q_serviceDestroyed);
 
    } else {
       d->mediaObject = nullptr;
