@@ -46,6 +46,7 @@ TEST_CASE("QLocale constructor_enum", "[qlocale]")
    REQUIRE(data.decimalPoint() == ".");
    REQUIRE(data.dateFormat(QLocale::ShortFormat) == "M/d/yy");
    REQUIRE(data.timeFormat(QLocale::ShortFormat) == QString("h:mm") + QChar(0x202f) + "AP");
+   REQUIRE(data.dayName(1) == "Monday");
 
    //
    data = QLocale(QLocale::French, QLocale::France);
@@ -60,6 +61,7 @@ TEST_CASE("QLocale constructor_enum", "[qlocale]")
    REQUIRE(data.decimalPoint() == ",");
    REQUIRE(data.dateFormat(QLocale::ShortFormat) == "dd/MM/yyyy");
    REQUIRE(data.timeFormat(QLocale::ShortFormat) == "HH:mm");
+   REQUIRE(data.dayName(1) == "lundi");
 
    //
    data = QLocale(QLocale::German, QLocale::Germany);
@@ -74,6 +76,7 @@ TEST_CASE("QLocale constructor_enum", "[qlocale]")
    REQUIRE(data.decimalPoint() == ",");
    REQUIRE(data.dateFormat(QLocale::ShortFormat) == "dd.MM.yy");
    REQUIRE(data.timeFormat(QLocale::ShortFormat) == "HH:mm");
+   REQUIRE(data.dayName(1) == "Montag");
 
    //
    data = QLocale(QLocale::Dutch, QLocale::Netherlands);
@@ -418,11 +421,57 @@ TEST_CASE("QLocale constructor_english", "[qlocale]")
    REQUIRE(list_lang.contains(QLocale::Russian) == false);
 }
 
-TEST_CASE("QLocale empty", "[qlocale]")
+TEST_CASE("QLocale ampm", "[qlocale]")
 {
-   QLocale data;
+   QLocale data  = QLocale(QLocale::C);
 
-   REQUIRE(data == QLocale::system());
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // german
+   data = QLocale("de_DE");
+
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // indonesia
+   data  = QLocale("id_ID");
+
+   REQUIRE(data.amText() == "AM");
+   REQUIRE(data.pmText() == "PM");
+
+   // sweden
+   data  = QLocale("sv_SE");
+
+   REQUIRE(data.amText() == "fm");
+   REQUIRE(data.pmText() == "em");
+
+   // netherlands
+   data  = QLocale("nl_NL");
+
+   REQUIRE(data.amText() == "a.m.");
+   REQUIRE(data.pmText() == "p.m.");
+
+   // sri lanka
+   data = QLocale("ta_LK");
+   REQUIRE(data.amText() == "முற்பகல்");
+   REQUIRE(data.pmText() == "பிற்பகல்");
+}
+
+TEST_CASE("QLocale day_name", "[qlocale]")
+{
+   QLocale data(QLocale::C);
+
+   REQUIRE(data.dayName(1) == "Monday");
+   REQUIRE(data.dayName(6) == "Saturday");
+
+   data = QLocale(QLocale::English, QLocale::UnitedStates);
+   REQUIRE(data.dayName(1) == "Monday");
+   REQUIRE(data.dayName(6) == "Saturday");
+
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.dayName(1) == "Montag");
+   REQUIRE(data.dayName(6) == "Samstag");
 }
 
 TEST_CASE("QLocale day_of_week", "[qlocale]")
@@ -501,6 +550,29 @@ TEST_CASE("QLocale day_of_week", "[qlocale]")
       str  = data.toString(date, "dddd");
       REQUIRE(str == "Saturday");
    }
+}
+
+TEST_CASE("QLocale empty", "[qlocale]")
+{
+   QLocale data;
+
+   REQUIRE(data == QLocale::system());
+}
+
+TEST_CASE("QLocale first_day_of_week", "[qlocale]")
+{
+   QLocale data(QLocale::C);
+
+   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
+
+   data = QLocale(QLocale::English, QLocale::UnitedStates);
+   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
+
+   data = QLocale(QLocale::German, QLocale::Germany);
+   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
+
+   data = QLocale(QLocale::Hebrew, QLocale::Israel);
+   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
 }
 
 TEST_CASE("QLocale format_date", "[qlocale]")
@@ -592,43 +664,6 @@ TEST_CASE("QLocale format_time", "[qlocale]")
    }
 }
 
-TEST_CASE("QLocale ampm", "[qlocale]")
-{
-   QLocale data  = QLocale(QLocale::C);
-
-   REQUIRE(data.amText() == "AM");
-   REQUIRE(data.pmText() == "PM");
-
-   // german
-   data = QLocale("de_DE");
-
-   REQUIRE(data.amText() == "AM");
-   REQUIRE(data.pmText() == "PM");
-
-   // indonesia
-   data  = QLocale("id_ID");
-
-   REQUIRE(data.amText() == "AM");
-   REQUIRE(data.pmText() == "PM");
-
-   // sweden
-   data  = QLocale("sv_SE");
-
-   REQUIRE(data.amText() == "fm");
-   REQUIRE(data.pmText() == "em");
-
-   // netherlands
-   data  = QLocale("nl_NL");
-
-   REQUIRE(data.amText() == "a.m.");
-   REQUIRE(data.pmText() == "p.m.");
-
-   // sri lanka
-   data = QLocale("ta_LK");
-   REQUIRE(data.amText() == "முற்பகல்");
-   REQUIRE(data.pmText() == "பிற்பகல்");
-}
-
 TEST_CASE("QLocale month_name", "[qlocale]")
 {
    QLocale data(QLocale::C);
@@ -639,38 +674,6 @@ TEST_CASE("QLocale month_name", "[qlocale]")
    data = QLocale(QLocale::German, QLocale::Germany);
    REQUIRE(data.monthName(1)  == "Januar");
    REQUIRE(data.monthName(12) == "Dezember");
-}
-
-TEST_CASE("QLocale day_name", "[qlocale]")
-{
-   QLocale data(QLocale::C);
-
-   REQUIRE(data.dayName(1) == "Monday");
-   REQUIRE(data.dayName(6) == "Saturday");
-
-   data = QLocale(QLocale::English, QLocale::UnitedStates);
-   REQUIRE(data.dayName(1) == "Monday");
-   REQUIRE(data.dayName(6) == "Saturday");
-
-   data = QLocale(QLocale::German, QLocale::Germany);
-   REQUIRE(data.dayName(1) == "Montag");
-   REQUIRE(data.dayName(6) == "Samstag");
-}
-
-TEST_CASE("QLocale first_day_of_week", "[qlocale]")
-{
-   QLocale data(QLocale::C);
-
-   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
-
-   data = QLocale(QLocale::English, QLocale::UnitedStates);
-   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
-
-   data = QLocale(QLocale::German, QLocale::Germany);
-   REQUIRE(data.firstDayOfWeek() == Qt::Monday);
-
-   data = QLocale(QLocale::Hebrew, QLocale::Israel);
-   REQUIRE(data.firstDayOfWeek() == Qt::Sunday);
 }
 
 TEST_CASE("QLocale weekdays", "[qlocale]")

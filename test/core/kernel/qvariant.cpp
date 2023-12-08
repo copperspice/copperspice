@@ -37,6 +37,7 @@
 #include <qrect.h>
 #include <qstringlist.h>
 #include <qsize.h>
+#include <qtimezone.h>
 #include <qurl.h>
 #include <quuid.h>
 #include <qvariant.h>

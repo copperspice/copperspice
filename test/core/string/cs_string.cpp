@@ -285,7 +285,7 @@ TEST_CASE("CsString_utf8 u32_constructor", "[cs_string]")
 TEST_CASE("CsString_utf8 char8_t_constructor", "[cs_string]")
 {
 #if defined(__cpp_char8_t)
-   printf("\nCsString C++20 char8_t checks enabled\n");
+   printf("\nC++20 mode enabled, char8_t checks enabled\n");
 
    const char8_t *data = u8"A wacky fox and sizeable pig";
 
