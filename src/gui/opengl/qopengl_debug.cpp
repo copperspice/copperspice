@@ -829,7 +829,7 @@ void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
             context->doneCurrent();
     }
 
-    QObject::disconnect(context, SIGNAL(aboutToBeDestroyed()), q, SLOT(_q_contextAboutToBeDestroyed()));
+    QObject::disconnect(context, &QOpenGLContext::aboutToBeDestroyed, q, &QOpenGLDebugLogger::_q_contextAboutToBeDestroyed);
     context = nullptr;
     initialized = false;
 }
@@ -875,7 +875,7 @@ bool QOpenGLDebugLogger::initialize()
     }
 
     if (d->context)
-        disconnect(d->context, SIGNAL(aboutToBeDestroyed()), this, SLOT(_q_contextAboutToBeDestroyed()));
+        disconnect(d->context, &QOpenGLContext::aboutToBeDestroyed, this, &QOpenGLDebugLogger::_q_contextAboutToBeDestroyed);
 
     d->initialized = false;
     d->context = nullptr;
@@ -884,7 +884,7 @@ bool QOpenGLDebugLogger::initialize()
         return false;
 
     d->context = context;
-    connect(d->context, SIGNAL(aboutToBeDestroyed()), this, SLOT(_q_contextAboutToBeDestroyed()));
+    connect(d->context, &QOpenGLContext::aboutToBeDestroyed, this, &QOpenGLDebugLogger::_q_contextAboutToBeDestroyed);
 
 #define GET_DEBUG_PROC_ADDRESS(procName) \
     d->procName = reinterpret_cast< qt_ ## procName ## _t >( \

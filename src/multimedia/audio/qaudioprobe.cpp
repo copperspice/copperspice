@@ -43,8 +43,8 @@ QAudioProbe::~QAudioProbe()
 {
     if (d->source) {
         if (d->probee) {
-            disconnect(d->probee.data(), SIGNAL(audioBufferProbed(QAudioBuffer)), this, SLOT(audioBufferProbed(QAudioBuffer)));
-            disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+            disconnect(d->probee.data(), &QMediaAudioProbeControl::audioBufferProbed, this, &QAudioProbe::audioBufferProbed);
+            disconnect(d->probee.data(), &QMediaAudioProbeControl::flush,             this, &QAudioProbe::flush);
         }
 
         d->source.data()->service()->releaseControl(d->probee.data());
@@ -59,15 +59,17 @@ bool QAudioProbe::setSource(QMediaObject *source)
 
     // in case source was destroyed but probe control is still valid
     if (! d->source && d->probee) {
-        disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+        disconnect(d->probee.data(), &QMediaAudioProbeControl::flush, this, &QAudioProbe::flush);
         d->probee.clear();
     }
 
     if (source != d->source.data()) {
         if (d->source) {
             Q_ASSERT(d->probee);
-            disconnect(d->probee.data(), SIGNAL(audioBufferProbed(QAudioBuffer)), this, SLOT(audioBufferProbed(QAudioBuffer)));
-            disconnect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+
+            disconnect(d->probee.data(), &QMediaAudioProbeControl::audioBufferProbed, this, &QAudioProbe::audioBufferProbed);
+            disconnect(d->probee.data(), &QMediaAudioProbeControl::flush,             this, &QAudioProbe::flush);
+
             d->source.data()->service()->releaseControl(d->probee.data());
             d->source.clear();
             d->probee.clear();
@@ -80,8 +82,8 @@ bool QAudioProbe::setSource(QMediaObject *source)
             }
 
             if (d->probee) {
-                connect(d->probee.data(), SIGNAL(audioBufferProbed(QAudioBuffer)), this, SLOT(audioBufferProbed(QAudioBuffer)));
-                connect(d->probee.data(), SIGNAL(flush()), this, SLOT(flush()));
+                connect(d->probee.data(), &QMediaAudioProbeControl::audioBufferProbed, this, &QAudioProbe::audioBufferProbed);
+                connect(d->probee.data(), &QMediaAudioProbeControl::flush,             this, &QAudioProbe::flush);
                 d->source = source;
             }
         }

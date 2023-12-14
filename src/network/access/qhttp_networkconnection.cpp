@@ -116,7 +116,7 @@ void QHttpNetworkConnectionPrivate::init()
 
    }
    delayedConnectionTimer.setSingleShot(true);
-   QObject::connect(&delayedConnectionTimer, SIGNAL(timeout()), q, SLOT(_q_connectDelayedChannel()));
+   QObject::connect(&delayedConnectionTimer, &QTimer::timeout, q, &QHttpNetworkConnection::_q_connectDelayedChannel);
 }
 
 void QHttpNetworkConnectionPrivate::pauseConnection()

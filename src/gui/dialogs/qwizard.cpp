@@ -1572,7 +1572,7 @@ void QWizardPrivate::connectButton(QWizard::WizardButton which) const
    if (which < QWizard::NStandardButtons) {
       QObject::connect(btns[which], SIGNAL(clicked()), q, buttonSlots(which));
    } else {
-      QObject::connect(btns[which], SIGNAL(clicked()), q, SLOT(_q_emitCustomButtonClicked()));
+      QObject::connect(btns[which], &QAbstractButton::clicked, q, &QWizard::_q_emitCustomButtonClicked);
    }
 }
 

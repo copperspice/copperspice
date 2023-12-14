@@ -779,10 +779,9 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       if (threadData->eventDispatcher) {
          if (!connectTimer) {
             connectTimer = new QTimer(q);
-            QObject::connect(connectTimer, SIGNAL(timeout()),
-                             q, SLOT(_q_abortConnectionAttempt()),
-                             Qt::DirectConnection);
+            QObject::connect(connectTimer, &QTimer::timeout, q, &QAbstractSocket::_q_abortConnectionAttempt, Qt::DirectConnection);
          }
+
          connectTimer->start(QT_CONNECT_TIMEOUT);
       }
 
@@ -2122,8 +2121,10 @@ void QAbstractSocket::disconnectFromHost()
          if (d->writeBuffer.size() == 0 && d->socketEngine->bytesToWrite() > 0) {
             if (!d->disconnectTimer) {
                d->disconnectTimer = new QTimer(this);
-               connect(d->disconnectTimer, SIGNAL(timeout()), this,
-                       SLOT(_q_forceDisconnect()), Qt::DirectConnection);
+
+               connect(d->disconnectTimer, &QTimer::timeout, this,
+                  &QAbstractSocket::_q_forceDisconnect, Qt::DirectConnection);
+
             }
             if (!d->disconnectTimer->isActive()) {
                d->disconnectTimer->start(2000);

@@ -396,17 +396,17 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
 
             engine->moveToThread(bearerThread);
 
-            connect(engine, SIGNAL(updateCompleted()),
-                    this, SLOT(updateConfigurations()), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::updateCompleted,
+                    this, &QNetworkConfigurationManagerPrivate::updateConfigurations, Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationAdded(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationAdded(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationAdded,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationAdded), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationRemoved(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationRemoved(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationRemoved,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationRemoved), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationChanged,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationChanged), Qt::QueuedConnection);
          }
       }
 
@@ -490,7 +490,7 @@ void QNetworkConfigurationManagerPrivate::startPolling()
 
       pollTimer->setInterval(interval);
       pollTimer->setSingleShot(true);
-      connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollEngines()));
+      connect(pollTimer, &QTimer::timeout, this, &QNetworkConfigurationManagerPrivate::pollEngines);
    }
 
    if (pollTimer->isActive()) {

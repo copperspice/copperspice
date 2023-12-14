@@ -342,7 +342,8 @@ bool QHttpProtocolHandler::sendRequest()
 
          if (uploadByteDevice) {
             // connect the signals so this function gets called again
-            QObject::connect(uploadByteDevice, SIGNAL(readyRead()), m_channel, SLOT(_q_uploadDataReadyRead()));
+            QObject::connect(uploadByteDevice, &QNonContiguousByteDevice::readyRead,
+                  m_channel, &QHttpNetworkConnectionChannel::_q_uploadDataReadyRead);
 
             m_channel->bytesTotal = m_channel->request.contentLength();
 
@@ -438,7 +439,8 @@ bool QHttpProtocolHandler::sendRequest()
          QNonContiguousByteDevice *uploadByteDevice = m_channel->request.uploadByteDevice();
 
          if (uploadByteDevice) {
-            QObject::disconnect(uploadByteDevice, SIGNAL(readyRead()), m_channel, SLOT(_q_uploadDataReadyRead()));
+            QObject::disconnect(uploadByteDevice, &QNonContiguousByteDevice::readyRead,
+               m_channel, &QHttpNetworkConnectionChannel::_q_uploadDataReadyRead);
          }
 
          // HTTP pipelining

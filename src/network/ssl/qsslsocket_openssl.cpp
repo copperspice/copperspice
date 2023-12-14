@@ -1475,8 +1475,8 @@ void QSslSocketBackendPrivate::fetchCaRootForCert(const QSslCertificate &cert)
 
    QWindowsCaRootFetcher *fetcher = new QWindowsCaRootFetcher(cert, mode);
 
-   QObject::connect(fetcher, SIGNAL(finished(QSslCertificate, QSslCertificate)),
-         q, SLOT(_q_caRootLoaded(QSslCertificate, QSslCertificate)), Qt::QueuedConnection);
+   QObject::connect(fetcher, &QWindowsCaRootFetcher::finished,
+         q, &QSslSocket::_q_caRootLoaded, Qt::QueuedConnection);
 
    QMetaObject::invokeMethod(fetcher, "start", Qt::QueuedConnection);
    pauseSocketNotifiers(q);

@@ -36,13 +36,13 @@ QSoundEffect::QSoundEffect(QObject *parent)
 {
    d = new QSoundEffectPrivate(this);
 
-   connect(d, SIGNAL(loopsRemainingChanged()), this, SLOT(loopsRemainingChanged()));
-   connect(d, SIGNAL(volumeChanged()),         this, SLOT(volumeChanged()));
-   connect(d, SIGNAL(mutedChanged()),          this, SLOT(mutedChanged()));
-   connect(d, SIGNAL(loadedChanged()),         this, SLOT(loadedChanged()));
-   connect(d, SIGNAL(playingChanged()),        this, SLOT(playingChanged()));
-   connect(d, SIGNAL(statusChanged()),         this, SLOT(statusChanged()));
-   connect(d, SIGNAL(categoryChanged()),       this, SLOT(categoryChanged()));
+   connect(d, &QSoundEffectPrivate::loopsRemainingChanged, this, &QSoundEffect::loopsRemainingChanged);
+   connect(d, &QSoundEffectPrivate::volumeChanged,         this, &QSoundEffect::volumeChanged);
+   connect(d, &QSoundEffectPrivate::mutedChanged,          this, &QSoundEffect::mutedChanged);
+   connect(d, &QSoundEffectPrivate::loadedChanged,         this, &QSoundEffect::loadedChanged);
+   connect(d, &QSoundEffectPrivate::playingChanged,        this, &QSoundEffect::playingChanged);
+   connect(d, &QSoundEffectPrivate::statusChanged,         this, &QSoundEffect::statusChanged);
+   connect(d, &QSoundEffectPrivate::categoryChanged,       this, &QSoundEffect::categoryChanged);
 }
 
 QSoundEffect::~QSoundEffect()

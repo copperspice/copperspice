@@ -127,7 +127,7 @@ void QTipLabel::reuseTip(const QString &text, int msecDisplayTime)
 {
 #ifndef QT_NO_STYLE_STYLESHEET
    if (styleSheetParent) {
-      disconnect(styleSheetParent, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+      disconnect(styleSheetParent, &QWidget::destroyed, QTipLabel::instance, &QTipLabel::styleSheetParentDestroyed);
       styleSheetParent = nullptr;
    }
 #endif
@@ -277,7 +277,7 @@ void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
       QTipLabel::instance->styleSheetParent = w;
 
       if (w) {
-         connect(w, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+         connect(w, &QWidget::destroyed, QTipLabel::instance, &QTipLabel::styleSheetParentDestroyed);
       }
    }
 #endif

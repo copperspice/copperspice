@@ -52,21 +52,16 @@ void QLocalSocketPrivate::init()
 {
    Q_Q(QLocalSocket);
 
-   // QIODevice signals
-   q->connect(&unixSocket, SIGNAL(aboutToClose()), q, SLOT(aboutToClose()));
-   q->connect(&unixSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(bytesWritten(qint64)));
-   q->connect(&unixSocket, SIGNAL(readyRead()), q, SLOT(readyRead()));
+   q->connect(&unixSocket, &QLocalUnixSocket::aboutToClose, q, &QLocalSocket::aboutToClose);
+   q->connect(&unixSocket, &QLocalUnixSocket::bytesWritten, q, &QLocalSocket::bytesWritten);
+   q->connect(&unixSocket, &QLocalUnixSocket::readyRead,    q, &QLocalSocket::readyRead);
 
-   // QAbstractSocket signals
-   q->connect(&unixSocket, SIGNAL(connected()), q, SLOT(connected()));
-   q->connect(&unixSocket, SIGNAL(disconnected()), q, SLOT(disconnected()));
-   q->connect(&unixSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-              q, SLOT(_q_stateChanged(QAbstractSocket::SocketState)));
+   q->connect(&unixSocket, &QLocalUnixSocket::connected,    q, &QLocalSocket::connected);
+   q->connect(&unixSocket, &QLocalUnixSocket::disconnected, q, &QLocalSocket::disconnected);
+   q->connect(&unixSocket, &QLocalUnixSocket::stateChanged, q, &QLocalSocket::_q_stateChanged);
+   q->connect(&unixSocket, &QLocalUnixSocket::error,        q, &QLocalSocket::_q_error);
 
-   q->connect(&unixSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-              q, SLOT(_q_error(QAbstractSocket::SocketError)));
-
-   q->connect(&unixSocket, SIGNAL(readChannelFinished()), q, SLOT(readChannelFinished()));
+   q->connect(&unixSocket, &QLocalUnixSocket::readChannelFinished, q, &QLocalSocket::readChannelFinished);
 
    unixSocket.setParent(q);
 }
@@ -312,13 +307,13 @@ void QLocalSocketPrivate::_q_connectToSocket()
             // Try again later, all of the sockets listening are full
             if (! delayConnect) {
                delayConnect = new QSocketNotifier(connectingSocket, QSocketNotifier::Write, q);
-               q->connect(delayConnect, SIGNAL(activated(int)), q, SLOT(_q_connectToSocket()));
+               q->connect(delayConnect, &QSocketNotifier::activated, q, &QLocalSocket::_q_connectToSocket);
             }
 
             if (! connectTimer) {
                connectTimer = new QTimer(q);
 
-               q->connect(connectTimer, SIGNAL(timeout()), q, SLOT(_q_abortConnectionAttempt()), Qt::DirectConnection);
+               q->connect(connectTimer, &QTimer::timeout, q, &QLocalSocket::_q_abortConnectionAttempt, Qt::DirectConnection);
                connectTimer->start(QT_CONNECT_TIMEOUT);
             }
 

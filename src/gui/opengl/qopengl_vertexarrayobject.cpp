@@ -138,7 +138,7 @@ bool QOpenGLVertexArrayObjectPrivate::create()
         return false;
 
     context = ctx;
-    QObject::connect(context, SIGNAL(aboutToBeDestroyed()), q, SLOT(_q_contextAboutToBeDestroyed()));
+    QObject::connect(context, &QOpenGLContext::aboutToBeDestroyed, q, &QOpenGLVertexArrayObject::_q_contextAboutToBeDestroyed);
 
     if (ctx->isOpenGLES()) {
         if (ctx->format().majorVersion() >= 3 || ctx->hasExtension(QByteArrayLiteral("GL_OES_vertex_array_object"))) {
@@ -182,7 +182,7 @@ void QOpenGLVertexArrayObjectPrivate::destroy()
     Q_Q(QOpenGLVertexArrayObject);
 
     if (context) {
-        QObject::disconnect(context, SIGNAL(aboutToBeDestroyed()), q, SLOT(_q_contextAboutToBeDestroyed()));
+        QObject::disconnect(context, &QOpenGLContext::aboutToBeDestroyed, q, &QOpenGLVertexArrayObject::_q_contextAboutToBeDestroyed);
         context = nullptr;
     }
 

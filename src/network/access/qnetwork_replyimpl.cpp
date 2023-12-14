@@ -89,8 +89,8 @@ void QNetworkReplyImplPrivate::_q_startOperation()
 
       if (session) {
 
-         QObject::connect(session.data(), SIGNAL(error(QNetworkSession::SessionError)),
-                          q, SLOT(_q_networkSessionFailed()));
+         QObject::connect(session.data(), &QNetworkSession::error,
+               q, &QNetworkReplyImpl::_q_networkSessionFailed);
 
          if (! session->isOpen()) {
             session->setSessionProperty("ConnectInBackground", isBackground);
@@ -122,8 +122,8 @@ void QNetworkReplyImplPrivate::_q_startOperation()
 
 #ifndef QT_NO_BEARERMANAGEMENT
       if (session) {
-         QObject::connect(session.data(), SIGNAL(stateChanged(QNetworkSession::State)),
-                          q, SLOT(_q_networkSessionStateChanged(QNetworkSession::State)), Qt::QueuedConnection);
+         QObject::connect(session.data(), &QNetworkSession::stateChanged,
+               q, &QNetworkReplyImpl::_q_networkSessionStateChanged, Qt::QueuedConnection);
       }
 #endif
 
@@ -131,8 +131,8 @@ void QNetworkReplyImplPrivate::_q_startOperation()
 
 #ifndef QT_NO_BEARERMANAGEMENT
    if (session) {
-      QObject::connect(session.data(), SIGNAL(usagePoliciesChanged(QNetworkSession::UsagePolicies)),
-                       q, SLOT(_q_networkSessionUsagePoliciesChanged(QNetworkSession::UsagePolicies)));
+      QObject::connect(session.data(), &QNetworkSession::usagePoliciesChanged,
+            q, &QNetworkReplyImpl::_q_networkSessionUsagePoliciesChanged);
    }
 #endif
 
@@ -245,8 +245,8 @@ void QNetworkReplyImplPrivate::_q_bufferOutgoingDataFinished()
    }
 
    // disconnect signals
-   QObject::disconnect(outgoingData, SIGNAL(readyRead()), q, SLOT(_q_bufferOutgoingData()));
-   QObject::disconnect(outgoingData, SIGNAL(readChannelFinished()), q, SLOT(_q_bufferOutgoingDataFinished()));
+   QObject::disconnect(outgoingData, &QIODevice::readyRead,           q, &QNetworkReplyImpl::_q_bufferOutgoingData);
+   QObject::disconnect(outgoingData, &QIODevice::readChannelFinished, q, &QNetworkReplyImpl::_q_bufferOutgoingDataFinished);
 
    // finally, start the request
    QMetaObject::invokeMethod(q, "_q_startOperation", Qt::QueuedConnection);
@@ -260,8 +260,8 @@ void QNetworkReplyImplPrivate::_q_bufferOutgoingData()
       // first call, create our buffer
       outgoingDataBuffer = QSharedPointer<QRingBuffer>::create();
 
-      QObject::connect(outgoingData, SIGNAL(readyRead()), q, SLOT(_q_bufferOutgoingData()));
-      QObject::connect(outgoingData, SIGNAL(readChannelFinished()), q, SLOT(_q_bufferOutgoingDataFinished()));
+      QObject::connect(outgoingData, &QIODevice::readyRead,           q, &QNetworkReplyImpl::_q_bufferOutgoingData);
+      QObject::connect(outgoingData, &QIODevice::readChannelFinished, q, &QNetworkReplyImpl::_q_bufferOutgoingDataFinished);
    }
 
    qint64 bytesBuffered = 0;
@@ -758,9 +758,9 @@ void QNetworkReplyImplPrivate::appendDownstreamData(QIODevice *data)
    }
 
    copyDevice = data;
-   q->connect(copyDevice, SIGNAL(readyRead()), q, SLOT(_q_copyReadyRead()));
-   q->connect(copyDevice, SIGNAL(readChannelFinished()), q, SLOT(_q_copyReadChannelFinished()));
 
+   q->connect(copyDevice, &QIODevice::readyRead,           q, &QNetworkReplyImpl::_q_copyReadyRead);
+   q->connect(copyDevice, &QIODevice::readChannelFinished, q, &QNetworkReplyImpl::_q_copyReadChannelFinished);
 
    // start the copy
    _q_copyReadyRead();

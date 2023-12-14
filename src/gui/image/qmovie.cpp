@@ -443,7 +443,7 @@ QMovie::QMovie(QObject *parent)
    Q_D(QMovie);
 
    d->reader = new QImageReader;
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
 QMovie::QMovie(QIODevice *device, const QString &format, QObject *parent)
@@ -454,8 +454,8 @@ QMovie::QMovie(QIODevice *device, const QString &format, QObject *parent)
 
    d->reader = new QImageReader(device, format);
    d->initialDevicePos = device->pos();
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
 
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
 QMovie::QMovie(const QString &fileName, const QString &format, QObject *parent)
@@ -470,7 +470,8 @@ QMovie::QMovie(const QString &fileName, const QString &format, QObject *parent)
    if (d->reader->device()) {
       d->initialDevicePos = d->reader->device()->pos();
    }
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
 QMovie::~QMovie()

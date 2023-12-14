@@ -295,8 +295,8 @@ void QDnsLookup::lookup()
    d->reply = QDnsLookupReply();
    d->runnable = new QDnsLookupRunnable(d->type, QUrl::toAce(d->name), d->nameserver);
 
-   connect(d->runnable, SIGNAL(finished(QDnsLookupReply)),
-         this, SLOT(_q_lookupFinished(QDnsLookupReply)), Qt::BlockingQueuedConnection);
+   connect(d->runnable, &QDnsLookupRunnable::finished,
+         this, &QDnsLookup::_q_lookupFinished, Qt::BlockingQueuedConnection);
 
    cs_DnsLookupThreadPool()->start(d->runnable);
 }
@@ -564,7 +564,7 @@ void QDnsLookupThreadPool::start(QRunnable *runnable)
          }
 
          moveToThread(app->thread());
-         connect(app, SIGNAL(destroyed()), SLOT(_q_applicationDestroyed()), Qt::DirectConnection);
+         connect(app, &QCoreApplication::destroyed, this, &QDnsLookupThreadPool::_q_applicationDestroyed, Qt::DirectConnection);
          signalsConnected = true;
       }
    }

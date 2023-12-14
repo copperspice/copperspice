@@ -205,14 +205,16 @@ void QFontDialogPrivate::init()
    size = 0;
    smoothScalable = false;
 
-   QObject::connect(writingSystemCombo, SIGNAL(activated(int)),   q, SLOT(_q_writingSystemHighlighted(int)));
-   QObject::connect(familyList,         SIGNAL(highlighted(int)), q, SLOT(_q_familyHighlighted(int)));
-   QObject::connect(styleList,          SIGNAL(highlighted(int)), q, SLOT(_q_styleHighlighted(int)));
-   QObject::connect(sizeList,           SIGNAL(highlighted(int)), q, SLOT(_q_sizeHighlighted(int)));
+   QObject::connect(writingSystemCombo, cs_mp_cast<int>(&QComboBox::activated), q,
+      &QFontDialog::_q_writingSystemHighlighted);
 
-   QObject::connect(sizeEdit,           &QLineEdit::textChanged,  q, &QFontDialog::_q_sizeChanged);
-   QObject::connect(strikeout,          &QCheckBox::clicked,      q, &QFontDialog::_q_updateSample);
-   QObject::connect(underline,          &QCheckBox::clicked,      q, &QFontDialog::_q_updateSample);
+   QObject::connect(familyList,         &QFontListView::highlighted, q, &QFontDialog::_q_familyHighlighted);
+   QObject::connect(styleList,          &QFontListView::highlighted, q, &QFontDialog::_q_styleHighlighted);
+   QObject::connect(sizeList,           &QFontListView::highlighted, q, &QFontDialog::_q_sizeHighlighted);
+
+   QObject::connect(sizeEdit,           &QLineEdit::textChanged,     q, &QFontDialog::_q_sizeChanged);
+   QObject::connect(strikeout,          &QCheckBox::clicked,         q, &QFontDialog::_q_updateSample);
+   QObject::connect(underline,          &QCheckBox::clicked,         q, &QFontDialog::_q_updateSample);
 
    for (int i = 0; i < QFontDatabase::WritingSystemsCount; ++i) {
       QFontDatabase::WritingSystem ws = QFontDatabase::WritingSystem(i);
@@ -278,11 +280,13 @@ void QFontDialogPrivate::init()
    mainGrid->addWidget(buttonBox, 9, 0, 1, 5);
 
    QPushButton *button = static_cast<QPushButton *>(buttonBox->addButton(QDialogButtonBox::Ok));
-   QObject::connect(buttonBox, SIGNAL(accepted()), q, SLOT(accept()));
    button->setDefault(true);
 
    buttonBox->addButton(QDialogButtonBox::Cancel);
-   QObject::connect(buttonBox, SIGNAL(rejected()), q, SLOT(reject()));
+
+   QObject::connect(buttonBox, &QDialogButtonBox::accepted, q, &QFontDialog::accept);
+   QObject::connect(buttonBox, &QDialogButtonBox::rejected, q, &QFontDialog::reject);
+
    q->resize(500, 360);
 
    sizeEdit->installEventFilter(q);

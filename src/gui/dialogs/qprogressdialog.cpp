@@ -98,8 +98,8 @@ void QProgressDialog::init(const QString &labelText, const QString &cancelButton
 
    }
 
-   connect(m_cancelButton, SIGNAL(clicked()),  this, SLOT(canceled()));
-   QObject::connect(this,  SIGNAL(canceled()), this, SLOT(cancel()));
+   connect(m_cancelButton, &QPushButton::clicked,      this, &QProgressDialog::canceled);
+   QObject::connect(this,  &QProgressDialog::canceled, this, &QProgressDialog::cancel);
 
    m_layout = new QVBoxLayout();
    m_layout->addWidget(m_label);
@@ -116,7 +116,7 @@ void QProgressDialog::init(const QString &labelText, const QString &cancelButton
    forceTimer = new QTimer(this);
    forceTimer->start(showTime);
 
-   QObject::connect(forceTimer, SIGNAL(timeout()), this, SLOT(forceShow()));
+   QObject::connect(forceTimer, &QTimer::timeout, this, &QProgressDialog::forceShow);
 }
 
 void QProgressDialog::cancel()
@@ -202,7 +202,7 @@ void QProgressDialog::setCancelButton(QPushButton *newButton)
 
    if (m_cancelButton) {
       m_layout->insertWidget(CANCEL_BUTTON_INDEX, m_cancelButton);
-      connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(canceled()));
+      connect(m_cancelButton, &QPushButton::clicked, this, &QProgressDialog::canceled);
 
 #ifndef QT_NO_SHORTCUT
       escapeShortcut = new QShortcut(QKeySequence::Cancel, this, SLOT(canceled()));

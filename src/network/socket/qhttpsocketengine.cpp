@@ -69,25 +69,23 @@ bool QHttpSocketEngine::initialize(QAbstractSocket::SocketType type, QAbstractSo
    // unwanted recursion.
    d->socket->setProxy(QNetworkProxy::NoProxy);
 
-   // Intercept all the signals.
-   connect(d->socket, SIGNAL(connected()),
-           this, SLOT(slotSocketConnected()),
-           Qt::DirectConnection);
-   connect(d->socket, SIGNAL(disconnected()),
-           this, SLOT(slotSocketDisconnected()),
-           Qt::DirectConnection);
-   connect(d->socket, SIGNAL(readyRead()),
-           this, SLOT(slotSocketReadNotification()),
-           Qt::DirectConnection);
-   connect(d->socket, SIGNAL(bytesWritten(qint64)),
-           this, SLOT(slotSocketBytesWritten()),
-           Qt::DirectConnection);
-   connect(d->socket, SIGNAL(error(QAbstractSocket::SocketError)),
-           this, SLOT(slotSocketError(QAbstractSocket::SocketError)),
-           Qt::DirectConnection);
-   connect(d->socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-           this, SLOT(slotSocketStateChanged(QAbstractSocket::SocketState)),
-           Qt::DirectConnection);
+   connect(d->socket, &QTcpSocket::connected,
+           this, &QHttpSocketEngine::slotSocketConnected, Qt::DirectConnection);
+
+   connect(d->socket, &QTcpSocket::disconnected,
+           this, &QHttpSocketEngine::slotSocketDisconnected, Qt::DirectConnection);
+
+   connect(d->socket, &QTcpSocket::readyRead,
+           this, &QHttpSocketEngine::slotSocketReadNotification, Qt::DirectConnection);
+
+   connect(d->socket, &QTcpSocket::bytesWritten,
+           this, &QHttpSocketEngine::slotSocketBytesWritten, Qt::DirectConnection);
+
+   connect(d->socket, &QTcpSocket::error,
+           this, &QHttpSocketEngine::slotSocketError, Qt::DirectConnection);
+
+   connect(d->socket, &QTcpSocket::stateChanged,
+           this, &QHttpSocketEngine::slotSocketStateChanged, Qt::DirectConnection);
 
    return true;
 }

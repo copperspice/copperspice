@@ -32,12 +32,11 @@ QIODeviceDelegate::QIODeviceDelegate(QIODevice *const source) : m_source(source)
 {
    Q_ASSERT(m_source);
 
-   connect(source, SIGNAL(aboutToClose()),         this, SLOT(aboutToClose()));
-   connect(source, SIGNAL(bytesWritten(qint64)),   this, SLOT(bytesWritten(qint64)));
-   connect(source, SIGNAL(readChannelFinished()),  this, SLOT(readChannelFinished()));
-   connect(source, SIGNAL(readyRead()),            this, SLOT(readyRead()));
-
-   connect(source, SIGNAL(readChannelFinished()), this, SLOT(finished()));
+   connect(source, &QIODevice::aboutToClose,         this, &QIODeviceDelegate::aboutToClose);
+   connect(source, &QIODevice::bytesWritten,         this, &QIODeviceDelegate::bytesWritten);
+   connect(source, &QIODevice::readyRead,            this, &QIODeviceDelegate::readyRead);
+   connect(source, &QIODevice::readChannelFinished,  this, &QIODeviceDelegate::readChannelFinished);
+   connect(source, &QIODevice::readChannelFinished,  this, &QIODeviceDelegate::finished);
 
    /* For instance QFile emits no signals, so how do we know if the device has all data available
     * and it therefore is safe and correct to emit finished()? isSequential() tells us whether it's
@@ -51,7 +50,7 @@ QIODeviceDelegate::QIODeviceDelegate(QIODevice *const source) : m_source(source)
    setOpenMode(QIODevice::ReadOnly);
 
    /* Set up the timeout timer. */
-   connect(&m_timeout, SIGNAL(timeout()), this, SLOT(networkTimeout()));
+   connect(&m_timeout, &QTimer::timeout, this, &QIODeviceDelegate::networkTimeout);
 
    m_timeout.setSingleShot(true);
    m_timeout.start(Timeout);

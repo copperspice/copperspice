@@ -96,10 +96,8 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessMana
    QNetworkRequest request(uri);
    QNetworkReply *const reply = networkManager->get(request);
 
-   networkLoop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &networkLoop,
-                       SLOT(error(QNetworkReply::NetworkError)));
-
-   networkLoop.connect(reply, SIGNAL(finished()), &networkLoop, SLOT(finished()));
+   networkLoop.connect(reply, &QNetworkReply::error,    &networkLoop, &NetworkLoop::error);
+   networkLoop.connect(reply, &QNetworkReply::finished, &networkLoop, &NetworkLoop::finished);
 
    if (networkLoop.exec(QEventLoop::ExcludeUserInputEvents)) {
       const QString errorMessage(escape(reply->errorString()));

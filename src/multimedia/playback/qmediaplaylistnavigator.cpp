@@ -257,9 +257,9 @@ void QMediaPlaylistNavigator::setPlaylist(QMediaPlaylistProvider *playlist)
       d->playlist = _q_nullMediaPlaylist();
    }
 
-   connect(d->playlist, SIGNAL(mediaInserted(int, int)), SLOT(_q_mediaInserted(int, int)));
-   connect(d->playlist, SIGNAL(mediaRemoved(int, int)), SLOT(_q_mediaRemoved(int, int)));
-   connect(d->playlist, SIGNAL(mediaChanged(int, int)), SLOT(_q_mediaChanged(int, int)));
+   connect(d->playlist, &QMediaPlaylistProvider::mediaInserted, this, &QMediaPlaylistNavigator::_q_mediaInserted);
+   connect(d->playlist, &QMediaPlaylistProvider::mediaRemoved,  this, &QMediaPlaylistNavigator::_q_mediaRemoved);
+   connect(d->playlist, &QMediaPlaylistProvider::mediaChanged,  this, &QMediaPlaylistNavigator::_q_mediaChanged);
 
    d->randomPositionsOffset = -1;
    d->randomModePositions.clear();

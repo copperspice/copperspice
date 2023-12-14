@@ -85,7 +85,9 @@ QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
          } else {
             // wrong thread, we need to make the main thread do this
             QObject *obj = new QObject;
-            QObject::connect(obj, SIGNAL(destroyed()), ptr, SLOT(addPreAndPostRoutine()), Qt::DirectConnection);
+
+            QObject::connect(obj, &QObject::destroyed,
+                  ptr, &QNetworkConfigurationManagerPrivate::addPreAndPostRoutine, Qt::DirectConnection);
 
             ptr->initialize();       // moves this object to the right thread
             obj->moveToThread(QCoreApplicationPrivate::mainThread());
@@ -95,6 +97,7 @@ QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
          connManager_ptr.storeRelease(ptr);
       }
    }
+
    return ptr;
 }
 

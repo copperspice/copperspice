@@ -128,7 +128,7 @@ void QAlphaWidget::run(int time)
    qApp->installEventFilter(this);
    widget->setWindowOpacity(0.0);
    widget->show();
-   connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
+   connect(&anim, &QTimer::timeout, this, &QAlphaWidget::render);
    anim.start(1);
 
 #else
@@ -152,7 +152,7 @@ void QAlphaWidget::run(int time)
       show();
       setEnabled(false);
 
-      connect(&anim, SIGNAL(timeout()), this, SLOT(render()));
+      connect(&anim, &QTimer::timeout, this, &QAlphaWidget::render);
       anim.start(1);
 
    } else {
@@ -447,7 +447,7 @@ void QRollEffect::run(int time)
       duration = qMin(qMax(dist / 3, 50), 120);
    }
 
-   connect(&anim, SIGNAL(timeout()), this, SLOT(scroll()));
+   connect(&anim, &QTimer::timeout, this, &QRollEffect::scroll);
 
    move(widget->geometry().x(), widget->geometry().y());
    resize(qMin(currentWidth, totalWidth), qMin(currentHeight, totalHeight));

@@ -1097,7 +1097,7 @@ void QPSQLDriver::close()
 
       d->seid.clear();
       if (d->sn) {
-         disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+         disconnect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
          delete d->sn;
          d->sn = nullptr;
       }
@@ -1702,7 +1702,7 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
 
       if (!d->sn) {
          d->sn = new QSocketNotifier(socket, QSocketNotifier::Read);
-         connect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+         connect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
       }
 
    } else {
@@ -1741,7 +1741,7 @@ bool QPSQLDriver::unsubscribeFromNotification(const QString &name)
    d->seid.removeAll(name);
 
    if (d->seid.isEmpty()) {
-      disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+      disconnect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
       delete d->sn;
       d->sn = nullptr;
    }

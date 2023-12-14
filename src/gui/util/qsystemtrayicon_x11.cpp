@@ -276,7 +276,8 @@ void QSystemTrayIconPrivate::install_sys()
 
    if (! sys && locateSystemTray()) {
       sys = new QSystemTrayIconSys(q);
-      QObject::connect(QGuiApplication::platformNativeInterface(), SIGNAL(systemTrayWindowChanged(QScreen *)),
+
+      QObject::connect(QApplication::platformNativeInterface(), SIGNAL(systemTrayWindowChanged(QScreen *)),
          sys, SLOT(systemTrayWindowChanged(QScreen *)));
    }
 }

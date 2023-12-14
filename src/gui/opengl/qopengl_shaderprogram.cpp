@@ -671,7 +671,7 @@ bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
         d->glfuncs->glAttachShader(d->programGuard->id(), shader->d_func()->shaderGuard->id());
         d->linked = false;  // Program needs to be relinked.
         d->shaders.append(shader);
-        connect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+        connect(shader, &QOpenGLShader::destroyed, this, &QOpenGLShaderProgram::shaderDestroyed);
         return true;
     } else {
         return false;
@@ -731,7 +731,7 @@ void QOpenGLShaderProgram::removeShader(QOpenGLShader *shader)
     if (shader) {
         d->shaders.removeAll(shader);
         d->anonShaders.removeAll(shader);
-        disconnect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+        disconnect(shader, &QOpenGLShader::destroyed, this, &QOpenGLShaderProgram::shaderDestroyed);
     }
 }
 

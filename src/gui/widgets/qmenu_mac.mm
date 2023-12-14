@@ -77,10 +77,11 @@ void QMenu::setAsDockMenu()
 void QMenuPrivate::moveWidgetToPlatformItem(QWidget *widget, QPlatformMenuItem* item)
 {
     QMacNativeWidget *container = new QMacNativeWidget;
-    QObject::connect(platformMenu, SIGNAL(destroyed()), container, SLOT(deleteLater()));
     container->resize(widget->sizeHint());
     widget->setParent(container);
     widget->setVisible(true);
+
+    QObject::connect(platformMenu.data(), &QPlatformMenu::destroyed, container, &QMacNativeWidget::deleteLater);
 
     NSView *containerView = container->nativeView();
     QWindow *containerWindow = container->windowHandle();

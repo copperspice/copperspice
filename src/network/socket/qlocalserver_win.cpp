@@ -235,7 +235,8 @@ bool QLocalServerPrivate::listen(const QString &name)
    // cheap compared to waiting for N additional events in each iteration of the main loop.
    eventHandle = CreateEvent(nullptr, TRUE, FALSE, nullptr);
    connectionEventNotifier = new QWinEventNotifier(eventHandle, q);
-   q->connect(connectionEventNotifier, SIGNAL(activated(HANDLE)), q, SLOT(_q_onNewConnection()));
+
+   q->connect(connectionEventNotifier, &QWinEventNotifier::activated, q, &QLocalServer::_q_onNewConnection);
 
    for (int i = 0; i < SYSTEM_MAX_PENDING_SOCKETS; ++i) {
       if (! addListener()) {

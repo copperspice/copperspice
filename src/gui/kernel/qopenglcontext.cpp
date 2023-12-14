@@ -318,7 +318,7 @@ void QOpenGLContext::setScreen(QScreen *screen)
    Q_D(QOpenGLContext);
 
    if (d->screen) {
-      disconnect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(_q_screenDestroyed(QObject *)));
+      disconnect(d->screen, &QScreen::destroyed, this, &QOpenGLContext::_q_screenDestroyed);
    }
 
    d->screen = screen;
@@ -328,7 +328,7 @@ void QOpenGLContext::setScreen(QScreen *screen)
    }
 
    if (d->screen) {
-      connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(_q_screenDestroyed(QObject *)));
+      connect(d->screen, &QScreen::destroyed, this, &QOpenGLContext::_q_screenDestroyed);
    }
 }
 

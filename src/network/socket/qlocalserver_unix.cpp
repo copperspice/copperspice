@@ -187,9 +187,10 @@ bool QLocalServerPrivate::listen(const QString &requestedServerName)
    Q_ASSERT(!socketNotifier);
    socketNotifier = new QSocketNotifier(listenSocket, QSocketNotifier::Read, q);
 
-   q->connect(socketNotifier, SIGNAL(activated(int)),
-              q, SLOT(_q_onNewConnection()));
+   q->connect(socketNotifier, &QSocketNotifier::activated, q, &QLocalServer::_q_onNewConnection);
+
    socketNotifier->setEnabled(maxPendingConnections > 0);
+
    return true;
 }
 
@@ -235,8 +236,7 @@ bool QLocalServerPrivate::listen(qintptr socketDescriptor)
    Q_ASSERT(! socketNotifier);
    socketNotifier = new QSocketNotifier(listenSocket, QSocketNotifier::Read, q);
 
-   q->connect(socketNotifier, SIGNAL(activated(int)),
-              q, SLOT(_q_onNewConnection()));
+   q->connect(socketNotifier, &QSocketNotifier::activated, q, &QLocalServer::_q_onNewConnection);
 
    socketNotifier->setEnabled(maxPendingConnections > 0);
 

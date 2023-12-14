@@ -72,7 +72,7 @@ QOffscreenSurface::QOffscreenSurface(QScreen *targetScreen)
    //the screen list is populated.
    Q_ASSERT(d->screen);
 
-   connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+   connect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
 }
 
 QOffscreenSurface::~QOffscreenSurface()
@@ -254,15 +254,19 @@ void QOffscreenSurface::setScreen(QScreen *newScreen)
 
    if (newScreen != d->screen) {
       const bool wasCreated = d->platformOffscreenSurface != nullptr || d->offscreenWindow != nullptr;
+
       if (wasCreated) {
          destroy();
       }
+
       if (d->screen) {
-         disconnect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+         disconnect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
       }
+
       d->screen = newScreen;
       if (newScreen) {
-         connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+         connect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
+
          if (wasCreated) {
             create();
          }

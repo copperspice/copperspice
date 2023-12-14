@@ -565,7 +565,7 @@ bool QGLShaderProgram::addShader(QGLShader *shader)
       d->linked = false;  // Program needs to be relinked.
       d->shaders.append(shader);
 
-      connect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+      connect(shader, &QGLShader::destroyed, this, &QGLShaderProgram::shaderDestroyed);
       return true;
 
    } else {
@@ -636,7 +636,7 @@ void QGLShaderProgram::removeShader(QGLShader *shader)
    if (shader) {
       d->shaders.removeAll(shader);
       d->anonShaders.removeAll(shader);
-      disconnect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+      disconnect(shader, &QGLShader::destroyed, this, &QGLShaderProgram::shaderDestroyed);
    }
 }
 
