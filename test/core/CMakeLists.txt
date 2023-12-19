@@ -140,6 +140,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qreadwritelock.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadstorage.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.cpp
