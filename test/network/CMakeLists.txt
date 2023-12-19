@@ -70,12 +70,18 @@ target_sources(CsNetworkTest
    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_reply.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_request.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpserver.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpsocket.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qudpsocket.cpp
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
 )
 
 # sets working dir for CTest
