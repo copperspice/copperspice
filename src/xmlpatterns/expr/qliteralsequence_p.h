@@ -26,9 +26,8 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class LiteralSequence : public EmptyContainer
 {
  public:
@@ -52,8 +51,7 @@ class LiteralSequence : public EmptyContainer
  private:
    const Item::List m_list;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

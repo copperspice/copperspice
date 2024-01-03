@@ -25,8 +25,6 @@
 
 #include "qunparsedtextavailablefn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool UnparsedTextAvailableFN::evaluateEBV(const DynamicContext::Ptr &context) const
@@ -66,5 +64,3 @@ bool UnparsedTextAvailableFN::evaluateEBV(const DynamicContext::Ptr &context) co
    Q_ASSERT(uri.isValid() && !uri.isRelative());
    return context->resourceLoader()->isUnparsedTextAvailable(uri, encoding);
 }
-
-QT_END_NAMESPACE

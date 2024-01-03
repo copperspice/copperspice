@@ -21,15 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qatomictype_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qgenericsequencetype_p.h"
-#include "qsequencemappingiterator_p.h"
+#include <qatomizer_p.h>
 
-#include "qatomizer_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qatomictype_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qgenericsequencetype_p.h>
+#include <qsequencemappingiterator_p.h>
 
 using namespace QPatternist;
 
@@ -105,5 +103,3 @@ const SourceLocationReflection *Atomizer::actualReflection() const
 {
    return m_operand->actualReflection();
 }
-
-QT_END_NAMESPACE

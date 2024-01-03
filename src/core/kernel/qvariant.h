@@ -104,7 +104,7 @@ class QVector3D;
 class QVector4D;
 class QWidget;
 
-class QVariantBase
+class Q_CORE_EXPORT QVariantBase
 {
    public:
       virtual ~QVariantBase()

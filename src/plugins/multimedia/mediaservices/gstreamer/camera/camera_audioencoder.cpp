@@ -54,7 +54,8 @@ QString CameraBinAudioEncoder::codecDescription(const QString &codecName) const
 #ifdef HAVE_GST_ENCODING_PROFILES
    return m_codecs.codecDescription(codecName);
 #else
-   Q_UNUSED(codecName)
+   (void) codecName;
+
    return QString();
 #endif
 }

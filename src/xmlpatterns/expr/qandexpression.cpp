@@ -28,8 +28,6 @@
 
 #include "qandexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AndExpression::AndExpression(const Expression::Ptr &operand1,
@@ -77,5 +75,3 @@ ExpressionVisitorResult::Ptr AndExpression::accept(const ExpressionVisitor::Ptr 
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

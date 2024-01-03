@@ -24,14 +24,13 @@
 #ifndef QDeduplicateIterator_P_H
 #define QDeduplicateIterator_P_H
 
-#include <QList>
+#include <qlist.h>
+
 #include <qexpression_p.h>
 #include <qitem_p.h>
 #include <qatomiccomparator_p.h>
 #include <qcomparisonplatform_p.h>
 #include <qsourcelocationreflection_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -54,8 +53,7 @@ class DeduplicateIterator : public ListIterator<Item>
     */
    int m_listPos;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

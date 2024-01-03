@@ -147,15 +147,20 @@ QString QCoreApplicationPrivate::appName() const
 
 bool QCoreApplicationPrivate::checkInstance(const char *function)
 {
-   bool b = (QCoreApplication::self != nullptr);
+   bool b = (QCoreApplication::m_self != nullptr);
 
-   if (!b) {
-      qWarning("QApplication::%s: Please instantiate the QApplication object first", function);
+   if (! b) {
+      qWarning("QCoreApplication::%s: QApplication must be started before calling this method", function);
    }
+
    return b;
 }
 
-Q_GLOBAL_STATIC(QString, qmljs_debug_arguments);
+static QString *qmljs_debug_arguments()
+{
+   static QString retval;
+   return &retval;
+}
 
 void QCoreApplicationPrivate::processCommandLineArguments()
 {
@@ -197,11 +202,20 @@ extern "C" void Q_CORE_EXPORT qt_startup_hook()
 {
 }
 
-using QStartUpFuncList  = QList<QtStartUpFunction>;
-Q_GLOBAL_STATIC(QStartUpFuncList, preRList)
+using QStartUpFuncList = QList<QtStartUpFunction>;
+using QVFuncList       = QList<QtCleanUpFunction>;
 
-using QVFuncList = QList<QtCleanUpFunction>;
-Q_GLOBAL_STATIC(QVFuncList, postRList)
+static QStartUpFuncList *preRList()
+{
+   static QStartUpFuncList retval;
+   return &retval;
+}
+
+static QVFuncList *postRList()
+{
+   static QVFuncList retval;
+   return &retval;
+}
 
 static QMutex globalPreRoutinesMutex;
 
@@ -309,7 +323,7 @@ Q_CORE_EXPORT uint qGlobalPostedEventsCount()
    return currentThreadData->postEventList.size() - currentThreadData->postEventList.startOffset;
 }
 
-QCoreApplication *QCoreApplication::self = nullptr;
+QCoreApplication *QCoreApplication::m_self = nullptr;
 QAbstractEventDispatcher *QCoreApplicationPrivate::eventDispatcher = nullptr;
 uint QCoreApplicationPrivate::attribs;
 
@@ -371,7 +385,7 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
 
    // this call to QThread::currentThread() may end up setting theMainThread
    if (QThread::currentThread() != theMainThread) {
-      qWarning("WARNING: QApplication was not created in the main() thread.");
+      qWarning("QCoreApplication must be created in the main() thread");
    }
 }
 
@@ -525,8 +539,8 @@ QCoreApplication::QCoreApplication(QCoreApplicationPrivate &p)
 
 void QCoreApplication::flush()
 {
-   if (self && self->d_func()->eventDispatcher) {
-      self->d_func()->eventDispatcher->flush();
+   if (m_self && m_self->d_func()->eventDispatcher) {
+      m_self->d_func()->eventDispatcher->flush();
    }
 }
 
@@ -544,10 +558,10 @@ void QCoreApplicationPrivate::init()
 
    initLocale();
 
-   Q_ASSERT_X(! QCoreApplication::self, "QCoreApplication", "There should be only one application object");
-   QCoreApplication::self = q;
+   Q_ASSERT_X(! QCoreApplication::m_self, "QCoreApplication", "There should be only one QApplication running");
+   QCoreApplication::m_self = q;
 
-   // Store app name (so it's still available after QCoreApplication is destroyed)
+   // Store app name (so it is available after QCoreApplication is destroyed)
    if (! coreappdata()->applicationNameSet) {
       coreappdata()->application = appName();
    }
@@ -555,7 +569,7 @@ void QCoreApplicationPrivate::init()
    // emerald - may want to adjust the library path
 #if ! defined(QT_NO_SETTINGS)
    if (! coreappdata()->app_libpaths) {
-      // make sure that library paths is initialized
+      // make sure library paths is initialized
       q->libraryPaths();
 
    } else {
@@ -597,7 +611,7 @@ QCoreApplication::~QCoreApplication()
 {
    qt_call_post_routines();
 
-   self = nullptr;
+   m_self = nullptr;
    QCoreApplicationPrivate::is_app_closing = true;
    QCoreApplicationPrivate::is_app_running = false;
 
@@ -608,7 +622,7 @@ QCoreApplication::~QCoreApplication()
       globalThreadPool = QThreadPool::globalInstance();
 
    } catch (...) {
-      // swallow the exception, since destructors shouldn't throw
+      // consume the exception since destructors should not throw
    }
 
    if (globalThreadPool) {
@@ -697,7 +711,7 @@ bool QCoreApplication::notify(QObject *receiver, QEvent *event)
    }
 
    if (receiver == nullptr) {                        // serious error
-      qWarning("QCoreApplication::notify: Unexpected null receiver");
+      qWarning("QCoreApplication::notify(): Receiver must not be null");
       return true;
    }
 
@@ -736,7 +750,7 @@ bool QCoreApplicationPrivate::sendThroughApplicationEventFilters(QObject *receiv
          QThreadData *threadData_Obj = CSInternalThreadData::get_m_ThreadData(obj);
 
          if (threadData_Obj != threadData) {
-            qWarning("QCoreApplication: Application event filter cannot be in a different thread.");
+            qWarning("QCoreApplication: Application event filter must be in the same thread");
             continue;
          }
 
@@ -768,7 +782,7 @@ bool QCoreApplicationPrivate::sendThroughObjectEventFilters(QObject *receiver, Q
          QThreadData *threadData_Obj = CSInternalThreadData::get_m_ThreadData(obj);
 
          if (threadData_Obj != threadData_Receiver) {
-            qWarning("QCoreApplication: Object event filter cannot be in a different thread.");
+            qWarning("QCoreApplication: Object event filter must be in the same thread");
             continue;
          }
 
@@ -850,38 +864,40 @@ void QCoreApplication::processEvents(QEventLoop::ProcessEventsFlags flags, int m
 
 int QCoreApplication::exec()
 {
-   if (!QCoreApplicationPrivate::checkInstance("exec")) {
+   if (! QCoreApplicationPrivate::checkInstance("exec")) {
       return -1;
    }
 
-   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(self);
+   QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(m_self);
 
    if (threadData != QThreadData::current()) {
-      qWarning("%s::exec: Must be called from the main thread", csPrintable(self->metaObject()->className()));
+      qWarning("%s::exec: This method must be called from the main() thread",
+         csPrintable(m_self->metaObject()->className()));
       return -1;
    }
 
-   if (!threadData->eventLoops.isEmpty()) {
-      qWarning("QCoreApplication::exec: The event loop is already running");
+   if (! threadData->eventLoops.isEmpty()) {
+      qWarning("QCoreApplication::exec: Event loop is already running");
       return -1;
    }
 
    threadData->quitNow = false;
 
    QEventLoop eventLoop;
-   self->d_func()->in_exec            = true;
-   self->d_func()->aboutToQuitEmitted = false;
+   m_self->d_func()->in_exec            = true;
+   m_self->d_func()->aboutToQuitEmitted = false;
+
    int returnCode = eventLoop.exec();
    threadData->quitNow = false;
 
-   if (self) {
-      self->d_func()->in_exec = false;
+   if (m_self) {
+      m_self->d_func()->in_exec = false;
 
-      if (!self->d_func()->aboutToQuitEmitted) {
-         emit self->aboutToQuit();
+      if (! m_self->d_func()->aboutToQuitEmitted) {
+         emit m_self->aboutToQuit();
       }
 
-      self->d_func()->aboutToQuitEmitted = true;
+      m_self->d_func()->aboutToQuitEmitted = true;
       sendPostedEvents(nullptr, QEvent::DeferredDelete);
    }
 
@@ -890,11 +906,11 @@ int QCoreApplication::exec()
 
 void QCoreApplication::exit(int returnCode)
 {
-   if (! self) {
+   if (! m_self) {
       return;
    }
 
-   QThreadData *data = CSInternalThreadData::get_m_ThreadData(self);
+   QThreadData *data = CSInternalThreadData::get_m_ThreadData(m_self);
    data->quitNow = true;
 
    for (int i = 0; i < data->eventLoops.size(); ++i) {
@@ -906,7 +922,7 @@ void QCoreApplication::exit(int returnCode)
 void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
 {
    if (receiver == nullptr) {
-      qWarning("QCoreApplication::postEvent: Unexpected nullptr for receiver");
+      qWarning("QCoreApplication::postEvent: Receiver must not be null");
       delete event;
       return;
    }
@@ -914,7 +930,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
    QThreadData *data = CSInternalThreadData::get_m_ThreadData(receiver);
 
    if (! data) {
-      // posting during destruction? just delete the event to prevent a leak
+      // posting during destruction, delete the event to prevent a leak
       delete event;
       return;
    }
@@ -930,7 +946,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
       data = pdata.load();
 
       if (! data) {
-         // posting during destruction? just delete the event to prevent a leak
+         // posting during destruction, delete the event to prevent a leak
          delete event;
          return;
       }
@@ -943,7 +959,7 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
    int peCount = CSInternalEvents::get_m_PostedEvents(receiver);
 
    // if this is one of the compressible events, do compression
-   if (peCount != 0 && self && self->compressEvent(event, receiver, &data->postEventList)) {
+   if (peCount != 0 && m_self && m_self->compressEvent(event, receiver, &data->postEventList)) {
       return;
    }
 
@@ -1037,7 +1053,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(receiver);
 
    if (receiver && threadData != data) {
-      qWarning("QCoreApplication::sendPostedEvents: Can not send posted events for objects in another thread");
+      qWarning("QCoreApplication::sendPostedEvents(): Unable to send posted events to objects in another thread");
       return;
    }
 
@@ -1269,9 +1285,9 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
       if (pe.event == event) {
 
 #ifndef QT_NO_DEBUG
-         qWarning("QCoreApplication::removePostedEvent: Event of type %d deleted while posted to %s %s",
-                  event->type(), csPrintable(pe.receiver->metaObject()->className()),
-                  csPrintable(pe.receiver->objectName()) );
+         qWarning("QCoreApplication::removePostedEvent(): Event of type %d deleted while posted to %s %s",
+            event->type(), csPrintable(pe.receiver->metaObject()->className()),
+            csPrintable(pe.receiver->objectName()) );
 #endif
 
          CSInternalEvents::decr_PostedEvents(pe.receiver);
@@ -1328,7 +1344,7 @@ void QCoreApplication::installTranslator(QTranslator *translationFile)
       return;
    }
 
-   QCoreApplicationPrivate *d = self->d_func();
+   QCoreApplicationPrivate *d = m_self->d_func();
    d->translators.prepend(translationFile);
 
    if (translationFile->isEmpty()) {
@@ -1336,7 +1352,7 @@ void QCoreApplication::installTranslator(QTranslator *translationFile)
    }
 
    QEvent ev(QEvent::LanguageChange);
-   QCoreApplication::sendEvent(self, &ev);
+   QCoreApplication::sendEvent(m_self, &ev);
 }
 
 void QCoreApplication::removeTranslator(QTranslator *translationFile)
@@ -1349,16 +1365,16 @@ void QCoreApplication::removeTranslator(QTranslator *translationFile)
       return;
    }
 
-   QCoreApplicationPrivate *d = self->d_func();
+   QCoreApplicationPrivate *d = m_self->d_func();
 
-   if (d->translators.removeAll(translationFile) && ! self->closingDown()) {
+   if (d->translators.removeAll(translationFile) && ! m_self->closingDown()) {
       QEvent ev(QEvent::LanguageChange);
-      QCoreApplication::sendEvent(self, &ev);
+      QCoreApplication::sendEvent(m_self, &ev);
    }
 }
 
 QString QCoreApplication::translate(const char *context, const char *text, const char *comment,
-            std::optional<int> numArg)
+      std::optional<int> numArg)
 {
    QString retval;
 
@@ -1366,9 +1382,9 @@ QString QCoreApplication::translate(const char *context, const char *text, const
       return retval;
    }
 
-   if (self != nullptr) {
+   if (m_self != nullptr) {
 
-      for (auto item : self->d_func()->translators) {
+      for (auto item : m_self->d_func()->translators) {
          retval = item->translate(context, text, comment, numArg);
 
          if (! retval.isEmpty()) {
@@ -1389,7 +1405,7 @@ QString QCoreApplication::translate(const char *context, const char *text, const
 }
 
 QString QCoreApplication::translate(const QString &context, const QString &text, const QString &comment,
-            std::optional<int> numArg)
+      std::optional<int> numArg)
 {
    QString retval;
 
@@ -1397,9 +1413,9 @@ QString QCoreApplication::translate(const QString &context, const QString &text,
       return retval;
    }
 
-   if (self != nullptr) {
+   if (m_self != nullptr) {
 
-      for (auto item : self->d_func()->translators) {
+      for (auto item : m_self->d_func()->translators) {
          retval = item->translate(context, text, comment, numArg);
 
          if (! retval.isEmpty()) {
@@ -1427,17 +1443,17 @@ QString qtTrId(const char *id, std::optional<int> n)
 
 bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)
 {
-   return QCoreApplication::self && QCoreApplication::self->d_func()->translators.contains(translator);
+   return QCoreApplication::m_self && QCoreApplication::m_self->d_func()->translators.contains(translator);
 }
 
 QString QCoreApplication::applicationDirPath()
 {
-   if (! self) {
-      qWarning("QCoreApplication::applicationDirPath: QApplication must be instantiated before calling this method");
+   if (! m_self) {
+      qWarning("QCoreApplication::applicationDirPath(): QApplication must be started before calling this method");
       return QString();
    }
 
-   QCoreApplicationPrivate *d = self->d_func();
+   QCoreApplicationPrivate *d = m_self->d_func();
 
    if (d->cachedApplicationDirPath.isEmpty()) {
       d->cachedApplicationDirPath = QFileInfo(applicationFilePath()).path();
@@ -1448,12 +1464,12 @@ QString QCoreApplication::applicationDirPath()
 
 QString QCoreApplication::applicationFilePath()
 {
-   if (! self) {
-      qWarning("QCoreApplication::applicationFilePath: QApplication must be instantiated before calling this method");
+   if (! m_self) {
+      qWarning("QCoreApplication::applicationFilePath(): QApplication must be started before calling this method");
       return QString();
    }
 
-   QCoreApplicationPrivate *d = self->d_func();
+   QCoreApplicationPrivate *d = m_self->d_func();
    if (! d->cachedApplicationFilePath.isEmpty()) {
       return d->cachedApplicationFilePath;
    }
@@ -1538,16 +1554,16 @@ QStringList QCoreApplication::arguments()
 {
    QStringList list;
 
-   if (! self) {
-      qWarning("QCoreApplication::arguments: Please instantiate the QApplication object first");
+   if (! m_self) {
+      qWarning("QCoreApplication::arguments(): QApplication must be started before calling this method");
       return list;
    }
 
 #ifdef Q_OS_WIN
    list = qCmdLineArgs(0, nullptr);
 
-   if (self->d_func()->application_type) {
-      // GUI app? Skip known - see qapplication.cpp
+   if (m_self->d_func()->application_type) {
+      // GUI app? Skip known, refer to qapplication.cpp
       QStringList stripped;
 
       for (int a = 0; a < list.count(); ++a) {
@@ -1577,11 +1593,11 @@ QStringList QCoreApplication::arguments()
    }
 
 #else
-   const int ac = self->d_func()->argc;
-   char **const av = self->d_func()->argv;
+   const int ac = m_self->d_func()->argc;
+   char **const av = m_self->d_func()->argv;
 
-   for (int a = 0; a < ac; ++a) {
-      list << QString::fromUtf8(av[a]);
+   for (int index = 0; index < ac; ++index) {
+      list << QString::fromUtf8(av[index]);
    }
 #endif
 
@@ -1662,8 +1678,8 @@ QStringList QCoreApplication::libraryPaths()
 
       // if QCoreApplication is not yet instantiated, make sure we add the
       // application path when we construct the QCoreApplication
-      if (self) {
-         self->d_func()->appendApplicationPathToLibraryPaths();
+      if (m_self) {
+         m_self->d_func()->appendApplicationPathToLibraryPaths();
       }
 
       const QByteArray libPathEnv = qgetenv("CS_PLUGIN_PATH");

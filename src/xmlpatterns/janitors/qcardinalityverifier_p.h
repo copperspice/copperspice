@@ -24,9 +24,7 @@
 #ifndef QCardinalityVerifier_P_H
 #define QCardinalityVerifier_P_H
 
-#include "qsinglecontainer_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qsinglecontainer_p.h>
 
 namespace QPatternist {
 
@@ -78,8 +76,7 @@ class CardinalityVerifier : public SingleContainer
    const bool m_allowsMany;
    const ReportContext::ErrorCode m_errorCode;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

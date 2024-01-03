@@ -24,11 +24,9 @@
 #ifndef QXMLSCHEMA_H
 #define QXMLSCHEMA_H
 
-#include <QSharedDataPointer>
-#include <QUrl>
-#include <QXmlNamePool>
-
-QT_BEGIN_NAMESPACE
+#include <qshareddatapointer.h>
+#include <qurl.h>
+#include <qxmlnamepool.h>
 
 class QAbstractMessageHandler;
 class QAbstractUriResolver;
@@ -44,8 +42,10 @@ class Q_XMLPATTERNS_EXPORT QXmlSchema
 
  public:
    QXmlSchema();
-   QXmlSchema(const QXmlSchema &other);
    ~QXmlSchema();
+
+   QXmlSchema(const QXmlSchema &other) = default;
+   QXmlSchema &operator=(const QXmlSchema &other) = default;
 
    bool load(const QUrl &source);
    bool load(QIODevice *source, const QUrl &documentUri = QUrl());
@@ -68,7 +68,5 @@ class Q_XMLPATTERNS_EXPORT QXmlSchema
  private:
    QSharedDataPointer<QXmlSchemaPrivate> d;
 };
-
-QT_END_NAMESPACE
 
 #endif

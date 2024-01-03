@@ -46,8 +46,8 @@ public:
     static bool mockIsActive;
 
 public:
-    WEB_CS_SIGNAL_1(Public, void mockOrientationChanged(DeviceOrientation * un_named_arg1))
-    WEB_CS_SIGNAL_2(mockOrientationChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_1(Public, void mockOrientationChanged(DeviceOrientation *orientation))
+    WEB_CS_SIGNAL_2(mockOrientationChanged,orientation)
 
 private:
     DeviceOrientationClientMockQt();

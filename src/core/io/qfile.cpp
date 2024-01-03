@@ -72,8 +72,9 @@ QFilePrivate::~QFilePrivate()
 bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
-   Q_UNUSED(flags);
-   Q_UNUSED(fd);
+   (void) flags;
+   (void) fd;
+
    return false;
 
 #else
@@ -89,14 +90,18 @@ bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags ha
 bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
-   Q_UNUSED(flags);
-   Q_UNUSED(fh);
+   (void) flags;
+   (void) fh;
+
    return false;
+
 #else
    delete fileEngine;
    fileEngine = nullptr;
+
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
+
    return fe->open(QIODevice::OpenMode(flags), fh, handleFlags);
 #endif
 }
@@ -134,9 +139,6 @@ QFile::QFile(const QString &name, QObject *parent)
    d->fileName = name;
 }
 
-/*!
-    \internal
-*/
 QFile::QFile(QFilePrivate &dd, QObject *parent)
    : QFileDevice(dd, parent)
 {
@@ -158,7 +160,7 @@ void QFile::setFileName(const QString &name)
 
    if (isOpen()) {
       qWarning("QFile::setFileName: File (%s) is already opened",
-               qPrintable(fileName()));
+               csPrintable(fileName()));
       close();
    }
 
@@ -208,7 +210,6 @@ bool QFile::exists() const
          & QAbstractFileEngine::ExistsFlag);
 }
 
-
 bool QFile::exists(const QString &fileName)
 {
    return QFileInfo(fileName).exists();
@@ -225,8 +226,7 @@ QString QFile::readLink() const
 
     Use symLinkTarget() instead.
 */
-QString
-QFile::readLink(const QString &fileName)
+QString QFile::readLink(const QString &fileName)
 {
    return QFileInfo(fileName).readLink();
 }
@@ -628,7 +628,7 @@ bool QFile::open(FILE *fh, OpenMode mode, FileHandleFlags handleFlags)
 {
    Q_D(QFile);
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
    if (mode & Append) {
@@ -659,7 +659,7 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", qPrintable(fileName()));
+      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
       return false;
    }
 

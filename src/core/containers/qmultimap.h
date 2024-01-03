@@ -279,7 +279,7 @@ class QMultiMap
    explicit QMultiMap(const std::multimap<Key, Val, C> &other)
       : m_data(other) {}
 
-   template<typename Input_Iterator>
+   template <typename Input_Iterator>
    QMultiMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
       : m_data(first, last, compare) {}
 

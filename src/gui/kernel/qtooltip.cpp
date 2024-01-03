@@ -127,7 +127,7 @@ void QTipLabel::reuseTip(const QString &text, int msecDisplayTime)
 {
 #ifndef QT_NO_STYLE_STYLESHEET
    if (styleSheetParent) {
-      disconnect(styleSheetParent, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+      disconnect(styleSheetParent, &QWidget::destroyed, QTipLabel::instance, &QTipLabel::styleSheetParentDestroyed);
       styleSheetParent = nullptr;
    }
 #endif
@@ -206,7 +206,7 @@ void QTipLabel::hideTipImmediately()
 void QTipLabel::setTipRect(QWidget *w, const QRect &r)
 {
    if (! r.isNull() && ! w) {
-      qWarning("QToolTip::setTipRect: Cannot pass null widget if rect is set");
+      qWarning("QToolTip::setTipRect() Current widget must be valid when a rectangle is specified");
 
    } else {
       widget = w;
@@ -277,7 +277,7 @@ void QTipLabel::placeTip(const QPoint &pos, QWidget *w)
       QTipLabel::instance->styleSheetParent = w;
 
       if (w) {
-         connect(w, SIGNAL(destroyed()), QTipLabel::instance, SLOT(styleSheetParentDestroyed()));
+         connect(w, &QWidget::destroyed, QTipLabel::instance, &QTipLabel::styleSheetParentDestroyed);
       }
    }
 #endif
@@ -394,7 +394,11 @@ QString QToolTip::text()
    return QString();
 }
 
-Q_GLOBAL_STATIC(QPalette, tooltip_palette)
+static QPalette *tooltip_palette()
+{
+   static QPalette retval;
+   return &retval;
+}
 
 QPalette QToolTip::palette()
 {

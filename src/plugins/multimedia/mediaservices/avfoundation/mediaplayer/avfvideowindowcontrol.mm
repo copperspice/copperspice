@@ -25,6 +25,10 @@
 
 #include <AVFoundation/AVFoundation.h>
 
+#if defined(Q_OS_DARWIN)
+#import <AppKit/AppKit.h>
+#endif
+
 AVFVideoWindowControl::AVFVideoWindowControl(QObject *parent)
    : QVideoWindowControl(parent)
    , m_winId(0)

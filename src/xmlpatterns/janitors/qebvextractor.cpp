@@ -21,14 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qboolean_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qgenericsequencetype_p.h"
-
 #include "qebvextractor_p.h"
 
-QT_BEGIN_NAMESPACE
+#include <qboolean_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qgenericsequencetype_p.h>
 
 using namespace QPatternist;
 
@@ -68,5 +66,3 @@ ExpressionVisitorResult::Ptr EBVExtractor::accept(const ExpressionVisitor::Ptr &
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

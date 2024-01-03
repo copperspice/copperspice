@@ -27,9 +27,8 @@
 #include <qatomictype_p.h>
 #include <qsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class EmptySequenceType : public ItemType, public SequenceType
 {
  public:
@@ -76,8 +75,7 @@ class EmptySequenceType : public ItemType, public SequenceType
    friend class CommonSequenceTypes;
    EmptySequenceType();
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

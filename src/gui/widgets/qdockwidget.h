@@ -128,7 +128,7 @@ class Q_GUI_EXPORT QDockWidget : public QWidget
  private:
    Q_DECLARE_PRIVATE(QDockWidget)
 
-   GUI_CS_SLOT_1(Private, void _q_toggleView(bool un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_toggleView(bool isToggled))
    GUI_CS_SLOT_2(_q_toggleView)
 
    GUI_CS_SLOT_1(Private, void _q_toggleTopLevel())

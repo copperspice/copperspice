@@ -31,9 +31,8 @@
 #include <qatomictypedispatch_p.h>
 #include <qitemtype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class Item;
 class SourceLocationReflection;
 
@@ -109,8 +108,7 @@ class AtomicType : public ItemType, public AnySimpleType
    AtomicType();
 
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

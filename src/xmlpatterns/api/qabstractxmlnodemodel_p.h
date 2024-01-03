@@ -34,7 +34,7 @@ class QAbstractXmlNodeModelPrivate
    }
 
    virtual QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const {
-      Q_UNUSED(index);
+      (void) index;
 
       return QSourceLocation();
    }

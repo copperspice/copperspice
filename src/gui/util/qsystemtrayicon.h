@@ -29,8 +29,8 @@
 #ifndef QT_NO_SYSTEMTRAYICON
 
 #include <qicon.h>
-#include <QScopedPointer>
 #include <qplatform_systemtrayicon.h>
+#include <qscopedpointer.h>
 
 class QSystemTrayIconPrivate;
 class QMenu;

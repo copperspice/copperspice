@@ -246,7 +246,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void) globalFrameChanged: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    m_platformWindow->updateExposedGeometry();
 }
 
@@ -712,7 +712,8 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (BOOL)acceptsFirstMouse: (NSEvent *)theEvent
 {
-   Q_UNUSED(theEvent)
+   (void) theEvent;
+
    if (!m_window || !m_platformWindow) {
       return NO;
    }
@@ -975,7 +976,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void)cursorUpdate: (NSEvent *)theEvent
 {
-   Q_UNUSED(theEvent);
+   (void) theEvent;
    m_platformWindow->applyEffectiveWindowCursor();
 }
 
@@ -1013,7 +1014,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void)mouseEnteredImpl: (NSEvent *)theEvent
 {
-   Q_UNUSED(theEvent)
+   (void) theEvent;
    m_platformWindow->m_windowUnderMouse = true;
 
    if (m_window && (m_window->flags() & Qt::WindowTransparentForInput) ) {
@@ -1034,7 +1035,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void)mouseExitedImpl: (NSEvent *)theEvent
 {
-   Q_UNUSED(theEvent);
+   (void) theEvent;
    m_platformWindow->m_windowUnderMouse = false;
 
    if (m_window && (m_window->flags() & Qt::WindowTransparentForInput) ) {
@@ -1746,7 +1747,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 
 - (void) insertNewline: (id)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    m_resendKeyEvent = true;
 }
 
@@ -1757,7 +1758,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 
 - (void) insertText: (id)aString replacementRange: (NSRange)replacementRange
 {
-   Q_UNUSED(replacementRange)
+   (void) replacementRange;
 
    if (m_sendKeyEvent && m_composingText.isEmpty() && [aString isEqualToString: m_inputSource]) {
       // don't send input method events for simple text input (let handleKeyEvent send key events instead)
@@ -1791,7 +1792,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 
 - (void) setMarkedText: (id)aString selectedRange: (NSRange)selectedRange replacementRange: (NSRange)replacementRange
 {
-   Q_UNUSED(replacementRange)
+   (void) replacementRange;
    QString preeditString;
 
    QList<QInputMethodEvent::Attribute> attrs;
@@ -1879,7 +1880,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 
 - (NSAttributedString *) attributedSubstringForProposedRange: (NSRange)aRange actualRange: (NSRangePointer)actualRange
 {
-   Q_UNUSED(actualRange)
+   (void) actualRange;
    QObject *fo = QApplication::focusObject();
    if (!fo) {
       return nil;
@@ -2059,15 +2060,15 @@ static QPoint mapWindowCoordinates(QWindow *source, QWindow *target, QPoint poin
 - (NSDragOperation)draggingSession: (NSDraggingSession *)session
    sourceOperationMaskForDraggingContext: (NSDraggingContext)context
 {
-   Q_UNUSED(session);
-   Q_UNUSED(context);
+   (void) session;
+   (void) context;
    QCocoaDrag *nativeDrag = QCocoaIntegration::instance()->drag();
    return qt_mac_mapDropActions(nativeDrag->currentDrag()->supportedActions());
 }
 
 - (BOOL)ignoreModifierKeysForDraggingSession: (NSDraggingSession *)session
 {
-   Q_UNUSED(session);
+   (void) session;
    // According to the "Dragging Sources" chapter on Cocoa DnD Programming
    // (https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/DragandDrop/Concepts/dragsource.html),
    // if the control, option, or command key is pressed, the source’s

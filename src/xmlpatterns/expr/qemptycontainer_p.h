@@ -26,8 +26,6 @@
 
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class EmptyContainer : public Expression
 {
@@ -55,8 +53,7 @@ class EmptyContainer : public Expression
    SequenceType::List expectedOperandTypes() const override;
 
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

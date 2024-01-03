@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+
 #include <qnoncontiguousbytedevice_p.h>
 #include <qbuffer.h>
 #include <qdebug.h>
@@ -386,8 +387,8 @@ qint64 QByteDeviceWrappingIoDevice::readData( char *data, qint64 maxSize)
 
 qint64 QByteDeviceWrappingIoDevice::writeData( const char *data, qint64 maxSize)
 {
-   Q_UNUSED(data);
-   Q_UNUSED(maxSize);
+   (void) data;
+   (void) maxSize;
 
    return -1;
 }

@@ -81,8 +81,9 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistProvider : public QObject
 
    MULTI_CS_SIGNAL_1(Public, void loaded())
    MULTI_CS_SIGNAL_2(loaded)
-   MULTI_CS_SIGNAL_1(Public, void loadFailed(QMediaPlaylist::Error un_named_arg1, const QString &errorMessage))
-   MULTI_CS_SIGNAL_2(loadFailed, un_named_arg1, errorMessage)
+
+   MULTI_CS_SIGNAL_1(Public, void loadFailed(QMediaPlaylist::Error playlistError, const QString &errorMsg))
+   MULTI_CS_SIGNAL_2(loadFailed, playlistError, errorMsg)
 
  protected:
    QMediaPlaylistProviderPrivate *d_ptr;

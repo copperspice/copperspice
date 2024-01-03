@@ -35,8 +35,6 @@
 
 #include "qgenericpredicate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GenericPredicate::GenericPredicate(const Expression::Ptr &sourceExpression,
@@ -186,5 +184,3 @@ Expression::ID GenericPredicate::id() const
 {
    return IDGenericPredicate;
 }
-
-QT_END_NAMESPACE

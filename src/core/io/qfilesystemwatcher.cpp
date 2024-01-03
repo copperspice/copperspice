@@ -442,8 +442,7 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
    }
 
    if (!p.isEmpty())
-      qWarning("QFileSystemWatcher: failed to add paths: %s",
-               qPrintable(p.join(QLatin1String(", "))));
+      qWarning("QFileSystemWatcher: failed to add paths: %s", csPrintable(p.join(", ")));
 }
 
 void QFileSystemWatcher::removePath(const QString &path)

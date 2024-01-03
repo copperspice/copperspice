@@ -26,8 +26,6 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class TreatAs : public SingleContainer
@@ -62,8 +60,7 @@ class TreatAs : public SingleContainer
  private:
    const SequenceType::Ptr m_reqType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

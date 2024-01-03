@@ -23,8 +23,6 @@
 
 #include "qabstractnodetest_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AbstractNodeTest::AbstractNodeTest(const ItemType::Ptr &primaryType) : m_primaryType(primaryType)
@@ -56,5 +54,3 @@ ItemType::Ptr AbstractNodeTest::xdtSuperType() const
 {
    return m_primaryType;
 }
-
-QT_END_NAMESPACE

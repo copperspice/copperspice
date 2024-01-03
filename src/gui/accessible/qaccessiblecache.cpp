@@ -25,7 +25,11 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-Q_GLOBAL_STATIC(QAccessibleCache, qAccessibleCache)
+static QAccessibleCache *qAccessibleCache()
+{
+   static QAccessibleCache retval;
+   return &retval;
+}
 
 QAccessibleCache *QAccessibleCache::instance()
 {

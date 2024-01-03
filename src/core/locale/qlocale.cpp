@@ -55,16 +55,20 @@
 
 #ifndef QT_NO_SYSTEMLOCALE
 
-static QSystemLocale *_systemLocale = nullptr;
-static QLocaleData *system_data     = nullptr;
+static QSystemLocale *s_system_locale = nullptr;
+static QLocaleData *s_system_data     = nullptr;
 
-static QSystemLocale *QSystemLocale_globalSystemLocale()
+static QSystemLocale *global_SystemLocale()
 {
-   static QSystemLocale retval = QSystemLocale::cs_internal_private_tag();
+   static QSystemLocale retval = QSystemLocale::cs_internal_tag();
    return &retval;
 }
 
-Q_GLOBAL_STATIC(QLocaleData, globalLocaleData)
+static QLocaleData *global_SystemData()
+{
+   static QLocaleData retval;
+   return &retval;
+}
 
 #endif
 
@@ -615,94 +619,92 @@ static QLocalePrivate *c_private()
 
 QSystemLocale::QSystemLocale()
 {
-   delete _systemLocale;
-   _systemLocale = this;
+   delete s_system_locale;
+   s_system_locale = this;
 
-   if (system_data) {
-      system_data->m_language_id = 0;
+   if (s_system_data) {
+      s_system_data->m_language_id = 0;
    }
 }
 
-QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_private_tag)
+QSystemLocale::QSystemLocale(QSystemLocale::cs_internal_tag)
 {
 }
 
 QSystemLocale::~QSystemLocale()
 {
-   if (_systemLocale == this) {
-      _systemLocale = nullptr;
+   if (s_system_locale == this) {
+      s_system_locale = nullptr;
 
-      if (system_data) {
-         system_data->m_language_id = 0;
+      if (s_system_data != nullptr) {
+         s_system_data->m_language_id = 0;
       }
    }
 }
 
 static const QSystemLocale *systemLocale()
 {
-   if (_systemLocale) {
-      return _systemLocale;
+   if (s_system_locale != nullptr) {
+      return s_system_locale;
    }
 
-   return QSystemLocale_globalSystemLocale();
+   return global_SystemLocale();
 }
 
 void QLocalePrivate::updateSystemPrivate()
 {
-   const QSystemLocale *sys_locale = systemLocale();
+   const QSystemLocale *current_locale = systemLocale();
 
-   if (! system_data) {
-      system_data = globalLocaleData();
+   if (s_system_data == nullptr) {
+      s_system_data = global_SystemData();
    }
 
-   // tell the object the system locale has changed
-   sys_locale->query(QSystemLocale::LocaleChanged, QVariant());
+   // system locale has changed
+   current_locale->query(QSystemLocale::LocaleChanged, QVariant());
 
-   *system_data = *sys_locale->fallbackUiLocale().d->m_data;
+   *s_system_data = *current_locale->fallbackUiLocale().d->m_data;
 
-   QVariant res = sys_locale->query(QSystemLocale::LanguageId, QVariant());
+   QVariant res   = current_locale->query(QSystemLocale::LanguageId, QVariant());
 
    if (res.isValid()) {
-      system_data->m_language_id = res.toInt();
-      system_data->m_script_id   = QLocale::AnyScript;       // default for compatibility
+      s_system_data->m_language_id = res.toInt();
+      s_system_data->m_script_id   = QLocale::AnyScript;       // default for compatibility
    }
 
-   res = sys_locale->query(QSystemLocale::CountryId, QVariant());
-
+   res = current_locale->query(QSystemLocale::CountryId, QVariant());
    if (res.isValid()) {
-      system_data->m_country_id = res.toInt();
-      system_data->m_script_id  = QLocale::AnyScript;        // default for compatibility
+      s_system_data->m_country_id = res.toInt();
+      s_system_data->m_script_id  = QLocale::AnyScript;        // default for compatibility
    }
 
-   res = sys_locale->query(QSystemLocale::ScriptId, QVariant());
-
+   res = current_locale->query(QSystemLocale::ScriptId, QVariant());
    if (res.isValid()) {
-      system_data->m_script_id = res.toInt();
+      s_system_data->m_script_id = res.toInt();
    }
 
-   res = sys_locale->query(QSystemLocale::DecimalPoint, QVariant());
+   res = current_locale->query(QSystemLocale::DecimalPoint, QVariant());
    if (res.isValid()) {
-      system_data->m_decimal = res.toString().at(0).unicode();
+      s_system_data->m_decimal = res.toString().at(0).unicode();
    }
 
-   res = sys_locale->query(QSystemLocale::GroupSeparator, QVariant());
+   res = current_locale->query(QSystemLocale::GroupSeparator, QVariant());
    if (res.isValid()) {
-      system_data->m_group = res.toString().at(0).unicode();
+      s_system_data->m_group = res.toString().at(0).unicode();
    }
 
-   res = sys_locale->query(QSystemLocale::ZeroDigit, QVariant());
+   res = current_locale->query(QSystemLocale::ZeroDigit, QVariant());
    if (res.isValid()) {
-      system_data->m_zero = res.toString().at(0).unicode();
+      s_system_data->m_zero = res.toString().at(0).unicode();
    }
 
-   res = sys_locale->query(QSystemLocale::NegativeSign, QVariant());
+   res = current_locale->query(QSystemLocale::NegativeSign, QVariant());
    if (res.isValid()) {
-      system_data->m_minus = res.toString().at(0).unicode();
+      s_system_data->m_minus = res.toString().at(0).unicode();
    }
 
-   res = sys_locale->query(QSystemLocale::PositiveSign, QVariant());
+   res = current_locale->query(QSystemLocale::PositiveSign, QVariant());
    if (res.isValid()) {
-      system_data->m_plus = res.toString().at(0).unicode();
+      s_system_data->m_plus = res.toString().at(0).unicode();
    }
 }
 #endif
@@ -710,12 +712,12 @@ void QLocalePrivate::updateSystemPrivate()
 static const QLocaleData *systemData()
 {
 #ifndef QT_NO_SYSTEMLOCALE
-   // copy over the information from the fallback locale and modify
-   if (! system_data || system_data->m_language_id == 0) {
+   // copy the information from the fallback locale and modify
+   if (! s_system_data || s_system_data->m_language_id == 0) {
       QLocalePrivate::updateSystemPrivate();
    }
 
-   return system_data;
+   return s_system_data;
 
 #else
    return locale_data;
@@ -870,6 +872,7 @@ uint qHash(const QLocale &key, uint seed)
 
    return seed;
 }
+
 void QLocale::setNumberOptions(NumberOptions options)
 {
    d->m_numberOptions = options;
@@ -2996,6 +2999,7 @@ QString QLocale::nativeLanguageName() const
 #ifndef QT_NO_SYSTEMLOCALE
    if (d->m_data == systemData()) {
       QVariant res = systemLocale()->query(QSystemLocale::NativeLanguageName, QVariant());
+
       if (res.isValid()) {
          return res.toString();
       }

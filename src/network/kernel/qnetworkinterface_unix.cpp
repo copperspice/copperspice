@@ -154,7 +154,7 @@ static QSet<QByteArray> interfaceNames(int socket)
    return result;
 
 #else
-   Q_UNUSED(socket);
+   (void) socket;
 
    // use if_nameindex
    struct if_nameindex *interfaceList = ::if_nameindex();

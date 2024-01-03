@@ -27,9 +27,8 @@
 #include "qexpression_p.h"
 #include "qatomictype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class PairContainer : public Expression
 {
  public:
@@ -43,8 +42,7 @@ class PairContainer : public Expression
    Expression::Ptr m_operand1;
    Expression::Ptr m_operand2;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

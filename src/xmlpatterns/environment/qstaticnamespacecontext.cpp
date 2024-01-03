@@ -23,8 +23,6 @@
 
 #include "qstaticnamespacecontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticNamespaceContext::StaticNamespaceContext(const NamespaceResolver::Ptr &resolver,
@@ -38,5 +36,3 @@ NamespaceResolver::Ptr StaticNamespaceContext::namespaceBindings() const
 {
    return m_namespaceBindings;
 }
-
-QT_END_NAMESPACE

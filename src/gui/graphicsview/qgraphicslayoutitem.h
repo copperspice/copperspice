@@ -82,7 +82,7 @@ class Q_GUI_EXPORT QGraphicsLayoutItem
    void setParentLayoutItem(QGraphicsLayoutItem *parent);
 
    bool isLayout() const;
-   // ###Qt5/Make automatic reparenting work regardless of item/object/widget type.
+   // TODO: Make automatic reparenting work regardless of item/object/widget type.
    QGraphicsItem *graphicsItem() const;
    bool ownedByLayout() const;
 

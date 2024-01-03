@@ -25,8 +25,6 @@
 
 #include "qtocodepointsiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ToCodepointsIterator::ToCodepointsIterator(const QString &string)
@@ -74,4 +72,3 @@ Item::Iterator::Ptr ToCodepointsIterator::copy() const
    return Item::Iterator::Ptr(new ToCodepointsIterator(m_string));
 }
 
-QT_END_NAMESPACE

@@ -38,10 +38,10 @@ namespace WebCore {
         WEB_CS_SLOT_1(Public,void lookup(QString hostname))
         WEB_CS_SLOT_2(lookup)
 
-        WEB_CS_SLOT_1(Public,void lookedUp(const QHostInfo &un_named_arg1))
+        WEB_CS_SLOT_1(Public,void lookedUp(const QHostInfo &hostInfo))
         WEB_CS_SLOT_2(lookedUp)
-  
-     
+
+
     protected:
         int currentLookups;
     };

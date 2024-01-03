@@ -130,11 +130,11 @@ QString QSystemError::toString()
          return standardLibraryErrorString(errorCode);
 
       case NoError:
-         return QLatin1String("No error");
+         return QString("No error");
 
       default:
-         qWarning("Invalid error scope");
-         return QLatin1String("Unrecognized error");
+         qWarning("QSystemError::toString() Invalid error scope");
+         return QString("Unrecognized error");
    }
 }
 

@@ -45,16 +45,16 @@ class CameraBinControl : public QCameraControl
       return true;
    }
 
-   QCamera::State state() const;
-   void setState(QCamera::State state);
+   QCamera::State state() const override;
+   void setState(QCamera::State state) override;
 
-   QCamera::Status status() const;
+   QCamera::Status status() const override;
 
-   QCamera::CaptureModes captureMode() const;
-   void setCaptureMode(QCamera::CaptureModes mode);
+   QCamera::CaptureModes captureMode() const override;
+   void setCaptureMode(QCamera::CaptureModes mode) override;
 
-   bool isCaptureModeSupported(QCamera::CaptureModes mode) const;
-   bool canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const;
+   bool isCaptureModeSupported(QCamera::CaptureModes mode) const override;
+   bool canChangeProperty(PropertyChangeType changeType, QCamera::Status status) const override;
    bool viewfinderColorSpaceConversion() const;
 
    CamerabinResourcePolicy *resourcePolicy() {
@@ -77,7 +77,7 @@ class CameraBinControl : public QCameraControl
    CS_SLOT_1(Private, void handleResourcesLost())
    CS_SLOT_2(handleResourcesLost)
 
-   CS_SLOT_1(Private, void handleBusyChanged(bool un_named_arg1))
+   CS_SLOT_1(Private, void handleBusyChanged(bool busy))
    CS_SLOT_2(handleBusyChanged)
 
    CS_SLOT_1(Private, void handleCameraError(int error, const QString &errorString))

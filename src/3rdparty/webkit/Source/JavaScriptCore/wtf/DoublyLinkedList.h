@@ -31,7 +31,7 @@ namespace WTF {
 template <typename Node> class DoublyLinkedList {
 public:
     DoublyLinkedList();
-    
+
     bool isEmpty();
 
     Node* head();
@@ -45,8 +45,7 @@ private:
 };
 
 template <typename Node> inline DoublyLinkedList<Node>::DoublyLinkedList()
-    : m_head(0)
-    , m_tail(0)
+    : m_head(nullptr), m_tail(nullptr)
 {
 }
 

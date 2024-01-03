@@ -24,10 +24,10 @@
 #ifndef QXMLQUERY_H
 #define QXMLQUERY_H
 
-#include <QUrl>
-#include <QAbstractXmlNodeModel>
-#include <QAbstractXmlReceiver>
-#include <QXmlNamePool>
+#include <qurl.h>
+#include <qabstractxmlnodemodel.h>
+#include <qabstractxmlreceiver.h>
+#include <qxmlnamepool.h>
 
 class QAbstractMessageHandler;
 class QAbstractUriResolver;

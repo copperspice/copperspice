@@ -26,8 +26,6 @@
 #include "qcastingplatform_p.h"
 #include "qvaluefactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /**
@@ -80,5 +78,3 @@ AtomicValue::Ptr ValueFactory::fromLexical(const QString &lexicalValue,
           type,
           context);
 }
-
-QT_END_NAMESPACE

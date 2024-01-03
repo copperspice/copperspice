@@ -30,8 +30,6 @@
 
 #include "qdecimal_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Decimal::Decimal(const xsDecimal num) : m_value(num)
@@ -208,5 +206,3 @@ bool Decimal::isSigned() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return false;
 }
-
-QT_END_NAMESPACE

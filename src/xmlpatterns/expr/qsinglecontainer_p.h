@@ -26,9 +26,8 @@
 
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class SingleContainer : public Expression
 {
  public:
@@ -42,8 +41,7 @@ class SingleContainer : public Expression
 
    Expression::Ptr m_operand;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -57,7 +57,12 @@ class QNetworkAccessBackendFactoryData: public QList<QNetworkAccessBackendFactor
    static QAtomicInt valid;
 };
 
-Q_GLOBAL_STATIC(QNetworkAccessBackendFactoryData, factoryData)
+static QNetworkAccessBackendFactoryData *factoryData()
+{
+   static QNetworkAccessBackendFactoryData retval;
+   return &retval;
+}
+
 QAtomicInt QNetworkAccessBackendFactoryData::valid = 0;
 
 QNetworkAccessBackendFactory::QNetworkAccessBackendFactory()
@@ -115,6 +120,7 @@ QStringList QNetworkAccessManagerPrivate::backendSupportedSchemes() const
 
    return QStringList();
 }
+
 QNonContiguousByteDevice *QNetworkAccessBackend::createUploadByteDevice()
 {
    if (reply->outgoingDataBuffer) {
@@ -129,7 +135,8 @@ QNonContiguousByteDevice *QNetworkAccessBackend::createUploadByteDevice()
 
    // We want signal emissions only for normal asynchronous uploads
    if (!isSynchronous()) {
-      connect(uploadByteDevice.data(), SIGNAL(readProgress(qint64, qint64)), this, SLOT(emitReplyUploadProgress(qint64, qint64)));
+      connect(uploadByteDevice.data(), &QNonContiguousByteDevice::readProgress,
+         this, &QNetworkAccessBackend::emitReplyUploadProgress);
    }
 
    return uploadByteDevice.data();
@@ -310,9 +317,9 @@ void QNetworkAccessBackend::finished()
    reply->finished();
 }
 
-void QNetworkAccessBackend::error(QNetworkReply::NetworkError code, const QString &errorString)
+void QNetworkAccessBackend::error(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
-   reply->error(code, errorString);
+   reply->error(errorCode, errorMsg);
 }
 
 #ifndef QT_NO_NETWORKPROXY
@@ -349,7 +356,7 @@ void QNetworkAccessBackend::sslErrors(const QList<QSslError> &errors)
 #ifdef QT_SSL
    reply->sslErrors(errors);
 #else
-   Q_UNUSED(errors);
+   (void) errors;
 #endif
 }
 

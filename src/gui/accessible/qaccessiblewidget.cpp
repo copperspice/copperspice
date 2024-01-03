@@ -246,7 +246,7 @@ void QAccessibleWidget::addControllingSignal(const QString &signal)
    int index = object()->metaObject()->indexOfSignal(signalName);
 
    if (index < 0) {
-      qWarning("QAccessibleWidget::addControllingSignal(): Signal %s unknown in %s", csPrintable(signalName),
+      qWarning("QAccessibleWidget::addControllingSignal() Signal %s unknown in %s", csPrintable(signalName),
                   csPrintable(object()->metaObject()->className()));
 
    } else {

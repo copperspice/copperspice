@@ -31,9 +31,7 @@
 #include <QTimer>
 #include <QVideoWidget>
 
-QT_BEGIN_NAMESPACE
 class QMediaPlayer;
-QT_END_NAMESPACE
 
 namespace WebCore {
 
@@ -46,7 +44,7 @@ public:
 
 public:
     WEB_CS_SIGNAL_1(Public, void didExitFullScreen())
-    WEB_CS_SIGNAL_2(didExitFullScreen) 
+    WEB_CS_SIGNAL_2(didExitFullScreen)
 
 protected:
     virtual void closeEvent(QCloseEvent*);
@@ -55,7 +53,7 @@ protected:
 
 private :
     WEB_CS_SLOT_1(Private, void hideCursor())
-    WEB_CS_SLOT_2(hideCursor) 
+    WEB_CS_SLOT_2(hideCursor)
 
 private:
     void showCursor();

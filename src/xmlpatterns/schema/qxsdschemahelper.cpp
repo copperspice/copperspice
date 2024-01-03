@@ -30,8 +30,6 @@
 #include "qxsdsimpletype_p.h"
 #include "qxsdtypechecker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /*
@@ -150,7 +148,6 @@ bool XsdSchemaHelper::wildcardAllowsExpandedName(const QXmlName &name, const Xsd
    return true;
 }
 
-// small helper function that should be available in Qt 4.6
 template<class T>
 static inline bool containsSet(const QSet<T> &super, const QSet<T> &sub)
 {
@@ -904,5 +901,3 @@ bool XsdSchemaHelper::isValidAttributeUsesExtension(const XsdAttributeUse::List 
 
    return true;
 }
-
-QT_END_NAMESPACE

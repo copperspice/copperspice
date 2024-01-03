@@ -27,9 +27,8 @@
 #include <qschematypefactory_p.h>
 #include <qstaticnamespacescontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class TypeAvailableFN : public StaticNamespacesContainer
 {
  public:
@@ -42,7 +41,5 @@ class TypeAvailableFN : public StaticNamespacesContainer
 };
 
 }
-
-QT_END_NAMESPACE
 
 #endif

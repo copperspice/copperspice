@@ -52,31 +52,11 @@ QWindowsPipeReader::QWindowsPipeReader(QObject *parent)
            this, &QWindowsPipeReader::emitPendingReadyRead, Qt::QueuedConnection);
 }
 
-bool qt_cancelIo(HANDLE handle, OVERLAPPED *overlapped)
-{
-   typedef BOOL (WINAPI * PtrCancelIoEx)(HANDLE, LPOVERLAPPED);
-   static PtrCancelIoEx ptrCancelIoEx = nullptr;
-   if (!ptrCancelIoEx) {
-      HMODULE kernel32 = GetModuleHandleA("kernel32");
-      if (kernel32) {
-         ptrCancelIoEx = PtrCancelIoEx(GetProcAddress(kernel32, "CancelIoEx"));
-      }
-   }
-   if (ptrCancelIoEx) {
-      return ptrCancelIoEx(handle, overlapped);
-   } else {
-      return CancelIo(handle);
-   }
-}
-
 QWindowsPipeReader::~QWindowsPipeReader()
 {
    stop();
 }
 
-/*!
-    Sets the handle to read from. The handle must be valid.
- */
 void QWindowsPipeReader::setHandle(HANDLE hPipeReadEnd)
 {
    readBuffer.clear();
@@ -85,36 +65,28 @@ void QWindowsPipeReader::setHandle(HANDLE hPipeReadEnd)
    pipeBroken = false;
 }
 
-/*!
-    Stops the asynchronous read sequence.
-    If the read sequence is running then the I/O operation is canceled.
- */
 void QWindowsPipeReader::stop()
 {
    stopped = true;
+
    if (readSequenceStarted) {
-      if (!qt_cancelIo(handle, &overlapped)) {
+      if (! CancelIoEx(handle, &overlapped)) {
          const DWORD dwError = GetLastError();
+
          if (dwError != ERROR_NOT_FOUND) {
-            qErrnoWarning(dwError, "QWindowsPipeReader: qt_cancelIo on handle %x failed.",
-                          handle);
+            qErrnoWarning(dwError, "QWindowsPipeReader: CancelIoEx on handle %x failed.", handle);
          }
       }
+
       waitForNotification(-1);
    }
 }
 
-/*!
-    Returns the number of bytes we've read so far.
- */
 qint64 QWindowsPipeReader::bytesAvailable() const
 {
    return actualReadBufferSize;
 }
 
-/*!
-    Copies at most \c{maxlen} bytes from the internal read buffer to \c{data}.
- */
 qint64 QWindowsPipeReader::read(char *data, qint64 maxlen)
 {
    if (pipeBroken && actualReadBufferSize == 0) {
@@ -188,7 +160,7 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
          [[fallthrough]];
 
       default:
-         emit winError(errorCode, QLatin1String("QWindowsPipeReader::notified"));
+         emit winError(errorCode, QString("QWindowsPipeReader::notified"));
          pipeBroken = true;
          break;
    }
@@ -253,8 +225,9 @@ void QWindowsPipeReader::startAsyncRead()
             pipeBroken = true;
             emit pipeClosed();
             break;
+
          default:
-            emit winError(dwError, QLatin1String("QWindowsPipeReader::startAsyncRead"));
+            emit winError(dwError, QString("QWindowsPipeReader::startAsyncRead"));
             break;
       }
    }

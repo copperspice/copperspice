@@ -29,11 +29,10 @@
 #include <qopengl_paintdevice.h>
 #include <qopenglcontext.h>
 #include <qopenglfunctions.h>
-#include <qscreen.h>
-#include <qwindow.h>
-
 #include <qplatform_window.h>
 #include <qplatform_integration.h>
+#include <qscreen.h>
+#include <qwindow.h>
 
 #include <qguiapplication_p.h>
 #include <qfont_p.h>
@@ -273,7 +272,7 @@ void QOpenGLWidgetPrivate::initialize()
    if (! shareContext) {
 
 #if defined(CS_SHOW_DEBUG)
-      qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context.");
+      qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context");
 #endif
 
       return;
@@ -292,7 +291,7 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setScreen(shareContext->screen());
 
    if (! ctx->create()) {
-      qWarning("QOpenGLWidget: Failed to create context");
+      qWarning("QOpenGLWidgetPrivate::initialize() Failed to create context");
       return;
    }
 
@@ -320,7 +319,7 @@ void QOpenGLWidgetPrivate::initialize()
    surface->create();
 
    if (!ctx->makeCurrent(surface)) {
-      qWarning("QOpenGLWidget: Failed to make context current");
+      qWarning("QOpenGLWidgetPrivate::initialize() Failed to make context current");
       return;
    }
 
@@ -464,125 +463,55 @@ QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags flags)
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)) {
       d->setRenderToTexture();
    } else {
-      qWarning("QOpenGLWidget is not supported on this platform.");
+      qWarning("QOpenGLWidget::QOpenGLWidget() Method not supported on this platform");
    }
 }
 
-/*!
-  Destroys the QOpenGLWidget instance, freeing its resources.
-
-  The QOpenGLWidget's context is made current in the destructor, allowing for
-  safe destruction of any child object that may need to release OpenGL
-  resources belonging to the context provided by this widget.
-
-  \warning if you have objects wrapping OpenGL resources (such as
-  QOpenGLBuffer, QOpenGLShaderProgram, etc.) as members of a OpenGLWidget
-  subclass, you may need to add a call to makeCurrent() in that subclass'
-  destructor as well. Due to the rules of C++ object destruction, those objects
-  will be destroyed \e{before} calling this function (but after that the
-  destructor of the subclass has run), therefore making the OpenGL context
-  current in this function happens too late for their safe disposal.
-
-  \sa makeCurrent
-*/
 QOpenGLWidget::~QOpenGLWidget()
 {
    Q_D(QOpenGLWidget);
    d->reset();
 }
 
-/*!
-  Sets this widget's update behavior to \a updateBehavior.
-  \since 5.5
-*/
 void QOpenGLWidget::setUpdateBehavior(UpdateBehavior updateBehavior)
 {
    Q_D(QOpenGLWidget);
    d->updateBehavior = updateBehavior;
 }
 
-/*!
-  \return the update behavior of the widget.
-  \since 5.5
-*/
 QOpenGLWidget::UpdateBehavior QOpenGLWidget::updateBehavior() const
 {
    Q_D(const QOpenGLWidget);
    return d->updateBehavior;
 }
 
-/*!
-  Sets the requested surface \a format.
-
-  When the format is not explicitly set via this function, the format returned by
-  QSurfaceFormat::defaultFormat() will be used. This means that when having multiple
-  OpenGL widgets, individual calls to this function can be replaced by one single call to
-  QSurfaceFormat::setDefaultFormat() before creating the first widget.
-
-  \note Requesting an alpha buffer via this function will not lead to the
-  desired results when the intention is to make other widgets beneath visible.
-  Instead, use Qt::WA_AlwaysStackOnTop to enable semi-transparent QOpenGLWidget
-  instances with other widgets visible underneath. Keep in mind however that
-  this breaks the stacking order, so it will no longer be possible to have
-  other widgets on top of the QOpenGLWidget.
-
-  \sa format(), Qt::WA_AlwaysStackOnTop, QSurfaceFormat::setDefaultFormat()
- */
 void QOpenGLWidget::setFormat(const QSurfaceFormat &format)
 {
-   Q_UNUSED(format);
+   (void) format;
+
    Q_D(QOpenGLWidget);
+
    if (d->initialized) {
-      qWarning("QOpenGLWidget: Already initialized, setting the format has no effect");
+      qWarning("QOpenGLWidget::setFormat() Already initialized, setting the format again has no effect");
       return;
    }
 
    d->requestedFormat = format;
 }
 
-/*!
-    Returns the context and surface format used by this widget and its toplevel
-    window.
-
-    After the widget and its toplevel have both been created, resized and shown,
-    this function will return the actual format of the context. This may differ
-    from the requested format if the request could not be fulfilled by the
-    platform. It is also possible to get larger color buffer sizes than
-    requested.
-
-    When the widget's window and the related OpenGL resources are not yet
-    initialized, the return value is the format that has been set via
-    setFormat().
-
-    \sa setFormat(), context()
- */
 QSurfaceFormat QOpenGLWidget::format() const
 {
    Q_D(const QOpenGLWidget);
    return d->initialized ? d->context->format() : d->requestedFormat;
 }
 
-/*!
-  \return \e true if the widget and OpenGL resources, like the context, have
-  been successfully initialized. Note that the return value is always false
-  until the widget is shown.
-*/
+
 bool QOpenGLWidget::isValid() const
 {
    Q_D(const QOpenGLWidget);
    return d->initialized && d->context->isValid();
 }
 
-/*!
-  Prepares for rendering OpenGL content for this widget by making the
-  corresponding context current and binding the framebuffer object in that
-  context.
-
-  It is not necessary to call this function in most cases, because it
-  is called automatically before invoking paintGL().
-
-  \sa context(), paintGL(), doneCurrent()
- */
 void QOpenGLWidget::makeCurrent()
 {
    Q_D(QOpenGLWidget);
@@ -597,13 +526,6 @@ void QOpenGLWidget::makeCurrent()
    }
 }
 
-/*!
-  Releases the context.
-
-  It is not necessary to call this function in most cases, since the
-  widget will make sure the context is bound and released properly
-  when invoking paintGL().
- */
 void QOpenGLWidget::doneCurrent()
 {
    Q_D(QOpenGLWidget);
@@ -614,98 +536,32 @@ void QOpenGLWidget::doneCurrent()
    d->context->doneCurrent();
 }
 
-/*!
-  \return The QOpenGLContext used by this widget or \c 0 if not yet initialized.
-
-  \note The context and the framebuffer object used by the widget changes when
-  reparenting the widget via setParent().
-
-  \sa QOpenGLContext::setShareContext(), defaultFramebufferObject()
- */
 QOpenGLContext *QOpenGLWidget::context() const
 {
    Q_D(const QOpenGLWidget);
    return d->context;
 }
 
-/*!
-  \return The framebuffer object handle or \c 0 if not yet initialized.
-
-  \note The framebuffer object belongs to the context returned by context()
-  and may not be accessible from other contexts.
-
-  \note The context and the framebuffer object used by the widget changes when
-  reparenting the widget via setParent(). In addition, the framebuffer object
-  changes on each resize.
-
-  \sa context()
- */
 GLuint QOpenGLWidget::defaultFramebufferObject() const
 {
    Q_D(const QOpenGLWidget);
    return d->fbo ? d->fbo->handle() : 0;
 }
 
-/*!
-  This virtual function is called once before the first call to
-  paintGL() or resizeGL(). Reimplement it in a subclass.
-
-  This function should set up any required OpenGL resources and state.
-
-  There is no need to call makeCurrent() because this has already been
-  done when this function is called. Note however that the framebuffer
-  is not yet available at this stage, so avoid issuing draw calls from
-  here. Defer such calls to paintGL() instead.
-
-  \sa paintGL(), resizeGL()
-*/
 void QOpenGLWidget::initializeGL()
 {
 }
 
-/*!
-  This virtual function is called whenever the widget has been
-  resized. Reimplement it in a subclass. The new size is passed in
-  \a w and \a h.
-
-  There is no need to call makeCurrent() because this has already been
-  done when this function is called. Additionally, the framebuffer is
-  also bound.
-
-  \sa initializeGL(), paintGL()
-*/
 void QOpenGLWidget::resizeGL(int w, int h)
 {
-   Q_UNUSED(w);
-   Q_UNUSED(h);
+   (void) w;
+   (void) h;
 }
 
-/*!
-  This virtual function is called whenever the widget needs to be
-  painted. Reimplement it in a subclass.
 
-  There is no need to call makeCurrent() because this has already
-  been done when this function is called.
-
-  Before invoking this function, the context and the framebuffer are
-  bound, and the viewport is set up by a call to glViewport(). No
-  other state is set and no clearing or drawing is performed by the
-  framework.
-
-  \sa initializeGL(), resizeGL()
-*/
 void QOpenGLWidget::paintGL()
 { }
 
-/*!
-  Handles resize events that are passed in the \a e event parameter.
-  Calls the virtual function resizeGL().
-
-  \note Avoid overriding this function in derived classes. If that is not
-  feasible, make sure that QOpenGLWidget's implementation is invoked
-  too. Otherwise the underlying framebuffer object and related resources will
-  not get resized properly and will lead to incorrect rendering.
-*/
 void QOpenGLWidget::resizeEvent(QResizeEvent *e)
 {
    Q_D(QOpenGLWidget);
@@ -726,21 +582,12 @@ void QOpenGLWidget::resizeEvent(QResizeEvent *e)
    d->sendPaintEvent(QRect(QPoint(0, 0), size()));
 }
 
-/*!
-  Handles paint events.
-
-  Calling QWidget::update() will lead to sending a paint event \a e,
-  and thus invoking this function. (NB this is asynchronous and will
-  happen at some point after returning from update()). This function
-  will then, after some preparation, call the virtual paintGL() to
-  update the contents of the QOpenGLWidget's framebuffer. The widget's
-  top-level window will then composite the framebuffer's texture with
-  the rest of the window.
-*/
 void QOpenGLWidget::paintEvent(QPaintEvent *e)
 {
-   Q_UNUSED(e);
+   (void) e;
+
    Q_D(QOpenGLWidget);
+
    if (!d->initialized) {
       return;
    }
@@ -750,21 +597,12 @@ void QOpenGLWidget::paintEvent(QPaintEvent *e)
    }
 }
 
-/*!
-  Renders and returns a 32-bit RGB image of the framebuffer.
-
-  \note This is a potentially expensive operation because it relies on glReadPixels()
-  to read back the pixels. This may be slow and can stall the GPU pipeline.
-*/
 QImage QOpenGLWidget::grabFramebuffer()
 {
    Q_D(QOpenGLWidget);
    return d->grabFramebuffer();
 }
 
-/*!
-  \internal
-*/
 int QOpenGLWidget::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
    Q_D(const QOpenGLWidget);
@@ -855,14 +693,12 @@ int QOpenGLWidget::metric(QPaintDevice::PaintDeviceMetric metric) const
          }
 
       default:
-         qWarning("QOpenGLWidget::metric(): unknown metric %d", metric);
+         qWarning("QOpenGLWidget::metric() Unknown metric %d", metric);
          return 0;
    }
 }
 
-/*!
-  \internal
-*/
+// internal
 QPaintDevice *QOpenGLWidget::redirected(QPoint *p) const
 {
    Q_D(const QOpenGLWidget);
@@ -873,9 +709,7 @@ QPaintDevice *QOpenGLWidget::redirected(QPoint *p) const
    return d->paintDevice;
 }
 
-/*!
-  \internal
-*/
+// internal
 QPaintEngine *QOpenGLWidget::paintEngine() const
 {
    Q_D(const QOpenGLWidget);
@@ -893,9 +727,7 @@ QPaintEngine *QOpenGLWidget::paintEngine() const
    return d->paintDevice->paintEngine();
 }
 
-/*!
-  \internal
-*/
+// internal
 bool QOpenGLWidget::event(QEvent *e)
 {
    Q_D(QOpenGLWidget);
@@ -933,4 +765,3 @@ bool QOpenGLWidget::event(QEvent *e)
 
    return QWidget::event(e);
 }
-

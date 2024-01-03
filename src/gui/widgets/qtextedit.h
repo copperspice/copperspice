@@ -384,13 +384,13 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    GUI_CS_SLOT_1(Private, void _q_repaintContents(const QRectF &r))
    GUI_CS_SLOT_2(_q_repaintContents)
 
-   GUI_CS_SLOT_1(Private, void _q_currentCharFormatChanged(const QTextCharFormat &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_currentCharFormatChanged(const QTextCharFormat &textFormat))
    GUI_CS_SLOT_2(_q_currentCharFormatChanged)
 
    GUI_CS_SLOT_1(Private, void _q_adjustScrollbars())
    GUI_CS_SLOT_2(_q_adjustScrollbars)
 
-   GUI_CS_SLOT_1(Private, void _q_ensureVisible(const QRectF &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_ensureVisible(const QRectF &rectF))
    GUI_CS_SLOT_2(_q_ensureVisible)
 
    GUI_CS_SLOT_1(Private, void _q_cursorPositionChanged())

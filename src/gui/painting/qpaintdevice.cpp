@@ -33,7 +33,7 @@ QPaintDevice::QPaintDevice()
 QPaintDevice::~QPaintDevice()
 {
    if (paintingActive()) {
-      qWarning("QPaintDevice: Can not destroy paint device which is being painted");
+      qWarning("QPaintDevice::~QPaintDevice() Unable to destroy a paint device while it is being painted");
    }
 }
 
@@ -70,7 +70,7 @@ int QPaintDevice::metric(PaintDeviceMetric m) const
       return this->metric(PdmDevicePixelRatio) * devicePixelRatioFScale();
    }
 
-   qWarning("QPaintDevice::metrics: Device has no metric information");
+   qWarning("QPaintDevice::metric() Device has no metric information");
 
    if (m == PdmDpiX) {
       return 72;

@@ -29,35 +29,35 @@
 
 namespace QPlatformHeaderHelper {
 
-template<typename ReturnT, typename FunctionT>
+template <typename ReturnT, typename FunctionT>
 ReturnT callPlatformFunction(const QByteArray &functionName)
 {
     FunctionT func = reinterpret_cast<FunctionT>(QGuiApplication::platformFunction(functionName));
     return func ? func() : ReturnT();
 }
 
-template<typename ReturnT, typename FunctionT, typename Arg1>
+template <typename ReturnT, typename FunctionT, typename Arg1>
 ReturnT callPlatformFunction(const QByteArray &functionName, Arg1 a1)
 {
     FunctionT func = reinterpret_cast<FunctionT>(QGuiApplication::platformFunction(functionName));
     return func ? func(a1) : ReturnT();
 }
 
-template<typename ReturnT, typename FunctionT, typename Arg1, typename Arg2>
+template <typename ReturnT, typename FunctionT, typename Arg1, typename Arg2>
 ReturnT callPlatformFunction(const QByteArray &functionName, Arg1 a1, Arg2 a2)
 {
     FunctionT func = reinterpret_cast<FunctionT>(QGuiApplication::platformFunction(functionName));
     return func ? func(a1, a2) : ReturnT();
 }
 
-template<typename ReturnT, typename FunctionT, typename Arg1, typename Arg2, typename Arg3>
+template <typename ReturnT, typename FunctionT, typename Arg1, typename Arg2, typename Arg3>
 ReturnT callPlatformFunction(const QByteArray &functionName, Arg1 a1, Arg2 a2, Arg3 a3)
 {
     FunctionT func = reinterpret_cast<FunctionT>(QGuiApplication::platformFunction(functionName));
     return func ? func(a1, a2, a3) : ReturnT();
 }
 
-template<typename ReturnT, typename FunctionT, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
+template <typename ReturnT, typename FunctionT, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
 ReturnT callPlatformFunction(const QByteArray &functionName, Arg1 a1, Arg2 a2, Arg3 a3, Arg4 a4)
 {
     FunctionT func = reinterpret_cast<FunctionT>(QGuiApplication::platformFunction(functionName));

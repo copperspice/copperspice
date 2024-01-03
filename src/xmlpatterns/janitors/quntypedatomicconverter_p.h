@@ -24,11 +24,9 @@
 #ifndef QUntypedAtomicConverter_P_H
 #define QUntypedAtomicConverter_P_H
 
+#include <qcastingplatform_p.h>
 #include <qitem_p.h>
 #include <qsinglecontainer_p.h>
-#include <qcastingplatform_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -69,7 +67,5 @@ Item UntypedAtomicConverter::mapToItem(const Item &item, const DynamicContext::P
    return cast(item, context);
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

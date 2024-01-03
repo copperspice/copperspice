@@ -27,7 +27,8 @@
 #include <qlayoutitem.h>
 #include <qstyle.h>
 
-template <typename T> class QVector;
+template <typename T>
+class QVector;
 
 struct QLayoutStruct {
    inline void init(int stretchFactor = 0, int minSize = 0) {

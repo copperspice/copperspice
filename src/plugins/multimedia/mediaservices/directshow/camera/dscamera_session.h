@@ -91,8 +91,8 @@ class DSCameraSession : public QObject
    QVariant imageProcessingParameter(QCameraImageProcessingControl::ProcessingParameter) const;
    void setImageProcessingParameter(QCameraImageProcessingControl::ProcessingParameter, const QVariant &);
 
-   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status un_named_arg1))
-   CS_SIGNAL_2(statusChanged, un_named_arg1)
+   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status newStatus))
+   CS_SIGNAL_2(statusChanged, newStatus)
 
    CS_SIGNAL_1(Public, void imageExposed(int id))
    CS_SIGNAL_2(imageExposed, id)
@@ -103,8 +103,8 @@ class DSCameraSession : public QObject
    CS_SIGNAL_1(Public, void imageSaved(int id, const QString &fileName))
    CS_SIGNAL_2(imageSaved, id, fileName)
 
-   CS_SIGNAL_1(Public, void readyForCaptureChanged(bool un_named_arg1))
-   CS_SIGNAL_2(readyForCaptureChanged, un_named_arg1)
+   CS_SIGNAL_1(Public, void readyForCaptureChanged(bool isReady))
+   CS_SIGNAL_2(readyForCaptureChanged, isReady)
 
    CS_SIGNAL_1(Public, void captureError(int id, int error, const QString &errorString))
    CS_SIGNAL_2(captureError, id, error, errorString)

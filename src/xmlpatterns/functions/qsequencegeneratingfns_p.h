@@ -28,9 +28,8 @@
 #include <qcontextnodechecker_p.h>
 #include <qstaticbaseuricontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class IdFN : public ContextNodeChecker
 {
  public:
@@ -78,7 +77,5 @@ class CollectionFN : public FunctionCall
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -354,12 +354,13 @@ QPushButton *QDialogButtonBoxPrivate::createButton(QDialogButtonBox::StandardBut
    }
 
    standardButtonHash.insert(button, sbutton);
-   QPlatformDialogHelper::ButtonRole role = QPlatformDialogHelper::buttonRole(static_cast<QPlatformDialogHelper::StandardButton>(sbutton));
+   QPlatformDialogHelper::ButtonRole role =
+         QPlatformDialogHelper::buttonRole(static_cast<QPlatformDialogHelper::StandardButton>(sbutton));
 
    if (role != QPlatformDialogHelper::InvalidRole) {
       addButton(button, static_cast<QDialogButtonBox::ButtonRole>(role), doLayout);
    } else {
-      qWarning("QDialogButtonBox::createButton: Invalid ButtonRole, button not added");
+      qWarning("QDialogButtonBox::createButton() Invalid ButtonRole, button will not be added");
    }
 
    return button;
@@ -544,7 +545,7 @@ void QDialogButtonBox::addButton(QAbstractButton *button, ButtonRole role)
    Q_D(QDialogButtonBox);
 
    if (role <= InvalidRole || role >= NRoles) {
-      qWarning("QDialogButtonBox::addButton: Invalid ButtonRole, button not added");
+      qWarning("QDialogButtonBox::addButton() Invalid ButtonRole, button will not be added");
       return;
    }
 
@@ -558,7 +559,7 @@ QPushButton *QDialogButtonBox::addButton(const QString &text, ButtonRole role)
    Q_D(QDialogButtonBox);
 
    if (role <= InvalidRole || role >= NRoles) {
-      qWarning("QDialogButtonBox::addButton: Invalid ButtonRole, button not added");
+      qWarning("QDialogButtonBox::addButton() Invalid ButtonRole, button will not be added");
       return nullptr;
    }
 

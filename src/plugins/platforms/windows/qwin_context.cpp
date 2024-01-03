@@ -414,25 +414,31 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
          break;
       case Qt::Dialog:
          if (!(flags & Qt::WindowSystemMenuHint)) {
-            icon = false;   // QTBUG-2027, dialogs without system menu.
+            icon = false;
          }
          break;
    }
+
    // Create a unique name for the flag combination
-   QString cname = QString("Qt5QWindow");
+   QString cname = QString("CsQWindow");
+
    switch (type) {
       case Qt::Tool:
          cname += QString("Tool");
          break;
+
       case Qt::ToolTip:
          cname += QString("ToolTip");
          break;
+
       case Qt::Popup:
          cname += QString("Popup");
          break;
+
       default:
          break;
    }
+
    if (style & CS_DROPSHADOW) {
       cname += QString("DropShadow");
    }

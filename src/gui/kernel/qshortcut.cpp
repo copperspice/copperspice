@@ -350,7 +350,7 @@ void QShortcutPrivate::redoGrab(QShortcutMap &map)
    Q_Q(QShortcut);
 
    if (! q->parent()) {
-      qWarning("QShortcut: No widget parent defined");
+      qWarning("QShortcut::redoGrab() Parent window was not defined");
       return;
    }
 

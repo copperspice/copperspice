@@ -87,13 +87,9 @@ void QColumnViewGrip::paintEvent(QPaintEvent *event)
    event->accept();
 }
 
-/*!
-    \reimp
-    Resize the parent window to the sizeHint
-*/
 void QColumnViewGrip::mouseDoubleClickEvent(QMouseEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
    QWidget *parentWidget = (QWidget *)parent();
    int offset = parentWidget->sizeHint().width() - parentWidget->width();
    if (isRightToLeft()) {

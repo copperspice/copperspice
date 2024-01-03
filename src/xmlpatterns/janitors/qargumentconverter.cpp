@@ -21,12 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qitemmappingiterator_p.h"
-#include "qsequencemappingiterator_p.h"
+#include <qargumentconverter_p.h>
 
-#include "qargumentconverter_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qitemmappingiterator_p.h>
+#include <qsequencemappingiterator_p.h>
 
 using namespace QPatternist;
 
@@ -82,5 +80,3 @@ SequenceType::Ptr ArgumentConverter::staticType() const
 {
    return CommonSequenceTypes::ZeroOrMoreAtomicTypes;
 }
-
-QT_END_NAMESPACE

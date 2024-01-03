@@ -39,6 +39,7 @@
 #include <qpluginloader.h>
 #include <qset.h>
 #include <qtextstream.h>
+#include <qtimezone.h>
 #include <qscriptextensioninterface.h>
 
 #include <qscriptsyntaxchecker_p.h>
@@ -205,8 +206,10 @@ QDateTime MsToDateTime(JSC::ExecState *exec, qsreal t)
    JSC::GregorianDateTime tm;
    JSC::msToGregorianDateTime(exec, t, /*output UTC=*/true, tm);
    int ms = MsFromTime(t);
+
    QDateTime convertedUTC = QDateTime(QDate(tm.year + 1900, tm.month + 1, tm.monthDay),
-         QTime(tm.hour, tm.minute, tm.second, ms), Qt::UTC);
+         QTime(tm.hour, tm.minute, tm.second, ms), QTimeZone::utc());
+
    return convertedUTC.toLocalTime();
 }
 
@@ -547,7 +550,7 @@ JSC::JSValue JSC_HOST_CALL functionPrint(JSC::ExecState *exec, JSC::JSObject *, 
    if (exec->hadException()) {
       return exec->exception();
    }
-   qDebug("%s", qPrintable(result));
+   qDebug("%s", csPrintable(result));
    return JSC::jsUndefined();
 }
 
@@ -1814,7 +1817,7 @@ void QScriptEnginePrivate::setProperty(JSC::ExecState *exec, JSC::JSValue object
       // setting the value
       if (getter && getter.isObject() && !(setter && setter.isObject())) {
          qWarning("QScriptValue::setProperty() failed: "
-            "property '%s' has a getter but no setter", csPrintable(id.ustring()));
+            "property '%s' has a getter but no setter", csPrintable(QString(id.ustring())));
          return;
       }
 
@@ -3529,10 +3532,10 @@ QScriptSyntaxCheckResult &QScriptSyntaxCheckResult::operator=(const QScriptSynta
    return *this;
 }
 
-void QScriptEngine::_q_objectDestroyed(QObject *un_named_arg1)
+void QScriptEngine::_q_objectDestroyed(QObject *object)
 {
    Q_D(QScriptEngine);
-   d->_q_objectDestroyed(un_named_arg1);
+   d->_q_objectDestroyed(object);
 }
 
 QScriptEnginePrivate *QScriptEnginePrivate::cs_getPrivate(QScriptEngine *object)

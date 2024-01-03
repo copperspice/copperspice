@@ -48,7 +48,6 @@
 #include <type_traits>
 
 #define QT_PREPEND_NAMESPACE(name)       ::name
-#define QT_FORWARD_DECLARE_CLASS(name)   class name;
 #define QT_MANGLE_NAMESPACE(name)        name
 
 #endif
@@ -208,10 +207,8 @@
 #endif
 
 #if defined(Q_OS_DARWIN)
-
-// ensure it is not defined right now
+// ensure this is not defined yet
 #  undef Q_OS_IOS
-
 #endif
 
 #if defined(Q_OS_WIN)
@@ -221,18 +218,6 @@
 #  define Q_OS_UNIX
 
 #endif
-
-// **
-#if defined(Q_OS_DARWIN) && ! defined(Q_CC_INTEL)
-#define QT_BEGIN_INCLUDE_HEADER     }
-#define QT_END_INCLUDE_HEADER     extern "C++" {
-
-#else
-#define QT_BEGIN_INCLUDE_HEADER
-#define QT_END_INCLUDE_HEADER     extern "C++"
-
-#endif
-
 
 #if defined(Q_OS_DARWIN) && ! defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
@@ -245,35 +230,50 @@
 #endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_9)
-#     define MAC_OS_X_VERSION_10_9  MAC_OS_X_VERSION_10_8 + 10
+#     define MAC_OS_X_VERSION_10_9   MAC_OS_X_VERSION_10_8 + 10
 #  endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_10)
-#     define MAC_OS_X_VERSION_10_10 101000
+#     define MAC_OS_X_VERSION_10_10  101000
 #  endif
 
 #  if ! defined(MAC_OS_X_VERSION_10_11)
-#     define MAC_OS_X_VERSION_10_11 101100
+#     define MAC_OS_X_VERSION_10_11  101100
 #  endif
 
+// Sierra
 #  if ! defined(MAC_OS_X_VERSION_10_12)
-#     define MAC_OS_X_VERSION_10_12 101200
+#     define MAC_OS_X_VERSION_10_12  101200
 #  endif
 
+// High Sierra
 #  if ! defined(MAC_OS_X_VERSION_10_13)
-#     define MAC_OS_X_VERSION_10_13 101300
+#     define MAC_OS_X_VERSION_10_13  101300
 #  endif
 
+// Mojave
 #  if ! defined(MAC_OS_X_VERSION_10_14)
-#     define MAC_OS_X_VERSION_10_14 101400
+#     define MAC_OS_X_VERSION_10_14  101400
 #  endif
 
+// Catalina
 #  if ! defined(MAC_OS_X_VERSION_10_15)
-#     define MAC_OS_X_VERSION_10_15 101500
+#     define MAC_OS_X_VERSION_10_15  101500
 #  endif
 
+// Big Sur Mac OS 11
 #  if ! defined(MAC_OS_X_VERSION_10_16)
-#     define MAC_OS_X_VERSION_10_16 101600
+#     define MAC_OS_X_VERSION_10_16  101600
+#  endif
+
+// Monterey OS 12
+#  if ! defined(MAC_OS_X_VERSION_12)
+#     define MAC_OS_X_VERSION_12     120000
+#  endif
+
+// Ventura OS 13
+#  if ! defined(MAC_OS_X_VERSION_13)
+#     define MAC_OS_X_VERSION_13     130000
 #  endif
 
 #endif
@@ -298,11 +298,9 @@
 
 #  define Q_CC_CLANG
 #  define Q_CC_GNU
-#  define Q_C_CALLBACKS
 
 #  define Q_FUNC_INFO       __func__
 
-#  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
@@ -319,7 +317,6 @@
 #  endif
 
 #  define Q_CC_GNU
-#  define Q_C_CALLBACKS
 
 #  if defined(__MINGW32__)
 #    define Q_CC_MINGW
@@ -332,7 +329,6 @@
 
 #  define Q_FUNC_INFO       __PRETTY_FUNCTION__
 
-#  define Q_ALIGNOF(type)   __alignof__(type)
 #  define Q_LIKELY(expr)    __builtin_expect(!!(expr), true)
 #  define Q_UNLIKELY(expr)  __builtin_expect(!!(expr), false)
 
@@ -355,7 +351,6 @@
 
 #  define Q_FUNC_INFO       __FUNCSIG__
 
-#  define Q_ALIGNOF(type)   __alignof(type)
 #  define Q_LIKELY(expr)    (expr)
 #  define Q_UNLIKELY(expr)  (expr)
 
@@ -375,10 +370,7 @@
 #elif defined(__EDG) || defined(__EDG__)
 //  **
 
-#  if defined(__COMO__)
-#    define Q_C_CALLBACKS
-
-#  elif defined(__INTEL_COMPILER)
+#  if defined(__INTEL_COMPILER)
 #    define Q_CC_INTEL
 
 #  elif defined(__sgi)
@@ -432,15 +424,15 @@
 #endif
 
 #define Q_INIT_RESOURCE_EXTERN(name) \
-   extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();
+   extern int qInitResources_ ## name ();
 
 #define Q_INIT_RESOURCE(name) \
-   do { extern int QT_MANGLE_NAMESPACE(qInitResources_ ## name) ();       \
-   QT_MANGLE_NAMESPACE(qInitResources_ ## name) (); } while (false)
+   do { extern int qInitResources_ ## name ();       \
+   qInitResources_ ## name (); } while (false)
 
 #define Q_CLEANUP_RESOURCE(name) \
-   do { extern int QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) ();    \
-   QT_MANGLE_NAMESPACE(qCleanupResources_ ## name) (); } while (false)
+   do { extern int qCleanupResources_ ## name ();    \
+   qCleanupResources_ ## name (); } while (false)
 
 // make sure to update QVariant when changing the following
 
@@ -581,11 +573,6 @@ class Q_CORE_EXPORT QMacAutoReleasePool
 
 #endif
 
-#define QT_TRY       try
-#define QT_CATCH(A)  catch (A)
-#define QT_THROW(A)  throw A
-#define QT_RETHROW   throw
-
 // System information
 class Q_CORE_EXPORT QSysInfo
 {
@@ -627,6 +614,7 @@ class Q_CORE_EXPORT QSysInfo
       WV_WINDOWS8   = 0x00a0,
       WV_WINDOWS8_1 = 0x00b0,
       WV_WINDOWS10  = 0x00c0,
+      WV_WINDOWS11  = 0x00d0,
       WV_NT_based   = 0x00f0,
 
       WV_4_0        = WV_NT,
@@ -637,7 +625,8 @@ class Q_CORE_EXPORT QSysInfo
       WV_6_1        = WV_WINDOWS7,
       WV_6_2        = WV_WINDOWS8,
       WV_6_3        = WV_WINDOWS8_1,
-      WV_10_0       = WV_WINDOWS10
+      WV_10_0       = WV_WINDOWS10,
+      WV_11_0       = WV_WINDOWS11
    };
 
    static const WinVersion WindowsVersion;
@@ -653,8 +642,10 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_13 = 0x000F,
       MV_10_14 = 0x0010,
       MV_10_15 = 0x0011,
+      MV_10_16 = 0x0012,                         // both 10_16 and 11
       MV_11    = 0x0012,
       MV_12    = 0x0013,
+      MV_13    = 0x0014,
 
       MV_EL_CAPITAN   = MV_10_11,                // current mimimum version
       MV_SIERRA       = MV_10_12,
@@ -664,6 +655,7 @@ class Q_CORE_EXPORT QSysInfo
 
       MV_BIGSUR       = MV_11,
       MV_MONTEREY     = MV_12,
+      MV_VENTURA      = MV_13,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
@@ -863,9 +855,7 @@ class QIncompatibleFlag
     T i;
 };
 
-#ifndef Q_NO_TYPESAFE_FLAGS
-
-template<typename E>
+template <typename E>
 class QFlags
 {
    public:
@@ -1001,7 +991,6 @@ template <typename T>  \
 inline QIncompatibleFlag<Flags::int_type> operator|(Flags::enum_type f1, T f2) \
    { return QIncompatibleFlag<Flags::int_type>(Flags::int_type(f1) | f2); }
 
-
 #define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags) \
 constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, Flags::enum_type f2) \
    { return QFlags<Flags::enum_type>(f1) | f2; } \
@@ -1009,12 +998,6 @@ constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<
    { return f2 | f1; } \
 Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
-#else
-// Q_NO_TYPESAFE_FLAGS
-
-#define Q_DECLARE_OPERATORS_FOR_FLAGS(Flags)
-
-#endif
 
 // raw pointer ( QEasingCurvePrivate, maybe a few other classes 12/28/2013 )
 template <typename T>
@@ -1107,15 +1090,6 @@ Q_CORE_EXPORT QByteArray qgetenv(const char *varName);
 Q_CORE_EXPORT bool       qputenv(const char *varName, const QByteArray &value);
 Q_CORE_EXPORT bool       qunsetenv(const char *varName);
 
-inline int qIntCast(double f)
-{
-   return int(f);
-}
-
-inline int qIntCast(float f)
-{
-   return int(f);
-}
 
 Q_CORE_EXPORT void qsrand(uint seed);
 Q_CORE_EXPORT int qrand();

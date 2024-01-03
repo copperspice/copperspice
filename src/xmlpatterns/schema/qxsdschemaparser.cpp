@@ -37,8 +37,6 @@
 #include <QFile>
 #include <QXmlQuery>
 
-QT_BEGIN_NAMESPACE
-
 /**
  * @page schema_overview Overview
  * @section structure_and_components Structure and Components
@@ -215,7 +213,7 @@ static XsdParticle::List collectGroupRef(const XsdModelGroup::Ptr &group)
  * Helper function that works around the limited facilities of
  * QUrl/AnyURI::fromLexical to detect invalid URIs
  */
-inline static bool isValidUri(const QString &string)
+static inline bool isValidUri(const QString &string)
 {
    // an empty URI points to the current document as defined in RFC 2396 (4.2)
    if (string.isEmpty()) {
@@ -6331,5 +6329,3 @@ void XsdSchemaParser::addFacet(const XsdFacet::Ptr &facet, XsdFacet::Hash &facet
 
    facets.insert(facet->type(), facet);
 }
-
-QT_END_NAMESPACE

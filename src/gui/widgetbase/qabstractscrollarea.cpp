@@ -493,8 +493,9 @@ QScrollBar *QAbstractScrollArea::verticalScrollBar() const
 void QAbstractScrollArea::setVerticalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
-   if (!scrollBar) {
-      qWarning("QAbstractScrollArea::setVerticalScrollBar: Cannot set a null scroll bar");
+
+   if (! scrollBar) {
+      qWarning("QAbstractScrollArea::setVerticalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }
 
@@ -517,6 +518,7 @@ void QAbstractScrollArea::setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy polic
    if (isVisible()) {
       d->layoutChildren();
    }
+
    if (oldPolicy != d->hbarpolicy) {
       d->scrollBarPolicyChanged(Qt::Horizontal, d->hbarpolicy);
    }
@@ -531,8 +533,9 @@ QScrollBar *QAbstractScrollArea::horizontalScrollBar() const
 void QAbstractScrollArea::setHorizontalScrollBar(QScrollBar *scrollBar)
 {
    Q_D(QAbstractScrollArea);
-   if (!scrollBar) {
-      qWarning("QAbstractScrollArea::setHorizontalScrollBar: Can not set a null scroll bar");
+
+   if (! scrollBar) {
+      qWarning("QAbstractScrollArea::setHorizontalScrollBar() Unable to set the scroll bar to an invalid value (nullptr)");
       return;
    }
 
@@ -1195,16 +1198,16 @@ void QAbstractScrollArea::setupViewport(QWidget *viewport)
    (void) viewport;
 }
 
-void QAbstractScrollArea::_q_hslide(int un_named_arg1)
+void QAbstractScrollArea::_q_hslide(int x)
 {
    Q_D(QAbstractScrollArea);
-   d->_q_hslide(un_named_arg1);
+   d->_q_hslide(x);
 }
 
-void QAbstractScrollArea::_q_vslide(int un_named_arg1)
+void QAbstractScrollArea::_q_vslide(int y)
 {
    Q_D(QAbstractScrollArea);
-   d->_q_vslide(un_named_arg1);
+   d->_q_vslide(y);
 }
 
 void QAbstractScrollArea::_q_showOrHideScrollBars()

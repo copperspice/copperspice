@@ -26,7 +26,11 @@
 
 #include <qplatform_pixmap.h>
 
-Q_GLOBAL_STATIC(QImagePixmapCleanupHooks, qt_image_and_pixmap_cleanup_hooks)
+static QImagePixmapCleanupHooks *qt_image_and_pixmap_cleanup_hooks()
+{
+   static QImagePixmapCleanupHooks retval;
+   return &retval;
+}
 
 QImagePixmapCleanupHooks *QImagePixmapCleanupHooks::instance()
 {

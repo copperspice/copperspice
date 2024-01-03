@@ -414,14 +414,14 @@ static bool checkToolBarArea(Qt::ToolBarArea area, const char *where)
          break;
    }
 
-   qWarning("%s: invalid 'area' argument", where);
+   qWarning("%s Invalid 'area' argument", where);
 
    return false;
 }
 
 void QMainWindow::addToolBarBreak(Qt::ToolBarArea area)
 {
-   if (! checkToolBarArea(area, "QMainWindow::addToolBarBreak")) {
+   if (! checkToolBarArea(area, "QMainWindow::addToolBarBreak()")) {
       return;
    }
 
@@ -441,7 +441,7 @@ void QMainWindow::removeToolBarBreak(QToolBar *before)
 
 void QMainWindow::addToolBar(Qt::ToolBarArea area, QToolBar *toolbar)
 {
-   if (!checkToolBarArea(area, "QMainWindow::addToolBar")) {
+   if (! checkToolBarArea(area, "QMainWindow::addToolBar()")) {
       return;
    }
 

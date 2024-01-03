@@ -26,8 +26,6 @@
 #include <QReadLocker>
 #include <QWriteLocker>
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchema::XsdSchema(const NamePool::Ptr &namePool)
@@ -253,5 +251,3 @@ XsdIdentityConstraint::List XsdSchema::identityConstraints() const
 
    return m_identityConstraints.values();
 }
-
-QT_END_NAMESPACE

@@ -23,10 +23,7 @@
 
 #include "qcommonsequencetypes_p.h"
 #include "qtypechecker_p.h"
-
 #include "qtreatas_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -71,4 +68,3 @@ SequenceType::List TreatAs::expectedOperandTypes() const
    return result;
 }
 
-QT_END_NAMESPACE

@@ -406,12 +406,6 @@ void QFont::detach()
    d.detach();
 }
 
-/*!
-    \internal
-    Detaches the font object from common font attributes data.
-    Call this instead of QFont::detach() if the only font attributes data
-    has been changed (underline, letterSpacing, kerning, etc.).
-*/
 void QFontPrivate::detachButKeepEngineData(QFont *font)
 {
    if (font->d->ref.load() == 1) {
@@ -538,7 +532,7 @@ QFont::HintingPreference QFont::hintingPreference() const
 void QFont::setPointSize(int pointSize)
 {
    if (pointSize <= 0) {
-      qWarning("QFont::setPointSize: Point size <= 0 (%d), must be greater than 0", pointSize);
+      qWarning("QFont::setPointSize() Point size of %d must be greater than 0", pointSize);
       return;
    }
 
@@ -556,7 +550,7 @@ void QFont::setPointSize(int pointSize)
 void QFont::setPointSizeF(qreal pointSize)
 {
    if (pointSize <= 0) {
-      qWarning("QFont::setPointSizeF: Point size <= 0 (%f), must be greater than 0", pointSize);
+      qWarning("QFont::setPointSizeF() Point size of %f must be greater than 0", pointSize);
       return;
    }
 
@@ -571,22 +565,15 @@ void QFont::setPointSizeF(qreal pointSize)
    resolve_mask |= QFont::SizeResolved;
 }
 
-/*!
-    Returns the point size of the font. Returns -1 if the font size was
-    specified in pixels.
-
-    \sa pointSize() setPointSizeF() pixelSize() QFontInfo::pointSize() QFontInfo::pixelSize()
-*/
 qreal QFont::pointSizeF() const
 {
    return d->request.pointSize;
 }
 
-
 void QFont::setPixelSize(int pixelSize)
 {
    if (pixelSize <= 0) {
-      qWarning("QFont::setPixelSize: Pixel size <= 0 (%d)", pixelSize);
+      qWarning("QFont::setPixelSize() Pixel size of %d must be greater than 0", pixelSize);
       return;
    }
 
@@ -601,30 +588,16 @@ void QFont::setPixelSize(int pixelSize)
    resolve_mask |= QFont::SizeResolved;
 }
 
-/*!
-    Returns the pixel size of the font if it was set with
-    setPixelSize(). Returns -1 if the size was set with setPointSize()
-    or setPointSizeF().
-
-    \sa setPixelSize() pointSize() QFontInfo::pointSize() QFontInfo::pixelSize()
-*/
 int QFont::pixelSize() const
 {
    return d->request.pixelSize;
 }
-
 
 QFont::Style QFont::style() const
 {
    return (QFont::Style)d->request.style;
 }
 
-
-/*!
-  Sets the style of the font to \a style.
-
-  \sa italic(), QFontInfo
-*/
 void QFont::setStyle(Style style)
 {
    if ((resolve_mask & QFont::StyleResolved) && d->request.style == style) {
@@ -636,12 +609,6 @@ void QFont::setStyle(Style style)
    resolve_mask |= QFont::StyleResolved;
 }
 
-/*!
-    Returns the weight of the font which is one of the enumerated
-    values from \l{QFont::Weight}.
-
-    \sa setWeight(), Weight, QFontInfo
-*/
 int QFont::weight() const
 {
    return d->request.weight;
@@ -665,12 +632,6 @@ bool QFont::underline() const
    return d->underline;
 }
 
-/*!
-    If \a enable is true, sets underline on; otherwise sets underline
-    off.
-
-    \sa underline(), QFontInfo
-*/
 void QFont::setUnderline(bool enable)
 {
    if ((resolve_mask & QFont::UnderlineResolved) && d->underline == enable) {
@@ -683,21 +644,11 @@ void QFont::setUnderline(bool enable)
    resolve_mask |= QFont::UnderlineResolved;
 }
 
-/*!
-    Returns true if overline has been set; otherwise returns false.
-
-    \sa setOverline()
-*/
 bool QFont::overline() const
 {
    return d->overline;
 }
 
-/*!
-  If \a enable is true, sets overline on; otherwise sets overline off.
-
-  \sa overline(), QFontInfo
-*/
 void QFont::setOverline(bool enable)
 {
    if ((resolve_mask & QFont::OverlineResolved) && d->overline == enable) {
@@ -710,22 +661,11 @@ void QFont::setOverline(bool enable)
    resolve_mask |= QFont::OverlineResolved;
 }
 
-/*!
-    Returns true if strikeout has been set; otherwise returns false.
-
-    \sa setStrikeOut()
-*/
 bool QFont::strikeOut() const
 {
    return d->strikeOut;
 }
 
-/*!
-    If \a enable is true, sets strikeout on; otherwise sets strikeout
-    off.
-
-    \sa strikeOut(), QFontInfo
-*/
 void QFont::setStrikeOut(bool enable)
 {
    if ((resolve_mask & QFont::StrikeOutResolved) && d->strikeOut == enable) {
@@ -738,22 +678,11 @@ void QFont::setStrikeOut(bool enable)
    resolve_mask |= QFont::StrikeOutResolved;
 }
 
-/*!
-    Returns true if fixed pitch has been set; otherwise returns false.
-
-    \sa setFixedPitch(), QFontInfo::fixedPitch()
-*/
 bool QFont::fixedPitch() const
 {
    return d->request.fixedPitch;
 }
 
-/*!
-    If \a enable is true, sets fixed pitch on; otherwise sets fixed
-    pitch off.
-
-    \sa fixedPitch(), QFontInfo
-*/
 void QFont::setFixedPitch(bool enable)
 {
    if ((resolve_mask & QFont::FixedPitchResolved) && d->request.fixedPitch == enable) {
@@ -767,27 +696,11 @@ void QFont::setFixedPitch(bool enable)
    resolve_mask |= QFont::FixedPitchResolved;
 }
 
-/*!
-  Returns true if kerning should be used when drawing text with this font.
-
-  \sa setKerning()
-*/
 bool QFont::kerning() const
 {
    return d->kerning;
 }
 
-/*!
-    Enables kerning for this font if \a enable is true; otherwise
-    disables it. By default, kerning is enabled.
-
-    When kerning is enabled, glyph metrics do not add up anymore,
-    even for Latin text. In other words, the assumption that
-    width('a') + width('b') is equal to width("ab") is not
-    neccesairly true.
-
-    \sa kerning(), QFontMetrics
-*/
 void QFont::setKerning(bool enable)
 {
    if ((resolve_mask & QFont::KerningResolved) && d->kerning == enable) {
@@ -799,36 +712,15 @@ void QFont::setKerning(bool enable)
    resolve_mask |= QFont::KerningResolved;
 }
 
-/*!
-    Returns the StyleStrategy.
-
-    The style strategy affects the \l{QFont}{font matching} algorithm.
-    See \l QFont::StyleStrategy for the list of available strategies.
-
-    \sa setStyleHint() QFont::StyleHint
-*/
 QFont::StyleStrategy QFont::styleStrategy() const
 {
    return (StyleStrategy) d->request.styleStrategy;
 }
 
-/*!
-    Returns the StyleHint.
-
-    The style hint affects the \l{QFont}{font matching} algorithm.
-    See \l QFont::StyleHint for the list of available hints.
-
-    \sa setStyleHint(), QFont::StyleStrategy QFontInfo::styleHint()
-*/
 QFont::StyleHint QFont::styleHint() const
 {
    return (StyleHint) d->request.styleHint;
 }
-
-
-
-
-
 
 void QFont::setStyleHint(StyleHint hint, StyleStrategy strategy)
 {
@@ -846,11 +738,6 @@ void QFont::setStyleHint(StyleHint hint, StyleStrategy strategy)
    resolve_mask |= QFont::StyleStrategyResolved;
 }
 
-/*!
-    Sets the style strategy for the font to \a s.
-
-    \sa QFont::StyleStrategy
-*/
 void QFont::setStyleStrategy(StyleStrategy s)
 {
    if ((resolve_mask & QFont::StyleStrategyResolved) &&
@@ -863,17 +750,15 @@ void QFont::setStyleStrategy(StyleStrategy s)
    resolve_mask |= QFont::StyleStrategyResolved;
 }
 
-
 int QFont::stretch() const
 {
    return d->request.stretch;
 }
 
-
 void QFont::setStretch(int factor)
 {
    if (factor < 1 || factor > 4000) {
-      qWarning("QFont::setStretch: Parameter '%d' out of range", factor);
+      qWarning("QFont::setStretch() Parameter '%d' is out of range", factor);
       return;
    }
 
@@ -887,7 +772,6 @@ void QFont::setStretch(int factor)
    d->request.stretch = (uint)factor;
    resolve_mask |= QFont::StretchResolved;
 }
-
 
 qreal QFont::letterSpacing() const
 {
@@ -912,18 +796,15 @@ void QFont::setLetterSpacing(SpacingType type, qreal spacing)
    resolve_mask |= QFont::LetterSpacingResolved;
 }
 
-
 QFont::SpacingType QFont::letterSpacingType() const
 {
    return d->letterSpacingIsAbsolute ? AbsoluteSpacing : PercentageSpacing;
 }
 
-
 qreal QFont::wordSpacing() const
 {
    return d->wordSpacing.toReal();
 }
-
 
 void QFont::setWordSpacing(qreal spacing)
 {
@@ -952,12 +833,6 @@ void QFont::setCapitalization(Capitalization caps)
    resolve_mask |= QFont::CapitalizationResolved;
 }
 
-/*!
-    \since 4.4
-    Returns the current capitalization type of the font.
-
-    \sa setCapitalization()
-*/
 QFont::Capitalization QFont::capitalization() const
 {
    return static_cast<QFont::Capitalization> (d->capital);
@@ -1042,20 +917,15 @@ bool QFont::operator<(const QFont &f) const
    return f1attrs < f2attrs;
 }
 
-
 bool QFont::operator!=(const QFont &f) const
 {
    return !(operator==(f));
 }
 
-/*!
-   Returns the font as a QVariant
-*/
 QFont::operator QVariant() const
 {
    return QVariant(QVariant::Font, this);
 }
-
 
 bool QFont::isCopyOf(const QFont &f) const
 {
@@ -1064,7 +934,6 @@ bool QFont::isCopyOf(const QFont &f) const
 
 QFont QFont::resolve(const QFont &other) const
 {
-
    if (resolve_mask == 0 || (resolve_mask == other.resolve_mask && *this == other)) {
       QFont o(other);
       o.resolve_mask = resolve_mask;
@@ -1078,8 +947,13 @@ QFont QFont::resolve(const QFont &other) const
    return font;
 }
 
-typedef QHash<QString, QStringList> QFontSubst;
-Q_GLOBAL_STATIC(QFontSubst, globalFontSubst)
+using QFontSubst = QHash<QString, QStringList>;
+
+static QFontSubst *globalFontSubst()
+{
+   static QFontSubst retval;
+   return &retval;
+}
 
 QString QFont::substitute(const QString &familyName)
 {
@@ -1266,8 +1140,14 @@ bool QFont::fromString(const QString &descrip)
    QStringList l(descrip.split(QLatin1Char(',')));
 
    int count = l.count();
-   if (!count || (count > 2 && count < 9) || count > 11) {
-      qWarning("QFont::fromString: Invalid description '%s'", descrip.isEmpty() ? "(empty)" : csPrintable(descrip));
+   if (! count || (count > 2 && count < 9) || count > 11) {
+
+      if (descrip.isEmpty()) {
+         qWarning("QFont::fromString() Font description was empty");
+      } else {
+         qWarning("QFont::fromString() Invalid font description of %s ", csPrintable(descrip));
+      }
+
       return false;
    }
 
@@ -1342,6 +1222,7 @@ QString QFont::lastResortFont() const
 {
    return QString("arial");
 }
+
 QDataStream &operator<<(QDataStream &s, const QFont &font)
 {
    if (s.version() == 1) {
@@ -1585,7 +1466,11 @@ static const int slow_timeout = 300000;  //  5m
 
 const uint QFontCache::min_cost = 4 * 1024; // 4mb
 
-Q_GLOBAL_STATIC(QThreadStorage<QFontCache *>, theFontCache)
+static QThreadStorage<QFontCache *> *theFontCache()
+{
+   static QThreadStorage<QFontCache *> retval;
+   return &retval;
+}
 
 QFontCache *QFontCache::instance()
 {
@@ -1594,6 +1479,7 @@ QFontCache *QFontCache::instance()
    if (! fontCache) {
       fontCache = new QFontCache;
    }
+
    return fontCache;
 }
 
@@ -1824,6 +1710,7 @@ void QFontCache::timerEvent(QTimerEvent *)
 
       return;
    }
+
    decreaseCache();
 }
 

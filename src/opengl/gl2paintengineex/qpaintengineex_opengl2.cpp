@@ -70,11 +70,6 @@
 # include <qopenglfunctions_1_1.h>
 #endif
 
-inline static bool isPowerOfTwo(uint x)
-{
-   return x && !(x & (x - 1));
-}
-
 Q_GUI_EXPORT QImage qt_imageForBrush(int brushStyle, bool invert);
 
 QGL2PaintEngineExPrivate::~QGL2PaintEngineExPrivate()

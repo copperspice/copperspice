@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef StructureTransitionTable_h
@@ -89,19 +89,21 @@ namespace JSC {
             Structure* getSlotTransition(unsigned count)
             {
                 if (!m_anonymousSlotTable)
-                    return 0;
+                    return nullptr;
 
                 AnonymousSlotMap::iterator find = m_anonymousSlotTable->find(count);
                 if (find == m_anonymousSlotTable->end())
-                    return 0;
+                    return nullptr;
+
                 return find->second;
             }
         private:
             OwnPtr<AnonymousSlotMap> m_anonymousSlotTable;
         };
+
     public:
         StructureTransitionTable() {
-            m_transitions.m_singleTransition.set(0);
+            m_transitions.m_singleTransition.set(nullptr);
             m_transitions.m_singleTransition.setFlag(usingSingleSlot);
         }
 
@@ -120,14 +122,16 @@ namespace JSC {
         {
             if (usingSingleTransitionSlot()) {
                 ASSERT(contains(key, specificValue));
-                setSingleTransition(0);
+                setSingleTransition(nullptr);
                 return;
             }
             TransitionTable::iterator find = table()->find(key);
+
             if (!specificValue)
-                find->second.first = 0;
+                find->second.first = nullptr;
             else
-                find->second.second = 0;
+                find->second.second = nullptr;
+
             if (!find->second.first && !find->second.second)
                 table()->remove(find);
         }
@@ -157,7 +161,8 @@ namespace JSC {
         Structure* getAnonymousSlotTransition(unsigned count)
         {
             if (usingSingleTransitionSlot())
-                return 0;
+                return nullptr;
+
             return table()->getSlotTransition(count);
         }
 
@@ -168,7 +173,7 @@ namespace JSC {
             ASSERT(!table()->getSlotTransition(count));
             table()->addSlotTransition(count, structure);
         }
-        
+
         void removeAnonymousSlotTransition(unsigned count)
         {
             ASSERT(!usingSingleTransitionSlot());
@@ -182,7 +187,7 @@ namespace JSC {
         }
         bool usingSingleTransitionSlot() const { return m_transitions.m_singleTransition.isFlagSet(usingSingleSlot); }
         void setSingleTransition(Structure* structure)
-        { 
+        {
             ASSERT(usingSingleTransitionSlot());
             m_transitions.m_singleTransition.set(structure);
         }

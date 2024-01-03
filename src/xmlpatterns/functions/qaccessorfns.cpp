@@ -29,10 +29,7 @@
 #include "qitem_p.h"
 #include "qqnamevalue_p.h"
 #include "qatomicstring_p.h"
-
 #include "qaccessorfns_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -133,5 +130,3 @@ Item DocumentURIFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       return Item();
    }
 }
-
-QT_END_NAMESPACE

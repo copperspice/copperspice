@@ -119,7 +119,7 @@ static const QByteArray q_macLocalEventType = "mac_generic_NSEvent";
 
 - (void) qt_sendEvent_original: (NSEvent *)event
 {
-   Q_UNUSED(event);
+   (void) event;
    // This method will only be used as a signature
    // template for the method we add into NSApplication
    // containing the original [NSApplication sendEvent:] implementation

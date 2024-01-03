@@ -138,9 +138,13 @@ static bool allowsMessages()
 #endif
 }
 
-typedef QHash<HWND, QSystemTrayIconSys *> HandleTrayIconHash;
+using HandleTrayIconHash = QHash<HWND, QSystemTrayIconSys *>;
 
-Q_GLOBAL_STATIC(HandleTrayIconHash, handleTrayIconHash)
+static HandleTrayIconHash *handleTrayIconHash()
+{
+   static HandleTrayIconHash retval;
+   return &retval;
+}
 
 extern "C" LRESULT QT_WIN_CALLBACK qWindowsTrayconWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -409,22 +413,18 @@ QSystemTrayIconPrivate::~QSystemTrayIconPrivate()
 void QSystemTrayIconPrivate::install_sys()
 {
    Q_Q(QSystemTrayIcon);
+
    if (!sys) {
       if (const HWND hwnd = createTrayIconMessageWindow()) {
          sys = new QSystemTrayIconSys(hwnd, q);
          sys->createIcon();
          sys->trayMessage(NIM_ADD);
       } else {
-         qWarning("The platform plugin failed to create a message window.");
+         qWarning("QSystemTrayIcon::install_sys() Platform plugin failed to create a message window");
       }
    }
 }
 
-/*
-* This function tries to determine the icon geometry from the tray
-*
-* If it fails an invalid rect is returned.
-*/
 QRect QSystemTrayIconSys::findIconGeometry(UINT iconId)
 {
    struct AppData {
@@ -608,6 +608,5 @@ bool QSystemTrayIconPrivate::supportsMessages_sys()
 {
    return allowsMessages();
 }
-
 
 #endif

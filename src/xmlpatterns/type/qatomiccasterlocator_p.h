@@ -26,9 +26,8 @@
 
 #include <qatomictypedispatch_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AtomicCasterLocator : public AtomicTypeVisitor
 {
  public:
@@ -48,7 +47,7 @@ class AtomicCasterLocator : public AtomicTypeVisitor
 
    AtomicTypeVisitorResult::Ptr visit(const DateTimeType *,
          const SourceLocationReflection *const reflection) const override;
- 
+
    AtomicTypeVisitorResult::Ptr visit(const DateType *,
          const SourceLocationReflection *const reflection) const override;
 
@@ -106,8 +105,7 @@ class AtomicCasterLocator : public AtomicTypeVisitor
    AtomicTypeVisitorResult::Ptr visit(const YearMonthDurationType *,
          const SourceLocationReflection *const reflection) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

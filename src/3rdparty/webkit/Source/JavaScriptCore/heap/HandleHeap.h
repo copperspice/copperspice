@@ -53,13 +53,13 @@ public:
     static HandleHeap* heapFor(HandleSlot);
 
     HandleHeap(JSGlobalData*);
-    
+
     JSGlobalData* globalData();
 
     HandleSlot allocate();
     void deallocate(HandleSlot);
 
-    void makeWeak(HandleSlot, WeakHandleOwner* = 0, void* context = 0);
+    void makeWeak(HandleSlot, WeakHandleOwner* = nullptr, void* context = nullptr);
     HandleSlot copyWeak(HandleSlot);
 
     void markStrongHandles(HeapRootVisitor&);
@@ -80,13 +80,13 @@ private:
     public:
         Node(WTF::SentinelTag);
         Node(HandleHeap*);
-        
+
         HandleSlot slot();
         HandleHeap* handleHeap();
 
         void makeWeak(WeakHandleOwner*, void* context);
         bool isWeak();
-        
+
         WeakHandleOwner* weakOwner();
         void* weakOwnerContext();
 
@@ -111,7 +111,7 @@ private:
     static Node* toNode(HandleSlot);
 
     void grow();
-    
+
 #if !ASSERT_DISABLED
     bool isValidWeakNode(Node*);
 #endif
@@ -201,15 +201,15 @@ inline bool HandleHeap::hasWeakOwner(HandleSlot handle, WeakHandleOwner* weakOwn
 
 inline HandleHeap::Node::Node(HandleHeap* handleHeap)
     : m_handleHeap(handleHeap)
-    , m_weakOwner(0)
-    , m_weakOwnerContext(0)
+    , m_weakOwner(nullptr)
+    , m_weakOwnerContext(nullptr)
 {
 }
 
 inline HandleHeap::Node::Node(WTF::SentinelTag)
-    : m_handleHeap(0)
-    , m_weakOwner(0)
-    , m_weakOwnerContext(0)
+    : m_handleHeap(nullptr)
+    , m_weakOwner(nullptr)
+    , m_weakOwnerContext(nullptr)
 {
 }
 
@@ -236,7 +236,7 @@ inline bool HandleHeap::Node::isWeak()
 
 inline WeakHandleOwner* HandleHeap::Node::weakOwner()
 {
-    return m_weakOwner == emptyWeakOwner() ? 0 : m_weakOwner; // 0 for emptyWeakOwner().
+    return m_weakOwner == emptyWeakOwner() ? nullptr : m_weakOwner; // 0 for emptyWeakOwner().
 }
 
 inline void* HandleHeap::Node::weakOwnerContext()

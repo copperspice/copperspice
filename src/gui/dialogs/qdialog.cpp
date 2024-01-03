@@ -290,7 +290,7 @@ int QDialog::exec()
    Q_D(QDialog);
 
    if (d->eventLoop) {
-      qWarning("QDialog::exec: Recursive call detected");
+      qWarning("QDialog::exec() Method called recursively ");
       return -1;
    }
 

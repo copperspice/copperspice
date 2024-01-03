@@ -1975,8 +1975,8 @@ void QDockAreaLayoutInfo::saveState(QDataStream &stream) const
          QString name = w->objectName();
 
          if (name.isEmpty()) {
-            qWarning("QMainWindow::saveState(): 'objectName' not set for QDockWidget %p '%s;",
-               w, qPrintable(w->windowTitle()));
+            qWarning("QDockAreaLayoutInfo::saveState() Object name was not set for this QDockWidget %p %s",
+               w, csPrintable(w->windowTitle()));
          }
          stream << name;
 
@@ -3467,11 +3467,12 @@ void QDockAreaLayout::tabifyDockWidget(QDockWidget *first, QDockWidget *second)
 
    removePlaceHolder(second->objectName());
 }
+
 void QDockAreaLayout::resizeDocks(const QList<QDockWidget *> &docks,
    const QList<int> &sizes, Qt::Orientation o)
 {
    if (docks.count() != sizes.count()) {
-      qWarning("QMainWidget::resizeDocks: size of the lists are not the same");
+      qWarning("QDockAreaLayout::resizeDocks() Sizes are not the same");
       return;
    }
 
@@ -3481,12 +3482,12 @@ void QDockAreaLayout::resizeDocks(const QList<QDockWidget *> &docks,
    for (int i = 0; i < count; ++i) {
       QList<int> path = indexOf(docks[i]);
       if (path.isEmpty()) {
-         qWarning("QMainWidget::resizeDocks: one QDockWidget is not part of the layout");
+         qWarning("QDockAreaLayout::resizeDocks() QDockWidget is not part of this layout");
          continue;
       }
       int size = sizes[i];
       if (size <= 0) {
-         qWarning("QMainWidget::resizeDocks: all sizes need to be larger than 0");
+         qWarning("QDockAreaLayout::resizeDocks() Sizes need to be larger than 0");
          size = 1;
       }
 

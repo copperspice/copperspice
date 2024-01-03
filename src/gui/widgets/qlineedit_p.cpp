@@ -131,10 +131,10 @@ void QLineEditPrivate::_q_cursorPositionChanged(int from, int to)
 }
 
 #ifdef QT_KEYPAD_NAVIGATION
-void QLineEditPrivate::_q_editFocusChange(bool e)
+void QLineEditPrivate::_q_editFocusChange(bool isFocusChanged)
 {
    Q_Q(QLineEdit);
-   q->setEditFocus(e);
+   q->setEditFocus(isFocusChanged);
 }
 #endif
 

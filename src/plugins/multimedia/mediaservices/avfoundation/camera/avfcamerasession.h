@@ -91,8 +91,10 @@ class AVFCameraSession : public QObject
 
    CS_SLOT_1(Public, void processRuntimeError())
    CS_SLOT_2(processRuntimeError)
+
    CS_SLOT_1(Public, void processSessionStarted())
    CS_SLOT_2(processSessionStarted)
+
    CS_SLOT_1(Public, void processSessionStopped())
    CS_SLOT_2(processSessionStopped)
 
@@ -104,12 +106,16 @@ class AVFCameraSession : public QObject
 
    CS_SIGNAL_1(Public, void readyToConfigureConnections())
    CS_SIGNAL_2(readyToConfigureConnections)
+
    CS_SIGNAL_1(Public, void stateChanged(QCamera::State newState))
    CS_SIGNAL_2(stateChanged, newState)
-   CS_SIGNAL_1(Public, void activeChanged(bool un_named_arg1))
-   CS_SIGNAL_2(activeChanged, un_named_arg1)
+
+   CS_SIGNAL_1(Public, void activeChanged(bool isActive))
+   CS_SIGNAL_2(activeChanged, isActive)
+
    CS_SIGNAL_1(Public, void newViewfinderFrame(const QVideoFrame &frame))
    CS_SIGNAL_2(newViewfinderFrame, frame)
+
    CS_SIGNAL_1(Public, void error(int error, const QString &errorString))
    CS_SIGNAL_2(error, error, errorString)
 

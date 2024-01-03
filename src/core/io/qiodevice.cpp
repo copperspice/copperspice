@@ -128,7 +128,7 @@ QIODevice::QIODevice()
 #if defined QIODEVICE_DEBUG
    QFile *file = qobject_cast<QFile *>(this);
    printf("%p QIODevice::QIODevice(\"%s\") %s\n", this, metaObject()->className(),
-          qPrintable(file ? file->fileName() : QString()));
+          csPrintable(file ? file->fileName() : QString()));
 #endif
 }
 
@@ -540,7 +540,7 @@ QByteArray QIODevice::read(qint64 maxSize)
    printf("%p QIODevice::read(%d), d->pos = %d, d->buffer.size() = %d\n",
           this, int(maxSize), int(d->pos), int(d->buffer.size()));
 #else
-   Q_UNUSED(d);
+   (void) d;
 #endif
 
    if (maxSize != qint64(int(maxSize))) {
@@ -965,13 +965,13 @@ QByteArray QIODevice::peek(qint64 maxSize)
 
 bool QIODevice::waitForReadyRead(int msecs)
 {
-   Q_UNUSED(msecs);
+   (void) msecs;
    return false;
 }
 
 bool QIODevice::waitForBytesWritten(int msecs)
 {
-   Q_UNUSED(msecs);
+   (void) msecs;
    return false;
 }
 

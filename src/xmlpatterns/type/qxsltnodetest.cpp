@@ -24,8 +24,6 @@
 #include "qbuiltintypes_p.h"
 #include "qxsltnodetest_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool XSLTNodeTest::xdtTypeMatches(const ItemType::Ptr &other) const
@@ -51,5 +49,3 @@ ItemType::Ptr XSLTNodeTest::xdtSuperType() const
 {
    return BuiltinTypes::node;
 }
-
-QT_END_NAMESPACE

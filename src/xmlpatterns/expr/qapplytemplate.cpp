@@ -32,8 +32,6 @@
 
 #include "qapplytemplate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ApplyTemplate::ApplyTemplate(const TemplateMode::Ptr &mode,
@@ -55,7 +53,7 @@ Item ApplyTemplate::mapToItem(const QXmlNodeModelIndex &node,
 Item::Iterator::Ptr ApplyTemplate::mapToSequence(const Item &item,
       const DynamicContext::Ptr &context) const
 {
-   Q_UNUSED(item);
+   (void) item;
    return evaluateSequence(context);
 }
 
@@ -166,7 +164,8 @@ Expression::Properties ApplyTemplate::properties() const
 bool ApplyTemplate::configureRecursion(const CallTargetDescription::Ptr &sign)
 {
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
-   Q_UNUSED(sign);
+   (void) sign;
+
    return false;
 }
 
@@ -181,5 +180,3 @@ CallTargetDescription::Ptr ApplyTemplate::callTargetDescription() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return CallTargetDescription::Ptr();
 }
-
-QT_END_NAMESPACE

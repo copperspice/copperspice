@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Base64Binary : public AtomicValue
@@ -73,7 +71,5 @@ class Base64Binary : public AtomicValue
    static const char Base64DecMap[128];
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

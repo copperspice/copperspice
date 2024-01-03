@@ -26,8 +26,6 @@
 #include <QReadLocker>
 #include <QWriteLocker>
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdIdCache::addId(const QString &id)
@@ -44,5 +42,3 @@ bool XsdIdCache::hasId(const QString &id) const
 
    return m_ids.contains(id);
 }
-
-QT_END_NAMESPACE

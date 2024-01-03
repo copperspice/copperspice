@@ -169,10 +169,14 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     void updateCompositionMode();
 
     enum TextureUpdateMode { UpdateIfNeeded, ForceUpdate };
-    template<typename T>
-    void updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode, GLenum filterMode, TextureUpdateMode updateMode = UpdateIfNeeded);
-    template<typename T>
+
+    template <typename T>
+    void updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode, GLenum filterMode,
+          TextureUpdateMode updateMode = UpdateIfNeeded);
+
+    template <typename T>
     GLuint bindTexture(const T &texture);
+
     void activateTextureUnit(GLenum textureUnit);
 
     void resetGLState();
@@ -181,9 +185,11 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     // however writeClip can also be thought of as en entry point as it does similar things.
     void fill(const QVectorPath &path);
     void stroke(const QVectorPath &path, const QPen &pen);
+
     void drawTexture(const QOpenGLRect& dest, const QOpenGLRect& src, const QSize &textureSize, bool opaque, bool pattern = false);
     void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                             QPainter::PixmapFragmentHints hints);
+          QPainter::PixmapFragmentHints hints);
+
     void drawCachedGlyphs(QFontEngine::GlyphFormat glyphFormat, QStaticTextItem *staticTextItem);
 
     // Calls glVertexAttributePointer if the pointer has changed

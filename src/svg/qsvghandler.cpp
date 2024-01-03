@@ -2182,8 +2182,7 @@ void QSvgHandler::parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *att
          name = QStringView(key);
 
       } else {
-         const QCss::Symbol &sym = m_cssParser.symbol();
-         name = QStringView(sym.text.begin() + sym.start, sym.text.begin() + sym.start + sym.len);
+        name = m_cssParser.symbol().text;
       }
 
       m_cssParser.skipSpace();
@@ -2207,34 +2206,8 @@ void QSvgHandler::parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *att
          ++symbolCount;
       } while (m_cssParser.hasNext() && !m_cssParser.test(QCss::SEMICOLON));
 
-      bool canExtractValueByRef = !m_cssParser.hasEscapeSequences;
-
-      if (canExtractValueByRef) {
-         int len = m_cssParser.symbols.at(firstSymbol).len;
-
-         for (int i = firstSymbol + 1; i < firstSymbol + symbolCount; ++i) {
-            len += m_cssParser.symbols.at(i).len;
-
-            if (m_cssParser.symbols.at(i - 1).start + m_cssParser.symbols.at(i - 1).len
-                  != m_cssParser.symbols.at(i).start) {
-               canExtractValueByRef = false;
-               break;
-            }
-         }
-         if (canExtractValueByRef) {
-            const QCss::Symbol &sym = m_cssParser.symbols.at(firstSymbol);
-            attribute.value = QStringView(sym.text.begin() + sym.start, sym.text.begin() + sym.start + len);
-         }
-      }
-
-      if (! canExtractValueByRef) {
-         QString value;
-
-         for (int i = firstSymbol; i < m_cssParser.index - 1; ++i) {
-            value += m_cssParser.symbols.at(i).lexem();
-         }
-
-         attribute.value = value;
+      for (int i = firstSymbol; i < m_cssParser.index - 1; ++i) {
+         attribute.value += m_cssParser.symbols.at(i).lexem();
       }
 
       attributes->append(attribute);

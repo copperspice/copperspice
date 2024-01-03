@@ -173,7 +173,7 @@ namespace JSC {
     }
 
     inline MarkedSpace::SizeClass::SizeClass()
-        : nextBlock(0)
+        : nextBlock(nullptr)
         , cellSize(0)
     {
     }

@@ -67,10 +67,11 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistNavigator : public QObject
 
    MULTI_CS_SLOT_1(Public, void next())
    MULTI_CS_SLOT_2(next)
+
    MULTI_CS_SLOT_1(Public, void previous())
    MULTI_CS_SLOT_2(previous)
 
-   MULTI_CS_SLOT_1(Public, void jump(int un_named_arg1))
+   MULTI_CS_SLOT_1(Public, void jump(int position))
    MULTI_CS_SLOT_2(jump)
 
    MULTI_CS_SLOT_1(Public, void setPlaybackMode(QMediaPlaylist::PlaybackMode mode))
@@ -78,8 +79,10 @@ class Q_MULTIMEDIA_EXPORT QMediaPlaylistNavigator : public QObject
 
    MULTI_CS_SIGNAL_1(Public, void activated(const QMediaContent &content))
    MULTI_CS_SIGNAL_2(activated, content)
-   MULTI_CS_SIGNAL_1(Public, void currentIndexChanged(int un_named_arg1))
-   MULTI_CS_SIGNAL_2(currentIndexChanged, un_named_arg1)
+
+   MULTI_CS_SIGNAL_1(Public, void currentIndexChanged(int index))
+   MULTI_CS_SIGNAL_2(currentIndexChanged, index)
+
    MULTI_CS_SIGNAL_1(Public, void playbackModeChanged(QMediaPlaylist::PlaybackMode mode))
    MULTI_CS_SIGNAL_2(playbackModeChanged, mode)
 

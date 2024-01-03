@@ -41,7 +41,13 @@ class QVariant;
 class QGradientPrivate;
 
 struct QBrushData;
-struct QBrushDataPointerDeleter;
+
+namespace cs_internal {
+   struct QBrushDataPointerDeleter {
+      static void deleteData(QBrushData *d);
+      void operator()(QBrushData *d) const;
+   };
+}
 
 class Q_GUI_EXPORT QBrush
 {
@@ -105,7 +111,8 @@ class Q_GUI_EXPORT QBrush
 
    inline bool isDetached() const;
 
-   typedef QScopedPointer<QBrushData, QBrushDataPointerDeleter> DataPtr;
+   using DataPtr = QScopedPointer<QBrushData, cs_internal::QBrushDataPointerDeleter>;
+
    inline DataPtr &data_ptr() {
       return d;
    }
@@ -115,11 +122,12 @@ class Q_GUI_EXPORT QBrush
    friend class QRasterPaintEnginePrivate;
    friend class QPainter;
    friend struct QSpanData;
+
    friend bool Q_GUI_EXPORT qHasPixmapTexture(const QBrush &brush);
 
    void detach(Qt::BrushStyle newStyle);
    void init(const QColor &color, Qt::BrushStyle style);
-   QScopedPointer<QBrushData, QBrushDataPointerDeleter> d;
+   QScopedPointer<QBrushData, cs_internal::QBrushDataPointerDeleter> d;
    void cleanUp(QBrushData *data);
 };
 
@@ -220,38 +228,53 @@ class Q_GUI_EXPORT QGradient
    InterpolationMode interpolationMode() const;
    void setInterpolationMode(InterpolationMode mode);
 
-   bool operator==(const QGradient &gradient) const;
+   bool operator==(const QGradient &other) const;
 
-   bool operator!=(const QGradient &gradient) const {
-      return ! operator==(gradient);
+   bool operator!=(const QGradient &other) const {
+      return ! operator==(other);
    }
 
  private:
-   friend class QLinearGradient;
-   friend class QRadialGradient;
-   friend class QConicalGradient;
-   friend class QBrush;
+   struct LinearData {
+      qreal x1;
+      qreal y1;
+      qreal x2;
+      qreal y2;
+   };
+
+   struct RadialData {
+      qreal cx;
+      qreal cy;
+      qreal fx;
+      qreal fy;
+      qreal cradius;
+      qreal fradius;
+   };
+
+   struct ConicalData {
+      qreal cx;
+      qreal cy;
+      qreal angle;
+   };
+
+   union {
+      LinearData  linear;
+      RadialData  radial;
+      ConicalData conical;
+
+   } m_data;
 
    Type m_type;
    Spread m_spread;
    QVector<QPair<qreal, QColor>> m_stops;
 
-   union {
-      struct {
-         qreal x1, y1, x2, y2;
-      } linear;
+   CoordinateMode m_CoordinateMode;
+   InterpolationMode m_InterpolationMode;
 
-      struct {
-         qreal cx, cy, fx, fy, cradius;
-      } radial;
-
-      struct {
-         qreal cx, cy, angle;
-      } conical;
-
-   } m_data;
-
-   void *dummy;
+   friend class QBrush;
+   friend class QLinearGradient;
+   friend class QRadialGradient;
+   friend class QConicalGradient;
 };
 
 inline void QGradient::setSpread(Spread spreadType)

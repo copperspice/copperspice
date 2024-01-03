@@ -81,6 +81,7 @@ class QNetworkAccessFtpBackend: public QNetworkAccessBackend
 
  private:
    QPointer<QNetworkAccessCachedFtpConnection> ftp;
+
    QIODevice *uploadDevice;
    qint64 totalBytes;
    int helpId, sizeId, mdtmId;

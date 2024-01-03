@@ -101,8 +101,8 @@ class QNetworkAccessCache : public QObject
    void releaseEntry(const QByteArray &key);
    void removeEntry(const QByteArray &key);
 
-   NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject *un_named_arg1))
-   NET_CS_SIGNAL_2(entryReady, un_named_arg1)
+   NET_CS_SIGNAL_1(Public, void entryReady(QNetworkAccessCache::CacheableObject *object))
+   NET_CS_SIGNAL_2(entryReady, object)
 
  protected:
    void timerEvent(QTimerEvent *) override;

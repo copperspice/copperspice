@@ -31,8 +31,6 @@
 #include <qvalidationerror_p.h>
 #include <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<TypeOfDerivedString DerivedType>
@@ -275,7 +273,5 @@ class DerivedString : public AtomicValue
    }
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

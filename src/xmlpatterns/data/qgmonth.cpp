@@ -25,8 +25,6 @@
 
 #include "qgmonth_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GMonth::GMonth(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -73,5 +71,3 @@ ItemType::Ptr GMonth::type() const
 {
    return BuiltinTypes::xsGMonth;
 }
-
-QT_END_NAMESPACE

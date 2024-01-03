@@ -25,14 +25,14 @@
 #define QTEXTDOCUMENT_H
 
 #include <qobject.h>
-#include <qsize.h>
-#include <qrect.h>
+#include <qcontainerfwd.h>
 #include <qfont.h>
+#include <qrect.h>
+#include <qscopedpointer.h>
+#include <qsize.h>
 #include <qtextcursor.h>
 #include <qurl.h>
 #include <qvariant.h>
-#include <qcontainerfwd.h>
-#include <QScopedPointer>
 
 class QTextFormatCollection;
 class QTextListFormat;

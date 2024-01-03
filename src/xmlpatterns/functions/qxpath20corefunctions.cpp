@@ -58,8 +58,6 @@
 
 #include "qxpath20corefunctions_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr XPath20CoreFunctions::retrieveExpression(const QXmlName name,
@@ -560,5 +558,3 @@ FunctionSignature::Ptr XPath20CoreFunctions::retrieveFunctionSignature(const Nam
    return s;
 }
 
-
-QT_END_NAMESPACE

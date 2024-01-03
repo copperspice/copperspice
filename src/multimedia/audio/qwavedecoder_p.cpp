@@ -26,21 +26,16 @@
 #include <qtimer.h>
 #include <qendian.h>
 
-QWaveDecoder::QWaveDecoder(QIODevice *s, QObject *parent):
-   QIODevice(parent),
-   haveFormat(false),
-   dataSize(0),
-   source(s),
-   state(QWaveDecoder::InitialState),
-   junkToSkip(0),
-   bigEndian(false)
+QWaveDecoder::QWaveDecoder(QIODevice *s, QObject *parent)
+   : QIODevice(parent), haveFormat(false), dataSize(0), source(s),
+     state(QWaveDecoder::InitialState), junkToSkip(0), bigEndian(false)
 {
    open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 
    if (enoughDataAvailable()) {
       QTimer::singleShot(0, this, SLOT(handleData()));
    } else {
-      connect(source, SIGNAL(readyRead()), SLOT(handleData()));
+      connect(source, &QIODevice::readyRead, this, &QWaveDecoder::handleData);
    }
 }
 
@@ -80,8 +75,8 @@ qint64 QWaveDecoder::readData(char *data, qint64 maxlen)
 
 qint64 QWaveDecoder::writeData(const char *data, qint64 len)
 {
-   Q_UNUSED(data);
-   Q_UNUSED(len);
+   (void) data;
+   (void) len;
 
    return -1;
 }
@@ -89,7 +84,7 @@ qint64 QWaveDecoder::writeData(const char *data, qint64 len)
 void QWaveDecoder::parsingFailed()
 {
    Q_ASSERT(source);
-   source->disconnect(SIGNAL(readyRead()), this, SLOT(handleData()));
+   source->disconnect(source, &QIODevice::readyRead, this, &QWaveDecoder::handleData);
    emit parsingError();
 }
 
@@ -172,6 +167,7 @@ void QWaveDecoder::handleData()
                format.setSampleRate(qFromBigEndian<quint32>(wave.sampleRate));
                format.setSampleSize(bps);
                format.setChannelCount(qFromBigEndian<quint16>(wave.numChannels));
+
             } else {
                int bps = qFromLittleEndian<quint16>(wave.bitsPerSample);
 
@@ -189,10 +185,11 @@ void QWaveDecoder::handleData()
 
    if (state == QWaveDecoder::WaitingForDataState) {
       if (findChunk("data")) {
-         source->disconnect(SIGNAL(readyRead()), this, SLOT(handleData()));
+         source->disconnect(source, &QIODevice::readyRead, this, &QWaveDecoder::handleData);
 
          chunk descriptor;
          source->read(reinterpret_cast<char *>(&descriptor), sizeof(chunk));
+
          if (bigEndian) {
             descriptor.size = qFromBigEndian<quint32>(descriptor.size);
          } else {
@@ -202,7 +199,7 @@ void QWaveDecoder::handleData()
          dataSize = descriptor.size;
 
          haveFormat = true;
-         connect(source, SIGNAL(readyRead()), this, SLOT(readyRead()));
+         connect(source, &QIODevice::readyRead, this, &QWaveDecoder::readyRead);
          emit formatKnown();
 
          return;
@@ -227,6 +224,7 @@ bool QWaveDecoder::enoughDataAvailable()
    if (qstrncmp(descriptor.id, "RIFX", 4) == 0) {
       descriptor.size = qFromBigEndian<quint32>(descriptor.size);
    }
+
    if (qstrncmp(descriptor.id, "RIFF", 4) == 0) {
       descriptor.size = qFromLittleEndian<quint32>(descriptor.size);
    }
@@ -306,5 +304,3 @@ void QWaveDecoder::discardBytes(qint64 numBytes)
       junkToSkip = origPos + numBytes - source->pos();
    }
 }
-
-

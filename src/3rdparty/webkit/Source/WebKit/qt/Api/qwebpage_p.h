@@ -57,12 +57,9 @@ namespace WebCore {
     class Frame;
 }
 
-QT_BEGIN_NAMESPACE
 class QUndoStack;
 class QMenu;
 class QBitArray;
-QT_END_NAMESPACE
-
 class QWebInspector;
 class QWebPageClient;
 

@@ -27,11 +27,11 @@
 #ifndef CS_PERL_MATCHER_NON_RECURSIVE_H
 #define CS_PERL_MATCHER_NON_RECURSIVE_H
 
+#include <regex/r_states.h>
+
 #include <cassert>
 #include <limits>
 #include <new>
-
-#include "regex/r_states.h"
 
 namespace cs_regex_ns {
 

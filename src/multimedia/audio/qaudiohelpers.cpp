@@ -28,7 +28,8 @@
 namespace QAudioHelperInternal
 {
 
-template<class T> void adjustSamples(qreal factor, const void *src, void *dst, int samples)
+template <class T>
+void adjustSamples(qreal factor, const void *src, void *dst, int samples)
 {
     const T *pSrc = (const T *)src;
     T *pDst = (T*)dst;
@@ -39,27 +40,32 @@ template<class T> void adjustSamples(qreal factor, const void *src, void *dst, i
 
 // Unsigned samples are biased around 0x80/0x8000 :/
 // This makes a pure template solution a bit unwieldy but possible
-template<class T> struct signedVersion {};
+template <class T>
+struct signedVersion {};
 
-template<> struct signedVersion<quint8>
+template <>
+struct signedVersion<quint8>
 {
     typedef qint8 TS;
     enum {offset = 0x80};
 };
 
-template<> struct signedVersion<quint16>
+template <>
+struct signedVersion<quint16>
 {
     typedef qint16 TS;
     enum {offset = 0x8000};
 };
 
-template<> struct signedVersion<quint32>
+template <>
+struct signedVersion<quint32>
 {
     typedef qint32 TS;
     enum {offset = 0x80000000};
 };
 
-template<class T> void adjustUnsignedSamples(qreal factor, const void *src, void *dst, int samples)
+template <class T>
+void adjustUnsignedSamples(qreal factor, const void *src, void *dst, int samples)
 {
     const T *pSrc = (const T *)src;
     T *pDst = (T*)dst;

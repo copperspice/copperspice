@@ -64,7 +64,7 @@ public:
         ASSERT(!isZombie(m_cell));
 #endif
     }
-    
+
     T* get() const
     {
         return reinterpret_cast<T*>(m_cell);
@@ -85,13 +85,13 @@ public:
         return static_cast<T*>(m_cell);
     }
 
-    void clear() { m_cell = 0; }
-    
+    void clear() { m_cell = nullptr; }
+
     JSCell** slot() { return &m_cell; }
-    
+
     typedef T* (WriteBarrierBase::*UnspecifiedBoolType);
-    operator UnspecifiedBoolType*() const { return m_cell ? reinterpret_cast<UnspecifiedBoolType*>(1) : 0; }
-    
+    operator UnspecifiedBoolType*() const { return m_cell ? reinterpret_cast<UnspecifiedBoolType*>(1) : nullptr; }
+
     bool operator!() const { return !m_cell; }
 
     void setWithoutWriteBarrier(T* value)
@@ -135,9 +135,9 @@ public:
     bool isObject() const { return get().isObject(); }
     bool isNull() const { return get().isNull(); }
     bool isGetterSetter() const { return get().isGetterSetter(); }
-    
+
     JSValue* slot()
-    { 
+    {
         union {
             EncodedJSValue* v;
             JSValue* slot;
@@ -145,11 +145,11 @@ public:
         u.v = &m_value;
         return u.slot;
     }
-    
+
     typedef JSValue (WriteBarrierBase::*UnspecifiedBoolType);
-    operator UnspecifiedBoolType*() const { return get() ? reinterpret_cast<UnspecifiedBoolType*>(1) : 0; }
-    bool operator!() const { return !get(); } 
-    
+    operator UnspecifiedBoolType*() const { return get() ? reinterpret_cast<UnspecifiedBoolType*>(1) : nullptr; }
+    bool operator!() const { return !get(); }
+
 private:
     EncodedJSValue m_value;
 };
@@ -158,7 +158,7 @@ template <typename T> class WriteBarrier : public WriteBarrierBase<T> {
 public:
     WriteBarrier()
     {
-        this->setWithoutWriteBarrier(0);
+        this->setWithoutWriteBarrier(nullptr);
     }
 
     WriteBarrier(JSGlobalData& globalData, const JSCell* owner, T* value)

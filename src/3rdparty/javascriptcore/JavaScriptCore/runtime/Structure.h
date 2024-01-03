@@ -266,10 +266,13 @@ namespace JSC {
     {
         if (usingSingleTransitionSlot()) {
             Structure* existingTransition = singleTransition();
+
             return existingTransition && existingTransition->m_nameInPrevious.get() == key.first
                    && existingTransition->m_attributesInPrevious == key.second
-                   && (existingTransition->m_specificValueInPrevious == specificValue || existingTransition->m_specificValueInPrevious == 0);
+                   && (existingTransition->m_specificValueInPrevious == specificValue ||
+                      existingTransition->m_specificValueInPrevious == nullptr);
         }
+
         TransitionTable::iterator find = table()->find(key);
         if (find == table()->end())
             return false;
@@ -281,11 +284,14 @@ namespace JSC {
     {
         if (usingSingleTransitionSlot()) {
             Structure* existingTransition = singleTransition();
+
             if (existingTransition && existingTransition->m_nameInPrevious.get() == key.first
                 && existingTransition->m_attributesInPrevious == key.second
-                && (existingTransition->m_specificValueInPrevious == specificValue || existingTransition->m_specificValueInPrevious == 0))
+                && (existingTransition->m_specificValueInPrevious == specificValue ||
+                    existingTransition->m_specificValueInPrevious == nullptr))
                 return existingTransition;
-            return 0;
+
+            return nullptr;
         }
 
         Transition transition = table()->get(key);

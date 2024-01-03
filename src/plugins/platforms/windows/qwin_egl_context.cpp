@@ -358,11 +358,11 @@ bool QWindowsEGLStaticContext::initializeAngle(QWindowsOpenGLTester::Renderers p
       }
    }
 #else // EGL_ANGLE_platform_angle
-   Q_UNUSED(preferredType);
-   Q_UNUSED(dc);
-   Q_UNUSED(display);
-   Q_UNUSED(major);
-   Q_UNUSED(minor);
+   (void) preferredType;
+   (void) dc;
+   (void) display;
+   (void) major;
+   (void) minor;
 #endif
    return true;
 }

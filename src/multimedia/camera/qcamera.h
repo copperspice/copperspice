@@ -259,17 +259,17 @@ class Q_MULTIMEDIA_EXPORT QCamera : public QMediaObject
  private:
    Q_DECLARE_PRIVATE(QCamera)
 
-   MULTI_CS_SLOT_1(Private, void _q_preparePropertyChange(int un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_preparePropertyChange(int changeType))
    MULTI_CS_SLOT_2(_q_preparePropertyChange)
 
    MULTI_CS_SLOT_1(Private, void _q_restartCamera())
    MULTI_CS_SLOT_2(_q_restartCamera)
 
-   MULTI_CS_SLOT_1(Private, void _q_error(int un_named_arg1, const QString &un_named_arg2))
+   MULTI_CS_SLOT_1(Private, void _q_error(int error, const QString &errorString))
    MULTI_CS_SLOT_2(_q_error)
 
-   MULTI_CS_SLOT_1(Private, void _q_updateLockStatus(QCamera::LockType un_named_arg1, QCamera::LockStatus un_named_arg2,
-         QCamera::LockChangeReason un_named_arg3))
+   MULTI_CS_SLOT_1(Private, void _q_updateLockStatus(QCamera::LockType type, QCamera::LockStatus status,
+         QCamera::LockChangeReason reason))
    MULTI_CS_SLOT_2(_q_updateLockStatus)
 
    MULTI_CS_SLOT_1(Private, void _q_updateState(QCamera::State state))

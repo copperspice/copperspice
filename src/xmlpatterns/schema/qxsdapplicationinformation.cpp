@@ -23,8 +23,6 @@
 
 #include "qxsdapplicationinformation_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdApplicationInformation::setSource(const AnyURI::Ptr &source)
@@ -46,5 +44,3 @@ QString XsdApplicationInformation::content() const
 {
    return m_content;
 }
-
-QT_END_NAMESPACE

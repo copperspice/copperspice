@@ -64,44 +64,47 @@ class Q_GUI_EXPORT QBlittable
    virtual void fillRect(const QRectF &rect, const QColor &color) = 0;
    virtual void drawPixmap(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect) = 0;
    virtual void alphaFillRect(const QRectF &rect, const QColor &color, QPainter::CompositionMode cmode) {
-      Q_UNUSED(rect);
-      Q_UNUSED(color);
-      Q_UNUSED(cmode);
-      qWarning("Please implement alphaFillRect function in your platform or remove AlphaFillRectCapability from it");
+      (void) rect;
+      (void) color;
+      (void) cmode;
+
+      qWarning("QBlittable::alphaFillRect() Implement for your platform or disable the AlphaFillRectCapability flag");
    }
 
    virtual void drawPixmapOpacity(const QRectF &rect, const QPixmap &pixmap, const QRectF &subrect,
       QPainter::CompositionMode cmode, qreal opacity) {
-      Q_UNUSED(rect);
-      Q_UNUSED(pixmap);
-      Q_UNUSED(subrect);
-      Q_UNUSED(cmode);
-      Q_UNUSED(opacity);
-      qWarning("Please implement drawPixmapOpacity function in your platform or remove OpacityPixmapCapability from it");
+      (void) rect;
+      (void) pixmap;
+      (void) subrect;
+      (void) cmode;
+      (void) opacity;
+
+      qWarning("QBlittable::drawPixmapOpacity() Implement for your platform or disable the OpacityPixmapCapability flag");
    }
 
    virtual bool drawCachedGlyphs(const QPaintEngineState *state, QFontEngine::GlyphFormat glyphFormat, int numGlyphs,
       const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine) {
-      Q_UNUSED(state);
-      Q_UNUSED(glyphFormat);
-      Q_UNUSED(numGlyphs);
-      Q_UNUSED(glyphs);
-      Q_UNUSED(positions);
-      Q_UNUSED(fontEngine);
-      qWarning("Please implement drawCachedGlyphs function in your platform or remove DrawCachedGlyphsCapability from it");
+      (void) state;
+      (void) glyphFormat;
+      (void) numGlyphs;
+      (void) glyphs;
+      (void) positions;
+      (void) fontEngine;
+
+      qWarning("QBlittable::drawCachedGlyphs() Implement for your platform or disable the DrawCachedGlyphsCapability flag");
       return true;
    }
+
    QImage *lock();
    void unlock();
 
    bool isLocked() const;
+
  protected:
    virtual QImage *doLock() = 0;
    virtual void doUnlock() = 0;
    QBlittablePrivate *d_ptr;
 };
-
-
 
 #endif //QT_NO_BLITTABLE
 #endif //QBLITTABLE_P_H

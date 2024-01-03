@@ -61,7 +61,11 @@ class QOpenUrlHandlerRegistry : public QObject
    GUI_CS_SLOT_2(handlerDestroyed)
 };
 
-Q_GLOBAL_STATIC(QOpenUrlHandlerRegistry, handlerRegistry)
+static QOpenUrlHandlerRegistry *handlerRegistry()
+{
+   static QOpenUrlHandlerRegistry retval;
+   return &retval;
+}
 
 void QOpenUrlHandlerRegistry::handlerDestroyed(QObject *handler)
 {
@@ -89,7 +93,9 @@ bool QDesktopServices::openUrl(const QUrl &url)
       if (handler != registry->handlers.constEnd()) {
          insideOpenUrlHandler = true;
 
-         bool result = QMetaObject::invokeMethod(handler->receiver, handler->name, Qt::DirectConnection, Q_ARG(const QUrl &, url));
+         bool result = QMetaObject::invokeMethod(handler->receiver, handler->name,
+               Qt::DirectConnection, Q_ARG(const QUrl &, url));
+
          insideOpenUrlHandler = false;
          return result;
       }
@@ -107,7 +113,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
    QPlatformServices *platformServices = platformIntegration->services();
 
    if (! platformServices) {
-      qWarning("Platform plugin does not support services.");
+      qWarning("QDesktopServices::openUrl() Platform plugin does not support services");
       return false;
    }
 

@@ -33,8 +33,6 @@
 
 #include "qcommonvalues_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 // STATIC DATA
@@ -101,5 +99,3 @@ const DayTimeDuration::Ptr      CommonValues::DayTimeDurationZero
 const DayTimeDuration::Ptr      CommonValues::YearMonthDurationZero
 (YearMonthDuration::fromComponents(true, 0, 0));
 
-
-QT_END_NAMESPACE

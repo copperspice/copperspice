@@ -26,8 +26,6 @@
 
 #include <qdelegatingstaticcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class StaticFocusContext : public DelegatingStaticContext
@@ -46,7 +44,5 @@ class StaticFocusContext : public DelegatingStaticContext
    const ItemType::Ptr m_contextItemType;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

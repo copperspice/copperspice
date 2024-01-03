@@ -25,8 +25,6 @@
 
 #include "qcardinality_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QString Cardinality::displayName(const CustomizeDisplayName explain) const
@@ -74,4 +72,3 @@ QString Cardinality::displayName(const CustomizeDisplayName explain) const
    }
 }
 
-QT_END_NAMESPACE

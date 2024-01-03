@@ -1352,7 +1352,7 @@ static Qt::DockWidgetArea toDockWidgetArea(QInternal::DockPosition pos)
    return Qt::NoDockWidgetArea;
 }
 
-inline static Qt::DockWidgetArea toDockWidgetArea(int pos)
+static inline Qt::DockWidgetArea toDockWidgetArea(int pos)
 {
    return toDockWidgetArea(static_cast<QInternal::DockPosition>(pos));
 }
@@ -1845,7 +1845,7 @@ void QMainWindowLayout::raise(QDockWidget *widget)
 
 int QMainWindowLayout::count() const
 {
-   qWarning("QMainWindowLayout::count: Possible issue");
+   qWarning("QMainWindowLayout::count() Method is not supported");
    return 0;
 }
 
@@ -1935,7 +1935,7 @@ void QMainWindowLayout::setGeometry(const QRect &_r)
 
 void QMainWindowLayout::addItem(QLayoutItem *)
 {
-   qWarning("QMainWindowLayout::addItem: Please use the public QMainWindow API");
+   qWarning("QMainWindowLayout::addItem() Method is not supported");
 }
 
 QSize QMainWindowLayout::sizeHint() const

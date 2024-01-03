@@ -24,15 +24,15 @@
 #ifndef QXMLQUERY_P_H
 #define QXMLQUERY_P_H
 
-#include <QAbstractMessageHandler>
-#include <QAbstractUriResolver>
-#include <QPointer>
-#include <QSourceLocation>
-#include <QUrl>
-#include <QVariant>
-#include <QXmlName>
-#include <QXmlNamePool>
-#include <QXmlQuery>
+#include <qabstractmessagehandler.h>
+#include <qabstracturiresolver.h>
+#include <qpointer.h>
+#include <qsourcelocation.h>
+#include <qurl.h>
+#include <qvariant.h>
+#include <qxmlname.h>
+#include <qxmlnamepool.h>
+#include <qxmlquery.h>
 
 #include "qacceltreebuilder_p.h"
 #include "qacceltreeresourceloader_p.h"

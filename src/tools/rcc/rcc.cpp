@@ -25,15 +25,14 @@
 
 #include <qalgorithms.h>
 #include <qbytearray.h>
-#include <qdatetime.h>
 #include <qdebug.h>
 #include <qdir.h>
 #include <qdiriterator.h>
 #include <qdomdocument.h>
 #include <qfile.h>
+#include <qlocale.h>
 #include <qiodevice.h>
 #include <qmultihash.h>
-#include <qlocale.h>
 #include <qstack.h>
 
 #include <algorithm>

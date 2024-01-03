@@ -30,7 +30,7 @@ class QMYSQLDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QMYSQLDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QMYSQL, QMYSQL3")
+   CS_PLUGIN_KEY("QMYSQL, QMARIADB")
 
  public:
    QMYSQLDriverPlugin();
@@ -47,7 +47,7 @@ QMYSQLDriverPlugin::QMYSQLDriverPlugin()
 
 QSqlDriver *QMYSQLDriverPlugin::create(const QString &name)
 {
-   if (name == "QMYSQL" || name == "QMYSQL3") {
+   if (name == "QMYSQL" || name == "QMARIADB") {
       QMYSQLDriver *driver = new QMYSQLDriver();
       return driver;
    }

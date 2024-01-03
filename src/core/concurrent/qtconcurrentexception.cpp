@@ -47,7 +47,7 @@ Exception *UnhandledException::clone() const
    return new UnhandledException(*this);
 }
 
-namespace internal {
+namespace cs_internal {
 
 class Base
 {
@@ -131,7 +131,7 @@ bool ExceptionStore::hasThrown() const
    return exceptionHolder.base->hasThrown;
 }
 
-} // namespace internal
+}   // end namespace
 
 
 } // namespace QtConcurrent

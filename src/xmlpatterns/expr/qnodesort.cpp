@@ -27,8 +27,6 @@
 #include "qdeduplicateiterator_p.h"
 #include "qnodesort_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NodeSortExpression::NodeSortExpression(const Expression::Ptr &op) : SingleContainer(op)
@@ -121,5 +119,3 @@ Expression::Properties NodeSortExpression::properties() const
     */
    return AffectsOrderOnly | DisableElimination;
 }
-
-QT_END_NAMESPACE

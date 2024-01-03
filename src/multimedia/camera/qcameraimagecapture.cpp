@@ -52,7 +52,7 @@ class QCameraImageCapturePrivate
    QString errorString;
 
    void _q_error(int id, int error, const QString &errorString);
-   void _q_readyChanged(bool);
+   void _q_readyChanged(bool ready);
    void _q_serviceDestroyed();
 
    void unsetError() {
@@ -407,10 +407,10 @@ void QCameraImageCapture::cancelCapture()
    }
 }
 
-void QCameraImageCapture::_q_error(int un_named_arg1, int un_named_arg2, const QString &un_named_arg3)
+void QCameraImageCapture::_q_error(int id, int error, const QString &errorString)
 {
    Q_D(QCameraImageCapture);
-   d->_q_error(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_error(id, error, errorString);
 }
 
 void QCameraImageCapture::_q_readyChanged(bool ready)

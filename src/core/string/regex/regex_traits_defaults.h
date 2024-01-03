@@ -27,10 +27,11 @@
 #ifndef CS_REGEX_TRAITS_DEFAULTS_H
 #define CS_REGEX_TRAITS_DEFAULTS_H
 
+#include <regex/r_config.h>
+
 #include <limits>
 #include <type_traits>
-
-#include "regex/r_config.h"
+#include <stdint.h>
 
 namespace cs_regex_ns {
 
@@ -40,8 +41,6 @@ LIB_CS_STRING_EXPORT const char                          *get_default_syntax(cs_
 LIB_CS_STRING_EXPORT regex_constants::syntax_type         get_default_syntax_type(char c);
 LIB_CS_STRING_EXPORT regex_constants::escape_syntax_type  get_default_escape_syntax_type(char c);
 LIB_CS_STRING_EXPORT std::string                          get_default_collate_name(const std::string &name);
-
-// **
 
 template <class charT>
 inline bool is_extended(charT c)
@@ -54,8 +53,6 @@ inline bool is_extended(char)
 {
    return false;
 }
-
-// **
 
 template <class charT>
 inline bool is_combining(charT c);
@@ -111,27 +108,33 @@ int global_value(charT c)
    if (c > f) {
       return -1;
    }
+
    if (c >= a) {
       return 10 + (c - a);
    }
+
    if (c > F) {
       return -1;
    }
+
    if (c >= A) {
       return 10 + (c - A);
    }
+
    if (c > nine) {
       return -1;
    }
+
    if (c >= zero) {
       return c - zero;
    }
+
    return -1;
 }
 
 template <class traits>
 intmax_t global_toi(typename traits::string_type::const_iterator &p1, const typename traits::string_type::const_iterator p2,
-                    int radix, const traits &t)
+      int radix, const traits &t)
 {
    intmax_t limit = (std::numeric_limits<intmax_t>::max)() / radix;
    intmax_t next_value = t.value(*p1, radix);
@@ -404,65 +407,65 @@ inline regex_constants::escape_syntax_type get_default_escape_syntax_type(char c
       regex_constants::escape_type_identity,
       regex_constants::escape_type_identity,
       regex_constants::escape_type_identity,
-      regex_constants::escape_type_identity,        //  32
-      regex_constants::escape_type_identity,        /*!*/
-      regex_constants::escape_type_identity,        /*"*/
-      regex_constants::escape_type_identity,        /*#*/
-      regex_constants::escape_type_identity,        /*$*/
-      regex_constants::escape_type_identity,        /*%*/
-      regex_constants::escape_type_identity,        /*&*/
-      regex_constants::escape_type_end_buffer,      /*'*/
-      regex_constants::syntax_open_mark,            /*(*/
-      regex_constants::syntax_close_mark,            /*)*/
-      regex_constants::escape_type_identity,        /***/
-      regex_constants::syntax_plus,                 /*+*/
-      regex_constants::escape_type_identity,        /*,*/
-      regex_constants::escape_type_identity,        /*-*/
-      regex_constants::escape_type_identity,        /*.*/
-      regex_constants::escape_type_identity,        /*/*/
-      regex_constants::escape_type_decimal,        /*0*/
-      regex_constants::escape_type_backref,        /*1*/
-      regex_constants::escape_type_backref,        /*2*/
-      regex_constants::escape_type_backref,        /*3*/
-      regex_constants::escape_type_backref,        /*4*/
-      regex_constants::escape_type_backref,        /*5*/
-      regex_constants::escape_type_backref,        /*6*/
-      regex_constants::escape_type_backref,        /*7*/
-      regex_constants::escape_type_backref,        /*8*/
-      regex_constants::escape_type_backref,        /*9*/
-      regex_constants::escape_type_identity,        /*:*/
-      regex_constants::escape_type_identity,        /*;*/
-      regex_constants::escape_type_left_word,        /*<*/
-      regex_constants::escape_type_identity,        /*=*/
-      regex_constants::escape_type_right_word,        /*>*/
-      regex_constants::syntax_question,              /*?*/
-      regex_constants::escape_type_identity,         /*@*/
-      regex_constants::escape_type_start_buffer,     /*A*/
-      regex_constants::escape_type_not_word_assert,  /*B*/
-      regex_constants::escape_type_C,                /*C*/
-      regex_constants::escape_type_not_class,        /*D*/
-      regex_constants::escape_type_E,                /*E*/
-      regex_constants::escape_type_not_class,        /*F*/
-      regex_constants::escape_type_G,                /*G*/
-      regex_constants::escape_type_not_class,        /*H*/
-      regex_constants::escape_type_not_class,        /*I*/
-      regex_constants::escape_type_not_class,        /*J*/
-      regex_constants::escape_type_reset_start_mark, /*K*/
-      regex_constants::escape_type_not_class,        /*L*/
-      regex_constants::escape_type_not_class,        /*M*/
-      regex_constants::escape_type_named_char,       /*N*/
-      regex_constants::escape_type_not_class,        /*O*/
-      regex_constants::escape_type_not_property,     /*P*/
-      regex_constants::escape_type_Q,                /*Q*/
-      regex_constants::escape_type_line_ending,      /*R*/
-      regex_constants::escape_type_not_class,        /*S*/
-      regex_constants::escape_type_not_class,        /*T*/
-      regex_constants::escape_type_not_class,        /*U*/
-      regex_constants::escape_type_not_class,        /*V*/
-      regex_constants::escape_type_not_class,        /*W*/
-      regex_constants::escape_type_X,                /*X*/
-      regex_constants::escape_type_not_class,        /*Y*/
-      regex_constants::escape_type_Z,                /*Z*/
+      regex_constants::escape_type_identity,           // 32
+      regex_constants::escape_type_identity,           /*!*/
+      regex_constants::escape_type_identity,           /*"*/
+      regex_constants::escape_type_identity,           /*#*/
+      regex_constants::escape_type_identity,           /*$*/
+      regex_constants::escape_type_identity,           /*%*/
+      regex_constants::escape_type_identity,           /*&*/
+      regex_constants::escape_type_end_buffer,         /*'*/
+      regex_constants::syntax_open_mark,               /*(*/
+      regex_constants::syntax_close_mark,              /*)*/
+      regex_constants::escape_type_identity,           /***/
+      regex_constants::syntax_plus,                    /*+*/
+      regex_constants::escape_type_identity,           /*,*/
+      regex_constants::escape_type_identity,           /*-*/
+      regex_constants::escape_type_identity,           /*.*/
+      regex_constants::escape_type_identity,           /*/*/
+      regex_constants::escape_type_decimal,            /*0*/
+      regex_constants::escape_type_backref,            /*1*/
+      regex_constants::escape_type_backref,            /*2*/
+      regex_constants::escape_type_backref,            /*3*/
+      regex_constants::escape_type_backref,            /*4*/
+      regex_constants::escape_type_backref,            /*5*/
+      regex_constants::escape_type_backref,            /*6*/
+      regex_constants::escape_type_backref,            /*7*/
+      regex_constants::escape_type_backref,            /*8*/
+      regex_constants::escape_type_backref,            /*9*/
+      regex_constants::escape_type_identity,           /*:*/
+      regex_constants::escape_type_identity,           /*;*/
+      regex_constants::escape_type_left_word,          /*<*/
+      regex_constants::escape_type_identity,           /*=*/
+      regex_constants::escape_type_right_word,         /*>*/
+      regex_constants::syntax_question,                /*?*/
+      regex_constants::escape_type_identity,           /*@*/
+      regex_constants::escape_type_start_buffer,       /*A*/
+      regex_constants::escape_type_not_word_assert,    /*B*/
+      regex_constants::escape_type_C,                  /*C*/
+      regex_constants::escape_type_not_class,          /*D*/
+      regex_constants::escape_type_E,                  /*E*/
+      regex_constants::escape_type_not_class,          /*F*/
+      regex_constants::escape_type_G,                  /*G*/
+      regex_constants::escape_type_not_class,          /*H*/
+      regex_constants::escape_type_not_class,          /*I*/
+      regex_constants::escape_type_not_class,          /*J*/
+      regex_constants::escape_type_reset_start_mark,   /*K*/
+      regex_constants::escape_type_not_class,          /*L*/
+      regex_constants::escape_type_not_class,          /*M*/
+      regex_constants::escape_type_named_char,         /*N*/
+      regex_constants::escape_type_not_class,          /*O*/
+      regex_constants::escape_type_not_property,       /*P*/
+      regex_constants::escape_type_Q,                  /*Q*/
+      regex_constants::escape_type_line_ending,        /*R*/
+      regex_constants::escape_type_not_class,          /*S*/
+      regex_constants::escape_type_not_class,          /*T*/
+      regex_constants::escape_type_not_class,          /*U*/
+      regex_constants::escape_type_not_class,          /*V*/
+      regex_constants::escape_type_not_class,          /*W*/
+      regex_constants::escape_type_X,                  /*X*/
+      regex_constants::escape_type_not_class,          /*Y*/
+      regex_constants::escape_type_Z,                  /*Z*/
       regex_constants::escape_type_identity,           /*[*/
       regex_constants::escape_type_identity,           /*\*/
       regex_constants::escape_type_identity,           /*]*/
@@ -480,25 +483,25 @@ inline regex_constants::escape_syntax_type get_default_escape_syntax_type(char c
       regex_constants::escape_type_class,              /*i*/
       regex_constants::escape_type_class,              /*j*/
       regex_constants::escape_type_extended_backref,   /*k*/
-      regex_constants::escape_type_class,           /*l*/
-      regex_constants::escape_type_class,           /*m*/
-      regex_constants::escape_type_control_n,       /*n*/
-      regex_constants::escape_type_class,           /*o*/
-      regex_constants::escape_type_property,        /*p*/
-      regex_constants::escape_type_class,           /*q*/
-      regex_constants::escape_type_control_r,       /*r*/
-      regex_constants::escape_type_class,           /*s*/
-      regex_constants::escape_type_control_t,       /*t*/
-      regex_constants::escape_type_class,           /*u*/
-      regex_constants::escape_type_control_v,       /*v*/
-      regex_constants::escape_type_class,           /*w*/
-      regex_constants::escape_type_hex,             /*x*/
-      regex_constants::escape_type_class,           /*y*/
-      regex_constants::escape_type_end_buffer,      /*z*/
-      regex_constants::syntax_open_brace,           /*{*/
-      regex_constants::syntax_or,                   /*|*/
-      regex_constants::syntax_close_brace,          /*}*/
-      regex_constants::escape_type_identity,        /*~*/
+      regex_constants::escape_type_class,              /*l*/
+      regex_constants::escape_type_class,              /*m*/
+      regex_constants::escape_type_control_n,          /*n*/
+      regex_constants::escape_type_class,              /*o*/
+      regex_constants::escape_type_property,           /*p*/
+      regex_constants::escape_type_class,              /*q*/
+      regex_constants::escape_type_control_r,          /*r*/
+      regex_constants::escape_type_class,              /*s*/
+      regex_constants::escape_type_control_t,          /*t*/
+      regex_constants::escape_type_class,              /*u*/
+      regex_constants::escape_type_control_v,          /*v*/
+      regex_constants::escape_type_class,              /*w*/
+      regex_constants::escape_type_hex,                /*x*/
+      regex_constants::escape_type_class,              /*y*/
+      regex_constants::escape_type_end_buffer,         /*z*/
+      regex_constants::syntax_open_brace,              /*{*/
+      regex_constants::syntax_or,                      /*|*/
+      regex_constants::syntax_close_brace,             /*}*/
+      regex_constants::escape_type_identity,           /*~*/
       regex_constants::escape_type_identity,
       regex_constants::escape_type_identity,
       regex_constants::escape_type_identity,
@@ -560,8 +563,7 @@ inline regex_constants::escape_syntax_type get_default_escape_syntax_type(char c
    return char_syntax[(unsigned char)c];
 }
 
-
-} // namespace
-} // namespace
+}   // end namespace
+}   // end namespace
 
 #endif

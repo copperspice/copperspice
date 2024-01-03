@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QList>
+#include <qlist.h>
 
 #include "qtriplecontainer_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -65,5 +63,3 @@ bool TripleContainer::compressOperands(const StaticContext::Ptr &context)
 
    return m_operand1->isEvaluated() && m_operand2->isEvaluated() && m_operand3->isEvaluated();
 }
-
-QT_END_NAMESPACE

@@ -26,8 +26,6 @@
 
 #include "qbasictypesfactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SchemaTypeFactory::Ptr BasicTypesFactory::self(const NamePool::Ptr &np)
@@ -106,4 +104,3 @@ SchemaType::Hash BasicTypesFactory::types() const
    return m_types;
 }
 
-QT_END_NAMESPACE

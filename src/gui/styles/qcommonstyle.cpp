@@ -1112,7 +1112,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
       }
 
       default:
-         qWarning("doLayout: Decoration position is invalid");
+         qWarning("viewItemLayout() Decoration position is invalid");
          decoration = *pixmapRect;
          break;
    }
@@ -4010,7 +4010,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
 #endif // QT_NO_WORKSPACE
 
       default:
-         qWarning("QCommonStyle::drawComplexControl: Control %d not handled", cc);
+         qWarning("QCommonStyle::drawComplexControl() Control %d was not handled", cc);
    }
 }
 
@@ -4137,6 +4137,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
          break;
 #endif // QT_NO_GROUPBOX
+
       case CC_MdiControls: {
          QRect r;
          uint ctrl = SC_MdiMinButton;
@@ -4150,8 +4151,9 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
          }
       }
       break;
+
       default:
-         qWarning("QCommonStyle::hitTestComplexControl: Case %d not handled", cc);
+         qWarning("QCommonStyle::hitTestComplexControl() Control %d was not handled", cc);
    }
    return sc;
 }
@@ -4650,7 +4652,7 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
 #endif // QT_NO_MDIAREA
 
       default:
-         qWarning("QCommonStyle::subControlRect: Case %d not handled", cc);
+         qWarning("QCommonStyle::subControlRect() Control %d was not handled", cc);
    }
    return ret;
 }

@@ -26,7 +26,6 @@
 #include "qbuiltintypes_p.h"
 #include "qsorttuple_p.h"
 
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -63,5 +62,3 @@ ItemType::Ptr SortTuple::type() const
 {
    return BuiltinTypes::xsAnyAtomicType;
 }
-
-QT_END_NAMESPACE

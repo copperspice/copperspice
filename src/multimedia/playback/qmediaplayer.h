@@ -198,6 +198,7 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
 
    MULTI_CS_SLOT_1(Public, void setMedia(const QMediaContent &media, QIODevice *stream = nullptr))
    MULTI_CS_SLOT_2(setMedia)
+
    MULTI_CS_SLOT_1(Public, void setPlaylist(QMediaPlaylist *playlist))
    MULTI_CS_SLOT_2(setPlaylist)
 
@@ -206,8 +207,9 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
 
    MULTI_CS_SIGNAL_1(Public, void mediaChanged(const QMediaContent &media))
    MULTI_CS_SIGNAL_2(mediaChanged, media)
-   MULTI_CS_SIGNAL_1(Public, void currentMediaChanged(const QMediaContent &media))
-   MULTI_CS_SIGNAL_2(currentMediaChanged, media)
+
+   MULTI_CS_SIGNAL_1(Public, void currentMediaChanged(const QMediaContent &content))
+   MULTI_CS_SIGNAL_2(currentMediaChanged, content)
 
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QMediaPlayer::State newState))
    MULTI_CS_SIGNAL_2(stateChanged, newState)
@@ -254,21 +256,22 @@ class Q_MULTIMEDIA_EXPORT QMediaPlayer : public QMediaObject
       setMedia(media);
    }
 
-   MULTI_CS_SLOT_1(Private, void _q_stateChanged(QMediaPlayer::State un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_stateChanged(QMediaPlayer::State state))
    MULTI_CS_SLOT_2(_q_stateChanged)
 
-   MULTI_CS_SLOT_1(Private, void _q_mediaStatusChanged(QMediaPlayer::MediaStatus un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_mediaStatusChanged(QMediaPlayer::MediaStatus status))
    MULTI_CS_SLOT_2(_q_mediaStatusChanged)
 
-   MULTI_CS_SLOT_1(Private, void _q_error(int un_named_arg1, const QString &un_named_arg2))
+   MULTI_CS_SLOT_1(Private, void _q_error(int error, const QString &errorString))
    MULTI_CS_SLOT_2(_q_error)
 
-   MULTI_CS_SLOT_1(Private, void _q_updateMedia(const QMediaContent &un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_updateMedia(const QMediaContent &media))
    MULTI_CS_SLOT_2(_q_updateMedia)
 
    MULTI_CS_SLOT_1(Private, void _q_playlistDestroyed())
    MULTI_CS_SLOT_2(_q_playlistDestroyed)
-   MULTI_CS_SLOT_1(Private, void _q_handleMediaChanged(const QMediaContent &un_named_arg1))
+
+   MULTI_CS_SLOT_1(Private, void _q_handleMediaChanged(const QMediaContent &media))
    MULTI_CS_SLOT_2(_q_handleMediaChanged)
 
    MULTI_CS_SLOT_1(Private, void _q_handlePlaylistLoaded())

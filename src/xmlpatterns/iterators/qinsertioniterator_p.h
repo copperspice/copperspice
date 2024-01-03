@@ -27,9 +27,8 @@
 #include <qabstractxmlforwarditerator_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class InsertionIterator : public Item::Iterator
 {
  public:
@@ -63,8 +62,7 @@ class InsertionIterator : public Item::Iterator
    xsInteger m_position;
    bool m_isInserting;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

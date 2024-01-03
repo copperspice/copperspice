@@ -38,7 +38,6 @@ alone libraries for anyone developing C++ applications.
  * CsString
 
 
-
 ### System Requirements
 
 To use the CopperSpice libraries a C++17 compiler and a C++17 standard library are required.
@@ -53,6 +52,11 @@ KitchenSink demo application for sample CMake project files.
 ### Building
 
 The CopperSpice libraries are built using the CMake build system.
+
+
+### Using the CopperSpice Libraries
+ * Any C++ application using CopperSpice can be built with CMake or any build system which imports CMake files
+ * CopperSpice can be linked directly into any standard C++ application
 
 
 ### Documentation
@@ -74,44 +78,43 @@ website and from our download page.
 
 |URL      |Description|
 |---------|-----------|
-|www.copperspice.com/docs/cs_api/index.html|CopperSpice 1.7|
+|www.copperspice.com/docs/cs_api/index.html|CopperSpice 1.8|
 |         |           |
 |https://download.copperspice.com/copperspice/documentation|Overview and API (tar and zip formats)|
 
 
-###### Major Enhancements
+### Major Enhancements
 
-Reflection
- * No Meta-Object Compiler is required for generating meta data, all references were removed
- * The functionality provided by moc was replaced with compile time templates
- * CopperSpice automatically generates meta data for processing Signals/ Slots and Introspection
- * A template class can now inherit from QObject with no restrictions on types
- * Complex data types such as **QMap&lt;QString, int&gt;** can be used for signal or slot arguments
-
-Enhanced Functionality
- * CopperSpice makes extensive use of modern C++ features
-   * constexpr, lambda expressions, templates, variadic templates, template variables
-   * move semantics, structured bindings, tuple,  decltype, SFINAE, and type traits
- * Redesigned all container classes to use the C++ standard library containers, iterators, and algorithms
- * Refactored all Mutex and Lock classes
- * CopperSpice includes a majority of the Qt 5 classes
- * Platform independent plugin system based on standard C++
- * High DPI Rendering Support
-
- * Integration of CsLibGuarded
-   * Used to manage shared data
- * Integration of CsSignal
-   * Improved thread aware Signal/Slot delivery
-   * Increased efficiency while maintaining the full Signal/Slot API
-   * Deadlocks in Signal/Slot processing have been eliminated
- * Integration of CsString
-   * Improved storage to properly represent Unicode strings
-   * QString8 (UTF-8) and QString16 (UTF-16) classes
-   * Added QStringView, QStringParser, and QRegularExpression
-
-Using the Libraries
- * Any C++ application using CopperSpice can be built with CMake or any build system which imports CMake files
- * CopperSpice can be linked directly into any standard C++ application
+* Reflection
+  * No Meta-Object Compiler is required for generating meta data, all references were removed
+  * The functionality provided by moc was replaced with compile time templates
+  * CopperSpice automatically generates meta data for processing Signals/ Slots and Introspection
+  * A template class can now inherit from QObject with no restrictions on types
+  * Complex data types such as **QMap&lt;QString, int&gt;** can be used for signal or slot arguments
+<!-- -->
+* Enhanced Functionality
+  * CopperSpice makes extensive use of modern C++ features
+    * constexpr, lambda expressions, templates, variadic templates, template variables
+    * move semantics, structured bindings, tuple,  decltype, SFINAE, and type traits
+  * Redesigned all container classes to use the C++ standard library containers, iterators, and algorithms
+  * Refactored all Mutex and Lock classes
+  * CopperSpice includes a majority of the Qt 5 classes
+  * Platform independent plugin system based on standard C++
+  * High DPI Rendering Support
+  * Redesigned pointer classes
+<!-- -->
+* Integration of CsLibGuarded
+  * Used to manage shared data
+<!-- -->
+* Integration of CsSignal
+  * Improved thread aware Signal/Slot delivery
+  * Increased efficiency while maintaining the full Signal/Slot API
+  * Deadlocks in Signal/Slot processing have been eliminated
+<!-- -->
+* Integration of CsString
+  * Improved storage to properly represent Unicode strings
+  * QString8 (UTF-8) and QString16 (UTF-16) classes
+  * Added QStringView, QStringParser, and QRegularExpression
 
 
 ### Presentations
@@ -155,11 +158,13 @@ this project.
 
 ### References
 
-* Website:  https://www.copperspice.com
-* Twitter:  https://twitter.com/copperspice_cpp
-* Email:    info@copperspice.com
+ * Website:  https://www.copperspice.com
+ * Twitter:  https://twitter.com/copperspice_cpp
+ * Email:    info@copperspice.com
 
-* Github:   https://github.com/copperspice
+<!-- -->
+ * Github:   https://github.com/copperspice
 
-* Forum:    https://forum.copperspice.com
-* Journal:  https://journal.copperspice.com
+<!-- -->
+ * Forum:    https://forum.copperspice.com
+ * Journal:  https://journal.copperspice.com

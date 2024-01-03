@@ -115,8 +115,8 @@ class QTextBrowserPrivate : public QTextEditPrivate
       forceLoadOnSourceChange = !currentURL.path().isEmpty();
    }
 
-   void _q_activateAnchor(const QString &href);
-   void _q_highlightLink(const QString &href);
+   void _q_activateAnchor(const QString &anchor);
+   void _q_highlightLink(const QString &anchor);
 
    void setSource(const QUrl &url);
 
@@ -202,20 +202,21 @@ QUrl QTextBrowserPrivate::resolveUrl(const QUrl &url) const
    return url;
 }
 
-void QTextBrowserPrivate::_q_activateAnchor(const QString &href)
+void QTextBrowserPrivate::_q_activateAnchor(const QString &anchor)
 {
-   if (href.isEmpty()) {
+   if (anchor.isEmpty()) {
       return;
    }
+
    Q_Q(QTextBrowser);
 
 #ifndef QT_NO_CURSOR
    viewport->setCursor(oldCursor);
 #endif
 
-   const QUrl url = resolveUrl(href);
+   const QUrl url = resolveUrl(anchor);
 
-   if (!openLinks) {
+   if (! openLinks) {
       emit q->anchorClicked(url);
       return;
    }
@@ -247,15 +248,19 @@ void QTextBrowserPrivate::_q_activateAnchor(const QString &href)
 void QTextBrowserPrivate::_q_highlightLink(const QString &anchor)
 {
    Q_Q(QTextBrowser);
+
    if (anchor.isEmpty()) {
+
 #ifndef QT_NO_CURSOR
       if (viewport->cursor().shape() != Qt::PointingHandCursor) {
          oldCursor = viewport->cursor();
       }
       viewport->setCursor(oldCursor);
 #endif
+
       emit q->highlighted(QUrl());
       emit q->highlighted(QString());
+
    } else {
 #ifndef QT_NO_CURSOR
       viewport->setCursor(Qt::PointingHandCursor);
@@ -263,6 +268,7 @@ void QTextBrowserPrivate::_q_highlightLink(const QString &anchor)
 
       const QUrl url = resolveUrl(anchor);
       emit q->highlighted(url);
+
       // convenience to ease connecting to QStatusBar::showMessage(const QString &)
       emit q->highlighted(url.toString());
    }
@@ -277,6 +283,7 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
       QApplication::setOverrideCursor(Qt::WaitCursor);
    }
 #endif
+
    textOrSourceChanged = true;
 
    QString txt;
@@ -288,12 +295,14 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
    QUrl newUrlWithoutFragment = currentURL.resolved(url);
    newUrlWithoutFragment.setFragment(QString());
 
-   if (url.isValid()
-      && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
+   if (url.isValid() && (newUrlWithoutFragment != currentUrlWithoutFragment || forceLoadOnSourceChange)) {
       QVariant data = q->loadResource(QTextDocument::HtmlResource, resolveUrl(url));
+
       if (data.type() == QVariant::String) {
          txt = data.toString();
+
       } else if (data.type() == QVariant::ByteArray) {
+
 #ifndef QT_NO_TEXTCODEC
          QByteArray ba = data.toByteArray();
          QTextCodec *codec = Qt::codecForHtml(ba);
@@ -302,8 +311,9 @@ void QTextBrowserPrivate::setSource(const QUrl &url)
          txt = data.toString();
 #endif
       }
+
       if (txt.isEmpty()) {
-         qWarning("QTextBrowser: No document for %s", url.toString().toLatin1().constData());
+         qWarning("QTextBrowser:setSource() No document for %s", csPrintable(url.toString()) );
       }
 
       if (q->isVisible()) {
@@ -535,8 +545,10 @@ void QTextBrowserPrivate::keypadMove(bool next)
       // Ensure that the new selection is highlighted.
       const QString href = control->anchorAtCursor();
       QUrl url = resolveUrl(href);
+
       emit q->highlighted(url);
       emit q->highlighted(url.toString());
+
    } else {
       // Scroll
       vbar->setValue(scrollYOffset);
@@ -597,6 +609,7 @@ void QTextBrowserPrivate::restoreHistoryEntry(const HistoryEntry entry)
 
    const QString href = prevFocus.charFormat().anchorHref();
    QUrl url = resolveUrl(href);
+
    emit q->highlighted(url);
    emit q->highlighted(url.toString());
 #endif
@@ -641,16 +654,6 @@ QUrl QTextBrowser::source() const
    }
 }
 
-/*!
-    \property QTextBrowser::searchPaths
-    \brief the search paths used by the text browser to find supporting
-    content
-
-    QTextBrowser uses this list to locate images and documents.
-
-    By default, this property contains an empty string list.
-*/
-
 QStringList QTextBrowser::searchPaths() const
 {
    Q_D(const QTextBrowser);
@@ -663,9 +666,6 @@ void QTextBrowser::setSearchPaths(const QStringList &paths)
    d->searchPaths = paths;
 }
 
-/*!
-    Reloads the current set source.
-*/
 void QTextBrowser::reload()
 {
    Q_D(QTextBrowser);
@@ -715,7 +715,6 @@ void QTextBrowser::setSource(const QUrl &url)
    emit historyChanged();
 }
 
-
 void QTextBrowser::backward()
 {
    Q_D(QTextBrowser);
@@ -732,13 +731,6 @@ void QTextBrowser::backward()
    emit historyChanged();
 }
 
-/*!
-    Changes the document displayed to the next document in the list of
-    documents built by navigating links. Does nothing if there is no
-    next document.
-
-    \sa backward(), forwardAvailable()
-*/
 void QTextBrowser::forward()
 {
    Q_D(QTextBrowser);
@@ -756,10 +748,6 @@ void QTextBrowser::forward()
    emit historyChanged();
 }
 
-/*!
-    Changes the document displayed to be the first document from
-    the history.
-*/
 void QTextBrowser::home()
 {
    Q_D(QTextBrowser);
@@ -768,28 +756,22 @@ void QTextBrowser::home()
    }
 }
 
-/*!
-    The event \a ev is used to provide the following keyboard shortcuts:
-    \table
-    \header \i Keypress            \i Action
-    \row \i Alt+Left Arrow  \i \l backward()
-    \row \i Alt+Right Arrow \i \l forward()
-    \row \i Alt+Up Arrow    \i \l home()
-    \endtable
-*/
 void QTextBrowser::keyPressEvent(QKeyEvent *ev)
 {
 #ifdef QT_KEYPAD_NAVIGATION
    Q_D(QTextBrowser);
+
    switch (ev->key()) {
       case Qt::Key_Select:
          if (QApplication::keypadNavigationEnabled()) {
             if (!hasEditFocus()) {
                setEditFocus(true);
                return;
+
             } else {
                QTextCursor cursor = d->control->textCursor();
                QTextCharFormat charFmt = cursor.charFormat();
+
                if (!cursor.hasSelection() || charFmt.anchorHref().isEmpty()) {
                   ev->accept();
                   return;
@@ -797,6 +779,7 @@ void QTextBrowser::keyPressEvent(QKeyEvent *ev)
             }
          }
          break;
+
       case Qt::Key_Back:
          if (QApplication::keypadNavigationEnabled()) {
             if (hasEditFocus()) {
@@ -845,33 +828,21 @@ void QTextBrowser::keyPressEvent(QKeyEvent *ev)
    QTextEdit::keyPressEvent(ev);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mouseMoveEvent(QMouseEvent *e)
 {
    QTextEdit::mouseMoveEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mousePressEvent(QMouseEvent *e)
 {
    QTextEdit::mousePressEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::mouseReleaseEvent(QMouseEvent *e)
 {
    QTextEdit::mouseReleaseEvent(e);
 }
 
-/*!
-    \reimp
-*/
 void QTextBrowser::focusOutEvent(QFocusEvent *ev)
 {
 #ifndef QT_NO_CURSOR
@@ -881,37 +852,36 @@ void QTextBrowser::focusOutEvent(QFocusEvent *ev)
    QTextEdit::focusOutEvent(ev);
 }
 
-/*!
-    \reimp
-*/
 bool QTextBrowser::focusNextPrevChild(bool next)
 {
    Q_D(QTextBrowser);
+
    if (d->control->setFocusToNextOrPreviousAnchor(next)) {
 #ifdef QT_KEYPAD_NAVIGATION
       // Might need to synthesize a highlight event.
       if (d->prevFocus != d->control->textCursor() && d->control->textCursor().hasSelection()) {
          const QString href = d->control->anchorAtCursor();
          QUrl url = d->resolveUrl(href);
+
          emit highlighted(url);
          emit highlighted(url.toString());
       }
+
       d->prevFocus = d->control->textCursor();
 #endif
       return true;
+
    } else {
 #ifdef QT_KEYPAD_NAVIGATION
       // We assume we have no highlight now.
       emit highlighted(QUrl());
       emit highlighted(QString());
 #endif
+
    }
    return QTextEdit::focusNextPrevChild(next);
 }
 
-/*!
-  \reimp
-*/
 void QTextBrowser::paintEvent(QPaintEvent *e)
 {
    Q_D(QTextBrowser);
@@ -979,19 +949,12 @@ QString QTextBrowser::historyTitle(int i) const
    return d->history(i).title;
 }
 
-
-
 int QTextBrowser::forwardHistoryCount() const
 {
    Q_D(const QTextBrowser);
    return d->forwardStack.count();
 }
 
-/*!
-    Returns the number of locations backward in the history.
-
-    \since 4.4
-*/
 int QTextBrowser::backwardHistoryCount() const
 {
    Q_D(const QTextBrowser);
@@ -1022,7 +985,6 @@ void QTextBrowser::setOpenLinks(bool open)
    d->openLinks = open;
 }
 
-/*! \reimp */
 bool QTextBrowser::event(QEvent *e)
 {
    return QTextEdit::event(e);
@@ -1034,16 +996,16 @@ void QTextBrowser::_q_documentModified()
    d->_q_documentModified();
 }
 
-void QTextBrowser::_q_activateAnchor(const QString &un_named_arg1)
+void QTextBrowser::_q_activateAnchor(const QString &anchor)
 {
    Q_D(QTextBrowser);
-   d->_q_activateAnchor(un_named_arg1);
+   d->_q_activateAnchor(anchor);
 }
 
-void QTextBrowser::_q_highlightLink(const QString &un_named_arg1)
+void QTextBrowser::_q_highlightLink(const QString &anchor)
 {
    Q_D(QTextBrowser);
-   d->_q_highlightLink(un_named_arg1);
+   d->_q_highlightLink(anchor);
 }
 
 #endif // QT_NO_TEXTBROWSER

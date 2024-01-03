@@ -32,7 +32,7 @@
 #include <qvector4d.h>
 #include <qquaternion.h>
 
-template<>
+template <>
 inline QColor cs_genericFormula(const QColor &from, const QColor &to, double progress)
 {
    return QColor( qBound(0, cs_genericFormula(from.red(),   to.red(),   progress), 255),
@@ -41,7 +41,7 @@ inline QColor cs_genericFormula(const QColor &from, const QColor &to, double pro
                   qBound(0, cs_genericFormula(from.alpha(), to.alpha(), progress), 255));
 }
 
-template<>
+template <>
 inline QQuaternion cs_genericFormula(const QQuaternion &from, const QQuaternion &to, double progress)
 {
    return QQuaternion::slerp(from, to, progress);

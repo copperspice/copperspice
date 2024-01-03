@@ -48,9 +48,6 @@ void QTextTableCell::setFormat(const QTextCharFormat &format)
    p->setCharFormat(frag.position(), 1, fmt, QTextDocumentPrivate::SetFormatAndPreserveObjectIndices);
 }
 
-/*!
-    Returns the cell's character format.
-*/
 QTextCharFormat QTextTableCell::format() const
 {
    QTextDocumentPrivate *p = table->docHandle();
@@ -61,24 +58,12 @@ QTextCharFormat QTextTableCell::format() const
    return fmt;
 }
 
-/*!
-    \since 4.5
-
-    Returns the index of the tableCell's format in the document's internal list of formats.
-
-    \sa QTextDocument::allFormats()
-*/
 int QTextTableCell::tableCellFormatIndex() const
 {
    QTextDocumentPrivate *p = table->docHandle();
    return QTextDocumentPrivate::FragmentIterator(&p->fragmentMap(), fragment)->format;
 }
 
-/*!
-    Returns the number of the row in the table that contains this cell.
-
-    \sa column()
-*/
 int QTextTableCell::row() const
 {
    const QTextTablePrivate *tp = table->d_func();
@@ -93,11 +78,6 @@ int QTextTableCell::row() const
    return tp->cellIndices.at(idx) / tp->nCols;
 }
 
-/*!
-    Returns the number of the column in the table that contains this cell.
-
-    \sa row()
-*/
 int QTextTableCell::column() const
 {
    const QTextTablePrivate *tp = table->d_func();
@@ -112,71 +92,32 @@ int QTextTableCell::column() const
    return tp->cellIndices.at(idx) % tp->nCols;
 }
 
-/*!
-    Returns the number of rows this cell spans. The default is 1.
-
-    \sa columnSpan()
-*/
 int QTextTableCell::rowSpan() const
 {
    return format().tableCellRowSpan();
 }
 
-/*!
-    Returns the number of columns this cell spans. The default is 1.
-
-    \sa rowSpan()
-*/
 int QTextTableCell::columnSpan() const
 {
    return format().tableCellColumnSpan();
 }
 
-/*!
-    \fn bool QTextTableCell::isValid() const
-
-    Returns true if this is a valid table cell; otherwise returns
-    false.
-*/
-
-
-/*!
-    Returns the first valid cursor position in this cell.
-
-    \sa lastCursorPosition()
-*/
 QTextCursor QTextTableCell::firstCursorPosition() const
 {
    return QTextCursorPrivate::fromPosition(table->d_func()->pieceTable, firstPosition());
 }
 
-/*!
-    Returns the last valid cursor position in this cell.
-
-    \sa firstCursorPosition()
-*/
 QTextCursor QTextTableCell::lastCursorPosition() const
 {
    return QTextCursorPrivate::fromPosition(table->d_func()->pieceTable, lastPosition());
 }
 
-
-/*!
-    \internal
-
-    Returns the first valid position in the document occupied by this cell.
-*/
 int QTextTableCell::firstPosition() const
 {
    QTextDocumentPrivate *p = table->docHandle();
    return p->fragmentMap().position(fragment) + 1;
 }
 
-/*!
-    \internal
-
-    Returns the last valid position in the document occupied by this cell.
-*/
 int QTextTableCell::lastPosition() const
 {
    QTextDocumentPrivate *p = table->docHandle();
@@ -189,15 +130,10 @@ int QTextTableCell::lastPosition() const
    } else {
       f = td->fragment_end;
    }
+
    return p->fragmentMap().position(f);
 }
 
-
-/*!
-    Returns a frame iterator pointing to the beginning of the table's cell.
-
-    \sa end()
-*/
 QTextFrame::iterator QTextTableCell::begin() const
 {
    QTextDocumentPrivate *p = table->docHandle();
@@ -206,11 +142,6 @@ QTextFrame::iterator QTextTableCell::begin() const
    return QTextFrame::iterator(const_cast<QTextTable *>(table), b, b, e);
 }
 
-/*!
-    Returns a frame iterator pointing to the end of the table's cell.
-
-    \sa begin()
-*/
 QTextFrame::iterator QTextTableCell::end() const
 {
    QTextDocumentPrivate *p = table->docHandle();
@@ -226,12 +157,12 @@ QTextTablePrivate::~QTextTablePrivate()
    }
 }
 
-
-QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int pos, int rows, int cols,
-   const QTextTableFormat &tableFormat)
+QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int pos,
+      int rows, int cols, const QTextTableFormat &tableFormat)
 {
    QTextTableFormat fmt = tableFormat;
    fmt.setColumns(cols);
+
    QTextTable *table = qobject_cast<QTextTable *>(pieceTable->createObject(fmt));
    Q_ASSERT(table);
 
@@ -324,6 +255,7 @@ void QTextTablePrivate::fragmentAdded(QChar type, uint fragment)
       }
       return;
    }
+
    QTextFramePrivate::fragmentAdded(type, fragment);
 }
 
@@ -350,19 +282,13 @@ void QTextTablePrivate::fragmentRemoved(QChar type, uint fragment)
    QTextFramePrivate::fragmentRemoved(type, fragment);
 }
 
-/*!
-    /fn void QTextTablePrivate::update() const
-
-    This function is usually called when the table is "dirty".
-    It seems to update all kind of table information.
-
-*/
 void QTextTablePrivate::update() const
 {
    Q_Q(const QTextTable);
    nCols = q->format().columns();
    nRows = (cells.size() + nCols - 1) / nCols;
-   //     qDebug(">>>> QTextTablePrivate::update, nRows=%d, nCols=%d", nRows, nCols);
+
+   // qDebug(">>>> QTextTablePrivate::update, nRows=%d, nCols=%d", nRows, nCols);
 
    grid = q_check_ptr((int *)realloc(grid, nRows * nCols * sizeof(int)));
    memset(grid, 0, nRows * nCols * sizeof(int));
@@ -413,19 +339,10 @@ QTextTable::QTextTable(QTextDocument *doc)
 {
 }
 
-
 QTextTable::~QTextTable()
 {
 }
 
-
-/*!
-    \fn QTextTableCell QTextTable::cellAt(int row, int column) const
-
-    Returns the table cell at the given \a row and \a column in the table.
-
-    \sa columns() rows()
-*/
 QTextTableCell QTextTable::cellAt(int row, int col) const
 {
    Q_D(const QTextTable);
@@ -440,12 +357,6 @@ QTextTableCell QTextTable::cellAt(int row, int col) const
    return QTextTableCell(this, d->grid[row * d->nCols + col]);
 }
 
-/*!
-    \overload
-
-    Returns the table cell that contains the character at the given \a position
-    in the document.
-*/
 QTextTableCell QTextTable::cellAt(int position) const
 {
    Q_D(const QTextTable);
@@ -469,28 +380,15 @@ QTextTableCell QTextTable::cellAt(int position) const
    return QTextTableCell(this, *it);
 }
 
-/*!
-    \fn QTextTableCell QTextTable::cellAt(const QTextCursor &cursor) const
-
-    \overload
-
-    Returns the table cell containing the given \a cursor.
-*/
 QTextTableCell QTextTable::cellAt(const QTextCursor &c) const
 {
    return cellAt(c.position());
 }
 
-/*!
-    \fn void QTextTable::resize(int rows, int columns)
-
-    Resizes the table to contain the required number of \a rows and \a columns.
-
-    \sa insertRows() insertColumns() removeRows() removeColumns()
-*/
 void QTextTable::resize(int rows, int cols)
 {
    Q_D(QTextTable);
+
    if (d->dirty) {
       d->update();
    }
@@ -519,13 +417,6 @@ void QTextTable::resize(int rows, int cols)
    d->pieceTable->endEditBlock();
 }
 
-/*!
-    \fn void QTextTable::insertRows(int index, int rows)
-
-    Inserts a number of \a rows before the row with the specified \a index.
-
-    \sa resize() insertColumns() removeRows() removeColumns() appendRows() appendColumns()
-*/
 void QTextTable::insertRows(int pos, int num)
 {
    Q_D(QTextTable);
@@ -548,34 +439,45 @@ void QTextTable::insertRows(int pos, int num)
 
    int extended = 0;
    int insert_before = 0;
+
    if (pos > 0 && pos < d->nRows) {
       for (int i = 0; i < d->nCols; ++i) {
          int cell = d->grid[pos * d->nCols + i];
+
          if (cell == d->grid[(pos - 1)*d->nCols + i]) {
             // cell spans the insertion place, extend it
             QTextDocumentPrivate::FragmentIterator it(&p->fragmentMap(), cell);
+
             QTextCharFormat fmt = c->charFormat(it->format);
             fmt.setTableCellRowSpan(fmt.tableCellRowSpan() + num);
+
             p->setCharFormat(it.position(), 1, fmt);
-            extended++;
-         } else if (!insert_before) {
+            ++extended;
+
+         } else if (! insert_before) {
             insert_before = cell;
          }
       }
+
    } else {
       insert_before = (pos == 0 ? d->grid[0] : d->fragment_end);
    }
+
    if (extended < d->nCols) {
       Q_ASSERT(insert_before);
       QTextDocumentPrivate::FragmentIterator it(&p->fragmentMap(), insert_before);
+
       QTextCharFormat fmt = c->charFormat(it->format);
       fmt.setTableCellRowSpan(1);
       fmt.setTableCellColumnSpan(1);
+
       Q_ASSERT(fmt.objectIndex() == objectIndex());
       int pos = it.position();
       int cfmt = p->formatCollection()->indexForFormat(fmt);
       int bfmt = p->formatCollection()->indexForFormat(QTextBlockFormat());
-      //         qDebug("inserting %d cells, nCols=%d extended=%d", num*(d->nCols-extended), d->nCols, extended);
+
+      //          qDebug("inserting %d cells, nCols=%d extended=%d", num*(d->nCols-extended), d->nCols, extended);
+
       for (int i = 0; i < num * (d->nCols - extended); ++i) {
          p->insertBlock(QTextBeginningOfFrame, pos, bfmt, cfmt, QTextUndoCommand::MoveCursor);
       }
@@ -585,13 +487,6 @@ void QTextTable::insertRows(int pos, int num)
    p->endEditBlock();
 }
 
-/*!
-    \fn void QTextTable::insertColumns(int index, int columns)
-
-    Inserts a number of \a columns before the column with the specified \a index.
-
-    \sa insertRows() resize() removeRows() removeColumns() appendRows() appendColumns()
-*/
 void QTextTable::insertColumns(int pos, int num)
 {
    Q_D(QTextTable);
@@ -665,14 +560,18 @@ void QTextTable::insertColumns(int pos, int num)
                cell = d->grid[gridIndex];
             }
          }
+
          QTextDocumentPrivate::FragmentIterator it(&p->fragmentMap(), cell);
          QTextCharFormat fmt = c->charFormat(it->format);
          fmt.setTableCellRowSpan(1);
          fmt.setTableCellColumnSpan(1);
+
          Q_ASSERT(fmt.objectIndex() == objectIndex());
+
          int position = it.position();
          int cfmt = p->formatCollection()->indexForFormat(fmt);
          int bfmt = p->formatCollection()->indexForFormat(QTextBlockFormat());
+
          for (int i = 0; i < num; ++i) {
             p->insertBlock(QTextBeginningOfFrame, position, bfmt, cfmt, QTextUndoCommand::MoveCursor);
          }
@@ -682,11 +581,13 @@ void QTextTable::insertColumns(int pos, int num)
    QTextTableFormat tfmt = format();
    tfmt.setColumns(tfmt.columns() + num);
    QVector<QTextLength> columnWidths = tfmt.columnWidthConstraints();
+
    if (! columnWidths.isEmpty()) {
       for (int i = num; i > 0; --i) {
          columnWidths.insert(pos, columnWidths[qMax(0, pos - 1)]);
       }
    }
+
    tfmt.setColumnWidthConstraints (columnWidths);
    QTextObject::setFormat(tfmt);
 
@@ -694,18 +595,15 @@ void QTextTable::insertColumns(int pos, int num)
    p->endEditBlock();
 }
 
-
 void QTextTable::appendRows(int count)
 {
    insertRows(rows(), count);
 }
 
-
 void QTextTable::appendColumns(int count)
 {
    insertColumns(columns(), count);
 }
-
 
 void QTextTable::removeRows(int pos, int num)
 {
@@ -715,12 +613,15 @@ void QTextTable::removeRows(int pos, int num)
    if (num <= 0 || pos < 0) {
       return;
    }
+
    if (d->dirty) {
       d->update();
    }
+
    if (pos >= d->nRows) {
       return;
    }
+
    if (pos + num > d->nRows) {
       num = d->nRows - pos;
    }
@@ -999,14 +900,6 @@ void QTextTable::mergeCells(int row, int column, int numRows, int numCols)
    p->endEditBlock();
 }
 
-/*!
-    \overload
-    \since 4.1
-
-    Merges the cells selected by the provided \a cursor.
-
-    \sa splitCell()
-*/
 void QTextTable::mergeCells(const QTextCursor &cursor)
 {
    if (!cursor.hasComplexSelection()) {
@@ -1018,17 +911,6 @@ void QTextTable::mergeCells(const QTextCursor &cursor)
    mergeCells(firstRow, firstColumn, numRows, numColumns);
 }
 
-/*!
-    \since 4.1
-
-    Splits the specified cell at \a row and \a column into an array of multiple
-    cells with dimensions specified by \a numRows and \a numCols.
-
-    \note It is only possible to split cells that span multiple rows or columns, such as rows
-    that have been merged using mergeCells().
-
-    \sa mergeCells()
-*/
 void QTextTable::splitCell(int row, int column, int numRows, int numCols)
 {
    Q_D(QTextTable);
@@ -1101,11 +983,6 @@ void QTextTable::splitCell(int row, int column, int numRows, int numCols)
    p->endEditBlock();
 }
 
-/*!
-    Returns the number of rows in the table.
-
-    \sa columns()
-*/
 int QTextTable::rows() const
 {
    Q_D(const QTextTable);
@@ -1116,11 +993,6 @@ int QTextTable::rows() const
    return d->nRows;
 }
 
-/*!
-    Returns the number of columns in the table.
-
-    \sa rows()
-*/
 int QTextTable::columns() const
 {
    Q_D(const QTextTable);
@@ -1147,14 +1019,6 @@ QTextCursor QTextTable::rowStart(const QTextCursor &c) const
    return QTextCursorPrivate::fromPosition(p, it.position());
 }
 
-/*!
-    \fn QTextCursor QTextTable::rowEnd(const QTextCursor &cursor) const
-
-    Returns a cursor pointing to the end of the row that contains the given
-    \a cursor.
-
-    \sa rowStart()
-*/
 QTextCursor QTextTable::rowEnd(const QTextCursor &c) const
 {
    Q_D(const QTextTable);
@@ -1179,5 +1043,3 @@ void QTextTable::setFormat(const QTextTableFormat &format)
    fmt.setColumns(columns());
    QTextObject::setFormat(fmt);
 }
-
-

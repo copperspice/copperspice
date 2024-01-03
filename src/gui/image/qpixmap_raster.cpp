@@ -42,8 +42,7 @@ QPixmap qt_toRasterPixmap(const QImage &image)
 {
    QPlatformPixmap *data =
       new QRasterPlatformPixmap(image.depth() == 1
-      ? QPlatformPixmap::BitmapType
-      : QPlatformPixmap::PixmapType);
+      ? QPlatformPixmap::BitmapType : QPlatformPixmap::PixmapType);
 
    data->fromImage(image, Qt::AutoColor);
 
@@ -87,7 +86,6 @@ void QRasterPlatformPixmap::resize(int width, int height)
       format = QNativeImage::systemFormat();
    }
 
-
    image = QImage(width, height, format);
    w = width;
    h = height;
@@ -107,6 +105,7 @@ bool QRasterPlatformPixmap::fromData(const uchar *buffer, uint len, const QStrin
    Qt::ImageConversionFlags flags)
 {
    QByteArray a = QByteArray::fromRawData(reinterpret_cast<const char *>(buffer), len);
+
    QBuffer b(&a);
    b.open(QIODevice::ReadOnly);
    QImage image = QImageReader(&b, format).read();
@@ -119,24 +118,21 @@ bool QRasterPlatformPixmap::fromData(const uchar *buffer, uint len, const QStrin
    return !isNull();
 }
 
-void QRasterPlatformPixmap::fromImage(const QImage &sourceImage,
-   Qt::ImageConversionFlags flags)
+void QRasterPlatformPixmap::fromImage(const QImage &sourceImage, Qt::ImageConversionFlags flags)
 {
-
    QImage image = sourceImage;
    createPixmapForImage(image, flags, /* inplace = */false);
 }
 
-void QRasterPlatformPixmap::fromImageInPlace(QImage &sourceImage,
-   Qt::ImageConversionFlags flags)
+void QRasterPlatformPixmap::fromImageInPlace(QImage &sourceImage, Qt::ImageConversionFlags flags)
 {
    createPixmapForImage(sourceImage, flags, /* inplace = */true);
 }
 
-void QRasterPlatformPixmap::fromImageReader(QImageReader *imageReader,
-   Qt::ImageConversionFlags flags)
+void QRasterPlatformPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags)
 {
    (void) flags;
+
    QImage image = imageReader->read();
 
    if (image.isNull()) {
@@ -159,6 +155,7 @@ bool QRasterPlatformPixmap::scroll(int dx, int dy, const QRect &rect)
    if (!image.isNull()) {
       qt_scrollRectInImage(image, rect, QPoint(dx, dy));
    }
+
    return true;
 }
 
@@ -168,6 +165,7 @@ void QRasterPlatformPixmap::fill(const QColor &color)
 
    if (image.depth() == 1) {
       int gray = qGray(color.rgba());
+
       // Pick the best approximate color in the image's colortable.
       if (qAbs(qGray(image.color(0)) - gray) < qAbs(qGray(image.color(1)) - gray)) {
          pixel = 0;
@@ -179,7 +177,7 @@ void QRasterPlatformPixmap::fill(const QColor &color)
       int alpha = color.alpha();
 
       if (alpha != 255) {
-         if (!image.hasAlphaChannel()) {
+         if (! image.hasAlphaChannel()) {
             QImage::Format toFormat = qt_alphaVersionForPainting(image.format());
 
             if (!image.isNull() && qt_depthForFormat(image.format()) == qt_depthForFormat(toFormat)) {
@@ -189,7 +187,6 @@ void QRasterPlatformPixmap::fill(const QColor &color)
                image = QImage(image.width(), image.height(), toFormat);
             }
          }
-
       }
 
       pixel = qPremultiply(color.rgba());
@@ -266,30 +263,42 @@ int QRasterPlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) const
    switch (metric) {
       case QPaintDevice::PdmWidth:
          return w;
+
       case QPaintDevice::PdmHeight:
          return h;
+
       case QPaintDevice::PdmWidthMM:
          return qRound(d->width * 25.4 / qt_defaultDpiX());
+
       case QPaintDevice::PdmHeightMM:
          return qRound(d->height * 25.4 / qt_defaultDpiY());
+
       case QPaintDevice::PdmNumColors:
          return d->colortable.size();
+
       case QPaintDevice::PdmDepth:
          return this->d;
-      case QPaintDevice::PdmDpiX: // fall-through
+
+      case QPaintDevice::PdmDpiX:
          return qt_defaultDpiX();
+
       case QPaintDevice::PdmPhysicalDpiX:
          return qt_defaultDpiX();
-      case QPaintDevice::PdmDpiY: // fall-through
+
+      case QPaintDevice::PdmDpiY:
          return qt_defaultDpiX();
+
       case QPaintDevice::PdmPhysicalDpiY:
          return qt_defaultDpiY();
+
       case QPaintDevice::PdmDevicePixelRatio:
          return image.devicePixelRatio();
+
       case QPaintDevice::PdmDevicePixelRatioScaled:
          return image.devicePixelRatio() * QPaintDevice::devicePixelRatioFScale();
+
       default:
-         qWarning("QRasterPlatformPixmap::metric(): Unhandled metric type %d", metric);
+         qWarning("QRasterPlatformPixmap::metric() Unhandled metric type %d", metric);
          break;
    }
 
@@ -299,26 +308,29 @@ int QRasterPlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) const
 void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageConversionFlags flags, bool inPlace)
 {
    QImage::Format format;
+
    if (flags & Qt::NoFormatConversion) {
       format = sourceImage.format();
    } else
 
       if (pixelType() == BitmapType) {
          format = QImage::Format_MonoLSB;
+
       } else {
          if (sourceImage.depth() == 1) {
             format = sourceImage.hasAlphaChannel()
-               ? QImage::Format_ARGB32_Premultiplied
-               : QImage::Format_RGB32;
+               ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32;
+
          } else {
             QImage::Format opaqueFormat = QNativeImage::systemFormat();
             QImage::Format alphaFormat = qt_alphaVersionForPainting(opaqueFormat);
 
-            if (!sourceImage.hasAlphaChannel()) {
+            if (! sourceImage.hasAlphaChannel()) {
                format = opaqueFormat;
 
             } else if ((flags & Qt::NoOpaqueDetection) == 0
-               && !const_cast<QImage &>(sourceImage).data_ptr()->checkForAlphaPixels()) {
+                  && ! const_cast<QImage &>(sourceImage).data_ptr()->checkForAlphaPixels()) {
+
                // image has alpha format but is really opaque, so try to do a
                // more efficient conversion
 
@@ -385,4 +397,3 @@ void QRasterPlatformPixmap::setDevicePixelRatio(qreal scaleFactor)
 {
    image.setDevicePixelRatio(scaleFactor);
 }
-

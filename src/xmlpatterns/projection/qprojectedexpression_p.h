@@ -26,17 +26,16 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ProjectedExpression
 {
  public:
    typedef ProjectedExpression *Ptr;
    typedef QVector<ProjectedExpression::Ptr> Vector;
 
-   virtual ~ProjectedExpression() {
-   }
+   virtual ~ProjectedExpression()
+   { }
 
    enum Action {
       Move = 0,
@@ -46,22 +45,23 @@ class ProjectedExpression
    };
 
    virtual Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const {
-      Q_UNUSED(name);
-      Q_UNUSED(next);
+      (void) name;
+      (void) next;
+
       return Skip;
    }
-
 };
 
 class ProjectedNodeTest
 {
  public:
    typedef ProjectedNodeTest *Ptr;
-   virtual ~ProjectedNodeTest() {
-   }
+
+   virtual ~ProjectedNodeTest()
+   { }
 
    virtual bool isMatch(const QXmlNodeModelIndex::NodeKind kind) const {
-      Q_UNUSED(kind);
+      (void) kind;
       return false;
    }
 };
@@ -69,29 +69,32 @@ class ProjectedNodeTest
 class ProjectedStep : public ProjectedExpression
 {
  public:
-   ProjectedStep(const ProjectedNodeTest::Ptr test,
-                 const QXmlNodeModelIndex::Axis axis) : m_test(test),
-      m_axis(axis) {
+   ProjectedStep(const ProjectedNodeTest::Ptr test, const QXmlNodeModelIndex::Axis axis)
+      : m_test(test)
+   {
+      (void) axis;
+
       Q_ASSERT(m_test);
    }
 
    Action actionForElement(const QXmlName name, ProjectedExpression::Ptr &next) const override {
-      Q_UNUSED(name);
-      Q_UNUSED(next);
+      (void) name;
+      (void) next;
+
       // TODO
       return Skip;
    }
 
  private:
-   const ProjectedNodeTest::Ptr    m_test;
-   const QXmlNodeModelIndex::Axis  m_axis;
+   const ProjectedNodeTest::Ptr m_test;
 };
 
 class ProjectedPath : public ProjectedExpression
 {
  public:
-   ProjectedPath(const ProjectedExpression::Ptr left, const ProjectedExpression::Ptr right) : m_left(left),
-      m_right(right) {
+   ProjectedPath(const ProjectedExpression::Ptr left, const ProjectedExpression::Ptr right)
+      : m_left(left), m_right(right)
+   {
       Q_ASSERT(m_left);
       Q_ASSERT(m_right);
    }
@@ -112,8 +115,7 @@ class ProjectedPath : public ProjectedExpression
    const ProjectedExpression::Ptr  m_left;
    const ProjectedExpression::Ptr  m_right;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

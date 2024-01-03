@@ -22,10 +22,7 @@
 ***********************************************************************/
 
 #include "qdaytimeduration_p.h"
-
 #include "qcurrentitemcontext_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -41,4 +38,3 @@ Item CurrentItemContext::currentItem() const
    return m_currentItem;
 }
 
-QT_END_NAMESPACE

@@ -25,9 +25,9 @@ template<typename TSubClass>
 Item ExtractFromDurationFN<TSubClass>::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
    const Item item(m_operands.first()->evaluateSingleton(context));
+
    if (item) {
-      return static_cast<const TSubClass *>(this)->
-             extract(item.as<AbstractDuration>());
+      return static_cast<const TSubClass *>(this)->extract(item.as<AbstractDuration>());
    } else {
       return Item();
    }
@@ -99,14 +99,12 @@ Item SecondsFromAbstractDateTimeFN::extract(const QDateTime &dt) const
 
 Item TimezoneFromAbstractDateTimeFN::extract(const QDateTime &dt) const
 {
-   if (dt.timeSpec() == Qt::UTC) {
+   if (dt.timeZone() == QTimeZone::utc()) {
       return toItem(CommonValues::DayTimeDurationZero);
 
-   } else if (dt.timeSpec() == Qt::OffsetFromUTC) {
+   } else {
       return toItem(DayTimeDuration::fromSeconds(dt.offsetFromUtc()));
 
-   } else {
-      return Item();
    }
 }
 

@@ -26,8 +26,6 @@
 
 #include <qdelegatingstaticcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class StaticCurrentContext : public DelegatingStaticContext
@@ -43,8 +41,7 @@ class StaticCurrentContext : public DelegatingStaticContext
  private:
    const ItemType::Ptr         m_currentItemType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

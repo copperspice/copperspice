@@ -54,7 +54,7 @@ namespace JSC {
     struct HashTable;
 
     typedef Vector<ExecState*, 16> ExecStateStack;
-    
+
     class JSGlobalObject : public JSVariableObject {
     protected:
         using JSVariableObject::JSVariableObjectData;
@@ -68,43 +68,43 @@ namespace JSC {
             typedef void (*Destructor)(void*);
 
             JSGlobalObjectData(Destructor destructor)
-                : JSVariableObjectData(&symbolTable, 0)
+                : JSVariableObjectData(&symbolTable, nullptr)
                 , destructor(destructor)
                 , registerArraySize(0)
                 , globalScopeChain(NoScopeChain())
-                , regExpConstructor(0)
-                , errorConstructor(0)
-                , evalErrorConstructor(0)
-                , rangeErrorConstructor(0)
-                , referenceErrorConstructor(0)
-                , syntaxErrorConstructor(0)
-                , typeErrorConstructor(0)
-                , URIErrorConstructor(0)
-                , evalFunction(0)
-                , callFunction(0)
-                , applyFunction(0)
-                , objectPrototype(0)
-                , functionPrototype(0)
-                , arrayPrototype(0)
-                , booleanPrototype(0)
-                , stringPrototype(0)
-                , numberPrototype(0)
-                , datePrototype(0)
-                , regExpPrototype(0)
-                , methodCallDummy(0)
+                , regExpConstructor(nullptr)
+                , errorConstructor(nullptr)
+                , evalErrorConstructor(nullptr)
+                , rangeErrorConstructor(nullptr)
+                , referenceErrorConstructor(nullptr)
+                , syntaxErrorConstructor(nullptr)
+                , typeErrorConstructor(nullptr)
+                , URIErrorConstructor(nullptr)
+                , evalFunction(nullptr)
+                , callFunction(nullptr)
+                , applyFunction(nullptr)
+                , objectPrototype(nullptr)
+                , functionPrototype(nullptr)
+                , arrayPrototype(nullptr)
+                , booleanPrototype(nullptr)
+                , stringPrototype(nullptr)
+                , numberPrototype(nullptr)
+                , datePrototype(nullptr)
+                , regExpPrototype(nullptr)
+                , methodCallDummy(nullptr)
                 , weakRandom(static_cast<unsigned>(randomNumber() * (std::numeric_limits<unsigned>::max() + 1.0)))
             {
             }
-            
+
             Destructor destructor;
-            
+
             size_t registerArraySize;
 
             JSGlobalObject* next;
             JSGlobalObject* prev;
 
             Debugger* debugger;
-            
+
             ScopeChain globalScopeChain;
             Register globalCallFrame[RegisterFile::CallFrameHeaderSize];
 
@@ -193,7 +193,7 @@ namespace JSC {
         JSGlobalObject*& head() { return d()->globalData->head; }
         JSGlobalObject* next() { return d()->next; }
 
-        // The following accessors return pristine values, even if a script 
+        // The following accessors return pristine values, even if a script
         // replaces the global object's associated property.
 
         RegExpConstructor* regExpConstructor() const { return d()->regExpConstructor; }
@@ -240,13 +240,13 @@ namespace JSC {
 
         Debugger* debugger() const { return d()->debugger; }
         void setDebugger(Debugger* debugger) { d()->debugger = debugger; }
-        
+
         virtual bool supportsProfiling() const { return false; }
-        
+
         int recursion() { return d()->recursion; }
         void incRecursion() { ++d()->recursion; }
         void decRecursion() { --d()->recursion; }
-        
+
         ScopeChain& globalScopeChain() { return d()->globalScopeChain; }
 
         virtual bool isGlobalObject() const { return true; }
@@ -263,7 +263,7 @@ namespace JSC {
 
         void copyGlobalsFrom(RegisterFile&);
         void copyGlobalsTo(RegisterFile&);
-        
+
         void resetPrototype(JSValue prototype);
 
         JSGlobalData* globalData() { return d()->globalData.get(); }
@@ -382,7 +382,7 @@ namespace JSC {
         // We cache our prototype chain so our clients can share it.
         if (!isValid(exec, m_cachedPrototypeChain.get())) {
             JSValue prototype = prototypeForLookup(exec);
-            m_cachedPrototypeChain = StructureChain::create(prototype.isNull() ? 0 : asObject(prototype)->structure());
+            m_cachedPrototypeChain = StructureChain::create(prototype.isNull() ? nullptr : asObject(prototype)->structure());
         }
         return m_cachedPrototypeChain.get();
     }
@@ -408,7 +408,7 @@ namespace JSC {
         if (this == lexicalGlobalObject()->globalExec())
             return lexicalGlobalObject();
 
-        // For any ExecState that's not a globalExec, the 
+        // For any ExecState that's not a globalExec, the
         // dynamic global object must be set since code is running
         ASSERT(globalData().dynamicGlobalObject);
         return globalData().dynamicGlobalObject;
@@ -443,7 +443,7 @@ namespace JSC {
 
     class DynamicGlobalObjectScope : public Noncopyable {
     public:
-        DynamicGlobalObjectScope(CallFrame* callFrame, JSGlobalObject* dynamicGlobalObject) 
+        DynamicGlobalObjectScope(CallFrame* callFrame, JSGlobalObject* dynamicGlobalObject)
             : m_dynamicGlobalObjectSlot(callFrame->globalData().dynamicGlobalObject)
             , m_savedDynamicGlobalObject(m_dynamicGlobalObjectSlot)
         {

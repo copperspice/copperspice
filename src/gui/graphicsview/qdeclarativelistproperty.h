@@ -28,7 +28,7 @@
 
 class QObject;
 
-template<typename T>
+template <typename T>
 class QDeclarativeListProperty
 {
  public:

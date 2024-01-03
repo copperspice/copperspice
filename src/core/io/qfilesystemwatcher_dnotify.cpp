@@ -104,7 +104,11 @@ class QDnotifySignalThread : public QThread
 
 };
 
-Q_GLOBAL_STATIC(QDnotifySignalThread, dnotifySignal)
+static QDnotifySignalThread *dnotifySignal()
+{
+   static QDnotifySignalThread retval;
+   return &retval;
+}
 
 QDnotifySignalThread::QDnotifySignalThread()
    : isExecing(false)
@@ -178,7 +182,7 @@ void QDnotifySignalThread::readFromDnotify()
    // Only expect EAGAIN or EINTR.  Other errors are assumed to be impossible.
    if (readrv != -1) {
       Q_ASSERT(readrv == sizeof(int));
-      Q_UNUSED(readrv);
+      (void) readrv;
 
       if (0 == fd) {
          quit();
@@ -190,7 +194,8 @@ void QDnotifySignalThread::readFromDnotify()
 
 QDnotifyFileSystemWatcherEngine::QDnotifyFileSystemWatcherEngine()
 {
-   QObject::connect(dnotifySignal(), &QDnotifySignalThread::fdChanged, this, &QDnotifyFileSystemWatcherEngine::refresh, Qt::DirectConnection);
+   QObject::connect(dnotifySignal(), &QDnotifySignalThread::fdChanged, this,
+         &QDnotifyFileSystemWatcherEngine::refresh, Qt::DirectConnection);
 }
 
 QDnotifyFileSystemWatcherEngine::~QDnotifyFileSystemWatcherEngine()

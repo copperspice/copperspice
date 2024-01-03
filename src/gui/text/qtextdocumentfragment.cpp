@@ -397,7 +397,6 @@ QTextHtmlImporter::QTextHtmlImporter(QTextDocument *_doc, const QString &_html, 
    if (startFragmentPos != -1) {
       QString qt3RichTextHeader("<meta name=\"qrichtext\" content=\"1\" />");
 
-      // backward compaitbitly for Qt3 RTF file format
       const bool hasQtRichtextMetaTag = html.contains(qt3RichTextHeader);
 
       const int endFragmentPos = html.indexOf("<!--EndFragment-->");

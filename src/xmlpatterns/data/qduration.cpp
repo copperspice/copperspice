@@ -27,8 +27,6 @@
 
 #include "qduration_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Duration::Duration(const bool isPositiveP,
@@ -216,5 +214,3 @@ ItemType::Ptr Duration::type() const
 {
    return BuiltinTypes::xsDuration;
 }
-
-QT_END_NAMESPACE

@@ -1425,9 +1425,10 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
 
-   if (arg1.type() != arg2.type())
-      qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+   if (arg1.type() != arg2.type()) {
+      qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
+         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
+   }
 
    switch (arg1.type()) {
       case QVariant::Int:  {
@@ -1453,10 +1454,9 @@ QVariant operator+(const QVariant &arg1, const QVariant &arg2)
          ret = QVariant(arg1.toDouble() + arg2.toDouble());
          break;
 
-
       case QVariant::DateTime: {
          QDateTime a2 = arg2.toDateTime();
-         QDateTime a1 = arg1.toDateTime().addDays(QDATETIMEEDIT_DATETIME_MIN.daysTo(a2));
+         QDateTime a1 = arg1.toDateTime().addDays(QDATETIME_DATETIME_MIN.daysTo(a2));
          a1.setTime(a1.time().addMSecs(QTime().msecsTo(a2.time())));
          ret = QVariant(a1);
       }
@@ -1473,9 +1473,10 @@ QVariant operator-(const QVariant &arg1, const QVariant &arg2)
 {
    QVariant ret;
 
-   if (arg1.type() != arg2.type())
-      qWarning("QAbstractSpinBox: Internal error: Different types (%s vs %s) (%s:%d)",
-         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()),  __FILE__, __LINE__);
+   if (arg1.type() != arg2.type()) {
+      qWarning("QAbstractSpinBox: Variant data types do not match (%s vs %s)",
+         csPrintable(arg1.typeName()), csPrintable(arg2.typeName()));
+   }
 
    switch (arg1.type()) {
       case QVariant::Int:
@@ -1526,12 +1527,13 @@ QVariant operator*(const QVariant &arg1, double multiplier)
       case QVariant::Double:
          ret = QVariant(arg1.toDouble() * multiplier);
          break;
+
       case QVariant::DateTime: {
-         double days = QDATETIMEEDIT_DATE_MIN.daysTo(arg1.toDateTime().date()) * multiplier;
+         double days = QDATETIME_DATE_MIN.daysTo(arg1.toDateTime().date()) * multiplier;
          int daysInt = (int)days;
          days -= daysInt;
 
-         long msecs = (long)((QDATETIMEEDIT_TIME_MIN.msecsTo(arg1.toDateTime().time()) * multiplier)
+         long msecs = (long)((QDATETIME_TIME_MIN.msecsTo(arg1.toDateTime().time()) * multiplier)
                + (days * (24 * 3600 * 1000)));
          ret = QDateTime(QDate().addDays(int(days)), QTime().addMSecs(msecs));
          break;
@@ -1555,15 +1557,17 @@ double operator/(const QVariant &arg1, const QVariant &arg2)
          a1 = (double)arg1.toInt();
          a2 = (double)arg2.toInt();
          break;
+
       case QVariant::Double:
          a1 = arg1.toDouble();
          a2 = arg2.toDouble();
          break;
+
       case QVariant::DateTime:
-         a1 = QDATETIMEEDIT_DATE_MIN.daysTo(arg1.toDate());
-         a2 = QDATETIMEEDIT_DATE_MIN.daysTo(arg2.toDate());
-         a1 += (double)QDATETIMEEDIT_TIME_MIN.msecsTo(arg1.toDateTime().time()) / (long)(3600 * 24 * 1000);
-         a2 += (double)QDATETIMEEDIT_TIME_MIN.msecsTo(arg2.toDateTime().time()) / (long)(3600 * 24 * 1000);
+         a1 = QDATETIME_DATE_MIN.daysTo(arg1.toDate());
+         a2 = QDATETIME_DATE_MIN.daysTo(arg2.toDate());
+         a1 += (double)QDATETIME_TIME_MIN.msecsTo(arg1.toDateTime().time()) / (long)(3600 * 24 * 1000);
+         a2 += (double)QDATETIME_TIME_MIN.msecsTo(arg2.toDateTime().time()) / (long)(3600 * 24 * 1000);
       default:
          break;
    }
@@ -1651,16 +1655,16 @@ QVariant QAbstractSpinBoxPrivate::variantBound(const QVariant &min, const QVaria
    }
 }
 
-void QAbstractSpinBox::_q_editorTextChanged(const QString &un_named_arg1)
+void QAbstractSpinBox::_q_editorTextChanged(const QString &text)
 {
    Q_D(QAbstractSpinBox);
-   d->_q_editorTextChanged(un_named_arg1);
+   d->_q_editorTextChanged(text);
 }
 
-void QAbstractSpinBox::_q_editorCursorPositionChanged(int un_named_arg1, int un_named_arg2)
+void QAbstractSpinBox::_q_editorCursorPositionChanged(int oldpos, int newpos)
 {
    Q_D(QAbstractSpinBox);
-   d->_q_editorCursorPositionChanged(un_named_arg1, un_named_arg2);
+   d->_q_editorCursorPositionChanged(oldpos, newpos);
 }
 
 #endif // QT_NO_SPINBOX

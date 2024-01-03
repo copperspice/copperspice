@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qbuiltintypes_p.h"
-#include "qitem_p.h"
+#include <qbuiltintypes_p.h>
+#include <qitem_p.h>
 
 QPatternist::Item::Iterator::Ptr QPatternist::Item::sequencedTypedValue() const
 {
    if (isAtomicValue()) {
-      return makeSingletonIterator(QPatternist::Item(atomicValue));
+      return makeSingletonIterator(QPatternist::Item(std::get<const AtomicValue *>(m_data)));
    } else {
       return asNode().sequencedTypedValue();
    }

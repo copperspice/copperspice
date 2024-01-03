@@ -28,8 +28,6 @@
 #include "qdynamiccontext_p.h"
 #include "qitem_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QXmlResultItemsPrivate
 {
  public:
@@ -53,6 +51,5 @@ class QXmlResultItemsPrivate
    QPatternist::DynamicContext::Ptr    m_context;
 };
 
-QT_END_NAMESPACE
 #endif
 

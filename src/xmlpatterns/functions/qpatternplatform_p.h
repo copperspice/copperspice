@@ -28,8 +28,6 @@
 #include <qregularexpression.h>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class PatternPlatform : public FunctionCall
@@ -142,7 +140,5 @@ inline int PatternPlatform::captureCount() const
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PatternPlatform::Flags)
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -705,13 +705,16 @@ class QXcbConnection : public QObject
    struct ScrollingDevice {
       ScrollingDevice()
          : deviceId(0), verticalIndex(0), horizontalIndex(0),
+           verticalIncrement(0), horizontalIncrement(0),
            orientations(Qt::EmptyFlag), legacyOrientations(Qt::EmptyFlag)
       {
       }
 
       int deviceId;
-      int verticalIndex, horizontalIndex;
-      double verticalIncrement, horizontalIncrement;
+      int verticalIndex;
+      int horizontalIndex;
+      double verticalIncrement;
+      double horizontalIncrement;
       Qt::Orientations orientations;
       Qt::Orientations legacyOrientations;
       QPointF lastScrollPosition;

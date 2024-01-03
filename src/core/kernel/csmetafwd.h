@@ -26,10 +26,10 @@
 
 class cs_internalEmpty;
 
-template<class T1 = cs_internalEmpty>
+template <class T1 = cs_internalEmpty>
 const QString &cs_typeToName();
 
-template<class T1, class T2, class ...Ts>
+template <class T1, class T2, class ...Ts>
 const QString &cs_typeToName();
 
 #endif

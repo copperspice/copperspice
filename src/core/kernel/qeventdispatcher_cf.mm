@@ -89,14 +89,14 @@ static CFStringRef runLoopMode(NSDictionary *dictionary)
         if (CFStringRef mode = runLoopMode(notification.userInfo))
             m_runLoopModes.push(mode);
         else
-            qWarning("Encountered run loop push notification without run loop mode!");
+            qWarning("Encountered run loop push notification without run loop mode");
 
      } else if (CFStringHasSuffix((CFStringRef)notification.name, CFSTR("RunLoopModePopNotification"))) {
         CFStringRef mode = runLoopMode(notification.userInfo);
         if (CFStringCompare(mode, [self currentMode], 0) == kCFCompareEqualTo)
             m_runLoopModes.pop();
         else
-            qWarning("Tried to pop run loop mode '%s' that was never pushed!", qPrintable(QCFString::toQString(mode)));
+            qWarning("Tried to pop run loop mode '%s' which was never pushed.", csPrintable(QCFString::toQString(mode)));
 
         Q_ASSERT(m_runLoopModes.size() >= 1);
      }
@@ -137,7 +137,7 @@ public:
 };
 
 #define Q_ENUM_PRINTER(enumName) \
-    static QString qPrintable##enumName(int value) \
+    static QString csPrintable##enumName(int value) \
     { \
         return RunLoopDebugger::staticMetaObject().enumerator(RunLoopDebugger::staticMetaObject().indexOfEnumerator(#enumName)).valueToKey(value); \
     }
@@ -257,12 +257,12 @@ bool QEventDispatcherCoreFoundation::processEvents(QEventLoop::ProcessEventsFlag
         CFTimeInterval duration = (m_processEvents.flags & QEventLoop::WaitForMoreEvents) ?
             kCFTimeIntervalDistantFuture : kCFTimeIntervalMinimum;
 
-        qEventDispatcherDebug() << "Calling CFRunLoopRunInMode = " << qPrintable(QCFString::toQString(mode))
+        qEventDispatcherDebug() << "Calling CFRunLoopRunInMode = " << csPrintable(QCFString::toQString(mode))
             << " for " << duration << " ms, processing single source = " << returnAfterSingleSourceHandled; qIndent();
 
         SInt32 result = CFRunLoopRunInMode(mode, duration, returnAfterSingleSourceHandled);
 
-        qUnIndent(); qEventDispatcherDebug() << "result = " << qPrintableResult(result);
+        qUnIndent(); qEventDispatcherDebug() << "result = " << csPrintableResult(result);
 
         eventsProcessed |= (result == kCFRunLoopRunHandledSource
                             || m_processEvents.processedPostedEvents
@@ -417,7 +417,7 @@ void QEventDispatcherCoreFoundation::processTimers(CFRunLoopTimerRef timer)
 
 void QEventDispatcherCoreFoundation::handleRunLoopActivity(CFRunLoopActivity activity)
 {
-    qEventDispatcherDebug() << qPrintableActivity(activity);
+    qEventDispatcherDebug() << csPrintableActivity(activity);
 
     switch (activity) {
        case kCFRunLoopBeforeWaiting:

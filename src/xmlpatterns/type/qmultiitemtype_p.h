@@ -24,10 +24,9 @@
 #ifndef QMultiItemType_P_H
 #define QMultiItemType_P_H
 
-#include <QList>
-#include <qitemtype_p.h>
+#include <qlist.h>
 
-QT_BEGIN_NAMESPACE
+#include <qitemtype_p.h>
 
 namespace QPatternist {
 
@@ -93,8 +92,7 @@ class MultiItemType : public ItemType
    const ItemType::List m_types;
    const ItemType::List::const_iterator m_end;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

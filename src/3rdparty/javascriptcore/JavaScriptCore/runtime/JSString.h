@@ -56,8 +56,8 @@ namespace JSC {
     // Should be used for strings that are owned by an object that will
     // likely outlive the JSValue this makes, such as the parse tree or a
     // DOM object that contains a UString
-    JSString* jsOwnedString(JSGlobalData*, const UString&); 
-    JSString* jsOwnedString(ExecState*, const UString&); 
+    JSString* jsOwnedString(JSGlobalData*, const UString&);
+    JSString* jsOwnedString(ExecState*, const UString&);
 
     typedef void (*JSStringFinalizerCallback)(JSString*, void* context);
     JSString* jsStringWithFinalizer(ExecState*, const UString&, JSStringFinalizerCallback callback, void* context);
@@ -126,7 +126,7 @@ namespace JSC {
                 void* allocation;
                 if (tryFastMalloc(sizeof(Rope) + (ropeLength - 1) * sizeof(Fiber)).getValue(allocation))
                     return adoptRef(new (allocation) Rope(ropeLength));
-                return 0;
+                return nullptr;
             }
 
             ~Rope();
@@ -159,7 +159,7 @@ namespace JSC {
         private:
             Rope(unsigned ropeLength) : m_ropeLength(ropeLength), m_stringLength(0) {}
             void* operator new(size_t, void* inPlace) { return inPlace; }
-            
+
             unsigned m_ropeLength;
             unsigned m_stringLength;
             Fiber m_fibers[1];
@@ -300,9 +300,8 @@ namespace JSC {
 
     private:
         enum VPtrStealingHackType { VPtrStealingHack };
-        JSString(VPtrStealingHackType) 
-            : JSCell(0)
-            , m_ropeLength(0)
+        JSString(VPtrStealingHackType)
+            : JSCell(nullptr), m_ropeLength(0)
         {
         }
 
@@ -487,7 +486,7 @@ namespace JSC {
     inline JSString* jsSubstring(ExecState* exec, const UString& s, unsigned offset, unsigned length) { return jsSubstring(&exec->globalData(), s, offset, length); }
     inline JSString* jsNontrivialString(ExecState* exec, const UString& s) { return jsNontrivialString(&exec->globalData(), s); }
     inline JSString* jsNontrivialString(ExecState* exec, const char* s) { return jsNontrivialString(&exec->globalData(), s); }
-    inline JSString* jsOwnedString(ExecState* exec, const UString& s) { return jsOwnedString(&exec->globalData(), s); } 
+    inline JSString* jsOwnedString(ExecState* exec, const UString& s) { return jsOwnedString(&exec->globalData(), s); }
 
     ALWAYS_INLINE bool JSString::getStringPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot)
     {
@@ -505,7 +504,7 @@ namespace JSC {
 
         return false;
     }
-        
+
     ALWAYS_INLINE bool JSString::getStringPropertySlot(ExecState* exec, unsigned propertyName, PropertySlot& slot)
     {
         if (propertyName < m_stringLength) {

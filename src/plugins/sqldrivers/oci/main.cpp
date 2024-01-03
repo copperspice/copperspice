@@ -30,7 +30,7 @@ class QOCIDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QOCIDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QOCI, QOCI8")
+   CS_PLUGIN_KEY("QOCI")
 
  public:
    QOCIDriverPlugin();
@@ -48,11 +48,12 @@ QOCIDriverPlugin::QOCIDriverPlugin()
 
 QSqlDriver *QOCIDriverPlugin::create(const QString &name)
 {
-   if (name == "QOCI" || name == "QOCI8") {
+   if (name == "QOCI") {
       QOCIDriver *driver = new QOCIDriver();
       return driver;
    }
-   return 0;
+
+   return nullptr;
 }
 
 

@@ -33,8 +33,6 @@
 
 #include "qarithmeticexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ArithmeticExpression::ArithmeticExpression(const Expression::Ptr &op1,
@@ -304,5 +302,3 @@ ExpressionVisitorResult::Ptr ArithmeticExpression::accept(const ExpressionVisito
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

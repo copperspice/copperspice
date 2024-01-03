@@ -25,10 +25,12 @@
 #define QParserContext_P_H
 
 #include <qflags.h>
+#include <qglobal.h>
+#include <qhash.h>
+#include <qmultihash.h>
 #include <qshareddata.h>
 #include <qstack.h>
 #include <qstringlist.h>
-#include <qglobal.h>
 #include <qxmlquery.h>
 
 #include <qbuiltintypes_p.h>
@@ -38,8 +40,6 @@
 #include <quserfunctioncallsite_p.h>
 #include <quserfunction_p.h>
 #include <qvariabledeclaration_p.h>
-#include <qhash.h>
-#include <qmultihash.h>
 
 namespace QPatternist {
 class Tokenizer;

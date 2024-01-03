@@ -78,7 +78,7 @@ class QVector
    QVector(std::initializer_list<T> args)
       : m_data(args) {}
 
-   template<class Input_Iterator>
+   template <class Input_Iterator>
    QVector(Input_Iterator first, Input_Iterator last)
       : m_data(first, last) {}
 
@@ -621,7 +621,7 @@ inline T QVector<T>::takeLast()
 }
 
 
-template<typename T>
+template <typename T>
 T QVector<T>::value(size_type i) const
 {
    if (i < 0 || i >= size()) {
@@ -631,7 +631,7 @@ T QVector<T>::value(size_type i) const
    return m_data.begin()[i];
 }
 
-template<typename T>
+template <typename T>
 T QVector<T>::value(size_type i, const T &defaultValue) const
 {
    return ((i < 0 || i >= size()) ? defaultValue : m_data[i]);

@@ -294,6 +294,15 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       ~QString16() = default;
 
+#if defined(__cpp_char8_t)
+      // support new data type added in C++20
+
+      inline QString16(const char8_t *str);
+      inline QString16(const char8_t *str, size_type size);
+
+      static inline QString16 fromUtf8(const char8_t *str, size_type numOfChars = -1);
+#endif
+
       using CsString::CsString_utf16::append;         // internal
       using CsString::CsString_utf16::operator=;      // internal
       using CsString::CsString_utf16::operator+=;     // internal
@@ -572,7 +581,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          return *this;
       }
 
-      template<typename Iterator>
+      template <typename Iterator>
       QString16 &insert(const_iterator first, Iterator begin, Iterator end) {
          CsString::CsString_utf16::insert(first, begin, end);
          return *this;
@@ -1204,5 +1213,24 @@ inline void swap(QString16 &a, QString16 &b) {
 
 QString16 cs_internal_string_normalize(const QString16 &data, QString16::NormalizationForm mode,
                   QChar32::UnicodeVersion version, int from);
+
+#if defined(__cpp_char8_t)
+   // support new data type added in C++20
+
+   inline QString16::QString16(const char8_t *str)
+   {
+      *this = QString16::fromUtf8(str, -1);
+   }
+
+   inline QString16::QString16(const char8_t *str, size_type size)
+   {
+      *this = QString16::fromUtf8(str, size);
+   }
+
+   inline QString16 QString16::fromUtf8(const char8_t *str, size_type numOfChars)
+   {
+      return CsString::CsString_utf16::fromUtf8(str, numOfChars);
+   }
+#endif
 
 #endif

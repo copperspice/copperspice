@@ -28,9 +28,8 @@
 #include <qfunctionsignature_p.h>
 #include <qxpathhelper_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FunctionCall : public UnlimitedContainer
 {
  public:
@@ -53,8 +52,7 @@ class FunctionCall : public UnlimitedContainer
  private:
    FunctionSignature::Ptr m_signature;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

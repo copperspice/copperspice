@@ -82,7 +82,7 @@ class Q_GUI_EXPORT QInputMethod : public QObject
    QLocale locale() const;
    Qt::LayoutDirection inputDirection() const;
 
-   static QVariant queryFocusObject(Qt::InputMethodQuery query, QVariant argument); // ### Qt 6: QVariant by const-ref
+   static QVariant queryFocusObject(Qt::InputMethodQuery query, QVariant argument); // TODO: QVariant by const-ref
 
    GUI_CS_SLOT_1(Public, void show())
    GUI_CS_SLOT_2(show)

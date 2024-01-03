@@ -23,8 +23,6 @@
 
 #include "qxsdmodelgroup_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdModelGroup::XsdModelGroup()
@@ -56,5 +54,3 @@ XsdParticle::List XsdModelGroup::particles() const
 {
    return m_particles;
 }
-
-QT_END_NAMESPACE

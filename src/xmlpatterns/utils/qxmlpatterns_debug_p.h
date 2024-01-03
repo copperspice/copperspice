@@ -24,7 +24,7 @@
 #ifndef QXmlPatterns_Debug_P_H
 #define QXmlPatterns_Debug_P_H
 
-#include <QDebug>
+#include <qdebug.h>
 
 #define Patternist_DEBUG_PARSER
 #define Patternist_DEBUG

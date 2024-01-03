@@ -26,8 +26,6 @@
 
 #include "qstaticcontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticContext::~StaticContext()
@@ -40,4 +38,3 @@ void StaticContext::wrapExpressionWith(const SourceLocationReflection *const exi
    addLocation(newNode.data(), locationFor(existingNode));
 }
 
-QT_END_NAMESPACE

@@ -267,13 +267,15 @@ bool QHttpProtocolHandler::sendRequest()
    m_reply = m_channel->reply;
 
    if (!m_reply) {
-      // heh, how should that happen!
+      // how should that happen
       qWarning() << "QAbstractProtocolHandler::sendRequest() called without QHttpNetworkReply";
       return false;
    }
 
    switch (m_channel->state) {
-      case QHttpNetworkConnectionChannel::IdleState: { // write the header
+      case QHttpNetworkConnectionChannel::IdleState: {
+         // write the header
+
          if (!m_channel->ensureConnection()) {
             // wait for the connection (and encryption) to be done
             // sendRequest will be called again from either
@@ -282,8 +284,8 @@ bool QHttpProtocolHandler::sendRequest()
          }
 
          QString scheme = m_channel->request.url().scheme();
-         if (scheme == QLatin1String("preconnect-http")
-               || scheme == QLatin1String("preconnect-https")) {
+
+         if (scheme == "preconnect-http" || scheme == "preconnect-https") {
             m_channel->state = QHttpNetworkConnectionChannel::IdleState;
             m_reply->d_func()->state = QHttpNetworkReplyPrivate::AllDoneState;
             m_channel->allDone();
@@ -313,11 +315,13 @@ bool QHttpProtocolHandler::sendRequest()
                auth.setPassword(url.password());
                m_connection->d_func()->copyCredentials(m_connection->d_func()->indexOf(m_socket), &auth, false);
             }
+
             // clear the userinfo,  since we use the same request for resending
             // userinfo in url can conflict with the one in the authenticator
             url.setUserInfo(QString());
             m_channel->request.setUrl(url);
          }
+
          // Will only be false if Qt WebKit is performing a cross-origin XMLHttpRequest
          // and withCredentials has not been set to true.
          if (m_channel->request.withCredentials()) {
@@ -335,9 +339,11 @@ bool QHttpProtocolHandler::sendRequest()
          // flushing is dangerous (QSslSocket calls transmit which might read or error)
          //        m_socket->flush();
          QNonContiguousByteDevice *uploadByteDevice = m_channel->request.uploadByteDevice();
+
          if (uploadByteDevice) {
             // connect the signals so this function gets called again
-            QObject::connect(uploadByteDevice, SIGNAL(readyRead()), m_channel, SLOT(_q_uploadDataReadyRead()));
+            QObject::connect(uploadByteDevice, &QNonContiguousByteDevice::readyRead,
+                  m_channel, &QHttpNetworkConnectionChannel::_q_uploadDataReadyRead);
 
             m_channel->bytesTotal = m_channel->request.contentLength();
 
@@ -355,10 +361,12 @@ bool QHttpProtocolHandler::sendRequest()
       case QHttpNetworkConnectionChannel::WritingState: {
          // write the data
          QNonContiguousByteDevice *uploadByteDevice = m_channel->request.uploadByteDevice();
+
          if (!uploadByteDevice || m_channel->bytesTotal == m_channel->written) {
             if (uploadByteDevice) {
                emit m_reply->dataSendProgress(m_channel->written, m_channel->bytesTotal);
             }
+
             m_channel->state = QHttpNetworkConnectionChannel::WaitingState; // now wait for response
             sendRequest(); // recurse
             break;
@@ -429,8 +437,10 @@ bool QHttpProtocolHandler::sendRequest()
 
       case QHttpNetworkConnectionChannel::WaitingState: {
          QNonContiguousByteDevice *uploadByteDevice = m_channel->request.uploadByteDevice();
+
          if (uploadByteDevice) {
-            QObject::disconnect(uploadByteDevice, SIGNAL(readyRead()), m_channel, SLOT(_q_uploadDataReadyRead()));
+            QObject::disconnect(uploadByteDevice, &QNonContiguousByteDevice::readyRead,
+               m_channel, &QHttpNetworkConnectionChannel::_q_uploadDataReadyRead);
          }
 
          // HTTP pipelining

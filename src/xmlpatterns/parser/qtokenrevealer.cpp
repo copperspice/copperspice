@@ -21,9 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qtokenrevealer_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qtokenrevealer_p.h>
 
 using namespace QPatternist;
 
@@ -87,5 +85,3 @@ void TokenRevealer::resumeTokenizationFrom(const int position)
 {
    m_tokenizer->resumeTokenizationFrom(position);
 }
-
-QT_END_NAMESPACE

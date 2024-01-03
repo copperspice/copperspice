@@ -26,8 +26,6 @@
 
 #include "qstaticbaseuristore_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticBaseURIStore::StaticBaseURIStore(const QUrl &baseURI,
@@ -60,5 +58,3 @@ ExpressionVisitorResult::Ptr StaticBaseURIStore::accept(const ExpressionVisitor:
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

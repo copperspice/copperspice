@@ -244,8 +244,10 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
 
 -(void) assetFailedToPrepareForPlayback: (NSError *)error
 {
-   Q_UNUSED(error)
+   (void) error;
+
    QMetaObject::invokeMethod(m_session, "processMediaLoadError", Qt::AutoConnection);
+
 #ifdef QT_DEBUG_AVF
    qDebug() << Q_FUNC_INFO;
    qDebug() << [[error localizedDescription] UTF8String];
@@ -256,7 +258,8 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
 
 - (void) playerItemDidReachEnd: (NSNotification *)notification
 {
-   Q_UNUSED(notification)
+   (void) notification;
+
    if (self.session) {
       QMetaObject::invokeMethod(m_session, "processEOS", Qt::AutoConnection);
    }
@@ -264,7 +267,8 @@ static void *AVFMediaPlayerSessionObserverCurrentItemObservationContext = &AVFMe
 
 - (void) playerItemTimeJumped: (NSNotification *)notification
 {
-   Q_UNUSED(notification)
+   (void) notification;
+
    if (self.session) {
       QMetaObject::invokeMethod(m_session, "processPositionChange", Qt::AutoConnection);
    }

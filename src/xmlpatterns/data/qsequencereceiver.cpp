@@ -25,8 +25,6 @@
 
 #include "qabstractxmlreceiver.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QAbstractXmlReceiver::~QAbstractXmlReceiver()
@@ -97,5 +95,3 @@ void QAbstractXmlReceiver::whitespaceOnly(QStringView value)
 
    characters(value.toString());
 }
-
-QT_END_NAMESPACE

@@ -44,7 +44,7 @@ class Q_CORE_EXPORT UnhandledException : public Exception
    Exception *clone() const override;
 };
 
-namespace internal {
+namespace cs_internal {
 
 class Base;
 
@@ -73,8 +73,8 @@ class Q_CORE_EXPORT ExceptionStore
    ExceptionHolder exceptionHolder;
 };
 
-} // namespace internal
+}   // end namespace
 
-} // namespace QtConcurrent
+}   // namespace QtConcurrent
 
 #endif

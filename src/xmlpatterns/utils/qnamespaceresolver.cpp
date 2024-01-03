@@ -21,10 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qnamespaceresolver_p.h"
-#include "qnamepool_p.h"
+#include <qnamespaceresolver_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 
@@ -35,5 +34,3 @@ NamespaceResolver::NamespaceResolver()
 NamespaceResolver::~NamespaceResolver()
 {
 }
-
-QT_END_NAMESPACE

@@ -25,8 +25,6 @@
 
 #include "qunparsedtextfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item UnparsedTextFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -60,5 +58,3 @@ Item UnparsedTextFN::evaluateSingleton(const DynamicContext::Ptr &context) const
    Q_ASSERT(uri.isValid() && !uri.isRelative());
    return context->resourceLoader()->openUnparsedText(uri, encoding, context, this);
 }
-
-QT_END_NAMESPACE

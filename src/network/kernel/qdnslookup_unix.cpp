@@ -50,10 +50,9 @@ static res_ninit_proto local_res_ninit = nullptr;
 typedef int (*res_nquery_proto)(res_state, const char *, int, int, unsigned char *, int);
 static res_nquery_proto local_res_nquery = nullptr;
 
-// Custom deleter to close resolver state.
-
+// Custom deleter to close resolver state
 struct QDnsLookupStateDeleter {
-   static inline void cleanup(struct __res_state *pointer) {
+   void operator() (struct __res_state *pointer) const {
       local_res_nclose(pointer);
    }
 };
@@ -195,7 +194,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
          break;
       case FORMERR:
          reply->error = QDnsLookup::InvalidRequestError;
-         reply->errorString = tr("Server could not process query");
+         reply->errorString = tr("Server was not able to process query");
          return;
       case SERVFAIL:
          reply->error = QDnsLookup::ServerFailureError;
@@ -230,7 +229,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
 
    if (status < 0) {
       reply->error = QDnsLookup::InvalidReplyError;
-      reply->errorString = tr("Could not expand domain name");
+      reply->errorString = tr("Unable to expand domain name");
       return;
    }
    p += status + 4;
@@ -243,7 +242,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
 
       if (status < 0) {
          reply->error = QDnsLookup::InvalidReplyError;
-         reply->errorString = tr("Could not expand domain name");
+         reply->errorString = tr("Unable to expand domain name");
          return;
       }
       const QString name = QUrl::fromAce(QString::fromUtf8(host));

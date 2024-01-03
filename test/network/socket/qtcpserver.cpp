@@ -194,7 +194,7 @@ TEST_CASE("QTcpServer ipv6ServerMapped", "[qtcpserver]")
 
    REQUIRE(server.listen(QHostAddress::LocalHost) == true);
 
-   printf("Network Server v6 Mapped (test 1 of 4)\n");
+   printf("Network Server v4 Mapped (test 1 of 4)\n");
 
    {
       QTcpSocket client;

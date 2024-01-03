@@ -27,11 +27,10 @@
 #include <qxsdparticle_p.h>
 #include <qxsdterm_p.h>
 
-QT_BEGIN_NAMESPACE
-
 template<typename N> class QList;
 
 namespace QPatternist {
+
 class XsdModelGroup : public XsdTerm
 {
  public:
@@ -85,8 +84,7 @@ class XsdModelGroup : public XsdTerm
    ModelCompositor   m_compositor;
    XsdParticle::List m_particles;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

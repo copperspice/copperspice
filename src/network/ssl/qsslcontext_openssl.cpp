@@ -482,7 +482,7 @@ SSL *QSslContext::createSsl()
    if (session) {
       // Try to resume the last session we cached
       if (! q_SSL_set_session(ssl, session)) {
-         qWarning("Could not set SSL session");
+         qWarning("Unable to set SSL session");
          q_SSL_SESSION_free(session);
          session = nullptr;
       }
@@ -541,7 +541,7 @@ bool QSslContext::cacheSession(SSL *ssl)
          unsigned char *data = reinterpret_cast<unsigned char *>(m_sessionASN1.data());
 
          if (! q_i2d_SSL_SESSION(session, &data)) {
-            qWarning("Could not store persistent version of SSL session");
+            qWarning("Unable to store persistent version of SSL session");
          }
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L

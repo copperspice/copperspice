@@ -21,46 +21,43 @@
 *
 ***********************************************************************/
 
+#include <qapplication.h>
+#include <qbitmap.h>
 #include <qdebug.h>
+#include <qglyphrun.h>
+#include <qimage.h>
 #include <qmath.h>
 #include <qmutex.h>
-
-#include <qbitmap.h>
-#include <qimage.h>
 #include <qpaintdevice.h>
 #include <qpaintengine.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qpicture.h>
 #include <qpixmapcache.h>
+#include <qplatform_integration.h>
+#include <qplatform_theme.h>
 #include <qpolygon.h>
+#include <qstatictext.h>
+#include <qstyle.h>
 #include <qtextlayout.h>
 #include <qthread.h>
 #include <qvarlengtharray.h>
-#include <qstatictext.h>
-#include <qglyphrun.h>
-
 #include <qwidget.h>
-#include <qapplication.h>
-#include <qstyle.h>
-#include <qplatform_integration.h>
-#include <qplatform_theme.h>
 
-#include <qfontengine_p.h>
-#include <qpaintengine_p.h>
-#include <qemulationpaintengine_p.h>
-#include <qpainterpath_p.h>
-#include <qpainter_p.h>
-
-#include <qtextengine_p.h>
-#include <qpaintengine_raster_p.h>
-#include <qmath_p.h>
-#include <qstatictext_p.h>
-#include <qglyphrun_p.h>
-#include <qstylehelper_p.h>
-#include <qhexstring_p.h>
-#include <qrawfont_p.h>
 #include <qapplication_p.h>
+#include <qemulationpaintengine_p.h>
+#include <qfontengine_p.h>
+#include <qglyphrun_p.h>
+#include <qhexstring_p.h>
+#include <qmath_p.h>
+#include <qpaintengine_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpainter_p.h>
+#include <qpainterpath_p.h>
+#include <qrawfont_p.h>
+#include <qstatictext_p.h>
+#include <qstylehelper_p.h>
+#include <qtextengine_p.h>
 #include <qwidget_p.h>
 
 #define QGradient_StretchToDevice 0x10000000
@@ -139,6 +136,7 @@ static inline uint line_emulation(uint emulation)
          | QPaintEngine::ObjectBoundingModeGradients
          | QPaintEngine_OpaqueBackground);
 }
+
 #ifndef QT_NO_DEBUG
 static bool qt_painter_thread_test(int devType, int engineType, const char *what)
 {
@@ -160,7 +158,7 @@ static bool qt_painter_thread_test(int devType, int engineType, const char *what
             // widgets cannot be targets except for QGLWidget
             && (devType != QInternal::Widget || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedOpenGL)
                || (engineType != QPaintEngine::OpenGL && engineType != QPaintEngine::OpenGL2))) {
-            qWarning("QPainter: It is not safe to use %s outside the GUI thread", what);
+            qWarning("qt_painter_thread() Unsafe to use %s outside the GUI thread", what);
             return false;
          }
          break;
@@ -343,12 +341,6 @@ void QPainterPrivate::detachPainterPrivate(QPainter *q)
 
 void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperation op)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawHelper\n");
-   }
-#endif
-
    if (originalPath.isEmpty()) {
       return;
    }
@@ -979,22 +971,19 @@ QPaintDevice *QPainter::device() const
    return d->original_device;
 }
 
-
-
 bool QPainter::isActive() const
 {
    Q_D(const QPainter);
    return d->engine;
 }
 
-
 void QPainter::initFrom(const QPaintDevice *device)
 {
-   Q_ASSERT_X(device, "QPainter::initFrom(const QPaintDevice *device)", "QPaintDevice cannot be 0");
+   Q_ASSERT_X(device, "QPainter::initFrom()", "QPaintDevice can not be a nullptr");
 
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::initFrom: Painter not active, aborted");
+      qWarning("QPainter::initFrom() Painter engine is not active");
       return;
    }
 
@@ -1009,25 +998,12 @@ void QPainter::initFrom(const QPaintDevice *device)
    }
 }
 
-
-/*!
-    Saves the current painter state (pushes the state onto a stack). A
-    save() must be followed by a corresponding restore(); the end()
-    function unwinds the stack.
-
-    \sa restore()
-*/
-
 void QPainter::save()
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::save()\n");
-   }
-#endif
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::save: Painter not active");
+      qWarning("QPainter::save() Painter engine not active");
       return;
    }
 
@@ -1042,27 +1018,14 @@ void QPainter::save()
    d->states.push_back(d->state);
 }
 
-/*!
-    Restores the current painter state (pops a saved state off the
-    stack).
-
-    \sa save()
-*/
-
 void QPainter::restore()
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::restore()\n");
-   }
-#endif
-
    Q_D(QPainter);
    if (d->states.size() <= 1) {
-      qWarning("QPainter::restore: Unbalanced save/restore");
+      qWarning("QPainter::restore() Unbalanced save / restore states");
       return;
    } else if (!d->engine) {
-      qWarning("QPainter::restore: Painter not active");
+      qWarning("QPainter::restore() Painter engine not active");
       return;
    }
 
@@ -1131,12 +1094,12 @@ bool QPainter::begin(QPaintDevice *pd)
    Q_ASSERT(pd);
 
    if (pd->painters > 0) {
-      qWarning("QPainter::begin: A paint device can only be painted by one painter at a time.");
+      qWarning("QPainter::begin() Paint device can only be used by one QPainter at a time");
       return false;
    }
 
    if (d_ptr->engine) {
-      qWarning("QPainter::begin: Painter already active");
+      qWarning("QPainter::begin() Painter engine already active");
       return false;
    }
 
@@ -1180,7 +1143,7 @@ bool QPainter::begin(QPaintDevice *pd)
    d->engine = pd->paintEngine();
 
    if (! d->engine) {
-      qWarning("QPainter::begin: Paint device returned engine == 0, type: %d", pd->devType());
+      qWarning("QPainter::begin() Paint device engine is invalid, type: %d", pd->devType());
       return false;
    }
 
@@ -1212,7 +1175,7 @@ bool QPainter::begin(QPaintDevice *pd)
          QPixmap *pm = static_cast<QPixmap *>(pd);
          Q_ASSERT(pm);
          if (pm->isNull()) {
-            qWarning("QPainter::begin: Unable to paint using a null pixmap");
+            qWarning("QPainter::begin() Unable to paint on a invalid pixmap");
             qt_cleanup_painter_state(d);
             return false;
          }
@@ -1229,13 +1192,13 @@ bool QPainter::begin(QPaintDevice *pd)
          Q_ASSERT(img);
 
          if (img->isNull()) {
-            qWarning("QPainter::begin: Unable to paint using a null pixmap");
+            qWarning("QPainter::begin() Unable to paint on a invalid image");
             qt_cleanup_painter_state(d);
             return false;
 
          } else if (img->format() == QImage::Format_Indexed8) {
             // Painting on indexed8 images is not supported.
-            qWarning("QPainter::begin: Cannot paint on an image with the QImage::Format_Indexed8 format");
+            qWarning("QPainter::begin() Unable to paint on an image with a format of QImage::Format_Indexed8");
             qt_cleanup_painter_state(d);
             return false;
          }
@@ -1260,7 +1223,7 @@ bool QPainter::begin(QPaintDevice *pd)
 
    bool begun = d->engine->begin(pd);
    if (!begun) {
-      qWarning("QPainter::begin(): Returned false");
+      qWarning("QPainter::begin() Failure in painting");
       if (d->engine->isActive()) {
          end();
       } else {
@@ -1310,17 +1273,10 @@ bool QPainter::begin(QPaintDevice *pd)
 
 bool QPainter::end()
 {
-
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::end()\n");
-   }
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::end: Painter not active, aborted");
+      qWarning("QPainter::end() Painter engine is not active");
       qt_cleanup_painter_state(d);
       return false;
    }
@@ -1344,7 +1300,7 @@ bool QPainter::end()
    }
 
    if (d->states.size() > 1) {
-      qWarning("QPainter::end: Painter ended with %zd saved states", d->states.size());
+      qWarning("QPainter::end() Painter ended with extra saved states");
    }
 
    if (d->engine->autoDestruct()) {
@@ -1371,13 +1327,12 @@ QPaintEngine *QPainter::paintEngine() const
    return d->engine;
 }
 
-
 void QPainter::beginNativePainting()
 {
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::beginNativePainting: Painter not active");
+      qWarning("QPainter::beginNativePainting() Painter engine not active");
       return;
    }
 
@@ -1390,7 +1345,7 @@ void QPainter::endNativePainting()
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::beginNativePainting: Painter not active");
+      qWarning("QPainter::beginNativePainting() Painter engine not active");
       return;
    }
 
@@ -1405,19 +1360,17 @@ QFontMetrics QPainter::fontMetrics() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::fontMetrics: Painter not active");
+      qWarning("QPainter::fontMetrics() Painter engine not active");
       return QFontMetrics(QFont());
    }
    return QFontMetrics(d->state->font);
 }
 
-
-
 QFontInfo QPainter::fontInfo() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::fontInfo: Painter not active");
+      qWarning("QPainter::fontInfo() Painter engine not active");
       return QFontInfo(QFont());
    }
    return QFontInfo(d->state->font);
@@ -1427,19 +1380,18 @@ qreal QPainter::opacity() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::opacity: Painter not active");
+      qWarning("QPainter::opacity() Painter engine not active");
       return 1.0;
    }
    return d->state->opacity;
 }
-
 
 void QPainter::setOpacity(qreal opacity)
 {
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setOpacity: Painter not active");
+      qWarning("QPainter::setOpacity() Painter engine not active");
       return;
    }
 
@@ -1458,18 +1410,16 @@ void QPainter::setOpacity(qreal opacity)
    }
 }
 
-
 QPoint QPainter::brushOrigin() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::brushOrigin: Painter not active");
+      qWarning("QPainter::brushOrigin() Painter engine not active");
       return QPoint();
    }
    return QPointF(d->state->brushOrigin).toPoint();
 }
-
-
 
 void QPainter::setBrushOrigin(const QPointF &p)
 {
@@ -1482,7 +1432,7 @@ void QPainter::setBrushOrigin(const QPointF &p)
 #endif
 
    if (! d->engine) {
-      qWarning("QPainter::setBrushOrigin: Painter not active");
+      qWarning("QPainter::setBrushOrigin() Painter engine not active");
       return;
    }
 
@@ -1500,9 +1450,10 @@ void QPainter::setCompositionMode(CompositionMode mode)
 {
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::setCompositionMode: Painter not active");
+      qWarning("QPainter::setCompositionMode() Painter engine not active");
       return;
    }
+
    if (d->state->composition_mode == mode) {
       return;
    }
@@ -1514,20 +1465,19 @@ void QPainter::setCompositionMode(CompositionMode mode)
 
    if (mode >= QPainter::RasterOp_SourceOrDestination) {
       if (!d->engine->hasFeature(QPaintEngine::RasterOpModes)) {
-         qWarning("QPainter::setCompositionMode: "
-            "Raster operation modes not supported on device");
+         qWarning("QPainter::setCompositionMode() Raster operation modes are not supported on this device");
          return;
       }
+
    } else if (mode >= QPainter::CompositionMode_Plus) {
       if (!d->engine->hasFeature(QPaintEngine::BlendModes)) {
-         qWarning("QPainter::setCompositionMode: "
-            "Blend modes not supported on device");
+         qWarning("QPainter::setCompositionMode() Blend modes not are supported on this device");
          return;
       }
+
    } else if (!d->engine->hasFeature(QPaintEngine::PorterDuff)) {
       if (mode != CompositionMode_Source && mode != CompositionMode_SourceOver) {
-         qWarning("QPainter::setCompositionMode: "
-            "PorterDuff modes not supported on device");
+         qWarning("QPainter::setCompositionMode() PorterDuff modes are not supported on this device");
          return;
       }
    }
@@ -1540,7 +1490,7 @@ QPainter::CompositionMode QPainter::compositionMode() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::compositionMode: Painter not active");
+      qWarning("QPainter::compositionMode() Painter engine not active");
       return QPainter::CompositionMode_SourceOver;
    }
    return d->state->composition_mode;
@@ -1549,49 +1499,39 @@ QPainter::CompositionMode QPainter::compositionMode() const
 const QBrush &QPainter::background() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::background: Painter not active");
+      qWarning("QPainter::background() Painter engine not active");
       return d->fakeState()->brush;
    }
+
    return d->state->bgBrush;
 }
-
-
-/*!
-    Returns true if clipping has been set; otherwise returns false.
-
-    \sa setClipping(), {QPainter#Clipping}{Clipping}
-*/
 
 bool QPainter::hasClipping() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::hasClipping: Painter not active");
+      qWarning("QPainter::hasClipping() Painter engine not active");
       return false;
    }
+
    return d->state->clipEnabled && d->state->clipOperation != Qt::NoClip;
 }
-
-
-/*!
-    Enables clipping if  \a enable is true, or disables clipping if  \a
-    enable is false.
-
-    \sa hasClipping(), {QPainter#Clipping}{Clipping}
-*/
 
 void QPainter::setClipping(bool enable)
 {
    Q_D(QPainter);
+
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output)
       printf("QPainter::setClipping(), enable=%s, was=%s\n",
-         enable ? "on" : "off",
-         hasClipping() ? "on" : "off");
+         enable ? "on" : "off", hasClipping() ? "on" : "off");
 #endif
+
    if (!d->engine) {
-      qWarning("QPainter::setClipping: Painter not active, state will be reset by begin");
+      qWarning("QPainter::setClipping() Painter engine not active");
       return;
    }
 
@@ -1615,13 +1555,11 @@ void QPainter::setClipping(bool enable)
    d->updateState(d->state);
 }
 
-
-
 QRegion QPainter::clipRegion() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::clipRegion: Painter not active");
+      qWarning("QPainter::clipRegion() Painter engine not active");
       return QRegion();
    }
 
@@ -1744,7 +1682,7 @@ QPainterPath QPainter::clipPath() const
    // ### Since we do not support path intersections and path unions yet,
    // we just use clipRegion() here...
    if (!d->engine) {
-      qWarning("QPainter::clipPath: Painter not active");
+      qWarning("QPainter::clipPath() Painter engine not active");
       return QPainterPath();
    }
 
@@ -1782,14 +1720,14 @@ QRectF QPainter::clipBoundingRect() const
    Q_D(const QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::clipBoundingRect: Painter not active");
+      qWarning("QPainter::clipBoundingRect() Painter engine not active");
       return QRectF();
    }
 
    // Accumulate the bounding box in device space. This is not 100%
-   // precise, but it fits within the guarantee and it is reasonably
-   // fast.
+   // precise, but it fits within the guarantee and it is reasonably fast
    QRectF bounds;
+
    for (int i = 0; i < d->state->clipInfo.size(); ++i) {
       QRectF r;
       const QPainterClipInfo &info = d->state->clipInfo.at(i);
@@ -1815,8 +1753,7 @@ QRectF QPainter::clipBoundingRect() const
       }
    }
 
-   // Map the rectangle back into logical space using the inverse
-   // matrix.
+   // Map the rectangle back into logical space using the inverse matrix
    if (!d->txinv) {
       const_cast<QPainter *>(this)->d_ptr->updateInvMatrix();
    }
@@ -1830,11 +1767,11 @@ void QPainter::setClipRect(const QRectF &rect, Qt::ClipOperation op)
 
    if (d->extended) {
 
-
       if (!d->engine) {
-         qWarning("QPainter::setClipRect: Painter not active");
+         qWarning("QPainter::setClipRect() Painter engine not active");
          return;
       }
+
       bool simplifyClipOp = (paintEngine()->type() != QPaintEngine::Picture);
       if (simplifyClipOp && (!d->state->clipEnabled && op != Qt::NoClip)) {
          op = Qt::ReplaceClip;
@@ -1883,7 +1820,7 @@ void QPainter::setClipRect(const QRect &rect, Qt::ClipOperation op)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setClipRect: Painter not active");
+      qWarning("QPainter::setClipRect() Painter engine not active");
       return;
    }
    bool simplifyClipOp = (paintEngine()->type() != QPaintEngine::Picture);
@@ -1918,18 +1855,20 @@ void QPainter::setClipRect(const QRect &rect, Qt::ClipOperation op)
    d->updateState(d->state);
 }
 
-
 void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
 {
    Q_D(QPainter);
+
 #ifdef QT_DEBUG_DRAW
    QRect rect = r.boundingRect();
+
    if (qt_show_painter_debug_output)
       printf("QPainter::setClipRegion(), size=%d, [%d,%d,%d,%d]\n",
          r.rects().size(), rect.x(), rect.y(), rect.width(), rect.height());
 #endif
+
    if (!d->engine) {
-      qWarning("QPainter::setClipRegion: Painter not active");
+      qWarning("QPainter::setClipRegion() Painter engine not active");
       return;
    }
    bool simplifyClipOp = (paintEngine()->type() != QPaintEngine::Picture);
@@ -1965,20 +1904,17 @@ void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
    d->updateState(d->state);
 }
 
-
 void QPainter::setWorldMatrix(const QMatrix &matrix, bool combine)
 {
    setWorldTransform(QTransform(matrix), combine);
 }
-
-
 
 // obsolete
 const QMatrix &QPainter::worldMatrix() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::worldMatrix: Painter not active");
+      qWarning("QPainter::worldMatrix() Painter engine not active");
       return d->fakeState()->transform.toAffine();
    }
    return d->state->worldMatrix.toAffine();
@@ -2007,7 +1943,7 @@ const QMatrix &QPainter::deviceMatrix() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::deviceMatrix: Painter not active");
+      qWarning("QPainter::deviceMatrix() Painter engine not active");
       return d->fakeState()->transform.toAffine();
    }
    return d->state->matrix.toAffine();
@@ -2022,16 +1958,12 @@ void QPainter::resetMatrix()
 void QPainter::setWorldMatrixEnabled(bool enable)
 {
    Q_D(QPainter);
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setMatrixEnabled(), enable=%d\n", enable);
-   }
-#endif
 
    if (!d->engine) {
-      qWarning("QPainter::setMatrixEnabled: Painter not active");
+      qWarning("QPainter::setMatrixEnabled() Painter engine not active");
       return;
    }
+
    if (enable == d->state->WxF) {
       return;
    }
@@ -2044,7 +1976,7 @@ bool QPainter::worldMatrixEnabled() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::worldMatrixEnabled: Painter not active");
+      qWarning("QPainter::worldMatrixEnabled() Painter engine not active");
       return false;
    }
    return d->state->WxF;
@@ -2061,16 +1993,19 @@ bool QPainter::matrixEnabled() const
 {
    return worldMatrixEnabled();
 }
+
 void QPainter::scale(qreal sx, qreal sy)
 {
+
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output) {
       printf("QPainter::scale(), sx=%f, sy=%f\n", sx, sy);
    }
 #endif
+
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::scale: Painter not active");
+      qWarning("QPainter::scale() Painter engine not active");
       return;
    }
 
@@ -2089,7 +2024,7 @@ void QPainter::shear(qreal sh, qreal sv)
 
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::shear: Painter not active");
+      qWarning("QPainter::shear() Painter engine not active");
       return;
    }
 
@@ -2105,9 +2040,10 @@ void QPainter::rotate(qreal a)
       printf("QPainter::rotate(), angle=%f\n", a);
    }
 #endif
+
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::rotate: Painter not active");
+      qWarning("QPainter::rotate() Painter engine not active");
       return;
    }
 
@@ -2120,14 +2056,16 @@ void QPainter::translate(const QPointF &offset)
 {
    qreal dx = offset.x();
    qreal dy = offset.y();
+
 #ifdef QT_DEBUG_DRAW
    if (qt_show_painter_debug_output) {
       printf("QPainter::translate(), dx=%f, dy=%f\n", dx, dy);
    }
 #endif
+
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::translate: Painter not active");
+      qWarning("QPainter::translate() Painter engine not active");
       return;
    }
 
@@ -2145,10 +2083,11 @@ void QPainter::setClipPath(const QPainterPath &path, Qt::ClipOperation op)
          path.elementCount(), op, b.x(), b.y(), b.width(), b.height());
    }
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setClipPath: Painter not active");
+      qWarning("QPainter::setClipPath() Painter engine not active");
       return;
    }
 
@@ -2187,7 +2126,7 @@ void QPainter::strokePath(const QPainterPath &path, const QPen &pen)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::strokePath: Painter not active");
+      qWarning("QPainter::strokePath() Painter engine not active");
       return;
    }
 
@@ -2221,7 +2160,7 @@ void QPainter::fillPath(const QPainterPath &path, const QBrush &brush)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::fillPath: Painter not active");
+      qWarning("QPainter::fillPath() Painter engine not active");
       return;
    }
 
@@ -2256,14 +2195,13 @@ void QPainter::drawPath(const QPainterPath &path)
    QRectF pathBounds = path.boundingRect();
    if (qt_show_painter_debug_output)
       printf("QPainter::drawPath(), size=%d, [%.2f,%.2f,%.2f,%.2f]\n",
-         path.elementCount(),
-         pathBounds.x(), pathBounds.y(), pathBounds.width(), pathBounds.height());
+         path.elementCount(), pathBounds.x(), pathBounds.y(), pathBounds.width(), pathBounds.height());
 #endif
 
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::drawPath: Painter not active");
+      qWarning("QPainter::drawPath() Painter engine not active");
       return;
    }
 
@@ -2287,10 +2225,11 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
       printf("QPainter::drawRects(), count=%d\n", rectCount);
    }
 #endif
+
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::drawRects: Painter not active");
+      qWarning("QPainter::drawRects() Painter engine not active");
       return;
    }
 
@@ -2350,7 +2289,7 @@ void QPainter::drawRects(const QRect *rectPtr, int rectCount)
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::drawRects: Painter not active");
+      qWarning("QPainter::drawRects() Painter engine not active");
       return;
    }
 
@@ -2409,7 +2348,7 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::drawPoints: Painter not active");
+      qWarning("QPainter::drawPoints() Painter engine not active");
       return;
    }
 
@@ -2472,7 +2411,7 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::drawPoints: Painter not active");
+      qWarning("QPainter::drawPoints() Painter engine not active");
       return;
    }
 
@@ -2532,7 +2471,7 @@ void QPainter::setBackgroundMode(Qt::BGMode mode)
 
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::setBackgroundMode: Painter not active");
+      qWarning("QPainter::setBackgroundMode() Painter engine not active");
       return;
    }
    if (d->state->bgMode == mode) {
@@ -2550,10 +2489,12 @@ void QPainter::setBackgroundMode(Qt::BGMode mode)
 Qt::BGMode QPainter::backgroundMode() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::backgroundMode: Painter not active");
+      qWarning("QPainter::backgroundMode() Painter engine not active");
       return Qt::TransparentMode;
    }
+
    return d->state->bgMode;
 }
 
@@ -2565,8 +2506,9 @@ void QPainter::setPen(const QColor &color)
    }
 #endif
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::setPen: Painter not active");
+      qWarning("QPainter::setPen() Painter engine not active");
       return;
    }
 
@@ -2583,8 +2525,6 @@ void QPainter::setPen(const QColor &color)
    }
 }
 
-
-
 void QPainter::setPen(const QPen &pen)
 {
 
@@ -2593,9 +2533,11 @@ void QPainter::setPen(const QPen &pen)
       printf("QPainter::setPen(), color=%04x, (brushStyle=%d) style=%d, cap=%d, join=%d\n",
          pen.color().rgb(), pen.brush().style(), pen.style(), pen.capStyle(), pen.joinStyle());
 #endif
+
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::setPen: Painter not active");
+      qWarning("QPainter::setPen() Painter engine not active");
       return;
    }
 
@@ -2614,13 +2556,11 @@ void QPainter::setPen(const QPen &pen)
    d->state->dirtyFlags |= QPaintEngine::DirtyPen;
 }
 
-
-
 void QPainter::setPen(Qt::PenStyle style)
 {
    Q_D(QPainter);
    if (!d->engine) {
-      qWarning("QPainter::setPen: Painter not active");
+      qWarning("QPainter::setPen() Painter engine not active");
       return;
    }
 
@@ -2639,23 +2579,17 @@ void QPainter::setPen(Qt::PenStyle style)
 
 }
 
-/*!
-    Returns the painter's current pen.
-
-    \sa setPen(), {QPainter#Settings}{Settings}
-*/
-
 const QPen &QPainter::pen() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::pen: Painter not active");
+      qWarning("QPainter::pen() Painter engine not active");
       return d->fakeState()->pen;
    }
+
    return d->state->pen;
 }
-
-
 
 void QPainter::setBrush(const QBrush &brush)
 {
@@ -2664,9 +2598,11 @@ void QPainter::setBrush(const QBrush &brush)
       printf("QPainter::setBrush(), color=%04x, style=%d\n", brush.color().rgb(), brush.style());
    }
 #endif
+
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::setBrush: Painter not active");
+      qWarning("QPainter::setBrush() Painter engine not active");
       return;
    }
 
@@ -2685,24 +2621,17 @@ void QPainter::setBrush(const QBrush &brush)
    d->state->dirtyFlags |= QPaintEngine::DirtyBrush;
 }
 
-
-/*!
-    \overload
-
-    Sets the painter's brush to black color and the specified \a
-    style.
-*/
-
 void QPainter::setBrush(Qt::BrushStyle style)
 {
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::setBrush: Painter not active");
+      qWarning("QPainter::setBrush() Painter engine not active");
       return;
    }
+
    if (d->state->brush.style() == style &&
-      (style == Qt::NoBrush
-         || (style == Qt::SolidPattern && d->state->brush.color() == QColor(0, 0, 0)))) {
+         (style == Qt::NoBrush || (style == Qt::SolidPattern && d->state->brush.color() == QColor(0, 0, 0)))) {
       return;
    }
 
@@ -2715,19 +2644,16 @@ void QPainter::setBrush(Qt::BrushStyle style)
    }
 }
 
-
-
 const QBrush &QPainter::brush() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::brush: Painter not active");
+      qWarning("QPainter::brush() Painter engine not active");
       return d->fakeState()->brush;
    }
    return d->state->brush;
 }
-
-
 
 void QPainter::setBackground(const QBrush &bg)
 {
@@ -2738,11 +2664,14 @@ void QPainter::setBackground(const QBrush &bg)
 #endif
 
    Q_D(QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::setBackground: Painter not active");
+      qWarning("QPainter::setBackground() Painter engine not active");
       return;
    }
+
    d->state->bgBrush = bg;
+
    if (!d->extended) {
       d->state->dirtyFlags |= QPaintEngine::DirtyBackground;
    }
@@ -2759,11 +2688,12 @@ void QPainter::setFont(const QFont &font)
 #endif
 
    if (!d->engine) {
-      qWarning("QPainter::setFont: Painter not active");
+      qWarning("QPainter::setFont() Painter engine not active");
       return;
    }
 
    d->state->font = QFont(font.resolve(d->state->deviceFont), device());
+
    if (! d->extended) {
       d->state->dirtyFlags |= QPaintEngine::DirtyFont;
    }
@@ -2774,7 +2704,7 @@ const QFont &QPainter::font() const
    Q_D(const QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::font: Painter not active");
+      qWarning("QPainter::font() Painter engine not active");
       return d->fakeState()->font;
    }
    return d->state->font;
@@ -2808,14 +2738,10 @@ void QPainter::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius,
    drawPath(path);
 }
 
-
 void QPainter::drawRoundRect(const QRectF &r, int xRnd, int yRnd)
 {
    drawRoundedRect(r, xRnd, yRnd, Qt::RelativeSize);
 }
-
-
-
 
 void QPainter::drawEllipse(const QRectF &r)
 {
@@ -2824,6 +2750,7 @@ void QPainter::drawEllipse(const QRectF &r)
       printf("QPainter::drawEllipse(), [%.2f,%.2f,%.2f,%.2f]\n", r.x(), r.y(), r.width(), r.height());
    }
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2852,7 +2779,6 @@ void QPainter::drawEllipse(const QRectF &r)
 
    d->engine->drawEllipse(rect);
 }
-
 
 void QPainter::drawEllipse(const QRect &r)
 {
@@ -2891,7 +2817,6 @@ void QPainter::drawEllipse(const QRect &r)
    d->engine->drawEllipse(rect);
 }
 
-
 void QPainter::drawArc(const QRectF &r, int a, int alen)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2913,8 +2838,6 @@ void QPainter::drawArc(const QRectF &r, int a, int alen)
    strokePath(path, d->state->pen);
 }
 
-
-
 void QPainter::drawPie(const QRectF &r, int a, int alen)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2922,6 +2845,7 @@ void QPainter::drawPie(const QRectF &r, int a, int alen)
       printf("QPainter::drawPie(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
          r.x(), r.y(), r.width(), r.height(), a / 16, alen / 16);
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2949,8 +2873,6 @@ void QPainter::drawPie(const QRectF &r, int a, int alen)
 
 }
 
-
-
 void QPainter::drawChord(const QRectF &r, int a, int alen)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2958,6 +2880,7 @@ void QPainter::drawChord(const QRectF &r, int a, int alen)
       printf("QPainter::drawChord(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
          r.x(), r.y(), r.width(), r.height(), a / 16, alen / 16);
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -3082,6 +3005,7 @@ void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
       printf("QPainter::drawPolyline(), count=%d\n", pointCount);
    }
 #endif
+
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -3330,8 +3254,7 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 #if defined QT_DEBUG_DRAW
    if (qt_show_painter_debug_output)
       printf("QPainter::drawPixmap(), p=[%.2f,%.2f], pix=[%d,%d]\n",
-         p.x(), p.y(),
-         pm.width(), pm.height());
+         p.x(), p.y(), pm.width(), pm.height());
 #endif
 
    Q_D(QPainter);
@@ -3404,15 +3327,16 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 #if defined QT_DEBUG_DRAW
    if (qt_show_painter_debug_output)
       printf("QPainter::drawPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], source=[%.2f,%.2f,%.2f,%.2f]\n",
-         r.x(), r.y(), r.width(), r.height(),
-         pm.width(), pm.height(),
+         r.x(), r.y(), r.width(), r.height(), pm.width(), pm.height(),
          sr.x(), sr.y(), sr.width(), sr.height());
 #endif
 
    Q_D(QPainter);
+
    if (!d->engine || pm.isNull()) {
       return;
    }
+
 #ifndef QT_NO_DEBUG
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawPixmap()");
 #endif
@@ -3718,7 +3642,7 @@ void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::drawGlyphRun: Painter not active");
+      qWarning("QPainter::drawGlyphRun() Painter engine not active");
       return;
    }
 
@@ -3809,8 +3733,9 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
       QVarLengthArray<QGlyphAttributes, 128> glyphAttributes(glyphCount);
 
       memset(glyphAttributes.data(), 0, glyphAttributes.size() * sizeof(QGlyphAttributes));
-      memset(advances.data(), 0, advances.size() * sizeof(QFixed));
-      memset(glyphJustifications.data(), 0, glyphJustifications.size() * sizeof(QGlyphJustification));
+
+      std::fill_n(advances.data(), advances.size(), QFixed());
+      std::fill_n(glyphJustifications.data(), glyphJustifications.size(), QGlyphJustification());
 
       textItem.glyphs.numGlyphs      = glyphCount;
       textItem.glyphs.glyphs         = const_cast<glyph_t *>(glyphArray);
@@ -3970,7 +3895,6 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
       d->state->matrix = oldMatrix;
    }
 }
-
 
 // internal
 void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justificationPadding)
@@ -4802,7 +4726,7 @@ void QPainter::setRenderHints(RenderHints hints, bool on)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setRenderHint: Painter must be active to set rendering hints");
+      qWarning("QPainter::setRenderHint() Painter engine not active");
       return;
    }
 
@@ -4834,7 +4758,7 @@ bool QPainter::viewTransformEnabled() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::viewTransformEnabled: Painter not active");
+      qWarning("QPainter::viewTransformEnabled() Painter engine not active");
       return false;
    }
    return d->state->VxF;
@@ -4851,7 +4775,7 @@ void QPainter::setWindow(const QRect &r)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setWindow: Painter not active");
+      qWarning("QPainter::setWindow() Painter engine not active");
       return;
    }
 
@@ -4868,7 +4792,7 @@ QRect QPainter::window() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::window: Painter not active");
+      qWarning("QPainter::window() Painter engine not active");
       return QRect();
    }
    return QRect(d->state->wx, d->state->wy, d->state->ww, d->state->wh);
@@ -4885,7 +4809,7 @@ void QPainter::setViewport(const QRect &r)
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setViewport: Painter not active");
+      qWarning("QPainter::setViewport() Painter engine not active");
       return;
    }
 
@@ -4902,7 +4826,7 @@ QRect QPainter::viewport() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::viewport: Painter not active");
+      qWarning("QPainter::viewport() Painter engine not active");
       return QRect();
    }
    return QRect(d->state->vx, d->state->vy, d->state->vw, d->state->vh);
@@ -4910,16 +4834,10 @@ QRect QPainter::viewport() const
 
 void QPainter::setViewTransformEnabled(bool enable)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setViewTransformEnabled(), enable=%d\n", enable);
-   }
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::setViewTransformEnabled: Painter not active");
+      qWarning("QPainter::setViewTransformEnabled() Painter engine not active");
       return;
    }
 
@@ -4937,7 +4855,7 @@ void QPainter::setRedirected(const QPaintDevice *device, QPaintDevice *replaceme
    (void) offset;
 
    Q_ASSERT(device != nullptr);
-   qWarning("QPainter::setRedirected(): Ignoring call to deprecated method, use QWidget::render() instead");
+   qWarning("QPainter::setRedirected() Deprecated method, use QWidget::render() instead");
 }
 
 // obsolete
@@ -4945,7 +4863,7 @@ void QPainter::restoreRedirected(const QPaintDevice *device)
 {
    (void) device;
 
-   qWarning("QPainter::restoreRedirected(): Ignoring call to deprecated method, use QWidget::render() instead");
+   qWarning("QPainter::restoreRedirected() Deprecated method, use QWidget::render() instead");
 }
 
 QPaintDevice *QPainter::redirected(const QPaintDevice *device, QPoint *offset)
@@ -5466,7 +5384,7 @@ const QTransform &QPainter::deviceTransform() const
 {
    Q_D(const QPainter);
    if (!d->engine) {
-      qWarning("QPainter::deviceTransform: Painter not active");
+      qWarning("QPainter::deviceTransform() Painter engine not active");
       return d->fakeState()->transform;
    }
    return d->state->matrix;
@@ -5476,14 +5394,8 @@ void QPainter::resetTransform()
 {
    Q_D(QPainter);
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::resetMatrix()\n");
-   }
-#endif
-
    if (!d->engine) {
-      qWarning("QPainter::resetMatrix: Painter not active");
+      qWarning("QPainter::resetMatrix() Painter engine not active");
       return;
    }
 
@@ -5506,7 +5418,7 @@ void QPainter::setWorldTransform(const QTransform &matrix, bool combine )
    Q_D(QPainter);
 
    if (! d->engine) {
-      qWarning("QPainter::setWorldTransform: Painter not active");
+      qWarning("QPainter::setWorldTransform() Painter engine not active");
       return;
    }
 
@@ -5523,10 +5435,12 @@ void QPainter::setWorldTransform(const QTransform &matrix, bool combine )
 const QTransform &QPainter::worldTransform() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
-      qWarning("QPainter::worldTransform: Painter not active");
+      qWarning("QPainter::worldTransform() Painter engine not active");
       return d->fakeState()->transform;
    }
+
    return d->state->worldMatrix;
 }
 
@@ -5535,7 +5449,7 @@ QTransform QPainter::combinedTransform() const
    Q_D(const QPainter);
 
    if (!d->engine) {
-      qWarning("QPainter::combinedTransform: Painter not active");
+      qWarning("QPainter::combinedTransform() Painter engine not active");
       return QTransform();
    }
 
@@ -5555,8 +5469,9 @@ void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragment
    for (int i = 0; i < fragmentCount; ++i) {
       QRectF sourceRect(fragments[i].sourceLeft, fragments[i].sourceTop,
          fragments[i].width, fragments[i].height);
+
       if (!(QRectF(pixmap.rect()).contains(sourceRect))) {
-         qWarning("QPainter::drawPixmapFragments - the source rect is not contained by the pixmap's rectangle");
+         qWarning("QPainter::drawPixmapFragments() Source rectangle is not contained by the pixmap rectangle");
       }
    }
 #endif

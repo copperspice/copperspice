@@ -23,8 +23,6 @@
 
 #include "qxsdelement_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdElement::Scope::setVariety(Variety variety)
@@ -222,5 +220,3 @@ XsdElement::WeakList XsdElement::substitutionGroups() const
 {
    return m_substitutionGroups.toList();
 }
-
-QT_END_NAMESPACE

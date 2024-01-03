@@ -29,7 +29,11 @@
 // #include <QDebug>
 // #define QT_QAUDIO_DEBUG 1
 
-Q_GLOBAL_STATIC(QSampleCache, sampleCache)
+static QSampleCache *sampleCache()
+{
+   static QSampleCache retval;
+   return &retval;
+}
 
 QSoundEffectPrivate::QSoundEffectPrivate(QObject *parent)
    : QObject(parent), m_soundSource(new PrivateSoundSource(this))

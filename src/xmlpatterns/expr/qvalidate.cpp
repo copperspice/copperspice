@@ -28,8 +28,6 @@
 
 #include "qvalidate_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
@@ -39,8 +37,9 @@ Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
    Q_ASSERT(operandNode);
    Q_ASSERT(validationMode == Lax || validationMode == Strict);
    Q_ASSERT(context);
-   Q_UNUSED(validationMode);
-   Q_UNUSED(context);
+
+   (void) validationMode;
+   (void) context;
 
    ItemType::List tList;
    tList.append(BuiltinTypes::element);
@@ -55,5 +54,3 @@ Expression::Ptr Validate::create(const Expression::Ptr &operandNode,
           context,
           ReportContext::XQTY0030);
 }
-
-QT_END_NAMESPACE

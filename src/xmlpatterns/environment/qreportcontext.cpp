@@ -28,8 +28,6 @@
 #include "qexpression_p.h"
 #include "qreportcontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ReportContext::~ReportContext()
@@ -69,7 +67,7 @@ QSourceLocation ReportContext::lookupSourceLocation(const SourceLocationReflecti
 
    if (sl.isNull()) {
       Q_ASSERT_X(!locationFor(actual).isNull(), Q_FUNC_INFO,
-                 qPrintable(QString::fromLatin1("No location is available for: %1").formatArg(actual->description())));
+                 csPrintable(QString::fromLatin1("No location is available for: %1").formatArg(actual->description())));
 
       return locationFor(actual);
    } else {
@@ -1054,4 +1052,3 @@ QUrl ReportContext::resolveURI(const QUrl &relative, const QUrl &baseURI) const
    }
 }
 
-QT_END_NAMESPACE

@@ -84,22 +84,18 @@ class regex_iterator_implementation
 
 template <class BidirectionalIterator, class charT, class traits>
 class regex_iterator
-   : public std::iterator <std::forward_iterator_tag, match_results<BidirectionalIterator>,
-     typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type,
-     const match_results<BidirectionalIterator> *, const match_results<BidirectionalIterator> & >
 {
  private:
    typedef regex_iterator_implementation<BidirectionalIterator, charT, traits> impl;
    typedef std::shared_ptr<impl> pimpl;
 
  public:
-   typedef basic_regex<charT, traits> regex_type;
-   typedef match_results<BidirectionalIterator> value_type;
-   typedef const value_type *pointer;
-   typedef const value_type &reference;
-   typedef std::forward_iterator_tag iterator_category;
-
-   typedef typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type difference_type;
+   using regex_type        = basic_regex<charT, traits>;
+   using difference_type   = typename cs_regex_detail_ns::regex_iterator_traits<BidirectionalIterator>::difference_type;
+   using value_type        = match_results<BidirectionalIterator>;
+   using iterator_category = std::forward_iterator_tag;
+   using pointer           = const value_type *;
+   using reference         = const value_type &;
 
    regex_iterator() {
    }

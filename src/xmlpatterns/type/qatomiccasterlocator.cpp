@@ -23,8 +23,6 @@
 
 #include "qatomiccasterlocator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 #define implCasterVisit(type)                                                                           \
@@ -60,5 +58,3 @@ implCasterVisit(UntypedAtomicType)
 implCasterVisit(YearMonthDurationType)
 
 #undef implCasterVisit
-
-QT_END_NAMESPACE

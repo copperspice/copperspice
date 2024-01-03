@@ -50,7 +50,7 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
    void stop() override;
 
  private:
-   CORE_CS_SLOT_1(Private, void refresh(int un_named_arg1))
+   CORE_CS_SLOT_1(Private, void refresh(int fd))
    CORE_CS_SLOT_2(refresh)
 
    struct Directory {

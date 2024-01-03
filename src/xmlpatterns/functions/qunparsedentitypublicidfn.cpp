@@ -25,8 +25,6 @@
 
 #include "qunparsedentitypublicidfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item UnparsedEntityPublicIDFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -34,5 +32,3 @@ Item UnparsedEntityPublicIDFN::evaluateSingleton(const DynamicContext::Ptr &cont
    checkTargetNode(context->contextItem().asNode(), context, ReportContext::XTDE1380);
    return AtomicString::fromValue(QString());
 }
-
-QT_END_NAMESPACE

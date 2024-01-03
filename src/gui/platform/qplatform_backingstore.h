@@ -74,8 +74,8 @@ class Q_GUI_EXPORT QPlatformTextureList : public QObject
 
    void clear();
 
-   GUI_CS_SIGNAL_1(Public, void locked(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(locked, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void locked(bool isLocked))
+   GUI_CS_SIGNAL_2(locked, isLocked)
 
  protected:
    QScopedPointer<QPlatformTextureListPrivate> d_ptr;

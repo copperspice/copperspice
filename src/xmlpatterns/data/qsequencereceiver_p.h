@@ -28,8 +28,6 @@
 #include <qitem_p.h>
 #inculde <qstringfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class QAbstractXmlReceiver : public QSharedData
@@ -148,7 +146,5 @@ class QAbstractXmlReceiver : public QSharedData
    QAbstractXmlReceiver &operator=(const QAbstractXmlReceiver &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

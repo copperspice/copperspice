@@ -312,7 +312,7 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 
 -(void)mouseUp: (NSEvent *)mouseEvent
 {
-   Q_UNUSED(mouseEvent);
+   (void) mouseEvent;
    [self menuTrackingDone: nil];
 }
 
@@ -323,7 +323,7 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 
 -(void)rightMouseUp: (NSEvent *)mouseEvent
 {
-   Q_UNUSED(mouseEvent);
+   (void) mouseEvent;
    [self menuTrackingDone: nil];
 }
 
@@ -334,7 +334,7 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 
 -(void)otherMouseUp: (NSEvent *)mouseEvent
 {
-   Q_UNUSED(mouseEvent);
+   (void) mouseEvent;
    [self menuTrackingDone: nil];
 }
 
@@ -409,7 +409,7 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 
 - (void)doubleClickSelector: (id)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    if (!systray) {
       return;
    }
@@ -419,15 +419,15 @@ void QCocoaSystemTrayIcon::showMessage(const QString &title, const QString &mess
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
 - (BOOL)userNotificationCenter: (NSUserNotificationCenter *)center shouldPresentNotification: (NSUserNotification *)notification
 {
-   Q_UNUSED(center);
-   Q_UNUSED(notification);
+   (void) center;
+   (void) notification;
    return YES;
 }
 
 - (void)userNotificationCenter: (NSUserNotificationCenter *)center didActivateNotification: (NSUserNotification *)notification
 {
-   Q_UNUSED(center);
-   Q_UNUSED(notification);
+   (void) center;
+   (void) notification;
    emit systray->messageClicked();
 }
 #endif

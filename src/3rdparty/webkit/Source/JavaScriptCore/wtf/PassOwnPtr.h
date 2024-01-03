@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef WTF_PassOwnPtr_h
@@ -47,8 +47,8 @@ namespace WTF {
         typedef typename RemovePointer<T>::Type ValueType;
         typedef ValueType* PtrType;
 
-        PassOwnPtr() : m_ptr(0) { }
-        PassOwnPtr(std::nullptr_t) : m_ptr(0) { }
+        PassOwnPtr() : m_ptr(nullptr) { }
+        PassOwnPtr(std::nullptr_t) : m_ptr(nullptr) { }
 
         // It somewhat breaks the type system to allow transfer of ownership out of
         // a const PassOwnPtr. However, it makes it much easier to work with PassOwnPtr
@@ -70,7 +70,7 @@ namespace WTF {
 
         // This conversion operator allows implicit conversion to bool but not to other integer types.
         typedef PtrType PassOwnPtr::*UnspecifiedBoolType;
-        operator UnspecifiedBoolType() const { return m_ptr ? &PassOwnPtr::m_ptr : 0; }
+        operator UnspecifiedBoolType() const { return m_ptr ? &PassOwnPtr::m_ptr : nullptr; }
 
         PassOwnPtr& operator=(const PassOwnPtr<T>&);
 #if !defined(LOOSE_PASS_OWN_PTR) || !HAVE(NULLPTR)
@@ -103,14 +103,14 @@ namespace WTF {
     template<typename T> inline void PassOwnPtr<T>::clear()
     {
         PtrType ptr = m_ptr;
-        m_ptr = 0;
+        m_ptr = nullptr;
         deleteOwnedPtr(ptr);
     }
 
     template<typename T> inline typename PassOwnPtr<T>::PtrType PassOwnPtr<T>::leakPtr() const
     {
         PtrType ptr = m_ptr;
-        m_ptr = 0;
+        m_ptr = nullptr;
         return ptr;
     }
 
@@ -146,54 +146,54 @@ namespace WTF {
         return *this;
     }
 
-    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, const PassOwnPtr<U>& b) 
+    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, const PassOwnPtr<U>& b)
     {
-        return a.get() == b.get(); 
+        return a.get() == b.get();
     }
 
-    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, const OwnPtr<U>& b) 
+    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, const OwnPtr<U>& b)
     {
-        return a.get() == b.get(); 
+        return a.get() == b.get();
     }
-    
-    template<typename T, typename U> inline bool operator==(const OwnPtr<T>& a, const PassOwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator==(const OwnPtr<T>& a, const PassOwnPtr<U>& b)
     {
-        return a.get() == b.get(); 
+        return a.get() == b.get();
     }
-    
-    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, U* b) 
+
+    template<typename T, typename U> inline bool operator==(const PassOwnPtr<T>& a, U* b)
     {
-        return a.get() == b; 
+        return a.get() == b;
     }
-    
-    template<typename T, typename U> inline bool operator==(T* a, const PassOwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator==(T* a, const PassOwnPtr<U>& b)
     {
-        return a == b.get(); 
+        return a == b.get();
     }
-    
-    template<typename T, typename U> inline bool operator!=(const PassOwnPtr<T>& a, const PassOwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator!=(const PassOwnPtr<T>& a, const PassOwnPtr<U>& b)
     {
-        return a.get() != b.get(); 
+        return a.get() != b.get();
     }
-    
-    template<typename T, typename U> inline bool operator!=(const PassOwnPtr<T>& a, const OwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator!=(const PassOwnPtr<T>& a, const OwnPtr<U>& b)
     {
-        return a.get() != b.get(); 
+        return a.get() != b.get();
     }
-    
-    template<typename T, typename U> inline bool operator!=(const OwnPtr<T>& a, const PassOwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator!=(const OwnPtr<T>& a, const PassOwnPtr<U>& b)
     {
-        return a.get() != b.get(); 
+        return a.get() != b.get();
     }
-    
+
     template<typename T, typename U> inline bool operator!=(const PassOwnPtr<T>& a, U* b)
     {
-        return a.get() != b; 
+        return a.get() != b;
     }
-    
-    template<typename T, typename U> inline bool operator!=(T* a, const PassOwnPtr<U>& b) 
+
+    template<typename T, typename U> inline bool operator!=(T* a, const PassOwnPtr<U>& b)
     {
-        return a != b.get(); 
+        return a != b.get();
     }
 
     template<typename T> inline PassOwnPtr<T> adoptPtr(T* ptr)
@@ -201,12 +201,12 @@ namespace WTF {
         return PassOwnPtr<T>(ptr);
     }
 
-    template<typename T, typename U> inline PassOwnPtr<T> static_pointer_cast(const PassOwnPtr<U>& p) 
+    template<typename T, typename U> inline PassOwnPtr<T> static_pointer_cast(const PassOwnPtr<U>& p)
     {
         return adoptPtr(static_cast<T*>(p.leakPtr()));
     }
 
-    template<typename T, typename U> inline PassOwnPtr<T> const_pointer_cast(const PassOwnPtr<U>& p) 
+    template<typename T, typename U> inline PassOwnPtr<T> const_pointer_cast(const PassOwnPtr<U>& p)
     {
         return adoptPtr(const_cast<T*>(p.leakPtr()));
     }

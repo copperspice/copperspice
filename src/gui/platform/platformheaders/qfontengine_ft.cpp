@@ -25,6 +25,7 @@
 
 #include <qalgorithms.h>
 #include <qdir.h>
+#include <qscopedarraypointer.h>
 #include <qtextstream.h>
 #include <qvariant.h>
 #include <qimage_p.h>
@@ -124,7 +125,11 @@ QtFreetypeData::~QtFreetypeData()
    library = nullptr;
 }
 
-Q_GLOBAL_STATIC(QThreadStorage<QtFreetypeData *>, theFreetypeData)
+static QThreadStorage<QtFreetypeData *> *theFreetypeData()
+{
+   static QThreadStorage<QtFreetypeData *> retval;
+   return &retval;
+}
 
 QtFreetypeData *qt_getFreetypeData()
 {
@@ -212,7 +217,9 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
       freetype->ref.ref();
 
    } else {
-      QScopedPointer<QFreetypeFace> newFreetype(new QFreetypeFace);
+      auto FreeTypeDeleter = [](auto ptr){ delete ptr; };
+      QUniquePointer<QFreetypeFace, decltype(FreeTypeDeleter)> newFreetype(new QFreetypeFace, FreeTypeDeleter);
+
       FT_Face face;
 
       if (! face_id.filename.isEmpty()) {
@@ -986,21 +993,23 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
       load_flags &= ~FT_LOAD_NO_BITMAP;
       err = FT_Load_Glyph(face, glyph, load_flags);
    }
+
    if (err == FT_Err_Too_Few_Arguments) {
       // this is an error in the bytecode interpreter, just try to run without it
       load_flags |= FT_LOAD_FORCE_AUTOHINT;
       err = FT_Load_Glyph(face, glyph, load_flags);
+
    } else if (err == FT_Err_Execution_Too_Long) {
       // This is an error in the bytecode, probably a web font made by someone who
       // didn't test bytecode hinting at all so disable for it for all glyphs.
-      qWarning("load glyph failed due to broken hinting bytecode in font, switching to auto hinting");
+      qWarning("QFontEngineFT::loadGlyph() FT_Load_Glyph() failed due to broken hinting bytecode in font, switching to auto hinting");
       default_load_flags |= FT_LOAD_FORCE_AUTOHINT;
       load_flags |= FT_LOAD_FORCE_AUTOHINT;
       err = FT_Load_Glyph(face, glyph, load_flags);
    }
 
    if (err != FT_Err_Ok) {
-      qWarning("load glyph failed err=%x face=%p, glyph=%d", err, face, glyph);
+      qWarning("QFontEngineFT::loadGlyph() FT_Load_Glyph() failed, err=%x face=%p, glyph=%d", err, face, glyph);
       if (set) {
          set->setGlyphMissing(glyph);
       }
@@ -1080,7 +1089,7 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
       err = FT_Render_Glyph(slot, hsubpixel ? FT_RENDER_MODE_LCD : FT_RENDER_MODE_LCD_V);
 
       if (err != FT_Err_Ok) {
-         qWarning("render glyph failed err=%x face=%p, glyph=%d", err, face, glyph);
+         qWarning("QFontEngineFT::loadGlyph() FT_Render_Glyph() failed err=%x face=%p, glyph=%d", err, face, glyph);
       }
 
       FT_Library_SetLcdFilter(slot->library, FT_LCD_FILTER_NONE);
@@ -1316,7 +1325,7 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
          }
 
       } else {
-         qWarning("QFontEngine: Glyph neither outline nor bitmap format=%d", slot->format);
+         qWarning("QFontEngineFT::loadGlyph() Glyph was not in outline or bitmap format, %d", slot->format);
          return nullptr;
       }
    }

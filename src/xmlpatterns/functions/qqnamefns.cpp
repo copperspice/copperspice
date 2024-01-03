@@ -33,8 +33,6 @@
 
 #include "qqnamefns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item QNameFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -168,5 +166,3 @@ Item::Iterator::Ptr InScopePrefixesFN::evaluateSequence(const DynamicContext::Pt
 
    return makeListIterator(result);
 }
-
-QT_END_NAMESPACE

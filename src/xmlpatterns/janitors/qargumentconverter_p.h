@@ -24,11 +24,10 @@
 #ifndef QArgumentConverter_P_H
 #define QArgumentConverter_P_H
 
-#include "quntypedatomicconverter_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <quntypedatomicconverter_p.h>
 
 namespace QPatternist {
+
 class ArgumentConverter : public UntypedAtomicConverter
 {
  public:
@@ -48,8 +47,7 @@ class ArgumentConverter : public UntypedAtomicConverter
    typedef QExplicitlySharedDataPointer<const ArgumentConverter> ConstPtr;
 
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

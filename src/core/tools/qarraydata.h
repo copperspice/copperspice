@@ -137,11 +137,11 @@ struct QTypedArrayData : QArrayData {
 
    [[nodiscard]] static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) {
       return static_cast<QTypedArrayData *>(QArrayData::allocate(sizeof(T),
-      Q_ALIGNOF(AlignmentDummy), capacity, options));
+         alignof(AlignmentDummy), capacity, options));
    }
 
    static void deallocate(QArrayData *data) {
-      QArrayData::deallocate(data, sizeof(T), Q_ALIGNOF(AlignmentDummy));
+      QArrayData::deallocate(data, sizeof(T), alignof(AlignmentDummy));
    }
 
    static QTypedArrayData *fromRawData(const T *data, size_t n, AllocationOptions options = Default) {
@@ -184,6 +184,6 @@ struct QArrayDataPointerRef {
 
 #define Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER(type, size) { \
     Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, \
-       (sizeof(QArrayData) + (Q_ALIGNOF(type) - 1)) & ~(Q_ALIGNOF(type) - 1) }
+       (sizeof(QArrayData) + (alignof(type) - 1)) & ~(alignof(type) - 1) }
 
 #endif

@@ -25,8 +25,6 @@
 #include "qatomicmathematicianlocators_p.h"
 #include "qatomicmathematicians_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 #define implMathVisit(ownerClass, visitor, mather, validOps)                            \
@@ -159,5 +157,3 @@ implReportingMathVisit(DateTime, DayTimeDurationType,   DateTimeDurationMathemat
 #undef implMathVisit
 #undef implReportingMathVisit
 #undef implRevReportingMathVisit
-
-QT_END_NAMESPACE

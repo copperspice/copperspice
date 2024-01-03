@@ -104,7 +104,7 @@ class QXcbXSettingsPrivate
                _xsettings_atom,
                offset / 4,
                8192);
-         xcb_get_property_reply_t *reply = xcb_get_property_reply(screen->xcb_connection(), get_prop_cookie, NULL);
+         xcb_get_property_reply_t *reply = xcb_get_property_reply(screen->xcb_connection(), get_prop_cookie, nullptr);
          bool more = false;
          if (!reply) {
             return settings;
@@ -172,7 +172,7 @@ class QXcbXSettingsPrivate
 
          VALIDATE_LENGTH(4);
          int last_change_serial = ADJUST_BO(byteOrder, qint32, data + offset + local_offset);
-         Q_UNUSED(last_change_serial);
+         (void) last_change_serial;
          local_offset += 4;
 
          QVariant value;

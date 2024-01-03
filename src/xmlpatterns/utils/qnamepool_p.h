@@ -24,13 +24,13 @@
 #ifndef QNamePool_P_H
 #define QNamePool_P_H
 
-#include <QHash>
-#include <QReadLocker>
-#include <QReadWriteLock>
-#include <QSharedData>
-#include <QString>
-#include <QVector>
-#include <QXmlName>
+#include <qhash.h>
+#include <qreadlocker.h>
+#include <qreadwritelock.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qvector.h>
+#include <qxmlname.h>
 
 #include <qprimitives_p.h>
 
@@ -429,13 +429,13 @@ inline QXmlName::QXmlName(const NamespaceCode uri,
    /* We can't use members like prefix() here because if one of the
     * values are to large, they would overflow into the others. */
    Q_ASSERT_X(p <= MaximumPrefixes, "",
-              qPrintable(QString("NamePool prefix limits: max is %1, therefore %2 exceeds.").formatArg(MaximumPrefixes).formatArg(p)));
+              csPrintable(QString("NamePool prefix limits: max is %1, therefore %2 exceeds.").formatArg(MaximumPrefixes).formatArg(p)));
 
    Q_ASSERT_X(ln <= MaximumLocalNames, "",
-              qPrintable(QString("NamePool local name limits: max is %1, therefore %2 exceeds.").formatArg(MaximumLocalNames).formatArg(ln)));
+              csPrintable(QString("NamePool local name limits: max is %1, therefore %2 exceeds.").formatArg(MaximumLocalNames).formatArg(ln)));
 
    Q_ASSERT_X(uri <= MaximumNamespaces, "",
-              qPrintable(QString("NamePool namespace limits: max is %1, therefore %2 exceeds.").formatArg(MaximumNamespaces).formatArg(uri)));
+              csPrintable(QString("NamePool namespace limits: max is %1, therefore %2 exceeds.").formatArg(MaximumNamespaces).formatArg(uri)));
 }
 
 #endif

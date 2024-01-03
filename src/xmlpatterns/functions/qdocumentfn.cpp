@@ -24,10 +24,7 @@
 #include "qforclause_p.h"
 #include "qfunctionfactory_p.h"
 #include "qrangevariablereference_p.h"
-
 #include "qdocumentfn_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -93,5 +90,3 @@ Expression::Ptr DocumentFN::typeCheck(const StaticContext::Ptr &context,
    rewrite(oldMe, newMe, context);
    return newMe->typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

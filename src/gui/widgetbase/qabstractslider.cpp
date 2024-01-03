@@ -206,13 +206,6 @@ bool QAbstractSlider::isSliderDown() const
    return d->pressed;
 }
 
-
-/*!
-    \property QAbstractSlider::sliderPosition
-    \brief the current slider position
-
-    If \l tracking is enabled (the default), this is identical to \l value.
-*/
 void QAbstractSlider::setSliderPosition(int position)
 {
    Q_D(QAbstractSlider);
@@ -220,13 +213,16 @@ void QAbstractSlider::setSliderPosition(int position)
    if (position == d->position) {
       return;
    }
+
    d->position = position;
    if (!d->tracking) {
       update();
    }
+
    if (d->pressed) {
       emit sliderMoved(position);
    }
+
    if (d->tracking && !d->blocktracking) {
       triggerAction(SliderMove);
    }
@@ -237,7 +233,6 @@ int QAbstractSlider::sliderPosition() const
    Q_D(const QAbstractSlider);
    return d->position;
 }
-
 
 int QAbstractSlider::value() const
 {

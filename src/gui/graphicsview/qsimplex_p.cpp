@@ -128,7 +128,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
 
    // Remove constraints of type Var == K and replace them for their value.
    if (!simplifyConstraints(&constraints)) {
-      qWarning("QSimplex: No feasible solution");
+      qWarning("QSimplex::setConstraints() No feasible solution");
       clearDataStructures();
       return false;
    }
@@ -210,9 +210,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    }
    artificialList.clear();
 
-   /////////////////////////////
-   // Fill the Simplex matrix //
-   /////////////////////////////
+   // Fill the Simplex matrix
 
    // One for each variable plus the Basic and BFS columns (first and last)
    columns = variableIndex + 2;
@@ -221,7 +219,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
 
    matrix = (qreal *)malloc(sizeof(qreal) * columns * rows);
    if (!matrix) {
-      qWarning() << "QSimplex: Unable to allocate memory!";
+      qWarning("QSimplex::setConstraints() Unable to allocate memory");
       return false;
    }
    for (int i = columns * rows - 1; i >= 0; --i) {
@@ -274,7 +272,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    // Otherwise, we clean up our structures and report there is
    // no feasible solution.
    if ((valueAt(0, columns - 1) != 0.0) && (qAbs(valueAt(0, columns - 1)) > 0.00001)) {
-      qWarning("QSimplex: No feasible solution");
+      qWarning("QSimplex::setConstraints() No feasible solution");
       clearDataStructures();
       return false;
    }
@@ -345,7 +343,9 @@ void QSimplex::dumpMatrix()
    for (int j = 0; j < columns; ++j) {
       str += QString::fromLatin1("  <%1 >").formatArg(j, 2);
    }
-   qDebug("%s", qPrintable(str));
+
+   qDebug("%s", csPrintable(str));
+
    for (int i = 0; i < rows; ++i) {
       str = QString::fromLatin1("Row %1:").formatArg(i, 2);
 
@@ -353,8 +353,9 @@ void QSimplex::dumpMatrix()
       for (int j = 0; j < columns; ++j) {
          str += QString::fromLatin1("%1").formatArg(row[j], 7, 'f', 2);
       }
-      qDebug("%s", qPrintable(str));
+      qDebug("%s", csPrintable(str));
    }
+
    qDebug("------------------------\n");
 }
 
@@ -473,7 +474,7 @@ bool QSimplex::iterate()
    // Find Pivot row for column
    int pivotRow = pivotRowForColumn(pivotColumn);
    if (pivotRow == -1) {
-      qWarning("QSimplex: Unbounded problem");
+      qWarning("QSimplex::iterate() Unbounded problem");
       return false;
    }
 

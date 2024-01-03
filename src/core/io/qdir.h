@@ -154,18 +154,20 @@ class Q_CORE_EXPORT QDir
    }
 
    static bool isRelativePath(const QString &path);
-   inline static bool isAbsolutePath(const QString &path) {
+   static inline bool isAbsolutePath(const QString &path) {
       return !isRelativePath(path);
    }
+
    bool isRelative() const;
    inline bool isAbsolute() const {
       return !isRelative();
    }
+
    bool makeAbsolute();
 
-   bool operator==(const QDir &dir) const;
-   inline bool operator!=(const QDir &dir) const {
-      return !operator==(dir);
+   bool operator==(const QDir &other) const;
+   inline bool operator!=(const QDir &other) const {
+      return !operator==(other);
    }
 
    bool remove(const QString &fileName);

@@ -38,8 +38,6 @@
 
 #include "qxslt20corefunctions_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr XSLT20CoreFunctions::retrieveExpression(const QXmlName lname,
@@ -133,5 +131,3 @@ FunctionSignature::Ptr XSLT20CoreFunctions::retrieveFunctionSignature(const Name
 
    return s;
 }
-
-QT_END_NAMESPACE

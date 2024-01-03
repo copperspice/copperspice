@@ -45,7 +45,7 @@ void QBasicFontDatabase::populateFontDatabase()
     QDir dir(fontpath);
 
     if (! dir.exists()) {
-       qWarning("QBasicFontDatabase: Unable to locate the font directory %s", csPrintable(fontpath));
+       qWarning("QBasicFontDatabase::populateFontDatabase() Unable to locate the font directory %s", csPrintable(fontpath));
        return;
     }
 

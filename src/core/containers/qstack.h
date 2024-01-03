@@ -27,7 +27,7 @@
 #include <qcontainerfwd.h>
 #include <qvector.h>
 
-template<class T>
+template <class T>
 class QStack : public QVector<T>
 {
    public:
@@ -65,7 +65,7 @@ class QStack : public QVector<T>
       const_reference top() const;
 };
 
-template<class T>
+template <class T>
 inline T QStack<T>::pop()
 {
    Q_ASSERT(! this->isEmpty());
@@ -76,14 +76,14 @@ inline T QStack<T>::pop()
    return value;
 }
 
-template<class T>
+template <class T>
 inline typename QStack<T>::reference QStack<T>::top()
 {
    Q_ASSERT(! this->isEmpty());
    return this->last();
 }
 
-template<class T>
+template <class T>
 inline typename QStack<T>::const_reference QStack<T>::top() const
 {
    Q_ASSERT(! this->isEmpty());

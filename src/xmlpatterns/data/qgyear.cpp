@@ -25,8 +25,6 @@
 
 #include "qgyear_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 GYear::GYear(const QDateTime &dateTime) : AbstractDateTime(dateTime)
@@ -79,5 +77,3 @@ ItemType::Ptr GYear::type() const
 {
    return BuiltinTypes::xsGYear;
 }
-
-QT_END_NAMESPACE

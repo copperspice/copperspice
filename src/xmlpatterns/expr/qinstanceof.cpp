@@ -25,10 +25,7 @@
 #include "qcommonsequencetypes_p.h"
 #include "qcommonvalues_p.h"
 #include "qliteral_p.h"
-
 #include "qinstanceof_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -110,5 +107,3 @@ ExpressionVisitorResult::Ptr InstanceOf::accept(const ExpressionVisitor::Ptr &vi
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

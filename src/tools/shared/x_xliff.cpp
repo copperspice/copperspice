@@ -523,7 +523,8 @@ bool XLIFFHandler::hasContext(XliffContext ctx) const
 bool XLIFFHandler::startElement(const QString &namespaceURI,
                                 const QString &localName, const QString &qName, const QXmlAttributes &atts )
 {
-   Q_UNUSED(qName);
+   (void) qName;
+
    if (namespaceURI == m_URITT) {
       goto bail;
    }
@@ -652,7 +653,7 @@ bail:
 
 bool XLIFFHandler::endElement(const QString &namespaceURI, const QString &localName, const QString &qName)
 {
-   Q_UNUSED(qName);
+   (void) qName;
 
    if (namespaceURI == m_URITT) {
       if (hasContext(XC_trans_unit) || hasContext(XC_restype_plurals)) {

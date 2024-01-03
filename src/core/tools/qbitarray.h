@@ -62,7 +62,7 @@ class Q_CORE_EXPORT QBitArray
    }
 
    int count(bool on) const;
-   // ### Qt5/Store the number of set bits separately
+   // TODO: Store the number of set bits separately
 
    inline bool isEmpty() const {
       return d.isEmpty();

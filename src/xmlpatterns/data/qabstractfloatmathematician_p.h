@@ -31,8 +31,6 @@
 #include <qpatternistlocale_p.h>
 #include <qsourcelocationreflection_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template <const bool isDouble>
@@ -59,7 +57,5 @@ typedef AbstractFloatMathematician<true> DoubleMathematician;
  */
 typedef AbstractFloatMathematician<false> FloatMathematician;
 }
-
-QT_END_NAMESPACE
 
 #endif

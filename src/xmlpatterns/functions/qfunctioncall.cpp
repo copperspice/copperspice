@@ -31,8 +31,6 @@
 
 #include "qfunctioncall_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SequenceType::List FunctionCall::expectedOperandTypes() const
@@ -134,4 +132,3 @@ Expression::ID FunctionCall::id() const
    return m_signature->id();
 }
 
-QT_END_NAMESPACE

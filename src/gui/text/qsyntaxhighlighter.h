@@ -29,8 +29,8 @@
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 
 #include <qobject.h>
+#include <qscopedpointer.h>
 #include <qtextobject.h>
-#include <QScopedPointer>
 
 class QTextDocument;
 class QSyntaxHighlighterPrivate;

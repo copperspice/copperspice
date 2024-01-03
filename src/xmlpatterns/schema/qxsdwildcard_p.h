@@ -27,8 +27,6 @@
 #include <qxsdterm_p.h>
 #include <QSet>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdWildcard : public XsdTerm
@@ -149,8 +147,7 @@ class XsdWildcard : public XsdTerm
    NamespaceConstraint::Ptr m_namespaceConstraint;
    ProcessContents          m_processContents;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

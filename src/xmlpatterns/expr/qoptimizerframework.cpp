@@ -23,8 +23,6 @@
 
 #include "qoptimizerblocks_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ExpressionIdentifier::~ExpressionIdentifier()
@@ -49,5 +47,3 @@ OptimizationPass::OptimizationPass(const ExpressionIdentifier::Ptr &startID,
               "Either resultCreator or sourceExpression must be set, otherwise there's "
               "nothing to rewrite to.");
 }
-
-QT_END_NAMESPACE

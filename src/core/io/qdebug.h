@@ -320,7 +320,7 @@ class QNoDebug
       return *this;
    }
 
-   template<typename T>
+   template <typename T>
    inline QNoDebug &operator<<(const T &) {
       return *this;
    }

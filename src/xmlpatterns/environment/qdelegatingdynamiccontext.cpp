@@ -21,14 +21,12 @@
 *
 ***********************************************************************/
 
-#include <QDateTime>
+#include <qdatetime.h>
 
 #include "qdaytimeduration_p.h"
 #include "qtemplatemode_p.h"
 
 #include "qdelegatingdynamiccontext_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -190,5 +188,3 @@ QExplicitlySharedDataPointer<TemplateMode> DelegatingDynamicContext::currentTemp
 {
    return m_prevContext->currentTemplateMode();
 }
-
-QT_END_NAMESPACE

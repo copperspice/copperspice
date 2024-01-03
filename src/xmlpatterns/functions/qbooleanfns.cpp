@@ -25,8 +25,6 @@
 
 #include "qbooleanfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool TrueFN::evaluateEBV(const DynamicContext::Ptr &) const
@@ -49,5 +47,3 @@ OptimizationPass::List NotFN::optimizationPasses() const
 {
    return OptimizationPasses::notFN;
 }
-
-QT_END_NAMESPACE

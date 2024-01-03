@@ -338,10 +338,10 @@ class QStringView : public CsString::CsBasicStringView<S>
       }
 
    private:
-      template<typename C = value_type>
+      template <typename C = value_type>
       const_iterator cs_internal_find_fast(value_type ch,  const_iterator iter_begin) const;
 
-      template<typename C = value_type>
+      template <typename C = value_type>
       const_iterator cs_internal_rfind_fast(value_type ch, const_iterator iter_begin) const;
 
       const_iterator cs_internal_find_fast(const S &str,  const_iterator iter_begin) const;
@@ -351,7 +351,7 @@ class QStringView : public CsString::CsBasicStringView<S>
 };
 
 template <typename S>
-template<typename C>
+template <typename C>
 typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(value_type ch, const_iterator iter_begin) const
 {
    const_iterator iter_end = cend();
@@ -431,7 +431,7 @@ typename QStringView<S>::const_iterator QStringView<S>::cs_internal_find_fast(co
 }
 
 template <typename S>
-template<typename C>
+template <typename C>
 typename QStringView<S>::const_iterator QStringView<S>::cs_internal_rfind_fast(value_type ch, const_iterator iter_begin) const
 {
    const_iterator iter_end = cend();

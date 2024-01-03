@@ -29,9 +29,8 @@
 #include <qliteral_p.h>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class BooleanFN : public FunctionCall
 {
  public:
@@ -190,7 +189,7 @@ class ReverseFN : public FunctionCall
  public:
 
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
-   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override; 
+   Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    SequenceType::Ptr staticType() const override;
 };
@@ -223,8 +222,7 @@ class SubsequenceFN : public FunctionCall
  private:
    bool m_hasTypeChecked;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

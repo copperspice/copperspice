@@ -879,7 +879,7 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
 
    for (currentColor = 0; currentColor < ncols; ++currentColor) {
       if (!read_xpm_string(buf, device, source, index, state)) {
-         qWarning("QImage: XPM color specification missing");
+         qWarning("QImage::read_xpm_body() Color specification missing");
          return false;
       }
 
@@ -903,7 +903,7 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
       }
 
       if (i < 0) {
-         qWarning("QImage: XPM color specification is missing: %s", buf.constData());
+         qWarning("QImage::read_xpm_body() Color specification is missing %s", buf.constData());
          return false;        // no c/g/g4/m specification at all
       }
 
@@ -913,7 +913,7 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
       }
 
       if (color.isEmpty()) {
-         qWarning("QImage: XPM color value is missing from specification: %s", buf.constData());
+         qWarning("QImage::read_xpm_body() Color value is missing from specification %s", buf.constData());
          return false;        // no color value
       }
 
@@ -968,9 +968,10 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
    // Read pixels
    for (int y = 0; y < h; y++) {
       if (!read_xpm_string(buf, device, source, index, state)) {
-         qWarning("QImage: XPM pixels missing on image line %d", y);
+         qWarning("QImage::read_xpm_body() Pixels missing on image line %d", y);
          return false;
       }
+
       if (image.depth() == 8) {
          uchar *p = image.scanLine(y);
          uchar *d = (uchar *)buf.data();
@@ -994,24 +995,27 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
          }
          // avoid uninitialized memory for malformed xpms
          if (x < w) {
-            qWarning("QImage: XPM pixels missing on image line %d (possibly a C++ trigraph).", y);
+            qWarning("QImage::read_xpm_body() Pixels missing on image line %d", y);
             memset(p, 0, w - x);
          }
       } else {
          QRgb *p = (QRgb *)image.scanLine(y);
          uchar *d = (uchar *)buf.data();
          uchar *end = d + buf.length();
+
          int x;
          char b[16];
          b[cpp] = '\0';
+
          for (x = 0; x < w && d < end; x++) {
             memcpy(b, (char *)d, cpp);
             *p++ = (QRgb)colorMap[xpmHash(b)];
             d += cpp;
          }
+
          // avoid uninitialized memory for malformed xpms
          if (x < w) {
-            qWarning("QImage: XPM pixels missing on image line %d (possibly a C++ trigraph).", y);
+            qWarning("QImage::read_xpm_body() Pixels missing on image line %d", y);
             memset(p, 0, (w - x) * 4);
          }
       }
@@ -1022,10 +1026,16 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
       for (int i = state.size() - 1; i >= 0; --i) {
          device->ungetChar(state[i]);
       }
+
       char c;
-      while (device->getChar(&c) && c != ';') {}
-      while (device->getChar(&c) && c != '\n') {}
+
+      while (device->getChar(&c) && c != ';')
+      { }
+
+      while (device->getChar(&c) && c != '\n')
+      { }
    }
+
    return true;
 }
 
@@ -1268,7 +1278,7 @@ bool QXpmHandler::canRead()
 bool QXpmHandler::canRead(QIODevice *device)
 {
    if (!device) {
-      qWarning("QXpmHandler::canRead() called with no device");
+      qWarning("QXpmHandler::canRead() No device");
       return false;
    }
 

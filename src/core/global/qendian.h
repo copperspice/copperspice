@@ -40,19 +40,22 @@ inline void qbswap_helper(const uchar *source, uchar *dest, int size)
    }
 }
 
-template <typename T> inline void qbswap(const T src, uchar *dest)
+template <typename T>
+inline void qbswap(const T src, uchar *dest)
 {
    qbswap_helper(reinterpret_cast<const uchar *>(&src), dest, sizeof(T));
 }
 
 // Used to implement a type-safe and alignment-safe copy operation
 // If you want to avoid the memcopy you must write specializations for this function
-template <typename T> inline void qToUnaligned(const T src, uchar *dest)
+template <typename T>
+inline void qToUnaligned(const T src, uchar *dest)
 {
    memcpy(dest, &src, sizeof(T));
 }
 
-template <typename T> inline T qFromUnaligned(const uchar *src)
+template <typename T>
+inline T qFromUnaligned(const uchar *src)
 {
     T dest;
     memcpy(&dest, src, sizeof(T));
@@ -235,6 +238,7 @@ inline T qToBigEndian(T source)
 {
    return source;
 }
+
 template <typename T>
 inline T qFromBigEndian(T source)
 {

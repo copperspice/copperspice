@@ -28,9 +28,8 @@
 #include <qschemacomponent_p.h>
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class NamedSchemaComponent : public SchemaComponent
 {
  public:
@@ -81,7 +80,5 @@ class NamedSchemaComponent : public SchemaComponent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(NamedSchemaComponent::BlockingConstraints)
 }
-
-QT_END_NAMESPACE
 
 #endif

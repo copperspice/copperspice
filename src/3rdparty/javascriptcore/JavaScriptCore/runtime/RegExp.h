@@ -53,7 +53,7 @@ namespace JSC {
         bool isValid() const { return !m_constructionError; }
         const char* errorMessage() const { return m_constructionError; }
 
-        int match(const UString&, int startOffset, Vector<int, 32>* ovector = 0);
+        int match(const UString&, int startOffset, Vector<int, 32>* ovector = nullptr);
         unsigned numSubpatterns() const { return m_numSubpatterns; }
 
     private:

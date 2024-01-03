@@ -145,11 +145,12 @@ static qreal differentialForProgress(const QEasingCurve &curve, qreal pos)
 
 static qreal progressForValue(const QEasingCurve &curve, qreal value)
 {
-   if (curve.type() >= QEasingCurve::InElastic &&
-      curve.type() < QEasingCurve::Custom) {
-      qWarning("progressForValue(): QEasingCurves of type %d do not have an inverse, since they are not injective.", curve.type());
+   if (curve.type() >= QEasingCurve::InElastic && curve.type() < QEasingCurve::Custom) {
+      qWarning("progressForValue() QEasingCurves of type %d do not have an inverse", curve.type());
+
       return value;
    }
+
    if (value < qreal(0) || value > qreal(1)) {
       return value;
    }
@@ -210,11 +211,20 @@ class QScrollTimer : public QAbstractAnimation
 };
 #endif // QT_NO_ANIMATION
 
-typedef QMap<QObject *, QScroller *> ScrollerHash;
-typedef QSet<QScroller *> ScrollerSet;
+using ScrollerHash = QMap<QObject *, QScroller *>;
+using ScrollerSet  = QSet<QScroller *>;
 
-Q_GLOBAL_STATIC(ScrollerHash, qt_allScrollers)
-Q_GLOBAL_STATIC(ScrollerSet, qt_activeScrollers)
+static ScrollerHash *qt_allScrollers()
+{
+   static ScrollerHash retval;
+   return &retval;
+}
+
+static ScrollerSet *qt_activeScrollers()
+{
+   static ScrollerSet retval;
+   return &retval;
+}
 
 bool QScroller::hasScroller(QObject *target)
 {
@@ -223,8 +233,8 @@ bool QScroller::hasScroller(QObject *target)
 
 QScroller *QScroller::scroller(QObject *target)
 {
-   if (!target) {
-      qWarning("QScroller::scroller() was called with a null target.");
+   if (! target) {
+      qWarning("QScroller::scroller() Target is an invalid value (nullptr)");
       return nullptr;
    }
 

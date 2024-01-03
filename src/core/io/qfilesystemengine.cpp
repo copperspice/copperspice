@@ -341,7 +341,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
          clear();
    }
 #else
-   Q_UNUSED(entry)
+   (void) entry;
 
 #endif
 
@@ -354,13 +354,14 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
 {
 
 #if defined(Q_OS_WIN)
-   Q_UNUSED(metaData);
+   (void) metaData;
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
 
 #else
-   if (!metaData.hasFlags(QFileSystemMetaData::UserId)) {
+   if (! metaData.hasFlags(QFileSystemMetaData::UserId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::UserId);
    }
+
    return resolveUserName(metaData.userId());
 #endif
 }
@@ -370,7 +371,7 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
 {
 
 #if defined(Q_OS_WIN)
-   Q_UNUSED(metaData);
+   (void) metaData;
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerGroup);
 
 #else
@@ -378,8 +379,8 @@ QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFile
    if (!metaData.hasFlags(QFileSystemMetaData::GroupId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::GroupId);
    }
+
    return resolveGroupName(metaData.groupId());
 
 #endif
 }
-

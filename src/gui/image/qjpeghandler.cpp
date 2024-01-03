@@ -173,7 +173,7 @@ inline my_jpeg_source_mgr::my_jpeg_source_mgr(QIODevice *device)
    next_input_byte = buffer;
 }
 
-inline static bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
+static inline bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
 {
    (void) jpeg_calc_output_dimensions(cinfo);
 
@@ -185,7 +185,7 @@ inline static bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
 
 #define HIGH_QUALITY_THRESHOLD 50
 
-inline static bool read_jpeg_format(QImage::Format &format, j_decompress_ptr cinfo)
+static inline bool read_jpeg_format(QImage::Format &format, j_decompress_ptr cinfo)
 {
 
    bool result = true;
@@ -900,7 +900,9 @@ static QImageIOHandler::Transformations exif2Qt(int exifOrientation)
       case 8: // rotate 270 CW
          return QImageIOHandler::TransformationRotate270;
    }
-   qWarning("Invalid EXIF orientation");
+
+   qWarning("QImageIOHandler::Transformations::exif2Qt() Invalid EXIF orientation");
+
    return QImageIOHandler::TransformationNone;
 }
 
@@ -1047,7 +1049,7 @@ bool QJpegHandler::canRead()
 bool QJpegHandler::canRead(QIODevice *device)
 {
    if (!device) {
-      qWarning("QJpegHandler::canRead() called with no device");
+      qWarning("QJpegHandler::canRead() No device");
       return false;
    }
 

@@ -144,7 +144,6 @@ QString QSpinBox::cleanText() const
    return d->stripped(d->edit->displayText());
 }
 
-
 int QSpinBox::singleStep() const
 {
    Q_D(const QSpinBox);
@@ -176,7 +175,6 @@ void QSpinBox::setMinimum(int minimum)
    d->setRange(m, (d->variantCompare(d->maximum, m) > 0 ? d->maximum : m));
 }
 
-
 int QSpinBox::maximum() const
 {
    Q_D(const QSpinBox);
@@ -202,12 +200,13 @@ int QSpinBox::displayIntegerBase() const
    Q_D(const QSpinBox);
    return d->displayIntegerBase;
 }
+
 void QSpinBox::setDisplayIntegerBase(int base)
 {
    Q_D(QSpinBox);
 
    if (base < 2 || base > 36) {
-      qWarning("QSpinBox::setDisplayIntegerBase: Invalid base (%d)", base);
+      qWarning("QSpinBox::setDisplayIntegerBase() Base (%d) is not a valid integer base", base);
       base = 10;
    }
 
@@ -216,6 +215,7 @@ void QSpinBox::setDisplayIntegerBase(int base)
       d->updateEdit();
    }
 }
+
 QString QSpinBox::textFromValue(int value) const
 {
    Q_D(const QSpinBox);
@@ -260,9 +260,6 @@ QValidator::State QSpinBox::validate(QString &text, int &pos) const
    return state;
 }
 
-/*!
-  \reimp
-*/
 void QSpinBox::fixup(QString &input) const
 {
    if (! isGroupSeparatorShown()) {
@@ -428,9 +425,6 @@ double QDoubleSpinBox::valueFromText(const QString &text) const
    return d->validateAndInterpret(copy, pos, state).toDouble();
 }
 
-/*!
-  \reimp
-*/
 QValidator::State QDoubleSpinBox::validate(QString &text, int &pos) const
 {
    Q_D(const QDoubleSpinBox);
@@ -440,9 +434,6 @@ QValidator::State QDoubleSpinBox::validate(QString &text, int &pos) const
    return state;
 }
 
-/*!
-  \reimp
-*/
 void QDoubleSpinBox::fixup(QString &input) const
 {
    input.remove(locale().groupSeparator());
@@ -458,9 +449,6 @@ QSpinBoxPrivate::QSpinBoxPrivate()
    type = QVariant::Int;
 }
 
-/*!
-    \reimp
-*/
 void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 {
    Q_Q(QSpinBox);
@@ -470,22 +458,19 @@ void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 
       if (ep == AlwaysEmit || value != old) {
          emit q->valueChanged(edit->displayText());
+
+         emit q->cs_valueChanged(value.toInt());
          emit q->valueChanged(value.toInt());
       }
    }
 }
 
-/*!
-    \reimp
-*/
 QString QSpinBoxPrivate::textFromValue(const QVariant &value) const
 {
    Q_Q(const QSpinBox);
    return q->textFromValue(value.toInt());
 }
-/*!
-    \reimp
-*/
+
 QVariant QSpinBoxPrivate::valueFromText(const QString &text) const
 {
    Q_Q(const QSpinBox);
@@ -493,8 +478,7 @@ QVariant QSpinBoxPrivate::valueFromText(const QString &text) const
    return QVariant(q->valueFromText(text));
 }
 
-QVariant QSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
-   QValidator::State &state) const
+QVariant QSpinBoxPrivate::validateAndInterpret(QString &input, int &pos, QValidator::State &state) const
 {
    if (cachedText == input && !input.isEmpty()) {
       state = cachedState;
@@ -576,40 +560,28 @@ QDoubleSpinBoxPrivate::QDoubleSpinBoxPrivate()
    type = QVariant::Double;
 }
 
-/*!
-    \internal
-    \reimp
-*/
 void QDoubleSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 {
    Q_Q(QDoubleSpinBox);
+
    if (ep != NeverEmit) {
       pendingEmit = false;
+
       if (ep == AlwaysEmit || value != old) {
          emit q->valueChanged(edit->displayText());
+
+         emit q->cs_valueChanged(value.toDouble());
          emit q->valueChanged(value.toDouble());
       }
    }
 }
 
-
-/*!
-    \internal
-    \reimp
-*/
 QVariant QDoubleSpinBoxPrivate::valueFromText(const QString &f) const
 {
    Q_Q(const QDoubleSpinBox);
    return QVariant(q->valueFromText(f));
 }
 
-/*!
-    \internal
-    Rounds to a double value that is restricted to decimals.
-    E.g. // decimals = 2
-
-    round(5.555) => 5.56
-*/
 double QDoubleSpinBoxPrivate::round(double value) const
 {
    QString tmp = QString::number(value, 'f', decimals);
@@ -765,17 +737,12 @@ end:
    return QVariant(num);
 }
 
-/*
-    \internal
-    \reimp
-*/
 QString QDoubleSpinBoxPrivate::textFromValue(const QVariant &f) const
 {
    Q_Q(const QDoubleSpinBox);
    return q->textFromValue(f.toDouble());
 }
 
-/*! \reimp */
 bool QSpinBox::event(QEvent *event)
 {
    Q_D(QSpinBox);

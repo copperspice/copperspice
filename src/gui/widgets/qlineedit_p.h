@@ -179,7 +179,7 @@ class QLineEditPrivate : public QWidgetPrivate
    void _q_cursorPositionChanged(int, int);
 
 #ifdef QT_KEYPAD_NAVIGATION
-   void _q_editFocusChange(bool);
+   void _q_editFocusChange(bool isFocusChanged);
 #endif
 
    void _q_selectionChanged();

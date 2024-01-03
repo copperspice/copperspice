@@ -43,7 +43,7 @@ class Q_GUI_EXPORT QCursor
 
    static void setPos(QScreen *screen, int x, int y);
 
-   inline static void setPos(const QPoint &p) {
+   static inline void setPos(const QPoint &p) {
       setPos(p.x(), p.y());
    }
 
@@ -98,11 +98,11 @@ class Q_GUI_EXPORT QCursor
 
    static void setPos(QScreen *screen, int x, int y);
 
-   inline static void setPos(const QPoint &p) {
+   static inline void setPos(const QPoint &p) {
       setPos(p.x(), p.y());
    }
 
-   inline static void setPos(QScreen *screen, const QPoint &p) {
+   static inline void setPos(QScreen *screen, const QPoint &p) {
       setPos(screen, p.x(), p.y());
    }
 
@@ -114,7 +114,7 @@ class Q_GUI_EXPORT QCursor
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &outS, const QCursor &cursor);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &inS, QCursor &cursor);
 
-template<>
+template <>
 inline bool CustomType_T<QCursor>::compare(const CustomType &other) const {
    auto ptr = dynamic_cast<const CustomType_T<QCursor>*>(&other);
 

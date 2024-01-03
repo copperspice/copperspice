@@ -246,7 +246,7 @@ void QGraphicsSceneBspTreeIndexPrivate::addItem(QGraphicsItem *item, bool recurs
       startIndexTimer(0);
    } else {
       Q_ASSERT(indexedItems.contains(item));
-      qWarning("QGraphicsSceneBspTreeIndex::addItem: item has already been added to this BSP");
+      qWarning("QGraphicsSceneBspTreeIndex::addItem() Item has already been added to this BSP index");
    }
 
    if (recursive) {

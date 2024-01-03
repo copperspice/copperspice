@@ -25,8 +25,6 @@
 
 #include "qfocus_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Focus::Focus(const DynamicContext::Ptr &prevContext) : DelegatingDynamicContext(prevContext),
@@ -88,4 +86,3 @@ Item Focus::currentItem() const
    }
 }
 
-QT_END_NAMESPACE

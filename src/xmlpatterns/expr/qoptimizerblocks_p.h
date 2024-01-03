@@ -28,9 +28,8 @@
 #include "qexpression_p.h"
 #include "qoptimizerframework_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ByIDIdentifier : public ExpressionIdentifier
 {
  public:
@@ -111,8 +110,7 @@ class ByIDCreator : public ExpressionCreator
  private:
    const Expression::ID m_id;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

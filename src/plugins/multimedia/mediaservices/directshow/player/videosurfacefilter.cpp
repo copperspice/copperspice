@@ -151,7 +151,8 @@ HRESULT VideoSurfaceFilter::Stop()
 
 HRESULT VideoSurfaceFilter::GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *pState)
 {
-   Q_UNUSED(dwMilliSecsTimeout)
+   (void) dwMilliSecsTimeout;
+
    if (!pState) {
       return E_POINTER;
    }
@@ -253,7 +254,7 @@ HRESULT VideoSurfaceFilter::QueryFilterInfo(FILTER_INFO *pInfo)
 
 HRESULT VideoSurfaceFilter::QueryVendorInfo(LPWSTR *pVendorInfo)
 {
-   Q_UNUSED(pVendorInfo);
+   (void) pVendorInfo;
 
    return E_NOTIMPL;
 }
@@ -266,8 +267,9 @@ ULONG VideoSurfaceFilter::GetMiscFlags()
 
 HRESULT VideoSurfaceFilter::Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt)
 {
-   Q_UNUSED(pReceivePin)
-   Q_UNUSED(pmt)
+   (void) pReceivePin;
+   (void) pmt;
+
    // This is an input pin, you shouldn't be calling Connect on it.
    return E_POINTER;
 }
@@ -448,8 +450,8 @@ HRESULT VideoSurfaceFilter::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 
 HRESULT VideoSurfaceFilter::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
-   Q_UNUSED(apPin);
-   Q_UNUSED(nPin);
+   (void) apPin;
+   (void) nPin;
 
    return E_NOTIMPL;
 }
@@ -506,9 +508,9 @@ void VideoSurfaceFilter::flush()
 
 HRESULT VideoSurfaceFilter::NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate)
 {
-   Q_UNUSED(tStart);
-   Q_UNUSED(tStop);
-   Q_UNUSED(dRate);
+   (void) tStart;
+   (void) tStop;
+   (void) dRate;
 
    return S_OK;
 }

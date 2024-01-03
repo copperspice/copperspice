@@ -60,15 +60,15 @@ class QSubpathBackwardIterator
    QSubpathBackwardIterator(const QVector<QStrokerOps::Element> *path)
       : m_path(path), m_pos(path->size() - 1) { }
 
-   inline int position() const {
+   int position() const {
       return m_pos;
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return m_pos >= 0;
    }
 
-   inline QStrokerOps::Element next() {
+   QStrokerOps::Element next() {
       Q_ASSERT(hasNext());
 
       QStrokerOps::Element ce = m_path->at(m_pos);   // current element
@@ -85,6 +85,7 @@ class QSubpathBackwardIterator
          case QPainterPath::LineToElement:
             ce.type = QPainterPath::LineToElement;
             break;
+
          case QPainterPath::CurveToDataElement:
             // First control point?
             if (ce.type == QPainterPath::CurveToElement) {
@@ -93,11 +94,13 @@ class QSubpathBackwardIterator
                ce.type = QPainterPath::CurveToElement;
             }
             break;
+
          case QPainterPath::CurveToElement:
             ce.type = QPainterPath::CurveToDataElement;
             break;
+
          default:
-            qWarning("QSubpathReverseIterator::next: Case %d unhandled", ce.type);
+            qWarning("QSubpathReverseIterator::next() Unhandled type, %d", ce.type);
             break;
       }
       --m_pos;
@@ -165,7 +168,8 @@ class QSubpathFlatIterator
    qreal m_curve_threshold;
 };
 
-template <class Iterator> bool qt_stroke_side(Iterator *it, QStroker *stroker,
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker,
    bool capFirst, QLineF *startTangent);
 
 static inline qreal adapted_angle_on_x(const QLineF &line)
@@ -533,7 +537,7 @@ void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine
 
          //             // line to the beginning of the arc segment, (should not be needed).
          //             emitLineTo(qt_real_to_fixed(curve_start.x()), qt_real_to_fixed(curve_start.y()));
-         Q_UNUSED(curve_start);
+         (void) curve_start;
 
          for (int i = 0; i < point_count; i += 3) {
             emitCubicTo(qt_real_to_fixed(curves[i].x()),
@@ -613,10 +617,9 @@ void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine
    connect the first segment, other segments will be joined using joinPoints.
    This is to put capping in order...
 */
-template <class Iterator> bool qt_stroke_side(Iterator *it,
-   QStroker *stroker,
-   bool capFirst,
-   QLineF *startTangent)
+
+template <class Iterator>
+bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *startTangent)
 {
    // Used in CurveToElement section below.
    const int MAX_OFFSET = 16;
@@ -635,9 +638,7 @@ template <class Iterator> bool qt_stroke_side(Iterator *it,
 #endif
 
    qfixed2d prev = start;
-
-   bool first = true;
-
+   bool first    = true;
    qfixed offset = stroker->strokeWidth() / 2;
 
    while (it->hasNext()) {
@@ -645,11 +646,14 @@ template <class Iterator> bool qt_stroke_side(Iterator *it,
 
       // LineToElement
       if (e.isLineTo()) {
+
 #ifdef QPP_STROKE_DEBUG
          qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
 #endif
+
          QLineF line(qt_fixed_to_real(prev.x), qt_fixed_to_real(prev.y),
             qt_fixed_to_real(e.x), qt_fixed_to_real(e.y));
+
          if (line.p1() != line.p2()) {
             QLineF normal = line.normalVector();
             normal.setLength(offset);
@@ -818,18 +822,7 @@ qreal qt_t_for_arc_angle(qreal angle)
 Q_GUI_EXPORT void qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
    QPointF *startPoint, QPointF *endPoint);
 
-/*!
-    \internal
-
-    Creates a number of curves for a given arc definition. The arc is
-    defined an arc along the ellipses that fits into \a rect starting
-    at \a startAngle and an arc length of \a sweepLength.
-
-    The function has three out parameters. The return value is the
-    starting point of the arc. The \a curves array represents the list
-    of cubicTo elements up to a maximum of \a point_count. There are of course
-    3 points pr curve.
-*/
+// internal
 QPointF qt_curves_for_arc(const QRectF &rect, qreal startAngle, qreal sweepLength,
    QPointF *curves, int *point_count)
 {
@@ -837,9 +830,11 @@ QPointF qt_curves_for_arc(const QRectF &rect, qreal startAngle, qreal sweepLengt
    Q_ASSERT(curves);
 
    *point_count = 0;
+
    if (qt_is_nan(rect.x()) || qt_is_nan(rect.y()) || qt_is_nan(rect.width()) || qt_is_nan(rect.height())
-      || qt_is_nan(startAngle) || qt_is_nan(sweepLength)) {
-      qWarning("QPainterPath::arcTo: Adding arc where a parameter is NaN, results are undefined");
+         || qt_is_nan(startAngle) || qt_is_nan(sweepLength)) {
+      qWarning("QPainterPath::arcTo() Value for arc is invalid");
+
       return QPointF();
    }
 

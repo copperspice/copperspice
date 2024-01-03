@@ -40,13 +40,13 @@ class QAudioDecoderPrivate : public QMediaObjectPrivate
 
  public:
    QAudioDecoderPrivate()
-      : provider(nullptr), control(nullptr), state(QAudioDecoder::StoppedState), error(QAudioDecoder::NoError)
+      : provider(nullptr), control(nullptr), m_state(QAudioDecoder::StoppedState), error(QAudioDecoder::NoError)
    {
    }
 
    QMediaServiceProvider *provider;
    QAudioDecoderControl *control;
-   QAudioDecoder::State state;
+   QAudioDecoder::State m_state;
    QAudioDecoder::Error error;
    QString errorString;
 
@@ -54,14 +54,14 @@ class QAudioDecoderPrivate : public QMediaObjectPrivate
    void _q_error(int error, const QString &errorString);
 };
 
-void QAudioDecoderPrivate::_q_stateChanged(QAudioDecoder::State ps)
+void QAudioDecoderPrivate::_q_stateChanged(QAudioDecoder::State newState)
 {
    Q_Q(QAudioDecoder);
 
-   if (ps != state) {
-      state = ps;
+   if (m_state != newState) {
+      m_state = newState;
 
-      emit q->stateChanged(ps);
+      emit q->stateChanged(newState);
    }
 }
 
@@ -121,7 +121,7 @@ QAudioDecoder::~QAudioDecoder()
 
 QAudioDecoder::State QAudioDecoder::state() const
 {
-   return d_func()->state;
+   return d_func()->m_state;
 }
 
 QAudioDecoder::Error QAudioDecoder::error() const
@@ -167,6 +167,7 @@ QString QAudioDecoder::sourceFilename() const
    if (d->control) {
       return d->control->sourceFilename();
    }
+
    return QString();
 }
 
@@ -182,6 +183,7 @@ void QAudioDecoder::setSourceFilename(const QString &fileName)
 QIODevice *QAudioDecoder::sourceDevice() const
 {
    Q_D(const QAudioDecoder);
+
    if (d->control) {
       return d->control->sourceDevice();
    }
@@ -201,6 +203,7 @@ void QAudioDecoder::setSourceDevice(QIODevice *device)
 QAudioFormat QAudioDecoder::audioFormat() const
 {
    Q_D(const QAudioDecoder);
+
    if (d->control) {
       return d->control->audioFormat();
    }

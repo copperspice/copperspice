@@ -56,8 +56,8 @@ namespace JSC {
     // Should be used for strings that are owned by an object that will
     // likely outlive the JSValue this makes, such as the parse tree or a
     // DOM object that contains a UString
-    JSString* jsOwnedString(JSGlobalData*, const UString&); 
-    JSString* jsOwnedString(ExecState*, const UString&); 
+    JSString* jsOwnedString(JSGlobalData*, const UString&);
+    JSString* jsOwnedString(ExecState*, const UString&);
 
     class JS_EXPORTCLASS JSString : public JSCell {
     public:
@@ -311,7 +311,7 @@ namespace JSC {
         const UString& tryGetValue() const
         {
             if (isRope())
-                resolveRope(0);
+                resolveRope(nullptr);
             return m_value;
         }
         unsigned length() { return m_length; }
@@ -332,7 +332,7 @@ namespace JSC {
         }
 
     private:
-        JSString(VPtrStealingHackType) 
+        JSString(VPtrStealingHackType)
             : JSCell(VPtrStealingHack)
             , m_fiberCount(0)
         {
@@ -537,7 +537,7 @@ namespace JSC {
     inline JSString* jsSubstring(ExecState* exec, const UString& s, unsigned offset, unsigned length) { return jsSubstring(&exec->globalData(), s, offset, length); }
     inline JSString* jsNontrivialString(ExecState* exec, const UString& s) { return jsNontrivialString(&exec->globalData(), s); }
     inline JSString* jsNontrivialString(ExecState* exec, const char* s) { return jsNontrivialString(&exec->globalData(), s); }
-    inline JSString* jsOwnedString(ExecState* exec, const UString& s) { return jsOwnedString(&exec->globalData(), s); } 
+    inline JSString* jsOwnedString(ExecState* exec, const UString& s) { return jsOwnedString(&exec->globalData(), s); }
 
     ALWAYS_INLINE bool JSString::getStringPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot)
     {
@@ -555,7 +555,7 @@ namespace JSC {
 
         return false;
     }
-        
+
     ALWAYS_INLINE bool JSString::getStringPropertySlot(ExecState* exec, unsigned propertyName, PropertySlot& slot)
     {
         if (propertyName < m_length) {

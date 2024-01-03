@@ -24,12 +24,11 @@
 #ifndef QAccelIterators_P_H
 #define QAccelIterators_P_H
 
-#include "qacceltree_p.h"
-#include "qitem_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qacceltree_p.h>
+#include <qitem_p.h>
 
 namespace QPatternist {
+
 class AccelIterator : public QXmlNodeModelIndex::Iterator
 {
  public:
@@ -278,8 +277,8 @@ class PrecedingIterator : public AccelIterator
    /**
     * @ pre must have at least one child.
     */
-   PrecedingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)  
-                  : AccelIterator(doc, pre, pre - 1 /* currentPre */), 
+   PrecedingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+                  : AccelIterator(doc, pre, pre - 1 /* currentPre */),
                   m_postNumber(m_document->postNumber(m_preNumber)) {
    }
 
@@ -296,7 +295,7 @@ class AttributeIterator : public AccelIterator
    /**
     * @p pre must have at least one child.
     */
-   inline AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre) 
+   inline AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
                   : AccelIterator(doc, pre, pre + 1) {
 
       Q_ASSERT(m_document->hasChildren(pre));
@@ -306,8 +305,7 @@ class AttributeIterator : public AccelIterator
    QXmlNodeModelIndex next() override;
    QXmlNodeModelIndex::Iterator::Ptr copy() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

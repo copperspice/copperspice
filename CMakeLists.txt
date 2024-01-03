@@ -18,7 +18,7 @@ project(copperspice)
 
 set(BUILD_MAJOR "1")
 set(BUILD_MINOR "8")
-set(BUILD_MICRO "1")
+set(BUILD_MICRO "2")
 
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
@@ -705,6 +705,7 @@ endif()
 if (BUILD_TESTS)
    enable_testing()
    add_subdirectory(test/core)
+   add_subdirectory(test/gui)
    add_subdirectory(test/network)
 endif()
 

@@ -172,14 +172,14 @@ class Q_GUI_EXPORT QLabel : public QFrame
    Q_DECLARE_PRIVATE(QLabel)
 
 #ifndef QT_NO_MOVIE
-   GUI_CS_SLOT_1(Private, void _q_movieUpdated(const QRect &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_movieUpdated(const QRect &rect))
    GUI_CS_SLOT_2(_q_movieUpdated)
 
-   GUI_CS_SLOT_1(Private, void _q_movieResized(const QSize &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_movieResized(const QSize &size))
    GUI_CS_SLOT_2(_q_movieResized)
 #endif
 
-   GUI_CS_SLOT_1(Private, void _q_linkHovered(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_linkHovered(const QString &anchor))
    GUI_CS_SLOT_2(_q_linkHovered)
 
    friend class QTipLabel;

@@ -137,8 +137,7 @@ inline std::size_t regex_split(OutputIterator out, std::basic_string<charT, trai
    return regex_split(out, s, cs_regex_detail_ns::get_default_expression(charT(0)), match_default, UINT_MAX);
 }
 
-} // namespace
+}   // end namespace
 
 #endif
-
 

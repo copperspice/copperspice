@@ -39,7 +39,7 @@ namespace WTF {
     template<typename T> class RefPtr {
         WTF_MAKE_FAST_ALLOCATED;
     public:
-        ALWAYS_INLINE RefPtr() : m_ptr(0) { }
+        ALWAYS_INLINE RefPtr() : m_ptr(nullptr) { }
         ALWAYS_INLINE RefPtr(T* ptr) : m_ptr(ptr) { refIfNotNull(ptr); }
         ALWAYS_INLINE RefPtr(const RefPtr& o) : m_ptr(o.m_ptr) { refIfNotNull(m_ptr); }
         template<typename U> RefPtr(const RefPtr<U>& o) : m_ptr(o.get()) { refIfNotNull(m_ptr); }
@@ -58,19 +58,19 @@ namespace WTF {
         ALWAYS_INLINE ~RefPtr() { derefIfNotNull(m_ptr); }
 
         T* get() const { return m_ptr; }
-        
+
         void clear();
-        PassRefPtr<T> release() { PassRefPtr<T> tmp = adoptRef(m_ptr); m_ptr = 0; return tmp; }
+        PassRefPtr<T> release() { PassRefPtr<T> tmp = adoptRef(m_ptr); m_ptr = nullptr; return tmp; }
 
         T& operator*() const { return *m_ptr; }
         ALWAYS_INLINE T* operator->() const { return m_ptr; }
-        
+
         bool operator!() const { return !m_ptr; }
-    
+
         // This conversion operator allows implicit conversion to bool but not to other integer types.
         typedef T* (RefPtr::*UnspecifiedBoolType);
-        operator UnspecifiedBoolType() const { return m_ptr ? &RefPtr::m_ptr : 0; }
-        
+        operator UnspecifiedBoolType() const { return m_ptr ? &RefPtr::m_ptr : nullptr; }
+
         RefPtr& operator=(const RefPtr&);
         RefPtr& operator=(T*);
         RefPtr& operator=(const PassRefPtr<T>&);
@@ -89,7 +89,7 @@ namespace WTF {
     private:
         T* m_ptr;
     };
-    
+
     template<typename T> template<typename U> inline RefPtr<T>::RefPtr(const PassRefPtr<U>& o)
         : m_ptr(o.leakRef())
     {
@@ -103,7 +103,7 @@ namespace WTF {
     template<typename T> inline void RefPtr<T>::clear()
     {
         T* ptr = m_ptr;
-        m_ptr = 0;
+        m_ptr  = nullptr;
         derefIfNotNull(ptr);
     }
 
@@ -116,7 +116,7 @@ namespace WTF {
         derefIfNotNull(ptr);
         return *this;
     }
-    
+
     template<typename T> template<typename U> inline RefPtr<T>& RefPtr<T>::operator=(const RefPtr<U>& o)
     {
         T* optr = o.get();
@@ -126,7 +126,7 @@ namespace WTF {
         derefIfNotNull(ptr);
         return *this;
     }
-    
+
     template<typename T> inline RefPtr<T>& RefPtr<T>::operator=(T* optr)
     {
         refIfNotNull(optr);
@@ -179,43 +179,43 @@ namespace WTF {
     }
 
     template<typename T, typename U> inline bool operator==(const RefPtr<T>& a, const RefPtr<U>& b)
-    { 
-        return a.get() == b.get(); 
+    {
+        return a.get() == b.get();
     }
 
     template<typename T, typename U> inline bool operator==(const RefPtr<T>& a, U* b)
-    { 
-        return a.get() == b; 
-    }
-    
-    template<typename T, typename U> inline bool operator==(T* a, const RefPtr<U>& b) 
     {
-        return a == b.get(); 
+        return a.get() == b;
     }
-    
+
+    template<typename T, typename U> inline bool operator==(T* a, const RefPtr<U>& b)
+    {
+        return a == b.get();
+    }
+
     template<typename T, typename U> inline bool operator!=(const RefPtr<T>& a, const RefPtr<U>& b)
-    { 
-        return a.get() != b.get(); 
+    {
+        return a.get() != b.get();
     }
 
     template<typename T, typename U> inline bool operator!=(const RefPtr<T>& a, U* b)
     {
-        return a.get() != b; 
+        return a.get() != b;
     }
 
     template<typename T, typename U> inline bool operator!=(T* a, const RefPtr<U>& b)
-    { 
-        return a != b.get(); 
+    {
+        return a != b.get();
     }
-    
+
     template<typename T, typename U> inline RefPtr<T> static_pointer_cast(const RefPtr<U>& p)
-    { 
-        return RefPtr<T>(static_cast<T*>(p.get())); 
+    {
+        return RefPtr<T>(static_cast<T*>(p.get()));
     }
 
     template<typename T, typename U> inline RefPtr<T> const_pointer_cast(const RefPtr<U>& p)
-    { 
-        return RefPtr<T>(const_cast<T*>(p.get())); 
+    {
+        return RefPtr<T>(const_cast<T*>(p.get()));
     }
 
     template<typename T> inline T* getPtr(const RefPtr<T>& p)

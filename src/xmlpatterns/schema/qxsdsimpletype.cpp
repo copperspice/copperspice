@@ -23,8 +23,6 @@
 
 #include "qxsdsimpletype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QString XsdSimpleType::displayName(const NamePool::Ptr &np) const
@@ -116,5 +114,3 @@ bool XsdSimpleType::isDefinedBySchema() const
 {
    return true;
 }
-
-QT_END_NAMESPACE

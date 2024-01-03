@@ -56,7 +56,7 @@ static inline bool qtransform_equals_no_translate(const QTransform &a, const QTr
    }
 }
 
-template<typename T>
+template <typename T>
 static inline bool qSafeFromBigEndian(const uchar *source, const uchar *end, T *output)
 {
    if (source + sizeof(T) > end) {
@@ -449,7 +449,7 @@ qreal QFontEngine::minRightBearing() const
       }
 
       if (m_minLeftBearing == kBearingNotInitialized || m_minRightBearing == kBearingNotInitialized) {
-         qWarning() << "Failed to compute left/right minimum bearings for" << fontDef.family;
+         qWarning() << "QFontEngine::minRightBearing() Failed to compute left/right minimum bearings for " << fontDef.family;
       }
    }
 
@@ -604,7 +604,7 @@ void QFontEngine::addBitmapFontToPath(qreal x, qreal y, const QGlyphLayout &glyp
    QPainterPath *path, QTextItem::RenderFlags flags)
 {
    // TODO what to do with 'flags' ??
-   Q_UNUSED(flags);
+   (void) flags;
 
    QFixed advanceX = QFixed::fromReal(x);
    QFixed advanceY = QFixed::fromReal(y);

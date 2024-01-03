@@ -41,24 +41,6 @@
 #define NETIO_STATUS DWORD
 #endif
 
-using PtrConvertInterfaceLuidToName = NETIO_STATUS (WINAPI *)(const NET_LUID *, PWSTR, SIZE_T);
-static PtrConvertInterfaceLuidToName ptrConvertInterfaceLuidToName = nullptr;
-
-static void resolveLibs()
-{
-   // try to find the functions we need from Iphlpapi.dll
-   static bool done = false;
-   if (! done) {
-      HINSTANCE iphlpapiHnd = GetModuleHandle(L"iphlpapi");
-      Q_ASSERT(iphlpapiHnd);
-
-      // since Windows Vista
-      ptrConvertInterfaceLuidToName = (PtrConvertInterfaceLuidToName)GetProcAddress(iphlpapiHnd, "ConvertInterfaceLuidToNameW");
-
-      done = true;
-   }
-}
-
 static QHostAddress addressFromSockaddr(sockaddr *sa)
 {
    QHostAddress address;
@@ -187,13 +169,13 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
          iface->flags |= QNetworkInterface::IsPointToPoint;
       }
 
-      if (ptrConvertInterfaceLuidToName && ptr->Length >= offsetof(IP_ADAPTER_ADDRESSES_LH, Luid)) {
+      if (ptr->Length >= offsetof(IP_ADAPTER_ADDRESSES_LH, Luid)) {
          IP_ADAPTER_ADDRESSES_LH tmp;
          memcpy(&tmp, ptr, sizeof(IP_ADAPTER_ADDRESSES_LH));
 
          std::wstring buffer(IF_MAX_STRING_SIZE + 1, L'\0');
 
-         if (ptrConvertInterfaceLuidToName(&tmp.Luid, &buffer[0], buffer.size()) == NO_ERROR) {
+         if (ConvertInterfaceLuidToNameW(&tmp.Luid, &buffer[0], buffer.size()) == NO_ERROR) {
             iface->name = QString::fromStdWString(buffer);
          }
       }
@@ -253,14 +235,11 @@ static QList<QNetworkInterfacePrivate *> interfaceListingWinXP()
 
 QList<QNetworkInterfacePrivate *> QNetworkInterfaceManager::scan()
 {
-   resolveLibs();
    return interfaceListingWinXP();
 }
 
 QString QHostInfo::localDomainName()
 {
-   resolveLibs();
-
    FIXED_INFO info, *pinfo;
    ULONG bufSize = sizeof info;
    pinfo = &info;

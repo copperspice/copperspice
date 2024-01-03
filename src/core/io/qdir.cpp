@@ -29,6 +29,7 @@
 #include <qresource.h>
 #include <qregularexpression.h>
 #include <qstring.h>
+#include <qtimezone.h>
 #include <qvector.h>
 #include <qvarlengtharray.h>
 
@@ -225,15 +226,11 @@ bool QDirSortItemComparator::operator()(const QDirSortItem &n1, const QDirSortIt
 
    switch (sortBy) {
       case QDir::Time: {
-        QDateTime firstModified = f1->item.lastModified();
+        QDateTime firstModified  = f1->item.lastModified();
         QDateTime secondModified = f2->item.lastModified();
 
-        // QDateTime by default will do all sorts of conversions on these to
-        // find timezones, which is incredibly expensive. As we aren't
-        // presenting these to the user, we don't care (at all) about the
-        // local timezone, so force them to UTC to avoid that conversion.
-        firstModified.setTimeSpec(Qt::UTC);
-        secondModified.setTimeSpec(Qt::UTC);
+        firstModified.setTimeZone(QTimeZone::utc());
+        secondModified.setTimeZone(QTimeZone::utc());
 
         r = firstModified.msecsTo(secondModified);
         break;
@@ -953,63 +950,71 @@ bool QDir::makeAbsolute()
    return true;
 }
 
-bool QDir::operator==(const QDir &dir) const
+bool QDir::operator==(const QDir &other) const
 {
-   const QDirPrivate *d = d_ptr.constData();
-   const QDirPrivate *other = dir.d_ptr.constData();
+   const QDirPrivate *obj_1 = d_ptr.constData();
+   const QDirPrivate *obj_2 = other.d_ptr.constData();
 
-   if (d == other) {
+   if (obj_1 == obj_2) {
       return true;
    }
+
    Qt::CaseSensitivity sensitive;
-   if (d->fileEngine.isNull() || other->fileEngine.isNull()) {
-      if (d->fileEngine.data() != other->fileEngine.data()) { // one is native, the other is a custom file-engine
+
+   if (obj_1->fileEngine.isNull() || obj_2->fileEngine.isNull()) {
+
+      if (obj_1->fileEngine.data() != obj_2->fileEngine.data()) {
+         // one is native the other is a custom file engine
          return false;
       }
 
       sensitive = QFileSystemEngine::isCaseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
    } else {
-      if (d->fileEngine->caseSensitive() != other->fileEngine->caseSensitive()) {
+      if (obj_1->fileEngine->caseSensitive() != obj_2->fileEngine->caseSensitive()) {
          return false;
       }
-      sensitive = d->fileEngine->caseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+      sensitive = obj_1->fileEngine->caseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
    }
 
-   if (d->filters == other->filters
-         && d->sort == other->sort
-         && d->nameFilters == other->nameFilters) {
+   if (obj_1->filters == obj_2->filters && obj_1->sort == obj_2->sort
+         && obj_1->nameFilters == obj_2->nameFilters) {
 
-        // Assume directories are the same if path is the same
-        if (d->dirEntry.filePath() == other->dirEntry.filePath()) {
-            return true;
-        }
+      // Assume directories are the same if path is the same
+      if (obj_1->dirEntry.filePath() == obj_2->dirEntry.filePath()) {
+         return true;
+      }
 
-        if (exists()) {
-            if (! dir.exists()) {
-                return false; //can't be equal if only one exists
-            }
+      if (exists()) {
+         if (! other.exists()) {
+            // can not be equal if only one exists
+            return false;
+         }
 
-            // Both exist, fallback to expensive canonical path computation
-            return canonicalPath().compare(dir.canonicalPath(), sensitive) == 0;
+        // Both exist, fallback to expensive canonical path computation
+        return canonicalPath().compare(other.canonicalPath(), sensitive) == 0;
 
-        } else {
-            if (dir.exists()) {
-                return false; //can't be equal if only one exists
-            }
+      } else {
+         if (other.exists()) {
+            // can not be equal if only one exists
+            return false;
+         }
 
-            // Neither exists, compare absolute paths rather than canonical (which would be empty strings)
-            d->resolveAbsoluteEntry();
-            other->resolveAbsoluteEntry();
-            return d->absoluteDirEntry.filePath().compare(other->absoluteDirEntry.filePath(), sensitive) == 0;
-        }
-    }
+         // Neither exists, compare absolute paths rather than canonical (which would be empty strings)
+         obj_1->resolveAbsoluteEntry();
+         obj_2->resolveAbsoluteEntry();
+
+         return obj_1->absoluteDirEntry.filePath().compare(obj_2->absoluteDirEntry.filePath(), sensitive) == 0;
+      }
+   }
 
    return false;
 }
 
-QDir &QDir::operator=(const QDir &dir)
+QDir &QDir::operator=(const QDir &other)
 {
-   d_ptr = dir.d_ptr;
+   d_ptr = other.d_ptr;
    return *this;
 }
 
@@ -1358,7 +1363,7 @@ QDebug operator<<(QDebug debug, QDir::Filters filters)
          flags << "NoSymLinks";
       }
       if (filters & QDir::NoDotAndDotDot) {
-         flags << "AndDotDot";   // ### Qt5/remove (because NoDotAndDotDot=NoDot|NoDotDo  if (filters & QDir::NoDot){s << "NoDot";
+         flags << "AndDotDot";   // TODO: remove (because NoDotAndDotDot=NoDot|NoDotDo  if (filters & QDir::NoDot){s << "NoDot";
       }
       if (filters & QDir::NoDotDot) {
          flags << "NoDotDot";

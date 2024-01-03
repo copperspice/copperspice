@@ -23,8 +23,6 @@
 
 #include "qxsdannotation_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAnnotation::setId(const DerivedString<TypeID>::Ptr &id)
@@ -56,5 +54,3 @@ XsdDocumentation::List XsdAnnotation::documentation() const
 {
    return m_documentations;
 }
-
-QT_END_NAMESPACE

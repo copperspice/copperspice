@@ -42,12 +42,12 @@ template <typename T> class Strong : public Handle<T> {
 
 public:
     typedef typename Handle<T>::ExternalType ExternalType;
-    
+
     Strong()
         : Handle<T>()
     {
     }
-    
+
     Strong(JSGlobalData& globalData, ExternalType value = ExternalType())
         : Handle<T>(allocateGlobalHandle(globalData))
     {
@@ -59,7 +59,7 @@ public:
     {
         set(handle.get());
     }
-    
+
     Strong(const Strong& other)
         : Handle<T>()
     {
@@ -77,7 +77,7 @@ public:
         setSlot(HandleHeap::heapFor(other.slot())->allocate());
         set(other.get());
     }
-    
+
     enum HashTableDeletedValueTag { HashTableDeletedValue };
     bool isHashTableDeletedValue() const { return slot() == hashTableDeletedValue(); }
     Strong(HashTableDeletedValueTag)
@@ -112,7 +112,7 @@ public:
         set(*HandleHeap::heapFor(other.slot())->globalData(), other.get());
         return *this;
     }
-    
+
     Strong& operator=(const Strong& other)
     {
         if (!other.slot()) {
@@ -129,7 +129,7 @@ public:
         if (!slot())
             return;
         HandleHeap::heapFor(slot())->deallocate(slot());
-        setSlot(0);
+        setSlot(nullptr);
     }
 
 private:

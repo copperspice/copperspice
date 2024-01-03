@@ -28,8 +28,6 @@
 
 #include "qexpressionsequence_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ExpressionSequence::ExpressionSequence(const Expression::List &ops) : UnlimitedContainer(ops)
@@ -188,5 +186,3 @@ Expression::ID ExpressionSequence::id() const
 {
    return IDExpressionSequence;
 }
-
-QT_END_NAMESPACE

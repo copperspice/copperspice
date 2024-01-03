@@ -23,7 +23,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include <qalgorithms.h>-
+#include <qalgorithms.h>
 #include <qapplication.h>
 #include <qdebug.h>
 #include <qcocoamenubar.h>

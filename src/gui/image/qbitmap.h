@@ -60,7 +60,7 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
    using DataPtr = QExplicitlySharedDataPointer<QPlatformPixmap>;
 };
 
-template<>
+template <>
 inline bool CustomType_T<QBitmap>::compare(const CustomType &other) const {
 
    auto ptr = dynamic_cast<const CustomType_T<QBitmap>*>(&other);

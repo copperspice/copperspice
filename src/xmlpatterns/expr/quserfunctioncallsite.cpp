@@ -27,8 +27,6 @@
 
 #include "quserfunctioncallsite_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UserFunctionCallsite::UserFunctionCallsite(const QXmlName nameP,
@@ -223,5 +221,3 @@ CallTargetDescription::Ptr UserFunctionCallsite::callTargetDescription() const
 {
    return m_functionDeclaration->signature();
 }
-
-QT_END_NAMESPACE

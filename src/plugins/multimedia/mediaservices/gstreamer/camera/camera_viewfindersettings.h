@@ -31,13 +31,14 @@ class CameraBinSession;
 class CameraBinViewfinderSettings : public QCameraViewfinderSettingsControl
 {
    CS_OBJECT(CameraBinViewfinderSettings)
+
  public:
    CameraBinViewfinderSettings(CameraBinSession *session);
    ~CameraBinViewfinderSettings();
 
-   bool isViewfinderParameterSupported(ViewfinderParameter parameter) const;
-   QVariant viewfinderParameter(ViewfinderParameter parameter) const;
-   void setViewfinderParameter(ViewfinderParameter parameter, const QVariant &value);
+   bool isViewfinderParameterSupported(ViewfinderParameter parameter) const override;
+   QVariant viewfinderParameter(ViewfinderParameter parameter) const override;
+   void setViewfinderParameter(ViewfinderParameter parameter, const QVariant &value) override;
 
  private:
    CameraBinSession *m_session;

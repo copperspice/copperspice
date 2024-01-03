@@ -62,9 +62,9 @@ public:
 
 public:
     WEB_CS_SIGNAL_1(Public, void selectItem(int index,bool allowMultiplySelections,bool shift))
-    WEB_CS_SIGNAL_2(selectItem,index,allowMultiplySelections,shift) 
+    WEB_CS_SIGNAL_2(selectItem,index,allowMultiplySelections,shift)
     WEB_CS_SIGNAL_1(Public, void didHide())
-    WEB_CS_SIGNAL_2(didHide) 
+    WEB_CS_SIGNAL_2(didHide)
 };
 
 class QWebNotificationData {
@@ -85,11 +85,11 @@ public:
     virtual ~QWebNotificationPresenter() {}
 
     virtual void showNotification(const QWebNotificationData*) = 0;
-    
+
     WEB_CS_SIGNAL_1(Public, void notificationClosed())
-    WEB_CS_SIGNAL_2(notificationClosed) 
+    WEB_CS_SIGNAL_2(notificationClosed)
     WEB_CS_SIGNAL_1(Public, void notificationClicked())
-    WEB_CS_SIGNAL_2(notificationClicked) 
+    WEB_CS_SIGNAL_2(notificationClicked)
 };
 
 class QWebHapticFeedbackPlayer: public QObject {
@@ -132,12 +132,12 @@ public:
 
 public:
     WEB_CS_SIGNAL_1(Public, void fullScreenClosed())
-    WEB_CS_SIGNAL_2(fullScreenClosed) 
+    WEB_CS_SIGNAL_2(fullScreenClosed)
 
-    WEB_CS_SLOT_1(Public, virtual void enterFullScreen(QMediaPlayer * un_named_arg1)=0)
-    WEB_CS_SLOT_2(enterFullScreen) 
+    WEB_CS_SLOT_1(Public, virtual void enterFullScreen(QMediaPlayer *player)=0)
+    WEB_CS_SLOT_2(enterFullScreen)
     WEB_CS_SLOT_1(Public, virtual void exitFullScreen())
-    WEB_CS_SLOT_2(exitFullScreen) 
+    WEB_CS_SLOT_2(exitFullScreen)
 };
 #endif
 
@@ -157,8 +157,6 @@ public:
     virtual QObject* createExtension(Extension) const = 0;
 };
 
-QT_BEGIN_NAMESPACE
 CS_DECLARE_INTERFACE(QWebKitPlatformPlugin, "com.nokia.Qt.WebKit.PlatformPlugin/1.7");
-QT_END_NAMESPACE
 
 #endif // QWEBKITPLATFORMPLUGIN_H

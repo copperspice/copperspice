@@ -44,12 +44,14 @@ void DnsPrefetchHelper::lookup(QString hostname)
    QHostInfo::lookupHost(hostname, this, SLOT(lookedUp(QHostInfo)));
 }
 
-void DnsPrefetchHelper::lookedUp(const QHostInfo &un_named_arg1)
+void DnsPrefetchHelper::lookedUp(const QHostInfo &hostInfo)
 {
    // we do not cache the result, we throw it away.
    // we currently rely on the OS to cache the results. If it does not do that
    // then at least the ISP nameserver did it.
-   // Since Qt 4.6.3, Qt also has a small DNS cache.
+
+   (void) hostInfo;
+
    currentLookups--;
 }
 

@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ResolveURIFN : public FunctionCall
@@ -36,9 +34,7 @@ class ResolveURIFN : public FunctionCall
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 };
+
 }
-
-QT_END_NAMESPACE
-
 
 #endif

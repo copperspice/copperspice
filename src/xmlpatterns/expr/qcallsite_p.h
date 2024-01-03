@@ -28,9 +28,8 @@
 #include <qcalltargetdescription_p.h>
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CallSite : public UnlimitedContainer
 {
  public:
@@ -67,8 +66,7 @@ class CallSite : public UnlimitedContainer
    bool            m_isRecursive;
    const QXmlName  m_name;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

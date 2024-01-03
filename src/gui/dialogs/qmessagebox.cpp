@@ -55,7 +55,7 @@
 #include <qplatform_nativeinterface.h>
 #endif
 
-#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
 HMENU qt_getWindowsSystemMenu(const QWidget *w)
 {
    if (QWindow *window = QApplicationPrivate::windowForWidget(w))

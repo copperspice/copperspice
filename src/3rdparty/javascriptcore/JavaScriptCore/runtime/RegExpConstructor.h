@@ -68,7 +68,7 @@ namespace JSC {
 
         static const ClassInfo info;
 
-        void performMatch(RegExp*, const UString&, int startOffset, int& position, int& length, int** ovector = 0);
+        void performMatch(RegExp*, const UString&, int startOffset, int& position, int& length, int** ovector = nullptr);
         JSObject* arrayOfMatches(ExecState*) const;
 
         void setInput(const UString&);
@@ -104,9 +104,9 @@ namespace JSC {
         return static_cast<RegExpConstructor*>(asObject(value));
     }
 
-    /* 
+    /*
       To facilitate result caching, exec(), test(), match(), search(), and replace() dipatch regular
-      expression matching through the performMatch function. We use cached results to calculate, 
+      expression matching through the performMatch function. We use cached results to calculate,
       e.g., RegExp.lastMatch and RegExp.leftParen.
     */
     inline void RegExpConstructor::performMatch(RegExp* r, const UString& s, int startOffset, int& position, int& length, int** ovector)

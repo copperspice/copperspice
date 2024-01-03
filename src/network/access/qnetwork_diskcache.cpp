@@ -160,9 +160,9 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
    } else {
       QString templateName = d->tmpCacheFileName();
 
-      QT_TRY {
+      try {
          cacheItem->file = new QTemporaryFile(templateName, &cacheItem->data);
-      } QT_CATCH(...) {
+      } catch(...) {
          cacheItem->file = nullptr;
       }
 
@@ -225,7 +225,7 @@ void QNetworkDiskCachePrivate::storeItem(QCacheItem *cacheItem)
 
    if (QFile::exists(fileName)) {
       if (!QFile::remove(fileName)) {
-         qWarning() << "QNetworkDiskCache: could not remove the cache file " << fileName;
+         qWarning() << "QNetworkDiskCache: Unable to remove the cache file " << fileName;
          return;
       }
    }

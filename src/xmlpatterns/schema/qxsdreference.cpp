@@ -23,8 +23,6 @@
 
 #include "qxsdreference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool XsdReference::isReference() const
@@ -61,5 +59,3 @@ QSourceLocation XsdReference::sourceLocation() const
 {
    return m_sourceLocation;
 }
-
-QT_END_NAMESPACE

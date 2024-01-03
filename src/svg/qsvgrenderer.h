@@ -29,10 +29,10 @@
 #ifndef QT_NO_SVGRENDERER
 
 #include <qobject.h>
-#include <qsize.h>
 #include <qrect.h>
+#include <qsize.h>
+#include <qscopedpointer.h>
 #include <qxmlstream.h>
-#include <QScopedPointer>
 
 class QSvgRendererPrivate;
 class QPainter;

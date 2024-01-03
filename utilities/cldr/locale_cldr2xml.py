@@ -61,7 +61,7 @@ def parse_number_format(patterns, data):
     for pattern in patterns:
         pattern = skip_repeating_pattern(pattern)
         pattern = pattern.replace('#', "%1")
-        # according to http://www.unicode.org/reports/tr35/#Number_Format_Patterns
+        # according to https://www.unicode.org/reports/tr35/#Number_Format_Patterns
         # there can be doubled or trippled currency sign, however none of the
         # locales use that.
         pattern = pattern.replace(u'\xa4', "%2")
@@ -122,10 +122,10 @@ def generateLocaleInfo(path):
     if alias:
         raise cs_findpath.Error("alias to \"%s\"" % alias)
 
-    language_code = findEntryInFile(path, "identity/language", attribute="type")[0]
+    language_code = findEntryInFile(path, "identity/language",  attribute="type")[0]
     country_code  = findEntryInFile(path, "identity/territory", attribute="type")[0]
-    script_code   = findEntryInFile(path, "identity/script", attribute="type")[0]
-    variant_code  = findEntryInFile(path, "identity/variant", attribute="type")[0]
+    script_code   = findEntryInFile(path, "identity/script",    attribute="type")[0]
+    variant_code  = findEntryInFile(path, "identity/variant",   attribute="type")[0]
 
     return _generateLocaleInfo(path, language_code, script_code, country_code, variant_code)
 
@@ -152,7 +152,7 @@ def _generateLocaleInfo(path, language_code, script_code, country_code, variant_
         raise cs_findpath.Error("Unknown script code \"%s\"" % script_code)
     script = cs_enumdata.script_list[script_id][0]
 
-    # we should handle fully qualified names with the territory
+    # handle fully qualified names with the territory
     if not country_code:
         return {}
     country_id = cs_enumdata.countryCodeToId(country_code)
@@ -196,34 +196,38 @@ def _generateLocaleInfo(path, language_code, script_code, country_code, variant_
             if t and t[0][0] == 'info':
                 result['currencyDigits']   = int(list(filter(lambda x: x[0] == 'digits', t[0][1]))[0][1])
                 result['currencyRounding'] = int(list(filter(lambda x: x[0] == 'rounding', t[0][1]))[0][1])
+
     numbering_system = None
     try:
         numbering_system = findEntry(CLDR_INPUT, path, "numbers/defaultNumberingSystem")
     except cs_findpath.Error:
         pass
+
     def findEntryDef(path, xpath, value=''):
         try:
             return findEntry(CLDR_MAIN, path, xpath)
         except cs_findpath.Error:
             return value
+
     def get_number_in_system(path, xpath, numbering_system):
         if numbering_system:
             try:
                 return findEntry(CLDR_INPUT, path, xpath + "[numberSystem=" + numbering_system + "]")
+
             except cs_findpath.Error:
-                # in CLDR 1.9 number system was refactored for numbers (but not for currency)
-                # so if previous findEntry doesn't work we should try this:
                 try:
                     return findEntry(CLDR_INPUT, path, xpath.replace("/symbols/", "/symbols[numberSystem=" + numbering_system + "]/"))
+
                 except cs_findpath.Error:
                     # fallback to default
                     pass
         return findEntry(CLDR_INPUT, path, xpath)
 
-    result['decimal'] = get_number_in_system(path, "numbers/symbols/decimal", numbering_system)
-    result['group']   = get_number_in_system(path, "numbers/symbols/group", numbering_system)
-    result['list']    = get_number_in_system(path, "numbers/symbols/list", numbering_system)
+    result['decimal'] = get_number_in_system(path, "numbers/symbols/decimal",     numbering_system)
+    result['group']   = get_number_in_system(path, "numbers/symbols/group",       numbering_system)
+    result['list']    = get_number_in_system(path, "numbers/symbols/list",        numbering_system)
     result['percent'] = get_number_in_system(path, "numbers/symbols/percentSign", numbering_system)
+
     try:
         numbering_systems = {}
         for ns in findTagsInFile(CLDR_INPUT + "supplemental/numberingSystems.xml", "numberingSystems"):
@@ -611,7 +615,7 @@ def main():
    # configure output for utf-8
    sys.stdout.reconfigure(encoding='utf-8')
 
-   # see http://www.unicode.org/reports/tr35/tr35-info.html#Default_Content
+   # refer to https://www.unicode.org/reports/tr35/tr35-info.html#Default_Content
 
    defaultContent_locales = {}
 
@@ -718,7 +722,7 @@ def main():
        except cs_findpath.Error as e:
            sys.stderr.write("skipping likelySubtag \"%s\" -> \"%s\" (%s)\n" % (tmp[u"from"], tmp[u"to"], str(e)))
            continue
-       # substitute according to http://www.unicode.org/reports/tr35/#Likely_Subtags
+       # substitute according to https://www.unicode.org/reports/tr35/#Likely_Subtags
        if to_country == "AnyCountry" and from_country != to_country:
            to_country = from_country
        if to_script == "AnyScript" and from_script != to_script:

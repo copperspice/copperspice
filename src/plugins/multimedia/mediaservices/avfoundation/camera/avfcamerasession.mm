@@ -105,19 +105,19 @@ QList<AVFCameraInfo> AVFCameraSession::m_cameraDevices;
 
 - (void) processRuntimeError:(NSNotification *)notification
 {
-    Q_UNUSED(notification);
+    (void) notification;
     QMetaObject::invokeMethod(m_session, "processRuntimeError", Qt::AutoConnection);
 }
 
 - (void) processSessionStarted:(NSNotification *)notification
 {
-    Q_UNUSED(notification);
+    (void) notification;
     QMetaObject::invokeMethod(m_session, "processSessionStarted", Qt::AutoConnection);
 }
 
 - (void) processSessionStopped:(NSNotification *)notification
 {
-    Q_UNUSED(notification);
+    (void) notification;
     QMetaObject::invokeMethod(m_session, "processSessionStopped", Qt::AutoConnection);
 }
 
@@ -327,7 +327,7 @@ void AVFCameraSession::processSessionStopped()
 
 void AVFCameraSession::onCaptureModeChanged(QCamera::CaptureModes mode)
 {
-    Q_UNUSED(mode)
+    (void) mode;
 
     const QCamera::State s = state();
     if (s == QCamera::LoadedState || s == QCamera::ActiveState) {

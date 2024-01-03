@@ -24,10 +24,8 @@
 #ifndef QXMLNAMEPOOL_H
 #define QXMLNAMEPOOL_H
 
-#include <QSharedData>
-#include <QString>
-
-QT_BEGIN_NAMESPACE
+#include <qshareddata.h>
+#include <qstring.h>
 
 namespace QPatternist {
 class NamePool;
@@ -63,7 +61,5 @@ class Q_XMLPATTERNS_EXPORT QXmlNamePool
    friend class QPatternistSDK::Global;
    QExplicitlySharedDataPointer<QPatternist::NamePool> d;
 };
-
-QT_END_NAMESPACE
 
 #endif

@@ -26,8 +26,6 @@
 
 #include <qxsdschema_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 /**
  * A helper class to print out the structure of a compiled schema.
@@ -88,7 +86,5 @@ class XsdSchemaDebugger
 };
 
 }
-
-QT_END_NAMESPACE
 
 #endif

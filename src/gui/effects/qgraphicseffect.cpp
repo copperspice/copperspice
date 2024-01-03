@@ -135,7 +135,7 @@ QPixmap QGraphicsEffectSource::pixmap(Qt::CoordinateSystem system, QPoint *offse
 
    if (system == Qt::DeviceCoordinates && item
          && !static_cast<const QGraphicsItemEffectSourcePrivate *>(d_func())->info) {
-      qWarning("QGraphicsEffectSource::pixmap: Not yet implemented, lacking device context");
+      qWarning("QGraphicsEffectSource::pixmap() Device context is missing, unable to create the pixmap");
       return QPixmap();
    }
 

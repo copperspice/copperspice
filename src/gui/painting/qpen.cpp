@@ -243,7 +243,6 @@ QVector<qreal> QPen::dashPattern() const
    return dd->dashPattern;
 }
 
-
 void QPen::setDashPattern(const QVector<qreal> &pattern)
 {
    if (pattern.isEmpty()) {
@@ -256,11 +255,10 @@ void QPen::setDashPattern(const QVector<qreal> &pattern)
    d->style = Qt::CustomDashLine;
 
    if ((dd->dashPattern.size() % 2) == 1) {
-      qWarning("QPen::setDashPattern: Pattern not of even length");
+      qWarning("QPen::setDashPattern() Pattern length must be an even number");
       dd->dashPattern << 1;
    }
 }
-
 
 qreal QPen::dashOffset() const
 {
@@ -273,9 +271,11 @@ void QPen::setDashOffset(qreal offset)
    if (qFuzzyCompare(offset, static_cast<QPenData *>(d)->dashOffset)) {
       return;
    }
+
    detach();
    QPenData *dd = static_cast<QPenData *>(d);
    dd->dashOffset = offset;
+
    if (d->style != Qt::CustomDashLine) {
       dd->dashPattern = dashPattern();
       d->style = Qt::CustomDashLine;
@@ -288,7 +288,6 @@ qreal QPen::miterLimit() const
    return dd->miterLimit;
 }
 
-
 void QPen::setMiterLimit(qreal limit)
 {
    detach();
@@ -296,39 +295,36 @@ void QPen::setMiterLimit(qreal limit)
    dd->miterLimit = limit;
 }
 
-
-
 int QPen::width() const
 {
    return qRound(d->width);
 }
-
 
 qreal QPen::widthF() const
 {
    return d->width;
 }
 
-
 void QPen::setWidth(int width)
 {
    if (width < 0) {
-      qWarning("QPen::setWidth: Setting a pen width with a negative value is not defined");
+      qWarning("QPen::setWidth() Pen width must be zero or greater");
    }
+
    if ((qreal)width == d->width) {
       return;
    }
+
    detach();
    d->width = width;
 }
 
-
-
 void QPen::setWidthF(qreal width)
 {
    if (width < 0.f) {
-      qWarning("QPen::setWidthF: Setting a pen width with a negative value is not defined");
+      qWarning("QPen::setWidthF() Pen width must be zero or greater");
    }
+
    if (qAbs(d->width - width) < 0.00000001f) {
       return;
    }
@@ -338,25 +334,10 @@ void QPen::setWidthF(qreal width)
    d->defaultWidth = false;
 }
 
-
-/*!
-    Returns the pen's cap style.
-
-    \sa setCapStyle(), {QPen#Cap Style}{Cap Style}
-*/
 Qt::PenCapStyle QPen::capStyle() const
 {
    return d->capStyle;
 }
-
-/*!
-    \fn void QPen::setCapStyle(Qt::PenCapStyle style)
-
-    Sets the pen's cap style to the given \a style. The default value
-    is Qt::SquareCap.
-
-    \sa capStyle(), {QPen#Cap Style}{Cap Style}
-*/
 
 void QPen::setCapStyle(Qt::PenCapStyle c)
 {
@@ -367,24 +348,10 @@ void QPen::setCapStyle(Qt::PenCapStyle c)
    d->capStyle = c;
 }
 
-/*!
-    Returns the pen's join style.
-
-    \sa setJoinStyle(),  {QPen#Join Style}{Join Style}
-*/
 Qt::PenJoinStyle QPen::joinStyle() const
 {
    return d->joinStyle;
 }
-
-/*!
-    \fn void QPen::setJoinStyle(Qt::PenJoinStyle style)
-
-    Sets the pen's join style to the given \a style. The default value
-    is Qt::BevelJoin.
-
-    \sa joinStyle(), {QPen#Join Style}{Join Style}
-*/
 
 void QPen::setJoinStyle(Qt::PenJoinStyle j)
 {
@@ -395,25 +362,10 @@ void QPen::setJoinStyle(Qt::PenJoinStyle j)
    d->joinStyle = j;
 }
 
-/*!
-    \fn const QColor &QPen::color() const
-
-    Returns the color of this pen's brush.
-
-    \sa brush(), setColor()
-*/
 QColor QPen::color() const
 {
    return d->brush.color();
 }
-
-/*!
-    \fn void QPen::setColor(const QColor &color)
-
-    Sets the color of this pen's brush to the given \a color.
-
-    \sa setBrush(), color()
-*/
 
 void QPen::setColor(const QColor &c)
 {
@@ -421,66 +373,27 @@ void QPen::setColor(const QColor &c)
    d->brush = QBrush(c);
 }
 
-
-/*!
-    Returns the brush used to fill strokes generated with this pen.
-*/
 QBrush QPen::brush() const
 {
    return d->brush;
 }
 
-/*!
-    Sets the brush used to fill strokes generated with this pen to the given
-    \a brush.
-
-    \sa brush(), setColor()
-*/
 void QPen::setBrush(const QBrush &brush)
 {
    detach();
    d->brush = brush;
 }
 
-
-/*!
-    Returns true if the pen has a solid fill, otherwise false.
-
-    \sa style(), dashPattern()
-*/
 bool QPen::isSolid() const
 {
    return d->brush.style() == Qt::SolidPattern;
 }
-
-
-/*!
-    Returns true if the pen is cosmetic; otherwise returns false.
-
-    Cosmetic pens are used to draw strokes that have a constant width
-    regardless of any transformations applied to the QPainter they are
-    used with. Drawing a shape with a cosmetic pen ensures that its
-    outline will have the same thickness at different scale factors.
-
-    A zero width pen is cosmetic by default; pens with a non-zero width
-    are non-cosmetic.
-
-    \sa setCosmetic(), widthF()
-*/
 
 bool QPen::isCosmetic() const
 {
    QPenData *dd = static_cast<QPenData *>(d);
    return (dd->cosmetic == true) || d->width == 0;
 }
-
-
-/*!
-    Sets this pen to cosmetic or non-cosmetic, depending on the value of
-    \a cosmetic.
-
-    \sa isCosmetic()
-*/
 
 void QPen::setCosmetic(bool cosmetic)
 {
@@ -489,32 +402,11 @@ void QPen::setCosmetic(bool cosmetic)
    dd->cosmetic = cosmetic;
 }
 
-
-
-/*!
-    \fn bool QPen::operator!=(const QPen &pen) const
-
-    Returns true if the pen is different from the given \a pen;
-    otherwise false. Two pens are different if they have different
-    styles, widths or colors.
-
-    \sa operator==()
-*/
-
-/*!
-    \fn bool QPen::operator==(const QPen &pen) const
-
-    Returns true if the pen is equal to the given \a pen; otherwise
-    false. Two pens are equal if they have equal styles, widths and
-    colors.
-
-    \sa operator!=()
-*/
-
 bool QPen::operator==(const QPen &p) const
 {
-   QPenData *dd = static_cast<QPenData *>(d);
+   QPenData *dd  = static_cast<QPenData *>(d);
    QPenData *pdd = static_cast<QPenData *>(p.d);
+
    return (p.d == d)
       || (p.d->style == d->style
          && p.d->capStyle == d->capStyle
@@ -528,13 +420,6 @@ bool QPen::operator==(const QPen &p) const
          && pdd->cosmetic == dd->cosmetic
          && pdd->defaultWidth == dd->defaultWidth);
 }
-
-
-/*!
-    \fn bool QPen::isDetached()
-
-    \internal
-*/
 
 bool QPen::isDetached()
 {
@@ -652,5 +537,3 @@ QDebug operator<<(QDebug dbg, const QPen &p)
 
    return dbg;
 }
-
-#undef QT_COMPILING_QPEN

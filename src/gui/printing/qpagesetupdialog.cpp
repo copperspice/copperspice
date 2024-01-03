@@ -48,9 +48,8 @@ void QPageSetupDialogPrivate::setPrinter(QPrinter *newPrinter)
    }
 
    if (printer->outputFormat() != QPrinter::NativeFormat) {
-      qWarning("QPageSetupDialog: Can not be used on non-native printers");
+      qWarning("setPrinter() Unable to use on a non-native printer");
    }
-
 }
 
 void QPageSetupDialog::open(QObject *receiver, const QString &member)

@@ -24,11 +24,4 @@
 #include <QUrl>
 
 #include "qnamespaceresolver_p.h"
-
 #include "qitem_p.h"
-
-QT_BEGIN_NAMESPACE
-
-
-
-QT_END_NAMESPACE

@@ -143,11 +143,11 @@ void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem *item)
 {
    Q_D(QGraphicsLinearLayout);
    if (!item) {
-      qWarning("QGraphicsLinearLayout::insertItem: cannot insert null item");
+      qWarning("QGraphicsLinearLayout::insertItem() Unable to insert an invalid item (nullptr)");
       return;
    }
    if (item == this) {
-      qWarning("QGraphicsLinearLayout::insertItem: cannot insert itself");
+      qWarning("QGraphicsLinearLayout::insertItem() Item already exists, can not insert again");
       return;
    }
    d->addChildLayoutItem(item);
@@ -186,7 +186,7 @@ void QGraphicsLinearLayout::removeAt(int index)
    Q_D(QGraphicsLinearLayout);
 
    if (index < 0 || index >= d->engine.itemCount()) {
-      qWarning("QGraphicsLinearLayout::removeAt: invalid index %d", index);
+      qWarning("QGraphicsLinearLayout::removeAt() Invalid index %d", index);
       return;
    }
 
@@ -205,7 +205,7 @@ void QGraphicsLinearLayout::setSpacing(qreal spacing)
 {
    Q_D(QGraphicsLinearLayout);
    if (spacing < 0) {
-      qWarning("QGraphicsLinearLayout::setSpacing: invalid spacing %g", spacing);
+      qWarning("QGraphicsLinearLayout::setSpacing() Invalid spacing %g", spacing);
       return;
    }
    d->engine.setSpacing(spacing, Qt::Horizontal | Qt::Vertical);
@@ -235,8 +235,7 @@ void QGraphicsLinearLayout::setStretchFactor(QGraphicsLayoutItem *item, int stre
 {
    Q_D(QGraphicsLinearLayout);
    if (!item) {
-      qWarning("QGraphicsLinearLayout::setStretchFactor: cannot assign"
-         " a stretch factor to a null item");
+      qWarning("QGraphicsLinearLayout::setStretchFactor() Unable to assign a stretch factor to an invalid item (nullptr)");
       return;
    }
    if (stretchFactor(item) == stretch) {
@@ -250,8 +249,7 @@ int QGraphicsLinearLayout::stretchFactor(QGraphicsLayoutItem *item) const
 {
    Q_D(const QGraphicsLinearLayout);
    if (!item) {
-      qWarning("QGraphicsLinearLayout::setStretchFactor: cannot return"
-         " a stretch factor for a null item");
+      qWarning("QGraphicsLinearLayout::setStretchFactor() Unable to return a stretch factor for an invalid item (nullptr)");
       return 0;
    }
    return d->engine.stretchFactor(item, d->orientation);
@@ -283,7 +281,7 @@ QGraphicsLayoutItem *QGraphicsLinearLayout::itemAt(int index) const
 {
    Q_D(const QGraphicsLinearLayout);
    if (index < 0 || index >= d->engine.itemCount()) {
-      qWarning("QGraphicsLinearLayout::itemAt: invalid index %d", index);
+      qWarning("QGraphicsLinearLayout::itemAt() Invalid index %d", index);
       return nullptr;
    }
 

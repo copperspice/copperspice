@@ -56,6 +56,32 @@ class rcu_guarded
 
             write_handle(T *ptr);
 
+            write_handle(const write_handle &other) = delete;
+            write_handle &operator=(const write_handle &other) = delete;
+
+            write_handle(write_handle &&other) {
+               m_ptr      = other.m_ptr;
+               m_guard    = std::move(other.m_guard);
+               m_accessed = other.m_accessed;
+
+               other.m_ptr      = nullptr;
+               other.m_accessed = false;
+            }
+
+            write_handle &operator=(write_handle &&other) {
+
+               if (m_accessed) {
+                  m_guard.rcu_write_unlock(*m_ptr);
+               }
+
+               m_ptr      = other.m_ptr;
+               m_guard    = std::move(other.m_guard);
+               m_accessed = other.m_accessed;
+
+               other.m_ptr      = nullptr;
+               other.m_accessed = false;
+            }
+
             ~write_handle()
             {
                if (m_accessed) {
@@ -75,7 +101,7 @@ class rcu_guarded
 
          private:
             void access() const {
-               if (!m_accessed) {
+               if (! m_accessed) {
                   m_guard.rcu_write_lock(*m_ptr);
                   m_accessed = true;
                }
@@ -95,6 +121,32 @@ class rcu_guarded
             read_handle(const T *ptr)
                : m_ptr(ptr), m_accessed(false)
             {
+            }
+
+            read_handle(const read_handle &other) = delete;
+            read_handle &operator=(const read_handle &other) = delete;
+
+            read_handle(read_handle &&other) {
+               m_ptr      = other.m_ptr;
+               m_guard    = std::move(other.m_guard);
+               m_accessed = other.m_accessed;
+
+               other.m_ptr      = nullptr;
+               other.m_accessed = false;
+            }
+
+            read_handle &operator=(read_handle &&other) {
+
+               if (m_accessed) {
+                  m_guard.rcu_read_unlock(*m_ptr);
+               }
+
+               m_ptr      = other.m_ptr;
+               m_guard    = std::move(other.m_guard);
+               m_accessed = other.m_accessed;
+
+               other.m_ptr      = nullptr;
+               other.m_accessed = false;
             }
 
             ~read_handle()

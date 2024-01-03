@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
+#include <qparsercontext_p.h>
+
 #include <qglobal.h>
 
-#include "qparsercontext_p.h"
-#include "qexpression_p.h"
-#include "qstaticcontext_p.h"
-#include "qtokenizer_p.h"
+#include <qexpression_p.h>
+#include <qstaticcontext_p.h>
+#include <qtokenizer_p.h>
 
 using namespace QPatternist;
 

@@ -24,11 +24,11 @@
 #ifndef QMaintainingReader_P_H
 #define QMaintainingReader_P_H
 
-#include <QSet>
-#include <QSourceLocation>
-#include <QStack>
-#include <QStringList>
-#include <QXmlStreamReader>
+#include <qset.h>
+#include <qsourcelocation.h>
+#include <qstack.h>
+#include <qstringlist.h>
+#include <qxmlstreamreader.h>
 
 #include <qxpathhelper_p.h>
 #include <qxslttokenlookup_p.h>

@@ -126,7 +126,7 @@ static int qt_create_pipe(int *pipe)
    int pipe_ret = qt_safe_pipe(pipe);
    if (pipe_ret != 0) {
       qWarning("QProcessPrivate::createPipe: Cannot create pipe %p: %s",
-               pipe, qPrintable(qt_error_string(errno)));
+               pipe, csPrintable(qt_error_string(errno)));
    }
    return pipe_ret;
 }
@@ -481,7 +481,7 @@ void QProcessPrivate::startProcess()
       // Cleanup, report error and return
 
 #if defined (QPROCESS_DEBUG)
-      qDebug("fork() failed: %s", qPrintable(qt_error_string(lastForkErrno)));
+      qDebug("fork() failed: %s", csPrintable(qt_error_string(lastForkErrno)));
 #endif
 
       q->setProcessState(QProcess::NotRunning);
@@ -606,7 +606,7 @@ report_errno:
    QString error = qt_error_string(errno);
 
 #if defined (QPROCESS_DEBUG)
-   fprintf(stderr, "QProcessPrivate::execChild() failed (%s), notifying parent process\n", qPrintable(error));
+   fprintf(stderr, "QProcessPrivate::execChild() failed (%s), notifying parent process\n", csPrintable(error));
 #endif
 
    qt_safe_write(childStartedPipe[1], error.data(), error.length() * sizeof(QChar));
@@ -691,7 +691,7 @@ bool QProcessPrivate::writeToStdin()
           data, qt_prettyDebug(data, bytesToWrite, 16).constData(), bytesToWrite, written);
 
    if (written == -1)  {
-      qDebug("QProcessPrivate::writeToStdin(), failed to write (%s)", qPrintable(qt_error_string(errno)));
+      qDebug("QProcessPrivate::writeToStdin(), failed to write (%s)", csPrintable(qt_error_string(errno)));
    }
 #endif
 

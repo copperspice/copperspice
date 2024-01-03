@@ -23,8 +23,6 @@
 
 #include "qatomiccomparatorlocator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicComparatorLocator::AtomicComparatorLocator()
@@ -69,5 +67,3 @@ implCompVisit(SchemaTimeType)
 implCompVisit(UntypedAtomicType)
 implCompVisit(YearMonthDurationType)
 #undef implCompVisit
-
-QT_END_NAMESPACE

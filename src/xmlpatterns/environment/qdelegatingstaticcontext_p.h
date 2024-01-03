@@ -29,8 +29,6 @@
 #include <qfunctionfactory_p.h>
 #include <qschematypefactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DelegatingStaticContext : public StaticContext
@@ -100,7 +98,5 @@ class DelegatingStaticContext : public StaticContext
    const StaticContext::Ptr m_context;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

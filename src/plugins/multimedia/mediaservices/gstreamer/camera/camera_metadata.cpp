@@ -86,7 +86,12 @@ struct QGStreamerMetaDataKey {
 }
 
 using QGStreamerMetaDataKeys = QList<QGStreamerMetaDataKey>;
-Q_GLOBAL_STATIC(QGStreamerMetaDataKeys, metadataKeys)
+
+static QGStreamerMetaDataKeys *metadataKeys()
+{
+   static QGStreamerMetaDataKeys retval;
+   return &retval;
+}
 
 static const QGStreamerMetaDataKeys *qt_gstreamerMetaDataKeys()
 {

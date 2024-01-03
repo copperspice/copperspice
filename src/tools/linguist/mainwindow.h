@@ -80,8 +80,8 @@ class MainWindow : public QMainWindow
  protected:
    void readConfig();
    void writeConfig();
-   void closeEvent(QCloseEvent *);
-   bool eventFilter(QObject *object, QEvent *event);
+   void closeEvent(QCloseEvent *) override;
+   bool eventFilter(QObject *object, QEvent *event) override;
 
  private:
    // file
@@ -220,10 +220,10 @@ class MainWindow : public QMainWindow
    CS_SLOT_1(Private, void updateProgress())
    CS_SLOT_2(updateProgress)
 
-   CS_SLOT_1(Private, void maybeUpdateStatistics(const MultiDataIndex &un_named_arg1))
+   CS_SLOT_1(Private, void maybeUpdateStatistics(const MultiDataIndex &index))
    CS_SLOT_2(maybeUpdateStatistics)
 
-   CS_SLOT_1(Private, void translationChanged(const MultiDataIndex &un_named_arg1))
+   CS_SLOT_1(Private, void translationChanged(const MultiDataIndex &index))
    CS_SLOT_2(translationChanged)
 
    CS_SLOT_1(Private, void updateCaption())
@@ -245,7 +245,7 @@ class MainWindow : public QMainWindow
    CS_SLOT_1(Private, void updateTranslatorComment(const QString & comment))
    CS_SLOT_2(updateTranslatorComment)
 
-   CS_SLOT_1(Private, void updateActiveModel(int un_named_arg1))
+   CS_SLOT_1(Private, void updateActiveModel(int model))
    CS_SLOT_2(updateActiveModel)
 
    CS_SLOT_1(Private, void refreshItemViews())

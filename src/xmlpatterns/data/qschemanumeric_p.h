@@ -27,8 +27,6 @@
 #include <qitem_p.h>
 #include <qprimitives_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Numeric : public AtomicValue
@@ -171,7 +169,5 @@ class Numeric : public AtomicValue
    static xsDouble roundFloat(const xsDouble val);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

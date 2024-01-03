@@ -400,36 +400,21 @@ Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QTextFormat &fmt)
    return stream;
 }
 
-
 QTextFormat::QTextFormat()
    : format_type(InvalidFormat)
 {
 }
-
 
 QTextFormat::QTextFormat(int type)
    : format_type(type)
 {
 }
 
-
-/*!
-    \fn QTextFormat::QTextFormat(const QTextFormat &other)
-
-    Creates a new text format with the same attributes as the \a other
-    text format.
-*/
 QTextFormat::QTextFormat(const QTextFormat &rhs)
    : d(rhs.d), format_type(rhs.format_type)
 {
 }
 
-/*!
-    \fn QTextFormat &QTextFormat::operator=(const QTextFormat &other)
-
-    Assigns the \a other text format to this text format, and returns a
-    reference to this text format.
-*/
 QTextFormat &QTextFormat::operator=(const QTextFormat &rhs)
 {
    d = rhs.d;
@@ -437,24 +422,15 @@ QTextFormat &QTextFormat::operator=(const QTextFormat &rhs)
    return *this;
 }
 
-
 QTextFormat::~QTextFormat()
 {
 }
 
-
-/*!
-   Returns the text format as a QVariant
-*/
 QTextFormat::operator QVariant() const
 {
    return QVariant(QVariant::TextFormat, this);
 }
 
-/*!
-    Merges the \a other format with this format; where there are
-    conflicts the \a other format takes precedence.
-*/
 void QTextFormat::merge(const QTextFormat &other)
 {
    if (format_type != other.format_type) {
@@ -481,98 +457,60 @@ void QTextFormat::merge(const QTextFormat &other)
    }
 }
 
-/*!
-    Returns the type of this format.
-
-    \sa FormatType
-*/
 int QTextFormat::type() const
 {
    return format_type;
 }
 
-/*!
-    Returns this format as a block format.
-*/
 QTextBlockFormat QTextFormat::toBlockFormat() const
 {
    return QTextBlockFormat(*this);
 }
 
-/*!
-    Returns this format as a character format.
-*/
 QTextCharFormat QTextFormat::toCharFormat() const
 {
    return QTextCharFormat(*this);
 }
 
-/*!
-    Returns this format as a list format.
-*/
 QTextListFormat QTextFormat::toListFormat() const
 {
    return QTextListFormat(*this);
 }
 
-/*!
-    Returns this format as a table format.
-*/
 QTextTableFormat QTextFormat::toTableFormat() const
 {
    return QTextTableFormat(*this);
 }
 
-/*!
-    Returns this format as a frame format.
-*/
 QTextFrameFormat QTextFormat::toFrameFormat() const
 {
    return QTextFrameFormat(*this);
 }
 
-/*!
-    Returns this format as an image format.
-*/
 QTextImageFormat QTextFormat::toImageFormat() const
 {
    return QTextImageFormat(*this);
 }
 
-/*!
-    \since 4.4
-
-    Returns this format as a table cell format.
-*/
 QTextTableCellFormat QTextFormat::toTableCellFormat() const
 {
    return QTextTableCellFormat(*this);
 }
 
-/*!
-    Returns the value of the property specified by \a propertyId. If the
-    property isn't of QTextFormat::Bool type, false is returned instead.
-
-    \sa setProperty() intProperty() doubleProperty() stringProperty() colorProperty() lengthProperty() lengthVectorProperty() Property
-*/
 bool QTextFormat::boolProperty(int propertyId) const
 {
-   if (!d) {
+   if (! d) {
       return false;
    }
+
    const QVariant prop = d->property(propertyId);
    if (prop.userType() != QVariant::Bool) {
       return false;
    }
+
    return prop.toBool();
 }
 
-/*!
-    Returns the value of the property specified by \a propertyId. If the
-    property is not of QTextFormat::Integer type, 0 is returned instead.
-
-    \sa setProperty() boolProperty() doubleProperty() stringProperty() colorProperty() lengthProperty() lengthVectorProperty() Property
-*/
 int QTextFormat::intProperty(int propertyId) const
 {
    // required, since the default layout direction has to be LayoutDirectionAuto, which is not integer 0
@@ -642,13 +580,6 @@ QPen QTextFormat::penProperty(int propertyId) const
    return prop.value<QPen>();
 }
 
-/*!
-    Returns the value of the property given by \a propertyId; if the
-    property isn't of QVariant::Brush type, Qt::NoBrush is
-    returned instead.
-
-    \sa setProperty() boolProperty() intProperty() doubleProperty() stringProperty() lengthProperty() lengthVectorProperty() Property
-*/
 QBrush QTextFormat::brushProperty(int propertyId) const
 {
    if (!d) {
@@ -695,21 +626,11 @@ QVector<QTextLength> QTextFormat::lengthVectorProperty(int propertyId) const
    return vector;
 }
 
-/*!
-    Returns the property specified by the given \a propertyId.
-
-    \sa Property
-*/
 QVariant QTextFormat::property(int propertyId) const
 {
    return d ? d->property(propertyId) : QVariant();
 }
 
-/*!
-    Sets the property specified by the \a propertyId to the given \a value.
-
-    \sa Property
-*/
 void QTextFormat::setProperty(int propertyId, const QVariant &value)
 {
    if (!d) {
@@ -723,11 +644,6 @@ void QTextFormat::setProperty(int propertyId, const QVariant &value)
    }
 }
 
-/*!
-    Sets the value of the property given by \a propertyId to \a value.
-
-    \sa lengthVectorProperty() Property
-*/
 void QTextFormat::setProperty(int propertyId, const QVector<QTextLength> &value)
 {
    if (!d) {
@@ -740,11 +656,6 @@ void QTextFormat::setProperty(int propertyId, const QVector<QTextLength> &value)
    d->insertProperty(propertyId, list);
 }
 
-/*!
-    Clears the value of the property given by \a propertyId
-
-    \sa Property
-*/
 void QTextFormat::clearProperty(int propertyId)
 {
    if (!d) {
@@ -752,7 +663,6 @@ void QTextFormat::clearProperty(int propertyId)
    }
    d->clearProperty(propertyId);
 }
-
 
 int QTextFormat::objectIndex() const
 {
@@ -766,13 +676,6 @@ int QTextFormat::objectIndex() const
    return prop.toInt();
 }
 
-/*!
-    \fn void QTextFormat::setObjectIndex(int index)
-
-    Sets the format object's object \a index.
-
-    \sa objectIndex()
-*/
 void QTextFormat::setObjectIndex(int o)
 {
    if (o == -1) {
@@ -789,26 +692,11 @@ void QTextFormat::setObjectIndex(int o)
    }
 }
 
-/*!
-    Returns true if the text format has a property with the given \a
-    propertyId; otherwise returns false.
-
-    \sa properties() Property
-*/
 bool QTextFormat::hasProperty(int propertyId) const
 {
    return d ? d->hasProperty(propertyId) : false;
 }
 
-/*
-    Returns the property type for the given \a propertyId.
-
-    \sa hasProperty() allPropertyIds() Property
-*/
-
-/*!
-    Returns a map with all properties of this text format.
-*/
 QMap<int, QVariant> QTextFormat::properties() const
 {
    QMap<int, QVariant> map;
@@ -820,29 +708,11 @@ QMap<int, QVariant> QTextFormat::properties() const
    return map;
 }
 
-/*!
-    \since 4.3
-    Returns the number of properties stored in the format.
-*/
 int QTextFormat::propertyCount() const
 {
    return d ? d->props.count() : 0;
 }
 
-/*!
-    \fn bool QTextFormat::operator!=(const QTextFormat &other) const
-
-    Returns true if this text format is different from the \a other text
-    format.
-*/
-
-
-/*!
-    \fn bool QTextFormat::operator==(const QTextFormat &other) const
-
-    Returns true if this text format is the same as the \a other text
-    format.
-*/
 bool QTextFormat::operator==(const QTextFormat &rhs) const
 {
    if (format_type != rhs.format_type) {
@@ -920,6 +790,7 @@ void QTextCharFormat::setFont(const QFont &font)
 {
    setFont(font, FontPropertiesAll);
 }
+
 void QTextCharFormat::setFont(const QFont &font, FontPropertiesInheritanceBehavior behavior)
 {
    const uint mask = behavior == FontPropertiesAll ? uint(QFont::AllPropertiesResolved)
@@ -1105,7 +976,6 @@ QTextTableFormat::QTextTableFormat()
    setCellSpacing(2);
    setBorder(1);
 }
-
 
 // internal (cs)
 QTextTableFormat::QTextTableFormat(const QTextFormat &fmt)

@@ -58,7 +58,7 @@ namespace JSC {
     public:
         void initialize(StringImpl* key, unsigned char attributes, intptr_t v1, intptr_t v2
 #if ENABLE(JIT)
-                        , ThunkGenerator generator = 0
+                        , ThunkGenerator generator = nullptr
 #endif
                         )
         {
@@ -69,7 +69,7 @@ namespace JSC {
 #if ENABLE(JIT)
             m_u.function.generator = generator;
 #endif
-            m_next = 0;
+            m_next = nullptr;
         }
 
         void setKey(StringImpl* key) { m_key = key; }
@@ -163,7 +163,7 @@ namespace JSC {
             const HashEntry* entry = &table[identifier.impl()->existingHash() & compactHashSizeMask];
 
             if (!entry->key())
-                return 0;
+                return nullptr;
 
             do {
                 if (entry->key() == identifier.impl())
@@ -171,7 +171,7 @@ namespace JSC {
                 entry = entry->next();
             } while (entry);
 
-            return 0;
+            return nullptr;
         }
 
         // Convert the hash table keys to identifiers.
@@ -206,10 +206,10 @@ namespace JSC {
     inline bool getStaticPropertyDescriptor(ExecState* exec, const HashTable* table, ThisImp* thisObj, const Identifier& propertyName, PropertyDescriptor& descriptor)
     {
         const HashEntry* entry = table->entry(exec, propertyName);
-        
+
         if (!entry) // not found, forward to parent
             return thisObj->ParentImp::getOwnPropertyDescriptor(exec, propertyName, descriptor);
- 
+
         PropertySlot slot;
         if (entry->attributes() & Function)
             setUpStaticFunctionSlot(exec, entry, thisObj, propertyName, slot);
@@ -238,7 +238,7 @@ namespace JSC {
         setUpStaticFunctionSlot(exec, entry, thisObj, propertyName, slot);
         return true;
     }
-    
+
     /**
      * Simplified version of getStaticPropertyDescriptor in case there are only functions.
      * Using this instead of getStaticPropertyDescriptor allows 'this' to avoid implementing
@@ -249,11 +249,11 @@ namespace JSC {
     {
         if (static_cast<ParentImp*>(thisObj)->ParentImp::getOwnPropertyDescriptor(exec, propertyName, descriptor))
             return true;
-        
+
         const HashEntry* entry = table->entry(exec, propertyName);
         if (!entry)
             return false;
-        
+
         PropertySlot slot;
         setUpStaticFunctionSlot(exec, entry, thisObj, propertyName, slot);
         descriptor.setDescriptor(slot.getValue(exec, propertyName), entry->attributes());
@@ -286,10 +286,10 @@ namespace JSC {
     inline bool getStaticValueDescriptor(ExecState* exec, const HashTable* table, ThisImp* thisObj, const Identifier& propertyName, PropertyDescriptor& descriptor)
     {
         const HashEntry* entry = table->entry(exec, propertyName);
-        
+
         if (!entry) // not found, forward to parent
             return thisObj->ParentImp::getOwnPropertyDescriptor(exec, propertyName, descriptor);
-        
+
         ASSERT(!(entry->attributes() & Function));
         PropertySlot slot;
         slot.setCustom(thisObj, entry->propertyGetter());

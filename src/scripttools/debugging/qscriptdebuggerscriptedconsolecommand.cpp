@@ -195,7 +195,7 @@ void QScriptDebuggerScriptedConsoleCommandJob::start()
    global->setMessageHandler(0);
    global->setConsole(0);
    if (ret.isError()) {
-      qWarning("*** internal error: %s", qPrintable(ret.toString()));
+      qWarning("*** internal error: %s", csPrintable(ret.toString()));
    }
    if (d->commandCount == 0) {
       finish();
@@ -227,7 +227,7 @@ void QScriptDebuggerScriptedConsoleCommandJob::handleResponse(
    global->setMessageHandler(0);
    global->setConsole(0);
    if (ret.isError()) {
-      qWarning("*** internal error: %s", qPrintable(ret.toString()));
+      qWarning("*** internal error: %s", csPrintable(ret.toString()));
    }
    if (d->commandCount == 0) {
       finish();

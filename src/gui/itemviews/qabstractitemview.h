@@ -440,27 +440,27 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
  private:
    Q_DECLARE_PRIVATE(QAbstractItemView)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_columnsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsInserted(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_columnsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-                  const QModelIndex &un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_columnsMoved(const QModelIndex &source, int sourceStart, int sourceEnd,
+         const QModelIndex &destination, int destinationStart))
    GUI_CS_SLOT_2(_q_columnsMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_rowsInserted(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_rowsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3))
+   GUI_CS_SLOT_1(Private, void _q_rowsRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_rowsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_rowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-                  const QModelIndex &un_named_arg4, int un_named_arg5))
+   GUI_CS_SLOT_1(Private, void _q_rowsMoved(const QModelIndex &source, int sourceStart, int sourceEnd,
+         const QModelIndex &destination, int destinationStart))
    GUI_CS_SLOT_2(_q_rowsMoved)
 
    void _q_modelDestroyed();

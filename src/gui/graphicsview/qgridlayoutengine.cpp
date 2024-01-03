@@ -759,7 +759,7 @@ void QGridLayoutRowInfo::dump(int indent) const
       }
 
       if (!message.isEmpty() || boxes.value(i) != QGridLayoutBox()) {
-         qDebug("%*s Row %d:%s", indent, "", i, qPrintable(message));
+         qDebug("%*s Row %d:%s", indent, "", i, csPrintable(message));
          if (boxes.value(i) != QGridLayoutBox()) {
             boxes.value(i).dump(indent + 1);
          }
@@ -1207,7 +1207,7 @@ void QGridLayoutEngine::dump(int indent) const
          message += QLatin1Char(' ');
       }
       message += QLatin1Char(']');
-      qDebug("%*s  %s", indent, "", qPrintable(message));
+      qDebug("%*s  %s", indent, "", csPrintable(message));
    }
 
    if (q_defaultSpacings[Hor].value() >= 0.0 || q_defaultSpacings[Ver].value() >= 0.0)
@@ -1662,8 +1662,8 @@ bool QGridLayoutEngine::ensureDynamicConstraint() const
                q_cachedConstraintOrientation = itemConstraintOrientation;
             } else if (q_cachedConstraintOrientation != itemConstraintOrientation) {
                q_cachedConstraintOrientation = UnfeasibleConstraint;
-               qWarning("QGridLayoutEngine: Unfeasible, cannot mix horizontal and"
-                  " vertical constraint in the same layout");
+               qWarning("QGridLayoutEngine::ensureDynamicConstraint() Can not mix horizontal and"
+                  " vertical constraints in the same layout");
                return false;
             }
          }

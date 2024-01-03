@@ -3090,7 +3090,8 @@ void QGtkStyle::drawControl(ControlElement element,
 
          // Draws the header in tables.
          if (const QStyleOptionHeader *header = qstyleoption_cast<const QStyleOptionHeader *>(option)) {
-            Q_UNUSED(header);
+            (void) header;
+
             GtkWidget *gtkTreeView = d->gtkWidget("GtkTreeView");
             // Get the middle column
             GtkTreeViewColumn *column = d->gtk_tree_view_get_column((GtkTreeView *)gtkTreeView, 1);
@@ -3637,10 +3638,12 @@ void QGtkStyle::drawControl(ControlElement element,
 
       case CE_ProgressBarGroove:
          if (const QStyleOptionProgressBar *bar = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
-            Q_UNUSED(bar);
+            (void) bar;
+
             GtkWidget *gtkProgressBar = d->gtkWidget("GtkProgressBar");
             GtkStateType state = qt_gtk_state(option);
-            gtkPainter->paintBox(gtkProgressBar, "trough", option->rect, state, GTK_SHADOW_IN, d->gtk_widget_get_style(gtkProgressBar));
+            gtkPainter->paintBox(gtkProgressBar, "trough", option->rect, state, GTK_SHADOW_IN,
+                  d->gtk_widget_get_style(gtkProgressBar));
          }
 
          break;

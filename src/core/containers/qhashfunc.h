@@ -25,6 +25,7 @@
 #define Q_HASHFUNC_H
 
 #include <qchar.h>
+#include <qhashfwd.h>
 #include <qpair.h>
 #include <qstring.h>
 #include <qstring16.h>
@@ -167,7 +168,7 @@ uint qHash(const QPair<T1, T2> &key)
    return ((h1 << 16) | (h1 >> 16)) ^ h2;
 }
 
-template<typename T>
+template <typename T>
 uint qHash(const T &t, uint seed)
 {
    return qHash(t) ^ seed;

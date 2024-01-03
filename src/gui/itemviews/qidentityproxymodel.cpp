@@ -42,129 +42,114 @@ class QIdentityProxyModelPrivate : public QAbstractProxyModelPrivate
    void _q_sourceRowsInserted(const QModelIndex &parent, int start, int end);
    void _q_sourceRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
    void _q_sourceRowsRemoved(const QModelIndex &parent, int start, int end);
-   void _q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destParent, int dest);
-   void _q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destParent, int dest);
+   void _q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart);
+   void _q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart);
 
    void _q_sourceColumnsAboutToBeInserted(const QModelIndex &parent, int start, int end);
    void _q_sourceColumnsInserted(const QModelIndex &parent, int start, int end);
    void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
    void _q_sourceColumnsRemoved(const QModelIndex &parent, int start, int end);
-   void _q_sourceColumnsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destParent, int dest);
-   void _q_sourceColumnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destParent, int dest);
+   void _q_sourceColumnsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart);
+   void _q_sourceColumnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart);
 
    void _q_sourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
    void _q_sourceHeaderDataChanged(Qt::Orientation orientation, int first, int last);
 
-   void _q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents, QAbstractItemModel::LayoutChangeHint hint);
+   void _q_sourceLayoutAboutToBeChanged(const QList<QPersistentModelIndex> &sourceParents,
+         QAbstractItemModel::LayoutChangeHint hint);
    void _q_sourceLayoutChanged(const QList<QPersistentModelIndex> &sourceParents, QAbstractItemModel::LayoutChangeHint hint);
    void _q_sourceModelAboutToBeReset();
    void _q_sourceModelReset();
-
 };
 
 QIdentityProxyModel::QIdentityProxyModel(QObject *parent)
    : QAbstractProxyModel(*new QIdentityProxyModelPrivate, parent)
 {
-
 }
 
-/*! \internal
- */
 QIdentityProxyModel::QIdentityProxyModel(QIdentityProxyModelPrivate &dd, QObject *parent)
    : QAbstractProxyModel(dd, parent)
 {
-
 }
 
-/*!
-    Destroys this identity model.
-*/
 QIdentityProxyModel::~QIdentityProxyModel()
 {
 }
 
-/*!
-    \reimp
- */
 int QIdentityProxyModel::columnCount(const QModelIndex &parent) const
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
    Q_D(const QIdentityProxyModel);
+
    return d->model->columnCount(mapToSource(parent));
 }
 
-/*!
-    \reimp
- */
 bool QIdentityProxyModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column,
    const QModelIndex &parent)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
+
    Q_D(QIdentityProxyModel);
+
    return d->model->dropMimeData(data, action, row, column, mapToSource(parent));
 }
 
-/*!
-    \reimp
- */
 QModelIndex QIdentityProxyModel::index(int row, int column, const QModelIndex &parent) const
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
    Q_D(const QIdentityProxyModel);
    const QModelIndex sourceParent = mapToSource(parent);
    const QModelIndex sourceIndex = d->model->index(row, column, sourceParent);
+
    return mapFromSource(sourceIndex);
 }
 
 QModelIndex QIdentityProxyModel::sibling(int row, int column, const QModelIndex &idx) const
 {
    Q_D(const QIdentityProxyModel);
+
    return mapFromSource(d->model->sibling(row, column, mapToSource(idx)));
 }
 
-/*!
-    \reimp
- */
 bool QIdentityProxyModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
    Q_D(QIdentityProxyModel);
+
    return d->model->insertColumns(column, count, mapToSource(parent));
 }
 
-/*!
-    \reimp
- */
 bool QIdentityProxyModel::insertRows(int row, int count, const QModelIndex &parent)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
+
    Q_D(QIdentityProxyModel);
    return d->model->insertRows(row, count, mapToSource(parent));
 }
 
-/*!
-    \reimp
- */
 QModelIndex QIdentityProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
    Q_D(const QIdentityProxyModel);
-   if (!d->model || !sourceIndex.isValid()) {
+
+   if (! d->model || !sourceIndex.isValid()) {
       return QModelIndex();
    }
 
    Q_ASSERT(sourceIndex.model() == d->model);
+
    return createIndex(sourceIndex.row(), sourceIndex.column(), sourceIndex.internalPointer());
 }
 
-/*!
-    \reimp
- */
 QItemSelection QIdentityProxyModel::mapSelectionFromSource(const QItemSelection &selection) const
 {
    Q_D(const QIdentityProxyModel);
    QItemSelection proxySelection;
 
-   if (!d->model) {
+   if (! d->model) {
       return proxySelection;
    }
 
@@ -180,15 +165,12 @@ QItemSelection QIdentityProxyModel::mapSelectionFromSource(const QItemSelection 
    return proxySelection;
 }
 
-/*!
-    \reimp
- */
 QItemSelection QIdentityProxyModel::mapSelectionToSource(const QItemSelection &selection) const
 {
    Q_D(const QIdentityProxyModel);
    QItemSelection sourceSelection;
 
-   if (!d->model) {
+   if (! d->model) {
       return sourceSelection;
    }
 
@@ -204,26 +186,24 @@ QItemSelection QIdentityProxyModel::mapSelectionToSource(const QItemSelection &s
    return sourceSelection;
 }
 
-/*!
-    \reimp
- */
 QModelIndex QIdentityProxyModel::mapToSource(const QModelIndex &proxyIndex) const
 {
    Q_D(const QIdentityProxyModel);
-   if (!d->model || !proxyIndex.isValid()) {
+
+   if (! d->model || !proxyIndex.isValid()) {
       return QModelIndex();
    }
+
    Q_ASSERT(proxyIndex.model() == this);
+
    return d->model->createIndex(proxyIndex.row(), proxyIndex.column(), proxyIndex.internalPointer());
 }
 
-/*!
-    \reimp
- */
 QModelIndexList QIdentityProxyModel::match(const QModelIndex &start, int role, const QVariant &value, int hits,
    Qt::MatchFlags flags) const
 {
    Q_D(const QIdentityProxyModel);
+
    Q_ASSERT(start.isValid() ? start.model() == this : true);
    if (!d->model) {
       return QModelIndexList();
@@ -231,6 +211,7 @@ QModelIndexList QIdentityProxyModel::match(const QModelIndex &start, int role, c
 
    const QModelIndexList sourceList = d->model->match(mapToSource(start), role, value, hits, flags);
    QModelIndexList::const_iterator it = sourceList.constBegin();
+
    const QModelIndexList::const_iterator end = sourceList.constEnd();
    QModelIndexList proxyList;
 
@@ -241,9 +222,6 @@ QModelIndexList QIdentityProxyModel::match(const QModelIndex &start, int role, c
    return proxyList;
 }
 
-/*!
-    \reimp
- */
 QModelIndex QIdentityProxyModel::parent(const QModelIndex &child) const
 {
    Q_ASSERT(child.isValid() ? child.model() == this : true);
@@ -252,9 +230,6 @@ QModelIndex QIdentityProxyModel::parent(const QModelIndex &child) const
    return mapFromSource(sourceParent);
 }
 
-/*!
-    \reimp
- */
 bool QIdentityProxyModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
@@ -262,27 +237,26 @@ bool QIdentityProxyModel::removeColumns(int column, int count, const QModelIndex
    return d->model->removeColumns(column, count, mapToSource(parent));
 }
 
-/*!
-    \reimp
- */
 bool QIdentityProxyModel::removeRows(int row, int count, const QModelIndex &parent)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
    Q_D(QIdentityProxyModel);
+
    return d->model->removeRows(row, count, mapToSource(parent));
 }
-
 
 int QIdentityProxyModel::rowCount(const QModelIndex &parent) const
 {
    Q_ASSERT(parent.isValid() ? parent.model() == this : true);
    Q_D(const QIdentityProxyModel);
+
    return d->model->rowCount(mapToSource(parent));
 }
 
 QVariant QIdentityProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QIdentityProxyModel);
+
    return d->model->headerData(section, orientation, role);
 }
 
@@ -291,51 +265,87 @@ void QIdentityProxyModel::setSourceModel(QAbstractItemModel *newSourceModel)
    beginResetModel();
 
    if (sourceModel()) {
-      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,    this, &QIdentityProxyModel::_q_sourceRowsAboutToBeInserted);
-      disconnect(sourceModel(), &QAbstractItemModel::rowsInserted,             this, &QIdentityProxyModel::_q_sourceRowsInserted);
-      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved,     this, &QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved);
-      disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this, &QIdentityProxyModel::_q_sourceRowsRemoved);
-      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this, &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
-      disconnect(sourceModel(), &QAbstractItemModel::rowsMoved,                this, &QIdentityProxyModel::_q_sourceRowsMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,    this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsInserted,             this,
+            &QIdentityProxyModel::_q_sourceRowsInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved,     this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this,
+            &QIdentityProxyModel::_q_sourceRowsRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::rowsMoved,                this,
+            &QIdentityProxyModel::_q_sourceRowsMoved);
 
-      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
-      disconnect(sourceModel(), &QAbstractItemModel::columnsInserted,          this, &QIdentityProxyModel::_q_sourceColumnsInserted);
-      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
-      disconnect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this, &QIdentityProxyModel::_q_sourceColumnsRemoved);
-      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
-      disconnect(sourceModel(), &QAbstractItemModel::columnsMoved,             this, &QIdentityProxyModel::_q_sourceColumnsMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsInserted,          this,
+            &QIdentityProxyModel::_q_sourceColumnsInserted);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this,
+            &QIdentityProxyModel::_q_sourceColumnsRemoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
+      disconnect(sourceModel(), &QAbstractItemModel::columnsMoved,             this,
+            &QIdentityProxyModel::_q_sourceColumnsMoved);
 
-      disconnect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this, &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
-      disconnect(sourceModel(), &QAbstractItemModel::modelReset,               this, &QIdentityProxyModel::_q_sourceModelReset);
-      disconnect(sourceModel(), &QAbstractItemModel::dataChanged,              this, &QIdentityProxyModel::_q_sourceDataChanged);
-      disconnect(sourceModel(), &QAbstractItemModel::headerDataChanged,        this, &QIdentityProxyModel::_q_sourceHeaderDataChanged);
-      disconnect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged,   this, &QIdentityProxyModel::_q_sourceLayoutAboutToBeChanged);
-      disconnect(sourceModel(), &QAbstractItemModel::layoutChanged,            this, &QIdentityProxyModel::_q_sourceLayoutChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this,
+            &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
+      disconnect(sourceModel(), &QAbstractItemModel::modelReset,               this,
+            &QIdentityProxyModel::_q_sourceModelReset);
+      disconnect(sourceModel(), &QAbstractItemModel::dataChanged,              this,
+            &QIdentityProxyModel::_q_sourceDataChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::headerDataChanged,        this,
+            &QIdentityProxyModel::_q_sourceHeaderDataChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged,   this,
+            &QIdentityProxyModel::_q_sourceLayoutAboutToBeChanged);
+      disconnect(sourceModel(), &QAbstractItemModel::layoutChanged,            this,
+            &QIdentityProxyModel::_q_sourceLayoutChanged);
    }
 
    QAbstractProxyModel::setSourceModel(newSourceModel);
 
    if (sourceModel()) {
-      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,    this, &QIdentityProxyModel::_q_sourceRowsAboutToBeInserted);
-      connect(sourceModel(), &QAbstractItemModel::rowsInserted,             this, &QIdentityProxyModel::_q_sourceRowsInserted);
-      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved,     this, &QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved);
-      connect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this, &QIdentityProxyModel::_q_sourceRowsRemoved);
-      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this, &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
-      connect(sourceModel(), &QAbstractItemModel::rowsMoved,                this, &QIdentityProxyModel::_q_sourceRowsMoved);
+      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,    this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeInserted);
+      connect(sourceModel(), &QAbstractItemModel::rowsInserted,             this,
+            &QIdentityProxyModel::_q_sourceRowsInserted);
+      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved,     this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved);
+      connect(sourceModel(), &QAbstractItemModel::rowsRemoved,              this,
+            &QIdentityProxyModel::_q_sourceRowsRemoved);
+      connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeMoved,       this,
+            &QIdentityProxyModel::_q_sourceRowsAboutToBeMoved);
+      connect(sourceModel(), &QAbstractItemModel::rowsMoved,                this,
+            &QIdentityProxyModel::_q_sourceRowsMoved);
 
-      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
-      connect(sourceModel(), &QAbstractItemModel::columnsInserted,          this, &QIdentityProxyModel::_q_sourceColumnsInserted);
-      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
-      connect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this, &QIdentityProxyModel::_q_sourceColumnsRemoved);
-      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this, &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
-      connect(sourceModel(), &QAbstractItemModel::columnsMoved,             this, &QIdentityProxyModel::_q_sourceColumnsMoved);
+      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeInserted, this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted);
+      connect(sourceModel(), &QAbstractItemModel::columnsInserted,          this,
+            &QIdentityProxyModel::_q_sourceColumnsInserted);
+      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeRemoved,  this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved);
+      connect(sourceModel(), &QAbstractItemModel::columnsRemoved,           this,
+            &QIdentityProxyModel::_q_sourceColumnsRemoved);
+      connect(sourceModel(), &QAbstractItemModel::columnsAboutToBeMoved,    this,
+            &QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved);
+      connect(sourceModel(), &QAbstractItemModel::columnsMoved,             this,
+            &QIdentityProxyModel::_q_sourceColumnsMoved);
 
-      connect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this, &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
-      connect(sourceModel(), &QAbstractItemModel::modelReset,               this, &QIdentityProxyModel::_q_sourceModelReset);
-      connect(sourceModel(), &QAbstractItemModel::dataChanged,              this, &QIdentityProxyModel::_q_sourceDataChanged);
-      connect(sourceModel(), &QAbstractItemModel::headerDataChanged,        this, &QIdentityProxyModel::_q_sourceHeaderDataChanged);
-      connect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged,   this, &QIdentityProxyModel::_q_sourceLayoutAboutToBeChanged);
-      connect(sourceModel(), &QAbstractItemModel::layoutChanged,            this, &QIdentityProxyModel::_q_sourceLayoutChanged);
+      connect(sourceModel(), &QAbstractItemModel::modelAboutToBeReset,      this,
+            &QIdentityProxyModel::_q_sourceModelAboutToBeReset);
+      connect(sourceModel(), &QAbstractItemModel::modelReset,               this,
+            &QIdentityProxyModel::_q_sourceModelReset);
+      connect(sourceModel(), &QAbstractItemModel::dataChanged,              this,
+            &QIdentityProxyModel::_q_sourceDataChanged);
+      connect(sourceModel(), &QAbstractItemModel::headerDataChanged,        this,
+            &QIdentityProxyModel::_q_sourceHeaderDataChanged);
+      connect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged,   this,
+            &QIdentityProxyModel::_q_sourceLayoutAboutToBeChanged);
+      connect(sourceModel(), &QAbstractItemModel::layoutChanged,            this,
+            &QIdentityProxyModel::_q_sourceLayoutChanged);
    }
 
    endResetModel();
@@ -350,59 +360,71 @@ void QIdentityProxyModelPrivate::_q_sourceColumnsAboutToBeInserted(const QModelI
 }
 
 void QIdentityProxyModelPrivate::_q_sourceColumnsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart,
-   int sourceEnd, const QModelIndex &destParent, int dest)
+   int sourceEnd, const QModelIndex &destinationParent, int destinationStart)
 {
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
-   Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+   Q_ASSERT(destinationParent.isValid() ? destinationParent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
-   q->beginMoveColumns(q->mapFromSource(sourceParent), sourceStart, sourceEnd, q->mapFromSource(destParent), dest);
+
+   q->beginMoveColumns(q->mapFromSource(sourceParent), sourceStart,
+         sourceEnd, q->mapFromSource(destinationParent), destinationStart);
 }
 
 void QIdentityProxyModelPrivate::_q_sourceColumnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
    q->beginRemoveColumns(q->mapFromSource(parent), start, end);
 }
 
 void QIdentityProxyModelPrivate::_q_sourceColumnsInserted(const QModelIndex &parent, int start, int end)
 {
+   (void) parent;
+   (void) start;
+   (void) end;
+
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(parent)
-   Q_UNUSED(start)
-   Q_UNUSED(end)
    q->endInsertColumns();
 }
 
 void QIdentityProxyModelPrivate::_q_sourceColumnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
-   const QModelIndex &destParent, int dest)
+   const QModelIndex &destinationParent, int destinationStart)
 {
+   (void) sourceParent;
+   (void) sourceStart;
+   (void) sourceEnd;
+   (void) destinationParent;
+   (void) destinationStart;
+
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
-   Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+   Q_ASSERT(destinationParent.isValid() ? destinationParent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(sourceParent)
-   Q_UNUSED(sourceStart)
-   Q_UNUSED(sourceEnd)
-   Q_UNUSED(destParent)
-   Q_UNUSED(dest)
    q->endMoveColumns();
 }
 
 void QIdentityProxyModelPrivate::_q_sourceColumnsRemoved(const QModelIndex &parent, int start, int end)
 {
+   (void) parent;
+   (void) start;
+   (void) end;
+
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
-   Q_UNUSED(parent)
-   Q_UNUSED(start)
-   Q_UNUSED(end)
    q->endRemoveColumns();
 }
 
-void QIdentityProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
+void QIdentityProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+      const QVector<int> &roles)
 {
    Q_ASSERT(topLeft.isValid() ? topLeft.model() == model : true);
    Q_ASSERT(bottomRight.isValid() ? bottomRight.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
    q->dataChanged(q->mapFromSource(topLeft), q->mapFromSource(bottomRight), roles);
 }
@@ -418,26 +440,28 @@ void QIdentityProxyModelPrivate::_q_sourceLayoutAboutToBeChanged(const QList<QPe
 {
    Q_Q(QIdentityProxyModel);
 
-   for (const QPersistentModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
+   for (const QModelIndex &proxyPersistentIndex : q->persistentIndexList()) {
       proxyIndexes << proxyPersistentIndex;
       Q_ASSERT(proxyPersistentIndex.isValid());
+
       const QPersistentModelIndex srcPersistentIndex = q->mapToSource(proxyPersistentIndex);
       Q_ASSERT(srcPersistentIndex.isValid());
+
       layoutChangePersistentIndexes << srcPersistentIndex;
    }
 
    QList<QPersistentModelIndex> parents;
 
    for (const QPersistentModelIndex &parent : sourceParents) {
-      if (!parent.isValid()) {
+      if (! parent.isValid()) {
          parents << QPersistentModelIndex();
          continue;
       }
+
       const QModelIndex mappedParent = q->mapFromSource(parent);
       Q_ASSERT(mappedParent.isValid());
       parents << mappedParent;
    }
-
 
    q->layoutAboutToBeChanged(parents, hint);
 }
@@ -457,14 +481,16 @@ void QIdentityProxyModelPrivate::_q_sourceLayoutChanged(const QList<QPersistentM
    QList<QPersistentModelIndex> parents;
 
    for (const QPersistentModelIndex &parent : sourceParents) {
-      if (!parent.isValid()) {
+      if (! parent.isValid()) {
          parents << QPersistentModelIndex();
          continue;
       }
+
       const QModelIndex mappedParent = q->mapFromSource(parent);
       Q_ASSERT(mappedParent.isValid());
       parents << mappedParent;
    }
+
    q->layoutChanged(parents, hint);
 }
 
@@ -484,22 +510,27 @@ void QIdentityProxyModelPrivate::_q_sourceRowsAboutToBeInserted(const QModelInde
 {
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
+
    q->beginInsertRows(q->mapFromSource(parent), start, end);
 }
 
 void QIdentityProxyModelPrivate::_q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart,
-   int sourceEnd, const QModelIndex &destParent, int dest)
+   int sourceEnd, const QModelIndex &destinationParent, int destinationStart)
 {
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
-   Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+   Q_ASSERT(destinationParent.isValid() ? destinationParent.model() == model : true);
+
    Q_Q(QIdentityProxyModel);
-   q->beginMoveRows(q->mapFromSource(sourceParent), sourceStart, sourceEnd, q->mapFromSource(destParent), dest);
+
+   q->beginMoveRows(q->mapFromSource(sourceParent), sourceStart, sourceEnd,
+         q->mapFromSource(destinationParent), destinationStart);
 }
 
 void QIdentityProxyModelPrivate::_q_sourceRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_ASSERT(parent.isValid() ? parent.model() == model : true);
    Q_Q(QIdentityProxyModel);
+
    q->beginRemoveRows(q->mapFromSource(parent), start, end);
 }
 
@@ -515,14 +546,14 @@ void QIdentityProxyModelPrivate::_q_sourceRowsInserted(const QModelIndex &parent
 }
 
 void QIdentityProxyModelPrivate::_q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
-   const QModelIndex &destParent, int dest)
+   const QModelIndex &destinationParent, int destinationStart)
 {
    (void) sourceStart;
    (void) sourceEnd;
-   (void) dest;
+   (void) destinationStart;
 
    Q_ASSERT(sourceParent.isValid() ? sourceParent.model() == model : true);
-   Q_ASSERT(destParent.isValid() ? destParent.model() == model : true);
+   Q_ASSERT(destinationParent.isValid() ? destinationParent.model() == model : true);
 
    Q_Q(QIdentityProxyModel);
 
@@ -540,91 +571,87 @@ void QIdentityProxyModelPrivate::_q_sourceRowsRemoved(const QModelIndex &parent,
    q->endRemoveRows();
 }
 
-void QIdentityProxyModel::_q_sourceRowsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QIdentityProxyModel::_q_sourceRowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceRowsAboutToBeInserted(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceRowsInserted(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QIdentityProxyModel::_q_sourceRowsInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceRowsInserted(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QIdentityProxyModel::_q_sourceRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceRowsAboutToBeRemoved(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceRowsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QIdentityProxyModel::_q_sourceRowsRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceRowsRemoved(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceRowsAboutToBeMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3, const QModelIndex &un_named_arg4, int un_named_arg5)
+void QIdentityProxyModel::_q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsAboutToBeMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_sourceRowsAboutToBeMoved(sourceParent, sourceStart, sourceEnd, destinationParent, destinationStart);
 }
 
-void QIdentityProxyModel::_q_sourceRowsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-   const QModelIndex &un_named_arg4, int un_named_arg5)
+void QIdentityProxyModel::_q_sourceRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceRowsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_sourceRowsMoved(sourceParent, sourceStart, sourceEnd, destinationParent, destinationStart);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QIdentityProxyModel::_q_sourceColumnsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsAboutToBeInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceColumnsAboutToBeInserted(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsInserted(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QIdentityProxyModel::_q_sourceColumnsInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsInserted(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceColumnsInserted(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QIdentityProxyModel::_q_sourceColumnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsAboutToBeRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceColumnsAboutToBeRemoved(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsRemoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3)
+void QIdentityProxyModel::_q_sourceColumnsRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsRemoved(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_sourceColumnsRemoved(parent, start, end);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved(const QModelIndex &un_named_arg1, int un_named_arg2,
-   int un_named_arg3,const QModelIndex &un_named_arg4, int un_named_arg5)
+void QIdentityProxyModel::_q_sourceColumnsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsAboutToBeMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_sourceColumnsAboutToBeMoved(sourceParent, sourceStart, sourceEnd, destinationParent, destinationStart);
 }
 
-void QIdentityProxyModel::_q_sourceColumnsMoved(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3,
-   const QModelIndex &un_named_arg4, int un_named_arg5)
+void QIdentityProxyModel::_q_sourceColumnsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd,
+         const QModelIndex &destinationParent, int destinationStart)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceColumnsMoved(un_named_arg1, un_named_arg2, un_named_arg3, un_named_arg4, un_named_arg5);
+   d->_q_sourceColumnsMoved(sourceParent, sourceStart, sourceEnd, destinationParent, destinationStart);
 }
 
-void QIdentityProxyModel::_q_sourceDataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2, const QVector<int> &roles)
+void QIdentityProxyModel::_q_sourceDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
+      const QVector<int> &roles)
 {
    Q_D(QIdentityProxyModel);
-   d->_q_sourceDataChanged(un_named_arg1, un_named_arg2, roles);
+   d->_q_sourceDataChanged(topLeft, bottomRight, roles);
 }
 
 void QIdentityProxyModel::_q_sourceHeaderDataChanged(Qt::Orientation orientation, int first, int last)
@@ -658,7 +685,5 @@ void QIdentityProxyModel::_q_sourceModelReset()
    Q_D(QIdentityProxyModel);
    d->_q_sourceModelReset();
 }
-
-
 
 #endif // QT_NO_IDENTITYPROXYMODEL

@@ -291,7 +291,11 @@ void QColorDialogStaticData::writeSettings() const
 #endif
 }
 
-Q_GLOBAL_STATIC(QColorDialogStaticData, qColorDialogStaticData)
+static QColorDialogStaticData *qColorDialogStaticData()
+{
+   static QColorDialogStaticData retval;
+   return &retval;
+}
 
 class QColorDialogOptionsPrivate : public QSharedData
 {
@@ -412,15 +416,6 @@ void QColorDialogOptions::setStandardColor(int index, QRgb color)
    qColorDialogStaticData()->standardRgb[index] = color;
 }
 
-/*!
-    \class QPlatformColorDialogHelper
-    \since 5.0
-    \internal
-    \ingroup qpa
-
-    \brief The QPlatformColorDialogHelper class allows for platform-specific customization of color dialogs.
-
-*/
 const QSharedPointer<QColorDialogOptions> &QPlatformColorDialogHelper::options() const
 {
    return m_options;
@@ -860,15 +855,6 @@ const int *QPlatformDialogHelper::buttonLayout(Qt::Orientation orientation, Butt
    return buttonRoleLayouts[orientation == Qt::Vertical][policy];
 }
 
-/*!
-    \class QPlatformMessageDialogHelper
-    \since 5.0
-    \internal
-    \ingroup qpa
-
-    \brief The QPlatformMessageDialogHelper class allows for platform-specific customization of Message dialogs.
-
-*/
 const QSharedPointer<QMessageDialogOptions> &QPlatformMessageDialogHelper::options() const
 {
    return m_options;
@@ -878,4 +864,3 @@ void QPlatformMessageDialogHelper::setOptions(const QSharedPointer<QMessageDialo
 {
    m_options = options;
 }
-

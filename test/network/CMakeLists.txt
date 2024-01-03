@@ -6,20 +6,18 @@ set_target_properties(CsNetworkTest
    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test"
 )
 
-if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
-   if (MSVC)
-      # CopperSpice must be compiled with C++20 in order to run the unit test for C++20
+if (MSVC)
+   # CopperSpice must be compiled with C++20 in order to run the unit test for C++20
 
-   else()
-      set_target_properties(CsCoreTest
-         PROPERTIES
+else()
+   set_target_properties(CsNetworkTest
+      PROPERTIES
 
-         # only a request for C++20
-         CXX_STANDARD_REQUIRED OFF
-         CXX_STANDARD 20
-      )
+      # only a request for C++20
+      CXX_STANDARD_REQUIRED OFF
+      CXX_STANDARD 20
+   )
 
-   endif()
 endif()
 
 if (CS_INSTALL_MODE STREQUAL "Deploy" AND CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -72,12 +70,18 @@ target_sources(CsNetworkTest
    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_reply.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/access/qnetwork_request.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qdnslookup.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qhostaddress.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalsocket.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/socket/qlocalserver.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpserver.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qtcpsocket.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qudpsocket.cpp
+
+   ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
 )
 
 # sets working dir for CTest

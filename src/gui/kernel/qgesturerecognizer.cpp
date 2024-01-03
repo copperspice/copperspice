@@ -37,7 +37,7 @@ QGestureRecognizer::~QGestureRecognizer()
 
 QGesture *QGestureRecognizer::create(QObject *target)
 {
-   Q_UNUSED(target);
+   (void) target;
    return new QGesture;
 }
 

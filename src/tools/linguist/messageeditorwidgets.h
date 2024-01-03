@@ -51,8 +51,8 @@ class ExpandingTextEdit : public QTextEdit
 
  public:
    ExpandingTextEdit(QWidget *parent = nullptr);
-   QSize sizeHint() const;
-   QSize minimumSizeHint() const;
+   QSize sizeHint() const override;
+   QSize minimumSizeHint() const override;
 
  private:
    int m_minimumHeight;
@@ -116,11 +116,11 @@ class FormWidget : public QWidget
       return m_editor;
    }
 
-   CS_SIGNAL_1(Public, void textChanged(QTextEdit *un_named_arg1))
-   CS_SIGNAL_2(textChanged, un_named_arg1)
+   CS_SIGNAL_1(Public, void textChanged(QTextEdit *editor))
+   CS_SIGNAL_2(textChanged, editor)
 
-   CS_SIGNAL_1(Public, void selectionChanged(QTextEdit *un_named_arg1))
-   CS_SIGNAL_2(selectionChanged, un_named_arg1)
+   CS_SIGNAL_1(Public, void selectionChanged(QTextEdit *editor))
+   CS_SIGNAL_2(selectionChanged, editor)
 
    CS_SIGNAL_1(Public, void cursorPositionChanged())
    CS_SIGNAL_2(cursorPositionChanged)
@@ -160,20 +160,20 @@ class FormMultiWidget : public QWidget
       return m_editors;
    }
 
-   CS_SIGNAL_1(Public, void editorCreated(QTextEdit * un_named_arg1))
-   CS_SIGNAL_2(editorCreated,un_named_arg1)
+   CS_SIGNAL_1(Public, void editorCreated(QTextEdit *editor))
+   CS_SIGNAL_2(editorCreated, editor)
 
-   CS_SIGNAL_1(Public, void textChanged(QTextEdit * un_named_arg1))
-   CS_SIGNAL_2(textChanged,un_named_arg1)
+   CS_SIGNAL_1(Public, void textChanged(QTextEdit *editor))
+   CS_SIGNAL_2(textChanged, editor)
 
-   CS_SIGNAL_1(Public, void selectionChanged(QTextEdit * un_named_arg1))
-   CS_SIGNAL_2(selectionChanged,un_named_arg1)
+   CS_SIGNAL_1(Public, void selectionChanged(QTextEdit *editor))
+   CS_SIGNAL_2(selectionChanged, editor)
 
    CS_SIGNAL_1(Public, void cursorPositionChanged())
    CS_SIGNAL_2(cursorPositionChanged)
 
  protected:
-   bool eventFilter(QObject *watched, QEvent *event);
+   bool eventFilter(QObject *watched, QEvent *event) override;
 
  private:
    void addEditor(int idx);

@@ -210,7 +210,7 @@ void AVFVideoRendererControl::setLayer(void *playerLayer)
 
 void AVFVideoRendererControl::updateVideoFrame(const CVTimeStamp &ts)
 {
-   Q_UNUSED(ts)
+   (void) ts;
 
    AVPlayerLayer *playerLayer = (AVPlayerLayer *)m_playerLayer;
 

@@ -30,8 +30,6 @@
 #include <qxsdvalidatedxmlnodemodel_p.h>
 #include <QStack>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlQuery;
 
 namespace QPatternist {
@@ -254,8 +252,7 @@ class XsdValidatingInstanceReader : public XsdInstanceReader
    QHash<QXmlName, TargetNode::Set>            m_idcKeys;
    SchemaType::Ptr                             m_idRefsType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

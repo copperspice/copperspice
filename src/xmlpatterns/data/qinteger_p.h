@@ -26,8 +26,6 @@
 
 #include <qschemanumeric_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class Integer : public Numeric
 {
@@ -81,7 +79,5 @@ class Integer : public Numeric
    const xsInteger m_value;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

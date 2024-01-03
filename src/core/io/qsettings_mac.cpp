@@ -21,13 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qsettings.h>
-#include <qsettings_p.h>
+#include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qdir.h>
+#include <qsettings.h>
+#include <qtimezone.h>
 #include <qvarlengtharray.h>
+
 #include <qcore_mac_p.h>
-#include <qcoreapplication.h>
+#include <qsettings_p.h>
 
 #include <Security/SecCode.h>
 #include <Security/SecRequirement.h>
@@ -162,12 +164,14 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
                                      &kCFTypeDictionaryValueCallBacks);
       }
       break;
+
       case QVariant::DateTime: {
          /*
              CFDate, unlike QDateTime, doesn't store timezone information.
          */
          QDateTime dt = value.toDateTime();
-         if (dt.timeSpec() == Qt::LocalTime) {
+
+         if (dt.timeZone() == QTimeZone::systemTimeZone()) {
             QDateTime reference;
             reference.setTime_t((uint)kCFAbsoluteTimeIntervalSince1970);
             result = CFDateCreate(kCFAllocatorDefault, CFAbsoluteTime(reference.secsTo(dt)));
@@ -176,6 +180,7 @@ static QCFType<CFPropertyListRef> macValue(const QVariant &value)
          }
       }
       break;
+
       case QVariant::Bool:
          result = value.toBool() ? kCFBooleanTrue : kCFBooleanFalse;
          break;
@@ -426,11 +431,11 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
    suiteId = javaPackageName;
 
    if (scope == QSettings::SystemScope) {
-      spec |= F_System;
+      m_spec |= F_System;
    }
 
    if (application.isEmpty()) {
-      spec |= F_Organization;
+      m_spec |= F_Organization;
    } else {
       javaPackageName += '.';
       javaPackageName += application;
@@ -439,8 +444,8 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
 
    numDomains = 0;
 
-   for (int i = (spec & F_System) ? 1 : 0; i < 2; ++i) {
-      for (int j = (spec & F_Organization) ? 1 : 0; j < 3; ++j) {
+   for (int i = (m_spec & F_System) ? 1 : 0; i < 2; ++i) {
+      for (int j = (m_spec & F_Organization) ? 1 : 0; j < 3; ++j) {
          SearchDomain &domain = domains[numDomains++];
          domain.userName = (i == 0) ? kCFPreferencesCurrentUser : kCFPreferencesAnyUser;
 
@@ -594,7 +599,7 @@ QString QMacSettingsPrivate::fileName() const
 {
    QString result;
 
-   if ((spec & F_System) == 0) {
+   if ((m_spec & F_System) == 0) {
       result = QDir::homePath();
    }
 
@@ -634,11 +639,6 @@ QSettingsPrivate *QSettingsPrivate::create(QSettings::Format format,
    } else {
       return new QConfFileSettingsPrivate(format, scope, organization, application);
    }
-}
-
-static QCFType<CFURLRef> urlFromFileName(const QString &fileName)
-{
-   return CFURLCreateWithFileSystemPath(kCFAllocatorDefault, QCFString(fileName).toCFStringRef(), kCFURLPOSIXPathStyle, false);
 }
 
 bool QConfFileSettingsPrivate::readPlistFile(const QString &fileName, ParsedSettingsMap *map) const

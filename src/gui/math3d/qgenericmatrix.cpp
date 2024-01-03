@@ -21,4 +21,4 @@
 *
 ***********************************************************************/
 
-#include "qgenericmatrix.h"
+#include <qgenericmatrix.h>

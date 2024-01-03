@@ -210,7 +210,7 @@ private:
 #if DEBUG_EVENT_DISPATCHER
 extern uint g_eventDispatcherIndentationLevel;
 #define qEventDispatcherDebug() qDebug().nospace() \
-            << qPrintable(QString(QLatin1String("| ")).repeated(g_eventDispatcherIndentationLevel)) \
+            << csPrintable(QString(QLatin1String("| ")).repeated(g_eventDispatcherIndentationLevel)) \
             << __FUNCTION__ << "(): "
 #define qIndent() ++g_eventDispatcherIndentationLevel
 #define qUnIndent() --g_eventDispatcherIndentationLevel

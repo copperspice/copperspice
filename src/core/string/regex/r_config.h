@@ -65,8 +65,8 @@
 
 #endif
 
-#include "regex/r_error_type.h"
-#include "regex/regex_constants.h"
+#include <regex/r_error_type.h>
+#include <regex/regex_constants.h>
 
 #endif
 

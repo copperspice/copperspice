@@ -765,22 +765,26 @@ inline quint24::operator uint() const
 template <class T>
 static void qt_memfill(T *dest, T value, int count);
 
-template<> inline void qt_memfill(quint64 *dest, quint64 color, int count)
+template <>
+inline void qt_memfill(quint64 *dest, quint64 color, int count)
 {
    qt_memfill64(dest, color, count);
 }
 
-template<> inline void qt_memfill(quint32 *dest, quint32 color, int count)
+template <>
+inline void qt_memfill(quint32 *dest, quint32 color, int count)
 {
    qt_memfill32(dest, color, count);
 }
 
-template<> inline void qt_memfill(quint16 *dest, quint16 color, int count)
+template <>
+inline void qt_memfill(quint16 *dest, quint16 color, int count)
 {
    qt_memfill16(dest, color, count);
 }
 
-template<> inline void qt_memfill(quint8 *dest, quint8 color, int count)
+template <>
+inline void qt_memfill(quint8 *dest, quint8 color, int count)
 {
    memset(dest, color, count);
 }
@@ -848,18 +852,18 @@ enum QtPixelOrder {
    PixelOrderBGR
 };
 
-template<enum QtPixelOrder>
+template <enum QtPixelOrder>
 inline uint qConvertArgb32ToA2rgb30(QRgb);
 
-template<enum QtPixelOrder>
+template <enum QtPixelOrder>
 inline uint qConvertRgb32ToRgb30(QRgb);
 
-template<enum QtPixelOrder>
+template <enum QtPixelOrder>
 inline QRgb qConvertA2rgb30ToArgb32(uint c);
 
 // A combined unpremultiply and premultiply with new simplified alpha.
 // Needed when alpha loses precision relative to other colors during conversion (ARGB32 -> A2RGB30).
-template<unsigned int Shift>
+template <unsigned int Shift>
 inline QRgb qRepremultiply(QRgb p)
 {
    const uint alpha = qAlpha(p);
@@ -876,7 +880,7 @@ inline QRgb qRepremultiply(QRgb p)
    return qPremultiply(p);
 }
 
-template<unsigned int Shift>
+template <unsigned int Shift>
 inline QRgba64 qRepremultiply(QRgba64 p)
 {
    const uint alpha = p.alpha();
@@ -890,7 +894,7 @@ inline QRgba64 qRepremultiply(QRgba64 p)
    return p.premultiplied();
 }
 
-template<>
+template <>
 inline uint qConvertArgb32ToA2rgb30<PixelOrderBGR>(QRgb c)
 {
    c = qRepremultiply<6>(c);
@@ -900,7 +904,7 @@ inline uint qConvertArgb32ToA2rgb30<PixelOrderBGR>(QRgb c)
       | (((c >> 14) & 0x000003fc) | ((c >> 22) & 0x00000003));
 }
 
-template<>
+template <>
 inline uint qConvertArgb32ToA2rgb30<PixelOrderRGB>(QRgb c)
 {
    c = qRepremultiply<6>(c);
@@ -910,7 +914,7 @@ inline uint qConvertArgb32ToA2rgb30<PixelOrderRGB>(QRgb c)
       | (((c << 2) & 0x000003fc) | ((c >> 6) & 0x00000003));
 }
 
-template<>
+template <>
 inline uint qConvertRgb32ToRgb30<PixelOrderBGR>(QRgb c)
 {
    return 0xc0000000
@@ -919,7 +923,7 @@ inline uint qConvertRgb32ToRgb30<PixelOrderBGR>(QRgb c)
       | (((c >> 14) & 0x000003fc) | ((c >> 22) & 0x00000003));
 }
 
-template<>
+template <>
 inline uint qConvertRgb32ToRgb30<PixelOrderRGB>(QRgb c)
 {
    return 0xc0000000
@@ -927,7 +931,7 @@ inline uint qConvertRgb32ToRgb30<PixelOrderRGB>(QRgb c)
       | (((c << 4) & 0x000ff000) | ((c >> 4) & 0x00000c00))
       | (((c << 2) & 0x000003fc) | ((c >> 6) & 0x00000003));
 }
-template<>
+template <>
 inline QRgb qConvertA2rgb30ToArgb32<PixelOrderBGR>(uint c)
 {
    uint a = c >> 30;
@@ -939,20 +943,23 @@ inline QRgb qConvertA2rgb30ToArgb32<PixelOrderBGR>(uint c)
       | ((c >> 22) & 0x000000ff);
 }
 
-template<>
+template <>
 inline QRgb qConvertA2rgb30ToArgb32<PixelOrderRGB>(uint c)
 {
    uint a = c >> 30;
    a |= a << 2;
    a |= a << 4;
+
    return (a << 24)
       | ((c >> 6) & 0x00ff0000)
       | ((c >> 4) & 0x0000ff00)
       | ((c >> 2) & 0x000000ff);
 }
-template<enum QtPixelOrder> inline QRgba64 qConvertA2rgb30ToRgb64(uint rgb);
 
-template<>
+template <enum QtPixelOrder>
+inline QRgba64 qConvertA2rgb30ToRgb64(uint rgb);
+
+template <>
 inline QRgba64 qConvertA2rgb30ToRgb64<PixelOrderBGR>(uint rgb)
 {
    quint16 alpha = rgb >> 30;
@@ -969,7 +976,7 @@ inline QRgba64 qConvertA2rgb30ToRgb64<PixelOrderBGR>(uint rgb)
    return qRgba64(red, green, blue, alpha);
 }
 
-template<>
+template <>
 inline QRgba64 qConvertA2rgb30ToRgb64<PixelOrderRGB>(uint rgb)
 {
    quint16 alpha = rgb >> 30;
@@ -986,9 +993,10 @@ inline QRgba64 qConvertA2rgb30ToRgb64<PixelOrderRGB>(uint rgb)
    return qRgba64(red, green, blue, alpha);
 }
 
-template<enum QtPixelOrder> inline unsigned int qConvertRgb64ToRgb30(QRgba64);
+template <enum QtPixelOrder>
+inline unsigned int qConvertRgb64ToRgb30(QRgba64);
 
-template<>
+template <>
 inline unsigned int qConvertRgb64ToRgb30<PixelOrderBGR>(QRgba64 c)
 {
    c = qRepremultiply<14>(c);
@@ -998,7 +1006,8 @@ inline unsigned int qConvertRgb64ToRgb30<PixelOrderBGR>(QRgba64 c)
    const uint b = c.blue() >> 6;
    return (a << 30) | (b << 20) | (g << 10) | r;
 }
-template<>
+
+template <>
 inline unsigned int qConvertRgb64ToRgb30<PixelOrderRGB>(QRgba64 c)
 {
    c = qRepremultiply<14>(c);
@@ -1033,6 +1042,7 @@ inline int qBlue565(quint16 rgb)
    const int b = (rgb & 0x001f);
    return (b << 3) | (b >> 2);
 }
+
 static inline const uint *qt_convertARGB32ToARGB32PM(uint *buffer, const uint *src, int count)
 {
    for (int i = 0; i < count; ++i) {
@@ -1048,6 +1058,7 @@ static inline const uint *qt_convertRGBA8888ToARGB32PM(uint *buffer, const uint 
    }
    return buffer;
 }
+
 const uint qt_bayer_matrix[16][16] = {
    {
       0x1, 0xc0, 0x30, 0xf0, 0xc, 0xcc, 0x3c, 0xfc,

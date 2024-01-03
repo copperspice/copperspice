@@ -273,7 +273,7 @@ static const char specialLanguages[][6] = {
    "",
    "",
 
-   "",       // unicode 10.0
+   "",        // unicode 10.0
    "",
    "",
    "",
@@ -286,21 +286,24 @@ static const char specialLanguages[][6] = {
    "",
    "",
 
-   "",       // unicode 12.0
+   "",        // unicode 12.0
    "",
    "",
    "",
 
-   "",       // unicode 13.0
+   "",        // unicode 13.0
    "",
    "",
    "",
 
-// "",       // unicode 14.0
-// "",
-// "",
-// "",
-// "",
+   "",        // unicode 14.0
+   "",
+   "",
+   "",
+   "",
+
+   "",        // unicode 15.1
+   "",
 
 };
 static_assert(sizeof(specialLanguages) / sizeof(* specialLanguages) == QChar::ScriptCount, "");
@@ -593,7 +596,7 @@ void QFontconfigDatabase::populateFontDatabase()
 #if FC_VERSION >= 20297
          FC_CAPABILITY,
 #endif
-         (const char *)0
+         (const char *)nullptr
       };
 
       const char **p = properties;

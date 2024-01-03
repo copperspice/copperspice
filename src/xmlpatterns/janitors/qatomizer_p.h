@@ -24,12 +24,11 @@
 #ifndef QAtomizer_P_H
 #define QAtomizer_P_H
 
-#include "qitem_p.h"
-#include "qsinglecontainer_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qitem_p.h>
+#include <qsinglecontainer_p.h>
 
 namespace QPatternist {
+
 class Atomizer : public SingleContainer
 {
  public:
@@ -56,8 +55,7 @@ class Atomizer : public SingleContainer
  private:
    typedef QExplicitlySharedDataPointer<const Atomizer> ConstPtr;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

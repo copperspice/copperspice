@@ -27,8 +27,6 @@
 
 #include "qemptysequence_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr EmptySequence::create(const Expression *const replacementFor,
@@ -90,5 +88,3 @@ Expression::Properties EmptySequence::properties() const
 {
    return IsEvaluated;
 }
-
-QT_END_NAMESPACE

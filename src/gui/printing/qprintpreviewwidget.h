@@ -55,7 +55,7 @@ class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
    ~QPrintPreviewWidget();
 
    qreal zoomFactor() const;
-   QPrinter::Orientation orientation() const;
+   QPageLayout::Orientation orientation() const;
    ViewMode viewMode() const;
    ZoomMode zoomMode() const;
    int currentPage() const;
@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QPrintPreviewWidget : public QWidget
    GUI_CS_SLOT_1(Public, void setZoomFactor(qreal factor))
    GUI_CS_SLOT_2(setZoomFactor)
 
-   GUI_CS_SLOT_1(Public, void setOrientation(QPrinter::Orientation orientation))
+   GUI_CS_SLOT_1(Public, void setOrientation(QPageLayout::Orientation orientation))
    GUI_CS_SLOT_2(setOrientation)
 
    GUI_CS_SLOT_1(Public, void setViewMode(ViewMode viewMode))

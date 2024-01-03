@@ -25,8 +25,6 @@
 
 #include "qunioniterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UnionIterator::UnionIterator(const Item::Iterator::Ptr &it1,
@@ -101,5 +99,3 @@ Item::Iterator::Ptr UnionIterator::copy() const
 {
    return Item::Iterator::Ptr(new UnionIterator(m_it1->copy(), m_it2->copy()));
 }
-
-QT_END_NAMESPACE

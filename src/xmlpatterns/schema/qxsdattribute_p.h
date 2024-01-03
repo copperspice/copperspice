@@ -24,14 +24,14 @@
 #ifndef QXsdAttribute_P_H
 #define QXsdAttribute_P_H
 
+#include <qlist.h>
+
 #include <qanysimpletype_p.h>
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
 {
  public:
@@ -187,8 +187,8 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
    Scope::Ptr           m_scope;
    ValueConstraint::Ptr m_valueConstraint;
 };
+
 }
 
-QT_END_NAMESPACE
 
 #endif

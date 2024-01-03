@@ -155,12 +155,9 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl,
    }
 }
 
-template <typename T> void qt_scale_image_32bit(uchar *destPixels, int dbpl,
-   const uchar *srcPixels, int sbpl, int srch,
-   const QRectF &targetRect,
-   const QRectF &srcRect,
-   const QRect &clip,
-   T blender)
+template <typename T>
+void qt_scale_image_32bit(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int srch,
+      const QRectF &targetRect, const QRectF &srcRect, const QRect &clip, T blender)
 {
    qreal sx = targetRect.width() / (qreal) srcRect.width();
    qreal sy = targetRect.height() / (qreal) srcRect.height();

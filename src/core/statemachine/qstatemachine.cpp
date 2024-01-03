@@ -711,7 +711,7 @@ void QStateMachinePrivate::exitStates(QEvent *event, const QList<QAbstractState*
 #ifndef QT_NO_ANIMATION
         terminateActiveAnimations(s, assignmentsForEnteredStates);
 #else
-        Q_UNUSED(assignmentsForEnteredStates);
+        (void) assignmentsForEnteredStates;
 #endif
 
       configuration.remove(s);
@@ -866,7 +866,7 @@ void QStateMachinePrivate::enterStates(QEvent *event, const QList<QAbstractState
 //         // ### executeContent(s.initial.transition.children())
 //      }
 
-        Q_UNUSED(statesForDefaultEntry);
+        (void) statesForDefaultEntry;
 
         if (QHistoryState *h = toHistoryState(s))
             QAbstractTransitionPrivate::get(h->defaultTransition())->callOnTransition(event);
@@ -1372,7 +1372,7 @@ void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractSta
 
    } else {
       qWarning("Unrecoverable error detected in running state machine: %s",
-         qPrintable(errorString));
+         csPrintable(errorString));
       q->stop();
    }
 }
@@ -2053,7 +2053,7 @@ void QStateMachinePrivate::startupHook()
 {
 }
 
-namespace CS_QStateMachine_Internal {
+namespace cs_internal_stateMachine {
 
 class GoToStateTransition : public QAbstractTransition
 {
@@ -2078,12 +2078,12 @@ class GoToStateTransition : public QAbstractTransition
 } // namespace
 
 
-using namespace CS_QStateMachine_Internal;
+using namespace cs_internal_stateMachine;
 
 void QStateMachinePrivate::goToState(QAbstractState *targetState)
 {
    if (! targetState) {
-      qWarning("QStateMachine::goToState(): cannot go to null state");
+      qWarning("QStateMachine::goToState(): unable to transition to a null state");
       return;
    }
 

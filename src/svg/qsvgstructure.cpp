@@ -169,7 +169,7 @@ enum {
 };
 /* maximum key range = 41, duplicates = 0 */
 
-inline static bool isSupportedSvgFeature(const QString &str)
+static inline bool isSupportedSvgFeature(const QString &str)
 {
    static const unsigned char asso_values[] = {
       89, 89, 89, 89, 89, 89, 89, 89, 89, 89,

@@ -298,7 +298,7 @@ static QString strippedText(QString s)
 
 - (BOOL)panel: (id)sender shouldShowFilename: (NSString *)filename
 {
-   Q_UNUSED(sender);
+   (void) sender;
 
    if ([filename length] == 0) {
       return NO;
@@ -359,7 +359,7 @@ static QString strippedText(QString s)
 
 - (NSString *)panel: (id)sender userEnteredFilename: (NSString *)filename confirmed: (BOOL)okFlag
 {
-   Q_UNUSED(sender);
+   (void) sender;
    if (!okFlag) {
       return filename;
    }
@@ -394,7 +394,7 @@ static QString strippedText(QString s)
 - (void)filterChanged: (id)sender
 {
    // This mDelegate function is called when the _name_ filter changes.
-   Q_UNUSED(sender);
+   (void) sender;
    QString selection = mNameFilterDropDownList->value([mPopUpButton indexOfSelectedItem]);
    *mSelectedNameFilter = [self findStrippedFilterWithVisualFilterName: selection];
    if ([mSavePanel respondsToSelector: @selector(validateVisibleColumns:)]) {

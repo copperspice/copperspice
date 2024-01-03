@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
+
 #include "qabstractduration_p.h"
 #include "qabstractdatetime_p.h"
 #include "qbase64binary_p.h"
@@ -29,8 +31,6 @@
 #include "qqnamevalue_p.h"
 
 #include "qatomiccomparators_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -54,9 +54,7 @@ bool StringComparator::equals(const Item &o1,
 {
    return o1.stringValue() == o2.stringValue();
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
 CaseInsensitiveStringComparator::compare(const Item &o1,
       const AtomicComparator::Operator,
@@ -85,18 +83,14 @@ bool CaseInsensitiveStringComparator::equals(const Item &o1,
    return s1.length() == s2.length() &&
           s1.startsWith(s2, Qt::CaseInsensitive);
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 bool BinaryDataComparator::equals(const Item &o1,
                                   const Item &o2) const
 {
    return o1.as<Base64Binary>()->asByteArray() ==
           o2.as<Base64Binary>()->asByteArray();
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
 BooleanComparator::compare(const Item &o1,
                            const AtomicComparator::Operator,
@@ -123,9 +117,7 @@ bool BooleanComparator::equals(const Item &o1,
    /* Boolean is an atomic class. */
    return o1.as<AtomicValue>() == o2.as<AtomicValue>();
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
 AbstractFloatComparator::compare(const Item &o1,
                                  const AtomicComparator::Operator op,
@@ -157,9 +149,7 @@ bool AbstractFloatComparator::equals(const Item &o1,
 {
    return Double::isEqual(o1.as<Numeric>()->toDouble(), o2.as<Numeric>()->toDouble());
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
 DecimalComparator::compare(const Item &o1,
                            const AtomicComparator::Operator,
@@ -182,9 +172,7 @@ bool DecimalComparator::equals(const Item &o1,
 {
    return Double::isEqual(o1.as<Numeric>()->toDecimal(), o2.as<Numeric>()->toDecimal());
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 AtomicComparator::ComparisonResult
 IntegerComparator::compare(const Item &o1,
                            const AtomicComparator::Operator,
@@ -236,18 +224,13 @@ bool IntegerComparator::equals(const Item &o1,
    return o1.as<Numeric>()->toInteger() == o2.as<Numeric>()->toInteger();
 }
 
-/* -------------------------------------------------- */
-
-/* -------------------------------------------------- */
 bool QNameComparator::equals(const Item &o1,
                              const Item &o2) const
 {
    return o1.as<QNameValue>()->m_qName ==
           o2.as<QNameValue>()->m_qName;
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 bool AbstractDateTimeComparator::equals(const Item &o1,
                                         const Item &o2) const
 {
@@ -261,9 +244,9 @@ bool AbstractDateTimeComparator::equals(const Item &o1,
    pDebug() << "DATE ONLY:"
        << o1->as<AbstractDateTime>()->toDateTime().isDateOnly()
           << o2->as<AbstractDateTime>()->toDateTime().isDateOnly();
-          */
-   return dt1 == dt2 &&
-          dt1.timeSpec() == dt2.timeSpec();
+   */
+
+   return dt1 == dt2 && dt1.timeZone() == dt2.timeZone();
 }
 
 AtomicComparator::ComparisonResult
@@ -282,9 +265,7 @@ AbstractDateTimeComparator::compare(const Item &operand1,
       return GreaterThan;
    }
 }
-/* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
 bool AbstractDurationComparator::equals(const Item &o1,
                                         const Item &o2) const
 {
@@ -323,10 +304,10 @@ AbstractDurationComparator::compare(const Item &o1,
    const AbstractDuration *const duration = o1.as<AbstractDuration>();
    const AbstractDuration *const otherDuration = o2.as<AbstractDuration>();
 
-   const QDateTime dateTime1(QDate(1696, 9, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime2(QDate(1697, 2, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime3(QDate(1903, 3, 1), QTime(0, 0, 0), Qt::UTC);
-   const QDateTime dateTime4(QDate(1903, 7, 1), QTime(0, 0, 0), Qt::UTC);
+   const QDateTime dateTime1(QDate(1696, 9, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime2(QDate(1697, 2, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime3(QDate(1903, 3, 1), QTime(0, 0, 0), QTimeZone::utc());
+   const QDateTime dateTime4(QDate(1903, 7, 1), QTime(0, 0, 0), QTimeZone::utc());
 
    const QDateTime durationDateTime1 = addDurationToDateTime(dateTime1, duration);
    const QDateTime durationDateTime2 = addDurationToDateTime(dateTime2, duration);
@@ -343,11 +324,13 @@ AbstractDurationComparator::compare(const Item &o1,
          durationDateTime3 > otherDurationDateTime3 &&
          durationDateTime4 > otherDurationDateTime4) {
       return GreaterThan;
+
    } else if (durationDateTime1 < otherDurationDateTime1 &&
               durationDateTime2 < otherDurationDateTime2 &&
               durationDateTime3 < otherDurationDateTime3 &&
               durationDateTime4 < otherDurationDateTime4) {
       return LessThan;
+
    } else if (*duration == *otherDuration) {
       return Equal;
    } else {
@@ -355,5 +338,3 @@ AbstractDurationComparator::compare(const Item &o1,
    }
 }
 
-/* -------------------------------------------------- */
-QT_END_NAMESPACE

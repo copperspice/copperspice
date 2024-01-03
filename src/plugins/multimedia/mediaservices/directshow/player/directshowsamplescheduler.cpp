@@ -170,7 +170,7 @@ HRESULT DirectShowSampleScheduler::GetAllocator(IMemAllocator **ppAllocator)
 
 HRESULT DirectShowSampleScheduler::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
 {
-   Q_UNUSED(bReadOnly);
+   (void) bReadOnly;
 
    HRESULT hr;
    ALLOCATOR_PROPERTIES properties;

@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef ResourceRequest_h
@@ -29,26 +29,24 @@
 
 #include "ResourceRequestBase.h"
 
-QT_BEGIN_NAMESPACE
 class QNetworkRequest;
 class QObject;
-QT_END_NAMESPACE
 
 namespace WebCore {
 
     class ResourceRequest : public ResourceRequestBase {
     public:
-        ResourceRequest(const String& url) 
+        ResourceRequest(const String& url)
             : ResourceRequestBase(KURL(ParsedURLString, url), UseProtocolCachePolicy)
         {
         }
 
-        ResourceRequest(const KURL& url) 
+        ResourceRequest(const KURL& url)
             : ResourceRequestBase(url, UseProtocolCachePolicy)
         {
         }
 
-        ResourceRequest(const KURL& url, const String& referrer, ResourceRequestCachePolicy policy = UseProtocolCachePolicy) 
+        ResourceRequest(const KURL& url, const String& referrer, ResourceRequestCachePolicy policy = UseProtocolCachePolicy)
             : ResourceRequestBase(url, policy)
         {
             setHTTPReferrer(referrer);

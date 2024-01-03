@@ -50,8 +50,8 @@ QStackedWidget::QStackedWidget(QWidget *parent)
    Q_D(QStackedWidget);
    d->layout = new QStackedLayout(this);
 
-   connect(d->layout, SIGNAL(widgetRemoved(int)),  this, SLOT(widgetRemoved(int)));
-   connect(d->layout, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
+   connect(d->layout, &QStackedLayout::widgetRemoved,  this, &QStackedWidget::widgetRemoved);
+   connect(d->layout, &QStackedLayout::currentChanged, this, &QStackedWidget::currentChanged);
 }
 
 QStackedWidget::~QStackedWidget()
@@ -91,10 +91,12 @@ QWidget *QStackedWidget::currentWidget() const
 void QStackedWidget::setCurrentWidget(QWidget *widget)
 {
    Q_D(QStackedWidget);
+
    if (d->layout->indexOf(widget) == -1) {
-      qWarning("QStackedWidget::setCurrentWidget: widget %p not contained in stack", widget);
+      qWarning("QStackedWidget::setCurrentWidget() Current widget (%p) is not in this stack", widget);
       return;
    }
+
    d->layout->setCurrentWidget(widget);
 }
 

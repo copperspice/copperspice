@@ -32,8 +32,6 @@
 #include <qxsdschemaresolver_p.h>
 #include <QSharedData>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 /**
  * @short A namespace class that contains identifiers for the different
@@ -180,8 +178,7 @@ class XsdSchemaParserContext : public QSharedData
    const ElementDescription<XsdSchemaToken, XsdTagScope::Type>::Hash m_elementDescriptions;
    mutable QAtomicInt                                                m_anonymousNameCounter;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

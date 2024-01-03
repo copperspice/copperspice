@@ -1068,8 +1068,8 @@ void QXcbConnection::xi2HandleScrollEvent(void *event, ScrollingDevice &scrollin
       }
    }
 #else
-   Q_UNUSED(event);
-   Q_UNUSED(scrollingDevice);
+   (void) event;
+   (void) scrollingDevice;
 #endif // XCB_USE_XINPUT21
 }
 
@@ -1231,7 +1231,7 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
       eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event), Qt::MouseEventSynthesizedByCS);
    }
 #else
-   Q_UNUSED(eventListener);
+   (void) eventListener;
 #endif
 
    return handled;

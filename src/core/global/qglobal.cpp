@@ -23,15 +23,17 @@
 
 #include <limits>
 #include <mutex>
+#include <random>
 #include <stdlib.h>
 
+#include <qbytearray.h>
 #include <qglobal.h>
 #include <qlog.h>
-#include <qbytearray.h>
-#include <qstring.h>
 #include <qscopedarraypointer.h>
-#include <qsystemlibrary_p.h>
+#include <qstring.h>
 #include <qthreadstorage.h>
+
+#include <qsystemlibrary_p.h>
 
 #if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
@@ -116,7 +118,7 @@ static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
      return false;
    }
 
-   QScopedArrayPointer<BYTE> versionInfo(new BYTE[size]);
+   QUniqueArrayPointer<BYTE[]> versionInfo(new BYTE[size]);
 
    if (! getFileVersionInfoW(kernel32Dll, handle, size, versionInfo.data())) {
      return false;
@@ -253,6 +255,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
           } else if (osver.dwMajorVersion == 10 && osver.dwMinorVersion == 0) {
              winver = QSysInfo::WV_WINDOWS10;
 
+          } else if (osver.dwMajorVersion == 11 && osver.dwMinorVersion == 0) {
+             winver = QSysInfo::WV_WINDOWS11;
+
           } else {
              qWarning("Untested Windows version %d.%d detected", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
                    winver = QSysInfo::WV_NT_based;
@@ -294,6 +299,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
 
       } else if (forceWinVer == "WINDOWS10") {
          winver = QSysInfo::WV_WINDOWS10;
+
+      } else if (forceWinVer == "WINDOWS11") {
+         winver = QSysInfo::WV_WINDOWS11;
 
       }
    }
@@ -378,7 +386,7 @@ void qt_check_pointer(const char *n, int l)
 */
 void qBadAlloc()
 {
-   QT_THROW(std::bad_alloc());
+   throw(std::bad_alloc());
 }
 
 /*
@@ -481,66 +489,17 @@ bool qunsetenv(const char *varName)
 #endif
 }
 
-#if defined(Q_OS_UNIX)
-
-typedef uint SeedStorageType;
-typedef QThreadStorage<SeedStorageType *> SeedStorage;
-
-Q_GLOBAL_STATIC(SeedStorage, randTLS)  // Thread Local Storage for seed value
-
-#endif
+thread_local static std::random_device s_randomDevice;
+thread_local static std::mt19937 s_rand(s_randomDevice());
+thread_local static std::uniform_int_distribution<int> s_dist;
 
 void qsrand(uint seed)
 {
-#if defined(Q_OS_UNIX)
-   SeedStorage *seedStorage = randTLS();
-
-   if (seedStorage) {
-      SeedStorageType *pseed = seedStorage->localData();
-
-      if (!pseed) {
-         seedStorage->setLocalData(pseed = new SeedStorageType);
-      }
-      *pseed = seed;
-
-   } else {
-      // global static seed storage should always exist,
-      // except after being deleted by QGlobalStaticDeleter.
-      // But since it still can be called from destructor of another
-      // global static object, fallback to srand(seed)
-      srand(seed);
-   }
-
-#else
-   srand(seed);
-#endif
+   s_rand = std::mt19937(seed);
 }
 
 int qrand()
 {
-
-#if defined(Q_OS_UNIX)
-   SeedStorage *seedStorage = randTLS();
-
-   if (seedStorage) {
-      SeedStorageType *pseed = seedStorage->localData();
-
-      if (! pseed) {
-          seedStorage->setLocalData(pseed = new SeedStorageType);
-          *pseed = 1;
-      }
-      return rand_r(pseed);
-
-   } else {
-      // global static seed storage should always exist,
-      // except after being deleted by QGlobalStaticDeleter.
-      // But since it still can be called from destructor of another
-      // global static object, fallback to rand()
-      return rand();
-   }
-#else
-   return rand();
-
-#endif
+   return s_dist(s_rand);
 }
 

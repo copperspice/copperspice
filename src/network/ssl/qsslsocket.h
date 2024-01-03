@@ -213,16 +213,16 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
    NET_CS_SLOT_1(Private, void _q_disconnectedSlot())
    NET_CS_SLOT_2(_q_disconnectedSlot)
 
-   NET_CS_SLOT_1(Private, void _q_stateChangedSlot(QAbstractSocket::SocketState un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_stateChangedSlot(QAbstractSocket::SocketState socketState))
    NET_CS_SLOT_2(_q_stateChangedSlot)
 
-   NET_CS_SLOT_1(Private, void _q_errorSlot(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_errorSlot(QAbstractSocket::SocketError socketError))
    NET_CS_SLOT_2(_q_errorSlot)
 
    NET_CS_SLOT_1(Private, void _q_readyReadSlot())
    NET_CS_SLOT_2(_q_readyReadSlot)
 
-   NET_CS_SLOT_1(Private, void _q_bytesWrittenSlot(qint64 un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_bytesWrittenSlot(qint64 written))
    NET_CS_SLOT_2(_q_bytesWrittenSlot)
 
    NET_CS_SLOT_1(Private, void _q_flushWriteBuffer())
@@ -235,7 +235,7 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
    NET_CS_SLOT_2(_q_resumeImplementation)
 
 #if defined(Q_OS_WIN)
-   NET_CS_SLOT_1(Private, void _q_caRootLoaded(QSslCertificate arg1, QSslCertificate arg2))
+   NET_CS_SLOT_1(Private, void _q_caRootLoaded(QSslCertificate cert, QSslCertificate trustedRoot))
    NET_CS_SLOT_2(_q_caRootLoaded)
 #endif
 

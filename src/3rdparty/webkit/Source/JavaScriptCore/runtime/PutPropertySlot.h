@@ -21,7 +21,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef PutPropertySlot_h
@@ -30,18 +30,16 @@
 #include <wtf/Assertions.h>
 
 namespace JSC {
-    
+
     class JSObject;
     class JSFunction;
-    
+
     class PutPropertySlot {
     public:
         enum Type { Uncachable, ExistingProperty, NewProperty };
 
         PutPropertySlot(bool isStrictMode = false)
-            : m_type(Uncachable)
-            , m_base(0)
-            , m_isStrictMode(isStrictMode)
+            : m_type(Uncachable), m_base(nullptr), m_isStrictMode(isStrictMode)
         {
         }
 

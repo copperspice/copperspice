@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qnamepool_p.h"
+#include <qgenericnamespaceresolver_p.h>
 
-#include "qgenericnamespaceresolver_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 
@@ -75,5 +73,3 @@ NamespaceResolver::Bindings GenericNamespaceResolver::bindings() const
 {
    return m_bindings;
 }
-
-QT_END_NAMESPACE

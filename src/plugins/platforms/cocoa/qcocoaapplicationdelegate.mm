@@ -65,7 +65,7 @@ static void cleanupCocoaApplicationDelegate()
 
 - (void)updateScreens: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
    if (QCocoaIntegration *ci = QCocoaIntegration::instance()) {
       ci->updateScreens();
    }
@@ -116,7 +116,7 @@ static void cleanupCocoaApplicationDelegate()
 
 - (NSMenu *)applicationDockMenu: (NSApplication *)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    // Manually invoke the delegate's -menuWillOpen: method.
    // See QTBUG-39604 (and its fix) for details.
    [[dockMenu delegate] menuWillOpen: dockMenu];
@@ -209,7 +209,7 @@ static void cleanupCocoaApplicationDelegate()
 
 - (void) applicationWillFinishLaunching: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
 
    /*
        From the Cocoa documentation: "A good place to install event handlers
@@ -268,8 +268,8 @@ static void cleanupCocoaApplicationDelegate()
 
 - (void)application: (NSApplication *)sender openFiles: (NSArray *)filenames
 {
-   Q_UNUSED(filenames);
-   Q_UNUSED(sender);
+   (void) filenames;
+   (void) sender;
 
    for (NSString * fileName in filenames) {
       QString qtFileName = QCFString::toQString(fileName);
@@ -350,8 +350,8 @@ static void cleanupCocoaApplicationDelegate()
 
 - (BOOL)applicationShouldHandleReopen: (NSApplication *)theApplication hasVisibleWindows: (BOOL)flag
 {
-   Q_UNUSED(theApplication);
-   Q_UNUSED(flag);
+   (void) theApplication;
+   (void) flag;
    if (reflectionDelegate
       && [reflectionDelegate respondsToSelector: @selector(applicationShouldHandleReopen: hasVisibleWindows:)]) {
       return [reflectionDelegate applicationShouldHandleReopen: theApplication hasVisibleWindows: flag];
@@ -406,21 +406,21 @@ static void cleanupCocoaApplicationDelegate()
 
 - (void)getUrl: (NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent
 {
-   Q_UNUSED(replyEvent);
+   (void) replyEvent;
    NSString *urlString = [[event paramDescriptorForKeyword: keyDirectObject] stringValue];
    QWindowSystemInterface::handleFileOpenEvent(QUrl(QCFString::toQString(urlString)));
 }
 
 - (void)appleEventQuit: (NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent
 {
-   Q_UNUSED(event);
-   Q_UNUSED(replyEvent);
+   (void) event;
+   (void) replyEvent;
    [NSApp terminate: self];
 }
 
 - (void)qtDispatcherToQAction: (id)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    [qtMenuLoader qtDispatcherToQPAMenuItem: sender];
 }
 

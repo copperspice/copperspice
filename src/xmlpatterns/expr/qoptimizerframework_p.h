@@ -27,9 +27,8 @@
 #include <QSharedData>
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ExpressionCreator : public QSharedData
 {
  public:
@@ -103,8 +102,7 @@ class OptimizationPass : public QSharedData
    OptimizationPass(const OptimizationPass &) = delete;
    OptimizationPass &operator=(const OptimizationPass &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

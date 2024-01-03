@@ -90,9 +90,17 @@ static inline int getResizeDeltaComponent(uint cflags, uint resizeFlag, uint res
    return 0;
 }
 
+#if (defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)) ||  \
+   (defined(QT_NO_MENUBAR) || defined(QT_NO_MAINWINDOW))
+
+   // do not implement
+
+#else
+
 static inline bool isChildOfQMdiSubWindow(const QWidget *child)
 {
    Q_ASSERT(child);
+
    QWidget *parent = child->parentWidget();
 
    while (parent) {
@@ -102,8 +110,11 @@ static inline bool isChildOfQMdiSubWindow(const QWidget *child)
       parent = parent->parentWidget();
 
    }
+
    return false;
 }
+
+#endif
 
 static inline bool isChildOfTabbedQMdiArea(const QMdiSubWindow *child)
 {
@@ -117,7 +128,7 @@ static inline bool isChildOfTabbedQMdiArea(const QMdiSubWindow *child)
    return false;
 }
 
-template<typename T>
+template <typename T>
 static inline ControlElement<T> *ptr(QWidget *widget)
 {
    if (widget) {
@@ -824,18 +835,21 @@ void QMdiSubWindowPrivate::_q_enterInteractiveMode()
 #endif // QT_NO_ACTION
 }
 
-void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *old, QWidget *now)
+void QMdiSubWindowPrivate::_q_processFocusChanged(QWidget *oldWidget, QWidget *newWidget)
 {
-   (void) old;
+   (void) oldWidget;
 
    Q_Q(QMdiSubWindow);
-   if (now && (now == q || q->isAncestorOf(now))) {
-      if (now == q && !isInInteractiveMode) {
+
+   if (newWidget != nullptr && (newWidget == q || q->isAncestorOf(newWidget))) {
+      if (newWidget == q && ! isInInteractiveMode) {
          setFocusWidget();
       }
+
       setActive(true);
    }
 }
+
 void QMdiSubWindowPrivate::leaveInteractiveMode()
 {
    Q_Q(QMdiSubWindow);
@@ -845,20 +859,20 @@ void QMdiSubWindowPrivate::leaveInteractiveMode()
       leaveRubberBandMode();
    } else
 #endif
+   {
       q->releaseMouse();
+   }
 
    isInInteractiveMode = false;
    currentOperation = None;
    updateDirtyRegions();
    updateCursor();
+
    if (baseWidget && baseWidget->focusWidget()) {
       baseWidget->focusWidget()->setFocus();
    }
 }
 
-/*!
-    \internal
-*/
 void QMdiSubWindowPrivate::removeBaseWidget()
 {
    if (!baseWidget) {
@@ -1718,9 +1732,6 @@ void QMdiSubWindowPrivate::sizeParameters(int *margin, int *minWidth) const
    *minWidth = tempWidth;
 }
 
-/*!
-    \internal
-*/
 bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
 {
    Q_Q(const QMdiSubWindow);
@@ -1732,8 +1743,9 @@ bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
       return false;
    }
 
-#if defined(Q_OS_DARWIN) && !defined(QT_NO_STYLE_MAC)
+#if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
    return true;
+
 #else
    if (q->style()->styleHint(QStyle::SH_Workspace_FillSpaceOnMaximize, nullptr, q)) {
       return true;
@@ -1741,15 +1753,18 @@ bool QMdiSubWindowPrivate::drawTitleBarWhenMaximized() const
 
 #if defined(QT_NO_MENUBAR) || defined(QT_NO_MAINWINDOW)
    return true;
+
 #else
    QMainWindow *mainWindow = qobject_cast<QMainWindow *>(q->window());
-   if (!mainWindow || !qobject_cast<QMenuBar *>(mainWindow->menuWidget())
-      || mainWindow->menuWidget()->isHidden()) {
+
+   if (! mainWindow || !qobject_cast<QMenuBar *>(mainWindow->menuWidget())
+         || mainWindow->menuWidget()->isHidden()) {
       return true;
    }
 
    return isChildOfQMdiSubWindow(q);
 #endif
+
 #endif
 }
 
@@ -2262,13 +2277,14 @@ QMdiSubWindow::~QMdiSubWindow()
 void QMdiSubWindow::setWidget(QWidget *widget)
 {
    Q_D(QMdiSubWindow);
-   if (!widget) {
+
+   if (widget == nullptr) {
       d->removeBaseWidget();
       return;
    }
 
    if (widget == d->baseWidget) {
-      qWarning("QMdiSubWindow::setWidget: widget is already set");
+      qWarning("QMdiSubWindow::setWidget() Current widget was already set");
       return;
    }
 
@@ -2430,7 +2446,7 @@ void QMdiSubWindow::setSystemMenu(QMenu *systemMenu)
 {
    Q_D(QMdiSubWindow);
    if (systemMenu && systemMenu == d->systemMenu) {
-      qWarning("QMdiSubWindow::setSystemMenu: system menu is already set");
+      qWarning("QMdiSubWindow::setSystemMenu() System menu was already set");
       return;
    }
 
@@ -3593,10 +3609,10 @@ void QMdiSubWindow::_q_enterInteractiveMode()
    d->_q_enterInteractiveMode();
 }
 
-void QMdiSubWindow::_q_processFocusChanged(QWidget *un_named_arg1, QWidget *un_named_arg2)
+void QMdiSubWindow::_q_processFocusChanged(QWidget *oldWidget, QWidget *newWidget)
 {
    Q_D(QMdiSubWindow);
-   d->_q_processFocusChanged(un_named_arg1, un_named_arg2);
+   d->_q_processFocusChanged(oldWidget, newWidget);
 }
 
 #endif //QT_NO_MDIAREA

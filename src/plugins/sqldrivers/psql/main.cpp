@@ -30,7 +30,7 @@ class QPSQLDriverPlugin : public QSqlDriverPlugin
    CS_OBJECT(QPSQLDriverPlugin)
 
    CS_PLUGIN_IID(QSqlDriverInterface_ID)
-   CS_PLUGIN_KEY("QPSQL, QPSQL7")
+   CS_PLUGIN_KEY("QPSQL")
 
  public:
    QPSQLDriverPlugin();
@@ -47,7 +47,7 @@ QPSQLDriverPlugin::QPSQLDriverPlugin()
 
 QSqlDriver *QPSQLDriverPlugin::create(const QString &name)
 {
-   if (name == "QPSQL" || name == "QPSQL7") {
+   if (name == "QPSQL") {
       QPSQLDriver *driver = new QPSQLDriver();
       return driver;
    }

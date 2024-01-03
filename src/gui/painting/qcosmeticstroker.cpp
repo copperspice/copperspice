@@ -37,7 +37,7 @@ static inline uint sourceOver(uint d, uint color)
    return color + BYTE_MUL(d, qAlpha(~color));
 }
 
-inline static int F16Dot16FixedDiv(int x, int y)
+static inline int F16Dot16FixedDiv(int x, int y)
 {
    if (qAbs(x) > 0x7fff) {
       return (((qint64)x) << 16) / y;
@@ -116,9 +116,10 @@ struct NoDasher {
  * of each of the two functions, aka "false" means completely outside the devices
  * rect.
  */
-template<DrawPixel drawPixel, class Dasher>
+template <DrawPixel drawPixel, class Dasher>
 static bool drawLine(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
-template<DrawPixel drawPixel, class Dasher>
+
+template <DrawPixel drawPixel, class Dasher>
 static bool drawLineAA(QCosmeticStroker *stroker, qreal x1, qreal y1, qreal x2, qreal y2, int caps);
 
 inline void drawPixel(QCosmeticStroker *stroker, int x, int y, int coverage)
@@ -749,7 +750,7 @@ static inline void capAdjust(int caps, int &x1, int &x2, int &y, int yinc)
   The hard part about this is dropout control and avoiding douple drawing of points when
   the drawing shifts from horizontal to vertical or back.
   */
-template<DrawPixel drawPixel, class Dasher>
+template <DrawPixel drawPixel, class Dasher>
 static bool drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
 {
    bool didDraw = qAbs(rx2 - rx1) + qAbs(ry2 - ry1) >= 1.0;
@@ -936,8 +937,7 @@ static bool drawLine(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2,
    return didDraw;
 }
 
-
-template<DrawPixel drawPixel, class Dasher>
+template <DrawPixel drawPixel, class Dasher>
 static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx2, qreal ry2, int caps)
 {
    if (stroker->clipLine(rx1, ry1, rx2, ry2)) {

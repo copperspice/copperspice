@@ -76,7 +76,7 @@ class QSet
    QSet(std::initializer_list<T> args)
       : m_data(args)  {}
 
-   template<class Input_Iterator>
+   template <class Input_Iterator>
    QSet(Input_Iterator first, Input_Iterator last);
 
    // methods

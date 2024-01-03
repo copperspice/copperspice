@@ -34,12 +34,12 @@
 #include <qxcb_gl_integrationfactory.h>
 #include <qxcb_gl_integration.h>
 
-#include <QDebug>
-#include <QSocketNotifier>
-#include <QAbstractEventDispatcher>
-#include <QTimer>
-#include <QByteArray>
-#include <QScopedPointer>
+#include <qdebug.h>
+#include <qsocketnotifier.h>
+#include <qabstracteventdispatcher.h>
+#include <qtimer.h>
+#include <qbytearray.h>
+#include <qscopedpointer.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
@@ -235,7 +235,7 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
          if (output.crtc != XCB_NONE && output.mode != XCB_NONE) {
             xcb_randr_get_output_info_cookie_t outputInfoCookie =
                xcb_randr_get_output_info(xcb_connection(), output.output, output.config_timestamp);
-            QScopedPointer<xcb_randr_get_output_info_reply_t, QScopedPointerPodDeleter> outputInfo(
+            QScopedPointer<xcb_randr_get_output_info_reply_t, QMallocDeleter> outputInfo(
                xcb_randr_get_output_info_reply(xcb_connection(), outputInfoCookie, nullptr));
 
             // Find a fake screen
@@ -267,7 +267,7 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
             xcb_randr_get_output_info_cookie_t outputInfoCookie =
                xcb_randr_get_output_info(xcb_connection(), output.output, output.config_timestamp);
 
-            QScopedPointer<xcb_randr_get_output_info_reply_t, QScopedPointerPodDeleter> outputInfo(
+            QScopedPointer<xcb_randr_get_output_info_reply_t, QMallocDeleter> outputInfo(
                xcb_randr_get_output_info_reply(xcb_connection(), outputInfoCookie, nullptr));
 
             if (outputInfo->crtc == XCB_NONE) {
@@ -296,7 +296,7 @@ bool QXcbConnection::checkOutputIsPrimary(xcb_window_t rootWindow, xcb_randr_out
 
    xcb_randr_get_output_primary_cookie_t primaryCookie = xcb_randr_get_output_primary(xcb_connection(), rootWindow);
 
-   QScopedPointer<xcb_randr_get_output_primary_reply_t, QScopedPointerPodDeleter> primary (
+   QScopedPointer<xcb_randr_get_output_primary_reply_t, QMallocDeleter> primary (
       xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
 
    if (! primary || error) {
@@ -410,10 +410,10 @@ void QXcbConnection::initializeScreens()
          // RRGetScreenResourcesCurrent is fast but it may return nothing if the
          // configuration is not initialized wrt to the hardware. We should call
          // RRGetScreenResources in this case.
-         QScopedPointer<xcb_randr_get_screen_resources_reply_t, QScopedPointerPodDeleter> resources;
+         QScopedPointer<xcb_randr_get_screen_resources_reply_t, QMallocDeleter> resources;
          xcb_randr_get_screen_resources_current_cookie_t resourcesCookie =
             xcb_randr_get_screen_resources_current(xcb_connection(), xcbScreen->root);
-         QScopedPointer<xcb_randr_get_screen_resources_current_reply_t, QScopedPointerPodDeleter> resources_current(
+         QScopedPointer<xcb_randr_get_screen_resources_current_reply_t, QMallocDeleter> resources_current(
             xcb_randr_get_screen_resources_current_reply(xcb_connection(), resourcesCookie, &error));
          if (!resources_current || error) {
             qWarning("failed to get the current screen resources");
@@ -442,14 +442,14 @@ void QXcbConnection::initializeScreens()
             if (outputCount) {
                xcb_randr_get_output_primary_cookie_t primaryCookie =
                   xcb_randr_get_output_primary(xcb_connection(), xcbScreen->root);
-               QScopedPointer<xcb_randr_get_output_primary_reply_t, QScopedPointerPodDeleter> primary(
+               QScopedPointer<xcb_randr_get_output_primary_reply_t, QMallocDeleter> primary(
                   xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
                if (!primary || error) {
                   qWarning("failed to get the primary output of the screen");
                   free(error);
                } else {
                   for (int i = 0; i < outputCount; i++) {
-                     QScopedPointer<xcb_randr_get_output_info_reply_t, QScopedPointerPodDeleter> output(
+                     QScopedPointer<xcb_randr_get_output_info_reply_t, QMallocDeleter> output(
                         xcb_randr_get_output_info_reply(xcb_connection(),
                            xcb_randr_get_output_info_unchecked(xcb_connection(), outputs[i], timestamp), nullptr));
 
@@ -848,8 +848,8 @@ void printXcbEvent(const char *message, xcb_generic_event_t *event)
             int(event->sequence));
    }
 #else
-   Q_UNUSED(message);
-   Q_UNUSED(event);
+   (void) message;
+   (void) event;
 #endif
 }
 
@@ -1433,8 +1433,8 @@ QXcbEventReader::QXcbEventReader(QXcbConnection *connection)
 void QXcbEventReader::start()
 {
    if (local_xcb_poll_for_queued_event) {
-      connect(this, SIGNAL(eventPending()), m_connection, SLOT(processXcbEvents()), Qt::QueuedConnection);
-      connect(this, SIGNAL(finished()), m_connection, SLOT(processXcbEvents()));
+      connect(this, &QXcbEventReader::eventPending, m_connection, &QXcbConnection::processXcbEvents, Qt::QueuedConnection);
+      connect(this, &QXcbEventReader::finished,     m_connection, &QXcbConnection::processXcbEvents);
       QThread::start();
 
    } else {
@@ -1446,12 +1446,15 @@ void QXcbEventReader::start()
 
 void QXcbEventReader::registerForEvents()
 {
-   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()), QSocketNotifier::Read, this);
-   connect(notifier, SIGNAL(activated(int)),   m_connection, SLOT(processXcbEvents()));
+   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()),
+         QSocketNotifier::Read, this);
 
    QAbstractEventDispatcher *dispatcher = QApplicationPrivate::eventDispatcher;
-   connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(processXcbEvents()));
-   connect(dispatcher, SIGNAL(awake()),        m_connection, SLOT(processXcbEvents()));
+
+   connect(notifier,   &QSocketNotifier::activated, m_connection, &QXcbConnection::processXcbEvents);
+
+   connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, m_connection, &QXcbConnection::processXcbEvents);
+   connect(dispatcher, &QAbstractEventDispatcher::awake,        m_connection, &QXcbConnection::processXcbEvents);
 }
 
 void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatcher)
@@ -1459,8 +1462,9 @@ void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatch
    // flush the xcb connection before the EventDispatcher is going to block
    // In the non-threaded case processXcbEvents is called before going to block,
    // which flushes the connection.
+
    if (local_xcb_poll_for_queued_event) {
-      connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(flush()));
+      connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, m_connection, &QXcbConnection::flush);
    }
 }
 
@@ -1856,7 +1860,7 @@ void QXcbConnection::processXcbEvents()
          continue;
       }
 
-      QScopedPointer<xcb_generic_event_t, QScopedPointerPodDeleter> eventGuard(event);
+      QScopedPointer<xcb_generic_event_t, QMallocDeleter> eventGuard(event);
       (*eventqueue)[i] = nullptr;
 
       if (! (event->response_type & ~0x80)) {
@@ -2512,11 +2516,11 @@ QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
       QXcbConnection *self = const_cast<QXcbConnection *>(this);
 
       if ((self->m_systemTrayTracker = QXcbSystemTrayTracker::create(self))) {
-
          connect(m_systemTrayTracker, SIGNAL(systemTrayWindowChanged(QScreen *)),
             QApplication::platformNativeInterface(), SLOT(systemTrayWindowChanged(QScreen *)));
       }
    }
+
    return m_systemTrayTracker;
 }
 

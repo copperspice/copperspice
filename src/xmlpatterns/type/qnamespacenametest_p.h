@@ -27,8 +27,6 @@
 #include <qabstractnodetest_p.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class NamespaceNameTest : public AbstractNodeTest
@@ -55,8 +53,7 @@ class NamespaceNameTest : public AbstractNodeTest
    NamespaceNameTest(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
    const QXmlName::NamespaceCode m_namespaceURI;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

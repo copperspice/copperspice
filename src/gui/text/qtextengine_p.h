@@ -263,7 +263,8 @@ class QVarLengthGlyphLayoutArray : private QVarLengthArray<void *>, public QGlyp
    }
 };
 
-template <int N> struct QGlyphLayoutArray : public QGlyphLayout {
+template <int N>
+struct QGlyphLayoutArray : public QGlyphLayout {
  public:
    QGlyphLayoutArray()
       : QGlyphLayout(reinterpret_cast<char *>(buffer), N) {

@@ -25,10 +25,7 @@
 #include "qcommonvalues_p.h"
 #include "qliteral_p.h"
 #include "qschemanumeric_p.h"
-
 #include "qunaryexpression_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -58,5 +55,3 @@ Item UnaryExpression::evaluateSingleton(const DynamicContext::Ptr &context) cons
       return m_operand2->evaluateSingleton(context);
    }
 }
-
-QT_END_NAMESPACE

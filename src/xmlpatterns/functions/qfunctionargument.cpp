@@ -23,8 +23,6 @@
 
 #include "qfunctionargument_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 FunctionArgument::FunctionArgument(const QXmlName nameP,
@@ -44,5 +42,3 @@ SequenceType::Ptr FunctionArgument::type() const
 {
    return m_type;
 }
-
-QT_END_NAMESPACE

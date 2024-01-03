@@ -562,13 +562,6 @@ QRectF QSvgGenerator::viewBoxF() const
    return d->engine->viewBox();
 }
 
-/*!
-    \since 4.5
-
-    Returns viewBoxF().toRect().
-
-    \sa viewBoxF()
-*/
 QRect QSvgGenerator::viewBox() const
 {
    Q_D(const QSvgGenerator);
@@ -590,13 +583,6 @@ void QSvgGenerator::setViewBox(const QRect &viewBox)
    setViewBox(QRectF(viewBox));
 }
 
-/*!
-    \property QSvgGenerator::fileName
-    \brief the target filename for the generated SVG drawing
-    \since 4.5
-
-    \sa outputDevice
-*/
 QString QSvgGenerator::fileName() const
 {
    Q_D(const QSvgGenerator);
@@ -622,16 +608,6 @@ void QSvgGenerator::setFileName(const QString &fileName)
    d->engine->setOutputDevice(file);
 }
 
-/*!
-    \property QSvgGenerator::outputDevice
-    \brief the output device for the generated SVG drawing
-    \since 4.5
-
-    If both output device and file name are specified, the output device
-    will have precedence.
-
-    \sa fileName
-*/
 QIODevice *QSvgGenerator::outputDevice() const
 {
    Q_D(const QSvgGenerator);
@@ -650,16 +626,6 @@ void QSvgGenerator::setOutputDevice(QIODevice *outputDevice)
    d->fileName = QString();
 }
 
-/*!
-    \property QSvgGenerator::resolution
-    \brief the resolution of the generated output
-    \since 4.5
-
-    The resolution is specified in dots per inch, and is used to
-    calculate the physical size of an SVG drawing.
-
-    \sa size, viewBox
-*/
 int QSvgGenerator::resolution() const
 {
    Q_D(const QSvgGenerator);
@@ -672,19 +638,12 @@ void QSvgGenerator::setResolution(int dpi)
    d->engine->setResolution(dpi);
 }
 
-/*!
-    Returns the paint engine used to render graphics to be converted to SVG
-    format information.
-*/
 QPaintEngine *QSvgGenerator::paintEngine() const
 {
    Q_D(const QSvgGenerator);
    return d->engine;
 }
 
-/*!
-    \reimp
-*/
 int QSvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
    Q_D(const QSvgGenerator);

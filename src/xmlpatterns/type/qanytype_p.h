@@ -26,9 +26,8 @@
 
 #include <qschematype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AtomicType;
 
 class AnyType : public SchemaType
@@ -95,8 +94,7 @@ class AnyType : public SchemaType
    inline AnyType() {
    }
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

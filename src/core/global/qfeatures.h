@@ -198,9 +198,6 @@
 // QTextCodec
 //#define QT_NO_TEXTCODEC
 
-// Text Date
-//#define QT_NO_TEXTDATE
-
 // HtmlParser
 //#define QT_NO_TEXTHTMLPARSER
 
@@ -304,7 +301,7 @@
 #endif
 
 // File Transfer Protocol
-#if !defined(QT_NO_FTP) && (defined(QT_NO_URLINFO) || defined(QT_NO_TEXTDATE))
+#if !defined(QT_NO_FTP) && (defined(QT_NO_URLINFO))
 #define QT_NO_FTP
 #endif
 
@@ -584,7 +581,7 @@
 #endif
 
 // QCalendarWidget
-#if !defined(QT_NO_CALENDARWIDGET) && (defined(QT_NO_TABLEVIEW) || defined(QT_NO_MENU) || defined(QT_NO_TEXTDATE) || defined(QT_NO_SPINBOX) || defined(QT_NO_TOOLBUTTON))
+#if !defined(QT_NO_CALENDARWIDGET) && (defined(QT_NO_TABLEVIEW) || defined(QT_NO_MENU) || defined(QT_NO_SPINBOX) || defined(QT_NO_TOOLBUTTON))
 #define QT_NO_CALENDARWIDGET
 #endif
 

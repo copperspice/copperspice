@@ -26,8 +26,6 @@
 
 #include "qtypeavailablefn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item TypeAvailableFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -52,5 +50,3 @@ Expression::Ptr TypeAvailableFN::typeCheck(const StaticContext::Ptr &context,
    m_schemaTypeFactory = context->schemaDefinitions();
    return StaticNamespacesContainer::typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

@@ -405,15 +405,15 @@ GType QGstVideoRendererSink::get_type()
 
    if (type == 0) {
       static const GTypeInfo info = {
-         sizeof(QGstVideoRendererSinkClass),                    // class_size
-         base_init,                                         // base_init
-         NULL,                                              // base_finalize
-         class_init,                                        // class_init
-         NULL,                                              // class_finalize
-         NULL,                                              // class_data
-         sizeof(QGstVideoRendererSink),                         // instance_size
-         0,                                                 // n_preallocs
-         instance_init,                                     // instance_init
+         sizeof(QGstVideoRendererSinkClass),               // class_size
+         base_init,                                        // base_init
+         nullptr,                                          // base_finalize
+         class_init,                                       // class_init
+         nullptr,                                          // class_finalize
+         nullptr,                                          // class_data
+         sizeof(QGstVideoRendererSink),                    // instance_size
+         0,                                                // n_preallocs
+         instance_init,                                    // instance_init
          nullptr                                           // value_table
       };
 
@@ -426,7 +426,7 @@ GType QGstVideoRendererSink::get_type()
 
 void QGstVideoRendererSink::class_init(gpointer g_class, gpointer class_data)
 {
-   Q_UNUSED(class_data);
+   (void) class_data;
 
    sink_parent_class = reinterpret_cast<GstVideoSinkClass *>(g_type_class_peek_parent(g_class));
 
@@ -464,7 +464,7 @@ void QGstVideoRendererSink::instance_init(GTypeInstance *instance, gpointer g_cl
 {
    VO_SINK(instance);
 
-   Q_UNUSED(g_class);
+   (void) g_class;
 
    sink->delegate = nullptr;
 }
@@ -481,8 +481,9 @@ void QGstVideoRendererSink::finalize(GObject *object)
 
 void QGstVideoRendererSink::handleShowPrerollChange(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(o);
-   Q_UNUSED(p);
+   (void) o;
+   (void) p;
+
    QGstVideoRendererSink *sink = reinterpret_cast<QGstVideoRendererSink *>(d);
 
    gboolean showPrerollFrame = true; // "show-preroll-frame" property is true by default
@@ -490,7 +491,7 @@ void QGstVideoRendererSink::handleShowPrerollChange(GObject *o, GParamSpec *p, g
 
    if (!showPrerollFrame) {
       GstState state = GST_STATE_VOID_PENDING;
-      gst_element_get_state(GST_ELEMENT(sink), &state, NULL, GST_CLOCK_TIME_NONE);
+      gst_element_get_state(GST_ELEMENT(sink), &state, nullptr, GST_CLOCK_TIME_NONE);
       // show-preroll-frame being set to 'false' while in GST_STATE_PAUSED means
       // the QMediaPlayer was stopped from the paused state.
       // We need to flush the current frame.

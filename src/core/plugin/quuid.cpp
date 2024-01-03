@@ -437,7 +437,13 @@ QUuid QUuid::createUuid()
 
 
 #if defined(Q_OS_UNIX)
-Q_GLOBAL_STATIC(QThreadStorage<QFile *>, devUrandomStorage);
+
+static QThreadStorage<QFile *> *devUrandomStorage()
+{
+   static QThreadStorage<QFile *> retval;
+   return &retval;
+}
+
 #endif
 
 QUuid QUuid::createUuid()

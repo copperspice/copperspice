@@ -40,8 +40,6 @@
 
 #include "qxsdschemachecker_helper.cpp"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaChecker::XsdSchemaChecker(const QExplicitlySharedDataPointer<XsdSchemaContext> &context,
@@ -2154,5 +2152,3 @@ QSourceLocation XsdSchemaChecker::sourceLocationForType(const SchemaType::Ptr &t
       return sourceLocation(XsdComplexType::Ptr(type));
    }
 }
-
-QT_END_NAMESPACE

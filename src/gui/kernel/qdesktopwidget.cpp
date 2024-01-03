@@ -57,8 +57,7 @@ int QDesktopScreenWidget::screenNumber() const
 const QRect QDesktopWidget::screenGeometry(const QWidget *widget) const
 {
    if (!widget) {
-      qWarning("QDesktopWidget::screenGeometry(): Attempt "
-         "to get the screen geometry of a null widget");
+      qWarning("QDesktopWidget::screenGeometry() Unable to retrieve screen geometry for an invalid widget (nullptr)");
       return QRect();
    }
 
@@ -73,8 +72,8 @@ const QRect QDesktopWidget::screenGeometry(const QWidget *widget) const
 const QRect QDesktopWidget::availableGeometry(const QWidget *widget) const
 {
    if (!widget) {
-      qWarning("QDesktopWidget::availableGeometry(): Attempt "
-         "to get the available geometry of a null widget");
+      qWarning("QDesktopWidget::availableGeometry() Unable to retrieve screen geometry for an invalid widget (nullptr)");
+
       return QRect();
    }
 

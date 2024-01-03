@@ -25,8 +25,6 @@
 
 #include "qintersectiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 IntersectIterator::IntersectIterator(const Item::Iterator::Ptr &it1,
@@ -87,5 +85,3 @@ Item::Iterator::Ptr IntersectIterator::copy() const
 {
    return Item::Iterator::Ptr(new IntersectIterator(m_it1->copy(), m_it2->copy()));
 }
-
-QT_END_NAMESPACE

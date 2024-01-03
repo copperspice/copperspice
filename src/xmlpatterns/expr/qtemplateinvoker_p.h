@@ -27,9 +27,8 @@
 #include <qcallsite_p.h>
 #include <qwithparam_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class TemplateInvoker : public CallSite
 {
  public:
@@ -54,8 +53,6 @@ const WithParam::Hash &TemplateInvoker::withParams() const
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif
 

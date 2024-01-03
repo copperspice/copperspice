@@ -27,8 +27,6 @@
 #include <qabstractduration_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class DayTimeDuration : public AbstractDuration
 {
@@ -104,7 +102,5 @@ class DayTimeDuration : public AbstractDuration
    const MSecondProperty   m_mseconds;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

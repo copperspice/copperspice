@@ -127,8 +127,8 @@ QGstreamerAudioDecoderSession::~QGstreamerAudioDecoderSession()
 void QGstreamerAudioDecoderSession::configureAppSrcElement(GObject *object, GObject *orig, GParamSpec *pspec,
    QGstreamerAudioDecoderSession *self)
 {
-   Q_UNUSED(object);
-   Q_UNUSED(pspec);
+   (void) object;
+   (void) pspec;
 
    // In case we switch from appsrc to not
    if (!self->appsrc()) {

@@ -47,36 +47,36 @@
 QMediaRecorderPrivate::QMediaRecorderPrivate()
    : mediaObject(nullptr), control(nullptr), formatControl(nullptr), audioControl(nullptr),
      videoControl(nullptr), metaDataControl(nullptr), availabilityControl(nullptr), settingsChanged(false),
-     notifyTimer(nullptr), state(QMediaRecorder::StoppedState), error(QMediaRecorder::NoError)
+     notifyTimer(nullptr), m_state(QMediaRecorder::StoppedState), m_error(QMediaRecorder::NoError)
 {
 }
 
-void QMediaRecorderPrivate::_q_stateChanged(QMediaRecorder::State ps)
+void QMediaRecorderPrivate::_q_stateChanged(QMediaRecorder::State newState)
 {
    Q_Q(QMediaRecorder);
 
-   if (ps == QMediaRecorder::RecordingState) {
+   if (newState == QMediaRecorder::RecordingState) {
       notifyTimer->start();
    } else {
       notifyTimer->stop();
    }
 
-   //  qDebug() << "Recorder state changed:" << ENUM_NAME(QMediaRecorder,"State",ps);
-   if (state != ps) {
-      emit q->stateChanged(ps);
+   //  qDebug() << "Recorder state changed:" << ENUM_NAME(QMediaRecorder,"State", newState);
+   if (m_state != newState) {
+      emit q->stateChanged(newState);
    }
 
-   state = ps;
+   m_state = newState;
 }
 
 void QMediaRecorderPrivate::_q_error(int error, const QString &errorString)
 {
    Q_Q(QMediaRecorder);
 
-   this->error = QMediaRecorder::Error(error);
-   this->errorString = errorString;
+   m_error       = QMediaRecorder::Error(error);
+   m_errorString = errorString;
 
-   emit q->error(this->error);
+   emit q->error(m_error);
 }
 
 void QMediaRecorderPrivate::_q_serviceDestroyed()
@@ -161,9 +161,6 @@ QMediaRecorder::QMediaRecorder(QMediaObject *mediaObject, QObject *parent)
    setMediaObject(mediaObject);
 }
 
-/*!
-    \internal
-*/
 QMediaRecorder::QMediaRecorder(QMediaRecorderPrivate &dd, QMediaObject *mediaObject, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
@@ -357,6 +354,7 @@ QUrl QMediaRecorder::outputLocation() const
 bool QMediaRecorder::setOutputLocation(const QUrl &location)
 {
    Q_D(QMediaRecorder);
+
    d->actualLocation.clear();
    return d->control ? d->control->setOutputLocation(location) : false;
 }
@@ -378,12 +376,12 @@ QMediaRecorder::Status QMediaRecorder::status() const
 
 QMediaRecorder::Error QMediaRecorder::error() const
 {
-   return d_func()->error;
+   return d_func()->m_error;
 }
 
 QString QMediaRecorder::errorString() const
 {
-   return d_func()->errorString;
+   return d_func()->m_errorString;
 }
 
 qint64 QMediaRecorder::duration() const
@@ -568,8 +566,8 @@ void QMediaRecorder::record()
    }
 
    // reset error
-   d->error = NoError;
-   d->errorString = QString();
+   d->m_error = NoError;
+   d->m_errorString = QString();
 
    if (d->control) {
       d->control->setState(RecordingState);
@@ -579,6 +577,7 @@ void QMediaRecorder::record()
 void QMediaRecorder::pause()
 {
    Q_D(QMediaRecorder);
+
    if (d->control) {
       d->control->setState(PausedState);
    }
@@ -597,8 +596,7 @@ bool QMediaRecorder::isMetaDataAvailable() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->isMetaDataAvailable()
-      : false;
+      ? d->metaDataControl->isMetaDataAvailable() : false;
 }
 
 bool QMediaRecorder::isMetaDataWritable() const
@@ -606,8 +604,7 @@ bool QMediaRecorder::isMetaDataWritable() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->isWritable()
-      : false;
+      ? d->metaDataControl->isWritable() : false;
 }
 
 QVariant QMediaRecorder::metaData(const QString &key) const
@@ -615,8 +612,7 @@ QVariant QMediaRecorder::metaData(const QString &key) const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->metaData(key)
-      : QVariant();
+      ? d->metaDataControl->metaData(key) : QVariant();
 }
 
 void QMediaRecorder::setMetaData(const QString &key, const QVariant &value)
@@ -633,20 +629,19 @@ QStringList QMediaRecorder::availableMetaData() const
    Q_D(const QMediaRecorder);
 
    return d->metaDataControl
-      ? d->metaDataControl->availableMetaData()
-      : QStringList();
+      ? d->metaDataControl->availableMetaData() : QStringList();
 }
 
-void QMediaRecorder::_q_stateChanged(QMediaRecorder::State un_named_arg1)
+void QMediaRecorder::_q_stateChanged(QMediaRecorder::State state)
 {
    Q_D(QMediaRecorder);
-   d->_q_stateChanged(un_named_arg1);
+   d->_q_stateChanged(state);
 }
 
-void QMediaRecorder::_q_error(int un_named_arg1, const QString &un_named_arg2)
+void QMediaRecorder::_q_error(int error, const QString &errorString)
 {
    Q_D(QMediaRecorder);
-   d->_q_error(un_named_arg1, un_named_arg2);
+   d->_q_error(error, errorString);
 }
 
 void QMediaRecorder::_q_serviceDestroyed()
@@ -661,16 +656,16 @@ void QMediaRecorder::_q_notify()
    d->_q_notify();
 }
 
-void QMediaRecorder::_q_updateActualLocation(const QUrl &un_named_arg1)
+void QMediaRecorder::_q_updateActualLocation(const QUrl &url)
 {
    Q_D(QMediaRecorder);
-   d->_q_updateActualLocation(un_named_arg1);
+   d->_q_updateActualLocation(url);
 }
 
-void QMediaRecorder::_q_updateNotifyInterval(int un_named_arg1)
+void QMediaRecorder::_q_updateNotifyInterval(int interval)
 {
    Q_D(QMediaRecorder);
-   d->_q_updateNotifyInterval(un_named_arg1);
+   d->_q_updateNotifyInterval(interval);
 }
 
 void QMediaRecorder::_q_applySettings()
@@ -679,8 +674,8 @@ void QMediaRecorder::_q_applySettings()
    d->_q_applySettings();
 }
 
-void QMediaRecorder::_q_availabilityChanged(QMultimedia::AvailabilityStatus un_named_arg1)
+void QMediaRecorder::_q_availabilityChanged(QMultimedia::AvailabilityStatus availStatus)
 {
    Q_D(QMediaRecorder);
-   d->_q_availabilityChanged(un_named_arg1);
+   d->_q_availabilityChanged(availStatus);
 }

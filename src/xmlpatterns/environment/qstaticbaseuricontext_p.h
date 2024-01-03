@@ -26,8 +26,6 @@
 
 #include <qdelegatingstaticcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class StaticBaseURIContext : public DelegatingStaticContext
 {
@@ -44,7 +42,5 @@ class StaticBaseURIContext : public DelegatingStaticContext
    const QUrl m_baseURI;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

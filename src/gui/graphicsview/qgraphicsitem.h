@@ -1163,7 +1163,7 @@ class Q_GUI_EXPORT QGraphicsTextItem : public QGraphicsObject
  private:
    QGraphicsTextItemPrivate *dd;
 
-   GUI_CS_SLOT_1(Private, void _q_updateBoundingRect(const QSizeF &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_updateBoundingRect(const QSizeF &sizeF))
    GUI_CS_SLOT_2(_q_updateBoundingRect)
 
    GUI_CS_SLOT_1(Private, void _q_update(const QRectF &rectF))

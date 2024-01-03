@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
+#include <qacceliterators_p.h>
 
-#include "qacceliterators_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qdebug.h>
 
 using namespace QPatternist;
 
@@ -160,6 +158,3 @@ QXmlNodeModelIndex::Iterator::Ptr AttributeIterator::copy() const
 {
    return QXmlNodeModelIndex::Iterator::Ptr(new AttributeIterator(m_document, m_preNumber));
 }
-
-QT_END_NAMESPACE
-

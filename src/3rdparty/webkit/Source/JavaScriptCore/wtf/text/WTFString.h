@@ -64,20 +64,20 @@ struct StringHash;
 
 bool charactersAreAllASCII(const UChar*, size_t);
 bool charactersAreAllLatin1(const UChar*, size_t);
-int charactersToIntStrict(const UChar*, size_t, bool* ok = 0, int base = 10);
-unsigned charactersToUIntStrict(const UChar*, size_t, bool* ok = 0, int base = 10);
-int64_t charactersToInt64Strict(const UChar*, size_t, bool* ok = 0, int base = 10);
-uint64_t charactersToUInt64Strict(const UChar*, size_t, bool* ok = 0, int base = 10);
-intptr_t charactersToIntPtrStrict(const UChar*, size_t, bool* ok = 0, int base = 10);
+int charactersToIntStrict(const UChar*, size_t, bool* ok = nullptr, int base = 10);
+unsigned charactersToUIntStrict(const UChar*, size_t, bool* ok = nullptr, int base = 10);
+int64_t charactersToInt64Strict(const UChar*, size_t, bool* ok = nullptr, int base = 10);
+uint64_t charactersToUInt64Strict(const UChar*, size_t, bool* ok = nullptr, int base = 10);
+intptr_t charactersToIntPtrStrict(const UChar*, size_t, bool* ok = nullptr, int base = 10);
 
-int charactersToInt(const UChar*, size_t, bool* ok = 0); // ignores trailing garbage
-unsigned charactersToUInt(const UChar*, size_t, bool* ok = 0); // ignores trailing garbage
-int64_t charactersToInt64(const UChar*, size_t, bool* ok = 0); // ignores trailing garbage
-uint64_t charactersToUInt64(const UChar*, size_t, bool* ok = 0); // ignores trailing garbage
-intptr_t charactersToIntPtr(const UChar*, size_t, bool* ok = 0); // ignores trailing garbage
+int charactersToInt(const UChar*, size_t, bool* ok = nullptr); // ignores trailing garbage
+unsigned charactersToUInt(const UChar*, size_t, bool* ok = nullptr); // ignores trailing garbage
+int64_t charactersToInt64(const UChar*, size_t, bool* ok = nullptr); // ignores trailing garbage
+uint64_t charactersToUInt64(const UChar*, size_t, bool* ok = nullptr); // ignores trailing garbage
+intptr_t charactersToIntPtr(const UChar*, size_t, bool* ok = nullptr); // ignores trailing garbage
 
-double charactersToDouble(const UChar*, size_t, bool* ok = 0, bool* didReadNumber = 0);
-float charactersToFloat(const UChar*, size_t, bool* ok = 0, bool* didReadNumber = 0);
+double charactersToDouble(const UChar*, size_t, bool* ok = nullptr, bool* didReadNumber = nullptr);
+float charactersToFloat(const UChar*, size_t, bool* ok = nullptr, bool* didReadNumber = nullptr);
 
 template<bool isSpecialCharacter(UChar)> bool isAllSpecialCharacters(const UChar*, size_t);
 
@@ -132,7 +132,7 @@ public:
     const UChar* characters() const
     {
         if (!m_impl)
-            return 0;
+            return nullptr;
         return m_impl->characters();
     }
 
@@ -255,19 +255,19 @@ public:
     void split(UChar separator, Vector<String>& result) const;
     void split(UChar separator, bool allowEmptyEntries, Vector<String>& result) const;
 
-    int toIntStrict(bool* ok = 0, int base = 10) const;
-    unsigned toUIntStrict(bool* ok = 0, int base = 10) const;
-    int64_t toInt64Strict(bool* ok = 0, int base = 10) const;
-    uint64_t toUInt64Strict(bool* ok = 0, int base = 10) const;
-    intptr_t toIntPtrStrict(bool* ok = 0, int base = 10) const;
+    int toIntStrict(bool* ok = nullptr, int base = 10) const;
+    unsigned toUIntStrict(bool* ok = nullptr, int base = 10) const;
+    int64_t toInt64Strict(bool* ok = nullptr, int base = 10) const;
+    uint64_t toUInt64Strict(bool* ok = nullptr, int base = 10) const;
+    intptr_t toIntPtrStrict(bool* ok = nullptr, int base = 10) const;
 
-    int toInt(bool* ok = 0) const;
-    unsigned toUInt(bool* ok = 0) const;
-    int64_t toInt64(bool* ok = 0) const;
-    uint64_t toUInt64(bool* ok = 0) const;
-    intptr_t toIntPtr(bool* ok = 0) const;
-    double toDouble(bool* ok = 0, bool* didReadNumber = 0) const;
-    float toFloat(bool* ok = 0, bool* didReadNumber = 0) const;
+    int toInt(bool* ok = nullptr) const;
+    unsigned toUInt(bool* ok = nullptr) const;
+    int64_t toInt64(bool* ok = nullptr) const;
+    uint64_t toUInt64(bool* ok = nullptr) const;
+    intptr_t toIntPtr(bool* ok = nullptr) const;
+    double toDouble(bool* ok = nullptr, bool* didReadNumber = nullptr) const;
+    float toFloat(bool* ok = nullptr, bool* didReadNumber = nullptr) const;
 
     bool percentage(int& percentage) const;
 
@@ -326,7 +326,7 @@ public:
     static String fromUTF8WithLatin1Fallback(const char*, size_t);
 
     // Determines the writing direction using the Unicode Bidi Algorithm rules P2 and P3.
-    WTF::Unicode::Direction defaultWritingDirection(bool* hasStrongDirectionality = 0) const
+    WTF::Unicode::Direction defaultWritingDirection(bool* hasStrongDirectionality = nullptr) const
     {
         if (m_impl)
             return m_impl->defaultWritingDirection(hasStrongDirectionality);

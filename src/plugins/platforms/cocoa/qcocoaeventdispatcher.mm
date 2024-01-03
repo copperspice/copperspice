@@ -680,8 +680,8 @@ NSModalSession QCocoaEventDispatcherPrivate::currentModalSession()
 
 static void setChildrenWorksWhenModal(QWindow *window, bool worksWhenModal)
 {
-   Q_UNUSED(window)
-   Q_UNUSED(worksWhenModal)
+   (void) window;
+   (void) worksWhenModal;
 
    // For NSPanels (but not NSWindows, sadly), we can set the flag
    // worksWhenModal, so that they are active even when they are not modal.

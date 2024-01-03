@@ -24,8 +24,8 @@
 #ifndef QXMLSCHEMAVALIDATOR_H
 #define QXMLSCHEMAVALIDATOR_H
 
-#include <QUrl>
-#include <QXmlNamePool>
+#include <qurl.h>
+#include <qxmlnamepool.h>
 
 class QAbstractMessageHandler;
 class QAbstractUriResolver;

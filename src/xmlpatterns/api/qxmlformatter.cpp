@@ -27,8 +27,6 @@
 #include "qxpathhelper_p.h"
 #include "qxmlserializer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 class QXmlFormatterPrivate : public QXmlSerializerPrivate
@@ -251,5 +249,3 @@ void QXmlFormatter::setIndentationDepth(int depth)
    Q_D(QXmlFormatter);
    d->indentationDepth = depth;
 }
-
-QT_END_NAMESPACE

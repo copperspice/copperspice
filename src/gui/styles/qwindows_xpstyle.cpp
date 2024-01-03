@@ -967,7 +967,7 @@ bool QWindowsXPStylePrivate::drawBackgroundDirectly(HDC dc, XPThemeData &themeDa
 
 #ifdef DEBUG_XP_STYLE
    printf("---[ DIRECT PAINTING ]------------------> Name(%-10s) Part(%d) State(%d)\n",
-      qPrintable(themeData.name), themeData.partId, themeData.stateId);
+      csPrintable(themeData.name), themeData.partId, themeData.stateId);
    showProperties(themeData);
 #endif
 
@@ -1098,7 +1098,7 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
       ::sprintf(buf, "+ Pixmap(%3d, %3d) ]", w, h);
       printf("---[ CACHED %s--------> Name(%-10s) Part(%d) State(%d)\n",
          haveCachedPixmap ? buf : "]-------------------",
-         qPrintable(themeData.name), themeData.partId, themeData.stateId);
+         csPrintable(themeData.name), themeData.partId, themeData.stateId);
 #endif
 
    } else {
@@ -1122,7 +1122,7 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
 
 #ifdef DEBUG_XP_STYLE
       printf("---[ NOT CACHED ]-----------------------> Name(%-10s) Part(%d) State(%d)\n",
-         qPrintable(themeData.name), themeData.partId, themeData.stateId);
+         csPrintable(themeData.name), themeData.partId, themeData.stateId);
       printf("-->partIsTransparen      = %d\n", partIsTransparent);
       printf("-->potentialInvalidAlpha = %d\n", potentialInvalidAlpha);
       showProperties(themeData);
@@ -1231,9 +1231,11 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
 
          // SHORTCUT: If the part's state has no data, cache it for NOOP later
          if (!stateHasData) {
-            memset(&data, 0, sizeof(data));
+            data = ThemeMapData();
+
             data.dataValid = true;
             alphaCache.insert(key, data);
+
             return true;
          }
 
@@ -1241,9 +1243,7 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
          if (!hasAlpha && partIsTransparent) {
             potentialInvalidAlpha = true;
          }
-
       }
-
 
       // Fix alpha values, if needed
       if (potentialInvalidAlpha) {
@@ -1333,13 +1333,14 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
       QPixmapCache::insert(pixmapCacheKey, pix);
 #ifdef DEBUG_XP_STYLE
       printf("+++Adding pixmap to cache, size(%d, %d), wasAlphaSwapped(%d), wasAlphaFixed(%d), name(%s)\n",
-         w, h, wasAlphaSwapped, wasAlphaFixed, qPrintable(pixmapCacheKey));
+         w, h, wasAlphaSwapped, wasAlphaFixed, csPrintable(pixmapCacheKey));
 #endif
    }
 
    // Add to theme part cache
    if (!isCached) {
-      memset(&data, 0, sizeof(data));
+      data = ThemeMapData();
+
       data.dataValid = true;
       data.partIsTransparent = partIsTransparent;
       data.alphaType = alphaType;

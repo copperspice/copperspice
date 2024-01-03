@@ -167,7 +167,6 @@ void QLineControl::backspace()
          m_cursor = prevMaskBlank(m_cursor);
       }
 
-      QChar uc = m_text.at(m_cursor);
       internalDelete(true);
    }
 
@@ -230,19 +229,13 @@ void QLineControl::undo()
       clear();
    }
 }
-/*!
-    \internal
 
-    Sets \a length characters from the given \a start position as selected.
-    The given \a start position must be within the current text for
-    the line control.  If \a length characters cannot be selected, then
-    the selection will extend to the end of the current text.
-*/
 void QLineControl::setSelection(int start, int length)
 {
    commitPreedit();
+
    if (start < 0 || start > (int)m_text.length()) {
-      qWarning("QLineControl::setSelection: Invalid start position");
+      qWarning("QLineControl::setSelection() Invalid start position");
       return;
    }
 
@@ -253,6 +246,7 @@ void QLineControl::setSelection(int start, int length)
       m_selstart = start;
       m_selend = qMin(start + length, (int)m_text.length());
       m_cursor = m_selend;
+
    } else if (length < 0) {
       if (start == m_selend && start + length == m_selstart && m_cursor == m_selstart) {
          return;
@@ -260,15 +254,18 @@ void QLineControl::setSelection(int start, int length)
       m_selstart = qMax(start + length, 0);
       m_selend = start;
       m_cursor = m_selstart;
+
    } else if (m_selstart != m_selend) {
       m_selstart = 0;
       m_selend = 0;
       m_cursor = start;
+
    } else {
       m_cursor = start;
       emitCursorPositionChanged();
       return;
    }
+
    emit selectionChanged();
    emitCursorPositionChanged();
 }
@@ -423,12 +420,6 @@ void QLineControl::moveCursor(int pos, bool mark)
    emitCursorPositionChanged();
 }
 
-/*!
-    \internal
-
-    Applies the given input method event \a event to the text of the line
-    control
-*/
 void QLineControl::processInputMethodEvent(QInputMethodEvent *event)
 {
    int priorState = -1;
@@ -525,7 +516,8 @@ void QLineControl::processInputMethodEvent(QInputMethodEvent *event)
    }
 
    m_textLayout.setFormats(formats);
-   updateDisplayText(/*force*/ true);
+   updateDisplayText(true);
+
    if (cursorPositionChanged) {
       emitCursorPositionChanged();
    } else if (m_preeditCursor != oldPreeditCursor) {
@@ -539,21 +531,6 @@ void QLineControl::processInputMethodEvent(QInputMethodEvent *event)
    }
 }
 
-/*!
-    \internal
-
-    Draws the display text for the line control using the given
-    \a painter, \a clip, and \a offset.  Which aspects of the display text
-    are drawn is specified by the given \a flags.
-
-    If the flags contain DrawSelections, then the selection or input mask
-    backgrounds and foregrounds will be applied before drawing the text.
-
-    If the flags contain DrawCursor a cursor of the current cursorWidth()
-    will be drawn after drawing the text.
-
-    The display text will only be drawn if the flags contain DrawText
-*/
 void QLineControl::draw(QPainter *painter, const QPoint &offset, const QRect &clip, int flags)
 {
    QVector<QTextLayout::FormatRange> selections;
@@ -1296,8 +1273,6 @@ void QLineControl::internalUndo(int until)
    cancelPasswordEchoTimer();
    internalDeselect();
 
-
-
    while (m_undoState && m_undoState > until) {
       Command &cmd = m_history[--m_undoState];
       switch (cmd.type) {
@@ -1305,21 +1280,25 @@ void QLineControl::internalUndo(int until)
             m_text.remove(cmd.pos, 1);
             m_cursor = cmd.pos;
             break;
+
          case SetSelection:
             m_selstart = cmd.selStart;
             m_selend = cmd.selEnd;
             m_cursor = cmd.pos;
             break;
+
          case Remove:
          case RemoveSelection:
             m_text.insert(cmd.pos, cmd.uc);
             m_cursor = cmd.pos + 1;
             break;
+
          case Delete:
          case DeleteSelection:
             m_text.insert(cmd.pos, cmd.uc);
             m_cursor = cmd.pos;
             break;
+
          case Separator:
             continue;
       }
@@ -1331,6 +1310,7 @@ void QLineControl::internalUndo(int until)
          }
       }
    }
+
    m_textDirty = true;
    emitCursorPositionChanged();
 }
@@ -1340,7 +1320,9 @@ void QLineControl::internalRedo()
    if (!isRedoAvailable()) {
       return;
    }
+
    internalDeselect();
+
    while (m_undoState < (int)m_history.size()) {
       Command &cmd = m_history[m_undoState++];
       switch (cmd.type) {
@@ -1380,12 +1362,6 @@ void QLineControl::internalRedo()
    emitCursorPositionChanged();
 }
 
-/*!
-    \internal
-
-    If the current cursor position differs from the last emitted cursor
-    position, emits cursorPositionChanged().
-*/
 void QLineControl::emitCursorPositionChanged()
 {
    if (m_cursor != m_lastCursorPos) {
@@ -1411,10 +1387,12 @@ bool QLineControl::advanceToEnabledItem(int dir)
    if (start == -1) {
       return false;
    }
+
    int i = start + dir;
    if (dir == 0) {
       dir = 1;
    }
+
    do {
       if (!m_completer->setCurrentRow(i)) {
          if (!m_completer->wrapAround()) {
@@ -1873,17 +1851,17 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
       } else { // ### check for *no* modifier
          switch (event->key()) {
             case Qt::Key_Backspace:
-               if (!isReadOnly()) {
+               if (! isReadOnly()) {
                   backspace();
 #ifndef QT_NO_COMPLETER
                   complete(Qt::Key_Backspace);
 #endif
                }
                break;
+
 #ifdef QT_KEYPAD_NAVIGATION
             case Qt::Key_Back:
-               if (QApplication::keypadNavigationEnabled() && !event->isAutoRepeat()
-                  && !isReadOnly()) {
+               if (QApplication::keypadNavigationEnabled() && ! event->isAutoRepeat() && ! isReadOnly()) {
                   if (text().length() == 0) {
                      setText(m_cancelText);
 
@@ -1892,9 +1870,11 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
                      }
 
                      emit editFocusChange(false);
+
                   } else if (!m_deleteAllTimer) {
                      m_deleteAllTimer = startTimer(750);
                   }
+
                } else {
                   unknown = true;
                }

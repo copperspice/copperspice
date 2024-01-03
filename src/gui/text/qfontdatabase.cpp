@@ -235,15 +235,6 @@ struct QtFontStyle {
       {
       }
 
-      Key(const Key &o)
-         : style(o.style), weight(o.weight), stretch(o.stretch)
-      {
-      }
-
-      uint style         : 2;
-      signed int weight  : 8;
-      signed int stretch : 12;
-
       bool operator==(const Key &other) const {
          return (style == other.style && weight == other.weight &&
                   (stretch == 0 || other.stretch == 0 || stretch == other.stretch));
@@ -259,6 +250,10 @@ struct QtFontStyle {
 
          return (x < y);
       }
+
+      uint style         : 2;
+      signed int weight  : 8;
+      signed int stretch : 12;
    };
 
    explicit QtFontStyle(const Key &k)
@@ -501,7 +496,11 @@ class QFontDatabasePrivate
    void invalidate();
 };
 
-Q_GLOBAL_STATIC(QFontDatabasePrivate, privateDb)
+static QFontDatabasePrivate *privateDb()
+{
+   static QFontDatabasePrivate retval;
+   return &retval;
+}
 
 static QRecursiveMutex *fontDatabaseMutex()
 {
@@ -925,7 +924,7 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
          if (engine) {
             // Also check for OpenType tables when using complex scripts
             if (! engine->supportsScript(QChar::Script(script))) {
-               qWarning("  OpenType support missing for script %d", script);
+               qWarning("loadSingleEngine() OpenType support missing for script %d", script);
                return nullptr;
             }
 
@@ -947,7 +946,7 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
       if (engine) {
          // Also check for OpenType tables when using complex scripts
          if (! engine->supportsScript(QChar::Script(script))) {
-            qWarning("  OpenType support missing for script %d", script);
+            qWarning("loadSingleEngine() OpenType support missing for script %d", script);
 
             if (engine->m_refCount.load() == 0) {
                delete engine;

@@ -65,7 +65,7 @@ const uint * convertRGBXFromARGB32PM_sse4(uint *buffer, const uint *src, int cou
    return buffer;
 }
 
-template<QtPixelOrder PixelOrder>
+template <QtPixelOrder PixelOrder>
 const uint * convertA2RGB30PMFromARGB32PM_sse4(uint *buffer, const uint *src, int count,
    const QPixelLayout *, const QRgb *)
 {
@@ -75,10 +75,12 @@ const uint * convertA2RGB30PMFromARGB32PM_sse4(uint *buffer, const uint *src, in
    return buffer;
 }
 
-template<>
-const uint * convertA2RGB30PMFromARGB32PM_sse4<PixelOrderBGR>(uint *buffer, const uint *src, int count, const QPixelLayout *, const QRgb *);
+template <>
+const uint * convertA2RGB30PMFromARGB32PM_sse4<PixelOrderBGR>(uint *buffer, const uint *src,
+      int count, const QPixelLayout *, const QRgb *);
 
-template<>
-const uint * convertA2RGB30PMFromARGB32PM_sse4<PixelOrderRGB>(uint *buffer, const uint *src, int count, const QPixelLayout *, const QRgb *);
+template <>
+const uint * convertA2RGB30PMFromARGB32PM_sse4<PixelOrderRGB>(uint *buffer, const uint *src,
+      int count, const QPixelLayout *, const QRgb *);
 
 #endif

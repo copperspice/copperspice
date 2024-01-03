@@ -87,7 +87,12 @@
 
 // Cache for QTextCodec::codecForName and codecForMib.
 using QTextCodecCache = QHash<QString, QTextCodec *>;
-Q_GLOBAL_STATIC(QTextCodecCache, qTextCodecCache)
+
+static QTextCodecCache *qTextCodecCache()
+{
+   static QTextCodecCache retval;
+   return &retval;
+}
 
 static bool nameMatch(QStringView name, QStringView test)
 {
@@ -140,7 +145,7 @@ static QTextCodec *createForName(QStringView name)
    QFactoryLoader *obj  = loader();
    QSet<QString> keySet = obj->keySet();
 
-   for (auto key : keySet) {
+   for (const auto &key : keySet) {
       if (nameMatch(make_view(name), key)) {
          if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
             return factory->create(key);
@@ -161,11 +166,11 @@ static QTextCodec *createForMib(int mib)
    QFactoryLoader *obj  = loader();
    QSet<QString> keySet = obj->keySet();
 
-   for (auto key : keySet) {
-      if (name == key) {
-         if (QTextCodecFactoryInterface * factory = qobject_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
-            return factory->create(key);
-         }
+   if (keySet.contains(name)) {
+      // current name is supported
+
+      if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(name))) {
+         return factory->create(name);
       }
    }
 
@@ -186,23 +191,26 @@ class QTextCodecCleanup
 
 QTextCodecCleanup::~QTextCodecCleanup()
 {
-   if (! all) {
+   if (all == nullptr) {
       return;
    }
 
    QList<QTextCodec *> *myAll = all;
+   all = nullptr;
 
-   all = nullptr; // Otherwise the d'tor destroys the iterator
-
-   for (QList<QTextCodec *>::const_iterator it = myAll->constBegin(); it != myAll->constEnd(); ++it) {
-      delete *it;
+   for (auto item : *myAll) {
+      delete item;
    }
 
    delete myAll;
    localeMapper = nullptr;
 }
 
-Q_GLOBAL_STATIC(QTextCodecCleanup, createQTextCodecCleanup)
+static QTextCodecCleanup *createQTextCodecCleanup()
+{
+   static QTextCodecCleanup retval;
+   return &retval;
+}
 
 bool QTextCodec::validCodecs()
 {
@@ -531,7 +539,6 @@ static void setup()
 
 #  endif // Q_WS_X11
 
-
 #  if defined(QT_NO_ICONV) && ! defined(QT_CODEC_PLUGINS)
    (void)new QGb18030Codec;
    (void)new QGbkCodec;
@@ -691,15 +698,16 @@ QTextCodec *QTextCodec::codecForMib(int mib)
 
    codec = createForMib(mib);
 
-   // Qt 3 used 1000 (mib for UCS2) as its identifier for the utf16 codec. Map
-   // this correctly for compatibility.
-   if (!codec && mib == 1000) {
+   // legacy code used used 1000 (mib for UCS2) as its identifier for the utf16 codec.
+   // map this correctly for compatibility.
+   if (! codec && mib == 1000) {
       return codecForMib(1015);
    }
 
    if (codec && cache) {
       cache->insert(key, codec);
    }
+
    return codec;
 }
 
@@ -943,31 +951,11 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
    return c;
 }
 
-/*!
-    \overload
-
-    Tries to detect the encoding of the provided snippet of HTML in
-    the given byte array, \a ba, by checking the BOM (Byte Order Mark)
-    and the content-type meta header and returns a QTextCodec instance
-    that is capable of decoding the html to unicode. If the codec cannot
-    be detected, this overload returns a Latin1 QTextCodec.
-*/
 QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba)
 {
    return codecForHtml(ba, QTextCodec::codecForMib(/*Latin 1*/ 4));
 }
 
-/*!
-    \since 4.6
-
-    Tries to detect the encoding of the provided snippet \a ba by
-    using the BOM (Byte Order Mark) and returns a QTextCodec instance
-    that is capable of decoding the text to unicode. If the codec
-    cannot be detected from the content provided, \a defaultCodec is
-    returned.
-
-    \sa codecForHtml()
-*/
 QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaultCodec)
 {
    const int arraySize = ba.size();
@@ -1007,28 +995,11 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
    return defaultCodec;
 }
 
-/*!
-    \overload
-
-    Tries to detect the encoding of the provided snippet \a ba by
-    using the BOM (Byte Order Mark) and returns a QTextCodec instance
-    that is capable of decoding the text to unicode. If the codec
-    cannot be detected, this overload returns a Latin1 QTextCodec.
-
-    \sa codecForHtml()
-*/
 QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba)
 {
    return codecForUtfText(ba, QTextCodec::codecForMib(/*Latin 1*/ 4));
 }
 
-
-/*! \internal
-    \since 4.3
-    Determines whether the decoder encountered a failure while decoding the input. If
-    an error was encountered, the produced result is undefined, and gets converted as according
-    to the conversion flags.
- */
 bool QTextDecoder::hasFailure() const
 {
    return state.invalidChars != 0;

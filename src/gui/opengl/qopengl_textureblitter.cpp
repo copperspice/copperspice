@@ -344,13 +344,15 @@ bool QOpenGLTextureBlitter::create()
 bool QOpenGLTextureBlitter::isCreated() const
 {
     Q_D(const QOpenGLTextureBlitter);
-    return d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram;
+    return d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram != nullptr;
 }
 
 void QOpenGLTextureBlitter::destroy()
 {
-    if (!isCreated())
+    if (!isCreated()) {
         return;
+    }
+
     Q_D(QOpenGLTextureBlitter);
     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_2D].glProgram.reset();
     d->programs[QOpenGLTextureBlitterPrivate::TEXTURE_EXTERNAL_OES].glProgram.reset();

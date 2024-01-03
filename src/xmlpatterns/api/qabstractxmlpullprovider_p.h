@@ -69,9 +69,8 @@ class AbstractXmlPullProvider
  private:
    AbstractXmlPullProvider(const AbstractXmlPullProvider &) = delete;
    AbstractXmlPullProvider &operator=(const AbstractXmlPullProvider &) = delete;
-
-   AbstractXmlPullProviderPrivate *d;
 };
-}
+
+}   // end namespace
 
 #endif

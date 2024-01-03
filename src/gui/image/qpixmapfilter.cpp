@@ -21,9 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-
 #include <qdebug.h>
+#include <qglobal.h>
 #include <qmath.h>
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -109,26 +108,10 @@ QPixmapConvolutionFilter::QPixmapConvolutionFilter(QObject *parent)
    d->convoluteAlpha = true;
 }
 
-/*!
-    Destructor of pixmap convolution filter.
-
-    \internal
-*/
 QPixmapConvolutionFilter::~QPixmapConvolutionFilter()
 {
 }
 
-/*!
-     Sets convolution kernel with the given number of \a rows and \a columns.
-     Values from \a kernel are copied to internal data structure.
-
-     To preserve the intensity of the pixmap, the sum of all the
-     values in the convolution kernel should add up to 1.0. A sum
-     greater than 1.0 produces a lighter result and a sum less than 1.0
-     produces a darker and transparent result.
-
-    \internal
-*/
 void QPixmapConvolutionFilter::setConvolutionKernel(const qreal *kernel, int rows, int columns)
 {
    Q_D(QPixmapConvolutionFilter);
@@ -139,43 +122,24 @@ void QPixmapConvolutionFilter::setConvolutionKernel(const qreal *kernel, int row
    d->kernelHeight = rows;
 }
 
-/*!
-    Gets the convolution kernel data.
-
-    \internal
-*/
 const qreal *QPixmapConvolutionFilter::convolutionKernel() const
 {
    Q_D(const QPixmapConvolutionFilter);
    return d->convolutionKernel;
 }
 
-/*!
-    Gets the number of rows in the convolution kernel.
-
-    \internal
-*/
 int QPixmapConvolutionFilter::rows() const
 {
    Q_D(const QPixmapConvolutionFilter);
    return d->kernelHeight;
 }
 
-/*!
-    Gets the number of columns in the convolution kernel.
-
-    \internal
-*/
 int QPixmapConvolutionFilter::columns() const
 {
    Q_D(const QPixmapConvolutionFilter);
    return d->kernelWidth;
 }
 
-
-/*!
-    \internal
-*/
 QRectF QPixmapConvolutionFilter::boundingRectFor(const QRectF &rect) const
 {
    Q_D(const QPixmapConvolutionFilter);
@@ -183,26 +147,23 @@ QRectF QPixmapConvolutionFilter::boundingRectFor(const QRectF &rect) const
 }
 
 // Convolutes the image
-static void convolute(
-   QImage *destImage,
-   const QPointF &pos,
-   const QImage &srcImage,
-   const QRectF &srcRect,
-   QPainter::CompositionMode mode,
-   qreal *kernel,
-   int kernelWidth,
-   int kernelHeight )
+static void convolute(QImage *destImage, const QPointF &pos, const QImage &srcImage, const QRectF &srcRect,
+      QPainter::CompositionMode mode, qreal *kernel, int kernelWidth, int kernelHeight )
 {
-   const QImage processImage = (srcImage.format() != QImage::Format_ARGB32_Premultiplied ) ?               srcImage.convertToFormat(
-         QImage::Format_ARGB32_Premultiplied) : srcImage;
+   const QImage processImage = (srcImage.format() != QImage::Format_ARGB32_Premultiplied )
+         ? srcImage.convertToFormat(QImage::Format_ARGB32_Premultiplied) : srcImage;
+
    // TODO: support also other formats directly without copying
 
    int *fixedKernel = new int[kernelWidth * kernelHeight];
+
    for (int i = 0; i < kernelWidth * kernelHeight; i++) {
       fixedKernel[i] = (int)(65536 * kernel[i]);
    }
+
    QRectF trect = srcRect.isNull() ? processImage.rect() : srcRect;
    trect.moveTo(pos);
+
    QRectF bounded = trect.adjusted(-kernelWidth / 2, -kernelHeight / 2, (kernelWidth - 1) / 2, (kernelHeight - 1) / 2);
    QRect rect = bounded.toAlignedRect();
    QRect targetRect = rect.intersected(destImage->rect());
@@ -215,9 +176,11 @@ static void convolute(
    uint *outputStart = (uint *)destImage->scanLine(0);
 
    int yk = srcStartPoint.y();
+
    for (int y = targetRect.top(); y <= targetRect.bottom(); y++) {
       uint *output = outputStart + (destImage->bytesPerLine() / sizeof(uint)) * y + targetRect.left();
       int xk = srcStartPoint.x();
+
       for (int x = targetRect.left(); x <= targetRect.right(); x++) {
          int r = 0;
          int g = 0;
@@ -228,9 +191,11 @@ static void convolute(
          int kernely = -kernelHeight / 2;
          int starty = 0;
          int endy = kernelHeight;
+
          if (yk + kernely + endy >= srcImage.height()) {
             endy = kernelHeight - ((yk + kernely + endy) - srcImage.height()) - 1;
          }
+
          if (yk + kernely < 0) {
             starty = -(yk + kernely);
          }
@@ -238,24 +203,29 @@ static void convolute(
          int kernelx = -kernelWidth / 2;
          int startx = 0;
          int endx = kernelWidth;
+
          if (xk + kernelx + endx >= srcImage.width()) {
             endx = kernelWidth - ((xk + kernelx + endx) - srcImage.width()) - 1;
          }
+
          if (xk + kernelx < 0) {
             startx = -(xk + kernelx);
          }
 
          for (int ys = starty; ys < endy; ys ++) {
-            const uint *pix = sourceStart + (processImage.bytesPerLine() / sizeof(uint)) * (yk + kernely + ys) + ((xk + kernelx + startx));
+            const uint *pix = sourceStart + (processImage.bytesPerLine() / sizeof(uint)) * (yk + kernely + ys) +
+                  ((xk + kernelx + startx));
+
             const uint *endPix = pix + endx - startx;
             int kernelPos = ys * kernelWidth + startx;
+
             while (pix < endPix) {
                int factor = fixedKernel[kernelPos++];
                a += (((*pix) & 0xff000000) >> 24) * factor;
                r += (((*pix) & 0x00ff0000) >> 16) * factor;
                g += (((*pix) & 0x0000ff00) >> 8 ) * factor;
                b += (((*pix) & 0x000000ff)    ) * factor;
-               pix++;
+               ++pix;
             }
          }
 
@@ -263,37 +233,42 @@ static void convolute(
          g = qBound((int)0, g >> 16, (int)255);
          b = qBound((int)0, b >> 16, (int)255);
          a = qBound((int)0, a >> 16, (int)255);
+
          // composition mode checking could be moved outside of loop
+
          if (mode == QPainter::CompositionMode_Source) {
             uint color = (a << 24) + (r << 16) + (g << 8) + b;
             *output++ = color;
+
          } else {
             uint current = *output;
             uchar ca = (current & 0xff000000) >> 24;
             uchar cr = (current & 0x00ff0000) >> 16;
             uchar cg = (current & 0x0000ff00) >> 8;
             uchar cb = (current & 0x000000ff);
+
             uint color =
                (((ca * (255 - a) >> 8) + a) << 24) +
                (((cr * (255 - a) >> 8) + r) << 16) +
                (((cg * (255 - a) >> 8) + g) << 8) +
                (((cb * (255 - a) >> 8) + b));
+
             *output++ = color;;
          }
-         xk++;
+
+         ++xk;
       }
-      yk++;
+
+      ++yk;
    }
    delete[] fixedKernel;
 }
 
-/*!
-    \internal
-*/
 void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF &srcRect) const
 {
    Q_D(const QPixmapConvolutionFilter);
-   if (!painter->isActive()) {
+
+   if (! painter->isActive()) {
       return;
    }
 
@@ -340,8 +315,8 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
       QTransform x = painter->deviceTransform();
       QPointF offset(x.dx(), x.dy());
 
-      convolute(target, p + offset, src.toImage(), srcRect, QPainter::CompositionMode_SourceOver, d->convolutionKernel, d->kernelWidth,
-         d->kernelHeight);
+      convolute(target, p + offset, src.toImage(), srcRect, QPainter::CompositionMode_SourceOver,
+            d->convolutionKernel, d->kernelWidth, d->kernelHeight);
 
    } else {
       QRect srect = srcRect.isNull() ? src.rect() : srcRect.toRect();
@@ -350,7 +325,7 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
       QPoint offset = srect.topLeft() - rect.topLeft();
 
       convolute(&result, offset, src.toImage(), srect, QPainter::CompositionMode_Source, d->convolutionKernel,
-               d->kernelWidth, d->kernelHeight);
+            d->kernelWidth, d->kernelHeight);
 
       painter->drawImage(p - offset, result);
    }
@@ -384,43 +359,18 @@ void QPixmapBlurFilter::setRadius(qreal radius)
    d->radius = radius;
 }
 
-/*!
-    Gets the radius of the blur filter.
-
-    \internal
-*/
 qreal QPixmapBlurFilter::radius() const
 {
    Q_D(const QPixmapBlurFilter);
    return d->radius;
 }
 
-/*!
-    Setting the blur hints to PerformanceHint causes the implementation
-    to trade off visual quality to blur the image faster.  Setting the
-    blur hints to QualityHint causes the implementation to improve
-    visual quality at the expense of speed.
-
-    AnimationHint causes the implementation to optimize for animating
-    the blur radius, possibly by caching blurred versions of the source
-    pixmap.
-
-    The implementation is free to ignore this value if it only has a single
-    blur algorithm.
-
-    \internal
-*/
 void QPixmapBlurFilter::setBlurHints(QGraphicsBlurEffect::BlurHints hints)
 {
    Q_D(QPixmapBlurFilter);
    d->hints = hints;
 }
 
-/*!
-    Gets the blur hints of the blur filter.
-
-    \internal
-*/
 QGraphicsBlurEffect::BlurHints QPixmapBlurFilter::blurHints() const
 {
    Q_D(const QPixmapBlurFilter);
@@ -429,9 +379,6 @@ QGraphicsBlurEffect::BlurHints QPixmapBlurFilter::blurHints() const
 
 const qreal radiusScale = qreal(2.5);
 
-/*!
-    \internal
-*/
 QRectF QPixmapBlurFilter::boundingRectFor(const QRectF &rect) const
 {
    Q_D(const QPixmapBlurFilter);
@@ -451,7 +398,7 @@ inline int qt_static_shift(int value)
    }
 }
 
-template<int aprec, int zprec>
+template <int aprec, int zprec>
 inline void qt_blurinner(uchar *bptr, int &zR, int &zG, int &zB, int &zA, int alpha)
 {
    QRgb *pixel = (QRgb *)bptr;
@@ -484,7 +431,7 @@ inline void qt_blurinner(uchar *bptr, int &zR, int &zG, int &zB, int &zA, int al
 
 const int alphaIndex = (QSysInfo::ByteOrder == QSysInfo::BigEndian ? 0 : 3);
 
-template<int aprec, int zprec>
+template <int aprec, int zprec>
 inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
 {
    const int A_zprec = int(*(bptr)) << zprec;
@@ -493,7 +440,7 @@ inline void qt_blurinner_alphaOnly(uchar *bptr, int &z, int alpha)
    *(bptr) = z >> (zprec + aprec);
 }
 
-template<int aprec, int zprec, bool alphaOnly>
+template <int aprec, int zprec, bool alphaOnly>
 inline void qt_blurrow(QImage &im, int line, int alpha)
 {
    uchar *bptr = im.scanLine(line);
@@ -527,23 +474,6 @@ inline void qt_blurrow(QImage &im, int line, int alpha)
    }
 }
 
-/*
-*  expblur(QImage &img, int radius)
-*
-*  Based on exponential blur algorithm by Jani Huhtanen
-*
-*  In-place blur of image 'img' with kernel
-*  of approximate radius 'radius'.
-*
-*  Blurs with two sided exponential impulse
-*  response.
-*
-*  aprec = precision of alpha parameter
-*  in fixed-point format 0.aprec
-*
-*  zprec = precision of state parameters
-*  zR,zG,zB and zA in fp format 8.zprec
-*/
 template <int aprec, int zprec, bool alphaOnly>
 void expblur(QImage &img, qreal radius, bool improvedQuality = false, int transposed = 0)
 {
@@ -753,9 +683,6 @@ Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, in
 
 Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
-/*!
-    \internal
-*/
 void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF &rect) const
 {
    Q_D(const QPixmapBlurFilter);
@@ -838,26 +765,6 @@ static void grayscale(const QImage &image, QImage &dest, const QRect &rect = QRe
    }
 }
 
-/*!
-    \class QPixmapColorizeFilter
-    \since 4.5
-    \ingroup painting
-
-    \brief The QPixmapColorizeFilter class provides colorizing
-    filtering for pixmaps.
-
-    A colorize filter gives the pixmap a tint of its color(). The
-    filter first grayscales the pixmap and then converts those to
-    colorized values using QPainter::CompositionMode_Screen with the
-    chosen color. The alpha-channel is not changed.
-
-    Example:
-    \snippet code/src_gui_image_qpixmapfilter.cpp 0
-
-    \sa QPainter::CompositionMode
-
-    \internal
-*/
 class QPixmapColorizeFilterPrivate : public QPixmapFilterPrivate
 {
    Q_DECLARE_PUBLIC(QPixmapColorizeFilter)
@@ -869,13 +776,6 @@ class QPixmapColorizeFilterPrivate : public QPixmapFilterPrivate
    quint32 padding : 30;
 };
 
-/*!
-    Constructs an pixmap colorize filter.
-
-    Default color value for colorizing is QColor(0, 0, 192).
-
-    \internal
-*/
 QPixmapColorizeFilter::QPixmapColorizeFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapColorizeFilterPrivate, ColorizeFilter, parent)
 {
@@ -886,45 +786,24 @@ QPixmapColorizeFilter::QPixmapColorizeFilter(QObject *parent)
    d->alphaBlend = false;
 }
 
-/*!
-    Gets the color of the colorize filter.
-
-    \internal
-*/
 QColor QPixmapColorizeFilter::color() const
 {
    Q_D(const QPixmapColorizeFilter);
    return d->color;
 }
 
-/*!
-    Sets the color of the colorize filter to the \a color specified.
-
-    \internal
-*/
 void QPixmapColorizeFilter::setColor(const QColor &color)
 {
    Q_D(QPixmapColorizeFilter);
    d->color = color;
 }
 
-/*!
-    Gets the strength of the colorize filter, 1.0 means full colorized while
-    0.0 equals to no filtering at all.
-
-    \internal
-*/
 qreal QPixmapColorizeFilter::strength() const
 {
    Q_D(const QPixmapColorizeFilter);
    return d->strength;
 }
 
-/*!
-    Sets the strength of the colorize filter to \a strength.
-
-    \internal
-*/
 void QPixmapColorizeFilter::setStrength(qreal strength)
 {
    Q_D(QPixmapColorizeFilter);
@@ -933,9 +812,6 @@ void QPixmapColorizeFilter::setStrength(qreal strength)
    d->alphaBlend = !qFuzzyIsNull(d->strength - 1);
 }
 
-/*!
-    \internal
-*/
 void QPixmapColorizeFilter::draw(QPainter *painter, const QPointF &dest, const QPixmap &src, const QRectF &srcRect) const
 {
    Q_D(const QPixmapColorizeFilter);
@@ -1001,168 +877,58 @@ class QPixmapDropShadowFilterPrivate : public QPixmapFilterPrivate
    qreal radius;
 };
 
-/*!
-    \class QPixmapDropShadowFilter
-    \since 4.5
-    \ingroup painting
-
-    \brief The QPixmapDropShadowFilter class is a convenience class
-    for drawing pixmaps with drop shadows.
-
-    The drop shadow is produced by taking a copy of the source pixmap
-    and applying a color to the copy using a
-    QPainter::CompositionMode_DestinationIn operation. This produces a
-    homogeneously-colored pixmap which is then drawn using a
-    QPixmapConvolutionFilter at an offset. The original pixmap is
-    drawn on top.
-
-    The QPixmapDropShadowFilter class provides some customization
-    options to specify how the drop shadow should appear. The color of
-    the drop shadow can be modified using the setColor() function, the
-    drop shadow offset can be modified using the setOffset() function,
-    and the blur radius of the drop shadow can be changed through the
-    setBlurRadius() function.
-
-    By default, the drop shadow is a dark gray shadow, blurred with a
-    radius of 1 at an offset of 8 pixels towards the lower right.
-
-    Example:
-    \snippet code/src_gui_image_qpixmapfilter.cpp 2
-
-    \sa QPixmapColorizeFilter, QPixmapConvolutionFilter
-
-    \internal
- */
-
-/*!
-    Constructs drop shadow filter.
-
-    \internal
-*/
 QPixmapDropShadowFilter::QPixmapDropShadowFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapDropShadowFilterPrivate, DropShadowFilter, parent)
 {
 }
 
-/*!
-    Destroys drop shadow filter.
-
-    \internal
-*/
 QPixmapDropShadowFilter::~QPixmapDropShadowFilter()
 {
 }
 
-/*!
-    Returns the radius in pixels of the blur on the drop shadow.
-
-    A smaller radius results in a sharper shadow.
-
-    \sa color(), offset()
-
-    \internal
-*/
 qreal QPixmapDropShadowFilter::blurRadius() const
 {
    Q_D(const QPixmapDropShadowFilter);
    return d->radius;
 }
 
-/*!
-    Sets the radius in pixels of the blur on the drop shadow to the \a radius specified.
-
-    Using a smaller radius results in a sharper shadow.
-
-    \sa setColor(), setOffset()
-
-    \internal
-*/
 void QPixmapDropShadowFilter::setBlurRadius(qreal radius)
 {
    Q_D(QPixmapDropShadowFilter);
    d->radius = radius;
 }
 
-/*!
-    Returns the color of the drop shadow.
-
-    \sa blurRadius(), offset()
-
-    \internal
-*/
 QColor QPixmapDropShadowFilter::color() const
 {
    Q_D(const QPixmapDropShadowFilter);
    return d->color;
 }
 
-/*!
-    Sets the color of the drop shadow to the \a color specified.
-
-    \sa setBlurRadius(), setOffset()
-
-    \internal
-*/
 void QPixmapDropShadowFilter::setColor(const QColor &color)
 {
    Q_D(QPixmapDropShadowFilter);
    d->color = color;
 }
 
-/*!
-    Returns the shadow offset in pixels.
-
-    \sa blurRadius(), color()
-
-    \internal
-*/
 QPointF QPixmapDropShadowFilter::offset() const
 {
    Q_D(const QPixmapDropShadowFilter);
    return d->offset;
 }
 
-/*!
-    Sets the shadow offset in pixels to the \a offset specified.
-
-    \sa setBlurRadius(), setColor()
-
-    \internal
-*/
 void QPixmapDropShadowFilter::setOffset(const QPointF &offset)
 {
    Q_D(QPixmapDropShadowFilter);
    d->offset = offset;
 }
 
-/*!
-    \fn void QPixmapDropShadowFilter::setOffset(qreal dx, qreal dy)
-    \overload
-
-    Sets the shadow offset in pixels to be the displacement specified by the
-    horizontal \a dx and vertical \a dy coordinates.
-
-    \sa setBlurRadius(), setColor()
-
-    \internal
-*/
-
-/*!
-    \internal
- */
 QRectF QPixmapDropShadowFilter::boundingRectFor(const QRectF &rect) const
 {
    Q_D(const QPixmapDropShadowFilter);
    return rect.united(rect.translated(d->offset).adjusted(-d->radius, -d->radius, d->radius, d->radius));
 }
 
-/*!
-    \internal
- */
-void QPixmapDropShadowFilter::draw(QPainter *p,
-   const QPointF &pos,
-   const QPixmap &px,
-   const QRectF &src) const
+void QPixmapDropShadowFilter::draw(QPainter *p, const QPointF &pos, const QPixmap &px, const QRectF &src) const
 {
    Q_D(const QPixmapDropShadowFilter);
 
@@ -1172,6 +938,7 @@ void QPixmapDropShadowFilter::draw(QPainter *p,
 
    QImage tmp(px.size(), QImage::Format_ARGB32_Premultiplied);
    tmp.fill(0);
+
    QPainter tmpPainter(&tmp);
    tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
    tmpPainter.drawPixmap(d->offset, px);

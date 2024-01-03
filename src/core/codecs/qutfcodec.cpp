@@ -29,11 +29,6 @@
 
 enum { Endian = 0, Data = 1 };
 
-static inline bool isUnicodeNonCharacter(uint ucs4)
-{
-   return (ucs4 & 0xfffe) == 0xfffe || (ucs4 - 0xfdd0U) < 16;
-}
-
 QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState *state)
 {
    QByteArray retval;

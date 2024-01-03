@@ -187,7 +187,8 @@ int QSharedMemoryPrivate::createUnixKeyFile(const QString &fileName)
    return 1;
 
 #else
-   Q_UNUSED(fileName);
+   (void) fileName;
+
    // nothing to do
    return -1;
 #endif

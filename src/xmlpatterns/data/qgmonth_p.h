@@ -26,8 +26,6 @@
 
 #include <qabstractdatetime_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class GMonth : public AbstractDateTime
 {
@@ -49,7 +47,5 @@ class GMonth : public AbstractDateTime
    GMonth(const QDateTime &dateTime);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

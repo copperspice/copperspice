@@ -32,7 +32,7 @@ class QXcbGlxIntegrationPlugin : public QXcbGlIntegrationPlugin
    CS_PLUGIN_KEY("xcb_glx")
 
  public:
-   QXcbGlIntegration *create() {
+   QXcbGlIntegration *create() override {
       return new QXcbGlxIntegration();
    }
 };

@@ -49,19 +49,27 @@ QNetworkSession::QNetworkSession(const QNetworkConfiguration &connectionConfig, 
             d->publicConfig = connectionConfig;
             d->syncStateWithInterface();
 
-            connect(d, SIGNAL(quitPendingWaitsForOpened()),          this, SLOT(opened()));
-            connect(d, SIGNAL(error(QNetworkSession::SessionError)), this, SLOT(error(QNetworkSession::SessionError)));
+            connect(d, &QNetworkSessionPrivate::quitPendingWaitsForOpened,
+                  this, &QNetworkSession::opened);
 
-            connect(d, SIGNAL(stateChanged(QNetworkSession::State)), this, SLOT(stateChanged(QNetworkSession::State)));
-            connect(d, SIGNAL(closed()), this, SLOT(closed()));
+            connect(d, &QNetworkSessionPrivate::error,
+                  this, &QNetworkSession::error);
 
-            connect(d, SIGNAL(preferredConfigurationChanged(QNetworkConfiguration, bool)),
-                    this, SLOT(preferredConfigurationChanged(QNetworkConfiguration, bool)));
+            connect(d, &QNetworkSessionPrivate::stateChanged,
+                  this, &QNetworkSession::stateChanged);
 
-            connect(d, SIGNAL(newConfigurationActivated()), this, SLOT(newConfigurationActivated()));
+            connect(d, &QNetworkSessionPrivate::closed,
+                  this, &QNetworkSession::closed);
 
-            connect(d, SIGNAL(usagePoliciesChanged(QNetworkSession::UsagePolicies)),
-                    this, SLOT(usagePoliciesChanged(QNetworkSession::UsagePolicies)));
+            connect(d, &QNetworkSessionPrivate::preferredConfigurationChanged,
+                  this, &QNetworkSession::preferredConfigurationChanged);
+
+            connect(d, &QNetworkSessionPrivate::newConfigurationActivated,
+                  this, &QNetworkSession::newConfigurationActivated);
+
+            connect(d, &QNetworkSessionPrivate::usagePoliciesChanged,
+                  this, &QNetworkSession::usagePoliciesChanged);
+
             break;
          }
       }
@@ -97,8 +105,9 @@ bool QNetworkSession::waitForOpened(int msecs)
    }
 
    QEventLoop loop;
-   QObject::connect(d, SIGNAL(quitPendingWaitsForOpened()), &loop, SLOT(quit()));
-   QObject::connect(this, SIGNAL(error(QNetworkSession::SessionError)), &loop, SLOT(quit()));
+
+   QObject::connect(d,    &QNetworkSessionPrivate::quitPendingWaitsForOpened, &loop, &QEventLoop::quit);
+   QObject::connect(this, &QNetworkSession::error, &loop, &QEventLoop::quit);
 
    //final call
    if (msecs >= 0) {

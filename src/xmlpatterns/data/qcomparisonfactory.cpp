@@ -28,8 +28,6 @@
 
 #include "qcomparisonfactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /**
@@ -131,5 +129,3 @@ bool ComparisonFactory::constructAndCompare(const DerivedString<TypeString>::Ptr
 
    return compare(value1, op, value2, type, context, sourceLocationReflection);
 }
-
-QT_END_NAMESPACE

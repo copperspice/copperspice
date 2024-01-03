@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QStringList>
+#include <qstringlist.h>
 
 #include "qboolean_p.h"
 #include "qcommonvalues_p.h"

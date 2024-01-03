@@ -237,7 +237,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          QCFType<CFURLRef> pacUrl = CFURLCreateWithString(kCFAllocatorDefault, cfPacLocation, nullptr);
 
          if (! pacUrl) {
-            qWarning("Invalid PAC URL \"%s\"", qPrintable(QCFString::toQString(cfPacLocation)));
+            qWarning("Invalid PAC URL \"%s\"", csPrintable(QCFString::toQString(cfPacLocation)));
             return result;
          }
 
@@ -245,12 +245,12 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          if (! CFURLCreateDataAndPropertiesFromResource(kCFAllocatorDefault, pacUrl, &pacData, nullptr, nullptr, &errorCode)) {
             QString pacLocation = QCFString::toQString(cfPacLocation);
 
-            qWarning("Unable to get the PAC script at \"%s\" (%s)", qPrintable(pacLocation), cfurlErrorDescription(errorCode));
+            qWarning("Unable to get the PAC script at \"%s\" (%s)", csPrintable(pacLocation), cfurlErrorDescription(errorCode));
             return result;
          }
 
          if (! pacData) {
-            qWarning("\"%s\" returned an empty PAC script", qPrintable(QCFString::toQString(cfPacLocation)));
+            qWarning("\"%s\" returned an empty PAC script", csPrintable(QCFString::toQString(cfPacLocation)));
             return result;
          }
 
@@ -259,7 +259,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          if (!pacScript) {
             // This should never happen, but the documentation says it may return nullptr if there was a problem creating the object.
             QString pacLocation = QCFString::toQString(cfPacLocation);
-            qWarning("Unable to read the PAC script at \"%s\"", qPrintable(pacLocation));
+            qWarning("Unable to read the PAC script at \"%s\"", csPrintable(pacLocation));
             return result;
          }
 
@@ -280,8 +280,8 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          if (!proxies) {
             QString pacLocation = QCFString::toQString(cfPacLocation);
             QCFType<CFStringRef> pacErrorDescription = CFErrorCopyDescription(pacError);
-            qWarning("Execution of PAC script at \"%s\" failed: %s", qPrintable(pacLocation),
-                     qPrintable(QCFString::toQString(pacErrorDescription)));
+            qWarning("Execution of PAC script at \"%s\" failed: %s", csPrintable(pacLocation),
+                     csPrintable(QCFString::toQString(pacErrorDescription)));
             return result;
          }
 

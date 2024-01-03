@@ -26,9 +26,8 @@
 
 #include <qsimplecontentconstructor_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XSLTSimpleContentConstructor : public SimpleContentConstructor
 {
  public:
@@ -41,8 +40,7 @@ class XSLTSimpleContentConstructor : public SimpleContentConstructor
  private:
    static inline QString processItem(const Item &item, bool &discard, bool &isText);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -23,8 +23,6 @@
 
 #include "qnamedschemacomponent_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NamedSchemaComponent::NamedSchemaComponent()
@@ -49,5 +47,3 @@ QString NamedSchemaComponent::displayName(const NamePool::Ptr &np) const
 {
    return np->displayName(m_name);
 }
-
-QT_END_NAMESPACE

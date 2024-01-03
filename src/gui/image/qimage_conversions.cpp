@@ -25,6 +25,7 @@
 
 #include <qdrawhelper_p.h>
 #include <qapplication_p.h>
+#include <qscopedarraypointer.h>
 #include <qsimd_p.h>
 #include <qimage_p.h>
 
@@ -239,7 +240,7 @@ static void convert_passthrough(QImageData *dest, const QImageData *src, Qt::Ima
    }
 }
 
-template<QImage::Format Format>
+template <QImage::Format Format>
 static bool convert_passthrough_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    data->format = Format;
@@ -452,7 +453,7 @@ static void convert_ARGB_to_RGBA(QImageData *dest, const QImageData *src, Qt::Im
    }
 }
 
-template<QImage::Format DestFormat>
+template <QImage::Format DestFormat>
 static bool convert_ARGB_to_RGBA_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_ARGB32 || data->format == QImage::Format_ARGB32_Premultiplied);
@@ -499,7 +500,7 @@ static void convert_RGBA_to_ARGB(QImageData *dest, const QImageData *src, Qt::Im
    }
 }
 
-template<QImage::Format DestFormat>
+template <QImage::Format DestFormat>
 static bool convert_RGBA_to_ARGB_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_RGBX8888 || data->format == QImage::Format_RGBA8888 ||
@@ -521,7 +522,7 @@ static bool convert_RGBA_to_ARGB_inplace(QImageData *data, Qt::ImageConversionFl
    return true;
 }
 
-template<QtPixelOrder PixelOrder>
+template <QtPixelOrder PixelOrder>
 static void convert_RGB_to_RGB30(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags)
 {
 
@@ -547,7 +548,7 @@ static void convert_RGB_to_RGB30(QImageData *dest, const QImageData *src, Qt::Im
    }
 }
 
-template<QtPixelOrder PixelOrder>
+template <QtPixelOrder PixelOrder>
 static bool convert_RGB_to_RGB30_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_RGB32 || data->format == QImage::Format_ARGB32);
@@ -593,7 +594,7 @@ static inline uint qUnpremultiplyRgb30(uint rgb30)
    return 0;
 }
 
-template<bool rgbswap>
+template <bool rgbswap>
 static void convert_A2RGB30_PM_to_RGB30(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags)
 {
    Q_ASSERT(src->format == QImage::Format_A2RGB30_Premultiplied || src->format == QImage::Format_A2BGR30_Premultiplied);
@@ -619,7 +620,7 @@ static void convert_A2RGB30_PM_to_RGB30(QImageData *dest, const QImageData *src,
    }
 }
 
-template<bool rgbswap>
+template <bool rgbswap>
 static bool convert_A2RGB30_PM_to_RGB30_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_A2RGB30_Premultiplied || data->format == QImage::Format_A2BGR30_Premultiplied);
@@ -724,7 +725,7 @@ static bool convert_BGR30_to_A2RGB30_inplace(QImageData *data, Qt::ImageConversi
    return true;
 }
 
-template<QtPixelOrder PixelOrder>
+template <QtPixelOrder PixelOrder>
 static void convert_A2RGB30_PM_to_ARGB(QImageData *dest, const QImageData *src, Qt::ImageConversionFlags)
 {
    Q_ASSERT(src->format == QImage::Format_A2RGB30_Premultiplied || src->format == QImage::Format_A2BGR30_Premultiplied);
@@ -749,7 +750,7 @@ static void convert_A2RGB30_PM_to_ARGB(QImageData *dest, const QImageData *src, 
    }
 }
 
-template<QtPixelOrder PixelOrder>
+template <QtPixelOrder PixelOrder>
 static bool convert_A2RGB30_PM_to_ARGB_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_A2RGB30_Premultiplied || data->format == QImage::Format_A2BGR30_Premultiplied);
@@ -921,7 +922,7 @@ static bool convert_indexed8_to_RGB16_inplace(QImageData *data, Qt::ImageConvers
    const int src_pad = data->bytes_per_line - width;
    const int dest_pad = (dst_bytes_per_line >> 1) - width;
 
-   quint16 colorTableRGB16[256];
+   quint16 colorTableRGB16[256] = {};
    const int tableSize = data->colortable.size();
    if (tableSize == 0) {
       for (int i = 0; i < 256; ++i) {
@@ -1082,7 +1083,7 @@ static void mask_alpha_converter(QImageData *dest, const QImageData *src, Qt::Im
    }
 }
 
-template<QImage::Format DestFormat>
+template <QImage::Format DestFormat>
 static bool mask_alpha_converter_inplace(QImageData *data, Qt::ImageConversionFlags)
 {
    Q_ASSERT(data->format == QImage::Format_RGB32

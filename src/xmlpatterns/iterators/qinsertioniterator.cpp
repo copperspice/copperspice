@@ -23,8 +23,6 @@
 
 #include "qinsertioniterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 InsertionIterator::InsertionIterator(const Item::Iterator::Ptr &target,
@@ -100,5 +98,3 @@ Item::Iterator::Ptr InsertionIterator::copy() const
 {
    return Item::Iterator::Ptr(new InsertionIterator(m_target->copy(), m_insertPos, m_inserts->copy()));
 }
-
-QT_END_NAMESPACE

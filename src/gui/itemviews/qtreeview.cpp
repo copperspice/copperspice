@@ -1867,7 +1867,7 @@ void QTreeView::doItemsLayout()
    Q_D(QTreeView);
 
    if (!d->customIndent) {
-      // ### Qt 6: move to event()
+      // TODO: move to event()
       // QAbstractItemView calls this method in case of a style change,
       // so update the indentation here if it wasn't set manually.
       d->updateIndentationFromStyle();
@@ -1955,14 +1955,10 @@ int QTreeView::verticalOffset() const
    return verticalScrollBar()->value();
 }
 
-/*!
-    Move the cursor in the way described by \a cursorAction, using the
-    information provided by the button \a modifiers.
-*/
 QModelIndex QTreeView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QTreeView);
-   Q_UNUSED(modifiers);
+   (void) modifiers;
 
    d->executePostedLayout();
 

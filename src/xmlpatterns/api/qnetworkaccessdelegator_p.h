@@ -24,11 +24,9 @@
 #ifndef QNETWORKACCESSDELEGATOR_P_H
 #define QNETWORKACCESSDELEGATOR_P_H
 
-#include <QObject>
-#include <QPointer>
-#include <QSharedData>
-
-QT_BEGIN_NAMESPACE
+#include <qobject.h>
+#include <qpointer.h>
+#include <qshareddata.h>
 
 class QNetworkAccessManager;
 class QUrl;
@@ -52,7 +50,5 @@ class NetworkAccessDelegator : public QObject, public QSharedData
    NetworkAccessDelegator &operator=(const NetworkAccessDelegator &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

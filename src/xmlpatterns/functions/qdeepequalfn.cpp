@@ -29,8 +29,6 @@
 
 #include "qdeepequalfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool DeepEqualFN::evaluateEBV(const DynamicContext::Ptr &context) const
@@ -124,5 +122,3 @@ Expression::Ptr DeepEqualFN::typeCheck(const StaticContext::Ptr &context,
       }
    }
 }
-
-QT_END_NAMESPACE

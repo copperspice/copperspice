@@ -617,8 +617,8 @@ void QMediaPlaylist::setCurrentIndex(int playlistPosition)
    d_func()->control->setCurrentIndex(playlistPosition);
 }
 
-void QMediaPlaylist::_q_loadFailed(QMediaPlaylist::Error un_named_arg1, const QString &un_named_arg2)
+void QMediaPlaylist::_q_loadFailed(QMediaPlaylist::Error playlistError, const QString &errorMsg)
 {
    Q_D(QMediaPlaylist);
-   d->_q_loadFailed(un_named_arg1, un_named_arg2);
+   d->_q_loadFailed(playlistError, errorMsg);
 }

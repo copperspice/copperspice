@@ -44,8 +44,8 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutItem *parent)
       if (itemParent && itemParent->isWidget()) {
          static_cast<QGraphicsWidget *>(itemParent)->d_func()->setLayout_helper(this);
       } else {
-         qWarning("QGraphicsLayout::QGraphicsLayout: Attempt to create a layout with a parent that is"
-            " neither a QGraphicsWidget nor QGraphicsLayout");
+         qWarning("QGraphicsLayout::QGraphicsLayout() Unable to create a layout with a parent which is not "
+            " a QGraphicsWidget or a QGraphicsLayout");
       }
    }
    d_func()->sizePolicy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding, QSizePolicy::DefaultType);
@@ -64,8 +64,8 @@ QGraphicsLayout::QGraphicsLayout(QGraphicsLayoutPrivate &dd, QGraphicsLayoutItem
       if (itemParent && itemParent->isWidget()) {
          static_cast<QGraphicsWidget *>(itemParent)->d_func()->setLayout_helper(this);
       } else {
-         qWarning("QGraphicsLayout::QGraphicsLayout: Attempt to create a layout with a parent that is"
-            " neither a QGraphicsWidget nor QGraphicsLayout");
+         qWarning("QGraphicsLayout::QGraphicsLayout() Unable to create a layout with a parent which is not "
+            " a QGraphicsWidget or a QGraphicsLayout");
       }
    }
 

@@ -28,8 +28,6 @@
 
 #include "qfunctionavailablefn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item FunctionAvailableFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -70,5 +68,3 @@ Expression::Ptr FunctionAvailableFN::typeCheck(const StaticContext::Ptr &context
 
    return StaticNamespacesContainer::typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

@@ -33,10 +33,10 @@
 #include <qreportcontext_p.h>
 #include <qresourceloader_p.h>
 
-QT_BEGIN_NAMESPACE
-
 class QDateTime;
-template<typename T> class QVector;
+
+template<typename T>
+class QVector;
 
 namespace QPatternist {
 class DayTimeDuration;
@@ -179,7 +179,5 @@ class DynamicContext : public ReportContext
    virtual QExplicitlySharedDataPointer<TemplateMode> currentTemplateMode() const = 0;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

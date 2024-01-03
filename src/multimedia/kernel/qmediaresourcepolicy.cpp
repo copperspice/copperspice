@@ -59,7 +59,11 @@ static QFactoryLoader *loader()
    return &retval;
 }
 
-Q_GLOBAL_STATIC(QObject, dummyRoot)
+static QObject *dummyRoot()
+{
+   static QObject retval;
+   return &retval;
+}
 
 QObject *QMediaResourcePolicy::createResourceSet(const QString &interfaceId)
 {

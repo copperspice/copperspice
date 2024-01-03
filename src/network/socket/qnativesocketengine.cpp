@@ -74,7 +74,7 @@ QNativeSocketEnginePrivate::QNativeSocketEnginePrivate()
    : socketDescriptor(-1), readNotifier(nullptr), writeNotifier(nullptr), exceptNotifier(nullptr)
 {
 
-#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
    QSysInfo::machineHostName();        // this initializes ws2_32.dll
 #endif
 }
@@ -433,21 +433,16 @@ void QNativeSocketEngine::connectionNotification()
    }
 }
 
-/*!
-    Connects to the remote host name given by \a name on port \a
-    port. When this function is called, the upper-level will not
-    perform a hostname lookup.
-
-    The native socket engine does not support this operation,
-    but some other socket engines (notably proxy-based ones) do.
-*/
 bool QNativeSocketEngine::connectToHostByName(const QString &name, quint16 port)
 {
-   Q_UNUSED(name);
-   Q_UNUSED(port);
    Q_D(QNativeSocketEngine);
+
+   (void) name;
+   (void) port;
+
    d->setError(QAbstractSocket::UnsupportedSocketOperationError,
                QNativeSocketEnginePrivate::OperationUnsupportedErrorString);
+
    return false;
 }
 

@@ -28,8 +28,6 @@
 
 #include "qnumerictype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NumericType::NumericType()
@@ -121,5 +119,3 @@ AtomicCasterLocator::Ptr NumericType::casterLocator() const
 {
    return AtomicCasterLocator::Ptr();
 }
-
-QT_END_NAMESPACE

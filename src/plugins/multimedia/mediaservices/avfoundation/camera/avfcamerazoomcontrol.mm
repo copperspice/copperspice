@@ -73,8 +73,8 @@ qreal AVFCameraZoomControl::currentDigitalZoom() const
 
 void AVFCameraZoomControl::zoomTo(qreal optical, qreal digital)
 {
-    Q_UNUSED(optical)
-    Q_UNUSED(digital)
+    (void) optical;
+    (void) digital;
 
 #if QT_IOS_PLATFORM_SDK_EQUAL_OR_ABOVE(__IPHONE_7_0)
     if (QSysInfo::MacintoshVersion < QSysInfo::MV_IOS_7_0)

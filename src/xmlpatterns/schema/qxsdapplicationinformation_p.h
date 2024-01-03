@@ -28,9 +28,8 @@
 #include <qanyuri_p.h>
 #include <qnamedschemacomponent_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdApplicationInformation : public NamedSchemaComponent
 {
  public:
@@ -66,8 +65,7 @@ class XsdApplicationInformation : public NamedSchemaComponent
    AnyURI::Ptr  m_source;
    QString      m_content;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

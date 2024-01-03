@@ -87,7 +87,6 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 }
 #endif
 
-
 #ifndef QT_NO_PROCESS
 
 QStringList QProcessEnvironmentPrivate::toList() const
@@ -159,23 +158,19 @@ void QProcessEnvironmentPrivate::insert(const QProcessEnvironmentPrivate &other)
 #endif
 }
 
-
 QProcessEnvironment::QProcessEnvironment()
    : d(nullptr)
 {
 }
 
-
 QProcessEnvironment::~QProcessEnvironment()
 {
 }
-
 
 QProcessEnvironment::QProcessEnvironment(const QProcessEnvironment &other)
    : d(other.d)
 {
 }
-
 
 QProcessEnvironment &QProcessEnvironment::operator=(const QProcessEnvironment &other)
 {
@@ -204,7 +199,7 @@ bool QProcessEnvironment::operator==(const QProcessEnvironment &other) const
 
 bool QProcessEnvironment::isEmpty() const
 {
-   // Needs no locking, as no hash nodes are accessed
+   // Needs no locking since no hash nodes are accessed
    return d ? d->hash.isEmpty() : true;
 }
 
@@ -213,6 +208,7 @@ void QProcessEnvironment::clear()
    if (d) {
       d->hash.clear();
    }
+
    // Unix: Don't clear d->nameMap, as the environment is likely to be
    // re-populated with the same keys again.
 }
@@ -222,26 +218,11 @@ bool QProcessEnvironment::contains(const QString &name) const
    if (!d) {
       return false;
    }
+
    QProcessEnvironmentPrivate::MutexLocker locker(d);
    return d->hash.contains(d->prepareName(name));
 }
 
-/*!
-    Inserts the environment variable of name \a name and contents \a value
-    into this QProcessEnvironment object. If that variable already existed,
-    it is replaced by the new value.
-
-    On Windows, variable names are case-insensitive, so this function always
-    uppercases the variable name before inserting. On other systems, names
-    are case-sensitive, so no transformation is applied.
-
-    On most systems, inserting a variable with no contents will have the
-    same effect for applications as if the variable had not been set at all.
-    However, to guarantee that there are no incompatibilities, to remove a
-    variable, please use the remove() function.
-
-    \sa contains(), remove(), value()
-*/
 void QProcessEnvironment::insert(const QString &name, const QString &value)
 {
    // our re-impl of detach() detaches from null
@@ -249,17 +230,6 @@ void QProcessEnvironment::insert(const QString &name, const QString &value)
    d->hash.insert(d->prepareName(name), d->prepareValue(value));
 }
 
-/*!
-    Removes the environment variable identified by \a name from this
-    QProcessEnvironment object. If that variable did not exist before,
-    nothing happens.
-
-    On Windows, variable names are case-insensitive, so the key is converted
-    to uppercase before searching. On other systems, names are case-sensitive
-    so no trasformation is applied.
-
-    \sa contains(), insert(), value()
-*/
 void QProcessEnvironment::remove(const QString &name)
 {
    if (d) {
@@ -268,17 +238,6 @@ void QProcessEnvironment::remove(const QString &name)
    }
 }
 
-/*!
-    Searches this QProcessEnvironment object for a variable identified by
-    \a name and returns its value. If the variable is not found in this object,
-    then \a defaultValue is returned instead.
-
-    On Windows, variable names are case-insensitive, so the key is converted
-    to uppercase before searching. On other systems, names are case-sensitive
-    so no trasformation is applied.
-
-    \sa contains(), insert(), remove()
-*/
 QString QProcessEnvironment::value(const QString &name, const QString &defaultValue) const
 {
    if (!d) {
@@ -294,19 +253,6 @@ QString QProcessEnvironment::value(const QString &name, const QString &defaultVa
    return d->valueToString(it.value());
 }
 
-/*!
-    Converts this QProcessEnvironment object into a list of strings, one for
-    each environment variable that is set. The environment variable's name
-    and its value are separated by an equal character ('=').
-
-    The QStringList contents returned by this function are suitable for use
-    with the QProcess::setEnvironment function. However, it is recommended
-    to use QProcess::setProcessEnvironment instead since that will avoid
-    unnecessary copying of the data.
-
-    \sa systemEnvironment(), QProcess::systemEnvironment(), QProcess::environment(),
-        QProcess::setEnvironment()
-*/
 QStringList QProcessEnvironment::toStringList() const
 {
    if (!d) {
@@ -344,6 +290,7 @@ void QProcessPrivate::Channel::clear()
          process->stdinChannel.type = Normal;
          process->stdinChannel.process = nullptr;
          break;
+
       case PipeSink:
          Q_ASSERT(process);
          process->stdoutChannel.type = Normal;
@@ -356,8 +303,6 @@ void QProcessPrivate::Channel::clear()
    process = nullptr;
 }
 
-/*! \internal
-*/
 QProcessPrivate::QProcessPrivate()
 {
    processChannel = QProcess::StandardOutput;
@@ -395,8 +340,6 @@ QProcessPrivate::QProcessPrivate()
 
 }
 
-/*! \internal
-*/
 QProcessPrivate::~QProcessPrivate()
 {
    if (stdinChannel.process) {
@@ -408,8 +351,6 @@ QProcessPrivate::~QProcessPrivate()
    }
 }
 
-/*! \internal
-*/
 void QProcessPrivate::cleanup()
 {
    q_func()->setProcessState(QProcess::NotRunning);
@@ -483,34 +424,39 @@ void QProcessPrivate::cleanup()
 void QProcessPrivate::setError(QProcess::ProcessError error, const QString &description)
 {
    processError = error;
+
    if (description.isEmpty()) {
       switch (error) {
          case QProcess::FailedToStart:
             errorString = QProcess::tr("Process failed to start");
             break;
+
          case QProcess::Crashed:
             errorString = QProcess::tr("Process crashed");
             break;
+
          case QProcess::Timedout:
             errorString = QProcess::tr("Process operation timed out");
             break;
+
          case QProcess::ReadError:
             errorString = QProcess::tr("Error reading from process");
             break;
+
          case QProcess::WriteError:
             errorString = QProcess::tr("Error writing to process");
             break;
+
          case QProcess::UnknownError:
             errorString.clear();
             break;
       }
+
    } else {
       errorString = description;
    }
 }
 
-/*! \internal
-*/
 void QProcessPrivate::setErrorAndEmit(QProcess::ProcessError error, const QString &description)
 {
    Q_Q(QProcess);
@@ -523,6 +469,7 @@ void QProcessPrivate::setErrorAndEmit(QProcess::ProcessError error, const QStrin
 bool QProcessPrivate::tryReadFromChannel(Channel *channel)
 {
    Q_Q(QProcess);
+
    if (channel->pipe[0] == INVALID_Q_PIPE) {
       return false;
    }
@@ -608,43 +555,39 @@ bool QProcessPrivate::_q_canReadStandardOutput()
    return tryReadFromChannel(&stdoutChannel);
 }
 
-
-/*! \internal
-*/
 bool QProcessPrivate::_q_canReadStandardError()
 {
    return tryReadFromChannel(&stderrChannel);
 }
 
-
-/*! \internal
-*/
 bool QProcessPrivate::_q_canWrite()
 {
-
    if (stdinChannel.notifier) {
       stdinChannel.notifier->setEnabled(false);
    }
+
    if (stdinChannel.buffer.isEmpty()) {
 
 #if defined QPROCESS_DEBUG
       qDebug("QProcessPrivate::canWrite(), not writing anything (empty write buffer).");
 #endif
+
       return false;
    }
 
    const bool writeSucceeded = writeToStdin();
+
    if (stdinChannel.notifier && !stdinChannel.buffer.isEmpty()) {
       stdinChannel.notifier->setEnabled(true);
    }
+
    if (stdinChannel.buffer.isEmpty() && stdinChannel.closed) {
       closeWriteChannel();
    }
+
    return writeSucceeded;
 }
 
-/*! \internal
-*/
 bool QProcessPrivate::_q_processDied()
 {
    Q_Q(QProcess);
@@ -654,7 +597,7 @@ bool QProcessPrivate::_q_processDied()
 #endif
 
 #ifdef Q_OS_UNIX
-   if (!waitForDeadChild()) {
+   if (! waitForDeadChild()) {
       return false;
    }
 #endif
@@ -720,11 +663,10 @@ bool QProcessPrivate::_q_processDied()
    return true;
 }
 
-/*! \internal
-*/
 bool QProcessPrivate::_q_startupNotification()
 {
    Q_Q(QProcess);
+
 #if defined QPROCESS_DEBUG
    qDebug("QProcessPrivate::startupNotification()");
 #endif
@@ -751,6 +693,7 @@ bool QProcessPrivate::_q_startupNotification()
 #endif
 
    cleanup();
+
    return false;
 }
 
@@ -784,9 +727,6 @@ bool QProcess::_q_processDied()
    return d->_q_processDied();
 }
 
-
-/*! \internal
-*/
 void QProcessPrivate::closeWriteChannel()
 {
 
@@ -807,9 +747,6 @@ void QProcessPrivate::closeWriteChannel()
    closeChannel(&stdinChannel);
 }
 
-/*!
-    Constructs a QProcess object with the given \a parent.
-*/
 QProcess::QProcess(QObject *parent)
    : QIODevice(*new QProcessPrivate, parent)
 {
@@ -819,15 +756,10 @@ QProcess::QProcess(QObject *parent)
 #endif
 }
 
-/*!
-    Destructs the QProcess object, i.e., killing the process.
-
-    Note that this function will not return until the process is
-    terminated.
-*/
 QProcess::~QProcess()
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess: Destroyed while process is still running.");
       kill();
@@ -842,86 +774,50 @@ QProcess::~QProcess()
    d->cleanup();
 }
 
-/*!
-    \obsolete
-    Returns the read channel mode of the QProcess. This function is
-    equivalent to processChannelMode()
-
-    \sa processChannelMode()
-*/
 QProcess::ProcessChannelMode QProcess::readChannelMode() const
 {
    return processChannelMode();
 }
 
-/*!
-    \obsolete
-
-    Use setProcessChannelMode(\a mode) instead.
-
-    \sa setProcessChannelMode()
-*/
 void QProcess::setReadChannelMode(ProcessChannelMode mode)
 {
    setProcessChannelMode(mode);
 }
 
-/*!
-    \since 4.2
-
-    Returns the channel mode of the QProcess standard output and
-    standard error channels.
-
-    \sa setProcessChannelMode(), ProcessChannelMode, setReadChannel()
-*/
 QProcess::ProcessChannelMode QProcess::processChannelMode() const
 {
    Q_D(const QProcess);
    return d->processChannelMode;
 }
 
-/*!
-    \since 4.2
-
-    Sets the channel mode of the QProcess standard output and standard
-    error channels to the \a mode specified.
-    This mode will be used the next time start() is called. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 0
-
-    \sa processChannelMode(), ProcessChannelMode, setReadChannel()
-*/
 void QProcess::setProcessChannelMode(ProcessChannelMode mode)
 {
    Q_D(QProcess);
    d->processChannelMode = mode;
 }
+
 QProcess::InputChannelMode QProcess::inputChannelMode() const
 {
    Q_D(const QProcess);
    return d->inputChannelMode;
 }
+
 void QProcess::setInputChannelMode(InputChannelMode mode)
 {
    Q_D(QProcess);
    d->inputChannelMode = mode;
 }
 
-/*!
-    Returns the current read channel of the QProcess.
-
-    \sa setReadChannel()
-*/
 QProcess::ProcessChannel QProcess::readChannel() const
 {
    Q_D(const QProcess);
    return d->processChannel;
 }
 
-
 void QProcess::setReadChannel(ProcessChannel channel)
 {
    Q_D(QProcess);
+
    if (d->processChannel != channel) {
       QByteArray buf = d->buffer.readAll();
 
@@ -939,16 +835,6 @@ void QProcess::setReadChannel(ProcessChannel channel)
    d->processChannel = channel;
 }
 
-/*!
-    Closes the read channel \a channel. After calling this function,
-    QProcess will no longer receive data on the channel. Any data that
-    has already been received is still available for reading.
-
-    Call this function to save memory, if you are not interested in
-    the output of the process.
-
-    \sa closeWriteChannel(), setReadChannel()
-*/
 void QProcess::closeReadChannel(ProcessChannel channel)
 {
    Q_D(QProcess);
@@ -960,24 +846,6 @@ void QProcess::closeReadChannel(ProcessChannel channel)
    }
 }
 
-/*!
-    Schedules the write channel of QProcess to be closed. The channel
-    will close once all data has been written to the process. After
-    calling this function, any attempts to write to the process will
-    fail.
-
-    Closing the write channel is necessary for programs that read
-    input data until the channel has been closed. For example, the
-    program "more" is used to display text data in a console on both
-    Unix and Windows. But it will not display the text data until
-    QProcess's write channel has been closed. Example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 1
-
-    The write channel is implicitly opened when start() is called.
-
-    \sa closeReadChannel()
-*/
 void QProcess::closeWriteChannel()
 {
    Q_D(QProcess);
@@ -987,7 +855,6 @@ void QProcess::closeWriteChannel()
       d->closeWriteChannel();
    }
 }
-
 
 void QProcess::setStandardInputFile(const QString &fileName)
 {
@@ -1048,10 +915,6 @@ void QProcess::setWorkingDirectory(const QString &dir)
    d->workingDirectory = dir;
 }
 
-/*!
-    Returns the native process identifier for the running process, if
-    available.  If no process is currently running, 0 is returned.
-*/
 Q_PID QProcess::pid() const
 {
    Q_D(const QProcess);
@@ -1068,64 +931,51 @@ qint64 QProcess::processId() const
    return d->pid;
 #endif
 }
-/*! \reimp
 
-    This function operates on the current read channel.
-
-    \sa readChannel(), setReadChannel()
-*/
 bool QProcess::canReadLine() const
 {
    Q_D(const QProcess);
+
    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                   ? &d->stderrChannel.buffer
-                                   : &d->stdoutChannel.buffer;
+         ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
+
    return readBuffer->canReadLine() || QIODevice::canReadLine();
 }
 
-/*!
-    Closes all communication with the process and kills it. After calling this
-    function, QProcess will no longer emit readyRead(), and data can no
-    longer be read or written.
-*/
 void QProcess::close()
 {
    emit aboutToClose();
-   while (waitForBytesWritten(-1))
+
+   while (waitForBytesWritten(-1)) {
       ;
+   }
+
    kill();
    waitForFinished(-1);
    QIODevice::close();
 }
 
-/*! \reimp
-
-   Returns true if the process is not running, and no more data is available
-   for reading; otherwise returns false.
-*/
 bool QProcess::atEnd() const
 {
    Q_D(const QProcess);
+
    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                   ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
-   return QIODevice::atEnd() && (!isOpen() || readBuffer->isEmpty());
+         ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
+
+   return QIODevice::atEnd() && (! isOpen() || readBuffer->isEmpty());
 }
 
-/*! \reimp
-*/
 bool QProcess::isSequential() const
 {
    return true;
 }
 
-/*! \reimp
-*/
 qint64 QProcess::bytesAvailable() const
 {
    Q_D(const QProcess);
+
    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                                   ? &d->stderrChannel.buffer
-                                   : &d->stdoutChannel.buffer;
+         ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
 
 #if defined QPROCESS_DEBUG
    qDebug("QProcess::bytesAvailable() == %i (%s)", readBuffer->size(),
@@ -1135,72 +985,35 @@ qint64 QProcess::bytesAvailable() const
    return readBuffer->size() + QIODevice::bytesAvailable();
 }
 
-/*! \reimp
-*/
 qint64 QProcess::bytesToWrite() const
 {
    Q_D(const QProcess);
    qint64 size = d->stdinChannel.buffer.size();
+
 #ifdef Q_OS_WIN
    size += d->pipeWriterBytesToWrite();
 #endif
+
    return size;
 }
 
-/*!
-    Returns the type of error that occurred last.
-
-    \sa state()
-*/
 QProcess::ProcessError QProcess::error() const
 {
    Q_D(const QProcess);
    return d->processError;
 }
 
-/*!
-    Returns the current state of the process.
-
-    \sa stateChanged(), error()
-*/
 QProcess::ProcessState QProcess::state() const
 {
    Q_D(const QProcess);
    return d->processState;
 }
 
-/*!
-    \deprecated
-    Sets the environment that QProcess will use when starting a process to the
-    \a environment specified which consists of a list of key=value pairs.
-
-    For example, the following code adds the \c{C:\\BIN} directory to the list of
-    executable paths (\c{PATHS}) on Windows:
-
-    \snippet doc/src/snippets/qprocess-environment/main.cpp 0
-
-    \note This function is less efficient than the setProcessEnvironment()
-    function.
-
-    \sa environment(), setProcessEnvironment(), systemEnvironment()
-*/
 void QProcess::setEnvironment(const QStringList &environment)
 {
    setProcessEnvironment(QProcessEnvironmentPrivate::fromList(environment));
 }
 
-/*!
-    \deprecated
-    Returns the environment that QProcess will use when starting a
-    process, or an empty QStringList if no environment has been set
-    using setEnvironment() or setEnvironmentHash(). If no environment
-    has been set, the environment of the calling process will be used.
-
-    \note The environment settings are ignored on Windows CE and Symbian,
-    as there is no concept of an environment.
-
-    \sa processEnvironment(), setEnvironment(), systemEnvironment()
-*/
 QStringList QProcess::environment() const
 {
    Q_D(const QProcess);
@@ -1213,35 +1026,16 @@ void QProcess::setProcessEnvironment(const QProcessEnvironment &environment)
    d->environment = environment;
 }
 
-
 QProcessEnvironment QProcess::processEnvironment() const
 {
    Q_D(const QProcess);
    return d->environment;
 }
 
-/*!
-    Blocks until the process has started and the started() signal has
-    been emitted, or until \a msecs milliseconds have passed.
-
-    Returns true if the process was started successfully; otherwise
-    returns false (if the operation timed out or if an error
-    occurred).
-
-    This function can operate without an event loop. It is
-    useful when writing non-GUI applications and when performing
-    I/O operations in a non-GUI thread.
-
-    \warning Calling this function from the main (GUI) thread
-    might cause your user interface to freeze.
-
-    If msecs is -1, this function will not time out.
-
-    \sa started(), waitForReadyRead(), waitForBytesWritten(), waitForFinished()
-*/
 bool QProcess::waitForStarted(int msecs)
 {
    Q_D(QProcess);
+
    if (d->processState == QProcess::Starting) {
       return d->waitForStarted(msecs);
    }
@@ -1249,8 +1043,6 @@ bool QProcess::waitForStarted(int msecs)
    return d->processState == QProcess::Running;
 }
 
-/*! \reimp
-*/
 bool QProcess::waitForReadyRead(int msecs)
 {
    Q_D(QProcess);
@@ -1258,17 +1050,18 @@ bool QProcess::waitForReadyRead(int msecs)
    if (d->processState == QProcess::NotRunning) {
       return false;
    }
+
    if (d->processChannel == QProcess::StandardOutput && d->stdoutChannel.closed) {
       return false;
    }
+
    if (d->processChannel == QProcess::StandardError && d->stderrChannel.closed) {
       return false;
    }
+
    return d->waitForReadyRead(msecs);
 }
 
-/*! \reimp
-*/
 bool QProcess::waitForBytesWritten(int msecs)
 {
    Q_D(QProcess);
@@ -1280,6 +1073,7 @@ bool QProcess::waitForBytesWritten(int msecs)
    if (d->processState == QProcess::Starting) {
       QElapsedTimer stopWatch;
       stopWatch.start();
+
       bool started = waitForStarted(msecs);
 
       if (! started) {
@@ -1292,7 +1086,6 @@ bool QProcess::waitForBytesWritten(int msecs)
    return d->waitForBytesWritten(msecs);
 }
 
-
 bool QProcess::waitForFinished(int msecs)
 {
    Q_D(QProcess);
@@ -1304,6 +1097,7 @@ bool QProcess::waitForFinished(int msecs)
    if (d->processState == QProcess::Starting) {
       QElapsedTimer stopWatch;
       stopWatch.start();
+
       bool started = waitForStarted(msecs);
 
       if (!started) {
@@ -1316,14 +1110,10 @@ bool QProcess::waitForFinished(int msecs)
    return d->waitForFinished(msecs);
 }
 
-/*!
-    Sets the current state of the QProcess to the \a state specified.
-
-    \sa state()
-*/
 void QProcess::setProcessState(ProcessState state)
 {
    Q_D(QProcess);
+
    if (d->processState == state) {
       return;
    }
@@ -1334,46 +1124,41 @@ void QProcess::setProcessState(ProcessState state)
 
 /*!
   This function is called in the child process context just before the
-    program is executed on Unix or Mac OS X (i.e., after \e fork(), but before
-    \e execve()). Reimplement this function to do last minute initialization
-    of the child process. Example:
+  program is executed on Unix or Mac OS X (i.e., after fork(), but before
+  execve()). Reimplement this function to do last minute initialization
+  of the child process. Example:
 
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 4
+  You cannot exit the process (by calling exit(), for instance) from
+  this function. If you need to stop the program before it starts
+  execution, your workaround is to emit finished() and then call exit().
 
-    You cannot exit the process (by calling exit(), for instance) from
-    this function. If you need to stop the program before it starts
-    execution, your workaround is to emit finished() and then call
-    exit().
-
-    \warning This function is called by QProcess on Unix and Mac OS X
-    only. On Windows and QNX, it is not called.
+  Only called by QProcess on Unix and Mac OS X
 */
 void QProcess::setupChildProcess()
 {
 }
 
-/*! \reimp
-*/
 qint64 QProcess::readData(char *data, qint64 maxlen)
 {
    Q_D(QProcess);
 
-   if (!maxlen) {
+   if (! maxlen) {
       return 0;
    }
 
    QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
-                             ? &d->stderrChannel.buffer
-                             : &d->stdoutChannel.buffer;
+         ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
 
    if (maxlen == 1 && !readBuffer->isEmpty()) {
       int c = readBuffer->getChar();
+
       if (c == -1) {
 
 #if defined QPROCESS_DEBUG
          qDebug("QProcess::readData(%p \"%s\", %d) == -1",
-                data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+               data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
+
          return -1;
       }
 
@@ -1381,7 +1166,7 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
 
 #if defined QPROCESS_DEBUG
       qDebug("QProcess::readData(%p \"%s\", %d) == 1",
-             data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
+            data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
 
       return 1;
@@ -1402,11 +1187,10 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
    if (! readSoFar && d->processState == QProcess::NotRunning) {
       return -1;   // EOF
    }
+
    return readSoFar;
 }
 
-/*! \reimp
-*/
 qint64 QProcess::writeData(const char *data, qint64 len)
 {
    Q_D(QProcess);
@@ -1422,14 +1206,13 @@ qint64 QProcess::writeData(const char *data, qint64 len)
 
       connect(d->stdinWriteTrigger, &QTimer::timeout, this, [d]() {d->_q_canWrite(); } );
    }
-
 #endif
 
    if (len == 1) {
       d->stdinChannel.buffer.putChar(*data);
 
 #ifdef Q_OS_WIN
-      if (!d->stdinWriteTrigger->isActive()) {
+      if (! d->stdinWriteTrigger->isActive()) {
          d->stdinWriteTrigger->start();
       }
 #else
@@ -1474,13 +1257,6 @@ QByteArray QProcess::readAllStandardOutput()
    return data;
 }
 
-/*!
-    Regardless of the current read channel, this function returns all
-    data available from the standard error of the process as a
-    QByteArray.
-
-    \sa readyReadStandardError(), readAllStandardOutput(), readChannel(), setReadChannel()
-*/
 QByteArray QProcess::readAllStandardError()
 {
    ProcessChannel tmp = readChannel();
@@ -1491,28 +1267,6 @@ QByteArray QProcess::readAllStandardError()
    return data;
 }
 
-/*!
-    Starts the given \a program in a new process, if none is already
-    running, passing the command line arguments in \a arguments. The OpenMode
-    is set to \a mode.
-
-    The QProcess object will immediately enter the Starting state. If the
-    process starts successfully, QProcess will emit started(); otherwise,
-    error() will be emitted. If the QProcess object is already running a
-    process, a warning may be printed at the console, and the existing
-    process will continue running.
-
-    \note Processes are started asynchronously, which means the started()
-    and error() signals may be delayed. Call waitForStarted() to make
-    sure the process has started (or has failed to start) and those signals
-    have been emitted.
-
-    \note No further splitting of the arguments is performed.
-
-    \bold{Windows:} Arguments that contain spaces are wrapped in quotes.
-
-    \sa pid(), started(), waitForStarted()
-*/
 void QProcess::start(const QString &program, const QStringList &arguments, OpenMode mode)
 {
    Q_D(QProcess);
@@ -1531,30 +1285,38 @@ void QProcess::start(const QString &program, const QStringList &arguments, OpenM
    d->arguments = arguments;
    d->start(mode);
 }
+
 void QProcess::start(OpenMode mode)
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess::start: Process is already running");
       return;
    }
+
    if (d->program.isEmpty()) {
       d->setErrorAndEmit(QProcess::FailedToStart, tr("No program defined"));
       return;
    }
+
    d->start(mode);
 }
+
 bool QProcess::open(OpenMode mode)
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess::start: Process is already running");
       return false;
    }
+
    if (d->program.isEmpty()) {
       qWarning("QProcess::start: program not set");
       return false;
    }
+
    d->start(mode);
    return true;
 }
@@ -1619,6 +1381,7 @@ static QStringList parseCombinedArgString(const QString &program)
    // handle quoting. tokens can be surrounded by double quotes
    // "hello world". three consecutive double quotes represent
    // the quote character itself.
+
    for (int i = 0; i < program.size(); ++i) {
       if (program.at(i) == '"') {
          ++quoteCount;
@@ -1630,21 +1393,25 @@ static QStringList parseCombinedArgString(const QString &program)
          }
          continue;
       }
+
       if (quoteCount) {
          if (quoteCount == 1) {
             inQuote = !inQuote;
          }
          quoteCount = 0;
       }
+
       if (!inQuote && program.at(i).isSpace()) {
          if (!tmp.isEmpty()) {
             args += tmp;
             tmp.clear();
          }
+
       } else {
          tmp += program.at(i);
       }
    }
+
    if (!tmp.isEmpty()) {
       args += tmp;
    }
@@ -1652,33 +1419,6 @@ static QStringList parseCombinedArgString(const QString &program)
    return args;
 }
 
-/*!
-    \overload
-
-    Starts the program \a program in a new process, if one is not already
-    running. \a program is a single string of text containing both the
-    program name and its arguments. The arguments are separated by one or
-    more spaces. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 5
-
-    The \a program string can also contain quotes, to ensure that arguments
-    containing spaces are correctly supplied to the new process. For example:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 6
-
-    If the QProcess object is already running a process, a warning may be
-    printed at the console, and the existing process will continue running.
-
-    Note that, on Windows, quotes need to be both escaped and quoted.
-    For example, the above code would be specified in the following
-    way to ensure that \c{"My Documents"} is used as the argument to
-    the \c dir executable:
-
-    \snippet doc/src/snippets/code/src_corelib_io_qprocess.cpp 7
-
-    The OpenMode is set to \a mode.
-*/
 void QProcess::start(const QString &program, OpenMode mode)
 {
    QStringList args = parseCombinedArgString(program);
@@ -1701,6 +1441,7 @@ QString QProcess::program() const
    Q_D(const QProcess);
    return d->program;
 }
+
 void QProcess::setProgram(const QString &program)
 {
    Q_D(QProcess);
@@ -1710,18 +1451,22 @@ void QProcess::setProgram(const QString &program)
    }
    d->program = program;
 }
+
 QStringList QProcess::arguments() const
 {
    Q_D(const QProcess);
    return d->arguments;
 }
+
 void QProcess::setArguments(const QStringList &arguments)
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess::setProgram: Process is already running");
       return;
    }
+
    d->arguments = arguments;
 }
 
@@ -1737,9 +1482,6 @@ void QProcess::kill()
    d->killProcess();
 }
 
-/*!
-    Returns the exit code of the last process that finished.
-*/
 int QProcess::exitCode() const
 {
    Q_D(const QProcess);
@@ -1758,9 +1500,10 @@ int QProcess::execute(const QString &program, const QStringList &arguments)
    process.setReadChannelMode(ForwardedChannels);
    process.start(program, arguments);
 
-   if (!process.waitForFinished(-1) || process.error() == FailedToStart) {
+   if (! process.waitForFinished(-1) || process.error() == FailedToStart) {
       return -2;
    }
+
    return process.exitStatus() == QProcess::NormalExit ? process.exitCode() : -1;
 }
 
@@ -1778,11 +1521,10 @@ int QProcess::execute(const QString &program)
 }
 
 bool QProcess::startDetached(const QString &program, const QStringList &arguments,
-                             const QString &workingDirectory, qint64 *pid)
+         const QString &workingDirectory, qint64 *pid)
 {
    return QProcessPrivate::startDetached(program, arguments, workingDirectory, pid);
 }
-
 
 bool QProcess::startDetached(const QString &program)
 {
@@ -1798,7 +1540,6 @@ bool QProcess::startDetached(const QString &program)
    return QProcessPrivate::startDetached(prog, args);
 }
 
-
 #ifdef Q_OS_DARWIN
 #include <crt_externs.h>
 #define environ (*_NSGetEnviron())
@@ -1807,7 +1548,6 @@ bool QProcess::startDetached(const QString &program)
 extern char **environ;
 
 #endif
-
 
 QStringList QProcess::systemEnvironment()
 {
@@ -1834,4 +1574,3 @@ QString QProcess::nullDevice()
 }
 
 #endif // QT_NO_PROCESS
-

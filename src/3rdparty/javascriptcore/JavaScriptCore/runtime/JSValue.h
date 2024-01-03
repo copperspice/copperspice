@@ -131,7 +131,7 @@ namespace JSC {
         bool isGetterSetter() const;
         bool isObject() const;
         bool inherits(const ClassInfo*) const;
-        
+
         // Extracting the value.
         bool getBoolean(bool&) const;
         bool getBoolean() const; // false if not a boolean
@@ -146,7 +146,7 @@ namespace JSC {
 
         // Extracting integer values.
         bool getUInt32(uint32_t&) const;
-        
+
         // Basic conversions.
         JSValue toPrimitive(ExecState*, PreferredPrimitiveType = NoPreference) const;
         bool getPrimitiveNumber(ExecState*, double& number, JSValue&);
@@ -460,19 +460,19 @@ namespace JSC {
         u.asBits.tag = NullTag;
         u.asBits.payload = 0;
     }
-    
+
     inline JSValue::JSValue(JSUndefinedTag)
     {
         u.asBits.tag = UndefinedTag;
         u.asBits.payload = 0;
     }
-    
+
     inline JSValue::JSValue(JSTrueTag)
     {
         u.asBits.tag = TrueTag;
         u.asBits.payload = 0;
     }
-    
+
     inline JSValue::JSValue(JSFalseTag)
     {
         u.asBits.tag = FalseTag;
@@ -574,30 +574,30 @@ namespace JSC {
     {
         return u.asBits.tag;
     }
-    
+
     inline int32_t JSValue::payload() const
     {
         return u.asBits.payload;
     }
-    
+
     inline int32_t JSValue::asInt32() const
     {
         ASSERT(isInt32());
         return u.asBits.payload;
     }
-    
+
     inline uint32_t JSValue::asUInt32() const
     {
         ASSERT(isUInt32());
         return u.asBits.payload;
     }
-    
+
     inline double JSValue::asDouble() const
     {
         ASSERT(isDouble());
         return u.asDouble;
     }
-    
+
     ALWAYS_INLINE JSCell* JSValue::asCell() const
     {
         ASSERT(isCell());
@@ -699,13 +699,13 @@ namespace JSC {
         }
         *this = JSValue(globalData, static_cast<int32_t>(d));
     }
-    
+
     inline JSValue::JSValue(JSGlobalData*, int i)
     {
         u.asBits.tag = Int32Tag;
         u.asBits.payload = i;
     }
-    
+
     inline JSValue::JSValue(JSGlobalData* globalData, unsigned i)
     {
         if (static_cast<int32_t>(i) < 0) {
@@ -735,7 +735,7 @@ namespace JSC {
             v = false;
             return true;
         }
-        
+
         return false;
     }
 
@@ -791,10 +791,10 @@ namespace JSC {
     {
         return reinterpret_cast<intptr_t>(m_ptr);
     }
-    
+
     // 0x0 can never occur naturally because it has a tag of 00, indicating a pointer value, but a payload of 0x0, which is in the (invalid) zero page.
     inline JSValue::JSValue()
-        : m_ptr(0)
+        : m_ptr(nullptr)
     {
     }
 

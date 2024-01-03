@@ -147,8 +147,9 @@ class QNetworkAccessBackend : public QObject
    virtual bool canResume() const {
       return false;
    }
+
    virtual void setResumeOffset(quint64 offset) {
-      Q_UNUSED(offset);
+      (void) offset;
    }
 
    virtual bool processRequestSynchronously() {
@@ -177,7 +178,7 @@ class QNetworkAccessBackend : public QObject
    NET_CS_SLOT_1(Protected, void finished())
    NET_CS_SLOT_2(finished)
 
-   NET_CS_SLOT_1(Protected, void error(QNetworkReply::NetworkError code, const QString &errorString))
+   NET_CS_SLOT_1(Protected, void error(QNetworkReply::NetworkError errorCode, const QString &errorMsg))
    NET_CS_SLOT_2(error)
 
 #ifndef QT_NO_NETWORKPROXY

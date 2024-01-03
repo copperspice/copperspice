@@ -1499,10 +1499,10 @@ QWidget *QDockWidget::titleBarWidget() const
    return layout->widgetForRole(QDockWidgetLayout::TitleBar);
 }
 
-void QDockWidget::_q_toggleView(bool un_named_arg1)
+void QDockWidget::_q_toggleView(bool isToggled)
 {
    Q_D(QDockWidget);
-   d->_q_toggleView(un_named_arg1);
+   d->_q_toggleView(isToggled);
 }
 
 void QDockWidget::_q_toggleTopLevel()

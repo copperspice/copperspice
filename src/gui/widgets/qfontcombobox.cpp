@@ -40,60 +40,88 @@ static QFontDatabase::WritingSystem writingSystemFromScript(QLocale::Script scri
    switch (script) {
       case QLocale::ArabicScript:
          return QFontDatabase::Arabic;
+
       case QLocale::CyrillicScript:
          return QFontDatabase::Cyrillic;
+
       case QLocale::GurmukhiScript:
          return QFontDatabase::Gurmukhi;
+
       case QLocale::SimplifiedHanScript:
          return QFontDatabase::SimplifiedChinese;
+
       case QLocale::TraditionalHanScript:
          return QFontDatabase::TraditionalChinese;
+
       case QLocale::LatinScript:
          return QFontDatabase::Latin;
+
       case QLocale::ArmenianScript:
          return QFontDatabase::Armenian;
+
       case QLocale::BengaliScript:
          return QFontDatabase::Bengali;
+
       case QLocale::DevanagariScript:
          return QFontDatabase::Devanagari;
+
       case QLocale::GeorgianScript:
          return QFontDatabase::Georgian;
+
       case QLocale::GreekScript:
          return QFontDatabase::Greek;
+
       case QLocale::GujaratiScript:
          return QFontDatabase::Gujarati;
+
       case QLocale::HebrewScript:
          return QFontDatabase::Hebrew;
+
       case QLocale::JapaneseScript:
          return QFontDatabase::Japanese;
+
       case QLocale::KhmerScript:
          return QFontDatabase::Khmer;
+
       case QLocale::KannadaScript:
          return QFontDatabase::Kannada;
+
       case QLocale::KoreanScript:
          return QFontDatabase::Korean;
+
       case QLocale::LaoScript:
          return QFontDatabase::Lao;
+
       case QLocale::MalayalamScript:
          return QFontDatabase::Malayalam;
+
       case QLocale::MyanmarScript:
          return QFontDatabase::Myanmar;
+
       case QLocale::TamilScript:
          return QFontDatabase::Tamil;
+
       case QLocale::TeluguScript:
          return QFontDatabase::Telugu;
+
       case QLocale::ThaanaScript:
          return QFontDatabase::Thaana;
+
       case QLocale::ThaiScript:
          return QFontDatabase::Thai;
+
       case QLocale::TibetanScript:
          return QFontDatabase::Tibetan;
+
       case QLocale::SinhalaScript:
          return QFontDatabase::Sinhala;
+
       case QLocale::SyriacScript:
          return QFontDatabase::Syriac;
+
       case QLocale::OriyaScript:
          return QFontDatabase::Oriya;
+
       case QLocale::OghamScript:
          return QFontDatabase::Ogham;
 
@@ -112,7 +140,8 @@ static QFontDatabase::WritingSystem writingSystemFromLocale()
 {
    QStringList uiLanguages = QLocale::system().uiLanguages();
    QLocale::Script script;
-   if (!uiLanguages.isEmpty()) {
+
+   if (! uiLanguages.isEmpty()) {
       script = QLocale(uiLanguages.at(0)).script();
    } else {
       script = QLocale::system().script();
@@ -199,8 +228,10 @@ void QFontFamilyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
    const QModelIndex &index) const
 {
    QString text = index.data(Qt::DisplayRole).toString();
+
    QFont font(option.font);
    font.setPointSize(QFontInfo(font).pointSize() * 3 / 2);
+
    QFont font2 = font;
    font2.setFamily(text);
 
@@ -269,7 +300,6 @@ void QFontFamilyDelegate::paint(QPainter *painter, const QStyleOptionViewItem &o
    if (option.state & QStyle::State_Selected) {
       painter->restore();
    }
-
 }
 
 QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -282,9 +312,9 @@ QSize QFontFamilyDelegate::sizeHint(const QStyleOptionViewItem &option, const QM
    font.setPointSize(QFontInfo(font).pointSize() * 3 / 2);
 
    QFontMetrics fontMetrics(font);
+
    return QSize(fontMetrics.width(text), fontMetrics.height());
 }
-
 
 class QFontComboBoxPrivate : public QComboBoxPrivate
 {
@@ -305,6 +335,7 @@ class QFontComboBoxPrivate : public QComboBoxPrivate
 void QFontComboBoxPrivate::_q_updateModel()
 {
    Q_Q(QFontComboBox);
+
    const int scalableMask = (QFontComboBox::ScalableFonts | QFontComboBox::NonScalableFonts);
    const int spacingMask = (QFontComboBox::ProportionalFonts | QFontComboBox::MonospacedFonts);
 
@@ -472,12 +503,10 @@ bool QFontComboBox::event(QEvent *e)
                QApplication::desktop()->availableGeometry(lview).width()));
       }
    }
+
    return QComboBox::event(e);
 }
 
-/*!
-    \reimp
-*/
 QSize QFontComboBox::sizeHint() const
 {
    QSize sz = QComboBox::sizeHint();
@@ -486,10 +515,10 @@ QSize QFontComboBox::sizeHint() const
    return sz;
 }
 
-void QFontComboBox::_q_currentChanged(const QString &un_named_arg1)
+void QFontComboBox::_q_currentChanged(const QString &text)
 {
    Q_D(QFontComboBox);
-   d->_q_currentChanged(un_named_arg1);
+   d->_q_currentChanged(text);
 }
 
 void QFontComboBox::_q_updateModel()

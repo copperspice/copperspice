@@ -27,9 +27,8 @@
 #include <qpaircontainer_p.h>
 #include <qvariabledeclaration_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class LetClause : public PairContainer
 {
  public:
@@ -52,8 +51,7 @@ class LetClause : public PairContainer
 
    const VariableDeclaration::Ptr m_varDecl;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

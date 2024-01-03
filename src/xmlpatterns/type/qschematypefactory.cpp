@@ -23,8 +23,6 @@
 
 #include "qschematypefactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SchemaTypeFactory::SchemaTypeFactory()
@@ -34,5 +32,3 @@ SchemaTypeFactory::SchemaTypeFactory()
 SchemaTypeFactory::~SchemaTypeFactory()
 {
 }
-
-QT_END_NAMESPACE

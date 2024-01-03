@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GraphicsContext3D_h
@@ -58,10 +58,8 @@ class CALayer;
 class WebGLLayer;
 #endif
 #elif PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QPainter;
 class QRect;
-QT_END_NAMESPACE
 #elif PLATFORM(GTK)
 typedef unsigned int GLuint;
 #endif
@@ -484,7 +482,7 @@ public:
     void makeContextCurrent();
 
     PassRefPtr<DrawingBuffer> createDrawingBuffer(const IntSize& = IntSize());
-    
+
 #if PLATFORM(MAC) || PLATFORM(CHROMIUM) || PLATFORM(GTK)
     // With multisampling on, blit from multisampleFBO to regular FBO.
     void prepareTexture();

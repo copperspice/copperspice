@@ -161,8 +161,7 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
       }
    }
 
-   // First clean out any target states that got destroyed, but for which we still have a QPointer
-   // around.
+   // clean out any target states that got destroyed, but which there is still a QPointer active
    for (int i = 0; i < d->targetStates.size(); ) {
       if (d->targetStates.at(i).isNull()) {
          d->targetStates.remove(i);
@@ -179,21 +178,22 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
    bool sameList = true;
 
    if (targets.size() != d->targetStates.size()) {
-      // If the sizes of the lists are different, we don't need to be smart: they're different. So
-      // we can just set the new list as the targetStates.
+      // If the sizes of the lists are different, we don't need to be smart: they're different.
+      // So we can just set the new list as the targetStates.
       sameList = false;
 
    } else {
       QVector<QPointer<QAbstractState>> copy(d->targetStates);
 
       for (int i = 0; i < targets.size(); ++i) {
-         sameList &= copy.removeOne(targets.at(i));
-         if (!sameList) {
+         sameList = sameList && copy.removeOne(targets.at(i));
+
+         if (! sameList) {
             break;   // we now know the lists are not the same, so stop the loop
          }
       }
 
-      sameList &= copy.isEmpty();
+      sameList = sameList && copy.isEmpty();
    }
 
    if (sameList) {

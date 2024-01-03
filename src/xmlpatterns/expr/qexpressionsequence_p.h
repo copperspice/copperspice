@@ -26,9 +26,8 @@
 
 #include <qunlimitedcontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ExpressionSequence : public UnlimitedContainer
 {
  public:
@@ -75,8 +74,7 @@ class ExpressionSequence : public UnlimitedContainer
  private:
    typedef QExplicitlySharedDataPointer<const ExpressionSequence> ConstPtr;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

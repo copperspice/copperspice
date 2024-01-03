@@ -34,8 +34,6 @@
 #include "qxsdschemaparsercontext_p.h"
 #include "qxsdschematypesfactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaResolver::XsdSchemaResolver(const QExplicitlySharedDataPointer<XsdSchemaContext> &context,
@@ -1823,5 +1821,3 @@ AnySimpleType::Ptr XsdSchemaResolver::findPrimitiveType(const AnySimpleType::Ptr
       }
    }
 }
-
-QT_END_NAMESPACE

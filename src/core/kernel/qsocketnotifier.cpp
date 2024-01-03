@@ -27,10 +27,6 @@
 #include <qcoreapplication.h>
 #include <qthread_p.h>
 
-
-
-
-
 QSocketNotifier::QSocketNotifier(qintptr socket, Type type, QObject *parent)
    : QObject(parent)
 {
@@ -77,8 +73,6 @@ bool QSocketNotifier::isEnabled() const
    return snenabled;
 }
 
-
-
 void QSocketNotifier::setEnabled(bool enable)
 {
    if (sockfd < 0) {
@@ -101,7 +95,7 @@ void QSocketNotifier::setEnabled(bool enable)
    }
 
    if (thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: Socket notifiers cannot be enabled or disabled from another thread");
+        qWarning("QSocketNotifier::setEnabled() Socket notifiers can not be enabled or disabled from another thread");
         return;
    }
 

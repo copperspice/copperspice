@@ -83,7 +83,7 @@ class QPlatformBackingStorePrivate
             blitter->destroy();
          }
       } else if (textureId || blitter) {
-         qWarning("No context current during QPlatformBackingStore destruction, OpenGL resources not released");
+         qWarning("QPlatformBackingStorePrivate, No current OpenGL context in destructor, resources not released");
       }
       delete blitter;
 #endif
@@ -272,7 +272,7 @@ void QPlatformBackingStore::composeAndFlush(QWindow *window, const QRegion &regi
    }
 
    if (!context->makeCurrent(window)) {
-      qWarning("composeAndFlush: makeCurrent() failed");
+      qWarning("QPlatformBackingStore::composeAndFlush() Unable to set the current OpenGL context");
       return;
    }
 

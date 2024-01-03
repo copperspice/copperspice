@@ -26,8 +26,6 @@
 
 #include <qtriplecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class IfThenClause : public TripleContainer
@@ -53,8 +51,7 @@ class IfThenClause : public TripleContainer
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
    //virtual Properties properties() const;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

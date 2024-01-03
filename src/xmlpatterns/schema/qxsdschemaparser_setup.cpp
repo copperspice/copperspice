@@ -25,8 +25,6 @@
 
 #include "qbuiltintypes_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /**
@@ -1178,5 +1176,3 @@ void XsdSchemaParser::setupBuiltinTypeNames()
    m_builtinTypeNames.insert(BuiltinTypes::xsENTITY->name(namePool));
    m_builtinTypeNames.insert(BuiltinTypes::xsNOTATION->name(namePool));
 }
-
-QT_END_NAMESPACE

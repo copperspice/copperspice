@@ -34,8 +34,6 @@
 #include "qatomiccomparatorlocators.cpp"
 #include "qatomicmathematicianlocators.cpp"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 // STATIC DATA
@@ -139,5 +137,3 @@ nt(pi,          ProcessingInstruction);
 #undef nt
 
 const ItemType::Ptr BuiltinTypes::xsltNodeTest(new XSLTNodeTest());
-
-QT_END_NAMESPACE

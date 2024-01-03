@@ -27,8 +27,6 @@
 #include <QByteArray>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ConcatFN : public FunctionCall
@@ -161,8 +159,7 @@ class EscapeHtmlURIFN : public EncodeString
    static const char *const include;
    static const char *const exclude;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -61,16 +61,6 @@
 
 #endif
 
-#if defined(Q_OS_WIN)
-   using PtrCertOpenSystemStoreW  = HCERTSTORE (WINAPI *)(HCRYPTPROV_LEGACY, LPCWSTR);
-
-   using PtrCertFindCertificateInStore =
-         PCCERT_CONTEXT (WINAPI *)(HCERTSTORE, DWORD, DWORD, DWORD, const void *, PCCERT_CONTEXT);
-
-   using PtrCertCloseStore        = BOOL (WINAPI *)(HCERTSTORE, DWORD);
-
-#endif
-
 class QSslSocketPrivate : public QTcpSocketPrivate
 {
    Q_DECLARE_PUBLIC(QSslSocket)
@@ -134,12 +124,6 @@ public:
    static PtrSecCertificateCopyData ptrSecCertificateCopyData;
    static PtrSecTrustSettingsCopyCertificates ptrSecTrustSettingsCopyCertificates;
    static PtrSecTrustCopyAnchorCertificates ptrSecTrustCopyAnchorCertificates;
-
-#elif defined(Q_OS_WIN)
-   static PtrCertOpenSystemStoreW ptrCertOpenSystemStoreW;
-   static PtrCertFindCertificateInStore ptrCertFindCertificateInStore;
-   static PtrCertCloseStore ptrCertCloseStore;
-
 #endif
 
    QTcpSocket *plainSocket;
@@ -165,7 +149,7 @@ public:
    void _q_resumeImplementation();
 
 #if defined(Q_OS_WIN)
-   virtual void _q_caRootLoaded(QSslCertificate,QSslCertificate) = 0;
+   virtual void _q_caRootLoaded(QSslCertificate cert, QSslCertificate trustedRoot) = 0;
 #endif
 
    static QList<QByteArray> unixRootCertDirectories(); // used also by QSslContext

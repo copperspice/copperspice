@@ -321,8 +321,6 @@ LRESULT QT_WIN_CALLBACK qt_GetMessageHook(int code, WPARAM wp, LPARAM lp)
    return q->d_func()->getMessageHook ? CallNextHookEx(nullptr, code, wp, lp) : 0;
 }
 
-// Provide class name and atom for the message window used by
-// QEventDispatcherWin32Private via Q_GLOBAL_STATIC shared between threads.
 struct QWindowsMessageWindowClassContext
 {
     QWindowsMessageWindowClassContext();
@@ -367,7 +365,12 @@ QWindowsMessageWindowClassContext::~QWindowsMessageWindowClassContext()
    }
 }
 
-Q_GLOBAL_STATIC(QWindowsMessageWindowClassContext, qWindowsMessageWindowClassContext)
+static QWindowsMessageWindowClassContext *qWindowsMessageWindowClassContext()
+{
+   static QWindowsMessageWindowClassContext retval;
+   return &retval;
+}
+
 static HWND qt_create_internal_window(const QEventDispatcherWin32 *eventDispatcher)
 {
     QWindowsMessageWindowClassContext *ctx = qWindowsMessageWindowClassContext();
@@ -382,9 +385,9 @@ static HWND qt_create_internal_window(const QEventDispatcherWin32 *eventDispatch
                            0,                 // style
                            0, 0, 0, 0,        // geometry
                            parent,            // parent
-                           0,                 // menu handle
+                           nullptr,          // menu handle
                            qWinAppInst(),     // application
-                           0);                // windows creation data.
+                           nullptr);         // windows creation data.
 
    if (! wnd) {
       qWarning("QEventDispatcher: Failed to create QEventDispatcherWin32 internal window: %d\n", (int)GetLastError());

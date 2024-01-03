@@ -69,22 +69,6 @@ static void unixCheckClockType()
 #endif
 }
 
-static inline qint64 fractionAdjustment()
-{
-   // disabled, but otherwise indicates bad usage of QElapsedTimer
-   //Q_ASSERT(monotonicClockChecked);
-
-   if (monotonicClockAvailable) {
-      // the monotonic timer is measured in nanoseconds
-      // 1 ms = 1000000 ns
-      return 1000 * 1000ull;
-   } else {
-      // gettimeofday is measured in microseconds
-      // 1 ms = 1000 us
-      return 1000;
-   }
-}
-
 bool QElapsedTimer::isMonotonic()
 {
    unixCheckClockType();

@@ -27,10 +27,10 @@
 #ifndef CS_PATTERN_EXCEPT_H
 #define CS_PATTERN_EXCEPT_H
 
+#include <regex/r_config.h>
+
 #include <stdexcept>
 #include <cstddef>
-
-#include "regex/r_config.h"
 
 namespace cs_regex_ns {
 
@@ -65,7 +65,6 @@ class LIB_CS_STRING_EXPORT regex_error : public std::runtime_error
    std::ptrdiff_t m_position;
 };
 
-
 typedef regex_error bad_pattern;
 typedef regex_error bad_expression;
 
@@ -78,12 +77,8 @@ void raise_error(const traits &t, regex_constants::error_type code)
    throw (err);
 }
 
-} // namespace
+}   // end namespace
 
-
-} // namespace
+}   // end namespace
 
 #endif
-
-
-

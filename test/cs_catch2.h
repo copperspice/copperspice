@@ -17,8 +17,12 @@
 *
 ***********************************************************************/
 
+#ifndef CS_CATCH2_H
+#define CS_CATCH2_H
+
 #include <qbytearray.h>
 #include <qdate.h>
+#include <qdatetime.h>
 #include <qlocale.h>
 #include <qmargins.h>
 #include <qstring8.h>
@@ -31,8 +35,12 @@
 
 inline std::unique_ptr<QCoreApplication> initCoreApp()
 {
-   int argc    = 0;
-   auto retval = std::make_unique<QCoreApplication>(argc, nullptr);
+   int argc     = 1;
+
+   char tmp[]   = "dummy";
+   char *argv[] = {tmp};
+
+   auto retval = std::make_unique<QCoreApplication>(argc, argv);
 
    return retval;
 }
@@ -47,8 +55,22 @@ namespace Catch {
    };
 
    template <>
+   struct StringMaker<QChar> {
+      static std::string convert(const QChar &value) {
+         return QString("\\U%1").formatArg(value.unicode(), 8, 16, '0').toStdString();
+      }
+   };
+
+   template <>
    struct StringMaker<QDate> {
       static std::string convert(const QDate &value) {
+         return value.toString().toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QDateTime> {
+      static std::string convert(const QDateTime &value) {
          return value.toString().toStdString();
       }
    };
@@ -57,6 +79,15 @@ namespace Catch {
    struct StringMaker<QLocale> {
       static std::string convert(const QLocale &value) {
          return value.name().toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QMargins> {
+      static std::string convert(const QMargins &value) {
+         QString retval = QString8("%1 %2 %3 %4")
+               .formatArgs(value.left(), value.top(), value.right(), value.bottom());
+         return retval.toStdString();
       }
    };
 
@@ -82,18 +113,11 @@ namespace Catch {
    };
 
    template <>
-   struct StringMaker<QMargins> {
-      static std::string convert(const QMargins &value) {
-         QString retval = QString8("%1 %2 %3 %4")
-               .formatArgs(value.left(), value.top(), value.right(), value.bottom());
-         return retval.toStdString();
-      }
-   };
-
-   template <>
    struct StringMaker<QTime> {
       static std::string convert(const QTime &value) {
          return value.toString().toStdString();
       }
    };
 }
+
+#endif

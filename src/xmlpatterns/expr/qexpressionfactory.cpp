@@ -21,25 +21,25 @@
 *
 ***********************************************************************/
 
-#include "qexpressionfactory_p.h"
+#include <qexpressionfactory_p.h>
 
-#include <QBuffer>
-#include <QByteArray>
+#include <qbuffer.h>
+#include <qbytearray.h>
 
 #include <qcalltemplate_p.h>
 #include <qcommonsequencetypes_p.h>
 #include <qxmlpatterns_debug_p.h>
-#include "qexpression_p.h"
-#include "qgenericstaticcontext_p.h"
-#include "qoperandsiterator_p.h"
-#include "qoptimizationpasses_p.h"
-#include "qparsercontext_p.h"
-#include "qpath_p.h"
-#include "qquerytransformparser_p.h"
-#include "qstaticfocuscontext_p.h"
-#include "qtokenrevealer_p.h"
-#include "qxquerytokenizer_p.h"
-#include "qxslttokenizer_p.h"
+#include <qexpression_p.h>
+#include <qgenericstaticcontext_p.h>
+#include <qoperandsiterator_p.h>
+#include <qoptimizationpasses_p.h>
+#include <qparsercontext_p.h>
+#include <qpath_p.h>
+#include <qquerytransformparser_p.h>
+#include <qstaticfocuscontext_p.h>
+#include <qtokenrevealer_p.h>
+#include <qxquerytokenizer_p.h>
+#include <qxslttokenizer_p.h>
 
 namespace QPatternist {
 

@@ -21,13 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qxsdvalidatedxmlnodemodel_p.h"
+#include <qurl.h>
+#include <qvariant.h>
+#include <qvector.h>
 
-#include <QUrl>
-#include <QVariant>
-#include <QVector>
-
-QT_BEGIN_NAMESPACE
+#include <qxsdvalidatedxmlnodemodel_p.h>
 
 using namespace QPatternist;
 
@@ -201,5 +199,3 @@ QSet<NamedSchemaComponent::Ptr> XsdValidatedXmlNodeModel::idIdRefBindings(const 
 {
    return m_idIdRefBindings.value(id);
 }
-
-QT_END_NAMESPACE

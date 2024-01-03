@@ -24,14 +24,13 @@
 #ifndef QFunctionArgument_P_H
 #define QFunctionArgument_P_H
 
-#include <QList>
+#include <qlist.h>
 #include <QSharedData>
 #include <qxmlname.h>
 #include <qsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FunctionArgument : public QSharedData
 {
  public:
@@ -50,8 +49,7 @@ class FunctionArgument : public QSharedData
    const QXmlName m_name;
    const SequenceType::Ptr m_type;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

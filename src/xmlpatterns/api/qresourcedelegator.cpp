@@ -23,8 +23,6 @@
 
 #include "qresourcedelegator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool ResourceDelegator::isUnparsedTextAvailable(const QUrl &uri,
@@ -82,5 +80,3 @@ QSet<QUrl> ResourceDelegator::deviceURIs() const
    uris |= m_forDeviceLoader->deviceURIs();
    return uris;
 }
-
-QT_END_NAMESPACE

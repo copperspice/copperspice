@@ -26,8 +26,6 @@
 
 #include "qxsltsimplecontentconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XSLTSimpleContentConstructor::XSLTSimpleContentConstructor(const Expression::Ptr &source) : SimpleContentConstructor(
@@ -130,5 +128,3 @@ SequenceType::Ptr XSLTSimpleContentConstructor::staticType() const
 {
    return CommonSequenceTypes::ZeroOrOneString;
 }
-
-QT_END_NAMESPACE

@@ -21,15 +21,14 @@
 *
 ***********************************************************************/
 
-#include <QStringList>
+#include <qxpathhelper_p.h>
 
-#include "qxmlutils_p.h"
-#include "qbuiltintypes_p.h"
-#include "qcommonvalues_p.h"
-#include "qnamepool_p.h"
-#include "qxpathhelper_p.h"
+#include <qstringlist.h>
 
-QT_BEGIN_NAMESPACE
+#include <qxmlutils_p.h>
+#include <qbuiltintypes_p.h>
+#include <qcommonvalues_p.h>
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 
@@ -113,5 +112,3 @@ QUrl XPathHelper::normalizeQueryURI(const QUrl &uri)
       return uri;
    }
 }
-
-QT_END_NAMESPACE

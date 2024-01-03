@@ -21,12 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QList>
+#include <qsinglecontainer_p.h>
 
-
-#include "qsinglecontainer_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qlist.h>
 
 using namespace QPatternist;
 
@@ -55,4 +52,3 @@ bool SingleContainer::compressOperands(const StaticContext::Ptr &context)
    return m_operand->isEvaluated();
 }
 
-QT_END_NAMESPACE

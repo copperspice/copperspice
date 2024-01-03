@@ -23,8 +23,6 @@
 
 #include "qstaticcompatibilitycontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticCompatibilityContext::StaticCompatibilityContext(const StaticContext::Ptr &context) : DelegatingStaticContext(
@@ -37,4 +35,3 @@ bool StaticCompatibilityContext::compatModeEnabled() const
    return true;
 }
 
-QT_END_NAMESPACE

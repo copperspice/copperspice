@@ -518,7 +518,7 @@ void QTextOdfWriter::writeBlockFormat(QXmlStreamWriter &writer, QTextBlockFormat
       } else if (alignment == Qt::AlignJustify) {
          value = QString::fromLatin1("justify");
       } else {
-         qWarning() << "QTextOdfWriter: unsupported paragraph alignment; " << format.alignment();
+         qWarning() << "QTextOdfWriter::writeBlockFormat() Unsupported paragraph alignment: " << format.alignment();
       }
 
       if (! value.isEmpty()) {
@@ -932,7 +932,7 @@ bool QTextOdfWriter::writeAll()
    }
 
    if (! m_device->isWritable() && ! m_device->open(QIODevice::WriteOnly)) {
-      qWarning() << "QTextOdfWriter::writeAll: the device can not be opened for writing";
+      qWarning() << "QTextOdfWriter::writeAll() Device can not be opened for writing";
       return false;
    }
 

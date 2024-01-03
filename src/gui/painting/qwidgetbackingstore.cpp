@@ -47,7 +47,13 @@
 extern QRegion qt_dirtyRegion(QWidget *);
 
 #ifndef QT_NO_OPENGL
-Q_GLOBAL_STATIC(QPlatformTextureList, qt_dummy_platformTextureList)
+
+static QPlatformTextureList *qt_dummy_platformTextureList()
+{
+   static QPlatformTextureList retval;
+   return &retval;
+}
+
 #endif
 
 /**
@@ -60,7 +66,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
    QWidgetBackingStore *widgetBackingStore)
 {
 #ifdef QT_NO_OPENGL
-   Q_UNUSED(widgetTextures);
+   (void) widgetTextures;
    Q_ASSERT(!region.isEmpty());
 #else
    Q_ASSERT(!region.isEmpty() || widgetTextures);
@@ -149,7 +155,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 }
 
 #ifndef QT_NO_PAINT_DEBUG
-#if defined(Q_OS_WIN) && ! defined(Q_OS_WINRT)
+#if defined(Q_OS_WIN)
 
 static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec)
 {
@@ -213,8 +219,8 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
       widget = nativeParent;
    }
 
-#if defined(Q_OS_WIN) && !defined(Q_OS_WINRT)
-   Q_UNUSED(unclipped);
+#if defined(Q_OS_WIN)
+   (void) unclipped;
    showYellowThing_win(widget, paintRegion, msec);
 
 #else
@@ -654,7 +660,7 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
     is more efficient as it eliminates QRegion operations/allocations and can
     use the rect more precisely for additional cut-offs.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    UpdateTime updateTime, BufferState bufferState)
@@ -668,7 +674,7 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
 
 #ifndef QT_NO_GRAPHICSEFFECT
    widget->d_func()->invalidateGraphicsEffectsRecursively();
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
    if (widget->d_func()->paintOnScreen()) {
       if (widget->d_func()->dirty.isEmpty()) {
@@ -1719,7 +1725,7 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
     all widgets intersecting with the region will be repainted when the backing store
     is synced.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
 {
@@ -1748,7 +1754,7 @@ void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
     is more efficient as it eliminates QRegion operations/allocations and can
     use the rect more precisely for additional cut-offs.
 
-    ### Qt Merge into a template function (after MSVC isn't supported anymore).
+    ### Merge into a template function (after MSVC isn't supported anymore).
 */
 void QWidgetPrivate::invalidateBuffer(const QRect &rect)
 {
@@ -1789,9 +1795,11 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    }
 
    Q_Q(QWidget);
+
    if (discardSyncRequest(q, maybeTopData())) {
       return;
    }
+
    if (q->testAttribute(Qt::WA_StaticContents)) {
       if (!extra) {
          createExtra();
@@ -1806,8 +1814,8 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    // 2) The context is single buffered and auto-fill background is enabled.
 
    const bool noPartialUpdateSupport = (engine && (engine->type() == QPaintEngine::OpenGL
-            || engine->type() == QPaintEngine::OpenGL2))
-            && (usesDoubleBufferedGLContext || q->autoFillBackground());
+         || engine->type() == QPaintEngine::OpenGL2))
+         && (usesDoubleBufferedGLContext || q->autoFillBackground());
 
    QRegion toBePainted(noPartialUpdateSupport ? q->rect() : rgn);
 
@@ -1815,13 +1823,12 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
    clipToEffectiveMask(toBePainted);
 
    if (toBePainted.isEmpty()) {
-      return;   // Nothing to repaint.
+      return;   // Nothing to repaint
    }
 
    drawWidget(q, toBePainted, QPoint(), QWidgetPrivate::DrawAsRoot | QWidgetPrivate::DrawPaintOnScreen, nullptr);
 
    if (q->paintingActive()) {
-      qWarning("QWidget::repaint: It is dangerous to leave painters active on a widget outside of the PaintEvent");
+      qWarning("QWidget::repaint() Paint process should not be active after leaving the paint event");
    }
 }
-

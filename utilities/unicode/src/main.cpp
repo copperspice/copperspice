@@ -21,19 +21,19 @@
 *
 ***********************************************************************/
 
-#include <qlist.h>
-#include <qhash.h>
-#include <qfile.h>
 #include <qbytearray.h>
-#include <qstring.h>
 #include <qchar.h>
-#include <qvector.h>
 #include <qdebug.h>
+#include <qfile.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qstring.h>
+#include <qvector.h>
 
 #include <utility>
 
-#define DATA_VERSION_S "11.0"
-#define DATA_VERSION_STR "QChar::Unicode_11_0"
+#define DATA_VERSION_S "15.1"
+#define DATA_VERSION_STR "QChar::Unicode_15_1"
 
 const QString UnicodeDataPrefix = "../data/";
 
@@ -82,6 +82,12 @@ static void initAgeMap()
       { QChar::Unicode_9_0,   "9.0"  },
       { QChar::Unicode_10_0,  "10.0" },
       { QChar::Unicode_11_0,  "11.0" },
+      { QChar::Unicode_12_0,  "12.0" },
+      { QChar::Unicode_12_1,  "12.1" },
+      { QChar::Unicode_13_0,  "13.0" },
+      { QChar::Unicode_14_0,  "14.0" },
+      { QChar::Unicode_15_0,  "15.0" },
+      { QChar::Unicode_15_1,  "15.1" },
       { QChar::Unicode_Unassigned, 0 }
    };
 
@@ -525,7 +531,7 @@ static void initSentenceBreak()
 
 static const char *line_break_class_string =
    "// see http://www.unicode.org/reports/tr14/tr14-30.html\n"
-   "// XX and AI classes are  mapped to AL\n"
+   "// XX, AI, and AK classes are  mapped to AL\n"
    "enum LineBreakClass {\n"
    "    LineBreak_OP, LineBreak_CL, LineBreak_CP, LineBreak_QU, LineBreak_GL,\n"
    "    LineBreak_NS, LineBreak_EX, LineBreak_SY, LineBreak_IS, LineBreak_PR,\n"
@@ -562,7 +568,7 @@ static void initLineBreak()
       { LineBreak_CR, "CR" },
       { LineBreak_LF, "LF" },
       { LineBreak_CM, "CM" },
-      { LineBreak_BK, "NL" },      // ### Class NL is mapped to BK
+      { LineBreak_BK, "NL" },      // Class NL is mapped to BK
       { LineBreak_SG, "SG" },
       { LineBreak_WJ, "WJ" },
       { LineBreak_ZW, "ZW" },
@@ -573,7 +579,7 @@ static void initLineBreak()
       { LineBreak_BB, "BB" },
       { LineBreak_HY, "HY" },
       { LineBreak_CB, "CB" },
-      { LineBreak_NS, "CJ" },      // CJ is mapped as NS to yield CSS strict line breaking, change to ID for normal breaking
+      { LineBreak_NS, "CJ" },      // CJ is mapped as NS to yield CSS strict line breaking
       { LineBreak_CL, "CL" },
       { LineBreak_CP, "CP" },
       { LineBreak_EX, "EX" },
@@ -586,8 +592,14 @@ static void initLineBreak()
       { LineBreak_PO, "PO" },
       { LineBreak_PR, "PR" },
       { LineBreak_SY, "SY" },
-      { LineBreak_AL, "AI" },      // Class AI is mapped to AL
       { LineBreak_AL, "AL" },
+      { LineBreak_AL, "AI" },      // AI is mapped to AL
+      { LineBreak_AL, "AK" },      // AK is mapped to AL
+      { LineBreak_AL, "AS" },      // AS is mapped to AL
+      { LineBreak_AL, "AP" },      // AP is mapped to AL
+      { LineBreak_AL, "VF" },      // VF is mapped to AL
+      { LineBreak_AL, "VI" },      // VI is mapped to AL
+      { LineBreak_AL, "XX" },      // XX is mapped to AL
       { LineBreak_HL, "HL" },
       { LineBreak_H2, "H2" },
       { LineBreak_H3, "H3" },
@@ -597,7 +609,6 @@ static void initLineBreak()
       { LineBreak_JT, "JT" },
       { LineBreak_RI, "RI" },
       { LineBreak_SA, "SA" },
-      { LineBreak_AL, "XX" },      // Class XX is mapped to AL
       { LineBreak_EB, "EB" },
       { LineBreak_EM, "EM" },
       { LineBreak_ZWJ, "ZWJ" },
@@ -739,36 +750,36 @@ static void initScriptMap()
       { QChar::Script_Takri,                  "Takri" },
 
       // 7.0
-      { QChar::Script_CaucasianAlbanian,      "CaucasianAlbanian" },
-      { QChar::Script_BassaVah,               "BassaVah" },
+      { QChar::Script_Caucasian_Albanian,     "CaucasianAlbanian" },
+      { QChar::Script_Bassa_Vah,              "BassaVah" },
       { QChar::Script_Duployan,               "Duployan" },
       { QChar::Script_Elbasan,                "Elbasan" },
       { QChar::Script_Grantha,                "Grantha" },
-      { QChar::Script_PahawhHmong,            "PahawhHmong" },
+      { QChar::Script_Pahawh_Hmong,           "PahawhHmong" },
       { QChar::Script_Khojki,                 "Khojki" },
-      { QChar::Script_LinearA,                "LinearA" },
+      { QChar::Script_Linear_A,               "LinearA" },
       { QChar::Script_Mahajani,               "Mahajani" },
       { QChar::Script_Manichaean,             "Manichaean" },
-      { QChar::Script_MendeKikakui,           "MendeKikakui" },
+      { QChar::Script_Mende_Kikakui,          "MendeKikakui" },
       { QChar::Script_Modi,                   "Modi" },
       { QChar::Script_Mro,                    "Mro" },
-      { QChar::Script_OldNorthArabian,        "OldNorthArabian" },
+      { QChar::Script_Old_North_Arabian,      "OldNorthArabian" },
       { QChar::Script_Nabataean,              "Nabataean" },
       { QChar::Script_Palmyrene,              "Palmyrene" },
       { QChar::Script_PauCinHau,              "PauCinHau" },
       { QChar::Script_OldPermic,              "OldPermic" },
-      { QChar::Script_PsalterPahlavi,         "PsalterPahlavi" },
+      { QChar::Script_Psalter_Pahlavi,        "PsalterPahlavi" },
       { QChar::Script_Siddham,                "Siddham" },
       { QChar::Script_Khudawadi,              "Khudawadi" },
       { QChar::Script_Tirhuta,                "Tirhuta" },
-      { QChar::Script_WarangCiti,             "WarangCiti" },
+      { QChar::Script_Warang_Citi,            "WarangCiti" },
 
       // 8.0
       { QChar::Script_Ahom,                   "Ahom" },
-      { QChar::Script_AnatolianHieroglyphs,   "AnatolianHieroglyphs" },
+      { QChar::Script_Anatolian_Hieroglyphs,  "AnatolianHieroglyphs" },
       { QChar::Script_Hatran,                 "Hatran" },
       { QChar::Script_Multani,                "Multani" },
-      { QChar::Script_OldHungarian,           "OldHungarian" },
+      { QChar::Script_Old_Hungarian,          "OldHungarian" },
       { QChar::Script_SignWriting,            "SignWriting" },
 
       // 9.0
@@ -780,19 +791,45 @@ static void initScriptMap()
       { QChar::Script_Tangut,                 "Tangut" },
 
       // 10.0
-      { QChar::Script_MasaramGondi,           "MasaramGondi" },
+      { QChar::Script_Masaram_Gondi,          "MasaramGondi" },
       { QChar::Script_Nushu,                  "Nushu" },
       { QChar::Script_Soyombo,                "Soyombo" },
-      { QChar::Script_ZanabazarSquare,        "ZanabazarSquare" },
+      { QChar::Script_Zanabazar_Square,       "ZanabazarSquare" },
 
       // 11.0
-      { QChar::Script_HanifiRohingya,         "HanifiRohingya" },
-      { QChar::Script_OldSogdian,             "OldSogdian" },
+      { QChar::Script_Hanifi_Rohingya,        "HanifiRohingya" },
+      { QChar::Script_Old_Sogdian,            "OldSogdian" },
       { QChar::Script_Sogdian,                "Sogdian" },
       { QChar::Script_Dogra,                  "Dogra" },
-      { QChar::Script_GunjalaGondi,           "GunjalaGondi" },
+      { QChar::Script_Gunjala_Gondi,          "GunjalaGondi" },
       { QChar::Script_Makasar,                "Makasar" },
       { QChar::Script_Medefaidrin,            "Medefaidrin" },
+
+      // 12.0
+      { QChar::Script_Elymaic,                "Elymaic" },
+      { QChar::Script_Nandinagari,            "Nandinagari" },
+      { QChar::Script_Nyiakeng_Puachue_Hmong, "NyiakengPuachueHmong" },
+      { QChar::Script_Wancho,                 "Wancho" },
+
+      // 13.0
+      { QChar::Script_Chorasmian,             "Chorasmian" },
+      { QChar::Script_Dives_Akuru,            "DivesAkuru" },
+      { QChar::Script_Khitan_Small_Script,    "KhitanSmallScript" },
+      { QChar::Script_Yezidi,                 "Yezidi" },
+
+      // 14.0
+      { QChar::Script_Cypro_Minoan,           "CyproMinoan"},
+      { QChar::Script_Old_Uyghur,             "OldUyghur"},
+      { QChar::Script_Tangsa,                 "Tangsa"},
+      { QChar::Script_Toto,                   "Toto"},
+      { QChar::Script_Vithkuqi,               "Vithkuqi"},
+
+      // 15.0
+      { QChar::Script_Kawi,                   "Kawi"},
+      { QChar::Script_Nag_Mundari,            "NagMundari"},
+
+      // 15.1
+      // nothing was added
 
       // unhandled
       { QChar::Script_Unknown,                0 }
@@ -1489,8 +1526,11 @@ static void readArabicShaping()
             break;
 
          case Joining_Transparent:
-            if (rowData.pFlags.category != QChar::Mark_NonSpacing && rowData.pFlags.category != QChar::Mark_Enclosing &&
-                     rowData.pFlags.category != QChar::Other_Format) {
+            if (rowData.pFlags.category != QChar::Mark_NonSpacing &&
+                rowData.pFlags.category != QChar::Mark_Enclosing &&
+                rowData.pFlags.category != QChar::Other_Format &&
+                rowData.pFlags.category != QChar::Letter_Modifier)   {
+
 
                qFatal("%x: joining type '%s' was met, the current implementation needs to be revised",
                       codepoint, l[2].constData());
@@ -1787,7 +1827,7 @@ static void readLineBreak()
 
    f.open(QFile::ReadOnly);
 
-   while (!f.atEnd()) {
+   while (! f.atEnd()) {
       QByteArray line = f.readLine();
       line = line.trimmed();
 

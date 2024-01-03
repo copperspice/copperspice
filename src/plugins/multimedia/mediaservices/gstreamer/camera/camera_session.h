@@ -112,12 +112,15 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    CameraBinControl *cameraControl() const {
       return m_cameraControl;
    }
+
    CameraBinAudioEncoder *audioEncodeControl() const {
       return m_audioEncodeControl;
    }
+
    CameraBinVideoEncoder *videoEncodeControl() const {
       return m_videoEncodeControl;
    }
+
    CameraBinImageEncoder *imageEncodeControl() const {
       return m_imageEncodeControl;
    }
@@ -132,12 +135,15 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    CameraBinZoom *cameraZoomControl() const {
       return m_cameraZoomControl;
    }
+
    CameraBinImageProcessing *imageProcessingControl() const {
       return m_imageProcessingControl;
    }
+
    CameraBinCaptureDestination *captureDestinationControl() const {
       return m_captureDestinationControl;
    }
+
    CameraBinCaptureBufferFormat *captureBufferFormatControl() const {
       return m_captureBufferFormatControl;
    }
@@ -145,6 +151,7 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    CameraBinRecorder *recorderControl() const {
       return m_recorderControl;
    }
+
    CameraBinContainer *mediaContainerControl() const {
       return m_mediaContainerControl;
    }
@@ -152,21 +159,25 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    QGstreamerElementFactory *audioInput() const {
       return m_audioInputFactory;
    }
+
    void setAudioInput(QGstreamerElementFactory *audioInput);
 
    QGstreamerElementFactory *videoInput() const {
       return m_videoInputFactory;
    }
+
    void setVideoInput(QGstreamerElementFactory *videoInput);
    bool isReady() const;
 
    QObject *viewfinder() const {
       return m_viewfinder;
    }
+
    void setViewfinder(QObject *viewfinder);
 
    QList<QCameraViewfinderSettings> supportedViewfinderSettings() const;
    QCameraViewfinderSettings viewfinderSettings() const;
+
    void setViewfinderSettings(const QCameraViewfinderSettings &settings) {
       m_viewfinderSettings = settings;
    }
@@ -188,50 +199,64 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
       return m_inputDevice;
    }
 
-   bool processSyncMessage(const QGstreamerMessage &message);
-   bool processBusMessage(const QGstreamerMessage &message);
+   bool processSyncMessage(const QGstreamerMessage &message) override;
+   bool processBusMessage(const QGstreamerMessage &message) override;
 
- public:
-   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status status))
-   CS_SIGNAL_2(statusChanged, status)
+   CS_SIGNAL_1(Public, void statusChanged(QCamera::Status newStatus))
+   CS_SIGNAL_2(statusChanged, newStatus)
+
    CS_SIGNAL_1(Public, void pendingStateChanged(QCamera::State state))
    CS_SIGNAL_2(pendingStateChanged, state)
+
    CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    CS_SIGNAL_2(durationChanged, duration)
+
    CS_SIGNAL_1(Public, void error(int error, const QString &errorString))
    CS_SIGNAL_2(error, error, errorString)
+
    CS_SIGNAL_1(Public, void imageExposed(int requestId))
    CS_SIGNAL_2(imageExposed, requestId)
+
    CS_SIGNAL_1(Public, void imageCaptured(int requestId, const QImage &img))
    CS_SIGNAL_2(imageCaptured, requestId, img)
-   CS_SIGNAL_1(Public, void mutedChanged(bool un_named_arg1))
-   CS_SIGNAL_2(mutedChanged, un_named_arg1)
+
+   CS_SIGNAL_1(Public, void mutedChanged(bool muted))
+   CS_SIGNAL_2(mutedChanged, muted)
+
    CS_SIGNAL_1(Public, void viewfinderChanged())
    CS_SIGNAL_2(viewfinderChanged)
-   CS_SIGNAL_1(Public, void readyChanged(bool un_named_arg1))
-   CS_SIGNAL_2(readyChanged, un_named_arg1)
-   CS_SIGNAL_1(Public, void busyChanged(bool un_named_arg1))
-   CS_SIGNAL_2(busyChanged, un_named_arg1)
 
- public :
+   CS_SIGNAL_1(Public, void readyChanged(bool isReady))
+   CS_SIGNAL_2(readyChanged, isReady)
+
+   CS_SIGNAL_1(Public, void busyChanged(bool busy))
+   CS_SIGNAL_2(busyChanged, busy)
+
    CS_SLOT_1(Public, void setDevice(const QString &device))
    CS_SLOT_2(setDevice)
-   CS_SLOT_1(Public, void setState(QCamera::State un_named_arg1))
+
+   CS_SLOT_1(Public, void setState(QCamera::State start))
    CS_SLOT_2(setState)
+
    CS_SLOT_1(Public, void setCaptureDevice(const QString &deviceName))
    CS_SLOT_2(setCaptureDevice)
-   CS_SLOT_1(Public, void setMetaData(const QMap <QByteArray, QVariant> &un_named_arg1))
+
+   CS_SLOT_1(Public, void setMetaData(const QMap <QByteArray, QVariant> &value))
    CS_SLOT_2(setMetaData)
-   CS_SLOT_1(Public, void setMuted(bool un_named_arg1))
+
+   CS_SLOT_1(Public, void setMuted(bool value))
    CS_SLOT_2(setMuted)
 
- private :
+   QString m_imageFileName;
+   int m_requestId;
+
+ private:
    CS_SLOT_1(Private, void handleViewfinderChange())
    CS_SLOT_2(handleViewfinderChange)
+
    CS_SLOT_1(Private, void setupCaptureResolution())
    CS_SLOT_2(setupCaptureResolution)
 
- private:
    void load();
    void unload();
    void start();
@@ -280,12 +305,14 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    CameraBinImageEncoder *m_imageEncodeControl;
    CameraBinRecorder *m_recorderControl;
    CameraBinContainer *m_mediaContainerControl;
+
 #ifdef HAVE_GST_PHOTOGRAPHY
    CameraBinExposure *m_cameraExposureControl;
    CameraBinFlash *m_cameraFlashControl;
    CameraBinFocus *m_cameraFocusControl;
    CameraBinLocks *m_cameraLocksControl;
 #endif
+
    CameraBinZoom *m_cameraZoomControl;
    CameraBinImageProcessing *m_imageProcessingControl;
    CameraBinCaptureDestination *m_captureDestinationControl;
@@ -306,15 +333,17 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    {
     public:
       ViewfinderProbe(CameraBinSession *s)
-         : QGstreamerBufferProbe(QGstreamerBufferProbe::ProbeCaps)
-         , session(s)
-      {}
+         : QGstreamerBufferProbe(QGstreamerBufferProbe::ProbeCaps), session(s)
+      {
+      }
 
       void probeCaps(GstCaps *caps);
 
     private:
       CameraBinSession *const session;
-   } m_viewfinderProbe;
+   };
+
+   ViewfinderProbe m_viewfinderProbe;
 
    GstElement *m_audioSrc;
    GstElement *m_audioConvert;
@@ -323,10 +352,6 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    GstElement *m_audioEncoder;
    GstElement *m_videoEncoder;
    GstElement *m_muxer;
-
- public:
-   QString m_imageFileName;
-   int m_requestId;
 };
 
 #endif

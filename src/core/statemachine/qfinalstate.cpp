@@ -51,12 +51,12 @@ QFinalState::~QFinalState()
 
 void QFinalState::onEntry(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QFinalState::onExit(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 bool QFinalState::event(QEvent *e)

@@ -26,16 +26,13 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class Aggregator : public FunctionCall
 {
  public:
    SequenceType::Ptr staticType() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

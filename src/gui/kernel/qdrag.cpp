@@ -116,7 +116,7 @@ Qt::DropAction QDrag::exec(Qt::DropActions supportedActions, Qt::DropAction defa
    Q_D(QDrag);
 
    if (! d->data) {
-      qWarning("QDrag::exec(): No mimedata set before starting the drag");
+      qWarning("QDrag::exec() Mime data was not set before starting the drag");
       return d->executed_action;
    }
 
@@ -148,7 +148,7 @@ Qt::DropAction QDrag::start(Qt::DropActions request)
 {
    Q_D(QDrag);
    if (!d->data) {
-      qWarning("QDrag: No mimedata set before starting the drag");
+      qWarning("QDrag::start() Mime data was not set before starting the drag");
       return d->executed_action;
    }
 

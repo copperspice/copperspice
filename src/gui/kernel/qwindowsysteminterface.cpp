@@ -208,21 +208,20 @@ bool QWindowSystemInterface::handleShortcutEvent(QWindow *window, ulong timestam
    return shortcutMap.tryShortcut(&keyEvent);
 
 #else
-   Q_UNUSED(window)
-   Q_UNUSED(timestamp)
-   Q_UNUSED(key)
-   Q_UNUSED(modifiers)
-   Q_UNUSED(nativeScanCode)
-   Q_UNUSED(nativeVirtualKey)
-   Q_UNUSED(nativeModifiers)
-   Q_UNUSED(text)
-   Q_UNUSED(autorepeat)
-   Q_UNUSED(count)
+   (void) window;
+   (void)  timestamp;
+   (void) key;
+   (void) modifiers;
+   (void) nativeScanCod;
+   (void) nativeVirtualKey;
+   (void) nativeModifiers;
+   (void) text;
+   (void) autorepeat;
+   (void) count;
 
    return false;
 #endif
 }
-
 
 bool QWindowSystemInterface::handleKeyEvent(QWindow *w, QEvent::Type t, int k, Qt::KeyboardModifiers mods,
       const QString &text, bool autorep, ushort count)
@@ -235,7 +234,8 @@ bool QWindowSystemInterface::handleKeyEvent(QWindow *tlw, ulong timestamp, QEven
       const QString &text, bool autorep, ushort count)
 {
 #if defined(Q_OS_DARWIN)
-   if (t == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw, timestamp, k, mods, 0, 0, 0, text, autorep, count)) {
+   if (t == QEvent::KeyPress && QWindowSystemInterface::handleShortcutEvent(tlw, timestamp, k, mods,
+         0, 0, 0, text, autorep, count)) {
       return true;
    }
 #endif
@@ -267,7 +267,7 @@ bool QWindowSystemInterface::handleExtendedKeyEvent(QWindow *tlw, ulong timestam
    }
 
 #else
-   Q_UNUSED(tryShortcutOverride)
+   (void) tryShortcutOverride;
 #endif
 
    QWindowSystemInterfacePrivate::KeyEvent *e =
@@ -583,9 +583,8 @@ bool QWindowSystemInterface::flushWindowSystemEvents(QEventLoop::ProcessEventsFl
    }
 
    if (! QGuiApplication::instance()) {
-      qWarning().nospace()
-            << "QWindowSystemInterface::flushWindowSystemEvents() invoked after "
-               "QGuiApplication destruction, discarding " << count << " events.";
+      qWarning("QWindowSystemInterface::flushWindowSystemEvents() Unable to call this method after "
+         "QApplication has been closed");
 
       QWindowSystemInterfacePrivate::windowSystemEventQueue.clear();
       return false;

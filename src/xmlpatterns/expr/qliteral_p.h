@@ -26,9 +26,8 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class Literal : public EmptyContainer
 {
  public:
@@ -96,8 +95,7 @@ inline Expression::Ptr wrapLiteral(const Item &item,
 
    return retval;
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

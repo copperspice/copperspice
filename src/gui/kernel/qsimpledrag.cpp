@@ -88,9 +88,9 @@ static inline QPoint getNativeMousePos(QEvent *e, QObject *o)
 
 bool QBasicDrag::eventFilter(QObject *o, QEvent *e)
 {
-   Q_UNUSED(o);
+   (void) o;
 
-   if (!m_drag) {
+   if (! m_drag) {
       if (e->type() == QEvent::KeyRelease && static_cast<QKeyEvent *>(e)->key() == Qt::Key_Escape) {
          disableEventFilter();
          exitDndEventLoop();

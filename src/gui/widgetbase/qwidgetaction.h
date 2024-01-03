@@ -57,7 +57,7 @@ class Q_GUI_EXPORT QWidgetAction : public QAction
    QList<QWidget *> createdWidgets() const;
 
  private:
-   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *obj))
+   GUI_CS_SLOT_1(Private, void _q_widgetDestroyed(QObject *object))
    GUI_CS_SLOT_2(_q_widgetDestroyed)
 
    friend class QToolBar;

@@ -44,9 +44,6 @@ QColumnView::QColumnView(QWidget *parent)
    d->initialize();
 }
 
-/*!
-    \internal
-*/
 QColumnView::QColumnView(QColumnViewPrivate &dd, QWidget *parent)
    :  QAbstractItemView(dd, parent)
 {
@@ -107,9 +104,6 @@ bool QColumnView::resizeGripsVisible() const
    return d->showResizeGrips;
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::setModel(QAbstractItemModel *model)
 {
    Q_D(QColumnView);
@@ -120,9 +114,6 @@ void QColumnView::setModel(QAbstractItemModel *model)
    QAbstractItemView::setModel(model);
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::setRootIndex(const QModelIndex &index)
 {
    Q_D(QColumnView);
@@ -145,18 +136,12 @@ void QColumnView::setRootIndex(const QModelIndex &index)
    d->updateScrollbars();
 }
 
-/*!
-    \reimp
-*/
 bool QColumnView::isIndexHidden(const QModelIndex &index) const
 {
-   Q_UNUSED(index);
+   (void) index;
    return false;
 }
 
-/*!
-    \reimp
-*/
 QModelIndex QColumnView::indexAt(const QPoint &point) const
 {
    Q_D(const QColumnView);
@@ -171,9 +156,6 @@ QModelIndex QColumnView::indexAt(const QPoint &point) const
    return QModelIndex();
 }
 
-/*!
-    \reimp
-*/
 QRect QColumnView::visualRect(const QModelIndex &index) const
 {
    if (!index.isValid()) {
@@ -191,12 +173,10 @@ QRect QColumnView::visualRect(const QModelIndex &index) const
    return QRect();
 }
 
-/*!
-    \reimp
- */
 void QColumnView::scrollContentsBy(int dx, int dy)
 {
    Q_D(QColumnView);
+
    if (d->columns.isEmpty() || dx == 0) {
       return;
    }
@@ -209,13 +189,11 @@ void QColumnView::scrollContentsBy(int dx, int dy)
    QAbstractItemView::scrollContentsBy(dx, dy);
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
    Q_D(QColumnView);
-   Q_UNUSED(hint);
+   (void) hint;
+
    if (!index.isValid() || d->columns.isEmpty()) {
       return;
    }
@@ -226,7 +204,7 @@ void QColumnView::scrollTo(const QModelIndex &index, ScrollHint hint)
    }
 
    d->currentAnimation.stop();
-#endif //QT_NO_ANIMATION
+#endif
 
    // Fill up what is needed to get to index
    d->closeColumns(index, true);
@@ -296,22 +274,19 @@ void QColumnView::scrollTo(const QModelIndex &index, ScrollHint hint)
       d->currentAnimation.setEndValue(newScrollbarValue);
       d->currentAnimation.start();
    } else
-#endif //QT_NO_ANIMATION
+#endif
+
    {
       horizontalScrollBar()->setValue(newScrollbarValue);
    }
 }
 
-/*!
-    \reimp
-    Move left should go to the parent index
-    Move right should go to the child index or down if there is no child
-*/
 QModelIndex QColumnView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    // the child views which have focus get to deal with this first and if
    // they don't accept it then it comes up this view and we only grip left/right
-   Q_UNUSED(modifiers);
+   (void) modifiers;
+
    if (!model()) {
       return QModelIndex();
    }
@@ -348,14 +323,13 @@ QModelIndex QColumnView::moveCursor(CursorAction cursorAction, Qt::KeyboardModif
    return QModelIndex();
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::resizeEvent(QResizeEvent *event)
 {
    Q_D(QColumnView);
+
    d->doLayout();
    d->updateScrollbars();
+
    if (!isRightToLeft()) {
       int diff = event->oldSize().width() - event->size().width();
       if (diff < 0 && horizontalScrollBar()->isVisible()
@@ -363,20 +337,19 @@ void QColumnView::resizeEvent(QResizeEvent *event)
          horizontalScrollBar()->setMaximum(horizontalScrollBar()->maximum() + diff);
       }
    }
+
    QAbstractItemView::resizeEvent(event);
 }
 
-/*!
-    \internal
-*/
 void QColumnViewPrivate::updateScrollbars()
 {
    Q_Q(QColumnView);
+
 #ifndef QT_NO_ANIMATION
    if (currentAnimation.state() == QPropertyAnimation::Running) {
       return;
    }
-#endif //QT_NO_ANIMATION
+#endif
 
    // find the total horizontal length of the laid out columns
    int horizontalLength = 0;
@@ -388,6 +361,7 @@ void QColumnViewPrivate::updateScrollbars()
    }
 
    QSize viewportSize = viewport->size();
+
    if (horizontalLength < viewportSize.width() && hbar->value() == 0) {
       hbar->setRange(0, 0);
    } else {
@@ -397,38 +371,32 @@ void QColumnViewPrivate::updateScrollbars()
          hbar->setRange(0, hiddenLength);
       }
    }
+
    if (!columns.isEmpty()) {
       int pageStepSize = columns.at(0)->width();
       if (pageStepSize != hbar->pageStep()) {
          hbar->setPageStep(pageStepSize);
       }
    }
+
    bool visible = (hbar->maximum() > 0);
+
    if (visible != hbar->isVisible()) {
       hbar->setVisible(visible);
    }
 }
 
-/*!
-    \reimp
-*/
 int QColumnView::horizontalOffset() const
 {
    Q_D(const QColumnView);
    return d->offset;
 }
 
-/*!
-    \reimp
-*/
 int QColumnView::verticalOffset() const
 {
    return 0;
 }
 
-/*!
-    \reimp
-*/
 QRegion QColumnView::visualRegionForSelection(const QItemSelection &selection) const
 {
    int ranges = selection.count();
@@ -458,33 +426,26 @@ QRegion QColumnView::visualRegionForSelection(const QItemSelection &selection) c
    return firstRegion.united(lastRegion);
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::setSelection(const QRect &rect, QItemSelectionModel::SelectionFlags command)
 {
-   Q_UNUSED(rect);
-   Q_UNUSED(command);
+   (void) rect;
+   (void) command;
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::setSelectionModel(QItemSelectionModel *newSelectionModel)
 {
    Q_D(const QColumnView);
+
    for (int i = 0; i < d->columns.size(); ++i) {
       if (d->columns.at(i)->selectionModel() == selectionModel()) {
          d->columns.at(i)->setSelectionModel(newSelectionModel);
          break;
       }
    }
+
    QAbstractItemView::setSelectionModel(newSelectionModel);
 }
 
-/*!
-    \reimp
-*/
 QSize QColumnView::sizeHint() const
 {
    Q_D(const QColumnView);
@@ -495,10 +456,6 @@ QSize QColumnView::sizeHint() const
    return sizeHint.expandedTo(QAbstractItemView::sizeHint());
 }
 
-/*!
-    \internal
-    Move all widgets from the corner grip and to the right
-  */
 void QColumnViewPrivate::_q_gripMoved(int offset)
 {
    Q_Q(QColumnView);
@@ -531,13 +488,6 @@ void QColumnViewPrivate::_q_gripMoved(int offset)
    updateScrollbars();
 }
 
-/*!
-    \internal
-
-    Find where the current columns intersect parent's columns
-
-    Delete any extra columns and insert any needed columns.
-  */
 void QColumnViewPrivate::closeColumns(const QModelIndex &parent, bool build)
 {
    if (columns.isEmpty()) {
@@ -552,17 +502,21 @@ void QColumnViewPrivate::closeColumns(const QModelIndex &parent, bool build)
    // Find the last column that matches the parent's tree
    int currentColumn = -1;
    QModelIndex parentIndex = parent;
+
    while (currentColumn == -1 && parentIndex.isValid()) {
       if (columns.isEmpty()) {
          break;
       }
+
       parentIndex = parentIndex.parent();
       if (root == parentIndex) {
          passThroughRoot = true;
       }
+
       if (!parentIndex.isValid()) {
          break;
       }
+
       for (int i = columns.size() - 1; i >= 0; --i) {
          if (columns.at(i)->rootIndex() == parentIndex) {
             currentColumn = i;
@@ -708,24 +662,6 @@ QAbstractItemView *QColumnViewPrivate::createColumn(const QModelIndex &index, bo
    return view;
 }
 
-/*!
-    \fn void QColumnView::updatePreviewWidget(const QModelIndex &index)
-
-    This signal is emitted when the preview widget should be updated to
-    provide rich information about \a index
-
-    \sa previewWidget()
- */
-
-/*!
-    To use a custom widget for the final column when you select
-    an item overload this function and return a widget.
-    \a index is the root index that will be assigned to the view.
-
-    Return the new view.  QColumnView will automatically take ownership of the widget.
-
-    \sa setPreviewWidget()
- */
 QAbstractItemView *QColumnView::createColumn(const QModelIndex &index)
 {
    QListView *view = new QListView(viewport());
@@ -740,15 +676,6 @@ QAbstractItemView *QColumnView::createColumn(const QModelIndex &index)
    return view;
 }
 
-/*!
-    Copies the behavior and options of the column view and applies them to
-    the \a column such as the iconSize(), textElideMode() and
-    alternatingRowColors(). This can be useful when reimplementing
-    createColumn().
-
-    \since 4.4
-    \sa createColumn()
- */
 void QColumnView::initializeColumn(QAbstractItemView *column) const
 {
    Q_D(const QColumnView);
@@ -790,45 +717,31 @@ void QColumnView::initializeColumn(QAbstractItemView *column) const
    delete delegate;
 }
 
-/*!
-    Returns the preview widget, or 0 if there is none.
-
-    \sa setPreviewWidget(), updatePreviewWidget()
-*/
 QWidget *QColumnView::previewWidget() const
 {
    Q_D(const QColumnView);
    return d->previewWidget;
 }
 
-/*!
-    Sets the preview \a widget.
-
-    The \a widget becomes a child of the column view, and will be
-    destroyed when the column area is deleted or when a new widget is
-    set.
-
-    \sa previewWidget(), updatePreviewWidget()
-*/
 void QColumnView::setPreviewWidget(QWidget *widget)
 {
    Q_D(QColumnView);
    d->setPreviewWidget(widget);
 }
 
-/*!
-    \internal
-*/
 void QColumnViewPrivate::setPreviewWidget(QWidget *widget)
 {
    Q_Q(QColumnView);
+
    if (previewColumn) {
       if (!columns.isEmpty() && columns.last() == previewColumn) {
          columns.removeLast();
       }
       previewColumn->deleteLater();
    }
+
    QColumnViewPreviewColumn *column = new QColumnViewPreviewColumn(q);
+
    column->setPreviewWidget(widget);
    previewColumn = column;
    previewColumn->hide();
@@ -841,14 +754,6 @@ void QColumnViewPrivate::setPreviewWidget(QWidget *widget)
    previewWidget->setParent(previewColumn->viewport());
 }
 
-/*!
-    Sets the column widths to the values given in the \a list.  Extra values in the list are
-    kept and used when the columns are created.
-
-    If list contains too few values, only width of the rest of the columns will not be modified.
-
-    \sa columnWidths(), createColumn()
-*/
 void QColumnView::setColumnWidths(const QList<int> &list)
 {
    Q_D(QColumnView);
@@ -867,11 +772,6 @@ void QColumnView::setColumnWidths(const QList<int> &list)
    }
 }
 
-/*!
-    Returns a list of the width of all the columns in this view.
-
-    \sa setColumnWidths()
-*/
 QList<int> QColumnView::columnWidths() const
 {
    Q_D(const QColumnView);
@@ -882,21 +782,16 @@ QList<int> QColumnView::columnWidths() const
    return list;
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
    QAbstractItemView::rowsInserted(parent, start, end);
    d_func()->checkColumnCreation(parent);
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
    Q_D(QColumnView);
+
    if (!current.isValid()) {
       QAbstractItemView::currentChanged(current, previous);
       return;
@@ -941,10 +836,6 @@ void QColumnView::currentChanged(const QModelIndex &current, const QModelIndex &
    QAbstractItemView::currentChanged(current, previous);
 }
 
-/*
-    We have change the current column and need to update focus and selection models
-    on the new current column.
-*/
 void QColumnViewPrivate::_q_changeCurrentColumn()
 {
    Q_Q(QColumnView);
@@ -1009,9 +900,6 @@ void QColumnViewPrivate::_q_changeCurrentColumn()
    updateScrollbars();
 }
 
-/*!
-    \reimp
-*/
 void QColumnView::selectAll()
 {
    if (!model() || !selectionModel()) {
@@ -1041,9 +929,6 @@ void QColumnView::selectAll()
    selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
 }
 
-/*
- * private object implementation
- */
 QColumnViewPrivate::QColumnViewPrivate()
    :  QAbstractItemViewPrivate(), showResizeGrips(true), offset(), previewWidget(nullptr), previewColumn(nullptr)
 {
@@ -1053,22 +938,12 @@ QColumnViewPrivate::~QColumnViewPrivate()
 {
 }
 
-/*!
-    \internal
-
-  */
 void QColumnViewPrivate::_q_columnsInserted(const QModelIndex &parent, int start, int end)
 {
    QAbstractItemViewPrivate::_q_columnsInserted(parent, start, end);
    checkColumnCreation(parent);
 }
 
-/*!
-    \internal
-
-    Makes sure we create a corresponding column as a result of changing the model.
-
-  */
 void QColumnViewPrivate::checkColumnCreation(const QModelIndex &parent)
 {
    if (parent == q_func()->currentIndex() && model->hasChildren(parent)) {
@@ -1076,6 +951,7 @@ void QColumnViewPrivate::checkColumnCreation(const QModelIndex &parent)
       //let's try to find out if there is already a mapping that is good
       for (int i = 0; i < columns.count(); ++i) {
          QAbstractItemView *view = columns.at(i);
+
          if (view->rootIndex() == parent) {
             if (view == previewColumn) {
                //let's recreate the parent
@@ -1088,10 +964,6 @@ void QColumnViewPrivate::checkColumnCreation(const QModelIndex &parent)
    }
 }
 
-/*!
-    \internal
-    Place all of the columns where they belong inside of the viewport, resize as necessary.
-*/
 void QColumnViewPrivate::doLayout()
 {
    Q_Q(QColumnView);
@@ -1111,6 +983,7 @@ void QColumnViewPrivate::doLayout()
             view->setGeometry(x, 0, view->width(), viewportHeight);
          }
       }
+
    } else {
       for (int i = 0; i < columns.size(); ++i) {
          QAbstractItemView *view = columns.at(i);
@@ -1123,16 +996,8 @@ void QColumnViewPrivate::doLayout()
    }
 }
 
-/*!
-    \internal
-
-    Draws a delegate with a > if an object has children.
-
-    \sa {Model/View Programming}, QItemDelegate
-*/
 void QColumnViewDelegate::paint(QPainter *painter,
-   const QStyleOptionViewItem &option,
-   const QModelIndex &index) const
+      const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
    drawBackground(painter, option, index );
 
@@ -1168,10 +1033,10 @@ void QColumnViewDelegate::paint(QPainter *painter,
    }
 }
 
-void QColumnView::_q_gripMoved(int un_named_arg1)
+void QColumnView::_q_gripMoved(int offset)
 {
    Q_D(QColumnView);
-   d->_q_gripMoved(un_named_arg1);
+   d->_q_gripMoved(offset);
 }
 
 void QColumnView::_q_changeCurrentColumn()
@@ -1180,12 +1045,10 @@ void QColumnView::_q_changeCurrentColumn()
    d->_q_changeCurrentColumn();
 }
 
-void QColumnView::_q_clicked(const QModelIndex &un_named_arg1)
+void QColumnView::_q_clicked(const QModelIndex &index)
 {
    Q_D(QColumnView);
-   d->_q_clicked(un_named_arg1);
+   d->_q_clicked(index);
 }
-
-
 
 #endif // QT_NO_COLUMNVIEW

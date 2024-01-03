@@ -121,13 +121,13 @@ class Q_GUI_EXPORT QDataWidgetMapper : public QObject
  private:
    Q_DECLARE_PRIVATE(QDataWidgetMapper)
 
-   GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2, const QVector<int> &))
+   GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles))
    GUI_CS_SLOT_2(_q_dataChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_commitData(QWidget *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_commitData(QWidget *currentWidget))
    GUI_CS_SLOT_2(_q_commitData)
 
-   GUI_CS_SLOT_1(Private, void _q_closeEditor(QWidget *un_named_arg1, QAbstractItemDelegate::EndEditHint un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_closeEditor(QWidget *currentWidget, QAbstractItemDelegate::EndEditHint hint))
    GUI_CS_SLOT_2(_q_closeEditor)
 
    GUI_CS_SLOT_1(Private, void _q_modelDestroyed())

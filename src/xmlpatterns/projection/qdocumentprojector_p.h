@@ -24,33 +24,33 @@
 #ifndef QDocumentProjector_P_H
 #define QDocumentProjector_P_H
 
-#include <qprojectedexpression_p.h>
 #include <qabstractxmlreceiver.h>
 
-QT_BEGIN_NAMESPACE
+#include <qprojectedexpression_p.h>
 
 namespace QPatternist {
+
 class DocumentProjector : public QAbstractXmlReceiver
 {
  public:
    DocumentProjector(const ProjectedExpression::Vector &paths, QAbstractXmlReceiver *const receiver);
 
-   virtual void namespaceBinding(const QXmlName nb);
-
-   virtual void characters(const QString &value);
-   void comment(const QString &value) override;
-
-   virtual void startElement(const QXmlName name);
+   void startElement(const QXmlName &name) override;
    void endElement() override;
 
-   virtual void attribute(const QXmlName name, const QString &value);
+   void attribute(const QXmlName &name, QStringView value) override;
 
-   virtual void processingInstruction(const QXmlName name, const QString &value);
-
-   void item(const Item &item) override;
+   void comment(const QString &value) override;
+   void characters(QStringView value) override;
 
    void startDocument() override;
    void endDocument() override;
+
+   void processingInstruction(const QXmlName &name, const QString &value) override;
+
+   void namespaceBinding(const QXmlName &nb) override;
+
+   void item(const Item &item) override;
 
    ProjectedExpression::Vector m_paths;
    const int m_pathCount;
@@ -60,8 +60,7 @@ class DocumentProjector : public QAbstractXmlReceiver
 
    QAbstractXmlReceiver *const m_receiver;
 };
-}
 
-QT_END_NAMESPACE
+}   // end namespace
 
 #endif

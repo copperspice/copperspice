@@ -23,8 +23,6 @@
 
 #include "qxsddocumentation_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdDocumentation::XsdDocumentation()
@@ -64,5 +62,3 @@ QString XsdDocumentation::content() const
 {
    return m_content;
 }
-
-QT_END_NAMESPACE

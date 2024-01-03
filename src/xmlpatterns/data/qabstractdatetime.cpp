@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <QStringList>
-#include <QTimeZone>
+#include <qstringlist.h>
+#include <qtimezone.h>
 
 #include "qbuiltintypes_p.h"
 #include "qitem_p.h"
@@ -245,12 +245,14 @@ void AbstractDateTime::setUtcOffset(QDateTime &result,
                                     const int zoOffset)
 {
    if (zoResult == UTC) {
-      result.setTimeSpec(Qt::UTC);
+      result.setTimeZone(QTimeZone::utc());
+
    } else if (zoResult == LocalTime) {
-      result.setTimeSpec(Qt::LocalTime);
+      result.setTimeZone(QTimeZone::systemTimeZone());
+
    } else {
       Q_ASSERT(zoResult == Offset);
-      result.setOffsetFromUtc(zoOffset);
+      result.setTimeZone(QTimeZone(zoOffset));
    }
 }
 
@@ -305,56 +307,35 @@ QString AbstractDateTime::timeToString() const
 
 QString AbstractDateTime::zoneOffsetToString() const
 {
-   switch (m_dateTime.timeSpec()) {
-      case Qt::LocalTime:
-         return QString();
-      case Qt::UTC:
-         return QLatin1String("Z");
-      default: {
-         Q_ASSERT(m_dateTime.timeSpec() == Qt::OffsetFromUTC);
+   if (m_dateTime.timeZone() == QTimeZone::systemTimeZone()) {
+      return QString();
 
-         const int zoneOffset = m_dateTime.offsetFromUtc();
-         Q_ASSERT(zoneOffset != 0);
+   } else if (m_dateTime.timeZone() == QTimeZone::utc()) {
+      return QString("Z");
 
-         const int posZoneOffset = qAbs(zoneOffset);
+   } else {
+      const int zoneOffset = m_dateTime.offsetFromUtc();
+      Q_ASSERT(zoneOffset != 0);
 
-         /* zoneOffset is in seconds. */
-         const int hours = posZoneOffset / (60 * 60);
-         const int minutes = (posZoneOffset % (60 * 60)) / 60;
+      const int posZoneOffset = qAbs(zoneOffset);
 
-         QString result;
-         result.append(zoneOffset < 0 ? QLatin1Char('-') : '+');
-         result.append(QString::number(hours).rightJustified(2, '0'));
-         result.append(QLatin1Char(':'));
-         result.append(QString::number(minutes).rightJustified(2, '0'));
+      /* zoneOffset is in seconds. */
+      const int hours   = posZoneOffset / (60 * 60);
+      const int minutes = (posZoneOffset % (60 * 60)) / 60;
 
-         return result;
-      }
+      QString result;
+      result.append(zoneOffset < 0 ? QLatin1Char('-') : '+');
+      result.append(QString::number(hours).rightJustified(2, '0'));
+      result.append(QLatin1Char(':'));
+      result.append(QString::number(minutes).rightJustified(2, '0'));
+
+      return result;
    }
 }
 
-void AbstractDateTime::copyTimeSpec(const QDateTime &from,
-                                    QDateTime &to)
+void AbstractDateTime::copyTimeSpec(const QDateTime &from, QDateTime &to)
 {
-   switch (from.timeSpec()) {
-      case Qt::UTC:
-      case Qt::LocalTime: {
-         to.setTimeSpec(from.timeSpec());
-         return;
-      }
-
-      case Qt::OffsetFromUTC: {
-         to.setOffsetFromUtc(from.offsetFromUtc());
-         Q_ASSERT(to.timeSpec() == Qt::OffsetFromUTC);
-
-         return;
-      }
-
-      case Qt::TimeZone: {
-         to.setTimeZone(from.timeZone());
-         return;
-      }
-   }
+   to.setTimeZone(from.timeZone());
 }
 
 Item AbstractDateTime::fromValue(const QDateTime &) const

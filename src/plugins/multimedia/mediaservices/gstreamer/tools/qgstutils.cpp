@@ -519,7 +519,12 @@ QMultimedia::SupportEstimate QGstUtils::hasSupport(const QString &mimeType, cons
 namespace {
 
 using FactoryCameraInfoMap = QHash<GstElementFactory *, QVector<QGstUtils::CameraInfo>>;
-Q_GLOBAL_STATIC(FactoryCameraInfoMap, qt_camera_device_info);
+
+static FactoryCameraInfoMap *qt_camera_device_info()
+{
+   static FactoryCameraInfoMap retval;
+   return &retval;
+}
 
 }
 
@@ -1355,7 +1360,7 @@ QVideoFrame::PixelFormat QGstUtils::structurePixelFormat(const GstStructure *str
    }
 
 #if GST_CHECK_VERSION(1,0,0)
-   Q_UNUSED(bpp);
+   (void) bpp;
 
    if (gst_structure_has_name(structure, "video/x-raw")) {
       const gchar *s = gst_structure_get_string(structure, "format");

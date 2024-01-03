@@ -168,7 +168,7 @@ static void qt_win_read_back_PRINTDLGEX(PRINTDLGEX *pd, QPrintDialog *pdlg, QPri
 static bool warnIfNotNative(QPrinter *printer)
 {
    if (printer->outputFormat() != QPrinter::NativeFormat) {
-      qWarning("QPrintDialog: Unable to open a Windows Print Dialog, native format was not configured");
+      qWarning("QPrintDialog::warnIfNotNative() Unable to open a Windows Print Dialog, native format was not configured");
       return false;
    }
 

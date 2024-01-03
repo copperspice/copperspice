@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qpatternistlocale_p.h"
+#include <qoutputvalidator_p.h>
 
-#include "qoutputvalidator_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 
@@ -122,7 +120,8 @@ void OutputValidator::endDocument()
 
 void OutputValidator::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
+
    // TODO
 }
 
@@ -133,5 +132,3 @@ void OutputValidator::endOfSequence()
 void OutputValidator::startOfSequence()
 {
 }
-
-QT_END_NAMESPACE

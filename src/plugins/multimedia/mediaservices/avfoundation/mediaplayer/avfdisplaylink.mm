@@ -85,7 +85,7 @@
 
 - (void)displayLinkNotification: (CADisplayLink *)sender
 {
-   Q_UNUSED(sender);
+   (void) sender;
    m_avfDisplayLink->displayLinkEvent(nullptr);
 }
 
@@ -95,10 +95,10 @@ static CVReturn CVDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
    const CVTimeStamp *inOutputTime, CVOptionFlags flagsIn,
    CVOptionFlags *flagsOut, void *displayLinkContext)
 {
-   Q_UNUSED(displayLink);
-   Q_UNUSED(inNow);
-   Q_UNUSED(flagsIn);
-   Q_UNUSED(flagsOut);
+   (void) displayLink;
+   (void) inNow;
+   (void) flagsIn;
+   (void) flagsOut;
 
    AVFDisplayLink *link = (AVFDisplayLink *)displayLinkContext;
 
@@ -187,7 +187,7 @@ void AVFDisplayLink::displayLinkEvent(const CVTimeStamp *ts)
    m_pendingDisplayLinkEvent = true;
 
 #if defined(Q_OS_IOS)
-   Q_UNUSED(ts);
+   (void) ts;
    memset(&m_frameTimeStamp, 0, sizeof(CVTimeStamp));
 #else
    m_frameTimeStamp = *ts;

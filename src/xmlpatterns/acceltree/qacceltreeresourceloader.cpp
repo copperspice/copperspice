@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qacceltreeresourceloader_p.h>
+
 #include <qfile.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
@@ -29,12 +31,11 @@
 
 #include <qatomicstring_p.h>
 #include <qcommonsequencetypes_p.h>
-#include <qacceltreeresourceloader_p.h>
 
 using namespace QPatternist;
 
 AccelTreeResourceLoader::AccelTreeResourceLoader(const NamePool::Ptr &np,
-                  const NetworkAccessDelegator::Ptr &manager, AccelTreeBuilder<true>::Features features)
+      const NetworkAccessDelegator::Ptr &manager, AccelTreeBuilder<true>::Features features)
    : m_namePool(np), m_networkAccessDelegator(manager), m_features(features)
 {
    Q_ASSERT(m_namePool);
@@ -95,10 +96,8 @@ QNetworkReply *AccelTreeResourceLoader::load(const QUrl &uri, QNetworkAccessMana
    QNetworkRequest request(uri);
    QNetworkReply *const reply = networkManager->get(request);
 
-   networkLoop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &networkLoop,
-                       SLOT(error(QNetworkReply::NetworkError)));
-
-   networkLoop.connect(reply, SIGNAL(finished()), &networkLoop, SLOT(finished()));
+   networkLoop.connect(reply, &QNetworkReply::error,    &networkLoop, &NetworkLoop::error);
+   networkLoop.connect(reply, &QNetworkReply::finished, &networkLoop, &NetworkLoop::finished);
 
    if (networkLoop.exec(QEventLoop::ExcludeUserInputEvents)) {
       const QString errorMessage(escape(reply->errorString()));

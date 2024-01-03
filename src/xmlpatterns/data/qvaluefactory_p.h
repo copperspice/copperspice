@@ -28,8 +28,6 @@
 #include <qreportcontext_p.h>
 #include <qschematype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ValueFactory
@@ -45,7 +43,5 @@ class ValueFactory
    ValueFactory &operator=(const ValueFactory &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -43,7 +43,7 @@ QPrintEngine *QCocoaPrinterSupport::createNativePrintEngine(QPrinter::PrinterMod
 
 QPaintEngine *QCocoaPrinterSupport::createPaintEngine(QPrintEngine *printEngine, QPrinter::PrinterMode printerMode)
 {
-   Q_UNUSED(printerMode);
+   (void) printerMode;
    /*
        QMacPrintEngine multiply inherits from QPrintEngine and QPaintEngine,
        the cast here allows conversion of QMacPrintEngine* to QPaintEngine*

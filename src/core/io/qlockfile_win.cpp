@@ -35,6 +35,8 @@
 #include <qthread.h>
 #include <qt_windows.h>
 
+#include <psapi.h>
+
 static inline QByteArray localHostName()
 {
    return qgetenv("COMPUTERNAME");
@@ -156,30 +158,16 @@ bool QLockFilePrivate::isApparentlyStale() const
 
 QString QLockFilePrivate::processNameByPid(qint64 pid)
 {
-   typedef DWORD (WINAPI * GetModuleFileNameExFunc)(HANDLE, HMODULE, LPTSTR, DWORD);
-
-   HMODULE hPsapi = LoadLibraryA("psapi");
-   if (!hPsapi) {
-      return QString();
-   }
-
-   GetModuleFileNameExFunc qGetModuleFileNameEx = (GetModuleFileNameExFunc)GetProcAddress(hPsapi, "GetModuleFileNameExW");
-   if (! qGetModuleFileNameEx) {
-      FreeLibrary(hPsapi);
-      return QString();
-   }
-
    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, DWORD(pid));
+
    if (! hProcess) {
-      FreeLibrary(hPsapi);
       return QString();
    }
 
    std::wstring buffer(MAX_PATH, L'\0');
-   const DWORD length = qGetModuleFileNameEx(hProcess, nullptr, &buffer[0], buffer.size());
+   const DWORD length = GetModuleFileNameEx(hProcess, nullptr, &buffer[0], buffer.size());
 
    CloseHandle(hProcess);
-   FreeLibrary(hPsapi);
 
    if (! length) {
       return QString();

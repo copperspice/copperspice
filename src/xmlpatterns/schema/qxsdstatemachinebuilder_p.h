@@ -24,15 +24,15 @@
 #ifndef QXsdStateMachineBuilder_P_H
 #define QXsdStateMachineBuilder_P_H
 
+#include <qexplicitlyshareddatapointer.h>
+#include <qlist.h>
+
 #include <qxsdparticle_p.h>
 #include <qxsdstatemachine_p.h>
 #include <qxsdterm_p.h>
-#include <QExplicitlySharedDataPointer>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class XsdStateMachineBuilder : public QSharedData
 {
  public:
@@ -95,8 +95,7 @@ class XsdStateMachineBuilder : public QSharedData
    NamePool::Ptr m_namePool;
    Mode m_mode;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

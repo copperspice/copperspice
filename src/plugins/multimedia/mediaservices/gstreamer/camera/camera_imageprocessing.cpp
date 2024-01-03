@@ -179,7 +179,7 @@ bool CameraBinImageProcessing::setWhiteBalanceMode(QCameraImageProcessing::White
       }
    }
 #else
-   Q_UNUSED(mode);
+   (void) mode;
 #endif
    return false;
 }
@@ -189,7 +189,7 @@ bool CameraBinImageProcessing::isWhiteBalanceModeSupported(QCameraImageProcessin
 #ifdef HAVE_GST_PHOTOGRAPHY
    return m_mappedWbValues.values().contains(mode);
 #else
-   Q_UNUSED(mode);
+   (void) mode;
    return false;
 #endif
 }

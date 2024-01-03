@@ -257,8 +257,8 @@ class Q_CORE_EXPORT QPointF
    inline QPoint toPoint() const;
 
  private:
-   qreal xp;
-   qreal yp;
+   double xp;
+   double yp;
 
    friend inline bool operator==(const QPointF &point1, const QPointF &point2);
    friend inline bool operator!=(const QPointF &point1, const QPointF &point2);

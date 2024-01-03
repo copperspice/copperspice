@@ -53,7 +53,7 @@ static inline qreal initialGlobalScaleFactor()
       QByteArray env_2 = qgetenv(legacyDevicePixelEnvVar);
 
       if (! env_2.isEmpty()) {
-         qWarning() << "Warning:" << legacyDevicePixelEnvVar << "is deprecated. Instead use:" << endl
+         qWarning() << "Warning:" << legacyDevicePixelEnvVar << "is deprecated. Instead use: " << endl
             << "   " << autoScreenEnvVar << "to enable platform plugin controlled per-screen factors." << endl
             << "   " << screenFactorsEnvVar << "to set per-screen factors." << endl
             << "   " << scaleFactorEnvVar << "to set the application global scale factor.";
@@ -324,7 +324,7 @@ void QHighDpiScaling::setGlobalFactor(qreal factor)
    }
 
    if (! QApplication::allWindows().isEmpty()) {
-      qWarning("QHighDpiScaling::setFactor: Should only be called when no windows exist.");
+      qWarning("QHighDpiScaling::setFactor() Only call this methdod when no windows exist");
    }
 
    m_globalScalingActive = ! qFuzzyCompare(factor, qreal(1));

@@ -26,10 +26,7 @@
 #include <ui4.h>
 #include <utils.h>
 
-DatabaseInfo::DatabaseInfo(Driver *drv)
-   : driver(drv)
-{
-}
+DatabaseInfo::DatabaseInfo() = default;
 
 void DatabaseInfo::acceptUI(DomUI *node)
 {

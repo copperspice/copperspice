@@ -2263,7 +2263,7 @@ inline void QScriptParser::reallocateStack()
    location_stack = reinterpret_cast<Location *> (qRealloc(location_stack, stack_size * sizeof(Location)));
 }
 
-inline static bool automatic(QScript::Lexer *lexer, int token)
+static inline bool automatic(QScript::Lexer *lexer, int token)
 {
    return (token == QScriptGrammar::T_RBRACE)
           || (token == 0)

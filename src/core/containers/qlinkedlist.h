@@ -68,7 +68,7 @@ class QLinkedList
    QLinkedList(std::initializer_list<T> args)
       : m_data(args) {}
 
-   template<class Input_Iterator>
+   template <class Input_Iterator>
    QLinkedList(Input_Iterator first, Input_Iterator last)
       : m_data(first, last) {}
 

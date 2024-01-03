@@ -264,7 +264,7 @@ inline void QScriptParser::reallocateStack()
 // Changes will be lost.
 //
 
-inline static bool automatic(QScriptEnginePrivate *driver, int token)
+static inline bool automatic(QScriptEnginePrivate *driver, int token)
 {
     return token == $table::T_RBRACE
         || token == 0

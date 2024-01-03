@@ -298,7 +298,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SLOT_1(Private, void _q_itemSelected(const QModelIndex &item))
    GUI_CS_SLOT_2(_q_itemSelected)
 
-   GUI_CS_SLOT_1(Private, void _q_emitHighlighted(const QModelIndex &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_emitHighlighted(const QModelIndex &index))
    GUI_CS_SLOT_2(_q_emitHighlighted)
 
    GUI_CS_SLOT_1(Private, void _q_emitCurrentIndexChanged(const QModelIndex &index))
@@ -313,7 +313,7 @@ class Q_GUI_EXPORT QComboBox : public QWidget
    GUI_CS_SLOT_1(Private, void _q_resetButton())
    GUI_CS_SLOT_2(_q_resetButton)
 
-   GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight))
    GUI_CS_SLOT_2(_q_dataChanged)
 
    GUI_CS_SLOT_1(Private, void _q_updateIndexBeforeChange())

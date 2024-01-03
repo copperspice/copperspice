@@ -26,9 +26,8 @@
 
 #include <qabstractfunctionfactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XPath10CoreFunctions : public AbstractFunctionFactory
 {
  protected:
@@ -36,9 +35,6 @@ class XPath10CoreFunctions : public AbstractFunctionFactory
          const FunctionSignature::Ptr &sign) const override;
 
    FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) override;
-};
-}
-
-QT_END_NAMESPACE
+};}
 
 #endif

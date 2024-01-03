@@ -23,8 +23,6 @@
 
 #include "qxsdschemadebugger_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaDebugger::XsdSchemaDebugger(const NamePool::Ptr &namePool)
@@ -37,20 +35,20 @@ void XsdSchemaDebugger::dumpParticle(const XsdParticle::Ptr &particle, int level
    QString prefix;
    prefix.fill(QLatin1Char(' '), level);
 
-   qDebug("%s min=%s max=%s", qPrintable(prefix), qPrintable(QString::number(particle->minimumOccurs())),
-          qPrintable(particle->maximumOccursUnbounded() ? QLatin1String("unbounded") : QString::number(
+   qDebug("%s min=%s max=%s", csPrintable(prefix), csPrintable(QString::number(particle->minimumOccurs())),
+          csPrintable(particle->maximumOccursUnbounded() ? QLatin1String("unbounded") : QString::number(
                         particle->maximumOccurs())));
 
    if (particle->term()->isElement()) {
-      qDebug("%selement (%s)", qPrintable(prefix), qPrintable(XsdElement::Ptr(particle->term())->displayName(m_namePool)));
+      qDebug("%selement (%s)", csPrintable(prefix), csPrintable(XsdElement::Ptr(particle->term())->displayName(m_namePool)));
    } else if (particle->term()->isModelGroup()) {
       const XsdModelGroup::Ptr group(particle->term());
       if (group->compositor() == XsdModelGroup::SequenceCompositor) {
-         qDebug("%ssequence", qPrintable(prefix));
+         qDebug("%ssequence", csPrintable(prefix));
       } else if (group->compositor() == XsdModelGroup::AllCompositor) {
-         qDebug("%sall", qPrintable(prefix));
+         qDebug("%sall", csPrintable(prefix));
       } else if (group->compositor() == XsdModelGroup::ChoiceCompositor) {
-         qDebug("%schoice", qPrintable(prefix));
+         qDebug("%schoice", csPrintable(prefix));
       }
 
       for (int i = 0; i < group->particles().count(); ++i) {
@@ -58,7 +56,7 @@ void XsdSchemaDebugger::dumpParticle(const XsdParticle::Ptr &particle, int level
       }
    } else if (particle->term()->isWildcard()) {
       XsdWildcard::Ptr wildcard(particle->term());
-      qDebug("%swildcard (process=%d)", qPrintable(prefix), wildcard->processContents());
+      qDebug("%swildcard (process=%d)", csPrintable(prefix), wildcard->processContents());
    }
 }
 
@@ -66,7 +64,7 @@ void XsdSchemaDebugger::dumpInheritance(const SchemaType::Ptr &type, int level)
 {
    QString prefix;
    prefix.fill(QLatin1Char(' '), level);
-   qDebug("%s-->%s", qPrintable(prefix), qPrintable(type->displayName(m_namePool)));
+   qDebug("%s-->%s", csPrintable(prefix), csPrintable(type->displayName(m_namePool)));
    if (type->wxsSuperType()) {
       dumpInheritance(type->wxsSuperType(), ++level);
    }
@@ -84,9 +82,9 @@ void XsdSchemaDebugger::dumpWildcard(const XsdWildcard::Ptr &wildcard)
    processContentsNames.append(QLatin1String("Lax"));
    processContentsNames.append(QLatin1String("Skip"));
 
-   qDebug("      processContents: %s", qPrintable(processContentsNames.at((int)wildcard->processContents())));
+   qDebug("      processContents: %s", csPrintable(processContentsNames.at((int)wildcard->processContents())));
    const XsdWildcard::NamespaceConstraint::Ptr constraint = wildcard->namespaceConstraint();
-   qDebug("      variety: %s", qPrintable(varietyNames.at((int)constraint->variety())));
+   qDebug("      variety: %s", csPrintable(varietyNames.at((int)constraint->variety())));
    if (constraint->variety() != XsdWildcard::NamespaceConstraint::Any) {
       qDebug() << "      namespaces:" << constraint->namespaces();
    }
@@ -98,11 +96,11 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       const XsdComplexType::Ptr complexType(type);
 
       qDebug("\n+++ Complex Type +++");
-      qDebug("Name: %s (abstract: %s)", qPrintable(complexType->displayName(m_namePool)),
+      qDebug("Name: %s (abstract: %s)", csPrintable(complexType->displayName(m_namePool)),
              complexType->isAbstract() ? "yes" : "no");
 
       if (complexType->wxsSuperType()) {
-         qDebug("  base type: %s", qPrintable(complexType->wxsSuperType()->displayName(m_namePool)));
+         qDebug("  base type: %s", csPrintable(complexType->wxsSuperType()->displayName(m_namePool)));
       } else {
          qDebug("  base type: (none)");
       }
@@ -120,7 +118,7 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       }
       if (complexType->contentType()->variety() == XsdComplexType::ContentType::Simple) {
          if (complexType->contentType()->simpleType()) {
-            qDebug("  simple type: %s", qPrintable(complexType->contentType()->simpleType()->displayName(m_namePool)));
+            qDebug("  simple type: %s", csPrintable(complexType->contentType()->simpleType()->displayName(m_namePool)));
          } else {
             qDebug("  simple type: (none)");
          }
@@ -130,7 +128,7 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
       qDebug("   %zd attributes", uses.count());
 
       for (int i = 0; i < uses.count(); ++i) {
-         qDebug("      attr: %s", qPrintable(uses.at(i)->attribute()->displayName(m_namePool)));
+         qDebug("      attr: %s", csPrintable(uses.at(i)->attribute()->displayName(m_namePool)));
       }
       qDebug("   has attribute wildcard: %s", complexType->attributeWildcard() ? "yes" : "no");
 
@@ -144,12 +142,12 @@ void XsdSchemaDebugger::dumpType(const SchemaType::Ptr &type)
 
    } else {
       qDebug("\n+++ Simple Type +++");
-      qDebug("Name: %s", qPrintable(type->displayName(m_namePool)));
+      qDebug("Name: %s", csPrintable(type->displayName(m_namePool)));
 
       if (type->isDefinedBySchema()) {
          const XsdSimpleType::Ptr simpleType(type);
          if (simpleType->primitiveType()) {
-            qDebug("  primitive type: %s", qPrintable(simpleType->primitiveType()->displayName(m_namePool)));
+            qDebug("  primitive type: %s", csPrintable(simpleType->primitiveType()->displayName(m_namePool)));
          } else {
             qDebug("  primitive type: (none)");
          }
@@ -228,5 +226,3 @@ void XsdSchemaDebugger::dumpSchema(const XsdSchema::Ptr &schema)
 
    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
 }
-
-QT_END_NAMESPACE

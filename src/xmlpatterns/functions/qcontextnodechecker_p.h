@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ContextNodeChecker : public FunctionCall
@@ -41,8 +39,7 @@ class ContextNodeChecker : public FunctionCall
                         const DynamicContext::Ptr &context,
                         const ReportContext::ErrorCode) const;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

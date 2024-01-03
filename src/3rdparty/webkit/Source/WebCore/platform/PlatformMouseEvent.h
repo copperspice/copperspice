@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef PlatformMouseEvent_h
@@ -40,10 +40,8 @@ typedef struct _Evas_Event_Mouse_Move Evas_Event_Mouse_Move;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QInputEvent;
 class QGraphicsSceneMouseEvent;
-QT_END_NAMESPACE
 #endif
 
 #if PLATFORM(WIN)
@@ -68,11 +66,11 @@ typedef unsigned long int uint32;
 #endif
 
 namespace WebCore {
-    
+
     // These button numbers match the ones used in the DOM API, 0 through 2, except for NoButton which isn't specified.
     enum MouseButton { NoButton = -1, LeftButton, MiddleButton, RightButton };
     enum MouseEventType { MouseEventMoved, MouseEventPressed, MouseEventReleased, MouseEventScroll };
-    
+
     class PlatformMouseEvent {
     public:
         PlatformMouseEvent()
@@ -127,11 +125,11 @@ namespace WebCore {
         bool altKey() const { return m_altKey; }
         bool metaKey() const { return m_metaKey; }
         unsigned modifierFlags() const { return m_modifierFlags; }
-        
+
         // Time in seconds.
         double timestamp() const { return m_timestamp; }
 
-#if PLATFORM(GTK) 
+#if PLATFORM(GTK)
         PlatformMouseEvent(GdkEventButton*);
         PlatformMouseEvent(GdkEventMotion*);
         void setClickCount(int count) { m_clickCount = count; }

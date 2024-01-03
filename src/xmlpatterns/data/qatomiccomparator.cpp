@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QString>
+#include <qstring.h>
 
 #include "qatomiccomparator_p.h"
 

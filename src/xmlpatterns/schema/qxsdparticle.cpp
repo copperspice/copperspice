@@ -23,8 +23,6 @@
 
 #include "qxsdparticle_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdParticle::XsdParticle()
@@ -73,5 +71,3 @@ XsdTerm::Ptr XsdParticle::term() const
 {
    return m_term;
 }
-
-QT_END_NAMESPACE

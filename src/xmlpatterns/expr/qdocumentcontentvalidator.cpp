@@ -25,8 +25,6 @@
 
 #include "qdocumentcontentvalidator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DocumentContentValidator::
@@ -115,7 +113,7 @@ void DocumentContentValidator::endDocument()
 
 void DocumentContentValidator::atomicValue(const QVariant &value)
 {
-   Q_UNUSED(value);
+   (void) value;
 }
 
 void DocumentContentValidator::startOfSequence()
@@ -126,4 +124,3 @@ void DocumentContentValidator::endOfSequence()
 {
 }
 
-QT_END_NAMESPACE

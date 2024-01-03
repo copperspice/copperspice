@@ -24,13 +24,12 @@
 #ifndef QXsdFacet_P_H
 #define QXsdFacet_P_H
 
+#include <qlist.h>
+
 #include <qitem_p.h>
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 #include <qxsdassertion_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -147,8 +146,7 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
    XsdAssertion::List m_assertions;
    bool               m_fixed;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

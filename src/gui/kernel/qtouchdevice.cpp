@@ -36,66 +36,42 @@ QTouchDevice::QTouchDevice()
 {
 }
 
-/*!
-  Destroys a touch device instance.
-  */
 QTouchDevice::~QTouchDevice()
 {
    delete d;
 }
 
-/*!
-    Returns the touch device type.
-*/
 QTouchDevice::DeviceType QTouchDevice::type() const
 {
    return d->type;
 }
 
-/*!
-    Returns the touch device capabilities.
-  */
+
 QTouchDevice::Capabilities QTouchDevice::capabilities() const
 {
    return d->caps;
 }
 
-/*!
-    Returns the maximum number of simultaneous touch points (fingers) that
-    can be detected.
-    \since 5.2
-  */
 int QTouchDevice::maximumTouchPoints() const
 {
    return d->maxTouchPoints;
 }
-
 
 QString QTouchDevice::name() const
 {
    return d->name;
 }
 
-/*!
-  Sets the device type \a devType.
-  */
 void QTouchDevice::setType(DeviceType devType)
 {
    d->type = devType;
 }
 
-/*!
-  Sets the capabilities \a caps supported by the device and its driver.
-  */
 void QTouchDevice::setCapabilities(Capabilities caps)
 {
    d->caps = caps;
 }
 
-/*!
-  Sets the maximum number of simultaneous touchpoints \a max
-  supported by the device and its driver.
-  */
 void QTouchDevice::setMaximumTouchPoints(int max)
 {
    d->maxTouchPoints = max;
@@ -106,9 +82,14 @@ void QTouchDevice::setName(const QString &name)
    d->name = name;
 }
 
-typedef QList<const QTouchDevice *> TouchDevices;
+using TouchDevices = QList<const QTouchDevice *>;
 
-Q_GLOBAL_STATIC(TouchDevices, deviceList)
+static TouchDevices *deviceList()
+{
+   static TouchDevices retval;
+   return &retval;
+}
+
 static QMutex devicesMutex;
 
 static void cleanupDevicesList()
@@ -129,18 +110,12 @@ QList<const QTouchDevice *> QTouchDevice::devices()
    return *deviceList();
 }
 
-/*!
-  \internal
-  */
 bool QTouchDevicePrivate::isRegistered(const QTouchDevice *dev)
 {
    QMutexLocker locker(&devicesMutex);
    return deviceList()->contains(dev);
 }
 
-/*!
-  \internal
-  */
 void QTouchDevicePrivate::registerDevice(const QTouchDevice *dev)
 {
    QMutexLocker lock(&devicesMutex);
@@ -150,13 +125,11 @@ void QTouchDevicePrivate::registerDevice(const QTouchDevice *dev)
    deviceList()->append(dev);
 }
 
-/*!
-  \internal
-  */
 void QTouchDevicePrivate::unregisterDevice(const QTouchDevice *dev)
 {
    QMutexLocker lock(&devicesMutex);
    bool wasRemoved = deviceList()->removeOne(dev);
+
    if (wasRemoved && deviceList()->isEmpty()) {
       qRemovePostRoutine(cleanupDevicesList);
    }
@@ -187,4 +160,3 @@ QDebug operator<<(QDebug debug, const QTouchDevice *device)
 
    return debug;
 }
-

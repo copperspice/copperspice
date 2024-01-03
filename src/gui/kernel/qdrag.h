@@ -25,7 +25,7 @@
 #define QDRAG_H
 
 #include <qobject.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_DRAGANDDROP
 

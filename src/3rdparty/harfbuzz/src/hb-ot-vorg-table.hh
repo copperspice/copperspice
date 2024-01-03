@@ -48,7 +48,7 @@ struct VertOriginMetric
   }
 
   public:
-  HBGlyphID	glyph;
+  HBGlyphID16	glyph;
   FWORD		vertOriginY;
 
   public:
@@ -90,7 +90,7 @@ struct VORG
   bool subset (hb_subset_context_t *c) const
   {
     TRACE_SUBSET (this);
-    VORG *vorg_prime = c->serializer->start_embed<VORG> ();
+    auto *vorg_prime = c->serializer->start_embed<VORG> ();
     if (unlikely (!c->serializer->check_success (vorg_prime))) return_trace (false);
 
     auto it =

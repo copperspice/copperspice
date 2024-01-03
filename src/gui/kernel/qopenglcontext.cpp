@@ -135,28 +135,35 @@ class QGuiGLThreadContext
       : context(nullptr)
    {
    }
+
    ~QGuiGLThreadContext() {
       if (context) {
          context->doneCurrent();
       }
    }
+
    QOpenGLContext *context;
 };
 
-Q_GLOBAL_STATIC(QThreadStorage<QGuiGLThreadContext *>, qwindow_context_storage);
+static QThreadStorage<QGuiGLThreadContext *> *qwindow_context_storage()
+{
+   static QThreadStorage<QGuiGLThreadContext *> retval;
+   return &retval;
+}
+
 static QOpenGLContext *global_share_context = nullptr;
 
 #ifndef QT_NO_DEBUG
-QHash<QOpenGLContext *, bool> QOpenGLContextPrivate::makeCurrentTracker;
-QMutex QOpenGLContextPrivate::makeCurrentTrackerMutex;
+   QHash<QOpenGLContext *, bool> QOpenGLContextPrivate::makeCurrentTracker;
+   QMutex QOpenGLContextPrivate::makeCurrentTrackerMutex;
 #endif
 
 /*!
     \internal
 
-    This function is used by Qt::AA_ShareOpenGLContexts and the Qt
-    WebEngine to set up context sharing across multiple windows. Do
-    not use it for any other purpose.
+    This function is used by Qt::AA_ShareOpenGLContexts and the
+    WebEngine to set up context sharing across multiple windows.
+    Do not use it for any other purpose.
 
     Please maintain the binary compatibility of these functions.
 */
@@ -175,15 +182,17 @@ QOpenGLContext *qt_gl_global_share_context()
 QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context)
 {
    QGuiGLThreadContext *threadContext = qwindow_context_storage()->localData();
-   if (!threadContext) {
-      if (!QThread::currentThread()) {
-         qWarning("No QTLS available. currentContext will not work");
+
+  if (! threadContext) {
+      if (! QThread::currentThread()) {
+         qWarning("QOpenGLContext::setCurrentContext() CurrentContext requires an active QThread");
          return nullptr;
       }
 
       threadContext = new QGuiGLThreadContext;
       qwindow_context_storage()->setLocalData(threadContext);
    }
+
    QOpenGLContext *previous = threadContext->context;
    threadContext->context = context;
    return previous;
@@ -309,7 +318,7 @@ void QOpenGLContext::setScreen(QScreen *screen)
    Q_D(QOpenGLContext);
 
    if (d->screen) {
-      disconnect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(_q_screenDestroyed(QObject *)));
+      disconnect(d->screen, &QScreen::destroyed, this, &QOpenGLContext::_q_screenDestroyed);
    }
 
    d->screen = screen;
@@ -319,7 +328,7 @@ void QOpenGLContext::setScreen(QScreen *screen)
    }
 
    if (d->screen) {
-      connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(_q_screenDestroyed(QObject *)));
+      connect(d->screen, &QScreen::destroyed, this, &QOpenGLContext::_q_screenDestroyed);
    }
 }
 
@@ -470,7 +479,7 @@ QAbstractOpenGLFunctions *QOpenGLContext::versionFunctions(const QOpenGLVersionP
 #ifndef QT_OPENGL_ES_2
 
    if (isOpenGLES()) {
-      qWarning("versionFunctions: Not supported on OpenGL ES");
+      qWarning("QOpenGLContext::versionFunctions() Method not supported on OpenGL ES");
       return nullptr;
    }
 #endif
@@ -571,7 +580,7 @@ bool QOpenGLContext::makeCurrent(QSurface *surface)
       return false;
    }
    if (!surface->supportsOpenGL()) {
-      qWarning() << "QOpenGLContext::makeCurrent() called with non-opengl surface" << surface;
+      qWarning() << "QOpenGLContext::makeCurrent() Called with a Non OpenGL surface" << surface;
       return false;
    }
 
@@ -625,30 +634,24 @@ void QOpenGLContext::swapBuffers(QSurface *surface)
    }
 
    if (!surface) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with null argument";
+      qWarning("QOpenGLContext::swapBuffers() Surface is invalid (nullptr)");
       return;
    }
 
    if (!surface->supportsOpenGL()) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with non-opengl surface";
+      qWarning("QOpenGLContext::swapBuffers() Called with a Non OpenGL surface");
       return;
    }
 
    if (surface->surfaceClass() == QSurface::Window
-      && !qt_window_private(static_cast<QWindow *>(surface))->receivedExpose) {
-      qWarning() << "QOpenGLContext::swapBuffers() called with non-exposed window, behavior is undefined";
+         && ! qt_window_private(static_cast<QWindow *>(surface))->receivedExpose) {
+      qWarning("QOpenGLContext::swapBuffers() Called with a non exposed window");
    }
 
    QPlatformSurface *surfaceHandle = surface->surfaceHandle();
    if (!surfaceHandle) {
       return;
    }
-
-#if ! defined(QT_NO_DEBUG)
-   if (!QOpenGLContextPrivate::toggleMakeCurrentTracker(this, false)) {
-      qWarning() << "QOpenGLContext::swapBuffers() called without corresponding makeCurrent()";
-   }
-#endif
 
    if (surface->format().swapBehavior() == QSurfaceFormat::SingleBuffer) {
       functions()->glFlush();
@@ -982,14 +985,6 @@ QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
       m_groups.at(i)->d_func()->m_resources.remove(this);
       active.deref();
    }
-
-#ifndef QT_NO_DEBUG
-   if (active.load() != 0) {
-      qWarning("QtGui: Resources are still available at program shutdown.\n"
-         "          This is possibly caused by a leaked QOpenGLWidget, \n"
-         "          QOpenGLFramebufferObject or QOpenGLPixelBuffer.");
-   }
-#endif
 }
 
 void QOpenGLMultiGroupSharedResource::insert(QOpenGLContext *context, QOpenGLSharedResource *value)

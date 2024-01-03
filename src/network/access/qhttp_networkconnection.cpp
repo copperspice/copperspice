@@ -116,7 +116,7 @@ void QHttpNetworkConnectionPrivate::init()
 
    }
    delayedConnectionTimer.setSingleShot(true);
-   QObject::connect(&delayedConnectionTimer, SIGNAL(timeout()), q, SLOT(_q_connectDelayedChannel()));
+   QObject::connect(&delayedConnectionTimer, &QTimer::timeout, q, &QHttpNetworkConnection::_q_connectDelayedChannel);
 }
 
 void QHttpNetworkConnectionPrivate::pauseConnection()
@@ -210,7 +210,7 @@ bool QHttpNetworkConnectionPrivate::shouldEmitChannelError(QAbstractSocket *sock
             emitError = false;
          }
          if (networkLayerState == QHttpNetworkConnectionPrivate::Unknown) {
-            qWarning() << "We got a connection error when networkLayerState is Unknown";
+            qWarning() << "Connection error when networkLayerState is Unknown";
          }
       }
    }

@@ -46,8 +46,8 @@ public:
     virtual void didFinishURLImport();
 
 public:
-    WEB_CS_SIGNAL_1(Public, void iconLoadedForPageURL(const QString & un_named_arg1))
-    WEB_CS_SIGNAL_2(iconLoadedForPageURL,un_named_arg1) 
+    WEB_CS_SIGNAL_1(Public, void iconLoadedForPageURL(const QString &url))
+    WEB_CS_SIGNAL_2(iconLoadedForPageURL,url)
 
 private:
     IconDatabaseClientQt();

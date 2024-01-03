@@ -67,7 +67,7 @@ class QCocoaFileDialogHelper : public QPlatformFileDialogHelper
    void QNSOpenSavePanelDelegate_filterSelected(int menuIndex);
 
  private:
-   QT_MANGLE_NAMESPACE(QNSOpenSavePanelDelegate) *mDelegate;
+   QNSOpenSavePanelDelegate *mDelegate;
    QUrl mDir;
 };
 

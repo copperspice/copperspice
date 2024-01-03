@@ -37,7 +37,7 @@ static inline QVariant hint(QPlatformIntegration::StyleHint h)
 static inline QVariant themeableHint(QPlatformTheme::ThemeHint th, QPlatformIntegration::StyleHint ih)
 {
    if (! QCoreApplication::instance()) {
-      qWarning() << "Must construct a QApplication before accessing a platform theme hint.";
+      qWarning("themeableHint() Must construct a QApplication before accessing a platform theme hint");
       return QVariant();
    }
 

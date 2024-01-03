@@ -172,7 +172,7 @@ bool QSaveFile::commit()
    }
 
    if (!isOpen()) {
-      qWarning("QSaveFile::commit: File (%s) is not open", qPrintable(fileName()));
+      qWarning("QSaveFile::commit: File (%s) is not open", csPrintable(fileName()));
       return false;
    }
    QFileDevice::close(); // calls flush()

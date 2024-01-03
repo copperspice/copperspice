@@ -24,12 +24,11 @@
 #ifndef QOutputValidator_P_H
 #define QOutputValidator_P_H
 
-#include <QSet>
-#include <qdynamiccontext_p.h>
 #include <qabstractxmlreceiver.h>
-#include <qsourcelocationreflection_p.h>
+#include <qset.h>
 
-QT_BEGIN_NAMESPACE
+#include <qdynamiccontext_p.h>
+#include <qsourcelocationreflection_p.h>
 
 namespace QPatternist {
 
@@ -69,7 +68,5 @@ class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLoca
    const bool m_isXSLT;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

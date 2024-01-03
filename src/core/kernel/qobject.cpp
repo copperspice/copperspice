@@ -34,22 +34,22 @@
 
 QObject::QObject(QObject *t_parent)
 {
-   m_parent                   = nullptr;        // no parent yet, set by setParent()
 
+   m_parent                   = nullptr;     // no parent yet, set by setParent()
    m_currentChildBeingDeleted = nullptr;
    m_declarativeData          = nullptr;
    m_postedEvents             = 0;
    m_sharedRefCount           = nullptr;
 
-   m_pendTimer                = false;    // no timers yet
-   m_wasDeleted               = false;    // double delete flag
+   m_pendTimer                = false;       // no timers yet
+   m_wasDeleted               = false;       // double delete flag
    m_sentChildRemoved         = false;
-   m_sendChildEvents          = true;     // should send ChildInsert and ChildRemove events to parent
+   m_sendChildEvents          = true;        // should send ChildInsert and ChildRemove events to parent
    m_receiveChildEvents       = true;
 
    // atomics
    m_inThreadChangeEvent      = false;
-   m_blockSig                 = false;    // allow signal to be emitted
+   m_blockSig                 = false;       // allow signal to be emitted
 
    //
    if (t_parent && ! t_parent->thread()) {
@@ -60,9 +60,7 @@ QObject::QObject(QObject *t_parent)
 
    m_threadData.load()->ref();
 
-   //
    if (t_parent) {
-
       try {
 
          if (! this->check_parent_thread(t_parent, t_parent->m_threadData, m_threadData)) {

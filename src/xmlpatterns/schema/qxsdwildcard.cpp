@@ -23,8 +23,6 @@
 
 #include "qxsdwildcard_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QString XsdWildcard::absentNamespace()
@@ -93,5 +91,3 @@ XsdWildcard::ProcessContents XsdWildcard::processContents() const
 {
    return m_processContents;
 }
-
-QT_END_NAMESPACE

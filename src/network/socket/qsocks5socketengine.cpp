@@ -335,7 +335,11 @@ class QSocks5BindStore : public QObject
    QHash<int, QSocks5BindData *> store;
 };
 
-Q_GLOBAL_STATIC(QSocks5BindStore, socks5BindStore)
+static QSocks5BindStore *socks5BindStore()
+{
+   static QSocks5BindStore retval;
+   return &retval;
+}
 
 QSocks5BindStore::QSocks5BindStore()
    : sweepTimerId(-1)
@@ -432,15 +436,17 @@ char QSocks5Authenticator::methodId()
 
 bool QSocks5Authenticator::beginAuthenticate(QTcpSocket *socket, bool *completed)
 {
-   Q_UNUSED(socket);
+   (void) socket;
    *completed = true;
+
    return true;
 }
 
 bool QSocks5Authenticator::continueAuthenticate(QTcpSocket *socket, bool *completed)
 {
-   Q_UNUSED(socket);
+   (void) socket;
    *completed = true;
+
    return true;
 }
 
@@ -480,12 +486,15 @@ bool QSocks5PasswordAuthenticator::beginAuthenticate(QTcpSocket *socket, bool *c
    QByteArray dataBuf(3 + uname.size() + passwd.size(), 0);
    char *buf = dataBuf.data();
    int pos = 0;
+
    buf[pos++] = S5_PASSWORDAUTH_VERSION;
    buf[pos++] = uname.size();
+
    memcpy(&buf[pos], uname.data(), uname.size());
    pos += uname.size();
    buf[pos++] = passwd.size();
    memcpy(&buf[pos], passwd.data(), passwd.size());
+
    return socket->write(dataBuf) == dataBuf.size();
 }
 
@@ -545,50 +554,63 @@ void QSocks5SocketEnginePrivate::initialize(Socks5Mode socks5Mode)
    Q_Q(QSocks5SocketEngine);
 
    mode = socks5Mode;
+
    if (mode == ConnectMode) {
       connectData = new QSocks5ConnectData;
       data = connectData;
+
 #ifndef QT_NO_UDPSOCKET
    } else if (mode == UdpAssociateMode) {
       udpData = new QSocks5UdpAssociateData;
-      data = udpData;
+      data    = udpData;
       udpData->udpSocket = new QUdpSocket(q);
+
 #ifndef QT_NO_BEARERMANAGEMENT
       udpData->udpSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
+
       udpData->udpSocket->setProxy(QNetworkProxy::NoProxy);
-      QObject::connect(udpData->udpSocket, SIGNAL(readyRead()),
-                       q, SLOT(_q_udpSocketReadNotification()),
-                       Qt::DirectConnection);
-#endif // QT_NO_UDPSOCKET
+
+      QObject::connect(udpData->udpSocket, &QUdpSocket::readyRead,
+         q, &QSocks5SocketEngine::_q_udpSocketReadNotification, Qt::DirectConnection);
+
+#endif
+
    } else if (mode == BindMode) {
       bindData = new QSocks5BindData;
       data = bindData;
    }
 
    data->controlSocket = new QTcpSocket(q);
+
 #ifndef QT_NO_BEARERMANAGEMENT
    data->controlSocket->setProperty("_q_networksession", q->property("_q_networksession"));
 #endif
+
    data->controlSocket->setProxy(QNetworkProxy::NoProxy);
-   QObject::connect(data->controlSocket, SIGNAL(connected()), q, SLOT(_q_controlSocketConnected()),
-                    Qt::DirectConnection);
-   QObject::connect(data->controlSocket, SIGNAL(readyRead()), q, SLOT(_q_controlSocketReadNotification()),
-                    Qt::DirectConnection);
-   QObject::connect(data->controlSocket, SIGNAL(bytesWritten(qint64)), q, SLOT(_q_controlSocketBytesWritten()),
-                    Qt::DirectConnection);
-   QObject::connect(data->controlSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-                    q, SLOT(_q_controlSocketError(QAbstractSocket::SocketError)),
-                    Qt::DirectConnection);
-   QObject::connect(data->controlSocket, SIGNAL(disconnected()), q, SLOT(_q_controlSocketDisconnected()),
-                    Qt::DirectConnection);
-   QObject::connect(data->controlSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-                    q, SLOT(_q_controlSocketStateChanged(QAbstractSocket::SocketState)),
-                    Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::connected,
+         q, &QSocks5SocketEngine::_q_controlSocketConnected, Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::readyRead,
+         q, &QSocks5SocketEngine::_q_controlSocketReadNotification, Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::bytesWritten,
+         q, &QSocks5SocketEngine::_q_controlSocketBytesWritten, Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::error,
+         q, &QSocks5SocketEngine::_q_controlSocketError, Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::disconnected,
+         q, &QSocks5SocketEngine::_q_controlSocketDisconnected, Qt::DirectConnection);
+
+   QObject::connect(data->controlSocket, &QTcpSocket::stateChanged,
+         q, &QSocks5SocketEngine::_q_controlSocketStateChanged, Qt::DirectConnection);
 
    if (!proxyInfo.user().isEmpty() || !proxyInfo.password().isEmpty()) {
       QSOCKS5_D_DEBUG << "using username/password authentication; user =" << proxyInfo.user();
       data->authenticator = new QSocks5PasswordAuthenticator(proxyInfo.user(), proxyInfo.password());
+
    } else {
       QSOCKS5_D_DEBUG << "not using authentication";
       data->authenticator = new QSocks5Authenticator();
@@ -1058,8 +1080,8 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
    }
 
    QSocks5BindData *bindData = socks5BindStore()->retrieve(socketDescriptor);
-   if (bindData) {
 
+   if (bindData) {
       d->socketState          = QAbstractSocket::ConnectedState;
       d->socketType           = QAbstractSocket::TcpSocket;
       d->connectData          = new QSocks5ConnectData;
@@ -1067,7 +1089,9 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
       d->mode                 = QSocks5SocketEnginePrivate::ConnectMode;
       d->data->controlSocket  = bindData->controlSocket;
       bindData->controlSocket = nullptr;
+
       d->data->controlSocket->setParent(this);
+
       d->socketProtocol       = d->data->controlSocket->localAddress().protocol();
       d->data->authenticator  = bindData->authenticator;
       bindData->authenticator = nullptr;
@@ -1075,28 +1099,33 @@ bool QSocks5SocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
       d->localAddress         = bindData->localAddress;
       d->peerPort             = bindData->peerPort;
       d->peerAddress          = bindData->peerAddress;
+
       delete bindData;
 
-      QObject::connect(d->data->controlSocket, SIGNAL(connected()), this, SLOT(_q_controlSocketConnected()),
-                       Qt::DirectConnection);
-      QObject::connect(d->data->controlSocket, SIGNAL(readyRead()), this, SLOT(_q_controlSocketReadNotification()),
-                       Qt::DirectConnection);
-      QObject::connect(d->data->controlSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(_q_controlSocketBytesWritten()),
-                       Qt::DirectConnection);
-      QObject::connect(d->data->controlSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-                       SLOT(_q_controlSocketError(QAbstractSocket::SocketError)),
-                       Qt::DirectConnection);
-      QObject::connect(d->data->controlSocket, SIGNAL(disconnected()), this, SLOT(_q_controlSocketDisconnected()),
-                       Qt::DirectConnection);
-      QObject::connect(d->data->controlSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
-                       this, SLOT(_q_controlSocketStateChanged(QAbstractSocket::SocketState)),
-                       Qt::DirectConnection);
+      QObject::connect(d->data->controlSocket, &QTcpSocket::connected,
+            this, &QSocks5SocketEngine::_q_controlSocketConnected, Qt::DirectConnection);
+
+      QObject::connect(d->data->controlSocket, &QTcpSocket::readyRead,
+            this, &QSocks5SocketEngine::_q_controlSocketReadNotification, Qt::DirectConnection);
+
+      QObject::connect(d->data->controlSocket, &QTcpSocket::bytesWritten,
+            this, &QSocks5SocketEngine::_q_controlSocketBytesWritten, Qt::DirectConnection);
+
+      QObject::connect(d->data->controlSocket, &QTcpSocket::error,
+            this, &QSocks5SocketEngine::_q_controlSocketError, Qt::DirectConnection);
+
+      QObject::connect(d->data->controlSocket, &QTcpSocket::disconnected,
+            this, &QSocks5SocketEngine::_q_controlSocketDisconnected, Qt::DirectConnection);
+
+      QObject::connect(d->data->controlSocket, &QTcpSocket::stateChanged,
+            this, &QSocks5SocketEngine::_q_controlSocketStateChanged, Qt::DirectConnection);
 
       d->socks5State = QSocks5SocketEnginePrivate::Connected;
 
       if (d->data->controlSocket->bytesAvailable() != 0) {
          d->_q_controlSocketReadNotification();
       }
+
       return true;
    }
    return false;
@@ -1765,6 +1794,7 @@ qint64 QSocks5SocketEngine::bytesToWrite() const
 int QSocks5SocketEngine::option(SocketOption option) const
 {
    Q_D(const QSocks5SocketEngine);
+
    if (d->data && d->data->controlSocket) {
       // convert the enum and call the real socket
       if (option == QAbstractSocketEngine::LowDelayOption) {
@@ -1781,6 +1811,7 @@ int QSocks5SocketEngine::option(SocketOption option) const
 bool QSocks5SocketEngine::setOption(SocketOption option, int value)
 {
    Q_D(QSocks5SocketEngine);
+
    if (d->data && d->data->controlSocket) {
       // convert the enum and call the real socket
       if (option == QAbstractSocketEngine::LowDelayOption) {
@@ -1923,7 +1954,8 @@ bool QSocks5SocketEngine::waitForReadOrWrite(bool *readyToRead, bool *readyToWri
       bool checkRead, bool checkWrite,
       int msecs, bool *timedOut)
 {
-   Q_UNUSED(checkRead);
+   (void) checkRead;
+
    if (!checkWrite) {
       bool canRead = waitForRead(msecs, timedOut);
       if (readyToRead) {
@@ -2008,19 +2040,20 @@ void QSocks5SocketEngine::setExceptionNotificationEnabled(bool enable)
    d->exceptNotificationEnabled = enable;
 }
 
-QAbstractSocketEngine *
-QSocks5SocketEngineHandler::createSocketEngine(QAbstractSocket::SocketType socketType,
-      const QNetworkProxy &proxy, QObject *parent)
+QAbstractSocketEngine * QSocks5SocketEngineHandler::createSocketEngine(
+      QAbstractSocket::SocketType socketType, const QNetworkProxy &proxy, QObject *parent)
 {
-   Q_UNUSED(socketType);
+   (void) socketType;
 
    // proxy type must have been resolved by now
    if (proxy.type() != QNetworkProxy::Socks5Proxy) {
       QSOCKS5_DEBUG << "not proxying";
       return nullptr;
    }
+
    QScopedPointer<QSocks5SocketEngine> engine(new QSocks5SocketEngine(parent));
    engine->setProxy(proxy);
+
    return engine.take();
 }
 
@@ -2046,10 +2079,10 @@ void QSocks5SocketEngine::_q_controlSocketReadNotification()
    d->_q_controlSocketReadNotification();
 }
 
-void QSocks5SocketEngine::_q_controlSocketError(QAbstractSocket::SocketError un_named_arg1)
+void QSocks5SocketEngine::_q_controlSocketError(QAbstractSocket::SocketError socketError)
 {
    Q_D(QSocks5SocketEngine);
-   d->_q_controlSocketError(un_named_arg1);
+   d->_q_controlSocketError(socketError);
 }
 
 #ifndef QT_NO_UDPSOCKET
@@ -2090,10 +2123,10 @@ void QSocks5SocketEngine::_q_controlSocketDisconnected()
    d->_q_controlSocketDisconnected();
 }
 
-void QSocks5SocketEngine::_q_controlSocketStateChanged(QAbstractSocket::SocketState un_named_arg1)
+void QSocks5SocketEngine::_q_controlSocketStateChanged(QAbstractSocket::SocketState socketState)
 {
    Q_D(QSocks5SocketEngine);
-   d->_q_controlSocketStateChanged(un_named_arg1);
+   d->_q_controlSocketStateChanged(socketState);
 }
 
 #endif // QT_NO_SOCKS5

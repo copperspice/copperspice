@@ -52,7 +52,7 @@ namespace JSC {
     struct HashTable;
 
     typedef Vector<ExecState*, 16> ExecStateStack;
-    
+
     class JSGlobalObject : public JSVariableObject {
     protected:
         typedef HashSet<RefPtr<OpaqueJSWeakObjectMap> > WeakMapSet;
@@ -118,7 +118,7 @@ namespace JSC {
         void* operator new(size_t, JSGlobalData*);
 
         explicit JSGlobalObject(JSGlobalData& globalData, Structure* structure)
-            : JSVariableObject(globalData, structure, &m_symbolTable, 0)
+            : JSVariableObject(globalData, structure, &m_symbolTable, nullptr)
             , m_registerArraySize(0)
             , m_globalScopeChain()
             , m_weakRandom(static_cast<unsigned>(randomNumber() * (std::numeric_limits<unsigned>::max() + 1.0)))
@@ -131,7 +131,7 @@ namespace JSC {
 
     protected:
         JSGlobalObject(JSGlobalData& globalData, Structure* structure, JSObject* thisValue)
-            : JSVariableObject(globalData, structure, &m_symbolTable, 0)
+            : JSVariableObject(globalData, structure, &m_symbolTable, nullptr)
             , m_registerArraySize(0)
             , m_globalScopeChain()
             , m_weakRandom(static_cast<unsigned>(randomNumber() * (std::numeric_limits<unsigned>::max() + 1.0)))
@@ -160,7 +160,7 @@ namespace JSC {
         // lookups prior to initializing the properties
         bool symbolTableHasProperty(const Identifier& propertyName);
 
-        // The following accessors return pristine values, even if a script 
+        // The following accessors return pristine values, even if a script
         // replaces the global object's associated property.
 
         RegExpConstructor* regExpConstructor() const { return m_regExpConstructor.get(); }
@@ -361,7 +361,7 @@ namespace JSC {
         // We cache our prototype chain so our clients can share it.
         if (!isValid(exec, m_cachedPrototypeChain.get())) {
             JSValue prototype = prototypeForLookup(exec);
-            m_cachedPrototypeChain.set(exec->globalData(), this, StructureChain::create(exec->globalData(), prototype.isNull() ? 0 : asObject(prototype)->structure()));
+            m_cachedPrototypeChain.set(exec->globalData(), this, StructureChain::create(exec->globalData(), prototype.isNull() ? nullptr : asObject(prototype)->structure()));
         }
         return m_cachedPrototypeChain.get();
     }
@@ -387,7 +387,7 @@ namespace JSC {
         if (this == lexicalGlobalObject()->globalExec())
             return lexicalGlobalObject();
 
-        // For any ExecState that's not a globalExec, the 
+        // For any ExecState that's not a globalExec, the
         // dynamic global object must be set since code is running
         ASSERT(globalData().dynamicGlobalObject);
         return globalData().dynamicGlobalObject;
@@ -407,7 +407,7 @@ namespace JSC {
     {
         return new (exec) JSArray(exec->globalData(), globalObject->arrayStructure());
     }
-    
+
     inline JSArray* constructEmptyArray(ExecState* exec)
     {
         return constructEmptyArray(exec, exec->lexicalGlobalObject());

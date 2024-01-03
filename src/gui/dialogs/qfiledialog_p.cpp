@@ -584,7 +584,7 @@ void QFileDialogPrivate::setLabelTextControl(QFileDialog::DialogLabel label, con
    }
 }
 
-inline static QUrl _qt_get_directory(const QUrl &url)
+static inline QUrl _qt_get_directory(const QUrl &url)
 {
    if (url.isLocalFile()) {
       QFileInfo info = QFileInfo(QDir::current(), url.toLocalFile());
