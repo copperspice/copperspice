@@ -928,14 +928,15 @@ void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
       m_dragTarget = nullptr;
    }
 
-   if (!widget) {
+   if (! widget) {
       event->ignore();
       return;
    }
 
    m_dragTarget = widget;
    const QPoint mapped = widget->mapFromGlobal(m_widget->mapToGlobal(event->pos()));
-   QDragEnterEvent translated(mapped, event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers());
+   QDragEnterEvent translated(mapped, event->possibleActions(), event->mimeData(),
+         event->mouseButtons(), event->keyboardModifiers());
    QGuiApplication::sendSpontaneousEvent(widget, &translated);
 
    if (translated.isAccepted()) {
@@ -958,16 +959,20 @@ void QWidgetWindow::handleDragLeaveEvent(QDragLeaveEvent *event)
 void QWidgetWindow::handleDropEvent(QDropEvent *event)
 {
    if (m_dragTarget.isNull()) {
-      qWarning() << m_widget << ": No drag target set.";
+      qWarning() << m_widget << ": No drag target was set";
       event->ignore();
+
       return;
    }
+
    const QPoint mapped = m_dragTarget.data()->mapFromGlobal(m_widget->mapToGlobal(event->pos()));
    QDropEvent translated(mapped, event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers());
    QGuiApplication::sendSpontaneousEvent(m_dragTarget.data(), &translated);
+
    if (translated.isAccepted()) {
       event->accept();
    }
+
    event->setDropAction(translated.dropAction());
    m_dragTarget = nullptr;
 }

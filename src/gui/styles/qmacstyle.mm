@@ -81,9 +81,9 @@ static QWindow *qt_getWindow(const QWidget *widget)
    return widget ? widget->window()->windowHandle() : nullptr;
 }
 
-@interface QT_MANGLE_NAMESPACE(NotificationReceiver) : NSObject
+@interface NotificationReceiver : NSObject
 {
-                                                          QMacStylePrivate *mPrivate;
+   QMacStylePrivate *mPrivate;
 }
 - (id)initWithPrivate: (QMacStylePrivate *)priv;
 - (void)scrollBarStyleDidChange: (NSNotification *)notification;
@@ -100,9 +100,11 @@ static QWindow *qt_getWindow(const QWidget *widget)
 
 - (void)scrollBarStyleDidChange: (NSNotification *)notification
 {
-   Q_UNUSED(notification);
+   (void) notification;
+
    QEvent event(QEvent::StyleChange);
    QMutableVectorIterator<QPointer<QObject> > it(QMacStylePrivate::scrollBars);
+
    while (it.hasNext()) {
       if (!it.next()) {
          it.remove();
@@ -501,6 +503,7 @@ static QString qt_mac_removeMnemonics(const QString &str)
 static CGContextRef qt_mac_cg_context(const QPaintDevice *pdev);
 
 namespace {
+
 class QMacCGContext
 {
    CGContextRef context;
@@ -561,7 +564,8 @@ public:
       return *this;
    }
 };
-} // anonymous namespace
+
+}   // end namespace
 
 OSStatus qt_mac_shape2QRegionHelper(int inMessage, HIShapeRef, const CGRect *inRect, void *inRefcon)
 {
@@ -1333,9 +1337,11 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
    if (insz) {
       *insz = QSize();
    }
-   Q_UNUSED(widg);
-   Q_UNUSED(ct);
-   Q_UNUSED(szHint);
+
+   (void) widg;
+   (void) ct;
+   (void) szHint;
+
    return QAquaSizeUnknown;
 #endif
 }
@@ -1716,7 +1722,7 @@ void QMacStylePrivate::drawTableHeader(const HIRect &outerBounds,
 {
    static SInt32 headerHeight = 0;
    static OSStatus err = CS_GetThemeMetric(kThemeMetricListHeaderHeight, &headerHeight);
-   Q_UNUSED(err);
+   (void) err;
 
    QPixmap buffer;
    QString key = QString("$qt_tableh%1-%2-%3").formatArg(int(bdi.state)).formatArg(int(bdi.adornment)).formatArg(int(bdi.value));
@@ -4508,28 +4514,25 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
             QStyleOptionTab myTab = *tab;
             ThemeTabDirection ttd = getTabDirection(myTab.shape);
-            bool verticalTabs = ttd == kThemeTabWest || ttd == kThemeTabEast;
-            bool selected = (myTab.state & QStyle::State_Selected);
 
-            // Check to see if we use have the same as the system font
-            // (QComboMenuItem is internal and should never be seen by the
-            // outside world, unless they read the source, in which case, it's
-            // their own fault).
+            bool verticalTabs = (ttd == kThemeTabWest || ttd == kThemeTabEast);
 
             bool nonDefaultFont = p->font() != cs_app_fonts_hash()->value("QComboMenuItem");
             bool isSelectedAndNeedsShadow = false;
 
-            if (isSelectedAndNeedsShadow || verticalTabs || nonDefaultFont || !tab->icon.isNull()
-                || !myTab.leftButtonSize.isEmpty() || !myTab.rightButtonSize.isEmpty()) {
+            if (isSelectedAndNeedsShadow || verticalTabs || nonDefaultFont || ! tab->icon.isNull()
+                || ! myTab.leftButtonSize.isEmpty() || ! myTab.rightButtonSize.isEmpty()) {
                int heightOffset = 0;
 
                if (verticalTabs) {
                   heightOffset = -1;
+
                } else if (nonDefaultFont) {
                   if (p->fontMetrics().height() == myTab.rect.height()) {
                      heightOffset = 2;
                   }
                }
+
                myTab.rect.setHeight(myTab.rect.height() + heightOffset);
 
                if (myTab.documentMode || isSelectedAndNeedsShadow) {
@@ -4550,6 +4553,7 @@ void QMacStyle::drawControl(ControlElement ce, const QStyleOption * opt, QPainte
                }
 
                QCommonStyle::drawControl(ce, &myTab, p, w);
+
             } else {
                p->save();
                CGContextSetShouldAntialias(cg, true);
@@ -7601,6 +7605,7 @@ void qt_mac_scale_region(QRegion *region, qreal scaleFactor)
 static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintDevice);
 
 namespace {
+
 QMacCGContext::QMacCGContext(QPainter *p)
 {
    QPaintEngine *pe = p->paintEngine();
@@ -7661,7 +7666,7 @@ QMacCGContext::QMacCGContext(QPainter *p)
    }
 }
 
-} // anonymous namespace
+}   // end namespace
 
 static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintDevice)
 {

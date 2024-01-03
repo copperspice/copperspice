@@ -24,11 +24,10 @@
 #ifndef QNamespaceBinding_P_H
 #define QNamespaceBinding_P_H
 
-template<typename T> class QVector;
-
 #include <qxmlname.h>
 
-QT_BEGIN_NAMESPACE
+template<typename T>
+class QVector;
 
 namespace QPatternist {
 
@@ -92,7 +91,5 @@ static inline uint qHash(const NamespaceBinding nb)
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

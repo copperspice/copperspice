@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class Boolean : public AtomicValue
 {
@@ -81,7 +79,5 @@ class Boolean : public AtomicValue
    const bool m_value;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

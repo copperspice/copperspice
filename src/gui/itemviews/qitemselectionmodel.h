@@ -317,16 +317,16 @@ class Q_GUI_EXPORT QItemSelectionModel : public QObject
  private:
    Q_DECLARE_PRIVATE(QItemSelectionModel)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &arg1, int arg2, int arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_columnsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_rowsAboutToBeRemoved(const QModelIndex &arg1, int arg2, int arg3))
+   GUI_CS_SLOT_1(Private, void _q_rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_rowsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeInserted(const QModelIndex &arg1, int arg2, int arg3))
+   GUI_CS_SLOT_1(Private, void _q_columnsAboutToBeInserted(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_columnsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_rowsAboutToBeInserted(const QModelIndex &arg1, int arg2, int arg3))
+   GUI_CS_SLOT_1(Private, void _q_rowsAboutToBeInserted(const QModelIndex &parent, int start, int end))
    GUI_CS_SLOT_2(_q_rowsAboutToBeInserted)
 
    GUI_CS_SLOT_1(Private, void _q_layoutAboutToBeChanged())

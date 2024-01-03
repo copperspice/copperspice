@@ -48,7 +48,7 @@ class QSettingsKey : public QString
    inline QSettingsKey(const QString &key, Qt::CaseSensitivity cs, int = -1)
       : QString(key) {
       Q_ASSERT(cs == Qt::CaseSensitive);
-      Q_UNUSED(cs);
+      (void) cs;
    }
 
    inline QString originalCaseKey() const {

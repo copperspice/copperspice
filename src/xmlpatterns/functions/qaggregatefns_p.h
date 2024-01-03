@@ -29,9 +29,8 @@
 #include <qatomicmathematician_p.h>
 #include <qcomparisonplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CountFN : public FunctionCall
 {
  public:
@@ -70,8 +69,7 @@ class SumFN : public AddingAggregate
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
    SequenceType::Ptr staticType() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

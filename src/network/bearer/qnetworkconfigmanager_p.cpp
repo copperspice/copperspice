@@ -48,10 +48,12 @@ QNetworkConfigurationManagerPrivate::QNetworkConfigurationManagerPrivate()
 
 void QNetworkConfigurationManagerPrivate::initialize()
 {
-   //Two stage construction, because we only want to do this heavyweight work for the winner of the Q_GLOBAL_STATIC race.
    bearerThread = new QThread();
    bearerThread->setObjectName("Network Bearer Thread");
-   bearerThread->moveToThread(QCoreApplicationPrivate::mainThread());    // because cleanup() is called in main thread context.
+
+   // because cleanup() is called in main thread context.
+   bearerThread->moveToThread(QCoreApplicationPrivate::mainThread());
+
    moveToThread(bearerThread);
    bearerThread->start();
    updateConfigurations();
@@ -394,22 +396,22 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
 
             engine->moveToThread(bearerThread);
 
-            connect(engine, SIGNAL(updateCompleted()),
-                    this, SLOT(updateConfigurations()), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::updateCompleted,
+                    this, &QNetworkConfigurationManagerPrivate::updateConfigurations, Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationAdded(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationAdded(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationAdded,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationAdded), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationRemoved(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationRemoved(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationRemoved,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationRemoved), Qt::QueuedConnection);
 
-            connect(engine, SIGNAL(configurationChanged(QNetworkConfigurationPrivatePointer)),
-                    this, SLOT(configurationChanged(QNetworkConfigurationPrivatePointer)), Qt::QueuedConnection);
+            connect(engine, &QBearerEngine::configurationChanged,
+                    this, cs_mp_cast<QNetworkConfigurationPrivatePointer>(&QNetworkConfigurationManagerPrivate::configurationChanged), Qt::QueuedConnection);
          }
       }
 
       if (generic) {
-         if ( !envOK || skipGeneric <= 0) {
+         if (! envOK || skipGeneric <= 0) {
             sessionEngines.append(generic);
          } else {
             delete generic;
@@ -419,7 +421,7 @@ void QNetworkConfigurationManagerPrivate::updateConfigurations()
 
    QBearerEngine *engine = dynamic_cast<QBearerEngine *>(sender());
 
-   if (engine && !updatingEngines.isEmpty()) {
+   if (engine && ! updatingEngines.isEmpty()) {
       updatingEngines.remove(engine);
    }
 
@@ -476,8 +478,9 @@ void QNetworkConfigurationManagerPrivate::startPolling()
 {
    QRecursiveMutexLocker locker(&mutex);
 
-   if (!pollTimer) {
+   if (! pollTimer) {
       pollTimer = new QTimer(this);
+
       bool ok;
       int interval = qgetenv("QT_BEARER_POLL_TIMEOUT").toInt(&ok);
 
@@ -487,7 +490,7 @@ void QNetworkConfigurationManagerPrivate::startPolling()
 
       pollTimer->setInterval(interval);
       pollTimer->setSingleShot(true);
-      connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollEngines()));
+      connect(pollTimer, &QTimer::timeout, this, &QNetworkConfigurationManagerPrivate::pollEngines);
    }
 
    if (pollTimer->isActive()) {

@@ -27,8 +27,6 @@
 
 #include "qcopyof_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CopyOf::CopyOf(const Expression::Ptr &operand,
@@ -112,4 +110,3 @@ ItemType::Ptr CopyOf::expectedContextItemType() const
    return m_operand->expectedContextItemType();
 }
 
-QT_END_NAMESPACE

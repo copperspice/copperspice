@@ -496,7 +496,11 @@ class QFontDatabasePrivate
    void invalidate();
 };
 
-Q_GLOBAL_STATIC(QFontDatabasePrivate, privateDb)
+static QFontDatabasePrivate *privateDb()
+{
+   static QFontDatabasePrivate retval;
+   return &retval;
+}
 
 static QRecursiveMutex *fontDatabaseMutex()
 {
@@ -920,7 +924,7 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
          if (engine) {
             // Also check for OpenType tables when using complex scripts
             if (! engine->supportsScript(QChar::Script(script))) {
-               qWarning("  OpenType support missing for script %d", script);
+               qWarning("loadSingleEngine() OpenType support missing for script %d", script);
                return nullptr;
             }
 
@@ -942,7 +946,7 @@ static QFontEngine *loadSingleEngine(int script, const QFontDef &request,
       if (engine) {
          // Also check for OpenType tables when using complex scripts
          if (! engine->supportsScript(QChar::Script(script))) {
-            qWarning("  OpenType support missing for script %d", script);
+            qWarning("loadSingleEngine() OpenType support missing for script %d", script);
 
             if (engine->m_refCount.load() == 0) {
                delete engine;

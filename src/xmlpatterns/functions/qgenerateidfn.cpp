@@ -25,8 +25,6 @@
 
 #include "qgenerateidfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item GenerateIDFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -42,5 +40,3 @@ Item GenerateIDFN::evaluateSingleton(const DynamicContext::Ptr &context) const
                                   + QString::number(qptrdiff(node.internalPointer()))
                                   + QString::number(node.additionalData()));
 }
-
-QT_END_NAMESPACE

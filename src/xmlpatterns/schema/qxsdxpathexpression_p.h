@@ -24,12 +24,11 @@
 #ifndef QXsdXPathExpression_P_H
 #define QXsdXPathExpression_P_H
 
+#include <qlist.h>
+
 #include <qanyuri_p.h>
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -94,9 +93,7 @@ class XsdXPathExpression : public NamedSchemaComponent, public XsdAnnotated
    AnyURI::Ptr     m_baseURI;
    QString         m_expression;
 };
+
 }
-
-QT_END_NAMESPACE
-
 
 #endif

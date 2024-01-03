@@ -24,10 +24,7 @@
 #include "qbuiltintypes_p.h"
 #include "qcommonsequencetypes_p.h"
 #include "qgenericsequencetype_p.h"
-
 #include "qcontextitem_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -94,5 +91,3 @@ void ContextItem::announceFocusType(const ItemType::Ptr &type)
    Q_ASSERT(type);
    m_itemType = type;
 }
-
-QT_END_NAMESPACE

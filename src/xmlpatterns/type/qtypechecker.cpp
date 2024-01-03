@@ -34,8 +34,6 @@
 
 #include "qtypechecker_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 QString TypeChecker::wrongType(const NamePool::Ptr &np, const ItemType::Ptr &reqType, const ItemType::Ptr &opType)
@@ -247,5 +245,3 @@ Expression::Ptr TypeChecker::verifyType(const Expression::Ptr &operand, const Se
     * EBVType, and the operand is compatible. */
    return result;
 }
-
-QT_END_NAMESPACE

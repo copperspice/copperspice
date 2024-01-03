@@ -40,8 +40,8 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
    , uncShareIndex(0)
    , onlyDirs(false)
 {
-   Q_UNUSED(nameFilters)
-   Q_UNUSED(flags)
+   (void) nameFilters;
+   (void) flags;
 
    if (nativePath.endsWith(".lnk")) {
       QFileSystemMetaData metaData;

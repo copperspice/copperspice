@@ -227,7 +227,7 @@ class Q_CORE_EXPORT QLineF
    QLineF unitVector() const;
    inline QLineF normalVector() const;
 
-   // ### Qt5 rename intersects() or intersection() and rename IntersectType IntersectionType
+   // TODO: rename intersects() or intersection() and rename IntersectType IntersectionType
    IntersectType intersect(const QLineF &lineF, QPointF *intersectionPoint) const;
 
    inline QPointF pointAt(qreal pos) const;

@@ -23,9 +23,7 @@
 #include "MIMESniffing.h"
 #include <QObject>
 
-QT_BEGIN_NAMESPACE
 class QNetworkReply;
-QT_END_NAMESPACE
 
 class QtMIMETypeSniffer : public QObject
 {
@@ -39,7 +37,7 @@ public:
     WEB_CS_SIGNAL_1(Public,void finished())
     WEB_CS_SIGNAL_2(finished)
 
-private:    
+private:
     WEB_CS_SLOT_1(Private,void trySniffing())
     WEB_CS_SLOT_2(trySniffing)
 

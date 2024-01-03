@@ -85,12 +85,10 @@ QCFSocketNotifier::QCFSocketNotifier()
     , maybeCancelWaitForMoreEvents(nullptr)
     , enableNotifiersObserver(nullptr)
 {
-
 }
 
 QCFSocketNotifier::~QCFSocketNotifier()
 {
-
 }
 
 void QCFSocketNotifier::setHostEventDispatcher(QAbstractEventDispatcher *hostEventDispacher)
@@ -108,25 +106,27 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
     Q_ASSERT(notifier);
     int nativeSocket = notifier->socket();
     int type = notifier->type();
+
 #ifndef QT_NO_DEBUG
     if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
-        qWarning("QSocketNotifier: Internal error");
+        qWarning("QSocketNotifier::registerSocketNotifier() Internal error");
         return;
+
     } else if (notifier->thread() != eventDispatcher->thread()
                || eventDispatcher->thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: socket notifiers cannot be enabled from another thread");
+        qWarning("QSocketNotifier::registerSocketNotifier() Socket notifiers can not be enabled from another thread");
         return;
     }
 #endif
 
     if (type == QSocketNotifier::Exception) {
-        qWarning("QSocketNotifier::Exception is not supported on iOS");
+        qWarning("QSocketNotifier::registerSocketNotifier() Exception is not supported on this OS");
         return;
     }
 
     // Check if we have a CFSocket for the native socket, create one if not.
     MacSocketInfo *socketInfo = macSockets.value(nativeSocket);
-    if (!socketInfo) {
+    if (! socketInfo) {
         socketInfo = new MacSocketInfo();
 
         // Create CFSocket, specify that we want both read and write callbacks (the callbacks
@@ -134,14 +134,16 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
         const int callbackTypes = kCFSocketReadCallBack | kCFSocketWriteCallBack;
         CFSocketContext context = {0, this, nullptr, nullptr, nullptr};
         socketInfo->socket = CFSocketCreateWithNative(kCFAllocatorDefault, nativeSocket, callbackTypes, qt_mac_socket_callback, &context);
+
         if (CFSocketIsValid(socketInfo->socket) == false) {
-            qWarning("QEventDispatcherMac::registerSocketNotifier: Failed to create CFSocket");
+            qWarning("QEventDispatcher::registerSocketNotifier() Failed to create CFSocket");
             return;
         }
 
         CFOptionFlags flags = CFSocketGetSocketFlags(socketInfo->socket);
         // QSocketNotifier doesn't close the socket upon destruction/invalidation
         flags &= ~kCFSocketCloseOnInvalidate;
+
         // Expicitly disable automatic re-enable, as we do that manually on each runloop pass
         flags &= ~(kCFSocketAutomaticallyReenableWriteCallBack | kCFSocketAutomaticallyReenableReadCallBack);
         CFSocketSetSocketFlags(socketInfo->socket, flags);
@@ -176,23 +178,25 @@ void QCFSocketNotifier::unregisterSocketNotifier(QSocketNotifier *notifier)
     Q_ASSERT(notifier);
     int nativeSocket = notifier->socket();
     int type = notifier->type();
+
 #ifndef QT_NO_DEBUG
     if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
-        qWarning("QSocketNotifier: Internal error");
+        qWarning("QSocketNotifier::unregisterSocketNotifier() Internal error");
         return;
+
     } else if (notifier->thread() != eventDispatcher->thread() || eventDispatcher->thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier: socket notifiers cannot be disabled from another thread");
+        qWarning("QSocketNotifier::unregisterSocketNotifier Socket notifiers can not be disabled from another thread");
         return;
     }
 #endif
 
     if (type == QSocketNotifier::Exception) {
-        qWarning("QSocketNotifier::Exception is not supported on iOS");
+        qWarning("QSocketNotifier::unregisterSocketNotifier() Exception is not supported on this OS");
         return;
     }
     MacSocketInfo *socketInfo = macSockets.value(nativeSocket);
     if (!socketInfo) {
-        qWarning("QEventDispatcherMac::unregisterSocketNotifier: Tried to unregister a not registered notifier");
+        qWarning("QEventDispatcherMac::unregisterSocketNotifier() Unable to unregister an unknown notifier");
         return;
     }
 
@@ -243,11 +247,14 @@ void QCFSocketNotifier::destroyRunLoopObserver()
 void QCFSocketNotifier::unregisterSocketInfo(MacSocketInfo *socketInfo)
 {
     if (socketInfo->runloop) {
-        if (CFSocketIsValid(socketInfo->socket))
+        if (CFSocketIsValid(socketInfo->socket)) {
             qt_mac_remove_socket_from_runloop(socketInfo->socket, socketInfo->runloop);
+        }
+
         CFRunLoopSourceInvalidate(socketInfo->runloop);
         CFRelease(socketInfo->runloop);
     }
+
     CFSocketInvalidate(socketInfo->socket);
     CFRelease(socketInfo->socket);
 }
@@ -257,27 +264,32 @@ void QCFSocketNotifier::enableSocketNotifiers(CFRunLoopObserverRef, CFRunLoopAct
     QCFSocketNotifier *that = static_cast<QCFSocketNotifier *>(info);
 
     for (MacSocketInfo *socketInfo : that->macSockets) {
-        if (!CFSocketIsValid(socketInfo->socket))
+        if (! CFSocketIsValid(socketInfo->socket)) {
             continue;
+        }
 
-        if (!socketInfo->runloop) {
+        if (! socketInfo->runloop) {
             // Add CFSocket to runloop.
-            if (!(socketInfo->runloop = qt_mac_add_socket_to_runloop(socketInfo->socket))) {
-                qWarning("QEventDispatcherMac::registerSocketNotifier: Failed to add CFSocket to runloop");
+            if (! (socketInfo->runloop = qt_mac_add_socket_to_runloop(socketInfo->socket))) {
+                qWarning("QEventDispatcher::registerSocketNotifier() Failed to add CFSocket to runloop");
                 CFSocketInvalidate(socketInfo->socket);
                 continue;
             }
 
-            if (!socketInfo->readNotifier)
+            if (! socketInfo->readNotifier) {
                 CFSocketDisableCallBacks(socketInfo->socket, kCFSocketReadCallBack);
-            if (!socketInfo->writeNotifier)
+            }
+
+            if (! socketInfo->writeNotifier) {
                 CFSocketDisableCallBacks(socketInfo->socket, kCFSocketWriteCallBack);
+            }
         }
 
         if (socketInfo->readNotifier && !socketInfo->readEnabled) {
             socketInfo->readEnabled = true;
             CFSocketEnableCallBacks(socketInfo->socket, kCFSocketReadCallBack);
         }
+
         if (socketInfo->writeNotifier && !socketInfo->writeEnabled) {
             socketInfo->writeEnabled = true;
             CFSocketEnableCallBacks(socketInfo->socket, kCFSocketWriteCallBack);

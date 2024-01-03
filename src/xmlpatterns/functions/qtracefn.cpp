@@ -25,10 +25,7 @@
 #include "qcommonvalues_p.h"
 #include "qitemmappingiterator_p.h"
 #include "qpatternistlocale_p.h"
-
 #include "qtracefn_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -98,5 +95,3 @@ SequenceType::Ptr TraceFN::staticType() const
 {
    return m_operands.first()->staticType();
 }
-
-QT_END_NAMESPACE

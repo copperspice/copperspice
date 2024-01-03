@@ -233,15 +233,17 @@ bool QGLPixelBuffer::isValid() const
    return !d->invalid;
 }
 
-Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_buffer_2_engine)
+static QGLEngineThreadStorage<QGL2PaintEngineEx> *qt_buffer_2_engine()
+{
+   static QGLEngineThreadStorage<QGL2PaintEngineEx> retval;
+   return &retval;
+}
 
-/*! \reimp */
 QPaintEngine *QGLPixelBuffer::paintEngine() const
 {
    return qt_buffer_2_engine()->engine();
 }
 
-/*! \reimp */
 int QGLPixelBuffer::metric(PaintDeviceMetric metric) const
 {
    Q_D(const QGLPixelBuffer);
@@ -377,7 +379,7 @@ bool QGLPixelBufferPrivate::cleanup()
 
 bool QGLPixelBuffer::bindToDynamicTexture(GLuint texture_id)
 {
-   Q_UNUSED(texture_id);
+   (void) texture_id;
    return false;
 }
 

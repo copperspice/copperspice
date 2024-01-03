@@ -39,7 +39,11 @@ class QGL2GradientCacheWrapper
     QMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QGL2GradientCacheWrapper, qt_gradient_caches)
+static QGL2GradientCacheWrapper *qt_gradient_caches()
+{
+   static QGL2GradientCacheWrapper retval;
+   return &retval;
+}
 
 QGL2GradientCache::QGL2GradientCache(QOpenGLContext *ctx)
     : QOpenGLSharedResource(ctx->shareGroup())
@@ -50,6 +54,7 @@ QGL2GradientCache::~QGL2GradientCache()
 {
     cache.clear();
 }
+
 QGL2GradientCache *QGL2GradientCache::cacheForContext(const QGLContext *context)
 {
    return qt_gradient_caches()->cacheForContext(context);
@@ -65,6 +70,7 @@ void QGL2GradientCache::freeResource(QOpenGLContext *)
 {
     cleanCache();
 }
+
 void QGL2GradientCache::cleanCache()
 {
     QOpenGLFunctions *funcs = QOpenGLContext::currentContext()->functions();
@@ -104,7 +110,6 @@ GLuint QGL2GradientCache::getBuffer(const QGradient &gradient, qreal opacity)
       return addCacheElement(hash_val, gradient, opacity);
    }
 }
-
 
 GLuint QGL2GradientCache::addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity)
 {

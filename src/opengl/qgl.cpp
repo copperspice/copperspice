@@ -75,7 +75,11 @@ class QGLDefaultExtensions
    QOpenGLExtensions::OpenGLExtensions extensions;
 };
 
-Q_GLOBAL_STATIC(QGLDefaultExtensions, qtDefaultExtensions)
+static QGLDefaultExtensions *qtDefaultExtensions()
+{
+   static QGLDefaultExtensions retval;
+   return &retval;
+}
 
 bool qgl_hasFeature(QOpenGLFunctions::OpenGLFeature feature)
 {
@@ -133,7 +137,11 @@ struct QGLThreadContext {
    QGLContext *context;
 };
 
-Q_GLOBAL_STATIC(QGLFormat, qgl_default_format)
+static QGLFormat *qgl_default_format()
+{
+   static QGLFormat retval;
+   return &retval;
+}
 
 class QGLDefaultOverlayFormat: public QGLFormat
 {
@@ -145,17 +153,28 @@ class QGLDefaultOverlayFormat: public QGLFormat
    }
 };
 
-Q_GLOBAL_STATIC(QGLDefaultOverlayFormat, defaultOverlayFormatInstance)
-Q_GLOBAL_STATIC(QGLSignalProxy, theSignalProxy)
+static QGLDefaultOverlayFormat *defaultOverlayFormatInstance()
+{
+   static QGLDefaultOverlayFormat retval;
+   return &retval;
+}
+
+static QGLSignalProxy *theSignalProxy()
+{
+   static QGLSignalProxy retval;
+   return &retval;
+}
 
 QGLSignalProxy *QGLSignalProxy::instance()
 {
    QGLSignalProxy *proxy = theSignalProxy();
+
    if (proxy && qApp && proxy->thread() != qApp->thread()) {
       if (proxy->thread() == QThread::currentThread()) {
          proxy->moveToThread(qApp->thread());
       }
    }
+
    return proxy;
 }
 
@@ -931,7 +950,11 @@ struct QGLContextGroupList {
    QRecursiveMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QGLContextGroupList, qt_context_groups)
+static QGLContextGroupList *qt_context_groups()
+{
+   static QGLContextGroupList retval;
+   return &retval;
+}
 
 QGLContextGroup::QGLContextGroup(const QGLContext *context)
    : m_context(context), m_refs(1)
@@ -943,6 +966,7 @@ QGLContextGroup::~QGLContextGroup()
 {
    qt_context_groups()->remove(this);
 }
+
 const QGLContext *qt_gl_transfer_context(const QGLContext *ctx)
 {
    if (! ctx) {
@@ -1144,15 +1168,21 @@ QImage qt_gl_read_texture(const QSize &size, bool alpha_format, bool include_alp
    int h = size.height();
 
 #ifndef QT_OPENGL_ES
-   if (!QOpenGLContext::currentContext()->isOpenGLES()) {
+   if (! QOpenGLContext::currentContext()->isOpenGLES()) {
       qgl1_functions()->glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.bits());
    }
 #endif
+
    convertFromGLImage(img, w, h, alpha_format, include_alpha);
+
    return img;
 }
 
-Q_GLOBAL_STATIC(QGLTextureCache, qt_gl_texture_cache)
+static QGLTextureCache *qt_gl_texture_cache()
+{
+   static QGLTextureCache retval;
+   return &retval;
+}
 
 QGLTextureCache::QGLTextureCache()
    : m_cache(64 * 1024) // cache ~64 MB worth of textures - this is not accurate though
@@ -2352,10 +2382,11 @@ bool QGLContext::chooseContext(const QGLContext *shareContext)
 {
    Q_D(QGLContext);
    if (!d->paintDevice || d->paintDevice->devType() != QInternal::Widget) {
-      // Unlike in Qt 4, the only possible target is a widget backed by an OpenGL-based
-      // QWindow. Pixmaps in particular are not supported anymore as paint devices since
-      // starting from Qt 5 QPixmap is raster-backed on almost all platforms.
+      // Only possible target is a widget backed by an OpenGL-based QWindow.
+      // Pixmaps in particular are not supported as paint devices
+
       d->valid = false;
+
    } else {
       QWidget *widget = static_cast<QWidget *>(d->paintDevice);
       QGLFormat glformat = format();
@@ -3070,7 +3101,7 @@ void QGLWidget::renderText(double x, double y, double z, const QString &str, con
          funcs->glEnable(GL_DEPTH_TEST);
       }
 
-      // The only option in Qt 5 is the shader-based OpenGL 2 paint engine.
+      // The only option is the shader-based OpenGL 2 paint engine.
       // Setting fixed pipeline transformations is futile. Instead, pass the
       // extra values directly and let the engine figure the matrices out.
       static_cast<QGL2PaintEngineEx *>(p->paintEngine())->setTranslateZ(-win_z);
@@ -3193,7 +3224,11 @@ void QGLWidget::drawTexture(const QPointF &point, GLuint textureId, GLenum textu
    d->glcx->drawTexture(point, textureId, textureTarget);
 }
 
-Q_GLOBAL_STATIC(QGLEngineThreadStorage<QGL2PaintEngineEx>, qt_gl_2_engine)
+static QGLEngineThreadStorage<QGL2PaintEngineEx> *qt_gl_2_engine()
+{
+   static QGLEngineThreadStorage<QGL2PaintEngineEx> retval;
+   return &retval;
+}
 
 Q_OPENGL_EXPORT QPaintEngine *qt_qgl_paint_engine()
 {
@@ -3238,7 +3273,11 @@ void QGLWidgetPrivate::cleanupColormaps()
 {
 }
 
-Q_GLOBAL_STATIC(QString, qt_gl_lib_name)
+static QString *qt_gl_lib_name()
+{
+   static QString retval;
+   return &retval;
+}
 
 void qt_set_gl_library_name(const QString &name)
 {

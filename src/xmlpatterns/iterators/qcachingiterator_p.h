@@ -24,12 +24,11 @@
 #ifndef QCachingIterator_P_H
 #define QCachingIterator_P_H
 
-#include <QList>
-#include <QVector>
+#include <qlist.h>
+#include <qvector.h>
+
 #include <qdynamiccontext_p.h>
 #include <qitem_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -79,8 +78,7 @@ class CachingIterator : public Item::Iterator
     */
    bool m_usingCache;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

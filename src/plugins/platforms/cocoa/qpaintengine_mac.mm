@@ -1069,7 +1069,7 @@ void QCoreGraphicsPaintEngine::drawImage(const QRectF &r, const QImage &img, con
    Qt::ImageConversionFlags flags)
 {
    Q_D(QCoreGraphicsPaintEngine);
-   Q_UNUSED(flags);
+   (void) flags;
    Q_ASSERT(isActive());
 
    if (img.isNull() || state->compositionMode() == QPainter::CompositionMode_Destination) {

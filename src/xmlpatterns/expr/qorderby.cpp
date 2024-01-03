@@ -30,10 +30,7 @@
 #include "qreturnorderby_p.h"
 #include "qsorttuple_p.h"
 #include "qsequencemappingiterator_p.h"
-
 #include "qorderby_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -223,5 +220,3 @@ OrderBy::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

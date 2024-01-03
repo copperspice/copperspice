@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ErrorFN : public FunctionCall
@@ -36,8 +34,7 @@ class ErrorFN : public FunctionCall
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    FunctionSignature::Ptr signature() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

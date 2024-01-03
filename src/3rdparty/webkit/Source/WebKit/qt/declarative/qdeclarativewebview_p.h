@@ -245,10 +245,10 @@ class QDeclarativeWebView : public QDeclarativeItem {
     WEB_CS_SIGNAL_2(urlChanged)
     WEB_CS_SIGNAL_1(Public, void progressChanged())
     WEB_CS_SIGNAL_2(progressChanged)
-    WEB_CS_SIGNAL_1(Public, void statusChanged(Status un_named_arg1))
-    WEB_CS_SIGNAL_2(statusChanged,un_named_arg1)
-    WEB_CS_SIGNAL_1(Public, void titleChanged(const QString & un_named_arg1))
-    WEB_CS_SIGNAL_2(titleChanged,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void statusChanged(Status newStatus))
+    WEB_CS_SIGNAL_2(statusChanged,newStatus)
+    WEB_CS_SIGNAL_1(Public, void titleChanged(const QString &newTitle))
+    WEB_CS_SIGNAL_2(titleChanged,newTitle)
     WEB_CS_SIGNAL_1(Public, void iconChanged())
     WEB_CS_SIGNAL_2(iconChanged)
     WEB_CS_SIGNAL_1(Public, void statusTextChanged())
@@ -263,8 +263,8 @@ class QDeclarativeWebView : public QDeclarativeItem {
     WEB_CS_SIGNAL_2(newWindowParentChanged)
     WEB_CS_SIGNAL_1(Public, void renderingEnabledChanged())
     WEB_CS_SIGNAL_2(renderingEnabledChanged)
-    WEB_CS_SIGNAL_1(Public, void contentsSizeChanged(const QSize & un_named_arg1))
-    WEB_CS_SIGNAL_2(contentsSizeChanged,un_named_arg1)
+    WEB_CS_SIGNAL_1(Public, void contentsSizeChanged(const QSize &newSize))
+    WEB_CS_SIGNAL_2(contentsSizeChanged,newSize)
     WEB_CS_SIGNAL_1(Public, void contentsScaleChanged())
     WEB_CS_SIGNAL_2(contentsScaleChanged)
 
@@ -289,7 +289,7 @@ class QDeclarativeWebView : public QDeclarativeItem {
     WEB_CS_SIGNAL_1(Public, void alert(const QString & message))
     WEB_CS_SIGNAL_2(alert,message)
 
-    WEB_CS_SLOT_1(Public, QVariant evaluateJavaScript(const QString & un_named_arg1))
+    WEB_CS_SLOT_1(Public, QVariant evaluateJavaScript(const QString &scriptSource))
     WEB_CS_SLOT_2(evaluateJavaScript)
 
  private:
@@ -299,7 +299,7 @@ class QDeclarativeWebView : public QDeclarativeItem {
     WEB_CS_SLOT_2(doLoadProgress)
     WEB_CS_SLOT_1(Private, void doLoadFinished(bool ok))
     WEB_CS_SLOT_2(doLoadFinished)
-    WEB_CS_SLOT_1(Private, void setStatusText(const QString & un_named_arg1))
+    WEB_CS_SLOT_1(Private, void setStatusText(const QString &text))
     WEB_CS_SLOT_2(setStatusText)
     WEB_CS_SLOT_1(Private, void windowObjectCleared())
     WEB_CS_SLOT_2(windowObjectCleared)

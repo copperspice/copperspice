@@ -26,8 +26,6 @@
 
 #include <qtemplatemode_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ApplyTemplate : public TemplateInvoker
@@ -71,7 +69,5 @@ TemplateMode::Ptr ApplyTemplate::mode() const
    return m_mode;
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

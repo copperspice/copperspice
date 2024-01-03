@@ -23,8 +23,6 @@
 
 #include "qxsdschemamerger_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaMerger::XsdSchemaMerger(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema)
@@ -142,5 +140,3 @@ void XsdSchemaMerger::merge(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &
       }
    }
 }
-
-QT_END_NAMESPACE

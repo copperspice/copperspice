@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QStatusBar : public QWidget
    void paintEvent(QPaintEvent *event) override;
    void resizeEvent(QResizeEvent *event) override;
 
-   // ### Qt5, consider making reformat() and hideOrShow() private
+   // TODO: consider making reformat() and hideOrShow() private
    void reformat();
    void hideOrShow();
    bool event(QEvent *event) override;

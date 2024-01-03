@@ -57,16 +57,14 @@ void QBackingStore::flush(const QRegion &region, QWindow *win, const QPoint &off
 
    if (! win->handle()) {
 #if defined(CS_SHOW_DEBUG)
-      qWarning() << "QBackingStore::flush(): Called for "
-                 << win << " which does not have a handle.";
+      qWarning("QBackingStore::flush() Unable to flush a window without a handle");
 #endif
       return;
    }
 
    if (win && win->isTopLevel() && ! qt_window_private(win)->receivedExpose) {
 #if defined(CS_SHOW_DEBUG)
-      qWarning() << "QBackingStore::flush():  Called with non-exposed window "
-                 << win << ", behavior is undefined";
+      qWarning("QBackingStore::flush() Unable to flush a non-exposed window");
 #endif
    }
 

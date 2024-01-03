@@ -24,10 +24,8 @@
 #include <QObject>
 #include <wtf/Platform.h>
 
-QT_BEGIN_NAMESPACE
 class QGraphicsVideoItem;
 class QMediaPlayer;
-QT_END_NAMESPACE
 
 namespace WebCore {
 
@@ -56,7 +54,7 @@ public:
     void exitFullScreen();
 
     WEB_CS_SLOT_1(Public, void windowClosed())
-    WEB_CS_SLOT_2(windowClosed) 
+    WEB_CS_SLOT_2(windowClosed)
 
 private:
     HTMLVideoElement* m_videoElement;
@@ -74,10 +72,10 @@ public:
     bool requiresFullScreenForVideoPlayback() const;
 
 public :
-    WEB_CS_SLOT_1(Public, void enterFullScreen(QMediaPlayer * un_named_arg1))
-    WEB_CS_SLOT_2(enterFullScreen) 
+    WEB_CS_SLOT_1(Public, void enterFullScreen(QMediaPlayer *player))
+    WEB_CS_SLOT_2(enterFullScreen)
     WEB_CS_SLOT_1(Public, void exitFullScreen())
-    WEB_CS_SLOT_2(exitFullScreen) 
+    WEB_CS_SLOT_2(exitFullScreen)
 
 private:
     static bool s_shouldForceFullScreenVideoPlayback;
@@ -104,7 +102,7 @@ private:
 
 private :
     WEB_CS_SLOT_1(Private, void aboutToClose())
-    WEB_CS_SLOT_2(aboutToClose) 
+    WEB_CS_SLOT_2(aboutToClose)
 
 private:
     ChromeClientQt* m_chromeClient;

@@ -26,8 +26,6 @@
 
 #include "qpaircontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Path : public PairContainer
@@ -99,8 +97,7 @@ void Path::setLast()
 {
    m_isLast = true;
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

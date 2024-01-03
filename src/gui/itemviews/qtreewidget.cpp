@@ -216,8 +216,9 @@ int QTreeModel::rowCount(const QModelIndex &parent) const
 
 int QTreeModel::columnCount(const QModelIndex &index) const
 {
-   Q_UNUSED(index);
-   if (!headerItem) {
+   (void) index;
+
+   if (! headerItem) {
       return 0;
    }
 
@@ -2038,20 +2039,24 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
 
       for (int i = 0; i < items.count(); ++i) {
          QTreeWidgetItem *item = items.at(i);
-         if (!item) {
-            qWarning("QTreeWidget::mimeData: Null-item passed");
+
+         if (! item) {
+            qWarning("QTreeWidget::mimeData() Item %d was invalid (nullptr)", i);
             return nullptr;
          }
 
          for (int c = 0; c < item->values.count(); ++c) {
             const QModelIndex index = indexFromItem(item, c);
-            if (!index.isValid()) {
-               qWarning() << "QTreeWidget::mimeData: No index associated with item :" << item;
+
+            if (! index.isValid()) {
+               qWarning("QTreeWidget::mimeData() No index associated with item %p at element %d", item, i);
                return nullptr;
             }
+
             indexes << index;
          }
       }
+
       return d->model->QAbstractItemModel::mimeData(indexes);
    }
 
@@ -2059,9 +2064,10 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
 }
 
 bool QTreeWidget::dropMimeData(QTreeWidgetItem *parent, int index,
-   const QMimeData *data, Qt::DropAction action)
+      const QMimeData *data, Qt::DropAction action)
 {
    QModelIndex idx;
+
    if (parent) {
       idx = indexFromItem(parent);
    }

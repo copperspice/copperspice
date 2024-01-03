@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
-#include <QVector>
-#include <QXmlNamePool>
+#include <qurl.h>
+#include <qvector.h>
+#include <qxmlnamepool.h>
 
 #include "qabstractxmlnodemodel_p.h"
 #include "qemptyiterator_p.h"
@@ -88,7 +88,7 @@ QXmlNamePool &QSimpleXmlNodeModel::namePool() const
  */
 QVector<QXmlName> QSimpleXmlNodeModel::namespaceBindings(const QXmlNodeModelIndex &node) const
 {
-   Q_UNUSED(node);
+   (void) node;
    return QVector<QXmlName>();
 }
 
@@ -100,7 +100,7 @@ QVector<QXmlName> QSimpleXmlNodeModel::namespaceBindings(const QXmlNodeModelInde
  */
 QXmlNodeModelIndex QSimpleXmlNodeModel::elementById(const QXmlName &id) const
 {
-   Q_UNUSED(id);
+   (void) id;
    return QXmlNodeModelIndex();
 }
 
@@ -112,7 +112,7 @@ QXmlNodeModelIndex QSimpleXmlNodeModel::elementById(const QXmlName &id) const
  */
 QVector<QXmlNodeModelIndex> QSimpleXmlNodeModel::nodesByIdref(const QXmlName &idref) const
 {
-   Q_UNUSED(idref);
+   (void) idref;
    return QVector<QXmlNodeModelIndex>();
 }
 

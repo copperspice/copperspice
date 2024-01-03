@@ -23,8 +23,6 @@
 
 #include "qxsdxpathexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdXPathExpression::setNamespaceBindings(const QList<QXmlName> &set)
@@ -66,5 +64,3 @@ QString XsdXPathExpression::expression() const
 {
    return m_expression;
 }
-
-QT_END_NAMESPACE

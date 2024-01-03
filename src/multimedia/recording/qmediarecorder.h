@@ -168,25 +168,34 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
 
    MULTI_CS_SLOT_1(Public, void record())
    MULTI_CS_SLOT_2(record)
+
    MULTI_CS_SLOT_1(Public, void pause())
    MULTI_CS_SLOT_2(pause)
+
    MULTI_CS_SLOT_1(Public, void stop())
    MULTI_CS_SLOT_2(stop)
+
    MULTI_CS_SLOT_1(Public, void setMuted(bool muted))
    MULTI_CS_SLOT_2(setMuted)
+
    MULTI_CS_SLOT_1(Public, void setVolume(qreal volume))
    MULTI_CS_SLOT_2(setVolume)
 
    MULTI_CS_SIGNAL_1(Public, void stateChanged(QMediaRecorder::State state))
    MULTI_CS_SIGNAL_2(stateChanged, state)
+
    MULTI_CS_SIGNAL_1(Public, void statusChanged(QMediaRecorder::Status status))
    MULTI_CS_SIGNAL_2(statusChanged, status)
+
    MULTI_CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    MULTI_CS_SIGNAL_2(durationChanged, duration)
+
    MULTI_CS_SIGNAL_1(Public, void mutedChanged(bool muted))
    MULTI_CS_SIGNAL_2(mutedChanged, muted)
+
    MULTI_CS_SIGNAL_1(Public, void volumeChanged(qreal volume))
    MULTI_CS_SIGNAL_2(volumeChanged, volume)
+
    MULTI_CS_SIGNAL_1(Public, void actualLocationChanged(const QUrl &location))
    MULTI_CS_SIGNAL_2(actualLocationChanged, location)
 
@@ -225,10 +234,10 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
       setOutputLocation(location);
    }
 
-   MULTI_CS_SLOT_1(Private, void _q_stateChanged(QMediaRecorder::State un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_stateChanged(QMediaRecorder::State state))
    MULTI_CS_SLOT_2(_q_stateChanged)
 
-   MULTI_CS_SLOT_1(Private, void _q_error(int un_named_arg1, const QString &un_named_arg2))
+   MULTI_CS_SLOT_1(Private, void _q_error(int error, const QString &errorString))
    MULTI_CS_SLOT_2(_q_error)
 
    MULTI_CS_SLOT_1(Private, void _q_serviceDestroyed())
@@ -237,16 +246,16 @@ class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindable
    MULTI_CS_SLOT_1(Private, void _q_notify())
    MULTI_CS_SLOT_2(_q_notify)
 
-   MULTI_CS_SLOT_1(Private, void _q_updateActualLocation(const QUrl &un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_updateActualLocation(const QUrl &url))
    MULTI_CS_SLOT_2(_q_updateActualLocation)
 
-   MULTI_CS_SLOT_1(Private, void _q_updateNotifyInterval(int un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_updateNotifyInterval(int interval))
    MULTI_CS_SLOT_2(_q_updateNotifyInterval)
 
    MULTI_CS_SLOT_1(Private, void _q_applySettings())
    MULTI_CS_SLOT_2(_q_applySettings)
 
-   MULTI_CS_SLOT_1(Private, void _q_availabilityChanged(QMultimedia::AvailabilityStatus un_named_arg1))
+   MULTI_CS_SLOT_1(Private, void _q_availabilityChanged(QMultimedia::AvailabilityStatus availStatus))
    MULTI_CS_SLOT_2(_q_availabilityChanged)
 };
 

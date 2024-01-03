@@ -24,15 +24,16 @@
 #ifndef QAccelTree_P_H
 #define QAccelTree_P_H
 
-#include <QHash>
-#include <QUrl>
-#include <QVector>
-#include <QXmlName>
+#include <qhash.h>
+#include <qurl.h>
+#include <qvector.h>
+#include <qxmlname.h>
 
 #include <qitem_p.h>
 #include <qnamepool_p.h>
 
 namespace QPatternist {
+
 template<bool> class AccelTreeBuilder;
 
 class AccelTree : public QAbstractXmlNodeModel
@@ -301,6 +302,7 @@ class AccelTree : public QAbstractXmlNodeModel
     */
    QHash<QXmlName::LocalNameCode, PreNumber> m_IDs;
 };
+
 }
 
 #endif

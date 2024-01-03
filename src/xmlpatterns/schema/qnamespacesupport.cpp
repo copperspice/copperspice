@@ -23,8 +23,6 @@
 
 #include "qnamespacesupport_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 NamespaceSupport::NamespaceSupport()
@@ -136,5 +134,3 @@ QList<QXmlName> NamespaceSupport::namespaceBindings() const
 
    return bindings;
 }
-
-QT_END_NAMESPACE

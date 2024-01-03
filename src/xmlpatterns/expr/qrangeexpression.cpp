@@ -31,8 +31,6 @@
 
 #include "qrangeexpression_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 RangeExpression::RangeExpression(const Expression::Ptr &operand1,
@@ -138,5 +136,3 @@ ExpressionVisitorResult::Ptr RangeExpression::accept(const ExpressionVisitor::Pt
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

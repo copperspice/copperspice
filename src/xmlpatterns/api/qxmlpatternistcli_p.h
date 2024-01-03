@@ -26,8 +26,6 @@
 
 #include <QCoreApplication>
 
-QT_BEGIN_NAMESPACE
-
 class QXmlPatternistCLI
 {
  public:
@@ -39,7 +37,5 @@ class QXmlPatternistCLI
    QXmlPatternistCLI(const QXmlPatternistCLI &) = delete;
    QXmlPatternistCLI &operator=(const QXmlPatternistCLI &) = delete;
 };
-
-QT_END_NAMESPACE
 
 #endif

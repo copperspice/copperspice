@@ -194,7 +194,7 @@ extern CGContextRef qt_mac_cg_context(const QPaintDevice *pdev);
 QPixmap QCocoaScreen::grabWindow(WId window, int x, int y, int width, int height) const
 {
    // TODO window should be handled
-   Q_UNUSED(window)
+   (void) window;
 
    const int maxDisplays = 128; // 128 displays should be enough for everyone.
    CGDirectDisplayID displays[maxDisplays];

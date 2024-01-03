@@ -34,12 +34,12 @@
 #include <qxcb_gl_integrationfactory.h>
 #include <qxcb_gl_integration.h>
 
-#include <QDebug>
-#include <QSocketNotifier>
-#include <QAbstractEventDispatcher>
-#include <QTimer>
-#include <QByteArray>
-#include <QScopedPointer>
+#include <qdebug.h>
+#include <qsocketnotifier.h>
+#include <qabstracteventdispatcher.h>
+#include <qtimer.h>
+#include <qbytearray.h>
+#include <qscopedpointer.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
@@ -848,8 +848,8 @@ void printXcbEvent(const char *message, xcb_generic_event_t *event)
             int(event->sequence));
    }
 #else
-   Q_UNUSED(message);
-   Q_UNUSED(event);
+   (void) message;
+   (void) event;
 #endif
 }
 
@@ -1433,8 +1433,8 @@ QXcbEventReader::QXcbEventReader(QXcbConnection *connection)
 void QXcbEventReader::start()
 {
    if (local_xcb_poll_for_queued_event) {
-      connect(this, SIGNAL(eventPending()), m_connection, SLOT(processXcbEvents()), Qt::QueuedConnection);
-      connect(this, SIGNAL(finished()), m_connection, SLOT(processXcbEvents()));
+      connect(this, &QXcbEventReader::eventPending, m_connection, &QXcbConnection::processXcbEvents, Qt::QueuedConnection);
+      connect(this, &QXcbEventReader::finished,     m_connection, &QXcbConnection::processXcbEvents);
       QThread::start();
 
    } else {
@@ -1446,12 +1446,15 @@ void QXcbEventReader::start()
 
 void QXcbEventReader::registerForEvents()
 {
-   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()), QSocketNotifier::Read, this);
-   connect(notifier, SIGNAL(activated(int)),   m_connection, SLOT(processXcbEvents()));
+   QSocketNotifier *notifier = new QSocketNotifier(xcb_get_file_descriptor(m_connection->xcb_connection()),
+         QSocketNotifier::Read, this);
 
    QAbstractEventDispatcher *dispatcher = QApplicationPrivate::eventDispatcher;
-   connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(processXcbEvents()));
-   connect(dispatcher, SIGNAL(awake()),        m_connection, SLOT(processXcbEvents()));
+
+   connect(notifier,   &QSocketNotifier::activated, m_connection, &QXcbConnection::processXcbEvents);
+
+   connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, m_connection, &QXcbConnection::processXcbEvents);
+   connect(dispatcher, &QAbstractEventDispatcher::awake,        m_connection, &QXcbConnection::processXcbEvents);
 }
 
 void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatcher)
@@ -1459,8 +1462,9 @@ void QXcbEventReader::registerEventDispatcher(QAbstractEventDispatcher *dispatch
    // flush the xcb connection before the EventDispatcher is going to block
    // In the non-threaded case processXcbEvents is called before going to block,
    // which flushes the connection.
+
    if (local_xcb_poll_for_queued_event) {
-      connect(dispatcher, SIGNAL(aboutToBlock()), m_connection, SLOT(flush()));
+      connect(dispatcher, &QAbstractEventDispatcher::aboutToBlock, m_connection, &QXcbConnection::flush);
    }
 }
 
@@ -2512,11 +2516,11 @@ QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
       QXcbConnection *self = const_cast<QXcbConnection *>(this);
 
       if ((self->m_systemTrayTracker = QXcbSystemTrayTracker::create(self))) {
-
          connect(m_systemTrayTracker, SIGNAL(systemTrayWindowChanged(QScreen *)),
             QApplication::platformNativeInterface(), SLOT(systemTrayWindowChanged(QScreen *)));
       }
    }
+
    return m_systemTrayTracker;
 }
 

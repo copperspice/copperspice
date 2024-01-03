@@ -270,8 +270,8 @@ GstElement *QGstreamerPlayerSession::playbin() const
 #if defined(HAVE_GST_APPSRC)
 void QGstreamerPlayerSession::configureAppSrcElement(GObject *object, GObject *orig, GParamSpec *pspec, QGstreamerPlayerSession *self)
 {
-   Q_UNUSED(object);
-   Q_UNUSED(pspec);
+   (void) object;
+   (void) pspec;
 
    if (!self->appsrc()) {
       return;
@@ -509,15 +509,18 @@ static GstPadProbeReturn block_pad_cb(GstPad *pad, GstPadProbeInfo *info, gpoint
 static void block_pad_cb(GstPad *pad, gboolean blocked, gpointer user_data)
 #endif
 {
-   Q_UNUSED(pad);
+   (void) pad;
+
 #if GST_CHECK_VERSION(1,0,0)
-   Q_UNUSED(info);
-   Q_UNUSED(user_data);
+   (void) info;
+   (void) user_data;
    return GST_PAD_PROBE_OK;
+
 #else
 #ifdef DEBUG_PLAYBIN
    qDebug() << "block_pad_cb, blocked:" << blocked;
 #endif
+
    if (blocked && user_data) {
       QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(user_data);
       QMetaObject::invokeMethod(session, "finishVideoOutputChange", Qt::QueuedConnection);
@@ -850,7 +853,7 @@ void QGstreamerPlayerSession::insertColorSpaceElement(GstElement *element, gpoin
    qDebug() << Q_FUNC_INFO;
 #endif
 
-   Q_UNUSED(element);
+   (void) element;
 
    QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(data);
 
@@ -1541,7 +1544,7 @@ void QGstreamerPlayerSession::updateDuration()
 
 void QGstreamerPlayerSession::playbinNotifySource(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(p);
+   (void) p;
 
    GstElement *source = nullptr;
    g_object_get(o, "source", &source, nullptr);
@@ -1644,8 +1647,9 @@ bool QGstreamerPlayerSession::isLiveSource() const
 
 void QGstreamerPlayerSession::handleVolumeChange(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(o);
-   Q_UNUSED(p);
+   (void) o;
+   (void) p;
+
    QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(d);
    QMetaObject::invokeMethod(session, "updateVolume", Qt::QueuedConnection);
 }
@@ -1666,8 +1670,9 @@ void QGstreamerPlayerSession::updateVolume()
 
 void QGstreamerPlayerSession::handleMutedChange(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(o);
-   Q_UNUSED(p);
+   (void) o;
+   (void) p;
+
    QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(d);
    QMetaObject::invokeMethod(session, "updateMuted", Qt::QueuedConnection);
 }
@@ -1717,9 +1722,9 @@ static gboolean factory_can_src_any_caps (GstElementFactory *factory, const GstC
 GstAutoplugSelectResult QGstreamerPlayerSession::handleAutoplugSelect(GstBin *bin, GstPad *pad, GstCaps *caps,
    GstElementFactory *factory, QGstreamerPlayerSession *session)
 {
-   Q_UNUSED(bin);
-   Q_UNUSED(pad);
-   Q_UNUSED(caps);
+   (void) bin;
+   (void) pad;
+   (void) caps;
 
    GstAutoplugSelectResult res = GST_AUTOPLUG_SELECT_TRY;
 
@@ -1750,7 +1755,8 @@ GstAutoplugSelectResult QGstreamerPlayerSession::handleAutoplugSelect(GstBin *bi
 
 void QGstreamerPlayerSession::handleElementAdded(GstBin *bin, GstElement *element, QGstreamerPlayerSession *session)
 {
-   Q_UNUSED(bin);
+   (void) bin;
+
    //we have to configure queue2 element to enable media downloading
    //and reporting available ranges,
    //but it's added dynamically to playbin2
@@ -1784,7 +1790,7 @@ void QGstreamerPlayerSession::handleElementAdded(GstBin *bin, GstElement *elemen
 
 void QGstreamerPlayerSession::handleStreamsChange(GstBin *bin, gpointer user_data)
 {
-   Q_UNUSED(bin);
+   (void) bin;
 
    QGstreamerPlayerSession *session = reinterpret_cast<QGstreamerPlayerSession *>(user_data);
    QMetaObject::invokeMethod(session, "getStreamsInfo", Qt::QueuedConnection);

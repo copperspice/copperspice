@@ -21,11 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qnamepool_p.h"
+#include <qdelegatingnamespaceresolver_p.h>
 
-#include "qdelegatingnamespaceresolver_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 
@@ -74,5 +72,3 @@ void DelegatingNamespaceResolver::addBinding(const QXmlName nb)
       m_bindings.insert(nb.prefix(), nb.namespaceURI());
    }
 }
-
-QT_END_NAMESPACE

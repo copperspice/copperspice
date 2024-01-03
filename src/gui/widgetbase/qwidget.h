@@ -24,22 +24,22 @@
 #ifndef QWIDGET_H
 #define QWIDGET_H
 
-#include <qwindowdefs.h>
-#include <qobject.h>
-#include <qmargins.h>
-#include <qpaintdevice.h>
-#include <qpalette.h>
+#include <qbrush.h>
+#include <qcursor.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qfontinfo.h>
-#include <qsizepolicy.h>
-#include <qregion.h>
-#include <qbrush.h>
-#include <qcursor.h>
-#include <qkeysequence.h>
 #include <qicon.h>
+#include <qkeysequence.h>
 #include <qlocale.h>
-#include <QScopedPointer>
+#include <qmargins.h>
+#include <qobject.h>
+#include <qpaintdevice.h>
+#include <qpalette.h>
+#include <qregion.h>
+#include <qsizepolicy.h>
+#include <qscopedpointer.h>
+#include <qwindowdefs.h>
 
 class QLayout;
 class QWSRegionManager;
@@ -391,14 +391,14 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void setSizeIncrement(int w, int h);
 
    // wrapper for overloaded property
-   inline void cs_setSizeIncrement(const QSize &un_named_arg1);
+   inline void cs_setSizeIncrement(const QSize &size);
 
    QSize baseSize() const;
    inline void setBaseSize(const QSize &size);
    void setBaseSize(int basew, int baseh);
 
    // wrapper for overloaded property
-   inline void cs_setBaseSize(const QSize &un_named_arg1);
+   inline void cs_setBaseSize(const QSize &size);
 
    void setFixedSize(const QSize &size);
    void setFixedSize(int w, int h);
@@ -666,7 +666,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    inline bool isVisible() const;
    bool isVisibleTo(const QWidget *parent) const;
 
-   // ### Qt5/bool isVisibleTo(_const_ QWidget *) const
+   // TODO: bool isVisibleTo(_const_ QWidget *) const
    inline bool isHidden() const;
 
    bool isMinimized() const;
@@ -922,18 +922,20 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QWidget::RenderFlags)
 template <>
 inline QWidget *qobject_cast<QWidget *>(QObject *o)
 {
-   if (!o || !o->isWidgetType()) {
+   if (! o || ! o->isWidgetType()) {
       return nullptr;
    }
+
    return static_cast<QWidget *>(o);
 }
 
 template <>
 inline const QWidget *qobject_cast<const QWidget *>(const QObject *o)
 {
-   if (!o || !o->isWidgetType()) {
+   if (! o || ! o->isWidgetType()) {
       return nullptr;
    }
+
    return static_cast<const QWidget *>(o);
 }
 
@@ -1166,7 +1168,5 @@ void QWidget::cs_setGeometry(const QRect &rect)
 }
 
 #define QWIDGETSIZE_MAX ((1<<24)-1)
-
-
 
 #endif

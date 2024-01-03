@@ -21,14 +21,15 @@
 *
 ***********************************************************************/
 
+#include <qxslttokenizer_p.h>
+
 #include <qstringlist.h>
 
-#include "qbuiltintypes_p.h"
-#include "qcommonnamespaces_p.h"
-#include "qquerytransformparser_p.h"
-#include "qxquerytokenizer_p.h"
-#include "qpatternistlocale_p.h"
-#include "qxslttokenizer_p.h"
+#include <qbuiltintypes_p.h>
+#include <qcommonnamespaces_p.h>
+#include <qquerytransformparser_p.h>
+#include <qxquerytokenizer_p.h>
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 
@@ -557,7 +558,7 @@ int XSLTTokenizer::commenceScanOnly()
 
 void XSLTTokenizer::resumeTokenizationFrom(const int position)
 {
-   Q_UNUSED(position);
+   (void) position;
 }
 
 void XSLTTokenizer::handleXSLTVersion(TokenSource::Queue *const to, QStack<Token> *const queueOnExit,
@@ -733,7 +734,7 @@ void XSLTTokenizer::handleValidationAttributes(const bool isLRE) const
 
 Tokenizer::Token XSLTTokenizer::nextToken(YYLTYPE *const sourceLocator)
 {
-   Q_UNUSED(sourceLocator);
+   (void) sourceLocator;
 
    if (m_tokenSource.isEmpty()) {
       switch (m_state.top()) {

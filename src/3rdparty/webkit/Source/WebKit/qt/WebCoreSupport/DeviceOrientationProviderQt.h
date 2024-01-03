@@ -47,11 +47,11 @@ public:
     bool hasAlpha() const { return m_rotation.property("hasZ").toBool(); }
 
 public:
-    WEB_CS_SIGNAL_1(Public, void deviceOrientationChanged(DeviceOrientation * un_named_arg1))
-    WEB_CS_SIGNAL_2(deviceOrientationChanged,un_named_arg1) 
+    WEB_CS_SIGNAL_1(Public, void deviceOrientationChanged(DeviceOrientation *orientation))
+    WEB_CS_SIGNAL_2(deviceOrientationChanged,orientation)
 
-    WEB_CS_SLOT_1(Public, void changeDeviceOrientation(DeviceOrientation * un_named_arg1))
-    WEB_CS_SLOT_2(changeDeviceOrientation) 
+    WEB_CS_SLOT_1(Public, void changeDeviceOrientation(DeviceOrientation *orientation))
+    WEB_CS_SLOT_2(changeDeviceOrientation)
 
 private:
     void activeClientMock();

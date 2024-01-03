@@ -44,10 +44,10 @@
    bool inLaunch;
 }
 
-+ (QT_MANGLE_NAMESPACE(QCocoaApplicationDelegate) *)sharedDelegate;
++ (QCocoaApplicationDelegate *)sharedDelegate;
 - (void)setDockMenu: (NSMenu *)newMenu;
-- (void)setMenuLoader: (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)menuLoader;
-- (QT_MANGLE_NAMESPACE(QCocoaMenuLoader) *)menuLoader;
+- (void)setMenuLoader: (QCocoaMenuLoader *)menuLoader;
+- (QCocoaMenuLoader *)menuLoader;
 - (void)setReflectionDelegate: (NSObject <NSApplicationDelegate> *)oldDelegate;
 - (void)getUrl: (NSAppleEventDescriptor *)event withReplyEvent: (NSAppleEventDescriptor *)replyEvent;
 - (void) removeAppleEventHandlers;

@@ -27,8 +27,6 @@
 #include <qabstractxmlforwarditerator_p.h>
 #include <qprimitives_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename T>
@@ -112,8 +110,7 @@ inline typename SingletonIterator<T>::Ptr makeSingletonIterator(const T &item)
 {
    return typename SingletonIterator<T>::Ptr(new SingletonIterator<T>(item));
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

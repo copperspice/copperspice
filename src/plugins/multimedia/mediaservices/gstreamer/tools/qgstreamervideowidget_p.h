@@ -73,8 +73,8 @@ class QGstreamerVideoWidgetControl
    CS_SIGNAL_1(Public, void sinkChanged())
    CS_SIGNAL_2(sinkChanged)
 
-   CS_SIGNAL_1(Public, void readyChanged(bool un_named_arg1))
-   CS_SIGNAL_2(readyChanged, un_named_arg1)
+   CS_SIGNAL_1(Public, void readyChanged(bool isReady))
+   CS_SIGNAL_2(readyChanged, isReady)
 
  private:
    void createVideoWidget();

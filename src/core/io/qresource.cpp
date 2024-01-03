@@ -24,6 +24,7 @@
 #include <qresource.h>
 #include <qresource_p.h>
 #include <qresource_iterator_p.h>
+
 #include <qset.h>
 #include <qhash.h>
 #include <qmutex.h>
@@ -37,6 +38,7 @@
 #include <qstringparser.h>
 #include <qshareddata.h>
 #include <qplatformdefs.h>
+
 #include <qabstractfileengine_p.h>
 
 #ifdef Q_OS_UNIX
@@ -134,8 +136,17 @@ static QRecursiveMutex *resourceMutex()
 
 using ResourceList = QList<QResourceRoot *>;
 
-Q_GLOBAL_STATIC(ResourceList, resourceList)
-Q_GLOBAL_STATIC(QStringList,  resourceSearchPaths)
+static ResourceList *resourceList()
+{
+   static ResourceList retval;
+   return &retval;
+}
+
+static QStringList *resourceSearchPaths()
+{
+   static QStringList retval;
+   return &retval;
+}
 
 class QResourcePrivate
 {
@@ -1369,12 +1380,14 @@ QAbstractFileEngine::Iterator *QResourceFileEngine::endEntryList()
 bool QResourceFileEngine::extension(Extension extension, const ExtensionOption *option, ExtensionReturn *output)
 {
    Q_D(QResourceFileEngine);
+
    if (extension == MapExtension) {
       const MapExtensionOption *options = (MapExtensionOption *)(option);
       MapExtensionReturn *returnValue = static_cast<MapExtensionReturn *>(output);
       returnValue->address = d->map(options->offset, options->size, options->flags);
       return (returnValue->address != nullptr);
    }
+
    if (extension == UnMapExtension) {
       UnMapExtensionOption *options = (UnMapExtensionOption *)option;
       return d->unmap(options->address);
@@ -1390,7 +1403,8 @@ bool QResourceFileEngine::supportsExtension(Extension extension) const
 uchar *QResourceFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags)
 {
    Q_Q(QResourceFileEngine);
-   Q_UNUSED(flags);
+
+   (void) flags;
 
    if (offset < 0 || size <= 0 || !resource.isValid() || offset + size > resource.size()) {
       q->setError(QFile::UnspecifiedError, QString());
@@ -1402,7 +1416,7 @@ uchar *QResourceFileEnginePrivate::map(qint64 offset, qint64 size, QFile::Memory
 
 bool QResourceFileEnginePrivate::unmap(uchar *ptr)
 {
-   Q_UNUSED(ptr);
+   (void) ptr;
    return true;
 }
 

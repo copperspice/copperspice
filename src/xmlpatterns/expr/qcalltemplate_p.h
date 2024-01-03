@@ -28,9 +28,8 @@
 #include <qtemplateinvoker_p.h>
 #include <qtemplate_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CallTemplate : public TemplateInvoker
 {
  public:
@@ -70,8 +69,7 @@ class CallTemplate : public TemplateInvoker
  private:
    Template::Ptr   m_template;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

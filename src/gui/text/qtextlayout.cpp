@@ -251,7 +251,7 @@ void QTextLayout::beginLayout()
 {
 #if defined(CS_SHOW_DEBUG)
    if (d->layoutData && d->layoutData->layoutState == QTextEngine::InLayout) {
-      qWarning("QTextLayout::beginLayout: Called while already doing layout");
+      qWarning("QTextLayout::beginLayout() Layout already is in progress");
       return;
    }
 #endif
@@ -266,7 +266,7 @@ void QTextLayout::endLayout()
 {
 #if defined(CS_SHOW_DEBUG)
    if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
-      qWarning("QTextLayout::endLayout: Called without beginLayout()");
+      qWarning("QTextLayout::endLayout() No layout in progress");
       return;
    }
 #endif
@@ -398,7 +398,7 @@ QTextLine QTextLayout::createLine()
 {
 #if defined(CS_SHOW_DEBUG)
    if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
-      qWarning("QTextLayout::createLine: Called without layout");
+      qWarning("QTextLayout::createLine() No layout in progress");
       return QTextLine();
    }
 #endif
@@ -954,7 +954,7 @@ void QTextLine::setLineWidth(qreal width)
    QScriptLine &line = m_textEngine->lines[index];
 
    if (! m_textEngine->layoutData) {
-      qWarning("QTextLine::setLineWidth(): Unable to set a line width when there is no layout.");
+      qWarning("QTextLine::setLineWidth() Unable to set a line width when there is no layout");
       return;
    }
 

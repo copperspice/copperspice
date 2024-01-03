@@ -29,8 +29,6 @@
 #include <qitem_p.h>
 #include <qatomictypedispatch_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class AtomicMathematician : public AtomicTypeVisitorResult
 {
@@ -89,8 +87,5 @@ class AtomicMathematician : public AtomicTypeVisitorResult
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(AtomicMathematician::Operators)
 }
-
-QT_END_NAMESPACE
-
 
 #endif

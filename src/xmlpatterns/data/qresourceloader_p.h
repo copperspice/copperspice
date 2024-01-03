@@ -29,8 +29,6 @@
 #include "qsequencetype_p.h"
 #include "qsourcelocationreflection_p.h"
 
-QT_BEGIN_NAMESPACE
-
 class QUrl;
 
 namespace QPatternist {
@@ -242,7 +240,5 @@ class ResourceLoader : public QSharedData
    virtual void clear(const QUrl &uri);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

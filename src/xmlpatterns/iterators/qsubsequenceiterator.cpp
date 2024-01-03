@@ -25,8 +25,6 @@
 
 #include "qsubsequenceiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SubsequenceIterator::SubsequenceIterator(const Item::Iterator::Ptr &iterator,
@@ -91,5 +89,3 @@ Item::Iterator::Ptr SubsequenceIterator::copy() const
 {
    return Item::Iterator::Ptr(new SubsequenceIterator(m_it->copy(), m_start, m_len));
 }
-
-QT_END_NAMESPACE

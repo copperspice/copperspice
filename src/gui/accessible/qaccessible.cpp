@@ -53,9 +53,24 @@ static QFactoryLoader *loader()
    return &retval;
 }
 
-Q_GLOBAL_STATIC(QAccessiblePluginsHash, qAccessiblePlugins)
-Q_GLOBAL_STATIC(QList<QAccessible::InterfaceFactory>, qAccessibleFactories)
-Q_GLOBAL_STATIC(QList<QAccessible::ActivationObserver *>, qAccessibleActivationObservers)
+static QAccessiblePluginsHash *qAccessiblePlugins()
+{
+   static QAccessiblePluginsHash retval;
+   return &retval;
+}
+
+
+static QList<QAccessible::InterfaceFactory> *qAccessibleFactories()
+{
+   static QList<QAccessible::InterfaceFactory> retval;
+   return &retval;
+}
+
+static QList<QAccessible::ActivationObserver *> *qAccessibleActivationObservers()
+{
+   static QList<QAccessible::ActivationObserver *> retval;
+   return &retval;
+}
 
 QAccessible::UpdateHandler QAccessible::updateHandler = nullptr;
 QAccessible::RootObjectHandler QAccessible::rootObjectHandler = nullptr;
@@ -473,7 +488,8 @@ QAccessibleInterface *QAccessibleEvent::accessibleInterface() const
       if (child) {
          iface = child;
       } else {
-         qWarning() << "Unable to create accessible child interface for object: " << m_object << " index: " << m_child;
+         qWarning() << "QAccessibleEvent::accessibleInterface() Unable to create accessible interface for child: "
+                    << m_object << " index: " << m_child;
       }
    }
    return iface;
@@ -1066,7 +1082,11 @@ struct QAccessibleActionStrings {
    }
 };
 
-Q_GLOBAL_STATIC(QAccessibleActionStrings, accessibleActionStrings)
+static QAccessibleActionStrings *accessibleActionStrings()
+{
+   static QAccessibleActionStrings retval;
+   return &retval;
+}
 
 QString QAccessibleActionInterface::localizedActionName(const QString &actionName) const
 {

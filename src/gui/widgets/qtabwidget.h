@@ -198,20 +198,18 @@ class Q_GUI_EXPORT QTabWidget : public QWidget
  private:
    Q_DECLARE_PRIVATE(QTabWidget)
 
-   GUI_CS_SLOT_1(Private, void _q_showTab(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_showTab(int index))
    GUI_CS_SLOT_2(_q_showTab)
 
-   GUI_CS_SLOT_1(Private, void _q_removeTab(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_removeTab(int index))
    GUI_CS_SLOT_2(_q_removeTab)
 
-   GUI_CS_SLOT_1(Private, void _q_tabMoved(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_tabMoved(int from, int to))
    GUI_CS_SLOT_2(_q_tabMoved)
 
    void setUpLayout(bool = false);
 };
 
 #endif // QT_NO_TABWIDGET
-
-
 
 #endif // QTABWIDGET_H

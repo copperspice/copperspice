@@ -42,9 +42,7 @@ typedef struct _NSRect NSRect;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QRectF;
-QT_END_NAMESPACE
 #endif
 
 #if PLATFORM(WX) && USE(WXGC)
@@ -104,8 +102,8 @@ public:
 
     FloatPoint center() const { return FloatPoint(x() + width() / 2, y() + height() / 2); }
 
-    void move(const FloatSize& delta) { m_location += delta; } 
-    void move(float dx, float dy) { m_location.move(dx, dy); } 
+    void move(const FloatSize& delta) { m_location += delta; }
+    void move(float dx, float dy) { m_location.move(dx, dy); }
 
     bool intersects(const FloatRect&) const;
     bool contains(const FloatRect&) const;

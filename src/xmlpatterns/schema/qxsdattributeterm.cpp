@@ -23,8 +23,6 @@
 
 #include "qxsdattributeterm_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool XsdAttributeTerm::isAttributeUse() const
@@ -37,4 +35,3 @@ bool XsdAttributeTerm::isReference() const
    return false;
 }
 
-QT_END_NAMESPACE

@@ -75,12 +75,12 @@ void QCameraExposurePrivate::initControls()
    }
 
    if (exposureControl) {
-      q->connect(exposureControl, SIGNAL(actualValueChanged(int)),    q, SLOT(_q_exposureParameterChanged(int)));
-      q->connect(exposureControl, SIGNAL(parameterRangeChanged(int)), q, SLOT(_q_exposureParameterRangeChanged(int)));
+      q->connect(exposureControl, &QCameraExposureControl::actualValueChanged,    q, &QCameraExposure::_q_exposureParameterChanged);
+      q->connect(exposureControl, &QCameraExposureControl::parameterRangeChanged, q, &QCameraExposure::_q_exposureParameterRangeChanged);
    }
 
    if (flashControl) {
-      q->connect(flashControl, SIGNAL(flashReady(bool)), q, SLOT(flashReady(bool)));
+      q->connect(flashControl, &QCameraFlashControl::flashReady, q, &QCameraExposure::flashReady);
    }
 }
 
@@ -173,6 +173,7 @@ QCameraExposure::QCameraExposure(QCamera *parent):
 QCameraExposure::~QCameraExposure()
 {
    Q_D(QCameraExposure);
+
    if (d->exposureControl) {
       d->camera->service()->releaseControl(d->exposureControl);
    }
@@ -219,11 +220,12 @@ void QCameraExposure::setExposureMode(QCameraExposure::ExposureMode mode)
 
 bool QCameraExposure::isExposureModeSupported(QCameraExposure::ExposureMode mode) const
 {
-   if (!d_func()->exposureControl) {
+   if (! d_func()->exposureControl) {
       return false;
    }
 
    bool continuous = false;
+
    return d_func()->exposureControl->supportedParameterRange(QCameraExposureControl::ExposureMode, &continuous)
           .contains(QVariant::fromValue<QCameraExposure::ExposureMode>(mode));
 }

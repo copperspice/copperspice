@@ -31,9 +31,8 @@
 
 class QIODevice;
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template <typename TransitionType>
 class XsdStateMachine
 {
@@ -260,7 +259,5 @@ class XsdStateMachine
 
 #include "qxsdstatemachine.cpp"
 }
-
-QT_END_NAMESPACE
 
 #endif

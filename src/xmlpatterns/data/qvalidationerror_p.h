@@ -27,8 +27,6 @@
 #include <qitem_p.h>
 #include <qreportcontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ValidationError : public AtomicValue
 {
@@ -71,7 +69,5 @@ class ValidationError : public AtomicValue
    const ReportContext::ErrorCode  m_code;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

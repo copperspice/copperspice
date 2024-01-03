@@ -99,7 +99,7 @@ class QXcbShmGraphicsBuffer : public QPlatformGraphicsBuffer
    { }
 
    bool doLock(AccessTypes access, const QRect &rect) override {
-      Q_UNUSED(rect);
+      (void) rect;
       if (access & ~(QPlatformGraphicsBuffer::SWReadAccess | QPlatformGraphicsBuffer::SWWriteAccess)) {
          return false;
       }

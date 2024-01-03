@@ -27,8 +27,6 @@
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdTerm : public NamedSchemaComponent, public XsdAnnotated
@@ -64,8 +62,7 @@ class XsdTerm : public NamedSchemaComponent, public XsdAnnotated
     */
    inline XsdTerm() {};
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

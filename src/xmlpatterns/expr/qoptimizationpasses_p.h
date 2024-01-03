@@ -28,8 +28,6 @@
 #include <qexpression_p.h>
 #include <qoptimizerframework_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 namespace OptimizationPasses {
@@ -50,9 +48,8 @@ class Coordinator
 
    inline Coordinator();
 };
-}
-}
 
-QT_END_NAMESPACE
+}
+}
 
 #endif

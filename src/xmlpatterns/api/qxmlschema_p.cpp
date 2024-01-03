@@ -125,7 +125,7 @@ void QXmlSchemaPrivate::load(QIODevice *source, const QUrl &documentUri, const Q
 
       m_schemaIsValid = true;
    } catch (QPatternist::Exception exception) {
-      Q_UNUSED(exception);
+      (void) exception;
       m_schemaIsValid = false;
    }
 }

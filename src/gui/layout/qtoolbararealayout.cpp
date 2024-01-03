@@ -1183,7 +1183,7 @@ QLayoutItem *QToolBarAreaLayout::plug(const QList<int> &path)
    QToolBarAreaLayoutItem *item = this->item(path);
 
    if (!item) {
-      qWarning() << "No item at" << path;
+      qWarning() << "QToolBarAreaLayout::plug() No tool bar item located at " << path;
       return nullptr;
    }
 
@@ -1322,7 +1322,7 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
             QString objectName = widget->objectName();
 
             if (objectName.isEmpty()) {
-               qWarning("QMainWindow::saveState(): 'objectName' not set for QToolBar %p '%s'",
+               qWarning("QMainWindow::saveState() Object name was not set for QToolBar %p '%s'",
                   widget, csPrintable(widget->windowTitle()) );
             }
 

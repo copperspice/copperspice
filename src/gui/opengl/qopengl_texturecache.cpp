@@ -86,7 +86,11 @@ private:
     QMutex m_mutex;
 };
 
-Q_GLOBAL_STATIC(QOpenGLTextureCacheWrapper, qt_texture_caches)
+static QOpenGLTextureCacheWrapper *qt_texture_caches()
+{
+   static QOpenGLTextureCacheWrapper retval;
+   return &retval;
+}
 
 QOpenGLTextureCache *QOpenGLTextureCache::cacheForContext(QOpenGLContext *context)
 {
@@ -96,8 +100,10 @@ QOpenGLTextureCache *QOpenGLTextureCache::cacheForContext(QOpenGLContext *contex
 void QOpenGLTextureCacheWrapper::cleanupTexturesForCacheKey(qint64 key)
 {
     QList<QOpenGLSharedResource *> resources = qt_texture_caches()->m_resource.resources();
-    for (QList<QOpenGLSharedResource *>::iterator it = resources.begin(); it != resources.end(); ++it)
+
+    for (auto it = resources.begin(); it != resources.end(); ++it) {
         static_cast<QOpenGLTextureCache *>(*it)->invalidate(key);
+    }
 }
 
 void QOpenGLTextureCacheWrapper::cleanupTexturesForPixmapData(QPlatformPixmap *pmd)

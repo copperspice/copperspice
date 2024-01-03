@@ -24,11 +24,10 @@
 #ifndef QXsdParticle_P_H
 #define QXsdParticle_P_H
 
+#include <qlist.h>
+
 #include <qnamedschemacomponent_p.h>
 #include <qxsdterm_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -101,8 +100,7 @@ class XsdParticle : public NamedSchemaComponent
    bool         m_maximumOccursUnbounded;
    XsdTerm::Ptr m_term;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

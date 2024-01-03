@@ -26,9 +26,8 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class QNameFN : public FunctionCall
 {
  public:
@@ -70,8 +69,7 @@ class InScopePrefixesFN : public FunctionCall
  public:
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

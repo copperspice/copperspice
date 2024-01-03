@@ -26,8 +26,6 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ComputedNamespaceConstructor : public PairContainer
 {
@@ -44,7 +42,5 @@ class ComputedNamespaceConstructor : public PairContainer
    Expression::Properties properties() const override;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

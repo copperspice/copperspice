@@ -84,14 +84,15 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const QString 
    QHostInfoLookupManager *manager = cs_HostInfoLookupManager();
 
    if (manager) {
-      // the application is still alive
+      // application is still alive
+
       if (manager->cache.isEnabled()) {
          // check cache first
          bool valid = false;
          QHostInfo info = manager->cache.get(name, &valid);
 
          if (valid) {
-            if (!receiver) {
+            if (! receiver) {
                return -1;
             }
 
@@ -266,7 +267,7 @@ void QHostInfoRunnable::run()
       bool valid = false;
       hostInfo = manager->cache.get(toBeLookedUp, &valid);
 
-      if (!valid) {
+      if (! valid) {
          // not in cache, we need to do the lookup and store the result in the cache
          hostInfo = QHostInfoAgent::fromName(toBeLookedUp);
          manager->cache.put(toBeLookedUp, hostInfo);
@@ -316,7 +317,7 @@ QHostInfoLookupManager::QHostInfoLookupManager()
    moveToThread(QCoreApplicationPrivate::mainThread());
 
    connect(QCoreApplication::instance(), &QCoreApplication::destroyed, this,
-            &QHostInfoLookupManager::waitForThreadPoolDone, Qt::DirectConnection);
+         &QHostInfoLookupManager::waitForThreadPoolDone, Qt::DirectConnection);
 
    threadPool.setMaxThreadCount(20); // do 20 DNS lookups in parallel
 }
@@ -359,7 +360,7 @@ void QHostInfoLookupManager::work()
 
    QRecursiveMutexLocker locker(&mutex);
 
-   if (!finishedLookups.isEmpty()) {
+   if (! finishedLookups.isEmpty()) {
       // remove ID from aborted if it is in there
       for (int i = 0; i < finishedLookups.length(); i++) {
          abortedLookups.removeAll(finishedLookups.at(i)->id);
@@ -368,7 +369,7 @@ void QHostInfoLookupManager::work()
       finishedLookups.clear();
    }
 
-   if (!postponedLookups.isEmpty()) {
+   if (! postponedLookups.isEmpty()) {
       // try to start the postponed ones
 
       QMutableListIterator<QHostInfoRunnable *> iterator(postponedLookups);
@@ -383,16 +384,18 @@ void QHostInfoLookupManager::work()
                break;
             }
          }
-         if (!alreadyRunning) {
+
+         if (! alreadyRunning) {
             iterator.remove();
-            scheduledLookups.prepend(postponed); // prepend! we want to finish it ASAP
+            scheduledLookups.prepend(postponed); // prepend, we want to finish quickly
          }
       }
    }
 
-   if (!scheduledLookups.isEmpty()) {
+   if (! scheduledLookups.isEmpty()) {
       // try to start the new ones
       QMutableListIterator<QHostInfoRunnable *> iterator(scheduledLookups);
+
       while (iterator.hasNext()) {
          QHostInfoRunnable *scheduled = iterator.next();
 
@@ -456,7 +459,7 @@ void QHostInfoLookupManager::abortLookup(int id)
       }
    }
 
-   if (!abortedLookups.contains(id)) {
+   if (! abortedLookups.contains(id)) {
       abortedLookups.append(id);
    }
 }
@@ -485,7 +488,7 @@ void QHostInfoLookupManager::lookupFinished(QHostInfoRunnable *r)
    work();
 }
 
-// This function returns immediately when we had a result in the cache, else it will later emit a signal
+// returns immediately when a result is in the cache, else it will later emit a signal
 QHostInfo qt_qhostinfo_lookup(const QString &name, QObject *receiver, const QString &member, bool *valid, int *id)
 {
    *valid = false;
@@ -529,15 +532,16 @@ void qt_qhostinfo_cache_inject(const QString &hostname, const QHostInfo &resolut
 {
    QAbstractHostInfoLookupManager *manager = cs_HostInfoLookupManager();
 
-   if (!manager || !manager->cache.isEnabled()) {
+   if (! manager || ! manager->cache.isEnabled()) {
       return;
    }
 
    manager->cache.put(hostname, resolution);
 }
-// cache for 60 seconds
-// cache 128 items
-QHostInfoCache::QHostInfoCache() : max_age(60), enabled(true), cache(128)
+
+// cache for 60 seconds, 128 items
+QHostInfoCache::QHostInfoCache()
+   : max_age(60), enabled(true), cache(128)
 {
 #ifdef QT_QHOSTINFO_CACHE_DISABLED_BY_DEFAULT
    enabled = false;
@@ -549,13 +553,11 @@ bool QHostInfoCache::isEnabled()
    return enabled;
 }
 
-// this function is currently only used for the auto tests
-// and not usable by public API
+// currently only used for the auto tests, not usable by public API
 void QHostInfoCache::setEnabled(bool e)
 {
    enabled = e;
 }
-
 
 QHostInfo QHostInfoCache::get(const QString &name, bool *valid)
 {
@@ -570,8 +572,7 @@ QHostInfo QHostInfoCache::get(const QString &name, bool *valid)
       }
       return element->info;
 
-      // FIXME idea:
-      // if too old but not expired, trigger a new lookup to freshen our cache
+      // FIXME, if too old but not expired, trigger a new lookup to freshen our cache
    }
 
    return QHostInfo();
@@ -603,4 +604,3 @@ QAbstractHostInfoLookupManager *QAbstractHostInfoLookupManager::globalInstance()
 {
    return cs_HostInfoLookupManager();
 }
-

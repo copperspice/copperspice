@@ -25,10 +25,7 @@
 #include "qpatternistlocale_p.h"
 #include "qqnamevalue_p.h"
 #include "qatomicstring_p.h"
-
 #include "qerrorfn_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -90,5 +87,3 @@ FunctionSignature::Ptr ErrorFN::signature() const
 
    return nev;
 }
-
-QT_END_NAMESPACE

@@ -26,8 +26,6 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class GenericPredicate : public PairContainer
 {
@@ -99,7 +97,5 @@ class GenericPredicate : public PairContainer
    typedef QExplicitlySharedDataPointer<const GenericPredicate> ConstPtr;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

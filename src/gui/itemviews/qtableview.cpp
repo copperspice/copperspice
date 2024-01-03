@@ -602,26 +602,25 @@ void QTableViewPrivate::trimHiddenSelections(QItemSelectionRange *range) const
    *range = QItemSelectionRange(topLeft, bottomRight);
 }
 
-/*!
-  \internal
-  Sets the span for the cell at (\a row, \a column).
-*/
 void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan)
 {
    if (row < 0 || column < 0 || rowSpan <= 0 || columnSpan <= 0) {
-      qWarning("QTableView::setSpan: invalid span given: (%d, %d, %d, %d)",
-         row, column, rowSpan, columnSpan);
+      qWarning("QTableView::setSpan() Invalid span (%d, %d, %d, %d)",
+            row, column, rowSpan, columnSpan);
       return;
    }
+
    QSpanCollection::Span *sp = spans.spanAt(column, row);
    if (sp) {
       if (sp->top() != row || sp->left() != column) {
-         qWarning("QTableView::setSpan: span cannot overlap");
+         qWarning("QTableView::setSpan() Span can not overlap");
          return;
       }
+
       if (rowSpan == 1 && columnSpan == 1) {
          rowSpan = columnSpan = 0;
       }
+
       const int old_height = sp->height();
       sp->m_bottom = row + rowSpan - 1;
       sp->m_right = column + columnSpan - 1;
@@ -629,7 +628,7 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
       return;
 
    } else if (rowSpan == 1 && columnSpan == 1) {
-      qWarning("QTableView::setSpan: Single cell span will not be added");
+      qWarning("QTableView::setSpan() Unable to add a single cell span");
       return;
    }
 
@@ -637,13 +636,10 @@ void QTableViewPrivate::setSpan(int row, int column, int rowSpan, int columnSpan
    spans.addSpan(sp);
 }
 
-/*!
-  \internal
-  Gets the span information for the cell at (\a row, \a column).
-*/
 QSpanCollection::Span QTableViewPrivate::span(int row, int column) const
 {
    QSpanCollection::Span *sp = spans.spanAt(column, row);
+
    if (sp) {
       return *sp;
    }
@@ -651,13 +647,10 @@ QSpanCollection::Span QTableViewPrivate::span(int row, int column) const
    return QSpanCollection::Span(row, column, 1, 1);
 }
 
-/*!
-  \internal
-  Returns the logical index of the last section that's part of the span.
-*/
 int QTableViewPrivate::sectionSpanEndLogical(const QHeaderView *header, int logical, int span) const
 {
    int visual = header->visualIndex(logical);
+
    for (int i = 1; i < span; ) {
       if (++visual >= header->count()) {
          break;
@@ -815,50 +808,30 @@ void QTableViewPrivate::drawAndClipSpans(const QRegion &area, QPainter *painter,
    painter->setClipRegion(region);
 }
 
-/*!
-  \internal
-  Updates spans after row insertion.
-*/
 void QTableViewPrivate::_q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateInsertedRows(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after column insertion.
-*/
 void QTableViewPrivate::_q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateInsertedColumns(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after row removal.
-*/
 void QTableViewPrivate::_q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateRemovedRows(start, end);
 }
 
-/*!
-  \internal
-  Updates spans after column removal.
-*/
 void QTableViewPrivate::_q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end)
 {
-   Q_UNUSED(parent)
+   (void) parent;
    spans.updateRemovedColumns(start, end);
 }
 
-/*!
-  \internal
-  Draws a table cell.
-*/
 void QTableViewPrivate::drawCell(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
    Q_Q(QTableView);
@@ -1443,7 +1416,7 @@ int QTableView::verticalOffset() const
 QModelIndex QTableView::moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers)
 {
    Q_D(QTableView);
-   Q_UNUSED(modifiers);
+   (void) modifiers;
 
    int bottom = d->model->rowCount(d->root) - 1;
 
@@ -2771,24 +2744,12 @@ void QTableView::columnMoved(int, int oldIndex, int newIndex)
    }
 }
 
-/*!
-    Selects the given \a row in the table view if the current
-    SelectionMode and SelectionBehavior allows rows to be selected.
-
-    \sa selectColumn()
-*/
 void QTableView::selectRow(int row)
 {
    Q_D(QTableView);
    d->selectRow(row, true);
 }
 
-/*!
-    Selects the given \a column in the table view if the current
-    SelectionMode and SelectionBehavior allows columns to be selected.
-
-    \sa selectRow()
-*/
 void QTableView::selectColumn(int column)
 {
    Q_D(QTableView);
@@ -3087,40 +3048,40 @@ int QTableView::visualIndex(const QModelIndex &index) const
    return index.row();
 }
 
-void QTableView::_q_selectRow(int un_named_arg1)
+void QTableView::_q_selectRow(int row)
 {
    Q_D(QTableView);
-   d->_q_selectRow(un_named_arg1);
+   d->_q_selectRow(row);
 }
 
-void QTableView::_q_selectColumn(int un_named_arg1)
+void QTableView::_q_selectColumn(int column)
 {
    Q_D(QTableView);
-   d->_q_selectColumn(un_named_arg1);
+   d->_q_selectColumn(column);
 }
 
-void QTableView::_q_updateSpanInsertedRows(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanInsertedRows(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanInsertedRows(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanInsertedRows(parent, start, end);
 }
 
-void QTableView::_q_updateSpanInsertedColumns(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanInsertedColumns(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanInsertedColumns(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanInsertedColumns(parent, start, end);
 }
 
-void QTableView::_q_updateSpanRemovedRows(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanRemovedRows(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanRemovedRows(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanRemovedRows(parent, start, end);
 }
 
-void QTableView::_q_updateSpanRemovedColumns(const QModelIndex &un_named_arg1, int un_named_arg2, int un_named_arg3)
+void QTableView::_q_updateSpanRemovedColumns(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTableView);
-   d->_q_updateSpanRemovedColumns(un_named_arg1, un_named_arg2, un_named_arg3);
+   d->_q_updateSpanRemovedColumns(parent, start, end);
 }
 
 #endif // QT_NO_TABLEVIEW

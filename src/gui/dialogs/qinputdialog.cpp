@@ -108,8 +108,8 @@ class QInputDialogSpinBox : public QSpinBox
       connect(this,       &QInputDialogSpinBox::editingFinished, this, &QInputDialogSpinBox::notifyTextChanged);
    }
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(bool isChanged))
+   GUI_CS_SIGNAL_2(textChanged, isChanged)
 
  private:
    GUI_CS_SLOT_1(Private, void notifyTextChanged())
@@ -150,8 +150,8 @@ class QInputDialogDoubleSpinBox : public QDoubleSpinBox
       connect(this,       &QInputDialogSpinBox::editingFinished, this, &QInputDialogDoubleSpinBox::notifyTextChanged);
    }
 
-   GUI_CS_SIGNAL_1(Public, void textChanged(bool un_named_arg1))
-   GUI_CS_SIGNAL_2(textChanged, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void textChanged(bool isChanged))
+   GUI_CS_SIGNAL_2(textChanged, isChanged)
 
    GUI_CS_SLOT_1(Private, void notifyTextChanged())
    GUI_CS_SLOT_2(notifyTextChanged)
@@ -582,13 +582,6 @@ QInputDialog::InputMode QInputDialog::inputMode() const
    return TextInput;
 }
 
-/*!
-    \since 4.5
-
-    \property QInputDialog::labelText
-
-    \brief the text to for the label to describe what needs to be input
-*/
 void QInputDialog::setLabelText(const QString &text)
 {
    Q_D(QInputDialog);
@@ -606,7 +599,6 @@ QString QInputDialog::labelText() const
    return d->label->text();
 }
 
-
 void QInputDialog::setOption(InputDialogOption option, bool on)
 {
    Q_D(QInputDialog);
@@ -615,27 +607,12 @@ void QInputDialog::setOption(InputDialogOption option, bool on)
    }
 }
 
-/*!
-    Returns true if the given \a option is enabled; otherwise, returns
-    false.
-
-    \sa options, setOption()
-*/
 bool QInputDialog::testOption(InputDialogOption option) const
 {
    Q_D(const QInputDialog);
    return (d->opts & option) != 0;
 }
 
-/*!
-    \property QInputDialog::options
-    \brief the various options that affect the look and feel of the dialog
-    \since 4.5
-
-    By default, all options are disabled.
-
-    \sa setOption(), testOption()
-*/
 void QInputDialog::setOptions(InputDialogOptions options)
 {
    Q_D(QInputDialog);
@@ -820,14 +797,6 @@ void QInputDialog::setIntRange(int min, int max)
    d->intSpinBox->setRange(min, max);
 }
 
-/*!
-    \property QInputDialog::intStep
-    \since 4.5
-    \brief the step by which the integer value is increased and decreased
-
-    This property is only relevant when the input dialog is used in
-    IntInput mode.
-*/
 void QInputDialog::setIntStep(int step)
 {
    Q_D(QInputDialog);
@@ -845,7 +814,6 @@ int QInputDialog::intStep() const
    }
 }
 
-
 void QInputDialog::setDoubleValue(double value)
 {
    Q_D(QInputDialog);
@@ -862,7 +830,6 @@ double QInputDialog::doubleValue() const
       return 0.0;
    }
 }
-
 
 void QInputDialog::setDoubleMinimum(double min)
 {
@@ -966,9 +933,6 @@ void QInputDialog::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-/*!
-    \reimp
-*/
 QSize QInputDialog::minimumSizeHint() const
 {
    Q_D(const QInputDialog);
@@ -976,9 +940,6 @@ QSize QInputDialog::minimumSizeHint() const
    return QDialog::minimumSizeHint();
 }
 
-/*!
-    \reimp
-*/
 QSize QInputDialog::sizeHint() const
 {
    Q_D(const QInputDialog);
@@ -986,9 +947,6 @@ QSize QInputDialog::sizeHint() const
    return QDialog::sizeHint();
 }
 
-/*!
-    \reimp
-*/
 void QInputDialog::setVisible(bool visible)
 {
    Q_D(const QInputDialog);
@@ -1168,10 +1126,10 @@ QString QInputDialog::getItem(QWidget *parent, const QString &title, const QStri
    }
 }
 
-void QInputDialog::_q_textChanged(const QString &un_named_arg1)
+void QInputDialog::_q_textChanged(const QString &text)
 {
    Q_D(QInputDialog);
-   d->_q_textChanged(un_named_arg1);
+   d->_q_textChanged(text);
 }
 
 void QInputDialog::_q_plainTextEditTextChanged()
@@ -1180,10 +1138,10 @@ void QInputDialog::_q_plainTextEditTextChanged()
    d->_q_plainTextEditTextChanged();
 }
 
-void QInputDialog::_q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2)
+void QInputDialog::_q_currentRowChanged(const QModelIndex &newIndex, const QModelIndex &oldIndex)
 {
    Q_D(QInputDialog);
-   d->_q_currentRowChanged(un_named_arg1, un_named_arg2);
+   d->_q_currentRowChanged(newIndex, oldIndex);
 }
 
 #endif

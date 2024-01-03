@@ -244,7 +244,7 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
 
 #if ! defined(Q_OS_DARWIN) && ! defined(Q_OS_ANDROID) && _POSIX_VERSION < 200809L
     // realpath(X,0) is not supported
-    Q_UNUSED(data);
+    (void) data;
     return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
 #else
     char *ret = nullptr;
@@ -725,9 +725,11 @@ bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSy
 
 bool QFileSystemEngine::copyFile(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
-   Q_UNUSED(source);
-   Q_UNUSED(target);
+   (void) source;
+   (void) target;
+
    error = QSystemError(ENOSYS, QSystemError::StandardLibraryError); //Function not implemented
+
    return false;
 }
 
@@ -736,7 +738,9 @@ bool QFileSystemEngine::renameFile(const QFileSystemEntry &source, const QFileSy
    if (::rename(source.nativeFilePath().constData(), target.nativeFilePath().constData()) == 0) {
       return true;
    }
+
    error = QSystemError(errno, QSystemError::StandardLibraryError);
+
    return false;
 }
 

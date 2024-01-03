@@ -116,12 +116,6 @@ class Graph
    void createEdge(Vertex *first, Vertex *second, EdgeData *data) {
       // Creates a bidirectional edge
 
-      if (edgeData(first, second)) {
-
-#ifdef QT_DEBUG
-         qWarning("%s-%s already has an edge", csPrintable(first->toString()), csPrintable(second->toString()));
-#endif
-      }
       createDirectedEdge(first, second, data);
       createDirectedEdge(second, first, data);
    }

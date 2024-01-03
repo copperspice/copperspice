@@ -114,10 +114,10 @@ void QOpenGLWindowPrivate::initialize()
    context->setShareContext(shareContext);
    context->setFormat(q->requestedFormat());
    if (!context->create()) {
-      qWarning("QOpenGLWindow::beginPaint: Failed to create context");
+      qWarning("QOpenGLWindow::initialize() Failed to create context");
    }
    if (!context->makeCurrent(q)) {
-      qWarning("QOpenGLWindow::beginPaint: Failed to make context current");
+      qWarning("QOpenGLWindow::initialize() Failed to make context current");
    }
 
    paintDevice.reset(new QOpenGLWindowPaintDevice(q));
@@ -130,7 +130,8 @@ void QOpenGLWindowPrivate::initialize()
 
 void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
 {
-   Q_UNUSED(region);
+   (void) region;
+
    Q_Q(QOpenGLWindow);
 
    initialize();
@@ -139,6 +140,7 @@ void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
    const int deviceWidth = q->width() * q->devicePixelRatio();
    const int deviceHeight = q->height() * q->devicePixelRatio();
    const QSize deviceSize(deviceWidth, deviceHeight);
+
    if (updateBehavior > QOpenGLWindow::NoPartialUpdate) {
       if (!fbo || fbo->size() != deviceSize) {
          QOpenGLFramebufferObjectFormat fboFormat;
@@ -147,7 +149,7 @@ void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
             if (updateBehavior != QOpenGLWindow::PartialUpdateBlend) {
                fboFormat.setSamples(q->requestedFormat().samples());
             } else {
-               qWarning("QOpenGLWindow: PartialUpdateBlend does not support multisampling");
+               qWarning("QOpenGLWindow::beginPaint() PartialUpdateBlend does not support multisampling");
             }
          }
          fbo.reset(new QOpenGLFramebufferObject(deviceSize, fboFormat));
@@ -223,8 +225,10 @@ void QOpenGLWindowPrivate::bindFBO()
 
 void QOpenGLWindowPrivate::flush(const QRegion &region)
 {
-   Q_UNUSED(region);
+   (void) region;
+
    Q_Q(QOpenGLWindow);
+
    context->swapBuffers(q);
    emit q->frameSwapped();
 }
@@ -234,11 +238,6 @@ void QOpenGLWindowPaintDevice::ensureActiveTarget()
    QOpenGLWindowPrivate::get(m_window)->bindFBO();
 }
 
-/*!
-  Constructs a new QOpenGLWindow with the given \a parent and \a updateBehavior.
-
-  \sa QOpenGLWindow::UpdateBehavior
- */
 QOpenGLWindow::QOpenGLWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QWindow *parent)
    : QPaintDeviceWindow(*(new QOpenGLWindowPrivate(nullptr, updateBehavior)), parent)
 {

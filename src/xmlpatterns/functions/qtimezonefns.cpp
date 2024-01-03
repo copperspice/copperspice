@@ -21,6 +21,8 @@
 *
 ***********************************************************************/
 
+#include <qtimezone.h>
+
 #include "qabstractdatetime_p.h"
 #include "qcontextfns_p.h"
 #include "qdate_p.h"
@@ -28,10 +30,7 @@
 #include "qdaytimeduration_p.h"
 #include "qpatternistlocale_p.h"
 #include "qschematime_p.h"
-
 #include "qtimezonefns_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -73,6 +72,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
                         .formatArg(formatData(tz->stringValue())),
                         ReportContext::FODT0003, this);
          return Item();
+
       } else if (tzMSecs > MSecLimit ||
                  tzMSecs < -MSecLimit) {
          context->error(QtXmlPatterns::tr("%1 is not a whole number of minutes.")
@@ -83,35 +83,46 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
 
       const SecondCountProperty tzSecs = tzMSecs / 1000;
 
-      if (dt.timeSpec() == Qt::LocalTime) { /* $arg has no time zone. */
+      if (dt.timeZone() == QTimeZone::systemTimeZone()) {
+         /* $arg has no time zone. */
          /* "If $arg does not have a timezone component and $timezone is not
           * the empty sequence, then the result is $arg with $timezone as
           * the timezone component." */
-         //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-            dt.setOffsetFromUtc(tzSecs);
+
+         dt.setTimeZone(QTimeZone(tzSecs));
+
          Q_ASSERT(dt.isValid());
          return createValue(dt);
+
       } else {
          /* "If $arg has a timezone component and $timezone is not the empty sequence,
           * then the result is an xs:dateTime value with a timezone component of
           * $timezone that is equal to $arg." */
+
          dt = dt.toUTC();
          dt = dt.addSecs(tzSecs);
-         //dt.setTimeSpec(QDateTime::Spec(QDateTime::OffsetFromUTC, tzSecs));
-            dt.setOffsetFromUtc(tzSecs);
+
+         dt.setTimeZone(QTimeZone(tzSecs));
+
          Q_ASSERT(dt.isValid());
          return createValue(dt);
       }
+
    } else {
       /* $timezone is the empty sequence. */
-      if (dt.timeSpec() == Qt::LocalTime) { /* $arg has no time zone. */
+
+      if (dt.timeZone() == QTimeZone::systemTimeZone()) {
+         /* $arg has no time zone. */
          /* "If $arg does not have a timezone component and $timezone is
           * the empty sequence, then the result is $arg." */
          return arg;
+
       } else {
          /* "If $arg has a timezone component and $timezone is the empty sequence,
           * then the result is the localized value of $arg without its timezone component." */
-         dt.setTimeSpec(Qt::LocalTime);
+
+         dt.setTimeZone(QTimeZone::systemTimeZone());
+
          return createValue(dt);
       }
    }
@@ -134,4 +145,3 @@ Item AdjustTimeToTimezoneFN::createValue(const QDateTime &dt) const
    Q_ASSERT(dt.isValid());
    return SchemaTime::fromDateTime(dt);
 }
-

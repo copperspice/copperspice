@@ -26,9 +26,8 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class TraceFN : public FunctionCall
 {
  public:
@@ -37,8 +36,7 @@ class TraceFN : public FunctionCall
 
    SequenceType::Ptr staticType() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

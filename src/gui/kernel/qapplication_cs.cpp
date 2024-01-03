@@ -97,7 +97,7 @@ int qUnregisterGuiStateMachine();
 #define CHECK_QAPP_INSTANCE(...) \
     if (Q_LIKELY(QCoreApplication::instance())) { \
     } else { \
-        qWarning("Must construct a QApplication first."); \
+        qWarning("Method can not be called before QApplication is created"); \
         return __VA_ARGS__; \
     }
 
@@ -646,9 +646,10 @@ int QApplication::colorSpec()
 
 void QApplication::setColorSpec(int spec)
 {
-   if (qApp)
-      qWarning("QApplication::setColorSpec: This function must be "
-         "called before the QApplication object is created");
+   if (qApp) {
+      qWarning("QApplication::setColorSpec() Method must be called before QApplication is created");
+   }
+
    QApplicationPrivate::app_cspec = spec;
 }
 
@@ -1521,7 +1522,7 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
    QWindow *unused = nullptr;
 
    if (! window) {
-      qWarning().nospace() << "window == nullptr";
+      qWarning().nospace() << "QApplication::isWindowBlocked() Invalid window (nullptr)";
       return false;
    }
 
@@ -2010,7 +2011,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
 
    if (receiver == nullptr) {
       // serious error
-      qWarning("QApplication::notify: Unexpected null receiver");
+      qWarning("QApplication::notify() Invalid receiver (nullptr)");
       return true;
    }
 
@@ -2283,7 +2284,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                      }
 
                      if (CSInternalThreadData::get_m_ThreadData(obj) != CSInternalThreadData::get_m_ThreadData(w)) {
-                        qWarning("QApplication: Object event filter cannot be in a different thread.");
+                        qWarning("QApplication::notify() Event filter can not be in a different thread");
                         continue;
                      }
 

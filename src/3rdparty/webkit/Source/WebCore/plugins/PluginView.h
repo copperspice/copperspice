@@ -22,7 +22,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef PluginView_h
@@ -60,9 +60,7 @@ typedef PlatformWidget PlatformPluginWidget;
 #if PLATFORM(QT)
 #include <QGraphicsItem>
 #include <QImage>
-QT_BEGIN_NAMESPACE
 class QPainter;
-QT_END_NAMESPACE
 #endif
 #if PLATFORM(QT) && USE(ACCELERATED_COMPOSITING) && ENABLE(NETSCAPE_PLUGIN_API) && (defined(XP_UNIX) || OS(SYMBIAN))
 #ifndef WTF_USE_ACCELERATED_COMPOSITING_PLUGIN_LAYER
@@ -175,7 +173,7 @@ namespace WebCore {
         static const char* userAgentStatic();
 #endif
         void status(const char* message);
-        
+
 #if ENABLE(NETSCAPE_PLUGIN_API)
         NPError getValue(NPNVariable variable, void* value);
         static NPError getValueStatic(NPNVariable variable, void* value);
@@ -426,7 +424,7 @@ private:
         void initXEvent(XEvent* event);
 #endif
 
-#if PLATFORM(QT) 
+#if PLATFORM(QT)
 #if defined(MOZ_PLATFORM_MAEMO) && (MOZ_PLATFORM_MAEMO >= 5)
         QImage m_image;
         bool m_renderToImage;

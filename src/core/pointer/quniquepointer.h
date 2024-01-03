@@ -80,44 +80,17 @@ class QUniqueArrayPointer : public CsPointer::CsUniqueArrayPointer<T, Deleter>
 
 #endif
 
-template <typename T, typename Deleter = std::default_delete<T>>
-using QScopedPointer = QUniquePointer<T, Deleter>;
-
-template <typename T, typename Deleter = std::default_delete<CsPointer::cs_add_missing_extent_t<T>>>
-using QScopedArrayPointer = QUniqueArrayPointer<T, Deleter>;
-
-
 // free functions
-template <typename T, typename Deleter>
-void swap(QScopedPointer<T, Deleter> &ptr1, QScopedPointer<T, Deleter> &ptr2) noexcept
-{
-   ptr1.swap(ptr2);
-}
 
+// QScopedPointer
 template <typename T, typename... Args, typename = typename std::enable_if_t<! std::is_array_v<T>>>
-QScopedPointer<T> QMakeScoped(Args &&... args) {
+QUniquePointer<T> QMakeUnique(Args &&... args) {
    return CsPointer::make_unique<T>(std::forward<Args>(args)...);
 }
 
-template <typename T, typename... Args, typename = typename std::enable_if_t<! std::is_array_v<T>>>
-QScopedPointer<T> QMakeUnique(Args &&... args) {
-   return CsPointer::make_unique<T>(std::forward<Args>(args)...);
-}
-
-//
-template <typename T, typename Deleter>
-void swap(QScopedArrayPointer<T, Deleter> &ptr1, QScopedArrayPointer<T, Deleter> &ptr2) noexcept
-{
-   ptr1.swap(ptr2);
-}
-
+// QScopedArrayPointer
 template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
-QScopedArrayPointer<T> QMakeScoped(std::size_t size) {
-   return CsPointer::make_unique<T>(size);
-}
-
-template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
-QScopedArrayPointer<T> QMakeUnique(std::size_t size) {
+QUniquePointer<T> QMakeUnique(std::size_t size) {
    return CsPointer::make_unique<T>(size);
 }
 

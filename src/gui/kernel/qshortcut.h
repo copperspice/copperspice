@@ -26,9 +26,7 @@
 
 #include <qwidget.h>
 #include <qkeysequence.h>
-#include <QScopedPointer>
-
-
+#include <qscopedpointer.h>
 
 #ifndef QT_NO_SHORTCUT
 

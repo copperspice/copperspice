@@ -86,21 +86,21 @@ void QGraphicsGridLayout::addItem(QGraphicsLayoutItem *item, int row, int column
 {
    Q_D(QGraphicsGridLayout);
    if (row < 0 || column < 0) {
-      qWarning("QGraphicsGridLayout::addItem: invalid row/column: %d",
+      qWarning("QGraphicsGridLayout::addItem() Invalid row/column: %d",
          row < 0 ? row : column);
       return;
    }
    if (columnSpan < 1 || rowSpan < 1) {
-      qWarning("QGraphicsGridLayout::addItem: invalid row span/column span: %d",
+      qWarning("QGraphicsGridLayout::addItem() Invalid row span/column span: %d",
          rowSpan < 1 ? rowSpan : columnSpan);
       return;
    }
    if (!item) {
-      qWarning("QGraphicsGridLayout::addItem: cannot add null item");
+      qWarning("QGraphicsGridLayout::addItem() Unable to add an invalid item (nullptr)");
       return;
    }
    if (item == this) {
-      qWarning("QGraphicsGridLayout::addItem: cannot insert itself");
+      qWarning("QGraphicsGridLayout::addItem() Unable to insert an item which has already been added");
       return;
    }
 
@@ -345,7 +345,7 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int row, int column) const
 {
    Q_D(const QGraphicsGridLayout);
    if (row < 0 || row >= rowCount() || column < 0 || column >= columnCount()) {
-      qWarning("QGraphicsGridLayout::itemAt: invalid row, column %d, %d", row, column);
+      qWarning("QGraphicsGridLayout::itemAt() Invalid row or column %d, %d", row, column);
       return nullptr;
    }
 
@@ -367,7 +367,7 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
    Q_D(const QGraphicsGridLayout);
 
    if (index < 0 || index >= d->engine.itemCount()) {
-      qWarning("QGraphicsGridLayout::itemAt: invalid index %d", index);
+      qWarning("QGraphicsGridLayout::itemAt() Invalid index %d", index);
       return nullptr;
    }
 
@@ -383,7 +383,7 @@ void QGraphicsGridLayout::removeAt(int index)
 {
    Q_D(QGraphicsGridLayout);
    if (index < 0 || index >= d->engine.itemCount()) {
-      qWarning("QGraphicsGridLayout::removeAt: invalid index %d", index);
+      qWarning("QGraphicsGridLayout::removeAt() Invalid index %d", index);
       return;
    }
 

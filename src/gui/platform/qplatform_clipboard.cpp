@@ -60,7 +60,11 @@ QClipboardData::~QClipboardData()
    delete src;
 }
 
-Q_GLOBAL_STATIC(QClipboardData, q_clipboardData);
+static QClipboardData *q_clipboardData()
+{
+   static QClipboardData retval;
+   return &retval;
+}
 
 QPlatformClipboard::~QPlatformClipboard()
 {

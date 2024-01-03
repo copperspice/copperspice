@@ -122,6 +122,7 @@ class CompressedWhitespace
    CompressedWhitespace(const CompressedWhitespace &) = delete;
    CompressedWhitespace &operator=(const CompressedWhitespace &) = delete;
 };
+
 }
 
 #endif

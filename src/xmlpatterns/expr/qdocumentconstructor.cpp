@@ -27,8 +27,6 @@
 
 #include "qdocumentconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DocumentConstructor::DocumentConstructor(const Expression::Ptr &op) : SingleContainer(op)
@@ -94,5 +92,3 @@ DocumentConstructor::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

@@ -27,9 +27,8 @@
 #include <QUrl>
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ElementConstructor : public PairContainer
 {
  public:
@@ -54,8 +53,7 @@ class ElementConstructor : public PairContainer
    QUrl m_staticBaseURI;
    const bool m_isXSLT;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

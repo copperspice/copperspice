@@ -805,7 +805,7 @@ bool QIcoHandler::canRead()
       }
 
    } else {
-      qWarning("QIcoHandler::canRead() called with no device");
+      qWarning("QIcoHandler::canRead() No device");
    }
 
    return bCanRead;

@@ -24,13 +24,13 @@
 #ifndef QNamePool_P_H
 #define QNamePool_P_H
 
-#include <QHash>
-#include <QReadLocker>
-#include <QReadWriteLock>
-#include <QSharedData>
-#include <QString>
-#include <QVector>
-#include <QXmlName>
+#include <qhash.h>
+#include <qreadlocker.h>
+#include <qreadwritelock.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qvector.h>
+#include <qxmlname.h>
 
 #include <qprimitives_p.h>
 

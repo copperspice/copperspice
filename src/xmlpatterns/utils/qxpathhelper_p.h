@@ -24,11 +24,12 @@
 #ifndef QXPathHelper_P_H
 #define QXPathHelper_P_H
 
+#include <qstringfwd.h>
+
 #include <qcommonnamespaces_p.h>
 #include <qitem_p.h>
 #include <qpatternistlocale_p.h>
 #include <qreportcontext_p.h>
-#include <qstringfwd.h>
 
 namespace QPatternist {
 class XPathHelper

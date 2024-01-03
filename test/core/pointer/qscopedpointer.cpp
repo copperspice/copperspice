@@ -25,24 +25,12 @@
 TEST_CASE("QScopedPointer traits", "[qscopedpointer]")
 {
    REQUIRE(std::is_copy_constructible_v<QScopedPointer<int>> == false);
-   REQUIRE(std::is_move_constructible_v<QScopedPointer<int>> == true);
+   REQUIRE(std::is_move_constructible_v<QScopedPointer<int>> == false);
 
    REQUIRE(std::is_copy_assignable_v<QScopedPointer<int>> == false);
-   REQUIRE(std::is_move_assignable_v<QScopedPointer<int>> == true);
+   REQUIRE(std::is_move_assignable_v<QScopedPointer<int>> == false);
 
    REQUIRE(std::has_virtual_destructor_v<QScopedPointer<int>> == false);
-}
-
-TEST_CASE("QScopedPointer convert", "[qscopedpointer]")
-{
-   QScopedPointer<int> ptr1 = QMakeScoped<int>(42);
-
-   std::unique_ptr<int> ptr2 = std::move(ptr1);
-
-   REQUIRE(ptr1 == nullptr);
-   REQUIRE(ptr2 != nullptr);
-
-   REQUIRE(*ptr2 == 42);
 }
 
 TEST_CASE("QScopedPointer custom_deleter", "[qscopedpointer]")
@@ -90,31 +78,6 @@ TEST_CASE("QScopedPointer equality", "[qscopedpointer]")
 
    REQUIRE((ptr1 != ptr2.get()) == true);
    REQUIRE((ptr1.get() != ptr2) == true);
-}
-
-TEST_CASE("QScopedPointer move_assign", "[qscopedpointer]")
-{
-   QScopedPointer<int> ptr1;
-   int *rawPointer = nullptr;
-
-   {
-      QScopedPointer<int> ptr2(new int);
-      rawPointer = ptr2.data();
-      ptr1 = std::move(ptr2);
-
-      REQUIRE(ptr2.isNull());
-   }
-
-   REQUIRE(rawPointer == ptr1.get());
-}
-
-TEST_CASE("QScopedPointer move_construct", "[qscopedpointer]")
-{
-   QScopedPointer<int> ptr1 = QMakeUnique<int>();
-   QScopedPointer<int> ptr2(std::move(ptr1));
-
-   REQUIRE(ptr1.isNull() == true);
-   REQUIRE(ptr2.isNull() == false);
 }
 
 TEST_CASE("QScopedPointer release", "[qscopedpointer]")

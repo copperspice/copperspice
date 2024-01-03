@@ -1203,9 +1203,9 @@ void QGraphicsWebView::syncLayers()
 	d->syncLayers();
 }
 
-void QGraphicsWebView::_q_contentsSizeChanged(const QSize & un_named_arg1)
+void QGraphicsWebView::_q_contentsSizeChanged(const QSize &size)
 {
-	d->_q_contentsSizeChanged(un_named_arg1);
+	d->_q_contentsSizeChanged(size);
 }
 
 void QGraphicsWebView::_q_scaleChanged()

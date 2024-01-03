@@ -80,10 +80,12 @@ bool QSystemSemaphore::release(int n)
    if (n == 0) {
       return true;
    }
+
    if (n < 0) {
-      qWarning("QSystemSemaphore::release: n is negative.");
+      qWarning("QSystemSemaphore::release() Value can not be negative.");
       return false;
    }
+
    return d->modifySemaphore(n);
 }
 

@@ -21,15 +21,13 @@
 *
 ***********************************************************************/
 
-#include <QHash>
+#include <qhash.h>
 
 #include "qbuiltintypes_p.h"
 #include "qitem_p.h"
 #include "qitem_p.h"
 
 #include "qnamespacenametest_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -73,5 +71,3 @@ PatternPriority NamespaceNameTest::patternPriority() const
 {
    return -0.25;
 }
-
-QT_END_NAMESPACE

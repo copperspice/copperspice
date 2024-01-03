@@ -47,8 +47,6 @@
 
 #include "qatomiccasters_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item ToUntypedAtomicCaster::castFrom(const Item &from,
@@ -317,5 +315,3 @@ Item AbstractDateTimeToTimeCaster::castFrom(const Item &from,
 
    return SchemaTime::fromDateTime(dt);
 }
-
-QT_END_NAMESPACE

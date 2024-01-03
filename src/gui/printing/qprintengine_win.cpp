@@ -385,7 +385,7 @@ int QWin32PrintEngine::metric(QPaintDevice::PaintDeviceMetric m) const
          break;
 
       default:
-         qWarning("QPrinter::metric: Invalid metric command");
+         qWarning("QPrinter::metric() Invalid metric command");
          return 0;
    }
 
@@ -929,8 +929,7 @@ void QWin32PrintEnginePrivate::initHDC()
    ReleaseDC(nullptr, display_dc);
 
    if (dpi_display == 0) {
-      qWarning("QWin32PrintEngine::metric: GetDeviceCaps() failed, "
-         "might be a driver problem");
+      qWarning("QWin32PrintEngine::metric() GetDeviceCaps() failed, this might be a driver problem");
       dpi_display = 96; // Reasonable default
    }
 
@@ -1000,12 +999,14 @@ void QWin32PrintEnginePrivate::doReinit()
 
 bool QWin32PrintEnginePrivate::resetDC()
 {
-   if (!hdc) {
-      qWarning() << "ResetDC() called with null hdc.";
+   if (! hdc) {
+      qWarning() << "resetDC() was called with an invalid hdc";
       return false;
    }
+
    const HDC oldHdc = hdc;
    const HDC hdc = ResetDC(oldHdc, devMode);
+
    if (!hdc) {
       const int lastError = GetLastError();
       qErrnoWarning(lastError, "ResetDC() on %p failed (%d)", oldHdc, lastError);
@@ -1088,7 +1089,7 @@ void QWin32PrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &
 
       case PPK_DocumentName:
          if (isActive()) {
-            qWarning("QWin32PrintEngine: Cannot change document name while printing is active");
+            qWarning("QWin32PrintEngine::setProperty() Unable to change document name while printing is active");
             return;
          }
          d->docName = value.toString();
@@ -1161,7 +1162,7 @@ void QWin32PrintEngine::setProperty(PrintEnginePropertyKey key, const QVariant &
 
       case PPK_OutputFileName:
          if (isActive()) {
-            qWarning("QWin32PrintEngine: Cannot change filename while printing");
+            qWarning("QWin32PrintEngine::setProperty() Unable to change filename while printing");
          } else {
             d->fileName = value.toString();
             d->printToFile = !value.toString().isEmpty();
@@ -1569,7 +1570,7 @@ void QWin32PrintEngine::setGlobalDevMode(HGLOBAL globalDevNames, HGLOBAL globalD
       d->updatePageLayout();
 
       if (! OpenPrinter(&tmp[0], &d->hPrinter, nullptr)) {
-         qWarning("QPrinter: OpenPrinter() failed after reading DEVMODE.");
+         qWarning("QWin32PrintEngine::setGlobalDevMode() OpenPrinter failed after reading DEVMODE");
       }
    }
 

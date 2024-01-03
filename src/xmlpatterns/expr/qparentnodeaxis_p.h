@@ -26,9 +26,8 @@
 
 #include "qemptycontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ParentNodeAxis : public EmptyContainer
 {
  public:
@@ -38,8 +37,7 @@ class ParentNodeAxis : public EmptyContainer
    SequenceType::Ptr staticType() const override;
    ItemType::Ptr expectedContextItemType() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

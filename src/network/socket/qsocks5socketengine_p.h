@@ -109,7 +109,7 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    NET_CS_SLOT_1(Private, void _q_controlSocketReadNotification())
    NET_CS_SLOT_2(_q_controlSocketReadNotification)
 
-   NET_CS_SLOT_1(Private, void _q_controlSocketError(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_controlSocketError(QAbstractSocket::SocketError socketError))
    NET_CS_SLOT_2(_q_controlSocketError)
 
 #ifndef QT_NO_UDPSOCKET
@@ -132,7 +132,7 @@ class QSocks5SocketEngine : public QAbstractSocketEngine
    NET_CS_SLOT_1(Private, void _q_controlSocketDisconnected())
    NET_CS_SLOT_2(_q_controlSocketDisconnected)
 
-   NET_CS_SLOT_1(Private, void _q_controlSocketStateChanged(QAbstractSocket::SocketState un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_controlSocketStateChanged(QAbstractSocket::SocketState socketState))
    NET_CS_SLOT_2(_q_controlSocketStateChanged)
 };
 

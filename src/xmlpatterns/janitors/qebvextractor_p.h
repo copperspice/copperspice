@@ -24,9 +24,8 @@
 #ifndef QEBVExtractor_P_H
 #define QEBVExtractor_P_H
 
+#include <qcommonsequencetypes_p.h>
 #include <qsinglecontainer_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -44,7 +43,7 @@ class EBVExtractor : public SingleContainer
    SequenceType::Ptr staticType() const override;
 
    template<typename TSubClass, typename ThisType>
-   static Expression::Ptr typeCheck(const StaticContext::Ptr &context, 
+   static Expression::Ptr typeCheck(const StaticContext::Ptr &context,
                   const SequenceType::Ptr &reqType, ThisType *const caller) {
 
       if (*CommonSequenceTypes::EBV->itemType() == *reqType->itemType()) {
@@ -55,8 +54,7 @@ class EBVExtractor : public SingleContainer
    }
 
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

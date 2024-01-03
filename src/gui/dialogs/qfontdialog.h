@@ -98,19 +98,19 @@ class Q_GUI_EXPORT QFontDialog : public QDialog
    bool eventFilter(QObject *object, QEvent *event) override;
 
  private:
-   GUI_CS_SLOT_1(Private, void _q_sizeChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_sizeChanged(const QString &data))
    GUI_CS_SLOT_2(_q_sizeChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_familyHighlighted(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_familyHighlighted(int data))
    GUI_CS_SLOT_2(_q_familyHighlighted)
 
-   GUI_CS_SLOT_1(Private, void _q_writingSystemHighlighted(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_writingSystemHighlighted(int data))
    GUI_CS_SLOT_2(_q_writingSystemHighlighted)
 
-   GUI_CS_SLOT_1(Private, void _q_styleHighlighted(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_styleHighlighted(int data))
    GUI_CS_SLOT_2(_q_styleHighlighted)
 
-   GUI_CS_SLOT_1(Private, void _q_sizeHighlighted(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_sizeHighlighted(int data))
    GUI_CS_SLOT_2(_q_sizeHighlighted)
 
    GUI_CS_SLOT_1(Private, void _q_updateSample())

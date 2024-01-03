@@ -138,7 +138,7 @@ class AVFScopedPointer<dispatch_queue_t>
 
 inline QSysInfo::MacVersion qt_OS_limit(QSysInfo::MacVersion osxVersion, QSysInfo::MacVersion iosVersion)
 {
-   Q_UNUSED(iosVersion)
+   (void) iosVersion;
    return osxVersion;
 }
 

@@ -24,10 +24,9 @@
 #ifndef QXMLFORMATTER_H
 #define QXMLFORMATTER_H
 
-#include <QXmlSerializer>
 #include <qstringfwd.h>
+#include <qxmlserializer.h>
 
-QT_BEGIN_NAMESPACE
 class QIODevice;
 class QTextCodec;
 class QXmlQuery;
@@ -63,8 +62,5 @@ class Q_XMLPATTERNS_EXPORT QXmlFormatter : public QXmlSerializer
    inline void startFormattingContent();
    Q_DECLARE_PRIVATE(QXmlFormatter)
 };
-
-QT_END_NAMESPACE
-
 
 #endif

@@ -80,8 +80,11 @@
 #undef XSetIMValues
 #endif
 
-
-Q_GLOBAL_STATIC(QGtkStyleUpdateScheduler, styleScheduler)
+static QGtkStyleUpdateScheduler *styleScheduler()
+{
+   static QGtkStyleUpdateScheduler retval;
+   return &retval;
+}
 
 Ptr_gtk_container_forall QGtkStylePrivate::gtk_container_forall = 0;
 Ptr_gtk_init QGtkStylePrivate::gtk_init = 0;
@@ -481,7 +484,7 @@ void QGtkStylePrivate::initGtkWidgets() const
       qWarning("\nThis process is currently running setuid or setgid.\nGTK+ does not allow this, "
          "the GTK+ integration will not be used.\nLaunch this app using \'gksudo\', "
          "\'kdesudo\' or a similar tool.\n\n"
-         "See http://www.gtk.org/setuid.html for more information.\n");
+         "Refer to https://www.gtk.org/setuid.html for more information.\n");
       return;
    }
 
@@ -763,7 +766,8 @@ void QGtkStylePrivate::addWidgetToMap(GtkWidget *widget)
 
 void QGtkStylePrivate::addAllSubWidgets(GtkWidget *widget, gpointer v)
 {
-   Q_UNUSED(v);
+   (void) v;
+
    addWidgetToMap(widget);
 
    if (G_TYPE_CHECK_INSTANCE_TYPE ((widget), gtk_container_get_type())) {

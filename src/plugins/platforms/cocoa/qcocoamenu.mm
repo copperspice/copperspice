@@ -116,7 +116,7 @@ static inline QCocoaMenuLoader *getMenuLoader()
 
 - (void)menu: (NSMenu *)menu willHighlightItem: (NSMenuItem *)item
 {
-   Q_UNUSED(menu);
+   (void) menu;
    if (item && [item tag]) {
       QCocoaMenuItem *cocoaItem = reinterpret_cast<QCocoaMenuItem *>([item tag]);
       cocoaItem->hovered();

@@ -252,7 +252,6 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    QBrush foregroundBrush() const;
    void setForegroundBrush(const QBrush &brush);
 
- public :
    GUI_CS_SLOT_1(Public, void updateScene(const QList <QRectF> &rects))
    GUI_CS_SLOT_2(updateScene)
 
@@ -268,7 +267,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    GUI_CS_SIGNAL_2(rubberBandChanged, viewportRect, fromScenePoint, toScenePoint)
 #endif
 
- protected :
+ protected:
    GUI_CS_SLOT_1(Protected, void setupViewport(QWidget *widget) override)
    GUI_CS_SLOT_2(setupViewport)
 
@@ -312,7 +311,7 @@ class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea
    Q_DECLARE_PRIVATE(QGraphicsView)
 
 #ifndef QT_NO_CURSOR
-   GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_setViewportCursor(const QCursor &cursor))
    GUI_CS_SLOT_2(_q_setViewportCursor)
 
    GUI_CS_SLOT_1(Private, void _q_unsetViewportCursor())

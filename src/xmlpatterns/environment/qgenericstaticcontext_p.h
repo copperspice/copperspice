@@ -30,8 +30,6 @@
 #include <qfunctionfactory_p.h>
 #include <qschematypefactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class GenericStaticContext : public StaticContext
 {
@@ -151,7 +149,5 @@ class GenericStaticContext : public StaticContext
    bool                        m_compatModeEnabled;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

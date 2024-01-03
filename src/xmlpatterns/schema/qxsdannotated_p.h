@@ -26,8 +26,6 @@
 
 #include <qxsdannotation_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdAnnotated
@@ -51,8 +49,7 @@ class XsdAnnotated
  private:
    XsdAnnotation::List m_annotations;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

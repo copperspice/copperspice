@@ -30,7 +30,7 @@
 AVFCameraMetaDataControl::AVFCameraMetaDataControl(AVFCameraService *service, QObject *parent)
     :QMetaDataWriterControl(parent)
 {
-    Q_UNUSED(service);
+    (void) service;
 }
 
 AVFCameraMetaDataControl::~AVFCameraMetaDataControl()

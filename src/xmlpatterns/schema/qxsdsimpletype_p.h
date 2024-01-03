@@ -29,9 +29,8 @@
 #include <qxsduserschematype_p.h>
 #include <QSet>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdSimpleType : public XsdUserSchemaType<AnySimpleType>
 {
  public:
@@ -165,8 +164,7 @@ class XsdSimpleType : public XsdUserSchemaType<AnySimpleType>
    TypeCategory              m_typeCategory;
    DerivationMethod          m_derivationMethod;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -29,9 +29,8 @@
 #include <qxsdschemacontext_p.h>
 #include <qxsdwildcard_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdParticleChecker
 {
  public:
@@ -62,8 +61,7 @@ class XsdParticleChecker
    static bool subsumes(const XsdParticle::Ptr &particle, const XsdParticle::Ptr &derivedParticle,
                         const XsdSchemaContext::Ptr &context, QString &errorMsg);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

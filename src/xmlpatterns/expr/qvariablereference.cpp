@@ -23,8 +23,6 @@
 
 #include "qvariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 VariableReference::VariableReference(const VariableSlotID slotP) : m_varSlot(slotP)
@@ -36,5 +34,3 @@ Expression::Properties VariableReference::properties() const
 {
    return DisableElimination;
 }
-
-QT_END_NAMESPACE

@@ -426,7 +426,7 @@ GType QGstVideoRendererSink::get_type()
 
 void QGstVideoRendererSink::class_init(gpointer g_class, gpointer class_data)
 {
-   Q_UNUSED(class_data);
+   (void) class_data;
 
    sink_parent_class = reinterpret_cast<GstVideoSinkClass *>(g_type_class_peek_parent(g_class));
 
@@ -464,7 +464,7 @@ void QGstVideoRendererSink::instance_init(GTypeInstance *instance, gpointer g_cl
 {
    VO_SINK(instance);
 
-   Q_UNUSED(g_class);
+   (void) g_class;
 
    sink->delegate = nullptr;
 }
@@ -481,8 +481,9 @@ void QGstVideoRendererSink::finalize(GObject *object)
 
 void QGstVideoRendererSink::handleShowPrerollChange(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(o);
-   Q_UNUSED(p);
+   (void) o;
+   (void) p;
+
    QGstVideoRendererSink *sink = reinterpret_cast<QGstVideoRendererSink *>(d);
 
    gboolean showPrerollFrame = true; // "show-preroll-frame" property is true by default

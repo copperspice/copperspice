@@ -27,9 +27,8 @@
 #include <qcommonsequencetypes_p.h>
 #include <qsequencetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class GenericSequenceType : public SequenceType
 {
  public:
@@ -69,8 +68,7 @@ makeGenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &cardin
       return SequenceType::Ptr(new GenericSequenceType(itemType, cardinality));
    }
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

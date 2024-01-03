@@ -26,9 +26,8 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class EmptySequence : public EmptyContainer
 {
  public:
@@ -74,8 +73,7 @@ class EmptySequence : public EmptyContainer
    ID id() const override;
    Properties properties() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -68,7 +68,7 @@ void QGraphicsAnchorPrivate::setSizePolicy(QSizePolicy::Policy policy)
 void QGraphicsAnchorPrivate::setSpacing(qreal value)
 {
    if (!data) {
-      qWarning("QGraphicsAnchor::setSpacing: The anchor does not exist.");
+      qWarning("QGraphicsAnchor::setSpacing() Anchor does not exist");
       return;
    }
 
@@ -86,7 +86,7 @@ void QGraphicsAnchorPrivate::setSpacing(qreal value)
 void QGraphicsAnchorPrivate::unsetSpacing()
 {
    if (!data) {
-      qWarning("QGraphicsAnchor::setSpacing: The anchor does not exist.");
+      qWarning("QGraphicsAnchor::setSpacing() Anchor does not exist");
       return;
    }
 
@@ -99,7 +99,7 @@ void QGraphicsAnchorPrivate::unsetSpacing()
 qreal QGraphicsAnchorPrivate::spacing() const
 {
    if (!data) {
-      qWarning("QGraphicsAnchor::setSpacing: The anchor does not exist.");
+      qWarning("QGraphicsAnchor::setSpacing() Anchor does not exist");
       return 0;
    }
 
@@ -1594,25 +1594,23 @@ QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::addAnchor(QGraphicsLayoutItem *fi
 {
    Q_Q(QGraphicsAnchorLayout);
    if ((firstItem == nullptr) || (secondItem == nullptr)) {
-      qWarning("QGraphicsAnchorLayout::addAnchor(): Unable to anchor NULL items");
+      qWarning("QGraphicsAnchorLayout::addAnchor() Unable to anchor invalid items (nullptr)");
       return nullptr;
    }
 
    if (firstItem == secondItem) {
-      qWarning("QGraphicsAnchorLayout::addAnchor(): Unable to anchor the item to itself");
+      qWarning("QGraphicsAnchorLayout::addAnchor() Unable to anchor an item to itself");
       return nullptr;
    }
 
    if (edgeOrientation(secondEdge) != edgeOrientation(firstEdge)) {
-      qWarning("QGraphicsAnchorLayout::addAnchor(): "
-         "Unable to anchor edges of different orientations");
+      qWarning("QGraphicsAnchorLayout::addAnchor() Unable to anchor edges of different orientations");
       return nullptr;
    }
 
    const QGraphicsLayoutItem *parentWidget = q->parentLayoutItem();
    if (firstItem == parentWidget || secondItem == parentWidget) {
-      qWarning("QGraphicsAnchorLayout::addAnchor(): "
-         "Unable to add the parent of the layout to the layout.");
+      qWarning("QGraphicsAnchorLayout::addAnchor() Unable to add the parent of the layout to this layout.");
       return nullptr;
    }
 
@@ -1875,7 +1873,7 @@ void QGraphicsAnchorLayoutPrivate::removeInternalVertex(QGraphicsLayoutItem *ite
    QPair<AnchorVertex *, int> v = m_vertexList.value(pair);
 
    if (!v.first) {
-      qWarning("This item with this edge is not in the graph");
+      qWarning("QGraphicsAnchorLayout::removeInternalVertex() This edge is not in the graph");
       return;
    }
 
@@ -2072,7 +2070,7 @@ void QGraphicsAnchorLayoutPrivate::calculateGraphs(
 
    // Simplify the graph
    if (simplificationEnabled && !simplifyGraph(orientation)) {
-      qWarning("QGraphicsAnchorLayout: anchor setup is not feasible.");
+      qWarning("QGraphicsAnchorLayout::calculateGraphs() Anchor setup is not valid");
       graphHasConflicts[orientation] = true;
       return;
    }
@@ -2976,7 +2974,7 @@ void QGraphicsAnchorLayoutPrivate::dumpGraph(const QString &name)
    QFile file(QString("anchorlayout.%1.dot").formatArg(name));
 
    if (! file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
-      qWarning("Could not write to %s", csPrintable(file.fileName()));
+      qWarning("QGraphicsAnchorLayout::dumpGraph() Unable to write to %s", csPrintable(file.fileName()));
    }
 
    QString str = "digraph anchorlayout {\nnode [shape=\"rect\"]\n%1}";

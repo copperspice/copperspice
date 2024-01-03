@@ -134,7 +134,7 @@ class Q_GUI_EXPORT QToolButton : public QAbstractButton
    GUI_CS_SLOT_1(Private, void _q_updateButtonDown())
    GUI_CS_SLOT_2(_q_updateButtonDown)
 
-   GUI_CS_SLOT_1(Private, void _q_menuTriggered(QAction *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_menuTriggered(QAction *action))
    GUI_CS_SLOT_2(_q_menuTriggered)
 #endif
 

@@ -27,8 +27,6 @@
 
 #include "qcommentconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CommentConstructor::CommentConstructor(const Expression::Ptr &op) : SingleContainer(op)
@@ -101,4 +99,3 @@ CommentConstructor::accept(const ExpressionVisitor::Ptr &visitor) const
    return visitor->visit(this);
 }
 
-QT_END_NAMESPACE

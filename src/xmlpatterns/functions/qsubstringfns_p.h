@@ -26,9 +26,8 @@
 
 #include <qcomparescaseaware_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ContainsFN : public ComparesCaseAware
 {
  public:
@@ -59,8 +58,7 @@ class SubstringAfterFN : public FunctionCall
  public:
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

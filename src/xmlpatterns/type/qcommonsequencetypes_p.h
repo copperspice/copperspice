@@ -27,8 +27,6 @@
 #include <qemptysequencetype_p.h>
 #include <qnonetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CommonSequenceTypes
@@ -369,9 +367,8 @@ class CommonSequenceTypes
    CommonSequenceTypes(const CommonSequenceTypes &) = delete;
    CommonSequenceTypes &operator=(const CommonSequenceTypes &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif
 

@@ -30,11 +30,10 @@
 #include <QSharedData>
 #include <QUrl>
 
-QT_BEGIN_NAMESPACE
-
 class QIODevice;
 
 namespace QPatternist {
+
 class ExpressionFactory : public QSharedData
 {
  public:
@@ -131,8 +130,7 @@ class ExpressionFactory : public QSharedData
    ExpressionFactory(const ExpressionFactory &) = delete;
    ExpressionFactory &operator=(const ExpressionFactory &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

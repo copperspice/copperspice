@@ -35,39 +35,50 @@
  *
  * Priority queue implemented as a binary heap. Supports extract minimum
  * and insert operations.
+ *
+ * The priority queue is implemented as a binary heap, which is a complete
+ * binary tree. The root of the tree is the minimum element. The heap
+ * property is that the priority of a node is less than or equal to the
+ * priority of its children. The heap is stored in an array, with the
+ * children of node i stored at indices 2i + 1 and 2i + 2.
  */
+template <typename K>
 struct hb_priority_queue_t
 {
-  HB_DELETE_COPY_ASSIGN (hb_priority_queue_t);
-  hb_priority_queue_t ()  { init (); }
-  ~hb_priority_queue_t () { fini (); }
-
  private:
-  typedef hb_pair_t<int64_t, unsigned> item_t;
+  typedef hb_pair_t<K, unsigned> item_t;
   hb_vector_t<item_t> heap;
 
  public:
-  void init () { heap.init (); }
-
-  void fini () { heap.fini (); }
 
   void reset () { heap.resize (0); }
 
   bool in_error () const { return heap.in_error (); }
 
-  void insert (int64_t priority, unsigned value)
+#ifndef HB_OPTIMIZE_SIZE
+  HB_ALWAYS_INLINE
+#endif
+  void insert (K priority, unsigned value)
   {
     heap.push (item_t (priority, value));
+    if (unlikely (heap.in_error ())) return;
     bubble_up (heap.length - 1);
   }
 
+#ifndef HB_OPTIMIZE_SIZE
+  HB_ALWAYS_INLINE
+#endif
   item_t pop_minimum ()
   {
-    item_t result = heap[0];
+    assert (!is_empty ());
 
-    heap[0] = heap[heap.length - 1];
-    heap.shrink (heap.length - 1);
-    bubble_down (0);
+    item_t result = heap.arrayZ[0];
+
+    heap.arrayZ[0] = heap.arrayZ[heap.length - 1];
+    heap.resize (heap.length - 1);
+
+    if (!is_empty ())
+      bubble_down (0);
 
     return result;
   }
@@ -102,8 +113,12 @@ struct hb_priority_queue_t
     return 2 * index + 2;
   }
 
+  HB_ALWAYS_INLINE
   void bubble_down (unsigned index)
   {
+    repeat:
+    assert (index < heap.length);
+
     unsigned left = left_child (index);
     unsigned right = right_child (index);
 
@@ -113,38 +128,43 @@ struct hb_priority_queue_t
       return;
 
     bool has_right = right < heap.length;
-    if (heap[index].first <= heap[left].first
-        && (!has_right || heap[index].first <= heap[right].first))
+    if (heap.arrayZ[index].first <= heap.arrayZ[left].first
+        && (!has_right || heap.arrayZ[index].first <= heap.arrayZ[right].first))
       return;
 
-    if (!has_right || heap[left].first < heap[right].first)
-    {
-      swap (index, left);
-      bubble_down (left);
-      return;
-    }
+    unsigned child;
+    if (!has_right || heap.arrayZ[left].first < heap.arrayZ[right].first)
+      child = left;
+    else
+      child = right;
 
-    swap (index, right);
-    bubble_down (right);
+    swap (index, child);
+    index = child;
+    goto repeat;
   }
 
+  HB_ALWAYS_INLINE
   void bubble_up (unsigned index)
   {
+    repeat:
+    assert (index < heap.length);
+
     if (index == 0) return;
 
     unsigned parent_index = parent (index);
-    if (heap[parent_index].first <= heap[index].first)
+    if (heap.arrayZ[parent_index].first <= heap.arrayZ[index].first)
       return;
 
     swap (index, parent_index);
-    bubble_up (parent_index);
+    index = parent_index;
+    goto repeat;
   }
 
   void swap (unsigned a, unsigned b)
   {
-    item_t temp = heap[a];
-    heap[a] = heap[b];
-    heap[b] = temp;
+    assert (a < heap.length);
+    assert (b < heap.length);
+    hb_swap (heap.arrayZ[a], heap.arrayZ[b]);
   }
 };
 

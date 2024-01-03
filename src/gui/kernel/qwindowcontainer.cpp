@@ -136,7 +136,7 @@ QWindowContainer::QWindowContainer(QWindow *embeddedWindow, QWidget *parent, Qt:
    Q_D(QWindowContainer);
 
    if (embeddedWindow == nullptr) {
-      qWarning("QWindowContainer: embedded window can not be a nullptr");
+      qWarning("QWindowContainer::QWindowContainer() Embedded window is invalid (nullptr)");
       return;
    }
 

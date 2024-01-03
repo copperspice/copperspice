@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class RemovalIterator : public Item::Iterator
@@ -63,8 +61,7 @@ class RemovalIterator : public Item::Iterator
    Item m_current;
    xsInteger m_position;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

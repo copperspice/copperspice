@@ -83,29 +83,37 @@ class QGraphicsItemCustomDataStore
    QHash<const QGraphicsItem *, QMap<int, QVariant>> data;
 };
 
-Q_GLOBAL_STATIC(QGraphicsItemCustomDataStore, qt_dataStore)
+static QGraphicsItemCustomDataStore *qt_dataStore()
+{
+   static QGraphicsItemCustomDataStore retval;
+   return &retval;
+}
 
 // internal
 static QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath &path, const QPen &pen)
 {
-   // We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
+   // We unfortunately need this adjustment since QPainterPathStroker will set a width of 1.0
    // if we pass a value of 0.0 to QPainterPathStroker::setWidth()
    const qreal penWidthZero = qreal(0.00000001);
 
    if (path == QPainterPath() || pen == Qt::NoPen) {
       return path;
    }
+
    QPainterPathStroker ps;
    ps.setCapStyle(pen.capStyle());
+
    if (pen.widthF() <= 0.0) {
       ps.setWidth(penWidthZero);
    } else {
       ps.setWidth(pen.widthF());
    }
+
    ps.setJoinStyle(pen.joinStyle());
    ps.setMiterLimit(pen.miterLimit());
    QPainterPath p = ps.createStroke(path);
    p.addPath(path);
+
    return p;
 }
 
@@ -910,7 +918,7 @@ const QGraphicsObject *QGraphicsItem::toGraphicsObject() const
 void QGraphicsItem::setParentItem(QGraphicsItem *newParent)
 {
    if (newParent == this) {
-      qWarning("QGraphicsItem::setParentItem: cannot assign %p as a parent of itself", this);
+      qWarning("QGraphicsItem::setParentItem() Unable to assign an item as a parent of itself");
       return;
    }
    if (newParent == d_ptr->parent) {
@@ -2100,17 +2108,17 @@ void QGraphicsItem::setFocusProxy(QGraphicsItem *item)
       return;
    }
    if (item == this) {
-      qWarning("QGraphicsItem::setFocusProxy: cannot assign self as focus proxy");
+      qWarning("QGraphicsItem::setFocusProxy() Unable to assign an item as a proxy for itself");
       return;
    }
    if (item) {
       if (item->d_ptr->scene != d_ptr->scene) {
-         qWarning("QGraphicsItem::setFocusProxy: focus proxy must be in same scene");
+         qWarning("QGraphicsItem::setFocusProxy() Focus proxy must be in the same QGraphicsScene");
          return;
       }
       for (QGraphicsItem *f = item->focusProxy(); f != nullptr; f = f->focusProxy()) {
          if (f == this) {
-            qWarning("QGraphicsItem::setFocusProxy: %p is already in the focus proxy chain", item);
+            qWarning("QGraphicsItem::setFocusProxy() Item is already a focus proxy");
             return;
          }
       }
@@ -2140,11 +2148,11 @@ QGraphicsItem *QGraphicsItem::focusScopeItem() const
 void QGraphicsItem::grabMouse()
 {
    if (!d_ptr->scene) {
-      qWarning("QGraphicsItem::grabMouse: cannot grab mouse without scene");
+      qWarning("QGraphicsItem::grabMouse() Unable to grab the mouse without a QGraphicsScene");
       return;
    }
    if (!d_ptr->visible) {
-      qWarning("QGraphicsItem::grabMouse: cannot grab mouse while invisible");
+      qWarning("QGraphicsItem::grabMouse() Unable to grab the mouse while this item is invisible");
       return;
    }
    d_ptr->scene->d_func()->grabMouse(this);
@@ -2153,7 +2161,7 @@ void QGraphicsItem::grabMouse()
 void QGraphicsItem::ungrabMouse()
 {
    if (!d_ptr->scene) {
-      qWarning("QGraphicsItem::ungrabMouse: cannot ungrab mouse without scene");
+      qWarning("QGraphicsItem::ungrabMouse() Unable to ungrab the mouse without a QGraphicsScene");
       return;
    }
    d_ptr->scene->d_func()->ungrabMouse(this);
@@ -2162,11 +2170,11 @@ void QGraphicsItem::ungrabMouse()
 void QGraphicsItem::grabKeyboard()
 {
    if (!d_ptr->scene) {
-      qWarning("QGraphicsItem::grabKeyboard: cannot grab keyboard without scene");
+      qWarning("QGraphicsItem::grabKeyboard() Unable to grab the keyboard without a QGraphicsScene");
       return;
    }
    if (!d_ptr->visible) {
-      qWarning("QGraphicsItem::grabKeyboard: cannot grab keyboard while invisible");
+      qWarning("QGraphicsItem::grabKeyboard() Unable to grab the keyboard while this item is invisible");
       return;
    }
    d_ptr->scene->d_func()->grabKeyboard(this);
@@ -2175,7 +2183,7 @@ void QGraphicsItem::grabKeyboard()
 void QGraphicsItem::ungrabKeyboard()
 {
    if (!d_ptr->scene) {
-      qWarning("QGraphicsItem::ungrabKeyboard: cannot ungrab keyboard without scene");
+      qWarning("QGraphicsItem::ungrabKeyboard() Unable to ungrab the keyboard without a QGraphicsScene");
       return;
    }
    d_ptr->scene->d_func()->ungrabKeyboard(this);
@@ -2568,7 +2576,7 @@ QTransform QGraphicsItem::itemTransform(const QGraphicsItem *other, bool *ok) co
 {
    // Catch simple cases first.
    if (other == nullptr) {
-      qWarning("QGraphicsItem::itemTransform: null pointer passed");
+      qWarning("QGraphicsItem::itemTransform() Invalid item (nullptr)");
       return QTransform();
    }
    if (other == this) {
@@ -2843,7 +2851,7 @@ void QGraphicsItem::stackBefore(const QGraphicsItem *sibling)
    }
 
    if (!sibling || d_ptr->parent != sibling->parentItem()) {
-      qWarning("QGraphicsItem::stackUnder: cannot stack under %p, which must be a sibling", sibling);
+      qWarning("QGraphicsItem::stackBefore() Unable to change the stack order, items must have the same parent");
       return;
    }
 
@@ -2852,7 +2860,7 @@ void QGraphicsItem::stackBefore(const QGraphicsItem *sibling)
       : (d_ptr->scene ? &d_ptr->scene->d_func()->topLevelItems : nullptr);
 
    if (!siblings) {
-      qWarning("QGraphicsItem::stackUnder: cannot stack under %p, which must be a sibling", sibling);
+       qWarning("QGraphicsItem::stackBefore() Unable to change the stack order, items must have the same parent");
       return;
    }
 
@@ -3183,7 +3191,7 @@ qreal QGraphicsItem::boundingRegionGranularity() const
 void QGraphicsItem::setBoundingRegionGranularity(qreal granularity)
 {
    if (granularity < 0.0 || granularity > 1.0) {
-      qWarning("QGraphicsItem::setBoundingRegionGranularity: invalid granularity %g", granularity);
+      qWarning("QGraphicsItem::setBoundingRegionGranularity() Invalid granularity %g", granularity);
       return;
    }
    if (granularity == 0.0) {
@@ -3921,13 +3929,13 @@ int QGraphicsItem::type() const
 void QGraphicsItem::installSceneEventFilter(QGraphicsItem *filterItem)
 {
    if (!d_ptr->scene) {
-      qWarning("QGraphicsItem::installSceneEventFilter: event filters can only be installed"
-         " on items in a scene.");
+      qWarning("QGraphicsItem::installSceneEventFilter() Event filters can only be installed"
+         " on items in a QGraphicsScene");
       return;
    }
    if (d_ptr->scene != filterItem->scene()) {
-      qWarning("QGraphicsItem::installSceneEventFilter: event filters can only be installed"
-         " on items in the same scene.");
+      qWarning("QGraphicsItem::installSceneEventFilter() Event filters can only be installed"
+         " on items in the same QGraphicsScene");
       return;
    }
    d_ptr->scene->d_func()->installSceneEventFilter(this, filterItem);
@@ -6518,11 +6526,11 @@ void QGraphicsItemGroup::addToGroup(QGraphicsItem *item)
 {
    Q_D(QGraphicsItemGroup);
    if (!item) {
-      qWarning("QGraphicsItemGroup::addToGroup: cannot add null item");
+      qWarning("QGraphicsItemGroup::addToGroup() Unable to add an invalid item (nullptr)");
       return;
    }
    if (item == this) {
-      qWarning("QGraphicsItemGroup::addToGroup: cannot add a group to itself");
+      qWarning("QGraphicsItemGroup::addToGroup() Unable to add a group to itself");
       return;
    }
 
@@ -6531,7 +6539,7 @@ void QGraphicsItemGroup::addToGroup(QGraphicsItem *item)
    QTransform itemTransform = item->itemTransform(this, &ok);
 
    if (!ok) {
-      qWarning("QGraphicsItemGroup::addToGroup: could not find a valid transformation from item to group coordinates");
+      qWarning("QGraphicsItemGroup::addToGroup() Unable to find a valid transformation from item to group coordinates");
       return;
    }
 
@@ -6570,7 +6578,7 @@ void QGraphicsItemGroup::removeFromGroup(QGraphicsItem *item)
 {
    Q_D(QGraphicsItemGroup);
    if (!item) {
-      qWarning("QGraphicsItemGroup::removeFromGroup: cannot remove null item");
+      qWarning("QGraphicsItemGroup::removeFromGroup() Unable to remove an invalid item (nullptr)");
       return;
    }
 
@@ -6658,7 +6666,7 @@ QRectF QGraphicsItemEffectSourcePrivate::boundingRect(Qt::CoordinateSystem syste
    const bool deviceCoordinates = (system == Qt::DeviceCoordinates);
    if (!info && deviceCoordinates) {
       // Device coordinates without info not yet supported.
-      qWarning("QGraphicsEffectSource::boundingRect: Not yet implemented, lacking device context");
+      qWarning("QGraphicsEffectSource::boundingRect() Not implemented, no device context");
       return QRectF();
    }
 
@@ -6678,7 +6686,7 @@ QRectF QGraphicsItemEffectSourcePrivate::boundingRect(Qt::CoordinateSystem syste
 void QGraphicsItemEffectSourcePrivate::draw(QPainter *painter)
 {
    if (!info) {
-      qWarning("QGraphicsEffectSource::draw: Can only begin as a result of QGraphicsEffect::draw");
+      qWarning("QGraphicsEffectSource::draw() Unable to draw, call QGraphicsEffect draw method");
       return;
    }
 
@@ -6743,7 +6751,7 @@ QPixmap QGraphicsItemEffectSourcePrivate::pixmap(Qt::CoordinateSystem system, QP
    const bool deviceCoordinates = (system == Qt::DeviceCoordinates);
    if (!info && deviceCoordinates) {
       // Device coordinates without info not yet supported.
-      qWarning("QGraphicsEffectSource::pixmap: Not yet implemented, lacking device context");
+      qWarning("QGraphicsEffectSource::pixmap() Not implemented, no device context");
       return QPixmap();
    }
 
@@ -7112,19 +7120,19 @@ QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags)
    return debug;
 }
 
-void QGraphicsTextItem::_q_updateBoundingRect(const QSizeF &un_named_arg1)
+void QGraphicsTextItem::_q_updateBoundingRect(const QSizeF &sizeF)
 {
-   dd->_q_updateBoundingRect(un_named_arg1);
+   dd->_q_updateBoundingRect(sizeF);
 }
 
-void QGraphicsTextItem::_q_update(const QRectF &un_named_arg1)
+void QGraphicsTextItem::_q_update(const QRectF &rectF)
 {
-   dd->_q_update(un_named_arg1);
+   dd->_q_update(rectF);
 }
 
-void QGraphicsTextItem::_q_ensureVisible(const QRectF &un_named_arg1)
+void QGraphicsTextItem::_q_ensureVisible(const QRectF &rectF)
 {
-   dd->_q_ensureVisible(un_named_arg1);
+   dd->_q_ensureVisible(rectF);
 }
 
 // wrapper for overloaded method

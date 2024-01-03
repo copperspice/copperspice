@@ -25,8 +25,6 @@
 
 #include "qunresolvedvariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 UnresolvedVariableReference::UnresolvedVariableReference(const QXmlName &name) : m_name(name)
@@ -71,5 +69,3 @@ Expression::ID UnresolvedVariableReference::id() const
 {
    return IDUnresolvedVariableReference;
 }
-
-QT_END_NAMESPACE

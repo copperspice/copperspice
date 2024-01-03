@@ -27,8 +27,6 @@
 #include "qitem_p.h"
 #include "qxmlname.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class QNameValue : public AtomicValue
 {
@@ -54,8 +52,5 @@ class QNameValue : public AtomicValue
    const NamePool::Ptr m_namePool;
 };
 }
-
-QT_END_NAMESPACE
-
 
 #endif

@@ -26,8 +26,6 @@
 
 #include "qanyitemtype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AnyItemType::AnyItemType()
@@ -68,5 +66,3 @@ ItemType::Ptr AnyItemType::atomizedType() const
 {
    return BuiltinTypes::xsAnyAtomicType;
 }
-
-QT_END_NAMESPACE

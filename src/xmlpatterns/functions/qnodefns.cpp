@@ -29,10 +29,7 @@
 #include "qcommonvalues_p.h"
 #include "qliteral_p.h"
 #include "qatomicstring_p.h"
-
 #include "qnodefns_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -187,5 +184,3 @@ SequenceType::Ptr RootFN::staticType() const
       return makeGenericSequenceType(BuiltinTypes::node, m_operands.first()->staticType()->cardinality().toWithoutMany());
    }
 }
-
-QT_END_NAMESPACE

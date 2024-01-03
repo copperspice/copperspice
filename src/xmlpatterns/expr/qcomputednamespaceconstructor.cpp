@@ -28,8 +28,6 @@
 #include "qxmlutils_p.h"
 #include "qcomputednamespaceconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ComputedNamespaceConstructor::ComputedNamespaceConstructor(
@@ -101,5 +99,3 @@ ExpressionVisitorResult::Ptr ComputedNamespaceConstructor::accept(const Expressi
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

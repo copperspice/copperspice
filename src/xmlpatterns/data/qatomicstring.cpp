@@ -25,8 +25,6 @@
 
 #include "qatomicstring_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicString::AtomicString(const QString &s) : m_value(s)
@@ -52,5 +50,3 @@ ItemType::Ptr AtomicString::type() const
 {
    return BuiltinTypes::xsString;
 }
-
-QT_END_NAMESPACE

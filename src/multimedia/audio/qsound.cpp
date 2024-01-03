@@ -30,7 +30,7 @@ void QSound::play(const QString &filename)
    // Object destruction is generaly handled via deleteOnComplete
    // Unexpected cases will be handled via parenting of QSound objects to qApp
    QSound *sound = new QSound(filename, qApp);
-   sound->connect(sound->m_soundEffect, SIGNAL(playingChanged()), SLOT(deleteOnComplete()));
+   sound->connect(sound->m_soundEffect, &QSoundEffect::playingChanged, sound, &QSound::deleteOnComplete);
    sound->play();
 }
 

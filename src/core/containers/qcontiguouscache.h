@@ -229,11 +229,7 @@ class QContiguousCache
    }
 
    int alignOfTypedData() const {
-#ifdef Q_ALIGNOF
-      return qMax(sizeof(void *), Q_ALIGNOF(Data));
-#else
-      return 0;
-#endif
+      return qMax(sizeof(void *), alignof(Data));
    }
 };
 

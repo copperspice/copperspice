@@ -157,16 +157,16 @@ class Q_NETWORK_EXPORT QFtp : public QObject
    NET_CS_SLOT_1(Private, void _q_startNextCommand())
    NET_CS_SLOT_2(_q_startNextCommand)
 
-   NET_CS_SLOT_1(Private, void _q_piFinished(const QString &un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_piFinished(const QString &textMsg))
    NET_CS_SLOT_2(_q_piFinished)
 
-   NET_CS_SLOT_1(Private, void _q_piError(int un_named_arg1, const QString &un_named_arg2))
+   NET_CS_SLOT_1(Private, void _q_piError(int errorCode, const QString &textMsg))
    NET_CS_SLOT_2(_q_piError)
 
-   NET_CS_SLOT_1(Private, void _q_piConnectState(int un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_piConnectState(int connectState))
    NET_CS_SLOT_2(_q_piConnectState)
 
-   NET_CS_SLOT_1(Private, void _q_piFtpReply(int un_named_arg1, const QString &un_named_arg2))
+   NET_CS_SLOT_1(Private, void _q_piFtpReply(int code, const QString &textMsg))
    NET_CS_SLOT_2(_q_piFtpReply)
 };
 

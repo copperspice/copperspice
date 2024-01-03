@@ -25,6 +25,7 @@
 
 #include <qdrawhelper_p.h>
 #include <qapplication_p.h>
+#include <qscopedarraypointer.h>
 #include <qsimd_p.h>
 #include <qimage_p.h>
 
@@ -921,7 +922,7 @@ static bool convert_indexed8_to_RGB16_inplace(QImageData *data, Qt::ImageConvers
    const int src_pad = data->bytes_per_line - width;
    const int dest_pad = (dst_bytes_per_line >> 1) - width;
 
-   quint16 colorTableRGB16[256];
+   quint16 colorTableRGB16[256] = {};
    const int tableSize = data->colortable.size();
    if (tableSize == 0) {
       for (int i = 0; i < 256; ++i) {

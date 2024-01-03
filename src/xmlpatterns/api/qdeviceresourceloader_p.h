@@ -29,8 +29,6 @@ class QUrl;
 
 #include <qresourceloader_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class DeviceResourceLoader : public ResourceLoader
 {
@@ -40,7 +38,5 @@ class DeviceResourceLoader : public ResourceLoader
    virtual QSet<QUrl> deviceURIs() const = 0;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

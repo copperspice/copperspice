@@ -25,8 +25,8 @@
 #define QUNDOSTACK_H
 
 #include <qobject.h>
+#include <qscopedpointer.h>
 #include <qstring.h>
-#include <QScopedPointer>
 
 class QAction;
 class QUndoCommandPrivate;

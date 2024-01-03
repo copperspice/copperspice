@@ -29,8 +29,6 @@
 
 #include "qattributeconstructor_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AttributeConstructor::AttributeConstructor(const Expression::Ptr &op1,
@@ -106,5 +104,3 @@ Expression::ID AttributeConstructor::id() const
 {
    return IDAttributeConstructor;
 }
-
-QT_END_NAMESPACE

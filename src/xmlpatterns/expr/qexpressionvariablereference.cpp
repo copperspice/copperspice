@@ -23,8 +23,6 @@
 
 #include "qexpressionvariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ExpressionVariableReference::ExpressionVariableReference(const VariableSlotID slotP,
@@ -71,5 +69,3 @@ SequenceType::Ptr ExpressionVariableReference::staticType() const
 {
    return m_varDecl->expression()->staticType();
 }
-
-QT_END_NAMESPACE

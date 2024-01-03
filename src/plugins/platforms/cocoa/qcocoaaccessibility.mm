@@ -75,7 +75,7 @@ void QCocoaAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
 
 void QCocoaAccessibility::setRootObject(QObject *o)
 {
-   Q_UNUSED(o)
+   (void) o;
 }
 
 void QCocoaAccessibility::initialize()
@@ -90,8 +90,13 @@ void QCocoaAccessibility::cleanup()
 
 namespace QCocoaAccessible {
 
-typedef QMap<QAccessible::Role, NSString *> QMacAccessibiltyRoleMap;
-Q_GLOBAL_STATIC(QMacAccessibiltyRoleMap, qMacAccessibiltyRoleMap);
+using QMacAccessibiltyRoleMap = QMap<QAccessible::Role, NSString *>;
+
+static QMacAccessibiltyRoleMap *qMacAccessibiltyRoleMap()
+{
+   static QMacAccessibiltyRoleMap retval;
+   return &retval;
+}
 
 static void populateRoleMap()
 {

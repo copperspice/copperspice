@@ -26,8 +26,6 @@
 
 #include "qsystempropertyfn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item SystemPropertyFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -79,5 +77,3 @@ QString SystemPropertyFN::retrieveProperty(const QXmlName name)
          return QString();
    }
 }
-
-QT_END_NAMESPACE

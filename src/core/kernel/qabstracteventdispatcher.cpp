@@ -58,6 +58,7 @@ enum {
     Size4 = Offset5  - Offset4,
     Size5 = QtTimerIdFreeListConstants::MaxIndex - Offset5
 };
+
 const int QtTimerIdFreeListConstants::Sizes[QtTimerIdFreeListConstants::BlockCount] = {
     Size0,
     Size1,
@@ -67,8 +68,13 @@ const int QtTimerIdFreeListConstants::Sizes[QtTimerIdFreeListConstants::BlockCou
     Size5
 };
 
-typedef QFreeList<void, QtTimerIdFreeListConstants> QtTimerIdFreeList;
-Q_GLOBAL_STATIC(QtTimerIdFreeList, timerIdFreeList)
+using QtTimerIdFreeList = QFreeList<void, QtTimerIdFreeListConstants>;
+
+static QtTimerIdFreeList *timerIdFreeList()
+{
+   static QtTimerIdFreeList retval;
+   return &retval;
+}
 
 int QAbstractEventDispatcherPrivate::allocateTimerId()
 {
@@ -77,10 +83,10 @@ int QAbstractEventDispatcherPrivate::allocateTimerId()
 
 void QAbstractEventDispatcherPrivate::releaseTimerId(int timerId)
 {
-    // this function may be called by a global destructor after
-    // timerIdFreeList() has been destructed
-    if (QtTimerIdFreeList *fl = timerIdFreeList())
+    // may be called by a global destructor after timerIdFreeList() has been destructed
+    if (QtTimerIdFreeList *fl = timerIdFreeList()) {
         fl->release(timerId);
+    }
 }
 
 QAbstractEventDispatcher::QAbstractEventDispatcher(QObject *parent)

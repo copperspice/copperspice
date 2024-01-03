@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ExceptIterator : public Item::Iterator
@@ -51,8 +49,7 @@ class ExceptIterator : public Item::Iterator
    Item m_node1;
    Item m_node2;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

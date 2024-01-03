@@ -67,9 +67,7 @@ typedef GtkWidget* PlatformWidget;
 #endif
 
 #if PLATFORM(QT)
-QT_BEGIN_NAMESPACE
 class QWidget;
-QT_END_NAMESPACE
 typedef QWidget* PlatformWidget;
 #endif
 
@@ -250,7 +248,7 @@ public:
 
     // A means to access the AX cache when this object can get a pointer to it.
     virtual AXObjectCache* axObjectCache() const { return 0; }
-    
+
 private:
     void init(PlatformWidget); // Must be called by all Widget constructors to initialize cross-platform data.
 

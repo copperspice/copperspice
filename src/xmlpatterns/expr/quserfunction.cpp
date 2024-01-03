@@ -23,21 +23,13 @@
 
 #include "quserfunction_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
-UserFunction::UserFunction(const FunctionSignature::Ptr &sign,
-                           const Expression::Ptr &b,
-                           const VariableSlotID slotOffset,
-                           const VariableDeclaration::List &varDecls) : m_signature(sign),
-   m_body(b),
-   m_slotOffset(slotOffset),
-   m_argumentDeclarations(varDecls)
+UserFunction::UserFunction(const FunctionSignature::Ptr &sign, const Expression::Ptr &b,
+      const VariableSlotID slotOffset, const VariableDeclaration::List &varDecls)
+   : m_signature(sign), m_body(b), m_slotOffset(slotOffset), m_argumentDeclarations(varDecls)
 {
    Q_ASSERT(m_signature);
    Q_ASSERT(m_body);
    Q_ASSERT(m_slotOffset > -2);
 }
-
-QT_END_NAMESPACE

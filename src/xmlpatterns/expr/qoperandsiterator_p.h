@@ -26,9 +26,8 @@
 
 #include <QPair>
 #include <QStack>
-#include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
+#include <qexpression_p.h>
 
 namespace QPatternist {
 class OperandsIterator
@@ -136,7 +135,5 @@ class OperandsIterator
    QStack<Level> m_exprs;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

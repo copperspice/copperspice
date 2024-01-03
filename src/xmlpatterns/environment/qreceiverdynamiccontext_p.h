@@ -26,8 +26,6 @@
 
 #include <qdelegatingdynamiccontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class ReceiverDynamicContext : public DelegatingDynamicContext
 {
@@ -45,7 +43,5 @@ class ReceiverDynamicContext : public DelegatingDynamicContext
    QAbstractXmlReceiver *const m_receiver;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -64,15 +64,15 @@ public :
     WEB_CS_SLOT_2(socketSentData)
     WEB_CS_SLOT_1(Public, void socketClosed())
     WEB_CS_SLOT_2(socketClosed)
-    WEB_CS_SLOT_1(Public, void socketError(QAbstractSocket::SocketError un_named_arg1))
+    WEB_CS_SLOT_1(Public, void socketError(QAbstractSocket::SocketError error))
     WEB_CS_SLOT_2(socketError)
     WEB_CS_SLOT_1(Public, void socketClosedCallback())
     WEB_CS_SLOT_2(socketClosedCallback)
-    WEB_CS_SLOT_1(Public, void socketErrorCallback(int un_named_arg1))
+    WEB_CS_SLOT_1(Public, void socketErrorCallback(int error))
     WEB_CS_SLOT_2(socketErrorCallback)
 
 #ifdef QT_SSL
-    WEB_CS_SLOT_1(Public, void socketSslErrors(const QList <QSslError> & un_named_arg1))
+    WEB_CS_SLOT_1(Public, void socketSslErrors(const QList <QSslError> & error))
     WEB_CS_SLOT_2(socketSslErrors)
 #endif
 

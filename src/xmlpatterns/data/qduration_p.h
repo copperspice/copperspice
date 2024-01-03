@@ -26,8 +26,6 @@
 
 #include <qabstractduration_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Duration : public AbstractDuration
@@ -82,7 +80,5 @@ class Duration : public AbstractDuration
    const MSecondProperty   m_mseconds;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

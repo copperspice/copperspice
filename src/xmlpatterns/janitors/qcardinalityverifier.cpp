@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include "qcommonsequencetypes_p.h"
-#include "qcommonvalues_p.h"
-#include "qgenericpredicate_p.h"
-#include "qgenericsequencetype_p.h"
-#include "qinsertioniterator_p.h"
-#include "qpatternistlocale_p.h"
+#include <qcardinalityverifier_p.h>
 
-#include "qcardinalityverifier_p.h"
+#include <qcommonsequencetypes_p.h>
+#include <qcommonvalues_p.h>
+#include <qgenericpredicate_p.h>
+#include <qgenericsequencetype_p.h>
+#include <qinsertioniterator_p.h>
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 

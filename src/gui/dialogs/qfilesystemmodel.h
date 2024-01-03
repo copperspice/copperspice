@@ -154,7 +154,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
    GUI_CS_SLOT_2(_q_performDelayedSort)
 
    GUI_CS_SLOT_1(Private, void _q_fileSystemChanged(const QString &path,
-         const QVector<QPair <QString, QFileInfo>> &un_named_arg2))
+         const QVector<QPair <QString, QFileInfo>> &data))
    GUI_CS_SLOT_2(_q_fileSystemChanged)
 
    GUI_CS_SLOT_1(Private, void _q_resolvedName(const QString &fileName, const QString &resolvedName))

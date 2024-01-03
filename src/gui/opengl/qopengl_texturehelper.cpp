@@ -418,145 +418,145 @@ QOpenGLTextureHelper::QOpenGLTextureHelper(QOpenGLContext *context)
 
 void QOpenGLTextureHelper::dsa_TextureParameteri(GLuint texture, GLenum target, GLenum bindingTarget, GLenum pname, GLint param)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureParameteriEXT(texture, target, pname, param);
 }
 
 void QOpenGLTextureHelper::dsa_TextureParameteriv(GLuint texture, GLenum target, GLenum bindingTarget, GLenum pname, const GLint *params)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureParameterivEXT(texture, target, pname, params);
 }
 
 void QOpenGLTextureHelper::dsa_TextureParameterf(GLuint texture, GLenum target, GLenum bindingTarget, GLenum pname, GLfloat param)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureParameterfEXT(texture, target, pname, param);
 }
 
 void QOpenGLTextureHelper::dsa_TextureParameterfv(GLuint texture, GLenum target, GLenum bindingTarget, GLenum pname, const GLfloat *params)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureParameterfvEXT(texture, target, pname, params);
 }
 
 void QOpenGLTextureHelper::dsa_GenerateTextureMipmap(GLuint texture, GLenum target, GLenum bindingTarget)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     GenerateTextureMipmapEXT(texture, target);
 }
 
 void QOpenGLTextureHelper::dsa_TextureStorage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureStorage3DEXT(texture, target, levels, internalFormat, width, height, depth);
 }
 
 void QOpenGLTextureHelper::dsa_TextureStorage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureStorage2DEXT(texture, target, levels, internalFormat, width, height);
 }
 
 void QOpenGLTextureHelper::dsa_TextureStorage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei levels, GLenum internalFormat, GLsizei width)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureStorage1DEXT(texture, target, levels, internalFormat, width);
 }
 
 void QOpenGLTextureHelper::dsa_TextureStorage3DMultisample(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureStorage3DMultisampleEXT(texture, target, samples, internalFormat, width, height, depth, fixedSampleLocations);
 }
 
 void QOpenGLTextureHelper::dsa_TextureStorage2DMultisample(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureStorage2DMultisampleEXT(texture, target, samples, internalFormat, width, height, fixedSampleLocations);
 }
 
 void QOpenGLTextureHelper::dsa_TextureImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureImage3DEXT(texture, target, level, internalFormat, width, height, depth, border, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureImage2DEXT(texture, target, level, internalFormat, width, height, border, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureImage1DEXT(texture, target, level, internalFormat, width, border, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureSubImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureSubImage3DEXT(texture, target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureSubImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureSubImage2DEXT(texture, target, level, xoffset, yoffset, width, height, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureSubImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid *pixels)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureSubImage1DEXT(texture, target, level, xoffset, width, format, type, pixels);
 }
 
 void QOpenGLTextureHelper::dsa_TextureImage3DMultisample(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureImage3DMultisampleNV(texture, target, samples, internalFormat, width, height, depth, fixedSampleLocations);
 }
 
 void QOpenGLTextureHelper::dsa_TextureImage2DMultisample(GLuint texture, GLenum target, GLenum bindingTarget, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     TextureImage2DMultisampleNV(texture, target, samples, internalFormat, width, height, fixedSampleLocations);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureSubImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureSubImage1DEXT(texture, target, level, xoffset, width, format, imageSize, bits);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureSubImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureSubImage2DEXT(texture, target, level, xoffset, yoffset, width, height, format, imageSize, bits);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureSubImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureSubImage3DEXT(texture, target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, bits);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureImage1D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureImage1DEXT(texture, target, level, internalFormat, width, border, imageSize, bits);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureImage2D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureImage2DEXT(texture, target, level, internalFormat, width, height, border, imageSize, bits);
 }
 
 void QOpenGLTextureHelper::dsa_CompressedTextureImage3D(GLuint texture, GLenum target, GLenum bindingTarget, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid *bits)
 {
-    Q_UNUSED(bindingTarget);
+    (void) bindingTarget;
     CompressedTextureImage3DEXT(texture, target, level, internalFormat, width, height, depth, border, imageSize, bits);
 }
 

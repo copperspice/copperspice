@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qvariant.h>
+#include <qtimezone.h>
 
 #include "qabstractdatetime_p.h"
 #include "qabstractfloat_p.h"
@@ -30,6 +31,7 @@
 #include "qboolean_p.h"
 #include "qbuiltintypes_p.h"
 #include "qdate_p.h"
+#include "qitem_p.h"
 #include "qschemadatetime_p.h"
 #include "qderivedinteger_p.h"
 #include "qdynamiccontext_p.h"
@@ -40,8 +42,6 @@
 #include "qqnamevalue_p.h"
 #include "qschematime_p.h"
 #include "qvalidationerror_p.h"
-
-#include "qitem_p.h"
 
 using namespace QPatternist;
 
@@ -150,7 +150,7 @@ Item AtomicValue::toXDM(const QVariant &value)
          return SchemaTime::fromDateTime(value.toDateTime());
 
       case QVariant::Date:
-         return Date::fromDateTime(QDateTime(value.toDate(), QTime(), Qt::UTC));
+         return Date::fromDateTime(QDateTime(value.toDate(), QTime(), QTimeZone::utc()));
 
       case QVariant::DateTime:
          return DateTime::fromDateTime(value.toDateTime());

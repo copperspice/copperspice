@@ -23,8 +23,6 @@
 
 #include "qatomiccaster_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicCaster::AtomicCaster()
@@ -34,5 +32,3 @@ AtomicCaster::AtomicCaster()
 AtomicCaster::~AtomicCaster()
 {
 }
-
-QT_END_NAMESPACE

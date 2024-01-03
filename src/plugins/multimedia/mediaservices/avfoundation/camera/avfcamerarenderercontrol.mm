@@ -43,7 +43,7 @@ public:
         : QAbstractPlanarVideoBuffer(NoHandle), m_buffer(buffer), m_mode(NotMapped)
     {
 
-        Q_UNUSED(renderer)
+        (void) renderer;
         CVPixelBufferRetain(m_buffer);
     }
 
@@ -205,8 +205,8 @@ private:
          didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
          fromConnection:(AVCaptureConnection *)connection
 {
-    Q_UNUSED(connection);
-    Q_UNUSED(captureOutput);
+    (void) connection;
+    (void) captureOutput;
 
     // NB: on iOS captureOutput/connection can be nil (when recording a video -
     // avfmediaassetwriter).

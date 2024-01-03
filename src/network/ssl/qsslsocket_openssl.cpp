@@ -117,7 +117,12 @@ class QOpenSslLocks
    QRecursiveMutex **locks;
 };
 
-Q_GLOBAL_STATIC(QOpenSslLocks, openssl_locks)
+static QOpenSslLocks *openssl_locks()
+{
+   static QOpenSslLocks retval;
+   return &retval;
+}
+
 #endif
 
 QString QSslSocketBackendPrivate::getErrorsFromOpenSsl()
@@ -243,7 +248,12 @@ struct QSslErrorList {
    QMutex mutex;
    QList<QPair<int, int> > errors;
 };
-Q_GLOBAL_STATIC(QSslErrorList, _q_sslErrorList)
+
+static QSslErrorList *_q_sslErrorList()
+{
+   static QSslErrorList retval;
+   return &retval;
+}
 
 int q_X509Callback(int ok, X509_STORE_CTX *ctx)
 {
@@ -1465,8 +1475,8 @@ void QSslSocketBackendPrivate::fetchCaRootForCert(const QSslCertificate &cert)
 
    QWindowsCaRootFetcher *fetcher = new QWindowsCaRootFetcher(cert, mode);
 
-   QObject::connect(fetcher, SIGNAL(finished(QSslCertificate, QSslCertificate)),
-         q, SLOT(_q_caRootLoaded(QSslCertificate, QSslCertificate)), Qt::QueuedConnection);
+   QObject::connect(fetcher, &QWindowsCaRootFetcher::finished,
+         q, &QSslSocket::_q_caRootLoaded, Qt::QueuedConnection);
 
    QMetaObject::invokeMethod(fetcher, "start", Qt::QueuedConnection);
    pauseSocketNotifiers(q);
@@ -1489,6 +1499,7 @@ void QSslSocketBackendPrivate::_q_caRootLoaded(QSslCertificate cert, QSslCertifi
 
       //Remove the broken chain ssl errors (as chain is verified by windows)
       for (int i = sslErrors.count() - 1; i >= 0; --i) {
+
          if (sslErrors.at(i).certificate() == cert) {
             switch (sslErrors.at(i).error()) {
                case QSslError::UnableToGetLocalIssuerCertificate:
@@ -1536,16 +1547,23 @@ class QWindowsCaRootFetcherThread : public QThread
       wait(15500); // worst case, a running request can block for 15 seconds
    }
 };
-Q_GLOBAL_STATIC(QWindowsCaRootFetcherThread, windowsCaRootFetcherThread);
+
+static QWindowsCaRootFetcherThread *windowsCaRootFetcherThread()
+{
+   static QWindowsCaRootFetcherThread retval;
+   return &retval;
+}
 
 QWindowsCaRootFetcher::QWindowsCaRootFetcher(const QSslCertificate &certificate, QSslSocket::SslMode sslMode)
    : cert(certificate), mode(sslMode)
 {
    moveToThread(windowsCaRootFetcherThread());
 }
+
 QWindowsCaRootFetcher::~QWindowsCaRootFetcher()
 {
 }
+
 void QWindowsCaRootFetcher::start()
 {
    QByteArray der = cert.toDer();
@@ -1662,6 +1680,7 @@ void QSslSocketBackendPrivate::disconnectFromHost()
          transmit();
       }
    }
+
    plainSocket->disconnectFromHost();
 }
 
@@ -1725,6 +1744,7 @@ QSsl::SslProtocol QSslSocketBackendPrivate::sessionProtocol() const
 
    return QSsl::UnknownProtocol;
 }
+
 void QSslSocketBackendPrivate::continueHandshake()
 {
    Q_Q(QSslSocket);

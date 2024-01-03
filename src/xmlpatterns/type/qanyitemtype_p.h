@@ -26,8 +26,6 @@
 
 #include <qatomictype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class AnyItemType : public ItemType
@@ -73,8 +71,7 @@ class AnyItemType : public ItemType
    friend class BuiltinTypes;
    AnyItemType();
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

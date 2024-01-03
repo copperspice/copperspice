@@ -29,8 +29,6 @@
 #include <qpatternistlocale_p.h>
 #include <qvariablereference_p.h>
 
-QT_BEGIN_NAMESPACE
-
 template<typename T> class QStack;
 
 namespace QPatternist {
@@ -133,7 +131,5 @@ static inline QString formatKeyword(const VariableDeclaration::Ptr &var,
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

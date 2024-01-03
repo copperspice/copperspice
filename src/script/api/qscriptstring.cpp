@@ -66,9 +66,6 @@ QScriptString::~QScriptString()
    }
 }
 
-/*!
-  Assigns the \a other value to this QScriptString.
-*/
 QScriptString &QScriptString::operator=(const QScriptString &other)
 {
    if (d_func() && d_func()->engine && (d_func()->ref.load() == 1) &&
@@ -87,19 +84,11 @@ QScriptString &QScriptString::operator=(const QScriptString &other)
    return *this;
 }
 
-/*!
-  Returns true if this QScriptString is valid; otherwise
-  returns false.
-*/
 bool QScriptString::isValid() const
 {
    return QScriptStringPrivate::isValid(*this);
 }
 
-/*!
-  Returns true if this QScriptString is equal to \a other;
-  otherwise returns false.
-*/
 bool QScriptString::operator==(const QScriptString &other) const
 {
    Q_D(const QScriptString);
@@ -109,24 +98,11 @@ bool QScriptString::operator==(const QScriptString &other) const
    return d->identifier == other.d_func()->identifier;
 }
 
-/*!
-  Returns true if this QScriptString is not equal to \a other;
-  otherwise returns false.
-*/
 bool QScriptString::operator!=(const QScriptString &other) const
 {
    return !operator==(other);
 }
 
-/*!
-  \since 4.6
-
-  Attempts to convert this QScriptString to a QtScript array index,
-  and returns the result.
-
-  If a conversion error occurs, *\a{ok} is set to false; otherwise
-  *\a{ok} is set to true.
-*/
 quint32 QScriptString::toArrayIndex(bool *ok) const
 {
    Q_D(const QScriptString);
@@ -145,12 +121,6 @@ quint32 QScriptString::toArrayIndex(bool *ok) const
    return result;
 }
 
-/*!
-  Returns the string that this QScriptString represents, or a
-  null string if this QScriptString is not valid.
-
-  \sa isValid()
-*/
 QString QScriptString::toString() const
 {
    Q_D(const QScriptString);
@@ -160,12 +130,6 @@ QString QScriptString::toString() const
    return d->identifier.ustring();
 }
 
-/*!
-  Returns the string that this QScriptString represents, or a
-  null string if this QScriptString is not valid.
-
-  \sa toString()
-*/
 QScriptString::operator QString() const
 {
    return toString();

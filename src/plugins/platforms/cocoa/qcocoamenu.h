@@ -57,7 +57,7 @@ class QCocoaMenu : public QPlatformMenu, public QCocoaMenuObject
    void propagateEnabledState(bool enabled);
 
    void setIcon(const QIcon &icon) override {
-      Q_UNUSED(icon)
+      (void) icon;
    }
 
    void setText(const QString &text) override;

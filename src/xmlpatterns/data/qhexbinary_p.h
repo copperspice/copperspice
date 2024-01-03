@@ -26,8 +26,6 @@
 
 #include <qbase64binary_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class HexBinary : public Base64Binary
 {
@@ -57,7 +55,5 @@ class HexBinary : public Base64Binary
    static inline qint8 fromHex(const QChar &c);
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

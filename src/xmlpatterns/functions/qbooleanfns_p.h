@@ -26,8 +26,6 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class TrueFN : public FunctionCall
@@ -48,8 +46,7 @@ class NotFN : public FunctionCall
    bool evaluateEBV(const DynamicContext::Ptr &context) const override;
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

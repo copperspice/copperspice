@@ -26,8 +26,6 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CurrentItemStore : public SingleContainer
@@ -56,8 +54,7 @@ class CurrentItemStore : public SingleContainer
    static inline StaticContext::Ptr newStaticContext(const StaticContext::Ptr &context);
    inline DynamicContext::Ptr createContext(const DynamicContext::Ptr &old) const;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

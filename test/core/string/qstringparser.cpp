@@ -65,6 +65,21 @@ TEST_CASE("QStringParser formatArg_int", "[qstringparser]")
    }
 }
 
+TEST_CASE("QStringParser formatArg16", "[qstringparser]")
+{
+   QString16 str = "Value %1";
+
+   SECTION ("formatArg a") {
+      str = QStringParser::formatArg(str, 5400, 0, 16);
+      REQUIRE(str == "Value 1518");
+   }
+
+   SECTION ("formatArg b") {
+      str = QStringParser::formatArg(str, 3.14, 0);
+      REQUIRE(str == "Value 3.14");
+   }
+}
+
 TEST_CASE("QStringParser number_a", "[qstringparser]")
 {
    QString str;

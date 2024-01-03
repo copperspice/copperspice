@@ -473,7 +473,7 @@ bool QPpmHandler::canRead()
 bool QPpmHandler::canRead(QIODevice *device, QByteArray *subType)
 {
    if (!device) {
-      qWarning("QPpmHandler::canRead() called with no device");
+      qWarning("QPpmHandler::canRead() No device");
       return false;
    }
 

@@ -26,8 +26,6 @@
 
 #include <qexpression_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class TripleContainer : public Expression
@@ -45,8 +43,7 @@ class TripleContainer : public Expression
    Expression::Ptr m_operand2;
    Expression::Ptr m_operand3;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

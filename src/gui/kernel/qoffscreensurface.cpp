@@ -72,7 +72,7 @@ QOffscreenSurface::QOffscreenSurface(QScreen *targetScreen)
    //the screen list is populated.
    Q_ASSERT(d->screen);
 
-   connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+   connect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
 }
 
 QOffscreenSurface::~QOffscreenSurface()
@@ -108,11 +108,13 @@ void QOffscreenSurface::create()
    Q_D(QOffscreenSurface);
    if (!d->platformOffscreenSurface && !d->offscreenWindow) {
       d->platformOffscreenSurface = QGuiApplicationPrivate::platformIntegration()->createPlatformOffscreenSurface(this);
+
       // No platform offscreen surface, fallback to an invisible window
       if (!d->platformOffscreenSurface) {
          if (QThread::currentThread() != qGuiApp->thread()) {
-            qWarning("Attempting to create QWindow-based QOffscreenSurface outside the gui thread. Expect failures.");
+            qWarning("QOffscreenSurface::create() Attempting to create an off screen surface outside of the GUI thread");
          }
+
          d->offscreenWindow = new QWindow(d->screen);
          d->offscreenWindow->setObjectName(QLatin1String("QOffscreenSurface"));
          // Remove this window from the global list since we do not want it to be destroyed when closing the app.
@@ -252,15 +254,19 @@ void QOffscreenSurface::setScreen(QScreen *newScreen)
 
    if (newScreen != d->screen) {
       const bool wasCreated = d->platformOffscreenSurface != nullptr || d->offscreenWindow != nullptr;
+
       if (wasCreated) {
          destroy();
       }
+
       if (d->screen) {
-         disconnect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+         disconnect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
       }
+
       d->screen = newScreen;
       if (newScreen) {
-         connect(d->screen, SIGNAL(destroyed(QObject *)), this, SLOT(screenDestroyed(QObject *)));
+         connect(d->screen, &QScreen::destroyed, this, &QOffscreenSurface::screenDestroyed);
+
          if (wasCreated) {
             create();
          }

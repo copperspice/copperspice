@@ -24,14 +24,14 @@
 #ifndef QUserFunction_P_H
 #define QUserFunction_P_H
 
-template<typename T> class QList;
+template<typename T>
+class QList;
 
 #include <QSharedData>
+
 #include <qexpression_p.h>
 #include <qfunctionsignature_p.h>
 #include <qvariabledeclaration_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 class UserFunction : public QSharedData
@@ -85,7 +85,5 @@ void UserFunction::setBody(const Expression::Ptr &newBody)
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

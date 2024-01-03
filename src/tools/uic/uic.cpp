@@ -38,11 +38,10 @@
 #include <javawritedeclaration.h>
 #endif
 
-#include <qxmlstreamreader.h>
 #include <qfileinfo.h>
 #include <qregularexpression.h>
 #include <qtextstream.h>
-#include <qdatetime.h>
+#include <qxmlstreamreader.h>
 
 Uic::Uic(Driver *d)
    : drv(d), out(d->output()), opt(d->option()), externalPix(true)

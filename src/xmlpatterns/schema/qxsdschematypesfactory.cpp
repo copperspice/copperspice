@@ -31,8 +31,6 @@
 #include "qxsdschematoken_p.h"
 #include "qxsdsimpletype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaTypesFactory::XsdSchemaTypesFactory(const NamePool::Ptr &namePool)
@@ -107,4 +105,3 @@ SchemaType::Hash XsdSchemaTypesFactory::types() const
    return m_types;
 }
 
-QT_END_NAMESPACE

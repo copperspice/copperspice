@@ -31,7 +31,7 @@ const int QNetworkReplyPrivate::progressSignalInterval = 100;
 QNetworkReplyPrivate::QNetworkReplyPrivate()
    : readBufferMaxSize(0), emitAllUploadProgressSignals(false),
      operation(QNetworkAccessManager::UnknownOperation),
-     errorCode(QNetworkReply::NoError), isFinished(false)
+     m_errorCode(QNetworkReply::NoError), isFinished(false)
 {
    // set the default attribute values
    attributes.insert(QNetworkRequest::ConnectionEncryptedAttribute, false);
@@ -91,7 +91,7 @@ QNetworkAccessManager::Operation QNetworkReply::operation() const
 
 QNetworkReply::NetworkError QNetworkReply::error() const
 {
-   return d_func()->errorCode;
+   return d_func()->m_errorCode;
 }
 
 bool QNetworkReply::isFinished() const
@@ -213,7 +213,7 @@ void QNetworkReply::setRequest(const QNetworkRequest &request)
 void QNetworkReply::setError(NetworkError errorCode, const QString &errorString)
 {
    Q_D(QNetworkReply);
-   d->errorCode = errorCode;
+   d->m_errorCode = errorCode;
    setErrorString(errorString); // in QIODevice
 }
 
@@ -251,4 +251,3 @@ void QNetworkReply::setAttribute(QNetworkRequest::Attribute code, const QVariant
       d->attributes.remove(code);
    }
 }
-

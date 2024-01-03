@@ -860,8 +860,9 @@ static ColorData parseColorValue(QCss::Value v)
       return ColorData();
    }
 
-   if ((lst.at(0).compare(QLatin1String("palette"), Qt::CaseInsensitive)) == 0) {
+   if ((lst.at(0).compare("palette", Qt::CaseInsensitive)) == 0) {
       int role = findKnownValue(lst.at(1).trimmed(), values, NumKnownValues);
+
       if (role >= Value_FirstColorRole && role <= Value_LastColorRole) {
          return (QPalette::ColorRole)(role - Value_FirstColorRole);
       }
@@ -869,16 +870,16 @@ static ColorData parseColorValue(QCss::Value v)
       return ColorData();
    }
 
-   bool rgb  = lst.at(0).startsWith(QLatin1String("rgb"));
-   bool rgba = lst.at(0).startsWith(QLatin1String("rgba"));
+   bool rgb  = lst.at(0).startsWith("rgb");
+   bool rgba = lst.at(0).startsWith("rgba");
 
    Parser p(lst.at(1));
-   if (!p.testExpr()) {
+   if (! p.testExpr()) {
       return ColorData();
    }
 
    QVector<QCss::Value> colorDigits;
-   if (!p.parseExpr(&colorDigits)) {
+   if (! p.parseExpr(&colorDigits)) {
       return ColorData();
    }
 
@@ -943,7 +944,8 @@ static BrushData parseBrushValue(const QCss::Value &v, const QPalette &pal)
    }
 
    QStringList gradFuncs;
-   gradFuncs << QLatin1String("qlineargradient") << QLatin1String("qradialgradient") << QLatin1String("qconicalgradient") << "qgradient";
+   gradFuncs << "qlineargradient" << "qradialgradient" << "qconicalgradient" << "qgradient";
+
    int gradType = -1;
 
    if ((gradType = gradFuncs.indexOf(lst.at(0).toLower())) == -1) {
@@ -954,32 +956,40 @@ static BrushData parseBrushValue(const QCss::Value &v, const QPalette &pal)
    QVector<QPair<qreal, QColor>> stops;
 
    int spread = -1;
+
    QStringList spreads;
-   spreads << QLatin1String("pad") << QLatin1String("reflect") << QLatin1String("repeat");
+   spreads << "pad" << "reflect" << "repeat";
 
    bool dependsOnThePalette = false;
    Parser parser(lst.at(1));
+
    while (parser.hasNext()) {
       parser.skipSpace();
       if (!parser.test(IDENT)) {
          return BrushData();
       }
+
       QString attr = parser.lexem();
       parser.skipSpace();
-      if (!parser.test(COLON)) {
+
+      if (! parser.test(COLON)) {
          return BrushData();
       }
+
       parser.skipSpace();
-      if (attr.compare(QLatin1String("stop"), Qt::CaseInsensitive) == 0) {
+
+      if (attr.compare("stop", Qt::CaseInsensitive) == 0) {
          QCss::Value stop, color;
          parser.next();
-         if (!parser.parseTerm(&stop)) {
+
+         if (! parser.parseTerm(&stop)) {
             return BrushData();
          }
 
          parser.skipSpace();
          parser.next();
-         if (!parser.parseTerm(&color)) {
+
+         if (! parser.parseTerm(&color)) {
             return BrushData();
          }
 
@@ -994,59 +1004,70 @@ static BrushData parseBrushValue(const QCss::Value &v, const QPalette &pal)
          parser.next();
          QCss::Value value;
          (void)parser.parseTerm(&value);
-         if (attr.compare(QLatin1String("spread"), Qt::CaseInsensitive) == 0) {
+
+         if (attr.compare("spread", Qt::CaseInsensitive) == 0) {
             spread = spreads.indexOf(value.variant.toString());
          } else {
             vars[attr] = value.variant.toReal();
          }
       }
+
       parser.skipSpace();
-      (void)parser.test(COMMA);
+      (void)parser.test(TokenType::COMMA);
    }
 
    if (gradType == 0) {
-      QLinearGradient lg(vars.value(QLatin1String("x1")), vars.value(QLatin1String("y1")),
-         vars.value(QLatin1String("x2")), vars.value(QLatin1String("y2")));
+      QLinearGradient lg(vars.value("x1"), vars.value("y1"), vars.value("x2"), vars.value("y2"));
+
       lg.setCoordinateMode(QGradient::ObjectBoundingMode);
       lg.setStops(stops);
+
       if (spread != -1) {
          lg.setSpread(QGradient::Spread(spread));
       }
+
       BrushData bd = QBrush(lg);
       if (dependsOnThePalette) {
          bd.type = BrushData::DependsOnThePalette;
       }
+
       return bd;
    }
 
    if (gradType == 1) {
-      QRadialGradient rg(vars.value(QLatin1String("cx")), vars.value(QLatin1String("cy")),
-         vars.value(QLatin1String("radius")), vars.value(QLatin1String("fx")),
-         vars.value(QLatin1String("fy")));
+      QRadialGradient rg(vars.value("cx"), vars.value("cy"),
+         vars.value("radius"), vars.value("fx"), vars.value("fy"));
+
       rg.setCoordinateMode(QGradient::ObjectBoundingMode);
       rg.setStops(stops);
+
       if (spread != -1) {
          rg.setSpread(QGradient::Spread(spread));
       }
+
       BrushData bd = QBrush(rg);
       if (dependsOnThePalette) {
          bd.type = BrushData::DependsOnThePalette;
       }
+
       return bd;
    }
 
    if (gradType == 2) {
-      QConicalGradient cg(vars.value(QLatin1String("cx")), vars.value(QLatin1String("cy")),
-         vars.value(QLatin1String("angle")));
+      QConicalGradient cg(vars.value("cx"), vars.value("cy"), vars.value("angle"));
+
       cg.setCoordinateMode(QGradient::ObjectBoundingMode);
       cg.setStops(stops);
+
       if (spread != -1) {
          cg.setSpread(QGradient::Spread(spread));
       }
+
       BrushData bd = QBrush(cg);
       if (dependsOnThePalette) {
          bd.type = BrushData::DependsOnThePalette;
       }
+
       return bd;
    }
 
@@ -1376,10 +1397,9 @@ static bool setFontWeightFromValue(const QCss::Value &value, QFont *font)
    return true;
 }
 
-/** \internal
- * parse the font family from the values (starting from index \a start)
- * and set it the \a font
- * \returns true if a family was extracted.
+/** internal
+ * parse the font family from the values (starting from index start) and set it the font
+ * returns true if a family was extracted.
  */
 static bool setFontFamilyFromValues(const QVector<QCss::Value> &values, QFont *font, int start = 0)
 {
@@ -1387,25 +1407,32 @@ static bool setFontFamilyFromValues(const QVector<QCss::Value> &values, QFont *f
    bool shouldAddSpace = false;
    for (int i = start; i < values.count(); ++i) {
       const QCss::Value &v = values.at(i);
+
       if (v.type == Value::TermOperatorComma) {
-         family += QLatin1Char(',');
+         family += ',';
          shouldAddSpace = false;
          continue;
       }
+
       const QString str = v.variant.toString();
       if (str.isEmpty()) {
          break;
       }
+
       if (shouldAddSpace) {
-         family += QLatin1Char(' ');
+         family += ' ';
       }
+
       family += str;
       shouldAddSpace = true;
    }
+
    if (family.isEmpty()) {
       return false;
    }
+
    font->setFamily(family);
+
    return true;
 }
 
@@ -1828,7 +1855,8 @@ QRect Declaration::rectValue() const
       return QRect();
    }
 
-   QStringList args = func[1].split(QLatin1Char(' '), QStringParser::SkipEmptyParts);
+   QStringList args = func[1].split(' ', QStringParser::SkipEmptyParts);
+
    if (args.count() != 4) {
       return QRect();
    }
@@ -2227,7 +2255,7 @@ bool StyleSelector::nodeNameEquals(NodePtr node, const QString &nodeName) const
 
 QStringList StyleSelector::nodeIds(NodePtr node) const
 {
-   return QStringList(attribute(node, QLatin1String("id")));
+   return QStringList(attribute(node, "id"));
 }
 
 bool StyleSelector::selectorMatches(const Selector &selector, NodePtr node)
@@ -2308,29 +2336,26 @@ bool StyleSelector::basicSelectorMatches(const BasicSelector &sel, NodePtr node)
 
          if (a.valueMatchCriterium == QCss::AttributeSelector::MatchContains) {
 
-            QStringList lst = attrValue.split(QLatin1Char(' '));
-            if (!lst.contains(a.value)) {
+            QStringList lst = attrValue.split(' ');
+            if (! lst.contains(a.value)) {
                return false;
             }
+
          } else if (
             (a.valueMatchCriterium == QCss::AttributeSelector::MatchEqual
-               && attrValue != a.value)
-            ||
+               && attrValue != a.value) ||
             (a.valueMatchCriterium == QCss::AttributeSelector::MatchBeginsWith
-               && !attrValue.startsWith(a.value))
-         ) {
+               && ! attrValue.startsWith(a.value))) {
             return false;
          }
       }
    }
 
-   if (!sel.elementName.isEmpty()
-      && !nodeNameEquals(node, sel.elementName)) {
+   if (! sel.elementName.isEmpty() && ! nodeNameEquals(node, sel.elementName)) {
       return false;
    }
 
-   if (!sel.ids.isEmpty()
-      && sel.ids != nodeIds(node)) {
+   if (! sel.ids.isEmpty() && sel.ids != nodeIds(node)) {
       return false;
    }
 
@@ -2377,7 +2402,7 @@ QVector<StyleRule> StyleSelector::styleRulesForNode(NodePtr node)
          matchRule(node, styleSheet.styleRules.at(i), styleSheet.origin, styleSheet.depth, &weightedRules);
       }
 
-      if (!styleSheet.idIndex.isEmpty()) {
+      if (! styleSheet.idIndex.isEmpty()) {
          QStringList ids = nodeIds(node);
 
          for (int i = 0; i < ids.count(); i++) {
@@ -2392,6 +2417,7 @@ QVector<StyleRule> StyleSelector::styleRulesForNode(NodePtr node)
       }
       if (! styleSheet.nameIndex.isEmpty()) {
          QStringList names = nodeNames(node);
+
          for (int i = 0; i < names.count(); i++) {
             QString name = names.at(i);
 
@@ -2406,7 +2432,7 @@ QVector<StyleRule> StyleSelector::styleRulesForNode(NodePtr node)
             }
          }
       }
-      if (!medium.isEmpty()) {
+      if (! medium.isEmpty()) {
          for (int i = 0; i < styleSheet.mediaRules.count(); ++i) {
             if (styleSheet.mediaRules.at(i).media.contains(medium, Qt::CaseInsensitive)) {
                for (int j = 0; j < styleSheet.mediaRules.at(i).styleRules.count(); ++j) {
@@ -2470,16 +2496,18 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
       *hasEscapeSequences = false;
    }
 
-   int i = 0;
-   while (i < output.size()) {
-      if (output.at(i) == QLatin1Char('\\')) {
+   QString::const_iterator i = output.begin();
+
+   while (i != output.end()) {
+
+      if ((*i) == '\\') {
          ++i;
 
          // test for unicode hex escape
          int hexCount = 0;
-         const int hexStart = i;
+         const QString::const_iterator hexStart = i;
 
-         while (i < output.size() && isHexDigit(output.at(i).toLatin1()) && hexCount < 7) {
+         while (i != output.end() && isHexDigit(i->toLatin1()) && hexCount < 7) {
             ++hexCount;
             ++i;
          }
@@ -2492,33 +2520,38 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
          }
 
          hexCount = qMin(hexCount, 6);
-         bool ok = false;
+         bool ok  = false;
          ushort code = output.mid(hexStart, hexCount).toInteger<ushort>(&ok, 16);
 
          if (ok) {
-            output.replace(hexStart - 1, hexCount + 1, QChar(code));
-            i = hexStart;
-         } else {
-            i = hexStart;
+            output.replace(hexStart - 1, i + 1, QChar(code));
          }
+
+         i = hexStart;
 
       } else {
          ++i;
       }
    }
+
    return output;
 }
 
 int QCssScanner_Generated::handleCommentStart()
 {
-   while (pos < input.size() - 1) {
-      if (input.at(pos) == '*' && input.at(pos + 1) == '/') {
-         pos += 2;
-         break;
-      }
-      ++pos;
-   }
-   return S;
+  QString::const_iterator it1 = pos;
+  QString::const_iterator it2 = ++pos;
+  while (it2 != input.end()) {
+    if ((*it1 == '*') && (*it2 == '/')) {
+      pos = ++it2;
+      break;
+    }
+
+    it1 = it2;
+    ++it2;
+  }
+
+  return S;
 }
 
 void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
@@ -2530,9 +2563,7 @@ void Scanner::scan(const QString &preprocessedInput, QVector<Symbol> *symbols)
 
    while (tok != -1) {
       sym.token = static_cast<QCss::TokenType>(tok);
-      sym.text = scanner.input;
-      sym.start = scanner.lexemStart;
-      sym.len = scanner.lexemLength;
+      sym.text.assign(scanner.lexemStart, scanner.lexemStart + scanner.lexemLength);
       symbols->append(sym);
       tok = scanner.lex();
    }
@@ -2542,12 +2573,29 @@ QString Symbol::lexem() const
 {
    QString result;
 
-   for (int i = 0; i < len; ++i) {
-      if (text.at(start + i) == '\\' && i < len - 1) {
-         ++i;
-      }
+   bool prevChIsBackslash = false;
 
-      result += text.at(start + i);
+   for (QChar ch : text) {
+
+      if (ch == '\\') {
+
+         if (prevChIsBackslash) {
+            result.append(ch);
+            prevChIsBackslash = false;
+
+         } else {
+            prevChIsBackslash = true;
+
+         }
+
+      } else {
+         result.append(ch);
+         prevChIsBackslash = false;
+      }
+   }
+
+   if (prevChIsBackslash) {
+      result.append('\\');
    }
 
    return result;
@@ -2568,16 +2616,20 @@ Parser::Parser()
 void Parser::init(const QString &css, bool isFile)
 {
    QString styleSheet = css;
+
    if (isFile) {
       QFile file(css);
+
       if (file.open(QFile::ReadOnly)) {
-         sourcePath = QFileInfo(styleSheet).absolutePath() + QLatin1Char('/');
+         sourcePath = QFileInfo(styleSheet).absolutePath() + '/';
          QTextStream stream(&file);
          styleSheet = stream.readAll();
+
       } else {
-         qWarning() << "QCss::Parser - Failed to load file " << css;
+         qWarning() << "QCss::Parser css file failed to open " << css;
          styleSheet.clear();
       }
+
    } else {
       sourcePath.clear();
    }
@@ -2585,8 +2637,10 @@ void Parser::init(const QString &css, bool isFile)
    hasEscapeSequences = false;
    symbols.resize(0);
    symbols.reserve(8);
+
    Scanner::scan(Scanner::preprocess(styleSheet, &hasEscapeSequences), &symbols);
-   index = 0;
+
+   index      = 0;
    errorIndex = -1;
 }
 
@@ -2594,63 +2648,78 @@ bool Parser::parse(StyleSheet *styleSheet, Qt::CaseSensitivity nameCaseSensitivi
 {
    if (testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("charset")))) {
 
-      while (test(S) || test(CDO) || test(CDC)) {
+      while (test(S) || test(TokenType::CDO) || test(TokenType::CDC)) {
          // do nothing
       }
 
-      if (!next(STRING)) {
+      if (! next(TokenType::STRING)) {
          return false;
       }
 
-      if (!next(SEMICOLON)) {
+      if (! next(TokenType::SEMICOLON)) {
          return false;
       }
    }
 
-   while (test(S) || test(CDO) || test(CDC)) {
+   while (test(S) || test(TokenType::CDO) || test(TokenType::CDC)) {
       // do nothing
    }
 
    while (testImport()) {
       ImportRule rule;
 
-      if (!parseImport(&rule)) {
+      if (! parseImport(&rule)) {
          return false;
       }
 
       styleSheet->importRules.append(rule);
-      while (test(S) || test(CDO) || test(CDC)) {}
+      while (test(TokenType::S) || test(TokenType::CDO) || test(TokenType::CDC)) {}
    }
 
    do {
       if (testMedia()) {
          MediaRule rule;
-         if (!parseMedia(&rule)) {
+         if (! parseMedia(&rule)) {
             return false;
          }
+
          styleSheet->mediaRules.append(rule);
+
       } else if (testPage()) {
          PageRule rule;
+
          if (!parsePage(&rule)) {
             return false;
          }
+
          styleSheet->pageRules.append(rule);
+
       } else if (testRuleset()) {
          StyleRule rule;
+
          if (!parseRuleset(&rule)) {
             return false;
          }
+
          styleSheet->styleRules.append(rule);
-      } else if (test(ATKEYWORD_SYM)) {
-         if (!until(RBRACE)) {
+
+      } else if (test(TokenType::ATKEYWORD_SYM)) {
+         if (! until(TokenType::RBRACE)) {
             return false;
          }
+
       } else if (hasNext()) {
          return false;
       }
-      while (test(S) || test(CDO) || test(CDC)) {}
+
+      while (test(TokenType::S) || test(TokenType::CDO) || test(TokenType::CDC)) {
+         // do nothing
+      }
+
    } while (hasNext());
+
    styleSheet->buildIndexes(nameCaseSensitivity);
+
    return true;
 }
 
@@ -2659,15 +2728,16 @@ Symbol Parser::errorSymbol()
    if (errorIndex == -1) {
       return Symbol();
    }
+
    return symbols.at(errorIndex);
 }
 
 static inline void removeOptionalQuotes(QString *str)
 {
-   if (!str->startsWith(QLatin1Char('\''))
-      && !str->startsWith(QLatin1Char('\"'))) {
+   if (! str->startsWith('\'') && ! str->startsWith('\"')) {
       return;
    }
+
    str->remove(0, 1);
    str->chop(1);
 }
@@ -2676,31 +2746,34 @@ bool Parser::parseImport(ImportRule *importRule)
 {
    skipSpace();
 
-   if (test(STRING)) {
+   if (test(TokenType::STRING)) {
       importRule->href = lexem();
+
    } else {
-      if (!testAndParseUri(&importRule->href)) {
+      if (! testAndParseUri(&importRule->href)) {
          return false;
       }
    }
+
    removeOptionalQuotes(&importRule->href);
 
    skipSpace();
 
    if (testMedium()) {
-      if (!parseMedium(&importRule->media)) {
+      if (! parseMedium(&importRule->media)) {
          return false;
       }
 
-      while (test(COMMA)) {
+      while (test(TokenType::COMMA)) {
          skipSpace();
-         if (!parseNextMedium(&importRule->media)) {
+
+         if (! parseNextMedium(&importRule->media)) {
             return false;
          }
       }
    }
 
-   if (!next(SEMICOLON)) {
+   if (! next(TokenType::SEMICOLON)) {
       return false;
    }
 
@@ -2715,25 +2788,30 @@ bool Parser::parseMedia(MediaRule *mediaRule)
       if (!parseNextMedium(&mediaRule->media)) {
          return false;
       }
-   } while (test(COMMA));
 
-   if (!next(LBRACE)) {
+   } while (test(TokenType::COMMA));
+
+   if (! next(TokenType::LBRACE)) {
       return false;
    }
    skipSpace();
 
    while (testRuleset()) {
       StyleRule rule;
-      if (!parseRuleset(&rule)) {
+
+      if (! parseRuleset(&rule)) {
          return false;
       }
+
       mediaRule->styleRules.append(rule);
    }
 
-   if (!next(RBRACE)) {
+   if (! next(TokenType::RBRACE)) {
       return false;
    }
+
    skipSpace();
+
    return true;
 }
 
@@ -2741,6 +2819,7 @@ bool Parser::parseMedium(QStringList *media)
 {
    media->append(lexem());
    skipSpace();
+
    return true;
 }
 
@@ -2748,40 +2827,48 @@ bool Parser::parsePage(PageRule *pageRule)
 {
    skipSpace();
 
-   if (testPseudoPage())
-      if (!parsePseudoPage(&pageRule->selector)) {
+   if (testPseudoPage()) {
+      if (! parsePseudoPage(&pageRule->selector)) {
          return false;
       }
+   }
 
    skipSpace();
-   if (!next(LBRACE)) {
+   if (! next(TokenType::LBRACE)) {
       return false;
    }
 
    do {
       skipSpace();
       Declaration decl;
-      if (!parseNextDeclaration(&decl)) {
+
+      if (! parseNextDeclaration(&decl)) {
          return false;
       }
-      if (!decl.isEmpty()) {
+
+      if (! decl.isEmpty()) {
          pageRule->declarations.append(decl);
       }
-   } while (test(SEMICOLON));
 
-   if (!next(RBRACE)) {
+   } while (test(TokenType::SEMICOLON));
+
+   if (! next(TokenType::RBRACE)) {
       return false;
    }
+
    skipSpace();
+
    return true;
 }
 
 bool Parser::parsePseudoPage(QString *selector)
 {
-   if (!next(IDENT)) {
+   if (! next(TokenType::IDENT)) {
       return false;
    }
+
    *selector = lexem();
+
    return true;
 }
 
@@ -2792,36 +2879,45 @@ bool Parser::parseNextOperator(Value *value)
    }
 
    switch (next()) {
-      case SLASH:
+      case TokenType::SLASH:
          value->type = Value::TermOperatorSlash;
          skipSpace();
          break;
-      case COMMA:
+
+      case TokenType::COMMA:
          value->type = Value::TermOperatorComma;
          skipSpace();
          break;
+
       default:
          prev();
          break;
    }
+
    return true;
 }
 
 bool Parser::parseCombinator(BasicSelector::Relation *relation)
 {
    *relation = BasicSelector::NoRelation;
-   if (lookup() == S) {
+
+   if (lookup() == TokenType::S) {
       *relation = BasicSelector::MatchNextSelectorIfAncestor;
       skipSpace();
+
    } else {
       prev();
    }
-   if (test(PLUS)) {
+
+   if (test(TokenType::PLUS)) {
       *relation = BasicSelector::MatchNextSelectorIfPreceeds;
-   } else if (test(GREATER)) {
+
+   } else if (test(TokenType::GREATER)) {
       *relation = BasicSelector::MatchNextSelectorIfParent;
    }
+
    skipSpace();
+
    return true;
 }
 
@@ -2838,22 +2934,26 @@ bool Parser::parseProperty(Declaration *decl)
 bool Parser::parseRuleset(StyleRule *styleRule)
 {
    Selector sel;
-   if (!parseSelector(&sel)) {
+   if (! parseSelector(&sel)) {
       return false;
    }
+
    styleRule->selectors.append(sel);
 
-   while (test(COMMA)) {
+   while (test(TokenType::COMMA)) {
       skipSpace();
+
       Selector sel;
-      if (!parseNextSelector(&sel)) {
+
+      if (! parseNextSelector(&sel)) {
          return false;
       }
+
       styleRule->selectors.append(sel);
    }
 
    skipSpace();
-   if (!next(LBRACE)) {
+   if (! next(TokenType::LBRACE)) {
       return false;
    }
    const int declarationStart = index;
@@ -2862,13 +2962,14 @@ bool Parser::parseRuleset(StyleRule *styleRule)
       skipSpace();
       Declaration decl;
       const int rewind = index;
-      if (!parseNextDeclaration(&decl)) {
+
+      if (! parseNextDeclaration(&decl)) {
          index = rewind;
-         const bool foundSemicolon = until(SEMICOLON);
+         const bool foundSemicolon = until(TokenType::SEMICOLON);
          const int semicolonIndex = index;
 
          index = declarationStart;
-         const bool foundRBrace = until(RBRACE);
+         const bool foundRBrace = until(TokenType::RBRACE);
 
          if (foundSemicolon && semicolonIndex < index) {
             decl = Declaration();
@@ -2878,30 +2979,36 @@ bool Parser::parseRuleset(StyleRule *styleRule)
             return foundRBrace;
          }
       }
+
       if (!decl.isEmpty()) {
          styleRule->declarations.append(decl);
       }
-   } while (test(SEMICOLON));
 
-   if (!next(RBRACE)) {
+   } while (test(TokenType::SEMICOLON));
+
+   if (! next(TokenType::RBRACE)) {
       return false;
    }
+
    skipSpace();
+
    return true;
 }
 
 bool Parser::parseSelector(Selector *sel)
 {
    BasicSelector basicSel;
-   if (!parseSimpleSelector(&basicSel)) {
+
+   if (! parseSimpleSelector(&basicSel)) {
       return false;
    }
+
    while (testCombinator()) {
-      if (!parseCombinator(&basicSel.relationToNext)) {
+      if (! parseCombinator(&basicSel.relationToNext)) {
          return false;
       }
 
-      if (!testSimpleSelector()) {
+      if (! testSimpleSelector()) {
          break;
       }
       sel->basicSelectors.append(basicSel);
@@ -2911,157 +3018,202 @@ bool Parser::parseSelector(Selector *sel)
          return false;
       }
    }
+
    sel->basicSelectors.append(basicSel);
+
    return true;
 }
 
 bool Parser::parseSimpleSelector(BasicSelector *basicSel)
 {
    int minCount = 0;
+
    if (lookupElementName()) {
-      if (!parseElementName(&basicSel->elementName)) {
+      if (! parseElementName(&basicSel->elementName)) {
          return false;
       }
+
    } else {
       prev();
       minCount = 1;
    }
+
    bool onceMore;
    int count = 0;
+
    do {
       onceMore = false;
       if (test(HASH)) {
          QString theid = lexem();
+
          // chop off leading #
          theid.remove(0, 1);
          basicSel->ids.append(theid);
          onceMore = true;
+
       } else if (testClass()) {
          onceMore = true;
+
          AttributeSelector a;
-         a.name = QLatin1String("class");
+         a.name = "class";
          a.valueMatchCriterium = AttributeSelector::MatchContains;
-         if (!parseClass(&a.value)) {
+
+         if (! parseClass(&a.value)) {
             return false;
          }
+
          basicSel->attributeSelectors.append(a);
+
       } else if (testAttrib()) {
          onceMore = true;
+
          AttributeSelector a;
-         if (!parseAttrib(&a)) {
+
+         if (! parseAttrib(&a)) {
             return false;
          }
+
          basicSel->attributeSelectors.append(a);
+
       } else if (testPseudo()) {
          onceMore = true;
          Pseudo ps;
-         if (!parsePseudo(&ps)) {
+
+         if (! parsePseudo(&ps)) {
             return false;
          }
+
          basicSel->pseudos.append(ps);
       }
+
       if (onceMore) {
          ++count;
       }
+
    } while (onceMore);
+
    return count >= minCount;
 }
 
 bool Parser::parseClass(QString *name)
 {
-   if (!next(IDENT)) {
+   if (! next(TokenType::IDENT)) {
       return false;
    }
+
    *name = lexem();
+
    return true;
 }
 
 bool Parser::parseElementName(QString *name)
 {
    switch (lookup()) {
-      case STAR:
+      case TokenType::STAR:
          name->clear();
          break;
-      case IDENT:
+
+      case TokenType::IDENT:
          *name = lexem();
          break;
+
       default:
          return false;
    }
+
    return true;
 }
 
 bool Parser::parseAttrib(AttributeSelector *attr)
 {
    skipSpace();
-   if (!next(IDENT)) {
+
+   if (! next(TokenType::IDENT)) {
       return false;
    }
+
    attr->name = lexem();
    skipSpace();
 
-   if (test(EQUAL)) {
+   if (test(TokenType::EQUAL)) {
       attr->valueMatchCriterium = AttributeSelector::MatchEqual;
-   } else if (test(INCLUDES)) {
+
+   } else if (test(TokenType::INCLUDES)) {
       attr->valueMatchCriterium = AttributeSelector::MatchContains;
-   } else if (test(DASHMATCH)) {
+
+   } else if (test(TokenType::DASHMATCH)) {
       attr->valueMatchCriterium = AttributeSelector::MatchBeginsWith;
+
    } else {
-      return next(RBRACKET);
+      return next(TokenType::RBRACKET);
    }
 
    skipSpace();
 
-   if (!test(IDENT) && !test(STRING)) {
+   if (! test(TokenType::IDENT) && ! test(TokenType::STRING)) {
       return false;
    }
    attr->value = unquotedLexem();
 
    skipSpace();
-   return next(RBRACKET);
+
+   return next(TokenType::RBRACKET);
 }
 
 bool Parser::parsePseudo(Pseudo *pseudo)
 {
-   (void)test(COLON);
-   pseudo->negated = test(EXCLAMATION_SYM);
-   if (test(IDENT)) {
+   (void) test(TokenType::COLON);
+
+   pseudo->negated = test(TokenType::EXCLAMATION_SYM);
+
+   if (test(TokenType::IDENT)) {
       pseudo->name = lexem();
       pseudo->type = static_cast<quint64>(findKnownValue(pseudo->name, pseudos, NumPseudos));
       return true;
    }
-   if (!next(FUNCTION)) {
+
+   if (! next(TokenType::FUNCTION)) {
       return false;
    }
+
    pseudo->function = lexem();
+
    // chop off trailing parenthesis
    pseudo->function.chop(1);
    skipSpace();
-   if (!test(IDENT)) {
+
+   if (! test(IDENT)) {
       return false;
    }
+
    pseudo->name = lexem();
    skipSpace();
+
    return next(RPAREN);
 }
 
 bool Parser::parseNextDeclaration(Declaration *decl)
 {
-   if (!testProperty()) {
-      return true;   // not an error!
+   if (! testProperty()) {
+      return true;   // not an error
    }
-   if (!parseProperty(decl)) {
+
+   if (! parseProperty(decl)) {
       return false;
    }
-   if (!next(COLON)) {
+
+   if (!next(TokenType::COLON)) {
       return false;
    }
+
    skipSpace();
-   if (!parseNextExpr(&decl->d->values)) {
+
+   if (! parseNextExpr(&decl->d->values)) {
       return false;
    }
+
    if (testPrio())
-      if (!parsePrio(decl)) {
+      if (! parsePrio(decl)) {
          return false;
       }
    return true;
@@ -3070,18 +3222,22 @@ bool Parser::parseNextDeclaration(Declaration *decl)
 bool Parser::testPrio()
 {
    const int rewind = index;
-   if (!test(EXCLAMATION_SYM)) {
+   if (! test(TokenType::EXCLAMATION_SYM)) {
       return false;
    }
+
    skipSpace();
+
    if (!test(IDENT)) {
       index = rewind;
       return false;
    }
-   if (lexem().compare(QLatin1String("important"), Qt::CaseInsensitive) != 0) {
+
+   if (lexem().compare("important", Qt::CaseInsensitive) != 0) {
       index = rewind;
       return false;
    }
+
    return true;
 }
 
@@ -3089,135 +3245,166 @@ bool Parser::parsePrio(Declaration *declaration)
 {
    declaration->d->important = true;
    skipSpace();
+
    return true;
 }
 
 bool Parser::parseExpr(QVector<Value> *values)
 {
    Value val;
-   if (!parseTerm(&val)) {
+   if (! parseTerm(&val)) {
       return false;
    }
+
    values->append(val);
    bool onceMore;
+
    do {
       onceMore = false;
       val = Value();
-      if (!parseNextOperator(&val)) {
+
+      if (! parseNextOperator(&val)) {
          return false;
       }
+
       if (val.type != QCss::Value::Unknown) {
          values->append(val);
       }
+
       if (testTerm()) {
          onceMore = true;
          val = Value();
+
          if (!parseTerm(&val)) {
             return false;
          }
+
          values->append(val);
       }
+
    } while (onceMore);
+
    return true;
 }
 
 bool Parser::testTerm()
 {
-   return test(PLUS) || test(MINUS)
-      || test(NUMBER)
-      || test(PERCENTAGE)
-      || test(LENGTH)
-      || test(STRING)
-      || test(IDENT)
-      || testHexColor()
-      || testFunction();
+   return test(TokenType::PLUS) || test(TokenType::MINUS) || test(TokenType::NUMBER)
+      || test(TokenType::PERCENTAGE) || test(TokenType::LENGTH) || test(TokenType::STRING)
+      || test(TokenType::IDENT) || testHexColor() || testFunction();
 }
 
 bool Parser::parseTerm(Value *value)
 {
    QString str = lexem();
    bool haveUnary = false;
-   if (lookup() == PLUS || lookup() == MINUS) {
+
+   if (lookup() == TokenType::PLUS || lookup() == TokenType::MINUS) {
       haveUnary = true;
-      if (!hasNext()) {
+
+      if (! hasNext()) {
          return false;
       }
+
       next();
+
       str += lexem();
    }
 
    value->variant = str;
    value->type = QCss::Value::String;
+
    switch (lookup()) {
-      case NUMBER:
+      case TokenType::NUMBER:
          value->type = Value::Number;
          value->variant.convert(QVariant::Double);
          break;
-      case PERCENTAGE:
+
+      case TokenType::PERCENTAGE:
          value->type = Value::Percentage;
          str.chop(1); // strip off %
          value->variant = str;
          break;
-      case LENGTH:
+
+      case TokenType::LENGTH:
          value->type = Value::Length;
          break;
 
-      case STRING:
+      case TokenType::STRING:
          if (haveUnary) {
             return false;
          }
+
          value->type = Value::String;
          str.chop(1);
          str.remove(0, 1);
          value->variant = str;
          break;
-      case IDENT: {
+
+      case TokenType::IDENT: {
          if (haveUnary) {
             return false;
          }
+
          value->type = Value::Identifier;
          const int theid = findKnownValue(str, values, NumKnownValues);
+
          if (theid != 0) {
             value->type = Value::KnownIdentifier;
             value->variant = theid;
          }
          break;
       }
+
       default: {
          if (haveUnary) {
             return false;
          }
+
          prev();
+
          if (testHexColor()) {
             QColor col;
-            if (!parseHexColor(&col)) {
+            if (! parseHexColor(&col)) {
                return false;
             }
+
             value->type = Value::Color;
             value->variant = col;
+
          } else if (testFunction()) {
-            QString name, args;
+            QString name;
+            QString args;
+
             if (!parseFunction(&name, &args)) {
                return false;
             }
-            if (name == QLatin1String("url")) {
+
+            if (name == "url") {
                value->type = Value::Uri;
                removeOptionalQuotes(&args);
+
                if (QFileInfo(args).isRelative() && !sourcePath.isEmpty()) {
                   args.prepend(sourcePath);
                }
+
                value->variant = args;
+
             } else {
                value->type = Value::Function;
                value->variant = QStringList() << name << args;
             }
+
          } else {
             return recordError();
          }
+
          return true;
       }
    }
+
    skipSpace();
+
    return true;
 }
 
@@ -3226,60 +3413,63 @@ bool Parser::parseFunction(QString *name, QString *args)
    *name = lexem();
    name->chop(1);
    skipSpace();
+
    const int start = index;
-   if (!until(RPAREN)) {
+
+   if (! until(TokenType::RPAREN)) {
       return false;
    }
+
    for (int i = start; i < index - 1; ++i) {
       args->append(symbols.at(i).lexem());
    }
-   /*
-   if (!nextExpr(&arguments)) return false;
-   if (!next(RPAREN)) return false;
-   */
+
    skipSpace();
+
    return true;
 }
 
 bool Parser::parseHexColor(QColor *col)
 {
    col->setNamedColor(lexem());
-   if (!col->isValid()) {
-      qWarning("QCssParser::parseHexColor: Unknown color name '%s'", lexem().toLatin1().constData());
+
+   if (! col->isValid()) {
+      qWarning("QCssParser::parseHexColor() Unknown color name '%s'", csPrintable(lexem()));
       return false;
    }
+
    skipSpace();
+
    return true;
 }
 
 bool Parser::testAndParseUri(QString *uri)
 {
    const int rewind = index;
-   if (!testFunction()) {
+   if (! testFunction()) {
       return false;
    }
 
    QString name, args;
-   if (!parseFunction(&name, &args)) {
+   if (! parseFunction(&name, &args)) {
       index = rewind;
       return false;
    }
-   if (name.toLower() != QLatin1String("url")) {
+
+   if (name.toLower() != "url") {
       index = rewind;
       return false;
    }
+
    *uri = args;
    removeOptionalQuotes(uri);
+
    return true;
 }
 
 bool Parser::testSimpleSelector()
 {
-   return testElementName()
-      || (test(HASH))
-      || testClass()
-      || testAttrib()
-      || testPseudo();
+   return testElementName() || (test(HASH)) || testClass() || testAttrib() || testPseudo();
 }
 
 bool Parser::next(QCss::TokenType t)
@@ -3287,6 +3477,7 @@ bool Parser::next(QCss::TokenType t)
    if (hasNext() && next() == t) {
       return true;
    }
+
    return recordError();
 }
 
@@ -3295,29 +3486,35 @@ bool Parser::test(QCss::TokenType t)
    if (index >= symbols.count()) {
       return false;
    }
+
    if (symbols.at(index).token == t) {
       ++index;
       return true;
    }
+
    return false;
 }
 
 QString Parser::unquotedLexem() const
 {
    QString s = lexem();
-   if (lookup() == STRING) {
+
+   if (lookup() == TokenType::STRING) {
       s.chop(1);
       s.remove(0, 1);
    }
+
    return s;
 }
 
 QString Parser::lexemUntil(QCss::TokenType t)
 {
    QString lexem;
+
    while (hasNext() && next() != t) {
       lexem += symbol().lexem();
    }
+
    return lexem;
 }
 
@@ -3326,18 +3523,22 @@ bool Parser::until(QCss::TokenType target, QCss::TokenType target2)
    int braceCount = 0;
    int brackCount = 0;
    int parenCount = 0;
+
    if (index) {
       switch (symbols.at(index - 1).token) {
-         case LBRACE:
+         case TokenType::LBRACE:
             ++braceCount;
             break;
-         case LBRACKET:
+
+         case TokenType::LBRACKET:
             ++brackCount;
             break;
-         case FUNCTION:
-         case LPAREN:
+
+         case TokenType::FUNCTION:
+         case TokenType::LPAREN:
             ++parenCount;
             break;
+
          default:
             ;
       }
@@ -3345,32 +3546,37 @@ bool Parser::until(QCss::TokenType target, QCss::TokenType target2)
    while (index < symbols.size()) {
       QCss::TokenType t = symbols.at(index++).token;
       switch (t) {
-         case LBRACE:
+         case TokenType::LBRACE:
             ++braceCount;
             break;
-         case RBRACE:
+
+         case TokenType::RBRACE:
             --braceCount;
             break;
-         case LBRACKET:
+
+         case TokenType::LBRACKET:
             ++brackCount;
             break;
-         case RBRACKET:
+
+         case TokenType::RBRACKET:
             --brackCount;
             break;
-         case FUNCTION:
-         case LPAREN:
+
+         case TokenType::FUNCTION:
+         case TokenType::LPAREN:
             ++parenCount;
             break;
-         case RPAREN:
+
+         case TokenType::RPAREN:
             --parenCount;
             break;
+
          default:
             break;
       }
-      if ((t == target || (target2 != NONE && t == target2))
-         && braceCount <= 0
-         && brackCount <= 0
-         && parenCount <= 0) {
+
+      if ((t == target || (target2 != TokenType::NONE && t == target2))
+            && braceCount <= 0 && brackCount <= 0 && parenCount <= 0) {
          return true;
       }
 
@@ -3379,6 +3585,7 @@ bool Parser::until(QCss::TokenType target, QCss::TokenType target2)
          break;
       }
    }
+
    return false;
 }
 

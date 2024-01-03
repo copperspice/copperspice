@@ -23,18 +23,18 @@
 
 #include <qauthenticator.h>
 #include <qauthenticator_p.h>
-#include <qdebug.h>
-#include <qhash.h>
 #include <qbytearray.h>
 #include <qcryptographichash.h>
-
-#include <qiodevice.h>
 #include <qdatastream.h>
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qendian.h>
+#include <qhash.h>
+#include <qiodevice.h>
 #include <qstring.h>
 #include <qstring16.h>
-#include <qdatetime.h>
 #include <qtextcodec.h>
+#include <qtimezone.h>
 
 #ifdef Q_OS_WIN
 #include <qmutex.h>
@@ -1170,7 +1170,7 @@ static QByteArray qEncodeNtlmv2Response(const QAuthenticatorPrivate *ctx,
       ds.writeRawData(timeArray.constData(), timeArray.size());
 
    } else {
-      QDateTime currentTime(QDate::currentDate(), QTime::currentTime(), Qt::UTC);
+      QDateTime currentTime(QDate::currentDate(), QTime::currentTime(), QTimeZone::utc());
 
       // number of seconds between 1601 and epoc(1970)
       // 369 years, 89 leap years

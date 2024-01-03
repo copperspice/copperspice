@@ -27,8 +27,6 @@
 #include "qxsdmodelgroup_p.h"
 #include "qxsdschemahelper_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 /*
@@ -251,5 +249,3 @@ QHash<XsdTerm::Ptr, XsdParticle::Ptr> XsdStateMachineBuilder::particleLookupMap(
 
    return result;
 }
-
-QT_END_NAMESPACE

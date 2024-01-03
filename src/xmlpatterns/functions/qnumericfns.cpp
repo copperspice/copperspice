@@ -24,10 +24,7 @@
 #include "qcommonvalues_p.h"
 #include "qgenericsequencetype_p.h"
 #include "qschemanumeric_p.h"
-
 #include "qnumericfns_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -91,5 +88,3 @@ Item RoundHalfToEvenFN::evaluateSingleton(const DynamicContext::Ptr &context) co
 
    return toItem(num.as<Numeric>()->roundHalfToEven(scale));
 }
-
-QT_END_NAMESPACE

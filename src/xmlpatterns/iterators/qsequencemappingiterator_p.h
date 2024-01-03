@@ -27,8 +27,6 @@
 #include <qabstractxmlforwarditerator_p.h>
 #include <qdynamiccontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template<typename TResult, typename TSource, typename TMapper>
@@ -140,15 +138,14 @@ xsInteger SequenceMappingIterator<TResult, TSource, TMapper>::position() const
 
 template<typename TResult, typename TSource, typename TMapper>
 static inline typename QAbstractXmlForwardIterator<TResult>::Ptr
-makeSequenceMappingIterator(const TMapper &mapper, 
+makeSequenceMappingIterator(const TMapper &mapper,
                   const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
                   const DynamicContext::Ptr &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new SequenceMappingIterator<TResult, TSource, TMapper>(mapper, source, context));
 }
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

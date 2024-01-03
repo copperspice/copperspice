@@ -30,8 +30,6 @@
 
 #include "qvaluecomparison_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ValueComparison::ValueComparison(const Expression::Ptr &op1,
@@ -142,5 +140,3 @@ Expression::ID ValueComparison::id() const
 {
    return IDValueComparison;
 }
-
-QT_END_NAMESPACE

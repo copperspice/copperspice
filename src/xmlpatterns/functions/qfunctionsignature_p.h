@@ -33,8 +33,6 @@
 #include <qprimitives_p.h>
 #include <qcontainerfwd.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class FunctionSignature : public CallTargetDescription
@@ -146,7 +144,5 @@ static inline QString formatFunction(const NamePool::Ptr &np, const FunctionSign
    return QLatin1String("<span class='XQuery-function'>")  + escape(func->displayName(np)) + QLatin1String("</span>");
 }
 }
-
-QT_END_NAMESPACE
 
 #endif

@@ -328,7 +328,7 @@ class Q_XML_EXPORT QXmlDeclHandler
    virtual bool externalEntityDecl(const QString &name, const QString &publicId, const QString &systemId) = 0;
    virtual QString errorString() const = 0;
 
-   // ### Qt5/Conform to SAX by adding elementDecl
+   // TODO: Conform to SAX by adding elementDecl
 };
 
 

@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class RangeIterator : public Item::Iterator
@@ -61,7 +59,7 @@ class RangeIterator : public Item::Iterator
     * @note @p start must be smaller than @p end, not larger
     * or equal. This is not checked.
     */
-   RangeIterator(const xsInteger start, const Direction direction, const xsInteger end); 
+   RangeIterator(const xsInteger start, const Direction direction, const xsInteger end);
 
    Item next() override;
    Item current() const override;
@@ -83,8 +81,7 @@ class RangeIterator : public Item::Iterator
     */
    const qint8 m_increment : 2;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

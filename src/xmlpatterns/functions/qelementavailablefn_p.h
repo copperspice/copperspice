@@ -26,9 +26,8 @@
 
 #include <qstaticnamespacescontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ElementAvailableFN : public StaticNamespacesContainer
 {
  public:
@@ -39,8 +38,7 @@ class ElementAvailableFN : public StaticNamespacesContainer
    static QSet<QString> allXSLTInstructions();
    const QSet<QString> m_xsltInstructions;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

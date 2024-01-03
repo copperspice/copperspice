@@ -28,8 +28,6 @@
 
 #include "qsubstringfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item ContainsFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -169,5 +167,3 @@ Item SubstringAfterFN::evaluateSingleton(const DynamicContext::Ptr &context) con
 
    return AtomicString::fromValue(QString(str1.right(str1.length() - (pos + str2.length()))));
 }
-
-QT_END_NAMESPACE

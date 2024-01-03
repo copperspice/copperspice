@@ -46,7 +46,7 @@ QPlatformScreen::~QPlatformScreen()
    Q_D(QPlatformScreen);
 
    if (d->screen) {
-      qWarning("Manually deleting a QPlatformScreen. Call QPlatformIntegration::destroyScreen instead.");
+      qWarning("QPlatformScreen Destructor was invoked manually, use QPlatformIntegration::destroyScreen instead");
       QGuiApplicationPrivate::platformIntegration()->removeScreen(d->screen);
       delete d->screen;
    }
@@ -219,7 +219,7 @@ static int log2(uint i)
 int QPlatformScreen::angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b)
 {
    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "angle");
+      qWarning("QPlatformScreen::angleBetween() Use angleBetween() in the QScreen class when passing Qt::PrimaryOrientation");
       return 0;
    }
 
@@ -243,7 +243,7 @@ int QPlatformScreen::angleBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation
 QTransform QPlatformScreen::transformBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &target)
 {
    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "transform");
+      qWarning("QPlatformScreen::transformBetween() Use transformBetween() in the QScreen class when passing Qt::PrimaryOrientation");
       return QTransform();
    }
 
@@ -275,7 +275,7 @@ QTransform QPlatformScreen::transformBetween(Qt::ScreenOrientation a, Qt::Screen
 QRect QPlatformScreen::mapBetween(Qt::ScreenOrientation a, Qt::ScreenOrientation b, const QRect &rect)
 {
    if (a == Qt::PrimaryOrientation || b == Qt::PrimaryOrientation) {
-      qWarning("Use QScreen version of %sBetween() when passing Qt::PrimaryOrientation", "map");
+      qWarning("QPlatformScreen::mapBetween() Use mapBetween() in the QScreen class when passing Qt::PrimaryOrientation");
       return rect;
    }
 

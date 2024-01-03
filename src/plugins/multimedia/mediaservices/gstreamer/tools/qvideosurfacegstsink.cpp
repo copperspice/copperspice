@@ -374,7 +374,7 @@ GType QVideoSurfaceGstSink::get_type()
 
 void QVideoSurfaceGstSink::class_init(gpointer g_class, gpointer class_data)
 {
-   Q_UNUSED(class_data);
+   (void) class_data;
 
    sink_parent_class = reinterpret_cast<GstVideoSinkClass *>(g_type_class_peek_parent(g_class));
 
@@ -422,7 +422,7 @@ void QVideoSurfaceGstSink::instance_init(GTypeInstance *instance, gpointer g_cla
 {
    VO_SINK(instance);
 
-   Q_UNUSED(g_class);
+   (void) g_class;
 
    sink->delegate          = nullptr;
    sink->lastRequestedCaps = nullptr;
@@ -455,8 +455,9 @@ void QVideoSurfaceGstSink::finalize(GObject *object)
 
 void QVideoSurfaceGstSink::handleShowPrerollChange(GObject *o, GParamSpec *p, gpointer d)
 {
-   Q_UNUSED(o);
-   Q_UNUSED(p);
+   (void) o;
+   (void) p;
+
    QVideoSurfaceGstSink *sink = reinterpret_cast<QVideoSurfaceGstSink *>(d);
 
    gboolean showPrerollFrame = true; // "show-preroll-frame" property is true by default
@@ -576,8 +577,8 @@ GstFlowReturn QVideoSurfaceGstSink::buffer_alloc(
 {
    VO_SINK(base);
 
-   Q_UNUSED(offset);
-   Q_UNUSED(size);
+   (void) offset;
+   (void) size;
 
    if (!buffer) {
       return GST_FLOW_ERROR;
@@ -674,7 +675,8 @@ GstFlowReturn QVideoSurfaceGstSink::buffer_alloc(
 
 gboolean QVideoSurfaceGstSink::start(GstBaseSink *base)
 {
-   Q_UNUSED(base);
+   (void) base;
+
    return TRUE;
 }
 

@@ -24,16 +24,14 @@
 #ifndef QXSLTTokenizer_P_H
 #define QXSLTTokenizer_P_H
 
-#include <QQueue>
-#include <QStack>
-#include <QUrl>
+#include <qqueue.h>
+#include <qstack.h>
+#include <qurl.h>
 
 #include <qmaintainingreader_p.h>
 #include <qreportcontext_p.h>
 #include <qtokenizer_p.h>
 #include <qxslttokenlookup_p.h>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
 
@@ -402,8 +400,7 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
 
    ParserContext::Ptr                          m_parseInfo;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

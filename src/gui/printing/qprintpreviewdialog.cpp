@@ -96,7 +96,7 @@ class LineEdit : public QLineEdit
    LineEdit(QWidget *parent = nullptr)
       : QLineEdit(parent) {
       setContextMenuPolicy(Qt::NoContextMenu);
-      connect(this, SIGNAL(returnPressed()), this, SLOT(handleReturnPressed()));
+      connect(this, &LineEdit::returnPressed, this, &LineEdit::handleReturnPressed);
    }
 
  protected:
@@ -214,8 +214,8 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
       preview = new QPrintPreviewWidget(printer, q);
    }
 
-   QObject::connect(preview, SIGNAL(paintRequested(QPrinter *)), q, SLOT(paintRequested(QPrinter *)));
-   QObject::connect(preview, SIGNAL(previewChanged()), q, SLOT(_q_previewChanged()));
+   QObject::connect(preview, &QPrintPreviewWidget::paintRequested, q, &QPrintPreviewDialog::paintRequested);
+   QObject::connect(preview, &QPrintPreviewWidget::previewChanged, q, &QPrintPreviewDialog::_q_previewChanged);
    setupActions();
 
    pageNumEdit = new LineEdit;
@@ -223,7 +223,7 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    pageNumEdit->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
    pageNumLabel = new QLabel;
 
-   QObject::connect(pageNumEdit, SIGNAL(editingFinished()), q, SLOT(_q_pageNumEdited()));
+   QObject::connect(pageNumEdit, &LineEdit::editingFinished, q, &QPrintPreviewDialog::_q_pageNumEdited);
 
    zoomFactor = new QComboBox;
    zoomFactor->setEditable(true);
@@ -238,8 +238,8 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
       zoomFactor->addItem(QPrintPreviewDialog::tr("%1%").formatArg(factorsX2[i] / 2.0));
    }
 
-   QObject::connect(zoomFactor->lineEdit(), SIGNAL(editingFinished()), q, SLOT(_q_zoomFactorChanged()));
-   QObject::connect(zoomFactor, SIGNAL(currentIndexChanged(int)), q, SLOT(_q_zoomFactorChanged()));
+   QObject::connect(zoomFactor->lineEdit(), &QLineEdit::editingFinished, q, &QPrintPreviewDialog::_q_zoomFactorChanged);
+   QObject::connect(zoomFactor, cs_mp_cast<int>(&QComboBox::currentIndexChanged), q, &QPrintPreviewDialog::_q_zoomFactorChanged);
 
    QPrintPreviewMainWindow *mw = new QPrintPreviewMainWindow(q);
    QToolBar *toolbar = new QToolBar(mw);
@@ -307,8 +307,9 @@ void QPrintPreviewDialogPrivate::init(QPrinter *_printer)
    zoomOutButton->setAutoRepeat(true);
    zoomOutButton->setAutoRepeatInterval(200);
    zoomOutButton->setAutoRepeatDelay(200);
-   QObject::connect(zoomInButton, SIGNAL(clicked()), q, SLOT(_q_zoomIn()));
-   QObject::connect(zoomOutButton, SIGNAL(clicked()), q, SLOT(_q_zoomOut()));
+
+   QObject::connect(zoomInButton,  &QToolButton::clicked, q, &QPrintPreviewDialog::_q_zoomIn);
+   QObject::connect(zoomOutButton, &QToolButton::clicked, q, &QPrintPreviewDialog::_q_zoomOut);
 
    mw->addToolBar(toolbar);
    mw->setCentralWidget(preview);
@@ -367,7 +368,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    qt_setupActionIcon(prevPageAction,  "go-previous");
    qt_setupActionIcon(firstPageAction, "go-first");
    qt_setupActionIcon(lastPageAction,  "go-last");
-   QObject::connect(navGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_navigate(QAction *)));
+
+   QObject::connect(navGroup, &QActionGroup::triggered, q, &QPrintPreviewDialog::_q_navigate);
 
    fitGroup = new QActionGroup(q);
    fitWidthAction = fitGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Fit width"));
@@ -381,7 +383,7 @@ void QPrintPreviewDialogPrivate::setupActions()
    qt_setupActionIcon(fitWidthAction, "fit-width");
    qt_setupActionIcon(fitPageAction,  "fit-page");
 
-   QObject::connect(fitGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_fit(QAction *)));
+   QObject::connect(fitGroup, &QActionGroup::triggered, q, &QPrintPreviewDialog::_q_fit);
 
    // Zoom
    zoomGroup = new QActionGroup(q);
@@ -398,15 +400,16 @@ void QPrintPreviewDialogPrivate::setupActions()
    landscapeAction->setCheckable(true);
    qt_setupActionIcon(portraitAction, QLatin1String("layout-portrait"));
    qt_setupActionIcon(landscapeAction, QLatin1String("layout-landscape"));
-   QObject::connect(portraitAction, SIGNAL(triggered(bool)), preview, SLOT(setPortraitOrientation()));
-   QObject::connect(landscapeAction, SIGNAL(triggered(bool)), preview, SLOT(setLandscapeOrientation()));
+
+   QObject::connect(portraitAction,  &QAction::triggered, preview, &QPrintPreviewWidget::setPortraitOrientation);
+   QObject::connect(landscapeAction, &QAction::triggered, preview, &QPrintPreviewWidget::setLandscapeOrientation);
 
    // Display mode
    modeGroup = new QActionGroup(q);
-   singleModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show single page"));
-   facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show facing pages"));
-   overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",
-            "Show overview of all pages"));
+   singleModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",   "Show single page"));
+   facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",   "Show facing pages"));
+   overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show overview of all pages"));
+
    qt_setupActionIcon(singleModeAction, QLatin1String("view-page-one"));
    qt_setupActionIcon(facingModeAction, QLatin1String("view-page-sided"));
    qt_setupActionIcon(overviewModeAction, QLatin1String("view-page-multi"));
@@ -417,7 +420,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    singleModeAction->setCheckable(true);
    facingModeAction->setCheckable(true);
    overviewModeAction->setCheckable(true);
-   QObject::connect(modeGroup, SIGNAL(triggered(QAction *)), q, SLOT(_q_setMode(QAction *)));
+
+   QObject::connect(modeGroup, &QActionGroup::triggered, q, &QPrintPreviewDialog::_q_setMode);
 
    // Print
    printerGroup = new QActionGroup(q);
@@ -425,8 +429,9 @@ void QPrintPreviewDialogPrivate::setupActions()
    pageSetupAction = printerGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Page setup"));
    qt_setupActionIcon(printAction, QLatin1String("print"));
    qt_setupActionIcon(pageSetupAction, QLatin1String("page-setup"));
-   QObject::connect(printAction, SIGNAL(triggered(bool)), q, SLOT(_q_print()));
-   QObject::connect(pageSetupAction, SIGNAL(triggered(bool)), q, SLOT(_q_pageSetup()));
+
+   QObject::connect(printAction,     &QAction::triggered, q, &QPrintPreviewDialog::_q_print);
+   QObject::connect(pageSetupAction, &QAction::triggered, q, &QPrintPreviewDialog::_q_pageSetup);
 
    // Initial state:
    fitPageAction->setChecked(true);

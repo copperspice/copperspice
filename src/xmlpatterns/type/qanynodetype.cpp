@@ -26,8 +26,6 @@
 
 #include "qanynodetype_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool AnyNodeType::xdtTypeMatches(const ItemType::Ptr &other) const
@@ -76,5 +74,3 @@ PatternPriority AnyNodeType::patternPriority() const
 {
    return -0.5;
 }
-
-QT_END_NAMESPACE

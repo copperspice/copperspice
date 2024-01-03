@@ -800,8 +800,8 @@ class MultiDataModel : public QObject
    CS_SIGNAL_1(Public, void statsChanged(int words,int characters,int cs,int words2,int characters2,int cs2))
    CS_SIGNAL_2(statsChanged,words,characters,cs,words2,characters2,cs2)
 
-   CS_SIGNAL_1(Public, void modifiedChanged(bool un_named_arg1))
-   CS_SIGNAL_2(modifiedChanged,un_named_arg1)
+   CS_SIGNAL_1(Public, void modifiedChanged(bool changed))
+   CS_SIGNAL_2(modifiedChanged, changed)
 
    CS_SIGNAL_1(Public, void multiContextDataChanged(const MultiDataIndex & index))
    CS_SIGNAL_2(multiContextDataChanged,index)

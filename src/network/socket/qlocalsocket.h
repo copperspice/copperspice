@@ -118,10 +118,10 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
 
  private:
 #if defined(QT_LOCALSOCKET_TCP)
-   NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState socketState))
    NET_CS_SLOT_2(_q_stateChanged)
 
-   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError socketError))
    NET_CS_SLOT_2(_q_error)
 
 #elif defined(Q_OS_WIN)
@@ -138,7 +138,7 @@ class Q_NETWORK_EXPORT QLocalSocket : public QIODevice
    NET_CS_SLOT_1(Private, void _q_stateChanged(QAbstractSocket::SocketState state))
    NET_CS_SLOT_2(_q_stateChanged)
 
-   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError error))
+   NET_CS_SLOT_1(Private, void _q_error(QAbstractSocket::SocketError socketError))
    NET_CS_SLOT_2(_q_error)
 
    NET_CS_SLOT_1(Private, void _q_connectToSocket())

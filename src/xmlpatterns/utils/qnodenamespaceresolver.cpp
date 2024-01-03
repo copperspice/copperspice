@@ -21,12 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qitem_p.h"
-#include "qnamepool_p.h"
+#include <qnodenamespaceresolver_p.h>
 
-#include "qnodenamespaceresolver_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qitem_p.h>
+#include <qnamepool_p.h>
 
 using namespace QPatternist;
 
@@ -37,7 +35,7 @@ NodeNamespaceResolver::NodeNamespaceResolver(const Item &item) : m_node(item.asN
 
 void NodeNamespaceResolver::addBinding(const QXmlName nb)
 {
-   Q_UNUSED(nb);
+   (void) nb;
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
 }
 
@@ -61,5 +59,3 @@ NamespaceResolver::Bindings NodeNamespaceResolver::bindings() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return NamespaceResolver::Bindings();
 }
-
-QT_END_NAMESPACE

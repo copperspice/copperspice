@@ -32,9 +32,8 @@
 #include <qitemtype_p.h>
 #include <qpatternistlocale_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template <typename TSubClass,
           bool issueError,
           AtomicComparator::ComparisonType comparisonType = AtomicComparator::AsValueComparison,
@@ -149,7 +148,5 @@ class ComparisonPlatform
 #include "qcomparisonplatform.cpp"
 
 }
-
-QT_END_NAMESPACE
 
 #endif

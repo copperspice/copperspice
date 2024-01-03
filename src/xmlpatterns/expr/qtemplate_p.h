@@ -33,8 +33,6 @@
 #include "qtemplateinvoker_p.h"
 #include "qvariabledeclaration_p.h"
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class Template : public QSharedData, public SourceLocationReflection
@@ -92,8 +90,7 @@ class Template : public QSharedData, public SourceLocationReflection
    DynamicContext::TemplateParameterHash parametersAsHash() const;
    const SequenceType::Ptr m_reqType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

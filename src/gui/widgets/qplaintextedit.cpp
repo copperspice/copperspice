@@ -1047,10 +1047,11 @@ void QPlainTextEdit::setDocument(QTextDocument *document)
       document = new QTextDocument(d->control);
       documentLayout = new QPlainTextDocumentLayout(document);
       document->setDocumentLayout(documentLayout);
+
    } else {
       documentLayout = qobject_cast<QPlainTextDocumentLayout *>(document->documentLayout());
       if (!documentLayout) {
-         qWarning("QPlainTextEdit::setDocument: Document set does not support QPlainTextDocumentLayout");
+         qWarning("QPlainTextEdit::setDocument() New document does not support QPlainTextDocumentLayout");
          return;
       }
    }
@@ -2405,10 +2406,10 @@ void QPlainTextEdit::_q_adjustScrollbars()
    d->_q_adjustScrollbars();
 }
 
-void QPlainTextEdit::_q_verticalScrollbarActionTriggered(int un_named_arg1)
+void QPlainTextEdit::_q_verticalScrollbarActionTriggered(int action)
 {
    Q_D(QPlainTextEdit);
-   d->_q_verticalScrollbarActionTriggered(un_named_arg1);
+   d->_q_verticalScrollbarActionTriggered(action);
 }
 
 void QPlainTextEdit::_q_cursorPositionChanged()

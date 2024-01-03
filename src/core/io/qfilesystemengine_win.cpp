@@ -179,12 +179,17 @@ SidCleanup::~SidCleanup()
    }
 }
 
-Q_GLOBAL_STATIC(SidCleanup, initSidCleanup)
+static SidCleanup *initSidCleanup()
+{
+   static SidCleanup retval;
+   return &retval;
+}
 
 static void resolveLibs()
 {
    static bool triedResolve = false;
-   if (!triedResolve) {
+
+   if (! triedResolve) {
       // need to resolve the security info functions
 
       // protect initialization
@@ -1328,9 +1333,10 @@ QFileSystemEntry QFileSystemEngine::currentPath()
 bool QFileSystemEngine::createLink(const QFileSystemEntry &source, const QFileSystemEntry &target, QSystemError &error)
 {
    Q_ASSERT(false);
-   Q_UNUSED(source)
-   Q_UNUSED(target)
-   Q_UNUSED(error)
+
+   (void) source;
+   (void) target;
+   (void) error;
 
    return false; // TODO implement - code needs to be moved from qfsfileengine_win.cpp
 }
@@ -1371,7 +1377,8 @@ bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &
 bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
                   QSystemError &error, QFileSystemMetaData *data)
 {
-   Q_UNUSED(data);
+   (void) data;
+
    int mode = 0;
 
    if (permissions & QFile::ReadOwner || permissions & QFile::ReadUser

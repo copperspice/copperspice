@@ -27,8 +27,6 @@
 #include <qnamedschemacomponent_p.h>
 #include <qxsdannotated_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdAttributeTerm : public NamedSchemaComponent, public XsdAnnotated
@@ -48,8 +46,7 @@ class XsdAttributeTerm : public NamedSchemaComponent, public XsdAnnotated
     */
    virtual bool isReference() const;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

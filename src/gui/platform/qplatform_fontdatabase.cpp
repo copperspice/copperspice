@@ -211,7 +211,7 @@ void QPlatformFontDatabase::populateFontDatabase()
    QString fontpath = fontDir();
 
    if (! QFile::exists(fontpath)) {
-      qWarning("QFontDatabase: Can not find font directory '%s'", csPrintable(QDir::toNativeSeparators(fontpath)));
+      qWarning("QFontDatabase::populateFontDatabase() Unable to find font directory '%s'", csPrintable(QDir::toNativeSeparators(fontpath)));
       return;
    }
 
@@ -261,7 +261,7 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal
    (void) pixelSize;
    (void) hintingPreference;
 
-   qWarning("Plugin does not support font engines created directly from font data");
+   qWarning("QPlatformFontDatabase::fontEngine() Plugin does not support font engines created directly from font data");
    return nullptr;
 }
 
@@ -270,7 +270,7 @@ QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData
    (void) fontData;
    (void) fileName;
 
-   qWarning("Plugin does not support application fonts");
+   qWarning("QPlatformFontDatabase::addApplicationFont() Plugin does not support application fonts");
    return QStringList();
 }
 

@@ -26,8 +26,6 @@
 #include "qderivedstring_p.h"
 #include "qxsdschemahelper_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 FieldNode::FieldNode()
@@ -124,4 +122,3 @@ bool TargetNode::operator==(const TargetNode &other) const
    return (m_item.toNodeModelIndex() == other.m_item.toNodeModelIndex());
 }
 
-QT_END_NAMESPACE

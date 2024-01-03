@@ -28,8 +28,6 @@
 #include <qitem_p.h>
 #include <qitemtype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class SortTuple : public AtomicValue
@@ -91,7 +89,5 @@ class SortTuple : public AtomicValue
    const Item::Iterator::Ptr   m_value;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

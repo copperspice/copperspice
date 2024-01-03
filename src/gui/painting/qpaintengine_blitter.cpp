@@ -840,7 +840,7 @@ void QBlitterPaintEngine::drawStaticTextItem(QStaticTextItem *sti)
 
 #ifdef QT_BLITTER_RASTEROVERLAY
    //#### d->pmData->markRasterOverlay(sti);
-   qWarning("not implemented: markRasterOverlay for QStaticTextItem");
+   qWarning("QBlitterPaintEngine::drawStaticTextItem() Unable to draw a QStaticTextItem");
 #endif
 }
 

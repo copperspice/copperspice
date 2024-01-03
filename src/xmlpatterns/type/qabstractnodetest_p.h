@@ -26,9 +26,8 @@
 
 #include <qanynodetype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AbstractNodeTest : public AnyNodeType
 {
  public:
@@ -41,8 +40,7 @@ class AbstractNodeTest : public AnyNodeType
  protected:
    const ItemType::Ptr m_primaryType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

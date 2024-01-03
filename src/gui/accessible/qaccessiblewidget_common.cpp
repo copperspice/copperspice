@@ -270,9 +270,9 @@ void QAccessibleTextEdit::scrollToSubstring(int startIndex, int endIndex)
    r.setBottomRight(edit->cursorRect(cursor).bottomRight());
    r.moveTo(r.x() + edit->horizontalScrollBar()->value(), r.y() + edit->verticalScrollBar()->value());
 
-   // E V I L, but ensureVisible is not public
+   // ensureVisible is not public
    if (! QMetaObject::invokeMethod(edit, "_q_ensureVisible", Q_ARG(const QRectF &, r))) {
-      qWarning("AccessibleTextEdit::scrollToSubstring failed");
+      qWarning("QAccessibleTextEdit::scrollToSubstring() Process failed");
    }
 }
 
@@ -874,8 +874,8 @@ QString QAccessibleTextWidget::attributes(int offset, int *startOffset, int *end
          break;
 
       default:
-         qWarning() << "Unknown QTextCharFormat::UnderlineStyle value " << underlineStyle <<
-            " could not be translated to IAccessible2 value";
+         qWarning() << "QAccessibleTextWidget::attributes() Unknown QTextCharFormat::UnderlineStyle value "
+                    << underlineStyle << " could not be translated to IAccessible2 value";
          break;
    }
 

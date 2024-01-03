@@ -193,13 +193,13 @@ class Q_GUI_EXPORT QToolBar : public QWidget
  private:
    Q_DECLARE_PRIVATE(QToolBar)
 
-   GUI_CS_SLOT_1(Private, void _q_toggleView(bool un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_toggleView(bool isToggleView))
    GUI_CS_SLOT_2(_q_toggleView)
 
-   GUI_CS_SLOT_1(Private, void _q_updateIconSize(const QSize &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_updateIconSize(const QSize &size))
    GUI_CS_SLOT_2(_q_updateIconSize)
 
-   GUI_CS_SLOT_1(Private, void _q_updateToolButtonStyle(Qt::ToolButtonStyle un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_updateToolButtonStyle(Qt::ToolButtonStyle style))
    GUI_CS_SLOT_2(_q_updateToolButtonStyle)
 
    bool cs_isMainWindow() const;

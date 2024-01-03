@@ -25,12 +25,12 @@
 #define QABSTRACTTEXTDOCUMENTLAYOUT_H
 
 #include <qobject.h>
+#include <qpalette.h>
+#include <qscopedpointer.h>
 #include <qtextlayout.h>
 #include <qtextdocument.h>
 #include <qtextcursor.h>
-#include <qpalette.h>
-#include <QTextBlock>
-#include <QScopedPointer>
+#include <qtextblock.h>
 
 class QAbstractTextDocumentLayoutPrivate;
 class QTextObjectInterface;

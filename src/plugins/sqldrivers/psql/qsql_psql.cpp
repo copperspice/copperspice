@@ -674,7 +674,12 @@ static QString qCreateParamString(const QVector<QVariant> &boundValues, const QS
    return params;
 }
 
-Q_GLOBAL_STATIC(QMutex, qMutex)
+static QMutex *qMutex()
+{
+   static QMutex retval;
+   return &retval;
+}
+
 QString qMakePreparedStmtId()
 {
    qMutex()->lock();
@@ -1092,7 +1097,7 @@ void QPSQLDriver::close()
 
       d->seid.clear();
       if (d->sn) {
-         disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+         disconnect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
          delete d->sn;
          d->sn = nullptr;
       }
@@ -1697,8 +1702,9 @@ bool QPSQLDriver::subscribeToNotification(const QString &name)
 
       if (!d->sn) {
          d->sn = new QSocketNotifier(socket, QSocketNotifier::Read);
-         connect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+         connect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
       }
+
    } else {
       qWarning("QPSQLDriver::subscribeToNotificationImplementation: PQsocket did not return a valid socket to listen on");
       return false;
@@ -1735,7 +1741,7 @@ bool QPSQLDriver::unsubscribeFromNotification(const QString &name)
    d->seid.removeAll(name);
 
    if (d->seid.isEmpty()) {
-      disconnect(d->sn, SIGNAL(activated(int)), this, SLOT(_q_handleNotification(int)));
+      disconnect(d->sn, &QSocketNotifier::activated, this, &QPSQLDriver::_q_handleNotification);
       delete d->sn;
       d->sn = nullptr;
    }

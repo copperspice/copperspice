@@ -56,7 +56,7 @@ static inline int panTouchPoints()
          return result;
       }
 
-      qWarning() << "Ignoring invalid value of " << panTouchPointVariable;
+      qWarning() << "panTouchPoints() Ignoring invalid value of " << panTouchPointVariable;
    }
 
    // Pan should use 1 finger on a touch screen and 2 fingers on touch pads etc.
@@ -101,8 +101,8 @@ Qt::GestureType QGestureManager::registerGestureRecognizer(QGestureRecognizer *r
    QGesture *dummy = recognizer->create(nullptr);
 
    if (!dummy) {
-      qWarning("QGestureManager::registerGestureRecognizer: "
-         "the recognizer fails to create a gesture object, skipping registration.");
+      qWarning("QGestureManager::registerGestureRecognizer() "
+         "Failed to create a gesture, skipping registration");
       return Qt::GestureType(0);
    }
 
@@ -713,7 +713,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
 
       Qt::GestureType gestureType = gesture->gestureType();
       Q_ASSERT(gestureType != Qt::CustomGesture);
-      Q_UNUSED(gestureType);
+      (void) gestureType;
 
       if (target) {
          if (gesture->state() == Qt::GestureStarted) {
@@ -721,13 +721,9 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          } else {
             normalStartedGestures[target].append(gesture);
          }
-      } else {
 
-#if defined(CS_SHOW_DEBUG)
-         qDebug() << "QGestureManager::deliverEvents(): Could not find target for gesture"
-                  << gesture->gestureType();
-#endif
-         qWarning("QGestureManager::deliverEvent: could not find the target for gesture");
+      } else {
+         qWarning("QGestureManager::deliverEvent() Unable to find the target for the given gesture");
          undeliveredGestures->insert(gesture);
       }
    }

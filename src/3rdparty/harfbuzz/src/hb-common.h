@@ -90,7 +90,7 @@ HB_BEGIN_DECLS
 
 /**
  * hb_bool_t:
- *
+ * 
  * Data type for booleans.
  *
  **/
@@ -98,15 +98,25 @@ typedef int hb_bool_t;
 
 /**
  * hb_codepoint_t:
- *
+ * 
  * Data type for holding Unicode codepoints. Also
  * used to hold glyph IDs.
  *
  **/
 typedef uint32_t hb_codepoint_t;
+
+/**
+ * HB_CODEPOINT_INVALID:
+ *
+ * Unused #hb_codepoint_t value.
+ *
+ * Since: 8.0.0
+ */
+#define HB_CODEPOINT_INVALID ((hb_codepoint_t) -1)
+
 /**
  * hb_position_t:
- *
+ * 
  * Data type for holding a single coordinate value.
  * Contour points and other multi-dimensional data are
  * stored as tuples of #hb_position_t's.
@@ -115,7 +125,7 @@ typedef uint32_t hb_codepoint_t;
 typedef int32_t hb_position_t;
 /**
  * hb_mask_t:
- *
+ * 
  * Data type for bitmasks.
  *
  **/
@@ -129,6 +139,16 @@ typedef union _hb_var_int_t {
   uint8_t u8[4];
   int8_t i8[4];
 } hb_var_int_t;
+
+typedef union _hb_var_num_t {
+  float f;
+  uint32_t u32;
+  int32_t i32;
+  uint16_t u16[2];
+  int16_t i16[2];
+  uint8_t u8[4];
+  int8_t i8[4];
+} hb_var_num_t;
 
 
 /* hb_tag_t */
@@ -210,9 +230,9 @@ hb_tag_to_string (hb_tag_t tag, char *buf);
  * @HB_DIRECTION_BTT: Text is set vertically from bottom to top.
  *
  * The direction of a text segment or buffer.
- *
+ * 
  * A segment can also be tested for horizontal or vertical
- * orientation (irrespective of specific direction) with
+ * orientation (irrespective of specific direction) with 
  * HB_DIRECTION_IS_HORIZONTAL() or HB_DIRECTION_IS_VERTICAL().
  *
  */
@@ -311,11 +331,14 @@ hb_language_to_string (hb_language_t language);
  *
  * Since: 0.6.0
  */
-#define HB_LANGUAGE_INVALID ((hb_language_t) nullptr)
+#define HB_LANGUAGE_INVALID ((hb_language_t) 0)
 
 HB_EXTERN hb_language_t
 hb_language_get_default (void);
 
+HB_EXTERN hb_bool_t
+hb_language_matches (hb_language_t language,
+		     hb_language_t specific);
 
 /**
  * hb_script_t:
@@ -476,6 +499,14 @@ hb_language_get_default (void);
  * @HB_SCRIPT_DIVES_AKURU: `Diak`, Since: 2.6.7
  * @HB_SCRIPT_KHITAN_SMALL_SCRIPT: `Kits`, Since: 2.6.7
  * @HB_SCRIPT_YEZIDI: `Yezi`, Since: 2.6.7
+ * @HB_SCRIPT_CYPRO_MINOAN: `Cpmn`, Since: 3.0.0
+ * @HB_SCRIPT_OLD_UYGHUR: `Ougr`, Since: 3.0.0
+ * @HB_SCRIPT_TANGSA: `Tnsa`, Since: 3.0.0
+ * @HB_SCRIPT_TOTO: `Toto`, Since: 3.0.0
+ * @HB_SCRIPT_VITHKUQI: `Vith`, Since: 3.0.0
+ * @HB_SCRIPT_MATH: `Zmth`, Since: 3.4.0
+ * @HB_SCRIPT_KAWI: `Kawi`, Since: 5.2.0
+ * @HB_SCRIPT_NAG_MUNDARI: `Nagm`, Since: 5.2.0
  * @HB_SCRIPT_INVALID: No script set
  *
  * Data type for scripts. Each #hb_script_t's value is an #hb_tag_t corresponding
@@ -683,6 +714,26 @@ typedef enum
   HB_SCRIPT_KHITAN_SMALL_SCRIPT		= HB_TAG ('K','i','t','s'), /*13.0*/
   HB_SCRIPT_YEZIDI			= HB_TAG ('Y','e','z','i'), /*13.0*/
 
+  /*
+   * Since 3.0.0
+   */
+  HB_SCRIPT_CYPRO_MINOAN		= HB_TAG ('C','p','m','n'), /*14.0*/
+  HB_SCRIPT_OLD_UYGHUR			= HB_TAG ('O','u','g','r'), /*14.0*/
+  HB_SCRIPT_TANGSA			= HB_TAG ('T','n','s','a'), /*14.0*/
+  HB_SCRIPT_TOTO			= HB_TAG ('T','o','t','o'), /*14.0*/
+  HB_SCRIPT_VITHKUQI			= HB_TAG ('V','i','t','h'), /*14.0*/
+
+  /*
+   * Since 3.4.0
+   */
+  HB_SCRIPT_MATH			= HB_TAG ('Z','m','t','h'),
+
+  /*
+   * Since 5.2.0
+   */
+  HB_SCRIPT_KAWI			= HB_TAG ('K','a','w','i'), /*15.0*/
+  HB_SCRIPT_NAG_MUNDARI			= HB_TAG ('N','a','g','m'), /*15.0*/
+
   /* No script set. */
   HB_SCRIPT_INVALID			= HB_TAG_NONE,
 
@@ -801,7 +852,7 @@ hb_feature_to_string (hb_feature_t *feature,
  * Data type for holding variation data. Registered OpenType
  * variation-axis tags are listed in
  * [OpenType Axis Tag Registry](https://docs.microsoft.com/en-us/typography/opentype/spec/dvaraxisreg).
- *
+ * 
  * Since: 1.4.2
  */
 typedef struct hb_variation_t {
@@ -855,6 +906,32 @@ hb_color_get_green (hb_color_t color);
 HB_EXTERN uint8_t
 hb_color_get_blue (hb_color_t color);
 #define hb_color_get_blue(color)	(((color) >> 24) & 0xFF)
+
+/**
+ * hb_glyph_extents_t:
+ * @x_bearing: Distance from the x-origin to the left extremum of the glyph.
+ * @y_bearing: Distance from the top extremum of the glyph to the y-origin.
+ * @width: Distance from the left extremum of the glyph to the right extremum.
+ * @height: Distance from the top extremum of the glyph to the bottom extremum.
+ *
+ * Glyph extent values, measured in font units.
+ *
+ * Note that @height is negative, in coordinate systems that grow up.
+ **/
+typedef struct hb_glyph_extents_t {
+  hb_position_t x_bearing;
+  hb_position_t y_bearing;
+  hb_position_t width;
+  hb_position_t height;
+} hb_glyph_extents_t;
+
+/**
+ * hb_font_t:
+ *
+ * Data type for holding fonts.
+ *
+ */
+typedef struct hb_font_t hb_font_t;
 
 HB_END_DECLS
 

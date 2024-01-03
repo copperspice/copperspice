@@ -26,11 +26,10 @@
 
 #include <qemptycontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 template<typename T> class QList;
 
 namespace QPatternist {
+
 class VariableReference : public EmptyContainer
 {
  public:
@@ -53,7 +52,5 @@ inline VariableSlotID VariableReference::slot() const
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

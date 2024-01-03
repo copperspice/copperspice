@@ -42,29 +42,29 @@ QMediaPlaylistProvider::~QMediaPlaylistProvider()
 
 bool QMediaPlaylistProvider::load(const QNetworkRequest &request, const char *format)
 {
-   Q_UNUSED(request);
-   Q_UNUSED(format);
+   (void) request;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::load(QIODevice *device, const char *format)
 {
-   Q_UNUSED(device);
-   Q_UNUSED(format);
+   (void) device;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::save(const QUrl &location, const char *format)
 {
-   Q_UNUSED(location);
-   Q_UNUSED(format);
+   (void) location;
+   (void) format;
    return false;
 }
 
 bool QMediaPlaylistProvider::save(QIODevice *device, const char *format)
 {
-   Q_UNUSED(device);
-   Q_UNUSED(format);
+   (void) device;
+   (void) format;
    return false;
 }
 
@@ -75,19 +75,14 @@ bool QMediaPlaylistProvider::isReadOnly() const
 
 bool QMediaPlaylistProvider::addMedia(const QMediaContent &media)
 {
-   Q_UNUSED(media);
+   (void) media;
    return false;
 }
 
-/*!
-    Append multiple media \a items to a playlist.
-
-    Returns true if the media items were appended; and false otherwise.
-*/
 bool QMediaPlaylistProvider::addMedia(const QList<QMediaContent> &items)
 {
    for (const QMediaContent &item : items) {
-      if (!addMedia(item)) {
+      if (! addMedia(item)) {
          return false;
       }
    }
@@ -95,23 +90,13 @@ bool QMediaPlaylistProvider::addMedia(const QList<QMediaContent> &items)
    return true;
 }
 
-/*!
-    Inserts \a media into a playlist at \a position.
-
-    Returns true if the media was inserted; and false otherwise.
-*/
 bool QMediaPlaylistProvider::insertMedia(int position, const QMediaContent &media)
 {
-   Q_UNUSED(position);
-   Q_UNUSED(media);
+   (void) position;
+   (void) media;
    return false;
 }
 
-/*!
-    Inserts multiple media \a items into a playlist at \a position.
-
-    Returns true if the media \a items were inserted; and false otherwise.
-*/
 bool QMediaPlaylistProvider::insertMedia(int position, const QList<QMediaContent> &items)
 {
    for (int i = 0; i < items.count(); i++) {
@@ -123,27 +108,16 @@ bool QMediaPlaylistProvider::insertMedia(int position, const QList<QMediaContent
    return true;
 }
 
-
-/*!
-    Removes the media at \a position from a playlist.
-
-    Returns true if the media was removed; and false otherwise.
-*/
 bool QMediaPlaylistProvider::removeMedia(int position)
 {
-   Q_UNUSED(position);
+   (void) position;
    return false;
 }
 
-/*!
-    Removes the media between the given \a start and \a end positions from a playlist.
-
-    Returns true if the media was removed; and false otherwise.
-  */
 bool QMediaPlaylistProvider::removeMedia(int start, int end)
 {
    for (int pos = start; pos <= end; pos++) {
-      if (!removeMedia(pos)) {
+      if (! removeMedia(pos)) {
          return false;
       }
    }
@@ -151,19 +125,11 @@ bool QMediaPlaylistProvider::removeMedia(int start, int end)
    return true;
 }
 
-/*!
-    Removes all media from a playlist.
-
-    Returns true if the media was removed; and false otherwise.
-*/
 bool QMediaPlaylistProvider::clear()
 {
    return removeMedia(0, mediaCount() - 1);
 }
 
-/*!
-    Shuffles the contents of a playlist.
-*/
 void QMediaPlaylistProvider::shuffle()
 {
 }

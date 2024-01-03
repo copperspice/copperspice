@@ -1757,310 +1757,278 @@ void comp_func_Exclusion(uint *__restrict dest, const uint *__restrict src, int 
         comp_func_Exclusion_impl(dest, src, length, QPartialCoverage(const_alpha));
 }
 
-void rasterop_solid_SourceOrDestination(uint *dest,
-                                                    int length,
-                                                    uint color,
-                                                    uint const_alpha)
+void rasterop_solid_SourceOrDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--)
-        *dest++ |= color;
+   (void) const_alpha;
+
+   while (length--) {
+      *dest++ |= color;
+   }
 }
 
-void rasterop_SourceOrDestination(uint *__restrict dest,
-                                              const uint *__restrict src,
-                                              int length,
-                                              uint const_alpha)
+void rasterop_SourceOrDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--)
-        *dest++ |= *src++;
+   (void) const_alpha;
+
+   while (length--) {
+      *dest++ |= *src++;
+   }
 }
 
-void rasterop_solid_SourceAndDestination(uint *dest,
-                                                     int length,
-                                                     uint color,
-                                                     uint const_alpha)
+void rasterop_solid_SourceAndDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color |= 0xff000000;
-    while (length--)
-        *dest++ &= color;
+   (void) const_alpha;
+
+   color |= 0xff000000;
+
+   while (length--) {
+      *dest++ &= color;
+   }
 }
 
-void rasterop_SourceAndDestination(uint *__restrict dest,
-                                               const uint *__restrict src,
-                                               int length,
-                                               uint const_alpha)
+void rasterop_SourceAndDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
+    (void) const_alpha;
+
     while (length--) {
         *dest = (*src & *dest) | 0xff000000;
         ++dest; ++src;
     }
 }
 
-void rasterop_solid_SourceXorDestination(uint *dest,
-                                                     int length,
-                                                     uint color,
-                                                     uint const_alpha)
+void rasterop_solid_SourceXorDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color &= 0x00ffffff;
-    while (length--)
-        *dest++ ^= color;
+   (void) const_alpha;
+
+   color &= 0x00ffffff;
+
+   while (length--) {
+      *dest++ ^= color;
+   }
 }
 
-void rasterop_SourceXorDestination(uint *__restrict dest,
-                                               const uint *__restrict src,
-                                               int length,
-                                               uint const_alpha)
+void rasterop_SourceXorDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (*src ^ *dest) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (*src ^ *dest) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_NotSourceAndNotDestination(uint *dest,
-                                                           int length,
-                                                           uint color,
-                                                           uint const_alpha)
+void rasterop_solid_NotSourceAndNotDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color = ~color;
-    while (length--) {
-        *dest = (color & ~(*dest)) | 0xff000000;
-        ++dest;
-    }
+   (void) const_alpha;
+
+   color = ~color;
+   while (length--) {
+      *dest = (color & ~(*dest)) | 0xff000000;
+      ++dest;
+   }
 }
 
 void rasterop_NotSourceAndNotDestination(uint *__restrict dest,
-                                                     const uint *__restrict src,
-                                                     int length,
-                                                     uint const_alpha)
+      const uint *__restrict src, int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (~(*src) & ~(*dest)) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (~(*src) & ~(*dest)) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_NotSourceOrNotDestination(uint *dest,
-                                                          int length,
-                                                          uint color,
-                                                          uint const_alpha)
+void rasterop_solid_NotSourceOrNotDestination(uint *dest, int length,
+      uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color = ~color | 0xff000000;
-    while (length--) {
-        *dest = color | ~(*dest);
-        ++dest;
-    }
+   (void) const_alpha;
+
+   color = ~color | 0xff000000;
+   while (length--) {
+      *dest = color | ~(*dest);
+      ++dest;
+   }
 }
 
-void rasterop_NotSourceOrNotDestination(uint *__restrict dest,
-                                                    const uint *__restrict src,
-                                                    int length,
-                                                    uint const_alpha)
+void rasterop_NotSourceOrNotDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = ~(*src) | ~(*dest) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = ~(*src) | ~(*dest) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_NotSourceXorDestination(uint *dest,
-                                                        int length,
-                                                        uint color,
-                                                        uint const_alpha)
+void rasterop_solid_NotSourceXorDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color = ~color & 0x00ffffff;
-    while (length--) {
-        *dest = color ^ (*dest);
-        ++dest;
-    }
+   (void) const_alpha;
+
+   color = ~color & 0x00ffffff;
+   while (length--) {
+      *dest = color ^ (*dest);
+      ++dest;
+   }
 }
 
-void rasterop_NotSourceXorDestination(uint *__restrict dest,
-                                                  const uint *__restrict src,
-                                                  int length,
-                                                  uint const_alpha)
+void rasterop_NotSourceXorDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = ((~(*src)) ^ (*dest)) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = ((~(*src)) ^ (*dest)) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_NotSource(uint *dest, int length,
-                                          uint color, uint const_alpha)
+void rasterop_solid_NotSource(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
+    (void) const_alpha;
+
     qt_memfill(dest, ~color | 0xff000000, length);
 }
 
 void rasterop_NotSource(uint *__restrict dest, const uint *__restrict src,
-                                    int length, uint const_alpha)
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
+    (void) const_alpha;
+
     while (length--)
         *dest++ = ~(*src++) | 0xff000000;
 }
 
-void rasterop_solid_NotSourceAndDestination(uint *dest,
-                                                        int length,
-                                                        uint color,
-                                                        uint const_alpha)
+void rasterop_solid_NotSourceAndDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color = ~color | 0xff000000;
-    while (length--) {
-        *dest = color & *dest;
-        ++dest;
-    }
+   (void) const_alpha;
+
+   color = ~color | 0xff000000;
+
+   while (length--) {
+      *dest = color & *dest;
+      ++dest;
+   }
 }
 
-void rasterop_NotSourceAndDestination(uint *__restrict dest,
-                                                  const uint *__restrict src,
-                                                  int length,
-                                                  uint const_alpha)
+void rasterop_NotSourceAndDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (~(*src) & *dest) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (~(*src) & *dest) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_SourceAndNotDestination(uint *dest,
-                                                        int length,
-                                                        uint color,
-                                                        uint const_alpha)
+void rasterop_solid_SourceAndNotDestination(uint *dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (color & ~(*dest)) | 0xff000000;
-        ++dest;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (color & ~(*dest)) | 0xff000000;
+      ++dest;
+   }
 }
 
-void rasterop_SourceAndNotDestination(uint *__restrict dest,
-                                                  const uint *__restrict src,
-                                                  int length,
-                                                  uint const_alpha)
+void rasterop_SourceAndNotDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (*src & ~(*dest)) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (*src & ~(*dest)) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_NotSourceOrDestination(uint *__restrict dest,
-                                                 const uint *__restrict src,
-                                                 int length,
-                                                 uint const_alpha)
+void rasterop_NotSourceOrDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (~(*src) | *dest) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (~(*src) | *dest) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_NotSourceOrDestination(uint *__restrict dest,
-                                                       int length,
-                                                       uint color,
-                                                       uint const_alpha)
+void rasterop_solid_NotSourceOrDestination(uint *__restrict dest, int length,
+      uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    color = ~color | 0xff000000;
-    while (length--)
-        *dest++ |= color;
+   (void) const_alpha;
+
+   color = ~color | 0xff000000;
+   while (length--) {
+      *dest++ |= color;
+   }
 }
 
-void rasterop_SourceOrNotDestination(uint *__restrict dest,
-                                                 const uint *__restrict src,
-                                                 int length,
-                                                 uint const_alpha)
+void rasterop_SourceOrNotDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (*src | ~(*dest)) | 0xff000000;
-        ++dest; ++src;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (*src | ~(*dest)) | 0xff000000;
+      ++dest; ++src;
+   }
 }
 
-void rasterop_solid_SourceOrNotDestination(uint *__restrict dest,
-                                                       int length,
-                                                       uint color,
-                                                       uint const_alpha)
+void rasterop_solid_SourceOrNotDestination(uint *__restrict dest, int length,
+      uint color, uint const_alpha)
 {
-    Q_UNUSED(const_alpha);
-    while (length--) {
-        *dest = (color | ~(*dest)) | 0xff000000;
-        ++dest;
-    }
+   (void) const_alpha;
+
+   while (length--) {
+      *dest = (color | ~(*dest)) | 0xff000000;
+      ++dest;
+   }
 }
 
-void rasterop_ClearDestination(uint *__restrict dest,
-                                           const uint *__restrict src,
-                                           int length,
-                                           uint const_alpha)
+void rasterop_ClearDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(src);
-    comp_func_solid_SourceOver (dest, length, 0xff000000, const_alpha);
+   (void) src;
+   comp_func_solid_SourceOver (dest, length, 0xff000000, const_alpha);
 }
 
-void rasterop_solid_ClearDestination(uint *__restrict dest,
-                                                 int length,
-                                                 uint color,
-                                                 uint const_alpha)
+void rasterop_solid_ClearDestination(uint *__restrict dest, int length,
+      uint color, uint const_alpha)
 {
-    Q_UNUSED(color);
-    comp_func_solid_SourceOver (dest, length, 0xff000000, const_alpha);
+   (void) color;
+   comp_func_solid_SourceOver (dest, length, 0xff000000, const_alpha);
 }
 
-void rasterop_SetDestination(uint *__restrict dest,
-                                         const uint *__restrict src,
-                                         int length,
-                                         uint const_alpha)
+void rasterop_SetDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(src);
-    comp_func_solid_SourceOver (dest, length, 0xffffffff, const_alpha);
+   (void) src;
+   comp_func_solid_SourceOver (dest, length, 0xffffffff, const_alpha);
 }
 
-void rasterop_solid_SetDestination(uint *__restrict dest,
-                                               int length,
-                                               uint color,
-                                               uint const_alpha)
+void rasterop_solid_SetDestination(uint *__restrict dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(color);
-    comp_func_solid_SourceOver (dest, length, 0xffffffff, const_alpha);
+   (void) color;
+   comp_func_solid_SourceOver (dest, length, 0xffffffff, const_alpha);
 }
 
-void rasterop_NotDestination(uint *__restrict dest,
-                                         const uint *__restrict src,
-                                         int length,
-                                         uint const_alpha)
+void rasterop_NotDestination(uint *__restrict dest, const uint *__restrict src,
+      int length, uint const_alpha)
 {
-    Q_UNUSED(src);
-    rasterop_solid_SourceXorDestination (dest, length, 0x00ffffff, const_alpha);
+   (void) src;
+   rasterop_solid_SourceXorDestination (dest, length, 0x00ffffff, const_alpha);
 }
 
-void rasterop_solid_NotDestination(uint *__restrict dest,
-                                               int length,
-                                               uint color,
-                                               uint const_alpha)
+void rasterop_solid_NotDestination(uint *__restrict dest, int length, uint color, uint const_alpha)
 {
-    Q_UNUSED(color);
-    rasterop_solid_SourceXorDestination (dest, length, 0x00ffffff, const_alpha);
+   (void) color;
+   rasterop_solid_SourceXorDestination (dest, length, 0x00ffffff, const_alpha);
 }
 
 CompositionFunctionSolid qt_functionForModeSolid_C[] = {

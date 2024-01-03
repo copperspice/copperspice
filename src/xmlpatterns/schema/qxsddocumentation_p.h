@@ -29,9 +29,8 @@
 #include <qderivedstring_p.h>
 #include <qnamedschemacomponent_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdDocumentation : public NamedSchemaComponent
 {
  public:
@@ -88,8 +87,7 @@ class XsdDocumentation : public NamedSchemaComponent
    DerivedString<TypeLanguage>::Ptr m_language;
    QString                          m_content;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

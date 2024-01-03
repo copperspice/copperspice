@@ -125,7 +125,7 @@ class Q_GUI_EXPORT QMenuBar : public QWidget
    GUI_CS_SLOT_1(Private, void _q_actionHovered())
    GUI_CS_SLOT_2(_q_actionHovered)
 
-   GUI_CS_SLOT_1(Private, void _q_internalShortcutActivated(int un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_internalShortcutActivated(int id))
    GUI_CS_SLOT_2(_q_internalShortcutActivated)
 
    GUI_CS_SLOT_1(Private, void _q_updateLayout())

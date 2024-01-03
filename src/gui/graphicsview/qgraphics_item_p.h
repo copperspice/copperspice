@@ -576,7 +576,7 @@ class QGraphicsItemEffectSourcePrivate : public QGraphicsEffectSourcePrivate
 
    QRect deviceRect() const override {
       if (! info || ! info->widget) {
-         qWarning("QGraphicsEffectSource::deviceRect: Not yet implemented, lacking device context");
+         qWarning("QGraphicsEffectSource::deviceRect() Not implemented, no device context");
          return QRect();
       }
 

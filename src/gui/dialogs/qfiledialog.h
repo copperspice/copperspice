@@ -300,7 +300,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
  private:
    Q_DECLARE_PRIVATE(QFileDialog)
 
-   GUI_CS_SLOT_1(Private, void _q_pathChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_pathChanged(const QString &path))
    GUI_CS_SLOT_2(_q_pathChanged)
 
    GUI_CS_SLOT_1(Private, void _q_navigateBackward())
@@ -321,7 +321,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_showDetailsView())
    GUI_CS_SLOT_2(_q_showDetailsView)
 
-   GUI_CS_SLOT_1(Private, void _q_showContextMenu(const QPoint &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_showContextMenu(const QPoint &point))
    GUI_CS_SLOT_2(_q_showContextMenu)
 
    GUI_CS_SLOT_1(Private, void _q_renameCurrent())
@@ -369,7 +369,7 @@ class Q_GUI_EXPORT QFileDialog : public QDialog
    GUI_CS_SLOT_1(Private, void _q_goHome())
    GUI_CS_SLOT_2(_q_goHome)
 
-   GUI_CS_SLOT_1(Private, void _q_showHeader(QAction *un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_showHeader(QAction *action))
    GUI_CS_SLOT_2(_q_showHeader)
 
    GUI_CS_SLOT_1(Private, void _q_autoCompleteFileName(const QString &text))

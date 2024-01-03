@@ -163,8 +163,8 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
    Qt::DropActions supportedDropActions() const override;
 
  protected:
-   virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
-   virtual bool filterAcceptsColumn(int source_column, const QModelIndex &source_parent) const;
+   virtual bool filterAcceptsRow(int source_row, const QModelIndex &sourceParent) const;
+   virtual bool filterAcceptsColumn(int source_column, const QModelIndex &sourceParent) const;
    virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
    void invalidateFilter();
@@ -193,40 +193,44 @@ class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
          QAbstractItemModel::LayoutChangeHint hint))
    GUI_CS_SLOT_2(_q_sourceLayoutChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeInserted(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsInserted(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeRemoved(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsRemoved(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceRowsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsAboutToBeMoved(const QModelIndex &sourceParent, int, int,
+         const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceRowsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(const QModelIndex &, int, int, const QModelIndex &, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceRowsMoved(const QModelIndex &sourceParent, int, int,
+         const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceRowsMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeInserted(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsInserted(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsInserted)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeRemoved(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &source_parent, int start, int end))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsRemoved(const QModelIndex &sourceParent, int start, int end))
    GUI_CS_SLOT_2(_q_sourceColumnsRemoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(const QModelIndex &, int, int, const QModelIndex &, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsAboutToBeMoved(const QModelIndex &sourceParent, int, int,
+         const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceColumnsAboutToBeMoved)
 
-   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(const QModelIndex &, int, int, const QModelIndex &, int))
+   GUI_CS_SLOT_1(Private, void _q_sourceColumnsMoved(const QModelIndex &sourceParent, int, int,
+         const QModelIndex &, int))
    GUI_CS_SLOT_2(_q_sourceColumnsMoved)
 
    GUI_CS_SLOT_1(Private, void _q_clearMapping())

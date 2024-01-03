@@ -24,13 +24,13 @@
 #ifndef QXsdAttributeUse_P_H
 #define QXsdAttributeUse_P_H
 
+#include <qlist.h>
+
 #include <qxsdattribute_p.h>
 #include <qxsdattributeterm_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class XsdAttributeUse : public XsdAttributeTerm
 {
  public:
@@ -166,8 +166,7 @@ class XsdAttributeUse : public XsdAttributeTerm
    XsdAttribute::Ptr    m_attribute;
    ValueConstraint::Ptr m_valueConstraint;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

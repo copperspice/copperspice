@@ -1662,8 +1662,8 @@ bool QGridLayoutEngine::ensureDynamicConstraint() const
                q_cachedConstraintOrientation = itemConstraintOrientation;
             } else if (q_cachedConstraintOrientation != itemConstraintOrientation) {
                q_cachedConstraintOrientation = UnfeasibleConstraint;
-               qWarning("QGridLayoutEngine: Unfeasible, cannot mix horizontal and"
-                  " vertical constraint in the same layout");
+               qWarning("QGridLayoutEngine::ensureDynamicConstraint() Can not mix horizontal and"
+                  " vertical constraints in the same layout");
                return false;
             }
          }

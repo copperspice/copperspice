@@ -24,13 +24,12 @@
 #ifndef QXsdIdCache_P_H
 #define QXsdIdCache_P_H
 
-#include <qschemacomponent_p.h>
 #include <QExplicitlySharedDataPointer>
 #include <QReadWriteLock>
 #include <QSet>
 #include <QString>
 
-QT_BEGIN_NAMESPACE
+#include <qschemacomponent_p.h>
 
 namespace QPatternist {
 
@@ -53,8 +52,7 @@ class XsdIdCache : public QSharedData
    QSet<QString>          m_ids;
    mutable QReadWriteLock m_lock;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

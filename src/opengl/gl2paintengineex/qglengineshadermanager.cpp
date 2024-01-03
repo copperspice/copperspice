@@ -82,7 +82,11 @@ class QGLShaderStorage
     QThreadStorage<QOpenGLMultiGroupSharedResource *> m_storage;
 };
 
-Q_GLOBAL_STATIC(QGLShaderStorage, qt_shader_storage);
+static QGLShaderStorage *qt_shader_storage()
+{
+   static QGLShaderStorage retval;
+   return &retval;
+}
 
 QGLEngineSharedShaders *QGLEngineSharedShaders::shadersForContext(const QGLContext *context)
 {
@@ -545,7 +549,7 @@ GLuint QGLEngineShaderManager::getUniformLocation(Uniform id)
 
 void QGLEngineShaderManager::optimiseForBrushTransform(QTransform::TransformationType transformType)
 {
-   Q_UNUSED(transformType); // Currently ignored
+   (void) transformType;
 }
 
 void QGLEngineShaderManager::setDirty()

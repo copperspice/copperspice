@@ -23,8 +23,6 @@
 
 #include "qdeduplicateiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DeduplicateIterator::DeduplicateIterator(const Item::List &source) : ListIterator<Item>(source)
@@ -71,4 +69,3 @@ Item::Iterator::Ptr DeduplicateIterator::copy() const
    return Item::Iterator::Ptr(new DeduplicateIterator(m_list));
 }
 
-QT_END_NAMESPACE

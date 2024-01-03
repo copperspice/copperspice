@@ -24,9 +24,8 @@
 #ifndef QReferenceCountedValue_P_H
 #define QReferenceCountedValue_P_H
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 template<typename T>
 class ReferenceCountedValue : public QSharedData
 {
@@ -50,8 +49,7 @@ class ReferenceCountedValue : public QSharedData
    ReferenceCountedValue(const ReferenceCountedValue &) = delete;
    ReferenceCountedValue &operator=(const ReferenceCountedValue &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

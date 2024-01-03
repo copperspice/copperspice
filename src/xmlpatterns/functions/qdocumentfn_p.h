@@ -26,18 +26,14 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
-
 
 class DocumentFN : public FunctionCall
 {
  public:
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

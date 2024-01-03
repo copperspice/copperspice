@@ -28,8 +28,6 @@
 #include <qanynodetype_p.h>
 #include <qbuiltintypes_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 template <const QXmlNodeModelIndex::NodeKind kind>
@@ -64,7 +62,5 @@ class BuiltinNodeType : public AnyNodeType
 #include "qbuiltinnodetype.cpp"
 
 }
-
-QT_END_NAMESPACE
 
 #endif

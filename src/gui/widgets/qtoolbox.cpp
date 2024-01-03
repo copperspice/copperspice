@@ -441,7 +441,7 @@ void QToolBox::setCurrentWidget(QWidget *widget)
    if (i >= 0) {
       setCurrentIndex(i);
    } else {
-      qWarning("QToolBox::setCurrentWidget(): Widget not contained in tool box");
+      qWarning("QToolBox::setCurrentWidget() Current widget was not found in this ToolBox");
    }
 }
 
@@ -590,10 +590,10 @@ void QToolBox::_q_buttonClicked()
    d->_q_buttonClicked();
 }
 
-void QToolBox::_q_widgetDestroyed(QObject *un_named_arg1)
+void QToolBox::_q_widgetDestroyed(QObject *object)
 {
    Q_D(QToolBox);
-   d->_q_widgetDestroyed(un_named_arg1);
+   d->_q_widgetDestroyed(object);
 }
 
 #endif //QT_NO_TOOLBOX

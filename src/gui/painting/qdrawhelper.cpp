@@ -4707,7 +4707,7 @@ static void blend_untransformed_generic_rgb64(int count, const QSpan *spans, voi
 
    Operator op = getOperator(data, spans, count);
    if (!op.func64) {
-      qWarning("Unsupported blend");
+      qWarning("blend_untransformed_generic_rgb64() Unsupported blend");
       return blend_untransformed_generic(count, spans, userData);
    }
    QRgba64 buffer[buffer_size];

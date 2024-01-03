@@ -25,8 +25,6 @@
 
 #include <qtemplatemode_p.h>
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool TemplateMode::lessThanByPriority(const TemplatePattern::Ptr &t1,
@@ -42,4 +40,3 @@ void TemplateMode::finalize()
    /* Now we have a list of patterns sorted by priority. */
 }
 
-QT_END_NAMESPACE

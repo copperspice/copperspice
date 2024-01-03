@@ -25,8 +25,6 @@
 
 #include "qunparsedentityurifn_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item UnparsedEntityURIFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -34,5 +32,3 @@ Item UnparsedEntityURIFN::evaluateSingleton(const DynamicContext::Ptr &context) 
    checkTargetNode(context->contextItem().asNode(), context, ReportContext::XTDE1370);
    return toItem(AnyURI::fromValue(QUrl()));
 }
-
-QT_END_NAMESPACE

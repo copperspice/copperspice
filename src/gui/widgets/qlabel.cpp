@@ -1321,22 +1321,22 @@ QMenu *QLabelPrivate::createStandardContextMenu(const QPoint &pos)
 #endif
 
 #ifndef QT_NO_MOVIE
-void QLabel::_q_movieUpdated(const QRect &un_named_arg1)
+void QLabel::_q_movieUpdated(const QRect &rect)
 {
    Q_D(QLabel);
-   d->_q_movieUpdated(un_named_arg1);
+   d->_q_movieUpdated(rect);
 }
 
-void QLabel::_q_movieResized(const QSize &un_named_arg1)
+void QLabel::_q_movieResized(const QSize &size)
 {
    Q_D(QLabel);
-   d->_q_movieResized(un_named_arg1);
+   d->_q_movieResized(size);
 }
 #endif
 
-void QLabel::_q_linkHovered(const QString &un_named_arg1)
+void QLabel::_q_linkHovered(const QString &anchor)
 {
    Q_D(QLabel);
-   d->_q_linkHovered(un_named_arg1);
+   d->_q_linkHovered(anchor);
 }
 

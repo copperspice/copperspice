@@ -126,7 +126,7 @@ class MessageEditor : public QScrollArea
    CS_SLOT_1(Public, void setEditorFocus())
    CS_SLOT_2(setEditorFocus)
 
-   CS_SLOT_1(Public, void setTranslation(int model, const QString & translation))
+   CS_SLOT_1(Public, void setTranslation(int model, const QString &translation))
    CS_SLOT_2(setTranslation)
 
    CS_SLOT_1(Public, void setLengthVariants(bool on))
@@ -142,33 +142,42 @@ class MessageEditor : public QScrollArea
    CS_SLOT_2(resetFontSize)
 
  private:
-   CS_SLOT_1(Private, void editorCreated(QTextEdit * un_named_arg1))
+   CS_SLOT_1(Private, void editorCreated(QTextEdit *editor))
    CS_SLOT_2(editorCreated)
 
    CS_SLOT_1(Private, void editorDestroyed())
    CS_SLOT_2(editorDestroyed)
 
-   CS_SLOT_1(Private, void selectionChanged(QTextEdit * un_named_arg1))
+   CS_SLOT_1(Private, void selectionChanged(QTextEdit *editor))
    CS_SLOT_2(selectionChanged)
 
    CS_SLOT_1(Private, void resetHoverSelection())
    CS_SLOT_2(resetHoverSelection)
-   CS_SLOT_1(Private, void emitTranslationChanged(QTextEdit * un_named_arg1))
+
+   CS_SLOT_1(Private, void emitTranslationChanged(QTextEdit *editor))
    CS_SLOT_2(emitTranslationChanged)
-   CS_SLOT_1(Private, void emitTranslatorCommentChanged(QTextEdit * un_named_arg1))
+
+   CS_SLOT_1(Private, void emitTranslatorCommentChanged(QTextEdit *editor))
    CS_SLOT_2(emitTranslatorCommentChanged)
+
    CS_SLOT_1(Private, void updateCanPaste())
    CS_SLOT_2(updateCanPaste)
+
    CS_SLOT_1(Private, void clipboardChanged())
    CS_SLOT_2(clipboardChanged)
+
    CS_SLOT_1(Private, void messageModelAppended())
    CS_SLOT_2(messageModelAppended)
+
    CS_SLOT_1(Private, void messageModelDeleted(int model))
    CS_SLOT_2(messageModelDeleted)
+
    CS_SLOT_1(Private, void allModelsDeleted())
    CS_SLOT_2(allModelsDeleted)
+
    CS_SLOT_1(Private, void setTargetLanguage(int model))
    CS_SLOT_2(setTargetLanguage)
+
    CS_SLOT_1(Private, void reallyFixTabOrder())
    CS_SLOT_2(reallyFixTabOrder)
 

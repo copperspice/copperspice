@@ -118,15 +118,16 @@ class SampleGrabberCallbackPrivate : public ISampleGrabberCB
    }
 
    STDMETHODIMP SampleCB(double Time, IMediaSample *pSample) {
-      Q_UNUSED(Time)
-      Q_UNUSED(pSample)
+      (void) Time;
+      (void) pSample;
+
       return E_NOTIMPL;
    }
 
    STDMETHODIMP BufferCB(double time, BYTE *pBuffer, long bufferLen) {
       // We display frames as they arrive, the presentation time is
       // irrelevant
-      Q_UNUSED(time);
+      (void) time;
 
       if (m_session) {
          m_session->onFrameAvailable(reinterpret_cast<const char *>(pBuffer), bufferLen);

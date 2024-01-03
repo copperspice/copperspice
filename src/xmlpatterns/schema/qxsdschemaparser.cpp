@@ -37,8 +37,6 @@
 #include <QFile>
 #include <QXmlQuery>
 
-QT_BEGIN_NAMESPACE
-
 /**
  * @page schema_overview Overview
  * @section structure_and_components Structure and Components
@@ -6331,5 +6329,3 @@ void XsdSchemaParser::addFacet(const XsdFacet::Ptr &facet, XsdFacet::Hash &facet
 
    facets.insert(facet->type(), facet);
 }
-
-QT_END_NAMESPACE

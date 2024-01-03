@@ -23,8 +23,6 @@
 
 #include "qxsdassertion_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAssertion::setTest(const XsdXPathExpression::Ptr &test)
@@ -36,5 +34,3 @@ XsdXPathExpression::Ptr XsdAssertion::test() const
 {
    return m_test;
 }
-
-QT_END_NAMESPACE

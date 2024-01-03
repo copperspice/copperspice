@@ -27,11 +27,9 @@
 #include <qabstractxmlforwarditerator_p.h>
 #include <qprimitives_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
-template<typename T> 
+template<typename T>
 class EmptyIterator : public QAbstractXmlForwardIterator<T>
 {
  public:
@@ -88,7 +86,5 @@ static inline typename QAbstractXmlForwardIterator<T>::Ptr makeEmptyIterator()
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

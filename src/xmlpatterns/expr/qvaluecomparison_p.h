@@ -28,8 +28,6 @@
 #include <qpaircontainer_p.h>
 #include <qcomparisonplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class ValueComparison : public PairContainer,
@@ -83,7 +81,5 @@ class ValueComparison : public PairContainer,
    const AtomicComparator::Operator m_operator;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

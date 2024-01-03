@@ -63,8 +63,10 @@ class AVFMediaRecorderControlIOS : public QMediaRecorderControl
 
    CS_SLOT_1(Public, void setState(QMediaRecorder::State state)override)
    CS_SLOT_2(setState)
+
    CS_SLOT_1(Public, void setMuted(bool muted)override)
    CS_SLOT_2(setMuted)
+
    CS_SLOT_1(Public, void setVolume(qreal volume)override)
    CS_SLOT_2(setVolume)
 
@@ -72,7 +74,7 @@ class AVFMediaRecorderControlIOS : public QMediaRecorderControl
    void stopWriter();
 
    AVFCameraService *m_service;
-   AVFScopedPointer<QT_MANGLE_NAMESPACE(AVFMediaAssetWriter)> m_writer;
+   AVFScopedPointer<AVFMediaAssetWriter> m_writer;
 
    QUrl m_outputLocation;
    AVFStorageLocation m_storageLocation;
@@ -87,7 +89,7 @@ class AVFMediaRecorderControlIOS : public QMediaRecorderControl
    Q_INVOKABLE void assetWriterStarted();
    Q_INVOKABLE void assetWriterFinished();
 
-   CS_SLOT_1(Private, void captureModeChanged(QCamera::CaptureModes un_named_arg1))
+   CS_SLOT_1(Private, void captureModeChanged(QCamera::CaptureModes newMode))
    CS_SLOT_2(captureModeChanged)
 
    CS_SLOT_1(Private, void cameraStatusChanged(QCamera::Status newStatus))

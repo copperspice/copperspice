@@ -28,8 +28,6 @@
 #include <qyearmonthduration_p.h>
 #include <qemptyiterator_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class CommonValues
@@ -183,7 +181,5 @@ class CommonValues
    CommonValues &operator=(const CommonValues &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

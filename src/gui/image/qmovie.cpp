@@ -40,37 +40,36 @@
 
 #define QMOVIE_INVALID_DELAY -1
 
-
-
 class QFrameInfo
 {
  public:
-   QPixmap pixmap;
-   int delay;
-   bool endMark;
-   inline QFrameInfo(bool endMark)
+   QFrameInfo(bool endMark)
       : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(endMark) {
    }
 
-   inline QFrameInfo()
+   QFrameInfo()
       : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(false) {
    }
 
-   inline QFrameInfo(const QPixmap &pixmap, int delay)
+   QFrameInfo(const QPixmap &pixmap, int delay)
       : pixmap(pixmap), delay(delay), endMark(false) {
    }
 
-   inline bool isValid() {
+   bool isValid() {
       return endMark || !(pixmap.isNull() && (delay == QMOVIE_INVALID_DELAY));
    }
 
-   inline bool isEndMarker() {
+   bool isEndMarker() {
       return endMark;
    }
 
    static inline QFrameInfo endMarker() {
       return QFrameInfo(true);
    }
+
+   QPixmap pixmap;
+   int delay;
+   bool endMark;
 };
 
 class QMoviePrivate
@@ -91,7 +90,7 @@ class QMoviePrivate
    QFrameInfo infoForFrame(int frameNumber);
    void reset();
 
-   inline void enterState(QMovie::MovieState newState) {
+   void enterState(QMovie::MovieState newState) {
       movieState = newState;
       emit q_func()->stateChanged(newState);
    }
@@ -417,35 +416,26 @@ bool QMoviePrivate::jumpToFrame(int frameNumber)
    return (nextFrameNumber == currentFrameNumber + 1);
 }
 
-/*!
-    \internal
-*/
 int QMoviePrivate::frameCount() const
 {
    int result;
+
    if ((result = reader->imageCount()) != 0) {
       return result;
    }
+
    if (haveReadAll) {
       return greatestFrameNumber + 1;
    }
-   return 0; // Don't know
+
+   return 0;
 }
 
-/*!
-    \internal
-*/
 bool QMoviePrivate::jumpToNextFrame()
 {
    return jumpToFrame(currentFrameNumber + 1);
 }
 
-/*!
-    Constructs a QMovie object, passing the \a parent object to QObject's
-    constructor.
-
-    \sa setFileName(), setDevice(), setFormat()
- */
 QMovie::QMovie(QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
@@ -453,17 +443,9 @@ QMovie::QMovie(QObject *parent)
    Q_D(QMovie);
 
    d->reader = new QImageReader;
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
-/*!
-    Constructs a QMovie object. QMovie will use read image data from \a
-    device, which it assumes is open and readable. If \a format is not empty,
-    QMovie will use the image format \a format for decoding the image
-    data. Otherwise, QMovie will attempt to guess the format.
-
-    The \a parent object is passed to QObject's constructor.
- */
 QMovie::QMovie(QIODevice *device, const QString &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
@@ -472,17 +454,10 @@ QMovie::QMovie(QIODevice *device, const QString &format, QObject *parent)
 
    d->reader = new QImageReader(device, format);
    d->initialDevicePos = device->pos();
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
-/*!
-    Constructs a QMovie object. QMovie will use read image data from \a
-    fileName. If \a format is not empty, QMovie will use the image format \a
-    format for decoding the image data. Otherwise, QMovie will attempt to
-    guess the format.
-
-    The \a parent object is passed to QObject's constructor.
- */
 QMovie::QMovie(const QString &fileName, const QString &format, QObject *parent)
    : QObject(parent), d_ptr(new QMoviePrivate(this))
 {
@@ -491,27 +466,20 @@ QMovie::QMovie(const QString &fileName, const QString &format, QObject *parent)
 
    d->absoluteFilePath = QDir(fileName).absolutePath();
    d->reader = new QImageReader(fileName, format);
+
    if (d->reader->device()) {
       d->initialDevicePos = d->reader->device()->pos();
    }
-   connect(&d->nextImageTimer, SIGNAL(timeout()), this, SLOT(_q_loadNextFrame()));
+
+   connect(&d->nextImageTimer, &QTimer::timeout, this, &QMovie::_q_loadNextFrame);
 }
 
-/*!
-    Destructs the QMovie object.
-*/
 QMovie::~QMovie()
 {
    Q_D(QMovie);
    delete d->reader;
 }
 
-/*!
-    Sets the current device to \a device. QMovie will read image data from
-    this device when the movie is running.
-
-    \sa device(), setFormat()
-*/
 void QMovie::setDevice(QIODevice *device)
 {
    Q_D(QMovie);
@@ -519,24 +487,12 @@ void QMovie::setDevice(QIODevice *device)
    d->reset();
 }
 
-/*!
-    Returns the device QMovie reads image data from. If no device has
-    currently been assigned, 0 is returned.
-
-    \sa setDevice(), fileName()
-*/
 QIODevice *QMovie::device() const
 {
    Q_D(const QMovie);
    return d->reader->device();
 }
 
-/*!
-    Sets the name of the file that QMovie reads image data from, to \a
-    fileName.
-
-    \sa fileName(), setDevice(), setFormat()
-*/
 void QMovie::setFileName(const QString &fileName)
 {
    Q_D(QMovie);
@@ -545,255 +501,102 @@ void QMovie::setFileName(const QString &fileName)
    d->reset();
 }
 
-/*!
-    Returns the name of the file that QMovie reads image data from. If no file
-    name has been assigned, or if the assigned device is not a file, an empty
-    QString is returned.
-
-    \sa setFileName(), device()
-*/
 QString QMovie::fileName() const
 {
    Q_D(const QMovie);
    return d->reader->fileName();
 }
 
-/*!
-    Sets the format that QMovie will use when decoding image data, to \a
-    format. By default, QMovie will attempt to guess the format of the image
-    data.
-
-    You can call supportedFormats() for the full list of formats
-    QMovie supports.
-
-    \sa QImageReader::supportedImageFormats()
-*/
 void QMovie::setFormat(const QString &format)
 {
    Q_D(QMovie);
    d->reader->setFormat(format);
 }
 
-/*!
-    Returns the format that QMovie uses when decoding image data. If no format
-    has been assigned, an empty QByteArray() is returned.
-
-    \sa setFormat()
-*/
 QString QMovie::format() const
 {
    Q_D(const QMovie);
    return d->reader->format();
 }
 
-/*!
-    For image formats that support it, this function sets the background color
-    to \a color.
-
-    \sa backgroundColor()
-*/
 void QMovie::setBackgroundColor(const QColor &color)
 {
    Q_D(QMovie);
    d->reader->setBackgroundColor(color);
 }
 
-/*!
-    Returns the background color of the movie. If no background color has been
-    assigned, an invalid QColor is returned.
-
-    \sa setBackgroundColor()
-*/
 QColor QMovie::backgroundColor() const
 {
    Q_D(const QMovie);
    return d->reader->backgroundColor();
 }
 
-/*!
-    Returns the current state of QMovie.
-
-    \sa MovieState, stateChanged()
-*/
 QMovie::MovieState QMovie::state() const
 {
    Q_D(const QMovie);
    return d->movieState;
 }
 
-/*!
-    Returns the rect of the last frame. If no frame has yet been updated, an
-    invalid QRect is returned.
-
-    \sa currentImage(), currentPixmap()
-*/
 QRect QMovie::frameRect() const
 {
    Q_D(const QMovie);
    return d->frameRect;
 }
 
-/*! \fn QImage QMovie::framePixmap() const
-
-    Use currentPixmap() instead.
-*/
-
-/*! \fn void QMovie::pause()
-
-    Use setPaused(true) instead.
-*/
-
-/*! \fn void QMovie::unpause()
-
-    Use setPaused(false) instead.
-*/
-
-/*!
-    Returns the current frame as a QPixmap.
-
-    \sa currentImage(), updated()
-*/
 QPixmap QMovie::currentPixmap() const
 {
    Q_D(const QMovie);
    return d->currentPixmap;
 }
 
-/*! \fn QImage QMovie::frameImage() const
-
-    Use currentImage() instead.
-*/
-
-/*!
-    Returns the current frame as a QImage.
-
-    \sa currentPixmap(), updated()
-*/
 QImage QMovie::currentImage() const
 {
    Q_D(const QMovie);
    return d->currentPixmap.toImage();
 }
 
-/*!
-    Returns true if the movie is valid (e.g., the image data is readable and
-    the image format is supported); otherwise returns false.
-*/
 bool QMovie::isValid() const
 {
    Q_D(const QMovie);
    return d->isValid();
 }
 
-/*! \fn bool QMovie::running() const
-
-    Use state() instead.
-*/
-
-/*! \fn bool QMovie::isNull() const
-
-    Use isValid() instead.
-*/
-
-/*! \fn int QMovie::frameNumber() const
-
-    Use currentFrameNumber() instead.
-*/
-
-/*! \fn bool QMovie::paused() const
-
-    Use state() instead.
-*/
-
-/*! \fn bool QMovie::finished() const
-
-    Use state() instead.
-*/
-
-/*! \fn void QMovie::restart()
-
-    Use stop() and start() instead.
-*/
-
-/*!
-    \fn void QMovie::step()
-
-    Use jumpToNextFrame() instead.
-*/
-
-/*!
-    Returns the number of frames in the movie.
-
-    Certain animation formats do not support this feature, in which
-    case 0 is returned.
-*/
 int QMovie::frameCount() const
 {
    Q_D(const QMovie);
    return d->frameCount();
 }
 
-/*!
-    Returns the number of milliseconds QMovie will wait before updating the
-    next frame in the animation.
-*/
 int QMovie::nextFrameDelay() const
 {
    Q_D(const QMovie);
    return d->nextDelay;
 }
 
-/*!
-    Returns the sequence number of the current frame. The number of the first
-    frame in the movie is 0.
-*/
 int QMovie::currentFrameNumber() const
 {
    Q_D(const QMovie);
    return d->currentFrameNumber;
 }
 
-/*!
-    Jumps to the next frame. Returns true on success; otherwise returns false.
-*/
 bool QMovie::jumpToNextFrame()
 {
    Q_D(QMovie);
    return d->jumpToNextFrame();
 }
 
-/*!
-    Jumps to frame number \a frameNumber. Returns true on success; otherwise
-    returns false.
-*/
 bool QMovie::jumpToFrame(int frameNumber)
 {
    Q_D(QMovie);
    return d->jumpToFrame(frameNumber);
 }
 
-/*!
-    Returns the number of times the movie will loop before it finishes.
-    If the movie will only play once (no looping), loopCount returns 0.
-    If the movie loops forever, loopCount returns -1.
-
-    Note that, if the image data comes from a sequential device (e.g. a
-    socket), QMovie can only loop the movie if the cacheMode is set to
-    QMovie::CacheAll.
-*/
 int QMovie::loopCount() const
 {
    Q_D(const QMovie);
    return d->reader->loopCount();
 }
 
-/*!
-    If \a paused is true, QMovie will enter \l Paused state and emit
-    stateChanged(Paused); otherwise it will enter \l Running state and emit
-    stateChanged(Running).
-
-    \sa state()
-*/
 void QMovie::setPaused(bool paused)
 {
    Q_D(QMovie);
@@ -812,16 +615,6 @@ void QMovie::setPaused(bool paused)
    }
 }
 
-/*!
-    \property QMovie::speed
-    \brief the movie's speed
-
-    The speed is measured in percentage of the original movie speed.
-    The default speed is 100%.
-    Example:
-
-    \snippet doc/src/snippets/code/src_gui_image_qmovie.cpp 1
-*/
 void QMovie::setSpeed(int percentSpeed)
 {
    Q_D(QMovie);
@@ -834,16 +627,6 @@ int QMovie::speed() const
    return d->speed;
 }
 
-/*!
-    Starts the movie. QMovie will enter \l Running state, and start emitting
-    updated() and resized() as the movie progresses.
-
-    If QMovie is in the \l Paused state, this function is equivalent
-    to calling setPaused(false). If QMovie is already in the \l
-    Running state, this function does nothing.
-
-    \sa stop(), setPaused()
-*/
 void QMovie::start()
 {
    Q_D(QMovie);
@@ -854,16 +637,6 @@ void QMovie::start()
    }
 }
 
-/*!
-    Stops the movie. QMovie enters \l NotRunning state, and stops emitting
-    updated() and resized(). If start() is called again, the movie will
-    restart from the beginning.
-
-    If QMovie is already in the \l NotRunning state, this function
-    does nothing.
-
-    \sa start(), setPaused()
-*/
 void QMovie::stop()
 {
    Q_D(QMovie);
@@ -875,13 +648,6 @@ void QMovie::stop()
    d->nextFrameNumber = 0;
 }
 
-/*!
-    \since 4.1
-
-    Returns the scaled size of frames.
-
-    \sa QImageReader::scaledSize()
-*/
 QSize QMovie::scaledSize()
 {
    Q_D(QMovie);

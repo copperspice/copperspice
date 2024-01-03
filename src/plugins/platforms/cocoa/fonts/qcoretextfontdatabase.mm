@@ -478,7 +478,7 @@ QFontEngine *QCoreTextFontDatabase::fontEngine(const QByteArray &fontData, qreal
    }
 #endif
 
-   Q_UNUSED(hintingPreference);
+   (void) hintingPreference;
 
    QByteArray *fontDataCopy = new QByteArray(fontData);
    QCFType<CGDataProviderRef> dataProvider = CGDataProviderCreateWithData(fontDataCopy,

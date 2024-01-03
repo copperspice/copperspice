@@ -36,10 +36,7 @@
 #include "QtPlatformPlugin.h"
 #include <wtf/RefCounted.h>
 
-QT_BEGIN_NAMESPACE
 class QEventLoop;
-QT_END_NAMESPACE
-
 class QWebPage;
 
 namespace WebCore {
@@ -164,7 +161,7 @@ public:
 #if ENABLE(TOUCH_EVENTS)
     virtual void needTouchEvents(bool) { }
 #endif
- 
+
 #if ENABLE(VIDEO) && (USE(GSTREAMER) || USE(QT_MULTIMEDIA) || USE(QTKIT))
     virtual bool supportsFullscreenForNode(const Node*);
     virtual void enterFullscreenForNode(Node*);

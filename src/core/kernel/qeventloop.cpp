@@ -32,15 +32,18 @@ class QEventLoopPrivate
    Q_DECLARE_PUBLIC(QEventLoop)
 
  public:
-   inline QEventLoopPrivate() : exit(true), inExec(false), returnCode(-1)   {  }
-   virtual ~QEventLoopPrivate() {}
+   inline QEventLoopPrivate()
+      : exit(true), inExec(false), returnCode(-1)
+   { }
+
+   virtual ~QEventLoopPrivate()
+   { }
 
    bool exit, inExec;
    int returnCode;
 
  protected:
    QEventLoop *q_ptr;
-
 };
 
 QEventLoop::QEventLoop(QObject *parent)
@@ -120,7 +123,8 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
       QEventLoop *eventLoop = threadData->eventLoops.pop();
       Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-      Q_UNUSED(eventLoop);
+
+      (void) eventLoop;
 
       d->inExec = false;
       --threadData->loopLevel;
@@ -133,7 +137,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
 
    QEventLoop *eventLoop = threadData->eventLoops.pop();
    Q_ASSERT_X(eventLoop == this, "QEventLoop::exec()", "internal error");
-   Q_UNUSED(eventLoop);
+   (void) eventLoop;
 
    d->inExec = false;
    --threadData->loopLevel;

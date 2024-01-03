@@ -74,7 +74,7 @@ TEST_CASE("QThread finished_running", "[qthread]")
    thread.cond.wait(locker.mutex());
    bool result = thread.wait(30000);
 
-   CHECK(result == true);
+   REQUIRE(result == true);
 
    REQUIRE(thread.isRunning() ==  false );
    REQUIRE(thread.isFinished() == true);
@@ -100,7 +100,7 @@ TEST_CASE("QThread set_priority", "[qthread]")
    REQUIRE(thread.priority() == QThread::HighPriority);
 
    thread.cond.wait(locker.mutex());
-   CHECK(thread.wait(30000) == true);
+   REQUIRE(thread.wait(30000) == true);
 }
 
 TEST_CASE("QThread thread_count", "[qthread]")
@@ -116,7 +116,7 @@ TEST_CASE("QThread thread_id", "[qthread]")
    thread.thread = nullptr;
    thread.start();
 
-   CHECK(thread.wait(30000) == true);
+   REQUIRE(thread.wait(30000) == true);
 
    REQUIRE(thread.id != nullptr);
    REQUIRE(thread.id != QThread::currentThreadId());

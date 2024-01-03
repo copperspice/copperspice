@@ -573,7 +573,7 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
    Q_Q(QGraphicsScene);
 
    if (item && item->scene() != q) {
-      qWarning("QGraphicsScene::setActivePanel: item %p must be part of this scene", item);
+      qWarning("QGraphicsScene::setActivePanel() Item %p must be a child of this QGraphicsScene", item);
       return;
    }
 
@@ -788,15 +788,17 @@ void QGraphicsScenePrivate::grabMouse(QGraphicsItem *item, bool implicit)
       if (mouseGrabberItems.last() == item) {
          Q_ASSERT(!implicit);
          if (!lastMouseGrabberItemHasImplicitMouseGrab) {
-            qWarning("QGraphicsItem::grabMouse: already a mouse grabber");
+            qWarning("QGraphicsItem::grabMouse() Mouse lock has already been obtained");
          } else {
             // Upgrade to an explicit mouse grab
             lastMouseGrabberItemHasImplicitMouseGrab = false;
          }
+
       } else {
-         qWarning("QGraphicsItem::grabMouse: already blocked by mouse grabber: %p",
-            mouseGrabberItems.last());
+         qWarning("QGraphicsItem::grabMouse() Mouse lock belongs to another QGraphicsItem");
+
       }
+
       return;
    }
 
@@ -829,7 +831,7 @@ void QGraphicsScenePrivate::ungrabMouse(QGraphicsItem *item, bool itemIsDying)
    auto iter = std::find(mouseGrabberItems.cbegin(), mouseGrabberItems.cend(), item);
 
    if (iter == mouseGrabberItems.cend()) {
-      qWarning("QGraphicsItem::ungrabMouse: not a mouse grabber");
+      qWarning("QGraphicsItem::ungrabMouse() No mouse lock was active");
       return;
    }
 
@@ -893,11 +895,11 @@ void QGraphicsScenePrivate::grabKeyboard(QGraphicsItem *item)
 {
    if (keyboardGrabberItems.contains(item)) {
       if (keyboardGrabberItems.last() == item) {
-         qWarning("QGraphicsItem::grabKeyboard: already a keyboard grabber");
+         qWarning("QGraphicsItem::grabKeyboard() Keyboard lock has already been obtained");
       } else {
-         qWarning("QGraphicsItem::grabKeyboard: already blocked by keyboard grabber: %p",
-            keyboardGrabberItems.last());
+         qWarning("QGraphicsItem::grabKeyboard() Keyboard lock belongs to another QGraphicsItem");
       }
+
       return;
    }
 
@@ -922,7 +924,7 @@ void QGraphicsScenePrivate::ungrabKeyboard(QGraphicsItem *item, bool itemIsDying
 {
    int index = keyboardGrabberItems.lastIndexOf(item);
    if (index == -1) {
-      qWarning("QGraphicsItem::ungrabKeyboard: not a keyboard grabber");
+      qWarning("QGraphicsItem::ungrabKeyboard() No keyboard lock was active");
       return;
    }
    if (item != keyboardGrabberItems.last()) {
@@ -1703,17 +1705,18 @@ int QGraphicsScene::bspTreeDepth() const
    QGraphicsSceneBspTreeIndex *bspTree = qobject_cast<QGraphicsSceneBspTreeIndex *>(d->index);
    return bspTree ? bspTree->bspTreeDepth() : 0;
 }
+
 void QGraphicsScene::setBspTreeDepth(int depth)
 {
    Q_D(QGraphicsScene);
    if (depth < 0) {
-      qWarning("QGraphicsScene::setBspTreeDepth: invalid depth %d ignored; must be >= 0", depth);
+      qWarning("QGraphicsScene::setBspTreeDepth() Invalid depth %d ignored, value can not be less than zero", depth);
       return;
    }
 
    QGraphicsSceneBspTreeIndex *bspTree = qobject_cast<QGraphicsSceneBspTreeIndex *>(d->index);
    if (!bspTree) {
-      qWarning("QGraphicsScene::setBspTreeDepth: can not apply if indexing method is not BSP");
+      qWarning("QGraphicsScene::setBspTreeDepth() Unable to set tree depth since there is no BSP index");
       return;
    }
    bspTree->setBspTreeDepth(depth);
@@ -1768,7 +1771,7 @@ QList<QGraphicsItem *> QGraphicsScene::collidingItems(const QGraphicsItem *item,
 {
    Q_D(const QGraphicsScene);
    if (!item) {
-      qWarning("QGraphicsScene::collidingItems: cannot find collisions for null item");
+      qWarning("QGraphicsScene::collidingItems() Unable to find collisions for an invalid item (nullptr)");
       return QList<QGraphicsItem *>();
    }
 
@@ -1974,11 +1977,11 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
    Q_D(QGraphicsScene);
 
    if (!item) {
-      qWarning("QGraphicsScene::addItem: cannot add null item");
+      qWarning("QGraphicsScene::addItem() Unable to add an invalid item (nullptr)");
       return;
    }
    if (item->d_ptr->scene == this) {
-      qWarning("QGraphicsScene::addItem: item has already been added to this scene");
+      qWarning("QGraphicsScene::addItem() Item has already been added to this QGraphicsScene");
       return;
    }
 
@@ -2239,14 +2242,12 @@ void QGraphicsScene::removeItem(QGraphicsItem *item)
    Q_D(QGraphicsScene);
 
    if (!item) {
-      qWarning("QGraphicsScene::removeItem: cannot remove null item");
+      qWarning("QGraphicsScene::removeItem() Unable to remove an invalid item (nullptr)");
       return;
    }
 
    if (item->scene() != this) {
-      qWarning("QGraphicsScene::removeItem: item %p's scene (%p)"
-         " is different from this scene (%p)", item, item->scene(), this);
-
+      qWarning("QGraphicsScene::removeItem() Item belongs to a different QGraphicsScene");
       return;
    }
 
@@ -4690,7 +4691,7 @@ QGraphicsWidget *QGraphicsScene::activeWindow() const
 void QGraphicsScene::setActiveWindow(QGraphicsWidget *widget)
 {
    if (widget && widget->scene() != this) {
-      qWarning("QGraphicsScene::setActiveWindow: widget %p must be part of this scene", widget);
+      qWarning("QGraphicsScene::setActiveWindow() Widget must be a child of this QGraphicsScene");
       return;
    }
 
@@ -4728,13 +4729,11 @@ bool QGraphicsScene::sendEvent(QGraphicsItem *item, QEvent *event)
 {
    Q_D(QGraphicsScene);
    if (!item) {
-      qWarning("QGraphicsScene::sendEvent: cannot send event to a null item");
+      qWarning("QGraphicsScene::sendEvent() Unable to send event to an invalid item (nullptr)");
       return false;
    }
    if (item->scene() != this) {
-      qWarning("QGraphicsScene::sendEvent: item %p's scene (%p)"
-         " is different from this scene (%p)",
-         item, item->scene(), this);
+      qWarning("QGraphicsScene::sendEvent() Item belongs to a different QGraphicsScene");
       return false;
    }
    return d->sendEvent(item, event);

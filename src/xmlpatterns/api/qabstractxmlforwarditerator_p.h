@@ -24,12 +24,11 @@
 #ifndef QABSTRACTXMLFORWARDITERATOR_P_H
 #define QABSTRACTXMLFORWARDITERATOR_P_H
 
-#include <QList>
-#include <QVector>
-#include <QSharedData>
-#include <QString>
 #include <qcontainerfwd.h>
-
+#include <qlist.h>
+#include <qshareddata.h>
+#include <qstring.h>
+#include <qvector.h>
 
 /* In this file we in some cases do not use QAbstractXmlForwardIterator's Ptr typedef.
  * This is a compiler workaround for MS VS 6.0. */
@@ -276,7 +275,5 @@ qint64 QAbstractXmlForwardIterator<T>::sizeHint() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
    return -1;
 }
-
-QT_END_NAMESPACE
 
 #endif

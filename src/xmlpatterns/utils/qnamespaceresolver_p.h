@@ -24,13 +24,12 @@
 #ifndef QNamespaceResolver_P_H
 #define QNamespaceResolver_P_H
 
-#include <QSharedData>
-#include <QXmlName>
 #include <qcontainerfwd.h>
-
-QT_BEGIN_NAMESPACE
+#include <qshareddata.h>
+#include <qxmlname.h>
 
 namespace QPatternist {
+
 class NamespaceResolver : public QSharedData
 {
  public:
@@ -69,8 +68,7 @@ class NamespaceResolver : public QSharedData
     */
    virtual Bindings bindings() const = 0;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

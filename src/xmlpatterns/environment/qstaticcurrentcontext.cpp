@@ -23,8 +23,6 @@
 
 #include "qstaticcurrentcontext_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 StaticCurrentContext::StaticCurrentContext(const ItemType::Ptr &t,
@@ -38,5 +36,3 @@ ItemType::Ptr StaticCurrentContext::currentItemType() const
 {
    return m_currentItemType;
 }
-
-QT_END_NAMESPACE

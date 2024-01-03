@@ -60,8 +60,8 @@ public:
 
 private :
     // QGeoPositionInfoSource
-    WEB_CS_SLOT_1(Private, void positionUpdated(const QGeoPositionInfo & un_named_arg1))
-    WEB_CS_SLOT_2(positionUpdated) 
+    WEB_CS_SLOT_1(Private, void positionUpdated(const QGeoPositionInfo &geoPosition))
+    WEB_CS_SLOT_2(positionUpdated)
 
 private:
     const QWebPage* m_page;

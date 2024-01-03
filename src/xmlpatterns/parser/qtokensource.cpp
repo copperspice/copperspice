@@ -21,15 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qtokensource_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qtokensource_p.h>
 
 using namespace QPatternist;
 
 TokenSource::~TokenSource()
 {
 }
-
-QT_END_NAMESPACE
-

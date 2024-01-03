@@ -26,8 +26,6 @@
 
 #include "qoptimizationpasses_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 OptimizationPass::List OptimizationPasses::comparisonPasses;
@@ -161,5 +159,3 @@ void OptimizationPasses::Coordinator::init()
                                       existsFN)));
    /* ****************************************************** */
 }
-
-QT_END_NAMESPACE

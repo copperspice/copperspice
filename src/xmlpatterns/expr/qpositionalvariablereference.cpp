@@ -26,8 +26,6 @@
 
 #include "qpositionalvariablereference_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 PositionalVariableReference::PositionalVariableReference(const VariableSlotID s) : VariableReference(s)
@@ -62,5 +60,3 @@ PositionalVariableReference::accept(const ExpressionVisitor::Ptr &visitor) const
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

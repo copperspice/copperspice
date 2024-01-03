@@ -52,14 +52,14 @@ def remove_spaces(input):
 
 def print_language(output, name, code, extra_map):
     if name in extra_map:
-        id = "Same as " + extra_map[name]
+        id = "Use " + extra_map[name]
     else:
         id = cs_enumdata.languageCodeToId(code)
 
     if name == "C":
-        extratext = '"C" locale is identical in behavior to English/UnitedStates.'
+        extratext = "Refer to QLocale::c()"
     else:
-        extratext = "&nbsp"
+        extratext = "&nbsp;"
 
 
     output.write("""

@@ -23,8 +23,6 @@
 
 #include "qxsdattributegroup_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAttributeGroup::setAttributeUses(const XsdAttributeUse::List &attributeUses)
@@ -52,4 +50,3 @@ XsdWildcard::Ptr XsdAttributeGroup::wildcard() const
    return m_wildcard;
 }
 
-QT_END_NAMESPACE

@@ -753,6 +753,7 @@ endif()
 if (BUILD_TESTS)
    enable_testing()
    add_subdirectory(test/core)
+   add_subdirectory(test/gui)
    add_subdirectory(test/network)
 endif()
 

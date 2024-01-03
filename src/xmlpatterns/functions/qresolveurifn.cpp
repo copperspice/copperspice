@@ -21,16 +21,13 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qurl.h>
 
 #include "qanyuri_p.h"
 #include "qliteral_p.h"
 #include "qpatternistlocale_p.h"
 #include "qatomicstring_p.h"
-
 #include "qresolveurifn_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -63,5 +60,3 @@ Expression::Ptr ResolveURIFN::typeCheck(const StaticContext::Ptr &context,
 
    return FunctionCall::typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

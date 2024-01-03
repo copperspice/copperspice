@@ -481,7 +481,7 @@ protected:
     virtual QString userAgentForUrl(const QUrl &url) const;
 
 private:
-    WEB_CS_SLOT_1(Private, void _q_onLoadProgressChanged(int un_named_arg1))
+    WEB_CS_SLOT_1(Private, void _q_onLoadProgressChanged(int progress))
     WEB_CS_SLOT_2(_q_onLoadProgressChanged)
 
 #ifndef QT_NO_ACTION

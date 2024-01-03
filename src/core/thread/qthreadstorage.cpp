@@ -50,14 +50,26 @@ void qtsDebug(const char *fmt, ...)
 #  define DEBUG_MSG if(false)qDebug
 #endif
 
-Q_GLOBAL_STATIC(QMutex, mutex)
-typedef QVector<void (*)(void *)> DestructorMap;
-Q_GLOBAL_STATIC(DestructorMap, destructors)
+using DestructorMap = QVector<void (*)(void *)>;
+
+static QMutex *mutex()
+{
+   static QMutex retval;
+   return &retval;
+}
+
+static DestructorMap *destructors()
+{
+   static DestructorMap retval;
+   return &retval;
+}
+
 
 QThreadStorageData::QThreadStorageData(void (*func)(void *))
 {
    QMutexLocker locker(mutex());
    DestructorMap *destr = destructors();
+
    if (!destr) {
       /*
        the destructors vector has already been destroyed, yet a new

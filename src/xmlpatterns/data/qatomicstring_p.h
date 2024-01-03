@@ -27,8 +27,6 @@
 #include <QUrl>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class AtomicString : public AtomicValue
@@ -71,8 +69,5 @@ class AtomicString : public AtomicValue
    const QString m_value;
 };
 }
-
-QT_END_NAMESPACE
-
 
 #endif

@@ -94,9 +94,9 @@ class QMediaPlayerPrivate : public QMediaObjectPrivate
    void _q_stateChanged(QMediaPlayer::State state);
    void _q_mediaStatusChanged(QMediaPlayer::MediaStatus status);
    void _q_error(int error, const QString &errorString);
-   void _q_updateMedia(const QMediaContent &);
+   void _q_updateMedia(const QMediaContent &media);
    void _q_playlistDestroyed();
-   void _q_handleMediaChanged(const QMediaContent &);
+   void _q_handleMediaChanged(const QMediaContent &media);
    void _q_handlePlaylistLoaded();
    void _q_handlePlaylistLoadFailed();
 };
@@ -167,19 +167,19 @@ void QMediaPlayerPrivate::_q_stateChanged(QMediaPlayer::State ps)
    }
 }
 
-void QMediaPlayerPrivate::_q_mediaStatusChanged(QMediaPlayer::MediaStatus s)
+void QMediaPlayerPrivate::_q_mediaStatusChanged(QMediaPlayer::MediaStatus newStatus)
 {
    Q_Q(QMediaPlayer);
 
-   if (int(s) == ignoreNextStatusChange) {
+   if (int(newStatus) == ignoreNextStatusChange) {
       ignoreNextStatusChange = -1;
       return;
    }
 
-   if (s != status) {
-      status = s;
+   if (newStatus != status) {
+      status = newStatus;
 
-      switch (s) {
+      switch (newStatus) {
          case QMediaPlayer::StalledMedia:
          case QMediaPlayer::BufferingMedia:
             q->addPropertyWatch<int>("bufferStatus");
@@ -190,7 +190,7 @@ void QMediaPlayerPrivate::_q_mediaStatusChanged(QMediaPlayer::MediaStatus s)
             break;
       }
 
-      emit q->mediaStatusChanged(s);
+      emit q->mediaStatusChanged(newStatus);
    }
 }
 
@@ -1038,28 +1038,28 @@ QList<QAudio::Role> QMediaPlayer::supportedAudioRoles() const
    return QList<QAudio::Role>();
 }
 
-void QMediaPlayer::_q_stateChanged(QMediaPlayer::State un_named_arg1)
+void QMediaPlayer::_q_stateChanged(QMediaPlayer::State state)
 {
    Q_D(QMediaPlayer);
-   d->_q_stateChanged(un_named_arg1);
+   d->_q_stateChanged(state);
 }
 
-void QMediaPlayer::_q_mediaStatusChanged(QMediaPlayer::MediaStatus un_named_arg1)
+void QMediaPlayer::_q_mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
    Q_D(QMediaPlayer);
-   d->_q_mediaStatusChanged(un_named_arg1);
+   d->_q_mediaStatusChanged(status);
 }
 
-void QMediaPlayer::_q_error(int un_named_arg1, const QString &un_named_arg2)
+void QMediaPlayer::_q_error(int error, const QString &errorString)
 {
    Q_D(QMediaPlayer);
-   d->_q_error(un_named_arg1, un_named_arg2);
+   d->_q_error(error, errorString);
 }
 
-void QMediaPlayer::_q_updateMedia(const QMediaContent &un_named_arg1)
+void QMediaPlayer::_q_updateMedia(const QMediaContent &media)
 {
    Q_D(QMediaPlayer);
-   d->_q_updateMedia(un_named_arg1);
+   d->_q_updateMedia(media);
 }
 
 void QMediaPlayer::_q_playlistDestroyed()
@@ -1068,10 +1068,10 @@ void QMediaPlayer::_q_playlistDestroyed()
    d->_q_playlistDestroyed();
 }
 
-void QMediaPlayer::_q_handleMediaChanged(const QMediaContent &un_named_arg1)
+void QMediaPlayer::_q_handleMediaChanged(const QMediaContent &media)
 {
    Q_D(QMediaPlayer);
-   d->_q_handleMediaChanged(un_named_arg1);
+   d->_q_handleMediaChanged(media);
 }
 
 void QMediaPlayer::_q_handlePlaylistLoaded()

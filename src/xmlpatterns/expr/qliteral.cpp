@@ -28,8 +28,6 @@
 
 #include "qliteral_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Literal::Literal(const Item &i) : m_item(i)
@@ -91,5 +89,3 @@ QString Literal::description() const
 {
    return m_item.stringValue();
 }
-
-QT_END_NAMESPACE

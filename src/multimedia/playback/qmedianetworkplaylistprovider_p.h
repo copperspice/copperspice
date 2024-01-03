@@ -62,7 +62,7 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
  private:
    Q_DECLARE_PRIVATE(QMediaNetworkPlaylistProvider)
 
-   MULTI_CS_SLOT_1(Private, void _q_handleParserError(QPlaylistFileParser::ParserError err, const QString &un_named_arg2))
+   MULTI_CS_SLOT_1(Private, void _q_handleParserError(QPlaylistFileParser::ParserError error, const QString &errorMsg))
    MULTI_CS_SLOT_2(_q_handleParserError)
 
    MULTI_CS_SLOT_1(Private, void _q_handleNewItem(const QVariant &content))

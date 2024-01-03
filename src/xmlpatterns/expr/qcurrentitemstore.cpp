@@ -28,8 +28,6 @@
 
 #include "qcurrentitemstore_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CurrentItemStore::CurrentItemStore(const Expression::Ptr &operand) : SingleContainer(operand)
@@ -117,5 +115,3 @@ Expression::Properties CurrentItemStore::properties() const
 {
    return m_operand->properties() & (RequiresFocus | IsEvaluated | DisableElimination);
 }
-
-QT_END_NAMESPACE

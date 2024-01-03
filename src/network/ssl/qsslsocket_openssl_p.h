@@ -104,7 +104,7 @@ public:
 
 #ifdef Q_OS_WIN
     void fetchCaRootForCert(const QSslCertificate &cert);
-    void _q_caRootLoaded(QSslCertificate,QSslCertificate) override;
+    void _q_caRootLoaded(QSslCertificate cert, QSslCertificate trustedRoot) override;
 #endif
 
    static long setupOpenSslOptions(QSsl::SslProtocol protocol, QSsl::SslOptions sslOptions);

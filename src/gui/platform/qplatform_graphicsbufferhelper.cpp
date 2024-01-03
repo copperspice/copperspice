@@ -43,7 +43,7 @@ bool QPlatformGraphicsBufferHelper::lockAndBindToTexture(QPlatformGraphicsBuffer
 {
    if (graphicsBuffer->lock(QPlatformGraphicsBuffer::TextureAccess)) {
       if (! graphicsBuffer->bindToTexture(rect)) {
-         qWarning("Failed to bind %sgraphicsbuffer to texture", "");
+         qWarning("QPlatformGraphicsBufferHelper::lockAndBindToTexture() Failed to bind graphicsbuffer to texture");
          return false;
       }
 
@@ -57,12 +57,12 @@ bool QPlatformGraphicsBufferHelper::lockAndBindToTexture(QPlatformGraphicsBuffer
 
    } else if (graphicsBuffer->lock(QPlatformGraphicsBuffer::SWReadAccess)) {
       if (! bindSWToTexture(graphicsBuffer, swizzle, premultiplied, rect)) {
-         qWarning("Failed to bind %sgraphicsbuffer to texture", "SW ");
+         qWarning("QPlatformGraphicsBufferHelper::lockAndBindToTexture() Failed to bind SW graphicsbuffer to texture");
          return false;
       }
 
    } else {
-      qWarning("Failed to lock");
+      qWarning("QPlatformGraphicsBufferHelper::lockAndBindToTexture() Failed to lock");
       return false;
    }
 

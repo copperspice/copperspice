@@ -711,7 +711,7 @@ void QStateMachinePrivate::exitStates(QEvent *event, const QList<QAbstractState*
 #ifndef QT_NO_ANIMATION
         terminateActiveAnimations(s, assignmentsForEnteredStates);
 #else
-        Q_UNUSED(assignmentsForEnteredStates);
+        (void) assignmentsForEnteredStates;
 #endif
 
       configuration.remove(s);
@@ -866,7 +866,7 @@ void QStateMachinePrivate::enterStates(QEvent *event, const QList<QAbstractState
 //         // ### executeContent(s.initial.transition.children())
 //      }
 
-        Q_UNUSED(statesForDefaultEntry);
+        (void) statesForDefaultEntry;
 
         if (QHistoryState *h = toHistoryState(s))
             QAbstractTransitionPrivate::get(h->defaultTransition())->callOnTransition(event);

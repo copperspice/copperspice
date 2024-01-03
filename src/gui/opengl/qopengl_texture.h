@@ -31,7 +31,7 @@
 
 #include <qopengl.h>
 #include <qimage.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QOpenGLTexturePrivate;
 class QOpenGLPixelTransferOptions;

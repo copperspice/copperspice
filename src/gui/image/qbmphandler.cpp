@@ -776,7 +776,7 @@ bool QBmpHandler::canRead()
 bool QBmpHandler::canRead(QIODevice *device)
 {
    if (!device) {
-      qWarning("QBmpHandler::canRead() called with 0 pointer");
+      qWarning("QBmpHandler::canRead() Invalid device (nullptr)");
       return false;
    }
 
@@ -795,7 +795,7 @@ bool QBmpHandler::read(QImage *image)
    }
 
    if (!image) {
-      qWarning("QBmpHandler::read: cannot read into null pointer");
+      qWarning("QBmpHandler::read() Invalid image (nullptr)");
       return false;
    }
 

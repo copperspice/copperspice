@@ -25,8 +25,6 @@
 
 #include "qfunctionfactory_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 FunctionFactory::~FunctionFactory()
@@ -59,4 +57,3 @@ bool FunctionFactory::hasSignature(const FunctionSignature::Ptr &signature) cons
 
    return false;
 }
-QT_END_NAMESPACE

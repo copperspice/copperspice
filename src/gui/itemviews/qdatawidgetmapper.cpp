@@ -84,9 +84,9 @@ class QDataWidgetMapperPrivate
    void populate();
 
    // private slots
-   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &);
-   void _q_commitData(QWidget *);
-   void _q_closeEditor(QWidget *, QAbstractItemDelegate::EndEditHint);
+   void _q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
+   void _q_commitData(QWidget *currentWidget);
+   void _q_closeEditor(QWidget *currentWidget, QAbstractItemDelegate::EndEditHint hint);
    void _q_modelDestroyed();
 
    struct WidgetMapper {
@@ -174,8 +174,10 @@ static bool qContainsIndex(const QModelIndex &idx, const QModelIndex &topLeft,
       && idx.column() >= topLeft.column() && idx.column() <= bottomRight.column();
 }
 
-void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &)
+void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+   (void) roles;
+
    if (topLeft.parent() != rootIndex) {
       return;   // not in our hierarchy
    }
@@ -187,13 +189,13 @@ void QDataWidgetMapperPrivate::_q_dataChanged(const QModelIndex &topLeft, const 
    }
 }
 
-void QDataWidgetMapperPrivate::_q_commitData(QWidget *w)
+void QDataWidgetMapperPrivate::_q_commitData(QWidget *currentWidget)
 {
    if (submitPolicy == QDataWidgetMapper::ManualSubmit) {
       return;
    }
 
-   int idx = findWidget(w);
+   int idx = findWidget(currentWidget);
    if (idx == -1) {
       return;   // not our widget
    }
@@ -201,9 +203,10 @@ void QDataWidgetMapperPrivate::_q_commitData(QWidget *w)
    commit(widgetMap.at(idx));
 }
 
-void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *w, QAbstractItemDelegate::EndEditHint hint)
+void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *currentWidget, QAbstractItemDelegate::EndEditHint hint)
 {
-   int idx = findWidget(w);
+   int idx = findWidget(currentWidget);
+
    if (idx == -1) {
       return;   // not our widget
    }
@@ -213,12 +216,13 @@ void QDataWidgetMapperPrivate::_q_closeEditor(QWidget *w, QAbstractItemDelegate:
          populate(widgetMap[idx]);
          break;
       }
+
       case QAbstractItemDelegate::EditNextItem:
-         w->focusNextChild();
+         currentWidget->focusNextChild();
          break;
 
       case QAbstractItemDelegate::EditPreviousItem:
-         w->focusPreviousChild();
+         currentWidget->focusPreviousChild();
          break;
 
       case QAbstractItemDelegate::SubmitModelCache:
@@ -612,22 +616,22 @@ QDataWidgetMapper::SubmitPolicy QDataWidgetMapper::submitPolicy() const
    return d->submitPolicy;
 }
 
-void QDataWidgetMapper::_q_dataChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2, const QVector<int> &roles)
+void QDataWidgetMapper::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
    Q_D(QDataWidgetMapper);
-   d->_q_dataChanged(un_named_arg1, un_named_arg2, roles);
+   d->_q_dataChanged(topLeft, bottomRight, roles);
 }
 
-void QDataWidgetMapper::_q_commitData(QWidget *un_named_arg1)
+void QDataWidgetMapper::_q_commitData(QWidget *currentWidget)
 {
    Q_D(QDataWidgetMapper);
-   d->_q_commitData(un_named_arg1);
+   d->_q_commitData(currentWidget);
 }
 
-void QDataWidgetMapper::_q_closeEditor(QWidget *un_named_arg1, QAbstractItemDelegate::EndEditHint un_named_arg2)
+void QDataWidgetMapper::_q_closeEditor(QWidget *currentWidget, QAbstractItemDelegate::EndEditHint hint)
 {
    Q_D(QDataWidgetMapper);
-   d->_q_closeEditor(un_named_arg1, un_named_arg2);
+   d->_q_closeEditor(currentWidget, hint);
 }
 
 void QDataWidgetMapper::_q_modelDestroyed()

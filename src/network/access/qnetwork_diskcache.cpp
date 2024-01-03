@@ -160,9 +160,9 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
    } else {
       QString templateName = d->tmpCacheFileName();
 
-      QT_TRY {
+      try {
          cacheItem->file = new QTemporaryFile(templateName, &cacheItem->data);
-      } QT_CATCH(...) {
+      } catch(...) {
          cacheItem->file = nullptr;
       }
 

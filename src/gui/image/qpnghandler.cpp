@@ -507,7 +507,7 @@ static void read_image_scaled(QImage *outImage, png_structp png_ptr, png_infop i
 extern "C" {
    static void CALLBACK_CALL_TYPE qt_png_warning(png_structp /*png_ptr*/, png_const_charp message)
    {
-      qWarning("Image libpng warning: %s", message);
+      qWarning("Warning: Image libpng %s", message);
    }
 }
 
@@ -903,7 +903,7 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
    int quality = quality_in;
    if (quality >= 0) {
       if (quality > 9) {
-         qWarning("PNG: Quality %d out of range", quality);
+         qWarning("QPNGImageWriter::writeImage() Quality %d is out of range", quality);
          quality = 9;
       }
       png_set_compression_level(png_ptr, quality);
@@ -1103,7 +1103,7 @@ bool QPngHandler::canRead()
 bool QPngHandler::canRead(QIODevice *device)
 {
    if (!device) {
-      qWarning("QPngHandler::canRead() called with no device");
+      qWarning("QPngHandler::canRead() No device");
       return false;
    }
 

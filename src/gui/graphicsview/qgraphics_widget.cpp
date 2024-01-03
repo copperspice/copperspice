@@ -88,7 +88,11 @@ class QGraphicsWidgetStyles
    mutable QMutex mutex;
 };
 
-Q_GLOBAL_STATIC(QGraphicsWidgetStyles, widgetStyles)
+static QGraphicsWidgetStyles *widgetStyles()
+{
+   static QGraphicsWidgetStyles retval;
+   return &retval;
+}
 
 QGraphicsWidget::~QGraphicsWidget()
 {
@@ -481,7 +485,7 @@ QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) c
             sh = QSizeF(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
             break;
          default:
-            qWarning("QGraphicsWidget::sizeHint(): Value of 'which' is not valid");
+            qWarning("QGraphicsWidget::sizeHint() Value for size hint is not valid");
             break;
       }
    }
@@ -509,8 +513,8 @@ void QGraphicsWidget::setLayout(QGraphicsLayout *l)
    QGraphicsLayoutItem *oldParent = l->parentLayoutItem();
 
    if (oldParent && oldParent != this) {
-      qWarning("QGraphicsWidget::setLayout: Attempting to set a layout on %s"
-         " \"%s\", when the layout already has a parent", csPrintable(metaObject()->className()), csPrintable(objectName()));
+      qWarning("QGraphicsWidget::setLayout() Unable to set a layout on %s, current layout already has a parent",
+         csPrintable(metaObject()->className()));
       return;
    }
 
@@ -731,7 +735,7 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
 // internal
 QVariant QGraphicsWidget::propertyChange(const QString &propertyName, const QVariant &value)
 {
-   Q_UNUSED(propertyName);
+   (void) propertyName;
    return value;
 }
 
@@ -968,7 +972,7 @@ void QGraphicsWidget::closeEvent(QCloseEvent *event)
 
 void QGraphicsWidget::focusInEvent(QFocusEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
    if (focusPolicy() != Qt::NoFocus) {
       update();
    }
@@ -999,7 +1003,7 @@ bool QGraphicsWidget::focusNextPrevChild(bool next)
 
 void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
    if (focusPolicy() != Qt::NoFocus) {
       update();
    }
@@ -1007,15 +1011,14 @@ void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 
 void QGraphicsWidget::hideEvent(QHideEvent *event)
 {
-   ///### focusNextPrevChild(true), don't lose focus when the focus widget
-   // is hidden.
-   Q_UNUSED(event);
+   ///### focusNextPrevChild(true), don't lose focus when the focus widget is hidden.
+   (void) event;
 }
 
 void QGraphicsWidget::moveEvent(QGraphicsSceneMoveEvent *event)
 {
    // ### Last position is always == current position
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::polishEvent()
@@ -1024,17 +1027,17 @@ void QGraphicsWidget::polishEvent()
 
 void QGraphicsWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::showEvent(QShowEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
@@ -1044,22 +1047,22 @@ void QGraphicsWidget::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void QGraphicsWidget::grabMouseEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::ungrabMouseEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::grabKeyboardEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 void QGraphicsWidget::ungrabKeyboardEvent(QEvent *event)
 {
-   Q_UNUSED(event);
+   (void) event;
 }
 
 Qt::WindowType QGraphicsWidget::windowType() const
@@ -1212,7 +1215,7 @@ void QGraphicsWidget::addActions(const QList<QAction *> &actions)
 void QGraphicsWidget::insertAction(QAction *before, QAction *action)
 {
    if (!action) {
-      qWarning("QWidget::insertAction: Attempt to insert null action");
+      qWarning("QWidget::insertAction() Unable to to insert an invalid action (nullptr)");
       return;
    }
 
@@ -1272,18 +1275,18 @@ QList<QAction *> QGraphicsWidget::actions() const
 void QGraphicsWidget::setTabOrder(QGraphicsWidget *first, QGraphicsWidget *second)
 {
    if (!first && !second) {
-      qWarning("QGraphicsWidget::setTabOrder(0, 0) is undefined");
+      qWarning("QGraphicsWidget::setTabOrder() Both widgets are invalid (nullptr)");
       return;
    }
+
    if ((first && second) && first->scene() != second->scene()) {
-      qWarning("QGraphicsWidget::setTabOrder: scenes %p and %p are different",
-         first->scene(), second->scene());
+      qWarning("QGraphicsWidget::setTabOrder() Items belong to different QGraphicsScene");
       return;
    }
+
    QGraphicsScene *scene = first ? first->scene() : second->scene();
    if (!scene && (!first || !second)) {
-      qWarning("QGraphicsWidget::setTabOrder: assigning tab order from/to the"
-         " scene requires the item to be in a scene.");
+      qWarning("QGraphicsWidget::setTabOrder() Assigning a tab order requires both items to be in a QGraphicsScene");
       return;
    }
 
@@ -1347,9 +1350,9 @@ int QGraphicsWidget::type() const
 
 void QGraphicsWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-   Q_UNUSED(painter);
-   Q_UNUSED(option);
-   Q_UNUSED(widget);
+   (void) painter;
+   (void) option;
+   (void) widget;
 }
 
 void QGraphicsWidget::paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *option,

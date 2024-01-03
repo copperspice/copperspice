@@ -31,7 +31,7 @@
 #include <qpixmap.h>
 #include <qpalette.h>
 #include <qsizepolicy.h>
-#include <QScopedPointer>
+#include <qscopedpointer.h>
 
 class QAction;
 class QDebug;

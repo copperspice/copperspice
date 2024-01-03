@@ -40,8 +40,9 @@ static QAtomicInt appShutdown;
 static void connManager_prepare()
 {
    int shutdown = appShutdown.fetchAndStoreAcquire(0);
+
    Q_ASSERT(shutdown == 0 || shutdown == 1);
-   Q_UNUSED(shutdown);
+   (void) shutdown;
 }
 
 static void connManager_cleanup()
@@ -84,8 +85,11 @@ QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
          } else {
             // wrong thread, we need to make the main thread do this
             QObject *obj = new QObject;
-            QObject::connect(obj, SIGNAL(destroyed()), ptr, SLOT(addPreAndPostRoutine()), Qt::DirectConnection);
-            ptr->initialize(); // this moves us to the right thread
+
+            QObject::connect(obj, &QObject::destroyed,
+                  ptr, &QNetworkConfigurationManagerPrivate::addPreAndPostRoutine, Qt::DirectConnection);
+
+            ptr->initialize();       // moves this object to the right thread
             obj->moveToThread(QCoreApplicationPrivate::mainThread());
             obj->deleteLater();
          }
@@ -93,6 +97,7 @@ QNetworkConfigurationManagerPrivate *qNetworkConfigurationManagerPrivate()
          connManager_ptr.storeRelease(ptr);
       }
    }
+
    return ptr;
 }
 

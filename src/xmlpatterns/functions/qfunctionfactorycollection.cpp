@@ -30,8 +30,6 @@
 
 #include "qfunctionfactorycollection_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr FunctionFactoryCollection::createFunctionCall(const QXmlName name,
@@ -119,5 +117,3 @@ FunctionFactory::Ptr FunctionFactoryCollection::xslt20Factory(const NamePool::Pt
    static_cast<FunctionFactoryCollection *>(retval.data())->append(FunctionFactory::Ptr(new XSLT20CoreFunctions()));
    return retval;
 }
-
-QT_END_NAMESPACE

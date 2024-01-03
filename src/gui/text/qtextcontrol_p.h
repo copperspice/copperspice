@@ -262,8 +262,8 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    GUI_CS_SIGNAL_1(Public, void linkActivated(const QString &link))
    GUI_CS_SIGNAL_2(linkActivated, link)
 
-   GUI_CS_SIGNAL_1(Public, void linkHovered(const QString &un_named_arg1))
-   GUI_CS_SIGNAL_2(linkHovered, un_named_arg1)
+   GUI_CS_SIGNAL_1(Public, void linkHovered(const QString &anchor))
+   GUI_CS_SIGNAL_2(linkHovered, anchor)
 
    GUI_CS_SIGNAL_1(Public, void modificationChanged(bool m))
    GUI_CS_SIGNAL_2(modificationChanged, m)
@@ -300,7 +300,7 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    GUI_CS_SLOT_1(Private, void _q_updateCurrentCharFormatAndSelection())
    GUI_CS_SLOT_2(_q_updateCurrentCharFormatAndSelection)
 
-   GUI_CS_SLOT_1(Private, void _q_emitCursorPosChanged(const QTextCursor &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_emitCursorPosChanged(const QTextCursor &cursor))
    GUI_CS_SLOT_2(_q_emitCursorPosChanged)
 
    GUI_CS_SLOT_1(Private, void _q_deleteSelected())
@@ -309,7 +309,7 @@ class Q_GUI_EXPORT QTextControl : public QInputControl
    GUI_CS_SLOT_1(Private, void _q_copyLink())
    GUI_CS_SLOT_2(_q_copyLink)
 
-   GUI_CS_SLOT_1(Private, void _q_updateBlock(const QTextBlock &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_updateBlock(const QTextBlock &block))
    GUI_CS_SLOT_2(_q_updateBlock)
 
    GUI_CS_SLOT_1(Private, void _q_documentLayoutChanged())

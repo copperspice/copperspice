@@ -6,20 +6,18 @@ set_target_properties(CsCoreTest
    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/test"
 )
 
-if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12.0")
-   if (MSVC)
-      # CopperSpice must be compiled with C++20 in order to run the unit test for C++20
+if (MSVC)
+   # CopperSpice must be compiled with C++20 in order to run the unit test for C++20
 
-   else()
-      set_target_properties(CsCoreTest
-         PROPERTIES
+else()
+   set_target_properties(CsCoreTest
+      PROPERTIES
 
-         # only a request for C++20
-         CXX_STANDARD_REQUIRED OFF
-         CXX_STANDARD 20
-      )
+      # only a request for C++20
+      CXX_STANDARD_REQUIRED OFF
+      CXX_STANDARD 20
+   )
 
-   endif()
 endif()
 
 if (CS_INSTALL_MODE STREQUAL "Deploy" AND CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -66,6 +64,7 @@ target_sources(CsCoreTest
    PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/../catch2/catch.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/../cs_catch2.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/../cs_catch_defines.h
 
    ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp
 
@@ -141,6 +140,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qmutex.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qreadwritelock.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthread.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/thread/qthreadstorage.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbitarray.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.cpp

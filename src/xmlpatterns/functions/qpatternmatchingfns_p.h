@@ -26,9 +26,8 @@
 
 #include <qpatternplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class MatchesFN : public PatternPlatform
 {
  public:
@@ -71,8 +70,7 @@ class TokenizeFN : public PatternPlatform
  private:
    typedef QExplicitlySharedDataPointer<const TokenizeFN> ConstPtr;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

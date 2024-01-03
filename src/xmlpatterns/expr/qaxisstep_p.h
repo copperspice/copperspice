@@ -27,9 +27,8 @@
 #include <qemptycontainer_p.h>
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AxisStep : public EmptyContainer
 {
  public:
@@ -99,7 +98,5 @@ void AxisStep::setAxis(const QXmlNodeModelIndex::Axis newAxis)
 }
 
 }
-
-QT_END_NAMESPACE
 
 #endif

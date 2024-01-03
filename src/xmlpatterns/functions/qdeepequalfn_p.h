@@ -28,8 +28,6 @@
 #include <qcomparisonplatform_p.h>
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class DeepEqualFN : public FunctionCall, public ComparisonPlatform<DeepEqualFN, false>
@@ -45,8 +43,7 @@ class DeepEqualFN : public FunctionCall, public ComparisonPlatform<DeepEqualFN, 
       return AtomicComparator::OperatorEqual;
    }
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

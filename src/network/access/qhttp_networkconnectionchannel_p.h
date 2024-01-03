@@ -166,7 +166,7 @@ class QHttpNetworkConnectionChannel : public QObject
    NET_CS_SLOT_1(Protected, void _q_connected())
    NET_CS_SLOT_2(_q_connected)  // start sending request
 
-   NET_CS_SLOT_1(Protected, void _q_error(QAbstractSocket::SocketError un_named_arg1))
+   NET_CS_SLOT_1(Protected, void _q_error(QAbstractSocket::SocketError socketError))
    NET_CS_SLOT_2(_q_error)  // error from socket
 
 #ifndef QT_NO_NETWORKPROXY

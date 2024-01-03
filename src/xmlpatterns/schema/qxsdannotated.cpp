@@ -23,8 +23,6 @@
 
 #include "qxsdannotated_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdAnnotated::addAnnotation(const XsdAnnotation::Ptr &annotation)
@@ -41,5 +39,3 @@ XsdAnnotation::List XsdAnnotated::annotations() const
 {
    return m_annotations;
 }
-
-QT_END_NAMESPACE

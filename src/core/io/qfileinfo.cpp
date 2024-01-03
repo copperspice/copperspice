@@ -196,11 +196,12 @@ QDateTime &QFileInfoPrivate::getFileTime(QAbstractFileEngine::FileTime request) 
    Q_ASSERT(fileEngine);
    // should never be called when using the native FS
 
-   if (!cache_enabled) {
+   if (! cache_enabled) {
       clearFlags();
    }
 
    uint cf;
+
    if (request == QAbstractFileEngine::CreationTime) {
       cf = CachedCTime;
    } else if (request == QAbstractFileEngine::ModificationTime) {
@@ -209,26 +210,31 @@ QDateTime &QFileInfoPrivate::getFileTime(QAbstractFileEngine::FileTime request) 
       cf = CachedATime;
    }
 
-   if (!getCachedFlag(cf)) {
+   if (! getCachedFlag(cf)) {
       fileTimes[request] = fileEngine->fileTime(request);
       setCachedFlag(cf);
    }
+
    return fileTimes[request];
 }
 
-QFileInfo::QFileInfo(QFileInfoPrivate *p) : d_ptr(p)
+QFileInfo::QFileInfo(QFileInfoPrivate *p)
+   : d_ptr(p)
 {
 }
 
-QFileInfo::QFileInfo() : d_ptr(new QFileInfoPrivate())
+QFileInfo::QFileInfo()
+   : d_ptr(new QFileInfoPrivate())
 {
 }
 
-QFileInfo::QFileInfo(const QString &file) : d_ptr(new QFileInfoPrivate(file))
+QFileInfo::QFileInfo(const QString &file)
+   : d_ptr(new QFileInfoPrivate(file))
 {
 }
 
-QFileInfo::QFileInfo(const QFile &file) : d_ptr(new QFileInfoPrivate(file.fileName()))
+QFileInfo::QFileInfo(const QFile &file)
+   : d_ptr(new QFileInfoPrivate(file.fileName()))
 {
 }
 
@@ -250,7 +256,7 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
 {
    Q_D(const QFileInfo);
 
-   // ### Qt5 understand long and short file names on Windows
+   // TODO: understand long and short file names on Windows
    // ### (GetFullPathName())
 
    if (fileinfo.d_ptr == d_ptr) {
@@ -495,7 +501,7 @@ QDir QFileInfo::dir() const
 {
    Q_D(const QFileInfo);
 
-   // ### Qt5 Maybe rename this to parentDirectory(), considering what it actually does?
+   // ### TODO: Maybe rename this to parentDirectory(), considering what it actually does?
    return QDir(d->fileEntry.path());
 }
 

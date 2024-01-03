@@ -107,7 +107,7 @@ struct QSystemLocalePrivate {
       SNever
    };
 
-   // cached values:
+   // cached values
    LCID lcid;
    SubstitutionType substitutionType;
    QChar zero;
@@ -120,9 +120,13 @@ struct QSystemLocalePrivate {
    QString &substituteDigits(QString &string);
 
    static QString fromWinFormat(const QString &sys_fmt);
-
 };
-Q_GLOBAL_STATIC(QSystemLocalePrivate, systemLocalePrivate)
+
+static QSystemLocalePrivate *systemLocalePrivate()
+{
+   static QSystemLocalePrivate retval;
+   return &retval;
+}
 
 QSystemLocalePrivate::QSystemLocalePrivate()
    : substitutionType(SUnknown)
@@ -656,10 +660,10 @@ QVariant QSystemLocalePrivate::nativeCountryName()
    return getLocaleInfo(LOCALE_SNATIVECOUNTRYNAME);
 }
 
-
 void QSystemLocalePrivate::update()
 {
    lcid = GetUserDefaultLCID();
+
    substitutionType = SUnknown;
    zero = QChar();
 }
@@ -873,6 +877,7 @@ QVariant QSystemLocale::query(QueryType type, QVariant in = QVariant()) const
 
       case NativeCountryName:
          return d->nativeCountryName();
+
       default:
          break;
    }

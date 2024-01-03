@@ -162,10 +162,10 @@ QList<QWidget *> QWidgetAction::createdWidgets() const
    return d->createdWidgets;
 }
 
-void QWidgetAction::_q_widgetDestroyed(QObject *un_named_arg1)
+void QWidgetAction::_q_widgetDestroyed(QObject *object)
 {
    Q_D(QWidgetAction);
-   d->_q_widgetDestroyed(un_named_arg1);
+   d->_q_widgetDestroyed(object);
 }
 
 #endif // QT_NO_ACTION

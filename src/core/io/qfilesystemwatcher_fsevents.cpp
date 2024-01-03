@@ -235,10 +235,12 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
    warmUpFSEvents();
 
    return failedToAdd;
+
 #else
-   Q_UNUSED(paths);
-   Q_UNUSED(files);
-   Q_UNUSED(directories);
+   (void) paths;
+   (void) files;
+   (void) directories;
+
    return QStringList();
 #endif
 }
@@ -325,9 +327,9 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    return failedToRemove;
 
 #else
-   Q_UNUSED(paths);
-   Q_UNUSED(files);
-   Q_UNUSED(directories);
+   (void) paths;
+   (void) files;
+   (void) directories;
 
    return QStringList();
 #endif
@@ -423,7 +425,8 @@ void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef,
       // there's not really much to worry about.
       // (btw, FSEvents is not the correct way of checking for mounts/unmounts,
       //  there are real CarbonCore events for that.)
-      Q_UNUSED(pathFlags);
+      (void) pathFlags;
+
       if (watcher->filePathInfoHash.contains(path)) {
          watcher->updateList(watcher->filePathInfoHash[path], false, true);
       }
@@ -432,11 +435,12 @@ void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef,
          watcher->updateList(watcher->dirPathInfoHash[path], true, true);
       }
    }
+
 #else
-   Q_UNUSED(clientCallBackInfo);
-   Q_UNUSED(numEvents);
-   Q_UNUSED(eventPaths);
-   Q_UNUSED(eventFlags);
+   (void) clientCallBackInfo;
+   (void) numEvents;
+   (void) eventPaths;
+   (void) eventFlags;
 #endif
 }
 
@@ -491,7 +495,7 @@ void QFSEventsFileSystemWatcherEngine::run()
    updateFiles();
 
 #ifdef QT_NO_DEBUG
-   Q_UNUSED(startedOK);
+   (void) startedOK;
 #else
    Q_ASSERT(startedOK);
 #endif

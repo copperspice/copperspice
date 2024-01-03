@@ -32,7 +32,7 @@ AVFCameraDeviceControl::AVFCameraDeviceControl(AVFCameraService *service, QObjec
    , m_selectedDevice(0)
    , m_dirty(true)
 {
-    Q_UNUSED(m_service);
+    (void) m_service;
 }
 
 AVFCameraDeviceControl::~AVFCameraDeviceControl()

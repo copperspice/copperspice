@@ -30,8 +30,6 @@
 
 #include "qcomparestringfns_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Item CodepointEqualFN::evaluateSingleton(const DynamicContext::Ptr &context) const
@@ -82,5 +80,3 @@ Item CompareFN::evaluateSingleton(const DynamicContext::Ptr &context) const
       return CommonValues::IntegerZero;
    }
 }
-
-QT_END_NAMESPACE

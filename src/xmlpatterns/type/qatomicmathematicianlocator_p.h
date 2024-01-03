@@ -26,9 +26,8 @@
 
 #include <qatomictypedispatch_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AtomicMathematicianLocator : public ParameterizedAtomicTypeVisitor
 {
  public:
@@ -111,8 +110,7 @@ class AtomicMathematicianLocator : public ParameterizedAtomicTypeVisitor
    AtomicTypeVisitorResult::Ptr visit(const YearMonthDurationType *,
          const qint16 op, const SourceLocationReflection *const reflection) const override;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

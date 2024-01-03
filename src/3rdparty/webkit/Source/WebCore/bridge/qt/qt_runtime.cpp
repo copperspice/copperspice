@@ -58,7 +58,9 @@
 #include <runtime/Error.h>
 #include <runtime_array.h>
 #include <runtime_object.h>
+
 #include <qstring16.h>
+#include <qtimezone.h>
 
 using namespace WebCore;
 
@@ -547,7 +549,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                 msToGregorianDateTime(exec, date->internalNumber(), true, gdt);
 
                 if (hint == QVariant::DateTime) {
-                    ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), Qt::UTC);
+                    ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), QTimeZone::utc());
                     dist = 0;
 
                 } else if (hint == QVariant::Date) {
@@ -564,7 +566,7 @@ QVariant convertValueToQVariant(ExecState* exec, JSValue value, QVariant::Type h
                 msToGregorianDateTime(exec, b, true, gdt);
 
                 if (hint == QVariant::DateTime) {
-                    ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), Qt::UTC);
+                    ret = QDateTime(QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay), QTime(gdt.hour, gdt.minute, gdt.second), QTimeZone::utc());
                     dist = 6;
                 } else if (hint == QVariant::Date) {
                     ret = QDate(gdt.year + 1900, gdt.month + 1, gdt.monthDay);

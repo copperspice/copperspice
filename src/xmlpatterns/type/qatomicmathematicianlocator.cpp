@@ -23,8 +23,6 @@
 
 #include "qatomicmathematicianlocator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicMathematicianLocator::~AtomicMathematicianLocator()
@@ -64,4 +62,3 @@ implVisit(UntypedAtomicType)
 implVisit(YearMonthDurationType)
 #undef implVisit
 
-QT_END_NAMESPACE

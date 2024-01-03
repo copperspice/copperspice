@@ -1344,9 +1344,10 @@ int QPdfEngine::metric(QPaintDevice::PaintDeviceMetric metricType) const
         val = 1 * QPaintDevice::devicePixelRatioFScale();
         break;
     default:
-        qWarning("QPdfWriter::metric: Invalid metric command");
+        qWarning("QPdfWriter::metric() nvalid metric command");
         return 0;
     }
+
     return val;
 }
 
@@ -1842,19 +1843,21 @@ int QPdfEnginePrivate::writeCompressed(QIODevice *dev)
         zStruct.opaque = nullptr;
 
         if (::deflateInit(&zStruct, Z_DEFAULT_COMPRESSION) != Z_OK) {
-            qWarning("QPdfStream::writeCompressed: Error in deflateInit()");
+            qWarning("QPdfStream::writeCompressed() Error in zlib deflateInit()");
             return sum;
         }
+
         zStruct.avail_in = 0;
         QByteArray in, out;
         out.resize(size);
+
         while (!dev->atEnd() || zStruct.avail_in != 0) {
             if (zStruct.avail_in == 0) {
                 in = dev->read(size);
                 zStruct.avail_in = in.size();
                 zStruct.next_in = reinterpret_cast<unsigned char*>(in.data());
                 if (in.size() <= 0) {
-                    qWarning("QPdfStream::writeCompressed: Error in read()");
+                    qWarning("QPdfStream::writeCompressed()) Error in zlib read()");
                     ::deflateEnd(&zStruct);
                     return sum;
                 }
@@ -1862,7 +1865,7 @@ int QPdfEnginePrivate::writeCompressed(QIODevice *dev)
             zStruct.next_out = reinterpret_cast<unsigned char*>(out.data());
             zStruct.avail_out = out.size();
             if (::deflate(&zStruct, 0) != Z_OK) {
-                qWarning("QPdfStream::writeCompressed: Error in deflate()");
+                qWarning("QPdfStream::writeCompressed() Error in zlib deflate()");
                 ::deflateEnd(&zStruct);
                 return sum;
             }
@@ -1877,7 +1880,7 @@ int QPdfEnginePrivate::writeCompressed(QIODevice *dev)
             zStruct.avail_out = out.size();
             ret = ::deflate(&zStruct, Z_FINISH);
             if (ret != Z_OK && ret != Z_STREAM_END) {
-                qWarning("QPdfStream::writeCompressed: Error in deflate()");
+                qWarning("QPdfStream::writeCompressed() Error in zlib deflate()");
                 ::deflateEnd(&zStruct);
                 return sum;
             }
@@ -1914,7 +1917,7 @@ int QPdfEnginePrivate::writeCompressed(const char *src, int len)
         if (Z_OK == ::compress(dest, &destLen, (const Bytef*) src, (uLongf)len)) {
             stream->writeRawData((const char*)dest, destLen);
         } else {
-            qWarning("QPdfStream::writeCompressed: Error in compress()");
+            qWarning("QPdfStream::writeCompressed() Error in zlib compress()");
             destLen = 0;
         }
         delete [] dest;
@@ -2224,12 +2227,15 @@ int QPdfEnginePrivate::generateGradientShader(const QGradient *gradient, const Q
     switch (gradient->type()) {
     case QGradient::LinearGradient:
         return generateLinearGradientShader(static_cast<const QLinearGradient *>(gradient), matrix, alpha);
+
     case QGradient::RadialGradient:
         return generateRadialGradientShader(static_cast<const QRadialGradient *>(gradient), matrix, alpha);
+
     case QGradient::ConicalGradient:
     default:
-        qWarning() << "Implement me!";
+        qWarning() << "generateGradientShader() Implementation is missing";
     }
+
     return 0;
 }
 

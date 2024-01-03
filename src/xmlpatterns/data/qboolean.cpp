@@ -30,8 +30,6 @@
 
 #include "qboolean_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 bool Boolean::evaluateEBV(const Item::Iterator::Ptr &it,
@@ -119,5 +117,3 @@ ItemType::Ptr Boolean::type() const
 {
    return BuiltinTypes::xsBoolean;
 }
-
-QT_END_NAMESPACE

@@ -912,10 +912,10 @@ void QToolButton::_q_updateButtonDown()
    d->_q_updateButtonDown();
 }
 
-void QToolButton::_q_menuTriggered(QAction *un_named_arg1)
+void QToolButton::_q_menuTriggered(QAction *action)
 {
    Q_D(QToolButton);
-   d->_q_menuTriggered(un_named_arg1);
+   d->_q_menuTriggered(action);
 }
 #endif
 

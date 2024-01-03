@@ -26,8 +26,6 @@
 
 #include <qdelegatingdynamiccontext_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 class CurrentItemContext : public DelegatingDynamicContext
 {
@@ -40,7 +38,5 @@ class CurrentItemContext : public DelegatingDynamicContext
    const Item m_currentItem;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

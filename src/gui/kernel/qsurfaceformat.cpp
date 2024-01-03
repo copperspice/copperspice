@@ -400,20 +400,25 @@ int QSurfaceFormat::swapInterval() const
    return d->swapInterval;
 }
 
-Q_GLOBAL_STATIC(QSurfaceFormat, qt_default_surface_format)
+static QSurfaceFormat *qt_default_surface_format()
+{
+   static QSurfaceFormat retval;
+   return &retval;
+}
 
 void QSurfaceFormat::setDefaultFormat(const QSurfaceFormat &format)
 {
 #ifndef QT_NO_OPENGL
    if (qApp) {
       QOpenGLContext *globalContext = QOpenGLContext::globalShareContext();
+
       if (globalContext && globalContext->isValid()) {
-         qWarning("Warning: Setting a new default format with a different version or profile "
-            "after the global shared context is created may cause issues with context "
-            "sharing.");
+         qWarning("QSurfaceFormat::setDefaultFormat() Setting a new default format with a different version or profile, "
+            "after the global shared context is created, may cause issues with context sharing");
       }
    }
 #endif
+
    *qt_default_surface_format() = format;
 }
 

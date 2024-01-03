@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class CommentConstructor : public SingleContainer
 {
  public:
@@ -52,7 +51,5 @@ class CommentConstructor : public SingleContainer
    inline QString evaluateContent(const DynamicContext::Ptr &context) const;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

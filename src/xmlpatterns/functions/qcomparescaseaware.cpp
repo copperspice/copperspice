@@ -25,8 +25,6 @@
 
 #include "qcomparescaseaware_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 ComparesCaseAware::ComparesCaseAware() : m_caseSensitivity(Qt::CaseSensitive)
@@ -48,5 +46,3 @@ Expression::Ptr ComparesCaseAware::compress(const StaticContext::Ptr &context)
 
    return FunctionCall::compress(context);
 }
-
-QT_END_NAMESPACE

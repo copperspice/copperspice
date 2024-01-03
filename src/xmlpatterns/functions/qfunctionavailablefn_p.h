@@ -27,9 +27,8 @@
 #include <qstaticnamespacescontainer_p.h>
 #include <qfunctionfactory_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class FunctionAvailableFN : public StaticNamespacesContainer
 {
  public:
@@ -40,8 +39,6 @@ class FunctionAvailableFN : public StaticNamespacesContainer
    FunctionFactory::Ptr    m_functionFactory;
    QXmlName::NamespaceCode m_defFuncNS;
 };
-
-QT_END_NAMESPACE
 
 }
 

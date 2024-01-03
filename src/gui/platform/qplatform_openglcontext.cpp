@@ -87,12 +87,12 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
                   minor = versionParts.at(1).left(idx).toInt(&minorOk);
                }
          } else {
-            qWarning("Unrecognized OpenGL ES version");
+            qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL ES version");
          }
 
       } else {
          // If < 3 parts to the name, it is an unrecognised OpenGL ES
-         qWarning("Unrecognised OpenGL ES version");
+         qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognised OpenGL ES version");
       }
 
    } else {
@@ -102,12 +102,12 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
          major = versionParts.at(0).toInt(&majorOk);
          minor = versionParts.at(1).toInt(&minorOk);
       } else {
-         qWarning("Unrecognized OpenGL version");
+         qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL version");
       }
    }
 
    if (!majorOk || !minorOk) {
-      qWarning("Unrecognized OpenGL version");
+      qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL version");
    }
 
    return (majorOk && minorOk);

@@ -26,8 +26,6 @@
 
 #include <qitem_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class SubsequenceIterator : public Item::Iterator
@@ -61,8 +59,7 @@ class SubsequenceIterator : public Item::Iterator
    const xsInteger m_len;
    const xsInteger m_stop;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

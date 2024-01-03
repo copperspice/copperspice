@@ -287,7 +287,7 @@ void QRasterPaintEngine::init()
 
    switch (d->device->devType()) {
       case QInternal::Pixmap:
-         qWarning("QRasterPaintEngine: unsupported for pixmaps");
+         qWarning("QRasterPaintEngine::init() Unsupported for pixmaps");
          break;
 
       case QInternal::Image:
@@ -295,7 +295,7 @@ void QRasterPaintEngine::init()
          break;
 
       default:
-         qWarning("QRasterPaintEngine: unsupported target device %d\n", d->device->devType());
+         qWarning("QRasterPaintEngine::init() Unsupported target device %d\n", d->device->devType());
          d->device = nullptr;
          return;
    }
@@ -1753,7 +1753,7 @@ void QRasterPaintEngine::fillPolygon(const QPointF *points, int pointCount, Poly
          fillPolygon(upper.constData(), upper.size(), mode);
          fillPolygon(lower.constData(), lower.size(), mode);
       } else {
-         qWarning("Polygon too complex for filling.");
+         qWarning("QRasterPaintEngine::fillPolygon() Polygon too complex");
       }
 
       return;
@@ -3474,9 +3474,8 @@ static inline uchar *alignAddress(uchar *address, quintptr alignmentMask)
    return (uchar *)(((quintptr)address + alignmentMask) & ~alignmentMask);
 }
 
-void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
-   ProcessSpans callback,
-   void *userData, QRasterBuffer *)
+void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline, ProcessSpans callback,
+      void *userData, QRasterBuffer *)
 {
    if (!callback || !outline) {
       return;
@@ -3542,7 +3541,7 @@ void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
       if (error == -6) { // ErrRaster_OutOfMemory from qgrayraster.c
          rasterPoolSize *= 2;
          if (rasterPoolSize > 1024 * 1024) {
-            qWarning("QPainter: Rasterization of primitive failed");
+            qWarning("QRasterPaintEngine::rasterize() Rasterization of primitive failed");
             break;
          }
 
@@ -3604,7 +3603,7 @@ QImage QRasterBuffer::colorizeBitmap(const QImage &image, const QColor &color)
       QRgb *target = reinterpret_cast<QRgb *>(dest.scanLine(y));
 
       if (! source || !target) {
-         QT_THROW(std::bad_alloc());   // we must have run out of memory
+         throw(std::bad_alloc());   // we must have run out of memory
       }
 
       for (int x = 0; x < width; ++x) {
@@ -4439,7 +4438,11 @@ void QGradientCache::generateGradientColorTable(const QGradient &gradient, QRgba
    colorTable[size - 1] = current_color;
 }
 
-Q_GLOBAL_STATIC(QGradientCache, qt_gradient_cache)
+static QGradientCache *qt_gradient_cache()
+{
+   static QGradientCache retval;
+   return &retval;
+}
 
 void QSpanData::init(QRasterBuffer *rb, const QRasterPaintEngine *pe)
 {

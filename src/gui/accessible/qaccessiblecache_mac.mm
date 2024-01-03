@@ -24,23 +24,23 @@
 #include <qaccessiblecache_p.h>
 
 // qcocoaaccessibilityelement.h in Cocoa platform plugin
-@interface QT_MANGLE_NAMESPACE(QMacAccessibilityElement)
+@interface QMacAccessibilityElement
 - (void)invalidate;
 @end
 
-void QAccessibleCache::insertElement(QAccessible::Id axid, QT_MANGLE_NAMESPACE(QMacAccessibilityElement) *element) const
+void QAccessibleCache::insertElement(QAccessible::Id axid, QMacAccessibilityElement *element) const
 {
     cocoaElements[axid] = element;
 }
 
 void QAccessibleCache::removeCocoaElement(QAccessible::Id axid)
 {
-    QT_MANGLE_NAMESPACE(QMacAccessibilityElement) *element = elementForId(axid);
+    QMacAccessibilityElement *element = elementForId(axid);
     [element invalidate];
     cocoaElements.remove(axid);
 }
 
-QT_MANGLE_NAMESPACE(QMacAccessibilityElement) *QAccessibleCache::elementForId(QAccessible::Id axid) const
+QMacAccessibilityElement *QAccessibleCache::elementForId(QAccessible::Id axid) const
 {
     return cocoaElements.value(axid);
 }

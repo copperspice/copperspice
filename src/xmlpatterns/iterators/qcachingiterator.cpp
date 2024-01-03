@@ -23,8 +23,6 @@
 
 #include "qcachingiterator_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 CachingIterator::CachingIterator(ItemSequenceCacheCell::Vector &cacheCells,
@@ -102,5 +100,3 @@ Item::Iterator::Ptr CachingIterator::copy() const
       return Item::Iterator::Ptr(new CachingIterator(m_cacheCells, m_varSlot, m_context));
    }
 }
-
-QT_END_NAMESPACE

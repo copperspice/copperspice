@@ -27,8 +27,6 @@
 
 #include "qdynamiccontextstore_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 DynamicContextStore::DynamicContextStore(const Expression::Ptr &operand,
@@ -75,4 +73,3 @@ const SourceLocationReflection *DynamicContextStore::actualReflection() const
    return m_operand->actualReflection();
 }
 
-QT_END_NAMESPACE

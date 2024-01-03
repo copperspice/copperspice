@@ -26,11 +26,9 @@
 
 #include <QStyle>
 
-QT_BEGIN_NAMESPACE
 class QLineEdit;
 class QPainter;
 class QWidget;
-QT_END_NAMESPACE
 
 namespace WebCore {
 

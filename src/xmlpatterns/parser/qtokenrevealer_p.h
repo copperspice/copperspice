@@ -24,16 +24,16 @@
 #ifndef QTokenRevealer_P_H
 #define QTokenRevealer_P_H
 
-#include <QSet>
+#include <qset.h>
+
 #include <qtokenizer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class TokenRevealer : public Tokenizer
 {
  public:
-   TokenRevealer(const QUrl &uri, const Tokenizer::Ptr &other); 
+   TokenRevealer(const QUrl &uri, const Tokenizer::Ptr &other);
    virtual ~TokenRevealer();
 
    Token nextToken(YYLTYPE *const sourceLocator) override;
@@ -46,9 +46,8 @@ class TokenRevealer : public Tokenizer
    QString                 m_result;
    QString                 m_indentationString;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif
 

@@ -32,9 +32,8 @@
 #include <qnumerictype_p.h>
 #include <quntyped_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class BuiltinTypes
 {
  public:
@@ -128,9 +127,8 @@ class BuiltinTypes
    BuiltinTypes(const BuiltinTypes &) = delete;
    BuiltinTypes &operator=(const BuiltinTypes &) = delete;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif
 

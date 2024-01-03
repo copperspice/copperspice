@@ -26,9 +26,8 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class AttributeConstructor : public PairContainer
 {
  public:
@@ -57,8 +56,7 @@ class AttributeConstructor : public PairContainer
  private:
    static inline QString processValue(const QXmlName name, const Item &value);
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

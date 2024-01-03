@@ -66,6 +66,7 @@ public:
         }
 #endif
     }
+
     ~QOpenGLShaderPrivate();
 
     QOpenGLSharedResourceGuard *shaderGuard;
@@ -102,32 +103,39 @@ namespace {
 QOpenGLShaderPrivate::~QOpenGLShaderPrivate()
 {
     delete glfuncs;
-    if (shaderGuard)
+    if (shaderGuard) {
         shaderGuard->free();
+    }
 }
 
 bool QOpenGLShaderPrivate::create()
 {
     QOpenGLContext *context = const_cast<QOpenGLContext *>(QOpenGLContext::currentContext());
+
     if (!context)
         return false;
     GLuint shader;
+
     if (shaderType == QOpenGLShader::Vertex) {
         shader = glfuncs->glCreateShader(GL_VERTEX_SHADER);
+
 #if defined(QT_OPENGL_3_2)
     } else if (shaderType == QOpenGLShader::Geometry && supportsGeometryShaders) {
         shader = glfuncs->glCreateShader(GL_GEOMETRY_SHADER);
 #endif
+
 #if defined(QT_OPENGL_4)
     } else if (shaderType == QOpenGLShader::TessellationControl && supportsTessellationShaders) {
         shader = glfuncs->glCreateShader(GL_TESS_CONTROL_SHADER);
     } else if (shaderType == QOpenGLShader::TessellationEvaluation && supportsTessellationShaders) {
         shader = glfuncs->glCreateShader(GL_TESS_EVALUATION_SHADER);
 #endif
+
 #if defined(QT_OPENGL_4_3)
     } else if (shaderType == QOpenGLShader::Compute) {
         shader = glfuncs->glCreateShader(GL_COMPUTE_SHADER);
 #endif
+
     } else {
         shader = glfuncs->glCreateShader(GL_FRAGMENT_SHADER);
     }
@@ -254,9 +262,6 @@ QOpenGLShader::~QOpenGLShader()
 {
 }
 
-/*!
-    Returns the type of this shader.
-*/
 QOpenGLShader::ShaderType QOpenGLShader::shaderType() const
 {
     Q_D(const QOpenGLShader);
@@ -492,13 +497,6 @@ bool QOpenGLShader::compileSourceCode(const QString& source)
     return compileSourceCode(source.toLatin1().constData());
 }
 
-/*!
-    Sets the source code for this shader to the contents of \a fileName
-    and compiles it.  Returns \c true if the file could be opened and the
-    source compiled, false otherwise.
-
-    \sa compileSourceCode()
-*/
 bool QOpenGLShader::compileSourceFile(const QString& fileName)
 {
     QFile file(fileName);
@@ -511,11 +509,6 @@ bool QOpenGLShader::compileSourceFile(const QString& fileName)
     return compileSourceCode(contents.constData());
 }
 
-/*!
-    Returns the source code for this shader.
-
-    \sa compileSourceCode()
-*/
 QByteArray QOpenGLShader::sourceCode() const
 {
     Q_D(const QOpenGLShader);
@@ -534,33 +527,18 @@ QByteArray QOpenGLShader::sourceCode() const
     return src;
 }
 
-/*!
-    Returns \c true if this shader has been compiled; false otherwise.
-
-    \sa compileSourceCode(), compileSourceFile()
-*/
 bool QOpenGLShader::isCompiled() const
 {
     Q_D(const QOpenGLShader);
     return d->compiled;
 }
 
-/*!
-    Returns the errors and warnings that occurred during the last compile.
-
-    \sa compileSourceCode(), compileSourceFile()
-*/
 QString QOpenGLShader::log() const
 {
     Q_D(const QOpenGLShader);
     return d->log;
 }
 
-/*!
-    Returns the OpenGL identifier associated with this shader.
-
-    \sa QOpenGLShaderProgram::programId()
-*/
 GLuint QOpenGLShader::shaderId() const
 {
     Q_D(const QOpenGLShader);
@@ -613,7 +591,6 @@ namespace {
     }
 }
 
-
 QOpenGLShaderProgramPrivate::~QOpenGLShaderProgramPrivate()
 {
     delete glfuncs;
@@ -630,42 +607,16 @@ bool QOpenGLShaderProgramPrivate::hasShader(QOpenGLShader::ShaderType type) cons
     return false;
 }
 
-/*!
-    Constructs a new shader program and attaches it to \a parent.
-    The program will be invalid until addShader() is called.
-
-    The shader program will be associated with the current QOpenGLContext.
-
-    \sa addShader()
-*/
 QOpenGLShaderProgram::QOpenGLShaderProgram(QObject *parent)
     : QObject(parent), d_ptr(new QOpenGLShaderProgramPrivate)
 {
    d_ptr->q_ptr = this;
 }
 
-/*!
-    Deletes this shader program.
-*/
 QOpenGLShaderProgram::~QOpenGLShaderProgram()
 {
 }
 
-/*!
-    Requests the shader program's id to be created immediately. Returns \c true
-    if successful; \c false otherwise.
-
-    This function is primarily useful when combining QOpenGLShaderProgram
-    with other OpenGL functions that operate directly on the shader
-    program id, like \c {GL_OES_get_program_binary}.
-
-    When the shader program is used normally, the shader program's id will
-    be created on demand.
-
-    \sa programId()
-
-    \since 5.3
- */
 bool QOpenGLShaderProgram::create()
 {
     return init();
@@ -703,18 +654,6 @@ bool QOpenGLShaderProgram::init()
     return true;
 }
 
-/*!
-    Adds a compiled \a shader to this shader program.  Returns \c true
-    if the shader could be added, or false otherwise.
-
-    Ownership of the \a shader object remains with the caller.
-    It will not be deleted when this QOpenGLShaderProgram instance
-    is deleted.  This allows the caller to add the same shader
-    to multiple shader programs.
-
-    \sa addShaderFromSourceCode(), addShaderFromSourceFile()
-    \sa removeShader(), link(), removeAllShaders()
-*/
 bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
 {
     Q_D(QOpenGLShaderProgram);
@@ -732,26 +671,13 @@ bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
         d->glfuncs->glAttachShader(d->programGuard->id(), shader->d_func()->shaderGuard->id());
         d->linked = false;  // Program needs to be relinked.
         d->shaders.append(shader);
-        connect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+        connect(shader, &QOpenGLShader::destroyed, this, &QOpenGLShaderProgram::shaderDestroyed);
         return true;
     } else {
         return false;
     }
 }
 
-/*!
-    Compiles \a source as a shader of the specified \a type and
-    adds it to this shader program.  Returns \c true if compilation
-    was successful, false otherwise.  The compilation errors
-    and warnings will be made available via log().
-
-    This function is intended to be a short-cut for quickly
-    adding vertex and fragment shaders to a shader program without
-    creating an instance of QOpenGLShader first.
-
-    \sa addShader(), addShaderFromSourceFile()
-    \sa removeShader(), link(), log(), removeAllShaders()
-*/
 bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType type, const char *source)
 {
     Q_D(QOpenGLShaderProgram);
@@ -767,58 +693,16 @@ bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType typ
     return addShader(shader);
 }
 
-/*!
-    \overload
-
-    Compiles \a source as a shader of the specified \a type and
-    adds it to this shader program.  Returns \c true if compilation
-    was successful, false otherwise.  The compilation errors
-    and warnings will be made available via log().
-
-    This function is intended to be a short-cut for quickly
-    adding vertex and fragment shaders to a shader program without
-    creating an instance of QOpenGLShader first.
-
-    \sa addShader(), addShaderFromSourceFile()
-    \sa removeShader(), link(), log(), removeAllShaders()
-*/
 bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType type, const QByteArray& source)
 {
     return addShaderFromSourceCode(type, source.constData());
 }
 
-/*!
-    \overload
-
-    Compiles \a source as a shader of the specified \a type and
-    adds it to this shader program.  Returns \c true if compilation
-    was successful, false otherwise.  The compilation errors
-    and warnings will be made available via log().
-
-    This function is intended to be a short-cut for quickly
-    adding vertex and fragment shaders to a shader program without
-    creating an instance of QOpenGLShader first.
-
-    \sa addShader(), addShaderFromSourceFile()
-    \sa removeShader(), link(), log(), removeAllShaders()
-*/
 bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType type, const QString& source)
 {
     return addShaderFromSourceCode(type, source.toLatin1().constData());
 }
 
-/*!
-    Compiles the contents of \a fileName as a shader of the specified
-    \a type and adds it to this shader program.  Returns \c true if
-    compilation was successful, false otherwise.  The compilation errors
-    and warnings will be made available via log().
-
-    This function is intended to be a short-cut for quickly
-    adding vertex and fragment shaders to a shader program without
-    creating an instance of QOpenGLShader first.
-
-    \sa addShader(), addShaderFromSourceCode()
-*/
 bool QOpenGLShaderProgram::addShaderFromSourceFile
     (QOpenGLShader::ShaderType type, const QString& fileName)
 {
@@ -835,13 +719,6 @@ bool QOpenGLShaderProgram::addShaderFromSourceFile
     return addShader(shader);
 }
 
-/*!
-    Removes \a shader from this shader program.  The object is not deleted.
-
-    The shader program must be valid in the current QOpenGLContext.
-
-    \sa addShader(), link(), removeAllShaders()
-*/
 void QOpenGLShaderProgram::removeShader(QOpenGLShader *shader)
 {
     Q_D(QOpenGLShaderProgram);
@@ -854,30 +731,16 @@ void QOpenGLShaderProgram::removeShader(QOpenGLShader *shader)
     if (shader) {
         d->shaders.removeAll(shader);
         d->anonShaders.removeAll(shader);
-        disconnect(shader, SIGNAL(destroyed()), this, SLOT(shaderDestroyed()));
+        disconnect(shader, &QOpenGLShader::destroyed, this, &QOpenGLShaderProgram::shaderDestroyed);
     }
 }
 
-/*!
-    Returns a list of all shaders that have been added to this shader
-    program using addShader().
-
-    \sa addShader(), removeShader()
-*/
 QList<QOpenGLShader *> QOpenGLShaderProgram::shaders() const
 {
     Q_D(const QOpenGLShaderProgram);
     return d->shaders;
 }
 
-/*!
-    Removes all of the shaders that were added to this program previously.
-    The QOpenGLShader objects for the shaders will not be deleted if they
-    were constructed externally.  QOpenGLShader objects that are constructed
-    internally by QOpenGLShaderProgram will be deleted.
-
-    \sa addShader(), removeShader()
-*/
 void QOpenGLShaderProgram::removeAllShaders()
 {
     Q_D(QOpenGLShaderProgram);
@@ -901,20 +764,6 @@ void QOpenGLShaderProgram::removeAllShaders()
     d->removingShaders = false;
 }
 
-/*!
-    Links together the shaders that were added to this program with
-    addShader().  Returns \c true if the link was successful or
-    false otherwise.  If the link failed, the error messages can
-    be retrieved with log().
-
-    Subclasses can override this function to initialize attributes
-    and uniform variables for use in specific shader programs.
-
-    If the shader program was already linked, calling this
-    function again will force it to be re-linked.
-
-    \sa addShader(), log()
-*/
 bool QOpenGLShaderProgram::link()
 {
     Q_D(QOpenGLShaderProgram);
@@ -959,39 +808,18 @@ bool QOpenGLShaderProgram::link()
     return d->linked;
 }
 
-/*!
-    Returns \c true if this shader program has been linked; false otherwise.
-
-    \sa link()
-*/
 bool QOpenGLShaderProgram::isLinked() const
 {
     Q_D(const QOpenGLShaderProgram);
     return d->linked;
 }
 
-/*!
-    Returns the errors and warnings that occurred during the last link()
-    or addShader() with explicitly specified source code.
-
-    \sa link()
-*/
 QString QOpenGLShaderProgram::log() const
 {
     Q_D(const QOpenGLShaderProgram);
     return d->log;
 }
 
-/*!
-    Binds this shader program to the active QOpenGLContext and makes
-    it the current shader program.  Any previously bound shader program
-    is released.  This is equivalent to calling \c{glUseProgram()} on
-    programId().  Returns \c true if the program was successfully bound;
-    false otherwise.  If the shader program has not yet been linked,
-    or it needs to be re-linked, this function will call link().
-
-    \sa link(), release()
-*/
 bool QOpenGLShaderProgram::bind()
 {
     Q_D(QOpenGLShaderProgram);
@@ -1000,22 +828,18 @@ bool QOpenGLShaderProgram::bind()
         return false;
     if (!d->linked && !link())
         return false;
+
 #ifndef QT_NO_DEBUG
     if (d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
         qWarning("QOpenGLShaderProgram::bind: program is not valid in the current context.");
         return false;
     }
 #endif
+
     d->glfuncs->glUseProgram(program);
     return true;
 }
 
-/*!
-    Releases the active shader program from the current QOpenGLContext.
-    This is equivalent to calling \c{glUseProgram(0)}.
-
-    \sa bind()
-*/
 void QOpenGLShaderProgram::release()
 {
     Q_D(QOpenGLShaderProgram);
@@ -1026,11 +850,6 @@ void QOpenGLShaderProgram::release()
     d->glfuncs->glUseProgram(0);
 }
 
-/*!
-    Returns the OpenGL identifier associated with this shader program.
-
-    \sa QOpenGLShader::shaderId()
-*/
 GLuint QOpenGLShaderProgram::programId() const
 {
     Q_D(const QOpenGLShaderProgram);
@@ -1046,17 +865,6 @@ GLuint QOpenGLShaderProgram::programId() const
     return d->programGuard ? d->programGuard->id() : 0;
 }
 
-/*!
-    Binds the attribute \a name to the specified \a location.  This
-    function can be called before or after the program has been linked.
-    Any attributes that have not been explicitly bound when the program
-    is linked will be assigned locations automatically.
-
-    When this function is called after the program has been linked,
-    the program will need to be relinked for the change to take effect.
-
-    \sa attributeLocation()
-*/
 void QOpenGLShaderProgram::bindAttributeLocation(const char *name, int location)
 {
     Q_D(QOpenGLShaderProgram);
@@ -1066,49 +874,16 @@ void QOpenGLShaderProgram::bindAttributeLocation(const char *name, int location)
     d->linked = false;  // Program needs to be relinked.
 }
 
-/*!
-    \overload
-
-    Binds the attribute \a name to the specified \a location.  This
-    function can be called before or after the program has been linked.
-    Any attributes that have not been explicitly bound when the program
-    is linked will be assigned locations automatically.
-
-    When this function is called after the program has been linked,
-    the program will need to be relinked for the change to take effect.
-
-    \sa attributeLocation()
-*/
 void QOpenGLShaderProgram::bindAttributeLocation(const QByteArray& name, int location)
 {
     bindAttributeLocation(name.constData(), location);
 }
 
-/*!
-    \overload
-
-    Binds the attribute \a name to the specified \a location.  This
-    function can be called before or after the program has been linked.
-    Any attributes that have not been explicitly bound when the program
-    is linked will be assigned locations automatically.
-
-    When this function is called after the program has been linked,
-    the program will need to be relinked for the change to take effect.
-
-    \sa attributeLocation()
-*/
 void QOpenGLShaderProgram::bindAttributeLocation(const QString& name, int location)
 {
     bindAttributeLocation(name.toLatin1().constData(), location);
 }
 
-/*!
-    Returns the location of the attribute \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    attribute for this shader program.
-
-    \sa uniformLocation(), bindAttributeLocation()
-*/
 int QOpenGLShaderProgram::attributeLocation(const char *name) const
 {
     Q_D(const QOpenGLShaderProgram);
@@ -1121,39 +896,16 @@ int QOpenGLShaderProgram::attributeLocation(const char *name) const
     }
 }
 
-/*!
-    \overload
-
-    Returns the location of the attribute \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    attribute for this shader program.
-
-    \sa uniformLocation(), bindAttributeLocation()
-*/
 int QOpenGLShaderProgram::attributeLocation(const QByteArray& name) const
 {
     return attributeLocation(name.constData());
 }
 
-/*!
-    \overload
-
-    Returns the location of the attribute \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    attribute for this shader program.
-
-    \sa uniformLocation(), bindAttributeLocation()
-*/
 int QOpenGLShaderProgram::attributeLocation(const QString& name) const
 {
     return attributeLocation(name.toLatin1().constData());
 }
 
-/*!
-    Sets the attribute at \a location in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat value)
 {
     Q_D(QOpenGLShaderProgram);
@@ -1161,24 +913,11 @@ void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat value)
         d->glfuncs->glVertexAttrib1fv(location, &value);
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat value)
 {
     setAttributeValue(attributeLocation(name), value);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to
-    the 2D vector (\a x, \a y).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat x, GLfloat y)
 {
     Q_D(QOpenGLShaderProgram);
@@ -1188,56 +927,29 @@ void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat x, GLfloat y)
     }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to
-    the 2D vector (\a x, \a y).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat x, GLfloat y)
 {
     setAttributeValue(attributeLocation(name), x, y);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to
-    the 3D vector (\a x, \a y, \a z).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
         (int location, GLfloat x, GLfloat y, GLfloat z)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[3] = {x, y, z};
         d->glfuncs->glVertexAttrib3fv(location, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to
-    the 3D vector (\a x, \a y, \a z).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
         (const char *name, GLfloat x, GLfloat y, GLfloat z)
 {
     setAttributeValue(attributeLocation(name), x, y, z);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to
-    the 4D vector (\a x, \a y, \a z, \a w).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
         (int location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
@@ -1248,103 +960,59 @@ void QOpenGLShaderProgram::setAttributeValue
     }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to
-    the 4D vector (\a x, \a y, \a z, \a w).
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
         (const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     setAttributeValue(attributeLocation(name), x, y, z, w);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, const QVector2D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    if (location != -1)
+
+    if (location != -1) {
         d->glfuncs->glVertexAttrib2fv(location, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QVector2D& value)
 {
     setAttributeValue(attributeLocation(name), value);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, const QVector3D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glVertexAttrib3fv(location, reinterpret_cast<const GLfloat *>(&value));
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QVector3D& value)
 {
     setAttributeValue(attributeLocation(name), value);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, const QVector4D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glVertexAttrib4fv(location, reinterpret_cast<const GLfloat *>(&value));
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QVector4D& value)
 {
     setAttributeValue(attributeLocation(name), value);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(int location, const QColor& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(value.redF()), GLfloat(value.greenF()),
                              GLfloat(value.blueF()), GLfloat(value.alphaF())};
@@ -1352,36 +1020,22 @@ void QOpenGLShaderProgram::setAttributeValue(int location, const QColor& value)
     }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to \a value.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QColor& value)
 {
     setAttributeValue(attributeLocation(name), value);
 }
 
-/*!
-    Sets the attribute at \a location in the current context to the
-    contents of \a values, which contains \a columns elements, each
-    consisting of \a rows elements.  The \a rows value should be
-    1, 2, 3, or 4.  This function is typically used to set matrix
-    values and column vectors.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
     (int location, const GLfloat *values, int columns, int rows)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (rows < 1 || rows > 4) {
         qWarning() << "QOpenGLShaderProgram::setAttributeValue: rows" << rows << "not supported";
         return;
     }
+
     if (location != -1) {
         while (columns-- > 0) {
             if (rows == 1)
@@ -1398,396 +1052,148 @@ void QOpenGLShaderProgram::setAttributeValue
     }
 }
 
-/*!
-    \overload
-
-    Sets the attribute called \a name in the current context to the
-    contents of \a values, which contains \a columns elements, each
-    consisting of \a rows elements.  The \a rows value should be
-    1, 2, 3, or 4.  This function is typically used to set matrix
-    values and column vectors.
-
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::setAttributeValue
     (const char *name, const GLfloat *values, int columns, int rows)
 {
     setAttributeValue(attributeLocation(name), values, columns, rows);
 }
 
-/*!
-    Sets an array of vertex \a values on the attribute at \a location
-    in this shader program.  The \a tupleSize indicates the number of
-    components per vertex (1, 2, 3, or 4), and the \a stride indicates
-    the number of bytes between vertices.  A default \a stride value
-    of zero indicates that the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
     (int location, const GLfloat *values, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         d->glfuncs->glVertexAttribPointer(location, tupleSize, GL_FLOAT, GL_FALSE,
                               stride, values);
     }
 }
 
-/*!
-    Sets an array of 2D vertex \a values on the attribute at \a location
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (int location, const QVector2D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
-        d->glfuncs->glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE,
-                              stride, values);
+        d->glfuncs->glVertexAttribPointer(location, 2, GL_FLOAT, GL_FALSE, stride, values);
     }
 }
 
-/*!
-    Sets an array of 3D vertex \a values on the attribute at \a location
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (int location, const QVector3D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
-        d->glfuncs->glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE,
-                              stride, values);
+        d->glfuncs->glVertexAttribPointer(location, 3, GL_FLOAT, GL_FALSE, stride, values);
     }
 }
 
-/*!
-    Sets an array of 4D vertex \a values on the attribute at \a location
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (int location, const QVector4D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
-        d->glfuncs->glVertexAttribPointer(location, 4, GL_FLOAT, GL_FALSE,
-                              stride, values);
+        d->glfuncs->glVertexAttribPointer(location, 4, GL_FLOAT, GL_FALSE, stride, values);
     }
 }
 
-/*!
-    Sets an array of vertex \a values on the attribute at \a location
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The \a type indicates the type of elements in the \a values array,
-    usually \c{GL_FLOAT}, \c{GL_UNSIGNED_BYTE}, etc.  The \a tupleSize
-    indicates the number of components per vertex: 1, 2, 3, or 4.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    The setAttributeBuffer() function can be used to set the attribute
-    array to an offset within a vertex buffer.
-
-    \note Normalization will be enabled. If this is not desired, call
-    glVertexAttribPointer directly through QOpenGLFunctions.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray(), setAttributeBuffer()
-*/
 void QOpenGLShaderProgram::setAttributeArray
     (int location, GLenum type, const void *values, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
-        d->glfuncs->glVertexAttribPointer(location, tupleSize, type, GL_TRUE,
-                              stride, values);
+        d->glfuncs->glVertexAttribPointer(location, tupleSize, type, GL_TRUE, stride, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets an array of vertex \a values on the attribute called \a name
-    in this shader program.  The \a tupleSize indicates the number of
-    components per vertex (1, 2, 3, or 4), and the \a stride indicates
-    the number of bytes between vertices.  A default \a stride value
-    of zero indicates that the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on \a name.  Otherwise the value specified with setAttributeValue()
-    for \a name will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
     (const char *name, const GLfloat *values, int tupleSize, int stride)
 {
     setAttributeArray(attributeLocation(name), values, tupleSize, stride);
 }
 
-/*!
-    \overload
-
-    Sets an array of 2D vertex \a values on the attribute called \a name
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on \a name.  Otherwise the value specified with setAttributeValue()
-    for \a name will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (const char *name, const QVector2D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-/*!
-    \overload
-
-    Sets an array of 3D vertex \a values on the attribute called \a name
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on \a name.  Otherwise the value specified with setAttributeValue()
-    for \a name will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (const char *name, const QVector3D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-/*!
-    \overload
-
-    Sets an array of 4D vertex \a values on the attribute called \a name
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The array will become active when enableAttributeArray() is called
-    on \a name.  Otherwise the value specified with setAttributeValue()
-    for \a name will be used.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeArray
         (const char *name, const QVector4D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-/*!
-    \overload
-
-    Sets an array of vertex \a values on the attribute called \a name
-    in this shader program.  The \a stride indicates the number of bytes
-    between vertices.  A default \a stride value of zero indicates that
-    the vertices are densely packed in \a values.
-
-    The \a type indicates the type of elements in the \a values array,
-    usually \c{GL_FLOAT}, \c{GL_UNSIGNED_BYTE}, etc.  The \a tupleSize
-    indicates the number of components per vertex: 1, 2, 3, or 4.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a name.  Otherwise the value specified with
-    setAttributeValue() for \a name will be used.
-
-    The setAttributeBuffer() function can be used to set the attribute
-    array to an offset within a vertex buffer.
-
-    \sa setAttributeValue(), setUniformValue(), enableAttributeArray()
-    \sa disableAttributeArray(), setAttributeBuffer()
-*/
 void QOpenGLShaderProgram::setAttributeArray
     (const char *name, GLenum type, const void *values, int tupleSize, int stride)
 {
     setAttributeArray(attributeLocation(name), type, values, tupleSize, stride);
 }
 
-/*!
-    Sets an array of vertex values on the attribute at \a location in
-    this shader program, starting at a specific \a offset in the
-    currently bound vertex buffer.  The \a stride indicates the number
-    of bytes between vertices.  A default \a stride value of zero
-    indicates that the vertices are densely packed in the value array.
-
-    The \a type indicates the type of elements in the vertex value
-    array, usually \c{GL_FLOAT}, \c{GL_UNSIGNED_BYTE}, etc.  The \a
-    tupleSize indicates the number of components per vertex: 1, 2, 3,
-    or 4.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a location.  Otherwise the value specified with
-    setAttributeValue() for \a location will be used.
-
-    \note Normalization will be enabled. If this is not desired, call
-    glVertexAttribPointer directly through QOpenGLFunctions.
-
-    \sa setAttributeArray()
-*/
 void QOpenGLShaderProgram::setAttributeBuffer
     (int location, GLenum type, int offset, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         d->glfuncs->glVertexAttribPointer(location, tupleSize, type, GL_TRUE, stride,
                               reinterpret_cast<const void *>(qintptr(offset)));
     }
 }
 
-/*!
-    \overload
-
-    Sets an array of vertex values on the attribute called \a name
-    in this shader program, starting at a specific \a offset in the
-    currently bound vertex buffer.  The \a stride indicates the number
-    of bytes between vertices.  A default \a stride value of zero
-    indicates that the vertices are densely packed in the value array.
-
-    The \a type indicates the type of elements in the vertex value
-    array, usually \c{GL_FLOAT}, \c{GL_UNSIGNED_BYTE}, etc.  The \a
-    tupleSize indicates the number of components per vertex: 1, 2, 3,
-    or 4.
-
-    The array will become active when enableAttributeArray() is called
-    on the \a name.  Otherwise the value specified with
-    setAttributeValue() for \a name will be used.
-
-    \sa setAttributeArray()
-*/
-void QOpenGLShaderProgram::setAttributeBuffer
-    (const char *name, GLenum type, int offset, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeBuffer(const char *name, GLenum type, int offset, int tupleSize, int stride)
 {
     setAttributeBuffer(attributeLocation(name), type, offset, tupleSize, stride);
 }
 
-/*!
-    Enables the vertex array at \a location in this shader program
-    so that the value set by setAttributeArray() on \a location
-    will be used by the shader program.
-
-    \sa disableAttributeArray(), setAttributeArray(), setAttributeValue()
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::enableAttributeArray(int location)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glEnableVertexAttribArray(location);
 }
 
-/*!
-    \overload
-
-    Enables the vertex array called \a name in this shader program
-    so that the value set by setAttributeArray() on \a name
-    will be used by the shader program.
-
-    \sa disableAttributeArray(), setAttributeArray(), setAttributeValue()
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::enableAttributeArray(const char *name)
 {
     enableAttributeArray(attributeLocation(name));
 }
 
-/*!
-    Disables the vertex array at \a location in this shader program
-    that was enabled by a previous call to enableAttributeArray().
-
-    \sa enableAttributeArray(), setAttributeArray(), setAttributeValue()
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::disableAttributeArray(int location)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glDisableVertexAttribArray(location);
 }
 
-/*!
-    \overload
-
-    Disables the vertex array called \a name in this shader program
-    that was enabled by a previous call to enableAttributeArray().
-
-    \sa enableAttributeArray(), setAttributeArray(), setAttributeValue()
-    \sa setUniformValue()
-*/
 void QOpenGLShaderProgram::disableAttributeArray(const char *name)
 {
     disableAttributeArray(attributeLocation(name));
 }
 
-/*!
-    Returns the location of the uniform variable \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    uniform variable for this shader program.
-
-    \sa attributeLocation()
-*/
 int QOpenGLShaderProgram::uniformLocation(const char *name) const
 {
     Q_D(const QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (d->linked && d->programGuard && d->programGuard->id()) {
         return d->glfuncs->glGetUniformLocation(d->programGuard->id(), name);
     } else {
@@ -1797,298 +1203,154 @@ int QOpenGLShaderProgram::uniformLocation(const char *name) const
     }
 }
 
-/*!
-    \overload
-
-    Returns the location of the uniform variable \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    uniform variable for this shader program.
-
-    \sa attributeLocation()
-*/
 int QOpenGLShaderProgram::uniformLocation(const QByteArray& name) const
 {
     return uniformLocation(name.constData());
 }
 
-/*!
-    \overload
-
-    Returns the location of the uniform variable \a name within this shader
-    program's parameter list.  Returns -1 if \a name is not a valid
-    uniform variable for this shader program.
-
-    \sa attributeLocation()
-*/
 int QOpenGLShaderProgram::uniformLocation(const QString& name) const
 {
     return uniformLocation(name.toLatin1().constData());
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, GLfloat value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform1fv(location, 1, &value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, GLint value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform1i(location, value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLint value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-    This function should be used when setting sampler values.
-
-    \note This function is not aware of unsigned int support in modern OpenGL
-    versions and therefore treats \a value as a GLint and calls glUniform1i.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, GLuint value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform1i(location, value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.  This function should be used when setting sampler values.
-
-    \note This function is not aware of unsigned int support in modern OpenGL
-    versions and therefore treats \a value as a GLint and calls glUniform1i.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLuint value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the 2D vector (\a x, \a y).
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, GLfloat x, GLfloat y)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[2] = {x, y};
         d->glfuncs->glUniform2fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to
-    the 2D vector (\a x, \a y).
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat x, GLfloat y)
 {
     setUniformValue(uniformLocation(name), x, y);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the 3D vector (\a x, \a y, \a z).
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue
         (int location, GLfloat x, GLfloat y, GLfloat z)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[3] = {x, y, z};
         d->glfuncs->glUniform3fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to
-    the 3D vector (\a x, \a y, \a z).
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValue
-        (const char *name, GLfloat x, GLfloat y, GLfloat z)
+void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat x, GLfloat y, GLfloat z)
 {
     setUniformValue(uniformLocation(name), x, y, z);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the 4D vector (\a x, \a y, \a z, \a w).
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValue
-        (int location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void QOpenGLShaderProgram::setUniformValue(int location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {x, y, z, w};
         d->glfuncs->glUniform4fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to
-    the 4D vector (\a x, \a y, \a z, \a w).
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValue
-        (const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     setUniformValue(uniformLocation(name), x, y, z, w);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QVector2D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform2fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector2D& value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QVector3D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform3fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector3D& value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QVector4D& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform4fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to \a value.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector4D& value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the red, green, blue, and alpha components of \a color.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QColor& color)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(color.redF()), GLfloat(color.greenF()),
                              GLfloat(color.blueF()), GLfloat(color.alphaF())};
@@ -2096,130 +1358,70 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QColor& color)
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to
-    the red, green, blue, and alpha components of \a color.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QColor& color)
 {
     setUniformValue(uniformLocation(name), color);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QPoint& point)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(point.x()), GLfloat(point.y())};
         d->glfuncs->glUniform2fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QPoint& point)
 {
     setUniformValue(uniformLocation(name), point);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QPointF& point)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(point.x()), GLfloat(point.y())};
         d->glfuncs->glUniform2fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the x and y coordinates of \a point.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QPointF& point)
 {
     setUniformValue(uniformLocation(name), point);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QSize& size)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(size.width()), GLfloat(size.height())};
         d->glfuncs->glUniform2fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QSize& size)
 {
     setUniformValue(uniformLocation(name), size);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to
-    the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QSizeF& size)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat values[4] = {GLfloat(size.width()), GLfloat(size.height())};
         d->glfuncs->glUniform2fv(location, 1, values);
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable associated with \a name in the current
-    context to the width and height of the given \a size.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QSizeF& size)
 {
     setUniformValue(uniformLocation(name), size);
@@ -2238,7 +1440,6 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix2x2& value
 
     d->glfuncs->glUniformMatrix2fv(location, 1, GL_FALSE, tmp);
 }
-
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QMatrix2x2& value)
 {
@@ -2336,7 +1537,6 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x4 &value
     d->glfuncs->glUniform4fv(location, 3, tmp);
 }
 
-
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QMatrix3x4& value)
 {
     setUniformValue(uniformLocation(name), value);
@@ -2415,77 +1615,35 @@ void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[3][
         d->glfuncs->glUniformMatrix3fv(location, 1, GL_FALSE, value[0]);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable at \a location in the current context
-    to a 4x4 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[4][4])
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniformMatrix4fv(location, 1, GL_FALSE, value[0]);
 }
 
-
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 2x2 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const GLfloat value[2][2])
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 3x3 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const GLfloat value[3][3])
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context
-    to a 4x4 matrix \a value.  The matrix elements must be specified
-    in column-major order.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValue(const char *name, const GLfloat value[4][4])
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable at \a location in the current context to a
-    3x3 transformation matrix \a value that is specified as a QTransform value.
-
-    To set a QTransform value as a 4x4 matrix in a shader, use
-    \c{setUniformValue(location, QMatrix4x4(value))}.
-*/
 void QOpenGLShaderProgram::setUniformValue(int location, const QTransform& value)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         GLfloat mat[3][3] = {
             {GLfloat(value.m11()), GLfloat(value.m12()), GLfloat(value.m13())},
@@ -2496,93 +1654,45 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QTransform& value
     }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable called \a name in the current context to a
-    3x3 transformation matrix \a value that is specified as a QTransform value.
-
-    To set a QTransform value as a 4x4 matrix in a shader, use
-    \c{setUniformValue(name, QMatrix4x4(value))}.
-*/
-void QOpenGLShaderProgram::setUniformValue
-        (const char *name, const QTransform& value)
+void QOpenGLShaderProgram::setUniformValue(const char *name, const QTransform& value)
 {
     setUniformValue(uniformLocation(name), value);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const GLint *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform1iv(location, count, values);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValueArray
-        (const char *name, const GLint *values, int count)
+void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLint *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.  This overload
-    should be used when setting an array of sampler values.
-
-    \note This function is not aware of unsigned int support in modern OpenGL
-    versions and therefore treats \a values as a GLint and calls glUniform1iv.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const GLuint *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
-    if (location != -1)
+    (void) d;
+
+    if (location != -1) {
         d->glfuncs->glUniform1iv(location, count, reinterpret_cast<const GLint *>(values));
+    }
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.  This overload
-    should be used when setting an array of sampler values.
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValueArray
-        (const char *name, const GLuint *values, int count)
+void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLuint *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count elements of \a values.  Each element
-    has \a tupleSize components.  The \a tupleSize must be 1, 2, 3, or 4.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *values, int count, int tupleSize)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1) {
         if (tupleSize == 1)
             d->glfuncs->glUniform1fv(location, count, values);
@@ -2597,97 +1707,49 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *val
     }
 }
 
-/*!
-    \overload
 
-    Sets the uniform variable array called \a name in the current
-    context to the \a count elements of \a values.  Each element
-    has \a tupleSize components.  The \a tupleSize must be 1, 2, 3, or 4.
-
-    \sa setAttributeValue()
-*/
-void QOpenGLShaderProgram::setUniformValueArray
-        (const char *name, const GLfloat *values, int count, int tupleSize)
+void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLfloat *values, int count, int tupleSize)
 {
     setUniformValueArray(uniformLocation(name), values, count, tupleSize);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector2D *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform2fv(location, count, reinterpret_cast<const GLfloat *>(values));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector2D *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector3D *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform3fv(location, count, reinterpret_cast<const GLfloat *>(values));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector3D *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector4D *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     if (location != -1)
         d->glfuncs->glUniform4fv(location, count, reinterpret_cast<const GLfloat *>(values));
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4D vector elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
@@ -2728,287 +1790,144 @@ void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector4
         colfunc(location, count * cols, temp.constData()); \
     }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformMatrixArray
         (d->glfuncs->glUniformMatrix2fv, location, values, count, QMatrix2x2, 2, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x2 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform3fv, location, values, count,
-         QMatrix2x3, 2, 3);
+        (d->glfuncs->glUniform3fv, location, values, count, QMatrix2x3, 2, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x3 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 2x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform4fv, location, values, count,
-         QMatrix2x4, 2, 4);
+        (d->glfuncs->glUniform4fv, location, values, count, QMatrix2x4, 2, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 2x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x4 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform2fv, location, values, count,
-         QMatrix3x2, 3, 2);
+        (d->glfuncs->glUniform2fv, location, values, count, QMatrix3x2, 3, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x2 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformMatrixArray
         (d->glfuncs->glUniformMatrix3fv, location, values, count, QMatrix3x3, 3, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x3 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 3x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform4fv, location, values, count,
-         QMatrix3x4, 3, 4);
+        (d->glfuncs->glUniform4fv, location, values, count, QMatrix3x4, 3, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 3x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x4 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform2fv, location, values, count,
-         QMatrix4x2, 4, 2);
+        (d->glfuncs->glUniform2fv, location, values, count, QMatrix4x2, 4, 2);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x2 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x2 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformGenericMatrixArray
-        (d->glfuncs->glUniform3fv, location, values, count,
-         QMatrix4x3, 4, 3);
+        (d->glfuncs->glUniform3fv, location, values, count, QMatrix4x3, 4, 3);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x3 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x3 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Sets the uniform variable array at \a location in the current
-    context to the \a count 4x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x4 *values, int count)
 {
     Q_D(QOpenGLShaderProgram);
-    Q_UNUSED(d);
+    (void) d;
+
     setUniformMatrixArray
         (d->glfuncs->glUniformMatrix4fv, location, values, count, QMatrix4x4, 4, 4);
 }
 
-/*!
-    \overload
-
-    Sets the uniform variable array called \a name in the current
-    context to the \a count 4x4 matrix elements of \a values.
-
-    \sa setAttributeValue()
-*/
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x4 *values, int count)
 {
     setUniformValueArray(uniformLocation(name), values, count);
 }
 
-/*!
-    Returns the hardware limit for how many vertices a geometry shader
-    can output.
-*/
 int QOpenGLShaderProgram::maxGeometryOutputVertices() const
 {
     GLint n = 0;
+
 #if defined(QT_OPENGL_3_2)
     Q_D(const QOpenGLShaderProgram);
     d->glfuncs->glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES, &n);
 #endif
+
     return n;
 }
 
-/*!
-    Use this function to specify to OpenGL the number of vertices in
-    a patch to \a count. A patch is a custom OpenGL primitive whose interpretation
-    is entirely defined by the tessellation shader stages. Therefore, calling
-    this function only makes sense when using a QOpenGLShaderProgram
-    containing tessellation stage shaders. When using OpenGL tessellation,
-    the only primitive that can be rendered with \c{glDraw*()} functions is
-    \c{GL_PATCHES}.
-
-    This is equivalent to calling glPatchParameteri(GL_PATCH_VERTICES, count).
-
-    \note This modifies global OpenGL state and is not specific to this
-    QOpenGLShaderProgram instance. You should call this in your render
-    function when needed, as QOpenGLShaderProgram will not apply this for
-    you. This is purely a convenience function.
-
-    \sa patchVertexCount()
-*/
 void QOpenGLShaderProgram::setPatchVertexCount(int count)
 {
 #if defined(QT_OPENGL_4)
@@ -3016,46 +1935,23 @@ void QOpenGLShaderProgram::setPatchVertexCount(int count)
     if (d->tessellationFuncs)
         d->tessellationFuncs->glPatchParameteri(GL_PATCH_VERTICES, count);
 #else
-    Q_UNUSED(count);
+    (void) count;
 #endif
 }
-
-/*!
-    Returns the number of vertices per-patch to be used when rendering.
-
-    \note This returns the global OpenGL state value. It is not specific to
-    this QOpenGLShaderProgram instance.
-
-    \sa setPatchVertexCount()
-*/
 int QOpenGLShaderProgram::patchVertexCount() const
 {
     int patchVertices = 0;
+
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
+
     if (d->tessellationFuncs)
         d->tessellationFuncs->glGetIntegerv(GL_PATCH_VERTICES, &patchVertices);
 #endif
+
     return patchVertices;
 }
 
-/*!
-    Sets the default outer tessellation levels to be used by the tessellation
-    primitive generator in the event that the tessellation control shader
-    does not output them to \a levels. For more details on OpenGL and Tessellation
-    shaders see \l{OpenGL Tessellation Shaders}.
-
-    The \a levels argument should be a QVector consisting of 4 floats. Not all
-    of the values make sense for all tessellation modes. If you specify a vector with
-    fewer than 4 elements, the remaining elements will be given a default value of 1.
-
-    \note This modifies global OpenGL state and is not specific to this
-    QOpenGLShaderProgram instance. You should call this in your render
-    function when needed, as QOpenGLShaderProgram will not apply this for
-    you. This is purely a convenience function.
-
-    \sa defaultOuterTessellationLevels(), setDefaultInnerTessellationLevels()
-*/
 void QOpenGLShaderProgram::setDefaultOuterTessellationLevels(const QVector<float> &levels)
 {
 #if defined(QT_OPENGL_4)
@@ -3064,6 +1960,7 @@ void QOpenGLShaderProgram::setDefaultOuterTessellationLevels(const QVector<float
     // Ensure we have the required 4 outer tessellation levels
     // Use default of 1 for missing entries (same as spec)
     const int argCount = 4;
+
     if (tessLevels.size() < argCount) {
         tessLevels.reserve(argCount);
         for (int i = tessLevels.size(); i < argCount; ++i)
@@ -3074,53 +1971,23 @@ void QOpenGLShaderProgram::setDefaultOuterTessellationLevels(const QVector<float
     if (d->tessellationFuncs)
         d->tessellationFuncs->glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessLevels.data());
 #else
-    Q_UNUSED(levels);
+    (void) levels;
 #endif
 }
 
-/*!
-    Returns the default outer tessellation levels to be used by the tessellation
-    primitive generator in the event that the tessellation control shader
-    does not output them. For more details on OpenGL and Tessellation shaders see
-    \l{OpenGL Tessellation Shaders}.
-
-    Returns a QVector of floats describing the outer tessellation levels. The vector
-    will always have four elements but not all of them make sense for every mode
-    of tessellation.
-
-    \note This returns the global OpenGL state value. It is not specific to
-    this QOpenGLShaderProgram instance.
-
-    \sa setDefaultOuterTessellationLevels(), defaultInnerTessellationLevels()
-*/
 QVector<float> QOpenGLShaderProgram::defaultOuterTessellationLevels() const
 {
     QVector<float> tessLevels(4, 1.0f);
+
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
     if (d->tessellationFuncs)
         d->tessellationFuncs->glGetFloatv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessLevels.data());
 #endif
+
     return tessLevels;
 }
 
-/*!
-    Sets the default outer tessellation levels to be used by the tessellation
-    primitive generator in the event that the tessellation control shader
-    does not output them to \a levels. For more details on OpenGL and Tessellation shaders see
-    \l{OpenGL Tessellation Shaders}.
-
-    The \a levels argument should be a QVector consisting of 2 floats. Not all
-    of the values make sense for all tessellation modes. If you specify a vector with
-    fewer than 2 elements, the remaining elements will be given a default value of 1.
-
-    \note This modifies global OpenGL state and is not specific to this
-    QOpenGLShaderProgram instance. You should call this in your render
-    function when needed, as QOpenGLShaderProgram will not apply this for
-    you. This is purely a convenience function.
-
-    \sa defaultInnerTessellationLevels(), setDefaultOuterTessellationLevels()
-*/
 void QOpenGLShaderProgram::setDefaultInnerTessellationLevels(const QVector<float> &levels)
 {
 #if defined(QT_OPENGL_4)
@@ -3139,76 +2006,50 @@ void QOpenGLShaderProgram::setDefaultInnerTessellationLevels(const QVector<float
     if (d->tessellationFuncs)
         d->tessellationFuncs->glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessLevels.data());
 #else
-    Q_UNUSED(levels);
+    (void) levels;
 #endif
 }
 
-/*!
-    Returns the default inner tessellation levels to be used by the tessellation
-    primitive generator in the event that the tessellation control shader
-    does not output them. For more details on OpenGL and Tessellation shaders see
-    \l{OpenGL Tessellation Shaders}.
-
-    Returns a QVector of floats describing the inner tessellation levels. The vector
-    will always have two elements but not all of them make sense for every mode
-    of tessellation.
-
-    \note This returns the global OpenGL state value. It is not specific to
-    this QOpenGLShaderProgram instance.
-
-    \sa setDefaultInnerTessellationLevels(), defaultOuterTessellationLevels()
-*/
 QVector<float> QOpenGLShaderProgram::defaultInnerTessellationLevels() const
 {
     QVector<float> tessLevels(2, 1.0f);
+
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
+
     if (d->tessellationFuncs)
         d->tessellationFuncs->glGetFloatv(GL_PATCH_DEFAULT_INNER_LEVEL, tessLevels.data());
 #endif
+
     return tessLevels;
 }
 
-
-/*!
-    Returns \c true if shader programs written in the OpenGL Shading
-    Language (GLSL) are supported on this system; false otherwise.
-
-    The \a context is used to resolve the GLSL extensions.
-    If \a context is null, then QOpenGLContext::currentContext() is used.
-*/
 bool QOpenGLShaderProgram::hasOpenGLShaderPrograms(QOpenGLContext *context)
 {
-#if !defined(QT_OPENGL_ES_2)
+#if ! defined(QT_OPENGL_ES_2)
     if (!context)
         context = QOpenGLContext::currentContext();
+
     if (!context)
         return false;
+
     return QOpenGLFunctions(context).hasOpenGLFeature(QOpenGLFunctions::Shaders);
 #else
-    Q_UNUSED(context);
+    (void) context;
     return true;
 #endif
 }
 
-/*!
-    \internal
-*/
+// internal
 void QOpenGLShaderProgram::shaderDestroyed()
 {
     Q_D(QOpenGLShaderProgram);
     QOpenGLShader *shader = qobject_cast<QOpenGLShader *>(sender());
+
     if (shader && !d->removingShaders)
         removeShader(shader);
 }
 
-/*!
-    Returns \c true if shader programs of type \a type are supported on
-    this system; false otherwise.
-
-    The \a context is used to resolve the GLSL extensions.
-    If \a context is null, then QOpenGLContext::currentContext() is used.
-*/
 bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
 {
     if (!context)
@@ -3220,6 +2061,7 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
         return false;
 
     QSurfaceFormat format = context->format();
+
     if (type == Geometry) {
 #ifndef QT_OPENGL_ES_2
         // Geometry shaders require OpenGL 3.2 or newer
@@ -3230,6 +2072,7 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
         // No geometry shader support in OpenGL ES2
         return false;
 #endif
+
     } else if (type == TessellationControl || type == TessellationEvaluation) {
 #if !defined(QT_OPENGL_ES_2)
         return (!context->isOpenGLES())
@@ -3238,6 +2081,7 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
         // No tessellation shader support in OpenGL ES2
         return false;
 #endif
+
     } else if (type == Compute) {
 #if defined(QT_OPENGL_4_3)
         return (format.version() >= qMakePair<int, int>(4, 3));
@@ -3245,6 +2089,7 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
         // No compute shader support without OpenGL 4.3 or newer
         return false;
 #endif
+
     }
 
     // Unconditional support of vertex and fragment shaders implicitly assumes

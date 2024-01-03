@@ -41,68 +41,70 @@ class QFileInfoPrivate : public QSharedData
           CachedSize = 0x08, CachedPerms = 0x80
         };
 
-   inline QFileInfoPrivate()
-      : QSharedData(), fileEngine(nullptr),
-        cachedFlags(0),
-        isDefaultConstructed(true),
-        cache_enabled(true), fileFlags(0), fileSize(0) {
+   QFileInfoPrivate()
+      : QSharedData(), fileEngine(nullptr), cachedFlags(0), isDefaultConstructed(true),
+        cache_enabled(true), fileFlags(0), fileSize(0)
+   {
    }
 
-   inline QFileInfoPrivate(const QFileInfoPrivate &copy)
-      : QSharedData(copy),
-        fileEntry(copy.fileEntry),
-        metaData(copy.metaData),
+   QFileInfoPrivate(const QFileInfoPrivate &copy)
+      : QSharedData(copy), fileEntry(copy.fileEntry), metaData(copy.metaData),
         fileEngine(QFileSystemEngine::resolveEntryAndCreateLegacyEngine(fileEntry, metaData)),
         cachedFlags(0),
+
 #ifndef QT_NO_FSFILEENGINE
         isDefaultConstructed(false),
 #else
-        isDefaultConstructed(!fileEngine),
+        isDefaultConstructed(! fileEngine),
 #endif
+
         cache_enabled(copy.cache_enabled), fileFlags(0), fileSize(0) {
    }
-   inline QFileInfoPrivate(const QString &file)
+
+   QFileInfoPrivate(const QString &file)
       : fileEntry(QDir::fromNativeSeparators(file)),
         fileEngine(QFileSystemEngine::resolveEntryAndCreateLegacyEngine(fileEntry, metaData)),
         cachedFlags(0),
+
 #ifndef QT_NO_FSFILEENGINE
         isDefaultConstructed(false),
 #else
-        isDefaultConstructed(!fileEngine),
+        isDefaultConstructed(! fileEngine),
 #endif
-        cache_enabled(true), fileFlags(0), fileSize(0) {
-   }
 
-   inline QFileInfoPrivate(const QFileSystemEntry &file, const QFileSystemMetaData &data)
-      : QSharedData(),
-        fileEntry(file),
-        metaData(data),
+        cache_enabled(true), fileFlags(0), fileSize(0)
+   {  }
+
+   QFileInfoPrivate(const QFileSystemEntry &file, const QFileSystemMetaData &data)
+      : QSharedData(), fileEntry(file), metaData(data),
         fileEngine(QFileSystemEngine::resolveEntryAndCreateLegacyEngine(fileEntry, metaData)),
-        cachedFlags(0),
-        isDefaultConstructed(false),
-        cache_enabled(true), fileFlags(0), fileSize(0) {
+        cachedFlags(0), isDefaultConstructed(false), cache_enabled(true), fileFlags(0), fileSize(0)
+   {
 
       // If the file engine is not null, this maybe a "mount point" for a custom file engine
-      // in which case we ca not trust the metadata
+      // in which case we can not trust the metadata
       if (fileEngine) {
          metaData = QFileSystemMetaData();
       }
    }
 
-   inline void clearFlags() const {
+   void clearFlags() const {
       fileFlags = 0;
       cachedFlags = 0;
+
       if (fileEngine) {
          (void)fileEngine->fileFlags(QAbstractFileEngine::Refresh);
       }
    }
 
-   inline void clear() {
+   void clear() {
       metaData.clear();
       clearFlags();
+
       for (int i = QAbstractFileEngine::NFileNames - 1 ; i >= 0 ; --i) {
          fileNames[i].clear();
       }
+
       fileOwners[1].clear();
       fileOwners[0].clear();
    }
@@ -127,16 +129,15 @@ class QFileInfoPrivate : public QSharedData
    mutable qint64 fileSize;
    mutable QDateTime fileTimes[3];
 
-   inline bool getCachedFlag(uint c) const {
+   bool getCachedFlag(uint c) const {
       return cache_enabled ? (cachedFlags & c) : 0;
    }
 
-   inline void setCachedFlag(uint c) const {
+   void setCachedFlag(uint c) const {
       if (cache_enabled) {
          cachedFlags |= c;
       }
    }
-
 };
 
 #endif

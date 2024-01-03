@@ -42,7 +42,6 @@
 #include <unicode/ubrk.h>
 #endif
 
-QT_BEGIN_NAMESPACE
 namespace QUnicodeTables {
     struct Properties {
         ushort category : 8;
@@ -65,7 +64,6 @@ namespace QUnicodeTables {
     Q_CORE_EXPORT const Properties * QT_FASTCALL properties(uint ucs4);
     Q_CORE_EXPORT const Properties * QT_FASTCALL properties(ushort ucs2);
 }
-QT_END_NAMESPACE
 
 // ugly hack to make UChar compatible with JSChar in API/JSStringRef.h
 #if defined(Q_OS_WIN) || (COMPILER(RVCT) && ! OS(LINUX))

@@ -331,7 +331,7 @@ QPainter *QPaintEngine::painter() const
 void QPaintEngine::drawPath(const QPainterPath &)
 {
    if (hasFeature(PainterPaths)) {
-      qWarning("QPaintEngine::drawPath: Must be implemented when feature PainterPaths is set");
+      qWarning("QPaintEngine::drawPath() Implement when PainterPaths flag is enabled");
    }
 }
 
@@ -522,7 +522,7 @@ QRegion QPaintEngine::systemClip() const
 void QPaintEngine::setSystemRect(const QRect &rect)
 {
    if (isActive()) {
-      qWarning("QPaintEngine::setSystemRect: Should not be changed while engine is active");
+      qWarning("QPaintEngine::setSystemRect() Unable to change while engine is active");
       return;
    }
    d_func()->systemRect = rect;

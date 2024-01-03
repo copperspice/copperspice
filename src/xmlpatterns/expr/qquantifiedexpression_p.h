@@ -26,9 +26,8 @@
 
 #include <qpaircontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class QuantifiedExpression : public PairContainer
 {
  public:
@@ -66,7 +65,5 @@ class QuantifiedExpression : public PairContainer
    const Operator m_quantifier;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

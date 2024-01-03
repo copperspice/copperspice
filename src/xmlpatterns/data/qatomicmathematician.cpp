@@ -23,8 +23,6 @@
 
 #include "qatomicmathematician_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 AtomicMathematician::~AtomicMathematician()
@@ -50,5 +48,3 @@ QString AtomicMathematician::displayName(const AtomicMathematician::Operator op)
 
    return QString(); /* Silence GCC warning. */
 }
-
-QT_END_NAMESPACE

@@ -142,7 +142,7 @@ bool QTiffHandler::canRead()
 bool QTiffHandler::canRead(QIODevice *device)
 {
    if (! device) {
-      qWarning("QTiffHandler::canRead() called with no device");
+      qWarning("QTiffHandler::canRead() No device");
       return false;
    }
 

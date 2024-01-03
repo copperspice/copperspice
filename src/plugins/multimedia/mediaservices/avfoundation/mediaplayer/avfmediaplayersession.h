@@ -83,43 +83,58 @@ class AVFMediaPlayerSession : public QObject
    CS_SLOT_2(play)
    CS_SLOT_1(Public, void pause())
    CS_SLOT_2(pause)
+
    CS_SLOT_1(Public, void stop())
    CS_SLOT_2(stop)
 
    CS_SLOT_1(Public, void setVolume(int volume))
    CS_SLOT_2(setVolume)
+
    CS_SLOT_1(Public, void setMuted(bool muted))
    CS_SLOT_2(setMuted)
 
    CS_SLOT_1(Public, void processEOS())
    CS_SLOT_2(processEOS)
+
    CS_SLOT_1(Public, void processLoadStateChange())
    CS_SLOT_2(processLoadStateChange)
+
    CS_SLOT_1(Public, void processPositionChange())
    CS_SLOT_2(processPositionChange)
+
    CS_SLOT_1(Public, void processMediaLoadError())
    CS_SLOT_2(processMediaLoadError)
 
    CS_SIGNAL_1(Public, void positionChanged(qint64 position))
    CS_SIGNAL_2(positionChanged, position)
+
    CS_SIGNAL_1(Public, void durationChanged(qint64 duration))
    CS_SIGNAL_2(durationChanged, duration)
+
    CS_SIGNAL_1(Public, void stateChanged(QMediaPlayer::State newState))
    CS_SIGNAL_2(stateChanged, newState)
+
    CS_SIGNAL_1(Public, void mediaStatusChanged(QMediaPlayer::MediaStatus status))
    CS_SIGNAL_2(mediaStatusChanged, status)
+
    CS_SIGNAL_1(Public, void volumeChanged(int volume))
    CS_SIGNAL_2(volumeChanged, volume)
+
    CS_SIGNAL_1(Public, void mutedChanged(bool muted))
    CS_SIGNAL_2(mutedChanged, muted)
+
    CS_SIGNAL_1(Public, void audioAvailableChanged(bool audioAvailable))
    CS_SIGNAL_2(audioAvailableChanged, audioAvailable)
+
    CS_SIGNAL_1(Public, void videoAvailableChanged(bool videoAvailable))
    CS_SIGNAL_2(videoAvailableChanged, videoAvailable)
+
    CS_SIGNAL_1(Public, void playbackRateChanged(qreal rate))
    CS_SIGNAL_2(playbackRateChanged, rate)
+
    CS_SIGNAL_1(Public, void seekableChanged(bool seekable))
    CS_SIGNAL_2(seekableChanged, seekable)
+
    CS_SIGNAL_1(Public, void error(int error, const QString &errorString))
    CS_SIGNAL_2(error, error, errorString)
 
@@ -135,6 +150,7 @@ class AVFMediaPlayerSession : public QObject
       ~ResourceHandler() {
          clear();
       }
+
       void setResourceFile(const QString &file) {
          if (resource) {
             if (resource->fileName() == file) {
@@ -145,9 +161,11 @@ class AVFMediaPlayerSession : public QObject
          }
          resource = new QResource(file);
       }
+
       bool isValid() const {
          return resource && resource->isValid() && resource->data() != nullptr;
       }
+
       const uchar *data() {
          if (!isValid()) {
             return nullptr;
@@ -160,6 +178,7 @@ class AVFMediaPlayerSession : public QObject
          }
          return resource->data();
       }
+
       qint64 size() {
          if (data() == nullptr) {
             return 0;

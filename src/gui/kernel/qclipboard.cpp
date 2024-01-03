@@ -146,7 +146,7 @@ void QClipboard::setMimeData(QMimeData *src, Mode mode)
    QPlatformClipboard *clipboard = QGuiApplicationPrivate::platformIntegration()->clipboard();
    if (!clipboard->supportsMode(mode)) {
       if (src != nullptr) {
-         qWarning("Data set on unsupported clipboard mode. QMimeData object will be deleted.");
+         qWarning("QClipboard::setMimeData() Unsupported clipboard mode, QMimeData will be deleted.");
          src->deleteLater();
       }
    } else {

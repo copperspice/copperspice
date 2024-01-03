@@ -193,10 +193,10 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
  private:
    Q_DECLARE_PRIVATE(QAbstractSpinBox)
 
-   GUI_CS_SLOT_1(Private, void _q_editorTextChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_editorTextChanged(const QString &text))
    GUI_CS_SLOT_2(_q_editorTextChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_editorCursorPositionChanged(int un_named_arg1, int un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_editorCursorPositionChanged(int oldpos, int newpos))
    GUI_CS_SLOT_2(_q_editorCursorPositionChanged)
 
    friend class QAccessibleAbstractSpinBox;

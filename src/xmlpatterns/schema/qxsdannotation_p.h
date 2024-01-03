@@ -28,8 +28,6 @@
 #include <qxsdapplicationinformation_p.h>
 #include <qxsddocumentation_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class XsdAnnotation : public NamedSchemaComponent
@@ -79,8 +77,7 @@ class XsdAnnotation : public NamedSchemaComponent
    XsdApplicationInformation::List m_applicationInformation;
    XsdDocumentation::List          m_documentations;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

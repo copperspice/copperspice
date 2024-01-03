@@ -23,8 +23,6 @@
 
 #include "qxsdschemadebugger_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 XsdSchemaDebugger::XsdSchemaDebugger(const NamePool::Ptr &namePool)
@@ -228,5 +226,3 @@ void XsdSchemaDebugger::dumpSchema(const XsdSchema::Ptr &schema)
 
    qDebug() << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
 }
-
-QT_END_NAMESPACE

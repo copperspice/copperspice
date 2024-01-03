@@ -99,14 +99,14 @@ QPlatformOpenGLContext *QPlatformIntegration::createPlatformOpenGLContext(QOpenG
 {
    (void) context;
 
-   qWarning("This plugin does not support createPlatformOpenGLContext");
+   qWarning("QPlatformIntegration::createPlatformOpenGLContext() Plugin does not support OpenGL");
    return nullptr;
 }
 #endif
 
 QPlatformSharedGraphicsCache *QPlatformIntegration::createPlatformSharedGraphicsCache(const char *cacheId) const
 {
-   qWarning("This plugin does not support createPlatformSharedGraphicsBuffer for cacheId: %s", cacheId);
+   qWarning("QPlatformIntegration::createPlatformSharedGraphicsCache() Plugin does not support cacheId %s", cacheId);
    return nullptr;
 }
 
@@ -287,7 +287,7 @@ void QPlatformIntegration::sync()
 #ifndef QT_NO_OPENGL
 QOpenGLContext::OpenGLModuleType QPlatformIntegration::openGLModuleType()
 {
-   qWarning("This plugin does not support dynamic OpenGL loading");
+   qWarning("QPlatformIntegration::openGLModuleType() Plugin does not support dynamic OpenGL loading");
    return QOpenGLContext::LibGL;
 }
 #endif

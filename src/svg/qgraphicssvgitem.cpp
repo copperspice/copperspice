@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qgraphicssvgitem.h"
+#include <qgraphicssvgitem.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
 
@@ -91,31 +91,17 @@ QGraphicsSvgItem::QGraphicsSvgItem(const QString &fileName, QGraphicsItem *paren
    d->updateDefaultSize();
 }
 
-/*!
-    Returns the currently use QSvgRenderer.
-*/
 QSvgRenderer *QGraphicsSvgItem::renderer() const
 {
    return d_func()->renderer;
 }
 
-
-/*!
-    Returns the bounding rectangle of this item.
-*/
 QRectF QGraphicsSvgItem::boundingRect() const
 {
    Q_D(const QGraphicsSvgItem);
    return d->boundingRect;
 }
 
-/*!
-    \internal
-
-    Highlights \a item as selected.
-
-    NOTE: This function is a duplicate of qt_graphicsItem_highlightSelected() in qgraphicsitem.cpp!
-*/
 static void qt_graphicsItem_highlightSelected(
    QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
 {
@@ -202,34 +188,11 @@ void QGraphicsSvgItem::setMaximumCacheSize(const QSize &size)
    update();
 }
 
-/*!
-    Returns the current maximum size of the device coordinate cache for this item.
-    If the item is cached using QGraphicsItem::DeviceCoordinateCache mode,
-    caching is bypassed if the extension of the item in device coordinates
-    is larger than the maximum size.
-
-    The default maximum cache size is 1024x768.
-    QPixmapCache::cacheLimit() gives the
-    cumulative bounds of the whole cache, whereas maximumCacheSize() refers
-    to a maximum cache size for this particular item.
-
-    \sa QGraphicsItem::cacheMode()
-*/
 QSize QGraphicsSvgItem::maximumCacheSize() const
 {
    return QGraphicsItem::d_ptr->extra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize).toSize();
 }
 
-/*!
-  \property QGraphicsSvgItem::elementId
-  \since 4.6
-
-  This property holds the element's XML ID.
- */
-
-/*!
-    Sets the XML ID of the element to \a id.
-*/
 void QGraphicsSvgItem::setElementId(const QString &id)
 {
    Q_D(QGraphicsSvgItem);
@@ -238,24 +201,12 @@ void QGraphicsSvgItem::setElementId(const QString &id)
    update();
 }
 
-/*!
-    Returns the XML ID the element that is currently
-    being rendered. Returns an empty string if the whole
-    file is being rendered.
-*/
 QString QGraphicsSvgItem::elementId() const
 {
    Q_D(const QGraphicsSvgItem);
    return d->elemId;
 }
 
-/*!
-    Sets \a renderer to be a shared QSvgRenderer on the item. By
-    using this method one can share the same QSvgRenderer on a number
-    of items. This means that the SVG file will be parsed only once.
-    QSvgRenderer passed to this method has to exist for as long as
-    this item is used.
-*/
 void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer *renderer)
 {
    Q_D(QGraphicsSvgItem);
@@ -271,27 +222,15 @@ void QGraphicsSvgItem::setSharedRenderer(QSvgRenderer *renderer)
    update();
 }
 
-/*!
-    \obsolete
-
-    Use QGraphicsItem::setCacheMode() instead. Passing true to this function is equivalent
-    to QGraphicsItem::setCacheMode(QGraphicsItem::DeviceCoordinateCache).
-*/
 void QGraphicsSvgItem::setCachingEnabled(bool caching)
 {
    setCacheMode(caching ? QGraphicsItem::DeviceCoordinateCache : QGraphicsItem::NoCache);
 }
 
-/*!
-    \obsolete
-
-    Use QGraphicsItem::cacheMode() instead.
-*/
 bool QGraphicsSvgItem::isCachingEnabled() const
 {
    return cacheMode() != QGraphicsItem::NoCache;
 }
-
 
 void QGraphicsSvgItem::_q_repaintItem()
 {

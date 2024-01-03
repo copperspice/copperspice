@@ -24,14 +24,14 @@
 #ifndef QXsdAttributeGroup_P_H
 #define QXsdAttributeGroup_P_H
 
+#include <qlist.h>
+
 #include <qxsdannotated_p.h>
 #include <qxsdattributeuse_p.h>
 #include <qxsdwildcard_p.h>
-#include <QList>
-
-QT_BEGIN_NAMESPACE
 
 namespace QPatternist {
+
 class XsdAttributeGroup : public NamedSchemaComponent, public XsdAnnotated
 {
  public:
@@ -71,8 +71,7 @@ class XsdAttributeGroup : public NamedSchemaComponent, public XsdAnnotated
    XsdAttributeUse::List m_attributeUses;
    XsdWildcard::Ptr      m_wildcard;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

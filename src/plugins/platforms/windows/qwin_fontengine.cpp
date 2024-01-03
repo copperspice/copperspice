@@ -1001,7 +1001,7 @@ bool QWindowsFontEngine::getSfntTableData(uint tag, uchar *buffer, uint *length)
 QWindowsNativeImage *QWindowsFontEngine::drawGDIGlyph(HFONT font, glyph_t glyph, int margin,
    const QTransform &t, QImage::Format mask_format)
 {
-   Q_UNUSED(mask_format)
+   (void) mask_format;
 
    glyph_metrics_t gm = boundingBox(glyph);
 

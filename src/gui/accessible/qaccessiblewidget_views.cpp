@@ -124,7 +124,7 @@ QAccessibleInterface *QAccessibleTable::cellAt(int row, int column) const
    Q_ASSERT(role() != QAccessible::Tree);
    QModelIndex index = view()->model()->index(row, column, view()->rootIndex());
    if (!index.isValid()) {
-      qWarning() << "QAccessibleTable::cellAt: invalid index: " << index << " for " << view();
+      qWarning() << "QAccessibleTable::cellAt() Invalid index: " << index << " for " << view();
       return nullptr;
    }
    return child(logicalIndex(index));
@@ -467,8 +467,7 @@ int QAccessibleTable::indexOfChild(const QAccessibleInterface *iface) const
    } else if (iface->role() == QAccessible::Pane) {
       return 0; // corner button
    } else {
-      qWarning() << "WARNING QAccessibleTable::indexOfChild Fix my children..."
-         << iface->role() << iface->text(QAccessible::Name);
+      qWarning() << "QAccessibleTable::indexOfChild() Unknown index: " << iface->role() << iface->text(QAccessible::Name);
    }
    // FIXME: we are in denial of our children. this should stop.
    return -1;
@@ -545,7 +544,7 @@ QAccessibleInterface *QAccessibleTable::child(int logicalIndex) const
    if (!iface) {
       QModelIndex index = view()->model()->index(row, column, view()->rootIndex());
       if (!index.isValid()) {
-         qWarning() << "QAccessibleTable::child: Invalid index at: " << row << column;
+         qWarning() << "QAccessibleTable::child() Invalid index at: " << row << column;
          return nullptr;
       }
       iface = new QAccessibleTableCell(view(), index, cellRole());
@@ -688,7 +687,7 @@ QModelIndex QAccessibleTree::indexFromLogical(int row, int column) const
 
    const QTreeView *treeView = qobject_cast<const QTreeView *>(view());
    if ((row < 0) || (column < 0) || (treeView->d_func()->viewItems.count() <= row)) {
-      qWarning() << "QAccessibleTree::indexFromLogical: invalid index: " << row << column << " for " << treeView;
+      qWarning() << "QAccessibleTree::indexFromLogical() Invalid index at: " << row << column << " for " << treeView;
       return QModelIndex();
    }
    QModelIndex modelIndex = treeView->d_func()->viewItems.at(row).index;
@@ -794,8 +793,7 @@ int QAccessibleTree::indexOfChild(const QAccessibleInterface *iface) const
       const QAccessibleTableHeaderCell *cell = static_cast<const QAccessibleTableHeaderCell *>(iface);
       return cell->index;
    } else {
-      qWarning() << "WARNING QAccessibleTable::indexOfChild invalid child"
-         << iface->role() << iface->text(QAccessible::Name);
+      qWarning() << "QAccessibleTable::indexOfChild() Invalid child " << iface->role() << iface->text(QAccessible::Name);
    }
    // FIXME: add scrollbars and don't just ignore them
    return -1;
@@ -805,7 +803,7 @@ QAccessibleInterface *QAccessibleTree::cellAt(int row, int column) const
 {
    QModelIndex index = indexFromLogical(row, column);
    if (!index.isValid()) {
-      qWarning() << "Requested invalid tree cell: " << row << column;
+      qWarning() << "QAccessibleTree::cellAt() Invalid cell at: " << row << column;
       return nullptr;
    }
    const QTreeView *treeView = qobject_cast<const QTreeView *>(view());
@@ -869,7 +867,7 @@ QAccessibleTableCell::QAccessibleTableCell(QAbstractItemView *view_, const QMode
    : /* QAccessibleSimpleEditableTextInterface(this), */ view(view_), m_index(index_), m_role(role_)
 {
    if (!index_.isValid()) {
-      qWarning() << "QAccessibleTableCell::QAccessibleTableCell with invalid index: " << index_;
+      qWarning() << "QAccessibleTableCell::QAccessibleTableCell() Invalid index: " << index_;
    }
 }
 

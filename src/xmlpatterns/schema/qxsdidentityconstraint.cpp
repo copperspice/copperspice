@@ -23,8 +23,6 @@
 
 #include "qxsdidentityconstraint_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 void XsdIdentityConstraint::setCategory(Category category)
@@ -71,5 +69,3 @@ XsdIdentityConstraint::Ptr XsdIdentityConstraint::referencedKey() const
 {
    return m_referencedKey;
 }
-
-QT_END_NAMESPACE

@@ -26,9 +26,8 @@
 
 #include <qfunctioncall_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class StaticNamespacesContainer : public FunctionCall
 {
  public:
@@ -56,8 +55,7 @@ class StaticNamespacesContainer : public FunctionCall
  private:
    NamespaceResolver::Ptr m_resolver;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -76,13 +76,13 @@ QThreadData *QThreadData::current(bool createIfNecessary)
       // avoid recursion.
 
       TlsSetValue(qt_current_thread_data_tls_index, threadData);
-      QT_TRY {
+      try {
          threadData->thread = new QAdoptedThread(threadData);
-      } QT_CATCH(...) {
+      } catch(...) {
          TlsSetValue(qt_current_thread_data_tls_index, nullptr);
          threadData->deref();
          threadData = nullptr;
-         QT_RETHROW;
+         throw;
       }
 
       threadData->deref();

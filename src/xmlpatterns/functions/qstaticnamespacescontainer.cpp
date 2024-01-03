@@ -23,8 +23,6 @@
 
 #include "qstaticnamespacescontainer_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Expression::Ptr StaticNamespacesContainer::typeCheck(const StaticContext::Ptr &context,
@@ -35,5 +33,3 @@ Expression::Ptr StaticNamespacesContainer::typeCheck(const StaticContext::Ptr &c
 
    return FunctionCall::typeCheck(context, reqType);
 }
-
-QT_END_NAMESPACE

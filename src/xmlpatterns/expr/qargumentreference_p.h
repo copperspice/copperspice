@@ -26,9 +26,8 @@
 
 #include <qvariablereference_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class ArgumentReference : public VariableReference
 {
  public:
@@ -44,8 +43,7 @@ class ArgumentReference : public VariableReference
  private:
    const SequenceType::Ptr m_type;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -119,7 +119,7 @@
 #define CHECK_QAPP_INSTANCE(...) \
     if (QCoreApplication::instance()) { \
     } else { \
-        qWarning("Your application must construct a QApplication before calling this method."); \
+        qWarning("QApplication must be constructed before calling this method"); \
         return __VA_ARGS__; \
     }
 
@@ -1033,7 +1033,7 @@ static void init_plugins(const QList<QString> &pluginList)
          QGuiApplicationPrivate::generic_plugin_list.append(plugin);
 
       } else {
-         qWarning() << "No such plugin for spec " << pluginSpec;
+         qWarning() << "QApplication::init_plugins() " << "Plugin failed to load, " << pluginSpec;
       }
    }
 }
@@ -1380,7 +1380,7 @@ QApplication::FP_Void QApplication::platformFunction(const QByteArray &function)
    QPlatformIntegration *platform_interface = QGuiApplicationPrivate::platformIntegration();
 
    if (! platform_interface) {
-      qWarning() << "QGuiApplication::platformFunction(): Please construct a QGuiApplication before accessing a platform function";
+      qWarning("QApplication::platformFunction() Construct a QApplication before accessing platform functions");
       return nullptr;
    }
 
@@ -1544,7 +1544,7 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
          break;
 
       default:
-         qWarning() << "Unknown user input event type:" << e->type;
+         qWarning() << "QApplicationPrivate::processWindowSystemEvent() Unknown user input event type," << e->type;
          break;
    }
 }
@@ -2712,7 +2712,7 @@ QClipboard *QApplication::clipboard()
 {
    if (QGuiApplicationPrivate::qt_clipboard == nullptr) {
       if (! qApp) {
-         qWarning("QGuiApplication: Must construct a QGuiApplication before accessing a QClipboard");
+         qWarning("QApplication::clipboard() Construct a QApplication before accessing the clipboard");
          return nullptr;
       }
       QGuiApplicationPrivate::qt_clipboard = new QClipboard(nullptr);
@@ -2771,26 +2771,12 @@ bool QApplication::quitOnLastWindowClosed()
    return QCoreApplication::isQuitLockEnabled();
 }
 
-
-/*!
-    \fn void QGuiApplication::lastWindowClosed()
-
-    This signal is emitted from exec() when the last visible
-    primary window (i.e. window with no parent) is closed.
-
-    By default, QGuiApplication quits after this signal is emitted. This feature
-    can be turned off by setting \l quitOnLastWindowClosed to \c false.
-
-    \sa QWindow::close(), QWindow::isTopLevel()
-*/
-
 void QGuiApplicationPrivate::emitLastWindowClosed()
 {
    if (qGuiApp && qGuiApp->d_func()->in_exec) {
       emit qGuiApp->lastWindowClosed();
    }
 }
-
 
 bool QGuiApplicationPrivate::shouldQuitInternal(const QWindowList &processedWindows)
 {
@@ -2826,31 +2812,10 @@ bool QGuiApplicationPrivate::tryCloseRemainingWindows(QWindowList processedWindo
    return true;
 }
 
-/*!
-    \since 5.2
-    \fn Qt::ApplicationState QGuiApplication::applicationState()
-
-
-    Returns the current state of the application.
-
-    You can react to application state changes to perform actions such as
-    stopping/resuming CPU-intensive tasks, freeing/loading resources or
-    saving/restoring application data.
- */
-
 Qt::ApplicationState QApplication::applicationState()
 {
    return QGuiApplicationPrivate::applicationState;
 }
-
-/*!
-    \since 5.2
-    \fn void QGuiApplication::applicationStateChanged(Qt::ApplicationState state)
-
-    This signal is emitted when the \a state of the application changes.
-
-    \sa applicationState()
-*/
 
 void QGuiApplicationPrivate::setApplicationState(Qt::ApplicationState state, bool forcePropagate)
 {
@@ -3048,17 +3013,6 @@ void QApplication::setOverrideCursor(const QCursor &cursor)
    applyCursor(QGuiApplicationPrivate::window_list, cursor);
 }
 
-/*!
-    \fn void QGuiApplication::restoreOverrideCursor()
-
-    Undoes the last setOverrideCursor().
-
-    If setOverrideCursor() has been called twice, calling
-    restoreOverrideCursor() will activate the first cursor set. Calling this
-    function a second time restores the original widgets' cursors.
-
-    \sa setOverrideCursor(), overrideCursor()
-*/
 void QApplication::restoreOverrideCursor()
 {
    CHECK_QAPP_INSTANCE()
@@ -3077,7 +3031,6 @@ void QApplication::restoreOverrideCursor()
 }
 #endif// QT_NO_CURSOR
 
-
 QStyleHints *QApplication::styleHints()
 {
    if (!QGuiApplicationPrivate::styleHints) {
@@ -3086,42 +3039,16 @@ QStyleHints *QApplication::styleHints()
    return QGuiApplicationPrivate::styleHints;
 }
 
-/*!
-    Sets whether Qt should use the system's standard colors, fonts, etc., to
-    \a on. By default, this is \c true.
-
-    This function must be called before creating the QGuiApplication object, like
-    this:
-
-    \snippet code/src_gui_kernel_qguiapplication.cpp 0
-
-    \sa desktopSettingsAware()
-*/
 void QApplication::setDesktopSettingsAware(bool on)
 {
    QGuiApplicationPrivate::obey_desktop_settings = on;
 }
 
-/*!
-    Returns \c true if Qt is set to use the system's standard colors, fonts, etc.;
-    otherwise returns \c false. The default is \c true.
-
-    \sa setDesktopSettingsAware()
-*/
 bool QApplication::desktopSettingsAware()
 {
    return QGuiApplicationPrivate::obey_desktop_settings;
 }
 
-/*!
-  returns the input method.
-
-  The input method returns properties about the state and position of
-  the virtual keyboard. It also provides information about the position of the
-  current focused input element.
-
-  \sa QInputMethod
-  */
 QInputMethod *QApplication::inputMethod()
 {
    CHECK_QAPP_INSTANCE(nullptr)
@@ -3132,7 +3059,6 @@ QInputMethod *QApplication::inputMethod()
 
    return qGuiApp->d_func()->inputMethod;
 }
-
 
 QStyle *QApplication::style()
 {

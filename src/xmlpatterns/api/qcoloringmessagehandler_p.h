@@ -24,9 +24,10 @@
 #ifndef QColoringMessageHandler_P_H
 #define QColoringMessageHandler_P_H
 
-#include <QHash>
-#include <qcoloroutput_p.h>
 #include <qabstractmessagehandler.h>
+#include <qhash.h>
+
+#include <qcoloroutput_p.h>
 
 namespace QPatternist {
 

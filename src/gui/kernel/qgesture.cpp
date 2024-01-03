@@ -306,31 +306,12 @@ void QSwipeGesture::setSwipeAngle(qreal value)
    d_func()->swipeAngle = value;
 }
 
-/*!
-    \class QTapGesture
-    \since 4.6
-    \brief The QTapGesture class describes a tap gesture made by the user.
-    \ingroup gestures
-
-    For an overview of gesture handling in Qt and information on using gestures
-    in your applications, see the \l{Gestures Programming} document.
-
-    \sa QPanGesture, QPinchGesture
-*/
-
-/*!
-    \property QTapGesture::position
-    \brief the position of the tap
-*/
-
-/*!
-    \internal
-*/
 QTapGesture::QTapGesture(QObject *parent)
    : QGesture(*new QTapGesturePrivate, parent)
 {
    d_func()->gestureType = Qt::TapGesture;
 }
+
 QTapGesture::~QTapGesture()
 {
 }
@@ -364,14 +345,6 @@ void QTapAndHoldGesture::setPosition(const QPointF &value)
    d_func()->position = value;
 }
 
-/*!
-    Set the timeout, in milliseconds, before the gesture triggers.
-
-    The recognizer will detect a touch down and and if \a msecs
-    later the touch is still down, it will trigger the QTapAndHoldGesture.
-    The default value is 700 milliseconds.
-*/
-
 // static
 void QTapAndHoldGesture::setTimeout(int msecs)
 {
@@ -385,7 +358,6 @@ int QTapAndHoldGesture::timeout()
 }
 
 int QTapAndHoldGesturePrivate::Timeout = 700; // in ms
-
 
 QGestureEvent::QGestureEvent(const QList<QGesture *> &gestures)
     : QEvent(QEvent::Gesture), m_gestures(gestures), m_widget(nullptr)

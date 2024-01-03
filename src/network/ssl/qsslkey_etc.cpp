@@ -138,7 +138,8 @@ static QByteArray deriveKey(QSslKeyPrivate::Cipher cipher, const QByteArray &pas
 
 void QSslKeyPrivate::clear(bool deep)
 {
-   Q_UNUSED(deep);
+   (void) deep;
+
    isNull = true;
    derData.clear();
    keyLength = -1;

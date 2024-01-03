@@ -181,7 +181,7 @@ class Q_NETWORK_EXPORT QNetworkAccessManager : public QObject
    NET_CS_SLOT_2(_q_replyEncrypted)
 
 #ifdef QT_SSL
-   NET_CS_SLOT_1(Private, void _q_replySslErrors(const QList<QSslError> &errList))
+   NET_CS_SLOT_1(Private, void _q_replySslErrors(const QList<QSslError> &errorList))
    NET_CS_SLOT_2(_q_replySslErrors)
 
    NET_CS_SLOT_1(Private, void _q_replyPreSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *data))

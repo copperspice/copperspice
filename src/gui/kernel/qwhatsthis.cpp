@@ -172,16 +172,20 @@ void QWhatsThat::mousePressEvent(QMouseEvent *e)
 
 void QWhatsThat::mouseReleaseEvent(QMouseEvent *e)
 {
-   if (!pressed) {
+   if (! pressed) {
       return;
    }
+
    if (widget && e->button() == Qt::LeftButton && doc && rect().contains(e->pos())) {
       QString a = doc->documentLayout()->anchorAt(e->pos() -  QPoint(hMargin, vMargin));
       QString href;
+
       if (anchor == a) {
          href = a;
       }
+
       anchor.clear();
+
       if (!href.isEmpty()) {
          QWhatsThisClickedEvent e(href);
          if (QApplication::sendEvent(widget, &e)) {
@@ -195,13 +199,15 @@ void QWhatsThat::mouseReleaseEvent(QMouseEvent *e)
 void QWhatsThat::mouseMoveEvent(QMouseEvent *e)
 {
 #ifdef QT_NO_CURSOR
-   Q_UNUSED(e);
+   (void) e;
 #else
-   if (!doc) {
+   if (! doc) {
       return;
    }
+
    QString a = doc->documentLayout()->anchorAt(e->pos() -  QPoint(hMargin, vMargin));
-   if (!a.isEmpty()) {
+
+   if (! a.isEmpty()) {
       setCursor(Qt::PointingHandCursor);
    } else {
       setCursor(Qt::ArrowCursor);
@@ -322,18 +328,22 @@ QWhatsThisPrivate::QWhatsThisPrivate()
    qApp->installEventFilter(this);
 
    QPoint pos = QCursor::pos();
+
    if (QWidget *w = QApplication::widgetAt(pos)) {
       QHelpEvent e(QEvent::QueryWhatsThis, w->mapFromGlobal(pos), pos);
       bool sentEvent = QApplication::sendEvent(w, &e);
+
 #ifdef QT_NO_CURSOR
-      Q_UNUSED(sentEvent);
+      (void) sentEvent;
 #else
-      QApplication::setOverrideCursor((!sentEvent || !e.isAccepted()) ?
+      QApplication::setOverrideCursor((! sentEvent || !e.isAccepted()) ?
          Qt::ForbiddenCursor : Qt::WhatsThisCursor);
    } else {
       QApplication::setOverrideCursor(Qt::WhatsThisCursor);
 #endif
+
    }
+
 #ifndef QT_NO_ACCESSIBILITY
    QAccessibleEvent event(this, QAccessible::ContextHelpStart);
    QAccessible::updateAccessibility(&event);
@@ -354,6 +364,7 @@ QWhatsThisPrivate::~QWhatsThisPrivate()
    QAccessibleEvent event(this, QAccessible::ContextHelpEnd);
    QAccessible::updateAccessibility(&event);
 #endif
+
    instance = nullptr;
 }
 
@@ -364,6 +375,7 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
    }
    QWidget *w = static_cast<QWidget *>(o);
    bool customWhatsThis = w->testAttribute(Qt::WA_CustomWhatsThis);
+
    switch (e->type()) {
       case QEvent::MouseButtonPress: {
          QMouseEvent *me = static_cast<QMouseEvent *>(e);
@@ -371,7 +383,7 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
             return false;
          }
          QHelpEvent e(QEvent::WhatsThis, me->pos(), me->globalPos());
-         if (!QApplication::sendEvent(w, &e) || !e.isAccepted()) {
+         if (!QApplication::sendEvent(w, &e) || ! e.isAccepted()) {
             leaveOnMouseRelease = true;
          }
 
@@ -382,10 +394,11 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
          QMouseEvent *me = static_cast<QMouseEvent *>(e);
          QHelpEvent e(QEvent::QueryWhatsThis, me->pos(), me->globalPos());
          bool sentEvent = QApplication::sendEvent(w, &e);
+
 #ifdef QT_NO_CURSOR
-         Q_UNUSED(sentEvent);
+         (void) sentEvent;
 #else
-         QApplication::changeOverrideCursor((!sentEvent || !e.isAccepted()) ?
+         QApplication::changeOverrideCursor((!sentEvent || ! e.isAccepted()) ?
             Qt::ForbiddenCursor : Qt::WhatsThisCursor);
 #endif
       }
@@ -400,6 +413,7 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
             return false;   // ignore RMB release
          }
          break;
+
       case QEvent::KeyPress: {
          QKeyEvent *kev = (QKeyEvent *)e;
 

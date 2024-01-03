@@ -35,9 +35,8 @@
 
 #include <QExplicitlySharedDataPointer>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class XsdSchemaContext;
 class XsdSchemaParserContext;
 
@@ -240,8 +239,7 @@ class XsdSchemaChecker : public QSharedData
    QHash<QXmlName, QSet<XsdFacet::Type> >               m_allowedAtomicFacets;
    QHash<NamedSchemaComponent::Ptr, QSourceLocation>    m_componentLocationHash;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

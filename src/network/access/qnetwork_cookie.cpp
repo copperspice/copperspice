@@ -24,14 +24,15 @@
 #include <qnetwork_cookie.h>
 #include <qnetwork_cookie_p.h>
 
-#include <qnetwork_request.h>
-#include <qnetwork_reply.h>
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qlist.h>
 #include <qlocale.h>
+#include <qnetwork_request.h>
+#include <qnetwork_reply.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtimezone.h>
 #include <qurl.h>
 
 #include <stdlib.h>
@@ -686,7 +687,7 @@ static QDateTime parseDateString(const QString &dateString)
       date = QDate(day + y2k, month, year);
    }
 
-   QDateTime dateTime(date, time, Qt::UTC);
+   QDateTime dateTime(date, time, QTimeZone::utc());
 
    if (zoneOffset != -1) {
       dateTime = dateTime.addSecs(zoneOffset);
@@ -791,7 +792,6 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                         return result;
                      }
                   }
-
 
                } else if (field.first == "max-age") {
                   bool ok = false;

@@ -26,9 +26,8 @@
 
 #include <qsinglecontainer_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
+
 class InstanceOf : public SingleContainer
 {
  public:
@@ -50,8 +49,7 @@ class InstanceOf : public SingleContainer
  private:
    const SequenceType::Ptr m_targetType;
 };
-}
 
-QT_END_NAMESPACE
+}
 
 #endif

@@ -48,6 +48,15 @@
 # define Q_NO_MYSQL_EMBEDDED
 #endif
 
+#if defined(LIBMYSQL_VERSION_ID)
+   // only true for newer versions of MySQL
+
+#if LIBMYSQL_VERSION_ID >= 80000
+   using my_bool = bool;
+#endif
+
+#endif
+
 #define Q_CLIENT_MULTI_STATEMENTS CLIENT_MULTI_STATEMENTS
 
 class QMYSQLDriverPrivate : public QSqlDriverPrivate
@@ -1002,7 +1011,7 @@ bool QMYSQLResult::exec()
    MYSQL_BIND *currBind;
 
    QVector<std::any> dataVector;
-   QVector<my_bool>  nullVector;
+   QList<my_bool>  nullVector;
 
    const QVector<QVariant> values = boundValues();
 

@@ -389,4 +389,3 @@ QSourceLocation AccelTreeBuilder<FromDocument>::sourceLocation() const
       return QSourceLocation(m_documentURI);
    }
 }
-

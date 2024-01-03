@@ -24,8 +24,9 @@
 #ifndef QDocumentProjector_P_H
 #define QDocumentProjector_P_H
 
-#include <qprojectedexpression_p.h>
 #include <qabstractxmlreceiver.h>
+
+#include <qprojectedexpression_p.h>
 
 namespace QPatternist {
 

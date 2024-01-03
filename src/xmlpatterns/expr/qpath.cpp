@@ -31,8 +31,6 @@
 
 #include "qpath_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 Path::Path(const Expression::Ptr &operand1, const Expression::Ptr &operand2, const Kind kind)
@@ -246,5 +244,3 @@ Expression::ID Path::id() const
 {
    return IDPath;
 }
-
-QT_END_NAMESPACE

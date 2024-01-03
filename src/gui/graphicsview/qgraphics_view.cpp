@@ -1915,7 +1915,7 @@ void QGraphicsView::setupViewport(QWidget *widget)
    Q_D(QGraphicsView);
 
    if (!widget) {
-      qWarning("QGraphicsView::setupViewport: cannot initialize null widget");
+      qWarning("QGraphicsView::setupViewport() Unable to initialize an invalid widget (nullptr)");
       return;
    }
 
@@ -2242,7 +2242,7 @@ void QGraphicsView::dragLeaveEvent(QDragLeaveEvent *event)
       return;
    }
    if (!d->lastDragDropEvent) {
-      qWarning("QGraphicsView::dragLeaveEvent: drag leave received before drag enter");
+      qWarning("QGraphicsView::dragLeaveEvent() Drag leave event was received before a drag enter event");
       return;
    }
 
@@ -3014,10 +3014,10 @@ QRectF QGraphicsViewPrivate::mapToScene(const QRectF &rect) const
 }
 
 #ifndef QT_NO_CURSOR
-void QGraphicsView::_q_setViewportCursor(const QCursor &un_named_arg1)
+void QGraphicsView::_q_setViewportCursor(const QCursor &cursor)
 {
    Q_D(QGraphicsView);
-   d->_q_setViewportCursor(un_named_arg1);
+   d->_q_setViewportCursor(cursor);
 }
 
 void QGraphicsView::_q_unsetViewportCursor()

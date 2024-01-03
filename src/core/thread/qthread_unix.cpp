@@ -228,15 +228,9 @@ void QAdoptedThread::init()
    d->thread_id = pthread_self();
 }
 
-#if defined(Q_C_CALLBACKS)
 extern "C" {
-#endif
-
-   typedef void *(*QtThreadCallback)(void *);
-
-#if defined(Q_C_CALLBACKS)
+   using QtThreadCallback = void *(*)(void *);
 }
-#endif
 
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)

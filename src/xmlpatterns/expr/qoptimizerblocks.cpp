@@ -29,10 +29,7 @@
 #include "qliteral_p.h"
 #include "qschemanumeric_p.h"
 #include "qvaluecomparison_p.h"
-
 #include "qoptimizerblocks_p.h"
-
-QT_BEGIN_NAMESPACE
 
 using namespace QPatternist;
 
@@ -151,5 +148,3 @@ Expression::Ptr ByIDCreator::create(const Expression::ID id,
    context->wrapExpressionWith(r, result);
    return result;
 }
-
-QT_END_NAMESPACE

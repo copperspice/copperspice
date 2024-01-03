@@ -24,6 +24,7 @@
 #include <qwindowsprintdevice.h>
 
 #include <qdebug.h>
+#include <qscopedarraypointer.h>
 #include <qstringlist.h>
 
 #ifndef DC_COLLATE

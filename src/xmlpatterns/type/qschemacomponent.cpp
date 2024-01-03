@@ -23,8 +23,6 @@
 
 #include "qschemacomponent_p.h"
 
-QT_BEGIN_NAMESPACE
-
 using namespace QPatternist;
 
 SchemaComponent::SchemaComponent()
@@ -34,5 +32,3 @@ SchemaComponent::SchemaComponent()
 SchemaComponent::~SchemaComponent()
 {
 }
-
-QT_END_NAMESPACE

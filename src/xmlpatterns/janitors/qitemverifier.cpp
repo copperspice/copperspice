@@ -21,14 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qcommonsequencetypes_p.h"
-#include "qgenericsequencetype_p.h"
-#include "qitemmappingiterator_p.h"
-#include "qpatternistlocale_p.h"
+#include <qitemverifier_p.h>
 
-#include "qitemverifier_p.h"
-
-QT_BEGIN_NAMESPACE
+#include <qcommonsequencetypes_p.h>
+#include <qgenericsequencetype_p.h>
+#include <qitemmappingiterator_p.h>
+#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 
@@ -96,5 +94,3 @@ ExpressionVisitorResult::Ptr ItemVerifier::accept(const ExpressionVisitor::Ptr &
 {
    return visitor->visit(this);
 }
-
-QT_END_NAMESPACE

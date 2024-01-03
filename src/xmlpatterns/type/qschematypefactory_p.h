@@ -29,8 +29,6 @@
 #include <qitemtype_p.h>
 #include <qschematype_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class SchemaTypeFactory : public QSharedData
@@ -58,7 +56,5 @@ class SchemaTypeFactory : public QSharedData
    SchemaTypeFactory &operator=(const SchemaTypeFactory &) = delete;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

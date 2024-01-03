@@ -28,8 +28,6 @@
 #include <qpaircontainer_p.h>
 #include <qcomparisonplatform_p.h>
 
-QT_BEGIN_NAMESPACE
-
 namespace QPatternist {
 
 class GeneralComparison : public PairContainer, public ComparisonPlatform<GeneralComparison,
@@ -80,7 +78,5 @@ class GeneralComparison : public PairContainer, public ComparisonPlatform<Genera
    const bool m_isBackwardsCompat;
 };
 }
-
-QT_END_NAMESPACE
 
 #endif

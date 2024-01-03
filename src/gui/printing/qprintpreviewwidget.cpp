@@ -84,12 +84,14 @@ void PageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
    painter->fillRect(rshadow, QBrush(rgrad));
    QRectF bshadow(paperRect.bottomLeft() + QPointF(shWidth, 0),
       paperRect.bottomRight() + QPointF(0, shWidth));
+
    QLinearGradient bgrad(bshadow.topLeft(), bshadow.bottomLeft());
    bgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
    bgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
    painter->fillRect(bshadow, QBrush(bgrad));
    QRectF cshadow(paperRect.bottomRight(),
       paperRect.bottomRight() + QPointF(shWidth, shWidth));
+
    QRadialGradient cgrad(cshadow.topLeft(), shWidth, cshadow.topLeft());
    cgrad.setColorAt(0.0, QColor(0, 0, 0, 255));
    cgrad.setColorAt(1.0, QColor(0, 0, 0, 0));
@@ -265,6 +267,7 @@ void QPrintPreviewWidgetPrivate::_q_updateCurrentPage()
    }
 
    int newPage = calcCurrentPage();
+
    if (newPage != curPage) {
       curPage = newPage;
       emit q->previewChanged();
@@ -275,12 +278,15 @@ int QPrintPreviewWidgetPrivate::calcCurrentPage()
 {
    int maxArea = 0;
    int newPage = curPage;
+
    QRect viewRect = graphicsView->viewport()->rect();
    QList<QGraphicsItem *> items = graphicsView->items(viewRect);
+
    for (int i = 0; i < items.size(); ++i) {
       PageItem *pg = static_cast<PageItem *>(items.at(i));
       QRect overlap = graphicsView->mapFromScene(pg->sceneBoundingRect()).boundingRect() & viewRect;
       int area = overlap.width() * overlap.height();
+
       if (area > maxArea) {
          maxArea = area;
          newPage = pg->pageNumber();
@@ -288,6 +294,7 @@ int QPrintPreviewWidgetPrivate::calcCurrentPage()
          newPage = pg->pageNumber();
       }
    }
+
    return newPage;
 }
 
@@ -299,9 +306,11 @@ void QPrintPreviewWidgetPrivate::init()
    graphicsView->setInteractive(false);
    graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
    graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
-   QObject::connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-      q, SLOT(_q_updateCurrentPage()));
-   QObject::connect(graphicsView, SIGNAL(resized()), q, SLOT(_q_fit()));
+
+   QObject::connect(graphicsView->verticalScrollBar(), &QScrollBar::valueChanged, q,
+      &QPrintPreviewWidget::_q_updateCurrentPage);
+
+   QObject::connect(graphicsView, &GraphicsView::resized, q, &QPrintPreviewWidget::_q_fit);
 
    scene = new QGraphicsScene(graphicsView);
    scene->setBackgroundBrush(Qt::gray);
@@ -319,6 +328,7 @@ void QPrintPreviewWidgetPrivate::populateScene()
    for (int i = 0; i < pages.size(); i++) {
       scene->removeItem(pages.at(i));
    }
+
    qDeleteAll(pages);
    pages.clear();
 
@@ -356,13 +366,15 @@ void QPrintPreviewWidgetPrivate::layoutPages()
    }
    int rows = qCeil(qreal(numPagePlaces) / cols);
 
-   qreal itemWidth = pages.at(0)->boundingRect().width();
+   qreal itemWidth  = pages.at(0)->boundingRect().width();
    qreal itemHeight = pages.at(0)->boundingRect().height();
+
    int pageNum = 1;
+
    for (int i = 0; i < rows && pageNum <= numPages; i++) {
       for (int j = 0; j < cols && pageNum <= numPages; j++) {
          if (!i && !j && viewMode == QPrintPreviewWidget::FacingPagesView) {
-            // Front page doesn't have a facing page
+            // Front page does not have a facing page
             continue;
          } else {
             pages.at(pageNum - 1)->setPos(QPointF(j * itemWidth, i * itemHeight));
@@ -384,14 +396,18 @@ void QPrintPreviewWidgetPrivate::generatePreview()
    Q_Q(QPrintPreviewWidget);
    printer->d_func()->setPreviewMode(true);
    emit q->paintRequested(printer);
+
    printer->d_func()->setPreviewMode(false);
    pictures = printer->d_func()->previewPages();
-   populateScene(); // i.e. setPreviewPrintedPictures() e.l.
+   populateScene();          // i.e. setPreviewPrintedPictures()
    layoutPages();
+
    curPage = qBound(1, curPage, pages.count());
+
    if (fitting) {
       _q_fit();
    }
+
    emit q->previewChanged();
 }
 
@@ -411,6 +427,7 @@ void QPrintPreviewWidgetPrivate::setCurrentPage(int pageNumber)
          QPointF pt = graphicsView->transform().map(pages.at(curPage - 1)->pos());
          vsc->setValue(int(pt.y()) - 10);
          hsc->setValue(int(pt.x()) - 10);
+
       } else {
          graphicsView->centerOn(pages.at(curPage - 1));
       }
@@ -426,10 +443,12 @@ void QPrintPreviewWidgetPrivate::zoom(qreal zoom)
 void QPrintPreviewWidgetPrivate::setZoomFactor(qreal _zoomFactor)
 {
    Q_Q(QPrintPreviewWidget);
+
    zoomFactor = _zoomFactor;
    graphicsView->resetTransform();
    int dpi_y = q->logicalDpiY();
    int printer_dpi_y = printer->logicalDpiY();
+
    graphicsView->scale(zoomFactor * (dpi_y / float(printer_dpi_y)),
       zoomFactor * (dpi_y / float(printer_dpi_y)));
 }
@@ -447,41 +466,34 @@ QPrintPreviewWidget::QPrintPreviewWidget(QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*new QPrintPreviewWidgetPrivate, parent, flags)
 {
    Q_D(QPrintPreviewWidget);
+
    d->printer = new QPrinter;
    d->ownPrinter = true;
    d->init();
 }
 
-
-/*!
-    Destroys the QPrintPreviewWidget.
-*/
 QPrintPreviewWidget::~QPrintPreviewWidget()
 {
    Q_D(QPrintPreviewWidget);
+
    if (d->ownPrinter) {
       delete d->printer;
    }
 }
 
-/*!
-    Returns the current view mode. The default view mode is SinglePageView.
-*/
 QPrintPreviewWidget::ViewMode QPrintPreviewWidget::viewMode() const
 {
    Q_D(const QPrintPreviewWidget);
    return d->viewMode;
 }
 
-/*!
-    Sets the view mode to \a mode. The default view mode is
-    SinglePageView.
-*/
 void QPrintPreviewWidget::setViewMode(ViewMode mode)
 {
    Q_D(QPrintPreviewWidget);
+
    d->viewMode = mode;
    d->layoutPages();
+
    if (d->viewMode == AllPagesView) {
       d->graphicsView->fitInView(d->scene->itemsBoundingRect(), Qt::KeepAspectRatio);
       d->fitting = false;
@@ -489,25 +501,18 @@ void QPrintPreviewWidget::setViewMode(ViewMode mode)
       d->zoomFactor = d->graphicsView->transform().m11() * (float(d->printer->logicalDpiY()) / logicalDpiY());
       emit previewChanged();
    } else {
+
       d->fitting = true;
       d->_q_fit();
    }
 }
 
-/*!
-    Returns the current orientation of the preview. This value is
-    obtained from the QPrinter object associated with the preview.
-*/
 QPrinter::Orientation QPrintPreviewWidget::orientation() const
 {
    Q_D(const QPrintPreviewWidget);
    return d->printer->orientation();
 }
 
-/*!
-    Sets the current orientation to \a orientation. This value will be
-    set on the QPrinter object associated with the preview.
-*/
 void QPrintPreviewWidget::setOrientation(QPrinter::Orientation orientation)
 {
    Q_D(QPrintPreviewWidget);
@@ -515,9 +520,6 @@ void QPrintPreviewWidget::setOrientation(QPrinter::Orientation orientation)
    d->generatePreview();
 }
 
-/*!
-    Prints the preview to the printer associated with the preview.
-*/
 void QPrintPreviewWidget::print()
 {
    Q_D(QPrintPreviewWidget);
@@ -525,10 +527,6 @@ void QPrintPreviewWidget::print()
    emit paintRequested(d->printer);
 }
 
-/*!
-    Zooms the current view in by \a factor. The default value for \a
-    factor is 1.1, which means the view will be scaled up by 10%.
-*/
 void QPrintPreviewWidget::zoomIn(qreal factor)
 {
    Q_D(QPrintPreviewWidget);
@@ -537,10 +535,6 @@ void QPrintPreviewWidget::zoomIn(qreal factor)
    d->zoom(factor);
 }
 
-/*!
-    Zooms the current view out by \a factor. The default value for \a
-    factor is 1.1, which means the view will be scaled down by 10%.
-*/
 void QPrintPreviewWidget::zoomOut(qreal factor)
 {
    Q_D(QPrintPreviewWidget);
@@ -549,22 +543,12 @@ void QPrintPreviewWidget::zoomOut(qreal factor)
    d->zoom(1 / factor);
 }
 
-/*!
-    Returns the zoom factor of the view.
-*/
 qreal QPrintPreviewWidget::zoomFactor() const
 {
    Q_D(const QPrintPreviewWidget);
    return d->zoomFactor;
 }
 
-/*!
-    Sets the zoom factor of the view to \a factor. For example, a
-    value of 1.0 indicates an unscaled view, which is approximately
-    the size the view will have on paper. A value of 0.5 will halve
-    the size of the view, while a value of 2.0 will double the size of
-    the view.
-*/
 void QPrintPreviewWidget::setZoomFactor(qreal factor)
 {
    Q_D(QPrintPreviewWidget);
@@ -573,46 +557,29 @@ void QPrintPreviewWidget::setZoomFactor(qreal factor)
    d->setZoomFactor(factor);
 }
 
-
-
 int QPrintPreviewWidget::pageCount() const
 {
    Q_D(const QPrintPreviewWidget);
    return d->pages.size();
 }
 
-/*!
-    Returns the currently viewed page in the preview.
-*/
 int QPrintPreviewWidget::currentPage() const
 {
    Q_D(const QPrintPreviewWidget);
    return d->curPage;
 }
 
-/*!
-    Sets the current page in the preview. This will cause the view to
-    skip to the beginning of \a page.
-*/
 void QPrintPreviewWidget::setCurrentPage(int page)
 {
    Q_D(QPrintPreviewWidget);
    d->setCurrentPage(page);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setZoomMode(QPrintPreviewWidget::FitToWidth)}.
-*/
 void QPrintPreviewWidget::fitToWidth()
 {
    setZoomMode(FitToWidth);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setZoomMode(QPrintPreviewWidget::FitInView)}.
-*/
 void QPrintPreviewWidget::fitInView()
 {
    setZoomMode(FitInView);
@@ -621,7 +588,9 @@ void QPrintPreviewWidget::fitInView()
 void QPrintPreviewWidget::setZoomMode(QPrintPreviewWidget::ZoomMode zoomMode)
 {
    Q_D(QPrintPreviewWidget);
+
    d->zoomMode = zoomMode;
+
    if (d->zoomMode == FitInView || d->zoomMode == FitToWidth) {
       d->fitting = true;
       d->_q_fit(true);
@@ -656,10 +625,6 @@ void QPrintPreviewWidget::setFacingPagesViewMode()
    setViewMode(FacingPagesView);
 }
 
-/*!
-    This is a convenience function and is the same as calling \c
-    {setViewMode(QPrintPreviewWidget::AllPagesView)}.
-*/
 void QPrintPreviewWidget::setAllPagesViewMode()
 {
    setViewMode(AllPagesView);

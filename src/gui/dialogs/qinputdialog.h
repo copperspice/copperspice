@@ -213,13 +213,13 @@ class Q_GUI_EXPORT QInputDialog : public QDialog
  private:
    Q_DECLARE_PRIVATE(QInputDialog)
 
-   GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &un_named_arg1))
+   GUI_CS_SLOT_1(Private, void _q_textChanged(const QString &text))
    GUI_CS_SLOT_2(_q_textChanged)
 
    GUI_CS_SLOT_1(Private, void _q_plainTextEditTextChanged())
    GUI_CS_SLOT_2(_q_plainTextEditTextChanged)
 
-   GUI_CS_SLOT_1(Private, void _q_currentRowChanged(const QModelIndex &un_named_arg1, const QModelIndex &un_named_arg2))
+   GUI_CS_SLOT_1(Private, void _q_currentRowChanged(const QModelIndex &newIndex, const QModelIndex &oldIndex))
    GUI_CS_SLOT_2(_q_currentRowChanged)
 };
 
