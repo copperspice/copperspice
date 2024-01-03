@@ -761,7 +761,7 @@ QProcess::~QProcess()
    Q_D(QProcess);
 
    if (d->processState != NotRunning) {
-      qWarning("QProcess: Destroyed while process is still running.");
+      qWarning("QProcess() Destroyed while a process was running");
       kill();
       waitForFinished();
    }
@@ -1272,7 +1272,7 @@ void QProcess::start(const QString &program, const QStringList &arguments, OpenM
    Q_D(QProcess);
 
    if (d->processState != NotRunning) {
-      qWarning("QProcess::start: Process is already running");
+      qWarning("QProcess::start() Process is already running");
       return;
    }
 
@@ -1291,7 +1291,7 @@ void QProcess::start(OpenMode mode)
    Q_D(QProcess);
 
    if (d->processState != NotRunning) {
-      qWarning("QProcess::start: Process is already running");
+      qWarning("QProcess::start() Process is already running");
       return;
    }
 
@@ -1308,12 +1308,12 @@ bool QProcess::open(OpenMode mode)
    Q_D(QProcess);
 
    if (d->processState != NotRunning) {
-      qWarning("QProcess::start: Process is already running");
+      qWarning("QProcess::start() Process is already running");
       return false;
    }
 
    if (d->program.isEmpty()) {
-      qWarning("QProcess::start: program not set");
+      qWarning("QProcess::start() No program was specified");
       return false;
    }
 
@@ -1324,10 +1324,6 @@ bool QProcess::open(OpenMode mode)
 void QProcessPrivate::start(QIODevice::OpenMode mode)
 {
    Q_Q(QProcess);
-
-#if defined QPROCESS_DEBUG
-   qDebug() << "QProcess::start(" << program << ',' << arguments << ',' << mode << ')';
-#endif
 
    stdinChannel.buffer.clear();
    stdoutChannel.buffer.clear();
@@ -1446,7 +1442,7 @@ void QProcess::setProgram(const QString &program)
 {
    Q_D(QProcess);
    if (d->processState != NotRunning) {
-      qWarning("QProcess::setProgram: Process is already running");
+      qWarning("QProcess::setProgram() Process is already running");
       return;
    }
    d->program = program;
@@ -1463,7 +1459,7 @@ void QProcess::setArguments(const QStringList &arguments)
    Q_D(QProcess);
 
    if (d->processState != NotRunning) {
-      qWarning("QProcess::setProgram: Process is already running");
+      qWarning("QProcess::setProgram() Process is already running");
       return;
    }
 

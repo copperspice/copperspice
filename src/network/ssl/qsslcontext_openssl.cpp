@@ -455,7 +455,7 @@ static int next_proto_cb(SSL *, unsigned char **out, unsigned char *outlen, cons
          break;
 
       default:
-         qWarning("OpenSSL sent unknown NPN status");
+         qWarning("next_proto_cb() OpenSSL sent unknown NPN status");
    }
 
    return SSL_TLSEXT_ERR_OK;
@@ -482,7 +482,7 @@ SSL *QSslContext::createSsl()
    if (session) {
       // Try to resume the last session we cached
       if (! q_SSL_set_session(ssl, session)) {
-         qWarning("Unable to set SSL session");
+         qWarning("QSslContext::createSsl() Unable to set SSL session");
          q_SSL_SESSION_free(session);
          session = nullptr;
       }
@@ -496,8 +496,8 @@ SSL *QSslContext::createSsl()
 
       for (int a = 0; a < protocols.count(); ++a) {
          if (protocols.at(a).size() > 255) {
-            qWarning()  << "TLS NPN extension" << protocols.at(a)
-                        << "is too long and will be truncated to 255 characters.";
+            qWarning()  << "QSslContext::createSsl() TLS NPN extension" << protocols.at(a)
+                        << "is too long and will be truncated to 255 characters";
 
             protocols[a] = protocols.at(a).left(255);
          }
@@ -541,7 +541,7 @@ bool QSslContext::cacheSession(SSL *ssl)
          unsigned char *data = reinterpret_cast<unsigned char *>(m_sessionASN1.data());
 
          if (! q_i2d_SSL_SESSION(session, &data)) {
-            qWarning("Unable to store persistent version of SSL session");
+            qWarning("QSslContext::cacheSession() Unable to store persistent version of SSL session");
          }
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L

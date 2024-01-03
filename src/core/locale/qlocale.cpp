@@ -511,7 +511,7 @@ bool qt_splitLocaleName(const QString &name, QString &lang, QString &script, QSt
             break;
 
          case NoState:
-            qWarning("QLocale: This should never happen");
+            qWarning("QLocale() Invalid state");
             break;
       }
       ++i;

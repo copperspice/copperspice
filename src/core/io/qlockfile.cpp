@@ -167,7 +167,7 @@ bool QLockFile::removeStaleLockFile()
    Q_D(QLockFile);
 
    if (d->isLocked) {
-      qWarning("QLockFile::removeStaleLockFile This method can only be called when not holding a lock");
+      qWarning("QLockFile::removeStaleLockFile() File must not be locked");
       return false;
    }
 

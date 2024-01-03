@@ -135,14 +135,14 @@ void QFactoryLoader::setup()
 
          if (! library->isPlugin()) {
             // show the full error message
-            qWarning("%s", csPrintable(library->errorString));
+            qWarning("QFactoryLoader::setup() %s", csPrintable(library->errorString));
 
             library->release();
             continue;
          }
 
          if (library->m_metaObject == nullptr) {
-            qWarning("Warning: metaObject is a nullptr");
+            qWarning("QFactoryLoader::setup() Invalid meta object (nullptr)");
             library->release();
             continue;
          }

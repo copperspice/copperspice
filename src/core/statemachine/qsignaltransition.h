@@ -88,17 +88,17 @@ QSignalTransition *QState::addTransition(QObject *sender, void (SignalClass::*si
       QAbstractState *target)
 {
    if (! sender) {
-      qWarning("QState::addTransition: No sender was specified");
+      qWarning("QState::addTransition() No sender was specified");
       return nullptr;
    }
 
    if (! signal) {
-      qWarning("QState::addTransition: No signal was specified");
+      qWarning("QState::addTransition() No signal was specified");
       return nullptr;
    }
 
    if (! target) {
-      qWarning("QState::addTransition: No target was specified");
+      qWarning("QState::addTransition() No target was specified");
       return nullptr;
    }
 

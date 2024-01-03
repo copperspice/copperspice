@@ -76,7 +76,7 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
          errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(windowsError);
 
 #if defined QLOCALSOCKET_DEBUG
-         qWarning() << "QLocalSocket error not handled:" << errorString;
+         qWarning() << "QLocalSocket::_q_winError() Error not handled, " << errorString;
 #endif
 
          state = QLocalSocket::UnconnectedState;
@@ -425,12 +425,12 @@ bool QLocalSocket::waitForDisconnected(int msecs)
    Q_D(QLocalSocket);
 
    if (state() == UnconnectedState) {
-      qWarning("QLocalSocket::waitForDisconnected() is not allowed in UnconnectedState");
+      qWarning("QLocalSocket::waitForDisconnected() Unable to wait in QLocalSocket::UnconnectedState");
       return false;
    }
 
    if (!openMode().testFlag(QIODevice::ReadOnly)) {
-      qWarning("QLocalSocket::waitForDisconnected is not supported for write only pipes");
+      qWarning("QLocalSocket::waitForDisconnected() Unable to wait on a write only pipe");
       return false;
    }
 

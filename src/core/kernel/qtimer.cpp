@@ -178,7 +178,7 @@ void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject *receiv
          int bracketPosition = slotMethod.indexOf('(');
 
          if (bracketPosition == -1) {
-            qWarning("QTimer::singleShot Invalid slot specification");
+            qWarning("QTimer::singleShot() Invalid slot specification");
             return;
          }
 

@@ -210,7 +210,7 @@ QPauseAnimation *QSequentialAnimationGroup::insertPause(int index, int msecs)
    Q_D(const QSequentialAnimationGroup);
 
    if (index < 0 || index > d->animations.size()) {
-      qWarning("QSequentialAnimationGroup::insertPause: index is out of bounds");
+      qWarning("QSequentialAnimationGroup::insertPause() Index is out of bounds");
       return nullptr;
    }
 
@@ -467,7 +467,7 @@ void QSequentialAnimationGroupPrivate::animationInsertedAt(int index)
    currentAnimationIndex = animations.indexOf(currentAnimation);
 
    if (index < currentAnimationIndex || currentLoop != 0) {
-      qWarning("QSequentialGroup::insertAnimation only supports to add animations after the current one.");
+      qWarning("QSequentialAnimationGroup::animationInsertedAt() Unable to add before the current animation");
       return; //we're not affected because it is added after the current one
    }
 }

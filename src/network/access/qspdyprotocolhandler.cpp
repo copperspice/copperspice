@@ -455,7 +455,7 @@ bool QSpdyProtocolHandler::uncompressHeader(const QByteArray &input, QByteArray 
             break;
          }
          default: {
-            qWarning() << "got unexpected zlib return value:" << zlibRet;
+            qWarning() << "QSpdyProtocolHandler::uncompressHeader() Unexpected zlib return value " << zlibRet;
             return false;
          }
       }
@@ -584,7 +584,7 @@ void QSpdyProtocolHandler::sendControlFrame(FrameType type,
 
    switch (type) {
       case FrameType_CREDENTIAL: {
-         qWarning("Sending SPDY CREDENTIAL frame is not yet implemented"); // QTBUG-36188
+         qWarning("QSpdyProtocolHandler::sendControlFrame() Sending SPDY CREDENTIAL frame is not implemented");
          return;
       }
 
@@ -704,7 +704,7 @@ bool QSpdyProtocolHandler::uploadData(qint32 streamID)
    Q_ASSERT(replyPrivate);
 
    if (reply->d_func()->state == QHttpNetworkReplyPrivate::SPDYHalfClosed || reply->d_func()->state == QHttpNetworkReplyPrivate::SPDYClosed) {
-      qWarning("Trying to upload to closed stream");
+      qWarning("QSpdyProtocolHandler::uploadData() Unable to upload to a closed stream");
       return false;
    }
 
@@ -868,7 +868,7 @@ void QSpdyProtocolHandler::handleControlFrame(const QByteArray &frameHeaders)
          break;
       }
       default:
-         qWarning() << "cannot handle frame of type" << type;
+         qWarning("QSpdyProtocolHandler::handleControlFrame() Unable to handle frame of type %d", type);
    }
 }
 
@@ -912,13 +912,13 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
 
    QByteArray uncompressedHeader;
    if (! uncompressHeader(headerValuePairs, &uncompressedHeader)) {
-      qWarning("error reading header from SYN_REPLY message");
+      qWarning("QSpdyProtocolHandler::parseHttpHeaders() Error reading header from SYN_REPLY message");
       return;
    }
 
    qint32 headerCount = fourBytesToInt(uncompressedHeader.constData());
    if (headerCount * 8 > uncompressedHeader.size()) {
-      qWarning("error parsing header from SYN_REPLY message");
+      qWarning("QSpdyProtocolHandler::parseHttpHeaders() Error parsing header from SYN_REPLY message");
       sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
       return;
    }
@@ -932,7 +932,7 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
       readPointer += count;
 
       if (readPointer > uncompressedHeader.size()) {
-         qWarning("error parsing header from SYN_REPLY message");
+         qWarning("QSpdyProtocolHandler::parseHttpHeaders() Eerror parsing header from SYN_REPLY message");
          sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
          return;
       }
@@ -942,7 +942,7 @@ void QSpdyProtocolHandler::parseHttpHeaders(char flags, const QByteArray &frameD
       readPointer += count;
 
       if (readPointer > uncompressedHeader.size()) {
-         qWarning("error parsing header from SYN_REPLY message");
+         qWarning("QSpdyProtocolHandler::parseHttpHeaders() Error parsing header from SYN_REPLY message");
          sendRST_STREAM(streamID, RST_STREAM_PROTOCOL_ERROR);
          return;
       }
@@ -1062,7 +1062,7 @@ void QSpdyProtocolHandler::handleRST_STREAM(char, quint32 length, const QByteArr
          break;
 
       default:
-         qWarning("Unable to parse servers RST_STREAM status code");
+         qWarning("QSpdyProtocolHandler::handleRST_STREAM() Unable to parse servers RST_STREAM status code");
          errorCode = QNetworkReply::ProtocolFailure;
          errorMessage = "got SPDY RST_STREAM message with unknown error code";
    }
@@ -1128,7 +1128,7 @@ void QSpdyProtocolHandler::handleSETTINGS(char flags, quint32 /*length*/, const 
             break;
          }
          default:
-            qWarning() << "found unknown settings value" << value;
+            qWarning() << "QSpdyProtocolHandler::handleSETTINGS() Found unknown settings value of " << value;
       }
    }
 }
@@ -1172,7 +1172,7 @@ void QSpdyProtocolHandler::handleGOAWAY(char,  quint32, const QByteArray &frameD
       }
 
       default:
-         qWarning() << "unexpected status code" << statusCode;
+         qWarning() << "QSpdyProtocolHandler::handleGOAWAY() Unexpected status code " << statusCode;
          errorCode = QNetworkReply::ProtocolUnknownError;
    }
 
@@ -1310,7 +1310,7 @@ void QSpdyProtocolHandler::handleDataFrame(const QByteArray &frameHeaders)
    }
 
    if (flag_compress) {
-      qWarning("SPDY level compression is not supported");
+      qWarning("QSpdyProtocolHandler::handleDataFrame() SPDY level compression is not supported");
    }
 
    if (flag_fin) {

@@ -229,7 +229,7 @@ bool QResourcePrivate::load(const QString &file)
             }
 
          } else if (res->isContainer(node) != container) {
-            qWarning("QResourceInfo: Resource [%s] has both data and children", file.toLatin1().constData());
+            qWarning("QResourceInfo::load() Resource %s has both data and child resources", csPrintable(file));
 
          }
 
@@ -452,8 +452,7 @@ QStringList QResource::children() const
 void QResource::addSearchPath(const QString &path)
 {
    if (! path.startsWith(QChar('/'))) {
-      qWarning("QResource::addResourceSearchPath: Search paths must be absolute (start with /) [%s]",
-            path.toUtf8().constData());
+      qWarning("QResource::addResourceSearchPath() Search path %s must be absolute", csPrintable(path));
       return;
    }
 
@@ -987,8 +986,8 @@ bool QResource::registerResource(const QString &rccFilename, const QString &reso
    QString r = qt_resource_fixResourceRoot(resourceRoot);
 
    if (!r.isEmpty() && r[0] != '/') {
-      qWarning("QDir::registerResource: Registering a resource [%s] must be rooted in an absolute path (start with /) [%s]",
-               rccFilename.toUtf8().constData(), resourceRoot.toUtf8().constData());
+      qWarning("QDir::registerResource() Registering resource %s requires an absolute path start with '/', current root is %s",
+            csPrintable(rccFilename), csPrintable(resourceRoot));
 
       return false;
    }
@@ -1038,8 +1037,8 @@ bool QResource::registerResource(const uchar *rccData, const QString &resourceRo
    QString r = qt_resource_fixResourceRoot(resourceRoot);
 
    if (!r.isEmpty() && r[0] != QLatin1Char('/')) {
-      qWarning("QDir::registerResource: Registering a resource [%p] must be rooted in an absolute path (start with /) [%s]",
-               rccData, resourceRoot.toUtf8().data());
+      qWarning("QDir::registerResource() Registering resource %s requires an absolute path start with '/', current root is %s",
+               rccData, csPrintable(resourceRoot));
       return false;
    }
 
@@ -1151,7 +1150,7 @@ bool QResourceFileEngine::open(QIODevice::OpenMode flags)
    Q_D(QResourceFileEngine);
 
    if (d->resource.fileName().isEmpty()) {
-      qWarning("QResourceFileEngine::open: Missing file name");
+      qWarning("QResourceFileEngine::open() Missing file name");
       return false;
    }
 

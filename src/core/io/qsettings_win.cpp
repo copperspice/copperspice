@@ -208,7 +208,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
                   &numKeys, &maxKeySize, nullptr, nullptr, nullptr);
 
    if (res != ERROR_SUCCESS) {
-      qWarning("QSettings: RegQueryInfoKey() failed: %s", errorCodeToString(res).toLatin1().data());
+      qWarning("QSettings::childKeysOrGroups() RegQueryInfoKey failed, %s", csPrintable(errorCodeToString(res)));
       return result;
    }
 
@@ -247,7 +247,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
       }
 
       if (res != ERROR_SUCCESS) {
-         qWarning("QSettings: RegEnumValue failed: %s", errorCodeToString(res).toLatin1().data());
+         qWarning("QSettings::childKeysOrGroups() RegEnumValue failed, %s", csPrintable(errorCodeToString(res)));
          continue;
       }
 
@@ -316,8 +316,8 @@ static void deleteChildGroups(HKEY parentHandle)
       LONG res = RegDeleteKey(parentHandle, &group.toStdWString()[0]);
 
       if (res != ERROR_SUCCESS) {
-         qWarning("QSettings: RegDeleteKey failed on subkey \"%s\": %s",
-                  group.toLatin1().data(), errorCodeToString(res).toLatin1().data());
+         qWarning("QSettings::deleteChildGroups() RegDeleteKey failed on subkey \"%s\": %s",
+                  csPrintable(group), csPrintable(errorCodeToString(res)));
          return;
       }
    }
@@ -594,7 +594,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
       }
 
       default:
-         qWarning("QSettings: Unknown data %d type in Windows registry", static_cast<int>(dataType));
+         qWarning("QWinSettings::readKey() Unknown data type in Windows registry, %d", static_cast<int>(dataType));
          if (value != nullptr) {
             *value = QVariant();
          }
@@ -628,8 +628,8 @@ QWinSettingsPrivate::~QWinSettingsPrivate()
       DWORD res = RegDeleteKey(writeHandle(), &emptyKey.toStdWString()[0]);
 
       if (res != ERROR_SUCCESS) {
-         qWarning("QSettings: Failed to delete key \"%s\": %s",
-                  regList.at(0).key().toLatin1().data(), errorCodeToString(res).toLatin1().data());
+         qWarning("QSettings() Failed to delete key \"%s\": %s",
+                  csPrintable(regList.at(0).key()), csPrintable(errorCodeToString(res)));
       }
    }
 
@@ -671,8 +671,8 @@ void QWinSettingsPrivate::remove(const QString &uKey)
             LONG res = RegDeleteValue(handle, &group.toStdWString()[0]);
 
             if (res != ERROR_SUCCESS) {
-               qWarning("QSettings: RegDeleteValue failed on subkey \"%s\": %s",
-                        group.toLatin1().data(), errorCodeToString(res).toLatin1().data());
+               qWarning("QWinSettings::remove() RegDeleteValue failed on subkey \"%s\": %s",
+                     csPrintable(group), csPrintable(errorCodeToString(res)));
             }
          }
 
@@ -680,8 +680,8 @@ void QWinSettingsPrivate::remove(const QString &uKey)
          res = RegDeleteKey(writeHandle(), &rKey.toStdWString()[0]);
 
          if (res != ERROR_SUCCESS) {
-            qWarning("QSettings: RegDeleteKey failed on key \"%s\": %s",
-                     rKey.toLatin1().data(), errorCodeToString(res).toLatin1().data());
+            qWarning("QWinSettings::remove() RegDeleteKey failed on key \"%s\": %s",
+                  csPrintable(rKey), csPrintable(errorCodeToString(res)));
          }
       }
 
@@ -811,7 +811,9 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
    if (res == ERROR_SUCCESS) {
       deleteWriteHandleOnExit = false;
    } else {
-      qWarning("QSettings: failed to set subkey \"%s\": %s", rKey.toLatin1().data(), errorCodeToString(res).toLatin1().data());
+      qWarning("QWinSettings::set() Failed to set subkey \"%s\": %s",
+            csPrintable(rKey), csPrintable(errorCodeToString(res)));
+
       setStatus(QSettings::AccessError);
    }
 

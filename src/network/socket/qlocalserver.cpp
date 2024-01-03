@@ -104,7 +104,7 @@ bool QLocalServer::listen(const QString &name)
 {
    Q_D(QLocalServer);
    if (isListening()) {
-      qWarning("QLocalServer::listen() called when already listening");
+      qWarning("QLocalServer::listen() Called when already listening");
       return false;
    }
 
@@ -131,7 +131,7 @@ bool QLocalServer::listen(qintptr socketDescriptor)
    Q_D(QLocalServer);
 
    if (isListening()) {
-     qWarning("QLocalServer::listen() called when already listening");
+     qWarning("QLocalServer::listen() Called when already listening");
      return false;
    }
 

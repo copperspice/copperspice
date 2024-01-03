@@ -132,7 +132,7 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
    }
 
    if (d->cacheDirectory.isEmpty()) {
-      qWarning() << "QNetworkDiskCache::prepare() The cache directory is not set";
+      qWarning("QNetworkDiskCache::prepare() Cache directory is not set");
       return nullptr;
    }
 
@@ -167,7 +167,7 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
       }
 
       if (! cacheItem->file || !cacheItem->file->open()) {
-         qWarning() << "QNetworkDiskCache::prepare() unable to open temporary file";
+         qWarning("QNetworkDiskCache::prepare() Unable to open temporary file");
          cacheItem.reset();
          return nullptr;
       }
@@ -192,7 +192,7 @@ void QNetworkDiskCache::insert(QIODevice *device)
 
    QHash<QIODevice *, QCacheItem *>::iterator it = d->inserting.find(device);
    if (it == d->inserting.end()) {
-      qWarning() << "QNetworkDiskCache::insert() called on a device which is unknown " << device;
+      qWarning("QNetworkDiskCache::insert() Called on a device which is unknown");
       return;
    }
 
@@ -225,7 +225,7 @@ void QNetworkDiskCachePrivate::storeItem(QCacheItem *cacheItem)
 
    if (QFile::exists(fileName)) {
       if (!QFile::remove(fileName)) {
-         qWarning() << "QNetworkDiskCache: Unable to remove the cache file " << fileName;
+         qWarning("QNetworkDiskCache::storeItem() Unable to remove the cache file %s", csPrintable(fileName));
          return;
       }
    }
@@ -473,7 +473,7 @@ qint64 QNetworkDiskCache::expire()
    }
 
    if (cacheDirectory().isEmpty()) {
-      qWarning() << "QNetworkDiskCache::expire() The cache directory is not set";
+      qWarning("QNetworkDiskCache::expire() Cache directory is not set");
       return 0;
    }
 

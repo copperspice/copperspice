@@ -97,8 +97,9 @@ static QNetworkReply::NetworkError statusCodeFromHttp(int httpStatusCode, const 
             code = QNetworkReply::UnknownContentError;
 
          } else {
-            qWarning("QNetworkAccess: got HTTP status code %d which is not expected from url: \"%s\"",
+            qWarning("QNetworkReply::statusCodeFromHttp() HTTP status code %d was not expected from url %s",
                      httpStatusCode, csPrintable(url.toString()));
+
             code = QNetworkReply::ProtocolFailure;
          }
    }

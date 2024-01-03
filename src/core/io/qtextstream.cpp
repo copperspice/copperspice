@@ -45,7 +45,7 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
 #define CHECK_VALID_STREAM(x) do { \
     if (! d->m_string && ! d->device) { \
-        qWarning("QTextStream: No device was available"); \
+        qWarning("QTextStream() No device was available"); \
         return x; \
     } } while (false)
 
@@ -1101,7 +1101,7 @@ void QTextStream::setRealNumberPrecision(int precision)
 {
    Q_D(QTextStream);
    if (precision < 0) {
-      qWarning("QTextStream::setRealNumberPrecision: Invalid precision (%d)", precision);
+      qWarning("QTextStream::setRealNumberPrecision() Invalid precision value, %d", precision);
       d->realNumberPrecision = 6;
       return;
    }

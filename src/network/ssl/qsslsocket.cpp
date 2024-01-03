@@ -97,7 +97,7 @@ void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port,
    Q_D(QSslSocket);
 
    if (d->state == ConnectedState || d->state == ConnectingState) {
-      qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
+      qWarning("QSslSocket::connectToHostEncrypted() Called when already connecting/connected");
       return;
    }
 
@@ -115,7 +115,7 @@ void QSslSocket::connectToHostEncrypted(const QString &hostName, quint16 port,
 {
    Q_D(QSslSocket);
    if (d->state == ConnectedState || d->state == ConnectingState) {
-      qWarning("QSslSocket::connectToHostEncrypted() called when already connecting/connected");
+      qWarning("QSslSocket::connectToHostEncrypted() Called when already connecting/connected");
       return;
    }
 
@@ -221,7 +221,7 @@ void QSslSocket::setPeerVerifyDepth(int depth)
 {
    Q_D(QSslSocket);
    if (depth < 0) {
-      qWarning("QSslSocket::setPeerVerifyDepth: cannot set negative depth of %d", depth);
+      qWarning("QSslSocket::setPeerVerifyDepth() Unable to set negative depth of %d", depth);
       return;
    }
    d->configuration.peerVerifyDepth = depth;
@@ -658,7 +658,7 @@ bool QSslSocket::waitForDisconnected(int msecs)
 
    // require calling connectToHost() before waitForDisconnected()
    if (state() == UnconnectedState) {
-      qWarning("QSslSocket::waitForDisconnected() is not allowed in UnconnectedState");
+      qWarning("QSslSocket::waitForDisconnected() Not allowed in UnconnectedState");
       return false;
    }
 
@@ -723,12 +723,12 @@ void QSslSocket::startClientEncryption()
 {
    Q_D(QSslSocket);
    if (d->mode != UnencryptedMode) {
-      qWarning("QSslSocket::startClientEncryption: cannot start handshake on non-plain connection");
+      qWarning("QSslSocket::startClientEncryption() Unable to start handshake on non-plain connection");
       return;
    }
 
    if (state() != ConnectedState) {
-      qWarning("QSslSocket::startClientEncryption: cannot start handshake when not connected");
+      qWarning("QSslSocket::startClientEncryption() Unable to start handshake when not connected");
       return;
    }
 
@@ -745,7 +745,7 @@ void QSslSocket::startServerEncryption()
 {
    Q_D(QSslSocket);
    if (d->mode != UnencryptedMode) {
-      qWarning("QSslSocket::startServerEncryption: cannot start handshake on non-plain connection");
+      qWarning("QSslSocket::startServerEncryption() Unable to start handshake on non-plain connection");
       return;
    }
 

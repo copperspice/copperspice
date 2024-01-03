@@ -2696,7 +2696,7 @@ void QCalendarWidget::setDateEditAcceptDelay(int delay)
 void QCalendarWidget::updateCell(const QDate &date)
 {
    if (! date.isValid()) {
-      qWarning("QCalendarWidget::updateCell: Invalid date");
+      qWarning("QCalendarWidget::updateCell() Date is invalid");
       return;
    }
 

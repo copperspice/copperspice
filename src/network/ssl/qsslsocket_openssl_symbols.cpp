@@ -91,7 +91,7 @@ namespace {
 
 void qsslSocketCannotResolveSymbolWarning(const char *functionName)
 {
-   qWarning("QSslSocket: Unable to resolve %s", functionName);
+   qWarning("QSslSocket() Unable to resolve %s", functionName);
 }
 
 }  // namespace
@@ -1448,7 +1448,7 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
       return result;
 
    } else {
-      qWarning("Unsupported date format detected");
+      qWarning("QSslSocket() Unsupported date format detected");
       return QDateTime();
    }
 }

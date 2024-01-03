@@ -55,7 +55,7 @@ static SSLContextRef qt_createSecureTransportContext(QSslSocket::SslMode mode)
    context = SSLCreateContext(nullptr, side, kSSLStreamType);
 
    if (! context) {
-      qWarning() << "SSLCreateContext failed";
+      qWarning("SSLCreateContext failed");
    }
 
    return context;
@@ -424,7 +424,7 @@ QList<QSslCertificate> QSslSocketPrivate::systemCaCertificates()
       }
    } else {
       // no detailed error handling here
-      qWarning() << "SecTrustSettingsCopyCertificates failed:" << status;
+      qWarning() << "QSslSocket::systemCaCertificates() SecTrustSettingsCopyCertificates failed - " << status;
    }
 
    return systemCerts;
@@ -492,7 +492,7 @@ QSsl::SslProtocol QSslSocketBackendPrivate::sessionProtocol() const
    SSLProtocol protocol = kSSLProtocolUnknown;
    const OSStatus err = SSLGetNegotiatedProtocolVersion(context, &protocol);
    if (err != noErr) {
-      qWarning() << "SSLGetNegotiatedProtocolVersion failed:" << err;
+      qWarning() << "QSslSocketBackend::sessionProtocol() SSLGetNegotiatedProtocolVersion failed - " << err;
       return QSsl::UnknownProtocol;
    }
 
@@ -832,7 +832,7 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       } else if (ciph.d->name.startsWith("ECDH-") || ciph.d->name.startsWith("ECDHE-")) {
          ciph.d->keyExchangeMethod = QLatin1String("ECDH");
       } else {
-         qWarning() << "Unknown Kx" << ciph.d->name;
+         qWarning() << "QSslSocketBackend() Unknown Kx" << ciph.d->name;
       }
 
       if (bits.size() == 2 || bits.size() == 3) {
@@ -842,7 +842,7 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       } else if (ciph.d->name.contains("-RSA-")) {
          ciph.d->authenticationMethod = QLatin1String("RSA");
       } else {
-         qWarning() << "Unknown Au" << ciph.d->name;
+         qWarning() << "QSslSocketBackend() Unknown Au" << ciph.d->name;
       }
 
       if (ciph.d->name.contains("RC4-")) {
@@ -864,7 +864,7 @@ QSslCipher QSslSocketBackendPrivate::QSslCipher_from_SSLCipherSuite(SSLCipherSui
       } else if (ciph.d->name.contains("NULL-")) {
          ciph.d->encryptionMethod = QLatin1String("NULL");
       } else {
-         qWarning() << "Unknown Enc" << ciph.d->name;
+         qWarning() << "QSslSocketBackend() Unknown Enc" << ciph.d->name;
       }
    }
 

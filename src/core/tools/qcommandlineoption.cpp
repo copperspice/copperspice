@@ -97,24 +97,24 @@ void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
    names.clear();
 
    if (nameList.isEmpty()) {
-      qWarning("QCommandLineOption: Options must have at least one name");
+      qWarning("QCommandLineOption:setName() List of options can not be empty");
    }
 
    for (const QString & name : nameList) {
       if (name.isEmpty()) {
-         qWarning("QCommandLineOption: Option names can not be empty");
+         qWarning("QCommandLineOption:setName() Option names can not be empty");
 
       } else {
          const QChar c = name.at(0);
 
          if (c == '-') {
-            qWarning("QCommandLineOption: Option names can not start with a '-'");
+            qWarning("QCommandLineOption:setName() Option names can not start with a '-'");
 
          } else if (c == '/') {
-            qWarning("QCommandLineOption: Option names can not start with a '/'");
+            qWarning("QCommandLineOption:setName() Option names can not start with a '/'");
 
          } else if (name.contains('=')) {
-            qWarning("QCommandLineOption: Option names can not contain a '='");
+            qWarning("QCommandLineOption:setName() Option names can not contain a '='");
 
          } else {
             names.append(name);

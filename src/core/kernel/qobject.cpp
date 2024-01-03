@@ -818,15 +818,15 @@ void QObject::moveToThread(QThread *targetThread)
 
    } else if (threadData != currentData) {
 
-      qWarning("QObject::moveToThread() Current thread (%p) is not the current object's thread (%p).\n"
-               "Can not move to target thread (%p)\n", currentData->thread.load(),
-               threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
+      qWarning("QObject::moveToThread() Current thread (%p) does not match thread for the current object (%p),\n"
+            "unable to move to target thread (%p)\n",
+            currentData->thread.load(), threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
 
 #ifdef Q_OS_DARWIN
 
-      qWarning("Multiple libraries might be loaded in the same process. Verify all plugins are "
-               "linked with the correct binaries. Export DYLD_PRINT_LIBRARIES=1 and verify only one set of "
-               "binaries are being loaded.");
+      qWarning("QObject::moveToThread() Multiple libraries might be loaded in the same process. Verify all plugins "
+            "are linked with the correct binaries. Set DYLD_PRINT_LIBRARIES=1 and verify only one set of "
+            "binaries are loaded.");
 #endif
 
       return;
@@ -1230,7 +1230,7 @@ int QObject::startTimer(int interval, Qt::TimerType timerType)
    }
 
    if (thread() != QThread::currentThread()) {
-       qWarning("QObject::startTimer: Timers can not be started from another thread");
+       qWarning("QObject::startTimer() Timers can not be started from another thread");
       return 0;
    }
 

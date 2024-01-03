@@ -221,7 +221,7 @@ void QTimeLine::setDuration(int duration)
 {
    Q_D(QTimeLine);
    if (duration <= 0) {
-      qWarning("QTimeLine::setDuration: cannot set duration <= 0");
+      qWarning("QTimeLine::setDuration() Unable to set duration less than or equal to 0");
       return;
    }
    d->duration = duration;
@@ -389,7 +389,7 @@ void QTimeLine::start()
    Q_D(QTimeLine);
 
    if (d->timerId) {
-      qWarning("QTimeLine::start: already running");
+      qWarning("QTimeLine::start() Already running");
       return;
    }
 
@@ -410,7 +410,7 @@ void QTimeLine::resume()
 {
    Q_D(QTimeLine);
    if (d->timerId) {
-      qWarning("QTimeLine::resume: already running");
+      qWarning("QTimeLine::resume() Already running");
       return;
    }
    d->timerId = startTimer(d->updateInterval);
@@ -433,7 +433,7 @@ void QTimeLine::setPaused(bool paused)
 {
    Q_D(QTimeLine);
    if (d->state == NotRunning) {
-      qWarning("QTimeLine::setPaused: Not running");
+      qWarning("QTimeLine::setPaused() Not running");
       return;
    }
    if (paused && d->state != Paused) {

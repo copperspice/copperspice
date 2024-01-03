@@ -394,7 +394,7 @@ QFileSystemWatcher::~QFileSystemWatcher()
 void QFileSystemWatcher::addPath(const QString &path)
 {
    if (path.isEmpty()) {
-      qWarning("QFileSystemWatcher::addPath: path is empty");
+      qWarning("QFileSystemWatcher::addPath() Path is empty");
       return;
    }
    addPaths(QStringList(path));
@@ -404,7 +404,7 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
 {
    Q_D(QFileSystemWatcher);
    if (paths.isEmpty()) {
-      qWarning("QFileSystemWatcher::addPaths: list is empty");
+      qWarning("QFileSystemWatcher::addPaths() List is empty");
       return;
    }
 
@@ -442,13 +442,13 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
    }
 
    if (!p.isEmpty())
-      qWarning("QFileSystemWatcher: failed to add paths: %s", csPrintable(p.join(", ")));
+      qWarning("QFileSystemWatcher::addPaths() Failed to add paths, %s", csPrintable(p.join(", ")));
 }
 
 void QFileSystemWatcher::removePath(const QString &path)
 {
    if (path.isEmpty()) {
-      qWarning("QFileSystemWatcher::removePath: path is empty");
+      qWarning("QFileSystemWatcher::removePath() Path is empty");
       return;
    }
    removePaths(QStringList(path));
@@ -457,7 +457,7 @@ void QFileSystemWatcher::removePath(const QString &path)
 void QFileSystemWatcher::removePaths(const QStringList &paths)
 {
    if (paths.isEmpty()) {
-      qWarning("QFileSystemWatcher::removePaths: list is empty");
+      qWarning("QFileSystemWatcher::removePaths() List is empty");
       return;
    }
 

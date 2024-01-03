@@ -712,12 +712,12 @@ void QOpenGLDebugLoggerPrivate::controlDebugMessages(QOpenGLDebugMessage::Source
       const QVector<GLuint> &ids, const QByteArray &callerName, bool enable)
 {
     if (! initialized) {
-        qWarning("QOpenGLDebugLogger::%s(): object must be initialized before enabling/disabling messages", callerName.constData());
+        qWarning("QOpenGLDebugLogger::%s(): Object must be initialized before enabling/disabling messages", callerName.constData());
         return;
     }
 
     if (sources == QOpenGLDebugMessage::InvalidSource) {
-        qWarning("QOpenGLDebugLogger::%s(): invalid source specified", callerName.constData());
+        qWarning("QOpenGLDebugLogger::%s() Invalid source specified", callerName.constData());
         return;
     }
 
@@ -813,7 +813,7 @@ void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
         offscreenSurface->create();
 
         if (! context->makeCurrent(offscreenSurface.data())) {
-            qWarning("QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed(): "
+            qWarning("QOpenGLDebugLogger::_q_contextAboutToBeDestroyed(): "
                "Unable to make the owning GL context current for cleanup");
         }
     }

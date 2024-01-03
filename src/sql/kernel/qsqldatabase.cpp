@@ -235,7 +235,7 @@ QSqlDatabasePrivate *QSqlDatabasePrivate::shared_null()
 void QSqlDatabasePrivate::invalidateDb(const QSqlDatabase &db, const QString &name, bool doWarn)
 {
    if (db.d->ref.load() != 1 && doWarn) {
-      qWarning("QSqlDatabasePrivate::removeDatabase: Connection '%s' is still in use, all queries about to fail", csPrintable(name));
+      qWarning("QSqlDatabase::invalidateDb() Connection '%s' is still in use, all queries about to fail", csPrintable(name));
       db.d->disable();
       db.d->connName.clear();
    }
@@ -265,7 +265,7 @@ void QSqlDatabasePrivate::addDatabase(const QSqlDatabase &db, const QString &nam
    if (dict->contains(name)) {
       invalidateDb(dict->take(name), name);
 
-      qWarning("QSqlDatabasePrivate::addDatabase: Duplicate connection name '%s', old connection removed", csPrintable(name));
+      qWarning("QSqlDatabase::addDatabase() Duplicate connection name '%s', old connection removed", csPrintable(name));
    }
 
    dict->insert(name, db);
@@ -283,7 +283,7 @@ QSqlDatabase QSqlDatabasePrivate::database(const QString &name, bool open)
 
    if (db.isValid() && ! db.isOpen() && open) {
       if (! db.open()) {
-         qWarning() << "QSqlDatabasePrivate::database: unable to open database:" << db.lastError().text();
+         qWarning() << "QSqlDatabase::database() Unable to open database:" << db.lastError().text();
       }
 
    }
@@ -525,11 +525,11 @@ void QSqlDatabasePrivate::init(const QString &type)
    }
 
    if (! driver) {
-      qWarning("QSqlDatabase: %s driver not loaded", csPrintable(type));
-      qWarning("QSqlDatabase: available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
+      qWarning("QSqlDatabase::init() %s driver not loaded", csPrintable(type));
+      qWarning("QSqlDatabase::init() Available drivers: %s", QSqlDatabase::drivers().join(" ").toLatin1().data());
 
       if (QCoreApplication::instance() == nullptr) {
-         qWarning("QSqlDatabase: an instance of QCoreApplication is required to load an SQL driver plugin");
+         qWarning("QSqlDatabase::init() QCoreApplication must be started before loading an SQL driver plugin");
       }
 
       driver = shared_null()->driver;

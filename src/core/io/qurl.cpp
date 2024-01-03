@@ -1459,7 +1459,7 @@ void QUrl::clear()
 void QUrl::setUrl(const QString &url, ParsingMode parsingMode)
 {
    if (parsingMode == DecodedMode) {
-      qWarning("QUrl::DecodedMode is not permitted when parsing a full URL");
+      qWarning("QUrl::setUrl() Unable to parse a full URL in QUrl::DecodedMode");
 
    } else {
       detach();
@@ -1499,7 +1499,7 @@ void QUrl::setAuthority(const QString &authority, ParsingMode mode)
    d->clearError();
 
    if (mode == DecodedMode) {
-      qWarning("QUrl::setAuthority(): QUrl::DecodedMode is not permitted in this method");
+      qWarning("QUrl::setAuthority() Unable to set authority in QUrl::DecodedMode");
       return;
    }
 
@@ -1518,7 +1518,9 @@ QString QUrl::authority(FormattingOptions options) const
    }
 
    if (options == QUrl::FullyDecoded) {
-      qWarning("QUrl::authority(): QUrl::FullyDecoded is not permitted in this method");
+      qWarning("QUrl::authority() Unable to set authority in QUrl::DecodedMode");
+
+
       return QString();
    }
 
@@ -1536,7 +1538,7 @@ void QUrl::setUserInfo(const QString &userInfo, ParsingMode mode)
    QString trimmed = userInfo.trimmed();
 
    if (mode == DecodedMode) {
-      qWarning("QUrl::setUserInfo(): QUrl::DecodedMode is not permitted in this method");
+      qWarning("QUrl::setUserInfo() Unable to set user information in QUrl::DecodedMode");
       return;
    }
 
@@ -1561,7 +1563,7 @@ QString QUrl::userInfo(FormattingOptions options) const
    }
 
    if (options == QUrl::FullyDecoded) {
-      qWarning("QUrl::userInfo(): QUrl::FullyDecoded is not permitted in this method");
+      qWarning("QUrl::userInfo() Unable to set user information in QUrl::DecodedMode");
       return QString();
    }
 
@@ -1953,7 +1955,7 @@ QString QUrl::toString(FormattingOptions options) const
    }
 
    if (options == QUrl::FullyDecoded) {
-      qWarning("QUrl: QUrl::FullyDecoded is not permitted when reconstructing the full URL");
+      qWarning("QUrl::toString() Unable to generate string in QUrl::FullyDecoded mode");
       options = QUrl::PrettyDecoded;
    }
 

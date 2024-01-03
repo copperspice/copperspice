@@ -104,7 +104,7 @@ QStringList QCommandLineParserPrivate::aliases(const QString &optionName) const
    const NameHash_t::const_iterator it = nameHash.find(optionName);
 
    if (it == nameHash.end()) {
-      qWarning("QCommandLineParser: Option was not defined: \"%s\"", csPrintable(optionName));
+      qWarning("QCommandLineParser::aliases() Option was not defined, %s", csPrintable(optionName));
       return QStringList();
    }
 
@@ -256,7 +256,7 @@ void QCommandLineParser::process(const QCoreApplication &)
 void QCommandLineParserPrivate::checkParsed(const char *method)
 {
    if (needsParsing) {
-      qWarning("QCommandLineParser: Call process() or parse() before %s", method);
+      qWarning("QCommandLineParser::checkParsed() Call process() or parse() before %s", method);
    }
 }
 
@@ -320,7 +320,7 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
    optionValuesHash.clear();
 
    if (args.isEmpty()) {
-      qWarning("QCommandLineParser: argument list cannot be empty, it should contain at least the executable name");
+      qWarning("QCommandLineParser::parse() Argument list can not be empty");
       return false;
    }
 
@@ -453,7 +453,7 @@ QStringList QCommandLineParser::values(const QString &optionName) const
       return values;
    }
 
-   qWarning("QCommandLineParser: option not defined: \"%s\"", csPrintable(optionName));
+   qWarning("QCommandLineParser::values() Option not defined, %s", csPrintable(optionName));
    return QStringList();
 }
 

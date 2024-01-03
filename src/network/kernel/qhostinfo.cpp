@@ -57,7 +57,7 @@ int QHostInfo::lookupHost(const QString &name, QObject *receiver, const QString 
 #endif
 
    if (! QAbstractEventDispatcher::instance(QThread::currentThread())) {
-      qWarning("QHostInfo::lookupHost() called with no event dispatcher");
+      qWarning("QHostInfo::lookupHost() Called with no event dispatcher");
       return -1;
    }
 

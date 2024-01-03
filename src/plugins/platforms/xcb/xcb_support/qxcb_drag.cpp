@@ -1124,7 +1124,7 @@ void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
          //            current_embedding_widget = embedding_widget;
          //            manager->object = currentObject;
       } else {
-         qWarning("QXcbDrag::handleFinished - drop data has expired");
+         qWarning("QXcbDrag::handleFinished() Drop data has expired");
       }
    }
    waiting_for_status = false;

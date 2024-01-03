@@ -422,7 +422,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
                result[QString::fromUtf8(QSslCertificatePrivate::asn1ObjectName(ad->method))] = uri;
 
             } else {
-               qWarning() << "Strange location type" << name->type;
+               qWarning() << "x509ExtensionToValue() Location type unknown, " << name->type;
             }
          }
 
@@ -575,7 +575,7 @@ void QSslCertificatePrivate::init(const QByteArray &data, QSsl::EncodingFormat f
 QByteArray QSslCertificatePrivate::QByteArray_from_X509(X509 *x509, QSsl::EncodingFormat format)
 {
    if (!x509) {
-      qWarning("QSslSocketBackendPrivate::X509_to_QByteArray: null X509");
+      qWarning("QSslSocketBackend::X509_to_QByteArray() Device is invalid (nullptr)");
       return QByteArray();
    }
 
@@ -614,7 +614,7 @@ QByteArray QSslCertificatePrivate::QByteArray_from_X509(X509 *x509, QSsl::Encodi
 QString QSslCertificatePrivate::text_from_X509(X509 *x509)
 {
    if (!x509) {
-      qWarning("QSslSocketBackendPrivate::text_from_X509: null X509");
+      qWarning("QSslSocketBackend::text_from_X509() Device is invalid (nullptr)");
       return QString();
    }
 

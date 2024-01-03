@@ -58,7 +58,7 @@ int QPauseAnimation::duration() const
 void QPauseAnimation::setDuration(int msecs)
 {
    if (msecs < 0) {
-      qWarning("QPauseAnimation::setDuration: cannot set a negative duration");
+      qWarning("QPauseAnimation::setDuration() Unable to set a negative duration");
       return;
    }
    Q_D(QPauseAnimation);

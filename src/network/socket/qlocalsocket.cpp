@@ -61,7 +61,7 @@ void QLocalSocket::setServerName(const QString &name)
 {
    Q_D(QLocalSocket);
    if (d->state != UnconnectedState) {
-      qWarning("QLocalSocket::setServerName() called while not in unconnected state");
+      qWarning("QLocalSocket::setServerName() Must be called while in unconnected state");
       return;
    }
    d->serverName = name;

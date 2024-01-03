@@ -648,7 +648,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
       QString urlQueryString = url.toString();
       if (urlQueryString.size() > 2083) {
-         qWarning("Proxy query URL too long for windows API, try with truncated URL");
+         qWarning("QNetworkProxyFactory::systemProxyForQuery() Proxy query url too long, try with truncated url");
          urlQueryString = url.toString().left(2083);
       }
 

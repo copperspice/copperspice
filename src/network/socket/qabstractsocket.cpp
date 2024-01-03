@@ -632,7 +632,7 @@ void QAbstractSocketPrivate::_q_startConnecting(const QHostInfo &hostInfo)
    }
 
    if (hostLookupId != -1 && hostLookupId != hostInfo.lookupId()) {
-      qWarning("QAbstractSocketPrivate::_q_startConnecting() received hostInfo for wrong lookup ID %d expected %d",
+      qWarning("QAbstractSocket::_q_startConnecting() Received hostInfo for lookup ID %d, expected %d",
                hostInfo.lookupId(), hostLookupId);
    }
    if (preferredNetworkLayerProtocol == QAbstractSocket::UnknownNetworkLayerProtocol || preferredNetworkLayerProtocol == QAbstractSocket::AnyIPProtocol) {
@@ -1179,8 +1179,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
    if (d->state == ConnectedState || d->state == ConnectingState
          || d->state == ClosingState || d->state == HostLookupState) {
 
-      qWarning("QAbstractSocket::connectToHost() called when already looking up or connecting/connected to \"%s\"",
-               csPrintable(hostName));
+      qWarning("QAbstractSocket::connectToHost() Called when looking up or connecting to \"%s\"", csPrintable(hostName));
 
       d->setErrorAndEmit(OperationError, tr("Trying to connect while connection is in progress"));
       return;
@@ -1611,7 +1610,7 @@ bool QAbstractSocket::waitForReadyRead(int msecs)
    if (state() == UnconnectedState) {
       /* If all you have is a QIODevice pointer to an abstractsocket, you cannot check
          this, so you cannot avoid this warning. */
-      //        qWarning("QAbstractSocket::waitForReadyRead() is not allowed in UnconnectedState");
+      //        qWarning("QAbstractSocket::waitForReadyRead() Not allowed in UnconnectedState");
       return false;
    }
 
@@ -1676,7 +1675,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
 
    // require calling connectToHost() before waitForBytesWritten()
    if (state() == UnconnectedState) {
-      qWarning("QAbstractSocket::waitForBytesWritten() is not allowed in UnconnectedState");
+      qWarning("QAbstractSocket::waitForBytesWritten() Not allowed in UnconnectedState");
       return false;
    }
 
@@ -1748,7 +1747,7 @@ bool QAbstractSocket::waitForDisconnected(int msecs)
 
    // require calling connectToHost() before waitForDisconnected()
    if (state() == UnconnectedState) {
-      qWarning("QAbstractSocket::waitForDisconnected() is not allowed in UnconnectedState");
+      qWarning("QAbstractSocket::waitForDisconnected() Not allowed in UnconnectedState");
       return false;
    }
 

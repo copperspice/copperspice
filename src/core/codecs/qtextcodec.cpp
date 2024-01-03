@@ -330,7 +330,7 @@ static QTextCodec *ru_RU_hack(const char *i)
    } else {
       // something else again
       ru_RU_codec = QTextCodec::codecForName("KOI8-R");
-      qWarning("QTextCodec: Using KOI8-R, probe failed (%02x %02x %s)", koi8r, latin5, i);
+      qWarning("QTextCodec() Using KOI8-R, probe failed (%02x %02x %s)", koi8r, latin5, i);
    }
 
 #if ! defined(QT_NO_SETLOCALE)
@@ -506,7 +506,7 @@ static void setup()
 
 #ifdef Q_DEBUG_TEXTCODEC
    if (destroying_is_ok) {
-      qWarning("QTextCodec: Creating new codec during codec cleanup");
+      qWarning("QTextCodec() Creating new codec during codec cleanup");
    }
 #endif
    all = new QList<QTextCodec *>;

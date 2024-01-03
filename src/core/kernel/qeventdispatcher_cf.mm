@@ -89,14 +89,15 @@ static CFStringRef runLoopMode(NSDictionary *dictionary)
         if (CFStringRef mode = runLoopMode(notification.userInfo))
             m_runLoopModes.push(mode);
         else
-            qWarning("Encountered run loop push notification without run loop mode");
+            qWarning("QEventDispatcher::receivedNotification() Encountered run loop push notification without run loop mode");
 
      } else if (CFStringHasSuffix((CFStringRef)notification.name, CFSTR("RunLoopModePopNotification"))) {
         CFStringRef mode = runLoopMode(notification.userInfo);
         if (CFStringCompare(mode, [self currentMode], 0) == kCFCompareEqualTo)
             m_runLoopModes.pop();
         else
-            qWarning("Tried to pop run loop mode '%s' which was never pushed.", csPrintable(QCFString::toQString(mode)));
+            qWarning("QEventDispatcher::receivedNotification() Tried to pop run loop mode which was never pushed, %s",
+               csPrintable(QCFString::toQString(mode)));
 
         Q_ASSERT(m_runLoopModes.size() >= 1);
      }
@@ -217,7 +218,7 @@ bool QEventDispatcherCoreFoundation::processEvents(QEventLoop::ProcessEventsFlag
     bool eventsProcessed = false;
 
     if (flags & (QEventLoop::ExcludeUserInputEvents | QEventLoop::ExcludeSocketNotifiers))
-        qWarning() << "processEvents() flags" << flags << "not supported on iOS";
+        qWarning() << "QEventDispatcherCoreFoundation::processEvents() Flags not supported on iOS " << flags;
 
     qEventDispatcherDebug() << "Entering with " << flags; qIndent();
 

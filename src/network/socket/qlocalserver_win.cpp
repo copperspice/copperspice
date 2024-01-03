@@ -249,7 +249,7 @@ bool QLocalServerPrivate::listen(const QString &name)
 }
 
 bool QLocalServerPrivate::listen(qintptr) {
-   qWarning("QLocalServer::listen(qintptr) is not supported on Windows");
+   qWarning("QLocalServer::listen() Not supported on Windows");
    return false;
 }
 

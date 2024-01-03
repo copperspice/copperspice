@@ -114,7 +114,7 @@ QLineF QLineF::unitVector() const
    QLineF f(p1(), QPointF(pt1.x() + x / len, pt1.y() + y / len));
 
    if (qAbs(f.length() - 1) >= 0.001) {
-      qWarning("QLine::unitVector() New line does not have unit length");
+      qWarning("QLine::unitVector() New line does not have a unit length");
    }
 
    return f;

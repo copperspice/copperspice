@@ -132,7 +132,7 @@ QWaitCondition::QWaitCondition()
 QWaitCondition::~QWaitCondition()
 {
    if (!d->queue.isEmpty()) {
-      qWarning("QWaitCondition: Destroyed while threads are still waiting");
+      qWarning("QWaitCondition() Destroyed while threads are still waiting");
       qDeleteAll(d->queue);
    }
 
@@ -162,8 +162,9 @@ bool QWaitCondition::wait(QReadWriteLock *readWriteLock, unsigned long time)
    if (!readWriteLock || readWriteLock->d->accessCount == 0) {
       return false;
    }
+
    if (readWriteLock->d->accessCount < -1) {
-      qWarning("QWaitCondition: cannot wait on QReadWriteLocks with recursive lockForWrite()");
+      qWarning("QWaitCondition::wait() Unable to wait on QReadWriteLocks with recursive lockForWrite()");
       return false;
    }
 

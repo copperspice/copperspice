@@ -150,7 +150,7 @@ bool QCoreApplicationPrivate::checkInstance(const char *function)
    bool b = (QCoreApplication::m_self != nullptr);
 
    if (! b) {
-      qWarning("QCoreApplication::%s: QApplication must be started before calling this method", function);
+      qWarning("QCoreApplication::%s() QApplication must be started before calling this method", function);
    }
 
    return b;
@@ -385,7 +385,7 @@ QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint 
 
    // this call to QThread::currentThread() may end up setting theMainThread
    if (QThread::currentThread() != theMainThread) {
-      qWarning("QCoreApplication must be created in the main() thread");
+      qWarning("QCoreApplication() QApplication must be created in the main() thread");
    }
 }
 
@@ -711,7 +711,7 @@ bool QCoreApplication::notify(QObject *receiver, QEvent *event)
    }
 
    if (receiver == nullptr) {                        // serious error
-      qWarning("QCoreApplication::notify(): Receiver must not be null");
+      qWarning("QCoreApplication::notify() Receiver invalid (nullptr)");
       return true;
    }
 
@@ -750,7 +750,7 @@ bool QCoreApplicationPrivate::sendThroughApplicationEventFilters(QObject *receiv
          QThreadData *threadData_Obj = CSInternalThreadData::get_m_ThreadData(obj);
 
          if (threadData_Obj != threadData) {
-            qWarning("QCoreApplication: Application event filter must be in the same thread");
+            qWarning("QCoreApplication::sendThroughApplicationEventFilters() Application event filter must be in the same thread");
             continue;
          }
 
@@ -782,7 +782,7 @@ bool QCoreApplicationPrivate::sendThroughObjectEventFilters(QObject *receiver, Q
          QThreadData *threadData_Obj = CSInternalThreadData::get_m_ThreadData(obj);
 
          if (threadData_Obj != threadData_Receiver) {
-            qWarning("QCoreApplication: Object event filter must be in the same thread");
+            qWarning("QCoreApplication::sendThroughObjectEventFilters() Object event filter must be in the same thread");
             continue;
          }
 
@@ -871,13 +871,13 @@ int QCoreApplication::exec()
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(m_self);
 
    if (threadData != QThreadData::current()) {
-      qWarning("%s::exec: This method must be called from the main() thread",
+      qWarning("%s::exec() Method must be called from the main() thread",
          csPrintable(m_self->metaObject()->className()));
       return -1;
    }
 
    if (! threadData->eventLoops.isEmpty()) {
-      qWarning("QCoreApplication::exec: Event loop is already running");
+      qWarning("QCoreApplication::exec() Event loop is already running");
       return -1;
    }
 
@@ -922,7 +922,7 @@ void QCoreApplication::exit(int returnCode)
 void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
 {
    if (receiver == nullptr) {
-      qWarning("QCoreApplication::postEvent: Receiver must not be null");
+      qWarning("QCoreApplication::postEvent() Receiver invalid (nullptr)");
       delete event;
       return;
    }
@@ -1053,7 +1053,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(receiver);
 
    if (receiver && threadData != data) {
-      qWarning("QCoreApplication::sendPostedEvents(): Unable to send posted events to objects in another thread");
+      qWarning("QCoreApplication::sendPostedEvents() Unable to send posted events to objects in another thread");
       return;
    }
 
@@ -1273,7 +1273,7 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
    if (data->postEventList.size() == 0) {
 
 #if defined(QT_DEBUG)
-      qDebug("QCoreApplication::removePostedEvent: Internal error: %p %d is posted", (void *)event, event->type());
+      qDebug("QCoreApplication::removePostedEvent() Internal error, %p %d is posted", (void *)event, event->type());
       return;
 #endif
 
@@ -1285,9 +1285,8 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
       if (pe.event == event) {
 
 #ifndef QT_NO_DEBUG
-         qWarning("QCoreApplication::removePostedEvent(): Event of type %d deleted while posted to %s %s",
-            event->type(), csPrintable(pe.receiver->metaObject()->className()),
-            csPrintable(pe.receiver->objectName()) );
+         qWarning("QCoreApplication::removePostedEvent() Event of type %d deleted while posted to %s %s",
+               event->type(), csPrintable(pe.receiver->metaObject()->className()), csPrintable(pe.receiver->objectName()));
 #endif
 
          CSInternalEvents::decr_PostedEvents(pe.receiver);
@@ -1449,7 +1448,7 @@ bool QCoreApplicationPrivate::isTranslatorInstalled(QTranslator *translator)
 QString QCoreApplication::applicationDirPath()
 {
    if (! m_self) {
-      qWarning("QCoreApplication::applicationDirPath(): QApplication must be started before calling this method");
+      qWarning("QCoreApplication::applicationDirPath() QApplication must be started before calling this method");
       return QString();
    }
 
@@ -1465,7 +1464,7 @@ QString QCoreApplication::applicationDirPath()
 QString QCoreApplication::applicationFilePath()
 {
    if (! m_self) {
-      qWarning("QCoreApplication::applicationFilePath(): QApplication must be started before calling this method");
+      qWarning("QCoreApplication::applicationFilePath() QApplication must be started before calling this method");
       return QString();
    }
 
@@ -1555,7 +1554,7 @@ QStringList QCoreApplication::arguments()
    QStringList list;
 
    if (! m_self) {
-      qWarning("QCoreApplication::arguments(): QApplication must be started before calling this method");
+      qWarning("QCoreApplication::arguments() QApplication must be started before calling this method");
       return list;
    }
 
@@ -1760,7 +1759,8 @@ void QCoreApplication::removeLibraryPath(const QString &path)
 void QCoreApplication::installNativeEventFilter(QAbstractNativeEventFilter *filterObj)
 {
    if (QCoreApplication::testAttribute(Qt::AA_MacPluginApplication)) {
-     qWarning("Native event filters are not applied when the Qt::AA_MacPluginApplication attribute is set");
+     qWarning("QCoreApplication::installNativeEventFilter() Native event filters are not applied when "
+         "Qt::AA_MacPluginApplication is set");
      return;
    }
 

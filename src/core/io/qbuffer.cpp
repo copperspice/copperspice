@@ -214,7 +214,7 @@ void QBuffer::setBuffer(QByteArray *byteArray)
 {
    Q_D(QBuffer);
    if (isOpen()) {
-      qWarning("QBuffer::setBuffer: Buffer is open");
+      qWarning("QBuffer::setBuffer() Buffer is open");
       return;
    }
    if (byteArray) {
@@ -278,7 +278,7 @@ void QBuffer::setData(const QByteArray &data)
 {
    Q_D(QBuffer);
    if (isOpen()) {
-      qWarning("QBuffer::setData: Buffer is open");
+      qWarning("QBuffer::setData() Buffer is open");
       return;
    }
    *d->buf = data;
@@ -305,7 +305,7 @@ bool QBuffer::open(OpenMode flags)
       flags |= WriteOnly;
    }
    if ((flags & (ReadOnly | WriteOnly)) == 0) {
-      qWarning("QBuffer::open: Buffer access not specified");
+      qWarning("QBuffer::open() Buffer access not specified");
       return false;
    }
 
@@ -352,14 +352,14 @@ bool QBuffer::seek(qint64 pos)
       if (seek(d->buf->size())) {
          const qint64 gapSize = pos - d->buf->size();
          if (write(QByteArray(gapSize, 0)) != gapSize) {
-            qWarning("QBuffer::seek: Unable to fill gap");
+            qWarning("QBuffer::seek() Unable to fill gap");
             return false;
          }
       } else {
          return false;
       }
    } else if (pos > d->buf->size() || pos < 0) {
-      qWarning("QBuffer::seek: Invalid pos: %d", int(pos));
+      qWarning("QBuffer::seek() Invalid position, %d", int(pos));
       return false;
    }
    d->ioIndex = int(pos);
@@ -412,7 +412,7 @@ qint64 QBuffer::writeData(const char *data, qint64 len)
       int newSize = d->buf->size() + extraBytes;
       d->buf->resize(newSize);
       if (d->buf->size() != newSize) { // could not resize
-         qWarning("QBuffer::writeData: Memory allocation error");
+         qWarning("QBuffer::writeData() Memory allocation error");
          return -1;
       }
    }

@@ -199,7 +199,7 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerTypeFamily() cons
          return QNetworkConfiguration::Bearer4G;
 
       default:
-         qWarning() << "unknown bearer type" << type;
+         qWarning() << "QNetworkConfiguration::bearerTypeFamily() Unknown bearer type " << type;
          return QNetworkConfiguration::BearerUnknown;
    }
 }

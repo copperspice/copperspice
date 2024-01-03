@@ -890,7 +890,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
       }
 
       default:
-         qWarning("QDateTimeParser::parseSection Internal error (%s %d)", csPrintable(sn.name()), sectionIndex);
+         qWarning("QDateTimeParser::parseSection() Internal error (%s %d)", csPrintable(sn.name()), sectionIndex);
          return -1;
    }
 

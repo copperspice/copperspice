@@ -71,9 +71,7 @@ void QThreadPoolThread::run()
                r->run();
 
             } catch (...) {
-               qWarning("Qt Concurrent has caught an exception thrown from a worker thread.\n"
-                        "This is not supported, exceptions thrown in worker threads must be\n"
-                        "caught before control returns to Qt Concurrent.");
+               qWarning("QThreadPoolThread::run() An exception was thrown from a worker thread");
                registerThreadInactive();
                throw;
             }

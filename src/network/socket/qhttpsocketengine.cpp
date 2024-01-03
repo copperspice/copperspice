@@ -131,7 +131,7 @@ bool QHttpSocketEngine::connectInternal()
 
    // If the handshake is done, enter ConnectedState state and return true.
    if (d->state == Connected) {
-      qWarning("QHttpSocketEngine::connectToHost: called when already connected");
+      qWarning("QHttpSocketEngine::connectToHost() Called when already connected");
       setState(QAbstractSocket::ConnectedState);
       return true;
    }

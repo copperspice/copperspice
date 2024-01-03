@@ -169,7 +169,7 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
    static bool already_called = false;
 
    if (already_called) {
-      qWarning("Internal error: qWinMain should be called only once");
+      qWarning("QCoreApplication() Internal error, qWinMain() should be called only once");
       return;
    }
 

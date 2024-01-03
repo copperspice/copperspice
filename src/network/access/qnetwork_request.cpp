@@ -529,7 +529,7 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
 
    if (name.isEmpty()) {
       // headerName verifies that a header is a known value
-      qWarning("QNetworkRequest::setHeader  Invalid header value KnownHeader(%d) received", header);
+      qWarning("QNetworkRequest::setCookedHeader() Invalid header id received %d", header);
       return;
    }
 
@@ -542,7 +542,7 @@ void QNetworkHeadersPrivate::setCookedHeader(QNetworkRequest::KnownHeaders heade
       QByteArray rawValue = headerValue(header, value);
 
       if (rawValue.isEmpty()) {
-         qWarning("QNetworkRequest::setHeader: QVariant of type %s can not be used with header %s",
+         qWarning("QNetworkRequest::setCookedHeader() QVariant type %s can not be used with header %s",
                   csPrintable(value.typeName()), name.constData());
          return;
       }

@@ -52,7 +52,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
          // For supoprting IPv6 nameserver addresses, we will need to switch from DnsQuey() to DnsQueryEx()
          // as it supports passing an IPv6 address in the nameserver list
 
-         qWarning("%s", QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
+         qWarning("QDnsLookupRunnable::query() %s", QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
          reply->error = QDnsLookup::ResolverError;
          reply->errorString = tr(QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
 

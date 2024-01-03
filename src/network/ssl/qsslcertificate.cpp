@@ -176,7 +176,7 @@ QList<QSslCertificate> QSslCertificate::fromPath(const QString &path, QSsl::Enco
 QList<QSslCertificate> QSslCertificate::fromDevice(QIODevice *device, QSsl::EncodingFormat format)
 {
    if (!device) {
-      qWarning("QSslCertificate::fromDevice: can not read from a null device");
+      qWarning("QSslCertificate::fromDevice() Unable to read device (nullptr)");
       return QList<QSslCertificate>();
    }
 

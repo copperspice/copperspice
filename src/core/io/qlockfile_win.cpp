@@ -81,7 +81,7 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
                   ? QLockFile::LockFailedError : QLockFile::PermissionError;
 
          default:
-            qWarning() << "Got unexpected locking error" << lastError;
+            qWarning("QLockFilePrivate::tryLock_sys() Unexpected lock error %ld", lastError);
             return QLockFile::UnknownError;
       }
    }
@@ -206,9 +206,7 @@ void QLockFile::unlock()
    }
 
    if (attempts == maxAttempts) {
-      qWarning() << "Could not remove our own lock file" << d->fileName <<
-         ". Either other users of the lock file are reading it constantly for 500 ms, or we (no longer) have permissions to delete the file";
-      // This is bad because other users of this lock file will now have to wait for the stale-lock-timeout...
+      qWarning("QLockFile::unlock() Unable to remove file %s", csPrintable(d->fileName));
    }
 
    d->lockError = QLockFile::NoError;

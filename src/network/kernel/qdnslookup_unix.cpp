@@ -167,7 +167,7 @@ void QDnsLookupRunnable::query(const int requestType, const QByteArray &requestN
             ns->sin6_addr.s6_addr[i] = ipv6Address[i];
          }
 #else
-         qWarning("%s", QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
+         qWarning("QDnsLookupRunnable::query() %s", QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
          reply->error = QDnsLookup::ResolverError;
          reply->errorString = tr(QDnsLookupPrivate::msgNoIpV6NameServerAdresses);
          return;

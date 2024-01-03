@@ -1371,8 +1371,9 @@ void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractSta
             pendingErrorStates.remove(s);
 
    } else {
-      qWarning("Unrecoverable error detected in running state machine: %s",
+      qWarning("QStateMachine::setError() Unrecoverable error detected while running state machine, %s",
          csPrintable(errorString));
+
       q->stop();
    }
 }
@@ -1868,7 +1869,7 @@ void QStateMachinePrivate::_q_startDelayedEventTimer(int id, int delay)
       e.timerId = q->startTimer(delay);
 
       if (! e.timerId) {
-         qWarning("QStateMachine::postDelayedEvent: failed to start timer (id=%d, delay=%d)", id, delay);
+         qWarning("QStateMachine::_q_startDelayedEventTimer() Failed to start timer (id=%d, delay=%d)", id, delay);
          delete e.event;
          delayedEvents.erase(it);
          delayedEventIdFreeList.release(id);
@@ -2083,7 +2084,7 @@ using namespace cs_internal_stateMachine;
 void QStateMachinePrivate::goToState(QAbstractState *targetState)
 {
    if (! targetState) {
-      qWarning("QStateMachine::goToState(): unable to transition to a null state");
+      qWarning("QStateMachine::goToState() Unable to transition to an invalid state (nullptr)");
       return;
    }
 
@@ -2284,7 +2285,7 @@ void QStateMachinePrivate::registerEventTransition(QEventTransition *transition)
       return;
    }
    if (transition->eventType() >= QEvent::User) {
-      qWarning("QObject event transitions are not supported for custom types");
+      qWarning("QStateMachine::registerEventTransition() Event transitions are not supported for custom types");
       return;
    }
 
@@ -2421,11 +2422,11 @@ void QStateMachine::setGlobalRestorePolicy(QState::RestorePolicy restorePolicy)
 void QStateMachine::addState(QAbstractState *state)
 {
    if (!state) {
-      qWarning("QStateMachine::addState: cannot add null state");
+      qWarning("QStateMachine::addState() Unable to add invalid state (nullptr)");
       return;
    }
    if (QAbstractStatePrivate::get(state)->machine() == this) {
-      qWarning("QStateMachine::addState: state has already been added to this machine");
+      qWarning("QStateMachine::addState() State has already been added to this state machine");
       return;
    }
    state->setParent(this);
@@ -2434,13 +2435,11 @@ void QStateMachine::addState(QAbstractState *state)
 void QStateMachine::removeState(QAbstractState *state)
 {
    if (!state) {
-      qWarning("QStateMachine::removeState: cannot remove null state");
+      qWarning("QStateMachine::removeState() Unable to remove invalid state (nullptr)");
       return;
    }
    if (QAbstractStatePrivate::get(state)->machine() != this) {
-      qWarning("QStateMachine::removeState: state %p's machine (%p)"
-         " is different from this machine (%p)",
-         state, QAbstractStatePrivate::get(state)->machine(), this);
+      qWarning("QStateMachine::removeState() Unable to remove state from a different state machine");
       return;
    }
 
@@ -2458,7 +2457,7 @@ void QStateMachine::start()
    Q_D(QStateMachine);
 
    if ((childMode() == QState::ExclusiveStates) && (initialState() == nullptr)) {
-      qWarning("QStateMachine::start: No initial state set for machine. Refusing to start.");
+      qWarning("QStateMachine::start() No initial state set for state machine");
       return;
    }
 
@@ -2472,7 +2471,7 @@ void QStateMachine::start()
          break;
 
       case QStateMachinePrivate::Running:
-         qWarning("QStateMachine::start(): already running");
+         qWarning("QStateMachine::start() State machine is already running");
          break;
    }
 }
@@ -2512,12 +2511,12 @@ void QStateMachine::postEvent(QEvent *event, EventPriority priority)
     case QStateMachinePrivate::Starting:
         break;
     default:
-      qWarning("QStateMachine::postEvent: cannot post event when the state machine is not running");
+      qWarning("QStateMachine::postEvent() Unable to post event when the state machine is not running");
       return;
    }
 
    if (! event) {
-      qWarning("QStateMachine::postEvent: Can not post null event");
+      qWarning("QStateMachine::postEvent() Unable to post invalid event (nullptr)");
       return;
    }
 
@@ -2540,15 +2539,15 @@ int QStateMachine::postDelayedEvent(QEvent *event, int delay)
 {
    Q_D(QStateMachine);
    if (d->state != QStateMachinePrivate::Running) {
-      qWarning("QStateMachine::postDelayedEvent: cannot post event when the state machine is not running");
+      qWarning("QStateMachine::postDelayedEvent() Unable to post event when the state machine is not running");
       return -1;
    }
    if (!event) {
-      qWarning("QStateMachine::postDelayedEvent: cannot post null event");
+      qWarning("QStateMachine::postDelayedEvent() Unable to post invalid event (nullptr)");
       return -1;
    }
    if (delay < 0) {
-      qWarning("QStateMachine::postDelayedEvent: delay cannot be negative");
+      qWarning("QStateMachine::postDelayedEvent() Delay can not be negative");
       return -1;
    }
 
@@ -2562,7 +2561,7 @@ int QStateMachine::postDelayedEvent(QEvent *event, int delay)
     bool inMachineThread = (QThread::currentThread() == thread());
     int timerId = inMachineThread ? startTimer(delay) : 0;
     if (inMachineThread && !timerId) {
-        qWarning("QStateMachine::postDelayedEvent: failed to start timer with interval %d", delay);
+        qWarning("QStateMachine::postDelayedEvent() Failed to start timer with interval %d", delay);
         d->delayedEventIdFreeList.release(id);
         return -1;
     }
@@ -2583,7 +2582,7 @@ bool QStateMachine::cancelDelayedEvent(int id)
 {
    Q_D(QStateMachine);
    if (d->state != QStateMachinePrivate::Running) {
-      qWarning("QStateMachine::cancelDelayedEvent: the machine is not running");
+      qWarning("QStateMachine::cancelDelayedEvent() State machine is not running");
       return false;
    }
 

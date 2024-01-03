@@ -41,7 +41,7 @@
 
 #define QAPP_CHECK(functionName) \
     if (!qApp) { \
-        qWarning("QShortcut: Initialize QApplication before calling '" functionName "'."); \
+        qWarning("QShortcut()::" functionName " QApplication must be started before calling this method"); \
         return; \
     }
 
@@ -56,7 +56,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 #endif
 bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context)
 {
-   Q_ASSERT_X(object, "QShortcutMap", "Shortcut has no owner. Illegal map state!");
+   Q_ASSERT_X(object, "QShortcutMap", "Shortcut has no owner, invalid map state");
 
    QWidget *active_window = QApplication::activeWindow();
 

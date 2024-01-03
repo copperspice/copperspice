@@ -60,9 +60,6 @@ bool QSslCertificate::isSelfSigned() const
       return false;
    }
 
-   qWarning("QSslCertificate::isSelfSigned: This function does not check, whether the certificate "
-            "is actually signed. It just checks whether issuer and subject are identical");
-
    return d->subjectMatchesIssuer;
 }
 

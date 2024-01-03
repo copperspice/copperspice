@@ -35,7 +35,7 @@
 static void report_error(int code, const char *where, const char *what)
 {
    if (code != 0) {
-      qWarning("%s: %s failure: %s", where, what, csPrintable(qt_error_string(code)));
+      qWarning("%s() %s failure, %s", where, what, csPrintable(qt_error_string(code)));
    }
 }
 
@@ -144,7 +144,7 @@ bool QWaitCondition::wait(QReadWriteLock *readWriteLock, unsigned long time)
       return false;
    }
    if (readWriteLock->d->accessCount < -1) {
-      qWarning("QWaitCondition: cannot wait on QReadWriteLocks with recursive lockForWrite()");
+      qWarning("QWaitCondition::wait() Unable to wait on QReadWriteLocks with recursive lockForWrite()");
       return false;
    }
 

@@ -195,7 +195,7 @@ DWORD WINAPI qt_adopted_thread_watcher_function(LPVOID)
       }
 
       if (ret == WAIT_FAILED || ret >= WAIT_OBJECT_0 + uint(count)) {
-         qWarning("QThread internal error while waiting for adopted threads: %d", int(GetLastError()));
+         qWarning("QThread() Internal error while waiting for adopted threads, %d", int(GetLastError()));
          continue;
       }
 
@@ -505,7 +505,7 @@ bool QThread::wait(unsigned long time)
    QMutexLocker locker(&d->mutex);
 
    if (d->id == GetCurrentThreadId()) {
-      qWarning("QThread::wait: Thread tried to wait on itself");
+      qWarning("QThread::wait() Thread tried to wait on itself");
       return false;
    }
 
@@ -603,12 +603,11 @@ void QThreadPrivate::setPriority(QThread::Priority threadPriority)
 
       case QThread::InheritPriority:
       default:
-         qWarning("QThread::setPriority: Argument cannot be InheritPriority");
+         qWarning("QThread::setPriority() Thread priority can not be QThread::InheritPriority");
          return;
    }
 
    if (!SetThreadPriority(handle, prio)) {
-      qErrnoWarning("QThread::setPriority: Failed to set thread priority");
+      qErrnoWarning("QThread::setPriority() Failed to set thread priority");
    }
 }
-

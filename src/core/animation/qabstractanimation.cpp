@@ -287,7 +287,7 @@ void QUnifiedTimer::installAnimationDriver(QAnimationDriver *d)
    if (driver) {
 
       if (driver->isRunning()) {
-         qWarning("QUnifiedTimer: Cannot change animation driver while animations are running");
+         qWarning("QUnifiedTimer::installAnimationDriver() Unable to change animation driver while animations are running");
          return;
       }
 
@@ -684,7 +684,7 @@ void QAbstractAnimation::pause()
 {
    Q_D(QAbstractAnimation);
    if (d->state == Stopped) {
-      qWarning("QAbstractAnimation::pause: Cannot pause a stopped animation");
+      qWarning("QAbstractAnimation::pause() Unable to pause a stopped animation");
       return;
    }
 
@@ -702,8 +702,7 @@ void QAbstractAnimation::resume()
 {
    Q_D(QAbstractAnimation);
    if (d->state != Paused) {
-      qWarning("QAbstractAnimation::resume: "
-               "Cannot resume an animation that is not paused");
+      qWarning("QAbstractAnimation::resume()  Unable to resume an animation that is not paused");
       return;
    }
 

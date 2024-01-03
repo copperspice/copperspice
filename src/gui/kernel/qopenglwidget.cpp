@@ -291,7 +291,7 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setScreen(shareContext->screen());
 
    if (! ctx->create()) {
-      qWarning("QOpenGLWidgetPrivate::initialize() Failed to create context");
+      qWarning("QOpenGLWidget::initialize() Failed to create context");
       return;
    }
 
@@ -319,7 +319,7 @@ void QOpenGLWidgetPrivate::initialize()
    surface->create();
 
    if (!ctx->makeCurrent(surface)) {
-      qWarning("QOpenGLWidgetPrivate::initialize() Failed to make context current");
+      qWarning("QOpenGLWidget::initialize() Failed to make context current");
       return;
    }
 

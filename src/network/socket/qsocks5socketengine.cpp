@@ -389,7 +389,7 @@ QSocks5BindData *QSocks5BindStore::retrieve(qintptr socketDescriptor)
    QSocks5BindData *bindData = store.take(socketDescriptor);
    if (bindData) {
       if (bindData->controlSocket->thread() != QThread::currentThread()) {
-         qWarning("Can not access socks5 bind data from different thread");
+         qWarning("QSocks5BindStore::retrieve() Unable to access socks5 bind data from another thread");
          return nullptr;
       }
    } else {
@@ -1265,9 +1265,8 @@ void QSocks5SocketEnginePrivate::_q_controlSocketReadNotification()
          [[fallthrough]];
 
       default:
-         qWarning("QSocks5SocketEnginePrivate::_q_controlSocketReadNotification: "
-                  "Unexpectedly received data while in state=%d and mode=%d",
-                  socks5State, mode);
+         qWarning("QSocks5SocketEngine::_q_controlSocketReadNotification() "
+               "Unexpectedly received data while in state %d and mode %d", socks5State, mode);
          break;
    };
 }

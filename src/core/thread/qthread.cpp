@@ -114,7 +114,7 @@ QAdoptedThread::~QAdoptedThread()
 void QAdoptedThread::run()
 {
    // this function should never be called
-   qFatal("QAdoptedThread::run(): Internal error, this implementation should never be called.");
+   qFatal("QAdoptedThread::run(): Internal error, this implementation should never be called");
 }
 
 QThreadPrivate::QThreadPrivate(QThreadData *d)
@@ -183,7 +183,7 @@ QThread::~QThread()
       }
 
       if (d->running && !d->finished && !d->data->isAdopted) {
-         qWarning("QThread: Destroyed while thread is still running");
+         qWarning("QThread() Destroyed while thread is still running");
       }
 
       d->data->thread = nullptr;
@@ -216,8 +216,9 @@ void QThread::setStackSize(uint stackSize)
 {
    Q_D(QThread);
    QMutexLocker locker(&d->mutex);
-   Q_ASSERT_X(!d->running, "QThread::setStackSize",
-              "cannot change stack size while the thread is running");
+
+   Q_ASSERT_X(!d->running, "QThread::setStackSize", "Unable to change stack size while the thread is running");
+
    d->stackSize = stackSize;
 }
 
@@ -294,7 +295,7 @@ void QThread::setPriority(Priority priority)
     QMutexLocker locker(&d->mutex);
 
     if (!d->running) {
-        qWarning("QThread::setPriority: Cannot set priority, thread is not running");
+        qWarning("QThread::setPriority() Unable to set priority while thread is not running");
         return;
     }
     d->setPriority(priority);
@@ -324,13 +325,13 @@ void QThread::setEventDispatcher(QAbstractEventDispatcher *eventDispatcher)
 {
     Q_D(QThread);
     if (d->data->hasEventDispatcher()) {
-        qWarning("QThread::setEventDispatcher: An event dispatcher has already been created for this thread");
+        qWarning("QThread::setEventDispatcher() Event dispatcher has already been created for this thread");
     } else {
         eventDispatcher->moveToThread(this);
         if (eventDispatcher->thread() == this) // was the move successful?
             d->data->eventDispatcher = eventDispatcher;
         else
-            qWarning("QThread::setEventDispatcher: Could not move event dispatcher to target thread");
+            qWarning("QThread::setEventDispatcher() Unable to move event dispatcher to target thread");
     }
 }
 
@@ -353,7 +354,7 @@ void QThread::requestInterruption()
     if (!d->running || d->finished || d->isInFinish)
         return;
     if (this == QCoreApplicationPrivate::theMainThread) {
-        qWarning("QThread::requestInterruption has no effect on the main thread");
+        qWarning("QThread::requestInterruption() Unable to interrupt main thread");
         return;
     }
     d->interruptionRequested = true;

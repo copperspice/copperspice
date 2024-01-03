@@ -37,8 +37,9 @@ void QHttpProtocolHandler::_q_receiveReply()
 
    if (!m_reply) {
       if (m_socket->bytesAvailable() > 0)
-         qWarning() << "QAbstractProtocolHandler::_q_receiveReply() called without QHttpNetworkReply,"
-                    << m_socket->bytesAvailable() << "bytes on socket.";
+         qWarning("QHttpProtocolHandler::_q_receiveReply() Called without QHttpNetworkReply, %lld bytes "
+               " are pending", m_socket->bytesAvailable());
+
       m_channel->close();
 
       return;
@@ -268,7 +269,7 @@ bool QHttpProtocolHandler::sendRequest()
 
    if (!m_reply) {
       // how should that happen
-      qWarning() << "QAbstractProtocolHandler::sendRequest() called without QHttpNetworkReply";
+      qWarning("QHttpProtocolHandler::sendRequest() No QHttpNetworkReply available");
       return false;
    }
 
@@ -401,9 +402,9 @@ bool QHttpProtocolHandler::sendRequest()
 
             } else {
                if (m_channel->written != uploadByteDevice->pos()) {
-                  // Sanity check. This was useful in tracking down an upload corruption.
-                  qWarning() << "QHttpProtocolHandler: Internal error in sendRequest. Expected to write at position"
-                             << m_channel->written << "but read device is at" << uploadByteDevice->pos();
+                  qWarning("QHttpProtocolHandler::sendRequest() Internal error in sendRequest, expected to write at position "
+                     "%lld, however device is at %lld", m_channel->written, uploadByteDevice->pos());
+
                   Q_ASSERT(m_channel->written == uploadByteDevice->pos());
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::ProtocolFailure);
 

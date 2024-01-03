@@ -107,7 +107,7 @@ void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
    Q_Q(QStandardItem);
 
    if (item == q) {
-      qWarning("QStandardItem::setChild() Unable to make an item a child of itself %p", item);
+      qWarning("QStandardItem::setChild() Unable to make an item a child of itself");
       return;
    }
 
@@ -139,8 +139,7 @@ void QStandardItemPrivate::setChild(int row, int column, QStandardItem *item,
       if (item->d_func()->parent == nullptr) {
          item->d_func()->setParentAndModel(q, model);
       } else {
-         qWarning("QStandardItem::setChild() Ignoring duplicate insertion of item %p",
-            item);
+         qWarning("QStandardItem::setChild() Ignoring duplicate insertion of item");
          return;
       }
    }
@@ -440,8 +439,7 @@ bool QStandardItemPrivate::insertRows(int row, int count, const QList<QStandardI
             if (item->d_func()->parent == nullptr) {
                item->d_func()->setParentAndModel(q, model);
             } else {
-               qWarning("QStandardItem::insertRows() Ignoring duplicate insertion of item %p",
-                  item);
+               qWarning("QStandardItem::insertRows() Ignoring duplicate insertion of item");
                item = nullptr;
             }
          }
@@ -493,7 +491,7 @@ bool QStandardItemPrivate::insertColumns(int column, int count, const QList<QSta
             if (item->d_func()->parent == nullptr) {
                item->d_func()->setParentAndModel(q, model);
             } else {
-               qWarning("QStandardItem::insertColumns() Ignoring duplicate insertion of item %p", item);
+               qWarning("QStandardItem::insertColumns() Ignoring duplicate insertion of item");
                item = nullptr;
             }
          }
@@ -1385,7 +1383,7 @@ void QStandardItemModel::setHorizontalHeaderItem(int column, QStandardItem *item
       if (item->model() == nullptr) {
          item->d_func()->setModel(this);
       } else {
-         qWarning("QStandardItem::setHorizontalHeaderItem() Ignoring duplicate insertion of item %p", item);
+         qWarning("QStandardItem::setHorizontalHeaderItem() Ignoring duplicate insertion of item");
          return;
       }
    }
@@ -1432,7 +1430,7 @@ void QStandardItemModel::setVerticalHeaderItem(int row, QStandardItem *item)
       if (item->model() == nullptr) {
          item->d_func()->setModel(this);
       } else {
-         qWarning("QStandardItem::setVerticalHeaderItem() Ignoring duplicate insertion of item %p", item);
+         qWarning("QStandardItem::setVerticalHeaderItem() Ignoring duplicate insertion of item");
          return;
       }
    }

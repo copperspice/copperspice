@@ -159,8 +159,7 @@ void QFile::setFileName(const QString &name)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::setFileName: File (%s) is already opened",
-               csPrintable(fileName()));
+      qWarning("QFile::setFileName() File (%s) is already opened", csPrintable(fileName()));
       close();
    }
 
@@ -236,7 +235,7 @@ bool QFile::remove()
    Q_D(QFile);
 
    if (d->fileName.isEmpty()) {
-      qWarning("QFile::remove: Empty or null file name");
+      qWarning("QFile::remove() File name can not be empty");
       return false;
    }
 
@@ -286,7 +285,7 @@ QFile::rename(const QString &newName)
 {
    Q_D(QFile);
    if (d->fileName.isEmpty()) {
-      qWarning("QFile::rename: Empty or null file name");
+      qWarning("QFile::rename() File name can not be empty");
       return false;
    }
    if (d->fileName == newName) {
@@ -440,7 +439,7 @@ QFile::link(const QString &linkName)
 {
    Q_D(QFile);
    if (d->fileName.isEmpty()) {
-      qWarning("QFile::link: Empty or null file name");
+      qWarning("QFile::link() File name can not be empty");
       return false;
    }
    QFileInfo fi(linkName);
@@ -474,7 +473,7 @@ bool QFile::copy(const QString &newName)
    Q_D(QFile);
 
    if (d->fileName.isEmpty()) {
-      qWarning("QFile::copy: Empty or null file name");
+      qWarning("QFile::copy() File name can not be empty");
       return false;
    }
 
@@ -587,7 +586,7 @@ bool QFile::open(OpenMode mode)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
+      qWarning("QFile::open() File (%s) already open", csPrintable(fileName()));
       return false;
    }
 
@@ -597,7 +596,7 @@ bool QFile::open(OpenMode mode)
 
    unsetError();
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
-      qWarning("QIODevice::open: File access not specified");
+      qWarning("QIODevice::open() Read/Write file access was not specified");
       return false;
    }
 
@@ -628,7 +627,7 @@ bool QFile::open(FILE *fh, OpenMode mode, FileHandleFlags handleFlags)
 {
    Q_D(QFile);
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
+      qWarning("QFile::open() File (%s) already open", csPrintable(fileName()));
       return false;
    }
    if (mode & Append) {
@@ -636,7 +635,7 @@ bool QFile::open(FILE *fh, OpenMode mode, FileHandleFlags handleFlags)
    }
    unsetError();
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
-      qWarning("QFile::open: File access not specified");
+      qWarning("QFile::open() Read/Write file access was not specified");
       return false;
    }
    if (d->openExternalFile(mode, fh, handleFlags)) {
@@ -659,7 +658,7 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
    Q_D(QFile);
 
    if (isOpen()) {
-      qWarning("QFile::open: File (%s) already open", csPrintable(fileName()));
+      qWarning("QFile::open() File (%s) already open", csPrintable(fileName()));
       return false;
    }
 
@@ -669,7 +668,7 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
 
    unsetError();
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
-      qWarning("QFile::open: File access not specified");
+      qWarning("QFile::open() Read/Write file access was not specified");
       return false;
    }
 

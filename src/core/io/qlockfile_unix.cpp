@@ -220,13 +220,13 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
    // Ensure nobody else can delete the file while we have it
    if (! setNativeLocks(fileName, fd)) {
       const int errnoSaved = errno;
-      qWarning() << "setNativeLocks failed:" << qt_error_string(errnoSaved);
+      qWarning() << "QLockFile::tryLock_sys() setNativeLocks failed, " << qt_error_string(errnoSaved);
    }
 
    if (qt_write_loop(fd, fileData.constData(), fileData.size()) < fileData.size()) {
       close(fd);
       if (!QFile::remove(fileName)) {
-         qWarning("QLockFile: Could not remove our own lock file %s.", csPrintable(fileName));
+         qWarning("QLockFile::tryLock_sys() Unable to remove lock file %s", csPrintable(fileName));
       }
       return QLockFile::UnknownError; // partition full
    }
@@ -372,8 +372,7 @@ void QLockFile::unlock()
    d->fileHandle = -1;
 
    if (! QFile::remove(d->fileName)) {
-      qWarning() << "Could not remove our own lock file" << d->fileName << "maybe permissions changed meanwhile?";
-      // This is bad because other users of this lock file will now have to wait for the stale-lock-timeout...
+      qWarning("QLockFile::unlock() Unable to remove lock file %s", csPrintable(d->fileName));
    }
 
    d->lockError = QLockFile::NoError;

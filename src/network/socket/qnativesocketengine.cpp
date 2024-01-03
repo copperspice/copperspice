@@ -333,7 +333,7 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType, QAb
 
    // Make sure we receive out-of-band data
    if (socketType == QAbstractSocket::TcpSocket && !setOption(ReceiveOutOfBandData, 1)) {
-      qWarning("QNativeSocketEngine::initialize unable to inline out-of-band data");
+      qWarning("QNativeSocketEngine::initialize() Unable to inline out-of-band data");
    }
 
    return true;
@@ -535,8 +535,8 @@ bool QNativeSocketEngine::joinMulticastGroup(const QHostAddress &groupAddress,
    if (groupAddress.protocol() == QAbstractSocket::IPv4Protocol &&
          (d->socketProtocol == QAbstractSocket::IPv6Protocol ||
           d->socketProtocol == QAbstractSocket::AnyIPProtocol)) {
-      qWarning("QAbstractSocket: cannot bind to QHostAddress::Any (or an IPv6 address) and join an IPv4 multicast group;"
-               " bind to QHostAddress::AnyIPv4 instead if you want to do this");
+      qWarning("QNativeSocketEngine::joinMulticastGroup() Unable to bind to QHostAddress::Any (or IPv6 address) "
+            "and join an IPv4 multicast group, bind to QHostAddress::AnyIPv4 instead");
       return false;
    }
 

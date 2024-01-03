@@ -83,7 +83,7 @@ class QPlatformBackingStorePrivate
             blitter->destroy();
          }
       } else if (textureId || blitter) {
-         qWarning("QPlatformBackingStorePrivate, No current OpenGL context in destructor, resources not released");
+         qWarning("QPlatformBackingStore() No current OpenGL context in destructor, resources not released");
       }
       delete blitter;
 #endif

@@ -2199,7 +2199,7 @@ void QSettings::endGroup()
 {
    Q_D(QSettings);
    if (d->groupStack.isEmpty()) {
-      qWarning("QSettings::endGroup: No matching beginGroup()");
+      qWarning("QSettings::endGroup() No matching beginGroup()");
       return;
    }
 
@@ -2210,7 +2210,7 @@ void QSettings::endGroup()
    }
 
    if (group.isArray()) {
-      qWarning("QSettings::endGroup: Expected endArray() instead");
+      qWarning("QSettings::endGroup() Expected endArray()");
    }
 }
 
@@ -2246,7 +2246,7 @@ void QSettings::endArray()
    Q_D(QSettings);
 
    if (d->groupStack.isEmpty()) {
-      qWarning("QSettings::endArray: No matching beginArray()");
+      qWarning("QSettings::endArray() No matching beginArray()");
       return;
    }
 
@@ -2263,7 +2263,7 @@ void QSettings::endArray()
    }
 
    if (! group.isArray()) {
-      qWarning("QSettings::endArray: Expected endGroup() instead");
+      qWarning("QSettings::endArray() Expected endGroup()");
    }
 }
 
@@ -2272,7 +2272,7 @@ void QSettings::setArrayIndex(int i)
    Q_D(QSettings);
 
    if (d->groupStack.isEmpty() || !d->groupStack.top().isArray()) {
-      qWarning("QSettings::setArrayIndex: Missing beginArray()");
+      qWarning("QSettings::setArrayIndex() Missing beginArray()");
       return;
    }
 
@@ -2311,7 +2311,7 @@ void QSettings::setValue(const QString &key, const QVariant &value)
    Q_D(QSettings);
 
    if (key.isEmpty()) {
-      qWarning("QSettings::setValue: Empty key passed");
+      qWarning("QSettings::setValue() Key can not be empty");
       return;
    }
 
@@ -2379,7 +2379,7 @@ QVariant QSettings::value(const QString &key, const QVariant &defaultValue) cons
 {
    Q_D(const QSettings);
    if (key.isEmpty()) {
-      qWarning("QSettings::value: Empty key passed");
+      qWarning("QSettings::value() Key can not be empty");
       return QVariant();
    }
 

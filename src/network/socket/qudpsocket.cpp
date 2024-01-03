@@ -133,7 +133,7 @@ void QUdpSocket::setMulticastInterface(const QNetworkInterface &iface)
 {
    Q_D(QUdpSocket);
    if (!isValid()) {
-      qWarning("QUdpSocket::setMulticastInterface() called on a QUdpSocket when not in QUdpSocket::BoundState");
+      qWarning("QUdpSocket::setMulticastInterface() Called on a QUdpSocket when not in QUdpSocket::BoundState");
       return;
    }
    d->socketEngine->setMulticastInterface(iface);

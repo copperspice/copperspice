@@ -38,10 +38,10 @@ QSocketNotifier::QSocketNotifier(qintptr socket, Type type, QObject *parent)
    auto tmp = threadData->eventDispatcher.load();
 
    if (socket < 0) {
-      qWarning("QSocketNotifier: Invalid socket specified");
+      qWarning("QSocketNotifier() Invalid socket specified");
 
    } else if (! tmp) {
-      qWarning("QSocketNotifier: Can only be used with threads started with QThread");
+      qWarning("QSocketNotifier() Can only be used with threads started with QThread");
 
    } else {
       tmp->registerSocketNotifier(this);

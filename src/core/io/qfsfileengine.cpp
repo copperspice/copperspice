@@ -526,7 +526,7 @@ bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
       if (QT_LSEEK(fd, QT_OFF_T(pos), SEEK_SET) == -1) {
 
 #if defined(CS_SHOW_DEBUG)
-         qWarning() << "QFile::at: Can not set file position" << pos;
+         qWarning() << "QFSFileEngine::seekFdFh() Unable to set file position" << pos;
 #endif
 
          q->setError(QFile::PositionError, qt_error_string(errno));

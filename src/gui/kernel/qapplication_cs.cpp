@@ -97,7 +97,7 @@ int qUnregisterGuiStateMachine();
 #define CHECK_QAPP_INSTANCE(...) \
     if (Q_LIKELY(QCoreApplication::instance())) { \
     } else { \
-        qWarning("Method can not be called before QApplication is created"); \
+        qWarning("QApplication must be started before calling this method"); \
         return __VA_ARGS__; \
     }
 
@@ -647,7 +647,7 @@ int QApplication::colorSpec()
 void QApplication::setColorSpec(int spec)
 {
    if (qApp) {
-      qWarning("QApplication::setColorSpec() Method must be called before QApplication is created");
+      qWarning("QApplication::setColorSpec() This method must be called before QApplication is created");
    }
 
    QApplicationPrivate::app_cspec = spec;

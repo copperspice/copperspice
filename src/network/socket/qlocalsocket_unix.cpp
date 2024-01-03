@@ -105,7 +105,7 @@ void QLocalSocketPrivate::_q_stateChanged(QAbstractSocket::SocketState newState)
 
       default:
 #if defined QLOCALSOCKET_DEBUG
-         qWarning() << "QLocalSocket::Unhandled socket state change:" << newState;
+         qWarning() << "QLocalSocket::_q_stateChanged() Socket state change: " << newState;
 #endif
          return;
    }
@@ -499,7 +499,7 @@ QLocalSocket::LocalSocketError QLocalSocket::error() const
          return QLocalSocket::UnknownSocketError;
       default:
 #if defined QLOCALSOCKET_DEBUG
-         qWarning() << "QLocalSocket error not handled:" << d->unixSocket.error();
+         qWarning() << "QLocalSocket::error() Error not handled " << d->unixSocket.error();
 #endif
          break;
    }
@@ -570,7 +570,7 @@ bool QLocalSocket::waitForDisconnected(int msecs)
 {
    Q_D(QLocalSocket);
    if (state() == UnconnectedState) {
-      qWarning("QLocalSocket::waitForDisconnected() is not allowed in UnconnectedState");
+      qWarning("QLocalSocket::waitForDisconnected() Not allowed in UnconnectedState");
       return false;
    }
    return (d->unixSocket.waitForDisconnected(msecs));

@@ -189,9 +189,8 @@ bool QTemporaryDir::remove()
    const bool result = QDir(path()).removeRecursively();
 
    if (! result) {
-      qWarning() << "QTemporaryDir: Unable to remove"
-                 << QDir::toNativeSeparators(path())
-                 << "most likely due to the presence of read-only files.";
+      qWarning() << "QTemporaryDir::remove() Unable to remove path " << QDir::toNativeSeparators(path())
+         << ", verify if there are read only files in this directory";
    }
 
    return result;

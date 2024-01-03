@@ -622,13 +622,13 @@ void QDir::addResourceSearchPath(const QString &path)
 void QDir::setSearchPaths(const QString &prefix, const QStringList &searchPaths)
 {
    if (prefix.length() < 2) {
-      qWarning("QDir::setSearchPaths: Prefix must be longer than 1 character");
+      qWarning("QDir::setSearchPaths() Prefix must be longer than 1 character");
       return;
    }
 
    for (int i = 0; i < prefix.count(); ++i) {
       if (!prefix.at(i).isLetterOrNumber()) {
-         qWarning("QDir::setSearchPaths: Prefix can only contain letters or numbers");
+         qWarning("QDir::setSearchPaths() Prefix can only contain letters or numbers");
          return;
       }
    }
@@ -781,7 +781,7 @@ bool QDir::mkdir(const QString &dirName) const
    const QDirPrivate *d = d_ptr.constData();
 
    if (dirName.isEmpty()) {
-      qWarning("QDir::mkdir: Empty or null file name(s)");
+      qWarning("QDir::mkdir() File name can not be empty");
       return false;
    }
 
@@ -797,7 +797,7 @@ bool QDir::rmdir(const QString &dirName) const
    const QDirPrivate *d = d_ptr.constData();
 
    if (dirName.isEmpty()) {
-      qWarning("QDir::rmdir: Empty or null file name(s)");
+      qWarning("QDir::rmdir() File name can not be empty");
       return false;
    }
 
@@ -814,7 +814,7 @@ bool QDir::mkpath(const QString &dirPath) const
    const QDirPrivate *d = d_ptr.constData();
 
    if (dirPath.isEmpty()) {
-      qWarning("QDir::mkpath: Empty or null file name(s)");
+      qWarning("QDir::mkpath() File name can not be empty");
       return false;
    }
 
@@ -831,7 +831,7 @@ bool QDir::rmpath(const QString &dirPath) const
    const QDirPrivate *d = d_ptr.constData();
 
    if (dirPath.isEmpty()) {
-      qWarning("QDir::rmpath: Empty or null file name(s)");
+      qWarning("QDir::rmpath() File name can not be empty");
       return false;
    }
 
@@ -1027,7 +1027,7 @@ QDir &QDir::operator=(const QString &path)
 bool QDir::remove(const QString &fileName)
 {
    if (fileName.isEmpty()) {
-      qWarning("QDir::remove: Empty or null file name");
+      qWarning("QDir::remove() File name can not be empty");
       return false;
    }
 
@@ -1037,7 +1037,7 @@ bool QDir::remove(const QString &fileName)
 bool QDir::rename(const QString &oldName, const QString &newName)
 {
    if (oldName.isEmpty() || newName.isEmpty()) {
-      qWarning("QDir::rename: Empty or null file name(s)");
+      qWarning("QDir::rename() Old and new file names can not be empty");
       return false;
    }
 
@@ -1051,7 +1051,7 @@ bool QDir::rename(const QString &oldName, const QString &newName)
 bool QDir::exists(const QString &name) const
 {
    if (name.isEmpty()) {
-      qWarning("QDir::exists: Empty or null file name");
+      qWarning("QDir::exists() File name can not be empty");
       return false;
    }
    return QFile::exists(filePath(name));

@@ -173,12 +173,12 @@ void PulseDaemon::prepare()
   m_mainLoop = pa_threaded_mainloop_new();
 
   if (m_mainLoop == nullptr) {
-      qWarning("PulseAudioService: Unable to create pulseaudio mainloop");
+      qWarning("PulseAudioService::prepare() Unable to create pulseaudio mainloop");
       return;
   }
 
   if (pa_threaded_mainloop_start(m_mainLoop) != 0) {
-      qWarning("PulseAudioService: unable to start pulseaudio mainloop");
+      qWarning("PulseAudioService::prepare() Unable to start pulseaudio mainloop");
       pa_threaded_mainloop_free(m_mainLoop);
       return;
   }
@@ -189,7 +189,7 @@ void PulseDaemon::prepare()
   m_context = pa_context_new(m_mainLoopApi, QString("QtPulseAudio:%1").formatArg(::getpid()).toLatin1().constData());
 
   if (m_context == nullptr) {
-      qWarning("PulseAudioService: Unable to create new pulseaudio context");
+      qWarning("PulseAudioService::prepare() Unable to create new pulseaudio context");
       pa_threaded_mainloop_unlock(m_mainLoop);
       pa_threaded_mainloop_free(m_mainLoop);
       m_mainLoop = nullptr;
@@ -201,7 +201,7 @@ void PulseDaemon::prepare()
   pa_context_set_state_callback(m_context, context_state_callback, this);
 
   if (pa_context_connect(m_context, nullptr, (pa_context_flags_t)0, nullptr) < 0) {
-      qWarning("PulseAudioService: pa_context_connect() failed");
+      qWarning("PulseAudioService::prepare() Unable to connect to pulseaudio context");
       pa_context_unref(m_context);
       pa_threaded_mainloop_unlock(m_mainLoop);
       pa_threaded_mainloop_free(m_mainLoop);
@@ -442,7 +442,7 @@ void QSoundEffectPrivate::setSource(const QUrl &url)
         if (op) {
             pa_operation_unref(op);
         } else {
-            qWarning("QSoundEffect(pulseaudio): failed to cork stream");
+            qWarning("QSoundEffect::setSource() Failed to cork stream");
         }
     }
 
@@ -648,7 +648,7 @@ void QSoundEffectPrivate::emptyStream(EmptyStreamOptions options)
     if (op) {
         pa_operation_unref(op);
     } else {
-        qWarning("QSoundEffect(pulseaudio): failed to flush stream");
+        qWarning("QSoundEffect::emptyStream() Failed to flush stream");
     }
 }
 
@@ -669,7 +669,7 @@ void QSoundEffectPrivate::emptyComplete(void *stream, bool reload)
         if (op)
             pa_operation_unref(op);
         else
-            qWarning("QSoundEffect(pulseaudio): failed to cork stream");
+            qWarning("QSoundEffect::emptyComplete() Failed to cork stream");
     }
 }
 
@@ -718,7 +718,7 @@ void QSoundEffectPrivate::sampleReady()
             if (op) {
                 pa_operation_unref(op);
             } else {
-                qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+                qWarning("QSoundEffect::sampleReady() Failed to adjust pre-buffer attribute");
             }
 
         } else {
@@ -741,7 +741,7 @@ void QSoundEffectPrivate::sampleReady()
             if (op) {
                 pa_operation_unref(op);
             } else {
-                qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+                qWarning("QSoundEffect::sampleReady() Failed to adjust pre-buffer attribute");
             }
 
         } else if (bufferAttr->prebuf > uint32_t(m_sample->data().size())) {
@@ -755,7 +755,7 @@ void QSoundEffectPrivate::sampleReady()
             if (op) {
                 pa_operation_unref(op);
             } else {
-                qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+                qWarning("QSoundEffect::sampleReady() Failed to adjust pre-buffer attribute");
             }
 
         } else {
@@ -775,7 +775,7 @@ void QSoundEffectPrivate::sampleReady()
 
 void QSoundEffectPrivate::decoderError()
 {
-    qWarning("QSoundEffect(pulseaudio): Error decoding source");
+    qWarning("QSoundEffect::decoderError() Error decoding source");
     disconnect(m_sample, &QSample::error, this, &QSoundEffectPrivate::decoderError);
 
     bool playingDirty = false;
@@ -926,8 +926,9 @@ int QSoundEffectPrivate::writeToStream(const void *data, int size)
         size_t nbytes = size;
 
         if (pa_stream_begin_write(m_pulseStream, &dest, &nbytes) < 0) {
-            qWarning("QSoundEffect(pulseaudio): pa_stream_begin_write, error = %s",
-                     pa_strerror(pa_context_errno(pulseDaemon()->context())));
+            qWarning("QSoundEffect::writeToStream() Pulseaudio stream begin write error = %s",
+                  pa_strerror(pa_context_errno(pulseDaemon()->context())));
+
             return 0;
         }
 
@@ -938,8 +939,9 @@ int QSoundEffectPrivate::writeToStream(const void *data, int size)
     }
 
     if (pa_stream_write(m_pulseStream, data, size, writeDoneCb, 0, PA_SEEK_RELATIVE) < 0) {
-        qWarning("QSoundEffect(pulseaudio): pa_stream_write, error = %s",
-                 pa_strerror(pa_context_errno(pulseDaemon()->context())));
+        qWarning("QSoundEffect::writeToStream() Pulseaudio stream write error = %s",
+              pa_strerror(pa_context_errno(pulseDaemon()->context())));
+
         return 0;
     }
 
@@ -1038,7 +1040,7 @@ void QSoundEffectPrivate::createPulseStream()
     connect(pulseDaemon(), &PulseDaemon::contextFailed, this, &QSoundEffectPrivate::contextFailed);
 
     if (stream == nullptr) {
-        qWarning("QSoundEffect(pulseaudio): Failed to create stream");
+        qWarning("QSoundEffect::createPulseStream() Failed to create stream");
         m_pulseStream = nullptr;
         setStatus(QSoundEffect::Error);
         setPlaying(false);
@@ -1066,8 +1068,8 @@ void QSoundEffectPrivate::createPulseStream()
     if (pa_stream_connect_playback(m_pulseStream, nullptr, nullptr, PA_STREAM_START_CORKED, nullptr, nullptr) < 0) {
 
 #endif
-        qWarning("QSoundEffect(pulseaudio): Failed to connect stream, error = %s",
-                 pa_strerror(pa_context_errno(pulseDaemon()->context())));
+        qWarning("QSoundEffect::createPulseStream() Failed to connect stream, error = %s",
+              pa_strerror(pa_context_errno(pulseDaemon()->context())));
     }
 }
 
@@ -1122,7 +1124,7 @@ void QSoundEffectPrivate::stream_state_callback(pa_stream *s, void *userdata)
                 if (op) {
                     pa_operation_unref(op);
                 } else {
-                    qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+                    qWarning("QSoundEffect::createPulseStream() Failed to adjust pre-buffer attribute");
                 }
 
             } else {
@@ -1145,7 +1147,7 @@ void QSoundEffectPrivate::stream_state_callback(pa_stream *s, void *userdata)
 
         case PA_STREAM_FAILED:
         default:
-            qWarning("QSoundEffect(pulseaudio): Error in pulse audio stream");
+            qWarning("QSoundEffect::createPulseStream() Error in pulse audio stream");
             break;
     }
 }
@@ -1168,7 +1170,7 @@ void QSoundEffectPrivate::stream_reset_buffer_callback(pa_stream *s, int success
     }
 
     if (! success)
-        qWarning("QSoundEffect(pulseaudio): failed to reset buffer attribute");
+        qWarning("QSoundEffect::createPulseStream() Failed to reset buffer attribute");
 
 #ifdef QT_PA_DEBUG
     qDebug() << self << "stream_reset_buffer_callback";
@@ -1186,7 +1188,7 @@ void QSoundEffectPrivate::stream_reset_buffer_callback(pa_stream *s, int success
         if (op) {
             pa_operation_unref(op);
         } else {
-            qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+            qWarning("QSoundEffect::createPulseStream() Failed to adjust pre-buffer attribute");
         }
 
     } else {
@@ -1211,7 +1213,7 @@ void QSoundEffectPrivate::stream_adjust_prebuffer_callback(pa_stream *s, int suc
     }
 
     if (! success) {
-        qWarning("QSoundEffect(pulseaudio): failed to adjust pre-buffer attribute");
+        qWarning("QSoundEffect::stream_adjust_prebuffer_callback() Failed to adjust pre-buffer attribute");
     }
 
 #ifdef QT_PA_DEBUG
@@ -1258,7 +1260,7 @@ void QSoundEffectPrivate::stream_cork_callback(pa_stream *s, int success, void *
     }
 
     if (! success) {
-        qWarning("QSoundEffect(pulseaudio): failed to stop");
+        qWarning("QSoundEffect::stream_cork_callback() Failed to stop");
     }
 
 #ifdef QT_PA_DEBUG
@@ -1283,7 +1285,7 @@ void QSoundEffectPrivate::stream_flush_callback(pa_stream *s, int success, void 
     }
 
     if (! success) {
-        qWarning("QSoundEffect(pulseaudio): failed to drain");
+        qWarning("QSoundEffect::stream_flush_callback() Failed to drain");
     }
 
     QMetaObject::invokeMethod(self, "emptyComplete", Qt::QueuedConnection, Q_ARG(void*, s), Q_ARG(bool, false));
@@ -1304,7 +1306,7 @@ void QSoundEffectPrivate::stream_flush_reload_callback(pa_stream *s, int success
     }
 
     if (! success) {
-        qWarning("QSoundEffect(pulseaudio): failed to drain");
+        qWarning("QSoundEffect::stream_flush_reload_callback() Failed to drain");
     }
 
     QMetaObject::invokeMethod(self, "emptyComplete", Qt::QueuedConnection, Q_ARG(void*, s), Q_ARG(bool, true));

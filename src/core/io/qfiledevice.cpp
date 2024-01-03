@@ -122,7 +122,7 @@ bool QFileDevice::flush()
 {
    Q_D(QFileDevice);
    if (!d->fileEngine) {
-      qWarning("QFileDevice::flush: No file engine. Is IODevice open?");
+      qWarning("QFileDevice::flush() No file engine was available");
       return false;
    }
 
@@ -213,7 +213,7 @@ bool QFileDevice::seek(qint64 off)
    Q_D(QFileDevice);
 
    if (!isOpen()) {
-      qWarning("QFileDevice::seek: IODevice is not open");
+      qWarning("QFileDevice::seek() IODevice was not open");
       return false;
    }
 
@@ -308,9 +308,9 @@ bool QFileDevicePrivate::putCharHelper(char c)
 
    if (!(openMode & QIODevice::WriteOnly)) {
       if (openMode == QIODevice::NotOpen) {
-         qWarning("QIODevice::putChar: Closed device");
+         qWarning("QIODevice::putChar() Device was not open");
       } else {
-         qWarning("QIODevice::putChar: ReadOnly device");
+         qWarning("QIODevice::putChar() Device is ReadOnly");
       }
       return false;
    }

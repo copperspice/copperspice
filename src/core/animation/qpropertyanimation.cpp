@@ -53,11 +53,11 @@ void QPropertyAnimationPrivate::updateMetaProperty()
       propertyType = QVariant::Invalid;
 
       if (! targetValue->dynamicPropertyNames().contains(propertyName)) {
-         qWarning("QPropertyAnimation: Trying to animate a non existent property %s", csPrintable(propertyName));
+         qWarning("QPropertyAnimationPrivate::updateMetaProperty() Trying to animate a non existent property %s", csPrintable(propertyName));
       }
 
    } else if (! targetValue->metaObject()->property(propertyIndex).isWritable()) {
-      qWarning("QPropertyAnimation: Trying to animate a read only property %s", csPrintable(propertyName));
+      qWarning("QPropertyAnimationPrivate::updateMetaProperty() Trying to animate a read only property %s", csPrintable(propertyName));
    }
 }
 
@@ -107,7 +107,7 @@ void QPropertyAnimation::setTargetObject(QObject *target)
    }
 
    if (d->state != QAbstractAnimation::Stopped) {
-      qWarning("QPropertyAnimation::setTargetObject: Not allowed to change the target of a running animation");
+      qWarning("QPropertyAnimation::setTargetObject() Unable to change the target of a running animation");
       return;
    }
 
@@ -128,7 +128,7 @@ void QPropertyAnimation::setPropertyName(const QString &propertyName)
    Q_D(QPropertyAnimation);
 
    if (d->state != QAbstractAnimation::Stopped) {
-      qWarning("QPropertyAnimation::setPropertyName: Not allowed to change the property name of a running animation");
+      qWarning("QPropertyAnimation::setPropertyName() Unable to change the property name of a running animation");
       return;
    }
 
@@ -154,7 +154,7 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
    Q_D(QPropertyAnimation);
 
    if (! d->target && oldState == Stopped) {
-      qWarning("QPropertyAnimation::updateState (%s): Changing state of an animation without target",
+      qWarning("QPropertyAnimation::updateState() Changing state of an animation without a target, %s",
                d->propertyName.constData());
       return;
    }

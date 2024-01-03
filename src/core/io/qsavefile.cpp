@@ -93,19 +93,19 @@ bool QSaveFile::open(OpenMode mode)
    Q_D(QSaveFile);
 
    if (isOpen()) {
-      qWarning("QSaveFile::open: File (%s) already open", csPrintable(fileName()));
+      qWarning("QSaveFile::open() File already open, %s", csPrintable(fileName()));
       return false;
    }
 
    unsetError();
    if ((mode & (QIODevice::ReadOnly | QIODevice::WriteOnly)) == 0) {
-      qWarning("QSaveFile::open: Open mode not specified");
+      qWarning("QSaveFile::open() Open mode not specified");
       return false;
    }
 
    // In the future we could implement ReadWrite by copying from the existing file to the temp file
    if ((mode & QIODevice::ReadOnly) || (mode & QIODevice::Append)) {
-      qWarning("QSaveFile::open: Unsupported open mode 0x%x", int(mode));
+      qWarning("QSaveFile::open() Unsupported open mode 0x%x", int(mode));
       return false;
    }
 
@@ -172,7 +172,7 @@ bool QSaveFile::commit()
    }
 
    if (!isOpen()) {
-      qWarning("QSaveFile::commit: File (%s) is not open", csPrintable(fileName()));
+      qWarning("QSaveFile::commit() File is not open, %s", csPrintable(fileName()));
       return false;
    }
    QFileDevice::close(); // calls flush()

@@ -125,7 +125,7 @@ static int qt_create_pipe(int *pipe)
 
    int pipe_ret = qt_safe_pipe(pipe);
    if (pipe_ret != 0) {
-      qWarning("QProcessPrivate::createPipe: Cannot create pipe %p: %s",
+      qWarning("QProcess::createPipe() Unable to create pipe %p: %s",
                pipe, csPrintable(qt_error_string(errno)));
    }
    return pipe_ret;
@@ -1077,7 +1077,7 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
 
          if (!encodedWorkingDirectory.isEmpty()) {
             if (QT_CHDIR(encodedWorkingDirectory.constData()) == -1) {
-               qWarning("QProcessPrivate::startDetached: failed to chdir to %s", encodedWorkingDirectory.constData());
+               qWarning("QProcess::startDetached() Failed to change directory to %s", encodedWorkingDirectory.constData());
             }
          }
 
@@ -1135,7 +1135,7 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
       qt_safe_write(pidPipe[1], (const char *)&doubleForkPid, sizeof(pid_t));
 
       if (QT_CHDIR("/") == -1) {
-         qWarning("QProcessPrivate::startDetached: failed to chdir to /");
+         qWarning("QProcess::startDetached() Failed to change directory to /");
       }
 
       ::_exit(1);

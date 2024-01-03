@@ -219,7 +219,7 @@ void QNetworkAccessCache::addEntry(const QByteArray &key, CacheableObject *entry
 
    Node &node = hash[key];     // create the entry in the hash if it didn't exist
    if (node.useCount) {
-      qWarning("QNetworkAccessCache::addEntry: Overriding active cache entry '%s'", key.constData());
+      qWarning("QNetworkAccessCache::addEntry() Overriding active cache entry %s", key.constData());
    }
 
    if (node.object) {
@@ -302,7 +302,7 @@ void QNetworkAccessCache::releaseEntry(const QByteArray &key)
 {
    auto it = hash.find(key);
    if (it == hash.end()) {
-      qWarning("QNetworkAccessCache::releaseEntry: Trying to release key '%s' which is not in cache", key.constData());
+      qWarning("QNetworkAccessCache::releaseEntry() Trying to release key %s which was not in the cache", key.constData());
       return;
    }
 
@@ -341,7 +341,7 @@ void QNetworkAccessCache::removeEntry(const QByteArray &key)
    auto it = hash.find(key);
 
    if (it == hash.end()) {
-      qWarning("QNetworkAccessCache::removeEntry: Trying to remove key '%s' which is not in cache", key.constData());
+      qWarning("QNetworkAccessCache::removeEntry() Trying to remove key %s which was not in the cache", key.constData());
       return;
    }
 
@@ -352,7 +352,7 @@ void QNetworkAccessCache::removeEntry(const QByteArray &key)
    }
 
    if (node->useCount > 1) {
-      qWarning("QNetworkAccessCache::removeEntry: Removing active cache entry '%s'", key.constData());
+      qWarning("QNetworkAccessCache::removeEntry() Removing active cache entry %s", key.constData());
    }
 
    node->object->key.clear();

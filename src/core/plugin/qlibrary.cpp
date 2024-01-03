@@ -115,7 +115,7 @@ inline void QLibraryStore::cleanup()
       for (auto lib : data->libraryMap) {
 
          if (lib) {
-            qDebug() << "When CsCore unload," << lib->fileName << "was still open, with"
+            qDebug() << "During Application shutdown, " << lib->fileName << " was still open with "
                << lib->libraryRefCount.load() << " references";
          }
       }
@@ -282,8 +282,7 @@ bool QLibraryHandle::unload(UnloadFlag flag)
 
       if (flag == NoUnloadSys || unload_sys()) {
          if (qt_debug_component()) {
-            qWarning() << "QLibraryHandle::unload succeeded on" << fileName
-               << (flag == NoUnloadSys ? "(faked)" : "");
+            qWarning() << "QLibraryHandle::unload() Succeeded on" << fileName;
          }
 
          // when the library is unloaded, we release the reference on it so
@@ -317,7 +316,7 @@ bool QLibraryHandle::loadPlugin()
    }
 
    if (qt_debug_component()) {
-      qWarning() << "QLibraryHandle::loadPlugin failed on" << fileName << ":" << errorString;
+      qWarning() << "QLibraryHandle::loadPlugin() Failed on" << fileName << ":" << errorString;
    }
 
    pluginState = IsNotAPlugin;
@@ -480,8 +479,8 @@ void QLibraryHandle::updatePluginState()
    if ((version & 0x00ff00) > (CS_VERSION & 0x00ff00) || (version & 0xff0000) != (CS_VERSION & 0xff0000)) {
 
       if (qt_debug_component()) {
-         qWarning("In %s:\n"
-            "  Plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
+         qWarning("QLibraryHandle::updatePluginState() In %s\n"
+            " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
             (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
       }
 

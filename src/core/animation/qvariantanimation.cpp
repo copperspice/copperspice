@@ -213,7 +213,7 @@ QVariant QVariantAnimationPrivate::valueAt(double step) const
 void QVariantAnimationPrivate::setValueAt(double step, const QVariant &value)
 {
    if (step < double(0.0) || step > double(1.0)) {
-      qWarning("QVariantAnimation::setValueAt: invalid step = %f", step);
+      qWarning("QVariantAnimation::setValueAt() Invalid step = %f", step);
       return;
    }
 
@@ -328,7 +328,7 @@ void QVariantAnimation::setDuration(int msecs)
    Q_D(QVariantAnimation);
 
    if (msecs < 0) {
-      qWarning("QVariantAnimation::setDuration: Duration can not be negative");
+      qWarning("QVariantAnimation::setDuration() Duration can not be negative");
       return;
 
    } else if (d->m_duration == msecs) {

@@ -1126,7 +1126,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
          && (localAddress == QHostAddress::AnyIPv4 || localAddress == QHostAddress::AnyIPv6)
          && !getsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, &optlen )) {
       if (optlen != sizeof(ipv6only)) {
-         qWarning("unexpected size of IPV6_V6ONLY socket option");
+         qWarning("QNativeSocketEngine::fetchConnectionParameters() Unexpected size of IPV6_V6ONLY socket option");
       }
       if (!ipv6only) {
          socketProtocol = QAbstractSocket::AnyIPProtocol;
@@ -1229,7 +1229,7 @@ qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxSize)
 {
    Q_Q(QNativeSocketEngine);
    if (!q->isValid()) {
-      qWarning("QNativeSocketEngine::nativeRead: Invalid socket");
+      qWarning("QNativeSocketEngine::nativeRead() Invalid socket");
       return -1;
    }
 

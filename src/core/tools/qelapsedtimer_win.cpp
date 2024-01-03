@@ -83,7 +83,7 @@ static quint64 getTickCount()
       if (QueryPerformanceCounter(&counter)) {
          return counter.QuadPart;
       } else {
-         qWarning("QueryPerformanceCounter failed, although QueryPerformanceFrequency succeeded.");
+         qWarning("getTickCount() QueryPerformanceCounter failed");
          return 0;
       }
    }

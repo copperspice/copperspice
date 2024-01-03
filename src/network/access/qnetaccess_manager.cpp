@@ -846,7 +846,7 @@ QList<QNetworkProxy> QNetworkAccessManagerPrivate::queryProxy(const QNetworkProx
       proxies = proxyFactory->queryProxy(query);
 
       if (proxies.isEmpty()) {
-         qWarning("QNetworkAccessManager: factory %p has returned an empty result set", proxyFactory);
+         qWarning("QNetworkAccessManager::queryProxy() Factory returned an empty result set");
          proxies << QNetworkProxy::NoProxy;
       }
 
@@ -1162,11 +1162,11 @@ QNetworkRequest QNetworkAccessManagerPrivate::prepareMultipart(const QNetworkReq
    if (! device->isReadable()) {
       if (! device->isOpen()) {
          if (! device->open(QIODevice::ReadOnly)) {
-            qWarning("Unable to open device for reading");
+            qWarning("QNetworkAccessManager::prepareMultipart() Unable to open device for reading");
          }
 
       } else {
-         qWarning("Device is not readable");
+         qWarning("QNetworkAccessManager::prepareMultipart() Device is not readable");
       }
    }
 

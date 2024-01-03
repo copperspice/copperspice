@@ -1840,7 +1840,8 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
          }
 
       } else {
-         qWarning("Backend is waiting for QNetworkSession to connect, but there is none");
+         qWarning("QNetworkReplyHttp::_q_startOperation() Backend is waiting for QNetworkSession to connect");
+
          QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
                Q_ARG(QNetworkReply::NetworkError, QNetworkReply::NetworkSessionFailedError),
                Q_ARG(const QString &, QCoreApplication::translate("QNetworkReply", "Network session error.")));
@@ -1856,7 +1857,8 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
 #else
 
    if (!start(request)) {
-      qWarning("Backend start failed");
+      qWarning("QNetworkReplyHttp::_q_startOperation() Backend start failed");
+
       QMetaObject::invokeMethod(q, "_q_error", synchronous ? Qt::DirectConnection : Qt::QueuedConnection,
             Q_ARG(QNetworkReply::NetworkError, QNetworkReply::UnknownNetworkError),
             Q_ARG(const QString &, QCoreApplication::translate("QNetworkReply", "Backend start error.")));
@@ -2213,7 +2215,7 @@ void QNetworkReplyHttpImplPrivate::error(QNetworkReplyImpl::NetworkError errorCo
 
    // can not set and emit multiple errors
    if (m_errorCode != QNetworkReply::NoError) {
-      qWarning("QNetworkReplyImplPrivate::error: Internal problem, this method must only be called once.");
+      qWarning("QNetworkReply::error() Method called too many times");
       return;
    }
 

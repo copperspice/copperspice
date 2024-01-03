@@ -156,7 +156,7 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
    for (int i = 0; i < targets.size(); ++i) {
 
       if (targets.at(i) == nullptr) {
-         qWarning("QAbstractTransition::setTargetStates: target state(s) cannot be null");
+         qWarning("QAbstractTransition::setTargetStates() Target state(s) invalid (nullptr)");
          return;
       }
    }
@@ -232,7 +232,7 @@ void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
 {
    Q_D(QAbstractTransition);
    if (!animation) {
-      qWarning("QAbstractTransition::addAnimation: cannot add null animation");
+      qWarning("QAbstractTransition::addAnimation() Unable to animation (nullptr)");
       return;
    }
    d->animations.append(animation);
@@ -243,7 +243,7 @@ void QAbstractTransition::removeAnimation(QAbstractAnimation *animation)
    Q_D(QAbstractTransition);
 
    if (! animation) {
-      qWarning("QAbstractTransition::removeAnimation: cannot remove null animation");
+      qWarning("QAbstractTransition::removeAnimation() Unable to remove animation (nullptr)");
       return;
    }
 

@@ -703,7 +703,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
    // undefined behavior. Otherwise, let mmap have its say.
    if (doStat(QFileSystemMetaData::SizeAttribute)
          && (QT_OFF_T(size) > metaData.size() - QT_OFF_T(offset))) {
-      qWarning("QFSFileEngine::map: Mapping a file beyond its size is not portable");
+      qWarning("QFSFileEngine::map() Mapping beyond the end of a file is not portable");
    }
 
    int access = 0;

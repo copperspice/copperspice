@@ -136,7 +136,7 @@ int QSslConfiguration::peerVerifyDepth() const
 void QSslConfiguration::setPeerVerifyDepth(int depth)
 {
    if (depth < 0) {
-      qWarning("QSslConfiguration::setPeerVerifyDepth: Can not set negative depth of %d", depth);
+      qWarning("QSslConfiguration::setPeerVerifyDepth() Unable to set negative depth of %d", depth);
       return;
    }
 

@@ -164,7 +164,7 @@ void QFutureWatcherBase::connectNotify(const QMetaMethod &signal) const
 
    if (signal == finishedSignal) {
       if (futureInterface().isRunning()) {
-         qWarning("QFutureWatcher::connect: Connecting after calling setFuture() is likely to produce a race condition");
+         qWarning("QFutureWatcher::connectNotify() Connecting after calling setFuture() is likely to produce a race condition");
       }
    }
 }

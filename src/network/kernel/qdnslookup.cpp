@@ -558,7 +558,7 @@ void QDnsLookupThreadPool::start(QRunnable *runnable)
          QCoreApplication *app = QCoreApplication::instance();
 
          if (!app) {
-            qWarning("QDnsLookup requires a QCoreApplication");
+            qWarning("QDnsLookupThreadPool::start() QCoreApplication must be started before calling this method");
             delete runnable;
             return;
          }

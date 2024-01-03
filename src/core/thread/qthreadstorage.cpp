@@ -111,7 +111,7 @@ void **QThreadStorageData::get() const
 {
    QThreadData *data = QThreadData::current();
    if (!data) {
-      qWarning("QThreadStorage::get: QThreadStorage can only be used with threads started with QThread");
+      qWarning("QThreadStorage::get() Only valid from threads started with QThread");
       return nullptr;
    }
    QVector<void *> &tls = data->tls;
@@ -132,7 +132,7 @@ void **QThreadStorageData::set(void *p)
 {
    QThreadData *data = QThreadData::current();
    if (! data) {
-      qWarning("QThreadStorage::set: QThreadStorage can only be used with threads started with QThread");
+      qWarning("QThreadStorage::set() Only valid from threads started with QThread");
       return nullptr;
    }
 
@@ -193,7 +193,7 @@ void QThreadStorageData::finish(void **p)
 
       if (!destructor) {
          if (QThread::currentThread())
-            qWarning("QThreadStorage: Thread %p exited after QThreadStorage %d destroyed",
+            qWarning("QThreadStorage::finish() Thread %p exited after QThreadStorage %d destroyed",
                      QThread::currentThread(), i);
          continue;
       }

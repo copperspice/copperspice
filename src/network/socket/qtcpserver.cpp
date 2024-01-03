@@ -173,7 +173,7 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
 {
    Q_D(QTcpServer);
    if (d->state == QAbstractSocket::ListeningState) {
-      qWarning("QTcpServer::listen() called when already listening");
+      qWarning("QTcpServer::listen() Called when already listening");
       return false;
    }
 
@@ -278,7 +278,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
 {
    Q_D(QTcpServer);
    if (isListening()) {
-      qWarning("QTcpServer::setSocketDescriptor() called when already listening");
+      qWarning("QTcpServer::setSocketDescriptor() Called when already listening");
       return false;
    }
 

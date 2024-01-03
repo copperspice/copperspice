@@ -259,8 +259,9 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
              winver = QSysInfo::WV_WINDOWS11;
 
           } else {
-             qWarning("Untested Windows version %d.%d detected", int(osver.dwMajorVersion), int(osver.dwMinorVersion));
                    winver = QSysInfo::WV_NT_based;
+             qWarning("QSysInfo::windowsVersion() Untested Windows version %d.%d detected",
+                   int(osver.dwMajorVersion), int(osver.dwMinorVersion));
           }
 
          }
@@ -330,7 +331,7 @@ QWindowsSockInit::QWindowsSockInit()
 
    // IPv6 requires Winsock v2.0 or better
    if (WSAStartup(MAKEWORD(2,0), &wsadata) != 0) {
-      qWarning("QTcpSocketAPI: WinSock v2.0 initialization failed.");
+      qWarning("QTcpSocketAPI() WinSock v2.0 initialization failed");
     } else {
        version = 0x20;
     }

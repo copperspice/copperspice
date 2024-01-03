@@ -181,7 +181,7 @@ void QPluginLoader::setFileName(const QString &fileName)
 
 #else
    if (qt_debug_component()) {
-      qWarning("Unable to load %s into a statically linked CopperSpice library.",
+      qWarning("QPluginLoader::setFileName() Unable to load %s into a statically linked CopperSpice library",
          QFile::encodeName(fileName).constData() );
    }
 

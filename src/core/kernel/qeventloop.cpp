@@ -53,7 +53,7 @@ QEventLoop::QEventLoop(QObject *parent)
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
    if (! QCoreApplication::instance()) {
-      qWarning("QEventLoop: Can not be used without QApplication");
+      qWarning("QEventLoop() QApplication must be started before calling this method");
 
    } else if (! threadData->eventDispatcher) {
       QThreadPrivate::createEventDispatcher(threadData);
@@ -91,7 +91,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
    }
 
    if (d->inExec) {
-      qWarning("QEventLoop::exec: instance %p has already called exec()", this);
+      qWarning("QEventLoop::exec() Called too many times");
       return -1;
    }
 
@@ -115,8 +115,7 @@ int QEventLoop::exec(ProcessEventsFlags flags)
       }
 
    } catch (...) {
-      qWarning("CopperSpice has caught an exception thrown from an event handler.\n"
-               "Reimplement QApplication::notify() and catch all exceptions.\n");
+      qWarning("QEventLoop::exec() Exception was thrown, reimplement QApplication::notify() and catch all exceptions");
 
       // copied from below
       locker.relock();

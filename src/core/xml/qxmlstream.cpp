@@ -139,7 +139,7 @@ void QXmlStreamReader::addData(const QByteArray &data)
    Q_D(QXmlStreamReader);
 
    if (d->device) {
-      qWarning("QXmlStreamReader: addData() with device()");
+      qWarning("QXmlStreamReader::addData() Invalid when using a device");
       return;
    }
 
@@ -2138,7 +2138,7 @@ void QXmlStreamWriterPrivate::write(QStringView str)
       stringDevice->append(str);
 
    } else {
-      qWarning("QXmlStreamWriter: No device");
+      qWarning("QXmlStreamWriter::write() No device available");
    }
 }
 
@@ -2158,7 +2158,7 @@ void QXmlStreamWriterPrivate::write(const QString &s)
    } else if (stringDevice) {
       stringDevice->append(s);
    } else {
-      qWarning("QXmlStreamWriter: No device");
+      qWarning("QXmlStreamWriter::write() No device available");
    }
 }
 
@@ -2815,7 +2815,7 @@ void QXmlStreamWriter::writeCurrentToken(const QXmlStreamReader &reader)
          break;
       default:
          Q_ASSERT(reader.tokenType() != QXmlStreamReader::Invalid);
-         qWarning("QXmlStreamWriter: writeCurrentToken() with invalid state.");
+         qWarning("QXmlStreamWriter::writeCurrentToken() Invalid state");
          break;
    }
 }

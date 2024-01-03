@@ -60,7 +60,7 @@ static QHostAddress addressFromSockaddr(sockaddr *sa)
       }
 
    } else {
-      qWarning("Got unknown socket family %d", sa->sa_family);
+      qWarning("QHostAddress::addressFromSockaddr() Unknown socket family %d", sa->sa_family);
    }
 
    return address;

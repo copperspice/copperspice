@@ -342,7 +342,7 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
    }
 
    if (!data) {
-      qWarning("qCompress: Data is null");
+      qWarning("qCompress() Invalid data (nullptr)");
       return QByteArray();
    }
 
@@ -367,7 +367,7 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
             bazip[3] = (nbytes & 0x000000ff);
             break;
          case Z_MEM_ERROR:
-            qWarning("qCompress: Z_MEM_ERROR: Not enough memory");
+            qWarning("qCompress() Z_MEM_ERROR: Not enough memory");
             bazip.resize(0);
             break;
          case Z_BUF_ERROR:
@@ -382,13 +382,13 @@ QByteArray qCompress(const uchar *data, int nbytes, int compressionLevel)
 QByteArray qUncompress(const uchar *data, int nbytes)
 {
    if (! data) {
-      qWarning("qUncompress(): Data is null");
+      qWarning("qUncompress() Invalid data (nullptr)");
       return QByteArray();
    }
 
    if (nbytes <= 4) {
       if (nbytes < 4 || (data[0] != 0 || data[1] != 0 || data[2] != 0 || data[3] != 0)) {
-         qWarning("qUncompress(): Input data is corrupted");
+         qWarning("qUncompress() Input data is damaged");
       }
 
       return QByteArray();
@@ -404,7 +404,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
 
       if (len >= (1u << 31u) - sizeof(QByteArray::Data)) {
          // does not support a huge size
-         qWarning("qUncompress(): Input data is corrupted");
+         qWarning("qUncompress() Input data is damaged");
          return QByteArray();
       }
 
@@ -412,7 +412,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
 
       if (tmpPtr == nullptr) {
          // may want to throw an exception
-         qWarning("qUncompress(): Unable to allocate enough memory to uncompress data");
+         qWarning("qUncompress() Unable to allocate enough memory to uncompress data");
          return QByteArray();
       }
 
@@ -427,7 +427,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
             if (len != alloc) {
                if (len >= (1u << 31u) - sizeof(QByteArray::Data)) {
                   // does not support a huge size
-                  qWarning("qUncompress: Input data is corrupted");
+                  qWarning("qUncompress() Input data is damaged");
                   return QByteArray();
                }
             }
@@ -445,7 +445,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
             }
 
          case Z_MEM_ERROR:
-            qWarning("qUncompress(): Z_MEM_ERROR: Not enough memory");
+            qWarning("qUncompress() Z_MEM_ERROR: Not enough memory");
             return QByteArray();
 
          case Z_BUF_ERROR:
@@ -453,7 +453,7 @@ QByteArray qUncompress(const uchar *data, int nbytes)
             continue;
 
          case Z_DATA_ERROR:
-            qWarning("qUncompress(): Z_DATA_ERROR: Input data is corrupted");
+            qWarning("qUncompress() Z_DATA_ERROR: Input data is damaged");
             return QByteArray();
       }
    }
@@ -1705,25 +1705,11 @@ bool QByteArray::isNull() const
 
 qint64 QByteArray::toLongLong(bool *ok, int base) const
 {
-#if defined(QT_CHECK_RANGE)
-   if (base != 0 && (base < 2 || base > 36)) {
-      qWarning("QByteArray::toLongLong: Invalid base %d", base);
-      base = 10;
-   }
-#endif
-
    return QLocaleData::bytearrayToLongLong(nulTerminated().constData(), base, ok);
 }
 
 quint64 QByteArray::toULongLong(bool *ok, int base) const
 {
-#if defined(QT_CHECK_RANGE)
-   if (base != 0 && (base < 2 || base > 36)) {
-      qWarning("QByteArray::toULongLong: Invalid base %d", base);
-      base = 10;
-   }
-#endif
-
    return QLocaleData::bytearrayToUnsLongLong(nulTerminated().constData(), base, ok);
 }
 
@@ -1868,14 +1854,6 @@ QByteArray QByteArray::toBase64() const
 
 static char *qulltoa2(char *p, quint64 n, int base)
 {
-
-#if defined(QT_CHECK_RANGE)
-   if (base < 2 || base > 36) {
-      qWarning("QByteArray::setNum: Invalid base %d", base);
-      base = 10;
-   }
-#endif
-
    const char b = 'a' - 10;
 
    do {
@@ -1941,9 +1919,6 @@ QByteArray &QByteArray::setNum(double n, char f, int prec)
          break;
 
       default:
-#if defined(QT_CHECK_RANGE)
-         qWarning("QByteArray::setNum: Invalid format char '%c'", f);
-#endif
          break;
    }
 
