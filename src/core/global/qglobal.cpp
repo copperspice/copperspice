@@ -44,6 +44,14 @@
 #include <unistd.h>
 #endif
 
+#if defined(Q_OS_WIN)
+#include <qt_windows.h>
+
+// from <ddk/ntddk.h>
+extern "C" __declspec(dllimport) NTSTATUS NTAPI RtlGetVersion(IN OUT PRTL_OSVERSIONINFOW lpVersionInformation);
+
+#endif
+
 const char *csVersion()
 {
    return CS_VERSION_STR;
@@ -85,142 +93,38 @@ const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
 // ** Windows
 #elif defined(Q_OS_WIN)
 
-#include <qt_windows.h>
-
-// determine versions >= 8 by querying the version of kernel32.dll
-static inline bool determineWinOsVersionPost8(OSVERSIONINFO *result)
+static OSVERSIONINFO winOsVersion()
 {
-   typedef WORD (WINAPI* PtrGetFileVersionInfoSizeW)(LPCWSTR, LPDWORD);
-   typedef BOOL (WINAPI* PtrVerQueryValueW)(LPCVOID, LPCWSTR, LPVOID, PUINT);
-   typedef BOOL (WINAPI* PtrGetFileVersionInfoW)(LPCWSTR, DWORD, DWORD, LPVOID);
+   OSVERSIONINFO result = { };
+   result.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
-   QSystemLibrary versionLib("version");
-
-   if (! versionLib.load()) {
-     return false;
-   }
-
-   PtrGetFileVersionInfoSizeW getFileVersionInfoSizeW =
-         (PtrGetFileVersionInfoSizeW)versionLib.resolve("GetFileVersionInfoSizeW");
-
-   PtrVerQueryValueW verQueryValueW = (PtrVerQueryValueW)versionLib.resolve("VerQueryValueW");
-   PtrGetFileVersionInfoW getFileVersionInfoW = (PtrGetFileVersionInfoW)versionLib.resolve("GetFileVersionInfoW");
-
-   if (! getFileVersionInfoSizeW || ! verQueryValueW || ! getFileVersionInfoW) {
-     return false;
-   }
-
-   const wchar_t kernel32Dll[] = L"kernel32.dll";
-   DWORD handle;
-
-   const DWORD size = getFileVersionInfoSizeW(kernel32Dll, &handle);
-   if (! size) {
-     return false;
-   }
-
-   QUniqueArrayPointer<BYTE[]> versionInfo(new BYTE[size]);
-
-   if (! getFileVersionInfoW(kernel32Dll, handle, size, versionInfo.data())) {
-     return false;
-   }
-
-   UINT uLen;
-   VS_FIXEDFILEINFO *fileInfo = nullptr;
-
-   if (! verQueryValueW(versionInfo.data(), L"\\", (LPVOID *)&fileInfo, &uLen)) {
-     return false;
-   }
-
-   const DWORD fileVersionMS = fileInfo->dwFileVersionMS;
-   const DWORD fileVersionLS = fileInfo->dwFileVersionLS;
-
-   result->dwMajorVersion = HIWORD(fileVersionMS);
-   result->dwMinorVersion = LOWORD(fileVersionMS);
-   result->dwBuildNumber  = HIWORD(fileVersionLS);
-
-   return true;
-}
-
-// Fallback for determining Windows versions >= 8 by looping using the
-// version check macros. Note that it will return build number = 0 to avoid inefficient looping.
-static inline void determineWinOsVersionFallbackPost8(OSVERSIONINFO *result)
-{
-   result->dwBuildNumber   = 0;
-   DWORDLONG conditionMask = 0;
-
-   VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL);
-   VER_SET_CONDITION(conditionMask, VER_PLATFORMID, VER_EQUAL);
-
-   OSVERSIONINFOEX checkVersion = { sizeof(OSVERSIONINFOEX), result->dwMajorVersion, 0,
-                                  result->dwBuildNumber, result->dwPlatformId, {'\0'}, 0, 0, 0, 0, 0 };
-
-   while (VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_PLATFORMID, conditionMask)) {
-     result->dwMajorVersion = checkVersion.dwMajorVersion;
-
-     ++checkVersion.dwMajorVersion;
-   }
-
-   conditionMask = 0;
-   checkVersion.dwMajorVersion = result->dwMajorVersion;
-   checkVersion.dwMinorVersion = 0;
-
-   VER_SET_CONDITION(conditionMask, VER_MAJORVERSION, VER_EQUAL);
-   VER_SET_CONDITION(conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL);
-   VER_SET_CONDITION(conditionMask, VER_PLATFORMID, VER_EQUAL);
-
-   while (VerifyVersionInfo(&checkVersion, VER_MAJORVERSION | VER_MINORVERSION | VER_PLATFORMID, conditionMask)) {
-     result->dwMinorVersion = checkVersion.dwMinorVersion;
-
-     ++checkVersion.dwMinorVersion;
-   }
-}
-
-static inline OSVERSIONINFO winOsVersion()
-{
-   OSVERSIONINFO result = { sizeof(OSVERSIONINFO), 0, 0, 0, 0, {'\0'}};
-
-   // GetVersionEx() has been deprecated in Windows 8.1 and will return
-   // only Windows 8 from that version on.
-
-   GetVersionEx(&result);
-
-   if (result.dwMajorVersion == 6 && result.dwMinorVersion == 2) {
-
-      if (! determineWinOsVersionPost8(&result)) {
-         determineWinOsVersionFallbackPost8(&result);
-      }
-   }
+   RtlGetVersion(&result);
 
    return result;
 }
 
 QSysInfo::WinVersion QSysInfo::windowsVersion()
 {
-   static QSysInfo::WinVersion winver;
-   if (winver) {
-      return winver;
+   static QSysInfo::WinVersion winVersion;
+
+   if (winVersion) {
+      return winVersion;
    }
 
-   winver = QSysInfo::WV_NT;
-   const OSVERSIONINFO osver = winOsVersion();
+   winVersion = QSysInfo::WV_NT;
+   const OSVERSIONINFO osVersion = winOsVersion();
 
-   switch (osver.dwPlatformId) {
-
-      case VER_PLATFORM_WIN32s:
-         winver = QSysInfo::WV_32s;
-         break;
+   switch (osVersion.dwPlatformId) {
 
       case VER_PLATFORM_WIN32_WINDOWS:
-         // Windows Me (minor 90) is the same as Windows 98
+         if (osVersion.dwMinorVersion == 90) {
+            winVersion = QSysInfo::WV_Me;
 
-         if (osver.dwMinorVersion == 90) {
-            winver = QSysInfo::WV_Me;
-
-         } else if (osver.dwMinorVersion == 10) {
-            winver = QSysInfo::WV_98;
+         } else if (osVersion.dwMinorVersion == 10) {
+            winVersion = QSysInfo::WV_98;
 
          } else {
-            winver = QSysInfo::WV_95;
+            winVersion = QSysInfo::WV_95;
          }
 
          break;
@@ -228,93 +132,157 @@ QSysInfo::WinVersion QSysInfo::windowsVersion()
       default:
           // VER_PLATFORM_WIN32_NT
 
-          if (osver.dwMajorVersion < 5) {
-             winver = QSysInfo::WV_NT;
+          if (osVersion.dwMajorVersion < 5) {
+             winVersion = QSysInfo::WV_NT;
 
-          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 0) {
-             winver = QSysInfo::WV_2000;
+          } else if (osVersion.dwMajorVersion == 5 && osVersion.dwMinorVersion == 0) {
+             winVersion = QSysInfo::WV_2000;
 
-          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 1) {
-             winver = QSysInfo::WV_XP;
+          } else if (osVersion.dwMajorVersion == 5 && osVersion.dwMinorVersion == 1) {
+             winVersion = QSysInfo::WV_XP;
 
-          } else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 2) {
-             winver = QSysInfo::WV_2003;
+          } else if (osVersion.dwMajorVersion == 5 && osVersion.dwMinorVersion == 2) {
+             winVersion = QSysInfo::WV_2003;
 
-          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 0) {
-             winver = QSysInfo::WV_VISTA;
+          } else if (osVersion.dwMajorVersion == 6 && osVersion.dwMinorVersion == 0) {
+             winVersion = QSysInfo::WV_VISTA;
 
-          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1) {
-             winver = QSysInfo::WV_WINDOWS7;
+          } else if (osVersion.dwMajorVersion == 6 && osVersion.dwMinorVersion == 1) {
+             winVersion = QSysInfo::WV_WINDOWS7;
 
-          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2) {
-             winver = QSysInfo::WV_WINDOWS8;
+          } else if (osVersion.dwMajorVersion == 6 && osVersion.dwMinorVersion == 2) {
+             winVersion = QSysInfo::WV_WINDOWS8;
 
-          } else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 3) {
-             winver = QSysInfo::WV_WINDOWS8_1;
+          } else if (osVersion.dwMajorVersion == 6 && osVersion.dwMinorVersion == 3) {
+             winVersion = QSysInfo::WV_WINDOWS8_1;
 
-          } else if (osver.dwMajorVersion == 10 && osver.dwMinorVersion == 0) {
-             winver = QSysInfo::WV_WINDOWS10;
+          } else if (osVersion.dwMajorVersion == 10 && osVersion.dwMinorVersion == 0) {
+             winVersion = QSysInfo::WV_WINDOWS10;
 
-          } else if (osver.dwMajorVersion == 11 && osver.dwMinorVersion == 0) {
-             winver = QSysInfo::WV_WINDOWS11;
+          } else if (osVersion.dwMajorVersion == 11 && osVersion.dwMinorVersion == 0) {
+             winVersion = QSysInfo::WV_WINDOWS11;
 
           } else {
-                   winver = QSysInfo::WV_NT_based;
              qWarning("QSysInfo::windowsVersion() Untested Windows version %d.%d detected",
-                   int(osver.dwMajorVersion), int(osver.dwMinorVersion));
+                   int(osVersion.dwMajorVersion), int(osVersion.dwMinorVersion));
+
+             winVersion = QSysInfo::WV_NT_based;
           }
 
          }
 
 #ifdef QT_DEBUG
    {
-      QByteArray forceWinVer = qgetenv("QT_WINVER_OVERRIDE");
+      QByteArray forceWinVersion = qgetenv("QT_WINVER_OVERRIDE");
 
-      if (forceWinVer.isEmpty()) {
-         return winver;
+      if (forceWinVersion.isEmpty()) {
+         return winVersion;
       }
 
-      if (forceWinVer == "NT") {
-         winver = QSysInfo::WV_NT;
+      if (forceWinVersion == "NT") {
+         winVersion = QSysInfo::WV_NT;
 
-      } else if (forceWinVer == "2000") {
-         winver = QSysInfo::WV_2000;
+      } else if (forceWinVersion == "2000") {
+         winVersion = QSysInfo::WV_2000;
 
-      } else if (forceWinVer == "2003") {
-         winver = QSysInfo::WV_2003;
+      } else if (forceWinVersion == "2003") {
+         winVersion = QSysInfo::WV_2003;
 
-      } else if (forceWinVer == "XP") {
-          winver = QSysInfo::WV_XP;
+      } else if (forceWinVersion == "XP") {
+          winVersion = QSysInfo::WV_XP;
 
-      } else if (forceWinVer == "VISTA") {
-          winver = QSysInfo::WV_VISTA;
+      } else if (forceWinVersion == "VISTA") {
+          winVersion = QSysInfo::WV_VISTA;
 
-      } else if (forceWinVer == "WINDOWS7") {
-          winver = QSysInfo::WV_WINDOWS7;
+      } else if (forceWinVersion == "WINDOWS7") {
+          winVersion = QSysInfo::WV_WINDOWS7;
 
-      } else if (forceWinVer == "WINDOWS8") {
-         winver = QSysInfo::WV_WINDOWS8;
+      } else if (forceWinVersion == "WINDOWS8") {
+         winVersion = QSysInfo::WV_WINDOWS8;
 
-      } else if (forceWinVer == "WINDOWS8.1") {
-         winver = QSysInfo::WV_WINDOWS8_1;
+      } else if (forceWinVersion == "WINDOWS8.1") {
+         winVersion = QSysInfo::WV_WINDOWS8_1;
 
-      } else if (forceWinVer == "WINDOWS10") {
-         winver = QSysInfo::WV_WINDOWS10;
+      } else if (forceWinVersion == "WINDOWS10") {
+         winVersion = QSysInfo::WV_WINDOWS10;
 
-      } else if (forceWinVer == "WINDOWS11") {
-         winver = QSysInfo::WV_WINDOWS11;
+      } else if (forceWinVersion == "WINDOWS11") {
+         winVersion = QSysInfo::WV_WINDOWS11;
 
       }
    }
 #endif
 
-   return winver;
+   return winVersion;
+}
+
+QString QSysInfo::windowsEdition(WinVersion winVersion)
+{
+   QString retval = "Unknown Version";
+
+   switch (winVersion) {
+      case QSysInfo::WV_95:
+         retval = "Windows 95";
+         break;
+
+      case QSysInfo::WV_98:
+         retval = "Windows 98";
+         break;
+
+      case QSysInfo::WV_Me:
+         retval = "Windows ME";
+         break;
+
+      case QSysInfo::WV_NT:
+         retval = "Windows NT";
+         break;
+
+      case QSysInfo::WV_2000:
+         retval = "Windows 2000";
+         break;
+
+      case  QSysInfo::WV_2003:
+         retval = "Windows Server 2003";
+         break;
+
+      case QSysInfo::WV_XP:
+         retval = "Windows XP";
+         break;
+
+      case QSysInfo::WV_VISTA:
+         retval = "Windows Vista";
+         break;
+
+      case QSysInfo::WV_WINDOWS7:
+         retval = "Windows 7";
+         break;
+
+      case QSysInfo::WV_WINDOWS8:
+         retval = "Windows 8";
+         break;
+
+      case QSysInfo::WV_WINDOWS8_1:
+         retval = "Windows 8.1";
+         break;
+
+      case QSysInfo::WV_WINDOWS10:
+         retval = "Windows 10";
+         break;
+
+      case QSysInfo::WV_WINDOWS11:
+         retval = "Windows 11";
+         break;
+
+      case QSysInfo::WV_NT_based:
+         retval = "Unknown NT Kernel";
+         break;
+   }
+
+   return retval;
 }
 
 const QSysInfo::WinVersion QSysInfo::WindowsVersion = QSysInfo::windowsVersion();
 
-
-//
 class QWindowsSockInit
 {
    public:

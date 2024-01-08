@@ -603,11 +603,9 @@ class Q_CORE_EXPORT QSysInfo
 
 #if defined(Q_OS_WIN)
    enum WinVersion {
-      WV_32s        = 0x0001,
       WV_95         = 0x0002,
       WV_98         = 0x0003,
       WV_Me         = 0x0004,
-      WV_DOS_based  = 0x000f,
 
       WV_NT         = 0x0010,
       WV_2000       = 0x0020,
@@ -619,6 +617,7 @@ class Q_CORE_EXPORT QSysInfo
       WV_WINDOWS8_1 = 0x00b0,
       WV_WINDOWS10  = 0x00c0,
       WV_WINDOWS11  = 0x00d0,
+
       WV_NT_based   = 0x00f0,
 
       WV_4_0        = WV_NT,
@@ -635,6 +634,8 @@ class Q_CORE_EXPORT QSysInfo
 
    static const WinVersion WindowsVersion;
    static WinVersion windowsVersion();
+   static QString windowsEdition(WinVersion winVersion);
+
 #endif
 
 #ifdef Q_OS_DARWIN

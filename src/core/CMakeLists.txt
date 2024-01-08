@@ -254,9 +254,10 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "(OpenBSD|FreeBSD|NetBSD|DragonFly)")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_link_libraries(CsCore
       PRIVATE
+      ntdll
       ole32
-      ws2_32
       uuid
+      ws2_32
    )
 
 endif()
