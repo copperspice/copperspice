@@ -149,7 +149,7 @@ elseif (MSVC)
    string (REGEX REPLACE "/W3" "" CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}"  )
    string (REGEX REPLACE "/W3" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-   add_compile_options("/utf-8")
+   add_compile_options("$<$<COMPILE_LANGUAGE:CXX>:/utf-8>")
 
 else()
    # Linux, Windows (MinGW)
