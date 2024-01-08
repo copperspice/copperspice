@@ -278,7 +278,7 @@ template <typename T, typename M, typename Alloc>
 void rcu_list<T, M, Alloc>::rcu_guard::rcu_read_unlock(const rcu_list<T, M, Alloc> &)
 {
    unlock();
-};
+}
 
 template <typename T, typename M, typename Alloc>
 void rcu_list<T, M, Alloc>::rcu_guard::unlock()

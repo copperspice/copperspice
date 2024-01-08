@@ -895,7 +895,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    friend class QX11PaintEngine;
    friend class QWin32PaintEngine;
 
-   friend class QWindowSurface;;
+   friend class QWindowSurface;
    friend class QWidgetItem;
    friend class QWidgetItemV2;
    friend class QWidgetWindow;

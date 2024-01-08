@@ -264,17 +264,7 @@ class match_results
    }
 
    const_reference operator[](size_type index) const {
-      if (m_is_singular && m_capture_list.empty()) {
-         raise_logic_error();
-      }
-
-      index += 2;
-
-      if (index < m_capture_list.size() && (index >= 0)) {
-         return m_capture_list[index];
-      }
-
-      return m_null;
+      return get_element(index + 2);
    }
 
    const_reference operator[](const string_type &capture_name) const {
@@ -298,7 +288,7 @@ class match_results
          raise_logic_error();
       }
 
-      return (*this)[-1];
+      return get_element(1);
    }
 
    const_reference suffix() const {
@@ -306,7 +296,7 @@ class match_results
          raise_logic_error();
       }
 
-      return (*this)[-2];
+      return get_element(0);
    }
 
    const_iterator begin() const {
@@ -468,6 +458,18 @@ class match_results
    }
 
  private:
+   const_reference get_element(size_type index) const {
+      if (m_is_singular && m_capture_list.empty()) {
+         raise_logic_error();
+      }
+
+      if (index < m_capture_list.size() && (index >= 0)) {
+         return m_capture_list[index];
+      }
+
+      return m_null;
+   }
+
    // error handler called when an uninitialized match_results is accessed:
    static void raise_logic_error() {
       std::logic_error e("Attempt to access an uninitialzed cs_regex_ns::::match_results<> class.");

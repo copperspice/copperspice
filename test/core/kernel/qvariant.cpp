@@ -2176,7 +2176,7 @@ struct MyCustomType
    QList<int> dataList;
 };
 
-CS_DECLARE_METATYPE(MyCustomType);
+CS_DECLARE_METATYPE(MyCustomType)
 
 TEST_CASE("QVariant constructor_user_type", "[qvariant]")
 {

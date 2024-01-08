@@ -29,13 +29,12 @@
 
 #ifndef QT_NO_BLITTABLE
 
-
 class QImage;
 class QBlittablePrivate;
 
 class Q_GUI_EXPORT QBlittable
 {
-   Q_DECLARE_PRIVATE(QBlittable);
+   Q_DECLARE_PRIVATE(QBlittable)
 
  public:
    enum Capability {

@@ -43,7 +43,7 @@
 void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleInterface *iface);
 # define accessibleDebugClientCalls(iface) accessibleDebugClientCalls_helper(Q_FUNC_INFO, iface)
 #else
-# define accessibleDebugClientCalls(iface)
+# define accessibleDebugClientCalls(iface)   (void) iface
 #endif
 
 QWindow *window_helper(const QAccessibleInterface *iface);

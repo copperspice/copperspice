@@ -244,7 +244,7 @@ void QStackedLayout::setCurrentWidget(QWidget *widget)
 {
    int index = indexOf(widget);
    if (index == -1) {
-      qWarning("QStackedLayout::setCurrentWidget() Widget %p is not part of this stacked layout", widget);
+      qWarning("QStackedLayout::setCurrentWidget() Widget %p is not part of this stacked layout", static_cast<void *>(widget));
       return;
    }
    setCurrentIndex(index);

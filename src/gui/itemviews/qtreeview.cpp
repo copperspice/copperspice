@@ -648,7 +648,8 @@ void QTreeView::keyboardSearch(const QString &search)
    bool skipRow = false;
    bool keyboardTimeWasValid = d->keyboardInputTime.isValid();
 
-   qint64 keyboardInputTimeElapsed;
+   qint64 keyboardInputTimeElapsed = 0;
+
    if (keyboardTimeWasValid) {
       keyboardInputTimeElapsed = d->keyboardInputTime.restart();
    } else {

@@ -75,7 +75,7 @@ QVector<T> filter_sort_queues(QVector<T> data, Flags f)
    return retval;
 }
 
-};
+}
 
 QVulkanWindow::QVulkanWindow(QWindow *parent)
    : QWindow(parent), m_isValid(false), m_concurrentFrameCount(MAX_CONCURRENT_FRAME_COUNT), m_currentFrame(0),

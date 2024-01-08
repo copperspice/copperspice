@@ -1562,7 +1562,8 @@ void QFontCache::clear()
                delete engine;
 
             } else if (cacheCount == 0) {
-               FC_DEBUG("QFontCache::clear: engine %p still has refcount %d", engine, engine->m_refCount.load());
+               FC_DEBUG("QFontCache::clear: engine %p still has refcount %d",
+                     static_cast<void *>(engine), engine->m_refCount.load());
             }
             it.value().data = nullptr;
          }
@@ -1634,7 +1635,7 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine, bool insertMu
    Q_ASSERT(engine != nullptr);
    Q_ASSERT(key.multi == (engine->type() == QFontEngine::Multi));
 
-   FC_DEBUG("QFontCache: inserting new engine %p", engine);
+   FC_DEBUG("QFontCache: inserting new engine %p", static_cast<void *>(engine));
    engine->m_refCount.ref();
 
    // Decrease now rather than waiting

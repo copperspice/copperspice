@@ -578,8 +578,8 @@ void QSpdyProtocolHandler::sendControlFrame(FrameType type,
 {
    // frame type and stream ID
    char header[8];
-   header[0] = 0x80u; // leftmost bit == 1 -> is a control frame
-   header[1] = 0x03; // 3 bit == version 3
+   header[0] = char(0x80u);   // leftmost bit == 1, control frame
+   header[1] = 0x03;          // 3 bit means version 3
    header[2] = 0;
 
    switch (type) {
@@ -652,15 +652,18 @@ void QSpdyProtocolHandler::sendSYN_STREAM(HttpMessagePair messagePair, qint32 st
    char prioAndSlot[2];
    switch (request.priority()) {
       case QHttpNetworkRequest::HighPriority:
-         prioAndSlot[0] = 0x00; // == prio 0 (highest)
+         prioAndSlot[0] = 0x00;            // == prio 0 (highest)
          break;
+
       case QHttpNetworkRequest::NormalPriority:
-         prioAndSlot[0] = 0x80u; // == prio 4
+         prioAndSlot[0] = char(0x80u);    // == prio 4
          break;
+
       case QHttpNetworkRequest::LowPriority:
-         prioAndSlot[0] = 0xe0u; // == prio 7 (lowest)
+         prioAndSlot[0] = char(0xe0u);    // == prio 7 (lowest)
          break;
    }
+
    prioAndSlot[1] = 0x00; // slot in client certificates (not supported currently)
    wireData.append(prioAndSlot, 2);
 

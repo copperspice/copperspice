@@ -510,7 +510,11 @@ using qreal = double;
 template <typename T>
 constexpr inline T qAbs(const T &value)
 {
-   return value >= 0 ? value : -value;
+   if constexpr (std::is_unsigned_v<T>) {
+      return value;
+   } else {
+      return value >= 0 ? value : -value;
+   }
 }
 
 constexpr inline int qRound(double value)

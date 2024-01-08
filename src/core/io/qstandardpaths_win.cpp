@@ -100,7 +100,7 @@ static int writableSpecialFolderClsid(QStandardPaths::StandardLocation type)
    static_assert(std::size(clsids) == size_t(QStandardPaths::AppConfigLocation + 1));
 
    return size_t(type) < sizeof(clsids) / sizeof(clsids[0]) ? clsids[type] : -1;
-};
+}
 
 static QString sHGetSpecialFolderPath(int clsid, QStandardPaths::StandardLocation type, bool warn = false)
 {

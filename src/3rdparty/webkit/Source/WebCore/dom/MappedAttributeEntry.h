@@ -4,7 +4,7 @@
  *           (C) 2001 Peter Kelly (pmk@post.com)
  *           (C) 2001 Dirk Mueller (mueller@kde.org)
  * Copyright (C) 2003, 2004, 2005, 2006 Apple Computer, Inc.
- * Copyright (C) 2010 François Sausset (sausset@gmail.com). All rights reserved.
+ * Copyright (C) 2010 Fran√ßois Sausset (sausset@gmail.com). All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

@@ -49,7 +49,7 @@
 
 static inline bool fuzzyIsNull(qreal d)
 {
-   if (sizeof(qreal) == sizeof(double)) {
+   if constexpr (sizeof(qreal) == sizeof(double)) {
       return qAbs(d) <= 1e-12;
    } else {
       return qAbs(d) <= 1e-5f;

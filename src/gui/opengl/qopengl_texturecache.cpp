@@ -196,9 +196,11 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, qint64 key, con
    funcs->glBindTexture(GL_TEXTURE_2D, id);
 
    QImage tx;
-   GLenum externalFormat;
-   GLenum internalFormat;
-   GLuint pixelType;
+
+   GLenum externalFormat = GL_RGBA;
+   GLenum internalFormat = GL_RGBA;
+   GLuint pixelType      = GL_UNSIGNED_BYTE;
+
    QImage::Format targetFormat = QImage::Format_Invalid;
 
    const bool isOpenGL12orBetter = !context->isOpenGLES() &&

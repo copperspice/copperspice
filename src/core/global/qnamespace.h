@@ -80,7 +80,7 @@ class Q_CORE_EXPORT Qt
          transparent
       };
 
-      enum KeyboardModifier {
+      enum KeyboardModifier : uint32_t {
          NoModifier           = 0x00000000,
          ShiftModifier        = 0x02000000,
          ControlModifier      = 0x04000000,

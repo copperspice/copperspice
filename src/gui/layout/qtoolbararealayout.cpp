@@ -1323,7 +1323,7 @@ void QToolBarAreaLayout::saveState(QDataStream &stream) const
 
             if (objectName.isEmpty()) {
                qWarning("QMainWindow::saveState() Object name was not set for QToolBar %p '%s'",
-                  widget, csPrintable(widget->windowTitle()) );
+                     static_cast<void *>(widget), csPrintable(widget->windowTitle()) );
             }
 
             stream << objectName;

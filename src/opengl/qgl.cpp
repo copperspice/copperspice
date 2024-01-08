@@ -1100,7 +1100,7 @@ static void convertFromGLImage(QImage &img, int w, int h, bool alpha_format, boo
 {
    Q_ASSERT(!img.isNull());
 
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       // OpenGL gives RGBA; Qt wants ARGB
       uint *p = (uint *)img.bits();
       uint *end = p + w * h;
@@ -1441,7 +1441,7 @@ GLuint QGLContext::bindTexture(const QString &fileName)
 static inline QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format)
 {
    if (texture_format == GL_BGRA) {
-      if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
          return ((src_pixel << 24) & 0xff000000)
             | ((src_pixel >> 24) & 0x000000ff)
             | ((src_pixel << 8) & 0x00ff0000)
@@ -1450,7 +1450,7 @@ static inline QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_
          return src_pixel;
       }
    } else {  // GL_RGBA
-      if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
          return (src_pixel << 8) | ((src_pixel >> 24) & 0xff);
       } else {
          return ((src_pixel << 16) & 0xff0000)
@@ -1500,7 +1500,7 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
       uint *q = (uint *) dst.scanLine(0);
 
       if (texture_format == GL_BGRA) {
-         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+         if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
             // mirror + swizzle
             for (int i = 0; i < height; ++i) {
                const uint *end = p + width;
@@ -1525,7 +1525,7 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
          }
 
       } else {
-         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+         if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
             for (int i = 0; i < height; ++i) {
                const uint *end = p + width;
 
@@ -3410,7 +3410,7 @@ struct PvrHeader {
 bool QGLTexture::canBindCompressedTexture
 (const char *buf, int len, const char *format, bool *hasAlpha)
 {
-   if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
+   if constexpr (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
       // Compressed texture loading only supported on little-endian
       // systems such as x86 and ARM at the moment.
       return false;
@@ -3449,7 +3449,7 @@ bool QGLTexture::canBindCompressedTexture
 
 QSize QGLTexture::bindCompressedTexture(const char *buf, int len, const char *format)
 {
-   if (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
+   if constexpr (QSysInfo::ByteOrder != QSysInfo::LittleEndian) {
       // Compressed texture loading only supported on little-endian
       // systems such as x86 and ARM at the moment.
       return QSize();

@@ -137,7 +137,7 @@ static TIME_ZONE_INFORMATION getRegistryTzi(const QByteArray &windowsId, bool *o
 {
    *ok = false;
 
-   TIME_ZONE_INFORMATION tzi;
+   TIME_ZONE_INFORMATION tzi = {};
    REG_TZI_FORMAT regTzi;
    DWORD regTziSize = sizeof(regTzi);
    HKEY key = nullptr;

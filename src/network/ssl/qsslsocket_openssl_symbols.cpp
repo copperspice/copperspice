@@ -105,7 +105,7 @@ DEFINEFUNC3(void *, ASN1_dup, i2d_of_void *a, a, d2i_of_void *b, b, char *c, c, 
 DEFINEFUNC(long, ASN1_INTEGER_get, ASN1_INTEGER *a, a, return 0, return)
 DEFINEFUNC(unsigned char *, ASN1_STRING_data, ASN1_STRING *a, a, return nullptr, return)
 DEFINEFUNC(int, ASN1_STRING_length, ASN1_STRING *a, a, return 0, return)
-DEFINEFUNC2(int, ASN1_STRING_to_UTF8, unsigned char **a, a, ASN1_STRING *b, b, return 0, return);
+DEFINEFUNC2(int, ASN1_STRING_to_UTF8, unsigned char **a, a, ASN1_STRING *b, b, return 0, return)
 DEFINEFUNC4(long, BIO_ctrl, BIO *a, a, int b, b, long c, c, void *d, d, return -1, return)
 DEFINEFUNC(int, BIO_free, BIO *a, a, return 0, return)
 DEFINEFUNC(BIO *, BIO_new, BIO_METHOD *a, a, return nullptr, return)
@@ -150,15 +150,15 @@ DEFINEFUNC(void, EVP_CIPHER_CTX_init, EVP_CIPHER_CTX *a, a, return, DUMMYARG)
 DEFINEFUNC(void, EVP_CIPHER_CTX_reset, EVP_CIPHER_CTX *a, a, return, DUMMYARG)
 #endif
 
-DEFINEFUNC4(int, EVP_CIPHER_CTX_ctrl, EVP_CIPHER_CTX *ctx, ctx, int type, type, int arg, arg, void *ptr, ptr, return 0, return);
+DEFINEFUNC4(int, EVP_CIPHER_CTX_ctrl, EVP_CIPHER_CTX *ctx, ctx, int type, type, int arg, arg, void *ptr, ptr, return 0, return)
 DEFINEFUNC2(int, EVP_CIPHER_CTX_set_key_length, EVP_CIPHER_CTX *ctx, ctx, int keylen, keylen, return 0, return)
 DEFINEFUNC5(int, EVP_CipherInit, EVP_CIPHER_CTX *ctx, ctx, const EVP_CIPHER *type, type, const unsigned char *key, key,
-      const unsigned char *iv, iv, int enc, enc, return 0, return);
+      const unsigned char *iv, iv, int enc, enc, return 0, return)
 
 DEFINEFUNC5(int, EVP_CipherUpdate, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl,
-      const unsigned char *in, in, int inl, inl, return 0, return);
+      const unsigned char *in, in, int inl, inl, return 0, return)
 
-DEFINEFUNC3(int, EVP_CipherFinal, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl, return 0, return);
+DEFINEFUNC3(int, EVP_CipherFinal, EVP_CIPHER_CTX *ctx, ctx, unsigned char *out, out, int *outl, outl, return 0, return)
 DEFINEFUNC(const EVP_CIPHER *, EVP_des_cbc, DUMMYARG, DUMMYARG, return nullptr, return)
 DEFINEFUNC(const EVP_CIPHER *, EVP_des_ede3_cbc, DUMMYARG, DUMMYARG, return nullptr, return)
 DEFINEFUNC(const EVP_CIPHER *, EVP_rc2_cbc, DUMMYARG, DUMMYARG, return nullptr, return)
@@ -471,7 +471,7 @@ DEFINEFUNC2(int, X509_cmp, X509 *a, a, X509 *b, b, return -1, return)
    DEFINEFUNC(X509 *, X509_dup, X509 *a, a, return nullptr, return)
 #endif
 
-DEFINEFUNC2(void, X509_print, BIO *a, a, X509 *b, b, return, DUMMYARG);
+DEFINEFUNC2(void, X509_print, BIO *a, a, X509 *b, b, return, DUMMYARG)
 DEFINEFUNC(ASN1_OBJECT *, X509_EXTENSION_get_object, X509_EXTENSION *a, a, return nullptr, return)
 DEFINEFUNC(void, X509_free, X509 *a, a, return, DUMMYARG)
 DEFINEFUNC2(X509_EXTENSION *, X509_get_ext, X509 *a, a, int b, b, return nullptr, return)
@@ -512,8 +512,8 @@ DEFINEFUNC(void, X509_STORE_CTX_free, X509_STORE_CTX *a, a, return, DUMMYARG)
 DEFINEFUNC4(int, X509_STORE_CTX_init, X509_STORE_CTX *a, a, X509_STORE *b, b, X509 *c, c,
       STACK_OF(X509) * d, d, return -1, return)
 
-DEFINEFUNC(ASN1_TIME *, X509_getm_notAfter,  const X509 *x, x, return nullptr, return);
-DEFINEFUNC(ASN1_TIME *, X509_getm_notBefore, const X509 *x, x, return nullptr, return);
+DEFINEFUNC(ASN1_TIME *, X509_getm_notAfter,  const X509 *x, x, return nullptr, return)
+DEFINEFUNC(ASN1_TIME *, X509_getm_notBefore, const X509 *x, x, return nullptr, return)
 
 DEFINEFUNC2(void, X509_STORE_set_verify_cb, X509_STORE *ctx, ctx, X509_STORE_CTX_verify_cb verify_cb,
       verify_cb, return, DUMMYARG)
@@ -588,9 +588,9 @@ DEFINEFUNC(int, EC_curve_nist2nid, const char *name, name, return 0, return)
 #endif      // OPENSSL_NO_EC
 
 DEFINEFUNC5(int, PKCS12_parse, PKCS12 *p12, p12, const char *pass, pass, EVP_PKEY **pkey, pkey,
-      X509 **cert, cert, STACK_OF(X509) **ca, ca, return 1, return);
+      X509 **cert, cert, STACK_OF(X509) **ca, ca, return 1, return)
 
-DEFINEFUNC2(PKCS12 *, d2i_PKCS12_bio, BIO *bio, bio, PKCS12 **pkcs12, pkcs12, return nullptr, return);
+DEFINEFUNC2(PKCS12 *, d2i_PKCS12_bio, BIO *bio, bio, PKCS12 **pkcs12, pkcs12, return nullptr, return)
 DEFINEFUNC(void, PKCS12_free, PKCS12 *pkcs12, pkcs12, return, DUMMYARG)
 
 #define RESOLVEFUNC(func) \

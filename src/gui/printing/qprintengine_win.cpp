@@ -222,33 +222,6 @@ bool QWin32PrintEngine::newPage()
       SetBkMode(d->hdc, TRANSPARENT);
    }
 
-   // ###
-   return true;
-
-   bool success = false;
-   if (d->hdc && d->state == QPrinter::Active) {
-      if (EndPage(d->hdc) != SP_ERROR) {
-         // reinitialize the DC before StartPage if needed,
-         // because resetdc is disabled between calls to the StartPage and EndPage functions
-         // (see StartPage documentation in the Platform SDK:Windows GDI)
-         //          state = PST_ACTIVEDOC;
-         //          reinit();
-         //          state = PST_ACTIVE;
-         // start the new page now
-
-         if (d->reinit) {
-            if (!d->resetDC()) {
-               qErrnoWarning("QWin32PrintEngine::newPage(), ResetDC failed (2)");
-            }
-            d->reinit = false;
-         }
-         success = (StartPage(d->hdc) != SP_ERROR);
-      }
-      if (!success) {
-         d->state = QPrinter::Aborted;
-         return false;
-      }
-   }
    return true;
 }
 

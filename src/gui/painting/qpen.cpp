@@ -439,7 +439,7 @@ QDataStream &operator<<(QDataStream &s, const QPen &p)
    s << p.brush();
    s << double(p.miterLimit());
 
-   if (sizeof(qreal) == sizeof(double)) {
+   if constexpr (sizeof(qreal) == sizeof(double)) {
       s << p.dashPattern();
 
    } else {
@@ -481,7 +481,7 @@ QDataStream &operator>>(QDataStream &s, QPen &p)
    s >> brush;
    s >> miterLimit;
 
-   if (sizeof(qreal) == sizeof(double)) {
+   if constexpr (sizeof(qreal) == sizeof(double)) {
       s >> dashPattern;
 
    } else {

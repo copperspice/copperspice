@@ -171,7 +171,7 @@ QMediaControl *DirectShowPlayerService::requestControl(const QString &name)
 
    } else if (name == QVideoWindowControl_iid) {
       if (! m_videoRendererControl && ! m_videoWindowControl) {
-         IBaseFilter *filter;
+         IBaseFilter *filter = nullptr;
 
 #ifdef HAVE_EVR
          DirectShowEvrVideoWindowControl *evrControl = new DirectShowEvrVideoWindowControl;

@@ -111,7 +111,7 @@ class cs_number<0>
    public:                            \
       using cs_parent = parentX;      \
       using cs_class  = classNameX;   \
-      CS_OBJECT_INTERNAL(classNameX); \
+      CS_OBJECT_INTERNAL(classNameX)  \
    private:
 
 #define CS_OBJECT_OUTSIDE(classNameX) \
@@ -200,7 +200,7 @@ class cs_number<0>
    public:                                      \
       using cs_parent = CSGadget_Fake_Parent;   \
       using cs_class  = classNameX;             \
-      CS_GADGET_INTERNAL(classNameX);           \
+      CS_GADGET_INTERNAL(classNameX)            \
    private:
 
 #define CS_GADGET_OUTSIDE(classNameX)           \

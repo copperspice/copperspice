@@ -573,7 +573,8 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
    Q_Q(QGraphicsScene);
 
    if (item && item->scene() != q) {
-      qWarning("QGraphicsScene::setActivePanel() Item %p must be a child of this QGraphicsScene", item);
+      qWarning("QGraphicsScene::setActivePanel() Item %p must be a child of this QGraphicsScene",
+            static_cast<void *>(item));
       return;
    }
 

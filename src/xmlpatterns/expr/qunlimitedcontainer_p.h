@@ -65,7 +65,7 @@ class UnlimitedContainer : public Expression
 
          /* Since this function is a template function, it doesn't
           * hurt performance that this test is inside the loop. */
-         if (suppliedCard == ProductOfCardinality) {
+         if constexpr (suppliedCard == ProductOfCardinality) {
             card += t->cardinality();
          } else {
             card |= t->cardinality();

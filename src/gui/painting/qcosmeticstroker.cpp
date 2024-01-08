@@ -109,7 +109,7 @@ struct NoDasher {
    void adjust(int = 0) {}
 };
 
-};   // namespace
+}   // namespace
 
 /*
  * The return value is the result of the clipLine() call performed at the start

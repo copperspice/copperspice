@@ -276,7 +276,7 @@ static void setup_qt(QImage &image, png_structp png_ptr, png_infop info_ptr, QSi
             }
          }
 
-         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+         if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
             png_set_swap_alpha(png_ptr);
          }
 
@@ -401,7 +401,7 @@ static void setup_qt(QImage &image, png_structp png_ptr, png_infop info_ptr, QSi
 
 
 
-      if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+      if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
          png_set_swap_alpha(png_ptr);
       }
 
@@ -409,7 +409,7 @@ static void setup_qt(QImage &image, png_structp png_ptr, png_infop info_ptr, QSi
    }
 
    // Qt==ARGB==Big(ARGB)==Little(BGRA)
-   if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
       png_set_bgr(png_ptr);
    }
 }
@@ -965,7 +965,8 @@ bool Q_INTERNAL_WIN_NO_THROW QPNGImageWriter::writeImage(const QImage &image, in
 
    // Swap ARGB to RGBA (normal PNG format) before saving on
    // BigEndian machines
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       png_set_swap_alpha(png_ptr);
    }
 

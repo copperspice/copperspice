@@ -452,7 +452,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       if (currentThread == objectThread) {
          qWarning("QMetaMethod::invoke() Dead lock detected in BlockingQueuedConnection, Receiver is %s(%p)",
-                  csPrintable(m_metaObject->className()), object);
+                  csPrintable(m_metaObject->className()), static_cast<void *>(object));
       }
 
       QSemaphore semaphore;
@@ -523,8 +523,8 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, Ts &&...Vs) c
       // blocking queued connection
 
       if (currentThread == objectThread) {
-         qWarning("QMetaMethod::invoke() Dead lock detected in BlockingQueuedConnection, Receiver is %s(%p)",
-                  csPrintable(m_metaObject->className()), object);
+         qWarning("QMetaMethod::invoke() Dead lock detected in BlockingQueuedConnection, Receiver is %s (%p)",
+                  csPrintable(m_metaObject->className()), static_cast<void *>(object));
       }
 
       QSemaphore semaphore;

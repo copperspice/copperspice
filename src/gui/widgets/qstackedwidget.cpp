@@ -93,7 +93,7 @@ void QStackedWidget::setCurrentWidget(QWidget *widget)
    Q_D(QStackedWidget);
 
    if (d->layout->indexOf(widget) == -1) {
-      qWarning("QStackedWidget::setCurrentWidget() Current widget (%p) is not in this stack", widget);
+      qWarning("QStackedWidget::setCurrentWidget() Current widget (%p) is not in this stack", static_cast<void *>(widget));
       return;
    }
 

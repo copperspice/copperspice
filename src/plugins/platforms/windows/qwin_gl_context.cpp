@@ -1442,7 +1442,7 @@ void QWindowsGLContext::swapBuffers(QPlatformSurface *surface)
    if (const QOpenGLContextData *contextData = findByHWND(m_windowContexts, handleOf(surface))) {
       QOpenGLStaticContext::opengl32.swapBuffers(contextData->hdc);
    } else {
-      qWarning("%s: Cannot find window %p", __FUNCTION__, handleOf(surface));
+      qWarning("QWindowsGLContext::swapBuffers() Unable to find window %p", static_cast<void *>(handleOf(surface)));
    }
 }
 

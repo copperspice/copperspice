@@ -189,7 +189,7 @@ static inline bool qt_is_inf(double d)
 #ifdef QT_ARMFPA
    return (ch[3] & 0x7f) == 0x7f && ch[2] == 0xf0;
 #else
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) == 0x7f && ch[1] == 0xf0;
    } else {
       return (ch[7] & 0x7f) == 0x7f && ch[6] == 0xf0;
@@ -203,7 +203,7 @@ static inline bool qt_is_nan(double d)
 #ifdef QT_ARMFPA
    return (ch[3] & 0x7f) == 0x7f && ch[2] > 0xf0;
 #else
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) == 0x7f && ch[1] > 0xf0;
    } else {
       return (ch[7] & 0x7f) == 0x7f && ch[6] > 0xf0;
@@ -217,7 +217,7 @@ static inline bool qt_is_finite(double d)
 #ifdef QT_ARMFPA
    return (ch[3] & 0x7f) != 0x7f || (ch[2] & 0xf0) != 0xf0;
 #else
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) != 0x7f || (ch[1] & 0xf0) != 0xf0;
    } else {
       return (ch[7] & 0x7f) != 0x7f || (ch[6] & 0xf0) != 0xf0;
@@ -228,7 +228,7 @@ static inline bool qt_is_finite(double d)
 static inline bool qt_is_inf(float d)
 {
    uchar *ch = (uchar *)&d;
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) == 0x7f && ch[1] == 0x80;
    } else {
       return (ch[3] & 0x7f) == 0x7f && ch[2] == 0x80;
@@ -238,7 +238,7 @@ static inline bool qt_is_inf(float d)
 static inline bool qt_is_nan(float d)
 {
    uchar *ch = (uchar *)&d;
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) == 0x7f && ch[1] > 0x80;
    } else {
       return (ch[3] & 0x7f) == 0x7f && ch[2] > 0x80;
@@ -248,7 +248,7 @@ static inline bool qt_is_nan(float d)
 static inline bool qt_is_finite(float d)
 {
    uchar *ch = (uchar *)&d;
-   if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+   if constexpr (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
       return (ch[0] & 0x7f) != 0x7f || (ch[1] & 0x80) != 0x80;
    } else {
       return (ch[3] & 0x7f) != 0x7f || (ch[2] & 0x80) != 0x80;

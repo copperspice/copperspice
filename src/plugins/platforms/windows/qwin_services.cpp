@@ -31,7 +31,6 @@
 #include <shlobj.h>
 #include <intshcut.h>
 
-enum { debug = 0 };
 
 static inline bool shellExecute(const QUrl &url)
 {
@@ -82,9 +81,9 @@ static inline QString mailCommand()
 
    keyName += "\\Shell\\Open\\Command";
 
-   if (debug) {
-      qDebug() << __FUNCTION__ << "keyName=" << keyName;
-   }
+#ifdef CS_SHOW_DEBUG
+   qDebug() << __FUNCTION__ << "keyName=" << keyName;
+#endif
 
    command[0] = 0;
 
@@ -129,9 +128,10 @@ static inline bool launchMail(const QUrl &url)
    // Pass the url as the parameter. Should use QProcess::startDetached(),
    // but that cannot handle a Windows command line [yet].
    command.replace(QString("%1"), url.toString(QUrl::FullyEncoded));
-   if (debug) {
-      qDebug() << __FUNCTION__ << "Launching" << command;
-   }
+
+#ifdef CS_SHOW_DEBUG
+   qDebug() << __FUNCTION__ << "Launching" << command;
+#endif
 
    //start the process
    PROCESS_INFORMATION pi;

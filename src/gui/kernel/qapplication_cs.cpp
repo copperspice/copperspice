@@ -2394,7 +2394,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                QWheelEvent we(relpos, wheel->globalPos(), wheel->pixelDelta(), wheel->angleDelta(),
                   wheel->buttons(), wheel->modifiers(), phase, wheel->source());
 
-               bool eventAccepted;
+               bool eventAccepted = false;
 
                while (w) {
                   we.spont = spontaneous && w == receiver;

@@ -32,13 +32,11 @@ class ColorOutputPrivate;
 
 class ColorOutput
 {
-   enum {
-      ForegroundShift = 10,
-      BackgroundShift = 20,
-      SpecialShift    = 20,
-      ForegroundMask  = ((static_cast<quint64>(1) << ForegroundShift) - 1) << ForegroundShift,
-      BackgroundMask  = ((static_cast<quint64>(1) << BackgroundShift) - 1) << BackgroundShift
-   };
+static constexpr uint32_t ForegroundShift = 0;
+static constexpr uint32_t BackgroundShift = 10;
+
+static constexpr uint32_t ForegroundMask  = 0x000003FF;
+static constexpr uint32_t BackgroundMask  = 0xFFFFFC00;
 
  public:
    enum ColorCodeComponent {
@@ -66,7 +64,8 @@ class ColorOutput
       RedBackground           = 5 << BackgroundShift,
       PurpleBackground        = 6 << BackgroundShift,
       BrownBackground         = 7 << BackgroundShift,
-      DefaultColor            = 1 << SpecialShift
+
+      DefaultColor            = BlackBackground,
    };
 
    typedef QFlags<ColorCodeComponent> ColorCode;

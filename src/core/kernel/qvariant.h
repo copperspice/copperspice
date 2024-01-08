@@ -430,7 +430,7 @@ class Q_CORE_EXPORT QVariant
       }
 
       return retval;
-   };
+   }
 
    // **
    QVariant &operator=(const QVariant &other);
@@ -802,7 +802,7 @@ uint QVariant::registerType()
    }
 
    return userId.load(std::memory_order_acquire);
-};
+}
 
 #define CS_DECLARE_METATYPE(TYPE)                  \
    template<>                                      \

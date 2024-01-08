@@ -1499,7 +1499,9 @@ QVector<QCss::StyleRule> QStyleSheetStyle::styleRules(const QObject *obj) const
             parser.init("* {" + styleSheet + '}');
 
             if (! parser.parse(&ss)) {
-               qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet for object %p", xx);
+               qWarning("QStyleSheetStyle::styleRules() Unable to parse application stylesheet for object %p",
+                  static_cast<const void *>(xx));
+
             }
          }
 

@@ -66,7 +66,7 @@ class Existence : public FunctionCall
 {
  public:
    bool evaluateEBV(const DynamicContext::Ptr &context) const override {
-      if (Id == IDExistsFN) {
+      if constexpr (Id == IDExistsFN) {
          return !m_operands.first()->evaluateSequence(context)->isEmpty();
       } else {
          return m_operands.first()->evaluateSequence(context)->isEmpty();

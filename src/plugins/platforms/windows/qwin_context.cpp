@@ -976,8 +976,8 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       }
 
    } else {
-      qWarning("%s: No Window found for event 0x%x (%s), hwnd=0x%p.", __FUNCTION__, message,
-         QWindowsGuiEventDispatcher::windowsMessageName(message), hwnd);
+      qWarning("QWindowsContext::windowsProc() No Window found for event 0x%x (%s), hwnd=0x%p.",
+            message, QWindowsGuiEventDispatcher::windowsMessageName(message), static_cast<void *>(hwnd));
       return false;
    }
 

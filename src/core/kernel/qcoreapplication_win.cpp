@@ -547,7 +547,7 @@ static const char *findWMstr(uint msg)
    }
    result = knownWM[i].str;
    return result;
-};
+}
 
 // Convenience function for converting flags and values into readable strings
 struct FLAG_STRING_STRUCT {
@@ -584,7 +584,7 @@ QString flagCheck(uint actual, ...)
    }
    va_end(ap);
    return result;
-};
+}
 
 // Returns the string representation of the value in 'actual'. (...) must
 // consist of FLAG_STRING, with a FLAG_STRING() as the last value in the list
@@ -602,7 +602,7 @@ QString valueCheck(uint actual, ...)
 
    va_end(ap);
    return result;
-};
+}
 
 // Returns a "human readable" string representation of the MSG and the information it points to
 QString decodeMSG(const MSG &msg)

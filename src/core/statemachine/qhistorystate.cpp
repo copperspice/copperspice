@@ -89,7 +89,7 @@ void QHistoryState::setDefaultState(QAbstractState *state)
 
    if (state && state->parentState() != parentState()) {
       qWarning("QHistoryState::setDefaultState() State %p does not belong "
-         "to this history state group (%p)", state, parentState());
+            "to this history state group (%p)", static_cast<void *>(state), static_cast<void *>(parentState()) );
       return;
    }
 

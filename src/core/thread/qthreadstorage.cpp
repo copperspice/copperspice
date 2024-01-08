@@ -82,7 +82,7 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
        */
       QThreadData *data = QThreadData::current();
       id = data->tls.count();
-      DEBUG_MSG("QThreadStorageData: Allocated id %d, destructor %p cannot be stored", id, func);
+
       return;
    }
    for (id = 0; id < destr->count(); id++) {
@@ -95,7 +95,6 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
    } else {
       (*destr)[id] = func;
    }
-   DEBUG_MSG("QThreadStorageData: Allocated id %d, destructor %p", id, func);
 }
 
 QThreadStorageData::~QThreadStorageData()
@@ -121,9 +120,7 @@ void **QThreadStorageData::get() const
    void **v = &tls[id];
 
    DEBUG_MSG("QThreadStorageData: Returning storage %d, data %p, for thread %p",
-             id,
-             *v,
-             data->thread.load());
+         id, static_cast<void *>(*v), static_cast<void *>(data->thread.load()));
 
    return *v ? v : nullptr;
 }
@@ -145,7 +142,7 @@ void **QThreadStorageData::set(void *p)
    // delete any previous data
    if (value != nullptr) {
       DEBUG_MSG("QThreadStorageData: Deleting previous storage %d, data %p, for thread %p",
-                id, value, data->thread.load());
+            id, static_cast<void *>(value), static_cast<void *>(data->thread.load()));
 
       QMutexLocker locker(mutex());
       DestructorMap *destr = destructors();
@@ -162,7 +159,8 @@ void **QThreadStorageData::set(void *p)
 
    // store new data
    value = p;
-   DEBUG_MSG("QThreadStorageData: Set storage %d for thread %p to %p", id, data->thread.load(), p);
+   DEBUG_MSG("QThreadStorageData: Set storage %d for thread %p to %p",
+         id, static_cast<void *>(data->thread.load()), static_cast<void *>(p));
 
    return &value;
 }
@@ -174,7 +172,7 @@ void QThreadStorageData::finish(void **p)
       return;   // nothing to do
    }
 
-   DEBUG_MSG("QThreadStorageData: Destroying storage for thread %p", QThread::currentThread());
+   DEBUG_MSG("QThreadStorageData: Destroying storage for thread %p", static_cast<void *>(QThread::currentThread()));
    while (!tls->isEmpty()) {
       void *&value = tls->last();
       void *q = value;
@@ -194,7 +192,7 @@ void QThreadStorageData::finish(void **p)
       if (!destructor) {
          if (QThread::currentThread())
             qWarning("QThreadStorage::finish() Thread %p exited after QThreadStorage %d destroyed",
-                     QThread::currentThread(), i);
+                  static_cast<void *>(QThread::currentThread()), i);
          continue;
       }
       destructor(q); //crash here might mean the thread exited after qthreadstorage was destroyed

@@ -389,10 +389,12 @@ QRectF QPixmapBlurFilter::boundingRectFor(const QRectF &rect) const
 template <int shift>
 inline int qt_static_shift(int value)
 {
-   if (shift == 0) {
+   if constexpr (shift == 0) {
       return value;
-   } else if (shift > 0) {
+
+   } else if constexpr (shift > 0) {
       return value << (uint(shift) & 0x1f);
+
    } else {
       return value >> (uint(-shift) & 0x1f);
    }

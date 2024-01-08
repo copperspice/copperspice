@@ -1009,7 +1009,9 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
    }
 
    if (err != FT_Err_Ok) {
-      qWarning("QFontEngineFT::loadGlyph() FT_Load_Glyph() failed, err=%x face=%p, glyph=%d", err, face, glyph);
+      qWarning("QFontEngineFT::loadGlyph() FT_Load_Glyph() failed, err=%x face=%p, glyph=%d",
+            err, static_cast<void *>(face), glyph);
+
       if (set) {
          set->setGlyphMissing(glyph);
       }
@@ -1089,7 +1091,8 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
       err = FT_Render_Glyph(slot, hsubpixel ? FT_RENDER_MODE_LCD : FT_RENDER_MODE_LCD_V);
 
       if (err != FT_Err_Ok) {
-         qWarning("QFontEngineFT::loadGlyph() FT_Render_Glyph() failed err=%x face=%p, glyph=%d", err, face, glyph);
+         qWarning("QFontEngineFT::loadGlyph() FT_Render_Glyph() failed err=%x face=%p, glyph=%d",
+               err, static_cast<void *>(face), glyph);
       }
 
       FT_Library_SetLcdFilter(slot->library, FT_LCD_FILTER_NONE);

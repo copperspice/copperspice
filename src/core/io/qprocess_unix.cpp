@@ -126,7 +126,7 @@ static int qt_create_pipe(int *pipe)
    int pipe_ret = qt_safe_pipe(pipe);
    if (pipe_ret != 0) {
       qWarning("QProcess::createPipe() Unable to create pipe %p: %s",
-               pipe, csPrintable(qt_error_string(errno)));
+            static_cast<void *>(pipe), csPrintable(qt_error_string(errno)));
    }
    return pipe_ret;
 }

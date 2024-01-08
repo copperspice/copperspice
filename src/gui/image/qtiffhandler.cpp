@@ -587,8 +587,9 @@ bool QTiffHandler::write(const QImage &image)
 
          int chunkStart = y;
          int chunkEnd = y + chunk.height();
+
          while (y < chunkEnd) {
-            if (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
+            if constexpr (QSysInfo::ByteOrder == QSysInfo::LittleEndian) {
                convert32BitOrder(chunk.scanLine(y - chunkStart), width);
             } else {
                convert32BitOrderBigEndian(chunk.scanLine(y - chunkStart), width);

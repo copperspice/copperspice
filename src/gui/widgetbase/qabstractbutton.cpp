@@ -150,7 +150,7 @@ void QAbstractButtonPrivate::notifyChecked()
 
 void QAbstractButtonPrivate::moveFocus(int key)
 {
-   QList<QAbstractButton *> buttonList = queryButtonList();;
+   QList<QAbstractButton *> buttonList = queryButtonList();
 
 #ifndef QT_NO_BUTTONGROUP
    bool exclusive = group ? group->d_func()->exclusive : autoExclusive;

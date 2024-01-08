@@ -45,7 +45,7 @@ struct QCssKnownValue {
    quint64 id;
 };
 
-static const QCssKnownValue properties[NumProperties - 1] = {
+static const QCssKnownValue s_properties[NumProperties - 1] = {
    { "-qt-background-role", QtBackgroundRole },
    { "-qt-block-indent", QtBlockIndent },
    { "-qt-list-indent", QtListIndent },
@@ -150,7 +150,7 @@ static const QCssKnownValue properties[NumProperties - 1] = {
    { "width", Width }
 };
 
-static const QCssKnownValue values[NumKnownValues - 1] = {
+static const QCssKnownValue s_values[NumKnownValues - 1] = {
    { "active", Value_Active },
    { "alternate-base", Value_AlternateBase },
    { "always", Value_Always },
@@ -226,7 +226,7 @@ static const QCssKnownValue values[NumKnownValues - 1] = {
 };
 
 //Map id to strings as they appears in the 'values' array above
-static const short indexOfId[NumKnownValues] = {
+static const short s_indexOfId[NumKnownValues] = {
    0, 41, 48, 42, 49, 54, 35, 26, 70, 71, 25, 43, 5, 63, 47,
    29, 58, 59, 27, 51, 61, 6, 10, 39, 56, 19, 13, 17, 18, 20, 21, 50, 24, 46, 67, 37, 3, 2, 40, 62, 16,
    11, 57, 14, 32, 64, 33, 65, 55, 66, 34, 69, 8, 28, 38, 12, 36, 60, 7, 9, 4, 68, 53, 22, 23, 30, 31,
@@ -236,7 +236,7 @@ static const short indexOfId[NumKnownValues] = {
 QString Value::toString() const
 {
    if (type == KnownIdentifier) {
-      return QString::fromLatin1(values[indexOfId[variant.toInt()]].name);
+      return QString::fromLatin1(s_values[s_indexOfId[variant.toInt()]].name);
    } else {
       return variant.toString();
    }
@@ -861,7 +861,7 @@ static ColorData parseColorValue(QCss::Value v)
    }
 
    if ((lst.at(0).compare("palette", Qt::CaseInsensitive)) == 0) {
-      int role = findKnownValue(lst.at(1).trimmed(), values, NumKnownValues);
+      int role = findKnownValue(lst.at(1).trimmed(), s_values, NumKnownValues);
 
       if (role >= Value_FirstColorRole && role <= Value_LastColorRole) {
          return (QPalette::ColorRole)(role - Value_FirstColorRole);
@@ -2924,7 +2924,7 @@ bool Parser::parseCombinator(BasicSelector::Relation *relation)
 bool Parser::parseProperty(Declaration *decl)
 {
    decl->d->property    = lexem();
-   decl->d->propertyId  = static_cast<Property>(findKnownValue(decl->d->property, properties, NumProperties));
+   decl->d->propertyId  = static_cast<Property>(findKnownValue(decl->d->property, s_properties, NumProperties));
    decl->d->inheritable = isInheritable(decl->d->propertyId);
    skipSpace();
 
@@ -3347,7 +3347,7 @@ bool Parser::parseTerm(Value *value)
          }
 
          value->type = Value::Identifier;
-         const int theid = findKnownValue(str, values, NumKnownValues);
+         const int theid = findKnownValue(str, s_values, NumKnownValues);
 
          if (theid != 0) {
             value->type = Value::KnownIdentifier;

@@ -74,7 +74,7 @@ inline T qFromLittleEndian(const uchar *source)
    static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
    static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
 
-   if (sizeof(T) == 8) {
+   if constexpr (sizeof(T) == 8) {
       // 64
       quint64 retval = 0
              | source[0]
@@ -88,7 +88,7 @@ inline T qFromLittleEndian(const uchar *source)
 
       return static_cast<T>(retval);
 
-   } else if (sizeof(T) == 4) {
+   } else if constexpr (sizeof(T) == 4) {
       // 32
       quint32 retval = 0
              | source[0]
@@ -119,7 +119,7 @@ inline T qFromBigEndian(const uchar *source)
    static_assert(std::is_integral<T>::value, "Data type for T must be an integer");
    static_assert(sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8, "T must be a 16-bit, 32-bit, or 64-bit integer");
 
-   if (sizeof(T) == 8) {
+   if constexpr (sizeof(T) == 8) {
       // 64
       quint64 retval = 0
              | source[7]
@@ -133,7 +133,7 @@ inline T qFromBigEndian(const uchar *source)
 
       return static_cast<T>(retval);
 
-   } else if (sizeof(T) == 4) {
+   } else if constexpr (sizeof(T) == 4) {
       // 32
       quint32 retval = 0
              | source[3]

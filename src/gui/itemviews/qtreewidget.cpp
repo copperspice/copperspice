@@ -2049,7 +2049,8 @@ QMimeData *QTreeWidget::mimeData(const QList<QTreeWidgetItem *> &items) const
             const QModelIndex index = indexFromItem(item, c);
 
             if (! index.isValid()) {
-               qWarning("QTreeWidget::mimeData() No index associated with item %p at element %d", item, i);
+               qWarning("QTreeWidget::mimeData() No index associated with item %p at element %d",
+                     static_cast<void *>(item), i);
                return nullptr;
             }
 

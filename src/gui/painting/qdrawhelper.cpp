@@ -1885,7 +1885,7 @@ static const uint *fetchTransformedARGB32PM(uint *buffer, const Operator *, cons
          int px = fx >> 16;
          int py = fy >> 16;
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
 
@@ -1923,7 +1923,7 @@ static const uint *fetchTransformedARGB32PM(uint *buffer, const Operator *, cons
          int px = int(tx) - (tx < 0);
          int py = int(ty) - (ty < 0);
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
 
@@ -1983,7 +1983,7 @@ static const uint *fetchTransformed(uint *buffer, const Operator *, const QSpanD
          int px = fx >> 16;
          int py = fy >> 16;
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
 
@@ -2021,7 +2021,7 @@ static const uint *fetchTransformed(uint *buffer, const Operator *, const QSpanD
          int px = int(tx) - (tx < 0);
          int py = int(ty) - (ty < 0);
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
 
@@ -2089,7 +2089,7 @@ static const QRgba64 *fetchTransformed64(QRgba64 *buffer, const Operator *, cons
          int px = fx >> 16;
          int py = fy >> 16;
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
             if (px < 0) {
@@ -2135,7 +2135,7 @@ static const QRgba64 *fetchTransformed64(QRgba64 *buffer, const Operator *, cons
          int px = int(tx) - (tx < 0);
          int py = int(ty) - (ty < 0);
 
-         if (blendType == BlendTransformedTiled) {
+         if constexpr (blendType == BlendTransformedTiled) {
             px %= image_width;
             py %= image_height;
             if (px < 0) {
@@ -2383,7 +2383,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
             Q_ASSERT(count <= buffer_size + 2); //length is supposed to be <= buffer_size and data->m11 < 1 in this case
             int f = 0;
             int lim = count;
-            if (blendType == BlendTransformedBilinearTiled) {
+            if constexpr (blendType == BlendTransformedBilinearTiled) {
                x %= image_width;
                if (x < 0) {
                   x += image_width;
@@ -2405,7 +2405,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                }
             }
 
-            if (blendType != BlendTransformedBilinearTiled) {
+            if constexpr (blendType != BlendTransformedBilinearTiled) {
 
 #if defined(__SSE2__)
                const __m128i disty_ = _mm_set1_epi16(disty);
@@ -2471,7 +2471,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
 #endif
             }
             for (; f < count; f++) { // Same as above but without sse2
-               if (blendType == BlendTransformedBilinearTiled) {
+               if constexpr (blendType == BlendTransformedBilinearTiled) {
                   if (x >= image_width) {
                      x -= image_width;
                   }
@@ -2532,7 +2532,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
             const uint *s2 = (const uint *)data->texture.scanLine(y2);
             int disty = (fy & 0x0000ffff) >> 12;
 
-            if (blendType != BlendTransformedBilinearTiled) {
+            if constexpr (blendType != BlendTransformedBilinearTiled) {
 #define BILINEAR_DOWNSCALE_BOUNDS_PROLOG \
                     while (b < end) { \
                         int x1 = (fx >> 16); \
@@ -2691,7 +2691,7 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
          } else {
             //we are zooming less than 8x, use 4bit precision
 
-            if (blendType != BlendTransformedBilinearTiled) {
+            if constexpr (blendType != BlendTransformedBilinearTiled) {
 #define BILINEAR_ROTATE_BOUNDS_PROLOG \
                     while (b < end) { \
                         int x1 = (fx >> 16); \
@@ -2920,7 +2920,7 @@ static const uint *fetchTransformedBilinear(uint *buffer, const Operator *,
             int count = (qint64(length) * fdx + fixed_scale - 1) / fixed_scale + 2;
             Q_ASSERT(count <= buffer_size + 2); //length is supposed to be <= buffer_size and data->m11 < 1 in this case
 
-            if (blendType == BlendTransformedBilinearTiled) {
+            if constexpr (blendType == BlendTransformedBilinearTiled) {
                x %= image_width;
                if (x < 0) {
                   x += image_width;

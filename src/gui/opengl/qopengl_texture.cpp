@@ -2717,18 +2717,25 @@ void QOpenGLTexture::generateMipMaps(int baseLevel, bool resetBaseLevel)
     Q_D(QOpenGLTexture);
     Q_ASSERT(d->texFuncs);
     Q_ASSERT(d->textureId);
+
     if (isCompressedFormat(d->format)) {
         if (QOpenGLContext *ctx = QOpenGLContext::currentContext())
             if (ctx->isOpenGLES() && ctx->format().majorVersion() < 3)
                 return;
     }
-    int oldBaseLevel;
-    if (resetBaseLevel)
+
+    int oldBaseLevel = 0;
+
+    if (resetBaseLevel) {
         oldBaseLevel = mipBaseLevel();
+    }
+
     setMipBaseLevel(baseLevel);
     d->texFuncs->glGenerateTextureMipmap(d->textureId, d->target, d->bindingTarget);
-    if (resetBaseLevel)
+
+    if (resetBaseLevel) {
         setMipBaseLevel(oldBaseLevel);
+    }
 }
 
 void QOpenGLTexture::setSwizzleMask(SwizzleComponent component, SwizzleValue value)

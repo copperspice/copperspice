@@ -251,8 +251,8 @@ struct QtFontStyle {
          return (x < y);
       }
 
-      uint style         : 2;
-      signed int weight  : 8;
+      uint style   : 2;
+      uint weight  : 8;
       signed int stretch : 12;
    };
 
@@ -2229,25 +2229,11 @@ QString QFontDatabase::writingSystemSample(WritingSystem writingSystem)
          break;
 
       case Vietnamese: {
-         static const char vietnameseUtf8[] = {
-            char(0xef),
-            char(0xbb),
-            char(0xbf),
-            char(0xe1),
-            char(0xbb),
-            char(0x97),
-            char(0xe1),
-            char(0xbb),
-            char(0x99),
-            char(0xe1),
-            char(0xbb),
-            char(0x91),
-            char(0xe1),
-            char(0xbb),
-            char(0x93),
-         };
-
-         sample += QString::fromUtf8(vietnameseUtf8, sizeof(vietnameseUtf8));
+         sample += QChar(0xFEFF);
+         sample += QChar(0x1ED7);
+         sample += QChar(0x1ED9);
+         sample += QChar(0x1ED1);
+         sample += QChar(0x1ED3);
          break;
       }
 

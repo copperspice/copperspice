@@ -267,8 +267,6 @@ bool QWindowsIntegration::hasCapability(QPlatformIntegration::Capability cap) co
       default:
          return QPlatformIntegration::hasCapability(cap);
    }
-
-   return false;
 }
 
 QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) const

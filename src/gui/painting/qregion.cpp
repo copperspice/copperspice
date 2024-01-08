@@ -384,8 +384,8 @@ struct Segment {
       }
    }
 
-   int horizontal : 1;
-   int added : 1;
+   uint8_t horizontal : 1;
+   uint8_t added : 1;
 
    QPoint point;
    Segment *prev;
@@ -1072,9 +1072,6 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
    OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func, NonOverlapFunc nonOverlap2Func);
 
-#define RectangleOut  0
-#define RectangleIn   1
-#define RectanglePart 2
 
 #define EvenOddRule   0
 #define WindingRule   1
@@ -2176,7 +2173,7 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
    int partIn, partOut;
 
    if (! region || region->numRects == 0 || ! EXTENTCHECK(&region->extents, prect)) {
-      return RectangleOut;
+      return false;
    }
 
    partOut = false;
@@ -2238,19 +2235,10 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
       }
    }
 
-   bool retval;
+   bool retval = false;
 
    if (partIn) {
-      if (ry <= prect->bottom()) {
-         retval = RectanglePart;
-
-      } else {
-         retval = RectangleIn;
-      }
-
-   } else {
-      retval = RectangleOut;
-
+      retval = true;
    }
 
    return retval;
@@ -3493,7 +3481,7 @@ bool QRegion::contains(const QPoint &p) const
 
 bool QRegion::contains(const QRect &r) const
 {
-   return RectInRegion(d->qt_rgn, r.left(), r.top(), r.width(), r.height()) != RectangleOut;
+   return RectInRegion(d->qt_rgn, r.left(), r.top(), r.width(), r.height());
 }
 
 void QRegion::translate(int dx, int dy)

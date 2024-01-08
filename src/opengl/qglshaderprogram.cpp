@@ -1674,7 +1674,7 @@ void QGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *v
 #define setUniformMatrixArray(func,location,values,count,type,cols,rows) \
     if (location == -1 || count <= 0) \
         return; \
-    if (sizeof(type) == sizeof(GLfloat) * cols * rows) { \
+    if constexpr (sizeof(type) == sizeof(GLfloat) * cols * rows) { \
         func(location, count, GL_FALSE, \
              reinterpret_cast<const GLfloat *>(values[0].constData())); \
     } else { \
@@ -1691,7 +1691,7 @@ void QGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *v
 #define setUniformGenericMatrixArray(colfunc,location,values,count,type,cols,rows) \
     if (location == -1 || count <= 0) \
         return; \
-    if (sizeof(type) == sizeof(GLfloat) * cols * rows) { \
+    if constexpr (sizeof(type) == sizeof(GLfloat) * cols * rows) { \
         const GLfloat *data = reinterpret_cast<const GLfloat *> \
             (values[0].constData());  \
         colfunc(location, count * cols, data); \

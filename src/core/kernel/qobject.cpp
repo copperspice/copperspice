@@ -164,11 +164,13 @@ bool QObject::check_parent_thread(QObject *parent, QThreadData *parentThreadData
       QThread *parentThread  = parentThreadData->thread;
       QThread *currentThread = currentThreadData->thread;
 
-      qWarning("QObject:check_parent_thread() Can not create children for a parent in a different thread.\n"
-               "(Parent is %s(%p), parent's thread is %s(%p), current thread is %s(%p)",
-               csPrintable(parent->metaObject()->className()), parent,
-               parentThread ? csPrintable(parentThread->metaObject()->className()) : "QThread",
-               parentThread, currentThread ? csPrintable(currentThread->metaObject()->className()) : "QThread", currentThread);
+      qWarning("QObject:check_parent_thread() Unable to create children for a parent in a different thread.\n"
+            "(Parent is %s(%p), parent's thread is %s(%p), current thread is %s(%p)",
+            csPrintable(parent->metaObject()->className()), static_cast<void *>(parent),
+            parentThread ? csPrintable(parentThread->metaObject()->className()) : "QThread",
+               static_cast<void *>(parentThread),
+            currentThread ? csPrintable(currentThread->metaObject()->className()) : "QThread",
+               static_cast<void *>(currentThread) );
 
       return false;
    }
@@ -820,7 +822,8 @@ void QObject::moveToThread(QThread *targetThread)
 
       qWarning("QObject::moveToThread() Current thread (%p) does not match thread for the current object (%p),\n"
             "unable to move to target thread (%p)\n",
-            currentData->thread.load(), threadData->thread.load(), targetData ? targetData->thread.load() : nullptr);
+            static_cast<void *>(currentData->thread.load()), static_cast<void *>(threadData->thread.load()),
+            targetData ? static_cast<void *>(targetData->thread.load()) : nullptr);
 
 #ifdef Q_OS_DARWIN
 
@@ -883,8 +886,9 @@ void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kin
       if (compareThreads()) {
 
          qWarning("QObject::activate() Dead lock detected while activating a BlockingQueuedConnection: "
-                  "Sender is %s(%p), receiver is %s(%p)", csPrintable(sender->metaObject()->className()), sender,
-                  csPrintable(this->metaObject()->className()), this);
+               "Sender is %s(%p), receiver is %s(%p)", csPrintable(sender->metaObject()->className()),
+               static_cast<void *>(sender),
+               csPrintable(this->metaObject()->className()), static_cast<void *>(this) );
       }
 
       QSemaphore semaphore;

@@ -1086,14 +1086,12 @@ void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
       return;
    }
 
-   const unsigned long *l = (const unsigned long *)event->data.data32;
+   unsigned long windowId;
+   memcpy(&windowId, event->data.data32, sizeof(unsigned long));
 
-   DNDDEBUG << "xdndHandleFinished, l[0]" << l[0]
-      << "current_target" << current_target
-      << "qt_xdnd_current_proxy_targe" << current_proxy_target;
+   if (windowId) {
+      int at = findTransactionByWindow(windowId);
 
-   if (l[0]) {
-      int at = findTransactionByWindow(l[0]);
       if (at != -1) {
 
          Transaction t = transactions.takeAt(at);

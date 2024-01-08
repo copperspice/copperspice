@@ -521,8 +521,6 @@ QImage::Format QVideoFrame::imageFormatFromPixelFormat(PixelFormat format)
       default:
          return QImage::Format_Invalid;
    }
-
-   return QImage::Format_Invalid;
 }
 
 extern void qt_convert_BGRA32_to_ARGB32(const QVideoFrame &, uchar *);
