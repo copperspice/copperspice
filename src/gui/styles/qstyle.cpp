@@ -32,7 +32,7 @@
 
 #include <qguiapplication_p.h>
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 #include <qdebug.h>
 #endif
 

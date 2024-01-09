@@ -42,7 +42,7 @@ XsdStateMachine<TransitionType>::XsdStateMachine(const NamePool::Ptr &namePool)
 template <typename TransitionType>
 typename XsdStateMachine<TransitionType>::StateId XsdStateMachine<TransitionType>::addState(StateType type)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    // make sure we don't have two start states
    if (type == StartState) {
       QHashIterator<StateId, StateType> it(m_states);
@@ -51,7 +51,7 @@ typename XsdStateMachine<TransitionType>::StateId XsdStateMachine<TransitionType
          Q_ASSERT(it.value() != StartState && it.value() != StartEndState);
       }
    }
-#endif // QT_NO_DEBUG
+#endif
 
    // reserve new state id
    const StateId id = ++m_counter;

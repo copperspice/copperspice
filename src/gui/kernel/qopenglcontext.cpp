@@ -153,11 +153,6 @@ static QThreadStorage<QGuiGLThreadContext *> *qwindow_context_storage()
 
 static QOpenGLContext *global_share_context = nullptr;
 
-#ifndef QT_NO_DEBUG
-   QHash<QOpenGLContext *, bool> QOpenGLContextPrivate::makeCurrentTracker;
-   QMutex QOpenGLContextPrivate::makeCurrentTrackerMutex;
-#endif
-
 /*!
     \internal
 
@@ -446,10 +441,6 @@ void QOpenGLContext::destroy()
 QOpenGLContext::~QOpenGLContext()
 {
    destroy();
-
-#ifndef QT_NO_DEBUG
-   QOpenGLContextPrivate::cleanMakeCurrentTracker(this);
-#endif
 }
 
 bool QOpenGLContext::isValid() const
@@ -590,10 +581,6 @@ bool QOpenGLContext::makeCurrent(QSurface *surface)
       d->surface = surface;
 
       d->shareGroup->d_func()->deletePendingResources(this);
-
-#ifndef QT_NO_DEBUG
-      QOpenGLContextPrivate::toggleMakeCurrentTracker(this, true);
-#endif
 
       return true;
    }

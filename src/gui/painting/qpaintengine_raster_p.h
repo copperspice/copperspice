@@ -184,10 +184,6 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
 
    QSize size() const;
 
-#ifndef QT_NO_DEBUG
-   void saveBuffer(const QString &s) const;
-#endif
-
 #ifdef Q_OS_WIN
    void setDC(HDC hdc);
    HDC getDC() const;
@@ -436,7 +432,7 @@ class QRasterBuffer
       return m_buffer + y * bytes_per_line;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    QImage bufferImage() const;
 #endif
 

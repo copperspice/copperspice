@@ -38,7 +38,7 @@ QImage cs_glRead_frameBuffer(const QSize &, bool, bool);
 #define QGL_FUNC_CONTEXT  const QGLContext *ctx = QGLContext::currentContext();
 #define QGL_FUNCP_CONTEXT const QGLContext *ctx = QGLContext::currentContext();
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 #define QT_RESET_GLERROR()                                \
 {                                                         \
     while (QOpenGLContext::currentContext()->functions()->glGetError() != GL_NO_ERROR) {} \

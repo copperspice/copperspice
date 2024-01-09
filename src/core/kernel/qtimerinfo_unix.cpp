@@ -445,7 +445,7 @@ int QTimerInfoList::timerRemainingTime(int timerId)
       }
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    qWarning("QTimerInfoList::timerRemainingTime() Timer id %i not found", timerId);
 #endif
 

@@ -33,7 +33,7 @@
 
 #undef  CHECK_STREAM_PRECOND
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 #define CHECK_STREAM_PRECOND(retVal) \
    if (! dev) { \
       qWarning("QDataStream() No device"); \

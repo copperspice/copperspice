@@ -36,7 +36,7 @@
 #include <qopengl_extensions_p.h>
 #include <qfont_p.h>
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 #define QT_RESET_GLERROR()                                \
 {                                                         \
     while (QOpenGLContext::currentContext()->functions()->glGetError() != GL_NO_ERROR) {} \

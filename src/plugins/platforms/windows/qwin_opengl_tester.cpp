@@ -108,7 +108,7 @@ QDebug operator<<(QDebug d, const GpuDescription &gd)
       << ", version=" << gd.driverVersion << ", " << gd.description << ')';
    return d;
 }
-#endif // !QT_NO_DEBUG_STREAM
+#endif
 
 // Return printable string formatted like the output of the dxdiag tool.
 QString GpuDescription::toString() const

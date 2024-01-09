@@ -273,7 +273,7 @@ int QEventDispatcherUNIX::select(int nfds, fd_set *readfds, fd_set *writefds, fd
 */
 void QEventDispatcherUNIX::registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *obj)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (timerId < 1 || interval < 0 || !obj) {
       qWarning("QEventDispatcher::registerTimer() Invalid arguments");
       return;
@@ -293,7 +293,7 @@ void QEventDispatcherUNIX::registerTimer(int timerId, int interval, Qt::TimerTyp
 */
 bool QEventDispatcherUNIX::unregisterTimer(int timerId)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (timerId < 1) {
       qWarning("QEventDispatcher::unregisterTimer() Invalid argument");
       return false;
@@ -312,7 +312,7 @@ bool QEventDispatcherUNIX::unregisterTimer(int timerId)
 */
 bool QEventDispatcherUNIX::unregisterTimers(QObject *object)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (! object) {
       qWarning("QEventDispatcher::unregisterTimers() Invalid argument");
       return false;
@@ -359,7 +359,7 @@ void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier *notifier)
    int sockfd = notifier->socket();
    int type = notifier->type();
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (sockfd < 0 || unsigned(sockfd) >= FD_SETSIZE) {
       qWarning("QEventDispatcher::registerSocketNotifier() Internal error");
       return;
@@ -406,7 +406,7 @@ void QEventDispatcherUNIX::unregisterSocketNotifier(QSocketNotifier *notifier)
    int sockfd = notifier->socket();
    int type = notifier->type();
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (sockfd < 0 || unsigned(sockfd) >= FD_SETSIZE) {
       qWarning("QSocketNotifier::unregisterSocketNotifier() Internal error");
       return;
@@ -460,7 +460,7 @@ void QEventDispatcherUNIX::setSocketNotifierPending(QSocketNotifier *notifier)
    int sockfd = notifier->socket();
    int type = notifier->type();
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (sockfd < 0 || unsigned(sockfd) >= FD_SETSIZE) {
       qWarning("QEventDispatcher::setSocketNotifierPending() Internal error");
       return;
@@ -586,7 +586,7 @@ bool QEventDispatcherUNIX::hasPendingEvents()
 
 int QEventDispatcherUNIX::remainingTime(int timerId)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
     if (timerId < 1) {
         qWarning("QEventDispatcher::remainingTime() Invalid argument");
         return -1;

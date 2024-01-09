@@ -25,7 +25,7 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 #include <qdebug.h>
 #endif
 

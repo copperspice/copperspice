@@ -28,8 +28,6 @@
 #include <qtransform.h>
 #include <qmath.h>
 
-// #define QPP_STROKE_DEBUG
-
 class QSubpathForwardIterator
 {
  public:
@@ -425,7 +423,7 @@ void QStroker::processCurrentSubpath()
 */
 void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine, LineJoinMode join)
 {
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf(" -----> joinPoints: around=(%.0f, %.0f), next_p1=(%.0f, %.f) next_p2=(%.0f, %.f)\n",
       qt_fixed_to_real(focal_x),
       qt_fixed_to_real(focal_y),
@@ -631,7 +629,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
    qfixed2d start = first_element;
 
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
    qDebug(" -> (side) [%.2f, %.2f], startPos=%d",
       qt_fixed_to_real(start.x),
       qt_fixed_to_real(start.y));
@@ -647,7 +645,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
       // LineToElement
       if (e.isLineTo()) {
 
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
          qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
 #endif
 
@@ -683,7 +681,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
          QStrokerOps::Element cp2 = it->next(); // control point 2
          QStrokerOps::Element ep = it->next();  // end point
 
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
          qDebug("\n ---> (side) cubicTo [%.2f, %.2f]",
             qt_fixed_to_real(ep.x),
             qt_fixed_to_real(ep.y));
@@ -739,7 +737,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
    if (start == prev) {
       // closed subpath, join first and last point
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
       qDebug("\n ---> (side) closed subpath");
 #endif
       // don't join empty subpaths
@@ -748,7 +746,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
       }
       return true;
    } else {
-#ifdef QPP_STROKE_DEBUG
+#if defined(CS_PAINT_DEBUG)
       qDebug("\n ---> (side) open subpath");
 #endif
       return false;

@@ -164,15 +164,10 @@ HRESULT STDMETHODCALLTYPE QWindowsEnumerate::Skip(unsigned long celt)
     return S_OK;
 }
 
-#if defined(DEBUG_SHOW_ATCLIENT_COMMANDS)
+#if defined(CS_SHOW_DEBUG)
 void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleInterface *iface)
 {
-#if defined(CS_SHOW_DEBUG)
-    qDebug() << iface << funcName;
-#else
-   (void) iface;
-   (void) funcName;
-#endif
+   qDebug() << iface << funcName;
 }
 #endif
 

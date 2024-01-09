@@ -41,11 +41,14 @@
 #include <qpathclipper_p.h>
 #include <qstroker_p.h>
 #include <qtextengine_p.h>
+
 #include <limits.h>
 
 #define PM_INIT
 #define PM_MEASURE(x)
 #define PM_DISPLAY
+
+// #define CS_PAINT_DEBUG
 
 namespace cs_internal {
   void QPainterPathPrivateDeleter::operator()(QPainterPathPrivate *d) const {
@@ -60,10 +63,6 @@ namespace cs_internal {
 
 // This value is used to determine the length of control point vectors when approximating
 // arc segments as curves. The factor is multiplied with the radius of the circle.
-
-// #define QPP_DEBUG
-// #define QPP_STROKE_DEBUG
-// #define QPP_FILLPOLYGONS_DEBUG
 
 QPainterPath qt_stroke_dash(const QPainterPath &path, qreal *dashes, int dashCount);
 
@@ -125,7 +124,7 @@ void qt_find_ellipse_coords(const QRectF &r, qreal angle, qreal length,
    }
 }
 
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
 static void qt_debug_path(const QPainterPath &path)
 {
    const char *names[] = {
@@ -241,13 +240,13 @@ void QPainterPath::closeSubpath()
 
 void QPainterPath::moveTo(const QPointF &p)
 {
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::moveTo() (%.2f,%.2f)\n", p.x(), p.y());
 #endif
 
    if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::moveTo() Value for point x or y is invalid");
 #endif
       return;
@@ -273,13 +272,13 @@ void QPainterPath::moveTo(const QPointF &p)
 
 void QPainterPath::lineTo(const QPointF &p)
 {
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::lineTo() (%.2f,%.2f)\n", p.x(), p.y());
 #endif
 
    if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::lineTo() Value for point x or y is invalid");
 #endif
       return;
@@ -303,7 +302,7 @@ void QPainterPath::lineTo(const QPointF &p)
 
 void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &e)
 {
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::cubicTo() (%.2f,%.2f), (%.2f,%.2f), (%.2f,%.2f)\n",
       c1.x(), c1.y(), c2.x(), c2.y(), e.x(), e.y());
 #endif
@@ -311,7 +310,7 @@ void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &
    if (!qt_is_finite(c1.x()) || !qt_is_finite(c1.y()) || !qt_is_finite(c2.x()) || !qt_is_finite(c2.y())
       || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::cubicTo() Value for point x or y is invalid");
 #endif
       return;
@@ -339,12 +338,12 @@ void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &
 
 void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 {
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::quadTo() (%.2f,%.2f), (%.2f,%.2f)\n", c.x(), c.y(), e.x(), e.y());
 #endif
 
    if (!qt_is_finite(c.x()) || !qt_is_finite(c.y()) || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::quadTo() Value for point x or y is invalid");
 #endif
       return;
@@ -371,7 +370,7 @@ void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 
 void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength)
 {
-#ifdef QPP_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::arcTo() (%.2f, %.2f, %.2f, %.2f, angle=%.2f, sweep=%.2f\n",
       rect.x(), rect.y(), rect.width(), rect.height(), startAngle, sweepLength);
 #endif
@@ -379,7 +378,7 @@ void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength
    if ((!qt_is_finite(rect.x()) && !qt_is_finite(rect.y())) || !qt_is_finite(rect.width()) || !qt_is_finite(rect.height())
       || !qt_is_finite(startAngle) || !qt_is_finite(sweepLength)) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::arcTo() Value for point x or y is invalid");
 #endif
       return;
@@ -424,7 +423,7 @@ void QPainterPath::addRect(const QRectF &r)
 {
    if (!qt_is_finite(r.x()) || !qt_is_finite(r.y()) || !qt_is_finite(r.width()) || !qt_is_finite(r.height())) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::addRect() Value for point x or y is invalid");
 #endif
       return;
@@ -475,7 +474,7 @@ void QPainterPath::addEllipse(const QRectF &boundingRect)
    if (!qt_is_finite(boundingRect.x()) || !qt_is_finite(boundingRect.y())
       || !qt_is_finite(boundingRect.width()) || !qt_is_finite(boundingRect.height())) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       qWarning("QPainterPath::addEllipse() Value for ellipse is invalid");
 #endif
 
@@ -908,7 +907,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       bounds += subpaths.at(i).boundingRect();
    }
 
-#ifdef QPP_FILLPOLYGONS_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("QPainterPath::toFillPolygons, subpathCount=%d\n", count);
    for (int i = 0; i < bounds.size(); ++i) {
       qDebug() << " bounds" << i << bounds.at(i);
@@ -931,7 +930,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       }
    }
 
-#ifdef QPP_FILLPOLYGONS_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("Intersections before flattening:\n");
 
    for (int i = 0; i < count; ++i) {
@@ -962,7 +961,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       }
    }
 
-#ifdef QPP_FILLPOLYGONS_DEBUG
+#if defined(CS_PAINT_DEBUG)
    printf("Intersections after flattening:\n");
    for (int i = 0; i < count; ++i) {
       printf("%d: ", i);
@@ -1585,7 +1584,7 @@ QDataStream &operator>>(QDataStream &s, QPainterPath &p)
 
       if (!qt_is_finite(x) || !qt_is_finite(y)) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
          qWarning("QDataStream::operator>>() Element in QPainterPath is invalid");
 #endif
 

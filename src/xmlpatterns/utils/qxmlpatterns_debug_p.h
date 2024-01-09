@@ -26,14 +26,9 @@
 
 #include <qdebug.h>
 
-#define Patternist_DEBUG_PARSER
-#define Patternist_DEBUG
-
-#undef Patternist_DEBUG          // disable it for release
-
-#ifdef QT_NO_DEBUG
-#   undef Patternist_DEBUG_PARSER
-#   undef Patternist_DEBUG
+#ifdef QT_DEBUG
+#   define Patternist_DEBUG_PARSER
+#   define Patternist_DEBUG
 #endif
 
 namespace QPatternist {

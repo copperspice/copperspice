@@ -137,7 +137,7 @@ static inline uint line_emulation(uint emulation)
          | QPaintEngine_OpaqueBackground);
 }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 static bool qt_painter_thread_test(int devType, int engineType, const char *what)
 {
    const QPlatformIntegration *platformIntegration = QGuiApplicationPrivate::platformIntegration();
@@ -460,7 +460,7 @@ void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperatio
 
    p.drawPath(originalPath);
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    static bool do_fallback_overlay = qgetenv("QT_PAINT_FALLBACK_OVERLAY").size() > 0;
 
    if (do_fallback_overlay) {
@@ -3263,7 +3263,7 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
       return;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawPixmap()");
 #endif
 
@@ -3337,7 +3337,7 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
       return;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawPixmap()");
 #endif
 
@@ -4500,7 +4500,7 @@ void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPo
       return;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawTiledPixmap()");
 #endif
 
@@ -4711,7 +4711,7 @@ void QPainter::setRenderHint(RenderHint hint, bool on)
    }
 #endif
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    static const bool antialiasingDisabled = qgetenv("QT_NO_ANTIALIASING").toInt();
    if (hint == QPainter::Antialiasing && antialiasingDisabled) {
       return;
@@ -5465,7 +5465,7 @@ void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragment
       return;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    for (int i = 0; i < fragmentCount; ++i) {
       QRectF sourceRect(fragments[i].sourceLeft, fragments[i].sourceTop,
          fragments[i].width, fragments[i].height);

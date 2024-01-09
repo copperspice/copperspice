@@ -240,7 +240,7 @@ QGLShader::QGLShader(QGLShader::ShaderType type, const QGLContext *context, QObj
 {
    Q_D(QGLShader);
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (context && !QGLContext::areSharing(context, QGLContext::currentContext())) {
       qWarning("QGLShader::QGLShader: \'context\' must be the current context or sharing with it.");
       return;
@@ -763,7 +763,7 @@ bool QGLShaderProgram::bind()
       return false;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
       qWarning("QGLShaderProgram::bind: program is not valid in the current context.");
       return false;
@@ -781,7 +781,7 @@ void QGLShaderProgram::release()
 {
    Q_D(QGLShaderProgram);
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (d->programGuard && d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
       qWarning("QGLShaderProgram::release: program is not valid in the current context.");
    }
@@ -1846,7 +1846,7 @@ int QGLShaderProgram::maxGeometryOutputVertices() const
 
 void QGLShaderProgram::setGeometryOutputVertexCount(int count)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    int max = maxGeometryOutputVertices();
    if (count > max) {
       qWarning("QGLShaderProgram::setGeometryOutputVertexCount: count: %d higher than maximum: %d",

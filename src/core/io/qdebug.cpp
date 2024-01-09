@@ -21,14 +21,6 @@
 *
 ***********************************************************************/
 
-#ifdef QT_NO_DEBUG
-#undef QT_NO_DEBUG
-#endif
-
-#ifdef qDebug
-#undef qDebug
-#endif
-
 #include <qdebug.h>
 #include <qmetaobject.h>
 

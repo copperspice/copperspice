@@ -494,7 +494,7 @@ void QFSEventsFileSystemWatcherEngine::run()
    // the stream, because otherwise you might miss an update in between starting it.
    updateFiles();
 
-#ifdef QT_NO_DEBUG
+#if defined(CS_DISABLE_ASSERT)
    (void) startedOK;
 #else
    Q_ASSERT(startedOK);

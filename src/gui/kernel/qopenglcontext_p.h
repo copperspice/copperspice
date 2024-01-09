@@ -228,21 +228,6 @@ class Q_GUI_EXPORT QOpenGLContextPrivate
       return context ? context->d_func() : nullptr;
    }
 
-#if ! defined(QT_NO_DEBUG)
-   static bool toggleMakeCurrentTracker(QOpenGLContext *context, bool value) {
-      QMutexLocker locker(&makeCurrentTrackerMutex);
-      bool old = makeCurrentTracker.value(context, false);
-      makeCurrentTracker.insert(context, value);
-      return old;
-   }
-   static void cleanMakeCurrentTracker(QOpenGLContext *context) {
-      QMutexLocker locker(&makeCurrentTrackerMutex);
-      makeCurrentTracker.remove(context);
-   }
-   static QHash<QOpenGLContext *, bool> makeCurrentTracker;
-   static QMutex makeCurrentTrackerMutex;
-#endif
-
    void _q_screenDestroyed(QObject *object);
 
  protected:

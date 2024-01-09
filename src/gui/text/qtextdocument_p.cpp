@@ -567,7 +567,7 @@ int QTextDocumentPrivate::remove_block(int pos, int *blockFormat, int command, Q
    return w;
 }
 
-#if !defined(QT_NO_DEBUG)
+#if defined(QT_DEBUG)
 static bool isAncestorFrame(QTextFrame *possibleAncestor, QTextFrame *child)
 {
    while (child) {
@@ -592,7 +592,7 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
 
    const bool needsInsert = to != -1;
 
-#if ! defined(QT_NO_DEBUG)
+#if defined(QT_DEBUG)
    const bool startAndEndInSameFrame = (frameAt(pos) == frameAt(pos + length - 1));
 
    const bool endIsEndOfChildFrame = (isAncestorFrame(frameAt(pos), frameAt(pos + length - 1))

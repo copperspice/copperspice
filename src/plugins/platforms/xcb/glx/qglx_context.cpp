@@ -76,7 +76,7 @@ static Window createDummyWindow(Display *dpy, XVisualInfo *visualInfo, int scree
          0, 0, 100, 100,
          0, visualInfo->depth, InputOutput, visualInfo->visual,
          CWBackPixel | CWBorderPixel | CWColormap | CWOverrideRedirect, &a);
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    XStoreName(dpy, window, "Qt GLX dummy window");
 #endif
    XFreeColormap(dpy, cmap);

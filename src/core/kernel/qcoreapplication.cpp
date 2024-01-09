@@ -715,7 +715,7 @@ bool QCoreApplication::notify(QObject *receiver, QEvent *event)
       return true;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    d->checkReceiverThread(receiver);
 #endif
 
@@ -1284,7 +1284,7 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
 
       if (pe.event == event) {
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
          qWarning("QCoreApplication::removePostedEvent() Event of type %d deleted while posted to %s %s",
                event->type(), csPrintable(pe.receiver->metaObject()->className()), csPrintable(pe.receiver->objectName()));
 #endif

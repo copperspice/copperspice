@@ -1676,7 +1676,7 @@ xcb_window_t QXcbConnection::clientLeader()
       Q_XCB_CALL(xcb_create_window(xcb_connection(), XCB_COPY_FROM_PARENT, m_clientLeader, screen->root(),
             0, 0, 1, 1, 0, XCB_WINDOW_CLASS_INPUT_OUTPUT, screen->screen()->root_visual, 0, nullptr));
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       QByteArray ba("Qt client leader window");
 
       Q_XCB_CALL(xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, m_clientLeader,

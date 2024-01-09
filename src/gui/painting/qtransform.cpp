@@ -184,7 +184,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
       return *this;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(dx) | qIsNaN(dy)) {
       qWarning("QTransform::translate() Value for x or y is invalid");
       return *this;
@@ -226,7 +226,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
 
 QTransform QTransform::fromTranslate(qreal dx, qreal dy)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(dx) | qIsNaN(dy)) {
       qWarning("QTransform::fromTranslate() Value for x or y is invalid");
       return QTransform();
@@ -252,7 +252,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
       return *this;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(sx) | qIsNaN(sy)) {
       qWarning("QTransform::scale() Value for x or y is invalid");
       return *this;
@@ -292,7 +292,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
 
 QTransform QTransform::fromScale(qreal sx, qreal sy)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(sx) | qIsNaN(sy)) {
       qWarning("QTransform::fromScale() Value for x or y is invalid");
       return QTransform();
@@ -318,7 +318,7 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
       return *this;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(sh) | qIsNaN(sv)) {
       qWarning("QTransform::shear() Value for horizontal or vertical is invalid");
       return *this;
@@ -468,7 +468,7 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
 
 QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
 {
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    if (qIsNaN(a)) {
       qWarning("QTransform::rotateRadians() Value is invalid");
       return *this;

@@ -272,7 +272,7 @@ QXcbClipboard::QXcbClipboard(QXcbConnection *c)
    m_timestamp[QClipboard::Selection] = XCB_CURRENT_TIME;
    m_owner = connection()->getQtSelectionOwner();
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    QByteArray ba("CS clipboard window");
 
    Q_XCB_CALL(xcb_change_property(xcb_connection(),
@@ -493,7 +493,7 @@ xcb_window_t QXcbClipboard::requestor() const
             0,                                          // value mask
             nullptr));                                 // value list
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
       QByteArray ba("CS clipboard requestor window");
 
       Q_XCB_CALL(xcb_change_property(xcb_connection(),

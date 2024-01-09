@@ -2015,7 +2015,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
       return true;
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    d->checkReceiverThread(receiver);
 #endif
 

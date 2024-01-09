@@ -43,18 +43,6 @@
 #include <errno.h>
 #endif
 
-#ifdef QT_NO_DEBUG
-#  define QLIBRARY_AS_DEBUG false
-#else
-#  define QLIBRARY_AS_DEBUG true
-#endif
-
-#if defined(Q_OS_UNIX)
-// We do not use separate debug and release libs on UNIX,
-// to allow loading plugins, regardless of how they were built
-#  define QT_NO_DEBUG_PLUGIN_CHECK
-#endif
-
 static QMutex qt_library_mutex;
 static QLibraryStore *qt_library_data = nullptr;
 static bool qt_library_data_once;

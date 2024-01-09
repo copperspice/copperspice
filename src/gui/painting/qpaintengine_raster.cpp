@@ -437,15 +437,6 @@ QSize QRasterPaintEngine::size() const
 }
 
 // internal
-#ifndef QT_NO_DEBUG
-void QRasterPaintEngine::saveBuffer(const QString &s) const
-{
-   Q_D(const QRasterPaintEngine);
-   d->rasterBuffer->bufferImage().save(s, "PNG");
-}
-#endif
-
-// internal
 void QRasterPaintEngine::updateMatrix(const QTransform &matrix)
 {
    QRasterPaintEngineState *s = state();
@@ -4108,7 +4099,7 @@ static void qt_span_clip(int count, const QSpan *spans, void *userData)
    }
 }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
 QImage QRasterBuffer::bufferImage() const
 {
    QImage image(m_width, m_height, QImage::Format_ARGB32_Premultiplied);

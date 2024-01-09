@@ -1631,7 +1631,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    time.start();
 #endif
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    // Reset the gl error stack...git
    while (funcs->glGetError() != GL_NO_ERROR) ;
 #endif
@@ -1836,7 +1836,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       q->functions()->glGenerateMipmap(target);
    }
 
-#ifndef QT_NO_DEBUG
+#if defined(QT_DEBUG)
    GLenum error = funcs->glGetError();
    if (error != GL_NO_ERROR) {
       qWarning(" - texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);

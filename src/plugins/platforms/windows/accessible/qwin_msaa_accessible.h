@@ -35,11 +35,7 @@
 # include <basetyps.h>
 # include <oleacc.h>
 
-#ifndef QT_NO_DEBUG_OUTPUT
-#define DEBUG_SHOW_ATCLIENT_COMMANDS
-#endif
-
-#if defined(DEBUG_SHOW_ATCLIENT_COMMANDS)
+#if defined(CS_SHOW_DEBUG)
 void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleInterface *iface);
 # define accessibleDebugClientCalls(iface) accessibleDebugClientCalls_helper(Q_FUNC_INFO, iface)
 #else

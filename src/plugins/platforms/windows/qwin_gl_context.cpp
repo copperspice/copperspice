@@ -1436,7 +1436,7 @@ static inline const QOpenGLContextData *findByHWND(const Array<QOpenGLContextDat
 void QWindowsGLContext::swapBuffers(QPlatformSurface *surface)
 {
    if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << surface;
+      qDebug() << "QWindowsGLContext::swapBuffers() " << surface;
    }
 
    if (const QOpenGLContextData *contextData = findByHWND(m_windowContexts, handleOf(surface))) {
