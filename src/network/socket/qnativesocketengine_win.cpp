@@ -1308,64 +1308,66 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
 
 qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
 {
-   qint64 ret = -1;
+   qint64 retval  = -1;
    int recvResult = 0;
+
    DWORD flags;
    DWORD bufferCount = 5;
-   WSABUF *buf = nullptr;
+   WSABUF *buffer = nullptr;
 
    for (;;) {
-      // the data written to udpMessagePeekBuffer is discarded, so
-      // this function is still reentrant although it might not look
-      // so.
+      // data written to udpMessagePeekBuffer is discarded,
+      // this function is still reentrant although it might not look like it is
       static char udpMessagePeekBuffer[8192];
 
-      buf = new WSABUF[bufferCount];
+      buffer = new WSABUF[bufferCount];
+
       for (DWORD i = 0; i < bufferCount; i++) {
-         buf[i].buf = udpMessagePeekBuffer;
-         buf[i].len = sizeof(udpMessagePeekBuffer);
+         buffer[i].buf = udpMessagePeekBuffer;
+         buffer[i].len = sizeof(udpMessagePeekBuffer);
       }
+
       flags = MSG_PEEK;
       DWORD bytesRead = 0;
-      recvResult = ::WSARecv(socketDescriptor, buf, bufferCount, &bytesRead, &flags, nullptr, nullptr);
-      int err = WSAGetLastError();
+      recvResult = ::WSARecv(socketDescriptor, buffer, bufferCount, &bytesRead, &flags, nullptr, nullptr);
+      int err    = WSAGetLastError();
 
       if (recvResult != SOCKET_ERROR) {
-         ret = qint64(bytesRead);
+         retval = qint64(bytesRead);
          break;
 
       } else {
          switch (err) {
             case WSAEMSGSIZE:
                bufferCount += 5;
-               delete[] buf;
+               delete[] buffer;
+               buffer = nullptr;
+
                continue;
 
             case WSAECONNRESET:
             case WSAENETRESET:
-               ret = 0;
+               retval = 0;
                break;
 
             default:
                WS_ERROR_DEBUG(err);
-               ret = -1;
+               retval = -1;
                break;
          }
-         break;
-      }
 
-      if (buf) {
-         delete[] buf;
+         break;
       }
    }
 
+   delete[] buffer;
+
 #if defined (QNATIVESOCKETENGINE_DEBUG)
-   qDebug("QNativeSocketEnginePrivate::nativePendingDatagramSize() == %lli", ret);
+   qDebug("QNativeSocketEnginePrivate::nativePendingDatagramSize() == %lli", retval);
 #endif
 
-   return ret;
+   return retval;
 }
-
 
 qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxLength, QIpPacketHeader *header,
       QAbstractSocketEngine::PacketHeaderOptions options)
