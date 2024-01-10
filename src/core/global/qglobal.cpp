@@ -63,21 +63,98 @@ const char *csVersion()
 // ** OSX
 #if defined(Q_OS_DARWIN)
 
-static QSysInfo::MacVersion macVersion()
+QSysInfo::MacVersion QSysInfo::macVersion()
 {
-   // qcore_mac_objc.mm
-   const QAppleOperatingSystemVersion version = qt_apple_os_version();
+   // kernel/qcore_mac_objc.mm
+   const QAppleOperatingSystemVersion osVersion = qt_apple_os_version();
 
-   if (version.major == 10) {
-      return QSysInfo::MacVersion(version.minor + 2);
+   QSysInfo::MacVersion retval;
+
+   if (osVersion.major == 10 && osVersion.minor == 11) {
+      retval = MacVersion::MV_10_11;
+
+   } else if (osVersion.major == 10 && osVersion.minor == 12) {
+      retval = MacVersion::MV_10_12;
+
+   } else if (osVersion.major == 10 && osVersion.minor == 13) {
+      retval = MacVersion::MV_10_13;
+
+   } else if (osVersion.major == 10 && osVersion.minor == 14) {
+      retval = MacVersion::MV_10_14;
+
+   } else if (osVersion.major == 10 && osVersion.minor == 15) {
+      retval = MacVersion::MV_10_15;
+
+   } else if (osVersion.major == 10 && osVersion.minor == 16) {
+      retval = MacVersion::MV_10_16;
+
+   // **
+   } else if (osVersion.major == 11) {
+      retval = MacVersion::MV_11;
+
+   } else if (osVersion.major == 12) {
+      retval = MacVersion::MV_12;
+
+   } else if (osVersion.major == 13) {
+      retval = MacVersion::MV_13;
+
+   } else if (osVersion.major == 14) {
+      retval = MacVersion::MV_14;
 
    } else {
-      return QSysInfo::MV_Unknown;
+      retval = QSysInfo::MV_Unknown;
 
    }
+
+   return retval;
 }
 
-const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
+const QSysInfo::MacVersion QSysInfo::MacintoshVersion = QSysInfo::macVersion();
+
+QString QSysInfo::macEdition(MacVersion macVersion)
+{
+   QString retval = "Unknown Version";
+
+   switch (macVersion) {
+      case QSysInfo::MacVersion::MV_10_11:
+         retval = "El Capitan";
+         break;
+
+      case QSysInfo::MacVersion::MV_10_12:
+         retval = "Sierra";
+         break;
+
+      case QSysInfo::MacVersion::MV_10_13:
+         retval = "High Sierra";
+         break;
+
+      case QSysInfo::MacVersion::MV_10_14:
+         retval = "Mojave";
+         break;
+
+      case QSysInfo::MacVersion::MV_10_15:
+         retval = "Catalina";
+         break;
+
+      case QSysInfo::MacVersion::MV_11:
+         retval = "Big Sur";
+         break;
+
+      case QSysInfo::MacVersion::MV_12:
+         retval = "Monterey";
+         break;
+
+      case QSysInfo::MacVersion::MV_13:
+         retval = "Ventura";
+         break;
+
+      case QSysInfo::MacVersion::MV_14:
+         retval = "Sonoma";
+         break;
+   }
+
+   return retval;
+}
 
 
 // ** Windows
