@@ -140,7 +140,8 @@ public:
 
     // for controlling when to send posted events
     QAtomicInt serialNumber;
-    int lastSerialNumber, sendPostedEventsWindowsTimerId;
+    int lastSerialNumber;
+    int sendPostedEventsWindowsTimerId;
     QAtomicInt wakeUps;
 
     // timers

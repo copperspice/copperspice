@@ -21,11 +21,6 @@
 *
 ***********************************************************************/
 
-#include <limits>
-#include <mutex>
-#include <random>
-#include <stdlib.h>
-
 #include <qbytearray.h>
 #include <qglobal.h>
 #include <qlog.h>
@@ -35,7 +30,15 @@
 
 #include <qsystemlibrary_p.h>
 
-#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
+#include <limits>
+#include <mutex>
+#include <random>
+#include <stdlib.h>
+
+#if defined(Q_OS_DARWIN)
+#include <qcore_mac_p.h>
+#include <qnamespace.h>
+
 #include <CoreServices/CoreServices.h>
 #endif
 
@@ -58,17 +61,12 @@ const char *csVersion()
 }
 
 // ** OSX
-#if ! defined(QWS) && defined(Q_OS_DARWIN)
-
-#include <qcore_mac_p.h>
-#include <qnamespace.h>
+#if defined(Q_OS_DARWIN)
 
 static QSysInfo::MacVersion macVersion()
 {
    // qcore_mac_objc.mm
    const QAppleOperatingSystemVersion version = qt_apple_os_version();
-
-#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
 
    if (version.major == 10) {
       return QSysInfo::MacVersion(version.minor + 2);
@@ -77,18 +75,10 @@ static QSysInfo::MacVersion macVersion()
       return QSysInfo::MV_Unknown;
 
    }
-
-#elif defined(Q_OS_IOS)
-   return QSysInfo::MV_IOS;
-
-#else
-   return QSysInfo::MV_Unknown;
-
-#endif
-
 }
 
 const QSysInfo::MacVersion QSysInfo::MacintoshVersion = macVersion();
+
 
 // ** Windows
 #elif defined(Q_OS_WIN)
@@ -301,7 +291,7 @@ QWindowsSockInit::QWindowsSockInit()
    if (WSAStartup(MAKEWORD(2,0), &wsadata) != 0) {
       qWarning("QTcpSocketAPI() WinSock v2.0 initialization failed");
     } else {
-       version = 0x20;
+      version = 0x20;
     }
 }
 
@@ -310,7 +300,8 @@ QWindowsSockInit::~QWindowsSockInit()
    WSACleanup();
 }
 
-#endif  // end of windows block
+#endif  // end of OS_X_WIN
+
 
 QString QSysInfo::machineHostName()
 {
@@ -325,10 +316,10 @@ QString QSysInfo::machineHostName()
 
 #else
 
-#  ifdef Q_OS_WIN
-    // QtNetwork depends on machineHostName() initializing ws2_32.dll
+#ifdef Q_OS_WIN
+    // network depends on machineHostName() initializing ws2_32.dll
     static QWindowsSockInit winSock;
-#  endif
+#endif
 
    char hostName[512];
    if (gethostname(hostName, sizeof(hostName)) == -1) {
@@ -343,24 +334,17 @@ QString QSysInfo::machineHostName()
 }
 
 // Q_CHECK_PTR macro calls this function if an allocation check fails
-
 void qt_check_pointer(const char *n, int l)
 {
    qFatal("In file %s, line %d: Out of memory", n, l);
 }
 
-/* \internal
-   Allows you to throw an exception without including <new>
-   Called internally from Q_CHECK_PTR on certain OS combinations
-*/
 void qBadAlloc()
 {
    throw(std::bad_alloc());
 }
 
-/*
-    Dijkstra's bisection algorithm to find the square root of an integer.
-*/
+// Dijkstra's bisection algorithm to find the square root of an integer.
 Q_CORE_EXPORT unsigned int qt_int_sqrt(unsigned int n)
 {
    if (n >= (std::numeric_limits<unsigned int>::max() >> 2)) {
@@ -426,7 +410,7 @@ bool qputenv(const char *varName, const QByteArray &value)
    int result = putenv(envVar);
 
    if (result != 0) {
-      // error, we have to delete the string.
+      // error, we have to delete the string
       delete[] envVar;
    }
 
@@ -471,4 +455,3 @@ int qrand()
 {
    return s_dist(s_rand);
 }
-

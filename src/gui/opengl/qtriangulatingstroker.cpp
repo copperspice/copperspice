@@ -303,8 +303,11 @@ void QTriangulatingStroker::cubicTo(const qreal *pts)
 
     float vx = 0.0;
     float vy = 0.0;
-    float cx = m_cx, cy = m_cy;
-    float x, y;
+
+    float cx = m_cx;
+    float cy = m_cy;
+    float x;
+    float y;
 
     for (int i=1; i<threshold; ++i) {
         qreal t = qreal(i) / threshold_minus_1;

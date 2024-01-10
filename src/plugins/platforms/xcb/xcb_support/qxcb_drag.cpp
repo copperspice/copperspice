@@ -1082,6 +1082,7 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
 void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
 {
    DEBUG("xdndHandleFinished");
+
    if (event->window != connection()->clipboard()->owner()) {
       return;
    }
@@ -1095,9 +1096,11 @@ void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
       if (at != -1) {
 
          Transaction t = transactions.takeAt(at);
+
          if (t.drag) {
             t.drag->deleteLater();
          }
+
          //            QDragManager *manager = QDragManager::self();
 
          //            Window target = current_target;
@@ -1121,10 +1124,12 @@ void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
          //            current_proxy_target = proxy_target;
          //            current_embedding_widget = embedding_widget;
          //            manager->object = currentObject;
+
       } else {
          qWarning("QXcbDrag::handleFinished() Drop data has expired");
       }
    }
+
    waiting_for_status = false;
 }
 

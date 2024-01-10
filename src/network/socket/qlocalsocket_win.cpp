@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qlocalsocket_p.h>
-#include <qthread_p.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qstring.h>
+
+#include <qlocalsocket_p.h>
+#include <qthread_p.h>
 
 void QLocalSocketPrivate::init()
 {
@@ -42,6 +43,7 @@ void QLocalSocketPrivate::setErrorString(const QString &function)
    DWORD windowsError = GetLastError();
    _q_winError(windowsError, function);
 }
+
 void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &function)
 {
    Q_Q(QLocalSocket);
@@ -61,16 +63,19 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
          errorString = QLocalSocket::tr("%1: Connection error").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
+
       case ERROR_FILE_NOT_FOUND:
          error = QLocalSocket::ServerNotFoundError;
          errorString = QLocalSocket::tr("%1: Invalid name").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
+
       case ERROR_ACCESS_DENIED:
          error = QLocalSocket::SocketAccessError;
          errorString = QLocalSocket::tr("%1: Access denied").formatArg(function);
          state = QLocalSocket::UnconnectedState;
          break;
+
       default:
          error = QLocalSocket::UnknownSocketError;
          errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(windowsError);
@@ -84,6 +89,7 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
 
    if (currentState != state) {
       q->emit stateChanged(state);
+
       if (state == QLocalSocket::UnconnectedState && currentState != QLocalSocket::ConnectingState) {
          q->emit disconnected();
       }
@@ -186,7 +192,7 @@ void QLocalSocket::connectToServer(OpenMode openMode)
    }
 }
 
-// This is reading from the buffer
+// reading from the buffer
 qint64 QLocalSocket::readData(char *data, qint64 maxSize)
 {
    Q_D(QLocalSocket);
@@ -247,11 +253,13 @@ void QLocalSocket::abort()
 void QLocalSocketPrivate::_q_pipeClosed()
 {
    Q_Q(QLocalSocket);
+
    if (state == QLocalSocket::UnconnectedState) {
       return;
    }
 
    emit q->readChannelFinished();
+
    if (state != QLocalSocket::ClosingState) {
       state = QLocalSocket::ClosingState;
       emit q->stateChanged(state);
@@ -259,12 +267,15 @@ void QLocalSocketPrivate::_q_pipeClosed()
          return;
       }
    }
+
    state = QLocalSocket::UnconnectedState;
    emit q->stateChanged(state);
    emit q->disconnected();
+
    pipeReader->stop();
    destroyPipeHandles();
    handle = INVALID_HANDLE_VALUE;
+
    if (pipeWriter) {
       delete pipeWriter;
       pipeWriter = nullptr;
@@ -336,7 +347,7 @@ void QLocalSocket::disconnectFromServer()
    Q_D(QLocalSocket);
 
    // Are we still connected?
-   if (!isValid()) {
+   if (! isValid()) {
       // If we have unwritten data, the pipeWriter is still present.
       // It must be destroyed before close() to prevent an infinite loop.
       delete d->pipeWriter;
@@ -451,6 +462,7 @@ bool QLocalSocket::isValid() const
 bool QLocalSocket::waitForReadyRead(int msecs)
 {
    Q_D(QLocalSocket);
+
    if (d->state != QLocalSocket::ConnectedState) {
       return false;
    }
@@ -465,13 +477,15 @@ bool QLocalSocket::waitForReadyRead(int msecs)
    if (d->pipeReader->isPipeClosed()) {
       d->_q_pipeClosed();
    }
+
    return result;
 }
 
 bool QLocalSocket::waitForBytesWritten(int msecs)
 {
    Q_D(const QLocalSocket);
-   if (!d->pipeWriter) {
+
+   if (! d->pipeWriter) {
       return false;
    }
 
@@ -481,5 +495,3 @@ bool QLocalSocket::waitForBytesWritten(int msecs)
    // within the given timeout.
    return d->pipeWriter->waitForWrite(msecs);
 }
-
-

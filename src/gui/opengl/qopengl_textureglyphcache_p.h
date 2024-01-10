@@ -103,6 +103,7 @@ public:
         QOpenGLGlyphTexture *glyphTexture = that->m_textureResource;
         return glyphTexture ? glyphTexture->m_width : 0;
     }
+
     inline int height() const {
         QOpenGLTextureGlyphCache *that = const_cast<QOpenGLTextureGlyphCache *>(this);
         QOpenGLGlyphTexture *glyphTexture = that->m_textureResource;

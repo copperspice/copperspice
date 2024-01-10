@@ -68,8 +68,8 @@ static constexpr uint32_t BackgroundMask  = 0xFFFFFC00;
       DefaultColor            = BlackBackground,
    };
 
-   typedef QFlags<ColorCodeComponent> ColorCode;
-   typedef QHash<int, ColorCode> ColorMapping;
+   using ColorCode    = QFlags<ColorCodeComponent>;
+   using ColorMapping = QHash<int, ColorCode>;
 
    ColorOutput();
    ~ColorOutput();

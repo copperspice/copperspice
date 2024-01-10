@@ -86,10 +86,10 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
       }
    }
 
-   // hold the lock, continue.
+   // hold the lock and continue
    fileHandle = fh;
 
-   // Assemble data, to write in a single call to write
+   // Assemble data to write in a single call to write
    QByteArray fileData;
 
    fileData += QByteArray::number(QCoreApplication::applicationPid());
@@ -111,7 +111,7 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
 
 bool QLockFilePrivate::removeStaleLock()
 {
-   // QFile::remove fails on Windows if the other process is still using the file, so it's not stale.
+   // QFile::remove fails on Windows if the other process is still using the file
    return QFile::remove(fileName);
 }
 
@@ -200,8 +200,8 @@ void QLockFile::unlock()
    int attempts = 0;
    static const int maxAttempts = 500; // 500ms
 
-   while (!QFile::remove(d->fileName) && ++attempts < maxAttempts) {
-      // Someone is reading the lock file right now (on Windows this prevents deleting it).
+   while (! QFile::remove(d->fileName) && ++attempts < maxAttempts) {
+      // Someone is reading the lock file right now, unable to delete
       QThread::msleep(1);
    }
 

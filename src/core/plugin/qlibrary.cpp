@@ -472,7 +472,7 @@ void QLibraryHandle::updatePluginState()
             (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
       }
 
-      errorString = QLibrary::tr("Plugin '%1' uses an incompatible CopperSpice library. (%2.%3.%4)")
+      errorString = QLibrary::tr("Plugin '%1' uses an incompatible CopperSpice library (%2.%3.%4)")
          .formatArg(fileName).formatArg((version & 0xff0000) >> 16).formatArg((version & 0xff00) >> 8)
          .formatArg(version & 0xff);
 

@@ -32,14 +32,16 @@
 #include <qsharedpointer.h>
 #include <qaccessible.h>
 
-# include <basetyps.h>
-# include <oleacc.h>
+#include <basetyps.h>
+#include <oleacc.h>
 
 #if defined(CS_SHOW_DEBUG)
 void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleInterface *iface);
-# define accessibleDebugClientCalls(iface) accessibleDebugClientCalls_helper(Q_FUNC_INFO, iface)
+# define accessibleDebugClientCalls(iface)   accessibleDebugClientCalls_helper(Q_FUNC_INFO, iface)
+
 #else
 # define accessibleDebugClientCalls(iface)   (void) iface
+
 #endif
 
 QWindow *window_helper(const QAccessibleInterface *iface);

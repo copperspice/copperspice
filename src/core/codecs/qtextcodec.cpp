@@ -218,7 +218,7 @@ bool QTextCodec::validCodecs()
 }
 
 #if defined(Q_OS_WIN)
-   // no code here
+   // no code should appear here
 
 #else
 

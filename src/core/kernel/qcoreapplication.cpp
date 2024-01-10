@@ -1572,11 +1572,11 @@ QStringList QCoreApplication::arguments()
          if (l1arg == "-qdevel" || l1arg == "-qdebug" || l1arg == "-reverse" ||
                   l1arg == "-stylesheet" || l1arg == "-widgetcount")  {
 
-            // no code here
+            // no code should appear here
 
          } else if (l1arg.startsWith("-style=") || l1arg.startsWith("-qmljsdebugger=")) {
 
-            // no code here
+            // no code should appear here
 
          } else if (l1arg == "-style" || l1arg == "-qmljsdebugger" || l1arg == "-session" ||
                   l1arg == "-graphicssystem" || l1arg == "-testability") {

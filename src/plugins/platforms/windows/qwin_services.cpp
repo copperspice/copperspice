@@ -22,15 +22,14 @@
 ***********************************************************************/
 
 #include <qwin_services.h>
-#include <qwin_additional.h>
 
-#include <QUrl>
-#include <QDebug>
-#include <QDir>
+#include <qurl.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qwin_additional.h>
 
 #include <shlobj.h>
 #include <intshcut.h>
-
 
 static inline bool shellExecute(const QUrl &url)
 {

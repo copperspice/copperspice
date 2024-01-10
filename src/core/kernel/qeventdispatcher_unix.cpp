@@ -465,6 +465,7 @@ void QEventDispatcherUNIX::setSocketNotifierPending(QSocketNotifier *notifier)
       qWarning("QEventDispatcher::setSocketNotifierPending() Internal error");
       return;
    }
+
    Q_ASSERT(notifier->thread() == thread() && thread() == QThread::currentThread());
 #endif
 

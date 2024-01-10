@@ -64,7 +64,6 @@ static DestructorMap *destructors()
    return &retval;
 }
 
-
 QThreadStorageData::QThreadStorageData(void (*func)(void *))
 {
    QMutexLocker locker(mutex());
@@ -85,11 +84,13 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
 
       return;
    }
+
    for (id = 0; id < destr->count(); id++) {
       if (destr->at(id) == nullptr) {
          break;
       }
    }
+
    if (id == destr->count()) {
       destr->append(func);
    } else {
@@ -100,6 +101,7 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
 QThreadStorageData::~QThreadStorageData()
 {
    DEBUG_MSG("QThreadStorageData: Released id %d", id);
+
    QMutexLocker locker(mutex());
    if (destructors()) {
       (*destructors())[id] = nullptr;
@@ -113,7 +115,9 @@ void **QThreadStorageData::get() const
       qWarning("QThreadStorage::get() Only valid from threads started with QThread");
       return nullptr;
    }
+
    QVector<void *> &tls = data->tls;
+
    if (tls.size() <= id) {
       tls.resize(id + 1);
    }
@@ -168,19 +172,20 @@ void **QThreadStorageData::set(void *p)
 void QThreadStorageData::finish(void **p)
 {
    QVector<void *> *tls = reinterpret_cast<QVector<void *> *>(p);
-   if (!tls || tls->isEmpty() || !mutex()) {
+   if (! tls || tls->isEmpty() || !mutex()) {
       return;   // nothing to do
    }
 
    DEBUG_MSG("QThreadStorageData: Destroying storage for thread %p", static_cast<void *>(QThread::currentThread()));
-   while (!tls->isEmpty()) {
+
+   while (! tls->isEmpty()) {
       void *&value = tls->last();
       void *q = value;
       value = nullptr;
       int i = tls->size() - 1;
       tls->resize(i);
 
-      if (!q) {
+      if (! q) {
          // data already deleted
          continue;
       }
@@ -189,10 +194,12 @@ void QThreadStorageData::finish(void **p)
       void (*destructor)(void *) = destructors()->value(i);
       locker.unlock();
 
-      if (!destructor) {
-         if (QThread::currentThread())
+      if (! destructor) {
+         if (QThread::currentThread()) {
             qWarning("QThreadStorage::finish() Thread %p exited after QThreadStorage %d destroyed",
                   static_cast<void *>(QThread::currentThread()), i);
+         }
+
          continue;
       }
       destructor(q); //crash here might mean the thread exited after qthreadstorage was destroyed
@@ -202,5 +209,6 @@ void QThreadStorageData::finish(void **p)
          (*tls)[i] = nullptr;
       }
    }
+
    tls->clear();
 }

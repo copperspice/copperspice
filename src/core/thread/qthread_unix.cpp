@@ -187,6 +187,7 @@ static typename std::enable_if<std::is_pointer_v<T>, T>::type from_HANDLE(Qt::HA
 {
     return static_cast<T>(id);
 }
+
 void QThreadData::clearCurrentThreadData()
 {
    clear_thread_data();
@@ -232,7 +233,6 @@ extern "C" {
    using QtThreadCallback = void *(*)(void *);
 }
 
-
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {
 #if defined(Q_OS_DARWIN)
@@ -250,8 +250,10 @@ void QThreadPrivate::createEventDispatcher(QThreadData *data)
       data->eventDispatcher.store(new QEventDispatcherGlib);
 
    } else
+
 #else
     data->eventDispatcher.store(new QEventDispatcherUNIX);
+
 #endif
 
    data->eventDispatcher.load()->startingUp();
@@ -296,9 +298,11 @@ void *QThreadPrivate::start(void *arg)
       data->quitNow = thr->d_func()->exited;
    }
 
-   if (data->eventDispatcher.load()) // custom event dispatcher set?
+   if (data->eventDispatcher.load()) {
+      // custom event dispatcher set?
       data->eventDispatcher.load()->startingUp();
-   else
+
+   } else
       createEventDispatcher(data);
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_DARWIN)
@@ -306,6 +310,7 @@ void *QThreadPrivate::start(void *arg)
    QString objectName = thr->objectName();
 
    pthread_t thread_id = from_HANDLE<pthread_t>(data->threadId);
+
    if (objectName.isEmpty()) {
       setCurrentThreadName(thread_id, thr->metaObject()->className());
    } else {
@@ -343,6 +348,7 @@ void QThreadPrivate::finish(void *arg)
    locker.relock();
 
    QAbstractEventDispatcher *eventDispatcher = d->data->eventDispatcher.load();
+
    if (eventDispatcher) {
       d->data->eventDispatcher = nullptr;
       locker.unlock();
@@ -358,7 +364,6 @@ void QThreadPrivate::finish(void *arg)
    d->isInFinish = false;
    d->thread_done.wakeAll();
 }
-
 
 Qt::HANDLE QThread::currentThreadId()
 {
@@ -471,13 +476,16 @@ static bool calculateUnixPriority(int priority, int *sched_policy, int *sched_pr
       return true;
    }
    const int lowestPriority = QThread::LowestPriority;
+
 #else
    const int lowestPriority = QThread::IdlePriority;
 #endif
+
    const int highestPriority = QThread::TimeCriticalPriority;
 
    int prio_min = sched_get_priority_min(*sched_policy);
    int prio_max = sched_get_priority_max(*sched_policy);
+
    if (prio_min == -1 || prio_max == -1) {
       return false;
    }
@@ -488,6 +496,7 @@ static bool calculateUnixPriority(int priority, int *sched_policy, int *sched_pr
    prio = qMax(prio_min, qMin(prio_max, prio));
 
    *sched_priority = prio;
+
    return true;
 }
 #endif
@@ -583,9 +592,11 @@ void QThread::start(Priority priority)
    if (code == EPERM) {
       // caller does not have permission to set the scheduling
       // parameters/policy
+
 #if defined(QT_HAS_THREAD_PRIORITY_SCHEDULING)
       pthread_attr_setinheritsched(&attr, PTHREAD_INHERIT_SCHED);
 #endif
+
       code = pthread_create(&threadId, &attr, QThreadPrivate::start, this);
    }
 
@@ -646,6 +657,7 @@ void QThread::setTerminationEnabled(bool enabled)
               "Current thread was not started with QThread.");
 
    pthread_setcancelstate(enabled ? PTHREAD_CANCEL_ENABLE : PTHREAD_CANCEL_DISABLE, nullptr);
+
    if (enabled) {
       pthread_testcancel();
    }

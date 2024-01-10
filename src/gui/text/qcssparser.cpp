@@ -1174,9 +1174,9 @@ void ValueExtractor::borderValue(const Declaration &decl, int *width, QCss::Bord
 static void parseShorthandBackgroundProperty(const QVector<QCss::Value> &values, BrushData *brush, QString *image,
    Repeat *repeat, Qt::Alignment *alignment, const QPalette &pal)
 {
-   *brush = BrushData();
-   *image = QString();
-   *repeat = Repeat_XY;
+   *brush     = BrushData();
+   *image     = QString();
+   *repeat    = Repeat_XY;
    *alignment = Qt::AlignTop | Qt::AlignLeft;
 
    for (int i = 0; i < values.count(); ++i) {

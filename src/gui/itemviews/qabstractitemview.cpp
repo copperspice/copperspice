@@ -2150,10 +2150,11 @@ void QAbstractItemView::keyboardSearch(const QString &search)
       d->keyboardInputTime.start();
    }
 
-   if (search.isEmpty() || !keyboardTimeWasValid
-      || keyboardInputTimeElapsed > QApplication::keyboardInputInterval()) {
+   if (search.isEmpty() || ! keyboardTimeWasValid
+         || keyboardInputTimeElapsed > QApplication::keyboardInputInterval()) {
       d->keyboardInput = search;
-      skipRow = currentIndex().isValid(); //if it is not valid we should really start at QModelIndex(0,0)
+      skipRow = currentIndex().isValid();  // if it is not valid, start at QModelIndex(0,0)
+
    } else {
       d->keyboardInput += search;
    }

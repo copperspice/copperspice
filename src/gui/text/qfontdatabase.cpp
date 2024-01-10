@@ -764,7 +764,7 @@ QString qt_resolveFontFamilyAlias(const QString &alias)
 }
 
 QStringList QPlatformFontDatabase::fallbacksForFamily(const QString &familyName, QFont::Style style,
-                  QFont::StyleHint styleHint, QChar::Script script) const
+      QFont::StyleHint styleHint, QChar::Script script) const
 {
    (void) familyName;
    (void) styleHint;
@@ -773,7 +773,7 @@ QStringList QPlatformFontDatabase::fallbacksForFamily(const QString &familyName,
    QStringList otherFallbacks;
 
    size_t writingSystem = std::find(scriptForWritingSystem, scriptForWritingSystem +
-                  QFontDatabase::WritingSystemsCount, script) - scriptForWritingSystem;
+         QFontDatabase::WritingSystemsCount, script) - scriptForWritingSystem;
 
    if (writingSystem >= QFontDatabase::WritingSystemsCount) {
       writingSystem = QFontDatabase::Any;
@@ -807,7 +807,7 @@ QStringList QPlatformFontDatabase::fallbacksForFamily(const QString &familyName,
 }
 
 static QStringList fallbacksForFamily(const QString &familyName, QFont::Style style,
-                  QFont::StyleHint styleHint, QChar::Script script)
+      QFont::StyleHint styleHint, QChar::Script script)
 {
    QFontDatabasePrivate *db = privateDb();
 
@@ -823,7 +823,7 @@ static QStringList fallbacksForFamily(const QString &familyName, QFont::Style st
 
    // make sure the db has all fallback families
    QStringList retval = QGuiApplicationPrivate::platformIntegration()->fontDatabase()->
-                  fallbacksForFamily(familyName, style, styleHint, script);
+         fallbacksForFamily(familyName, style, styleHint, script);
 
    QStringList::iterator iter = retval.begin();
 

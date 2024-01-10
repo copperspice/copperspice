@@ -2111,7 +2111,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
 
       while ((m_position != m_end) && (this->m_traits.syntax_type(*m_position++) != regex_constants::syntax_close_mark))
       {
-         // no code
+         // no code should appear here
       }
 
       return true;

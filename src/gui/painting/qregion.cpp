@@ -337,10 +337,12 @@ QRegion QRegion::intersect(const QRect &r) const
 namespace {
 
 struct Segment {
-   Segment() {}
+   Segment()
+   { }
+
    Segment(const QPoint &p)
-      : added(false)
-      , point(p) {
+      : added(false), point(p)
+   {
    }
 
    int left() const {
@@ -374,6 +376,7 @@ struct Segment {
          point = p;
          prev = oprev;
          oprev->next = this;
+
       } else {
          Segment *onext = other.next;
          other.next = next;
@@ -1072,11 +1075,10 @@ static void UnionRegion(const QRegionPrivate *reg1, const QRegionPrivate *reg2, 
 static void miRegionOp(QRegionPrivate &dest, const QRegionPrivate *reg1, const QRegionPrivate *reg2,
    OverlapFunc overlapFunc, NonOverlapFunc nonOverlap1Func, NonOverlapFunc nonOverlap2Func);
 
-
 #define EvenOddRule   0
 #define WindingRule   1
 
-// START OF region.h extract
+
 /* $XConsortium: region.h,v 11.14 94/04/17 20:22:20 rws Exp $ */
 /************************************************************************
 
@@ -1183,9 +1185,7 @@ typedef struct _POINTBLOCK {
 } POINTBLOCK;
 
 #endif
-// END OF region.h extract
 
-// START OF Region.c extract
 /* $XConsortium: Region.c /main/30 1996/10/22 14:21:24 kaleb $ */
 /************************************************************************
 
@@ -2243,9 +2243,7 @@ static bool RectInRegion(QRegionPrivate *region, int rx, int ry, uint rwidth, ui
 
    return retval;
 }
-// END OF Region.c extract
 
-// START OF poly.h extract
 /* $XConsortium: poly.h,v 1.4 94/04/17 20:22:19 rws Exp $ */
 /************************************************************************
 
@@ -2538,8 +2536,8 @@ typedef struct _ScanLineListBlock {
       pAET = pAET->next; \
    } \
 }
-// END OF poly.h extract
-// START OF PolyReg.c extract
+
+
 /* $XConsortium: PolyReg.c,v 11.23 94/11/17 21:59:37 converse Exp $ */
 /************************************************************************
 
@@ -3542,27 +3540,34 @@ QRegion &QRegion::operator+=(const QRegion &r)
    if (isEmptyHelper(d->qt_rgn)) {
       return *this = r;
    }
+
    if (isEmptyHelper(r.d->qt_rgn)) {
       return *this;
    }
+
    if (d == r.d) {
       return *this;
    }
 
    if (d->qt_rgn->contains(*r.d->qt_rgn)) {
       return *this;
+
    } else if (r.d->qt_rgn->contains(*d->qt_rgn)) {
       return *this = r;
+
    } else if (d->qt_rgn->canAppend(r.d->qt_rgn)) {
       detach();
       d->qt_rgn->append(r.d->qt_rgn);
       return *this;
+
    } else if (d->qt_rgn->canPrepend(r.d->qt_rgn)) {
       detach();
       d->qt_rgn->prepend(r.d->qt_rgn);
       return *this;
+
    } else if (EqualRegion(d->qt_rgn, r.d->qt_rgn)) {
       return *this;
+
    } else {
       detach();
       UnionRegion(d->qt_rgn, r.d->qt_rgn, *d->qt_rgn);
@@ -3575,26 +3580,32 @@ QRegion QRegion::united(const QRect &r) const
    if (isEmptyHelper(d->qt_rgn)) {
       return r;
    }
+
    if (r.isEmpty()) {
       return *this;
    }
 
    if (d->qt_rgn->contains(r)) {
       return *this;
+
    } else if (d->qt_rgn->within(r)) {
       return r;
+
    } else if (d->qt_rgn->numRects == 1 && d->qt_rgn->extents == r) {
       return *this;
+
    } else if (d->qt_rgn->canAppend(&r)) {
       QRegion result(*this);
       result.detach();
       result.d->qt_rgn->append(&r);
       return result;
+
    } else if (d->qt_rgn->canPrepend(&r)) {
       QRegion result(*this);
       result.detach();
       result.d->qt_rgn->prepend(&r);
       return result;
+
    } else {
       QRegion result;
       result.detach();
@@ -3609,24 +3620,30 @@ QRegion &QRegion::operator+=(const QRect &r)
    if (isEmptyHelper(d->qt_rgn)) {
       return *this = r;
    }
+
    if (r.isEmpty()) {
       return *this;
    }
 
    if (d->qt_rgn->contains(r)) {
       return *this;
+
    } else if (d->qt_rgn->within(r)) {
       return *this = r;
+
    } else if (d->qt_rgn->canAppend(&r)) {
       detach();
       d->qt_rgn->append(&r);
       return *this;
+
    } else if (d->qt_rgn->canPrepend(&r)) {
       detach();
       d->qt_rgn->prepend(&r);
       return *this;
+
    } else if (d->qt_rgn->numRects == 1 && d->qt_rgn->extents == r) {
       return *this;
+
    } else {
       detach();
       QRegionPrivate p(r);
@@ -3638,7 +3655,7 @@ QRegion &QRegion::operator+=(const QRect &r)
 QRegion QRegion::intersected(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn) || isEmptyHelper(r.d->qt_rgn)
-      || ! EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
+         || ! EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
       return QRegion();
    }
 
@@ -3718,12 +3735,15 @@ QRegion QRegion::subtracted(const QRegion &r) const
    if (isEmptyHelper(d->qt_rgn) || isEmptyHelper(r.d->qt_rgn)) {
       return *this;
    }
+
    if (r.d->qt_rgn->contains(*d->qt_rgn)) {
       return QRegion();
    }
+
    if (!EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
       return *this;
    }
+
    if (d == r.d || EqualRegion(d->qt_rgn, r.d->qt_rgn)) {
       return QRegion();
    }
@@ -3746,12 +3766,16 @@ QRegion QRegion::xored(const QRegion &r) const
 {
    if (isEmptyHelper(d->qt_rgn)) {
       return r;
+
    } else if (isEmptyHelper(r.d->qt_rgn)) {
       return *this;
+
    } else if (!EXTENTCHECK(&d->qt_rgn->extents, &r.d->qt_rgn->extents)) {
       return (*this + r);
+
    } else if (d == r.d || EqualRegion(d->qt_rgn, r.d->qt_rgn)) {
       return QRegion();
+
    } else {
       QRegion result;
       result.detach();

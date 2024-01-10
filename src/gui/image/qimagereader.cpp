@@ -27,23 +27,20 @@
 #include <qdebug.h>
 #endif
 
+#include <qcolor.h>
+#include <qcoreapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qimage.h>
 #include <qimageiohandler.h>
 #include <qlist.h>
+#include <qmutexlocker.h>
 #include <qrect.h>
-
 #include <qsize.h>
-#include <qcolor.h>
 #include <qvariant.h>
 
-// factory loader
-#include <qcoreapplication.h>
 #include <qfactoryloader_p.h>
-#include <qmutexlocker.h>
 
-// image handlers
 #include <qbmphandler_p.h>
 #include <qppmhandler_p.h>
 #include <qxbmhandler_p.h>
@@ -92,8 +89,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "png", "image/png",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QPngHandler::canRead(device))
-         {
+         if (QPngHandler::canRead(device)) {
             return new QPngHandler;
          }
 
@@ -107,8 +103,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "jpg",  "image/jpeg",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QJpegHandler::canRead(device))
-         {
+         if (QJpegHandler::canRead(device)) {
             return new QJpegHandler;
          }
 
@@ -120,8 +115,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "jpeg", "image/jpeg",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QJpegHandler::canRead(device))
-         {
+         if (QJpegHandler::canRead(device)) {
             return new QJpegHandler;
          }
 
@@ -135,8 +129,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "gif", "image/gif",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QGifHandler::canRead(device))
-         {
+         if (QGifHandler::canRead(device)) {
             return new QGifHandler;
          }
 
@@ -149,8 +142,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "bmp", "image/bmp",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QBmpHandler::canRead(device))
-         {
+         if (QBmpHandler::canRead(device)) {
             return new QBmpHandler;
          }
 
@@ -175,8 +167,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "ppm", "image/x-portable-pixmap",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QPpmHandler::canRead(device))
-         {
+         if (QPpmHandler::canRead(device)) {
             auto handler = new QPpmHandler;
             handler->setOption(QImageIOHandler::SubType, QString("ppm"));
 
@@ -191,8 +182,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "pgm", "image/x-portable-graymap",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QPpmHandler::canRead(device))
-         {
+         if (QPpmHandler::canRead(device)) {
             auto handler = new QPpmHandler;
             handler->setOption(QImageIOHandler::SubType, QString("pgm"));
 
@@ -207,8 +197,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "pbm", "image/x-portable-bitmap",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QPpmHandler::canRead(device))
-         {
+         if (QPpmHandler::canRead(device)) {
             auto handler = new QPpmHandler;
             handler->setOption(QImageIOHandler::SubType, QString("pbm"));
 
@@ -225,8 +214,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "xbm", "image/x-xbitmap",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QXbmHandler::canRead(device))
-         {
+         if (QXbmHandler::canRead(device)) {
             auto handler = new QXbmHandler;
             handler->setOption(QImageIOHandler::SubType, QString("xbm"));
 
@@ -243,8 +231,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "xpm", "image/x-xpixmap",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QXpmHandler::canRead(device))
-         {
+         if (QXpmHandler::canRead(device)) {
             return new QXpmHandler;
          }
 
@@ -258,8 +245,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "ico", "image/x-icon",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QIcoHandler::canRead(device))
-         {
+         if (QIcoHandler::canRead(device)) {
             return new QIcoHandler;
          }
 
@@ -273,8 +259,7 @@ static const cs_BuiltInFormatStruct cs_BuiltInFormats[] = {
       "tif", "image/tiff",
       [](QIODevice * device) -> QImageIOHandler *
       {
-         if (QTiffHandler::canRead(device))
-         {
+         if (QTiffHandler::canRead(device)) {
             return new QTiffHandler;
          }
 

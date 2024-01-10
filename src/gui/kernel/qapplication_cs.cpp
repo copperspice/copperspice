@@ -93,7 +93,6 @@ int qRegisterGuiStateMachine();
 int qUnregisterGuiStateMachine();
 #endif
 
-// Helper macro for static functions to check on the existence of the application class.
 #define CHECK_QAPP_INSTANCE(...) \
     if (Q_LIKELY(QCoreApplication::instance())) { \
     } else { \
@@ -102,7 +101,6 @@ int qUnregisterGuiStateMachine();
     }
 
 bool QApplicationPrivate::autoSipEnabled = true;
-
 
 QApplicationPrivate::QApplicationPrivate(int &argc, char **argv, int flags)
    : QCoreApplicationPrivate(argc, argv, flags),
