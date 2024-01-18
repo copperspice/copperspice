@@ -1,7 +1,7 @@
 # ***********************************************************************
 #
-# Copyright (c) 2012-2023 Barbara Geller
-# Copyright (c) 2012-2023 Ansel Sermersheim
+# Copyright (c) 2012-2024 Barbara Geller
+# Copyright (c) 2012-2024 Ansel Sermersheim
 # Copyright (c) 2015 Ivailo Monev, <xakepa10@gmail.com>
 # Copyright (c) 2009 Marcus Hufgard, <Marcus.Hufgard@hufgard.de>
 #
