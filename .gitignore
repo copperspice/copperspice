@@ -1,14 +1,13 @@
-/utilities/cldr/__pycache__/*
+/utilities/cldr/__pycache__
+/utilities/cldr/doxypress/__pycache__
+/utilities/cldr/doxypress/generate_docs
 /utilities/cldr/data
+/utilities/cldr/generate_cldr
 /utilities/cldr/output
-/utilities/cldr/build-*
-
-/utilities/cldr/doxypress/__pycache__/*
-/utilities/cldr/doxypress/build-*
 
 /utilities/unicode/build
 /utilities/unicode/deploy
-/utilities/unicode/unicode_11
-/utilities/unicode/unused
+/utilities/unicode/zip
 /utilities/unicode/do-*
 /utilities/unicode/error.log
+/utilities/unicode/read_me.txt

@@ -10,11 +10,6 @@
 /src/plugins/imageformats/tiff
 /src/plugins/sqldrivers/tds
 /src/scripttools
-/test/gui
-/test/network
-/translations/hold_1
-/translations/hold_2
-/translations/generate_ts_files
 /utilities
 
 /src/3rdparty/*/ANNOUNCE
