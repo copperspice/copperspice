@@ -31,7 +31,8 @@ alone libraries for anyone developing C++ applications.
 
  * CsCrypto
  * CsLibGuarded
- * CsPrint
+ * CsPaint
+ * CsPointer
  * CsSignal
  * CsString
 
@@ -73,12 +74,15 @@ https://www.copperspice.com/docs/cs_overview/index.html
 The API contains full class documentation and multiple tutorials for CopperSpice and is available directly on our
 website and from our download page.
 
+https://www.copperspice.com/docs/cs_api/index.html
 
-|URL      |Description|
-|---------|-----------|
-|www.copperspice.com/docs/cs_api/index.html|CopperSpice 1.8|
-|         |           |
-|https://download.copperspice.com/copperspice/documentation|Overview and API (tar and zip formats)|
+
+###### Offline
+
+Both the CS Overview and API documentation can be downloaded for offline use. They are available in a compressed tar file
+or zip format.
+
+https://download.copperspice.com/copperspice/documentation
 
 
 ### Major Enhancements
@@ -129,7 +133,13 @@ found on our presentation page.
 https://www.copperspice.com/presentations.html
 
 
-### Authors / Key Contributors
+### Authors and Key Contributors
+
+The CS team welcomes contributors of all skill levels. When submitting a pull request please observe our
+Coding Style Guidelines.
+
+https://www.copperspice.com/style_guide/source_code_style.html
+
 
 * **Ansel Sermersheim**
 * **Barbara Geller**
@@ -146,6 +156,8 @@ https://www.copperspice.com/presentations.html
 * **Jeff Cohen**
 * **Daniel Pfeifer**
 * **Zbigniew Skowron**
+* **Johan Förberg**
+* **Dennis Menschel**
 
 
 ### License
