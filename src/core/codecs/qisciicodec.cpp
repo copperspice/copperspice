@@ -200,7 +200,7 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
 
             if (halant) {
                // Consonant Halant ZWNJ -> Consonant Halant Halant
-               retval.append(0xe8);
+               retval.append(uchar(0xe8));
             }
 
          } else if (uc == 0x200d) {
@@ -208,7 +208,7 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
 
             if (halant) {
                // Consonant Halant ZWJ -> Consonant Halant Nukta
-               retval.append(0xe9);
+               retval.append(uchar(0xe9));
             }
 
          } else {

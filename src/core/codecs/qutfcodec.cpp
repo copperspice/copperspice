@@ -34,9 +34,9 @@ QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState
    QByteArray retval;
 
    if (state && ! (state->m_flags & QTextCodec::IgnoreHeader)) {
-      retval.append(0xEF);
-      retval.append(0xBB);
-      retval.append(0xBF);
+      retval.append(uchar(0xEF));
+      retval.append(uchar(0xBB));
+      retval.append(uchar(0xBF));
    }
 
    retval += QByteArray(str.charData(), str.size_storage());
@@ -202,12 +202,12 @@ QByteArray QUtf16::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
 
    if (! state || ! (state->m_flags & QTextCodec::IgnoreHeader)) {
       if (endian == BigEndianness) {
-         retval.append(0xFE);
-         retval.append(0xFF);
+         retval.append(uchar(0xFE));
+         retval.append(uchar(0xFF));
 
       } else  {
-         retval.append(0xFF);
-         retval.append(0xFE);
+         retval.append(uchar(0xFF));
+         retval.append(uchar(0xFE));
       }
    }
 
@@ -398,12 +398,12 @@ QByteArray QUtf32::convertFromUnicode(QStringView str, QTextCodec::ConverterStat
       if (endian == BigEndianness) {
          retval.append('\x00');
          retval.append('\x00');
-         retval.append(0xFE);
-         retval.append(0xFF);
+         retval.append(uchar(0xFE));
+         retval.append(uchar(0xFF));
 
       } else  {
-         retval.append(0xFF);
-         retval.append(0xFE);
+         retval.append(uchar(0xFF));
+         retval.append(uchar(0xFE));
          retval.append('\x00');
          retval.append('\x00');
       }
