@@ -4,6 +4,7 @@ list(APPEND MULTIMEDIA_PUBLIC_INCLUDES
    QMediaObject
    QMediaMetaData
    QMediaService
+   QMediaService_Provider_Plugin
    QMediaTimeRange
    QMultimedia
    QtMultimedia
