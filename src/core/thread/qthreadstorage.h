@@ -109,31 +109,34 @@ class QThreadStorage
  private:
    QThreadStorageData d;
 
-   static inline void deleteData(void *x) {
+   static void deleteData(void *x) {
       qThreadStorage_deleteData(x, static_cast<T *>(nullptr));
    }
 
  public:
-   inline QThreadStorage() : d(deleteData) { }
+   QThreadStorage()
+      : d(deleteData)
+   { }
 
    QThreadStorage(const QThreadStorage &) = delete;
    QThreadStorage &operator=(const QThreadStorage &) = delete;
 
-   inline ~QThreadStorage() { }
+   ~QThreadStorage()
+   { }
 
-   inline bool hasLocalData() const {
+   bool hasLocalData() const {
       return d.get() != nullptr;
    }
 
-   inline T &localData() {
+   T &localData() {
       return qThreadStorage_localData(d, static_cast<T *>(nullptr));
    }
 
-   inline T localData() const {
+   T localData() const {
       return qThreadStorage_localData_const(d, static_cast<T *>(nullptr));
    }
 
-   inline void setLocalData(T data) {
+   void setLocalData(T data) {
       qThreadStorage_setLocalData(d, &data);
    }
 };

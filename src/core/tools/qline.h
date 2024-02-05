@@ -68,7 +68,7 @@ class Q_CORE_EXPORT QLine
    inline void setLine(int x1, int y1, int x2, int y2);
 
    inline bool operator==(const QLine &line) const;
-   inline bool operator!=(const QLine &line) const {
+   bool operator!=(const QLine &line) const {
       return !(*this == line);
    }
 
@@ -243,7 +243,7 @@ class Q_CORE_EXPORT QLineF
    inline void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
 
    inline bool operator==(const QLineF &lineF) const;
-   inline bool operator!=(const QLineF &lineF) const {
+   bool operator!=(const QLineF &lineF) const {
       return !(*this == lineF);
    }
 

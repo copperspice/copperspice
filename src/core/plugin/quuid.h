@@ -137,11 +137,11 @@ class Q_CORE_EXPORT QUuid
    static QUuid createUuidV3(const QUuid &ns, const QByteArray &baseData);
    static QUuid createUuidV5(const QUuid &ns, const QByteArray &baseData);
 
-   static inline QUuid createUuidV3(const QUuid &ns, const QString &baseData) {
+   static QUuid createUuidV3(const QUuid &ns, const QString &baseData) {
       return QUuid::createUuidV3(ns, baseData.toUtf8());
    }
 
-   static inline QUuid createUuidV5(const QUuid &ns, const QString &baseData) {
+   static QUuid createUuidV5(const QUuid &ns, const QString &baseData) {
       return QUuid::createUuidV5(ns, baseData.toUtf8());
    }
 

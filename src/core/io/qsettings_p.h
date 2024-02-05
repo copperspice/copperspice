@@ -51,11 +51,11 @@ class QSettingsKey : public QString
       (void) cs;
    }
 
-   inline QString originalCaseKey() const {
+   QString originalCaseKey() const {
       return *this;
    }
 
-   inline int originalKeyPosition() const {
+   int originalKeyPosition() const {
       return -1;
    }
 };
@@ -73,11 +73,11 @@ class QSettingsKey : public QString
       }
    }
 
-   inline QString originalCaseKey() const {
+   QString originalCaseKey() const {
       return theOriginalKey;
    }
 
-   inline int originalKeyPosition() const {
+   int originalKeyPosition() const {
       return theOriginalKeyPosition;
    }
 
@@ -95,33 +95,33 @@ using ParsedSettingsMap   = QMap<QSettingsKey, QVariant>;
 class QSettingsGroup
 {
  public:
-   inline QSettingsGroup()
+   QSettingsGroup()
       : num(-1), maxNum(-1)
    { }
 
-   inline QSettingsGroup(const QString &s)
+   QSettingsGroup(const QString &s)
       : str(s), num(-1), maxNum(-1)
    { }
 
-   inline QSettingsGroup(const QString &s, bool guessArraySize)
+   QSettingsGroup(const QString &s, bool guessArraySize)
       : str(s), num(0), maxNum(guessArraySize ? 0 : -1)
    { }
 
-   inline QString name() const {
+   QString name() const {
       return str;
    }
 
-   inline QString toString() const;
+   QString toString() const;
 
-   inline bool isArray() const {
+   bool isArray() const {
       return num != -1;
    }
 
-   inline int arraySizeGuess() const {
+   int arraySizeGuess() const {
       return maxNum;
    }
 
-   inline void setArrayIndex(int i) {
+   void setArrayIndex(int i) {
       num = i + 1;
       if (maxNum != -1 && num > maxNum) {
          maxNum = num;

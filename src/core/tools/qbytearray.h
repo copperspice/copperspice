@@ -163,7 +163,7 @@ class Q_CORE_EXPORT QByteArray
    QByteArray(int size, Qt::NoDataOverload dummy);
 
    // internal
-   inline QByteArray(QByteArrayDataPtr dd)
+   QByteArray(QByteArrayDataPtr dd)
       : d(static_cast<Data *>(dd.ptr)) {
    }
 
@@ -194,7 +194,7 @@ class Q_CORE_EXPORT QByteArray
    int count(const char *str) const;
    int count(const QByteArray &value) const;
 
-   inline int count() const {
+   int count() const {
       return d->size;
    }
 
@@ -204,7 +204,7 @@ class Q_CORE_EXPORT QByteArray
    inline void detach();
 
    // internal
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 
@@ -217,7 +217,7 @@ class Q_CORE_EXPORT QByteArray
    inline bool isEmpty() const;
    inline bool isDetached() const;
 
-   inline bool isSharedWith(const QByteArray &value) const {
+   bool isSharedWith(const QByteArray &value) const {
       return d == value.d;
    }
 

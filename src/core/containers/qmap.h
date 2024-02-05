@@ -760,7 +760,7 @@ class QMapIterator
    const_iterator i;
    const_iterator n;
 
-   inline bool item_exists() const {
+   bool item_exists() const {
       return n != c->constEnd();
    }
 };

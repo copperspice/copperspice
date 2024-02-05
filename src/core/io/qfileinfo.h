@@ -48,14 +48,14 @@ class Q_CORE_EXPORT QFileInfo
 
    QFileInfo &operator=(const QFileInfo &fileinfo);
 
-   inline QFileInfo &operator=(QFileInfo && other) {
+   QFileInfo &operator=(QFileInfo && other) {
       qSwap(d_ptr, other.d_ptr);
       return *this;
    }
 
    bool operator==(const QFileInfo &fileinfo) const;
 
-   inline bool operator!=(const QFileInfo &fileinfo) const {
+   bool operator!=(const QFileInfo &fileinfo) const {
       return !(operator==(fileinfo));
    }
 
@@ -89,9 +89,10 @@ class Q_CORE_EXPORT QFileInfo
    bool isNativePath() const;
 
    bool isRelative() const;
-   inline bool isAbsolute() const {
+   bool isAbsolute() const {
       return !isRelative();
    }
+
    bool makeAbsolute();
 
    bool isFile() const;
@@ -101,7 +102,7 @@ class Q_CORE_EXPORT QFileInfo
    bool isBundle() const;
 
    QString readLink() const;
-   inline QString symLinkTarget() const {
+   QString symLinkTarget() const {
       return readLink();
    }
 
@@ -130,12 +131,12 @@ class Q_CORE_EXPORT QFileInfo
  private:
    friend class QDirIteratorPrivate;
 
-   inline QFileInfoPrivate *d_func() {
+   QFileInfoPrivate *d_func() {
       detach();
       return const_cast<QFileInfoPrivate *>(d_ptr.constData());
    }
 
-   inline const QFileInfoPrivate *d_func() const {
+   const QFileInfoPrivate *d_func() const {
       return d_ptr.constData();
    }
 };

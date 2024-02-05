@@ -146,19 +146,19 @@ class QProcessEnvironmentPrivate: public QSharedData
 
 #ifdef Q_OS_WIN
 
-   inline Key prepareName(const QString &name) const {
+   Key prepareName(const QString &name) const {
       return Key(name);
    }
 
-   inline QString nameToString(const Key &name) const {
+   QString nameToString(const Key &name) const {
       return name;
    }
 
-   inline Value prepareValue(const QString &value) const {
+   Value prepareValue(const QString &value) const {
       return value;
    }
 
-   inline QString valueToString(const Value &value) const {
+   QString valueToString(const Value &value) const {
       return value;
    }
 
@@ -180,17 +180,17 @@ class QProcessEnvironmentPrivate: public QSharedData
         return ent;
     }
 
-    inline QString nameToString(const Key &name) const  {
+   QString nameToString(const Key &name) const  {
       const QString sname = QString::fromUtf8(name.key);
       nameMap[sname] = name;
       return sname;
    }
 
-   inline Value prepareValue(const QString &value) const {
+   Value prepareValue(const QString &value) const {
       return Value(value);
    }
 
-   inline QString valueToString(const Value &value) const {
+   QString valueToString(const Value &value) const {
       return value.string();
    }
 

@@ -140,26 +140,30 @@ class QFuture
 
       using size_type = difference_type;
 
-      inline const_iterator() {}
-      inline const_iterator(QFuture const *const _future, int _index) : future(_future), index(_index) {}
+      const_iterator() {
+      }
 
-      inline const_iterator(const const_iterator &other) : future(other.future), index(other.index)  {}
+      const_iterator(QFuture const *const _future, int _index) : future(_future), index(_index) {
+      }
 
-      inline const_iterator &operator=(const const_iterator &other) {
+      const_iterator(const const_iterator &other) : future(other.future), index(other.index)  {
+      }
+
+      const_iterator &operator=(const const_iterator &other) {
          future = other.future;
          index  = other.index;
          return *this;
       }
 
-      inline const T &operator*() const {
+      const T &operator*() const {
          return future->d.resultReference(index);
       }
 
-      inline const T *operator->() const {
+      const T *operator->() const {
          return future->d.resultPointer(index);
       }
 
-      inline bool operator!=(const const_iterator &other) const {
+      bool operator!=(const const_iterator &other) const {
          if (index == -1 && other.index == -1) {
             // comparing end != end?
             return false;
@@ -171,47 +175,46 @@ class QFuture
          return (index != other.index);
       }
 
-      inline bool operator==(const const_iterator &other) const {
+      bool operator==(const const_iterator &other) const {
          return !operator!=(other);
       }
 
-      inline const_iterator &operator++() {
+      const_iterator &operator++() {
          ++index;
          return *this;
       }
 
-
-      inline const_iterator operator++(int) {
+      const_iterator operator++(int) {
          const_iterator r = *this;
          ++index;
          return r;
       }
 
-      inline const_iterator &operator--() {
+      const_iterator &operator--() {
          --index;
          return *this;
       }
 
-      inline const_iterator operator--(int) {
+      const_iterator operator--(int) {
          const_iterator r = *this;
          --index;
          return r;
       }
 
-      inline const_iterator operator+(size_type n) const {
+      const_iterator operator+(size_type n) const {
          return const_iterator(future, index + n);
       }
 
-      inline const_iterator operator-(size_type n) const {
+      const_iterator operator-(size_type n) const {
          return const_iterator(future, index - n);
       }
 
-      inline const_iterator &operator+=(size_type n) {
+      const_iterator &operator+=(size_type n) {
          index += n;
          return *this;
       }
 
-      inline const_iterator &operator-=(size_type n) {
+      const_iterator &operator-=(size_type n) {
          index -= n;
          return *this;
       }

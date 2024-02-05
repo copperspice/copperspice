@@ -52,7 +52,7 @@ class Q_CORE_EXPORT BlockSizeManager
    int blockSize();
 
  private:
-   inline bool blockSizeMaxed() {
+   bool blockSizeMaxed() {
       return (m_blockSize >= maxBlockSize);
    }
 
@@ -90,7 +90,7 @@ class ResultReporter
       }
    }
 
-   inline T *getPointer() {
+   T *getPointer() {
       return vector.data();
    }
 
@@ -103,11 +103,16 @@ template <>
 class ResultReporter<void>
 {
  public:
-   inline ResultReporter(ThreadEngine<void> *) { }
-   inline void reserveSpace(int) { };
-   inline void reportResults(int) { };
+   ResultReporter(ThreadEngine<void> *) {
+   }
 
-   inline void *getPointer() {
+   void reserveSpace(int) {
+   };
+
+   void reportResults(int) {
+   };
+
+   void *getPointer() {
       return nullptr;
    }
 };

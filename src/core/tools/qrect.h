@@ -580,19 +580,19 @@ class Q_CORE_EXPORT QRectF
    inline bool isValid() const;
    QRectF normalized() const;
 
-   inline qreal left() const {
+   qreal left() const {
       return m_x;
    }
 
-   inline qreal top() const {
+   qreal top() const {
       return m_y;
    }
 
-   inline qreal right() const {
+   qreal right() const {
       return m_x + m_w;
    }
 
-   inline qreal bottom() const {
+   qreal bottom() const {
       return m_y + m_h;
    }
 
@@ -604,27 +604,27 @@ class Q_CORE_EXPORT QRectF
    inline void setRight(qreal pos);
    inline void setBottom(qreal pos);
 
-   inline void setX(qreal xPos) {
+   void setX(qreal xPos) {
       setLeft(xPos);
    }
 
-   inline void setY(qreal yPos) {
+   void setY(qreal yPos) {
       setTop(yPos);
    }
 
-   inline QPointF topLeft() const {
+   QPointF topLeft() const {
       return QPointF(m_x, m_y);
    }
 
-   inline QPointF bottomRight() const {
+   QPointF bottomRight() const {
       return QPointF(m_x + m_w, m_y + m_h);
    }
 
-   inline QPointF topRight() const {
+   QPointF topRight() const {
       return QPointF(m_x + m_w, m_y);
    }
 
-   inline QPointF bottomLeft() const {
+   QPointF bottomLeft() const {
       return QPointF(m_x, m_y + m_h);
    }
 

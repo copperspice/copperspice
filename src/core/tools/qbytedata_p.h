@@ -43,7 +43,7 @@ class QByteDataBuffer
       clear();
    }
 
-   inline void append(QByteDataBuffer &other) {
+   void append(QByteDataBuffer &other) {
       if (other.isEmpty()) {
          return;
       }
@@ -52,7 +52,7 @@ class QByteDataBuffer
       bufferCompleteSize += other.byteAmount();
    }
 
-   inline void append(const QByteArray &bd) {
+   void append(const QByteArray &bd) {
       if (bd.isEmpty()) {
          return;
       }
@@ -61,7 +61,7 @@ class QByteDataBuffer
       bufferCompleteSize += bd.size();
    }
 
-   inline void prepend(const QByteArray &bd) {
+   void prepend(const QByteArray &bd) {
       if (bd.isEmpty()) {
          return;
       }
@@ -72,20 +72,20 @@ class QByteDataBuffer
 
    // return the first QByteData. User of this function has to qFree() its .data!
    // preferably use this function to read data.
-   inline QByteArray read() {
+   QByteArray read() {
       bufferCompleteSize -= buffers.first().size();
       return buffers.takeFirst();
    }
 
    // return everything. User of this function has to qFree() its .data!
    // avoid to use this, it might malloc and memcpy.
-   inline QByteArray readAll() {
+   QByteArray readAll() {
       return read(byteAmount());
    }
 
    // return amount. User of this function has to qFree() its .data!
    // avoid to use this, it might malloc and memcpy.
-   inline QByteArray read(qint64 amount) {
+   QByteArray read(qint64 amount) {
       amount = qMin(byteAmount(), amount);
       QByteArray byteData;
       byteData.resize(amount);
@@ -128,32 +128,32 @@ class QByteDataBuffer
       return originalAmount;
    }
 
-   inline char getChar() {
+   char getChar() {
       char c;
       read(&c, 1);
       return c;
    }
 
-   inline void clear() {
+   void clear() {
       buffers.clear();
       bufferCompleteSize = 0;
    }
 
    // The byte count of all QByteArrays
-   inline qint64 byteAmount() const {
+   qint64 byteAmount() const {
       return bufferCompleteSize;
    }
 
    // the number of QByteArrays
-   inline qint64 bufferCount() const {
+   qint64 bufferCount() const {
       return buffers.length();
    }
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return byteAmount() == 0;
    }
 
-   inline qint64 sizeNextBlock() const {
+   qint64 sizeNextBlock() const {
       if (buffers.isEmpty()) {
          return 0;
       } else {
@@ -161,11 +161,11 @@ class QByteDataBuffer
       }
    }
 
-   inline QByteArray &operator[](int i) {
+   QByteArray &operator[](int i) {
       return buffers[i];
    }
 
-   inline bool canReadLine() const {
+   bool canReadLine() const {
       for (int i = 0; i < buffers.length(); i++)
          if (buffers.at(i).contains('\n')) {
             return true;

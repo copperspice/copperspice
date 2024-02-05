@@ -131,11 +131,11 @@ class Q_CORE_EXPORT QXmlStreamAttributes : public QVector<QXmlStreamAttribute>
    void append(const QString &namespaceUri, const QString &name, const QString &value);
    void append(const QString &qualifiedName, const QString &value);
 
-   inline bool hasAttribute(const QString &qualifiedName) const {
+   bool hasAttribute(const QString &qualifiedName) const {
       return ! value(qualifiedName).isEmpty();
    }
 
-   inline bool hasAttribute(const QString &namespaceUri, const QString &name) const {
+   bool hasAttribute(const QString &namespaceUri, const QString &name) const {
       return ! value(namespaceUri, name).isEmpty();
    }
 

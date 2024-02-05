@@ -417,7 +417,7 @@ class QHash
       return m_data == other.m_data;
    }
 
-   inline bool operator!=(const QHash<Key, Val, Hash, KeyEqual> &other) const {
+   bool operator!=(const QHash<Key, Val, Hash, KeyEqual> &other) const {
       return ! (*this == other);
    }
 
@@ -430,35 +430,35 @@ class QHash
    }
 
    // iterators
-   inline iterator begin() {
+   iterator begin() {
       return m_data.begin();
    }
 
-   inline const_iterator begin() const {
+   const_iterator begin() const {
       return m_data.begin();
    }
 
-   inline const_iterator cbegin() const {
+   const_iterator cbegin() const {
       return m_data.begin();
    }
 
-   inline const_iterator constBegin() const {
+   const_iterator constBegin() const {
       return m_data.begin();
    }
 
-   inline iterator end() {
+   iterator end() {
       return m_data.end();
    }
 
-   inline const_iterator end() const {
+   const_iterator end() const {
       return m_data.end();
    }
 
-   inline const_iterator cend() const {
+   const_iterator cend() const {
       return m_data.end();
    }
 
-   inline const_iterator constEnd() const {
+   const_iterator constEnd() const {
       return m_data.end();
    }
 
@@ -635,7 +635,7 @@ class QHashIterator
    const_iterator i;
    const_iterator n;
 
-   inline bool item_exists() const {
+   bool item_exists() const {
       return n != c->constEnd();
    }
 };

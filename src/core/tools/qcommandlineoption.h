@@ -48,12 +48,12 @@ class Q_CORE_EXPORT QCommandLineOption
 
    QCommandLineOption &operator=(const QCommandLineOption &other);
 
-   inline QCommandLineOption &operator=(QCommandLineOption && other) {
+   QCommandLineOption &operator=(QCommandLineOption && other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QCommandLineOption &other) {
+   void swap(QCommandLineOption &other) {
       qSwap(d, other.d);
    }
 

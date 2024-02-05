@@ -131,7 +131,7 @@ class QXmlStreamReader_Table
    static const short     action_info [];
    static const short    action_check [];
 
-   static inline int nt_action (int state, int nt) {
+   static int nt_action (int state, int nt) {
       const int yyn = action_index [GOTO_INDEX_OFFSET + state] + nt;
       if (yyn < 0 || action_check [GOTO_CHECK_OFFSET + yyn] != nt) {
          return goto_default [nt];
@@ -140,7 +140,7 @@ class QXmlStreamReader_Table
       return action_info [GOTO_INFO_OFFSET + yyn];
    }
 
-   static inline int t_action (int state, int token) {
+   static int t_action (int state, int token) {
       const int yyn = action_index [state] + token;
 
       if (yyn < 0 || action_check [yyn] != token) {
@@ -698,7 +698,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
            hasBeenParsed(false), isCurrentlyReferenced(false)
       {}
 
-      static inline Entity createLiteral(const QString &entity) {
+      static Entity createLiteral(const QString &entity) {
          Entity result(entity);
          result.literal = result.hasBeenParsed = true;
          return result;
@@ -738,7 +738,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       bool parameter;
       bool external;
 
-      inline void clear() {
+      void clear() {
          name.clear();
          notationName.clear();
          publicId.clear();
@@ -748,7 +748,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       }
    };
 
-   inline bool referenceEntity(Entity &entity) {
+   bool referenceEntity(Entity &entity) {
       if (entity.isCurrentlyReferenced) {
          raiseWellFormedError(QXmlStream::tr("Recursive entity detected."));
          return false;
@@ -776,7 +776,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
 
    void resume(int rule);
 
-   inline bool entitiesMustBeDeclared() const {
+   bool entitiesMustBeDeclared() const {
       return (! inParseEntity && (standalone || (! referenceToUnparsedEntityDetected
                   && ! referenceToParameterEntityDetected // Errata 13 as of 2006-04-25
                   && ! hasExternalDtdSubset)));
@@ -797,11 +797,11 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    int   *state_stack;
    inline void reallocateStack();
 
-   inline Value &sym(int index) const {
+   Value &sym(int index) const {
       return sym_stack[tos + index - 1];
    }
 
-   inline void clearTextBuffer() {
+   void clearTextBuffer() {
       if (! scanDtd) {
          textBuffer.clear();
       }
@@ -812,22 +812,22 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       Value value;
    };
 
-   inline QStringView symString(int index) {
+   QStringView symString(int index) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix, symbol.len - symbol.prefix);
    }
 
-   inline QStringView symName(int index) {
+   QStringView symName(int index) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos, symbol.len);
    }
 
-   inline QStringView symString(int index, int offset) {
+   QStringView symString(int index, int offset) {
       const Value &symbol = sym(index);
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix + offset, symbol.len - symbol.prefix -  offset);
    }
 
-   inline QStringView symPrefix(int index) {
+   QStringView symPrefix(int index) {
       const Value &symbol = sym(index);
 
       if (symbol.prefix) {
@@ -837,15 +837,15 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       return QStringView();
    }
 
-   inline QStringView symString(const Value &symbol) {
+   QStringView symString(const Value &symbol) {
       return makeStringView(&textBuffer, symbol.pos + symbol.prefix, symbol.len - symbol.prefix);
    }
 
-   inline QStringView symName(const Value &symbol) {
+   QStringView symName(const Value &symbol) {
       return makeStringView(&textBuffer, symbol.pos, symbol.len);
    }
 
-   inline QStringView symPrefix(const Value &symbol) {
+   QStringView symPrefix(const Value &symbol) {
       if (symbol.prefix) {
          return makeStringView(&textBuffer, symbol.pos, symbol.prefix - 1);
       }
@@ -853,7 +853,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
       return QStringView();
    }
 
-   inline void clearSym() {
+   void clearSym() {
       Value &val = sym(1);
       val.pos = textBuffer.size();
       val.len = 0;
@@ -863,11 +863,11 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    inline uint getChar();
    inline uint peekChar();
 
-   inline void putChar(uint c) {
+   void putChar(uint c) {
       putStack.push(c);
    }
 
-   inline void putChar(QChar c) {
+   void putChar(QChar c) {
       putStack.push(c.unicode());
    }
 
@@ -880,7 +880,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    bool scanUntil(const char *str, short tokenToInject = -1);
    bool scanString(const char *str, short tokenToInject, bool requireSpace = true);
 
-   inline void injectToken(ushort tokenToInject) {
+   void injectToken(ushort tokenToInject) {
       putChar(int(tokenToInject) << 16);
    }
 
@@ -985,7 +985,7 @@ class QXmlStreamReaderPrivate : public QXmlStreamReader_Table, public QXmlStream
    QXmlStreamReader *q_ptr;
    Q_DECLARE_PUBLIC(QXmlStreamReader)
 
-   inline void setType(const QXmlStreamReader::TokenType t) {
+   void setType(const QXmlStreamReader::TokenType t) {
       if (type != QXmlStreamReader::Invalid) {
          type = t;
       }

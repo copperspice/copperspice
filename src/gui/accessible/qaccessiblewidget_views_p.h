@@ -85,7 +85,7 @@ class QAccessibleTable : public QAccessibleTableInterface, public QAccessibleObj
    void modelChange(QAccessibleTableModelChangeEvent *event) override;
 
  protected:
-   inline QAccessible::Role cellRole() const {
+   QAccessible::Role cellRole() const {
       switch (m_role) {
          case QAccessible::List:
             return QAccessible::ListItem;

@@ -287,7 +287,8 @@ class Q_GUI_EXPORT QWidgetPrivate
    void updateFocusChild();
 
    void updateFont(const QFont &);
-   inline void setFont_helper(const QFont &font) {
+
+   void setFont_helper(const QFont &font) {
       if (data.fnt.resolve() == font.resolve() && data.fnt == font) {
          return;
       }
@@ -478,24 +479,24 @@ class Q_GUI_EXPORT QWidgetPrivate
       return screen;
    }
 
-   inline void setRedirected(QPaintDevice *replacement, const QPoint &offset) {
+   void setRedirected(QPaintDevice *replacement, const QPoint &offset) {
       Q_ASSERT(q_func()->testAttribute(Qt::WA_WState_InPaintEvent));
       redirectDev = replacement;
       redirectOffset = offset;
    }
 
-   inline QPaintDevice *redirected(QPoint *offset) const {
+   QPaintDevice *redirected(QPoint *offset) const {
       if (offset) {
          *offset = redirectDev ? redirectOffset : QPoint();
       }
       return redirectDev;
    }
 
-   inline void restoreRedirected() {
+   void restoreRedirected() {
       redirectDev = nullptr;
    }
 
-   inline void enforceNativeChildren() {
+   void enforceNativeChildren() {
       Q_Q(QWidget);
 
       if (!extra) {
@@ -515,11 +516,11 @@ class Q_GUI_EXPORT QWidgetPrivate
       }
    }
 
-   inline bool nativeChildrenForced() const {
+   bool nativeChildrenForced() const {
       return extra ? extra->nativeChildrenForced : false;
    }
 
-   inline QRect effectiveRectFor(const QRect &rect) const {
+   QRect effectiveRectFor(const QRect &rect) const {
 #ifndef QT_NO_GRAPHICSEFFECT
       if (graphicsEffect && graphicsEffect->isEnabled()) {
          return graphicsEffect->boundingRectFor(rect).toAlignedRect();
@@ -530,7 +531,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    QSize adjustedSize() const;
 
-   inline void handleSoftwareInputPanel(Qt::MouseButton button, bool clickCausedFocus) {
+   void handleSoftwareInputPanel(Qt::MouseButton button, bool clickCausedFocus) {
       Q_Q(QWidget);
       if (button == Qt::LeftButton && qApp->autoSipEnabled()) {
          QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(
@@ -544,19 +545,19 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    void setWSGeometry();
 
-   inline QPoint mapToWS(const QPoint &p) const {
+   QPoint mapToWS(const QPoint &p) const {
       return p - data.wrect.topLeft();
    }
 
-   inline QPoint mapFromWS(const QPoint &p) const {
+   QPoint mapFromWS(const QPoint &p) const {
       return p + data.wrect.topLeft();
    }
 
-   inline QRect mapToWS(const QRect &r) const  {
+   QRect mapToWS(const QRect &r) const  {
       return r.translated(-data.wrect.topLeft());
    }
 
-   inline QRect mapFromWS(const QRect &r) const {
+   QRect mapFromWS(const QRect &r) const {
       return r.translated(data.wrect.topLeft());
    }
 

@@ -39,50 +39,50 @@ class Q_CORE_EXPORT QBitArray
    {
    }
 
-   inline QBitArray &operator=(const QBitArray &other) {
+   QBitArray &operator=(const QBitArray &other) {
       d = other.d;
       return *this;
    }
 
-   inline QBitArray &operator=(QBitArray && other) {
+   QBitArray &operator=(QBitArray && other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QBitArray &other) {
+   void swap(QBitArray &other) {
       qSwap(d, other.d);
    }
 
-   inline int size() const {
+   int size() const {
       return (d.size() << 3) - *d.constData();
    }
 
-   inline int count() const {
+   int count() const {
       return (d.size() << 3) - *d.constData();
    }
 
    int count(bool on) const;
    // TODO: Store the number of set bits separately
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return d.isEmpty();
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return d.isNull();
    }
 
    void resize(int size);
 
-   inline void detach() {
+   void detach() {
       d.detach();
    }
 
-   inline bool isDetached() const {
+   bool isDetached() const {
       return d.isDetached();
    }
 
-   inline void clear() {
+   void clear() {
       d.clear();
    }
 
@@ -103,25 +103,25 @@ class Q_CORE_EXPORT QBitArray
    QBitArray &operator^=(const QBitArray &other);
    QBitArray  operator~() const;
 
-   inline bool operator==(const QBitArray &other) const {
+   bool operator==(const QBitArray &other) const {
       return d == other.d;
    }
 
-   inline bool operator!=(const QBitArray &other) const {
+   bool operator!=(const QBitArray &other) const {
       return d != other.d;
    }
 
    inline bool fill(bool value, int size = -1);
    void fill(bool value, int begin, int end);
 
-   inline void truncate(int pos) {
+   void truncate(int pos) {
       if (pos < size()) {
          resize(pos);
       }
    }
 
    typedef QByteArray::DataPtr DataPtr;
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d.data_ptr();
    }
 
@@ -200,11 +200,11 @@ inline bool QBitArray::at(int i) const
 class Q_CORE_EXPORT QBitRef
 {
  public:
-   inline operator bool() const {
+   operator bool() const {
       return a.testBit(i);
    }
 
-   inline bool operator!() const {
+   bool operator!() const {
       return !a.testBit(i);
    }
 

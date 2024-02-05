@@ -39,7 +39,7 @@ class QWidgetActionPrivate : public QActionPrivate
    uint defaultWidgetInUse : 1;
    uint autoCreated : 1; // created by QToolBar::addWidget and the like
 
-   inline void _q_widgetDestroyed(QObject *o) {
+   void _q_widgetDestroyed(QObject *o) {
       createdWidgets.removeAll(static_cast<QWidget *>(o));
    }
 };

@@ -33,7 +33,7 @@ namespace QtPrivate {
 class RefCount
 {
  public:
-   inline bool ref() {
+   bool ref() {
       int count = atomic.load();
       if (count == 0) { // !isSharable
          return false;
@@ -44,7 +44,7 @@ class RefCount
       return true;
    }
 
-   inline bool deref() {
+   bool deref() {
       int count = atomic.load();
       if (count == 0) { // !isSharable
          return false;
@@ -82,19 +82,19 @@ class RefCount
       return (count != 1) && (count != 0);
    }
 
-   inline bool operator==(int value) const {
+   bool operator==(int value) const {
       return atomic.load() == value;
    }
 
-   inline bool operator!=(int value) const {
+   bool operator!=(int value) const {
       return atomic.load() != value;
    }
 
-   inline bool operator!() const {
+   bool operator!() const {
       return !atomic.load();
    }
 
-   inline operator int() const {
+   operator int() const {
       return atomic.load();
    }
 

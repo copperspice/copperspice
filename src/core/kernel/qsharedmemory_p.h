@@ -52,9 +52,8 @@ namespace QSharedMemoryPrivate {
 
 class QSharedMemoryLocker
 {
-
  public:
-   inline QSharedMemoryLocker(QSharedMemory *sharedMemory) : q_sm(sharedMemory) {
+   QSharedMemoryLocker(QSharedMemory *sharedMemory) : q_sm(sharedMemory) {
       Q_ASSERT(q_sm);
    }
 

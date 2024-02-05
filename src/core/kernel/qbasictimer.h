@@ -41,11 +41,11 @@ class Q_CORE_EXPORT QBasicTimer
       }
    }
 
-   inline bool isActive() const {
+   bool isActive() const {
       return id != 0;
    }
 
-   inline int timerId() const {
+   int timerId() const {
       return id;
    }
 

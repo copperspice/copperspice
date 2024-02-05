@@ -32,13 +32,13 @@
 typedef void (*QTextCodecStateFreeFunction)(QTextCodec::ConverterState *);
 
 struct QTextCodecUnalignedPointer {
-   static inline QTextCodecStateFreeFunction decode(const uint *src) {
+   static QTextCodecStateFreeFunction decode(const uint *src) {
       quintptr data;
       memcpy(&data, src, sizeof(data));
       return reinterpret_cast<QTextCodecStateFreeFunction>(data);
    }
 
-   static inline void encode(uint *dst, QTextCodecStateFreeFunction fn) {
+   static void encode(uint *dst, QTextCodecStateFreeFunction fn) {
       quintptr data = reinterpret_cast<quintptr>(fn);
       memcpy(dst, &data, sizeof(data));
    }

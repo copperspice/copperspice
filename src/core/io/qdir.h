@@ -154,19 +154,19 @@ class Q_CORE_EXPORT QDir
    }
 
    static bool isRelativePath(const QString &path);
-   static inline bool isAbsolutePath(const QString &path) {
+   static bool isAbsolutePath(const QString &path) {
       return !isRelativePath(path);
    }
 
    bool isRelative() const;
-   inline bool isAbsolute() const {
+   bool isAbsolute() const {
       return !isRelative();
    }
 
    bool makeAbsolute();
 
    bool operator==(const QDir &other) const;
-   inline bool operator!=(const QDir &other) const {
+   bool operator!=(const QDir &other) const {
       return !operator==(other);
    }
 
@@ -186,24 +186,24 @@ class Q_CORE_EXPORT QDir
    static QChar separator();
 
    static bool setCurrent(const QString &path);
-   static inline QDir current() {
+   static QDir current() {
       return QDir(currentPath());
    }
 
    static QString currentPath();
 
-   static inline QDir home() {
+   static QDir home() {
       return QDir(homePath());
    }
 
    static QString homePath();
 
-   static inline QDir root() {
+   static QDir root() {
       return QDir(rootPath());
    }
 
    static QString rootPath();
-   static inline QDir temp() {
+   static QDir temp() {
       return QDir(tempPath());
    }
 

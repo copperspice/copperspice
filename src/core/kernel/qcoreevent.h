@@ -347,7 +347,7 @@ class Q_CORE_EXPORT QDynamicPropertyChangeEvent : public QEvent
    explicit QDynamicPropertyChangeEvent(const QByteArray &name);
    ~QDynamicPropertyChangeEvent();
 
-   inline QByteArray propertyName() const {
+   QByteArray propertyName() const {
       return n;
    }
 

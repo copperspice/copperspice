@@ -39,7 +39,8 @@ class FunctionWrapper0
    inline FunctionWrapper0(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer) { }
 
-   inline T operator()() {
+
+   T operator()() {
       return functionPointer();
    }
 
@@ -57,7 +58,7 @@ class FunctionWrapper1
    inline FunctionWrapper1(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer) { }
 
-   inline T operator()(U u) {
+   T operator()(U u) {
       return functionPointer(u);
    }
 
@@ -109,7 +110,7 @@ class MemberFunctionWrapper1
       : functionPointer(_functionPointer) {
    }
 
-   inline T operator()(C &c, U u) {
+   T operator()(C &c, U u) {
       return (c.*functionPointer)(u);
    }
 
@@ -126,7 +127,7 @@ class ConstMemberFunctionWrapper
    inline ConstMemberFunctionWrapper(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer) { }
 
-   inline T operator()(const C &c) const {
+   T operator()(const C &c) const {
       return (c.*functionPointer)();
    }
 
@@ -172,12 +173,13 @@ struct PushBackWrapper {
    typedef void result_type;
 
    template <class C, class U>
-   inline void operator()(C &c, const U &u) const {
+
+   void operator()(C &c, const U &u) const {
       return c.push_back(u);
    }
 
    template <class C, class U>
-   inline void operator()(C &c, U &&u) const {
+   void operator()(C &c, U &&u) const {
       return c.push_back(u);
    }
 

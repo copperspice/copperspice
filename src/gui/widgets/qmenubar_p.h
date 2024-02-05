@@ -108,7 +108,7 @@ class QMenuBarPrivate : public QWidgetPrivate
    QBasicTimer autoReleaseTimer;
 
    QPlatformMenuBar *platformMenuBar;
-   inline int indexOf(QAction *act) const {
+   int indexOf(QAction *act) const {
       return q_func()->actions().indexOf(act);
    }
 };

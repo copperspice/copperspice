@@ -77,7 +77,7 @@ class QFreeList
    typedef typename ElementType::ReferenceType ReferenceType;
 
    // return which block the index \a x falls in, and modify \a x to be the index into that block
-   static inline int blockfor(int &x) {
+   static int blockfor(int &x) {
       for (int i = 0; i < ConstantsType::BlockCount; ++i) {
          int size = ConstantsType::Sizes[i];
 
@@ -91,17 +91,19 @@ class QFreeList
    }
 
    // allocate a block of the given \a size, initialized starting with the given \a offset
-   static inline ElementType *allocate(int offset, int size) {
+   static ElementType *allocate(int offset, int size) {
       // qDebug("QFreeList: allocating %d elements (%ld bytes) with offset %d", size, size * sizeof(ElementType), offset);
       ElementType *v = new ElementType[size];
+
       for (int i = 0; i < size; ++i) {
          v[i].next.store(offset + i + 1);
       }
+
       return v;
    }
 
    // take the current serial number from \a o, increment it, and store it in \a n
-   static inline int incrementserial(int o, int n) {
+   static int incrementserial(int o, int n) {
       using uint = unsigned int;
       return int((uint(n) & ConstantsType::IndexMask) | ((uint(o) + ConstantsType::SerialCounter) & ConstantsType::SerialMask));
    }

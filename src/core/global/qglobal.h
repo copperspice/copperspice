@@ -733,7 +733,7 @@ class QGlobalStaticDeleter
       : globalStatic(_globalStatic) {
    }
 
-   inline ~QGlobalStaticDeleter() {
+   ~QGlobalStaticDeleter() {
       delete globalStatic.pointer.load();
       globalStatic.pointer.store(nullptr);
       globalStatic.destroyed = true;

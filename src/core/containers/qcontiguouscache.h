@@ -60,7 +60,7 @@ struct QContiguousCacheTypedData: private QContiguousCacheData {
    // private inheritance to avoid aliasing warningss
    T array[1];
 
-   static inline void free(QContiguousCacheTypedData *data) {
+   static void free(QContiguousCacheTypedData *data) {
       QContiguousCacheData::free(data);
    }
 };
@@ -104,56 +104,62 @@ class QContiguousCache
       }
    }
 
-   inline void detach() {
+   void detach() {
       if (d->ref.load() != 1) {
          detach_helper();
       }
    }
 
-   inline bool isDetached() const {
+   bool isDetached() const {
       return d->ref.load() == 1;
    }
 
-   inline void setSharable(bool sharable) {
+   void setSharable(bool sharable) {
       if (! sharable) {
          detach();
       }
+
       d->sharable = sharable;
    }
 
    QContiguousCache<T> &operator=(const QContiguousCache<T> &other);
 
-   inline QContiguousCache<T> &operator=(QContiguousCache<T> && other) {
+   QContiguousCache<T> &operator=(QContiguousCache<T> && other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QContiguousCache<T> &other) {
+   void swap(QContiguousCache<T> &other) {
       qSwap(d, other.d);
    }
 
    bool operator==(const QContiguousCache<T> &other) const;
-   inline bool operator!=(const QContiguousCache<T> &other) const {
+
+   bool operator!=(const QContiguousCache<T> &other) const {
       return !(*this == other);
    }
 
-   inline int capacity() const {
+   int capacity() const {
       return d->alloc;
    }
-   inline int count() const {
-      return d->count;
-   }
-   inline int size() const {
+
+   int count() const {
       return d->count;
    }
 
-   inline bool isEmpty() const {
+   int size() const {
+      return d->count;
+   }
+
+   bool isEmpty() const {
       return d->count == 0;
    }
-   inline bool isFull() const {
+
+   bool isFull() const {
       return d->count == d->alloc;
    }
-   inline int available() const {
+
+   int available() const {
       return d->alloc - d->count;
    }
 
@@ -168,30 +174,35 @@ class QContiguousCache
    void prepend(const T &value);
    void insert(int pos, const T &value);
 
-   inline bool containsIndex(int pos) const {
+   bool containsIndex(int pos) const {
       return pos >= d->offset && pos - d->offset < d->count;
    }
-   inline int firstIndex() const {
+
+   int firstIndex() const {
       return d->offset;
    }
-   inline int lastIndex() const {
+
+   int lastIndex() const {
       return d->offset + d->count - 1;
    }
 
-   inline const T &first() const {
+   const T &first() const {
       Q_ASSERT(!isEmpty());
       return p->array[d->start];
    }
-   inline const T &last() const {
+
+   const T &last() const {
       Q_ASSERT(!isEmpty());
       return p->array[(d->start + d->count - 1) % d->alloc];
    }
-   inline T &first() {
+
+   T &first() {
       Q_ASSERT(!isEmpty());
       detach();
       return p->array[d->start];
    }
-   inline T &last() {
+
+   T &last() {
       Q_ASSERT(!isEmpty());
       detach();
       return p->array[(d->start + d->count - 1) % d->alloc];
@@ -202,11 +213,11 @@ class QContiguousCache
    void removeLast();
    T takeLast();
 
-   inline bool areIndexesValid() const {
+   bool areIndexesValid() const {
       return d->offset >= 0 && d->offset < INT_MAX - d->count && (d->offset % d->alloc) == d->start;
    }
 
-   inline void normalizeIndexes() {
+   void normalizeIndexes() {
       d->offset = d->start;
    }
 

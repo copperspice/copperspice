@@ -165,11 +165,11 @@ class ReduceKernel
       reduceResults(reduce, r, resultsMap);
    }
 
-   inline bool shouldThrottle() {
+   bool shouldThrottle() {
       return (resultsMapSize > (ReduceQueueThrottleLimit * threadCount));
    }
 
-   inline bool shouldStartThread() {
+   bool shouldStartThread() {
       return (resultsMapSize <= (ReduceQueueStartLimit * threadCount));
    }
 };

@@ -42,7 +42,8 @@ class QVistaBackButton : public QAbstractButton
    QVistaBackButton(QWidget *widget);
 
    QSize sizeHint() const override;
-   inline QSize minimumSizeHint() const override {
+
+   QSize minimumSizeHint() const override {
       return sizeHint();
    }
 

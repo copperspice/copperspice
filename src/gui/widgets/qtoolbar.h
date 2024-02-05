@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QToolBar : public QWidget
    void setAllowedAreas(Qt::ToolBarAreas areas);
    Qt::ToolBarAreas allowedAreas() const;
 
-   inline bool isAreaAllowed(Qt::ToolBarArea area) const {
+   bool isAreaAllowed(Qt::ToolBarArea area) const {
       return (allowedAreas() & area) == area;
    }
 

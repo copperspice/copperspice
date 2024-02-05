@@ -38,11 +38,11 @@ class Q_CORE_EXPORT QSegfaultHandler
  public:
    static void initialize(char **, int);
 
-   static inline void installCrashHandler(QtCrashHandler h) {
+   static void installCrashHandler(QtCrashHandler h) {
       callback = h;
    }
 
-   static inline QtCrashHandler crashHandler() {
+   static QtCrashHandler crashHandler() {
       return callback;
    }
 };

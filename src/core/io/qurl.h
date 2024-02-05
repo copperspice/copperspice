@@ -297,7 +297,7 @@ class Q_CORE_EXPORT QUrl
 
    using DataPtr = QUrlPrivate *;
 
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 

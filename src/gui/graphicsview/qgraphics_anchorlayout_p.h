@@ -435,15 +435,15 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    void identifyFloatItems(const QSet<AnchorData *> &visited, Orientation orientation);
    void identifyNonFloatItems_helper(const AnchorData *ad, QSet<QGraphicsLayoutItem *> *nonFloatingItemsIdentifiedSoFar);
 
-   inline AnchorVertex *internalVertex(const QPair<QGraphicsLayoutItem *, Qt::AnchorPoint> &itemEdge) const {
+   AnchorVertex *internalVertex(const QPair<QGraphicsLayoutItem *, Qt::AnchorPoint> &itemEdge) const {
       return m_vertexList.value(itemEdge).first;
    }
 
-   inline AnchorVertex *internalVertex(const QGraphicsLayoutItem *item, Qt::AnchorPoint edge) const {
+   AnchorVertex *internalVertex(const QGraphicsLayoutItem *item, Qt::AnchorPoint edge) const {
       return internalVertex(qMakePair(const_cast<QGraphicsLayoutItem *>(item), edge));
    }
 
-   inline void changeLayoutVertex(Orientation orientation, AnchorVertex *oldV, AnchorVertex *newV) {
+   void changeLayoutVertex(Orientation orientation, AnchorVertex *oldV, AnchorVertex *newV) {
       if (layoutFirstVertex[orientation] == oldV) {
          layoutFirstVertex[orientation] = newV;
 

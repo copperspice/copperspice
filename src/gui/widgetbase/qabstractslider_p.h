@@ -90,7 +90,7 @@ class QAbstractSliderPrivate : public QWidgetPrivate
       return qMax(minimum, qMin(maximum, val));
    }
 
-   inline int overflowSafeAdd(int add) const {
+   int overflowSafeAdd(int add) const {
       int newValue = value + add;
       if (add > 0 && newValue < value) {
          newValue = maximum;
@@ -99,7 +99,8 @@ class QAbstractSliderPrivate : public QWidgetPrivate
       }
       return newValue;
    }
-   inline void setAdjustedSliderPosition(int position) {
+
+   void setAdjustedSliderPosition(int position) {
       Q_Q(QAbstractSlider);
 
       if (q->style()->styleHint(QStyle::SH_Slider_StopMouseOverSlider, nullptr, q)) {

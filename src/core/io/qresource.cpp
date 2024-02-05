@@ -54,7 +54,7 @@ class QResourceRoot
 
    const uchar *tree, *names, *payloads;
 
-   inline int findOffset(int node) const {
+   int findOffset(int node) const {
       return node * 14;   //sizeof each tree element
    }
 
@@ -68,18 +68,18 @@ class QResourceRoot
    inline QResourceRoot()
       : tree(nullptr), names(nullptr), payloads(nullptr) {}
 
-   inline QResourceRoot(const uchar *t, const uchar *n, const uchar *d) {
+   QResourceRoot(const uchar *t, const uchar *n, const uchar *d) {
       setSource(t, n, d);
    }
 
    virtual ~QResourceRoot() { }
    int findNode(const QString &path, const QLocale &locale = QLocale()) const;
 
-   inline bool isContainer(int node) const {
+   bool isContainer(int node) const {
       return flags(node) & Directory;
    }
 
-   inline bool isCompressed(int node) const {
+   bool isCompressed(int node) const {
       return flags(node) & Compressed;
    }
 
@@ -92,11 +92,11 @@ class QResourceRoot
 
    bool mappingRootSubdir(const QString &path, QString *match = nullptr) const;
 
-   inline bool operator==(const QResourceRoot &other) const {
+   bool operator==(const QResourceRoot &other) const {
       return tree == other.tree && names == other.names && payloads == other.payloads;
    }
 
-   inline bool operator!=(const QResourceRoot &other) const {
+   bool operator!=(const QResourceRoot &other) const {
       return !operator==(other);
    }
 
@@ -107,7 +107,7 @@ class QResourceRoot
    }
 
  protected:
-   inline void setSource(const uchar *t, const uchar *n, const uchar *d) {
+   void setSource(const uchar *t, const uchar *n, const uchar *d) {
       tree     = t;
       names    = n;
       payloads = d;

@@ -30,12 +30,12 @@ template <class Key, class T>
 class QCache
 {
    struct Node {
-      inline Node()
+      Node()
          : keyPtr(0)
       {
       }
 
-      inline Node(T *data, int cost)
+      Node(T *data, int cost)
          : keyPtr(nullptr), t(data), c(cost), p(nullptr), n(nullptr)
       {
       }
@@ -113,7 +113,7 @@ class QCache
    QCache(const QCache &) = delete;
    QCache &operator=(const QCache &) = delete;
 
-   inline ~QCache() {
+   ~QCache() {
       clear();
    }
 

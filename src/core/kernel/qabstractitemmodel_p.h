@@ -78,15 +78,15 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast,
                   const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
 
-   inline QModelIndex createIndex(int row, int column, void *data = nullptr) const {
+   QModelIndex createIndex(int row, int column, void *data = nullptr) const {
       return q_func()->createIndex(row, column, data);
    }
 
-   inline QModelIndex createIndex(int row, int column, int id) const {
+   QModelIndex createIndex(int row, int column, int id) const {
       return q_func()->createIndex(row, column, id);
    }
 
-   inline bool indexValid(const QModelIndex &index) const {
+   bool indexValid(const QModelIndex &index) const {
       return (index.row() >= 0) && (index.column() >= 0) && (index.model() == q_func());
    }
 
@@ -99,7 +99,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       persistent.m_indexes.clear();
    }
 
-   inline void invalidatePersistentIndex(const QModelIndex &index) {
+   void invalidatePersistentIndex(const QModelIndex &index) {
       QMultiMap<QModelIndex, QPersistentModelIndexData *>::iterator it = persistent.m_indexes.find(index);
 
       if (it != persistent.m_indexes.end()) {

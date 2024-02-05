@@ -36,7 +36,7 @@ class QFileSystemWatcherEngine : public QThread
    CORE_CS_OBJECT(QFileSystemWatcherEngine)
 
  protected:
-   inline QFileSystemWatcherEngine(bool move = true) {
+   QFileSystemWatcherEngine(bool move = true) {
       if (move) {
          moveToThread(this);
       }

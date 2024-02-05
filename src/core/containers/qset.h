@@ -450,67 +450,74 @@ class QMutableSetIterator
    QSet<T> *c;
    iterator i, n;
 
-   inline bool item_exists() const {
+   bool item_exists() const {
       return c->constEnd() != n;
    }
 
  public:
-   inline QMutableSetIterator(QSet<T> &set)
+   QMutableSetIterator(QSet<T> &set)
       : c(&set)
    {
       i = c->begin();
       n = c->end();
    }
 
-   inline ~QMutableSetIterator() {
+   ~QMutableSetIterator() {
    }
 
-   inline QMutableSetIterator &operator=(QSet<T> &set)
-   {
+   QMutableSetIterator &operator=(QSet<T> &set) {
       c = &set;
       i = c->begin();
       n = c->end();
+
       return *this;
    }
 
-   inline void toFront() {
+   void toFront() {
       i = c->begin();
       n = c->end();
    }
 
-   inline void toBack() {
+   void toBack() {
       i = c->end();
       n = i;
    }
 
-   inline bool hasNext() const {
+   bool hasNext() const {
       return c->constEnd() != i;
    }
-   inline const T &next() {
+
+   const T &next() {
       n = i++;
       return *n;
    }
-   inline const T &peekNext() const {
+
+   const T &peekNext() const {
       return *i;
    }
-   inline bool hasPrevious() const {
+
+   bool hasPrevious() const {
       return c->constBegin() != i;
    }
-   inline const T &previous() {
+
+   const T &previous() {
       n = --i;
       return *n;
    }
-   inline const T &peekPrevious() const {
+
+   const T &peekPrevious() const {
       iterator p = i;
       return *--p;
    }
-   inline void remove() {
+
+   void remove() {
       if (c->constEnd() != n) {
          i = c->erase(n);
          n = c->end();
       }
    }
-   inline const T &value() const {
+
+   const T &value() const {
       Q_ASSERT(item_exists());
       return *n;
    }

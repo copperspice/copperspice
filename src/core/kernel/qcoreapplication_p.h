@@ -48,7 +48,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    bool sendThroughObjectEventFilters(QObject *, QEvent *);
    bool notify_helper(QObject *, QEvent *);
 
-   static inline void setEventSpontaneous(QEvent *e, bool spontaneous) {
+   static void setEventSpontaneous(QEvent *e, bool spontaneous) {
       e->spont = spontaneous;
    }
 
@@ -112,7 +112,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    static bool setuidAllowed;
    static uint attribs;
 
-   static inline bool testAttribute(uint flag) {
+   static bool testAttribute(uint flag) {
       return attribs & (1 << flag);
    }
 

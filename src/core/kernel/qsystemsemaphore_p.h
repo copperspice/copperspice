@@ -40,7 +40,7 @@ class QSystemSemaphorePrivate
  public:
    QSystemSemaphorePrivate();
 
-   inline QString makeKeyFileName() const {
+   QString makeKeyFileName() const {
       return QSharedMemoryPrivate::makePlatformSafeKey(key, QString("qipc_systemsem_"));
    }
 

@@ -64,9 +64,10 @@ class Q_CORE_EXPORT QResource
    friend class QResourceFileEngineIterator;
    bool isDir() const;
 
-   inline bool isFile() const {
+   bool isFile() const {
       return !isDir();
    }
+
    QStringList children() const;
 
    QScopedPointer<QResourcePrivate> d_ptr;

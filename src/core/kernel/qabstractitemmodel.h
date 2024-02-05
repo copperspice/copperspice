@@ -52,19 +52,19 @@ class Q_CORE_EXPORT QModelIndex
 
    // compiler-generated copy/move constructor/assignment operators are fine
 
-   inline int row() const {
+   int row() const {
       return r;
    }
 
-   inline int column() const {
+   int column() const {
       return c;
    }
 
-   inline void *internalPointer() const {
+   void *internalPointer() const {
       return p;
    }
 
-   inline qint64 internalId() const {
+   qint64 internalId() const {
       return reinterpret_cast<qint64>(p);
    }
 
@@ -74,23 +74,23 @@ class Q_CORE_EXPORT QModelIndex
    inline QVariant data(int role = Qt::DisplayRole) const;
    inline Qt::ItemFlags flags() const;
 
-   inline const QAbstractItemModel *model() const {
+   const QAbstractItemModel *model() const {
       return m;
    }
 
-   inline bool isValid() const {
+   bool isValid() const {
       return (r >= 0) && (c >= 0) && (m != nullptr);
    }
 
-   inline bool operator==(const QModelIndex &other) const {
+   bool operator==(const QModelIndex &other) const {
       return (other.r == r) && (other.p == p) && (other.c == c) && (other.m == m);
    }
 
-   inline bool operator!=(const QModelIndex &other) const {
+   bool operator!=(const QModelIndex &other) const {
       return !(*this == other);
    }
 
-   inline bool operator<(const QModelIndex &other) const {
+   bool operator<(const QModelIndex &other) const {
       if (r < other.r) {
          return true;
       }
@@ -112,7 +112,7 @@ class Q_CORE_EXPORT QModelIndex
    }
 
  private:
-   inline QModelIndex(int row, int column, void *ptr, const QAbstractItemModel *model)
+   QModelIndex(int row, int column, void *ptr, const QAbstractItemModel *model)
       : r(row), c(column), p(ptr), m(model)
    {
    }
@@ -136,23 +136,24 @@ class Q_CORE_EXPORT QPersistentModelIndex
 
    bool operator<(const QPersistentModelIndex &other) const;
    bool operator==(const QPersistentModelIndex &other) const;
-   inline bool operator!=(const QPersistentModelIndex &other) const {
+
+   bool operator!=(const QPersistentModelIndex &other) const {
       return !operator==(other);
    }
 
    QPersistentModelIndex &operator=(const QPersistentModelIndex &other);
-    inline QPersistentModelIndex(QPersistentModelIndex &&other)
+    QPersistentModelIndex(QPersistentModelIndex &&other)
       : d(other.d)
     {
       other.d = nullptr;
     }
 
-   inline QPersistentModelIndex &operator=(QPersistentModelIndex &&other) {
+   QPersistentModelIndex &operator=(QPersistentModelIndex &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QPersistentModelIndex &other)   {
+   void swap(QPersistentModelIndex &other)   {
       qSwap(d, other.d);
    }
 

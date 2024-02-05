@@ -33,12 +33,12 @@ class QSharedDataPointer;
 class Q_CORE_EXPORT QSharedData
 {
  public:
-   inline QSharedData()
+   QSharedData()
       : ref(0)
    {
    }
 
-   inline QSharedData(const QSharedData &other)
+   QSharedData(const QSharedData &other)
       : ref(0)
    {
       (void) other;

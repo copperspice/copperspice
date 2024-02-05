@@ -159,31 +159,31 @@ class Q_GUI_EXPORT QKeySequence
 
    QKeySequence &operator=(const QKeySequence &other);
 
-   inline QKeySequence &operator=(QKeySequence &&other) {
+   QKeySequence &operator=(QKeySequence &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QKeySequence &other) {
+   void swap(QKeySequence &other) {
       qSwap(d, other.d);
    }
 
    bool operator==(const QKeySequence &other) const;
-   inline bool operator!= (const QKeySequence &other) const {
+   bool operator!= (const QKeySequence &other) const {
       return !(*this == other);
    }
 
    bool operator< (const QKeySequence &other) const;
 
-   inline bool operator> (const QKeySequence &other) const {
+   bool operator> (const QKeySequence &other) const {
       return other < *this;
    }
 
-   inline bool operator<= (const QKeySequence &other) const {
+   bool operator<= (const QKeySequence &other) const {
       return !(other < *this);
    }
 
-   inline bool operator>= (const QKeySequence &other) const {
+   bool operator>= (const QKeySequence &other) const {
       return !(*this < other);
    }
 
@@ -206,7 +206,8 @@ class Q_GUI_EXPORT QKeySequence
 
  public:
    typedef QKeySequencePrivate *DataPtr;
-   inline DataPtr &data_ptr() {
+
+   DataPtr &data_ptr() {
       return d;
    }
 

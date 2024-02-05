@@ -63,7 +63,7 @@ class Q_CORE_EXPORT QJsonObject
       return size();
    }
 
-   inline bool empty() const {
+   bool empty() const {
       return isEmpty();
    }
 

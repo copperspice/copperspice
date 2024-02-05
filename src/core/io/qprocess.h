@@ -242,7 +242,7 @@ class Q_CORE_EXPORT QProcessEnvironment
    QProcessEnvironment &operator=(const QProcessEnvironment &other);
 
    bool operator==(const QProcessEnvironment &other) const;
-   inline bool operator!=(const QProcessEnvironment &other) const {
+   bool operator!=(const QProcessEnvironment &other) const {
       return !(*this == other);
    }
 

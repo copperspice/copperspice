@@ -106,17 +106,17 @@ class Q_CORE_EXPORT QSystemLocale
 
 struct QLocaleId {
    // bypass constructors
-   static inline QLocaleId fromIds(ushort language, ushort script, ushort country) {
+   static QLocaleId fromIds(ushort language, ushort script, ushort country) {
       const QLocaleId localeId = { language, script, country };
       return localeId;
    }
 
-   inline bool operator==(QLocaleId other) const
+   bool operator==(QLocaleId other) const
    {
       return language_id == other.language_id && script_id == other.script_id && country_id == other.country_id;
    }
 
-   inline bool operator!=(QLocaleId other) const
+   bool operator!=(QLocaleId other) const
    {
       return !operator==(other);
    }

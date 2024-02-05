@@ -91,35 +91,35 @@ class QVersionNumber
       : m_segments(args)
    {}
 
-   inline explicit QVersionNumber(int maj) {
+   explicit QVersionNumber(int maj) {
       m_segments.setSegments(1, maj);
    }
 
-   inline explicit QVersionNumber(int maj, int min) {
+   explicit QVersionNumber(int maj, int min) {
       m_segments.setSegments(2, maj, min);
    }
 
-   inline explicit QVersionNumber(int maj, int min, int mic) {
+   explicit QVersionNumber(int maj, int min, int mic) {
       m_segments.setSegments(3, maj, min, mic);
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return segmentCount() == 0;
    }
 
-   inline bool isNormalized() const {
+   bool isNormalized() const {
       return isNull() || segmentAt(segmentCount() - 1) != 0;
    }
 
-   inline int majorVersion() const {
+   int majorVersion() const {
       return segmentAt(0);
    }
 
-   inline int minorVersion() const {
+   int minorVersion() const {
       return segmentAt(1);
    }
 
-   inline int microVersion() const {
+   int microVersion() const {
       return segmentAt(2);
    }
 
@@ -127,11 +127,11 @@ class QVersionNumber
 
    Q_CORE_EXPORT QVector<int> segments() const;
 
-   inline int segmentAt(int index) const {
+   int segmentAt(int index) const {
       return (m_segments.size() > index) ? m_segments.at(index) : 0;
    }
 
-   inline int segmentCount() const {
+   int segmentCount() const {
       return m_segments.size();
    }
 

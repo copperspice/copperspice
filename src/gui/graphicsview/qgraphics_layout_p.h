@@ -69,35 +69,35 @@ class QLayoutStyleInfo
       m_defaultSpacing[1] = style->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
    }
 
-   inline void invalidate() {
+   void invalidate() {
       m_valid  = false;
       m_style  = nullptr;
       m_widget = nullptr;
    }
 
-   inline QStyle *style() const {
+   QStyle *style() const {
       return m_style;
    }
 
-   inline QWidget *widget() const {
+   QWidget *widget() const {
       return m_widget;
    }
 
-   inline bool operator==(const QLayoutStyleInfo &other) const {
+   bool operator==(const QLayoutStyleInfo &other) const {
       return m_style == other.m_style && m_widget == other.m_widget;
    }
 
-   inline bool operator!=(const QLayoutStyleInfo &other) const {
+   bool operator!=(const QLayoutStyleInfo &other) const {
       return !(*this == other);
    }
 
-   inline void setDefaultSpacing(Qt::Orientation o, qreal spacing) {
+   void setDefaultSpacing(Qt::Orientation o, qreal spacing) {
       if (spacing >= 0) {
          m_defaultSpacing[o - 1] = spacing;
       }
    }
 
-   inline qreal defaultSpacing(Qt::Orientation o) const {
+   qreal defaultSpacing(Qt::Orientation o) const {
       return m_defaultSpacing[o - 1];
    }
 

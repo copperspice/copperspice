@@ -60,7 +60,7 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    static QByteArray encodeName(const QString &fileName);
    static QString decodeName(const QByteArray &localFileName);
 
-   static inline QString decodeName(const char *localFileName) {
+   static QString decodeName(const char *localFileName) {
       return decodeName(QByteArray(localFileName));
    }
 
@@ -72,11 +72,12 @@ class Q_CORE_EXPORT QFile : public QFileDevice
 
    QString readLink() const;
    static QString readLink(const QString &fileName);
-   inline QString symLinkTarget() const {
+
+   QString symLinkTarget() const {
       return readLink();
    }
 
-   static inline QString symLinkTarget(const QString &fileName) {
+   static QString symLinkTarget(const QString &fileName) {
       return readLink(fileName);
    }
 

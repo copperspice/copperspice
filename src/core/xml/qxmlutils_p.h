@@ -39,7 +39,7 @@ class Q_CORE_EXPORT QXmlUtils
 
    static bool isNCName(QStringView ncName);
 
-   static inline bool isNCName(const QString &ncName) {
+   static bool isNCName(const QString &ncName) {
       return isNCName(QStringView(ncName));
    }
 

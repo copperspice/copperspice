@@ -240,7 +240,7 @@ class Q_CORE_EXPORT QIODevicePrivate
 
    mutable AccessMode accessMode;
 
-   inline bool isSequential() const {
+   bool isSequential() const {
       if (accessMode == Unset) {
          accessMode = q_func()->isSequential() ? Sequential : RandomAccess;
       }

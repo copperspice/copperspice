@@ -108,11 +108,11 @@ class FilterKernel : public IterateKernel<typename Sequence::const_iterator, voi
       sequence = reducedResult;
    }
 
-   inline bool shouldThrottleThread() {
+   bool shouldThrottleThread() {
       return IterateKernelType::shouldThrottleThread() || reducer.shouldThrottle();
    }
 
-   inline bool shouldStartThread() {
+   bool shouldStartThread() {
       return IterateKernelType::shouldStartThread() && reducer.shouldStartThread();
    }
 
@@ -178,11 +178,11 @@ class FilteredReducedKernel : public IterateKernel<Iterator, ReducedResultType>
       reducer.finish(reduce, reducedResult);
    }
 
-   inline bool shouldThrottleThread() {
+   bool shouldThrottleThread() {
       return IterateKernelType::shouldThrottleThread() || reducer.shouldThrottle();
    }
 
-   inline bool shouldStartThread() {
+   bool shouldStartThread() {
       return IterateKernelType::shouldStartThread() && reducer.shouldStartThread();
    }
 
