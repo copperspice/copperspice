@@ -21,30 +21,32 @@
 *
 ***********************************************************************/
 
-#define _POSIX_
-#include <qplatformdefs.h>
-#include <qabstractfileengine.h>
 #include <qfsfileengine_p.h>
-#include <qfilesystemengine_p.h>
-#include <qdebug.h>
+#define _POSIX_
 
-#include <qfile.h>
-#include <qdir.h>
-#include <qmutexpool_p.h>
-#include <qvarlengtharray.h>
+#include <qabstractfileengine.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qplatformdefs.h>
 #include <qt_windows.h>
+#include <qvarlengtharray.h>
 
-#include <sys/types.h>
-#include <direct.h>
-#include <winioctl.h>
+#include <qfilesystemengine_p.h>
+#include <qmutexpool_p.h>
 
-#include <objbase.h>
-#include <shlobj.h>
-#include <initguid.h>
 #include <accctrl.h>
 #include <ctype.h>
+#include <direct.h>
 #include <limits.h>
+#include <objbase.h>
+#include <shlobj.h>
+#include <winioctl.h>
+
+// do not move these two files
+#include <sys/types.h>
+#include <initguid.h>
 
 #define SECURITY_WIN32
 #include <security.h>

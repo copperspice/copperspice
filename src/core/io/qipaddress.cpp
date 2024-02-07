@@ -26,9 +26,11 @@
 *******************************************/
 
 #include <qipaddress_p.h>
+
+#include <qvarlengtharray.h>
+
 #include <qlocale_tools_p.h>
 #include <qtools_p.h>
-#include <qvarlengtharray.h>
 
 namespace QIPAddressUtils {
 

@@ -27,9 +27,10 @@
 #define DEBUG_EVENT_DISPATCHER 0
 
 #include <qabstracteventdispatcher.h>
-#include <qtimerinfo_unix_p.h>
-#include <qcfsocketnotifier_p.h>
 #include <qdebug.h>
+
+#include <qcfsocketnotifier_p.h>
+#include <qtimerinfo_unix_p.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 

@@ -24,13 +24,13 @@
 #ifndef QHASH_H
 #define QHASH_H
 
-#include <initializer_list>
-#include <unordered_map>
-
 #include <qcontainerfwd.h>
 #include <qhashfunc.h>
 #include <qhashfwd.h>
 #include <qlist.h>
+
+#include <initializer_list>
+#include <unordered_map>
 
 template <typename Key, typename Val, typename Hash = qHashFunc<Key>, typename KeyEqual = qHashEqual<Key>>
 class QHashIterator;

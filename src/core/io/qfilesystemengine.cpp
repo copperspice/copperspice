@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qfilesystemengine_p.h>
+
 #include <qdir.h>
 #include <qset.h>
+
 #include <qabstractfileengine_p.h>
 #include <qresource_p.h>
 

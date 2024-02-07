@@ -38,12 +38,14 @@
  *
  ************************************************************************/
 
-#include <qplatformdefs.h>
-#include <qcrashhandler_p.h>
 #include <qbytearray.h>
+#include <qplatformdefs.h>
 #include <qstring.h>
 
-#ifndef QT_NO_CRASHHANDLER
+#include <qcrashhandler_p.h>
+// file is only compiled for unix ( not windows or darwin )
+
+#if ! defined(QT_NO_CRASHHANDLER)
 
 #include <stdio.h>
 #include <signal.h>

@@ -23,61 +23,59 @@
 
 #include <qwidget.h>
 
+#include <qabstractscrollarea.h>
 #include <qapplication.h>
+#include <qbackingstore.h>
 #include <qbrush.h>
 #include <qcursor.h>
+#include <qdebug.h>
 #include <qevent.h>
+#include <qfileinfo.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsscene.h>
+#include <qinputmethod.h>
 #include <qlayout.h>
 #include <qmenu.h>
 #include <qmetaobject.h>
+#include <qoffscreensurface.h>
+#include <qopenglcontext.h>
+#include <qpainter.h>
 #include <qpixmap.h>
+#include <qplatform_backingstore.h>
+#include <qplatform_window.h>
 #include <qpointer.h>
 #include <qstack.h>
 #include <qstyle.h>
 #include <qstylefactory.h>
-#include <qvariant.h>
-#include <qstyleoption.h>
 #include <qstylehints.h>
+#include <qstyleoption.h>
+#include <qtooltip.h>
+#include <qvariant.h>
+#include <qwhatsthis.h>
+#include <platformheaders/qxcbwindowfunctions.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif
 
-#include <qbackingstore.h>
-#include <qplatform_window.h>
-#include <qplatform_backingstore.h>
-#include <qpainter.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qdebug.h>
-#include <qfileinfo.h>
-#include <qinputmethod.h>
-#include <qopenglcontext.h>
-#include <qoffscreensurface.h>
-#include <qgraphicsproxywidget.h>
-#include <qgraphicsscene.h>
-#include <qabstractscrollarea.h>
-
-#include <platformheaders/qxcbwindowfunctions.h>
-
+#include <qabstractscrollarea_p.h>
+#include <qaction_p.h>
 #include <qapplication_p.h>
 #include <qdesktopwidget_p.h>
-#include <qstylesheetstyle_p.h>
-#include <qstyle_p.h>
-#include <qhighdpiscaling_p.h>
-#include <qopenglcontext_p.h>
-#include <qwidgetwindow_p.h>
-#include <qgraphicseffect_p.h>
-#include <qwidgetbackingstore_p.h>
-#include <qpaintengine_raster_p.h>
-#include <qwidget_p.h>
-#include <qwindow_p.h>
-#include <qaction_p.h>
-#include <qlayout_p.h>
-#include <qgraphics_proxywidget_p.h>
-#include <qabstractscrollarea_p.h>
 #include <qevent_p.h>
 #include <qgesturemanager_p.h>
+#include <qgraphics_proxywidget_p.h>
+#include <qgraphicseffect_p.h>
+#include <qhighdpiscaling_p.h>
+#include <qlayout_p.h>
+#include <qopenglcontext_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qstyle_p.h>
+#include <qstylesheetstyle_p.h>
+#include <qwidget_p.h>
+#include <qwidgetbackingstore_p.h>
+#include <qwidgetwindow_p.h>
+#include <qwindow_p.h>
 #include <qwindowcontainer_p.h>
 
 static bool qt_enable_backingstore = true;

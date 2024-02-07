@@ -21,8 +21,10 @@
 *
 ***********************************************************************/
 
+// do not move these two includes
 #include <qobject.h>
 #include <csmeta.h>
+
 #include <qmetaobject.h>
 #include <qstringlist.h>
 #include <qstringparser.h>

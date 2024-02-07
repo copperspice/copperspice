@@ -22,8 +22,8 @@
 ***********************************************************************/
 
 #include <qpropertyanimation.h>
-#include <qwidget.h>
 #include <qstyle.h>
+#include <qwidget.h>
 
 #include <qmainwindowlayout_p.h>
 #include <qwidgetanimator_p.h>

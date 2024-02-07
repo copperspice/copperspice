@@ -27,16 +27,14 @@
 #define _CRT_RAND_S
 #endif
 
-#include <stdlib.h>
-
-#include <qhash.h>
-
 #ifdef truncate
 #undef truncate
 #endif
 
-#include <qbytearray.h>
+#include <qhash.h>
+
 #include <qbitarray.h>
+#include <qbytearray.h>
 #include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qglobal.h>
@@ -48,6 +46,7 @@
 #endif
 
 #include <limits.h>
+#include <stdlib.h>
 
 static std::atomic<uint> cs_seed_value{0};
 

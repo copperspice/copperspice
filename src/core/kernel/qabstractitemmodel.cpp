@@ -22,17 +22,18 @@
 ***********************************************************************/
 
 #include <qabstractitemmodel.h>
-#include <qabstractitemmodel_p.h>
 
 #include <qbitarray.h>
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qstringlist.h>
-#include <qsize.h>
 #include <qmimedata.h>
 #include <qregularexpression.h>
-#include <qvector.h>
+#include <qsize.h>
 #include <qstack.h>
+#include <qstringlist.h>
+#include <qvector.h>
+
+#include <qabstractitemmodel_p.h>
 
 #include <limits.h>
 

@@ -24,14 +24,14 @@
 #ifndef QTCONCURRENTTHREADENGINE_H
 #define QTCONCURRENTTHREADENGINE_H
 
-#include <qglobal.h>
-#include <qthreadpool.h>
-#include <qfuture.h>
-#include <qdebug.h>
-#include <qtconcurrentexception.h>
-#include <qwaitcondition.h>
 #include <qatomic.h>
+#include <qdebug.h>
+#include <qfuture.h>
+#include <qglobal.h>
 #include <qsemaphore.h>
+#include <qtconcurrentexception.h>
+#include <qthreadpool.h>
+#include <qwaitcondition.h>
 
 namespace QtConcurrent {
 

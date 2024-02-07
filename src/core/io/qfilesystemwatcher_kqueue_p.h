@@ -25,6 +25,7 @@
 #define QFILESYSTEMWATCHER_KQUEUE_P_H
 
 #include <qfilesystemwatcher_p.h>
+
 #include <qhash.h>
 #include <qmutex.h>
 #include <qthread.h>

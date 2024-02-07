@@ -25,17 +25,17 @@
 
 #ifndef QT_NO_MDIAREA
 
-#include <QApplication>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QStylePainter>
-#include <QVBoxLayout>
-#include <QMouseEvent>
-#include <QWhatsThis>
-#include <QToolTip>
-#include <QScrollBar>
-#include <QDebug>
-#include <QScopedValueRollback>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qmainwindow.h>
+#include <qmdiarea.h>
+#include <qmouseevent.h>
+#include <qscopedvaluerollback.h>
+#include <qscrollbar.h>
+#include <qstylepainter.h>
+#include <qtooltip.h>
+#include <qvboxlayout.h>
+#include <qwhatsthis.h>
 
 #if defined(Q_OS_DARWIN) && ! defined(QT_NO_STYLE_MAC)
 #include <qmacstyle.h>

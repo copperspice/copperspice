@@ -25,12 +25,12 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qabstracttransition_p.h>
-
 #include <qabstractstate.h>
 #include <qhistorystate.h>
 #include <qstate.h>
 #include <qstatemachine.h>
+
+#include <qabstracttransition_p.h>
 
 QAbstractTransitionPrivate::QAbstractTransitionPrivate()
    : transitionType(QAbstractTransition::ExternalTransition)

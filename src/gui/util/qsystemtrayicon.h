@@ -32,12 +32,12 @@
 #include <qplatform_systemtrayicon.h>
 #include <qscopedpointer.h>
 
-class QSystemTrayIconPrivate;
-class QMenu;
 class QEvent;
-class QWheelEvent;
+class QMenu;
 class QMouseEvent;
 class QPoint;
+class QSystemTrayIconPrivate;
+class QWheelEvent;
 
 class Q_GUI_EXPORT QSystemTrayIcon : public QObject
 {

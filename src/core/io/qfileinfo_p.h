@@ -24,11 +24,12 @@
 #ifndef QFILEINFO_P_H
 #define QFILEINFO_P_H
 
-#include <qfileinfo.h>
 #include <qabstractfileengine.h>
-#include <qdatetime.h>
 #include <qatomic.h>
+#include <qdatetime.h>
+#include <qfileinfo.h>
 #include <qshareddata.h>
+
 #include <qfilesystemengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>

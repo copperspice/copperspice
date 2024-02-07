@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qcryptographichash.h>
+
 #include <qiodevice.h>
 
 #include "../../3rdparty/md5/md5.h"

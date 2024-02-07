@@ -22,44 +22,44 @@
 ***********************************************************************/
 
 #include <qcommonstyle.h>
-#include <qcommonstyle_p.h>
 
-#include <qfile.h>
 #include <qapplication.h>
-#include <qplatform_theme.h>
 #include <qbitmap.h>
 #include <qcache.h>
+#include <qdebug.h>
+#include <qdialogbuttonbox.h>
+#include <qdir.h>
 #include <qdockwidget.h>
 #include <qdrawutil.h>
-#include <qdialogbuttonbox.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <qformlayout.h>
 #include <qgroupbox.h>
 #include <qmath.h>
 #include <qmenu.h>
-#include <qpainter.h>
 #include <qpaintengine.h>
+#include <qpainter.h>
 #include <qpainterpath.h>
+#include <qpixmapcache.h>
+#include <qplatform_theme.h>
+#include <qrubberband.h>
+#include <qsettings.h>
 #include <qslider.h>
 #include <qstyleoption.h>
 #include <qtabbar.h>
 #include <qtabwidget.h>
+#include <qtextformat.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <qrubberband.h>
 #include <qtreeview.h>
-#include <qdebug.h>
-#include <qtextformat.h>
 #include <qwizard.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qsettings.h>
-#include <qpixmapcache.h>
 
+#include <qcommonstyle_p.h>
 #include <qcommonstylepixmaps_p.h>
 #include <qguiapplication_p.h>
 #include <qmath_p.h>
-#include <qstylehelper_p.h>
 #include <qstyleanimation_p.h>
+#include <qstylehelper_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 #   include <qtextengine_p.h>

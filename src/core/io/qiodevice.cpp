@@ -23,13 +23,14 @@
 
 //#define QIODEVICE_DEBUG
 
-#include <algorithm>
+#include <qiodevice_p.h>
 
 #include <qbytearray.h>
 #include <qdebug.h>
-#include <qiodevice_p.h>
 #include <qfile.h>
 #include <qstringlist.h>
+
+#include <algorithm>
 #include <limits.h>
 
 #ifdef QIODEVICE_DEBUG

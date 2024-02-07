@@ -24,6 +24,7 @@
 #include <qcombobox.h>
 
 #ifndef QT_NO_COMBOBOX
+
 #include <qstylepainter.h>
 #include <qplatform_theme.h>
 #include <qplatform_menu.h>

@@ -23,7 +23,6 @@
 
 #include <qtranslator.h>
 
-#include <qplatformdefs.h>
 #include <qalgorithms.h>
 #include <qcoreapplication.h>
 #include <qdatastream.h>
@@ -33,10 +32,11 @@
 #include <qfileinfo.h>
 #include <qhash.h>
 #include <qlocale.h>
+#include <qmap.h>
+#include <qplatformdefs.h>
+#include <qresource.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qmap.h>
-#include <qresource.h>
 
 #include <qcoreapplication_p.h>
 #include <qtranslator_p.h>

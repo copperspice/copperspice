@@ -30,8 +30,8 @@
 
 #include <qgraphicslayout.h>
 #include <qstyle.h>
-#include <qwidget.h>
 #include <qstyleoption.h>
+#include <qwidget.h>
 
 #include <qgraphics_layoutitem_p.h>
 

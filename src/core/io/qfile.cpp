@@ -21,21 +21,20 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qdebug.h>
 #include <qfile.h>
-#include <qfsfileengine.h>
-#include <qtemporaryfile.h>
-#include <qlist.h>
+
+#include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qfileinfo.h>
-#include <qiodevice_p.h>
+#include <qfsfileengine.h>
+#include <qlist.h>
+#include <qplatformdefs.h>
+#include <qtemporaryfile.h>
+
 #include <qfile_p.h>
 #include <qfilesystemengine_p.h>
+#include <qiodevice_p.h>
 #include <qsystemerror_p.h>
-
-#if defined(QT_BUILD_CORE_LIB)
-# include <qcoreapplication.h>
-#endif
 
 static QByteArray locale_encode(const QString &f)
 {

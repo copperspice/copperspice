@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <array>
-
 #include <qstring16.h>
+
 #include <qdatastream.h>
 #include <qregularexpression.h>
+
 #include <qunicodetables_p.h>
 
 #if defined(Q_OS_WIN)
@@ -35,6 +35,8 @@
 #ifdef Q_OS_DARWIN
 #include <CoreFoundation/CFString.h>
 #endif
+
+#include <array>
 
 static bool cs_internal_quickCheck(QString16::const_iterator &first_iter, QString16::const_iterator last_iter,
                   QString16::NormalizationForm mode);

@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <QPointer>
-#include <QObject>
-#include <qmath.h>
-
 #include <qscrollerproperties.h>
+
+#include <qmath.h>
+#include <qobject.h>
+#include <qpointer.h>
+
 #include <qscrollerproperties_p.h>
 
 static QScrollerPropertiesPrivate *userDefaults   = nullptr;

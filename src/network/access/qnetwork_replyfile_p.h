@@ -26,9 +26,9 @@
 
 #include <qnetwork_reply.h>
 
-#include <qnetaccess_manager.h>
-#include <qfile.h>
 #include <qabstractfileengine.h>
+#include <qfile.h>
+#include <qnetaccess_manager.h>
 
 #include <qnetwork_reply_p.h>
 

@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qline.h>
+
 #include <qdebug.h>
 #include <qdatastream.h>
 #include <qmath.h>
+
 #include <qnumeric_p.h>
 
 QDebug operator<<(QDebug d, const QLine &p)

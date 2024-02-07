@@ -24,12 +24,12 @@
 #ifndef QMAP_H
 #define QMAP_H
 
-#include <initializer_list>
-#include <map>
-
 #include <qcontainerfwd.h>
 #include <qlist.h>
 #include <qmapfunc.h>
+
+#include <initializer_list>
+#include <map>
 
 template <typename Key, typename Val, typename C>
 class QMapIterator;

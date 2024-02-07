@@ -26,30 +26,29 @@
 
 #include <qabstracteventdispatcher.h>
 #include <qcoreevent.h>
-#include <qeventloop.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qdir.h>
+#include <qelapsedtimer.h>
+#include <qeventloop.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qglobal.h>
 #include <qhash.h>
+#include <qlibraryinfo.h>
 #include <qmutex.h>
-#include <qtextcodec.h>
 #include <qstandardpaths.h>
+#include <qtextcodec.h>
 #include <qthread.h>
 #include <qthreadpool.h>
 #include <qthreadstorage.h>
-#include <qelapsedtimer.h>
-#include <qlibraryinfo.h>
 #include <qvarlengtharray.h>
-
 #include <qcorecmdlineargs_p.h>
+#include <qfactoryloader_p.h>
+#include <qlocale_p.h>
 #include <qprocess_p.h>
 #include <qprocess_p.h>
 #include <qthread_p.h>
-#include <qfactoryloader_p.h>
-#include <qlocale_p.h>
 
 #if defined(Q_OS_UNIX)
 #  if defined(Q_OS_DARWIN)

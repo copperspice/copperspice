@@ -26,9 +26,9 @@
 #include <qfile.h>
 #include <qlibraryinfo.h>
 #include <qregularexpression.h>
-#include <qstringlist.h>
-#include <qsettings.h>
 #include <qscopedpointer.h>
+#include <qsettings.h>
+#include <qstringlist.h>
 
 #include <cs_build_info.h>
 

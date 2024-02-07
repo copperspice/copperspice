@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-// do not move include, if qcoreapplication.h is included directly forward declarations are not sufficient 12/30/2013
+// do not move include
 #include <qobject.h>
 
 #ifndef QCOREAPPLICATION_H

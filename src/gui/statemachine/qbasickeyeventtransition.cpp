@@ -25,8 +25,9 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qevent.h>
 #include <qdebug.h>
+#include <qevent.h>
+
 #include <qabstracttransition_p.h>
 
 class QBasicKeyEventTransitionPrivate : public QAbstractTransitionPrivate

@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qstringview.h>
+
 #include <qstring8.h>
 #include <qstring16.h>
+
 #include <qunicodetables_p.h>
 
 std::pair<char32_t, const char32_t *> cs_internal_convertCaseTrait(int trait, char32_t value)

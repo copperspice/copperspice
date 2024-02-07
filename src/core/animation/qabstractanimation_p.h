@@ -24,11 +24,11 @@
 #ifndef QABSTRACTANIMATION_P_H
 #define QABSTRACTANIMATION_P_H
 
+#include <qabstractanimation.h>
 #include <qbasictimer.h>
 #include <qdatetime.h>
-#include <qtimer.h>
 #include <qelapsedtimer.h>
-#include <qabstractanimation.h>
+#include <qtimer.h>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>

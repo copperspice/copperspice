@@ -24,9 +24,9 @@
 #ifndef QABSTRACTITEMMODEL_P_H
 #define QABSTRACTITEMMODEL_P_H
 
+#include <qmultihash.h>
 #include <qstack.h>
 #include <qset.h>
-#include <qmultihash.h>
 
 #include <optional>
 

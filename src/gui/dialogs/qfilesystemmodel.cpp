@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qfilesystemmodel_p.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qfilesystemmodel.h>
 #include <qlocale.h>
+#include <qmessagebox.h>
 #include <qmimedata.h>
 #include <qurl.h>
-#include <qdebug.h>
-#include <qmessagebox.h>
-#include <qapplication.h>
 
 #include <algorithm>
 

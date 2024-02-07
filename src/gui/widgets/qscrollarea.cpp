@@ -22,17 +22,18 @@
 ***********************************************************************/
 
 #include <qscrollarea.h>
-#include <qscrollarea_p.h>
 
 #ifndef QT_NO_SCROLLAREA
 
-#include <qscrollbar.h>
-#include <qlayout.h>
-#include <qstyle.h>
 #include <qapplication.h>
-#include <qvariant.h>
 #include <qdebug.h>
+#include <qlayout.h>
+#include <qscrollbar.h>
+#include <qstyle.h>
+#include <qvariant.h>
+
 #include <qlayoutengine_p.h>
+#include <qscrollarea_p.h>
 
 QScrollArea::QScrollArea(QWidget *parent)
    : QAbstractScrollArea(*new QScrollAreaPrivate, parent)

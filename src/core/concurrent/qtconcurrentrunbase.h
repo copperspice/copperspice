@@ -24,8 +24,8 @@
 #ifndef QTCONCURRENTRUNBASE_H
 #define QTCONCURRENTRUNBASE_H
 
-#include <qglobal.h>
 #include <qfuture.h>
+#include <qglobal.h>
 #include <qrunnable.h>
 #include <qthreadpool.h>
 

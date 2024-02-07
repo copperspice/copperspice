@@ -21,29 +21,29 @@
 *
 ***********************************************************************/
 
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <qevent.h>
 #include <qapplication.h>
+#include <qbackingstore.h>
+#include <qbitmap.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qlabel.h>
 #include <qlist.h>
 #include <qmenu.h>
-#include <qtimer.h>
-#include <qsystemtrayicon_p.h>
 #include <qpaintengine.h>
-#include <qwindow.h>
-#include <qguiapplication.h>
-#include <qscreen.h>
-#include <qbackingstore.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 #include <qplatform_nativeinterface.h>
 #include <qplatform_systemtrayicon.h>
 #include <qplatform_theme.h>
-#include <qguiapplication_p.h>
-#include <qdebug.h>
+#include <qscreen.h>
+#include <qtimer.h>
+#include <qwindow.h>
 
 #include <platformheaders/qxcbwindowfunctions.h>
 #include <platformheaders/qxcbintegrationfunctions.h>
+
+#include <qapplication_p.h>
+#include <qsystemtrayicon_p.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 

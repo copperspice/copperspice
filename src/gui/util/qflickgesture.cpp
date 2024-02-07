@@ -21,20 +21,21 @@
 *
 ***********************************************************************/
 
-#include <qgesture.h>
+#include <qflickgesture_p.h>
+
 #include <qapplication.h>
 #include <qevent.h>
-#include <qwidget.h>
+#include <qgesture.h>
 #include <qgraphicsitem.h>
 #include <qgraphicsscene.h>
 #include <qgraphicssceneevent.h>
 #include <qgraphicsview.h>
 #include <qscroller.h>
+#include <qwidget.h>
 
 #include <qapplication_p.h>
-#include <qevent_p.h>
-#include <qflickgesture_p.h>
 #include <qdebug.h>
+#include <qevent_p.h>
 
 #ifndef QT_NO_GESTURES
 

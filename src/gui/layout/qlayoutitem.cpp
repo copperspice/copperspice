@@ -24,10 +24,10 @@
 #include <qlayout.h>
 
 #include <qapplication.h>
-#include <qmenubar.h>
-#include <qtoolbar.h>
 #include <qevent.h>
+#include <qmenubar.h>
 #include <qstyle.h>
+#include <qtoolbar.h>
 #include <qvariant.h>
 
 #include <qlayoutengine_p.h>

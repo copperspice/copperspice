@@ -24,14 +24,13 @@
 #include <qeventdispatcher_glib_p.h>
 
 #include <qcoreapplication.h>
-#include <qsocketnotifier.h>
 #include <qhash.h>
 #include <qlist.h>
 #include <qpair.h>
+#include <qsocketnotifier.h>
 
 #include <qeventdispatcher_unix_p.h>
 #include <qthread_p.h>
-
 
 #include <glib.h>
 

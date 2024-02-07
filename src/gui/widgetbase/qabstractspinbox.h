@@ -24,8 +24,8 @@
 #ifndef QABSTRACTSPINBOX_H
 #define QABSTRACTSPINBOX_H
 
-#include <qwidget.h>
 #include <qvalidator.h>
+#include <qwidget.h>
 
 #ifndef QT_NO_SPINBOX
 

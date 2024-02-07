@@ -24,7 +24,7 @@
 #ifndef QHASHFWD_H
 #define QHASHFWD_H
 
-template <class T> 
+template <class T>
 unsigned int qHash(const T *key, unsigned int seed = 0);
 
 #endif

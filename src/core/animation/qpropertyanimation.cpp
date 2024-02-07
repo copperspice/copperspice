@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qpropertyanimation.h>
+
 #include <qanimationgroup.h>
 #include <qhash.h>
 

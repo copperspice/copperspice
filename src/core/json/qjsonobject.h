@@ -24,9 +24,9 @@
 #ifndef QJSONOBJECT_H
 #define QJSONOBJECT_H
 
-#include <qjsonvalue.h>
 #include <qflatmap.h>
 #include <qhash.h>
+#include <qjsonvalue.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>

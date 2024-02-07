@@ -21,11 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qapplication.h>
 #include <qabstractslider.h>
-#include <qevent.h>
-#include <qabstractslider_p.h>
+
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qevent.h>
+
+#include <qabstractslider_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

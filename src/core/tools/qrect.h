@@ -25,8 +25,8 @@
 #define QRECT_H
 
 #include <qmargins.h>
-#include <qsize.h>
 #include <qpoint.h>
+#include <qsize.h>
 
 #ifdef topLeft
 #error qrect.h must be included before any header file that defines topLeft

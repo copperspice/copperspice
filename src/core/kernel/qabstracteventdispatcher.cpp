@@ -22,14 +22,14 @@
 ***********************************************************************/
 
 #include <qabstracteventdispatcher.h>
-#include <qabstracteventdispatcher_p.h>
 
 #include <qabstractnativeeventfilter.h>
 #include <qthread.h>
 
-#include <qthread_p.h>
+#include <qabstracteventdispatcher_p.h>
 #include <qcoreapplication_p.h>
 #include <qfreelist_p.h>
+#include <qthread_p.h>
 
 // we allow for 2^24 = 8^8 = 16777216 simultaneously running timers
 struct QtTimerIdFreeListConstants : public QFreeListDefaultConstants

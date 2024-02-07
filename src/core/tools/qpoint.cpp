@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qpoint.h>
+
 #include <qdatastream.h>
 #include <qdebug.h>
 

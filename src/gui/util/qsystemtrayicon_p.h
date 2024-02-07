@@ -31,13 +31,13 @@
 #include <qmenu.h>
 #include <qpixmap.h>
 #include <qplatform_systemtrayicon.h>
-#include <qstring.h>
 #include <qpointer.h>
+#include <qstring.h>
 
-class QSystemTrayIconSys;
-class QPlatformSystemTrayIcon;
-class QToolButton;
 class QLabel;
+class QPlatformSystemTrayIcon;
+class QSystemTrayIconSys;
+class QToolButton;
 
 class QSystemTrayIconPrivate
 {

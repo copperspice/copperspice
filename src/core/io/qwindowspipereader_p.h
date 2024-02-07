@@ -25,8 +25,9 @@
 #define QWINDOWSPIPEREADER_P_H
 
 #include <qobject.h>
-#include <qringbuffer_p.h>
 #include <qt_windows.h>
+
+#include <qringbuffer_p.h>
 
 class Q_CORE_EXPORT QWindowsPipeReader : public QObject
 {

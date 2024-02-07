@@ -25,9 +25,9 @@
 
 #ifndef QT_NO_STATEMACHINE
 
+#include <qdebug.h>
 #include <qevent.h>
 #include <qpainterpath.h>
-#include <qdebug.h>
 
 #include <qabstracttransition_p.h>
 

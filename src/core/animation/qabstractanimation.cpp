@@ -23,13 +23,13 @@
 
 #include <qabstractanimation.h>
 #include <qanimationgroup.h>
-#include <qdebug.h>
-#include <qabstractanimation_p.h>
-
-#include <qmath.h>
-#include <qthreadstorage.h>
 #include <qcoreevent.h>
+#include <qdebug.h>
+#include <qmath.h>
 #include <qpointer.h>
+#include <qthreadstorage.h>
+
+#include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 

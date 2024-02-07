@@ -29,8 +29,8 @@
 
 #include <qvariant.h>
 
-#include <initializer_list>
 #include <functional>
+#include <initializer_list>
 #include <memory>
 #include <stdexcept>
 #include <tuple>

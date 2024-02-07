@@ -31,6 +31,7 @@
 #include <qdir.h>
 #include <qdiriterator.h>
 #include <qstringlist.h>
+
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
 

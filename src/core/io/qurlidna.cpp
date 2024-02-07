@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <algorithm>
-
-#include <qurl_p.h>
 #include <qset.h>
 #include <qstringlist.h>
+
+#include <qurl_p.h>
+
+#include <algorithm>
 
 static const uint base         = 36;
 static const uint tmin         = 1;

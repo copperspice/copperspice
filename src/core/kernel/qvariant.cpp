@@ -29,20 +29,20 @@
 #include <qdebug.h>
 #include <qdatetime.h>
 #include <qeasingcurve.h>
-#include <qstring8.h>
-#include <qstring16.h>
-#include <qstringlist.h>
-#include <qlocale.h>
 #include <qjsonvalue.h>
 #include <qjsonobject.h>
 #include <qjsonarray.h>
 #include <qjsondocument.h>
-#include <qpoint.h>
-#include <qsize.h>
-#include <qrect.h>
 #include <qline.h>
-#include <quuid.h>
+#include <qlocale.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qstring8.h>
+#include <qstring16.h>
+#include <qstringlist.h>
 #include <qurl.h>
+#include <quuid.h>
 
 #include <limits>
 

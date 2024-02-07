@@ -24,9 +24,9 @@
 #ifndef QTCONCURRENTRESULTSTORE_H
 #define QTCONCURRENTRESULTSTORE_H
 
+#include <qdebug.h>
 #include <qglobal.h>
 #include <qmap.h>
-#include <qdebug.h>
 
 /*
     ResultStore stores indexed results. Results can be added and retrieved

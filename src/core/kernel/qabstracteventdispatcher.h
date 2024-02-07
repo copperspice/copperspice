@@ -24,8 +24,8 @@
 #ifndef QABSTRACTEVENTDISPATCHER_H
 #define QABSTRACTEVENTDISPATCHER_H
 
-#include <qobject.h>
 #include <qeventloop.h>
+#include <qobject.h>
 #include <qscopedpointer.h>
 
 class QAbstractNativeEventFilter;

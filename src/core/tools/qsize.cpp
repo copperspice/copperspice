@@ -22,7 +22,9 @@
 ***********************************************************************/
 
 #include <qsize.h>
+
 #include <qdatastream.h>
+
 #include <qdebug_p.h>
 
 void QSize::transpose()

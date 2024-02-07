@@ -23,11 +23,12 @@
 
 #include <qthreadstorage.h>
 
-#include <qthread.h>
 #include <qmutex.h>
-#include <string.h>
+#include <qthread.h>
 
 #include <qthread_p.h>
+
+#include <string.h>
 
 #ifdef THREADSTORAGE_DEBUG
 #define DEBUG_MSG qtsDebug

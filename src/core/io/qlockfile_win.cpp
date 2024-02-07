@@ -25,15 +25,15 @@
 ** Copyright (c) 2013 David Faure <faure+bluesystems@kde.org>
 *****************************************************************/
 
-#include <qlockfile_p.h>
-
 #include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qdebug.h>
 #include <qfileinfo.h>
-#include <qfilesystementry_p.h>
 #include <qthread.h>
 #include <qt_windows.h>
+
+#include <qlockfile_p.h>
+#include <qfilesystementry_p.h>
 
 #include <psapi.h>
 

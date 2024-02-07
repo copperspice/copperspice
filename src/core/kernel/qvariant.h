@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-// do not move include, if qvarient.h is included directly forward declarations are not sufficient
+// do not move include
 #include <qobject.h>
 
 #ifndef QVARIANT_H
@@ -43,39 +43,34 @@
 #include <optional>
 #include <variant>
 
-class QDataStream;
-class QDebug;
-class QObject;
-class QVariant;
-
+// core
 class QBitArray;
-class QStringList;
-
+class QDataStream;
 class QDate;
 class QDateTime;
-class QTime;
-class QLocale;
-
+class QDebug;
+class QEasingCurve;
 class QJsonArray;
 class QJsonDocument;
 class QJsonObject;
 class QJsonValue;
-
 class QLine;
 class QLineF;
+class QLocale;
+class QModelIndex;
+class QObject;
+class QPersistentModelIndex;
 class QPoint;
 class QPointF;
 class QRect;
 class QRectF;
 class QSize;
 class QSizeF;
-
-// core
-class QEasingCurve;
-class QModelIndex;
-class QPersistentModelIndex;
-class QUuid;
+class QStringList;
+class QTime;
 class QUrl;
+class QUuid;
+class QVariant;
 
 // gui
 class QBitmap;
@@ -86,8 +81,8 @@ class QFont;
 class QIcon;
 class QImage;
 class QKeySequence;
-class QMatrix;
 class QMatrix4x4;
+class QMatrix;
 class QPalette;
 class QPen;
 class QPixmap;

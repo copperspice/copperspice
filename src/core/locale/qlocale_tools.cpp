@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qlocale_tools_p.h>
-#include <qlocale_p.h>
 
 #include <qstring.h>
+
+#include <qlocale_p.h>
 
 #include <ctype.h>
 #include <errno.h>

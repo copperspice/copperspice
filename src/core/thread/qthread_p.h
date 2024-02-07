@@ -24,12 +24,12 @@
 #ifndef QTHREAD_P_H
 #define QTHREAD_P_H
 
-#include <qplatformdefs.h>
-#include <qthread.h>
-#include <qmutex.h>
-#include <qstack.h>
-#include <qwaitcondition.h>
 #include <qmap.h>
+#include <qmutex.h>
+#include <qplatformdefs.h>
+#include <qstack.h>
+#include <qthread.h>
+#include <qwaitcondition.h>
 
 #include <algorithm>
 

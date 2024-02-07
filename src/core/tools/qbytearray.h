@@ -24,14 +24,14 @@
 #ifndef QBYTEARRAY_H
 #define QBYTEARRAY_H
 
+#include <qarraydata.h>
+#include <qassert.h>
+#include <qnamespace.h>
+#include <qrefcount.h>
+
 #include <string.h>
 #include <stdarg.h>
 #include <iterator>
-
-#include <qassert.h>
-#include <qrefcount.h>
-#include <qnamespace.h>
-#include <qarraydata.h>
 
 class QByteRef;
 class QDataStream;

@@ -25,39 +25,38 @@
 
 #if ! defined(QT_NO_STYLE_WINDOWS) || defined(QT_PLUGIN)
 
-#include <qsystemlibrary_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
+#include <qdebug.h>
 #include <qdrawutil.h>
 #include <qevent.h>
+#include <qfile.h>
+#include <qlistview.h>
+#include <qmainwindow.h>
+#include <qmath.h>
 #include <qmenu.h>
 #include <qmenubar.h>
 #include <qpaintengine.h>
 #include <qpainter.h>
+#include <qpixmapcache.h>
 #include <qrubberband.h>
 #include <qstyleoption.h>
 #include <qtabbar.h>
-#include <qwidget.h>
-#include <qdebug.h>
-#include <qmainwindow.h>
-#include <qfile.h>
 #include <qtextstream.h>
-#include <qpixmapcache.h>
+#include <qwidget.h>
 #include <qwizard.h>
-#include <qlistview.h>
-#include <qmath.h>
 
-#include <qmath_p.h>
-#include <qmenubar_p.h>
-#include <qscreen.h>
-#include <qwindow.h>
-#include <qplatform_theme.h>
-#include <qplatform_screen.h>
 #include <qguiapplication_p.h>
 #include <qhighdpiscaling_p.h>
-
-#include <qstylehelper_p.h>
+#include <qmath_p.h>
+#include <qmenubar_p.h>
+#include <qplatform_screen.h>
+#include <qplatform_theme.h>
+#include <qscreen.h>
 #include <qstyleanimation_p.h>
+#include <qstylehelper_p.h>
+#include <qsystemlibrary_p.h>
+#include <qwindow.h>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>

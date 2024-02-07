@@ -25,18 +25,18 @@
 
 #ifndef QT_NO_RESIZEHANDLER
 
-#include <qframe.h>
 #include <qapplication.h>
-#include <qdesktopwidget.h>
 #include <qcursor.h>
-#include <qsizegrip.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
 #include <qevent.h>
+#include <qframe.h>
+#include <qsizegrip.h>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #endif
 
-#include <qdebug.h>
 #include <qlayoutengine_p.h>
 
 #define RANGE 4

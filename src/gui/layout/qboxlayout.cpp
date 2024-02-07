@@ -24,10 +24,10 @@
 #include <qboxlayout.h>
 
 #include <qapplication.h>
-#include <qwidget.h>
 #include <qlist.h>
 #include <qsizepolicy.h>
 #include <qvector.h>
+#include <qwidget.h>
 
 #include <qlayoutengine_p.h>
 #include <qlayout_p.h>

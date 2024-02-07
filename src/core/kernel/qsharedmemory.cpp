@@ -22,14 +22,14 @@
 ***********************************************************************/
 
 #include <qsharedmemory.h>
-#include <qsharedmemory_p.h>
-#include <qsystemsemaphore.h>
-#include <qdir.h>
+
 #include <qcryptographichash.h>
-#include <qregularexpression.h>
-
 #include <qdebug.h>
+#include <qdir.h>
+#include <qregularexpression.h>
+#include <qsystemsemaphore.h>
 
+#include <qsharedmemory_p.h>
 #if !(defined(QT_NO_SHAREDMEMORY) && defined(QT_NO_SYSTEMSEMAPHORE))
 /*!
     \internal

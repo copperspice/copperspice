@@ -23,8 +23,8 @@
 
 #include <qsqlrelationaltablemodel.h>
 
+#include <qdebug.h>
 #include <qhash.h>
-#include <qstringlist.h>
 #include <qsqldatabase.h>
 #include <qsqldriver.h>
 #include <qsqlerror.h>
@@ -32,9 +32,9 @@
 #include <qsqlindex.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
+#include <qstringlist.h>
 
 #include <qsqltablemodel_p.h>
-#include <qdebug.h>
 
 class QSqlRelationalTableModelSql: public QSqlTableModelSql
 {

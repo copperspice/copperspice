@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qrect.h>
+
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qmath.h>

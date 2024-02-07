@@ -26,6 +26,7 @@
 
 #include <cs_signal.h>
 #include <cs_slot.h>
+
 #include <qglobal.h>
 
 #include <optional>

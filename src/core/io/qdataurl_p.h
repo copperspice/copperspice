@@ -24,10 +24,10 @@
 #ifndef QDATAURL_P_H
 #define QDATAURL_P_H
 
-#include <qurl.h>
 #include <qbytearray.h>
-#include <qstring.h>
 #include <qpair.h>
+#include <qstring.h>
+#include <qurl.h>
 
 Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &url);
 

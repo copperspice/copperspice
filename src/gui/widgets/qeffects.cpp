@@ -26,7 +26,6 @@
 #ifndef QT_NO_EFFECTS
 
 #include <qdesktopwidget.h>
-#include <qeffects_p.h>
 #include <qevent.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -36,6 +35,8 @@
 #include <qtimer.h>
 #include <qelapsedtimer.h>
 #include <qdebug.h>
+
+#include <qeffects_p.h>
 
 class QAlphaWidget: public QWidget, private QEffects
 {

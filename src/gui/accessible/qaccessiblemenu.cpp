@@ -23,9 +23,9 @@
 
 #include <qaccessiblemenu_p.h>
 
+#include <qaction.h>
 #include <qmenu.h>
 #include <qmenubar.h>
-#include <QAction>
 #include <qstyle.h>
 
 #ifndef QT_NO_ACCESSIBILITY

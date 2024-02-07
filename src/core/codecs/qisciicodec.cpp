@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qisciicodec_p.h>
+
 #include <qlist.h>
 
 #ifndef QT_NO_CODECS

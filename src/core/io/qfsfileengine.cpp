@@ -22,12 +22,14 @@
 ***********************************************************************/
 
 #include <qfsfileengine_p.h>
-#include <qfsfileengine_iterator_p.h>
-#include <qfilesystemengine_p.h>
+
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qdiriterator.h>
 #include <qset.h>
-#include <qdebug.h>
+
+#include <qfilesystemengine_p.h>
+#include <qfsfileengine_iterator_p.h>
 
 #ifndef QT_NO_FSFILEENGINE
 #include <errno.h>
@@ -60,7 +62,6 @@
 #    define INVALID_FILE_ATTRIBUTES (DWORD (-1))
 #  endif
 #endif
-
 
 // QFSFileEnginePrivate
 QFSFileEnginePrivate::QFSFileEnginePrivate() : QAbstractFileEnginePrivate()

@@ -24,11 +24,11 @@
 #ifndef QJSONARRAY_H
 #define QJSONARRAY_H
 
-#include <initializer_list>
-
 #include <qjsonvalue.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+
+#include <initializer_list>
 
 class QJsonData;
 class QJsonDataArray;

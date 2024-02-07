@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qicohandler_p.h>
-#include <qendian.h>
-#include <qimage.h>
-#include <qfile.h>
+
 #include <qbuffer.h>
+#include <qendian.h>
+#include <qfile.h>
+#include <qimage.h>
 #include <qvariant.h>
 
 // These next two structs represent how the icon information is stored in an ICO file.

@@ -28,13 +28,13 @@
 #include <qpointf.h>
 #include <qscrollerproperties.h>
 
-class QWidget;
 class QScrollerPrivate;
 class QScrollerProperties;
+class QWidget;
 
 #ifndef QT_NO_GESTURES
-   class QFlickGestureRecognizer;
-   class QMouseFlickGestureRecognizer;
+class QFlickGestureRecognizer;
+class QMouseFlickGestureRecognizer;
 #endif
 
 class Q_GUI_EXPORT QScroller : public QObject

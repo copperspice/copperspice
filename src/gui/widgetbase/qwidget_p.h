@@ -25,36 +25,37 @@
 #define QWIDGET_P_H
 
 #include <qwidget.h>
-#include <qrect.h>
-#include <qlocale.h>
-#include <qset.h>
-#include <qregion.h>
-#include <qinputmethod.h>
-#include <qopengl.h>
-#include <qsurfaceformat.h>
-#include <qsizepolicy.h>
-#include <qstyle.h>
-#include <qapplication.h>
 
-#include <qgraphicseffect_p.h>
+#include <qapplication.h>
 #include <qgraphicsproxywidget.h>
 #include <qgraphicsscene.h>
 #include <qgraphicsview.h>
+#include <qinputmethod.h>
+#include <qlocale.h>
+#include <qopengl.h>
+#include <qrect.h>
+#include <qregion.h>
+#include <qset.h>
+#include <qsizepolicy.h>
+#include <qstyle.h>
+#include <qsurfaceformat.h>
+
 #include <qgesture_p.h>
+#include <qgraphicseffect_p.h>
 
 // Extra QWidget data
 //  - to minimize memory usage for members that are seldom used
 //  - top-level widgets have extra extra data to reduce cost further
 
+class QGraphicsProxyWidget;
+class QOpenGLContext;
 class QPaintEngine;
 class QPixmap;
-class QWidgetBackingStore;
-class QGraphicsProxyWidget;
-class QWidgetItemV2;
-class QOpenGLContext;
 class QPlatformTextureList;
 class QStyle;
 class QUnifiedToolbarSurface;
+class QWidgetBackingStore;
+class QWidgetItemV2;
 
 // implemented in qshortcut.cpp
 bool qWidgetShortcutContextMatcher(QObject *object, Qt::ShortcutContext context);

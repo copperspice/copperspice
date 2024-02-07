@@ -22,7 +22,9 @@
 ***********************************************************************/
 
 #include <qcoreevent.h>
+
 #include <qcoreapplication.h>
+
 #include <qcoreapplication_p.h>
 
 #include <limits>

@@ -22,18 +22,18 @@
 ***********************************************************************/
 
 #include <qsidebar_p.h>
-#include <qfilesystemmodel.h>
 
 #ifndef QT_NO_FILEDIALOG
 
 #include <qaction.h>
-#include <qurl.h>
-#include <qmenu.h>
-#include <qmimedata.h>
-#include <qevent.h>
 #include <qdebug.h>
+#include <qevent.h>
 #include <qfileiconprovider.h>
 #include <qfiledialog.h>
+#include <qfilesystemmodel.h>
+#include <qmenu.h>
+#include <qmimedata.h>
+#include <qurl.h>
 
 void QSideBarDelegate::initStyleOption(QStyleOptionViewItem *option, const QModelIndex &index) const
 {

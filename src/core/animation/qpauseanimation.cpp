@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qpauseanimation.h>
+
 #include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION

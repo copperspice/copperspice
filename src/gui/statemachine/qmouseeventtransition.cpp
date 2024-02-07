@@ -25,8 +25,8 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qstatemachine.h>
 #include <qpainterpath.h>
+#include <qstatemachine.h>
 
 #include <qbasicmouseeventtransition_p.h>
 #include <qeventtransition_p.h>

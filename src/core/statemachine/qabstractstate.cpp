@@ -25,11 +25,10 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qabstractstate_p.h>
-
 #include <qstate.h>
 #include <qstatemachine.h>
 
+#include <qabstractstate_p.h>
 #include <qstate_p.h>
 #include <qstatemachine_p.h>
 

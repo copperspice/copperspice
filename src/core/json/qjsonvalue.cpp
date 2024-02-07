@@ -25,8 +25,8 @@
 
 #include <qjson.h>
 #include <qjsonarray.h>
-#include <qjsonobject.h>
 #include <qjsondocument.h>
+#include <qjsonobject.h>
 
 QJsonValue::QJsonValue(Type type)
 {

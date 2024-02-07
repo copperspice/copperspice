@@ -24,21 +24,21 @@
 #ifndef QLIST_H
 #define QLIST_H
 
+#include <qassert.h>
+#include <qcontainerfwd.h>
+#include <qglobal.h>
+
 #include <algorithm>
 #include <deque>
 #include <exception>
 #include <initializer_list>
 #include <iterator>
 #include <list>
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include <limits.h>
 #include <string.h>
-
-#include <qassert.h>
-#include <qcontainerfwd.h>
-#include <qglobal.h>
 
 template <class T>
 class QListIterator;

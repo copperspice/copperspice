@@ -22,19 +22,21 @@
 ***********************************************************************/
 
 #include <qbytearray.h>
-#include <qtools_p.h>
-#include <qstring.h>
+
+#include <qdatastream.h>
 #include <qlist.h>
 #include <qlocale.h>
-#include <qlocale_p.h>
 #include <qscopedpointer.h>
-#include <qdatastream.h>
-#include <zlib.h>
+#include <qstring.h>
+
+#include <qlocale_p.h>
+#include <qtools_p.h>
 
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
+#include <zlib.h>
 
 #define IS_RAW_DATA(d) ((d)->offset != sizeof(QByteArrayData))
 

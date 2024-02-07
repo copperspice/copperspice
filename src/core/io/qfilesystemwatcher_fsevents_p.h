@@ -28,11 +28,12 @@
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qthread.h>
 #include <qhash.h>
 #include <qlinkedlist.h>
+#include <qmutex.h>
+#include <qthread.h>
+#include <qwaitcondition.h>
+
 #include <qcore_mac_p.h>
 
 #include <sys/stat.h>

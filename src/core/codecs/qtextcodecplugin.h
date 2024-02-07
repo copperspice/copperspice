@@ -24,10 +24,10 @@
 #ifndef QTEXTCODECPLUGIN_H
 #define QTEXTCODECPLUGIN_H
 
-#include <qplugin.h>
+#include <qbytearray.h>
 #include <qfactoryinterface.h>
 #include <qlist.h>
-#include <qbytearray.h>
+#include <qplugin.h>
 
 #ifndef QT_NO_TEXTCODECPLUGIN
 

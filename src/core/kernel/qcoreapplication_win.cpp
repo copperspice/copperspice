@@ -21,18 +21,20 @@
 *
 ***********************************************************************/
 
-#include <ctype.h>
-
-#include <qcorecmdlineargs_p.h>
 #include <qcoreapplication.h>
-#include <qcoreapplication_p.h>
+
 #include <qfileinfo.h>
 #include <qmutex.h>
 #include <qstringlist.h>
 #include <qstring16.h>
 #include <qt_windows.h>
-#include <qthread_p.h>
 #include <qvector.h>
+
+#include <qcoreapplication_p.h>
+#include <qcorecmdlineargs_p.h>
+#include <qthread_p.h>
+
+#include <ctype.h>
 
 bool usingWinMain = false;  // whether the qWinMain() is used or not
 int appCmdShow = 0;

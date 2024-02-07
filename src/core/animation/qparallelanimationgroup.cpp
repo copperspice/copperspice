@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qparallelanimationgroup.h>
+
 #include <qparallelanimationgroup_p.h>
 
 // #define QANIMATION_DEBUG

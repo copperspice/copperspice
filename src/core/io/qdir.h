@@ -24,10 +24,10 @@
 #ifndef QDIR_H
 #define QDIR_H
 
-#include <qstring.h>
 #include <qfileinfo.h>
-#include <qstringlist.h>
 #include <qshareddata.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 class QDebug;
 class QDirIterator;

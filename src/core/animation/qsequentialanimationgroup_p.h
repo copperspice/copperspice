@@ -25,6 +25,7 @@
 #define QSEQUENTIALANIMATIONGROUP_P_H
 
 #include <qsequentialanimationgroup.h>
+
 #include <qanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION

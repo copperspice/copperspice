@@ -23,6 +23,8 @@
 
 #include <qtconcurrentiteratekernel.h>
 
+#include <qglobal.h>
+
 #if defined(Q_OS_DARWIN)
 #include <mach/mach.h>
 #include <mach/mach_time.h>
@@ -36,8 +38,6 @@
 #include <qt_windows.h>
 
 #endif
-
-#include <qglobal.h>
 
 enum {
    TargetRatio = 100,

@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qwaitcondition.h>
-#include <qmutex.h>
-#include <qreadwritelock.h>
+
 #include <qatomic.h>
+#include <qmutex.h>
+#include <qplatformdefs.h>
+#include <qreadwritelock.h>
 #include <qstring.h>
 
 #include <qreadwritelock_p.h>

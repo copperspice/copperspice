@@ -25,8 +25,8 @@
 #define QDATETIME_H
 
 #include <qnamespace.h>
-#include <qstring.h>
 #include <qshareddatapointer.h>
+#include <qstring.h>
 #include <qtimezone.h>
 
 class QDateTimePrivate;

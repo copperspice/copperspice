@@ -24,8 +24,8 @@
 #ifndef QSCROLLERPROPERTIES_P_H
 #define QSCROLLERPROPERTIES_P_H
 
-#include <QPointF>
-#include <QEasingCurve>
+#include <qeasingcurve.h>
+#include <qpointf.h>
 #include <qscrollerproperties.h>
 
 class QScrollerPropertiesPrivate

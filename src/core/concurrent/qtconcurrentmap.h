@@ -25,10 +25,10 @@
 #define QTCONCURRENTMAP_H
 
 #include <qglobal.h>
+#include <qstringlist.h>
+#include <qtconcurrentfunctionwrappers.h>
 #include <qtconcurrentmapkernel.h>
 #include <qtconcurrentreducekernel.h>
-#include <qtconcurrentfunctionwrappers.h>
-#include <qstringlist.h>
 
 namespace QtConcurrent {
 

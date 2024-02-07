@@ -24,7 +24,6 @@
 #ifndef QSTATEMACHINE_P_H
 #define QSTATEMACHINE_P_H
 
-#include <qstate_p.h>
 #include <qcoreevent.h>
 #include <qhash.h>
 #include <qlist.h>
@@ -34,7 +33,9 @@
 #include <qpointer.h>
 #include <qset.h>
 #include <qvector.h>
+
 #include <qfreelist_p.h>
+#include <qstate_p.h>
 
 class QEvent;
 

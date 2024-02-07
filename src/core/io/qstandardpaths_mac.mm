@@ -22,10 +22,12 @@
 ***********************************************************************/
 
 #include <qstandardpaths.h>
+
 #include <qdir.h>
 #include <qurl.h>
-#include <qcore_mac_p.h>
 #include <qcoreapplication.h>
+
+#include <qcore_mac_p.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>

@@ -24,9 +24,9 @@
 #ifndef QVARLENGTHARRAY_H
 #define QVARLENGTHARRAY_H
 
+#include <qassert.h>
 #include <qcontainerfwd.h>
 #include <qglobal.h>
-#include <qassert.h>
 
 #include <algorithm>
 #include <initializer_list>

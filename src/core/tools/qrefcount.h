@@ -24,9 +24,9 @@
 #ifndef QREFCOUNT_H
 #define QREFCOUNT_H
 
-#include <qglobal.h>
 #include <qassert.h>
 #include <qatomic.h>
+#include <qglobal.h>
 
 namespace QtPrivate {
 

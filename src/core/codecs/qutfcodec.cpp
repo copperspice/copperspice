@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qutfcodec_p.h>
+
 #include <qendian.h>
 #include <qlist.h>
 #include <qstring.h>

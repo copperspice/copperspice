@@ -24,6 +24,7 @@
 static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
 #include <qtextstream.h>
+
 #include <qbuffer.h>
 #include <qfile.h>
 #include <qnumeric.h>

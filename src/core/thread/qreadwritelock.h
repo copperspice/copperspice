@@ -24,8 +24,8 @@
 #ifndef QREADWRITELOCK_H
 #define QREADWRITELOCK_H
 
-#include <qglobal.h>
 #include <qassert.h>
+#include <qglobal.h>
 
 struct QReadWriteLockPrivate;
 

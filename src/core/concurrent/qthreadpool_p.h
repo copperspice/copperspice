@@ -56,7 +56,7 @@ class QThreadPoolPrivate
    QSet<QThreadPoolThread *> allThreads;
    QQueue<QThreadPoolThread *> waitingThreads;
    QQueue<QThreadPoolThread *> expiredThreads;
-   QVector<QPair<QRunnable *, int> > queue;
+   QVector<QPair<QRunnable *, int>> queue;
    QWaitCondition noActiveThreads;
 
    bool isExiting;

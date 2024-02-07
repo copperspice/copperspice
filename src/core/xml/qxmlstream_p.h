@@ -34,6 +34,7 @@
 #include <qstack.h>
 #include <qstring.h>
 #include <qtextdecoder.h>
+
 #include <qxmlutils_p.h>
 
 QStringView makeStringView(const QString *str, int start, int length)

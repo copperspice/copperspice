@@ -25,11 +25,12 @@
 
 #ifndef QT_NO_SETTINGS
 
-#include <qsettings_p.h>
 #include <qvector.h>
 #include <qmap.h>
 #include <qt_windows.h>
 #include <qdebug.h>
+
+#include <qsettings_p.h>
 
 /*  Keys are stored in QStrings
 

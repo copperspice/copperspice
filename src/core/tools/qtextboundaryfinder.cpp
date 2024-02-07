@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtextboundaryfinder.h>
+
 #include <qunicodetools_p.h>
 
 class QTextBoundaryFinderPrivate

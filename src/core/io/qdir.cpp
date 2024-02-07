@@ -21,25 +21,25 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qdir.h>
-#include <qdebug.h>
-#include <qdiriterator.h>
 #include <qdatetime.h>
-#include <qresource.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qdiriterator.h>
+#include <qplatformdefs.h>
 #include <qregularexpression.h>
+#include <qresource.h>
 #include <qstring.h>
 #include <qtimezone.h>
-#include <qvector.h>
 #include <qvarlengtharray.h>
+#include <qvector.h>
 
-#include <qdir_p.h>
 #include <qabstractfileengine_p.h>
 #include <qcoreglobaldata_p.h>
-#include <qfsfileengine_p.h>
+#include <qdir_p.h>
+#include <qfilesystemengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
-#include <qfilesystemengine_p.h>
+#include <qfsfileengine_p.h>
 
 #include <algorithm>
 #include <stdlib.h>

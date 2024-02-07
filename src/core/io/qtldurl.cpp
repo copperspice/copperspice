@@ -21,12 +21,14 @@
 *
 ***********************************************************************/
 
+#include <qtldurl_p.h>
+
 #include <qplatformdefs.h>
 #include <qurl.h>
-#include <qurltlds_p.h>
-#include <qtldurl_p.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
+
+#include <qurltlds_p.h>
 
 static bool containsTLDEntry(const QString &entry)
 {

@@ -24,25 +24,26 @@
 #include <qtreeview.h>
 
 #ifndef QT_NO_TREEVIEW
+
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qevent.h>
 #include <qheaderview.h>
 #include <qitemdelegate.h>
-#include <qapplication.h>
-#include <qscrollbar.h>
+#include <qmetamethod.h>
 #include <qpainter.h>
+#include <qpen.h>
+#include <qscrollbar.h>
 #include <qstack.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qevent.h>
-#include <qpen.h>
-#include <qdebug.h>
-#include <qmetamethod.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
-#include <qtreeview_p.h>
 #include <qheaderview_p.h>
+#include <qtreeview_p.h>
 
 #include <algorithm>
 

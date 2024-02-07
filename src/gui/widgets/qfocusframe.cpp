@@ -27,8 +27,8 @@
 #include <qstylepainter.h>
 #include <qstyleoption.h>
 #include <qdebug.h>
-#include <qwidget_p.h>
 
+#include <qwidget_p.h>
 
 class QFocusFramePrivate : public QWidgetPrivate
 {

@@ -21,8 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qjson.h>
 #include <qjsonobject.h>
+
+#include <qjson.h>
+
 #include <qjsonwriter_p.h>
 
 QJsonObject::QJsonObject()

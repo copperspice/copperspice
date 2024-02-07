@@ -26,8 +26,9 @@
 
 #include <qbasictimer.h>
 #include <qelapsedtimer.h>
-#include <qwidget_p.h>
 #include <qstyle.h>
+
+#include <qwidget_p.h>
 
 class QAbstractSliderPrivate : public QWidgetPrivate
 {

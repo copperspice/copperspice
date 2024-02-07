@@ -23,32 +23,30 @@
 
 #include <qapplication.h>
 #include <qbitmap.h>
+#include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qdialog.h>
-#include <qdialog_p.h>
+#include <qdialogbuttonbox.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
+#include <qlayoutitem.h>
 #include <qmenu.h>
-#include <qstylepainter.h>
 #include <qpixmap.h>
 #include <qpointer.h>
 #include <qpushbutton.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
+#include <qstylepainter.h>
 #include <qtoolbar.h>
-#include <qdebug.h>
-#include <qlayoutitem.h>
-#include <qdialogbuttonbox.h>
+
+#include <qdialog_p.h>
+#include <qmenu_p.h>
+#include <qpushbutton_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-
-#include <qmenu_p.h>
-#include <qpushbutton_p.h>
-
-
 
 QPushButton::QPushButton(QWidget *parent)
    : QAbstractButton(*new QPushButtonPrivate, parent)

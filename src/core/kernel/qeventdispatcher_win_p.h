@@ -25,9 +25,8 @@
 #define QEVENTDISPATCHER_WIN_P_H
 
 #include <qabstracteventdispatcher.h>
-#include <qt_windows.h>
 #include <qhash.h>
-
+#include <qt_windows.h>
 #include <qabstracteventdispatcher_p.h>
 
 class QWinEventNotifier;

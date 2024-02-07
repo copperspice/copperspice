@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qresource.h>
 #include <qresource_iterator_p.h>
+
+#include <qresource.h>
 #include <qvariant.h>
 
 QResourceFileEngineIterator::QResourceFileEngineIterator(QDir::Filters filters, const QStringList &filterNames)

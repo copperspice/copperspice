@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qsocketnotifier.h>
-#include <qplatformdefs.h>
+
 #include <qabstracteventdispatcher.h>
 #include <qcoreapplication.h>
+#include <qplatformdefs.h>
+
 #include <qthread_p.h>
 
 QSocketNotifier::QSocketNotifier(qintptr socket, Type type, QObject *parent)

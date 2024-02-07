@@ -21,29 +21,30 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qfilesystemwatcher.h>
+#include <qplatformdefs.h>
+
 #include <qfilesystemwatcher_dnotify_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qsocketnotifier.h>
+#include <dirent.h>
 #include <qcoreapplication.h>
+#include <qdir.h>
 #include <qfileinfo.h>
+#include <qmutex.h>
+#include <qsocketnotifier.h>
 #include <qtimer.h>
 #include <qwaitcondition.h>
-#include <qmutex.h>
-#include <dirent.h>
-#include <qdir.h>
 
 #include <qcore_unix_p.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <time.h>
+#include <unistd.h>
 
 #ifdef QT_LINUXBASE
 

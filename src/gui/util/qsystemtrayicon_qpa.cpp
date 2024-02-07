@@ -23,10 +23,10 @@
 
 #include <qsystemtrayicon_p.h>
 
-#include <QApplication>
-#include <QStyle>
+#include <qapplication.h>
 #include <qplatform_systemtrayicon.h>
 #include <qplatform_theme.h>
+#include <qstyle.h>
 
 #include <qguiapplication_p.h>
 

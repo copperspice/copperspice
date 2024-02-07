@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qarraydata.h>
+
 #include <qtools_p.h>
 
 #if defined (__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__  >= 406) && !defined(Q_CC_INTEL)

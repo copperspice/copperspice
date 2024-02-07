@@ -25,9 +25,9 @@
 #define QWINDOWSPIPEWRITER_P_H
 
 #include <qelapsedtimer.h>
-#include <qthread.h>
 #include <qmutex.h>
 #include <qt_windows.h>
+#include <qthread.h>
 
 #define SLEEPMIN 10
 #define SLEEPMAX 500

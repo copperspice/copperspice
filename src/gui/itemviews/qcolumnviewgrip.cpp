@@ -24,11 +24,12 @@
 #ifndef QT_NO_QCOLUMNVIEW
 
 #include <qcolumnviewgrip_p.h>
-#include <qstyleoption.h>
-#include <qpainter.h>
+
 #include <qbrush.h>
-#include <qevent.h>
 #include <qdebug.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qstyleoption.h>
 
 QColumnViewGrip::QColumnViewGrip(QWidget *parent)
    :  QWidget(*new QColumnViewGripPrivate, parent, Qt::EmptyFlag)

@@ -25,13 +25,16 @@
 ** Copyright (c) 2012 David Faure <faure@kde.org>
 *****************************************************/
 
-#include <qplatformdefs.h>
 #include <qsavefile.h>
-#include <qsavefile_p.h>
+
+#include <qplatformdefs.h>
+
 #include <qfileinfo.h>
-#include <qabstractfileengine_p.h>
 #include <qdebug.h>
 #include <qtemporaryfile.h>
+
+#include <qsavefile_p.h>
+#include <qabstractfileengine_p.h>
 #include <qiodevice_p.h>
 #include <qtemporaryfile_p.h>
 

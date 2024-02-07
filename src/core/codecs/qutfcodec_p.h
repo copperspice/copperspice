@@ -25,6 +25,7 @@
 #define QUTFCODEC_P_H
 
 #include <qtextcodec.h>
+
 #include <qtextcodec_p.h>
 
 enum DataEndianness {
@@ -150,7 +151,6 @@ class QUtf32LECodec : public QUtf32Codec
    QStringList aliases() const override;
    int mibEnum() const override;
 };
-
 
 #endif // QT_NO_TEXTCODEC
 

@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qtextcodecplugin.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
+#include <qtextcodecplugin.h>
 
 #ifndef QT_NO_TEXTCODECPLUGIN
 

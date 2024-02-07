@@ -26,31 +26,31 @@
 
 #if ! defined(QT_NO_STYLE_FUSION) || defined(QT_PLUGIN)
 
-#include <qcommonstyle_p.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
-#include <qpainter.h>
-#include <qdir.h>
-#include <qstyleoption.h>
 #include <qapplication.h>
-#include <qmainwindow.h>
+#include <qcombobox.h>
+#include <qdialogbuttonbox.h>
+#include <qdir.h>
+#include <qdrawutil.h>
 #include <qfont.h>
 #include <qgroupbox.h>
-#include <qprocess.h>
-#include <qpixmapcache.h>
-#include <qdialogbuttonbox.h>
-#include <qscrollbar.h>
-#include <qspinbox.h>
-#include <qslider.h>
-#include <qsplitter.h>
-#include <qprogressbar.h>
-#include <qwizard.h>
 #include <qlibrary.h>
-#include <qdrawutil.h>
+#include <qmainwindow.h>
+#include <qpainter.h>
+#include <qpixmapcache.h>
+#include <qprocess.h>
+#include <qprogressbar.h>
+#include <qpushbutton.h>
+#include <qscrollbar.h>
+#include <qslider.h>
+#include <qspinbox.h>
+#include <qsplitter.h>
+#include <qstyleoption.h>
+#include <qwizard.h>
 
-#include <qstylehelper_p.h>
-#include <qdrawhelper_p.h>
 #include <qapplication_p.h>
+#include <qcommonstyle_p.h>
+#include <qdrawhelper_p.h>
+#include <qstylehelper_p.h>
 
 using namespace QStyleHelper;
 

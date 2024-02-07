@@ -29,24 +29,23 @@ static const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qapplication.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
 #include <qgraphicsitem.h>
 #include <qgraphicsscene.h>
 #include <qgraphicssceneevent.h>
 #include <qgraphicswidget.h>
-
-#include <qdatetime.h>
-#include <qdebug.h>
-#include <qmath.h>
-#include <qscopedvaluerollback.h>
-#include <qapplication.h>
-#include <qdesktopwidget.h>
-#include <qevent.h>
 #include <qlayout.h>
-#include <qtransform.h>
+#include <qmath.h>
 #include <qmatrix.h>
 #include <qpainter.h>
+#include <qscopedvaluerollback.h>
 #include <qscrollbar.h>
 #include <qstyleoption.h>
+#include <qtransform.h>
 
 #include <qevent_p.h>
 #include <qgraphics_item_p.h>

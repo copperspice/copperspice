@@ -2,6 +2,7 @@
 #define QT_XMLPATTERNS_H
 
 #include <qtcore.h>
+
 #include <qabstractmessagehandler.h>
 #include <qabstracturiresolver.h>
 #include <qabstractxmlnodemodel.h>

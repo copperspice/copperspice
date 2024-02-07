@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <qjsonparser_p.h>
-#include <qjson.h>
 
 #include <qcoreapplication.h>
+#include <qjson.h>
 #include <qstringparser.h>
 
 static const int NESTING_LIMIT = 1024;

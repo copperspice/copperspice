@@ -23,12 +23,12 @@
 
 #include <qcore_mac_p.h>
 
+#include <qdebug.h>
+
 #if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
 #include <AppKit/NSText.h>
 #include <Carbon/Carbon.h>
 #endif
-
-#include <qdebug.h>
 
 #ifdef Q_OS_IOS
 #import <UIKit/UIKit.h>

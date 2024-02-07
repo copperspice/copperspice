@@ -22,17 +22,19 @@
 ***********************************************************************/
 
 #include <qlayout.h>
+
 #include <qapplication.h>
-#include <qlayoutengine_p.h>
-#include <qmenubar.h>
-#include <qtoolbar.h>
-#include <qsizegrip.h>
 #include <qevent.h>
-#include <qstyle.h>
-#include <qvariant.h>
-#include <qwidget_p.h>
-#include <qlayout_p.h>
 #include <qformlayout.h>
+#include <qmenubar.h>
+#include <qsizegrip.h>
+#include <qstyle.h>
+#include <qtoolbar.h>
+#include <qvariant.h>
+
+#include <qlayout_p.h>
+#include <qlayoutengine_p.h>
+#include <qwidget_p.h>
 
 static int menuBarHeightForWidth(QWidget *menubar, int w)
 {

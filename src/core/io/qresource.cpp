@@ -22,27 +22,36 @@
 ***********************************************************************/
 
 #include <qresource.h>
+
+#include <qbytearray.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qglobal.h>
+#include <qhash.h>
+#include <qlocale.h>
+#include <qmutex.h>
+#include <qplatformdefs.h>
+#include <qset.h>
+#include <qshareddata.h>
+#include <qstringlist.h>
+#include <qstringparser.h>
+#include <qvector.h>
+
+#include <qabstractfileengine_p.h>
 #include <qresource_p.h>
 #include <qresource_iterator_p.h>
 
-#include <qset.h>
-#include <qhash.h>
-#include <qmutex.h>
-#include <qdebug.h>
-#include <qlocale.h>
-#include <qglobal.h>
-#include <qvector.h>
-#include <qdatetime.h>
-#include <qbytearray.h>
-#include <qstringlist.h>
-#include <qstringparser.h>
-#include <qshareddata.h>
-#include <qplatformdefs.h>
-
-#include <qabstractfileengine_p.h>
-
 #ifdef Q_OS_UNIX
 # include <qcore_unix_p.h>
+# define QT_USE_MMAP
+#endif
+
+#if defined(QT_USE_MMAP)
+// for mmap
+
+#include <sys/mman.h>
+#include <errno.h>
+
 #endif
 
 class QResourceRoot
@@ -845,22 +854,6 @@ class QDynamicBufferResourceRoot: public QResourceRoot
       return false;
    }
 };
-
-#if defined(Q_OS_UNIX) && !defined (Q_OS_NACL)
-#define QT_USE_MMAP
-#endif
-
-// most of the headers below are already included in qplatformdefs.h
-// also this lacks Large File support but that's probably irrelevant
-#if defined(QT_USE_MMAP)
-// for mmap
-
-#include <sys/mman.h>
-#include <errno.h>
-
-#endif
-
-
 
 class QDynamicFileResourceRoot: public QDynamicBufferResourceRoot
 {

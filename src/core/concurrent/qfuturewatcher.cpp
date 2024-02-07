@@ -22,12 +22,13 @@
 ***********************************************************************/
 
 #include <qfuturewatcher.h>
-#include <qfuturewatcher_p.h>
 
 #include <qalgorithms.h>
-#include <qcoreevent.h>
 #include <qcoreapplication.h>
+#include <qcoreevent.h>
 #include <qthread.h>
+
+#include <qfuturewatcher_p.h>
 
 QFutureWatcherBase::QFutureWatcherBase(QObject *parent)
    : QObject(parent), d_ptr(new QFutureWatcherBasePrivate)

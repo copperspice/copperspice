@@ -25,6 +25,7 @@
 #define QANIMATIONGROUP_P_H
 
 #include <qanimationgroup.h>
+
 #include <qlist.h>
 
 #include <qabstractanimation_p.h>

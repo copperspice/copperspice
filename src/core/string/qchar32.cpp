@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qchar32.h>
-#include <qstring8.h>
-#include <qstring16.h>
+
 #include <qdatastream.h>
+#include <qstring16.h>
+#include <qstring8.h>
+
 #include <qunicodetables_p.h>
 
 #include "../locale/qunicodetables.cpp"      // do not change to < >

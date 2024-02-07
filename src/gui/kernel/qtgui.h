@@ -17,7 +17,6 @@
 #include <qaccessibleobject.h>
 #include <qaccessibleplugin.h>
 #include <qaccessiblewidget.h>
-
 #include <qaction.h>
 #include <qactiongroup.h>
 #include <qapplication.h>
@@ -35,7 +34,6 @@
 #include <qcolumnview.h>
 #include <qcombobox.h>
 #include <qcommandlinkbutton.h>
-
 #include <qcommonstyle.h>
 #include <qcompleter.h>
 #include <qcursor.h>
@@ -70,7 +68,6 @@
 #include <qgesture.h>
 #include <qgesturerecognizer.h>
 #include <qglyphrun.h>
-
 #include <qgraphicsanchorlayout.h>
 #include <qgraphicseffect.h>
 #include <qgraphicsgridlayout.h>
@@ -85,7 +82,6 @@
 #include <qgraphicstransform.h>
 #include <qgraphicsview.h>
 #include <qgraphicswidget.h>
-
 #include <qgridlayout.h>
 #include <qgroupbox.h>
 #include <qheaderview.h>
@@ -123,7 +119,6 @@
 #include <qmouseeventtransition.h>
 #include <qmovie.h>
 #include <qoffscreensurface.h>
-
 #include <qopengl.h>
 #include <qopengl_buffer.h>
 #include <qopengl_debug.h>
@@ -135,14 +130,10 @@
 #include <qopengl_texture.h>
 #include <qopengl_versionfunctions.h>
 #include <qopengl_vertexarrayobject.h>
-
-//   #include <qopengltimerquery.h>
-
-#include <qopenglfunctions.h>
 #include <qopenglcontext.h>
+#include <qopenglfunctions.h>
 #include <qopenglwidget.h>
 #include <qopenglwindow.h>
-
 #include <qpagedpaintdevice.h>
 #include <qpagelayout.h>
 #include <qpagesetupdialog.h>
@@ -162,14 +153,12 @@
 #include <qpixmapcache.h>
 #include <qplaintextedit.h>
 #include <qpolygon.h>
-
 #include <qprintdialog.h>
 #include <qprintengine.h>
 #include <qprinter.h>
 #include <qprinterinfo.h>
 #include <qprintpreviewdialog.h>
 #include <qprintpreviewwidget.h>
-
 #include <qprogressbar.h>
 #include <qprogressdialog.h>
 #include <qproxystyle.h>
@@ -193,7 +182,6 @@
 #include <qsizepolicy.h>
 #include <qslider.h>
 #include <qsortfilterproxymodel.h>
-
 #include <qspinbox.h>
 #include <qsplashscreen.h>
 #include <qsplitter.h>
@@ -218,7 +206,6 @@
 #include <qtableview.h>
 #include <qtablewidget.h>
 #include <qtabwidget.h>
-
 #include <qtextbrowser.h>
 #include <qtextcursor.h>
 #include <qtextdocument.h>
@@ -231,7 +218,6 @@
 #include <qtextobject.h>
 #include <qtextoption.h>
 #include <qtexttable.h>
-
 #include <qtoolbar.h>
 #include <qtoolbox.h>
 #include <qtoolbutton.h>
@@ -254,5 +240,4 @@
 #include <qwindow.h>
 #include <qwindowdefs.h>
 #include <qwizard.h>
-
 #endif

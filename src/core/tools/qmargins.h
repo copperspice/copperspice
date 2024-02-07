@@ -24,8 +24,8 @@
 #ifndef QMARGINS_H
 #define QMARGINS_H
 
-#include <qnamespace.h>
 #include <qdebug.h>
+#include <qnamespace.h>
 
 class QMargins
 {

@@ -22,14 +22,16 @@
 ***********************************************************************/
 
 #include <qdatastream.h>
-#include <qdatastream_p.h>
 
 #include <qbuffer.h>
-#include <qstring.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
 #include <qendian.h>
+#include <qstring.h>
+
+#include <qdatastream_p.h>
+
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #undef  CHECK_STREAM_PRECOND
 

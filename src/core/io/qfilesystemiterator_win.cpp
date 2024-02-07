@@ -22,10 +22,12 @@
 ***********************************************************************/
 
 #include <qfilesystemiterator_p.h>
-#include <qfilesystemengine_p.h>
+
 #include <qplatformdefs.h>
 #include <qstringparser.h>
 #include <qt_windows.h>
+
+#include <qfilesystemengine_p.h>
 
 #ifndef  QT_NO_FILESYSTEMITERATOR
 

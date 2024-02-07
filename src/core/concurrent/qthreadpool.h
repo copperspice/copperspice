@@ -25,9 +25,9 @@
 #define QTHREADPOOL_H
 
 #include <qglobal.h>
-#include <qthread.h>
 #include <qrunnable.h>
 #include <qscopedpointer.h>
+#include <qthread.h>
 
 class QThreadPoolPrivate;
 

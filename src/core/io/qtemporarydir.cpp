@@ -25,14 +25,12 @@
 
 #ifndef QT_NO_TEMPORARYFILE
 
-#include <qdiriterator.h>
-#include <qdir_p.h>
+#include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qdiriterator.h>
 #include <qstring16.h>
 
-#if defined(QT_BUILD_CORE_LIB)
-#include <qcoreapplication.h>
-#endif
+#include <qdir_p.h>
 
 #include <stdlib.h>
 

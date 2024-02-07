@@ -31,9 +31,9 @@
 #include <qstringlist.h>
 #include <qurlquery.h>
 
-#include <qurl_p.h>
-#include <qtldurl_p.h>
 #include <qipaddress_p.h>
+#include <qtldurl_p.h>
+#include <qurl_p.h>
 
 #include <algorithm>
 

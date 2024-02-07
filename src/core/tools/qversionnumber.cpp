@@ -23,9 +23,9 @@
 
 #include <qversionnumber.h>
 
-#include <qhash.h>
 #include <qdatastream.h>
 #include <qdebug.h>
+#include <qhash.h>
 
 #include <qlocale_tools_p.h>
 

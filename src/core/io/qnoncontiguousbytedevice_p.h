@@ -24,11 +24,12 @@
 #ifndef QNONCONTIGUOUSBYTEDEVICE_P_H
 #define QNONCONTIGUOUSBYTEDEVICE_P_H
 
-#include <qobject.h>
-#include <qbytearray.h>
 #include <qbuffer.h>
+#include <qbytearray.h>
 #include <qiodevice.h>
+#include <qobject.h>
 #include <qsharedpointer.h>
+
 #include <qringbuffer_p.h>
 
 class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject

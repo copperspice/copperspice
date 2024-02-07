@@ -25,8 +25,8 @@
 #define QTCONCURRENTFUNCTION_WRAPPERS_H
 
 #include <qglobal.h>
-#include <qtconcurrentcompilertest.h>
 #include <qstringlist.h>
+#include <qtconcurrentcompilertest.h>
 
 namespace QtConcurrent {
 

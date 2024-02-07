@@ -24,9 +24,9 @@
 #ifndef QCONTIGUOUSCACHE_H
 #define QCONTIGUOUSCACHE_H
 
-#include <qglobal.h>
 #include <qassert.h>
 #include <qatomic.h>
+#include <qglobal.h>
 
 #include <limits.h>
 #include <new>

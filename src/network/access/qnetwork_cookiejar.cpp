@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qnetwork_cookiejar.h>
-#include <qnetwork_cookiejar_p.h>
 
+#include <qdatetime.h>
 #include <qnetwork_cookie.h>
 #include <qurl.h>
-#include <qdatetime.h>
+
+#include <qnetwork_cookiejar_p.h>
 #include <qtldurl_p.h>
 
 QNetworkCookieJar::QNetworkCookieJar(QObject *parent)

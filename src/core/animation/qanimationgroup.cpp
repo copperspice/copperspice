@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qanimationgroup.h>
 #include <qalgorithms.h>
-#include <qdebug.h>
+#include <qanimationgroup.h>
 #include <qcoreevent.h>
+#include <qdebug.h>
+
 #include <qanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION

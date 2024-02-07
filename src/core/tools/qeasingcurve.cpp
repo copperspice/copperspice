@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qeasingcurve.h>
+
+#include <qdatastream.h>
 #include <qdebug.h>
 #include <qstring.h>
-#include <qdatastream.h>
 
 #include "../../3rdparty/easing/easing.cpp"
 

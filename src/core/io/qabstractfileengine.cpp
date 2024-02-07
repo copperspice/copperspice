@@ -24,16 +24,16 @@
 #include <qabstractfileengine.h>
 
 #include <qdatetime.h>
+#include <qdiriterator.h>
+#include <qfsfileengine.h>
 #include <qreadwritelock.h>
 #include <qvariant.h>
-#include <qfsfileengine.h>
-#include <qdiriterator.h>
 
 #include <qabstractfileengine_p.h>
-#include <qresource_p.h>
+#include <qfilesystemengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
-#include <qfilesystemengine_p.h>
+#include <qresource_p.h>
 
 static bool qt_file_engine_handlers_in_use = false;
 

@@ -21,11 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qreadwritelock.h>
+
 #include <qmutex.h>
+#include <qplatformdefs.h>
 #include <qthread.h>
 #include <qwaitcondition.h>
+
 #include <qreadwritelock_p.h>
 
 QReadWriteLock::QReadWriteLock(RecursionMode recursionMode)

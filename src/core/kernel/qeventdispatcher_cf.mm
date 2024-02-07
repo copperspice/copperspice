@@ -25,6 +25,7 @@
 
 #include <qdebug.h>
 #include <qthread.h>
+
 #include <qcoreapplication_p.h>
 #include <qcore_unix_p.h>
 #include <qcore_mac_p.h>

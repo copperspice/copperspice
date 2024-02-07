@@ -33,16 +33,16 @@
 #ifndef QT_NO_SPINBOX
 
 #include <qapplication.h>
-#include <qstylehints.h>
 #include <qclipboard.h>
 #include <qdatetime.h>
 #include <qdatetimeedit.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qmenu.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qstylehints.h>
 #include <qstylepainter.h>
-#include <qdebug.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>

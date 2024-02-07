@@ -23,9 +23,9 @@
 
 #include <qvariantanimation.h>
 
-#include <qrect.h>
 #include <qline.h>
 #include <qmutex.h>
+#include <qrect.h>
 
 #include <qmutexpool_p.h>
 #include <qvariantanimation_p.h>

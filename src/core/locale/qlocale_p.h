@@ -24,10 +24,10 @@
 #ifndef QLOCALE_P_H
 #define QLOCALE_P_H
 
-#include <cmath>
-
-#include <qvarlengtharray.h>
 #include <qlocale.h>
+#include <qvarlengtharray.h>
+
+#include <cmath>
 
 #ifndef QT_NO_SYSTEMLOCALE
 

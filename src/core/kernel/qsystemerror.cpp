@@ -25,6 +25,7 @@
 
 #include <qglobal.h>
 #include <qlog.h>
+
 #include <qsystemerror_p.h>
 
 #ifdef Q_OS_WIN

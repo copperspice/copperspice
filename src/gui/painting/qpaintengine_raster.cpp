@@ -21,32 +21,33 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-#include <qmutex.h>
-#include <qrasterdefs_p.h>
-#include <qgrayraster_p.h>
-#include <qpainterpath.h>
-#include <qdebug.h>
 #include <qbitmap.h>
+#include <qdebug.h>
+#include <qglobal.h>
 #include <qmath.h>
+#include <qmutex.h>
+#include <qpainterpath.h>
 
-#include <qtextengine_p.h>
-#include <qfontengine_p.h>
-#include <qpixmap_raster_p.h>
-#include <qimage_p.h>
-#include <qstatictext_p.h>
 #include <qcosmeticstroker_p.h>
+#include <qfontengine_p.h>
+#include <qgrayraster_p.h>
+#include <qimage_p.h>
 #include <qmemrotate_p.h>
-#include <qrgba64_p.h>
-#include <qpaintengine_raster_p.h>
 #include <qoutlinemapper_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpixmap_raster_p.h>
+#include <qrasterdefs_p.h>
+#include <qrgba64_p.h>
+#include <qstatictext_p.h>
+#include <qtextengine_p.h>
 
-#include <limits.h>
 #include <algorithm>
+#include <limits.h>
 
 #if defined(Q_OS_WIN)
 #  include <qt_windows.h>
 #  include <qvarlengtharray.h>
+
 #  include <qfontengine_p.h>
 #endif
 

@@ -23,6 +23,7 @@
 
 #include <qelapsedtimer.h>
 #include <qlog.h>
+
 #include <qsystemlibrary_p.h>
 
 #include <windows.h>

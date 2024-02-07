@@ -22,15 +22,17 @@
 ***********************************************************************/
 
 #include <qiconvcodec_p.h>
-#include <qtextcodec_p.h>
-#include <qlibrary.h>
+
 #include <qdebug.h>
+#include <qlibrary.h>
 #include <qthreadstorage.h>
 
+#include <qtextcodec_p.h>
+
+#include <dlfcn.h>
 #include <errno.h>
 #include <locale.h>
 #include <stdio.h>
-#include <dlfcn.h>
 
 // unistd.h is needed for the _XOPEN_UNIX macro
 #include <unistd.h>

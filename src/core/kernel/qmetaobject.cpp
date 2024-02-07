@@ -25,9 +25,10 @@
 #include <qmetaobject.h>
 
 #include <qcoreapplication.h>
-#include <qthread_p.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
+
+#include <qthread_p.h>
 
 int QMetaObject::classInfoOffset() const
 {

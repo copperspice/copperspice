@@ -21,16 +21,14 @@
 *
 ***********************************************************************/
 
-#import  <Cocoa/Cocoa.h>
-
 #include <qmacnativewidget_mac.h>
 
+#include <qapplication.h>
 #include <qdebug.h>
-#include <qwindow.h>
-#include <qguiapplication.h>
 #include <qplatform_nativeinterface.h>
+#include <qwindow.h>
 
-
+#import  <Cocoa/Cocoa.h>
 
 namespace {
 // TODO use QtMacExtras copy of this function when available.

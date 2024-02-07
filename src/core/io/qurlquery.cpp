@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qurlquery.h>
-#include <qurl_p.h>
 
 #include <qhashfunc.h>
 #include <qstringlist.h>
 
+#include <qurl_p.h>
 
 typedef QList<QPair<QString, QString> > Map;
 

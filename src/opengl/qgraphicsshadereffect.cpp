@@ -26,13 +26,13 @@
 #ifndef QT_NO_GRAPHICSEFFECT
 
 #include <qglshaderprogram.h>
-#include <qglcustomshaderstage_p.h>
 
 #define QGL_HAVE_CUSTOM_SHADERS 1
 
-#include <qpainter.h>
 #include <qgraphicsitem.h>
+#include <qpainter.h>
 
+#include <qglcustomshaderstage_p.h>
 #include <qgraphicseffect_p.h>
 
 static const char qglslDefaultImageFragmentShader[] = "\

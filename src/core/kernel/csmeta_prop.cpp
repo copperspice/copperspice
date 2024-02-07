@@ -21,8 +21,10 @@
 *
 ***********************************************************************/
 
+// do not move these two includes
 #include <qobject.h>
 #include <csmeta.h>
+
 #include <qmetaobject.h>
 
 QMetaProperty::QMetaProperty(const QString &name, QMetaObject *obj)

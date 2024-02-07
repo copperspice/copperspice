@@ -22,11 +22,8 @@
 ***********************************************************************/
 
 #include <qwineventnotifier.h>
-#include <qeventdispatcher_win_p.h>
+
 #include <qcoreapplication.h>
-#include <qthread_p.h>
-
-
 /*
     \class QWinEventNotifier
     \brief The QWinEventNotifier class provides support for the Windows Wait functions.
@@ -39,6 +36,8 @@
     reset it after the notification.
 */
 
+#include <qeventdispatcher_win_p.h>
+#include <qthread_p.h>
 
 QWinEventNotifier::QWinEventNotifier(QObject *parent)
    : QObject(parent), handleToEvent(nullptr), enabled(false)

@@ -22,16 +22,16 @@
 ***********************************************************************/
 
 #include <qtimezone.h>
-#include <qtimezone_p.h>
 
-#include <qfile.h>
-#include <qhash.h>
 #include <qdatastream.h>
 #include <qdatetime.h>
 #include <qdebug.h>
+#include <qfile.h>
+#include <qhash.h>
 #include <qstringlist.h>
 
 #include <qlocale_tools_p.h>
+#include <qtimezone_p.h>
 
 #include <algorithm>
 

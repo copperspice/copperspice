@@ -37,8 +37,8 @@
 
 #include <qlist.h>
 #include <qpointer.h>
-#include <qsharedpointer.h>
 #include <qreadwritelock.h>
+#include <qsharedpointer.h>
 #include <qstring8.h>
 
 #include <atomic>
@@ -59,8 +59,8 @@ class CSInternalRefCount;
 class CSInternalSender;
 class CSInternalThreadData;
 
-class QEvent;
 class QChildEvent;
+class QEvent;
 class QTimerEvent;
 class QThread;
 class QThreadData;

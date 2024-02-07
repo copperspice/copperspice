@@ -23,16 +23,15 @@
 
 #include <qfilesystemengine_p.h>
 
-#include <qplatformdefs.h>
-#include <qfsfileengine.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qfsfileengine.h>
+#include <qplatformdefs.h>
 #include <qvarlengtharray.h>
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

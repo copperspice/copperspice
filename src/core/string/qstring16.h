@@ -26,9 +26,6 @@
 
 #define CS_STRING_ALLOW_UNSAFE
 
-#include <cstddef>
-#include <string>
-
 #include <cs_string.h>
 
 #include <qglobal.h>
@@ -38,6 +35,9 @@
 #include <qstringfwd.h>
 
 class QStringParser;
+
+#include <cstddef>
+#include <string>
 
 #ifdef Q_OS_DARWIN
    using CFStringRef = const struct __CFString *;

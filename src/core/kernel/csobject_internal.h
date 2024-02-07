@@ -24,8 +24,11 @@
 #ifndef CSOBJECT_INTERNAL_H
 #define CSOBJECT_INTERNAL_H
 
+// do not move this include
 #include <qcoreapplication.h>
+
 #include <csmeta_callevent.h>
+
 #include <qsemaphore.h>
 #include <qstring8.h>
 #include <qthread.h>

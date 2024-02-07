@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qundostack.h>
 #include <qundoview.h>
 
 #ifndef QT_NO_UNDOVIEW
 
-#include <qundogroup.h>
 #include <qabstractitemmodel.h>
-#include <qpointer.h>
 #include <qicon.h>
+#include <qpointer.h>
+#include <qundogroup.h>
+#include <qundostack.h>
 
 #include <qlistview_p.h>
 

@@ -24,12 +24,14 @@
 #ifndef QLISTVIEW_P_H
 #define QLISTVIEW_P_H
 
-#include <qabstractitemview_p.h>
-#include <qrubberband.h>
 #include <qbitarray.h>
-#include <qbsptree_p.h>
-#include <limits.h>
+#include <qrubberband.h>
 #include <qscrollbar.h>
+
+#include <qabstractitemview_p.h>
+#include <qbsptree_p.h>
+
+#include <limits.h>
 
 #ifndef QT_NO_LISTVIEW
 

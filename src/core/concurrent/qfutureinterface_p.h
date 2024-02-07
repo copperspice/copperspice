@@ -24,14 +24,14 @@
 #ifndef QFUTUREINTERFACE_P_H
 #define QFUTUREINTERFACE_P_H
 
-#include <qelapsedtimer.h>
 #include <qcoreevent.h>
-#include <qlist.h>
-#include <qwaitcondition.h>
-#include <qrunnable.h>
+#include <qelapsedtimer.h>
 #include <qfutureinterface.h>
-#include <qtconcurrentresultstore.h>
+#include <qlist.h>
+#include <qrunnable.h>
 #include <qtconcurrentexception.h>
+#include <qtconcurrentresultstore.h>
+#include <qwaitcondition.h>
 
 class QFutureCallOutEvent : public QEvent
 {

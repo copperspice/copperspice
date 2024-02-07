@@ -24,9 +24,9 @@
 #ifndef QUNDOSTACK_P_H
 #define QUNDOSTACK_P_H
 
+#include <qaction.h>
 #include <qlist.h>
 #include <qstring.h>
-#include <qaction.h>
 #include <qundostack.h>
 
 class QUndoCommand;

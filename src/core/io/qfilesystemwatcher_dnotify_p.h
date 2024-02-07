@@ -28,10 +28,10 @@
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qmutex.h>
-#include <qhash.h>
 #include <qdatetime.h>
 #include <qfile.h>
+#include <qhash.h>
+#include <qmutex.h>
 
 class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {

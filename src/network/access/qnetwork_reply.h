@@ -25,16 +25,16 @@
 #define QNETWORK_REPLY_H
 
 #include <qiodevice.h>
+#include <qnetaccess_manager.h>
+#include <qnetwork_request.h>
 #include <qstring.h>
 #include <qvariant.h>
-#include <qnetwork_request.h>
-#include <qnetaccess_manager.h>
 
-class QUrl;
-class QVariant;
 class QAuthenticator;
 class QSslConfiguration;
 class QSslError;
+class QUrl;
+class QVariant;
 
 class QNetworkReplyPrivate;
 

@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qsequentialanimationgroup.h>
-#include <qpauseanimation.h>
+
 #include <qdebug.h>
+#include <qpauseanimation.h>
 
 #include <qsequentialanimationgroup_p.h>
 

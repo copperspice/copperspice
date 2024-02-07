@@ -21,28 +21,29 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qabstractfileengine.h>
-#include <qfsfileengine_p.h>
+#include <qplatformdefs.h>
+
 #include <qcore_unix_p.h>
-#include <qfilesystementry_p.h>
 #include <qfilesystemengine_p.h>
+#include <qfilesystementry_p.h>
+#include <qfsfileengine_p.h>
 
 #ifndef QT_NO_FSFILEENGINE
 
-#include <qfile.h>
-#include <qdir.h>
 #include <qdatetime.h>
+#include <qdir.h>
+#include <qfile.h>
 #include <qvarlengtharray.h>
 
 #if defined(Q_OS_DARWIN)
 # include <qcore_mac_p.h>
 #endif
 
-#include <sys/mman.h>
-#include <stdlib.h>
-#include <limits.h>
 #include <errno.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <sys/mman.h>
 
 /*!
     \internal

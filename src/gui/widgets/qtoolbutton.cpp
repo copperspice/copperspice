@@ -23,23 +23,24 @@
 
 #include <qtoolbutton.h>
 
-#ifndef QT_NO_TOOLBUTTON
+#if ! defined(QT_NO_TOOLBUTTON)
 
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qicon.h>
+#include <qmainwindow.h>
 #include <qmenu.h>
 #include <qpainter.h>
 #include <qpointer.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qtooltip.h>
-#include <qmainwindow.h>
-#include <qtoolbar.h>
-#include <qvariant.h>
 #include <qstylepainter.h>
+#include <qtoolbar.h>
+#include <qtooltip.h>
+#include <qvariant.h>
+
 #include <qabstractbutton_p.h>
 #include <qaction_p.h>
 #include <qmenu_p.h>

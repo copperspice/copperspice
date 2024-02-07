@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qfiledevice.h>
+#include <qplatformdefs.h>
+
 #include <qfiledevice_p.h>
 #include <qfsfileengine_p.h>
 

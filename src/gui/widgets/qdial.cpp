@@ -36,6 +36,7 @@
 #include <qstylepainter.h>
 #include <qstyleoption.h>
 #include <qslider.h>
+
 #include <qabstractslider_p.h>
 #include <qmath_p.h>
 

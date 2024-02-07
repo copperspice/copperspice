@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qmimedata.h>
-#include <qurl.h>
+
 #include <qstringlist.h>
 #include <qtextcodec.h>
+#include <qurl.h>
 
 struct QMimeDataStruct {
    QString format;

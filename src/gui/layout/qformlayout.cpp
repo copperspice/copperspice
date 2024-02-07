@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qformlayout.h>
+
 #include <qalgorithms.h>
 #include <qapplication.h>
 #include <qdebug.h>
-#include <qformlayout.h>
 #include <qlabel.h>
 #include <qrect.h>
 #include <qvector.h>

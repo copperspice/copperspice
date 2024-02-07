@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qlibrary.h>
-#include <qlibrary_p.h>
 
 #include <qstringlist.h>
 #include <qfile.h>
@@ -32,8 +31,10 @@
 #include <qdebug.h>
 #include <qvector.h>
 #include <qdir.h>
-#include <qcoreapplication_p.h>
 #include <qplatformdefs.h>
+
+#include <qlibrary_p.h>
+#include <qcoreapplication_p.h>
 
 #ifdef Q_OS_DARWIN
 #  include <qcore_mac_p.h>

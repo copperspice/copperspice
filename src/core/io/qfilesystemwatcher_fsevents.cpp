@@ -22,30 +22,32 @@
 ***********************************************************************/
 
 #define _DARWIN_USE_64_BIT_INODE
-#include <qplatformdefs.h>
 
 #include <qfilesystemwatcher.h>
+
+#include <qplatformdefs.h>
+
 #include <qfilesystemwatcher_fsevents_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
+#include <qdatetime.h>
 #include <qdebug.h>
 #include <qfile.h>
-#include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qvarlengtharray.h>
 
-#include <mach/mach.h>
-#include <sys/types.h>
+#include <qcore_mac_p.h>
+
+#include <AvailabilityMacros.h>
 #include <CoreFoundation/CFRunLoop.h>
 #include <CoreFoundation/CFUUID.h>
+#include <mach/mach.h>
+#include <sys/types.h>
 
 #if ! defined(Q_OS_IOS)
 #include <CoreServices/CoreServices.h>
 #endif
-
-#include <AvailabilityMacros.h>
-#include <qcore_mac_p.h>
 
 #if ! defined(Q_OS_IOS)
 // Static operator overloading so for the sake of some convieniece.

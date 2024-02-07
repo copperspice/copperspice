@@ -22,16 +22,17 @@
 ***********************************************************************/
 
 #include <qfilesystemwatcher.h>
+
 #include <qfilesystemwatcher_win_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qdebug.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
-#include <qset.h>
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qdir.h>
+#include <qfileinfo.h>
+#include <qset.h>
+#include <qstringlist.h>
 
 void QWindowsFileSystemWatcherEngine::stop()
 {

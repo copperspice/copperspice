@@ -24,10 +24,10 @@
 #ifndef QDEBUG_P_H
 #define QDEBUG_P_H
 
-#include "qdebug.h"
-#include "qmetaobject.h"
-#include "qflags.h"
+#include <qdebug.h>
 
+#include <qflags.h>
+#include <qmetaobject.h>
 
 namespace QtDebugUtils {
 

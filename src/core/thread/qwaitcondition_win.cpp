@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qwaitcondition.h>
-#include <qnamespace.h>
-#include <qmutex.h>
-#include <qreadwritelock.h>
-#include <qlist.h>
+
 #include <qalgorithms.h>
+#include <qlist.h>
+#include <qmutex.h>
+#include <qnamespace.h>
+#include <qreadwritelock.h>
 #include <qt_windows.h>
 
 #include <qreadwritelock_p.h>

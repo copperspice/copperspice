@@ -22,26 +22,27 @@
 ***********************************************************************/
 
 #include <qprintpreviewdialog.h>
-#include <qprintpreviewwidget.h>
-#include <qprinter_p.h>
-#include <qdialog_p.h>
-#include <qprintdialog.h>
 
 #include <qaction.h>
 #include <qboxlayout.h>
 #include <qcombobox.h>
+#include <qcoreapplication.h>
+#include <qfiledialog.h>
+#include <qformlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qmainwindow.h>
 #include <qpagesetupdialog.h>
+#include <qprintdialog.h>
 #include <qprinter.h>
+#include <qprintpreviewwidget.h>
 #include <qstyle.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qvalidator.h>
-#include <qfiledialog.h>
-#include <qmainwindow.h>
-#include <qtoolbar.h>
-#include <qformlayout.h>
-#include <QCoreApplication>
+
+#include <qdialog_p.h>
+#include <qprinter_p.h>
 
 #ifndef QT_NO_PRINTPREVIEWDIALOG
 

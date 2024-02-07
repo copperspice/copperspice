@@ -24,8 +24,8 @@
 #ifndef QTCONCURRENTREDUCEKERNEL_H
 #define QTCONCURRENTREDUCEKERNEL_H
 
-#include <qglobal.h>
 #include <qatomic.h>
+#include <qglobal.h>
 #include <qlist.h>
 #include <qmap.h>
 #include <qmutex.h>

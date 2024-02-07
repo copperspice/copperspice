@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qfactoryloader_p.h>
+
 #include <qfactoryinterface.h>
 #include <qmap.h>
 #include <qdir.h>

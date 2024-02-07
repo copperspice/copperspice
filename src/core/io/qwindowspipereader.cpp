@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qwindowspipereader_p.h>
-#include <qiodevice_p.h>
+
 #include <qelapsedtimer.h>
+
+#include <qiodevice_p.h>
 
 QWindowsPipeReader::Overlapped::Overlapped(QWindowsPipeReader *reader)
    : pipeReader(reader)

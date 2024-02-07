@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qsemaphore.h>
+
+#include <qdatetime.h>
+#include <qelapsedtimer.h>
 #include <qmutex.h>
 #include <qwaitcondition.h>
-#include <qelapsedtimer.h>
-#include <qdatetime.h>
 
 class QSemaphorePrivate
 {

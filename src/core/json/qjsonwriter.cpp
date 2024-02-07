@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <cmath>
-
 #include <qjsonwriter_p.h>
+
 #include <qjson.h>
 #include <qstringparser.h>
+
+#include <cmath>
 
 static void cs_internal_objectToStr(const QJsonObject &data, QString &retval, int indent, bool compact);
 static void cs_internal_arrayToStr(const QJsonArray &data,   QString &retval, int indent, bool compact);

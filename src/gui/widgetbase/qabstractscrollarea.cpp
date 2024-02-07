@@ -25,21 +25,21 @@
 
 #ifndef QT_NO_SCROLLAREA
 
-#include <qscrollbar.h>
 #include <qapplication.h>
+#include <qboxlayout.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qheaderview.h>
+#include <qmargins.h>
+#include <qpainter.h>
+#include <qscrollbar.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qevent.h>
-#include <qdebug.h>
-#include <qboxlayout.h>
-#include <qpainter.h>
-#include <qmargins.h>
-#include <qheaderview.h>
 #include <qwidget.h>
 
 #include <qabstractscrollarea_p.h>
-#include <qscrollbar_p.h>
 #include <qapplication_p.h>
+#include <qscrollbar_p.h>
 
 #ifdef Q_OS_WIN
 #  include <qlibrary.h>

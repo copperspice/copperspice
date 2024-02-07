@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+// do not move the order of these two includes
 #include <qobject.h>
 #include <csmeta_callevent.h>
 

@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qxmlutils_p.h>
+
 #include <qregularexpression.h>
 #include <qstring.h>
-#include <qxmlutils_p.h>
 
 /* TODO:
  * - isNameChar() doesn't have to be public, it's only needed in qdom.cpp

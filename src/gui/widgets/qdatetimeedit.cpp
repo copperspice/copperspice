@@ -30,13 +30,14 @@
 #include <qdebug.h>
 #include <qevent.h>
 #include <qlineedit.h>
-#include <qlineedit_p.h>
 #include <qlocale.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qset.h>
 #include <qstyle.h>
 #include <qtimezone.h>
+
+#include <qlineedit_p.h>
 
 #ifndef QT_NO_DATETIMEEDIT
 

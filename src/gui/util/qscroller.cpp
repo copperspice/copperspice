@@ -21,29 +21,30 @@
 *
 ***********************************************************************/
 
-#include <qevent.h>
-#include <qwidget.h>
 #include <qscroller.h>
+
+#include <qabstractscrollarea.h>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qelapsedtimer.h>
+#include <qevent.h>
+#include <qevent.h>
+#include <qgraphicsobject.h>
+#include <qgraphicsscene.h>
+#include <qgraphicsview.h>
+#include <qmap.h>
+#include <qmath.h>
+#include <qnumeric.h>
+#include <qnumeric.h>
+#include <qscrollerproperties.h>
+#include <qtime.h>
+#include <qvector2d.h>
+#include <qwidget.h>
+
 #include <qflickgesture_p.h>
 #include <qscroller_p.h>
-#include <qscrollerproperties.h>
 #include <qscrollerproperties_p.h>
-#include <qnumeric.h>
-
-#include <QTime>
-#include <QElapsedTimer>
-#include <QMap>
-#include <QApplication>
-#include <QAbstractScrollArea>
-#include <QGraphicsObject>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QDesktopWidget>
-#include <QVector2D>
-#include <qmath.h>
-#include <qevent.h>
-#include <qnumeric.h>
-#include <qdebug.h>
 
 #include <math.h>
 

@@ -24,11 +24,11 @@
 #ifndef QLINKEDLIST_H
 #define QLINKEDLIST_H
 
-#include <iterator>
-#include <list>
+#include <qcontainerfwd.h>
 
 #include <qassert.h>
-#include <qcontainerfwd.h>
+#include <iterator>
+#include <list>
 
 template <class T>
 class QLinkedListIterator;

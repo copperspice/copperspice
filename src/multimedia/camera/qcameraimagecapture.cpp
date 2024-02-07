@@ -21,20 +21,22 @@
 *
 ***********************************************************************/
 
-#include <qcamera.h>
-#include <qcameracontrol.h>
 #include <qcameraimagecapture.h>
-#include <qcameraimagecapturecontrol.h>
-#include <qcameracapturedestinationcontrol.h>
+
+#include <qcamera.h>
 #include <qcameracapturebufferformatcontrol.h>
-#include <qimageencodercontrol.h>
-#include <qmediaobject_p.h>
-#include <qmediaservice.h>
-#include <qmediaencodersettings.h>
+#include <qcameracapturedestinationcontrol.h>
+#include <qcameracontrol.h>
+#include <qcameraimagecapturecontrol.h>
 #include <qdebug.h>
+#include <qimageencodercontrol.h>
+#include <qmediaencodersettings.h>
+#include <qmediaservice.h>
 #include <qmetaobject.h>
 #include <qstringlist.h>
 #include <qurl.h>
+
+#include <qmediaobject_p.h>
 
 class QCameraImageCapturePrivate
 {

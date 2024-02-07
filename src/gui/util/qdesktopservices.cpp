@@ -25,16 +25,16 @@
 
 #ifndef QT_NO_DESKTOPSERVICES
 
-#include <qdebug.h>
-#include <qstandardpaths.h>
-#include <qhash.h>
-#include <qobject.h>
 #include <qcoreapplication.h>
-#include <qurl.h>
-#include <qmutex.h>
-#include <qplatform_services.h>
-#include <qplatform_integration.h>
+#include <qdebug.h>
 #include <qdir.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qobject.h>
+#include <qplatform_integration.h>
+#include <qplatform_services.h>
+#include <qstandardpaths.h>
+#include <qurl.h>
 
 #include <qguiapplication_p.h>
 

@@ -24,8 +24,9 @@
 #ifndef QTCONCURRENTEXCEPTION_H
 #define QTCONCURRENTEXCEPTION_H
 
-#include <qglobal.h>
 #include <qatomic.h>
+#include <qglobal.h>
+
 #include <exception>
 
 namespace QtConcurrent {

@@ -24,8 +24,8 @@
 #ifndef QTCONCURRENTITERATEKERNEL_H
 #define QTCONCURRENTITERATEKERNEL_H
 
-#include <qglobal.h>
 #include <qatomic.h>
+#include <qglobal.h>
 #include <qtconcurrentmedian.h>
 #include <qtconcurrentthreadengine.h>
 

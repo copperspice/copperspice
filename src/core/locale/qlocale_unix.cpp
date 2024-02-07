@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qlocale_p.h>
 #include <qdatetime.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+
+#include <qlocale_p.h>
 
 static QByteArray getSystemLocale()
 {

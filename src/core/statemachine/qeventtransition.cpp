@@ -25,12 +25,13 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qeventtransition_p.h>
-#include <qstate.h>
-#include <qstate_p.h>
-#include <qstatemachine.h>
-#include <qstatemachine_p.h>
 #include <qdebug.h>
+#include <qstate.h>
+#include <qstatemachine.h>
+
+#include <qeventtransition_p.h>
+#include <qstate_p.h>
+#include <qstatemachine_p.h>
 
 QEventTransitionPrivate::QEventTransitionPrivate()
 {

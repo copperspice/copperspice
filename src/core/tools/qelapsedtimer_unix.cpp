@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qelapsedtimer.h>
+
 #include <qcore_unix_p.h>
 
 #include <sys/time.h>

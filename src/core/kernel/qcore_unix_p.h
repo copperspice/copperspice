@@ -24,10 +24,10 @@
 #ifndef QCORE_UNIX_P_H
 #define QCORE_UNIX_P_H
 
-#include <qplatformdefs.h>
 #include <qatomic.h>
 #include <qbytearray.h>
 #include <qhashfunc.h>
+#include <qplatformdefs.h>
 
 #ifndef Q_OS_UNIX
 # error <qcore_unix_p.h included on a non-Unix system>

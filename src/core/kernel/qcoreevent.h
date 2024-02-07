@@ -26,8 +26,8 @@
 #ifndef QCOREEVENT_H
 #define QCOREEVENT_H
 
-#include <qnamespace.h>
 #include <qbytearray.h>
+#include <qnamespace.h>
 
 #ifdef Expose
 #undef Expose

@@ -23,27 +23,28 @@
 
 #include <qplatformdefs.h>
 #include <qtextcodec.h>
+
 #include <qtextcodec_p.h>
 
 #ifndef QT_NO_TEXTCODEC
 
-#include <qlatincodec_p.h>
-#include <qfactoryloader_p.h>
-#include <qutfcodec_p.h>
-#include <qsimplecodec_p.h>
-#include <qtextcodecplugin.h>
-
 #include <qcoreapplication.h>
-#include <qlocale.h>
 #include <qfile.h>
 #include <qhash.h>
-#include <qmap.h>
 #include <qlist.h>
+#include <qlocale.h>
+#include <qmap.h>
 #include <qmutex.h>
+#include <qset.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
+#include <qtextcodecplugin.h>
 #include <qvarlengtharray.h>
-#include <qset.h>
+
+#include <qfactoryloader_p.h>
+#include <qlatincodec_p.h>
+#include <qsimplecodec_p.h>
+#include <qutfcodec_p.h>
 
 #ifdef Q_OS_UNIX
 #  include <qiconvcodec_p.h>

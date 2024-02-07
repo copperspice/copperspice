@@ -24,8 +24,8 @@
 #ifndef QTRANSLATOR_H
 #define QTRANSLATOR_H
 
-#include <qobject.h>
 #include <qbytearray.h>
+#include <qobject.h>
 #include <qscopedpointer.h>
 
 class QLocale;

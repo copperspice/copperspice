@@ -8,7 +8,6 @@
 #include <qabstractnativeeventfilter.h>
 #include <qabstractstate.h>
 #include <qabstracttransition.h>
-
 #include <qalgorithms.h>
 #include <qanimationgroup.h>
 #include <qatomic.h>
@@ -40,6 +39,7 @@
 #include <qfileinfo.h>
 #include <qfilesystemwatcher.h>
 #include <qfinalstate.h>
+#include <qflatmap.h>
 #include <qfsfileengine.h>
 #include <qfuture.h>
 #include <qfutureinterface.h>
@@ -87,6 +87,8 @@
 #include <qresource.h>
 #include <qrunnable.h>
 #include <qsavefile.h>
+#include <qscopedarraypointer.h>
+#include <qscopedpointer.h>
 #include <qscopedvaluerollback.h>
 #include <qsemaphore.h>
 #include <qsequentialanimationgroup.h>
@@ -109,8 +111,6 @@
 #include <qstringparser.h>
 #include <qstringview.h>
 #include <qsystemsemaphore.h>
-#include <quniquepointer.h>
-
 #include <qtconcurrentcompilertest.h>
 #include <qtconcurrentexception.h>
 #include <qtconcurrentfilter.h>
@@ -126,7 +126,6 @@
 #include <qtconcurrentrunbase.h>
 #include <qtconcurrentstoredfunctioncall.h>
 #include <qtconcurrentthreadengine.h>
-
 #include <qtemporaryfile.h>
 #include <qtextboundaryfinder.h>
 #include <qtextcodec.h>
@@ -136,10 +135,10 @@
 #include <qthreadpool.h>
 #include <qthreadstorage.h>
 #include <qtimeline.h>
-
 #include <qtimer.h>
 #include <qtimezone.h>
 #include <qtranslator.h>
+#include <quniquepointer.h>
 #include <qurl.h>
 #include <quuid.h>
 #include <qvariant.h>

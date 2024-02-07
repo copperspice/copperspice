@@ -25,49 +25,47 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qgraphicseffect.h>
 #include <qgraphicsitem.h>
 #include <qgraphicslayout.h>
+#include <qgraphicslayout.h>
+#include <qgraphicsproxywidget.h>
 #include <qgraphicssceneevent.h>
 #include <qgraphicsview.h>
 #include <qgraphicswidget.h>
-
-#include <qdebug.h>
+#include <qgraphicswidget.h>
+#include <qinputmethod.h>
 #include <qlist.h>
 #include <qmath.h>
-#include <qrect.h>
-#include <qset.h>
-#include <qstack.h>
-#include <qtimer.h>
-#include <qvarlengtharray.h>
-#include <QMetaMethod>
-#include <qapplication.h>
-#include <qdesktopwidget.h>
-#include <qevent.h>
-#include <qgraphicslayout.h>
-#include <qgraphicsproxywidget.h>
-#include <qgraphicswidget.h>
 #include <qmatrix.h>
+#include <qmetamethod.h>
 #include <qpaintengine.h>
 #include <qpainter.h>
 #include <qpixmapcache.h>
 #include <qpolygon.h>
+#include <qrect.h>
+#include <qset.h>
+#include <qstack.h>
 #include <qstyleoption.h>
+#include <qtimer.h>
 #include <qtooltip.h>
 #include <qtransform.h>
-#include <qinputmethod.h>
-#include <qgraphicseffect.h>
+#include <qvarlengtharray.h>
 
+#include <qapplication_p.h>
+#include <qgesturemanager_p.h>
 #include <qgraphics_item_p.h>
 #include <qgraphics_scene_p.h>
-#include <qgraphics_sceneindex_p.h>
 #include <qgraphics_scenebsptreeindex_p.h>
+#include <qgraphics_sceneindex_p.h>
 #include <qgraphics_scenelinearindex_p.h>
 #include <qgraphics_view_p.h>
 #include <qgraphics_widget_p.h>
-
-#include <qapplication_p.h>
 #include <qgraphicseffect_p.h>
-#include <qgesturemanager_p.h>
 #include <qpathclipper_p.h>
 
 // #define GESTURE_DEBUG

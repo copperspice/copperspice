@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qmachparser_p.h"
+#include <qmachparser_p.h>
 
 #if defined(Q_OF_MACH_O)
 
 #include <qendian.h>
+
 #include <qlibrary_p.h>
 
 #include <mach-o/loader.h>

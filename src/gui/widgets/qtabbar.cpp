@@ -23,7 +23,6 @@
 
 #include <qtabbar_p.h>
 
-#include <qlayoutengine_p.h>
 #include <qabstractitemdelegate.h>
 #include <qapplication.h>
 #include <qbitmap.h>
@@ -37,6 +36,8 @@
 #include <qtabwidget.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+
+#include <qlayoutengine_p.h>
 #include <qtextengine_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY

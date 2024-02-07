@@ -25,8 +25,8 @@
 
 #include <qprocess.h>
 
-#include <qcoreapplication.h>
 #include <qbytearray.h>
+#include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qdir.h>
 #include <qelapsedtimer.h>

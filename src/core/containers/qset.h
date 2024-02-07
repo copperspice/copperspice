@@ -24,10 +24,10 @@
 #ifndef QSET_H
 #define QSET_H
 
+#include <qhash.h>
+
 #include <initializer_list>
 #include <unordered_set>
-
-#include <qhash.h>
 
 template <class T>
 class QSetIterator;

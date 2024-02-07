@@ -28,13 +28,12 @@
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qt_windows.h>
-
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qhash.h>
 #include <qmutex.h>
+#include <qt_windows.h>
 #include <qvector.h>
 
 class QWindowsFileSystemWatcherEngineThread;

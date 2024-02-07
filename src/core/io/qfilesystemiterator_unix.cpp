@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
+
 #include <qfilesystemiterator_p.h>
 
 #ifndef QT_NO_FILESYSTEMITERATOR

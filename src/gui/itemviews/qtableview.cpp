@@ -25,19 +25,19 @@
 
 #ifndef QT_NO_TABLEVIEW
 
+#include <qabstractbutton.h>
+#include <qapplication.h>
+#include <qbitarray.h>
+#include <qevent.h>
 #include <qheaderview.h>
 #include <qitemdelegate.h>
-#include <qapplication.h>
 #include <qpainter.h>
-#include <qstyle.h>
-#include <qsize.h>
-#include <qevent.h>
-#include <qbitarray.h>
 #include <qscrollbar.h>
-#include <qabstractbutton.h>
+#include <qsize.h>
+#include <qstyle.h>
 
-#include <qtableview_p.h>
 #include <qheaderview_p.h>
+#include <qtableview_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

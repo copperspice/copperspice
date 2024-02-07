@@ -25,8 +25,10 @@
 #define QPARALLELANIMATIONGROUP_P_H
 
 #include <qparallelanimationgroup.h>
-#include <qanimationgroup_p.h>
+
 #include <qhash.h>
+
+#include <qanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION
 

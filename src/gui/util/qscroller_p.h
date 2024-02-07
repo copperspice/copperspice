@@ -24,21 +24,21 @@
 #ifndef QSCROLLER_P_H
 #define QSCROLLER_P_H
 
-#include <QAbstractAnimation>
-#include <QObject>
-#include <QPointer>
-#include <QQueue>
-#include <QSet>
-#include <QEasingCurve>
-#include <QElapsedTimer>
-#include <QSizeF>
-#include <QPointF>
-#include <QRectF>
 #include <qscroller.h>
+
+#include <qabstractanimation.h>
+#include <qeasingcurve.h>
+#include <qelapsedtimer.h>
+#include <qobject.h>
+#include <qpointer.h>
+#include <qpointf.h>
+#include <qqueue.h>
+#include <qrectf.h>
 #include <qscrollerproperties.h>
+#include <qset.h>
+#include <qsizef.h>
 
 #include <qscrollerproperties_p.h>
-
 
 #ifndef QT_NO_GESTURES
 class QFlickGestureRecognizer;

@@ -26,7 +26,6 @@
 #ifndef QT_NO_FONTDIALOG
 
 #include <qfontdialog.h>
-#include <qfontdialog_p.h>
 
 #include <qapplication.h>
 #include <qcheckbox.h>
@@ -47,6 +46,7 @@
 
 #include <qdialog_p.h>
 #include <qfont_p.h>
+#include <qfontdialog_p.h>
 
 class QFontListView : public QListView
 {

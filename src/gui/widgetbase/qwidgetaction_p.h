@@ -26,8 +26,6 @@
 
 #include <qaction_p.h>
 
-
-
 class QWidgetActionPrivate : public QActionPrivate
 {
    Q_DECLARE_PUBLIC(QWidgetAction)

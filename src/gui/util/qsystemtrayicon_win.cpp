@@ -37,11 +37,10 @@
 #define _WIN32_IE 0x0600             //required for NOTIFYICONDATA_V2_SIZE
 #endif
 
+#include <qdebug.h>
+#include <qhash.h>
 #include <qplatform_nativeinterface.h>
-#include <QSettings>
-#include <QDebug>
-#include <QHash>
-
+#include <qsettings.h>
 #include <qt_windows.h>
 
 #include <qsystemlibrary_p.h>

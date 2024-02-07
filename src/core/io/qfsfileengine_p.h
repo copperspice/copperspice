@@ -24,12 +24,14 @@
 #ifndef QFSFILEENGINE_P_H
 #define QFSFILEENGINE_P_H
 
-#include <qplatformdefs.h>
 #include <qfsfileengine.h>
+
+#include <qhash.h>
+#include <qplatformdefs.h>
+
 #include <qabstractfileengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>
-#include <qhash.h>
 
 #ifndef QT_NO_FSFILEENGINE
 

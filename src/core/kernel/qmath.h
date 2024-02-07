@@ -24,8 +24,9 @@
 #ifndef QMATH_H
 #define QMATH_H
 
-#include <math.h>
 #include <qglobal.h>
+
+#include <math.h>
 
 #define QT_SINE_TABLE_SIZE 256
 

@@ -28,8 +28,8 @@
 #ifndef QCOMMANDLINEOPTION_H
 #define QCOMMANDLINEOPTION_H
 
-#include <qstringlist.h>
 #include <qshareddata.h>
+#include <qstringlist.h>
 
 class QCommandLineOptionPrivate;
 

@@ -24,12 +24,11 @@
 #ifndef QJSON_H
 #define QJSON_H
 
+#include <qcontainerfwd.h>
+#include <qflatmap.h>
 #include <qjsonarray.h>
 #include <qjsonobject.h>
 #include <qjsonvalue.h>
-
-#include <qcontainerfwd.h>
-#include <qflatmap.h>
 #include <qstring.h>
 
 class QJsonData

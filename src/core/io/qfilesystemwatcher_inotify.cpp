@@ -22,22 +22,24 @@
 ***********************************************************************/
 
 #include <qfilesystemwatcher.h>
+
 #include <qfilesystemwatcher_inotify_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <qcore_unix_p.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qsocketnotifier.h>
 #include <qvarlengtharray.h>
 
+#include <qcore_unix_p.h>
+
 #if defined(Q_OS_LINUX)
-#include <sys/syscall.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
 #include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 #endif
 
 #if defined(QT_NO_INOTIFY)

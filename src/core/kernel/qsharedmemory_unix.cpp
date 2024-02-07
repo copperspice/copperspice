@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qsharedmemory.h>
 #include <qdebug.h>
 #include <qfile.h>
+#include <qplatformdefs.h>
+#include <qsharedmemory.h>
 
 #include <errno.h>
 #include <qcore_unix_p.h>

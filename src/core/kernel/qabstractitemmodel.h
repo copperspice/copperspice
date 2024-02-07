@@ -24,19 +24,19 @@
 #ifndef QABSTRACTITEMMODEL_H
 #define QABSTRACTITEMMODEL_H
 
-#include <qvariant.h>
-#include <qobject.h>
-#include <qmultihash.h>
-#include <qvector.h>
-#include <qscopedpointer.h>
 #include <qcontainerfwd.h>
+#include <qmultihash.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 class QAbstractItemModel;
+class QAbstractItemModelPrivate;
+class QMimeData;
+class QModelIndex;
 class QPersistentModelIndex;
 class QPersistentModelIndexData;
-class QModelIndex;
-class QMimeData;
-class QAbstractItemModelPrivate;
 
 using QModelIndexList = QList<QModelIndex>;
 

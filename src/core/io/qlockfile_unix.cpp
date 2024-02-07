@@ -29,8 +29,8 @@
 
 #include <qcache.h>
 #include <qcoreapplication.h>
-#include <qdebug.h>
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qfileinfo.h>
 #include <qmutex.h>
 #include <qtemporaryfile.h>
@@ -39,9 +39,9 @@
 #include <qabstractfileengine_p.h>
 #include <qtemporaryfile_p.h>
 
+#include <signal.h>    // kill
 #include <sys/file.h>  // flock
 #include <sys/types.h> // kill
-#include <signal.h>    // kill
 #include <unistd.h>    // gethostname
 
 #if defined(Q_OS_DARWIN)

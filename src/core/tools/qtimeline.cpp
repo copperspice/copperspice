@@ -24,8 +24,8 @@
 #include <qtimeline.h>
 
 #include <qcoreevent.h>
-#include <qmath.h>
 #include <qelapsedtimer.h>
+#include <qmath.h>
 
 class QTimeLinePrivate
 {

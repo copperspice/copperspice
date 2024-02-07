@@ -23,43 +23,44 @@
 
 #include <qgtkstyle_p.h>
 
-#if !defined(QT_NO_STYLE_GTK)
+#if ! defined(QT_NO_STYLE_GTK)
 
-#include <qapplication_p.h>
-#include <QLibrary>
-#include <QSettings>
-#include <QDialogButtonBox>
-#include <QStatusBar>
-#include <QLineEdit>
-#include <QWidget>
-#include <QListView>
-#include <QApplication>
-#include <QStyleOption>
-#include <QPushButton>
-#include <QPainter>
-#include <QMainWindow>
-#include <QToolBar>
-#include <QHeaderView>
-#include <QMenuBar>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QScrollBar>
-#include <QAbstractButton>
-#include <QToolButton>
-#include <QGroupBox>
-#include <QRadioButton>
-#include <QCheckBox>
-#include <QTreeView>
-#include <QStyledItemDelegate>
+#include <qlibrary.h>
+#include <qsettings.h>
+#include <qdialogbuttonbox.h>
+#include <qstatusbar.h>
+#include <qlineedit.h>
+#include <qwidget.h>
+#include <qlistview.h>
+#include <qapplication.h>
+#include <qstyleoption.h>
+#include <qpushbutton.h>
+#include <qpainter.h>
+#include <qmainwindow.h>
+#include <qtoolbar.h>
+#include <qheaderview.h>
+#include <qmenubar.h>
+#include <qcombobox.h>
+#include <qspinbox.h>
+#include <qscrollbar.h>
+#include <qabstractbutton.h>
+#include <qtoolbutton.h>
+#include <qgroupbox.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qtreeview.h>
+#include <qstyleditemdelegate.h>
 #include <qwizard.h>
 #include <qpixmapcache.h>
+
+#include <qapplication_p.h>
 #include <qstyleanimation_p.h>
 
 #undef signals // Collides with GTK stymbols
 
 #include <qgtkpainter_p.h>
-#include <qstylehelper_p.h>
 #include <qgtkstyle_p.h>
+#include <qstylehelper_p.h>
 
 static GtkStateType qt_gtk_state(const QStyleOption *option)
 {

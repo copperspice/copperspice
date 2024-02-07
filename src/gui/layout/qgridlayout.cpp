@@ -22,12 +22,13 @@
 ***********************************************************************/
 
 #include <qgridlayout.h>
+
 #include <qapplication.h>
-#include <qwidget.h>
 #include <qlist.h>
 #include <qsizepolicy.h>
-#include <qvector.h>
 #include <qvarlengtharray.h>
+#include <qvector.h>
+#include <qwidget.h>
 
 #include <qlayoutengine_p.h>
 #include <qlayout_p.h>

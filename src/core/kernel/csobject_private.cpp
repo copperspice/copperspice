@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qobject.h>
-#include <qthread_p.h>
 #include <qabstracteventdispatcher.h>
+#include <qobject.h>
+
+#include <qthread_p.h>
 
 void CSInternalChildren::deleteChildren(QObject *object)
 {

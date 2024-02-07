@@ -25,6 +25,7 @@
 #define QTOOLS_P_H
 
 #include <qglobal.h>
+
 #include <limits>
 
 namespace QtMiscUtils {

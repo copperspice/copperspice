@@ -22,7 +22,10 @@
 ***********************************************************************/
 
 #include <qcore_unix_p.h>
+
 #include <qelapsedtimer.h>
+
+#include <stdlib.h>
 
 #ifdef Q_OS_NACL
 
@@ -33,8 +36,6 @@
 
 # include <sys/time.h>
 #endif
-
-#include <stdlib.h>
 
 #ifdef Q_OS_DARWIN
 #include <mach/mach_time.h>

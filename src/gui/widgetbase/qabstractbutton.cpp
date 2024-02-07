@@ -22,16 +22,16 @@
 ***********************************************************************/
 
 #include <qabstractbutton.h>
-#include <qabstractbutton_p.h>
 
 #include <qabstractitemview.h>
+#include <qapplication.h>
+#include <qaction.h>
 #include <qbuttongroup.h>
 #include <qevent.h>
 #include <qpainter.h>
-#include <qapplication.h>
 #include <qstyle.h>
-#include <qaction.h>
 
+#include <qabstractbutton_p.h>
 #include <qbuttongroup_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY

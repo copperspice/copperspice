@@ -22,12 +22,14 @@
 ***********************************************************************/
 
 #include <qlocale_p.h>
-#include <qlocale_tools_p.h>
+
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <qdatetime.h>
+
+#include <qlocale_tools_p.h>
 #include <qsystemlibrary_p.h>
-#include <qdebug.h>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>

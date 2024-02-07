@@ -24,8 +24,8 @@
 #ifndef QDATASTREAM_H
 #define QDATASTREAM_H
 
-#include <qglobal.h>
 #include <qcontainerfwd.h>
+#include <qglobal.h>
 #include <qiodevice.h>
 #include <qregularexpression.h>
 #include <qscopedpointer.h>

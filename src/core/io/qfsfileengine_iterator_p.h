@@ -25,8 +25,9 @@
 #define QFSFILEENGINE_ITERATOR_P_H
 
 #include <qabstractfileengine.h>
-#include <qfilesystemiterator_p.h>
 #include <qdir.h>
+
+#include <qfilesystemiterator_p.h>
 
 #ifndef QT_NO_FSFILEENGINE
 #ifndef QT_NO_FILESYSTEMITERATOR

@@ -21,19 +21,20 @@
 *
 ***********************************************************************/
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <qxmlstream.h>
-#include <qxmlstream_p.h>
 
+#include <qbuffer.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qfile.h>
-#include <qtextcodec.h>
 #include <qstack.h>
-#include <qbuffer.h>
+#include <qtextcodec.h>
+
+#include <qxmlstream_p.h>
 #include <qxmlutils_p.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 
 QXmlStreamEntityResolver::~QXmlStreamEntityResolver()
 {

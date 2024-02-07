@@ -27,8 +27,9 @@
 #include <qatomic.h>
 #include <qthread.h>
 #include <qthreadpool.h>
-#include <qthreadpool_p.h>
+
 #include <qfutureinterface_p.h>
+#include <qthreadpool_p.h>
 
 enum {
    MaxProgressEmitsPerSecond = 25

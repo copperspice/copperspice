@@ -24,10 +24,10 @@
 #ifndef QFILESYSTEMMETADATA_P_H
 #define QFILESYSTEMMETADATA_P_H
 
-#include <qplatformdefs.h>
-#include <qglobal.h>
-#include <qdatetime.h>
 #include <qabstractfileengine.h>
+#include <qdatetime.h>
+#include <qglobal.h>
+#include <qplatformdefs.h>
 
 #if defined(Q_OS_WIN)
 #ifndef IO_REPARSE_TAG_SYMLINK

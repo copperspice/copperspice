@@ -1,7 +1,12 @@
 #ifndef QTMULTIMEDIA_H
 #define QTMULTIMEDIA_H
-#include <QtCore>
-#include <QtGui>
+
+#include <qtcore.h>
+#include <qtgui.h>
+
+#include <qabstractvideobuffer.h>
+#include <qabstractvideofilter.h>
+#include <qabstractvideosurface.h>
 #include <qaudio.h>
 #include <qaudiobuffer.h>
 #include <qaudiodecoder.h>
@@ -26,13 +31,13 @@
 #include <qcameraflashcontrol.h>
 #include <qcamerafocus.h>
 #include <qcamerafocuscontrol.h>
-#include <qcamerainfo.h>
-#include <qcamerainfocontrol.h>
-#include <qcameralockscontrol.h>
 #include <qcameraimagecapture.h>
 #include <qcameraimagecapturecontrol.h>
 #include <qcameraimageprocessing.h>
 #include <qcameraimageprocessingcontrol.h>
+#include <qcamerainfo.h>
+#include <qcamerainfocontrol.h>
+#include <qcameralockscontrol.h>
 #include <qcameraviewfinder.h>
 #include <qcameraviewfindersettings.h>
 #include <qcamerazoomcontrol.h>
@@ -68,9 +73,6 @@
 #include <qradiotunercontrol.h>
 #include <qsound.h>
 #include <qsoundeffect.h>
-#include <qabstractvideobuffer.h>
-#include <qabstractvideofilter.h>
-#include <qabstractvideosurface.h>
 #include <qvideoframe.h>
 #include <qvideoprobe.h>
 #include <qvideorenderercontrol.h>

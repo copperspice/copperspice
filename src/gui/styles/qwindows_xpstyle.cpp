@@ -25,35 +25,33 @@
 
 #if ! defined(QT_NO_STYLE_WINDOWSXP) || defined(QT_PLUGIN)
 
-#include <qpaintengine_raster_p.h>
-#include <qapplication_p.h>
-
-#include <qstylehelper_p.h>
-#include <qwidget_p.h>
-#include <qsystemlibrary_p.h>
-#include <qpainter.h>
-#include <qpaintengine.h>
-#include <qwidget.h>
-#include <qbackingstore.h>
 #include <qapplication.h>
-#include <qpixmapcache.h>
-#include <qapplication_p.h>
-#include <qplatform_nativeinterface.h>
-
-#include <qdesktopwidget.h>
-#include <qtoolbutton.h>
-#include <qtabbar.h>
+#include <qbackingstore.h>
 #include <qcombobox.h>
-#include <qscrollbar.h>
-#include <qheaderview.h>
-#include <qspinbox.h>
-#include <qlistview.h>
-#include <qstackedwidget.h>
-#include <qpushbutton.h>
-#include <qtoolbar.h>
-#include <qlabel.h>
-#include <qvarlengtharray.h>
 #include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qheaderview.h>
+#include <qlabel.h>
+#include <qlistview.h>
+#include <qpaintengine.h>
+#include <qpainter.h>
+#include <qpixmapcache.h>
+#include <qplatform_nativeinterface.h>
+#include <qpushbutton.h>
+#include <qscrollbar.h>
+#include <qspinbox.h>
+#include <qstackedwidget.h>
+#include <qtabbar.h>
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
+#include <qvarlengtharray.h>
+#include <qwidget.h>
+
+#include <qapplication_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qstylehelper_p.h>
+#include <qsystemlibrary_p.h>
+#include <qwidget_p.h>
 
 #include <algorithm>
 

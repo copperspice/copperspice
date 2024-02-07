@@ -23,14 +23,14 @@
 
 #include <Cocoa/Cocoa.h>
 
-#include <qprintdialog.h>
-#include <qabstractprintdialog_p.h>
-
-#include <qcore_mac_p.h>
-#include <qapplication_p.h>
-#include <qprinter.h>
-#include <qprintengine.h>
 #include <qplatform_printdevice.h>
+#include <qprintdialog.h>
+#include <qprintengine.h>
+#include <qprinter.h>
+
+#include <qabstractprintdialog_p.h>
+#include <qapplication_p.h>
+#include <qcore_mac_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 

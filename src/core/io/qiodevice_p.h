@@ -27,6 +27,7 @@
 #include <qiodevice.h>
 #include <qbytearray.h>
 #include <qstring.h>
+
 #include <qringbuffer_p.h>
 
 #ifndef QIODEVICE_BUFFERSIZE

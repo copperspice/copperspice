@@ -25,20 +25,29 @@
 
 #ifndef QT_NO_MENU
 
+#include <qapplication.h>
 #include <qdebug.h>
-#include <qstyle.h>
+#include <qdesktopwidget.h>
 #include <qevent.h>
 #include <qtimer.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qplatform_theme.h>
+#include <qpushbutton.h>
+#include <qstyle.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+#include <qwidgetaction.h>
+
+#include <qaction_p.h>
+#include <qguiapplication_p.h>
+#include <qmenu_p.h>
+#include <qmenubar_p.h>
+#include <qpushbutton_p.h>
 
 #ifdef Q_OS_DARWIN
 #include <qmacnativewidget_mac.h>
 #endif
-
-#include <qapplication.h>
-#include <qdesktopwidget.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #  include <qaccessible.h>
@@ -51,17 +60,6 @@
 #ifndef QT_NO_WHATSTHIS
 # include <qwhatsthis.h>
 #endif
-
-#include <qmenu_p.h>
-#include <qmenubar_p.h>
-#include <qwidgetaction.h>
-#include <qtoolbutton.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
-#include <qpushbutton_p.h>
-#include <qaction_p.h>
-
-#include <qguiapplication_p.h>
 
 QMenu *QMenuPrivate::mouseDown = nullptr;
 
