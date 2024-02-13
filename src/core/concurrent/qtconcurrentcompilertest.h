@@ -35,7 +35,7 @@ class HasResultType
    static char test(int, const typename U::result_type * = nullptr);
 
    template <typename U>
-   static void * test(double);
+   static void *test(double);
 
  public:
    constexpr static bool Value = (sizeof(test<T>(0)) == sizeof(char));

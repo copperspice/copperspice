@@ -67,7 +67,8 @@ class Base
 
 ExceptionHolder::ExceptionHolder(Exception *exception)
    : base(new Base(exception))
-{ }
+{
+}
 
 ExceptionHolder::ExceptionHolder(const ExceptionHolder &other)
    : base(other.base)
@@ -132,7 +133,6 @@ bool ExceptionStore::hasThrown() const
 }
 
 }   // end namespace
-
 
 } // namespace QtConcurrent
 

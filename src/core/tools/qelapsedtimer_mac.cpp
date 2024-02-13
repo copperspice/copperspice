@@ -45,6 +45,7 @@ static qint64 absoluteToNSecs(qint64 cpuTime)
    if (info.denom == 0) {
       mach_timebase_info(&info);
    }
+
    qint64 nsecs = cpuTime * info.numer / info.denom;
    return nsecs;
 }

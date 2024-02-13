@@ -29,12 +29,6 @@
 #include <qabstractfileengine_p.h>
 #include <qresource_p.h>
 
-/*!
-    \internal
-
-    Returns the canonicalized form of \a path (i.e., with all symlinks resolved,
-    and all redundant path elements removed.
-*/
 QString QFileSystemEngine::slowCanonicalized(const QString &path)
 {
    if (path.isEmpty()) {
@@ -52,9 +46,11 @@ QString QFileSystemEngine::slowCanonicalized(const QString &path)
    QSet<QString> known;
 
    known.insert(path);
+
    do {
 
 #ifdef Q_OS_WIN
+
       if (separatorPos == 0) {
          if (tmpPath.size() >= 2 && tmpPath.at(0) == slash && tmpPath.at(1) == slash) {
             // UNC, skip past the first two elements
@@ -65,36 +61,44 @@ QString QFileSystemEngine::slowCanonicalized(const QString &path)
             separatorPos = 2;
          }
       }
+
       if (separatorPos != -1)
 #endif
          separatorPos = tmpPath.indexOf(slash, separatorPos + 1);
+
       QString prefix = separatorPos == -1 ? tmpPath : tmpPath.left(separatorPos);
 
-      if (
-         !nonSymlinks.contains(prefix)) {
+      if (! nonSymlinks.contains(prefix)) {
          fi.setFile(prefix);
+
          if (fi.isSymLink()) {
             QString target = fi.symLinkTarget();
+
             if (QFileInfo(target).isRelative()) {
                target = fi.absolutePath() + slash + target;
             }
+
             if (separatorPos != -1) {
                if (fi.isDir() && !target.endsWith(slash)) {
                   target.append(slash);
                }
+
                target.append(tmpPath.mid(separatorPos));
             }
+
             tmpPath = QDir::cleanPath(target);
             separatorPos = 0;
 
             if (known.contains(tmpPath)) {
                return QString();
             }
+
             known.insert(tmpPath);
          } else {
             nonSymlinks.insert(prefix);
          }
       }
+
    } while (separatorPos != -1);
 
    return QDir::cleanPath(tmpPath);
@@ -177,18 +181,8 @@ static bool _q_resolveEntryAndCreateLegacyEngine_recursive(QFileSystemEntry &ent
    return _q_checkEntry(entry, data, resolvingEntry);
 }
 
-/*!
-    \internal
-
-    Resolves the \a entry (see QDir::searchPaths) and returns an engine for
-    it, but never a QFSFileEngine.
-
-    Returns a file engine that can be used to access the entry. Returns 0 if
-    QFileSystemEngine API should be used to query and interact with the file
-    system object.
-*/
 QAbstractFileEngine *QFileSystemEngine::resolveEntryAndCreateLegacyEngine(
-   QFileSystemEntry &entry, QFileSystemMetaData &data)
+      QFileSystemEntry &entry, QFileSystemMetaData &data)
 {
    QFileSystemEntry copy       = entry;
    QAbstractFileEngine *engine = nullptr;
@@ -203,8 +197,6 @@ QAbstractFileEngine *QFileSystemEngine::resolveEntryAndCreateLegacyEngine(
    return engine;
 }
 
-
-// these unix functions are in this file, because they are shared by symbian port for open C file handles
 #ifdef Q_OS_UNIX
 
 bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data)
@@ -213,6 +205,7 @@ bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data)
    data.knownFlagsMask |= QFileSystemMetaData::PosixStatFlags;
 
    QT_STATBUF statBuffer;
+
    if (QT_FSTAT(fd, &statBuffer) == 0) {
       data.fillFromStatBuf(statBuffer);
       return true;
@@ -227,9 +220,11 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    if (statBuffer.st_mode & S_IRUSR) {
       entryFlags |= QFileSystemMetaData::OwnerReadPermission;
    }
+
    if (statBuffer.st_mode & S_IWUSR) {
       entryFlags |= QFileSystemMetaData::OwnerWritePermission;
    }
+
    if (statBuffer.st_mode & S_IXUSR) {
       entryFlags |= QFileSystemMetaData::OwnerExecutePermission;
    }
@@ -237,9 +232,11 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    if (statBuffer.st_mode & S_IRGRP) {
       entryFlags |= QFileSystemMetaData::GroupReadPermission;
    }
+
    if (statBuffer.st_mode & S_IWGRP) {
       entryFlags |= QFileSystemMetaData::GroupWritePermission;
    }
+
    if (statBuffer.st_mode & S_IXGRP) {
       entryFlags |= QFileSystemMetaData::GroupExecutePermission;
    }
@@ -247,9 +244,11 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    if (statBuffer.st_mode & S_IROTH) {
       entryFlags |= QFileSystemMetaData::OtherReadPermission;
    }
+
    if (statBuffer.st_mode & S_IWOTH) {
       entryFlags |= QFileSystemMetaData::OtherWritePermission;
    }
+
    if (statBuffer.st_mode & S_IXOTH) {
       entryFlags |= QFileSystemMetaData::OtherExecutePermission;
    }
@@ -268,10 +267,12 @@ void QFileSystemMetaData::fillFromStatBuf(const QT_STATBUF &statBuffer)
    size_ = statBuffer.st_size;
 
 #if defined(Q_OS_DARWIN)
+
    if (statBuffer.st_flags & UF_HIDDEN) {
       entryFlags     |= QFileSystemMetaData::HiddenAttribute;
       knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
    }
+
 #endif
 
    // Times
@@ -292,13 +293,13 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
    switch (entry.d_type) {
       case DT_DIR:
          knownFlagsMask = QFileSystemMetaData::LinkType
-                          | QFileSystemMetaData::FileType
-                          | QFileSystemMetaData::DirectoryType
-                          | QFileSystemMetaData::SequentialType
-                          | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::FileType
+               | QFileSystemMetaData::DirectoryType
+               | QFileSystemMetaData::SequentialType
+               | QFileSystemMetaData::ExistsAttribute;
 
          entryFlags = QFileSystemMetaData::DirectoryType
-                      | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::ExistsAttribute;
 
          break;
 
@@ -308,15 +309,15 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
       case DT_SOCK:
          // ### System attribute
          knownFlagsMask = QFileSystemMetaData::LinkType
-                          | QFileSystemMetaData::FileType
-                          | QFileSystemMetaData::DirectoryType
-                          | QFileSystemMetaData::BundleType
-                          | QFileSystemMetaData::AliasType
-                          | QFileSystemMetaData::SequentialType
-                          | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::FileType
+               | QFileSystemMetaData::DirectoryType
+               | QFileSystemMetaData::BundleType
+               | QFileSystemMetaData::AliasType
+               | QFileSystemMetaData::SequentialType
+               | QFileSystemMetaData::ExistsAttribute;
 
          entryFlags = QFileSystemMetaData::SequentialType
-                      | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::ExistsAttribute;
 
          break;
 
@@ -327,14 +328,14 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
 
       case DT_REG:
          knownFlagsMask = QFileSystemMetaData::LinkType
-                          | QFileSystemMetaData::FileType
-                          | QFileSystemMetaData::DirectoryType
-                          | QFileSystemMetaData::BundleType
-                          | QFileSystemMetaData::SequentialType
-                          | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::FileType
+               | QFileSystemMetaData::DirectoryType
+               | QFileSystemMetaData::BundleType
+               | QFileSystemMetaData::SequentialType
+               | QFileSystemMetaData::ExistsAttribute;
 
          entryFlags = QFileSystemMetaData::FileType
-                      | QFileSystemMetaData::ExistsAttribute;
+               | QFileSystemMetaData::ExistsAttribute;
 
          break;
 
@@ -342,6 +343,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
       default:
          clear();
    }
+
 #else
    (void) entry;
 
@@ -351,7 +353,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
 
 #endif
 
-//static
+// static method
 QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileSystemMetaData &metaData)
 {
 
@@ -360,6 +362,7 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
    return QFileSystemEngine::owner(entry, QAbstractFileEngine::OwnerUser);
 
 #else
+
    if (! metaData.hasFlags(QFileSystemMetaData::UserId)) {
       QFileSystemEngine::fillMetaData(entry, metaData, QFileSystemMetaData::UserId);
    }
@@ -368,7 +371,7 @@ QString QFileSystemEngine::resolveUserName(const QFileSystemEntry &entry, QFileS
 #endif
 }
 
-//static
+// static method
 QString QFileSystemEngine::resolveGroupName(const QFileSystemEntry &entry, QFileSystemMetaData &metaData)
 {
 

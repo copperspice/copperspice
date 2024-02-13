@@ -33,14 +33,13 @@
 class QFileSystemEngine
 {
  public:
-   static bool isCaseSensitive()
-    {
+   static bool isCaseSensitive() {
 #ifndef Q_OS_WIN
-        return true;
+      return true;
 #else
-        return false;
+      return false;
 #endif
-    }
+   }
 
    static QFileSystemEntry getLinkTarget(const QFileSystemEntry &link, QFileSystemMetaData &data);
    static QFileSystemEntry canonicalName(const QFileSystemEntry &entry, QFileSystemMetaData &data);
@@ -70,8 +69,8 @@ class QFileSystemEngine
 #endif
 
 #if defined(Q_OS_WIN)
-   static bool uncListSharesOnServer(const QString &server,QStringList *list);
-   static bool fillMetaData(int fd, QFileSystemMetaData &data,QFileSystemMetaData::MetaDataFlags what);
+   static bool uncListSharesOnServer(const QString &server, QStringList *list);
+   static bool fillMetaData(int fd, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
    static bool fillMetaData(HANDLE fHandle, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
    static bool fillPermissions(const QFileSystemEntry &entry, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what);
    static QString owner(const QFileSystemEntry &entry, QAbstractFileEngine::FileOwner own);
@@ -98,7 +97,7 @@ class QFileSystemEngine
    static bool setCurrentPath(const QFileSystemEntry &entry);
    static QFileSystemEntry currentPath();
 
-   static QAbstractFileEngine *resolveEntryAndCreateLegacyEngine(QFileSystemEntry &entry,QFileSystemMetaData &data);
+   static QAbstractFileEngine *resolveEntryAndCreateLegacyEngine(QFileSystemEntry &entry, QFileSystemMetaData &data);
 
  private:
    static QString slowCanonicalized(const QString &path);

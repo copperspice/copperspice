@@ -145,6 +145,7 @@ bool QLockFilePrivate::isApparentlyStale() const
          }
 
          const QString processName = processNameByPid(pid);
+
          if (! processName.isEmpty() && processName != appname) {
             return true;   // PID got reused by a different application.
          }
@@ -181,6 +182,7 @@ QString QLockFilePrivate::processNameByPid(qint64 pid)
    }
 
    i = name.lastIndexOf('.');
+
    if (i >= 0) {
       name.truncate(i);
    }

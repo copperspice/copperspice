@@ -137,7 +137,6 @@ void QPropertyAnimation::setPropertyName(const QString &propertyName)
    d->updateMetaProperty();
 }
 
-// reimp
 bool QPropertyAnimation::event(QEvent *event)
 {
    return QVariantAnimation::event(event);
@@ -149,14 +148,13 @@ void QPropertyAnimation::updateCurrentValue(const QVariant &value)
    d->updateProperty(value);
 }
 
-// reimp
 void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstractAnimation::State oldState)
 {
    Q_D(QPropertyAnimation);
 
    if (! d->target && oldState == Stopped) {
       qWarning("QPropertyAnimation::updateState() Changing state of an animation without a target, %s",
-               d->propertyName.constData());
+            d->propertyName.constData());
       return;
    }
 

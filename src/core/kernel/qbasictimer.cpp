@@ -31,13 +31,13 @@ void QBasicTimer::start(int msec, QObject *obj)
    QAbstractEventDispatcher *eventDispatcher = QAbstractEventDispatcher::instance();
 
    if (! eventDispatcher) {
-     qWarning("QBasicTimer::start() Timer can only be used within a QThread");
-     return;
+      qWarning("QBasicTimer::start() Timer can only be used within a QThread");
+      return;
    }
 
    if (obj && obj->thread() != eventDispatcher->thread()) {
-     qWarning("QBasicTimer::start() Unable to start a timer from another thread");
-     return;
+      qWarning("QBasicTimer::start() Unable to start a timer from another thread");
+      return;
    }
 
    if (id) {
@@ -70,8 +70,8 @@ void QBasicTimer::start(int msec, Qt::TimerType timerType, QObject *obj)
    }
 
    if (obj && obj->thread() != eventDispatcher->thread()) {
-     qWarning("QBasicTimer::start() Unable to start a timer from another thread");
-     return;
+      qWarning("QBasicTimer::start() Unable to start a timer from another thread");
+      return;
    }
 
    if (id) {

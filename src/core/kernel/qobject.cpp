@@ -168,9 +168,9 @@ bool QObject::check_parent_thread(QObject *parent, QThreadData *parentThreadData
             "(Parent is %s(%p), parent's thread is %s(%p), current thread is %s(%p)",
             csPrintable(parent->metaObject()->className()), static_cast<void *>(parent),
             parentThread ? csPrintable(parentThread->metaObject()->className()) : "QThread",
-               static_cast<void *>(parentThread),
+            static_cast<void *>(parentThread),
             currentThread ? csPrintable(currentThread->metaObject()->className()) : "QThread",
-               static_cast<void *>(currentThread) );
+            static_cast<void *>(currentThread));
 
       return false;
    }
@@ -233,6 +233,7 @@ bool QObject::connect(const QObject *sender, const QString8 &signalMethod, const
          qDebug("QObject::connect()  Class %s has method %s", csPrintable(senderMetaObject->className()),
                csPrintable(senderMetaObject->method(k).methodSignature()) );
       }
+
       qDebug("");
 #endif
 
@@ -531,7 +532,7 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetaM
 
       if (signalMetaMethod.methodType() != QMetaMethod::Signal) {
          qWarning("QObject::disconnect() Unable to disconnect %s::%s, is not a signal",
-                  csPrintable(sender->metaObject()->className()), csPrintable(signalMetaMethod.methodSignature()));
+               csPrintable(sender->metaObject()->className()), csPrintable(signalMetaMethod.methodSignature()));
          return false;
       }
    }
@@ -550,7 +551,7 @@ bool QObject::disconnect(const QObject *sender,   const QMetaMethod &signalMetaM
    // if signalMethod is not empty and signal_index is -1, then signal is not a member of sender
    if (signalMetaObject != nullptr && signal_index == -1) {
       qWarning("QObject::disconnect() Signal %s was not found in class %s",
-               csPrintable(signalMetaMethod.methodSignature()), csPrintable(sender->metaObject()->className()));
+            csPrintable(signalMetaMethod.methodSignature()), csPrintable(sender->metaObject()->className()));
       return false;
    }
 
@@ -921,7 +922,6 @@ QDebug operator<<(QDebug debug, const QObject *object)
 
       msg += ")";
 
-
    } else {
       msg = "QObject(nullptr) ";
 
@@ -929,7 +929,6 @@ QDebug operator<<(QDebug debug, const QObject *object)
 
    return debug << msg;
 }
-
 
 QObject *QObject::parent() const
 {
@@ -1160,8 +1159,8 @@ bool QObject::setProperty(const QString8 &name, const QVariant &value)
    QMetaProperty p = metaObj->property(index);
 
    if (! p.isWritable()) {
-      qWarning("%s::setProperty() Property \"%s\" is invalid, read only, or does not exist", csPrintable(metaObj->className()),
-                  csPrintable(name));
+      qWarning("%s::setProperty() Property \"%s\" is invalid, read only, or does not exist",
+            csPrintable(metaObj->className()), csPrintable(name));
    }
 
    bool retval = p.write(this, value);
@@ -1169,7 +1168,7 @@ bool QObject::setProperty(const QString8 &name, const QVariant &value)
    if (! retval) {
       qWarning("%s::setProperty() Set property \"%s\" failed. Passed value is of type %s, property is of type %s",
             csPrintable(metaObj->className()), csPrintable(name), csPrintable(value.typeName()),
-            csPrintable(p.typeName()) );
+            csPrintable(p.typeName()));
    }
 
    return retval;
@@ -1236,7 +1235,7 @@ int QObject::startTimer(int interval, Qt::TimerType timerType)
    }
 
    if (thread() != QThread::currentThread()) {
-       qWarning("QObject::startTimer() Timers can not be started from another thread");
+      qWarning("QObject::startTimer() Timers can not be started from another thread");
       return 0;
    }
 

@@ -26,10 +26,8 @@
 #include <qregularexpression.h>
 #include <qstring.h>
 
-/* TODO:
- * - isNameChar() doesn't have to be public, it's only needed in qdom.cpp
- *-- refactor fixedXmlName() to use isNCName()
- */
+// isNameChar() does not have to be public, only needed in qdom.cpp
+// refactor fixedXmlName() to use isNCName()
 
 class QXmlCharRange
 {
@@ -39,10 +37,6 @@ class QXmlCharRange
 };
 typedef const QXmlCharRange *RangeIter;
 
-/*!
-  Performs a binary search between \a begin and \a end inclusive, to check whether \a
-  c is contained. Remember that the QXmlCharRange instances must be in numeric order.
- */
 bool QXmlUtils::rangeContains(RangeIter begin, RangeIter end, const QChar c)
 {
    const ushort cp(c.unicode());
@@ -70,8 +64,10 @@ bool QXmlUtils::rangeContains(RangeIter begin, RangeIter end, const QChar c)
 
       if (mid->min > cp) {
          end = mid;
+
       } else if (mid->max < cp) {
          begin = mid;
+
       } else {
          return true;
       }
@@ -216,23 +212,23 @@ bool QXmlUtils::isLetter(const QChar c)
 bool QXmlUtils::isChar(const QChar c)
 {
    return (c.unicode() >= 0x0020 && c.unicode() <= 0xD7FF)
-          || c.unicode() == 0x0009
-          || c.unicode() == 0x000A
-          || c.unicode() == 0x000D
-          || (c.unicode() >= 0xE000 && c.unicode() <= 0xFFFD);
+         || c.unicode() == 0x0009
+         || c.unicode() == 0x000A
+         || c.unicode() == 0x000D
+         || (c.unicode() >= 0xE000 && c.unicode() <= 0xFFFD);
 }
 
 bool QXmlUtils::isNameChar(const QChar c)
 {
    return isBaseChar(c)
-          || isDigit(c)
-          || c.unicode() == '.'
-          || c.unicode() == '-'
-          || c.unicode() == '_'
-          || c.unicode() == ':'
-          || isCombiningChar(c)
-          || isIdeographic(c)
-          || isExtender(c);
+         || isDigit(c)
+         || c.unicode() == '.'
+         || c.unicode() == '-'
+         || c.unicode() == '_'
+         || c.unicode() == ':'
+         || isCombiningChar(c)
+         || isIdeographic(c)
+         || isExtender(c);
 }
 
 bool QXmlUtils::isPublicID(const QString &candidate)
@@ -271,6 +267,7 @@ bool QXmlUtils::isPublicID(const QString &candidate)
          case '_':
          case '%':
             continue;
+
          default:
             return false;
       }
@@ -302,6 +299,7 @@ bool QXmlUtils::isNCName(QStringView ncName)
    }
 
    const int len = ncName.size();
+
    for (int i = 0; i < len; ++i) {
       const QChar &at = ncName.at(i);
 
@@ -312,4 +310,3 @@ bool QXmlUtils::isNCName(QStringView ncName)
 
    return true;
 }
-

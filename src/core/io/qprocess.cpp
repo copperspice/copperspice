@@ -53,12 +53,15 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
    }
 
    QByteArray out;
+
    for (int i = 0; i < len && i < maxSize; ++i) {
       char c = data[i];
 
       if (isprint(c)) {
          out += c;
-      } else switch (c) {
+
+      } else {
+         switch (c) {
             case '\n':
                out += "\\n";
                break;
@@ -77,6 +80,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
                buf[4] = '\0';
                out += QByteArray(buf);
          }
+      }
    }
 
    if (len < maxSize) {
@@ -93,8 +97,8 @@ QStringList QProcessEnvironmentPrivate::toList() const
 {
    QStringList result;
 
-   Hash::const_iterator it  = hash.constBegin();
-   Hash::const_iterator end = hash.constEnd();
+   auto it  = hash.constBegin();
+   auto end = hash.constEnd();
 
    for ( ; it != end; ++it) {
       result << nameToString(it.key()) + QLatin1Char('=') + valueToString(it.value());
@@ -106,8 +110,9 @@ QStringList QProcessEnvironmentPrivate::toList() const
 QProcessEnvironment QProcessEnvironmentPrivate::fromList(const QStringList &list)
 {
    QProcessEnvironment env;
-   QStringList::const_iterator it  = list.constBegin();
-   QStringList::const_iterator end = list.constEnd();
+
+   auto it  = list.constBegin();
+   auto end = list.constEnd();
 
    for ( ; it != end; ++it) {
       int pos = it->indexOf('=', 1);
@@ -118,9 +123,11 @@ QProcessEnvironment QProcessEnvironmentPrivate::fromList(const QStringList &list
 
       QString value = it->mid(pos + 1);
       QString name  = *it;
+
       name.truncate(pos);
       env.insert(name, value);
    }
+
    return env;
 }
 
@@ -128,8 +135,8 @@ QStringList QProcessEnvironmentPrivate::keys() const
 {
    QStringList result;
 
-   Hash::const_iterator it = hash.constBegin();
-   Hash::const_iterator end = hash.constEnd();
+   auto it = hash.constBegin();
+   auto end = hash.constEnd();
 
    for ( ; it != end; ++it) {
       result << nameToString(it.key());
@@ -140,16 +147,16 @@ QStringList QProcessEnvironmentPrivate::keys() const
 
 void QProcessEnvironmentPrivate::insert(const QProcessEnvironmentPrivate &other)
 {
-   Hash::const_iterator it = other.hash.constBegin();
-   Hash::const_iterator end = other.hash.constEnd();
+   auto it = other.hash.constBegin();
+   auto end = other.hash.constEnd();
 
    for ( ; it != end; ++it) {
       hash.insert(it.key(), it.value());
    }
 
 #ifdef Q_OS_UNIX
-   QHash<QString, Key>::const_iterator nit  = other.nameMap.constBegin();
-   QHash<QString, Key>::const_iterator nend = other.nameMap.constEnd();
+   auto nit  = other.nameMap.constBegin();
+   auto nend = other.nameMap.constEnd();
 
    for ( ; nit != nend; ++nit) {
       nameMap.insert(nit.key(), nit.value());
@@ -245,7 +252,8 @@ QString QProcessEnvironment::value(const QString &name, const QString &defaultVa
    }
 
    QProcessEnvironmentPrivate::MutexLocker locker(d);
-   QProcessEnvironmentPrivate::Hash::const_iterator it = d->hash.constFind(d->prepareName(name));
+   auto it = d->hash.constFind(d->prepareName(name));
+
    if (it == d->hash.constEnd()) {
       return defaultValue;
    }
@@ -255,25 +263,27 @@ QString QProcessEnvironment::value(const QString &name, const QString &defaultVa
 
 QStringList QProcessEnvironment::toStringList() const
 {
-   if (!d) {
+   if (! d) {
       return QStringList();
    }
+
    QProcessEnvironmentPrivate::MutexLocker locker(d);
    return d->toList();
 }
 
 QStringList QProcessEnvironment::keys() const
 {
-   if (!d) {
+   if (! d) {
       return QStringList();
    }
+
    QProcessEnvironmentPrivate::MutexLocker locker(d);
    return d->keys();
 }
 
 void QProcessEnvironment::insert(const QProcessEnvironment &e)
 {
-   if (!e.d) {
+   if (! e.d) {
       return;
    }
 
@@ -356,6 +366,7 @@ void QProcessPrivate::cleanup()
    q_func()->setProcessState(QProcess::NotRunning);
 
 #ifdef Q_OS_WIN
+
    if (pid) {
       CloseHandle(pid->hThread);
       CloseHandle(pid->hProcess);
@@ -372,6 +383,7 @@ void QProcessPrivate::cleanup()
       delete processFinishedNotifier;
       processFinishedNotifier = nullptr;
    }
+
 #endif
 
 #ifdef Q_OS_WIN
@@ -414,9 +426,11 @@ void QProcessPrivate::cleanup()
    destroyPipe(childStartedPipe);
 
 #ifdef Q_OS_UNIX
+
    if (forkfd != -1) {
       qt_safe_close(forkfd);
    }
+
    forkfd = -1;
 #endif
 }
@@ -475,6 +489,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
    }
 
    qint64 available = bytesAvailableInChannel(channel);
+
    if (available == 0) {
       available = 1;   // always try to read at least one byte
    }
@@ -485,10 +500,12 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
    if (readBytes <= 0) {
       channel->buffer.chop(available);
    }
+
    if (readBytes == -2) {
       // EWOULDBLOCK
       return false;
    }
+
    if (readBytes == -1) {
       setErrorAndEmit(QProcess::ReadError);
 
@@ -515,7 +532,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
 
 #if defined QPROCESS_DEBUG
    qDebug("QProcessPrivate::tryReadFromChannel(%d), read %d bytes from the process' output", channel - &stdinChannel
-          int(readBytes));
+         int(readBytes));
 #endif
 
    if (channel->closed) {
@@ -534,6 +551,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
       }
    } else if ((processChannel == QProcess::StandardOutput) == isStdout) {
       didRead = true;
+
       if (!emittedReadyRead) {
          emittedReadyRead = true;
          emit q->readyRead();
@@ -597,12 +615,15 @@ bool QProcessPrivate::_q_processDied()
 #endif
 
 #ifdef Q_OS_UNIX
+
    if (! waitForDeadChild()) {
       return false;
    }
+
 #endif
 
 #ifdef Q_OS_WIN
+
    if (processFinishedNotifier) {
       processFinishedNotifier->setEnabled(false);
    }
@@ -626,6 +647,7 @@ bool QProcessPrivate::_q_processDied()
       // signals emitted below.
       return true;
    }
+
    dying = true;
 
    // in case there is data in the pipe line and this slot by chance
@@ -832,6 +854,7 @@ void QProcess::setReadChannel(ProcessChannel channel)
          }
       }
    }
+
    d->processChannel = channel;
 }
 
@@ -979,7 +1002,7 @@ qint64 QProcess::bytesAvailable() const
 
 #if defined QPROCESS_DEBUG
    qDebug("QProcess::bytesAvailable() == %i (%s)", readBuffer->size(),
-          (d->processChannel == QProcess::StandardError) ? "stderr" : "stdout");
+         (d->processChannel == QProcess::StandardError) ? "stderr" : "stdout");
 #endif
 
    return readBuffer->size() + QIODevice::bytesAvailable();
@@ -1122,18 +1145,6 @@ void QProcess::setProcessState(ProcessState state)
    emit stateChanged(state);
 }
 
-/*!
-  This function is called in the child process context just before the
-  program is executed on Unix or Mac OS X (i.e., after fork(), but before
-  execve()). Reimplement this function to do last minute initialization
-  of the child process. Example:
-
-  You cannot exit the process (by calling exit(), for instance) from
-  this function. If you need to stop the program before it starts
-  execution, your workaround is to emit finished() and then call exit().
-
-  Only called by QProcess on Unix and Mac OS X
-*/
 void QProcess::setupChildProcess()
 {
 }
@@ -1200,25 +1211,34 @@ qint64 QProcess::writeData(const char *data, qint64 len)
    }
 
 #if defined(Q_OS_WIN)
+
    if (! d->stdinWriteTrigger) {
       d->stdinWriteTrigger = new QTimer;
       d->stdinWriteTrigger->setSingleShot(true);
 
-      connect(d->stdinWriteTrigger, &QTimer::timeout, this, [d]() {d->_q_canWrite(); } );
+      connect(d->stdinWriteTrigger, &QTimer::timeout, this,
+         [d]() {
+            d->_q_canWrite();
+         } );
    }
+
 #endif
 
    if (len == 1) {
       d->stdinChannel.buffer.putChar(*data);
 
 #ifdef Q_OS_WIN
+
       if (! d->stdinWriteTrigger->isActive()) {
          d->stdinWriteTrigger->start();
       }
+
 #else
+
       if (d->stdinChannel.notifier) {
          d->stdinChannel.notifier->setEnabled(true);
       }
+
 #endif
 
       return 1;
@@ -1228,19 +1248,22 @@ qint64 QProcess::writeData(const char *data, qint64 len)
    memcpy(dest, data, len);
 
 #ifdef Q_OS_WIN
-   if (!d->stdinWriteTrigger->isActive()) {
+
+   if (! d->stdinWriteTrigger->isActive()) {
       d->stdinWriteTrigger->start();
    }
 
 #else
+
    if (d->stdinChannel.notifier) {
       d->stdinChannel.notifier->setEnabled(true);
    }
+
 #endif
 
 #if defined QPROCESS_DEBUG
    qDebug("QProcess::writeData(%p \"%s\", %lld) == %lld (written to buffer)",
-          data, qt_prettyDebug(data, len, 16).constData(), len, len);
+         data, qt_prettyDebug(data, len, 16).constData(), len, len);
 #endif
 
    return len;
@@ -1335,7 +1358,7 @@ void QProcessPrivate::start(QIODevice::OpenMode mode)
 
    if (stdoutChannel.type != QProcessPrivate::Channel::Normal &&
          (stderrChannel.type != QProcessPrivate::Channel::Normal ||
-          processChannelMode == QProcess::MergedChannels)) {
+               processChannelMode == QProcess::MergedChannels)) {
       mode &= ~QIODevice::ReadOnly;   // not open for reading
    }
 
@@ -1343,22 +1366,22 @@ void QProcessPrivate::start(QIODevice::OpenMode mode)
       mode = QIODevice::Unbuffered;
    }
 
-
    if ((mode & QIODevice::ReadOnly) == 0) {
       if (stdoutChannel.type == QProcessPrivate::Channel::Normal) {
          q->setStandardOutputFile(q->nullDevice());
       }
+
       if (stderrChannel.type == QProcessPrivate::Channel::Normal
             && processChannelMode != QProcess::MergedChannels) {
          q->setStandardErrorFile(q->nullDevice());
       }
    }
+
    q->QIODevice::open(mode);
 
    stdinChannel.closed = false;
    stdoutChannel.closed = false;
    stderrChannel.closed = false;
-
 
    exitCode = 0;
    exitStatus = QProcess::NormalExit;
@@ -1387,6 +1410,7 @@ static QStringList parseCombinedArgString(const QString &program)
             quoteCount = 0;
             tmp += program.at(i);
          }
+
          continue;
       }
 
@@ -1394,6 +1418,7 @@ static QStringList parseCombinedArgString(const QString &program)
          if (quoteCount == 1) {
             inQuote = !inQuote;
          }
+
          quoteCount = 0;
       }
 
@@ -1441,10 +1466,12 @@ QString QProcess::program() const
 void QProcess::setProgram(const QString &program)
 {
    Q_D(QProcess);
+
    if (d->processState != NotRunning) {
       qWarning("QProcess::setProgram() Process is already running");
       return;
    }
+
    d->program = program;
 }
 
@@ -1517,7 +1544,7 @@ int QProcess::execute(const QString &program)
 }
 
 bool QProcess::startDetached(const QString &program, const QStringList &arguments,
-         const QString &workingDirectory, qint64 *pid)
+      const QString &workingDirectory, qint64 *pid)
 {
    return QProcessPrivate::startDetached(program, arguments, workingDirectory, pid);
 }

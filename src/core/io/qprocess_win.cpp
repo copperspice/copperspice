@@ -23,20 +23,20 @@
 
 #include <qprocess.h>
 
-#include <qdebug.h>
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qdir.h>
 #include <qelapsedtimer.h>
 #include <qfileinfo.h>
 #include <qmutex.h>
 #include <qregularexpression.h>
-#include <qtimer.h>
 #include <qthread.h>
+#include <qtimer.h>
 #include <qwaitcondition.h>
 #include <qwineventnotifier.h>
 
-#include <qprocess_p.h>
 #include <qfsfileengine_p.h>
+#include <qprocess_p.h>
 #include <qsystemlibrary_p.h>
 #include <qthread_p.h>
 #include <qwindowspipereader_p.h>
@@ -63,7 +63,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
    wchar_t pipeName[256];
    unsigned int attempts = 1000;
 
-    while (true) {
+   while (true) {
       _snwprintf(pipeName, sizeof(pipeName) / sizeof(pipeName[0]), L"\\\\.\\pipe\\qt-%X", qrand());
 
       DWORD dwOpenMode = FILE_FLAG_OVERLAPPED;
@@ -81,24 +81,21 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
       }
 
       DWORD dwPipeFlags = PIPE_TYPE_BYTE | PIPE_WAIT;
+
       if (QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA) {
          dwPipeFlags |= PIPE_REJECT_REMOTE_CLIENTS;
       }
 
-      hServer = CreateNamedPipe(pipeName,
-                                dwOpenMode,
-                                dwPipeFlags,
-                                1,                      // only one pipe instance
-                                dwOutputBufferSize,
-                                dwInputBufferSize,
-                                0,
-                                &secAtt);
+      // only one pipe instance
+      hServer = CreateNamedPipe(pipeName, dwOpenMode, dwPipeFlags, 1, dwOutputBufferSize, dwInputBufferSize, 0, &secAtt);
+
       if (hServer != INVALID_HANDLE_VALUE) {
          break;
       }
 
       DWORD dwError = GetLastError();
-      if (dwError != ERROR_PIPE_BUSY || !--attempts) {
+
+      if (dwError != ERROR_PIPE_BUSY || ! --attempts) {
          qErrnoWarning(dwError, "QProcess: CreateNamedPipe failed.");
          return;
       }
@@ -106,16 +103,11 @@ static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
 
    secAtt.bInheritHandle = TRUE;
    const HANDLE hClient = CreateFile(pipeName,
-                                     (isInputPipe ? (GENERIC_READ | FILE_WRITE_ATTRIBUTES)
-                                      : GENERIC_WRITE),
-                                     0,
-                                     &secAtt,
-                                     OPEN_EXISTING,
-                                     FILE_FLAG_OVERLAPPED,
-                                     nullptr);
+         (isInputPipe ? (GENERIC_READ | FILE_WRITE_ATTRIBUTES) : GENERIC_WRITE), 0,
+         &secAtt, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, nullptr);
 
    if (hClient == INVALID_HANDLE_VALUE) {
-      qErrnoWarning("QProcess: CreateFile failed.");
+      qErrnoWarning("QProcess: CreateFile failed");
       CloseHandle(hServer);
       return;
    }
@@ -145,11 +137,11 @@ bool QProcessPrivate::openChannel(Channel &channel)
 
    if (&channel == &stderrChannel && processChannelMode == QProcess::MergedChannels) {
       return DuplicateHandle(GetCurrentProcess(), stdoutChannel.pipe[1], GetCurrentProcess(),
-                             &stderrChannel.pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS);
+            &stderrChannel.pipe[1], 0, TRUE, DUPLICATE_SAME_ACCESS);
    }
 
    if (channel.type == Channel::Normal) {
-      // we're piping this channel to our own process
+      // piping this channel to our own process
       if (&channel == &stdinChannel) {
          if (inputChannelMode != QProcess::ForwardedInputChannel) {
             qt_create_pipe(channel.pipe, true);
@@ -160,7 +152,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
             HANDLE hCurrentProcess = GetCurrentProcess();
 
             DuplicateHandle(hCurrentProcess, hStdReadChannel, hCurrentProcess,
-                            &channel.pipe[0], 0, TRUE, DUPLICATE_SAME_ACCESS);
+                  &channel.pipe[0], 0, TRUE, DUPLICATE_SAME_ACCESS);
          }
 
       } else {
@@ -177,7 +169,7 @@ bool QProcessPrivate::openChannel(Channel &channel)
 
          } else {
             if (processChannelMode != QProcess::ForwardedChannels && processChannelMode !=
-                     QProcess::ForwardedErrorChannel) {
+                  QProcess::ForwardedErrorChannel) {
 
                if (! stderrChannel.reader) {
                   stderrChannel.reader = new QWindowsPipeReader(q);
@@ -208,8 +200,8 @@ bool QProcessPrivate::openChannel(Channel &channel)
          // try to open in read-only mode
          channel.pipe[1] = INVALID_Q_PIPE;
          channel.pipe[0] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
-                  GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
-                  OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+               GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
+               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
          if (channel.pipe[0] != INVALID_Q_PIPE) {
             return true;
@@ -221,13 +213,14 @@ bool QProcessPrivate::openChannel(Channel &channel)
          // open in write mode
          channel.pipe[0] = INVALID_Q_PIPE;
          channel.pipe[1] = CreateFile(&QFSFileEnginePrivate::longFileName(channel.file).toStdWString()[0],
-                  GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
-                  channel.append ? OPEN_ALWAYS : CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+               GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &secAtt,
+               channel.append ? OPEN_ALWAYS : CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 
          if (channel.pipe[1] != INVALID_Q_PIPE) {
             if (channel.append) {
                SetFilePointer(channel.pipe[1], 0, nullptr, FILE_END);
             }
+
             return true;
          }
 
@@ -266,8 +259,8 @@ bool QProcessPrivate::openChannel(Channel &channel)
          Q_ASSERT(source == &stdoutChannel);
          Q_ASSERT(sink->process == this && sink->type == Channel::PipeSink);
 
-         qt_create_pipe(source->pipe, /* in = */ false); // source is stdout
-         sink->pipe[0] = source->pipe[0];
+         qt_create_pipe(source->pipe, false); // source is stdout
+         sink->pipe[0]   = source->pipe[0];
          source->pipe[0] = INVALID_Q_PIPE;
 
          return true;
@@ -275,11 +268,10 @@ bool QProcessPrivate::openChannel(Channel &channel)
       } else {
          // we are the sink;
          source = &channel.process->stdoutChannel;
-         sink = &channel;
+         sink   = &channel;
 
          if (sink->pipe[0] != INVALID_Q_PIPE) {
-            // already constructed by the source
-            // make it inheritable
+            // already constructed by the source, make it inheritable
             HANDLE tmpHandle = sink->pipe[0];
 
             if (! DuplicateHandle(GetCurrentProcess(), tmpHandle, GetCurrentProcess(),
@@ -361,6 +353,7 @@ static QString qt_create_commandline(const QString &program, const QStringList &
          // rather use "foo"\ than "foo\"
 
          int i = tmp.length();
+
          while (i > 0 && tmp.at(i - 1) == '\\') {
             --i;
          }
@@ -393,6 +386,7 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
             QString value = QString::fromStdWString(std::wstring(equal + 1, entryLen - nameLen - 1));
             env.d->hash.insert(QProcessEnvironmentPrivate::Key(name), value);
          }
+
          entry += entryLen + 1;
       }
 
@@ -412,10 +406,10 @@ static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &
       // add PATH if necessary (for DLL loading)
       QProcessEnvironmentPrivate::Key pathKey("PATH");
 
-      if (!copy.contains(pathKey)) {
+      if (! copy.contains(pathKey)) {
          QByteArray path = qgetenv("PATH");
 
-         if (!path.isEmpty()) {
+         if (! path.isEmpty()) {
             copy.insert(pathKey, QString::fromUtf8(path));
          }
       }
@@ -524,13 +518,13 @@ void QProcessPrivate::startProcess()
    dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
 
    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), nullptr, nullptr, nullptr,
-                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                  0, 0, 0, STARTF_USESTDHANDLES, 0, 0, nullptr, stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1]};
+         (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+         0, 0, 0, STARTF_USESTDHANDLES, 0, 0, nullptr, stdinChannel.pipe[0], stdoutChannel.pipe[1], stderrChannel.pipe[1] };
 
    success = CreateProcess(nullptr, &args.toStdWString()[0], nullptr, nullptr, TRUE, dwCreationFlags,
-                  environment.isEmpty() ? nullptr : envlist.data(),
-                  workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0],
-                  &startupInfo, pid);
+         environment.isEmpty() ? nullptr : envlist.data(),
+         workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0],
+         &startupInfo, pid);
 
    QString errorString;
 
@@ -671,6 +665,7 @@ bool QProcessPrivate::drainOutputPipes()
       }
 
       someReadyReadEmitted |= readyReadEmitted;
+
       if (! readOperationActive || !readyReadEmitted) {
          break;
       }
@@ -705,17 +700,21 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
 
       if (WaitForSingleObjectEx(pid->hProcess, 0, false) == WAIT_OBJECT_0) {
          bool readyReadEmitted = drainOutputPipes();
+
          if (pid) {
             _q_processDied();
          }
+
          return readyReadEmitted;
       }
 
       Sleep(timer.nextSleepTime());
+
       if (timer.hasTimedOut()) {
          break;
       }
    }
+
    setError(QProcess::Timedout);
    return false;
 }
@@ -750,29 +749,26 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
       // already written the data, or if it manages to write data
       // within the given timeout. If the write buffer was non-empty
       // and the pipeWriter is now dead, that means _q_canWrite()
-      // destroyed the writer after it successfully wrote the last
-      // batch.
+      // destroyed the writer after it successfully wrote the last batch.
 
-      if (!stdinChannel.writer || stdinChannel.writer->waitForWrite(0)) {
+      if (! stdinChannel.writer || stdinChannel.writer->waitForWrite(0)) {
          return true;
       }
 
-      // If we wouldn't write anything, check if we can read stdout.
-      if (stdoutChannel.pipe[0] != INVALID_Q_PIPE
-            && bytesAvailableInChannel(&stdoutChannel) != 0) {
+      // check if we can read stdout
+      if (stdoutChannel.pipe[0] != INVALID_Q_PIPE && bytesAvailableInChannel(&stdoutChannel) != 0) {
          tryReadFromChannel(&stdoutChannel);
          timer.resetIncrements();
       }
 
       // Check if we can read stderr.
-      if (stderrChannel.pipe[0] != INVALID_Q_PIPE
-            && bytesAvailableInChannel(&stderrChannel) != 0) {
+      if (stderrChannel.pipe[0] != INVALID_Q_PIPE && bytesAvailableInChannel(&stderrChannel) != 0) {
          tryReadFromChannel(&stderrChannel);
          timer.resetIncrements();
       }
 
       // Check if the process died while reading.
-      if (!pid) {
+      if (! pid) {
          return false;
       }
 
@@ -801,7 +797,7 @@ bool QProcessPrivate::waitForFinished(int msecs)
 
    QIncrementalSleepTimer timer(msecs);
 
-    while (true) {
+   while (true) {
       if (! stdinChannel.buffer.isEmpty() && !_q_canWrite()) {
          return false;
       }
@@ -829,6 +825,7 @@ bool QProcessPrivate::waitForFinished(int msecs)
          if (pid) {
             _q_processDied();
          }
+
          return true;
       }
 
@@ -849,9 +846,10 @@ void QProcessPrivate::findExitCode()
 
    if (GetExitCodeProcess(pid->hProcess, &theExitCode)) {
       exitCode = theExitCode;
-      //### for now we assume a crash if exit code is less than -1 or the magic number
-      crashed = (exitCode == 0xf291   // our magic number, see killProcess
-                 || (theExitCode >= 0x80000000 && theExitCode < 0xD0000000));
+      // for now we assume a crash if exit code is less than -1 or the magic number
+      // our magic number, see killProcess
+
+      crashed = (exitCode == 0xf291 || (theExitCode >= 0x80000000 && theExitCode < 0xD0000000));
    }
 }
 
@@ -871,13 +869,13 @@ bool QProcessPrivate::writeToStdin()
 {
    Q_Q(QProcess);
 
-   if (!stdinChannel.writer) {
+   if (! stdinChannel.writer) {
       stdinChannel.writer = new QWindowsPipeWriter(stdinChannel.pipe[1], q);
 
       QObject::connect(stdinChannel.writer, &QWindowsPipeWriter::bytesWritten, q, &QProcess::bytesWritten);
-      QObject::connect(stdinChannel.writer, &QWindowsPipeWriter::canWrite, q, [this]() {
-         this->_q_canWrite();
-      } );
+
+      QObject::connect(stdinChannel.writer, &QWindowsPipeWriter::canWrite, q,
+            [this]() { this->_q_canWrite(); } );
 
    } else {
       if (stdinChannel.writer->isWriteOperationActive()) {
@@ -891,8 +889,7 @@ bool QProcessPrivate::writeToStdin()
 
 bool QProcessPrivate::waitForWrite(int msecs)
 {
-
-   if (!stdinChannel.writer || stdinChannel.writer->waitForWrite(msecs)) {
+   if (! stdinChannel.writer || stdinChannel.writer->waitForWrite(msecs)) {
       return true;
    }
 
@@ -907,9 +904,9 @@ static bool startDetachedUacPrompt(const QString &programIn, const QStringList &
    typedef BOOL (WINAPI * ShellExecuteExType)(SHELLEXECUTEINFOW *);
 
    static const ShellExecuteExType shellExecuteEx = // XP ServicePack 1 onwards.
-      reinterpret_cast<ShellExecuteExType>(QSystemLibrary::resolve("shell32", "ShellExecuteExW"));
+         reinterpret_cast<ShellExecuteExType>(QSystemLibrary::resolve("shell32", "ShellExecuteExW"));
 
-   if (!shellExecuteEx) {
+   if (! shellExecuteEx) {
       return false;
    }
 
@@ -927,12 +924,14 @@ static bool startDetachedUacPrompt(const QString &programIn, const QStringList &
    shellExecuteExInfo.lpFile = reinterpret_cast<LPCWSTR>(&tmp_program[0]);
 
    std::wstring tmp_args;
+
    if (! args.isEmpty()) {
       tmp_args = args.toStdWString();
       shellExecuteExInfo.lpParameters = reinterpret_cast<LPCWSTR>(&tmp_args[0]);
    }
 
    std::wstring tmp_dir;
+
    if (! workingDir.isEmpty()) {
       tmp_dir = workingDir.toStdWString();
       shellExecuteExInfo.lpDirectory = reinterpret_cast<LPCWSTR>(&tmp_dir[0]);
@@ -962,12 +961,12 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
    PROCESS_INFORMATION pinfo;
 
    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), nullptr, nullptr, nullptr,
-                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
-                  0, 0, 0, 0, 0, 0, nullptr, nullptr, nullptr, nullptr};
+         (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+         0, 0, 0, 0, 0, 0, nullptr, nullptr, nullptr, nullptr};
 
    success = CreateProcess(nullptr, &args.toStdWString()[0], nullptr, nullptr,
-                  FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, nullptr,
-                  workingDir.isEmpty() ? nullptr : &workingDir.toStdWString()[0], &startupInfo, &pinfo);
+         FALSE, CREATE_UNICODE_ENVIRONMENT | CREATE_NEW_CONSOLE, nullptr,
+         workingDir.isEmpty() ? nullptr : &workingDir.toStdWString()[0], &startupInfo, &pinfo);
 
    if (success) {
       CloseHandle(pinfo.hThread);

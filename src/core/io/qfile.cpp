@@ -219,11 +219,6 @@ QString QFile::readLink() const
    return d->engine()->fileName(QAbstractFileEngine::LinkName);
 }
 
-/*!
-    \obsolete
-
-    Use symLinkTarget() instead.
-*/
 QString QFile::readLink(const QString &fileName)
 {
    return QFileInfo(fileName).readLink();
@@ -240,61 +235,45 @@ bool QFile::remove()
 
    unsetError();
    close();
+
    if (error() == QFile::NoError) {
       if (d->engine()->remove()) {
          unsetError();
          return true;
       }
+
       d->setError(QFile::RemoveError, d->fileEngine->errorString());
    }
 
    return false;
 }
 
-/*!
-    \overload
 
-    Removes the file specified by the \a fileName given.
-
-    Returns true if successful; otherwise returns false.
-
-    \sa remove()
-*/
-
-bool
-QFile::remove(const QString &fileName)
+bool QFile::remove(const QString &fileName)
 {
    return QFile(fileName).remove();
 }
 
-/*!
-    Renames the file currently specified by fileName() to \a newName.
-    Returns true if successful; otherwise returns false.
 
-    If a file with the name \a newName already exists, rename() returns false
-    (i.e., QFile will not overwrite it).
-
-    The file is closed before it is renamed.
-
-    \sa setFileName()
-*/
-
-bool
-QFile::rename(const QString &newName)
+bool QFile::rename(const QString &newName)
 {
    Q_D(QFile);
+
    if (d->fileName.isEmpty()) {
       qWarning("QFile::rename() File name can not be empty");
       return false;
    }
+
    if (d->fileName == newName) {
       d->setError(QFile::RenameError, tr("Destination file is the same file."));
       return false;
    }
+
    if (!exists()) {
       d->setError(QFile::RenameError, tr("Source file does not exist."));
       return false;
    }
+
    // If the file exists and it is a case-changing rename ("foo" -> "Foo"),
    // compare Ids to make sure it really is a different file.
    if (QFile::exists(newName)) {
@@ -306,15 +285,18 @@ QFile::rename(const QString &newName)
          d->setError(QFile::RenameError, tr("Destination file exists"));
          return false;
       }
+
 #ifdef Q_OS_LINUX
       // rename() on Linux simply does nothing when renaming "foo" to "Foo" on a case-insensitive
       // FS, such as FAT32. Move the file away and rename in 2 steps to work around.
       QTemporaryFile tempFile(d->fileName + QString(".XXXXXX"));
       tempFile.setAutoRemove(false);
+
       if (!tempFile.open(QIODevice::ReadWrite)) {
          d->setError(QFile::RenameError, tempFile.errorString());
          return false;
       }
+
       tempFile.close();
 
       if (!d->fileEngine->rename(tempFile.fileName())) {
@@ -333,14 +315,16 @@ QFile::rename(const QString &newName)
 
       if (!tempFile.rename(d->fileName)) {
          d->setError(QFile::RenameError, errorString() + '\n' + tr("Unable to restore from %1: %2")
-                  .formatArgs(QDir::toNativeSeparators(tempFile.fileName()), tempFile.errorString()));
+               .formatArgs(QDir::toNativeSeparators(tempFile.fileName()), tempFile.errorString()));
       }
 
       return false;
 #endif
    }
+
    unsetError();
    close();
+
    if (error() == QFile::NoError) {
       if (d->engine()->rename(newName)) {
          unsetError();
@@ -356,6 +340,7 @@ QFile::rename(const QString &newName)
       }
 
       QFile out(newName);
+
       if (open(QIODevice::ReadOnly)) {
          if (out.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             bool error = false;
@@ -369,16 +354,19 @@ QFile::rename(const QString &newName)
                   break;
                }
             }
+
             if (bytes == -1) {
                d->setError(QFile::RenameError, errorString());
                error = true;
             }
+
             if (!error) {
                if (!remove()) {
                   d->setError(QFile::RenameError, tr("Can not remove source file"));
                   error = true;
                }
             }
+
             if (error) {
                out.remove();
             } else {
@@ -387,82 +375,47 @@ QFile::rename(const QString &newName)
                unsetError();
                setFileName(newName);
             }
+
             close();
             return !error;
          }
+
          close();
       }
+
       d->setError(QFile::RenameError, out.isOpen() ? errorString() : out.errorString());
    }
+
    return false;
 }
 
-/*!
-    \overload
-
-    Renames the file \a oldName to \a newName. Returns true if
-    successful; otherwise returns false.
-
-    If a file with the name \a newName already exists, rename() returns false
-    (i.e., QFile will not overwrite it).
-
-    \sa rename()
-*/
-
-bool
-QFile::rename(const QString &oldName, const QString &newName)
+bool QFile::rename(const QString &oldName, const QString &newName)
 {
    return QFile(oldName).rename(newName);
 }
 
-/*!
 
-    Creates a link named \a linkName that points to the file currently specified by
-    fileName().  What a link is depends on the underlying filesystem (be it a
-    shortcut on Windows or a symbolic link on Unix). Returns true if successful;
-    otherwise returns false.
-
-    This function will not overwrite an already existing entity in the file system;
-    in this case, \c link() will return false and set \l{QFile::}{error()} to
-    return \l{QFile::}{RenameError}.
-
-    \note To create a valid link on Windows, \a linkName must have a \c{.lnk} file extension.
-
-    \note Symbian filesystem does not support links.
-
-    \sa setFileName()
-*/
-
-bool
-QFile::link(const QString &linkName)
+bool QFile::link(const QString &linkName)
 {
    Q_D(QFile);
+
    if (d->fileName.isEmpty()) {
       qWarning("QFile::link() File name can not be empty");
       return false;
    }
+
    QFileInfo fi(linkName);
+
    if (d->engine()->link(fi.absoluteFilePath())) {
       unsetError();
       return true;
    }
+
    d->setError(QFile::RenameError, d->fileEngine->errorString());
    return false;
 }
 
-/*!
-    \overload
-
-    Creates a link named \a linkName that points to the file \a fileName. What a link is
-    depends on the underlying filesystem (be it a shortcut on Windows
-    or a symbolic link on Unix). Returns true if successful; otherwise
-    returns false.
-
-    \sa link()
-*/
-
-bool
-QFile::link(const QString &fileName, const QString &linkName)
+bool QFile::link(const QString &fileName, const QString &linkName)
 {
    return QFile(fileName).link(linkName);
 }
@@ -509,8 +462,10 @@ bool QFile::copy(const QString &newName)
             if (! out.open(QIODevice::ReadWrite)) {
                error = true;
             }
+
 #else
             QTemporaryFile out(fileTemplate.formatArg(QFileInfo(newName).path()));
+
             if (! out.open()) {
                out.setFileTemplate(fileTemplate.formatArg(QDir::tempPath()));
 
@@ -518,7 +473,9 @@ bool QFile::copy(const QString &newName)
                   error = true;
                }
             }
+
 #endif
+
             if (error) {
                out.close();
                close();
@@ -530,10 +487,13 @@ bool QFile::copy(const QString &newName)
 
                while (!atEnd()) {
                   qint64 in = read(block, sizeof(block));
+
                   if (in <= 0) {
                      break;
                   }
+
                   totalRead += in;
+
                   if (in != out.write(block, in)) {
                      close();
                      d->setError(QFile::CopyError, tr("Failure to write block"));
@@ -554,17 +514,22 @@ bool QFile::copy(const QString &newName)
                }
 
 #ifdef QT_NO_TEMPORARYFILE
+
                if (error) {
                   out.remove();
                }
+
 #else
+
                if (!error) {
                   out.setAutoRemove(false);
                }
+
 #endif
             }
          }
-         if (!error) {
+
+         if (! error) {
             QFile::setPermissions(newName, permissions());
             close();
             unsetError();
@@ -572,6 +537,7 @@ bool QFile::copy(const QString &newName)
          }
       }
    }
+
    return false;
 }
 
@@ -594,6 +560,7 @@ bool QFile::open(OpenMode mode)
    }
 
    unsetError();
+
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
       qWarning("QIODevice::open() Read/Write file access was not specified");
       return false;
@@ -625,30 +592,39 @@ bool QFile::open(OpenMode mode)
 bool QFile::open(FILE *fh, OpenMode mode, FileHandleFlags handleFlags)
 {
    Q_D(QFile);
+
    if (isOpen()) {
       qWarning("QFile::open() File (%s) already open", csPrintable(fileName()));
       return false;
    }
+
    if (mode & Append) {
       mode |= WriteOnly;
    }
+
    unsetError();
+
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
       qWarning("QFile::open() Read/Write file access was not specified");
       return false;
    }
+
    if (d->openExternalFile(mode, fh, handleFlags)) {
       QIODevice::open(mode);
+
       if (mode & Append) {
          seek(size());
       } else {
          qint64 pos = (qint64)QT_FTELL(fh);
+
          if (pos != -1) {
             seek(pos);
          }
       }
+
       return true;
    }
+
    return false;
 }
 
@@ -666,6 +642,7 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
    }
 
    unsetError();
+
    if ((mode & (ReadOnly | WriteOnly)) == 0) {
       qWarning("QFile::open() Read/Write file access was not specified");
       return false;
@@ -679,10 +656,12 @@ bool QFile::open(int fd, OpenMode mode, FileHandleFlags handleFlags)
 
       } else {
          qint64 pos = (qint64)QT_LSEEK(fd, QT_OFF_T(0), SEEK_CUR);
+
          if (pos != -1) {
             seek(pos);
          }
       }
+
       return true;
    }
 

@@ -182,7 +182,7 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
 
       } else if (! (metaObj->method(slotIndex).attributes() & QMetaMethod::Cloned)) {
          qWarning("QMetaObject::connectSlotsByName() No matching signal for: %s::%s",
-                  csPrintable(metaObj->className()), csPrintable(slotName));
+               csPrintable(metaObj->className()), csPrintable(slotName));
 
       }
    }
@@ -379,9 +379,9 @@ int QMetaObject::indexOfSlot(const QString &slot) const
 }
 
 // internal method wrapping the global enum map
-QMap<std::type_index, std::pair<QMetaObject *, QString> > &QMetaObject::m_enumsAll()
+QMap<std::type_index, std::pair<QMetaObject *, QString>> &QMetaObject::m_enumsAll()
 {
-   static QMap<std::type_index, std::pair<QMetaObject *, QString> > enums_All;
+   static QMap<std::type_index, std::pair<QMetaObject *, QString>> enums_All;
    return enums_All;
 }
 
@@ -509,9 +509,8 @@ QMetaProperty QMetaObject::userProperty() const
    return retval;
 }
 
-// ***************
-
-std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::getSignatures(const QString &fullName)
+// **
+std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::getSignatures(const QString &fullName)
 {
    try {
 
@@ -534,8 +533,8 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
             }
 
          } else if (letter == '*' || letter == '&' || letter == '=' || letter == ',' ||
-                    letter == '[' || letter == ']' || letter == '(' || letter == ')' ||
-                    letter == '{' || letter == '}' || letter == '<' || letter == '>'  )   {
+               letter == '[' || letter == ']' || letter == '(' || letter == ')' ||
+               letter == '{' || letter == '}' || letter == '<' || letter == '>'  )   {
 
             // store the token
             if (! item.isEmpty()) {
@@ -592,7 +591,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
             --parenLevel;
 
          }
-
 
          // B
          if (word == "const")  {
@@ -721,7 +719,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
 
       returnType = typeReturn;
 
-
       // part 3 parse method name
       if (tokens[index] == "explicit")  {
          // discard
@@ -729,7 +726,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
       }
 
       QString signature = tokens[index++];
-
 
       // part 4, parse signature from tokens
       QString typeArg;
@@ -1022,10 +1018,8 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                break;
             }
 
-
             // C save var name
             word = tokens[k];
-
 
             // D
             if (found_funcPtrVar) {
@@ -1040,7 +1034,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
                paramNames.push_back(word);
                ++k;
             }
-
 
             // E next token could be equal, close paren, comma, left square bracket(array), or Zero
             int parenLevel_2 = 0;
@@ -1105,7 +1098,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
             }
          }
 
-
          if (k < tokens.size()) {
             signature += tokens[k];
          }
@@ -1134,7 +1126,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString> > QMetaObject::ge
    }
 }
 
-
 // **
 QString QMetaObject::getType(const QString &fullName)
 {
@@ -1153,8 +1144,8 @@ QString QMetaObject::getType(const QString &fullName)
          }
 
       } else if (letter == '*' || letter == '&' || letter == '=' || letter == ',' ||
-                 letter == '[' || letter == ']' || letter == '(' || letter == ')' ||
-                 letter == '{' || letter == '}' || letter == '<' || letter == '>'  )   {
+            letter == '[' || letter == ']' || letter == '(' || letter == ')' ||
+            letter == '{' || letter == '}' || letter == '<' || letter == '>'  )   {
 
          // store the token
          if (! item.isEmpty()) {
@@ -1174,7 +1165,6 @@ QString QMetaObject::getType(const QString &fullName)
    if (! item.isEmpty()) {
       tokens.append(item);
    }
-
 
    // part 2, parse return type from tokens
    int index = 0;
@@ -1213,7 +1203,6 @@ QString QMetaObject::getType(const QString &fullName)
          --parenLevel;
 
       }
-
 
       // B
       if (word == "const")  {
@@ -1355,7 +1344,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
          }
 
       } else if (letter == '&' || letter == '|' || letter == '<' || letter == '~' ||
-                 letter == '(' || letter == ')' )   {
+            letter == '(' || letter == ')' ) {
 
          if (! item.isEmpty()) {
             // store the token
@@ -1386,7 +1375,6 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
       tokens.append(item);
    }
 
-
    // part 2, convert to rpn
    int tokensSize = tokens.size();
    int index = 0;
@@ -1413,7 +1401,6 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
    tokens.clear();
    tokens.append(vList);
    tokens.append(opList);
-
 
    // part 3, decipher tokens from word
    bool ok;
@@ -1512,7 +1499,6 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
          }
       }
 
-
       // B
       if (word  == "|")  {
          if (valueStack.size() < 2) {
@@ -1522,7 +1508,6 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
          int right = valueStack.takeLast();
          int left  = valueStack.takeLast();
          valueStack.append(left | right);
-
 
       } else if (word  == "<<")  {
          if (valueStack.size() < 2) {
@@ -1553,7 +1538,7 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
    return retval;
 }
 
-// ** internal
+// internal
 void QMetaObject_X::register_classInfo(const QString &name, const QString &value)
 {
    if (name.isEmpty()) {
@@ -1778,7 +1763,7 @@ void QMetaObject_X::register_enum_data(const QString &args)
 
       }
 
-     ++iter;
+      ++iter;
 
       // may not handle enum class
       if (word == "enum") {
@@ -1853,7 +1838,6 @@ void QMetaObject_X::register_enum_data(const QString &args)
       ++iter;
    }
 
-
    // 3 look up enumName to test if it has a flag
    std::vector<QString> tmpName;
    tmpName.push_back(enumName);
@@ -1865,7 +1849,6 @@ void QMetaObject_X::register_enum_data(const QString &args)
       tmpName.push_back(iter_flag.value());
       ++iter_flag;
    }
-
 
    // for each enum name, update value of 'enum value name'/'enum value' in m_enums
    for (const auto &item : tmpName) {
@@ -2014,7 +1997,6 @@ void QMetaObject_X::register_tag(const QString &name, const QString &method)
       // entry not found
       throw std::logic_error("Unable to register method tag, verify signal/slot macros");
 
-
    } else {
       // retrieve existing obj
       QMetaMethod obj = item.value();
@@ -2025,9 +2007,9 @@ void QMetaObject_X::register_tag(const QString &name, const QString &method)
    }
 }
 
-// ** internal properties
+// internal properties
 void QMetaObject_X::register_property_read(const QString &name, std::type_index returnTypeId,
-         QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar)
+      QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar)
 {
    if (name.isEmpty() ) {
       return;
@@ -2149,10 +2131,12 @@ void QMetaObject_X::register_property_int(const QString &name, int value, QMetaP
       data.setRevision(value);
 
    }
+
    if (kind == QMetaProperty::CONSTANT) {
       data.setConstant();
 
    }
+
    if (kind == QMetaProperty::FINAL) {
       data.setFinal();
 
@@ -2161,4 +2145,3 @@ void QMetaObject_X::register_property_int(const QString &name, int value, QMetaP
    // update QMetaProperty in the container
    m_properties.insert(name, data);
 }
-

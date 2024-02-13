@@ -253,17 +253,17 @@ class Q_CORE_EXPORT QDateTimeParser
    int sectionMaxSize(Section s, int count) const;
    QString sectionText(const QString &text, int sectionIndex, int index) const;
    int parseSection(const QDateTime &currentValue, int sectionIndex, QString &txt, int &cursorPosition,
-      int index, QDateTimeParser::State &state, int *used = nullptr) const;
+         int index, QDateTimeParser::State &state, int *used = nullptr) const;
 
    int findMonth(const QString &str1, int monthstart, int sectionIndex,
-      QString *monthName = nullptr, int *used = nullptr) const;
+         QString *monthName = nullptr, int *used = nullptr) const;
 
    int findDay(const QString &str1, int intDaystart, int sectionIndex,
-      QString *dayName = nullptr, int *used = nullptr) const;
+         QString *dayName = nullptr, int *used = nullptr) const;
 
    AmPmFinder findAmPm(QString &str, int index, int *used = nullptr) const;
    bool potentialValue(const QString &str, int min, int max, int index,
-      const QDateTime &currentValue, int insert) const;
+         const QDateTime &currentValue, int insert) const;
 };
 
 Q_CORE_EXPORT bool operator==(const QDateTimeParser::SectionNode &s1, const QDateTimeParser::SectionNode &s2);

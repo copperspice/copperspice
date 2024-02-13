@@ -54,10 +54,10 @@ class Q_CORE_EXPORT QTranslator : public QObject
    static QString replacePercentN(QString text, int numArg);
 
    bool load(const QString &filename, const QString &directory = QString(), const QString &search_delimiters = QString(),
-                  const QString &suffix = QString());
+         const QString &suffix = QString());
 
    bool load(const QLocale &locale, const QString &filename, const QString &prefix = QString(),
-                  const QString &directory = QString(), const QString &suffix = QString());
+         const QString &directory = QString(), const QString &suffix = QString());
 
    bool load(const uchar *data, int len, const QString &directory = QString());
 

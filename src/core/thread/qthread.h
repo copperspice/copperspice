@@ -85,8 +85,8 @@ class Q_CORE_EXPORT QThread : public QObject
    QAbstractEventDispatcher *eventDispatcher() const;
    void setEventDispatcher(QAbstractEventDispatcher *eventDispatcher);
 
-    bool event(QEvent *event) override;
-    int loopLevel() const;
+   bool event(QEvent *event) override;
+   int loopLevel() const;
 
    CORE_CS_SIGNAL_1(Public, void started())
    CORE_CS_SIGNAL_2(started)
@@ -114,7 +114,6 @@ class Q_CORE_EXPORT QThread : public QObject
 
  private:
    Q_DECLARE_PRIVATE(QThread)
-
 
    friend class QCoreApplication;
    friend class QThreadData;

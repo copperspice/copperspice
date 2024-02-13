@@ -32,9 +32,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <ApplicationServices/ApplicationServices.h>
 
-/*
-    Translates a QStandardPaths::StandardLocation into the mac equivalent.
-*/
+
+// Translates a QStandardPaths::StandardLocation into the mac equivalent
 OSType translateLocation(QStandardPaths::StandardLocation type)
 {
    switch (type) {
@@ -62,18 +61,23 @@ OSType translateLocation(QStandardPaths::StandardLocation type)
 
       case QStandardPaths::MoviesLocation:
          return kMovieDocumentsFolderType;
+
       case QStandardPaths::PicturesLocation:
          return kPictureDocumentsFolderType;
+
       case QStandardPaths::TempLocation:
          return kTemporaryFolderType;
+
       case QStandardPaths::GenericDataLocation:
       case QStandardPaths::RuntimeLocation:
       case QStandardPaths::AppDataLocation:
       case QStandardPaths::AppLocalDataLocation:
          return kApplicationSupportFolderType;
+
       case QStandardPaths::GenericCacheLocation:
       case QStandardPaths::CacheLocation:
          return kCachedDataFolderType;
+
       default:
          return kDesktopFolderType;
    }
@@ -107,18 +111,23 @@ static void appendOrganizationAndApp(QString &path)
 
 static QString macLocation(QStandardPaths::StandardLocation type, short domain)
 {
-    // https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/index.html
-    if (type == QStandardPaths::DownloadLocation) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
-        if (!url)
-            return QString();
-        return QString::fromNSString([url path]);
-    }
+   // https://developer.apple.com/library/mac/documentation/Cocoa/Reference/Foundation/Classes/NSFileManager_Class/index.html
+   if (type == QStandardPaths::DownloadLocation) {
+      NSFileManager *fileManager = [NSFileManager defaultManager];
+      NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+
+      if (! url) {
+         return QString();
+      }
+
+      return QString::fromNSString([url path]);
+   }
+
    // http://developer.apple.com/documentation/Carbon/Reference/Folder_Manager/Reference/reference.html
    FSRef ref;
 
    OSErr err = FSFindFolder(domain, translateLocation(type), false, &ref);
+
    if (err) {
       return QString();
    }
@@ -126,8 +135,8 @@ static QString macLocation(QStandardPaths::StandardLocation type, short domain)
    QString path = getFullPath(ref);
 
    if (type == QStandardPaths::AppDataLocation || type == QStandardPaths::AppLocalDataLocation ||
-        type == QStandardPaths::CacheLocation || type == QStandardPaths::AppConfigLocation) {
-        appendOrganizationAndApp(path);
+         type == QStandardPaths::CacheLocation || type == QStandardPaths::AppConfigLocation) {
+      appendOrganizationAndApp(path);
    }
 
    return path;
@@ -141,27 +150,35 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 
       switch (type) {
          case GenericDataLocation:
-        case AppDataLocation:
-        case AppLocalDataLocation:
+         case AppDataLocation:
+         case AppLocalDataLocation:
             path = qttestDir + "/Application Support";
+
             if (type != GenericDataLocation) {
                appendOrganizationAndApp(path);
             }
+
             return path;
+
          case GenericCacheLocation:
          case CacheLocation:
             path = qttestDir + QLatin1String("/Cache");
+
             if (type == CacheLocation) {
                appendOrganizationAndApp(path);
             }
+
             return path;
 
-        case GenericConfigLocation:
-        case ConfigLocation:
-        case AppConfigLocation:
+         case GenericConfigLocation:
+         case ConfigLocation:
+         case AppConfigLocation:
             path = qttestDir + "/Preferences";
-            if (type == AppConfigLocation)
-                appendOrganizationAndApp(path);
+
+            if (type == AppConfigLocation) {
+               appendOrganizationAndApp(path);
+            }
+
             return path;
 
          default:
@@ -193,14 +210,15 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
 {
    QStringList dirs;
 
-    if (type == GenericDataLocation || type == AppDataLocation || type == AppLocalDataLocation || type == GenericCacheLocation || type == CacheLocation) {
-        const QString path = macLocation(type, kOnAppropriateDisk);
-        if (! path.isEmpty()) {
-         dirs.append(path);
-        }
-    }
+   if (type == GenericDataLocation || type == AppDataLocation || type == AppLocalDataLocation || type == GenericCacheLocation || type == CacheLocation) {
+      const QString path = macLocation(type, kOnAppropriateDisk);
 
-    if (type == AppDataLocation || type == AppLocalDataLocation) {
+      if (! path.isEmpty()) {
+         dirs.append(path);
+      }
+   }
+
+   if (type == AppDataLocation || type == AppLocalDataLocation) {
 
       CFBundleRef mainBundle = CFBundleGetMainBundle();
 
@@ -243,18 +261,19 @@ QString QStandardPaths::displayName(StandardLocation type)
    }
 
    if (QStandardPaths::DownloadLocation == type) {
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+      NSFileManager *fileManager = [NSFileManager defaultManager];
+      NSURL *url = [fileManager URLForDirectory:NSDownloadsDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
 
-        if (!url) {
-            return QString();
-        }
+      if (!url) {
+         return QString();
+      }
 
-        return QString::fromNSString([fileManager displayNameAtPath: [url absoluteString]]);
+      return QString::fromNSString([fileManager displayNameAtPath: [url absoluteString]]);
    }
 
    FSRef ref;
    OSErr err = FSFindFolder(kOnAppropriateDisk, translateLocation(type), false, &ref);
+
    if (err) {
       return QString();
    }

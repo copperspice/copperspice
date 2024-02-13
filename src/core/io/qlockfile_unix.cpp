@@ -87,6 +87,7 @@ static qint64 qt_write_loop(int fd, const char *data, qint64 len)
          // for example, partition full
          return pos;
       }
+
       pos += ret;
    }
 
@@ -105,10 +106,12 @@ int QLockFilePrivate::checkFcntlWorksAfterFlock(const QString &fn)
    const int fd = file.d_func()->engine()->handle();
 
 #if defined(LOCK_EX) && defined(LOCK_NB)
+
    if (flock(fd, LOCK_EX | LOCK_NB) == -1) {
       // other threads, and other processes on a local fs
       return 0;
    }
+
 #endif
 
    struct flock flockData;
@@ -168,10 +171,12 @@ static bool fcntlWorksAfterFlock(const QString &fn)
 static bool setNativeLocks(const QString &fileName, int fd)
 {
 #if defined(LOCK_EX) && defined(LOCK_NB)
+
    if (flock(fd, LOCK_EX | LOCK_NB) == -1) {
       // other threads, and other processes on a local fs
       return false;
    }
+
 #endif
 
    struct flock flockData;
@@ -182,7 +187,7 @@ static bool setNativeLocks(const QString &fileName, int fd)
    flockData.l_pid    = getpid();
 
    if (fcntlWorksAfterFlock(QDir::cleanPath(QFileInfo(fileName).absolutePath()) + '/') &&
-                  fcntl(fd, F_SETLK, &flockData) == -1) {
+         fcntl(fd, F_SETLK, &flockData) == -1) {
       // for networked filesystems
 
       return false;
@@ -198,7 +203,7 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
    // Use operator% from the fast builder to avoid multiple memory allocations.
 
    QByteArray fileData = QByteArray::number(QCoreApplication::applicationPid()) + '\n'
-      + QCoreApplication::applicationName().toUtf8() + '\n' + localHostName() + '\n';
+         + QCoreApplication::applicationName().toUtf8() + '\n' + localHostName() + '\n';
 
    const QByteArray lockFileName = QFile::encodeName(fileName);
    const int fd = qt_safe_open(lockFileName.constData(), O_WRONLY | O_CREAT | O_EXCL, 0666);
@@ -225,9 +230,11 @@ QLockFile::LockError QLockFilePrivate::tryLock_sys()
 
    if (qt_write_loop(fd, fileData.constData(), fileData.size()) < fileData.size()) {
       close(fd);
-      if (!QFile::remove(fileName)) {
+
+      if (! QFile::remove(fileName)) {
          qWarning("QLockFile::tryLock_sys() Unable to remove lock file %s", csPrintable(fileName));
       }
+
       return QLockFile::UnknownError; // partition full
    }
 
@@ -274,6 +281,7 @@ bool QLockFilePrivate::isApparentlyStale() const
          }
 
          const QString processName = processNameByPid(pid);
+
          if (! processName.isEmpty()) {
             QFileInfo fi(appname);
 
@@ -287,6 +295,7 @@ bool QLockFilePrivate::isApparentlyStale() const
          }
       }
    }
+
    const qint64 age = QFileInfo(fileName).lastModified().msecsTo(QDateTime::currentDateTime());
    return staleLockTime > 0 && age > staleLockTime;
 }
@@ -300,6 +309,7 @@ QString QLockFilePrivate::processNameByPid(qint64 pid)
    return QFile::decodeName(name);
 
 #elif defined(Q_OS_LINUX)
+
    if (! QFile::exists("/proc/version")) {
       return QString();
    }
@@ -340,12 +350,14 @@ QString QLockFilePrivate::processNameByPid(qint64 pid)
    }
 
 # if defined(Q_OS_OPENBSD) || defined(Q_OS_NETBSD)
+
    if (kp.p_pid != pid) {
       return QString();
    }
 
    QString name = QFile::decodeName(kp.p_comm);
 # else
+
    if (kp.ki_pid != pid) {
       return QString();
    }
@@ -378,4 +390,3 @@ void QLockFile::unlock()
    d->lockError = QLockFile::NoError;
    d->isLocked  = false;
 }
-

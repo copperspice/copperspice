@@ -39,7 +39,6 @@ class Q_CORE_EXPORT QThreadStorageData
    int id;
 };
 
-
 // pointer specialization
 template <typename T>
 inline T *&qThreadStorage_localData(QThreadStorageData &d, T **)
@@ -49,6 +48,7 @@ inline T *&qThreadStorage_localData(QThreadStorageData &d, T **)
    if (! v) {
       v = d.set(nullptr);
    }
+
    return *(reinterpret_cast<T **>(v));
 }
 
@@ -77,7 +77,8 @@ template <typename T>
 inline T &qThreadStorage_localData(QThreadStorageData &d, T *)
 {
    void **v = d.get();
-   if (!v) {
+
+   if (! v) {
       v = d.set(new T());
    }
 

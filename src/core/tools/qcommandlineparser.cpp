@@ -40,10 +40,10 @@ using NameHash_t = QHash<QString, int>;
 class QCommandLineParserPrivate
 {
  public:
-   inline QCommandLineParserPrivate()
+   QCommandLineParserPrivate()
       : singleDashWordOptionMode(QCommandLineParser::ParseAsCompactedShortOptions),
-        builtinVersionOption(false), builtinHelpOption(false), needsParsing(true) {
-   }
+        builtinVersionOption(false), builtinHelpOption(false), needsParsing(true)
+   { }
 
    bool parse(const QStringList &args);
    void checkParsed(const char *method);
@@ -51,34 +51,26 @@ class QCommandLineParserPrivate
    QString helpText() const;
    bool registerFoundOption(const QString &optionName);
    bool parseOptionValue(const QString &optionName, const QString &argument,
-                         QStringList::const_iterator *argumentIterator,
-                         QStringList::const_iterator argsEnd);
+         QStringList::const_iterator *argumentIterator, QStringList::const_iterator argsEnd);
 
-   //! Error text set when parse() returns false
    QString errorText;
 
-   //! The command line options used for parsing
    QList<QCommandLineOption> commandLineOptionList;
 
-   //! Hash mapping option names to their offsets in commandLineOptionList and optionArgumentList.
+   // hash mapping option names to their offsets in commandLineOptionList and optionArgumentList.
    NameHash_t nameHash;
 
-   //! Option values found (only for options with a value)
+   // option values found (only for options with a value)
    QHash<int, QStringList> optionValuesHash;
 
-   //! Names of options found on the command line.
    QStringList optionNames;
 
-   //! Arguments which did not belong to any option.
+   // arguments which did not belong to any option
    QStringList positionalArgumentList;
 
-   //! Names of options which were unknown.
    QStringList unknownOptionNames;
-
-   //! Application description
    QString description;
 
-   //! Documentation for positional arguments
    struct PositionalArgumentDefinition {
       QString name;
       QString description;
@@ -86,16 +78,15 @@ class QCommandLineParserPrivate
    };
    QVector<PositionalArgumentDefinition> positionalArgumentDefinitions;
 
-   //! The parsing mode for "-abc"
+   // parsing mode for "-abc"
    QCommandLineParser::SingleDashWordOptionMode singleDashWordOptionMode;
 
-   //! Whether addVersionOption was called
+   // whether addVersionOption was called
    bool builtinVersionOption;
 
-   //! Whether addHelpOption was called
+   // whether addHelpOption was called
    bool builtinHelpOption;
 
-   //! True if parse() needs to be called
    bool needsParsing;
 };
 
@@ -131,7 +122,7 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
    QStringList list = option.names();
 
    if (! list.isEmpty()) {
-      for (const QString & name : list) {
+      for (const QString &name : list) {
          if (d->nameHash.contains(name)) {
             return false;
          }
@@ -141,7 +132,7 @@ bool QCommandLineParser::addOption(const QCommandLineOption &option)
 
       const int offset = d->commandLineOptionList.size() - 1;
 
-      for (const QString & name : list) {
+      for (const QString &name : list) {
          d->nameHash.insert(name, offset);
       }
 
@@ -170,7 +161,7 @@ QCommandLineOption QCommandLineParser::addHelpOption()
    QStringList list;
 
 #ifdef Q_OS_WIN
-      list.append("?");
+   list.append("?");
 #endif
 
    list.append("h");
@@ -277,17 +268,21 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
 {
    const QLatin1Char assignChar('=');
    const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
+
    if (nameHashIt != nameHash.constEnd()) {
       const int assignPos = argument.indexOf(assignChar);
       const NameHash_t::mapped_type optionOffset = *nameHashIt;
       const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
+
       if (withValue) {
          if (assignPos == -1) {
             ++(*argumentIterator);
+
             if (*argumentIterator == argsEnd) {
                errorText = QCommandLineParser::tr("Missing value after '%1'.").formatArg(argument);
                return false;
             }
+
             optionValuesHash[optionOffset].append(*(*argumentIterator));
          } else {
             optionValuesHash[optionOffset].append(argument.mid(assignPos + 1));
@@ -299,6 +294,7 @@ bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, cons
          }
       }
    }
+
    return true;
 }
 
@@ -355,12 +351,15 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
             positionalArgumentList.append(argument);
             continue;
          }
+
          switch (singleDashWordOptionMode) {
             case QCommandLineParser::ParseAsCompactedShortOptions: {
                QString optionName;
                bool valueFound = false;
+
                for (int pos = 1 ; pos < argument.size(); ++pos) {
                   optionName = argument.mid(pos, 1);
+
                   if (!registerFoundOption(optionName)) {
                      error = true;
                   } else {
@@ -368,60 +367,76 @@ bool QCommandLineParserPrivate::parse(const QStringList &args)
                      Q_ASSERT(nameHashIt != nameHash.constEnd()); // checked by registerFoundOption
                      const NameHash_t::mapped_type optionOffset = *nameHashIt;
                      const bool withValue = !commandLineOptionList.at(optionOffset).valueName().isEmpty();
+
                      if (withValue) {
                         if (pos + 1 < argument.size()) {
                            if (argument.at(pos + 1) == assignChar) {
                               ++pos;
                            }
+
                            optionValuesHash[optionOffset].append(argument.mid(pos + 1));
                            valueFound = true;
                         }
+
                         break;
                      }
+
                      if (pos + 1 < argument.size() && argument.at(pos + 1) == assignChar) {
                         break;
                      }
                   }
                }
-               if (!valueFound && !parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+
+               if (! valueFound && !parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
                   error = true;
                }
+
                break;
             }
+
             case QCommandLineParser::ParseAsLongOptions: {
                const QString optionName = argument.mid(1).section(assignChar, 0, 0);
+
                if (registerFoundOption(optionName)) {
-                  if (!parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
+                  if (! parseOptionValue(optionName, argument, &argumentIterator, args.end())) {
                      error = true;
                   }
+
                } else {
                   error = true;
                }
+
                break;
             }
          }
       } else {
          positionalArgumentList.append(argument);
       }
+
       if (argumentIterator == args.end()) {
          break;
       }
    }
+
    return !error;
 }
 
 bool QCommandLineParser::isSet(const QString &name) const
 {
    d->checkParsed("isSet");
+
    if (d->optionNames.contains(name)) {
       return true;
    }
+
    const QStringList aliases = d->aliases(name);
-   for (const QString & optionName : d->optionNames) {
+
+   for (const QString &optionName : d->optionNames) {
       if (aliases.contains(optionName)) {
          return true;
       }
    }
+
    return false;
 }
 
@@ -430,7 +445,7 @@ QString QCommandLineParser::value(const QString &optionName) const
    d->checkParsed("value");
    const QStringList valueList = values(optionName);
 
-   if (!valueList.isEmpty()) {
+   if (! valueList.isEmpty()) {
       return valueList.last();
    }
 
@@ -506,29 +521,34 @@ static QString wrapText(const QString &names, int longestOptionNameString, const
    const QLatin1Char nl('\n');
    QString text = QString("  ") + names.leftJustified(longestOptionNameString) + QLatin1Char(' ');
    const int indent = text.length();
-   int lineStart = 0;
+
+   int lineStart     = 0;
    int lastBreakable = -1;
-   const int max = 79 - indent;
+   const int max     = 79 - indent;
    int x = 0;
    const int len = description.length();
 
    for (int i = 0; i < len; ++i) {
       ++x;
       const QChar c = description.at(i);
+
       if (c.isSpace()) {
          lastBreakable = i;
       }
 
       int breakAt = -1;
       int nextLineStart = -1;
+
       if (x > max && lastBreakable != -1) {
          // time to break and we know where
          breakAt = lastBreakable;
          nextLineStart = lastBreakable + 1;
+
       } else if ((x > max - 1 && lastBreakable == -1) || i == len - 1) {
          // time to break but found nowhere [-> break here], or end of last line
          breakAt = i + 1;
          nextLineStart = breakAt;
+
       } else if (c == nl) {
          // forced break
          breakAt = i;
@@ -550,6 +570,7 @@ static QString wrapText(const QString &names, int longestOptionNameString, const
          if (lineStart < len && description.at(lineStart).isSpace()) {
             ++lineStart;   // don't start a line with a space
          }
+
          i = lineStart;
       }
    }
@@ -561,6 +582,7 @@ QString QCommandLineParserPrivate::helpText() const
 {
    const QLatin1Char nl('\n');
    QString text;
+
    const QString exeName = QCoreApplication::instance()->arguments().first();
    QString usage = exeName;
    if (!commandLineOptionList.isEmpty()) {
@@ -574,22 +596,24 @@ QString QCommandLineParserPrivate::helpText() const
    }
 
    text += QCommandLineParser::tr("Usage: %1").formatArg(usage) + nl;
-   if (!description.isEmpty()) {
+
+   if (! description.isEmpty()) {
       text += description + nl;
    }
 
    text += nl;
-   if (!commandLineOptionList.isEmpty()) {
+
+   if (! commandLineOptionList.isEmpty()) {
       text += QCommandLineParser::tr("Options:") + nl;
    }
 
    QStringList optionNameList;
    int longestOptionNameString = 0;
 
-   for (const QCommandLineOption & option : commandLineOptionList) {
+   for (const QCommandLineOption &option : commandLineOptionList) {
       QStringList optionNames;
 
-      for (const QString & optionName : option.names()) {
+      for (const QString &optionName : option.names()) {
          if (optionName.length() == 1) {
             optionNames.append(QLatin1Char('-') + optionName);
          } else {
@@ -601,11 +625,13 @@ QString QCommandLineParserPrivate::helpText() const
       if (!option.valueName().isEmpty()) {
          optionNamesString += QString(" <") + option.valueName() + QLatin1Char('>');
       }
+
       optionNameList.append(optionNamesString);
       longestOptionNameString = qMax(longestOptionNameString, optionNamesString.length());
    }
 
    ++longestOptionNameString;
+
    for (int i = 0; i < commandLineOptionList.count(); ++i) {
       const QCommandLineOption &option = commandLineOptionList.at(i);
       text += wrapText(optionNameList.at(i), longestOptionNameString, option.description());
@@ -617,10 +643,11 @@ QString QCommandLineParserPrivate::helpText() const
       }
 
       text += QCommandLineParser::tr("Arguments:") + nl;
-      for (const PositionalArgumentDefinition & arg : positionalArgumentDefinitions) {
+
+      for (const PositionalArgumentDefinition &arg : positionalArgumentDefinitions) {
          text += wrapText(arg.name, longestOptionNameString, arg.description);
       }
    }
+
    return text;
 }
-

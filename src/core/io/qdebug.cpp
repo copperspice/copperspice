@@ -28,17 +28,17 @@
 
 QDebug::~QDebug()
 {
-    if (! --stream->ref) {
-        if (stream->space && stream->buffer.endsWith(' ')) {
-            stream->buffer.chop(1);
-        }
+   if (! --stream->ref) {
+      if (stream->space && stream->buffer.endsWith(' ')) {
+         stream->buffer.chop(1);
+      }
 
-        if (stream->message_output) {
-            qt_message_output(stream->type, stream->buffer);
-        }
+      if (stream->message_output) {
+         qt_message_output(stream->type, stream->buffer);
+      }
 
-        delete stream;
-    }
+      delete stream;
+   }
 }
 
 void QDebug::putString(QStringView str)
@@ -53,33 +53,32 @@ void QDebug::putByteArray(const QByteArray &str)
 
 QDebug &QDebug::resetFormat()
 {
-    stream->ts.reset();
+   stream->ts.reset();
 
-    stream->space = true;
-    stream->m_flags = 0;
+   stream->space = true;
+   stream->m_flags = 0;
 
-    stream->setVerbosity(Stream::defaultVerbosity);
+   stream->setVerbosity(Stream::defaultVerbosity);
 
-    return *this;
+   return *this;
 }
 
 class QDebugStateSaverPrivate
 {
-public:
+ public:
    QDebugStateSaverPrivate(QDebug &dbg)
-        : m_dbg(dbg), m_spaces(dbg.autoInsertSpaces()), m_streamParams(dbg.stream->ts.getParams())
+      : m_dbg(dbg), m_spaces(dbg.autoInsertSpaces()), m_streamParams(dbg.stream->ts.getParams())
    {
       m_flags     = m_dbg.stream->m_flags;
       m_verbosity = m_dbg.stream->m_verbosity;
    }
 
-   void restoreState()
-   {
+   void restoreState() {
       const bool currentSpaces = m_dbg.autoInsertSpaces();
 
       if (currentSpaces && ! m_spaces)
          if (m_dbg.stream->buffer.endsWith(' ')) {
-             m_dbg.stream->buffer.chop(1);
+            m_dbg.stream->buffer.chop(1);
          }
 
       m_dbg.setAutoInsertSpaces(m_spaces);
@@ -102,7 +101,7 @@ public:
 };
 
 QDebugStateSaver::QDebugStateSaver(QDebug &dbg)
-    : d_ptr(new QDebugStateSaverPrivate(dbg))
+   : d_ptr(new QDebugStateSaverPrivate(dbg))
 {
 }
 

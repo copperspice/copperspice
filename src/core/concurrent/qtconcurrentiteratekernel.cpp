@@ -53,7 +53,6 @@ static qint64 getticks()
 
 #elif defined(Q_OS_UNIX)
 
-
 static qint64 getticks()
 {
 #if defined(_POSIX_TIMERS) && (_POSIX_TIMERS > 0)
@@ -77,6 +76,7 @@ static qint64 getticks()
    if (useThreadCpuTime != -1) {
       clockId = CLOCK_THREAD_CPUTIME_ID;
    }
+
 #  endif
 
 #else
@@ -84,9 +84,11 @@ static qint64 getticks()
 #endif
 
    struct timespec ts;
+
    if (clock_gettime(clockId, &ts) == -1) {
       return 0;
    }
+
    return (ts.tv_sec * 1000000000) + ts.tv_nsec;
 #else
 
@@ -94,7 +96,6 @@ static qint64 getticks()
    struct timeval tv;
    gettimeofday(&tv, 0);
    return (tv.tv_sec * 1000000) + tv.tv_usec;
-
 
 #endif
 }
@@ -104,9 +105,11 @@ static qint64 getticks()
 static qint64 getticks()
 {
    LARGE_INTEGER x;
+
    if (!QueryPerformanceCounter(&x)) {
       return 0;
    }
+
    return x.QuadPart;
 }
 
@@ -119,14 +122,10 @@ static double elapsed(qint64 after, qint64 before)
 
 namespace QtConcurrent {
 
-/*! \internal
-
-*/
 BlockSizeManager::BlockSizeManager(int iterationCount)
    : maxBlockSize(iterationCount / (QThreadPool::globalInstance()->maxThreadCount() * 2)),
-     beforeUser(0), afterUser(0),
-     controlPartElapsed(MedianSize), userPartElapsed(MedianSize),
-     m_blockSize(1)
+     beforeUser(0), afterUser(0), controlPartElapsed(MedianSize),
+     userPartElapsed(MedianSize), m_blockSize(1)
 { }
 
 // Records the time before user code.

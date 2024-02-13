@@ -94,7 +94,7 @@ void QHistoryState::setDefaultState(QAbstractState *state)
    }
 
    if (! d->defaultTransition || d->defaultTransition->targetStates().size() != 1
-      || d->defaultTransition->targetStates().first() != state) {
+         || d->defaultTransition->targetStates().first() != state) {
 
       if (! d->defaultTransition || ! dynamic_cast<DefaultStateTransition *>(d->defaultTransition)) {
          d->defaultTransition = new DefaultStateTransition(this, state);
@@ -128,7 +128,6 @@ void QHistoryState::onEntry(QEvent *event)
 {
    (void) event;
 }
-
 
 void QHistoryState::onExit(QEvent *event)
 {

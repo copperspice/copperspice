@@ -68,6 +68,7 @@ static inline bool hasResourcePropertyFlag(const QFileSystemMetaData &data, cons
    }
 
    CFBooleanRef value;
+
    if (CFURLCopyResourcePropertyForKey(url, key, &value, nullptr)) {
       if (value == kCFBooleanTrue) {
          return true;
@@ -100,6 +101,7 @@ static bool isPackage(const QFileSystemMetaData &data, const QFileSystemEntry &e
       QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, path, kCFURLPOSIXPathStyle, true);
 
       UInt32 type, creator;
+
       // Well created packages have the PkgInfo file
       if (CFBundleGetPackageInfoInDirectory(url, &type, &creator)) {
          return true;
@@ -139,13 +141,16 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
       s = (char *) ::realloc(s, size);
       Q_CHECK_PTR(s);
       len = ::readlink(link.nativeFilePath().constData(), s, size);
+
       if (len < 0) {
          ::free(s);
          break;
       }
+
       if (len < size) {
          break;
       }
+
       size *= 2;
    }
 
@@ -188,9 +193,11 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
       }
 
       ret = QDir::cleanPath(ret);
+
       if (ret.size() > 1 && ret.endsWith('/')) {
          ret.chop(1);
       }
+
       return QFileSystemEntry(ret);
    }
 
@@ -211,19 +218,21 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
       }
 
       QCFType<CFDataRef> bookmarkData = CFURLCreateBookmarkDataFromFile(nullptr, url, nullptr);
+
       if (! bookmarkData) {
          return QFileSystemEntry();
       }
 
       QCFType<CFURLRef> resolvedUrl = CFURLCreateByResolvingBookmarkData(nullptr, bookmarkData,
-                  (CFURLBookmarkResolutionOptions)(kCFBookmarkResolutionWithoutUIMask
-                  | kCFBookmarkResolutionWithoutMountingMask), nullptr, nullptr, nullptr, nullptr);
+            (CFURLBookmarkResolutionOptions)(kCFBookmarkResolutionWithoutUIMask
+            | kCFBookmarkResolutionWithoutMountingMask), nullptr, nullptr, nullptr, nullptr);
 
       if (! resolvedUrl) {
          return QFileSystemEntry();
       }
 
       QCFString cfstr(CFURLCopyFileSystemPath(resolvedUrl, kCFURLPOSIXPathStyle));
+
       if (cfstr.toCFStringRef() != nullptr) {
          return QFileSystemEntry();
       }
@@ -242,41 +251,44 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
    }
 
 #if ! defined(Q_OS_DARWIN) && ! defined(Q_OS_ANDROID) && _POSIX_VERSION < 200809L
-    // realpath(X,0) is not supported
-    (void) data;
-    return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
+   // realpath(X,0) is not supported
+
+   (void) data;
+   return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
 #else
-    char *ret = nullptr;
+   char *ret = nullptr;
 
 #ifdef Q_OS_DARWIN
 
-    ret = (char*)malloc(PATH_MAX + 1);
+   ret = (char *)malloc(PATH_MAX + 1);
 
-    if (ret && realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
-        const int savedErrno = errno; // errno is checked below, and free() might change it
-        free(ret);
-        errno = savedErrno;
-        ret = nullptr;
-    }
+   if (ret && realpath(entry.nativeFilePath().constData(), (char * )ret) == nullptr) {
+      const int savedErrno = errno; // errno is checked below, and free() might change it
+      free(ret);
+      errno = savedErrno;
+      ret = nullptr;
+   }
 
 #elif defined(Q_OS_ANDROID)
+
    if (! data.hasFlags(QFileSystemMetaData::ExistsAttribute))  {
-     fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute);
+      fillMetaData(entry, data, QFileSystemMetaData::ExistsAttribute);
    }
 
    if (! data.exists()) {
-     ret   = nullptr;
-     errno = ENOENT;
+      ret   = nullptr;
+      errno = ENOENT;
 
    } else {
-     ret = (char*)malloc(PATH_MAX + 1);
-     if (realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
+      ret = (char *)malloc(PATH_MAX + 1);
+
+      if (realpath(entry.nativeFilePath().constData(), (char * )ret) == nullptr) {
          const int savedErrno = errno; // errno is checked below, and free() might change it
          free(ret);
 
          errno = savedErrno;
          ret   = nullptr;
-     }
+      }
    }
 
 # else
@@ -285,13 +297,13 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
    ret = realpath(entry.nativeFilePath().constData(), (char *)nullptr);
 
 #else
-   ret = (char*)malloc(PATH_MAX + 1);
+   ret = (char *)malloc(PATH_MAX + 1);
 
-   if (realpath(entry.nativeFilePath().constData(), (char*)ret) == nullptr) {
+   if (realpath(entry.nativeFilePath().constData(), (char * )ret) == nullptr) {
       const int savedErrno = errno; // errno is checked below, and free() might change it
       free(ret);
       errno = savedErrno;
-      ret = nullptr;
+      ret   = nullptr;
    }
 
 #endif
@@ -400,6 +412,7 @@ QString QFileSystemEngine::resolveUserName(uint userId)
    if (pw) {
       return QFile::decodeName(QByteArray(pw->pw_name));
    }
+
    return QString();
 }
 
@@ -407,6 +420,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 {
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
    int size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
+
    if (size_max == -1) {
       size_max = 1024;
    }
@@ -418,15 +432,19 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS) && !defined(Q_OS_OPENBSD)
    size_max = sysconf(_SC_GETGR_R_SIZE_MAX);
+
    if (size_max == -1) {
       size_max = 1024;
    }
+
    buf.resize(size_max);
    struct group entry;
+
    // Some large systems have more members than the POSIX max size
    // Loop over by doubling the buffer size (upper limit 250k)
    for (unsigned size = size_max; size < 256000; size += size) {
       buf.resize(size);
+
       // ERANGE indicates that the buffer was too small
       if (!getgrgid_r(groupId, &entry, buf.data(), buf.size(), &gr)
             || errno != ERANGE) {
@@ -450,7 +468,7 @@ QString QFileSystemEngine::resolveGroupName(uint groupId)
 QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 {
    QCFType<CFURLRef> url = CFURLCreateWithFileSystemPath(nullptr, QCFString(entry.filePath()).toCFStringRef(),
-                           kCFURLPOSIXPathStyle, true);
+         kCFURLPOSIXPathStyle, true);
 
    if (QCFType<CFDictionaryRef> dict = CFBundleCopyInfoDictionaryForURL(url)) {
       if (CFTypeRef name = (CFTypeRef)CFDictionaryGetValue(dict, kCFBundleNameKey)) {
@@ -465,11 +483,12 @@ QString QFileSystemEngine::bundleName(const QFileSystemEntry &entry)
 #endif
 
 bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemMetaData &data,
-                                     QFileSystemMetaData::MetaDataFlags what)
+      QFileSystemMetaData::MetaDataFlags what)
 {
 #ifdef Q_OS_DARWIN
+
    if (what & QFileSystemMetaData::BundleType) {
-      if (!data.hasFlags(QFileSystemMetaData::DirectoryType)) {
+      if (! data.hasFlags(QFileSystemMetaData::DirectoryType)) {
          what |= QFileSystemMetaData::DirectoryType;
       }
    }
@@ -478,6 +497,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
       // Mac OS >= 10.5: st_flags & UF_HIDDEN
       what |= QFileSystemMetaData::PosixStatFlags;
    }
+
 #endif
 
    if (what & QFileSystemMetaData::PosixStatFlags) {
@@ -537,13 +557,15 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
    }
 
 #ifdef Q_OS_DARWIN
-    if (what & QFileSystemMetaData::AliasType) {
-        if (entryExists && hasResourcePropertyFlag(data, entry, kCFURLIsAliasFileKey)) {
-            data.entryFlags |= QFileSystemMetaData::AliasType;
-        }
 
-        data.knownFlagsMask |= QFileSystemMetaData::AliasType;
-    }
+   if (what & QFileSystemMetaData::AliasType) {
+      if (entryExists && hasResourcePropertyFlag(data, entry, kCFURLIsAliasFileKey)) {
+         data.entryFlags |= QFileSystemMetaData::AliasType;
+      }
+
+      data.knownFlagsMask |= QFileSystemMetaData::AliasType;
+   }
+
 #endif
 
    if (what & QFileSystemMetaData::UserPermissions) {
@@ -555,36 +577,40 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
                data.entryFlags |= QFileSystemMetaData::UserReadPermission;
             }
          }
+
          if (what & QFileSystemMetaData::UserWritePermission) {
             if (QT_ACCESS(nativeFilePath.constData(), W_OK) == 0) {
                data.entryFlags |= QFileSystemMetaData::UserWritePermission;
             }
          }
+
          if (what & QFileSystemMetaData::UserExecutePermission) {
             if (QT_ACCESS(nativeFilePath.constData(), X_OK) == 0) {
                data.entryFlags |= QFileSystemMetaData::UserExecutePermission;
             }
          }
       }
+
       data.knownFlagsMask |= (what & QFileSystemMetaData::UserPermissions);
    }
 
    if (what & QFileSystemMetaData::HiddenAttribute && ! data.isHidden()) {
       QString fileName = entry.fileName();
 
-        if ((fileName.size() > 0 && fileName.at(0) == '.')
+      if ((fileName.size() > 0 && fileName.at(0) == '.')
 
 #ifdef Q_OS_DARWIN
-                || (entryExists && hasResourcePropertyFlag(data, entry, kCFURLIsHiddenKey))
+            || (entryExists && hasResourcePropertyFlag(data, entry, kCFURLIsHiddenKey))
 #endif
-                )  {
-            data.entryFlags |= QFileSystemMetaData::HiddenAttribute;
-        }
+      )  {
+         data.entryFlags |= QFileSystemMetaData::HiddenAttribute;
+      }
 
       data.knownFlagsMask |= QFileSystemMetaData::HiddenAttribute;
    }
 
 #ifdef Q_OS_DARWIN
+
    if (what & QFileSystemMetaData::BundleType) {
       if (entryExists && isPackage(data, entry)) {
          data.entryFlags |= QFileSystemMetaData::BundleType;
@@ -592,11 +618,12 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
       data.knownFlagsMask |= QFileSystemMetaData::BundleType;
    }
+
 #endif
 
    if (! entryExists) {
-        data.clearFlags(what);
-        return false;
+      data.clearFlags(what);
+      return false;
    }
 
    return data.hasFlags(what);
@@ -604,12 +631,12 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
 
 static bool pathIsDir(const QByteArray &nativeName)
 {
-    // helper function to check if a given path is a directory, since mkdir can
-    // fail if the dir already exists (it may have been created by another
-    // thread or another process)
+   // helper function to check if a given path is a directory, since mkdir can
+   // fail if the dir already exists (it may have been created by another
+   // thread or another process)
 
-    QT_STATBUF st;
-    return QT_STAT(nativeName.constData(), &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR;
+   QT_STATBUF st;
+   return QT_STAT(nativeName.constData(), &st) == 0 && (st.st_mode & S_IFMT) == S_IFDIR;
 };
 
 // Note: if \a shouldMkdirFirst is false, we assume the caller did try to mkdir
@@ -617,31 +644,33 @@ static bool pathIsDir(const QByteArray &nativeName)
 static bool createDirectoryWithParents(const QByteArray &nativeName, bool shouldMkdirFirst = true)
 {
    if (shouldMkdirFirst && QT_MKDIR(nativeName.constData(), 0777) == 0) {
-     return true;
+      return true;
    }
 
    if (errno == EEXIST) {
-     return pathIsDir(nativeName);
+      return pathIsDir(nativeName);
    }
 
    if (errno != ENOENT) {
-     return false;
+      return false;
    }
 
    // mkdir failed because the parent dir doesn't exist, so try to create it
    int slash = nativeName.lastIndexOf('/');
+
    if (slash < 1) {
-     return false;
+      return false;
    }
 
    QByteArray parentNativeName = nativeName.left(slash);
+
    if (! createDirectoryWithParents(parentNativeName)) {
-     return false;
+      return false;
    }
 
    // try again
    if (QT_MKDIR(nativeName.constData(), 0777) == 0) {
-     return true;
+      return true;
    }
 
    return errno == EEXIST && pathIsDir(nativeName);
@@ -651,37 +680,37 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
 {
    QString dirName = entry.filePath();
 
-    // Darwin doesn't support trailing /'s, so remove for everyone
-    while (dirName.size() > 1 && dirName.endsWith('/')) {
-        dirName.chop(1);
-    }
+   // Darwin does not support trailing /'s, so remove for everyone
+   while (dirName.size() > 1 && dirName.endsWith('/')) {
+      dirName.chop(1);
+   }
 
-    // try to mkdir this directory
-    QByteArray nativeName = QFile::encodeName(dirName);
+   // try to mkdir this directory
+   QByteArray nativeName = QFile::encodeName(dirName);
 
-    if (QT_MKDIR(nativeName.constData(), 0777) == 0) {
-        return true;
-    }
+   if (QT_MKDIR(nativeName.constData(), 0777) == 0) {
+      return true;
+   }
 
-    if (! createParents) {
-        return false;
-    }
+   if (! createParents) {
+      return false;
+   }
 
-    // we need the cleaned path in order to create the parents
-    // and we save errno just in case encodeName needs to load codecs
-    int savedErrno   = errno;
-    bool pathChanged = false;
+   // we need the cleaned path in order to create the parents
+   // and we save errno just in case encodeName needs to load codecs
+   int savedErrno   = errno;
+   bool pathChanged = false;
 
-    QString cleanName = QDir::cleanPath(dirName);
+   QString cleanName = QDir::cleanPath(dirName);
 
-    if (cleanName != dirName) {
-       pathChanged = true;
-       nativeName = QFile::encodeName(cleanName);
-    }
+   if (cleanName != dirName) {
+      pathChanged = true;
+      nativeName = QFile::encodeName(cleanName);
+   }
 
-    errno = savedErrno;
+   errno = savedErrno;
 
-    return createDirectoryWithParents(nativeName, pathChanged);
+   return createDirectoryWithParents(nativeName, pathChanged);
 }
 
 bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool removeEmptyParents)
@@ -692,6 +721,7 @@ bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool remo
       for (int oldslash = 0, slash = dirName.length(); slash > 0; oldslash = slash) {
          const QByteArray chunk = QFile::encodeName(dirName.left(slash));
          QT_STATBUF st;
+
          if (QT_STAT(chunk.constData(), &st) != -1) {
             if ((st.st_mode & S_IFMT) != S_IFDIR) {
                return false;
@@ -704,8 +734,10 @@ bool QFileSystemEngine::removeDirectory(const QFileSystemEntry &entry, bool remo
          } else {
             return false;
          }
+
          slash = dirName.lastIndexOf(QDir::separator(), oldslash - 1);
       }
+
       return true;
    }
 
@@ -748,15 +780,17 @@ bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &
    if (unlink(entry.nativeFilePath().constData()) == 0) {
       return true;
    }
-   error = QSystemError(errno, QSystemError::StandardLibraryError);
-   return false;
 
+   error = QSystemError(errno, QSystemError::StandardLibraryError);
+
+   return false;
 }
 
 bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
-         QSystemError &error, QFileSystemMetaData *data)
+      QSystemError &error, QFileSystemMetaData *data)
 {
    mode_t mode = 0;
+
    if (permissions & (QFile::ReadOwner | QFile::ReadUser)) {
       mode |= S_IRUSR;
    }
@@ -794,6 +828,7 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Per
    }
 
    bool success = ::chmod(entry.nativeFilePath().constData(), mode) == 0;
+
    if (success && data) {
       data->entryFlags &= ~QFileSystemMetaData::Permissions;
       data->entryFlags |= QFileSystemMetaData::MetaDataFlag(uint(permissions));
@@ -810,9 +845,11 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Per
 QString QFileSystemEngine::homePath()
 {
    QString home = QFile::decodeName(qgetenv("HOME"));
+
    if (home.isEmpty()) {
       home = rootPath();
    }
+
    return QDir::cleanPath(home);
 }
 
@@ -864,22 +901,26 @@ QFileSystemEntry QFileSystemEngine::currentPath()
    QFileSystemEntry result;
 
 #if defined(__GLIBC__) && ! defined(PATH_MAX)
-      char *currentName = ::get_current_dir_name();
+   char *currentName = ::get_current_dir_name();
 
-      if (currentName) {
-         result = QFileSystemEntry(QByteArray(currentName), QFileSystemEntry::FromNativePath());
-         ::free(currentName);
-      }
+   if (currentName) {
+      result = QFileSystemEntry(QByteArray(currentName), QFileSystemEntry::FromNativePath());
+      ::free(currentName);
+   }
+
 #else
-      char currentName[PATH_MAX + 1];
-      if (::getcwd(currentName, PATH_MAX)) {
-         result = QFileSystemEntry(QByteArray(currentName), QFileSystemEntry::FromNativePath());
-      }
+   char currentName[PATH_MAX + 1];
+
+   if (::getcwd(currentName, PATH_MAX)) {
+      result = QFileSystemEntry(QByteArray(currentName), QFileSystemEntry::FromNativePath());
+   }
 
 # if defined(QT_DEBUG)
-      if (result.isEmpty()) {
-        qWarning("QFileSystemEngine::currentPath() Call to getcwd() failed");
-      }
+
+   if (result.isEmpty()) {
+      qWarning("QFileSystemEngine::currentPath() Call to getcwd() failed");
+   }
+
 # endif
 #endif
 

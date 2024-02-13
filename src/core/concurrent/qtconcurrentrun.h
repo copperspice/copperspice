@@ -54,27 +54,27 @@ QFuture<T> run(T (*functionPointer)(Param1, Param2, Param3), const Arg1 &arg1, c
    return (new StoredFunctorCall3<T, T (*)(Param1, Param2, Param3), Arg1, Arg2, Arg3>(functionPointer, arg1, arg2, arg3))->start();
 }
 
-template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4>
 QFuture<T> run(T (*functionPointer)(Param1, Param2, Param3, Param4), const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new StoredFunctorCall4<T, T (*)(Param1, Param2, Param3, Param4), Arg1, Arg2, Arg3, Arg4>(functionPointer, arg1,
-          arg2, arg3, arg4))->start();
+           arg2, arg3, arg4))->start();
 }
 
-template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4, typename Param5, typename Arg5>
 QFuture<T> run(T (*functionPointer)(Param1, Param2, Param3, Param4, Param5), const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new StoredFunctorCall5<T, T (*)(Param1, Param2, Param3, Param4, Param5), Arg1, Arg2, Arg3, Arg4, Arg5>
-          (functionPointer, arg1, arg2, arg3, arg4, arg5))->start();
+         (functionPointer, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename Functor>
-auto run(Functor functor) 
--> typename std::enable_if< ! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor())> >::type
+auto run(Functor functor)
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor())>>::type
 {
    typedef decltype(functor()) result_type;
    return (new StoredFunctorCall0<result_type, Functor>(functor))->start();
@@ -82,7 +82,7 @@ auto run(Functor functor)
 
 template <typename Functor, typename Arg1>
 auto run(Functor functor, const Arg1 &arg1)
--> typename std::enable_if< !QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1))> >::type
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1))>>::type
 {
    typedef decltype(functor(arg1)) result_type;
    return (new StoredFunctorCall1<result_type, Functor, Arg1>(functor, arg1))->start();
@@ -90,7 +90,7 @@ auto run(Functor functor, const Arg1 &arg1)
 
 template <typename Functor, typename Arg1, typename Arg2>
 auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2)
--> typename std::enable_if< !QtPrivate::HasResultType<Functor>::Value,QFuture<decltype(functor(arg1, arg2))> >::type 
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2))>>::type
 {
    typedef decltype(functor(arg1, arg2)) result_type;
    return (new StoredFunctorCall2<result_type, Functor, Arg1, Arg2>(functor, arg1, arg2))->start();
@@ -98,7 +98,7 @@ auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2)
 
 template <typename Functor, typename Arg1, typename Arg2, typename Arg3>
 auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
--> typename std::enable_if< !QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3))> >::type 
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3))>>::type
 {
    typedef decltype(functor(arg1, arg2, arg3)) result_type;
    return (new StoredFunctorCall3<result_type, Functor, Arg1, Arg2, Arg3>(functor, arg1, arg2, arg3))->start();
@@ -106,7 +106,7 @@ auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 
 template <typename Functor, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
 auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
--> typename std::enable_if< !QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3, arg4))> >::type 
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3, arg4))>>::type
 {
    typedef decltype(functor(arg1, arg2, arg3, arg4)) result_type;
    return (new StoredFunctorCall4<result_type, Functor, Arg1, Arg2, Arg3, Arg4>(functor, arg1, arg2, arg3, arg4))->start();
@@ -114,7 +114,7 @@ auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, 
 
 template <typename Functor, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
 auto run(Functor functor, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
--> typename std::enable_if< !QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3, arg4, arg5))> >::type 
+-> typename std::enable_if<! QtPrivate::HasResultType<Functor>::Value, QFuture<decltype(functor(arg1, arg2, arg3, arg4, arg5))>>::type
 {
    typedef decltype(functor(arg1, arg2, arg3, arg4, arg5)) result_type;
    return (new StoredFunctorCall5<result_type, Functor, Arg1, Arg2, Arg3, Arg4, Arg5>(functor, arg1, arg2, arg3, arg4, arg5))->start();
@@ -142,7 +142,7 @@ template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3>
 QFuture<typename FunctionObject::result_type> run(FunctionObject functionObject, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 {
    return (new StoredFunctorCall3<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3>
-          (functionObject, arg1, arg2, arg3))->start();
+         (functionObject, arg1, arg2, arg3))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
@@ -150,7 +150,7 @@ QFuture<typename FunctionObject::result_type> run(FunctionObject functionObject,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new StoredFunctorCall4<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4>
-          (functionObject, arg1, arg2, arg3, arg4))->start();
+         (functionObject, arg1, arg2, arg3, arg4))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
@@ -158,46 +158,46 @@ QFuture<typename FunctionObject::result_type> run(FunctionObject functionObject,
       const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new StoredFunctorCall5<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4, Arg5>
-          (functionObject, arg1, arg2, arg3, arg4, arg5))->start();
+         (functionObject, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename FunctionObject>
 QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject)
 {
    return (new typename SelectStoredFunctorPointerCall0<typename FunctionObject::result_type, FunctionObject>::type(
-          functionObject))->start();
+         functionObject))->start();
 }
 
 template <typename FunctionObject, typename Arg1>
 QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject, const Arg1 &arg1)
 {
    return (new typename
-          SelectStoredFunctorPointerCall1<typename FunctionObject::result_type, FunctionObject, Arg1>::type(functionObject, arg1))->start();
+         SelectStoredFunctorPointerCall1<typename FunctionObject::result_type, FunctionObject, Arg1>::type(functionObject, arg1))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2>
 QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject, const Arg1 &arg1, const Arg2 &arg2)
 {
    return (new typename
-          SelectStoredFunctorPointerCall2<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2>::type(
-          functionObject, arg1, arg2))->start();
+         SelectStoredFunctorPointerCall2<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2>::type(
+         functionObject, arg1, arg2))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3>
 QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 {
    return (new typename
-          SelectStoredFunctorPointerCall3<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3>::type(
-          functionObject, arg1, arg2, arg3))->start();
+         SelectStoredFunctorPointerCall3<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3>::type(
+         functionObject, arg1, arg2, arg3))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject, const Arg1 &arg1, const Arg2 &arg2, 
+QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject, const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new typename
-          SelectStoredFunctorPointerCall4<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4>::type(
-          functionObject, arg1, arg2, arg3, arg4))->start();
+         SelectStoredFunctorPointerCall4<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4>::type(
+         functionObject, arg1, arg2, arg3, arg4))->start();
 }
 
 template <typename FunctionObject, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
@@ -205,8 +205,8 @@ QFuture<typename FunctionObject::result_type> run(FunctionObject *functionObject
       const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new typename
-          SelectStoredFunctorPointerCall5<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4, Arg5>::type(
-          functionObject, arg1, arg2, arg3, arg4, arg5))->start();
+         SelectStoredFunctorPointerCall5<typename FunctionObject::result_type, FunctionObject, Arg1, Arg2, Arg3, Arg4, Arg5>::type(
+         functionObject, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename T, typename Class>
@@ -231,27 +231,27 @@ template <typename T, typename Class, typename Param1, typename Arg1, typename P
 QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 {
    return (new typename SelectStoredMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(fn,
-      object, arg1, arg2, arg3))->start();
+         object, arg1, arg2, arg3))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
       typename Param3, typename Arg3, typename Param4, typename Arg4>
 QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3, Param4), const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new typename
-      SelectStoredMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn, object,
-      arg1, arg2, arg3, arg4))->start();
+         SelectStoredMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn, object,
+         arg1, arg2, arg3, arg4))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4, typename Param5, typename Arg5>
 QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3, Param4, Param5), const Arg1 &arg1,
-   const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
+      const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new typename
-          SelectStoredMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
-          fn, object, arg1, arg2, arg3, arg4, arg5))->start();
+         SelectStoredMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
+         fn, object, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename T, typename Class>
@@ -276,17 +276,17 @@ template <typename T, typename Class, typename Param1, typename Arg1, typename P
 QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3) const, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 {
    return (new typename SelectStoredConstMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(
-      fn, object, arg1, arg2, arg3))->start();
+         fn, object, arg1, arg2, arg3))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4>
 QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3, Param4) const, const Arg1 &arg1,
-               const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
+      const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new typename
-          SelectStoredConstMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn, object,
-          arg1, arg2, arg3, arg4))->start();
+         SelectStoredConstMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn, object,
+         arg1, arg2, arg3, arg4))->start();
 }
 
 template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
@@ -295,8 +295,8 @@ QFuture<T> run(const Class &object, T (Class::*fn)(Param1, Param2, Param3, Param
       const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new typename
-          SelectStoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
-          fn, object, arg1, arg2, arg3, arg4, arg5))->start();
+         SelectStoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
+         fn, object, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename T, typename Class>
@@ -305,47 +305,45 @@ QFuture<T> run(Class *object, T (Class::*fn)())
    return (new typename SelectStoredMemberFunctionPointerCall0<T, Class>::type(fn, object))->start();
 }
 
-
 template <typename T, typename Class, typename Param1, typename Arg1>
 QFuture<T> run(Class *object, T (Class::*fn)(Param1), const Arg1 &arg1)
 {
-   return (new typename SelectStoredMemberFunctionPointerCall1<T, Class, Param1, Arg1>::type(fn, object,
-           arg1))->start();
+   return (new typename SelectStoredMemberFunctionPointerCall1<T, Class, Param1, Arg1>::type(fn, object, arg1))->start();
 }
 
 template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2>
 QFuture<T> run(Class *object, T (Class::*fn)(Param1, Param2), const Arg1 &arg1, const Arg2 &arg2)
 {
    return (new typename SelectStoredMemberFunctionPointerCall2<T, Class, Param1, Arg1, Param2, Arg2>::type(fn, object,
-           arg1, arg2))->start();
+         arg1, arg2))->start();
 }
 
 template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
 QFuture<T> run(Class *object, T (Class::*fn)(Param1, Param2, Param3), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
 {
    return (new typename
-           SelectStoredMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(fn, object, arg1, arg2,
-           arg3))->start();
+         SelectStoredMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(fn, object, arg1, arg2,
+         arg3))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4>
-QFuture<T> run(Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4), const Arg1 &arg1, const Arg2 &arg2, 
+QFuture<T> run(Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4), const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new typename
-           SelectStoredMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn,
-           object, arg1, arg2, arg3, arg4))->start();
+      SelectStoredMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn,
+      object, arg1, arg2, arg3, arg4))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4, typename Param5, typename Arg5>
 QFuture<T> run(Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4, Param5), const Arg1 &arg1,
       const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new typename
-          SelectStoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
-          fn, object, arg1, arg2, arg3, arg4, arg5))->start();
+         SelectStoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
+         fn, object, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 template <typename T, typename Class>
@@ -357,44 +355,43 @@ QFuture<T> run(const Class *object, T (Class::*fn)() const)
 template <typename T, typename Class, typename Param1, typename Arg1>
 QFuture<T> run(const Class *object, T (Class::*fn)(Param1) const, const Arg1 &arg1)
 {
-   return (new typename SelectStoredConstMemberFunctionPointerCall1<T, Class, Param1, Arg1>::type(fn, object,
-           arg1))->start();
+   return (new typename SelectStoredConstMemberFunctionPointerCall1<T, Class, Param1, Arg1>::type(fn, object, arg1))->start();
 }
 
 template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2>
 QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2) const, const Arg1 &arg1, const Arg2 &arg2)
 {
    return (new typename SelectStoredConstMemberFunctionPointerCall2<T, Class, Param1, Arg1, Param2, Arg2>::type(fn,
-           object, arg1, arg2))->start();
+         object, arg1, arg2))->start();
 }
 
 template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
 QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2, Param3) const, const Arg1 &arg1, const Arg2 &arg2,
-               const Arg3 &arg3)
+      const Arg3 &arg3)
 {
    return (new typename
-           SelectStoredConstMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(fn, object, arg1,
-                 arg2, arg3))->start();
+         SelectStoredConstMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>::type(fn, object, arg1,
+         arg2, arg3))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4>
-QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4) const, const Arg1 &arg1, const Arg2 &arg2, 
+QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4) const, const Arg1 &arg1, const Arg2 &arg2,
       const Arg3 &arg3, const Arg4 &arg4)
 {
    return (new typename
-          SelectStoredConstMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn,
-          object, arg1, arg2, arg3, arg4))->start();
+         SelectStoredConstMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>::type(fn,
+         object, arg1, arg2, arg3, arg4))->start();
 }
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3, 
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
       typename Param4, typename Arg4, typename Param5, typename Arg5>
 QFuture<T> run(const Class *object, T (Class::*fn)(Param1, Param2, Param3, Param4, Param5) const, const Arg1 &arg1,
-               const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
+      const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
 {
    return (new typename
-          SelectStoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
-          fn, object, arg1, arg2, arg3, arg4, arg5))->start();
+         SelectStoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>::type(
+         fn, object, arg1, arg2, arg3, arg4, arg5))->start();
 }
 
 } // namespace QtConcurrent

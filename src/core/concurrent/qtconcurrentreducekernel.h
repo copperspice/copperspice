@@ -62,7 +62,7 @@ enum ReduceOption {
    UnorderedReduce = 0x1,
    OrderedReduce = 0x2,
    SequentialReduce = 0x4,
-// ParallelReduce = 0x8
+   // ParallelReduce = 0x8
 };
 using ReduceOptions = QFlags<ReduceOption>;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ReduceOptions)
@@ -71,7 +71,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ReduceOptions)
 template <typename ReduceFunctor, typename ReduceResultType, typename T>
 class ReduceKernel
 {
-   typedef QMap<int, IntermediateResults<T> > ResultsMap;
+   typedef QMap<int, IntermediateResults<T>> ResultsMap;
 
    const ReduceOptions reduceOptions;
 
@@ -91,6 +91,7 @@ class ReduceKernel
 
    void reduceResults(ReduceFunctor &reduce, ReduceResultType &r, ResultsMap &map) {
       typename ResultsMap::iterator it = map.begin();
+
       while (it != map.end()) {
          reduceResult(reduce, r, it.value());
          ++it;
@@ -105,6 +106,7 @@ class ReduceKernel
 
    void runReduce(ReduceFunctor &reduce, ReduceResultType &r, const IntermediateResults<T> &result) {
       QMutexLocker locker(&mutex);
+
       if (!canReduce(result.begin)) {
          ++resultsMapSize;
          resultsMap.insert(result.begin, result);
@@ -133,6 +135,7 @@ class ReduceKernel
          }
 
          progress = 0;
+
       } else {
          // reduce this result
          locker.unlock();
@@ -144,6 +147,7 @@ class ReduceKernel
 
          // reduce as many other results as possible
          typename ResultsMap::iterator it = resultsMap.begin();
+
          while (it != resultsMap.end()) {
             if (it.value().begin != progress) {
                break;
@@ -177,7 +181,8 @@ class ReduceKernel
 template <typename Sequence, typename Base, typename Functor1, typename Functor2>
 struct SequenceHolder2 : public Base {
    SequenceHolder2(const Sequence &_sequence, Functor1 functor1, Functor2 functor2, ReduceOptions reduceOptions)
-      : Base(_sequence.begin(), _sequence.end(), functor1, functor2, reduceOptions), sequence(_sequence) {
+      : Base(_sequence.begin(), _sequence.end(), functor1, functor2, reduceOptions), sequence(_sequence)
+   {
    }
 
    Sequence sequence;

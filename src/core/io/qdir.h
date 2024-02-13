@@ -56,10 +56,10 @@ class Q_CORE_EXPORT QDir
                  CaseSensitive   = 0x800,
                  NoDot           = 0x2000,
                  NoDotDot        = 0x4000,
-                 NoDotAndDotDot  = NoDot|NoDotDot,
+                 NoDotAndDotDot  = NoDot | NoDotDot,
 
                  NoFilter = -1
-               };
+   };
 
    using Filters = QFlags<Filter>;
 
@@ -76,14 +76,14 @@ class Q_CORE_EXPORT QDir
                    LocaleAware = 0x40,
                    Type        = 0x80,
                    NoSort = -1
-                 };
+   };
 
    using SortFlags = QFlags<SortFlag>;
 
    QDir(const QDir &dir);
    QDir(const QString &path = QString());
    QDir(const QString &path, const QString &nameFilter, SortFlags sort = SortFlags(Name | IgnoreCase),
-            Filters filters = AllEntries);
+         Filters filters = AllEntries);
 
    ~QDir();
 
@@ -132,11 +132,11 @@ class Q_CORE_EXPORT QDir
 
    QStringList entryList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
    QStringList entryList(const QStringList &nameFilters, Filters filters = NoFilter,
-            SortFlags sort = NoSort) const;
+         SortFlags sort = NoSort) const;
 
    QFileInfoList entryInfoList(Filters filters = NoFilter, SortFlags sort = NoSort) const;
    QFileInfoList entryInfoList(const QStringList &nameFilters, Filters filters = NoFilter,
-            SortFlags sort = NoSort) const;
+         SortFlags sort = NoSort) const;
 
    bool mkdir(const QString &dirName) const;
    bool rmdir(const QString &dirName) const;
@@ -178,11 +178,11 @@ class Q_CORE_EXPORT QDir
 
    static QChar listSeparator() {
 #if defined(Q_OS_WIN)
-        return ';';
+      return ';';
 #else
-        return ':';
+      return ':';
 #endif
-    }
+   }
    static QChar separator();
 
    static bool setCurrent(const QString &path);
@@ -219,12 +219,12 @@ class Q_CORE_EXPORT QDir
    explicit QDir(QDirPrivate &d);
    QSharedDataPointer<QDirPrivate> d_ptr;
 
-    friend class QDirIterator;
-    QDirPrivate* d_func();
-    inline const QDirPrivate* d_func() const
-    {
-        return d_ptr.constData();
-    }
+   friend class QDirIterator;
+   QDirPrivate *d_func();
+
+   const QDirPrivate *d_func() const {
+      return d_ptr.constData();
+   }
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QDir::Filters)

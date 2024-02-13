@@ -49,7 +49,7 @@ using ffd_atomic_int = std::atomic<int>;
 #define ffd_atomic_add_fetch(ptr,val,order) ((ptr)->fetch_add(val, order) + val)
 
 #define ffd_atomic_compare_exchange(ptr,expected,desired,order1,order2) \
-                                            (ptr)->compare_exchange_strong(*expected, desired, order1, order2)
+      (ptr)->compare_exchange_strong(*expected, desired, order1, order2)
 
 extern "C" {
 #include "../../3rdparty/forkfd/forkfd.c"

@@ -314,7 +314,6 @@ class Q_CORE_EXPORT QTimerEvent : public QEvent
    int id;
 };
 
-
 class Q_CORE_EXPORT QChildEvent : public QEvent
 {
  public:
@@ -358,14 +357,16 @@ class Q_CORE_EXPORT QDynamicPropertyChangeEvent : public QEvent
 class Q_CORE_EXPORT QDeferredDeleteEvent : public QEvent
 {
  public:
-    explicit QDeferredDeleteEvent();
-    ~QDeferredDeleteEvent();
+   explicit QDeferredDeleteEvent();
+   ~QDeferredDeleteEvent();
 
-    int loopLevel() const { return level; }
+   int loopLevel() const {
+      return level;
+   }
 
  private:
-    int level;
-    friend class QCoreApplication;
+   int level;
+   friend class QCoreApplication;
 };
 
 #endif // QCOREEVENT_H

@@ -50,6 +50,7 @@ bool QLibraryHandle::load_sys()
    // if it is a plugin, do not try the ".dll" extension
 
    QStringList attempts;
+
    if (pluginState != IsAPlugin) {
       attempts.append(fileName + QString(".dll"));
    }
@@ -73,6 +74,7 @@ bool QLibraryHandle::load_sys()
    }
 
    SetErrorMode(oldmode);
+
    if (pHnd == nullptr) {
       errorString = QLibrary::tr("Unable to load library %1: %2").formatArgs(fileName, qt_error_string());
 
@@ -125,4 +127,3 @@ void *QLibraryHandle::resolve_sys(const QString &symbol)
 
    return address;
 }
-

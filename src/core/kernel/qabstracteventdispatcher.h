@@ -53,7 +53,6 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    virtual void registerSocketNotifier(QSocketNotifier *notifier) = 0;
    virtual void unregisterSocketNotifier(QSocketNotifier *notifier) = 0;
 
-
    int registerTimer(int interval, Qt::TimerType timerType, QObject *object);
 
    virtual void registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object) = 0;
@@ -61,11 +60,11 @@ class Q_CORE_EXPORT QAbstractEventDispatcher : public QObject
    virtual bool unregisterTimers(QObject *object) = 0;
    virtual QList<QTimerInfo> registeredTimers(QObject *object) const = 0;
 
-    virtual int remainingTime(int timerId) = 0;
+   virtual int remainingTime(int timerId) = 0;
 
 #ifdef Q_OS_WIN
-    virtual bool registerEventNotifier(QWinEventNotifier *notifier) = 0;
-    virtual void unregisterEventNotifier(QWinEventNotifier *notifier) = 0;
+   virtual bool registerEventNotifier(QWinEventNotifier *notifier)   = 0;
+   virtual void unregisterEventNotifier(QWinEventNotifier *notifier) = 0;
 #endif
 
    virtual void wakeUp() = 0;

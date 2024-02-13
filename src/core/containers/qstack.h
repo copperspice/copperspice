@@ -30,39 +30,39 @@
 template <class T>
 class QStack : public QVector<T>
 {
-   public:
-      using difference_type = typename QVector<T>::difference_type;
-      using pointer         = typename QVector<T>::pointer;
-      using reference       = typename QVector<T>::reference;
-      using size_type       = typename QVector<T>::difference_type;
-      using value_type      = typename QVector<T>::value_type;
+ public:
+   using difference_type = typename QVector<T>::difference_type;
+   using pointer         = typename QVector<T>::pointer;
+   using reference       = typename QVector<T>::reference;
+   using size_type       = typename QVector<T>::difference_type;
+   using value_type      = typename QVector<T>::value_type;
 
-      using allocator_type  = typename QVector<T>::allocator_type;
+   using allocator_type  = typename QVector<T>::allocator_type;
 
-      using iterator        = typename QVector<T>::iterator;
-      using const_iterator  = typename QVector<T>::const_iterator;
+   using iterator        = typename QVector<T>::iterator;
+   using const_iterator  = typename QVector<T>::const_iterator;
 
-      using const_pointer   = typename QVector<T>::const_pointer;
-      using const_reference = typename QVector<T>::const_reference;
+   using const_pointer   = typename QVector<T>::const_pointer;
+   using const_reference = typename QVector<T>::const_reference;
 
-      using reverse_iterator       = typename QVector<T>::reverse_iterator;
-      using const_reverse_iterator = typename QVector<T>::const_reverse_iterator;
+   using reverse_iterator       = typename QVector<T>::reverse_iterator;
+   using const_reverse_iterator = typename QVector<T>::const_reverse_iterator;
 
-      QStack() = default;
-      ~QStack () = default;
+   QStack() = default;
+   ~QStack () = default;
 
-      void swap(QStack<T> &other) {
-         QVector<T>::swap(other);
-      }
+   void swap(QStack<T> &other) {
+      QVector<T>::swap(other);
+   }
 
-      void push(const T &value) {
-         QVector<T>::append(value);
-      }
+   void push(const T &value) {
+      QVector<T>::append(value);
+   }
 
-      T pop();
+   T pop();
 
-      reference top();
-      const_reference top() const;
+   reference top();
+   const_reference top() const;
 };
 
 template <class T>

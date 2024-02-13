@@ -77,6 +77,7 @@ bool QNonContiguousByteDeviceBufferImpl::reset()
    if (resetDisabled) {
       return false;
    }
+
    return arrayImpl->reset();
 }
 
@@ -242,10 +243,12 @@ const char *QNonContiguousByteDeviceIoDeviceImpl::readPointer(qint64 maximumLeng
    if ((haveRead == -1) || (haveRead == 0 && device->atEnd() && !device->isSequential())) {
       eof = true;
       len = -1;
+
       // size was unknown before, emit a readProgress with the final size
       if (size() == -1) {
          emit readProgress(totalAdvancements, totalAdvancements);
       }
+
       return nullptr;
    }
 
@@ -272,18 +275,19 @@ bool QNonContiguousByteDeviceIoDeviceImpl::advanceReadPointer(qint64 amount)
    // advancing over that what has actually been read before
    if (currentReadBufferPosition > currentReadBufferAmount) {
       qint64 i = currentReadBufferPosition - currentReadBufferAmount;
+
       while (i > 0) {
          if (device->getChar(nullptr) == false) {
             emit readProgress(totalAdvancements - i, size());
             return false; // ### FIXME handle eof
          }
+
          i--;
       }
 
       currentReadBufferPosition = 0;
       currentReadBufferAmount = 0;
    }
-
 
    return true;
 }
@@ -298,14 +302,18 @@ bool QNonContiguousByteDeviceIoDeviceImpl::reset()
    if (resetDisabled) {
       return false;
    }
+
    bool reset = (initialPosition == 0) ? device->reset() : device->seek(initialPosition);
+
    if (reset) {
       eof = false; // assume eof is false, it will be true after a read has been attempted
       totalAdvancements = 0; //reset the progress counter
+
       if (currentReadBuffer) {
          delete currentReadBuffer;
          currentReadBuffer = nullptr;
       }
+
       currentReadBufferAmount = 0;
       currentReadBufferPosition = 0;
       return true;
@@ -375,6 +383,7 @@ qint64 QByteDeviceWrappingIoDevice::readData( char *data, qint64 maxSize)
 {
    qint64 len;
    const char *readPointer = byteDevice->readPointer(maxSize, len);
+
    if (len == -1) {
       return -1;
    }

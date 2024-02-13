@@ -48,9 +48,11 @@ class QOrderedMutexLocker
          if (mtx1) {
             mtx1->lock();
          }
+
          if (mtx2) {
             mtx2->lock();
          }
+
          locked = true;
       }
    }
@@ -60,9 +62,11 @@ class QOrderedMutexLocker
          if (mtx1) {
             mtx1->unlock();
          }
+
          if (mtx2) {
             mtx2->unlock();
          }
+
          locked = false;
       }
    }
@@ -72,15 +76,18 @@ class QOrderedMutexLocker
       if (mtx1 == mtx2) {
          return false;
       }
+
       if (mtx1 < mtx2) {
          mtx2->lock();
          return true;
       }
+
       if (!mtx2->tryLock()) {
          mtx1->unlock();
          mtx2->lock();
          mtx1->lock();
       }
+
       return true;
    }
 

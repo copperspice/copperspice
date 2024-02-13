@@ -79,11 +79,11 @@
 #endif
 
 #if ! defined(QT_NO_TEXTCODECPLUGIN)
-   static QFactoryLoader *loader()
-   {
-      static QFactoryLoader retval(QTextCodecInterface_ID, "/codecs");
-      return &retval;
-   }
+static QFactoryLoader *loader()
+{
+   static QFactoryLoader retval(QTextCodecInterface_ID, "/codecs");
+   return &retval;
+}
 #endif
 
 // Cache for QTextCodec::codecForName and codecForMib.
@@ -148,11 +148,12 @@ static QTextCodec *createForName(QStringView name)
 
    for (const auto &key : keySet) {
       if (nameMatch(make_view(name), key)) {
-         if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
+         if (QTextCodecFactoryInterface *factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(key))) {
             return factory->create(key);
          }
       }
    }
+
 #endif
 
    return nullptr;
@@ -170,7 +171,7 @@ static QTextCodec *createForMib(int mib)
    if (keySet.contains(name)) {
       // current name is supported
 
-      if (QTextCodecFactoryInterface * factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(name))) {
+      if (QTextCodecFactoryInterface *factory = dynamic_cast<QTextCodecFactoryInterface *>(obj->instance(name))) {
          return factory->create(name);
       }
    }
@@ -219,7 +220,7 @@ bool QTextCodec::validCodecs()
 }
 
 #if defined(Q_OS_WIN)
-   // no code should appear here
+// no code should appear here
 
 #else
 
@@ -355,6 +356,7 @@ static QTextCodec *checkForCodec(const QByteArray &name)
          c = QTextCodec::codecForName(name.left(index));
       }
    }
+
    return c;
 }
 #endif
@@ -367,6 +369,7 @@ static void setupLocaleMapper()
 #if ! defined(Q_OS_WIN)
 
 #if defined (_XOPEN_UNIX)
+
    if (! localeMapper) {
       char *charset = nl_langinfo (CODESET);
 
@@ -416,6 +419,7 @@ static void setupLocaleMapper()
 
       // 1. CODESET from ctype if it contains a .CODESET part (e.g. en_US.ISO8859-15)
       int indexOfDot = ctype.indexOf('.');
+
       if (indexOfDot != -1) {
          localeMapper = checkForCodec( ctype.mid(indexOfDot + 1) );
       }
@@ -423,6 +427,7 @@ static void setupLocaleMapper()
       // 2. CODESET from lang if it contains a .CODESET part
       if (!localeMapper) {
          indexOfDot = lang.indexOf('.');
+
          if (indexOfDot != -1) {
             localeMapper = checkForCodec( lang.mid(indexOfDot + 1) );
          }
@@ -488,6 +493,7 @@ static void setupLocaleMapper()
    if (! localeMapper) {
       localeMapper = QTextCodec::codecForName("ISO 8859-1");
    }
+
 #endif
 
 }
@@ -506,15 +512,18 @@ static void setup()
    }
 
 #ifdef Q_DEBUG_TEXTCODEC
+
    if (destroying_is_ok) {
       qWarning("QTextCodec() Creating new codec during codec cleanup");
    }
+
 #endif
    all = new QList<QTextCodec *>;
    // create the cleanup object to cleanup all codecs on exit
    (void) createQTextCodecCleanup();
 
 #ifndef QT_NO_CODECS
+
    for (int i = 0; i < 9; ++i) {
       (void)new QIsciiCodec(i);
    }
@@ -679,6 +688,7 @@ QTextCodec *QTextCodec::codecForMib(int mib)
 
    if (cache) {
       codec = cache->value(key);
+
       if (codec) {
          return codec;
       }
@@ -693,6 +703,7 @@ QTextCodec *QTextCodec::codecForMib(int mib)
          if (cache) {
             cache->insert(key, cursor);
          }
+
          return cursor;
       }
    }
@@ -742,6 +753,7 @@ QStringList QTextCodec::availableCodecs()
          }
       }
    }
+
 #endif
 
    return codecs;
@@ -778,6 +790,7 @@ QList<int> QTextCodec::availableMibs()
          }
       }
    }
+
 #endif
 
    return codecs;
@@ -788,6 +801,7 @@ void QTextCodec::setCodecForLocale(QTextCodec *c)
    QRecursiveMutexLocker locker(textCodecsMutex());
 
    localeMapper = c;
+
    if (! localeMapper) {
       setupLocaleMapper();
    }
@@ -795,7 +809,7 @@ void QTextCodec::setCodecForLocale(QTextCodec *c)
 
 QTextCodec *QTextCodec::codecForLocale()
 {
-   if (!validCodecs()) {
+   if (! validCodecs()) {
       return nullptr;
    }
 
@@ -945,7 +959,8 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
          }
       }
    }
-   if (!c) {
+
+   if (! c) {
       c = defaultCodec;
    }
 
@@ -978,6 +993,7 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
    if (arraySize < 2) {
       return defaultCodec;
    }
+
    if ((uchar)ba[0] == 0xfe && (uchar)ba[1] == 0xff) {
       return QTextCodec::codecForMib(1013);   // utf16 be
    } else if ((uchar)ba[0] == 0xff && (uchar)ba[1] == 0xfe) {
@@ -987,9 +1003,8 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
    if (arraySize < 3) {
       return defaultCodec;
    }
-   if ((uchar)ba[0] == 0xef
-         && (uchar)ba[1] == 0xbb
-         && (uchar)ba[2] == 0xbf) {
+
+   if ((uchar)ba[0] == 0xef && (uchar)ba[1] == 0xbb && (uchar)ba[2] == 0xbf) {
       return QTextCodec::codecForMib(106);   // utf-8
    }
 

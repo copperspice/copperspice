@@ -31,7 +31,9 @@ class QBitRef;
 class Q_CORE_EXPORT QBitArray
 {
  public:
-   inline QBitArray() {}
+   QBitArray()
+   { }
+
    explicit QBitArray(int size, bool value = false);
 
    QBitArray(const QBitArray &other)

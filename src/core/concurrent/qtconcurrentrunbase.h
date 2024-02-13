@@ -48,7 +48,7 @@ struct SelectSpecialization<void> {
 };
 
 template <typename T>
-class RunFunctionTaskBase : public QFutureInterface<T> , public QRunnable
+class RunFunctionTaskBase : public QFutureInterface<T>, public QRunnable
 {
  public:
    QFuture<T> start() {
@@ -85,6 +85,7 @@ class RunFunctionTask : public RunFunctionTaskBase<T>
       this->reportResult(result);
       this->reportFinished();
    }
+
    T result;
 };
 

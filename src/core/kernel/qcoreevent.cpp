@@ -32,10 +32,11 @@
 
 QEvent::QEvent(Type type)
    : d(nullptr), t(type), posted(false), spont(false), m_accept(true)
-{}
+{
+}
 
 QEvent::QEvent(const QEvent &other)
-    : d(other.d), t(other.t), posted(other.posted), spont(other.spont), m_accept(other.m_accept)
+   : d(other.d), t(other.t), posted(other.posted), spont(other.spont), m_accept(other.m_accept)
 {
    Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
@@ -65,19 +66,18 @@ namespace {
 
 template <size_t N>
 struct QBasicAtomicBitField {
-    enum {
-        BitsPerInt = std::numeric_limits<uint>::digits,
-        NumInts = (N + BitsPerInt - 1) / BitsPerInt,
-        NumBits = N
-    };
+   enum {
+      BitsPerInt = std::numeric_limits<uint>::digits,
+      NumInts = (N + BitsPerInt - 1) / BitsPerInt,
+      NumBits = N
+   };
 
-    // atomic int points to the next (possibly) free ID saving
-    // the otherwise necessary scan through 'data':
-    std::atomic<uint> next;
-    std::atomic<uint> data[NumInts];
+   // atomic int points to the next (possibly) free ID saving
+   // the otherwise necessary scan through 'data':
+   std::atomic<uint> next;
+   std::atomic<uint> data[NumInts];
 
-    bool allocateSpecific(int which)
-    {
+   bool allocateSpecific(int which) {
       std::atomic<uint> &entry = data[which / BitsPerInt];
 
       uint old = entry.load();
@@ -86,27 +86,27 @@ struct QBasicAtomicBitField {
       return !(old & bit) && entry.compare_exchange_strong(old, old | bit, std::memory_order_relaxed);
    }
 
-    int allocateNext()
-    {
-        // Unroll loop to iterate over ints, then bits? Would save
-        // potentially a lot of cmpxchgs, because we can scan the
-        // whole int before having to load it again.
+   int allocateNext() {
+      // Unroll loop to iterate over ints, then bits? Would save
+      // potentially a lot of cmpxchgs, because we can scan the
+      // whole int before having to load it again.
 
-        // this should never execute many iterations, so leave like this for now
-        for (uint i = next.load(); i < NumBits; ++i) {
-            if (allocateSpecific(i)) {
-                // remember next (possibly) free id
-                uint oldNext = next.load();
+      // this should never execute many iterations, so leave like this for now
+      for (uint i = next.load(); i < NumBits; ++i) {
+         if (allocateSpecific(i)) {
+            // remember next (possibly) free id
+            uint oldNext = next.load();
 
-                next.compare_exchange_strong(oldNext, qMax(i + 1, oldNext), std::memory_order_relaxed);
-                return i;
-            }
-        }
-        return -1;
-    }
+            next.compare_exchange_strong(oldNext, qMax(i + 1, oldNext), std::memory_order_relaxed);
+            return i;
+         }
+      }
+
+      return -1;
+   }
 };
 
-} // unnamed namespace
+} // end namespace
 
 using UserEventTypeRegistry = QBasicAtomicBitField<QEvent::MaxUser - QEvent::User + 1>;
 
@@ -122,27 +122,26 @@ static inline int registerEventTypeZeroBased(int id)
    // otherwise ignore hint
    return userEventTypeRegistry.allocateNext();
 }
+
 int QEvent::registerEventType(int hint)
 {
-    const int result = registerEventTypeZeroBased(QEvent::MaxUser - hint);
-    return result < 0 ? -1 : QEvent::MaxUser - result ;
+   const int result = registerEventTypeZeroBased(QEvent::MaxUser - hint);
+   return result < 0 ? -1 : QEvent::MaxUser - result ;
 }
-
 
 QTimerEvent::QTimerEvent(int timerId)
    : QEvent(Timer), id(timerId)
-{}
+{
+}
 
-//  internal
 QTimerEvent::~QTimerEvent()
 {
 }
 
 QChildEvent::QChildEvent(Type type, QObject *child)
    : QEvent(type), c(child)
-{}
-
-//  internal
+{
+}
 
 QChildEvent::~QChildEvent()
 {
@@ -153,15 +152,13 @@ QDynamicPropertyChangeEvent::QDynamicPropertyChangeEvent(const QByteArray &name)
 {
 }
 
-
-//  internal
 QDynamicPropertyChangeEvent::~QDynamicPropertyChangeEvent()
 {
 }
 
 QDeferredDeleteEvent::QDeferredDeleteEvent()
-    : QEvent(QEvent::DeferredDelete)
-    , level(0)
+   : QEvent(QEvent::DeferredDelete), level(0)
 { }
+
 QDeferredDeleteEvent::~QDeferredDeleteEvent()
 { }

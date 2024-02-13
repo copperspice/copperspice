@@ -31,7 +31,7 @@
 class Q_CORE_EXPORT QStandardPaths
 {
  public:
-   // Do not re-order, must match QDesktopServices
+   // Do not re-order, this must match QDesktopServices
    enum StandardLocation {
       DesktopLocation,
       DocumentsLocation,
@@ -69,7 +69,6 @@ class Q_CORE_EXPORT QStandardPaths
    static QString displayName(StandardLocation type);
 
    static QString findExecutable(const QString &executableName, const QStringList &paths = QStringList());
-
 
    static void setTestModeEnabled(bool testMode);
    static bool isTestModeEnabled();

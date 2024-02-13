@@ -73,5 +73,4 @@ class QThreadPoolPrivate
    friend class QThreadPoolThread;
 };
 
-
 #endif

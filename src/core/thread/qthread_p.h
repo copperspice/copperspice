@@ -54,7 +54,7 @@ class QPostEvent
 
 inline bool operator<(const QPostEvent &first, const QPostEvent &second)
 {
-    return first.priority > second.priority;
+   return first.priority > second.priority;
 }
 
 // This class holds the list of posted events.
@@ -73,8 +73,8 @@ class QPostEventList : public QVector<QPostEvent>
    QMutex mutex;
 
    inline QPostEventList()
-        : QVector<QPostEvent>(), recursion(0), startOffset(0), insertionOffset(0)
-    { }
+      : QVector<QPostEvent>(), recursion(0), startOffset(0), insertionOffset(0)
+   { }
 
    void addEvent(const QPostEvent &ev) {
       int priority = ev.priority;
@@ -101,9 +101,9 @@ class QPostEventList : public QVector<QPostEvent>
 
 class Q_CORE_EXPORT QDaemonThread : public QThread
 {
-public:
-    QDaemonThread(QObject *parent = nullptr);
-    ~QDaemonThread();
+ public:
+   QDaemonThread(QObject *parent = nullptr);
+   ~QDaemonThread();
 };
 
 class QThreadPrivate
@@ -114,7 +114,7 @@ class QThreadPrivate
    QThreadPrivate(QThreadData *d = nullptr);
    virtual ~QThreadPrivate();
 
-    void setPriority(QThread::Priority prio);
+   void setPriority(QThread::Priority prio);
    mutable QMutex mutex;
    QAtomicInt quitLockRef;
 
@@ -151,19 +151,19 @@ class QThreadPrivate
 
    bool terminationEnabled, terminatePending;
 #endif
-    QThreadData *data;
+   QThreadData *data;
 
-    static void createEventDispatcher(QThreadData *data);
+   static void createEventDispatcher(QThreadData *data);
 
-    void ref() {
-        quitLockRef.ref();
-    }
+   void ref() {
+      quitLockRef.ref();
+   }
 
-    void deref() {
-        if (!quitLockRef.deref() && running) {
-            QCoreApplication::instance()->postEvent(q_ptr, new QEvent(QEvent::Quit));
-        }
-    }
+   void deref() {
+      if (!quitLockRef.deref() && running) {
+         QCoreApplication::instance()->postEvent(q_ptr, new QEvent(QEvent::Quit));
+      }
+   }
 
  protected:
    QThread *q_ptr;
@@ -212,8 +212,8 @@ class QThreadData
 
    QThreadPrivate *get_QThreadPrivate() const;
 
-private:
-    QAtomicInt m_ref;
+ private:
+   QAtomicInt m_ref;
 };
 
 class QScopedLoopLevelCounter

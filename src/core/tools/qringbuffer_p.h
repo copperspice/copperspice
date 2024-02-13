@@ -30,23 +30,25 @@
 class QRingBuffer
 {
  public:
-   inline QRingBuffer(int growth = 4096) : basicBlockSize(growth) {
+   QRingBuffer(int growth = 4096)
+      : basicBlockSize(growth)
+   {
       buffers << QByteArray();
       clear();
    }
 
-   inline int nextDataBlockSize() const {
+   int nextDataBlockSize() const {
       return (tailBuffer == 0 ? tail : buffers.first().size()) - head;
    }
 
-   inline const char *readPointer() const {
+   const char *readPointer() const {
       return buffers.isEmpty() ? nullptr : (buffers.first().constData() + head);
    }
 
    // access the bytes at a specified position
    // the out-variable length will contain the amount of bytes readable
    // from there, e.g. the amount still the same QByteArray
-   inline const char *readPointerAtPosition(qint64 pos, qint64 &length) const {
+   const char *readPointerAtPosition(qint64 pos, qint64 &length) const {
       if (buffers.isEmpty()) {
          length = 0;
          return nullptr;
@@ -59,6 +61,7 @@ class QRingBuffer
 
       // special case: it is in the first buffer
       int nextDataBlockSizeValue = nextDataBlockSize();
+
       if (pos - head < nextDataBlockSizeValue) {
          length = nextDataBlockSizeValue - pos;
          return buffers.at(0).constData() + head + pos;
@@ -89,27 +92,33 @@ class QRingBuffer
       return buffers[tailBuffer].constData() + pos;
    }
 
-   inline void free(int bytes) {
+   void free(int bytes) {
       bufferSize -= bytes;
+
       if (bufferSize < 0) {
          bufferSize = 0;
       }
 
       for (;;) {
          int nextBlockSize = nextDataBlockSize();
+
          if (bytes < nextBlockSize) {
             head += bytes;
+
             if (head == tail && tailBuffer == 0) {
                head = tail = 0;
             }
+
             break;
          }
 
          bytes -= nextBlockSize;
+
          if (buffers.count() == 1) {
             if (buffers.at(0).size() != basicBlockSize) {
                buffers[0].resize(basicBlockSize);
             }
+
             head = tail = 0;
             tailBuffer = 0;
             break;
@@ -125,7 +134,7 @@ class QRingBuffer
       }
    }
 
-   inline char *reserve(int bytes) {
+   char *reserve(int bytes) {
       // if this is a fresh empty QRingBuffer
       if (bufferSize == 0) {
          buffers[0].resize(qMax(basicBlockSize, bytes));
@@ -162,14 +171,15 @@ class QRingBuffer
       return buffers[tailBuffer].data();
    }
 
-   inline void truncate(int pos) {
+   void truncate(int pos) {
       if (pos < size()) {
          chop(size() - pos);
       }
    }
 
-   inline void chop(int bytes) {
+   void chop(int bytes) {
       bufferSize -= bytes;
+
       if (bufferSize < 0) {
          bufferSize = 0;
       }
@@ -178,9 +188,11 @@ class QRingBuffer
          // special case: head and tail are in the same buffer
          if (tailBuffer == 0) {
             tail -= bytes;
+
             if (tail <= head) {
                tail = head = 0;
             }
+
             return;
          }
 
@@ -201,41 +213,44 @@ class QRingBuffer
       }
    }
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return tailBuffer == 0 && tail == 0;
    }
 
-   inline int getChar() {
+   int getChar() {
       if (isEmpty()) {
          return -1;
       }
+
       char c = *readPointer();
       free(1);
       return int(uchar(c));
    }
 
-   inline void putChar(char c) {
+   void putChar(char c) {
       char *ptr = reserve(1);
       *ptr = c;
    }
 
-   inline void ungetChar(char c) {
+   void ungetChar(char c) {
       --head;
+
       if (head < 0) {
          buffers.prepend(QByteArray());
          buffers[0].resize(basicBlockSize);
          head = basicBlockSize - 1;
          ++tailBuffer;
       }
+
       buffers[0][head] = c;
       ++bufferSize;
    }
 
-   inline int size() const {
+   int size() const {
       return bufferSize;
    }
 
-   inline void clear() {
+   void clear() {
       buffers.erase(buffers.begin() + 1, buffers.end());
       buffers[0].resize(0);
       buffers[0].squeeze();
@@ -245,8 +260,9 @@ class QRingBuffer
       bufferSize = 0;
    }
 
-   inline int indexOf(char c) const {
+   int indexOf(char c) const {
       int index = 0;
+
       for (int i = 0; i < buffers.size(); ++i) {
          int start = 0;
          int end = buffers.at(i).size();
@@ -254,23 +270,29 @@ class QRingBuffer
          if (i == 0) {
             start = head;
          }
+
          if (i == tailBuffer) {
             end = tail;
          }
+
          const char *ptr = buffers.at(i).data() + start;
+
          for (int j = start; j < end; ++j) {
             if (*ptr++ == c) {
                return index;
             }
+
             ++index;
          }
       }
+
       return -1;
    }
 
-   inline int indexOf(char c, int maxLength) const {
+   int indexOf(char c, int maxLength) const {
       int index = 0;
       int remain = qMin(size(), maxLength);
+
       for (int i = 0; remain && i < buffers.size(); ++i) {
          int start = 0;
          int end = buffers.at(i).size();
@@ -278,54 +300,64 @@ class QRingBuffer
          if (i == 0) {
             start = head;
          }
+
          if (i == tailBuffer) {
             end = tail;
          }
+
          if (remain < end - start) {
             end = start + remain;
             remain = 0;
          } else {
             remain -= end - start;
          }
+
          const char *ptr = buffers.at(i).data() + start;
+
          for (int j = start; j < end; ++j) {
             if (*ptr++ == c) {
                return index;
             }
+
             ++index;
          }
       }
+
       return -1;
    }
 
-   inline int read(char *data, int maxLength) {
+   int read(char *data, int maxLength) {
       int bytesToRead = qMin(size(), maxLength);
       int readSoFar = 0;
+
       while (readSoFar < bytesToRead) {
          const char *ptr = readPointer();
          int bytesToReadFromThisBlock = qMin(bytesToRead - readSoFar, nextDataBlockSize());
+
          if (data) {
             memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
          }
+
          readSoFar += bytesToReadFromThisBlock;
          free(bytesToReadFromThisBlock);
       }
+
       return readSoFar;
    }
 
-   inline QByteArray read(int maxLength) {
+   QByteArray read(int maxLength) {
       QByteArray tmp;
       tmp.resize(qMin(maxLength, size()));
       read(tmp.data(), tmp.size());
       return tmp;
    }
 
-   inline QByteArray readAll() {
+   QByteArray readAll() {
       return read(size());
    }
 
    // read an unspecified amount (will read the first buffer)
-   inline QByteArray read() {
+   QByteArray read() {
       if (bufferSize == 0) {
          return QByteArray();
       }
@@ -354,18 +386,20 @@ class QRingBuffer
       QByteArray qba(readPointer(), nextDataBlockSize());
       buffers.removeFirst();
       head = 0;
+
       if (tailBuffer == 0) {
          buffers << QByteArray();
          tail = 0;
       } else {
          --tailBuffer;
       }
+
       bufferSize -= qba.length();
       return qba;
    }
 
    // append a new buffer to the end
-   inline void append(const QByteArray &qba) {
+   void append(const QByteArray &qba) {
       buffers[tailBuffer].resize(tail);
       buffers << qba;
       ++tailBuffer;
@@ -373,45 +407,55 @@ class QRingBuffer
       bufferSize += qba.length();
    }
 
-   inline QByteArray peek(int maxLength) const {
+   QByteArray peek(int maxLength) const {
       int bytesToRead = qMin(size(), maxLength);
+
       if (maxLength <= 0) {
          return QByteArray();
       }
+
       QByteArray ret;
       ret.resize(bytesToRead);
       int readSoFar = 0;
+
       for (int i = 0; readSoFar < bytesToRead && i < buffers.size(); ++i) {
          int start = 0;
          int end = buffers.at(i).size();
+
          if (i == 0) {
             start = head;
          }
+
          if (i == tailBuffer) {
             end = tail;
          }
+
          const int len = qMin(ret.size() - readSoFar, end - start);
          memcpy(ret.data() + readSoFar, buffers.at(i).constData() + start, len);
          readSoFar += len;
       }
+
       Q_ASSERT(readSoFar == ret.size());
       return ret;
    }
 
-   inline int skip(int length) {
+   int skip(int length) {
       return read(nullptr, length);
    }
 
-   inline int readLine(char *data, int maxLength) {
+   int readLine(char *data, int maxLength) {
       int index = indexOf('\n');
+
       if (index == -1) {
          return read(data, maxLength);
       }
+
       if (maxLength <= 0) {
          return -1;
       }
 
       int readSoFar = 0;
+
       while (readSoFar < index + 1 && readSoFar < maxLength - 1) {
          int bytesToRead = qMin((index + 1) - readSoFar, nextDataBlockSize());
          bytesToRead = qMin(bytesToRead, (maxLength - 1) - readSoFar);
@@ -425,7 +469,7 @@ class QRingBuffer
       return readSoFar;
    }
 
-   inline bool canReadLine() const {
+   bool canReadLine() const {
       return indexOf('\n') != -1;
    }
 

@@ -111,6 +111,7 @@ static QString locatePlugin(const QString &fileName)
 
    if (isAbsolute) {
       QFileInfo fi(fileName);
+
       if (fi.isFile()) {
          return fi.canonicalFilePath();
       }
@@ -131,6 +132,7 @@ static QString locatePlugin(const QString &fileName)
    const bool debug = qt_debug_component();
 
    QStringList paths;
+
    if (isAbsolute) {
       paths.append(fileName.left(slash));         // don't include the '/'
    } else {
@@ -146,6 +148,7 @@ static QString locatePlugin(const QString &fileName)
             if (debug) {
                qDebug() << "Trying..." << fn;
             }
+
             if (QFileInfo(fn).isFile()) {
                return fn;
             }
@@ -156,6 +159,7 @@ static QString locatePlugin(const QString &fileName)
    if (debug) {
       qDebug() << fileName << "not found";
    }
+
    return QString();
 }
 #endif
@@ -175,14 +179,16 @@ void QPluginLoader::setFileName(const QString &fileName)
    const QString fn = locatePlugin(fileName);
 
    mp_handle = QLibraryHandle::findOrLoad(fn, QString(), lh);
+
    if (! fn.isEmpty()) {
       mp_handle->updatePluginState();
    }
 
 #else
+
    if (qt_debug_component()) {
       qWarning("QPluginLoader::setFileName() Unable to load %s into a statically linked CopperSpice library",
-         QFile::encodeName(fileName).constData() );
+            QFile::encodeName(fileName).constData() );
    }
 
 #endif
@@ -225,8 +231,6 @@ QLibrary::LoadHints QPluginLoader::loadHints() const
    return mp_handle ? mp_handle->loadHints() : QLibrary::LoadHints();
 }
 
-
-
 /* emerald - static plugins
 void Q_CORE_EXPORT qRegisterStaticPluginFunction(QStaticPlugin plugin)
 {
@@ -264,4 +268,3 @@ QVector<QMetaObject *> QPluginLoader::staticPlugins()
 
    return QVector<QMetaObject *>();
 }
-

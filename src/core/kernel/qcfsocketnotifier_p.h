@@ -30,14 +30,14 @@
 #include <CoreFoundation/CoreFoundation.h>
 
 struct MacSocketInfo {
-    MacSocketInfo() : socket(nullptr), runloop(nullptr), readNotifier(nullptr), writeNotifier(nullptr),
-        readEnabled(false), writeEnabled(false) {}
-    CFSocketRef socket;
-    CFRunLoopSourceRef runloop;
-    QObject *readNotifier;
-    QObject *writeNotifier;
-    bool readEnabled;
-    bool writeEnabled;
+   MacSocketInfo() : socket(nullptr), runloop(nullptr), readNotifier(nullptr), writeNotifier(nullptr),
+      readEnabled(false), writeEnabled(false) {}
+   CFSocketRef socket;
+   CFRunLoopSourceRef runloop;
+   QObject *readNotifier;
+   QObject *writeNotifier;
+   bool readEnabled;
+   bool writeEnabled;
 };
 typedef QHash<int, MacSocketInfo *> MacSocketHash;
 
@@ -54,27 +54,27 @@ typedef void (*MaybeCancelWaitForMoreEventsFn)(QAbstractEventDispatcher *hostEve
 //
 class Q_CORE_EXPORT QCFSocketNotifier
 {
-public:
-    QCFSocketNotifier();
-    ~QCFSocketNotifier();
-    void setHostEventDispatcher(QAbstractEventDispatcher *hostEventDispacher);
-    void setMaybeCancelWaitForMoreEventsCallback(MaybeCancelWaitForMoreEventsFn callBack);
-    void registerSocketNotifier(QSocketNotifier *notifier);
-    void unregisterSocketNotifier(QSocketNotifier *notifier);
-    void removeSocketNotifiers();
+ public:
+   QCFSocketNotifier();
+   ~QCFSocketNotifier();
+   void setHostEventDispatcher(QAbstractEventDispatcher *hostEventDispacher);
+   void setMaybeCancelWaitForMoreEventsCallback(MaybeCancelWaitForMoreEventsFn callBack);
+   void registerSocketNotifier(QSocketNotifier *notifier);
+   void unregisterSocketNotifier(QSocketNotifier *notifier);
+   void removeSocketNotifiers();
 
-private:
-    void destroyRunLoopObserver();
+ private:
+   void destroyRunLoopObserver();
 
-    static void unregisterSocketInfo(MacSocketInfo *socketInfo);
-    static void enableSocketNotifiers(CFRunLoopObserverRef ref, CFRunLoopActivity activity, void *info);
+   static void unregisterSocketInfo(MacSocketInfo *socketInfo);
+   static void enableSocketNotifiers(CFRunLoopObserverRef ref, CFRunLoopActivity activity, void *info);
 
-    MacSocketHash macSockets;
-    QAbstractEventDispatcher *eventDispatcher;
-    MaybeCancelWaitForMoreEventsFn maybeCancelWaitForMoreEvents;
-    CFRunLoopObserverRef enableNotifiersObserver;
+   MacSocketHash macSockets;
+   QAbstractEventDispatcher *eventDispatcher;
+   MaybeCancelWaitForMoreEventsFn maybeCancelWaitForMoreEvents;
+   CFRunLoopObserverRef enableNotifiersObserver;
 
-    friend void qt_mac_socket_callback(CFSocketRef, CFSocketCallBackType, CFDataRef, const void *, void *);
+   friend void qt_mac_socket_callback(CFSocketRef, CFSocketCallBackType, CFDataRef, const void *, void *);
 };
 
 #endif

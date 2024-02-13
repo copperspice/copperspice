@@ -31,70 +31,80 @@
 
 class Q_CORE_EXPORT QWindowsPipeReader : public QObject
 {
-    CORE_CS_OBJECT(QWindowsPipeReader)
+   CORE_CS_OBJECT(QWindowsPipeReader)
 
-public:
-    explicit QWindowsPipeReader(QObject *parent = nullptr);
-    ~QWindowsPipeReader();
+ public:
+   explicit QWindowsPipeReader(QObject *parent = nullptr);
+   ~QWindowsPipeReader();
 
-    void setHandle(HANDLE hPipeReadEnd);
-    void startAsyncRead();
-    void stop();
+   void setHandle(HANDLE hPipeReadEnd);
+   void startAsyncRead();
+   void stop();
 
-    void setMaxReadBufferSize(qint64 size) { readBufferMaxSize = size; }
-    qint64 maxReadBufferSize() const { return readBufferMaxSize; }
+   void setMaxReadBufferSize(qint64 size) {
+      readBufferMaxSize = size;
+   }
 
-    bool isPipeClosed() const { return pipeBroken; }
-    qint64 bytesAvailable() const;
-    qint64 read(char *data, qint64 maxlen);
-    bool canReadLine() const;
-    bool waitForReadyRead(int msecs);
-    bool waitForPipeClosed(int msecs);
+   qint64 maxReadBufferSize() const {
+      return readBufferMaxSize;
+   }
 
-    bool isReadOperationActive() const { return readSequenceStarted; }
+   bool isPipeClosed() const {
+      return pipeBroken;
+   }
 
-    CORE_CS_SIGNAL_1(Public, void winError(ulong errorCode, const QString &text))
-    CORE_CS_SIGNAL_2(winError, errorCode, text)
+   qint64 bytesAvailable() const;
+   qint64 read(char *data, qint64 maxlen);
+   bool canReadLine() const;
+   bool waitForReadyRead(int msecs);
+   bool waitForPipeClosed(int msecs);
 
-    CORE_CS_SIGNAL_1(Public, void readyRead())
-    CORE_CS_SIGNAL_2(readyRead)
+   bool isReadOperationActive() const {
+      return readSequenceStarted;
+   }
 
-    CORE_CS_SIGNAL_1(Public, void pipeClosed())
-    CORE_CS_SIGNAL_2(pipeClosed)
+   CORE_CS_SIGNAL_1(Public, void winError(ulong errorCode, const QString &text))
+   CORE_CS_SIGNAL_2(winError, errorCode, text)
 
-    CORE_CS_SIGNAL_1(Public, void _q_queueReadyRead())
-    CORE_CS_SIGNAL_2(_q_queueReadyRead)
+   CORE_CS_SIGNAL_1(Public, void readyRead())
+   CORE_CS_SIGNAL_2(readyRead)
 
-private:
-    static void CALLBACK readFileCompleted(DWORD errorCode, DWORD numberOfBytesTransfered, OVERLAPPED *overlappedBase);
-    void notified(DWORD errorCode, DWORD numberOfBytesRead);
-    DWORD checkPipeState();
-    bool waitForNotification(int timeout);
-    void emitPendingReadyRead();
+   CORE_CS_SIGNAL_1(Public, void pipeClosed())
+   CORE_CS_SIGNAL_2(pipeClosed)
 
-    class Overlapped : public OVERLAPPED
-    {
-      public:
-        explicit Overlapped(QWindowsPipeReader *reader);
+   CORE_CS_SIGNAL_1(Public, void _q_queueReadyRead())
+   CORE_CS_SIGNAL_2(_q_queueReadyRead)
 
-        Overlapped(const Overlapped &) = delete;
-        Overlapped &operator=(const Overlapped &) = delete;
+ private:
+   static void CALLBACK readFileCompleted(DWORD errorCode, DWORD numberOfBytesTransfered, OVERLAPPED *overlappedBase);
+   void notified(DWORD errorCode, DWORD numberOfBytesRead);
+   DWORD checkPipeState();
+   bool waitForNotification(int timeout);
+   void emitPendingReadyRead();
 
-        void clear();
-        QWindowsPipeReader *pipeReader;
-    };
+   class Overlapped : public OVERLAPPED
+   {
+    public:
+      explicit Overlapped(QWindowsPipeReader *reader);
 
-    HANDLE handle;
-    Overlapped overlapped;
-    qint64 readBufferMaxSize;
-    QRingBuffer readBuffer;
-    qint64 actualReadBufferSize;
-    bool stopped;
-    bool readSequenceStarted;
-    bool notifiedCalled;
-    bool pipeBroken;
-    bool readyReadPending;
-    bool inReadyRead;
+      Overlapped(const Overlapped &) = delete;
+      Overlapped &operator=(const Overlapped &) = delete;
+
+      void clear();
+      QWindowsPipeReader *pipeReader;
+   };
+
+   HANDLE handle;
+   Overlapped overlapped;
+   qint64 readBufferMaxSize;
+   QRingBuffer readBuffer;
+   qint64 actualReadBufferSize;
+   bool stopped;
+   bool readSequenceStarted;
+   bool notifiedCalled;
+   bool pipeBroken;
+   bool readyReadPending;
+   bool inReadyRead;
 };
 
 #endif

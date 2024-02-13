@@ -50,8 +50,8 @@
 #endif
 
 #if ! defined(Q_OS_IOS)
-// Static operator overloading so for the sake of some convieniece.
-// They only live in this compilation unit to avoid polluting Qt in general.
+
+// static operator overloading
 static bool operator==(const struct ::timespec &left, const struct ::timespec &right)
 {
    return left.tv_sec == right.tv_sec && left.tv_nsec == right.tv_nsec;
@@ -60,14 +60,14 @@ static bool operator==(const struct ::timespec &left, const struct ::timespec &r
 static bool operator==(const struct ::stat &left, const struct ::stat &right)
 {
    return left.st_dev == right.st_dev
-          && left.st_mode == right.st_mode
-          && left.st_size == right.st_size
-          && left.st_ino == right.st_ino
-          && left.st_uid == right.st_uid
-          && left.st_gid == right.st_gid
-          && left.st_mtimespec == right.st_mtimespec
-          && left.st_ctimespec == right.st_ctimespec
-          && left.st_flags == right.st_flags;
+         && left.st_mode == right.st_mode
+         && left.st_size == right.st_size
+         && left.st_ino == right.st_ino
+         && left.st_uid == right.st_uid
+         && left.st_gid == right.st_gid
+         && left.st_mtimespec == right.st_mtimespec
+         && left.st_ctimespec == right.st_ctimespec
+         && left.st_flags == right.st_flags;
 }
 
 static bool operator!=(const struct ::stat &left, const struct ::stat &right)
@@ -95,6 +95,7 @@ static void removePathFromHash(PathHash &pathHash, const QString &key, const QSt
          list.erase(it);
          break;
       }
+
       ++it;
    }
 
@@ -142,13 +143,13 @@ QFSEventsFileSystemWatcherEngine::~QFSEventsFileSystemWatcherEngine()
 {
 #if ! defined(Q_OS_IOS)
    // I assume that at this point, QFileSystemWatcher has already called stop
-   // on me, so I don't need to invalidate or stop my stream, simply
-   // release it.
+   // on me, so I don't need to invalidate or stop my stream, simply release it.
    cleanupFSStream(fsStream);
 
    if (pathsToWatch) {
       CFRelease(pathsToWatch);
    }
+
 #endif
 }
 
@@ -163,11 +164,13 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
 #if ! defined(Q_OS_IOS)
    stop();
    wait();
+
    QMutexLocker locker(&mutex);
    QStringList failedToAdd;
 
    // if we have a running FSStreamEvent, we have to kill it, we'll re-add the stream soon.
    FSEventStreamEventId idToCheck;
+
    if (fsStream) {
       idToCheck = FSEventStreamGetLatestEventId(fsStream);
       cleanupFSStream(fsStream);
@@ -175,19 +178,20 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       idToCheck = kFSEventStreamEventIdSinceNow;
    }
 
-   // Brain-dead approach, but works. FSEvents actually can already read sub-trees, but since it's
+   // Not the best approach, but works. FSEvents actually can already read sub-trees, but since it's
    // work to figure out if we are doing a double register, we just register it twice as FSEvents
    // seems smart enough to only deliver one event. We also duplicate directory entries in here
    // (e.g., if you watch five files in the same directory, you get that directory included in the
-   // array 5 times). This stupidity also makes remove work correctly though. I'll freely admit
-   // that we could make this a bit smarter. If you do, check the auto-tests, they should catch at
-   // least a couple of the issues.
+   // array 5 times). This approach makes remove work correctly.
+
    QCFType<CFMutableArrayRef> tmpArray = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+
    for (int i = 0; i < paths.size(); ++i) {
       const QString &path = paths.at(i);
 
       QFileInfo fileInfo(path);
-      if (!fileInfo.exists()) {
+
+      if (! fileInfo.exists()) {
          failedToAdd.append(path);
          continue;
       }
@@ -196,6 +200,7 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          if (directories->contains(path)) {
             failedToAdd.append(path);
             continue;
+
          } else {
             directories->append(path);
             // Full file path for dirs.
@@ -218,7 +223,7 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       }
    }
 
-   if (!pathsToWatch && failedToAdd.size() == paths.size()) {
+   if (! pathsToWatch && failedToAdd.size() == paths.size()) {
       return failedToAdd;
    }
 
@@ -227,12 +232,13 @@ QStringList QFSEventsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          CFArrayAppendArray(tmpArray, pathsToWatch, CFRangeMake(0, CFArrayGetCount(pathsToWatch)));
          CFRelease(pathsToWatch);
       }
+
       pathsToWatch = CFArrayCreateCopy(kCFAllocatorDefault, tmpArray);
    }
 
    FSEventStreamContext context = { 0, this, nullptr, nullptr, nullptr };
    fsStream = FSEventStreamCreate(kCFAllocatorDefault, QFSEventsFileSystemWatcherEngine::fseventsCallback,
-                  &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
+         &context, pathsToWatch, idToCheck, Latency, QtFSEventFlags);
 
    warmUpFSEvents();
 
@@ -265,6 +271,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    wait();
 
    QMutexLocker locker(&mutex);
+
    // short circuit for smarties that call remove before add and we have nothing.
    if (pathsToWatch == nullptr) {
       return paths;
@@ -317,6 +324,7 @@ QStringList QFSEventsFileSystemWatcherEngine::removePaths(const QStringList &pat
    }
 
    itemCount = CFArrayGetCount(tmpArray);
+
    if (itemCount != 0) {
       pathsToWatch = CFArrayCreateCopy(kCFAllocatorDefault, tmpArray);
 
@@ -345,6 +353,7 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
 
    while (it != End) {
       struct ::stat newInfo;
+
       if (::stat(it->absolutePath.constData(), &newInfo) == 0) {
 
          if (emitSignals) {
@@ -377,7 +386,7 @@ void QFSEventsFileSystemWatcherEngine::updateList(PathInfoList &list, bool direc
 
          } else {
             qWarning("%s:%d:QFSEventsFileSystemWatcherEngine: stat error on %s:%s",
-                     __FILE__, __LINE__, csPrintable(it->originalPath), strerror(errno));
+                  __FILE__, __LINE__, csPrintable(it->originalPath), strerror(errno));
 
          }
       }
@@ -390,6 +399,7 @@ void QFSEventsFileSystemWatcherEngine::updateHash(PathHash &pathHash)
 {
    PathHash::iterator HashEnd = pathHash.end();
    PathHash::iterator it = pathHash.begin();
+
    const bool IsDirectory = (&pathHash == &dirPathInfoHash);
 
    while (it != HashEnd) {
@@ -451,10 +461,12 @@ void QFSEventsFileSystemWatcherEngine::stop()
 #if ! defined(Q_OS_IOS)
    QMutexLocker locker(&mutex);
    stopFSStream(fsStream);
+
    if (threadsRunLoop) {
       CFRunLoopStop(threadsRunLoop);
       waitForStop.wait(&mutex);
    }
+
 #endif
 }
 
@@ -475,12 +487,15 @@ void QFSEventsFileSystemWatcherEngine::updateFiles()
       // thread. (waitForStop.wakeAll() is only called from the
       // end of run()).
       stopFSStream(fsStream);
+
       if (threadsRunLoop) {
          CFRunLoopStop(threadsRunLoop);
       }
+
 #endif
       cleanupFSStream(fsStream);
    }
+
    waitCondition.wakeAll();
 #endif
 }

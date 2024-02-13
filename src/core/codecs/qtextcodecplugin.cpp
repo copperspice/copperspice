@@ -42,6 +42,7 @@ QStringList QTextCodecPlugin::keys() const
    keys += aliases();
 
    QList<int> mibs = mibEnums();
+
    for (int i = 0; i < mibs.count(); ++i) {
       keys += "MIB: " + QString::number(mibs.at(i));
    }

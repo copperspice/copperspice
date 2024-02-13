@@ -123,7 +123,7 @@ static bool isValidCountRules(const QVector<std::variant<CountGuide, int>> &data
    uint rulesSize = data.size();
 
    if (rulesSize == 0) {
-     return true;
+      return true;
    }
 
    quint32 offset = 0;
@@ -144,24 +144,25 @@ static bool isValidCountRules(const QVector<std::variant<CountGuide, int>> &data
             return false;                  // Missing operand
          }
 
-        // right operand
-        ++offset;
+         // right operand
+         ++offset;
 
-        switch (option) {
-           case CountGuide::Equal:
-           case CountGuide::LessThan:
-           case CountGuide::LessThanEqual:
+         switch (option) {
+            case CountGuide::Equal:
+            case CountGuide::LessThan:
+            case CountGuide::LessThanEqual:
                break;
 
-           case CountGuide::Between:
+            case CountGuide::Between:
                if (offset != rulesSize) {
-                   // third operand
-                   ++offset;
-                   break;
+                  // third operand
+                  ++offset;
+                  break;
                }
+
                return false;               // Missing operand
 
-           default:
+            default:
                return false;               // Bad option (0)
          }
 
@@ -203,7 +204,7 @@ static uint countHelper(int n, const QVector<std::variant<CountGuide, int>> &dat
    uint rulesSize = data.size();
 
    if (rulesSize == 0) {
-     return result;
+      return result;
    }
 
    while (true) {
@@ -259,7 +260,7 @@ static uint countHelper(int n, const QVector<std::variant<CountGuide, int>> &dat
                   ++cnt;
 
                   break;
-                }
+               }
 
                default:
                   // not a valid case
@@ -328,7 +329,7 @@ class QTranslatorPrivate
    QResource *resource;
 
    // used if the translator has dependencies
-   QList<QTranslator*> subTranslators;
+   QList<QTranslator *> subTranslators;
 
    // for squeezed but non-file data, this is what needs to be deleted
    const uchar *messageArray;
@@ -367,7 +368,7 @@ QTranslator::~QTranslator()
 }
 
 bool QTranslator::load(const QString &filename, const QString &directory,
-                       const QString &search_delimiters, const QString &suffix)
+      const QString &search_delimiters, const QString &suffix)
 {
    Q_D(QTranslator);
    d->clear();
@@ -392,19 +393,23 @@ bool QTranslator::load(const QString &filename, const QString &directory,
 
       realname = prefix + fname + (suffix.isEmpty() ? QString(".qm") : suffix);
       fi.setFile(realname);
+
       if (fi.isReadable() && fi.isFile()) {
          break;
       }
 
       realname = prefix + fname;
       fi.setFile(realname);
+
       if (fi.isReadable() && fi.isFile()) {
          break;
       }
 
       int rightmost = 0;
+
       for (int i = 0; i < (int)delims.length(); i++) {
          int k = fname.lastIndexOf(delims[i]);
+
          if (k > rightmost) {
             rightmost = k;
          }
@@ -451,6 +456,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
 
    if (! ok) {
       QFile file(realname);
+
       if (! file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
          return false;
       }
@@ -465,7 +471,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
          char magicBuffer[MagicLength];
 
          if (MagicLength != file.read(magicBuffer, MagicLength) || memcmp(magicBuffer, magic, MagicLength)) {
-             return false;
+            return false;
          }
       }
 
@@ -487,7 +493,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
 
          char *ptr;
          ptr = reinterpret_cast<char *>(mmap(nullptr, unmapLength, PROT_READ,
-               MAP_FILE | MAP_PRIVATE, fd, 0));
+                           MAP_FILE | MAP_PRIVATE, fd, 0));
 
          if (ptr && ptr != reinterpret_cast<char *>(MAP_FAILED)) {
             file.close();
@@ -498,6 +504,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
             ok = true;
          }
       }
+
 #endif // QT_USE_MMAP
 
       if (! ok) {
@@ -519,15 +526,16 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
    }
 
 #if defined(QT_USE_MMAP)
-    if (used_mmap) {
-        used_mmap = false;
-        munmap(unmapPointer, unmapLength);
-    } else
+
+   if (used_mmap) {
+      used_mmap = false;
+      munmap(unmapPointer, unmapLength);
+   } else
 #endif
 
-       if (! resource) {
-           delete [] unmapPointer;
-       }
+      if (! resource) {
+         delete [] unmapPointer;
+      }
 
    delete resource;
    resource = nullptr;
@@ -538,7 +546,7 @@ bool QTranslatorPrivate::do_load(const QString &realname, const QString &directo
 }
 
 static QString find_translation(const QLocale &locale, const QString &filename, const QString &prefix,
-            const QString &directory, const QString &suffix)
+      const QString &directory, const QString &suffix)
 {
    QString path;
 
@@ -557,6 +565,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    QStringList languages = locale.uiLanguages();
 
 #if defined(Q_OS_UNIX)
+
    for (int i = languages.size() - 1; i >= 0; --i) {
       QString lang = languages.at(i);
       QString lowerLang = lang.toLower();
@@ -565,6 +574,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
          languages.insert(i + 1, lowerLang);
       }
    }
+
 #endif
 
    // try explicit locales names first
@@ -573,12 +583,14 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
 
       realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QString(".qm") : suffix);
       fi.setFile(realname);
+
       if (fi.isReadable() && fi.isFile()) {
          return realname;
       }
 
       realname = path + filename + prefix + localeName;
       fi.setFile(realname);
+
       if (fi.isReadable() && fi.isFile()) {
          return realname;
       }
@@ -590,20 +602,24 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    for (QString localeName : fuzzyLocales) {
       while (true) {
          int rightmost = localeName.lastIndexOf(QLatin1Char('_'));
+
          // no truncations? fail
          if (rightmost <= 0) {
             break;
          }
+
          localeName.truncate(rightmost);
 
          realname = path + filename + prefix + localeName + (suffix.isEmpty() ? QString(".qm") : suffix);
          fi.setFile(realname);
+
          if (fi.isReadable() && fi.isFile()) {
             return realname;
          }
 
          realname = path + filename + prefix + localeName;
          fi.setFile(realname);
+
          if (fi.isReadable() && fi.isFile()) {
             return realname;
          }
@@ -614,6 +630,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
       realname = path + filename + suffix;
 
       fi.setFile(realname);
+
       if (fi.isReadable() && fi.isFile()) {
          return realname;
       }
@@ -621,12 +638,14 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
 
    realname = path + filename + prefix;
    fi.setFile(realname);
+
    if (fi.isReadable() && fi.isFile()) {
       return realname;
    }
 
    realname = path + filename;
    fi.setFile(realname);
+
    if (fi.isReadable() && fi.isFile()) {
       return realname;
    }
@@ -635,7 +654,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
 }
 
 bool QTranslator::load(const QLocale &locale, const QString &filename, const QString &prefix,
-            const QString &directory, const QString &suffix)
+      const QString &directory, const QString &suffix)
 {
    Q_D(QTranslator);
 
@@ -720,17 +739,17 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
             // retrieve and enum or int ( some rule )
             switch (which) {
                case 0:
-                  m_countRules.append(static_cast<CountGuide>(data[cnt +1]));
+                  m_countRules.append(static_cast<CountGuide>(data[cnt + 1]));
                   break;
 
                case 1:
-                  m_countRules.append(static_cast<int>(data[cnt +1]));
+                  m_countRules.append(static_cast<int>(data[cnt + 1]));
                   break;
             }
          }
 
       } else if (tag == TranslatorCategory::Dependencies) {
-         QDataStream stream(QByteArray::fromRawData((const char*)data, blockLen));
+         QDataStream stream(QByteArray::fromRawData((const char *)data, blockLen));
          QString dep;
 
          while (! stream.atEnd()) {
@@ -758,6 +777,7 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
          subTranslators.append(translator);
 
          ok = translator->load(dependencies.at(i), directory);
+
          if (! ok) {
             break;
          }
@@ -786,12 +806,12 @@ bool QTranslatorPrivate::do_load(const uchar *data, int len, const QString &dire
 }
 
 static QString getMessage(const uchar *data, const uchar *end, const char *context, const char *text,
-            const char *comment, uint numerus)
+      const char *comment, uint numerus)
 {
    QString retval;
 
    const uchar *tn = nullptr;
-   uint tn_length = 0;
+   uint tn_length  = 0;
 
    const uint sourceTextLen = uint(strlen(text));
    const uint contextLen    = uint(strlen(context));
@@ -907,7 +927,7 @@ static QString getMessage(const uchar *data, const uchar *end, const char *conte
 }
 
 QString QTranslatorPrivate::do_translate(const char *context, const char *text, const char *comment,
-            std::optional<int> numArg) const
+      std::optional<int> numArg) const
 {
    QString retval;
 
@@ -948,6 +968,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *text, 
       c = contextArray + (2 + (hTableSize << 1) + (off << 1));
 
       const uint contextLen = uint(strlen(context));
+
       for (;;) {
          quint8 len = read8(c++);
 
@@ -1008,6 +1029,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *text, 
          while (start < offsetArray + offsetLength) {
             quint32 rh = read32(start);
             start += 4;
+
             if (rh != h) {
                break;
             }
@@ -1016,6 +1038,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *text, 
             start += 4;
 
             QString tn = getMessage(messageArray + ro, messageArray + messageLength, context, text, comment, numerus);
+
             if (! tn.isEmpty()) {
                return tn;
             }
@@ -1030,6 +1053,7 @@ QString QTranslatorPrivate::do_translate(const char *context, const char *text, 
    }
 
 searchDependencies:
+
    for (QTranslator *translator : subTranslators) {
       QString tn = translator->translate(context, text, comment, numArg);
 
@@ -1037,7 +1061,7 @@ searchDependencies:
          retval = tn;
          break;
       }
-    }
+   }
 
    return retval;
 }
@@ -1049,6 +1073,7 @@ void QTranslatorPrivate::clear()
    if (unmapPointer != nullptr && unmapLength != 0) {
 
 #if defined(QT_USE_MMAP)
+
       if (used_mmap) {
          used_mmap = false;
          munmap(unmapPointer, unmapLength);
@@ -1077,6 +1102,7 @@ void QTranslatorPrivate::clear()
    qDeleteAll(subTranslators);
 
    subTranslators.clear();
+
    if (QCoreApplicationPrivate::isTranslatorInstalled(q)) {
       QCoreApplication::postEvent(QCoreApplication::instance(), new QEvent(QEvent::LanguageChange));
    }
@@ -1139,5 +1165,5 @@ bool QTranslator::isEmpty() const
    Q_D(const QTranslator);
 
    return ! d->unmapPointer && ! d->unmapLength && ! d->messageArray &&
-          ! d->offsetArray && ! d->contextArray && d->subTranslators.isEmpty();
+         ! d->offsetArray && ! d->contextArray && d->subTranslators.isEmpty();
 }

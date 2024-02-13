@@ -36,7 +36,7 @@
 
 void QWindowsFileSystemWatcherEngine::stop()
 {
-   for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
+   for (QWindowsFileSystemWatcherEngineThread *thread : threads) {
       thread->stop();
    }
 }
@@ -52,7 +52,7 @@ QWindowsFileSystemWatcherEngine::~QWindowsFileSystemWatcherEngine()
       return;
    }
 
-   for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
+   for (QWindowsFileSystemWatcherEngineThread *thread : threads) {
       thread->stop();
       thread->wait();
       delete thread;
@@ -77,15 +77,18 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       }
 
       QFileInfo fileInfo(normalPath.toLower());
+
       if (! fileInfo.exists()) {
          continue;
       }
 
       bool isDir = fileInfo.isDir();
+
       if (isDir) {
          if (directories->contains(path)) {
             continue;
          }
+
       } else {
          if (files->contains(path)) {
             continue;
@@ -95,20 +98,15 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
       // qDebug()<<"Looking for a thread/handle for"<<normalPath;
 
       const QString absolutePath = isDir ? fileInfo.absoluteFilePath() : fileInfo.absolutePath();
-      const uint flags = isDir
-                         ? (FILE_NOTIFY_CHANGE_DIR_NAME
-                            | FILE_NOTIFY_CHANGE_FILE_NAME)
-                         : (FILE_NOTIFY_CHANGE_DIR_NAME
-                            | FILE_NOTIFY_CHANGE_FILE_NAME
-                            | FILE_NOTIFY_CHANGE_ATTRIBUTES
-                            | FILE_NOTIFY_CHANGE_SIZE
-                            | FILE_NOTIFY_CHANGE_LAST_WRITE
-                            | FILE_NOTIFY_CHANGE_SECURITY);
+
+      const uint flags = isDir ? (FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_FILE_NAME) :
+            (FILE_NOTIFY_CHANGE_DIR_NAME | FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_ATTRIBUTES |
+            FILE_NOTIFY_CHANGE_SIZE | FILE_NOTIFY_CHANGE_LAST_WRITE | FILE_NOTIFY_CHANGE_SECURITY);
 
       QWindowsFileSystemWatcherEngine::PathInfo pathInfo;
       pathInfo.absolutePath = absolutePath;
       pathInfo.isDir = isDir;
-      pathInfo.path = path;
+      pathInfo.path  = path;
       pathInfo = fileInfo;
 
       // Look for a thread
@@ -155,7 +153,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          const QString effectiveAbsolutePath = isDir ? (absolutePath + '/') : absolutePath;
 
          handle.handle = FindFirstChangeNotification(&QDir::toNativeSeparators(effectiveAbsolutePath).toStdWString()[0],
-                  false, flags);
+                     false, flags);
 
          handle.flags  = flags;
 
@@ -166,15 +164,18 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          // now look for a thread to insert
          bool found = false;
 
-         for (QWindowsFileSystemWatcherEngineThread * thread : threads) {
+         for (QWindowsFileSystemWatcherEngineThread *thread : threads) {
             QMutexLocker(&(thread->mutex));
+
             if (thread->handles.count() < MAXIMUM_WAIT_OBJECTS) {
                // qDebug() << "  Added handle" << handle.handle << "for" << absolutePath << "to watch" << fileInfo.absoluteFilePath();
                // qDebug()<< "  to existing thread"<<thread;
+
                thread->handles.append(handle.handle);
                thread->handleForDir.insert(absolutePath, handle);
 
                thread->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
+
                if (isDir) {
                   directories->append(path);
                } else {
@@ -196,6 +197,7 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
             thread->handleForDir.insert(absolutePath, handle);
 
             thread->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
+
             if (isDir) {
                directories->append(path);
             } else {
@@ -239,6 +241,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
 
       for (jt = threads.begin(); jt != end; ++jt) {
          QWindowsFileSystemWatcherEngineThread *thread = *jt;
+
          if (*jt == nullptr) {
             continue;
          }
@@ -246,14 +249,17 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
          QMutexLocker locker(&(thread->mutex));
 
          QWindowsFileSystemWatcherEngine::Handle handle = thread->handleForDir.value(absolutePath);
+
          if (handle.handle == INVALID_HANDLE_VALUE) {
             // perhaps path is a file?
             absolutePath = fileInfo.absolutePath();
             handle = thread->handleForDir.value(absolutePath);
          }
+
          if (handle.handle != INVALID_HANDLE_VALUE) {
             QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> &h =
-               thread->pathInfoForHandle[handle.handle];
+                  thread->pathInfoForHandle[handle.handle];
+
             if (h.remove(fileInfo.absoluteFilePath())) {
                // ###
                files->removeAll(path);
@@ -283,6 +289,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
                   }
                }
             }
+
             // Found the file, go to next one
             break;
          }
@@ -292,6 +299,7 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
    // Remove all threads that we stopped
    QList<QWindowsFileSystemWatcherEngineThread *>::iterator jt, end;
    end = threads.end();
+
    for (jt = threads.begin(); jt != end; ++jt) {
       if (!(*jt)->isRunning()) {
          delete *jt;
@@ -303,10 +311,6 @@ QStringList QWindowsFileSystemWatcherEngine::removePaths(const QStringList &path
    return p;
 }
 
-///////////
-// QWindowsFileSystemWatcherEngineThread
-///////////
-
 QWindowsFileSystemWatcherEngineThread::QWindowsFileSystemWatcherEngineThread()
    : msg(0)
 {
@@ -314,9 +318,9 @@ QWindowsFileSystemWatcherEngineThread::QWindowsFileSystemWatcherEngineThread()
       handles.reserve(MAXIMUM_WAIT_OBJECTS);
       handles.append(h);
    }
+
    moveToThread(this);
 }
-
 
 QWindowsFileSystemWatcherEngineThread::~QWindowsFileSystemWatcherEngineThread()
 {
@@ -327,6 +331,7 @@ QWindowsFileSystemWatcherEngineThread::~QWindowsFileSystemWatcherEngineThread()
       if (h == INVALID_HANDLE_VALUE) {
          continue;
       }
+
       FindCloseChangeNotification(h);
    }
 }
@@ -342,21 +347,24 @@ void QWindowsFileSystemWatcherEngineThread::run()
       // qDebug() << "QWindowsFileSystemWatcherThread"<<this<<"waiting on" << handlesCopy.count() << "handles";
       DWORD r = WaitForMultipleObjects(handlesCopy.count(), handlesCopy.constData(), false, INFINITE);
       locker.relock();
+
       do {
-         if (r == WAIT_OBJECT_0)
-         {
+         if (r == WAIT_OBJECT_0) {
             int m = msg;
             msg = 0;
+
             if (m == 'q') {
                // qDebug() << "thread"<<this<<"told to quit";
                return;
             }
+
             if (m != '@')  {
                qDebug("QWindowsFileSystemWatcherEngine: unknown message '%c' send to thread", char(m));
             }
+
             break;
-         } else if (r > WAIT_OBJECT_0 && r < WAIT_OBJECT_0 + uint(handlesCopy.count()))
-         {
+
+         } else if (r > WAIT_OBJECT_0 && r < WAIT_OBJECT_0 + uint(handlesCopy.count())) {
             int at = r - WAIT_OBJECT_0;
             Q_ASSERT(at < handlesCopy.count());
             HANDLE handle = handlesCopy.at(at);
@@ -386,6 +394,7 @@ void QWindowsFileSystemWatcherEngineThread::run()
                      } else {
                         emit fileChanged(x.value().path, true);
                      }
+
                      h.erase(x);
 
                      // close the notification handle if the directory has been removed
@@ -413,6 +422,7 @@ void QWindowsFileSystemWatcherEngineThread::run()
                   }
                }
             }
+
          } else {
             // qErrnoWarning("QFileSystemWatcher: error while waiting for change notification");
             break;  // avoid endless loop
@@ -425,7 +435,6 @@ void QWindowsFileSystemWatcherEngineThread::run()
    }
 }
 
-
 void QWindowsFileSystemWatcherEngineThread::stop()
 {
    msg = 'q';
@@ -437,4 +446,5 @@ void QWindowsFileSystemWatcherEngineThread::wakeup()
    msg = '@';
    SetEvent(handles.at(0));
 }
+
 #endif // QT_NO_FILESYSTEMWATCHER

@@ -50,12 +50,10 @@ QSocketNotifier::QSocketNotifier(qintptr socket, Type type, QObject *parent)
    }
 }
 
-
 QSocketNotifier::~QSocketNotifier()
 {
    setEnabled(false);
 }
-
 
 qintptr QSocketNotifier::socket() const
 {
@@ -97,8 +95,8 @@ void QSocketNotifier::setEnabled(bool enable)
    }
 
    if (thread() != QThread::currentThread()) {
-        qWarning("QSocketNotifier::setEnabled() Socket notifiers can not be enabled or disabled from another thread");
-        return;
+      qWarning("QSocketNotifier::setEnabled() Socket notifiers can not be enabled or disabled from another thread");
+      return;
    }
 
    if (snenabled) {
@@ -121,11 +119,11 @@ bool QSocketNotifier::event(QEvent *e)
    }
 
    QObject::event(e);                        // will activate filters
+
    if ((e->type() == QEvent::SockAct) || (e->type() == QEvent::SockClose)) {
       emit activated(sockfd);
       return true;
    }
+
    return false;
 }
-
-

@@ -40,7 +40,7 @@ class Q_CORE_EXPORT QElapsedTimer
    };
 
    constexpr QElapsedTimer()
-        : t1(std::numeric_limits<qint64>::lowest()), t2(std::numeric_limits<qint64>::lowest())
+      : t1(std::numeric_limits<qint64>::lowest()), t2(std::numeric_limits<qint64>::lowest())
    {
    }
 

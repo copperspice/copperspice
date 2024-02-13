@@ -78,18 +78,18 @@ class QVersionNumber
 
  public:
    QVersionNumber() : m_segments()
-   {}
+   { }
 
    explicit QVersionNumber(const QVector<int> &seg) : m_segments(seg)
-   {}
+   { }
 
    explicit QVersionNumber(QVector<int> &&seg)
       : m_segments(std::move(seg))
-   {}
+   { }
 
-   inline QVersionNumber(std::initializer_list<int> args)
+   QVersionNumber(std::initializer_list<int> args)
       : m_segments(args)
-   {}
+   { }
 
    explicit QVersionNumber(int maj) {
       m_segments.setSegments(1, maj);

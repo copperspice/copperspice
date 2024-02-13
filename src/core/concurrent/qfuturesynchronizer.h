@@ -75,7 +75,7 @@ class QFutureSynchronizer
       m_futures.clear();
    }
 
-   QList<QFuture<T> > futures() const {
+   QList<QFuture<T>> futures() const {
       return m_futures;
    }
 
@@ -88,7 +88,7 @@ class QFutureSynchronizer
    }
 
  protected:
-   QList<QFuture<T> > m_futures;
+   QList<QFuture<T>> m_futures;
    bool m_cancelOnWait;
 };
 

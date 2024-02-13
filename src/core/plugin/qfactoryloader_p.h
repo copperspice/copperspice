@@ -48,7 +48,7 @@ class Q_CORE_EXPORT QFactoryLoader : public QObject
 #endif
 
    QObject *instance(QString key) const;
-   QObject *instance(QLibraryHandle * library) const;
+   QObject *instance(QLibraryHandle *library) const;
 
    QSet<QString> keySet() const;
    QSet<QLibraryHandle *> librarySet(QString key) const;

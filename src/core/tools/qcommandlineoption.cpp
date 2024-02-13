@@ -32,8 +32,8 @@
 class QCommandLineOptionPrivate : public QSharedData
 {
  public:
-   inline QCommandLineOptionPrivate() {
-   }
+   QCommandLineOptionPrivate()
+   { }
 
    void setNames(const QStringList &nameList);
 
@@ -52,7 +52,7 @@ class QCommandLineOptionPrivate : public QSharedData
 };
 
 QCommandLineOption::QCommandLineOption(const QString &name, const QString &description,
-                  const QString &valueName, const QString &defaultValue)
+      const QString &valueName, const QString &defaultValue)
    : d(new QCommandLineOptionPrivate)
 {
    d->setNames(QStringList(name));
@@ -61,9 +61,8 @@ QCommandLineOption::QCommandLineOption(const QString &name, const QString &descr
    setDefaultValue(defaultValue);
 }
 
-
 QCommandLineOption::QCommandLineOption(const QStringList &names, const QString &description,
-                                       const QString &valueName, const QString &defaultValue)
+      const QString &valueName, const QString &defaultValue)
    : d(new QCommandLineOptionPrivate)
 {
    d->setNames(names);
@@ -100,7 +99,7 @@ void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
       qWarning("QCommandLineOption:setName() List of options can not be empty");
    }
 
-   for (const QString & name : nameList) {
+   for (const QString &name : nameList) {
       if (name.isEmpty()) {
          qWarning("QCommandLineOption:setName() Option names can not be empty");
 
@@ -146,7 +145,8 @@ QString QCommandLineOption::description() const
 void QCommandLineOption::setDefaultValue(const QString &defaultValue)
 {
    d->defaultValues.clear();
-   if (!defaultValue.isEmpty()) {
+
+   if (! defaultValue.isEmpty()) {
       d->defaultValues << defaultValue;
    }
 }

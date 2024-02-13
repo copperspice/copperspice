@@ -89,10 +89,8 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
       }
 
       bool operator!=(const QFileInfo &fileInfo) const {
-         return (ownerId != fileInfo.ownerId()
-                 || groupId != fileInfo.groupId()
-                 || permissions != fileInfo.permissions()
-                 || lastModified != fileInfo.lastModified());
+         return (ownerId != fileInfo.ownerId() || groupId != fileInfo.groupId()
+               || permissions != fileInfo.permissions() || lastModified != fileInfo.lastModified());
       }
    };
 
@@ -118,7 +116,7 @@ class QWindowsFileSystemWatcherEngineThread : public QThread
 
    QHash<QString, QWindowsFileSystemWatcherEngine::Handle> handleForDir;
 
-   QHash<HANDLE, QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo> > pathInfoForHandle;
+   QHash<HANDLE, QHash<QString, QWindowsFileSystemWatcherEngine::PathInfo>> pathInfoForHandle;
 
    CORE_CS_SIGNAL_1(Public, void fileChanged(const QString &path, bool removed))
    CORE_CS_SIGNAL_2(fileChanged, path, removed)

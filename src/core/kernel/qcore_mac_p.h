@@ -124,8 +124,8 @@ class Q_CORE_EXPORT QCFString : public QCFType<CFStringRef>
    static CFStringRef toCFStringRef(const QString &str);
 
 #ifdef __OBJC__
-    static QString toQString(const NSString *nsstr);
-    static NSString *toNSString(const QString &string);
+   static QString toQString(const NSString *nsstr);
+   static NSString *toNSString(const QString &string);
 #endif
 
  private:

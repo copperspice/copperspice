@@ -28,8 +28,7 @@
 #include <qstring.h>
 #include <qvector.h>
 
-struct QCharAttributes
-{
+struct QCharAttributes {
    uchar graphemeBoundary : 1;
    uchar wordBreak        : 1;
    uchar sentenceBoundary : 1;
@@ -42,8 +41,7 @@ struct QCharAttributes
 
 namespace QUnicodeTools {
 
-struct ScriptItem
-{
+struct ScriptItem {
    int position;
    QChar::Script script;
 };
@@ -62,7 +60,7 @@ using CharAttributeOptions = QFlags<CharAttributeOption>;
 
 // attributes buffer has to have a length of string length + 1
 Q_CORE_EXPORT void initCharAttributes(const QString &str, QVector<QUnicodeTools::ScriptItem> &scriptItems,
-                  QCharAttributes *attributes, CharAttributeOptions options = DefaultOptionsCompat);
+      QCharAttributes *attributes, CharAttributeOptions options = DefaultOptionsCompat);
 
 Q_CORE_EXPORT void initScripts(const QString &str, QVector<QChar::Script> &scriptIds);
 

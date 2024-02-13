@@ -32,12 +32,13 @@ static void dumpRecursive(int level, QObject *object)
       QByteArray buffer;
 
       buffer.fill(' ', level / 2 * 8);
+
       if (level % 2) {
          buffer += "    ";
       }
 
       qDebug("%s%s::%s", buffer.constData(), csPrintable(object->metaObject()->className()),
-                  csPrintable(object->objectName()) );
+            csPrintable(object->objectName()) );
 
       QList<QObject *> children = object->children();
 
@@ -65,7 +66,7 @@ void QObject::dumpObjectInfo()
 #if defined(QT_DEBUG)
    qDebug("\n--  dumpObjectInfo  --\n");
    qDebug("  OBJECT %s::%s", csPrintable(this->metaObject()->className()), objectName().isEmpty() ? "unnamed" :
-                  csPrintable(objectName()) );
+         csPrintable(objectName()) );
 
    qDebug("  SIGNAL LIST - CONNECTED TO WHICH RECEIVERS");
 
@@ -96,7 +97,7 @@ void QObject::dumpObjectInfo()
             // const QMetaMethod slotMetaMethod = receiverMetaObject->method(*temp.slotMethod);
 
             qDebug("          --> %s::%s", csPrintable(receiverMetaObject->className()),
-                obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );
+                  obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()) );
 
          } else {
             // receiver does not inherit from QObject
@@ -121,7 +122,7 @@ void QObject::dumpObjectInfo()
          const QMetaObject *senderMetaObject = obj->metaObject();
 
          qDebug("          <-- %s::%s", csPrintable(senderMetaObject->className()),
-                obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
+               obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
 
          //   qDebug("          <-- %s::%s  %s",
          //   slot.methodSignature().constData());

@@ -65,7 +65,8 @@ class Q_CORE_EXPORT QReadLocker
    QReadLocker(const QReadLocker &) = delete;
    QReadLocker &operator=(const QReadLocker &) = delete;
 
-   ~QReadLocker() {
+   ~QReadLocker()
+   {
       unlock();
    }
 

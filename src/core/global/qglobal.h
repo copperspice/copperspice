@@ -47,10 +47,10 @@
 #include <optional>
 #include <type_traits>
 
-#define QT_PREPEND_NAMESPACE(name)       ::name
-#define QT_MANGLE_NAMESPACE(name)        name
+#define QT_PREPEND_NAMESPACE(name)   ::name
+#define QT_MANGLE_NAMESPACE(name)    name
 
-#endif
+#endif   // defined(__cplusplus)
 
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE
@@ -155,7 +155,6 @@
 #error Unable to detect target endianness, contact CopperSpice development
 
 #endif
-
 
 // **
 #if defined(__APPLE__) && defined(__GNUC__)
@@ -466,17 +465,16 @@ using ushort   = unsigned short;
 using uint     = unsigned int;
 using ulong    = unsigned long;
 
-// ****
 #ifndef TRUE
-#  define TRUE  true
-#  define FALSE false
+#  define TRUE   true
+#  define FALSE  false
 #endif
 
 #if defined(__i386__) || defined(_WIN32)
 #  if defined(Q_CC_GNU)
 
 #    if ! defined(Q_CC_INTEL)
-#       define QT_FASTCALL      __attribute__((regparm(3)))
+#       define QT_FASTCALL    __attribute__((regparm(3)))
 #    else
 #       define QT_FASTCALL
 #    endif
@@ -575,7 +573,7 @@ class Q_CORE_EXPORT QMacAutoReleasePool
       void *pool;
 };
 
-#endif
+#endif  // Q_OS_DARWIN
 
 // System information
 class Q_CORE_EXPORT QSysInfo
@@ -597,9 +595,10 @@ class Q_CORE_EXPORT QSysInfo
       ByteOrder = LittleEndian
 
 #endif
-};
 
-#endif
+   };
+
+#endif   // Q_BYTE_ORDER
 
 #if defined(Q_OS_WIN)
    enum WinVersion {
@@ -635,7 +634,6 @@ class Q_CORE_EXPORT QSysInfo
    static const WinVersion WindowsVersion;
    static WinVersion windowsVersion();
    static QString windowsEdition(WinVersion winVersion);
-
 #endif
 
 #ifdef Q_OS_DARWIN
@@ -687,9 +685,8 @@ Q_CORE_EXPORT const char *csVersion();
 // avoid "unused parameter" warnings
 #define Q_UNUSED(x) (void)x;
 
-// debug messages
 #if defined(CS_DISABLE_DEBUG)
-# undef QT_DEBUG
+# undef  QT_DEBUG
 #else
 # define QT_DEBUG
 #endif
@@ -1016,7 +1013,7 @@ constexpr inline QFlags<Flags::enum_type> operator|(Flags::enum_type f1, QFlags<
 Q_DECLARE_INCOMPATIBLE_FLAGS(Flags)
 
 
-// raw pointer ( QEasingCurvePrivate, maybe a few other classes 12/28/2013 )
+// raw pointer ( QEasingCurvePrivate, maybe a few other classes )
 template <typename T>
 T *qGetPtrHelper(T *ptr)
 {
@@ -1073,7 +1070,7 @@ constexpr const char * cs_mark_tr(const char *text) {
    return text;
 }
 
-// used internally in cs
+// used internally in copperspice
 constexpr const char * cs_mark_tr(const char *context, const char *text) {
    (void) context;
    return text;
@@ -1118,6 +1115,6 @@ Q_CORE_EXPORT int qrand();
 #endif
 
 
-#endif      // block c
+#endif   // defined(__cplusplus)
 
 #endif

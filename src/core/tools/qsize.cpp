@@ -37,7 +37,7 @@ void QSize::transpose()
 QSize QSize::scaled(const QSize &s, Qt::AspectRatioMode mode) const
 {
    if (mode == Qt::IgnoreAspectRatio || wd == 0 || ht == 0) {
-     return s;
+      return s;
 
    } else {
       bool useHeight;
@@ -45,15 +45,15 @@ QSize QSize::scaled(const QSize &s, Qt::AspectRatioMode mode) const
 
       if (mode == Qt::KeepAspectRatio) {
          useHeight = (rw <= s.wd);
-      } else { // mode == Qt::KeepAspectRatioByExpanding
+      } else {
+         // mode == Qt::KeepAspectRatioByExpanding
          useHeight = (rw >= s.wd);
       }
 
       if (useHeight) {
-            return QSize(rw, s.ht);
+         return QSize(rw, s.ht);
       } else {
-            return QSize(s.wd,
-                         qint32(qint64(s.wd) * qint64(ht) / qint64(wd)));
+         return QSize(s.wd, qint32(qint64(s.wd) * qint64(ht) / qint64(wd)));
       }
    }
 }
@@ -79,12 +79,12 @@ QDataStream &operator>>(QDataStream &stream, QSize &size)
 
 QDebug operator<<(QDebug dbg, const QSize &s)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
-    dbg << "QSize(";
-    QtDebugUtils::formatQSize(dbg, s);
-    dbg << ')';
-    return dbg;
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QSize(";
+   QtDebugUtils::formatQSize(dbg, s);
+   dbg << ')';
+   return dbg;
 }
 
 void QSizeF::transpose()
@@ -96,7 +96,7 @@ void QSizeF::transpose()
 QSizeF QSizeF::scaled(const QSizeF &s, Qt::AspectRatioMode mode) const
 {
    if (mode == Qt::IgnoreAspectRatio || qIsNull(wd) || qIsNull(ht)) {
-        return s;
+      return s;
    } else {
       bool useHeight;
       qreal rw = s.ht * wd / ht;
@@ -108,9 +108,9 @@ QSizeF QSizeF::scaled(const QSizeF &s, Qt::AspectRatioMode mode) const
       }
 
       if (useHeight) {
-            return QSizeF(rw, s.ht);
+         return QSizeF(rw, s.ht);
       } else {
-            return QSizeF(s.wd, s.wd * ht / wd);
+         return QSizeF(s.wd, s.wd * ht / wd);
       }
    }
 }
@@ -136,13 +136,12 @@ QDataStream &operator>>(QDataStream &stream, QSizeF &sizeF)
 
 QDebug operator<<(QDebug dbg, const QSizeF &size)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
-    dbg << "QSizeF(";
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QSizeF(";
 
-    QtDebugUtils::formatQSize(dbg, size);
-    dbg << ')';
+   QtDebugUtils::formatQSize(dbg, size);
+   dbg << ')';
 
-    return dbg;
+   return dbg;
 }
-

@@ -44,20 +44,15 @@ class QAbstractAnimationPrivate
 {
  public:
    QAbstractAnimationPrivate()
-      : state(QAbstractAnimation::Stopped),
-        direction(QAbstractAnimation::Forward),
-        totalCurrentTime(0),
-        currentTime(0),
-        loopCount(1),
-        currentLoop(0),
-        deleteWhenStopped(false),
-        hasRegisteredTimer(false),
-        isPause(false),
-        isGroup(false),
-        group(nullptr) {
+      : state(QAbstractAnimation::Stopped), direction(QAbstractAnimation::Forward),
+        totalCurrentTime(0), currentTime(0),  loopCount(1), currentLoop(0), deleteWhenStopped(false),
+        hasRegisteredTimer(false), isPause(false), isGroup(false), group(nullptr)
+   {
    }
 
-   virtual ~QAbstractAnimationPrivate() {}
+   virtual ~QAbstractAnimationPrivate()
+   {
+   }
 
    static QAbstractAnimationPrivate *get(QAbstractAnimation *q) {
       return q->d_func();
@@ -86,7 +81,6 @@ class QAbstractAnimationPrivate
    QAbstractAnimation *q_ptr;
 };
 
-
 class QDefaultAnimationDriver : public QAnimationDriver
 {
    CORE_CS_OBJECT(QDefaultAnimationDriver)
@@ -103,13 +97,16 @@ class QDefaultAnimationDriver : public QAnimationDriver
    QUnifiedTimer *m_unified_timer;
 };
 
-
 class Q_CORE_EXPORT QAnimationDriverPrivate
 {
 
  public:
-   QAnimationDriverPrivate() : running(false) {}
-   virtual ~QAnimationDriverPrivate() {}
+   QAnimationDriverPrivate()
+      : running(false)
+   { }
+
+   virtual ~QAnimationDriverPrivate() {
+   }
 
    bool running;
 };
@@ -145,6 +142,7 @@ class Q_CORE_EXPORT QUnifiedTimer : public QObject
    void setSlowModeEnabled(bool enabled) {
       slowMode = enabled;
    }
+
    void setSlowdownFactor(double factor) {
       slowdownFactor = factor;
    }

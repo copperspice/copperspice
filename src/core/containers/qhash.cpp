@@ -63,7 +63,7 @@ static inline uint hash(const uchar *p, int len, uint seed)
 
 uint qHashBits(const void *p, size_t len, uint seed)
 {
-    return hash(static_cast<const uchar*>(p), int(len), seed);
+   return hash(static_cast<const uchar *>(p), int(len), seed);
 }
 
 uint qHash(const QByteArray &key, uint seed)
@@ -80,6 +80,7 @@ uint qHash(const QBitArray &bitArray, uint seed)
    // the padding is initialized to 0 in bitArray.d
 
    int n = bitArray.size();
+
    if (n & 0x7) {
       result = ((result << 4) + bitArray.d.at(m)) & ((1 << n) - 1);
    }
@@ -119,6 +120,7 @@ static uint cs_create_seed()
 
       qt_safe_close(randomfd);
    }
+
 #endif
 
    quint64 timestamp = QDateTime::currentMSecsSinceEpoch();
@@ -161,3 +163,4 @@ uint cs_getHashSeed()
       return expectedValue;
    }
 }
+

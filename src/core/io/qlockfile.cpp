@@ -103,6 +103,7 @@ bool QLockFile::tryLock(int timeout)
                   }
                }
             }
+
             break;
       }
 
@@ -111,6 +112,7 @@ bool QLockFile::tryLock(int timeout)
       }
 
       QThread::msleep(sleepTime);
+
       if (sleepTime < 5 * 1000) {
          sleepTime *= 2;
       }
@@ -129,6 +131,7 @@ bool QLockFile::getLockInfo(qint64 *pid, QString *hostname, QString *appname) co
 bool QLockFilePrivate::getLockInfo(qint64 *pid, QString *hostname, QString *appname) const
 {
    QFile reader(fileName);
+
    if (! reader.open(QIODevice::ReadOnly)) {
       return false;
    }
@@ -147,6 +150,7 @@ bool QLockFilePrivate::getLockInfo(qint64 *pid, QString *hostname, QString *appn
    }
 
    qint64 thePid = pidLine.toLongLong();
+
    if (pid) {
       *pid = thePid;
    }
@@ -179,4 +183,3 @@ QLockFile::LockError QLockFile::error() const
    Q_D(const QLockFile);
    return d->lockError;
 }
-

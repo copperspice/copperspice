@@ -118,6 +118,7 @@ bool QPersistentModelIndex::operator==(const QPersistentModelIndex &other) const
    if (d && other.d) {
       return d->index == other.d->index;
    }
+
    return d == other.d;
 }
 
@@ -141,6 +142,7 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QPersistentModelIn
    }
 
    d = other.d;
+
    if (d) {
       d->ref.ref();
    }
@@ -156,9 +158,11 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QModelIndex &other
 
    if (other.isValid()) {
       d = QPersistentModelIndexData::create(other);
+
       if (d) {
          d->ref.ref();
       }
+
    } else {
       d = nullptr;
    }
@@ -169,9 +173,11 @@ QPersistentModelIndex &QPersistentModelIndex::operator=(const QModelIndex &other
 QPersistentModelIndex::operator const QModelIndex &() const
 {
    static const QModelIndex invalid;
+
    if (d) {
       return d->index;
    }
+
    return invalid;
 }
 
@@ -180,6 +186,7 @@ bool QPersistentModelIndex::operator==(const QModelIndex &other) const
    if (d) {
       return d->index == other;
    }
+
    return !other.isValid();
 }
 
@@ -188,6 +195,7 @@ bool QPersistentModelIndex::operator!=(const QModelIndex &other) const
    if (d) {
       return d->index != other;
    }
+
    return other.isValid();
 }
 
@@ -196,6 +204,7 @@ int QPersistentModelIndex::row() const
    if (d) {
       return d->index.row();
    }
+
    return -1;
 }
 
@@ -204,6 +213,7 @@ int QPersistentModelIndex::column() const
    if (d) {
       return d->index.column();
    }
+
    return -1;
 }
 
@@ -261,7 +271,6 @@ QVariant QPersistentModelIndex::data(int role) const
    return QVariant();
 }
 
-
 Qt::ItemFlags QPersistentModelIndex::flags() const
 {
    if (d) {
@@ -289,7 +298,8 @@ QDebug operator<<(QDebug dbg, const QModelIndex &idx)
 {
    QDebugStateSaver saver(dbg);
    dbg.nospace() << "QModelIndex(" << idx.row() << ',' << idx.column()
-                 << ',' << idx.internalPointer() << ',' << idx.model() << ')';
+         << ',' << idx.internalPointer() << ',' << idx.model() << ')';
+
    return dbg;
 }
 
@@ -300,6 +310,7 @@ QDebug operator<<(QDebug dbg, const QPersistentModelIndex &idx)
    } else {
       dbg << QModelIndex();
    }
+
    return dbg;
 }
 
@@ -319,7 +330,7 @@ class QEmptyItemModel : public QAbstractItemModel
       return 0;
    }
 
-   int columnCount(const QModelIndex &) const  override{
+   int columnCount(const QModelIndex &) const  override {
       return 0;
    }
 
@@ -327,7 +338,7 @@ class QEmptyItemModel : public QAbstractItemModel
       return false;
    }
 
-   QVariant data(const QModelIndex &, int) const override{
+   QVariant data(const QModelIndex &, int) const override {
       return QVariant();
    }
 };
@@ -349,17 +360,18 @@ QAbstractItemModel *QAbstractItemModelPrivate::staticEmptyModel()
 
 namespace {
 
-   struct DefaultRoleNames : public QMultiHash<int, QString> {
-      DefaultRoleNames() {
-         this->insert(Qt::DisplayRole,    "display");
-         this->insert(Qt::DecorationRole, "decoration");
-         this->insert(Qt::EditRole,       "edit");
-         this->insert(Qt::ToolTipRole,    "toolTip");
-         this->insert(Qt::StatusTipRole,  "statusTip");
-         this->insert(Qt::WhatsThisRole,  "whatsThis");
-      }
-   };
-}
+struct DefaultRoleNames : public QMultiHash<int, QString> {
+   DefaultRoleNames() {
+      this->insert(Qt::DisplayRole,    "display");
+      this->insert(Qt::DecorationRole, "decoration");
+      this->insert(Qt::EditRole,       "edit");
+      this->insert(Qt::ToolTipRole,    "toolTip");
+      this->insert(Qt::StatusTipRole,  "statusTip");
+      this->insert(Qt::WhatsThisRole,  "whatsThis");
+   }
+};
+
+}   // end namespace
 
 static DefaultRoleNames *qDefaultRoleNames()
 {
@@ -397,10 +409,7 @@ static SortType typeOfVariant(const QVariant &value)
    }
 }
 
-
-// internal
 // called from QTreeWidgetItem, QListWidgetItem, QTableWidgetItem for sorting
-
 bool QAbstractItemModelPrivate::variantLessThan(const QVariant &v1, const QVariant &v2)
 {
    SortType type1 = typeOfVariant(v1);
@@ -425,7 +434,7 @@ void QAbstractItemModelPrivate::removePersistentIndexData(QPersistentModelIndexD
       int removed = persistent.m_indexes.remove(data->index);
 
       Q_ASSERT_X(removed == 1, "QPersistentModelIndex::~QPersistentModelIndex",
-                 "persistent model indexes corrupted");
+            "persistent model indexes corrupted");
 
       // This assert may happen if the model use changePersistentIndex in a way that could result on two
       // QPersistentModelIndex pointing to the same index.
@@ -435,6 +444,7 @@ void QAbstractItemModelPrivate::removePersistentIndexData(QPersistentModelIndexD
    // make sure our optimization still works
    for (int i = persistent.moved.count() - 1; i >= 0; --i) {
       int idx = persistent.moved[i].indexOf(data);
+
       if (idx >= 0) {
          persistent.moved[i].remove(idx);
       }
@@ -443,6 +453,7 @@ void QAbstractItemModelPrivate::removePersistentIndexData(QPersistentModelIndexD
    // update the references to invalidated persistent indexes
    for (int i = persistent.invalidated.count() - 1; i >= 0; --i) {
       int idx = persistent.invalidated[i].indexOf(data);
+
       if (idx >= 0) {
          persistent.invalidated[i].remove(idx);
       }
@@ -494,7 +505,7 @@ void QAbstractItemModelPrivate::rowsInserted(const QModelIndex &parent,
          persistent.insertMultiAtEnd(data->index, data);
       } else {
          qWarning() << "QAbstractItemModel::rowsInserted() Invalid index (" << old.row() + count << ','
-                    << old.column() << ") in model" << q_func();
+               << old.column() << ") in model" << q_func();
       }
    }
 }
@@ -523,6 +534,7 @@ void QAbstractItemModelPrivate::itemsAboutToBeMoved(const QModelIndex &srcParent
       const bool isDestinationIndex = (parent == destinationParent);
 
       int childPosition;
+
       if (orientation == Qt::Vertical) {
          childPosition = index.row();
       } else {
@@ -537,6 +549,7 @@ void QAbstractItemModelPrivate::itemsAboutToBeMoved(const QModelIndex &srcParent
          if (childPosition >= destinationChild) {
             persistent_moved_in_destination.append(data);
          }
+
          continue;
       }
 
@@ -562,18 +575,12 @@ void QAbstractItemModelPrivate::itemsAboutToBeMoved(const QModelIndex &srcParent
          persistent_moved_in_source.append(data);
       }
    }
+
    persistent.moved.push(persistent_moved_explicitly);
    persistent.moved.push(persistent_moved_in_source);
    persistent.moved.push(persistent_moved_in_destination);
 }
 
-/*!
-  \internal
-
-  Moves persistent indexes \a indexes by amount \a change. The change will be either a change in row value or a change in
-  column value depending on the value of \a orientation. The indexes may also be moved to a different parent if \a parent
-  differs from the existing parent for the index.
-*/
 void QAbstractItemModelPrivate::movePersistentIndexes(const QVector<QPersistentModelIndexData *> &indexes, int change,
       const QModelIndex &parent, Qt::Orientation orientation)
 {
@@ -605,7 +612,7 @@ void QAbstractItemModelPrivate::movePersistentIndexes(const QVector<QPersistentM
          persistent.insertMultiAtEnd(data->index, data);
       } else {
          qWarning() << "QAbstractItemModel::movePersistentIndexes() Invalid index (" << row
-                    << "," << column << ") in model" << q_func();
+               << "," << column << ") in model" << q_func();
       }
    }
 }
@@ -630,7 +637,7 @@ void QAbstractItemModelPrivate::itemsMoved(const QModelIndex &sourceParent, int 
 }
 
 void QAbstractItemModelPrivate::rowsAboutToBeRemoved(const QModelIndex &parent,
-         int first, int last)
+      int first, int last)
 {
    QVector<QPersistentModelIndexData *>  persistent_moved;
    QVector<QPersistentModelIndexData *>  persistent_invalidated;
@@ -654,6 +661,7 @@ void QAbstractItemModelPrivate::rowsAboutToBeRemoved(const QModelIndex &parent,
                // in the removed subtree
                persistent_invalidated.append(data);
             }
+
             break;
          }
 
@@ -688,7 +696,7 @@ void QAbstractItemModelPrivate::rowsRemoved(const QModelIndex &parent, int first
          persistent.insertMultiAtEnd(data->index, data);
       } else {
          qWarning() << "QAbstractItemModel::rowsRemoved() Invalid index ("
-                    << old.row() - count << ',' << old.column() << ") in model" << q_func();
+               << old.row() - count << ',' << old.column() << ") in model" << q_func();
       }
    }
 
@@ -752,13 +760,13 @@ void QAbstractItemModelPrivate::columnsInserted(const QModelIndex &parent, int f
          persistent.insertMultiAtEnd(data->index, data);
       } else {
          qWarning() << "QAbstractItemModel::columnsInserted() Invalid index (" << old.row() << ','
-                    << old.column() + count << ") in model" << q_func();
+               << old.column() + count << ") in model" << q_func();
       }
    }
 }
 
 void QAbstractItemModelPrivate::columnsAboutToBeRemoved(const QModelIndex &parent,
-         int first, int last)
+      int first, int last)
 {
    QVector<QPersistentModelIndexData *> persistent_moved;
    QVector<QPersistentModelIndexData *> persistent_invalidated;
@@ -784,8 +792,10 @@ void QAbstractItemModelPrivate::columnsAboutToBeRemoved(const QModelIndex &paren
                // in the removed subtree
                persistent_invalidated.append(data);
             }
+
             break;
          }
+
          current = current_parent;
          level_changed = true;
       }
@@ -796,7 +806,7 @@ void QAbstractItemModelPrivate::columnsAboutToBeRemoved(const QModelIndex &paren
 }
 
 void QAbstractItemModelPrivate::columnsRemoved(const QModelIndex &parent,
-         int first, int last)
+      int first, int last)
 {
    QVector<QPersistentModelIndexData *> persistent_moved = persistent.moved.pop();
    int count = (last - first) + 1; // it is important to only use the delta, because the change could be nested
@@ -818,13 +828,13 @@ void QAbstractItemModelPrivate::columnsRemoved(const QModelIndex &parent,
          persistent.insertMultiAtEnd(data->index, data);
       } else {
          qWarning() << "QAbstractItemModel::columnsRemoved() Invalid index (" << old.row() << ','
-                    << old.column() - count << ") in model" << q_func();
+               << old.column() - count << ") in model" << q_func();
       }
    }
 
    QVector<QPersistentModelIndexData *> persistent_invalidated = persistent.invalidated.pop();
 
-   for (auto it = persistent_invalidated.constBegin();it != persistent_invalidated.constEnd(); ++it) {
+   for (auto it = persistent_invalidated.constBegin(); it != persistent_invalidated.constEnd(); ++it) {
       QPersistentModelIndexData *data = *it;
 
       auto iter = persistent.m_indexes.find(data->index);
@@ -848,9 +858,6 @@ QAbstractItemModel::QAbstractItemModel(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-/*!
-  \internal
-*/
 QAbstractItemModel::QAbstractItemModel(QAbstractItemModelPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
@@ -867,6 +874,7 @@ bool QAbstractItemModel::hasIndex(int row, int column, const QModelIndex &parent
    if (row < 0 || column < 0) {
       return false;
    }
+
    return row < rowCount(parent) && column < columnCount(parent);
 }
 
@@ -877,7 +885,7 @@ bool QAbstractItemModel::hasChildren(const QModelIndex &parent) const
 
 QModelIndex QAbstractItemModel::sibling(int row, int column, const QModelIndex &idx) const
 {
-    return (row == idx.row() && column == idx.column()) ? idx : index(row, column, parent(idx));
+   return (row == idx.row() && column == idx.column()) ? idx : index(row, column, parent(idx));
 }
 
 QMap<int, QVariant> QAbstractItemModel::itemData(const QModelIndex &index) const
@@ -930,6 +938,7 @@ QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
    }
 
    QStringList types = mimeTypes();
+
    if (types.isEmpty()) {
       return nullptr;
    }
@@ -946,27 +955,29 @@ QMimeData *QAbstractItemModel::mimeData(const QModelIndexList &indexes) const
 }
 
 bool QAbstractItemModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
-            int row, int column, const QModelIndex &parent) const
+      int row, int column, const QModelIndex &parent) const
 {
    (void) row;
    (void) column;
    (void) parent;
 
-    if (! (action & supportedDropActions()))
-        return false;
+   if (! (action & supportedDropActions())) {
+      return false;
+   }
 
-    const QStringList modelTypes = mimeTypes();
+   const QStringList modelTypes = mimeTypes();
 
-    for (int i = 0; i < modelTypes.count(); ++i) {
-        if (data->hasFormat(modelTypes.at(i)))
-            return true;
-    }
+   for (int i = 0; i < modelTypes.count(); ++i) {
+      if (data->hasFormat(modelTypes.at(i))) {
+         return true;
+      }
+   }
 
-    return false;
+   return false;
 }
 
 bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent)
+      int row, int column, const QModelIndex &parent)
 {
    // check if the action is supported
    if (! data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
@@ -975,11 +986,13 @@ bool QAbstractItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
 
    // check if the format is supported
    QStringList types = mimeTypes();
+
    if (types.isEmpty()) {
       return false;
    }
 
    QString format = types.at(0);
+
    if (! data->hasFormat(format)) {
       return false;
    }
@@ -1031,7 +1044,6 @@ bool QAbstractItemModel::insertColumns(int, int, const QModelIndex &)
    return false;
 }
 
-
 bool QAbstractItemModel::removeRows(int, int, const QModelIndex &)
 {
    return false;
@@ -1039,18 +1051,18 @@ bool QAbstractItemModel::removeRows(int, int, const QModelIndex &)
 
 bool QAbstractItemModel::removeColumns(int, int, const QModelIndex &)
 {
-    return false;
+   return false;
 }
 
-bool QAbstractItemModel::moveRows(const QModelIndex &, int , int , const QModelIndex &, int)
-{
-    return false;
-}
-bool QAbstractItemModel::moveColumns(const QModelIndex &, int , int , const QModelIndex &, int)
+bool QAbstractItemModel::moveRows(const QModelIndex &, int, int, const QModelIndex &, int)
 {
    return false;
 }
 
+bool QAbstractItemModel::moveColumns(const QModelIndex &, int, int, const QModelIndex &, int)
+{
+   return false;
+}
 
 void QAbstractItemModel::fetchMore(const QModelIndex &)
 {
@@ -1061,7 +1073,6 @@ bool QAbstractItemModel::canFetchMore(const QModelIndex &) const
 {
    return false;
 }
-
 
 Qt::ItemFlags QAbstractItemModel::flags(const QModelIndex &index) const
 {
@@ -1086,7 +1097,7 @@ QModelIndex QAbstractItemModel::buddy(const QModelIndex &index) const
 }
 
 QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role, const QVariant &value,
-                  int hits, Qt::MatchFlags flags) const
+      int hits, Qt::MatchFlags flags) const
 {
    QModelIndexList result;
 
@@ -1133,55 +1144,57 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role, co
 
             switch (matchType) {
 
-               case Qt::MatchRegExp:
-                  {
-                     QPatternOptionFlags options = QPatternOption::ExactMatchOption;
+               case Qt::MatchRegExp: {
+                  QPatternOptionFlags options = QPatternOption::ExactMatchOption;
 
-                     if (cs == Qt::CaseInsensitive) {
-                        options |= QPatternOption::CaseInsensitiveOption;
-                     }
-
-                     QRegularExpression8 regExp(text, options);
-
-                     if (regExp.match(t).hasMatch()) {
-                        result.append(idx);
-                     }
-
-                     break;
+                  if (cs == Qt::CaseInsensitive) {
+                     options |= QPatternOption::CaseInsensitiveOption;
                   }
 
-               case Qt::MatchWildcard:
-                  {
-                     QPatternOptionFlags options = QPatternOption::ExactMatchOption | QPatternOption::WildcardOption;
+                  QRegularExpression8 regExp(text, options);
 
-                     if (cs == Qt::CaseInsensitive) {
-                        options |= QPatternOption::CaseInsensitiveOption;
-                     }
-
-                     QRegularExpression8 regExp(text, options);
-
-                     if (regExp.match(t).hasMatch()) {
-                        result.append(idx);
-                     }
-                     break;
+                  if (regExp.match(t).hasMatch()) {
+                     result.append(idx);
                   }
+
+                  break;
+               }
+
+               case Qt::MatchWildcard: {
+                  QPatternOptionFlags options = QPatternOption::ExactMatchOption | QPatternOption::WildcardOption;
+
+                  if (cs == Qt::CaseInsensitive) {
+                     options |= QPatternOption::CaseInsensitiveOption;
+                  }
+
+                  QRegularExpression8 regExp(text, options);
+
+                  if (regExp.match(t).hasMatch()) {
+                     result.append(idx);
+                  }
+
+                  break;
+               }
 
                case Qt::MatchStartsWith:
                   if (t.startsWith(text, cs)) {
                      result.append(idx);
                   }
+
                   break;
 
                case Qt::MatchEndsWith:
                   if (t.endsWith(text, cs)) {
                      result.append(idx);
                   }
+
                   break;
 
                case Qt::MatchFixedString:
                   if (t.compare(text, cs) == 0) {
                      result.append(idx);
                   }
+
                   break;
 
                case Qt::MatchContains:
@@ -1194,8 +1207,8 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role, co
 
          if (recurse && hasChildren(idx)) { // search the hierarchy
             result += match(index(0, idx.column(), idx), role,
-                            (text.isEmpty() ? value : text),
-                            (allHits ? -1 : hits - result.count()), flags);
+                  (text.isEmpty() ? value : text),
+                  (allHits ? -1 : hits - result.count()), flags);
          }
       }
 
@@ -1203,6 +1216,7 @@ QModelIndexList QAbstractItemModel::match(const QModelIndex &start, int role, co
       from = 0;
       to = start.row();
    }
+
    return result;
 }
 
@@ -1223,7 +1237,6 @@ QMultiHash<int, QString> QAbstractItemModel::roleNames() const
    return d->roleNames;
 }
 
-
 bool QAbstractItemModel::submit()
 {
    return true;
@@ -1240,6 +1253,7 @@ QVariant QAbstractItemModel::headerData(int section, Qt::Orientation orientation
    if (role == Qt::DisplayRole) {
       return section + 1;
    }
+
    return QVariant();
 }
 
@@ -1262,9 +1276,6 @@ void QAbstractItemModel::encodeData(const QModelIndexList &indexes, QDataStream 
    }
 }
 
-/*!
-  \internal
- */
 bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &parent, QDataStream &stream)
 {
    int top    = INT_MAX;
@@ -1273,7 +1284,7 @@ bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &pare
    int right  = 0;
 
    QVector<int> rows, columns;
-   QVector<QMap<int, QVariant> > data;
+   QVector<QMap<int, QVariant>> data;
 
    while (!stream.atEnd()) {
       int r, c;
@@ -1295,15 +1306,18 @@ bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &pare
 
    // Compute the number of continuous rows upon insertion and modify the rows to match
    QVector<int> rowsToInsert(bottom + 1);
+
    for (int i = 0; i < rows.count(); ++i) {
       rowsToInsert[rows.at(i)] = 1;
    }
+
    for (int i = 0; i < rowsToInsert.count(); ++i) {
       if (rowsToInsert[i] == 1) {
          rowsToInsert[i] = dragRowCount;
          ++dragRowCount;
       }
    }
+
    for (int i = 0; i < rows.count(); ++i) {
       rows[i] = top + rowsToInsert[rows[i]];
    }
@@ -1312,16 +1326,19 @@ bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &pare
 
    // make space in the table for the dropped data
    int colCount = columnCount(parent);
+
    if (colCount == 0) {
       insertColumns(colCount, dragColumnCount - colCount, parent);
       colCount = columnCount(parent);
    }
+
    insertRows(row, dragRowCount, parent);
 
    row = qMax(0, row);
    column = qMax(0, column);
 
    QVector<QPersistentModelIndex> newIndexes(data.size());
+
    // set the data in the table
    for (int j = 0; j < data.size(); ++j) {
       int relativeRow = rows.at(j) - top;
@@ -1329,6 +1346,7 @@ bool QAbstractItemModel::decodeData(int row, int column, const QModelIndex &pare
       int destinationRow = relativeRow + row;
       int destinationColumn = relativeColumn + column;
       int flat = (relativeRow * dragColumnCount) + relativeColumn;
+
       // if the item was already written to, or we just can't fit it in the table, create a new row
       if (destinationColumn >= colCount || isWrittenTo.testBit(flat)) {
          destinationColumn = qBound(column, destinationColumn, colCount - 1);
@@ -1383,14 +1401,6 @@ void QAbstractItemModel::beginRemoveRows(const QModelIndex &parent, int first, i
    d->rowsAboutToBeRemoved(parent, first, last);
 }
 
-/*!
-    Ends a row removal operation.
-
-    When reimplementing removeRows() in a subclass, you must call this function
-    \e after removing data from the model's underlying data store.
-
-    \sa beginRemoveRows()
-*/
 void QAbstractItemModel::endRemoveRows()
 {
    Q_D(QAbstractItemModel);
@@ -1399,18 +1409,10 @@ void QAbstractItemModel::endRemoveRows()
    emit rowsRemoved(change.parent, change.first, change.last);
 }
 
-/*!
-    Returns whether a move operation is valid.
-
-    A move operation is not allowed if it moves a continuous range of rows to a destination within
-    itself, or if it attempts to move a row to one of its own descendants.
-
-    \internal
-*/
 bool QAbstractItemModelPrivate::allowMove(const QModelIndex &srcParent, int start, int end,
       const QModelIndex &destinationParent, int destinationStart, Qt::Orientation orientation)
 {
-   // Don't move the range within itself.
+   // Don't move the range within itself
    if (destinationParent == srcParent) {
       return !(destinationStart >= start && destinationStart <= end + 1);
    }
@@ -1419,16 +1421,15 @@ bool QAbstractItemModelPrivate::allowMove(const QModelIndex &srcParent, int star
    int pos = (Qt::Vertical == orientation) ? destinationAncestor.row() : destinationAncestor.column();
 
    while (true) {
-      if (destinationAncestor == srcParent)
-      {
+      if (destinationAncestor == srcParent) {
          if (pos >= start && pos <= end) {
             return false;
          }
+
          break;
       }
 
-      if (!destinationAncestor.isValid())
-      {
+      if (!destinationAncestor.isValid()) {
          break;
       }
 
@@ -1439,27 +1440,30 @@ bool QAbstractItemModelPrivate::allowMove(const QModelIndex &srcParent, int star
    return true;
 }
 
-
 bool QAbstractItemModel::beginMoveRows(const QModelIndex &sourceParent, int sourceFirst, int sourceLast,
-                                       const QModelIndex &destinationParent, int destinationChild)
+      const QModelIndex &destinationParent, int destinationChild)
 {
    Q_ASSERT(sourceFirst >= 0);
    Q_ASSERT(sourceLast >= sourceFirst);
    Q_ASSERT(destinationChild >= 0);
+
    Q_D(QAbstractItemModel);
 
-   if (!d->allowMove(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild, Qt::Vertical)) {
+   if (! d->allowMove(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild, Qt::Vertical)) {
       return false;
    }
 
    QAbstractItemModelPrivate::Change sourceChange(sourceParent, sourceFirst, sourceLast);
    sourceChange.needsAdjust = sourceParent.isValid() && sourceParent.row() >= destinationChild &&
-                              sourceParent.parent() == destinationParent;
+         sourceParent.parent() == destinationParent;
+
    d->changes.push(sourceChange);
    int destinationLast = destinationChild + (sourceLast - sourceFirst);
    QAbstractItemModelPrivate::Change destinationChange(destinationParent, destinationChild, destinationLast);
+
    destinationChange.needsAdjust = destinationParent.isValid() && destinationParent.row() >= sourceLast &&
-                                   destinationParent.parent() == sourceParent;
+         destinationParent.parent() == sourceParent;
+
    d->changes.push(destinationChange);
 
    emit rowsAboutToBeMoved(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild);
@@ -1467,7 +1471,6 @@ bool QAbstractItemModel::beginMoveRows(const QModelIndex &sourceParent, int sour
    d->itemsAboutToBeMoved(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild, Qt::Vertical);
    return true;
 }
-
 
 void QAbstractItemModel::endMoveRows()
 {
@@ -1480,21 +1483,21 @@ void QAbstractItemModel::endMoveRows()
    QModelIndex adjustedDestination = insertChange.parent;
 
    const int numMoved = removeChange.last - removeChange.first + 1;
+
    if (insertChange.needsAdjust) {
       adjustedDestination = createIndex(adjustedDestination.row() - numMoved, adjustedDestination.column(),
-                                        adjustedDestination.internalPointer());
+            adjustedDestination.internalPointer());
    }
 
    if (removeChange.needsAdjust) {
       adjustedSource = createIndex(adjustedSource.row() + numMoved, adjustedSource.column(),
-                                   adjustedSource.internalPointer());
+            adjustedSource.internalPointer());
    }
 
    d->itemsMoved(adjustedSource, removeChange.first, removeChange.last, adjustedDestination, insertChange.first,
-                 Qt::Vertical);
+         Qt::Vertical);
 
    emit rowsMoved(adjustedSource, removeChange.first, removeChange.last, adjustedDestination, insertChange.first);
-
 }
 
 void QAbstractItemModel::beginInsertColumns(const QModelIndex &parent, int first, int last)
@@ -1548,12 +1551,14 @@ bool QAbstractItemModel::beginMoveColumns(const QModelIndex &sourceParent, int s
 
    QAbstractItemModelPrivate::Change sourceChange(sourceParent, sourceFirst, sourceLast);
    sourceChange.needsAdjust = sourceParent.isValid() && sourceParent.row() >= destinationChild &&
-                              sourceParent.parent() == destinationParent;
+         sourceParent.parent() == destinationParent;
+
    d->changes.push(sourceChange);
    int destinationLast = destinationChild + (sourceLast - sourceFirst);
    QAbstractItemModelPrivate::Change destinationChange(destinationParent, destinationChild, destinationLast);
    destinationChange.needsAdjust = destinationParent.isValid() && destinationParent.row() >= sourceLast &&
-                                   destinationParent.parent() == sourceParent;
+         destinationParent.parent() == sourceParent;
+
    d->changes.push(destinationChange);
 
    d->itemsAboutToBeMoved(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild, Qt::Horizontal);
@@ -1574,18 +1579,19 @@ void QAbstractItemModel::endMoveColumns()
    QModelIndex adjustedDestination = insertChange.parent;
 
    const int numMoved = removeChange.last - removeChange.first + 1;
+
    if (insertChange.needsAdjust) {
       adjustedDestination = createIndex(adjustedDestination.row(), adjustedDestination.column() - numMoved,
-                                        adjustedDestination.internalPointer());
+            adjustedDestination.internalPointer());
    }
 
    if (removeChange.needsAdjust) {
       adjustedSource = createIndex(adjustedSource.row(), adjustedSource.column() + numMoved,
-                                   adjustedSource.internalPointer());
+            adjustedSource.internalPointer());
    }
 
    d->itemsMoved(adjustedSource, removeChange.first, removeChange.last, adjustedDestination, insertChange.first,
-                 Qt::Horizontal);
+         Qt::Horizontal);
 
    emit columnsMoved(adjustedSource, removeChange.first, removeChange.last, adjustedDestination, insertChange.first);
 }
@@ -1594,7 +1600,6 @@ void QAbstractItemModel::beginResetModel()
 {
    emit modelAboutToBeReset();
 }
-
 
 void QAbstractItemModel::endResetModel()
 {
@@ -1705,8 +1710,9 @@ QModelIndex QAbstractTableModel::parent(const QModelIndex &) const
 
 QModelIndex QAbstractTableModel::sibling(int row, int column, const QModelIndex &) const
 {
-    return index(row, column);
+   return index(row, column);
 }
+
 bool QAbstractTableModel::hasChildren(const QModelIndex &parent) const
 {
    if (parent.model() == this || ! parent.isValid()) {
@@ -1721,7 +1727,7 @@ Qt::ItemFlags QAbstractTableModel::flags(const QModelIndex &index) const
    Qt::ItemFlags f = QAbstractItemModel::flags(index);
 
    if (index.isValid()) {
-     f |= Qt::ItemNeverHasChildren;
+      f |= Qt::ItemNeverHasChildren;
    }
 
    return f;
@@ -1746,19 +1752,20 @@ QModelIndex QAbstractListModel::index(int row, int column, const QModelIndex &pa
    return hasIndex(row, column, parent) ? createIndex(row, column) : QModelIndex();
 }
 
-QModelIndex QAbstractListModel::parent(const QModelIndex & /* index */) const
+QModelIndex QAbstractListModel::parent(const QModelIndex &) const
 {
    return QModelIndex();
 }
 
 QModelIndex QAbstractListModel::sibling(int row, int column, const QModelIndex &) const
 {
-    return index(row, column);
+   return index(row, column);
 }
 
 Qt::ItemFlags QAbstractListModel::flags(const QModelIndex &index) const
 {
    Qt::ItemFlags f = QAbstractItemModel::flags(index);
+
    if (index.isValid()) {
       f |= Qt::ItemNeverHasChildren;
    }
@@ -1777,19 +1784,21 @@ bool QAbstractListModel::hasChildren(const QModelIndex &parent) const
 }
 
 bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent)
+      int row, int column, const QModelIndex &parent)
 {
    if (! data || ! (action == Qt::CopyAction || action == Qt::MoveAction)) {
       return false;
    }
 
    QStringList types = mimeTypes();
+
    if (types.isEmpty()) {
       return false;
    }
 
    QString format = types.at(0);
-   if (!data->hasFormat(format)) {
+
+   if (! data->hasFormat(format)) {
       return false;
    }
 
@@ -1801,22 +1810,26 @@ bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction act
       int top = INT_MAX;
       int left = INT_MAX;
       QVector<int> rows, columns;
-      QVector<QMap<int, QVariant> > data;
+      QVector<QMap<int, QVariant>> data;
 
       while (!stream.atEnd()) {
-         int r, c;
+         int r;
+         int c;
+
          QMap<int, QVariant> v;
          stream >> r >> c >> v;
          rows.append(r);
          columns.append(c);
          data.append(v);
-         top = qMin(r, top);
+
+         top  = qMin(r, top);
          left = qMin(c, left);
       }
 
       for (int i = 0; i < data.size(); ++i) {
          int r = (rows.at(i) - top) + parent.row();
          int c = (columns.at(i) - left) + parent.column();
+
          if (hasIndex(r, c)) {
             setItemData(index(r, c), data.at(i));
          }
@@ -1829,23 +1842,22 @@ bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction act
    return decodeData(row, column, parent, stream);
 }
 
-/*!
-  \reimp
-*/
 bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent)
+      int row, int column, const QModelIndex &parent)
 {
-   if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
+   if (! data || !(action == Qt::CopyAction || action == Qt::MoveAction)) {
       return false;
    }
 
    QStringList types = mimeTypes();
+
    if (types.isEmpty()) {
       return false;
    }
 
    QString format = types.at(0);
-   if (!data->hasFormat(format)) {
+
+   if (! data->hasFormat(format)) {
       return false;
    }
 
@@ -1857,7 +1869,7 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
       int top = INT_MAX;
       int left = INT_MAX;
       QVector<int> rows, columns;
-      QVector<QMap<int, QVariant> > data;
+      QVector<QMap<int, QVariant>> data;
 
       while (!stream.atEnd()) {
          int r, c;
@@ -1866,12 +1878,14 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
          rows.append(r);
          columns.append(c);
          data.append(v);
-         top = qMin(r, top);
+
+         top  = qMin(r, top);
          left = qMin(c, left);
       }
 
       for (int i = 0; i < data.size(); ++i) {
          int r = (rows.at(i) - top) + parent.row();
+
          if (columns.at(i) == left && hasIndex(r, 0)) {
             setItemData(index(r), data.at(i));
          }

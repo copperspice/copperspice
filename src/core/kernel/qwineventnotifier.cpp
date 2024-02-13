@@ -24,24 +24,14 @@
 #include <qwineventnotifier.h>
 
 #include <qcoreapplication.h>
-/*
-    \class QWinEventNotifier
-    \brief The QWinEventNotifier class provides support for the Windows Wait functions.
-
-    The QWinEventNotifier class makes it possible to use the wait
-    functions on windows in a asynchronous manner. With this class
-    you can register a HANDLE to an event and get notification when
-    that event becomes signalled. The state of the event is not modified
-    in the process so if it is a manual reset event you will need to
-    reset it after the notification.
-*/
 
 #include <qeventdispatcher_win_p.h>
 #include <qthread_p.h>
 
 QWinEventNotifier::QWinEventNotifier(QObject *parent)
    : QObject(parent), handleToEvent(nullptr), enabled(false)
-{}
+{
+}
 
 QWinEventNotifier::QWinEventNotifier(HANDLE hEvent, QObject *parent)
    : QObject(parent), handleToEvent(hEvent), enabled(false)
@@ -51,7 +41,7 @@ QWinEventNotifier::QWinEventNotifier(HANDLE hEvent, QObject *parent)
    QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
 
    Q_ASSERT_X(eventDispatcher, "QWinEventNotifier::QWinEventNotifier()",
-              "Cannot create a win event notifier without a QEventDispatcherWin32");
+         "Unable to create a win event notifier without a QEventDispatcherWin32");
 
    eventDispatcher->registerEventNotifier(this);
    enabled = true;
@@ -83,12 +73,14 @@ void QWinEventNotifier::setEnabled(bool enable)
    if (enabled == enable) {                      // no change
       return;
    }
+
    enabled = enable;
 
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
    QEventDispatcherWin32 *eventDispatcher = qobject_cast<QEventDispatcherWin32 *>(threadData->eventDispatcher);
 
-   if (!eventDispatcher) { // perhaps application is shutting down
+   if (! eventDispatcher) {
+      // perhaps application is shutting down
       return;
    }
 
@@ -103,17 +95,17 @@ bool QWinEventNotifier::event(QEvent *e)
 {
    if (e->type() == QEvent::ThreadChange) {
       if (enabled) {
-         QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection,
-                                   Q_ARG(bool, enabled));
+         QMetaObject::invokeMethod(this, "setEnabled", Qt::QueuedConnection, Q_ARG(bool, enabled));
          setEnabled(false);
       }
    }
+
    QObject::event(e);                        // will activate filters
+
    if (e->type() == QEvent::WinEventAct) {
       emit activated(handleToEvent);
       return true;
    }
+
    return false;
 }
-
-

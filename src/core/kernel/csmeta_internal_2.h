@@ -37,7 +37,7 @@ QVariant cs_convertToQVariant(T data)
       return QVariant(data);
 
    } else {
-     return QVariant::fromValue(data);
+      return QVariant::fromValue(data);
 
    }
 }
@@ -127,10 +127,10 @@ const QString &CS_ReturnType<E, typename std::enable_if<std::is_enum_v<E>>::type
    }
 }
 
-#endif // doxypress
+#endif   // doxypress
 
 template<class E>
-const QString &CS_ReturnType<QFlags<E> >::getName()
+const QString &CS_ReturnType<QFlags<E>>::getName()
 {
    static QMetaEnum enumObject = QMetaObject::findEnum<QFlags<E>>();
 
@@ -156,13 +156,12 @@ void cs_namespace_register_enum_data(const char *data)
    const_cast<QMetaObject_T<T>&>(T::staticMetaObject()).register_enum_data(QString::fromUtf8(data));
 }
 
-
 // ** flags
 template<class T>
 void cs_namespace_register_flag(const char *enumName, const char *scope, const char *flagName, std::type_index id)
 {
    const_cast<QMetaObject_T<T>&> (T::staticMetaObject()).register_flag(QString::fromUtf8(enumName),
-                  QString::fromUtf8(scope), QString::fromUtf8(flagName), id);
+         QString::fromUtf8(scope), QString::fromUtf8(flagName), id);
 }
 
 #endif

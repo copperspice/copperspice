@@ -45,7 +45,8 @@ static inline QString fromstrerror_helper(const char *str, const QByteArray &)
 {
    return QString::fromUtf8(str);
 }
-}
+
+}     // end namespace
 #endif
 
 #ifdef Q_OS_WIN
@@ -55,7 +56,7 @@ static QString windowsErrorString(int errorCode)
    wchar_t *buffer = nullptr;
 
    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                 nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, nullptr);
+         nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPWSTR)&buffer, 0, nullptr);
 
    if (buffer != nullptr) {
       ret = QString::fromStdWString(std::wstring(buffer));
@@ -138,4 +139,3 @@ QString QSystemError::toString()
          return QString("Unrecognized error");
    }
 }
-

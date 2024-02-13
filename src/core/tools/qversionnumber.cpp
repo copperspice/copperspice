@@ -153,6 +153,7 @@ QVersionNumber QVersionNumber::fromString(const QString &string, int *suffixInde
    do {
       bool ok = false;
       const quint64 value = qstrtoull(start, &end, 10, &ok);
+
       if (! ok || value > quint64(std::numeric_limits<int>::max())) {
          break;
       }
@@ -178,6 +179,7 @@ void QVersionNumber::SegmentStorage::setVector(int len, int maj, int min, int mi
 
    if (len > 1) {
       pointer_segments.data()[1] = min;
+
       if (len > 2) {
          pointer_segments.data()[2] = mic;
       }
@@ -215,5 +217,3 @@ uint qHash(const QVersionNumber &key, uint seed)
 
    return seed;
 }
-
-

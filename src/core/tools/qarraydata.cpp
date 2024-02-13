@@ -33,10 +33,10 @@
 static QArrayData *qtArray()
 {
    static const QArrayData qt_array[3] = {
-      { Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, 0, sizeof(QArrayData) }, 			// shared empty
-      { { 0 }, 0, 0, 0, sizeof(QArrayData) }, 	   // unsharable empty
-      { { 0 }, 0, 0, 0, 0 }
-   };						// zero initialized element
+      { Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, 0, sizeof(QArrayData) },  // shared empty
+      { { 0 }, 0, 0, 0, sizeof(QArrayData) },                         // unsharable empty
+      { { 0 }, 0, 0, 0, 0 }                                           // zero initialized element
+   };
 
    return const_cast<QArrayData *>(qt_array);
 }
@@ -44,9 +44,9 @@ static QArrayData *qtArray()
 QArrayData *QArrayData::sharedNull()
 {
    static const QArrayData shared_null[2] = {
-      { Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, 0, sizeof(QArrayData) }, 	      // shared null
-      { { 0 }, 0, 0, 0, 0 }
-   };					// zero initialized element
+      { Q_REFCOUNT_INITIALIZE_STATIC, 0, 0, 0, sizeof(QArrayData) },  // shared null
+      { { 0 }, 0, 0, 0, 0 }                                           // zero initialized element
+   };
 
    return const_cast<QArrayData *>(shared_null);
 }

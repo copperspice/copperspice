@@ -119,11 +119,11 @@ bool _q_uuidFromHex(const char *src, uint &d1, ushort &d2, ushort &d3, uchar (&d
    }
 
    if (! _q_fromHex(src, d1)
-      || *src++ != '-'  || ! _q_fromHex(src, d2)
-      || *src++ != '-'  || ! _q_fromHex(src, d3)
-      || *src++ != '-'  || ! _q_fromHex(src, d4[0]) || ! _q_fromHex(src, d4[1])
-      || *src++ != '-'  || ! _q_fromHex(src, d4[2]) || ! _q_fromHex(src, d4[3])
-      || ! _q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
+         || *src++ != '-'  || ! _q_fromHex(src, d2)
+         || *src++ != '-'  || ! _q_fromHex(src, d3)
+         || *src++ != '-'  || ! _q_fromHex(src, d4[0]) || ! _q_fromHex(src, d4[1])
+         || *src++ != '-'  || ! _q_fromHex(src, d4[2]) || ! _q_fromHex(src, d4[3])
+         || ! _q_fromHex(src, d4[4]) || !_q_fromHex(src, d4[5]) || !_q_fromHex(src, d4[6]) || !_q_fromHex(src, d4[7])) {
 
       return false;
    }
@@ -336,15 +336,11 @@ QDataStream &operator>>(QDataStream &stream, QUuid &id)
    return stream;
 }
 
-/*!
-    Returns true if this is the null UUID
-    {00000000-0000-0000-0000-000000000000}; otherwise returns false.
-*/
 bool QUuid::isNull() const
 {
    return data4[0] == 0 && data4[1] == 0 && data4[2] == 0 && data4[3] == 0 &&
-      data4[4] == 0 && data4[5] == 0 && data4[6] == 0 && data4[7] == 0 &&
-      data1 == 0 && data2 == 0 && data3 == 0;
+         data4[4] == 0 && data4[5] == 0 && data4[6] == 0 && data4[7] == 0 &&
+         data1 == 0 && data2 == 0 && data3 == 0;
 }
 
 QUuid::Variant QUuid::variant() const
@@ -374,12 +370,11 @@ QUuid::Version QUuid::version() const
 {
    // Check the 4 MSB of data3
    Version ver = (Version)(data3 >> 12);
-   if (isNull()
-      || (variant() != DCE)
-      || ver < Time
-      || ver > Sha1) {
+
+   if (isNull() || (variant() != DCE) || ver < Time || ver > Sha1) {
       return VerUnknown;
    }
+
    return ver;
 }
 
@@ -435,7 +430,6 @@ QUuid QUuid::createUuid()
 
 #else // ! Q_OS_WIN
 
-
 #if defined(Q_OS_UNIX)
 
 static QThreadStorage<QFile *> *devUrandomStorage()
@@ -455,6 +449,7 @@ QUuid QUuid::createUuid()
    QFile *devUrandom;
 
    devUrandom = devUrandomStorage()->localData();
+
    if (! devUrandom) {
       devUrandom = new QFile(QLatin1String("/dev/urandom"));
       devUrandom->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
@@ -474,26 +469,29 @@ QUuid QUuid::createUuid()
    {
       static const int intbits = sizeof(int) * 8;
       static int randbits = 0;
+
       if (!randbits) {
          int r = 0;
          int max = RAND_MAX;
+
          do {
             ++r;
          } while ((max = max >> 1));
+
          randbits = r;
       }
 
       // Seed the PRNG once per thread with a combination of current time, a
-      // stack address and a serial counter (since thread stack addresses are
-      // re-used).
+      // stack address and a serial counter (since thread stack addresses are re-used).
 
       static QThreadStorage<int *> uuidseed;
+
       if (! uuidseed.hasLocalData()) {
          int *pseed = new int;
          static QAtomicInt serial = QAtomicInt {2};
 
          qsrand(*pseed = QDateTime::currentDateTime().toTime_t()
-               + quintptr(&pseed) + serial.fetchAndAddRelaxed(1));
+                     + quintptr(&pseed) + serial.fetchAndAddRelaxed(1));
 
          uuidseed.setLocalData(pseed);
       }
@@ -502,6 +500,7 @@ QUuid QUuid::createUuid()
 
       while (chunks--) {
          uint randNumber = 0;
+
          for (int filled = 0; filled < intbits; filled += randbits) {
             randNumber |= qrand() << filled;
          }
@@ -527,8 +526,7 @@ QDebug operator<<(QDebug dbg, const QUuid &id)
 uint qHash(const QUuid &uuid, uint seed)
 {
    return uuid.data1 ^ uuid.data2 ^ (uuid.data3 << 16)
-      ^ ((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
-      ^ ((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7])
-      ^ seed;
+         ^ ((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
+         ^ ((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7])
+         ^ seed;
 }
-

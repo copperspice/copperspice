@@ -59,13 +59,12 @@ class QUniquePointer : public CsPointer::CsUniquePointer<T, Deleter>
 
 #endif
 
-
 #if ! defined(CS_DOXYPRESS)
 
 template <typename T, typename Deleter = std::default_delete<CsPointer::cs_add_missing_extent_t<T>>>
 class QUniqueArrayPointer : public CsPointer::CsUniqueArrayPointer<T, Deleter>
 {
- public:
+public:
    using CsPointer::CsUniqueArrayPointer<T, Deleter>::CsUniqueArrayPointer;
 
    QUniqueArrayPointer(CsPointer::CsUniqueArrayPointer<T, Deleter> other) noexcept
@@ -83,14 +82,16 @@ class QUniqueArrayPointer : public CsPointer::CsUniqueArrayPointer<T, Deleter>
 // free functions
 
 // QScopedPointer
-template <typename T, typename... Args, typename = typename std::enable_if_t<! std::is_array_v<T>>>
-QUniquePointer<T> QMakeUnique(Args &&... args) {
+template < typename T, typename... Args, typename = typename std::enable_if_t < ! std::is_array_v<T >>>
+QUniquePointer<T> QMakeUnique(Args && ... args)
+{
    return CsPointer::make_unique<T>(std::forward<Args>(args)...);
 }
 
 // QScopedArrayPointer
 template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
-QUniquePointer<T> QMakeUnique(std::size_t size) {
+QUniquePointer<T> QMakeUnique(std::size_t size)
+{
    return CsPointer::make_unique<T>(size);
 }
 

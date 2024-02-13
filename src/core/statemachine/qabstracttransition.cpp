@@ -119,7 +119,7 @@ void QAbstractTransition::setTargetState(QAbstractState *target)
    Q_D(QAbstractTransition);
 
    if ((d->targetStates.size() == 1 && target == d->targetStates.at(0).data()) ||
-      (d->targetStates.isEmpty() && target == nullptr)) {
+         (d->targetStates.isEmpty() && target == nullptr)) {
       return;
    }
 
@@ -201,6 +201,7 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
    }
 
    d->targetStates.resize(targets.size());
+
    for (int i = 0; i < targets.size(); ++i) {
       d->targetStates[i] = targets.at(i);
    }
@@ -231,10 +232,12 @@ QStateMachine *QAbstractTransition::machine() const
 void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
 {
    Q_D(QAbstractTransition);
-   if (!animation) {
+
+   if (! animation) {
       qWarning("QAbstractTransition::addAnimation() Unable to animation (nullptr)");
       return;
    }
+
    d->animations.append(animation);
 }
 

@@ -43,7 +43,7 @@ class QLibraryHandle
    enum {IsAPlugin, IsNotAPlugin, MightBeAPlugin } pluginState;
 
  public:
-    enum UnloadFlag { UnloadSys, NoUnloadSys };
+   enum UnloadFlag { UnloadSys, NoUnloadSys };
 
    bool tryload();
    bool loadPlugin();                              // loads and resolves instance
@@ -59,7 +59,7 @@ class QLibraryHandle
    void setLoadHints(QLibrary::LoadHints lh);
 
    static QLibraryHandle *findOrLoad(const QString &fileName, const QString &version = QString(),
-                  QLibrary::LoadHints loadHints = Qt::EmptyFlag);
+         QLibrary::LoadHints loadHints = Qt::EmptyFlag);
 
    static QStringList suffixes_sys(const QString &fullVersion);
    static QStringList prefixes_sys();

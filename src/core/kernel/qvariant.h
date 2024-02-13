@@ -101,14 +101,14 @@ class QWidget;
 
 class Q_CORE_EXPORT QVariantBase
 {
-   public:
-      virtual ~QVariantBase()
-      { }
+ public:
+   virtual ~QVariantBase()
+   { }
 
-      virtual bool cs_internal_convert(uint current_userType, uint new_userType, QVariant &self) const = 0;
-      virtual bool cs_internal_create(uint typeId, const void *other, QVariant &self) const = 0;
-      virtual bool cs_internal_load(QDataStream &stream, uint type, QVariant &self) const = 0;
-      virtual bool cs_internal_save(QDataStream &stream, uint type, const QVariant &self) const = 0;
+   virtual bool cs_internal_convert(uint current_userType, uint new_userType, QVariant &self) const = 0;
+   virtual bool cs_internal_create(uint typeId, const void *other, QVariant &self) const = 0;
+   virtual bool cs_internal_load(QDataStream &stream, uint type, QVariant &self) const = 0;
+   virtual bool cs_internal_save(QDataStream &stream, uint type, const QVariant &self) const = 0;
 };
 
 class Q_CORE_EXPORT QVariant
@@ -443,23 +443,24 @@ class Q_CORE_EXPORT QVariant
       return ! cs_internal_compare(other);
    }
 
-   class CustomType {
-      public:
-         virtual ~CustomType()
-         {
-         }
+   class CustomType
+   {
+    public:
+      virtual ~CustomType()
+      {
+      }
 
-         virtual std::shared_ptr<CustomType> clone() const = 0;
-         virtual bool compare(const CustomType &other) const = 0;
-         virtual bool isEnum() const = 0;
+      virtual std::shared_ptr<CustomType> clone() const = 0;
+      virtual bool compare(const CustomType &other) const = 0;
+      virtual bool isEnum() const = 0;
 
-         virtual int64_t enumToInt() const = 0;
-         virtual uint64_t enumToUInt() const = 0;
+      virtual int64_t enumToInt() const = 0;
+      virtual uint64_t enumToUInt() const = 0;
 
-         virtual void loadFromStream() = 0;
-         virtual void saveToStream()   = 0;
+      virtual void loadFromStream() = 0;
+      virtual void saveToStream()   = 0;
 
-         virtual uint userType() const = 0;
+      virtual uint userType() const = 0;
    };
 
    //
@@ -503,7 +504,7 @@ class Q_CORE_EXPORT QVariant
    static QVector<QVariantBase *> m_variantClients;
 
    std::variant <std::monostate, bool, char, int, uint, qint64, quint64, double, float,
-                 QChar32, QString, QObject *, void *, std::shared_ptr<CustomType> > m_data;
+       QChar32, QString, QObject *, void *, std::shared_ptr<CustomType>> m_data;
 
    friend Q_CORE_EXPORT QDataStream &operator>> (QDataStream &stream, QVariant &data);
    friend Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant &data);

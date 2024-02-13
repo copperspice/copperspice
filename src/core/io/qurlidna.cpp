@@ -52,33 +52,6 @@ inline bool operator<(const NameprepCaseFoldingEntry &one, uint other)
 }
 
 static const NameprepCaseFoldingEntry NameprepCaseFolding[] = {
-   /*      { 0x0041, { 0x0061, 0x0000, 0x0000, 0x0000 } },
-           { 0x0042, { 0x0062, 0x0000, 0x0000, 0x0000 } },
-           { 0x0043, { 0x0063, 0x0000, 0x0000, 0x0000 } },
-           { 0x0044, { 0x0064, 0x0000, 0x0000, 0x0000 } },
-           { 0x0045, { 0x0065, 0x0000, 0x0000, 0x0000 } },
-           { 0x0046, { 0x0066, 0x0000, 0x0000, 0x0000 } },
-           { 0x0047, { 0x0067, 0x0000, 0x0000, 0x0000 } },
-           { 0x0048, { 0x0068, 0x0000, 0x0000, 0x0000 } },
-           { 0x0049, { 0x0069, 0x0000, 0x0000, 0x0000 } },
-           { 0x004A, { 0x006A, 0x0000, 0x0000, 0x0000 } },
-           { 0x004B, { 0x006B, 0x0000, 0x0000, 0x0000 } },
-           { 0x004C, { 0x006C, 0x0000, 0x0000, 0x0000 } },
-           { 0x004D, { 0x006D, 0x0000, 0x0000, 0x0000 } },
-           { 0x004E, { 0x006E, 0x0000, 0x0000, 0x0000 } },
-           { 0x004F, { 0x006F, 0x0000, 0x0000, 0x0000 } },
-           { 0x0050, { 0x0070, 0x0000, 0x0000, 0x0000 } },
-           { 0x0051, { 0x0071, 0x0000, 0x0000, 0x0000 } },
-           { 0x0052, { 0x0072, 0x0000, 0x0000, 0x0000 } },
-           { 0x0053, { 0x0073, 0x0000, 0x0000, 0x0000 } },
-           { 0x0054, { 0x0074, 0x0000, 0x0000, 0x0000 } },
-           { 0x0055, { 0x0075, 0x0000, 0x0000, 0x0000 } },
-           { 0x0056, { 0x0076, 0x0000, 0x0000, 0x0000 } },
-           { 0x0057, { 0x0077, 0x0000, 0x0000, 0x0000 } },
-           { 0x0058, { 0x0078, 0x0000, 0x0000, 0x0000 } },
-           { 0x0059, { 0x0079, 0x0000, 0x0000, 0x0000 } },
-           { 0x005A, { 0x007A, 0x0000, 0x0000, 0x0000 } },*/
-
    { 0x00B5, { 0x03BC, 0x0000, 0x0000, 0x0000 } },
    { 0x00C0, { 0x00E0, 0x0000, 0x0000, 0x0000 } },
    { 0x00C1, { 0x00E1, 0x0000, 0x0000, 0x0000 } },
@@ -1514,30 +1487,30 @@ static bool containsProhibitedOuptut(const QString &str, int from)
 
       if (uc <= 0xFFFF) {
          if (uc < 0x80 || ! (uc <= 0x009F
-                 || uc == 0x00A0
-                 || uc == 0x0340
-                 || uc == 0x0341
-                 || uc == 0x06DD
-                 || uc == 0x070F
-                 || uc == 0x1680
-                 || uc == 0x180E
-                 || (uc >= 0x2000 && uc <= 0x200F)
-                 || (uc >= 0x2028 && uc <= 0x202F)
-                 || uc == 0x205F
-                 || (uc >= 0x2060 && uc <= 0x2063)
-                 || (uc >= 0x206A && uc <= 0x206F)
-                 || (uc >= 0x2FF0 && uc <= 0x2FFB)
-                 || uc == 0x3000
-                 || (uc >= 0xD800 && uc <= 0xDFFF)
-                 || (uc >= 0xE000 && uc <= 0xF8FF)
-                 || (uc >= 0xFDD0 && uc <= 0xFDEF)
-                 || uc == 0xFEFF
-                 || (uc >= 0xFFF9 && uc <= 0xFFFF))) {
+               || uc == 0x00A0
+               || uc == 0x0340
+               || uc == 0x0341
+               || uc == 0x06DD
+               || uc == 0x070F
+               || uc == 0x1680
+               || uc == 0x180E
+               || (uc >= 0x2000 && uc <= 0x200F)
+               || (uc >= 0x2028 && uc <= 0x202F)
+               || uc == 0x205F
+               || (uc >= 0x2060 && uc <= 0x2063)
+               || (uc >= 0x206A && uc <= 0x206F)
+               || (uc >= 0x2FF0 && uc <= 0x2FFB)
+               || uc == 0x3000
+               || (uc >= 0xD800 && uc <= 0xDFFF)
+               || (uc >= 0xE000 && uc <= 0xF8FF)
+               || (uc >= 0xFDD0 && uc <= 0xFDEF)
+               || uc == 0xFEFF
+               || (uc >= 0xFFF9 && uc <= 0xFFFF))) {
             continue;
          }
 
       } else {
-         if (!((uc >= 0x1D173 && uc <= 0x1D17A)
+         if (! ((uc >= 0x1D173 && uc <= 0x1D17A)
                || (uc >= 0x1FFFE && uc <= 0x1FFFF)
                || (uc >= 0x2FFFE && uc <= 0x2FFFF)
                || (uc >= 0x3FFFE && uc <= 0x3FFFF)
@@ -1575,45 +1548,46 @@ static bool isBidirectionalRorAL(QChar32 uc)
    }
 
    return uc == 0x05BE
-          || uc == 0x05C0
-          || uc == 0x05C3
-          || (uc >= 0x05D0 && uc <= 0x05EA)
-          || (uc >= 0x05F0 && uc <= 0x05F4)
-          || uc == 0x061B
-          || uc == 0x061F
-          || (uc >= 0x0621 && uc <= 0x063A)
-          || (uc >= 0x0640 && uc <= 0x064A)
-          || (uc >= 0x066D && uc <= 0x066F)
-          || (uc >= 0x0671 && uc <= 0x06D5)
-          || uc == 0x06DD
-          || (uc >= 0x06E5 && uc <= 0x06E6)
-          || (uc >= 0x06FA && uc <= 0x06FE)
-          || (uc >= 0x0700 && uc <= 0x070D)
-          || uc == 0x0710
-          || (uc >= 0x0712 && uc <= 0x072C)
-          || (uc >= 0x0780 && uc <= 0x07A5)
-          || uc == 0x07B1
-          || uc == 0x200F
-          || uc == 0xFB1D
-          || (uc >= 0xFB1F && uc <= 0xFB28)
-          || (uc >= 0xFB2A && uc <= 0xFB36)
-          || (uc >= 0xFB38 && uc <= 0xFB3C)
-          || uc == 0xFB3E
-          || (uc >= 0xFB40 && uc <= 0xFB41)
-          || (uc >= 0xFB43 && uc <= 0xFB44)
-          || (uc >= 0xFB46 && uc <= 0xFBB1)
-          || (uc >= 0xFBD3 && uc <= 0xFD3D)
-          || (uc >= 0xFD50 && uc <= 0xFD8F)
-          || (uc >= 0xFD92 && uc <= 0xFDC7)
-          || (uc >= 0xFDF0 && uc <= 0xFDFC)
-          || (uc >= 0xFE70 && uc <= 0xFE74)
-          || (uc >= 0xFE76 && uc <= 0xFEFC);
+         || uc == 0x05C0
+         || uc == 0x05C3
+         || (uc >= 0x05D0 && uc <= 0x05EA)
+         || (uc >= 0x05F0 && uc <= 0x05F4)
+         || uc == 0x061B
+         || uc == 0x061F
+         || (uc >= 0x0621 && uc <= 0x063A)
+         || (uc >= 0x0640 && uc <= 0x064A)
+         || (uc >= 0x066D && uc <= 0x066F)
+         || (uc >= 0x0671 && uc <= 0x06D5)
+         || uc == 0x06DD
+         || (uc >= 0x06E5 && uc <= 0x06E6)
+         || (uc >= 0x06FA && uc <= 0x06FE)
+         || (uc >= 0x0700 && uc <= 0x070D)
+         || uc == 0x0710
+         || (uc >= 0x0712 && uc <= 0x072C)
+         || (uc >= 0x0780 && uc <= 0x07A5)
+         || uc == 0x07B1
+         || uc == 0x200F
+         || uc == 0xFB1D
+         || (uc >= 0xFB1F && uc <= 0xFB28)
+         || (uc >= 0xFB2A && uc <= 0xFB36)
+         || (uc >= 0xFB38 && uc <= 0xFB3C)
+         || uc == 0xFB3E
+         || (uc >= 0xFB40 && uc <= 0xFB41)
+         || (uc >= 0xFB43 && uc <= 0xFB44)
+         || (uc >= 0xFB46 && uc <= 0xFBB1)
+         || (uc >= 0xFBD3 && uc <= 0xFD3D)
+         || (uc >= 0xFD50 && uc <= 0xFD8F)
+         || (uc >= 0xFD92 && uc <= 0xFDC7)
+         || (uc >= 0xFDF0 && uc <= 0xFDFC)
+         || (uc >= 0xFE70 && uc <= 0xFE74)
+         || (uc >= 0xFE76 && uc <= 0xFEFC);
 }
 
 static bool isBidirectionalL(QChar32 uc)
 {
-   if (uc < 0xaa)
+   if (uc < 0xaa) {
       return (uc >= 0x0041 && uc <= 0x005A) || (uc >= 0x0061 && uc <= 0x007A);
+   }
 
    if (uc == 0x00AA
          || uc == 0x00B5
@@ -1958,6 +1932,7 @@ static bool isBidirectionalL(QChar32 uc)
          || (uc >= 0x337B && uc <= 0x33DD)) {
       return true;
    }
+
    if  ((uc >= 0x33E0 && uc <= 0x33FE)
          || (uc >= 0x3400 && uc <= 0x4DB5)
          || (uc >= 0x4E00 && uc <= 0x9FA5)
@@ -2173,6 +2148,7 @@ static inline uint adapt(uint delta, uint numpoints, bool firsttime)
    delta += (delta / numpoints);
 
    uint k = 0;
+
    for (; delta > ((base - tmin) * tmax) / 2; k += base) {
       delta /= (base - tmin);
    }
@@ -2347,6 +2323,7 @@ static QString qt_punycodeDecoder(const QString &pc)
          // (each digit code is part of the variable-length integer delta)
 
          uint digit = pc.at(cnt++).unicode();
+
          if (digit - 48 < 10) {
             digit -= 22;
 
@@ -2626,4 +2603,3 @@ void QUrl::setIdnWhitelist(const QStringList &list)
 
    *user_idn_whitelist = list;
 }
-

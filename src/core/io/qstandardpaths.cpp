@@ -52,6 +52,7 @@ QString QStandardPaths::locate(StandardLocation type, const QString &fileName, L
          return path;
       }
    }
+
    return QString();
 }
 
@@ -100,7 +101,7 @@ static inline QString searchExecutable(const QStringList &searchPaths, const QSt
 {
    const QDir currentDir = QDir::current();
 
-   for (const QString & searchPath : searchPaths) {
+   for (const QString &searchPath : searchPaths) {
       const QString candidate = currentDir.absoluteFilePath(searchPath + '/' + executableName);
       const QString absPath = checkExecutable(candidate);
 
@@ -108,22 +109,22 @@ static inline QString searchExecutable(const QStringList &searchPaths, const QSt
          return absPath;
       }
    }
+
    return QString();
 }
 
 #ifdef Q_OS_WIN
-
 // Find executable appending candidate suffixes, used for suffix-less executables on Windows.
 
 static inline QString searchExecutableAppendSuffix(const QStringList &searchPaths,
-                  const QString &executableName, const QStringList &suffixes)
+      const QString &executableName, const QStringList &suffixes)
 {
    const QDir currentDir = QDir::current();
 
-   for (const QString & searchPath : searchPaths) {
+   for (const QString &searchPath : searchPaths) {
       const QString candidateRoot = currentDir.absoluteFilePath(searchPath + '/' + executableName);
 
-      for (const QString & suffix : suffixes) {
+      for (const QString &suffix : suffixes) {
          const QString absPath = checkExecutable(candidateRoot + suffix);
 
          if (! absPath.isEmpty()) {
@@ -131,10 +132,10 @@ static inline QString searchExecutableAppendSuffix(const QStringList &searchPath
          }
       }
    }
+
    return QString();
 }
-
-#endif // Q_OS_WIN
+#endif
 
 QString QStandardPaths::findExecutable(const QString &executableName, const QStringList &paths)
 {
@@ -156,7 +157,7 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
       // Remove trailing slashes, which occur on Windows
       const QStringList rawPaths = QString::fromUtf8(pEnv.constData()).split(pathSep, QStringParser::SkipEmptyParts);
 
-      for (const QString & rawPath : rawPaths) {
+      for (const QString &rawPath : rawPaths) {
          QString cleanPath = QDir::cleanPath(rawPath);
 
          if (cleanPath.size() > 1 && cleanPath.endsWith('/')) {
@@ -175,59 +176,78 @@ QString QStandardPaths::findExecutable(const QString &executableName, const QStr
 
    if (executableName.contains('.')) {
       const QString suffix = QFileInfo(executableName).suffix();
-      if (suffix.isEmpty() || !executable_extensions.contains('.' + suffix, Qt::CaseInsensitive)) {
+
+      if (suffix.isEmpty() || ! executable_extensions.contains('.' + suffix, Qt::CaseInsensitive)) {
          return searchExecutableAppendSuffix(searchPaths, executableName, executable_extensions);
       }
 
    } else {
       return searchExecutableAppendSuffix(searchPaths, executableName, executable_extensions);
    }
+
 #endif
 
    return searchExecutable(searchPaths, executableName);
 }
 
-#if !defined(Q_OS_DARWIN)
+#if ! defined(Q_OS_DARWIN)
 QString QStandardPaths::displayName(StandardLocation type)
 {
    switch (type) {
       case DesktopLocation:
          return QCoreApplication::translate("QStandardPaths", "Desktop");
+
       case DocumentsLocation:
          return QCoreApplication::translate("QStandardPaths", "Documents");
+
       case FontsLocation:
          return QCoreApplication::translate("QStandardPaths", "Fonts");
+
       case ApplicationsLocation:
          return QCoreApplication::translate("QStandardPaths", "Applications");
+
       case MusicLocation:
          return QCoreApplication::translate("QStandardPaths", "Music");
+
       case MoviesLocation:
          return QCoreApplication::translate("QStandardPaths", "Movies");
+
       case PicturesLocation:
          return QCoreApplication::translate("QStandardPaths", "Pictures");
+
       case TempLocation:
          return QCoreApplication::translate("QStandardPaths", "Temporary Directory");
+
       case HomeLocation:
          return QCoreApplication::translate("QStandardPaths", "Home");
+
       case CacheLocation:
          return QCoreApplication::translate("QStandardPaths", "Cache");
+
       case GenericDataLocation:
          return QCoreApplication::translate("QStandardPaths", "Shared Data");
+
       case RuntimeLocation:
          return QCoreApplication::translate("QStandardPaths", "Runtime");
+
       case ConfigLocation:
          return QCoreApplication::translate("QStandardPaths", "Configuration");
+
       case GenericConfigLocation:
          return QCoreApplication::translate("QStandardPaths", "Shared Configuration");
+
       case GenericCacheLocation:
          return QCoreApplication::translate("QStandardPaths", "Shared Cache");
+
       case DownloadLocation:
          return QCoreApplication::translate("QStandardPaths", "Download");
-    case AppDataLocation:
-    case AppLocalDataLocation:
-        return QCoreApplication::translate("QStandardPaths", "Application Data");
-    case AppConfigLocation:
-        return QCoreApplication::translate("QStandardPaths", "Application Configuration");
+
+      case AppDataLocation:
+      case AppLocalDataLocation:
+         return QCoreApplication::translate("QStandardPaths", "Application Data");
+
+      case AppConfigLocation:
+         return QCoreApplication::translate("QStandardPaths", "Application Configuration");
    }
 
    // not reached
@@ -237,7 +257,6 @@ QString QStandardPaths::displayName(StandardLocation type)
 #endif
 
 static bool qsp_testMode = false;
-
 
 void QStandardPaths::setTestModeEnabled(bool testMode)
 {

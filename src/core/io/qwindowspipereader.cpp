@@ -51,7 +51,7 @@ QWindowsPipeReader::QWindowsPipeReader(QObject *parent)
      inReadyRead(false)
 {
    connect(this, &QWindowsPipeReader::_q_queueReadyRead,
-           this, &QWindowsPipeReader::emitPendingReadyRead, Qt::QueuedConnection);
+         this, &QWindowsPipeReader::emitPendingReadyRead, Qt::QueuedConnection);
 }
 
 QWindowsPipeReader::~QWindowsPipeReader()
@@ -96,18 +96,21 @@ qint64 QWindowsPipeReader::read(char *data, qint64 maxlen)
    }
 
    qint64 readSoFar;
+
    // If startAsyncRead() has read data, copy it to its destination.
    if (maxlen == 1 && actualReadBufferSize > 0) {
       *data = readBuffer.getChar();
       actualReadBufferSize--;
       readSoFar = 1;
+
    } else {
       qint64 bytesToRead = qMin(actualReadBufferSize, maxlen);
       readSoFar = 0;
+
       while (readSoFar < bytesToRead) {
          const char *ptr = readBuffer.readPointer();
-         qint64 bytesToReadFromThisBlock = qMin(bytesToRead - readSoFar,
-                                                readBuffer.nextDataBlockSize());
+
+         qint64 bytesToReadFromThisBlock = qMin(bytesToRead - readSoFar, readBuffer.nextDataBlockSize());
          memcpy(data + readSoFar, ptr, bytesToReadFromThisBlock);
          readSoFar += bytesToReadFromThisBlock;
          readBuffer.free(bytesToReadFromThisBlock);
@@ -115,10 +118,11 @@ qint64 QWindowsPipeReader::read(char *data, qint64 maxlen)
       }
    }
 
-   if (!pipeBroken) {
+   if (! pipeBroken) {
       if (!readSequenceStarted && !stopped) {
          startAsyncRead();
       }
+
       if (readSoFar == 0) {
          return -2;   // signal EWOULDBLOCK
       }
@@ -132,10 +136,6 @@ bool QWindowsPipeReader::canReadLine() const
    return readBuffer.indexOf('\n', actualReadBufferSize) >= 0;
 }
 
-/*!
-    \internal
-    Will be called whenever the read operation completes.
- */
 void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
 {
    notifiedCalled = true;
@@ -144,6 +144,7 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
    switch (errorCode) {
       case ERROR_SUCCESS:
          break;
+
       case ERROR_MORE_DATA:
          // This is not an error. We're connected to a message mode
          // pipe and the message didn't fit into the pipe's system
@@ -159,6 +160,7 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
          if (stopped) {
             break;
          }
+
          [[fallthrough]];
 
       default:
@@ -189,20 +191,18 @@ void QWindowsPipeReader::notified(DWORD errorCode, DWORD numberOfBytesRead)
    }
 }
 
-/*!
-    \internal
-    Reads data from the pipe into the readbuffer.
- */
 void QWindowsPipeReader::startAsyncRead()
 {
    const DWORD minReadBufferSize = 4096;
    DWORD bytesToRead = qMax(checkPipeState(), minReadBufferSize);
+
    if (pipeBroken) {
       return;
    }
 
    if (readBufferMaxSize && bytesToRead > (readBufferMaxSize - readBuffer.size())) {
       bytesToRead = readBufferMaxSize - readBuffer.size();
+
       if (bytesToRead == 0) {
          // Buffer is full. User must read data from the buffer
          // before we can read more from the pipe.
@@ -215,10 +215,12 @@ void QWindowsPipeReader::startAsyncRead()
    stopped = false;
    readSequenceStarted = true;
    overlapped.clear();
+
    if (!ReadFileEx(handle, ptr, bytesToRead, &overlapped, &readFileCompleted)) {
       readSequenceStarted = false;
 
       const DWORD dwError = GetLastError();
+
       switch (dwError) {
          case ERROR_BROKEN_PIPE:
          case ERROR_PIPE_NOT_CONNECTED:
@@ -235,10 +237,6 @@ void QWindowsPipeReader::startAsyncRead()
    }
 }
 
-/*!
-    \internal
-    Called when ReadFileEx finished the read operation.
- */
 void QWindowsPipeReader::readFileCompleted(DWORD errorCode, DWORD numberOfBytesTransfered,
       OVERLAPPED *overlappedBase)
 {
@@ -246,14 +244,10 @@ void QWindowsPipeReader::readFileCompleted(DWORD errorCode, DWORD numberOfBytesT
    overlapped->pipeReader->notified(errorCode, numberOfBytesTransfered);
 }
 
-/*!
-    \internal
-    Returns the number of available bytes in the pipe.
-    Sets QWindowsPipeReader::pipeBroken to true if the connection is broken.
- */
 DWORD QWindowsPipeReader::checkPipeState()
 {
    DWORD bytes;
+
    if (PeekNamedPipe(handle, nullptr, 0, nullptr, &bytes, nullptr)) {
       return bytes;
    } else {
@@ -262,6 +256,7 @@ DWORD QWindowsPipeReader::checkPipeState()
          emit pipeClosed();
       }
    }
+
    return 0;
 }
 
@@ -271,6 +266,7 @@ bool QWindowsPipeReader::waitForNotification(int timeout)
    t.start();
    notifiedCalled = false;
    int msecs = timeout;
+
    while (SleepEx(msecs == -1 ? INFINITE : msecs, TRUE) == WAIT_IO_COMPLETION) {
       if (notifiedCalled) {
          return true;
@@ -278,10 +274,12 @@ bool QWindowsPipeReader::waitForNotification(int timeout)
 
       // Some other I/O completion routine was called. Wait some more.
       msecs = qt_subtract_from_timeout(timeout, t.elapsed());
+
       if (!msecs) {
          break;
       }
    }
+
    return notifiedCalled;
 }
 
@@ -289,17 +287,12 @@ void QWindowsPipeReader::emitPendingReadyRead()
 {
    if (readyReadPending) {
       readyReadPending = false;
-      inReadyRead = true;
+      inReadyRead      = true;
       emit readyRead();
-      inReadyRead = false;
+      inReadyRead      = false;
    }
 }
 
-/*!
-    Waits for the completion of the asynchronous read operation.
-    Returns \c true, if we've emitted the readyRead signal (non-recursive case)
-    or readyRead will be emitted by the event loop (recursive case).
- */
 bool QWindowsPipeReader::waitForReadyRead(int msecs)
 {
    if (!readSequenceStarted) {
@@ -307,9 +300,10 @@ bool QWindowsPipeReader::waitForReadyRead(int msecs)
    }
 
    if (readyReadPending) {
-      if (!inReadyRead) {
+      if (! inReadyRead) {
          emitPendingReadyRead();
       }
+
       return true;
    }
 
@@ -321,15 +315,13 @@ bool QWindowsPipeReader::waitForReadyRead(int msecs)
       if (!inReadyRead) {
          emitPendingReadyRead();
       }
+
       return true;
    }
 
    return false;
 }
 
-/*!
-    Waits until the pipe is closed.
- */
 bool QWindowsPipeReader::waitForPipeClosed(int msecs)
 {
    const int sleepTime = 10;
@@ -339,13 +331,15 @@ bool QWindowsPipeReader::waitForPipeClosed(int msecs)
    while (true) {
       waitForReadyRead(0);
       checkPipeState();
+
       if (pipeBroken) {
          return true;
       }
+
       if (stopWatch.hasExpired(msecs - sleepTime)) {
          return false;
       }
+
       Sleep(sleepTime);
    }
 }
-

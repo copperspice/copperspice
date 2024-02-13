@@ -35,8 +35,7 @@ class Q_CORE_EXPORT QMutex
    QMutex() = default;
 
    template <typename T>
-   explicit QMutex(T)
-   {
+   explicit QMutex(T) {
       static_assert(! std::is_same_v<T, T>, "Use QRecursiveMutex for recursive mutex operations");
    }
 
@@ -75,7 +74,8 @@ class Q_CORE_EXPORT QMutex
    }
 
    // produces a clean compile error when obsolete enum values are used
-   class RemovedEnum {
+   class RemovedEnum
+   {
    };
 
    static constexpr RemovedEnum NonRecursive = RemovedEnum();
@@ -131,8 +131,7 @@ class Q_CORE_EXPORT QRecursiveMutex
 class Q_CORE_EXPORT QMutexLocker
 {
  public:
-   explicit QMutexLocker(QMutex *mutex)
-   {
+   explicit QMutexLocker(QMutex *mutex) {
       if (mutex == nullptr) {
          // nothing
 
@@ -151,7 +150,7 @@ class Q_CORE_EXPORT QMutexLocker
       m_data.lock();
    }
 
-   QMutex * mutex() const {
+   QMutex *mutex() const {
       return m_data.mutex();
    }
 
@@ -170,8 +169,7 @@ class Q_CORE_EXPORT QMutexLocker
 class Q_CORE_EXPORT QRecursiveMutexLocker
 {
  public:
-   explicit QRecursiveMutexLocker(QRecursiveMutex *mutex)
-   {
+   explicit QRecursiveMutexLocker(QRecursiveMutex *mutex) {
       if (mutex == nullptr) {
          // nothing
 
@@ -190,7 +188,7 @@ class Q_CORE_EXPORT QRecursiveMutexLocker
       m_data.lock();
    }
 
-   QRecursiveMutex * mutex() const {
+   QRecursiveMutex *mutex() const {
       return m_data.mutex();
    }
 

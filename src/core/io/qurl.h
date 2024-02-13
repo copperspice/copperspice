@@ -125,7 +125,7 @@ class Q_CORE_EXPORT QUrl
    static QUrl fromUserInput(const QString &userInput);
 
    static QUrl fromUserInput(const QString &userInput, const QString &workingDirectory,
-                  UserInputResolutionOptions options = DefaultResolution);
+         UserInputResolutionOptions options = DefaultResolution);
 
    static QUrl fromLocalFile(const QString &localfile);
 
@@ -150,7 +150,7 @@ class Q_CORE_EXPORT QUrl
    QString topLevelDomain(FormattingOptions options = FullyDecoded) const;
 
    static QByteArray toPercentEncoding(const QString &input, const QByteArray &exclude = QByteArray(),
-                  const QByteArray &include = QByteArray());
+         const QByteArray &include = QByteArray());
 
    QString toLocalFile() const;
    QString toString(FormattingOptions options = FormattingOptions(PrettyDecoded)) const;
@@ -217,8 +217,8 @@ class Q_CORE_EXPORT QUrl
    }
 
    void addQueryItem(const QString &key, const QString &value);
-   void setQueryItems(const QList<QPair<QString, QString> > &query);
-   QList<QPair<QString, QString> > queryItems() const;
+   void setQueryItems(const QList<QPair<QString, QString>> &query);
+   QList<QPair<QString, QString>> queryItems() const;
 
    bool hasQueryItem(const QString &key) const;
    QString queryItemValue(const QString &key) const;
@@ -228,9 +228,9 @@ class Q_CORE_EXPORT QUrl
    void removeQueryItem(const QString &key);
    void removeAllQueryItems(const QString &key);
 
-   void setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray> > &query);
+   void setEncodedQueryItems(const QList<QPair<QByteArray, QByteArray>> &query);
    void addEncodedQueryItem(const QByteArray &key, const QByteArray &value);
-   QList<QPair<QByteArray, QByteArray> > encodedQueryItems() const;
+   QList<QPair<QByteArray, QByteArray>> encodedQueryItems() const;
    bool hasEncodedQueryItem(const QByteArray &key) const;
    QByteArray encodedQueryItemValue(const QByteArray &key) const;
    QList<QByteArray> allEncodedQueryItemValues(const QByteArray &key) const;

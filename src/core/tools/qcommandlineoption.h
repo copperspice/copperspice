@@ -37,10 +37,10 @@ class Q_CORE_EXPORT QCommandLineOption
 {
  public:
    explicit QCommandLineOption(const QString &name, const QString &description = QString(),
-                               const QString &valueName = QString(), const QString &defaultValue = QString());
+         const QString &valueName = QString(), const QString &defaultValue = QString());
 
    explicit QCommandLineOption(const QStringList &names, const QString &description = QString(),
-                               const QString &valueName = QString(), const QString &defaultValue = QString());
+         const QString &valueName = QString(), const QString &defaultValue = QString());
 
    QCommandLineOption(const QCommandLineOption &other);
 

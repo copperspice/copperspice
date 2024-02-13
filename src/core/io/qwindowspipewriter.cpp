@@ -49,7 +49,7 @@ QWindowsPipeWriter::QWindowsPipeWriter(HANDLE pipeWriteEnd, QObject *parent)
      inBytesWritten(false)
 {
    connect(this, &QWindowsPipeWriter::_q_queueBytesWritten,
-           this, &QWindowsPipeWriter::emitPendingBytesWrittenValue, Qt::QueuedConnection);
+         this, &QWindowsPipeWriter::emitPendingBytesWrittenValue, Qt::QueuedConnection);
 }
 
 QWindowsPipeWriter::~QWindowsPipeWriter()
@@ -64,16 +64,20 @@ bool QWindowsPipeWriter::waitForWrite(int msecs)
       emitPendingBytesWrittenValue();
       return true;
    }
-   if (!writeSequenceStarted) {
+
+   if (! writeSequenceStarted) {
       return false;
    }
+
    if (!waitForNotification(msecs)) {
       return false;
    }
+
    if (bytesWrittenPending) {
       emitPendingBytesWrittenValue();
       return true;
    }
+
    return false;
 }
 
@@ -89,6 +93,7 @@ void QWindowsPipeWriter::emitPendingBytesWrittenValue()
       const qint64 bytes = pendingBytesWrittenValue;
       pendingBytesWrittenValue = 0;
       emit canWrite();
+
       if (!inBytesWritten) {
          inBytesWritten = true;
          emit bytesWritten(bytes);
@@ -122,6 +127,7 @@ void QWindowsPipeWriter::notified(DWORD errorCode, DWORD numberOfBytesWritten)
          if (stopped) {
             break;
          }
+
          [[fallthrough]];
 
       default:
@@ -136,7 +142,7 @@ void QWindowsPipeWriter::notified(DWORD errorCode, DWORD numberOfBytesWritten)
 
    pendingBytesWrittenValue += qint64(numberOfBytesWritten);
 
-   if (!bytesWrittenPending) {
+   if (! bytesWrittenPending) {
       bytesWrittenPending = true;
       emit _q_queueBytesWritten();
    }
@@ -148,15 +154,19 @@ bool QWindowsPipeWriter::waitForNotification(int timeout)
    t.start();
    notifiedCalled = false;
    int msecs = timeout;
+
    while (SleepEx(msecs == -1 ? INFINITE : msecs, TRUE) == WAIT_IO_COMPLETION) {
       if (notifiedCalled) {
          return true;
       }
+
       msecs = qt_subtract_from_timeout(timeout, t.elapsed());
+
       if (!msecs) {
          break;
       }
    }
+
    return notifiedCalled;
 }
 
@@ -197,6 +207,7 @@ void QWindowsPipeWriter::stop()
             qErrnoWarning(dwError, "QWindowsPipeWriter: CancelIoEx on handle %x failed.", handle);
          }
       }
+
       waitForNotification(-1);
    }
 }

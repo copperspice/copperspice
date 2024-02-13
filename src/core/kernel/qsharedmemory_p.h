@@ -32,8 +32,10 @@
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
 namespace QSharedMemoryPrivate {
-   int createUnixKeyFile(const QString &fileName);
-   QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_"));
+
+int createUnixKeyFile(const QString &fileName);
+QString makePlatformSafeKey(const QString &key, const QString &prefix = QString("qipc_sharedmemory_"));
+
 }
 
 #endif
@@ -146,4 +148,3 @@ class QSharedMemoryPrivate
 #endif // QT_NO_SHAREDMEMORY
 
 #endif
-

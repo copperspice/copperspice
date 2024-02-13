@@ -100,6 +100,7 @@ QList<QAbstractState *> QStatePrivate::childStates() const
 
          childStatesList.append(s);
       }
+
       childStatesListNeedsRefresh = false;
    }
 
@@ -122,6 +123,7 @@ QList<QHistoryState *> QStatePrivate::historyStates() const
          result.append(h);
       }
    }
+
    return result;
 }
 
@@ -137,12 +139,15 @@ QList<QAbstractTransition *> QStatePrivate::transitions() const
 
       for (it = children.constBegin(); it != children.constEnd(); ++it) {
          QAbstractTransition *t = qobject_cast<QAbstractTransition *>(*it);
+
          if (t) {
             transitionsList.append(t);
          }
       }
+
       transitionsListNeedsRefresh = false;
    }
+
    return transitionsList;
 }
 
@@ -185,6 +190,7 @@ void QState::setErrorState(QAbstractState *state)
       qWarning("QStateMachine::setErrorState() Unable to set error state for the 'root state'");
       return;
    }
+
    if (state != nullptr && (!state->machine() || ((state->machine() != machine()) && !qobject_cast<QStateMachine *>(this)))) {
       qWarning("QState::setErrorState() Unable to set error state from a different state machine");
       return;
@@ -215,17 +221,18 @@ void QState::addTransition(QAbstractTransition *transition)
          qWarning("QState::addTransition() Unable to add invalid transition (nullptr)");
          return ;
       }
+
       if ((QAbstractStatePrivate::get(t)->machine() != d->machine())
-         && QAbstractStatePrivate::get(t)->machine() && d->machine()) {
+            && QAbstractStatePrivate::get(t)->machine() && d->machine()) {
          qWarning("QState::addTransition() Unable to add transition for a state from a different state machine");
          return ;
       }
    }
+
    if (QStateMachine *mach = machine()) {
       QStateMachinePrivate::get(mach)->maybeRegisterTransition(transition);
    }
 }
-
 
 namespace {
 
@@ -275,6 +282,7 @@ void QState::removeTransition(QAbstractTransition *transition)
    }
 
    QStateMachinePrivate *mach = QStateMachinePrivate::get(d->machine());
+
    if (mach) {
       mach->unregisterTransition(transition);
    }

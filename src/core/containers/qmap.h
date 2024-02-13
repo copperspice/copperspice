@@ -270,17 +270,21 @@ class QMap
    QMap(QMap<Key, Val, C> &&other)      = default;
 
    QMap(std::initializer_list<std::pair<const Key, Val>> list, const C &compare = C())
-      : m_data(list, compare) {}
+      : m_data(list, compare)
+   { }
 
    explicit QMap(C compare)
-      : m_data(compare) {}
+      : m_data(compare)
+   { }
 
    explicit QMap(const std::map<Key, Val, C> &other)
-      : m_data(other) {}
+      : m_data(other)
+   { }
 
    template <typename Input_Iterator>
    QMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
-      : m_data(first, last, compare) {}
+      : m_data(first, last, compare)
+   { }
 
    ~QMap() = default;
 
@@ -372,7 +376,7 @@ class QMap
    QList<Key> keys(const Val &value) const;
 
    Val &last()  {
-      return (end()- 1).value();
+      return (end() - 1).value();
    }
 
    const Val &last() const  {
@@ -741,6 +745,7 @@ class QMapIterator
             return true;
          }
       }
+
       return false;
    }
 

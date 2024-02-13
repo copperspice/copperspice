@@ -577,7 +577,7 @@ static inline bool scanEscapeSequence(QString::const_iterator &m_position, QStri
 
          for (int i = 0; i < 4; ++i) {
 
-            if (! addHexDigit(*m_position,tmp)) {
+            if (! addHexDigit(*m_position, tmp)) {
                return false;
             }
 
@@ -632,4 +632,3 @@ bool QJsonParser::parseString(QString &str)
 
    return true;
 }
-

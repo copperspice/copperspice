@@ -59,19 +59,21 @@ class QVarLengthArray
    inline explicit QVarLengthArray(int size = 0);
 
    QVarLengthArray(const QVarLengthArray<T, Prealloc> &other)
-      : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array)) {
+      : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
+   {
       append(other.constData(), other.size());
    }
 
    QVarLengthArray(std::initializer_list<T> args)
-        : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
+      : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
    {
       if (args.size()) {
          append(args.begin(), args.size());
       }
    }
 
-   ~QVarLengthArray() {
+   ~QVarLengthArray()
+   {
       if constexpr (! std::is_trivially_destructible_v<T>) {
          T *i = ptr + s;
 
@@ -176,12 +178,12 @@ class QVarLengthArray
       return first();
    }
 
-   T& last() {
+   T &last() {
       Q_ASSERT(! isEmpty());
       return *(end() - 1);
    }
 
-   const T& last() const {
+   const T &last() const {
       Q_ASSERT(!isEmpty());
       return *(end() - 1);
    }
@@ -299,11 +301,11 @@ class QVarLengthArray
          clear();
          append(other.constData(), other.size());
       }
+
       return *this;
    }
 
-   QVarLengthArray<T, Prealloc> &operator=(std::initializer_list<T> list)
-   {
+   QVarLengthArray<T, Prealloc> &operator=(std::initializer_list<T> list) {
       resize(list.size());
       std::copy(list.begin(), list.end(), this->begin());
 
@@ -393,25 +395,25 @@ int QVarLengthArray<T, Prealloc>::indexOf(const T &value, int from) const
 template <class T, int Prealloc>
 int QVarLengthArray<T, Prealloc>::lastIndexOf(const T &value, int from) const
 {
-    if (from < 0) {
-        from += s;
+   if (from < 0) {
+      from += s;
 
-    } else if (from >= s) {
-        from = s - 1;
-    }
+   } else if (from >= s) {
+      from = s - 1;
+   }
 
-    if (from >= 0) {
-        T *b = ptr;
-        T *n = ptr + from + 1;
+   if (from >= 0) {
+      T *b = ptr;
+      T *n = ptr + from + 1;
 
-        while (n != b) {
-            if (*--n == value) {
-                return n - b;
-            }
-        }
-    }
+      while (n != b) {
+         if (*--n == value) {
+            return n - b;
+         }
+      }
+   }
 
-    return -1;
+   return -1;
 }
 
 template <class T, int Prealloc>
@@ -486,7 +488,7 @@ void QVarLengthArray<T, Prealloc>::realloc(int size, int allocSize)
                   s++;
                }
 
-            } catch(...) {
+            } catch (...) {
                // clean up all the old objects and then free the old ptr
                int sClean = s;
 
@@ -599,7 +601,7 @@ inline void QVarLengthArray<T, Prealloc>::replace(int index, const T &value)
 
 template <class T, int Prealloc>
 typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::insert(const_iterator before,
-            size_type count, const T &value)
+      size_type count, const T &value)
 {
    int offset = int(before - ptr);
 
@@ -608,7 +610,7 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::in
       const T copy(value);
 
       if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&
-                  std::is_trivially_copyable_v<T> ) {
+            std::is_trivially_copyable_v<T> ) {
 
          T *b = ptr + offset;
          T *i = b + count;
@@ -641,14 +643,14 @@ typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::in
 
 template <class T, int Prealloc>
 typename QVarLengthArray<T, Prealloc>::iterator QVarLengthArray<T, Prealloc>::erase(const_iterator begin,
-            const_iterator end)
+      const_iterator end)
 {
    int f = int(begin - ptr);
    int l = int(end - ptr);
    int n = l - f;
 
    if constexpr (std::is_trivially_constructible_v<T> && std::is_trivially_destructible_v<T> &&
-                  std::is_trivially_copyable_v<T> ) {
+         std::is_trivially_copyable_v<T> ) {
 
       memmove(ptr + f, ptr + l, (s - l) * sizeof(T));
 
@@ -685,7 +687,6 @@ bool operator==(const QVarLengthArray<T, Prealloc1> &l, const QVarLengthArray<T,
 
    return true;
 }
-
 
 template <typename T, int Prealloc1, int Prealloc2>
 bool operator!=(const QVarLengthArray<T, Prealloc1> &l, const QVarLengthArray<T, Prealloc2> &r)

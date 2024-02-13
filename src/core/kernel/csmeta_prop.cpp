@@ -173,7 +173,7 @@ bool QMetaProperty::isStored(const QObject *object) const
          retval = true;
       }
 
-   } else{
+   } else {
       retval = m_storedJar->run<bool>(object);
    }
 
@@ -393,7 +393,7 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
 
 // internal
 void QMetaProperty::setReadMethod(std::type_index returnTypeId,
-         QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead)
+      QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead)
 {
    if (! jarRead) {
       return;

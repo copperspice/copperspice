@@ -207,7 +207,7 @@ QString QTimeZonePrivate::displayName(qint64 atMSecsSinceEpoch,
 }
 
 QString QTimeZonePrivate::displayName(QTimeZone::TimeType timeType,
-   QTimeZone::NameType nameType, const QLocale &locale) const
+      QTimeZone::NameType nameType, const QLocale &locale) const
 {
    (void) timeType;
    (void) nameType;
@@ -300,10 +300,10 @@ QTimeZonePrivate::Data QTimeZonePrivate::dataForLocalTime(qint64 forLocalMSecs) 
       // If tran is in StandardTime, then need to check if falls close to either DST transition.
       // If it does, then it may need adjusting for missing hour or for second occurrence
       qint64 diffPrevTran = forLocalMSecs
-         - (tran.atMSecsSinceEpoch + (tran.offsetFromUtc * MSECS_PER_SEC));
+            - (tran.atMSecsSinceEpoch + (tran.offsetFromUtc * MSECS_PER_SEC));
 
       qint64 diffNextTran = nextTran.atMSecsSinceEpoch + (nextTran.offsetFromUtc * MSECS_PER_SEC)
-         - forLocalMSecs;
+            - forLocalMSecs;
 
       if (diffPrevTran >= 0 && diffPrevTran < MSECS_TRANSITION_WINDOW) {
          // If tran picked is for standard time check if changed from DST in last 6 hours,
@@ -350,7 +350,7 @@ QTimeZonePrivate::Data QTimeZonePrivate::previousTransition(qint64 beforeMSecsSi
 }
 
 QTimeZonePrivate::DataList QTimeZonePrivate::transitions(qint64 fromMSecsSinceEpoch,
-   qint64 toMSecsSinceEpoch) const
+      qint64 toMSecsSinceEpoch) const
 {
    DataList list;
 
@@ -397,7 +397,7 @@ QList<QByteArray> QTimeZonePrivate::availableTimeZoneIds(QLocale::Country countr
    QList<QByteArray> result;
 
    std::set_intersection(all.begin(), all.end(), regions.cbegin(), regions.cend(),
-      std::back_inserter(result));
+         std::back_inserter(result));
    return result;
 }
 
@@ -429,7 +429,7 @@ QList<QByteArray> QTimeZonePrivate::availableTimeZoneIds(int offsetFromUtc) cons
    QList<QByteArray> result;
 
    std::set_intersection(all.begin(), all.end(), offsets.cbegin(), offsets.cend(),
-      std::back_inserter(result));
+         std::back_inserter(result));
    return result;
 }
 
@@ -538,13 +538,13 @@ bool QTimeZonePrivate::isValidId(const QByteArray &ianaId)
          }
 
       } else if (!(ch >= 'a' && ch <= 'z')
-         && !(ch >= 'A' && ch <= 'Z')
-         && !(ch == '_')
-         && !(ch == '.')
-         // Should ideally check these only happen as an offset:
-         && !(ch >= '0' && ch <= '9')
-         && !(ch == '+')
-         && !(ch == ':')) {
+            && !(ch >= 'A' && ch <= 'Z')
+            && !(ch == '_')
+            && !(ch == '.')
+            // Should ideally check these only happen as an offset:
+            && !(ch >= '0' && ch <= '9')
+            && !(ch == '+')
+            && !(ch == ':')) {
          return false; // violates (2)
       }
    }
@@ -561,8 +561,8 @@ QString QTimeZonePrivate::isoOffsetFormat(int offsetFromUtc)
    const int mins = offsetFromUtc / 60;
 
    return QString::fromUtf8("UTC%1%2:%3").formatArg(mins >= 0 ? '+' : '-')
-      .formatArg(qAbs(mins) / 60, 2, 10, QLatin1Char('0'))
-      .formatArg(qAbs(mins) % 60, 2, 10, QLatin1Char('0'));
+         .formatArg(qAbs(mins) / 60, 2, 10, QLatin1Char('0'))
+         .formatArg(qAbs(mins) % 60, 2, 10, QLatin1Char('0'));
 }
 
 QByteArray QTimeZonePrivate::ianaIdToWindowsId(const QByteArray &id)
@@ -594,7 +594,7 @@ QByteArray QTimeZonePrivate::windowsIdToDefaultIanaId(const QByteArray &windowsI
 }
 
 QByteArray QTimeZonePrivate::windowsIdToDefaultIanaId(const QByteArray &windowsId,
-   QLocale::Country country)
+      QLocale::Country country)
 {
    const QList<QByteArray> list = windowsIdToIanaIds(windowsId, country);
 
@@ -678,8 +678,7 @@ QUtcTimeZonePrivate::QUtcTimeZonePrivate(qint32 offsetSeconds)
 }
 
 QUtcTimeZonePrivate::QUtcTimeZonePrivate(const QByteArray &zoneId, int offsetSeconds,
-   const QString &name, const QString &abbreviation,
-   QLocale::Country country, const QString &comment)
+      const QString &name, const QString &abbreviation, QLocale::Country country, const QString &comment)
 {
    init(zoneId, offsetSeconds, name, abbreviation, country, comment);
 }
@@ -716,7 +715,7 @@ void QUtcTimeZonePrivate::init(const QByteArray &zoneId)
 }
 
 void QUtcTimeZonePrivate::init(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-   const QString &abbreviation, QLocale::Country country, const QString &comment)
+      const QString &abbreviation, QLocale::Country country, const QString &comment)
 {
    m_id            = zoneId;
    m_offsetFromUtc = offsetSeconds;
@@ -822,7 +821,7 @@ void QUtcTimeZonePrivate::serialize(QDataStream &stream) const
    // first entry must be a QByteArray
 
    stream << QByteArray("OffsetFromUtc") << QString::fromUtf8(m_id) << m_offsetFromUtc << m_name
-          << m_abbreviation << (qint32) m_country << m_comment;
+         << m_abbreviation << (qint32) m_country << m_comment;
 }
 
 // Create named time zone using appropriate backend
@@ -901,7 +900,7 @@ QTimeZone::QTimeZone(int offsetSeconds)
 }
 
 QTimeZone::QTimeZone(const QByteArray &ianaId, int offsetSeconds, const QString &name,
-            const QString &abbreviation, QLocale::Country country, const QString &comment)
+      const QString &abbreviation, QLocale::Country country, const QString &comment)
    : d()
 {
    if (! isTimeZoneIdAvailable(ianaId)) {
@@ -1079,7 +1078,7 @@ QTimeZone::OffsetDataList QTimeZone::transitions(const QDateTime &fromDateTime, 
 
    if (hasTransitions()) {
       QTimeZonePrivate::DataList plist = d->transitions(fromDateTime.toMSecsSinceEpoch(),
-         toDateTime.toMSecsSinceEpoch());
+            toDateTime.toMSecsSinceEpoch());
 
       list.reserve(plist.count());
 

@@ -119,7 +119,7 @@ class QDateTimePrivate
    }
 
    static qint64 zoneMSecsToEpochMSecs(qint64 msecs, const QTimeZone &zone,
-      QDate *localDate = nullptr, QTime *localTime = nullptr);
+         QDate *localDate = nullptr, QTime *localTime = nullptr);
 
    qint64 m_msecs;
    QTimeZone m_timeZone;

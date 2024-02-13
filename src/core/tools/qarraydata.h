@@ -65,11 +65,13 @@ struct Q_CORE_EXPORT QArrayData {
       if (capacityReserved && newSize < alloc) {
          return alloc;
       }
+
       return newSize;
    }
 
    AllocationOptions detachFlags() const {
       AllocationOptions result;
+
       if (!ref.isSharable()) {
          result |= Unsharable;
       }
@@ -83,6 +85,7 @@ struct Q_CORE_EXPORT QArrayData {
 
    AllocationOptions cloneFlags() const {
       AllocationOptions result;
+
       if (capacityReserved) {
          result |= CapacityReserved;
       }
@@ -137,7 +140,7 @@ struct QTypedArrayData : QArrayData {
 
    [[nodiscard]] static QTypedArrayData *allocate(size_t capacity, AllocationOptions options = Default) {
       return static_cast<QTypedArrayData *>(QArrayData::allocate(sizeof(T),
-         alignof(AlignmentDummy), capacity, options));
+            alignof(AlignmentDummy), capacity, options));
    }
 
    static void deallocate(QArrayData *data) {
@@ -183,7 +186,7 @@ struct QArrayDataPointerRef {
 };
 
 #define Q_STATIC_ARRAY_DATA_HEADER_INITIALIZER(type, size) { \
-    Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, \
-       (sizeof(QArrayData) + (alignof(type) - 1)) & ~(alignof(type) - 1) }
+      Q_REFCOUNT_INITIALIZE_STATIC, size, 0, 0, \
+      (sizeof(QArrayData) + (alignof(type) - 1)) & ~(alignof(type) - 1) }
 
 #endif

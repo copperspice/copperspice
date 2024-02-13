@@ -32,15 +32,16 @@ class QTimeLinePrivate
    Q_DECLARE_PUBLIC(QTimeLine)
 
  public:
-   inline QTimeLinePrivate()
+   QTimeLinePrivate()
       : startTime(0), duration(1000), startFrame(0), endFrame(0),
         updateInterval(1000 / 25),
         totalLoopCount(1), currentLoopCount(0), currentTime(0), timerId(0),
         direction(QTimeLine::Forward), easingCurve(QEasingCurve::InOutSine),
-        state(QTimeLine::NotRunning) {
-   }
+        state(QTimeLine::NotRunning)
+   { }
 
-   virtual ~QTimeLinePrivate() {}
+   virtual ~QTimeLinePrivate()
+   { }
 
    int startTime;
    int duration;
@@ -60,6 +61,7 @@ class QTimeLinePrivate
 
    void setState(QTimeLine::State newState) {
       Q_Q(QTimeLine);
+
       if (newState != state) {
          emit q->stateChanged(state = newState);
       }
@@ -69,7 +71,6 @@ class QTimeLinePrivate
 
  protected:
    QTimeLine *q_ptr;
-
 };
 
 void QTimeLinePrivate::setCurrentTime(int msecs)
@@ -87,8 +88,8 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
 #ifdef QTIMELINE_DEBUG
    qDebug() << "QTimeLinePrivate::setCurrentTime:" << msecs << duration << "with loopCount" << loopCount
-            << "currentLoopCount" << currentLoopCount
-            << "looping" << looping;
+         << "currentLoopCount" << currentLoopCount
+         << "looping" << looping;
 #endif
 
    if (looping) {
@@ -97,12 +98,14 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
    // Normalize msecs to be between 0 and duration, inclusive.
    currentTime = elapsed % duration;
+
    if (direction == QTimeLine::Backward) {
       currentTime = duration - currentTime;
    }
 
    // Check if we have reached the end of loopcount.
    bool finished = false;
+
    if (totalLoopCount && currentLoopCount >= totalLoopCount) {
       finished = true;
       currentTime = (direction == QTimeLine::Backward) ? 0 : duration;
@@ -132,6 +135,7 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 #ifdef QTIMELINE_DEBUG
       else {
          QByteArray reason;
+
          if (!looping) {
             reason += " not looping";
          }
@@ -140,6 +144,7 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
             if (!reason.isEmpty()) {
                reason += " and";
             }
+
             reason += " finished";
          }
 
@@ -147,11 +152,13 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
             if (!reason.isEmpty()) {
                reason += " and";
             }
+
             reason += " transitionframe is equal to currentFrame: " + QByteArray::number(currentFrame);
          }
 
          qDebug("QTimeLinePrivate::setCurrentTime: not transitionframe because %s",  reason.constData());
       }
+
 #endif
 
       emit q->frameChanged(currentFrame);
@@ -220,10 +227,12 @@ int QTimeLine::duration() const
 void QTimeLine::setDuration(int duration)
 {
    Q_D(QTimeLine);
+
    if (duration <= 0) {
       qWarning("QTimeLine::setDuration() Unable to set duration less than or equal to 0");
       return;
    }
+
    d->duration = duration;
 }
 
@@ -372,9 +381,11 @@ qreal QTimeLine::currentValue() const
 int QTimeLine::frameForTime(int msec) const
 {
    Q_D(const QTimeLine);
+
    if (d->direction == Forward) {
       return d->startFrame + int((d->endFrame - d->startFrame) * valueForTime(msec));
    }
+
    return d->startFrame + qCeil((d->endFrame - d->startFrame) * valueForTime(msec));
 }
 
@@ -397,6 +408,7 @@ void QTimeLine::start()
    }
 
    int curTime = 0;
+
    if (d->direction == Backward) {
       curTime = d->duration;
    }
@@ -412,10 +424,12 @@ void QTimeLine::start()
 void QTimeLine::resume()
 {
    Q_D(QTimeLine);
+
    if (d->timerId) {
       qWarning("QTimeLine::resume() Already running");
       return;
    }
+
    d->timerId = startTimer(d->updateInterval);
    d->startTime = d->currentTime;
    d->timer.start();
@@ -425,9 +439,11 @@ void QTimeLine::resume()
 void QTimeLine::stop()
 {
    Q_D(QTimeLine);
+
    if (d->timerId) {
       killTimer(d->timerId);
    }
+
    d->setState(NotRunning);
    d->timerId = 0;
 }
@@ -435,10 +451,12 @@ void QTimeLine::stop()
 void QTimeLine::setPaused(bool paused)
 {
    Q_D(QTimeLine);
+
    if (d->state == NotRunning) {
       qWarning("QTimeLine::setPaused() Not running");
       return;
    }
+
    if (paused && d->state != Paused) {
       d->startTime = d->currentTime;
       killTimer(d->timerId);
@@ -462,10 +480,12 @@ void QTimeLine::toggleDirection()
 void QTimeLine::timerEvent(QTimerEvent *event)
 {
    Q_D(QTimeLine);
+
    if (event->timerId() != d->timerId) {
       event->ignore();
       return;
    }
+
    event->accept();
 
    if (d->direction == Forward) {

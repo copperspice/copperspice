@@ -61,7 +61,7 @@ class Q_CORE_EXPORT QTimeZone
    explicit QTimeZone(int offsetSeconds);
 
    QTimeZone(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-      const QString &abbreviation, QLocale::Country country = QLocale::AnyCountry, const QString &comment = QString());
+         const QString &abbreviation, QLocale::Country country = QLocale::AnyCountry, const QString &comment = QString());
 
    QTimeZone(const QTimeZone &other);
    QTimeZone(QTimeZone &&other);
@@ -80,10 +80,10 @@ class Q_CORE_EXPORT QTimeZone
    QString comment() const;
 
    QString displayName(const QDateTime &atDateTime, QTimeZone::NameType nameType = QTimeZone::DefaultName,
-      const QLocale &locale = QLocale()) const;
+         const QLocale &locale = QLocale()) const;
 
    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType = QTimeZone::DefaultName,
-      const QLocale &locale = QLocale()) const;
+         const QLocale &locale = QLocale()) const;
 
    QByteArray id() const;
    bool isValid() const;

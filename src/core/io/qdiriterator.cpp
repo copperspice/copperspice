@@ -50,7 +50,7 @@ class QDirIteratorPrivate
 {
  public:
    QDirIteratorPrivate(const QFileSystemEntry &entry, const QStringList &nameFilters,
-                       QDir::Filters filters, QDirIterator::IteratorFlags flags, bool resolveEngine = true);
+         QDir::Filters filters, QDirIterator::IteratorFlags flags, bool resolveEngine = true);
 
    void advance();
 
@@ -81,13 +81,10 @@ class QDirIteratorPrivate
    QSet<QString> visitedLinks;
 };
 
-/*!
-    \internal
-*/
 QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QStringList &nameFilters,
       QDir::Filters filters, QDirIterator::IteratorFlags flags, bool resolveEngine)
-   : dirEntry(entry), nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters)
-   , filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
+   : dirEntry(entry), nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters),
+     filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
 {
    nameRegExps.reserve(nameFilters.size());
 
@@ -115,17 +112,16 @@ QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QS
    advance();
 }
 
-/*!
-    \internal
-*/
 void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
 {
    QString path = fileInfo.filePath();
 
 #ifdef Q_OS_WIN
+
    if (fileInfo.isSymLink()) {
       path = fileInfo.canonicalFilePath();
    }
+
 #endif
 
    if (iteratorFlags & QDirIterator::FollowSymlinks) {
@@ -135,6 +131,7 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
    if (engine) {
       engine->setFileName(path);
       QAbstractFileEngineIterator *it = engine->beginEntryList(filters, nameFilters);
+
       if (it) {
          it->setPath(path);
          fileEngineIterators << it;
@@ -165,17 +162,16 @@ inline bool QDirIteratorPrivate::entryMatches(const QString &fileName, const QFi
    return false;
 }
 
-/*!
-    \internal
-*/
 void QDirIteratorPrivate::advance()
 {
    if (engine) {
       while (!fileEngineIterators.isEmpty()) {
          // Find the next valid iterator that matches the filters.
          QAbstractFileEngineIterator *it;
+
          while (it = fileEngineIterators.top(), it->hasNext()) {
             it->next();
+
             if (entryMatches(it->currentFileName(), it->currentFileInfo())) {
                return;
             }
@@ -184,6 +180,7 @@ void QDirIteratorPrivate::advance()
          fileEngineIterators.pop();
          delete it;
       }
+
    } else {
 #ifndef QT_NO_FILESYSTEMITERATOR
       QFileSystemEntry nextEntry;
@@ -192,6 +189,7 @@ void QDirIteratorPrivate::advance()
       while (!nativeIterators.isEmpty()) {
          // Find the next valid iterator that matches the filters.
          QFileSystemIterator *it;
+
          while (it = nativeIterators.top(), it->advance(nextEntry, nextMetaData)) {
             QFileInfo info(new QFileInfoPrivate(nextEntry, nextMetaData));
 
@@ -203,6 +201,7 @@ void QDirIteratorPrivate::advance()
          nativeIterators.pop();
          delete it;
       }
+
 #endif
    }
 
@@ -210,9 +209,6 @@ void QDirIteratorPrivate::advance()
    nextFileInfo = QFileInfo();
 }
 
-/*!
-    \internal
- */
 void QDirIteratorPrivate::checkAndPushDirectory(const QFileInfo &fileInfo)
 {
    // If we're doing flat iteration, we're done.
@@ -238,29 +234,17 @@ void QDirIteratorPrivate::checkAndPushDirectory(const QFileInfo &fileInfo)
    }
 
    // No hidden directories unless requested
-   if (!(filters & QDir::AllDirs) && !(filters & QDir::Hidden) && fileInfo.isHidden()) {
+   if (! (filters & QDir::AllDirs) && ! (filters & QDir::Hidden) && fileInfo.isHidden()) {
       return;
    }
 
    // Stop link loops
-   if (!visitedLinks.isEmpty() &&
-         visitedLinks.contains(fileInfo.canonicalFilePath())) {
+   if (! visitedLinks.isEmpty() && visitedLinks.contains(fileInfo.canonicalFilePath())) {
       return;
    }
 
    pushDirectory(fileInfo);
 }
-
-/*!
-    \internal
-
-    This convenience function implements the iterator's filtering logics and
-    applies then to the current directory entry.
-
-    It returns true if the current entry matches the filters (i.e., the
-    current entry will be returned as part of the directory iteration);
-    otherwise, false is returned.
-*/
 
 bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInfo &fi) const
 {
@@ -309,6 +293,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
 
    // filter hidden
    const bool includeHidden = (filters & QDir::Hidden);
+
    if (! includeHidden && ! dotOrDotDot && fi.isHidden()) {
       return false;
    }
@@ -320,6 +305,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
 
    // skip directories
    const bool skipDirs = !(filters & (QDir::Dirs | QDir::AllDirs));
+
    if (skipDirs && fi.isDir()) {
       return false;
    }
@@ -338,8 +324,8 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    const bool doExecutable = !filterPermissions || (filters & QDir::Executable);
    const bool doReadable   = !filterPermissions || (filters & QDir::Readable);
 
-   if (filterPermissions && ((doReadable && !fi.isReadable())
-             || (doWritable && !fi.isWritable()) || (doExecutable && !fi.isExecutable()))) {
+   if (filterPermissions && ((doReadable && ! fi.isReadable())
+         || (doWritable && ! fi.isWritable()) || (doExecutable && !fi.isExecutable()))) {
       return false;
    }
 
@@ -363,7 +349,7 @@ QDirIterator::QDirIterator(const QString &path, IteratorFlags flags)
 }
 
 QDirIterator::QDirIterator(const QString &path, const QStringList &nameFilters,
-                           QDir::Filters filters, IteratorFlags flags)
+      QDir::Filters filters, IteratorFlags flags)
    : d(new QDirIteratorPrivate(QFileSystemEntry(path), nameFilters, filters, flags))
 {
 }
@@ -378,19 +364,15 @@ QString QDirIterator::next()
    return filePath();
 }
 
-/*!
-    Returns true if there is at least one more entry in the directory;
-    otherwise, false is returned.
-
-    \sa next(), fileName(), filePath(), fileInfo()
-*/
 bool QDirIterator::hasNext() const
 {
    if (d->engine) {
       return !d->fileEngineIterators.isEmpty();
+
    } else
 #ifndef QT_NO_FILESYSTEMITERATOR
       return !d->nativeIterators.isEmpty();
+
 #else
       return false;
 #endif
@@ -401,31 +383,17 @@ QString QDirIterator::fileName() const
    return d->currentFileInfo.fileName();
 }
 
-/*!
-    Returns the full file path for the current directory entry.
-
-    \sa fileInfo(), fileName()
-*/
 QString QDirIterator::filePath() const
 {
    return d->currentFileInfo.filePath();
 }
 
-/*!
-    Returns a QFileInfo for the current directory entry.
-
-    \sa filePath(), fileName()
-*/
 QFileInfo QDirIterator::fileInfo() const
 {
    return d->currentFileInfo;
 }
 
-/*!
-    Returns the base directory of the iterator.
-*/
 QString QDirIterator::path() const
 {
    return d->dirEntry.filePath();
 }
-

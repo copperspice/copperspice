@@ -69,9 +69,6 @@ QFSFileEnginePrivate::QFSFileEnginePrivate() : QAbstractFileEnginePrivate()
    init();
 }
 
-/*!
-    \internal
-*/
 void QFSFileEnginePrivate::init()
 {
    is_sequential = 0;
@@ -106,24 +103,15 @@ QFSFileEngine::QFSFileEngine(const QString &file)
    d->fileEntry = QFileSystemEntry(file);
 }
 
-/*!
-    Constructs a QFSFileEngine.
-*/
 QFSFileEngine::QFSFileEngine() : QAbstractFileEngine(*new QFSFileEnginePrivate)
 {
 }
 
-/*!
-    \internal
-*/
 QFSFileEngine::QFSFileEngine(QFSFileEnginePrivate &dd)
    : QAbstractFileEngine(dd)
 {
 }
 
-/*!
-    Destructs the QFSFileEngine.
-*/
 QFSFileEngine::~QFSFileEngine()
 {
    Q_D(QFSFileEngine);
@@ -131,12 +119,14 @@ QFSFileEngine::~QFSFileEngine()
    if (d->closeFileHandle) {
       if (d->fh) {
          int ret;
+
          do {
             ret = fclose(d->fh);
          } while (ret == EOF && errno == EINTR);
 
       } else if (d->fd != -1) {
          int ret;
+
          do {
             ret = QT_CLOSE(d->fd);
          } while (ret == -1 && errno == EINTR);
@@ -144,14 +134,12 @@ QFSFileEngine::~QFSFileEngine()
    }
 
    QList<uchar *> keys = d->maps.keys();
+
    for (int i = 0; i < keys.count(); ++i) {
       unmap(keys.at(i));
    }
 }
 
-/*!
-    \reimp
-*/
 void QFSFileEngine::setFileName(const QString &file)
 {
    Q_D(QFSFileEngine);
@@ -159,9 +147,6 @@ void QFSFileEngine::setFileName(const QString &file)
    d->fileEntry = QFileSystemEntry(file);
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::open(QIODevice::OpenMode openMode)
 {
    Q_D(QFSFileEngine);
@@ -240,13 +225,14 @@ bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode openMode, FILE *fh)
    // Seek to the end when in Append mode.
    if (openMode & QIODevice::Append) {
       int ret;
+
       do {
          ret = QT_FSEEK(fh, 0, SEEK_END);
       } while (ret != 0 && errno == EINTR);
 
       if (ret != 0) {
          q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError,
-                     qt_error_string(int(errno)));
+               qt_error_string(int(errno)));
 
          this->openMode = QIODevice::NotOpen;
          this->fh = nullptr;
@@ -258,10 +244,6 @@ bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode openMode, FILE *fh)
    return true;
 }
 
-/*!
-    Opens the file descriptor \a fd in \a openMode mode. Returns true
-    on success; otherwise returns false.
-*/
 bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd)
 {
    return open(openMode, fd, QFile::DontCloseHandle);
@@ -271,7 +253,7 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd, QFile::FileHandle
 {
    Q_D(QFSFileEngine);
 
-   // Append implies WriteOnly.
+   // Append implies WriteOnly
    if (openMode & QFile::Append) {
       openMode |= QFile::WriteOnly;
    }
@@ -292,11 +274,6 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd, QFile::FileHandle
    return d->openFd(openMode, fd);
 }
 
-
-/*!
-    Opens the file descriptor \a fd to the file engine, using the open mode \a
-    flags.
-*/
 bool QFSFileEnginePrivate::openFd(QIODevice::OpenMode openMode, int fd)
 {
    Q_Q(QFSFileEngine);
@@ -306,13 +283,14 @@ bool QFSFileEnginePrivate::openFd(QIODevice::OpenMode openMode, int fd)
    // Seek to the end when in Append mode.
    if (openMode & QFile::Append) {
       int ret;
+
       do {
          ret = QT_LSEEK(fd, 0, SEEK_END);
       } while (ret == -1 && errno == EINTR);
 
       if (ret == -1) {
          q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError,
-                     qt_error_string(int(errno)));
+               qt_error_string(int(errno)));
 
          this->openMode = QIODevice::NotOpen;
          this->fd = -1;
@@ -324,9 +302,6 @@ bool QFSFileEnginePrivate::openFd(QIODevice::OpenMode openMode, int fd)
    return true;
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::close()
 {
    Q_D(QFSFileEngine);
@@ -334,13 +309,11 @@ bool QFSFileEngine::close()
    return d->nativeClose();
 }
 
-/*!
-    \internal
-*/
 bool QFSFileEnginePrivate::closeFdFh()
 {
    Q_Q(QFSFileEngine);
-   if (fd == -1 && !fh ) {
+
+   if (fd == -1 && !fh) {
       return false;
    }
 
@@ -383,35 +356,30 @@ bool QFSFileEnginePrivate::closeFdFh()
    return true;
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::flush()
 {
    Q_D(QFSFileEngine);
+
    if ((d->openMode & QIODevice::WriteOnly) == 0) {
       // Nothing in the write buffers, so flush succeeds in doing
       // nothing.
       return true;
    }
+
    return d->nativeFlush();
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::syncToDisk()
 {
    Q_D(QFSFileEngine);
+
    if ((d->openMode & QIODevice::WriteOnly) == 0) {
       return true;
    }
+
    return d->nativeSyncToDisk();
 }
 
-/*!
-    \internal
-*/
 bool QFSFileEnginePrivate::flushFh()
 {
    Q_Q(QFSFileEngine);
@@ -429,15 +397,13 @@ bool QFSFileEnginePrivate::flushFh()
 
    if (ret != 0) {
       q->setError(errno == ENOSPC ? QFile::ResourceError : QFile::WriteError,
-                  qt_error_string(errno));
+            qt_error_string(errno));
       return false;
    }
+
    return true;
 }
 
-/*!
-    \reimp
-*/
 qint64 QFSFileEngine::size() const
 {
    Q_D(const QFSFileEngine);
@@ -445,9 +411,6 @@ qint64 QFSFileEngine::size() const
 }
 
 #ifndef Q_OS_WIN
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::sizeFdFh() const
 {
    Q_Q(const QFSFileEngine);
@@ -455,45 +418,36 @@ qint64 QFSFileEnginePrivate::sizeFdFh() const
 
    tried_stat = 0;
    metaData.clearFlags(QFileSystemMetaData::SizeAttribute);
+
    if (!doStat(QFileSystemMetaData::SizeAttribute)) {
       return 0;
    }
+
    return metaData.size();
 }
 #endif
 
-/*!
-    \reimp
-*/
 qint64 QFSFileEngine::pos() const
 {
    Q_D(const QFSFileEngine);
    return d->nativePos();
 }
 
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::posFdFh() const
 {
    if (fh) {
       return qint64(QT_FTELL(fh));
    }
+
    return QT_LSEEK(fd, 0, SEEK_CUR);
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::seek(qint64 pos)
 {
    Q_D(QFSFileEngine);
    return d->nativeSeek(pos);
 }
 
-/*!
-    \internal
-*/
 bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
 {
    Q_Q(QFSFileEngine);
@@ -538,18 +492,12 @@ bool QFSFileEnginePrivate::seekFdFh(qint64 pos)
    return true;
 }
 
-/*!
-    \reimp
-*/
 int QFSFileEngine::handle() const
 {
    Q_D(const QFSFileEngine);
    return d->nativeHandle();
 }
 
-/*!
-    \reimp
-*/
 qint64 QFSFileEngine::read(char *data, qint64 maxlen)
 {
    Q_D(QFSFileEngine);
@@ -566,9 +514,6 @@ qint64 QFSFileEngine::read(char *data, qint64 maxlen)
    return d->nativeRead(data, maxlen);
 }
 
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::readFdFh(char *data, qint64 len)
 {
    Q_Q(QFSFileEngine);
@@ -586,6 +531,7 @@ qint64 QFSFileEnginePrivate::readFdFh(char *data, qint64 len)
 
       size_t result;
       bool retry = true;
+
       do {
          result = fread(data + readBytes, 1, size_t(len - readBytes), fh);
          eof = feof(fh);
@@ -599,6 +545,7 @@ qint64 QFSFileEnginePrivate::readFdFh(char *data, qint64 len)
             retry = false;
             continue;
          }
+
          readBytes += result;
       } while (!eof && (result == 0 ? errno == EINTR : readBytes < len));
 
@@ -610,6 +557,7 @@ qint64 QFSFileEnginePrivate::readFdFh(char *data, qint64 len)
 #else
       ssize_t result;
 #endif
+
       do {
          result = QT_READ(fd, data + readBytes, size_t(len - readBytes));
       } while ((result == -1 && errno == EINTR) || (result > 0 && (readBytes += result) < len));
@@ -625,9 +573,6 @@ qint64 QFSFileEnginePrivate::readFdFh(char *data, qint64 len)
    return readBytes;
 }
 
-/*!
-    \reimp
-*/
 qint64 QFSFileEngine::readLine(char *data, qint64 maxlen)
 {
    Q_D(QFSFileEngine);
@@ -643,12 +588,10 @@ qint64 QFSFileEngine::readLine(char *data, qint64 maxlen)
    return d->nativeReadLine(data, maxlen);
 }
 
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::readLineFdFh(char *data, qint64 maxlen)
 {
    Q_Q(QFSFileEngine);
+
    if (!fh) {
       return q->QAbstractFileEngine::readLine(data, maxlen);
    }
@@ -656,34 +599,34 @@ qint64 QFSFileEnginePrivate::readLineFdFh(char *data, qint64 maxlen)
    QT_OFF_T oldPos = 0;
 #ifdef Q_OS_WIN
    bool seq = q->isSequential();
+
    if (!seq)
 #endif
       oldPos = QT_FTELL(fh);
 
    // QIODevice::readLine() passes maxlen - 1 to QFile::readLineData()
    // because it has made space for the '\0' at the end of data.  But fgets
-   // does the same, so we'd get two '\0' at the end - passing maxlen + 1
-   // solves this.
-   if (!fgets(data, int(maxlen + 1), fh)) {
+   // does the same, so we'd get two '\0' at the end - passing maxlen + 1 solves this
+   if (! fgets(data, int(maxlen + 1), fh)) {
       if (!feof(fh)) {
          q->setError(QFile::ReadError, qt_error_string(int(errno)));
       }
+
       return -1;              // error
    }
 
 #ifdef Q_OS_WIN
+
    if (seq) {
       return qstrlen(data);
    }
+
 #endif
 
    qint64 lineLength = QT_FTELL(fh) - oldPos;
    return lineLength > 0 ? lineLength : qstrlen(data);
 }
 
-/*!
-    \reimp
-*/
 qint64 QFSFileEngine::write(const char *data, qint64 len)
 {
    Q_D(QFSFileEngine);
@@ -699,9 +642,6 @@ qint64 QFSFileEngine::write(const char *data, qint64 len)
    return d->nativeWrite(data, len);
 }
 
-/*!
-    \internal
-*/
 qint64 QFSFileEnginePrivate::writeFdFh(const char *data, qint64 len)
 {
    Q_Q(QFSFileEngine);
@@ -717,6 +657,7 @@ qint64 QFSFileEnginePrivate::writeFdFh(const char *data, qint64 len)
       // Buffered stdlib mode.
 
       size_t result;
+
       do {
          result = fwrite(data + writtenBytes, 1, size_t(len - writtenBytes), fh);
          writtenBytes += result;
@@ -730,10 +671,11 @@ qint64 QFSFileEnginePrivate::writeFdFh(const char *data, qint64 len)
 #else
       ssize_t result;
 #endif
+
       do {
          result = QT_WRITE(fd, data + writtenBytes, size_t(len - writtenBytes));
       } while ((result == -1 && errno == EINTR)
-               || (result > 0 && (writtenBytes += result) < len));
+            || (result > 0 && (writtenBytes += result) < len));
    }
 
    if (len &&  writtenBytes == 0) {
@@ -745,62 +687,48 @@ qint64 QFSFileEnginePrivate::writeFdFh(const char *data, qint64 len)
 }
 
 #ifndef QT_NO_FILESYSTEMITERATOR
-/*!
-    \internal
-*/
 QAbstractFileEngine::Iterator *QFSFileEngine::beginEntryList(QDir::Filters filters, const QStringList &filterNames)
 {
    return new QFSFileEngineIterator(filters, filterNames);
 }
 
-/*!
-    \internal
-*/
 QAbstractFileEngine::Iterator *QFSFileEngine::endEntryList()
 {
    return nullptr;
 }
 #endif
 
-/*!
-    \internal
-*/
 QStringList QFSFileEngine::entryList(QDir::Filters filters, const QStringList &filterNames) const
 {
    return QAbstractFileEngine::entryList(filters, filterNames);
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::isSequential() const
 {
    Q_D(const QFSFileEngine);
+
    if (d->is_sequential == 0) {
       d->is_sequential = d->nativeIsSequential() ? 1 : 2;
    }
+
    return d->is_sequential == 1;
 }
 
-/*!
-    \internal
-*/
 #ifdef Q_OS_UNIX
 bool QFSFileEnginePrivate::isSequentialFdFh() const
 {
    if (doStat(QFileSystemMetaData::SequentialType)) {
       return metaData.isSequential();
    }
+
    return true;
 }
 #endif
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::extension(Extension extension, const ExtensionOption *option, ExtensionReturn *output)
 {
    Q_D(QFSFileEngine);
+
    if (extension == AtEndExtension && d->fh && isSequential()) {
       return feof(d->fh);
    }
@@ -811,6 +739,7 @@ bool QFSFileEngine::extension(Extension extension, const ExtensionOption *option
       returnValue->address = d->map(options->offset, options->size, options->flags);
       return (returnValue->address != nullptr);
    }
+
    if (extension == UnMapExtension) {
       UnMapExtensionOption *options = (UnMapExtensionOption *)option;
       return d->unmap(options->address);
@@ -819,24 +748,26 @@ bool QFSFileEngine::extension(Extension extension, const ExtensionOption *option
    return false;
 }
 
-/*!
-    \reimp
-*/
 bool QFSFileEngine::supportsExtension(Extension extension) const
 {
    Q_D(const QFSFileEngine);
+
    if (extension == AtEndExtension && d->fh && isSequential()) {
       return true;
    }
+
    if (extension == FastReadLineExtension && d->fh) {
       return true;
    }
+
    if (extension == FastReadLineExtension && d->fd != -1 && isSequential()) {
       return true;
    }
+
    if (extension == UnMapExtension || extension == MapExtension) {
       return true;
    }
+
    return false;
 }
 

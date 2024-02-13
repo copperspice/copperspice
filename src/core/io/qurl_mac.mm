@@ -29,27 +29,28 @@
 
 QUrl QUrl::fromCFURL(CFURLRef url)
 {
-    return QUrl(QString::fromCFString(CFURLGetString(url)));
+   return QUrl(QString::fromCFString(CFURLGetString(url)));
 }
 
 CFURLRef QUrl::toCFURL() const
 {
-    CFURLRef url = nullptr;
-    CFStringRef str = toString(FullyEncoded).toCFString();
-    if (str) {
-        url = CFURLCreateWithString(nullptr, str, nullptr);
-        CFRelease(str);
-    }
-    return url;
+   CFURLRef url = nullptr;
+   CFStringRef str = toString(FullyEncoded).toCFString();
+
+   if (str) {
+      url = CFURLCreateWithString(nullptr, str, nullptr);
+      CFRelease(str);
+   }
+
+   return url;
 }
 
 QUrl QUrl::fromNSURL(const NSURL *url)
 {
-    return QUrl(QString::fromNSString([url absoluteString]));
+   return QUrl(QString::fromNSString([url absoluteString]));
 }
 
 NSURL *QUrl::toNSURL() const
 {
-    return [NSURL URLWithString:toString(FullyEncoded).toNSString()];
+   return [NSURL URLWithString:toString(FullyEncoded).toNSString()];
 }
-

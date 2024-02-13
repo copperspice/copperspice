@@ -80,13 +80,13 @@ class Q_CORE_EXPORT QSettings : public QObject
    };
 
    explicit QSettings(const QString &organization,
-                  const QString &application = QString(), QObject *parent = nullptr);
+         const QString &application = QString(), QObject *parent = nullptr);
 
    QSettings(Scope scope, const QString &organization,
-                  const QString &application = QString(), QObject *parent = nullptr);
+         const QString &application = QString(), QObject *parent = nullptr);
 
    QSettings(Format format, Scope scope, const QString &organization,
-                  const QString &application = QString(), QObject *parent = nullptr);
+         const QString &application = QString(), QObject *parent = nullptr);
 
    QSettings(const QString &fileName, Format format, QObject *parent = nullptr);
    explicit QSettings(QObject *parent = nullptr);
@@ -146,7 +146,7 @@ class Q_CORE_EXPORT QSettings : public QObject
    typedef bool (*WriteFunc)(QIODevice &device, const SettingsMap &map);
 
    static Format registerFormat(const QString &extension, ReadFunc readFunc, WriteFunc writeFunc,
-                                Qt::CaseSensitivity caseSensitivity = Qt::CaseSensitive);
+         Qt::CaseSensitivity caseSensitivity = Qt::CaseSensitive);
 
  protected:
    bool event(QEvent *event) override;

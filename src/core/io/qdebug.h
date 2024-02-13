@@ -48,17 +48,17 @@ class Q_CORE_EXPORT QDebug
       Stream(QIODevice *device)
          : ts(device), ref(1), type(QtDebugMsg),
            space(true), message_output(false), m_flags(0), m_verbosity(defaultVerbosity)
-      {}
+      { }
 
       Stream(QString *string)
          : ts(string, QIODevice::WriteOnly), ref(1), type(QtDebugMsg),
            space(true), message_output(false), m_flags(0), m_verbosity(defaultVerbosity)
-      {}
+      { }
 
       Stream(QtMsgType t)
          : ts(&buffer, QIODevice::WriteOnly), ref(1), type(t),
            space(true), message_output(true), m_flags(0), m_verbosity(defaultVerbosity)
-      {}
+      { }
 
       QTextStream ts;
       QString buffer;
@@ -116,11 +116,11 @@ class Q_CORE_EXPORT QDebug
    inline QDebug &operator=(const QDebug &other);
 
    bool autoInsertSpaces() const {
-     return stream->space;
+      return stream->space;
    }
 
    void setAutoInsertSpaces(bool b) {
-     stream->space = b;
+      stream->space = b;
    }
 
    QDebug &space() {
@@ -138,13 +138,27 @@ class Q_CORE_EXPORT QDebug
       if (stream->space) {
          stream->ts << ' ';
       }
+
       return *this;
    }
 
-   inline QDebug &maybeQuote(char c = '"') { if (!(stream->testFlag(Stream::NoQuotes))) stream->ts << c; return *this; }
+   QDebug &maybeQuote(char c = '"') {
+      if (! (stream->testFlag(Stream::NoQuotes))) {
+         stream->ts << c;
+      }
 
-   inline QDebug &quote()   { stream->unsetFlag(Stream::NoQuotes); return *this; }
-   inline QDebug &noquote() { stream->setFlag(Stream::NoQuotes);   return *this; }
+      return *this;
+   }
+
+   QDebug &quote()   {
+      stream->unsetFlag(Stream::NoQuotes);
+      return *this;
+   }
+
+   QDebug &noquote() {
+      stream->setFlag(Stream::NoQuotes);
+      return *this;
+   }
 
    QDebug &resetFormat();
 
@@ -152,8 +166,13 @@ class Q_CORE_EXPORT QDebug
       qSwap(stream, other.stream);
    }
 
-   int verbosity() const { return stream->verbosity(); }
-   void setVerbosity(int verbosityLevel) { stream->setVerbosity(verbosityLevel); }
+   int verbosity() const {
+      return stream->verbosity();
+   }
+
+   void setVerbosity(int verbosityLevel) {
+      stream->setVerbosity(verbosityLevel);
+   }
 
    QDebug &operator<<(bool value) {
       stream->ts << (value ? "true" : "false");
@@ -268,13 +287,13 @@ class Q_CORE_EXPORT QDebug
    }
 
  private:
-    friend class QDebugStateSaverPrivate;
+   friend class QDebugStateSaverPrivate;
 };
 
 class Q_CORE_EXPORT QDebugStateSaver
 {
  public:
-    QDebugStateSaver(QDebug &dbg);
+   QDebugStateSaver(QDebug &dbg);
 
    QDebugStateSaver(const QDebugStateSaver &) = delete;
    QDebugStateSaver &operator=(const QDebugStateSaver &) = delete;
@@ -346,6 +365,7 @@ inline QDebug operator<<(QDebug debug, const QList<T> &list)
       if (i) {
          debug << ", ";
       }
+
       debug << list.at(i);
    }
 
@@ -426,7 +446,7 @@ inline QDebug operator<<(QDebug debug, const QMultiHash<Key, Val, Hash, KeyEqual
    debug << ')';
    debug.setAutoInsertSpaces(oldSetting);
 
-      return debug.maybeSpace();
+   return debug.maybeSpace();
 }
 
 template <class T1, class T2>
@@ -457,6 +477,7 @@ inline QDebug operator<<(QDebug debug, const QContiguousCache<T> &cache)
 
    for (int i = cache.firstIndex(); i <= cache.lastIndex(); ++i) {
       debug << cache[i];
+
       if (i != cache.lastIndex()) {
          debug << ", ";
       }
@@ -495,7 +516,6 @@ inline QDebug operator<<(QDebug debug, const QFlags<T> &flags)
    return debug;
 }
 
-
 inline QDebug qDebug()
 {
    return QDebug(QtDebugMsg);
@@ -518,9 +538,9 @@ inline QDebug qWarning()
 // may be added by the user, using Q_DECLARE_QDEBUG_OPERATOR_FOR_CF_TYPE.
 
 #ifdef __OBJC__
-   @class NSObject;
+@class NSObject;
 #else
-   using NSObject = struct objc_object;
+using NSObject = struct objc_object;
 #endif
 
 using CFStringRef     = const struct __CFString *;

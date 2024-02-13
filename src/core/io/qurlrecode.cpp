@@ -152,8 +152,8 @@ static const uchar reservedMask[96] = {
 static inline bool isHex(QChar c)
 {
    return (c >= 'a' && c <= 'f') ||
-          (c >= 'A' && c <= 'F') ||
-          (c >= '0' && c <= '9');
+         (c >= 'A' && c <= 'F') ||
+         (c >= '0' && c <= '9');
 }
 
 static inline bool isUpperHex(QChar c)
@@ -169,7 +169,7 @@ static inline QChar toUpperHex(QChar c)
 static inline int decodeNibble(QChar c)
 {
    return c >= 'a' ? c.unicode() - 'a' + 0xA :
-          c >= 'A' ? c.unicode() - 'A' + 0xA : c.unicode() - '0';
+         c >= 'A' ? c.unicode() - 'A' + 0xA : c.unicode() - '0';
 }
 
 // if the sequence at input is 2*HEXDIG then return its decoding, otherwise returns -1
@@ -180,6 +180,7 @@ static inline int decodePercentEncoding(QString::const_iterator begin, QString::
    if (begin == end) {
       return -1;
    }
+
    QChar c1 = *begin;
 
    ++begin;
@@ -187,6 +188,7 @@ static inline int decodePercentEncoding(QString::const_iterator begin, QString::
    if (begin == end) {
       return -1;
    }
+
    QChar c2 = *begin;
 
    if (! isHex(c1) || ! isHex(c2)) {
@@ -251,8 +253,8 @@ static void utf16_to_encoded_utf8(QChar c, QString &retval)
 }
 
 void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, EncodingAction &action,
-                   QString::const_iterator begin, QString::const_iterator end,
-                   QUrl::FormattingOptions encoding, const uchar *actionTable)
+      QString::const_iterator begin, QString::const_iterator end,
+      QUrl::FormattingOptions encoding, const uchar *actionTable)
 {
    (void) begin;
    (void) end;
@@ -370,7 +372,7 @@ static int decode(QString &appendTo, QString::const_iterator begin, QString::con
 }
 
 static int recode(QString &result, QString::const_iterator begin, QString::const_iterator end,
-                  QUrl::FormattingOptions encoding, const uchar *actionTable)
+      QUrl::FormattingOptions encoding, const uchar *actionTable)
 {
    QString retval = result;
 
@@ -450,7 +452,7 @@ static void maskTable(uchar (&table)[N], const uchar (&mask)[N])
 */
 
 int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QString::const_iterator end,
-                 QUrl::FormattingOptions encoding, const ushort *tableModifications)
+      QUrl::FormattingOptions encoding, const ushort *tableModifications)
 {
    uchar actionTable[sizeof defaultActionTable];
 
@@ -523,4 +525,3 @@ QString qt_urlRecodeByteArray(const QByteArray &ba)
 
    return QString::fromLatin1(intermediate.constData(), out - reinterpret_cast<uchar *>(intermediate.data()));
 }
-

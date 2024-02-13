@@ -45,85 +45,92 @@
 
 struct sockaddr;
 
-#define EINTR_LOOP(var, cmd)                    \
-    do {                                        \
-        var = cmd;                              \
-    } while (var == -1 && errno == EINTR)
-
+#define EINTR_LOOP(var, cmd)                  \
+   do {                                       \
+      var = cmd;                              \
+   } while (var == -1 && errno == EINTR)
 
 // Internal operator functions for timespecs
 inline timespec &normalizedTimespec(timespec &t)
 {
-    while (t.tv_nsec >= 1000000000) {
-        ++t.tv_sec;
-        t.tv_nsec -= 1000000000;
-    }
-    while (t.tv_nsec < 0) {
-        --t.tv_sec;
-        t.tv_nsec += 1000000000;
-    }
-    return t;
+   while (t.tv_nsec >= 1000000000) {
+      ++t.tv_sec;
+      t.tv_nsec -= 1000000000;
+   }
+
+   while (t.tv_nsec < 0) {
+      --t.tv_sec;
+      t.tv_nsec += 1000000000;
+   }
+
+   return t;
 }
 
 inline bool operator<(const timespec &t1, const timespec &t2)
-{ return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_nsec < t2.tv_nsec); }
+{
+   return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_nsec < t2.tv_nsec);
+}
 
 inline bool operator==(const timespec &t1, const timespec &t2)
-{ return t1.tv_sec == t2.tv_sec && t1.tv_nsec == t2.tv_nsec; }
+{
+   return t1.tv_sec == t2.tv_sec && t1.tv_nsec == t2.tv_nsec;
+}
 
 inline bool operator!=(const timespec &t1, const timespec &t2)
-{ return !(t1 == t2); }
+{
+   return !(t1 == t2);
+}
 
 inline timespec &operator+=(timespec &t1, const timespec &t2)
 {
-    t1.tv_sec += t2.tv_sec;
-    t1.tv_nsec += t2.tv_nsec;
-    return normalizedTimespec(t1);
+   t1.tv_sec += t2.tv_sec;
+   t1.tv_nsec += t2.tv_nsec;
+   return normalizedTimespec(t1);
 }
 
 inline timespec operator+(const timespec &t1, const timespec &t2)
 {
-    timespec tmp;
-    tmp.tv_sec = t1.tv_sec + t2.tv_sec;
-    tmp.tv_nsec = t1.tv_nsec + t2.tv_nsec;
-    return normalizedTimespec(tmp);
+   timespec tmp;
+   tmp.tv_sec = t1.tv_sec + t2.tv_sec;
+   tmp.tv_nsec = t1.tv_nsec + t2.tv_nsec;
+   return normalizedTimespec(tmp);
 }
 
 inline timespec operator-(const timespec &t1, const timespec &t2)
 {
-    timespec tmp;
-    tmp.tv_sec = t1.tv_sec - (t2.tv_sec - 1);
-    tmp.tv_nsec = t1.tv_nsec - (t2.tv_nsec + 1000000000);
-    return normalizedTimespec(tmp);
+   timespec tmp;
+   tmp.tv_sec = t1.tv_sec - (t2.tv_sec - 1);
+   tmp.tv_nsec = t1.tv_nsec - (t2.tv_nsec + 1000000000);
+   return normalizedTimespec(tmp);
 }
 
 inline timespec operator*(const timespec &t1, int mul)
 {
-    timespec tmp;
-    tmp.tv_sec = t1.tv_sec * mul;
-    tmp.tv_nsec = t1.tv_nsec * mul;
-    return normalizedTimespec(tmp);
+   timespec tmp;
+   tmp.tv_sec = t1.tv_sec * mul;
+   tmp.tv_nsec = t1.tv_nsec * mul;
+   return normalizedTimespec(tmp);
 }
 
 inline void qt_ignore_sigpipe()
 {
-    // Set to ignore SIGPIPE once only.
-    static std::atomic<bool> atom(false);
+   // Set to ignore SIGPIPE once only.
+   static std::atomic<bool> atom(false);
 
-    if (! atom.load()) {
-        // More than one thread could turn off SIGPIPE at the same time
-        // But that's acceptable because they all would be doing the same action
-        struct sigaction noaction;
-        memset(&noaction, 0, sizeof(noaction));
+   if (! atom.load()) {
+      // More than one thread could turn off SIGPIPE at the same time
+      // But that's acceptable because they all would be doing the same action
+      struct sigaction noaction;
+      memset(&noaction, 0, sizeof(noaction));
 
-        noaction.sa_handler = SIG_IGN;
-        ::sigaction(SIGPIPE, &noaction, nullptr);
+      noaction.sa_handler = SIG_IGN;
+      ::sigaction(SIGPIPE, &noaction, nullptr);
 
-        atom.store(true);
-    }
+      atom.store(true);
+   }
 }
 
-// don't call QT_OPEN or ::open
+// do not call QT_OPEN or ::open
 // call qt_safe_open
 static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 0777)
 {
@@ -139,27 +146,27 @@ static inline int qt_safe_open(const char *pathname, int flags, mode_t mode = 07
    if (fd != -1) {
       ::fcntl(fd, F_SETFD, FD_CLOEXEC);
    }
+
    return fd;
 }
 
 #undef QT_OPEN
 #define QT_OPEN  qt_safe_open
 
-
-
 static inline int qt_safe_pipe(int pipefd[2], int flags = 0)
 {
-    Q_ASSERT((flags & ~O_NONBLOCK) == 0);
+   Q_ASSERT((flags & ~O_NONBLOCK) == 0);
 
 #ifdef QT_THREADSAFE_CLOEXEC
-    // use pipe2
-    flags |= O_CLOEXEC;
-    return ::pipe2(pipefd, flags); // pipe2 is documented not to return EINTR
+   // use pipe2
+   flags |= O_CLOEXEC;
+   return ::pipe2(pipefd, flags); // pipe2 is documented not to return EINTR
 #else
-    int ret = ::pipe(pipefd);
-    if (ret == -1) {
-        return -1;
-    }
+   int ret = ::pipe(pipefd);
+
+   if (ret == -1) {
+      return -1;
+   }
 
    ::fcntl(pipefd[0], F_SETFD, FD_CLOEXEC);
    ::fcntl(pipefd[1], F_SETFD, FD_CLOEXEC);
@@ -180,10 +187,13 @@ static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC
    Q_ASSERT(flags == FD_CLOEXEC || flags == 0);
 
 #ifdef F_DUPFD_CLOEXEC
-    int cmd = F_DUPFD;
-    if (flags & FD_CLOEXEC)
-        cmd = F_DUPFD_CLOEXEC;
-    return ::fcntl(oldfd, cmd, atleast);
+   int cmd = F_DUPFD;
+
+   if (flags & FD_CLOEXEC) {
+      cmd = F_DUPFD_CLOEXEC;
+   }
+
+   return ::fcntl(oldfd, cmd, atleast);
 
 #else
    // use F_DUPFD
@@ -192,6 +202,7 @@ static inline int qt_safe_dup(int oldfd, int atleast = 0, int flags = FD_CLOEXEC
    if (flags && ret != -1) {
       ::fcntl(ret, F_SETFD, flags);
    }
+
    return ret;
 #endif
 }
@@ -204,17 +215,21 @@ static inline int qt_safe_dup2(int oldfd, int newfd, int flags = FD_CLOEXEC)
    int ret;
 #ifdef QT_THREADSAFE_CLOEXEC
    // use dup3
-    EINTR_LOOP(ret, ::dup3(oldfd, newfd, flags ? O_CLOEXEC : 0));
-    return ret;
+   EINTR_LOOP(ret, ::dup3(oldfd, newfd, flags ? O_CLOEXEC : 0));
+   return ret;
 #else
 
    EINTR_LOOP(ret, ::dup2(oldfd, newfd));
-    if (ret == -1)
-        return -1;
 
-    if (flags)
-        ::fcntl(newfd, F_SETFD, flags);
-    return 0;
+   if (ret == -1) {
+      return -1;
+   }
+
+   if (flags) {
+      ::fcntl(newfd, F_SETFD, flags);
+   }
+
+   return 0;
 #endif
 }
 
@@ -252,7 +267,7 @@ static inline int qt_safe_close(int fd)
 #define QT_CLOSE qt_safe_close
 
 static inline int qt_safe_execve(const char *filename, char *const argv[],
-                                 char *const envp[])
+      char *const envp[])
 {
    int ret;
    EINTR_LOOP(ret, ::execve(filename, argv, envp));
@@ -290,7 +305,7 @@ timespec qt_gettime();
 void qt_nanosleep(timespec amount);
 
 Q_CORE_EXPORT int qt_safe_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
-                  const struct timespec *tv);
+      const struct timespec *tv);
 
 int qt_select_msecs(int nfds, fd_set *fdread, fd_set *fdwrite, int timeout);
 
@@ -308,9 +323,9 @@ union qt_semun {
 
 static inline key_t qt_safe_ftok(const QByteArray &filename, int proj_id)
 {
-    // Unfortunately ftok can return colliding keys even for different files.
-    // Try to add some more entropy via qHash.
-    return ::ftok(filename.constData(), qHash(filename, proj_id));
+   // Unfortunately ftok can return colliding keys even for different files.
+   // Try to add some more entropy via qHash.
+   return ::ftok(filename.constData(), qHash(filename, proj_id));
 }
 
 #endif // QT_NO_SHAREDMEMORY

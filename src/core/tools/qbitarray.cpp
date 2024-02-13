@@ -29,7 +29,7 @@
 
 QBitArray::QBitArray(int size, bool value)
 {
-   if (!size) {
+   if (! size) {
       d.resize(0);
       return;
    }
@@ -52,6 +52,7 @@ int QBitArray::count(bool on) const
 
    // See http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
    const quint8 *bits = reinterpret_cast<const quint8 *>(d.data()) + 1;
+
    while (len >= 32) {
       quint32 v = quint32(bits[0]) | (quint32(bits[1]) << 8) | (quint32(bits[2]) << 16) | (quint32(bits[3]) << 24);
       quint32 c = ((v & 0xfff) * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
@@ -61,6 +62,7 @@ int QBitArray::count(bool on) const
       bits += 4;
       numBits += int(c);
    }
+
    while (len >= 24) {
       quint32 v = quint32(bits[0]) | (quint32(bits[1]) << 8) | (quint32(bits[2]) << 16);
       quint32 c =  ((v & 0xfff) * Q_UINT64_C(0x1001001001001) & Q_UINT64_C(0x84210842108421)) % 0x1f;
@@ -69,10 +71,12 @@ int QBitArray::count(bool on) const
       bits += 3;
       numBits += int(c);
    }
+
    while (len >= 0) {
       if (bits[len / 8] & (1 << ((len - 1) & 7))) {
          ++numBits;
       }
+
       --len;
    }
 
@@ -87,11 +91,13 @@ void QBitArray::resize(int size)
       int s = d.size();
       d.resize(1 + (size + 7) / 8);
       uchar *c = reinterpret_cast<uchar *>(d.data());
+
       if (size > (s << 3)) {
          memset(c + s, 0, d.size() - s);
       } else if ( size % 8) {
          *(c + 1 + size / 8) &= (1 << (size % 8)) - 1;
       }
+
       *c = d.size() * 8 - size;
    }
 }
@@ -101,14 +107,18 @@ void QBitArray::fill(bool value, int begin, int end)
    while (begin < end && begin & 0x7) {
       setBit(begin++, value);
    }
+
    int len = end - begin;
+
    if (len <= 0) {
       return;
    }
+
    int s = len & ~0x7;
    uchar *c = reinterpret_cast<uchar *>(d.data());
    memset(c + (begin >> 3) + 1, value ? 0xff : 0, s >> 3);
    begin += s;
+
    while (begin < end) {
       setBit(begin++, value);
    }
@@ -121,12 +131,15 @@ QBitArray &QBitArray::operator&=(const QBitArray &other)
    const uchar *a2 = reinterpret_cast<const uchar *>(other.d.constData()) + 1;
    int n = other.d.size() - 1 ;
    int p = d.size() - 1 - n;
+
    while (n-- > 0) {
       *a1++ &= *a2++;
    }
+
    while (p-- > 0) {
       *a1++ = 0;
    }
+
    return *this;
 }
 
@@ -136,9 +149,11 @@ QBitArray &QBitArray::operator|=(const QBitArray &other)
    uchar *a1 = reinterpret_cast<uchar *>(d.data()) + 1;
    const uchar *a2 = reinterpret_cast<const uchar *>(other.d.constData()) + 1;
    int n = other.d.size() - 1;
+
    while (n-- > 0) {
       *a1++ |= *a2++;
    }
+
    return *this;
 }
 
@@ -148,9 +163,11 @@ QBitArray &QBitArray::operator^=(const QBitArray &other)
    uchar *a1 = reinterpret_cast<uchar *>(d.data()) + 1;
    const uchar *a2 = reinterpret_cast<const uchar *>(other.d.constData()) + 1;
    int n = other.d.size() - 1;
+
    while (n-- > 0) {
       *a1++ ^= *a2++;
    }
+
    return *this;
 }
 
@@ -169,6 +186,7 @@ QBitArray QBitArray::operator~() const
    if (sz && sz % 8) {
       *(a2 - 1) &= (1 << (sz % 8)) - 1;
    }
+
    return a;
 }
 

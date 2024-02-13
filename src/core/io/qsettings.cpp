@@ -165,10 +165,11 @@ bool QConfFile::isWritable() const
          }
       }
 
-      // we use a temporary file to avoid race conditions
+      // use a temporary file to avoid race conditions
       QTemporaryFile file(name);
       return file.open();
    }
+
 #endif
 }
 
@@ -229,13 +230,6 @@ QString QSettingsPrivate::actualKey(const QString &key) const
    return n;
 }
 
-/*
-Returns a string that never starts nor ends with a slash (or an empty string).
-
-      "foo"            becomes   "foo"
-      "/foo//bar///"   becomes   "foo/bar"
-      "///"            becomes   ""
-*/
 QString QSettingsPrivate::normalizedKey(const QString &key)
 {
    QString result = key;
@@ -262,6 +256,7 @@ QString QSettingsPrivate::normalizedKey(const QString &key)
    }
 
 after_loop:
+
    if (! result.isEmpty()) {
       result.truncate(i - 1);   // remove the trailing slash
    }
@@ -371,6 +366,7 @@ QVariant QSettingsPrivate::stringListToVariantList(const QStringList &l)
 
          } else {
             QVariantList variantList;
+
             for (int j = 0; j < l.count(); ++j) {
                variantList.append(stringToVariant(l.at(j)));
             }
@@ -409,9 +405,11 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
       case QVariant::Double:
       case QVariant::KeySequence: {
          result = v.toString();
+
          if (result.startsWith('@')) {
             result.prepend('@');
          }
+
          break;
       }
 
@@ -541,7 +539,7 @@ void QSettingsPrivate::iniEscapedKey(const QString &key, QByteArray &result)
          result += '\\';
 
       } else if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9')
-                 || ch == '_' || ch == '-' || ch == '.') {
+            || ch == '_' || ch == '-' || ch == '.') {
          result += (char)ch;
 
       } else if (ch <= 0xFF) {
@@ -553,10 +551,12 @@ void QSettingsPrivate::iniEscapedKey(const QString &key, QByteArray &result)
          result += "%U";
 
          QByteArray hexCode;
+
          for (int i = 0; i < 4; ++i) {
             hexCode.prepend(hexDigits[ch % 16]);
             ch >>= 4;
          }
+
          result += hexCode;
       }
    }
@@ -591,6 +591,7 @@ bool QSettingsPrivate::iniUnescapedKey(const QByteArray &key, int from, int to, 
       int firstDigitPos = i + 1;
 
       ch = key.at(i + 1);
+
       if (ch == 'U') {
          ++firstDigitPos;
          numDigits = 4;
@@ -605,6 +606,7 @@ bool QSettingsPrivate::iniUnescapedKey(const QByteArray &key, int from, int to, 
 
       bool ok;
       ch = key.mid(firstDigitPos, numDigits).toInt(&ok, 16);
+
       if (! ok) {
          result += '%';
          // ### missing U
@@ -613,6 +615,7 @@ bool QSettingsPrivate::iniUnescapedKey(const QByteArray &key, int from, int to, 
       }
 
       QChar qch(ch);
+
       if (qch.isUpper()) {
          lowercaseOnly = false;
       }
@@ -643,9 +646,7 @@ void QSettingsPrivate::iniEscapedString(const QString &str, QByteArray &result, 
       }
 
       if (escapeNextIfDigit
-            && ((ch >= '0' && ch <= '9')
-                || (ch >= 'a' && ch <= 'f')
-                || (ch >= 'A' && ch <= 'F'))) {
+            && ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))) {
          result += "\\x";
          result += QByteArray::number(ch, 16);
          continue;
@@ -741,13 +742,14 @@ void QSettingsPrivate::iniEscapedStringList(const QStringList &strs, QByteArray 
          if (i != 0) {
             result += ", ";
          }
+
          iniEscapedString(strs.at(i), result, codec);
       }
    }
 }
 
 bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, int to,
-                  QString &stringResult, QStringList &stringListResult, QTextCodec *codec)
+      QString &stringResult, QStringList &stringListResult, QTextCodec *codec)
 {
    static const char escapeCodes[][2] = {
       { 'a', '\a'  },
@@ -772,6 +774,7 @@ bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, i
    char ch;
 
 StSkipSpaces:
+
    while (i < to && ((ch = str.at(i)) == ' ' || ch == '\t')) {
       ++i;
    }
@@ -784,11 +787,13 @@ StNormal:
       switch (str.at(i)) {
          case '\\':
             ++i;
+
             if (i >= to) {
                goto end;
             }
 
             ch = str.at(i++);
+
             for (int j = 0; j < numEscapeCodes; ++j) {
                if (ch == escapeCodes[j][0]) {
                   stringResult += escapeCodes[j][1];
@@ -804,6 +809,7 @@ StNormal:
                }
 
                ch = str.at(i);
+
                if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f')) {
                   goto StHexEscape;
                }
@@ -856,19 +862,22 @@ StNormal:
                stringResult.clear();
                currentValueIsQuoted = false;
                ++i;
+
                goto StSkipSpaces;
             }
 
-            // fallthrough
+         [[fallthrough]];
 
          default: {
             int j = i + 1;
 
             while (j < to) {
                ch = str.at(j);
+
                if (ch == '\\' || ch == '"' || ch == ',') {
                   break;
                }
+
                ++j;
             }
 
@@ -884,6 +893,7 @@ StNormal:
          }
       }
    }
+
    if (! currentValueIsQuoted) {
       iniChopTrailingSpaces(stringResult, chopLimit);
    }
@@ -891,12 +901,14 @@ StNormal:
    goto end;
 
 StHexEscape:
+
    if (i >= to) {
       stringResult += QChar(escapeVal);
       goto end;
    }
 
    ch = str.at(i);
+
    if (ch >= 'a') {
       ch -= 'a' - 'A';
    }
@@ -913,12 +925,14 @@ StHexEscape:
    }
 
 StOctEscape:
+
    if (i >= to) {
       stringResult += QChar(escapeVal);
       goto end;
    }
 
    ch = str.at(i);
+
    if (ch >= '0' && ch <= '7') {
       escapeVal <<= 3;
       escapeVal += ch - '0';
@@ -931,6 +945,7 @@ StOctEscape:
    }
 
 end:
+
    if (isStringList) {
       stringListResult.append(stringResult);
    }
@@ -1016,6 +1031,7 @@ static QString windowsConfigPath(int type)
    QString result;
 
    std::wstring path(MAX_PATH, L'\0');
+
    if (SHGetSpecialFolderPath(nullptr, &path[0], type, FALSE)) {
       result = QString::fromStdWString(path);
    }
@@ -1066,10 +1082,10 @@ static void initDefaultPaths(QMutexLocker *locker)
 
 #ifdef Q_OS_WIN
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::UserScope),
-                       windowsConfigPath(CSIDL_APPDATA) + QDir::separator());
+            windowsConfigPath(CSIDL_APPDATA) + QDir::separator());
 
       pathHash->insert(pathHashKey(QSettings::IniFormat, QSettings::SystemScope),
-                       windowsConfigPath(CSIDL_COMMON_APPDATA) + QDir::separator());
+            windowsConfigPath(CSIDL_COMMON_APPDATA) + QDir::separator());
 #else
       QString userPath;
       QByteArray env = qgetenv("XDG_CONFIG_HOME");
@@ -1114,6 +1130,7 @@ static QString getPath(QSettings::Format format, QSettings::Scope scope)
    }
 
    QString result = pathHash->value(pathHashKey(format, scope));
+
    if (! result.isEmpty()) {
       return result;
    }
@@ -1129,6 +1146,7 @@ QConfFileSettingsPrivate::QConfFileSettingsPrivate(QSettings::Format format, QSe
    initFormat();
 
    QString org = organization;
+
    if (org.isEmpty()) {
       setStatus(QSettings::AccessError);
       org = "Unknown Organization";
@@ -1160,6 +1178,7 @@ QConfFileSettingsPrivate::QConfFileSettingsPrivate(QSettings::Format format, QSe
    }
 
    QString systemPath = getPath(format, QSettings::SystemScope);
+
    if (! application.isEmpty()) {
 
       constexpr auto index_C = F_System | F_Application;
@@ -1268,9 +1287,11 @@ void QConfFileSettingsPrivate::remove(const QString &key)
    ensureSectionParsed(filePtr, prefix);
 
    ParsedSettingsMap::iterator i = filePtr->addedKeys.lowerBound(prefix);
+
    while (i != filePtr->addedKeys.end() && i.key().startsWith(prefix)) {
       i = filePtr->addedKeys.erase(i);
    }
+
    filePtr->addedKeys.remove(theKey);
 
    ParsedSettingsMap::const_iterator j = const_cast<const ParsedSettingsMap *>(&filePtr->originalKeys)->lowerBound(prefix);
@@ -1522,6 +1543,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       filePtr->originalKeys.clear();
 
       QFile file(filePtr->name);
+
       if (! createFile && ! file.open(QFile::ReadOnly)) {
          setStatus(QSettings::AccessError);
          return;
@@ -1533,6 +1555,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       if (file.isReadable() && fileInfo.size() != 0) {
 
 #ifdef Q_OS_DARWIN
+
          if (format == QSettings::NativeFormat) {
             ok = readPlistFile(filePtr->name, &filePtr->originalKeys);
          } else
@@ -1578,6 +1601,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       ParsedSettingsMap mergedKeys = filePtr->mergedKeyMap();
 
 #ifdef Q_OS_DARWIN
+
       if (format == QSettings::NativeFormat) {
          ok = writePlistFile(filePtr->name, mergedKeys);
 
@@ -1588,17 +1612,18 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
          QSaveFile sf(filePtr->name);
 
          if (! sf.open(QIODevice::WriteOnly)) {
-             setStatus(QSettings::AccessError);
-             ok = false;
+            setStatus(QSettings::AccessError);
+            ok = false;
 
          } else if (format <= QSettings::IniFormat) {
-             ok = writeIniFile(sf, mergedKeys);
+            ok = writeIniFile(sf, mergedKeys);
 
          } else {
             if (writeFunc) {
                QSettings::SettingsMap tempOriginalKeys;
 
                ParsedSettingsMap::const_iterator i = mergedKeys.constBegin();
+
                while (i != mergedKeys.constEnd()) {
                   tempOriginalKeys.insert(i.key(), i.value());
                   ++i;
@@ -1676,11 +1701,13 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
    equalsPos = -1;
 
    lineStart = dataPos;
+
    while (lineStart < dataLen && (charTraits[uint(uchar(data.at(lineStart)))] & Space)) {
       ++lineStart;
    }
 
    int i = lineStart;
+
    while (i < dataLen) {
       while (! (charTraits[uint(uchar(data.at(i)))] & Special)) {
          if (++i == dataLen) {
@@ -1689,6 +1716,7 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
       }
 
       char ch = data.at(i++);
+
       if (ch == '=') {
          if (! inQuotes && equalsPos == -1) {
             equalsPos = i - 1;
@@ -1697,6 +1725,7 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
       } else if (ch == '\n' || ch == '\r') {
          if (i == lineStart + 1) {
             ++lineStart;
+
          } else if (!inQuotes) {
             --i;
             goto break_out_of_outer_loop;
@@ -1708,6 +1737,7 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
 
             if (i < dataLen) {
                char ch2 = data.at(i);
+
                // \n, \r, \r\n, and \n\r are legitimate line terminators in INI files
                if ((ch == '\n' && ch2 == '\r') || (ch == '\r' && ch2 == '\n')) {
                   ++i;
@@ -1723,9 +1753,11 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
 
          if (i == lineStart + 1) {
             char ch;
+
             while (i < dataLen && ((ch = data.at(i) != '\n') && ch != '\r')) {
                ++i;
             }
+
             lineStart = i;
 
          } else if (!inQuotes) {
@@ -1740,25 +1772,19 @@ break_out_of_outer_loop:
    lineLen = i - lineStart;
    return lineLen > 0;
 }
-
-/*
-    Returns false on parse error. However, as many keys are read as
-    possible, so if the user doesn't check the status he will get the
-    most out of the file anyway.
-*/
 bool QConfFileSettingsPrivate::readIniFile(const QByteArray &data,
       UnparsedSettingsMap *unparsedIniSections)
 {
 #define FLUSH_CURRENT_SECTION() \
-    { \
-        QByteArray &sectionData = (*unparsedIniSections)[QSettingsKey(currentSection, \
-                                                                      IniCaseSensitivity, \
-                                                                      sectionPosition)]; \
-        if (! sectionData.isEmpty()) \
-            sectionData.append('\n'); \
-        sectionData += data.mid(currentSectionStart, lineStart - currentSectionStart); \
-        sectionPosition = ++position; \
-    }
+   { \
+      QByteArray &sectionData = (*unparsedIniSections)[QSettingsKey(currentSection, \
+                        IniCaseSensitivity, \
+                        sectionPosition)]; \
+      if (! sectionData.isEmpty()) \
+         sectionData.append('\n'); \
+      sectionData += data.mid(currentSectionStart, lineStart - currentSectionStart); \
+      sectionPosition = ++position; \
+   }
 
    QString currentSection;
    int currentSectionStart = 0;
@@ -1772,6 +1798,7 @@ bool QConfFileSettingsPrivate::readIniFile(const QByteArray &data,
 
    while (readIniLine(data, dataPos, lineStart, lineLen, equalsPos)) {
       char ch = data.at(lineStart);
+
       if (ch == '[') {
          FLUSH_CURRENT_SECTION();
 
@@ -1838,13 +1865,16 @@ bool QConfFileSettingsPrivate::readIniSection(const QSettingsKey &section, const
          if (ch != ';') {
             ok = false;
          }
+
          continue;
       }
 
       int keyEnd = equalsPos;
+
       while (keyEnd > lineStart && ((ch = data.at(keyEnd - 1)) == ' ' || ch == '\t')) {
          --keyEnd;
       }
+
       int valueStart = equalsPos + 1;
 
       QString key = section.originalCaseKey();
@@ -1853,8 +1883,10 @@ bool QConfFileSettingsPrivate::readIniSection(const QSettingsKey &section, const
       QString strValue;
 
       bool isStringList = iniUnescapedStringList(data, valueStart, lineStart + lineLen,
-                          strValue, strListValue, codec);
+                  strValue, strListValue, codec);
+
       QVariant variant;
+
       if (isStringList) {
          variant = stringListToVariantList(strListValue);
       } else {
@@ -1868,6 +1900,7 @@ bool QConfFileSettingsPrivate::readIniSection(const QSettingsKey &section, const
       */
       settingsMap->insert(QSettingsKey(key, keyIsLowercase ? Qt::CaseSensitive
             : IniCaseSensitivity, position), variant);
+
       ++position;
    }
 
@@ -1913,10 +1946,6 @@ struct QSettingsIniSection {
 
 typedef QMap<QString, QSettingsIniSection> IniMap;
 
-/*
-    This would be more straightforward if we didn't try to remember the original
-    key order in the .ini file, but we do.
-*/
 bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSettingsMap &map)
 {
    IniMap iniMap;
@@ -1944,6 +1973,7 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
       if (uint(key.position) < uint(iniSection.position)) {
          iniSection.position = key.position;
       }
+
       iniSection.keyMap[key] = j.value();
    }
 
@@ -1955,9 +1985,11 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
    for (i = iniMap.constBegin(); i != iniMap.constEnd(); ++i) {
       sections.append(QSettingsIniKey(i.key(), i.value().position));
    }
+
    std::sort(sections.begin(), sections.end());
 
    bool writeError = false;
+
    for (int j = 0; !writeError && j < sectionCount; ++j) {
       i = iniMap.constFind(sections.at(j));
       Q_ASSERT(i != iniMap.constEnd());
@@ -1978,11 +2010,13 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
       if (j != 0) {
          realSection.prepend(eol);
       }
+
       realSection += eol;
 
       device.write(realSection);
 
       const IniKeyMap &ents = i.value().keyMap;
+
       for (IniKeyMap::const_iterator j = ents.constBegin(); j != ents.constEnd(); ++j) {
          QByteArray block;
          iniEscapedKey(j.key(), block);
@@ -2002,13 +2036,15 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
          }
 
          block += eol;
+
          if (device.write(block) == -1) {
             writeError = true;
             break;
          }
       }
    }
-   return !writeError;
+
+   return ! writeError;
 }
 
 void QConfFileSettingsPrivate::ensureAllSectionsParsed(QConfFile *filePtr) const
@@ -2050,6 +2086,7 @@ void QConfFileSettingsPrivate::ensureSectionParsed(QConfFile *filePtr, const QSe
 
    } else {
       iter = filePtr->unparsedIniSections.begin();
+
       if (iter == filePtr->unparsedIniSections.end() || ! iter.key().isEmpty()) {
          return;
       }
@@ -2092,13 +2129,12 @@ QSettings::QSettings(QObject *parent)
 
 #ifdef Q_OS_DARWIN
      QCoreApplication::organizationDomain().isEmpty() ? QCoreApplication::organizationName()
-        : QCoreApplication::organizationDomain(),
+        : QCoreApplication::organizationDomain(), QCoreApplication::applicationName() ))
 #else
      QCoreApplication::organizationName().isEmpty() ? QCoreApplication::organizationDomain()
-        : QCoreApplication::organizationName(),
+        : QCoreApplication::organizationName(), QCoreApplication::applicationName() ))
 #endif
 
-     QCoreApplication::applicationName() ))
 {
    d_ptr->q_ptr = this;
 }
@@ -2110,8 +2146,10 @@ QSettings::~QSettings()
    if (d->pendingChanges) {
       try {
          d->flush();
+
       } catch (...) {
-         ; // do not flush and do not throw in the destructor
+         // do not flush and do not throw in the destructor
+         ;
       }
    }
 }
@@ -2170,6 +2208,7 @@ void QSettings::setIniCodec(QTextCodec *codec)
 void QSettings::setIniCodec(const char *codecName)
 {
    Q_D(QSettings);
+
    if (QTextCodec *codec = QTextCodec::codecForName(codecName)) {
       d->iniCodec = codec;
    }
@@ -2198,6 +2237,7 @@ void QSettings::beginGroup(const QString &prefix)
 void QSettings::endGroup()
 {
    Q_D(QSettings);
+
    if (d->groupStack.isEmpty()) {
       qWarning("QSettings::endGroup() No matching beginGroup()");
       return;
@@ -2205,6 +2245,7 @@ void QSettings::endGroup()
 
    QSettingsGroup group = d->groupStack.pop();
    int len = group.toString().size();
+
    if (len > 0) {
       d->groupPrefix.truncate(d->groupPrefix.size() - (len + 1));
    }
@@ -2341,6 +2382,7 @@ void QSettings::remove(const QString &key)
    } else {
       d->remove(theKey);
    }
+
    d->requestUpdate();
 }
 
@@ -2378,6 +2420,7 @@ bool QSettings::event(QEvent *event)
 QVariant QSettings::value(const QString &key, const QVariant &defaultValue) const
 {
    Q_D(const QSettings);
+
    if (key.isEmpty()) {
       qWarning("QSettings::value() Key can not be empty");
       return QVariant();

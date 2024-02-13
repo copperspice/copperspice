@@ -48,5 +48,4 @@ class Q_CORE_EXPORT QAbstractEventDispatcherPrivate
    QAbstractEventDispatcher *q_ptr;
 };
 
-
 #endif // QABSTRACTEVENTDISPATCHER_P_H

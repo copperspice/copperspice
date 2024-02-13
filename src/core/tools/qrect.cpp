@@ -175,6 +175,7 @@ QRect QRect::operator|(const QRect &r) const
    if (isNull()) {
       return r;
    }
+
    if (r.isNull()) {
       return *this;
    }
@@ -339,7 +340,7 @@ bool QRect::intersects(const QRect &r) const
 QDataStream &operator<<(QDataStream &stream, const QRect &rect)
 {
    stream << (qint32)rect.left()  << (qint32)rect.top()
-          << (qint32)rect.right() << (qint32)rect.bottom();
+         << (qint32)rect.right() << (qint32)rect.bottom();
 
    return stream;
 }
@@ -359,18 +360,19 @@ QDataStream &operator>>(QDataStream &stream, QRect &rect)
 
 QDebug operator<<(QDebug dbg, const QRect &r)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
-    dbg << "QRect" << '(';
-    QtDebugUtils::formatQRect(dbg, r);
-    dbg << ')';
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QRect" << '(';
+   QtDebugUtils::formatQRect(dbg, r);
+   dbg << ')';
 
-    return dbg;
+   return dbg;
 }
 
 QRectF QRectF::normalized() const
 {
    QRectF r = *this;
+
    if (r.m_w < 0) {
       r.m_x += r.m_w;
       r.m_w = -r.m_w;
@@ -394,6 +396,7 @@ bool QRectF::contains(const QPointF &p) const
    } else {
       r += m_w;
    }
+
    if (l == r) {
       // null rect
       return false;
@@ -671,6 +674,7 @@ bool QRectF::intersects(const QRectF &r) const
    } else {
       b2 += r.m_h;
    }
+
    if (t2 == b2) {
       // null rect
       return false;
@@ -715,11 +719,11 @@ QDataStream &operator>>(QDataStream &stream, QRectF &rectF)
 
 QDebug operator<<(QDebug dbg, const QRectF &r)
 {
-    QDebugStateSaver saver(dbg);
-    dbg.nospace();
-    dbg << "QRectF" << '(';
-    QtDebugUtils::formatQRect(dbg, r);
-    dbg << ')';
+   QDebugStateSaver saver(dbg);
+   dbg.nospace();
+   dbg << "QRectF" << '(';
+   QtDebugUtils::formatQRect(dbg, r);
+   dbg << ')';
 
-    return dbg;
+   return dbg;
 }

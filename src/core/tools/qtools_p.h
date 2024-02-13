@@ -32,15 +32,15 @@ namespace QtMiscUtils {
 
 constexpr inline char toHexUpper(uint value)
 {
-    return "0123456789ABCDEF"[value & 0xF];
+   return "0123456789ABCDEF"[value & 0xF];
 }
 
 constexpr inline char toHexLower(uint value)
 {
-    return "0123456789abcdef"[value & 0xF];
+   return "0123456789abcdef"[value & 0xF];
 }
 
-}
+}   // end namespace
 
 // typically need an extra bit for qNextPowerOfTwo when determining the next allocation size.
 constexpr int MaxAllocSize = (1 << (std::numeric_limits<int>::digits - 1)) - 1;

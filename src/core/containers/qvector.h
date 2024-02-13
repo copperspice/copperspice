@@ -76,7 +76,8 @@ class QVector
    QVector(QVector<T> &&other) = default;
 
    QVector(std::initializer_list<T> args)
-      : m_data(args) {}
+      : m_data(args)
+   { }
 
    template <class Input_Iterator>
    QVector(Input_Iterator first, Input_Iterator last)
@@ -148,7 +149,7 @@ class QVector
    }
 
    bool endsWith(const T &value) const {
-      return ! isEmpty() && m_data.back()== value;
+      return ! isEmpty() && m_data.back() == value;
    }
 
    QVector<T> &fill(const T &value, size_type size = -1);
@@ -283,19 +284,19 @@ class QVector
    }
 
    void removeLast() {
-     Q_ASSERT(! isEmpty());
-     m_data.pop_back();
+      Q_ASSERT(! isEmpty());
+      m_data.pop_back();
    }
 
    bool removeOne(const T &value) {
-     auto iter = std::find(m_data.begin(), m_data.end(), value);
+      auto iter = std::find(m_data.begin(), m_data.end(), value);
 
-     if (iter != m_data.end()) {
-       m_data.erase(iter);
-       return true;
-     }
+      if (iter != m_data.end()) {
+         m_data.erase(iter);
+         return true;
+      }
 
-     return false;
+      return false;
    }
 
    void replace(size_type i, const T &value);
@@ -343,7 +344,7 @@ class QVector
       return tmp;
    }
 
-    QList<T> toList() const;
+   QList<T> toList() const;
 
    std::vector<T> toStdVector() const {
       return m_data;
@@ -466,8 +467,8 @@ class QVector
       return *this;
    }
 
-   private:
-      std::vector<T> m_data;
+ private:
+   std::vector<T> m_data;
 };
 
 // constructors
@@ -562,7 +563,7 @@ inline void QVector<T>::move(size_type from, size_type to)
       std::rotate(m_data.begin() + from, m_data.begin() + from + 1, m_data.begin() + to + 1);
 
    } else {
-       // reverse
+      // reverse
       std::rotate(m_data.rend() - from - 1, m_data.rend() - from, m_data.rend() - to);
 
    }
@@ -619,7 +620,6 @@ inline T QVector<T>::takeLast()
 
    return value;
 }
-
 
 template <typename T>
 T QVector<T>::value(size_type i) const
@@ -694,44 +694,70 @@ class QVectorIterator
    QVector<T> c;
    const_iterator i;
 
-   public:
-      inline QVectorIterator(const QVector<T> &vector)
-         : c(vector), i(c.constBegin())
-      {
-      }
+ public:
+   QVectorIterator(const QVector<T> &vector)
+      : c(vector), i(c.constBegin())
+   {
+   }
 
-      inline QVectorIterator &operator=(const QVector<T> &vector) {
-         c = vector;
-         i = c.constBegin();
-         return *this;
-      }
+   QVectorIterator &operator=(const QVector<T> &vector) {
+      c = vector;
+      i = c.constBegin();
+      return *this;
+   }
 
-      inline void toFront() { i = c.constBegin(); }
-      inline void toBack() { i = c.constEnd(); }
-      inline bool hasNext() const { return i != c.constEnd(); }
-      inline const T &next() { return *i++; }
-      inline const T &peekNext() const { return *i; }
-      inline bool hasPrevious() const { return i != c.constBegin(); }
-      inline const T &previous() { return *--i; }
-      inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
+   void toFront() {
+      i = c.constBegin();
+   }
 
-      inline bool findNext(const T &value)  {
-         while (i != c.constEnd()) {
-            if (*i++ == value) {
-               return true;
-            }
+   void toBack() {
+      i = c.constEnd();
+   }
+
+   bool hasNext() const {
+      return i != c.constEnd();
+   }
+
+   const T &next() {
+      return *(i++);
+   }
+
+   const T &peekNext() const {
+      return *i;
+   }
+
+   bool hasPrevious() const {
+      return i != c.constBegin();
+   }
+
+   const T &previous() {
+      return *(--i);
+   }
+
+   const T &peekPrevious() const {
+      const_iterator p = i;
+      return *(--p);
+   }
+
+   bool findNext(const T &value) {
+      while (i != c.constEnd()) {
+         if (*(i++) == value) {
+            return true;
          }
-         return false;
       }
 
-      inline bool findPrevious(const T &value)   {
-         while (i != c.constBegin()) {
-            if (*(--i) == value)  {
-               return true;
-            }
+      return false;
+   }
+
+   bool findPrevious(const T &value) {
+      while (i != c.constBegin()) {
+         if (*(--i) == value)  {
+            return true;
          }
-         return false;
       }
+
+      return false;
+   }
 };
 
 template <class T>
@@ -747,66 +773,111 @@ class QMutableVectorIterator
       return const_iterator(n) != c->constEnd();
    }
 
-   public:
-      inline QMutableVectorIterator(QVector<T> &vector)
-         : c(&vector)
-      {
-         i = c->begin();
+ public:
+   QMutableVectorIterator(QVector<T> &vector)
+      : c(&vector)
+   {
+      i = c->begin();
+      n = c->end();
+   }
+
+   QMutableVectorIterator &operator=(QVector<T> &vector) {
+      c = &vector;
+      i = c->begin();
+      n = c->end();
+      return *this;
+   }
+
+   void toFront() {
+      i = c->begin();
+      n = c->end();
+   }
+
+   void toBack() {
+      i = c->end();
+      n = i;
+   }
+
+   bool hasNext() const {
+      return c->constEnd() != const_iterator(i);
+   }
+
+   T &next() {
+      n = i++;
+      return *n;
+   }
+
+   T &peekNext() const {
+      return *i;
+   }
+
+   bool hasPrevious() const {
+      return c->constBegin() != const_iterator(i);
+   }
+
+   T &previous() {
+      n = --i;
+      return *n;
+   }
+
+   T &peekPrevious() const {
+      iterator p = i;
+      return *(--p);
+   }
+
+   void remove() {
+      if (c->constEnd() != const_iterator(n)) {
+         i = c->erase(n);
          n = c->end();
       }
+   }
 
-      inline QMutableVectorIterator &operator=(QVector<T> &vector)
-      {
-         c = &vector;
-         i = c->begin();
-         n = c->end();
-         return *this;
+   void setValue(const T &value) const {
+      if (c->constEnd() != const_iterator(n)) {
+         *n = value;
       }
+   }
 
-      inline void toFront() { i = c->begin(); n = c->end(); }
-      inline void toBack() { i = c->end(); n = i; }
-      inline bool hasNext() const { return c->constEnd() != const_iterator(i); }
-      inline T &next() { n = i++; return *n; }
-      inline T &peekNext() const { return *i; }
-      inline bool hasPrevious() const { return c->constBegin() != const_iterator(i); }
-      inline T &previous() { n = --i; return *n; }
-      inline T &peekPrevious() const { iterator p = i; return *--p; }
+   T &value() {
+      Q_ASSERT(item_exists());
+      return *n;
+   }
 
-      inline void remove() {
-         if (c->constEnd() != const_iterator(n)) {
-            i = c->erase(n);
-            n = c->end();
+   const T &value() const {
+      Q_ASSERT(item_exists());
+      return *n;
+   }
+
+   void insert(const T &value) {
+      n = c->insert(i, value);
+      i = n;
+      ++i;
+   }
+
+   bool findNext(const T &value) {
+      while (c->constEnd() != const_iterator(n = i)) {
+
+         if (*(i++) == value) {
+            return true;
          }
       }
 
-      inline void setValue(const T &value) const { if (c->constEnd() != const_iterator(n)) *n = value; }
-      inline T &value() { Q_ASSERT(item_exists()); return *n; }
-      inline const T &value() const { Q_ASSERT(item_exists()); return *n; }
-      inline void insert(const T &value) { n = i = c->insert(i, value); ++i; }
+      return false;
+   }
 
-      inline bool findNext(const T &value) {
-         while (c->constEnd() != const_iterator(n = i)) {
+   bool findPrevious(const T &value) {
+      while (c->constBegin() != const_iterator(i)) {
+         n = --i;
 
-            if (*i++ == value) {
-               return true;
-            }
+         if (*n == value) {
+            return true;
          }
-
-         return false;
       }
 
-      inline bool findPrevious(const T &value) {
-         while (c->constBegin() != const_iterator(i)) {
+      n = c->end();
 
-            if (*(n = --i) == value) {
-               return true;
-            }
-         }
-
-         n = c->end();
-
-         return false;
-      }
+      return false;
+   }
 };
 
 #endif

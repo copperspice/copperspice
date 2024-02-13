@@ -50,8 +50,11 @@ struct QFreeListElement<void> {
 
    std::atomic<int> next;
 
-   inline void t() const { }
-   inline void t() { }
+   void t() const {
+   }
+
+   void t() {
+   }
 };
 
 struct QFreeListDefaultConstants {
@@ -84,6 +87,7 @@ class QFreeList
          if (x < size) {
             return i;
          }
+
          x -= size;
       }
 
@@ -162,7 +166,10 @@ inline typename QFreeList<T, ConstantsType>::ReferenceType QFreeList<T, Constant
 template <typename T, typename ConstantsType>
 inline int QFreeList<T, ConstantsType>::next()
 {
-   int id, newid, at;
+   int id;
+   int newid;
+   int at;
+
    ElementType *v;
 
    id = _next.load();
@@ -223,6 +230,5 @@ inline void QFreeList<T, ConstantsType>::release(int id)
    //        x & ConstantsType::IndexMask,
    //        (newid & ~ConstantsType::IndexMask) >> 24);
 }
-
 
 #endif // QFREELIST_P_H

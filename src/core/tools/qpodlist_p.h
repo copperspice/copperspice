@@ -42,20 +42,24 @@ class QPodList : public QVarLengthArray<T, Prealloc>
 
    void insert(int idx, const T &t) {
       const int sz = s++;
+
       if (s == a) {
          realloc(s, s << 1);
       }
+
       ::memmove(ptr + idx + 1, ptr + idx, (sz - idx) * sizeof(T));
       ptr[idx] = t;
    }
 
    void removeAll(const T &t) {
       int i = 0;
+
       for (int j = 0; j < s; ++j) {
          if (ptr[j] != t) {
             ptr[i++] = ptr[j];
          }
       }
+
       s = i;
    }
 

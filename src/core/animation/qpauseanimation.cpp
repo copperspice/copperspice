@@ -62,6 +62,7 @@ void QPauseAnimation::setDuration(int msecs)
       qWarning("QPauseAnimation::setDuration() Unable to set a negative duration");
       return;
    }
+
    Q_D(QPauseAnimation);
    d->duration = msecs;
 }

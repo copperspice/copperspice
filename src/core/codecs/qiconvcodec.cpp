@@ -80,27 +80,31 @@ QIconvCodec::QIconvCodec()
    }
 
 #if defined(Q_OS_DARWIN)
+
    if (ptr_iconv_open == nullptr) {
       QLibrary libiconv("/usr/lib/libiconv");
       libiconv.setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
       ptr_iconv_open = reinterpret_cast<Ptr_iconv_open>(libiconv.resolve("libiconv_open"));
-      if (!ptr_iconv_open) {
+
+      if (! ptr_iconv_open) {
          ptr_iconv_open = reinterpret_cast<Ptr_iconv_open>(libiconv.resolve("iconv_open"));
       }
 
       ptr_iconv = reinterpret_cast<Ptr_iconv>(libiconv.resolve("libiconv"));
-      if (!ptr_iconv) {
+
+      if (! ptr_iconv) {
          ptr_iconv = reinterpret_cast<Ptr_iconv>(libiconv.resolve("iconv"));
       }
 
       ptr_iconv_close = reinterpret_cast<Ptr_iconv_close>(libiconv.resolve("libiconv_close"));
-      if (!ptr_iconv_close) {
+
+      if (! ptr_iconv_close) {
          ptr_iconv_close = reinterpret_cast<Ptr_iconv_close>(libiconv.resolve("iconv_close"));
       }
 
       Q_ASSERT_X(ptr_iconv_open && ptr_iconv && ptr_iconv_close,
-                 "QIconvCodec::QIconvCodec()", "internal error, could not resolve the iconv functions");
+            "QIconvCodec::QIconvCodec()", "internal error, could not resolve the iconv functions");
 
 #       undef iconv_open
 #       define iconv_open ptr_iconv_open
@@ -109,6 +113,7 @@ QIconvCodec::QIconvCodec()
 #       undef iconv_close
 #       define iconv_close ptr_iconv_close
    }
+
 #endif
 }
 
@@ -126,6 +131,7 @@ QIconvCodec::IconvState::~IconvState()
    if (cd != reinterpret_cast<iconv_t>(-1)) {
       iconv_close(cd);
    }
+
    if (buffer != array) {
       delete[] buffer;
    }
@@ -137,6 +143,7 @@ void QIconvCodec::IconvState::saveChars(const char *c, int count)
       if (buffer != array) {
          delete[] buffer;
       }
+
       buffer = new char[bufferLen = count];
    }
 
@@ -336,6 +343,7 @@ static bool setByteOrder(iconv_t cd)
    if (iconv(cd, inBytesPtr, &inBytesLeft, &outBytes, &outBytesLeft) == (size_t) - 1) {
       return false;
    }
+
 #endif
 
    return true;
@@ -345,18 +353,18 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
 {
    (void) convState;
 
-/*
-   char   *inBytes;
-   char   *outBytes;
-   size_t inBytesLeft;
+   /*
+      char   *inBytes;
+      char   *outBytes;
+      size_t inBytesLeft;
 
-#if defined(GNU_LIBICONV)
-   const char **inBytesPtr = const_cast<const char **>(&inBytes);
-#else
-   char **inBytesPtr = &inBytes;
-#endif
+   #if defined(GNU_LIBICONV)
+      const char **inBytesPtr = const_cast<const char **>(&inBytes);
+   #else
+      char **inBytesPtr = &inBytes;
+   #endif
 
-*/
+   */
 
    // remove when enabled
    perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed for BOM");
@@ -379,6 +387,7 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
             return str.toLatin1();
          }
       }
+
       state = new IconvState(cd);
    }
 
@@ -397,82 +406,82 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
 
    // broom - resolve this code as soon as possible
 
-/*
-   size_t outBytesLeft = len;
-   QByteArray ba(outBytesLeft, Qt::NoData);
-   outBytes = ba.data();
+   /*
+      size_t outBytesLeft = len;
+      QByteArray ba(outBytesLeft, Qt::NoData);
+      outBytes = ba.data();
 
-   // now feed iconv() the real data
-   inBytes = const_cast<char *>(reinterpret_cast<const char *>(uc));
-   inBytesLeft = len * sizeof(QChar);
+      // now feed iconv() the real data
+      inBytes = const_cast<char *>(reinterpret_cast<const char *>(uc));
+      inBytesLeft = len * sizeof(QChar);
 
-   QByteArray in;
-   if (convState && convState->remainingChars) {
-      // we have one surrogate char to be prepended
-      in.resize(sizeof(QChar) + len);
-      inBytes = in.data();
+      QByteArray in;
+      if (convState && convState->remainingChars) {
+         // we have one surrogate char to be prepended
+         in.resize(sizeof(QChar) + len);
+         inBytes = in.data();
 
-      QChar remaining = convState->state_data[0];
-      memcpy(in.data(), &remaining, sizeof(QChar));
-      memcpy(in.data() + sizeof(QChar), uc, inBytesLeft);
+         QChar remaining = convState->state_data[0];
+         memcpy(in.data(), &remaining, sizeof(QChar));
+         memcpy(in.data() + sizeof(QChar), uc, inBytesLeft);
 
-      inBytesLeft += sizeof(QChar);
-      convState->remainingChars = 0;
-   }
+         inBytesLeft += sizeof(QChar);
+         convState->remainingChars = 0;
+      }
 
-   int invalidCount = 0;
-   while (inBytesLeft != 0) {
-      if (iconv(state->cd, inBytesPtr, &inBytesLeft, &outBytes, &outBytesLeft) == (size_t) - 1) {
-         if (errno == EINVAL && convState) {
-            // buffer ends in a surrogate
-            Q_ASSERT(inBytesLeft == 2);
-            convState->remainingChars = 1;
-            convState->state_data[0] = uc[len - 1].unicode();
-            break;
-         }
-
-         switch (errno) {
-            case EILSEQ:
-               ++invalidCount;
-            // fall through
-            case EINVAL: {
-               inBytes += sizeof(QChar);
-               inBytesLeft -= sizeof(QChar);
+      int invalidCount = 0;
+      while (inBytesLeft != 0) {
+         if (iconv(state->cd, inBytesPtr, &inBytesLeft, &outBytes, &outBytesLeft) == (size_t) - 1) {
+            if (errno == EINVAL && convState) {
+               // buffer ends in a surrogate
+               Q_ASSERT(inBytesLeft == 2);
+               convState->remainingChars = 1;
+               convState->state_data[0] = uc[len - 1].unicode();
                break;
             }
-            case E2BIG: {
-               int offset = ba.size() - outBytesLeft;
-               ba.resize(ba.size() * 2);
-               outBytes = ba.data() + offset;
-               outBytesLeft = ba.size() - offset;
-               break;
-            }
-            default: {
-               // note, cannot use qWarning() since we are implementing the codecForLocale :)
-               perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed");
 
-               // reset to initial state
-               iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
+            switch (errno) {
+               case EILSEQ:
+                  ++invalidCount;
+               // fall through
+               case EINVAL: {
+                  inBytes += sizeof(QChar);
+                  inBytesLeft -= sizeof(QChar);
+                  break;
+               }
+               case E2BIG: {
+                  int offset = ba.size() - outBytesLeft;
+                  ba.resize(ba.size() * 2);
+                  outBytes = ba.data() + offset;
+                  outBytesLeft = ba.size() - offset;
+                  break;
+               }
+               default: {
+                  // note, cannot use qWarning() since we are implementing the codecForLocale :)
+                  perror("QIconvCodec::convertFromUnicode: using Latin1 for conversion, iconv failed");
 
-               delete temporaryState;
-               return QString(uc, len).toLatin1();
+                  // reset to initial state
+                  iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
+
+                  delete temporaryState;
+                  return QString(uc, len).toLatin1();
+               }
             }
          }
       }
-   }
 
-   // reset to initial state
-   iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
-   setByteOrder(state->cd);
+      // reset to initial state
+      iconv(state->cd, 0, &inBytesLeft, 0, &outBytesLeft);
+      setByteOrder(state->cd);
 
-   ba.resize(ba.size() - outBytesLeft);
+      ba.resize(ba.size() - outBytesLeft);
 
-   if (convState) {
-      convState->invalidChars = invalidCount;
-   }
+      if (convState) {
+         convState->invalidChars = invalidCount;
+      }
 
-   delete temporaryState;
-*/
+      delete temporaryState;
+   */
 
    return ba;
 }
@@ -506,12 +515,15 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
 #endif
 
 #if defined(_XOPEN_UNIX)
+
    if (cd == (iconv_t) - 1) {
       codeset = nl_langinfo(CODESET);
+
       if (codeset) {
          cd = iconv_open(to ? to : codeset, from ? from : codeset);
       }
    }
+
 #endif
 
    if (cd == (iconv_t) - 1) {
@@ -529,17 +541,19 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
       // Get the first nonempty value from $LC_ALL, $LC_CTYPE, and $LANG environment variables.
       char *lang = qstrdup(qgetenv("LC_ALL").constData());
 
-      if (!lang || lang[0] == 0 || strcmp(lang, "C") == 0) {
+      if (! lang || lang[0] == 0 || strcmp(lang, "C") == 0) {
          if (lang) {
             delete [] lang;
          }
+
          lang = qstrdup(qgetenv("LC_CTYPE").constData());
       }
 
-      if (!lang || lang[0] == 0 || strcmp(lang, "C") == 0) {
+      if (! lang || lang[0] == 0 || strcmp(lang, "C") == 0) {
          if (lang) {
             delete [] lang;
          }
+
          lang = qstrdup(qgetenv("LANG").constData());
       }
 
@@ -570,7 +584,6 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
       if (cd == (iconv_t) - 1 && ctype && *ctype != 0 && strcmp (ctype, "C") != 0) {
          cd = iconv_open(to ? to : ctype, from ? from : ctype);
       }
-
 
       // 4. locale (ditto)
       if (cd == (iconv_t) - 1 && lang && *lang != 0) {

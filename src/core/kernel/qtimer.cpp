@@ -70,6 +70,7 @@ void QTimer::timerEvent(QTimerEvent *e)
       if (single) {
          stop();
       }
+
       emit timeout();
    }
 }
@@ -106,7 +107,7 @@ QSingleShotTimer::QSingleShotTimer(int msec, Qt::TimerType timerType, const QObj
 }
 
 QSingleShotTimer::QSingleShotTimer(int msec, Qt::TimerType timerType, const QObject *receiver,
-   std::unique_ptr<CSBentoAbstract> slotBento)
+      std::unique_ptr<CSBentoAbstract> slotBento)
    : QObject(QAbstractEventDispatcher::instance()), hasValidReceiver(receiver != nullptr),
      m_receiver(receiver), m_slotBento(std::move(slotBento))
 {
@@ -153,9 +154,8 @@ void QSingleShotTimer::timerEvent(QTimerEvent *)
    delete this;
 }
 
-
 void QTimer::singleShot_internal(int msec, Qt::TimerType timerType, const QObject *receiver,
-   std::unique_ptr<CSBentoAbstract> slotBento)
+      std::unique_ptr<CSBentoAbstract> slotBento)
 {
    new QSingleShotTimer(msec, timerType, receiver, std::move(slotBento));
 }
@@ -164,7 +164,6 @@ void QTimer::singleShot(int msec, const QObject *receiver, const QString &slotMe
 {
    singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);
 }
-
 
 void QTimer::singleShot(int msec, Qt::TimerType timerType, const QObject *receiver, const QString &slotMethod)
 {

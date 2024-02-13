@@ -35,23 +35,33 @@ class RefCount
  public:
    bool ref() {
       int count = atomic.load();
-      if (count == 0) { // !isSharable
+
+      if (count == 0) {
+         // !isSharable
          return false;
       }
-      if (count != -1) { // !isStatic
+
+      if (count != -1) {
+         // !isStatic
          atomic.ref();
       }
+
       return true;
    }
 
    bool deref() {
       int count = atomic.load();
-      if (count == 0) { // !isSharable
+
+      if (count == 0) {
+         // !isSharable
          return false;
       }
-      if (count == -1) { // isStatic
+
+      if (count == -1) {
+         // isStatic
          return true;
       }
+
       return atomic.deref();
    }
 

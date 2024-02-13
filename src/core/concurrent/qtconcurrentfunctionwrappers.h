@@ -36,9 +36,10 @@ class FunctionWrapper0
  public:
    typedef T (*FunctionPointerType)();
    typedef T result_type;
-   inline FunctionWrapper0(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) { }
 
+   FunctionWrapper0(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   { }
 
    T operator()() {
       return functionPointer();
@@ -55,8 +56,9 @@ class FunctionWrapper1
    typedef T (*FunctionPointerType)(U u);
    typedef T result_type;
 
-   inline FunctionWrapper1(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) { }
+   FunctionWrapper1(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   { }
 
    T operator()(U u) {
       return functionPointer(u);
@@ -72,12 +74,15 @@ class FunctionWrapper2
  public:
    typedef T (*FunctionPointerType)(U u, V v);
    typedef T result_type;
-   inline FunctionWrapper2(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) { }
 
-   inline T operator()(U u, V v) {
+   FunctionWrapper2(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   { }
+
+   T operator()(U u, V v) {
       return functionPointer(u, v);
    }
+
  private:
    FunctionPointerType functionPointer;
 };
@@ -88,10 +93,12 @@ class MemberFunctionWrapper
  public:
    typedef T (C::*FunctionPointerType)();
    typedef T result_type;
-   inline MemberFunctionWrapper(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) { }
 
-   inline T operator()(C &c) {
+   MemberFunctionWrapper(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   { }
+
+   T operator()(C &c) {
       return (c.*functionPointer)();
    }
 
@@ -106,8 +113,9 @@ class MemberFunctionWrapper1
    typedef T (C::*FunctionPointerType)(U);
    typedef T result_type;
 
-   inline MemberFunctionWrapper1(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) {
+   MemberFunctionWrapper1(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   {
    }
 
    T operator()(C &c, U u) {
@@ -124,8 +132,10 @@ class ConstMemberFunctionWrapper
  public:
    typedef T (C::*FunctionPointerType)() const;
    typedef T result_type;
-   inline ConstMemberFunctionWrapper(FunctionPointerType _functionPointer)
-      : functionPointer(_functionPointer) { }
+
+   ConstMemberFunctionWrapper(FunctionPointerType _functionPointer)
+      : functionPointer(_functionPointer)
+   { }
 
    T operator()(const C &c) const {
       return (c.*functionPointer)();

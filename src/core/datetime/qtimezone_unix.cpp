@@ -52,6 +52,7 @@ static QTzTimeZoneHash loadTzTimeZones()
    }
 
    QFile tzif(path);
+
    if (! tzif.open(QIODevice::ReadOnly)) {
       return QTzTimeZoneHash();
    }
@@ -71,9 +72,11 @@ static QTzTimeZoneHash loadTzTimeZones()
          QTzTimeZone zone;
 
          zone.country = QLocalePrivate::codeToCountry(parts.at(0));
+
          if (parts.size() > 3) {
             zone.comment = parts.at(3).toUtf8();
          }
+
          zonesHash.insert(parts.at(2).toUtf8(), zone);
       }
    }
@@ -88,7 +91,6 @@ static QTzTimeZoneHash *tzZones()
    static QTzTimeZoneHash retval(loadTzTimeZones());
    return &retval;
 }
-
 
 /*
     The following is copied and modified from tzfile.h which is in the public domain.
@@ -145,29 +147,31 @@ static QTzHeader parseTzHeader(QDataStream &stream, bool *ok)
    // Parse Version, 1 byte, before 2005 was '\0', since 2005 a '2', since 2013 a '3'
    stream >> ch;
    hdr.tzh_version = ch;
+
    if (stream.status() != QDataStream::Ok
-      || (hdr.tzh_version != '2' && hdr.tzh_version != '\0' && hdr.tzh_version != '3')) {
+         || (hdr.tzh_version != '2' && hdr.tzh_version != '\0' && hdr.tzh_version != '3')) {
       return hdr;
    }
 
    // Parse reserved space, 15 bytes
    stream.readRawData(hdr.tzh_reserved, 15);
+
    if (stream.status() != QDataStream::Ok) {
       return hdr;
    }
 
    // Parse rest of header, 6 x 4-byte transition counts
    stream >> hdr.tzh_ttisgmtcnt >> hdr.tzh_ttisstdcnt >> hdr.tzh_leapcnt >> hdr.tzh_timecnt
-      >> hdr.tzh_typecnt >> hdr.tzh_charcnt;
+         >> hdr.tzh_typecnt >> hdr.tzh_charcnt;
 
    // Check defined maximums
    if (stream.status() != QDataStream::Ok
-      || hdr.tzh_timecnt > TZ_MAX_TIMES
-      || hdr.tzh_typecnt > TZ_MAX_TYPES
-      || hdr.tzh_charcnt > TZ_MAX_CHARS
-      || hdr.tzh_leapcnt > TZ_MAX_LEAPS
-      || hdr.tzh_ttisgmtcnt > hdr.tzh_typecnt
-      || hdr.tzh_ttisstdcnt > hdr.tzh_typecnt) {
+         || hdr.tzh_timecnt > TZ_MAX_TIMES
+         || hdr.tzh_typecnt > TZ_MAX_TYPES
+         || hdr.tzh_charcnt > TZ_MAX_CHARS
+         || hdr.tzh_leapcnt > TZ_MAX_LEAPS
+         || hdr.tzh_ttisgmtcnt > hdr.tzh_typecnt
+         || hdr.tzh_ttisstdcnt > hdr.tzh_typecnt) {
 
       return hdr;
    }
@@ -185,6 +189,7 @@ static QVector<QTzTransition> parseTzTransitions(QDataStream &stream, int tzh_ti
       // Parse tzh_timecnt x 8-byte transition times
       for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
          stream >> transitions[i].tz_time;
+
          if (stream.status() != QDataStream::Ok) {
             transitions.resize(i);
          }
@@ -192,9 +197,11 @@ static QVector<QTzTransition> parseTzTransitions(QDataStream &stream, int tzh_ti
    } else {
       // Parse tzh_timecnt x 4-byte transition times
       int val;
+
       for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
          stream >> val;
          transitions[i].tz_time = val;
+
          if (stream.status() != QDataStream::Ok) {
             transitions.resize(i);
          }
@@ -205,6 +212,7 @@ static QVector<QTzTransition> parseTzTransitions(QDataStream &stream, int tzh_ti
    for (int i = 0; i < tzh_timecnt && stream.status() == QDataStream::Ok; ++i) {
       quint8 typeind;
       stream >> typeind;
+
       if (stream.status() == QDataStream::Ok) {
          transitions[i].tz_typeind = typeind;
       }
@@ -274,6 +282,7 @@ static QMap<int, QByteArray> parseTzAbbreviations(QDataStream &stream, int tzh_c
       for (int i = type.tz_abbrind; input.at(i) != '\0'; ++i) {
          abbrev.append(input.at(i));
       }
+
       // Have reached end of an abbreviation, so add to map
       map[type.tz_abbrind] = abbrev;
    }
@@ -321,6 +330,7 @@ static QVector<QTzType> parseTzIndicators(QDataStream &stream, const QVector<QTz
    // Parse tzh_ttisstdcnt x 1-byte standard/wall indicators
    for (int i = 0; i < tzh_ttisstdcnt && stream.status() == QDataStream::Ok; ++i) {
       stream >> temp;
+
       if (stream.status() == QDataStream::Ok) {
          result[i].tz_ttisstd = temp;
       }
@@ -329,6 +339,7 @@ static QVector<QTzType> parseTzIndicators(QDataStream &stream, const QVector<QTz
    // Parse tzh_ttisgmtcnt x 1-byte UTC/local indicators
    for (int i = 0; i < tzh_ttisgmtcnt && stream.status() == QDataStream::Ok; ++i) {
       stream >> temp;
+
       if (stream.status() == QDataStream::Ok) {
          result[i].tz_ttisgmt = temp;
       }
@@ -350,6 +361,7 @@ static QByteArray parseTzPosixRule(QDataStream &stream)
    }
 
    stream >> ch;
+
    while (ch != '\n' && stream.status() == QDataStream::Ok) {
       rule.append((char)ch);
       stream >> ch;
@@ -370,6 +382,7 @@ static QDate calculateDowDate(int year, int month, int dayOfWeek, int week)
    }
 
    date = date.addDays(week * 7);
+
    while (date.month() != month) {
       date = date.addDays(-7);
    }
@@ -437,6 +450,7 @@ static int parsePosixTime(const char *begin, const char *end)
       ++begin;
 
       min = qstrtoll(begin, &begin, 10, &ok);
+
       if (! ok || min < 0) {
          return INT_MIN;
       }
@@ -531,6 +545,7 @@ static QPair<QString, int> parsePosixZoneNameAndOffset(const char *&pos, const c
 
       pos = nameEnd;
    }
+
    if (nameEnd - nameBegin < 3) {
       return result;   // name must be at least 3 characters long
    }
@@ -552,6 +567,7 @@ static QPair<QString, int> parsePosixZoneNameAndOffset(const char *&pos, const c
    }
 
    result.first = QString::fromUtf8(nameBegin, nameEnd - nameBegin);
+
    if (zoneEnd > zoneBegin) {
       result.second = parsePosixOffset(zoneBegin, zoneEnd);
    }
@@ -562,7 +578,7 @@ static QPair<QString, int> parsePosixZoneNameAndOffset(const char *&pos, const c
 }
 
 static QVector<QTimeZonePrivate::Data> calculatePosixTransitions(const QByteArray &posixRule,
-   int startYear, int endYear, int lastTranMSecs)
+      int startYear, int endYear, int lastTranMSecs)
 {
    QVector<QTimeZonePrivate::Data> result;
 
@@ -570,6 +586,7 @@ static QVector<QTimeZonePrivate::Data> calculatePosixTransitions(const QByteArra
    if (startYear > 292278994) {
       startYear = 292278994;
    }
+
    if (endYear > 292278994) {
       endYear = 292278994;
    }
@@ -585,10 +602,12 @@ static QVector<QTimeZonePrivate::Data> calculatePosixTransitions(const QByteArra
       const char *begin = zoneinfo.constBegin();
 
       stdZone = parsePosixZoneNameAndOffset(begin, zoneinfo.constEnd());
+
       if (stdZone.second == INT_MIN) {
          stdZone.second = 0;     // reset to UTC if we failed to parse
       } else if (begin < zoneinfo.constEnd()) {
          dstZone = parsePosixZoneNameAndOffset(begin, zoneinfo.constEnd());
+
          if (dstZone.second == INT_MIN) {
             // if the dst offset isn't provided, it is 1 hour ahead of the standard offset
             dstZone.second = stdZone.second + (60 * 60);
@@ -654,6 +673,7 @@ static QVector<QTimeZonePrivate::Data> calculatePosixTransitions(const QByteArra
          } else if (stdData.atMSecsSinceEpoch > 0) {
             result << stdData;
          }
+
       } else if (dst < std) {
          result << dstData << stdData;
       } else {
@@ -695,6 +715,7 @@ QTimeZonePrivate *QTzTimeZonePrivate::clone()
 void QTzTimeZonePrivate::init(const QByteArray &ianaId)
 {
    QFile tzif;
+
    if (ianaId.isEmpty()) {
       // Open system tz
       tzif.setFileName("/etc/localtime");
@@ -722,29 +743,35 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
    bool ok = false;
 
    QTzHeader hdr = parseTzHeader(ds, &ok);
+
    if (! ok || ds.status() != QDataStream::Ok) {
       return;
    }
 
    QVector<QTzTransition> tranList = parseTzTransitions(ds, hdr.tzh_timecnt, false);
+
    if (ds.status() != QDataStream::Ok) {
       return;
    }
 
    QVector<QTzType> typeList = parseTzTypes(ds, hdr.tzh_typecnt);
+
    if (ds.status() != QDataStream::Ok) {
       return;
    }
 
    QMap<int, QByteArray> abbrevMap = parseTzAbbreviations(ds, hdr.tzh_charcnt, typeList);
+
    if (ds.status() != QDataStream::Ok) {
       return;
    }
+
    parseTzLeapSeconds(ds, hdr.tzh_leapcnt, false);
 
    if (ds.status() != QDataStream::Ok) {
       return;
    }
+
    typeList = parseTzIndicators(ds, typeList, hdr.tzh_ttisstdcnt, hdr.tzh_ttisgmtcnt);
 
    if (ds.status() != QDataStream::Ok) {
@@ -756,21 +783,25 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
       ok = false;
 
       QTzHeader hdr2 = parseTzHeader(ds, &ok);
+
       if (! ok || ds.status() != QDataStream::Ok) {
          return;
       }
 
       tranList = parseTzTransitions(ds, hdr2.tzh_timecnt, true);
+
       if (ds.status() != QDataStream::Ok) {
          return;
       }
 
       typeList = parseTzTypes(ds, hdr2.tzh_typecnt);
+
       if (ds.status() != QDataStream::Ok) {
          return;
       }
 
       abbrevMap = parseTzAbbreviations(ds, hdr2.tzh_charcnt, typeList);
+
       if (ds.status() != QDataStream::Ok) {
          return;
       }
@@ -799,6 +830,7 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
    // Translate the array index based tz_abbrind into list index
    m_abbreviations = abbrevMap.values();
    QList<int> abbrindList = abbrevMap.keys();
+
    for (int i = 0; i < typeList.size(); ++i) {
       typeList[i].tz_abbrind = abbrindList.indexOf(typeList.at(i).tz_abbrind);
    }
@@ -806,6 +838,7 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
    // Offsets are stored as total offset, want to know separate UTC and DST offsets
    // so find the first non-dst transition to use as base UTC Offset
    int utcOffset = 0;
+
    for (const QTzTransition &tran : tranList) {
       if (!typeList.at(tran.tz_typeind).tz_isdst) {
          utcOffset = typeList.at(tran.tz_typeind).tz_gmtoff;
@@ -815,6 +848,7 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
 
    // Now for each transition time calculate our rule and save them
    m_tranTimes.reserve(tranList.count());
+
    for (const QTzTransition &tz_tran : tranList) {
       QTzTransitionTime tran;
       QTzTransitionRule rule;
@@ -889,6 +923,7 @@ QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone:
    // Get current tran, if valid and is what we want, then use it
    const qint64 currentMSecs = QDateTime::currentMSecsSinceEpoch();
    QTimeZonePrivate::Data tran = data(currentMSecs);
+
    if (tran.atMSecsSinceEpoch != invalidMSecs()
          && ((timeType == QTimeZone::DaylightTime && tran.daylightTimeOffset != 0)
          || (timeType == QTimeZone::StandardTime && tran.daylightTimeOffset == 0))) {
@@ -897,6 +932,7 @@ QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone:
 
    // Otherwise get next tran and if valid and is what we want, then use it
    tran = nextTransition(currentMSecs);
+
    if (tran.atMSecsSinceEpoch != invalidMSecs()
          && ((timeType == QTimeZone::DaylightTime && tran.daylightTimeOffset != 0)
          || (timeType == QTimeZone::StandardTime && tran.daylightTimeOffset == 0))) {
@@ -905,6 +941,7 @@ QString QTzTimeZonePrivate::displayName(QTimeZone::TimeType timeType, QTimeZone:
 
    // Otherwise get prev tran and if valid and is what we want, then use it
    tran = previousTransition(currentMSecs);
+
    if (tran.atMSecsSinceEpoch != invalidMSecs()) {
       tran = previousTransition(tran.atMSecsSinceEpoch);
    }
@@ -1037,7 +1074,7 @@ QTimeZonePrivate::Data QTzTimeZonePrivate::nextTransition(qint64 afterMSecsSince
       const int year = QDateTime::fromMSecsSinceEpoch(afterMSecsSinceEpoch, QTimeZone::utc()).date().year();
 
       QVector<QTimeZonePrivate::Data> posixTrans =
-         calculatePosixTransitions(m_posixRule, year - 1, year + 1, m_tranTimes.last().atMSecsSinceEpoch);
+            calculatePosixTransitions(m_posixRule, year - 1, year + 1, m_tranTimes.last().atMSecsSinceEpoch);
 
       for (int i = 0; i < posixTrans.size(); ++i) {
          if (posixTrans.at(i).atMSecsSinceEpoch > afterMSecsSinceEpoch) {
@@ -1110,6 +1147,7 @@ QByteArray QTzTimeZonePrivate::systemTimeZoneId() const
       if (tzif.open(QIODevice::ReadOnly)) {
          // TODO QTextStream inefficient, replace later
          QTextStream ts(&tzif);
+
          if (! ts.atEnd()) {
             ianaId = ts.readLine().toUtf8();
          }
@@ -1178,4 +1216,3 @@ QList<QByteArray> QTzTimeZonePrivate::availableTimeZoneIds(QLocale::Country coun
    std::sort(result.begin(), result.end());
    return result;
 }
-

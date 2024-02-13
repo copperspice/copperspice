@@ -92,13 +92,13 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
 #ifdef Q_OS_WIN
    HANDLE fileHandle;
    HANDLE mapHandle;
-   QHash<uchar *, DWORD /* offset % AllocationGranularity */> maps;
+   QHash<uchar *, DWORD> maps;
 
    mutable int cachedFd;
    mutable DWORD fileAttrib;
 
 #else
-   QHash<uchar *, QPair<int /*offset % PageSize*/, size_t /*length + offset % PageSize*/> > maps;
+   QHash<uchar *, QPair<int, size_t>> maps;
 
 #endif
 
@@ -109,7 +109,9 @@ class QFSFileEnginePrivate : public QAbstractFileEnginePrivate
       IOReadCommand,
       IOWriteCommand
    };
-   LastIOCommand  lastIOCommand;
+
+   LastIOCommand lastIOCommand;
+
    bool lastFlushFailed;
    bool closeFileHandle;
 

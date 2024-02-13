@@ -115,7 +115,6 @@ bool ThreadEngineBarrier::releaseUnlessLast()
    while (true)  {
       int localCount = count.load();
 
-
       if (qAbs(localCount) == 1) {
          return false;
 
@@ -142,7 +141,8 @@ ThreadEngineBase::ThreadEngineBase()
    setAutoDelete(false);
 }
 
-ThreadEngineBase::~ThreadEngineBase() {
+ThreadEngineBase::~ThreadEngineBase()
+{
 }
 
 void ThreadEngineBase::startSingleThreaded()
@@ -177,7 +177,6 @@ void ThreadEngineBase::startBlocking()
    } catch (...) {
       handleException(QtConcurrent::UnhandledException());
    }
-
 
    if (throttled == false) {
       barrier.release();
@@ -241,10 +240,12 @@ bool ThreadEngineBase::startThreadInternal()
    }
 
    barrier.acquire();
+
    if (!threadPool->tryStart(this)) {
       barrier.release();
       return false;
    }
+
    return true;
 }
 
@@ -296,9 +297,9 @@ void ThreadEngineBase::run()
          }
       }
 
-
    } catch (QtConcurrent::Exception &e) {
       handleException(e);
+
    } catch (...) {
       handleException(QtConcurrent::UnhandledException());
    }
@@ -315,5 +316,5 @@ void ThreadEngineBase::handleException(const QtConcurrent::Exception &exception)
    }
 }
 
-} // namepsace QtConcurrent
+} // namespace QtConcurrent
 

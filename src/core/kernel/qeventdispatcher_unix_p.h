@@ -54,7 +54,6 @@ class QSockNotType
    fd_set select_fds;
    fd_set enabled_fds;
    fd_set pending_fds;
-
 };
 
 #ifdef check
@@ -130,7 +129,5 @@ class Q_CORE_EXPORT QEventDispatcherUNIXPrivate : public QAbstractEventDispatche
    QAtomicInt wakeUps;
    std::atomic<bool> interrupt;
 };
-
-
 
 #endif // QEVENTDISPATCHER_UNIX_P_H

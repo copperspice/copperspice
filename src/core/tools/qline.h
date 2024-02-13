@@ -178,8 +178,11 @@ Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QLine &line);
 class Q_CORE_EXPORT QLineF
 {
  public:
-
-   enum IntersectType { NoIntersection, BoundedIntersection, UnboundedIntersection };
+   enum IntersectType {
+      NoIntersection,
+      BoundedIntersection,
+      UnboundedIntersection,
+   };
 
    QLineF() = default;
 
@@ -341,7 +344,6 @@ inline QLine QLineF::toLine() const
 {
    return QLine(pt1.toPoint(), pt2.toPoint());
 }
-
 
 inline void QLineF::setP1(const QPointF &point)
 {

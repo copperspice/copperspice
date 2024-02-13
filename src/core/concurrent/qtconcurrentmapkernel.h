@@ -39,7 +39,8 @@ class MapKernel : public IterateKernel<Iterator, void>
  public:
    typedef void ReturnType;
    MapKernel(Iterator begin, Iterator end, MapFunctor _map)
-      : IterateKernel<Iterator, void>(begin, end), map(_map) {
+      : IterateKernel<Iterator, void>(begin, end), map(_map)
+   {
    }
 
    bool runIteration(Iterator it, int, void *) {
@@ -50,6 +51,7 @@ class MapKernel : public IterateKernel<Iterator, void>
    bool runIterations(Iterator sequenceBeginIterator, int beginIndex, int endIndex, void *) {
       Iterator it = sequenceBeginIterator;
       advance(it, beginIndex);
+
       for (int i = beginIndex; i < endIndex; ++i) {
          runIteration(it, i, 0);
          advance(it, 1);
@@ -60,7 +62,7 @@ class MapKernel : public IterateKernel<Iterator, void>
 };
 
 template <typename ReducedResultType, typename Iterator, typename MapFunctor, typename ReduceFunctor,
-          typename Reducer = ReduceKernel<ReduceFunctor, ReducedResultType, typename MapFunctor::result_type> >
+          typename Reducer = ReduceKernel<ReduceFunctor, ReducedResultType, typename MapFunctor::result_type>>
 
 class MappedReducedKernel : public IterateKernel<Iterator, ReducedResultType>
 {
@@ -98,6 +100,7 @@ class MappedReducedKernel : public IterateKernel<Iterator, ReducedResultType>
 
       Iterator it = sequenceBeginIterator;
       advance(it, begin);
+
       for (int i = begin; i < end; ++i) {
          results.vector.append(map(*(it)));
          advance(it, 1);
@@ -136,7 +139,8 @@ class MappedEachKernel : public IterateKernel<Iterator, typename MapFunctor::res
    typedef T ResultType;
 
    MappedEachKernel(Iterator begin, Iterator end, MapFunctor _map)
-      : IterateKernel<Iterator, T>(begin, end), map(_map) { }
+      : IterateKernel<Iterator, T>(begin, end), map(_map)
+   { }
 
    bool runIteration(Iterator it, int,  T *result) {
       *result = map(*it);
@@ -147,6 +151,7 @@ class MappedEachKernel : public IterateKernel<Iterator, typename MapFunctor::res
 
       Iterator it = sequenceBeginIterator;
       advance(it, begin);
+
       for (int i = begin; i < end; ++i) {
          runIteration(it, i, results + (i - begin));
          advance(it, 1);
@@ -168,10 +173,6 @@ inline ThreadEngineStarter<T> startMapped(Iterator begin, Iterator end, Functor 
    return startThreadEngine(new MappedEachKernel<Iterator, Functor>(begin, end, functor));
 }
 
-/*
-    The SequnceHolder class is used to hold a reference to the
-    sequence we are working on.
-*/
 template <typename Sequence, typename Base, typename Functor>
 struct SequenceHolder1 : public Base {
    SequenceHolder1(const Sequence &_sequence, Functor functor)
@@ -192,16 +193,15 @@ template <typename T, typename Sequence, typename Functor>
 inline ThreadEngineStarter<T> startMapped(const Sequence &sequence, Functor functor)
 {
    typedef SequenceHolder1<Sequence,
-           MappedEachKernel<typename Sequence::const_iterator , Functor>, Functor>
-           SequenceHolderType;
+         MappedEachKernel<typename Sequence::const_iterator, Functor>, Functor>
+         SequenceHolderType;
 
    return startThreadEngine(new SequenceHolderType(sequence, functor));
 }
 
 template <typename IntermediateType, typename ResultType, typename Sequence, typename MapFunctor, typename ReduceFunctor>
 inline ThreadEngineStarter<ResultType> startMappedReduced(const Sequence &sequence,
-      MapFunctor mapFunctor, ReduceFunctor reduceFunctor,
-      ReduceOptions options)
+      MapFunctor mapFunctor, ReduceFunctor reduceFunctor, ReduceOptions options)
 {
    typedef typename Sequence::const_iterator Iterator;
    typedef ReduceKernel<ReduceFunctor, ResultType, IntermediateType> Reducer;

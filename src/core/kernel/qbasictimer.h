@@ -32,10 +32,11 @@ class QObject;
 class Q_CORE_EXPORT QBasicTimer
 {
  public:
-   inline QBasicTimer() : id(0)
-   {}
+   QBasicTimer()
+      : id(0)
+   { }
 
-   inline ~QBasicTimer() {
+   ~QBasicTimer() {
       if (id) {
          stop();
       }

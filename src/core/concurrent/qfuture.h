@@ -42,13 +42,15 @@ class QFuture
       : d(QFutureInterface<T>::canceledResult()) {
    }
 
+   // internal
    explicit QFuture(QFutureInterface<T> *p)
-      // internal
-      : d(*p) {
+      : d(*p)
+   {
    }
 
    QFuture(const QFuture &other)
-      : d(other.d) {
+      : d(other.d)
+   {
    }
 
    ~QFuture() {
@@ -67,6 +69,7 @@ class QFuture
    void cancel() {
       d.cancel();
    }
+
    bool isCanceled() const {
       return d.isCanceled();
    }
@@ -74,15 +77,19 @@ class QFuture
    void setPaused(bool paused) {
       d.setPaused(paused);
    }
+
    bool isPaused() const {
       return d.isPaused();
    }
+
    void pause() {
       setPaused(true);
    }
+
    void resume() {
       setPaused(false);
    }
+
    void togglePaused() {
       d.togglePaused();
    }
@@ -90,9 +97,11 @@ class QFuture
    bool isStarted() const {
       return d.isStarted();
    }
+
    bool isFinished() const {
       return d.isFinished();
    }
+
    bool isRunning() const {
       return d.isRunning();
    }
@@ -100,24 +109,29 @@ class QFuture
    int resultCount() const {
       return d.resultCount();
    }
+
    int progressValue() const {
       return d.progressValue();
    }
+
    int progressMinimum() const {
       return d.progressMinimum();
    }
    int progressMaximum() const {
       return d.progressMaximum();
    }
+
    QString progressText() const {
       return d.progressText();
    }
+
    void waitForFinished() {
       d.waitForFinished();
    }
 
    inline T result() const;
    inline T resultAt(int index) const;
+
    bool isResultReadyAt(int index) const {
       return d.isResultReadyAt(index);
    }
@@ -125,6 +139,7 @@ class QFuture
    operator T() const {
       return result();
    }
+
    QList<T> results() const {
       return d.results();
    }
@@ -172,6 +187,7 @@ class QFuture
          if (other.index == -1) {
             return (future->isRunning() || (index < future->resultCount()));
          }
+
          return (index != other.index);
       }
 
@@ -242,16 +258,16 @@ class QFuture
       return const_iterator(this, -1);
    }
 
- private:
-   friend class QFutureWatcher<T>;
-
  public:
    // Warning: the d pointer is not documented and is considered private.
    mutable QFutureInterface<T> d;
+
+ private:
+   friend class QFutureWatcher<T>;
 };
 
 template <typename T>
-inline QFuture<T> & QFuture<T>::operator=(const QFuture<T> &other)
+inline QFuture<T> &QFuture<T>::operator=(const QFuture<T> &other)
 {
    d = other.d;
    return *this;
@@ -281,42 +297,73 @@ template <class T>
 class QFutureIterator
 {
    typedef typename QFuture<T>::const_iterator const_iterator;
+
    QFuture<T> c;
    const_iterator i;
 
-   public:
-      inline QFutureIterator(const QFuture<T> &future)
-         : c(future), i(c.constBegin()) {}
+ public:
+   QFutureIterator(const QFuture<T> &future)
+      : c(future), i(c.constBegin())
+   { }
 
-      inline QFutureIterator &operator=(const QFuture<T> &future)
-         { c = future; i = c.constBegin(); return *this; }
+   QFutureIterator &operator=(const QFuture<T> &future) {
+      c = future;
+      i = c.constBegin();
+      return *this;
+   }
 
-      inline void toFront() { i = c.constBegin(); }
-      inline void toBack() { i = c.constEnd(); }
-      inline bool hasNext() const { return i != c.constEnd(); }
-      inline const T &next() { return *i++; }
-      inline const T &peekNext() const { return *i; }
-      inline bool hasPrevious() const { return i != c.constBegin(); }
-      inline const T &previous() { return *--i; }
-      inline const T &peekPrevious() const { const_iterator p = i; return *--p; }
+   void toFront() {
+      i = c.constBegin();
+   }
 
-      inline bool findNext(const T &value)  {
-         while (i != c.constEnd()) {
-            if (*i++ == value) {
-               return true;
-            }
+   void toBack() {
+      i = c.constEnd();
+   }
+
+   bool hasNext() const {
+      return i != c.constEnd();
+   }
+
+   const T &next() {
+      return *i++;
+   }
+
+   const T &peekNext() const {
+      return *i;
+   }
+
+   bool hasPrevious() const {
+      return i != c.constBegin();
+   }
+
+   const T &previous() {
+      return *--i;
+   }
+
+   const T &peekPrevious() const {
+      const_iterator p = i;
+      return *--p;
+   }
+
+   bool findNext(const T &value)  {
+      while (i != c.constEnd()) {
+         if (*i++ == value) {
+            return true;
          }
-         return false;
       }
 
-      inline bool findPrevious(const T &value)   {
-         while (i != c.constBegin()) {
-            if (*(--i) == value)  {
-               return true;
-            }
+      return false;
+   }
+
+   bool findPrevious(const T &value)   {
+      while (i != c.constBegin()) {
+         if (*(--i) == value)  {
+            return true;
          }
-         return false;
       }
+
+      return false;
+   }
 };
 
 template <>
@@ -324,11 +371,14 @@ class QFuture<void>
 {
  public:
    QFuture()
-      : d(QFutureInterface<void>::canceledResult()) {
+      : d(QFutureInterface<void>::canceledResult())
+   {
    }
+
+   // internal
    explicit QFuture(QFutureInterfaceBase *p)
-      // internal
-      : d(*p) {
+      : d(*p)
+   {
    }
 
    QFuture(const QFuture &other)
@@ -348,7 +398,6 @@ class QFuture<void>
       return (d != other.d);
    }
 
-
    template <typename T>
    QFuture(const QFuture<T> &other)
       : d(other.d) {
@@ -363,6 +412,7 @@ class QFuture<void>
    void cancel() {
       d.cancel();
    }
+
    bool isCanceled() const {
       return d.isCanceled();
    }
@@ -370,15 +420,19 @@ class QFuture<void>
    void setPaused(bool paused) {
       d.setPaused(paused);
    }
+
    bool isPaused() const {
       return d.isPaused();
    }
+
    void pause() {
       setPaused(true);
    }
+
    void resume() {
       setPaused(false);
    }
+
    void togglePaused() {
       d.togglePaused();
    }
@@ -386,9 +440,11 @@ class QFuture<void>
    bool isStarted() const {
       return d.isStarted();
    }
+
    bool isFinished() const {
       return d.isFinished();
    }
+
    bool isRunning() const {
       return d.isRunning();
    }
@@ -396,18 +452,23 @@ class QFuture<void>
    int resultCount() const {
       return d.resultCount();
    }
+
    int progressValue() const {
       return d.progressValue();
    }
+
    int progressMinimum() const {
       return d.progressMinimum();
    }
+
    int progressMaximum() const {
       return d.progressMaximum();
    }
+
    QString progressText() const {
       return d.progressText();
    }
+
    void waitForFinished() {
       d.waitForFinished();
    }

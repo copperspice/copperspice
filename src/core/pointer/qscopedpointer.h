@@ -33,8 +33,7 @@ class QScopedPointer : public QUniquePointer<T, Deleter>
    using QUniquePointer<T, Deleter>::QUniquePointer;
 
    QScopedPointer(QScopedPointer && other) = delete;
-   QScopedPointer & operator=(QScopedPointer && other) = delete;
-
+   QScopedPointer &operator=(QScopedPointer && other) = delete;
 };
 
 // free functions
@@ -45,7 +44,8 @@ void swap(QScopedPointer<T, Deleter> &ptr1, QScopedPointer<T, Deleter> &ptr2) no
 }
 
 template <typename T, typename... Args, typename = typename std::enable_if_t<! std::is_array_v<T>>>
-QScopedPointer<T> QMakeScoped(Args &&... args) {
+QScopedPointer<T> QMakeScoped(Args && ... args)
+{
    return CsPointer::make_unique<T>(std::forward<Args>(args)...);
 }
 

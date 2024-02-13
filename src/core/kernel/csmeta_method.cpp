@@ -28,8 +28,8 @@
 #include <qmetaobject.h>
 
 QMetaMethod::QMetaMethod(const QString &typeName, const QString &signature, std::vector<QString> paramNames,
-                  QMetaMethod::Access access, QMetaMethod::MethodType methodType,
-                  QMetaMethod::Attributes attributes, QMetaObject *obj)
+      QMetaMethod::Access access, QMetaMethod::MethodType methodType,
+      QMetaMethod::Attributes attributes, QMetaObject *obj)
    : m_typeName(typeName), m_signature(signature), m_paramNames(paramNames.begin(), paramNames.end()),
      m_access(access), m_methodType(methodType), m_attributes(attributes), m_metaObject(obj)
 {
@@ -246,4 +246,3 @@ const QString &QMetaMethod::typeName() const
 {
    return m_typeName;
 }
-

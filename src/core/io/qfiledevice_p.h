@@ -34,7 +34,7 @@ class QFileDevicePrivate : public QIODevicePrivate
 {
    Q_DECLARE_PUBLIC(QFileDevice)
 
-protected:
+ protected:
    QFileDevicePrivate();
    ~QFileDevicePrivate();
 
@@ -63,10 +63,12 @@ inline bool QFileDevicePrivate::ensureFlushed() const
    // because certain const functions need to call it.
    if (lastWasWrite) {
       const_cast<QFileDevicePrivate *>(this)->lastWasWrite = false;
+
       if (! const_cast<QFileDevice *>(q_func())->flush()) {
          return false;
       }
    }
+
    return true;
 }
 

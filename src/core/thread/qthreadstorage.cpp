@@ -104,6 +104,7 @@ QThreadStorageData::~QThreadStorageData()
    DEBUG_MSG("QThreadStorageData: Released id %d", id);
 
    QMutexLocker locker(mutex());
+
    if (destructors()) {
       (*destructors())[id] = nullptr;
    }
@@ -112,6 +113,7 @@ QThreadStorageData::~QThreadStorageData()
 void **QThreadStorageData::get() const
 {
    QThreadData *data = QThreadData::current();
+
    if (!data) {
       qWarning("QThreadStorage::get() Only valid from threads started with QThread");
       return nullptr;
@@ -122,6 +124,7 @@ void **QThreadStorageData::get() const
    if (tls.size() <= id) {
       tls.resize(id + 1);
    }
+
    void **v = &tls[id];
 
    DEBUG_MSG("QThreadStorageData: Returning storage %d, data %p, for thread %p",
@@ -133,17 +136,20 @@ void **QThreadStorageData::get() const
 void **QThreadStorageData::set(void *p)
 {
    QThreadData *data = QThreadData::current();
+
    if (! data) {
       qWarning("QThreadStorage::set() Only valid from threads started with QThread");
       return nullptr;
    }
 
    QVector<void *> &tls = data->tls;
+
    if (tls.size() <= id) {
       tls.resize(id + 1);
    }
 
    void *&value = tls[id];
+
    // delete any previous data
    if (value != nullptr) {
       DEBUG_MSG("QThreadStorageData: Deleting previous storage %d, data %p, for thread %p",
@@ -173,6 +179,7 @@ void **QThreadStorageData::set(void *p)
 void QThreadStorageData::finish(void **p)
 {
    QVector<void *> *tls = reinterpret_cast<QVector<void *> *>(p);
+
    if (! tls || tls->isEmpty() || !mutex()) {
       return;   // nothing to do
    }
@@ -203,6 +210,7 @@ void QThreadStorageData::finish(void **p)
 
          continue;
       }
+
       destructor(q); //crash here might mean the thread exited after qthreadstorage was destroyed
 
       if (tls->size() > i) {

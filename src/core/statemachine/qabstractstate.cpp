@@ -57,6 +57,7 @@ QStateMachine *QAbstractStatePrivate::machine() const
       if (QStateMachine *mach = dynamic_cast<QStateMachine *>(par)) {
          return mach;
       }
+
       par = par->parent();
    }
 
@@ -103,7 +104,6 @@ QAbstractState::QAbstractState(QState *parent)
 {
    d_ptr->q_ptr = this;
 }
-
 
 QAbstractState::QAbstractState(QAbstractStatePrivate &dd, QState *parent)
    : QObject(parent), d_ptr(&dd)

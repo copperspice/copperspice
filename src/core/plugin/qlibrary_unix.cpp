@@ -63,12 +63,14 @@ QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
    }
 
 # ifdef Q_OS_DARWIN
+
    if (! fullVersion.isEmpty()) {
       suffixes << QString(".%1.bundle").formatArg(fullVersion);
       suffixes << QString(".%1.dylib").formatArg(fullVersion);
    } else {
       suffixes << ".bundle" << ".dylib";
    }
+
 #endif
 
    return suffixes;
@@ -106,7 +108,6 @@ bool QLibraryHandle::load_sys()
 
    int dlFlags = 0;
 
-
    int loadHints = this->loadHints();
 
    if (loadHints & QLibrary::ResolveAllSymbolsHint) {
@@ -123,9 +124,11 @@ bool QLibraryHandle::load_sys()
    }
 
 #if defined(RTLD_DEEPBIND)
+
    if (loadHints & QLibrary::DeepBindHint) {
       dlFlags |= RTLD_DEEPBIND;
    }
+
 #endif
 
    // Provide access to RTLD_NODELETE flag on Unix
@@ -135,9 +138,11 @@ bool QLibraryHandle::load_sys()
    // library is reloaded with dlopen() at a later time.
 
 #ifdef RTLD_NODELETE
+
    if (loadHints & QLibrary::PreventUnloadHint) {
       dlFlags |= RTLD_NODELETE;
    }
+
 #endif
 
    // If the filename is an absolute path then we want to try that first as it is most likely
@@ -154,11 +159,13 @@ bool QLibraryHandle::load_sys()
    }
 
    bool retry = true;
+
    for (int prefix = 0; retry && !pHnd && prefix < prefixes.size(); prefix++) {
       for (int suffix = 0; retry && !pHnd && suffix < suffixes.size(); suffix++) {
-         if (!prefixes.at(prefix).isEmpty() && name.startsWith(prefixes.at(prefix))) {
+         if (! prefixes.at(prefix).isEmpty() && name.startsWith(prefixes.at(prefix))) {
             continue;
          }
+
          if (!suffixes.at(suffix).isEmpty() && name.endsWith(suffixes.at(suffix))) {
             continue;
          }
@@ -185,15 +192,15 @@ bool QLibraryHandle::load_sys()
             // This is all because dlerror is flawed and cannot tell us the reason why it failed.
             retry = false;
          }
-
       }
    }
 
 #ifdef Q_OS_DARWIN
+
    if (!pHnd) {
       QByteArray utf8Bundle = fileName.toUtf8();
       QCFType<CFURLRef> bundleUrl = CFURLCreateFromFileSystemRepresentation(nullptr,
-            reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
+                  reinterpret_cast<const UInt8 *>(utf8Bundle.data()), utf8Bundle.length(), true);
 
       QCFType<CFBundleRef> bundle = CFBundleCreate(nullptr, bundleUrl);
 
@@ -207,6 +214,7 @@ bool QLibraryHandle::load_sys()
          pHnd = dlopen(QFile::encodeName(attempt).constData(), dlFlags);
       }
    }
+
 #endif
 
 #endif // ! defined(QT_NO_DYNAMIC_LIBRARY)
@@ -217,6 +225,7 @@ bool QLibraryHandle::load_sys()
    } else {
       errorString = QLibrary::tr("Unable to load library %1: %2").formatArg(fileName).formatArg(qdlerror());
    }
+
    return (pHnd != nullptr);
 }
 
@@ -225,9 +234,10 @@ bool QLibraryHandle::unload_sys()
 #if ! defined(QT_NO_DYNAMIC_LIBRARY)
 
    if (dlclose(pHnd)) {
-      errorString = QLibrary::tr("Can not unload library %1: %2").formatArg(fileName).formatArg(qdlerror());
+      errorString = QLibrary::tr("Unable to unload library %1: %2").formatArg(fileName).formatArg(qdlerror());
       return false;
    }
+
 #endif
    errorString.clear();
    return true;
@@ -259,11 +269,10 @@ void *QLibraryHandle::resolve_sys(const QString &symbol)
 #endif
 
    if (! address) {
-      errorString = QLibrary::tr("Can not resolve symbol \"%1\" in %2:%3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
+      errorString = QLibrary::tr("Unable to resolve symbol \"%1\" in %2:%3").formatArg(symbol).formatArg(fileName).formatArg(qdlerror());
    } else {
       errorString.clear();
    }
 
    return address;
 }
-

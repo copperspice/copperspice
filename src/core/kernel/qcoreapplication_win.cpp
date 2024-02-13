@@ -55,7 +55,7 @@ Q_CORE_EXPORT int qWinAppCmdShow()                         // get main window sh
    GetStartupInfo(&startupInfo);
 
    return (startupInfo.dwFlags & STARTF_USESHOWWINDOW)
-          ? startupInfo.wShowWindow : SW_SHOWDEFAULT;
+         ? startupInfo.wShowWindow : SW_SHOWDEFAULT;
 }
 
 Q_CORE_EXPORT QString qAppFileName()
@@ -160,14 +160,14 @@ Q_CORE_EXPORT void qWinMsgHandler(QtMsgType t, QStringView str)
 }
 
 
-/*****************************************************************************
-  qWinMain() - Initializes Windows. Called from WinMain() in qtmain_win.cpp
- *****************************************************************************/
-
+//  qWinMain(), initializes Windows. Called from WinMain() in qtmain_win.cpp
 
 Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdParam,
-                  int cmdShow, int &argc, QVector<char *> &argv)
+      int cmdShow, int &argc, QVector<char *> &argv)
 {
+   (void) instance;
+   (void) prevInstance;
+
    static bool already_called = false;
 
    if (already_called) {
@@ -176,7 +176,7 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
    }
 
    already_called = true;
-   usingWinMain = true;
+   usingWinMain   = true;
 
    // Install default debug handler
    csInstallMsgHandler(qWinMsgHandler);
@@ -186,9 +186,6 @@ Q_CORE_EXPORT void qWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cm
 
    appCmdShow = cmdShow;
 
-   // Ignore Windows parameters
-   (void) instance;
-   (void) prevInstance;
 }
 
 void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerId)
@@ -221,13 +218,14 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
 
 #if defined(Q_OS_WIN)
 
-// Convenience functions for convert WM_* messages into human readable strings,
-// including a nifty QDebug operator<< for simpel QDebug() << msg output.
+// Convenience functions to convert WM_* messages into human readable strings,
+// including a QDebug operator<< for simple QDebug() << msg output
 
-#include <windowsx.h>
 #include <qdebug.h>
 
-#if !defined(GET_X_LPARAM)
+#include <windowsx.h>
+
+#if ! defined(GET_X_LPARAM)
 #  define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
 #  define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif
@@ -543,10 +541,12 @@ static const char *findWMstr(uint msg)
 {
    uint i = 0;
    const char *result = nullptr;
+
    // Known WM_'s
    while (knownWM[i].str && (knownWM[i].WM != msg)) {
       ++i;
    }
+
    result = knownWM[i].str;
    return result;
 }
@@ -576,14 +576,17 @@ QString flagCheck(uint actual, ...)
    QString result;
    int count = 0;
    FLAG_STRING_STRUCT v;
+
    while ((v = va_arg(ap, FLAG_STRING_STRUCT)).str) {
       if ((actual & v.value) == v.value) {
          if (count++) {
             result += QLatin1String(" | ");
          }
+
          result += QString::fromLatin1(v.str);
       }
    }
+
    va_end(ap);
    return result;
 }
@@ -598,8 +601,10 @@ QString valueCheck(uint actual, ...)
 
    QString result;
    FLAG_STRING_STRUCT v;
+
    while ((v = va_arg(ap, FLAG_STRING_STRUCT)).str && (actual != v.value))
       ;
+
    result = QString::fromLatin1(v.str);
 
    va_end(ap);
@@ -634,12 +639,13 @@ QString decodeMSG(const MSG &msg)
    switch (msg.message) {
 
 #ifdef WM_ACTIVATE
+
       case WM_ACTIVATE: {
          QString activation = valueCheck(wParam,
-                                         FLAG_STRING(WA_ACTIVE,      "Activate"),
-                                         FLAG_STRING(WA_INACTIVE,    "Deactivate"),
-                                         FLAG_STRING(WA_CLICKACTIVE, "Activate by mouseclick"),
-                                         FLAG_STRING());
+               FLAG_STRING(WA_ACTIVE,      "Activate"),
+               FLAG_STRING(WA_INACTIVE,    "Deactivate"),
+               FLAG_STRING(WA_CLICKACTIVE, "Activate by mouseclick"),
+               FLAG_STRING());
 
          parameters = QString("%1 Hwnd (0x%2)").formatArg(activation).formatArg(reinterpret_cast<quintptr>(msg.hwnd), 8, 16, '0');
       }
@@ -648,105 +654,130 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_CAPTURECHANGED
+
       case WM_CAPTURECHANGED:
          parameters = QString("Hwnd gaining capture (0x%1)").formatArg(lParam, 8, 16, '0');
          break;
 #endif
 
 #ifdef WM_CREATE
+
       case WM_CREATE: {
          LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
          QString styles = flagCheck(lpcs->style,
-                                    FLGSTR(WS_BORDER),
-                                    FLGSTR(WS_CAPTION),
-                                    FLGSTR(WS_CHILD),
-                                    FLGSTR(WS_CLIPCHILDREN),
-                                    FLGSTR(WS_CLIPSIBLINGS),
-                                    FLGSTR(WS_DISABLED),
-                                    FLGSTR(WS_DLGFRAME),
-                                    FLGSTR(WS_GROUP),
-                                    FLGSTR(WS_HSCROLL),
-                                    FLGSTR(WS_OVERLAPPED),
+               FLGSTR(WS_BORDER),
+               FLGSTR(WS_CAPTION),
+               FLGSTR(WS_CHILD),
+               FLGSTR(WS_CLIPCHILDREN),
+               FLGSTR(WS_CLIPSIBLINGS),
+               FLGSTR(WS_DISABLED),
+               FLGSTR(WS_DLGFRAME),
+               FLGSTR(WS_GROUP),
+               FLGSTR(WS_HSCROLL),
+               FLGSTR(WS_OVERLAPPED),
+
 #if defined(WS_OVERLAPPEDWINDOW) && (WS_OVERLAPPEDWINDOW != 0)
-                                    FLGSTR(WS_OVERLAPPEDWINDOW),
+               FLGSTR(WS_OVERLAPPEDWINDOW),
 #endif
 
 #ifdef WS_ICONIC
-                                    FLGSTR(WS_ICONIC),
+               FLGSTR(WS_ICONIC),
 #endif
-                                    FLGSTR(WS_MAXIMIZE),
-                                    FLGSTR(WS_MAXIMIZEBOX),
-                                    FLGSTR(WS_MINIMIZE),
-                                    FLGSTR(WS_MINIMIZEBOX),
-                                    FLGSTR(WS_OVERLAPPEDWINDOW),
-                                    FLGSTR(WS_POPUP),
+
+               FLGSTR(WS_MAXIMIZE),
+               FLGSTR(WS_MAXIMIZEBOX),
+               FLGSTR(WS_MINIMIZE),
+               FLGSTR(WS_MINIMIZEBOX),
+               FLGSTR(WS_OVERLAPPEDWINDOW),
+               FLGSTR(WS_POPUP),
+
 #ifdef WS_POPUPWINDOW
-                                    FLGSTR(WS_POPUPWINDOW),
+               FLGSTR(WS_POPUPWINDOW),
 #endif
-                                    FLGSTR(WS_SIZEBOX),
-                                    FLGSTR(WS_SYSMENU),
-                                    FLGSTR(WS_TABSTOP),
-                                    FLGSTR(WS_THICKFRAME),
+               FLGSTR(WS_SIZEBOX),
+               FLGSTR(WS_SYSMENU),
+               FLGSTR(WS_TABSTOP),
+               FLGSTR(WS_THICKFRAME),
+
 #ifdef WS_TILED
-                                    FLGSTR(WS_TILED),
+               FLGSTR(WS_TILED),
 #endif
+
 #ifdef WS_TILEDWINDOW
-                                    FLGSTR(WS_TILEDWINDOW),
+               FLGSTR(WS_TILEDWINDOW),
 #endif
-                                    FLGSTR(WS_VISIBLE),
-                                    FLGSTR(WS_VSCROLL),
-                                    FLAG_STRING());
+               FLGSTR(WS_VISIBLE),
+               FLGSTR(WS_VSCROLL),
+               FLAG_STRING());
 
          QString exStyles = flagCheck(lpcs->dwExStyle,
+
 #ifdef WS_EX_ACCEPTFILES
-                                      FLGSTR(WS_EX_ACCEPTFILES),
+               FLGSTR(WS_EX_ACCEPTFILES),
 #endif
+
 #ifdef WS_EX_APPWINDOW
-                                      FLGSTR(WS_EX_APPWINDOW),
+               FLGSTR(WS_EX_APPWINDOW),
 #endif
-                                      FLGSTR(WS_EX_CLIENTEDGE),
-                                      FLGSTR(WS_EX_DLGMODALFRAME),
+               FLGSTR(WS_EX_CLIENTEDGE),
+               FLGSTR(WS_EX_DLGMODALFRAME),
+
 #ifdef WS_EX_LEFT
-                                      FLGSTR(WS_EX_LEFT),
+               FLGSTR(WS_EX_LEFT),
 #endif
-                                      FLGSTR(WS_EX_LEFTSCROLLBAR),
+
+               FLGSTR(WS_EX_LEFTSCROLLBAR),
+
 #ifdef WS_EX_LTRREADING
-                                      FLGSTR(WS_EX_LTRREADING),
+               FLGSTR(WS_EX_LTRREADING),
 #endif
+
 #ifdef WS_EX_MDICHILD
-                                      FLGSTR(WS_EX_MDICHILD),
+               FLGSTR(WS_EX_MDICHILD),
 #endif
+
 #ifdef WS_EX_NOACTIVATE
-                                      FLGSTR(WS_EX_NOACTIVATE),
+               FLGSTR(WS_EX_NOACTIVATE),
 #endif
+
 #ifdef WS_EX_NOANIMATION
-                                      FLGSTR(WS_EX_NOANIMATION),
+               FLGSTR(WS_EX_NOANIMATION),
+
 #endif
-                                      FLGSTR(WS_EX_NOPARENTNOTIFY),
-                                      FLGSTR(WS_EX_OVERLAPPEDWINDOW),
+
+               FLGSTR(WS_EX_NOPARENTNOTIFY),
+               FLGSTR(WS_EX_OVERLAPPEDWINDOW),
+
 #ifdef WS_EX_PALETTEWINDOW
-                                      FLGSTR(WS_EX_PALETTEWINDOW),
+               FLGSTR(WS_EX_PALETTEWINDOW),
 #endif
+
 #ifdef WS_EX_RIGHT
-                                      FLGSTR(WS_EX_RIGHT),
+               FLGSTR(WS_EX_RIGHT),
 #endif
+
 #ifdef WS_EX_RIGHTSCROLLBAR
-                                      FLGSTR(WS_EX_RIGHTSCROLLBAR),
+               FLGSTR(WS_EX_RIGHTSCROLLBAR),
 #endif
+
 #ifdef WS_EX_RTLREADING
-                                      FLGSTR(WS_EX_RTLREADING),
+               FLGSTR(WS_EX_RTLREADING),
 #endif
-                                      FLGSTR(WS_EX_STATICEDGE),
-                                      FLGSTR(WS_EX_TOOLWINDOW),
-                                      FLGSTR(WS_EX_TOPMOST),
+
+               FLGSTR(WS_EX_STATICEDGE),
+               FLGSTR(WS_EX_TOOLWINDOW),
+               FLGSTR(WS_EX_TOPMOST),
+
 #ifdef WS_EX_TRANSPARENT
-                                      FLGSTR(WS_EX_TRANSPARENT),
+               FLGSTR(WS_EX_TRANSPARENT),
 #endif
-                                      FLGSTR(WS_EX_WINDOWEDGE),
+               FLGSTR(WS_EX_WINDOWEDGE),
+
 #ifdef WS_EX_CAPTIONOKBTN
-                                      FLGSTR(WS_EX_CAPTIONOKBTN),
+               FLGSTR(WS_EX_CAPTIONOKBTN),
 #endif
-                                      FLAG_STRING());
+
+               FLAG_STRING());
 
          QString className;
 
@@ -768,37 +799,39 @@ QString decodeMSG(const MSG &msg)
          }
 
          parameters = QString("x,y(%1,%2) w,h(%3,%4) className(%5) windowName(%6) parent(0x%7) style(%8) exStyle(%9)")
-                .formatArg(lpcs->x, 4).formatArg(lpcs->y, 4).formatArg(lpcs->cx, 4).formatArg(lpcs->cy, 4)
-                .formatArg(className).formatArg(windowName).formatArg(reinterpret_cast<quintptr>(lpcs->hwndParent), 8, 16, '0')
-                .formatArg(styles).formatArg(exStyles);
+               .formatArg(lpcs->x, 4).formatArg(lpcs->y, 4).formatArg(lpcs->cx, 4).formatArg(lpcs->cy, 4)
+               .formatArg(className).formatArg(windowName).formatArg(reinterpret_cast<quintptr>(lpcs->hwndParent), 8, 16, '0')
+               .formatArg(styles).formatArg(exStyles);
       }
       break;
 
 #endif
 
 #ifdef WM_DESTROY
+
       case WM_DESTROY:
          parameters = QString("Destroy hwnd (0x%1)").formatArg(reinterpret_cast<quintptr>(msg.hwnd), 8, 16, '0');
          break;
 #endif
 
 #ifdef WM_IME_NOTIFY
+
       case WM_IME_NOTIFY: {
          QString imnCommand = valueCheck(wParam,
-                                         FLGSTR(IMN_CHANGECANDIDATE),
-                                         FLGSTR(IMN_CLOSECANDIDATE),
-                                         FLGSTR(IMN_CLOSESTATUSWINDOW),
-                                         FLGSTR(IMN_GUIDELINE),
-                                         FLGSTR(IMN_OPENCANDIDATE),
-                                         FLGSTR(IMN_OPENSTATUSWINDOW),
-                                         FLGSTR(IMN_SETCANDIDATEPOS),
-                                         FLGSTR(IMN_SETCOMPOSITIONFONT),
-                                         FLGSTR(IMN_SETCOMPOSITIONWINDOW),
-                                         FLGSTR(IMN_SETCONVERSIONMODE),
-                                         FLGSTR(IMN_SETOPENSTATUS),
-                                         FLGSTR(IMN_SETSENTENCEMODE),
-                                         FLGSTR(IMN_SETSTATUSWINDOWPOS),
-                                         FLAG_STRING());
+               FLGSTR(IMN_CHANGECANDIDATE),
+               FLGSTR(IMN_CLOSECANDIDATE),
+               FLGSTR(IMN_CLOSESTATUSWINDOW),
+               FLGSTR(IMN_GUIDELINE),
+               FLGSTR(IMN_OPENCANDIDATE),
+               FLGSTR(IMN_OPENSTATUSWINDOW),
+               FLGSTR(IMN_SETCANDIDATEPOS),
+               FLGSTR(IMN_SETCOMPOSITIONFONT),
+               FLGSTR(IMN_SETCOMPOSITIONWINDOW),
+               FLGSTR(IMN_SETCONVERSIONMODE),
+               FLGSTR(IMN_SETOPENSTATUS),
+               FLGSTR(IMN_SETSENTENCEMODE),
+               FLGSTR(IMN_SETSTATUSWINDOWPOS),
+               FLAG_STRING());
 
          parameters = QString("Command(%1 : 0x%2)").formatArg(imnCommand).formatArg(lParam, 8, 16, '0');
       }
@@ -806,27 +839,29 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_IME_SETCONTEXT
+
       case WM_IME_SETCONTEXT: {
          bool fSet = (BOOL)wParam;
          DWORD fShow = (DWORD)lParam;
 
          QString showFlgs = flagCheck(fShow,
 #ifdef ISC_SHOWUICOMPOSITIONWINDOW
-                                      FLGSTR(ISC_SHOWUICOMPOSITIONWINDOW),
+               FLGSTR(ISC_SHOWUICOMPOSITIONWINDOW),
 #endif
 
 #ifdef ISC_SHOWUIGUIDWINDOW
-                                      FLGSTR(ISC_SHOWUIGUIDWINDOW),
+               FLGSTR(ISC_SHOWUIGUIDWINDOW),
 #endif
 
 #ifdef ISC_SHOWUISOFTKBD
-                                      FLGSTR(ISC_SHOWUISOFTKBD),
+               FLGSTR(ISC_SHOWUISOFTKBD),
 #endif
-                                      FLGSTR(ISC_SHOWUICANDIDATEWINDOW),
-                                      FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 1),
-                                      FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 2),
-                                      FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 3),
-                                      FLAG_STRING());
+
+               FLGSTR(ISC_SHOWUICANDIDATEWINDOW),
+               FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 1),
+               FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 2),
+               FLGSTR(ISC_SHOWUICANDIDATEWINDOW << 3),
+               FLAG_STRING());
 
          parameters = QString("Input context(%1) Show flags(%2)").formatArg(fSet ? QString("Active") : QString("Inactive")).formatArg(showFlgs);
       }
@@ -834,12 +869,14 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_KILLFOCUS
+
       case WM_KILLFOCUS:
          parameters = QString("Hwnd gaining keyboard focus (0x%1)").formatArg(wParam, 8, 16, '0');
          break;
 #endif
 
 #ifdef WM_CHAR
+
       case WM_CHAR:
 #endif
 
@@ -862,19 +899,21 @@ QString decodeMSG(const MSG &msg)
          bool transState  = (lKeyData & 0x80000000);    // Bit 31
 
          parameters = QString("Virtual-key(0x%1) Scancode(%2) Rep(%3) Contextcode(%4), Prev state(%5), Trans state(%6)")
-                  .formatArg(nVirtKey, 0, 16).formatArg(scanCode).formatArg(repCount).formatArg(contextCode)
-                  .formatArg(prevState).formatArg(transState);
+               .formatArg(nVirtKey, 0, 16).formatArg(scanCode).formatArg(repCount).formatArg(contextCode)
+               .formatArg(prevState).formatArg(transState);
       }
       break;
 #endif
 
 #ifdef WM_INPUTLANGCHANGE
+
       case WM_INPUTLANGCHANGE:
          parameters = QLatin1String("Keyboard layout changed");
          break;
 #endif
 
 #ifdef WM_NCACTIVATE
+
       case WM_NCACTIVATE: {
          parameters = (msg.wParam ? QString("Active Titlebar") : QString("Inactive Titlebar"));
       }
@@ -882,84 +921,104 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_MOUSEACTIVATE
+
       case WM_MOUSEACTIVATE: {
          QString mouseMsg = QString::fromLatin1(findWMstr(HIWORD(lParam)));
          parameters = QString("TLW(0x%1) HittestCode(0x%2) MouseMsg(%3)")
-                  .formatArg(wParam, 8, 16, '0').formatArg(LOWORD(lParam)).formatArg(mouseMsg);
+               .formatArg(wParam, 8, 16, '0').formatArg(LOWORD(lParam)).formatArg(mouseMsg);
 
       }
       break;
 #endif
 
 #ifdef WM_MOUSELEAVE
+
       case WM_MOUSELEAVE:
          break; // wParam & lParam not used
 #endif
+
 #ifdef WM_MOUSEHOVER
+
       case WM_MOUSEHOVER:
 #endif
+
 #ifdef WM_MOUSEWHEEL
       case WM_MOUSEWHEEL:
 #endif
+
 #ifdef WM_MOUSEHWHEEL
       case WM_MOUSEHWHEEL:
 #endif
+
 #ifdef WM_LBUTTONDBLCLK
       case WM_LBUTTONDBLCLK:
 #endif
+
 #ifdef WM_LBUTTONDOWN
       case WM_LBUTTONDOWN:
 #endif
+
 #ifdef WM_LBUTTONUP
       case WM_LBUTTONUP:
 #endif
+
 #ifdef WM_MBUTTONDBLCLK
       case WM_MBUTTONDBLCLK:
 #endif
+
 #ifdef WM_MBUTTONDOWN
       case WM_MBUTTONDOWN:
 #endif
+
 #ifdef WM_MBUTTONUP
       case WM_MBUTTONUP:
 #endif
+
 #ifdef WM_RBUTTONDBLCLK
       case WM_RBUTTONDBLCLK:
 #endif
+
 #ifdef WM_RBUTTONDOWN
       case WM_RBUTTONDOWN:
 #endif
+
 #ifdef WM_RBUTTONUP
       case WM_RBUTTONUP:
 #endif
+
 #ifdef WM_MOUSEMOVE
       case WM_MOUSEMOVE: {
          QString vrtKeys = flagCheck(wParam,
-                                     FLGSTR(MK_CONTROL),
-                                     FLGSTR(MK_LBUTTON),
-                                     FLGSTR(MK_MBUTTON),
-                                     FLGSTR(MK_RBUTTON),
-                                     FLGSTR(MK_SHIFT),
+               FLGSTR(MK_CONTROL),
+               FLGSTR(MK_LBUTTON),
+               FLGSTR(MK_MBUTTON),
+               FLGSTR(MK_RBUTTON),
+               FLGSTR(MK_SHIFT),
 #ifdef MK_XBUTTON1
-                                     FLGSTR(MK_XBUTTON1),
+               FLGSTR(MK_XBUTTON1),
 #endif
+
 #ifdef MK_XBUTTON2
-                                     FLGSTR(MK_XBUTTON2),
+               FLGSTR(MK_XBUTTON2),
 #endif
-                                     FLAG_STRING());
+
+               FLAG_STRING());
 
          parameters = QString("x,y(%1,%2) Virtual Keys(%3)").formatArg(GET_X_LPARAM(lParam), 4)
-                  .formatArg(GET_Y_LPARAM(lParam), 4).formatArg(vrtKeys);
+               .formatArg(GET_Y_LPARAM(lParam), 4).formatArg(vrtKeys);
       }
       break;
 #endif
 
 #ifdef WM_MOVE
+
       case WM_MOVE:
          parameters = QString("x,y(%1,%2)").formatArg(LOWORD(lParam), 4).formatArg(HIWORD(lParam), 4);
          break;
 #endif
 
 #if defined(WM_PAINT) && defined(WM_ERASEBKGND)
+
       case WM_ERASEBKGND:
       case WM_PAINT:
          parameters = QString("hdc(0x%1)").formatArg(wParam, 8, 16, '0');
@@ -967,11 +1026,13 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_QUERYNEWPALETTE
+
       case WM_QUERYNEWPALETTE:
          break; // lParam & wParam are unused
 #endif
 
 #ifdef WM_SETCURSOR
+
       case WM_SETCURSOR: {
          QString mouseMsg = QString::fromLatin1(findWMstr(HIWORD(lParam)));
          parameters = QString("HitTestCode(0x%1) MouseMsg(%2)").formatArg(LOWORD(lParam), 0, 16).formatArg(mouseMsg);
@@ -980,29 +1041,32 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_SETFOCUS
+
       case WM_SETFOCUS:
          parameters = QString("Lost Focus (0x%1)").formatArg(wParam, 8, 16, '0');
          break;
 #endif
 
 #ifdef WM_SETTEXT
-      case WM_SETTEXT:
-         {
-            QString tmp = QString::fromStdWString(std::wstring((const wchar_t *)lParam));
-            parameters = QString("Set Text (%1)").formatArg(tmp);
-            break;
-         }
+
+      case WM_SETTEXT: {
+         QString tmp = QString::fromStdWString(std::wstring((const wchar_t *)lParam));
+         parameters = QString("Set Text (%1)").formatArg(tmp);
+         break;
+      }
+
 #endif
 
 #ifdef WM_SIZE
+
       case WM_SIZE: {
          QString showMode = valueCheck(wParam,
-                                       FLGSTR(SIZE_MAXHIDE),
-                                       FLGSTR(SIZE_MAXIMIZED),
-                                       FLGSTR(SIZE_MAXSHOW),
-                                       FLGSTR(SIZE_MINIMIZED),
-                                       FLGSTR(SIZE_RESTORED),
-                                       FLAG_STRING());
+               FLGSTR(SIZE_MAXHIDE),
+               FLGSTR(SIZE_MAXIMIZED),
+               FLGSTR(SIZE_MAXSHOW),
+               FLGSTR(SIZE_MINIMIZED),
+               FLGSTR(SIZE_RESTORED),
+               FLAG_STRING());
 
          parameters = QString("w,h(%1,%2) showmode(%3)").formatArg(LOWORD(lParam), 4).formatArg(HIWORD(lParam), 4).formatArg(showMode);
 
@@ -1011,45 +1075,52 @@ QString decodeMSG(const MSG &msg)
 #endif
 
 #ifdef WM_WINDOWPOSCHANGED
+
       case WM_WINDOWPOSCHANGED: {
          LPWINDOWPOS winPos = (LPWINDOWPOS)lParam;
 
          if (!winPos) {
             break;
          }
+
          QString hwndAfter = valueCheck(quint64(winPos->hwndInsertAfter),
-                                        FLAG_STRING((qptrdiff)HWND_BOTTOM,    "HWND_BOTTOM"),
-                                        FLAG_STRING((qptrdiff)HWND_NOTOPMOST, "HWND_NOTOPMOST"),
-                                        FLAG_STRING((qptrdiff)HWND_TOP,       "HWND_TOP"),
-                                        FLAG_STRING((qptrdiff)HWND_TOPMOST,   "HWND_TOPMOST"),
-                                        FLAG_STRING());
+               FLAG_STRING((qptrdiff)HWND_BOTTOM,    "HWND_BOTTOM"),
+               FLAG_STRING((qptrdiff)HWND_NOTOPMOST, "HWND_NOTOPMOST"),
+               FLAG_STRING((qptrdiff)HWND_TOP,       "HWND_TOP"),
+               FLAG_STRING((qptrdiff)HWND_TOPMOST,   "HWND_TOPMOST"),
+               FLAG_STRING());
+
          if (hwndAfter.isEmpty()) {
             hwndAfter = QString::number((quintptr)winPos->hwndInsertAfter, 16);
          }
 
          QString flags = flagCheck(winPos->flags,
-                                   FLGSTR(SWP_DRAWFRAME),
-                                   FLGSTR(SWP_FRAMECHANGED),
-                                   FLGSTR(SWP_HIDEWINDOW),
-                                   FLGSTR(SWP_NOACTIVATE),
+               FLGSTR(SWP_DRAWFRAME),
+               FLGSTR(SWP_FRAMECHANGED),
+               FLGSTR(SWP_HIDEWINDOW),
+               FLGSTR(SWP_NOACTIVATE),
+
 #ifdef SWP_NOCOPYBITS
-                                   FLGSTR(SWP_NOCOPYBITS),
+               FLGSTR(SWP_NOCOPYBITS),
 #endif
-                                   FLGSTR(SWP_NOMOVE),
-                                   FLGSTR(SWP_NOOWNERZORDER),
-                                   FLGSTR(SWP_NOREDRAW),
-                                   FLGSTR(SWP_NOREPOSITION),
+
+               FLGSTR(SWP_NOMOVE),
+               FLGSTR(SWP_NOOWNERZORDER),
+               FLGSTR(SWP_NOREDRAW),
+               FLGSTR(SWP_NOREPOSITION),
+
 #ifdef SWP_NOSENDCHANGING
-                                   FLGSTR(SWP_NOSENDCHANGING),
+                     FLGSTR(SWP_NOSENDCHANGING),
 #endif
-                                   FLGSTR(SWP_NOSIZE),
-                                   FLGSTR(SWP_NOZORDER),
-                                   FLGSTR(SWP_SHOWWINDOW),
-                                   FLAG_STRING());
+
+                FLGSTR(SWP_NOSIZE),
+                FLGSTR(SWP_NOZORDER),
+                FLGSTR(SWP_SHOWWINDOW),
+                FLAG_STRING());
 
          parameters = QString("x,y(%1,%2) w,h(%3,%4) flags(%5) hwndAfter(%6)")
-                  .formatArg(winPos->x, 4).formatArg(winPos->y, 4).formatArg(winPos->cx, 4).formatArg(winPos->cy, 4)
-                  .formatArg(flags).formatArg(hwndAfter);
+               .formatArg(winPos->x, 4).formatArg(winPos->y, 4).formatArg(winPos->cx, 4).formatArg(winPos->cy, 4)
+               .formatArg(flags).formatArg(hwndAfter);
       }
       break;
 #endif
@@ -1070,11 +1141,9 @@ QString decodeMSG(const MSG &msg)
    return message;
 }
 
-
 QDebug operator<<(QDebug dbg, const MSG &msg)
 {
    dbg << decodeMSG(msg);
    return dbg.nospace();
 }
 #endif
-

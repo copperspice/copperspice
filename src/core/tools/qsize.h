@@ -147,7 +147,6 @@ inline QSize QSize::scaled(int width, int height, Qt::AspectRatioMode mode) cons
    return scaled(QSize(width, height), mode);
 }
 
-
 inline int &QSize::rwidth()
 {
    return wd;
@@ -364,7 +363,6 @@ inline QSizeF QSizeF::scaled(qreal width, qreal height, Qt::AspectRatioMode mode
    return scaled(QSizeF(width, height), mode);
 }
 
-
 inline qreal &QSizeF::rwidth()
 {
    return wd;
@@ -456,6 +454,5 @@ inline QSize QSizeF::toSize() const
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QSizeF &sizeF);
-
 
 #endif // QSIZE_H

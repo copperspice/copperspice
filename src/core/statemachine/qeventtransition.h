@@ -71,5 +71,4 @@ class Q_CORE_EXPORT QEventTransition : public QAbstractTransition
 
 #endif //QT_NO_STATEMACHINE
 
-
 #endif

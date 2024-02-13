@@ -406,13 +406,13 @@ inline void QRect::moveBottomLeft(const QPoint &point)
 
 inline void QRect::moveCenter(const QPoint &point)
 {
-    int w = m_x2 - m_x1;
-    int h = m_y2 - m_y1;
+   int w = m_x2 - m_x1;
+   int h = m_y2 - m_y1;
 
-    m_x1 = point.x() - w/2;
-    m_y1 = point.y() - h/2;
-    m_x2 = m_x1 + w;
-    m_y2 = m_y1 + h;
+   m_x1 = point.x() - w / 2;
+   m_y1 = point.y() - h / 2;
+   m_x2 = m_x1 + w;
+   m_y2 = m_y1 + h;
 }
 
 inline void QRect::getRect(int *x, int *y, int *width, int *height) const
@@ -520,44 +520,44 @@ inline bool operator!=(const QRect &rect1, const QRect &rect2)
 
 inline QRect operator+(const QRect &rect, const QMargins &margins)
 {
-    return QRect(QPoint(rect.left() - margins.left(), rect.top() - margins.top()),
-                 QPoint(rect.right() + margins.right(), rect.bottom() + margins.bottom()));
+   return QRect(QPoint(rect.left() - margins.left(), rect.top() - margins.top()),
+         QPoint(rect.right() + margins.right(), rect.bottom() + margins.bottom()));
 }
 
 inline QRect operator+(const QMargins &margins, const QRect &rect)
 {
-    return QRect(QPoint(rect.left() - margins.left(), rect.top() - margins.top()),
-                 QPoint(rect.right() + margins.right(), rect.bottom() + margins.bottom()));
+   return QRect(QPoint(rect.left() - margins.left(), rect.top() - margins.top()),
+         QPoint(rect.right() + margins.right(), rect.bottom() + margins.bottom()));
 }
 
 inline QRect operator-(const QRect &lhs, const QMargins &rhs)
 {
-    return QRect(QPoint(lhs.left() + rhs.left(), lhs.top() + rhs.top()),
-                 QPoint(lhs.right() - rhs.right(), lhs.bottom() - rhs.bottom()));
+   return QRect(QPoint(lhs.left() + rhs.left(), lhs.top() + rhs.top()),
+         QPoint(lhs.right() - rhs.right(), lhs.bottom() - rhs.bottom()));
 }
 
 inline QRect QRect::marginsAdded(const QMargins &margins) const
 {
-    return QRect(QPoint(m_x1 - margins.left(), m_y1 - margins.top()),
-                 QPoint(m_x2 + margins.right(), m_y2 + margins.bottom()));
+   return QRect(QPoint(m_x1 - margins.left(), m_y1 - margins.top()),
+         QPoint(m_x2 + margins.right(), m_y2 + margins.bottom()));
 }
 
 inline QRect QRect::marginsRemoved(const QMargins &margins) const
 {
-    return QRect(QPoint(m_x1 + margins.left(), m_y1 + margins.top()),
-                 QPoint(m_x2 - margins.right(), m_y2 - margins.bottom()));
+   return QRect(QPoint(m_x1 + margins.left(), m_y1 + margins.top()),
+         QPoint(m_x2 - margins.right(), m_y2 - margins.bottom()));
 }
 
 inline QRect &QRect::operator+=(const QMargins &margins)
 {
-    *this = marginsAdded(margins);
-    return *this;
+   *this = marginsAdded(margins);
+   return *this;
 }
 
 inline QRect &QRect::operator-=(const QMargins &margins)
 {
-    *this = marginsRemoved(margins);
-    return *this;
+   *this = marginsRemoved(margins);
+   return *this;
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QRect &);
@@ -1000,13 +1000,13 @@ inline QRectF QRectF::united(const QRectF &rect) const
 inline bool operator==(const QRectF &rect1, const QRectF &rect2)
 {
    return qFuzzyCompare(rect1.m_x, rect2.m_x) && qFuzzyCompare(rect1.m_y, rect2.m_y)
-          && qFuzzyCompare(rect1.m_w, rect2.m_w) && qFuzzyCompare(rect1.m_h, rect2.m_h);
+         && qFuzzyCompare(rect1.m_w, rect2.m_w) && qFuzzyCompare(rect1.m_h, rect2.m_h);
 }
 
 inline bool operator!=(const QRectF &rect1, const QRectF &rect2)
 {
    return ! qFuzzyCompare(rect1.m_x, rect2.m_x) || ! qFuzzyCompare(rect1.m_y, rect2.m_y)
-          || ! qFuzzyCompare(rect1.m_w, rect2.m_w) || ! qFuzzyCompare(rect1.m_h, rect2.m_h);
+         || ! qFuzzyCompare(rect1.m_w, rect2.m_w) || ! qFuzzyCompare(rect1.m_h, rect2.m_h);
 }
 
 inline QRect QRectF::toRect() const
@@ -1016,44 +1016,44 @@ inline QRect QRectF::toRect() const
 
 inline QRectF operator+(const QRectF &lhs, const QMarginsF &rhs)
 {
-    return QRectF(QPointF(lhs.left() - rhs.left(), lhs.top() - rhs.top()),
-                  QSizeF(lhs.width() + rhs.left() + rhs.right(), lhs.height() + rhs.top() + rhs.bottom()));
+   return QRectF(QPointF(lhs.left() - rhs.left(), lhs.top() - rhs.top()),
+         QSizeF(lhs.width() + rhs.left() + rhs.right(), lhs.height() + rhs.top() + rhs.bottom()));
 }
 
 inline QRectF operator+(const QMarginsF &lhs, const QRectF &rhs)
 {
-    return QRectF(QPointF(rhs.left() - lhs.left(), rhs.top() - lhs.top()),
-                  QSizeF(rhs.width() + lhs.left() + lhs.right(), rhs.height() + lhs.top() + lhs.bottom()));
+   return QRectF(QPointF(rhs.left() - lhs.left(), rhs.top() - lhs.top()),
+         QSizeF(rhs.width() + lhs.left() + lhs.right(), rhs.height() + lhs.top() + lhs.bottom()));
 }
 
 inline QRectF operator-(const QRectF &lhs, const QMarginsF &rhs)
 {
-    return QRectF(QPointF(lhs.left() + rhs.left(), lhs.top() + rhs.top()),
-                  QSizeF(lhs.width() - rhs.left() - rhs.right(), lhs.height() - rhs.top() - rhs.bottom()));
+   return QRectF(QPointF(lhs.left() + rhs.left(), lhs.top() + rhs.top()),
+         QSizeF(lhs.width() - rhs.left() - rhs.right(), lhs.height() - rhs.top() - rhs.bottom()));
 }
 
 inline QRectF QRectF::marginsAdded(const QMarginsF &margins) const
 {
-    return QRectF(QPointF(m_x - margins.left(), m_y - margins.top()),
-                  QSizeF(m_w + margins.left() + margins.right(), m_h + margins.top() + margins.bottom()));
+   return QRectF(QPointF(m_x - margins.left(), m_y - margins.top()),
+         QSizeF(m_w + margins.left() + margins.right(), m_h + margins.top() + margins.bottom()));
 }
 
 inline QRectF QRectF::marginsRemoved(const QMarginsF &margins) const
 {
-    return QRectF(QPointF(m_x + margins.left(), m_y + margins.top()),
-                  QSizeF(m_w - margins.left() - margins.right(), m_h - margins.top() - margins.bottom()));
+   return QRectF(QPointF(m_x + margins.left(), m_y + margins.top()),
+         QSizeF(m_w - margins.left() - margins.right(), m_h - margins.top() - margins.bottom()));
 }
 
 inline QRectF &QRectF::operator+=(const QMarginsF &margins)
 {
-    *this = marginsAdded(margins);
-    return *this;
+   *this = marginsAdded(margins);
+   return *this;
 }
 
 inline QRectF &QRectF::operator-=(const QMarginsF &margins)
 {
-    *this = marginsRemoved(margins);
-    return *this;
+   *this = marginsRemoved(margins);
+   return *this;
 }
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QRectF &rect);

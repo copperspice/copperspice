@@ -107,20 +107,24 @@ static bool parseIp4Internal(IPv4Address &address, Buffer::const_iterator iter, 
          if (value32 & ~0xff) {
             return false;
          }
+
          address <<= 8;
 
       } else if (dotCount == 2) {
          if (value32 & ~0xffff) {
             return false;
          }
+
          address <<= 16;
 
       } else if (dotCount == 1) {
          if (value32 & ~0xffffff) {
             return false;
          }
+
          address <<= 24;
       }
+
       address |= value32;
 
       if (dotCount == 3 && *end != '\0') {
@@ -146,12 +150,12 @@ void toString(QString &appendTo, IPv4Address address)
    // reconstructing is easy
    // use the fast operator% that pre-calculates the size
    appendTo += number(address >> 24)
-               + '.'
-               + number(address >> 16)
-               + '.'
-               + number(address >> 8)
-               + '.'
-               + number(address);
+         + '.'
+         + number(address >> 16)
+         + '.'
+         + number(address >> 8)
+         + '.'
+         + number(address);
 }
 
 const QString::const_iterator parseIp6(IPv6Address &address, const QString::const_iterator begin, QString::const_iterator end)
@@ -175,9 +179,11 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
       if (*ptr == ':') {
          ++colonCount;
       }
+
       if (*ptr == '.') {
          ++dotCount;
       }
+
       ++ptr;
    }
 
@@ -187,6 +193,7 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
    }
 
    memset(address, 0, sizeof address);
+
    if (colonCount == 2 && end - begin == 2) {
       // "::"
       return begin;
@@ -213,6 +220,7 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
    }
 
    int pos = 0;
+
    while (pos < 15) {
       if (*ptr == ':') {
          // empty field, we hope it's "::"
@@ -225,6 +233,7 @@ const QString::const_iterator parseIp6(IPv6Address &address, const QString::cons
             if (ptr[0] == '\0' || ptr[1] != ':') {
                return begin + (ptr - buffer.data());
             }
+
             ++ptr;
          }
 
@@ -346,6 +355,7 @@ void toString(QString &appendTo, IPv6Address address)
    }
 
    const QChar colon = ushort(':');
+
    if (zeroRunLength < 4) {
       zeroRunOffset = -1;
 
@@ -362,9 +372,10 @@ void toString(QString &appendTo, IPv6Address address)
 
       if (i == 12 && embeddedIp4) {
          IPv4Address ip4 = address[12] << 24 |
-                           address[13] << 16 |
-                           address[14] << 8 |
-                           address[15];
+               address[13] << 16 |
+               address[14] << 8 |
+               address[15];
+
          toString(appendTo, ip4);
          return;
       }
@@ -380,9 +391,11 @@ void toString(QString &appendTo, IPv6Address address)
             appendTo.append(toHex(address[i + 1] >> 4));
             appendTo.append(toHex(address[i + 1] & 0xf));
          }
+
       } else if (address[i + 1] >> 4) {
          appendTo.append(toHex(address[i + 1] >> 4));
          appendTo.append(toHex(address[i + 1] & 0xf));
+
       } else {
          appendTo.append(toHex(address[i + 1] & 0xf));
       }
@@ -394,4 +407,3 @@ void toString(QString &appendTo, IPv6Address address)
 }
 
 }
-

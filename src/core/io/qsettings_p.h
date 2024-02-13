@@ -45,8 +45,9 @@ static const Qt::CaseSensitivity IniCaseSensitivity = Qt::CaseSensitive;
 class QSettingsKey : public QString
 {
  public:
-   inline QSettingsKey(const QString &key, Qt::CaseSensitivity cs, int = -1)
-      : QString(key) {
+   QSettingsKey(const QString &key, Qt::CaseSensitivity cs, int = -1)
+      : QString(key)
+   {
       Q_ASSERT(cs == Qt::CaseSensitive);
       (void) cs;
    }
@@ -66,8 +67,9 @@ static const Qt::CaseSensitivity IniCaseSensitivity = Qt::CaseInsensitive;
 class QSettingsKey : public QString
 {
  public:
-   inline QSettingsKey(const QString &key, Qt::CaseSensitivity cs, int position = -1)
-      : QString(key), theOriginalKey(key), theOriginalKeyPosition(position) {
+   QSettingsKey(const QString &key, Qt::CaseSensitivity cs, int position = -1)
+      : QString(key), theOriginalKey(key), theOriginalKeyPosition(position)
+   {
       if (cs == Qt::CaseInsensitive) {
          QString::operator=(toLower());
       }
@@ -87,10 +89,8 @@ class QSettingsKey : public QString
 };
 #endif
 
-
 using UnparsedSettingsMap = QMap<QSettingsKey, QByteArray>;
 using ParsedSettingsMap   = QMap<QSettingsKey, QVariant>;
-
 
 class QSettingsGroup
 {
@@ -123,6 +123,7 @@ class QSettingsGroup
 
    void setArrayIndex(int i) {
       num = i + 1;
+
       if (maxNum != -1 && num > maxNum) {
          maxNum = num;
       }
@@ -181,6 +182,15 @@ class QSettingsPrivate
  public:
    enum ChildSpec { AllKeys, ChildKeys, ChildGroups };
 
+   // numeric values for this enum defines the search order
+   enum {
+      F_Application  = 0x0,
+      F_Organization = 0x1,
+      F_User         = 0x0,
+      F_System       = 0x2
+   };
+
+
    QSettingsPrivate(QSettings::Format format);
    QSettingsPrivate(QSettings::Format format, QSettings::Scope scope, const QString &organization, const QString &application);
 
@@ -206,7 +216,7 @@ class QSettingsPrivate
 
    static QString normalizedKey(const QString &key);
    static QSettingsPrivate *create(QSettings::Format format, QSettings::Scope scope,
-      const QString &organization, const QString &application);
+         const QString &organization, const QString &application);
 
    static QSettingsPrivate *create(const QString &fileName, QSettings::Format format);
 
@@ -225,20 +235,9 @@ class QSettingsPrivate
    static void iniEscapedString(const QString &str, QByteArray &result, QTextCodec *codec);
    static void iniEscapedStringList(const QStringList &strs, QByteArray &result, QTextCodec *codec);
    static bool iniUnescapedStringList(const QByteArray &str, int from, int to, QString &stringResult,
-      QStringList &stringListResult, QTextCodec *codec);
+         QStringList &stringListResult, QTextCodec *codec);
 
    static QStringList splitArgs(const QString &s, int idx);
-
-   /* numeric values for this enums defines their search order.
-      F_User | F_Organization is searched before F_System | F_Application,
-      because their values are respectively 1 and 2.
-   */
-   enum {
-      F_Application  = 0x0,
-      F_Organization = 0x1,
-      F_User         = 0x0,
-      F_System       = 0x2
-   };
 
    QSettings::Format format;
    QSettings::Scope scope;

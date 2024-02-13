@@ -112,7 +112,7 @@ class Q_CORE_EXPORT QMetaObject
 
    template<class R, class ...Ts>
    static bool invokeMethod(QObject *object, const QString &member, Qt::ConnectionType type, CSReturnArgument<R> retval,
-                            CSArgument<Ts>... Vs);
+         CSArgument<Ts>... Vs);
 
    template<class R, class ...Ts>
    static bool invokeMethod(QObject *object, const QString &member, CSReturnArgument<R> retval, CSArgument<Ts>... Vs);
@@ -135,7 +135,7 @@ class Q_CORE_EXPORT QMetaObject
    static std::tuple<std::vector<QString>, QString, std::vector<QString>> getSignatures(const QString &fullName);
 
    // global enum list
-   static QMap<std::type_index, std::pair<QMetaObject *, QString> > &m_enumsAll();
+   static QMap<std::type_index, std::pair<QMetaObject *, QString>> &m_enumsAll();
 
    int enum_calculate(QString enumData, QMap<QString, int> valueMap);
 
@@ -298,34 +298,34 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
 template<class T>
 class QMetaObject_T : public QMetaObject_X
 {
-   public:
-      QMetaObject_T() = default;
+ public:
+   QMetaObject_T() = default;
 
-      void postConstruct();
+   void postConstruct();
 
-      const QString &className() const override;
-      const QString &getInterface_iid() const override;
-      const QMetaObject *superClass() const override;
+   const QString &className() const override;
+   const QString &getInterface_iid() const override;
+   const QMetaObject *superClass() const override;
 
-      // revision
-      template<class U>
-      void register_method_rev(U method, int revision);
+   // revision
+   template<class U>
+   void register_method_rev(U method, int revision);
 
-      // signals
-      template<class U>
-      void register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind);
+   // signals
+   template<class U>
+   void register_method_s2(const QString &name, U method, QMetaMethod::MethodType kind);
 
-      // slots, invokables
-      template<class U>
-      void register_method(const QString &name, U method, QMetaMethod::MethodType kind,
-            const QString &va_args, QMetaMethod::Access access);
+   // slots, invokables
+   template<class U>
+   void register_method(const QString &name, U method, QMetaMethod::MethodType kind,
+         const QString &va_args, QMetaMethod::Access access);
 
-      // properties
-      template<class U>
-      void register_property_notify(const QString &name, U method);
+   // properties
+   template<class U>
+   void register_property_notify(const QString &name, U method);
 
-      template<class U>
-      void register_property_reset(const QString &name, U method);
+   template<class U>
+   void register_property_reset(const QString &name, U method);
 };
 
 template<class T>
@@ -394,7 +394,6 @@ void QMetaObject_T<T>::register_method_rev(U methodPtr, int revision)
    m_methods.insert(tokenName, data);
 }
 
-
 // **
 template<class T>
 template<class U>
@@ -410,12 +409,11 @@ void QMetaObject_T<T>::register_method_s2(const QString &name, U methodPtr, QMet
    register_method_s2_part2(className, name, methodBento, kind);
 }
 
-
 // **
 template<class T>
 template<class U>
 void QMetaObject_T<T>::register_method(const QString &name, U methodPtr, QMetaMethod::MethodType kind,
-                  const QString &va_args, QMetaMethod::Access access)
+      const QString &va_args, QMetaMethod::Access access)
 {
    if (name.isEmpty() || va_args.isEmpty()) {
       return;
@@ -462,7 +460,6 @@ void QMetaObject_T<T>::register_method(const QString &name, U methodPtr, QMetaMe
    }
 }
 
-
 // **
 template<class T>
 template<class U>
@@ -492,7 +489,6 @@ void QMetaObject_T<T>::register_property_notify(const QString &name, U methodPtr
    // update QMetaProperty
    m_properties.insert(name, data);
 }
-
 
 template<class T>
 template<class U>
@@ -527,6 +523,6 @@ void QMetaObject_T<T>::register_property_reset(const QString &name, U methodPtr)
 // best way to handle declarations
 #include <csmeta_internal_2.h>
 
-#endif // doxypress
+#endif   // doxypress
 
 #endif

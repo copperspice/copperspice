@@ -35,28 +35,15 @@ QAnimationGroup::QAnimationGroup(QObject *parent)
 {
 }
 
-/*!
-    \internal
-*/
 QAnimationGroup::QAnimationGroup(QAnimationGroupPrivate &dd, QObject *parent)
    : QAbstractAnimation(dd, parent)
 {
 }
 
-/*!
-    Destroys the animation group. It will also destroy all its animations.
-*/
 QAnimationGroup::~QAnimationGroup()
 {
 }
 
-/*!
-    Returns a pointer to the animation at \a index in this group. This
-    function is useful when you need access to a particular animation.  \a
-    index is between 0 and animationCount() - 1.
-
-    \sa animationCount(), indexOfAnimation()
-*/
 QAbstractAnimation *QAnimationGroup::animationAt(int index) const
 {
    Q_D(const QAnimationGroup);
@@ -69,53 +56,24 @@ QAbstractAnimation *QAnimationGroup::animationAt(int index) const
    return d->animations.at(index);
 }
 
-
-/*!
-    Returns the number of animations managed by this group.
-
-    \sa indexOfAnimation(), addAnimation(), animationAt()
-*/
 int QAnimationGroup::animationCount() const
 {
    Q_D(const QAnimationGroup);
    return d->animations.size();
 }
 
-/*!
-    Returns the index of \a animation. The returned index can be passed
-    to the other functions that take an index as an argument.
-
-    \sa insertAnimation(), animationAt(), takeAnimation()
-*/
 int QAnimationGroup::indexOfAnimation(QAbstractAnimation *animation) const
 {
    Q_D(const QAnimationGroup);
    return d->animations.indexOf(animation);
 }
 
-/*!
-    Adds \a animation to this group. This will call insertAnimation with
-    index equals to animationCount().
-
-    \note The group takes ownership of the animation.
-
-    \sa removeAnimation()
-*/
 void QAnimationGroup::addAnimation(QAbstractAnimation *animation)
 {
    Q_D(QAnimationGroup);
    insertAnimation(d->animations.count(), animation);
 }
 
-/*!
-    Inserts \a animation into this animation group at \a index.
-    If \a index is 0 the animation is inserted at the beginning.
-    If \a index is animationCount(), the animation is inserted at the end.
-
-    \note The group takes ownership of the animation.
-
-    \sa takeAnimation(), addAnimation(), indexOfAnimation(), removeAnimation()
-*/
 void QAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
 {
    Q_D(QAnimationGroup);
@@ -136,21 +94,17 @@ void QAnimationGroup::insertAnimation(int index, QAbstractAnimation *animation)
    d->animationInsertedAt(index);
 }
 
-/*!
-    Removes \a animation from this group. The ownership of \a animation is
-    transferred to the caller.
-
-    \sa takeAnimation(), insertAnimation(), addAnimation()
-*/
 void QAnimationGroup::removeAnimation(QAbstractAnimation *animation)
 {
    Q_D(QAnimationGroup);
 
-   if (!animation) {
+   if (! animation) {
       qWarning("QAnimationGroup::remove() Unable to remove null animation");
       return;
    }
+
    int index = d->animations.indexOf(animation);
+
    if (index == -1) {
       qWarning("QAnimationGroup::remove() Animation is not part of this group");
       return;
@@ -159,16 +113,10 @@ void QAnimationGroup::removeAnimation(QAbstractAnimation *animation)
    takeAnimation(index);
 }
 
-/*!
-    Returns the animation at \a index and removes it from the animation group.
-
-    \note The ownership of the animation is transferred to the caller.
-
-    \sa removeAnimation(), addAnimation(), insertAnimation(), indexOfAnimation()
-*/
 QAbstractAnimation *QAnimationGroup::takeAnimation(int index)
 {
    Q_D(QAnimationGroup);
+
    if (index < 0 || index >= d->animations.size()) {
       qWarning("QAnimationGroup::takeAnimation() No animation at index %d", index);
       return nullptr;
@@ -187,41 +135,37 @@ QAbstractAnimation *QAnimationGroup::takeAnimation(int index)
    return animation;
 }
 
-/*!
-    Removes and deletes all animations in this animation group, and resets the current
-    time to 0.
-
-    \sa addAnimation(), removeAnimation()
-*/
 void QAnimationGroup::clear()
 {
    Q_D(QAnimationGroup);
    qDeleteAll(d->animations);
 }
 
-/*!
-    \reimp
-*/
 bool QAnimationGroup::event(QEvent *event)
 {
    Q_D(QAnimationGroup);
+
    if (event->type() == QEvent::ChildAdded) {
       QChildEvent *childEvent = static_cast<QChildEvent *>(event);
+
       if (QAbstractAnimation *a = qobject_cast<QAbstractAnimation *>(childEvent->child())) {
          if (a->group() != this) {
             addAnimation(a);
          }
       }
+
    } else if (event->type() == QEvent::ChildRemoved) {
       QChildEvent *childEvent = static_cast<QChildEvent *>(event);
       QAbstractAnimation *a = static_cast<QAbstractAnimation *>(childEvent->child());
       // You can only rely on the child being a QObject because in the QEvent::ChildRemoved
       // case it might be called from the destructor.
       int index = d->animations.indexOf(a);
+
       if (index != -1) {
          takeAnimation(index);
       }
    }
+
    return QAbstractAnimation::event(event);
 }
 

@@ -118,16 +118,17 @@
 #define _UNICODE
 #endif
 
-#include <tchar.h>
-#include <io.h>
-#include <direct.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <stdlib.h>
 #include <qt_windows.h>
+
+#include <direct.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <io.h>
 #include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <tchar.h>
 
 #if ! defined(_WIN32_WINNT) || (_WIN32_WINNT-0 < 0x0500)
 typedef enum {

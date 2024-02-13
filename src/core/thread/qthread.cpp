@@ -35,8 +35,8 @@
 #include <qthread_p.h>
 
 QThreadData::QThreadData(int initialRefCount)
-    : thread(nullptr), threadId(nullptr), eventDispatcher(nullptr), loopLevel(0),
-      quitNow(false), canWait(true), isAdopted(false), requiresCoreApplication(true), m_ref(initialRefCount)
+   : thread(nullptr), threadId(nullptr), eventDispatcher(nullptr), loopLevel(0),
+     quitNow(false), canWait(true), isAdopted(false), requiresCoreApplication(true), m_ref(initialRefCount)
 {
    // fprintf(stderr, "QThreadData %p created\n", this);
 }
@@ -45,7 +45,7 @@ QThreadData::~QThreadData()
 {
    Q_ASSERT(m_ref.load() == 0);
 
-   // In the odd case that Qt is running on a secondary thread, the main
+   // In the odd case we are running on a secondary thread, the main
    // thread instance will have been dereffed asunder because of the deref in
    // QThreadData::current() and the deref in the pthread_destroy. To avoid
    // crashing during QCoreApplicationData's global static cleanup we need to
@@ -176,6 +176,7 @@ QThread::~QThread()
    Q_D(QThread);
    {
       QMutexLocker locker(&d->mutex);
+
       if (d->isInFinish) {
          locker.unlock();
          wait();
@@ -272,104 +273,104 @@ void QThread::run()
 
 void QThread::setPriority(Priority priority)
 {
-    Q_D(QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(QThread);
+   QMutexLocker locker(&d->mutex);
 
-    if (! d->running) {
-        qWarning("QThread::setPriority() Unable to set priority while thread is not running");
-        return;
-    }
+   if (! d->running) {
+      qWarning("QThread::setPriority() Unable to set priority while thread is not running");
+      return;
+   }
 
-    d->setPriority(priority);
+   d->setPriority(priority);
 }
 
 QThread::Priority QThread::priority() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
 
-    // mask off the high bits that are used for flags
-    return Priority(d->priority & 0xffff);
+   // mask off the high bits that are used for flags
+   return Priority(d->priority & 0xffff);
 }
 
 int QThread::loopLevel() const
 {
-    Q_D(const QThread);
-    return d->data->eventLoops.size();
+   Q_D(const QThread);
+   return d->data->eventLoops.size();
 }
 
 QAbstractEventDispatcher *QThread::eventDispatcher() const
 {
-    Q_D(const QThread);
-    return d->data->eventDispatcher.load();
+   Q_D(const QThread);
+   return d->data->eventDispatcher.load();
 }
 
 void QThread::setEventDispatcher(QAbstractEventDispatcher *eventDispatcher)
 {
-    Q_D(QThread);
+   Q_D(QThread);
 
-    if (d->data->hasEventDispatcher()) {
-        qWarning("QThread::setEventDispatcher() Event dispatcher has already been created for this thread");
-    } else {
-        eventDispatcher->moveToThread(this);
+   if (d->data->hasEventDispatcher()) {
+      qWarning("QThread::setEventDispatcher() Event dispatcher has already been created for this thread");
+   } else {
+      eventDispatcher->moveToThread(this);
 
-        if (eventDispatcher->thread() == this)  {
-            // was the move successful?
-            d->data->eventDispatcher = eventDispatcher;
-        } else {
-            qWarning("QThread::setEventDispatcher() Unable to move event dispatcher to target thread");
-        }
-    }
+      if (eventDispatcher->thread() == this)  {
+         // was the move successful?
+         d->data->eventDispatcher = eventDispatcher;
+      } else {
+         qWarning("QThread::setEventDispatcher() Unable to move event dispatcher to target thread");
+      }
+   }
 }
 
 bool QThread::event(QEvent *event)
 {
-    if (event->type() == QEvent::Quit) {
-        quit();
-        return true;
-    } else {
-        return QObject::event(event);
-    }
+   if (event->type() == QEvent::Quit) {
+      quit();
+      return true;
+   } else {
+      return QObject::event(event);
+   }
 }
 
 void QThread::requestInterruption()
 {
-    Q_D(QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(QThread);
+   QMutexLocker locker(&d->mutex);
 
-    if (! d->running || d->finished || d->isInFinish) {
-        return;
-    }
+   if (! d->running || d->finished || d->isInFinish) {
+      return;
+   }
 
-    if (this == QCoreApplicationPrivate::theMainThread) {
-        qWarning("QThread::requestInterruption() Unable to interrupt main thread");
-        return;
-    }
+   if (this == QCoreApplicationPrivate::theMainThread) {
+      qWarning("QThread::requestInterruption() Unable to interrupt main thread");
+      return;
+   }
 
-    d->interruptionRequested = true;
+   d->interruptionRequested = true;
 }
 
 bool QThread::isInterruptionRequested() const
 {
-    Q_D(const QThread);
-    QMutexLocker locker(&d->mutex);
+   Q_D(const QThread);
+   QMutexLocker locker(&d->mutex);
 
-    if (! d->running || d->finished || d->isInFinish) {
-        return false;
-    }
+   if (! d->running || d->finished || d->isInFinish) {
+      return false;
+   }
 
-    return d->interruptionRequested;
+   return d->interruptionRequested;
 }
 
 static void setThreadDoesNotRequireCoreApplication()
 {
-    QThreadData::current()->requiresCoreApplication = false;
+   QThreadData::current()->requiresCoreApplication = false;
 }
 
 QDaemonThread::QDaemonThread(QObject *parent)
-    : QThread(parent)
+   : QThread(parent)
 {
-    connect(this, &QThread::started, this,setThreadDoesNotRequireCoreApplication);
+   connect(this, &QThread::started, this, setThreadDoesNotRequireCoreApplication);
 }
 
 QDaemonThread::~QDaemonThread()

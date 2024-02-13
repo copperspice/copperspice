@@ -25,10 +25,10 @@
 
 #ifndef QT_NO_SETTINGS
 
-#include <qvector.h>
+#include <qdebug.h>
 #include <qmap.h>
 #include <qt_windows.h>
-#include <qdebug.h>
+#include <qvector.h>
 
 #include <qsettings_p.h>
 
@@ -40,7 +40,6 @@
     If the variable name starts with 'r', this is a "registry" key
     ie. "\foo\bar\alpha\beta"
 */
-
 
 //  We do not use KEY_ALL_ACCESS because it gives more rights than what we need. See task 199061.
 static const REGSAM registryPermissions = KEY_READ | KEY_WRITE;
@@ -103,6 +102,7 @@ typedef QMap<QString, QString> NameSet;
 static void mergeKeySets(NameSet *dest, const NameSet &src)
 {
    NameSet::const_iterator it = src.constBegin();
+
    for (; it != src.constEnd(); ++it) {
       dest->insert(unescapedKey(it.key()), QString());
    }
@@ -111,6 +111,7 @@ static void mergeKeySets(NameSet *dest, const NameSet &src)
 static void mergeKeySets(NameSet *dest, const QStringList &src)
 {
    QStringList::const_iterator it = src.constBegin();
+
    for (; it != src.constEnd(); ++it) {
       dest->insert(unescapedKey(*it), QString());
    }
@@ -154,13 +155,14 @@ static HKEY createOrOpenKey(HKEY parentHandle, REGSAM perms, const QString &rSub
 {
    // try to open it
    HKEY resultHandle = openKey(parentHandle, perms, rSubKey);
+
    if (resultHandle != nullptr) {
       return resultHandle;
    }
 
    // try to create it
    LONG res = RegCreateKeyEx(parentHandle, &rSubKey.toStdWString()[0], 0, nullptr,
-                  REG_OPTION_NON_VOLATILE, perms, nullptr, &resultHandle, nullptr);
+         REG_OPTION_NON_VOLATILE, perms, nullptr, &resultHandle, nullptr);
 
    if (res == ERROR_SUCCESS) {
       return resultHandle;
@@ -179,6 +181,7 @@ static HKEY createOrOpenKey(HKEY parentHandle, const QString &rSubKey, bool *rea
       if (readOnly != nullptr) {
          *readOnly = false;
       }
+
       return resultHandle;
    }
 
@@ -189,6 +192,7 @@ static HKEY createOrOpenKey(HKEY parentHandle, const QString &rSubKey, bool *rea
       if (readOnly != nullptr) {
          *readOnly = true;
       }
+
       return resultHandle;
    }
 
@@ -206,7 +210,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
 
    // Find the number of keys and subgroups, as well as the max of their lengths.
    LONG res = RegQueryInfoKey(parentHandle, nullptr, nullptr, nullptr, &numSubgroups, &maxSubgroupSize, nullptr,
-                  &numKeys, &maxKeySize, nullptr, nullptr, nullptr);
+         &numKeys, &maxKeySize, nullptr, nullptr, nullptr);
 
    if (res != ERROR_SUCCESS) {
       qWarning("QSettings::childKeysOrGroups() RegQueryInfoKey failed, %s", csPrintable(errorCodeToString(res)));
@@ -227,7 +231,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
       m = maxSubgroupSize;
    }
 
-   /* The size does not include the terminating null character. */
+   // The size does not include the terminating null character
    ++m;
 
    // Get the list
@@ -265,6 +269,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
 static void allKeys(HKEY parentHandle, const QString &rSubKey, NameSet *result)
 {
    HKEY handle = openKey(parentHandle, KEY_READ, rSubKey);
+
    if (handle == nullptr) {
       return;
    }
@@ -318,7 +323,7 @@ static void deleteChildGroups(HKEY parentHandle)
 
       if (res != ERROR_SUCCESS) {
          qWarning("QSettings::deleteChildGroups() RegDeleteKey failed on subkey \"%s\": %s",
-                  csPrintable(group), csPrintable(errorCodeToString(res)));
+               csPrintable(group), csPrintable(errorCodeToString(res)));
          return;
       }
    }
@@ -493,6 +498,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
 
    // open a handle on the subkey
    HKEY handle = openKey(parentHandle, KEY_READ, rSubkeyPath);
+
    if (handle == nullptr) {
       return false;
    }
@@ -510,7 +516,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
    // get the value
    QByteArray data(dataSize, 0);
    res = RegQueryValueEx(handle, &rSubkeyName.toStdWString()[0], nullptr, nullptr,
-                  reinterpret_cast<unsigned char *>(data.data()), &dataSize);
+         reinterpret_cast<unsigned char *>(data.data()), &dataSize);
 
    if (res != ERROR_SUCCESS) {
       RegCloseKey(handle);
@@ -529,6 +535,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          if (value != nullptr) {
             *value = stringToVariant(s);
          }
+
          break;
       }
 
@@ -553,6 +560,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          if (value != nullptr) {
             *value = stringListToVariantList(list);
          }
+
          break;
       }
 
@@ -567,6 +575,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          if (value != nullptr) {
             *value = stringToVariant(s);
          }
+
          break;
       }
 
@@ -580,6 +589,7 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          if (value != nullptr) {
             *value = i;
          }
+
          break;
       }
 
@@ -591,14 +601,17 @@ bool QWinSettingsPrivate::readKey(HKEY parentHandle, const QString &rSubKey, QVa
          if (value != nullptr) {
             *value = i;
          }
+
          break;
       }
 
       default:
          qWarning("QWinSettings::readKey() Unknown data type in Windows registry, %d", static_cast<int>(dataType));
+
          if (value != nullptr) {
             *value = QVariant();
          }
+
          break;
    }
 
@@ -614,6 +627,7 @@ HKEY QWinSettingsPrivate::writeHandle() const
    }
 
    const RegistryKey &key = regList.at(0);
+
    if (key.handle() == nullptr || key.readOnly()) {
       return nullptr;
    }
@@ -630,7 +644,7 @@ QWinSettingsPrivate::~QWinSettingsPrivate()
 
       if (res != ERROR_SUCCESS) {
          qWarning("QSettings() Failed to delete key \"%s\": %s",
-                  csPrintable(regList.at(0).key()), csPrintable(errorCodeToString(res)));
+               csPrintable(regList.at(0).key()), csPrintable(errorCodeToString(res)));
       }
    }
 
@@ -700,6 +714,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
    QString rKey = escapedKey(uKey);
 
    HKEY handle = createOrOpenKey(writeHandle(), registryPermissions, keyPath(rKey));
+
    if (handle == nullptr) {
       setStatus(QSettings::AccessError);
       return;
@@ -757,6 +772,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
             regValueBuff.append((char)0);
             regValueBuff.append((char)0);
          }
+
          break;
       }
 
@@ -793,7 +809,6 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
             regValueBuff.resize(tmp.size() * 2);
             memcpy(regValueBuff.data(), tmp.data(), tmp.size() * 2);
 
-
          } else {
             type = REG_SZ;
 
@@ -807,7 +822,7 @@ void QWinSettingsPrivate::set(const QString &uKey, const QVariant &value)
 
    // set the value
    LONG res = RegSetValueEx(handle, &keyName(rKey).toStdWString()[0], 0, type,
-                  reinterpret_cast<const unsigned char *>(regValueBuff.constData()), regValueBuff.size());
+         reinterpret_cast<const unsigned char *>(regValueBuff.constData()), regValueBuff.size());
 
    if (res == ERROR_SUCCESS) {
       deleteWriteHandleOnExit = false;
@@ -893,7 +908,7 @@ void QWinSettingsPrivate::sync()
 
 void QWinSettingsPrivate::flush()
 {
-   // Windows does this for us.
+   // Windows does this for us
 }
 
 QString QWinSettingsPrivate::fileName() const

@@ -75,6 +75,7 @@ QLibraryStore::~QLibraryStore()
 inline void QLibraryStore::cleanup()
 {
    QLibraryStore *data = qt_library_data;
+
    if (! data) {
       return;
    }
@@ -105,7 +106,7 @@ inline void QLibraryStore::cleanup()
 
          if (lib) {
             qDebug() << "During Application shutdown, " << lib->fileName << " was still open with "
-               << lib->libraryRefCount.load() << " references";
+                  << lib->libraryRefCount.load() << " references";
          }
       }
    }
@@ -119,7 +120,6 @@ static void qlibraryCleanup()
 }
 
 Q_DESTRUCTOR_FUNCTION(qlibraryCleanup)
-
 
 QLibraryStore *QLibraryStore::instance()
 {
@@ -135,7 +135,7 @@ QLibraryStore *QLibraryStore::instance()
 }
 
 inline QLibraryHandle *QLibraryStore::cs_findLibrary(const QString &fileName, const QString &version,
-                  QLibrary::LoadHints loadHints)
+      QLibrary::LoadHints loadHints)
 {
    QMutexLocker locker(&qt_library_mutex);
    QLibraryStore *data = instance();
@@ -321,9 +321,11 @@ bool QLibrary::isLibrary(const QString &fileName)
 
 #else
    QString completeSuffix = QFileInfo(fileName).completeSuffix();
+
    if (completeSuffix.isEmpty()) {
       return false;
    }
+
    QStringList suffixes = completeSuffix.split(QLatin1Char('.'));
 
 # if defined(Q_OS_DARWIN)
@@ -341,7 +343,6 @@ bool QLibrary::isLibrary(const QString &fileName)
 # else  // Generic Unix
    QStringList validSuffixList;
 
-
 #  if defined(Q_OS_UNIX)
    validSuffixList << QLatin1String("so");
 #  endif
@@ -355,15 +356,18 @@ bool QLibrary::isLibrary(const QString &fileName)
 
    int suffix;
    int suffixPos = -1;
+
    for (suffix = 0; suffix < validSuffixList.count() && suffixPos == -1; ++suffix) {
       suffixPos = suffixes.indexOf(validSuffixList.at(suffix));
    }
 
    bool valid = suffixPos != -1;
+
    for (int i = suffixPos + 1; i < suffixes.count() && valid; ++i)
       if (i != suffixPos) {
          suffixes.at(i).toInteger<int>(&valid);
       }
+
    return valid;
 # endif
 
@@ -407,6 +411,7 @@ void QLibraryHandle::updatePluginState()
    bool success = false;
 
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
+
    if (fileName.endsWith(".debug")) {
 
       // do not load a file which ends in .debug, these are the debug symbols from the libraries
@@ -418,6 +423,7 @@ void QLibraryHandle::updatePluginState()
 
       return;
    }
+
 #endif
 
    if (pHnd) {
@@ -469,13 +475,13 @@ void QLibraryHandle::updatePluginState()
 
       if (qt_debug_component()) {
          qWarning("QLibraryHandle::updatePluginState() In %s\n"
-            " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
-            (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
+               " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
+               (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
       }
 
       errorString = QLibrary::tr("Plugin '%1' uses an incompatible CopperSpice library (%2.%3.%4)")
-         .formatArg(fileName).formatArg((version & 0xff0000) >> 16).formatArg((version & 0xff00) >> 8)
-         .formatArg(version & 0xff);
+            .formatArg(fileName).formatArg((version & 0xff0000) >> 16).formatArg((version & 0xff00) >> 8)
+            .formatArg(version & 0xff);
 
    } else {
       pluginState = IsAPlugin;
@@ -661,4 +667,3 @@ bool qt_debug_component()
 
    return debug_env != 0;
 }
-

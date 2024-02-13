@@ -87,6 +87,7 @@ class QCache
       }
 
       Node &n = *i;
+
       if (f != &n) {
          if (n.p) {
             n.p->n = n.n;
@@ -95,6 +96,7 @@ class QCache
          if (n.n) {
             n.n->p = n.p;
          }
+
          if (l == &n) {
             l = n.p;
          }
@@ -104,6 +106,7 @@ class QCache
          f->p = &n;
          f = &n;
       }
+
       return n.t;
    }
 

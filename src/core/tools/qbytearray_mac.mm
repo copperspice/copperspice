@@ -27,57 +27,58 @@
 
 QByteArray QByteArray::fromCFData(CFDataRef data)
 {
-    if (!data)
-        return QByteArray();
+   if (! data) {
+      return QByteArray();
+   }
 
-    return QByteArray(reinterpret_cast<const char *>(CFDataGetBytePtr(data)), CFDataGetLength(data));
+   return QByteArray(reinterpret_cast<const char *>(CFDataGetBytePtr(data)), CFDataGetLength(data));
 }
 
 QByteArray QByteArray::fromRawCFData(CFDataRef data)
 {
-    if (!data)
-        return QByteArray();
+   if (! data) {
+      return QByteArray();
+   }
 
-    return QByteArray::fromRawData(reinterpret_cast<const char *>(CFDataGetBytePtr(data)), CFDataGetLength(data));
+   return QByteArray::fromRawData(reinterpret_cast<const char *>(CFDataGetBytePtr(data)), CFDataGetLength(data));
 }
 
 CFDataRef QByteArray::toCFData() const
 {
-    return CFDataCreate(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data()), length());
+   return CFDataCreate(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data()), length());
 }
 
 CFDataRef QByteArray::toRawCFData() const
 {
-    return CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data()),
-                    length(), kCFAllocatorNull);
+   return CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, reinterpret_cast<const UInt8 *>(data()),
+               length(), kCFAllocatorNull);
 }
 
 QByteArray QByteArray::fromNSData(const NSData *data)
 {
-    if (!data) {
-        return QByteArray();
-    }
+   if (! data) {
+      return QByteArray();
+   }
 
-    return QByteArray(reinterpret_cast<const char *>([data bytes]), [data length]);
+   return QByteArray(reinterpret_cast<const char *>([data bytes]), [data length]);
 }
 
 QByteArray QByteArray::fromRawNSData(const NSData *data)
 {
-    if (!data) {
-        return QByteArray();
-    }
+   if (! data) {
+      return QByteArray();
+   }
 
-    return QByteArray::fromRawData(reinterpret_cast<const char *>([data bytes]), [data length]);
+   return QByteArray::fromRawData(reinterpret_cast<const char *>([data bytes]), [data length]);
 }
 
 NSData *QByteArray::toNSData() const
 {
-    return [NSData dataWithBytes:constData() length:size()];
+   return [NSData dataWithBytes:constData() length:size()];
 }
 
 NSData *QByteArray::toRawNSData() const
 {
-    // const_cast is fine here because NSData is immutable thus will never modify bytes we're giving it
-    return [NSData dataWithBytesNoCopy:const_cast<char *>(constData()) length:size() freeWhenDone:NO];
+   // const_cast is fine here because NSData is immutable thus will never modify bytes we're giving it
+   return [NSData dataWithBytesNoCopy:const_cast<char *>(constData()) length:size() freeWhenDone:NO];
 }
-

@@ -184,24 +184,12 @@ void QEventLoop::exit(int returnCode)
    threadData->eventDispatcher.load()->interrupt();
 }
 
-/*!
-    Returns true if the event loop is running; otherwise returns
-    false. The event loop is considered running from the time when
-    exec() is called until exit() is called.
-
-    \sa exec() exit()
- */
 bool QEventLoop::isRunning() const
 {
    Q_D(const QEventLoop);
    return ! d->exit;
 }
 
-/*!
-    Wakes up the event loop.
-
-    \sa QAbstractEventDispatcher::wakeUp()
-*/
 void QEventLoop::wakeUp()
 {
    QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);

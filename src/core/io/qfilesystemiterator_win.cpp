@@ -35,12 +35,8 @@ bool done = true;
 
 QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Filters filters,
       const QStringList &nameFilters, QDirIterator::IteratorFlags flags)
-   : nativePath(entry.nativeFilePath())
-   , dirPath(entry.filePath())
-   , findFileHandle(INVALID_HANDLE_VALUE)
-   , uncFallback(false)
-   , uncShareIndex(0)
-   , onlyDirs(false)
+   : nativePath(entry.nativeFilePath()), dirPath(entry.filePath()), findFileHandle(INVALID_HANDLE_VALUE), uncFallback(false),
+     uncShareIndex(0), onlyDirs(false)
 {
    (void) nameFilters;
    (void) flags;
@@ -56,6 +52,7 @@ QFileSystemIterator::QFileSystemIterator(const QFileSystemEntry &entry, QDir::Fi
    }
 
    nativePath.append('*');
+
    if (!dirPath.endsWith('/')) {
       dirPath.append('/');
    }
@@ -88,12 +85,13 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
       }
 
       int searchOps =  0;              // FindExSearchNameMatch
+
       if (onlyDirs) {
-         searchOps = 1 ;              // FindExSearchLimitToDirectories
+         searchOps = 1 ;               // FindExSearchLimitToDirectories
       }
 
       findFileHandle = FindFirstFileEx(&nativePath.toStdWString()[0], FINDEX_INFO_LEVELS(infoLevel), &findData,
-                                       FINDEX_SEARCH_OPS(searchOps), nullptr, dwAdditionalFlags);
+            FINDEX_SEARCH_OPS(searchOps), nullptr, dwAdditionalFlags);
 
       if (findFileHandle == INVALID_HANDLE_VALUE) {
 
@@ -127,6 +125,7 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
          }
       }
    }
+
    // Create the new file system entry & meta data.
    if (uncFallback) {
       fileEntry = QFileSystemEntry(dirPath + uncShares.at(uncShareIndex));
@@ -142,6 +141,7 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
       if (! fileName.endsWith(QLatin1String(".lnk"))) {
          metaData.fillFromFindData(findData, true);
       }
+
       return true;
    }
 
@@ -149,4 +149,3 @@ bool QFileSystemIterator::advance(QFileSystemEntry &fileEntry, QFileSystemMetaDa
 }
 
 #endif //  QT_NO_FILESYSTEMITERATOR
-

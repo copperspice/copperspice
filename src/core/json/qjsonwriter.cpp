@@ -131,17 +131,17 @@ static void valueToJson(const QJsonValue &value, QString &retval, int indent, bo
          break;
 
       case QJsonValue::Double: {
-            const double d = value.toDouble();
+         const double d = value.toDouble();
 
-            if (std::isfinite(d)) {
-               retval += QString::number(d, 'g', std::numeric_limits<double>::digits10 + 2);
+         if (std::isfinite(d)) {
+            retval += QString::number(d, 'g', std::numeric_limits<double>::digits10 + 2);
 
-            } else {
-               retval += "null";
-            }
-
-            break;
+         } else {
+            retval += "null";
          }
+
+         break;
+      }
 
       case QJsonValue::String:
          retval += '"' + escapedString(value.toString()) + '"';
@@ -245,4 +245,3 @@ QString QJsonWriter::objectToString(const QJsonObject &data,  int indent, QJsonD
 
    return retval;
 }
-

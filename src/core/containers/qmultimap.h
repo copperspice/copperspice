@@ -281,9 +281,10 @@ class QMultiMap
 
    template <typename Input_Iterator>
    QMultiMap(Input_Iterator first, Input_Iterator last, const C &compare = C())
-      : m_data(first, last, compare) {}
+      : m_data(first, last, compare)
+   { }
 
-  ~QMultiMap() = default;
+   ~QMultiMap() = default;
 
    // methods
    void clear() {
@@ -360,7 +361,7 @@ class QMultiMap
    }
 
    const_iterator find(const Key &key, const Val &value) const {
-     auto range = m_data.equal_range(key);
+      auto range = m_data.equal_range(key);
 
       for (auto iter = range.first; iter != range.second; ++iter) {
          if (iter->second == value) {
@@ -410,7 +411,7 @@ class QMultiMap
    QList<Key> keys(const Val &value) const;
 
    Val &last()  {
-      return (end()- 1).value();
+      return (end() - 1).value();
    }
 
    const Val &last() const  {
@@ -778,7 +779,6 @@ Val &QMultiMap<Key, Val, C>::operator[](const Key &key)
    return iter->second;
 }
 
-
 // to from
 
 template <class Key, class Val, class C>
@@ -794,7 +794,6 @@ std::multimap<Key, Val, C> QMultiMap<Key, Val, C>::toStdMultiMap() const
 
    return map;
 }
-
 
 // java style iterators
 
@@ -874,6 +873,7 @@ class QMultiMapIterator
             return true;
          }
       }
+
       return false;
    }
 
@@ -888,7 +888,7 @@ class QMultiMapIterator
       return false;
    }
 
-  private:
+ private:
    const QMultiMap<Key, Val, C> *c;
    const_iterator i;
    const_iterator n;

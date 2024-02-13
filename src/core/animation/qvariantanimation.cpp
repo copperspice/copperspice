@@ -34,7 +34,8 @@
 
 #ifndef QT_NO_ANIMATION
 
-libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>> &QVariantAnimation::getFormulas() {
+libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>> &QVariantAnimation::getFormulas()
+{
    static libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>> retval;
    return retval;
 }
@@ -54,10 +55,10 @@ inline QRect cs_genericFormula(const QRect &from, const QRect &to, double progre
 {
    QRect retval;
 
-   retval.setCoords(cs_genericFormula(from.left(),   to.left(),   progress),
-                    cs_genericFormula(from.top(),    to.top(),    progress),
-                    cs_genericFormula(from.right(),  to.right(),  progress),
-                    cs_genericFormula(from.bottom(), to.bottom(), progress));
+   retval.setCoords(cs_genericFormula(from.left(), to.left(), progress),
+         cs_genericFormula(from.top(),    to.top(),    progress),
+         cs_genericFormula(from.right(),  to.right(),  progress),
+         cs_genericFormula(from.bottom(), to.bottom(), progress));
 
    return retval;
 }
@@ -72,7 +73,7 @@ inline QRectF cs_genericFormula(const QRectF &from, const QRectF &to, double pro
    to.getRect(&x2, &y2, &w2, &h2);
 
    return QRectF(cs_genericFormula(x1, x2, progress), cs_genericFormula(y1, y2, progress),
-                 cs_genericFormula(w1, w2, progress), cs_genericFormula(h1, h2, progress));
+         cs_genericFormula(w1, w2, progress), cs_genericFormula(h1, h2, progress));
 }
 
 template <>
@@ -88,7 +89,7 @@ inline QLineF cs_genericFormula(const QLineF &from, const QLineF &to, double pro
 }
 
 QVariantAnimationPrivate::QVariantAnimationPrivate()
-    : m_duration(250), m_callBack(&cs_defaultFormula)
+   : m_duration(250), m_callBack(&cs_defaultFormula)
 { }
 
 void QVariantAnimationPrivate::convertValues(uint typeId)
@@ -157,7 +158,9 @@ void QVariantAnimationPrivate::recalculateCurrentInterval(bool force)
          }
 
       } else if (iter == m_keyValues.constEnd()) {
-         --iter; //position the iterator on the last item
+         // position the iterator on the last item
+
+         --iter;
 
          if (iter->first == 1 && m_keyValues.count() > 1) {
             // have an end value (item with progress = 1)
@@ -201,7 +204,7 @@ void QVariantAnimationPrivate::setCurrentValueForProgress(const double progress)
 QVariant QVariantAnimationPrivate::valueAt(double step) const
 {
    auto iter = std::lower_bound(m_keyValues.constBegin(), m_keyValues.constEnd(),
-                  qMakePair(step, QVariant()), animationValueLessThan);
+         qMakePair(step, QVariant()), animationValueLessThan);
 
    if (iter != m_keyValues.constEnd() && ! animationValueLessThan(qMakePair(step, QVariant()), *iter)) {
       return iter->second;
@@ -220,7 +223,7 @@ void QVariantAnimationPrivate::setValueAt(double step, const QVariant &value)
    QVariantAnimation::ValuePair pair(step, value);
 
    auto iter = std::lower_bound(m_keyValues.begin(), m_keyValues.end(),
-                  pair, animationValueLessThan);
+         pair, animationValueLessThan);
 
    if (iter == m_keyValues.end() || iter->first != step) {
       m_keyValues.insert(iter, pair);
@@ -267,7 +270,6 @@ void QVariantAnimation::setEasingCurve(const QEasingCurve &easing)
    d->recalculateCurrentInterval();
 }
 
-
 QVariantAnimation::CustomFormula QVariantAnimationPrivate::cs_getCustomType(uint typeId)
 {
    switch (typeId) {
@@ -312,7 +314,7 @@ QVariantAnimation::CustomFormula QVariantAnimationPrivate::cs_getCustomType(uint
    }
 
    libguarded::shared_guarded<QHash<uint, QVariantAnimation::CustomFormula>>::shared_handle hash =
-                  QVariantAnimation::getFormulas().lock_shared();
+         QVariantAnimation::getFormulas().lock_shared();
 
    return hash->value(typeId, nullptr);
 }

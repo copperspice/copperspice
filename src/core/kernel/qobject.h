@@ -109,39 +109,39 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    const QList<QObject *> &children() const;
 
    bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
-                  const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+         const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    bool connect(const QObject *sender, const QString &signalMethod, const QString &slotMethod,
-                  Qt::ConnectionType type = Qt::AutoConnection);
+         Qt::ConnectionType type = Qt::AutoConnection);
 
    static bool connect(const QObject *sender, const QString &signalMethod, const QString &location,
-                  const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+         const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    static bool connect(const QObject *sender, const QString &signalMethod,
-                  const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
-                  const QString &location = QString());
+         const QObject *receiver, const QString &slotMethod, Qt::ConnectionType type = Qt::AutoConnection,
+         const QString &location = QString());
 
    static bool connect(const QObject *sender, const QMetaMethod &signalMethod,
-                  const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
+         const QObject *receiver, const QMetaMethod &slotMethod, Qt::ConnectionType type = Qt::AutoConnection);
 
    bool disconnect(const QString &signalMethod = QString(), const QObject *receiver = nullptr,
-                  const QString &slotMethod = QString()) const;
+         const QString &slotMethod = QString()) const;
 
    bool disconnect(const QString &signalMethod, const QString &location, const QObject *receiver = nullptr,
-                   const QString &slotMethod = QString()) const;
+         const QString &slotMethod = QString()) const;
 
    bool disconnect(const QObject *receiver, const QString &slotMethod = QString()) const;
 
    static bool disconnect(const QObject *sender, const QString &signalMethod,
-                  const QObject *receiver, const QString &slotMethod);
+         const QObject *receiver, const QString &slotMethod);
 
    static bool disconnect(const QObject *sender, std::nullptr_t, const QObject *receiver, std::nullptr_t);
 
    static bool disconnect(const QObject *sender, const QMetaMethod &signalMethod,
-                  const QObject *receiver, const QMetaMethod &slotMethod);
+         const QObject *receiver, const QMetaMethod &slotMethod);
 
    static bool disconnect(const QObject *sender, const QString &signalMethod, const QString &location,
-                  const QObject *receiver, const QString &slotMethod);
+         const QObject *receiver, const QString &slotMethod);
 
    void dumpObjectTree();
    void dumpObjectInfo();
@@ -179,28 +179,28 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    // signal & slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                       const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...),
-                       Qt::ConnectionType type = Qt::AutoConnection);
+         const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...),
+         Qt::ConnectionType type = Qt::AutoConnection);
 
    // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool connect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                       const Receiver *receiver, T slotLambda, Qt::ConnectionType type = Qt::AutoConnection);
+         const Receiver *receiver, T slotLambda, Qt::ConnectionType type = Qt::AutoConnection);
 
    // signal & slot method ptr
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class SlotClass, class ...SlotArgs, class SlotReturn>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                          const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...));
+         const Receiver *receiver, SlotReturn (SlotClass::*slotMethod)(SlotArgs...));
 
    // signal method ptr, nullptr slot
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                          const Receiver *receiver, std::nullptr_t slotMethod = nullptr);
+         const Receiver *receiver, std::nullptr_t slotMethod = nullptr);
 
    // function ptr or lambda
    template<class Sender, class SignalClass, class ...SignalArgs, class Receiver, class T>
    static bool disconnect(const Sender *sender, void (SignalClass::*signalMethod)(SignalArgs...),
-                          const Receiver *receiver, T slotMethod);
+         const Receiver *receiver, T slotMethod);
 
    template<typename T>
    T findChild(const QString &childName = QString()) const;
@@ -253,7 +253,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    QObject *m_currentChildBeingDeleted;
    CSAbstractDeclarativeData *m_declarativeData;
 
-   QList< QPointer<QObject> > m_eventFilters;
+   QList< QPointer<QObject>> m_eventFilters;
 
    QString m_objectName;
    int m_postedEvents;
@@ -292,7 +292,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 
    template<class T>
    void findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
-                  Qt::FindChildOptions options) const;
+         Qt::FindChildOptions options) const;
 
    CORE_CS_SLOT_1(Private, void internal_reregisterTimers(QList<QTimerInfo> timerList))
    CORE_CS_SLOT_2(internal_reregisterTimers)
@@ -354,7 +354,7 @@ QList<T> QObject::findChildren(const QRegularExpression &regExp, Qt::FindChildOp
 
 template<class T>
 void QObject::findChildren_helper(const QString &name, const QRegularExpression *regExp, QList<T> &list,
-                  Qt::FindChildOptions options) const
+      Qt::FindChildOptions options) const
 {
    for (QObject *temp : m_children) {
       T child = dynamic_cast<T>(temp);
@@ -398,7 +398,7 @@ T QObject::property(const QString &name) const
 
       if (k < 0) {
          std::string msg = meta->className().toStdString() + "::property() Property " + csPrintable(name) +
-                  " is invalid or does not exist";
+               " is invalid or does not exist";
          throw std::invalid_argument(msg);
       }
 
@@ -409,7 +409,7 @@ T QObject::property(const QString &name) const
 
       } else {
          std::string msg = meta->className().toStdString() + "::property() Property " + csPrintable(name) +
-                  " is not the correct type";
+               " is not the correct type";
          throw std::invalid_argument(msg);
       }
    }
@@ -474,7 +474,6 @@ inline const QString &qobject_interface_iid()
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QObject *);
 
-
 // **
 class Q_CORE_EXPORT CSAbstractDeclarativeData
 {
@@ -485,14 +484,12 @@ class Q_CORE_EXPORT CSAbstractDeclarativeData
    static int  (*receivers)(CSAbstractDeclarativeData *, const QObject *, int);
 };
 
-
 // **
 class Q_CORE_EXPORT CSGadget_Fake_Parent
 {
  public:
    static const QMetaObject &staticMetaObject();
 };
-
 
 // **
 class Q_CORE_EXPORT CSInternalChildren
@@ -507,7 +504,6 @@ class Q_CORE_EXPORT CSInternalChildren
    friend class QWidgetPrivate;
 };
 
-
 class Q_CORE_EXPORT CSInternalDeclarativeData
 {
  private:
@@ -517,7 +513,6 @@ class Q_CORE_EXPORT CSInternalDeclarativeData
    friend class QWidget;
    friend class QGraphicsItem;
 };
-
 
 class Q_CORE_EXPORT CSInternalEvents
 {
@@ -531,7 +526,7 @@ class Q_CORE_EXPORT CSInternalEvents
    static void set_m_sendChildEvents(QObject *object, bool data);
    static void set_m_receiveChildEvents(QObject *object, bool data);
 
-   static QList<QPointer<QObject> > &get_m_EventFilters(QObject *object);
+   static QList<QPointer<QObject>> &get_m_EventFilters(QObject *object);
    static std::atomic<bool> &get_m_inThreadChangeEvent(QObject *object);
 
    friend class QApplication;

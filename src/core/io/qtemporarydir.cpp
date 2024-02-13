@@ -64,14 +64,12 @@ QTemporaryDirPrivate::~QTemporaryDirPrivate()
 
 static QString defaultTemplateName()
 {
-   QString baseName;
+   QString baseName = QCoreApplication::applicationName();
 
-#if defined(QT_BUILD_CORE_LIB)
-   baseName = QCoreApplication::applicationName();
-   if (baseName.isEmpty())
-#endif
+   if (baseName.isEmpty()) {
 
       baseName = "cs_temp";
+   }
 
    return QDir::tempPath() + '/' + baseName + "-XXXXXX";
 }
@@ -116,6 +114,7 @@ void QTemporaryDirPrivate::create(const QString &templateName)
       success = true;
       m_pathOrError = QFile::decodeName(buffer.constData());
    }
+
 #endif
 }
 
@@ -188,7 +187,7 @@ bool QTemporaryDir::remove()
 
    if (! result) {
       qWarning() << "QTemporaryDir::remove() Unable to remove path " << QDir::toNativeSeparators(path())
-         << ", verify if there are read only files in this directory";
+            << ", verify if there are read only files in this directory";
    }
 
    return result;

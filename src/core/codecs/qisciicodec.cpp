@@ -232,6 +232,7 @@ QByteArray QIsciiCodec::convertFromUnicode(QStringView str, ConverterState *stat
 QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState *state) const
 {
    bool halant = false;
+
    if (state) {
       halant = state->state_data[0];
    }
@@ -273,4 +274,3 @@ QString QIsciiCodec::convertToUnicode(const char *chars, int len, ConverterState
 }
 
 #endif // QT_NO_CODECS
-

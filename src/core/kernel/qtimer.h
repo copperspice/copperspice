@@ -85,13 +85,13 @@ class Q_CORE_EXPORT QTimer : public QObject
    // **A  slot in a QObject
    template <typename Receiver, typename SlotClass, typename SlotReturn>
    static typename std::enable_if<std::is_base_of<SlotClass, Receiver>::value>::type
-            singleShot(int msec, Receiver *receiver, SlotReturn (SlotClass::*slotMethod)()) {
+   singleShot(int msec, Receiver *receiver, SlotReturn (SlotClass::*slotMethod)()) {
       singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);
    }
 
    template <typename Receiver, typename SlotClass, typename SlotReturn>
    static typename std::enable_if<std::is_base_of<SlotClass, Receiver>::value>::type
-            singleShot(int msec, Qt::TimerType timerType, Receiver *receiver, SlotReturn (SlotClass::*slotMethod)()) {
+         singleShot(int msec, Qt::TimerType timerType, Receiver *receiver, SlotReturn (SlotClass::*slotMethod)()) {
 
       std::unique_ptr<CSBento< SlotReturn (SlotClass::*)() >> slotBento =
             std::make_unique<CSBento< SlotReturn(SlotClass::*)() >>(std::move(slotMethod));
@@ -102,31 +102,30 @@ class Q_CORE_EXPORT QTimer : public QObject
    // ** B  slot is a function pointer (without receiver)
    template <typename T>
    static typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
-            ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
-            singleShot(int msec, T slotMethod) {
+         ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
+         singleShot(int msec, T slotMethod) {
       singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, nullptr, slotMethod);
    }
 
    template <typename T>
    static typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
-            ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
-            singleShot(int msec, Qt::TimerType timerType, T slotMethod) {
+         ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
+         singleShot(int msec, Qt::TimerType timerType, T slotMethod) {
       singleShot(msec, timerType, nullptr, slotMethod);
    }
-
 
    // ** C  slot is a function pointer (with receiver)
    template <typename T>
    static inline typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
-            ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
-            singleShot(int msec, QObject *receiver, T slotMethod) {
+         ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
+         singleShot(int msec, QObject *receiver, T slotMethod) {
       singleShot(msec, msec >= 2000 ? Qt::CoarseTimer : Qt::PreciseTimer, receiver, slotMethod);
    }
 
    template <typename T>
    static typename std::enable_if < ! std::is_member_function_pointer<T>::value &&
-            ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
-            singleShot(int msec, Qt::TimerType timerType, QObject *receiver, T slotMethod) {
+         ! std::is_convertible<T, QString>::value && ! std::is_convertible<T, const char *>::value, void >::type
+         singleShot(int msec, Qt::TimerType timerType, QObject *receiver, T slotMethod) {
 
       std::unique_ptr<CSBento<T>> slotBento = std::make_unique<CSBento<T>>(std::move(slotMethod));
 
@@ -153,14 +152,16 @@ class Q_CORE_EXPORT QTimer : public QObject
       return -1;
    }
 
-   inline void killTimer(int) {}
+   void killTimer(int) {
+   }
 
    static void singleShot_internal(int msec, Qt::TimerType timerType,
-      const QObject *receiver, std::unique_ptr<CSBentoAbstract> slotBento);
+         const QObject *receiver, std::unique_ptr<CSBentoAbstract> slotBento);
 
    int id;
    int inter;
    int del;
+
    uint single : 1;
    uint nulltimer : 1;
    uint type : 2;

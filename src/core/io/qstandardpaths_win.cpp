@@ -55,22 +55,23 @@ static inline bool isGenericConfigLocation(QStandardPaths::StandardLocation type
 static inline bool isConfigLocation(QStandardPaths::StandardLocation type)
 {
    return type == QStandardPaths::ConfigLocation || type == QStandardPaths::AppConfigLocation
-      || type == QStandardPaths::AppDataLocation || type == QStandardPaths::AppLocalDataLocation
-      || isGenericConfigLocation(type);
+         || type == QStandardPaths::AppDataLocation || type == QStandardPaths::AppLocalDataLocation
+         || isGenericConfigLocation(type);
 }
 
 static void appendOrganizationAndApp(QString &path)
 {
-    const QString &org = QCoreApplication::organizationName();
-    if (! org.isEmpty()) {
-       path += '/' + org;
-    }
+   const QString &org = QCoreApplication::organizationName();
 
-    const QString &appName = QCoreApplication::applicationName();
+   if (! org.isEmpty()) {
+      path += '/' + org;
+   }
 
-    if (! appName.isEmpty()) {
-       path += '/' + appName;
-    }
+   const QString &appName = QCoreApplication::applicationName();
+
+   if (! appName.isEmpty()) {
+      path += '/' + appName;
+   }
 }
 
 // Map QStandardPaths::StandardLocation to CLSID of SHGetSpecialFolderPath()
@@ -96,7 +97,6 @@ static int writableSpecialFolderClsid(QStandardPaths::StandardLocation type)
       CSIDL_LOCAL_APPDATA,    // AppConfigLocation ("Local" path)
    };
 
-
    static_assert(std::size(clsids) == size_t(QStandardPaths::AppConfigLocation + 1));
 
    return size_t(type) < sizeof(clsids) / sizeof(clsids[0]) ? clsids[type] : -1;
@@ -111,10 +111,10 @@ static QString sHGetSpecialFolderPath(int clsid, QStandardPaths::StandardLocatio
       result = convertCharArray(path);
 
    } else {
-     if (warn) {
-        qErrnoWarning("SHGetSpecialFolderPath() failed for standard location \"%s\", clsid=0x%x.",
-            csPrintable(QStandardPaths::displayName(type)), clsid);
-     }
+      if (warn) {
+         qErrnoWarning("SHGetSpecialFolderPath() failed for standard location \"%s\", clsid=0x%x.",
+               csPrintable(QStandardPaths::displayName(type)), clsid);
+      }
    }
 
    return result;
@@ -124,13 +124,14 @@ static QString sHGetKnownFolderPath(const GUID &clsid, QStandardPaths::StandardL
 {
    QString result;
 
-   using GetKnownFolderPath = HRESULT (WINAPI *)(const GUID&, DWORD, HANDLE, LPWSTR*);
+   using GetKnownFolderPath = HRESULT (WINAPI *)(const GUID &, DWORD, HANDLE, LPWSTR *);
 
    // vista and newer
    static const GetKnownFolderPath sHGetKnownFolderPath =
-      reinterpret_cast<GetKnownFolderPath>(QSystemLibrary::resolve("shell32", "SHGetKnownFolderPath"));
+         reinterpret_cast<GetKnownFolderPath>(QSystemLibrary::resolve("shell32", "SHGetKnownFolderPath"));
 
    LPWSTR path;
+
    if (sHGetKnownFolderPath && SUCCEEDED(sHGetKnownFolderPath(clsid, 0, nullptr, &path))) {
       result = convertCharArray(path);
       CoTaskMemFree(path);
@@ -139,8 +140,9 @@ static QString sHGetKnownFolderPath(const GUID &clsid, QStandardPaths::StandardL
       if (warn) {
          qErrnoWarning("SHGetKnownFolderPath() failed for standard location \"%s\".",
                csPrintable(QStandardPaths::displayName(type)));
-     }
+      }
    }
+
    return result;
 }
 
@@ -156,6 +158,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          if (result.isEmpty()) {
             result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
          }
+
          break;
 
       case CacheLocation:
@@ -169,6 +172,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
             appendOrganizationAndApp(result);
             result += "/cache";
          }
+
          break;
 
       case GenericCacheLocation:
@@ -177,6 +181,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          if (! result.isEmpty()) {
             result += "/cache";
          }
+
          break;
 
       case RuntimeLocation:
@@ -194,9 +199,10 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          if (! result.isEmpty() && isConfigLocation(type)) {
 
             if (! isGenericConfigLocation(type)) {
-                appendOrganizationAndApp(result);
+               appendOrganizationAndApp(result);
             }
          }
+
          break;
    }
 
@@ -218,15 +224,15 @@ QStringList QStandardPaths::standardLocations(StandardLocation type)
 
       if (! programData.isEmpty()) {
          if (! isGenericConfigLocation(type)) {
-             appendOrganizationAndApp(programData);
+            appendOrganizationAndApp(programData);
          }
+
          dirs.append(programData);
       }
-     dirs.append(QCoreApplication::applicationDirPath());
-     dirs.append(QCoreApplication::applicationDirPath() + "/data");
+
+      dirs.append(QCoreApplication::applicationDirPath());
+      dirs.append(QCoreApplication::applicationDirPath() + "/data");
    }
-
-
 
    return dirs;
 }

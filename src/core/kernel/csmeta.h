@@ -92,7 +92,7 @@ class Q_CORE_EXPORT QMetaMethod
    enum Attributes { Compatibility = 0x1, Cloned = 0x2, Scriptable = 0x4 };   // internal
 
    QMetaMethod(const QString &typeName, const QString &signature, std::vector<QString> paramNames,
-               Access access, MethodType methodType, Attributes attributes, QMetaObject *obj);
+         Access access, MethodType methodType, Attributes attributes, QMetaObject *obj);
 
    QMetaMethod();
 
@@ -184,8 +184,8 @@ class Q_CORE_EXPORT QMetaProperty
 {
  public:
    enum Kind { READ, WRITE, RESET, NOTIFY, REVISION, DESIGNABLE, SCRIPTABLE,
-               STORED, USER, CONSTANT, FINAL
-             };
+         STORED, USER, CONSTANT, FINAL
+   };
 
    QMetaProperty(const QString &name = QString(), QMetaObject *object = nullptr);
 
@@ -322,12 +322,12 @@ bool QMetaMethod::invoke(QObject *object, Ts &&...Vs) const
 template <class T, class = void>
 class CS_ReturnType
 {
-   public:
-      static const QString &getName() {
-         static_assert(! std::is_same_v<T, T>, "Requested type name has not been registered.");
-         static const QString retval;
-         return retval;
-      }
+ public:
+   static const QString &getName() {
+      static_assert(! std::is_same_v<T, T>, "Requested type name has not been registered.");
+      static const QString retval;
+      return retval;
+   }
 };
 
 #if ! defined (CS_DOXYPRESS)
@@ -346,13 +346,13 @@ class CS_ReturnType
    }
 
 // specialization of a templated class
-#define CS_REGISTER_TEMPLATE(dataType)                   \
+#define CS_REGISTER_TEMPLATE(dataType)                    \
    template <class... Ts>                                 \
-   class CS_ReturnType<dataType<Ts...>>                  \
-   {                                                     \
-      public:                                            \
-         static const QString &getName();                \
-   };                                                    \
+   class CS_ReturnType<dataType<Ts...>>                   \
+   {                                                      \
+    public:                                               \
+      static const QString &getName();                    \
+   };                                                     \
    template <class... Ts>                                 \
    const QString &CS_ReturnType< dataType<Ts...> >::getName()                               \
    {                                                                                        \
@@ -360,7 +360,7 @@ class CS_ReturnType
       return retval;                                                                        \
    }
 
-#endif // doxypress
+#endif   // doxypress
 
 // methods for these 2 class, located in csmeta_internal2.h around line 113
 template <class E>
@@ -377,23 +377,21 @@ class CS_ReturnType<QFlags<E>>
    static const QString &getName();
 };
 
-
 // QObject and children
 template <class T>
 class CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
-   typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
+      typename std::remove_reference< decltype(T::staticMetaObject() )>::type >::value>::type >
 {
  public:
    static const QString &getName();
 };
 
 template <class T>
-const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject ,
-       typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::getName()
+const QString &CS_ReturnType<T, typename std::enable_if< std::is_base_of< QMetaObject,
+      typename std::remove_reference<decltype(T::staticMetaObject() )>::type>::value>::type>::getName()
 {
    return T::staticMetaObject().className();
 }
-
 
 // standard template function   ( class T1 = cs_internalEmpty, default value located in csmetafwd.h )
 template <class T1>
@@ -557,46 +555,46 @@ CS_REGISTER_TEMPLATE(std::pair)
 
 // next 8 function are specializations for containers to omit the Compare template when it is not specified
 template <class Key, class Value>
-class CS_ReturnType<QMap<Key, Value, qMapCompare<Key> >>
+class CS_ReturnType<QMap<Key, Value, qMapCompare<Key>>>
 {
-   public:
-      static const QString &getName() {
-         static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-         return retval;
-      }
+ public:
+   static const QString &getName() {
+      static QString retval("QMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+      return retval;
+   }
 };
 
 template <class Key, class Value>
-class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key> >>
+class CS_ReturnType<QMultiMap<Key, Value, qMapCompare<Key>>>
 {
-   public:
-      static const QString &getName() {
-         static const QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-         return retval;
-      }
+ public:
+   static const QString &getName() {
+      static const QString retval("QMultiMap<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+      return retval;
+   }
 };
 
 template <class Key, class Value>
-class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
+class CS_ReturnType<QHash<Key, Value, qHashFunc<Key>, qHashEqual<Key>>>
 {
-   public:
-      static const QString &getName() {
-         static const QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-         return retval;
-      }
+ public:
+   static const QString &getName() {
+      static const QString retval("QHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+      return retval;
+   }
 };
 
 template <class Key, class Value>
-class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key> >>
+class CS_ReturnType<QMultiHash<Key, Value, qHashFunc<Key>, qHashEqual<Key>>>
 {
-   public:
-      static const QString &getName() {
-         static const QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
-         return retval;
-      }
+ public:
+   static const QString &getName() {
+      static const QString retval("QMultiHash<" + cs_typeToName<Key>() + "," + cs_typeToName<Value>() + ">");
+      return retval;
+   }
 };
 
-#endif // doxypress
+#endif   // doxypress
 
 // **
 template <class T>

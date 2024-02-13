@@ -93,10 +93,10 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
    virtual QString comment() const;
 
    virtual QString displayName(qint64 atMSecsSinceEpoch,
-      QTimeZone::NameType nameType, const QLocale &locale) const;
+         QTimeZone::NameType nameType, const QLocale &locale) const;
 
    virtual QString displayName(QTimeZone::TimeType timeType,
-      QTimeZone::NameType nameType, const QLocale &locale) const;
+         QTimeZone::NameType nameType, const QLocale &locale) const;
 
    QByteArray id() const;
    bool isValid() const;
@@ -155,7 +155,8 @@ class Q_CORE_EXPORT QTimeZonePrivate : public QSharedData
 };
 
 template <>
-inline QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone() {
+inline QTimeZonePrivate *QSharedDataPointer<QTimeZonePrivate>::clone()
+{
    return d->clone();
 }
 
@@ -173,7 +174,7 @@ class QUtcTimeZonePrivate final : public QTimeZonePrivate
 
    // Create custom offset from UTC
    QUtcTimeZonePrivate(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-      const QString &abbreviation, QLocale::Country country, const QString &comment);
+         const QString &abbreviation, QLocale::Country country, const QString &comment);
 
    QUtcTimeZonePrivate(const QUtcTimeZonePrivate &other);
    virtual ~QUtcTimeZonePrivate();
@@ -186,7 +187,7 @@ class QUtcTimeZonePrivate final : public QTimeZonePrivate
    QString comment() const override;
 
    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
-      const QLocale &locale) const override;
+         const QLocale &locale) const override;
 
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
@@ -204,7 +205,7 @@ class QUtcTimeZonePrivate final : public QTimeZonePrivate
  private:
    void init(const QByteArray &zoneId);
    void init(const QByteArray &zoneId, int offsetSeconds, const QString &name,
-      const QString &abbreviation, QLocale::Country country, const QString &comment);
+         const QString &abbreviation, QLocale::Country country, const QString &comment);
 
    QString m_name;
    QString m_abbreviation;
@@ -229,7 +230,7 @@ struct QTzTransitionRule {
 inline bool operator==(const QTzTransitionRule &lhs, const QTzTransitionRule &rhs)
 {
    return lhs.stdOffset == rhs.stdOffset && lhs.dstOffset == rhs.dstOffset &&
-      lhs.abbreviationIndex == rhs.abbreviationIndex;
+         lhs.abbreviationIndex == rhs.abbreviationIndex;
 }
 
 inline bool operator!=(const QTzTransitionRule &lhs, const QTzTransitionRule &rhs)
@@ -255,10 +256,10 @@ class QTzTimeZonePrivate final : public QTimeZonePrivate
    QString comment() const override;
 
    QString displayName(qint64 atMSecsSinceEpoch, QTimeZone::NameType nameType,
-      const QLocale &locale) const override;
+         const QLocale &locale) const override;
 
    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
-      const QLocale &locale) const override;
+         const QLocale &locale) const override;
 
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
@@ -362,7 +363,7 @@ class QWinTimeZonePrivate final : public QTimeZonePrivate
    QString comment() const override;
 
    QString displayName(QTimeZone::TimeType timeType, QTimeZone::NameType nameType,
-      const QLocale &locale) const override;
+         const QLocale &locale) const override;
 
    QString abbreviation(qint64 atMSecsSinceEpoch) const override;
 
@@ -387,7 +388,7 @@ class QWinTimeZonePrivate final : public QTimeZonePrivate
    void init(const QByteArray &ianaId);
    QWinTransitionRule ruleForYear(int year) const;
    QTimeZonePrivate::Data ruleToData(const QWinTransitionRule &rule, qint64 atMSecsSinceEpoch,
-      QTimeZone::TimeType type) const;
+         QTimeZone::TimeType type) const;
 
    QByteArray m_windowsId;
    QString m_displayName;

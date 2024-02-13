@@ -45,6 +45,7 @@ QSharedMemoryPrivate::QSharedMemoryPrivate()
 void QSharedMemoryPrivate::setErrorString(const QString &function)
 {
    DWORD windowsError = GetLastError();
+
    if (windowsError == 0) {
       return;
    }
@@ -54,23 +55,28 @@ void QSharedMemoryPrivate::setErrorString(const QString &function)
          error = QSharedMemory::AlreadyExists;
          errorString = QSharedMemory::tr("%1: already exists").formatArg(function);
          break;
+
       case ERROR_FILE_NOT_FOUND:
          error = QSharedMemory::NotFound;
          errorString = QSharedMemory::tr("%1: does not exist").formatArg(function);
          break;
+
       case ERROR_COMMITMENT_LIMIT:
          error = QSharedMemory::InvalidSize;
          errorString = QSharedMemory::tr("%1: invalid size").formatArg(function);
          break;
+
       case ERROR_NO_SYSTEM_RESOURCES:
       case ERROR_NOT_ENOUGH_MEMORY:
          error = QSharedMemory::OutOfResources;
          errorString = QSharedMemory::tr("%1: out of resources").formatArg(function);
          break;
+
       case ERROR_ACCESS_DENIED:
          error = QSharedMemory::PermissionDenied;
          errorString = QSharedMemory::tr("%1: permission denied").formatArg(function);
          break;
+
       default:
          errorString = QSharedMemory::tr("%1: unknown error %2").formatArg(function).formatArg(windowsError);
          error = QSharedMemory::UnknownError;
@@ -84,7 +90,7 @@ void QSharedMemoryPrivate::setErrorString(const QString &function)
 HANDLE QSharedMemoryPrivate::handle()
 {
    if (! hand) {
-      // don't allow making handles on empty keys
+      // do not allow making handles on empty keys
       if (nativeKey.isEmpty()) {
          error       = QSharedMemory::KeyError;
          errorString = QSharedMemory::tr("%1: key is empty").formatArg("QSharedMemory::handle");
@@ -108,6 +114,7 @@ void QSharedMemoryPrivate::cleanHandle()
    if (hand != nullptr && ! CloseHandle(hand)) {
       setErrorString(QLatin1String("QSharedMemory::cleanHandle"));
    }
+
    hand = nullptr;
 }
 
@@ -141,6 +148,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
 
    // Grab the size of the memory we have been given (a multiple of 4K on windows)
    MEMORY_BASIC_INFORMATION info;
+
    if (! VirtualQuery(memory, &info, sizeof(info))) {
       // Windows doesn't set an error code on this one,
       // it should only be a kernel memory error.
@@ -157,7 +165,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
 bool QSharedMemoryPrivate::detach()
 {
    // umap memory
-   if (!UnmapViewOfFile(memory)) {
+   if (! UnmapViewOfFile(memory)) {
       setErrorString(QLatin1String("QSharedMemory::detach"));
       return false;
    }

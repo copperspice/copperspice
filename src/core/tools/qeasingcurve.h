@@ -54,9 +54,11 @@ class Q_CORE_EXPORT QEasingCurve
 
    QEasingCurve(Type type = Linear);
    QEasingCurve(const QEasingCurve &other);
+
    ~QEasingCurve();
 
    QEasingCurve &operator=(const QEasingCurve &other);
+
    bool operator==(const QEasingCurve &other) const;
    bool operator!=(const QEasingCurve &other) const {
       return !(this->operator==(other));

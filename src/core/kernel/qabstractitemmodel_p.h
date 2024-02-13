@@ -56,7 +56,7 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
 
    void removePersistentIndexData(QPersistentModelIndexData *data);
    void movePersistentIndexes(const QVector<QPersistentModelIndexData *> &indexes, int change,
-                  const QModelIndex &parent, Qt::Orientation orientation);
+         const QModelIndex &parent, Qt::Orientation orientation);
 
    void rowsAboutToBeInserted(const QModelIndex &parent, int first, int last);
    void rowsInserted(const QModelIndex &parent, int first, int last);
@@ -70,13 +70,13 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
    static bool variantLessThan(const QVariant &v1, const QVariant &v2);
 
    void itemsAboutToBeMoved(const QModelIndex &srcParent, int srcFirst, int srcLast,
-                  const QModelIndex &destinationParent, int destinationChild, Qt::Orientation);
+         const QModelIndex &destinationParent, int destinationChild, Qt::Orientation);
 
    void itemsMoved(const QModelIndex &srcParent, int srcFirst, int srcLast,
-                  const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
+         const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
 
    bool allowMove(const QModelIndex &srcParent, int srcFirst, int srcLast,
-                  const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
+         const QModelIndex &destinationParent, int destinationChild, Qt::Orientation orientation);
 
    QModelIndex createIndex(int row, int column, void *data = nullptr) const {
       return q_func()->createIndex(row, column, data);
@@ -142,8 +142,8 @@ class Q_CORE_EXPORT QAbstractItemModelPrivate
       Persistent() {}
       QMultiMap<QModelIndex, QPersistentModelIndexData *> m_indexes;
 
-      QStack<QVector<QPersistentModelIndexData *> > moved;
-      QStack<QVector<QPersistentModelIndexData *> > invalidated;
+      QStack<QVector<QPersistentModelIndexData *>> moved;
+      QStack<QVector<QPersistentModelIndexData *>> invalidated;
 
       void insertMultiAtEnd(const QModelIndex &key, QPersistentModelIndexData *data);
    } persistent;

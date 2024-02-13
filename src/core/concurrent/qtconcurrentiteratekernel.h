@@ -69,8 +69,8 @@ class ResultReporter
 {
  public:
    ResultReporter(ThreadEngine<T> *_threadEngine)
-      : threadEngine(_threadEngine) {
-
+      : threadEngine(_threadEngine)
+   {
    }
 
    void reserveSpace(int resultCount) {
@@ -80,6 +80,7 @@ class ResultReporter
 
    void reportResults(int begin) {
       const int useVectorThreshold = 4; // Tunable parameter.
+
       if (currentResultCount > useVectorThreshold) {
          vector.resize(currentResultCount);
          threadEngine->reportResults(vector, begin);
@@ -150,7 +151,7 @@ class IterateKernel : public ThreadEngine<T>
 
    virtual ~IterateKernel() { }
 
-   virtual bool runIteration(Iterator it, int index , T *result) {
+   virtual bool runIteration(Iterator it, int index, T *result) {
       (void) it;
       (void) index;
       (void) result;
@@ -167,6 +168,7 @@ class IterateKernel : public ThreadEngine<T>
 
    void start() {
       progressReportingEnabled = this->isProgressReportingEnabled();
+
       if (progressReportingEnabled && iterationCount > 0) {
          this->setProgressRange(0, iterationCount);
       }
@@ -240,6 +242,7 @@ class IterateKernel : public ThreadEngine<T>
             return ThrottleThread;
          }
       }
+
       return ThreadFinished;
    }
 
@@ -272,6 +275,7 @@ class IterateKernel : public ThreadEngine<T>
          }
 
          const bool resultAavailable = this->runIteration(prev, index, resultReporter.getPointer());
+
          if (resultAavailable) {
             resultReporter.reportResults(index);
          }
@@ -281,6 +285,7 @@ class IterateKernel : public ThreadEngine<T>
          }
 
          expected = 0;
+
          if (iteratorThreads.compareExchange(expected, 1, std::memory_order_acquire) == false) {
             return ThreadFinished;
          }
@@ -288,7 +293,6 @@ class IterateKernel : public ThreadEngine<T>
 
       return ThreadFinished;
    }
-
 
  public:
    const Iterator begin;

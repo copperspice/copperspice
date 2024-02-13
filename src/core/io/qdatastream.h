@@ -334,6 +334,7 @@ template <typename T>
 QDataStream &operator<<(QDataStream &stream, const QVector<T> &vector)
 {
    stream << quint32(vector.size());
+
    for (typename QVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it) {
       stream << *it;
    }

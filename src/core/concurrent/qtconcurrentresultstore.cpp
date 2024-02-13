@@ -39,6 +39,7 @@ int ResultIteratorBase::vectorIndex() const
 {
    return m_vectorIndex;
 }
+
 int ResultIteratorBase::resultIndex() const
 {
    return mapIterator.key() + m_vectorIndex;
@@ -52,6 +53,7 @@ ResultIteratorBase ResultIteratorBase::operator++()
       ++mapIterator;
       m_vectorIndex = 0;
    }
+
    return *this;
 }
 
@@ -102,6 +104,7 @@ bool ResultStoreBase::filterMode() const
 void ResultStoreBase::syncResultCount()
 {
    ResultIteratorBase it = resultAt(resultCount);
+
    while (it != end()) {
       resultCount += it.batchSize();
       it = resultAt(resultCount);
@@ -121,6 +124,7 @@ void ResultStoreBase::insertResultItemIfValid(int index, ResultItem &resultItem)
 int ResultStoreBase::insertResultItem(int index, ResultItem &resultItem)
 {
    int storeIndex;
+
    if (m_filterMode && index != -1 && index > insertIndex) {
       pendingResults[index] = resultItem;
       storeIndex = index;
@@ -128,6 +132,7 @@ int ResultStoreBase::insertResultItem(int index, ResultItem &resultItem)
       storeIndex = updateInsertIndex(index, resultItem.count());
       insertResultItemIfValid(storeIndex - filteredResults, resultItem);
    }
+
    syncPendingResults();
    return storeIndex;
 }
@@ -136,8 +141,10 @@ void ResultStoreBase::syncPendingResults()
 {
    // check if we can insert any of the pending results:
    QMap<int, ResultItem>::iterator it = pendingResults.begin();
+
    while (it != pendingResults.end()) {
       int index = it.key();
+
       if (index != resultCount + filteredResults) {
          break;
       }
@@ -192,6 +199,7 @@ ResultIteratorBase ResultStoreBase::resultAt(int index) const
    if (m_results.isEmpty()) {
       return ResultIteratorBase(m_results.end());
    }
+
    QMap<int, ResultItem>::const_iterator it = m_results.lowerBound(index);
 
    // lowerBound returns either an iterator to the result or an iterator
@@ -199,14 +207,17 @@ ResultIteratorBase ResultStoreBase::resultAt(int index) const
    // that the result is stored in a vector at the previous index.
    if (it == m_results.end()) {
       --it;
+
       if (it.value().isVector() == false) {
          return ResultIteratorBase(m_results.end());
       }
+
    } else {
       if (it.key() > index) {
          if (it == m_results.begin()) {
             return ResultIteratorBase(m_results.end());
          }
+
          --it;
       }
    }
@@ -218,6 +229,7 @@ ResultIteratorBase ResultStoreBase::resultAt(int index) const
    } else if (it.value().isVector() == false && vectorIndex != 0) {
       return ResultIteratorBase(m_results.end());
    }
+
    return ResultIteratorBase(it, vectorIndex);
 }
 
@@ -241,6 +253,7 @@ int ResultStoreBase::updateInsertIndex(int index, int _count)
    } else {
       insertIndex = qMax(index + _count, insertIndex);
    }
+
    return index;
 }
 

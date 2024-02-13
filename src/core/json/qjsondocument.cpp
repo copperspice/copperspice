@@ -164,4 +164,3 @@ bool QJsonDocument::isNull() const
 {
    return m_data->isNull();
 }
-

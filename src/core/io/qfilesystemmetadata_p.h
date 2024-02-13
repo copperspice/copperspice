@@ -89,13 +89,13 @@ class QFileSystemMetaData
 
       // Attributes
       HiddenAttribute     = 0x00100000,
-      SizeAttribute       = 0x00200000,   // Note: overlaps with QAbstractFileEngine::LocalDiskFlag
+      SizeAttribute       = 0x00200000,   // overlaps with QAbstractFileEngine::LocalDiskFlag
       ExistsAttribute     = 0x00400000,
 
       Attributes          = HiddenAttribute | SizeAttribute | ExistsAttribute,
 
       // Times
-      CreationTime        = 0x01000000,   // Note: overlaps with QAbstractFileEngine::Refresh
+      CreationTime        = 0x01000000,   // overlaps with QAbstractFileEngine::Refresh
       ModificationTime    = 0x02000000,
       AccessTime          = 0x04000000,
 
@@ -108,22 +108,22 @@ class QFileSystemMetaData
       OwnerIds            = UserId | GroupId,
 
       PosixStatFlags      = QFileSystemMetaData::OtherPermissions
-                            | QFileSystemMetaData::GroupPermissions
-                            | QFileSystemMetaData::OwnerPermissions
-                            | QFileSystemMetaData::FileType
-                            | QFileSystemMetaData::DirectoryType
-                            | QFileSystemMetaData::SequentialType
-                            | QFileSystemMetaData::SizeAttribute
-                            | QFileSystemMetaData::Times
-                            | QFileSystemMetaData::OwnerIds,
+            | QFileSystemMetaData::GroupPermissions
+            | QFileSystemMetaData::OwnerPermissions
+            | QFileSystemMetaData::FileType
+            | QFileSystemMetaData::DirectoryType
+            | QFileSystemMetaData::SequentialType
+            | QFileSystemMetaData::SizeAttribute
+            | QFileSystemMetaData::Times
+            | QFileSystemMetaData::OwnerIds,
 
 #if defined(Q_OS_WIN)
       WinStatFlags        = QFileSystemMetaData::FileType
-                            | QFileSystemMetaData::DirectoryType
-                            | QFileSystemMetaData::HiddenAttribute
-                            | QFileSystemMetaData::ExistsAttribute
-                            | QFileSystemMetaData::SizeAttribute
-                            | QFileSystemMetaData::Times,
+            | QFileSystemMetaData::DirectoryType
+            | QFileSystemMetaData::HiddenAttribute
+            | QFileSystemMetaData::ExistsAttribute
+            | QFileSystemMetaData::SizeAttribute
+            | QFileSystemMetaData::Times,
 #endif
 
       AllMetaDataFlags    = 0xFFFFFFFF
@@ -384,9 +384,9 @@ inline void QFileSystemMetaData::fillFromFindData(WIN32_FIND_DATA &findData, boo
 inline void QFileSystemMetaData::fillFromFindInfo(BY_HANDLE_FILE_INFORMATION &fileInfo)
 {
    fillFromFileAttribute(fileInfo.dwFileAttributes);
-   creationTime_ = fileInfo.ftCreationTime;
+   creationTime_   = fileInfo.ftCreationTime;
    lastAccessTime_ = fileInfo.ftLastAccessTime;
-   lastWriteTime_ = fileInfo.ftLastWriteTime;
+   lastWriteTime_  = fileInfo.ftLastWriteTime;
 
    if (fileAttribute_ & FILE_ATTRIBUTE_DIRECTORY) {
       size_ = 0;
@@ -395,8 +395,9 @@ inline void QFileSystemMetaData::fillFromFindInfo(BY_HANDLE_FILE_INFORMATION &fi
       size_ <<= 32;
       size_ += fileInfo.nFileSizeLow;
    }
+
    knownFlagsMask |=  Times | SizeAttribute;
 }
 #endif
 
-#endif // include guard
+#endif //

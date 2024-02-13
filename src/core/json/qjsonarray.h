@@ -106,8 +106,7 @@ class Q_CORE_EXPORT QJsonArray
    bool operator==(const QJsonArray &other) const;
    bool operator!=(const QJsonArray &other) const;
 
-   QJsonArray operator+(QJsonValue value) const
-   {
+   QJsonArray operator+(QJsonValue value) const {
       QJsonArray retval = *this;
       retval += std::move(value);
 

@@ -122,6 +122,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual QDateTime fileTime(FileTime time) const;
    virtual void setFileName(const QString &file);
    virtual int handle() const;
+
    bool atEnd() const;
    uchar *map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags);
    bool unmap(uchar *address);
@@ -145,10 +146,10 @@ class Q_CORE_EXPORT QAbstractFileEngine
    };
 
    class ExtensionOption
-   {};
+   { };
 
    class ExtensionReturn
-   {};
+   { };
 
    class MapExtensionOption : public ExtensionOption
    {

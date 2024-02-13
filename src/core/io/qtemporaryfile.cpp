@@ -39,9 +39,9 @@
 #endif
 
 #if defined(Q_OS_WIN)
-   using NativeFileHandle = HANDLE;
+using NativeFileHandle = HANDLE;
 #else
-   using NativeFileHandle = int;
+using NativeFileHandle = int;
 #endif
 
 static QString createFileName(QString fName, size_t pos, size_t length)
@@ -66,7 +66,7 @@ static QString createFileName(QString fName, size_t pos, size_t length)
 }
 
 static bool createFileFromTemplate(NativeFileHandle &fHandle, QString &fName,
-                  size_t pos, size_t length, quint32 mode, QSystemError &error)
+      size_t pos, size_t length, quint32 mode, QSystemError &error)
 {
    for (int cntLimit = 0; cntLimit < 100; ++cntLimit) {
       // create file and obtain handle
@@ -77,8 +77,7 @@ static bool createFileFromTemplate(NativeFileHandle &fHandle, QString &fName,
       (void) mode;
 
       fHandle = CreateFile(&fName.toStdWString()[0], GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CREATE_NEW,
-                        FILE_ATTRIBUTE_NORMAL, nullptr);
+            FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, nullptr);
 
       if (fHandle != INVALID_HANDLE_VALUE) {
          // opened successfully
@@ -146,7 +145,7 @@ bool QTemporaryFileEngine::isReallyOpen()
 #if defined Q_OS_WIN
          && (INVALID_HANDLE_VALUE == d->fileHandle)
 #endif
-        )) {
+         )) {
 
       return true;
    }
@@ -301,7 +300,7 @@ QTemporaryFilePrivate::~QTemporaryFilePrivate()
 QAbstractFileEngine *QTemporaryFilePrivate::engine() const
 {
    if (fileEngine == nullptr) {
-     resetFileEngine();
+      resetFileEngine();
    }
 
    return fileEngine;
@@ -437,9 +436,11 @@ QTemporaryFile *QTemporaryFile::createNativeFile(QFile &file)
 
       while (true) {
          qint64 len = file.read(buffer, 1024);
+
          if (len < 1) {
             break;
          }
+
          ret->write(buffer, len);
       }
 

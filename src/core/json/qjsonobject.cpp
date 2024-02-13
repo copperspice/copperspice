@@ -38,12 +38,11 @@ QJsonObject::QJsonObject(const_iterator iter_begin, const_iterator iter_end)
    m_object->m_map = QFlatMap<QString, QJsonValue>(iter_begin, iter_end);
 }
 
-QJsonObject::QJsonObject(std::initializer_list<QPair<QString, QJsonValue> > list)
+QJsonObject::QJsonObject(std::initializer_list<QPair<QString, QJsonValue>> list)
 {
    m_object = std::make_shared<QJsonDataObject>();
    m_object->m_map = QFlatMap<QString, QJsonValue>(list.begin(), list.end());
 }
-
 
 QJsonObject::QJsonObject(const QJsonObject &other)
 {
@@ -191,26 +190,32 @@ QJsonObject::const_iterator QJsonObject::constFind(const QString &key) const
 }
 
 // iterators
-QJsonObject::iterator QJsonObject::begin() {
+QJsonObject::iterator QJsonObject::begin()
+{
    return m_object->m_map.begin();
 }
 
-QJsonObject::const_iterator QJsonObject::begin() const {
+QJsonObject::const_iterator QJsonObject::begin() const
+{
    return m_object->m_map.begin();
 }
 
-QJsonObject::const_iterator QJsonObject::constBegin() const {
+QJsonObject::const_iterator QJsonObject::constBegin() const
+{
    return m_object->m_map.constBegin();
 }
 
-QJsonObject::iterator QJsonObject::end() {
+QJsonObject::iterator QJsonObject::end()
+{
    return m_object->m_map.end();
 }
 
-QJsonObject::const_iterator QJsonObject::end() const {
+QJsonObject::const_iterator QJsonObject::end() const
+{
    return m_object->m_map.end();
 }
 
-QJsonObject::const_iterator QJsonObject::constEnd() const {
+QJsonObject::const_iterator QJsonObject::constEnd() const
+{
    return m_object->m_map.constEnd();
 }

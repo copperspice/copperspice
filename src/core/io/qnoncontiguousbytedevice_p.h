@@ -49,7 +49,7 @@ class Q_CORE_EXPORT QNonContiguousByteDevice : public QObject
 
    virtual qint64 size() = 0;
    virtual qint64 pos() {
-       return -1;
+      return -1;
    }
 
    virtual ~QNonContiguousByteDevice();
@@ -115,10 +115,9 @@ class QNonContiguousByteDeviceRingBufferImpl : public QNonContiguousByteDevice
    qint64 currentPosition;
 };
 
-
 class QNonContiguousByteDeviceIoDeviceImpl : public QNonContiguousByteDevice
 {
-  CORE_CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
+   CORE_CS_OBJECT(QNonContiguousByteDeviceIoDeviceImpl)
 
  public:
    QNonContiguousByteDeviceIoDeviceImpl(QIODevice *d);

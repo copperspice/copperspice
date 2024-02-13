@@ -141,10 +141,10 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    static void removeTranslator(QTranslator *translationFile);
 
    static QString translate(const char *context, const char *text, const char *comment = nullptr,
-            std::optional<int> numArg = std::optional<int>());
+         std::optional<int> numArg = std::optional<int>());
 
    static QString translate(const QString &context, const QString &text, const QString &comment = QString(),
-            std::optional<int> numArg = std::optional<int>());
+         std::optional<int> numArg = std::optional<int>());
 
    static void flush();
    void installNativeEventFilter(QAbstractNativeEventFilter *filterObj);
@@ -267,12 +267,11 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
 }
 
 #define Q_DECLARE_TR_FUNCTIONS(context) \
- public: \
-   static QString tr(const char *text, const char *comment = nullptr, \
-            std::optional<int> numArg = std::optional<int>()) \
-        { return QCoreApplication::translate(#context, text, comment, numArg); } \
- private:
-
+   public: \
+   static QString tr(const char *text, const char *comment = nullptr,       \
+         std::optional<int> numArg = std::optional<int>())                  \
+   { return QCoreApplication::translate(#context, text, comment, numArg); } \
+   private:
 
 using QtStartUpFunction = void (*)();
 using QtCleanUpFunction = void (*)();
@@ -283,8 +282,8 @@ Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
 Q_CORE_EXPORT QString qAppName();
 
 #if defined(Q_OS_WIN)
-   Q_CORE_EXPORT QString decodeMSG(const MSG &);
-   Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
+Q_CORE_EXPORT QString decodeMSG(const MSG &);
+Q_CORE_EXPORT QDebug operator<<(QDebug, const MSG &);
 #endif
 
 #endif

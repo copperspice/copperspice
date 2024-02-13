@@ -56,7 +56,7 @@ QStringList QStringList::filter(const QString &str, Qt::CaseSensitivity cs) cons
    return res;
 }
 
-QStringList & QStringList::replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs)
+QStringList &QStringList::replaceInStrings(const QString &before, const QString &after, Qt::CaseSensitivity cs)
 {
    for (int i = 0; i < this->size(); ++i) {
       (*this)[i].replace(before, after, cs);
@@ -80,6 +80,7 @@ QString QStringList::join(const QString &sep) const
 
       retval += this->at(i);
    }
+
    return retval;
 }
 
@@ -101,7 +102,7 @@ QStringList QStringList::filter(const QRegularExpression8 &rx) const
    return res;
 }
 
-QStringList & QStringList::replaceInStrings(const QRegularExpression8 &rx, const QString &after)
+QStringList &QStringList::replaceInStrings(const QRegularExpression8 &rx, const QString &after)
 {
    for (int i = 0; i < this->size(); ++i) {
       (*this)[i].replace(rx, after);
@@ -121,7 +122,7 @@ int QStringList::indexOf(const QRegularExpression8 &regExp, int from) const
 
    for (int i = from; i < this->size(); ++i) {
 
-      if(re.match(this->at(i)).hasMatch()) {
+      if (re.match(this->at(i)).hasMatch()) {
          return i;
       }
    }
@@ -142,7 +143,7 @@ int QStringList::lastIndexOf( const QRegularExpression8 &regExp, int from) const
    QRegularExpression8 re(regExp.pattern(), options);
 
    for (int i = from; i >= 0; --i) {
-      if(re.match(this->at(i)).hasMatch()) {
+      if (re.match(this->at(i)).hasMatch()) {
          return i;
       }
    }
@@ -170,6 +171,7 @@ int QStringList::removeDuplicates()
       if (j != i) {
          (*this)[j] = s;
       }
+
       ++j;
    }
 

@@ -36,10 +36,13 @@ class QByteDataBuffer
    qint64 bufferCompleteSize;
 
  public:
-   QByteDataBuffer() : bufferCompleteSize(0) {
+   QByteDataBuffer()
+      : bufferCompleteSize(0)
+   {
    }
 
-   ~QByteDataBuffer() {
+   ~QByteDataBuffer()
+   {
       clear();
    }
 
@@ -70,14 +73,14 @@ class QByteDataBuffer
       bufferCompleteSize += bd.size();
    }
 
-   // return the first QByteData. User of this function has to qFree() its .data!
+   // return the first QByteData. User of this function has to qFree() its .data
    // preferably use this function to read data.
    QByteArray read() {
       bufferCompleteSize -= buffers.first().size();
       return buffers.takeFirst();
    }
 
-   // return everything. User of this function has to qFree() its .data!
+   // return everything. User of this function has to qFree() its .data
    // avoid to use this, it might malloc and memcpy.
    QByteArray readAll() {
       return read(byteAmount());
@@ -102,6 +105,7 @@ class QByteDataBuffer
 
       while (amount > 0) {
          QByteArray first = buffers.takeFirst();
+
          if (amount >= first.size()) {
             // take it completely
             bufferCompleteSize -= first.size();
@@ -139,12 +143,12 @@ class QByteDataBuffer
       bufferCompleteSize = 0;
    }
 
-   // The byte count of all QByteArrays
+   // byte count of all QByteArrays
    qint64 byteAmount() const {
       return bufferCompleteSize;
    }
 
-   // the number of QByteArrays
+   // bumber of QByteArrays
    qint64 bufferCount() const {
       return buffers.length();
    }
@@ -170,6 +174,7 @@ class QByteDataBuffer
          if (buffers.at(i).contains('\n')) {
             return true;
          }
+
       return false;
    }
 };

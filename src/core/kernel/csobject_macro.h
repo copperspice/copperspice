@@ -45,492 +45,457 @@ class QMetaObject;
 
 #define CS_PLUGIN_IID(data)                                                         \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype( cs_counter(cs_number<255>{}) )::value;                        \
+         decltype( cs_counter(cs_number<255>{}) )::value;                           \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         QMetaObject_T<cs_class> &meta = const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()); \
-         meta.register_classInfo("plugin_iid", data);                               \
-         meta.register_classInfo("plugin_version", QString::number(CS_VERSION));    \
-         \
-         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);       \
-         \
-         QString cname = QString::fromUtf8(cs_className());                         \
-         meta.register_method<QObject * (*)()>(                                     \
+   {  \
+      QMetaObject_T<cs_class> &meta = const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()); \
+      meta.register_classInfo("plugin_iid", data);                                  \
+      meta.register_classInfo("plugin_version", QString::number(CS_VERSION));       \
+      \
+      constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);          \
+      \
+      QString cname = QString::fromUtf8(cs_className());                            \
+      meta.register_method<QObject * (*)()>(                                        \
             cname, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__),         \
-            QMetaMethod::Constructor, cname + " " + cname + "()", QMetaMethod::Public);   \
-                                                                                    \
-         cs_regTrigger(cs_number<cntValue + 1>{} );                                 \
-      }                                                                             \
+            QMetaMethod::Constructor, cname + " " + cname + "()", QMetaMethod::Public);  \
+      \
+      cs_regTrigger(cs_number<cntValue + 1>{});                                     \
+   }                                                                                \
    static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)()                  \
-      {                                                                             \
-         return new cs_class;                                                       \
-      }
+   {                                                                                \
+      return new cs_class;                                                          \
+   }
 
 #define CS_PLUGIN_KEY(y)  CS_CLASSINFO("plugin_key", y)
 
-
 #define CS_PLUGIN_REGISTER(classname)                                                \
-   extern "C" Q_DECL_EXPORT QMetaObject * cs_internal_plugin_metaobject() {          \
+   extern "C" Q_DECL_EXPORT QMetaObject *cs_internal_plugin_metaobject() {           \
       return const_cast<QMetaObject_T<classname> *>(&classname::staticMetaObject()); \
    }
-
-
 
 #if ! defined (CS_DOXYPRESS)
 
 template<int N>
 class cs_number : public cs_number<N - 1>
 {
-   public:
-      static constexpr int value = N;
+ public:
+   static constexpr int value = N;
 };
 
 template<>
 class cs_number<0>
 {
-   public:
-      static constexpr int value = 0;
+ public:
+   static constexpr int value = 0;
 };
 
 #endif // doxypress
 
 # define CS_TR_FUNCTIONS \
    static inline QString tr(const char *text, const char *comment = nullptr, std::optional<int> numArg = std::optional<int>()) \
-      { return staticMetaObject().tr(text, comment, numArg); }
+   { return staticMetaObject().tr(text, comment, numArg); }
 
 // ** cs_object
-#define CS_OBJECT(classNameX)         \
-   public:                            \
-      using cs_parent = cs_class;     \
-      using cs_class  = classNameX;   \
-      CS_OBJECT_INTERNAL(classNameX)  \
-   private:
+#define CS_OBJECT(classNameX)      \
+ public:                           \
+   using cs_parent = cs_class;     \
+   using cs_class  = classNameX;   \
+   CS_OBJECT_INTERNAL(classNameX)  \
+ private:
 
 #define CS_OBJECT_MULTIPLE(classNameX,parentX) \
-   public:                            \
-      using cs_parent = parentX;      \
-      using cs_class  = classNameX;   \
-      CS_OBJECT_INTERNAL(classNameX)  \
-   private:
+ public:                           \
+   using cs_parent = parentX;      \
+   using cs_class  = classNameX;   \
+   CS_OBJECT_INTERNAL(classNameX)  \
+ private:
 
-#define CS_OBJECT_OUTSIDE(classNameX) \
-   public:                            \
-      using cs_parent = cs_class;     \
-      using cs_class  = classNameX;   \
-      CS_OBJECT_INTERNAL_OUTSIDE(classNameX)   \
-   private:
+#define CS_OBJECT_OUTSIDE(classNameX)     \
+ public:                                  \
+   using cs_parent = cs_class;            \
+   using cs_class  = classNameX;          \
+   CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+ private:
 
 #define CS_OBJECT_MULTIPLE_OUTSIDE(classNameX,parentX) \
-   public:                            \
-      using cs_parent = parentX;      \
-      using cs_class  = classNameX;   \
-      CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
-   private:
+ public:                                  \
+   using cs_parent = parentX;             \
+   using cs_class  = classNameX;          \
+   CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+ private:
 
 #define CS_OVERRIDE override
 
 #define CS_OBJECT_INTERNAL(classNameX)  \
-   public: \
-      static const char *cs_className() \
-      { \
-         static const char *retval(#classNameX); \
-         return retval; \
+ public:                                \
+   static const char *cs_className()    \
+   { \
+      static const char *retval(#classNameX); \
+      return retval;                          \
+   } \
+   template<int N>                            \
+   static void cs_regTrigger(cs_number<N>)    \
+   { \
+   } \
+   static constexpr cs_number<0> cs_counter(cs_number<0>) \
+   { \
+      return cs_number<0>{};                  \
+   } \
+   friend QMetaObject_T<classNameX>;          \
+   [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject()  \
+   { \
+      static std::atomic<bool> isCreated(false);                            \
+      static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);  \
+      if (isCreated) {                                                      \
+         return *createdObj;                                                \
       } \
-      template<int N> \
-      static void cs_regTrigger(cs_number<N>) \
-      { \
+      std::lock_guard<std::recursive_mutex> lock(m_metaObjectMutex());      \
+      if (createdObj != nullptr) {                                          \
+         return *createdObj;                                                \
       } \
-      static constexpr cs_number<0> cs_counter(cs_number<0>)   \
-      { \
-         return cs_number<0>{};         \
+      QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll();      \
+      auto index = temp.find(typeid(cs_class));    \
+      QMetaObject_T<classNameX> *newMeta;          \
+      if (index == temp.end()) {                   \
+         newMeta = new QMetaObject_T<classNameX>;  \
+         temp.insert(typeid(cs_class), newMeta);   \
+         createdObj.store(newMeta);                \
+         newMeta->postConstruct();                 \
+         isCreated = true;                         \
+         return *newMeta;                          \
+      } else {  \
+         newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+         createdObj.store(newMeta);  \
+         isCreated = true;           \
+         return *newMeta;            \
       } \
-      friend QMetaObject_T<classNameX>; \
-      [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> & staticMetaObject()  \
-      { \
-         static std::atomic<bool> isCreated(false);                               \
-         static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);     \
-         if (isCreated) {               \
-            return *createdObj;         \
-         } \
-         std::lock_guard<std::recursive_mutex> lock(m_metaObjectMutex()); \
-         if (createdObj != nullptr) {   \
-            return *createdObj;         \
-         } \
-         QMap<std::type_index, QMetaObject *> &temp = m_metaObjectsAll(); \
-         auto index = temp.find(typeid(cs_class));    \
-         QMetaObject_T<classNameX> *newMeta;          \
-         if (index == temp.end()) {                   \
-            newMeta = new QMetaObject_T<classNameX>;  \
-            temp.insert(typeid(cs_class), newMeta);   \
-            createdObj.store(newMeta);                \
-            newMeta->postConstruct();                 \
-            isCreated = true;                         \
-            return *newMeta;                          \
-         } else {  \
-            newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
-            createdObj.store(newMeta);  \
-            isCreated = true;           \
-            return *newMeta;            \
-         } \
-      } \
-      virtual Q_EXPORT_MAYBE const QMetaObject *metaObject() const CS_OVERRIDE \
-      { \
-         return &staticMetaObject(); \
-      } \
-      CS_TR_FUNCTIONS \
-   private:
+   } \
+   virtual Q_EXPORT_MAYBE const QMetaObject *metaObject() const CS_OVERRIDE \
+   { \
+      return &staticMetaObject(); \
+   } \
+   CS_TR_FUNCTIONS \
+ private:
 
-
-#define CS_OBJECT_INTERNAL_OUTSIDE(classNameX)    \
-   public: \
-      static const char *cs_className()           \
-      { \
-         static const char * retval(#classNameX); \
-         return retval;                           \
-      } \
-      static const QMetaObject_T<classNameX> & staticMetaObject(); \
-      virtual const QMetaObject *metaObject() const CS_OVERRIDE;   \
-      CS_TR_FUNCTIONS \
-   private:
-
+#define CS_OBJECT_INTERNAL_OUTSIDE(classNameX) \
+ public:                                       \
+   static const char *cs_className()           \
+   { \
+      static const char * retval(#classNameX); \
+      return retval;                           \
+   } \
+   static const QMetaObject_T<classNameX> & staticMetaObject(); \
+   virtual const QMetaObject *metaObject() const CS_OVERRIDE;   \
+   CS_TR_FUNCTIONS \
+ private:
 
 // ** cs_gadget
-#define CS_GADGET(classNameX)                   \
-   public:                                      \
-      using cs_parent = CSGadget_Fake_Parent;   \
-      using cs_class  = classNameX;             \
-      CS_GADGET_INTERNAL(classNameX)            \
-   private:
+#define CS_GADGET(classNameX)                \
+ public:                                     \
+   using cs_parent = CSGadget_Fake_Parent;   \
+   using cs_class  = classNameX;             \
+   CS_GADGET_INTERNAL(classNameX)            \
+ private:
 
-#define CS_GADGET_OUTSIDE(classNameX)           \
-   public:                                      \
-      using cs_parent = CSGadget_Fake_Parent;   \
-      using cs_class  = classNameX;             \
-      CS_GADGET_INTERNAL_OUTSIDE(classNameX)    \
-   private:
-
+#define CS_GADGET_OUTSIDE(classNameX)        \
+ public:                                     \
+   using cs_parent = CSGadget_Fake_Parent;   \
+   using cs_class  = classNameX;             \
+   CS_GADGET_INTERNAL_OUTSIDE(classNameX)    \
+ private:
 
 #define CS_GADGET_INTERNAL(classNameX) \
-   public: \
-      static const char *cs_className() \
-      { \
-         static const char *retval(#classNameX); \
-         return retval; \
+ public:                               \
+   static const char *cs_className()   \
+   { \
+      static const char *retval(#classNameX); \
+      return retval;                          \
+   } \
+   template<int N>                            \
+   static void cs_regTrigger(cs_number<N>)    \
+   { \
+   } \
+   static constexpr cs_number<0> cs_counter(cs_number<0>) \
+   { \
+      return cs_number<0>{};                  \
+   } \
+   friend QMetaObject_T<classNameX>;          \
+   [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject() \
+   { \
+      static std::atomic<bool> isCreated(false);                             \
+      static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);   \
+      if (isCreated) {               \
+         return *createdObj;         \
       } \
-      template<int N> \
-      static void cs_regTrigger(cs_number<N>) \
-      { \
+      std::lock_guard<std::recursive_mutex> lock(QObject::m_metaObjectMutex()); \
+      if (createdObj != nullptr) {   \
+         return *createdObj;         \
       } \
-      static constexpr cs_number<0> cs_counter(cs_number<0>)   \
-      { \
-         return cs_number<0>{};  \
+      QMap<std::type_index, QMetaObject *> &temp = QObject::m_metaObjectsAll(); \
+      auto index = temp.find(typeid(cs_class));       \
+      QMetaObject_T<classNameX> *newMeta;             \
+      if (index == temp.end()) {                      \
+         newMeta = new QMetaObject_T<classNameX>;     \
+         temp.insert(typeid(cs_class), newMeta);      \
+         newMeta->postConstruct();                    \
+         return *newMeta;                             \
+      } else {                                        \
+         newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
+         createdObj.store(newMeta);  \
+         isCreated = true;           \
+         return *newMeta;            \
       } \
-      friend QMetaObject_T<classNameX>; \
-      [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> & staticMetaObject() \
-      { \
-         static std::atomic<bool> isCreated(false);                             \
-         static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);   \
-         if (isCreated) {               \
-            return *createdObj;         \
-         } \
-         std::lock_guard<std::recursive_mutex> lock(QObject::m_metaObjectMutex()); \
-         if (createdObj != nullptr) {   \
-            return *createdObj;         \
-         } \
-         QMap<std::type_index, QMetaObject *> &temp = QObject::m_metaObjectsAll(); \
-         auto index = temp.find(typeid(cs_class));       \
-         QMetaObject_T<classNameX> *newMeta;             \
-         if (index == temp.end()) {                      \
-            newMeta = new QMetaObject_T<classNameX>;     \
-            temp.insert(typeid(cs_class), newMeta);      \
-            newMeta->postConstruct();                    \
-            return *newMeta;                             \
-         } else {                                        \
-            newMeta = dynamic_cast<QMetaObject_T<classNameX> *> (index.value()); \
-            createdObj.store(newMeta);  \
-            isCreated = true;           \
-            return *newMeta;            \
-         } \
-      } \
-      CS_TR_FUNCTIONS \
-   private:
-
+   } \
+   CS_TR_FUNCTIONS                   \
+ private:
 
 #define CS_GADGET_INTERNAL_OUTSIDE(classNameX) \
-   public: \
-      static const char *cs_className() \
-      { \
-         static const char *retval(#classNameX); \
-         return retval; \
-      } \
-      static const QMetaObject_T<classNameX> & staticMetaObject(); \
-      CS_TR_FUNCTIONS \
-   private:
-
+ public:                                       \
+   static const char *cs_className()           \
+   { \
+      static const char *retval(#classNameX);  \
+      return retval;                           \
+   } \
+   static const QMetaObject_T<classNameX> &staticMetaObject(); \
+   CS_TR_FUNCTIONS                             \
+ private:
 
 // ** interface
-#define CS_DECLARE_INTERFACE(IFace, IId) \
-   template<> \
+#define CS_DECLARE_INTERFACE(IFace, IId)       \
+   template<>                                  \
    inline const QString &qobject_interface_iid<IFace *>() \
-      {  \
-         static QString retval(IId); \
-         return retval;              \
-      }
+   {  \
+      static QString retval(IId);              \
+      return retval;                           \
+   }
 
-
-#define CS_INTERFACES(...)    \
-   public: \
-      bool cs_interface_query(const QString &data) const override \
-      {  \
-         if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
-            return true;   \
-         }  \
-         return false;  \
+#define CS_INTERFACES(...)                     \
+ public: \
+   bool cs_interface_query(const QString &data) const override \
+   {  \
+      if (cs_factory_interface_query<__VA_ARGS__>(data)) { \
+         return true;                          \
       }  \
-   private:  \
-
+      return false;                            \
+   }  \
+ private:
 
 // ** classInfo
 #define CS_CLASSINFO(name, data) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
-            decltype( cs_counter(cs_number<255>{}) )::value;                         \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_classInfo(name, data); \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_classInfo(name, data); \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );   \
+   }
 
 // ** enum
 #define CS_ENUM(name) \
-   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
-   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
-   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {  \
-         cs_namespace_register_enum<cs_class>(#name, typeid(name), cs_className());   \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
+   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
+   {  \
+      cs_namespace_register_enum<cs_class>(#name, typeid(name), cs_className());     \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );   \
+   }
 
 #define CS_REGISTER_ENUM(...) \
    __VA_ARGS__ \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
-            decltype( cs_counter(cs_number<255>{}) )::value;                         \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
-      {  \
-         cs_namespace_register_enum_data<cs_class>(#__VA_ARGS__);  \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {  \
+      cs_namespace_register_enum_data<cs_class>(#__VA_ARGS__);                       \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );   \
+   }
 
 // ** flag
 #define CS_FLAG(enumName, flagName) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
-            decltype( cs_counter(cs_number<255>{}) )::value;                         \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
-      {  \
-         cs_namespace_register_flag<cs_class>(#enumName, cs_className(),    \
-            #flagName, typeid(flagName));  \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {  \
+      cs_namespace_register_flag<cs_class>(#enumName, cs_className(),                \
+            #flagName, typeid(flagName));                                            \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );   \
+   }
 
 // ** invoke constructor
 #define CS_INVOKABLE_CONSTRUCTOR_1(access, ...) \
    __VA_ARGS__; \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype( cs_counter(cs_number<255>{}) )::value;                        \
+         decltype( cs_counter(cs_number<255>{}) )::value;                           \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         QString va_args = #__VA_ARGS__;    \
-         QMetaMethod::Access accessType = QMetaMethod::access; \
-         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
+   {  \
+      QString va_args = #__VA_ARGS__;                                               \
+      QMetaMethod::Access accessType = QMetaMethod::access;                         \
+      constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
-
-#define CS_INVOKABLE_CONSTRUCTOR_2(className, ...) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method    \
-            <QObject * (*)(__VA_ARGS__)>(   \
-            #className, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)<__VA_ARGS__>,  \
-            QMetaMethod::Constructor, QString(#className) + " " + va_args, accessType); \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} );  \
-      } \
-   template <class... Ts> \
+#define CS_INVOKABLE_CONSTRUCTOR_2(className, ...)                                  \
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method       \
+   <QObject * (*)(__VA_ARGS__)>(                                                            \
+         #className, &cs_class::CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)<__VA_ARGS__>,  \
+         QMetaMethod::Constructor, QString(#className) + " " + va_args, accessType);        \
+   cs_regTrigger(cs_number<cntValue + 1>{} );                                               \
+   } \
+   template <class... Ts>                                                 \
    static QObject * CS_TOKENPASTE2(cs_fauxConstructor, __LINE__)(Ts...Vs) \
-      { \
-         return new className{Vs...};  \
-      }
-
+   { \
+      return new className{Vs...};                                        \
+   }
 
 // ** invoke
 #define CS_INVOKABLE_METHOD_1(access, ...) \
    __VA_ARGS__; \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype( cs_counter(cs_number<255>{}) )::value;                        \
+         decltype( cs_counter(cs_number<255>{}) )::value;                           \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         const auto &va_args = #__VA_ARGS__;    \
-         QMetaMethod::Access accessType = QMetaMethod::access; \
-         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
+   {  \
+      const auto &va_args = #__VA_ARGS__;                   \
+      QMetaMethod::Access accessType = QMetaMethod::access; \
+      constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
+#define CS_INVOKABLE_METHOD_2(methodName)                   \
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
+         #methodName, &cs_class::methodName, QMetaMethod::Method, va_args, accessType); \
+   cs_regTrigger(cs_number<cntValue + 1>{});                \
+   }
 
-#define CS_INVOKABLE_METHOD_2(methodName) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
-            #methodName, &cs_class::methodName, QMetaMethod::Method, va_args, accessType); \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} );  \
-      }
-
-
-#define CS_INVOKABLE_OVERLOAD(methodName, argTypes, ...) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
-            #methodName, static_cast<void (cs_class::*)argTypes>(&cs_class::methodName), \
-            QMetaMethod::Method, va_args, accessType); \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} );  \
-      }
-
+#define CS_INVOKABLE_OVERLOAD(methodName, argTypes, ...)                                \
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
+         #methodName, static_cast<void (cs_class::*)argTypes>(&cs_class::methodName),   \
+         QMetaMethod::Method, va_args, accessType);         \
+   cs_regTrigger(cs_number<cntValue + 1>{});                \
+   }
 
 // ** revision
 #define CS_REVISION(methodName,revision) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
-            decltype( cs_counter(cs_number<255>{}) )::value;                         \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_rev( \
-            &cs_class::methodName, revision); \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_rev( \
+            &cs_class::methodName, revision);                                        \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );   \
+   }
 
-
-#define CS_REVISION_OVERLOAD(methodName, revision, argTypes) \
+#define CS_REVISION_OVERLOAD(methodName, revision, argTypes)                         \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
-            decltype( cs_counter(cs_number<255>{}) )::value;                         \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);   \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_rev( \
-            static_cast<void (cs_class::*)argTypes>(&cs_class::methodName), revision);           \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_rev( \
+            static_cast<void (cs_class::*)argTypes>(&cs_class::methodName), revision);        \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});    \
+   }
 
 // ** slots
-#define CS_SLOT_1(access, ...) \
-   __VA_ARGS__; \
+#define CS_SLOT_1(access, ...)                                                      \
+   __VA_ARGS__;                                                                     \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype(cs_counter(cs_number<255>{}))::value;                          \
+         decltype(cs_counter(cs_number<255>{}))::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         const auto &va_args = #__VA_ARGS__;    \
-         QMetaMethod::Access accessType = QMetaMethod::access; \
-         constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
+   {  \
+      const auto &va_args = #__VA_ARGS__;                                           \
+      QMetaMethod::Access accessType = QMetaMethod::access;                         \
+      constexpr int cntValue = CS_TOKENPASTE2(cs_counter_value, __LINE__);
 // do not remove the ";", this is required for part two of the macro
 
-
 #define CS_SLOT_2(slotName) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
-            #slotName, &cs_class::slotName, QMetaMethod::Slot, va_args, accessType); \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} ); \
-      }
-
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(  \
+         #slotName, &cs_class::slotName, QMetaMethod::Slot, va_args, accessType);       \
+   cs_regTrigger(cs_number<cntValue + 1>{} );                                           \
+   }
 
 // ** signals
-#define CS_SIGNAL_1(access, ...) \
+#define CS_SIGNAL_1(access, ...)                                                    \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype(cs_counter(cs_number<255>{}))::value;                          \
+         decltype(cs_counter(cs_number<255>{}))::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s1(  \
-            #__VA_ARGS__, QMetaMethod::access, QMetaMethod::Signal);  \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }  \
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s1(  \
+            #__VA_ARGS__, QMetaMethod::access, QMetaMethod::Signal);                \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );  \
+   }  \
    Q_EXPORT_MAYBE  __VA_ARGS__ {      \
       if (this->signalsBlocked()) {   \
          return;                      \
       }
 // do not remove the "{", this is required for part two of the macro
 
-
 #define CS_SIGNAL_2(signalName, ...) \
-      CsSignal::activate(*this, &cs_class::signalName, ##__VA_ARGS__);              \
+   CsSignal::activate(*this, &cs_class::signalName, ##__VA_ARGS__);                 \
    }  \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype(cs_counter(cs_number<255>{}))::value;                          \
+         decltype(cs_counter(cs_number<255>{}))::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s2(  \
-            #signalName, &cs_class::signalName, QMetaMethod::Signal);   \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }  \
-
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s2(  \
+            #signalName, &cs_class::signalName, QMetaMethod::Signal);               \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );  \
+   }  \
 
 #define CS_SIGNAL_OVERLOAD(signalName, argTypes, ...) \
-      CsSignal::activate(*this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
+   CsSignal::activate(*this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
    }  \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
-            decltype(cs_counter(cs_number<255>{}))::value;                          \
+         decltype(cs_counter(cs_number<255>{}))::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>       \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);  \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);           \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>) \
-      {  \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s2(  \
+   {  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method_s2(  \
             #signalName #argTypes, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), QMetaMethod::Signal);  \
-         \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }  \
+      \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );  \
+   }  \
 
+#define CS_SLOT_OVERLOAD(slotName, argTypes)                                                 \
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(       \
+         #slotName #argTypes, static_cast<void (cs_class::*)argTypes>(&cs_class::slotName),  \
+         QMetaMethod::Slot, va_args, accessType);                                            \
+   cs_regTrigger(cs_number<cntValue + 1>{} );                                                \
+   }
 
-#define CS_SLOT_OVERLOAD(slotName, argTypes) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(    \
-            #slotName #argTypes, static_cast<void (cs_class::*)argTypes>(&cs_class::slotName),  \
-            QMetaMethod::Slot, va_args, accessType); \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} );  \
-      }
-
-
-#define CS_SLOT_OVERLOAD_BOOL(slotName, argTypes) \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(     \
-            #slotName #argTypes, static_cast<bool (cs_class::*)argTypes>(&cs_class::slotName),   \
-            QMetaMethod::Slot, va_args, accessType);  \
-         \
-         cs_regTrigger(cs_number<cntValue + 1>{} );   \
-      }
+#define CS_SLOT_OVERLOAD_BOOL(slotName, argTypes)                                            \
+   const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_method(       \
+         #slotName #argTypes, static_cast<bool (cs_class::*)argTypes>(&cs_class::slotName),  \
+         QMetaMethod::Slot, va_args, accessType);                                            \
+   cs_regTrigger(cs_number<cntValue + 1>{} );                                                \
+   }
 
 #if defined(QT_DEBUG)
 
@@ -557,262 +522,244 @@ class cs_number<0>
 
 #endif
 
-
 // ** metaMethod tag
 #define CS_TAG(name, data) \
-  static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =             \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
-   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
-   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_tag(#name, #data); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
-
+   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
+   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
+   {                                                                                 \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_tag(#name, #data); \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});    \
+   }
 
 // ** properties
 #define CS_PROPERTY_READ(name, method) \
-   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
-   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
-   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         using T = decltype(&cs_class::method);                                       \
-         using R = cs_returnType<T>::type;                                            \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
-            .register_property_read(#name, typeid(R),                                 \
-            [] () { return cs_typeToName<R>(); },                                      \
-            new SpiceJarRead<cs_class, R>(&cs_class::method));                        \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =           \
+         decltype( cs_counter(cs_number<255>{}) )::value;                            \
+   static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>        \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);            \
+   static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)  \
+   {                                                                                 \
+      using T = decltype(&cs_class::method);                                         \
+      using R = cs_returnType<T>::type;                                              \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())             \
+            .register_property_read(#name, typeid(R),                                \
+            [] () { return cs_typeToName<R>(); },                                    \
+            new SpiceJarRead<cs_class, R>(&cs_class::method));                       \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});    \
+   }
 
 #define CS_PROPERTY_WRITE(name, method) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         using T = decltype(&cs_class::method);                                       \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      using T = decltype(&cs_class::method);                                          \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_write(#name,                                           \
             new SpiceJarWrite<cs_class, cs_argType<T>::type>(&cs_class::method));     \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_NOTIFY(name, method) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_notify(#name, &cs_class::method);                      \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_RESET(name, method) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_reset(#name, &cs_class::method);                       \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_REVISION(name, data) \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
-                  .register_property_int(#name, data, QMetaProperty::REVISION);       \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
+            .register_property_int(#name, data, QMetaProperty::REVISION);             \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_DESIGNABLE(name, data)                 \
    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()   \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                    \
+      return data;                                      \
+   }                                                    \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::DESIGNABLE); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_DESIGNABLE_NONSTATIC(name, data)       \
    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const    \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::DESIGNABLE); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_SCRIPTABLE(name, data)                 \
    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()   \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =             \
-            decltype( cs_counter(cs_number<255>{}) )::value;                           \
+         decltype( cs_counter(cs_number<255>{}) )::value;                              \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>          \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);     \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);              \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)    \
-      {                                                                                \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())            \
+   {                                                                                   \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())               \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>            \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::SCRIPTABLE); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );  \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});      \
+   }
 
 #define CS_PROPERTY_SCRIPTABLE_NONSTATIC(name, data)       \
    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const    \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::SCRIPTABLE); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_STORED(name, data)                     \
    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()   \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =             \
-            decltype( cs_counter(cs_number<255>{}) )::value;                           \
+         decltype( cs_counter(cs_number<255>{}) )::value;                              \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>          \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);     \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);              \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)    \
-      {                                                                                \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())            \
+   {                                                                                   \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())               \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>            \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::STORED); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} );  \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});      \
+   }
 
 #define CS_PROPERTY_STORED_NONSTATIC(name, data)           \
    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)() const    \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::STORED); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_USER(name, data)                       \
    static bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()   \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::USER); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_USER_NONSTATIC(name, data)             \
    bool CS_TOKENPASTE2(cs_fauxMethod, __LINE__)()  const   \
-      {                                                    \
-         return data;                                      \
-      }                                                    \
+   {                                                       \
+      return data;                                         \
+   }                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())           \
-            .register_property_bool(#name, new SpiceJarRead<cs_class, bool>           \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
+            .register_property_bool(#name, new SpiceJarRead<cs_class, bool>             \
             (&cs_class::CS_TOKENPASTE2(cs_fauxMethod, __LINE__)), QMetaProperty::USER); \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});      \
+   }
 
 #define CS_PROPERTY_CONSTANT(name)                                                    \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(  \
-            #name, 1, QMetaProperty::CONSTANT);                                       \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
+            .register_property_int(#name, 1, QMetaProperty::CONSTANT);                \
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 #define CS_PROPERTY_FINAL(name)                                                       \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =            \
-            decltype( cs_counter(cs_number<255>{}) )::value;                          \
+         decltype( cs_counter(cs_number<255>{}) )::value;                             \
    static constexpr cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>         \
-            cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);    \
+   cs_counter(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>);             \
    static void cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__)>)   \
-      {                                                                               \
-         const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(  \
+   {                                                                                  \
+      const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject()).register_property_int(  \
             #name, 1, QMetaProperty::FINAL);                                          \
-         cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{} ); \
-      }
-
+      cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
+   }
 
 // ** macros used when compiling
 
@@ -895,7 +842,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 2
 #if defined(QT_BUILD_GUI_LIB) || defined(Q_OS_DARWIN)
 
@@ -970,7 +916,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 3
 #if defined(QT_BUILD_MULTIMEDIA_LIB) || defined(Q_OS_DARWIN)
 
@@ -1040,7 +985,6 @@ class cs_number<0>
 #define MULTI_CS_PROPERTY_FINAL(name)
 
 #endif
-
 
 // ** 4
 #if defined(QT_BUILD_NETWORK_LIB) || defined(Q_OS_DARWIN)
@@ -1116,7 +1060,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 5
 #if defined(QT_BUILD_OPENGL_LIB) || defined(Q_OS_DARWIN)
 
@@ -1146,7 +1089,6 @@ class cs_number<0>
 #define OPENGL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #endif
-
 
 // ** 6
 #if defined(QT_BUILD_SCRIPT_LIB) || defined(Q_OS_DARWIN)
@@ -1179,7 +1121,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 7
 #if defined(QT_BUILD_SCRIPTTOOLS_LIB) || defined(Q_OS_DARWIN)
 
@@ -1210,7 +1151,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 8
 #if defined(QT_BUILD_SQL_LIB) || defined(Q_OS_DARWIN)
 
@@ -1240,7 +1180,6 @@ class cs_number<0>
 #define SQL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)
 
 #endif
-
 
 // ** 9
 #if defined(QT_BUILD_SVG_LIB) || defined(Q_OS_DARWIN)
@@ -1356,7 +1295,6 @@ class cs_number<0>
 
 #endif
 
-
 // ** 12
 #if defined(BUILDING_WEBKIT) || defined(Q_OS_DARWIN)
 
@@ -1432,7 +1370,6 @@ class cs_number<0>
 #define WEB_CS_PROPERTY_FINAL(name)
 
 #endif
-
 
 // ** 13
 #if defined(QT_BUILD_DECLARE_LIB) || defined(Q_OS_DARWIN)

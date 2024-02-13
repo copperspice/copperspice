@@ -79,8 +79,11 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    void acquireBarrierSemaphore();
 
  protected:
-   virtual void start() {}
-   virtual void finish() {}
+   virtual void start() {
+   }
+
+   virtual void finish() {
+   }
 
    virtual ThreadFunctionResult threadFunction() {
       return ThreadFinished;
@@ -107,7 +110,6 @@ class Q_CORE_EXPORT ThreadEngineBase: public QRunnable
    void run() override;
    virtual void asynchronousFinish() = 0;
    void handleException(const QtConcurrent::Exception &exception);
-
 };
 
 template <typename T>
@@ -161,7 +163,6 @@ class ThreadEngine : public virtual ThreadEngineBase
       delete this;
    }
 
-
    void reportResult(const T *_result, int index = -1) {
       if (futureInterface) {
          futureInterfaceTyped()->reportResult(_result, index);
@@ -182,10 +183,12 @@ class ThreadEngineStarterBase
 {
  public:
    ThreadEngineStarterBase(ThreadEngine<T> *_threadEngine)
-      : threadEngine(_threadEngine) { }
+      : threadEngine(_threadEngine)
+   { }
 
-   inline ThreadEngineStarterBase(const ThreadEngineStarterBase &other)
-      : threadEngine(other.threadEngine) { }
+   ThreadEngineStarterBase(const ThreadEngineStarterBase &other)
+      : threadEngine(other.threadEngine)
+   { }
 
    QFuture<T> startAsynchronously() {
       return threadEngine->startAsynchronously();
@@ -199,7 +202,6 @@ class ThreadEngineStarterBase
    ThreadEngine<T> *threadEngine;
 };
 
-
 // factor out the code that dereferences the T pointer, with a specialization where T is void.
 // (code that dereferences a void * will not compile)
 template <typename T>
@@ -210,7 +212,8 @@ class ThreadEngineStarter : public ThreadEngineStarterBase<T>
 
  public:
    ThreadEngineStarter(TypedThreadEngine *eng)
-      : Base(eng) { }
+      : Base(eng)
+   { }
 
    T startBlocking() {
       T t = *this->threadEngine->startBlocking();
@@ -225,7 +228,8 @@ class ThreadEngineStarter<void> : public ThreadEngineStarterBase<void>
 {
  public:
    ThreadEngineStarter<void>(ThreadEngine<void> *_threadEngine)
-      : ThreadEngineStarterBase<void>(_threadEngine) {}
+      : ThreadEngineStarterBase<void>(_threadEngine)
+   { }
 
    void startBlocking() {
       this->threadEngine->startBlocking();

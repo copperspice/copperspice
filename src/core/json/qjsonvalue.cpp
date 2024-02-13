@@ -84,7 +84,7 @@ QJsonValue::QJsonValue(QJsonArray array)
 
 QJsonValue::QJsonValue(QJsonObject obj)
 {
-  m_data = std::move(obj.m_object);
+   m_data = std::move(obj.m_object);
 }
 
 QJsonValue::~QJsonValue()
@@ -141,9 +141,9 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
          return variant.toJsonArray();
 
       case QVariant::JsonDocument: {
-            QJsonDocument doc = variant.toJsonDocument();
-            return doc.isArray() ? QJsonValue(doc.array()) : QJsonValue(doc.object());
-         }
+         QJsonDocument doc = variant.toJsonDocument();
+         return doc.isArray() ? QJsonValue(doc.array()) : QJsonValue(doc.object());
+      }
 
       default:
          break;
@@ -160,7 +160,7 @@ QJsonValue QJsonValue::fromVariant(const QVariant &variant)
 
 QVariant QJsonValue::toVariant() const
 {
-  switch (type()) {
+   switch (type()) {
       case Type::Bool:
          return toBool();
 
@@ -262,4 +262,3 @@ bool QJsonValue::operator!=(const QJsonValue &other) const
 {
    return !(*this == other);
 }
-

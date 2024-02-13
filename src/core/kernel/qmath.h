@@ -35,6 +35,7 @@ extern Q_CORE_EXPORT const qreal qt_sine_table[QT_SINE_TABLE_SIZE];
 inline int qCeil(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return int(ceilf(float(v)));
    } else
@@ -45,6 +46,7 @@ inline int qCeil(qreal v)
 inline int qFloor(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return int(floorf(float(v)));
    } else
@@ -55,6 +57,7 @@ inline int qFloor(qreal v)
 inline qreal qFabs(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return fabsf(float(v));
    } else
@@ -65,6 +68,7 @@ inline qreal qFabs(qreal v)
 inline qreal qSin(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return sinf(float(v));
    } else
@@ -75,6 +79,7 @@ inline qreal qSin(qreal v)
 inline qreal qCos(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return cosf(float(v));
    } else
@@ -85,6 +90,7 @@ inline qreal qCos(qreal v)
 inline qreal qTan(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return tanf(float(v));
    } else
@@ -95,6 +101,7 @@ inline qreal qTan(qreal v)
 inline qreal qAcos(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return acosf(float(v));
    } else
@@ -105,6 +112,7 @@ inline qreal qAcos(qreal v)
 inline qreal qAsin(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return asinf(float(v));
    } else
@@ -115,6 +123,7 @@ inline qreal qAsin(qreal v)
 inline qreal qAtan(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return atanf(float(v));
    } else
@@ -125,6 +134,7 @@ inline qreal qAtan(qreal v)
 inline qreal qAtan2(qreal y, qreal x)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return atan2f(float(y), float(x));
    } else
@@ -135,6 +145,7 @@ inline qreal qAtan2(qreal y, qreal x)
 inline qreal qSqrt(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return sqrtf(float(v));
    } else
@@ -145,6 +156,7 @@ inline qreal qSqrt(qreal v)
 inline qreal qLn(qreal v)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return logf(float(v));
    } else
@@ -162,6 +174,7 @@ inline qreal qExp(qreal v)
 inline qreal qPow(qreal x, qreal y)
 {
 #ifdef QT_USE_MATH_H_FLOATS
+
    if (sizeof(qreal) == sizeof(float)) {
       return powf(float(x), float(y));
    } else
@@ -180,6 +193,7 @@ inline qreal qFastSin(qreal x)
    int ci = si + QT_SINE_TABLE_SIZE / 4;
    si &= QT_SINE_TABLE_SIZE - 1;
    ci &= QT_SINE_TABLE_SIZE - 1;
+
    return qt_sine_table[si] + (qt_sine_table[ci] - 0.5 * qt_sine_table[si] * d) * d;
 }
 
@@ -190,27 +204,28 @@ inline qreal qFastCos(qreal x)
    int si = ci + QT_SINE_TABLE_SIZE / 4;
    si &= QT_SINE_TABLE_SIZE - 1;
    ci &= QT_SINE_TABLE_SIZE - 1;
+
    return qt_sine_table[si] - (qt_sine_table[ci] + 0.5 * qt_sine_table[si] * d) * d;
 }
 
 constexpr inline float qDegreesToRadians(float degrees)
 {
-    return degrees * float(M_PI/180);
+   return degrees * float(M_PI / 180);
 }
 
 constexpr  inline double qDegreesToRadians(double degrees)
 {
-    return degrees * (M_PI / 180);
+   return degrees * (M_PI / 180);
 }
 
 constexpr  inline float qRadiansToDegrees(float radians)
 {
-    return radians * float(180/M_PI);
+   return radians * float(180 / M_PI);
 }
 
 constexpr  inline double qRadiansToDegrees(double radians)
 {
-    return radians * (180 / M_PI);
+   return radians * (180 / M_PI);
 }
 
 #if defined(Q_CC_GNU)
@@ -237,36 +252,38 @@ inline quint64 qNextPowerOfTwo(quint64 v)
 
 inline quint32 qNextPowerOfTwo(quint32 v)
 {
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    ++v;
-    return v;
+   v |= v >> 1;
+   v |= v >> 2;
+   v |= v >> 4;
+   v |= v >> 8;
+   v |= v >> 16;
+   ++v;
+
+   return v;
 }
 
 inline quint64 qNextPowerOfTwo(quint64 v)
 {
-    v |= v >> 1;
-    v |= v >> 2;
-    v |= v >> 4;
-    v |= v >> 8;
-    v |= v >> 16;
-    v |= v >> 32;
-    ++v;
-    return v;
+   v |= v >> 1;
+   v |= v >> 2;
+   v |= v >> 4;
+   v |= v >> 8;
+   v |= v >> 16;
+   v |= v >> 32;
+   ++v;
+
+   return v;
 }
 #endif
 
 inline quint32 qNextPowerOfTwo(qint32 v)
 {
-    return qNextPowerOfTwo(quint32(v));
+   return qNextPowerOfTwo(quint32(v));
 }
 
 inline quint64 qNextPowerOfTwo(qint64 v)
 {
-    return qNextPowerOfTwo(quint64(v));
+   return qNextPowerOfTwo(quint64(v));
 }
 
 #endif

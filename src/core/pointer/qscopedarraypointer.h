@@ -29,11 +29,11 @@
 template <typename T, typename Deleter = std::default_delete<CsPointer::cs_add_missing_extent_t<T>>>
 class QScopedArrayPointer : public QUniqueArrayPointer<T, Deleter>
 {
- public:
+public:
    using QUniqueArrayPointer<T, Deleter>::QUniqueArrayPointer;
 
    QScopedArrayPointer(QScopedArrayPointer && other) = delete;
-   QScopedArrayPointer & operator=(QScopedArrayPointer && other) = delete;
+   QScopedArrayPointer &operator=(QScopedArrayPointer && other) = delete;
 };
 
 // free functions
@@ -44,7 +44,8 @@ void swap(QScopedArrayPointer<T, Deleter> &ptr1, QScopedArrayPointer<T, Deleter>
 }
 
 template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
-QScopedArrayPointer<T> QMakeScoped(std::size_t size) {
+QScopedArrayPointer<T> QMakeScoped(std::size_t size)
+{
    return CsPointer::make_unique<T>(size);
 }
 

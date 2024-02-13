@@ -66,17 +66,19 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
          while (*p && p < p_end) {
             if (quote) {
                if (*p == quote) {
-                  p++;
+                  ++p;
+
                   if (QChar((short)(*p)).isSpace()) {
                      break;
                   }
+
                   quote = 0;
                }
             }
 
             if (*p == '\\') {                // escape char?
                if (*(p + 1) == quote) {
-                  p++;
+                  ++p;
                }
 
             } else {
@@ -88,6 +90,7 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
                   break;
                }
             }
+
             if (*p) {
                *r++ = *p++;
             }
@@ -96,11 +99,13 @@ static QVector<Char *> qWinCmdLine(Char *cmdParam, int length, int &argc)
          if (*p && p < p_end) {
             p++;
          }
+
          *r = Char('\0');
 
          if (argc >= (int)argv.size() - 1) {    // expand array
             argv.resize(argv.size() * 2);
          }
+
          argv[argc++] = start;
       }
    }
@@ -129,7 +134,7 @@ static inline QStringList qCmdLineArgs(int t1, char *t2[])
 }
 
 #else
-   // not windows
+// not windows
 
 static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {

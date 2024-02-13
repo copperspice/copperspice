@@ -74,6 +74,7 @@ class QIODevicePrivateLinearBuffer
       if (len == 0) {
          return -1;
       }
+
       int ch = uchar(*first);
       len--;
       first++;
@@ -214,6 +215,12 @@ class Q_CORE_EXPORT QIODevicePrivate
    Q_DECLARE_PUBLIC(QIODevice)
 
  public:
+    enum AccessMode {
+      Unset,
+      Sequential,
+      RandomAccess
+   };
+
    QIODevicePrivate();
    virtual ~QIODevicePrivate();
 
@@ -228,16 +235,11 @@ class Q_CORE_EXPORT QIODevicePrivate
    qint64 seqDumpPos;
    qint64 *pPos;
    qint64 *pDevicePos;
+
    bool baseReadLineDataCalled;
    bool firstRead;
 
    virtual bool putCharHelper(char c);
-
-   enum AccessMode {
-      Unset,
-      Sequential,
-      RandomAccess
-   };
 
    mutable AccessMode accessMode;
 
@@ -245,6 +247,7 @@ class Q_CORE_EXPORT QIODevicePrivate
       if (accessMode == Unset) {
          accessMode = q_func()->isSequential() ? Sequential : RandomAccess;
       }
+
       return accessMode == Sequential;
    }
 
@@ -255,7 +258,6 @@ class Q_CORE_EXPORT QIODevicePrivate
 
  protected:
    QIODevice *q_ptr;
-
 };
 
 #endif

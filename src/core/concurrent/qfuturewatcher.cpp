@@ -136,13 +136,16 @@ bool QFutureWatcherBase::event(QEvent *event)
          for (int i = 0; i < d->pendingCallOutEvents.count(); ++i) {
             d->sendCallOutEvent(d->pendingCallOutEvents.at(i));
          }
+
          qDeleteAll(d->pendingCallOutEvents);
          d->pendingCallOutEvents.clear();
       } else {
          d->sendCallOutEvent(callOutEvent);
       }
+
       return true;
    }
+
    return QObject::event(event);
 }
 
@@ -246,6 +249,7 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
          if (q->futureInterface().isCanceled()) {
             break;
          }
+
          emit q->paused();
          break;
 
@@ -253,6 +257,7 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
          if (q->futureInterface().isCanceled()) {
             break;
          }
+
          emit q->resumed();
          break;
 
@@ -291,6 +296,7 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
          if (! event->text.isEmpty()) {
             q->progressTextChanged(event->text);
          }
+
          break;
 
       case QFutureCallOutEvent::ProgressRange:

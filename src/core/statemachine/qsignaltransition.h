@@ -72,7 +72,6 @@ class Q_CORE_EXPORT QSignalTransition : public QAbstractTransition
    QScopedPointer<CsSignal::Internal::BentoAbstract> m_signalBento;
 };
 
-
 template <class SignalClass, class ...SignalArgs>
 QSignalTransition::QSignalTransition(QObject *sender, void (SignalClass::*signal)(SignalArgs...), QState *sourceState)
    : QAbstractTransition(sourceState)
