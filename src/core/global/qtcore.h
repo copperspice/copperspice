@@ -17,6 +17,8 @@
 #include <qbytearray.h>
 #include <qcache.h>
 #include <qchar.h>
+#include <qcommandlineparser.h>
+#include <qcommandlineoption.h>
 #include <qcontainerfwd.h>
 #include <qcontiguouscache.h>
 #include <qcoreapplication.h>
