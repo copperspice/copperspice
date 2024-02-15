@@ -151,6 +151,9 @@ QString QSysInfo::macEdition(MacVersion macVersion)
       case QSysInfo::MacVersion::MV_14:
          retval = "Sonoma";
          break;
+
+      default:
+         break;
    }
 
    return retval;
