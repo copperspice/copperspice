@@ -56,9 +56,9 @@
 #define GNU_LIBICONV
 #endif
 
-typedef iconv_t (*Ptr_iconv_open) (const char *, const char *);
-typedef size_t (*Ptr_iconv) (iconv_t, const char **, size_t *, char **, size_t *);
-typedef int (*Ptr_iconv_close) (iconv_t);
+using Ptr_iconv_open  = iconv_t (*) (const char *, const char *);
+using Ptr_iconv       = size_t (*) (iconv_t, const char **, size_t *, char **, size_t *);
+using Ptr_iconv_close = int (*) (iconv_t);
 
 static Ptr_iconv_open ptr_iconv_open = nullptr;
 static Ptr_iconv ptr_iconv = nullptr;

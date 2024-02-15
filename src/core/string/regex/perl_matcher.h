@@ -157,7 +157,7 @@ iterator re_is_set_member(iterator next, iterator last, const re_set_long<char_c
       return next;
    }
 
-   typedef typename traits_type::string_type traits_string_type;
+   using traits_string_type = typename traits_type::string_type;
    const cs_regex_ns::regex_traits_wrapper<traits_type> &traits_inst = *(e.m_ptraits);
 
    // try and match a single character, could be a multi-character collating element
@@ -372,8 +372,9 @@ enum saved_state_type {
 
 template <class Results>
 struct recursion_info {
-   typedef typename Results::value_type value_type;
-   typedef typename value_type::iterator iterator;
+   using value_type = typename Results::value_type;
+   using iterator   = typename value_type::iterator;
+
    int idx;
    const re_syntax_base *preturn_address;
    Results results;
@@ -537,7 +538,7 @@ class perl_matcher
    std::vector<recursion_info<results_type>> recursion_stack;
 
    // additional members for non-recursive version
-   typedef bool (self_type::*unwind_proc_type)(bool);
+   using unwind_proc_type = bool (self_type::*)(bool);
 
    void extend_stack();
    bool unwind(bool);

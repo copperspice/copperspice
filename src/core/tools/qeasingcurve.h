@@ -34,6 +34,8 @@ class Q_CORE_EXPORT QEasingCurve
    CORE_CS_GADGET(QEasingCurve)
 
  public:
+   using EasingFunction = qreal (*)(qreal progress);
+
    enum Type {
       Linear,
       InQuad, OutQuad, InOutQuad, OutInQuad,
@@ -75,7 +77,7 @@ class Q_CORE_EXPORT QEasingCurve
 
    Type type() const;
    void setType(Type type);
-   typedef qreal (*EasingFunction)(qreal progress);
+
    void setCustomType(EasingFunction func);
    EasingFunction customType() const;
 

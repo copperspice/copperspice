@@ -90,7 +90,7 @@ struct QSockNot {
    QSocketNotifier *obj;
    int fd;
 };
-typedef QHash<int, QSockNot *> QSNDict;
+using QSNDict = QHash<int, QSockNot *>;
 
 struct QSockFd {
    long event;
@@ -98,7 +98,7 @@ struct QSockFd {
 
    explicit inline QSockFd(long ev = 0) : event(ev), selected(false) { }
 };
-typedef QHash<int, QSockFd> QSFDict;
+using QSFDict = QHash<int, QSockFd>;
 
 struct WinTimerInfo {                           // internal timer info
    QObject *dispatcher;
@@ -121,8 +121,8 @@ class QZeroTimerEvent : public QTimerEvent
    }
 };
 
-typedef QList<WinTimerInfo *>  WinTimerVec;      // vector of TimerInfo structs
-typedef QHash<int, WinTimerInfo *> WinTimerDict; // fast dict of timers
+using WinTimerVec  = QList<WinTimerInfo *>  ;      // vector of TimerInfo structs
+using WinTimerDict = QHash<int, WinTimerInfo *>;   // fast dict of timers
 
 class Q_CORE_EXPORT QEventDispatcherWin32Private : public QAbstractEventDispatcherPrivate
 {

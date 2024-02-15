@@ -34,13 +34,13 @@
 
 namespace QIPAddressUtils {
 
+using Buffer = QVarLengthArray<char, 64>;
+
 static QString number(quint8 val, int base = 10)
 {
    QChar zero(0x30);
    return val ? qulltoa(val, base, zero) : zero;
 }
-
-typedef QVarLengthArray<char, 64> Buffer;
 
 static const QString::const_iterator checkedToAscii(Buffer &buffer, const QString::const_iterator begin, const QString::const_iterator end)
 {

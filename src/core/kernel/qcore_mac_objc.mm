@@ -34,8 +34,6 @@
 #import <UIKit/UIKit.h>
 #endif
 
-typedef qint16 (*GestaltFunction)(quint32 selector, qint32 *response);
-
 NSString *QCFString::toNSString(const QString &string)
 {
    // The const cast below is safe: CfStringRef is immutable and so is NSString.
@@ -406,7 +404,7 @@ bool operator<(const KeyPair &entry, const Qt::Key &key)
 }
 
 struct qtKey2CocoaKeySortLessThan {
-   typedef bool result_type;
+   using result_type = bool;
 
    constexpr result_type operator()(const KeyPair &entry1, const KeyPair &entry2) const {
       return entry1.qtKey < entry2.qtKey;

@@ -92,7 +92,7 @@ class LIB_CS_STRING_EXPORT regbase
       JavaScript = normal,
       JScript    = normal
    };
-   typedef unsigned int flag_type;
+   using flag_type  = unsigned int;
 
    enum restart_info {
       restart_any       = 0,
@@ -147,8 +147,7 @@ enum flag_type_ {
    JScript      = normal
 };
 
-typedef cs_regex_ns::regbase::flag_type syntax_option_type;
-
+using syntax_option_type = cs_regex_ns::regbase::flag_type;
 using syntax_type        = unsigned char;
 using escape_syntax_type = unsigned char;
 

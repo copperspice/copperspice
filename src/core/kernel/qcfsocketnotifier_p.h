@@ -39,9 +39,9 @@ struct MacSocketInfo {
    bool readEnabled;
    bool writeEnabled;
 };
-typedef QHash<int, MacSocketInfo *> MacSocketHash;
 
-typedef void (*MaybeCancelWaitForMoreEventsFn)(QAbstractEventDispatcher *hostEventDispacher);
+using MacSocketHash                  = QHash<int, MacSocketInfo *>;
+using MaybeCancelWaitForMoreEventsFn = void (*)(QAbstractEventDispatcher *hostEventDispacher);
 
 // The CoreFoundationSocketNotifier class implements socket notifiers support using
 // CFSocket for event dispatchers running on top of the Core Foundation run loop system.

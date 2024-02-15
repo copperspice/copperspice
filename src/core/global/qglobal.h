@@ -433,37 +433,40 @@
    do { extern int qCleanupResources_ ## name ();    \
    qCleanupResources_ ## name (); } while (false)
 
-// make sure to update QVariant when changing the following
+#if defined(__cplusplus)
+   // block c files
+   // make sure to update QVariant when changing the following
 
-typedef int8_t               qint8;
-typedef uint8_t              quint8;
+using qint8    = int8_t;
+using quint8   = uint8_t;
 
-typedef int16_t              qint16;
-typedef uint16_t             quint16;
+using qint16   = int16_t;
+using quint16  = uint16_t;
 
-typedef int32_t              qint32;
-typedef uint32_t             quint32;
+using qint32   = int32_t;
+using quint32  = uint32_t;
 
-typedef long long            qint64;
-typedef unsigned long long   quint64;
-
-#define Q_INT64_C(c)      static_cast<int64_t>(c ## LL)
-#define Q_UINT64_C(c)     static_cast<uint64_t>(c ## ULL)
-
-#ifndef QT_POINTER_SIZE
-#define QT_POINTER_SIZE   sizeof(void *)
-#endif
-
-#if defined(__cplusplus)      // block c
-
-using qintptr  = std::conditional<sizeof(void *) == 4, qint32, qint64>::type;
-using qptrdiff = qintptr;
-using quintptr = std::conditional<sizeof(void *) == 4, quint32, quint64>::type;
+using qint64   = long long;
+using quint64  = unsigned long long;
 
 using uchar    = unsigned char;
 using ushort   = unsigned short;
 using uint     = unsigned int;
 using ulong    = unsigned long;
+
+using qreal    = double;
+
+using qintptr  = std::conditional<sizeof(void *) == 4, qint32, qint64>::type;
+using quintptr = std::conditional<sizeof(void *) == 4, quint32, quint64>::type;
+
+using qptrdiff = qintptr;
+
+#define Q_INT64_C(c)   static_cast<int64_t>(c ## LL)
+#define Q_UINT64_C(c)  static_cast<uint64_t>(c ## ULL)
+
+#ifndef QT_POINTER_SIZE
+#define QT_POINTER_SIZE  sizeof(void *)
+#endif
 
 #ifndef TRUE
 #  define TRUE   true
@@ -500,9 +503,6 @@ using ulong    = unsigned long;
 
 #  define QT_WIN_CALLBACK CALLBACK             QT_ENSURE_STACK_ALIGNED_FOR_SSE
 #endif
-
-//
-using qreal = double;
 
 // utility macros and inline functions
 template <typename T>

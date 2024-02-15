@@ -915,7 +915,8 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_set_repeat()
 template <class BidiIterator, class Allocator, class traits>
 bool perl_matcher<BidiIterator, Allocator, traits>::match_long_set_repeat()
 {
-   typedef typename traits::char_class_type m_type;
+   using m_type = typename traits::char_class_type;
+
    const re_repeat *rep = static_cast<const re_repeat *>(pstate);
    const re_set_long<m_type> *set = static_cast<const re_set_long<m_type>*>(pstate->next.p);
    std::size_t count = 0;
@@ -1632,7 +1633,8 @@ bool perl_matcher<BidiIterator, Allocator, traits>::unwind_short_set_repeat(bool
 template <class BidiIterator, class Allocator, class traits>
 bool perl_matcher<BidiIterator, Allocator, traits>::unwind_long_set_repeat(bool r)
 {
-   typedef typename traits::char_class_type m_type;
+   using m_type = typename traits::char_class_type;
+
    saved_single_repeat<BidiIterator> *pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
 
    // if we have a match, just discard this state:

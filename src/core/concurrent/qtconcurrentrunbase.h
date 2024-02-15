@@ -35,7 +35,7 @@ template <typename T>
 struct SelectSpecialization {
    template <class Normal, class Void>
    struct Type {
-      typedef Normal type;
+      using type = Normal;
    };
 };
 
@@ -43,7 +43,7 @@ template <>
 struct SelectSpecialization<void> {
    template <class Normal, class Void>
    struct Type {
-      typedef Void type;
+      using type = Void;
    };
 };
 

@@ -34,8 +34,8 @@ template <typename T>
 class FunctionWrapper0
 {
  public:
-   typedef T (*FunctionPointerType)();
-   typedef T result_type;
+   using FunctionPointerType = T (*)();
+   using result_type         = T;
 
    FunctionWrapper0(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -53,8 +53,8 @@ template <typename T, typename U>
 class FunctionWrapper1
 {
  public:
-   typedef T (*FunctionPointerType)(U u);
-   typedef T result_type;
+   using FunctionPointerType = T (*)(U u);
+   using result_type         = T;
 
    FunctionWrapper1(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -72,8 +72,8 @@ template <typename T, typename U, typename V>
 class FunctionWrapper2
 {
  public:
-   typedef T (*FunctionPointerType)(U u, V v);
-   typedef T result_type;
+   using FunctionPointerType = T (*)(U u, V v);
+   using result_type         = T;
 
    FunctionWrapper2(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -91,8 +91,8 @@ template <typename T, typename C>
 class MemberFunctionWrapper
 {
  public:
-   typedef T (C::*FunctionPointerType)();
-   typedef T result_type;
+   using FunctionPointerType = T (C::*)();
+   using result_type         = T;
 
    MemberFunctionWrapper(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -110,8 +110,8 @@ template <typename T, typename C, typename U>
 class MemberFunctionWrapper1
 {
  public:
-   typedef T (C::*FunctionPointerType)(U);
-   typedef T result_type;
+   using FunctionPointerType = T (C::*)(U);
+   using result_type         = T;
 
    MemberFunctionWrapper1(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -130,8 +130,8 @@ template <typename T, typename C>
 class ConstMemberFunctionWrapper
 {
  public:
-   typedef T (C::*FunctionPointerType)() const;
-   typedef T result_type;
+   using FunctionPointerType = T (C::*)() const;
+   using result_type         = T;
 
    ConstMemberFunctionWrapper(FunctionPointerType _functionPointer)
       : functionPointer(_functionPointer)
@@ -180,10 +180,9 @@ QtConcurrent::ConstMemberFunctionWrapper<T, C> createFunctionWrapper(T (C::*func
 }
 
 struct PushBackWrapper {
-   typedef void result_type;
+   using result_type = void;
 
    template <class C, class U>
-
    void operator()(C &c, const U &u) const {
       return c.push_back(u);
    }
@@ -192,17 +191,16 @@ struct PushBackWrapper {
    void operator()(C &c, U &&u) const {
       return c.push_back(u);
    }
-
 };
 
 template <typename Functor, bool foo = HasResultType<Functor>::Value>
 struct LazyResultType {
-   typedef typename Functor::result_type Type;
+   using Type = typename Functor::result_type;
 };
 
 template <typename Functor>
 struct LazyResultType<Functor, false> {
-   typedef void Type;
+   using Type = void;
 };
 
 template <class T>
@@ -210,57 +208,57 @@ struct ReduceResultType;
 
 template <class U, class V>
 struct ReduceResultType<void(*)(U &, V)> {
-   typedef U ResultType;
+   using ResultType = U;
 };
 
 template <class T, class C, class U>
 struct ReduceResultType<T(C::*)(U)> {
-   typedef C ResultType;
+   using ResultType = C;
 };
 
 template <class InputSequence, class MapFunctor>
 struct MapResultType {
-   typedef typename LazyResultType<MapFunctor>::Type ResultType;
+   using ResultType = typename LazyResultType<MapFunctor>::Type;
 };
 
 template <class U, class V>
 struct MapResultType<void, U (*)(V)> {
-   typedef U ResultType;
+   using ResultType = U;
 };
 
 template <class T, class C>
 struct MapResultType<void, T(C::*)() const> {
-   typedef T ResultType;
+     using ResultType = T;
 };
 
 template <template <typename> class InputSequence, typename MapFunctor, typename T>
 struct MapResultType<InputSequence<T>, MapFunctor> {
-   typedef InputSequence<typename LazyResultType<MapFunctor>::Type> ResultType;
+   using ResultType = InputSequence<typename LazyResultType<MapFunctor>::Type>;
 };
 
 template <template <typename> class InputSequence, class T, class U, class V>
 struct MapResultType<InputSequence<T>, U (*)(V)> {
-   typedef InputSequence<U> ResultType;
+   using ResultType = InputSequence<U>;
 };
 
 template <template <typename> class InputSequence, class T, class U, class C>
 struct MapResultType<InputSequence<T>, U(C::*)() const> {
-   typedef InputSequence<U> ResultType;
+   using ResultType = InputSequence<U>;
 };
 
 template <class MapFunctor>
 struct MapResultType<QStringList, MapFunctor> {
-   typedef QList<typename LazyResultType<MapFunctor>::Type> ResultType;
+   using ResultType = QList<typename LazyResultType<MapFunctor>::Type>;
 };
 
 template <class U, class V>
 struct MapResultType<QStringList, U (*)(V)> {
-   typedef QList<U> ResultType;
+   using ResultType = QList<U>;
 };
 
 template <class U, class C>
 struct MapResultType<QStringList, U(C::*)() const> {
-   typedef QList<U> ResultType;
+   using ResultType = QList<U>;
 };
 
 } // namespace QtPrivate

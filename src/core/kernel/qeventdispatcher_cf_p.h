@@ -37,7 +37,7 @@
 #ifdef __OBJC__
 @class RunLoopModeTracker;
 #else
-typedef struct objc_object RunLoopModeTracker;
+using RunLoopModeTracker = struct objc_object;
 #endif
 
 class QEventDispatcherCoreFoundation;
@@ -46,7 +46,7 @@ template <class T = QEventDispatcherCoreFoundation>
 class RunLoopSource
 {
  public:
-   typedef bool (T::*CallbackFunction)();
+   using CallbackFunction = bool (T::*)();
 
    enum { kHighestPriority = 0 } RunLoopSourcePriority;
 
@@ -94,7 +94,7 @@ template <class T = QEventDispatcherCoreFoundation>
 class RunLoopObserver
 {
  public:
-   typedef void (T::*CallbackFunction) (CFRunLoopActivity activity);
+   using CallbackFunction = void (T::*) (CFRunLoopActivity activity);
 
    RunLoopObserver(T *delegate, CallbackFunction callback, CFOptionFlags activities)
       : m_delegate(delegate), m_callback(callback)

@@ -1932,11 +1932,9 @@ static bool operator<(const QSettingsIniKey &k1, const QSettingsIniKey &k2)
    return static_cast<const QString &>(k1) < static_cast<const QString &>(k2);
 }
 
-typedef QMap<QSettingsIniKey, QVariant> IniKeyMap;
-
 struct QSettingsIniSection {
    int position;
-   IniKeyMap keyMap;
+   QMap<QSettingsIniKey, QVariant> keyMap;
 
    QSettingsIniSection()
       : position(-1)
@@ -1944,12 +1942,10 @@ struct QSettingsIniSection {
    }
 };
 
-typedef QMap<QString, QSettingsIniSection> IniMap;
-
 bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSettingsMap &map)
 {
-   IniMap iniMap;
-   IniMap::const_iterator i;
+   QMap<QString, QSettingsIniSection> iniMap;
+   QMap<QString, QSettingsIniSection>::const_iterator i;
 
 #ifdef Q_OS_WIN
    const char *const eol = "\r\n";
@@ -2015,9 +2011,9 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
 
       device.write(realSection);
 
-      const IniKeyMap &ents = i.value().keyMap;
+      const QMap<QSettingsIniKey, QVariant> &ents = i.value().keyMap;
 
-      for (IniKeyMap::const_iterator j = ents.constBegin(); j != ents.constEnd(); ++j) {
+      for (auto j = ents.constBegin(); j != ents.constEnd(); ++j) {
          QByteArray block;
          iniEscapedKey(j.key(), block);
          block += '=';

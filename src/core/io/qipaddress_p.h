@@ -32,8 +32,8 @@
 
 namespace QIPAddressUtils {
 
-typedef quint32 IPv4Address;
-typedef quint8 IPv6Address[16];
+using IPv4Address = quint32;
+using IPv6Address = quint8[16];
 
 Q_CORE_EXPORT bool parseIp4(IPv4Address &address, const QString::const_iterator begin, const QString::const_iterator end);
 Q_CORE_EXPORT const QString::const_iterator parseIp6(IPv6Address &address, QString::const_iterator begin, const QString::const_iterator end);

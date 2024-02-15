@@ -384,7 +384,7 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
 
             QString name  = QString::fromStdWString(std::wstring(entry, nameLen));
             QString value = QString::fromStdWString(std::wstring(equal + 1, entryLen - nameLen - 1));
-            env.d->hash.insert(QProcessEnvironmentPrivate::Key(name), value);
+            env.d->hash.insert(QProcEnvKey(name), value);
          }
 
          entry += entryLen + 1;
@@ -396,15 +396,15 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
    return env;
 }
 
-static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &environment)
+static QByteArray qt_create_environment(const QHash<QProcEnvKey, QProcEnvValue> &environment)
 {
    QByteArray envlist;
 
    if (! environment.isEmpty()) {
-      QProcessEnvironmentPrivate::Hash copy = environment;
+      QHash<QProcEnvKey, QProcEnvValue> copy = environment;
 
       // add PATH if necessary (for DLL loading)
-      QProcessEnvironmentPrivate::Key pathKey("PATH");
+      QProcEnvKey pathKey("PATH");
 
       if (! copy.contains(pathKey)) {
          QByteArray path = qgetenv("PATH");
@@ -415,7 +415,7 @@ static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &
       }
 
       // add systemroot if needed
-      QProcessEnvironmentPrivate::Key rootKey("SystemRoot");
+      QProcEnvKey rootKey("SystemRoot");
 
       if (! copy.contains(rootKey)) {
          QByteArray systemRoot = qgetenv("SystemRoot");
@@ -425,8 +425,9 @@ static QByteArray qt_create_environment(const QProcessEnvironmentPrivate::Hash &
          }
       }
 
-      int pos = 0;
-      QProcessEnvironmentPrivate::Hash::const_iterator it = copy.constBegin(), end = copy.constEnd();
+      int pos  = 0;
+      auto it  = copy.constBegin();
+      auto end = copy.constEnd();
 
       static const wchar_t equal = L'=';
       static const wchar_t nul   = L'\0';
@@ -901,7 +902,7 @@ bool QProcessPrivate::waitForWrite(int msecs)
 // with ERROR_ELEVATION_REQUIRED.
 static bool startDetachedUacPrompt(const QString &programIn, const QStringList &arguments, const QString &workingDir, qint64 *pid)
 {
-   typedef BOOL (WINAPI * ShellExecuteExType)(SHELLEXECUTEINFOW *);
+   using ShellExecuteExType = BOOL (WINAPI *)(SHELLEXECUTEINFOW *);
 
    static const ShellExecuteExType shellExecuteEx = // XP ServicePack 1 onwards.
          reinterpret_cast<ShellExecuteExType>(QSystemLibrary::resolve("shell32", "ShellExecuteExW"));

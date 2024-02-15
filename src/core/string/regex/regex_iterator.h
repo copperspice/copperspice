@@ -32,7 +32,7 @@ namespace cs_regex_ns {
 template <class BidirectionalIterator, class charT, class traits>
 class regex_iterator_implementation
 {
-   typedef basic_regex<charT, traits> regex_type;
+   using regex_type = basic_regex<charT, traits>;
 
    match_results<BidirectionalIterator> what;  // current match
    BidirectionalIterator                base;  // start of sequence
@@ -86,8 +86,8 @@ template <class BidirectionalIterator, class charT, class traits>
 class regex_iterator
 {
  private:
-   typedef regex_iterator_implementation<BidirectionalIterator, charT, traits> impl;
-   typedef std::shared_ptr<impl> pimpl;
+   using impl  = regex_iterator_implementation<BidirectionalIterator, charT, traits>;
+   using pimpl = std::shared_ptr<impl>;
 
  public:
    using regex_type        = basic_regex<charT, traits>;

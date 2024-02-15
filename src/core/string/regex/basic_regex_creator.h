@@ -74,10 +74,9 @@ template <class charT, class traits>
 class basic_char_set
 {
  public:
-   typedef digraph<charT>                   digraph_type;
-   typedef typename traits::char_class_type m_type;
-
-   using seq_type = typename traits::string_type;
+   using digraph_type = digraph<charT>;
+   using seq_type     = typename traits::string_type;
+   using m_type       = typename traits::char_class_type;
 
    basic_char_set() {
       m_negate          = false;
@@ -149,8 +148,8 @@ class basic_char_set
       return m_negate;
    }
 
-   typedef typename std::vector<digraph_type>::const_iterator  list_iterator;
-   typedef typename std::set<digraph_type>::const_iterator     set_iterator;
+   using list_iterator = typename std::vector<digraph_type>::const_iterator;
+   using set_iterator  = typename std::set<digraph_type>::const_iterator;
 
    set_iterator singles_begin() const {
       return m_singles.begin();
@@ -384,10 +383,10 @@ re_literal *basic_regex_creator<charT, traits>::append_literal(charT c)
 template <class charT, class traits>
 re_syntax_base *basic_regex_creator<charT, traits>::append_set(const basic_char_set<charT, traits> &char_set)
 {
-   typedef typename traits::string_type                          string_type;
-   typedef typename basic_char_set<charT, traits>::list_iterator item_iterator;
-   typedef typename basic_char_set<charT, traits>::set_iterator  set_iterator;
-   typedef typename traits::char_class_type                      m_type;
+   using string_type   = typename traits::string_type;
+   using item_iterator = typename basic_char_set<charT, traits>::list_iterator;
+   using set_iterator  = typename basic_char_set<charT, traits>::set_iterator;
+   using m_type        = typename traits::char_class_type;
 
    re_set_long<m_type> *result = static_cast<re_set_long<m_type>*>(append_state(syntax_element_long_set, sizeof(re_set_long<m_type>)));
 
@@ -899,8 +898,8 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base *state)
 template <class charT, class traits>
 int basic_regex_creator<charT, traits>::calculate_backstep(re_syntax_base *state)
 {
-   typedef typename traits::char_class_type m_type;
-   int result = 0;
+   using m_type = typename traits::char_class_type;
+   int result   = 0;
 
    while (state) {
       switch (state->type) {
@@ -1172,7 +1171,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base *state, 
 
          case syntax_element_long_set:
             if (l_map) {
-               typedef typename traits::char_class_type m_type;
+               using m_type = typename traits::char_class_type;
 
                if (static_cast<re_set_long<m_type>*>(state)->singleton) {
                   l_map[0] |= mask_init;
@@ -1452,7 +1451,7 @@ void basic_regex_creator<charT, traits>::set_bad_repeat(re_syntax_base *pt)
 template <class charT, class traits>
 syntax_element_type basic_regex_creator<charT, traits>::get_repeat_type(re_syntax_base *state)
 {
-   typedef typename traits::char_class_type m_type;
+   using m_type = typename traits::char_class_type;
 
    if (state->type == syntax_element_rep) {
       // check to see if we are repeating a single state:

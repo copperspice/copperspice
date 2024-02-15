@@ -38,11 +38,11 @@
 
 #include <sys/stat.h>
 
-typedef struct __FSEventStream *FSEventStreamRef;
-typedef const struct __FSEventStream *ConstFSEventStreamRef;
-typedef const struct __CFArray *CFArrayRef;
-typedef UInt32 FSEventStreamEventFlags;
-typedef uint64_t FSEventStreamEventId;
+using FSEventStreamRef        = struct __FSEventStream *;
+using ConstFSEventStreamRef   = const struct __FSEventStream *;
+using CFArrayRef              = const struct __CFArray *;
+using FSEventStreamEventFlags = UInt32;
+using FSEventStreamEventId    = uint64_t;
 
 #if ! defined(Q_OS_IOS)
 
@@ -56,8 +56,9 @@ struct PathInfo {
    struct ::stat savedInfo;    // All the info for the path so we can compare it.
 };
 
-typedef QLinkedList<PathInfo> PathInfoList;
-typedef QHash<QString, PathInfoList> PathHash;
+using PathInfoList = QLinkedList<PathInfo>;
+using PathHash     = QHash<QString, PathInfoList>;
+
 #endif
 
 class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
@@ -80,8 +81,7 @@ class QFSEventsFileSystemWatcherEngine : public QFileSystemWatcherEngine
    void updateFiles();
 
    static void fseventsCallback(ConstFSEventStreamRef streamRef, void *clientCallBackInfo, size_t numEvents,
-         void *eventPaths, const FSEventStreamEventFlags eventFlags[],
-         const FSEventStreamEventId eventIds[]);
+         void *eventPaths, const FSEventStreamEventFlags eventFlags[], const FSEventStreamEventId eventIds[]);
 
    void run() override;
    FSEventStreamRef fsStream;

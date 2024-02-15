@@ -137,7 +137,7 @@ template <typename Iterator, typename T>
 class IterateKernel : public ThreadEngine<T>
 {
  public:
-   typedef T ResultType;
+   using ResultType = T;
 
    IterateKernel(Iterator _begin, Iterator _end)
       : begin(_begin), end(_end), current(_begin), currentIndex(0),

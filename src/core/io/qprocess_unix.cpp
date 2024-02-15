@@ -296,13 +296,13 @@ QProcessEnvironment QProcessEnvironment::systemEnvironment()
 
       QByteArray name(entry, equal - entry);
       QByteArray value(equal + 1);
-      env.d->hash.insert(QProcessEnvironmentPrivate::Key(name), QProcessEnvironmentPrivate::Value(value));
+      env.d->hash.insert(QProcEnvKey(name), QProcEnvValue(value));
    }
 
    return env;
 }
 
-static char **_q_dupEnvironment(const QProcessEnvironmentPrivate::Hash &environment, int *envc)
+static char **_q_dupEnvironment(const QHash<QProcEnvKey, QProcEnvValue> &environment, int *envc)
 {
    *envc = 0;
 
@@ -314,8 +314,8 @@ static char **_q_dupEnvironment(const QProcessEnvironmentPrivate::Hash &environm
    envp[environment.count()] = nullptr;
    envp[environment.count() + 1] = nullptr;
 
-   QProcessEnvironmentPrivate::Hash::const_iterator it        = environment.constBegin();
-   const QProcessEnvironmentPrivate::Hash::const_iterator end = environment.constEnd();
+   auto it  = environment.constBegin();
+   auto end = environment.constEnd();
 
    for ( ; it != end; ++it) {
       QByteArray key = it.key().key;

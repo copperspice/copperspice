@@ -411,7 +411,8 @@ QLinkedList<T> &QLinkedList<T>::operator+=(const QLinkedList<T> &other)
 template <class T>
 class QLinkedListIterator
 {
-   typedef typename QLinkedList<T>::const_iterator const_iterator;
+   using const_iterator = typename QLinkedList<T>::const_iterator;
+
    QLinkedList<T> c;
    const_iterator i;
 
@@ -484,8 +485,9 @@ class QLinkedListIterator
 template <class T>
 class QMutableLinkedListIterator
 {
-   typedef typename QLinkedList<T>::iterator iterator;
-   typedef typename QLinkedList<T>::const_iterator const_iterator;
+   using iterator       = typename QLinkedList<T>::iterator;
+   using const_iterator = typename QLinkedList<T>::const_iterator;
+
    QLinkedList<T> *c;
    iterator i, n;
 

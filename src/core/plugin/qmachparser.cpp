@@ -54,16 +54,21 @@ static const cpu_type_t my_cputype = CPU_TYPE_ARM;
 #endif
 
 #ifdef MACHO64
-#  undef MACHO64
-typedef mach_header_64 my_mach_header;
-typedef segment_command_64 my_segment_command;
-typedef section_64 my_section;
+#undef MACHO64
+
+using my_mach_header     = mach_header_64;
+using my_segment_command = segment_command_64;
+using my_section         = section_64;
+
 static const uint32_t my_magic = MH_MAGIC_64;
+
 #else
-typedef mach_header my_mach_header;
-typedef segment_command my_segment_command;
-typedef section my_section;
+using my_mach_header     = mach_header;
+using my_segment_command = segment_command;
+using my_section         = section;
+
 static const uint32_t my_magic = MH_MAGIC;
+
 #endif
 
 static int ns(const QString &reason, const QString &library, QString *errorString)

@@ -65,8 +65,8 @@ class LIB_CS_STRING_EXPORT regex_error : public std::runtime_error
    std::ptrdiff_t m_position;
 };
 
-typedef regex_error bad_pattern;
-typedef regex_error bad_expression;
+using bad_pattern    = regex_error;
+using bad_expression = regex_error;
 
 namespace cs_regex_detail_ns {
 

@@ -37,8 +37,8 @@ namespace cs_regex_detail_ns {
 template <class BidiIterator, class Allocator, class traits>
 void perl_matcher<BidiIterator, Allocator, traits>::construct_init(const basic_regex<char_type, traits> &e, match_flag_type f)
 {
-   typedef typename regex_iterator_traits<BidiIterator>::iterator_category category;
-   typedef typename basic_regex<char_type, traits>::flag_type expression_flag_type;
+   using category             = typename regex_iterator_traits<BidiIterator>::iterator_category;
+   using expression_flag_type = typename basic_regex<char_type, traits>::flag_type;
 
    if (e.empty()) {
       // precondition failure: e is not a valid regex.
@@ -596,7 +596,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_backref()
 template <class BidiIterator, class Allocator, class traits>
 bool perl_matcher<BidiIterator, Allocator, traits>::match_long_set()
 {
-   typedef typename traits::char_class_type char_class_type;
+   using char_class_type = typename traits::char_class_type;
 
    // let the traits class do the work:
    if (position == last) {

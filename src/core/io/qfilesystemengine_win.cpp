@@ -66,13 +66,14 @@
 #ifndef _INTPTR_T_DEFINED
 
 #ifdef  _WIN64
-typedef __int64             intptr_t;
+using intptr_t =  __int64;
+
 #else
 
 #ifdef _W64
-typedef _W64 int            intptr_t;
+using intptr_t =  _W64 int;
 #else
-typedef INT_PTR intptr_t;
+using intptr_t = INT_PTR;
 #endif
 
 #endif
@@ -86,7 +87,7 @@ typedef INT_PTR intptr_t;
 
 #if ! defined(REPARSE_DATA_BUFFER_HEADER_SIZE)
 
-typedef struct _REPARSE_DATA_BUFFER {
+struct _REPARSE_DATA_BUFFER {
    ULONG  ReparseTag;
    USHORT ReparseDataLength;
    USHORT Reserved;
@@ -108,46 +109,51 @@ typedef struct _REPARSE_DATA_BUFFER {
          USHORT PrintNameLength;
          WCHAR  PathBuffer[1];
       } MountPointReparseBuffer;
+
       struct {
          UCHAR  DataBuffer[1];
       } GenericReparseBuffer;
    };
-} REPARSE_DATA_BUFFER, *PREPARSE_DATA_BUFFER;
+};
 
-#    define REPARSE_DATA_BUFFER_HEADER_SIZE  FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer)
-#endif // !defined(REPARSE_DATA_BUFFER_HEADER_SIZE)
+using REPARSE_DATA_BUFFER  = _REPARSE_DATA_BUFFER;
+using PREPARSE_DATA_BUFFER = _REPARSE_DATA_BUFFER *;
+
+#   define REPARSE_DATA_BUFFER_HEADER_SIZE  FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer)
+#endif
 
 #ifndef MAXIMUM_REPARSE_DATA_BUFFER_SIZE
-#    define MAXIMUM_REPARSE_DATA_BUFFER_SIZE 16384
+#   define MAXIMUM_REPARSE_DATA_BUFFER_SIZE 16384
 #endif
 
 #ifndef IO_REPARSE_TAG_SYMLINK
-#    define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+#   define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
 #endif
 
 #ifndef FSCTL_GET_REPARSE_POINT
-#    define FSCTL_GET_REPARSE_POINT CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#   define FSCTL_GET_REPARSE_POINT CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 42, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #endif
 
 Q_CORE_EXPORT int qt_ntfs_permission_lookup = 0;
 
-typedef DWORD (WINAPI *PtrGetNamedSecurityInfoW)(LPWSTR, SE_OBJECT_TYPE, SECURITY_INFORMATION, PSID *, PSID *, PACL *,
-      PACL *, PSECURITY_DESCRIPTOR *);
+using PtrGetNamedSecurityInfoW =
+   DWORD (WINAPI *)(LPWSTR, SE_OBJECT_TYPE, SECURITY_INFORMATION, PSID *, PSID *, PACL *, PACL *, PSECURITY_DESCRIPTOR *);
+
 static PtrGetNamedSecurityInfoW ptrGetNamedSecurityInfoW = nullptr;
 
-typedef BOOL (WINAPI *PtrLookupAccountSidW)(LPCWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE);
+using PtrLookupAccountSidW = BOOL (WINAPI *)(LPCWSTR, PSID, LPWSTR, LPDWORD, LPWSTR, LPDWORD, PSID_NAME_USE);
 static PtrLookupAccountSidW ptrLookupAccountSidW = nullptr;
 
-typedef VOID (WINAPI *PtrBuildTrusteeWithSidW)(PTRUSTEE_W, PSID);
+using PtrBuildTrusteeWithSidW = VOID (WINAPI *)(PTRUSTEE_W, PSID);
 static PtrBuildTrusteeWithSidW ptrBuildTrusteeWithSidW = nullptr;
 
-typedef DWORD (WINAPI *PtrGetEffectiveRightsFromAclW)(PACL, PTRUSTEE_W, OUT PACCESS_MASK);
+using PtrGetEffectiveRightsFromAclW = DWORD (WINAPI *)(PACL, PTRUSTEE_W, OUT PACCESS_MASK);
 static PtrGetEffectiveRightsFromAclW ptrGetEffectiveRightsFromAclW = nullptr;
 
-typedef BOOL (WINAPI *PtrGetUserProfileDirectoryW)(HANDLE, LPWSTR, LPDWORD);
+using PtrGetUserProfileDirectoryW = BOOL (WINAPI *)(HANDLE, LPWSTR, LPDWORD);
 static PtrGetUserProfileDirectoryW ptrGetUserProfileDirectoryW = nullptr;
 
-typedef BOOL (WINAPI *PtrGetVolumePathNamesForVolumeNameW)(LPCWSTR, LPWSTR, DWORD, PDWORD);
+using PtrGetVolumePathNamesForVolumeNameW = BOOL (WINAPI *)(LPCWSTR, LPWSTR, DWORD, PDWORD);
 static PtrGetVolumePathNamesForVolumeNameW ptrGetVolumePathNamesForVolumeNameW = nullptr;
 
 static TRUSTEE_W currentUserTrusteeW;
@@ -240,10 +246,11 @@ static void resolveLibs()
             ::CloseHandle(token);
          }
 
-         typedef BOOL (WINAPI * PtrAllocateAndInitializeSid)(PSID_IDENTIFIER_AUTHORITY, BYTE, DWORD, DWORD, DWORD, DWORD, DWORD,
-               DWORD, DWORD, DWORD, PSID *);
-         PtrAllocateAndInitializeSid ptrAllocateAndInitializeSid = (PtrAllocateAndInitializeSid)
-               advapi32.resolve("AllocateAndInitializeSid");
+         using PtrAllocateAndInitializeSid =
+               BOOL (WINAPI *)(PSID_IDENTIFIER_AUTHORITY, BYTE, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, PSID *);
+
+         PtrAllocateAndInitializeSid ptrAllocateAndInitializeSid =
+               (PtrAllocateAndInitializeSid) advapi32.resolve("AllocateAndInitializeSid");
 
          if (ptrAllocateAndInitializeSid) {
             // Create TRUSTEE for Everyone (World)
@@ -271,17 +278,18 @@ static void resolveLibs()
    }
 }
 
-typedef DWORD (WINAPI *PtrNetShareEnum)(LPWSTR, DWORD, LPBYTE *, DWORD, LPDWORD, LPDWORD, LPDWORD);
+using PtrNetShareEnum = DWORD (WINAPI *)(LPWSTR, DWORD, LPBYTE *, DWORD, LPDWORD, LPDWORD, LPDWORD);
 static PtrNetShareEnum ptrNetShareEnum = nullptr;
 
-typedef DWORD (WINAPI *PtrNetApiBufferFree)(LPVOID);
+using PtrNetApiBufferFree = DWORD (WINAPI *)(LPVOID);
 static PtrNetApiBufferFree ptrNetApiBufferFree = nullptr;
 
-typedef struct _SHARE_INFO_1 {
+struct _SHARE_INFO_1 {
    LPWSTR shi1_netname;
    DWORD shi1_type;
    LPWSTR shi1_remark;
-} SHARE_INFO_1;
+};
+using SHARE_INFO_1 = _SHARE_INFO_1;
 
 static bool resolveUNCLibs()
 {
@@ -599,23 +607,28 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
 }
 
 // FILE_INFO_BY_HANDLE_CLASS has been extended by FileIdInfo = 18
-enum Q_FILE_INFO_BY_HANDLE_CLASS {
-   Q_FileIdInfo = 18
-};
+static constexpr const FILE_INFO_BY_HANDLE_CLASS Q_FileIdInfo = static_cast<FILE_INFO_BY_HANDLE_CLASS>(18);
 
 #if defined(Q_CC_MINGW) && ! defined(STORAGE_INFO_OFFSET_UNKNOWN)
 
 #ifndef FILE_SUPPORTS_INTEGRITY_STREAMS
 
-typedef struct _FILE_ID_128 {
-   BYTE  Identifier[16];
-} FILE_ID_128, *PFILE_ID_128;
+struct _FILE_ID_128 {
+   BYTE Identifier[16];
+};
+
+using FILE_ID_128  = _FILE_ID_128;
+using PFILE_ID_128 = _FILE_ID_128 *;
+
 #endif
 
-typedef struct _FILE_ID_INFO {
+struct _FILE_ID_INFO {
    ULONGLONG VolumeSerialNumber;
    FILE_ID_128 FileId;
-} FILE_ID_INFO, *PFILE_ID_INFO;
+};
+
+using FILE_ID_INFO  = _FILE_ID_INFO;
+using PFILE_ID_INFO = *_FILE_ID_INFO;
 
 #endif
 
@@ -637,7 +650,7 @@ static inline QByteArray fileId(HANDLE handle)
 // File ID for Windows starting from version 8
 QByteArray fileIdWin8(HANDLE handle)
 {
-   using GetFileInformationByHandleExType = BOOL (WINAPI *)(HANDLE, Q_FILE_INFO_BY_HANDLE_CLASS, void *, DWORD);
+   using GetFileInformationByHandleExType = BOOL (WINAPI *)(HANDLE, FILE_INFO_BY_HANDLE_CLASS, void *, DWORD);
 
    // Dynamically resolve  GetFileInformationByHandleEx (Vista onwards).
    static GetFileInformationByHandleExType getFileInformationByHandleEx = nullptr;

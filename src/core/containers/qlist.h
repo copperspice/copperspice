@@ -661,7 +661,8 @@ uint qHash(const QList<T> &list, uint seed = 0)
 template <class T>
 class QListIterator
 {
-   typedef typename QList<T>::const_iterator const_iterator;
+   using const_iterator = typename QList<T>::const_iterator;
+
    QList<T> c;
    const_iterator i;
 
@@ -733,8 +734,8 @@ class QListIterator
 template <class T>
 class QMutableListIterator
 {
-   typedef typename QList<T>::iterator iterator;
-   typedef typename QList<T>::const_iterator const_iterator;
+   using iterator       = typename QList<T>::iterator;
+   using const_iterator = typename QList<T>::const_iterator;
 
    QList<T> *c;
    iterator i, n;

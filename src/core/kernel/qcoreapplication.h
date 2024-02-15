@@ -32,7 +32,7 @@
 #include <qscopedpointer.h>
 
 #if defined(Q_OS_WIN) && ! defined(tagMSG)
-typedef struct tagMSG MSG;
+using MSG = struct tagMSG;
 #endif
 
 class QCoreApplicationPrivate;
@@ -273,12 +273,11 @@ inline bool QCoreApplication::sendSpontaneousEvent(QObject *receiver, QEvent *ev
    { return QCoreApplication::translate(#context, text, comment, numArg); } \
    private:
 
-using QtStartUpFunction = void (*)();
-using QtCleanUpFunction = void (*)();
+using FP_Void = void (*)();
 
-Q_CORE_EXPORT void qAddPreRoutine(QtStartUpFunction);
-Q_CORE_EXPORT void qAddPostRoutine(QtCleanUpFunction);
-Q_CORE_EXPORT void qRemovePostRoutine(QtCleanUpFunction);
+Q_CORE_EXPORT void qAddPreRoutine(FP_Void);
+Q_CORE_EXPORT void qAddPostRoutine(FP_Void);
+Q_CORE_EXPORT void qRemovePostRoutine(FP_Void);
 Q_CORE_EXPORT QString qAppName();
 
 #if defined(Q_OS_WIN)

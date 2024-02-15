@@ -141,9 +141,9 @@ class Q_CORE_EXPORT QSettings : public QObject
    static void setUserIniPath(const QString &dir);   // ### remove in 5.0 (use setPath() instead)
    static void setPath(Format format, Scope scope, const QString &path);
 
-   typedef QMap<QString, QVariant> SettingsMap;
-   typedef bool (*ReadFunc)(QIODevice &device, SettingsMap &map);
-   typedef bool (*WriteFunc)(QIODevice &device, const SettingsMap &map);
+   using SettingsMap = QMap<QString, QVariant>;
+   using ReadFunc    = bool (*)(QIODevice &device, SettingsMap &map);
+   using WriteFunc   = bool (*)(QIODevice &device, const SettingsMap &map);
 
    static Format registerFormat(const QString &extension, ReadFunc readFunc, WriteFunc writeFunc,
          Qt::CaseSensitivity caseSensitivity = Qt::CaseSensitive);

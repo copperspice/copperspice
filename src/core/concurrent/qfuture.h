@@ -147,13 +147,12 @@ class QFuture
    class const_iterator
    {
     public:
-      typedef std::bidirectional_iterator_tag iterator_category;
-      typedef qptrdiff difference_type;
-      typedef T value_type;
-      typedef const T *pointer;
-      typedef const T &reference;
-
-      using size_type = difference_type;
+      using iterator_category = std::bidirectional_iterator_tag;
+      using difference_type   = qptrdiff;
+      using size_type         = difference_type;
+      using value_type        = T;
+      using pointer           = const T *;
+      using reference         = const T &;
 
       const_iterator() {
       }
@@ -296,7 +295,7 @@ inline QFuture<T> QFutureInterface<T>::future()
 template <class T>
 class QFutureIterator
 {
-   typedef typename QFuture<T>::const_iterator const_iterator;
+   using const_iterator = typename QFuture<T>::const_iterator;
 
    QFuture<T> c;
    const_iterator i;

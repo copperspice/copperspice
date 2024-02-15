@@ -122,8 +122,7 @@ class Q_CORE_EXPORT QBitArray
       }
    }
 
-   typedef QByteArray::DataPtr DataPtr;
-   DataPtr &data_ptr() {
+   QByteArray::DataPtr &data_ptr() {
       return d.data_ptr();
    }
 

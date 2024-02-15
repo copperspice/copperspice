@@ -71,7 +71,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ReduceOptions)
 template <typename ReduceFunctor, typename ReduceResultType, typename T>
 class ReduceKernel
 {
-   typedef QMap<int, IntermediateResults<T>> ResultsMap;
+   using ResultsMap = QMap<int, IntermediateResults<T>>;
 
    const ReduceOptions reduceOptions;
 

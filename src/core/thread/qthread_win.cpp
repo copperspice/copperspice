@@ -242,12 +242,14 @@ DWORD WINAPI qt_adopted_thread_watcher_function(LPVOID)
 #ifndef Q_OS_WIN64
 #  define ULONG_PTR DWORD
 #endif
-typedef struct tagTHREADNAME_INFO {
+
+struct tagTHREADNAME_INFO {
    DWORD dwType;      // must be 0x1000
    LPCSTR szName;     // pointer to name (in user addr space)
    HANDLE dwThreadID; // thread ID (-1=caller thread)
    DWORD dwFlags;     // reserved for future use, must be zero
-} THREADNAME_INFO;
+};
+using THREADNAME_INFO = tagTHREADNAME_INFO;
 
 void qt_set_thread_name(HANDLE threadId, LPCSTR threadName)
 {

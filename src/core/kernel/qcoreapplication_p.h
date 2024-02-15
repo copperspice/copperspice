@@ -28,7 +28,7 @@
 #include <qtranslator.h>
 #include <qsettings.h>
 
-typedef QList<QTranslator *> QTranslatorList;
+using QTranslatorList = QList<QTranslator *>;
 
 class QAbstractEventDispatcher;
 

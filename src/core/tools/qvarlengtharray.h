@@ -43,18 +43,18 @@ template <class T, int Prealloc>
 class QVarLengthArray
 {
  public:
-   typedef int size_type;
-   typedef T value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef value_type &reference;
-   typedef const value_type &const_reference;
-   typedef qptrdiff difference_type;
+   using size_type        = int;
+   using value_type       = T;
+   using pointer          = value_type *;
+   using const_pointer    = const value_type *;
+   using reference        = value_type &;
+   using const_reference  = const value_type &;
+   using difference_type  = qptrdiff;
+   using iterator         = T *;
+   using const_iterator   = const T *;
 
-   typedef T *iterator;
-   typedef const T *const_iterator;
-   typedef std::reverse_iterator<iterator> reverse_iterator;
-   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+   using reverse_iterator       = std::reverse_iterator<iterator>;
+   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
    inline explicit QVarLengthArray(int size = 0);
 

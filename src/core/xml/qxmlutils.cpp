@@ -35,9 +35,8 @@ class QXmlCharRange
    ushort min;
    ushort max;
 };
-typedef const QXmlCharRange *RangeIter;
 
-bool QXmlUtils::rangeContains(RangeIter begin, RangeIter end, const QChar c)
+bool QXmlUtils::rangeContains(const QXmlCharRange *begin, const QXmlCharRange *end, const QChar c)
 {
    const ushort cp(c.unicode());
 
@@ -60,7 +59,7 @@ bool QXmlUtils::rangeContains(RangeIter begin, RangeIter end, const QChar c)
 
    while (begin != end) {
       int delta = (end - begin) / 2;
-      RangeIter mid = begin + delta;
+      const QXmlCharRange *mid = begin + delta;
 
       if (mid->min > cp) {
          end = mid;
@@ -125,12 +124,13 @@ static const QXmlCharRange g_base_begin[] = {
    {0x212A, 0x212B}, {0x212E, 0x212E}, {0x2180, 0x2182}, {0x3041, 0x3094}, {0x30A1, 0x30FA},
    {0x3105, 0x312C}, {0xAC00, 0xD7A3}
 };
-static const RangeIter g_base_end = g_base_begin + sizeof(g_base_begin) / sizeof(QXmlCharRange);
+static const QXmlCharRange *g_base_end = g_base_begin + sizeof(g_base_begin) / sizeof(QXmlCharRange);
 
 static const QXmlCharRange g_ideographic_begin[] = {
    {0x3007, 0x3007}, {0x3021, 0x3029}, {0x4E00, 0x9FA5}
 };
-static const RangeIter g_ideographic_end = g_ideographic_begin + sizeof(g_ideographic_begin) / sizeof(QXmlCharRange);
+static const QXmlCharRange *g_ideographic_end =
+      g_ideographic_begin + sizeof(g_ideographic_begin) / sizeof(QXmlCharRange);
 
 bool QXmlUtils::isIdeographic(const QChar c)
 {
@@ -158,7 +158,8 @@ static const QXmlCharRange g_combining_begin[] = {
    {0x0F90, 0x0F95}, {0x0F97, 0x0F97}, {0x0F99, 0x0FAD}, {0x0FB1, 0x0FB7}, {0x0FB9, 0x0FB9},
    {0x20D0, 0x20DC}, {0x20E1, 0x20E1}, {0x302A, 0x302F}, {0x3099, 0x3099}, {0x309A, 0x309A}
 };
-static const RangeIter g_combining_end = g_combining_begin + sizeof(g_combining_begin) / sizeof(QXmlCharRange);
+static const QXmlCharRange *g_combining_end =
+      g_combining_begin + sizeof(g_combining_begin) / sizeof(QXmlCharRange);
 
 bool QXmlUtils::isCombiningChar(const QChar c)
 {
@@ -171,7 +172,8 @@ static const QXmlCharRange g_digit_begin[] = {
    {0x0A66, 0x0A6F}, {0x0AE6, 0x0AEF}, {0x0B66, 0x0B6F}, {0x0BE7, 0x0BEF}, {0x0C66, 0x0C6F},
    {0x0CE6, 0x0CEF}, {0x0D66, 0x0D6F}, {0x0E50, 0x0E59}, {0x0ED0, 0x0ED9}, {0x0F20, 0x0F29}
 };
-static const RangeIter g_digit_end = g_digit_begin + sizeof(g_digit_begin) / sizeof(QXmlCharRange);
+static const QXmlCharRange *g_digit_end =
+      g_digit_begin + sizeof(g_digit_begin) / sizeof(QXmlCharRange);
 
 bool QXmlUtils::isDigit(const QChar c)
 {
@@ -184,7 +186,8 @@ static const QXmlCharRange g_extender_begin[] = {
    {0x0E46, 0x0E46}, {0x0EC6, 0x0EC6}, {0x3005, 0x3005}, {0x3031, 0x3035}, {0x309D, 0x309E},
    {0x30FC, 0x30FE}
 };
-static const RangeIter g_extender_end = g_extender_begin + sizeof(g_extender_begin) / sizeof(QXmlCharRange);
+static const QXmlCharRange *g_extender_end =
+      g_extender_begin + sizeof(g_extender_begin) / sizeof(QXmlCharRange);
 
 bool QXmlUtils::isExtender(const QChar c)
 {

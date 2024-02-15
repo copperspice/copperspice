@@ -1537,7 +1537,7 @@ class Q_CORE_EXPORT Qt
    };
    using MatchFlags = QFlags<MatchFlag>;
 
-   typedef void *HANDLE;
+   using HANDLE = void *;
 
    CORE_CS_ENUM(WindowModality)
 
@@ -1792,7 +1792,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::MouseEventFlags)
    Q_DECLARE_OPERATORS_FOR_FLAGS(Qt::GestureFlags)
 #endif
 
-typedef bool (*qInternalCallback)(void **);
+using qInternalCallback = bool (*)(void **);
 
 class Q_CORE_EXPORT QInternal
 {

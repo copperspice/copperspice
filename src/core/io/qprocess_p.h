@@ -40,11 +40,13 @@
 #ifdef Q_OS_WIN
 
 #include <qt_windows.h>
-typedef HANDLE Q_PIPE;
+
+using Q_PIPE = HANDLE;
 #define INVALID_Q_PIPE INVALID_HANDLE_VALUE
 
 #else
-typedef int Q_PIPE;
+
+using Q_PIPE = int;
 #define INVALID_Q_PIPE -1
 
 #endif
@@ -153,8 +155,8 @@ class QProcEnvValue
 class QProcessEnvironmentPrivate : public QSharedData
 {
  public:
-   typedef QProcEnvKey Key;
-   typedef QProcEnvValue Value;
+   using Key   = QProcEnvKey;
+   using Value = QProcEnvValue;
 
 #ifdef Q_OS_WIN
 
@@ -232,13 +234,10 @@ class QProcessEnvironmentPrivate : public QSharedData
    }
 #endif
 
-   typedef QHash<Key, Value> Hash;
-   Hash hash;
+   QHash<Key, Value> hash;
 
 #ifdef Q_OS_UNIX
-   typedef QHash<QString, Key> NameHash;
-   mutable NameHash nameMap;
-
+   mutable QHash<QString, Key> nameMap;
    mutable QMutex mutex;
 #endif
 

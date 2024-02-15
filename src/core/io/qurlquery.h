@@ -86,8 +86,8 @@ class Q_CORE_EXPORT QUrlQuery
       return query(encoding);
    }
 
+   using DataPtr = QSharedDataPointer<QUrlQueryPrivate>;
 
-   typedef QSharedDataPointer<QUrlQueryPrivate> DataPtr;
    DataPtr &data_ptr() {
       return d;
    }

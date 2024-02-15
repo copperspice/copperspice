@@ -46,8 +46,8 @@ template <class OutputIterator, class charT, class traits, class allocator>
 class split_pred
 {
  private:
-   typedef std::basic_string<charT, traits, allocator> string_type;
-   typedef typename string_type::const_iterator        iterator_type;
+   using string_type   = std::basic_string<charT, traits, allocator>;
+   using iterator_type = typename string_type::const_iterator;
 
    iterator_type  *p_last;
    OutputIterator *p_out;
@@ -97,7 +97,7 @@ template <class OutputIterator, class charT, class traits, class allocator, clas
 std::size_t regex_split(OutputIterator out, std::basic_string<charT, traits, allocator> &s,
                   const basic_regex<charT, Traits2> &e, match_flag_type flags, std::size_t max_split)
 {
-   typedef typename std::basic_string<charT, traits, allocator>::const_iterator  ci_t;
+   using ci_t = typename std::basic_string<charT, traits, allocator>::const_iterator;
 
    ci_t last = s.begin();
    std::size_t init_size = max_split;

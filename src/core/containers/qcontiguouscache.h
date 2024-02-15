@@ -68,21 +68,21 @@ struct QContiguousCacheTypedData: private QContiguousCacheData {
 template <typename T>
 class QContiguousCache
 {
-   typedef QContiguousCacheTypedData<T> Data;
+   using Data = QContiguousCacheTypedData<T>;
+
    union {
       QContiguousCacheData *d;
       QContiguousCacheTypedData<T> *p;
    };
 
  public:
-   // STL compatibility
-   typedef T value_type;
-   typedef value_type *pointer;
-   typedef const value_type *const_pointer;
-   typedef value_type &reference;
-   typedef const value_type &const_reference;
-   typedef qptrdiff difference_type;
-   typedef int size_type;
+   using value_type       = T;
+   using pointer          = value_type *;
+   using const_pointer    = const value_type *;
+   using reference        = value_type &;
+   using const_reference  = const value_type &;
+   using difference_type  = qptrdiff;
+   using size_type        = int;
 
    explicit QContiguousCache(int capacity = 0);
 

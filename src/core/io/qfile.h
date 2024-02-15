@@ -55,8 +55,9 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    QString fileName() const override;
    void setFileName(const QString &name);
 
-   typedef QByteArray (*EncoderFn)(const QString &fileName);
-   typedef QString (*DecoderFn)(const QByteArray &localfileName);
+   using EncoderFn = QByteArray (*)(const QString &fileName);
+   using DecoderFn = QString (*)(const QByteArray &localfileName);
+
    static QByteArray encodeName(const QString &fileName);
    static QString decodeName(const QByteArray &localFileName);
 

@@ -204,8 +204,8 @@ extern "C" void Q_CORE_EXPORT qt_startup_hook()
 {
 }
 
-using QStartUpFuncList = QList<QtStartUpFunction>;
-using QVFuncList       = QList<QtCleanUpFunction>;
+using QStartUpFuncList = QList<FP_Void>;
+using QVFuncList       = QList<FP_Void>;
 
 static QStartUpFuncList *preRList()
 {
@@ -221,7 +221,7 @@ static QVFuncList *postRList()
 
 static QMutex globalPreRoutinesMutex;
 
-void qAddPreRoutine(QtStartUpFunction p)
+void qAddPreRoutine(FP_Void p)
 {
    QStartUpFuncList *list = preRList();
 
@@ -239,7 +239,7 @@ void qAddPreRoutine(QtStartUpFunction p)
    list->prepend(p); // in case QCoreApplication is re-created, see qt_call_pre_routines
 }
 
-void qAddPostRoutine(QtCleanUpFunction p)
+void qAddPostRoutine(FP_Void p)
 {
    QVFuncList *list = postRList();
 
@@ -250,7 +250,7 @@ void qAddPostRoutine(QtCleanUpFunction p)
    list->prepend(p);
 }
 
-void qRemovePostRoutine(QtCleanUpFunction p)
+void qRemovePostRoutine(FP_Void p)
 {
    QVFuncList *list = postRList();
 

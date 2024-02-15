@@ -36,13 +36,14 @@ static const char tzRegPath[]     = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVer
 static const char currTzRegPath[] = "SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation";
 
 // Copied from MSDN
-typedef struct _REG_TZI_FORMAT {
+struct _REG_TZI_FORMAT {
    LONG Bias;
    LONG StandardBias;
    LONG DaylightBias;
    SYSTEMTIME StandardDate;
    SYSTEMTIME DaylightDate;
-} REG_TZI_FORMAT;
+};
+using REG_TZI_FORMAT = _REG_TZI_FORMAT;
 
 // Fast and reliable conversion from msecs to date for all values
 // Adapted from QDateTime msecsToDate

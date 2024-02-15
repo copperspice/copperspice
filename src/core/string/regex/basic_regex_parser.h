@@ -83,9 +83,9 @@ class basic_regex_parser : public basic_regex_creator<charT, traits>
    regex_constants::syntax_option_type parse_options();
 
  private:
-   typedef bool (basic_regex_parser::*parser_proc_type)();
-   typedef typename traits::string_type string_type;
-   typedef typename traits::char_class_type char_class_type;
+   using parser_proc_type = bool (basic_regex_parser::*)();
+   using string_type      = typename traits::string_type;
+   using char_class_type  = typename traits::char_class_type;
 
    parser_proc_type           m_parser_proc;                       // the main parser to use
 
@@ -1579,8 +1579,9 @@ bool basic_regex_parser<charT, traits>::parse_inner_set(basic_char_set<charT, tr
             negated = true;
          }
 
-         typedef typename traits::char_class_type m_type;
+         using m_type = typename traits::char_class_type;
          m_type m = this->m_traits.lookup_classname(name_first, name_last);
+
          if (m == 0) {
             if (char_set.empty() && (name_last - name_first == 1)) {
                // maybe a special case:

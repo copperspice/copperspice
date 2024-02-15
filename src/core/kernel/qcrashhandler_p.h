@@ -28,21 +28,21 @@
 
 #ifndef QT_NO_CRASHHANDLER
 
-typedef void (*QtCrashHandler)();
+using FP_Void = void (*)();
 
 class Q_CORE_EXPORT QSegfaultHandler
 {
    friend void qt_signal_handler(int);
-   static QtCrashHandler callback;
+   static FP_Void callback;
 
  public:
    static void initialize(char **, int);
 
-   static void installCrashHandler(QtCrashHandler h) {
+   static void installCrashHandler(FP_Void h) {
       callback = h;
    }
 
-   static QtCrashHandler crashHandler() {
+   static FP_Void crashHandler() {
       return callback;
    }
 };

@@ -97,20 +97,18 @@ static QString unescapedKey(QString rKey)
    return escapedKey(rKey);
 }
 
-typedef QMap<QString, QString> NameSet;
-
-static void mergeKeySets(NameSet *dest, const NameSet &src)
+static void mergeKeySets(QMap<QString, QString> *dest, const QMap<QString, QString> &src)
 {
-   NameSet::const_iterator it = src.constBegin();
+   auto it = src.constBegin();
 
    for (; it != src.constEnd(); ++it) {
       dest->insert(unescapedKey(it.key()), QString());
    }
 }
 
-static void mergeKeySets(NameSet *dest, const QStringList &src)
+static void mergeKeySets(QMap<QString, QString> *dest, const QStringList &src)
 {
-   QStringList::const_iterator it = src.constBegin();
+   auto it = src.constBegin();
 
    for (; it != src.constEnd(); ++it) {
       dest->insert(unescapedKey(*it), QString());
@@ -266,7 +264,7 @@ static QStringList childKeysOrGroups(HKEY parentHandle, QSettingsPrivate::ChildS
    return result;
 }
 
-static void allKeys(HKEY parentHandle, const QString &rSubKey, NameSet *result)
+static void allKeys(HKEY parentHandle, const QString &rSubKey, QMap<QString, QString> *result)
 {
    HKEY handle = openKey(parentHandle, KEY_READ, rSubKey);
 
@@ -394,8 +392,6 @@ void RegistryKey::close()
    m_handle = nullptr;
 }
 
-typedef QVector<RegistryKey> RegistryKeyList;
-
 class QWinSettingsPrivate : public QSettingsPrivate
 {
  public:
@@ -419,7 +415,7 @@ class QWinSettingsPrivate : public QSettingsPrivate
    QString fileName() const override;
 
  private:
-   RegistryKeyList regList;       // list of registry locations to search for keys
+   QVector<RegistryKey> regList;       // list of registry locations to search for keys
    bool deleteWriteHandleOnExit;
 };
 
@@ -857,7 +853,7 @@ bool QWinSettingsPrivate::get(const QString &uKey, QVariant *value) const
 
 QStringList QWinSettingsPrivate::children(const QString &uKey, ChildSpec spec) const
 {
-   NameSet retval;
+   QMap<QString, QString> retval;
    QString rKey = escapedKey(uKey);
 
    for (auto &item : regList) {
@@ -874,7 +870,7 @@ QStringList QWinSettingsPrivate::children(const QString &uKey, ChildSpec spec) c
       }
 
       if (spec == AllKeys) {
-         NameSet keys;
+         QMap<QString, QString> keys;
          allKeys(handle, QString(), &keys);
          mergeKeySets(&retval, keys);
 

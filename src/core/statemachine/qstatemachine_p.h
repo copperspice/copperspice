@@ -321,7 +321,7 @@ class Q_CORE_EXPORT QStateMachinePrivate : public QStatePrivate
    QHash<int, int> timerIdToDelayedEventId;
    QMutex delayedEventsMutex;
 
-   typedef QEvent *(*f_cloneEvent)(QEvent *);
+   using f_cloneEvent = QEvent *(*)(QEvent *);
 
    struct Handler {
       f_cloneEvent cloneEvent;

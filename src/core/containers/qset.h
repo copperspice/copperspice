@@ -403,7 +403,7 @@ QList<T> QList<T>::fromSet(const QSet<T> &set)
 template <class T>
 class QSetIterator
 {
-   typedef typename QSet<T>::const_iterator const_iterator;
+   using const_iterator = typename QSet<T>::const_iterator;
 
    QSet<T> c;
    const_iterator i;
@@ -476,7 +476,7 @@ class QSetIterator
 template <typename T>
 class QMutableSetIterator
 {
-   typedef typename QSet<T>::iterator iterator;
+   using iterator = typename QSet<T>::iterator;
 
    QSet<T> *c;
    iterator i, n;

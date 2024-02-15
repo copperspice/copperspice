@@ -116,7 +116,7 @@ template <typename T>
 class ThreadEngine : public virtual ThreadEngineBase
 {
  public:
-   typedef T ResultType;
+   using ResultType = T;
 
    virtual T *result() {
       return nullptr;
@@ -207,8 +207,8 @@ class ThreadEngineStarterBase
 template <typename T>
 class ThreadEngineStarter : public ThreadEngineStarterBase<T>
 {
-   typedef ThreadEngineStarterBase<T> Base;
-   typedef ThreadEngine<T> TypedThreadEngine;
+   using Base              = ThreadEngineStarterBase<T>;
+   using TypedThreadEngine = ThreadEngine<T>;
 
  public:
    ThreadEngineStarter(TypedThreadEngine *eng)

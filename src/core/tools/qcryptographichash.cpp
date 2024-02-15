@@ -34,18 +34,29 @@
 #include "../../3rdparty/md5/md5.cpp"
 #include "../../3rdparty/sha1/sha1.cpp"
 
-typedef unsigned char BitSequence;
-typedef unsigned long long DataLength;
-typedef enum { SUCCESS = 0, FAIL = 1, BAD_HASHLEN = 2 } HashReturn;
-#include "../../3rdparty/sha3/KeccakSponge.c"
+enum HashReturn {
+   SUCCESS     = 0,
+   FAIL        = 1,
+   BAD_HASHLEN = 2
+};
 
-typedef spongeState hashState;
-#include "../../3rdparty/sha3/KeccakNISTInterface.c"
+using BitSequence = unsigned char;
+using DataLength  = unsigned long long;
 
-typedef spongeState SHA3Context;
+using hashState   = spongeState;
+using SHA3Context = spongeState;
+
 typedef HashReturn (SHA3Init)(hashState *state, int hashbitlen);
 typedef HashReturn (SHA3Update)(hashState *state, const BitSequence *data, DataLength databitlen);
 typedef HashReturn (SHA3Final)(hashState *state, BitSequence *hashval);
+
+static int SHA224_256AddLength(SHA256Context *context, unsigned int length);
+static int SHA384_512AddLength(SHA512Context *context, unsigned int length);
+
+#include "../../3rdparty/sha3/KeccakNISTInterface.c"
+#include "../../3rdparty/sha3/KeccakSponge.c"
+#include "../../3rdparty/rfc6234/sha224-256.c"
+#include "../../3rdparty/rfc6234/sha384-512.c"
 
 #if Q_PROCESSOR_WORDSIZE == 8
    // 64 bit version
@@ -67,47 +78,15 @@ static SHA3Final  *const sha3Final  = Final;
 
 #endif
 
-#ifdef uint64_t
-#undef uint64_t
-#endif
-
-#ifdef uint32_t
-#undef uint32_t
-#endif
-
-#ifdef uint8_t
-#undef uint8_t
-#endif
-
-#ifdef int_least16_t
-#undef int_least16_t
-#endif
-
-#define uint64_t       quint64
-#define uint32_t       quint32
-#define uint8_t        quint8
-#define int_least16_t  qint16
-
-static int SHA224_256AddLength(SHA256Context *context, unsigned int length);
-static int SHA384_512AddLength(SHA512Context *context, unsigned int length);
-
-#include "../../3rdparty/rfc6234/sha224-256.c"
-#include "../../3rdparty/rfc6234/sha384-512.c"
-
-#undef uint64_t
-#undef uint32_t
-#undef uint68_t
-#undef int_least16_t
-
 static inline int SHA224_256AddLength(SHA256Context *context, unsigned int length)
 {
-   quint32 addTemp;
+   uint32_t addTemp;
    return SHA224_256AddLengthM(context, length);
 }
 
 static inline int SHA384_512AddLength(SHA512Context *context, unsigned int length)
 {
-   quint64 addTemp;
+   uint64_t addTemp;
    return SHA384_512AddLengthM(context, length);
 }
 

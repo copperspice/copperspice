@@ -94,8 +94,8 @@ enum {
 class LIB_CS_STRING_EXPORT raw_storage
 {
  public:
-   typedef std::size_t           size_type;
-   typedef unsigned char        *pointer;
+   using size_type = std::size_t;
+   using pointer   = unsigned char *;
 
  private:
    pointer last, start, end;

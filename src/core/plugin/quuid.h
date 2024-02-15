@@ -31,12 +31,17 @@
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
 
-typedef struct _GUID {
+struct _GUID {
    ulong   Data1;
    ushort  Data2;
    ushort  Data3;
    uchar   Data4[8];
-} GUID, *REFGUID, *LPGUID;
+};
+
+using GUID    = _GUID;
+using REFGUID = _GUID *;
+using LPGUID  = _GUID *;
+
 #endif
 
 #endif

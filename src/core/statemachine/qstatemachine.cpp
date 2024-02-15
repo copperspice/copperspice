@@ -77,7 +77,7 @@ struct CalculationCache {
       { }
    };
 
-   typedef QHash<QAbstractTransition *, TransitionInfo> TransitionInfoCache;
+   using TransitionInfoCache = QHash<QAbstractTransition *, TransitionInfo>;
    TransitionInfoCache cache;
 
    bool effectiveTargetStates(QAbstractTransition *t, QList<QAbstractState *> *targets) const {

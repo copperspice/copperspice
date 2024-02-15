@@ -36,7 +36,7 @@ namespace detail {
 template <class I>
 struct is_random_imp {
  private:
-   typedef typename std::iterator_traits<I>::iterator_category cat;
+   using cat = typename std::iterator_traits<I>::iterator_category;
 
  public:
    static const bool value = std::is_convertible<cat *, std::random_access_iterator_tag *>::value;
@@ -52,7 +52,7 @@ struct is_random_imp_selector {
 
    template <class I>
    struct rebind {
-      typedef is_random_imp<I> type;
+      using type = is_random_imp<I>;
    };
 };
 
@@ -61,7 +61,7 @@ struct is_random_imp_selector<true> {
 
    template <class I>
    struct rebind {
-      typedef is_random_pointer_imp<I> type;
+      using type = is_random_pointer_imp<I>;
    };
 
 };
@@ -72,9 +72,9 @@ template <class I>
 struct is_random_access_iterator {
 
  private:
-   typedef detail::is_random_imp_selector< std::is_pointer<I>::value> selector;
-   typedef typename selector::template rebind<I> bound_type;
-   typedef typename bound_type::type answer;
+   using  selector  = detail::is_random_imp_selector< std::is_pointer<I>::value>;
+   using bound_type = typename selector::template rebind<I>;
+   using answer     = typename bound_type::type ;
 
  public:
    static const bool value = answer::value;

@@ -81,7 +81,7 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
 {
  protected:
    // used in the CS_OBJECT macro to define cs_parent (ex:QObject) and cs_class (ex:MyClass)
-   typedef QObject cs_class;
+   using cs_class = QObject;
 
  private:
 

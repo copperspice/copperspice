@@ -55,8 +55,8 @@ template <class T>
 class QSharedDataPointer
 {
  public:
-   typedef T Type;
-   typedef T *pointer;
+   using Type    = T;
+   using pointer = T *;
 
    inline void detach() {
       if (d && d->ref.load() != 1) {

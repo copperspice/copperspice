@@ -545,8 +545,8 @@ QList<Val> QHash<Key, Val, Hash, KeyEqual>::values() const
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QHashIterator
 {
-   typedef typename QHash<Key, Val, Hash, KeyEqual>::const_iterator const_iterator;
-   typedef const_iterator Item;
+   using const_iterator = typename QHash<Key, Val, Hash, KeyEqual>::const_iterator;
+   using Item           = const_iterator;
 
  public:
    QHashIterator(const QHash<Key, Val, Hash, KeyEqual> &hash)
@@ -648,9 +648,9 @@ class QHashIterator
 template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QMutableHashIterator
 {
-   typedef typename QHash<Key, Val, Hash, KeyEqual>::iterator iterator;
-   typedef typename QHash<Key, Val, Hash, KeyEqual>::const_iterator const_iterator;
-   typedef iterator Item;
+   using const_iterator = typename QHash<Key, Val, Hash, KeyEqual>::const_iterator;
+   using iterator       = typename QHash<Key, Val, Hash, KeyEqual>::iterator;
+   using Item           = iterator;
 
  public:
    QMutableHashIterator(QHash<Key, Val, Hash, KeyEqual> &hash)

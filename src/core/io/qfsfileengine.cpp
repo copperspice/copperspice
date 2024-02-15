@@ -687,12 +687,12 @@ qint64 QFSFileEnginePrivate::writeFdFh(const char *data, qint64 len)
 }
 
 #ifndef QT_NO_FILESYSTEMITERATOR
-QAbstractFileEngine::Iterator *QFSFileEngine::beginEntryList(QDir::Filters filters, const QStringList &filterNames)
+QAbstractFileEngineIterator *QFSFileEngine::beginEntryList(QDir::Filters filters, const QStringList &filterNames)
 {
    return new QFSFileEngineIterator(filters, filterNames);
 }
 
-QAbstractFileEngine::Iterator *QFSFileEngine::endEntryList()
+QAbstractFileEngineIterator *QFSFileEngine::endEntryList()
 {
    return nullptr;
 }

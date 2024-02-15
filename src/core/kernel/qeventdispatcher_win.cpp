@@ -75,8 +75,8 @@ class QEventDispatcherWin32Private;
 #define DWORD_PTR DWORD
 #endif
 
-typedef MMRESULT(WINAPI *ptimeSetEvent)(UINT, UINT, LPTIMECALLBACK, DWORD_PTR, UINT);
-typedef MMRESULT(WINAPI *ptimeKillEvent)(UINT);
+using ptimeSetEvent  = MMRESULT(WINAPI *)(UINT, UINT, LPTIMECALLBACK, DWORD_PTR, UINT);
+using ptimeKillEvent = MMRESULT(WINAPI *)(UINT);
 
 static ptimeSetEvent qtimeSetEvent   = nullptr;
 static ptimeKillEvent qtimeKillEvent = nullptr;

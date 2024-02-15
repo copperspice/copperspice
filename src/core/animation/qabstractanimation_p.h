@@ -111,7 +111,7 @@ class Q_CORE_EXPORT QAnimationDriverPrivate
    bool running;
 };
 
-typedef QElapsedTimer ElapsedTimer;
+using ElapsedTimer = QElapsedTimer;
 
 class Q_CORE_EXPORT QUnifiedTimer : public QObject
 {

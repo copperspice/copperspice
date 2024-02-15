@@ -46,8 +46,7 @@ class Q_CORE_EXPORT QXmlUtils
    static bool isPublicID(const QString &candidate);
 
  private:
-   typedef const QXmlCharRange *RangeIter;
-   static bool rangeContains(RangeIter begin, RangeIter end, const QChar c);
+   static bool rangeContains(const QXmlCharRange *begin, const QXmlCharRange *end, const QChar c);
    static bool isBaseChar(const QChar c);
    static bool isDigit(const QChar c);
    static bool isExtender(const QChar c);

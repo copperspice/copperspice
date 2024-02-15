@@ -51,7 +51,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
-QtCrashHandler QSegfaultHandler::callback = nullptr;
+FP_Void QSegfaultHandler::callback = nullptr;
 
 #if defined(__GLIBC__) && (__GLIBC__ >= 2) && ! defined(__UCLIBC__) && ! defined(QT_LINUXBASE)
 

@@ -611,8 +611,8 @@ QVariant QSystemLocalePrivate::toCurrencyString(const QSystemLocale::CurrencyToS
 QStringList QSystemLocalePrivate::uiLanguages()
 {
    if (QSysInfo::windowsVersion() >= QSysInfo::WV_VISTA) {
-      typedef BOOL (WINAPI * GetUserPreferredUILanguagesFunc) (
-            DWORD dwFlags, PULONG pulNumLanguages, PWSTR pwszLanguagesBuffer, PULONG pcchLanguagesBuffer);
+      using GetUserPreferredUILanguagesFunc =
+            BOOL (WINAPI *) (DWORD dwFlags, PULONG pulNumLanguages, PWSTR pwszLanguagesBuffer, PULONG pcchLanguagesBuffer);
 
       static GetUserPreferredUILanguagesFunc GetUserPreferredUILanguages_ptr = nullptr;
 

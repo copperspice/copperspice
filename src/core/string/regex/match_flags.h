@@ -31,7 +31,7 @@ namespace cs_regex_ns {
 
 namespace regex_constants {
 
-typedef enum _match_flags {
+enum _match_flags {
    match_default = 0,
    match_not_bol = 1,                                /* first is not start of line */
    match_not_eol = match_not_bol << 1,               /* last is not end of line */
@@ -82,10 +82,10 @@ typedef enum _match_flags {
                    | format_literal
 
 
-} match_flags;
+};
 
-
-typedef match_flags match_flag_type;
+using match_flags     = _match_flags;
+using match_flag_type = match_flags;
 
 inline match_flags operator&(match_flags m1, match_flags m2)
 {

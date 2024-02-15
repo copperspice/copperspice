@@ -406,7 +406,7 @@ QFileInfo QAbstractFileEngineIterator::currentFileInfo() const
    return d->fileInfo;
 }
 
-QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters filters,
+QAbstractFileEngineIterator *QAbstractFileEngine::beginEntryList(QDir::Filters filters,
       const QStringList &filterNames)
 {
    (void) filters;
@@ -416,7 +416,7 @@ QAbstractFileEngine::Iterator *QAbstractFileEngine::beginEntryList(QDir::Filters
 }
 
 // internal
-QAbstractFileEngine::Iterator *QAbstractFileEngine::endEntryList()
+QAbstractFileEngineIterator *QAbstractFileEngine::endEntryList()
 {
    return nullptr;
 }

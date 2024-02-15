@@ -1425,13 +1425,13 @@ QDateTime QResourceFileEngine::fileTime(FileTime) const
    return QDateTime();
 }
 
-QAbstractFileEngine::Iterator *QResourceFileEngine::beginEntryList(QDir::Filters filters,
+QAbstractFileEngineIterator *QResourceFileEngine::beginEntryList(QDir::Filters filters,
       const QStringList &filterNames)
 {
    return new QResourceFileEngineIterator(filters, filterNames);
 }
 
-QAbstractFileEngine::Iterator *QResourceFileEngine::endEntryList()
+QAbstractFileEngineIterator *QResourceFileEngine::endEntryList()
 {
    return nullptr;
 }

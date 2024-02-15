@@ -34,12 +34,12 @@ namespace cs_regex_ns {
 template <class BidiIterator>
 struct sub_match : public std::pair<BidiIterator, BidiIterator> {
 
-   typedef typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::value_type   value_type;
+   using value_type = typename cs_regex_detail_ns::regex_iterator_traits<BidiIterator>::value_type;
 
-   typedef  std::ptrdiff_t       difference_type;
-   typedef  BidiIterator         iterator_type;
-   typedef  BidiIterator         iterator;
-   typedef  BidiIterator         const_iterator;
+   using difference_type = std::ptrdiff_t;
+   using iterator_type   = BidiIterator;
+   using iterator        = BidiIterator;
+   using const_iterator  = BidiIterator;
 
    bool matched;
 
@@ -126,11 +126,11 @@ struct sub_match : public std::pair<BidiIterator, BidiIterator> {
 
 };
 
-typedef sub_match<const char *> csub_match;
-typedef sub_match<std::string::const_iterator> ssub_match;
+using csub_match = sub_match<const char *>;
+using ssub_match = sub_match<std::string::const_iterator>;
 
-typedef sub_match<const wchar_t *> wcsub_match;
-typedef sub_match<std::wstring::const_iterator> wssub_match;
+using wcsub_match = sub_match<const wchar_t *>;
+using wssub_match = sub_match<std::wstring::const_iterator>;
 
 // comparison to std::basic_string<> part 1:
 template <class RandomAccessIterator, class traits, class Allocator>

@@ -29,7 +29,7 @@
 
 #ifndef QT_NO_TEXTCODEC
 
-typedef void (*QTextCodecStateFreeFunction)(QTextCodec::ConverterState *);
+using QTextCodecStateFreeFunction = void (*)(QTextCodec::ConverterState *);
 
 struct QTextCodecUnalignedPointer {
    static QTextCodecStateFreeFunction decode(const uint *src) {

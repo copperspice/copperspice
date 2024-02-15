@@ -689,7 +689,7 @@ QList<T> QList<T>::fromVector(const QVector<T> &vector)
 template <class T>
 class QVectorIterator
 {
-   typedef typename QVector<T>::const_iterator const_iterator;
+   using const_iterator = typename QVector<T>::const_iterator;
 
    QVector<T> c;
    const_iterator i;
@@ -763,8 +763,8 @@ class QVectorIterator
 template <class T>
 class QMutableVectorIterator
 {
-   typedef typename QVector<T>::iterator iterator;
-   typedef typename QVector<T>::const_iterator const_iterator;
+   using iterator       = typename QVector<T>::iterator;
+   using const_iterator = typename QVector<T>::const_iterator;
 
    QVector<T> *c;
    iterator i, n;

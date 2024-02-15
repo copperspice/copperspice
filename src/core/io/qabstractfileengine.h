@@ -127,9 +127,8 @@ class Q_CORE_EXPORT QAbstractFileEngine
    uchar *map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags);
    bool unmap(uchar *address);
 
-   typedef QAbstractFileEngineIterator Iterator;
-   virtual Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames);
-   virtual Iterator *endEntryList();
+   virtual QAbstractFileEngineIterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames);
+   virtual QAbstractFileEngineIterator *endEntryList();
 
    virtual qint64 read(char *data, qint64 maxlen);
    virtual qint64 readLine(char *data, qint64 maxlen);

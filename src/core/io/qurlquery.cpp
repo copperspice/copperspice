@@ -28,7 +28,7 @@
 
 #include <qurl_p.h>
 
-typedef QList<QPair<QString, QString> > Map;
+using Map = QList<QPair<QString, QString>>;
 
 class QUrlQueryPrivate : public QSharedData
 {

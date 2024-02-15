@@ -162,7 +162,8 @@ template <typename MapFunctor, typename InputSequence>
 typename QtPrivate::MapResultType<InputSequence, MapFunctor>::ResultType blockingMapped(const InputSequence &sequence,
       MapFunctor map)
 {
-   typedef typename QtPrivate::MapResultType<InputSequence, MapFunctor>::ResultType OutputSequence;
+   using OutputSequence = typename QtPrivate::MapResultType<InputSequence, MapFunctor>::ResultType;
+
    return blockingMappedReduced<OutputSequence> (sequence, QtPrivate::createFunctionWrapper(map),
           QtPrivate::PushBackWrapper(), QtConcurrent::OrderedReduce);
 }
@@ -179,7 +180,8 @@ template <typename Iterator, typename MapFunctor>
 typename QtPrivate::MapResultType<Iterator, MapFunctor>::ResultType blockingMapped(Iterator begin, Iterator end,
       MapFunctor map)
 {
-   typedef typename QtPrivate::MapResultType<Iterator, MapFunctor>::ResultType OutputSequence;
+   using OutputSequence = typename QtPrivate::MapResultType<Iterator, MapFunctor>::ResultType;
+
    return blockingMappedReduced<OutputSequence> (begin, end, QtPrivate::createFunctionWrapper(map),
          QtPrivate::PushBackWrapper(), QtConcurrent::OrderedReduce);
 }

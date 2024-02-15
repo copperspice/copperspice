@@ -105,8 +105,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QArrayData::AllocationOptions)
 
 template <class T>
 struct QTypedArrayData : QArrayData {
-   typedef T *iterator;
-   typedef const T *const_iterator;
+   using iterator       = T *;
+   using const_iterator = const T *;
 
    T *data() {
       return static_cast<T *>(QArrayData::data());

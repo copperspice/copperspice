@@ -48,7 +48,7 @@ class QSockNotType
    QSockNotType();
    ~QSockNotType();
 
-   typedef QPodList<QSockNot *, 32> List;
+   using List = QPodList<QSockNot *, 32>;
 
    List list;
    fd_set select_fds;

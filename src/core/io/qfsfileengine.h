@@ -72,8 +72,8 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    int handle() const override;
 
 #ifndef QT_NO_FILESYSTEMITERATOR
-   Iterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
-   Iterator *endEntryList() override;
+   QAbstractFileEngineIterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
+   QAbstractFileEngineIterator *endEntryList() override;
 #endif
 
    qint64 read(char *data, qint64 maxlen) override;

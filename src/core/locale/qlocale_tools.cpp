@@ -413,8 +413,7 @@ struct
    int k, maxwds, sign, wds;
    quint32 x[1];
 };
-
-typedef struct Bigint Bigint;
+using Bigint = struct Bigint;
 
 static Bigint *Balloc(int k)
 {
@@ -423,6 +422,7 @@ static Bigint *Balloc(int k)
 
    x = 1 << k;
    rv = static_cast<Bigint *>(malloc(sizeof(Bigint) + (x - 1) * sizeof(qint32)));
+
    Q_CHECK_PTR(rv);
 
    rv->k = k;

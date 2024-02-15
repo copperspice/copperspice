@@ -48,8 +48,7 @@ class QWaitConditionEvent
    bool wokenUp;
    HANDLE event;
 };
-
-typedef QList<QWaitConditionEvent *> EventQueue;
+using EventQueue = QList<QWaitConditionEvent *>;
 
 class QWaitConditionPrivate
 {
