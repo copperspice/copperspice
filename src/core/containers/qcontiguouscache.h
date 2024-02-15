@@ -31,8 +31,6 @@
 #include <limits.h>
 #include <new>
 
-#undef QT_QCONTIGUOUSCACHE_DEBUG
-
 struct Q_CORE_EXPORT QContiguousCacheData {
    QAtomicInt ref;
    int alloc;
@@ -49,10 +47,6 @@ struct Q_CORE_EXPORT QContiguousCacheData {
 
    static QContiguousCacheData *allocate(int size, int alignment);
    static void free(QContiguousCacheData *data);
-
-#ifdef QT_QCONTIGUOUSCACHE_DEBUG
-   void dump() const;
-#endif
 };
 
 template <typename T>
@@ -222,12 +216,6 @@ class QContiguousCache
    void normalizeIndexes() {
       d->offset = d->start;
    }
-
-#ifdef QT_QCONTIGUOUSCACHE_DEBUG
-   void dump() const {
-      p->dump();
-   }
-#endif
 
  private:
    void detach_helper();
