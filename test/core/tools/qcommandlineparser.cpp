@@ -35,81 +35,86 @@ TEST_CASE("QCommandLineParser traits", "[qcommandlineparser]")
    REQUIRE(std::has_virtual_destructor_v<QCommandLineParser> == false);
 }
 
-std::unique_ptr<QCommandLineParser> GetQCommandLineParser(const QStringList &arguments,
+QUniquePointer<QCommandLineParser> ParseCommandLine(const QStringList &arguments,
       QList<QCommandLineOption> options)
 {
-   std::unique_ptr<QCommandLineParser> parser = std::make_unique<QCommandLineParser>();
+   QUniquePointer<QCommandLineParser> parser = QMakeUnique<QCommandLineParser>();
 
-   parser->setApplicationDescription("Test helper");
+   parser->setApplicationDescription("CsCore Test");
    parser->addHelpOption();
-   parser->addVersionOption();
-   parser->addPositionalArgument("source", QCoreApplication::translate("main", "Source file to copy."));
-   parser->addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
 
-   for (const QCommandLineOption &commandLineOption : options) {
-      parser->addOption(commandLineOption);
+   parser->addVersionOption();
+
+   for (const QCommandLineOption &item : options) {
+      parser->addOption(item);
    }
+
+   //
+   parser->addPositionalArgument("source",      "Source path and file name");
+   parser->addPositionalArgument("destination", "Destination path and file name");
 
    parser->process(arguments);
 
    return parser;
 }
 
-TEST_CASE("QCommandListParser non_copyable", "[qcommandlineparser]")
+TEST_CASE("QCommandLineParser non_copyable", "[qcommandlineparser]")
 {
    REQUIRE(((! std::is_copy_constructible_v<QCommandLineParser> && ! std::is_copy_assignable_v<QCommandLineParser>) ));
 }
 
-TEST_CASE("QCommandListParser constructor", "[qcommandlineparser]")
+TEST_CASE("QCommandLineParser constructor", "[qcommandlineparser]")
 {
-   std::unique_ptr<QCommandLineParser> commandlistparser = GetQCommandLineParser({"", "source-location", "destination-location"}, {});
-   const QStringList args = commandlistparser->positionalArguments();
+   QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+         {"", "c:\\system\\file.txt", "c:\\tmp\\output.txt"}, { });
+
+   const QStringList args = parser->positionalArguments();
 
    REQUIRE(args.size() == 2);
-   REQUIRE(args.at(0) == "source-location");
-   REQUIRE(args.at(1) == "destination-location");
+   REQUIRE(args.at(0) == "c:\\system\\file.txt");
+   REQUIRE(args.at(1) == "c:\\tmp\\output.txt");
+
+   REQUIRE(parser->optionNames().size() == 0);
 }
 
-TEST_CASE("QCommandListParser options", "[qcommandlineparser]")
+TEST_CASE("QCommandLineParser options", "[qcommandlineparser]")
 {
    // boolean option with a single name
-   QCommandLineOption showProgressOption("p", QCoreApplication::translate("main", "Show progress during copy"));
+   QCommandLineOption showProgressOption("p", "Show progress during copy");
 
    // boolean option with multiple names
-   QCommandLineOption forceOption(QStringList() << "f" << "force",
-               QCoreApplication::translate("main", "Overwrite existing files."));
+   QCommandLineOption forceOption(QStringList() << "f" << "force", "Overwrite existing files");
 
    // option with a value
    QCommandLineOption targetDirectoryOption(QStringList() << "t" << "target-directory",
-               QCoreApplication::translate("main", "Copy all source files into <directory>."),
-               QCoreApplication::translate("main", "directory"));
+         "Copy all source files into <directory>.", "directory");
 
    {
-      std::unique_ptr<QCommandLineParser> commandlistparser = GetQCommandLineParser(
-               {"copy", "source-location", "destination-location"},
-               {showProgressOption, forceOption, targetDirectoryOption});
+      QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+            {"copy", "source-location", "destination-location"},
+            {showProgressOption, forceOption, targetDirectoryOption});
 
-      QStringList args = commandlistparser->positionalArguments();
+      QStringList args = parser->positionalArguments();
 
       REQUIRE(args.at(0) == "source-location");
       REQUIRE(args.at(1) == "destination-location");
 
-      REQUIRE(commandlistparser->isSet(showProgressOption) == false);
-      REQUIRE(commandlistparser->isSet(forceOption) == false);
+      REQUIRE(parser->isSet(showProgressOption) == false);
+      REQUIRE(parser->isSet(forceOption) == false);
 
-      QString targetDir = commandlistparser->value(targetDirectoryOption);
+      QString targetDir = parser->value(targetDirectoryOption);
       REQUIRE(targetDir == "");
    }
 
    {
-      std::unique_ptr<QCommandLineParser> commandlistparser = GetQCommandLineParser(
-               {"copy", "-f", "-t", "destination-location"},
-               {showProgressOption, forceOption, targetDirectoryOption});
+      QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+            {"copy", "-f", "-t", "destination-location"},
+            {showProgressOption, forceOption, targetDirectoryOption});
 
-      REQUIRE(commandlistparser->isSet(showProgressOption) == false);
-      REQUIRE(commandlistparser->isSet(forceOption) == true);
+      REQUIRE(parser->isSet(showProgressOption) == false);
+      REQUIRE(parser->isSet(forceOption) == true);
 
-      QString targetDir = commandlistparser->value(targetDirectoryOption);
+      QString targetDir = parser->value(targetDirectoryOption);
 
       REQUIRE(targetDir == "destination-location");
    }
