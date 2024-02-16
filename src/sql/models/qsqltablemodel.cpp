@@ -194,98 +194,6 @@ bool QSqlTableModelPrivate::exec(const QString &stmt, bool prepStatement,
    return true;
 }
 
-
-/*!
-    \class QSqlTableModel
-    \brief The QSqlTableModel class provides an editable data model
-    for a single database table.
-
-    \ingroup database
-    \inmodule QtSql
-
-    QSqlTableModel is a high-level interface for reading and writing
-    database records from a single table. It is build on top of the
-    lower-level QSqlQuery and can be used to provide data to view
-    classes such as QTableView. For example:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 24
-
-    We set the SQL table's name and the edit strategy, then we set up
-    the labels displayed in the view header. The edit strategy
-    dictates when the changes done by the user in the view are
-    actually applied to the database. The possible values are \l
-    OnFieldChange, \l OnRowChange, and \l OnManualSubmit.
-
-    QSqlTableModel can also be used to access a database
-    programmatically, without binding it to a view:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 21
-
-    The code snippet above extracts the \c salary field from record 4 in
-    the result set of the query \c{SELECT * from employee}.
-
-    It is possible to set filters using setFilter(), or modify the
-    sort order using setSort(). At the end, you must call select() to
-    populate the model with data.
-
-    The \l{sql/tablemodel} example illustrates how to use
-    QSqlTableModel as the data source for a QTableView.
-
-    QSqlTableModel provides no direct support for foreign keys. Use
-    the QSqlRelationalTableModel and QSqlRelationalDelegate if you
-    want to resolve foreign keys.
-
-    \sa QSqlRelationalTableModel, QSqlQuery, {Model/View Programming},
-        {Table Model Example}, {Cached Table Example}
-*/
-
-/*!
-    \fn QSqlTableModel::beforeDelete(int row)
-
-    This signal is emitted by deleteRowFromTable() before the \a row
-    is deleted from the currently active database table.
-*/
-
-/*!
-    \fn void QSqlTableModel::primeInsert(int row, QSqlRecord &record)
-
-    This signal is emitted by insertRows(), when an insertion is
-    initiated in the given \a row of the currently active database
-    table. The \a record parameter can be written to (since it is a
-    reference), for example to populate some fields with default
-    values.
-*/
-
-/*!
-    \fn QSqlTableModel::beforeInsert(QSqlRecord &record)
-
-    This signal is emitted by insertRowIntoTable() before a new row is
-    inserted into the currently active database table. The values that
-    are about to be inserted are stored in \a record and can be
-    modified before they will be inserted.
-*/
-
-/*!
-    \fn QSqlTableModel::beforeUpdate(int row, QSqlRecord &record)
-
-    This signal is emitted by updateRowInTable() before the \a row is
-    updated in the currently active database table with the values
-    from \a record.
-
-    Note that only values that are marked as generated will be updated.
-    The generated flag can be set with \l QSqlRecord::setGenerated()
-    and checked with \l QSqlRecord::isGenerated().
-
-    \sa QSqlRecord::isGenerated()
-*/
-
-/*!
-    Creates an empty QSqlTableModel and sets the parent to \a parent
-    and the database connection to \a db. If \a db is not valid, the
-    default database connection will be used.
-
-    The default edit strategy is \l OnRowChange.
-*/
 QSqlTableModel::QSqlTableModel(QObject *parent, QSqlDatabase db)
    : QSqlQueryModel(*new QSqlTableModelPrivate, parent)
 {
@@ -293,8 +201,6 @@ QSqlTableModel::QSqlTableModel(QObject *parent, QSqlDatabase db)
    d->db = db.isValid() ? db : QSqlDatabase::database();
 }
 
-/*!  \internal
-*/
 QSqlTableModel::QSqlTableModel(QSqlTableModelPrivate &dd, QObject *parent, QSqlDatabase db)
    : QSqlQueryModel(dd, parent)
 {
@@ -302,24 +208,10 @@ QSqlTableModel::QSqlTableModel(QSqlTableModelPrivate &dd, QObject *parent, QSqlD
    d->db = db.isValid() ? db : QSqlDatabase::database();
 }
 
-/*!
-    Destroys the object and frees any allocated resources.
-*/
 QSqlTableModel::~QSqlTableModel()
 {
 }
 
-/*!
-    Sets the database table on which the model operates to \a
-    tableName. Does not select data from the table, but fetches its
-    field information.
-
-    To populate the model with the table's data, call select().
-
-    Error information can be retrieved with \l lastError().
-
-    \sa select(), setFilter(), lastError()
-*/
 void QSqlTableModel::setTable(const QString &tableName)
 {
    Q_D(QSqlTableModel);
@@ -339,24 +231,12 @@ void QSqlTableModel::setTable(const QString &tableName)
    }
 }
 
-/*!
-    Returns the name of the currently selected table.
-*/
 QString QSqlTableModel::tableName() const
 {
    Q_D(const QSqlTableModel);
    return d->tableName;
 }
 
-/*!
-    Populates the model with data from the table that was set via setTable(), using the
-    specified filter and sort condition, and returns true if successful; otherwise
-    returns false.
-
-    \note Calling select() will revert any unsubmitted changes and remove any inserted columns.
-
-    \sa setTable(), setFilter(), selectStatement()
-*/
 bool QSqlTableModel::select()
 {
    Q_D(QSqlTableModel);
@@ -471,9 +351,6 @@ QVariant QSqlTableModel::data(const QModelIndex &index, int role) const
    return QSqlQueryModel::data(index, role);
 }
 
-/*!
-    \reimp
-*/
 QVariant QSqlTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
    Q_D(const QSqlTableModel);
@@ -489,6 +366,7 @@ QVariant QSqlTableModel::headerData(int section, Qt::Orientation orientation, in
 
    return QSqlQueryModel::headerData(section, orientation, role);
 }
+
 bool QSqlTableModel::isDirty() const
 {
    Q_D(const QSqlTableModel);
@@ -502,13 +380,6 @@ bool QSqlTableModel::isDirty() const
    return false;
 }
 
-/*!
-    Returns true if the value at the index \a index is dirty, otherwise false.
-    Dirty values are values that were modified in the model
-    but not yet written into the database.
-
-    If \a index is invalid or points to a non-existing row, false is returned.
-*/
 bool QSqlTableModel::isDirty(const QModelIndex &index) const
 {
    Q_D(const QSqlTableModel);
@@ -610,7 +481,7 @@ bool QSqlTableModel::insertRowIntoTable(const QSqlRecord &values)
       return false;
    }
 
-   return d->exec(stmt, prepStatement, rec, QSqlRecord() /* no where values */);
+   return d->exec(stmt, prepStatement, rec, QSqlRecord());
 }
 
 bool QSqlTableModel::deleteRowFromTable(int row)
@@ -633,7 +504,7 @@ bool QSqlTableModel::deleteRowFromTable(int row)
       return false;
    }
 
-   return d->exec(Sql::concat(stmt, where), prepStatement, QSqlRecord() /* no new values */, whereValues);
+   return d->exec(Sql::concat(stmt, where), prepStatement, QSqlRecord(), whereValues);
 }
 
 bool QSqlTableModel::submitAll()
@@ -852,21 +723,6 @@ bool QSqlTableModel::removeColumns(int column, int count, const QModelIndex &par
    return true;
 }
 
-/*!
-    Removes \a count rows starting at \a row. Since this model
-    does not support hierarchical structures, \a parent must be
-    an invalid model index.
-
-    Emits the beforeDelete() signal before a row is deleted. When
-    the edit strategy is OnManualSubmit signal emission is delayed
-    until submitAll() is called.
-
-    Returns true if all rows could be removed; otherwise returns
-    false. Detailed error information can be retrieved using
-    lastError().
-
-    \sa removeColumns(), insertRows()
-*/
 bool QSqlTableModel::removeRows(int row, int count, const QModelIndex &parent)
 {
    Q_D(QSqlTableModel);
@@ -913,23 +769,6 @@ bool QSqlTableModel::removeRows(int row, int count, const QModelIndex &parent)
    return true;
 }
 
-/*!
-    Inserts \a count empty rows at position \a row. Note that \a
-    parent must be invalid, since this model does not support
-    parent-child relations.
-
-    Only one row at a time can be inserted when using the
-    OnFieldChange or OnRowChange update strategies.
-
-    The primeInsert() signal will be emitted for each new row.
-    Connect to it if you want to initialize the new row with default
-    values.
-
-    Returns false if the parameters are out of bounds; otherwise
-    returns true.
-
-    \sa primeInsert(), insertRecord()
-*/
 bool QSqlTableModel::insertRows(int row, int count, const QModelIndex &parent)
 {
    Q_D(QSqlTableModel);
@@ -979,15 +818,6 @@ bool QSqlTableModel::insertRows(int row, int count, const QModelIndex &parent)
    return true;
 }
 
-/*!
-    Inserts the \a record after \a row. If \a row is negative, the
-    record will be appended to the end. Calls insertRows() and
-    setRecord() internally.
-
-    Returns true if the row could be inserted, otherwise false.
-
-    \sa insertRows(), removeRows()
-*/
 bool QSqlTableModel::insertRecord(int row, const QSqlRecord &record)
 {
 
@@ -1006,7 +836,6 @@ bool QSqlTableModel::insertRecord(int row, const QSqlRecord &record)
 
    return true;
 }
-
 
 int QSqlTableModel::rowCount(const QModelIndex &parent) const
 {
@@ -1032,29 +861,12 @@ QModelIndex QSqlTableModel::indexInQuery(const QModelIndex &item) const
    return QSqlQueryModel::indexInQuery(createIndex(item.row() - rowOffset, item.column(), item.internalPointer()));
 }
 
-/*!
-    Returns the currently set filter.
-
-    \sa setFilter(), select()
-*/
 QString QSqlTableModel::filter() const
 {
    Q_D(const QSqlTableModel);
    return d->filter;
 }
 
-/*!
-    Sets the current filter to \a filter.
-
-    The filter is a SQL \c WHERE clause without the keyword \c WHERE
-    (for example, \c{name='Josephine')}.
-
-    If the model is already populated with data from a database,
-    the model re-selects it with the new filter. Otherwise, the filter
-    will be applied the next time select() is called.
-
-    \sa filter(), select(), selectStatement(), orderByClause()
-*/
 void QSqlTableModel::setFilter(const QString &filter)
 {
    Q_D(QSqlTableModel);
@@ -1064,8 +876,6 @@ void QSqlTableModel::setFilter(const QString &filter)
    }
 }
 
-/*! \reimp
-*/
 void QSqlTableModel::clear()
 {
    Q_D(QSqlTableModel);
@@ -1075,8 +885,6 @@ void QSqlTableModel::clear()
    endResetModel();
 }
 
-/*! \reimp
-*/
 Qt::ItemFlags QSqlTableModel::flags(const QModelIndex &index) const
 {
    Q_D(const QSqlTableModel);

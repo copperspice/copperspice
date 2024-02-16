@@ -26,14 +26,13 @@
 #ifndef QT_NO_GRAPHICSEFFECT
 
 #include <qglshaderprogram.h>
-
-#define QGL_HAVE_CUSTOM_SHADERS 1
-
 #include <qgraphicsitem.h>
 #include <qpainter.h>
 
 #include <qglcustomshaderstage_p.h>
 #include <qgraphicseffect_p.h>
+
+#define QGL_HAVE_CUSTOM_SHADERS 1
 
 static const char qglslDefaultImageFragmentShader[] = "\
     lowp vec4 customShader(lowp sampler2D imageTexture, highp vec2 textureCoords) { \
@@ -114,9 +113,6 @@ void QGraphicsShaderEffect::setPixelShaderFragment(const QByteArray &code)
    }
 }
 
-/*#
-    \reimp
-*/
 void QGraphicsShaderEffect::draw(QPainter *painter)
 {
    Q_D(QGraphicsShaderEffect);

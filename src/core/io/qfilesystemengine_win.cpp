@@ -1158,9 +1158,9 @@ bool QFileSystemEngine::createDirectory(const QFileSystemEntry &entry, bool crea
          if (oldslash != -1) {
             oldslash = dirName.indexOf(QDir::separator(), oldslash);
          }
-      } else if (dirName.size() > 2
-                 && dirName.at(1) == QLatin1Char(':')) {
-         // Don't try to call mkdir with just a drive letter
+
+      } else if (dirName.size() > 2 && dirName.at(1) == QChar(':')) {
+         // do not try to call mkdir with just a drive letter
          oldslash = 2;
       }
 

@@ -32,56 +32,37 @@ class QVideoSurfaceFormatPrivate : public QSharedData
 {
  public:
    QVideoSurfaceFormatPrivate()
-      : pixelFormat(QVideoFrame::Format_Invalid)
-      , handleType(QAbstractVideoBuffer::NoHandle)
-      , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
-      , pixelAspectRatio(1, 1)
-      , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
-      , frameRate(0.0)
-      , mirrored(false) {
+      : pixelFormat(QVideoFrame::Format_Invalid), handleType(QAbstractVideoBuffer::NoHandle),
+        scanLineDirection(QVideoSurfaceFormat::TopToBottom), pixelAspectRatio(1, 1),
+        ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined), frameRate(0.0), mirrored(false)
+   {
    }
 
-   QVideoSurfaceFormatPrivate(
-      const QSize &size,
-      QVideoFrame::PixelFormat format,
-      QAbstractVideoBuffer::HandleType type)
-      : pixelFormat(format)
-      , handleType(type)
-      , scanLineDirection(QVideoSurfaceFormat::TopToBottom)
-      , frameSize(size)
-      , pixelAspectRatio(1, 1)
-      , ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined)
-      , viewport(QPoint(0, 0), size)
-      , frameRate(0.0)
-      , mirrored(false) {
+   QVideoSurfaceFormatPrivate(const QSize &size, QVideoFrame::PixelFormat format,
+         QAbstractVideoBuffer::HandleType type)
+      : pixelFormat(format), handleType(type), scanLineDirection(QVideoSurfaceFormat::TopToBottom),
+        frameSize(size), pixelAspectRatio(1, 1), ycbcrColorSpace(QVideoSurfaceFormat::YCbCr_Undefined),
+        viewport(QPoint(0, 0), size), frameRate(0.0), mirrored(false)
+ {
    }
 
    QVideoSurfaceFormatPrivate(const QVideoSurfaceFormatPrivate &other)
-      : QSharedData(other)
-      , pixelFormat(other.pixelFormat)
-      , handleType(other.handleType)
-      , scanLineDirection(other.scanLineDirection)
-      , frameSize(other.frameSize)
-      , pixelAspectRatio(other.pixelAspectRatio)
-      , ycbcrColorSpace(other.ycbcrColorSpace)
-      , viewport(other.viewport)
-      , frameRate(other.frameRate)
-      , mirrored(other.mirrored)
-      , propertyNames(other.propertyNames)
-      , propertyValues(other.propertyValues) {
+      : QSharedData(other), pixelFormat(other.pixelFormat), handleType(other.handleType),
+        scanLineDirection(other.scanLineDirection), frameSize(other.frameSize),
+        pixelAspectRatio(other.pixelAspectRatio), ycbcrColorSpace(other.ycbcrColorSpace),
+        viewport(other.viewport), frameRate(other.frameRate), mirrored(other.mirrored),
+        propertyNames(other.propertyNames), propertyValues(other.propertyValues)
+   {
    }
 
    bool operator ==(const QVideoSurfaceFormatPrivate &other) const {
-      if (pixelFormat == other.pixelFormat
-         && handleType == other.handleType
-         && scanLineDirection == other.scanLineDirection
-         && frameSize == other.frameSize
-         && pixelAspectRatio == other.pixelAspectRatio
-         && viewport == other.viewport
-         && frameRatesEqual(frameRate, other.frameRate)
-         && ycbcrColorSpace == other.ycbcrColorSpace
-         && mirrored == other.mirrored
-         && propertyNames.count() == other.propertyNames.count()) {
+      if (pixelFormat == other.pixelFormat && handleType == other.handleType
+            && scanLineDirection == other.scanLineDirection && frameSize == other.frameSize
+            && pixelAspectRatio == other.pixelAspectRatio && viewport == other.viewport
+            && frameRatesEqual(frameRate, other.frameRate)
+            && ycbcrColorSpace == other.ycbcrColorSpace && mirrored == other.mirrored
+            && propertyNames.count() == other.propertyNames.count()) {
+
          for (int i = 0; i < propertyNames.count(); ++i) {
             int j = other.propertyNames.indexOf(propertyNames.at(i));
 
@@ -89,13 +70,15 @@ class QVideoSurfaceFormatPrivate : public QSharedData
                return false;
             }
          }
+
          return true;
+
       } else {
          return false;
       }
    }
 
-   static inline bool frameRatesEqual(qreal r1, qreal r2) {
+   static bool frameRatesEqual(qreal r1, qreal r2) {
       return qAbs(r1 - r2) <= 0.00001 * qMin(qAbs(r1), qAbs(r2));
    }
 
@@ -113,7 +96,6 @@ class QVideoSurfaceFormatPrivate : public QSharedData
    QList<QVariant> propertyValues;
 };
 
-
 QVideoSurfaceFormat::QVideoSurfaceFormat()
    : d(new QVideoSurfaceFormatPrivate)
 {
@@ -125,18 +107,10 @@ QVideoSurfaceFormat::QVideoSurfaceFormat(
 {
 }
 
-/*!
-    Constructs a copy of \a other.
-*/
-
 QVideoSurfaceFormat::QVideoSurfaceFormat(const QVideoSurfaceFormat &other)
    : d(other.d)
 {
 }
-
-/*!
-    Assigns the values of \a other to a video stream description.
-*/
 
 QVideoSurfaceFormat &QVideoSurfaceFormat::operator =(const QVideoSurfaceFormat &other)
 {
@@ -145,102 +119,49 @@ QVideoSurfaceFormat &QVideoSurfaceFormat::operator =(const QVideoSurfaceFormat &
    return *this;
 }
 
-/*!
-    Destroys a video stream description.
-*/
-
 QVideoSurfaceFormat::~QVideoSurfaceFormat()
 {
 }
-
-/*!
-    Identifies if a video surface format has a valid pixel format and frame size.
-
-    Returns true if the format is valid, and false otherwise.
-*/
 
 bool QVideoSurfaceFormat::isValid() const
 {
    return d->pixelFormat != QVideoFrame::Format_Invalid && d->frameSize.isValid();
 }
 
-/*!
-    Returns true if \a other is the same as a video format, and false if they are the different.
-*/
-
 bool QVideoSurfaceFormat::operator ==(const QVideoSurfaceFormat &other) const
 {
    return d == other.d || *d == *other.d;
 }
-
-/*!
-    Returns true if \a other is different to a video format, and false if they are the same.
-*/
 
 bool QVideoSurfaceFormat::operator !=(const QVideoSurfaceFormat &other) const
 {
    return d != other.d && !(*d == *other.d);
 }
 
-/*!
-    Returns the pixel format of frames in a video stream.
-*/
-
 QVideoFrame::PixelFormat QVideoSurfaceFormat::pixelFormat() const
 {
    return d->pixelFormat;
 }
-
-/*!
-    Returns the type of handle the surface uses to present the frame data.
-
-    If the handle type is QAbstractVideoBuffer::NoHandle buffers with any handle type are valid
-    provided they can be \l {QAbstractVideoBuffer::map()}{mapped} with the
-    QAbstractVideoBuffer::ReadOnly flag.  If the handleType() is not QAbstractVideoBuffer::NoHandle
-    then the handle type of the buffer be the same as that of the surface format.
-*/
 
 QAbstractVideoBuffer::HandleType QVideoSurfaceFormat::handleType() const
 {
    return d->handleType;
 }
 
-/*!
-    Returns the size of frames in a video stream.
-
-    \sa frameWidth(), frameHeight()
-*/
-
 QSize QVideoSurfaceFormat::frameSize() const
 {
    return d->frameSize;
 }
-
-/*!
-    Returns the width of frames in a video stream.
-
-    \sa frameSize(), frameHeight()
-*/
 
 int QVideoSurfaceFormat::frameWidth() const
 {
    return d->frameSize.width();
 }
 
-/*!
-    Returns the height of frame in a video stream.
-*/
-
 int QVideoSurfaceFormat::frameHeight() const
 {
    return d->frameSize.height();
 }
-
-/*!
-    Sets the size of frames in a video stream to \a size.
-
-    This will reset the viewport() to fill the entire frame.
-*/
 
 void QVideoSurfaceFormat::setFrameSize(const QSize &size)
 {
@@ -248,131 +169,66 @@ void QVideoSurfaceFormat::setFrameSize(const QSize &size)
    d->viewport = QRect(QPoint(0, 0), size);
 }
 
-/*!
-    \overload
-
-    Sets the \a width and \a height of frames in a video stream.
-
-    This will reset the viewport() to fill the entire frame.
-*/
-
 void QVideoSurfaceFormat::setFrameSize(int width, int height)
 {
    d->frameSize = QSize(width, height);
    d->viewport = QRect(0, 0, width, height);
 }
 
-/*!
-    Returns the viewport of a video stream.
-
-    The viewport is the region of a video frame that is actually displayed.
-
-    By default the viewport covers an entire frame.
-*/
-
 QRect QVideoSurfaceFormat::viewport() const
 {
    return d->viewport;
 }
-
-/*!
-    Sets the viewport of a video stream to \a viewport.
-*/
 
 void QVideoSurfaceFormat::setViewport(const QRect &viewport)
 {
    d->viewport = viewport;
 }
 
-/*!
-    Returns the direction of scan lines.
-*/
-
 QVideoSurfaceFormat::Direction QVideoSurfaceFormat::scanLineDirection() const
 {
    return d->scanLineDirection;
 }
-
-/*!
-    Sets the \a direction of scan lines.
-*/
 
 void QVideoSurfaceFormat::setScanLineDirection(Direction direction)
 {
    d->scanLineDirection = direction;
 }
 
-/*!
-    Returns the frame rate of a video stream in frames per second.
-*/
-
 qreal QVideoSurfaceFormat::frameRate() const
 {
    return d->frameRate;
 }
-
-/*!
-    Sets the frame \a rate of a video stream in frames per second.
-*/
 
 void QVideoSurfaceFormat::setFrameRate(qreal rate)
 {
    d->frameRate = rate;
 }
 
-/*!
-    Returns a video stream's pixel aspect ratio.
-*/
-
 QSize QVideoSurfaceFormat::pixelAspectRatio() const
 {
    return d->pixelAspectRatio;
 }
-
-/*!
-    Sets a video stream's pixel aspect \a ratio.
-*/
 
 void QVideoSurfaceFormat::setPixelAspectRatio(const QSize &ratio)
 {
    d->pixelAspectRatio = ratio;
 }
 
-/*!
-    \overload
-
-    Sets the \a horizontal and \a vertical elements of a video stream's pixel aspect ratio.
-*/
-
 void QVideoSurfaceFormat::setPixelAspectRatio(int horizontal, int vertical)
 {
    d->pixelAspectRatio = QSize(horizontal, vertical);
 }
-
-/*!
-    Returns the Y'CbCr color space of a video stream.
-*/
 
 QVideoSurfaceFormat::YCbCrColorSpace QVideoSurfaceFormat::yCbCrColorSpace() const
 {
    return d->ycbcrColorSpace;
 }
 
-/*!
-    Sets the Y'CbCr color \a space of a video stream.
-    It is only used with raw YUV frame types.
-*/
-
 void QVideoSurfaceFormat::setYCbCrColorSpace(QVideoSurfaceFormat::YCbCrColorSpace space)
 {
    d->ycbcrColorSpace = space;
 }
-
-/*!
-    Returns a suggested size in pixels for the video stream.
-
-    This is the size of the viewport scaled according to the pixel aspect ratio.
-*/
 
 QSize QVideoSurfaceFormat::sizeHint() const
 {
@@ -384,10 +240,6 @@ QSize QVideoSurfaceFormat::sizeHint() const
 
    return size;
 }
-
-/*!
-    Returns a list of video format dynamic property names.
-*/
 
 QList<QString > QVideoSurfaceFormat::propertyNames() const
 {
@@ -558,6 +410,7 @@ QDebug operator<<(QDebug dbg, QVideoSurfaceFormat::YCbCrColorSpace cs)
          dbg << "YCbCr_Undefined";
          break;
    }
+
    return dbg;
 }
 
@@ -570,10 +423,12 @@ QDebug operator<<(QDebug dbg, QVideoSurfaceFormat::Direction dir)
       case QVideoSurfaceFormat::BottomToTop:
          dbg << "BottomToTop";
          break;
+
       case QVideoSurfaceFormat::TopToBottom:
          dbg << "TopToBottom";
          break;
    }
+
    return dbg;
 }
 
@@ -593,4 +448,3 @@ QDebug operator<<(QDebug dbg, const QVideoSurfaceFormat &f)
 
    return dbg;
 }
-

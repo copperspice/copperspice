@@ -321,18 +321,17 @@ static QString comify(const QString &organization)
 {
    for (int i = organization.size() - 1; i >= 0; --i) {
       QChar ch = organization.at(i);
-      if (ch == QLatin1Char('.') || ch == QChar(0x3002) || ch == QChar(0xff0e)
-            || ch == QChar(0xff61)) {
+
+      if (ch == QChar('.') || ch == QChar(0x3002) || ch == QChar(0xff0e) || ch == QChar(0xff61)) {
          QString suffix = organization.mid(i + 1).toLower();
-         if (suffix.size() == 2 || suffix == QLatin1String("com")
-               || suffix == QLatin1String("org") || suffix == QLatin1String("net")
-               || suffix == QLatin1String("edu") || suffix == QLatin1String("gov")
-               || suffix == QLatin1String("mil") || suffix == QLatin1String("biz")
-               || suffix == QLatin1String("info") || suffix == QLatin1String("name")
-               || suffix == QLatin1String("pro") || suffix == QLatin1String("aero")
-               || suffix == QLatin1String("coop") || suffix == QLatin1String("museum")) {
+
+         if (suffix.size() == 2 || suffix == "com"  || suffix == "org" || suffix == "net"   ||
+               suffix == "edu"  || suffix == "gov"  || suffix == "mil"  || suffix == "biz"  ||
+               suffix == "info" || suffix == "name" || suffix == "pro"  || suffix == "aero" ||
+               suffix == "coop" || suffix == "museum") {
+
             QString result = organization;
-            result.replace(QLatin1Char('/'), QLatin1Char(' '));
+            result.replace(QChar('/'), QChar(' '));
 
             return result;
          }
@@ -360,16 +359,16 @@ static QString comify(const QString &organization)
          domain += ch.toLower();
 
       } else {
-         domain += QLatin1Char(' ');
+         domain += QChar(' ');
 
       }
    }
 
    domain = domain.simplified();
-   domain.replace(QLatin1Char(' '), QLatin1Char('-'));
+   domain.replace(QChar(' '), QChar('-'));
 
    if (! domain.isEmpty()) {
-      domain.append(QLatin1String(".com"));
+      domain.append(".com");
    }
 
    return domain;
@@ -425,7 +424,7 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
             QString bundle_identifier(qtKey(main_bundle_identifier));
 
             // CFBundleGetIdentifier returns identifier separated by slashes rather than periods.
-            QStringList bundle_identifier_components = bundle_identifier.split(QLatin1Char('/'));
+            QStringList bundle_identifier_components = bundle_identifier.split('/');
 
             // pre-reverse them so that when they get reversed again below, they are in the com.company.product format.
             QStringList bundle_identifier_components_reversed;
@@ -435,7 +434,7 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
                bundle_identifier_components_reversed.push_front(bundle_identifier_component);
             }
 
-            domainName = bundle_identifier_components_reversed.join(QLatin1Char('.'));
+            domainName = bundle_identifier_components_reversed.join(".");
          }
       }
    }
@@ -445,9 +444,9 @@ QMacSettingsPrivate::QMacSettingsPrivate(QSettings::Scope scope, const QString &
       domainName = "unknown-organization.copperspice.com";
    }
 
-   while ((nextDot = domainName.indexOf(QLatin1Char('.'), curPos)) != -1) {
+   while ((nextDot = domainName.indexOf('.', curPos)) != -1) {
       javaPackageName.prepend(domainName.midView(curPos, nextDot - curPos));
-      javaPackageName.prepend(QLatin1Char('.'));
+      javaPackageName.prepend('.');
       curPos = nextDot + 1;
    }
 
@@ -499,14 +498,14 @@ QMacSettingsPrivate::~QMacSettingsPrivate()
 
 void QMacSettingsPrivate::remove(const QString &key)
 {
-   QStringList keys = children(key + QLatin1Char('/'), AllKeys);
+   QStringList keys = children(key + QChar('/'), AllKeys);
 
    // If i == -1, then delete "key" itself.
    for (int i = -1; i < keys.size(); ++i) {
       QString subKey = key;
 
       if (i >= 0) {
-         subKey += QLatin1Char('/');
+         subKey += QChar('/');
          subKey += keys.at(i);
       }
 
@@ -614,7 +613,7 @@ void QMacSettingsPrivate::flush()
 bool QMacSettingsPrivate::isWritable() const
 {
    QMacSettingsPrivate *that = const_cast<QMacSettingsPrivate *>(this);
-   QString impossibleKey(QLatin1String("qt_internal/"));
+   QString impossibleKey("qt_internal/");
 
    QSettings::Status oldStatus = that->status;
    that->status = QSettings::NoError;
@@ -638,9 +637,9 @@ QString QMacSettingsPrivate::fileName() const
       result = QDir::homePath();
    }
 
-   result += QLatin1String("/Library/Preferences/");
+   result += "/Library/Preferences/";
    result += QCFString::toQString(domains[0].applicationOrSuiteId);
-   result += QLatin1String(".plist");
+   result += ".plist";
 
    return result;
 }

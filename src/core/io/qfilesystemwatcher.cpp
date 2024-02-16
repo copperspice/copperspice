@@ -143,8 +143,9 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
          if (!directories->contains(path)) {
             directories->append(path);
          }
-         if (!path.endsWith(QLatin1Char('/'))) {
-            fi = QFileInfo(path + QLatin1Char('/'));
+
+         if (!path.endsWith('/')) {
+            fi = QFileInfo(path + QChar('/'));
          }
 
          this->directories.insert(path, fi);

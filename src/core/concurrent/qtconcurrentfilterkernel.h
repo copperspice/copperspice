@@ -204,7 +204,8 @@ class FilteredEachKernel : public IterateKernel<Iterator, typename qValueType<It
    using ResultType  = T;
 
    FilteredEachKernel(Iterator begin, Iterator end, KeepFunctor _keep)
-      : IterateKernelType(begin, end), keep(_keep) {
+      : IterateKernelType(begin, end), keep(_keep)
+   {
    }
 
    void start() {
@@ -286,7 +287,7 @@ inline ThreadEngineStarter<ResultType> startFilteredReduced(Iterator begin, Iter
    return startThreadEngine(new FilteredReduceType(begin, end, mapFunctor, reduceFunctor, options));
 }
 
-} // namespace QtConcurrent
+}   // end namespace
 
 #endif
 

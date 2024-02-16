@@ -455,7 +455,7 @@ bool QFileSystemEntry::isClean() const
    bool slashok = true;
 
    for (QString::const_iterator iter = m_filePath.constBegin(); iter != m_filePath.constEnd(); iter++) {
-      if (*iter == QLatin1Char('/')) {
+      if (*iter == QChar('/')) {
          if (dots == 1 || dots == 2) {
             return false;   // path contains "./" or "../"
          }

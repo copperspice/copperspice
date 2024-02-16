@@ -22,6 +22,7 @@
 
 #include <atomic>
 #include <cstddef>
+#include <initializer_list>
 #include <memory>
 #include <mutex>
 

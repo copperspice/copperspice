@@ -101,7 +101,7 @@ QStringList QProcessEnvironmentPrivate::toList() const
    auto end = hash.constEnd();
 
    for ( ; it != end; ++it) {
-      result << nameToString(it.key()) + QLatin1Char('=') + valueToString(it.value());
+      result << nameToString(it.key()) + '=' + valueToString(it.value());
    }
 
    return result;

@@ -153,7 +153,6 @@ class StoredConstMemberFunctionCall0 : public RunFunctionTask<T>
  private:
    T (Class::*fn)()const;
    const Class object;
-
 };
 
 template <typename T, typename Class>

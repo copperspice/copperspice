@@ -215,6 +215,6 @@ inline ThreadEngineStarter<ResultType> startMappedReduced(Iterator begin, Iterat
    return startThreadEngine(new MappedReduceType(begin, end, mapFunctor, reduceFunctor, options));
 }
 
-} // namespace QtConcurrent
+}   // end namespace
 
 #endif

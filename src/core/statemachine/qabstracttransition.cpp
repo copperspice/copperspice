@@ -234,7 +234,7 @@ void QAbstractTransition::addAnimation(QAbstractAnimation *animation)
    Q_D(QAbstractTransition);
 
    if (! animation) {
-      qWarning("QAbstractTransition::addAnimation() Unable to animation (nullptr)");
+      qWarning("QAbstractTransition::addAnimation() Unable to add animation (nullptr)");
       return;
    }
 

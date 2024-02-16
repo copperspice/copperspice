@@ -995,7 +995,6 @@ void QMediaPlayer::setVideoOutput(QAbstractVideoSurface *surface)
    }
 }
 
-/*! \reimp */
 QMultimedia::AvailabilityStatus QMediaPlayer::availability() const
 {
    Q_D(const QMediaPlayer);

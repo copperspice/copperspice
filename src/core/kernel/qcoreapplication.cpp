@@ -236,7 +236,7 @@ void qAddPreRoutine(FP_Void p)
       p();
    }
 
-   list->prepend(p); // in case QCoreApplication is re-created, see qt_call_pre_routines
+   list->prepend(p); // in case QCoreApplication is re-initialized, refer to qt_call_pre_routines
 }
 
 void qAddPostRoutine(FP_Void p)

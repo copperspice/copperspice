@@ -238,9 +238,12 @@ class QXmlSimpleReaderPrivate
 
    // used for entity declarations
    struct ExternParameterEntity {
-      ExternParameterEntity() {}
+      ExternParameterEntity()
+      { }
+
       ExternParameterEntity(const QString &p, const QString &s)
-         : publicId(p), systemId(s) {}
+         : publicId(p), systemId(s)
+      { }
 
       QString publicId;
       QString systemId;
@@ -394,21 +397,23 @@ class QXmlSimpleReaderPrivate
    const QString &string();
    void stringClear();
    void stringAddC(QChar);
-   inline void stringAddC() {
+   void stringAddC() {
       stringAddC(c);
    }
 
    const QString &name();
    void nameClear();
    void nameAddC(QChar);
-   inline void nameAddC() {
+
+   void nameAddC() {
       nameAddC(c);
    }
 
    const QString &ref();
    void refClear();
    void refAddC(QChar);
-   inline void refAddC() {
+
+   void refAddC() {
       refAddC(c);
    }
 

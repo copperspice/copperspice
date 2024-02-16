@@ -334,9 +334,7 @@ bool QLibrary::isLibrary(const QString &fileName)
    const QString lastSuffix = suffixes.at(suffixes.count() - 1);
    const QString firstSuffix = suffixes.at(0);
 
-   bool valid = (lastSuffix == QLatin1String("dylib")
-         || firstSuffix == QLatin1String("so")
-         || firstSuffix == QLatin1String("bundle"));
+   bool valid = (lastSuffix == QString("dylib") || firstSuffix == QString("so") || firstSuffix == QString("bundle"));
 
    return valid;
 

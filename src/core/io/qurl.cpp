@@ -1703,7 +1703,8 @@ QString QUrl::host(FormattingOptions options) const
 
    QString result;
    d->appendHost(result, options);
-   if (result.startsWith(QLatin1Char('['))) {
+
+   if (result.startsWith(QChar('['))) {
       return result.mid(1, result.length() - 2);
    }
 
@@ -1771,7 +1772,8 @@ QString QUrl::path(FormattingOptions options) const
 QString QUrl::fileName(FormattingOptions options) const
 {
    const QString ourPath = path(options);
-   const int slash = ourPath.lastIndexOf(QLatin1Char('/'));
+   const int slash = ourPath.lastIndexOf(QChar('/'));
+
    if (slash == -1) {
       return ourPath;
    }
@@ -2430,19 +2432,17 @@ bool QUrl::isParentOf(const QUrl &childUrl) const
 {
    QString childPath = childUrl.path();
 
-   if (!d)
-      return ((childUrl.scheme().isEmpty())
-              && (childUrl.authority().isEmpty())
-              && childPath.length() > 0 && childPath.at(0) == QLatin1Char('/'));
+   if (! d) {
+      return ((childUrl.scheme().isEmpty()) && (childUrl.authority().isEmpty())
+            && childPath.length() > 0 && childPath.at(0) == QChar('/'));
+   }
 
    QString ourPath = path();
 
-   return ((childUrl.scheme().isEmpty() || d->scheme == childUrl.scheme())
-           && (childUrl.authority().isEmpty() || authority() == childUrl.authority())
-           &&  childPath.startsWith(ourPath)
-           && ((ourPath.endsWith(QLatin1Char('/')) && childPath.length() > ourPath.length())
-               || (!ourPath.endsWith(QLatin1Char('/'))
-                   && childPath.length() > ourPath.length() && childPath.at(ourPath.length()) == QLatin1Char('/'))));
+   return ((childUrl.scheme().isEmpty() || d->scheme == childUrl.scheme())  && (childUrl.authority().isEmpty() ||
+         authority() == childUrl.authority()) &&  childPath.startsWith(ourPath) && ((ourPath.endsWith(QChar('/')) &&
+         childPath.length() > ourPath.length()) || (! ourPath.endsWith(QChar('/')) &&
+         childPath.length() > ourPath.length() && childPath.at(ourPath.length()) == QChar('/'))));
 }
 
 QDataStream &operator<<(QDataStream &stream, const QUrl &url)

@@ -21,24 +21,27 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
 #include <qdom.h>
+
+#include <qplatformdefs.h>
+
 #include <qxmlutils_p.h>
 
 #ifndef QT_NO_DOM
 
 #include <qatomic.h>
 #include <qbuffer.h>
+#include <qdebug.h>
 #include <qiodevice.h>
 #include <qlist.h>
-#include <qtextcodec.h>
-#include <qtextstream.h>
-#include <qxml.h>
-#include <qvariant.h>
 #include <qmap.h>
 #include <qmultimap.h>
 #include <qshareddata.h>
-#include <qdebug.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
+#include <qvariant.h>
+#include <qxml.h>
+
 #include <stdio.h>
 
 static void qt_split_namespace(QString &prefix, QString &name, const QString &qName, bool hasURI)
@@ -60,7 +63,9 @@ static void qt_split_namespace(QString &prefix, QString &name, const QString &qN
 class QDomImplementationPrivate
 {
  public:
-   inline QDomImplementationPrivate() {}
+   QDomImplementationPrivate()
+   {
+   }
 
    QDomImplementationPrivate *clone();
    QAtomicInt ref;
@@ -102,11 +107,11 @@ class QDomNodePrivate
    virtual void normalize();
    virtual void clear();
 
-   inline QDomNodePrivate *parent() const {
+   QDomNodePrivate *parent() const {
       return hasParent ? ownerNode : nullptr;
    }
 
-   inline void setParent(QDomNodePrivate *p) {
+   void setParent(QDomNodePrivate *p) {
       ownerNode = p;
       hasParent = true;
    }
@@ -1391,9 +1396,6 @@ QDomNode QDomNodeList::item(int index) const
    return QDomNode(impl->item(index));
 }
 
-/*!
-    Returns the number of nodes in the list.
-*/
 int QDomNodeList::length() const
 {
    if (!impl) {

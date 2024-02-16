@@ -447,9 +447,6 @@ QSqlTableModel *QSqlRelationalTableModel::relationModel(int column) const
    return relation.model;
 }
 
-/*!
-    \reimp
-*/
 void QSqlRelationalTableModel::revertRow(int row)
 {
    QSqlTableModel::revertRow(row);

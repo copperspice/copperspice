@@ -237,6 +237,7 @@ DWORD WINAPI qt_adopted_thread_watcher_function(LPVOID)
 
    return 0;
 }
+
 #if defined(Q_CC_MSVC)
 
 #ifndef Q_OS_WIN64
@@ -261,10 +262,12 @@ void qt_set_thread_name(HANDLE threadId, LPCSTR threadName)
 
    __try {
       RaiseException(0x406D1388, 0, sizeof(info) / sizeof(DWORD), (const ULONG_PTR *)&info);
+
    } __except (EXCEPTION_CONTINUE_EXECUTION) {
+      // do nothing
    }
 }
-#endif // Q_CC_MSVC
+#endif
 
 void QThreadPrivate::createEventDispatcher(QThreadData *data)
 {

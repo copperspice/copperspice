@@ -83,7 +83,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineoption.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrect.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qrefcount.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsimd.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsize.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp

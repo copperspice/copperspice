@@ -103,7 +103,7 @@ bool QLibraryHandle::load_sys()
 bool QLibraryHandle::unload_sys()
 {
    if (! FreeLibrary(pHnd)) {
-      errorString = QLibrary::tr("Can not unload library %1: %2").formatArgs(fileName, qt_error_string());
+      errorString = QLibrary::tr("Unable to unload library %1: %2").formatArgs(fileName, qt_error_string());
       return false;
    }
 

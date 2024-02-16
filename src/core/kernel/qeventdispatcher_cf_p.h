@@ -211,8 +211,8 @@ class Q_CORE_EXPORT QEventDispatcherCoreFoundation : public QAbstractEventDispat
 #if DEBUG_EVENT_DISPATCHER
 extern uint g_eventDispatcherIndentationLevel;
 #define qEventDispatcherDebug() qDebug().nospace() \
-            << csPrintable(QString(QLatin1String("| ")).repeated(g_eventDispatcherIndentationLevel)) \
-            << __FUNCTION__ << "(): "
+         << csPrintable(QString(QLatin1String("| ")).repeated(g_eventDispatcherIndentationLevel)) \
+         << __FUNCTION__ << "(): "
 #define qIndent() ++g_eventDispatcherIndentationLevel
 #define qUnIndent() --g_eventDispatcherIndentationLevel
 

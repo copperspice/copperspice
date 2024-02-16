@@ -26,6 +26,8 @@
 
 #include <quniquepointer.h>
 
+#if ! defined(CS_DOXYPRESS)
+
 template <typename T, typename Deleter = std::default_delete<T>>
 class QScopedPointer : public QUniquePointer<T, Deleter>
 {
@@ -35,6 +37,8 @@ class QScopedPointer : public QUniquePointer<T, Deleter>
    QScopedPointer(QScopedPointer && other) = delete;
    QScopedPointer &operator=(QScopedPointer && other) = delete;
 };
+
+#endif
 
 // free functions
 template <typename T, typename Deleter>

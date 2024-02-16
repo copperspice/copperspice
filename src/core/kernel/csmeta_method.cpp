@@ -40,7 +40,7 @@ QMetaMethod::QMetaMethod(const QString &typeName, const QString &signature, std:
 
 QMetaMethod::QMetaMethod()
 {
-   m_typeName   = "";
+   m_typeName   = QString();
    // m_signature
    // m_paramNames
    m_access     = Private;

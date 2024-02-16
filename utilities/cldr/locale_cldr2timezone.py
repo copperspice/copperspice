@@ -205,7 +205,7 @@ windowsIdList = {
   103: [u'SE Asia Standard Time',             25200  ],
   104: [u'Singapore Standard Time',           28800  ],
   105: [u'South Africa Standard Time',         7200  ],
-  106: [u'South Sudan Standard Time',          7200  ], 
+  106: [u'South Sudan Standard Time',          7200  ],
   107: [u'Sri Lanka Standard Time',           19800  ],
   108: [u'Sudan Standard Time',                7200  ],
   109: [u'Syria Standard Time',                7200  ],

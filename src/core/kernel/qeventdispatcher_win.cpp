@@ -71,7 +71,7 @@ static constexpr UINT_PTR WM_CS_SENDPOSTED_TIMER   = WM_USER + 3;
 
 class QEventDispatcherWin32Private;
 
-#if !defined(DWORD_PTR) && !defined(Q_OS_WIN64)
+#if ! defined(DWORD_PTR) && ! defined(Q_OS_WIN64)
 #define DWORD_PTR DWORD
 #endif
 

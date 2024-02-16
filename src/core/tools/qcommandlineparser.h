@@ -28,10 +28,9 @@
 #ifndef QCOMMANDLINEPARSER_H
 #define QCOMMANDLINEPARSER_H
 
-#include <qstringlist.h>
 #include <qcoreapplication.h>
 #include <qcommandlineoption.h>
-
+#include <qstringlist.h>
 class QCommandLineParserPrivate;
 class QCoreApplication;
 
@@ -40,6 +39,11 @@ class Q_CORE_EXPORT QCommandLineParser
    Q_DECLARE_TR_FUNCTIONS(QCommandLineParser)
 
  public:
+   enum SingleDashWordOptionMode {
+      ParseAsCompactedShortOptions,
+      ParseAsLongOptions
+   };
+
    QCommandLineParser();
 
    QCommandLineParser(const QCommandLineParser &) = delete;
@@ -47,10 +51,6 @@ class Q_CORE_EXPORT QCommandLineParser
 
    ~QCommandLineParser();
 
-   enum SingleDashWordOptionMode {
-      ParseAsCompactedShortOptions,
-      ParseAsLongOptions
-   };
    void setSingleDashWordOptionMode(SingleDashWordOptionMode parsingMode);
 
    bool addOption(const QCommandLineOption &option);

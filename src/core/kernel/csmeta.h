@@ -216,8 +216,6 @@ class Q_CORE_EXPORT QMetaProperty
 
    // Note: Doxypress docs must be located here due to an overload with similar signatures
 
-   //! \brief .
-   //!
    //! Reads the property's value from the given \a obj. Returns the property value if
    //! valid, otherwise returns a default constructed T.
    template <class T>
