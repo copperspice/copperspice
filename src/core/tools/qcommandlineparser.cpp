@@ -227,8 +227,7 @@ void QCommandLineParser::process(const QStringList &arguments)
    }
 
    if (d->builtinVersionOption && isSet("version")) {
-      printf("%s %s\n", csPrintable(QCoreApplication::applicationName()), csPrintable(QCoreApplication::applicationVersion()));
-      ::exit(EXIT_SUCCESS);
+      showVersion();
    }
 
    if (d->builtinHelpOption && isSet("help")) {
@@ -266,7 +265,7 @@ bool QCommandLineParserPrivate::registerFoundOption(const QString &optionName)
 bool QCommandLineParserPrivate::parseOptionValue(const QString &optionName, const QString &argument,
       QStringList::const_iterator *argumentIterator, QStringList::const_iterator argsEnd)
 {
-   const QLatin1Char assignChar('=');
+   const QChar assignChar('=');
    const NameHash_t::const_iterator nameHashIt = nameHash.constFind(optionName);
 
    if (nameHashIt != nameHash.constEnd()) {
@@ -505,9 +504,17 @@ QStringList QCommandLineParser::unknownOptionNames() const
    return d->unknownOptionNames;
 }
 
+void QCommandLineParser::showVersion()
+{
+   printf("%s %s\n", csPrintable(QCoreApplication::applicationName()),
+      csPrintable(QCoreApplication::applicationVersion()));
+   ::exit(EXIT_SUCCESS);
+}
+
+
 void QCommandLineParser::showHelp(int exitCode)
 {
-   fprintf(stdout, "%s", csPrintable(d->helpText()));
+   printf("%s", csPrintable(d->helpText()));
    ::exit(exitCode);
 }
 
@@ -518,8 +525,9 @@ QString QCommandLineParser::helpText() const
 
 static QString wrapText(const QString &names, int longestOptionNameString, const QString &description)
 {
-   const QLatin1Char nl('\n');
-   QString text = QString("  ") + names.leftJustified(longestOptionNameString) + QLatin1Char(' ');
+   const QChar nl('\n');
+
+   QString text = QString("  ") + names.leftJustified(longestOptionNameString) + QChar(' ');
    const int indent = text.length();
 
    int lineStart     = 0;
@@ -559,7 +567,7 @@ static QString wrapText(const QString &names, int longestOptionNameString, const
          const int numChars = breakAt - lineStart;
 
          if (lineStart > 0) {
-            text += QString(indent, QLatin1Char(' '));
+            text += QString(indent, QChar(' '));
          }
 
          text += description.mid(lineStart, numChars) + nl;
@@ -580,18 +588,19 @@ static QString wrapText(const QString &names, int longestOptionNameString, const
 
 QString QCommandLineParserPrivate::helpText() const
 {
-   const QLatin1Char nl('\n');
+   const QChar nl('\n');
    QString text;
 
    const QString exeName = QCoreApplication::instance()->arguments().first();
    QString usage = exeName;
-   if (!commandLineOptionList.isEmpty()) {
-      usage += QLatin1Char(' ');
+
+   if (! commandLineOptionList.isEmpty()) {
+      usage += QChar(' ');
       usage += QCommandLineParser::tr("[options]");
    }
 
-   for (const PositionalArgumentDefinition & arg : positionalArgumentDefinitions) {
-      usage += QLatin1Char(' ');
+   for (const PositionalArgumentDefinition &arg : positionalArgumentDefinitions) {
+      usage += QChar(' ');
       usage += arg.syntax;
    }
 
@@ -615,15 +624,16 @@ QString QCommandLineParserPrivate::helpText() const
 
       for (const QString &optionName : option.names()) {
          if (optionName.length() == 1) {
-            optionNames.append(QLatin1Char('-') + optionName);
+            optionNames.append(QChar('-') + optionName);
          } else {
             optionNames.append(QString("--") + optionName);
          }
       }
 
       QString optionNamesString = optionNames.join(QString(", "));
-      if (!option.valueName().isEmpty()) {
-         optionNamesString += QString(" <") + option.valueName() + QLatin1Char('>');
+
+      if (! option.valueName().isEmpty()) {
+         optionNamesString += QString(" <") + option.valueName() + QChar('>');
       }
 
       optionNameList.append(optionNamesString);

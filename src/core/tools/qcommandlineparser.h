@@ -80,6 +80,7 @@ class Q_CORE_EXPORT QCommandLineParser
    QStringList optionNames() const;
    QStringList unknownOptionNames() const;
 
+   void showVersion();
    void showHelp(int exitCode = 0);
    QString helpText() const;
 
