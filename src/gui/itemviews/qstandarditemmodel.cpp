@@ -71,7 +71,10 @@ QStandardItemPrivate::~QStandardItemPrivate()
    for (it = children.constBegin(); it != children.constEnd(); ++it) {
       QStandardItem *child = *it;
 
-      if (child != nullptr && model->d_func() != nullptr) {
+      if (model == nullptr) {
+         // do nothing
+
+      } else if (child != nullptr && model->d_func() != nullptr) {
          child->d_func()->setModel(nullptr);
       }
 
