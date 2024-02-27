@@ -60,37 +60,37 @@ inline bool can_start(charT c, const unsigned char *map, unsigned char mask, con
 }
 
 template <class traits>
-inline bool can_start(char c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(char c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return map[(unsigned char)c] & mask;
 }
 
 template <class traits>
-inline bool can_start(signed char c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(signed char c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return map[(unsigned char)c] & mask;
 }
 
 template <class traits>
-inline bool can_start(unsigned char c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(unsigned char c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return map[c] & mask;
 }
 
 template <class traits>
-inline bool can_start(unsigned short c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(unsigned short c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return ((c >= (1 << CHAR_BIT)) ? true : map[c] & mask);
 }
 
 template <class traits>
-inline bool can_start(wchar_t c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(wchar_t c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return ((c >= static_cast<wchar_t>(1u << CHAR_BIT)) ? true : map[c] & mask);
 }
 
 template <class traits>
-inline bool can_start(unsigned int c, const unsigned char *map, unsigned char mask, const traits &traits_inst)
+inline bool can_start(unsigned int c, const unsigned char *map, unsigned char mask, const traits &)
 {
    return (((c >= static_cast<unsigned int>(1u << CHAR_BIT)) ? true : map[c] & mask));
 }

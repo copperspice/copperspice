@@ -54,7 +54,7 @@ class Q_GUI_EXPORT QPlatformWindow : public QPlatformSurface
    QWindow *window() const;
    QPlatformWindow *parent() const;
    QPlatformScreen *screen() const;
-   virtual QSurfaceFormat format() const override;
+   QSurfaceFormat format() const override;
    virtual void setGeometry(const QRect &rect);
    virtual QRect geometry() const;
    virtual QRect normalGeometry() const;

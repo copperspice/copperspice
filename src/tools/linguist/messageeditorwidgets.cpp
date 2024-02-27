@@ -239,11 +239,12 @@ class ButtonWrapper : public QWidget
    }
 
  protected:
-   virtual bool eventFilter(QObject *object, QEvent *event) {
+   bool eventFilter(QObject *object, QEvent *event) override {
       if (event->type() == QEvent::Resize) {
          QWidget *relator = static_cast<QWidget *>(object);
          setFixedHeight((relator->height() + layout()->spacing() + m_wrapee->height()) / 2);
       }
+
       return false;
    }
 

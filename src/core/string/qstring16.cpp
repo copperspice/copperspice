@@ -1063,9 +1063,9 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
    static QRegularExpression16 regSplit("(.*?)(\\\\[0-9])");
    bool noCapture = true;
 
-   auto iter = after.indexOfFast(u'\\');
+   auto iter_start = after.indexOfFast(u'\\');
 
-   if (iter != after.end() && iter != after.end() - 1) {
+   if (iter_start != after.end() && iter_start != after.end() - 1) {
       splitMatch = regSplit.match(after);
 
       if (splitMatch.hasMatch()) {

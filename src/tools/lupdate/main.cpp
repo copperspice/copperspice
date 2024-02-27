@@ -156,7 +156,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
       ConversionData cd;
       Translator tor;
-      cd.m_sortContexts = !(options & NoSort);
+      cd.m_sortContexts = ! (options & NoSorting);
 
       if (QFile(fileName).exists()) {
          if (! tor.load(fileName, cd, "auto")) {
@@ -445,7 +445,7 @@ int main(int argc, char **argv)
          continue;
 
       } else if (arg == "-no-sort" || arg == "-nosort") {
-         options |= NoSort;
+         options |= NoSorting;
          continue;
 
       } else if (arg == "-version") {

@@ -58,11 +58,11 @@ class Q_CORE_EXPORT QEventDispatcherWin32 : public QAbstractEventDispatcher
    bool unregisterTimers(QObject *object) override;
    QList<QTimerInfo> registeredTimers(QObject *object) const override;
 
-   bool registerEventNotifier(QWinEventNotifier *notifier);
-   void unregisterEventNotifier(QWinEventNotifier *notifier);
+   bool registerEventNotifier(QWinEventNotifier *notifier) override;
+   void unregisterEventNotifier(QWinEventNotifier *notifier) override;
    void activateEventNotifiers();
 
-   int remainingTime(int timerId);
+   int remainingTime(int timerId) override;
    void wakeUp() override;
    void interrupt() override;
    void flush() override;

@@ -3018,6 +3018,7 @@ void QComboBox::wheelEvent(QWheelEvent *e)
 
 #ifdef Q_OS_DARWIN
    // no code here
+   (void) e;
 
 #else
    Q_D(QComboBox);

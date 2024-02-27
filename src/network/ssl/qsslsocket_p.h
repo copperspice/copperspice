@@ -154,8 +154,8 @@ public:
 
    static QList<QByteArray> unixRootCertDirectories(); // used also by QSslContext
 
-   virtual qint64 peek(char *data, qint64 maxSize) override;
-   virtual QByteArray peek(qint64 maxSize) override;
+   qint64 peek(char *data, qint64 maxSize) override;
+   QByteArray peek(qint64 maxSize) override;
 
    // Platform specific functions
    virtual void startClientEncryption() = 0;

@@ -181,9 +181,9 @@ EXTERN_C const IID IID_ISampleGrabberCB;
 DECLARE_INTERFACE_(ISampleGrabberCB, IUnknown)
 {
    //    STDMETHOD(QueryInterface) (THIS_ const GUID *, void **) PURE;
-   STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **) PURE;
-   STDMETHOD_(ULONG, AddRef) (THIS) PURE;
-   STDMETHOD_(ULONG, Release) (THIS) PURE;
+   STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **) override PURE;
+   STDMETHOD_(ULONG, AddRef) (THIS) override PURE;
+   STDMETHOD_(ULONG, Release) (THIS) override PURE;
    STDMETHOD_(HRESULT, SampleCB) (THIS_ double, LPMEDIASAMPLE) PURE;
    STDMETHOD_(HRESULT, BufferCB) (THIS_ double, BYTE *, long) PURE;
 };
@@ -198,9 +198,9 @@ DECLARE_INTERFACE_(ISampleGrabberCB, IUnknown)
 #define INTERFACE ISampleGrabber
 DECLARE_INTERFACE_(ISampleGrabber, IUnknown)
 {
-   STDMETHOD(QueryInterface)(THIS_ REFIID, PVOID *) PURE;
-   STDMETHOD_(ULONG, AddRef)(THIS) PURE;
-   STDMETHOD_(ULONG, Release)(THIS) PURE;
+   STDMETHOD(QueryInterface)(THIS_ REFIID, PVOID *) override PURE;
+   STDMETHOD_(ULONG, AddRef)(THIS) override PURE;
+   STDMETHOD_(ULONG, Release)(THIS) override PURE;
    STDMETHOD(SetOneShot)(THIS_ BOOL) PURE;
    STDMETHOD(SetMediaType)(THIS_ const AM_MEDIA_TYPE *) PURE;
    STDMETHOD(GetConnectedMediaType)(THIS_ AM_MEDIA_TYPE *) PURE;

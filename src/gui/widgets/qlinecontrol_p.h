@@ -536,7 +536,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
 #endif
 
  protected:
-   virtual void timerEvent(QTimerEvent *event) override;
+   void timerEvent(QTimerEvent *event) override;
 
  private:
    void init(const QString &txt);

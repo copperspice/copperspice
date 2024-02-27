@@ -186,18 +186,18 @@ class deallocator
    using allocator_traits = std::allocator_traits<allocator_type>;
    using pointer          = typename allocator_traits::pointer;
 
-   allocator_type alloc;
+   allocator_type m_alloc;
 
 public:
    explicit deallocator(const allocator_type &alloc) noexcept
-      : alloc(alloc)
+      : m_alloc(alloc)
    {
    }
 
    void operator()(pointer p) {
       if (p != nullptr) {
-         allocator_traits::destroy(alloc, p);
-         allocator_traits::deallocate(alloc, p, 1);
+         allocator_traits::destroy(m_alloc, p);
+         allocator_traits::deallocate(m_alloc, p, 1);
       }
    }
 };
@@ -698,7 +698,6 @@ auto rcu_list<T, M, Alloc>::erase(const_iterator iter) -> iterator
       iter.m_current->deleted = true;
 
       node *oldPrev = iter.m_current->back.load();
-      node *oldNext = iter.m_current->next.load();
 
       if (oldPrev) {
          oldPrev->next.store(oldNext);

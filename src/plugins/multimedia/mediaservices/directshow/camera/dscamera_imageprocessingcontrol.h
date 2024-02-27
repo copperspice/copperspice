@@ -37,10 +37,10 @@ class DSCameraImageProcessingControl : public QCameraImageProcessingControl
    DSCameraImageProcessingControl(DSCameraSession *session);
    virtual ~DSCameraImageProcessingControl();
 
-   bool isParameterSupported(ProcessingParameter) const;
-   bool isParameterValueSupported(ProcessingParameter parameter, const QVariant &value) const;
-   QVariant parameter(ProcessingParameter parameter) const;
-   void setParameter(ProcessingParameter parameter, const QVariant &value);
+   bool isParameterSupported(ProcessingParameter) const override;
+   bool isParameterValueSupported(ProcessingParameter parameter, const QVariant &value) const override;
+   QVariant parameter(ProcessingParameter parameter) const override;
+   void setParameter(ProcessingParameter parameter, const QVariant &value) override;
 
  private:
    DSCameraSession *m_session;

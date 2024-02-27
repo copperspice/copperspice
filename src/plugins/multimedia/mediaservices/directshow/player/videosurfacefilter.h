@@ -55,69 +55,69 @@ class VideoSurfaceFilter
    ~VideoSurfaceFilter();
 
    // IUnknown
-   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-   ULONG STDMETHODCALLTYPE AddRef();
-   ULONG STDMETHODCALLTYPE Release();
+   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject) override;
+   ULONG STDMETHODCALLTYPE AddRef() override;
+   ULONG STDMETHODCALLTYPE Release() override;
 
    // IPersist
-   HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClassID);
+   HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClassID)  override;
 
    // IMediaFilter
-   HRESULT STDMETHODCALLTYPE Run(REFERENCE_TIME tStart);
-   HRESULT STDMETHODCALLTYPE Pause();
-   HRESULT STDMETHODCALLTYPE Stop();
+   HRESULT STDMETHODCALLTYPE Run(REFERENCE_TIME tStart) override;
+   HRESULT STDMETHODCALLTYPE Pause() override;
+   HRESULT STDMETHODCALLTYPE Stop() override;
 
-   HRESULT STDMETHODCALLTYPE GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *pState);
+   HRESULT STDMETHODCALLTYPE GetState(DWORD dwMilliSecsTimeout, FILTER_STATE *pState) override;
 
-   HRESULT STDMETHODCALLTYPE SetSyncSource(IReferenceClock *pClock);
-   HRESULT STDMETHODCALLTYPE GetSyncSource(IReferenceClock **ppClock);
+   HRESULT STDMETHODCALLTYPE SetSyncSource(IReferenceClock *pClock) override;
+   HRESULT STDMETHODCALLTYPE GetSyncSource(IReferenceClock **ppClock) override;
 
    // IBaseFilter
-   HRESULT STDMETHODCALLTYPE EnumPins(IEnumPins **ppEnum);
-   HRESULT STDMETHODCALLTYPE FindPin(LPCWSTR Id, IPin **ppPin);
+   HRESULT STDMETHODCALLTYPE EnumPins(IEnumPins **ppEnum) override;
+   HRESULT STDMETHODCALLTYPE FindPin(LPCWSTR Id, IPin **ppPin) override;
 
-   HRESULT STDMETHODCALLTYPE JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName);
+   HRESULT STDMETHODCALLTYPE JoinFilterGraph(IFilterGraph *pGraph, LPCWSTR pName) override;
 
-   HRESULT STDMETHODCALLTYPE QueryFilterInfo(FILTER_INFO *pInfo);
-   HRESULT STDMETHODCALLTYPE QueryVendorInfo(LPWSTR *pVendorInfo);
+   HRESULT STDMETHODCALLTYPE QueryFilterInfo(FILTER_INFO *pInfo) override;
+   HRESULT STDMETHODCALLTYPE QueryVendorInfo(LPWSTR *pVendorInfo) override;
 
    // IAMFilterMiscFlags
-   ULONG STDMETHODCALLTYPE GetMiscFlags();
+   ULONG STDMETHODCALLTYPE GetMiscFlags() override;
 
    // IPin
-   HRESULT STDMETHODCALLTYPE Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt);
-   HRESULT STDMETHODCALLTYPE ReceiveConnection(IPin *pConnector, const AM_MEDIA_TYPE *pmt);
-   HRESULT STDMETHODCALLTYPE Disconnect();
-   HRESULT STDMETHODCALLTYPE ConnectedTo(IPin **ppPin);
+   HRESULT STDMETHODCALLTYPE Connect(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt) override;
+   HRESULT STDMETHODCALLTYPE ReceiveConnection(IPin *pConnector, const AM_MEDIA_TYPE *pmt) override;
+   HRESULT STDMETHODCALLTYPE Disconnect() override;
+   HRESULT STDMETHODCALLTYPE ConnectedTo(IPin **ppPin) override;
 
-   HRESULT STDMETHODCALLTYPE ConnectionMediaType(AM_MEDIA_TYPE *pmt);
+   HRESULT STDMETHODCALLTYPE ConnectionMediaType(AM_MEDIA_TYPE *pmt) override;
 
-   HRESULT STDMETHODCALLTYPE QueryPinInfo(PIN_INFO *pInfo);
-   HRESULT STDMETHODCALLTYPE QueryId(LPWSTR *Id);
+   HRESULT STDMETHODCALLTYPE QueryPinInfo(PIN_INFO *pInfo) override;
+   HRESULT STDMETHODCALLTYPE QueryId(LPWSTR *Id) override;
 
-   HRESULT STDMETHODCALLTYPE QueryAccept(const AM_MEDIA_TYPE *pmt);
+   HRESULT STDMETHODCALLTYPE QueryAccept(const AM_MEDIA_TYPE *pmt) override;
 
-   HRESULT STDMETHODCALLTYPE EnumMediaTypes(IEnumMediaTypes **ppEnum);
+   HRESULT STDMETHODCALLTYPE EnumMediaTypes(IEnumMediaTypes **ppEnum) override;
 
-   HRESULT STDMETHODCALLTYPE QueryInternalConnections(IPin **apPin, ULONG *nPin);
+   HRESULT STDMETHODCALLTYPE QueryInternalConnections(IPin **apPin, ULONG *nPin) override;
 
-   HRESULT STDMETHODCALLTYPE EndOfStream();
+   HRESULT STDMETHODCALLTYPE EndOfStream() override;
 
-   HRESULT STDMETHODCALLTYPE BeginFlush();
-   HRESULT STDMETHODCALLTYPE EndFlush();
+   HRESULT STDMETHODCALLTYPE BeginFlush() override;
+   HRESULT STDMETHODCALLTYPE EndFlush() override;
 
-   HRESULT STDMETHODCALLTYPE NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate);
+   HRESULT STDMETHODCALLTYPE NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate) override;
 
-   HRESULT STDMETHODCALLTYPE QueryDirection(PIN_DIRECTION *pPinDir);
+   HRESULT STDMETHODCALLTYPE QueryDirection(PIN_DIRECTION *pPinDir) override;
 
-   int currentMediaTypeToken();
-   HRESULT nextMediaType(
-      int token, int *index, ULONG count, AM_MEDIA_TYPE **types, ULONG *fetchedCount);
-   HRESULT skipMediaType(int token, int *index, ULONG count);
-   HRESULT cloneMediaType(int token, int index, IEnumMediaTypes **enumeration);
+   int currentMediaTypeToken() override;
+
+   HRESULT nextMediaType(int token, int *index, ULONG count, AM_MEDIA_TYPE **types, ULONG *fetchedCount) override;
+   HRESULT skipMediaType(int token, int *index, ULONG count) override;
+   HRESULT cloneMediaType(int token, int index, IEnumMediaTypes **enumeration) override;
 
  protected:
-   void customEvent(QEvent *event);
+   void customEvent(QEvent *event) override;
 
  private:
    CS_SLOT_1(Private, void supportedFormatsChanged())

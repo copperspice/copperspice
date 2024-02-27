@@ -46,7 +46,7 @@ class DirectShowEventLoop : public QObject
    void postEvent(QObject *object, QEvent *event);
 
  protected:
-   void customEvent(QEvent *event);
+   void customEvent(QEvent *event) override;
 
  private:
    void processEvents();

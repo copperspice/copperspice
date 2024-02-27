@@ -37,8 +37,8 @@ class DSVideoRendererControl : public QVideoRendererControl
    DSVideoRendererControl(DSCameraSession *session, QObject *parent = nullptr);
    ~DSVideoRendererControl();
 
-   QAbstractVideoSurface *surface() const;
-   void setSurface(QAbstractVideoSurface *surface);
+   QAbstractVideoSurface *surface() const override;
+   void setSurface(QAbstractVideoSurface *surface) override;
 
    void setSession(DSCameraSession *session);
 

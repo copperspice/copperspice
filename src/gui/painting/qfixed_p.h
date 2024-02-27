@@ -30,17 +30,25 @@
 
 struct QFixed {
  public:
-   QFixed() : val(0) {}
-   QFixed(int i) : val(i << 6) {}
-   QFixed(long i) : val(i << 6) {}
+   QFixed()
+      : m_fixedValue(0)
+   { }
+
+   QFixed(int i)
+      : m_fixedValue(i << 6)
+   { }
+
+   QFixed(long i)
+      : m_fixedValue(i << 6)
+   { }
 
    QFixed &operator=(int i) {
-      val = (i << 6);
+      m_fixedValue = (i << 6);
       return *this;
    }
 
    QFixed &operator=(long i) {
-      val = (i << 6);
+      m_fixedValue = (i << 6);
       return *this;
    }
 
@@ -53,135 +61,136 @@ struct QFixed {
    }
 
    int value() const {
-      return val;
+      return m_fixedValue;
    }
 
    void setValue(int value) {
-      val = value;
+      m_fixedValue = value;
    }
 
    int toInt() const {
-      return (((val) + 32) & -64) >> 6;
+      return (((m_fixedValue) + 32) & -64) >> 6;
    }
 
    qreal toReal() const {
-      return ((qreal)val) / (qreal)64;
+      return ((qreal)m_fixedValue) / (qreal)64;
    }
 
    int truncate() const {
-      return val >> 6;
+      return m_fixedValue >> 6;
    }
 
    QFixed round() const {
-      return fromFixed(((val) + 32) & -64);
+      return fromFixed(((m_fixedValue) + 32) & -64);
    }
 
    QFixed floor() const {
-      return fromFixed((val) & -64);
+      return fromFixed((m_fixedValue) & -64);
    }
 
    QFixed ceil() const {
-      return fromFixed((val + 63) & -64);
+      return fromFixed((m_fixedValue + 63) & -64);
    }
 
    QFixed operator+(int i) const {
-      return fromFixed(val + i * 64);
+      return fromFixed(m_fixedValue + i * 64);
    }
 
    QFixed operator+(uint i) const {
-      return fromFixed((val + (i << 6)));
+      return fromFixed((m_fixedValue + (i << 6)));
    }
 
    QFixed operator+(const QFixed &other) const {
-      return fromFixed((val + other.val));
+      return fromFixed((m_fixedValue + other.m_fixedValue));
    }
 
    QFixed &operator+=(int i) {
-      val += (i << 6);
+      m_fixedValue += (i << 6);
       return *this;
    }
 
    QFixed &operator+=(uint i) {
-      val += (i << 6);
+      m_fixedValue += (i << 6);
       return *this;
    }
 
    QFixed &operator+=(const QFixed &other) {
-      val += other.val;
+      m_fixedValue += other.m_fixedValue;
       return *this;
    }
 
    QFixed operator-(int i) const {
-      return fromFixed(val - i * 64);
+      return fromFixed(m_fixedValue - i * 64);
    }
 
    QFixed operator-(uint i) const {
-      return fromFixed((val - (i << 6)));
+      return fromFixed((m_fixedValue - (i << 6)));
    }
 
    QFixed operator-(const QFixed &other) const {
-      return fromFixed((val - other.val));
+      return fromFixed((m_fixedValue - other.m_fixedValue));
    }
 
    QFixed &operator-=(int i) {
-      val -= (i << 6);
+      m_fixedValue -= (i << 6);
       return *this;
    }
 
    QFixed &operator-=(uint i) {
-      val -= (i << 6);
+      m_fixedValue -= (i << 6);
       return *this;
    }
 
    QFixed &operator-=(const QFixed &other) {
-      val -= other.val;
+      m_fixedValue -= other.m_fixedValue;
       return *this;
    }
 
    QFixed operator-() const {
-      return fromFixed(-val);
+      return fromFixed(-m_fixedValue);
    }
 
    bool operator==(const QFixed &other) const {
-      return val == other.val;
+      return m_fixedValue == other.m_fixedValue;
    }
 
    bool operator!=(const QFixed &other) const {
-      return val != other.val;
+      return m_fixedValue != other.m_fixedValue;
    }
 
    bool operator<(const QFixed &other) const {
-      return val < other.val;
+      return m_fixedValue < other.m_fixedValue;
    }
 
    bool operator>(const QFixed &other) const {
-      return val > other.val;
+      return m_fixedValue > other.m_fixedValue;
    }
 
    bool operator<=(const QFixed &other) const {
-      return val <= other.val;
+      return m_fixedValue <= other.m_fixedValue;
    }
 
    bool operator>=(const QFixed &other) const {
-      return val >= other.val;
+      return m_fixedValue >= other.m_fixedValue;
    }
 
    bool operator!() const {
-      return !val;
+      return ! m_fixedValue;
    }
 
    QFixed &operator/=(int x) {
-      val /= x;
+      m_fixedValue /= x;
       return *this;
    }
 
-   QFixed &operator/=(const QFixed &o) {
-      if (o.val == 0) {
-         val = 0x7FFFFFFFL;
+   QFixed &operator/=(const QFixed &other) {
+      if (other.m_fixedValue == 0) {
+         m_fixedValue = 0x7FFFFFFFL;
+
       } else {
          bool neg = false;
-         qint64 a = val;
-         qint64 b = o.val;
+         qint64 a = m_fixedValue;
+         qint64 b = other.m_fixedValue;
 
          if (a < 0) {
             a = -a;
@@ -195,14 +204,14 @@ struct QFixed {
 
          int res = (int)(((a << 6) + (b >> 1)) / b);
 
-         val = (neg ? -res : res);
+         m_fixedValue = (neg ? -res : res);
       }
 
       return *this;
    }
 
    QFixed operator/(int d) const {
-      return fromFixed(val / d);
+      return fromFixed(m_fixedValue / d);
    }
 
    QFixed operator/(QFixed b) const {
@@ -212,24 +221,24 @@ struct QFixed {
 
    QFixed operator>>(int d) const {
       QFixed f = *this;
-      f.val >>= d;
+      f.m_fixedValue >>= d;
       return f;
    }
 
    QFixed &operator*=(int i) {
-      val *= i;
+      m_fixedValue *= i;
       return *this;
    }
 
    QFixed &operator*=(uint i) {
-      val *= i;
+      m_fixedValue *= i;
       return *this;
    }
 
-   QFixed &operator*=(const QFixed &o) {
+   QFixed &operator*=(const QFixed &other) {
       bool neg = false;
-      qint64 a = val;
-      qint64 b = o.val;
+      qint64 a = m_fixedValue;
+      qint64 b = other.m_fixedValue;
 
       if (a < 0) {
          a = -a;
@@ -242,16 +251,17 @@ struct QFixed {
       }
 
       int res = (int)((a * b + 0x20L) >> 6);
-      val = neg ? -res : res;
+      m_fixedValue = neg ? -res : res;
+
       return *this;
    }
 
    QFixed operator*(int i) const {
-      return fromFixed(val * i);
+      return fromFixed(m_fixedValue * i);
    }
 
    QFixed operator*(uint i) const {
-      return fromFixed(val * i);
+      return fromFixed(m_fixedValue * i);
    }
 
    QFixed operator*(const QFixed &o) const {
@@ -260,54 +270,57 @@ struct QFixed {
    }
 
  private:
-   constexpr QFixed(int val, int) : val(val)
-   {} // 2nd int is just a dummy for disambiguation
+   // 2nd int is just a dummy for disambiguation
+   constexpr QFixed(int val, int)
+      : m_fixedValue(val)
+   { }
 
-   constexpr  QFixed(qreal i) : val((int)(i * qreal(64)))
-   {}
+   constexpr QFixed(qreal i)
+      : m_fixedValue((int)(i * qreal(64)))
+   { }
 
    QFixed &operator=(qreal i) {
-      val = (int)(i * qreal(64));
+     m_fixedValue = (int)(i * qreal(64));
       return *this;
    }
 
    QFixed operator+(qreal i) const {
-      return fromFixed((val + (int)(i * qreal(64))));
+      return fromFixed((m_fixedValue + (int)(i * qreal(64))));
    }
 
    QFixed &operator+=(qreal i) {
-      val += (int)(i * 64);
+      m_fixedValue += (int)(i * 64);
       return *this;
    }
 
    QFixed operator-(qreal i) const {
-      return fromFixed((val - (int)(i * qreal(64))));
+      return fromFixed((m_fixedValue - (int)(i * qreal(64))));
    }
 
    QFixed &operator-=(qreal i) {
-      val -= (int)(i * 64);
+      m_fixedValue -= (int)(i * 64);
       return *this;
    }
 
    QFixed &operator/=(qreal r) {
-      val = (int)(val / r);
+      m_fixedValue = (int)(m_fixedValue / r);
       return *this;
    }
 
    QFixed operator/(qreal d) const {
-      return fromFixed((int)(val / d));
+      return fromFixed((int)(m_fixedValue / d));
    }
 
    QFixed &operator*=(qreal d) {
-      val = (int) (val * d);
+      m_fixedValue = (int) (m_fixedValue * d);
       return *this;
    }
 
    QFixed operator*(qreal d) const {
-      return fromFixed((int) (val * d));
+      return fromFixed((int) (m_fixedValue * d));
    }
 
-   int val;
+   int m_fixedValue;
 };
 
 #define QFIXED_MAX (INT_MAX/256)

@@ -39,23 +39,15 @@ class QNtlmWindowsHandles;
 class QAuthenticatorPrivate
 {
  public:
-   enum Method { None, Basic, Plain, Login, Ntlm, CramMd5, DigestMd5 };
-   QAuthenticatorPrivate();
-   ~QAuthenticatorPrivate();
-
-   QString user;
-   QString extractedUser;
-   QString password;
-   QVariantHash options;
-   Method method;
-   QString realm;
-   QByteArray challenge;
-
-#ifdef Q_OS_WIN
-    QNtlmWindowsHandles *ntlmWindowsHandles;
-#endif
-
-   bool hasFailed; //credentials have been tried but rejected by server.
+   enum Method {
+      None,
+      Basic,
+      Plain,
+      Login,
+      Ntlm,
+      CramMd5,
+      DigestMd5
+   };
 
    enum Phase {
       Start,
@@ -63,7 +55,22 @@ class QAuthenticatorPrivate
       Done,
       Invalid
    };
+
+   QAuthenticatorPrivate();
+   ~QAuthenticatorPrivate();
+
+   QString user;
+   QString extractedUser;
+   QString password;
+   QVariantHash options;
+
+   QString realm;
+   QByteArray challenge;
+
+   Method method;
    Phase phase;
+
+   bool hasFailed;   // credentials have been tried but rejected by server.
 
    // digest specific
    QByteArray cnonce;
@@ -72,6 +79,10 @@ class QAuthenticatorPrivate
    // ntlm specific
    QString workstation;
    QString userDomain;
+
+#ifdef Q_OS_WIN
+    QNtlmWindowsHandles *ntlmWindowsHandles;
+#endif
 
    QByteArray calculateResponse(const QByteArray &method, const QByteArray &path);
 

@@ -1786,13 +1786,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          if (const QStyleOptionToolBox *tb = qstyleoption_cast<const QStyleOptionToolBox *>(opt)) {
             p->setPen(tb->palette.mid().color().darker(150));
 
-            int d = 20 + tb->rect.height() - 3;
+            int depth = 20 + tb->rect.height() - 3;
 
             if (tb->direction != Qt::RightToLeft) {
                const QPoint points[] = {
                   QPoint(-1, tb->rect.height() + 1),
                   QPoint(-1, 1),
-                  QPoint(tb->rect.width() - d, 1),
+                  QPoint(tb->rect.width() - depth, 1),
                   QPoint(tb->rect.width() - 20, tb->rect.height() - 2),
                   QPoint(tb->rect.width() - 1, tb->rect.height() - 2),
                   QPoint(tb->rect.width() - 1, tb->rect.height() + 1),
@@ -1803,7 +1803,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
                const QPoint points[] = {
                   QPoint(tb->rect.width(), tb->rect.height() + 1),
                   QPoint(tb->rect.width(), 1),
-                  QPoint(d - 1, 1),
+                  QPoint(depth - 1, 1),
                   QPoint(20 - 1, tb->rect.height() - 2),
                   QPoint(0, tb->rect.height() - 2),
                   QPoint(0, tb->rect.height() + 1),
@@ -1816,13 +1816,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             p->setPen(tb->palette.light().color());
 
             if (tb->direction != Qt::RightToLeft) {
-               p->drawLine(0, 2, tb->rect.width() - d, 2);
-               p->drawLine(tb->rect.width() - d - 1, 2, tb->rect.width() - 21, tb->rect.height() - 1);
+               p->drawLine(0, 2, tb->rect.width() - depth, 2);
+               p->drawLine(tb->rect.width() - depth - 1, 2, tb->rect.width() - 21, tb->rect.height() - 1);
                p->drawLine(tb->rect.width() - 20, tb->rect.height() - 1,
                   tb->rect.width(), tb->rect.height() - 1);
             } else {
-               p->drawLine(tb->rect.width() - 1, 2, d - 1, 2);
-               p->drawLine(d, 2, 20, tb->rect.height() - 1);
+               p->drawLine(tb->rect.width() - 1, 2, depth - 1, 2);
+               p->drawLine(depth, 2, 20, tb->rect.height() - 1);
                p->drawLine(19, tb->rect.height() - 1,
                   -1, tb->rect.height() - 1);
             }

@@ -72,7 +72,7 @@ class DirectShowPlayerServiceThread : public QThread
    { }
 
  protected:
-   void run() {
+   void run() override {
       m_service->run();
    }
 

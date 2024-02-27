@@ -45,30 +45,30 @@ class DirectShowIOReader : public QObject, public IAsyncReader
    ~DirectShowIOReader();
 
    // IUnknown
-   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-   ULONG STDMETHODCALLTYPE AddRef();
-   ULONG STDMETHODCALLTYPE Release();
+   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject) override;
+   ULONG STDMETHODCALLTYPE AddRef() override;
+   ULONG STDMETHODCALLTYPE Release() override;
 
    // IAsyncReader
    HRESULT STDMETHODCALLTYPE RequestAllocator(
-      IMemAllocator *pPreferred, ALLOCATOR_PROPERTIES *pProps, IMemAllocator **ppActual);
+      IMemAllocator *pPreferred, ALLOCATOR_PROPERTIES *pProps, IMemAllocator **ppActual) override;
 
-   HRESULT STDMETHODCALLTYPE Request(IMediaSample *pSample, DWORD_PTR dwUser);
+   HRESULT STDMETHODCALLTYPE Request(IMediaSample *pSample, DWORD_PTR dwUser) override;
 
    HRESULT STDMETHODCALLTYPE WaitForNext(
-      DWORD dwTimeout, IMediaSample **ppSample, DWORD_PTR *pdwUser);
+      DWORD dwTimeout, IMediaSample **ppSample, DWORD_PTR *pdwUser) override;
 
-   HRESULT STDMETHODCALLTYPE SyncReadAligned(IMediaSample *pSample);
+   HRESULT STDMETHODCALLTYPE SyncReadAligned(IMediaSample *pSample) override;
 
-   HRESULT STDMETHODCALLTYPE SyncRead(LONGLONG llPosition, LONG lLength, BYTE *pBuffer);
+   HRESULT STDMETHODCALLTYPE SyncRead(LONGLONG llPosition, LONG lLength, BYTE *pBuffer) override;
 
-   HRESULT STDMETHODCALLTYPE Length(LONGLONG *pTotal, LONGLONG *pAvailable);
+   HRESULT STDMETHODCALLTYPE Length(LONGLONG *pTotal, LONGLONG *pAvailable) override;
 
-   HRESULT STDMETHODCALLTYPE BeginFlush();
-   HRESULT STDMETHODCALLTYPE EndFlush();
+   HRESULT STDMETHODCALLTYPE BeginFlush() override;
+   HRESULT STDMETHODCALLTYPE EndFlush() override;
 
  protected:
-   void customEvent(QEvent *event);
+   void customEvent(QEvent *event) override;
 
  private:
    CS_SLOT_1(Private, void readyRead())

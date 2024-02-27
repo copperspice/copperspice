@@ -1461,7 +1461,6 @@ void QRasterPaintEngine::stroke(const QVectorPath &path, const QPen &pen)
          }
       }
 
-      Q_D(QRasterPaintEngine);
       d->initializeRasterizer(&s->penData);
       int lineCount = path.elementCount() / 2;
       const QLineF *lines = reinterpret_cast<const QLineF *>(path.points());

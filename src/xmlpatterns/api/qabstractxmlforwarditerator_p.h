@@ -170,7 +170,7 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
    inline ListIterator(const ListType &list) : ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>(list) {
    }
 
-   virtual QList<T> toList() override {
+   QList<T> toList() override {
       return toList(m_list);
    }
 

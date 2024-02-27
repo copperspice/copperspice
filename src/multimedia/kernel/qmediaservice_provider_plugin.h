@@ -142,9 +142,6 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderPlugin : public QObject, public Q
 
  public:
    virtual ~QMediaServiceProviderPlugin();
-
-   virtual QMediaService *create(const QString &key) override = 0 ;
-   virtual void release(QMediaService *service) override = 0;
 };
 
 /*!

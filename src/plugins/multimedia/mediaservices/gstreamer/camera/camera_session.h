@@ -337,7 +337,7 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
       {
       }
 
-      void probeCaps(GstCaps *caps);
+      void probeCaps(GstCaps *caps) override;
 
     private:
       CameraBinSession *const session;

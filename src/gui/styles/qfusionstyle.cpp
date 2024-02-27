@@ -967,7 +967,6 @@ void QFusionStyle::drawPrimitive(PrimitiveElement elem,
       case PE_FrameStatusBarItem:
          break;
       case PE_IndicatorTabClose: {
-         Q_D(const QFusionStyle);
          if (d->tabBarcloseButtonIcon.isNull()) {
             d->tabBarcloseButtonIcon = proxy()->standardIcon(SP_DialogCloseButton, option, widget);
          }

@@ -159,7 +159,7 @@ static inline QString bannerPageToString(const QCUPSSupport::BannerPage bannerPa
    // error, may want to throw
 
    return QString();
-};
+}
 
 void QCUPSSupport::setBannerPages(QPrinter *printer, const BannerPage startBannerPage, const BannerPage endBannerPage)
 {

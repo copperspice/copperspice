@@ -118,8 +118,8 @@ class QFontDialogPrivate : public QDialogPrivate
    void _q_runNativeAppModalPanel();
 
  private:
-   virtual void initHelper(QPlatformDialogHelper *) override;
-   virtual void helperPrepareShow(QPlatformDialogHelper *) override;
+   void initHelper(QPlatformDialogHelper *) override;
+   void helperPrepareShow(QPlatformDialogHelper *) override;
 };
 
 #endif // QT_NO_FONTDIALOG

@@ -107,8 +107,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class CloseEvent : public WindowSystemEvent
    {
     public:
-      explicit CloseEvent(QWindow *w, bool *a = nullptr)
-         : WindowSystemEvent(Close), window(w), accepted(a)
+      explicit CloseEvent(QWindow *w, bool *isAccepted = nullptr)
+         : WindowSystemEvent(Close), window(w), accepted(isAccepted)
       {
       }
 
@@ -119,8 +119,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class GeometryChangeEvent : public WindowSystemEvent
    {
     public:
-      GeometryChangeEvent(QWindow *tlw, const QRect &newGeometry, const QRect &oldGeometry)
-         : WindowSystemEvent(GeometryChange), tlw(tlw), newGeometry(newGeometry), oldGeometry(oldGeometry)
+      GeometryChangeEvent(QWindow *window, const QRect &newRect, const QRect &oldRect)
+         : WindowSystemEvent(GeometryChange), tlw(window), newGeometry(newRect), oldGeometry(oldRect)
       {
       }
 
@@ -132,8 +132,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class EnterEvent : public WindowSystemEvent
    {
     public:
-      explicit EnterEvent(QWindow *enter, const QPointF &local, const QPointF &global)
-         : WindowSystemEvent(Enter), enter(enter), localPos(local), globalPos(global)
+      explicit EnterEvent(QWindow *window, const QPointF &localPoint, const QPointF &globalPoint)
+         : WindowSystemEvent(Enter), enter(window), localPos(localPoint), globalPos(globalPoint)
       {
       }
 
@@ -145,8 +145,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class LeaveEvent : public WindowSystemEvent
    {
     public:
-      explicit LeaveEvent(QWindow *leave)
-         : WindowSystemEvent(Leave), leave(leave)
+      explicit LeaveEvent(QWindow *window)
+         : WindowSystemEvent(Leave), leave(window)
       {
       }
 
@@ -168,8 +168,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class WindowStateChangedEvent : public WindowSystemEvent
    {
     public:
-      WindowStateChangedEvent(QWindow *_window, Qt::WindowState _newState)
-         : WindowSystemEvent(WindowStateChanged), window(_window), newState(_newState)
+      WindowStateChangedEvent(QWindow *eventWindow, Qt::WindowState newWindowState)
+         : WindowSystemEvent(WindowStateChanged), window(eventWindow), newState(newWindowState)
       {
       }
 
@@ -192,8 +192,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class ApplicationStateChangedEvent : public WindowSystemEvent
    {
     public:
-      ApplicationStateChangedEvent(Qt::ApplicationState newState, bool forcePropagate = false)
-         : WindowSystemEvent(ApplicationStateChanged), newState(newState), forcePropagate(forcePropagate)
+      ApplicationStateChangedEvent(Qt::ApplicationState newAppState, bool isForcePropagate = false)
+         : WindowSystemEvent(ApplicationStateChanged), newState(newAppState), forcePropagate(isForcePropagate)
       {
       }
 
@@ -390,33 +390,33 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       FileOpenEvent(const QString &fileName)
-         : WindowSystemEvent(FileOpen), url(QUrl::fromLocalFile(fileName))
+         : WindowSystemEvent(FileOpen), m_url(QUrl::fromLocalFile(fileName))
       {
       }
 
       FileOpenEvent(const QUrl &url)
-         : WindowSystemEvent(FileOpen), url(url)
+         : WindowSystemEvent(FileOpen), m_url(url)
       {
       }
 
-      QUrl url;
+      QUrl m_url;
    };
 
    class TabletEvent : public InputEvent
    {
     public:
       static void handleTabletEvent(QWindow *w, const QPointF &local, const QPointF &global,
-         int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
-         qreal tangentialPressure, qreal rotation, int z, qint64 uid,
-         Qt::KeyboardModifiers modifiers = Qt::NoModifier);
+            int device, int pointerType, Qt::MouseButtons buttons, qreal pressure, int xTilt, int yTilt,
+            qreal tangentialPressure, qreal rotation, int z, qint64 uid,
+            Qt::KeyboardModifiers modifiers = Qt::NoModifier);
 
-      TabletEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global,
-         int device, int pointerType, Qt::MouseButtons b, qreal pressure, int xTilt, int yTilt, qreal tpressure,
-         qreal rotation, int z, qint64 uid, Qt::KeyboardModifiers mods)
+      TabletEvent(QWindow *w, ulong time, const QPointF &localPoint, const QPointF &globalPoint,
+            int deviceId, int pointerId, Qt::MouseButtons b, qreal penPressure, int xTilt_Value, int yTilt_Value,
+            qreal tanPressure, qreal rotationValue, int zValue, qint64 userId, Qt::KeyboardModifiers mods)
          : InputEvent(w, time, Tablet, mods),
-           buttons(b), local(local), global(global), device(device), pointerType(pointerType),
-           pressure(pressure), xTilt(xTilt), yTilt(yTilt), tangentialPressure(tpressure),
-           rotation(rotation), z(z), uid(uid)
+           buttons(b), local(localPoint), global(globalPoint), device(deviceId), pointerType(pointerId),
+           pressure(penPressure), xTilt(xTilt_Value), yTilt(yTilt_Value), tangentialPressure(tanPressure),
+           rotation(rotationValue), z(zValue), uid(userId)
       {
       }
 
@@ -437,9 +437,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class TabletEnterProximityEvent : public InputEvent
    {
     public:
-      TabletEnterProximityEvent(ulong time, int device, int pointerType, qint64 uid)
+      TabletEnterProximityEvent(ulong time, int deviceId, int pointerId, qint64 userId)
          : InputEvent(nullptr, time, TabletEnterProximity, Qt::NoModifier),
-           device(device), pointerType(pointerType), uid(uid)
+           device(deviceId), pointerType(pointerId), uid(userId)
       {
       }
 
@@ -451,9 +451,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class TabletLeaveProximityEvent : public InputEvent
    {
     public:
-      TabletLeaveProximityEvent(ulong time, int device, int pointerType, qint64 uid)
+      TabletLeaveProximityEvent(ulong time, int deviceId, int pointerId, qint64 userId)
          : InputEvent(nullptr, time, TabletLeaveProximity, Qt::NoModifier),
-           device(device), pointerType(pointerType), uid(uid)
+           device(deviceId), pointerType(pointerId), uid(userId)
       {
       }
 
@@ -477,10 +477,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class ContextMenuEvent : public WindowSystemEvent
    {
     public:
-      explicit ContextMenuEvent(QWindow *w, bool mouseTriggered, const QPoint &pos,
-         const QPoint &globalPos, Qt::KeyboardModifiers modifiers)
-         : WindowSystemEvent(ContextMenu), window(w), mouseTriggered(mouseTriggered), pos(pos),
-           globalPos(globalPos), modifiers(modifiers)
+      explicit ContextMenuEvent(QWindow *w, bool isMouseTriggered, const QPoint &posPoint,
+         const QPoint &globalPoint, Qt::KeyboardModifiers keyModifiers)
+         : WindowSystemEvent(ContextMenu), window(w), mouseTriggered(isMouseTriggered), pos(posPoint),
+           globalPos(globalPoint), modifiers(keyModifiers)
       {
       }
 
@@ -496,8 +496,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class GestureEvent : public InputEvent
    {
     public:
-      GestureEvent(QWindow *window, ulong time, Qt::NativeGestureType type, QPointF pos, QPointF globalPos)
-         : InputEvent(window, time, Gesture, Qt::NoModifier), type(type), pos(pos), globalPos(globalPos),
+      GestureEvent(QWindow *w, ulong time, Qt::NativeGestureType gestureType, QPointF posPoint, QPointF globalPoint)
+         : InputEvent(w, time, Gesture, Qt::NoModifier), type(gestureType), pos(posPoint), globalPos(globalPoint),
            realValue(0), sequenceId(0), intValue(0)
       {
       }

@@ -39,14 +39,14 @@ class DSServicePlugin
    CS_INTERFACES(QMediaServiceSupportedDevicesInterface, QMediaServiceDefaultDeviceInterface, QMediaServiceFeaturesInterface)
 
  public:
-   QMediaService *create(const QString  &key);
-   void release(QMediaService *service);
+   QMediaService *create(const QString  &key) override;
+   void release(QMediaService *service) override;
 
-   QMediaServiceProviderHint::Features supportedFeatures(const QString  &service) const;
+   QMediaServiceProviderHint::Features supportedFeatures(const QString  &service) const override;
 
-   QString  defaultDevice(const QString &service) const;
-   QList<QString > devices(const QString  &service) const;
-   QString deviceDescription(const QString  &service, const QString  &device);
+   QString  defaultDevice(const QString &service) const override;
+   QList<QString > devices(const QString  &service) const override;
+   QString deviceDescription(const QString  &service, const QString  &device) override;
 };
 
 #endif

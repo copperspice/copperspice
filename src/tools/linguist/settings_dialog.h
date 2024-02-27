@@ -44,7 +44,7 @@ class SettingsDialog : public QDialog
    void setPhraseBook(PhraseBook *phraseBook);
 
  private:
-   virtual void showEvent(QShowEvent *e) override;
+   void showEvent(QShowEvent *e) override;
    Ui::SettingsDialog *m_ui;
 
    DataModel *m_dataModel;

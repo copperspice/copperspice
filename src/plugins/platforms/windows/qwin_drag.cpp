@@ -206,13 +206,13 @@ class QWindowsOleDropSource : public IDropSource
    void createCursors();
 
    // IUnknown methods
-   STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
-   STDMETHOD_(ULONG, AddRef)(void);
-   STDMETHOD_(ULONG, Release)(void);
+   STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj) override;
+   STDMETHOD_(ULONG, AddRef)(void) override;
+   STDMETHOD_(ULONG, Release)(void) override;
 
    // IDropSource methods
-   STDMETHOD(QueryContinueDrag)(BOOL fEscapePressed, DWORD grfKeyState);
-   STDMETHOD(GiveFeedback)(DWORD dwEffect);
+   STDMETHOD(QueryContinueDrag)(BOOL fEscapePressed, DWORD grfKeyState) override;
+   STDMETHOD(GiveFeedback)(DWORD dwEffect) override;
 
  private:
    struct CursorEntry {

@@ -34,7 +34,7 @@ class QTemporaryFilePrivate : public QFilePrivate
    QTemporaryFilePrivate();
    ~QTemporaryFilePrivate();
 
-   QAbstractFileEngine *engine() const;
+   QAbstractFileEngine *engine() const override;
    void resetFileEngine() const;
    bool autoRemove;
    QString templateName;

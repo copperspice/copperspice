@@ -85,12 +85,12 @@ public:
     QOpenGLTextureGlyphCache(QFontEngine::GlyphFormat glyphFormat, const QTransform &matrix);
     ~QOpenGLTextureGlyphCache();
 
-    virtual void createTextureData(int width, int height) override;
-    virtual void resizeTextureData(int width, int height) override;
-    virtual void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition) override;
-    virtual int glyphPadding() const override;
-    virtual int maxTextureWidth() const override;
-    virtual int maxTextureHeight() const override;
+    void createTextureData(int width, int height) override;
+    void resizeTextureData(int width, int height) override;
+    void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition) override;
+    int glyphPadding() const override;
+    int maxTextureWidth() const override;
+    int maxTextureHeight() const override;
 
     inline GLuint texture() const {
         QOpenGLTextureGlyphCache *that = const_cast<QOpenGLTextureGlyphCache *>(this);

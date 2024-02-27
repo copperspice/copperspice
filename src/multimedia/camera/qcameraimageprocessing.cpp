@@ -40,16 +40,20 @@ class QCameraImageProcessingFakeControl : public QCameraImageProcessingControl
       : QCameraImageProcessingControl(parent) {
    }
 
-   bool isParameterSupported(ProcessingParameter) const {
+   bool isParameterSupported(ProcessingParameter) const override {
       return false;
    }
-   bool isParameterValueSupported(ProcessingParameter, const QVariant &) const {
+
+   bool isParameterValueSupported(ProcessingParameter, const QVariant &) const override {
       return false;
    }
-   QVariant parameter(ProcessingParameter) const {
+
+   QVariant parameter(ProcessingParameter) const override {
       return QVariant();
    }
-   void setParameter(ProcessingParameter, const QVariant &) {}
+
+   void setParameter(ProcessingParameter, const QVariant &) override {
+   }
 };
 
 class QCameraImageProcessingPrivate : public QMediaObjectPrivate

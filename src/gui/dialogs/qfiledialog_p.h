@@ -266,9 +266,9 @@ class QFileDialogPrivate : public QDialogPrivate
    QList<QUrl> sidebarUrls;
 
  private:
-   virtual void initHelper(QPlatformDialogHelper *) override;
-   virtual void helperPrepareShow(QPlatformDialogHelper *) override;
-   virtual void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) override;
+   void initHelper(QPlatformDialogHelper *) override;
+   void helperPrepareShow(QPlatformDialogHelper *) override;
+   void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) override;
 };
 
 class QFileDialogLineEdit : public QLineEdit

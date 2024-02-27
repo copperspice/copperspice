@@ -41,8 +41,8 @@ class QXcbGlxIntegration : public QXcbGlIntegration
    QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
    QPlatformOffscreenSurface *createPlatformOffscreenSurface(QOffscreenSurface *surface) const override;
 
-   virtual bool supportsThreadedOpenGL() const override;
-   virtual bool supportsSwitchableWidgetComposition() const override;
+   bool supportsThreadedOpenGL() const override;
+   bool supportsSwitchableWidgetComposition() const override;
 
  private:
    QXcbConnection *m_connection;

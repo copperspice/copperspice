@@ -507,7 +507,7 @@ class QWindowsDialogThread : public QThread
 
    explicit QWindowsDialogThread(const QWindowsNativeDialogBasePtr &d, HWND owner)
       : m_dialog(d), m_owner(owner) {}
-   void run();
+   void run() override;
 
  private:
    const QWindowsNativeDialogBasePtr m_dialog;
@@ -745,7 +745,7 @@ class QWindowsNativeFileDialogEventHandler : public IFileDialogEvents
    static IFileDialogEvents *create(QWindowsNativeFileDialogBase *nativeFileDialog);
 
    // IUnknown methods
-   IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv) {
+   IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv) override {
       if (riid != IID_IUnknown && riid != IID_IFileDialogEvents) {
          *ppv = nullptr;
          return ResultFromScode(E_NOINTERFACE);
@@ -756,11 +756,11 @@ class QWindowsNativeFileDialogEventHandler : public IFileDialogEvents
       return NOERROR;
    }
 
-   IFACEMETHODIMP_(ULONG) AddRef() {
+   IFACEMETHODIMP_(ULONG) AddRef() override {
       return InterlockedIncrement(&m_ref);
    }
 
-   IFACEMETHODIMP_(ULONG) Release() {
+   IFACEMETHODIMP_(ULONG) Release() override {
       const long ref = InterlockedDecrement(&m_ref);
       if (!ref) {
          delete this;
@@ -769,20 +769,23 @@ class QWindowsNativeFileDialogEventHandler : public IFileDialogEvents
    }
 
    // IFileDialogEvents methods
-   IFACEMETHODIMP OnFileOk(IFileDialog *);
-   IFACEMETHODIMP OnFolderChange(IFileDialog *) {
+   IFACEMETHODIMP OnFileOk(IFileDialog *) override;
+   IFACEMETHODIMP OnFolderChange(IFileDialog *) override {
       return S_OK;
    }
-   IFACEMETHODIMP OnFolderChanging(IFileDialog *, IShellItem *);
+
+   IFACEMETHODIMP OnFolderChanging(IFileDialog *, IShellItem *) override;
    IFACEMETHODIMP OnHelp(IFileDialog *) {
       return S_OK;
    }
-   IFACEMETHODIMP OnSelectionChange(IFileDialog *);
-   IFACEMETHODIMP OnShareViolation(IFileDialog *, IShellItem *, FDE_SHAREVIOLATION_RESPONSE *) {
+
+   IFACEMETHODIMP OnSelectionChange(IFileDialog *) override;
+   IFACEMETHODIMP OnShareViolation(IFileDialog *, IShellItem *, FDE_SHAREVIOLATION_RESPONSE *) override {
       return S_OK;
    }
-   IFACEMETHODIMP OnTypeChange(IFileDialog *);
-   IFACEMETHODIMP OnOverwrite(IFileDialog *, IShellItem *, FDE_OVERWRITE_RESPONSE *) {
+
+   IFACEMETHODIMP OnTypeChange(IFileDialog *) override;
+   IFACEMETHODIMP OnOverwrite(IFileDialog *, IShellItem *, FDE_OVERWRITE_RESPONSE *) override {
       return S_OK;
    }
 
@@ -880,7 +883,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    CS_SIGNAL_1(Public, void filterSelected(const QString &filter))
    CS_SIGNAL_2(filterSelected, filter)
 
-   CS_SLOT_1(Public, void close())
+   CS_SLOT_1(Public, void close() override)
    CS_SLOT_2(close)
 
  protected:
@@ -1668,22 +1671,22 @@ class QWindowsFileDialogHelper : public QWindowsDialogHelperBase<QPlatformFileDi
  public:
    QWindowsFileDialogHelper() {}
 
-   virtual bool supportsNonModalDialog(const QWindow *parent = nullptr) const override {
+   bool supportsNonModalDialog(const QWindow *parent = nullptr) const override {
       (void) parent;
       return false;
    }
 
-   virtual bool defaultNameFilterDisables() const override {
+   bool defaultNameFilterDisables() const override {
       return false;
    }
 
-   virtual void setDirectory(const QUrl &directory) override;
-   virtual QUrl directory() const override;
-   virtual void selectFile(const QUrl &filename) override;
-   virtual QList<QUrl> selectedFiles() const override;
-   virtual void setFilter() override;
-   virtual void selectNameFilter(const QString &filter) override;
-   virtual QString selectedNameFilter() const override;
+   void setDirectory(const QUrl &directory) override;
+   QUrl directory() const override;
+   void selectFile(const QUrl &filename) override;
+   QList<QUrl> selectedFiles() const override;
+   void setFilter() override;
+   void selectNameFilter(const QString &filter) override;
+   QString selectedNameFilter() const override;
 
  private:
    QWindowsNativeDialogBase *createNativeDialog() override;
@@ -2275,7 +2278,7 @@ class QWindowsColorDialogHelper : public QWindowsDialogHelperBase<QPlatformColor
  public:
    QWindowsColorDialogHelper() : m_currentColor(new QColor) {}
 
-   virtual bool supportsNonModalDialog() {
+   bool supportsNonModalDialog() {
       return false;
    }
 

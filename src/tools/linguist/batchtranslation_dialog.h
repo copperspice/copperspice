@@ -36,7 +36,7 @@ class CheckableListModel : public QStandardItemModel
 {
  public:
    CheckableListModel(QObject *parent = nullptr);
-   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+   Qt::ItemFlags flags(const QModelIndex &index) const override;
 };
 
 class BatchTranslationDialog : public QDialog

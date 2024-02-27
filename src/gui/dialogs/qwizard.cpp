@@ -576,7 +576,7 @@ class QWizardAntiFlickerWidget : public QWidget
    {}
 
  protected:
-   void paintEvent(QPaintEvent *);
+   void paintEvent(QPaintEvent *) override;
 
 #else
  public:

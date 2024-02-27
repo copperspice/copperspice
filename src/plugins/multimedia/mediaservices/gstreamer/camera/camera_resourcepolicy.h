@@ -28,7 +28,7 @@
 
 namespace ResourcePolicy {
 class ResourceSet;
-};
+}
 
 class CamerabinResourcePolicy : public QObject
 {

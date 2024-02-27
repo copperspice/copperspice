@@ -102,7 +102,7 @@ class M3UParser : public ParserBase
       : ParserBase(parent), m_extendedFormat(false)
    { }
 
-   void parseLine(int lineIndex, const QString &line, const QUrl &root) {
+   void parseLine(int lineIndex, const QString &line, const QUrl &root) override {
       if (line[0] == '#' ) {
          if (m_extendedFormat) {
             if (line.startsWith("#EXTINF:")) {

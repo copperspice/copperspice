@@ -56,7 +56,7 @@ class AVFDisplayLink : public QObject
    void displayLinkEvent(const CVTimeStamp *);
 
  protected:
-   virtual bool event(QEvent *) override;
+   bool event(QEvent *) override;
 
  private:
 

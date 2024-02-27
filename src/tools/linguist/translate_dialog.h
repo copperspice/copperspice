@@ -65,7 +65,7 @@ class TranslateDialog : public QDialog
    CS_SIGNAL_2(activated,mode)
 
  protected:
-   virtual void showEvent(QShowEvent *event) override;
+   void showEvent(QShowEvent *event) override;
 
  private:
    Ui::TranslateDialog *m_ui;

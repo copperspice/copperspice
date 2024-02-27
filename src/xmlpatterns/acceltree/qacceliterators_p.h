@@ -145,7 +145,7 @@ class SiblingIterator : public AccelIterator
                  "When being following-sibling, the context node cannot be the last node in the document.");
    }
 
-   virtual QXmlNodeModelIndex next()  override {
+   QXmlNodeModelIndex next() override {
       if (m_currentPre == -1) {
          return QXmlNodeModelIndex();
       }
@@ -183,7 +183,7 @@ class SiblingIterator : public AccelIterator
       }
    }
 
-   virtual QXmlNodeModelIndex::Iterator::Ptr copy() const  override {
+   QXmlNodeModelIndex::Iterator::Ptr copy() const override {
       return QXmlNodeModelIndex::Iterator::Ptr(new SiblingIterator<IsFollowing>(m_document, m_preNumber));
    }
 

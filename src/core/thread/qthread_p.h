@@ -218,16 +218,16 @@ class QThreadData
 
 class QScopedLoopLevelCounter
 {
-   QThreadData *threadData;
+   QThreadData *m_threadData;
 
  public:
    QScopedLoopLevelCounter(QThreadData *threadData)
-      : threadData(threadData) {
-      ++threadData->loopLevel;
+      : m_threadData(threadData) {
+      ++m_threadData->loopLevel;
    }
 
    ~QScopedLoopLevelCounter() {
-      --threadData->loopLevel;
+      --m_threadData->loopLevel;
    }
 };
 

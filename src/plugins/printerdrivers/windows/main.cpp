@@ -34,7 +34,7 @@ class QWindowsPrinterSupportPlugin : public QPlatformPrinterSupportPlugin
    CS_PLUGIN_KEY("printerdriver_windows")
 
  public:
-   QPlatformPrinterSupport *create(const QString &);
+   QPlatformPrinterSupport *create(const QString &) override;
 };
 
 CS_PLUGIN_REGISTER(QWindowsPrinterSupportPlugin)

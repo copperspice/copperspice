@@ -92,8 +92,8 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QSize swapChainImageSize() const;
    VkImageView swapChainImageView(int idx) const;
 
-   bool event(QEvent *event);
-   void exposeEvent(QExposeEvent *event);
+   bool event(QEvent *event) override;
+   void exposeEvent(QExposeEvent *event) override;
 
  private:
    struct FrameData {

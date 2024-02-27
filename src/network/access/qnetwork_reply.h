@@ -93,8 +93,8 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    ~QNetworkReply();
 
    // reimplemented from QIODevice
-   virtual void close() override;
-   virtual bool isSequential() const override;
+   void close() override;
+   bool isSequential() const override;
 
    // like QAbstractSocket:
    qint64 readBufferSize() const;
@@ -166,7 +166,7 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
  protected:
    explicit QNetworkReply(QObject *parent = nullptr);
    QNetworkReply(QNetworkReplyPrivate &dd, QObject *parent);
-   virtual qint64 writeData(const char *data, qint64 len) override;
+   qint64 writeData(const char *data, qint64 len) override;
 
    void setOperation(QNetworkAccessManager::Operation operation);
    void setRequest(const QNetworkRequest &request);

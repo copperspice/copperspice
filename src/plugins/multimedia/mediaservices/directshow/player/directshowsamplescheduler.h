@@ -49,18 +49,18 @@ class DirectShowSampleScheduler : public QObject, public IMemInputPin
    ~DirectShowSampleScheduler();
 
    // IUnknown
-   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
-   ULONG STDMETHODCALLTYPE AddRef();
-   ULONG STDMETHODCALLTYPE Release();
+   HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject) override;
+   ULONG STDMETHODCALLTYPE AddRef() override;
+   ULONG STDMETHODCALLTYPE Release() override;
 
    // IMemInputPin
-   HRESULT STDMETHODCALLTYPE GetAllocator(IMemAllocator **ppAllocator);
-   HRESULT STDMETHODCALLTYPE NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly);
-   HRESULT STDMETHODCALLTYPE GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps);
+   HRESULT STDMETHODCALLTYPE GetAllocator(IMemAllocator **ppAllocator) override;
+   HRESULT STDMETHODCALLTYPE NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly) override;
+   HRESULT STDMETHODCALLTYPE GetAllocatorRequirements(ALLOCATOR_PROPERTIES *pProps) override;
 
-   HRESULT STDMETHODCALLTYPE Receive(IMediaSample *pSample);
-   HRESULT STDMETHODCALLTYPE ReceiveMultiple(IMediaSample **pSamples, long nSamples, long *nSamplesProcessed);
-   HRESULT STDMETHODCALLTYPE ReceiveCanBlock();
+   HRESULT STDMETHODCALLTYPE Receive(IMediaSample *pSample) override;
+   HRESULT STDMETHODCALLTYPE ReceiveMultiple(IMediaSample **pSamples, long nSamples, long *nSamplesProcessed) override;
+   HRESULT STDMETHODCALLTYPE ReceiveCanBlock() override;
 
    void run(REFERENCE_TIME startTime);
    void pause();
@@ -77,7 +77,7 @@ class DirectShowSampleScheduler : public QObject, public IMemInputPin
 
    IMediaSample *takeSample(bool *eos);
 
-   bool event(QEvent *event);
+   bool event(QEvent *event) override;
 
  public:
    CS_SIGNAL_1(Public, void sampleReady())

@@ -89,7 +89,7 @@ class Q_MULTIMEDIA_EXPORT QAbstractPlanarVideoBuffer : public QAbstractVideoBuff
 
    virtual ~QAbstractPlanarVideoBuffer();
 
-   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
+   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
    virtual int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) = 0;
 
  protected:

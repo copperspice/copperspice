@@ -128,7 +128,7 @@ class Q_GUI_EXPORT QWidgetItem : public QLayoutItem
    bool isEmpty() const override;
    void setGeometry(const QRect &rect) override;
    QRect geometry() const override;
-   virtual QWidget *widget() override;
+   QWidget *widget() override;
 
    bool hasHeightForWidth() const override;
    int heightForWidth(int width) const override;

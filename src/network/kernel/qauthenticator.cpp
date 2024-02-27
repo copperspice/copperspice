@@ -205,13 +205,11 @@ class QNtlmWindowsHandles
 #endif
 
 QAuthenticatorPrivate::QAuthenticatorPrivate()
-   : method(None)
+   : method(None), phase(Start), hasFailed(false), nonceCount(0)
 
 #if defined(Q_OS_WIN)
    , ntlmWindowsHandles(nullptr)
 #endif
-
-   , hasFailed(false), phase(Start), nonceCount(0)
 {
    cnonce = QCryptographicHash::hash(QByteArray::number(qrand(), 16) + QByteArray::number(qrand(), 16),
                                      QCryptographicHash::Md5).toHex();

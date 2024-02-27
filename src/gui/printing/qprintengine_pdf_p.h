@@ -78,8 +78,8 @@ class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
    }
 
    int metric(QPaintDevice::PaintDeviceMetric) const override;
-   virtual void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
-   virtual QVariant property(PrintEnginePropertyKey key) const override;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
+   QVariant property(PrintEnginePropertyKey key) const override;
 
    QPrinter::PrinterState state;
 

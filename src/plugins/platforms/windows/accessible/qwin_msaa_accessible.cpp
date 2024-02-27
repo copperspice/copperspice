@@ -59,14 +59,14 @@ public:
 
     virtual ~QWindowsEnumerate() {}
 
-    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID *);
-    ULONG STDMETHODCALLTYPE AddRef();
-    ULONG STDMETHODCALLTYPE Release();
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID *) override;
+    ULONG STDMETHODCALLTYPE AddRef() override;
+    ULONG STDMETHODCALLTYPE Release() override;
 
-    HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **ppEnum);
-    HRESULT STDMETHODCALLTYPE Next(unsigned long  celt, VARIANT FAR*  rgVar, unsigned long FAR*  pCeltFetched);
-    HRESULT STDMETHODCALLTYPE Reset();
-    HRESULT STDMETHODCALLTYPE Skip(unsigned long celt);
+    HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT **ppEnum) override;
+    HRESULT STDMETHODCALLTYPE Next(unsigned long  celt, VARIANT FAR*  rgVar, unsigned long FAR*  pCeltFetched) override;
+    HRESULT STDMETHODCALLTYPE Reset() override;
+    HRESULT STDMETHODCALLTYPE Skip(unsigned long celt) override;
 
 private:
     ULONG ref;

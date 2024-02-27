@@ -47,7 +47,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
 {
  public:
    QPixmap();
-   explicit QPixmap(QPlatformPixmap *data);
+   explicit QPixmap(QPlatformPixmap *imageData);
    QPixmap(int width, int height);
    explicit QPixmap(const QSize &size);
 
@@ -136,9 +136,10 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    }
 
    bool load(const QString &fileName, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
-   bool loadFromData(const uchar *data, uint len, const QString &format = QString(), Qt::ImageConversionFlags flags = Qt::AutoColor);
+   bool loadFromData(const uchar *imageData, uint len, const QString &format = QString(),
+         Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-   inline bool loadFromData(const QByteArray &data, const QString &format = QString(),
+   inline bool loadFromData(const QByteArray &imageData, const QString &format = QString(),
          Qt::ImageConversionFlags flags = Qt::AutoColor);
 
    bool save(const QString &fileName, const QString &format = QString(), int quality = -1) const;
@@ -208,9 +209,10 @@ inline void QPixmap::scroll(int dx, int dy, int x, int y, int width, int height,
    scroll(dx, dy, QRect(x, y, width, height), exposed);
 }
 
-inline bool QPixmap::loadFromData(const QByteArray &data, const QString &format, Qt::ImageConversionFlags flags)
+inline bool QPixmap::loadFromData(const QByteArray &imageData, const QString &format,
+      Qt::ImageConversionFlags flags)
 {
-   return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format, flags);
+   return loadFromData(reinterpret_cast<const uchar *>(imageData.constData()), imageData.size(), format, flags);
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPixmap &pixmap);

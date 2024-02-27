@@ -638,7 +638,7 @@ class Expression : public QSharedData, public CppCastingHelper<Expression>, publ
    /**
     * Reimplementation of SourceLocationReflection::description().
     */
-   virtual QString description() const override;
+   QString description() const override;
 
    /**
     * When this function is called, it signals that the parent will create

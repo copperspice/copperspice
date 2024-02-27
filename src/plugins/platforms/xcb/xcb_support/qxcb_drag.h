@@ -57,7 +57,7 @@ class QXcbDrag : public QXcbObject, public QBasicDrag
    QXcbDrag(QXcbConnection *c);
    ~QXcbDrag();
 
-   virtual QMimeData *platformDropData() override;
+   QMimeData *platformDropData() override;
    bool eventFilter(QObject *o, QEvent *e) override;
 
    void startDrag() override;

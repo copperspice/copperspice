@@ -29,9 +29,9 @@
 
 #ifndef QT_NO_OPENGL
 
-#include <qpaintdevice.h>
 #include <qopengl.h>
 #include <qopenglcontext.h>
+#include <qpaintdevice.h>
 
 class QOpenGLPaintDevicePrivate;
 
@@ -47,11 +47,11 @@ class Q_GUI_EXPORT QOpenGLPaintDevice : public QPaintDevice
 
     virtual ~QOpenGLPaintDevice();
 
-    int devType() const {
+    int devType() const override {
       return QInternal::OpenGL;
     }
 
-    QPaintEngine *paintEngine() const;
+    QPaintEngine *paintEngine() const override;
 
     QOpenGLContext *context() const;
     QSize size() const;
@@ -71,7 +71,7 @@ class Q_GUI_EXPORT QOpenGLPaintDevice : public QPaintDevice
 
  protected:
     QOpenGLPaintDevice(QOpenGLPaintDevicePrivate &dd);
-    int metric(QPaintDevice::PaintDeviceMetric metric) const;
+    int metric(QPaintDevice::PaintDeviceMetric metric) const override;
     QScopedPointer<QOpenGLPaintDevicePrivate> d_ptr;
 
  private:

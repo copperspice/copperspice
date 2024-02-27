@@ -2034,11 +2034,11 @@ void QGuiApplicationPrivate::processCloseEvent(QWindowSystemInterfacePrivate::Cl
 
 void QGuiApplicationPrivate::processFileOpenEvent(QWindowSystemInterfacePrivate::FileOpenEvent *e)
 {
-   if (e->url.isEmpty()) {
+   if (e->m_url.isEmpty()) {
       return;
    }
 
-   QFileOpenEvent event(e->url);
+   QFileOpenEvent event(e->m_url);
    QGuiApplication::sendSpontaneousEvent(qApp, &event);
 }
 

@@ -42,33 +42,33 @@ class Vmr9VideoWindowControl : public QVideoWindowControl
       return m_filter;
    }
 
-   WId winId() const;
-   void setWinId(WId id);
+   WId winId() const override;
+   void setWinId(WId id) override;
 
-   QRect displayRect() const;
-   void setDisplayRect(const QRect &rect);
+   QRect displayRect() const override;
+   void setDisplayRect(const QRect &rect) override;
 
-   bool isFullScreen() const;
-   void setFullScreen(bool fullScreen);
+   bool isFullScreen() const override;
+   void setFullScreen(bool fullScreen) override;
 
-   void repaint();
+   void repaint() override;
 
-   QSize nativeSize() const;
+   QSize nativeSize() const override;
 
-   Qt::AspectRatioMode aspectRatioMode() const;
-   void setAspectRatioMode(Qt::AspectRatioMode mode);
+   Qt::AspectRatioMode aspectRatioMode() const override;
+   void setAspectRatioMode(Qt::AspectRatioMode mode) override;
 
-   int brightness() const;
-   void setBrightness(int brightness);
+   int brightness() const override;
+   void setBrightness(int brightness) override;
 
-   int contrast() const;
-   void setContrast(int contrast);
+   int contrast() const override;
+   void setContrast(int contrast) override;
 
-   int hue() const;
-   void setHue(int hue);
+   int hue() const override;
+   void setHue(int hue) override;
 
-   int saturation() const;
-   void setSaturation(int saturation);
+   int saturation() const override;
+   void setSaturation(int saturation) override;
 
  private:
    void setProcAmpValues();

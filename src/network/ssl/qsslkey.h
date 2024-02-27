@@ -75,7 +75,8 @@ class Q_NETWORK_EXPORT QSslKey
    }
 
    bool operator==(const QSslKey &other) const;
-   inline bool operator!=(const QSslKey &other) const {
+
+   bool operator!=(const QSslKey &other) const {
       return ! operator==(other);
    }
 

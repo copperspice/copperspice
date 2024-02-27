@@ -480,13 +480,13 @@ int QWindowsMime::registerMimeType(const QString &mime)
 class QWindowsMimeText : public QWindowsMime
 {
  public:
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
 
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 };
 
 bool QWindowsMimeText::canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
@@ -674,13 +674,13 @@ class QWindowsMimeURI : public QWindowsMime
  public:
    QWindowsMimeURI();
 
-   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const;
-   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const;
-   QString mimeForFormat(const FORMATETC &formatetc) const;
-   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const;
-   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const;
+   bool canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const override;
+   QVariant convertToMime(const QString &mime, LPDATAOBJECT pDataObj, QVariant::Type preferredType) const override;
+   QString mimeForFormat(const FORMATETC &formatetc) const override;
+   bool canConvertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const override;
+   bool convertFromMime(const FORMATETC &formatetc, const QMimeData *mimeData, STGMEDIUM *pmedium) const override;
 
-   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const;
+   QVector<FORMATETC> formatsForMime(const QString &mimeType, const QMimeData *mimeData) const override;
 
  private:
    int CF_INETURL_W; // wide char version

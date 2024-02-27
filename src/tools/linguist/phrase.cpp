@@ -115,14 +115,14 @@ class QphHandler : public QXmlDefaultHandler
    QphHandler(PhraseBook *phraseBook)
       : pb(phraseBook), ferrorCount(0) { }
 
-   virtual bool startElement(const QString &namespaceURI,
-            const QString &localName, const QString &qName, const QXmlAttributes &atts);
+   bool startElement(const QString &namespaceURI,
+         const QString &localName, const QString &qName, const QXmlAttributes &atts) override;
 
-   virtual bool endElement(const QString &namespaceURI,
-            const QString &localName, const QString &qName);
+   bool endElement(const QString &namespaceURI,
+         const QString &localName, const QString &qName) override;
 
-   virtual bool characters(const QString &ch);
-   virtual bool fatalError(const QXmlParseException &exception);
+   bool characters(const QString &ch) override;
+   bool fatalError(const QXmlParseException &exception) override;
 
    QString language() const {
       return m_language;

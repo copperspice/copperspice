@@ -418,13 +418,13 @@ class Q_GUI_EXPORT QTextEngine
       ItemDecoration() {}
 
       ItemDecoration(qreal x1, qreal x2, qreal y, const QPen &pen)
-         : x1(x1), x2(x2), y(y), pen(pen)
-      {}
+         : m_x1(x1), m_x2(x2), m_y(y), m_pen(pen)
+      { }
 
-      qreal x1;
-      qreal x2;
-      qreal y;
-      QPen pen;
+      qreal m_x1;
+      qreal m_x2;
+      qreal m_y;
+      QPen m_pen;
    };
 
    typedef QVector<ItemDecoration> ItemDecorationList;
@@ -433,10 +433,6 @@ class Q_GUI_EXPORT QTextEngine
    QTextEngine(const QString &str, const QFont &f);
 
    ~QTextEngine();
-
-   enum Mode {
-      WidthOnly = 0x07
-   };
 
    void clearLineData();
    void invalidate();

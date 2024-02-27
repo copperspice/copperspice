@@ -83,8 +83,8 @@ class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket
 
    void disconnectFromHost() override;
 
-   virtual void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value) override;
-   virtual QVariant socketOption(QAbstractSocket::SocketOption option) override;
+   void setSocketOption(QAbstractSocket::SocketOption option, const QVariant &value) override;
+   QVariant socketOption(QAbstractSocket::SocketOption option) override;
 
    SslMode mode() const;
    bool isEncrypted() const;

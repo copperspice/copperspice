@@ -58,27 +58,27 @@ class QAccessibleTable : public QAccessibleTableInterface, public QAccessibleObj
    void *interface_cast(QAccessible::InterfaceType t) override;
 
    // table interface
-   virtual QAccessibleInterface *cellAt(int row, int column) const override;
-   virtual QAccessibleInterface *caption() const override;
-   virtual QAccessibleInterface *summary() const override;
-   virtual QString columnDescription(int column) const override;
-   virtual QString rowDescription(int row) const override;
-   virtual int columnCount() const override;
-   virtual int rowCount() const override;
+   QAccessibleInterface *cellAt(int row, int column) const override;
+   QAccessibleInterface *caption() const override;
+   QAccessibleInterface *summary() const override;
+   QString columnDescription(int column) const override;
+   QString rowDescription(int row) const override;
+   int columnCount() const override;
+   int rowCount() const override;
 
    // selection
-   virtual int selectedCellCount() const override;
-   virtual int selectedColumnCount() const override;
-   virtual int selectedRowCount() const override;
-   virtual QList<QAccessibleInterface *> selectedCells() const override;
-   virtual QList<int> selectedColumns() const override;
-   virtual QList<int> selectedRows() const override;
-   virtual bool isColumnSelected(int column) const override;
-   virtual bool isRowSelected(int row) const override;
-   virtual bool selectRow(int row) override;
-   virtual bool selectColumn(int column) override;
-   virtual bool unselectRow(int row) override;
-   virtual bool unselectColumn(int column) override;
+   int selectedCellCount() const override;
+   int selectedColumnCount() const override;
+   int selectedRowCount() const override;
+   QList<QAccessibleInterface *> selectedCells() const override;
+   QList<int> selectedColumns() const override;
+   QList<int> selectedRows() const override;
+   bool isColumnSelected(int column) const override;
+   bool isRowSelected(int row) const override;
+   bool selectRow(int row) override;
+   bool selectColumn(int column) override;
+   bool unselectRow(int row) override;
+   bool unselectColumn(int column) override;
 
    QAbstractItemView *view() const;
 
@@ -120,7 +120,6 @@ class QAccessibleTree : public QAccessibleTable
    explicit QAccessibleTree(QWidget *w)
       : QAccessibleTable(w)
    {}
-
 
    QAccessibleInterface *childAt(int x, int y) const override;
    int childCount() const override;
@@ -173,19 +172,19 @@ class QAccessibleTableCell: public QAccessibleInterface, public QAccessibleTable
    QAccessibleInterface *child(int) const override;
 
    // cell interface
-   virtual int columnExtent() const override;
-   virtual QList<QAccessibleInterface *> columnHeaderCells() const override;
-   virtual int columnIndex() const override;
-   virtual int rowExtent() const override;
-   virtual QList<QAccessibleInterface *> rowHeaderCells() const override;
-   virtual int rowIndex() const override;
-   virtual bool isSelected() const override;
-   virtual QAccessibleInterface *table() const override;
+   int columnExtent() const override;
+   QList<QAccessibleInterface *> columnHeaderCells() const override;
+   int columnIndex() const override;
+   int rowExtent() const override;
+   QList<QAccessibleInterface *> rowHeaderCells() const override;
+   int rowIndex() const override;
+   bool isSelected() const override;
+   QAccessibleInterface *table() const override;
 
    //action interface
-   virtual QStringList actionNames() const override;
-   virtual void doAction(const QString &actionName) override;
-   virtual QStringList keyBindingsForAction(const QString &actionName) const override;
+   QStringList actionNames() const override;
+   void doAction(const QString &actionName) override;
+   QStringList keyBindingsForAction(const QString &actionName) const override;
 
  private:
    QHeaderView *verticalHeader() const;
@@ -200,7 +199,6 @@ class QAccessibleTableCell: public QAccessibleInterface, public QAccessibleTable
    friend class QAccessibleTable;
    friend class QAccessibleTree;
 };
-
 
 class QAccessibleTableHeaderCell: public QAccessibleInterface
 {

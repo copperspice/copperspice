@@ -34,10 +34,10 @@ class Translator;
 class TranslatorMessage;
 
 enum UpdateOption {
-   Verbose = 1,
+   Verbose    = 1,
    NoObsolete = 2,
    PluralOnly = 4,
-   NoSort = 8,
+   NoSorting  = 8,
    HeuristicSameText = 16,
    HeuristicSimilarText = 32,
    HeuristicNumber = 64,

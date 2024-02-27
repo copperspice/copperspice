@@ -1832,7 +1832,6 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             Q_D(const QWindowsStyle);
 
             if (pb->minimum == 0 && pb->maximum == 0) {
-               Q_D(const QWindowsStyle);
                const int unit_width = proxy()->pixelMetric(PM_ProgressBarChunkWidth, pb, widget);
                QStyleOptionProgressBar pbBits = *pb;
                Q_ASSERT(unit_width > 0);

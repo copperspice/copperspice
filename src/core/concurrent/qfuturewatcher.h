@@ -131,10 +131,11 @@ class QFutureWatcher : public QFutureWatcherBase
 
  private:
    QFuture<T> m_future;
-   const QFutureInterfaceBase &futureInterface() const {
+   const QFutureInterfaceBase &futureInterface() const override {
       return m_future.d;
    }
-   QFutureInterfaceBase &futureInterface() {
+
+   QFutureInterfaceBase &futureInterface() override  {
       return m_future.d;
    }
 };

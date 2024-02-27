@@ -159,8 +159,8 @@ class Q_GUI_EXPORT QPaintEngine
       return active;
    }
 
-   void setActive(bool state) {
-      active = state;
+   void setActive(bool newState) {
+      active =  newState;
    }
 
    virtual bool begin(QPaintDevice *pdev) = 0;

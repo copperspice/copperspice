@@ -127,7 +127,7 @@ bool QFutureWatcherBase::event(QEvent *event)
          return true;
       }
 
-      if (callOutEvent->callOutType == QFutureCallOutEvent::Resumed
+      if (callOutEvent->m_callOutType == QFutureCallOutEvent::Resumed
             && !d->pendingCallOutEvents.isEmpty()) {
          // send the resume
          d->sendCallOutEvent(callOutEvent);
@@ -212,7 +212,7 @@ void QFutureWatcherBasePrivate::postCallOutEvent(const QFutureCallOutEvent &call
 {
    Q_Q(QFutureWatcherBase);
 
-   if (callOutEvent.callOutType == QFutureCallOutEvent::ResultsReady) {
+   if (callOutEvent.m_callOutType == QFutureCallOutEvent::ResultsReady) {
       if (pendingResultsReady.fetchAndAddRelaxed(1) >= maximumPendingResultsReady) {
          q->futureInterface().d->internal_setThrottled(true);
       }
@@ -230,7 +230,7 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
 {
    Q_Q(QFutureWatcherBase);
 
-   switch (event->callOutType) {
+   switch (event->m_callOutType) {
       case QFutureCallOutEvent::Started:
          emit q->started();
          break;
@@ -270,8 +270,8 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
             q->futureInterface().setThrottled(false);
          }
 
-         const int beginIndex = event->index1;
-         const int endIndex = event->index2;
+         const int beginIndex = event->m_index1;
+         const int endIndex   = event->m_index2;
 
          emit q->resultsReadyAt(beginIndex, endIndex);
 
@@ -291,20 +291,19 @@ void QFutureWatcherBasePrivate::sendCallOutEvent(QFutureCallOutEvent *event)
             break;
          }
 
-         emit q->progressValueChanged(event->index1);
+         emit q->progressValueChanged(event->m_index1);
 
-         if (! event->text.isEmpty()) {
-            q->progressTextChanged(event->text);
+         if (! event->m_text.isEmpty()) {
+            q->progressTextChanged(event->m_text);
          }
 
          break;
 
       case QFutureCallOutEvent::ProgressRange:
-         emit q->progressRangeChanged(event->index1, event->index2);
+         emit q->progressRangeChanged(event->m_index1, event->m_index2);
          break;
 
       default:
          break;
    }
 }
-

@@ -287,6 +287,8 @@ class QList
 
    [[deprecated]] void reserve(size_type size) {
       // this method should do nothing, undocumented
+
+      (void) size;
    }
 
    void resize(size_type size) {
@@ -590,19 +592,19 @@ inline T QList<T>::takeAt(size_type i)
 template <typename T>
 inline T QList<T>::takeFirst()
 {
-   T value = first();
+   T retval = first();
    removeFirst();
 
-   return value;
+   return retval;
 }
 
 template <typename T>
 inline T QList<T>::takeLast()
 {
-   T value = last();
+   T retval = last();
    removeLast();
 
-   return value;
+   return retval;
 }
 
 template <typename T>

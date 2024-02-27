@@ -453,16 +453,16 @@ bool QPixmap::load(const QString &fileName, const QString &format, Qt::ImageConv
    return false;
 }
 
-bool QPixmap::loadFromData(const uchar *buf, uint len, const QString &format, Qt::ImageConversionFlags flags)
+bool QPixmap::loadFromData(const uchar *imageData, uint len, const QString &format, Qt::ImageConversionFlags flags)
 {
-   if (len == 0 || buf == nullptr) {
+   if (len == 0 || imageData == nullptr) {
       data.reset();
       return false;
    }
 
    data = QPlatformPixmap::create(0, 0, QPlatformPixmap::PixmapType);
 
-   if (data->fromData(buf, len, format, flags)) {
+   if (data->fromData(imageData, len, format, flags)) {
       return true;
    }
 
@@ -794,22 +794,22 @@ QPixmap QPixmap::fromImageInPlace(QImage &image, Qt::ImageConversionFlags flags)
       return QPixmap();
    }
 
-   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
-                  createPlatformPixmap(QPlatformPixmap::PixmapType));
+   QScopedPointer<QPlatformPixmap> tmpImage(
+         QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::PixmapType));
 
-   data->fromImageInPlace(image, flags);
+   tmpImage->fromImageInPlace(image, flags);
 
-   return QPixmap(data.take());
+   return QPixmap(tmpImage.take());
 }
 
 QPixmap QPixmap::fromImageReader(QImageReader *imageReader, Qt::ImageConversionFlags flags)
 {
-   QScopedPointer<QPlatformPixmap> data(QGuiApplicationPrivate::platformIntegration()->
-                  createPlatformPixmap(QPlatformPixmap::PixmapType));
+   QScopedPointer<QPlatformPixmap> tmpImage(
+         QGuiApplicationPrivate::platformIntegration()->createPlatformPixmap(QPlatformPixmap::PixmapType));
 
-   data->fromImageReader(imageReader, flags);
+   tmpImage->fromImageReader(imageReader, flags);
 
-   return QPixmap(data.take());
+   return QPixmap(tmpImage.take());
 }
 
 QPixmap QPixmap::grabWindow(WId window, int x, int y, int w, int h)

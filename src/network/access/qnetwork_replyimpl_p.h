@@ -49,7 +49,7 @@ class QNetworkReplyImpl: public QNetworkReply
    QNetworkReplyImpl(QObject *parent = nullptr);
    ~QNetworkReplyImpl();
 
-   virtual void abort() override;
+   void abort() override;
 
    // reimplemented from QNetworkReply or QIODevice
    void close() override;
@@ -94,8 +94,8 @@ class QNetworkReplyImpl: public QNetworkReply
 #ifdef QT_SSL
 
  protected:
-   virtual void ignoreSslErrors() override;
-   virtual void ignoreSslErrorsImplementation(const QList<QSslError> &errors) override;
+   void ignoreSslErrors() override;
+   void ignoreSslErrorsImplementation(const QList<QSslError> &errors) override;
 
    void sslConfigurationImplementation(QSslConfiguration &configuration) const override;
    void setSslConfigurationImplementation(const QSslConfiguration &configuration) override;

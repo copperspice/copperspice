@@ -54,10 +54,10 @@ class PhraseView : public QTreeView
 
  protected:
    // QObject
-   virtual void contextMenuEvent(QContextMenuEvent *event) override;
+   void contextMenuEvent(QContextMenuEvent *event) override;
 
    // QAbstractItemView
-   virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
+   void mouseDoubleClickEvent(QMouseEvent *event) override;
 
  private:
    // slots

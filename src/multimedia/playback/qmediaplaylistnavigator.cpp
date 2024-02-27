@@ -37,13 +37,15 @@ class QMediaPlaylistNullProvider : public QMediaPlaylistProvider
    {
    }
 
-   virtual ~QMediaPlaylistNullProvider() {}
+   virtual ~QMediaPlaylistNullProvider()
+   {
+   }
 
-   virtual int mediaCount() const {
+   int mediaCount() const override {
       return 0;
    }
 
-   virtual QMediaContent media(int) const {
+   QMediaContent media(int) const override {
       return QMediaContent();
    }
 };

@@ -284,10 +284,10 @@ class QSocks5SocketEnginePrivate : public QAbstractSocketEnginePrivate
 class QSocks5SocketEngineHandler : public QSocketEngineHandler
 {
  public:
-   virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
+   QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
          const QNetworkProxy &, QObject *parent) override;
 
-   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) override;
+   QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) override;
 };
 
 #endif // QT_NO_SOCKS5

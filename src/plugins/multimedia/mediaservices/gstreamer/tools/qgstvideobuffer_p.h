@@ -47,17 +47,17 @@ class QGstVideoBuffer : public QAbstractVideoBuffer
 
    ~QGstVideoBuffer();
 
-   MapMode mapMode() const;
+   MapMode mapMode() const override;
 
 #if GST_CHECK_VERSION(1,0,0)
-   int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]);
+   int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) override;
 #else
-   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine);
+   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
 #endif
 
-   void unmap();
+   void unmap() override;
 
-   QVariant handle() const {
+   QVariant handle() const override {
       return m_handle;
    }
 

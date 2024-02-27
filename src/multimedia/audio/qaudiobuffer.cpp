@@ -112,27 +112,31 @@ class QMemoryAudioBufferProvider : public QAbstractAudioBuffer
       }
    }
 
-   void release() {
+   void release() override {
       delete this;
    }
-   QAudioFormat format() const {
+
+   QAudioFormat format() const override {
       return mFormat;
    }
-   qint64 startTime() const {
+
+   qint64 startTime() const override {
       return mStartTime;
    }
-   int frameCount() const {
+
+   int frameCount() const override {
       return mFrameCount;
    }
 
-   void *constData() const {
+   void *constData() const override {
       return mBuffer;
    }
 
-   void *writableData() {
+   void *writableData() override {
       return mBuffer;
    }
-   QAbstractAudioBuffer *clone() const {
+
+   QAbstractAudioBuffer *clone() const override {
       return new QMemoryAudioBufferProvider(mBuffer, mFrameCount, mFormat, mStartTime);
    }
 

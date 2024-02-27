@@ -167,7 +167,7 @@ class QWindowsWindow : public QPlatformWindow
       return WId(m_data.hwnd);
    }
 
-   void *nativeHandle() {
+   void *nativeHandle() override {
       return &m_data.hwnd;
    }
 

@@ -197,17 +197,19 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    static QOpenGLStaticContext *create(bool softwareRendering = false);
    static QByteArray getGlString(unsigned int which);
 
-   QWindowsOpenGLContext *createContext(QOpenGLContext *context);
-   void *moduleHandle() const {
+   QWindowsOpenGLContext *createContext(QOpenGLContext *context) override;
+
+   void *moduleHandle() const override {
       return opengl32.moduleHandle();
    }
-   QOpenGLContext::OpenGLModuleType moduleType() const {
+
+   QOpenGLContext::OpenGLModuleType moduleType() const override {
       return QOpenGLContext::LibGL;
    }
 
    // For a regular opengl32.dll report the ThreadedOpenGL capability.
    // For others, which are likely to be software-only, don't.
-   bool supportsThreadedOpenGL() const {
+   bool supportsThreadedOpenGL() const override {
       return ! opengl32.moduleIsNotOpengl32();
    }
 

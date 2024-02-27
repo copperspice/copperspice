@@ -41,28 +41,32 @@ class QCameraFocusFakeZoomControl : public QCameraZoomControl
    QCameraFocusFakeZoomControl(QObject *parent)
       : QCameraZoomControl(parent) {}
 
-   qreal maximumOpticalZoom() const {
-      return 1.0;
-   }
-   qreal maximumDigitalZoom() const {
+   qreal maximumOpticalZoom() const override {
       return 1.0;
    }
 
-   qreal requestedOpticalZoom() const {
-      return 1.0;
-   }
-   qreal requestedDigitalZoom() const {
-      return 1.0;
-   }
-   qreal currentOpticalZoom() const {
-      return 1.0;
-   }
-   qreal currentDigitalZoom() const {
+   qreal maximumDigitalZoom() const override {
       return 1.0;
    }
 
-   void zoomTo(qreal, qreal) {
-      qWarning("This camera does not support zooming.");
+   qreal requestedOpticalZoom() const override {
+      return 1.0;
+   }
+
+   qreal requestedDigitalZoom() const override {
+      return 1.0;
+   }
+
+   qreal currentOpticalZoom() const override {
+      return 1.0;
+   }
+
+   qreal currentDigitalZoom() const override {
+      return 1.0;
+   }
+
+   void zoomTo(qreal, qreal) override {
+      qWarning("This camera does not support zooming");
    }
 };
 
@@ -70,41 +74,42 @@ class QCameraFocusFakeFocusControl : public QCameraFocusControl
 {
  public:
    QCameraFocusFakeFocusControl(QObject *parent)
-      : QCameraFocusControl(parent) {}
+      : QCameraFocusControl(parent)
+   { }
 
-   QCameraFocus::FocusModes focusMode() const {
+   QCameraFocus::FocusModes focusMode() const override {
       return QCameraFocus::AutoFocus;
    }
 
-   void setFocusMode(QCameraFocus::FocusModes) {
+   void setFocusMode(QCameraFocus::FocusModes) override {
       qWarning("Focus mode selection is not supported");
    }
 
-   bool isFocusModeSupported(QCameraFocus::FocusModes) const {
+   bool isFocusModeSupported(QCameraFocus::FocusModes) const override {
       return false;
    }
 
-   QCameraFocus::FocusPointMode focusPointMode() const {
+   QCameraFocus::FocusPointMode focusPointMode() const override {
       return QCameraFocus::FocusPointAuto;
    }
 
-   void setFocusPointMode(QCameraFocus::FocusPointMode) {
+   void setFocusPointMode(QCameraFocus::FocusPointMode) override {
       qWarning("Focus points mode selection is not supported");
    }
 
-   bool isFocusPointModeSupported(QCameraFocus::FocusPointMode) const {
+   bool isFocusPointModeSupported(QCameraFocus::FocusPointMode) const override {
       return false;
    }
 
-   QPointF customFocusPoint() const {
+   QPointF customFocusPoint() const override {
       return QPointF(0.5, 0.5);
    }
 
-   void setCustomFocusPoint(const QPointF &) {
+   void setCustomFocusPoint(const QPointF &) override {
       qWarning("Focus points selection is not supported");
    }
 
-   QCameraFocusZoneList focusZones() const {
+   QCameraFocusZoneList focusZones() const override {
       return QCameraFocusZoneList();
    }
 };

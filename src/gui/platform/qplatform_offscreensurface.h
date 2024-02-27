@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface
 
    QPlatformScreen *screen() const;
 
-   virtual QSurfaceFormat format() const override;
+   QSurfaceFormat format() const override;
    virtual bool isValid() const;
 
  protected:

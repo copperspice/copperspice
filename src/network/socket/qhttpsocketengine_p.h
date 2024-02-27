@@ -179,10 +179,10 @@ class QHttpSocketEnginePrivate : public QAbstractSocketEnginePrivate
 class QHttpSocketEngineHandler : public QSocketEngineHandler
 {
  public:
-   virtual QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
-                  const QNetworkProxy &, QObject *parent) override;
+   QAbstractSocketEngine *createSocketEngine(QAbstractSocket::SocketType socketType,
+         const QNetworkProxy &, QObject *parent) override;
 
-   virtual QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) override;
+   QAbstractSocketEngine *createSocketEngine(qintptr socketDescriptor, QObject *parent) override;
 };
 #endif
 

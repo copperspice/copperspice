@@ -140,7 +140,7 @@ class QWindowsVistaStyle : public QWindowsXPStyle
       const QWidget *widget = nullptr) const override;
 
    QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
-      const QWidget *widget = nullptr) const;
+      const QWidget *widget = nullptr) const override;
 
    QPixmap standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option,
       const QWidget *widget = nullptr) const override;
@@ -173,7 +173,7 @@ class QWindowsVistaAnimation : public QBlendStyleAnimation
       : QBlendStyleAnimation(type, target)
    { }
 
-   virtual bool isUpdateNeeded() const;
+   bool isUpdateNeeded() const override;
    void paint(QPainter *painter, const QStyleOption *option);
 };
 
@@ -185,7 +185,7 @@ class QWindowsVistaTransition : public QWindowsVistaAnimation
  public :
    QWindowsVistaTransition(QObject *target)
       : QWindowsVistaAnimation(Transition, target)
-   {}
+   { }
 };
 
 // Handles pulse animations (default buttons)
@@ -196,7 +196,7 @@ class QWindowsVistaPulse: public QWindowsVistaAnimation
  public :
    QWindowsVistaPulse(QObject *target)
       : QWindowsVistaAnimation(Pulse, target)
-   {}
+   { }
 };
 
 class QWindowsVistaStylePrivate :  public QWindowsXPStylePrivate

@@ -41,7 +41,7 @@ class QGstreamerVideoWidget : public QWidget
 
    virtual ~QGstreamerVideoWidget() {}
 
-   QSize sizeHint() const {
+   QSize sizeHint() const override {
       return m_nativeSize;
    }
 
@@ -64,7 +64,7 @@ class QGstreamerVideoWidget : public QWidget
    }
 
  protected:
-   void paintEvent(QPaintEvent *) {
+   void paintEvent(QPaintEvent *) override {
       paint_helper();
    }
 

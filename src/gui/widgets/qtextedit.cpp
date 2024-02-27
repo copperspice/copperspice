@@ -632,7 +632,6 @@ bool QTextEdit::event(QEvent *e)
 #ifndef QT_NO_CONTEXTMENU
    if (e->type() == QEvent::ContextMenu
          && static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard) {
-      Q_D(QTextEdit);
       ensureCursorVisible();
 
       const QPoint cursorPos = cursorRect().center();

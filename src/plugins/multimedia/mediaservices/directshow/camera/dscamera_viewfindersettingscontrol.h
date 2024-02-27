@@ -33,10 +33,10 @@ class DSCameraViewfinderSettingsControl : public QCameraViewfinderSettingsContro
  public:
    DSCameraViewfinderSettingsControl(DSCameraSession *session);
 
-   QList<QCameraViewfinderSettings> supportedViewfinderSettings() const;
+   QList<QCameraViewfinderSettings> supportedViewfinderSettings() const override;
 
-   QCameraViewfinderSettings viewfinderSettings() const;
-   void setViewfinderSettings(const QCameraViewfinderSettings &settings);
+   QCameraViewfinderSettings viewfinderSettings() const override;
+   void setViewfinderSettings(const QCameraViewfinderSettings &settings) override;
 
  private:
    DSCameraSession *m_session;

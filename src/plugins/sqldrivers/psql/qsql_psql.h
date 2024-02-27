@@ -50,7 +50,7 @@ class QPSQLResult : public QSqlResult
    QPSQLResult(const QPSQLDriver *db);
    ~QPSQLResult();
 
-   QVariant handle() const;
+   QVariant handle() const override;
    void virtual_hook(int id, void *data) override;
 
  protected:

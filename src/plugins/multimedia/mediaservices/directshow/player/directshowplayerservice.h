@@ -79,7 +79,7 @@ class DirectShowPlayerService : public QMediaService
    void setVideoOutput(IBaseFilter *filter);
 
  protected:
-   void customEvent(QEvent *event);
+   void customEvent(QEvent *event) override;
 
  private :
    CS_SLOT_1(Private, void videoOutputChanged())

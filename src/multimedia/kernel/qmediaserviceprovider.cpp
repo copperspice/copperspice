@@ -176,7 +176,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
    QMap<const QMediaService *, MediaServiceData> mediaServiceData;
 
  public:
-   QMediaService *requestService(const QString &key, const QMediaServiceProviderHint &hint) {
+   QMediaService *requestService(const QString &key, const QMediaServiceProviderHint &hint) override {
 
       QList<QMediaServiceProviderPlugin *> plugins;
       QFactoryLoader *factoryObj = loader();
@@ -328,7 +328,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return nullptr;
    }
 
-   void releaseService(QMediaService *service) {
+   void releaseService(QMediaService *service) override {
       if (service != nullptr) {
          MediaServiceData d = mediaServiceData.take(service);
 
@@ -338,7 +338,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       }
    }
 
-   QMediaServiceProviderHint::Features supportedFeatures(const QMediaService *service) const {
+   QMediaServiceProviderHint::Features supportedFeatures(const QMediaService *service) const override {
       if (service) {
          MediaServiceData d = mediaServiceData.value(service);
 
@@ -355,7 +355,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
    }
 
    QMultimedia::SupportEstimate hasSupport(const QString &serviceType, const QString &mimeType,
-         const QStringList &codecs, int flags) const {
+         const QStringList &codecs, int flags) const  override {
 
       QList<QObject *> plugins;
       QFactoryLoader *factoryObj = loader();
@@ -418,7 +418,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return supportEstimate;
    }
 
-   QStringList supportedMimeTypes(const QString &serviceType, int flags) const {
+   QStringList supportedMimeTypes(const QString &serviceType, int flags) const override {
       QFactoryLoader *factoryObj = loader();
       QStringList supportedTypes;
 
@@ -469,7 +469,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return supportedTypes;
    }
 
-   QString defaultDevice(const QString &serviceType) const {
+   QString defaultDevice(const QString &serviceType) const override {
       QFactoryLoader *factoryObj = loader();
 
       for (QLibraryHandle *handle : factoryObj->librarySet(serviceType))  {
@@ -496,7 +496,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return QString();
    }
 
-   QList<QString> devices(const QString &serviceType) const {
+   QList<QString> devices(const QString &serviceType) const override {
       QFactoryLoader *factoryObj = loader();
       QList<QString> list;
 
@@ -517,7 +517,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return list;
    }
 
-   QString deviceDescription(const QString &serviceType, const QString &device) {
+   QString deviceDescription(const QString &serviceType, const QString &device) override {
       QFactoryLoader *factoryObj = loader();
 
       for (QLibraryHandle *handle : factoryObj->librarySet(serviceType) )  {
@@ -539,8 +539,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
       return QString();
    }
 
-   QCamera::Position cameraPosition(const QString &device) const
-   {
+   QCamera::Position cameraPosition(const QString &device) const override {
      const QString serviceType(Q_MEDIASERVICE_CAMERA);
 
      QFactoryLoader *factoryObj = loader();
@@ -567,8 +566,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
      return QCamera::UnspecifiedPosition;
    }
 
-   int cameraOrientation(const QString &device) const
-   {
+   int cameraOrientation(const QString &device) const override {
      const QString serviceType(Q_MEDIASERVICE_CAMERA);
 
      QFactoryLoader *factoryObj = loader();

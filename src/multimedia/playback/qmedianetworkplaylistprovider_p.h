@@ -41,22 +41,22 @@ class Q_MULTIMEDIA_EXPORT QMediaNetworkPlaylistProvider : public QMediaPlaylistP
 
    virtual ~QMediaNetworkPlaylistProvider();
 
-   virtual bool load(const QNetworkRequest &request, const char *format = nullptr) override;
+   bool load(const QNetworkRequest &request, const char *format = nullptr) override;
 
-   virtual int mediaCount() const override;
-   virtual QMediaContent media(int pos) const override;
+   int mediaCount() const override;
+   QMediaContent media(int pos) const override;
 
-   virtual bool isReadOnly() const override;
+   bool isReadOnly() const override;
 
-   virtual bool addMedia(const QMediaContent &content) override;
-   virtual bool addMedia(const QList<QMediaContent> &items) override;
-   virtual bool insertMedia(int pos, const QMediaContent &content) override;
-   virtual bool insertMedia(int pos, const QList<QMediaContent> &items) override;
-   virtual bool removeMedia(int pos) override;
-   virtual bool removeMedia(int start, int end) override;
-   virtual bool clear() override;
+   bool addMedia(const QMediaContent &content) override;
+   bool addMedia(const QList<QMediaContent> &items) override;
+   bool insertMedia(int pos, const QMediaContent &content) override;
+   bool insertMedia(int pos, const QList<QMediaContent> &items) override;
+   bool removeMedia(int pos) override;
+   bool removeMedia(int start, int end) override;
+   bool clear() override;
 
-   MULTI_CS_SLOT_1(Public, virtual void shuffle() override)
+   MULTI_CS_SLOT_1(Public, void shuffle() override)
    MULTI_CS_SLOT_2(shuffle)
 
  private:

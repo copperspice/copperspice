@@ -36,13 +36,13 @@ class QGstreamerStreamsControl : public QMediaStreamsControl
    QGstreamerStreamsControl(QGstreamerPlayerSession *session, QObject *parent);
    virtual ~QGstreamerStreamsControl();
 
-   virtual int streamCount() override;
-   virtual StreamType streamType(int streamNumber) override;
+   int streamCount() override;
+   StreamType streamType(int streamNumber) override;
 
-   virtual QVariant metaData(int streamNumber, const QString &key) override;
+   QVariant metaData(int streamNumber, const QString &key) override;
 
-   virtual bool isActive(int streamNumber) override;
-   virtual void setActive(int streamNumber, bool state) override;
+   bool isActive(int streamNumber) override;
+   void setActive(int streamNumber, bool state) override;
 
  private:
    QGstreamerPlayerSession *m_session;

@@ -842,11 +842,11 @@ class QDynamicBufferResourceRoot: public QResourceRoot
       return buffer;
    }
 
-   virtual QString mappingRoot() const override {
+   QString mappingRoot() const override {
       return root;
    }
 
-   virtual ResourceRootType type() const override {
+   ResourceRootType type() const override {
       return Resource_Buffer;
    }
 
@@ -920,7 +920,7 @@ class QDynamicFileResourceRoot: public QDynamicBufferResourceRoot
       return fileName;
    }
 
-   virtual ResourceRootType type() const override {
+   ResourceRootType type() const override {
       return Resource_File;
    }
 

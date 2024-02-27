@@ -3741,8 +3741,8 @@ void QTextEngine::drawItemDecorationList(QPainter *painter, const ItemDecoration
    }
 
    for (const ItemDecoration &decoration : decorationList) {
-      painter->setPen(decoration.pen);
-      painter->drawLine(QLineF(decoration.x1, decoration.y, decoration.x2, decoration.y));
+      painter->setPen(decoration.m_pen);
+      painter->drawLine(QLineF(decoration.m_x1, decoration.m_y, decoration.m_x2, decoration.m_y));
    }
 }
 
@@ -3776,22 +3776,27 @@ void QTextEngine::adjustUnderlines()
 
    ItemDecorationList::iterator start = underlineList.begin();
    ItemDecorationList::iterator end   = underlineList.end();
-   ItemDecorationList::iterator it = start;
-   qreal underlinePos = start->y;
-   qreal penWidth = start->pen.widthF();
-   qreal lastLineEnd = start->x1;
+   ItemDecorationList::iterator it    = start;
+
+   qreal underlinePos = start->m_y;
+   qreal penWidth     = start->m_pen.widthF();
+   qreal lastLineEnd  = start->m_x1;
 
    while (it != end) {
-      if (qFuzzyCompare(lastLineEnd, it->x1)) { // no gap between underlines
-         underlinePos = qMax(underlinePos, it->y);
-         penWidth = qMax(penWidth, it->pen.widthF());
-      } else { // gap between this and the last underline
+      if (qFuzzyCompare(lastLineEnd, it->m_x1)) {
+         // no gap between underlines
+         underlinePos = qMax(underlinePos, it->m_y);
+         penWidth     = qMax(penWidth, it->m_pen.widthF());
+
+      } else {
+         // gap between this and the last underline
          adjustUnderlines(start, it, underlinePos, penWidth);
          start = it;
-         underlinePos = start->y;
-         penWidth = start->pen.widthF();
+         underlinePos = start->m_y;
+         penWidth     = start->m_pen.widthF();
       }
-      lastLineEnd = it->x2;
+
+      lastLineEnd = it->m_x2;
       ++it;
    }
 
@@ -3802,10 +3807,11 @@ void QTextEngine::adjustUnderlines(ItemDecorationList::iterator start,
    ItemDecorationList::iterator end, qreal underlinePos, qreal penWidth)
 {
    for (ItemDecorationList::iterator it = start; it != end; ++it) {
-      it->y = underlinePos;
-      it->pen.setWidthF(penWidth);
+      it->m_y = underlinePos;
+      it->m_pen.setWidthF(penWidth);
    }
 }
+
 QStackTextEngine::QStackTextEngine(const QString &string, const QFont &f)
    : QTextEngine(string, f), _layoutData(string, _memory, MemSize)
 {

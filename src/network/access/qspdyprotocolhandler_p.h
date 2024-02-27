@@ -67,12 +67,11 @@ public:
     };
     using SETTINGS_ID_Flags = QFlags<SETTINGS_ID_Flag>;
 
-    virtual void _q_receiveReply() override;
-    virtual void _q_readyRead() override;
-    virtual bool sendRequest() override;
+    void _q_receiveReply() override;
+    void _q_readyRead() override;
+    bool sendRequest() override;
 
 private:
-
     enum FrameType {
         FrameType_SYN_STREAM = 1,
         FrameType_SYN_REPLY = 2,

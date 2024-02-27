@@ -58,12 +58,12 @@ class DefaultStateTransition : public QAbstractTransition
    // entered either: either the stored configuration will be used, or the target(s) of this
    // transition are used.
 
-   virtual bool eventTest(QEvent *event) override {
+   bool eventTest(QEvent *event) override {
       (void) event;
       return false;
    }
 
-   virtual void onTransition(QEvent *event) override {
+   void onTransition(QEvent *event) override {
       (void) event;
    }
 };

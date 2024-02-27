@@ -375,7 +375,7 @@ class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
    void inputMethodEvent(QInputMethodEvent *event) override;
    QTextEdit(QTextEditPrivate &dd, QWidget *parent);
 
-   virtual void scrollContentsBy(int dx, int dy) override;
+   void scrollContentsBy(int dx, int dy) override;
    virtual void doSetTextCursor(const QTextCursor &cursor);
 
    void zoomInF(float range);

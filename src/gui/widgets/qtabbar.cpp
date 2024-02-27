@@ -2072,6 +2072,8 @@ void QTabBar::wheelEvent(QWheelEvent *event)
    int offset = event->delta() > 0 ? -1 : 1;
    d->setCurrentNextEnabledIndex(offset);
    QWidget::wheelEvent(event);
+#else
+   (void) event;
 #endif
 }
 #endif //QT_NO_WHEELEVENT

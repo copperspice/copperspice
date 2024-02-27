@@ -2965,7 +2965,6 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font)
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);
    if (!d->glcx->contextHandle()->isOpenGLES()) {
-      Q_D(QGLWidget);
       if (str.isEmpty() || !isValid()) {
          return;
       }
@@ -3044,7 +3043,6 @@ void QGLWidget::renderText(double x, double y, double z, const QString &str, con
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);
    if (!d->glcx->contextHandle()->isOpenGLES()) {
-      Q_D(QGLWidget);
       if (str.isEmpty() || !isValid()) {
          return;
       }

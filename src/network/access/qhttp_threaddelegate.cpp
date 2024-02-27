@@ -184,7 +184,7 @@ class QNetworkAccessCachedHttpConnection: public QHttpNetworkConnection, public 
       setShareable(true);
    }
 
-   virtual void dispose() override {
+   void dispose() override {
       delete this;
    }
 };

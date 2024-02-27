@@ -33,7 +33,7 @@ class QWindowsIntegrationPlugin : public QPlatformIntegrationPlugin
    CS_PLUGIN_KEY("windows")
 
  public:
-   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **);
+   QPlatformIntegration *create(const QString &, const QStringList &, int &, char **) override;
 };
 
 CS_PLUGIN_REGISTER(QWindowsIntegrationPlugin)

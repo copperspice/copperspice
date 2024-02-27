@@ -37,19 +37,17 @@ class QGraphicsLayoutStyleInfo : public QAbstractLayoutStyleInfo
    QGraphicsLayoutStyleInfo(const QGraphicsLayoutPrivate *layout);
    ~QGraphicsLayoutStyleInfo();
 
-   virtual qreal combinedLayoutSpacing(QLayoutPolicy::ControlTypes controls1,
-      QLayoutPolicy::ControlTypes controls2,
-      Qt::Orientation orientation) const override;
+   qreal combinedLayoutSpacing(QLayoutPolicy::ControlTypes controls1,
+      QLayoutPolicy::ControlTypes controls2, Qt::Orientation orientation) const override;
 
-   virtual qreal perItemSpacing(QLayoutPolicy::ControlType control1,
-      QLayoutPolicy::ControlType control2,
-      Qt::Orientation orientation) const override;
+   qreal perItemSpacing(QLayoutPolicy::ControlType control1,
+      QLayoutPolicy::ControlType control2, Qt::Orientation orientation) const override;
 
-   virtual qreal spacing(Qt::Orientation orientation) const override;
+   qreal spacing(Qt::Orientation orientation) const override;
 
-   virtual qreal windowMargin(Qt::Orientation orientation) const override;
+   qreal windowMargin(Qt::Orientation orientation) const override;
 
-   virtual void invalidate() override {
+   void invalidate() override {
       m_style = nullptr;
       QAbstractLayoutStyleInfo::invalidate();
    }

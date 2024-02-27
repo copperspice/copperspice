@@ -342,10 +342,10 @@ class QTextEditMimeData : public QMimeData
  public:
    inline QTextEditMimeData(const QTextDocumentFragment &aFragment) : fragment(aFragment) {}
 
-   virtual QStringList formats() const override;
+   QStringList formats() const override;
 
  protected:
-   virtual QVariant retrieveData(const QString &mimeType, QVariant::Type type) const override;
+   QVariant retrieveData(const QString &mimeType, QVariant::Type type) const override;
 
  private:
    void setup() const;

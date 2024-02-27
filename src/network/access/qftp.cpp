@@ -126,8 +126,8 @@ class QFtpDTP : public QObject
 
    QFtpPI *pi;
    QString err;
-   qint64 bytesDone;
-   qint64 bytesTotal;
+   qint64 m_bytesDone;
+   qint64 m_bytesTotal;
    bool callWriteData;
 
    // If is_ba is true, ba is used; ba is never 0.
@@ -326,9 +326,9 @@ void QFtpDTP::setDevice(QIODevice *dev)
 
 void QFtpDTP::setBytesTotal(qint64 bytes)
 {
-   bytesTotal = bytes;
-   bytesDone = 0;
-   emit dataTransferProgress(bytesDone, bytesTotal);
+   m_bytesTotal = bytes;
+   m_bytesDone = 0;
+   emit dataTransferProgress(m_bytesDone, m_bytesTotal);
 }
 
 void QFtpDTP::connectToHost(const QString &host, quint16 port)
@@ -408,7 +408,8 @@ qint64 QFtpDTP::read(char *data, qint64 maxlen)
       bytesFromSocket.remove(0, read);
    }
 
-   bytesDone += read;
+   m_bytesDone += read;
+
    return read;
 }
 
@@ -417,7 +418,7 @@ QByteArray QFtpDTP::readAll()
    QByteArray tmp;
    if (socket && socket->state() == QTcpSocket::ConnectedState) {
       tmp = socket->readAll();
-      bytesDone += tmp.size();
+      m_bytesDone += tmp.size();
    } else {
       tmp = bytesFromSocket;
       bytesFromSocket.clear();
@@ -438,7 +439,7 @@ void QFtpDTP::writeData()
 #endif
 
       if (data.ba->size() == 0) {
-         emit dataTransferProgress(0, bytesTotal);
+         emit dataTransferProgress(0, m_bytesTotal);
       } else {
          socket->write(data.ba->data(), data.ba->size());
       }
@@ -461,8 +462,8 @@ void QFtpDTP::writeData()
          socket->write(buf, read);
       } else if (read == -1 || (!data.dev->isSequential() && data.dev->atEnd())) {
          // error or EOF
-         if (bytesDone == 0 && socket->bytesToWrite() == 0) {
-            emit dataTransferProgress(0, bytesTotal);
+         if (m_bytesDone == 0 && socket->bytesToWrite() == 0) {
+            emit dataTransferProgress(0, m_bytesTotal);
          }
          socket->close();
          clearData();
@@ -693,7 +694,7 @@ bool QFtpDTP::parseDir(const QByteArray &buffer, const QString &userName, QUrlIn
 
 void QFtpDTP::socketConnected()
 {
-   bytesDone = 0;
+   m_bytesDone = 0;
 
 #if defined(QFTPDTP_DEBUG)
    qDebug("QFtpDTP::connectState(CsConnected)");
@@ -758,14 +759,15 @@ void QFtpDTP::socketReadyRead()
                return;
             }
             ba.resize(bytesRead);
-            bytesDone += bytesRead;
+            m_bytesDone += bytesRead;
+
 #if defined(QFTPDTP_DEBUG)
-            qDebug("QFtpDTP read: %lli bytes (total %lli bytes)", bytesRead, bytesDone);
+            qDebug("QFtpDTP read: %lli bytes (total %lli bytes)", bytesRead, m_bytesDone);
 #endif
             if (data.dev) {     // make sure it wasn't deleted in the slot
                data.dev->write(ba);
             }
-            emit dataTransferProgress(bytesDone, bytesTotal);
+            emit dataTransferProgress(m_bytesDone, m_bytesTotal);
 
             // Need to loop; dataTransferProgress is often connected to
             // slots that update the GUI (e.g., progress bar values), and
@@ -775,10 +777,10 @@ void QFtpDTP::socketReadyRead()
       } else {
 #if defined(QFTPDTP_DEBUG)
          qDebug("QFtpDTP readyRead: %lli bytes available (total %lli bytes read)",
-                bytesAvailable(), bytesDone);
+                bytesAvailable(), m_bytesDone);
 #endif
 
-         emit dataTransferProgress(bytesDone + socket->bytesAvailable(), bytesTotal);
+         emit dataTransferProgress(m_bytesDone + socket->bytesAvailable(), m_bytesTotal);
          emit readyRead();
       }
    }
@@ -825,13 +827,13 @@ void QFtpDTP::socketConnectionClosed()
 
 void QFtpDTP::socketBytesWritten(qint64 bytes)
 {
-   bytesDone += bytes;
+   m_bytesDone += bytes;
 
 #if defined(QFTPDTP_DEBUG)
-   qDebug("QFtpDTP::bytesWritten(%lli)", bytesDone);
+   qDebug("QFtpDTP::bytesWritten(%lli)", m_bytesDone);
 #endif
 
-   emit dataTransferProgress(bytesDone, bytesTotal);
+   emit dataTransferProgress(m_bytesDone, m_bytesTotal);
    if (callWriteData) {
       writeData();
    }

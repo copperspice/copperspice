@@ -85,11 +85,11 @@ class SampleGrabberCallbackPrivate : public ISampleGrabberCB
    virtual ~SampleGrabberCallbackPrivate() {
    }
 
-   STDMETHODIMP_(ULONG) AddRef() {
+   STDMETHODIMP_(ULONG) AddRef() override {
       return InterlockedIncrement(&m_ref);
    }
 
-   STDMETHODIMP_(ULONG) Release() {
+   STDMETHODIMP_(ULONG) Release() override {
       ULONG ref = InterlockedDecrement(&m_ref);
 
       if (ref == 0) {
@@ -99,7 +99,7 @@ class SampleGrabberCallbackPrivate : public ISampleGrabberCB
       return ref;
    }
 
-   STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject) {
+   STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject) override {
       if (nullptr == ppvObject) {
          return E_POINTER;
       }
@@ -117,14 +117,14 @@ class SampleGrabberCallbackPrivate : public ISampleGrabberCB
       return E_NOTIMPL;
    }
 
-   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample) {
+   STDMETHODIMP SampleCB(double Time, IMediaSample *pSample) override {
       (void) Time;
       (void) pSample;
 
       return E_NOTIMPL;
    }
 
-   STDMETHODIMP BufferCB(double time, BYTE *pBuffer, long bufferLen) {
+   STDMETHODIMP BufferCB(double time, BYTE *pBuffer, long bufferLen) override {
       // We display frames as they arrive, the presentation time is
       // irrelevant
       (void) time;

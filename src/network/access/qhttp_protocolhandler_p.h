@@ -31,9 +31,9 @@ class QHttpProtocolHandler : public QAbstractProtocolHandler {
     QHttpProtocolHandler(QHttpNetworkConnectionChannel *channel);
 
  private:
-    virtual void _q_receiveReply() override;
-    virtual void _q_readyRead() override;
-    virtual bool sendRequest() override;
+    void _q_receiveReply() override;
+    void _q_readyRead() override;
+    bool sendRequest() override;
 };
 
 #endif

@@ -254,12 +254,13 @@ class QHash
    QHash(const QHash<Key, Val, Hash, KeyEqual> &other) = default;
    QHash(QHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
-   QHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(), const KeyEqual &key_equal = KeyEqual())
-      : m_data(list, bucket_count, hash, key_equal)
+   QHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(),
+         const KeyEqual &key = KeyEqual())
+      : m_data(list, bucket_count, hash, key)
    { }
 
-   explicit QHash(const Hash &hash, const KeyEqual &key_equal = KeyEqual())
-      : m_data(hash, key_equal)
+   explicit QHash(const Hash &hash, const KeyEqual &key = KeyEqual())
+      : m_data(hash, key)
    { }
 
    explicit QHash(const std::unordered_map<Key, Val, Hash, KeyEqual> &other)
@@ -271,8 +272,8 @@ class QHash
    { }
 
    template <typename Input_Iterator>
-   QHash(Input_Iterator first, Input_Iterator last, const Hash &hash = Hash(), const KeyEqual &key_equal = KeyEqual())
-      : m_data(first, last, hash, key_equal)
+   QHash(Input_Iterator first, Input_Iterator last, const Hash &hash = Hash(), const KeyEqual &key = KeyEqual())
+      : m_data(first, last, hash, key)
    { }
 
    ~QHash() = default;
