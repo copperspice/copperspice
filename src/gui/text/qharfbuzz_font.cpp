@@ -275,6 +275,7 @@ static hb_blob_t *internal_hb_reference_table(hb_face_t *, hb_tag_t tag, void *u
    }
 
    if (! funcPtr(data->user_data, tag, reinterpret_cast<uchar *>(buffer), &length)) {
+      free(buffer);
       return nullptr;
    }
 
