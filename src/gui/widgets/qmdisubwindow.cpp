@@ -676,7 +676,7 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
       m_menuBar     = menuBar;
    }
 
-   if (!m_menuBar || !mdiChild || qt_widget_private(mdiChild->window())->data.in_destructor) {
+   if (! m_menuBar || ! mdiChild || qt_widget_private(mdiChild->window())->m_privateData.in_destructor) {
       return;
    }
 

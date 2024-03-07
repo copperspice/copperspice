@@ -980,7 +980,7 @@ bool QApplicationPrivate::tryCloseAllWidgetWindows(QWindowList *processedWindows
 {
    Q_ASSERT(processedWindows);
    while (QWidget *w = QApplication::activeModalWidget()) {
-      if (!w->isVisible() || w->data->is_closing) {
+      if (! w->isVisible() || w->m_widgetData->is_closing) {
          break;
       }
       QWindow *window = w->windowHandle();
@@ -996,7 +996,7 @@ bool QApplicationPrivate::tryCloseAllWidgetWindows(QWindowList *processedWindows
    for (int i = 0; i < list.size(); ++i) {
       QWidget *w = list.at(i);
       if (w->isVisible() && w->windowType() != Qt::Desktop &&
-         !w->testAttribute(Qt::WA_DontShowOnScreen) && !w->data->is_closing) {
+            ! w->testAttribute(Qt::WA_DontShowOnScreen) && ! w->m_widgetData->is_closing) {
          QWindow *window = w->windowHandle();
          if (!window->close()) { // Qt::WA_DeleteOnClose may cause deletion.
             return false;
@@ -1449,7 +1449,7 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
 
       if (w->testAttribute(Qt::WA_SetCursor)) {
          QWidget *parent = w->parentWidget();
-         while (parent && parent->d_func()->data.in_destructor) {
+         while (parent && parent->d_func()->m_privateData.in_destructor) {
             parent = parent->parentWidget();
          }
 
@@ -1894,12 +1894,14 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
    if (!widget || widget->isWindow()) {
       return;
    }
-   const bool widgetInShow = widget->isVisible() && !widget->data->in_destructor;
-   if (!widgetInShow && widget != qt_last_mouse_receiver) {
+
+   const bool widgetInShow = widget->isVisible() && ! widget->m_widgetData->in_destructor;
+
+   if (! widgetInShow && widget != qt_last_mouse_receiver) {
       return;   // Widget was not under the cursor when it was hidden/deleted.
    }
 
-   if (widgetInShow && widget->parentWidget()->data->in_show) {
+   if (widgetInShow && widget->parentWidget()->m_widgetData->in_show) {
       return;   // Ingore recursive show.
    }
 
@@ -1909,7 +1911,7 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
    }
 
    QWidget *tlw = widget->window();
-   if (tlw->data->in_destructor || tlw->data->is_closing) {
+   if (tlw->m_widgetData->in_destructor || tlw->m_widgetData->is_closing) {
       return;   // Closing down the business.
    }
 
@@ -1923,7 +1925,7 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
    // Find the current widget under the mouse. If this function was called from
    // the widget's destructor, we have to make sure childAt() doesn't take into
    // account widgets that are about to be destructed.
-   QWidget *widgetUnderCursor = tlw->d_func()->childAt_helper(windowPos, widget->data->in_destructor);
+   QWidget *widgetUnderCursor = tlw->d_func()->childAt_helper(windowPos, widget->m_widgetData->in_destructor);
    if (!widgetUnderCursor) {
       widgetUnderCursor = tlw;
    }
@@ -1933,7 +1935,7 @@ void QApplicationPrivate::sendSyntheticEnterLeave(QWidget *widget)
       return;   // Mouse cursor not inside the widget or any of its children.
    }
 
-   if (widget->data->in_destructor && qt_button_down == widget) {
+   if (widget->m_widgetData->in_destructor && qt_button_down == widget) {
       qt_button_down = nullptr;
    }
 

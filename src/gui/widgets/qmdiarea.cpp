@@ -1223,7 +1223,7 @@ bool QMdiAreaPrivate::lastWindowAboutToBeDestroyed() const
       return false;
    }
 
-   return last->d_func()->data.is_closing;
+   return last->d_func()->m_privateData.is_closing;
 }
 
 void QMdiAreaPrivate::setChildActivationEnabled(bool enable, bool onlyNextActivationEvent) const

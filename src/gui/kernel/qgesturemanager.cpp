@@ -188,7 +188,7 @@ QGesture *QGestureManager::getState(QObject *object, QGestureRecognizer *recogni
    // create a new state, as it will create QWeakPointer which doesn't work
    // from the destructor.
    if (object->isWidgetType()) {
-      if (static_cast<QWidget *>(object)->d_func()->data.in_destructor) {
+      if (static_cast<QWidget *>(object)->d_func()->m_privateData.in_destructor) {
          return nullptr;
       }
 

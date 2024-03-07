@@ -54,7 +54,7 @@ QAccessibleInterface *qAccessibleFactory(const QString &classname, QObject *obje
    // up here, so we have to ensure that we don't fill the cache with an entry of
    // a widget that is going away.
 
-   if (QWidgetPrivate::get(widget)->data.in_destructor) {
+   if (QWidgetPrivate::get(widget)->m_privateData.in_destructor) {
       return iface;
    }
 

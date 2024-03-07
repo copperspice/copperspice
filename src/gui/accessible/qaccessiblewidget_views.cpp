@@ -78,7 +78,7 @@ QAccessibleTable::QAccessibleTable(QWidget *w)
 
 bool QAccessibleTable::isValid() const
 {
-   return (view() && !qobject_cast<QWidget *>(view())->d_func()->data.in_destructor);
+   return (view() && !qobject_cast<QWidget *>(view())->d_func()->m_privateData.in_destructor);
 }
 
 QAccessibleTable::~QAccessibleTable()

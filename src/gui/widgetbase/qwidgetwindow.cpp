@@ -727,9 +727,10 @@ bool QWidgetWindow::updateSize()
    if (m_widget->testAttribute(Qt::WA_OutsideWSRange)) {
       return changed;
    }
-   if (m_widget->data->crect.size() != geometry().size()) {
+
+   if (m_widget->m_widgetData->crect.size() != geometry().size()) {
       changed = true;
-      m_widget->data->crect.setSize(geometry().size());
+      m_widget->m_widgetData->crect.setSize(geometry().size());
    }
 
    updateMargins();
@@ -742,9 +743,10 @@ bool QWidgetWindow::updatePos()
    if (m_widget->testAttribute(Qt::WA_OutsideWSRange)) {
       return changed;
    }
-   if (m_widget->data->crect.topLeft() != geometry().topLeft()) {
+
+   if (m_widget->m_widgetData->crect.topLeft() != geometry().topLeft()) {
       changed = true;
-      m_widget->data->crect.moveTopLeft(geometry().topLeft());
+      m_widget->m_widgetData->crect.moveTopLeft(geometry().topLeft());
    }
    updateMargins();
    return changed;
@@ -756,7 +758,7 @@ void QWidgetWindow::updateMargins()
    QTLWExtra *te = m_widget->d_func()->topData();
    te->posIncludesFrame = false;
    te->frameStrut.setCoords(margins.left(), margins.top(), margins.right(), margins.bottom());
-   m_widget->data->fstrut_dirty = false;
+   m_widget->m_widgetData->fstrut_dirty = false;
 }
 
 static void sendScreenChangeRecursively(QWidget *widget)
@@ -827,7 +829,7 @@ void QWidgetWindow::handleMoveEvent(QMoveEvent *event)
 
 void QWidgetWindow::handleResizeEvent(QResizeEvent *event)
 {
-   QSize oldSize = m_widget->data->crect.size();
+   QSize oldSize = m_widget->m_widgetData->crect.size();
 
    if (updateSize()) {
       QGuiApplication::sendSpontaneousEvent(m_widget, event);
@@ -1055,8 +1057,9 @@ void QWidgetWindow::handleWindowStateChangedEvent(QWindowStateChangeEvent *event
 
    // Sent event if the state changed (that is, it is not triggered by
    // QWidget::setWindowState(), which also sends an event to the widget).
-   if (widgetState != int(m_widget->data->window_state)) {
-      m_widget->data->window_state = widgetState;
+
+   if (widgetState != int(m_widget->m_widgetData->window_state)) {
+      m_widget->m_widgetData->window_state = widgetState;
       QWindowStateChangeEvent widgetEvent(eventState);
       QGuiApplication::sendSpontaneousEvent(m_widget, &widgetEvent);
    }

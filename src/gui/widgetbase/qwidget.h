@@ -315,7 +315,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    void createWinId();       // internal, may go away
 
    WId internalWinId() const {
-      return data->winid;
+      return m_widgetData->winid;
    }
 
    WId effectiveWinId() const;
@@ -857,8 +857,6 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
  private:
    Q_DECLARE_PRIVATE(QWidget)
 
-   QWidgetData *data;
-
    void setBackingStore(QBackingStore *store);
    bool testAttribute_helper(Qt::WidgetAttribute) const;
 
@@ -866,6 +864,8 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
 
    GUI_CS_SLOT_1(Private, void _q_showIfNotHidden())
    GUI_CS_SLOT_2(_q_showIfNotHidden)
+
+   QWidgetData *m_widgetData;
 
    friend class QAccessibleWidget;
    friend class QAccessibleTable;
@@ -945,12 +945,12 @@ inline QWidget *QWidget::childAt(int x, int y) const
 
 inline Qt::WindowType QWidget::windowType() const
 {
-   return static_cast<Qt::WindowType>(int(data->m_flags & Qt::WindowType_Mask));
+   return static_cast<Qt::WindowType>(int(m_widgetData->m_flags & Qt::WindowType_Mask));
 }
 
 inline Qt::WindowFlags QWidget::windowFlags() const
 {
-   return data->m_flags;
+   return m_widgetData->m_flags;
 }
 
 inline bool QWidget::isTopLevel() const
@@ -970,7 +970,7 @@ inline bool QWidget::isEnabled() const
 
 inline bool QWidget::isModal() const
 {
-   return data->window_modality != Qt::NonModal;
+   return m_widgetData->window_modality != Qt::NonModal;
 }
 
 inline bool QWidget::isEnabledToTLW() const
@@ -1020,17 +1020,17 @@ inline void QWidget::setBaseSize(const QSize &size)
 
 inline const QFont &QWidget::font() const
 {
-   return data->fnt;
+   return m_widgetData->fnt;
 }
 
 inline QFontMetrics QWidget::fontMetrics() const
 {
-   return QFontMetrics(data->fnt);
+   return QFontMetrics(m_widgetData->fnt);
 }
 
 inline QFontInfo QWidget::fontInfo() const
 {
-   return QFontInfo(data->fnt);
+   return QFontInfo(m_widgetData->fnt);
 }
 
 inline void QWidget::setMouseTracking(bool enable)
@@ -1085,27 +1085,27 @@ inline void QWidget::setGeometry(int x, int y, int w, int h)
 
 inline QRect QWidget::rect() const
 {
-   return QRect(0, 0, data->crect.width(), data->crect.height());
+   return QRect(0, 0, m_widgetData->crect.width(), m_widgetData->crect.height());
 }
 
 inline const QRect &QWidget::geometry() const
 {
-   return data->crect;
+   return m_widgetData->crect;
 }
 
 inline QSize QWidget::size() const
 {
-   return data->crect.size();
+   return m_widgetData->crect.size();
 }
 
 inline int QWidget::width() const
 {
-   return data->crect.width();
+   return m_widgetData->crect.width();
 }
 
 inline int QWidget::height() const
 {
-   return data->crect.height();
+   return m_widgetData->crect.height();
 }
 
 inline QWidget *QWidget::parentWidget() const
@@ -1121,8 +1121,9 @@ inline void QWidget::setSizePolicy(QSizePolicy::Policy horizontal, QSizePolicy::
 inline bool QWidget::testAttribute(Qt::WidgetAttribute attribute) const
 {
    if (attribute < int(8 * sizeof(uint))) {
-      return data->widget_attributes & (1 << attribute);
+      return m_widgetData->widget_attributes & (1 << attribute);
    }
+
    return testAttribute_helper(attribute);
 }
 

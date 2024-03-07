@@ -6412,11 +6412,11 @@ void QStyleSheetStyle::updateStyleSheetFont(QWidget *w) const
       font = font.resolve(static_cast<QWidget *>(w->parent())->font());
    }
 
-   if (w->data->fnt == font) {
+   if (w->m_widgetData->fnt == font) {
       return;
    }
 
-   w->data->fnt = font;
+   w->m_widgetData->fnt = font;
 
    QEvent e(QEvent::FontChange);
    QApplication::sendEvent(w, &e);

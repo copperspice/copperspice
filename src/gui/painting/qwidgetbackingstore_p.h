@@ -155,7 +155,7 @@ class QWidgetBackingStore
    bool syncAllowed();
 
    void addDirtyWidget(QWidget *widget, const QRegion &rgn) {
-      if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
+      if (widget && ! widget->d_func()->inDirtyList && ! widget->m_widgetData->in_destructor) {
          QWidgetPrivate *widgetPrivate = widget->d_func();
 
 #ifndef QT_NO_GRAPHICSEFFECT
@@ -173,7 +173,7 @@ class QWidgetBackingStore
    }
 
    void addDirtyRenderToTextureWidget(QWidget *widget) {
-      if (widget && !widget->d_func()->inDirtyList && !widget->data->in_destructor) {
+      if (widget && ! widget->d_func()->inDirtyList && ! widget->m_widgetData->in_destructor) {
          QWidgetPrivate *widgetPrivate = widget->d_func();
          Q_ASSERT(widgetPrivate->renderToTexture);
          dirtyRenderToTextureWidgets.append(widget);
@@ -232,7 +232,7 @@ class QWidgetBackingStore
    }
 
    QRect topLevelRect() const {
-      return tlw->data->crect;
+      return tlw->m_widgetData->crect;
    }
 
    void appendDirtyOnScreenWidget(QWidget *widget) {
@@ -278,7 +278,7 @@ class QWidgetBackingStore
          if (!wd->extra) {
             wd->createExtra();
          }
-         wd->extra->staticContentsSize = wd->data.crect.size();
+         wd->extra->staticContentsSize = wd->m_privateData.crect.size();
       }
    }
 

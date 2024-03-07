@@ -290,9 +290,10 @@ class Q_GUI_EXPORT QWidgetPrivate
    void updateFont(const QFont &);
 
    void setFont_helper(const QFont &font) {
-      if (data.fnt.resolve() == font.resolve() && data.fnt == font) {
+      if (m_privateData.fnt.resolve() == font.resolve() && m_privateData.fnt == font) {
          return;
       }
+
       updateFont(font);
    }
    void resolveFont();
@@ -547,19 +548,19 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setWSGeometry();
 
    QPoint mapToWS(const QPoint &p) const {
-      return p - data.wrect.topLeft();
+      return p - m_privateData.wrect.topLeft();
    }
 
    QPoint mapFromWS(const QPoint &p) const {
-      return p + data.wrect.topLeft();
+      return p + m_privateData.wrect.topLeft();
    }
 
    QRect mapToWS(const QRect &r) const  {
-      return r.translated(-data.wrect.topLeft());
+      return r.translated(-m_privateData.wrect.topLeft());
    }
 
    QRect mapFromWS(const QRect &r) const {
-      return r.translated(data.wrect.topLeft());
+      return r.translated(m_privateData.wrect.topLeft());
    }
 
    QOpenGLContext *shareContext() const;
@@ -667,7 +668,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    static int instanceCounter; // Current number of widget instances
    static int maxInstances; // Maximum number of widget instances
    Qt::HANDLE hd;
-   QWidgetData data;
+   QWidgetData m_privateData;
    QSizePolicy size_policy;
    QLocale locale;
    QPoint redirectOffset;

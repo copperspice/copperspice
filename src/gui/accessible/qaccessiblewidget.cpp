@@ -172,7 +172,7 @@ QAccessibleWidget::QAccessibleWidget(QWidget *w, QAccessible::Role role, const Q
 
 bool QAccessibleWidget::isValid() const
 {
-   if (! object() || static_cast<QWidget *>(object())->d_func()->data.in_destructor) {
+   if (! object() || static_cast<QWidget *>(object())->d_func()->m_privateData.in_destructor) {
       return false;
    }
    return QAccessibleObject::isValid();

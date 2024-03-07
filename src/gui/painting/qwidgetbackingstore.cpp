@@ -926,7 +926,8 @@ void QWidgetPrivate::moveRect(const QRect &rect, int dx, int dy)
          parentR += newRect & clipR;
       }
       pd->invalidateBuffer(parentR);
-      invalidateBuffer((newRect & clipR).translated(-data.crect.topLeft()));
+      invalidateBuffer((newRect & clipR).translated(- (m_privateData.crect.topLeft()) ));
+
    } else {
 
       QWidgetBackingStore *wbs = x->backingStoreTracker.data();
@@ -942,7 +943,7 @@ void QWidgetPrivate::moveRect(const QRect &rect, int dx, int dy)
 
       const bool childUpdatesEnabled = q->updatesEnabled();
       if (childUpdatesEnabled && !childExpose.isEmpty()) {
-         childExpose.translate(-data.crect.topLeft());
+         childExpose.translate(- (m_privateData.crect.topLeft()) );
          wbs->markDirty(childExpose, q);
          isMoved = true;
       }
@@ -950,7 +951,7 @@ void QWidgetPrivate::moveRect(const QRect &rect, int dx, int dy)
       QRegion parentExpose(parentRect);
       parentExpose -= newRect;
       if (extra && extra->hasMask) {
-         parentExpose += QRegion(newRect) - extra->mask.translated(data.crect.topLeft());
+         parentExpose += QRegion(newRect) - extra->mask.translated(m_privateData.crect.topLeft());
       }
 
       if (!parentExpose.isEmpty()) {
@@ -991,7 +992,7 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
    QRect scrollRect = rect & clipRect();
    bool overlapped = false;
    bool accelerateScroll = accelEnv && isOpaque && !q_func()->testAttribute(Qt::WA_WState_InPaintEvent)
-      && !(overlapped = isOverlapped(scrollRect.translated(data.crect.topLeft())));
+      && !(overlapped = isOverlapped(scrollRect.translated(m_privateData.crect.topLeft())));
 
    if (! accelerateScroll) {
       if (overlapped) {
@@ -1358,7 +1359,7 @@ void QWidgetBackingStore::doSync()
       QWidget *w = dirtyWidgets.at(i);
       QWidgetPrivate *wd = w->d_func();
 
-      if (wd->data.in_destructor) {
+      if (wd->m_privateData.in_destructor) {
          continue;
       }
 
@@ -1635,9 +1636,12 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
    Q_ASSERT(q->parentWidget());
 
    const bool staticContents = q->testAttribute(Qt::WA_StaticContents);
-   const bool sizeDecreased = (data.crect.width() < oldSize.width()) || (data.crect.height() < oldSize.height());
 
-   const QPoint offset(data.crect.x() - oldPos.x(), data.crect.y() - oldPos.y());
+   const bool sizeDecreased = (m_privateData.crect.width() < oldSize.width()) ||
+         (m_privateData.crect.height() < oldSize.height());
+
+   const QPoint offset(m_privateData.crect.x() - oldPos.x(), m_privateData.crect.y() - oldPos.y());
+
    const bool parentAreaExposed = !offset.isNull() || sizeDecreased;
    const QRect newWidgetRect(q->rect());
    const QRect oldWidgetRect(0, 0, oldSize.width(), oldSize.height());
@@ -1669,13 +1673,13 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
          QRegion parentExpose(extra->mask.translated(oldPos));
          parentExpose &= QRect(oldPos, oldSize);
          if (hasStaticChildren) {
-            parentExpose -= data.crect;   // Offset is unchanged, safe to do this.
+            parentExpose -= m_privateData.crect;   // Offset is unchanged, safe to do this.
          }
          q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
       } else {
          if (hasStaticChildren && !graphicsEffect) {
             QRegion parentExpose(QRect(oldPos, oldSize));
-            parentExpose -= data.crect; // Offset is unchanged, safe to do this.
+            parentExpose -= m_privateData.crect; // Offset is unchanged, safe to do this.
             q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
          } else {
             q->parentWidget()->d_func()->invalidateBuffer(effectiveRectFor(QRect(oldPos, oldSize)));
@@ -1687,8 +1691,8 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
    // Move static content to its new position.
    if (!offset.isNull()) {
       if (sizeDecreased) {
-         const QSize minSize(qMin(oldSize.width(), data.crect.width()),
-            qMin(oldSize.height(), data.crect.height()));
+         const QSize minSize(qMin(oldSize.width(), m_privateData.crect.width()),
+            qMin(oldSize.height(), m_privateData.crect.height()));
          moveRect(QRect(oldPos, minSize), offset.x(), offset.y());
       } else {
          moveRect(QRect(oldPos, oldSize), offset.x(), offset.y());
@@ -1711,11 +1715,11 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
    if (extra && extra->hasMask) {
       QRegion parentExpose(oldRect);
       parentExpose &= extra->mask.translated(oldPos);
-      parentExpose -= (extra->mask.translated(data.crect.topLeft()) & data.crect);
+      parentExpose -= (extra->mask.translated(m_privateData.crect.topLeft()) & m_privateData.crect);
       q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
    } else {
       QRegion parentExpose(oldRect);
-      parentExpose -= data.crect;
+      parentExpose -= m_privateData.crect;
       q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
    }
 }
@@ -1790,7 +1794,7 @@ void QWidgetPrivate::invalidateBuffer(const QRect &rect)
 
 void QWidgetPrivate::repaint_sys(const QRegion &rgn)
 {
-   if (data.in_destructor) {
+   if (m_privateData.in_destructor) {
       return;
    }
 
@@ -1804,7 +1808,7 @@ void QWidgetPrivate::repaint_sys(const QRegion &rgn)
       if (!extra) {
          createExtra();
       }
-      extra->staticContentsSize = data.crect.size();
+      extra->staticContentsSize = m_privateData.crect.size();
    }
 
    QPaintEngine *engine = q->paintEngine();
