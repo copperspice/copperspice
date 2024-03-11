@@ -1326,7 +1326,7 @@ void QSplitter::changeEvent(QEvent *ev)
    QFrame::changeEvent(ev);
 }
 
-static const qint32 SplitterMagic = 0xff;
+static constexpr const qint32 SplitterMagic = 0xff;
 
 QByteArray QSplitter::saveState() const
 {

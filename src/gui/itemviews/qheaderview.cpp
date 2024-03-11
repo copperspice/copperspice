@@ -57,7 +57,8 @@ QDataStream &operator>>(QDataStream &in, QHeaderViewPrivate::SectionItem &sectio
    return in;
 }
 
-static const int maxSizeSection = 1048575; // since section size is in a bitfield (uint 20). See qheaderview_p.h
+// since section size is in a bitfield (uint 20), refer to qheaderview_p.h
+static constexpr const int maxSizeSection = 1048575;
 
 QHeaderView::QHeaderView(Qt::Orientation orientation, QWidget *parent)
    : QAbstractItemView(*new QHeaderViewPrivate, parent)

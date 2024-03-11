@@ -35,7 +35,7 @@
 #include <Security/SecRequirement.h>
 
 static const CFStringRef hostNames[2] = { kCFPreferencesCurrentHost, kCFPreferencesAnyHost };
-static const int numHostNames = 2;
+static constexpr const int numHostNames = 2;
 
 /*
     On the Mac, it is more natural to use '.' as the key separator
@@ -49,8 +49,9 @@ enum RotateShift { Macify = 1, Qtify = 2 };
 
 static QString rotateSlashesDotsAndMiddots(const QString &key, int shift)
 {
-   static const int NumKnights = 3;
-   static const char knightsOfTheRoundTable[NumKnights] = { '/', '.', '\xb7' };
+   static constexpr const int NumKnights = 3;
+   static constexpr const char knightsOfTheRoundTable[NumKnights] = { '/', '.', '\xb7' };
+
    QString result = key;
 
    for (int i = 0; i < result.size(); ++i) {

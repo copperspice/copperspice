@@ -49,7 +49,7 @@
 #include <commctrl.h>
 #include <windowsx.h>
 
-static const UINT q_uNOTIFYICONID = 0;
+static constexpr const UINT q_uNOTIFYICONID = 0;
 
 static uint MYWM_TASKBARCREATED = 0;
 #define MYWM_NOTIFYICON (WM_APP+101)

@@ -49,7 +49,7 @@ enum {
 };
 
 // must be multiple of 4 for easier SIMD implementations
-static const int buffer_size = 2048;
+static constexpr const int buffer_size = 2048;
 
 template <QImage::Format>
 constexpr uint redWidth();
@@ -725,7 +725,7 @@ static const uint *convertARGBPMFromARGB32PM(uint *buffer, const uint *src, int 
 }
 
 template <QImage::Format Format>
-constexpr static inline QPixelLayout pixelLayoutRGB()
+static constexpr inline QPixelLayout pixelLayoutRGB()
 {
    return QPixelLayout{
       uchar(redWidth<Format>()), uchar(redShift<Format>()),
@@ -741,7 +741,7 @@ constexpr static inline QPixelLayout pixelLayoutRGB()
 }
 
 template <QImage::Format Format>
-constexpr static inline QPixelLayout pixelLayoutARGBPM()
+static constexpr inline QPixelLayout pixelLayoutARGBPM()
 {
    return QPixelLayout{
       uchar(redWidth<Format>()), uchar(redShift<Format>()),

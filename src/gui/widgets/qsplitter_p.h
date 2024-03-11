@@ -27,7 +27,7 @@
 #include <qframe_p.h>
 #include <qrubberband.h>
 
-static const uint Default = 2;
+static constexpr const uint Default = 2;
 
 class QSplitterLayoutStruct
 {

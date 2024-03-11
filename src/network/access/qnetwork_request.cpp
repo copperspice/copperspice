@@ -38,7 +38,7 @@
 class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
  public:
-   static const int maxRedirectCount = 50;
+   static constexpr const int maxRedirectCount = 50;
 
    QNetworkRequestPrivate()
       : priority(QNetworkRequest::NormalPriority)

@@ -281,7 +281,7 @@ qint64 QFSFileEnginePrivate::nativeRead(char *data, qint64 maxlen)
 
    // Reading on Windows fails with ERROR_NO_SYSTEM_RESOURCES when
    // the chunks are too large, so we limit the block size to 32MB.
-   static const qint64 maxBlockSize = 32 * 1024 * 1024;
+   static constexpr const qint64 maxBlockSize = 32 * 1024 * 1024;
 
    qint64 totalRead = 0;
 
@@ -347,7 +347,7 @@ qint64 QFSFileEnginePrivate::nativeWrite(const char *data, qint64 len)
 
    // Writing on Windows fails with ERROR_NO_SYSTEM_RESOURCES when
    // the chunks are too large, so we limit the block size to 32MB.
-   static const qint64 maxBlockSize = 32 * 1024 * 1024;
+   static constexpr const qint64 maxBlockSize = 32 * 1024 * 1024;
 
    qint64 totalWritten = 0;
 
@@ -809,7 +809,7 @@ bool QFSFileEngine::isRelativePath() const
 
 uint QFSFileEngine::ownerId(FileOwner) const
 {
-   static const uint nobodyID = (uint) - 2;
+   static constexpr const uint nobodyID = (uint) - 2;
    return nobodyID;
 }
 

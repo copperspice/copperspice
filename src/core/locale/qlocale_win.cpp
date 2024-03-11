@@ -1016,8 +1016,7 @@ static const WindowsToISOListElt windows_to_iso_list[] = {
    { 0x500a, "es_PR" }
 };
 
-static const int windows_to_iso_count
-   = sizeof(windows_to_iso_list) / sizeof(WindowsToISOListElt);
+static constexpr const int windows_to_iso_count = sizeof(windows_to_iso_list) / sizeof(WindowsToISOListElt);
 
 static const char *winLangCodeToIsoName(int code)
 {

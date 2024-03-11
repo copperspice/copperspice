@@ -78,9 +78,9 @@ class QWhatsThat : public QWidget
 QWhatsThat *QWhatsThat::instance = nullptr;
 
 // shadowWidth not const, for XP drop-shadow-fu turns it to 0
-static int shadowWidth   = 6;   // also used as '5' and '6' and even '8' below
-static const int vMargin = 8;
-static const int hMargin = 12;
+static int shadowWidth  = 6;                 // also used as '5' and '6' and even '8' below
+static constexpr const int vMargin = 8;
+static constexpr const int hMargin = 12;
 
 static inline bool dropShadow()
 {

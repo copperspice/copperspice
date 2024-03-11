@@ -27,7 +27,7 @@
 #include <qfiledevice_p.h>
 #include <qfsfileengine_p.h>
 
-static const int QFILE_WRITEBUFFER_SIZE = 16384;
+static constexpr const int QFILE_WRITEBUFFER_SIZE = 16384;
 
 QFileDevicePrivate::QFileDevicePrivate()
    : fileEngine(nullptr), lastWasWrite(false),

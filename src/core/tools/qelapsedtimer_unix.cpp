@@ -38,8 +38,8 @@
 #endif
 
 #if (_POSIX_MONOTONIC_CLOCK-0 != 0)
-static const bool monotonicClockChecked = true;
-static const bool monotonicClockAvailable = _POSIX_MONOTONIC_CLOCK > 0;
+static constexpr const bool monotonicClockChecked   = true;
+static constexpr const bool monotonicClockAvailable = _POSIX_MONOTONIC_CLOCK > 0;
 #else
 static int monotonicClockChecked = false;
 static int monotonicClockAvailable = false;

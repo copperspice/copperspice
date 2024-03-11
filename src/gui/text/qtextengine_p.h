@@ -166,7 +166,7 @@ static_assert(sizeof(QGlyphAttributes) == 1, "Type mismatch");
 #endif
 
 struct QGlyphLayout {
-   constexpr static const int SpaceRequired = sizeof(glyph_t) + sizeof(QFixed) + sizeof(QFixedPoint)
+   static constexpr const int SpaceRequired = sizeof(glyph_t) + sizeof(QFixed) + sizeof(QFixedPoint)
       + sizeof(QGlyphAttributes) + sizeof(QGlyphJustification);
 
    inline QGlyphLayout()
@@ -666,7 +666,7 @@ class Q_GUI_EXPORT QTextEngine
 class QStackTextEngine : public QTextEngine
 {
  public:
-   constexpr static const int MemSize = 256 * 40 / sizeof(void *);
+   static constexpr const int MemSize = 256 * 40 / sizeof(void *);
 
    QStackTextEngine(const QString &string, const QFont &f);
 

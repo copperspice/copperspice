@@ -108,7 +108,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 #endif
 
 // POSIX requires PIPE_BUF to be 512 or larger
-static const int errorBufferMax = 512;
+static constexpr const int errorBufferMax = 512;
 
 static inline void add_fd(int &nfds, int fd, fd_set *fdset)
 {

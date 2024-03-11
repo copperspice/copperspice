@@ -52,7 +52,8 @@ struct MacSpecialKey {
    ushort macSymbol;
 };
 
-static const int NumEntries = 21;
+static constexpr const int NumEntries = 21;
+
 static const MacSpecialKey entries[NumEntries] = {
    { Qt::Key_Escape,    0x238B },
    { Qt::Key_Tab,       0x21E5 },

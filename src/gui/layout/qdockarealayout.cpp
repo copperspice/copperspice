@@ -215,7 +215,7 @@ static quintptr tabId(const QDockAreaLayoutItem &item)
 }
 #endif
 
-static const int zero = 0;
+static constexpr const int zero = 0;
 
 QDockAreaLayoutInfo::QDockAreaLayoutInfo()
    : sep(&zero), dockPos(QInternal::LeftDock), o(Qt::Horizontal), mainWindow(nullptr)

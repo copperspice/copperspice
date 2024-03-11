@@ -124,12 +124,15 @@ static const QXmlCharRange g_base_begin[] = {
    {0x212A, 0x212B}, {0x212E, 0x212E}, {0x2180, 0x2182}, {0x3041, 0x3094}, {0x30A1, 0x30FA},
    {0x3105, 0x312C}, {0xAC00, 0xD7A3}
 };
-static const QXmlCharRange *g_base_end = g_base_begin + sizeof(g_base_begin) / sizeof(QXmlCharRange);
+
+static constexpr const QXmlCharRange *g_base_end =
+      g_base_begin + sizeof(g_base_begin) / sizeof(QXmlCharRange);
 
 static const QXmlCharRange g_ideographic_begin[] = {
    {0x3007, 0x3007}, {0x3021, 0x3029}, {0x4E00, 0x9FA5}
 };
-static const QXmlCharRange *g_ideographic_end =
+
+static constexpr const QXmlCharRange *g_ideographic_end =
       g_ideographic_begin + sizeof(g_ideographic_begin) / sizeof(QXmlCharRange);
 
 bool QXmlUtils::isIdeographic(const QChar c)

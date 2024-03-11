@@ -26,7 +26,7 @@
 
 
 #if QT_ROTATION_ALGORITHM == QT_ROTATION_TILED
-static const int tileSize = 32;
+static constexpr const int tileSize = 32;
 #endif
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN

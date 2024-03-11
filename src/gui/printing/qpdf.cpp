@@ -46,14 +46,14 @@
 #endif
 
 #ifdef QT_NO_COMPRESS
-static const bool do_compress = false;
+static constexpr const bool do_compress = false;
 #else
-static const bool do_compress = true;
+static constexpr const bool do_compress = true;
 #endif
 
 // might be helpful for smooth transforms of images
 // can not use it though, as gs generates completely wrong images if this is true.
-static const bool interpolateImages = false;
+static constexpr const bool interpolateImages = false;
 
 inline QPaintEngine::PaintEngineFeatures qt_pdf_decide_features()
 {

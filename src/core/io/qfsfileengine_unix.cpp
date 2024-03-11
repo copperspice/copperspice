@@ -629,7 +629,8 @@ bool QFSFileEngine::isRelativePath() const
 uint QFSFileEngine::ownerId(FileOwner own) const
 {
    Q_D(const QFSFileEngine);
-   static const uint nobodyID = (uint) - 2;
+
+   static constexpr const uint nobodyID = (uint) - 2;
 
    if (d->doStat(QFileSystemMetaData::OwnerIds)) {
       return d->metaData.ownerId(own);

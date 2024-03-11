@@ -162,13 +162,13 @@ static const QColor titlebarSeparatorLineInactive(131, 131, 131);
 static const QColor mainWindowGradientBegin(240, 240, 240);
 static const QColor mainWindowGradientEnd(200, 200, 200);
 
-static const int DisclosureOffset = 4;
+static constexpr const int DisclosureOffset = 4;
 
 // Resolve these at run-time, since the functions was moved in Leopard.
 typedef HIRect *(*PtrHIShapeGetBounds)(HIShapeRef, HIRect *);
 static PtrHIShapeGetBounds ptrHIShapeGetBounds = nullptr;
 
-static int closeButtonSize = 12;
+static constexpr int closeButtonSize = 12;
 static bool isVerticalTabs(const QTabBar::Shape shape)
 {
    return (shape == QTabBar::RoundedEast
@@ -3538,11 +3538,11 @@ void QMacStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPa
       }
          break;
       case PE_IndicatorToolBarHandle: {
+         static constexpr const int RectHeight = 2;
          p->save();
          QPainterPath path;
          int x = opt->rect.x() + 6;
          int y = opt->rect.y() + 7;
-         static const int RectHeight = 2;
          if (opt->state & State_Horizontal) {
             while (y < opt->rect.height() - RectHeight - 5) {
                path.moveTo(x, y);

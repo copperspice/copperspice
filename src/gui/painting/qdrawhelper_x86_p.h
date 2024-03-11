@@ -54,6 +54,6 @@ extern CompositionFunction qt_functionForModeSSE2[];
 extern CompositionFunctionSolid qt_functionForModeSolidSSE2[];
 #endif
 
-static const int numCompositionFunctions = 38;
+static constexpr const int numCompositionFunctions = 38;
 
 #endif

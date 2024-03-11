@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-static const int QTEXTSTREAM_BUFFERSIZE = 16384;
-
 #include <qtextstream.h>
 
 #include <qbuffer.h>
@@ -40,6 +38,8 @@ static const int QTEXTSTREAM_BUFFERSIZE = 16384;
 #include <locale.h>
 #include <new>
 #include <stdlib.h>
+
+static constexpr const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
 #define Q_VOID
 // #define QTEXTSTREAM_DEBUG

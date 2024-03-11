@@ -764,7 +764,8 @@ bool QSettingsPrivate::iniUnescapedStringList(const QByteArray &str, int from, i
       { '\'', '\'' },
       { '\\', '\\' }
    };
-   static const int numEscapeCodes = sizeof(escapeCodes) / sizeof(escapeCodes[0]);
+
+   static constexpr const int numEscapeCodes = sizeof(escapeCodes) / sizeof(escapeCodes[0]);
 
    bool isStringList = false;
    bool inQuotedString = false;

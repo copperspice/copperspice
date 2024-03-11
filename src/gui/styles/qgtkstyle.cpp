@@ -249,9 +249,9 @@ static const char *const qt_scrollbar_button_arrow_down[] = {
    "   *   "
 };
 
-static const int groupBoxBottomMargin    =  2;  // space below the groupbox
-static const int groupBoxTitleMargin     =  6;  // space between contents and title
-static const int groupBoxTopMargin       =  2;
+static constexpr const int groupBoxBottomMargin =  2;  // space below the groupbox
+static constexpr const int groupBoxTitleMargin  =  6;  // space between contents and title
+static constexpr const int groupBoxTopMargin    =  2;
 
 /*!
   Returns the configuration string for \a value.

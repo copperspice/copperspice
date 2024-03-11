@@ -78,11 +78,11 @@ class QPixelFormat
    static_assert(uint(TotalFieldWidthByWidths) == uint(TotalFieldWidthByOffsets), "Type mismatch");
    static_assert(uint(TotalFieldWidthByWidths) == 8 * sizeof(quint64), "Type mismatch");
 
-   constexpr inline uchar get(Field offset, FieldWidth width) const {
+   constexpr uchar get(Field offset, FieldWidth width) const {
       return uchar((data >> uint(offset)) & ((static_cast<quint64>(1) << uint(width)) - static_cast<quint64>(1)));
    }
 
-   constexpr static inline quint64 set(Field offset, FieldWidth width, uchar value) {
+   static constexpr quint64 set(Field offset, FieldWidth width, uchar value) {
       return (quint64(value) & ((static_cast<quint64>(1) << uint(width)) - static_cast<quint64>(1))) << uint(offset);
    }
 
@@ -246,7 +246,7 @@ class QPixelFormat
    }
 
  private:
-   constexpr static inline ByteOrder resolveByteOrder(ByteOrder bo) {
+   static constexpr inline ByteOrder resolveByteOrder(ByteOrder bo) {
       return bo == CurrentSystemEndian ? Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? LittleEndian : BigEndian : bo ;
    }
 

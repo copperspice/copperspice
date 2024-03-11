@@ -26,7 +26,8 @@
 
 // update before each release, for instructions refer to util/corelib/qurl-generateTLDs
 
-static const quint16 tldCount = 8101;
+static constexpr const quint16 tldCount = 8101;
+
 static const quint32 tldIndices[] = {
    0,
    15,
@@ -13243,7 +13244,7 @@ static const char *tldData[] = {
    "mielno.pl\0ga.us\0"
 };
 
-static const quint16 tldChunkCount = 2;
-static const quint32 tldChunks[] = {65512, 93761};
+static constexpr const quint16 tldChunkCount = 2;
+static constexpr const quint32 tldChunks[] = {65512, 93761};
 
 #endif

@@ -194,13 +194,14 @@ void QLockFile::unlock()
 {
    Q_D(QLockFile);
 
+   static constexpr const int maxAttempts = 500;   // 500ms
+
    if (! d->isLocked) {
       return;
    }
 
    CloseHandle(d->fileHandle);
    int attempts = 0;
-   static const int maxAttempts = 500; // 500ms
 
    while (! QFile::remove(d->fileName) && ++attempts < maxAttempts) {
       // Someone is reading the lock file right now, unable to delete

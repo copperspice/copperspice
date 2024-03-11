@@ -26,8 +26,9 @@
 
 #include <qexport.h>
 
-constexpr static inline void cs_do_nothing(void)
-{ }
+static constexpr  inline void cs_do_nothing(void)
+{
+}
 
 Q_CORE_EXPORT void qt_assert(const char *assertion, const char *file, int line);
 

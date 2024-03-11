@@ -892,7 +892,7 @@ void QT_FASTCALL comp_func_Plus_neon(uint *dst, const uint *src, int length, uin
 }
 
 #if defined(ENABLE_PIXMAN_DRAWHELPERS)
-static const int tileSize = 32;
+static constexpr const int tileSize = 32;
 
 extern "C" void qt_rotate90_16_neon(quint16 *dst, const quint16 *src, int sstride, int dstride, int count);
 

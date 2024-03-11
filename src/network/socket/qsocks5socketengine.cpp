@@ -42,7 +42,7 @@
 #include <qnetworkinterface.h>
 #include <qstring.h>
 
-static const int MaxWriteBufferSize = 128 * 1024;
+static constexpr const int MaxWriteBufferSize = 128 * 1024;
 
 //#define QSOCKS5SOCKETLAYER_DEBUG
 

@@ -241,7 +241,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 #endif
 
       case PE_IndicatorBranch: {
-         static const int decoration_size = 9;
+         static constexpr const int decoration_size = 9;
 
          int mid_h = opt->rect.x() + opt->rect.width() / 2;
          int mid_v = opt->rect.y() + opt->rect.height() / 2;

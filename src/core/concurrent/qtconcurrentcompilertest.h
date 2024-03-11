@@ -38,7 +38,7 @@ class HasResultType
    static void *test(double);
 
  public:
-   constexpr static bool Value = (sizeof(test<T>(0)) == sizeof(char));
+   static constexpr bool Value = (sizeof(test<T>(0)) == sizeof(char));
 };
 
 }  // namespace

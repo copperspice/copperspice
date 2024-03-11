@@ -303,7 +303,8 @@ class QVideoSurfaceGLPainter : public QVideoSurfacePainter, protected QOpenGLFun
    GLenum m_textureType;
    int m_textureCount;
 
-   static const uint Max_Textures = 3;
+   static constexpr const uint Max_Textures = 3;
+
    GLuint m_textureIds[Max_Textures];
    int m_textureWidths[Max_Textures];
    int m_textureHeights[Max_Textures];

@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-static const int QGRAPHICSVIEW_REGION_RECT_THRESHOLD  = 50;
-static const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 2^9
+static constexpr const int QGRAPHICSVIEW_REGION_RECT_THRESHOLD  = 50;
+static constexpr const int QGRAPHICSVIEW_PREALLOC_STYLE_OPTIONS = 503; // largest prime < 2^9
 
 #include <qgraphicsview.h>
 #include <qgraphics_view_p.h>

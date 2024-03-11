@@ -38,12 +38,12 @@
 
 #include <qmediaserviceprovider_p.h>
 
-constexpr static bool qt_sizeLessThan(const QSize &s1, const QSize &s2)
+static constexpr bool qt_sizeLessThan(const QSize &s1, const QSize &s2)
 {
    return (s1.width() * s1.height()) < (s2.width() * s2.height());
 }
 
-constexpr static bool qt_frameRateRangeLessThan(const QCamera::FrameRateRange &s1, const QCamera::FrameRateRange &s2)
+static constexpr bool qt_frameRateRangeLessThan(const QCamera::FrameRateRange &s1, const QCamera::FrameRateRange &s2)
 {
    return qFuzzyCompare(s1.maximumFrameRate, s2.maximumFrameRate) ? (s1.minimumFrameRate < s2.minimumFrameRate)
           : (s1.maximumFrameRate < s2.maximumFrameRate);

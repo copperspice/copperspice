@@ -125,7 +125,7 @@ void dumpClip(int width, int height, const QClipData *clip);
 #define int_dim(pos, dim) (int(pos+dim) - int(pos))
 
 // use the same rounding as in qrasterizer.cpp (6 bit fixed point)
-static const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
+static constexpr const qreal aliasedCoordinateDelta = 0.5 - 0.015625;
 
 #ifdef Q_OS_WIN
 

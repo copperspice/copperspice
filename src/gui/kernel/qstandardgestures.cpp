@@ -34,8 +34,8 @@
 
 // If the change in scale for a single touch event is out of this range,
 // we consider it to be spurious.
-static const qreal kSingleStepScaleMax = 2.0;
-static const qreal kSingleStepScaleMin = 0.1;
+static constexpr const qreal kSingleStepScaleMax = 2.0;
+static constexpr const qreal kSingleStepScaleMin = 0.1;
 
 QGesture *QPanGestureRecognizer::create(QObject *target)
 {
@@ -299,6 +299,9 @@ QGestureRecognizer::Result QSwipeGestureRecognizer::recognize(QGesture *state,
          break;
       }
       case QEvent::TouchUpdate: {
+         static constexpr const int MoveThreshold = 50;
+         static constexpr const int directionChangeThreshold = MoveThreshold / 8;
+
          const QTouchEvent *ev = static_cast<const QTouchEvent *>(event);
 
          if (d->state == QSwipeGesturePrivate::NoGesture) {
@@ -332,8 +335,6 @@ QGestureRecognizer::Result QSwipeGestureRecognizer::recognize(QGesture *state,
             d->velocityValue = 0.9 * d->velocityValue + distance / elapsedTime;
             d->swipeAngle = QLineF(p1.startScreenPos(), p1.screenPos()).angle();
 
-            static const int MoveThreshold = 50;
-            static const int directionChangeThreshold = MoveThreshold / 8;
             if (qAbs(xDistance) > MoveThreshold || qAbs(yDistance) > MoveThreshold) {
                // measure the distance to check if the direction changed
                d->lastPositions[0] = p1.screenPos().toPoint();

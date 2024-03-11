@@ -28,13 +28,13 @@
 
 #include <algorithm>
 
-static const uint base         = 36;
-static const uint tmin         = 1;
-static const uint tmax         = 26;
-static const uint skew         = 38;
-static const uint damp         = 700;
-static const uint initial_bias = 72;
-static const uint initial_n    = 128;
+static constexpr const uint base         = 36;
+static constexpr const uint tmin         = 1;
+static constexpr const uint tmax         = 26;
+static constexpr const uint skew         = 38;
+static constexpr const uint damp         = 700;
+static constexpr const uint initial_bias = 72;
+static constexpr const uint initial_n    = 128;
 
 struct NameprepCaseFoldingEntry {
    char32_t uc;

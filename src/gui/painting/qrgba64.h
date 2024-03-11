@@ -58,25 +58,25 @@ class QRgba64
 
    inline constexpr QRgba64() : rgba(0) { }
 
-   constexpr static QRgba64 fromRgba64(quint64 c) {
+   static constexpr  QRgba64 fromRgba64(quint64 c) {
       return QRgba64(c);
    }
 
-   constexpr static QRgba64 fromRgba64(quint16 red, quint16 green, quint16 blue, quint16 alpha) {
+   static constexpr QRgba64 fromRgba64(quint16 red, quint16 green, quint16 blue, quint16 alpha) {
       return fromRgba64(quint64(red)   << RedShift
             | quint64(green) << GreenShift
             | quint64(blue)  << BlueShift
             | quint64(alpha) << AlphaShift);
    }
 
-   constexpr static QRgba64 fromRgba(quint8 red, quint8 green, quint8 blue, quint8 alpha) {
+   static constexpr QRgba64 fromRgba(quint8 red, quint8 green, quint8 blue, quint8 alpha) {
       QRgba64 rgb64 = fromRgba64(red, green, blue, alpha);
       // Expand the range so that 0x00 maps to 0x0000 and 0xff maps to 0xffff.
       rgb64.rgba |= rgb64.rgba << 8;
       return rgb64;
    }
 
-   constexpr static QRgba64 fromArgb32(uint rgb) {
+   static constexpr QRgba64 fromArgb32(uint rgb) {
       return fromRgba(quint8(rgb >> 16), quint8(rgb >> 8), quint8(rgb), quint8(rgb >> 24));
    }
 

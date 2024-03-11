@@ -29,7 +29,7 @@
 
 #ifndef QT_NO_MATRIX4X4
 
-static const qreal inv_dist_to_plane = 1. / 1024.;
+static constexpr const qreal inv_dist_to_plane = 1.0 / 1024.0;
 
 QMatrix4x4::QMatrix4x4(const qreal *values)
 {

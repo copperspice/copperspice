@@ -55,8 +55,8 @@ void qt_format_text(const QFont &fnt, const QRectF &_r,
    QPainter *painter);
 
 const char  *qt_mfhdr_tag = "QPIC"; // header tag
-static const quint16 mfhdr_maj = 11; // major version #
-static const quint16 mfhdr_min = 0; // minor version #
+static constexpr const quint16 mfhdr_maj = 11;   // major version #
+static constexpr const quint16 mfhdr_min = 0;    // minor version #
 
 QPicture::QPicture(int formatVersion)
    : QPaintDevice(), d_ptr(new QPicturePrivate)

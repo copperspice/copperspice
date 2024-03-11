@@ -221,7 +221,7 @@ enum CPUFeatures {
    QSimdInitialized = 0x80000000
 };
 
-static const quint64 qCompilerCpuFeatures = 0
+static constexpr const quint64 qCompilerCpuFeatures = 0
 
 #if defined __SHA__
       | (Q_UINT64_C(1) << CpuFeatureSHA)

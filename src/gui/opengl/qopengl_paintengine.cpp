@@ -148,7 +148,7 @@ template <typename T>
 void QOpenGL2PaintEngineExPrivate::updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode,
       GLenum filterMode, TextureUpdateMode updateMode)
 {
-   static const GLenum target = GL_TEXTURE_2D;
+   static constexpr const GLenum target = GL_TEXTURE_2D;
 
    activateTextureUnit(textureUnit);
 

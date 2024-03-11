@@ -411,7 +411,8 @@ struct qtKey2CocoaKeySortLessThan {
    }
 };
 
-static const int NumEntries = 59;
+static constexpr const int NumEntries = 59;
+
 static const KeyPair entries[NumEntries] = {
    { NSEnterCharacter, Qt::Key_Enter },
    { NSBackspaceCharacter, Qt::Key_Backspace },
@@ -477,7 +478,8 @@ static const KeyPair entries[NumEntries] = {
    { NSMenuFunctionKey, Qt::Key_Menu },
    { NSHelpFunctionKey, Qt::Key_Help },
 };
-static const KeyPair *const end = entries + NumEntries;
+
+static constexpr const KeyPair *const end = entries + NumEntries;
 
 QChar qt_mac_qtKey2CocoaKey(Qt::Key key)
 {

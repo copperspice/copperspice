@@ -162,7 +162,7 @@ bool QAbstractSocketPrivate::initSocketLayer(QAbstractSocket::NetworkLayerProtoc
 
 #ifdef QT_NO_NETWORKPROXY
    // here to avoid a duplication of the call to createSocketEngine below
-   static const QNetworkProxy &proxyInUse = *(QNetworkProxy *)0;
+   static constexpr const QNetworkProxy &proxyInUse = *(QNetworkProxy *)0;
 #endif
 
    Q_Q(QAbstractSocket);

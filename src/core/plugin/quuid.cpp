@@ -467,7 +467,7 @@ QUuid QUuid::createUuid()
 #endif
 
    {
-      static const int intbits = sizeof(int) * 8;
+      static constexpr const int intbits = sizeof(int) * 8;
       static int randbits = 0;
 
       if (!randbits) {

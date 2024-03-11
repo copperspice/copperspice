@@ -1411,7 +1411,7 @@ bool QResourceFileEngine::isRelativePath() const
 
 uint QResourceFileEngine::ownerId(FileOwner) const
 {
-   static const uint nobodyID = (uint) - 2;
+   static constexpr const uint nobodyID = (uint) - 2;
    return nobodyID;
 }
 

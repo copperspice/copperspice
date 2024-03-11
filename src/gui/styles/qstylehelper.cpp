@@ -149,7 +149,7 @@ static QPointF calcRadialPos(const QStyleOptionSlider *dial, qreal offset)
 
 qreal angle(const QPointF &p1, const QPointF &p2)
 {
-   static const qreal rad_factor = 180 / Q_PI;
+   static constexpr const qreal rad_factor = 180 / Q_PI;
    qreal _angle = 0;
 
    if (p1.x() == p2.x()) {

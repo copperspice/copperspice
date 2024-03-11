@@ -468,7 +468,7 @@ GLuint QPlatformBackingStore::toTexture(const QRegion &dirtyRegion, QSize *textu
 
    // The image provided by the backingstore may have a stride larger than width * 4, for
    // instance on platforms that manually implement client-side decorations.
-   static const int bytesPerPixel = 4;
+   static constexpr const int bytesPerPixel  = 4;
    const int strideInPixels = image.bytesPerLine() / bytesPerPixel;
    const bool hasUnpackRowLength = !ctx->isOpenGLES() || ctx->format().majorVersion() >= 3;
 

@@ -35,7 +35,7 @@
 #include <qgraphics_item_p.h>
 #include <qgraphics_scene_bsp_p.h>
 
-static const int QGRAPHICSSCENE_INDEXTIMER_TIMEOUT = 2000;
+static constexpr const int QGRAPHICSSCENE_INDEXTIMER_TIMEOUT = 2000;
 
 class QGraphicsScene;
 class QGraphicsSceneBspTreeIndexPrivate;

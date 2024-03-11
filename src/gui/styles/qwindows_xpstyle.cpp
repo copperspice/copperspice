@@ -144,11 +144,11 @@ bool QWindowsUxThemeLib::resolveSymbols()
 }
 
 // General const values
-static const int windowsItemFrame        =  2; // menu item frame width
-static const int windowsItemHMargin      =  3; // menu item hor text margin
-static const int windowsItemVMargin      =  0; // menu item ver text margin
-static const int windowsArrowHMargin     =  6; // arrow horizontal margin
-static const int windowsRightBorder      = 12; // right border on windows
+static constexpr const int windowsItemFrame    =  2; // menu item frame width
+static constexpr const int windowsItemHMargin  =  3; // menu item hor text margin
+static constexpr const int windowsItemVMargin  =  0; // menu item ver text margin
+static constexpr const int windowsArrowHMargin =  6; // arrow horizontal margin
+static constexpr const int windowsRightBorder  = 12; // right border on windows
 
 // External function calls
 extern Q_GUI_EXPORT HDC qt_win_display_dc();

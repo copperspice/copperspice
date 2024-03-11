@@ -27,7 +27,7 @@
 #include <qjson.h>
 #include <qstringparser.h>
 
-static const int NESTING_LIMIT = 1024;
+static constexpr const int NESTING_LIMIT = 1024;
 
 // error strings for the JSON parser
 #define JSONERR_OK          cs_mark_tr("QJsonParseError", "no error occurred")

@@ -326,7 +326,7 @@ QList<int> QPlatformFontDatabase::standardSizes() const
    static const quint8 standard[] =
    { 6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
 
-   static const int num_standards = int(sizeof standard / sizeof * standard);
+   static constexpr const int num_standards = int(sizeof standard / sizeof * standard);
 
    std::copy(standard, standard + num_standards, std::back_inserter(retval));
 

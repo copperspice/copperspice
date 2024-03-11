@@ -54,7 +54,6 @@ static const QStyle::SubControl SubControls[] = {
    QStyle::SC_TitleBarUnshadeButton,     // 8
    QStyle::SC_TitleBarContextHelpButton  // 9
 };
-static const int NumSubControls = sizeof(SubControls) / sizeof(SubControls[0]);
 
 static const Qt::WindowFlags CustomizeWindowFlags =
    Qt::FramelessWindowHint
@@ -65,7 +64,8 @@ static const Qt::WindowFlags CustomizeWindowFlags =
    | Qt::WindowMaximizeButtonHint
    | Qt::WindowMinMaxButtonsHint;
 
-static const int BoundaryMargin = 5;
+static constexpr const int NumSubControls = sizeof(SubControls) / sizeof(SubControls[0]);
+static constexpr const int BoundaryMargin = 5;
 
 static inline int getMoveDeltaComponent(uint cflags, uint moveFlag, uint resizeFlag,
    int delta, int maxDelta, int minDelta)

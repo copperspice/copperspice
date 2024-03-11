@@ -59,7 +59,7 @@ int QIsciiCodec::mibEnum() const
    return -3000 - idx;
 }
 
-static const uchar inv = 0xFF;
+static constexpr const uchar inv = 0xFF;
 
 /* iscii range from 0xa0 - 0xff */
 static const uchar iscii_to_uni_table[0x60] = {

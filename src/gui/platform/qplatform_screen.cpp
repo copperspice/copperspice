@@ -105,7 +105,8 @@ QScreen *QPlatformScreen::screen() const
 
 QSizeF QPlatformScreen::physicalSize() const
 {
-   static const int dpi = 100;
+   static constexpr const int dpi = 100;
+
    return QSizeF(geometry().size()) / dpi * qreal(25.4);
 }
 

@@ -43,7 +43,8 @@ QAccessibleCache *QAccessibleCache::instance()
 */
 QAccessible::Id QAccessibleCache::acquireId() const
 {
-   static const QAccessible::Id FirstId = QAccessible::Id(INT_MAX) + 1;
+   static constexpr const QAccessible::Id FirstId = QAccessible::Id(INT_MAX) + 1;
+
    static QAccessible::Id lastUsedId = FirstId;
 
    while (idToInterface.contains(lastUsedId)) {

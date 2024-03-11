@@ -97,8 +97,8 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std
    // but these take unreasonably amounts of time to bale out in pathological cases.
 
    // Calculate NS^2 first
+   static constexpr const std::ptrdiff_t k = 100000;
 
-   static const std::ptrdiff_t k = 100000;
    std::ptrdiff_t dist = std::distance(base, last);
 
   if (dist == 0) {

@@ -1457,11 +1457,12 @@ bool QFontInfo::exactMatch() const
 
 #ifdef QFONTCACHE_DEBUG
 // fast timeouts for debugging
-static const int fast_timeout =   1000;  // 1s
-static const int slow_timeout =   5000;  // 5s
+static constexpr const int fast_timeout =   1000;  // 1s
+static constexpr const int slow_timeout =   5000;  // 5s
+
 #else
-static const int fast_timeout =  10000;  // 10s
-static const int slow_timeout = 300000;  //  5m
+static constexpr const int fast_timeout =  10000;  // 10s
+static constexpr const int slow_timeout = 300000;  //  5m
 #endif
 
 const uint QFontCache::min_cost = 4 * 1024; // 4mb

@@ -28,13 +28,13 @@
 #include <qrect.h>
 #include <limits.h>
 
-static const int QLAYOUTSIZE_MAX = INT_MAX / 256 / 16;
 
 class QLayout;
 class QLayoutItem;
 class QSpacerItem;
 class QWidget;
 class QSize;
+static constexpr const int QLAYOUTSIZE_MAX = INT_MAX / 256 / 16;
 
 class Q_GUI_EXPORT QLayoutItem
 {

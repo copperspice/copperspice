@@ -216,12 +216,12 @@ struct QOpenGLEngineCachedShaderProg
 }
 */
 
-static const GLuint QT_VERTEX_COORDS_ATTR  = 0;
-static const GLuint QT_TEXTURE_COORDS_ATTR = 1;
-static const GLuint QT_OPACITY_ATTR = 2;
-static const GLuint QT_PMV_MATRIX_1_ATTR = 3;
-static const GLuint QT_PMV_MATRIX_2_ATTR = 4;
-static const GLuint QT_PMV_MATRIX_3_ATTR = 5;
+static constexpr const GLuint QT_VERTEX_COORDS_ATTR  = 0;
+static constexpr const GLuint QT_TEXTURE_COORDS_ATTR = 1;
+static constexpr const GLuint QT_OPACITY_ATTR        = 2;
+static constexpr const GLuint QT_PMV_MATRIX_1_ATTR   = 3;
+static constexpr const GLuint QT_PMV_MATRIX_2_ATTR   = 4;
+static constexpr const GLuint QT_PMV_MATRIX_3_ATTR   = 5;
 
 class QOpenGLEngineShaderProg;
 

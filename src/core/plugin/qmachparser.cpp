@@ -34,20 +34,20 @@
 
 #if defined(Q_PROCESSOR_X86_64)
 #define MACHO64
-static const cpu_type_t my_cputype = CPU_TYPE_X86_64;
+static constexpr const cpu_type_t my_cputype = CPU_TYPE_X86_64;
 
 #elif defined(Q_PROCESSOR_X86_32)
-static const cpu_type_t my_cputype = CPU_TYPE_X86;
+static constexpr const cpu_type_t my_cputype = CPU_TYPE_X86;
 
 #elif defined(Q_PROCESSOR_POWER_64)
 #define MACHO64
-static const cpu_type_t my_cputype = CPU_TYPE_POWERPC64;
+static constexpr const cpu_type_t my_cputype = CPU_TYPE_POWERPC64;
 
 #elif defined(Q_PROCESSOR_POWER_32)
-static const cpu_type_t my_cputype = CPU_TYPE_POWERPC;
+static constexpr const cpu_type_t my_cputype = CPU_TYPE_POWERPC;
 
 #elif defined(Q_PROCESSOR_ARM)
-static const cpu_type_t my_cputype = CPU_TYPE_ARM;
+static constexpr const cpu_type_t my_cputype = CPU_TYPE_ARM;
 
 #else
 #  error "Unknown CPU type"
@@ -60,14 +60,14 @@ using my_mach_header     = mach_header_64;
 using my_segment_command = segment_command_64;
 using my_section         = section_64;
 
-static const uint32_t my_magic = MH_MAGIC_64;
+static constexpr const uint32_t my_magic = MH_MAGIC_64;
 
 #else
 using my_mach_header     = mach_header;
 using my_segment_command = segment_command;
 using my_section         = section;
 
-static const uint32_t my_magic = MH_MAGIC;
+static constexpr const uint32_t my_magic = MH_MAGIC;
 
 #endif
 
@@ -87,8 +87,8 @@ int QMachOParser::parse(const char *m_s, ulong fdlen, const QString &library, QS
    // section. It's probably useless with just the "qtmetadata" section, but
    // it's valid nonetheless.
    // A fat binary must have this plus the fat header, of course.
-   static const size_t MinFileSize = sizeof(my_mach_header) + sizeof(my_segment_command) + sizeof(my_section);
-   static const size_t MinFatHeaderSize = sizeof(fat_header) + 2 * sizeof(fat_arch);
+   static constexpr const size_t MinFileSize      = sizeof(my_mach_header) + sizeof(my_segment_command) + sizeof(my_section);
+   static constexpr const size_t MinFatHeaderSize = sizeof(fat_header) + 2 * sizeof(fat_arch);
 
    if (fdlen < MinFileSize) {
       return ns(QLibrary::tr("file too small"), library, errorString);

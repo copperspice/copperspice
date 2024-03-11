@@ -51,7 +51,7 @@ static quint64 xpmHash(const char *str)
 #endif
 #define QRGB(r,g,b) (r*65536 + g*256 + b)
 
-static const int xpmRgbTblSize = 657;
+static constexpr const int xpmRgbTblSize = 657;
 
 static const struct XPMRGBData {
    uint  value;

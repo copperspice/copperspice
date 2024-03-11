@@ -23,7 +23,7 @@
 
 #include <qelapsedtimer.h>
 
-static const qint64 invalidData = Q_INT64_C(0x8000000000000000);
+static constexpr const qint64 invalidData = Q_INT64_C(0x8000000000000000);
 
 void QElapsedTimer::invalidate()
 {

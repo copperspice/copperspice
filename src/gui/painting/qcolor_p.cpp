@@ -283,7 +283,7 @@ static const struct RGBData {
    { "yellowgreen", rgb(154, 205, 50) }
 };
 
-static const int rgbTblSize = sizeof(rgbTbl) / sizeof(RGBData);
+static constexpr const int rgbTblSize = sizeof(rgbTbl) / sizeof(RGBData);
 
 #undef rgb
 

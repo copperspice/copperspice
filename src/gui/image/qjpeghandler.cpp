@@ -84,7 +84,7 @@ extern "C" {
 
 }
 
-static const int max_buf = 4096;
+static constexpr const int max_buf = 4096;
 
 struct my_jpeg_source_mgr : public jpeg_source_mgr {
    // Nothing dynamic - cannot rely on destruction over longjump

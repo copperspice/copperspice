@@ -77,11 +77,13 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateIndex()
       }
    }
 
+   static constexpr const int slack = 100;
+
    // Determine whether we should regenerate the BSP tree.
    if (bspTreeDepth == 0) {
       int oldDepth = intmaxlog(lastItemCount);
       bspTreeDepth = intmaxlog(indexedItems.size());
-      static const int slack = 100;
+
       if (bsp.leafCount() == 0 || (oldDepth != bspTreeDepth && qAbs(lastItemCount - indexedItems.size()) > slack)) {
          // ### Crude algorithm.
          regenerateIndex = true;

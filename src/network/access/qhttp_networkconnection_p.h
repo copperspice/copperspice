@@ -190,8 +190,6 @@ class QHttpNetworkConnectionPrivate
    ConnectionState state;
    NetworkLayerPreferenceState networkLayerState;
 
-   static constexpr int ChunkSize = 4096;
-
    int indexOf(QAbstractSocket *socket) const;
 
    QHttpNetworkReply *queueRequest(const QHttpNetworkRequest &request);

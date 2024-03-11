@@ -44,7 +44,7 @@
 #include <algorithm>
 #include <stdlib.h>
 
-static const float smallCapsFraction = 0.7f;
+static constexpr const float smallCapsFraction = 0.7f;
 
 namespace {
 
@@ -271,7 +271,7 @@ struct QBidiStatus {
    QChar::Direction dir;
 };
 
-enum { MaxBidiLevel = 61 };
+static constexpr const int MaxBidiLevel = 61;
 
 struct QBidiControl {
    inline QBidiControl(bool rtl)

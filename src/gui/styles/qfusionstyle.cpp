@@ -62,14 +62,13 @@ enum Direction {
 };
 
 // from windows style
-static const int windowsItemFrame        =  2; // menu item frame width
-static const int windowsItemHMargin      =  3; // menu item hor text margin
-static const int windowsItemVMargin      =  8; // menu item ver text margin
-static const int windowsRightBorder      = 15; // right border on windows
+static constexpr const int windowsItemFrame        =  2;  // menu item frame width
+static constexpr const int windowsItemHMargin      =  3;  // menu item hor text margin
+static constexpr const int windowsItemVMargin      =  8;  // menu item ver text margin
+static constexpr const int windowsRightBorder      = 15;  // right border on windows
 
-static const int groupBoxBottomMargin    =  0;  // space below the groupbox
-static const int groupBoxTopMargin       =  3;
-
+static constexpr const int groupBoxBottomMargin    =  0;  // space below the groupbox
+static constexpr const int groupBoxTopMargin       =  3;
 
 /* XPM */
 static const char *const dock_widget_close_xpm[] = {

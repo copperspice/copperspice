@@ -1125,8 +1125,9 @@ QList<QOpenGLDebugMessage> QOpenGLDebugLogger::loggedMessages() const
         return QList<QOpenGLDebugMessage>();
     }
 
-    static const GLuint maxMessageCount = 128;
+    static constexpr const GLuint maxMessageCount = 128;
     GLuint messagesRead;
+
     GLenum messageSources[maxMessageCount];
     GLenum messageTypes[maxMessageCount];
     GLuint messageIds[maxMessageCount];

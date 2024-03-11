@@ -46,6 +46,7 @@ class QGIFFormat
    bool partialNewFrame;
 
  private:
+   static constexpr const int max_lzw_bits = 12;
    void fillRect(QImage *image, int x, int y, int w, int h, QRgb col);
    inline QRgb color(uchar index) const;
 
@@ -95,8 +96,6 @@ class QGIFFormat
    int interlace;
    int accum;
    int bitcount;
-
-   enum { max_lzw_bits = 12 }; // (poor-compiler's static const int)
 
    int code_size, clear_code, end_code, max_code_size, max_code;
    int firstcode, oldcode, incode;

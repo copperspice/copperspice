@@ -389,10 +389,10 @@ class QXmlSimpleReaderPrivate
 
    // The limit to the amount of times the DTD parsing functions can be called
    // for the DTD currently being parsed.
-   constexpr static int dtdRecursionLimit = 2;
+   static constexpr int dtdRecursionLimit = 2;
 
    // The maximum amount of characters an entity value may contain, after expansion.
-   static const int entityCharacterLimit = 1024;
+   static constexpr const int entityCharacterLimit = 1024;
 
    const QString &string();
    void stringClear();

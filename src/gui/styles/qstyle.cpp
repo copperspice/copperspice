@@ -39,7 +39,7 @@
 #include <algorithm>
 #include <limits.h>
 
-static const int MaxBits = 8 * sizeof(QSizePolicy::ControlType);
+static constexpr const int MaxBits = 8 * sizeof(QSizePolicy::ControlType);
 
 static int unpackControlTypes(QSizePolicy::ControlTypes controls, QSizePolicy::ControlType *array)
 {

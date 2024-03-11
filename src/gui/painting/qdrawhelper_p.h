@@ -51,10 +51,10 @@ class QClipData;
 class QRasterPaintEngineState;
 class QRasterPaintEngine;
 
-static const uint AMASK = 0xff000000;
-static const uint RMASK = 0x00ff0000;
-static const uint GMASK = 0x0000ff00;
-static const uint BMASK = 0x000000ff;
+static constexpr const uint AMASK = 0xff000000;
+static constexpr const uint RMASK = 0x00ff0000;
+static constexpr const uint GMASK = 0x0000ff00;
+static constexpr const uint BMASK = 0x000000ff;
 
 typedef QT_FT_Span QSpan;
 typedef QT_FT_SpanFunc ProcessSpans;
