@@ -146,6 +146,13 @@ TEST_CASE("QRegularExpression global_match", "[qregularexpression]")
    REQUIRE(result[2].captured(0) == "Tuesday");
 }
 
+TEST_CASE("QRegularExpression replace", "[qregularexpression]")
+{
+   QString8 str = "@3::A   A::@2::B   @A";
 
+   QRegularExpression regex = QRegularExpression("(::)?@[0-9]+");
+   str.replace(regex, "");
 
+   REQUIRE(str == "::A   A::B   @A");
+}
 
