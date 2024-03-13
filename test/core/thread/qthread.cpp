@@ -40,7 +40,7 @@ class Current_Thread : public QThread
       Qt::HANDLE id;
       QThread *thread;
 
-      void run() {
+      void run() override {
          id = QThread::currentThreadId();
          thread = QThread::currentThread();
       }
@@ -52,7 +52,7 @@ class Mutex_Thread : public QThread
       QMutex mutex;
       QWaitCondition cond;
 
-      void run() {
+      void run() override {
         QMutexLocker locker(&mutex);
         cond.wakeOne();
       }
