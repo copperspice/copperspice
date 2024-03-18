@@ -129,10 +129,12 @@ bool qt_get_hex_rgb(QStringView str, QRgb *rgb)
 #endif
 #define rgb(r,g,b) (0xff000000 | (r << 16) |  (g << 8) | b)
 
-static const struct RGBData {
+struct RGBData {
    const char name[21];
    uint  value;
-} rgbTbl[] = {
+};
+
+static const RGBData rgbTbl[] = {
    { "aliceblue", rgb(240, 248, 255) },
    { "antiquewhite", rgb(250, 235, 215) },
    { "aqua", rgb( 0, 255, 255) },

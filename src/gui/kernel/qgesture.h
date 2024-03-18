@@ -234,7 +234,14 @@ class Q_GUI_EXPORT QSwipeGesture : public QGesture
    GUI_CS_PROPERTY_WRITE(velocity, cs_setVelocity)
 
  public:
-   enum SwipeDirection { NoDirection, Left, Right, Up, Down };
+   enum SwipeDirection {
+      NoDirection,
+      Left,
+      Right,
+      Up,
+      Down
+   };
+
    explicit QSwipeGesture(QObject *parent = nullptr);
    ~QSwipeGesture();
 

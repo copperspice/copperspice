@@ -133,7 +133,7 @@ inline void drawPixel(QCosmeticStroker *stroker, int x, int y, int coverage)
       const int lastx = stroker->spans[stroker->current_span - 1].x + stroker->spans[stroker->current_span - 1].len ;
       const int lasty = stroker->spans[stroker->current_span - 1].y;
 
-      if (stroker->current_span == QCosmeticStroker::NSPANS || y < lasty || (y == lasty && x < lastx)) {
+      if (stroker->current_span == QCosmeticStroker::SpanCount || y < lasty || (y == lasty && x < lastx)) {
          stroker->blend(stroker->current_span, stroker->spans, &stroker->state->penData);
          stroker->current_span = 0;
       }

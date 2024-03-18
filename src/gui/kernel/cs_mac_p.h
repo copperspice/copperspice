@@ -30,7 +30,7 @@
 
 #define kThemeAppearanceAquaGraphite CFSTR("com.apple.theme.appearance.aqua.graphite")
 
-enum {
+enum MacThemeFlags {
    kThemeTabNorth                           = 0,
    kThemeTabSouth                           = 1,
    kThemeTabEast                            = 2,

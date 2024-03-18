@@ -114,7 +114,8 @@ void QSplashScreen::clearMessage()
 
 static inline bool waitForWindowExposed(QWindow *window, int timeout = 1000)
 {
-   enum { TimeOutMs = 10 };
+   static constexpr const int TimeOutMs = 10;
+
    QElapsedTimer timer;
    timer.start();
 

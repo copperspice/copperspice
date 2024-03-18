@@ -1182,11 +1182,17 @@ void dither_to_Mono(QImageData *dst, const QImageData *src, Qt::ImageConversionF
    Q_ASSERT(src->height == dst->height);
    Q_ASSERT(dst->format == QImage::Format_Mono || dst->format == QImage::Format_MonoLSB);
 
+   enum DitherType {
+      Threshold,
+      Ordered,
+      Diffuse
+   };
+
+   DitherType dithermode;
+
    dst->colortable.clear();
    dst->colortable.append(0xffffffff);
    dst->colortable.append(0xff000000);
-
-   enum { Threshold, Ordered, Diffuse } dithermode;
 
    if (fromalpha) {
       if ((flags & Qt::AlphaDither_Mask) == Qt::DiffuseAlphaDither) {

@@ -229,12 +229,12 @@ class Q_GUI_EXPORT QPlatformTheme
    };
 
    enum UiEffect {
-      GeneralUiEffect = 0x1,
-      AnimateMenuUiEffect = 0x2,
-      FadeMenuUiEffect = 0x4,
-      AnimateComboUiEffect = 0x8,
+      GeneralUiEffect        = 0x1,
+      AnimateMenuUiEffect    = 0x2,
+      FadeMenuUiEffect       = 0x4,
+      AnimateComboUiEffect   = 0x8,
       AnimateTooltipUiEffect = 0x10,
-      FadeTooltipUiEffect = 0x20,
+      FadeTooltipUiEffect    = 0x20,
       AnimateToolBoxUiEffect = 0x40
    };
 

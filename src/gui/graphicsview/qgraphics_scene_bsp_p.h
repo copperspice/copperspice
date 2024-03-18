@@ -42,11 +42,17 @@ class QGraphicsSceneBspTree
 {
  public:
    struct Node {
-      enum Type { Horizontal, Vertical, Leaf };
+      enum Type {
+         Horizontal,
+         Vertical,
+         Leaf
+      };
+
       union {
          qreal offset;
          int leafIndex;
       };
+
       Type type;
    };
 

@@ -34,7 +34,12 @@ class QBspTree
  public:
 
    struct Node {
-      enum Type { None = 0, VerticalPlane = 1, HorizontalPlane = 2, Both = 3 };
+      enum Type {
+         None            = 0,
+         VerticalPlane   = 1,
+         HorizontalPlane = 2,
+         Both            = 3
+      };
       inline Node() : pos(0), type(None) {}
       int pos;
       Type type;

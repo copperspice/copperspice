@@ -44,22 +44,20 @@ class QGraphicsLayoutItem;
 class QGridLayoutRowInfo;
 class QGridLayoutEngine;
 
-// ### deal with Descent in a similar way
-enum {
-   MinimumSize = Qt::MinimumSize,
+// deal with Descent in a similar way
+enum GridSize {
+   MinimumSize   = Qt::MinimumSize,
    PreferredSize = Qt::PreferredSize,
-   MaximumSize = Qt::MaximumSize,
+   MaximumSize   = Qt::MaximumSize,
    NSizes
 };
 
-// do not reorder
-enum {
-   Hor,
-   Ver,
-   NOrientations
-};
+// do not reorder values
+static constexpr const int GridOrientation_Horizontal = 0;
+static constexpr const int GridOrientation_Vertical   = 1;
+static constexpr const int GridOrientation_Count      = 2;
 
-// do not reorder
+// do not reorder values
 enum LayoutSide {
    Left,
    Top,
@@ -67,7 +65,7 @@ enum LayoutSide {
    Bottom
 };
 
-enum {
+enum GridConstraint {
    NoConstraint,
    HorizontalConstraint,   // Width depends on the height
    VerticalConstraint,     // Height depends on the width
@@ -79,7 +77,11 @@ template <typename T>
 class QLayoutParameter
 {
  public:
-   enum State { Default, User, Cached };
+   enum State {
+      Default,
+      User,
+      Cached
+   };
 
    inline QLayoutParameter() : q_value(T()), q_state(Default) {}
    inline QLayoutParameter(T value, State state = Default) : q_value(value), q_state(state) {}
@@ -264,16 +266,19 @@ class QGridLayoutItem
    virtual ~QGridLayoutItem() {}
 
    inline int firstRow() const {
-      return q_firstRows[Ver];
+      return q_firstRows[GridOrientation_Vertical];
    }
+
    inline int firstColumn() const {
-      return q_firstRows[Hor];
+      return q_firstRows[GridOrientation_Horizontal];
    }
+
    inline int rowSpan() const {
-      return q_rowSpans[Ver];
+      return q_rowSpans[GridOrientation_Vertical];
    }
+
    inline int columnSpan() const {
-      return q_rowSpans[Hor];
+      return q_rowSpans[GridOrientation_Horizontal];
    }
    inline int lastRow() const {
       return firstRow() + rowSpan() - 1;
@@ -328,9 +333,9 @@ class QGridLayoutItem
 
 
  private:
-   int q_firstRows[NOrientations];
-   int q_rowSpans[NOrientations];
-   int q_stretches[NOrientations];
+   int q_firstRows[GridOrientation_Count];
+   int q_rowSpans[GridOrientation_Count];
+   int q_stretches[GridOrientation_Count];
    Qt::Alignment q_alignment;
 };
 
@@ -348,11 +353,11 @@ class QGridLayoutEngine
    int columnCount(Qt::Orientation orientation) const;
 
    int rowCount() const {
-      return q_infos[Ver].count;
+      return q_infos[GridOrientation_Vertical].count;
    }
 
    int columnCount() const {
-      return q_infos[Hor].count;
+      return q_infos[GridOrientation_Horizontal].count;
    }
    // returns the number of items inserted, which may be less than (rowCount * columnCount)
    int itemCount() const;
@@ -424,6 +429,12 @@ class QGridLayoutEngine
 
 
  private:
+   enum GridCacheMode {
+      NotCached = -2,                // cache is empty, happens when the engine is invalidated
+      CachedWithNoConstraint = -1    // cache has a totalBox without any HFW/WFH constraints
+         // >= 0                     // cache has a totalBox with this specific constraint
+   };
+
    static int grossRoundUp(int n) {
       return ((n + 2) | 0x3) - 2;
    }
@@ -460,26 +471,21 @@ class QGridLayoutEngine
  private:
    // User input
    QVector<QGridLayoutItem *> q_grid;
-   QLayoutParameter<qreal> q_defaultSpacings[NOrientations];
-   QGridLayoutRowInfo q_infos[NOrientations];
+   QLayoutParameter<qreal> q_defaultSpacings[GridOrientation_Count];
+   QGridLayoutRowInfo q_infos[GridOrientation_Count];
    Qt::LayoutDirection m_visualDirection;
 
    // Configuration
    Qt::Alignment m_defaultAlignment;
    unsigned m_snapToPixelGrid : 1;
    // Lazily computed from the above user input
-   mutable int q_cachedEffectiveFirstRows[NOrientations];
-   mutable int q_cachedEffectiveLastRows[NOrientations];
+   mutable int q_cachedEffectiveFirstRows[GridOrientation_Count];
+   mutable int q_cachedEffectiveLastRows[GridOrientation_Count];
    mutable quint8 q_cachedConstraintOrientation : 3;
 
    // this is useful to cache
-   mutable QGridLayoutBox q_totalBoxes[NOrientations];
-   enum {
-      NotCached = -2,             // Cache is empty. Happens when the engine is invalidated.
-      CachedWithNoConstraint = -1 // cache has a totalBox without any HFW/WFH constraints.
-         // >= 0                     // cache has a totalBox with this specific constraint.
-   };
-   mutable qreal q_totalBoxCachedConstraints[NOrientations];   // holds the constraint used for the cached totalBox
+   mutable QGridLayoutBox q_totalBoxes[GridOrientation_Count];
+   mutable qreal q_totalBoxCachedConstraints[GridOrientation_Count];   // holds the constraint used for the cached totalBox
    mutable QGridLayoutRowData q_columnData;
    mutable QGridLayoutRowData q_rowData;
 

@@ -56,7 +56,11 @@ class QTabBar;
 // indexes into the QDockAreaLayoutInfo::item_list.
 
 struct QDockAreaLayoutItem {
-   enum ItemFlags { NoFlags = 0, GapItem = 1, KeepSize = 2 };
+   enum ItemFlags {
+      NoFlags  = 0,
+      GapItem  = 1,
+      KeepSize = 2
+   };
 
    QDockAreaLayoutItem(QLayoutItem *_widgetItem = nullptr);
    QDockAreaLayoutItem(QDockAreaLayoutInfo *_subinfo);
@@ -95,6 +99,16 @@ class QPlaceHolderItem
 class QDockAreaLayoutInfo
 {
  public:
+   static constexpr const uchar SequenceMarker = 0xfc;
+   static constexpr const uchar TabMarker      = 0xfa;
+   static constexpr const uchar WidgetMarker   = 0xfb;
+
+   enum TabMode {
+      NoTabs,
+      AllowTabs,
+      ForceTabs
+   };
+
    QDockAreaLayoutInfo();
    QDockAreaLayoutInfo(const int *_sep, QInternal::DockPosition _dockPos, Qt::Orientation _o,
       int tbhape, QMainWindow *window);
@@ -107,7 +121,6 @@ class QDockAreaLayoutInfo
    bool insertGap(const QList<int> &path, QLayoutItem *dockWidgetItem);
    QLayoutItem *plug(const QList<int> &path);
    QLayoutItem *unplug(const QList<int> &path);
-   enum TabMode { NoTabs, AllowTabs, ForceTabs };
 
    QList<int> gapIndex(const QPoint &pos, bool nestingEnabled, TabMode tabMode) const;
    void remove(const QList<int> &path);
@@ -118,10 +131,6 @@ class QDockAreaLayoutInfo
    QDockAreaLayoutItem &item(const QList<int> &path);
    QDockAreaLayoutInfo *info(const QList<int> &path);
    QDockAreaLayoutInfo *info(QWidget *widget);
-
-   static constexpr const uchar SequenceMarker = 0xfc;
-   static constexpr const uchar TabMarker      = 0xfa;
-   static constexpr const uchar WidgetMarker   = 0xfb;
 
    void saveState(QDataStream &stream) const;
    bool restoreState(QDataStream &stream, QList<QDockWidget *> &widgets, bool testing);
@@ -193,10 +202,11 @@ class QDockAreaLayoutInfo
 class QDockAreaLayout
 {
  public:
-   enum { EmptyDropAreaSize = 80 }; // when a dock area is empty, how "wide" is it?
+   // when a dock area is empty, how "wide" is it?
+   static constexpr const int EmptyDropAreaSize = 80;
 
-   enum {
-      DockWidgetStateMarker = 0xfd,
+   enum DockMarker {
+      DockWidgetStateMarker       = 0xfd,
       FloatingDockWidgetTabMarker = 0xf9
    };
 

@@ -77,7 +77,7 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    class WindowSystemEvent
    {
     public:
-      enum {
+      enum EventSource {
          Synthetic  = 0x1,
          NullWindow = 0x2
       };

@@ -181,6 +181,15 @@ enum ApplicationResourceFlags {
    ApplicationFontExplicitlySet    = 0x2
 };
 
+enum ApplicationMouseFlags {
+   MouseCapsMask       = 0xFF,
+   MouseSourceMaskDst  = 0xFF00,
+   MouseSourceMaskSrc  = MouseCapsMask,
+   MouseSourceShift    = 8,
+   MouseFlagsCapsMask  = 0xFF0000,
+   MouseFlagsShift     = 16
+};
+
 static bool force_reverse                = false;
 static unsigned applicationResourceFlags = 0;
 static qreal fontSmoothingGamma          = 1.7;
@@ -3438,15 +3447,6 @@ void QGuiApplicationPrivate::_q_updateFocusObject(QObject *object)
    }
    emit q->focusObjectChanged(object);
 }
-
-enum {
-   MouseCapsMask = 0xFF,
-   MouseSourceMaskDst = 0xFF00,
-   MouseSourceMaskSrc = MouseCapsMask,
-   MouseSourceShift = 8,
-   MouseFlagsCapsMask = 0xFF0000,
-   MouseFlagsShift = 16
-};
 
 int QGuiApplicationPrivate::mouseEventCaps(QMouseEvent *event)
 {

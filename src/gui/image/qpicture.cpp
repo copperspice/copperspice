@@ -1134,6 +1134,12 @@ QPictureIO::~QPictureIO()
 class QPictureHandler
 {
  public:
+   enum TMode {
+      Untranslated = 0,
+      TranslateIn,
+      TranslateInOut
+   };
+
    QPictureHandler(const QString &f, const QString &h, const QString &fl,
       picture_io_handler r, picture_io_handler w);
 
@@ -1144,7 +1150,7 @@ class QPictureHandler
    picture_io_handler  write_picture;         // picture write function
    bool                obsolete;              // support not "published"
 
-   enum TMode { Untranslated = 0, TranslateIn, TranslateInOut } text_mode;
+   TMode text_mode;
 };
 
 QPictureHandler::QPictureHandler(const QString &f, const QString &h, const QString &fl,

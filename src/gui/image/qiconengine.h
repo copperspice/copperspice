@@ -32,7 +32,10 @@
 class Q_GUI_EXPORT QIconEngine
 {
  public:
-   enum IconEngineHook { AvailableSizesHook = 1, IconNameHook };
+   enum IconEngineHook {
+      AvailableSizesHook = 1,
+      IconNameHook
+   };
 
    QIconEngine();
 

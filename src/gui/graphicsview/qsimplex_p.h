@@ -133,6 +133,11 @@ class QSimplex
    void dumpMatrix();
 
  private:
+   enum SolverFactor {
+      Minimum = -1,
+      Maximum = 1
+   };
+
    // Matrix handling
    inline qreal valueAt(int row, int column);
    inline void setValueAt(int row, int column, qreal value);
@@ -151,7 +156,6 @@ class QSimplex
    void clearDataStructures();
    void solveMaxHelper();
 
-   enum SolverFactor { Minimum = -1, Maximum = 1 };
    qreal solver(SolverFactor factor);
 
    void collectResults();

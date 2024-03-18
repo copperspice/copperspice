@@ -38,7 +38,15 @@ class Q_GUI_EXPORT QFileIconProvider
    };
    using Options = QFlags<Option>;
 
-   enum IconType { Computer, Desktop, Trashcan, Network, Drive, Folder, File };
+   enum IconType {
+      Computer,
+      Desktop,
+      Trashcan,
+      Network,
+      Drive,
+      Folder,
+      File
+   };
 
    QFileIconProvider();
 

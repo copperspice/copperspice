@@ -52,7 +52,10 @@ class Q_GUI_EXPORT QDataWidgetMapper : public QObject
    GUI_CS_PROPERTY_WRITE(submitPolicy, setSubmitPolicy)
 
  public:
-   enum SubmitPolicy { AutoSubmit, ManualSubmit };
+   enum SubmitPolicy {
+      AutoSubmit,
+      ManualSubmit
+   };
 
    explicit QDataWidgetMapper(QObject *parent = nullptr);
 

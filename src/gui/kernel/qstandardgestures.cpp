@@ -442,10 +442,12 @@ QGestureRecognizer::Result QTapGestureRecognizer::recognize(QGesture *state,
       }
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd: {
+         static constexpr const int TapRadius = 40;
+
          if (q->state() != Qt::NoGesture && ev->touchPoints().size() == 1) {
             QTouchEvent::TouchPoint p = ev->touchPoints().at(0);
             QPoint delta = p.pos().toPoint() - p.startPos().toPoint();
-            enum { TapRadius = 40 };
+
             if (delta.manhattanLength() <= TapRadius) {
                if (event->type() == QEvent::TouchEnd) {
                   result = QGestureRecognizer::FinishGesture;
@@ -493,6 +495,8 @@ QGesture *QTapAndHoldGestureRecognizer::create(QObject *target)
 QGestureRecognizer::Result QTapAndHoldGestureRecognizer::recognize(QGesture *state, QObject *object,
    QEvent *event)
 {
+   static constexpr const int TapRadius = 40;
+
    QTapAndHoldGesture *q = static_cast<QTapAndHoldGesture *>(state);
    QTapAndHoldGesturePrivate *d = q->d_func();
 
@@ -501,8 +505,6 @@ QGestureRecognizer::Result QTapAndHoldGestureRecognizer::recognize(QGesture *sta
       d->timerId = 0;
       return QGestureRecognizer::FinishGesture | QGestureRecognizer::ConsumeEventHint;
    }
-
-   enum { TapRadius = 40 };
 
    switch (event->type()) {
 #ifndef QT_NO_GRAPHICSVIEW

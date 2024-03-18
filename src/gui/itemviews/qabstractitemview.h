@@ -146,6 +146,18 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
       };
    )
 
+#ifndef QT_NO_DRAGANDDROP
+   GUI_CS_REGISTER_ENUM(
+      enum DragDropMode {
+         NoDragDrop,
+         DragOnly,
+         DropOnly,
+         DragDrop,
+         InternalMove
+      };
+   )
+#endif
+
    explicit QAbstractItemView(QWidget *parent = nullptr);
 
    QAbstractItemView(const QAbstractItemView &) = delete;
@@ -198,16 +210,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    void setDragDropOverwriteMode(bool overwrite);
    bool dragDropOverwriteMode() const;
-
-   GUI_CS_REGISTER_ENUM(
-      enum DragDropMode {
-         NoDragDrop,
-         DragOnly,
-         DropOnly,
-         DragDrop,
-         InternalMove
-      };
-   )
 
    void setDragDropMode(DragDropMode behavior);
    DragDropMode dragDropMode() const;
@@ -304,6 +306,38 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SIGNAL_2(iconSizeChanged, size)
 
  protected:
+   enum CursorAction {
+      MoveUp,
+      MoveDown,
+      MoveLeft,
+      MoveRight,
+      MoveHome,
+      MoveEnd,
+      MovePageUp,
+      MovePageDown,
+      MoveNext,
+      MovePrevious
+   };
+
+   enum State {
+      NoState,
+      DraggingState,
+      DragSelectingState,
+      EditingState,
+      ExpandingState,
+      CollapsingState,
+      AnimatingState
+   };
+
+#ifndef QT_NO_DRAGANDDROP
+   enum DropIndicatorPosition {
+      OnItem,
+      AboveItem,
+      BelowItem,
+      OnViewport
+   };
+#endif
+
    GUI_CS_SLOT_1(Protected, virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
          const QVector<int> &roles = QVector<int>()))
    GUI_CS_SLOT_2(dataChanged)
@@ -358,11 +392,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void setVerticalStepsPerItem(int steps);
    int verticalStepsPerItem() const;
 
-   enum CursorAction { MoveUp, MoveDown, MoveLeft, MoveRight,
-      MoveHome, MoveEnd, MovePageUp, MovePageDown,
-      MoveNext, MovePrevious
-   };
-
    virtual QModelIndex moveCursor(CursorAction cursorAction, Qt::KeyboardModifiers modifiers) = 0;
 
    virtual int horizontalOffset() const = 0;
@@ -383,16 +412,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 #endif
 
    virtual QStyleOptionViewItem viewOptions() const;
-
-   enum State {
-      NoState,
-      DraggingState,
-      DragSelectingState,
-      EditingState,
-      ExpandingState,
-      CollapsingState,
-      AnimatingState
-   };
 
    State state() const;
    void setState(State state);
@@ -431,7 +450,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void inputMethodEvent(QInputMethodEvent *event) override;
 
 #ifndef QT_NO_DRAGANDDROP
-   enum DropIndicatorPosition { OnItem, AboveItem, BelowItem, OnViewport };
    DropIndicatorPosition dropIndicatorPosition() const;
 #endif
 

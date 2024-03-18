@@ -142,10 +142,16 @@ class QPngHandlerPrivate
 class QPNGImageWriter
 {
  public:
+   enum DisposalMethod {
+      Unspecified,
+      NoDisposal,
+      RestoreBackground,
+      RestoreImage
+   };
+
    explicit QPNGImageWriter(QIODevice *);
    ~QPNGImageWriter();
 
-   enum DisposalMethod { Unspecified, NoDisposal, RestoreBackground, RestoreImage };
    void setDisposalMethod(DisposalMethod);
    void setLooping(int loops = 0); // 0 == infinity
    void setFrameDelay(int msecs);

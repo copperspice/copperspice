@@ -44,7 +44,11 @@ class QFileIconProvider;
 class QExtendedInformation
 {
  public:
-   enum Type { Dir, File, System };
+   enum Type {
+      Dir,
+      File,
+      System
+   };
 
    QExtendedInformation() {}
    QExtendedInformation(const QFileInfo &info) : mFileInfo(info) {}

@@ -40,8 +40,12 @@ class QStyleOptionTitleBar;
 class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 {
  public:
-   // Margins
-   enum {Left, Top, Right, Bottom};
+   enum WidgetMargins {
+      Left,
+      Top,
+      Right,
+      Bottom
+   };
 
    QGraphicsWidgetPrivate()
       : windowData(nullptr), margins(nullptr), setWindowFrameMargins(false), windowFrameMargins(nullptr),

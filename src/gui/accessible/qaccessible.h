@@ -273,18 +273,18 @@ class Q_GUI_EXPORT QAccessible
       PageTabList    = 0x0000003C,
       Clock          = 0x0000003D,
       Splitter       = 0x0000003E,
-      // Additional Qt roles where enum value does not map directly to MSAA:
+      // Additional roles where enum value does not map directly to MSAA:
       LayeredPane    = 0x00000080,
       Terminal       = 0x00000081,
       Desktop        = 0x00000082,
       Paragraph      = 0x00000083,
       WebDocument    = 0x00000084,
       Section        = 0x00000085,
-      ColorChooser = 0x404,
-      Footer      = 0x40E,
-      Form        = 0x410,
-      Heading  = 0x414,
-      Note = 0x41B,
+      ColorChooser   = 0x404,
+      Footer         = 0x40E,
+      Form           = 0x410,
+      Heading        = 0x414,
+      Note           = 0x41B,
       ComplementaryContent = 0x42C,
       UserRole       = 0x0000ffff
    };

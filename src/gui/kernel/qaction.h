@@ -134,6 +134,11 @@ class Q_GUI_EXPORT QAction : public QObject
       HighPriority   = 256
    };
 
+   enum ActionEvent {
+      Trigger,
+      Hover
+   };
+
    explicit QAction(QObject *parent);
    QAction(const QString &text, QObject *parent);
    QAction(const QIcon &icon, const QString &text, QObject *parent);
@@ -202,7 +207,6 @@ class Q_GUI_EXPORT QAction : public QObject
    bool isEnabled() const;
    bool isVisible() const;
 
-   enum ActionEvent { Trigger, Hover };
    void activate(ActionEvent event);
    bool showStatusText(QWidget *widget = nullptr);
 

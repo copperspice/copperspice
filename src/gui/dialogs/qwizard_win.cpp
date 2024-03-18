@@ -97,16 +97,18 @@ enum WIZ_WINDOWTHEMEATTRIBUTETYPE {
 #define WIZ_DT_SINGLELINE                0x00000020
 #define WIZ_DT_NOPREFIX                  0x00000800
 
-enum WIZ_NAVIGATIONPARTS {               // NAVIGATIONPARTS
-   WIZ_NAV_BACKBUTTON = 1,
+enum WIZ_NAVIGATIONPARTS {
+   // NAVIGATIONPARTS
+   WIZ_NAV_BACKBUTTON    = 1,
    WIZ_NAV_FORWARDBUTTON = 2,
-   WIZ_NAV_MENUBUTTON = 3,
+   WIZ_NAV_MENUBUTTON    = 3,
 };
 
-enum WIZ_NAV_BACKBUTTONSTATES {          //NAV_BACKBUTTONSTATES
-   WIZ_NAV_BB_NORMAL = 1,
-   WIZ_NAV_BB_HOT = 2,
-   WIZ_NAV_BB_PRESSED = 3,
+enum WIZ_NAV_BACKBUTTONSTATES {
+   // NAV_BACKBUTTONSTATES
+   WIZ_NAV_BB_NORMAL   = 1,
+   WIZ_NAV_BB_HOT      = 2,
+   WIZ_NAV_BB_PRESSED  = 3,
    WIZ_NAV_BB_DISABLED = 4,
 };
 
@@ -163,7 +165,7 @@ static PtrGetThemeColor pGetThemeColor = nullptr;
 int QVistaHelper::instanceCount = 0;
 int QVistaHelper::m_devicePixelRatio = 1;
 bool QVistaHelper::is_vista = false;
-QVistaHelper::VistaState QVistaHelper::cachedVistaState = QVistaHelper::Dirty;
+QVistaHelper::VistaState QVistaHelper::cachedVistaState = QVistaHelper::VistaState::Dirty;
 
 /******************************************************************************
 ** QVistaBackButton
@@ -260,7 +262,7 @@ QVistaHelper::QVistaHelper(QWizard *wizard)
    is_vista = QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && resolveSymbols();
 
    if (instanceCount++ == 0) {
-      cachedVistaState = Dirty;
+      cachedVistaState = QVistaHelper::VistaState::Dirty;
    }
 
    if (is_vista) {
@@ -318,7 +320,7 @@ bool QVistaHelper::isThemeActive()
 
 QVistaHelper::VistaState QVistaHelper::vistaState()
 {
-   if (instanceCount == 0 || cachedVistaState == Dirty) {
+   if (instanceCount == 0 || cachedVistaState == QVistaHelper::VistaState::Dirty) {
       cachedVistaState =  isCompositionEnabled() ? VistaAero : isThemeActive() ? VistaBasic : Classic;
    }
 
@@ -566,7 +568,7 @@ void QVistaHelper::mouseEvent(QEvent *event)
 bool QVistaHelper::handleWinEvent(MSG *message, long *result)
 {
    if (message->message == WIZ_WM_THEMECHANGED || message->message == WIZ_WM_DWMCOMPOSITIONCHANGED) {
-      cachedVistaState = Dirty;
+      cachedVistaState = QVistaHelper::VistaState::Dirty;
    }
 
    bool status = false;

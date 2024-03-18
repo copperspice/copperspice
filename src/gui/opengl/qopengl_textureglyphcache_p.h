@@ -82,6 +82,11 @@ public:
 class Q_GUI_EXPORT QOpenGLTextureGlyphCache : public QImageTextureGlyphCache
 {
 public:
+    enum FilterMode {
+        Nearest,
+        Linear
+    };
+
     QOpenGLTextureGlyphCache(QFontEngine::GlyphFormat glyphFormat, const QTransform &matrix);
     ~QOpenGLTextureGlyphCache();
 
@@ -116,10 +121,6 @@ public:
 
     inline int serialNumber() const { return m_serialNumber; }
 
-    enum FilterMode {
-        Nearest,
-        Linear
-    };
     FilterMode filterMode() const { return m_filterMode; }
     void setFilterMode(FilterMode m) { m_filterMode = m; }
 

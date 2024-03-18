@@ -40,7 +40,11 @@
 class QIconLoader;
 
 struct QIconDirInfo {
-   enum Type { Fixed, Scalable, Threshold };
+   enum Type {
+      Fixed,
+      Scalable,
+      Threshold
+   };
 
    QIconDirInfo(const QString &_path = QString()) :
       path(_path),

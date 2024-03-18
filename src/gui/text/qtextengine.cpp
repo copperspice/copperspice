@@ -101,7 +101,7 @@ class Itemizer
    }
 
  private:
-   enum { MaxItemLength = 4096 };
+   static constexpr const int MaxItemLength = 4096;
 
    void generateScriptItemsAndChangeCase(int start, int length, QScriptAnalysis::Flags flags) {
       generateScriptItems(start, length);
@@ -313,10 +313,14 @@ struct QBidiControl {
       return ((level % 2) ? QChar::DirR : QChar:: DirL);
    }
 
-   struct {
+   struct Context {
       unsigned int level;
       bool override;
-   } ctx[MaxBidiLevel];
+
+   };
+
+   Context ctx[MaxBidiLevel];
+
    unsigned int cCtx;
    const unsigned int base;
    unsigned int level;

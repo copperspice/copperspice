@@ -62,6 +62,8 @@ class QCosmeticStroker
       HorizontalMask = 0xc
    };
 
+   static constexpr const int SpanCount = 255;
+
    QCosmeticStroker(QRasterPaintEngineState *s, const QRect &dr, const QRect &dr_unclipped)
       : state(s), deviceRect(dr_unclipped), clip(dr), pattern(nullptr), reversePattern(nullptr),
         patternSize(0), patternLength(0), patternOffset(0), legacyRounding(false),
@@ -102,8 +104,8 @@ class QCosmeticStroker
    int patternOffset;
    bool legacyRounding;
 
-   enum { NSPANS = 255 };
-   QT_FT_Span spans[NSPANS];
+   QT_FT_Span spans[SpanCount];
+
    int current_span;
    ProcessSpans blend;
 

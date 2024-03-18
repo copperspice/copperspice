@@ -129,7 +129,7 @@ void FixedColumnMatrix<T, NumColumns>::storageIndexToPosition(int idx, int *rowP
 const uint DefaultFieldGrowthPolicy = 255;
 const uint DefaultRowWrapPolicy = 255;
 
-enum { ColumnCount = 2 };
+static constexpr const int ColumnCount = 2;
 
 // -- our data structure for our items
 // This owns the QLayoutItem

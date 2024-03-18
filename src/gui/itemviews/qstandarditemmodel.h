@@ -42,6 +42,11 @@ class Q_GUI_EXPORT QStandardItem
 {
 
  public:
+   enum ItemType {
+      Type     = 0,
+      UserType = 1000
+   };
+
    QStandardItem();
    explicit QStandardItem(const QString &text);
    QStandardItem(const QIcon &icon, const QString &text);
@@ -209,8 +214,6 @@ class Q_GUI_EXPORT QStandardItem
    void sortChildren(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
    virtual QStandardItem *clone() const;
-
-   enum ItemType { Type = 0, UserType = 1000 };
    virtual int type() const;
 
 #ifndef QT_NO_DATASTREAM

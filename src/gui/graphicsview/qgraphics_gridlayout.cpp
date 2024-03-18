@@ -395,8 +395,7 @@ void QGraphicsGridLayout::removeAt(int index)
       d->engine.removeItem(gridItem);
 
       // recalculate rowInfo.count if we remove an item that is on the right/bottommost row
-      for (int j = 0; j < NOrientations; ++j) {
-         // 0: Hor, 1: Ver
+      for (int j = 0; j < GridOrientation_Count; ++j) {
          const Qt::Orientation orient = (j == 0 ? Qt::Horizontal : Qt::Vertical);
          const int oldCount = d->engine.rowCount(orient);
          if (gridItem->lastRow(orient) == oldCount - 1) {

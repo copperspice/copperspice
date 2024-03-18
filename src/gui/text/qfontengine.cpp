@@ -39,6 +39,16 @@
 #include <algorithm>
 #include <limits.h>
 
+#define GRID(x, y) grid[(y)*(w+1) + (x)]
+#define SET(x, y) (*(image_data + (y)*bpl + ((x) >> 3)) & (0x80 >> ((x) & 7)))
+
+enum FontEdges {
+   EdgeRight = 0x1,
+   EdgeDown  = 0x2,
+   EdgeLeft  = 0x4,
+   EdgeUp    = 0x8
+};
+
 static inline bool qtransform_equals_no_translate(const QTransform &a, const QTransform &b)
 {
    if (a.type() <= QTransform::TxTranslate && b.type() <= QTransform::TxTranslate) {
@@ -495,15 +505,6 @@ void QFontEngine::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs,
    getGlyphPositions(glyphs, matrix, flags, positioned_glyphs, positions);
    addGlyphsToPath(positioned_glyphs.data(), positions.data(), positioned_glyphs.size(), path, flags);
 }
-
-#define GRID(x, y) grid[(y)*(w+1) + (x)]
-#define SET(x, y) (*(image_data + (y)*bpl + ((x) >> 3)) & (0x80 >> ((x) & 7)))
-
-enum { EdgeRight = 0x1,
-   EdgeDown  = 0x2,
-   EdgeLeft  = 0x4,
-   EdgeUp    = 0x8
-};
 
 static void collectSingleContour(qreal x0, qreal y0, uint *grid, int x, int y, int w, int h, QPainterPath *path)
 {

@@ -184,7 +184,7 @@ class Q_GUI_EXPORT QMatrix4x4
    qreal m[4][4];          // Column-major order to match OpenGL.
    int flagBits;           // Flag bits from the enum below.
 
-   enum {
+   enum MatrixType {
       Identity        = 0x0000,   // Identity matrix
       Translation     = 0x0001,   // Contains a simple translation
       Scale           = 0x0002,   // Contains a simple scale

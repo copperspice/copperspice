@@ -273,6 +273,6 @@ static const AGLEntry unicode_to_agl_map[] = {
    { 0x2666, 2211 }, { 0x266a, 3256 }, { 0x266b, 3268 }
 };
 
-enum { unicode_to_agl_map_size = sizeof(unicode_to_agl_map) / sizeof(unicode_to_agl_map[0]) };
+static constexpr const int unicode_to_agl_map_size = sizeof(unicode_to_agl_map) / sizeof(unicode_to_agl_map[0]);
 
 }

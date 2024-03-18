@@ -50,6 +50,11 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
    Q_DECLARE_PUBLIC(QToolButton)
 
  public:
+   enum ButtonStatus {
+      NoButtonPressed   = 0,
+      MenuButtonPressed = 1,
+      ToolButtonPressed = 2
+   };
    void init();
 
 #ifndef QT_NO_MENU
@@ -71,7 +76,6 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
    Qt::ArrowType arrowType;
    Qt::ToolButtonStyle toolButtonStyle;
    QToolButton::ToolButtonPopupMode popupMode;
-   enum { NoButtonPressed = 0, MenuButtonPressed = 1, ToolButtonPressed = 2 };
    uint buttonPressed : 2;
    uint menuButtonDown          : 1;
    uint autoRaise             : 1;

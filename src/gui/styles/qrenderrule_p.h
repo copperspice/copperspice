@@ -204,6 +204,13 @@ struct QStyleSheetImageData : public QSharedData {
 class QRenderRule
 {
  public:
+   enum RenderArea {
+      Margin  = 1,
+      Border  = 2,
+      Padding = 4,
+      All     = Margin | Border | Padding
+   };
+
    QRenderRule()
       : features(0), hasFont(false), pal(nullptr), b(nullptr), bg(nullptr), bd(nullptr),
         ou(nullptr), geo(nullptr), p(nullptr), img(nullptr), clipset(0)
@@ -217,7 +224,6 @@ class QRenderRule
    QRect paddingRect(const QRect &r) const;
    QRect contentsRect(const QRect &r) const;
 
-   enum { Margin = 1, Border = 2, Padding = 4, All = Margin | Border | Padding };
    QRect boxRect(const QRect &r, int flags = All) const;
    QSize boxSize(const QSize &s, int flags = All) const;
    QRect originRect(const QRect &rect, QCss::Origin origin) const;

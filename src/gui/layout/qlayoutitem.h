@@ -155,20 +155,21 @@ class Q_GUI_EXPORT QWidgetItemV2 : public QWidgetItem
    int heightForWidth(int width) const override;
 
  private:
-   enum { Dirty = -123, HfwCacheMaxSize = 3 };
+   static constexpr const int ItemDirty    = -123;
+   static constexpr const int SizeCacheMax = 3;
 
    inline bool useSizeCache() const;
    void updateCacheIfNecessary() const;
 
    void invalidateSizeCache() {
-      q_cachedMinimumSize.setWidth(Dirty);
+      q_cachedMinimumSize.setWidth(ItemDirty);
       q_hfwCacheSize = 0;
    }
 
    mutable QSize q_cachedMinimumSize;
    mutable QSize q_cachedSizeHint;
    mutable QSize q_cachedMaximumSize;
-   mutable QSize q_cachedHfws[HfwCacheMaxSize];
+   mutable QSize q_cachedHfws[SizeCacheMax];
    mutable short q_firstCachedHfw;
    mutable short q_hfwCacheSize;
    void *d;

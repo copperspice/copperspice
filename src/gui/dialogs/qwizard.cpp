@@ -307,7 +307,9 @@ bool QWizardLayoutInfo::operator==(const QWizardLayoutInfo &other)
 class QWizardHeader : public QWidget
 {
  public:
-   enum RulerType { Ruler };
+   enum RulerType {
+      Ruler
+   };
 
    inline QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
       : QWidget(parent) {
@@ -520,7 +522,11 @@ class QWizardPagePrivate : public QWidgetPrivate
    Q_DECLARE_PUBLIC(QWizardPage)
 
  public:
-   enum TriState { Tri_Unknown = -1, Tri_False, Tri_True };
+   enum TriState {
+      Tri_Unknown = -1,
+      Tri_False,
+      Tri_True
+   };
 
    inline QWizardPagePrivate()
       : wizard(nullptr), completeState(Tri_Unknown), explicitlyFinal(false), commit(false) {}
@@ -624,7 +630,7 @@ class QWizardPrivate : public QDialogPrivate
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA)
       , vistaHelper(nullptr)
       , vistaInitPending(false)
-      , vistaState(QVistaHelper::Dirty)
+      , vistaState(QVistaHelper::VistaState::Dirty)
       , vistaStateChanged(false)
       , inHandleAeroStyleChange(false)
 #endif

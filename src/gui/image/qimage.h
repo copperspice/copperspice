@@ -49,7 +49,10 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 {
 
  public:
-   enum InvertMode { InvertRgb, InvertRgba };
+   enum InvertMode {
+      InvertRgb,
+      InvertRgba
+   };
 
    enum Format {
       Format_Invalid,

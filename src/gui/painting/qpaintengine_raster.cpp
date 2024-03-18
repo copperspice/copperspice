@@ -1230,6 +1230,8 @@ void QRasterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
 
 static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEnginePrivate *pe)
 {
+   static constexpr const int ArraySize = 256;
+
    int x1, x2, y1, y2;
 
    bool rectClipped = true;
@@ -1283,12 +1285,11 @@ static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEng
 
    Q_ASSERT(blend);
 
-   const int nspans = 256;
-   QT_FT_Span spans[nspans];
+   QT_FT_Span spans[ArraySize];
 
    int y = y1;
    while (y < y2) {
-      int n = qMin(nspans, y2 - y);
+      int n = qMin(ArraySize, y2 - y);
       int i = 0;
 
       while (i < n) {
@@ -2445,6 +2446,8 @@ QRasterBuffer *QRasterPaintEngine::rasterBuffer()
 */
 void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx, int ry, int w, int h)
 {
+   static constexpr const int ArraySize = 256;
+
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
@@ -2573,8 +2576,7 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
       return;
    }
 
-   const int NSPANS = 256;
-   QSpan spans[NSPANS];
+   QSpan spans[ArraySize];
    int current = 0;
 
    const int x1 = x0 + w;
@@ -2588,7 +2590,7 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
                continue;
             }
 
-            if (current == NSPANS) {
+            if (current == ArraySize) {
                blend(current, spans, &s->penData);
                current = 0;
             }
@@ -2616,7 +2618,7 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
                continue;
             }
 
-            if (current == NSPANS) {
+            if (current == ArraySize) {
                blend(current, spans, &s->penData);
                current = 0;
             }
@@ -2650,7 +2652,7 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
                continue;
             }
 
-            if (current == NSPANS) {
+            if (current == ArraySize) {
                blend(current, spans, &s->penData);
                current = 0;
             }
@@ -3981,19 +3983,21 @@ static const QSpan *qt_intersect_spans(const QClipData *clip, int *currentClip,
 
 static void qt_span_fill_clipped(int spanCount, const QSpan *spans, void *userData)
 {
+   static constexpr const int ArraySize = 256;
+
    //     qDebug() << "qt_span_fill_clipped" << spanCount;
    QSpanData *fillData = reinterpret_cast<QSpanData *>(userData);
 
    Q_ASSERT(fillData->blend && fillData->unclipped_blend);
 
-   const int NSPANS = 256;
-   QSpan cspans[NSPANS];
+   QSpan cspans[ArraySize];
+
    int currentClip = 0;
    const QSpan *end = spans + spanCount;
 
    while (spans < end) {
       QSpan *clipped = cspans;
-      spans = qt_intersect_spans(fillData->clip, &currentClip, spans, end, &clipped, NSPANS);
+      spans = qt_intersect_spans(fillData->clip, &currentClip, spans, end, &clipped, ArraySize);
       //         qDebug() << "processed " << spanCount - (end - spans) << "clipped" << clipped-cspans
       //                  << "span:" << cspans->x << cspans->y << cspans->len << spans->coverage;
 

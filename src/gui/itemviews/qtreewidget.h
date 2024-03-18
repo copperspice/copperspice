@@ -46,7 +46,16 @@ class Q_GUI_EXPORT QTreeWidgetItem
    friend class QTreeWidgetItemPrivate;
 
  public:
-   enum ItemType { Type = 0, UserType = 1000 };
+   enum ItemType {
+      Type     = 0,
+      UserType = 1000
+   };
+
+   enum ChildIndicatorPolicy {
+      ShowIndicator,
+      DontShowIndicator,
+      DontShowIndicatorWhenChildless
+   };
 
    explicit QTreeWidgetItem(int type = Type);
    explicit QTreeWidgetItem(const QStringList &strings, int type = Type);
@@ -84,7 +93,6 @@ class Q_GUI_EXPORT QTreeWidgetItem
    inline void setDisabled(bool disabled);
    inline bool isDisabled() const;
 
-   enum ChildIndicatorPolicy { ShowIndicator, DontShowIndicator, DontShowIndicatorWhenChildless };
    void setChildIndicatorPolicy(QTreeWidgetItem::ChildIndicatorPolicy policy);
    QTreeWidgetItem::ChildIndicatorPolicy childIndicatorPolicy() const;
 

@@ -79,6 +79,9 @@ class QGraphicsItemGroupPrivate;
 class Q_GUI_EXPORT QGraphicsItem
 {
  public:
+   static constexpr const int Type = 1;
+   static constexpr const int UserType = 65536;
+
    enum GraphicsItemFlag {
       ItemIsMovable = 0x1,
       ItemIsSelectable = 0x2,
@@ -431,9 +434,6 @@ class Q_GUI_EXPORT QGraphicsItem
 
    Qt::InputMethodHints inputMethodHints() const;
    void setInputMethodHints(Qt::InputMethodHints hints);
-
-   static constexpr const int Type = 1;
-   static constexpr const int UserType = 65536;
 
    virtual int type() const;
 

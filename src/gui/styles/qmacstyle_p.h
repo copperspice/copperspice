@@ -202,8 +202,16 @@ class QMacStylePrivate : public QCommonStylePrivate
 
    struct ButtonState {
       int frame;
-      enum { ButtonDark, ButtonLight } dir;
-   } buttonState;
+
+      enum ButtonColor {
+         ButtonDark,
+         ButtonLight
+      };
+
+      ButtonColor dir;
+   };
+
+   ButtonState buttonState;
 
    mutable QPointer<QFocusFrame> focusWidget;
    CFAbsoluteTime defaultButtonStart;

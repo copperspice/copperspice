@@ -43,7 +43,8 @@
 // qmainwindow.cpp
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 
-enum { StateFlagVisible = 1, StateFlagFloating = 2 };
+static constexpr const int StateFlagVisible  = 1;
+static constexpr const int StateFlagFloating = 2;
 
 QPlaceHolderItem::QPlaceHolderItem(QWidget *w)
 {

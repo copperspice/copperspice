@@ -2824,7 +2824,11 @@ bool QGraphicsAnchorLayoutPrivate::solveMinMax(const QList<QSimplexConstraint *>
    return feasible;
 }
 
-enum slackType { Grower = -1, Shrinker = 1 };
+enum slackType {
+   Grower   = -1,
+   Shrinker = 1
+};
+
 static QPair<QSimplexVariable *, QSimplexConstraint *> createSlack(QSimplexConstraint *sizeConstraint,
    qreal interval, slackType type)
 {

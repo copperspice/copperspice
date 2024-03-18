@@ -439,6 +439,12 @@ static QImageIOHandler *createReadHandlerHelper(QIODevice *device,
 class QImageReaderPrivate
 {
  public:
+   enum ImageReadFlags {
+      UsePluginDefault,
+      ApplyTransform,
+      DoNotApplyTransform
+   };
+
    QImageReaderPrivate(QImageReader *qq);
    ~QImageReaderPrivate();
 
@@ -459,11 +465,7 @@ class QImageReaderPrivate
    QMap<QString, QString> text;
    void getText();
 
-   enum {
-      UsePluginDefault,
-      ApplyTransform,
-      DoNotApplyTransform
-   } autoTransform;
+   ImageReadFlags autoTransform;
 
    // error
    QImageReader::ImageReaderError imageReaderError;

@@ -78,7 +78,17 @@ class QGIFFormat
       SkipBlock,
       Done,
       Error
-   } state;
+   };
+
+   enum Disposal {
+      NoDisposal,
+      DoNotChange,
+      RestoreBackground,
+      RestoreImage
+   };
+
+   State state;
+   Disposal disposal;
    int gncols;
    int lncols;
    int ncols;
@@ -87,8 +97,7 @@ class QGIFFormat
    int swidth, sheight;
    int width, height;
    int left, top, right, bottom;
-   enum Disposal { NoDisposal, DoNotChange, RestoreBackground, RestoreImage };
-   Disposal disposal;
+
    bool disposed;
    int trans_index;
    bool gcmap;

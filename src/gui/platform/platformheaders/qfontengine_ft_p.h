@@ -47,6 +47,8 @@ class QFontconfigDatabase;
 class QFreetypeFace
 {
  public:
+   static constexpr const int CmapCacheSize = 0x200;
+
    void computeSize(const QFontDef &fontDef, int *xsize, int *ysize, bool *outline_drawing);
    QFontEngine::Properties properties() const;
    bool getSfntTable(uint tag, uchar *buffer, uint *length) const;
@@ -71,8 +73,7 @@ class QFreetypeFace
    FT_CharMap unicode_map;
    FT_CharMap symbol_map;
 
-   enum { cmapCacheSize = 0x200 };
-   glyph_t cmapCache[cmapCacheSize];
+   glyph_t cmapCache[CmapCacheSize];
 
    int fsType() const;
 

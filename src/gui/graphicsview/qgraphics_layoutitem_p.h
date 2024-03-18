@@ -33,6 +33,11 @@ class QGraphicsLayoutItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsLayoutItem)
 
  public:
+   enum SizeComponent {
+      Width,
+      Height
+   };
+
    virtual ~QGraphicsLayoutItemPrivate();
 
    QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *parent, bool isLayout);
@@ -49,7 +54,7 @@ class QGraphicsLayoutItemPrivate
    QGraphicsItem *parentItem() const;
    void ensureUserSizeHints();
    void setSize(Qt::SizeHint which, const QSizeF &size);
-   enum SizeComponent { Width, Height };
+
    void setSizeComponent(Qt::SizeHint which, SizeComponent component, qreal value);
 
    bool hasHeightForWidth() const;

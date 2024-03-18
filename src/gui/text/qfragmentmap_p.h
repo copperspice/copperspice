@@ -33,21 +33,22 @@ template <int N = 1>
 class QFragment
 {
  public:
+   static constexpr const int size_array_max = N;
+
    quint32 parent;
    quint32 left;
    quint32 right;
    quint32 color;
    quint32 size_left_array[N];
    quint32 size_array[N];
-   enum {size_array_max = N };
 };
 
 template <class Fragment>
 class QFragmentMapData
 {
-   enum Color { Red, Black };
-
  public:
+   static constexpr const int fragmentSize = sizeof(Fragment);
+
    QFragmentMapData();
    ~QFragmentMapData();
 
@@ -62,9 +63,6 @@ class QFragmentMapData
       quint32 node_count;
       quint32 allocated;
    };
-
-
-   enum {fragmentSize = sizeof(Fragment) };
 
    int length(uint field = 0) const;
 
@@ -183,6 +181,11 @@ class QFragmentMapData
    };
 
  private:
+   enum Color {
+      Red,
+      Black
+   };
+
    void rotateLeft(uint x);
    void rotateRight(uint x);
    void rebalance(uint x);

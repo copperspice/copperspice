@@ -110,6 +110,12 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    GUI_CS_PROPERTY_WRITE(autoSipEnabled, setAutoSipEnabled)
 
  public:
+   enum ColorSpec {
+      NormalColor = 0,
+      CustomColor = 1,
+      ManyColor   = 2
+   };
+
    using FP_Void = void(*)();
 
    QApplication(int &argc, char **argv, int flags = ApplicationFlags);
@@ -160,7 +166,6 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    static void setStyle(QStyle *style);
    static QStyle *setStyle(const QString &style);
 
-   enum ColorSpec { NormalColor = 0, CustomColor = 1, ManyColor = 2 };
    static int colorSpec();
    static void setColorSpec(int spec);
 

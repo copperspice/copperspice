@@ -26,7 +26,7 @@
 #include <qdebug.h>
 #include <qpixmapcache_p.h>
 
-static int cache_limit = 10240;    // 10 MB cache limit for desktop
+static int CacheLimit = 10240;    // 10 MB cache limit for desktop
 
 QPixmapCache::Key::Key()
    : d(nullptr)
@@ -109,7 +109,8 @@ class QPMCache : public QObject, public QCache<QPixmapCache::Key, QPixmapCacheEn
    bool flushDetachedPixmaps(bool nt);
 
  private:
-   enum { soon_time = 10000, flush_time = 30000 };
+   static constexpr const int TimeSoon  = 10000;
+   static constexpr const int TimeFlush = 30000;
 
    int *keyArray;
    int theid;
@@ -132,7 +133,7 @@ uint qHash(const QPixmapCache::Key &k)
 }
 
 QPMCache::QPMCache()
-   : QObject(nullptr), QCache<QPixmapCache::Key, QPixmapCacheEntry>(cache_limit * 1024),
+   : QObject(nullptr), QCache<QPixmapCache::Key, QPixmapCacheEntry>(CacheLimit * 1024),
      keyArray(nullptr), theid(0), ps(0), keyArraySize(0), freeKey(0), t(false)
 {
 }
@@ -173,7 +174,7 @@ void QPMCache::timerEvent(QTimerEvent *)
       theid = 0;
    } else if (nt != t) {
       killTimer(theid);
-      theid = startTimer(nt ? soon_time : flush_time);
+      theid = startTimer(nt ? TimeSoon : TimeFlush);
       t = nt;
    }
 }
@@ -224,7 +225,7 @@ bool QPMCache::insert(const QString &key, const QPixmap &pixmap, int cost)
    if (success) {
       cacheKeys.insert(key, cacheKey);
       if (!theid) {
-         theid = startTimer(flush_time);
+         theid = startTimer(TimeFlush);
          t = false;
       }
    } else {
@@ -241,7 +242,7 @@ QPixmapCache::Key QPMCache::insert(const QPixmap &pixmap, int cost)
          cost);
    if (success) {
       if (!theid) {
-         theid = startTimer(flush_time);
+         theid = startTimer(TimeFlush);
          t = false;
       }
    } else {
@@ -263,7 +264,7 @@ bool QPMCache::replace(const QPixmapCache::Key &key, const QPixmap &pixmap, int 
          cost);
    if (success) {
       if (!theid) {
-         theid = startTimer(flush_time);
+         theid = startTimer(TimeFlush);
          t = false;
       }
       const_cast<QPixmapCache::Key &>(key) = cacheKey;
@@ -416,13 +417,13 @@ bool QPixmapCache::replace(const Key &key, const QPixmap &pixmap)
 
 int QPixmapCache::cacheLimit()
 {
-   return cache_limit;
+   return CacheLimit;
 }
 
 void QPixmapCache::setCacheLimit(int n)
 {
-   cache_limit = n;
-   pm_cache()->setMaxCost(1024 * cache_limit);
+   CacheLimit = n;
+   pm_cache()->setMaxCost(1024 * CacheLimit);
 }
 
 void QPixmapCache::remove(const QString &key)

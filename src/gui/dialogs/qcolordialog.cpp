@@ -731,7 +731,10 @@ class QColorLuminancePicker : public QWidget
    void mousePressEvent(QMouseEvent *) override;
 
  private:
-   enum { foff = 3, coff = 4 }; //frame and contents offset
+   // frame and contents offset
+   static constexpr const int F_Offset = 3;
+   static constexpr const int C_Offset = 4;
+
    int val;
    int hue;
    int sat;
@@ -746,14 +749,15 @@ class QColorLuminancePicker : public QWidget
 
 int QColorLuminancePicker::y2val(int y)
 {
-   int d = height() - 2 * coff - 1;
-   return 255 - (y - coff) * 255 / d;
+   int d = height() - 2 * C_Offset - 1;
+
+   return 255 - (y - C_Offset) * 255 / d;
 }
 
 int QColorLuminancePicker::val2y(int v)
 {
-   int d = height() - 2 * coff - 1;
-   return coff + (255 - v) * d / 255;
+   int d = height() - 2 * C_Offset - 1;
+   return C_Offset + (255 - v) * d / 255;
 }
 
 QColorLuminancePicker::QColorLuminancePicker(QWidget *parent)
@@ -806,7 +810,7 @@ void QColorLuminancePicker::paintEvent(QPaintEvent *)
 {
    int w = width() - 5;
 
-   QRect r(0, foff, w, height() - 2 * foff);
+   QRect r(0, F_Offset, w, height() - 2 * F_Offset);
    int wi = r.width() - 2;
    int hi = r.height() - 2;
 
@@ -820,7 +824,7 @@ void QColorLuminancePicker::paintEvent(QPaintEvent *)
       for (y = 0; y < hi; y++) {
          uint *end = pixel + wi;
 
-         std::fill(pixel, end, QColor::fromHsv(hue, sat, y2val(y + coff)).rgb());
+         std::fill(pixel, end, QColor::fromHsv(hue, sat, y2val(y + C_Offset)).rgb());
          pixel = end;
       }
 
@@ -828,7 +832,7 @@ void QColorLuminancePicker::paintEvent(QPaintEvent *)
    }
 
    QPainter p(this);
-   p.drawPixmap(1, coff, *pix);
+   p.drawPixmap(1, C_Offset, *pix);
 
    const QPalette &g = palette();
    qDrawShadePanel(&p, r, g, true);
@@ -1593,11 +1597,9 @@ void QColorDialogPrivate::setCurrentQColor(const QColor &color)
 }
 
 // size of standard and custom color selector
-enum {
-   colorColumns = 8,
-   standardColorRows = 6,
-   customColorRows = 2
-};
+static constexpr const int ColorColumns      = 8;
+static constexpr const int StandardColorRows = 6;
+static constexpr const int CustomColorRows   = 2;
 
 bool QColorDialogPrivate::selectColor(const QColor &col)
 {
@@ -1606,13 +1608,14 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
    // Check standard colors
    if (standard) {
       const QRgb *standardColors = QColorDialogOptions::standardColors();
-      const QRgb *standardColorsEnd = standardColors + standardColorRows * colorColumns;
+      const QRgb *standardColorsEnd = standardColors + StandardColorRows * ColorColumns;
       const QRgb *match = std::find(standardColors, standardColorsEnd, color);
 
       if (match != standardColorsEnd) {
          const int index = int(match - standardColors);
-         const int column = index / standardColorRows;
-         const int row = index % standardColorRows;
+         const int column = index / StandardColorRows;
+         const int row    = index % StandardColorRows;
+
          _q_newStandard(row, column);
          standard->setCurrent(row, column);
          standard->setSelected(row, column);
@@ -1625,13 +1628,13 @@ bool QColorDialogPrivate::selectColor(const QColor &col)
    // Check custom colors
    if (custom) {
       const QRgb *customColors = QColorDialogOptions::customColors();
-      const QRgb *customColorsEnd = customColors + customColorRows * colorColumns;
+      const QRgb *customColorsEnd = customColors + CustomColorRows * ColorColumns;
       const QRgb *match = std::find(customColors, customColorsEnd, color);
 
       if (match != customColorsEnd) {
          const int index = int(match - customColors);
-         const int column = index / customColorRows;
-         const int row = index % customColorRows;
+         const int column = index / CustomColorRows;
+         const int row = index % CustomColorRows;
 
          _q_newCustom(row, column);
 
@@ -1667,12 +1670,12 @@ void QColorDialogPrivate::_q_newColorTypedIn(QRgb rgb)
 
 void QColorDialogPrivate::_q_nextCustom(int r, int c)
 {
-   nextCust = r + customColorRows * c;
+   nextCust = r + CustomColorRows * c;
 }
 
 void QColorDialogPrivate::_q_newCustom(int r, int c)
 {
-   const int i = r + customColorRows * c;
+   const int i = r + CustomColorRows * c;
    setCurrentRgbColor(QColorDialogOptions::customColor(i));
 
    if (standard) {
@@ -1801,7 +1804,7 @@ void QColorDialogPrivate::initWidgets()
       leftLay = new QVBoxLayout;
       topLay->addLayout(leftLay);
 
-      standard       = new QColorWell(q, standardColorRows, colorColumns, QColorDialogOptions::standardColors());
+      standard       = new QColorWell(q, StandardColorRows, ColorColumns, QColorDialogOptions::standardColors());
       lblBasicColors = new QLabel(q);
 
 #ifndef QT_NO_SHORTCUT
@@ -1824,7 +1827,7 @@ void QColorDialogPrivate::initWidgets()
 
       leftLay->addStretch();
 
-      custom = new QColorWell(q, customColorRows, colorColumns, QColorDialogOptions::customColors());
+      custom = new QColorWell(q, CustomColorRows, ColorColumns, QColorDialogOptions::customColors());
       custom->setAcceptDrops(true);
 
       QObject::connect(custom, &QColorWell::selected,       q, &QColorDialog::_q_newCustom);

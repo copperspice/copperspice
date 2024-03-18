@@ -402,8 +402,8 @@ QSizePolicy::ControlTypes QWidgetItem::controlTypes() const
 }
 
 QWidgetItemV2::QWidgetItemV2(QWidget *widget)
-   : QWidgetItem(widget), q_cachedMinimumSize(Dirty, Dirty), q_cachedSizeHint(Dirty, Dirty),
-     q_cachedMaximumSize(Dirty, Dirty), q_firstCachedHfw(0), q_hfwCacheSize(0), d(nullptr)
+   : QWidgetItem(widget), q_cachedMinimumSize(ItemDirty, ItemDirty), q_cachedSizeHint(ItemDirty, ItemDirty),
+     q_cachedMaximumSize(ItemDirty, ItemDirty), q_firstCachedHfw(0), q_hfwCacheSize(0), d(nullptr)
 {
    QWidgetPrivate *wd = wid->d_func();
 
@@ -429,7 +429,7 @@ inline bool QWidgetItemV2::useSizeCache() const
 
 void QWidgetItemV2::updateCacheIfNecessary() const
 {
-   if (q_cachedMinimumSize.width() != Dirty) {
+   if (q_cachedMinimumSize.width() != ItemDirty) {
       return;
    }
 
@@ -540,10 +540,10 @@ int QWidgetItemV2::heightForWidth(int width) const
 
    for (int i = 0; i < q_hfwCacheSize; ++i) {
       int offset = q_firstCachedHfw + i;
-      const QSize &size = q_cachedHfws[offset % HfwCacheMaxSize];
+      const QSize &size = q_cachedHfws[offset % SizeCacheMax];
 
       if (size.width() == width) {
-         if (q_hfwCacheSize == HfwCacheMaxSize) {
+         if (q_hfwCacheSize == SizeCacheMax) {
             q_firstCachedHfw = offset;
          }
 
@@ -551,11 +551,11 @@ int QWidgetItemV2::heightForWidth(int width) const
       }
    }
 
-   if (q_hfwCacheSize < HfwCacheMaxSize) {
+   if (q_hfwCacheSize < SizeCacheMax) {
       ++q_hfwCacheSize;
    }
 
-   q_firstCachedHfw = (q_firstCachedHfw + HfwCacheMaxSize - 1) % HfwCacheMaxSize;
+   q_firstCachedHfw = (q_firstCachedHfw + SizeCacheMax - 1) % SizeCacheMax;
 
    int height = QWidgetItem::heightForWidth(width);
    q_cachedHfws[q_firstCachedHfw] = QSize(width, height);

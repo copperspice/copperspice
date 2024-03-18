@@ -237,7 +237,8 @@ void QPlatformFontDialogHelper::setOptions(const QSharedPointer<QFontDialogOptio
 class QColorDialogStaticData
 {
  public:
-   enum { CustomColorCount = 16, StandardColorCount = 6 * 8 };
+   static constexpr const int CustomColorCount   = 16;
+   static constexpr const int StandardColorCount = 6 * 8;
 
    QColorDialogStaticData();
    inline void readSettings();

@@ -37,7 +37,17 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    Q_DECLARE_PUBLIC(QHeaderView)
 
  public:
-   enum StateVersion { VersionMarker = 0xff };
+   enum StateVersion {
+      VersionMarker = 0xff
+   };
+
+   enum State {
+      NoState,
+      ResizeSection,
+      MoveSection,
+      SelectSections,
+      NoClear
+   };
 
    QHeaderViewPrivate()
       : state(NoState), offset(0), sortIndicatorOrder(Qt::DescendingOrder), sortIndicatorSection(0),
@@ -199,7 +209,7 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    void flipSortIndicator(int section);
    void cascadingResize(int visual, int newSize);
 
-   enum State { NoState, ResizeSection, MoveSection, SelectSections, NoClear } state;
+   State state;
 
    int offset;
    Qt::Orientation orientation;

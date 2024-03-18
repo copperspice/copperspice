@@ -53,10 +53,12 @@ static quint64 xpmHash(const char *str)
 
 static constexpr const int xpmRgbTblSize = 657;
 
-static const struct XPMRGBData {
+struct XPMRGBData {
    uint  value;
    const char name[21];
-} xpmRgbTbl[] = {
+};
+
+static const XPMRGBData xpmRgbTbl[] = {
    { QRGB(240, 248, 255),  "aliceblue" },
    { QRGB(250, 235, 215),  "antiquewhite" },
    { QRGB(255, 239, 219),  "antiquewhite1" },

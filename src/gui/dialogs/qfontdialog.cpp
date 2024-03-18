@@ -416,7 +416,12 @@ void QFontDialogPrivate::updateFamilies()
 {
    Q_Q(QFontDialog);
 
-   enum match_t { MATCH_NONE = 0, MATCH_LAST_RESORT = 1, MATCH_APP = 2, MATCH_FAMILY = 3 };
+   enum match_t {
+      MATCH_NONE        = 0,
+      MATCH_LAST_RESORT = 1,
+      MATCH_APP         = 2,
+      MATCH_FAMILY      = 3
+   };
 
    const QFontDialog::FontDialogOptions scalableMask = (QFontDialog::ScalableFonts | QFontDialog::NonScalableFonts);
    const QFontDialog::FontDialogOptions spacingMask = (QFontDialog::ProportionalFonts | QFontDialog::MonospacedFonts);

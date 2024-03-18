@@ -57,9 +57,20 @@ class QWizard;
 class QVistaHelper : public QObject
 {
  public:
+   enum TitleBarChangeType {
+      NormalTitleBar,
+      ExtendedTitleBar
+   };
+
+   enum VistaState {
+      VistaAero,
+      VistaBasic,
+      Classic,
+      Dirty
+   };
+
    QVistaHelper(QWizard *wizard);
    ~QVistaHelper();
-   enum TitleBarChangeType { NormalTitleBar, ExtendedTitleBar };
 
    void updateCustomMargins(bool vistaMargins);
    bool setDWMTitleBar(TitleBarChangeType type);
@@ -81,7 +92,7 @@ class QVistaHelper : public QObject
    }
 
    QColor basicWindowFrameColor();
-   enum VistaState { VistaAero, VistaBasic, Classic, Dirty };
+
    static VistaState vistaState();
 
    static int titleBarSize() {
@@ -100,6 +111,12 @@ class QVistaHelper : public QObject
    static int topOffset();
    static HDC backingStoreDC(const QWidget *wizard, QPoint *offset);
  private:
+   enum Changes {
+      resizeTop,
+      movePosition,
+      noChange
+   };
+
    HWND wizardHWND() const;
    bool drawTitleText(QPainter *painter, const QString &text, const QRect &rect, HDC hdc);
    static bool drawBlackRect(const QRect &rect, HDC hdc);
@@ -142,7 +159,8 @@ class QVistaHelper : public QObject
    static VistaState cachedVistaState;
    static bool isCompositionEnabled();
    static bool isThemeActive();
-   enum Changes { resizeTop, movePosition, noChange } change;
+
+   Changes change;
    QPoint pressedPos;
    bool pressed;
    QRect rtTop;
