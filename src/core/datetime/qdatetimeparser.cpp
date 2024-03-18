@@ -1516,6 +1516,9 @@ int QDateTimeParser::findDay(const QString &str1, int startDay, int sectionIndex
 
 QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionIndex, int *used) const
 {
+   static constexpr const int am_index = 0;
+   static constexpr const int pm_index = 1;
+
    const SectionNode &s = sectionNode(sectionIndex);
 
    if (s.type != AmPmSection) {
@@ -1534,14 +1537,9 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
    const QChar space(' ');
    int size = sectionMaxSize(sectionIndex);
 
-   enum {
-      amindex = 0,
-      pmindex = 1
-   };
-
    QString ampm[2];
-   ampm[amindex] = getAmPmText(AmText, s.count == 1 ? UpperCase : LowerCase);
-   ampm[pmindex] = getAmPmText(PmText, s.count == 1 ? UpperCase : LowerCase);
+   ampm[am_index] = getAmPmText(AmText, s.count == 1 ? UpperCase : LowerCase);
+   ampm[pm_index] = getAmPmText(PmText, s.count == 1 ? UpperCase : LowerCase);
 
    for (int i = 0; i < 2; ++i) {
       ampm[i].truncate(size);
@@ -1549,12 +1547,12 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
 
    QDTPDEBUG << "findAmPm" << str << ampm[0] << ampm[1];
 
-   if (str.indexOf(ampm[amindex], 0, Qt::CaseInsensitive) == 0) {
-      str = ampm[amindex];
+   if (str.indexOf(ampm[am_index], 0, Qt::CaseInsensitive) == 0) {
+      str = ampm[am_index];
       return AM;
 
-   } else if (str.indexOf(ampm[pmindex], 0, Qt::CaseInsensitive) == 0) {
-      str = ampm[pmindex];
+   } else if (str.indexOf(ampm[pm_index], 0, Qt::CaseInsensitive) == 0) {
+      str = ampm[pm_index];
       return PM;
 
    } else if (context == FromString || (str.count(space) == 0 && str.size() >= size)) {
@@ -1592,7 +1590,7 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
                   if (index == -1) {
                      broken[j] = true;
 
-                     if (broken[amindex] && broken[pmindex]) {
+                     if (broken[am_index] && broken[pm_index]) {
                         QDTPDEBUG << str << "did not work";
                         return Neither;
                      }
@@ -1610,11 +1608,11 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
       }
    }
 
-   if (! broken[pmindex] && ! broken[amindex]) {
+   if (! broken[am_index] && ! broken[pm_index]) {
       return PossibleBoth;
    }
 
-   return (!broken[amindex] ? PossibleAM : PossiblePM);
+   return (! broken[am_index] ? PossibleAM : PossiblePM);
 }
 
 int QDateTimeParser::SectionNode::maxChange() const

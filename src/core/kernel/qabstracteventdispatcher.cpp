@@ -32,16 +32,15 @@
 #include <qthread_p.h>
 
 // we allow for 2^24 = 8^8 = 16777216 simultaneously running timers
-struct QtTimerIdFreeListConstants : public QFreeListDefaultConstants {
-   enum {
-      InitialNextValue = 1,
-      BlockCount = 6
-   };
+struct QtTimerIdFreeListConstants : public QFreeListDefaultConstants
+{
+   static constexpr const int InitialNextValue = 1;
+   static constexpr const int BlockCount       = 6;
 
    static const int Sizes[BlockCount];
 };
 
-enum {
+enum TimerOffset {
    Offset0 = 0x00000000,
    Offset1 = 0x00000040,
    Offset2 = 0x00000100,

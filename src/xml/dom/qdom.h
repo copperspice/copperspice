@@ -72,7 +72,11 @@ class QXmlReader;
 class Q_XML_EXPORT QDomImplementation
 {
  public:
-   enum InvalidDataPolicy { AcceptInvalidChars = 0, DropInvalidChars, ReturnNullNode };
+   enum InvalidDataPolicy {
+      AcceptInvalidChars = 0,
+      DropInvalidChars,
+      ReturnNullNode
+   };
 
    QDomImplementation();
 

@@ -1762,7 +1762,9 @@ bool cs_internal_quickCheck(QString8::const_iterator &first_iter, QString8::cons
    static_assert(QString8::NormalizationForm_KD == 2, "Normalization form mismatch");
    static_assert(QString8::NormalizationForm_KC == 3, "Normalization form mismatch");
 
-   enum { NFQC_YES = 0, NFQC_NO = 1, NFQC_MAYBE = 3 };
+   static constexpr const int NFQC_YES      = 0;
+   // static constexpr const int NFQC_NO    = 1;
+   // static constexpr const int NFQC_MAYBE = 3;
 
    uchar lastCombining = 0;
 

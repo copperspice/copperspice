@@ -114,6 +114,8 @@ static QMutex *globalMutex()
 
 static QSettings::Format globalDefaultFormat = QSettings::NativeFormat;
 
+static constexpr const int Space   = 0x1;
+static constexpr const int Special = 0x2;
 QConfFile::QConfFile(const QString &fileName, bool _userPerms)
    : name(fileName), size(0), ref(1), userPerms(_userPerms)
 {
@@ -1667,8 +1669,6 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       }
    }
 }
-
-enum { Space = 0x1, Special = 0x2 };
 
 static const char charTraits[256] = {
    // Space: '\t', '\n', '\r', ' '

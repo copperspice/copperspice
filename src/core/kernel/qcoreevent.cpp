@@ -66,11 +66,9 @@ namespace {
 
 template <size_t N>
 struct QBasicAtomicBitField {
-   enum {
-      BitsPerInt = std::numeric_limits<uint>::digits,
-      NumInts = (N + BitsPerInt - 1) / BitsPerInt,
-      NumBits = N
-   };
+   static constexpr const int BitsPerInt = std::numeric_limits<uint>::digits;
+   static constexpr const int NumInts = (N + BitsPerInt - 1) / BitsPerInt;
+   static constexpr const int NumBits = N;
 
    // atomic int points to the next (possibly) free ID saving
    // the otherwise necessary scan through 'data':

@@ -791,28 +791,31 @@ const quint8 hirespversion = 1;
 class QNtlmBuffer
 {
  public:
+   static constexpr const int Size = 8;
    QNtlmBuffer() : len(0), maxLen(0), offset(0) {}
    quint16 len;
    quint16 maxLen;
    quint32 offset;
-   enum { Size = 8 };
 };
 
 class QNtlmPhase1BlockBase
 {
  public:
+   static constexpr const int Size = 32;
+
    char magic[8];
    quint32 type;
    quint32 flags;
    QNtlmBuffer domain;
    QNtlmBuffer workstation;
-   enum { Size = 32 };
 };
 
 // ################# check paddings
 class QNtlmPhase2BlockBase
 {
  public:
+   static constexpr const int Size = 48;
+
    char magic[8];
    quint32 type;
    QNtlmBuffer targetName;
@@ -820,12 +823,13 @@ class QNtlmPhase2BlockBase
    unsigned char challenge[8];
    quint32 context[2];
    QNtlmBuffer targetInfo;
-   enum { Size = 48 };
 };
 
 class QNtlmPhase3BlockBase
 {
  public:
+   static constexpr const int Size = 64;
+
    char magic[8];
    quint32 type;
    QNtlmBuffer lmResponse;
@@ -835,7 +839,6 @@ class QNtlmPhase3BlockBase
    QNtlmBuffer workstation;
    QNtlmBuffer sessionKey;
    quint32 flags;
-   enum { Size = 64 };
 };
 
 static void qStreamNtlmBuffer(QDataStream &ds, const QByteArray &s)

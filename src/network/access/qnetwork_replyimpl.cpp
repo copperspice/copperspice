@@ -626,10 +626,9 @@ void QNetworkReplyImplPrivate::emitUploadProgress(qint64 bytesSent, qint64 bytes
    resumeNotificationHandling();
 }
 
-
 qint64 QNetworkReplyImplPrivate::nextDownstreamBlockSize() const
 {
-   enum { DesiredBufferSize = 32 * 1024 };
+   static constexpr const int DesiredBufferSize = 32 * 1024;
 
    if (readBufferMaxSize == 0) {
       return DesiredBufferSize;

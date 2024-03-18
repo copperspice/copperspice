@@ -57,7 +57,10 @@ class ThreadEngineBarrier
    QSemaphore semaphore;
 };
 
-enum ThreadFunctionResult { ThrottleThread, ThreadFinished };
+enum ThreadFunctionResult {
+   ThrottleThread,
+   ThreadFinished
+};
 
 // ThreadEngine controls the threads used in the computation.
 // Can be run in three modes: single threaded, multi-threaded blocking & multi-threaded asynchronous.

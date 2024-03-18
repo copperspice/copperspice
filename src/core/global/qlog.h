@@ -46,7 +46,13 @@ class QNoDebug;
 
 #endif
 
-enum QtMsgType { QtDebugMsg, QtWarningMsg, QtCriticalMsg, QtFatalMsg, QtSystemMsg = QtCriticalMsg };
+enum QtMsgType {
+   QtDebugMsg,
+   QtWarningMsg,
+   QtCriticalMsg,
+   QtFatalMsg,
+   QtSystemMsg = QtCriticalMsg
+};
 
 using QtMsgHandler = void (*)(QtMsgType, QStringView);
 

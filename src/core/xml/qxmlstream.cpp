@@ -989,7 +989,11 @@ inline int QXmlStreamReaderPrivate::fastScanName(int *prefix)
    return 0;
 }
 
-enum NameChar { NameBeginning, NameNotBeginning, NotName };
+enum NameChar {
+   NameBeginning,
+   NameNotBeginning,
+   NotName
+};
 
 static const char Begi = static_cast<char>(NameBeginning);
 static const char NtBg = static_cast<char>(NameNotBeginning);

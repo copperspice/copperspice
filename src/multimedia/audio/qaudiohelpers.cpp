@@ -47,21 +47,27 @@ template <>
 struct signedVersion<quint8>
 {
     typedef qint8 TS;
-    enum {offset = 0x80};
+   enum {
+      offset = 0x80
+   };
 };
 
 template <>
 struct signedVersion<quint16>
 {
     typedef qint16 TS;
-    enum {offset = 0x8000};
+   enum {
+      offset = 0x8000
+   };
 };
 
 template <>
 struct signedVersion<quint32>
 {
     typedef qint32 TS;
-    enum {offset = 0x80000000};
+   enum {
+      offset = 0x80000000
+   };
 };
 
 template <class T>

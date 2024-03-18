@@ -34,7 +34,7 @@ class QAtomicPointer;
 class QSimpleTextCodec: public QTextCodec
 {
  public:
-   enum { numSimpleCodecs = 30 };
+   static constexpr const int numSimpleCodecs = 30;
 
    explicit QSimpleTextCodec(int);
    ~QSimpleTextCodec();

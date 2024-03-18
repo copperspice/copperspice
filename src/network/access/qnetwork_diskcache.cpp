@@ -38,10 +38,11 @@
 
 #define CACHE_POSTFIX QString(".d")
 #define PREPARED_SLASH QString("prepared/")
-#define CACHE_VERSION 8
 #define DATA_DIR QString("data")
 
-#define MAX_COMPRESSION_SIZE (1024 * 1024 * 3)
+static constexpr const int CacheMagic         = 0xe8;
+static constexpr const int CacheVersion       = 8;
+static constexpr const int MaxCompressionSize = (1024 * 1024 * 3);
 
 #ifndef QT_NO_NETWORKDISKCACHE
 
@@ -90,7 +91,7 @@ void QNetworkDiskCache::setCacheDirectory(const QString &cacheDir)
       d->cacheDirectory += '/';
    }
 
-   d->dataDirectory = d->cacheDirectory + DATA_DIR + QString::number(CACHE_VERSION) + QChar('/');
+   d->dataDirectory = d->cacheDirectory + DATA_DIR + QString::number(CacheVersion) + QChar('/');
    d->prepareLayout();
 }
 
@@ -600,7 +601,8 @@ bool QCacheItem::canCompress() const
    for (const QNetworkCacheMetaData::RawHeader &header : metaData.rawHeaders()) {
       if (header.first.toLower() == "content-length") {
          qint64 size = header.second.toLongLong();
-         if (size > MAX_COMPRESSION_SIZE) {
+
+         if (size > MaxCompressionSize) {
             return false;
          } else {
             sizeOk = true;
@@ -624,17 +626,12 @@ bool QCacheItem::canCompress() const
    return false;
 }
 
-enum {
-   CacheMagic = 0xe8,
-   CurrentCacheVersion = CACHE_VERSION
-};
-
 void QCacheItem::writeHeader(QFile *device) const
 {
    QDataStream out(device);
 
    out << qint32(CacheMagic);
-   out << qint32(CurrentCacheVersion);
+   out << qint32(CacheVersion);
    out << static_cast<qint32>(out.version());
    out << metaData;
    bool compressed = canCompress();
@@ -663,7 +660,7 @@ bool QCacheItem::read(QFile *device, bool readData)
    }
 
    // If the cache magic is correct, but the version is not we should remove it
-   if (v != CurrentCacheVersion) {
+   if (v != CacheVersion) {
       return false;
    }
 

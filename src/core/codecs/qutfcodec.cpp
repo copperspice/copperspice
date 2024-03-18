@@ -28,7 +28,8 @@
 #include <qstring.h>
 #include <qstring16.h>
 
-enum { Endian = 0, Data = 1 };
+static constexpr const int Endian = 0;
+static constexpr const int Data   = 1;
 
 QByteArray QUtf8::convertFromUnicode(QStringView str, QTextCodec::ConverterState *state)
 {

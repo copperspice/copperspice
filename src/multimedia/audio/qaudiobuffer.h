@@ -70,7 +70,9 @@ class Q_MULTIMEDIA_EXPORT QAudioBuffer
 
    // Structures for easier access to stereo data
    template <typename T> struct StereoFrameDefault {
-      enum { Default = 0 };
+      enum {
+         Default = 0
+      };
    };
 
    template <typename T> struct StereoFrame {
@@ -126,10 +128,14 @@ class Q_MULTIMEDIA_EXPORT QAudioBuffer
 };
 
 template <> struct QAudioBuffer::StereoFrameDefault<unsigned char> {
-   enum { Default = 128 };
+   enum {
+      Default = 128
+   };
 };
 template <> struct QAudioBuffer::StereoFrameDefault<unsigned short> {
-   enum { Default = 32768 };
+   enum {
+      Default = 32768
+   };
 };
 
 #endif

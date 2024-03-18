@@ -78,7 +78,7 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
 
     private:
       CameraBinImageCapture *const m_capture;
-   } m_encoderProbe;
+   };
 
    class MuxerProbe : public QGstreamerBufferProbe
    {
@@ -92,8 +92,10 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
 
     private:
       CameraBinImageCapture *const m_capture;
+   };
 
-   } m_muxerProbe;
+   EncoderProbe m_encoderProbe;
+   MuxerProbe m_muxerProbe;
 
    QVideoSurfaceFormat m_bufferFormat;
    QSize m_jpegResolution;

@@ -1467,7 +1467,15 @@ static void parseFont(QSvgNode *node, const QSvgAttributes &attributes, QSvgHand
       static const qreal sizeTable[] = { qreal(6.9), qreal(8.3), qreal(10.0),
                   qreal(12.0), qreal(14.4), qreal(17.3), qreal(20.7) };
 
-      enum AbsFontSize { XXSmall, XSmall, Small, Medium, Large, XLarge, XXLarge };
+      enum AbsFontSize {
+         XXSmall,
+         XSmall,
+         Small,
+         Medium,
+         Large,
+         XLarge,
+         XXLarge
+      };
 
       switch (attributes.fontSize.at(0).unicode()) {
          case 'x':

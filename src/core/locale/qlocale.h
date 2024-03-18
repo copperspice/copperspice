@@ -915,6 +915,11 @@ class Q_CORE_EXPORT QLocale
       CurrencyDisplayName
    };
 
+   enum QuotationStyle {
+      StandardQuotation,
+      AlternateQuotation
+   };
+
    CORE_CS_ENUM(Language)
    CORE_CS_ENUM(Country)
    CORE_CS_ENUM(Script)
@@ -1035,9 +1040,7 @@ class Q_CORE_EXPORT QLocale
    void setNumberOptions(NumberOptions options);
    NumberOptions numberOptions() const;
 
-   enum QuotationStyle { StandardQuotation, AlternateQuotation };
    QString quoteString(const QString &str, QuotationStyle style = StandardQuotation) const;
-
    QString quoteString(QStringView str, QuotationStyle style = StandardQuotation) const;
 
    QString createSeparatedList(const QStringList &list) const;

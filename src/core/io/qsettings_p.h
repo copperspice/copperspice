@@ -180,16 +180,18 @@ class QConfFile
 class QSettingsPrivate
 {
  public:
-   enum ChildSpec { AllKeys, ChildKeys, ChildGroups };
+   enum ChildSpec {
+      AllKeys,
+      ChildKeys,
+      ChildGroups
+   };
 
-   // numeric values for this enum defines the search order
-   enum {
+   enum SearchOrder {
       F_Application  = 0x0,
       F_Organization = 0x1,
       F_User         = 0x0,
       F_System       = 0x2
    };
-
 
    QSettingsPrivate(QSettings::Format format);
    QSettingsPrivate(QSettings::Format format, QSettings::Scope scope, const QString &organization, const QString &application);

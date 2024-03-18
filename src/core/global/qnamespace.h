@@ -1060,7 +1060,7 @@ class Q_CORE_EXPORT Qt
    CORE_CS_ENUM(BrushStyle)
 
    CORE_CS_REGISTER_ENUM(
-      enum BrushStyle {                     // brush style
+      enum BrushStyle {                  // brush style
          NoBrush,
          SolidPattern,
          Dense1Pattern,
@@ -1643,8 +1643,8 @@ class Q_CORE_EXPORT Qt
    };
 
    enum GestureFlag {
-      DontStartGestureOnChildren = 0x01,
-      ReceivePartialGestures     = 0x02,
+      DontStartGestureOnChildren       = 0x01,
+      ReceivePartialGestures           = 0x02,
       IgnoredGesturesPropagateToParent = 0x04
    };
    using GestureFlags = QFlags<GestureFlag>;
@@ -1705,9 +1705,11 @@ class Q_CORE_EXPORT Qt
    };
    using MouseEventFlags = QFlags<MouseEventFlag>;
 
-
-   // following enum and 3 methods declarations moved from gui/text/qtextdocument.h
-   enum HitTestAccuracy { ExactHit, FuzzyHit };
+   // following enum and 3 method declarations were moved from gui/text/qtextdocument.h
+   enum HitTestAccuracy {
+      ExactHit,
+      FuzzyHit
+   };
 
    static bool mightBeRichText(const QString &text);
    static QString convertFromPlainText(const QString &plain, WhiteSpaceMode mode = WhiteSpacePre);

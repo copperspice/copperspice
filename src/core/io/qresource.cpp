@@ -72,6 +72,11 @@ class QResourceRoot
    short flags(int node) const;
 
  public:
+   enum ResourceRootType {
+      Resource_Builtin,
+      Resource_File,
+      Resource_Buffer
+   };
    mutable QAtomicInt ref;
 
    QResourceRoot()
@@ -109,8 +114,6 @@ class QResourceRoot
    bool operator!=(const QResourceRoot &other) const {
       return !operator==(other);
    }
-
-   enum ResourceRootType { Resource_Builtin, Resource_File, Resource_Buffer };
 
    virtual ResourceRootType type() const {
       return Resource_Builtin;

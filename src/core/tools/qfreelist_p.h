@@ -59,13 +59,13 @@ struct QFreeListElement<void> {
 
 struct QFreeListDefaultConstants {
    // used by QFreeList, make sure to define all of when customizing
-   enum {
+   enum FreeListFlags {
       InitialNextValue = 0,
-      IndexMask = 0x00ffffff,
-      SerialMask = ~IndexMask & ~0x80000000,
-      SerialCounter = IndexMask + 1,
-      MaxIndex = IndexMask,
-      BlockCount = 4,
+      IndexMask        = 0x00ffffff,
+      SerialMask       = ~IndexMask & ~0x80000000,
+      SerialCounter    = IndexMask + 1,
+      MaxIndex         = IndexMask,
+      BlockCount       = 4,
    };
 
    static const int Sizes[BlockCount];

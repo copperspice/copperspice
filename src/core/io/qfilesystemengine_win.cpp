@@ -749,12 +749,14 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
 
 bool QFileSystemEngine::fillPermissions(const QFileSystemEntry &entry, QFileSystemMetaData &data, QFileSystemMetaData::MetaDataFlags what)
 {
+   static constexpr const int ReadMask  = 0x00000001;
+   static constexpr const int WriteMask = 0x00000002;
+   static constexpr const int ExecMask  = 0x00000020;
+
    if ((qt_ntfs_permission_lookup > 0) && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)) {
       resolveLibs();
 
       if (ptrGetNamedSecurityInfoW && ptrBuildTrusteeWithSidW && ptrGetEffectiveRightsFromAclW) {
-         enum { ReadMask = 0x00000001, WriteMask = 0x00000002, ExecMask = 0x00000020 };
-
          QString fname = entry.nativeFilePath();
 
          PSID pOwner = nullptr;

@@ -226,15 +226,26 @@ class QXmlSimpleReaderPrivate
    ~QXmlSimpleReaderPrivate();
 
  private:
-   // functions
+   // used by parseReference() and parsePEReference()
+   enum EntityRecognitionContext {
+      InContent,
+      InAttributeValue,
+      InEntityValue,
+      InDTD
+   };
+
+   // used for standalone declaration
+   enum Standalone {
+      Yes,
+      No,
+      Unknown
+   };
+
    QXmlSimpleReaderPrivate(QXmlSimpleReader *reader);
    void initIncrementalParsing();
 
    // used to determine if elements are correctly nested
    QStack<QString> tags;
-
-   // used by parseReference() and parsePEReference()
-   enum EntityRecognitionContext { InContent, InAttributeValue, InEntityValue, InDTD };
 
    // used for entity declarations
    struct ExternParameterEntity {
@@ -289,9 +300,6 @@ class QXmlSimpleReaderPrivate
    };
 
    QStack<XmlRef> xmlRefStack;
-
-   // used for standalone declaration
-   enum Standalone { Yes, No, Unknown };
 
    QString doctype; // only used for the doctype
    QString xmlVersion; // only used to store the version information
@@ -915,9 +923,7 @@ void QXmlInputSource::setData(const QByteArray &dat)
 
 void QXmlInputSource::fetchData()
 {
-   enum {
-      BufferSize = 1024
-   };
+   static constexpr const int BufferSize = 1024;
 
    QByteArray rawData;
 
@@ -1316,7 +1322,11 @@ static inline bool is_S(QChar ch)
    return (uc == ' ' || uc == '\t' || uc == '\n' || uc == '\r');
 }
 
-enum NameChar { NameBeginning, NameNotBeginning, NotName };
+enum NameChar {
+   NameBeginning,
+   NameNotBeginning,
+   NotName
+};
 
 static const char Begi = (char)NameBeginning;
 static const char NtBg = (char)NameNotBeginning;

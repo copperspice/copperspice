@@ -35,13 +35,19 @@ class QMediaServiceProviderHintPrivate;
 class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint
 {
  public:
-   enum Type { Null, ContentType, Device, SupportedFeatures, CameraPosition };
+   enum Type {
+      Null,
+      ContentType,
+      Device,
+      SupportedFeatures,
+      CameraPosition
+   };
 
    enum Feature {
       LowLatencyPlayback = 0x01,
-      RecordingSupport = 0x02,
-      StreamPlayback = 0x04,
-      VideoSurface = 0x08
+      RecordingSupport   = 0x02,
+      StreamPlayback     = 0x04,
+      VideoSurface       = 0x08
    };
    using Features = QFlags<Feature>;
 

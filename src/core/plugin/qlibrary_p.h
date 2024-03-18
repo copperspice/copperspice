@@ -40,10 +40,11 @@ bool qt_debug_component();
 
 class QLibraryHandle
 {
-   enum {IsAPlugin, IsNotAPlugin, MightBeAPlugin } pluginState;
-
  public:
-   enum UnloadFlag { UnloadSys, NoUnloadSys };
+   enum UnloadFlag {
+      UnloadSys,
+      NoUnloadSys
+   };
 
    bool tryload();
    bool loadPlugin();                              // loads and resolves instance
@@ -85,6 +86,12 @@ class QLibraryHandle
    QPointer<QObject> pluginObj;
 
  private:
+   enum PluginState {
+      IsAPlugin,
+      IsNotAPlugin,
+      MightBeAPlugin
+   };
+
    explicit QLibraryHandle(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints);
    ~QLibraryHandle();
 
@@ -93,6 +100,8 @@ class QLibraryHandle
    bool load_sys();
    bool unload_sys();
    void *resolve_sys(const QString &symbol);
+
+   PluginState pluginState;
 
    QAtomicInt loadHintsInt;
 

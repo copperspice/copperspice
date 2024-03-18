@@ -159,7 +159,11 @@ struct QLocaleData {
       ParseGroupSeparators
    };
 
-   enum NumberMode { IntegerMode, DoubleStandardMode, DoubleScientificMode };
+   enum NumberMode {
+      IntegerMode,
+      DoubleStandardMode,
+      DoubleScientificMode
+   };
 
    using CharBuff = QVarLengthArray<char, 256>;
 

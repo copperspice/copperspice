@@ -48,7 +48,9 @@ class RunLoopSource
  public:
    using CallbackFunction = bool (T::*)();
 
-   enum { kHighestPriority = 0 } RunLoopSourcePriority;
+   enum EventPriority {
+      kHighestPriority = 0
+   };
 
    RunLoopSource(T *delegate, CallbackFunction callback)
       : m_delegate(delegate), m_callback(callback)
@@ -78,6 +80,8 @@ class RunLoopSource
    void signal() {
       CFRunLoopSourceSignal(m_source);
    }
+
+   EventPriority RunLoopSourcePriority;
 
  private:
    static void process(void *info) {

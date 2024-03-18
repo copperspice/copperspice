@@ -165,7 +165,10 @@ class QIODevicePrivateLinearBuffer
    }
 
  private:
-   enum FreeSpacePos {freeSpaceAtStart, freeSpaceAtEnd};
+   enum FreeSpacePos {
+      freeSpaceAtStart,
+      freeSpaceAtEnd
+   };
 
    void makeSpace(size_t required, FreeSpacePos where) {
       size_t newCapacity = qMax(capacity, size_t(QIODEVICE_BUFFERSIZE));

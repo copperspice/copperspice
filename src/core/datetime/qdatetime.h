@@ -286,7 +286,7 @@ class Q_CORE_EXPORT QTime
    static bool isValid(int h, int m, int s, int ms = 0);
 
  private:
-   enum TimeFlag { NullTime = -1 };
+   static constexpr const int NullTime = -1;
 
    constexpr int ds() const {
       return mds == -1 ? 0 : mds;

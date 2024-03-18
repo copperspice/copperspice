@@ -24,7 +24,7 @@
 #include <qfreelist_p.h>
 
 // default sizes and offsets (no need to define these when customizing)
-enum {
+enum OffsetSizes {
    Offset0 = 0x00000000,
    Offset1 = 0x00008000,
    Offset2 = 0x00080000,

@@ -33,8 +33,17 @@ class QAudioFormatPrivate;
 class Q_MULTIMEDIA_EXPORT QAudioFormat
 {
  public:
-   enum SampleType { Unknown, SignedInt, UnSignedInt, Float };
-   enum Endian { BigEndian = QSysInfo::BigEndian, LittleEndian = QSysInfo::LittleEndian };
+   enum SampleType {
+      Unknown,
+      SignedInt,
+      UnSignedInt,
+      Float
+   };
+
+   enum Endian {
+      BigEndian    = QSysInfo::BigEndian,
+      LittleEndian = QSysInfo::LittleEndian
+   };
 
    QAudioFormat();
    QAudioFormat(const QAudioFormat &other);

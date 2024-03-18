@@ -395,7 +395,14 @@ class Q_OPENGL_EXPORT QGLEngineShaderManager : public QObject
    QGLEngineShaderManager(QGLContext *context);
    ~QGLEngineShaderManager();
 
-   enum MaskType {NoMask, PixelMask, SubPixelMaskPass1, SubPixelMaskPass2, SubPixelWithGammaMask};
+   enum MaskType {
+      NoMask,
+      PixelMask,
+      SubPixelMaskPass1,
+      SubPixelMaskPass2,
+      SubPixelWithGammaMask
+   };
+
    enum PixelSrcType {
       ImageSrc = Qt::TexturePattern + 1,
       NonPremultipliedImageSrc = Qt::TexturePattern + 2,

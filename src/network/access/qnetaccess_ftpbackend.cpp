@@ -32,9 +32,7 @@
 
 #ifndef QT_NO_FTP
 
-enum {
-   DefaultFtpPort = 21
-};
+static constexpr const int DefaultFtpPort = 21;
 
 static QByteArray makeCacheKey(const QUrl &url)
 {

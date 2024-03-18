@@ -187,7 +187,7 @@ inline void QLibraryStore::releaseLibrary(QLibraryHandle *lib)
 }
 
 QLibraryHandle::QLibraryHandle(const QString &canonicalFileName, const QString &version, QLibrary::LoadHints loadHints)
-   : pluginState(MightBeAPlugin), pHnd(nullptr), fileName(canonicalFileName), fullVersion(version),
+   : pHnd(nullptr), fileName(canonicalFileName), fullVersion(version), pluginState(MightBeAPlugin),
      libraryRefCount(0), libraryUnloadCount(0)
 {
    loadHintsInt.store(loadHints);

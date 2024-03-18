@@ -80,7 +80,8 @@
 #endif
 
 static_assert(sizeof(pthread_t) <= sizeof(Qt::HANDLE), "Pthread size mismatch");
-enum { ThreadPriorityResetFlag = 0x80000000 };
+
+static constexpr const int ThreadPriorityResetFlag = 0x80000000;
 
 #if defined(Q_OS_LINUX) && defined(__GLIBC__) && (defined(Q_CC_GNU) || defined(Q_CC_INTEL))
 #define HAVE_TLS

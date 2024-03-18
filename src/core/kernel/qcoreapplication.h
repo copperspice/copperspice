@@ -67,7 +67,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    Q_DECLARE_PRIVATE(QCoreApplication)
 
  public:
-   enum { ApplicationFlags = CS_VERSION | 0x01000000 };
+   static constexpr const int ApplicationFlags = CS_VERSION | 0x01000000;
 
    QCoreApplication(int &argc, char **argv, int = ApplicationFlags);
 

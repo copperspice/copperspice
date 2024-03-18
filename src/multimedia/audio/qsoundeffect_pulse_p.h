@@ -88,6 +88,9 @@ public:
     MULTI_CS_SIGNAL_2(categoryChanged)
 
 private:
+    enum EmptyStreamOption {
+        ReloadSampleWhenDone = 0x1
+    };
     MULTI_CS_SLOT_1(Private, void decoderError())
     MULTI_CS_SLOT_2(decoderError)
     MULTI_CS_SLOT_1(Private, void sampleReady())
@@ -112,10 +115,6 @@ private:
 
     void playAvailable();
     void playSample();
-
-    enum EmptyStreamOption {
-        ReloadSampleWhenDone = 0x1
-    };
 
     using EmptyStreamOptions = QFlags<EmptyStreamOption>;
     void emptyStream(EmptyStreamOptions options = EmptyStreamOptions());

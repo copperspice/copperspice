@@ -45,7 +45,10 @@ static constexpr const int numHostNames = 2;
     becomes "4<middot>0.BrowserCommand".
 */
 
-enum RotateShift { Macify = 1, Qtify = 2 };
+enum RotateShift {
+   Macify = 1,
+   Qtify = 2
+};
 
 static QString rotateSlashesDotsAndMiddots(const QString &key, int shift)
 {

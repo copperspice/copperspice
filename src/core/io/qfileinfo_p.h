@@ -37,9 +37,15 @@
 class QFileInfoPrivate : public QSharedData
 {
  public:
-   enum { CachedFileFlags = 0x01, CachedLinkTypeFlag = 0x02, CachedBundleTypeFlag = 0x04,
-         CachedMTime = 0x10, CachedCTime = 0x20, CachedATime = 0x40,
-         CachedSize = 0x08, CachedPerms = 0x80
+   enum CachedFlags {
+      CachedFileFlags      = 0x01,
+      CachedLinkTypeFlag   = 0x02,
+      CachedBundleTypeFlag = 0x04,
+      CachedMTime          = 0x10,
+      CachedCTime          = 0x20,
+      CachedATime          = 0x40,
+      CachedSize           = 0x08,
+      CachedPerms          = 0x80
    };
 
    QFileInfoPrivate()

@@ -51,7 +51,7 @@
 
 #endif
 
-enum { PollingInterval = 1000 };
+static constexpr const int PollingInterval = 1000;
 
 class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
 {

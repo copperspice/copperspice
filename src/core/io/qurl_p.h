@@ -31,8 +31,15 @@ extern int qt_urlRecode(QString &appendTo, QString::const_iterator begin, QStrin
       QUrl::FormattingOptions encoding, const ushort *tableModifications = nullptr);
 
 // in qurlidna.cpp
-enum AceLeadingDot { AllowLeadingDot, ForbidLeadingDot };
-enum AceOperation { ToAceOnly, NormalizeAce };
+enum AceLeadingDot {
+   AllowLeadingDot,
+   ForbidLeadingDot
+};
+
+enum AceOperation {
+   ToAceOnly,
+   NormalizeAce
+};
 
 QString qt_ACE_do(QStringView domain, AceOperation op, AceLeadingDot dot);
 QString qt_urlRecodeByteArray(const QByteArray &ba);

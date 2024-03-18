@@ -39,10 +39,8 @@
 
 #endif
 
-enum {
-   TargetRatio = 100,
-   MedianSize = 7
-};
+static constexpr const int TargetRatio = 100;
+static constexpr const int MedianSize  = 7;
 
 #ifdef Q_OS_DARWIN
 

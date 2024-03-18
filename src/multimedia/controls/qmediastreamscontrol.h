@@ -35,7 +35,13 @@ class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
    MULTI_CS_ENUM(StreamType)
 
  public:
-   enum StreamType { UnknownStream, VideoStream, AudioStream, SubPictureStream, DataStream };
+   enum StreamType {
+      UnknownStream,
+      VideoStream,
+      AudioStream,
+      SubPictureStream,
+      DataStream
+   };
 
    virtual ~QMediaStreamsControl();
 

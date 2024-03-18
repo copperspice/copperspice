@@ -442,6 +442,8 @@ static QThreadStorage<QFile *> *devUrandomStorage()
 
 QUuid QUuid::createUuid()
 {
+   static constexpr const int AmountToRead = 4 * sizeof(uint);
+
    QUuid result;
    uint *data = &(result.data1);
 
@@ -455,8 +457,6 @@ QUuid QUuid::createUuid()
       devUrandom->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
       devUrandomStorage()->setLocalData(devUrandom);
    }
-
-   enum { AmountToRead = 4 * sizeof(uint) };
 
    if (devUrandom->isOpen() && devUrandom->read((char *) data, AmountToRead) == AmountToRead) {
       // we got what we wanted, nothing more to do

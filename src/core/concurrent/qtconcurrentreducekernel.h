@@ -42,10 +42,9 @@ namespace QtConcurrent {
     MapReduce won't start any new threads, and when it exceeds
     ReduceQueueThrottleLimit running threads will be stopped.
 */
-enum {
-   ReduceQueueStartLimit = 20,
-   ReduceQueueThrottleLimit = 30
-};
+
+static constexpr const int ReduceQueueStartLimit    = 20;
+static constexpr const int ReduceQueueThrottleLimit = 30;
 
 // IntermediateResults holds a block of intermediate results from a
 // map or filter functor. The begin/end offsets indicates the origin
@@ -59,11 +58,12 @@ class IntermediateResults
 };
 
 enum ReduceOption {
-   UnorderedReduce = 0x1,
-   OrderedReduce = 0x2,
-   SequentialReduce = 0x4,
+   UnorderedReduce   = 0x1,
+   OrderedReduce     = 0x2,
+   SequentialReduce  = 0x4,
    // ParallelReduce = 0x8
 };
+
 using ReduceOptions = QFlags<ReduceOption>;
 Q_DECLARE_OPERATORS_FOR_FLAGS(ReduceOptions)
 

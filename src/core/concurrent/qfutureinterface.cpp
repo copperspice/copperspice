@@ -31,9 +31,7 @@
 #include <qfutureinterface_p.h>
 #include <qthreadpool_p.h>
 
-enum {
-   MaxProgressEmitsPerSecond = 25
-};
+static constexpr const int MaxProgressEmitsPerSecond = 25;
 
 QFutureInterfaceBase::QFutureInterfaceBase(State initialState)
    : d(new QFutureInterfaceBasePrivate(initialState))

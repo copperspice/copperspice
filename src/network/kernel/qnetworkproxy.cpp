@@ -147,25 +147,10 @@ QList<QNetworkProxy> QGlobalNetworkProxy::proxyForQuery(const QNetworkProxyQuery
    return result;
 }
 
-namespace {
-
-template <bool>
-struct StaticAssertTest;
-
-template <>
-struct StaticAssertTest<true> {
-   enum { Value = 1 };
-};
-
-}
-
-static inline void qt_noop_with_arg(int) {}
-#define q_static_assert(expr)   qt_noop_with_arg(sizeof(StaticAssertTest< expr >::Value))
-
 static QNetworkProxy::Capabilities defaultCapabilitiesForType(QNetworkProxy::ProxyType type)
 {
-   q_static_assert(int(QNetworkProxy::DefaultProxy) == 0);
-   q_static_assert(int(QNetworkProxy::FtpCachingProxy) == 5);
+   static_assert(int(QNetworkProxy::DefaultProxy) == 0);
+   static_assert(int(QNetworkProxy::FtpCachingProxy) == 5);
 
    static const int defaults[] = {
       /* [QNetworkProxy::DefaultProxy] = */
