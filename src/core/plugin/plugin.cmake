@@ -16,7 +16,6 @@ list(APPEND CORE_INCLUDES
 list(APPEND CORE_PRIVATE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryloader_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qmachparser_p.h
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qsystemlibrary_p.h
 )
 
@@ -25,7 +24,6 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryloader.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qfactoryinterface.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qlibrary.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qmachparser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/qpluginloader.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/plugin/quuid.cpp
 )
