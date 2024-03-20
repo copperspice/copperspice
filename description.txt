@@ -1,0 +1,4 @@
+LS-CS is a port of CopperSpice C++ cross platform GUI library
+ This port focuses on building Debian and RPM packages for 
+ both run-time and development. Install with Ubuntu Software
+ installer to get depdencies.
