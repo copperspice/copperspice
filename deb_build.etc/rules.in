@@ -1,0 +1,8 @@
+#!/usr/bin/make -f
+#  need to use TAB instead of spaces here
+#  I honestly don't think we need any rules for this.
+#  Edit this file in a terminal window using nano with
+#  default editor configuration.
+#
+%:
+	dh $@

@@ -1,0 +1,107 @@
+Name:       @CPACK_PACKAGE_NAME@
+Version:    @RPM_VERSION@
+Release:    @RPM_RELEASE@
+Summary:    @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+License:    GPL V2 + restriction
+Group:      Development/Libraries/C and C++
+URL:        https://github.com/RolandHughes/copperspice
+Vendor:     @CPACK_PACKAGE_CONTACT@
+Packager:   Roland Hughes <roland@logikalsolutions.com>
+
+
+%description
+@CPACK_PACKAGE_DESCRIPTION_TEXT@
+
+%prep
+# Cleanup any left over build files
+#
+rm -rf *
+
+# Populate the build directory
+
+cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_BUILD_RPATH=TRUE \
+      -DBUILDING_RPM=ON \
+      -DCMAKE_INSTALL_PREFIX="%{buildroot}/usr" \
+      "@CMAKE_SOURCE_DIR@"
+
+%package devel
+Summary: Development files for @CPACK_PACKAGE_DESCRIPTION_SUMMARY@
+
+%description devel
+Development files for
+@CPACK_PACKAGE_DESCRIPTION_TEXT@
+
+%build
+ninja
+
+%install
+
+# This variable gets rid of bogus RPATH error message
+#
+# The default CopperSpice build has .. in RPATH for lconvert and other binaries.
+# This QA_RPATHS variable is a bitmask override for certain checks.
+#
+# TODO:: See if we cannot completely remove $ORIGIN for BUILDING_RPM
+#        Should be able to 
+#
+QA_RPATHS=\$[0x0023]
+
+ninja install
+
+#  Sweep up what CopperSpice gets wrong in their default build.
+#  They should not have let CMake generate this file.
+#
+sed -i 's#${_IMPORT_PREFIX}/include;#${_IMPORT_PREFIX}/include/copperspice;#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets.cmake"
+sed -i 's#${_IMPORT_PREFIX}/include/Qt#${_IMPORT_PREFIX}/include/copperspice/Qt#g' "%{buildroot}/usr/%{_lib}/cmake/CopperSpice/CopperSpiceLibraryTargets.cmake"
+
+#  Fedora screwed the pooch, at least with 36 and possibly later. The UsrMove proposal went in and now
+#  /bin    ->  /usr/bin
+#  /lib    ->  /usr/lib
+#  /lib64  ->  /usr/lib64
+#  /sbin   ->  /usr/sbin
+#
+#  Because of that, you get File Conflict errors if you let RPMBUILD choose your included files because
+#  it will include the destination directories if you have any files under them. If you look at your files
+#  list it will have an entry for /usr/lib64 then a bunch of entries for /usr/lib64/something.so
+#
+#  Really sucks!
+
+#
+#  Run-time only
+#
+%files
+%exclude %{_libdir}/cmake
+%exclude %{_libdir}/pkgconfig
+%exclude %{_libdir}/copperspice/bin
+%exclude /usr/include
+%exclude /usr/lib
+
+%{_libdir}/copperspice
+%{_libdir}/*
+%{_datadir}
+
+#
+#  Development
+#
+%files devel
+%{_includedir}
+%{_prefix}/lib/.build-id
+%{_libdir}/cmake
+%{_libdir}/copperspice
+%{_libdir}/*
+%{_datadir}
+
+%post
+
+ldconfig
+
+
+%postun
+# No difference between upgrade and uninstall for these
+#
+# We did not do anything kinky like create links or files for ldconfig to consume
+# May have to force an entry in $PATH but unknown right now. cmake files should already look there
+
+%changelog
+# let's skip this for now
