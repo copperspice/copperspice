@@ -144,29 +144,29 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
 
    // Bundle detecton on Mac can be slow, expecially on network paths, so we separate out that as well.
 
-   QAbstractFileEngine::FileFlags req = Qt::EmptyFlag;
+   QAbstractFileEngine::FileFlags tmpFlags = Qt::EmptyFlag;
    uint localFlags = 0;
 
    if (request & (QAbstractFileEngine::FlagsMask | QAbstractFileEngine::TypesMask)) {
       if (! getCachedFlag(CachedFileFlags)) {
-         req |=   QAbstractFileEngine::FlagsMask;
-         req |=   QAbstractFileEngine::TypesMask;
-         req &= (~QAbstractFileEngine::LinkType);
-         req &= (~QAbstractFileEngine::BundleType);
+         tmpFlags |=   QAbstractFileEngine::FlagsMask;
+         tmpFlags |=   QAbstractFileEngine::TypesMask;
+         tmpFlags &= (~QAbstractFileEngine::LinkType);
+         tmpFlags &= (~QAbstractFileEngine::BundleType);
 
          localFlags |= CachedFileFlags;
       }
 
       if (request & QAbstractFileEngine::LinkType) {
          if (! getCachedFlag(CachedLinkTypeFlag)) {
-            req |= QAbstractFileEngine::LinkType;
+            tmpFlags   |= QAbstractFileEngine::LinkType;
             localFlags |= CachedLinkTypeFlag;
          }
       }
 
       if (request & QAbstractFileEngine::BundleType) {
          if (! getCachedFlag(CachedBundleTypeFlag)) {
-            req |= QAbstractFileEngine::BundleType;
+            tmpFlags   |= QAbstractFileEngine::BundleType;
             localFlags |= CachedBundleTypeFlag;
          }
       }
@@ -174,19 +174,19 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
 
    if (request & QAbstractFileEngine::PermsMask) {
       if (! getCachedFlag(CachedPerms)) {
-         req |= QAbstractFileEngine::PermsMask;
+         tmpFlags   |= QAbstractFileEngine::PermsMask;
          localFlags |= CachedPerms;
       }
    }
 
-   if (req) {
+   if (tmpFlags) {
       if (cache_enabled) {
-         req &= (~QAbstractFileEngine::Refresh);
+         tmpFlags &= (~QAbstractFileEngine::Refresh);
       } else {
-         req |= QAbstractFileEngine::Refresh;
+         tmpFlags |= QAbstractFileEngine::Refresh;
       }
 
-      QAbstractFileEngine::FileFlags flags = fileEngine->fileFlags(req);
+      QAbstractFileEngine::FileFlags flags = fileEngine->fileFlags(tmpFlags);
       fileFlags |= uint(flags);
       setCachedFlag(localFlags);
    }

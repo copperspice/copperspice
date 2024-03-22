@@ -129,7 +129,7 @@ class QFileInfoPrivate : public QSharedData
    mutable QString fileNames[QAbstractFileEngine::NFileNames];
    mutable QString fileOwners[2];
 
-   mutable uint cachedFlags : 30;
+   mutable uint cachedFlags;
    bool const isDefaultConstructed : 1; // QFileInfo is a default constructed instance
    bool cache_enabled : 1;
    mutable uint fileFlags;
