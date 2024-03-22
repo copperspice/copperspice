@@ -52,6 +52,7 @@
 
 #include <limits.h>
 
+static constexpr const uint MinCacheSize = 4 * 1024;        // 4 mb
 #ifdef QFONTCACHE_DEBUG
 #  define FC_DEBUG qDebug
 #else
@@ -1465,7 +1466,6 @@ static constexpr const int fast_timeout =  10000;  // 10s
 static constexpr const int slow_timeout = 300000;  //  5m
 #endif
 
-const uint QFontCache::min_cost = 4 * 1024; // 4mb
 
 static QThreadStorage<QFontCache *> *theFontCache()
 {
@@ -1503,9 +1503,8 @@ void QFontCache::cleanup()
 std::atomic<int> font_cache_id{1};
 
 QFontCache::QFontCache()
-   : QObject(), total_cost(0), max_cost(min_cost),
-     current_timestamp(0), fast(false), timer_id(-1),
-     m_id(font_cache_id.fetch_add(1, std::memory_order_relaxed))
+   : QObject(), total_cost(0), max_cost(MinCacheSize), current_timestamp(0), fast(false),
+     timer_id(-1), m_id(font_cache_id.fetch_add(1, std::memory_order_relaxed))
 {
 }
 
@@ -1576,7 +1575,7 @@ void QFontCache::clear()
    engineCacheCount.clear();
 
    total_cost = 0;
-   max_cost = min_cost;
+   max_cost   = MinCacheSize;
 }
 
 QFontEngineData *QFontCache::findEngineData(const QFontDef &def) const
@@ -1599,7 +1598,7 @@ void QFontCache::insertEngineData(const QFontDef &def, QFontEngineData *engineDa
 
    // Decrease now rather than waiting
 
-   if (total_cost > min_cost * 2 && engineDataCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
+   if (total_cost > MinCacheSize * 2 && engineDataCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
       decreaseCache();
    }
 
@@ -1640,7 +1639,7 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine, bool insertMu
    engine->m_refCount.ref();
 
    // Decrease now rather than waiting
-   if (total_cost > min_cost * 2 && engineCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
+   if (total_cost > MinCacheSize * 2 && engineCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
       decreaseCache();
    }
 
@@ -1703,7 +1702,7 @@ void QFontCache::timerEvent(QTimerEvent *)
    FC_DEBUG("QFontCache::timerEvent() Performing cache maintenance (timestamp %u)",
       current_timestamp);
 
-   if (total_cost <= max_cost && max_cost <= min_cost) {
+   if (total_cost <= max_cost && max_cost <= MinCacheSize) {
       FC_DEBUG("  cache redused sufficiently, stopping timer");
 
       killTimer(timer_id);
@@ -1762,8 +1761,8 @@ void QFontCache::decreaseCache()
      calculation correct, we are more interested in speed, and use
      in_use_cost as a floor for new_max_cost
    */
-   uint new_max_cost = qMax(qMax(max_cost / 2, in_use_cost), min_cost);
 
+   uint new_max_cost = qMax(qMax(max_cost / 2, in_use_cost), MinCacheSize);
    FC_DEBUG("  after sweep, in use %u kb, total %u kb, max %u kb, new max %u kb",
       in_use_cost, total_cost, max_cost, new_max_cost);
 

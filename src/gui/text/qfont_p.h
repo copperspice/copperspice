@@ -304,7 +304,6 @@ class QFontCache : public QObject
    void timerEvent(QTimerEvent *event) override;
    void decreaseCache();
 
-   static const uint min_cost;
    uint total_cost;
    uint max_cost;
    uint current_timestamp;
