@@ -273,7 +273,8 @@ bool QGtkStyle::getGConfBool(const QString &key, bool fallback)
 
 static QColor mergedColors(const QColor &colorA, const QColor &colorB, int factor = 50)
 {
-   const int maxFactor = 100;
+   static constexpr const int maxFactor = 100;
+
    QColor tmp = colorA;
    tmp.setRed((tmp.red() * factor) / maxFactor + (colorB.red() * (maxFactor - factor)) / maxFactor);
    tmp.setGreen((tmp.green() * factor) / maxFactor + (colorB.green() * (maxFactor - factor)) / maxFactor);

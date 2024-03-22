@@ -2127,7 +2127,8 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
          break;
 
       case PE_IndicatorBranch: {
-         static const int decoration_size = 9;
+         static constexpr const int decoration_size = 9;
+
          int mid_h = option->rect.x() + option->rect.width() / 2;
          int mid_v = option->rect.y() + option->rect.height() / 2;
          int bef_h = mid_h;
