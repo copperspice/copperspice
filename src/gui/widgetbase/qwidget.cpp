@@ -7250,7 +7250,7 @@ void QWidget::moveEvent(QMoveEvent *)
 {
 }
 
-void QWidget::resizeEvent(QResizeEvent * /* event */)
+void QWidget::resizeEvent(QResizeEvent *)
 {
 }
 

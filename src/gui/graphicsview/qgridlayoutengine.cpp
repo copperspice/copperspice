@@ -537,9 +537,7 @@ void QGridLayoutItem::setStretchFactor(int stretch, Qt::Orientation orientation)
    q_stretches[orientation == Qt::Vertical] = stretch;
 }
 
-
-
-QLayoutPolicy::ControlTypes QGridLayoutItem::controlTypes(LayoutSide /*side*/) const
+QLayoutPolicy::ControlTypes QGridLayoutItem::controlTypes(LayoutSide) const
 {
    return QLayoutPolicy::DefaultType;
 }

@@ -6653,8 +6653,8 @@ QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &p
    return pixmap;
 }
 
-int QCommonStyle::layoutSpacing(QSizePolicy::ControlType /* control1 */, QSizePolicy::ControlType /* control2 */,
-   Qt::Orientation /* orientation */, const QStyleOption * /* option */, const QWidget * /* widget */) const
+int QCommonStyle::layoutSpacing(QSizePolicy::ControlType, QSizePolicy::ControlType,
+      Qt::Orientation, const QStyleOption *, const QWidget *) const
 {
    return -1;
 }

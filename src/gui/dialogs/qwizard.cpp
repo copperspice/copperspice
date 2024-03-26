@@ -454,7 +454,7 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
    updateGeometry();
 }
 
-void QWizardHeader::paintEvent(QPaintEvent * /* event */)
+void QWizardHeader::paintEvent(QPaintEvent *)
 {
    QPainter painter(this);
    painter.drawPixmap(0, 0, bannerPixmap);

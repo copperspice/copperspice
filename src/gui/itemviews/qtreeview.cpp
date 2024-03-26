@@ -2567,7 +2567,7 @@ void QTreeView::expandToDepth(int depth)
    d->viewport->update();
 }
 
-void QTreeView::columnResized(int column, int /* oldSize */, int /* newSize */)
+void QTreeView::columnResized(int column, int, int)
 {
    Q_D(QTreeView);
    d->columnsToUpdate.append(column);

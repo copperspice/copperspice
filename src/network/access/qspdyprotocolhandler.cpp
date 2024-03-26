@@ -875,8 +875,7 @@ void QSpdyProtocolHandler::handleControlFrame(const QByteArray &frameHeaders)
    }
 }
 
-void QSpdyProtocolHandler::handleSYN_STREAM(char /*flags*/, quint32 /*length*/,
-      const QByteArray &frameData)
+void QSpdyProtocolHandler::handleSYN_STREAM(char, quint32, const QByteArray &frameData)
 {
    // not implemented; will be implemented when servers start using it
    // we just tell the server that we do not accept that
@@ -886,7 +885,7 @@ void QSpdyProtocolHandler::handleSYN_STREAM(char /*flags*/, quint32 /*length*/,
    sendRST_STREAM(streamID, RST_STREAM_REFUSED_STREAM);
 }
 
-void QSpdyProtocolHandler::handleSYN_REPLY(char flags, quint32 /*length*/, const QByteArray &frameData)
+void QSpdyProtocolHandler::handleSYN_REPLY(char flags, quint32, const QByteArray &frameData)
 {
    parseHttpHeaders(flags, frameData);
 }
@@ -1075,7 +1074,7 @@ void QSpdyProtocolHandler::handleRST_STREAM(char, quint32 length, const QByteArr
    }
 }
 
-void QSpdyProtocolHandler::handleSETTINGS(char flags, quint32 /*length*/, const QByteArray &frameData)
+void QSpdyProtocolHandler::handleSETTINGS(char flags, quint32, const QByteArray &frameData)
 {
    Q_ASSERT(frameData.count() > 0);
 
@@ -1136,7 +1135,7 @@ void QSpdyProtocolHandler::handleSETTINGS(char flags, quint32 /*length*/, const 
    }
 }
 
-void QSpdyProtocolHandler::handlePING(char /*flags*/, quint32 length, const QByteArray &frameData)
+void QSpdyProtocolHandler::handlePING(char, quint32 length, const QByteArray &frameData)
 {
    // flags are ignored
 
@@ -1192,14 +1191,12 @@ void QSpdyProtocolHandler::handleGOAWAY(char,  quint32, const QByteArray &frameD
    // ### we could make sure a new session is initiated anyhow
 }
 
-void QSpdyProtocolHandler::handleHEADERS(char flags, quint32 /*length*/,
-      const QByteArray &frameData)
+void QSpdyProtocolHandler::handleHEADERS(char flags, quint32, const QByteArray &frameData)
 {
    parseHttpHeaders(flags, frameData);
 }
 
-void QSpdyProtocolHandler::handleWINDOW_UPDATE(char /*flags*/, quint32 /*length*/,
-      const QByteArray &frameData)
+void QSpdyProtocolHandler::handleWINDOW_UPDATE(char, quint32, const QByteArray &frameData)
 {
    qint32 streamID = getStreamID(frameData.constData());
    qint32 deltaWindowSize = fourBytesToInt(frameData.constData() + 4);

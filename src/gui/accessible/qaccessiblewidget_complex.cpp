@@ -370,7 +370,7 @@ void QAccessibleComboBox::doAction(const QString &actionName)
    }
 }
 
-QStringList QAccessibleComboBox::keyBindingsForAction(const QString &/*actionName*/) const
+QStringList QAccessibleComboBox::keyBindingsForAction(const QString &) const
 {
    return QStringList();
 }

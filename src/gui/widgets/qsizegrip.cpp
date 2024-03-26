@@ -334,7 +334,7 @@ void QSizeGrip::mouseReleaseEvent(QMouseEvent *mouseEvent)
    }
 }
 
-void QSizeGrip::moveEvent(QMoveEvent * /*moveEvent*/)
+void QSizeGrip::moveEvent(QMoveEvent *)
 {
    Q_D(QSizeGrip);
    // We're inside a resize operation; no update necessary.

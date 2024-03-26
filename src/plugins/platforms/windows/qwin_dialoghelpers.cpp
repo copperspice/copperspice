@@ -1224,7 +1224,7 @@ QString QWindowsNativeFileDialogBase::itemPath(IShellItem *item)
    return QString();
 }
 
-int QWindowsNativeFileDialogBase::itemPaths(IShellItemArray *items, QList<QUrl> *result /* = 0 */)
+int QWindowsNativeFileDialogBase::itemPaths(IShellItemArray *items, QList<QUrl> *result)
 {
    DWORD itemCount = 0;
 

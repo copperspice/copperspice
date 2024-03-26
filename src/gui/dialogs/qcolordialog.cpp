@@ -385,7 +385,7 @@ void QWellArray::mousePressEvent(QMouseEvent *e)
    setCurrent(rowAt(pos.y()), columnAt(pos.x()));
 }
 
-void QWellArray::mouseReleaseEvent(QMouseEvent * /* event */)
+void QWellArray::mouseReleaseEvent(QMouseEvent *)
 {
    // The current cell marker is set to the cell the mouse is clicked in
    setSelected(curRow, curCol);

@@ -36,7 +36,7 @@ QMacSwipeGestureRecognizer::QMacSwipeGestureRecognizer()
 {
 }
 
-QGesture *QMacSwipeGestureRecognizer::create(QObject * /*target*/)
+QGesture *QMacSwipeGestureRecognizer::create(QObject *)
 {
     return new QSwipeGesture;
 }
@@ -74,7 +74,7 @@ QMacPinchGestureRecognizer::QMacPinchGestureRecognizer()
 {
 }
 
-QGesture *QMacPinchGestureRecognizer::create(QObject * /*target*/)
+QGesture *QMacPinchGestureRecognizer::create(QObject *)
 {
     return new QPinchGesture;
 }

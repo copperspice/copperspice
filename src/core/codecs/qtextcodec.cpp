@@ -969,7 +969,7 @@ QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba, QTextCodec *defaultCo
 
 QTextCodec *QTextCodec::codecForHtml(const QByteArray &ba)
 {
-   return codecForHtml(ba, QTextCodec::codecForMib(/*Latin 1*/ 4));
+   return codecForHtml(ba, QTextCodec::codecForMib(4));
 }
 
 QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaultCodec)
@@ -1013,7 +1013,7 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
 
 QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba)
 {
-   return codecForUtfText(ba, QTextCodec::codecForMib(/*Latin 1*/ 4));
+   return codecForUtfText(ba, QTextCodec::codecForMib(4));
 }
 
 bool QTextDecoder::hasFailure() const

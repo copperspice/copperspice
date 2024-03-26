@@ -850,7 +850,7 @@ QRect QItemDelegate::doCheck(const QStyleOptionViewItem &option,
    return QRect();
 }
 
-QRect QItemDelegate::textRectangle(QPainter * /*painter*/, const QRect &rect,
+QRect QItemDelegate::textRectangle(QPainter *, const QRect &rect,
    const QFont &font, const QString &text) const
 {
    Q_D(const QItemDelegate);

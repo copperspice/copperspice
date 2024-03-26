@@ -124,7 +124,7 @@ int QLayoutItem::minimumHeightForWidth(int w) const
    return heightForWidth(w);
 }
 
-int QLayoutItem::heightForWidth(int /* w */) const
+int QLayoutItem::heightForWidth(int) const
 {
    return -1;
 }

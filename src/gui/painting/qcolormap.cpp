@@ -73,7 +73,7 @@ void QColormap::cleanup()
    screenMap = nullptr;
 }
 
-QColormap QColormap::instance(int /*screen*/)
+QColormap QColormap::instance(int)
 {
    return QColormap();
 }

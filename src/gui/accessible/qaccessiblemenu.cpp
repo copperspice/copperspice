@@ -264,7 +264,7 @@ QAccessible::Role QAccessibleMenuItem::role() const
    return m_action->isSeparator() ? QAccessible::Separator : QAccessible::MenuItem;
 }
 
-void QAccessibleMenuItem::setText(QAccessible::Text /*t*/, const QString & /*text */)
+void QAccessibleMenuItem::setText(QAccessible::Text, const QString &)
 {
 }
 

@@ -364,7 +364,7 @@ static void cleanupCocoaApplicationDelegate()
       app that has no windows opened would need the event be to delivered even if it was already
       active in order to create a new window as per OS X conventions.
     */
-   QWindowSystemInterface::handleApplicationStateChanged(Qt::ApplicationActive, true /*forcePropagate*/);
+   QWindowSystemInterface::handleApplicationStateChanged(Qt::ApplicationActive, true);
 
    return YES;
 }

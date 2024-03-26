@@ -89,23 +89,23 @@ QStyle::~QStyle()
 {
 }
 
-void QStyle::polish(QWidget * /* widget */)
+void QStyle::polish(QWidget *)
 {
 }
 
-void QStyle::unpolish(QWidget * /* widget */)
+void QStyle::unpolish(QWidget *)
 {
 }
 
-void QStyle::polish(QApplication * /* app */)
+void QStyle::polish(QApplication *)
 {
 }
 
-void QStyle::unpolish(QApplication * /* app */)
+void QStyle::unpolish(QApplication *)
 {
 }
 
-void QStyle::polish(QPalette & /* pal */)
+void QStyle::polish(QPalette &)
 {
 }
 

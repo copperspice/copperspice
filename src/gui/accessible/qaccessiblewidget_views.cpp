@@ -1144,7 +1144,7 @@ QString QAccessibleTableCell::text(QAccessible::Text t) const
    return value;
 }
 
-void QAccessibleTableCell::setText(QAccessible::Text /*t*/, const QString &text)
+void QAccessibleTableCell::setText(QAccessible::Text, const QString &text)
 {
    if (!(m_index.flags() & Qt::ItemIsEditable)) {
       return;

@@ -1825,7 +1825,7 @@ void QPlainTextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 /*!\reimp
 */
-void QPlainTextEdit::scrollContentsBy(int dx, int /*dy*/)
+void QPlainTextEdit::scrollContentsBy(int dx, int)
 {
    Q_D(QPlainTextEdit);
    d->setTopLine(d->vbar->value(), dx);

@@ -474,7 +474,8 @@ void QAccessibleWidget::doAction(const QString &actionName)
       widget()->setFocus();
    }
 }
-QStringList QAccessibleWidget::keyBindingsForAction(const QString & /* actionName */) const
+
+QStringList QAccessibleWidget::keyBindingsForAction(const QString &) const
 {
    return QStringList();
 }

@@ -33,14 +33,13 @@ class Q_GUI_EXPORT QAbstractLayoutStyleInfo
    QAbstractLayoutStyleInfo() : m_isWindow(false) {}
 
    virtual ~QAbstractLayoutStyleInfo() {}
-   virtual qreal combinedLayoutSpacing(QLayoutPolicy::ControlTypes /*controls1*/,
-      QLayoutPolicy::ControlTypes /*controls2*/, Qt::Orientation /*orientation*/) const {
+   virtual qreal combinedLayoutSpacing(QLayoutPolicy::ControlTypes, QLayoutPolicy::ControlTypes,
+         Qt::Orientation) const {
       return -1;
    }
 
-   virtual qreal perItemSpacing(QLayoutPolicy::ControlType /*control1*/,
-      QLayoutPolicy::ControlType /*control2*/,
-      Qt::Orientation /*orientation*/) const {
+   virtual qreal perItemSpacing(QLayoutPolicy::ControlType, QLayoutPolicy::ControlType,
+         Qt::Orientation) const {
       return -1;
    }
 

@@ -30,12 +30,10 @@
 #include <qapplication_p.h>
 #include <qpaintengine_raster_p.h>
 
-QNativeImage::QNativeImage(int width, int height, QImage::Format format,  bool /* isTextBuffer */, QWindow *)
+QNativeImage::QNativeImage(int width, int height, QImage::Format format, bool, QWindow *)
    : image(width, height, format)
 {
-
 }
-
 
 QNativeImage::~QNativeImage()
 {

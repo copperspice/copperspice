@@ -990,7 +990,7 @@ void QXcbDrag::send_leave()
 
    QXcbWindow *w = connection()->platformWindowFromId(current_proxy_target);
 
-   if (w != nullptr && (w->window()->type() == Qt::Desktop) /*&& !w->acceptDrops()*/) {
+   if (w != nullptr && (w->window()->type() == Qt::Desktop)) {
       w = nullptr;
    }
 

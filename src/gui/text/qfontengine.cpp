@@ -2278,7 +2278,7 @@ QImage QFontEngineMulti::alphaRGBMapForGlyph(glyph_t glyph, QFixed subPixelPosit
 QFontEngine *QFontEngineMulti::createMultiFontEngine(QFontEngine *fe, int script)
 {
    QFontEngine *engine = nullptr;
-   QFontCache::Key key(fe->fontDef, script, /*multi = */true);
+   QFontCache::Key key(fe->fontDef, script, true);
    QFontCache *fc = QFontCache::instance();
 
    // can not  rely on the fontDef (and hence the cache Key) alone to distinguish webfonts, since these should not be

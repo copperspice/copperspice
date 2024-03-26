@@ -24,7 +24,7 @@
 #include <qiconengine.h>
 #include <qpainter.h>
 
-QSize QIconEngine::actualSize(const QSize &size, QIcon::Mode /*mode*/, QIcon::State /*state*/)
+QSize QIconEngine::actualSize(const QSize &size, QIcon::Mode, QIcon::State)
 {
    return size;
 }

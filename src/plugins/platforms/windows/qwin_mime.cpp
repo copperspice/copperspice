@@ -1426,7 +1426,7 @@ bool QLastResortMimes::convertFromMime(const FORMATETC &formatetc, const QMimeDa
 #endif
 }
 
-QVector<FORMATETC> QLastResortMimes::formatsForMime(const QString &mimeType, const QMimeData * /*mimeData*/) const
+QVector<FORMATETC> QLastResortMimes::formatsForMime(const QString &mimeType, const QMimeData *) const
 {
    QVector<FORMATETC> formatetcs;
 

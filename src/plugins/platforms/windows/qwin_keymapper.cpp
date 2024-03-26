@@ -879,7 +879,7 @@ bool QWindowsKeyMapper::translateMultimediaKeyEventInternal(QWindow *window, con
 
 }
 
-bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &msg, bool /* grab */)
+bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &msg, bool)
 {
    const UINT msgType = msg.message;
 

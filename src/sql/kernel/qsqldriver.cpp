@@ -115,7 +115,7 @@ QSqlIndex QSqlDriver::primaryIndex(const QString &) const
    return QSqlIndex();
 }
 
-QSqlRecord QSqlDriver::record(const QString & /* tableName */) const
+QSqlRecord QSqlDriver::record(const QString &) const
 {
    return QSqlRecord();
 }

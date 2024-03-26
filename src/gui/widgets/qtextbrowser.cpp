@@ -889,7 +889,7 @@ void QTextBrowser::paintEvent(QPaintEvent *e)
    d->paint(&p, e);
 }
 
-QVariant QTextBrowser::loadResource(int /*type*/, const QUrl &name)
+QVariant QTextBrowser::loadResource(int, const QUrl &name)
 {
    Q_D(QTextBrowser);
 

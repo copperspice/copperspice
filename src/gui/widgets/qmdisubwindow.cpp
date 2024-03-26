@@ -323,7 +323,7 @@ bool ControlLabel::event(QEvent *event)
    return QWidget::event(event);
 }
 
-void ControlLabel::paintEvent(QPaintEvent * /*paintEvent*/)
+void ControlLabel::paintEvent(QPaintEvent *)
 {
    QPainter painter(this);
    painter.drawPixmap(0, 0, label);
@@ -465,7 +465,7 @@ void ControllerWidget::setControlVisible(QMdiSubWindowPrivate::WindowStateAction
    }
 }
 
-void ControllerWidget::paintEvent(QPaintEvent * /*paintEvent*/)
+void ControllerWidget::paintEvent(QPaintEvent *)
 {
    QStyleOptionComplex opt;
    initStyleOption(&opt);
@@ -531,7 +531,7 @@ void ControllerWidget::mouseMoveEvent(QMouseEvent *event)
    }
 }
 
-void ControllerWidget::leaveEvent(QEvent * /*event*/)
+void ControllerWidget::leaveEvent(QEvent *)
 {
    hoverControl = QStyle::SC_None;
    update();
@@ -2944,7 +2944,7 @@ void QMdiSubWindow::showEvent(QShowEvent *showEvent)
 /*!
     \reimp
 */
-void QMdiSubWindow::hideEvent(QHideEvent * /*hideEvent*/)
+void QMdiSubWindow::hideEvent(QHideEvent *)
 {
 #ifndef QT_NO_MENUBAR
    d_func()->removeButtonsFromMenuBar();
@@ -3043,7 +3043,7 @@ void QMdiSubWindow::closeEvent(QCloseEvent *closeEvent)
 /*!
     \reimp
 */
-void QMdiSubWindow::leaveEvent(QEvent * /*leaveEvent*/)
+void QMdiSubWindow::leaveEvent(QEvent *)
 {
    Q_D(QMdiSubWindow);
    if (d->hoveredSubControl != QStyle::SC_None) {
@@ -3500,7 +3500,7 @@ void QMdiSubWindow::focusInEvent(QFocusEvent *focusInEvent)
 /*!
     \reimp
 */
-void QMdiSubWindow::focusOutEvent(QFocusEvent * /*focusOutEvent*/)
+void QMdiSubWindow::focusOutEvent(QFocusEvent *)
 {
    // To avoid update() in QWidget::focusOutEvent.
 }

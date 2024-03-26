@@ -500,7 +500,7 @@ QWindow *QAccessibleInterface::window() const
    return nullptr;
 }
 
-void QAccessibleInterface::virtual_hook(int /*id*/, void * /*data*/)
+void QAccessibleInterface::virtual_hook(int, void *)
 {
 }
 

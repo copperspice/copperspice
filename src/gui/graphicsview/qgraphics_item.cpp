@@ -1462,8 +1462,8 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
                   while (fsi->d_ptr->focusScopeItem && fsi->d_ptr->focusScopeItem->isVisible()) {
                      fsi = fsi->d_ptr->focusScopeItem;
                   }
-                  fsi->d_ptr->setFocusHelper(Qt::OtherFocusReason, /* climb = */ true,
-                     /* focusFromHide = */ false);
+
+                  fsi->d_ptr->setFocusHelper(Qt::OtherFocusReason, true, false);
                }
                break;
             }
@@ -1488,8 +1488,7 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
             while (p) {
                if (p->flags() & QGraphicsItem::ItemIsFocusScope) {
                   if (p->d_ptr->visible) {
-                     p->d_ptr->setFocusHelper(Qt::OtherFocusReason, /* climb = */ true,
-                        /* focusFromHide = */ true);
+                     p->d_ptr->setFocusHelper(Qt::OtherFocusReason, true, true);
                   }
                   break;
                }

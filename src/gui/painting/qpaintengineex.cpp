@@ -984,7 +984,7 @@ void QPaintEngineEx::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, con
 }
 
 void QPaintEngineEx::drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount,
-   const QPixmap &pixmap, QPainter::PixmapFragmentHints /*hints*/)
+      const QPixmap &pixmap, QPainter::PixmapFragmentHints)
 {
    if (pixmap.isNull()) {
       return;

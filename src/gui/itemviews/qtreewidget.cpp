@@ -2163,7 +2163,7 @@ void QTreeWidget::dropEvent(QDropEvent *event)
 }
 #endif
 
-void QTreeWidget::setModel(QAbstractItemModel * /*model*/)
+void QTreeWidget::setModel(QAbstractItemModel *)
 {
    Q_ASSERT(!"QTreeWidget::setModel() - Changing the model of the QTreeWidget is not allowed.");
 }

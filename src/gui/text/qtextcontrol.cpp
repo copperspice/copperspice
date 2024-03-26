@@ -554,7 +554,7 @@ void QTextControlPrivate::repaintOldAndNewSelection(const QTextCursor &oldSelect
    }
 }
 
-void QTextControlPrivate::selectionChanged(bool forceEmitSelectionChanged /*=false*/)
+void QTextControlPrivate::selectionChanged(bool forceEmitSelectionChanged)
 {
    Q_Q(QTextControl);
 

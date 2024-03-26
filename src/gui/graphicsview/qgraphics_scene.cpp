@@ -387,8 +387,7 @@ void QGraphicsScenePrivate::removeItemHelper(QGraphicsItem *item)
    // Clear focus on the item to remove any reference in the focusWidget chain.
    item->clearFocus();
 
-   markDirty(item, QRectF(), /*invalidateChildren=*/false, /*force=*/false,
-      /*ignoreOpacity=*/false, /*removingItemFromScene=*/true);
+   markDirty(item, QRectF(), false, false, false, true);
 
    if (item->d_ptr->inDestructor) {
       // The item is actually in its destructor, we call the special method in the index.
@@ -517,12 +516,12 @@ void QGraphicsScenePrivate::removeItemHelper(QGraphicsItem *item)
 
    // Reset the mouse grabber and focus item data.
    if (mouseGrabberItems.contains(item)) {
-      ungrabMouse(item, /* item is dying */ item->d_ptr->inDestructor);
+      ungrabMouse(item, item->d_ptr->inDestructor);
    }
 
    // Reset the keyboard grabber
    if (keyboardGrabberItems.contains(item)) {
-      ungrabKeyboard(item, /* item is dying */ item->d_ptr->inDestructor);
+      ungrabKeyboard(item, item->d_ptr->inDestructor);
    }
 
    // Reset the last mouse grabber item
@@ -624,14 +623,16 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
 
       // Set focus on the panel's focus item.
       if (QGraphicsItem *focusItem = panel->focusItem()) {
-         setFocusItemHelper(focusItem, Qt::ActiveWindowFocusReason, /* emitFocusChanged = */ false);
+         setFocusItemHelper(focusItem, Qt::ActiveWindowFocusReason, false);
+
       } else if (panel->flags() & QGraphicsItem::ItemIsFocusable) {
-         setFocusItemHelper(panel, Qt::ActiveWindowFocusReason, /* emitFocusChanged = */ false);
+         setFocusItemHelper(panel, Qt::ActiveWindowFocusReason, false);
+
       } else if (panel->isWidget()) {
          QGraphicsWidget *fw = static_cast<QGraphicsWidget *>(panel)->d_func()->focusNext;
          do {
             if (fw->focusPolicy() & Qt::TabFocus) {
-               setFocusItemHelper(fw, Qt::ActiveWindowFocusReason, /* emitFocusChanged = */ false);
+               setFocusItemHelper(fw, Qt::ActiveWindowFocusReason, false);
                break;
             }
             fw = fw->d_func()->focusNext;

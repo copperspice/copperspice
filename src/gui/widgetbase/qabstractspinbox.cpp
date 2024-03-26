@@ -269,12 +269,12 @@ QAbstractSpinBox::StepEnabled QAbstractSpinBox::stepEnabled() const
    return ret;
 }
 
-QValidator::State QAbstractSpinBox::validate(QString & /* input */, int & /* pos */) const
+QValidator::State QAbstractSpinBox::validate(QString &, int &) const
 {
    return QValidator::Acceptable;
 }
 
-void QAbstractSpinBox::fixup(QString & /* input */) const
+void QAbstractSpinBox::fixup(QString &) const
 {
 }
 
@@ -1161,7 +1161,7 @@ void QAbstractSpinBoxPrivate::reset()
    }
 }
 
-void QAbstractSpinBoxPrivate::updateState(bool up, bool fromKeyboard /* = false */)
+void QAbstractSpinBoxPrivate::updateState(bool up, bool fromKeyboard)
 {
    Q_Q(QAbstractSpinBox);
    if ((up && (buttonState & Up)) || (!up && (buttonState & Down))) {

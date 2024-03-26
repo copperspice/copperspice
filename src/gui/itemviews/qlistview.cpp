@@ -1671,13 +1671,13 @@ void QCommonListViewBase::updateVerticalScrollBar(const QSize &step)
    }
 }
 
-void QCommonListViewBase::scrollContentsBy(int dx, int dy, bool /*scrollElasticBand*/)
+void QCommonListViewBase::scrollContentsBy(int dx, int dy, bool)
 {
    dd->scrollContentsBy(isRightToLeft() ? -dx : dx, dy);
 }
 
-int QCommonListViewBase::verticalScrollToValue(int /*index*/, QListView::ScrollHint hint,
-   bool above, bool below, const QRect &area, const QRect &rect) const
+int QCommonListViewBase::verticalScrollToValue(int, QListView::ScrollHint hint,
+      bool above, bool below, const QRect &area, const QRect &rect) const
 {
    int verticalValue = verticalScrollBar()->value();
    QRect adjusted = rect.adjusted(-spacing(), -spacing(), spacing(), spacing());
@@ -1697,8 +1697,8 @@ int QCommonListViewBase::horizontalOffset() const
          horizontalScrollBar()->value());
 }
 
-int QCommonListViewBase::horizontalScrollToValue(const int /*index*/, QListView::ScrollHint hint,
-   bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const
+int QCommonListViewBase::horizontalScrollToValue(const int, QListView::ScrollHint hint,
+      bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const
 {
    int horizontalValue = horizontalScrollBar()->value();
    if (isRightToLeft()) {
