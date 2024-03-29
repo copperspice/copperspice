@@ -120,9 +120,6 @@ class QGIFFormat
    void disposePrevious(QImage *image);
 };
 
-/*!
-    Constructs a QGIFFormat.
-*/
 QGIFFormat::QGIFFormat()
 {
    globalcmap    = nullptr;
@@ -146,9 +143,6 @@ QGIFFormat::QGIFFormat()
    stack    = nullptr;
 }
 
-/*!
-    Destroys a QGIFFormat.
-*/
 QGIFFormat::~QGIFFormat()
 {
    if (globalcmap) {

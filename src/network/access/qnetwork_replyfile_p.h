@@ -43,9 +43,8 @@ class QNetworkReplyFileImpl: public QNetworkReply
    ~QNetworkReplyFileImpl();
 
    void abort() override;
-
-   // reimplemented from QNetworkReply
    void close() override;
+
    qint64 bytesAvailable() const override;
    bool isSequential () const override;
    qint64 size() const override;

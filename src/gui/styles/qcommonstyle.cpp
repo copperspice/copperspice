@@ -982,14 +982,6 @@ void QCommonStylePrivate::viewItemDrawText(QPainter *p, const QStyleOptionViewIt
    }
 }
 
-/*! \internal
-    compute the position for the different component of an item (pixmap, text, checkbox)
-
-    Set sizehint to false to layout the elements inside opt->rect. Set sizehint to true to ignore
-    opt->rect and return rectangles in infinite space
-
-    Code duplicated in QItemDelegate::doLayout
-*/
 void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect *checkRect,
    QRect *pixmapRect, QRect *textRect, bool sizehint) const
 {
@@ -1144,11 +1136,6 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
 
 
 #ifndef QT_NO_TABBAR
-/*! \internal
-    Compute the textRect and the pixmapRect from the opt rect
-
-    Uses the same computation than in QTabBar::tabSizeHint
- */
 void QCommonStylePrivate::tabLayout(const QStyleOptionTab *opt, const QWidget *widget, QRect *textRect, QRect *iconRect) const
 {
    Q_ASSERT(textRect);
@@ -2479,9 +2466,6 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
    }
 }
 
-/*!
-  \reimp
-*/
 QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
    const QWidget *widget) const
 {
@@ -3309,9 +3293,6 @@ static StaticPolygonF<3> calcArrow(const QStyleOptionSlider *dial, qreal &a)
 
 #endif // QT_NO_DIAL
 
-/*!
-  \reimp
-*/
 void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
    QPainter *p, const QWidget *widget) const
 {
@@ -4014,9 +3995,6 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
    }
 }
 
-/*!
-    \reimp
-*/
 QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
    const QPoint &pt, const QWidget *widget) const
 {
@@ -4036,7 +4014,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             }
          }
          break;
-#endif // QT_NO_SLIDER
+#endif
 
 #ifndef QT_NO_SCROLLBAR
       case CC_ScrollBar:
@@ -4053,7 +4031,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             }
          }
          break;
-#endif // QT_NO_SCROLLBAR
+#endif
 
 #ifndef QT_NO_TOOLBUTTON
       case CC_ToolButton:
@@ -4070,7 +4048,7 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             }
          }
          break;
-#endif // QT_NO_TOOLBUTTON
+#endif
 
 #ifndef QT_NO_SPINBOX
       case CC_SpinBox:
@@ -4087,7 +4065,8 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
             }
          }
          break;
-#endif // QT_NO_SPINBOX
+#endif
+
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *tb = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             QRect r;
@@ -4158,9 +4137,6 @@ QStyle::SubControl QCommonStyle::hitTestComplexControl(ComplexControl cc, const 
    return sc;
 }
 
-/*!
-    \reimp
-*/
 QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt,
    SubControl sc, const QWidget *widget) const
 {
@@ -4657,7 +4633,6 @@ QRect QCommonStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex 
    return ret;
 }
 
-/*! \reimp */
 int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWidget *widget) const
 {
    int ret;
@@ -5050,9 +5025,6 @@ int QCommonStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const QWid
    return ret;
 }
 
-/*!
-    \reimp
-*/
 QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
    const QSize &csz, const QWidget *widget) const
 {
@@ -5256,7 +5228,6 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
    return sz;
 }
 
-/*! \reimp */
 int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *widget,
    QStyleHintReturn *hret) const
 {
@@ -6576,7 +6547,6 @@ static inline uint qt_intensity(uint r, uint g, uint b)
    return (77 * r + 150 * g + 28 * b) / 255;
 }
 
-/*! \reimp */
 QPixmap QCommonStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
    const QStyleOption *opt) const
 {

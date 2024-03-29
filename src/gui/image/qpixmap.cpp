@@ -690,17 +690,11 @@ bool QPixmap::hasAlphaChannel() const
    return data && data->hasAlphaChannel();
 }
 
-/*!
-    \internal
-*/
 int QPixmap::metric(PaintDeviceMetric metric) const
 {
    return data ? data->metric(metric) : 0;
 }
 
-/*!
-    \internal
-*/
 QPaintEngine *QPixmap::paintEngine() const
 {
    return data ? data->paintEngine() : nullptr;

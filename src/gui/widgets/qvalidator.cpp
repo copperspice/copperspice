@@ -99,7 +99,6 @@ QIntValidator::QIntValidator(int minimum, int maximum, QObject *parent)
 
 QIntValidator::~QIntValidator()
 {
-   // nothing
 }
 
 static int numDigits(qint64 n)
@@ -170,7 +169,6 @@ QValidator::State QIntValidator::validate(QString &input, int &) const
    }
 }
 
-/*! \reimp */
 void QIntValidator::fixup(QString &input) const
 {
    QByteArray buff;
@@ -390,7 +388,6 @@ QDoubleValidator::Notation QDoubleValidator::notation() const
    return d->notation;
 }
 
-// **
 QRegularExpressionValidator::QRegularExpressionValidator(QObject *parent)
    : QValidator(parent), m_regexp(".*")
 {

@@ -41,10 +41,9 @@
 #define USE_MANUAL_DEFS
 #endif
 
-// Under OSX (at least up to 10.8) we cannot include our copy of glext.h,
-// but we use the system-wide one, which unfortunately lacks all the needed
-// defines/typedefs. In order to make the code compile, we just add here
-// the GL_KHR_debug defines.
+// Under OSX (at least up to 10.8) we can not include our own copy of glext.h,
+// using the system version unfortunately lacks the needed  defines/typedefs.
+// Work around by adding GL_KHR_debug defines manually
 
 #ifndef GL_KHR_debug
 #define GL_KHR_debug 1

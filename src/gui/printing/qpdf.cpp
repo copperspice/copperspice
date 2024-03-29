@@ -1131,7 +1131,6 @@ void QPdfEngine::updateClipPath(const QPainterPath &p, Qt::ClipOperation op)
 {
     Q_D(QPdfEngine);
     QPainterPath path = d->stroker.matrix.map(p);
-    //qDebug() << "updateClipPath: " << d->stroker.matrix << p.boundingRect() << path.boundingRect() << op;
 
     if (op == Qt::NoClip) {
         d->clipEnabled = false;
@@ -1141,8 +1140,9 @@ void QPdfEngine::updateClipPath(const QPainterPath &p, Qt::ClipOperation op)
         d->clips.append(path);
     } else if (op == Qt::IntersectClip) {
         d->clips.append(path);
-    } else { // UniteClip
-        // ask the painter for the current clipping path. that's the easiest solution
+
+    } else {
+        // UniteClip, ask the painter for the current clipping path. that's the easiest solution
         path = painter()->clipPath();
         path = d->stroker.matrix.map(path);
         d->clips.clear();
@@ -1532,7 +1532,6 @@ void QPdfEnginePrivate::writePageRoot()
 
 void QPdfEnginePrivate::embedFont(QFontSubset *font)
 {
-    //qDebug() << "embedFont" << font->object_id;
     int fontObject = font->object_id;
     QByteArray fontData = font->toTruetype();
 
@@ -1964,7 +1963,6 @@ int QPdfEnginePrivate::writeImage(const QByteArray &data, int width, int height,
         xprintf("/Interpolate true\n");
     int len = 0;
     if (dct) {
-        //qDebug() << "DCT";
         xprintf("/Filter /DCTDecode\n>>\nstream\n");
         write(data);
         len = data.length();
@@ -2353,7 +2351,6 @@ int QPdfEnginePrivate::addBrushPattern(const QTransform &m, bool *specifyColor, 
     QTransform matrix = m;
     matrix.translate(brushOrigin.x(), brushOrigin.y());
     matrix = matrix * pageMatrix();
-    //qDebug() << brushOrigin << matrix;
 
     Qt::BrushStyle style = brush.style();
     if (style == Qt::LinearGradientPattern || style == Qt::RadialGradientPattern) {// && style <= Qt::ConicalGradientPattern) {

@@ -232,9 +232,6 @@ QRasterPaintEngine::QRasterPaintEngine(QPaintDevice *device)
    init();
 }
 
-/*!
-    \internal
-*/
 QRasterPaintEngine::QRasterPaintEngine(QRasterPaintEnginePrivate &dd, QPaintDevice *device)
    : QPaintEngineEx(dd)
 {
@@ -1305,9 +1302,6 @@ static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEng
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1418,8 +1412,6 @@ void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
    QPaintEngineEx::drawRects(rectPtr, rectCount);
 }
 
-
-// internal
 void QRasterPaintEngine::stroke(const QVectorPath &path, const QPen &pen)
 {
    Q_D(QRasterPaintEngine);
@@ -1512,9 +1504,6 @@ QRect QRasterPaintEngine::toNormalizedFillRect(const QRectF &rect)
    return QRect(x1, y1, x2 - x1, y2 - y1);
 }
 
-/*!
-    \internal
-*/
 void QRasterPaintEngine::fill(const QVectorPath &path, const QBrush &brush)
 {
    if (path.isEmpty()) {
@@ -1628,9 +1617,6 @@ void QRasterPaintEngine::fillRect(const QRectF &r, QSpanData *data)
    fillPath(path, data);
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1647,9 +1633,6 @@ void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
    fillRect(r, &s->brushData);
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::fillRect(const QRectF &r, const QColor &color)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1727,9 +1710,6 @@ static bool splitPolygon(const QPointF *points, int pointCount, QVector<QPointF>
    return upper->size() < pointCount && lower->size() < pointCount;
 }
 
-/*!
-  \internal
- */
 void QRasterPaintEngine::fillPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QRasterPaintEngine);
@@ -1762,9 +1742,6 @@ void QRasterPaintEngine::fillPolygon(const QPointF *points, int pointCount, Poly
    d->rasterize(outline, brushBlend, &s->brushData, d->rasterBuffer.data());
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
    Q_D(QRasterPaintEngine);
@@ -1879,9 +1856,6 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
    }
 }
 
-/*!
-    \internal
-*/
 void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1922,9 +1896,6 @@ void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, const QRectF &sr)
 {
 #ifdef QT_DEBUG_DRAW
@@ -1992,9 +1963,6 @@ static inline const QRect toAlignedRect_positive(const QRectF &rect)
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
 
-/*!
-    \internal
-*/
 void QRasterPaintEngine::drawImage(const QPointF &p, const QImage &img)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2091,9 +2059,6 @@ inline bool isPixelAligned(const QRectF &rect)
 
 }  // namespace
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRectF &sr,
    Qt::ImageConversionFlags)
 {
@@ -2350,9 +2315,6 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &sr)
 {
 #ifdef QT_DEBUG_DRAW
@@ -2427,23 +2389,17 @@ void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap,
    }
 }
 
-// QWS
 static inline bool monoVal(const uchar *s, int x)
 {
    return  (s[x >> 3] << (x & 7)) & 0x80;
 }
 
-/*!
-    \internal
- */
 QRasterBuffer *QRasterPaintEngine::rasterBuffer()
 {
    Q_D(QRasterPaintEngine);
    return d->rasterBuffer.data();
 }
-/*!
-    \internal
-*/
+
 void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx, int ry, int w, int h)
 {
    static constexpr const int ArraySize = 256;
@@ -2676,8 +2632,6 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
       }
    }
 
-   //     qDebug() << "alphaPenBlt: num spans=" << current
-   //              << "span:" << spans->x << spans->y << spans->len << spans->coverage;
    // Call span func for current set of spans.
 
    if (current != 0) {
@@ -2790,9 +2744,6 @@ bool QRasterPaintEngine::drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, 
    return true;
 }
 
-/*!
- * Returns true if the rectangle is completely within the current clip state of the paint engine.
- */
 bool QRasterPaintEnginePrivate::isUnclipped_normalized(const QRect &r) const
 {
    const QClipData *cl = clip();
@@ -2929,9 +2880,6 @@ static QPair<int, int> visibleGlyphRange(const QRectF &clip, QFontEngine *fontEn
    return QPair<int, int>(first, last + 1);
 }
 
-/*!
-   \reimp
-*/
 void QRasterPaintEngine::drawStaticTextItem(QStaticTextItem *textItem)
 {
    if (textItem->numGlyphs == 0) {
@@ -2969,9 +2917,6 @@ void QRasterPaintEngine::drawStaticTextItem(QStaticTextItem *textItem)
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 {
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
@@ -3070,9 +3015,6 @@ void QRasterPaintEngine::drawPoints(const QPoint *pointPtr, int pointCount)
    stroker.drawPoints(pointPtr, pointCount);
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawLines(const QLine *lines, int lineCount)
 {
    Q_D(QRasterPaintEngine);
@@ -3148,9 +3090,6 @@ void QRasterPaintEnginePrivate::rasterizeLine_dashed(QLineF line,
    }
 }
 
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawLines(const QLineF *lines, int lineCount)
 {
 #ifdef QT_DEBUG_DRAW
@@ -3178,10 +3117,6 @@ void QRasterPaintEngine::drawLines(const QLineF *lines, int lineCount)
    }
 }
 
-
-/*!
-    \reimp
-*/
 void QRasterPaintEngine::drawEllipse(const QRectF &rect)
 {
    Q_D(QRasterPaintEngine);
@@ -3235,9 +3170,6 @@ void QRasterPaintEngine::releaseDC(HDC) const
 
 #endif
 
-/*!
-    \internal
-*/
 bool QRasterPaintEngine::requiresPretransformedGlyphPositions(QFontEngine *fontEngine, const QTransform &m) const
 {
    // Cached glyphs always require pretransformed positions
@@ -3248,10 +3180,7 @@ bool QRasterPaintEngine::requiresPretransformedGlyphPositions(QFontEngine *fontE
    // Otherwise let the base-class decide based on the transform
    return QPaintEngineEx::requiresPretransformedGlyphPositions(fontEngine, m);
 }
-/*!
-   Indicates whether glyph caching is supported by the font engine
-   \a fontEngine with the given transform \a m applied.
-*/
+
 bool QRasterPaintEngine::shouldDrawCachedGlyphs(QFontEngine *fontEngine, const QTransform &m) const
 {
    // The raster engine does not support projected cached glyph drawing
@@ -3362,18 +3291,6 @@ void QRasterPaintEngine::drawBitmap(const QPointF &pos, const QImage &image, QSp
    }
 }
 
-/*!
-    \enum QRasterPaintEngine::ClipType
-    \internal
-
-    \value RectClip Indicates that the currently set clip is a single rectangle.
-    \value ComplexClip Indicates that the currently set clip is a combination of several shapes.
-*/
-
-/*!
-    \internal
-    Returns the type of the clip currently set.
-*/
 QRasterPaintEngine::ClipType QRasterPaintEngine::clipType() const
 {
    Q_D(const QRasterPaintEngine);
@@ -3386,10 +3303,6 @@ QRasterPaintEngine::ClipType QRasterPaintEngine::clipType() const
    }
 }
 
-/*!
-    \internal
-    Returns the bounding rect of the currently set clip.
-*/
 QRect QRasterPaintEngine::clipBoundingRect() const
 {
    Q_D(const QRasterPaintEngine);
@@ -3854,16 +3767,12 @@ void QClipData::fixup()
    }
 }
 
-/*
-    Convert \a rect to clip spans.
- */
 void QClipData::setClipRect(const QRect &rect)
 {
    if (hasRectClip && rect == clipRect) {
       return;
    }
 
-   //    qDebug() << "setClipRect" << clipSpanHeight << count << allocated << rect;
    hasRectClip = true;
    hasRegionClip = false;
    clipRect = rect;
@@ -3877,13 +3786,8 @@ void QClipData::setClipRect(const QRect &rect)
       free(m_spans);
       m_spans = nullptr;
    }
-
-   // qDebug() << xmin << xmax << ymin << ymax;
 }
 
-/*
-    Convert \a region to clip spans.
- */
 void QClipData::setClipRegion(const QRegion &region)
 {
    if (region.rectCount() == 1) {
@@ -3911,10 +3815,6 @@ void QClipData::setClipRegion(const QRegion &region)
 
 }
 
-/*!
-    \internal
-    spans must be sorted on y
-*/
 static const QSpan *qt_intersect_spans(const QClipData *clip, int *currentClip,
    const QSpan *spans, const QSpan *end,
    QSpan **outSpans, int available)
@@ -3985,7 +3885,6 @@ static void qt_span_fill_clipped(int spanCount, const QSpan *spans, void *userDa
 {
    static constexpr const int ArraySize = 256;
 
-   //     qDebug() << "qt_span_fill_clipped" << spanCount;
    QSpanData *fillData = reinterpret_cast<QSpanData *>(userData);
 
    Q_ASSERT(fillData->blend && fillData->unclipped_blend);
@@ -3998,8 +3897,6 @@ static void qt_span_fill_clipped(int spanCount, const QSpan *spans, void *userDa
    while (spans < end) {
       QSpan *clipped = cspans;
       spans = qt_intersect_spans(fillData->clip, &currentClip, spans, end, &clipped, ArraySize);
-      //         qDebug() << "processed " << spanCount - (end - spans) << "clipped" << clipped-cspans
-      //                  << "span:" << cspans->x << cspans->y << cspans->len << spans->coverage;
 
       if (clipped - cspans) {
          fillData->unclipped_blend(clipped - cspans, cspans, fillData);
@@ -4007,11 +3904,6 @@ static void qt_span_fill_clipped(int spanCount, const QSpan *spans, void *userDa
    }
 }
 
-/*
-    \internal
-    Clip spans to \a{clip}-rectangle.
-    Returns number of unclipped spans
-*/
 static int qt_intersect_spans(QT_FT_Span *spans, int numSpans,
    const QRect &clip)
 {
@@ -4068,11 +3960,6 @@ static void qt_span_fill_clipRect(int count, const QSpan *spans,
 static void qt_span_clip(int count, const QSpan *spans, void *userData)
 {
    ClipData *clipData = reinterpret_cast<ClipData *>(userData);
-
-   //     qDebug() << " qt_span_clip: " << count << clipData->operation;
-   //     for (int i = 0; i < qMin(count, 10); ++i) {
-   //         qDebug() << "    " << spans[i].x << spans[i].y << spans[i].len << spans[i].coverage;
-   //     }
 
    switch (clipData->operation) {
 
@@ -4701,10 +4588,6 @@ void QSpanData::initTexture(const QImage *image, int alpha, QTextureData::Type _
    adjustSpanMethods();
 }
 
-/*!
-    \internal
-    \a x and \a y is relative to the midpoint of \a rect.
-*/
 static inline void drawEllipsePoints(int x, int y, int length,
    const QRect &rect,
    const QRect &clip,
@@ -4777,10 +4660,6 @@ static inline void drawEllipsePoints(int x, int y, int length,
    }
 }
 
-/*!
-    \internal
-    Draws an ellipse using the integer point midpoint algorithm.
-*/
 static void drawEllipse_midpoint_i(const QRect &rect, const QRect &clip,
    ProcessSpans pen_func, ProcessSpans brush_func,
    QSpanData *pen_data, QSpanData *brush_data)

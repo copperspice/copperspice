@@ -80,7 +80,6 @@ void QBasicDrag::disableEventFilter()
    qApp->removeEventFilter(this);
 }
 
-
 static inline QPoint getNativeMousePos(QEvent *e, QObject *o)
 {
    return QHighDpi::toNativePixels(static_cast<QMouseEvent *>(e)->globalPos(), qobject_cast<QWindow *>(o));
@@ -216,11 +215,6 @@ void QBasicDrag::cancel()
    restoreCursor();
    m_drag_icon_window->setVisible(false);
 }
-
-/*!
-  Move the drag label to \a globalPos, which is
-  interpreted in device independent coordinates. Typically called from reimplementations of move().
- */
 
 void QBasicDrag::moveShapedPixmapWindow(const QPoint &globalPos)
 {

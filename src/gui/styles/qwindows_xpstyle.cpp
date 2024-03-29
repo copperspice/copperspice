@@ -483,9 +483,8 @@ bool QWindowsXPStylePrivate::isLineEditBaseColorSet(const QStyleOption *option, 
 }
 
 /*! \internal
-    This function will always return a valid window handle, and might
-    create a limbo widget to do so.
-    We often need a window handle to for example open theme data, so
+    Will always return a valid window handle, and might create a limbo widget
+    to do so. We often need a window handle to for example open theme data, so
     this function ensures that we get one.
 */
 HWND QWindowsXPStylePrivate::winId(const QWidget *widget)
@@ -1360,13 +1359,11 @@ QWindowsXPStyle::~QWindowsXPStyle()
 {
 }
 
-/*! \reimp */
 void QWindowsXPStyle::unpolish(QApplication *app)
 {
    QWindowsStyle::unpolish(app);
 }
 
-/*! \reimp */
 void QWindowsXPStyle::polish(QApplication *app)
 {
    QWindowsStyle::polish(app);
@@ -1375,7 +1372,6 @@ void QWindowsXPStyle::polish(QApplication *app)
    }
 }
 
-/*! \reimp */
 void QWindowsXPStyle::polish(QWidget *widget)
 {
    QWindowsStyle::polish(widget);
@@ -1433,14 +1429,12 @@ void QWindowsXPStyle::polish(QWidget *widget)
    }
 }
 
-/*! \reimp */
 void QWindowsXPStyle::polish(QPalette &pal)
 {
    QWindowsStyle::polish(pal);
    pal.setBrush(QPalette::AlternateBase, pal.base().color().darker(110));
 }
 
-/*! \reimp */
 void QWindowsXPStyle::unpolish(QWidget *widget)
 {
 #ifndef QT_NO_RUBBERBAND
@@ -1489,7 +1483,6 @@ void QWindowsXPStyle::unpolish(QWidget *widget)
    QWindowsStyle::unpolish(widget);
 }
 
-/*! \reimp */
 QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option, const QWidget *widget) const
 {
    if (!QWindowsXPStylePrivate::useXP()) {
@@ -1591,9 +1584,6 @@ QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option,
    return rect;
 }
 
-/*!
-    \reimp
-*/
 void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p,
    const QWidget *widget) const
 {
@@ -2223,9 +2213,6 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
    d->drawBackground(theme);
 }
 
-/*!
-    \reimp
-*/
 void QWindowsXPStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *p,
    const QWidget *widget) const
 {
@@ -3740,7 +3727,6 @@ int QWindowsXPStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, cons
    return QWindowsXPStylePrivate::InvalidMetric;
 }
 
-/*! \reimp */
 int QWindowsXPStyle::pixelMetric(PixelMetric pm, const QStyleOption *option, const QWidget *widget) const
 {
    if (!QWindowsXPStylePrivate::useXP()) {
@@ -3896,9 +3882,6 @@ static bool buttonVisible(const QStyle::SubControl sc, const QStyleOptionTitleBa
    return retVal;
 }
 
-/*!
-    \reimp
-*/
 QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *option,
    SubControl subControl, const QWidget *widget) const
 {
@@ -4136,9 +4119,6 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
    return visualRect(option->direction, option->rect, rect);
 }
 
-/*!
-    \reimp
-*/
 QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *option,
    const QSize &contentsSize, const QWidget *widget) const
 {
@@ -4229,8 +4209,6 @@ QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt
    return sz;
 }
 
-
-/*! \reimp */
 int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
    QStyleHintReturn *returnData) const
 {
@@ -4317,7 +4295,6 @@ int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const
    return res;
 }
 
-/*! \reimp */
 QPalette QWindowsXPStyle::standardPalette() const
 {
    if (QWindowsXPStylePrivate::useXP() && QApplicationPrivate::sys_palette) {
@@ -4327,9 +4304,6 @@ QPalette QWindowsXPStyle::standardPalette() const
    }
 }
 
-/*!
-    \reimp
-*/
 QPixmap QWindowsXPStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option,
    const QWidget *widget) const
 {
@@ -4356,9 +4330,6 @@ QPixmap QWindowsXPStyle::standardPixmap(StandardPixmap standardPixmap, const QSt
    return QWindowsStyle::standardPixmap(standardPixmap, option, widget);
 }
 
-/*!
-    \internal
-*/
 QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
    const QStyleOption *option, const QWidget *widget) const
 {
@@ -4490,11 +4461,6 @@ QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
    return QWindowsStyle::standardIcon(standardIcon, option, widget);
 }
 
-/*!
-    \internal
-
-    Constructs a QWindowsXPStyle object.
-*/
 QWindowsXPStyle::QWindowsXPStyle(QWindowsXPStylePrivate &dd) : QWindowsStyle(dd)
 {
 }
@@ -4571,9 +4537,6 @@ void QWindowsXPStylePrivate::dumpNativeDIB(int w, int h)
    }
 }
 
-/*! \internal
-    Shows the value of a given property for a part.
-*/
 static void showProperty(XPThemeData &themeData, const PropPair &prop)
 {
    PROPERTYORIGIN origin = PO_NOTFOUND;

@@ -94,9 +94,8 @@ static QString buddyString(const QWidget *widget)
    return QString();
 }
 
-/* This function will return the offset of the '&' in the text that would be
-   preceding the accelerator character.
-   If this text does not have an accelerator, -1 will be returned. */
+// returns the offset of the '&' in the text that would be preceding the accelerator character
+// if the text does not have an accelerator, -1 will be returned.
 static int qt_accAmpIndex(const QString &text)
 {
 #ifndef QT_NO_SHORTCUT
@@ -349,7 +348,6 @@ QAccessibleInterface *QAccessibleWidget::parent() const
    return QAccessible::queryAccessibleInterface(parentObject());
 }
 
-/*! \reimp */
 QAccessibleInterface *QAccessibleWidget::child(int index) const
 {
    Q_ASSERT(widget());
@@ -360,7 +358,6 @@ QAccessibleInterface *QAccessibleWidget::child(int index) const
    return nullptr;
 }
 
-/*! \reimp */
 QAccessibleInterface *QAccessibleWidget::focusChild() const
 {
    if (widget()->hasFocus()) {

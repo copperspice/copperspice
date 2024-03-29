@@ -154,7 +154,6 @@ public:
     void setResolution(int resolution);
     int resolution() const;
 
-    // reimplementations QPaintEngine
     bool begin(QPaintDevice *pdev) override;
     bool end() override;
 
@@ -177,7 +176,6 @@ public:
 
     int metric(QPaintDevice::PaintDeviceMetric metricType) const;
     Type type() const override;
-    // end reimplementations QPaintEngine
 
     // Printer stuff
     bool newPage();

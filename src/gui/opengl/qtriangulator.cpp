@@ -2072,7 +2072,7 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
     classifyVertices();
     fillPriorityQueue();
 
-    // debug: set helpers explicitly (shouldn't be necessary)
+    // debug: set helpers explicitly (should not be necessary)
     //for (int i = 0; i < m_edges.size(); ++i)
     //    m_edges.at(i).helper = m_edges.at(i).upper();
 

@@ -379,7 +379,8 @@ void QWidgetResizeHandler::setMouseCursor(MousePosition m)
          widget->setCursor(Qt::ArrowCursor);
          break;
    }
-#endif // QT_NO_CURSOR
+
+#endif
 }
 
 void QWidgetResizeHandler::keyPressEvent(QKeyEvent *e)

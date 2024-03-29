@@ -51,9 +51,6 @@ QOpenGLPaintDevice::QOpenGLPaintDevice(int width, int height)
 {
 }
 
-/*!
-    \internal
- */
 QOpenGLPaintDevice::QOpenGLPaintDevice(QOpenGLPaintDevicePrivate &dd)
     : d_ptr(&dd)
 {
@@ -63,12 +60,6 @@ QOpenGLPaintDevice::~QOpenGLPaintDevice()
 {
     delete d_ptr->engine;
 }
-
-/*!
-    \fn int QOpenGLPaintDevice::devType() const
-    \internal
-    \reimp
-*/
 
 QOpenGLPaintDevicePrivate::QOpenGLPaintDevicePrivate(const QSize &sz)
     : size(sz), ctx(QOpenGLContext::currentContext())
@@ -119,20 +110,10 @@ QPaintEngine *QOpenGLPaintDevice::paintEngine() const
     return engine;
 }
 
-/*!
-    Returns the OpenGL context associated with the paint device.
-*/
-
 QOpenGLContext *QOpenGLPaintDevice::context() const
 {
     return d_ptr->ctx;
 }
-
-/*!
-    Returns the pixel size of the paint device.
-
-    \sa setSize()
-*/
 
 QSize QOpenGLPaintDevice::size() const
 {
@@ -144,17 +125,10 @@ void QOpenGLPaintDevice::setSize(const QSize &size)
     d_ptr->size = size;
 }
 
-/*!
-    Sets the device pixel ratio for the paint device to \a devicePixelRatio.
-*/
 void QOpenGLPaintDevice::setDevicePixelRatio(qreal devicePixelRatio)
 {
     d_ptr->devicePixelRatio = devicePixelRatio;
 }
-
-/*!
-    \reimp
-*/
 
 int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
 {

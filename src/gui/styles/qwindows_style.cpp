@@ -119,10 +119,6 @@ bool QWindowsStylePrivate::hasSeenAlt(const QWidget *widget) const
    return seenAlt.contains(widget);
 }
 
-
-/*!
-    \reimp
-*/
 bool QWindowsStyle::eventFilter(QObject *o, QEvent *e)
 {
    // Records Alt and Focus events
@@ -210,7 +206,6 @@ static inline QRgb colorref2qrgb(COLORREF col)
 }
 #endif
 
-/*! \reimp */
 void QWindowsStyle::polish(QApplication *app)
 {
    QCommonStyle::polish(app);
@@ -545,7 +540,6 @@ QPixmap QWindowsStyle::standardPixmap(StandardPixmap standardPixmap, const QStyl
    return QCommonStyle::standardPixmap(standardPixmap, opt, widget);
 }
 
-/*! \reimp */
 int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWidget *widget,
    QStyleHintReturn *returnData) const
 {
@@ -672,7 +666,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
    return ret;
 }
 
-/*! \reimp */
+
 void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
    const QWidget *w) const
 {
@@ -1137,7 +1131,6 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
    }
 }
 
-/*! \reimp */
 void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p, const QWidget *widget) const
 {
    switch (ce) {
@@ -1987,7 +1980,6 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
    }
 }
 
-/*! \reimp */
 QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const
 {
    QRect r;
@@ -2027,7 +2019,6 @@ QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, cons
    return r;
 }
 
-/*! \reimp */
 void QWindowsStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
    QPainter *p, const QWidget *widget) const
 {
@@ -2442,7 +2433,6 @@ void QWindowsStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComp
    }
 }
 
-/*! \reimp */
 QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
    const QSize &csz, const QWidget *widget) const
 {

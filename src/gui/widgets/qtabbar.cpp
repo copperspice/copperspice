@@ -737,16 +737,6 @@ void QTabBar::setShape(Shape shape)
    d->refresh();
 }
 
-/*!
-    \property QTabBar::drawBase
-    \brief defines whether or not tab bar should draw its base.
-
-    If true then QTabBar draws a base in relation to the styles overlab.
-    Otherwise only the tabs are drawn.
-
-    \sa QStyle::pixelMetric() QStyle::PM_TabBarBaseOverlap QStyleOptionTabBarBaseV2
-*/
-
 void QTabBar::setDrawBase(bool drawBase)
 {
    Q_D(QTabBar);
@@ -763,10 +753,6 @@ bool QTabBar::drawBase() const
    return d->drawBase;
 }
 
-/*!
-    Adds a new tab with text \a text. Returns the new
-    tab's index.
-*/
 int QTabBar::addTab(const QString &text)
 {
    return insertTab(-1, text);
@@ -967,9 +953,6 @@ QString QTabBar::tabText(int index) const
    return QString();
 }
 
-/*!
-    Sets the text of the tab at position \a index to \a text.
-*/
 void QTabBar::setTabText(int index, const QString &text)
 {
    Q_D(QTabBar);
@@ -1222,8 +1205,6 @@ int QTabBar::count() const
    return d->tabList.count();
 }
 
-/*!\reimp
- */
 QSize QTabBar::sizeHint() const
 {
    Q_D(const QTabBar);
@@ -1238,8 +1219,6 @@ QSize QTabBar::sizeHint() const
    return r.size().expandedTo(sz);
 }
 
-/*!\reimp
- */
 QSize QTabBar::minimumSizeHint() const
 {
    Q_D(const QTabBar);
@@ -1398,8 +1377,6 @@ void QTabBar::hideEvent(QHideEvent *)
    d->updateMacBorderMetrics();
 }
 
-/*!\reimp
- */
 bool QTabBar::event(QEvent *event)
 {
    Q_D(QTabBar);
@@ -1516,8 +1493,6 @@ bool QTabBar::event(QEvent *event)
    return QWidget::event(event);
 }
 
-/*!\reimp
- */
 void QTabBar::resizeEvent(QResizeEvent *)
 {
    Q_D(QTabBar);
@@ -1529,8 +1504,6 @@ void QTabBar::resizeEvent(QResizeEvent *)
    d->makeVisible(d->currentIndex);
 }
 
-/*!\reimp
- */
 void QTabBar::paintEvent(QPaintEvent *)
 {
    Q_D(QTabBar);
@@ -1629,9 +1602,6 @@ void QTabBar::paintEvent(QPaintEvent *)
    }
 }
 
-/*
-    Given that index at position from moved to position to where return where index goes.
- */
 int QTabBarPrivate::calculateNewPosition(int from, int to, int index) const
 {
    if (index == from) {
@@ -1787,8 +1757,6 @@ void QTabBarPrivate::moveTab(int index, int offset)
    q_func()->update();
 }
 
-/*!\reimp
-*/
 void QTabBar::mousePressEvent(QMouseEvent *event)
 {
    Q_D(QTabBar);
@@ -1830,8 +1798,6 @@ void QTabBar::mousePressEvent(QMouseEvent *event)
    }
 }
 
-/*!\reimp
- */
 void QTabBar::mouseMoveEvent(QMouseEvent *event)
 {
    Q_D(QTabBar);
@@ -2007,8 +1973,6 @@ void QTabBarPrivate::moveTabFinished(int index)
    q->update();
 }
 
-/*!\reimp
-*/
 void QTabBar::mouseReleaseEvent(QMouseEvent *event)
 {
    Q_D(QTabBar);
@@ -2046,8 +2010,6 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
    }
 }
 
-/*!\reimp
- */
 void QTabBar::keyPressEvent(QKeyEvent *event)
 {
    Q_D(QTabBar);
@@ -2061,8 +2023,6 @@ void QTabBar::keyPressEvent(QKeyEvent *event)
    d->setCurrentNextEnabledIndex(offset);
 }
 
-/*!\reimp
- */
 #ifndef QT_NO_WHEELEVENT
 void QTabBar::wheelEvent(QWheelEvent *event)
 {
@@ -2076,7 +2036,8 @@ void QTabBar::wheelEvent(QWheelEvent *event)
    (void) event;
 #endif
 }
-#endif //QT_NO_WHEELEVENT
+
+#endif
 
 void QTabBarPrivate::setCurrentNextEnabledIndex(int offset)
 {
@@ -2090,8 +2051,6 @@ void QTabBarPrivate::setCurrentNextEnabledIndex(int offset)
    }
 }
 
-/*!\reimp
- */
 void QTabBar::changeEvent(QEvent *event)
 {
    Q_D(QTabBar);

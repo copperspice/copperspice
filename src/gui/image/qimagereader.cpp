@@ -474,9 +474,6 @@ class QImageReaderPrivate
    QImageReader *q;
 };
 
-/*!
-    \internal
-*/
 QImageReaderPrivate::QImageReaderPrivate(QImageReader *qq)
    : autoDetectImageFormat(true), ignoresFormatAndExtension(false)
 {
@@ -490,9 +487,6 @@ QImageReaderPrivate::QImageReaderPrivate(QImageReader *qq)
    q = qq;
 }
 
-/*!
-    \internal
-*/
 QImageReaderPrivate::~QImageReaderPrivate()
 {
    if (deleteDevice) {
@@ -501,9 +495,6 @@ QImageReaderPrivate::~QImageReaderPrivate()
    delete handler;
 }
 
-/*!
-    \internal
-*/
 bool QImageReaderPrivate::initHandler()
 {
    // check some preconditions
@@ -557,9 +548,6 @@ bool QImageReaderPrivate::initHandler()
    return true;
 }
 
-/*!
-    \internal
-*/
 void QImageReaderPrivate::getText()
 {
    if (!text.isEmpty() || (!handler && !initHandler()) || !handler->supportsOption(QImageIOHandler::Description)) {

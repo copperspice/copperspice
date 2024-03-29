@@ -96,7 +96,6 @@ class QFreeList
 
    // allocate a block of the given \a size, initialized starting with the given \a offset
    static ElementType *allocate(int offset, int size) {
-      // qDebug("QFreeList: allocating %d elements (%ld bytes) with offset %d", size, size * sizeof(ElementType), offset);
       ElementType *v = new ElementType[size];
 
       for (int i = 0; i < size; ++i) {
@@ -197,11 +196,6 @@ inline int QFreeList<T, ConstantsType>::next()
 
    } while (! _next.compareExchange(id, newid, std::memory_order_relaxed));
 
-   // qDebug("QFreeList::next(): returning %d (_next now %d, serial %d)",
-   //        id & ConstantsType::IndexMask,
-   //        newid & ConstantsType::IndexMask,
-   //        (newid & ~ConstantsType::IndexMask) >> 24);
-
    return id & ConstantsType::IndexMask;
 }
 
@@ -223,12 +217,6 @@ inline void QFreeList<T, ConstantsType>::release(int id)
       newid = incrementserial(x, id);
 
    } while (! _next.compareExchange(x, newid, std::memory_order_release, std::memory_order_acquire));
-
-   // qDebug("QFreeList::release(%d): _next now %d (was %d), serial %d",
-   //        id & ConstantsType::IndexMask,
-   //        newid & ConstantsType::IndexMask,
-   //        x & ConstantsType::IndexMask,
-   //        (newid & ~ConstantsType::IndexMask) >> 24);
 }
 
 #endif // QFREELIST_P_H

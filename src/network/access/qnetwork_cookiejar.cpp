@@ -79,28 +79,6 @@ static inline bool isParentDomain(const QString &domain, const QString &referenc
    return domain.endsWith(reference) || domain == reference.mid(1);
 }
 
-/*!
-    Adds the cookies in the list \a cookieList to this cookie
-    jar. Default values for path and domain are taken from the \a
-    url object.
-
-    Returns true if one or more cookies are set for \a url,
-    otherwise false.
-
-    If a cookie already exists in the cookie jar, it will be
-    overridden by those in \a cookieList.
-
-    The default QNetworkCookieJar class implements only a very basic
-    security policy (it makes sure that the cookies' domain and path
-    match the reply's). To enhance the security policy with your own
-    algorithms, override setCookiesFromUrl().
-
-    Also, QNetworkCookieJar does not have a maximum cookie jar
-    size. Reimplement this function to discard older cookies to create
-    room for new ones.
-
-    \sa cookiesForUrl(), QNetworkAccessManager::setCookieJar()
-*/
 bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList,
       const QUrl &url)
 {
@@ -118,30 +96,12 @@ bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieLis
    return added;
 }
 
-/*!
-    Returns the cookies to be added to when a request is sent to
-    \a url. This function is called by the default
-    QNetworkAccessManager::createRequest(), which adds the
-    cookies returned by this function to the request being sent.
-
-    If more than one cookie with the same name is found, but with
-    differing paths, the one with longer path is returned before the
-    one with shorter path. In other words, this function returns
-    cookies sorted decreasingly by path length.
-
-    The default QNetworkCookieJar class implements only a very basic
-    security policy (it makes sure that the cookies' domain and path
-    match the reply's). To enhance the security policy with your own
-    algorithms, override cookiesForUrl().
-
-    \sa setCookiesFromUrl(), QNetworkAccessManager::setCookieJar()
-*/
 QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
 {
-   //     \b Warning! This is only a dumb implementation!
-   //     It does NOT follow all of the recommendations from
-   //     http://wp.netscape.com/newsref/std/cookie_spec.html
-   //     It does not implement a very good cross-domain verification yet.
+   //  This is only a weak implementation
+   //  It does NOT follow all of the recommendations from
+   //  http://wp.netscape.com/newsref/std/cookie_spec.html
+   //  It does not implement a very good cross-domain verification yet.
 
    Q_D(const QNetworkCookieJar);
 

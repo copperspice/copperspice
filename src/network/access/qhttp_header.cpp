@@ -768,8 +768,6 @@ bool QHttpResponseHeader::parseLine(const QString &line, int number)
    return true;
 }
 
-/*! \reimp
-*/
 QString QHttpResponseHeader::toString() const
 {
    Q_D(const QHttpResponseHeader);

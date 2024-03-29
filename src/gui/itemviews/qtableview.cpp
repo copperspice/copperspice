@@ -69,7 +69,7 @@ void QSpanCollection::addSpan(QSpanCollection::Span *span)
       // we will insert span to *it_y in the later loop
    }
 
-   //insert the span as supspan in all the lists that intesects the span
+   // insert the span as supspan in all the lists that intesects the span
    while (-it_y.key() <= span->bottom()) {
       (*it_y).insert(-span->left(), span);
       if (it_y == index.begin()) {
@@ -79,13 +79,12 @@ void QSpanCollection::addSpan(QSpanCollection::Span *span)
    }
 }
 
-// internal
 // Has to be called after the height and width of a span is changed.
 // old_height is the height before the change, if the size of the span is now 0x0 the span will be deleted.
 void QSpanCollection::updateSpan(QSpanCollection::Span *span, int old_height)
 {
    if (old_height < span->height()) {
-      //add the span as subspan in all the lists that intersect the new covered columns
+      // add the span as subspan in all the lists that intersect the new covered columns
       Index::iterator it_y = index.lowerBound(-(span->top() + old_height - 1));
       Q_ASSERT(it_y != index.end()); //it_y must exist since the span is in the list
       while (-it_y.key() <= span->bottom()) {
@@ -97,7 +96,7 @@ void QSpanCollection::updateSpan(QSpanCollection::Span *span, int old_height)
       }
 
    } else if (old_height > span->height()) {
-      //remove the span from all the subspans lists that intersect the columns not covered anymore
+      // remove the span from all the subspans lists that intersect the columns not covered anymore
       Index::iterator it_y = index.lowerBound(-qMax(span->bottom(), span->top())); //qMax useful if height is 0
       Q_ASSERT(it_y != index.end()); //it_y must exist since the span is in the list
 
@@ -125,7 +124,6 @@ void QSpanCollection::updateSpan(QSpanCollection::Span *span, int old_height)
    }
 }
 
-// internal - return a spans that spans over cell x,y  (column,row)  or 0 if there is none
 QSpanCollection::Span *QSpanCollection::spanAt(int x, int y) const
 {
    Index::const_iterator it_y = index.lowerBound(-y);
@@ -146,7 +144,6 @@ QSpanCollection::Span *QSpanCollection::spanAt(int x, int y) const
    return nullptr;
 }
 
-// internal - remove and deletes all spans inside the collection
 void QSpanCollection::clear()
 {
    qDeleteAll(spans);
@@ -154,7 +151,6 @@ void QSpanCollection::clear()
    spans.clear();
 }
 
-// internal - return a list to all the spans that spans over cells in the given rectangle
 QList<QSpanCollection::Span *> QSpanCollection::spansInRect(int x, int y, int w, int h) const
 {
    QSet<Span *> list;
@@ -199,10 +195,8 @@ QDebug operator<<(QDebug str, const QSpanCollection::Span &span)
 }
 #endif
 
-// internal - Updates the span collection after row insertion
 void QSpanCollection::updateInsertedRows(int start, int end)
 {
-
    if (spans.isEmpty()) {
       return;
    }
@@ -235,7 +229,6 @@ void QSpanCollection::updateInsertedRows(int start, int end)
    }
 }
 
-// internal - Updates the span collection after column insertion
 void QSpanCollection::updateInsertedColumns(int start, int end)
 {
    if (spans.isEmpty()) {
@@ -273,11 +266,6 @@ void QSpanCollection::updateInsertedColumns(int start, int end)
 
 }
 
-/** \internal
-* Cleans a subindex from to be deleted spans. The update argument is used
-* to move the spans inside the subindex, in case their anchor changed.
-* \return true if no span in this subindex starts at y, and should thus be deleted.
-*/
 bool QSpanCollection::cleanSpanSubIndex(QSpanCollection::SubIndex &subindex, int y, bool update)
 {
    if (subindex.isEmpty()) {
@@ -309,9 +297,6 @@ bool QSpanCollection::cleanSpanSubIndex(QSpanCollection::SubIndex &subindex, int
    return should_be_deleted;
 }
 
-/** \internal
-* Updates the span collection after row removal.
-*/
 void QSpanCollection::updateRemovedRows(int start, int end)
 {
 
@@ -434,9 +419,6 @@ void QSpanCollection::updateRemovedRows(int start, int end)
    qDeleteAll(spansToBeDeleted);
 }
 
-/** \internal
-* Updates the span collection after column removal.
-*/
 void QSpanCollection::updateRemovedColumns(int start, int end)
 {
    if (spans.isEmpty()) {
@@ -558,10 +540,6 @@ void QTableViewPrivate::init()
    QObject::connect(tmpObj, &QTableCornerButton::clicked, q, &QTableView::selectAll);
 }
 
-/*!
-  \internal
-  Trims away indices that are hidden in the treeview due to hidden horizontal or vertical sections.
-*/
 void QTableViewPrivate::trimHiddenSelections(QItemSelectionRange *range) const
 {
    Q_ASSERT(range && range->isValid());
@@ -661,11 +639,6 @@ int QTableViewPrivate::sectionSpanEndLogical(const QHeaderView *header, int logi
    return logical;
 }
 
-/*!
-  \internal
-  Returns the size of the span starting at logical index \a logical
-  and spanning \a span sections.
-*/
 int QTableViewPrivate::sectionSpanSize(const QHeaderView *header, int logical, int span) const
 {
    int endLogical = sectionSpanEndLogical(header, logical, span);
@@ -674,12 +647,6 @@ int QTableViewPrivate::sectionSpanSize(const QHeaderView *header, int logical, i
       + header->sectionSize(endLogical);
 }
 
-/*!
-  \internal
-  Returns true if the section at logical index \a logical is part of the span
-  starting at logical index \a spanLogical and spanning \a span sections;
-  otherwise, returns false.
-*/
 bool QTableViewPrivate::spanContainsSection(const QHeaderView *header, int logical, int spanLogical, int span) const
 {
    if (logical == spanLogical) {
@@ -699,10 +666,6 @@ bool QTableViewPrivate::spanContainsSection(const QHeaderView *header, int logic
    return false;
 }
 
-/*!
-  \internal
-  Returns the visual rect for the given \a span.
-*/
 QRect QTableViewPrivate::visualSpanRect(const QSpanCollection::Span &span) const
 {
    Q_Q(const QTableView);
@@ -728,12 +691,6 @@ QRect QTableViewPrivate::visualSpanRect(const QSpanCollection::Span &span) const
    return QRect(colp, rowp, colw - i, rowh - i);
 }
 
-/*!
-  \internal
-  Draws the spanning cells within rect \a area, and clips them off as
-  preparation for the main drawing loop.
-  \a drawn is a QBitArray of visualRowCountxvisualCoulumnCount which say if particular cell has been drawn
-*/
 void QTableViewPrivate::drawAndClipSpans(const QRegion &area, QPainter *painter,
    const QStyleOptionViewItem &option, QBitArray *drawn,
    int firstVisualRow, int lastVisualRow, int firstVisualColumn, int lastVisualColumn)
@@ -932,9 +889,6 @@ QTableView::QTableView(QWidget *parent)
    d->init();
 }
 
-/*!
-  \internal
-*/
 QTableView::QTableView(QTableViewPrivate &dd, QWidget *parent)
    : QAbstractItemView(dd, parent)
 {
@@ -990,9 +944,6 @@ void QTableView::setModel(QAbstractItemModel *model)
    QAbstractItemView::setModel(model);
 }
 
-/*!
-  \reimp
-*/
 void QTableView::setRootIndex(const QModelIndex &index)
 {
    Q_D(QTableView);
@@ -1007,9 +958,6 @@ void QTableView::setRootIndex(const QModelIndex &index)
    QAbstractItemView::setRootIndex(index);
 }
 
-/*!
-  \internal
-*/
 void QTableView::doItemsLayout()
 {
    Q_D(QTableView);
@@ -1123,10 +1071,6 @@ void QTableView::setVerticalHeader(QHeaderView *header)
    connect(d->verticalHeader, &QHeaderView::geometriesChanged,          this, &QTableView::updateGeometries);
 }
 
-/*!
-    \internal
-    Scroll the contents of the table view by (\a dx, \a dy).
-*/
 void QTableView::scrollContentsBy(int dx, int dy)
 {
    Q_D(QTableView);
@@ -1805,15 +1749,6 @@ void QTableView::setSelection(const QRect &rect, QItemSelectionModel::SelectionF
    d->selectionModel->select(selection, command);
 }
 
-/*!
-    \internal
-
-    Returns the rectangle from the viewport of the items in the given
-    \a selection.
-
-    the returned region only contains rectangles intersecting
-    (or included in) the viewport.
-*/
 QRegion QTableView::visualRegionForSelection(const QItemSelection &selection) const
 {
    Q_D(const QTableView);
@@ -1927,9 +1862,6 @@ QRegion QTableView::visualRegionForSelection(const QItemSelection &selection) co
    return selectionRegion;
 }
 
-/*!
-  \reimp
-*/
 QModelIndexList QTableView::selectedIndexes() const
 {
    Q_D(const QTableView);
@@ -1960,11 +1892,6 @@ void QTableView::rowCountChanged(int oldCount, int newCount )
    d->doDelayedItemsLayout();
 }
 
-/*!
-    This slot is called whenever columns are added or deleted. The
-    previous number of columns is specified by \a oldCount, and the new
-    number of columns is specified by \a newCount.
-*/
 void QTableView::columnCountChanged(int, int)
 {
    Q_D(QTableView);
@@ -1977,9 +1904,6 @@ void QTableView::columnCountChanged(int, int)
    d->viewport->update();
 }
 
-/*!
-    \reimp
-*/
 void QTableView::updateGeometries()
 {
    Q_D(QTableView);
@@ -2280,10 +2204,6 @@ int QTableView::sizeHintForColumn(int column) const
    return d->showGrid ? hint + 1 : hint;
 }
 
-/*!
-    Returns the y-coordinate in contents coordinates of the given \a
-    row.
-*/
 int QTableView::rowViewportPosition(int row) const
 {
    Q_D(const QTableView);
@@ -2457,12 +2377,6 @@ bool QTableView::isCornerButtonEnabled() const
    return d->cornerWidget->isEnabled();
 }
 
-/*!
-    \internal
-
-    Returns the rectangle on the viewport occupied by the given index.
-    If the index is hidden in the view it will return a null QRect.
-*/
 QRect QTableView::visualRect(const QModelIndex &index) const
 {
    Q_D(const QTableView);
@@ -2488,12 +2402,6 @@ QRect QTableView::visualRect(const QModelIndex &index) const
    return QRect(colp, rowp, colw - i, rowh - i);
 }
 
-/*!
-    \internal
-
-    Makes sure that the given \a item is visible in the table view,
-    scrolling if necessary.
-*/
 void QTableView::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
    Q_D(QTableView);
@@ -2641,9 +2549,6 @@ void QTableView::columnResized(int column, int, int)
    }
 }
 
-/*!
- \reimp
- */
 void QTableView::timerEvent(QTimerEvent *event)
 {
    Q_D(QTableView);
@@ -2825,25 +2730,16 @@ void QTableView::sortByColumn(int column, Qt::SortOrder order)
    sortByColumn(column);
 }
 
-/*!
-    \internal
-*/
 void QTableView::verticalScrollbarAction(int action)
 {
    QAbstractItemView::verticalScrollbarAction(action);
 }
 
-/*!
-    \internal
-*/
 void QTableView::horizontalScrollbarAction(int action)
 {
    QAbstractItemView::horizontalScrollbarAction(action);
 }
 
-/*!
-  \reimp
-*/
 bool QTableView::isIndexHidden(const QModelIndex &index) const
 {
    Q_D(const QTableView);
@@ -2985,9 +2881,6 @@ void QTableViewPrivate::selectColumn(int column, bool anchor)
    }
 }
 
-/*!
-  \reimp
- */
 void QTableView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
 #ifndef QT_NO_ACCESSIBILITY
@@ -3007,9 +2900,6 @@ void QTableView::currentChanged(const QModelIndex &current, const QModelIndex &p
    QAbstractItemView::currentChanged(current, previous);
 }
 
-/*!
-  \reimp
- */
 void QTableView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
    Q_D(QTableView);

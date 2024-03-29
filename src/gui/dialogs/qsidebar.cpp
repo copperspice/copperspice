@@ -53,17 +53,11 @@ QUrlModel::QUrlModel(QObject *parent)
 {
 }
 
-/*!
-    \reimp
-*/
 QStringList QUrlModel::mimeTypes() const
 {
    return QStringList("text/uri-list");
 }
 
-/*!
-    \reimp
-*/
 Qt::ItemFlags QUrlModel::flags(const QModelIndex &index) const
 {
    Qt::ItemFlags flags = QStandardItemModel::flags(index);
@@ -81,9 +75,6 @@ Qt::ItemFlags QUrlModel::flags(const QModelIndex &index) const
    return flags;
 }
 
-/*!
-    \reimp
-*/
 QMimeData *QUrlModel::mimeData(const QModelIndexList &indexes) const
 {
    QList<QUrl> list;
@@ -98,11 +89,6 @@ QMimeData *QUrlModel::mimeData(const QModelIndexList &indexes) const
 }
 
 #ifndef QT_NO_DRAGANDDROP
-
-/*!
-    Decide based upon the data if it should be accepted or not
-    We only accept dirs and not files
-*/
 bool QUrlModel::canDrop(QDragEnterEvent *event)
 {
    if (!event->mimeData()->formats().contains(mimeTypes().first())) {
@@ -119,9 +105,6 @@ bool QUrlModel::canDrop(QDragEnterEvent *event)
    return true;
 }
 
-/*!
-    \reimp
-*/
 bool QUrlModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
    int row, int column, const QModelIndex &parent)
 {
@@ -137,14 +120,8 @@ bool QUrlModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
    return true;
 }
+#endif
 
-#endif // QT_NO_DRAGANDDROP
-
-/*!
-    \reimp
-
-    If the role is the UrlRole then handle otherwise just pass to QStandardItemModel
-*/
 bool QUrlModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
    if (value.type() == QVariant::Url) {
@@ -317,9 +294,6 @@ void QUrlModel::setFileSystemModel(QFileSystemModel *model)
    insertColumns(0, 1);
 }
 
-/*
-    If one of the index's we are watching has changed update our internal data
-*/
 void QUrlModel::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {
    QModelIndex parent = topLeft.parent();
@@ -341,14 +315,10 @@ void QUrlModel::dataChanged(const QModelIndex &topLeft, const QModelIndex &botto
    }
 }
 
-/*!
-    Re-get all of our data, anything could have changed
- */
 void QUrlModel::layoutChanged()
 {
    QStringList paths;
    const int numPaths = watching.count();
-
 
    for (int i = 0; i < numPaths; ++i) {
       paths.append(watching.at(i).second);
@@ -484,7 +454,6 @@ void QSidebar::removeEntry()
    }
 }
 
-// internal
 void QSidebar::clicked(const QModelIndex &index)
 {
    QUrl url = model()->index(index.row(), 0).data(QUrlModel::UrlRole).toUrl();
@@ -493,19 +462,12 @@ void QSidebar::clicked(const QModelIndex &index)
    selectUrl(url);
 }
 
-/*!
-    \reimp
-    Don't automatically select something
- */
 void QSidebar::focusInEvent(QFocusEvent *event)
 {
    QAbstractScrollArea::focusInEvent(event);
    viewport()->update();
 }
 
-/*!
-    \reimp
- */
 bool QSidebar::event(QEvent *event)
 {
    if (event->type() == QEvent::KeyRelease) {

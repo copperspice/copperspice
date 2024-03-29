@@ -125,7 +125,6 @@ QAbstractFileEngine::QAbstractFileEngine() : d_ptr(new QAbstractFileEnginePrivat
    d_ptr->q_ptr = this;
 }
 
-// internal
 QAbstractFileEngine::QAbstractFileEngine(QAbstractFileEnginePrivate &dd) : d_ptr(&dd)
 {
    d_ptr->q_ptr = this;

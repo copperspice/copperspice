@@ -414,7 +414,6 @@ QSize QLabelPrivate::sizeForWidth(int w) const
    return (contentsSize + contentsMargin).expandedTo(q->minimumSize());
 }
 
-// reimp
 int QLabel::heightForWidth(int w) const
 {
    Q_D(const QLabel);
@@ -513,8 +512,6 @@ int QLabel::selectionStart() const
    return -1;
 }
 
-/*!\reimp
-*/
 QSize QLabel::sizeHint() const
 {
    Q_D(const QLabel);
@@ -524,9 +521,6 @@ QSize QLabel::sizeHint() const
    return d->sh;
 }
 
-/*!
-  \reimp
-*/
 QSize QLabel::minimumSizeHint() const
 {
    Q_D(const QLabel);
@@ -556,16 +550,12 @@ QSize QLabel::minimumSizeHint() const
    return msh;
 }
 
-/*!\reimp
-*/
 void QLabel::mousePressEvent(QMouseEvent *ev)
 {
    Q_D(QLabel);
    d->sendControlEvent(ev);
 }
 
-/*!\reimp
-*/
 void QLabel::mouseMoveEvent(QMouseEvent *ev)
 {
    Q_D(QLabel);
@@ -599,9 +589,6 @@ void QLabel::contextMenuEvent(QContextMenuEvent *ev)
 #endif
 }
 
-/*!
-    \reimp
-*/
 void QLabel::focusInEvent(QFocusEvent *ev)
 {
    Q_D(QLabel);
@@ -612,9 +599,6 @@ void QLabel::focusInEvent(QFocusEvent *ev)
    QFrame::focusInEvent(ev);
 }
 
-/*!
-    \reimp
-*/
 void QLabel::focusOutEvent(QFocusEvent *ev)
 {
    Q_D(QLabel);
@@ -634,8 +618,6 @@ void QLabel::focusOutEvent(QFocusEvent *ev)
    QFrame::focusOutEvent(ev);
 }
 
-/*!\reimp
-*/
 bool QLabel::focusNextPrevChild(bool next)
 {
    Q_D(QLabel);
@@ -645,16 +627,12 @@ bool QLabel::focusNextPrevChild(bool next)
    return QFrame::focusNextPrevChild(next);
 }
 
-/*!\reimp
-*/
 void QLabel::keyPressEvent(QKeyEvent *ev)
 {
    Q_D(QLabel);
    d->sendControlEvent(ev);
 }
 
-/*!\reimp
-*/
 bool QLabel::event(QEvent *e)
 {
    Q_D(QLabel);
@@ -694,8 +672,6 @@ bool QLabel::event(QEvent *e)
    return QFrame::event(e);
 }
 
-/*!\reimp
-*/
 void QLabel::paintEvent(QPaintEvent *)
 {
    Q_D(QLabel);
@@ -1040,9 +1016,6 @@ void QLabel::setTextFormat(Qt::TextFormat format)
    }
 }
 
-/*!
-  \reimp
-*/
 void QLabel::changeEvent(QEvent *ev)
 {
    Q_D(QLabel);

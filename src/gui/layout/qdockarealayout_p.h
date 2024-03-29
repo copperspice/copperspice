@@ -217,7 +217,7 @@ class QDockAreaLayout
    QRect centralWidgetRect;
    QDockAreaLayout(QMainWindow *win);
    QDockAreaLayoutInfo docks[4];
-   int sep; // separator extent
+   int sep;                            // separator extent
 
    // determines if we should use the sizehint for the dock areas
    // (true until the layout is restored or the central widget is set)

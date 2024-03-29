@@ -95,9 +95,6 @@ void QNetworkDiskCache::setCacheDirectory(const QString &cacheDir)
    d->prepareLayout();
 }
 
-/*!
-    \reimp
-*/
 qint64 QNetworkDiskCache::cacheSize() const
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -117,9 +114,6 @@ qint64 QNetworkDiskCache::cacheSize() const
    return d->currentCacheSize;
 }
 
-/*!
-    \reimp
-*/
 QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -180,9 +174,6 @@ QIODevice *QNetworkDiskCache::prepare(const QNetworkCacheMetaData &metaData)
    return device;
 }
 
-/*!
-    \reimp
-*/
 void QNetworkDiskCache::insert(QIODevice *device)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -262,9 +253,6 @@ void QNetworkDiskCachePrivate::storeItem(QCacheItem *cacheItem)
    }
 }
 
-/*!
-    \reimp
-*/
 bool QNetworkDiskCache::remove(const QUrl &url)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -317,9 +305,6 @@ bool QNetworkDiskCachePrivate::removeFile(const QString &file)
    return false;
 }
 
-/*!
-    \reimp
-*/
 QNetworkCacheMetaData QNetworkDiskCache::metaData(const QUrl &url)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -355,9 +340,6 @@ QNetworkCacheMetaData QNetworkDiskCache::fileMetaData(const QString &fileName) c
    return d->lastItem.metaData;
 }
 
-/*!
-    \reimp
-*/
 QIODevice *QNetworkDiskCache::data(const QUrl &url)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -413,9 +395,6 @@ QIODevice *QNetworkDiskCache::data(const QUrl &url)
    return buffer.take();
 }
 
-/*!
-    \reimp
-*/
 void QNetworkDiskCache::updateMetaData(const QNetworkCacheMetaData &metaData)
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -541,9 +520,6 @@ qint64 QNetworkDiskCache::expire()
    return totalSize;
 }
 
-/*!
-    \reimp
-*/
 void QNetworkDiskCache::clear()
 {
 #if defined(QNETWORKDISKCACHE_DEBUG)
@@ -659,7 +635,7 @@ bool QCacheItem::read(QFile *device, bool readData)
       return true;
    }
 
-   // If the cache magic is correct, but the version is not we should remove it
+   // If the cache magic is correct, but the version is not then remove it
    if (v != CacheVersion) {
       return false;
    }

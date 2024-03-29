@@ -53,8 +53,7 @@ void QWidgetAnimator::abort(QWidget *w)
    m_mainWindowLayout->animationFinished(w);
 #endif
 
-
-#endif //QT_NO_ANIMATION
+#endif
 }
 
 #ifndef QT_NO_ANIMATION
@@ -103,7 +102,7 @@ void QWidgetAnimator::animate(QWidget *widget, const QRect &end_geometry, bool a
    } else
 #endif
    {
-      //we do it in one shot
+      // do this in one shot
       widget->setGeometry(final_geometry);
 
 #ifndef QT_NO_MAINWINDOW

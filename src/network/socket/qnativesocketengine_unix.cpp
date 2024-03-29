@@ -865,7 +865,7 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
 qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxSize, QIpPacketHeader *header,
       QAbstractSocketEngine::PacketHeaderOptions options)
 {
-   // we use quintptr to force the alignment
+   // use quintptr to force the alignment
    quintptr cbuf[(CMSG_SPACE(sizeof(struct in6_pktinfo)) + CMSG_SPACE(sizeof(int))
 #if !defined(IP_PKTINFO) && defined(IP_RECVIF) && defined(Q_OS_BSD4)
                                                           + CMSG_SPACE(sizeof(sockaddr_dl))

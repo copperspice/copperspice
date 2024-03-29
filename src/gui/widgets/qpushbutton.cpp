@@ -203,7 +203,7 @@ QSize QPushButton::sizeHint() const
    QStyleOptionButton opt;
    initStyleOption(&opt);
 
-   // calculate contents size...
+   // calculate contents size
 #ifndef QT_NO_ICON
 
    bool showButtonBoxIcons = qobject_cast<QDialogButtonBox *>(parentWidget())
@@ -367,8 +367,8 @@ void QPushButtonPrivate::_q_popupPressed()
    QPointer<QPushButton> guard(q);
    QMenuPrivate::get(menu)->causedPopup.widget = guard;
 
-   //Because of a delay in menu effects, we must keep track of the
-   //menu visibility to avoid flicker on button release
+   // Because of a delay in menu effects, we must keep track of the
+   // menu visibility to avoid flicker on button release
    menuOpen = true;
    menu->exec(menuPos);
    if (guard) {
@@ -447,7 +447,6 @@ bool QPushButton::isFlat() const
    return d->flat;
 }
 
-/*! \reimp */
 bool QPushButton::event(QEvent *e)
 {
    Q_D(QPushButton);

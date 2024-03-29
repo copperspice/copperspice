@@ -159,8 +159,7 @@ int QAccessibleMenuBar::indexOfChild(const QAccessibleInterface *child) const
    }
    return -1;
 }
-
-#endif // QT_NO_MENUBAR
+#endif
 
 QAccessibleMenuItem::QAccessibleMenuItem(QWidget *owner, QAction *action)
    : m_action(action), m_owner(owner)
@@ -225,7 +224,6 @@ QObject *QAccessibleMenuItem::object() const
    return m_action;
 }
 
-/*! \reimp */
 QWindow *QAccessibleMenuItem::window() const
 {
    QWindow *result = nullptr;
@@ -250,7 +248,7 @@ QRect QAccessibleMenuItem::rect() const
       QPoint globalPos = menuBar->mapToGlobal(QPoint(0, 0));
       rect = rect.translated(globalPos);
    } else
-#endif // QT_NO_MENUBAR
+#endif
       if (QMenu *menu = qobject_cast<QMenu *>(own)) {
          rect = menu->actionGeometry(m_action);
          QPoint globalPos = menu->mapToGlobal(QPoint(0, 0));

@@ -537,7 +537,6 @@ int QTextDocumentPrivate::remove_block(int pos, int *blockFormat, int command, Q
 
    } else {
       // non empty block, merge with next one into this block
-      //    qDebug("merging block with next");
 
       int n = blocks.next(b);
       Q_ASSERT((int)blocks.position(n) == pos + 1);
@@ -638,7 +637,6 @@ void QTextDocumentPrivate::move(int pos, int to, int length, QTextUndoCommand::O
          blockRevision);
 
       if (key + 1 != blocks.position(b)) {
-         //        qDebug("remove_string from %d length %d", key, X->size_array[0]);
          Q_ASSERT(noBlockInString(text.mid(X->stringPosition, X->size_array[0])));
          w = remove_string(key, X->size_array[0], op);
 
@@ -861,8 +859,7 @@ bool QTextDocumentPrivate::split(int pos)
    uint x = fragments.findNode(pos);
    if (x) {
       int k = fragments.position(x);
-      //          qDebug("found fragment with key %d, size_left=%d, size=%d to split at %d",
-      //                k, (*it)->size_left[0], (*it)->size_array[0], pos);
+
       if (k != pos) {
          Q_ASSERT(k <= pos);
          // need to resize the first fragment and add a new one
@@ -1087,9 +1084,6 @@ int QTextDocumentPrivate::undoRedo(bool undo)
    return newCursorPos;
 }
 
-/*!
-    Appends a custom undo \a item to the undo stack.
-*/
 void QTextDocumentPrivate::appendUndoItem(QAbstractUndoItem *item)
 {
    if (!undoEnabled) {
@@ -1346,7 +1340,6 @@ void QTextDocumentPrivate::finishEdit()
 
 void QTextDocumentPrivate::documentChange(int from, int length)
 {
-   //     qDebug("QTextDocumentPrivate::documentChange: from=%d,length=%d", from, length);
    if (docChangeFrom < 0) {
       docChangeFrom = from;
       docChangeOldLength = length;
@@ -1361,13 +1354,6 @@ void QTextDocumentPrivate::documentChange(int from, int length)
    docChangeLength += diff;
 }
 
-/*
-    adjustDocumentChangesAndCursors is called whenever there is an insert or remove of characters.
-    param from is the cursor position in the document
-    param addedOrRemoved is the amount of characters added or removed.  A negative number means characters are removed.
-
-    The function stores information to be emitted when finishEdit() is called.
-*/
 void QTextDocumentPrivate::adjustDocumentChangesAndCursors(int from, int addedOrRemoved, QTextUndoCommand::Operation op)
 {
    if (!editBlock) {

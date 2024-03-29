@@ -94,9 +94,6 @@ Qt::MouseButton QBasicMouseEventTransition::button() const
    return d->button;
 }
 
-/*!
-  Sets the button that this mouse event transition will check for.
-*/
 void QBasicMouseEventTransition::setButton(Qt::MouseButton button)
 {
    Q_D(QBasicMouseEventTransition);
@@ -127,9 +124,6 @@ void QBasicMouseEventTransition::setHitTestPath(const QPainterPath &path)
    d->path = path;
 }
 
-/*!
-  \reimp
-*/
 bool QBasicMouseEventTransition::eventTest(QEvent *event)
 {
    Q_D(const QBasicMouseEventTransition);
@@ -142,9 +136,6 @@ bool QBasicMouseEventTransition::eventTest(QEvent *event)
    return false;
 }
 
-/*!
-  \reimp
-*/
 void QBasicMouseEventTransition::onTransition(QEvent *)
 {
 }

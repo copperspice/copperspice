@@ -92,18 +92,19 @@ typedef void (GL_APIENTRYP PFNGLBLENDBARRIERKHRPROC) (void);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glBlendBarrierKHR (void);
 #endif
-#endif /* GL_KHR_blend_equation_advanced */
+
+#endif
 
 #ifndef GL_KHR_blend_equation_advanced_coherent
 #define GL_KHR_blend_equation_advanced_coherent 1
 #define GL_BLEND_ADVANCED_COHERENT_KHR    0x9285
-#endif /* GL_KHR_blend_equation_advanced_coherent */
+#endif
 
 #ifndef GL_KHR_context_flush_control
 #define GL_KHR_context_flush_control 1
 #define GL_CONTEXT_RELEASE_BEHAVIOR_KHR   0x82FB
 #define GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH_KHR 0x82FC
-#endif /* GL_KHR_context_flush_control */
+#endif
 
 #ifndef GL_KHR_debug
 #define GL_KHR_debug 1
@@ -176,7 +177,7 @@ GL_APICALL void GL_APIENTRY glGetPointervKHR (GLenum pname, void **params);
 
 #ifndef GL_KHR_robust_buffer_access_behavior
 #define GL_KHR_robust_buffer_access_behavior 1
-#endif /* GL_KHR_robust_buffer_access_behavior */
+#endif
 
 #ifndef GL_KHR_robustness
 #define GL_KHR_robustness 1
@@ -200,7 +201,8 @@ GL_APICALL void GL_APIENTRY glGetnUniformfvKHR (GLuint program, GLint location, 
 GL_APICALL void GL_APIENTRY glGetnUniformivKHR (GLuint program, GLint location, GLsizei bufSize, GLint *params);
 GL_APICALL void GL_APIENTRY glGetnUniformuivKHR (GLuint program, GLint location, GLsizei bufSize, GLuint *params);
 #endif
-#endif /* GL_KHR_robustness */
+
+#endif
 
 #ifndef GL_KHR_texture_compression_astc_hdr
 #define GL_KHR_texture_compression_astc_hdr 1
@@ -232,11 +234,11 @@ GL_APICALL void GL_APIENTRY glGetnUniformuivKHR (GLuint program, GLint location,
 #define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR 0x93DB
 #define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR 0x93DC
 #define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR 0x93DD
-#endif /* GL_KHR_texture_compression_astc_hdr */
+#endif
 
 #ifndef GL_KHR_texture_compression_astc_ldr
 #define GL_KHR_texture_compression_astc_ldr 1
-#endif /* GL_KHR_texture_compression_astc_ldr */
+#endif
 
 #ifndef GL_OES_EGL_image
 #define GL_OES_EGL_image 1

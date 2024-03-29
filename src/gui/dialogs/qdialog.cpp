@@ -158,7 +158,6 @@ QDialog::QDialog(QWidget *parent, Qt::WindowFlags flags)
 {
 }
 
-// internal
 QDialog::QDialog(QDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(dd, parent, flags | ((flags & Qt::WindowType_Mask) == 0 ? Qt::Dialog : Qt::WindowType(0)))
 {
@@ -175,13 +174,6 @@ QDialog::~QDialog()
    }
 }
 
-/*!
-  \internal
-  This function is called by the push button \a pushButton when it
-  becomes the default button. If \a pushButton is 0, the dialogs
-  default default button becomes the default button. This is what a
-  push button calls when it loses focus.
-*/
 void QDialogPrivate::setDefault(QPushButton *pushButton)
 {
    Q_Q(QDialog);
@@ -209,22 +201,12 @@ void QDialogPrivate::setDefault(QPushButton *pushButton)
    }
 }
 
-/*!
-  \internal
-  This function sets the default default push button to \a pushButton.
-  This function is called by QPushButton::setDefault().
-*/
 void QDialogPrivate::setMainDefault(QPushButton *pushButton)
 {
    mainDef = nullptr;
    setDefault(pushButton);
 }
 
-/*!
-  \internal
-  Hides the default button indicator. Called when non auto-default
-  push button get focus.
- */
 void QDialogPrivate::hideDefault()
 {
    Q_Q(QDialog);
@@ -362,18 +344,12 @@ void QDialog::reject()
    done(Rejected);
 }
 
-/*! \reimp */
 bool QDialog::eventFilter(QObject *o, QEvent *e)
 {
    return QWidget::eventFilter(o, e);
 }
 
-/*****************************************************************************
-  Event handlers
- *****************************************************************************/
-
 #ifndef QT_NO_CONTEXTMENU
-/*! \reimp */
 void QDialog::contextMenuEvent(QContextMenuEvent *e)
 {
 #if defined(QT_NO_WHATSTHIS) || defined(QT_NO_MENU)
@@ -404,9 +380,8 @@ void QDialog::contextMenuEvent(QContextMenuEvent *e)
    }
 #endif
 }
-#endif // QT_NO_CONTEXTMENU
+#endif
 
-/*! \reimp */
 void QDialog::keyPressEvent(QKeyEvent *e)
 {
    //   Calls reject() if Escape is pressed. Simulates a button
@@ -445,7 +420,6 @@ void QDialog::keyPressEvent(QKeyEvent *e)
       }
 }
 
-/*! \reimp */
 void QDialog::closeEvent(QCloseEvent *e)
 {
 #ifndef QT_NO_WHATSTHIS
@@ -535,7 +509,6 @@ void QDialog::setVisible(bool visible)
       }
 #endif
 
-      // Reimplemented to exit a modal event loop when the dialog is hidden.
       QWidget::setVisible(visible);
 
       if (d->eventLoop) {
@@ -550,11 +523,8 @@ void QDialog::setVisible(bool visible)
       && theme->themeHint(QPlatformTheme::DialogSnapToDefaultButton).toBool()) {
       QCursor::setPos(d->mainDef->mapToGlobal(d->mainDef->rect().center()));
    }
-
-
 }
 
-/*!\reimp */
 void QDialog::showEvent(QShowEvent *event)
 {
    if (!event->spontaneous() && !testAttribute(Qt::WA_Moved)) {
@@ -567,7 +537,6 @@ void QDialog::showEvent(QShowEvent *event)
    }
 }
 
-/*! \internal */
 void QDialog::adjustPosition(QWidget *w)
 {
    if (const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme())
@@ -749,8 +718,6 @@ void QDialog::showExtension(bool showIt)
    }
 }
 
-
-/*! \reimp */
 QSize QDialog::sizeHint() const
 {
    Q_D(const QDialog);
@@ -768,8 +735,6 @@ QSize QDialog::sizeHint() const
    return QWidget::sizeHint();
 }
 
-
-/*! \reimp */
 QSize QDialog::minimumSizeHint() const
 {
    Q_D(const QDialog);
@@ -836,8 +801,6 @@ void QDialog::setSizeGripEnabled(bool enabled)
 
 }
 
-
-/*! \reimp */
 void QDialog::resizeEvent(QResizeEvent *)
 {
 #ifndef QT_NO_SIZEGRIP

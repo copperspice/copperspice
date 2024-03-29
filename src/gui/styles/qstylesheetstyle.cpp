@@ -3634,17 +3634,20 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                      labelWidth += (textWidth + iconSpacing);
                   }
 
-                  //Determine label alignment:
-                  if (textAlignment & Qt::AlignLeft) { /*left*/
+                  // determine label alignment
+                  if (textAlignment & Qt::AlignLeft) {
+                     // left
                      iconRect = QRect(textRect.x(), textRect.y() + (textRect.height() - labelHeight) / 2,
                            pixmapWidth, pixmapHeight);
 
-                  } else if (textAlignment & Qt::AlignHCenter) { /* center */
+                  } else if (textAlignment & Qt::AlignHCenter) {
+                     // center
                      iconRect = QRect(textRect.x() + (textRect.width() - labelWidth) / 2,
                            textRect.y() + (textRect.height() - labelHeight) / 2,
                            pixmapWidth, pixmapHeight);
 
-                  } else { /*right*/
+                  } else {
+                     // right
                      iconRect = QRect(textRect.x() + textRect.width() - labelWidth,
                            textRect.y() + (textRect.height() - labelHeight) / 2,
                            pixmapWidth, pixmapHeight);
@@ -3652,7 +3655,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
 
                   iconRect = visualRect(button->direction, textRect, iconRect);
 
-                  tf |= Qt::AlignLeft; //left align, we adjust the text-rect instead
+                  tf |= Qt::AlignLeft; // left align, we adjust the text-rect instead
 
                   if (button->direction == Qt::RightToLeft) {
                      textRect.setRight(iconRect.left() - iconSpacing);

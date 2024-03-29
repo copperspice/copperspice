@@ -223,7 +223,7 @@ static inline XTextProperty *qstringToXTP(Display *dpy, const QString &s)
 
       errCode = XmbTextListToTextProperty(dpy, tl, 1, XStdICCTextStyle, &tp);
       if (errCode < 0) {
-         qDebug("XmbTextListToTextProperty result code %d", errCode);
+         qWarning("XmbTextListToTextProperty result code %d", errCode);
       }
    }
 

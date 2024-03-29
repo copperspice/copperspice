@@ -762,7 +762,7 @@ void QProcessPrivate::closeWriteChannel()
    }
 
 #ifdef Q_OS_WIN
-   // ### Find a better fix, feeding the process little by little instead.
+   // ### Find a better fix, feeding the process little by little instead
    flushPipeWriter();
 #endif
 

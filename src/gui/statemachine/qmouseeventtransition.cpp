@@ -103,9 +103,6 @@ void QMouseEventTransition::setHitTestPath(const QPainterPath &path)
    d->transition->setHitTestPath(path);
 }
 
-/*!
-  \reimp
-*/
 bool QMouseEventTransition::eventTest(QEvent *event)
 {
    Q_D(const QMouseEventTransition);
@@ -117,9 +114,6 @@ bool QMouseEventTransition::eventTest(QEvent *event)
    return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
 }
 
-/*!
-  \reimp
-*/
 void QMouseEventTransition::onTransition(QEvent *event)
 {
    QEventTransition::onTransition(event);

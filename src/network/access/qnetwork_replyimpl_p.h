@@ -51,7 +51,6 @@ class QNetworkReplyImpl: public QNetworkReply
 
    void abort() override;
 
-   // reimplemented from QNetworkReply or QIODevice
    void close() override;
    qint64 bytesAvailable() const override;
    void setReadBufferSize(qint64 size) override;

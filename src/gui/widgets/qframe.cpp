@@ -119,13 +119,6 @@ void QFrame::setFrameShape(QFrame::Shape s)
    setFrameStyle((d->frameStyle & Shadow_Mask) | s);
 }
 
-
-/*!
-    \property QFrame::frameShadow
-    \brief the frame shadow value from the frame style
-
-    \sa frameStyle(), frameShape()
-*/
 QFrame::Shadow QFrame::frameShadow() const
 {
    Q_D(const QFrame);
@@ -163,18 +156,6 @@ void QFrame::setFrameStyle(int style)
    d->updateFrameWidth();
 }
 
-/*!
-    \property QFrame::lineWidth
-    \brief the line width
-
-    Note that the \e total line width for frames used as separators
-    (\l HLine and \l VLine) is specified by \l frameWidth.
-
-    The default value is 1.
-
-    \sa midLineWidth, frameWidth
-*/
-
 void QFrame::setLineWidth(int w)
 {
    Q_D(QFrame);
@@ -190,15 +171,6 @@ int QFrame::lineWidth() const
    Q_D(const QFrame);
    return d->lineWidth;
 }
-
-/*!
-    \property QFrame::midLineWidth
-    \brief the width of the mid-line
-
-    The default value is 0.
-
-    \sa lineWidth, frameWidth
-*/
 
 void QFrame::setMidLineWidth(int w)
 {
@@ -218,10 +190,6 @@ int QFrame::midLineWidth() const
    return d->midLineWidth;
 }
 
-/*!
-  \internal
-  Updates the frame widths from the style.
-*/
 void QFramePrivate::updateStyledFrameWidths()
 {
    Q_Q(const QFrame);
@@ -236,11 +204,6 @@ void QFramePrivate::updateStyledFrameWidths()
    bottomFrameWidth = opt.rect.bottom() - cr.bottom();
    frameWidth = qMax(qMax(leftFrameWidth, rightFrameWidth), qMax(topFrameWidth, bottomFrameWidth));
 }
-
-/*!
-  \internal
-  Updated the frameWidth parameter.
-*/
 
 void QFramePrivate::updateFrameWidth()
 {
@@ -273,8 +236,6 @@ void QFrame::setFrameRect(const QRect &r)
    setContentsMargins(cr.left(), cr.top(), rect().right() - cr.right(), rect().bottom() - cr.bottom());
 }
 
-/*!\reimp
-*/
 QSize QFrame::sizeHint() const
 {
    Q_D(const QFrame);
@@ -293,18 +254,12 @@ QSize QFrame::sizeHint() const
    }
 }
 
-/*!\reimp
-*/
-
 void QFrame::paintEvent(QPaintEvent *)
 {
    QPainter paint(this);
    drawFrame(&paint);
 }
 
-/*!
-    \internal
-*/
 void QFrame::drawFrame(QPainter *p)
 {
    QStyleOptionFrame opt;
@@ -312,9 +267,6 @@ void QFrame::drawFrame(QPainter *p)
    style()->drawControl(QStyle::CE_ShapedFrame, &opt, p, this);
 }
 
-
-/*!\reimp
- */
 void QFrame::changeEvent(QEvent *ev)
 {
    Q_D(QFrame);
@@ -329,7 +281,6 @@ void QFrame::changeEvent(QEvent *ev)
    QWidget::changeEvent(ev);
 }
 
-/*! \reimp */
 bool QFrame::event(QEvent *e)
 {
    if (e->type() == QEvent::ParentChange) {

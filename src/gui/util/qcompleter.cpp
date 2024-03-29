@@ -1377,7 +1377,7 @@ bool QCompleter::eventFilter(QObject *o, QEvent *e)
       case QEvent::MouseButtonPress: {
 #ifdef QT_KEYPAD_NAVIGATION
          if (QApplication::keypadNavigationEnabled()) {
-            // if we've clicked in the widget (or its descendant), let it handle the click
+            // if we have clicked in the widget (or its descendant), let it handle the click
             QWidget *source = qobject_cast<QWidget *>(o);
 
             if (source) {

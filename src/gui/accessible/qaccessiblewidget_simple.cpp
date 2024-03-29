@@ -69,13 +69,11 @@ QAccessibleButton::QAccessibleButton(QWidget *w)
    }
 }
 
-/*! Returns the button. */
 QAbstractButton *QAccessibleButton::button() const
 {
    return qobject_cast<QAbstractButton *>(object());
 }
 
-/*! \reimp */
 QString QAccessibleButton::text(QAccessible::Text t) const
 {
    QString str;
@@ -237,34 +235,19 @@ QStringList QAccessibleButton::keyBindingsForAction(const QString &actionName) c
    return QStringList();
 }
 
-
 #ifndef QT_NO_TOOLBUTTON
-/*!
-  \class QAccessibleToolButton
-  \brief The QAccessibleToolButton class implements the QAccessibleInterface for tool buttons.
-  \internal
 
-  \ingroup accessibility
-*/
-
-/*!
-  Creates a QAccessibleToolButton object for \a w.
-*/
 QAccessibleToolButton::QAccessibleToolButton(QWidget *w)
    : QAccessibleButton(w)
 {
    Q_ASSERT(toolButton());
 }
 
-/*! Returns the button. */
 QToolButton *QAccessibleToolButton::toolButton() const
 {
    return qobject_cast<QToolButton *>(object());
 }
 
-/*!
-    Returns \c true if this tool button is a split button.
-*/
 bool QAccessibleToolButton::isSplitButton() const
 {
 #ifndef QT_NO_MENU
@@ -321,12 +304,6 @@ QAccessibleInterface *QAccessibleToolButton::child(int index) const
    return nullptr;
 }
 
-/*
-   The three different tool button types can have the following actions:
-| DelayedPopup    | ShowMenuAction + (PressedAction || CheckedAction) |
-| MenuButtonPopup | ShowMenuAction + (PressedAction || CheckedAction) |
-| InstantPopup    | ShowMenuAction |
-*/
 QStringList QAccessibleToolButton::actionNames() const
 {
    QStringList names;
@@ -364,18 +341,6 @@ void QAccessibleToolButton::doAction(const QString &actionName)
 
 #endif // QT_NO_TOOLBUTTON
 
-/*!
-  \class QAccessibleDisplay
-  \brief The QAccessibleDisplay class implements the QAccessibleInterface for widgets that display information.
-  \internal
-
-  \ingroup accessibility
-*/
-
-/*!
-  Constructs a QAccessibleDisplay object for \a w.
-  \a role is propagated to the QAccessibleWidget constructor.
-*/
 QAccessibleDisplay::QAccessibleDisplay(QWidget *w, QAccessible::Role role)
    : QAccessibleWidget(w, role)
 {
@@ -459,7 +424,6 @@ QString QAccessibleDisplay::text(QAccessible::Text t) const
    return str;
 }
 
-/*! \reimp */
 QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> QAccessibleDisplay::relations(QAccessible::Relation match ) const
 {
    QVector<QPair<QAccessibleInterface *, QAccessible::Relation>> rels = QAccessibleWidget::relations(match);
@@ -490,7 +454,6 @@ void *QAccessibleDisplay::interface_cast(QAccessible::InterfaceType t)
    return QAccessibleWidget::interface_cast(t);
 }
 
-/*! \internal */
 QString QAccessibleDisplay::imageDescription() const
 {
 #ifndef QT_NO_TOOLTIP
@@ -499,8 +462,6 @@ QString QAccessibleDisplay::imageDescription() const
    return QString::null;
 #endif
 }
-
-/*! \internal */
 QSize QAccessibleDisplay::imageSize() const
 {
    QLabel *label = qobject_cast<QLabel *>(widget());
@@ -514,7 +475,6 @@ QSize QAccessibleDisplay::imageSize() const
    return pixmap->size();
 }
 
-/*! \internal */
 QPoint QAccessibleDisplay::imagePosition() const
 {
    QLabel *label = qobject_cast<QLabel *>(widget());
@@ -617,18 +577,7 @@ QStringList QAccessibleGroupBox::keyBindingsForAction(const QString &) const
 #endif
 
 #ifndef QT_NO_LINEEDIT
-/*!
-  \class QAccessibleLineEdit
-  \brief The QAccessibleLineEdit class implements the QAccessibleInterface for widgets with editable text
-  \internal
 
-  \ingroup accessibility
-*/
-
-/*!
-  Constructs a QAccessibleLineEdit object for \a w.
-  \a name is propagated to the QAccessibleWidget constructor.
-*/
 QAccessibleLineEdit::QAccessibleLineEdit(QWidget *w, const QString &name)
    : QAccessibleWidget(w, QAccessible::EditableText, name)
 {
@@ -636,7 +585,6 @@ QAccessibleLineEdit::QAccessibleLineEdit(QWidget *w, const QString &name)
    addControllingSignal(QLatin1String("returnPressed()"));
 }
 
-/*! Returns the line edit. */
 QLineEdit *QAccessibleLineEdit::lineEdit() const
 {
    return qobject_cast<QLineEdit *>(object());
@@ -949,5 +897,3 @@ QWindowContainer *QAccessibleWindowContainer::container() const
 }
 
 #endif // QT_NO_ACCESSIBILITY
-
-

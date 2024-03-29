@@ -418,8 +418,7 @@ void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
 
       if (QApplicationPrivate::inPopupMode() && receiver == m_widget
          && qt_last_mouse_receiver != m_widget) {
-         // This allows to deliver the leave event to the native widget
-         // action on first-level menu.
+         // allows delivering the leave event to the native widget action on first level menu
          leave = qt_last_mouse_receiver;
       }
 
@@ -666,7 +665,7 @@ void QWidgetWindow::handleMouseEvent(QMouseEvent *event)
       || !(event->flags().testFlag(Qt::MouseEventCreatedDoubleClick))) {
 
       // The preceding statement excludes MouseButtonPress events which caused
-      // creation of a MouseButtonDblClick event. QTBUG-25831
+      // creation of a MouseButtonDblClick event
       QMouseEvent translated(event->type(), mapped, event->windowPos(), event->screenPos(),
          event->button(), event->buttons(), event->modifiers(), event->source());
 
@@ -893,7 +892,8 @@ void QWidgetWindow::handleWheelEvent(QWheelEvent *event)
 void QWidgetWindow::handleDragEnterMoveEvent(QDragMoveEvent *event)
 {
    Q_ASSERT(event->type() == QEvent::DragMove || !m_dragTarget);
-   // Find a target widget under mouse that accepts drops (QTBUG-22987).
+
+   // Find a target widget under mouse that accepts drops
    QWidget *widget = m_widget->childAt(event->pos());
    if (!widget) {
       widget = m_widget;
@@ -987,24 +987,28 @@ void QWidgetWindow::handleExposeEvent(QExposeEvent *event)
    const bool exposed = isExposed();
 
    if (wPriv->childrenHiddenByWState) {
-      // If widgets has been previously hidden by window state change event
-      // and they aren't yet shown...
+      // if widgets have been previously hidden by a window state change event
+      // and they are not yet shown
+
       if (exposed) {
-         // If the window becomes exposed...
+         // if the window becomes exposed
          if (!wPriv->childrenShownByExpose) {
-            // ... and they haven't been shown by this function yet - show it.
+            // have not been shown by this methodd, show it
             wPriv->showChildren(true);
             QShowEvent showEvent;
             QCoreApplication::sendSpontaneousEvent(m_widget, &showEvent);
             wPriv->childrenShownByExpose = true;
          }
       } else {
-         // If the window becomes not exposed...
+         // if the window becomes not exposed
+
          if (wPriv->childrenShownByExpose) {
-            // ... and child widgets was previously shown by the expose event - hide widgets again.
-            // This is a workaround, because sometimes when window is minimized programatically,
-            // the QPA can notify that the window is exposed after changing window state to minimized
-            // and then, the QPA can send next expose event with null exposed region (not exposed).
+            // and child widgets were previously shown by the expose event, hide widgets again
+
+            // This is a workaround, because sometimes when a window is minimized programatically,
+            // it can notify the window is exposed after changing window state to minimized
+            // and then, the it can send next expose event with null exposed region (not exposed).
+
             wPriv->hideChildren(true);
             QHideEvent hideEvent;
             QCoreApplication::sendSpontaneousEvent(m_widget, &hideEvent);
@@ -1025,15 +1029,14 @@ void QWidgetWindow::handleExposeEvent(QExposeEvent *event)
 
 void QWidgetWindow::handleWindowStateChangedEvent(QWindowStateChangeEvent *event)
 {
-   // QWindow does currently not know 'active'.
+   // QWindow does currently not know 'active'
    Qt::WindowStates eventState = event->oldState();
    Qt::WindowStates widgetState = m_widget->windowState();
    if (widgetState & Qt::WindowActive) {
       eventState |= Qt::WindowActive;
    }
 
-   // Determine the new widget state, remember maximized/full screen
-   // during minimized.
+   // Determine the new widget state, remember maximized/full screen during minimized
    switch (windowState()) {
       case Qt::WindowNoState:
          widgetState &= ~(Qt::WindowMinimized | Qt::WindowMaximized | Qt::WindowFullScreen);
@@ -1056,7 +1059,7 @@ void QWidgetWindow::handleWindowStateChangedEvent(QWindowStateChangeEvent *event
    }
 
    // Sent event if the state changed (that is, it is not triggered by
-   // QWidget::setWindowState(), which also sends an event to the widget).
+   // QWidget::setWindowState(), which also sends an event to the widget)
 
    if (widgetState != int(m_widget->m_widgetData->window_state)) {
       m_widget->m_widgetData->window_state = widgetState;
@@ -1098,7 +1101,7 @@ void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
       qt_tablet_target = nullptr;
    }
 }
-#endif // QT_NO_TABLETEVENT
+#endif
 
 #ifndef QT_NO_GESTURES
 void QWidgetWindow::handleGestureEvent(QNativeGestureEvent *e)
@@ -1121,7 +1124,7 @@ void QWidgetWindow::handleGestureEvent(QNativeGestureEvent *e)
 
    QApplication::sendSpontaneousEvent(receiver, e);
 }
-#endif // QT_NO_GESTURES
+#endif
 
 #ifndef QT_NO_CONTEXTMENU
 void QWidgetWindow::handleContextMenuEvent(QContextMenuEvent *e)
@@ -1154,7 +1157,7 @@ void QWidgetWindow::handleContextMenuEvent(QContextMenuEvent *e)
       QGuiApplication::sendSpontaneousEvent(fw, &widgetEvent);
    }
 }
-#endif // QT_NO_CONTEXTMENU
+#endif
 
 void QWidgetWindow::updateObjectName()
 {

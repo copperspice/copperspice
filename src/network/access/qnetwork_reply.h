@@ -92,7 +92,6 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
 
    ~QNetworkReply();
 
-   // reimplemented from QIODevice
    void close() override;
    bool isSequential() const override;
 

@@ -608,10 +608,6 @@ QSize QDateTimeEdit::sizeHint() const
    return d->cachedSizeHint;
 }
 
-/*!
-  \reimp
-*/
-
 bool QDateTimeEdit::event(QEvent *event)
 {
    Q_D(QDateTimeEdit);
@@ -640,18 +636,11 @@ bool QDateTimeEdit::event(QEvent *event)
    return QAbstractSpinBox::event(event);
 }
 
-/*!
-  \reimp
-*/
-
 void QDateTimeEdit::clear()
 {
    Q_D(QDateTimeEdit);
    d->clearSection(d->currentSectionIndex);
 }
-/*!
-  \reimp
-*/
 
 void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
 {
@@ -895,10 +884,6 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
          return false;
    }
 }
-
-/*!
-  \reimp
-*/
 
 void QDateTimeEdit::stepBy(int steps)
 {
@@ -1473,16 +1458,6 @@ QVariant QDateTimeEditPrivate::valueFromText(const QString &f) const
    return q->dateTimeFromText(f).toTimeZone(m_timeZone);
 }
 
-/*!
-  \internal
-
-  Internal function called by QDateTimeEdit::stepBy(). Also takes a
-  Section for which section to step on and a bool \a test for
-  whether or not to modify the internal cachedDay variable. This is
-  necessary because the function is called from the const function
-  QDateTimeEdit::stepEnabled() as well as QDateTimeEdit::stepBy().
-*/
-
 QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) const
 {
    Q_Q(const QDateTimeEdit);
@@ -1725,11 +1700,6 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
    ignoreCursorPositionChanged = false;
 }
 
-/*!
-  \internal
-
-  Try to get the format from the local settings
-*/
 void QDateTimeEditPrivate::readLocaleSettings()
 {
    const QLocale loc;
@@ -1815,10 +1785,6 @@ QDateTimeEdit::Sections QDateTimeEditPrivate::convertSections(QDateTimeParser::S
 
    return ret;
 }
-
-/*!
-    \reimp
-*/
 
 void QDateTimeEdit::paintEvent(QPaintEvent *event)
 {

@@ -412,8 +412,6 @@ QAbstractButton::~QAbstractButton()
 #endif
 }
 
-/*! \internal
- */
 QAbstractButton::QAbstractButton(QAbstractButtonPrivate &dd, QWidget *parent)
    : QWidget(dd, parent, Qt::EmptyFlag)
 {
@@ -716,7 +714,6 @@ bool QAbstractButton::hitButton(const QPoint &pos) const
    return rect().contains(pos);
 }
 
-/*! \reimp */
 bool QAbstractButton::event(QEvent *e)
 {
    // as opposed to other widgets, disabled buttons accept mouse

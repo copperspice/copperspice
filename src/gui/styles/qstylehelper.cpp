@@ -53,7 +53,8 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
          + HexString<uint>(spinBox->stepEnabled)
          + QLatin1Char(spinBox->frame ? '1' : '0'); ;
    }
-#endif // QT_NO_SPINBOX
+#endif
+
    if (option->palette != QGuiApplication::palette()) {
       tmp.append(QLatin1Char('P'));
 

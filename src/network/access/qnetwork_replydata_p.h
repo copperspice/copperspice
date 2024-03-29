@@ -42,7 +42,6 @@ class QNetworkReplyDataImpl: public QNetworkReply
 
    void abort() override;
 
-   // reimplemented from QNetworkReply
    void close() override;
    qint64 bytesAvailable() const override;
    bool isSequential () const override;

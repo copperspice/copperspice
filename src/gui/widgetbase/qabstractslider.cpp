@@ -83,7 +83,6 @@ QAbstractSlider::QAbstractSlider(QWidget *parent)
 {
 }
 
-/*! \internal */
 QAbstractSlider::QAbstractSlider(QAbstractSliderPrivate &dd, QWidget *parent)
    : QWidget(dd, parent, Qt::EmptyFlag)
 {

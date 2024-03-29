@@ -678,9 +678,6 @@ QPrintPreviewDialog::~QPrintPreviewDialog()
    delete d->printDialog;
 }
 
-/*!
-    \reimp
-*/
 void QPrintPreviewDialog::setVisible(bool visible)
 {
    Q_D(QPrintPreviewDialog);
@@ -692,9 +689,6 @@ void QPrintPreviewDialog::setVisible(bool visible)
    QDialog::setVisible(visible);
 }
 
-/*!
-    \reimp
-*/
 void QPrintPreviewDialog::done(int result)
 {
    Q_D(QPrintPreviewDialog);
@@ -721,26 +715,11 @@ void QPrintPreviewDialog::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-/*!
-    Returns a pointer to the QPrinter object this dialog is currently
-    operating on.
-*/
 QPrinter *QPrintPreviewDialog::printer()
 {
    Q_D(QPrintPreviewDialog);
    return d->printer;
 }
-
-/*!
-    \fn void QPrintPreviewDialog::paintRequested(QPrinter *printer)
-
-    This signal is emitted when the QPrintPreviewDialog needs to generate
-    a set of preview pages.
-
-    The \a printer instance supplied is the paint device onto which you should
-    paint the contents of each page, using the QPrinter instance in the same way
-    as you would when printing directly.
-*/
 
 void QPrintPreviewDialog::_q_fit(QAction *action)
 {

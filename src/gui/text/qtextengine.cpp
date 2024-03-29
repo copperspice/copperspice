@@ -931,7 +931,6 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
          int end = i - 1;
 
          if (start != end) {
-            //qDebug() << "reversing from " << start << " to " << end;
             for (int j = 0; j < (end - start + 1) / 2; j++) {
                int tmp = visualOrder[start + j];
                visualOrder[start + j] = visualOrder[end - j];
@@ -1928,8 +1927,6 @@ QFixed QTextEngine::width(int from, int len) const
       int pos = si->position;
       int ilen = length(i);
 
-      // qDebug("item %d: from %d len %d", i, pos, ilen);
-
       if (pos >= from + len) {
          break;
       }
@@ -1982,14 +1979,13 @@ QFixed QTextEngine::width(int from, int len) const
             }
             glyphEnd = (charEnd == ilen) ? si->num_glyphs : logClusters[charEnd];
 
-            //                 qDebug("char: start=%d end=%d / glyph: start = %d, end = %d", charFrom, charEnd, glyphStart, glyphEnd);
             for (int i = glyphStart; i < glyphEnd; i++) {
                w += glyphs.advances[i] * !glyphs.attributes[i].dontPrint;
             }
          }
       }
    }
-   //     qDebug("   --> w= %d ", w);
+
    return w;
 }
 
@@ -2343,7 +2339,6 @@ static void set(QJustificationPoint *point, int type, const QGlyphLayout &glyph,
 
 void QTextEngine::justify(const QScriptLine &line)
 {
-   //     qDebug("justify: line.gridfitted = %d, line.justified=%d", line.gridfitted, line.justified);
    if (line.gridfitted && line.justified) {
       return;
    }
@@ -2449,7 +2444,6 @@ void QTextEngine::justify(const QScriptLine &line)
 
             case Justification_Arabic_Space:
                if (kashida_pos >= 0) {
-                  //                     qDebug("kashida position at %d in word", kashida_pos);
                   set(&justificationPoints[nPoints], kashida_type, g.mid(kashida_pos), fontEngine(si));
                   if (justificationPoints[nPoints].kashidaWidth > 0) {
                      minKashida = qMin(minKashida, justificationPoints[nPoints].kashidaWidth);
@@ -2502,9 +2496,6 @@ void QTextEngine::justify(const QScriptLine &line)
       return;
    }
 
-   //  qDebug("doing justification: textWidth=%x, requested=%x, maxJustify=%d", line.textWidth.value(), line.width.value(), maxJustify);
-   //  qDebug("     minKashida=%f, need=%f", minKashida.toReal(), need.toReal());
-
    // distribute in priority order
    if (maxJustify >= Justification_Arabic_Normal) {
       while (need >= minKashida) {
@@ -2514,10 +2505,8 @@ void QTextEngine::justify(const QScriptLine &line)
                if (justificationPoints[i].type == type && justificationPoints[i].kashidaWidth <= need) {
                   justificationPoints[i].glyph.justifications->nKashidas++;
 
-                  // ############
                   justificationPoints[i].glyph.justifications->space_18d6 += justificationPoints[i].kashidaWidth.value();
                   need -= justificationPoints[i].kashidaWidth;
-                  // qDebug("adding kashida type %d with width %x, neednow %x", type, justificationPoints[i].kashidaWidth, need.value());
                }
             }
          }
@@ -2540,8 +2529,6 @@ void QTextEngine::justify(const QScriptLine &line)
          }
       }
 
-      // qDebug("number of points for justification type %d: %d", type, n);
-
       if (! n) {
          continue;
       }
@@ -2549,7 +2536,6 @@ void QTextEngine::justify(const QScriptLine &line)
       for (int i = 0; i < nPoints; ++i) {
          if (justificationPoints[i].type == type) {
             QFixed add = need / n;
-            //                  qDebug("adding %x to glyph %x", add.value(), justificationPoints[i].glyph->glyph);
             justificationPoints[i].glyph.justifications[0].space_18d6 = add.value();
             need -= add;
             --n;
@@ -2796,7 +2782,6 @@ void QTextEngine::addRequiredBoundaries() const
          const QTextLayout::FormatRange &r = specialData->formats.at(i);
          setBoundary(r.start);
          setBoundary(r.start + r.length);
-         //qDebug("adding boundaries %d %d", r.start, r.start+r.length);
       }
    }
 }

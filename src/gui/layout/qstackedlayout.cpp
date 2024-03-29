@@ -123,9 +123,6 @@ int QStackedLayout::insertWidget(int index, QWidget *widget)
    return index;
 }
 
-/*!
-    \reimp
-*/
 QLayoutItem *QStackedLayout::itemAt(int index) const
 {
    Q_D(const QStackedLayout);
@@ -272,12 +269,10 @@ int QStackedLayout::count() const
    return d->list.size();
 }
 
-/*!
-    \reimp
-*/
 void QStackedLayout::addItem(QLayoutItem *item)
 {
    QWidget *widget = item->widget();
+
    if (widget) {
       addWidget(widget);
       delete item;
@@ -286,9 +281,6 @@ void QStackedLayout::addItem(QLayoutItem *item)
    }
 }
 
-/*!
-    \reimp
-*/
 QSize QStackedLayout::sizeHint() const
 {
    Q_D(const QStackedLayout);
@@ -309,9 +301,6 @@ QSize QStackedLayout::sizeHint() const
    return s;
 }
 
-/*!
-    \reimp
-*/
 QSize QStackedLayout::minimumSize() const
 {
    Q_D(const QStackedLayout);
@@ -325,9 +314,6 @@ QSize QStackedLayout::minimumSize() const
    return s;
 }
 
-/*!
-    \reimp
-*/
 void QStackedLayout::setGeometry(const QRect &rect)
 {
    Q_D(QStackedLayout);

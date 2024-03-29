@@ -71,9 +71,6 @@ QAbstractScrollAreaScrollBarContainer::QAbstractScrollAreaScrollBarContainer(Qt:
    layout->setSizeConstraint(QLayout::SetMaximumSize);
 }
 
-/*! \internal
-    Adds a widget to the scroll bar container.
-*/
 void QAbstractScrollAreaScrollBarContainer::addWidget(QWidget *widget, LogicalPosition position)
 {
    QSizePolicy policy = widget->sizePolicy();
@@ -90,10 +87,6 @@ void QAbstractScrollAreaScrollBarContainer::addWidget(QWidget *widget, LogicalPo
    layout->insertWidget(insertIndex, widget);
 }
 
-/*! \internal
-    Retuns a list of scroll bar widgets for the given position. The scroll bar
-    itself is not returned.
-*/
 QWidgetList QAbstractScrollAreaScrollBarContainer::widgets(LogicalPosition position)
 {
    QWidgetList list;
@@ -114,12 +107,6 @@ QWidgetList QAbstractScrollAreaScrollBarContainer::widgets(LogicalPosition posit
    return list;
 }
 
-/*! \internal
-    Returns the layout index for the scroll bar. This needs to be
-    recalculated by a linear search for each use, since items in
-    the layout can be removed at any time (i.e. when a widget is
-    deleted or re-parented).
-*/
 int QAbstractScrollAreaScrollBarContainer::scrollBarLayoutIndex() const
 {
    const int layoutItemCount = layout->count();
@@ -133,8 +120,6 @@ int QAbstractScrollAreaScrollBarContainer::scrollBarLayoutIndex() const
    return -1;
 }
 
-/*! \internal
-*/
 void QAbstractScrollAreaPrivate::replaceScrollBar(QScrollBar *scrollBar, Qt::Orientation orientation)
 {
    Q_Q(QAbstractScrollArea);
@@ -760,7 +745,8 @@ bool QAbstractScrollArea::event(QEvent *e)
 
          return false;
       }
-#endif // QT_NO_GESTURES
+
+#endif
 
       case QEvent::ScrollPrepare: {
          QScrollPrepareEvent *se = static_cast<QScrollPrepareEvent *>(e);
@@ -834,7 +820,8 @@ bool QAbstractScrollArea::viewportEvent(QEvent *e)
 #endif
 #ifndef QT_NO_OPENGL
          // QOpenGLWidget needs special support because it has to know
-         // its size has changed, so that it can resize its fbo.
+         // its size has changed, so that it can resize its fbo
+
          if (e->type() == QEvent::Resize) {
             QWidgetPrivate::get(viewport())->resizeViewportFramebuffer();
          }
@@ -871,49 +858,21 @@ void QAbstractScrollArea::mousePressEvent(QMouseEvent *e)
    e->ignore();
 }
 
-/*!
-    This event handler can be reimplemented in a subclass to receive
-    mouse release events for the viewport() widget. The event is
-    passed in \a e.
-
-    \sa QWidget::mouseReleaseEvent()
-*/
 void QAbstractScrollArea::mouseReleaseEvent(QMouseEvent *e)
 {
    e->ignore();
 }
 
-/*!
-    This event handler can be reimplemented in a subclass to receive
-    mouse double click events for the viewport() widget. The event is
-    passed in \a e.
-
-    \sa QWidget::mouseDoubleClickEvent()
-*/
 void QAbstractScrollArea::mouseDoubleClickEvent(QMouseEvent *e)
 {
    e->ignore();
 }
 
-/*!
-    This event handler can be reimplemented in a subclass to receive
-    mouse move events for the viewport() widget. The event is passed
-    in \a e.
-
-    \sa QWidget::mouseMoveEvent()
-*/
 void QAbstractScrollArea::mouseMoveEvent(QMouseEvent *e)
 {
    e->ignore();
 }
 
-/*!
-    This event handler can be reimplemented in a subclass to receive
-    wheel events for the viewport() widget. The event is passed in \a
-    e.
-
-    \sa QWidget::wheelEvent()
-*/
 #ifndef QT_NO_WHEELEVENT
 void QAbstractScrollArea::wheelEvent(QWheelEvent *e)
 {
@@ -927,24 +886,12 @@ void QAbstractScrollArea::wheelEvent(QWheelEvent *e)
 #endif
 
 #ifndef QT_NO_CONTEXTMENU
-/*!
-    This event handler can be reimplemented in a subclass to receive
-    context menu events for the viewport() widget. The event is passed
-    in \a e.
-
-    \sa QWidget::contextMenuEvent()
-*/
 void QAbstractScrollArea::contextMenuEvent(QContextMenuEvent *e)
 {
    e->ignore();
 }
-#endif // QT_NO_CONTEXTMENU
+#endif
 
-/*!
-    This function is called with key event \a e when key presses
-    occur. It handles PageUp, PageDown, Up, Down, Left, and Right, and
-    ignores all other key presses.
-*/
 void QAbstractScrollArea::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QAbstractScrollArea);
@@ -1036,8 +983,9 @@ bool QAbstractScrollAreaPrivate::canStartScrollingAt( const QPoint &startPos )
    Q_Q(QAbstractScrollArea);
 
 #ifndef QT_NO_GRAPHICSVIEW
-   // don't start scrolling when a drag mode has been set.
-   // don't start scrolling on a movable item.
+
+   // do not start scrolling when a drag mode has been set
+   // do not start scrolling on a movable item.
    if (QGraphicsView *view = qobject_cast<QGraphicsView *>(q)) {
       if (view->dragMode() != QGraphicsView::NoDrag) {
          return false;
@@ -1051,7 +999,7 @@ bool QAbstractScrollAreaPrivate::canStartScrollingAt( const QPoint &startPos )
    }
 #endif
 
-   // don't start scrolling on a QAbstractSlider
+   // do not start scrolling on a QAbstractSlider
    if (qobject_cast<QAbstractSlider *>(q->viewport()->childAt(startPos))) {
       return false;
    }
@@ -1120,10 +1068,6 @@ QPoint QAbstractScrollAreaPrivate::contentsOffset() const
    return offset;
 }
 
-/*!
-    \reimp
-
-*/
 QSize QAbstractScrollArea::minimumSizeHint() const
 {
    Q_D(const QAbstractScrollArea);
@@ -1140,9 +1084,6 @@ QSize QAbstractScrollArea::minimumSizeHint() const
          d->scrollBarContainers[Qt::Vertical]->sizeHint().height() + hsbExt + extra);
 }
 
-/*!
-    \reimp
-*/
 QSize QAbstractScrollArea::sizeHint() const
 {
    Q_D(const QAbstractScrollArea);

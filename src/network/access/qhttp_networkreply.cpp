@@ -496,7 +496,7 @@ bool QHttpNetworkReplyPrivate::parseStatus(const QByteArray &status)
          || !status.startsWith(httpMagic)
          || status.at(dotPos) != '.'
          || status.at(spacePos) != ' ') {
-      // I don't know how to parse this status line
+      // unable to parse this status line
       return false;
    }
 

@@ -117,9 +117,8 @@ class QWidgetBackingStoreTracker
 };
 
 struct QTLWExtra {
-   // *************************** Cross-platform variables *****************************
+   // cross platform variables
 
-   // Regular pointers (keep them together to avoid gaps on 64 bits architectures).
    QIcon *icon; // widget icon
 
    QWidgetBackingStoreTracker backingStoreTracker;
@@ -129,23 +128,19 @@ struct QTLWExtra {
    QWindow *window;
    QOpenGLContext *shareContext;
 
-   // Implicit pointers (shared_null).
    QString caption; // widget caption
    QString iconText; // widget icon text
    QString role; // widget role
    QString filePath; // widget file path
 
-   // Other variables.
    short incw, inch; // size increments
    short basew, baseh; // base sizes
-   // frame strut, don't use these directly, use QWidgetPrivate::frameStrut() instead.
    QRect frameStrut;
    QRect normalGeometry; // used by showMin/maximized/FullScreen
    Qt::WindowFlags savedFlags; // Save widget flags while showing fullscreen
 
    int initialScreenIndex; // Screen number when passing a QDesktop[Screen]Widget as parent.
    QVector<QPlatformTextureList *> widgetTextures;
-   // *************************** Cross-platform bit fields ****************************
    uint opacity : 8;
    uint posIncludesFrame : 1;
    uint sizeAdjusted : 1;
@@ -159,9 +154,8 @@ struct QTLWExtra {
 };
 
 struct QWExtra {
-   // *************************** Cross-platform variables *****************************
+   // cross platform variables
 
-   // Regular pointers (keep them together to avoid gaps on 64 bits architectures).
    void *glContext;       // if the widget is hijacked by QGLWindowSurface
    QTLWExtra *topextra;   // only useful for TLWs
 
@@ -176,7 +170,6 @@ struct QWExtra {
    QPointer<QStyle> style;
    QPointer<QWidget> focus_proxy;
 
-   // Implicit pointers (shared_empty/shared_null).
    QRegion mask; // widget mask
    QString styleSheet;
 
@@ -189,7 +182,6 @@ struct QWExtra {
    quint16 customDpiY;
    QSize staticContentsSize;
 
-   // *************************** Cross-platform bit fields ****************************
    uint explicitMinSize : 2;
    uint explicitMaxSize : 2;
    uint autoFillBackground : 1;
@@ -218,7 +210,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    Q_DECLARE_PUBLIC(QWidget)
 
  public:
-   // *************************** Cross-platform ***************************************
    enum DrawWidgetFlags {
       DrawAsRoot = 0x01,
       DrawPaintOnScreen = 0x02,
@@ -605,7 +596,6 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    static void setWidgetParentHelper(QObject *widgetAsObject, QObject *newParent);
 
-   // Regular pointers (keep them together to avoid gaps on 64 bit architectures).
    QWExtra *extra;
    QWidget *focus_next;
    QWidget *focus_prev;
@@ -618,9 +608,8 @@ class Q_GUI_EXPORT QWidgetPrivate
    mutable const QMetaObject *polished;
    QGraphicsEffect *graphicsEffect;
 
-   // All widgets are added into the allWidgets set. Once
-   // they receive a window id they are also added to the mapper.
-   // This should just ensure that all widgets are deleted by QApplication
+   // All widgets are added into the allWidgets set.
+   // Once they receive a window id they are also added to the mapper.
    static QWidgetMapper *mapper;
    static QWidgetSet *allWidgets;
 
@@ -632,7 +621,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    static QPointer<QWidget> editingWidget;
 #endif
 
-   // Implicit pointers (shared_null/shared_empty).
    QRegion opaqueChildren;
    QRegion dirty;
 
@@ -654,7 +642,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    QString accessibleDescription;
 #endif
 
-   // Other variables
    uint inheritedFontResolveMask;
    uint inheritedPaletteResolveMask;
    short leftmargin;
@@ -681,7 +668,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    QMap<Qt::GestureType, Qt::GestureFlags> gestureContext;
 #endif
 
-   // Bit fields.
    uint high_attributes[4]; // the low ones are in QWidget::widget_attributes
    QPalette::ColorRole fg_role : 8;
    QPalette::ColorRole bg_role : 8;
@@ -708,8 +694,6 @@ class Q_GUI_EXPORT QWidgetPrivate
    uint childrenHiddenByWState : 1;
    uint childrenShownByExpose : 1;
 
-
-   // *************************** Platform specific ************************************
 #if defined(Q_OS_WIN)
    uint noPaintOnScreen : 1;    // see qwidget.cpp ::paintEngine()
 #endif
@@ -775,8 +759,7 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
    }
 
    inline void effectBoundingRectChanged() override {
-      // ### This function should take a rect parameter; then we can avoid
-      // updating too much on the parent widget.
+      // ### should take a rect parameter; then we can avoid updating too much on the parent widget
       if (QWidget *parent = m_widget->parentWidget()) {
          parent->update();
       } else {
@@ -802,7 +785,7 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
    QTransform lastEffectTransform;
    bool updateDueToGraphicsEffect;
 };
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
 inline QWExtra *QWidgetPrivate::extraData() const
 {

@@ -829,7 +829,6 @@ QPainterPath QPainterPath::toReversed() const
       }
    }
 
-   //qt_debug_path(rev);
    return rev;
 }
 

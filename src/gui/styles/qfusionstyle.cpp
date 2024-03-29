@@ -320,69 +320,24 @@ static void qt_fusion_draw_mdibutton(QPainter *painter, const QStyleOptionTitleB
    painter->drawPoint(tmp.right(), tmp.bottom() - 1);
 }
 
-/*
-    \internal
-*/
 QFusionStylePrivate::QFusionStylePrivate()
 {
    animationFps = 60;
 }
 
-/*!
-    \class QFusionStyle
-    \brief The QFusionStyle class provides a custom widget style
-
-    \inmodule QtWidgets
-    \internal
-
-    The Fusion style provides a custom look and feel that is not
-    tied to a particular platform.
-    //{Fusion Style Widget Gallery}
-    \sa QWindowsStyle, QWindowsVistaStyle, QMacStyle, QCommonStyle
-*/
-
-/*!
-    Constructs a QFusionStyle object.
-*/
 QFusionStyle::QFusionStyle() : QCommonStyle(*new QFusionStylePrivate)
 {
    setObjectName(QLatin1String("Fusion"));
 }
 
-/*!
-    \internal
-
-    Constructs a QFusionStyle object.
-*/
 QFusionStyle::QFusionStyle(QFusionStylePrivate &dd) : QCommonStyle(dd)
 {
 }
 
-/*!
-    Destroys the QFusionStyle object.
-*/
 QFusionStyle::~QFusionStyle()
 {
 }
 
-/*!
-    \fn void QFusionStyle::drawItemText(QPainter *painter, const QRect &rectangle, int alignment, const QPalette &palette,
-                                    bool enabled, const QString& text, QPalette::ColorRole textRole) const
-
-    Draws the given \a text in the specified \a rectangle using the
-    provided \a painter and \a palette.
-
-    Text is drawn using the painter's pen. If an explicit \a textRole
-    is specified, then the text is drawn using the \a palette's color
-    for the specified role.  The \a enabled value indicates whether or
-    not the item is enabled; when reimplementing, this value should
-    influence how the item is drawn.
-
-    The text is aligned and wrapped according to the specified \a
-    alignment.
-
-    \sa Qt::Alignment
-*/
 void QFusionStyle::drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &pal,
    bool enabled, const QString &text, QPalette::ColorRole textRole) const
 {
@@ -402,10 +357,6 @@ void QFusionStyle::drawItemText(QPainter *painter, const QRect &rect, int alignm
    painter->setPen(savedPen);
 }
 
-
-/*!
-    \reimp
-*/
 void QFusionStyle::drawPrimitive(PrimitiveElement elem,
    const QStyleOption *option,
    QPainter *painter, const QWidget *widget) const
@@ -993,9 +944,6 @@ void QFusionStyle::drawPrimitive(PrimitiveElement elem,
    }
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *painter,
    const QWidget *widget) const
 {
@@ -1947,17 +1895,11 @@ void QFusionStyle::drawControl(ControlElement element, const QStyleOption *optio
 
 extern QPalette qt_fusionPalette();
 
-/*!
-  \reimp
-*/
 QPalette QFusionStyle::standardPalette () const
 {
    return qt_fusionPalette();
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
    QPainter *painter, const QWidget *widget) const
 {
@@ -3111,9 +3053,6 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
    }
 }
 
-/*!
-  \reimp
-*/
 int QFusionStyle::pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const
 {
    int val = -1;
@@ -3231,9 +3170,6 @@ int QFusionStyle::pixelMetric(PixelMetric metric, const QStyleOption *option, co
    return QStyleHelper::dpiScaled(val);
 }
 
-/*!
-  \reimp
-*/
 QSize QFusionStyle::sizeFromContents(ContentsType type, const QStyleOption *option,
    const QSize &size, const QWidget *widget) const
 {
@@ -3333,17 +3269,11 @@ QSize QFusionStyle::sizeFromContents(ContentsType type, const QStyleOption *opti
    return newSize;
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::polish(QApplication *app)
 {
    QCommonStyle::polish(app);
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::polish(QWidget *widget)
 {
    QCommonStyle::polish(widget);
@@ -3362,17 +3292,11 @@ void QFusionStyle::polish(QWidget *widget)
    }
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::polish(QPalette &pal)
 {
    QCommonStyle::polish(pal);
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::unpolish(QWidget *widget)
 {
    QCommonStyle::unpolish(widget);
@@ -3390,17 +3314,11 @@ void QFusionStyle::unpolish(QWidget *widget)
    }
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::unpolish(QApplication *app)
 {
    QCommonStyle::unpolish(app);
 }
 
-/*!
-  \reimp
-*/
 QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionComplex *option,
    SubControl subControl, const QWidget *widget) const
 {
@@ -3715,45 +3633,29 @@ QRect QFusionStyle::subControlRect(ComplexControl control, const QStyleOptionCom
    return rect;
 }
 
-
-/*!
-  \reimp
-*/
 QRect QFusionStyle::itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const
 {
    return QCommonStyle::itemPixmapRect(r, flags, pixmap);
 }
 
-/*!
-  \reimp
-*/
 void QFusionStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
    int alignment, const QPixmap &pixmap) const
 {
    QCommonStyle::drawItemPixmap(painter, rect, alignment, pixmap);
 }
 
-/*!
-  \reimp
-*/
 QStyle::SubControl QFusionStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
    const QPoint &pt, const QWidget *w) const
 {
    return QCommonStyle::hitTestComplexControl(cc, opt, pt, w);
 }
 
-/*!
-  \reimp
-*/
 QPixmap QFusionStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
    const QStyleOption *opt) const
 {
    return QCommonStyle::generatedIconPixmap(iconMode, pixmap, opt);
 }
 
-/*!
-  \reimp
-*/
 int QFusionStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
    QStyleHintReturn *returnData) const
 {
@@ -3827,7 +3729,6 @@ int QFusionStyle::styleHint(StyleHint hint, const QStyleOption *option, const QW
    return QCommonStyle::styleHint(hint, option, widget, returnData);
 }
 
-/*! \reimp */
 QRect QFusionStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const
 {
    QRect r = QCommonStyle::subElementRect(sr, opt, w);
@@ -3862,17 +3763,11 @@ QRect QFusionStyle::subElementRect(SubElement sr, const QStyleOption *opt, const
    return r;
 }
 
-/*!
-    \reimp
-*/
 QIcon QFusionStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const
 {
    return QCommonStyle::standardIcon(standardIcon, option, widget);
 }
 
-/*!
- \reimp
- */
 QPixmap QFusionStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption *opt, const QWidget *widget) const
 {
 #ifndef QT_NO_IMAGEFORMAT_XPM

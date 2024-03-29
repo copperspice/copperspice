@@ -304,9 +304,6 @@ int QPrintDialog::exec()
    return result();
 }
 
-/*!
-    \reimp
-*/
 void QPrintDialog::setVisible(bool visible)
 {
    Q_D(QPrintDialog);

@@ -490,10 +490,6 @@ void QAbstractSpinBox::resizeEvent(QResizeEvent *event)
    update();
 }
 
-/*!
-    \reimp
-*/
-
 QSize QAbstractSpinBox::sizeHint() const
 {
    Q_D(const QAbstractSpinBox);
@@ -531,10 +527,6 @@ QSize QAbstractSpinBox::sizeHint() const
    }
    return d->cachedSizeHint;
 }
-
-/*!
-    \reimp
-*/
 
 QSize QAbstractSpinBox::minimumSizeHint() const
 {
@@ -735,10 +727,6 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
-
 void QAbstractSpinBox::keyReleaseEvent(QKeyEvent *event)
 {
    Q_D(QAbstractSpinBox);
@@ -749,10 +737,6 @@ void QAbstractSpinBox::keyReleaseEvent(QKeyEvent *event)
       d->edit->event(event);
    }
 }
-
-/*!
-    \reimp
-*/
 
 #ifndef QT_NO_WHEELEVENT
 void QAbstractSpinBox::wheelEvent(QWheelEvent *event)
@@ -800,10 +784,6 @@ void QAbstractSpinBox::focusOutEvent(QFocusEvent *event)
 #endif
       emit editingFinished();
 }
-
-/*!
-    \reimp
-*/
 
 void QAbstractSpinBox::closeEvent(QCloseEvent *event)
 {
@@ -912,7 +892,7 @@ void QAbstractSpinBox::contextMenuEvent(QContextMenuEvent *event)
       }
    }
    event->accept();
-#endif // QT_NO_CONTEXTMENU
+#endif
 }
 
 void QAbstractSpinBox::mouseMoveEvent(QMouseEvent *event)
@@ -966,7 +946,6 @@ void QAbstractSpinBox::mouseReleaseEvent(QMouseEvent *event)
    event->accept();
 }
 
-// internal
 QAbstractSpinBoxPrivate::QAbstractSpinBoxPrivate()
    : edit(nullptr), type(QVariant::Invalid), spinClickTimerId(-1), spinClickTimerInterval(100),
      spinClickThresholdTimerId(-1), spinClickThresholdTimerInterval(-1), effectiveSpinRepeatRate(1),
@@ -1389,8 +1368,6 @@ void QAbstractSpinBoxPrivate::clearCache() const
    cachedValue.clear();
    cachedState = QValidator::Acceptable;
 }
-
-// --- QSpinBoxValidator ---
 
 QSpinBoxValidator::QSpinBoxValidator(QAbstractSpinBox *qp, QAbstractSpinBoxPrivate *dp)
    : QValidator(qp), qptr(qp), dptr(dp)

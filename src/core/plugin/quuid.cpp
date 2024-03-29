@@ -459,8 +459,7 @@ QUuid QUuid::createUuid()
    }
 
    if (devUrandom->isOpen() && devUrandom->read((char *) data, AmountToRead) == AmountToRead) {
-      // we got what we wanted, nothing more to do
-      ;
+      // nothing more to do
 
    } else
 
@@ -514,7 +513,7 @@ QUuid QUuid::createUuid()
 
    return result;
 }
-#endif // !Q_OS_WIN
+#endif
 
 QDebug operator<<(QDebug dbg, const QUuid &id)
 {

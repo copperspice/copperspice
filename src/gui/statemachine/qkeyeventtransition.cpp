@@ -85,9 +85,6 @@ void QKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMask)
    d->transition->setModifierMask(modifierMask);
 }
 
-/*!
-  \reimp
-*/
 bool QKeyEventTransition::eventTest(QEvent *event)
 {
    Q_D(const QKeyEventTransition);
@@ -99,13 +96,9 @@ bool QKeyEventTransition::eventTest(QEvent *event)
    return QAbstractTransitionPrivate::get(d->transition)->callEventTest(we->event());
 }
 
-/*!
-  \reimp
-*/
 void QKeyEventTransition::onTransition(QEvent *event)
 {
    QEventTransition::onTransition(event);
 }
-
 
 #endif //QT_NO_STATEMACHINE

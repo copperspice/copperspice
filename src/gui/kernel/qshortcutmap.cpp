@@ -376,10 +376,6 @@ QKeySequence::SequenceMatch QShortcutMap::nextState(QKeyEvent *e)
    return result;
 }
 
-
-/*! \internal
-    Determines if an enabled shortcut has a matcing key sequence.
-*/
 bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
 {
    Q_D(const QShortcutMap);
@@ -670,10 +666,6 @@ void QShortcutMap::dispatchEvent(QKeyEvent *e)
    QCoreApplication::sendEvent(const_cast<QObject *>(next->owner), &se);
 }
 
-/* \internal
-    QShortcutMap dump function, only available when DEBUG_QSHORTCUTMAP is
-    defined.
-*/
 #if defined(Dump_QShortcutMap)
 void QShortcutMap::dumpMap() const
 {

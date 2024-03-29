@@ -215,7 +215,6 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    virtual QItemViewPaintPairs draggablePaintPairs(const QModelIndexList &indexes, QRect *r) const;
 
-   // reimplemented in subclasses
    virtual void adjustViewOptionsForIndex(QStyleOptionViewItem *, const QModelIndex &) const {}
 
    inline void releaseEditor(QWidget *editor, const QModelIndex &index = QModelIndex()) const {
@@ -325,7 +324,6 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
       return isIndexValid(index) && isIndexSelectable(index);
    }
 
-   // reimplemented from QAbstractScrollAreaPrivate
    QPoint contentsOffset() const  override {
       Q_Q(const QAbstractItemView);
       return QPoint(q->horizontalOffset(), q->verticalOffset());

@@ -252,7 +252,7 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
 
     bool vertexAttributeArraysEnabledState[QT_GL_VERTEX_ARRAY_TRACKED_COUNT];
 
-    // Dirty flags
+    // dirty flags
     bool matrixDirty; // Implies matrix uniforms are also dirty
     bool compositionModeDirty;
     bool brushTextureDirty;

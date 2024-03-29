@@ -140,7 +140,6 @@ QIODevice::QIODevice(QObject *parent)
 #endif
 }
 
-// internal
 QIODevice::QIODevice(QIODevicePrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {

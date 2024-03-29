@@ -210,8 +210,6 @@ int QSqlQueryModel::rowCount(const QModelIndex &index) const
    return index.isValid() ? 0 : d->bottom.row() + 1;
 }
 
-/*! \reimp
- */
 int QSqlQueryModel::columnCount(const QModelIndex &index) const
 {
    Q_D(const QSqlQueryModel);

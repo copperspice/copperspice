@@ -249,7 +249,7 @@ bool QLibraryHandle::tryload()
    }
 
    if (retval) {
-      // when loading a library we add a reference so the QLibraryHandle will not be deleted
+      // when loading a library add a reference so the QLibraryHandle will not be deleted
       // this allows the abilitiy to unload the library at a later time
 
       libraryUnloadCount.ref();
@@ -274,8 +274,7 @@ bool QLibraryHandle::unload(UnloadFlag flag)
             qWarning() << "QLibraryHandle::unload() Succeeded on" << fileName;
          }
 
-         // when the library is unloaded, we release the reference on it so
-         // 'this' can get deleted
+         // when the library is unloaded release the reference so 'this' can get deleted
          libraryRefCount.deref();
          pHnd = nullptr;
       }

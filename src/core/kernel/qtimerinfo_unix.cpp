@@ -618,7 +618,6 @@ int QTimerInfoList::activateTimers()
    firstTimerInfo = nullptr;
 
    timespec currentTime = updateCurrentTime();
-   // qDebug() << "Thread" << QThread::currentThreadId() << "woken up at" << currentTime;
    repairTimersIfNeeded();
 
    // Find out how many timer have expired
@@ -706,7 +705,6 @@ int QTimerInfoList::activateTimers()
    }
 
    firstTimerInfo = nullptr;
-   // qDebug() << "Thread" << QThread::currentThreadId() << "activated" << n_act << "timers";
 
    return n_act;
 }

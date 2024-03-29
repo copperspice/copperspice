@@ -136,8 +136,6 @@ static qreal differentialForProgress(const QEasingCurve &curve, qreal pos)
    qreal right = (pos >= qreal(0.5)) ? pos : pos + qreal(dx);
    qreal d = (curve.valueForProgress(right) - curve.valueForProgress(left)) / qreal(dx);
 
-   //qScrollerDebug() << "differentialForProgress(type: " << curve.type() << ", pos: " << pos << ") = " << d;
-
    return d;
 }
 
@@ -210,7 +208,7 @@ class QScrollTimer : public QAbstractAnimation
    bool ignoreUpdate;
    int skip;
 };
-#endif // QT_NO_ANIMATION
+#endif
 
 using ScrollerHash = QMap<QObject *, QScroller *>;
 using ScrollerSet  = QSet<QScroller *>;
@@ -331,7 +329,7 @@ Qt::GestureType QScroller::grabGesture(QObject *target, ScrollerGestureType scro
          go->setAcceptTouchEvents(true);
       }
       go->grabGesture(sp->recognizerType);
-#endif // QT_NO_GRAPHICSVIEW
+#endif
    }
    return sp->recognizerType;
 }
@@ -374,9 +372,6 @@ void QScroller::ungrabGesture(QObject *target)
 
 #endif // QT_NO_GESTURES
 
-/*!
-    \internal
-*/
 QScroller::QScroller(QObject *target)
    : d_ptr(new QScrollerPrivate(this, target))
 {
@@ -385,9 +380,6 @@ QScroller::QScroller(QObject *target)
    d->init();
 }
 
-/*!
-    \internal
-*/
 QScroller::~QScroller()
 {
    Q_D(QScroller);
@@ -505,7 +497,7 @@ QPointF QScroller::finalPosition() const
 
 void QScroller::scrollTo(const QPointF &pos)
 {
-   // we could make this adjustable via QScrollerProperties
+   // could make this adjustable via QScrollerProperties
    scrollTo(pos, 300);
 }
 
@@ -556,7 +548,7 @@ void QScroller::scrollTo(const QPointF &pos, int scrollTime)
 
 void QScroller::ensureVisible(const QRectF &rect, qreal xmargin, qreal ymargin)
 {
-   // we could make this adjustable via QScrollerProperties
+   // could make this adjustable via QScrollerProperties
    ensureVisible(rect, xmargin, ymargin, 1000);
 }
 
@@ -572,7 +564,7 @@ void QScroller::ensureVisible(const QRectF &rect, qreal xmargin, qreal ymargin, 
       return;
    }
 
-   // -- calculate the current pos (or the position after the current scroll)
+   // calculate the current pos (or the position after the current scroll)
    QPointF startPos(d->scrollingSegmentsEndPos(Qt::Horizontal),
       d->scrollingSegmentsEndPos(Qt::Vertical));
 
@@ -907,10 +899,6 @@ void QScrollerPrivate::pushSegment(ScrollType type, qreal deltaTime, qreal stopP
    qScrollerDebug() << "+++ Added a new ScrollSegment: " << s;
 }
 
-
-/*! \internal
-    Clears the old segments and recalculates them if the current segments are not longer valid
-*/
 void QScrollerPrivate::recalcScrollingSegments(bool forceRecalc)
 {
    Q_Q(QScroller);
@@ -925,9 +913,6 @@ void QScrollerPrivate::recalcScrollingSegments(bool forceRecalc)
    }
 }
 
-/*! \internal
-    Returns the end position after the current scroll has finished.
-*/
 qreal QScrollerPrivate::scrollingSegmentsEndPos(Qt::Orientation orientation) const
 {
    if (orientation == Qt::Horizontal) {
@@ -945,9 +930,6 @@ qreal QScrollerPrivate::scrollingSegmentsEndPos(Qt::Orientation orientation) con
    }
 }
 
-/*! \internal
-    Checks if the scroller segment end in a valid position.
-*/
 bool QScrollerPrivate::scrollingSegmentsValid(Qt::Orientation orientation)
 {
    QQueue<ScrollSegment> *segments;
@@ -996,9 +978,6 @@ bool QScrollerPrivate::scrollingSegmentsValid(Qt::Orientation orientation)
    return true;
 }
 
-/*! \internal
-   Creates the sections needed to scroll to the specific \a endPos to the segments queue.
-*/
 void QScrollerPrivate::createScrollToSegments(qreal v, qreal deltaTime, qreal endPos,
                Qt::Orientation orientation, ScrollType type)
 {
@@ -1022,8 +1001,7 @@ void QScrollerPrivate::createScrollToSegments(qreal v, qreal deltaTime, qreal en
    pushSegment(type, deltaTime * qreal(0.7), qreal(1.0), startPos + deltaPos, deltaPos, endPos, sp->scrollingCurve.type(), orientation);
 }
 
-/*! \internal
-*/
+
 void QScrollerPrivate::createScrollingSegments(qreal v, qreal startPos,
    qreal deltaTime, qreal deltaPos,
    Qt::Orientation orientation)
@@ -1212,10 +1190,6 @@ void QScrollerPrivate::createScrollingSegments(const QPointF &v,
       Qt::Vertical);
 }
 
-/*! \internal
-    Prepares scrolling by sending a QScrollPrepareEvent to the receiver widget.
-    Returns \c true if the scrolling was accepted and a target was returned.
-*/
 bool QScrollerPrivate::prepareScrolling(const QPointF &position)
 {
    QScrollPrepareEvent spe(position);
@@ -1285,7 +1259,7 @@ void QScrollerPrivate::handleDrag(const QPointF &position, qint64 timestamp)
       if (dx || dy) {
          bool vertical = (dy > dx);
          qreal alpha = qreal(vertical ? dx : dy) / qreal(vertical ? dy : dx);
-         //qScrollerDebug() << "QScroller::handleDrag() -- axis lock:" << alpha << " / " << axisLockThreshold << "- isvertical:" << vertical << "- dx:" << dx << "- dy:" << dy;
+
          if (alpha <= sp->axisLockThreshold) {
             if (vertical) {
                deltaPixel.setX(0);
@@ -1320,7 +1294,6 @@ void QScrollerPrivate::handleDrag(const QPointF &position, qint64 timestamp)
    //    } else {
    dragDistance += deltaPixel;
    //    }
-   //qScrollerDebug() << "######################" << deltaPixel << position.y() << lastPosition.y();
 
    lastPosition = position;
    lastTimestamp = timestamp;
@@ -1503,9 +1476,6 @@ bool QScrollerPrivate::pressWhileScrolling(const QPointF &position, qint64 times
    }
 }
 
-/*! \internal
-    This function handles all state changes of the scroller.
-*/
 void QScrollerPrivate::setState(QScroller::State newstate)
 {
    Q_Q(QScroller);
@@ -1571,19 +1541,6 @@ void QScrollerPrivate::setState(QScroller::State newstate)
    emit q->stateChanged(state);
 }
 
-
-/*! \internal
-    Helps when setting the content position.
-    It will try to move the content by the requested delta but stop in case
-    when we are coming back from an overshoot or a scrollTo.
-    It will also indicate a new overshooting condition by the overshootX and oversthootY flags.
-
-    In this cases it will reset the velocity variables and other flags.
-
-    Also keeps track of the current over-shooting value in overshootPosition.
-
-    \a deltaPos is the amount of pixels the current content position should be moved
-*/
 void QScrollerPrivate::setContentPositionHelperDragging(const QPointF &deltaPos)
 {
    const QScrollerPropertiesPrivate *sp = properties.d.data();
@@ -1702,14 +1659,6 @@ void QScrollerPrivate::setContentPositionHelperScrolling()
    qScrollerDebug() << "  --> new position:" << newClampedPos << "- new overshoot:" << overshootPosition;
 }
 
-/*! \internal
-    Returns the next snap point in direction.
-    If \a direction >0 it will return the next snap point that is larger than the current position.
-    If \a direction <0 it will return the next snap point that is smaller than the current position.
-    If \a direction ==0 it will return the nearest snap point (or the current position if we are already
-    on a snap point.
-    Returns the nearest snap position or NaN if no such point could be found.
- */
 qreal QScrollerPrivate::nextSnapPos(qreal p, int dir, Qt::Orientation orientation)
 {
    qreal bestSnapPos = Q_QNAN;

@@ -41,13 +41,6 @@ QGesture *QGestureRecognizer::create(QObject *target)
    return new QGesture;
 }
 
-/*!
-    This function is called by the framework to reset a given \a gesture.
-
-    Reimplement this function to implement additional requirements for custom QGesture
-    objects. This may be necessary if you implement a custom QGesture whose properties
-    need special handling when the gesture is reset.
-*/
 void QGestureRecognizer::reset(QGesture *gesture)
 {
    if (gesture) {

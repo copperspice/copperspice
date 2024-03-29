@@ -408,10 +408,6 @@ void QFontDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
    options->setWindowTitle(q_func()->windowTitle());
 }
 
-/*
-    Updates the contents of the "font family" list box. This
-    function can be reimplemented if you have special requirements.
-*/
 void QFontDialogPrivate::updateFamilies()
 {
    Q_Q(QFontDialog);
@@ -512,10 +508,6 @@ void QFontDialogPrivate::updateFamilies()
    updateStyles();
 }
 
-/*
-    Updates the contents of the "font style" list box. This
-    function can be reimplemented if you have special requirements.
-*/
 void QFontDialogPrivate::updateStyles()
 {
    Q_Q(QFontDialog);

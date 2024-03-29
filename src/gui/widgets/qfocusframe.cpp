@@ -183,20 +183,12 @@ void QFocusFrame::setWidget(QWidget *widget)
    }
 }
 
-/*!
-  Returns the currently monitored widget for automatically resize and
-  update.
-
-   \sa QFocusFrame::setWidget()
-*/
-
 QWidget *QFocusFrame::widget() const
 {
    Q_D(const QFocusFrame);
    return d->widget;
 }
 
-/*! \reimp */
 void QFocusFrame::paintEvent(QPaintEvent *)
 {
    Q_D(QFocusFrame);
@@ -214,8 +206,6 @@ void QFocusFrame::paintEvent(QPaintEvent *)
    p.drawControl(QStyle::CE_FocusFrame, option);
 }
 
-
-/*! \reimp */
 bool QFocusFrame::eventFilter(QObject *o, QEvent *e)
 {
    Q_D(QFocusFrame);
@@ -286,7 +276,6 @@ bool QFocusFrame::eventFilter(QObject *o, QEvent *e)
    return false;
 }
 
-/*! \reimp */
 bool QFocusFrame::event(QEvent *e)
 {
    return QWidget::event(e);

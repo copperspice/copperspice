@@ -120,9 +120,6 @@ void QBasicKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMas
    d->modifierMask = modifierMask;
 }
 
-/*!
-  \reimp
-*/
 bool QBasicKeyEventTransition::eventTest(QEvent *event)
 {
    Q_D(const QBasicKeyEventTransition);
@@ -134,9 +131,6 @@ bool QBasicKeyEventTransition::eventTest(QEvent *event)
    return false;
 }
 
-/*!
-  \reimp
-*/
 void QBasicKeyEventTransition::onTransition(QEvent *)
 {
 }

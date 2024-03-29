@@ -207,15 +207,10 @@ void QGroupBox::setAlignment(int alignment)
    update();
 }
 
-/*! \reimp
-*/
 void QGroupBox::resizeEvent(QResizeEvent *e)
 {
    QWidget::resizeEvent(e);
 }
-
-/*! \reimp
-*/
 
 void QGroupBox::paintEvent(QPaintEvent *)
 {
@@ -225,7 +220,6 @@ void QGroupBox::paintEvent(QPaintEvent *)
    paint.drawComplexControl(QStyle::CC_GroupBox, option);
 }
 
-/*! \reimp  */
 bool QGroupBox::event(QEvent *e)
 {
    Q_D(QGroupBox);
@@ -296,7 +290,6 @@ bool QGroupBox::event(QEvent *e)
    return QWidget::event(e);
 }
 
-/*!\reimp */
 void QGroupBox::childEvent(QChildEvent *c)
 {
    Q_D(QGroupBox);
@@ -322,14 +315,6 @@ void QGroupBox::childEvent(QChildEvent *c)
       }
    }
 }
-
-
-/*!
-    \internal
-
-    This private slot finds a widget in this group box that can accept
-    focus, and gives the focus to that widget.
-*/
 
 void QGroupBoxPrivate::_q_fixFocus(Qt::FocusReason reason)
 {
@@ -366,9 +351,6 @@ void QGroupBoxPrivate::_q_fixFocus(Qt::FocusReason reason)
    }
 }
 
-/*
-    Sets the right frame rect depending on the title.
-*/
 void QGroupBoxPrivate::calculateFrame()
 {
    Q_Q(QGroupBox);
@@ -380,8 +362,6 @@ void QGroupBoxPrivate::calculateFrame()
    setLayoutItemMargins(QStyle::SE_GroupBoxLayoutItem, &box);
 }
 
-/*! \reimp
- */
 void QGroupBox::focusInEvent(QFocusEvent *fe)
 {
    // note no call to super
@@ -393,10 +373,6 @@ void QGroupBox::focusInEvent(QFocusEvent *fe)
    }
 }
 
-
-/*!
-  \reimp
-*/
 QSize QGroupBox::minimumSizeHint() const
 {
    Q_D(const QGroupBox);
@@ -417,23 +393,6 @@ QSize QGroupBox::minimumSizeHint() const
    return size.expandedTo(QWidget::minimumSizeHint());
 }
 
-/*!
-    \property QGroupBox::flat
-    \brief whether the group box is painted flat or has a frame
-
-    A group box usually consists of a surrounding frame with a title
-    at the top. If this property is enabled, only the top part of the frame is
-    drawn in most styles; otherwise the whole frame is drawn.
-
-    By default, this property is disabled; i.e. group boxes are not flat unless
-    explicitly specified.
-
-    \bold{Note:} In some styles, flat and non-flat group boxes have similar
-    representations and may not be as distinguishable as they are in other
-    styles.
-
-    \sa title
-*/
 bool QGroupBox::isFlat() const
 {
    Q_D(const QGroupBox);
@@ -514,10 +473,6 @@ void QGroupBox::setChecked(bool b)
    }
 }
 
-/*
-  sets all children of the group box except the qt_groupbox_checkbox
-  to either disabled/enabled
-*/
 void QGroupBoxPrivate::_q_setChildrenEnabled(bool b)
 {
    Q_Q(QGroupBox);
@@ -540,7 +495,6 @@ void QGroupBoxPrivate::_q_setChildrenEnabled(bool b)
    }
 }
 
-/*! \reimp */
 void QGroupBox::changeEvent(QEvent *ev)
 {
    Q_D(QGroupBox);
@@ -561,7 +515,6 @@ void QGroupBox::changeEvent(QEvent *ev)
    QWidget::changeEvent(ev);
 }
 
-/*! \reimp */
 void QGroupBox::mousePressEvent(QMouseEvent *event)
 {
    if (event->button() != Qt::LeftButton) {
@@ -580,7 +533,6 @@ void QGroupBox::mousePressEvent(QMouseEvent *event)
    }
 }
 
-/*! \reimp */
 void QGroupBox::mouseMoveEvent(QMouseEvent *event)
 {
    Q_D(QGroupBox);
@@ -596,7 +548,6 @@ void QGroupBox::mouseMoveEvent(QMouseEvent *event)
    }
 }
 
-/*! \reimp */
 void QGroupBox::mouseReleaseEvent(QMouseEvent *event)
 {
    if (event->button() != Qt::LeftButton) {

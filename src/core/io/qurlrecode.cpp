@@ -421,10 +421,9 @@ static void maskTable(uchar (&table)[N], const uchar (&mask)[N])
    }
 }
 
-/*!
-    \internal
-
+/*
     Recodes the string from begin to end.
+
     If any transformations are done append them to appendTo and return the number of characters added.
     If no transformations were required return 0.
 

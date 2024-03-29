@@ -124,7 +124,6 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    QWidget *labelForField(QWidget *field) const;
    QWidget *labelForField(QLayout *field) const;
 
-   // reimplemented from QLayout
    void addItem(QLayoutItem *item) override;
    QLayoutItem *itemAt(int index) const override;
    QLayoutItem *takeAt(int index) override;

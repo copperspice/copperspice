@@ -62,11 +62,9 @@ class QPdfPrintEngine: public QPdfEngine, public QPrintEngine
 
    virtual ~QPdfPrintEngine();
 
-   // reimplementations QPaintEngine
    bool begin(QPaintDevice *pdev) override;
    bool end() override;
 
-   // reimplementations QPrintEngine
    bool abort() override {
       return false;
    }

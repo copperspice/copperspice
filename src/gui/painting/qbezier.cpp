@@ -621,12 +621,9 @@ qreal QBezier::tAtLength(qreal l) const
    }
 
    t *= qreal(0.5);
-   //int iters = 0;
-   //qDebug()<<"LEN is "<<l<<len;
    qreal lastBigger = qreal(1.0);
 
    while (true) {
-      //qDebug()<<"\tt is "<<t;
       QBezier right = *this;
       QBezier left;
       right.parameterSplitLeft(t, &left);
@@ -643,7 +640,6 @@ qreal QBezier::tAtLength(qreal l) const
       }
       //++iters;
    }
-   //qDebug()<<"number of iters is "<<iters;
    return t;
 }
 

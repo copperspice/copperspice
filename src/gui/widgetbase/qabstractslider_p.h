@@ -42,9 +42,6 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 
    int minimum, maximum, pageStep, value, position, pressValue;
 
-   /**
-    * Call effectiveSingleStep() when changing the slider value.
-    */
    int singleStep;
 
    float offset_accumulated;
@@ -61,20 +58,13 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 
 #ifdef QT_KEYPAD_NAVIGATION
    int origValue;
-
-   /**
-    */
    bool isAutoRepeating;
 
-   /**
-    * When we're auto repeating, we multiply singleStep with this value to
-    * get our effective step.
-    */
+   // When auto repeating, multiply singleStep with this value to get our effective step
    qreal repeatMultiplier;
 
-   /**
-    * The time of when the first auto repeating key press event occurs.
-    */
+
+   // time of when the first auto repeating key press event occurs
    QElapsedTimer firstRepeat;
 
 #endif

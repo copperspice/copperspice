@@ -458,9 +458,6 @@ void QGraphicsWidget::initStyleOption(QStyleOption *option) const
    option->styleObject = const_cast<QGraphicsWidget *>(this);
 }
 
-/*!
-    \reimp
-*/
 QSizeF QGraphicsWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsWidget);

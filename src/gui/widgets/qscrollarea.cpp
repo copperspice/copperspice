@@ -45,9 +45,6 @@ QScrollArea::QScrollArea(QWidget *parent)
    d->layoutChildren();
 }
 
-/*!
-    \internal
-*/
 QScrollArea::QScrollArea(QScrollAreaPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {
@@ -58,11 +55,6 @@ QScrollArea::QScrollArea(QScrollAreaPrivate &dd, QWidget *parent)
    d->layoutChildren();
 }
 
-/*!
-    Destroys the scroll area and its child widget.
-
-    \sa setWidget()
-*/
 QScrollArea::~QScrollArea()
 {
 }
@@ -118,12 +110,6 @@ void QScrollAreaPrivate::updateScrollBars()
 
 }
 
-/*!
-    Returns the scroll area's widget, or 0 if there is none.
-
-    \sa setWidget()
-*/
-
 QWidget *QScrollArea::widget() const
 {
    Q_D(const QScrollArea);
@@ -171,9 +157,6 @@ QWidget *QScrollArea::takeWidget()
    return w;
 }
 
-/*!
-    \reimp
- */
 bool QScrollArea::event(QEvent *e)
 {
    Q_D(QScrollArea);
@@ -214,9 +197,6 @@ bool QScrollArea::eventFilter(QObject *o, QEvent *e)
    return false;
 }
 
-/*!
-    \reimp
- */
 void QScrollArea::resizeEvent(QResizeEvent *)
 {
    Q_D(QScrollArea);
@@ -224,9 +204,6 @@ void QScrollArea::resizeEvent(QResizeEvent *)
 
 }
 
-
-/*!\reimp
- */
 void QScrollArea::scrollContentsBy(int, int)
 {
    Q_D(QScrollArea);
@@ -251,9 +228,6 @@ void QScrollArea::setWidgetResizable(bool resizable)
    d->updateScrollBars();
 }
 
-/*!
-    \reimp
- */
 QSize QScrollArea::sizeHint() const
 {
    Q_D(const QScrollArea);
@@ -302,12 +276,6 @@ bool QScrollArea::focusNextPrevChild(bool next)
    return false;
 }
 
-/*!
-    Scrolls the contents of the scroll area so that the point (\a x, \a y) is visible
-    inside the region of the viewport with margins specified in pixels by \a xmargin and
-    \a ymargin. If the specified point cannot be reached, the contents are scrolled to
-    the nearest valid position. The default value for both margins is 50 pixels.
-*/
 void QScrollArea::ensureVisible(int x, int y, int xmargin, int ymargin)
 {
    Q_D(QScrollArea);

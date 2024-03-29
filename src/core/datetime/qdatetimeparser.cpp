@@ -547,10 +547,6 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    display = newDisplay;
    last.pos = -1;
 
-   //     for (int i=0; i<sectionNodes.size(); ++i) {
-   //         QDTPDEBUG << sectionNodes.at(i).name() << sectionNodes.at(i).count;
-   //     }
-
    QDTPDEBUG << newFormat << displayFormat;
    QDTPDEBUGN("separators:\n'%s'", separators.join(QString("\n")).toLatin1().constData());
 

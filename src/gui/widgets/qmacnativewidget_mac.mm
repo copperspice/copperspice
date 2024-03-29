@@ -79,16 +79,10 @@ QMacNativeWidget::QMacNativeWidget(NSView *parentView)
     setAttribute(Qt::WA_NoSystemBackground, false);
 }
 
-/*!
-    Destroy the QMacNativeWidget.
-*/
 QMacNativeWidget::~QMacNativeWidget()
 {
 }
 
-/*!
-    \reimp
-*/
 QSize QMacNativeWidget::sizeHint() const
 {
     // QMacNativeWidget really does not have any other choice

@@ -150,56 +150,10 @@ class Q_MULTIMEDIA_EXPORT QMediaServiceProviderPlugin : public QObject, public Q
    virtual ~QMediaServiceProviderPlugin();
 };
 
-/*!
-    Service with support for media playback
-    Required Controls: QMediaPlayerControl
-    Optional Controls: QMediaPlaylistControl, QAudioDeviceControl
-    Video Output Controls (used by QWideoWidget and QGraphicsVideoItem):
-                        Required: QVideoOutputControl
-                        Optional: QVideoWindowControl, QVideoRendererControl, QVideoWidgetControl
-*/
-#define Q_MEDIASERVICE_MEDIAPLAYER "com.copperspice.CS.mediaPlayer"
-
-/*!
-   Service with support for recording from audio sources
-   Required Controls: QAudioDeviceControl
-   Recording Controls (QMediaRecorder):
-                        Required: QMediaRecorderControl
-                        Recommended: QAudioEncoderSettingsControl
-                        Optional: QMediaContainerControl
-*/
-#define Q_MEDIASERVICE_AUDIOSOURCE "com.copperspice.CS.audioSource"
-
-/*!
-    Service with support for camera use.
-    Required Controls: QCameraControl
-    Optional Controls: QCameraExposureControl, QCameraFocusControl, QCameraImageProcessingControl
-    Still Capture Controls: QCameraImageCaptureControl
-    Video Capture Controls (QMediaRecorder):
-                        Required: QMediaRecorderControl
-                        Recommended: QAudioEncoderSettingsControl, QVideoEncoderSettingsControl, QMediaContainerControl
-    Viewfinder Video Output Controls (used by QCameraViewfinder and QGraphicsVideoItem):
-                        Required: QVideoOutputControl
-                        Optional: QVideoWindowControl, QVideoRendererControl, QVideoWidgetControl
-*/
-#define Q_MEDIASERVICE_CAMERA "com.copperspice.CS.camera"
-
-/*!
-    Service with support for radio tuning.
-    Required Controls: QRadioTunerControl
-    Recording Controls (Optional, used by QMediaRecorder):
-                        Required: QMediaRecorderControl
-                        Recommended: QAudioEncoderSettingsControl
-                        Optional: QMediaContainerControl
-*/
-#define Q_MEDIASERVICE_RADIO "com.copperspice.CS.radio"
-
-/*!
-    Service with support for decoding audio.
-    Required Controls: QAudioDecoderControl
-    Optional: that streams control
-*/
+#define Q_MEDIASERVICE_MEDIAPLAYER  "com.copperspice.CS.mediaPlayer"
+#define Q_MEDIASERVICE_AUDIOSOURCE  "com.copperspice.CS.audioSource"
+#define Q_MEDIASERVICE_CAMERA       "com.copperspice.CS.camera"
+#define Q_MEDIASERVICE_RADIO        "com.copperspice.CS.radio"
 #define Q_MEDIASERVICE_AUDIODECODER "com.copperspice.CS.audioDecoder"
-
 
 #endif

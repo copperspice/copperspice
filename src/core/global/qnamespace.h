@@ -1659,8 +1659,7 @@ class Q_CORE_EXPORT Qt
       RotateNativeGesture,
       SwipeNativeGesture
    };
-
-#endif // QT_NO_GESTURES
+#endif
 
    enum NavigationMode {
       NavigationModeNone,

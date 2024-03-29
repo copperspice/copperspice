@@ -950,26 +950,10 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
    }
 }
 
-
-/*!
-    Returns the application top-level window that has the keyboard input focus,
-    or 0 if no application window has the focus. There might be an
-    activeWindow() even if there is no focusWidget(), for example if no widget
-    in that window accepts key events.
-
-    \sa QWidget::setFocus(), QWidget::hasFocus(), focusWidget()
-*/
-
 QWidget *QApplication::activeWindow()
 {
    return QApplicationPrivate::active_window;
 }
-
-/*!
-    Returns display (screen) font metrics for the application font.
-
-    \sa font(), setFont(), QWidget::fontMetrics(), QPainter::fontMetrics()
-*/
 
 QFontMetrics QApplication::fontMetrics()
 {
@@ -1766,9 +1750,6 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
    return receiver;
 }
 
-/*
-   \internal
-*/
 bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
             QWidget *alienWidget, QWidget *nativeWidget, QWidget **buttonDown,
             QPointer<QWidget> &lastMouseReceiver, bool spontaneous)

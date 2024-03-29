@@ -166,8 +166,7 @@
 #define QT_FT_MEM_ZERO( dest, count )  QT_FT_MEM_SET( dest, 0, count )
 #endif
 
-
-  /* define this to dump debugging information */
+/* define this to dump debugging information */
 #define xxxDEBUG_GRAYS
 
 #define RAS_ARG   PWorker  worker
@@ -179,7 +178,7 @@
 #define ras       (*worker)
 
 
-  /* must be at least 6 bits! */
+/* must be at least 6 bits! */
 #define PIXEL_BITS  8
 
 #define ONE_PIXEL       ( 1L << PIXEL_BITS )

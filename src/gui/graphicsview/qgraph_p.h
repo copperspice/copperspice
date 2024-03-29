@@ -172,7 +172,9 @@ class Graph
    }
 
 #if defined(QT_DEBUG)
-   QString serializeToDot() {   // traversal
+   QString serializeToDot() {
+      // traversal
+
       QString strVertices;
       QString edges;
 
@@ -180,10 +182,12 @@ class Graph
       for (typename QSet<Vertex *>::const_iterator it = setOfVertices.begin(); it != setOfVertices.end(); ++it) {
          Vertex *v = *it;
          QList<Vertex *> adjacents = adjacentVertices(v);
+
          for (int i = 0; i < adjacents.count(); ++i) {
             Vertex *v1 = adjacents.at(i);
             EdgeData *data = edgeData(v, v1);
             bool forward = data->from == v;
+
             if (forward) {
                edges += QString::fromLatin1("\"%1\"->\"%2\" [label=\"[%3,%4,%5,%6,%7]\" color=\"#000000\"] \n")
                   .formatArg(v->toString())

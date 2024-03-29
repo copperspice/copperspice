@@ -843,7 +843,7 @@ void QTextEdit::keyPressEvent(QKeyEvent *e)
       }
       return;
    }
-#endif // QT_NO_SHORTCUT
+#endif
 
    {
       QTextCursor cursor = d->control->textCursor();

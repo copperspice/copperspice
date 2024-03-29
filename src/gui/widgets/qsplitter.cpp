@@ -113,9 +113,6 @@ int QSplitterHandle::closestLegalPosition(int pos)
    return s->closestLegalPosition(pos, s->indexOf(this));
 }
 
-/*!
-    \reimp
-*/
 QSize QSplitterHandle::sizeHint() const
 {
    Q_D(const QSplitterHandle);
@@ -129,9 +126,6 @@ QSize QSplitterHandle::sizeHint() const
       .expandedTo(QApplication::globalStrut());
 }
 
-/*!
-    \reimp
-*/
 void QSplitterHandle::resizeEvent(QResizeEvent *event)
 {
    Q_D(const QSplitterHandle);
@@ -159,9 +153,6 @@ void QSplitterHandle::resizeEvent(QResizeEvent *event)
    QWidget::resizeEvent(event);
 }
 
-/*!
-    \reimp
-*/
 bool QSplitterHandle::event(QEvent *event)
 {
    Q_D(QSplitterHandle);
@@ -180,9 +171,6 @@ bool QSplitterHandle::event(QEvent *event)
    return QWidget::event(event);
 }
 
-/*!
-    \reimp
-*/
 void QSplitterHandle::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
@@ -201,9 +189,6 @@ void QSplitterHandle::mouseMoveEvent(QMouseEvent *e)
    }
 }
 
-/*!
-   \reimp
-*/
 void QSplitterHandle::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
@@ -215,9 +200,6 @@ void QSplitterHandle::mousePressEvent(QMouseEvent *e)
    }
 }
 
-/*!
-   \reimp
-*/
 void QSplitterHandle::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
@@ -233,9 +215,6 @@ void QSplitterHandle::mouseReleaseEvent(QMouseEvent *e)
    }
 }
 
-/*!
-   \reimp
-*/
 void QSplitterHandle::paintEvent(QPaintEvent *)
 {
    Q_D(QSplitterHandle);
@@ -773,9 +752,6 @@ QSplitterLayoutStruct *QSplitterPrivate::findWidget(QWidget *w) const
    return nullptr;
 }
 
-/*!
-    \internal
-*/
 void QSplitterPrivate::insertWidget_helper(int index, QWidget *widget, bool show)
 {
    Q_Q(QSplitter);
@@ -857,11 +833,6 @@ QSplitter::QSplitter(Qt::Orientation orientation, QWidget *parent)
    d->orient = orientation;
    d->init();
 }
-
-
-/*!
-    Destroys the splitter. All children are deleted.
-*/
 
 QSplitter::~QSplitter()
 {
@@ -983,17 +954,6 @@ QSplitterHandle *QSplitter::createHandle()
    return new QSplitterHandle(d->orient, this);
 }
 
-/*!
-    Returns the handle to the left (or above) for the item in the
-    splitter's layout at the given \a index. The handle at index 0 is
-    always hidden.
-
-    For right-to-left languages such as Arabic and Hebrew, the layout
-    of horizontal splitters is reversed. The handle will be to the
-    right of the widget at \a index.
-
-    \sa count(), widget(), indexOf(), createHandle(), setHandleWidth()
-*/
 QSplitterHandle *QSplitter::handle(int index) const
 {
    Q_D(const QSplitter);
@@ -1003,11 +963,6 @@ QSplitterHandle *QSplitter::handle(int index) const
    return d->list.at(index)->handle;
 }
 
-/*!
-    Returns the widget at the given \a index in the splitter's layout.
-
-    \sa count(), handle(), indexOf(), insertWidget()
-*/
 QWidget *QSplitter::widget(int index) const
 {
    Q_D(const QSplitter);
@@ -1097,10 +1052,6 @@ void QSplitter::setRubberBand(int pos)
    d->rubberBand->setGeometry(newGeom);
    d->rubberBand->show();
 }
-
-/*!
-    \reimp
-*/
 
 bool QSplitter::event(QEvent *e)
 {
@@ -1209,9 +1160,6 @@ void QSplitter::setOpaqueResize(bool on)
    d->opaque = on;
 }
 
-/*!
-    \reimp
-*/
 QSize QSplitter::sizeHint() const
 {
    Q_D(const QSplitter);
@@ -1286,17 +1234,6 @@ void QSplitter::setSizes(const QList<int> &list)
    d->setSizes_helper(list, true);
 }
 
-/*!
-    \property QSplitter::handleWidth
-    \brief the width of the splitter handles
-
-    By default, this property contains a value that depends on the user's platform
-    and style preferences.
-
-    If you set handleWidth to 1, the actual grab area will grow to overlap a
-    few pixels of it's respective widgets.
-*/
-
 int QSplitter::handleWidth() const
 {
    Q_D(const QSplitter);
@@ -1314,9 +1251,6 @@ void QSplitter::setHandleWidth(int width)
    d->updateHandles();
 }
 
-/*!
-    \reimp
-*/
 void QSplitter::changeEvent(QEvent *ev)
 {
    Q_D(QSplitter);

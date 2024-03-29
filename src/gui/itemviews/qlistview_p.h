@@ -223,7 +223,6 @@ class QListModeViewBase : public QCommonListViewBase
    // used when laying out in batches
    int batchSavedPosition;
 
-   //reimplementations
    int itemIndex(const QListViewItem &item) const override {
       return item.indexHint;
    }
@@ -288,7 +287,6 @@ class QIconModeViewBase : public QCommonListViewBase
    // used when laying out in batches
    QVector<QModelIndex> *interSectingVector; //used from within intersectingSet
 
-   //reimplementations
    int itemIndex(const QListViewItem &item) const override;
    QListViewItem indexToListViewItem(const QModelIndex &index) const override;
    bool doBatchedItemLayout(const QListViewLayoutInfo &info, int max) override;

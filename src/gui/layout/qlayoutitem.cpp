@@ -263,17 +263,11 @@ int QWidgetItem::heightForWidth(int w) const
    return hfw;
 }
 
-/*!
-    \reimp
-*/
 Qt::Orientations QSpacerItem::expandingDirections() const
 {
    return sizeP.expandingDirections();
 }
 
-/*!
-    \reimp
-*/
 Qt::Orientations QWidgetItem::expandingDirections() const
 {
    if (isEmpty()) {
@@ -308,18 +302,12 @@ Qt::Orientations QWidgetItem::expandingDirections() const
    return e;
 }
 
-/*!
-    \reimp
-*/
 QSize QSpacerItem::minimumSize() const
 {
    return QSize(sizeP.horizontalPolicy() & QSizePolicy::ShrinkFlag ? 0 : width,
          sizeP.verticalPolicy() & QSizePolicy::ShrinkFlag ? 0 : height);
 }
 
-/*!
-    \reimp
-*/
 QSize QWidgetItem::minimumSize() const
 {
    if (isEmpty()) {
@@ -331,18 +319,12 @@ QSize QWidgetItem::minimumSize() const
       : qSmartMinSize(this);
 }
 
-/*!
-    \reimp
-*/
 QSize QSpacerItem::maximumSize() const
 {
    return QSize(sizeP.horizontalPolicy() & QSizePolicy::GrowFlag ? QLAYOUTSIZE_MAX : width,
          sizeP.verticalPolicy() & QSizePolicy::GrowFlag ? QLAYOUTSIZE_MAX : height);
 }
 
-/*!
-    \reimp
-*/
 QSize QWidgetItem::maximumSize() const
 {
    if (isEmpty()) {
@@ -355,9 +337,6 @@ QSize QWidgetItem::maximumSize() const
    }
 }
 
-/*!
-    \reimp
-*/
 QSize QSpacerItem::sizeHint() const
 {
    return QSize(width, height);
@@ -516,21 +495,6 @@ QSize QWidgetItemV2::maximumSize() const
 
    }
 }
-
-/*
-    The height-for-width cache is organized as a circular buffer. The entries
-
-        q_hfwCachedHfws[q_firstCachedHfw],
-        ...,
-        q_hfwCachedHfws[(q_firstCachedHfw + q_hfwCacheSize - 1) % HfwCacheMaxSize]
-
-    contain the last cached values. When the cache is full, the first entry to
-    be erased is the entry before q_hfwCachedHfws[q_firstCachedHfw]. When
-    values are looked up, we try to move q_firstCachedHfw to point to that new
-    entry (unless the cache is not full, in which case it would leave the cache
-    in a broken state), so that the most recently used entry is also the last
-    to be erased.
-*/
 
 int QWidgetItemV2::heightForWidth(int width) const
 {

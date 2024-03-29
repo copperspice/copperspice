@@ -153,13 +153,6 @@ void QScrollBarPrivate::stopRepeatAction()
    q->repaint(q->style()->subControlRect(QStyle::CC_ScrollBar, &opt, tmp, q));
 }
 
-/*!
-    Initialize \a option with the values from this QScrollBar. This method
-    is useful for subclasses when they need a QStyleOptionSlider, but don't want
-    to fill in all the information themselves.
-
-    \sa QStyleOption::initFrom()
-*/
 void QScrollBar::initStyleOption(QStyleOptionSlider *option) const
 {
    if (!option) {
@@ -190,17 +183,6 @@ void QScrollBar::initStyleOption(QStyleOptionSlider *option) const
 #define HORIZONTAL (d_func()->orientation == Qt::Horizontal)
 #define VERTICAL !HORIZONTAL
 
-/*!
-    Constructs a vertical scroll bar.
-
-    The \a parent argument is sent to the QWidget constructor.
-
-    The \l {QAbstractSlider::minimum} {minimum} defaults to 0, the
-    \l {QAbstractSlider::maximum} {maximum} to 99, with a
-    \l {QAbstractSlider::singleStep} {singleStep} size of 1 and a
-    \l {QAbstractSlider::pageStep} {pageStep} size of 10, and an
-    initial \l {QAbstractSlider::value} {value} of 0.
-*/
 QScrollBar::QScrollBar(QWidget *parent)
    : QAbstractSlider(*new QScrollBarPrivate, parent)
 {
@@ -298,7 +280,6 @@ void QScrollBar::contextMenuEvent(QContextMenuEvent *event)
 #endif // QT_NO_CONTEXTMENU
 
 
-/*! \reimp */
 QSize QScrollBar::sizeHint() const
 {
    ensurePolished();
@@ -319,15 +300,11 @@ QSize QScrollBar::sizeHint() const
                .expandedTo(QApplication::globalStrut());
 }
 
-/*!\reimp */
 void QScrollBar::sliderChange(SliderChange change)
 {
    QAbstractSlider::sliderChange(change);
 }
 
-/*!
-    \reimp
-*/
 bool QScrollBar::event(QEvent *event)
 {
    Q_D(QScrollBar);
@@ -365,7 +342,6 @@ bool QScrollBar::event(QEvent *event)
 void QScrollBar::wheelEvent(QWheelEvent *event)
 {
    event->ignore();
-   // override wheel event without adding virtual function override
 
    int delta = event->delta();
 
@@ -392,10 +368,6 @@ void QScrollBar::wheelEvent(QWheelEvent *event)
 
 #endif
 
-
-/*!
-    \reimp
-*/
 void QScrollBar::paintEvent(QPaintEvent *)
 {
    Q_D(QScrollBar);
@@ -414,9 +386,6 @@ void QScrollBar::paintEvent(QPaintEvent *)
    style()->drawComplexControl(QStyle::CC_ScrollBar, &opt, &p, this);
 }
 
-/*!
-    \reimp
-*/
 void QScrollBar::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QScrollBar);
@@ -485,10 +454,6 @@ void QScrollBar::mousePressEvent(QMouseEvent *e)
    }
 }
 
-
-/*!
-    \reimp
-*/
 void QScrollBar::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QScrollBar);
@@ -503,10 +468,6 @@ void QScrollBar::mouseReleaseEvent(QMouseEvent *e)
    d->stopRepeatAction();
 }
 
-
-/*!
-    \reimp
-*/
 void QScrollBar::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QScrollBar);
@@ -597,8 +558,6 @@ int QScrollBarPrivate::pixelPosToRangeValue(int pos) const
          sliderMax - sliderMin, opt.upsideDown);
 }
 
-/*! \reimp
-*/
 void QScrollBar::hideEvent(QHideEvent *)
 {
    Q_D(QScrollBar);
@@ -608,15 +567,6 @@ void QScrollBar::hideEvent(QHideEvent *)
    }
 }
 
-/*!
-    \fn bool QScrollBar::draggingSlider()
-
-    Use isSliderDown() instead.
-*/
-
-/*! \internal
-    Returns the style option for scroll bar.
-*/
 Q_GUI_EXPORT QStyleOptionSlider qt_qscrollbarStyleOption(QScrollBar *scrollbar)
 {
    QStyleOptionSlider opt;

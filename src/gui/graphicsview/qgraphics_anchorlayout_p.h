@@ -258,17 +258,6 @@ inline QString AnchorVertex::toString() const
 }
 #endif
 
-/*
-  internal
-
-  Representation of a valid path for a given vertex in the graph.
-  In this struct, "positives" is the set of anchors that have been
-  traversed in the forward direction, while "negatives" is the set
-  with the ones walked backwards.
-
-  This paths are compared against each other to produce LP Constraints,
-  the exact order in which the anchors were traversed is not relevant.
-*/
 class GraphPath
 {
  public:

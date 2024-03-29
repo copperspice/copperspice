@@ -548,8 +548,7 @@ void QThread::start(Priority priority)
          int sched_policy;
 
          if (pthread_attr_getschedpolicy(&attr, &sched_policy) != 0) {
-            // failed to get the scheduling policy, don't bother
-            // setting the priority
+            // failed to get the scheduling policy, do not bother setting the priority
             qWarning("QThread::start() Unable to determine default scheduler policy");
             break;
          }

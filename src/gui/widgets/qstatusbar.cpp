@@ -458,9 +458,6 @@ void QStatusBar::hideOrShow()
    repaint(d->messageRect());
 }
 
-/*!
-  \reimp
- */
 void QStatusBar::showEvent(QShowEvent *)
 {
 #ifndef QT_NO_SIZEGRIP
@@ -501,17 +498,10 @@ void QStatusBar::paintEvent(QPaintEvent *event)
    }
 }
 
-/*!
-    \reimp
-*/
 void QStatusBar::resizeEvent(QResizeEvent *e)
 {
    QWidget::resizeEvent(e);
 }
-
-/*!
-    \reimp
-*/
 
 bool QStatusBar::event(QEvent *e)
 {

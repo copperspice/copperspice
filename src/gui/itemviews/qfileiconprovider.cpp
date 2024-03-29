@@ -125,8 +125,9 @@ class QFileIconEngine : public QPixmapIconEngine
       }
 
       // Find the smallest available size whose area is still larger than the input
-      // size. Otherwise, use the largest area available size. (We don't assume the
-      // platform theme sizes are sorted, hence the extra logic.)
+      // size. Otherwise, use the largest area available size. Do not assume the
+      // platform theme sizes are sorted, hence the extra logic.
+
       const int sizeArea = size.width() * size.height();
       QSize actualSize = sizes.first();
       int actualArea = actualSize.width() * actualSize.height();

@@ -1203,7 +1203,7 @@ void QDashStroker::processCurrentSubpath()
          }
       }
 
-      // Dash away...
+      // Dash away
       while (!done) {
          QPointF p2;
 
@@ -1254,7 +1254,7 @@ void QDashStroker::processCurrentSubpath()
          }
       }
 
-      // Shuffle to the next cycle...
+      // Shuffle to the next cycle
       estart = estop;
       prev = e;
    }

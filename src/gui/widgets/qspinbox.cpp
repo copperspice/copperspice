@@ -248,9 +248,6 @@ int QSpinBox::valueFromText(const QString &text) const
    return d->validateAndInterpret(copy, pos, state).toInt();
 }
 
-/*!
-  \reimp
-*/
 QValidator::State QSpinBox::validate(QString &text, int &pos) const
 {
    Q_D(const QSpinBox);

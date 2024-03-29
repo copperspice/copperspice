@@ -317,7 +317,6 @@ QStringList QInotifyFileSystemWatcherEngine::removePaths(const QStringList &path
       }
 
       int wd = id < 0 ? -id : id;
-      // qDebug() << "removing watch for path" << path << "wd" << wd;
       inotify_rm_watch(inotifyFd, wd);
 
       it.remove();
@@ -341,10 +340,9 @@ void QInotifyFileSystemWatcherEngine::readFromInotify()
 {
    QMutexLocker locker(&mutex);
 
-   // qDebug() << "QInotifyFileSystemWatcherEngine::readFromInotify";
-
    int buffSize = 0;
    ioctl(inotifyFd, FIONREAD, (char *) &buffSize);
+
    QVarLengthArray<char, 4096> buffer(buffSize);
    buffSize = read(inotifyFd, buffer.data(), buffSize);
    char *at = buffer.data();
@@ -370,8 +368,6 @@ void QInotifyFileSystemWatcherEngine::readFromInotify()
       const inotify_event &event = **it;
       ++it;
 
-      // qDebug() << "inotify event, wd" << event.wd << "mask" << hex << event.mask;
-
       int id = event.wd;
       QString path = idToPath.value(id);
 
@@ -384,8 +380,6 @@ void QInotifyFileSystemWatcherEngine::readFromInotify()
             continue;
          }
       }
-
-      // qDebug() << "event for path" << path;
 
       if ((event.mask & (IN_DELETE_SELF | IN_MOVE_SELF | IN_UNMOUNT)) != 0) {
          pathToID.remove(path);

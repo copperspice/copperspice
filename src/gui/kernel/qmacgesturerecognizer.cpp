@@ -68,8 +68,6 @@ void QMacSwipeGestureRecognizer::reset(QGesture *gesture)
     QGestureRecognizer::reset(gesture);
 }
 
-////////////////////////////////////////////////////////////////////////
-
 QMacPinchGestureRecognizer::QMacPinchGestureRecognizer()
 {
 }
@@ -145,8 +143,6 @@ void QMacPinchGestureRecognizer::reset(QGesture *gesture)
     g->setLastCenterPoint(QPointF());
     QGestureRecognizer::reset(gesture);
 }
-
-////////////////////////////////////////////////////////////////////////
 
 QMacPanGestureRecognizer::QMacPanGestureRecognizer() : _panCanceled(true)
 {

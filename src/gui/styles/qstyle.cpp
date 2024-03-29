@@ -71,11 +71,6 @@ QStyle::QStyle()
    d->proxyStyle = this;
 }
 
-/*!
-    \internal
-
-    Constructs a style object.
-*/
 QStyle::QStyle(QStylePrivate &dd)
    : QObject(nullptr), d_ptr(&dd)
 {

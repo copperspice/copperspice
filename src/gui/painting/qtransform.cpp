@@ -1417,7 +1417,6 @@ bool QTransform::quadToQuad(const QPolygonF &one, const QPolygonF &two, QTransfo
 
    trans *= stq;
 
-   //qDebug()<<"Final = "<<trans;
    return true;
 }
 

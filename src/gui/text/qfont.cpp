@@ -1596,8 +1596,7 @@ void QFontCache::insertEngineData(const QFontDef &def, QFontEngineData *engineDa
 
    engineData->m_refCount.ref();
 
-   // Decrease now rather than waiting
-
+   // decrease now rather than waiting
    if (total_cost > MinCacheSize * 2 && engineDataCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
       decreaseCache();
    }
@@ -1638,7 +1637,7 @@ void QFontCache::insertEngine(const Key &key, QFontEngine *engine, bool insertMu
    FC_DEBUG("QFontCache: inserting new engine %p", static_cast<void *>(engine));
    engine->m_refCount.ref();
 
-   // Decrease now rather than waiting
+   // decrease now rather than waiting
    if (total_cost > MinCacheSize * 2 && engineCache.size() >= QFONTCACHE_DECREASE_TRIGGER_LIMIT) {
       decreaseCache();
    }
@@ -1756,9 +1755,8 @@ void QFontCache::decreaseCache()
    /*
      calculate the new maximum cost for the cache
 
-     NOTE: in_use_cost is *not* correct due to rounding errors in the
-     above algorithm.  instead of worrying about getting the
-     calculation correct, we are more interested in speed, and use
+     in_use_cost is *not* correct due to rounding errors in the above algorithm.
+     instead of trying to get the calculation exact, more interested in speed so
      in_use_cost as a floor for new_max_cost
    */
 

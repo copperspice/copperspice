@@ -1092,7 +1092,8 @@ QSizeF QGridLayoutEngine::sizeHint(Qt::SizeHint which, const QSizeF &constraint,
       bool sizeHintCalculated = false;
 
       if (constraintOrientation() == Qt::Vertical) {
-         //We have items whose height depends on their width
+         // we have items whose height depends on their width
+
          if (constraint.width() >= 0) {
             ensureColumnAndRowData(&q_columnData, &sizehint_totalBoxes[GridOrientation_Horizontal],
                   nullptr, nullptr, Qt::Horizontal, styleInfo);
@@ -1104,8 +1105,8 @@ QSizeF QGridLayoutEngine::sizeHint(Qt::SizeHint which, const QSizeF &constraint,
             sizehint_widths.resize(columnCount());
             qreal width = constraint.width();
 
-            //Calculate column widths and positions, and put results in q_xx.data() and q_widths.data() so that we can use this information as
-            //constraints to find the row heights
+            // Calculate column widths and positions, and put results in q_xx.data() and q_widths.data()
+            // so that we can use this information as constraints to find the row heights
             q_columnData.calculateGeometries(0, columnCount(), width, sizehint_xx.data(), sizehint_widths.data(),
                   nullptr, sizehint_totalBoxes[GridOrientation_Horizontal], q_infos[GridOrientation_Horizontal],
                   m_snapToPixelGrid);
@@ -1126,8 +1127,9 @@ QSizeF QGridLayoutEngine::sizeHint(Qt::SizeHint which, const QSizeF &constraint,
             sizehint_yy.resize(rowCount());
             sizehint_heights.resize(rowCount());
             qreal height = constraint.height();
-            //Calculate row heights and positions, and put results in q_yy.data() and q_heights.data() so that we can use this information as
-            //constraints to find the column widths
+
+            // Calculate row heights and positions, and put results in q_yy.data() and q_heights.data()
+            // so that we can use this information as constraints to find the column widths
             q_rowData.calculateGeometries(0, rowCount(), height, sizehint_yy.data(), sizehint_heights.data(),
                nullptr, sizehint_totalBoxes[GridOrientation_Vertical], q_infos[GridOrientation_Vertical], m_snapToPixelGrid);
 
@@ -1687,9 +1689,6 @@ bool QGridLayoutEngine::hasDynamicConstraint() const
    return q_cachedConstraintOrientation != NoConstraint;
 }
 
-/*
- * return value is only valid if hasConstraint() returns true
- */
 Qt::Orientation QGridLayoutEngine::constraintOrientation() const
 {
    (void)ensureDynamicConstraint();
@@ -1712,11 +1711,11 @@ void QGridLayoutEngine::ensureGeometries(const QSizeF &size,
    q_descents.resize(rowCount());
 
    if (constraintOrientation() != Qt::Horizontal) {
-      //We might have items whose width depends on their height
+      // We might have items whose width depends on their height
       ensureColumnAndRowData(&q_columnData, &q_totalBoxes[GridOrientation_Horizontal], nullptr, nullptr, Qt::Horizontal, styleInfo);
 
-      //Calculate column widths and positions, and put results in q_xx.data() and q_widths.data() so that we can use this information as
-      //constraints to find the row heights
+      // Calculate column widths and positions, and put results in q_xx.data() and q_widths.data() so that we can use this information as
+      // constraints to find the row heights
       q_columnData.calculateGeometries(0, columnCount(), size.width(), q_xx.data(), q_widths.data(),
          nullptr, q_totalBoxes[GridOrientation_Horizontal], q_infos[GridOrientation_Horizontal], m_snapToPixelGrid);
 
@@ -1730,8 +1729,8 @@ void QGridLayoutEngine::ensureGeometries(const QSizeF &size,
       //We have items whose height depends on their width
       ensureColumnAndRowData(&q_rowData, &q_totalBoxes[GridOrientation_Vertical], nullptr, nullptr, Qt::Vertical, styleInfo);
 
-      //Calculate row heights and positions, and put results in q_yy.data() and q_heights.data() so that we can use this information as
-      //constraints to find the column widths
+      // Calculate row heights and positions, and put results in q_yy.data() and q_heights.data() so that we can use this information as
+      // constraints to find the column widths
       q_rowData.calculateGeometries(0, rowCount(), size.height(), q_yy.data(), q_heights.data(),
          q_descents.data(), q_totalBoxes[GridOrientation_Vertical], q_infos[GridOrientation_Vertical], m_snapToPixelGrid);
 

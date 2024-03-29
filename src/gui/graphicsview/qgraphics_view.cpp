@@ -84,7 +84,6 @@ void QGraphicsViewPrivate::translateTouchEvent(QGraphicsViewPrivate *d, QTouchEv
    touchEvent->setTouchPoints(touchPoints);
 }
 
-// internal
 QGraphicsViewPrivate::QGraphicsViewPrivate()
    : renderHints(QPainter::TextAntialiasing), dragMode(QGraphicsView::NoDrag),
      sceneInteractionAllowed(true), hasSceneRect(false), connectedToScene(false),
@@ -2017,9 +2016,8 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          break;
 
       case QEvent::WindowDeactivate:
-         // ### This is a temporary fix for until we get proper mouse
-         // grab events. mouseGrabberItem should be set to 0 if we lose
-         // the mouse grab.
+         // ### This is a temporary fix until we have proper mouse grab events
+         // mouseGrabberItem should be set to 0 if we lose he mouse grab.
          // Remove all popups when the scene loses focus.
          if (!d->scene->d_func()->popupWidgets.isEmpty()) {
             d->scene->d_func()->removePopup(d->scene->d_func()->popupWidgets.first());
@@ -2043,9 +2041,9 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          break;
 
       case QEvent::Leave: {
-         // ### This is a temporary fix for until we get proper mouse grab
-         // events. activeMouseGrabberItem should be set to 0 if we lose the
-         // mouse grab.
+         // ### This is a temporary fix until we have proper mouse grab events
+         //  activeMouseGrabberItem should be set to 0 if we lose the mouse grab.
+
          if ((QApplication::activePopupWidget() && QApplication::activePopupWidget() != window())
             || (QApplication::activeModalWidget() && QApplication::activeModalWidget() != window())
             || (QApplication::activeWindow() != window())) {

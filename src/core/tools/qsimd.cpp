@@ -339,12 +339,11 @@ static quint64 detectProcessorFeatures()
 #elif defined(Q_PROCESSOR_MIPS_32)
 
 #if defined(Q_OS_LINUX)
-//
-// Do not use QByteArray: it could use SIMD instructions itself at
-// some point, thus creating a recursive dependency. Instead, use a
-// QSimpleBuffer, which has the bare minimum needed to use memory
+
+// Do not use a QByteArray for the implementation for QSimd to avoid a recursive dependency.
+// Use QSimpleBuffer, which has the bare minimum needed to use memory
 // dynamically and read lines from /proc/cpuinfo of arbitrary sizes.
-//
+
 struct QSimpleBuffer {
    static constexpr const int chunk_size = 256;
 

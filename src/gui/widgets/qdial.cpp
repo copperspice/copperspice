@@ -91,13 +91,6 @@ int QDialPrivate::bound(int val) const
    }
 }
 
-/*!
-    Initialize \a option with the values from this QDial. This method
-    is useful for subclasses when they need a QStyleOptionSlider, but don't want
-    to fill in all the information themselves.
-
-    \sa QStyleOption::initFrom()
-*/
 void QDial::initStyleOption(QStyleOptionSlider *option) const
 {
    if (!option) {
@@ -168,20 +161,14 @@ QDial::QDial(QWidget *parent)
    d->init();
 }
 
-
 QDial::~QDial()
 {
 }
 
-/*! \reimp */
 void QDial::resizeEvent(QResizeEvent *e)
 {
    QWidget::resizeEvent(e);
 }
-
-/*!
-  \reimp
-*/
 
 void QDial::paintEvent(QPaintEvent *)
 {
@@ -190,10 +177,6 @@ void QDial::paintEvent(QPaintEvent *)
    initStyleOption(&option);
    p.drawComplexControl(QStyle::CC_Dial, option);
 }
-
-/*!
-  \reimp
-*/
 
 void QDial::mousePressEvent(QMouseEvent *e)
 {
@@ -213,11 +196,6 @@ void QDial::mousePressEvent(QMouseEvent *e)
    setSliderDown(true);
 }
 
-
-/*!
-  \reimp
-*/
-
 void QDial::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QDial);
@@ -231,11 +209,6 @@ void QDial::mouseReleaseEvent(QMouseEvent *e)
    setSliderDown(false);
 }
 
-
-/*!
-  \reimp
-*/
-
 void QDial::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QDial);
@@ -248,11 +221,6 @@ void QDial::mouseMoveEvent(QMouseEvent *e)
    setSliderPosition(d->valueFromPoint(e->pos()));
    d->doNotEmit = false;
 }
-
-
-/*!
-    \reimp
-*/
 
 void QDial::sliderChange(SliderChange change)
 {
@@ -269,41 +237,11 @@ void QDial::setWrapping(bool enable)
    update();
 }
 
-
-/*!
-    \property QDial::wrapping
-    \brief whether wrapping is enabled
-
-    If true, wrapping is enabled; otherwise some space is inserted at the bottom
-    of the dial to separate the ends of the range of valid values.
-
-    If enabled, the arrow can be oriented at any angle on the dial. If disabled,
-    the arrow will be restricted to the upper part of the dial; if it is rotated
-    into the space at the bottom of the dial, it will be clamped to the closest
-    end of the valid range of values.
-
-    By default this property is false.
-*/
-
 bool QDial::wrapping() const
 {
    Q_D(const QDial);
    return d->wrapping;
 }
-
-
-/*!
-    \property QDial::notchSize
-    \brief the current notch size
-
-    The notch size is in range control units, not pixels, and if
-    possible it is a multiple of singleStep() that results in an
-    on-screen notch size near notchTarget().
-
-    By default, this property has a value of 1.
-
-    \sa notchTarget(), singleStep()
-*/
 
 int QDial::notchSize() const
 {
@@ -337,17 +275,6 @@ void QDial::setNotchTarget(double target)
    update();
 }
 
-/*!
-    \property QDial::notchTarget
-    \brief the target number of pixels between notches
-
-    The notch target is the number of pixels QDial attempts to put
-    between each notch.
-
-    The actual size may differ from the target size.
-
-    The default notch target is 3.7 pixels.
-*/
 qreal QDial::notchTarget() const
 {
    Q_D(const QDial);
@@ -362,43 +289,22 @@ void QDial::setNotchesVisible(bool visible)
    update();
 }
 
-/*!
-    \property QDial::notchesVisible
-    \brief whether the notches are shown
-
-    If the property is true, a series of notches are drawn around the dial
-    to indicate the range of values available; otherwise no notches are
-    shown.
-
-    By default, this property is disabled.
-*/
 bool QDial::notchesVisible() const
 {
    Q_D(const QDial);
    return d->showNotches;
 }
 
-/*!
-  \reimp
-*/
-
 QSize QDial::minimumSizeHint() const
 {
    return QSize(50, 50);
 }
-
-/*!
-  \reimp
-*/
 
 QSize QDial::sizeHint() const
 {
    return QSize(100, 100).expandedTo(QApplication::globalStrut());
 }
 
-/*!
-  \reimp
-*/
 bool QDial::event(QEvent *e)
 {
    return QAbstractSlider::event(e);

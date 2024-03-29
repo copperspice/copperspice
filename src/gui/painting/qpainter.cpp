@@ -428,12 +428,6 @@ void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperatio
       }
    }
 
-   //     qDebug("\nQPainterPrivate::draw_helper(), x=%d, y=%d, w=%d, h=%d",
-   //            devMinX, devMinY, device->width(), device->height());
-   //     qDebug() << " - matrix" << state->matrix;
-   //     qDebug() << " - originalPath.bounds" << originalPath.boundingRect();
-   //     qDebug() << " - path.bounds" << path.boundingRect();
-
    if (absPathRect.width() <= 0 || absPathRect.height() <= 0) {
       return;
    }
@@ -662,12 +656,8 @@ void QPainterPrivate::updateMatrix()
    }
 
    state->matrix *= hidpiScaleTransform();
-
-   //     printf("VxF=%d, WxF=%d\n", state->VxF, state->WxF);
-   //     qDebug() << " --- using matrix" << state->matrix << redirection_offset;
 }
 
-/*! \internal */
 void QPainterPrivate::updateInvMatrix()
 {
    Q_ASSERT(txinv == false);

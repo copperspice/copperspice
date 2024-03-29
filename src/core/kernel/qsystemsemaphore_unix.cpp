@@ -43,7 +43,7 @@
 
 #include <qcore_unix_p.h>
 
-// OpenBSD 4.2 doesn't define EIDRM, see BUGS section:
+// OpenBSD 4.2 does not define EIDRM, refer to BUGS section
 // http://www.openbsd.org/cgi-bin/man.cgi?query=semop&manpath=OpenBSD+4.2
 #if defined(Q_OS_OPENBSD) && !defined(EIDRM)
 #define EIDRM EINVAL

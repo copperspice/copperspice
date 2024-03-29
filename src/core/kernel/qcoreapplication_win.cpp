@@ -218,9 +218,7 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
 
 #if defined(Q_OS_WIN)
 
-// Convenience functions to convert WM_* messages into human readable strings,
-// including a QDebug operator<< for simple QDebug() << msg output
-
+// convenience functions to convert WM_* messages into human readable strings,
 #include <qdebug.h>
 
 #include <windowsx.h>
@@ -230,7 +228,7 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
 #  define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
 #endif
 
-// The values below should never change. Note that none of the usual
+// values below should never change, none of the usual
 // WM_...FIRST & WM_...LAST values are in the list, as they normally have other
 // WM_... representations
 

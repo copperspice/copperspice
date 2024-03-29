@@ -253,19 +253,11 @@ static constexpr const int groupBoxBottomMargin =  2;  // space below the groupb
 static constexpr const int groupBoxTitleMargin  =  6;  // space between contents and title
 static constexpr const int groupBoxTopMargin    =  2;
 
-/*!
-  Returns the configuration string for \a value.
-  Returns \a fallback if \a value is not found.
- */
 QString QGtkStyle::getGConfString(const QString &value, const QString &fallback)
 {
    return QGtkStylePrivate::getGConfString(value, fallback);
 }
 
-/*!
-  Returns the configuration boolean for \a key.
-  Returns \a fallback if \a key is not found.
- */
 bool QGtkStyle::getGConfBool(const QString &key, bool fallback)
 {
    return QGtkStylePrivate::getGConfBool(key, fallback);
@@ -293,9 +285,6 @@ static GdkColor fromQColor(const QColor &color)
    return retval;
 }
 
-/*!
-    Constructs a QGtkStyle object.
-*/
 QGtkStyle::QGtkStyle()
    : QCommonStyle(*new QGtkStylePrivate)
 {
@@ -303,11 +292,6 @@ QGtkStyle::QGtkStyle()
    d->init();
 }
 
-/*!
-    \internal
-
-    Constructs a QGtkStyle object.
-*/
 QGtkStyle::QGtkStyle(QGtkStylePrivate &dd)
    : QCommonStyle(dd)
 {
@@ -315,17 +299,10 @@ QGtkStyle::QGtkStyle(QGtkStylePrivate &dd)
    d->init();
 }
 
-
-/*!
-    Destroys the QGtkStyle object.
-*/
 QGtkStyle::~QGtkStyle()
 {
 }
 
-/*!
-    \reimp
-*/
 QPalette QGtkStyle::standardPalette() const
 {
    Q_D(const QGtkStyle);
@@ -413,9 +390,6 @@ QPalette QGtkStyle::standardPalette() const
    return palette;
 }
 
-/*!
-    \reimp
-*/
 void QGtkStyle::polish(QPalette &palette)
 {
    Q_D(QGtkStyle);
@@ -428,9 +402,6 @@ void QGtkStyle::polish(QPalette &palette)
 
 }
 
-/*!
-    \reimp
-*/
 void QGtkStyle::polish(QApplication *app)
 {
    Q_D(QGtkStyle);
@@ -451,9 +422,6 @@ void QGtkStyle::polish(QApplication *app)
    }
 }
 
-/*!
-    \reimp
-*/
 void QGtkStyle::unpolish(QApplication *app)
 {
    Q_D(QGtkStyle);
@@ -465,10 +433,6 @@ void QGtkStyle::unpolish(QApplication *app)
       qApp->removeEventFilter(&d->filter);
    }
 }
-
-/*!
-    \reimp
-*/
 
 void QGtkStyle::polish(QWidget *widget)
 {
@@ -506,9 +470,6 @@ void QGtkStyle::unpolish(QWidget *widget)
    QCommonStyle::unpolish(widget);
 }
 
-/*!
-    \reimp
-*/
 int QGtkStyle::pixelMetric(PixelMetric metric,
    const QStyleOption *option,
    const QWidget *widget) const
@@ -715,9 +676,6 @@ int QGtkStyle::pixelMetric(PixelMetric metric,
    }
 }
 
-/*!
-    \reimp
-*/
 int QGtkStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
 
    QStyleHintReturn *returnData = 0) const
@@ -871,9 +829,6 @@ int QGtkStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidg
    return QCommonStyle::styleHint(hint, option, widget, returnData);
 }
 
-/*!
-    \reimp
-*/
 void QGtkStyle::drawPrimitive(PrimitiveElement element,
    const QStyleOption *option,
    QPainter *painter,
@@ -1141,7 +1096,8 @@ void QGtkStyle::drawPrimitive(PrimitiveElement element,
          GtkWidget *gtkToolbar = d->gtkWidget("GtkToolbar");
          GtkShadowType shadow_type;
          d->gtk_widget_style_get(gtkToolbar, "shadow-type", &shadow_type, NULL);
-         //Note when the toolbar is horizontal, the handle is vertical
+
+         // Note when the toolbar is horizontal, the handle is vertical
          painter->setClipRect(option->rect);
          gtkPainter->paintHandle(gtkToolbar, "toolbar", option->rect.adjusted(-1, -1, 0, 1),
             GTK_STATE_NORMAL, shadow_type, !(option->state & State_Horizontal) ?
@@ -1527,9 +1483,6 @@ void QGtkStyle::drawPrimitive(PrimitiveElement element,
    }
 }
 
-/*!
-    \reimp
-*/
 void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex *option,
 
    QPainter *painter, const QWidget *widget) const
@@ -2781,10 +2734,6 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
    }
 }
 
-
-/*!
-    \reimp
-*/
 void QGtkStyle::drawControl(ControlElement element,
    const QStyleOption *option,
    QPainter *painter,
@@ -3163,10 +3112,11 @@ void QGtkStyle::drawControl(ControlElement element,
             style = d->gtk_widget_get_style(gtkMenubarItem);
 
             if (widget) {
-               // Since Qt does not currently allow filling the entire background
-               // we use a hack for this by making a complete menubar each time and
-               // paint with the correct offset inside it. Pixmap caching should resolve
-               // most of the performance penalty.
+               // we do not currently allow filling the entire background
+               // this is workaround by making a complete menubar each time to
+               // paint with the correct offset inside it.
+               // Pixmap caching should resolve most of the performance penalty
+
                QRect menuBarRect = widget->rect();
                QPixmap pixmap(menuBarRect.size());
                pixmap.fill(Qt::transparent);
@@ -3748,9 +3698,6 @@ void QGtkStyle::drawControl(ControlElement element,
    }
 }
 
-/*!
-  \reimp
-*/
 QRect QGtkStyle::subControlRect(ComplexControl control, const QStyleOptionComplex *option,
    SubControl subControl, const QWidget *widget) const
 {
@@ -4103,9 +4050,6 @@ QRect QGtkStyle::subControlRect(ComplexControl control, const QStyleOptionComple
    return rect;
 }
 
-/*!
-  \reimp
-*/
 QSize QGtkStyle::sizeFromContents(ContentsType type, const QStyleOption *option,
    const QSize &size, const QWidget *widget) const
 {
@@ -4309,8 +4253,6 @@ QSize QGtkStyle::sizeFromContents(ContentsType type, const QStyleOption *option,
    return newSize;
 }
 
-
-/*! \reimp */
 QPixmap QGtkStyle::standardPixmap(StandardPixmap sp, const QStyleOption *option,
    const QWidget *widget) const
 {
@@ -4379,9 +4321,6 @@ QPixmap QGtkStyle::standardPixmap(StandardPixmap sp, const QStyleOption *option,
    return pixmap;
 }
 
-/*!
-    \internal
-*/
 QIcon QGtkStyle::standardIcon(StandardPixmap standardIcon,
    const QStyleOption *option,
    const QWidget *widget) const
@@ -4424,8 +4363,6 @@ QIcon QGtkStyle::standardIcon(StandardPixmap standardIcon,
    }
 }
 
-
-/*! \reimp */
 QRect QGtkStyle::subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const
 {
    Q_D(const QGtkStyle);
@@ -4482,49 +4419,33 @@ QRect QGtkStyle::subElementRect(SubElement element, const QStyleOption *option, 
    return r;
 }
 
-/*!
-  \reimp
-*/
 QRect QGtkStyle::itemPixmapRect(const QRect &r, int flags, const QPixmap &pixmap) const
 {
    return QCommonStyle::itemPixmapRect(r, flags, pixmap);
 }
 
-/*!
-  \reimp
-*/
 void QGtkStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
    int alignment, const QPixmap &pixmap) const
 {
    QCommonStyle::drawItemPixmap(painter, rect, alignment, pixmap);
 }
 
-/*!
-  \reimp
-*/
 QStyle::SubControl QGtkStyle::hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
    const QPoint &pt, const QWidget *w) const
 {
    return QCommonStyle::hitTestComplexControl(cc, opt, pt, w);
 }
 
-/*!
-  \reimp
-*/
 QPixmap QGtkStyle::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
    const QStyleOption *opt) const
 {
    return QCommonStyle::generatedIconPixmap(iconMode, pixmap, opt);
 }
 
-/*!
-  \reimp
-*/
 void QGtkStyle::drawItemText(QPainter *painter, const QRect &rect, int alignment, const QPalette &pal,
    bool enabled, const QString &text, QPalette::ColorRole textRole) const
 {
    return QCommonStyle::drawItemText(painter, rect, alignment, pal, enabled, text, textRole);
 }
 
-
-#endif //!defined(QT_NO_STYLE_QGTK)
+#endif //! defined(QT_NO_STYLE_QGTK)

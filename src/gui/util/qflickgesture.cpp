@@ -166,7 +166,7 @@ class PressDelayHandler : public QObject
       qFGDebug("QFG: deleting delayed mouse press, since scroller was only intercepted");
 
       if (pressDelayEvent) {
-         // we still haven't even sent the press, so just throw it away now
+         // we still have not even sent the press, just throw it away now
          if (pressDelayTimer) {
             killTimer(pressDelayTimer);
             pressDelayTimer = 0;
@@ -179,7 +179,7 @@ class PressDelayHandler : public QObject
    void scrollerBecameActive()
    {
       if (pressDelayEvent) {
-         // we still haven't even sent the press, so just throw it away now
+         // we still have not even sent the press, just throw it away now
          qFGDebug("QFG: deleting delayed mouse press, since scroller is active now");
          if (pressDelayTimer) {
             killTimer(pressDelayTimer);
@@ -213,7 +213,8 @@ class PressDelayHandler : public QObject
                         mouseButton, QApplication::mouseButtons() & ~mouseButton,
                         QApplication::keyboardModifiers(), mouseEventSource);
          sendMouseEvent(&re, RegrabMouseAfterwards);
-         // don't clear the mouseTarget just yet, since we need to explicitly ungrab the mouse on release!
+
+         // do not clear the mouseTarget just yet, since we need to explicitly ungrab the mouse on release!
       }
    }
 
@@ -271,8 +272,7 @@ class PressDelayHandler : public QObject
             // GraphicsView Mouse Handling Workaround #2:
             // we need to re-grab the mouse after sending a faked mouse
             // release, since we still need the mouse moves for the gesture
-            // (the scene will clear the item's mouse grabber status on
-            // release).
+            // (the scene will clear the item's mouse grabber status on release)
             qFGDebug() << "QFG: re-grabbing" << grabber;
             grabber->grabMouse();
          }
@@ -324,12 +324,6 @@ QGesture *QFlickGestureRecognizer::create(QObject *target)
    return new QFlickGesture(target, button);
 }
 
-/*! \internal
-    The recognize function detects a touch event suitable to start the attached QScroller.
-    The QFlickGesture will be triggered as soon as the scroller is no longer in the state
-    QScroller::Inactive or QScroller::Pressed. It will be finished or canceled at the next
-    QEvent::TouchEnd. Note that the QScroller might continue scrolling (kinetically) at this point.
- */
 QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
 {
    (void) watched;
@@ -355,9 +349,8 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
    QGraphicsObject *receiverGraphicsObject = qobject_cast<QGraphicsObject *>(d->receiver);
 #endif
 
-   // this is only set for events that we inject into the event loop via sendEvent()
+   // only set for events that we inject into the event loop via sendEvent()
    if (PressDelayHandler::instance()->shouldEventBeIgnored(event)) {
-      // qFGDebug() << state << "QFG: ignored event: " << event->type();
       return Ignore;
    }
 
@@ -369,8 +362,6 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
 
    const QTouchEvent *te = nullptr;
    QPoint globalPos;
-
-   // qFGDebug() << "FlickGesture "<<state<<"watched:"<<watched<<"receiver"<<d->receiver<<"event"<<event->type()<<"button"<<button;
 
    switch (event->type()) {
       case QEvent::MouseButtonPress:
@@ -570,7 +561,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
                             scroller->state() == QScroller::Scrolling);
 
    // Consume all mouse events while dragging or scrolling to avoid nasty
-   // side effects with Qt's standard widgets.
+   // side effects with standard widgets
    if ((me
      #ifndef QT_NO_GRAPHICSVIEW
         || gsme
@@ -579,10 +570,10 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
       result |= ConsumeEventHint;
 
    // The only problem with this approach is that we consume the
-   // MouseRelease when we start the scrolling with a flick gesture, so we
+   // MouseRelease when we start the scrolling with a flick gesture. We
    // have to fake a MouseRelease "somewhere" to not mess with the internal
-   // states of Qt's widgets (a QPushButton would stay in 'pressed' state
-   // forever, if it doesn't receive a MouseRelease).
+   // states of widgets (a QPushButton would stay in 'pressed' state
+   // forever, if it does not receive a MouseRelease).
    if (me
     #ifndef QT_NO_GRAPHICSVIEW
        || gsme

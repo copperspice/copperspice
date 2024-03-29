@@ -498,7 +498,7 @@ QMap<int, QVariant> QTableModel::itemData(const QModelIndex &index) const
    return roles;
 }
 
-// reimplemented to ensure that only one dataChanged() signal is emitted
+// ensure only one dataChanged() signal is emitted
 bool QTableModel::setItemData(const QModelIndex &index, const QMap<int, QVariant> &roles)
 {
    if (!index.isValid()) {

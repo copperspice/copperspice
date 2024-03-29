@@ -36,7 +36,7 @@
 #include <zlib.h>
 
 // Zip standard version for archives handled by this API
-// (actually, the only basic support of this version is implemented but it is enough for now)
+// only basic support of this version is implemented but it is enough for now
 #define ZIP_VERSION 20
 
 #if 0
@@ -902,7 +902,6 @@ QByteArray QZipReader::fileData(const QString &fileName) const
    int compressed_size = readUInt(header.h.compressed_size);
    int uncompressed_size = readUInt(header.h.uncompressed_size);
    int start = readUInt(header.h.offset_local_header);
-   //qDebug("uncompressing file %d: local header at %d", i, start);
 
    d->device->seek(start);
    LocalFileHeader lh;
@@ -925,7 +924,7 @@ QByteArray QZipReader::fileData(const QString &fileName) const
       return compressed;
    } else if (compression_method == CompressionMethodDeflated) {
       // Deflate
-      //qDebug("compressed=%d", compressed.size());
+
       compressed.truncate(compressed_size);
       QByteArray baunzip;
       ulong len = qMax(uncompressed_size,  1);
@@ -1189,19 +1188,11 @@ void QZipWriter::addDirectory(const QString &dirName)
    d->addEntry(QZipWriterPrivate::Directory, name, QByteArray());
 }
 
-/*!
-    Create a new symbolic link in the archive with the specified \a dirName
-    and the \a permissions;
-    A symbolic link contains the destination (relative) path and name.
-*/
 void QZipWriter::addSymLink(const QString &fileName, const QString &destination)
 {
    d->addEntry(QZipWriterPrivate::Symlink, QDir::fromNativeSeparators(fileName), QFile::encodeName(destination));
 }
 
-/*!
-   Closes the zip file.
-*/
 void QZipWriter::close()
 {
    if (!(d->device->openMode() & QIODevice::WriteOnly)) {
@@ -1209,7 +1200,6 @@ void QZipWriter::close()
       return;
    }
 
-   //qDebug("QZip::close writing directory, %d entries", d->fileHeaders.size());
    d->device->seek(d->start_of_directory);
    // write new directory
    for (int i = 0; i < d->fileHeaders.size(); ++i) {

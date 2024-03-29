@@ -74,8 +74,7 @@ QMenu *QSystemTrayIcon::contextMenu() const
    Q_D(const QSystemTrayIcon);
    return d->menu;
 }
-
-#endif // QT_NO_MENU
+#endif
 
 void QSystemTrayIcon::setIcon(const QIcon &icon)
 {

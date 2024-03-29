@@ -1587,10 +1587,6 @@ bool QListViewPrivate::dropOn(QDropEvent *event, int *dropRow, int *dropCol, QMo
 }
 #endif
 
-/*
- * Common ListView Implementation
-*/
-
 void QCommonListViewBase::appendHiddenRow(int row)
 {
    dd->hiddenRows.insert(dd->model->index(row, 0, qq->rootIndex()));
@@ -2547,10 +2543,6 @@ void QListModeViewBase::clear()
    batchStartRow = 0;
    batchSavedDeltaSeg = 0;
 }
-
-/*
- * IconMode ListView Implementation
-*/
 
 void QIconModeViewBase::setPositionForIndex(const QPoint &position, const QModelIndex &index)
 {

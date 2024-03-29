@@ -95,19 +95,12 @@ QAlphaWidget::~QAlphaWidget()
 #endif
 }
 
-/*
-  \reimp
-*/
 void QAlphaWidget::paintEvent(QPaintEvent *)
 {
    QPainter p(this);
    p.drawPixmap(0, 0, pm);
 }
 
-/*
-  Starts the alphablending animation.
-  The animation will take about \a time ms
-*/
 void QAlphaWidget::run(int time)
 {
    duration = time;
@@ -163,9 +156,6 @@ void QAlphaWidget::run(int time)
 #endif
 }
 
-/*
-  \reimp
-*/
 bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
 {
    switch (e->type()) {
@@ -208,9 +198,6 @@ bool QAlphaWidget::eventFilter(QObject *o, QEvent *e)
    return QWidget::eventFilter(o, e);
 }
 
-/*
-  \reimp
-*/
 void QAlphaWidget::closeEvent(QCloseEvent *e)
 {
    e->accept();
@@ -391,9 +378,6 @@ QRollEffect::QRollEffect(QWidget *w, Qt::WindowFlags flags, DirFlags orient)
    pm = widget->grab();
 }
 
-/*
-  \reimp
-*/
 void QRollEffect::paintEvent(QPaintEvent *)
 {
    int x = orientation & RightScroll ? qMin(0, currentWidth - totalWidth) : 0;
@@ -403,9 +387,6 @@ void QRollEffect::paintEvent(QPaintEvent *)
    p.drawPixmap(x, y, pm);
 }
 
-/*
-  \reimp
-*/
 void QRollEffect::closeEvent(QCloseEvent *e)
 {
    e->accept();
@@ -420,12 +401,6 @@ void QRollEffect::closeEvent(QCloseEvent *e)
    QWidget::closeEvent(e);
 }
 
-/*
-  Start the animation.
-
-  The animation will take about \a time ms, or is
-  calculated if \a time is negative
-*/
 void QRollEffect::run(int time)
 {
    if (!widget) {
@@ -466,9 +441,6 @@ void QRollEffect::run(int time)
    checkTime.start();
 }
 
-/*
-  Roll according to the time elapsed.
-*/
 void QRollEffect::scroll()
 {
    if (!done && widget) {
@@ -546,10 +518,6 @@ void QRollEffect::scroll()
    }
 }
 
-/*!
-    Scroll widget \a w in \a time ms. \a orient may be 1 (vertical), 2
-    (horizontal) or 3 (diagonal).
-*/
 void qScrollEffect(QWidget *w, QEffects::DirFlags orient, int time)
 {
    if (q_roll) {
@@ -570,9 +538,6 @@ void qScrollEffect(QWidget *w, QEffects::DirFlags orient, int time)
    q_roll->run(time);
 }
 
-/*!
-    Fade in widget \a w in \a time ms.
-*/
 void qFadeEffect(QWidget *w, int time)
 {
    if (q_blend) {

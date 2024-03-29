@@ -1630,9 +1630,6 @@ void QTreeView::drawBranches(QPainter *painter, const QRect &rect, const QModelI
    painter->setBrushOrigin(oldBO);
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::mousePressEvent(QMouseEvent *event)
 {
    Q_D(QTreeView);
@@ -1647,9 +1644,6 @@ void QTreeView::mousePressEvent(QMouseEvent *event)
    }
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::mouseReleaseEvent(QMouseEvent *event)
 {
    Q_D(QTreeView);
@@ -1668,9 +1662,6 @@ void QTreeView::mouseReleaseEvent(QMouseEvent *event)
    }
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::mouseDoubleClickEvent(QMouseEvent *event)
 {
    Q_D(QTreeView);
@@ -1741,9 +1732,6 @@ void QTreeView::mouseDoubleClickEvent(QMouseEvent *event)
    }
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::mouseMoveEvent(QMouseEvent *event)
 {
    Q_D(QTreeView);
@@ -1800,9 +1788,6 @@ void QTreeView::keyPressEvent(QKeyEvent *event)
    QAbstractItemView::keyPressEvent(event);
 }
 
-/*!
-  \reimp
-*/
 QModelIndex QTreeView::indexAt(const QPoint &point) const
 {
    Q_D(const QTreeView);
@@ -1913,9 +1898,6 @@ void QTreeView::doItemsLayout()
    d->header->doItemsLayout();
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::reset()
 {
    Q_D(QTreeView);
@@ -2314,21 +2296,15 @@ void QTreeView::columnMoved()
    d->viewport->update();
 }
 
-/*!
-  \internal
-*/
 void QTreeView::reexpand()
 {
    // do nothing
 }
 
-/*!
-  Informs the view that the rows from the \a start row to the \a end row
-  inclusive have been inserted into the \a parent model item.
-*/
 void QTreeView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTreeView);
+
    // if we are going to do a complete relayout anyway, there is no need to update
    if (d->delayedPendingLayout) {
       QAbstractItemView::rowsInserted(parent, start, end);
@@ -2360,10 +2336,6 @@ void QTreeView::rowsInserted(const QModelIndex &parent, int start, int end)
    QAbstractItemView::rowsInserted(parent, start, end);
 }
 
-/*!
-  Informs the view that the rows from the \a start row to the \a end row
-  inclusive are about to removed from the given \a parent model item.
-*/
 void QTreeView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
    Q_D(QTreeView);
@@ -2381,10 +2353,6 @@ void QTreeView::rowsRemoved(const QModelIndex &parent, int start, int end)
    d->_q_rowsRemoved(parent, start, end);
 }
 
-/*!
-  Informs the tree view that the number of columns in the tree view has
-  changed from \a oldCount to \a newCount.
-*/
 void QTreeView::columnCountChanged(int oldCount, int newCount)
 {
    Q_D(QTreeView);
@@ -2411,12 +2379,6 @@ void QTreeView::resizeColumnToContents(int column)
    d->header->resizeSection(column, qMax(contents, header));
 }
 
-/*!
-  \obsolete
-  \overload
-
-  Sorts the model by the values in the given \a column.
-*/
 void QTreeView::sortByColumn(int column)
 {
    Q_D(QTreeView);
@@ -2427,17 +2389,15 @@ void QTreeView::sortByColumn(int column, Qt::SortOrder order)
 {
    Q_D(QTreeView);
 
-   //If sorting is enabled  will emit a signal connected to _q_sortIndicatorChanged, which then actually sorts
+   // If sorting is enabled  will emit a signal connected to _q_sortIndicatorChanged, which then actually sorts
    d->header->setSortIndicator(column, order);
-   //If sorting is not enabled, force to sort now.
+
+   // If sorting is not enabled, force to sort now
    if (!d->sortingEnabled) {
       d->model->sort(column, order);
    }
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::selectAll()
 {
    Q_D(QTreeView);
@@ -2576,9 +2536,6 @@ void QTreeView::columnResized(int column, int, int)
    }
 }
 
-/*!
-  \reimp
-*/
 void QTreeView::updateGeometries()
 {
    Q_D(QTreeView);
@@ -3272,11 +3229,6 @@ int QTreeViewPrivate::itemHeight(int item) const
    return qMax(height, 0);
 }
 
-
-/*!
-  \internal
-  Returns the viewport y coordinate for \a item.
-*/
 int QTreeViewPrivate::coordinateForItem(int item) const
 {
    if (verticalScrollMode == QAbstractItemView::ScrollPerPixel) {
@@ -3330,13 +3282,6 @@ int QTreeViewPrivate::coordinateForItem(int item) const
    return 0;
 }
 
-/*!
-  \internal
-  Returns the index of the view item at the
-  given viewport \a coordinate.
-
-  \sa modelIndex()
-*/
 int QTreeViewPrivate::itemAtCoordinate(int coordinate) const
 {
    const int itemCount = viewItems.count();
@@ -3870,9 +3815,6 @@ void QTreeView::currentChanged(const QModelIndex &current, const QModelIndex &pr
 #endif
 }
 
-/*!
-  \reimp
- */
 void QTreeView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
    QAbstractItemView::selectionChanged(selected, deselected);

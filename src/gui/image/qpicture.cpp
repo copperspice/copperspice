@@ -81,7 +81,6 @@ QPicture::QPicture(const QPicture &pic)
 {
 }
 
-/*! \internal */
 QPicture::QPicture(QPicturePrivate &dptr)
    : QPaintDevice(), d_ptr(&dptr)
 {
@@ -91,9 +90,6 @@ QPicture::~QPicture()
 {
 }
 
-/*!
-  \internal
-*/
 int QPicture::devType() const
 {
    return QInternal::Picture;
@@ -337,12 +333,6 @@ class QFakeDevice : public QPaintDevice
    int dpi_x;
    int dpi_y;
 };
-
-/*!
-  \internal
-  Iterates over the internal picture data and draws the picture using
-  \a painter.
-*/
 
 bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
 {

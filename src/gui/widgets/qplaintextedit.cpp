@@ -108,9 +108,6 @@ int QPlainTextDocumentLayout::hitTest(const QPointF &, Qt::HitTestAccuracy ) con
    return -1;
 }
 
-/*!
-  \reimp
- */
 int QPlainTextDocumentLayout::pageCount() const
 {
    return 1;
@@ -128,9 +125,6 @@ QRectF QPlainTextDocumentLayout::frameBoundingRect(QTextFrame *) const
    return QRectF(0, 0, qMax(d->width, d->maximumWidth), qreal(INT_MAX));
 }
 
-/*!
-  \reimp
- */
 QRectF QPlainTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 {
    if (!block.isValid()) {
@@ -1445,8 +1439,6 @@ void QPlainTextEdit::keyPressEvent(QKeyEvent *e)
 #endif
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::keyReleaseEvent(QKeyEvent *e)
 {
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1682,9 +1674,6 @@ void QPlainTextEditPrivate::updateDefaultTextOption()
    }
 }
 
-
-/*! \reimp
-*/
 void QPlainTextEdit::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1697,8 +1686,6 @@ void QPlainTextEdit::mousePressEvent(QMouseEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1720,8 +1707,6 @@ void QPlainTextEdit::mouseMoveEvent(QMouseEvent *e)
    }
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1738,16 +1723,12 @@ void QPlainTextEdit::mouseReleaseEvent(QMouseEvent *e)
    d->clickCausedFocus = 0;
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::mouseDoubleClickEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 bool QPlainTextEdit::focusNextPrevChild(bool next)
 {
    Q_D(const QPlainTextEdit);
@@ -1782,8 +1763,6 @@ void QPlainTextEdit::dragLeaveEvent(QDragLeaveEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::dragMoveEvent(QDragMoveEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1794,8 +1773,6 @@ void QPlainTextEdit::dragMoveEvent(QDragMoveEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::dropEvent(QDropEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1806,8 +1783,6 @@ void QPlainTextEdit::dropEvent(QDropEvent *e)
 
 #endif // QT_NO_DRAGANDDROP
 
-/*! \reimp
- */
 void QPlainTextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1823,16 +1798,12 @@ void QPlainTextEdit::inputMethodEvent(QInputMethodEvent *e)
    ensureCursorVisible();
 }
 
-/*!\reimp
-*/
 void QPlainTextEdit::scrollContentsBy(int dx, int)
 {
    Q_D(QPlainTextEdit);
    d->setTopLine(d->vbar->value(), dx);
 }
 
-/*!\reimp
-*/
 QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery property) const
 {
    return inputMethodQuery(property, QVariant());
@@ -1882,8 +1853,6 @@ void QPlainTextEdit::focusOutEvent(QFocusEvent *e)
    d->sendControlEvent(e);
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::showEvent(QShowEvent *)
 {
    Q_D(QPlainTextEdit);
@@ -1893,8 +1862,6 @@ void QPlainTextEdit::showEvent(QShowEvent *)
    }
 }
 
-/*! \reimp
-*/
 void QPlainTextEdit::changeEvent(QEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1921,8 +1888,6 @@ void QPlainTextEdit::changeEvent(QEvent *e)
    }
 }
 
-/*! \reimp
-*/
 #ifndef QT_NO_WHEELEVENT
 void QPlainTextEdit::wheelEvent(QWheelEvent *e)
 {
@@ -1974,21 +1939,14 @@ QMenu *QPlainTextEdit::createStandardContextMenu(const QPoint &position)
    Q_D(QPlainTextEdit);
    return d->control->createStandardContextMenu(position, this);
 }
-#endif // QT_NO_CONTEXTMENU
+#endif
 
-/*!
-  returns a QTextCursor at position \a pos (in viewport coordinates).
-*/
 QTextCursor QPlainTextEdit::cursorForPosition(const QPoint &pos) const
 {
    Q_D(const QPlainTextEdit);
    return d->control->cursorForPosition(d->mapToContents(pos));
 }
 
-/*!
-  returns a rectangle (in viewport coordinates) that includes the
-  \a cursor.
- */
 QRect QPlainTextEdit::cursorRect(const QTextCursor &cursor) const
 {
    Q_D(const QPlainTextEdit);

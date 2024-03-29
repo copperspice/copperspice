@@ -224,7 +224,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
    showYellowThing_win(widget, paintRegion, msec);
 
 #else
-   //flags to fool painter
+   // flags to fool painter
    bool paintUnclipped = widget->testAttribute(Qt::WA_PaintUnclipped);
    if (unclipped && !widget->d_func()->paintOnScreen()) {
       widget->setAttribute(Qt::WA_PaintUnclipped);
@@ -235,7 +235,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
       widget->setAttribute(Qt::WA_WState_InPaintEvent);
    }
 
-   //setup the engine
+   // setup the engine
    QPaintEngine *pe = widget->paintEngine();
    if (pe) {
       pe->setSystemClip(paintRegion);
@@ -277,7 +277,7 @@ void QWidgetBackingStore::showYellowThing(QWidget *widget, const QRegion &toBePa
    ::usleep(1000 * msec);
 #endif
 
-#endif // !Q_OS_WIN
+#endif // ! Q_OS_WIN
 }
 
 bool QWidgetBackingStore::flushPaint(QWidget *widget, const QRegion &rgn)

@@ -168,7 +168,6 @@ QVariant QXcbMime::mimeConvertToFormat(QXcbConnection *connection, xcb_atom_t a,
    QVariant::Type requestedType, const QByteArray &encoding)
 {
    QString atomName = mimeAtomToString(connection, a);
-   //    qDebug() << "mimeConvertDataToFormat" << format << atomName << data;
 
    if (!encoding.isEmpty()
       && atomName == format + ";charset=" + QString::fromLatin1(encoding)) {

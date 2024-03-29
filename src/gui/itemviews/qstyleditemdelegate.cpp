@@ -322,9 +322,6 @@ bool QStyledItemDelegate::eventFilter(QObject *object, QEvent *event)
    return d->editorEventFilter(object, event);
 }
 
-/*!
-  \reimp
-*/
 bool QStyledItemDelegate::editorEvent(QEvent *event,
    QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
