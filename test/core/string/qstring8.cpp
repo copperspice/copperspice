@@ -252,6 +252,48 @@ TEST_CASE("QString8 index", "[qstring]")
    }
 }
 
+TEST_CASE("QString8 index_ignore_case", "[qstring]")
+{
+   QString str = "A wacky FOX and sizeable pig Jumped halfway over a blue moon";
+
+   int position;
+
+   {
+      position = str.indexOf("fox", 0, Qt::CaseInsensitive);
+      CHECK(position == 8);
+   }
+
+   {
+      position = str.indexOf("FOX", 0, Qt::CaseInsensitive);
+      CHECK(position == 8);
+   }
+
+   {
+      position = str.indexOf("pig", 0, Qt::CaseInsensitive);
+      REQUIRE(position == 25);
+   }
+
+   {
+      position = str.indexOf("PIG", 0, Qt::CaseInsensitive);
+      REQUIRE(position == 25);
+   }
+
+   {
+      position = str.indexOf("jumped", 0, Qt::CaseInsensitive);
+      REQUIRE(position == 29);
+   }
+
+   {
+      position = str.indexOf("Jumped", 0, Qt::CaseInsensitive);
+      REQUIRE(position == 29);
+   }
+
+   {
+      position = str.indexOf("JUMPED", 0, Qt::CaseInsensitive);
+      REQUIRE(position == 29);
+   }
+}
+
 TEST_CASE("QString8 justify", "[qstring]")
 {
    QString str = "grapefruit";
