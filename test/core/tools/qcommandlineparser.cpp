@@ -35,7 +35,7 @@ TEST_CASE("QCommandLineParser traits", "[qcommandlineparser]")
    REQUIRE(std::has_virtual_destructor_v<QCommandLineParser> == false);
 }
 
-QUniquePointer<QCommandLineParser> ParseCommandLine(const QStringList &arguments,
+QUniquePointer<QCommandLineParser> parseCommandLine(const QStringList &arguments,
       QList<QCommandLineOption> options)
 {
    QUniquePointer<QCommandLineParser> parser = QMakeUnique<QCommandLineParser>();
@@ -65,7 +65,7 @@ TEST_CASE("QCommandLineParser non_copyable", "[qcommandlineparser]")
 
 TEST_CASE("QCommandLineParser constructor", "[qcommandlineparser]")
 {
-   QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+   QUniquePointer<QCommandLineParser> parser = parseCommandLine(
          {"", "c:\\system\\file.txt", "c:\\tmp\\output.txt"}, { });
 
    const QStringList args = parser->positionalArguments();
@@ -90,7 +90,7 @@ TEST_CASE("QCommandLineParser options", "[qcommandlineparser]")
          "Copy all source files into <directory>.", "directory");
 
    {
-      QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+      QUniquePointer<QCommandLineParser> parser = parseCommandLine(
             {"copy", "source-location", "destination-location"},
             {showProgressOption, forceOption, targetDirectoryOption});
 
@@ -107,7 +107,7 @@ TEST_CASE("QCommandLineParser options", "[qcommandlineparser]")
    }
 
    {
-      QUniquePointer<QCommandLineParser> parser = ParseCommandLine(
+      QUniquePointer<QCommandLineParser> parser = parseCommandLine(
             {"copy", "-f", "-t", "destination-location"},
             {showProgressOption, forceOption, targetDirectoryOption});
 
