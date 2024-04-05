@@ -195,7 +195,7 @@ QWidgetPrivate::QWidgetPrivate()
 
 QWidgetPrivate::~QWidgetPrivate()
 {
-   if (widgetItem) {
+   if (widgetItem != nullptr) {
       widgetItem->wid = nullptr;
    }
 
@@ -331,12 +331,13 @@ QWidgetSet *QWidgetPrivate::allWidgets = nullptr;         // widgets with no wid
 
 QRegion qt_dirtyRegion(QWidget *widget)
 {
-   if (!widget) {
+   if (widget == nullptr) {
       return QRegion();
    }
 
    QWidgetBackingStore *bs = qt_widget_private(widget)->maybeBackingStore();
-   if (!bs) {
+
+   if (bs == nullptr) {
       return QRegion();
    }
 
@@ -3723,7 +3724,7 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
       QWidget *widget = q;
       QWidgetList hiddenWidgets;
 
-      while (widget) {
+      while (widget != nullptr) {
          if (widget->isHidden()) {
             widget->setAttribute(Qt::WA_WState_Hidden, false);
             hiddenWidgets.append(widget);
@@ -7564,7 +7565,7 @@ void QWidgetPrivate::updateGeometry_helper(bool forceUpdate)
 {
    Q_Q(QWidget);
 
-   if (widgetItem) {
+   if (widgetItem != nullptr) {
       widgetItem->invalidateSizeCache();
    }
 
@@ -9772,7 +9773,7 @@ QDebug operator<<(QDebug debug, const QWidget *widget)
    const QDebugStateSaver saver(debug);
    debug.nospace();
 
-   if (widget) {
+   if (widget != nullptr) {
       debug << widget->metaObject()->className() << '(' << (const void *)widget;
 
       if (!widget->objectName().isEmpty()) {

@@ -137,7 +137,11 @@ class QFileInfoPrivate : public QSharedData
    mutable QDateTime fileTimes[3];
 
    bool getCachedFlag(uint c) const {
-      return cache_enabled ? (cachedFlags & c) : 0;
+      if (cache_enabled) {
+         return (cachedFlags & c);
+      } else {
+         return false;
+      }
    }
 
    void setCachedFlag(uint c) const {

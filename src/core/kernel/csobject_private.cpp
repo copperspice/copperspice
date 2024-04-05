@@ -169,7 +169,7 @@ void CSInternalRefCount::set_m_wasDeleted(QObject *object, bool data)
 
 std::atomic<QtSharedPointer::ExternalRefCountData *> &CSInternalRefCount::get_m_SharedRefCount(const QObject *object)
 {
-   if (! object) {
+   if (object == nullptr) {
       static std::atomic<QtSharedPointer::ExternalRefCountData *> emptyAtomic;
       return emptyAtomic;
    }

@@ -503,15 +503,14 @@ iconv_t QIconvCodec::createIconv_t(const char *to, const char *from)
    iconv_t cd = (iconv_t) - 1;
 
 #if defined(__GLIBC__) || defined(GNU_LIBICONV)
-
    // both GLIBC and libgnuiconv will use the locale's encoding if from or to is an empty string
-   static const char empty_codeset[] = "";
 
-   const char *codeset = empty_codeset;
+   const char *codeset = "";
    cd = iconv_open(to ? to : codeset, from ? from : codeset);
 
 #else
-   char *codeset = 0;
+   char *codeset = nullptr;
+
 #endif
 
 #if defined(_XOPEN_UNIX)

@@ -202,7 +202,7 @@ void QThreadStorageData::finish(void **p)
       void (*destructor)(void *) = destructors()->value(i);
       locker.unlock();
 
-      if (! destructor) {
+      if (destructor == nullptr) {
          if (QThread::currentThread()) {
             qWarning("QThreadStorage::finish() Thread %p exited after QThreadStorage %d destroyed",
                   static_cast<void *>(QThread::currentThread()), i);

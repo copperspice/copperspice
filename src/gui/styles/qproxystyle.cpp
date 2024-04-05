@@ -36,14 +36,14 @@ void QProxyStylePrivate::ensureBaseStyle() const
 {
    Q_Q(const QProxyStyle);
 
-   if (baseStyle) {
+   if (baseStyle != nullptr) {
       return;
    }
 
-   if (!baseStyle && !QApplicationPrivate::styleOverride.isEmpty()) {
+   if (baseStyle == nullptr && ! QApplicationPrivate::styleOverride.isEmpty()) {
       baseStyle = QStyleFactory::create(QApplicationPrivate::styleOverride);
 
-      if (baseStyle) {
+      if (baseStyle != nullptr) {
          // If baseStyle is an instance of the same proxyStyle
          // we destroy it and fall back to the desktop style
 
@@ -54,11 +54,13 @@ void QProxyStylePrivate::ensureBaseStyle() const
       }
    }
 
-   if (!baseStyle) { // Use application desktop style
+   if (baseStyle == nullptr) {
+      // Use application desktop style
       baseStyle = QStyleFactory::create(QApplicationPrivate::desktopStyleKey());
    }
 
-   if (!baseStyle) { // Fallback to windows style
+   if (baseStyle == nullptr) {
+      // Fallback to windows style
       baseStyle = QStyleFactory::create(QLatin1String("windows"));
    }
 
@@ -71,7 +73,7 @@ QProxyStyle::QProxyStyle(QStyle *style)
 {
    Q_D(QProxyStyle);
 
-   if (style) {
+   if (style != nullptr) {
       d->baseStyle = style;
 
       style->setProxy(this);
@@ -86,7 +88,8 @@ QProxyStyle::QProxyStyle(const QString &key)
    Q_D(QProxyStyle);
 
    QStyle *style = QStyleFactory::create(key);
-   if (style) {
+
+   if (style != nullptr) {
       d->baseStyle = style;
       style->setProxy(this);
       style->setParent(this); // Take ownership

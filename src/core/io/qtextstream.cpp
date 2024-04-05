@@ -41,7 +41,6 @@
 
 static constexpr const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
-#define Q_VOID
 // #define QTEXTSTREAM_DEBUG
 
 #define CHECK_VALID_STREAM(x) do { \
@@ -974,7 +973,7 @@ qint64 QTextStream::pos() const
 void QTextStream::skipWhiteSpace()
 {
    Q_D(QTextStream);
-   CHECK_VALID_STREAM(Q_VOID);
+   CHECK_VALID_STREAM();
 
    d->scan(nullptr, 0, QTextStreamPrivate::NotSpace);
    d->consumeLastToken();

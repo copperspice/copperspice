@@ -411,7 +411,7 @@ QListWidgetItem *QListWidget::itemAt(int x, int y) const
 
 void QListWidgetItem::setSelected(bool select)
 {
-   if (view) {
+   if (view != nullptr) {
       view->setItemSelected(this, select);
    }
 }
@@ -423,7 +423,7 @@ bool QListWidgetItem::isSelected() const
 
 void QListWidgetItem::setHidden(bool hide)
 {
-   if (view) {
+   if (view != nullptr) {
       view->setItemHidden(this, hide);
    }
 }

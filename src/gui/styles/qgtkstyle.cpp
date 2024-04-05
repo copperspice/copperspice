@@ -677,8 +677,7 @@ int QGtkStyle::pixelMetric(PixelMetric metric,
 }
 
 int QGtkStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
-
-   QStyleHintReturn *returnData = 0) const
+        QStyleHintReturn *returnData = nullptr) const
 {
    Q_D(const QGtkStyle);
 
@@ -2553,7 +2552,8 @@ void QGtkStyle::drawComplexControl(ComplexControl control, const QStyleOptionCom
             if ((option->subControls & SC_SliderGroove) && groove.isValid()) {
 
                GtkRange *range = (GtkRange *)scaleWidget;
-               GtkAdjustment *adjustment = 0;
+               GtkAdjustment *adjustment = nullptr;
+
                if (d->gtk_adjustment_configure) {
                   adjustment = d->gtk_range_get_adjustment(range);
                }

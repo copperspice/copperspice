@@ -1262,7 +1262,8 @@ void QTextDocumentLayoutPrivate::drawFlow(const QPointF &offset, QPainter *paint
 
       if (inRootFrame && !checkPoints.isEmpty()) {
          int currentPosInDoc;
-         if (c) {
+
+         if (c != nullptr) {
             currentPosInDoc = c->firstPosition();
          } else {
             currentPosInDoc = it.currentBlock().position();
@@ -1282,7 +1283,7 @@ void QTextDocumentLayoutPrivate::drawFlow(const QPointF &offset, QPainter *paint
          }
       }
 
-      if (c) {
+      if (c != nullptr) {
          drawFrame(offset, painter, context, c);
       } else {
          QAbstractTextDocumentLayout::PaintContext pc = context;
@@ -1316,7 +1317,8 @@ void QTextDocumentLayoutPrivate::drawFlow(const QPointF &offset, QPainter *paint
       const int pos = frame->firstPosition() - 1;
       QTextCharFormat format = const_cast<QTextDocumentLayout *>(q)->format(pos);
       QTextObjectInterface *handler = q->handlerForObject(format.objectType());
-      if (handler) {
+
+      if (handler != nullptr) {
          QRectF rect = frameBoundingRectInternal(frame);
          handler->drawObject(painter, rect, document, pos, format);
       }
@@ -2405,7 +2407,7 @@ void QTextDocumentLayoutPrivate::layoutFlow(QTextFrame::iterator it, QTextLayout
          }
       }
 
-      if (c) {
+      if (c != nullptr) {
          // position child frame
          QTextFrameData *cd = data(c);
 

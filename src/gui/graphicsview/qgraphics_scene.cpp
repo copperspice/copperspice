@@ -2866,11 +2866,12 @@ void QGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
    Q_D(QGraphicsScene);
 
    QGraphicsItem *item = !d->keyboardGrabberItems.isEmpty() ? d->keyboardGrabberItems.last() : nullptr;
-   if (!item) {
+
+   if (item == nullptr) {
       item = focusItem();
    }
 
-   if (item) {
+   if (item != nullptr) {
       QGraphicsItem *p = item;
 
       do {
