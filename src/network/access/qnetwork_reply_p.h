@@ -48,7 +48,7 @@ class QNetworkReplyPrivate: public QIODevicePrivate, public QNetworkHeadersPriva
 
    QNetworkReplyPrivate();
 
-   static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager) {
+   static void setManager(QNetworkReply *reply, QNetworkAccessManager *manager) {
       reply->d_func()->manager = manager;
    }
 

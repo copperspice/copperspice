@@ -97,32 +97,43 @@ public:
     int maxTextureWidth() const override;
     int maxTextureHeight() const override;
 
-    inline GLuint texture() const {
+    GLuint texture() const {
         QOpenGLTextureGlyphCache *that = const_cast<QOpenGLTextureGlyphCache *>(this);
         QOpenGLGlyphTexture *glyphTexture = that->m_textureResource;
         return glyphTexture ? glyphTexture->m_texture : 0;
     }
 
-    inline int width() const {
+    int width() const {
         QOpenGLTextureGlyphCache *that = const_cast<QOpenGLTextureGlyphCache *>(this);
         QOpenGLGlyphTexture *glyphTexture = that->m_textureResource;
         return glyphTexture ? glyphTexture->m_width : 0;
     }
 
-    inline int height() const {
+    int height() const {
         QOpenGLTextureGlyphCache *that = const_cast<QOpenGLTextureGlyphCache *>(this);
         QOpenGLGlyphTexture *glyphTexture = that->m_textureResource;
         return glyphTexture ? glyphTexture->m_height : 0;
     }
 
-    inline void setPaintEnginePrivate(QOpenGL2PaintEngineExPrivate *p) { pex = p; }
+    void setPaintEnginePrivate(QOpenGL2PaintEngineExPrivate *p) {
+       pex = p;
+    }
 
-    inline const QOpenGLContextGroup *contextGroup() const { return m_textureResource ? m_textureResource->group() : nullptr; }
+    const QOpenGLContextGroup *contextGroup() const {
+       return m_textureResource ? m_textureResource->group() : nullptr;
+    }
 
-    inline int serialNumber() const { return m_serialNumber; }
+    int serialNumber() const {
+      return m_serialNumber;
+    }
 
-    FilterMode filterMode() const { return m_filterMode; }
-    void setFilterMode(FilterMode m) { m_filterMode = m; }
+    FilterMode filterMode() const {
+      return m_filterMode;
+    }
+
+    void setFilterMode(FilterMode m) {
+       m_filterMode = m;
+    }
 
     void clear();
 

@@ -48,7 +48,7 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
    QWidgetResizeHandler(const QWidgetResizeHandler &) = delete;
    QWidgetResizeHandler &operator=(const QWidgetResizeHandler &) = delete;
 
-   inline void setActive(bool b) {
+   void setActive(bool b) {
       setActive(Any, b);
    }
 

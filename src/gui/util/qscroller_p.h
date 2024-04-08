@@ -114,7 +114,7 @@ class QScrollerPrivate : public QObject
    qreal nextSnapPos(qreal p, int dir, Qt::Orientation orientation);
    static qreal nextSegmentPosition(QQueue<ScrollSegment> &segments, qint64 now, qreal oldPos);
 
-   inline int frameRateSkip() const {
+   int frameRateSkip() const {
       return properties.d.data()->frameRate;
    }
 

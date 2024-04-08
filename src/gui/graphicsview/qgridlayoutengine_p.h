@@ -83,36 +83,43 @@ class QLayoutParameter
       Cached
    };
 
-   inline QLayoutParameter() : q_value(T()), q_state(Default) {}
-   inline QLayoutParameter(T value, State state = Default) : q_value(value), q_state(state) {}
+   QLayoutParameter()
+      : q_value(T()), q_state(Default)
+   { }
 
-   inline void setUserValue(T value) {
+   QLayoutParameter(T value, State state = Default)
+      : q_value(value), q_state(state)
+   { }
+
+   void setUserValue(T value) {
       q_value = value;
       q_state = User;
    }
-   inline void setCachedValue(T value) const {
+
+   void setCachedValue(T value) const {
       if (q_state != User) {
          q_value = value;
          q_state = Cached;
       }
    }
 
-   inline T value() const {
+   T value() const {
       return q_value;
    }
 
-   inline T value(T defaultValue) const {
+   T value(T defaultValue) const {
       return isUser() ? q_value : defaultValue;
    }
 
-   inline bool isDefault() const {
+   bool isDefault() const {
       return q_state == Default;
    }
 
-   inline bool isUser() const {
+   bool isUser() const {
       return q_state == User;
    }
-   inline bool isCached() const {
+
+   bool isCached() const {
       return q_state == Cached;
    }
 
@@ -131,7 +138,7 @@ class QStretchParameter : public QLayoutParameter<int>
 class QGridLayoutBox
 {
  public:
-   inline QGridLayoutBox()
+   QGridLayoutBox()
       : q_minimumSize(0), q_preferredSize(0), q_maximumSize(FLT_MAX),
         q_minimumDescent(-1), q_minimumAscent(-1) {}
 
@@ -401,10 +408,11 @@ class QGridLayoutEngine
       qDeleteAll(oldItems);
    }
    QGridLayoutItem *itemAt(int row, int column, Qt::Orientation orientation = Qt::Vertical) const;
-   inline void insertRow(int row, Qt::Orientation orientation = Qt::Vertical) {
+   void insertRow(int row, Qt::Orientation orientation = Qt::Vertical) {
       insertOrRemoveRows(row, +1, orientation);
    }
-   inline void removeRows(int row, int count, Qt::Orientation orientation) {
+
+   void removeRows(int row, int count, Qt::Orientation orientation) {
       insertOrRemoveRows(row, -count, orientation);
    }
 
@@ -441,11 +449,12 @@ class QGridLayoutEngine
 
    void maybeExpandGrid(int row, int column, Qt::Orientation orientation = Qt::Vertical);
    void regenerateGrid();
-   inline int internalGridRowCount() const {
+
+   int internalGridRowCount() const {
       return grossRoundUp(rowCount());
    }
 
-   inline int internalGridColumnCount() const {
+   int internalGridColumnCount() const {
       return grossRoundUp(columnCount());
    }
    void setItemAt(int row, int column, QGridLayoutItem *item);

@@ -67,7 +67,7 @@ class Q_NETWORK_EXPORT QSslCipher
    QSslCipher &operator=(const QSslCipher &other);
    bool operator==(const QSslCipher &other) const;
 
-   inline bool operator!=(const QSslCipher &other) const {
+   bool operator!=(const QSslCipher &other) const {
       return !operator==(other);
    }
 

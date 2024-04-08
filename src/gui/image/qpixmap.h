@@ -87,7 +87,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    void fill(const QColor &fillColor = Qt::white);
    void fill(const QPaintDevice *device, const QPoint &offset);
 
-   inline void fill(const QPaintDevice *device, int xOffset, int yOffset) {
+   void fill(const QPaintDevice *device, int xOffset, int yOffset) {
       fill(device, QPoint(xOffset, yOffset));
    }
 
@@ -181,8 +181,7 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    QPixmap(const QSize &s, int type);
    void doInit(int, int, int);
 
-   using DataPtr = QExplicitlySharedDataPointer<QPlatformPixmap>;
-   inline DataPtr &data_ptr() {
+   QExplicitlySharedDataPointer<QPlatformPixmap> &data_ptr() {
       return data;
    }
 

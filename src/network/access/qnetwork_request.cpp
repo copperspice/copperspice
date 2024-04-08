@@ -69,7 +69,7 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
 #endif
    }
 
-   inline bool operator==(const QNetworkRequestPrivate &other) const {
+   bool operator==(const QNetworkRequestPrivate &other) const {
       return url == other.url &&
              priority == other.priority &&
              rawHeaders == other.rawHeaders &&

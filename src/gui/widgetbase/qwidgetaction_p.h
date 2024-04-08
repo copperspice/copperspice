@@ -31,7 +31,10 @@ class QWidgetActionPrivate : public QActionPrivate
    Q_DECLARE_PUBLIC(QWidgetAction)
 
  public:
-   inline QWidgetActionPrivate() : defaultWidgetInUse(false), autoCreated(false) {}
+   QWidgetActionPrivate()
+      : defaultWidgetInUse(false), autoCreated(false)
+   { }
+
    QPointer<QWidget> defaultWidget;
    QList<QWidget *> createdWidgets;
    uint defaultWidgetInUse : 1;

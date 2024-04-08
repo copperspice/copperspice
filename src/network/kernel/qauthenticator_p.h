@@ -86,11 +86,11 @@ class QAuthenticatorPrivate
 
    QByteArray calculateResponse(const QByteArray &method, const QByteArray &path);
 
-   static inline QAuthenticatorPrivate *getPrivate(QAuthenticator &auth) {
+   static QAuthenticatorPrivate *getPrivate(QAuthenticator &auth) {
       return auth.d;
    }
 
-   static inline const QAuthenticatorPrivate *getPrivate(const QAuthenticator &auth) {
+   static const QAuthenticatorPrivate *getPrivate(const QAuthenticator &auth) {
       return auth.d;
    }
 

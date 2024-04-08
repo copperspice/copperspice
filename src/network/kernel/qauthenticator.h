@@ -40,7 +40,7 @@ class Q_NETWORK_EXPORT QAuthenticator
    QAuthenticator &operator=(const QAuthenticator &other);
 
    bool operator==(const QAuthenticator &other) const;
-   inline bool operator!=(const QAuthenticator &other) const {
+   bool operator!=(const QAuthenticator &other) const {
       return !operator==(other);
    }
 

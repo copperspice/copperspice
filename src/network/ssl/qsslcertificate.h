@@ -81,7 +81,7 @@ class Q_NETWORK_EXPORT QSslCertificate
    }
 
    bool operator==(const QSslCertificate &other) const;
-   inline bool operator!=(const QSslCertificate &other) const {
+   bool operator!=(const QSslCertificate &other) const {
       return !operator==(other);
    }
 

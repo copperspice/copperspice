@@ -158,7 +158,7 @@ class QNetworkAccessManagerPrivate
    // and use the connections for multiple requests
    QNetworkAccessCache objectCache;
 
-   static inline QNetworkAccessCache *getObjectCache(QNetworkAccessBackend *backend) {
+   static QNetworkAccessCache *getObjectCache(QNetworkAccessBackend *backend) {
       return &backend->manager->objectCache;
    }
 

@@ -104,7 +104,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    QImage(const QImage &other);
 
-   inline QImage(QImage &&other)
+   QImage(QImage &&other)
       : QPaintDevice(), d(nullptr) {
       qSwap(d, other.d);
    }

@@ -840,7 +840,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    virtual void setNameFilters(const QStringList &f);
    inline void selectNameFilter(const QString &filter);
 
-   inline void updateSelectedNameFilter() {
+   void updateSelectedNameFilter() {
       selectNameFilter(m_data.selectedNameFilter());
    }
 
@@ -856,7 +856,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
 
    void setDefaultSuffix(const QString &s);
 
-   inline bool hasDefaultSuffix() const  {
+   bool hasDefaultSuffix() const  {
       return m_hasDefaultSuffix;
    }
    inline void setLabelText(QPlatformFileDialogOptions::DialogLabel l, const QString &text);

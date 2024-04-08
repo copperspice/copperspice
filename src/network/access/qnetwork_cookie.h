@@ -56,7 +56,7 @@ class Q_NETWORK_EXPORT QNetworkCookie
    QNetworkCookie &operator=(const QNetworkCookie &other);
 
    bool operator==(const QNetworkCookie &other) const;
-   inline bool operator!=(const QNetworkCookie &other) const {
+   bool operator!=(const QNetworkCookie &other) const {
       return !(*this == other);
    }
 

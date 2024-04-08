@@ -85,7 +85,7 @@ class Q_NETWORK_EXPORT QNetworkConfiguration
 
    bool operator==(const QNetworkConfiguration &other) const;
 
-   inline bool operator!=(const QNetworkConfiguration &other) const {
+   bool operator!=(const QNetworkConfiguration &other) const {
       return !operator==(other);
    }
 

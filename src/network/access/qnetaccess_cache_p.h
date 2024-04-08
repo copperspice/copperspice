@@ -51,7 +51,7 @@ class QNetworkAccessCache : public QObject
 
        virtual void dispose() = 0;
 
-       inline QByteArray cacheKey() const {
+       QByteArray cacheKey() const {
           return key;
        }
 

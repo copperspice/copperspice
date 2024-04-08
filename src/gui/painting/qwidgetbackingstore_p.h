@@ -35,7 +35,10 @@ class QPlatformTextureListWatcher;
 class QWidgetBackingStore;
 
 struct BeginPaintInfo {
-   inline BeginPaintInfo() : wasFlushed(0), nothingToPaint(0), backingStoreRecreated(0) {}
+   BeginPaintInfo()
+      : wasFlushed(0), nothingToPaint(0), backingStoreRecreated(0)
+   { }
+
    uint wasFlushed : 1;
    uint nothingToPaint : 1;
    uint backingStoreRecreated : 1;

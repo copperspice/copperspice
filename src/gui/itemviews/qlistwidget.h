@@ -60,7 +60,7 @@ class Q_GUI_EXPORT QListWidgetItem
 
    virtual QListWidgetItem *clone() const;
 
-   inline QListWidget *listWidget() const {
+   QListWidget *listWidget() const {
       return view;
    }
 

@@ -528,8 +528,9 @@ class QWizardPagePrivate : public QWidgetPrivate
       Tri_True
    };
 
-   inline QWizardPagePrivate()
-      : wizard(nullptr), completeState(Tri_Unknown), explicitlyFinal(false), commit(false) {}
+   QWizardPagePrivate()
+      : wizard(nullptr), completeState(Tri_Unknown), explicitlyFinal(false), commit(false)
+   { }
 
    bool cachedIsComplete() const;
    void _q_maybeEmitCompleteChanged();

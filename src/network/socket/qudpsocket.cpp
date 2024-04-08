@@ -43,11 +43,11 @@ class QUdpSocketPrivate : public QAbstractSocketPrivate
    bool doEnsureInitialized(const QHostAddress &bindAddress, quint16 bindPort,
                             const QHostAddress &remoteAddress);
  public:
-   inline bool ensureInitialized(const QHostAddress &bindAddress, quint16 bindPort) {
+   bool ensureInitialized(const QHostAddress &bindAddress, quint16 bindPort) {
       return doEnsureInitialized(bindAddress, bindPort, QHostAddress());
    }
 
-   inline bool ensureInitialized(const QHostAddress &remoteAddress) {
+   bool ensureInitialized(const QHostAddress &remoteAddress) {
       return doEnsureInitialized(QHostAddress(), 0, remoteAddress);
    }
 };

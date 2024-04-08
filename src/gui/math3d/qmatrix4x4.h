@@ -170,7 +170,7 @@ class Q_GUI_EXPORT QMatrix4x4
       return *m;
    }
 
-   inline const qreal *constData() const {
+   const qreal *constData() const {
       return *m;
    }
 

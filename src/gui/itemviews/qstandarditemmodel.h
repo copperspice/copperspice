@@ -56,13 +56,13 @@ class Q_GUI_EXPORT QStandardItem
    virtual QVariant data(int role = Qt::UserRole + 1) const;
    virtual void setData(const QVariant &value, int role = Qt::UserRole + 1);
 
-   inline QString text() const {
+   QString text() const {
       return (data(Qt::DisplayRole)).value<QString>();
    }
 
    inline void setText(const QString &text);
 
-   inline QIcon icon() const {
+   QIcon icon() const {
       return (data(Qt::DecorationRole)).value<QIcon>();
    }
 
@@ -89,27 +89,27 @@ class Q_GUI_EXPORT QStandardItem
    inline void setWhatsThis(const QString &whatsThis);
 #endif
 
-   inline QSize sizeHint() const {
+   QSize sizeHint() const {
       return (data(Qt::SizeHintRole)).value<QSize>();
    }
    inline void setSizeHint(const QSize &size);
 
-   inline QFont font() const {
+   QFont font() const {
       return (data(Qt::FontRole)).value<QFont>();
    }
    inline void setFont(const QFont &font);
 
-   inline Qt::Alignment textAlignment() const {
+   Qt::Alignment textAlignment() const {
       return Qt::Alignment((data(Qt::TextAlignmentRole)).value<int>());
    }
    inline void setTextAlignment(Qt::Alignment alignment);
 
-   inline QBrush background() const {
+   QBrush background() const {
       return (data(Qt::BackgroundRole)).value<QBrush>();
    }
    inline void setBackground(const QBrush &brush);
 
-   inline QBrush foreground() const {
+   QBrush foreground() const {
       return (data(Qt::ForegroundRole)).value<QBrush>();
    }
    inline void setForeground(const QBrush &brush);
@@ -124,7 +124,7 @@ class Q_GUI_EXPORT QStandardItem
    }
    inline void setAccessibleText(const QString &accessibleText);
 
-   inline QString accessibleDescription() const {
+   QString accessibleDescription() const {
       return (data(Qt::AccessibleDescriptionRole)).value<QString>();
    }
    inline void setAccessibleDescription(const QString &accessibleDescription);
@@ -132,42 +132,43 @@ class Q_GUI_EXPORT QStandardItem
    Qt::ItemFlags flags() const;
    void setFlags(Qt::ItemFlags flags);
 
-   inline bool isEnabled() const {
+   bool isEnabled() const {
       return (flags() & Qt::ItemIsEnabled) != 0;
    }
    void setEnabled(bool enabled);
 
-   inline bool isEditable() const {
+   bool isEditable() const {
       return (flags() & Qt::ItemIsEditable) != 0;
    }
    void setEditable(bool editable);
 
-   inline bool isSelectable() const {
+   bool isSelectable() const {
       return (flags() & Qt::ItemIsSelectable) != 0;
    }
    void setSelectable(bool selectable);
 
-   inline bool isCheckable() const {
+   bool isCheckable() const {
       return (flags() & Qt::ItemIsUserCheckable) != 0;
    }
    void setCheckable(bool checkable);
 
-   inline bool isAutoTristate() const {
+   bool isAutoTristate() const {
       return (flags() & Qt::ItemIsAutoTristate) != 0;
    }
    void setAutoTristate(bool tristate);
-   inline bool isUserTristate() const {
+
+   bool isUserTristate() const {
       return (flags() & Qt::ItemIsUserTristate) != 0;
    }
    void setUserTristate(bool tristate);
 
 #ifndef QT_NO_DRAGANDDROP
-   inline bool isDragEnabled() const {
+   bool isDragEnabled() const {
       return (flags() & Qt::ItemIsDragEnabled) != 0;
    }
    void setDragEnabled(bool dragEnabled);
 
-   inline bool isDropEnabled() const {
+   bool isDropEnabled() const {
       return (flags() & Qt::ItemIsDropEnabled) != 0;
    }
    void setDropEnabled(bool dropEnabled);

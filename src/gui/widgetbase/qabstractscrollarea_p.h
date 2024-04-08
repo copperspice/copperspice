@@ -75,7 +75,7 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
 
    virtual QPoint contentsOffset() const;
 
-   inline bool viewportEvent(QEvent *event) {
+   bool viewportEvent(QEvent *event) {
       return q_func()->viewportEvent(event);
    }
 

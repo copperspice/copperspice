@@ -123,7 +123,7 @@ struct QTextLayoutStruct {
    QRectF updateRect;
    QRectF updateRectForFloats;
 
-   inline void addUpdateRectForFloat(const QRectF &rect) {
+   void addUpdateRectForFloat(const QRectF &rect) {
       if (updateRectForFloats.isValid()) {
          updateRectForFloats |= rect;
       } else {
@@ -131,15 +131,15 @@ struct QTextLayoutStruct {
       }
    }
 
-   inline QFixed absoluteY() const {
+   QFixed absoluteY() const {
       return frameY + y;
    }
 
-   inline int currentPage() const {
+   int currentPage() const {
       return pageHeight == 0 ? 0 : (absoluteY() / pageHeight).truncate();
    }
 
-   inline void newPage() {
+   void newPage() {
       if (pageHeight == QFIXED_MAX) {
          return;
       }
@@ -169,12 +169,12 @@ class QTextTableData : public QTextFrameData
    // the specific cell
    QMultiHash<int, QTextFrame *> childFrameMap;
 
-   inline QFixed cellWidth(int column, int colspan) const {
+   QFixed cellWidth(int column, int colspan) const {
       return columnPositions.at(column + colspan - 1) + widths.at(column + colspan - 1)
          - columnPositions.at(column);
    }
 
-   inline void calcRowPosition(int row) {
+   void calcRowPosition(int row) {
       if (row > 0) {
          rowPositions[row] = rowPositions.at(row - 1) + heights.at(row - 1) + border + cellSpacing + border;
       }
@@ -182,7 +182,7 @@ class QTextTableData : public QTextFrameData
 
    QRectF cellRect(const QTextTableCell &cell) const;
 
-   inline QFixed paddingProperty(const QTextFormat &format, QTextFormat::Property property) const {
+   QFixed paddingProperty(const QTextFormat &format, QTextFormat::Property property) const {
       QVariant v = format.property(property);
 
       if (! v.isValid()) {
@@ -193,23 +193,23 @@ class QTextTableData : public QTextFrameData
       }
    }
 
-   inline QFixed topPadding(const QTextFormat &format) const {
+   QFixed topPadding(const QTextFormat &format) const {
       return paddingProperty(format, QTextFormat::TableCellTopPadding);
    }
 
-   inline QFixed bottomPadding(const QTextFormat &format) const {
+   QFixed bottomPadding(const QTextFormat &format) const {
       return paddingProperty(format, QTextFormat::TableCellBottomPadding);
    }
 
-   inline QFixed leftPadding(const QTextFormat &format) const {
+   QFixed leftPadding(const QTextFormat &format) const {
       return paddingProperty(format, QTextFormat::TableCellLeftPadding);
    }
 
-   inline QFixed rightPadding(const QTextFormat &format) const {
+   QFixed rightPadding(const QTextFormat &format) const {
       return paddingProperty(format, QTextFormat::TableCellRightPadding);
    }
 
-   inline QFixedPoint cellPosition(const QTextTableCell &cell) const {
+   QFixedPoint cellPosition(const QTextTableCell &cell) const {
       const QTextFormat fmt = cell.format();
       return cellPosition(cell.row(), cell.column()) + QFixedPoint(leftPadding(fmt), topPadding(fmt));
    }

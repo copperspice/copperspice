@@ -94,7 +94,7 @@ class Q_NETWORK_EXPORT QUrlInfo
 
    bool operator==(const QUrlInfo &other) const;
 
-   inline bool operator!=(const QUrlInfo &other) const {
+   bool operator!=(const QUrlInfo &other) const {
       return ! operator==(other);
    }
 

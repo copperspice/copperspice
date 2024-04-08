@@ -105,8 +105,8 @@ class QBoxLayoutPrivate : public QLayoutPrivate
    QBoxLayout::Direction dir;
    int spacing;
 
-   inline void deleteAll() {
-      while (!list.isEmpty()) {
+   void deleteAll() {
+      while (! list.isEmpty()) {
          delete list.takeFirst();
       }
    }

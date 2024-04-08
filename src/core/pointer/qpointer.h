@@ -45,7 +45,9 @@ class QPointer
    QWeakPointer<QObjectType> wp;
 
  public:
-   inline QPointer() { }
+   QPointer()
+   {
+   }
 
    inline QPointer(T *ptr)
       : wp(ptr, true)
@@ -60,16 +62,19 @@ class QPointer
       return *this;
    }
 
-   inline T *data() const {
+   T *data() const {
       return static_cast<T *>( wp.data());
    }
-   inline T *operator->() const {
+
+   T *operator->() const {
       return data();
    }
-   inline T &operator*() const {
+
+   T &operator*() const {
       return *data();
    }
-   inline operator T *() const {
+
+   operator T *() const {
       return data();
    }
 

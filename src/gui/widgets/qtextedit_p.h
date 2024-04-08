@@ -52,7 +52,7 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
    void paint(QPainter *p, QPaintEvent *e);
    void _q_repaintContents(const QRectF &contentsRect);
 
-   inline QPoint mapToContents(const QPoint &point) const {
+   QPoint mapToContents(const QPoint &point) const {
       return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset());
    }
 
@@ -63,15 +63,15 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
    void createAutoBulletList();
    void pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode);
 
-   inline int horizontalOffset() const {
+   int horizontalOffset() const {
       return q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value();
    }
 
-   inline int verticalOffset() const {
+   int verticalOffset() const {
       return vbar->value();
    }
 
-   inline void sendControlEvent(QEvent *e) {
+   void sendControlEvent(QEvent *e) {
       control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport);
    }
 

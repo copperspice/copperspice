@@ -109,7 +109,7 @@ class Q_NETWORK_EXPORT QNetworkRequest
    }
 
    bool operator==(const QNetworkRequest &other) const;
-   inline bool operator!=(const QNetworkRequest &other) const {
+   bool operator!=(const QNetworkRequest &other) const {
       return !operator==(other);
    }
 

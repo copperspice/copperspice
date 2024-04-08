@@ -274,14 +274,16 @@ struct QBidiStatus {
 static constexpr const int MaxBidiLevel = 61;
 
 struct QBidiControl {
-   inline QBidiControl(bool rtl)
-      : cCtx(0), base(rtl ? 1 : 0), level(rtl ? 1 : 0), override(false) {}
+   QBidiControl(bool rtl)
+      : cCtx(0), base(rtl ? 1 : 0), level(rtl ? 1 : 0), override(false)
+   { }
 
-   inline void embed(bool rtl, bool o = false) {
+   void embed(bool rtl, bool o = false) {
       unsigned int toAdd = 1;
       if ((level % 2 != 0) == rtl ) {
          ++toAdd;
       }
+
       if (level + toAdd <= MaxBidiLevel) {
          ctx[cCtx].level = level;
          ctx[cCtx].override = override;
@@ -290,26 +292,27 @@ struct QBidiControl {
          level += toAdd;
       }
    }
-   inline bool canPop() const {
+
+   bool canPop() const {
       return cCtx != 0;
    }
 
-   inline void pdf() {
+   void pdf() {
       Q_ASSERT(cCtx);
       --cCtx;
       level = ctx[cCtx].level;
       override = ctx[cCtx].override;
    }
 
-   inline QChar::Direction basicDirection() const {
+   QChar::Direction basicDirection() const {
       return (base ? QChar::DirR : QChar:: DirL);
    }
 
-   inline unsigned int baseLevel() const {
+   unsigned int baseLevel() const {
       return base;
    }
 
-   inline QChar::Direction direction() const {
+   QChar::Direction direction() const {
       return ((level % 2) ? QChar::DirR : QChar:: DirL);
    }
 

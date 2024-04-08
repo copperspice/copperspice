@@ -378,7 +378,7 @@ class ControllerWidget : public QWidget
    QSize sizeHint() const override;
    void setControlVisible(QMdiSubWindowPrivate::WindowStateAction action, bool visible);
 
-   inline bool hasVisibleControls() const {
+   bool hasVisibleControls() const {
       return (visibleControls & QStyle::SC_MdiMinButton)
          || (visibleControls & QStyle::SC_MdiNormalButton)
          || (visibleControls & QStyle::SC_MdiCloseButton);
@@ -408,7 +408,7 @@ class ControllerWidget : public QWidget
    void initStyleOption(QStyleOptionComplex *option) const;
    QMdiArea *mdiArea;
 
-   inline QStyle::SubControl getSubControl(const QPoint &pos) const {
+   QStyle::SubControl getSubControl(const QPoint &pos) const {
       QStyleOptionComplex opt;
       initStyleOption(&opt);
       return style()->hitTestComplexControl(QStyle::CC_MdiControls, &opt, pos, mdiArea);

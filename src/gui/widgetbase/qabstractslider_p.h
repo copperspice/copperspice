@@ -69,7 +69,7 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 
 #endif
 
-   inline int effectiveSingleStep() const {
+   int effectiveSingleStep() const {
       return singleStep
 #ifdef QT_KEYPAD_NAVIGATION
          * repeatMultiplier

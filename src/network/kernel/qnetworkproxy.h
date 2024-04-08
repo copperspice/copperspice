@@ -78,7 +78,7 @@ class Q_NETWORK_EXPORT QNetworkProxyQuery
 
    bool operator==(const QNetworkProxyQuery &other) const;
 
-   inline bool operator!=(const QNetworkProxyQuery &other) const {
+   bool operator!=(const QNetworkProxyQuery &other) const {
       return ! (*this == other);
    }
 
@@ -150,7 +150,7 @@ class Q_NETWORK_EXPORT QNetworkProxy
    }
 
    bool operator==(const QNetworkProxy &other) const;
-   inline bool operator!=(const QNetworkProxy &other) const {
+   bool operator!=(const QNetworkProxy &other) const {
       return !(*this == other);
    }
 

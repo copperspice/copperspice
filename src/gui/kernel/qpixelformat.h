@@ -146,25 +146,20 @@ class QPixelFormat
       CurrentSystemEndian
    };
 
-   constexpr inline QPixelFormat()  : data(0) {}
-   constexpr inline QPixelFormat(ColorModel colorModel,
-      uchar firstSize,
-      uchar secondSize,
-      uchar thirdSize,
-      uchar fourthSize,
-      uchar fifthSize,
-      uchar alphaSize,
-      AlphaUsage alphaUsage,
-      AlphaPosition alphaPosition,
-      AlphaPremultiplied premultiplied,
-      TypeInterpretation typeInterpretation,
-      ByteOrder byteOrder = CurrentSystemEndian,
-      uchar subEnum = 0) ;
+   constexpr QPixelFormat()
+      : data(0)
+   { }
 
-   constexpr inline ColorModel colorModel() const   {
+   constexpr inline QPixelFormat(ColorModel colorModel, uchar firstSize, uchar secondSize,
+         uchar thirdSize, uchar fourthSize, uchar fifthSize, uchar alphaSize, AlphaUsage alphaUsage,
+         AlphaPosition alphaPosition, AlphaPremultiplied premultiplied, TypeInterpretation typeInterpretation,
+         ByteOrder byteOrder = CurrentSystemEndian, uchar subEnum = 0);
+
+   constexpr ColorModel colorModel() const   {
       return ColorModel(get(ModelField, ModelFieldWidth));
    }
-   constexpr inline uchar channelCount() const  {
+
+   constexpr uchar channelCount() const  {
       return (get(FirstField, FirstFieldWidth) > 0) +
          (get(SecondField, SecondFieldWidth) > 0) +
          (get(ThirdField, ThirdFieldWidth) > 0) +

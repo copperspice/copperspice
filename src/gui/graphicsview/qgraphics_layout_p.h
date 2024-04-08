@@ -55,11 +55,12 @@ inline bool qt_graphicsLayoutDebug()
 class QLayoutStyleInfo
 {
  public:
-   inline QLayoutStyleInfo() {
+   QLayoutStyleInfo()
+   {
       invalidate();
    }
 
-   inline QLayoutStyleInfo(QStyle *style, QWidget *widget)
+   QLayoutStyleInfo(QStyle *style, QWidget *widget)
       : m_valid(true), m_style(style), m_widget(widget) {
       Q_ASSERT(style);
       if (widget) { //###
@@ -101,7 +102,8 @@ class QLayoutStyleInfo
       return m_defaultSpacing[o - 1];
    }
 
-   inline qreal perItemSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2, Qt::Orientation orientation) const {
+   qreal perItemSpacing(QSizePolicy::ControlType control1, QSizePolicy::ControlType control2,
+         Qt::Orientation orientation) const {
       Q_ASSERT(style());
       return style()->layoutSpacing(control1, control2, orientation, &m_styleOption, widget());
    }

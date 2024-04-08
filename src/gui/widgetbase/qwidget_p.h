@@ -434,7 +434,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    // sub-classes that their internals are about to be released.
    virtual void aboutToDestroy() {}
 
-   inline QWidget *effectiveFocusWidget() {
+   QWidget *effectiveFocusWidget() {
       QWidget *w = q_func();
       while (w->focusProxy()) {
          w = w->focusProxy();
@@ -758,7 +758,7 @@ class QWidgetEffectSourcePrivate : public QGraphicsEffectSourcePrivate
       return false;
    }
 
-   inline void effectBoundingRectChanged() override {
+   void effectBoundingRectChanged() override {
       // ### should take a rect parameter; then we can avoid updating too much on the parent widget
       if (QWidget *parent = m_widget->parentWidget()) {
          parent->update();

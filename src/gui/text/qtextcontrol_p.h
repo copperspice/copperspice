@@ -340,7 +340,9 @@ class QUnicodeControlCharacterMenu : public QMenu
 class QTextEditMimeData : public QMimeData
 {
  public:
-   inline QTextEditMimeData(const QTextDocumentFragment &aFragment) : fragment(aFragment) {}
+   QTextEditMimeData(const QTextDocumentFragment &aFragment)
+      : fragment(aFragment)
+   { }
 
    QStringList formats() const override;
 

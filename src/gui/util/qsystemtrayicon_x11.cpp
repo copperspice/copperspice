@@ -62,10 +62,11 @@ class QSystemTrayIconSys : public QWidget
  public:
    explicit QSystemTrayIconSys(QSystemTrayIcon *q);
 
-   inline void updateIcon() {
+   void updateIcon() {
       update();
    }
-   inline QSystemTrayIcon *systemTrayIcon() const {
+
+   QSystemTrayIcon *systemTrayIcon() const {
       return q;
    }
 

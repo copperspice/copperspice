@@ -48,7 +48,7 @@ class Q_NETWORK_EXPORT QHttpPart
    QHttpPart &operator=(const QHttpPart &other);
    bool operator==(const QHttpPart &other) const;
 
-   inline bool operator!=(const QHttpPart &other) const {
+   bool operator!=(const QHttpPart &other) const {
       return !operator==(other);
    }
 

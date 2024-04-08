@@ -166,7 +166,7 @@ struct QMatchData {
 
    QIndexMapper indices;
 
-   inline bool isValid() const {
+   bool isValid() const {
       return indices.isValid();
    }
 

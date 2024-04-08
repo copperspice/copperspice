@@ -83,7 +83,7 @@ public:
    QSslError &operator=(const QSslError &other);
    bool operator==(const QSslError &other) const;
 
-   inline bool operator!=(const QSslError &other) const {
+   bool operator!=(const QSslError &other) const {
       return !(*this == other);
    }
 

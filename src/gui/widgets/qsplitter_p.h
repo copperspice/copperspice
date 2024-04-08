@@ -81,19 +81,19 @@ class QSplitterPrivate : public QFramePrivate
    bool blockChildAdd;
    bool opaqueResizeSet;
 
-   inline int pick(const QPoint &pos) const {
+   int pick(const QPoint &pos) const {
       return orient == Qt::Horizontal ? pos.x() : pos.y();
    }
 
-   inline int pick(const QSize &s) const {
+   int pick(const QSize &s) const {
       return orient == Qt::Horizontal ? s.width() : s.height();
    }
 
-   inline int trans(const QPoint &pos) const {
+   int trans(const QPoint &pos) const {
       return orient == Qt::Vertical ? pos.x() : pos.y();
    }
 
-   inline int trans(const QSize &s) const {
+   int trans(const QSize &s) const {
       return orient == Qt::Vertical ? s.width() : s.height();
    }
 
@@ -131,7 +131,7 @@ class QSplitterHandlePrivate : public QWidgetPrivate
    {
    }
 
-   inline int pick(const QPoint &pos) const {
+   int pick(const QPoint &pos) const {
       return orient == Qt::Horizontal ? pos.x() : pos.y();
    }
 

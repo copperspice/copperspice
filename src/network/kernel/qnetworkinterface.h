@@ -52,7 +52,7 @@ class Q_NETWORK_EXPORT QNetworkAddressEntry
 
    bool operator==(const QNetworkAddressEntry &other) const;
 
-   inline bool operator!=(const QNetworkAddressEntry &other) const {
+   bool operator!=(const QNetworkAddressEntry &other) const {
       return !(*this == other);
    }
 

@@ -39,11 +39,11 @@ Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 class Q_NETWORK_EXPORT QIPv6Address
 {
  public:
-   inline quint8 &operator [](int index) {
+   quint8 &operator [](int index) {
       return c[index];
    }
 
-   inline quint8 operator [](int index) const {
+   quint8 operator [](int index) const {
       return c[index];
    }
 
@@ -106,13 +106,13 @@ class Q_NETWORK_EXPORT QHostAddress
 
    bool operator ==(const QHostAddress &other) const;
 
-   inline bool operator !=(const QHostAddress &other) const {
+   bool operator !=(const QHostAddress &other) const {
       return !operator==(other);
    }
 
    bool operator ==(SpecialAddress address) const;
 
-   inline bool operator !=(SpecialAddress address) const {
+   bool operator !=(SpecialAddress address) const {
       return !operator==(address);
    }
 
