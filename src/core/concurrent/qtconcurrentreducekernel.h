@@ -49,6 +49,7 @@ static constexpr const int ReduceQueueThrottleLimit = 30;
 // IntermediateResults holds a block of intermediate results from a
 // map or filter functor. The begin/end offsets indicates the origin
 // and range of the block.
+
 template <typename T>
 class IntermediateResults
 {

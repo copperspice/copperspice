@@ -129,7 +129,9 @@ static constexpr const QXmlCharRange *g_base_end =
       g_base_begin + sizeof(g_base_begin) / sizeof(QXmlCharRange);
 
 static const QXmlCharRange g_ideographic_begin[] = {
-   {0x3007, 0x3007}, {0x3021, 0x3029}, {0x4E00, 0x9FA5}
+   {0x3007, 0x3007},
+   {0x3021, 0x3029},
+   {0x4E00, 0x9FA5}
 };
 
 static constexpr const QXmlCharRange *g_ideographic_end =

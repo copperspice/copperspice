@@ -615,10 +615,10 @@ int QEventDispatcherUNIX::remainingTime(int timerId)
       qWarning("QEventDispatcher::remainingTime() Invalid argument");
       return -1;
    }
-
 #endif
 
    Q_D(QEventDispatcherUNIX);
+
    return d->timerList.timerRemainingTime(timerId);
 }
 

@@ -215,7 +215,7 @@ void ThreadEngineBase::waitForResume()
 
 bool ThreadEngineBase::isProgressReportingEnabled()
 {
-   // If we don't have a QFuture, there is no-one to report the progress to.
+   // if we do not have a QFuture, there is no-one to report the progress to.
    return (futureInterface != nullptr);
 }
 

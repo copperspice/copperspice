@@ -1911,7 +1911,8 @@ void QMetaObject_X::register_method_s1(const QString &name, QMetaMethod::Access 
    }
 }
 
-void QMetaObject_X::register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento, QMetaMethod::MethodType kind)
+void QMetaObject_X::register_method_s2_part2(QString className, const QString &name, CSBentoAbstract *methodBento,
+      QMetaMethod::MethodType kind)
 {
    QMap<QString, QMetaMethod> *map;
 

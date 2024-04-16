@@ -1116,7 +1116,7 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
             saveCapture[x] = match.captured(x);
          }
 
-         auto iter  = this->erase(first, last);
+         auto iter = this->erase(first, last);
 
          for (const auto &item : list) {
 
@@ -1124,31 +1124,31 @@ QString16 &QString16::replace(const QRegularExpression16 &regExp, const QString1
                iter = CsString::CsString_utf16::insert(iter, saveCapture[0]);
 
             } else if (item == u"\\1") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[1]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[1]);
 
             } else if (item == u"\\2") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[2]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[2]);
 
             } else if (item == u"\\3") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[3]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[3]);
 
             } else if (item == u"\\4") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[4]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[4]);
 
             } else if (item == u"\\5") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[5]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[5]);
 
             } else if (item == u"\\6") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[6]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[6]);
 
             } else if (item == u"\\7") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[7]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[7]);
 
             } else if (item == u"\\8") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[8]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[8]);
 
             } else if (item == u"\\9") {
-                  iter = CsString::CsString_utf16::insert(iter, saveCapture[9]);
+               iter = CsString::CsString_utf16::insert(iter, saveCapture[9]);
 
             } else {
                iter = CsString::CsString_utf16::insert(iter, item);

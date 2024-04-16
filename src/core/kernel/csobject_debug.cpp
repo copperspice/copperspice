@@ -48,7 +48,6 @@ static void dumpRecursive(int level, QObject *object)
          }
       }
    }
-
 #endif
 
 }
@@ -135,7 +134,6 @@ void QObject::dumpObjectInfo()
    }
 
    qDebug("--\n");
-
 #endif
 
 }

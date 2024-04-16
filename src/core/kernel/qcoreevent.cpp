@@ -81,7 +81,7 @@ struct QBasicAtomicBitField {
       uint old = entry.load();
       const uint bit = 1U << (which % BitsPerInt);
 
-      return !(old & bit) && entry.compare_exchange_strong(old, old | bit, std::memory_order_relaxed);
+      return ! (old & bit) && entry.compare_exchange_strong(old, old | bit, std::memory_order_relaxed);
    }
 
    int allocateNext() {

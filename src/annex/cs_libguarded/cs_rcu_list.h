@@ -720,7 +720,7 @@ auto rcu_list<T, M, Alloc>::erase(const_iterator iter) -> iterator
 
       do {
          newZombie->next = oldZombie;
-      } while (!m_zombie_head.compare_exchange_weak(oldZombie, newZombie));
+      } while (! m_zombie_head.compare_exchange_weak(oldZombie, newZombie));
    }
 
    return iterator(oldNext);

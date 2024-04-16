@@ -1117,7 +1117,7 @@ QString8 &QString8::replace(const QRegularExpression8 &regExp, const QString8 &a
             saveCapture[x] = match.captured(x);
          }
 
-         auto iter  = this->erase(first, last);
+         auto iter = this->erase(first, last);
 
          for (const auto &item : list) {
 
@@ -1125,31 +1125,31 @@ QString8 &QString8::replace(const QRegularExpression8 &regExp, const QString8 &a
                iter = CsString::CsString::insert(iter, saveCapture[0]);
 
             } else if (item == "\\1") {
-                  iter = CsString::CsString::insert(iter, saveCapture[1]);
+               iter = CsString::CsString::insert(iter, saveCapture[1]);
 
             } else if (item == "\\2") {
-                  iter = CsString::CsString::insert(iter, saveCapture[2]);
+               iter = CsString::CsString::insert(iter, saveCapture[2]);
 
             } else if (item == "\\3") {
-                  iter = CsString::CsString::insert(iter, saveCapture[3]);
+               iter = CsString::CsString::insert(iter, saveCapture[3]);
 
             } else if (item == "\\4") {
-                  iter = CsString::CsString::insert(iter, saveCapture[4]);
+               iter = CsString::CsString::insert(iter, saveCapture[4]);
 
             } else if (item == "\\5") {
-                  iter = CsString::CsString::insert(iter, saveCapture[5]);
+               iter = CsString::CsString::insert(iter, saveCapture[5]);
 
             } else if (item == "\\6") {
-                  iter = CsString::CsString::insert(iter, saveCapture[6]);
+               iter = CsString::CsString::insert(iter, saveCapture[6]);
 
             } else if (item == "\\7") {
-                  iter = CsString::CsString::insert(iter, saveCapture[7]);
+               iter = CsString::CsString::insert(iter, saveCapture[7]);
 
             } else if (item == "\\8") {
-                  iter = CsString::CsString::insert(iter, saveCapture[8]);
+               iter = CsString::CsString::insert(iter, saveCapture[8]);
 
             } else if (item == "\\9") {
-                  iter = CsString::CsString::insert(iter, saveCapture[9]);
+               iter = CsString::CsString::insert(iter, saveCapture[9]);
 
             } else {
                iter = CsString::CsString::insert(iter, item);

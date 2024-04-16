@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qcontiguouscache.h>
+
 #include <qdebug.h>
 
 #ifdef QT_QCONTIGUOUSCACHE_DEBUG

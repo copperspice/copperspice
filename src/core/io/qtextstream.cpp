@@ -83,8 +83,8 @@ class QDeviceClosedNotifier : public QObject
    CORE_CS_OBJECT(QDeviceClosedNotifier)
 
  public:
-   QDeviceClosedNotifier() {
-   }
+   QDeviceClosedNotifier()
+   { }
 
    void setupDevice(QTextStream *stream, QIODevice *device) {
       disconnect();

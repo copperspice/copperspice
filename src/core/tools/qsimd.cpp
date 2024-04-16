@@ -376,11 +376,13 @@ struct QSimpleBuffer {
 
       size = newsize;
    }
+
    void append(const QSimpleBuffer &other, unsigned appendsize) {
       unsigned oldsize = size;
       resize(oldsize + appendsize);
       ::memcpy(data + oldsize, other.data, appendsize);
    }
+
    void popleft(unsigned amount) {
       if (amount >= size) {
          return resize(0);

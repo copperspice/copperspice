@@ -54,8 +54,10 @@ class RunFunctionTaskBase : public QFutureInterface<T>, public QRunnable
    QFuture<T> start() {
       this->setRunnable(this);
       this->reportStarted();
+
       QFuture<T> future = this->future();
       QThreadPool::globalInstance()->start(this, 0);
+
       return future;
    }
 

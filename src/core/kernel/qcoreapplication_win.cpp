@@ -201,16 +201,16 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
    for (int i = 0; i < data->postEventList.size(); ++i) {
       const QPostEvent &pe = data->postEventList.at(i);
 
-      if (pe.receiver == object
-            && pe.event
+      if (pe.receiver == object && pe.event
             && (pe.event->type() == QEvent::Timer || pe.event->type() == QEvent::ZeroTimerEvent)
-
             && static_cast<QTimerEvent *>(pe.event)->timerId() == timerId) {
+
          CSInternalEvents::decr_PostedEvents(pe.receiver);
          pe.event->posted = false;
 
          delete pe.event;
          const_cast<QPostEvent &>(pe).event = nullptr;
+
          return;
       }
    }
@@ -220,7 +220,6 @@ void QCoreApplicationPrivate::removePostedTimerEvent(QObject *object, int timerI
 
 // convenience functions to convert WM_* messages into human readable strings,
 #include <qdebug.h>
-
 #include <windowsx.h>
 
 #if ! defined(GET_X_LPARAM)

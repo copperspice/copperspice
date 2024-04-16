@@ -431,7 +431,7 @@ void QFSEventsFileSystemWatcherEngine::fseventsCallback(ConstFSEventStreamRef,
       // Here they are and why we don't care.
       // kFSEventStreamEventFlagHistoryDone--(very unlikely to be gotten, but even then, not much changes).
       // kFSEventStreamEventFlagMustScanSubDirs--Likely means the data is very much out of date, we
-      //            aren't coalescing our directories, so again not so much of an issue
+      // are not coalescing our directories, so again not so much of an issue
       // kFSEventStreamEventFlagRootChanged | kFSEventStreamEventFlagMount | kFSEventStreamEventFlagUnmount--
       // These three flags indicate something has changed, but the stat will likely show this, so
       // there's not really much to worry about.

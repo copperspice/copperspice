@@ -90,13 +90,13 @@ class Q_CORE_EXPORT QSystemLocale
       UILanguages,                     // QStringList
       StringToStandardQuotation,       // QString in: QStringView to quote
       StringToAlternateQuotation,      // QString in: QStringView to quote
-      ScriptId,                // uint
-      ListToSeparatedString,   // QString
-      LocaleChanged,           // system locale changed
-      NativeLanguageName,      // QString
-      NativeCountryName,       // QString
-      StandaloneMonthNameLong, // QString, in: int
-      StandaloneMonthNameShort // QString, in: int
+      ScriptId,                        // uint
+      ListToSeparatedString,           // QString
+      LocaleChanged,                   // system locale changed
+      NativeLanguageName,              // QString
+      NativeCountryName,               // QString
+      StandaloneMonthNameLong,         // QString, in: int
+      StandaloneMonthNameShort         // QString, in: int
    };
 
    virtual QVariant query(QueryType type, QVariant in) const;
@@ -148,7 +148,6 @@ struct QLocaleData {
       AlwaysShowSign      = 0x10,
       ThousandsGroup      = 0x20,
       CapitalEorX         = 0x40,
-
       ShowBase            = 0x80,
       UppercaseBase       = 0x100,
       ForcePoint          = Alternate

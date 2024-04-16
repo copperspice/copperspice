@@ -88,8 +88,7 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
 #ifdef QTIMELINE_DEBUG
    qDebug() << "QTimeLinePrivate::setCurrentTime:" << msecs << duration << "with loopCount" << loopCount
-         << "currentLoopCount" << currentLoopCount
-         << "looping" << looping;
+         << "currentLoopCount" << currentLoopCount << "looping" << looping;
 #endif
 
    if (looping) {
@@ -158,7 +157,6 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
          qDebug("QTimeLinePrivate::setCurrentTime: not transitionframe because %s",  reason.constData());
       }
-
 #endif
 
       emit q->frameChanged(currentFrame);

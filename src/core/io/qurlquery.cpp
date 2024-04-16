@@ -339,7 +339,8 @@ void QUrlQuery::setQuery(const QString &queryString)
    d->setQuery(queryString);
 }
 
-static void recodeAndAppend(QString &to, const QString &input, QUrl::FormattingOptions encoding, const ushort *tableModifications)
+static void recodeAndAppend(QString &to, const QString &input, QUrl::FormattingOptions encoding,
+      const ushort *tableModifications)
 {
    if (!qt_urlRecode(to, input.constBegin(), input.constEnd(), encoding, tableModifications)) {
       to += input;

@@ -32,8 +32,8 @@
 namespace QtConcurrent {
 
 template <typename T, typename FunctionPointer>
-struct StoredFunctorCall0: public RunFunctionTask<T> {
-
+struct StoredFunctorCall0 : public RunFunctionTask<T>
+{
    StoredFunctorCall0(FunctionPointer _function)
       : function(_function)
    { }
@@ -46,8 +46,8 @@ struct StoredFunctorCall0: public RunFunctionTask<T> {
 };
 
 template <typename FunctionPointer>
-struct StoredFunctorCall0<void, FunctionPointer>: public RunFunctionTask<void> {
-
+struct StoredFunctorCall0<void, FunctionPointer> : public RunFunctionTask<void>
+{
    StoredFunctorCall0(FunctionPointer _function)
       : function(_function)
    { }
@@ -57,11 +57,11 @@ struct StoredFunctorCall0<void, FunctionPointer>: public RunFunctionTask<void> {
    }
 
    FunctionPointer function;
-
 };
 
 template <typename T, typename FunctionPointer>
-struct StoredFunctorPointerCall0: public RunFunctionTask<T> {
+struct StoredFunctorPointerCall0: public RunFunctionTask<T>
+{
    StoredFunctorPointerCall0(FunctionPointer *_function)
       : function(_function)
    { }
@@ -71,12 +71,11 @@ struct StoredFunctorPointerCall0: public RunFunctionTask<T> {
    }
 
    FunctionPointer *function;
-
 };
 
 template <typename T, typename FunctionPointer>
-struct VoidStoredFunctorPointerCall0: public RunFunctionTask<T> {
-
+struct VoidStoredFunctorPointerCall0: public RunFunctionTask<T>
+{
    VoidStoredFunctorPointerCall0(FunctionPointer *_function)
       : function(_function)
    { }
@@ -86,11 +85,11 @@ struct VoidStoredFunctorPointerCall0: public RunFunctionTask<T> {
    }
 
    FunctionPointer *function;
-
 };
 
 template <typename T, typename FunctionPointer>
-struct SelectStoredFunctorPointerCall0 {
+struct SelectStoredFunctorPointerCall0
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredFunctorPointerCall0<T, FunctionPointer>,
          VoidStoredFunctorPointerCall0<T, FunctionPointer> >::type;
@@ -111,8 +110,8 @@ class StoredMemberFunctionCall0 : public RunFunctionTask<T>
  private:
    T (Class::*fn)();
    Class object;
-
 };
+
 template <typename T, typename Class>
 class VoidStoredMemberFunctionCall0 : public RunFunctionTask<T>
 {
@@ -128,7 +127,6 @@ class VoidStoredMemberFunctionCall0 : public RunFunctionTask<T>
  private:
    T (Class::*fn)();
    Class object;
-
 };
 
 template <typename T, typename Class>
@@ -170,11 +168,11 @@ class VoidStoredConstMemberFunctionCall0 : public RunFunctionTask<T>
  private:
    T (Class::*fn)()const;
    const Class object;
-
 };
 
 template <typename T, typename Class>
-struct SelectStoredConstMemberFunctionCall0 {
+struct SelectStoredConstMemberFunctionCall0
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionCall0<T, Class>,
          VoidStoredConstMemberFunctionCall0<T, Class>>::type;
@@ -216,7 +214,8 @@ class VoidStoredMemberFunctionPointerCall0 : public RunFunctionTask<T>
 };
 
 template <typename T, typename Class>
-struct SelectStoredMemberFunctionPointerCall0 {
+struct SelectStoredMemberFunctionPointerCall0
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionPointerCall0<T, Class>,
          VoidStoredMemberFunctionPointerCall0<T, Class>>::type;
@@ -254,18 +253,19 @@ class VoidStoredConstMemberFunctionPointerCall0 : public RunFunctionTask<T>
  private:
    T (Class::*fn)()const;
    Class const *object;
-
 };
 
 template <typename T, typename Class>
-struct SelectStoredConstMemberFunctionPointerCall0 {
+struct SelectStoredConstMemberFunctionPointerCall0
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionPointerCall0<T, Class>,
          VoidStoredConstMemberFunctionPointerCall0<T, Class>>::type;
 };
 
 template <typename T, typename FunctionPointer, typename Arg1>
-struct StoredFunctorCall1: public RunFunctionTask<T> {
+struct StoredFunctorCall1: public RunFunctionTask<T>
+{
    StoredFunctorCall1(FunctionPointer _function, const Arg1 &_arg1)
       : function(_function), arg1(_arg1)
    { }
@@ -279,7 +279,8 @@ struct StoredFunctorCall1: public RunFunctionTask<T> {
 };
 
 template <typename FunctionPointer, typename Arg1>
-struct StoredFunctorCall1<void, FunctionPointer, Arg1>: public RunFunctionTask<void> {
+struct StoredFunctorCall1<void, FunctionPointer, Arg1>: public RunFunctionTask<void>
+{
    StoredFunctorCall1(FunctionPointer _function, const Arg1 &_arg1)
       : function(_function), arg1(_arg1)
    { }
@@ -293,7 +294,8 @@ struct StoredFunctorCall1<void, FunctionPointer, Arg1>: public RunFunctionTask<v
 };
 
 template <typename T, typename FunctionPointer, typename Arg1>
-struct StoredFunctorPointerCall1: public RunFunctionTask<T> {
+struct StoredFunctorPointerCall1: public RunFunctionTask<T>
+{
    StoredFunctorPointerCall1(FunctionPointer *_function, const Arg1 &_arg1)
       : function(_function), arg1(_arg1)
     { }
@@ -307,7 +309,8 @@ struct StoredFunctorPointerCall1: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1>
-struct VoidStoredFunctorPointerCall1: public RunFunctionTask<T> {
+struct VoidStoredFunctorPointerCall1: public RunFunctionTask<T>
+{
    VoidStoredFunctorPointerCall1(FunctionPointer *_function, const Arg1 &_arg1)
       : function(_function), arg1(_arg1)
    { }
@@ -321,7 +324,8 @@ struct VoidStoredFunctorPointerCall1: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1>
-struct SelectStoredFunctorPointerCall1 {
+struct SelectStoredFunctorPointerCall1
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredFunctorPointerCall1<T, FunctionPointer, Arg1>,
          VoidStoredFunctorPointerCall1<T, FunctionPointer, Arg1>>::type;
@@ -450,7 +454,8 @@ class VoidStoredMemberFunctionPointerCall1 : public RunFunctionTask<T>
 };
 
 template <typename T, typename Class, typename Param1, typename Arg1>
-struct SelectStoredMemberFunctionPointerCall1 {
+struct SelectStoredMemberFunctionPointerCall1
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionPointerCall1<T, Class, Param1, Arg1>,
          VoidStoredMemberFunctionPointerCall1<T, Class, Param1, Arg1>>::type;
@@ -493,14 +498,16 @@ class VoidStoredConstMemberFunctionPointerCall1 : public RunFunctionTask<T>
 };
 
 template <typename T, typename Class, typename Param1, typename Arg1>
-struct SelectStoredConstMemberFunctionPointerCall1 {
+struct SelectStoredConstMemberFunctionPointerCall1
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionPointerCall1<T, Class, Param1, Arg1>,
          VoidStoredConstMemberFunctionPointerCall1<T, Class, Param1, Arg1>>::type;
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2>
-struct StoredFunctorCall2: public RunFunctionTask<T> {
+struct StoredFunctorCall2: public RunFunctionTask<T>
+{
    StoredFunctorCall2(FunctionPointer _function, const Arg1 &_arg1, const Arg2 &_arg2)
       : function(_function), arg1(_arg1), arg2(_arg2)
    { }
@@ -515,7 +522,8 @@ struct StoredFunctorCall2: public RunFunctionTask<T> {
 };
 
 template <typename FunctionPointer, typename Arg1, typename Arg2>
-struct StoredFunctorCall2<void, FunctionPointer, Arg1, Arg2>: public RunFunctionTask<void> {
+struct StoredFunctorCall2<void, FunctionPointer, Arg1, Arg2>: public RunFunctionTask<void>
+{
    StoredFunctorCall2(FunctionPointer _function, const Arg1 &_arg1, const Arg2 &_arg2)
       : function(_function), arg1(_arg1), arg2(_arg2)
    { }
@@ -530,7 +538,8 @@ struct StoredFunctorCall2<void, FunctionPointer, Arg1, Arg2>: public RunFunction
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2>
-struct StoredFunctorPointerCall2: public RunFunctionTask<T> {
+struct StoredFunctorPointerCall2: public RunFunctionTask<T>
+{
    StoredFunctorPointerCall2(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2)
       : function(_function), arg1(_arg1), arg2(_arg2)
    { }
@@ -545,7 +554,8 @@ struct StoredFunctorPointerCall2: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2>
-struct VoidStoredFunctorPointerCall2: public RunFunctionTask<T> {
+struct VoidStoredFunctorPointerCall2: public RunFunctionTask<T>
+{
    VoidStoredFunctorPointerCall2(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2)
       : function(_function), arg1(_arg1), arg2(_arg2)
    { }
@@ -592,7 +602,6 @@ class VoidStoredMemberFunctionCall2 : public RunFunctionTask<T>
    VoidStoredMemberFunctionCall2(T (Class::*_fn)(Param1, Param2), const Class &_object, const Arg1 &_arg1, const Arg2 &_arg2)
       : fn(_fn), object(_object), arg1(_arg1), arg2(_arg2)
     { }
-
 
    void runFunctor() override {
       (object.*fn)(arg1, arg2);
@@ -785,7 +794,8 @@ struct StoredFunctorCall3<void, FunctionPointer, Arg1, Arg2, Arg3>: public RunFu
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3>
-struct StoredFunctorPointerCall3: public RunFunctionTask<T> {
+struct StoredFunctorPointerCall3: public RunFunctionTask<T>
+{
    StoredFunctorPointerCall3(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3)
    { }
@@ -801,7 +811,8 @@ struct StoredFunctorPointerCall3: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3>
-struct VoidStoredFunctorPointerCall3: public RunFunctionTask<T> {
+struct VoidStoredFunctorPointerCall3: public RunFunctionTask<T>
+{
    VoidStoredFunctorPointerCall3(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2,
          const Arg3 &_arg3)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3)
@@ -818,13 +829,15 @@ struct VoidStoredFunctorPointerCall3: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3>
-struct SelectStoredFunctorPointerCall3 {
+struct SelectStoredFunctorPointerCall3
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredFunctorPointerCall3    <T, FunctionPointer, Arg1, Arg2, Arg3>,
          VoidStoredFunctorPointerCall3<T, FunctionPointer, Arg1, Arg2, Arg3>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class StoredMemberFunctionCall3 : public RunFunctionTask<T>
 {
  public:
@@ -845,7 +858,8 @@ class StoredMemberFunctionCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class VoidStoredMemberFunctionCall3 : public RunFunctionTask<T>
 {
  public:
@@ -866,14 +880,17 @@ class VoidStoredMemberFunctionCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
-struct SelectStoredMemberFunctionCall3 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
+struct SelectStoredMemberFunctionCall3
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>,
          VoidStoredMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class StoredConstMemberFunctionCall3 : public RunFunctionTask<T>
 {
  public:
@@ -894,7 +911,8 @@ class StoredConstMemberFunctionCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class VoidStoredConstMemberFunctionCall3 : public RunFunctionTask<T>
 {
  public:
@@ -915,8 +933,10 @@ class VoidStoredConstMemberFunctionCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
-struct SelectStoredConstMemberFunctionCall3 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
+struct SelectStoredConstMemberFunctionCall3
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>,
          VoidStoredConstMemberFunctionCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>>::type;
@@ -942,7 +962,9 @@ class StoredMemberFunctionPointerCall3 : public RunFunctionTask<T>
    Arg2 arg2;
    Arg3 arg3;
 };
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class VoidStoredMemberFunctionPointerCall3 : public RunFunctionTask<T>
 {
  public:
@@ -963,14 +985,17 @@ class VoidStoredMemberFunctionPointerCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
-struct SelectStoredMemberFunctionPointerCall3 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
+struct SelectStoredMemberFunctionPointerCall3
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>,
          VoidStoredMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class StoredConstMemberFunctionPointerCall3 : public RunFunctionTask<T>
 {
  public:
@@ -991,7 +1016,8 @@ class StoredConstMemberFunctionPointerCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
 class VoidStoredConstMemberFunctionPointerCall3 : public RunFunctionTask<T>
 {
  public:
@@ -1012,15 +1038,19 @@ class VoidStoredConstMemberFunctionPointerCall3 : public RunFunctionTask<T>
    Arg3 arg3;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3>
-struct SelectStoredConstMemberFunctionPointerCall3 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3>
+struct SelectStoredConstMemberFunctionPointerCall3
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>,
          VoidStoredConstMemberFunctionPointerCall3<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3>>::type;
 };
 
-template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-struct StoredFunctorCall4: public RunFunctionTask<T> {
+template <typename T, typename FunctionPointer, typename Arg1, typename Arg2,
+      typename Arg3, typename Arg4>
+struct StoredFunctorCall4: public RunFunctionTask<T>
+{
    StoredFunctorCall4(FunctionPointer _function, const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3,
          const Arg4 &_arg4)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3), arg4(_arg4)
@@ -1074,7 +1104,8 @@ struct StoredFunctorPointerCall4: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-struct VoidStoredFunctorPointerCall4: public RunFunctionTask<T> {
+struct VoidStoredFunctorPointerCall4: public RunFunctionTask<T>
+{
    VoidStoredFunctorPointerCall4(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2,
          const Arg3 &_arg3, const Arg4 &_arg4)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3), arg4(_arg4)
@@ -1092,14 +1123,15 @@ struct VoidStoredFunctorPointerCall4: public RunFunctionTask<T> {
 };
 
 template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-struct SelectStoredFunctorPointerCall4 {
+struct SelectStoredFunctorPointerCall4
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredFunctorPointerCall4    <T, FunctionPointer, Arg1, Arg2, Arg3, Arg4>,
          VoidStoredFunctorPointerCall4<T, FunctionPointer, Arg1, Arg2, Arg3, Arg4>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3,
-      typename Arg3, typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class StoredMemberFunctionCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1121,13 +1153,13 @@ class StoredMemberFunctionCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class VoidStoredMemberFunctionCall4 : public RunFunctionTask<T>
 {
  public:
-   VoidStoredMemberFunctionCall4(T (Class::*_fn)(Param1, Param2, Param3, Param4), const Class &_object, const Arg1 &_arg1,
-         const Arg2 &_arg2, const Arg3 &_arg3, const Arg4 &_arg4)
+   VoidStoredMemberFunctionCall4(T (Class::*_fn)(Param1, Param2, Param3, Param4), const Class &_object,
+         const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3, const Arg4 &_arg4)
       : fn(_fn), object(_object), arg1(_arg1), arg2(_arg2), arg3(_arg3), arg4(_arg4)
    { }
 
@@ -1144,16 +1176,17 @@ class VoidStoredMemberFunctionCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
-struct SelectStoredMemberFunctionCall4 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
+struct SelectStoredMemberFunctionCall4
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>,
          VoidStoredMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class StoredConstMemberFunctionCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1175,8 +1208,8 @@ class StoredConstMemberFunctionCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class VoidStoredConstMemberFunctionCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1198,16 +1231,16 @@ class VoidStoredConstMemberFunctionCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 struct SelectStoredConstMemberFunctionCall4 {
   using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>,
          VoidStoredConstMemberFunctionCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class StoredMemberFunctionPointerCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1229,8 +1262,8 @@ class StoredMemberFunctionPointerCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class VoidStoredMemberFunctionPointerCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1252,16 +1285,17 @@ class VoidStoredMemberFunctionPointerCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
-struct SelectStoredMemberFunctionPointerCall4 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
+struct SelectStoredMemberFunctionPointerCall4
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>,
          VoidStoredMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class StoredConstMemberFunctionPointerCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1283,8 +1317,8 @@ class StoredConstMemberFunctionPointerCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
 class VoidStoredConstMemberFunctionPointerCall4 : public RunFunctionTask<T>
 {
  public:
@@ -1306,15 +1340,17 @@ class VoidStoredConstMemberFunctionPointerCall4 : public RunFunctionTask<T>
    Arg4 arg4;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4>
-struct SelectStoredConstMemberFunctionPointerCall4 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4>
+struct SelectStoredConstMemberFunctionPointerCall4
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredConstMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>,
          VoidStoredConstMemberFunctionPointerCall4<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4>>::type;
 };
 
-template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
+template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3,
+      typename Arg4, typename Arg5>
 struct StoredFunctorCall5: public RunFunctionTask<T> {
    StoredFunctorCall5(FunctionPointer _function, const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3,
          const Arg4 &_arg4, const Arg5 &_arg5)
@@ -1334,7 +1370,8 @@ struct StoredFunctorCall5: public RunFunctionTask<T> {
 };
 
 template <typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-struct StoredFunctorCall5<void, FunctionPointer, Arg1, Arg2, Arg3, Arg4, Arg5>: public RunFunctionTask<void> {
+struct StoredFunctorCall5<void, FunctionPointer, Arg1, Arg2, Arg3, Arg4, Arg5>: public RunFunctionTask<void>
+{
    StoredFunctorCall5(FunctionPointer _function, const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3,
          const Arg4 &_arg4, const Arg5 &_arg5)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3), arg4(_arg4), arg5(_arg5)
@@ -1352,8 +1389,10 @@ struct StoredFunctorCall5<void, FunctionPointer, Arg1, Arg2, Arg3, Arg4, Arg5>: 
    Arg5 arg5;
 };
 
-template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-struct StoredFunctorPointerCall5: public RunFunctionTask<T> {
+template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3,
+      typename Arg4, typename Arg5>
+struct StoredFunctorPointerCall5: public RunFunctionTask<T>
+{
    StoredFunctorPointerCall5(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2, const Arg3 &_arg3,
          const Arg4 &_arg4, const Arg5 &_arg5)
       : function(_function), arg1(_arg1), arg2(_arg2), arg3(_arg3), arg4(_arg4), arg5(_arg5)
@@ -1371,7 +1410,8 @@ struct StoredFunctorPointerCall5: public RunFunctionTask<T> {
    Arg5 arg5;
 };
 
-template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
+template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3,
+      typename Arg4, typename Arg5>
 struct VoidStoredFunctorPointerCall5: public RunFunctionTask<T> {
    VoidStoredFunctorPointerCall5(FunctionPointer *_function, const Arg1 &_arg1, const Arg2 &_arg2,
          const Arg3 &_arg3, const Arg4 &_arg4, const Arg5 &_arg5)
@@ -1390,15 +1430,17 @@ struct VoidStoredFunctorPointerCall5: public RunFunctionTask<T> {
    Arg5 arg5;
 };
 
-template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-struct SelectStoredFunctorPointerCall5 {
+template <typename T, typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3,
+      typename Arg4, typename Arg5>
+struct SelectStoredFunctorPointerCall5
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredFunctorPointerCall5    <T, FunctionPointer, Arg1, Arg2, Arg3, Arg4, Arg5>,
          VoidStoredFunctorPointerCall5<T, FunctionPointer, Arg1, Arg2, Arg3, Arg4, Arg5>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class StoredMemberFunctionCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1421,8 +1463,8 @@ class StoredMemberFunctionCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class VoidStoredMemberFunctionCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1445,16 +1487,17 @@ class VoidStoredMemberFunctionCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
-struct SelectStoredMemberFunctionCall5 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
+struct SelectStoredMemberFunctionCall5
+{
    using type = typename SelectSpecialization<T>::template
          Type<StoredMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>,
          VoidStoredMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class StoredConstMemberFunctionCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1477,8 +1520,8 @@ class StoredConstMemberFunctionCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class VoidStoredConstMemberFunctionCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1501,16 +1544,19 @@ class VoidStoredConstMemberFunctionCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
-struct SelectStoredConstMemberFunctionCall5 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
+struct SelectStoredConstMemberFunctionCall5
+{
    using type = typename SelectSpecialization<T>::template
-         Type<StoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>,
-         VoidStoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>>::type;
+         Type<StoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4,
+         Param5, Arg5>,
+         VoidStoredConstMemberFunctionCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4,
+         Param5, Arg5>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class StoredMemberFunctionPointerCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1533,8 +1579,8 @@ class StoredMemberFunctionPointerCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class VoidStoredMemberFunctionPointerCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1557,16 +1603,19 @@ class VoidStoredMemberFunctionPointerCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
-struct SelectStoredMemberFunctionPointerCall5 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
+struct SelectStoredMemberFunctionPointerCall5
+{
    using type = typename SelectSpecialization<T>::template
-         Type<StoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>,
-         VoidStoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>>::type;
+         Type<StoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4,
+         Arg4, Param5, Arg5>,
+         VoidStoredMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4,
+         Arg4, Param5, Arg5>>::type;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class StoredConstMemberFunctionPointerCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1589,8 +1638,8 @@ class StoredConstMemberFunctionPointerCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
 class VoidStoredConstMemberFunctionPointerCall5 : public RunFunctionTask<T>
 {
  public:
@@ -1613,12 +1662,15 @@ class VoidStoredConstMemberFunctionPointerCall5 : public RunFunctionTask<T>
    Arg5 arg5;
 };
 
-template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2, typename Param3, typename Arg3,
-      typename Param4, typename Arg4, typename Param5, typename Arg5>
-struct SelectStoredConstMemberFunctionPointerCall5 {
+template <typename T, typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2,
+      typename Param3, typename Arg3, typename Param4, typename Arg4, typename Param5, typename Arg5>
+struct SelectStoredConstMemberFunctionPointerCall5
+{
    using type = typename SelectSpecialization<T>::template
-         Type<StoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>,
-         VoidStoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3, Param4, Arg4, Param5, Arg5>>::type;
+         Type<StoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3,
+         Param4, Arg4, Param5, Arg5>,
+         VoidStoredConstMemberFunctionPointerCall5<T, Class, Param1, Arg1, Param2, Arg2, Param3, Arg3,
+         Param4, Arg4, Param5, Arg5>>::type;
 };
 
 template <typename T, typename Functor>

@@ -364,9 +364,11 @@ void QSharedDataPointer<T>::detach_helper()
 {
    T *x = clone();
    x->ref.ref();
-   if (!d->ref.deref()) {
+
+   if (! d->ref.deref()) {
       delete d;
    }
+
    d = x;
 }
 
@@ -381,9 +383,11 @@ void QExplicitlySharedDataPointer<T>::detach_helper()
 {
    T *x = clone();
    x->ref.ref();
+
    if (!d->ref.deref()) {
       delete d;
    }
+
    d = x;
 }
 
@@ -419,6 +423,5 @@ inline void swap(QExplicitlySharedDataPointer<T> &p1, QExplicitlySharedDataPoint
 {
    p1.swap(p2);
 }
-
 
 #endif

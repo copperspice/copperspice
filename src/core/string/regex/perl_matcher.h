@@ -597,7 +597,7 @@ class perl_matcher
    // Recursion limit:
    unsigned m_recursions;
 
-   // these operations aren't allowed, so are declared private,
+   // these operations are not allowed, so are declared private,
    // bodies are provided to keep explicit-instantiation requests happy
    perl_matcher &operator=(const perl_matcher &) {
       return *this;

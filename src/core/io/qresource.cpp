@@ -77,7 +77,6 @@ class QResourceRoot
       Resource_File,
       Resource_Buffer
    };
-   mutable QAtomicInt ref;
 
    QResourceRoot()
       : tree(nullptr), names(nullptr), payloads(nullptr)
@@ -118,6 +117,8 @@ class QResourceRoot
    virtual ResourceRootType type() const {
       return Resource_Builtin;
    }
+
+   mutable QAtomicInt ref;
 
  protected:
    void setSource(const uchar *t, const uchar *n, const uchar *d) {

@@ -123,14 +123,14 @@ class QXmlStreamReader_Table
       GOTO_CHECK_OFFSET = 1017
    };
 
-   static const char  *const    spell [];
-   static const short             lhs [];
-   static const short             rhs [];
-   static const short    goto_default [];
-   static const short  action_default [];
-   static const short    action_index [];
-   static const short     action_info [];
-   static const short    action_check [];
+   static const char  *const spell[];
+   static const short lhs[];
+   static const short rhs[];
+   static const short goto_default[];
+   static const short action_default[];
+   static const short action_index[];
+   static const short action_info[];
+   static const short action_check[];
 
    static int nt_action (int state, int nt) {
       const int yyn = action_index [GOTO_INDEX_OFFSET + state] + nt;

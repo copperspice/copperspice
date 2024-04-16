@@ -56,7 +56,8 @@ void QSystemSemaphorePrivate::setErrorString(const QString &function)
          break;
 
       default:
-         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: unknown error %2").formatArg(function).formatArg(windowsError);
+         errorString = QCoreApplication::translate("QSystemSemaphore", "%1: unknown error %2")
+               .formatArg(function).formatArg(windowsError);
          error = QSystemSemaphore::UnknownError;
 
 #ifdef QSYSTEMSEMAPHORE_DEBUG

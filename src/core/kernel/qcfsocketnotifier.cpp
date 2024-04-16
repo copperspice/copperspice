@@ -189,7 +189,6 @@ void QCFSocketNotifier::unregisterSocketNotifier(QSocketNotifier *notifier)
       qWarning("QSocketNotifier::unregisterSocketNotifier Socket notifiers can not be disabled from another thread");
       return;
    }
-
 #endif
 
    if (type == QSocketNotifier::Exception) {

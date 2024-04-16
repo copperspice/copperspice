@@ -1298,17 +1298,15 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
       const QPostEvent &pe = data->postEventList.at(i);
 
       if (pe.event == event) {
-
-#if defined(QT_DEBUG)
          qWarning("QCoreApplication::removePostedEvent() Event of type %d deleted while posted to %s %s",
                event->type(), csPrintable(pe.receiver->metaObject()->className()), csPrintable(pe.receiver->objectName()));
-#endif
 
          CSInternalEvents::decr_PostedEvents(pe.receiver);
          pe.event->posted = false;
 
          delete pe.event;
          const_cast<QPostEvent &>(pe).event = nullptr;
+
          return;
       }
    }

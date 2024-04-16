@@ -96,7 +96,7 @@ class QFileInfoPrivate : public QSharedData
    }
 
    void clearFlags() const {
-      fileFlags = 0;
+      fileFlags   = 0;
       cachedFlags = 0;
 
       if (fileEngine) {
@@ -130,8 +130,10 @@ class QFileInfoPrivate : public QSharedData
    mutable QString fileOwners[2];
 
    mutable uint cachedFlags;
-   bool const isDefaultConstructed : 1; // QFileInfo is a default constructed instance
+
+   bool const isDefaultConstructed : 1;
    bool cache_enabled : 1;
+
    mutable uint fileFlags;
    mutable qint64 fileSize;
    mutable QDateTime fileTimes[3];

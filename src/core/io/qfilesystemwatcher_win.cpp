@@ -359,7 +359,7 @@ void QWindowsFileSystemWatcherEngineThread::run()
             // When removing a path, FindCloseChangeNotification might actually fire a notification
             // for some reason, so we must check if the handle exist in the handles vector
             if (handles.contains(handle)) {
-               if (!FindNextChangeNotification(handle)) {
+               if (! FindNextChangeNotification(handle)) {
                   qErrnoWarning("QFileSystemWatcher: FindNextChangeNotification failed!!");
                }
 
@@ -371,8 +371,7 @@ void QWindowsFileSystemWatcherEngineThread::run()
                   QString absolutePath = x.value().absolutePath;
                   QFileInfo fileInfo(x.value().path);
 
-
-                  if (!fileInfo.exists()) {
+                  if (! fileInfo.exists()) {
                      if (x.value().isDir) {
                         emit directoryChanged(x.value().path, true);
                      } else {

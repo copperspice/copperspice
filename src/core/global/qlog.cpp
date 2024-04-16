@@ -52,7 +52,6 @@ namespace {
 }
 #endif
 
-
 QString qt_error_string(int errorCode)
 {
    if (errorCode == -1) {

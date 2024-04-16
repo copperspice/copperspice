@@ -516,8 +516,8 @@ static void setup()
    if (destroying_is_ok) {
       qWarning("QTextCodec() Creating new codec during codec cleanup");
    }
-
 #endif
+
    all = new QList<QTextCodec *>;
    // create the cleanup object to cleanup all codecs on exit
    (void) createQTextCodecCleanup();
@@ -982,6 +982,7 @@ QTextCodec *QTextCodec::codecForUtfText(const QByteArray &ba, QTextCodec *defaul
             && (uchar)ba[2] == 0xFE
             && (uchar)ba[3] == 0xFF) {
          return QTextCodec::codecForMib(1018);   // utf-32 be
+
       } else if ((uchar)ba[0] == 0xFF
                  && (uchar)ba[1] == 0xFE
                  && (uchar)ba[2] == 0x00

@@ -51,15 +51,16 @@
 
 //#define QSYSTEMSEMAPHORE_DEBUG
 
-QSystemSemaphorePrivate::QSystemSemaphorePrivate() :
 #ifndef QT_POSIX_IPC
-   unix_key(-1), semaphore(-1), createdFile(false),
+   QSystemSemaphorePrivate::QSystemSemaphorePrivate()
+      : unix_key(-1), semaphore(-1), createdFile(false), createdSemaphore(false),
+        error(QSystemSemaphore::NoError)
+   { }
 #else
-   semaphore(SEM_FAILED),
+   QSystemSemaphorePrivate::QSystemSemaphorePrivate()
+      : semaphore(SEM_FAILED), createdSemaphore(false), error(QSystemSemaphore::NoError)
+   { }
 #endif
-   createdSemaphore(false), error(QSystemSemaphore::NoError)
-{
-}
 
 void QSystemSemaphorePrivate::setErrorString(const QString &function)
 {

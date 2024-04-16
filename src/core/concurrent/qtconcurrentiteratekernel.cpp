@@ -60,7 +60,7 @@ static qint64 getticks()
    clockId = CLOCK_REALTIME;
 
 #elif (_POSIX_THREAD_CPUTIME-0 <= 0)
-   // if we don't have CLOCK_THREAD_CPUTIME_ID, we have to just use elapsed realtime instead
+   // if we do not have CLOCK_THREAD_CPUTIME_ID, we have to just use elapsed realtime instead
    clockId = CLOCK_REALTIME;
 
 #  if (_POSIX_THREAD_CPUTIME-0 == 0)

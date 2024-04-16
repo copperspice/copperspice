@@ -60,10 +60,10 @@ const QString &QMetaEnum::key(int index) const
       if (m_data.isEmpty()) {
          qDebug("QMetaEnum::key() Enum %s may not be registered", csPrintable(m_name));
       }
-
 #endif
 
       static QString retval;
+
       return retval;
    }
 

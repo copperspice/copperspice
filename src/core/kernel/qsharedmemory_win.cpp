@@ -83,6 +83,7 @@ void QSharedMemoryPrivate::setErrorString(const QString &function)
 #ifdef QSHAREDMEMORY_DEBUG
          qDebug() << errorString << "key" << key;
 #endif
+
          break;
    }
 }

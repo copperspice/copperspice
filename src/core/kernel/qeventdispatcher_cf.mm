@@ -278,7 +278,7 @@ bool QEventDispatcherCoreFoundation::processEvents(QEventLoop::ProcessEventsFlag
             QEventLoop *currentEventLoop = QThreadData::current()->eventLoops.top();
             Q_ASSERT(currentEventLoop);
 
-            if (!currentEventLoop->isRunning()) {
+            if (! currentEventLoop->isRunning()) {
                qEventDispatcherDebug() << "Top level event loop was exited";
                break;
             } else {
@@ -597,7 +597,7 @@ void QEventDispatcherCoreFoundation::updateTimers()
          qEventDispatcherDebug() << "Re-scheduled CFRunLoopTimer " << m_runLoopTimer;
       }
 
-      m_overdueTimerScheduled = !timespecToSeconds(tv);
+      m_overdueTimerScheduled = ! timespecToSeconds(tv);
 
       qEventDispatcherDebug() << "Next timeout in " << tv << " seconds";
 

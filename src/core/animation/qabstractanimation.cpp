@@ -146,7 +146,7 @@ void QUnifiedTimer::restartAnimationTimer()
       animationTimer.start(closestTimeToFinish, this);
       isPauseTimerActive = true;
 
-   } else if (!driver->isRunning() || isPauseTimerActive) {
+   } else if (! driver->isRunning() || isPauseTimerActive) {
       driver->start();
       isPauseTimerActive = false;
 

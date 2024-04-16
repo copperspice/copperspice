@@ -69,12 +69,10 @@ class QLibraryHandle
    bool isPlugin();
 
 #ifdef Q_OS_WIN
-   HINSTANCE
+   HINSTANCE pHnd;
 #else
-   void *
+   void *pHnd;
 #endif
-
-   pHnd;
 
    QString fileName;
    QString qualifiedFileName;

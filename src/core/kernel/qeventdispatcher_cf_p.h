@@ -55,7 +55,7 @@ class RunLoopSource
    RunLoopSource(T *delegate, CallbackFunction callback)
       : m_delegate(delegate), m_callback(callback)
    {
-      CFRunLoopSourceContext context = {};
+      CFRunLoopSourceContext context = { };
       context.info = this;
       context.perform = RunLoopSource::process;
 

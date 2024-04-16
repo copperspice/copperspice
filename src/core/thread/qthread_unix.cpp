@@ -66,16 +66,17 @@
 # endif
 #endif
 
-#if defined(Q_OS_LINUX) && !defined(QT_LINUXBASE)
+#if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)
 #include <sys/prctl.h>
 #endif
 
-#if defined(Q_OS_LINUX) && !defined(SCHED_IDLE)
+#if defined(Q_OS_LINUX) && ! defined(SCHED_IDLE)
 // from linux/sched.h
 # define SCHED_IDLE    5
 #endif
 
-#if defined(Q_OS_DARWIN) || !defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
+#if defined(Q_OS_DARWIN) || ! defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) \
+      && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
 #define QT_HAS_THREAD_PRIORITY_SCHEDULING
 #endif
 
@@ -415,10 +416,6 @@ void QThread::yieldCurrentThread()
    sched_yield();
 }
 
-/*  \internal
-    helper function to do thread sleeps, since usleep()/nanosleep()
-    aren't reliable enough (in terms of behavior and availability)
-*/
 static void thread_sleep(struct timespec *ti)
 {
    pthread_mutex_t mtx;

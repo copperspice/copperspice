@@ -67,16 +67,16 @@ class LIB_CS_STRING_EXPORT regbase
 
       // options common to all groups
       no_escape_in_lists = 1 << 16,                     // '\' not special inside [...]
-      newline_alt = 1 << 17,                            // \n is the same as |
-      no_except = 1 << 18,                              // no exception on error
-      failbit = 1 << 19,                                // error flag
-      icase = 1 << 20,                                  // characters are matched regardless of case
-      nocollate = 0,                                    // don't use locale specific collation (deprecated)
-      collate = 1 << 21,                                // use locale specific collation
-      nosubs = 1 << 22,                                 // don't mark sub-expressions
+      newline_alt        = 1 << 17,                     // \n is the same as |
+      no_except          = 1 << 18,                     // no exception on error
+      failbit            = 1 << 19,                     // error flag
+      icase              = 1 << 20,                     // characters are matched regardless of case
+      nocollate          = 0,                           // don't use locale specific collation (deprecated)
+      collate            = 1 << 21,                     // use locale specific collation
+      nosubs             = 1 << 22,                     // don't mark sub-expressions
       save_subexpression_location = 1 << 23,            // save subexpression locations
-      no_empty_expressions = 1 << 24,                   // no empty expressions allowed
-      optimize = 0,                                     // not really supported
+      no_empty_expressions        = 1 << 24,            // no empty expressions allowed
+      optimize           = 0,                           // not really supported
 
 
       basic      = basic_syntax_group | collate | no_escape_in_lists,
@@ -133,13 +133,13 @@ enum flag_type_ {
    save_subexpression_location = cs_regex_ns::regbase::save_subexpression_location,
    no_empty_expressions = cs_regex_ns::regbase::no_empty_expressions,
 
-   basic = cs_regex_ns::regbase::basic,
-   extended = cs_regex_ns::regbase::extended,
-   normal = cs_regex_ns::regbase::normal,
-   emacs = cs_regex_ns::regbase::emacs,
-   awk = cs_regex_ns::regbase::awk,
-   grep = cs_regex_ns::regbase::grep,
-   egrep = cs_regex_ns::regbase::egrep,
+   basic        = cs_regex_ns::regbase::basic,
+   extended     = cs_regex_ns::regbase::extended,
+   normal       = cs_regex_ns::regbase::normal,
+   emacs        = cs_regex_ns::regbase::emacs,
+   awk          = cs_regex_ns::regbase::awk,
+   grep         = cs_regex_ns::regbase::grep,
+   egrep        = cs_regex_ns::regbase::egrep,
    sed          = basic,
    perl         = normal,
    ECMAScript   = normal,

@@ -593,6 +593,7 @@ bool QEventDispatcherGlib::unregisterTimers(QObject *object)
 #endif
 
    Q_D(QEventDispatcherGlib);
+
    return d->timerSource->timerList.unregisterTimers(object);
 }
 
@@ -615,7 +616,6 @@ int QEventDispatcherGlib::remainingTime(int timerId)
       qWarning("QEventDispatcher::remainingTimeTime() Invalid argument");
       return -1;
    }
-
 #endif
 
    Q_D(QEventDispatcherGlib);
