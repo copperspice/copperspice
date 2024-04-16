@@ -36,9 +36,9 @@
 
 //#define QNETWORKDISKCACHE_DEBUG
 
-#define CACHE_POSTFIX QString(".d")
+#define CACHE_POSTFIX  QString(".d")
 #define PREPARED_SLASH QString("prepared/")
-#define DATA_DIR QString("data")
+#define DATA_DIR       QString("data")
 
 static constexpr const int CacheMagic         = 0xe8;
 static constexpr const int CacheVersion       = 8;
@@ -631,6 +631,7 @@ bool QCacheItem::read(QFile *device, bool readData)
    qint32 v;
    in >> marker;
    in >> v;
+
    if (marker != CacheMagic) {
       return true;
    }

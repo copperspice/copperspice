@@ -31,7 +31,8 @@ class QAudioBufferPrivate : public QSharedData
 {
  public:
    QAudioBufferPrivate(QAbstractAudioBuffer *provider)
-      : mProvider(provider), mCount(1) {
+      : mProvider(provider), mCount(1)
+   {
    }
 
    ~QAudioBufferPrivate() {

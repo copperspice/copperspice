@@ -792,7 +792,11 @@ class QNtlmBuffer
 {
  public:
    static constexpr const int Size = 8;
-   QNtlmBuffer() : len(0), maxLen(0), offset(0) {}
+
+   QNtlmBuffer()
+      : len(0), maxLen(0), offset(0)
+   { }
+
    quint16 len;
    quint16 maxLen;
    quint32 offset;

@@ -215,7 +215,8 @@ class QDisabledNetworkReply : public QNetworkReply
    QDisabledNetworkReply(QObject *parent, const QNetworkRequest &req, QNetworkAccessManager::Operation op);
    ~QDisabledNetworkReply();
 
-   void abort() override { }
+   void abort() override {
+   }
 
  protected:
    qint64 readData(char *, qint64) override {

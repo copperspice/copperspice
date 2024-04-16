@@ -26,7 +26,6 @@
 #include <qxcb_connection.h>
 #include <qxcb_screen.h>
 #include <qxcb_mime.h>
-
 #include <qapplication_p.h>
 #include <qelapsedtimer.h>
 #include <qdebug.h>
@@ -238,6 +237,7 @@ class INCRTransaction : public QObject
 #ifdef INCR_DEBUG
          qDebug("INCRTransaction: Timed out while sending data to %p", this);
 #endif
+
          delete this;
       }
    }
@@ -621,10 +621,6 @@ void QXcbClipboard::handleSelectionClearRequest(xcb_selection_clear_event_t *eve
    if (m_timestamp[mode] != XCB_CURRENT_TIME && event->time <= m_timestamp[mode]) {
       return;
    }
-
-   //    DEBUG("QClipboard: new selection owner 0x%lx at time %lx (ours %lx)",
-   //          XGetSelectionOwner(dpy, XA_PRIMARY),
-   //          xevent->xselectionclear.time, d->timestamp);
 
    xcb_window_t newOwner = getSelectionOwner(event->selection);
 

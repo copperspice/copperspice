@@ -747,17 +747,20 @@ void QFtpDTP::socketReadyRead()
             }
          }
       }
+
    } else {
-      if (!is_ba && data.dev) {
+      if (! is_ba && data.dev) {
          do {
             QByteArray ba;
             ba.resize(socket->bytesAvailable());
             qint64 bytesRead = socket->read(ba.data(), ba.size());
+
             if (bytesRead < 0) {
                // a read following a readyRead() signal will
                // never fail.
                return;
             }
+
             ba.resize(bytesRead);
             m_bytesDone += bytesRead;
 

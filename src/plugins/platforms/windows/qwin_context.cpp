@@ -329,7 +329,7 @@ void QWindowsContext::setProcessDpiAwareness(QtWindows::ProcessDpiAwareness dpiA
 
    } else {
       if (dpiAwareness != QtWindows::ProcessDpiUnaware && QWindowsContext::user32dll.setProcessDPIAware) {
-         if ( !QWindowsContext::user32dll.setProcessDPIAware()) {
+         if (! QWindowsContext::user32dll.setProcessDPIAware()) {
             qErrnoWarning("SetProcessDPIAware() failed");
          }
       }

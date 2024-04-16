@@ -761,6 +761,7 @@ bool QHttpResponseHeader::parseLine(const QString &line, int number)
          d->statCode = l.mid(9).toInteger<int>();
          d->reasonPhr.clear();
       }
+
    } else {
       return false;
    }
@@ -771,6 +772,9 @@ bool QHttpResponseHeader::parseLine(const QString &line, int number)
 QString QHttpResponseHeader::toString() const
 {
    Q_D(const QHttpResponseHeader);
-   QString ret(QLatin1String("HTTP/%1.%2 %3 %4\r\n%5\r\n"));
-   return ret.formatArg(d->majVer).formatArg(d->minVer).formatArg(d->statCode).formatArg(d->reasonPhr).formatArg(QHttpHeader::toString());
+
+   QString retval(QLatin1String("HTTP/%1.%2 %3 %4\r\n%5\r\n"));
+
+   return retval.formatArg(d->majVer).formatArg(d->minVer).formatArg(d->statCode)
+         .formatArg(d->reasonPhr).formatArg(QHttpHeader::toString());
 }

@@ -216,9 +216,13 @@ class QWindowsOleDropSource : public IDropSource
 
  private:
    struct CursorEntry {
-      CursorEntry() : cacheKey(0) {}
-      CursorEntry(const QPixmap &p, qint64 cK, const CursorHandlePtr &c, const QPoint &h) :
-         pixmap(p), cacheKey(cK), cursor(c), hotSpot(h) {}
+      CursorEntry()
+         : cacheKey(0)
+      { }
+
+      CursorEntry(const QPixmap &p, qint64 cK, const CursorHandlePtr &c, const QPoint &h)
+         : pixmap(p), cacheKey(cK), cursor(c), hotSpot(h)
+      { }
 
       QPixmap pixmap;
       qint64 cacheKey; // Cache key of cursor

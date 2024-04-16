@@ -158,7 +158,6 @@ class QM3uPlaylistWriter : public QMediaPlaylistWriter
    QTextStream *m_textStream;
 };
 
-
 QM3uPlaylistPlugin::QM3uPlaylistPlugin(QObject *parent)
    : QMediaPlaylistIOPlugin(parent)
 {

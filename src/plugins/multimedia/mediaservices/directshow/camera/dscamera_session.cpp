@@ -717,7 +717,7 @@ void DSCameraSession::presentFrame()
       captureId = m_currentImageId;
 
       QtConcurrent::run(this, &DSCameraSession::saveCapturedImage,
-                        m_currentImageId, captureImage, m_imageCaptureFileName);
+            m_currentImageId, captureImage, m_imageCaptureFileName);
 
       m_imageCaptureFileName.clear();
       m_currentImageId = -1;

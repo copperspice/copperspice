@@ -791,6 +791,7 @@ class QWindowsNativeFileDialogEventHandler : public IFileDialogEvents
 
    QWindowsNativeFileDialogEventHandler(QWindowsNativeFileDialogBase *nativeFileDialog) :
       m_ref(1), m_nativeFileDialog(nativeFileDialog) {}
+
    virtual ~QWindowsNativeFileDialogEventHandler() {}
 
  private:
@@ -859,6 +860,7 @@ class QWindowsNativeFileDialogBase : public QWindowsNativeDialogBase
    bool hasDefaultSuffix() const  {
       return m_hasDefaultSuffix;
    }
+
    inline void setLabelText(QPlatformFileDialogOptions::DialogLabel l, const QString &text);
 
    // Return the selected files for tracking in OnSelectionChanged().
@@ -2285,6 +2287,7 @@ class QWindowsColorDialogHelper : public QWindowsDialogHelperBase<QPlatformColor
    virtual QColor currentColor() const {
       return *m_currentColor;
    }
+
    virtual void setCurrentColor(const QColor &c) {
       *m_currentColor = c;
    }
@@ -2378,4 +2381,3 @@ QPlatformDialogHelper *createHelper(QPlatformTheme::DialogType type)
 }
 
 } // namespace
-

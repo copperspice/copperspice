@@ -2964,14 +2964,17 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font)
 {
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);
-   if (!d->glcx->contextHandle()->isOpenGLES()) {
-      if (str.isEmpty() || !isValid()) {
+
+   if (! d->glcx->contextHandle()->isOpenGLES()) {
+
+      if (str.isEmpty() || ! isValid()) {
          return;
       }
 
       QOpenGLFunctions *funcs = qgl_functions();
       GLint view[4];
       bool use_scissor_testing = funcs->glIsEnabled(GL_SCISSOR_TEST);
+
       if (!use_scissor_testing) {
          funcs->glGetIntegerv(GL_VIEWPORT, &view[0]);
       }
@@ -3035,14 +3038,15 @@ void QGLWidget::renderText(int x, int y, const QString &str, const QFont &font)
 #endif
 
    qWarning("QGLWidget::renderText is not supported under OpenGL/ES");
-
 }
 
 void QGLWidget::renderText(double x, double y, double z, const QString &str, const QFont &font)
 {
 #ifndef QT_OPENGL_ES
    Q_D(QGLWidget);
-   if (!d->glcx->contextHandle()->isOpenGLES()) {
+
+   if (! d->glcx->contextHandle()->isOpenGLES()) {
+
       if (str.isEmpty() || !isValid()) {
          return;
       }

@@ -117,12 +117,14 @@ class QCameraFocusFakeFocusControl : public QCameraFocusControl
 class QCameraFocusZoneData : public QSharedData
 {
  public:
-   QCameraFocusZoneData():
-      status(QCameraFocusZone::Invalid) {
+   QCameraFocusZoneData()
+      : status(QCameraFocusZone::Invalid)
+   {
    }
 
    QCameraFocusZoneData(const QRectF &_area, QCameraFocusZone::FocusZoneStatus _status)
-      : area(_area), status(_status) {
+      : area(_area), status(_status)
+   {
    }
 
    QCameraFocusZoneData(const QCameraFocusZoneData &other)

@@ -78,13 +78,11 @@ class Q_MULTIMEDIA_EXPORT QAudioBuffer
    template <typename T> struct StereoFrame {
 
       StereoFrame()
-         : left(T(StereoFrameDefault<T>::Default))
-         , right(T(StereoFrameDefault<T>::Default)) {
+         : left(T(StereoFrameDefault<T>::Default)), right(T(StereoFrameDefault<T>::Default)) {
       }
 
       StereoFrame(T leftSample, T rightSample)
-         : left(leftSample)
-         , right(rightSample) {
+         : left(leftSample), right(rightSample) {
       }
 
       StereoFrame &operator=(const StereoFrame &other) {
@@ -116,9 +114,11 @@ class Q_MULTIMEDIA_EXPORT QAudioBuffer
    template <typename T> const T *constData() const {
       return static_cast<const T *>(constData());
    }
+
    template <typename T> const T *data() const {
       return static_cast<const T *>(data());
    }
+
    template <typename T> T *data() {
       return static_cast<T *>(data());
    }
@@ -127,12 +127,15 @@ class Q_MULTIMEDIA_EXPORT QAudioBuffer
    QAudioBufferPrivate *d;
 };
 
-template <> struct QAudioBuffer::StereoFrameDefault<unsigned char> {
+template <>
+struct QAudioBuffer::StereoFrameDefault<unsigned char> {
    enum {
       Default = 128
    };
 };
-template <> struct QAudioBuffer::StereoFrameDefault<unsigned short> {
+
+template <>
+struct QAudioBuffer::StereoFrameDefault<unsigned short> {
    enum {
       Default = 32768
    };

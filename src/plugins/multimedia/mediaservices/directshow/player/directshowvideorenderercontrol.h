@@ -47,7 +47,6 @@ class DirectShowVideoRendererControl : public QVideoRendererControl
 
    IBaseFilter *filter();
 
- public:
    CS_SIGNAL_1(Public, void filterChanged())
    CS_SIGNAL_2(filterChanged)
 

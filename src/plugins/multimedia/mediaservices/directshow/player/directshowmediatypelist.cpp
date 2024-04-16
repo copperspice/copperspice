@@ -51,13 +51,9 @@ class DirectShowMediaTypeEnum : public IEnumMediaTypes
    int m_index;
 };
 
-
 DirectShowMediaTypeEnum::DirectShowMediaTypeEnum(
    DirectShowMediaTypeList *list, int token, int index)
-   : m_ref(1)
-   , m_list(list)
-   , m_mediaTypeToken(token)
-   , m_index(index)
+   : m_ref(1), m_list(list), m_mediaTypeToken(token), m_index(index)
 {
    m_list->AddRef();
 }

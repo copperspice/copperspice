@@ -64,9 +64,9 @@ class QGL2GradientCache : public QOpenGLSharedResource
       return 60;
    }
 
-   inline void generateGradientColorTable(const QGradient &gradient,
-                                          uint *colorTable,
-                                          int size, qreal opacity) const;
+   inline void generateGradientColorTable(const QGradient &gradient, uint *colorTable,
+         int size, qreal opacity) const;
+
    GLuint addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity);
    void cleanCache();
 

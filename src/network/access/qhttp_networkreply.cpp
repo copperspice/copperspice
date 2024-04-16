@@ -492,11 +492,9 @@ bool QHttpNetworkReplyPrivate::parseStatus(const QByteArray &status)
    static constexpr const int spacePos = 8;
    static constexpr const char httpMagic[] = "HTTP/";
 
-   if (status.length() < minLength
-         || !status.startsWith(httpMagic)
-         || status.at(dotPos) != '.'
-         || status.at(spacePos) != ' ') {
+   if (status.length() < minLength || ! status.startsWith(httpMagic) || status.at(dotPos) != '.' || status.at(spacePos) != ' ') {
       // unable to parse this status line
+
       return false;
    }
 

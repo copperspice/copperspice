@@ -251,7 +251,9 @@ class SortedContextsModel : public QSortFilterProxyModel
 class FocusWatcher : public QObject
 {
  public:
-   FocusWatcher(MessageEditor *msgedit, QObject *parent) : QObject(parent), m_messageEditor(msgedit) {}
+   FocusWatcher(MessageEditor *msgedit, QObject *parent)
+      : QObject(parent), m_messageEditor(msgedit)
+   { }
 
  protected:
    bool eventFilter(QObject *object, QEvent *event) override;

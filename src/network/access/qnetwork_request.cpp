@@ -41,14 +41,16 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
    static constexpr const int maxRedirectCount = 50;
 
    QNetworkRequestPrivate()
-      : priority(QNetworkRequest::NormalPriority)
+      : priority(QNetworkRequest::NormalPriority),
+
 #ifdef QT_SSL
-      , sslConfiguration(nullptr)
+        sslConfiguration(nullptr),
 #endif
-      , maxRedirectsAllowed(maxRedirectCount)
+        maxRedirectsAllowed(maxRedirectCount)
    { }
 
-   ~QNetworkRequestPrivate() {
+   ~QNetworkRequestPrivate()
+   {
 
 #ifdef QT_SSL
       delete sslConfiguration;
@@ -70,11 +72,9 @@ class QNetworkRequestPrivate: public QSharedData, public QNetworkHeadersPrivate
    }
 
    bool operator==(const QNetworkRequestPrivate &other) const {
-      return url == other.url &&
-             priority == other.priority &&
-             rawHeaders == other.rawHeaders &&
-             attributes == other.attributes &&
-             maxRedirectsAllowed == other.maxRedirectsAllowed;
+      return url == other.url && priority == other.priority && rawHeaders == other.rawHeaders &&
+            attributes == other.attributes && maxRedirectsAllowed == other.maxRedirectsAllowed;
+
       // do not compare cookedHeaders
    }
 

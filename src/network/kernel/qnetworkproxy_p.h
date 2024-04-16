@@ -29,7 +29,9 @@
 class QSystemConfigurationProxyFactory : public QNetworkProxyFactory
 {
  public:
-   QSystemConfigurationProxyFactory() : QNetworkProxyFactory() {}
+   QSystemConfigurationProxyFactory()
+      : QNetworkProxyFactory()
+   { }
 
    QList<QNetworkProxy> queryProxy(const QNetworkProxyQuery &query) override {
       QList<QNetworkProxy> proxies = QNetworkProxyFactory::systemProxyForQuery(query);

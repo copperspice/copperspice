@@ -37,8 +37,8 @@ class QCameraImageProcessingFakeControl : public QCameraImageProcessingControl
 {
  public:
    QCameraImageProcessingFakeControl(QObject *parent)
-      : QCameraImageProcessingControl(parent) {
-   }
+      : QCameraImageProcessingControl(parent)
+   { }
 
    bool isParameterSupported(ProcessingParameter) const override {
       return false;

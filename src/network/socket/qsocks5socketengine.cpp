@@ -629,7 +629,7 @@ void QSocks5SocketEnginePrivate::setErrorState(Socks5State state, const QString 
       case Connected:
       case UdpAssociateSuccess:
       case BindSuccess:
-         // these aren't error states
+         // these are not error states
          return;
 
       case ConnectError:

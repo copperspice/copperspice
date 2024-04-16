@@ -81,11 +81,10 @@ class DirectShowPlayerService : public QMediaService
  protected:
    void customEvent(QEvent *event) override;
 
- private :
+ private:
    CS_SLOT_1(Private, void videoOutputChanged())
    CS_SLOT_2(videoOutputChanged)
 
- private:
    void releaseGraph();
    void updateStatus();
 

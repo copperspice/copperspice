@@ -55,8 +55,11 @@ class Q_NETWORK_EXPORT QNetworkCacheMetaData
    }
 
    QNetworkCacheMetaData &operator=(const QNetworkCacheMetaData &other);
-   void swap(QNetworkCacheMetaData &other)
-    { qSwap(d, other.d); }
+
+   void swap(QNetworkCacheMetaData &other) {
+      qSwap(d, other.d);
+   }
+
    bool operator==(const QNetworkCacheMetaData &other) const;
 
    bool operator!=(const QNetworkCacheMetaData &other) const {

@@ -24,14 +24,16 @@
 //#define QUDPSOCKET_DEBUG
 
 #include <qudpsocket.h>
+
 #include <qhostaddress.h>
 #include <qnetworkinterface.h>
+
 #include <qabstractsocket_p.h>
 
 #ifndef QT_NO_UDPSOCKET
 
 #define QT_CHECK_BOUND(function, a) do { \
-    if (!isValid()) { \
+    if (! isValid()) { \
         qWarning(function" called on a QUdpSocket when not in QUdpSocket::BoundState"); \
         return (a); \
     } } while (false)
@@ -57,6 +59,7 @@ bool QUdpSocketPrivate::doEnsureInitialized(const QHostAddress &bindAddress, qui
 {
    const QHostAddress *address = &bindAddress;
    QAbstractSocket::NetworkLayerProtocol proto = address->protocol();
+
    if (proto == QUdpSocket::UnknownNetworkLayerProtocol) {
       address = &remoteAddress;
       proto = address->protocol();

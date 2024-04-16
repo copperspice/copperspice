@@ -551,8 +551,10 @@ class QPluginServiceProvider : public QMediaServiceProvider
             continue;
          }
 
-         const QMediaServiceSupportedDevicesInterface *deviceIface = dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
-         const QMediaServiceCameraInfoInterface *cameraIface       = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
+         const QMediaServiceSupportedDevicesInterface *deviceIface =
+               dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+
+         const QMediaServiceCameraInfoInterface *cameraIface = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
 
          if (cameraIface) {
              if (deviceIface && ! deviceIface->devices(serviceType).contains(device)) {
@@ -571,15 +573,17 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
      QFactoryLoader *factoryObj = loader();
 
-     for (QLibraryHandle *handle : factoryObj->librarySet(serviceType))  {
+     for (QLibraryHandle *handle : factoryObj->librarySet(serviceType)) {
          QObject *obj = factoryObj->instance(handle);
 
          if (obj == nullptr) {
             continue;
          }
 
-         const QMediaServiceSupportedDevicesInterface *deviceIface = dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
-         const QMediaServiceCameraInfoInterface *cameraIface       = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
+         const QMediaServiceSupportedDevicesInterface *deviceIface =
+               dynamic_cast<QMediaServiceSupportedDevicesInterface*>(obj);
+
+         const QMediaServiceCameraInfoInterface *cameraIface = dynamic_cast<QMediaServiceCameraInfoInterface*>(obj);
 
          if (cameraIface) {
             if (deviceIface && ! deviceIface->devices(serviceType).contains(device)) {

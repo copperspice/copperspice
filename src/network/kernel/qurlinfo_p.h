@@ -29,6 +29,7 @@
 #include <qiodevice.h>
 
 #ifndef QT_NO_FTP
+
 class QUrl;
 class QUrlInfoPrivate;
 
@@ -103,6 +104,5 @@ class Q_NETWORK_EXPORT QUrlInfo
 };
 
 #endif // QT_NO_FTP
-
 
 #endif // QURLINFO_H

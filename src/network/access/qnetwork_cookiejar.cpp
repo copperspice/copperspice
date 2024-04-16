@@ -36,7 +36,6 @@ QNetworkCookieJar::QNetworkCookieJar(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-
 QNetworkCookieJar::~QNetworkCookieJar()
 {
 }
@@ -114,7 +113,7 @@ QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
    QList<QNetworkCookie>::const_iterator end = d->allCookies.constEnd();
 
    for ( ; it != end; ++it) {
-      if (!isParentDomain(url.host(), it->domain())) {
+      if (! isParentDomain(url.host(), it->domain())) {
          continue;
       }
 
@@ -151,17 +150,20 @@ QList<QNetworkCookie> QNetworkCookieJar::cookiesForUrl(const QUrl &url) const
 
    return result;
 }
+
 bool QNetworkCookieJar::insertCookie(const QNetworkCookie &cookie)
 {
    Q_D(QNetworkCookieJar);
    const QDateTime now = QDateTime::currentDateTimeUtc();
-   bool isDeletion = !cookie.isSessionCookie() &&
-                     cookie.expirationDate() < now;
+
+   bool isDeletion = !cookie.isSessionCookie() && cookie.expirationDate() < now;
    deleteCookie(cookie);
+
    if (!isDeletion) {
       d->allCookies += cookie;
       return true;
    }
+
    return false;
 }
 
@@ -176,6 +178,7 @@ bool QNetworkCookieJar::updateCookie(const QNetworkCookie &cookie)
 bool QNetworkCookieJar::deleteCookie(const QNetworkCookie &cookie)
 {
    Q_D(QNetworkCookieJar);
+
    QList<QNetworkCookie>::iterator it;
 
    for (it = d->allCookies.begin(); it != d->allCookies.end(); ++it) {
@@ -184,16 +187,21 @@ bool QNetworkCookieJar::deleteCookie(const QNetworkCookie &cookie)
          return true;
       }
    }
+
    return false;
 }
+
 bool QNetworkCookieJar::validateCookie(const QNetworkCookie &cookie, const QUrl &url) const
 {
    QString domain = cookie.domain();
+
    if (!(isParentDomain(domain, url.host()) || isParentDomain(url.host(), domain))) {
       return false;   // not accepted
    }
+
    if (qIsEffectiveTLD(domain.startsWith('.') ? domain.remove(0, 1) : domain)) {
       return false;   // not accepted
    }
+
    return true;
 }
