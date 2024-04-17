@@ -55,14 +55,15 @@ public:
 
     {
 #ifndef QT_OPENGL_ES_2
-        if (!ctx->isOpenGLES()) {
+        if (! ctx->isOpenGLES()) {
             QSurfaceFormat f = ctx->format();
 
             // Geometry shaders require OpenGL >= 3.2
-            if (shaderType & QOpenGLShader::Geometry)
+            if (shaderType & QOpenGLShader::Geometry) {
                 supportsGeometryShaders = (f.version() >= qMakePair<int, int>(3, 2));
-            else if (shaderType & (QOpenGLShader::TessellationControl | QOpenGLShader::TessellationEvaluation))
+            } else if (shaderType & (QOpenGLShader::TessellationControl | QOpenGLShader::TessellationEvaluation))  {
                 supportsTessellationShaders = (f.version() >= qMakePair<int, int>(4, 0));
+            }
         }
 #endif
     }
@@ -94,8 +95,7 @@ public:
 };
 
 namespace {
-    void freeShaderFunc(QOpenGLFunctions *funcs, GLuint id)
-    {
+    void freeShaderFunc(QOpenGLFunctions *funcs, GLuint id) {
         funcs->glDeleteShader(id);
     }
 }
@@ -103,6 +103,7 @@ namespace {
 QOpenGLShaderPrivate::~QOpenGLShaderPrivate()
 {
     delete glfuncs;
+
     if (shaderGuard) {
         shaderGuard->free();
     }
@@ -112,8 +113,10 @@ bool QOpenGLShaderPrivate::create()
 {
     QOpenGLContext *context = const_cast<QOpenGLContext *>(QOpenGLContext::currentContext());
 
-    if (!context)
+    if (! context) {
         return false;
+    }
+
     GLuint shader;
 
     if (shaderType == QOpenGLShader::Vertex) {
@@ -127,6 +130,7 @@ bool QOpenGLShaderPrivate::create()
 #if defined(QT_OPENGL_4)
     } else if (shaderType == QOpenGLShader::TessellationControl && supportsTessellationShaders) {
         shader = glfuncs->glCreateShader(GL_TESS_CONTROL_SHADER);
+
     } else if (shaderType == QOpenGLShader::TessellationEvaluation && supportsTessellationShaders) {
         shader = glfuncs->glCreateShader(GL_TESS_EVALUATION_SHADER);
 #endif
@@ -139,19 +143,24 @@ bool QOpenGLShaderPrivate::create()
     } else {
         shader = glfuncs->glCreateShader(GL_FRAGMENT_SHADER);
     }
-    if (!shader) {
-        qWarning() << "QOpenGLShader: could not create shader";
+
+    if (! shader) {
+        qWarning() << "QOpenGLShader: Unable to create shader";
         return false;
     }
+
     shaderGuard = new QOpenGLSharedResourceGuard(context, shader, freeShaderFunc);
+
     return true;
 }
 
 bool QOpenGLShaderPrivate::compile(QOpenGLShader *q)
 {
     GLuint shader = shaderGuard ? shaderGuard->id() : 0;
-    if (!shader)
+
+    if (! shader) {
         return false;
+    }
 
     // Try to compile shader
     glfuncs->glCompileShader(shader);
@@ -161,7 +170,7 @@ bool QOpenGLShaderPrivate::compile(QOpenGLShader *q)
     glfuncs->glGetShaderiv(shader, GL_COMPILE_STATUS, &value);
     compiled = (value != 0);
 
-    if (!compiled) {
+    if (! compiled) {
         // Compilation failed, try to provide some information about the failure
         QString name = q->objectName();
 
@@ -216,15 +225,17 @@ bool QOpenGLShaderPrivate::compile(QOpenGLShader *q)
             glfuncs->glGetShaderSource(shader, sourceCodeLength, &temp, sourceCodeBuffer);
         }
 
-        if (logBuffer)
+        if (logBuffer) {
             log = QString::fromLatin1(logBuffer);
-        else
-            log = QLatin1String("failed");
+        } else {
+            log = QString("failed");
+        }
 
-        if (name.isEmpty())
+        if (name.isEmpty()) {
             qWarning("QOpenGLShader::compile(%s): %s", type, csPrintable(log));
-        else
+        } else {
             qWarning("QOpenGLShader::compile(%s)[%s]: %s", type, csPrintable(name), csPrintable(log));
+        }
 
         // Dump the source code if we got it
         if (sourceCodeBuffer) {
@@ -323,37 +334,43 @@ static QVersionDirectivePosition findVersionDirectivePosition(const char *source
 
       switch (state) {
         case Normal:
-            if (c == '/')
+            if (c == '/') {
                 state = CommentStarting;
+            }
             break;
 
         case CommentStarting:
-            if (c == '*')
+            if (c == '*') {
                 state = MultiLineComment;
 
-            else if (c == '/')
+            } else if (c == '/') {
                 state = SingleLineComment;
 
-            else
+            } else {
                 state = Normal;
+
+            }
 
             break;
 
         case MultiLineComment:
-            if (c == '*')
+            if (c == '*') {
                 state = CommentEnding;
 
-            else if (c == '#')
+            } else if (c == '#') {
                 c = '_';
+            }
 
             break;
 
         case SingleLineComment:
-            if (c == '\n')
+            if (c == '\n') {
                 state = Normal;
 
-            else if (c == '#')
+            } else if (c == '#') {
                 c = '_';
+            }
+
             break;
 
         case CommentEnding:
@@ -364,8 +381,9 @@ static QVersionDirectivePosition findVersionDirectivePosition(const char *source
                 if (c == '#')
                     c = '_';
 
-                if (c != '*')
+                if (c != '*') {
                     state = MultiLineComment;
+                }
             }
 
             break;
@@ -378,8 +396,7 @@ static QVersionDirectivePosition findVersionDirectivePosition(const char *source
     int splitPosition = 0;
     int linePosition  = 1;
 
-    static const QRegularExpression pattern("^\\s*#\\s*version.*(\\n)?",
-                  QPatternOption::MultilineOption );
+    static const QRegularExpression pattern("^\\s*#\\s*version.*(\\n)?", QPatternOption::MultilineOption );
 
     QRegularExpressionMatch match = pattern.match(retval);
 
@@ -395,6 +412,7 @@ static QVersionDirectivePosition findVersionDirectivePosition(const char *source
 bool QOpenGLShader::compileSourceCode(const char *source)
 {
     Q_D(QOpenGLShader);
+
     // This method breaks the shader code into two parts:
     // 1. Up to and including an optional #version directive.
     // 2. The rest.
@@ -414,10 +432,12 @@ bool QOpenGLShader::compileSourceCode(const char *source)
             // Append source up to and including the #version directive
             sourceChunks.append(source);
             sourceChunkLengths.append(GLint(versionDirectivePosition.position));
+
         } else {
             // QTBUG-55733: Intel on Windows with Compatibility profile requires a #version always
             if (ctx->format().profile() == QSurfaceFormat::CompatibilityProfile) {
                 const char *vendor = reinterpret_cast<const char *>(ctx->functions()->glGetString(GL_VENDOR));
+
                 if (vendor && !strcmp(vendor, "Intel")) {
                     static const char version110[] = "#version 110\n";
                     sourceChunks.append(version110);
@@ -430,19 +450,20 @@ bool QOpenGLShader::compileSourceCode(const char *source)
         // but usually not present on desktop systems.
         const QSurfaceFormat currentSurfaceFormat = ctx->format();
         QOpenGLContextPrivate *ctx_d = QOpenGLContextPrivate::get(QOpenGLContext::currentContext());
+
         if (currentSurfaceFormat.renderableType() == QSurfaceFormat::OpenGL
-                || ctx_d->workaround_missingPrecisionQualifiers
+              || ctx_d->workaround_missingPrecisionQualifiers
 #ifdef QT_OPENGL_FORCE_SHADER_DEFINES
-                || true
+              || true
 #endif
-                ) {
+              ) {
             sourceChunks.append(qualifierDefines);
             sourceChunkLengths.append(GLint(sizeof(qualifierDefines) - 1));
         }
 
 #ifdef QOpenGL_REDEFINE_HIGHP
         if (d->shaderType == Fragment && !ctx_d->workaround_missingPrecisionQualifiers
-            && QOpenGLContext::currentContext()->isOpenGLES()) {
+              && QOpenGLContext::currentContext()->isOpenGLES()) {
             sourceChunks.append(redefineHighp);
             sourceChunkLengths.append(GLint(sizeof(redefineHighp) - 1));
         }
@@ -453,7 +474,7 @@ bool QOpenGLShader::compileSourceCode(const char *source)
         // "2.1 Mesa 8.1-devel (git-48a3d4e)" or "MESA 2.1 Mesa 8.1-devel"
         const char *version = reinterpret_cast<const char *>(ctx->functions()->glGetString(GL_VERSION));
 
-        if (!version || ! strstr(version, "2.1 Mesa 8")) {
+        if (! version || ! strstr(version, "2.1 Mesa 8")) {
             // Append #line directive in order to compensate for text insertion
             lineDirective = QString("#line %1\n").formatArg(versionDirectivePosition.line).toUtf8();
             sourceChunks.append(lineDirective.constData());
@@ -466,32 +487,17 @@ bool QOpenGLShader::compileSourceCode(const char *source)
 
         d->glfuncs->glShaderSource(d->shaderGuard->id(), sourceChunks.size(), sourceChunks.data(), sourceChunkLengths.data());
         return d->compile(this);
+
     } else {
         return false;
     }
 }
 
-/*!
-    \overload
-
-    Sets the \a source code for this shader and compiles it.
-    Returns \c true if the source was successfully compiled, false otherwise.
-
-    \sa compileSourceFile()
-*/
 bool QOpenGLShader::compileSourceCode(const QByteArray& source)
 {
     return compileSourceCode(source.constData());
 }
 
-/*!
-    \overload
-
-    Sets the \a source code for this shader and compiles it.
-    Returns \c true if the source was successfully compiled, false otherwise.
-
-    \sa compileSourceFile()
-*/
 bool QOpenGLShader::compileSourceCode(const QString& source)
 {
     return compileSourceCode(source.toLatin1().constData());
@@ -500,30 +506,41 @@ bool QOpenGLShader::compileSourceCode(const QString& source)
 bool QOpenGLShader::compileSourceFile(const QString& fileName)
 {
     QFile file(fileName);
-    if (!file.open(QFile::ReadOnly)) {
+
+    if (! file.open(QFile::ReadOnly)) {
         qWarning() << "QOpenGLShader: Unable to open file" << fileName;
         return false;
     }
 
     QByteArray contents = file.readAll();
+
     return compileSourceCode(contents.constData());
 }
 
 QByteArray QOpenGLShader::sourceCode() const
 {
     Q_D(const QOpenGLShader);
+
     GLuint shader = d->shaderGuard ? d->shaderGuard->id() : 0;
-    if (!shader)
+
+    if (! shader) {
         return QByteArray();
+    }
+
     GLint size = 0;
     d->glfuncs->glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &size);
-    if (size <= 0)
+
+    if (size <= 0) {
         return QByteArray();
+    }
+
     GLint len = 0;
     char *source = new char [size];
     d->glfuncs->glGetShaderSource(shader, size, &len, source);
+
     QByteArray src(source);
     delete [] source;
+
     return src;
 }
 
@@ -585,8 +602,7 @@ protected:
 };
 
 namespace {
-    void freeProgramFunc(QOpenGLFunctions *funcs, GLuint id)
-    {
+    void freeProgramFunc(QOpenGLFunctions *funcs, GLuint id) {
         funcs->glDeleteProgram(id);
     }
 }
@@ -594,15 +610,18 @@ namespace {
 QOpenGLShaderProgramPrivate::~QOpenGLShaderProgramPrivate()
 {
     delete glfuncs;
-    if (programGuard)
+
+    if (programGuard) {
         programGuard->free();
+    }
 }
 
 bool QOpenGLShaderProgramPrivate::hasShader(QOpenGLShader::ShaderType type) const
 {
     for (QOpenGLShader *shader : shaders) {
-        if (shader->shaderType() == type)
+        if (shader->shaderType() == type) {
             return true;
+        }
     }
     return false;
 }
@@ -625,54 +644,75 @@ bool QOpenGLShaderProgram::create()
 bool QOpenGLShaderProgram::init()
 {
     Q_D(QOpenGLShaderProgram);
-    if ((d->programGuard && d->programGuard->id()) || d->inited)
+
+    if ((d->programGuard && d->programGuard->id()) || d->inited) {
         return true;
+    }
+
     d->inited = true;
+
     QOpenGLContext *context = const_cast<QOpenGLContext *>(QOpenGLContext::currentContext());
-    if (!context)
+
+    if (! context) {
         return false;
+    }
+
     d->glfuncs->initializeOpenGLFunctions();
 
 #ifndef QT_OPENGL_ES_2
     // Resolve OpenGL 4 functions for tessellation shader support
     QSurfaceFormat format = context->format();
-    if (!context->isOpenGLES()
-        && format.version() >= qMakePair<int, int>(4, 0)) {
+
+    if (! context->isOpenGLES() && format.version() >= qMakePair<int, int>(4, 0)) {
         d->tessellationFuncs = context->versionFunctions<QOpenGLFunctions_4_0_Core>();
         d->tessellationFuncs->initializeOpenGLFunctions();
     }
 #endif
 
     GLuint program = d->glfuncs->glCreateProgram();
-    if (!program) {
+    if (! program) {
         qWarning() << "QOpenGLShaderProgram: could not create shader program";
         return false;
     }
-    if (d->programGuard)
+
+    if (d->programGuard) {
         delete d->programGuard;
+    }
+
     d->programGuard = new QOpenGLSharedResourceGuard(context, program, freeProgramFunc);
+
     return true;
 }
 
 bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
 {
     Q_D(QOpenGLShaderProgram);
-    if (!init())
+
+    if (! init()) {
         return false;
-    if (d->shaders.contains(shader))
-        return true;    // Already added to this shader program.
+    }
+
+    if (d->shaders.contains(shader)) {
+        return true;    // Already added to this shader program
+    }
+
     if (d->programGuard && d->programGuard->id() && shader) {
-        if (!shader->d_func()->shaderGuard || !shader->d_func()->shaderGuard->id())
+        if (! shader->d_func()->shaderGuard || !shader->d_func()->shaderGuard->id()) {
             return false;
+        }
+
         if (d->programGuard->group() != shader->d_func()->shaderGuard->group()) {
             qWarning("QOpenGLShaderProgram::addShader: Program and shader are not associated with same context.");
             return false;
         }
+
         d->glfuncs->glAttachShader(d->programGuard->id(), shader->d_func()->shaderGuard->id());
         d->linked = false;  // Program needs to be relinked.
         d->shaders.append(shader);
         connect(shader, &QOpenGLShader::destroyed, this, &QOpenGLShaderProgram::shaderDestroyed);
+
         return true;
+
     } else {
         return false;
     }
@@ -681,14 +721,18 @@ bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
 bool QOpenGLShaderProgram::addShaderFromSourceCode(QOpenGLShader::ShaderType type, const char *source)
 {
     Q_D(QOpenGLShaderProgram);
-    if (!init())
+
+    if (! init()) {
         return false;
+    }
+
     QOpenGLShader *shader = new QOpenGLShader(type, this);
-    if (!shader->compileSourceCode(source)) {
+    if (! shader->compileSourceCode(source)) {
         d->log = shader->log();
         delete shader;
         return false;
     }
+
     d->anonShaders.append(shader);
     return addShader(shader);
 }
@@ -707,14 +751,18 @@ bool QOpenGLShaderProgram::addShaderFromSourceFile
     (QOpenGLShader::ShaderType type, const QString& fileName)
 {
     Q_D(QOpenGLShaderProgram);
-    if (!init())
+
+    if (! init()) {
         return false;
+    }
+
     QOpenGLShader *shader = new QOpenGLShader(type, this);
-    if (!shader->compileSourceFile(fileName)) {
+    if (! shader->compileSourceFile(fileName)) {
         d->log = shader->log();
         delete shader;
         return false;
     }
+
     d->anonShaders.append(shader);
     return addShader(shader);
 }
@@ -722,12 +770,13 @@ bool QOpenGLShaderProgram::addShaderFromSourceFile
 void QOpenGLShaderProgram::removeShader(QOpenGLShader *shader)
 {
     Q_D(QOpenGLShaderProgram);
-    if (d->programGuard && d->programGuard->id()
-        && shader && shader->d_func()->shaderGuard)
-    {
+
+    if (d->programGuard && d->programGuard->id() && shader && shader->d_func()->shaderGuard) {
         d->glfuncs->glDetachShader(d->programGuard->id(), shader->d_func()->shaderGuard->id());
     }
+
     d->linked = false;  // Program needs to be relinked.
+
     if (shader) {
         d->shaders.removeAll(shader);
         d->anonShaders.removeAll(shader);
@@ -747,9 +796,7 @@ void QOpenGLShaderProgram::removeAllShaders()
     d->removingShaders = true;
 
     for (QOpenGLShader *shader : d->shaders) {
-        if (d->programGuard && d->programGuard->id()
-            && shader && shader->d_func()->shaderGuard)
-        {
+        if (d->programGuard && d->programGuard->id() && shader && shader->d_func()->shaderGuard) {
             d->glfuncs->glDetachShader(d->programGuard->id(), shader->d_func()->shaderGuard->id());
         }
     }
@@ -758,6 +805,7 @@ void QOpenGLShaderProgram::removeAllShaders()
         // Delete shader objects that were created anonymously.
         delete shader;
     }
+
     d->shaders.clear();
     d->anonShaders.clear();
     d->linked = false;  // Program needs to be relinked.
@@ -767,9 +815,11 @@ void QOpenGLShaderProgram::removeAllShaders()
 bool QOpenGLShaderProgram::link()
 {
     Q_D(QOpenGLShaderProgram);
+
     GLuint program = d->programGuard ? d->programGuard->id() : 0;
-    if (!program)
+    if (! program) {
         return false;
+    }
 
     GLint value;
     if (d->shaders.isEmpty()) {
@@ -780,31 +830,42 @@ bool QOpenGLShaderProgram::link()
         value = 0;
         d->glfuncs->glGetProgramiv(program, GL_LINK_STATUS, &value);
         d->linked = (value != 0);
-        if (d->linked)
+
+        if (d->linked) {
             return true;
+        }
     }
 
     d->glfuncs->glLinkProgram(program);
     value = 0;
+
     d->glfuncs->glGetProgramiv(program, GL_LINK_STATUS, &value);
     d->linked = (value != 0);
     value = 0;
+
     d->glfuncs->glGetProgramiv(program, GL_INFO_LOG_LENGTH, &value);
     d->log = QString();
+
     if (value > 1) {
         char *logbuf = new char [value];
         GLint len;
+
         d->glfuncs->glGetProgramInfoLog(program, value, &len, logbuf);
         d->log = QString::fromLatin1(logbuf);
-        if (!d->linked) {
+
+        if (! d->linked) {
             QString name = objectName();
-            if (name.isEmpty())
+
+            if (name.isEmpty()) {
                 qWarning() << "QOpenGLShader::link:" << d->log;
-            else
+            } else {
                 qWarning() << "QOpenGLShader::link[" << name << "]:" << d->log;
+            }
         }
+
         delete [] logbuf;
     }
+
     return d->linked;
 }
 
@@ -823,11 +884,15 @@ QString QOpenGLShaderProgram::log() const
 bool QOpenGLShaderProgram::bind()
 {
     Q_D(QOpenGLShaderProgram);
+
     GLuint program = d->programGuard ? d->programGuard->id() : 0;
-    if (!program)
+    if (! program) {
         return false;
-    if (!d->linked && !link())
+    }
+
+    if (! d->linked && ! link()) {
         return false;
+    }
 
 #if defined(QT_DEBUG)
     if (d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
@@ -837,6 +902,7 @@ bool QOpenGLShaderProgram::bind()
 #endif
 
     d->glfuncs->glUseProgram(program);
+
     return true;
 }
 
@@ -844,32 +910,42 @@ void QOpenGLShaderProgram::release()
 {
     Q_D(QOpenGLShaderProgram);
 #if defined(QT_DEBUG)
-    if (d->programGuard && d->programGuard->group() != QOpenGLContextGroup::currentContextGroup())
+    if (d->programGuard && d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
         qWarning("QOpenGLShaderProgram::release: program is not valid in the current context.");
+    }
 #endif
+
     d->glfuncs->glUseProgram(0);
 }
 
 GLuint QOpenGLShaderProgram::programId() const
 {
     Q_D(const QOpenGLShaderProgram);
+
     GLuint id = d->programGuard ? d->programGuard->id() : 0;
-    if (id)
+
+    if (id) {
         return id;
+    }
 
     // Create the identifier if we don't have one yet.  This is for
     // applications that want to create the attached shader configuration
     // themselves, particularly those using program binaries.
-    if (!const_cast<QOpenGLShaderProgram *>(this)->init())
+    if (! const_cast<QOpenGLShaderProgram *>(this)->init()) {
         return 0;
+    }
+
     return d->programGuard ? d->programGuard->id() : 0;
 }
 
 void QOpenGLShaderProgram::bindAttributeLocation(const char *name, int location)
 {
     Q_D(QOpenGLShaderProgram);
-    if (!init() || !d->programGuard || !d->programGuard->id())
+
+    if (! init() || ! d->programGuard || ! d->programGuard->id()) {
         return;
+    }
+
     d->glfuncs->glBindAttribLocation(d->programGuard->id(), location, name);
     d->linked = false;  // Program needs to be relinked.
 }
@@ -879,7 +955,7 @@ void QOpenGLShaderProgram::bindAttributeLocation(const QByteArray& name, int loc
     bindAttributeLocation(name.constData(), location);
 }
 
-void QOpenGLShaderProgram::bindAttributeLocation(const QString& name, int location)
+void QOpenGLShaderProgram::bindAttributeLocation(const QString &name, int location)
 {
     bindAttributeLocation(name.toLatin1().constData(), location);
 }
@@ -887,8 +963,10 @@ void QOpenGLShaderProgram::bindAttributeLocation(const QString& name, int locati
 int QOpenGLShaderProgram::attributeLocation(const char *name) const
 {
     Q_D(const QOpenGLShaderProgram);
+
     if (d->linked && d->programGuard && d->programGuard->id()) {
         return d->glfuncs->glGetAttribLocation(d->programGuard->id(), name);
+
     } else {
         qWarning() << "QOpenGLShaderProgram::attributeLocation(" << name
                    << "): shader program is not linked";
@@ -896,12 +974,12 @@ int QOpenGLShaderProgram::attributeLocation(const char *name) const
     }
 }
 
-int QOpenGLShaderProgram::attributeLocation(const QByteArray& name) const
+int QOpenGLShaderProgram::attributeLocation(const QByteArray &name) const
 {
     return attributeLocation(name.constData());
 }
 
-int QOpenGLShaderProgram::attributeLocation(const QString& name) const
+int QOpenGLShaderProgram::attributeLocation(const QString &name) const
 {
     return attributeLocation(name.toLatin1().constData());
 }
@@ -909,8 +987,10 @@ int QOpenGLShaderProgram::attributeLocation(const QString& name) const
 void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat value)
 {
     Q_D(QOpenGLShaderProgram);
-    if (location != -1)
+
+    if (location != -1) {
         d->glfuncs->glVertexAttrib1fv(location, &value);
+    }
 }
 
 void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat value)
@@ -921,6 +1001,7 @@ void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat value)
 void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat x, GLfloat y)
 {
     Q_D(QOpenGLShaderProgram);
+
     if (location != -1) {
         GLfloat values[2] = {x, y};
         d->glfuncs->glVertexAttrib2fv(location, values);
@@ -932,10 +1013,10 @@ void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat x, GLfloa
     setAttributeValue(attributeLocation(name), x, y);
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-        (int location, GLfloat x, GLfloat y, GLfloat z)
+void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat x, GLfloat y, GLfloat z)
 {
     Q_D(QOpenGLShaderProgram);
+
     (void) d;
 
     if (location != -1) {
@@ -944,24 +1025,22 @@ void QOpenGLShaderProgram::setAttributeValue
     }
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-        (const char *name, GLfloat x, GLfloat y, GLfloat z)
+void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat x, GLfloat y, GLfloat z)
 {
     setAttributeValue(attributeLocation(name), x, y, z);
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-        (int location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void QOpenGLShaderProgram::setAttributeValue(int location, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     Q_D(QOpenGLShaderProgram);
+
     if (location != -1) {
         GLfloat values[4] = {x, y, z, w};
         d->glfuncs->glVertexAttrib4fv(location, values);
     }
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-        (const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void QOpenGLShaderProgram::setAttributeValue(const char *name, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
     setAttributeValue(attributeLocation(name), x, y, z, w);
 }
@@ -985,8 +1064,9 @@ void QOpenGLShaderProgram::setAttributeValue(int location, const QVector3D& valu
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glVertexAttrib3fv(location, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QVector3D& value)
@@ -999,8 +1079,9 @@ void QOpenGLShaderProgram::setAttributeValue(int location, const QVector4D& valu
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glVertexAttrib4fv(location, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
 void QOpenGLShaderProgram::setAttributeValue(const char *name, const QVector4D& value)
@@ -1016,6 +1097,7 @@ void QOpenGLShaderProgram::setAttributeValue(int location, const QColor& value)
     if (location != -1) {
         GLfloat values[4] = {GLfloat(value.redF()), GLfloat(value.greenF()),
                              GLfloat(value.blueF()), GLfloat(value.alphaF())};
+
         d->glfuncs->glVertexAttrib4fv(location, values);
     }
 }
@@ -1025,10 +1107,10 @@ void QOpenGLShaderProgram::setAttributeValue(const char *name, const QColor& val
     setAttributeValue(attributeLocation(name), value);
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-    (int location, const GLfloat *values, int columns, int rows)
+void QOpenGLShaderProgram::setAttributeValue(int location, const GLfloat *values, int columns, int rows)
 {
     Q_D(QOpenGLShaderProgram);
+
     (void) d;
 
     if (rows < 1 || rows > 4) {
@@ -1037,41 +1119,42 @@ void QOpenGLShaderProgram::setAttributeValue
     }
 
     if (location != -1) {
-        while (columns-- > 0) {
-            if (rows == 1)
+        while ((columns--) > 0) {
+            if (rows == 1) {
                 d->glfuncs->glVertexAttrib1fv(location, values);
-            else if (rows == 2)
+
+            } else if (rows == 2) {
                 d->glfuncs->glVertexAttrib2fv(location, values);
-            else if (rows == 3)
+
+            } else if (rows == 3) {
                 d->glfuncs->glVertexAttrib3fv(location, values);
-            else
+
+            } else {
                 d->glfuncs->glVertexAttrib4fv(location, values);
+            }
+
             values += rows;
             ++location;
         }
     }
 }
 
-void QOpenGLShaderProgram::setAttributeValue
-    (const char *name, const GLfloat *values, int columns, int rows)
+void QOpenGLShaderProgram::setAttributeValue(const char *name, const GLfloat *values, int columns, int rows)
 {
     setAttributeValue(attributeLocation(name), values, columns, rows);
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-    (int location, const GLfloat *values, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeArray(int location, const GLfloat *values, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
     if (location != -1) {
-        d->glfuncs->glVertexAttribPointer(location, tupleSize, GL_FLOAT, GL_FALSE,
-                              stride, values);
+        d->glfuncs->glVertexAttribPointer(location, tupleSize, GL_FLOAT, GL_FALSE, stride, values);
     }
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (int location, const QVector2D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(int location, const QVector2D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
@@ -1081,8 +1164,7 @@ void QOpenGLShaderProgram::setAttributeArray
     }
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (int location, const QVector3D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(int location, const QVector3D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
@@ -1092,8 +1174,7 @@ void QOpenGLShaderProgram::setAttributeArray
     }
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (int location, const QVector4D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(int location, const QVector4D *values, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
@@ -1103,8 +1184,7 @@ void QOpenGLShaderProgram::setAttributeArray
     }
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-    (int location, GLenum type, const void *values, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeArray(int location, GLenum type, const void *values, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
@@ -1114,45 +1194,39 @@ void QOpenGLShaderProgram::setAttributeArray
     }
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-    (const char *name, const GLfloat *values, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeArray(const char *name, const GLfloat *values, int tupleSize, int stride)
 {
     setAttributeArray(attributeLocation(name), values, tupleSize, stride);
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (const char *name, const QVector2D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(const char *name, const QVector2D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (const char *name, const QVector3D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(const char *name, const QVector3D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-        (const char *name, const QVector4D *values, int stride)
+void QOpenGLShaderProgram::setAttributeArray(const char *name, const QVector4D *values, int stride)
 {
     setAttributeArray(attributeLocation(name), values, stride);
 }
 
-void QOpenGLShaderProgram::setAttributeArray
-    (const char *name, GLenum type, const void *values, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeArray(const char *name, GLenum type, const void *values, int tupleSize, int stride)
 {
     setAttributeArray(attributeLocation(name), type, values, tupleSize, stride);
 }
 
-void QOpenGLShaderProgram::setAttributeBuffer
-    (int location, GLenum type, int offset, int tupleSize, int stride)
+void QOpenGLShaderProgram::setAttributeBuffer(int location, GLenum type, int offset, int tupleSize, int stride)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
     if (location != -1) {
         d->glfuncs->glVertexAttribPointer(location, tupleSize, type, GL_TRUE, stride,
-                              reinterpret_cast<const void *>(qintptr(offset)));
+              reinterpret_cast<const void *>(qintptr(offset)));
     }
 }
 
@@ -1166,8 +1240,9 @@ void QOpenGLShaderProgram::enableAttributeArray(int location)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glEnableVertexAttribArray(location);
+    }
 }
 
 void QOpenGLShaderProgram::enableAttributeArray(const char *name)
@@ -1180,8 +1255,9 @@ void QOpenGLShaderProgram::disableAttributeArray(int location)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glDisableVertexAttribArray(location);
+    }
 }
 
 void QOpenGLShaderProgram::disableAttributeArray(const char *name)
@@ -1198,7 +1274,7 @@ int QOpenGLShaderProgram::uniformLocation(const char *name) const
         return d->glfuncs->glGetUniformLocation(d->programGuard->id(), name);
     } else {
         qWarning() << "QOpenGLShaderProgram::uniformLocation(" << name
-                   << "): shader program is not linked";
+              << "): shader program is not linked";
         return -1;
     }
 }
@@ -1218,8 +1294,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, GLfloat value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform1fv(location, 1, &value);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat value)
@@ -1232,8 +1309,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, GLint value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform1i(location, value);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLint value)
@@ -1246,8 +1324,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, GLuint value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform1i(location, value);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, GLuint value)
@@ -1271,8 +1350,7 @@ void QOpenGLShaderProgram::setUniformValue(const char *name, GLfloat x, GLfloat 
     setUniformValue(uniformLocation(name), x, y);
 }
 
-void QOpenGLShaderProgram::setUniformValue
-        (int location, GLfloat x, GLfloat y, GLfloat z)
+void QOpenGLShaderProgram::setUniformValue(int location, GLfloat x, GLfloat y, GLfloat z)
 {
     Q_D(QOpenGLShaderProgram);
     (void) d;
@@ -1309,8 +1387,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QVector2D& value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform2fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector2D& value)
@@ -1323,8 +1402,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QVector3D& value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform3fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector3D& value)
@@ -1337,8 +1417,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, const QVector4D& value)
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform4fv(location, 1, reinterpret_cast<const GLfloat *>(&value));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, const QVector4D& value)
@@ -1522,7 +1603,6 @@ void QOpenGLShaderProgram::setUniformValue(const char *name, const QMatrix3x3& v
     setUniformValue(uniformLocation(name), value);
 }
 
-
 void QOpenGLShaderProgram::setUniformValue(int location, const QMatrix3x4 &value)
 {
     Q_D(QOpenGLShaderProgram);
@@ -1603,16 +1683,18 @@ void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[2][
 {
     Q_D(QOpenGLShaderProgram);
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniformMatrix2fv(location, 1, GL_FALSE, value[0]);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[3][3])
 {
     Q_D(QOpenGLShaderProgram);
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniformMatrix3fv(location, 1, GL_FALSE, value[0]);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[4][4])
@@ -1620,8 +1702,9 @@ void QOpenGLShaderProgram::setUniformValue(int location, const GLfloat value[4][
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniformMatrix4fv(location, 1, GL_FALSE, value[0]);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValue(const char *name, const GLfloat value[2][2])
@@ -1664,8 +1747,9 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLint *value
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform1iv(location, count, values);
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLint *values, int count)
@@ -1694,16 +1778,21 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *val
     (void) d;
 
     if (location != -1) {
-        if (tupleSize == 1)
+        if (tupleSize == 1) {
             d->glfuncs->glUniform1fv(location, count, values);
-        else if (tupleSize == 2)
+
+        } else if (tupleSize == 2) {
             d->glfuncs->glUniform2fv(location, count, values);
-        else if (tupleSize == 3)
+
+        } else if (tupleSize == 3) {
             d->glfuncs->glUniform3fv(location, count, values);
-        else if (tupleSize == 4)
+
+        } else if (tupleSize == 4) {
             d->glfuncs->glUniform4fv(location, count, values);
-        else
+
+        } else {
             qWarning() << "QOpenGLShaderProgram::setUniformValue: size" << tupleSize << "not supported";
+        }
     }
 }
 
@@ -1718,8 +1807,9 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector2D *v
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform2fv(location, count, reinterpret_cast<const GLfloat *>(values));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector2D *values, int count)
@@ -1732,8 +1822,9 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector3D *v
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform3fv(location, count, reinterpret_cast<const GLfloat *>(values));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector3D *values, int count)
@@ -1746,8 +1837,9 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QVector4D *v
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    if (location != -1)
+    if (location != -1) {
         d->glfuncs->glUniform4fv(location, count, reinterpret_cast<const GLfloat *>(values));
+    }
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QVector4D *values, int count)
@@ -1795,8 +1887,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x2 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformMatrixArray
-        (d->glfuncs->glUniformMatrix2fv, location, values, count, QMatrix2x2, 2, 2);
+    setUniformMatrixArray(d->glfuncs->glUniformMatrix2fv, location, values, count, QMatrix2x2, 2, 2);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x2 *values, int count)
@@ -1809,8 +1900,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x3 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform3fv, location, values, count, QMatrix2x3, 2, 3);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform3fv, location, values, count, QMatrix2x3, 2, 3);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x3 *values, int count)
@@ -1823,8 +1913,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix2x4 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform4fv, location, values, count, QMatrix2x4, 2, 4);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform4fv, location, values, count, QMatrix2x4, 2, 4);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix2x4 *values, int count)
@@ -1837,8 +1926,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x2 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform2fv, location, values, count, QMatrix3x2, 3, 2);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform2fv, location, values, count, QMatrix3x2, 3, 2);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x2 *values, int count)
@@ -1851,8 +1939,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x3 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformMatrixArray
-        (d->glfuncs->glUniformMatrix3fv, location, values, count, QMatrix3x3, 3, 3);
+    setUniformMatrixArray(d->glfuncs->glUniformMatrix3fv, location, values, count, QMatrix3x3, 3, 3);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x3 *values, int count)
@@ -1865,8 +1952,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix3x4 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform4fv, location, values, count, QMatrix3x4, 3, 4);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform4fv, location, values, count, QMatrix3x4, 3, 4);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix3x4 *values, int count)
@@ -1879,8 +1965,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x2 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform2fv, location, values, count, QMatrix4x2, 4, 2);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform2fv, location, values, count, QMatrix4x2, 4, 2);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x2 *values, int count)
@@ -1893,8 +1978,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x3 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformGenericMatrixArray
-        (d->glfuncs->glUniform3fv, location, values, count, QMatrix4x3, 4, 3);
+    setUniformGenericMatrixArray(d->glfuncs->glUniform3fv, location, values, count, QMatrix4x3, 4, 3);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x3 *values, int count)
@@ -1907,8 +1991,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const QMatrix4x4 *
     Q_D(QOpenGLShaderProgram);
     (void) d;
 
-    setUniformMatrixArray
-        (d->glfuncs->glUniformMatrix4fv, location, values, count, QMatrix4x4, 4, 4);
+    setUniformMatrixArray(d->glfuncs->glUniformMatrix4fv, location, values, count, QMatrix4x4, 4, 4);
 }
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const QMatrix4x4 *values, int count)
@@ -1932,8 +2015,10 @@ void QOpenGLShaderProgram::setPatchVertexCount(int count)
 {
 #if defined(QT_OPENGL_4)
     Q_D(QOpenGLShaderProgram);
-    if (d->tessellationFuncs)
+
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glPatchParameteri(GL_PATCH_VERTICES, count);
+    }
 #else
     (void) count;
 #endif
@@ -1945,8 +2030,9 @@ int QOpenGLShaderProgram::patchVertexCount() const
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
 
-    if (d->tessellationFuncs)
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glGetIntegerv(GL_PATCH_VERTICES, &patchVertices);
+    }
 #endif
 
     return patchVertices;
@@ -1963,13 +2049,18 @@ void QOpenGLShaderProgram::setDefaultOuterTessellationLevels(const QVector<float
 
     if (tessLevels.size() < argCount) {
         tessLevels.reserve(argCount);
-        for (int i = tessLevels.size(); i < argCount; ++i)
+
+        for (int i = tessLevels.size(); i < argCount; ++i) {
             tessLevels.append(1.0f);
+        }
     }
 
     Q_D(QOpenGLShaderProgram);
-    if (d->tessellationFuncs)
+
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessLevels.data());
+    }
+
 #else
     (void) levels;
 #endif
@@ -1981,8 +2072,10 @@ QVector<float> QOpenGLShaderProgram::defaultOuterTessellationLevels() const
 
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
-    if (d->tessellationFuncs)
+
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glGetFloatv(GL_PATCH_DEFAULT_OUTER_LEVEL, tessLevels.data());
+    }
 #endif
 
     return tessLevels;
@@ -1996,15 +2089,20 @@ void QOpenGLShaderProgram::setDefaultInnerTessellationLevels(const QVector<float
     // Ensure we have the required 2 inner tessellation levels
     // Use default of 1 for missing entries (same as spec)
     const int argCount = 2;
+
     if (tessLevels.size() < argCount) {
         tessLevels.reserve(argCount);
-        for (int i = tessLevels.size(); i < argCount; ++i)
+
+        for (int i = tessLevels.size(); i < argCount; ++i) {
             tessLevels.append(1.0f);
+        }
     }
 
     Q_D(QOpenGLShaderProgram);
-    if (d->tessellationFuncs)
+
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, tessLevels.data());
+    }
 #else
     (void) levels;
 #endif
@@ -2017,8 +2115,9 @@ QVector<float> QOpenGLShaderProgram::defaultInnerTessellationLevels() const
 #if defined(QT_OPENGL_4)
     Q_D(const QOpenGLShaderProgram);
 
-    if (d->tessellationFuncs)
+    if (d->tessellationFuncs) {
         d->tessellationFuncs->glGetFloatv(GL_PATCH_DEFAULT_INNER_LEVEL, tessLevels.data());
+    }
 #endif
 
     return tessLevels;
@@ -2027,11 +2126,13 @@ QVector<float> QOpenGLShaderProgram::defaultInnerTessellationLevels() const
 bool QOpenGLShaderProgram::hasOpenGLShaderPrograms(QOpenGLContext *context)
 {
 #if ! defined(QT_OPENGL_ES_2)
-    if (!context)
+    if (! context) {
         context = QOpenGLContext::currentContext();
+    }
 
-    if (!context)
+    if (! context) {
         return false;
+    }
 
     return QOpenGLFunctions(context).hasOpenGLFeature(QOpenGLFunctions::Shaders);
 #else
@@ -2046,19 +2147,24 @@ void QOpenGLShaderProgram::shaderDestroyed()
     Q_D(QOpenGLShaderProgram);
     QOpenGLShader *shader = qobject_cast<QOpenGLShader *>(sender());
 
-    if (shader && !d->removingShaders)
+    if (shader && ! d->removingShaders) {
         removeShader(shader);
+    }
 }
 
 bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
 {
-    if (!context)
+    if (! context) {
         context = QOpenGLContext::currentContext();
-    if (!context)
-        return false;
+    }
 
-    if ((type & ~(Geometry | Vertex | Fragment | TessellationControl | TessellationEvaluation | Compute)) || type == 0)
+    if (! context) {
         return false;
+    }
+
+    if ((type & ~(Geometry | Vertex | Fragment | TessellationControl | TessellationEvaluation | Compute)) || type == 0) {
+        return false;
+    }
 
     QSurfaceFormat format = context->format();
 
@@ -2066,17 +2172,15 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
 #ifndef QT_OPENGL_ES_2
         // Geometry shaders require OpenGL 3.2 or newer
         QSurfaceFormat format = context->format();
-        return (!context->isOpenGLES())
-            && (format.version() >= qMakePair<int, int>(3, 2));
+        return (! context->isOpenGLES()) && (format.version() >= qMakePair<int, int>(3, 2));
 #else
         // No geometry shader support in OpenGL ES2
         return false;
 #endif
 
     } else if (type == TessellationControl || type == TessellationEvaluation) {
-#if !defined(QT_OPENGL_ES_2)
-        return (!context->isOpenGLES())
-            && (format.version() >= qMakePair<int, int>(4, 0));
+#if ! defined(QT_OPENGL_ES_2)
+        return (!context->isOpenGLES()) && (format.version() >= qMakePair<int, int>(4, 0));
 #else
         // No tessellation shader support in OpenGL ES2
         return false;
@@ -2096,4 +2200,3 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
     // a minimum OpenGL version of 2.0
     return true;
 }
-

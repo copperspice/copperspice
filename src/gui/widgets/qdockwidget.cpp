@@ -76,7 +76,6 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
    return (dockwidget->features() & feature) == feature;
 }
 
-
 /*
     A Dock Window:
 
@@ -102,7 +101,6 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
     +-------------------------------+
 
 */
-
 
 class QDockWidgetTitleButton : public QAbstractButton
 {
@@ -1148,7 +1146,6 @@ QDockWidget::QDockWidget(QWidget *parent, Qt::WindowFlags flags)
    d->init();
 }
 
-
 QDockWidget::QDockWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*new QDockWidgetPrivate, parent, flags)
 {
@@ -1158,7 +1155,8 @@ QDockWidget::QDockWidget(const QString &title, QWidget *parent, Qt::WindowFlags 
 }
 
 QDockWidget::~QDockWidget()
-{ }
+{
+}
 
 QWidget *QDockWidget::widget() const
 {
@@ -1435,14 +1433,12 @@ bool QDockWidget::event(QEvent *event)
 }
 
 #ifndef QT_NO_ACTION
-
 QAction *QDockWidget::toggleViewAction() const
 {
    Q_D(const QDockWidget);
    return d->toggleViewAction;
 }
 #endif
-
 
 void QDockWidget::setTitleBarWidget(QWidget *widget)
 {
@@ -1454,7 +1450,7 @@ void QDockWidget::setTitleBarWidget(QWidget *widget)
 
    if (isWindow()) {
       // this ensures the native decoration is drawn
-      d->setWindowState(true /*floating*/, true /*unplug*/);
+      d->setWindowState(true, true);
    }
 }
 

@@ -196,6 +196,7 @@ QPixmap QPixmap::copy(const QRect &rect) const
 
    QPlatformPixmap *d = data->createCompatiblePlatformPixmap();
    d->copy(data.data(), r);
+
    return QPixmap(d);
 }
 
@@ -217,13 +218,15 @@ void QPixmap::scroll(int dx, int dy, const QRect &rect, QRegion *exposed)
 
    detach();
 
-   if (!data->scroll(dx, dy, src)) {
+   if (! data->scroll(dx, dy, src)) {
       // Fallback
       QPixmap pix = *this;
+
       QPainter painter(&pix);
       painter.setCompositionMode(QPainter::CompositionMode_Source);
       painter.drawPixmap(src.translated(dx, dy), *this, src);
       painter.end();
+
       *this = pix;
    }
 
@@ -371,14 +374,16 @@ void QPixmap::setMask(const QBitmap &mask)
          }
       }
    }
+
    data->fromImage(image, Qt::AutoColor);
 }
 
 qreal QPixmap::devicePixelRatio() const
 {
-   if (!data) {
+   if (! data) {
       return qreal(1.0);
    }
+
    return data->devicePixelRatio();
 }
 
@@ -531,6 +536,7 @@ void QPixmap::fill(const QColor &color)
       // detach() will also remove this pixmap from caches, so
       // it has to be called even when ref == 1.
       detach();
+
    } else {
       // Don't bother to make a copy of the data object, since
       // it will be filled with new pixel data anyway.
@@ -584,6 +590,7 @@ QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap)
    } else {
       pixmap = QPixmap::fromImage(image);
    }
+
    return stream;
 }
 
@@ -702,12 +709,13 @@ QPaintEngine *QPixmap::paintEngine() const
 
 QBitmap QPixmap::mask() const
 {
-   if (!data || !hasAlphaChannel()) {
+   if (! data || ! hasAlphaChannel()) {
       return QBitmap();
    }
 
    const QImage img = toImage();
    bool shouldConvert = (img.format() != QImage::Format_ARGB32 && img.format() != QImage::Format_ARGB32_Premultiplied);
+
    const QImage image = (shouldConvert ? img.convertToFormat(QImage::Format_ARGB32_Premultiplied) : img);
    const int w = image.width();
    const int h = image.height();
@@ -745,7 +753,7 @@ int QPixmap::defaultDepth()
 
 void QPixmap::detach()
 {
-   if (!data) {
+   if (! data) {
       return;
    }
 
@@ -764,8 +772,8 @@ void QPixmap::detach()
    if (data->ref.load() != 1) {
       *this = copy();
    }
-   ++data->detach_no;
 
+   ++data->detach_no;
 }
 
 QPixmap QPixmap::fromImage(const QImage &image, Qt::ImageConversionFlags flags)
@@ -843,4 +851,3 @@ QDebug operator<<(QDebug dbg, const QPixmap &r)
 
    return dbg;
 }
-

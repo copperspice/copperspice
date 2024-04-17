@@ -511,6 +511,7 @@ void QFontDialogPrivate::updateFamilies()
 void QFontDialogPrivate::updateStyles()
 {
    Q_Q(QFontDialog);
+
    QStringList styles = fdb.styles(familyList->currentText());
    styleList->model()->setStringList(styles);
 

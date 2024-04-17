@@ -2402,7 +2402,7 @@ void QTreeView::selectAll()
 {
    Q_D(QTreeView);
 
-   if (!selectionModel()) {
+   if (! selectionModel()) {
       return;
    }
 
@@ -2412,9 +2412,9 @@ void QTreeView::selectAll()
    if (mode != SingleSelection && mode != NoSelection && !d->viewItems.isEmpty()) {
       const QModelIndex &idx = d->viewItems.last().index;
       QModelIndex lastItemIndex = idx.sibling(idx.row(), d->model->columnCount(idx.parent()) - 1);
+
       d->select(d->viewItems.first().index, lastItemIndex,
-         QItemSelectionModel::ClearAndSelect
-         | QItemSelectionModel::Rows);
+            QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
    }
 }
 
@@ -2530,6 +2530,7 @@ void QTreeView::expandToDepth(int depth)
 void QTreeView::columnResized(int column, int, int)
 {
    Q_D(QTreeView);
+
    d->columnsToUpdate.append(column);
    if (d->columnResizeTimerID == 0) {
       d->columnResizeTimerID = startTimer(0);
@@ -2554,11 +2555,13 @@ void QTreeView::updateGeometries()
       QRect vg = d->viewport->geometry();
       QRect geometryRect(vg.left(), vg.top() - height, vg.width(), height);
       d->header->setGeometry(geometryRect);
+
       //d->header->setOffset(horizontalScrollBar()->value()); // ### bug ???
       QMetaObject::invokeMethod(d->header, "updateGeometries");
       d->updateScrollBars();
       d->geometryRecursionBlock = false;
    }
+
    QAbstractItemView::updateGeometries();
 }
 
@@ -2580,8 +2583,9 @@ int QTreeView::sizeHintForColumn(int column) const
    const int maximumProcessRows = d->header->resizeContentsPrecision(); // To avoid this to take forever.
 
    int offset = 0;
-   int start = d->firstVisibleItem(&offset);
-   int end = d->lastVisibleItem(start, offset);
+   int start  = d->firstVisibleItem(&offset);
+   int end    = d->lastVisibleItem(start, offset);
+
    if (start < 0 || end < 0 || end == viewItems.size() - 1) {
       end = viewItems.size() - 1;
       if (maximumProcessRows < 0) {

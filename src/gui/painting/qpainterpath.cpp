@@ -135,6 +135,7 @@ static void qt_debug_path(const QPainterPath &path)
    };
 
    printf("\nQPainterPath: elementCount=%d\n", path.elementCount());
+
    for (int i = 0; i < path.elementCount(); ++i) {
       const QPainterPath::Element &e = path.elementAt(i);
       Q_ASSERT(e.type >= 0 && e.type <= QPainterPath::CurveToDataElement);
@@ -244,11 +245,12 @@ void QPainterPath::moveTo(const QPointF &p)
    printf("QPainterPath::moveTo() (%.2f,%.2f)\n", p.x(), p.y());
 #endif
 
-   if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
+   if (! qt_is_finite(p.x()) || ! qt_is_finite(p.y())) {
 
 #if defined(QT_DEBUG)
       qWarning("QPainterPath::moveTo() Value for point x or y is invalid");
 #endif
+
       return;
    }
 
@@ -276,11 +278,12 @@ void QPainterPath::lineTo(const QPointF &p)
    printf("QPainterPath::lineTo() (%.2f,%.2f)\n", p.x(), p.y());
 #endif
 
-   if (!qt_is_finite(p.x()) || !qt_is_finite(p.y())) {
+   if (! qt_is_finite(p.x()) || ! qt_is_finite(p.y())) {
 
 #if defined(QT_DEBUG)
       qWarning("QPainterPath::lineTo() Value for point x or y is invalid");
 #endif
+
       return;
    }
 
@@ -307,12 +310,13 @@ void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &
       c1.x(), c1.y(), c2.x(), c2.y(), e.x(), e.y());
 #endif
 
-   if (!qt_is_finite(c1.x()) || !qt_is_finite(c1.y()) || !qt_is_finite(c2.x()) || !qt_is_finite(c2.y())
-      || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
+   if (! qt_is_finite(c1.x()) || ! qt_is_finite(c1.y()) || ! qt_is_finite(c2.x()) || ! qt_is_finite(c2.y())
+      || !qt_is_finite(e.x()) || ! qt_is_finite(e.y())) {
 
 #if defined(QT_DEBUG)
       qWarning("QPainterPath::cubicTo() Value for point x or y is invalid");
 #endif
+
       return;
    }
 
@@ -342,10 +346,11 @@ void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
    printf("QPainterPath::quadTo() (%.2f,%.2f), (%.2f,%.2f)\n", c.x(), c.y(), e.x(), e.y());
 #endif
 
-   if (!qt_is_finite(c.x()) || !qt_is_finite(c.y()) || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
+   if (! qt_is_finite(c.x()) || !qt_is_finite(c.y()) || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
 #if defined(QT_DEBUG)
       qWarning("QPainterPath::quadTo() Value for point x or y is invalid");
 #endif
+
       return;
    }
 
@@ -381,6 +386,7 @@ void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength
 #if defined(QT_DEBUG)
       qWarning("QPainterPath::arcTo() Value for point x or y is invalid");
 #endif
+
       return;
    }
 
@@ -962,6 +968,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
 
 #if defined(CS_PAINT_DEBUG)
    printf("Intersections after flattening:\n");
+
    for (int i = 0; i < count; ++i) {
       printf("%d: ", i);
       for (int j = 0; j < isects[i].size(); ++j) {
@@ -1126,8 +1133,7 @@ bool QPainterPath::contains(const QPointF &pt) const
          : ((winding_number % 2) != 0));
 }
 
-static bool qt_painterpath_isect_line_rect(qreal x1, qreal y1, qreal x2, qreal y2,
-   const QRectF &rect)
+static bool qt_painterpath_isect_line_rect(qreal x1, qreal y1, qreal x2, qreal y2, const QRectF &rect)
 {
    enum PainterDirection {
       Left,
@@ -1136,9 +1142,9 @@ static bool qt_painterpath_isect_line_rect(qreal x1, qreal y1, qreal x2, qreal y
       Bottom
    };
 
-   qreal left = rect.left();
-   qreal right = rect.right();
-   qreal top = rect.top();
+   qreal left   = rect.left();
+   qreal right  = rect.right();
+   qreal top    = rect.top();
    qreal bottom = rect.bottom();
 
    // clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
@@ -1146,6 +1152,7 @@ static bool qt_painterpath_isect_line_rect(qreal x1, qreal y1, qreal x2, qreal y
       | ((x1 > right) << Right)
       | ((y1 < top) << Top)
       | ((y1 > bottom) << Bottom);
+
    int p2 = ((x2 < left) << Left)
       | ((x2 > right) << Right)
       | ((y2 < top) << Top)

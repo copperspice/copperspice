@@ -156,15 +156,18 @@ void QSplitterHandle::resizeEvent(QResizeEvent *event)
 bool QSplitterHandle::event(QEvent *event)
 {
    Q_D(QSplitterHandle);
+
    switch (event->type()) {
       case QEvent::HoverEnter:
          d->hover = true;
          update();
          break;
+
       case QEvent::HoverLeave:
          d->hover = false;
          update();
          break;
+
       default:
          break;
    }
@@ -203,12 +206,14 @@ void QSplitterHandle::mousePressEvent(QMouseEvent *e)
 void QSplitterHandle::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QSplitterHandle);
+
    if (!opaqueResize() && e->button() == Qt::LeftButton) {
       int pos = d->pick(parentWidget()->mapFromGlobal(e->globalPos()))
          - d->mouseOffset;
       d->s->setRubberBand(-1);
       moveSplitter(pos);
    }
+
    if (e->button() == Qt::LeftButton) {
       d->pressed = false;
       update();
@@ -245,7 +250,6 @@ void QSplitterHandle::paintEvent(QPaintEvent *)
    parentWidget()->style()->drawControl(QStyle::CE_Splitter, &opt, &p, d->s);
 }
 
-
 int QSplitterLayoutStruct::getWidgetSize(Qt::Orientation orient)
 {
    if (sizer == -1) {
@@ -263,6 +267,7 @@ int QSplitterLayoutStruct::getWidgetSize(Qt::Orientation orient)
          sizer *= sf;
       }
    }
+
    return sizer;
 }
 
@@ -941,10 +946,12 @@ int QSplitter::indexOf(QWidget *w) const
 
    for (int i = 0; i < d->list.size(); ++i) {
       QSplitterLayoutStruct *s = d->list.at(i);
+
       if (s->widget == w || s->handle == w) {
          return i;
       }
    }
+
    return -1;
 }
 
@@ -966,9 +973,11 @@ QSplitterHandle *QSplitter::handle(int index) const
 QWidget *QSplitter::widget(int index) const
 {
    Q_D(const QSplitter);
+
    if (index < 0 || index >= d->list.size()) {
       return nullptr;
    }
+
    return d->list.at(index)->widget;
 }
 
@@ -982,7 +991,7 @@ void QSplitter::childEvent(QChildEvent *c)
 {
    Q_D(QSplitter);
 
-   if (!c->child()->isWidgetType()) {
+   if (! c->child()->isWidgetType()) {
       if (c->type() == QEvent::ChildAdded && qobject_cast<QLayout *>(c->child())) {
          qWarning("QSplitter::childEvent() Adding a QLayout to a QSplitter is not supported");
       }
@@ -1163,6 +1172,7 @@ void QSplitter::setOpaqueResize(bool on)
 QSize QSplitter::sizeHint() const
 {
    Q_D(const QSplitter);
+
    ensurePolished();
    int l = 0;
    int t = 0;
@@ -1178,6 +1188,7 @@ QSize QSplitter::sizeHint() const
          t = qMax(t, d->trans(s));
       }
    }
+
    return orientation() == Qt::Horizontal ? QSize(l, t) : QSize(t, l);
 }
 
@@ -1190,29 +1201,34 @@ QSize QSplitter::minimumSizeHint() const
 
    for (int i = 0; i < d->list.size(); ++i) {
       QSplitterLayoutStruct *s = d->list.at(i);
-      if (!s || !s->widget) {
+
+      if (! s || !s->widget) {
          continue;
       }
+
       if (s->widget->isHidden()) {
          continue;
       }
+
       QSize widgetSize = qSmartMinSize(s->widget);
       if (widgetSize.isValid()) {
          l += d->pick(widgetSize);
          t = qMax(t, d->trans(widgetSize));
       }
+
       if (!s->handle || s->handle->isHidden()) {
          continue;
       }
+
       QSize splitterSize = s->handle->sizeHint();
       if (splitterSize.isValid()) {
          l += d->pick(splitterSize);
          t = qMax(t, d->trans(splitterSize));
       }
    }
+
    return orientation() == Qt::Horizontal ? QSize(l, t) : QSize(t, l);
 }
-
 
 QList<int> QSplitter::sizes() const
 {
@@ -1224,9 +1240,9 @@ QList<int> QSplitter::sizes() const
       QSplitterLayoutStruct *s = d->list.at(i);
       list.append(d->pick(s->rect.size()));
    }
+
    return list;
 }
-
 
 void QSplitter::setSizes(const QList<int> &list)
 {

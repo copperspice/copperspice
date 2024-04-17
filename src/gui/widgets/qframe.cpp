@@ -131,10 +131,10 @@ void QFrame::setFrameShadow(QFrame::Shadow s)
    setFrameStyle((d->frameStyle & Shape_Mask) | s);
 }
 
-
 void QFrame::setFrameStyle(int style)
 {
    Q_D(QFrame);
+
    if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
       QSizePolicy sp;
 
@@ -295,4 +295,3 @@ bool QFrame::event(QEvent *e)
    }
    return result;
 }
-

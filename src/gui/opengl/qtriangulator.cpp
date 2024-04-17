@@ -47,9 +47,19 @@
 template <typename T>
 struct QVertexSet
 {
-    inline QVertexSet() { }
-    inline QVertexSet(const QVertexSet<T> &other) : vertices(other.vertices), indices(other.indices) { }
-    QVertexSet<T> &operator = (const QVertexSet<T> &other) {vertices = other.vertices; indices = other.indices; return *this;}
+    inline QVertexSet()
+   { }
+
+    inline QVertexSet(const QVertexSet<T> &other)
+      : vertices(other.vertices), indices(other.indices)
+    { }
+
+    QVertexSet<T> &operator = (const QVertexSet<T> &other) {
+      vertices = other.vertices;
+      indices  = other.indices;
+
+      return *this;
+    }
 
     // The vertices of a triangle are given by: (x[i[n]], y[i[n]]), (x[j[n]], y[j[n]]), (x[k[n]], y[k[n]]), n = 0, 1, ...
     QVector<qreal> vertices; // [x[0], y[0], x[1], y[1], x[2], ...]
@@ -614,16 +624,19 @@ public:
 #ifdef Q_TRIANGULATOR_DEBUG
         friend class DebugDialog;
         friend class QTriangulator;
+
         class DebugDialog : public QDialog
         {
-        public:
+         public:
             DebugDialog(ComplexToSimple *parent, int currentVertex);
-        protected:
+
+         protected:
             void paintEvent(QPaintEvent *);
             void wheelEvent(QWheelEvent *);
             void mouseMoveEvent(QMouseEvent *);
             void mousePressEvent(QMouseEvent *);
-        private:
+
+         private:
             ComplexToSimple *m_parent;
             QRectF m_window;
             QPoint m_lastMousePos;
@@ -1363,9 +1376,13 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
                 QRBTree<int>::Node *left  = m_edgeList.previous(m_edges[i].node);
                 QRBTree<int>::Node *right = m_edgeList.next(m_edges[i].node);
                 m_edgeList.deleteNode(m_edges[i].node);
-                if (!left || !right)
+
+                if (! left || ! right) {
                     continue;
+                }
+
                 calculateIntersection(left->data, right->data);
+
             } else {
                 // Insert edge into edge list.
                 Q_ASSERT(event.type == Event::Upper);
@@ -1373,10 +1390,14 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
                 m_edgeList.attachAfter(left, m_edges[i].node = m_edgeList.newNode());
                 m_edges[i].node->data = i;
                 QRBTree<int>::Node *right = m_edgeList.next(m_edges[i].node);
-                if (left)
+
+                if (left) {
                     calculateIntersection(left->data, i);
-                if (right)
+                }
+
+                if (right) {
                     calculateIntersection(i, right->data);
+                }
             }
         }
         while (!m_topIntersection.isEmpty() && m_topIntersection.top().intersectionPoint <= eventPoint)
@@ -1385,7 +1406,9 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
         DebugDialog dialog(this, vertex);
         dialog.exec();
 #endif
+
     }
+
     m_processedEdgePairs.clear();
 }
 
@@ -1659,18 +1682,21 @@ QTriangulator<T>::ComplexToSimple::DebugDialog::DebugDialog(ComplexToSimple *par
     : m_parent(parent), m_vertex(currentVertex)
 {
     QVector<QPodPoint> &vertices = m_parent->m_parent->m_vertices;
+
     if (vertices.isEmpty())
         return;
 
     int minX, maxX, minY, maxY;
     minX = maxX = vertices.at(0).x;
     minY = maxY = vertices.at(0).y;
+
     for (int i = 1; i < vertices.size(); ++i) {
         minX = qMin(minX, vertices.at(i).x);
         maxX = qMax(maxX, vertices.at(i).x);
         minY = qMin(minY, vertices.at(i).y);
         maxY = qMax(maxY, vertices.at(i).y);
     }
+
     int w = maxX - minX;
     int h = maxY - minY;
     qreal border = qMin(w, h) / 10.0;
@@ -1776,7 +1802,6 @@ void QTriangulator<T>::ComplexToSimple::DebugDialog::mousePressEvent(QMouseEvent
         m_lastMousePos = event->pos();
     event->accept();
 }
-
 
 #endif
 

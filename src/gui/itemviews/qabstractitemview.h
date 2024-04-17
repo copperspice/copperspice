@@ -281,6 +281,7 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    GUI_CS_SLOT_2(scrollToBottom)
 
    using QAbstractScrollArea::update;
+
    GUI_CS_SLOT_1(Public, void update(const QModelIndex &index))
    GUI_CS_SLOT_OVERLOAD(update, (const QModelIndex &))
 
@@ -407,10 +408,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 
    virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event = nullptr) const;
 
-#ifndef QT_NO_DRAGANDDROP
-   virtual void startDrag(Qt::DropActions supportedActions);
-#endif
-
    virtual QStyleOptionViewItem viewOptions() const;
 
    State state() const;
@@ -440,6 +437,10 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void dragMoveEvent(QDragMoveEvent *event) override;
    void dragLeaveEvent(QDragLeaveEvent *event) override;
    void dropEvent(QDropEvent *event) override;
+
+   DropIndicatorPosition dropIndicatorPosition() const;
+
+   virtual void startDrag(Qt::DropActions supportedActions);
 #endif
 
    void focusInEvent(QFocusEvent *event) override;
@@ -448,10 +449,6 @@ class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
    void resizeEvent(QResizeEvent *event) override;
    void timerEvent(QTimerEvent *event) override;
    void inputMethodEvent(QInputMethodEvent *event) override;
-
-#ifndef QT_NO_DRAGANDDROP
-   DropIndicatorPosition dropIndicatorPosition() const;
-#endif
 
    QSize viewportSizeHint() const override;
 

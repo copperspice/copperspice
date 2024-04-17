@@ -180,7 +180,9 @@ bool QFontEngine::supportsScript(QChar::Script script) const
       uint script_count = HB_OT_MAX_TAGS_PER_SCRIPT;
       hb_tag_t script_tag[HB_OT_MAX_TAGS_PER_SCRIPT];
 
-      hb_ot_tags_from_script_and_language(cs_script_to_hb_script(script), HB_LANGUAGE_INVALID, &script_count, script_tag, nullptr, nullptr);
+      hb_ot_tags_from_script_and_language(cs_script_to_hb_script(script), HB_LANGUAGE_INVALID, &script_count,
+            script_tag, nullptr, nullptr);
+
       retval = hb_ot_layout_table_select_script(face.get(), HB_OT_TAG_GSUB, script_count, script_tag, nullptr, nullptr);
    }
 
@@ -399,6 +401,7 @@ qreal QFontEngine::minRightBearing() const
 
       // Try the 'hhea' font table first, which covers the entire font
       QByteArray hheaTable = getSfntTable(MAKE_TAG('h', 'h', 'e', 'a'));
+
       if (hheaTable.size() >= int(kMinRightSideBearingOffset + sizeof(qint16))) {
          const uchar *tableData = reinterpret_cast<const uchar *>(hheaTable.constData());
          Q_ASSERT(q16Dot16ToFloat(qFromBigEndian<quint32>(tableData)) == 1.0);
@@ -416,6 +419,7 @@ qreal QFontEngine::minRightBearing() const
          // invalid values for their NBSPACE left bearing, causing the 'hhea' minimum bearings to
          // be way off. We detect this by assuming that the minimum bearsings are within a certain
          // range of the em square size.
+
          static const int largestValidBearing = 4 * unitsPerEm;
 
          if (qAbs(minLeftSideBearing) < largestValidBearing) {
@@ -442,7 +446,7 @@ qreal QFontEngine::minRightBearing() const
 
          for (uint i = 0; i < (sizeof(characterSubset) / sizeof(ushort)); ++i) {
             const glyph_t glyph = glyphIndex(characterSubset[i]);
-            if (!glyph) {
+            if (! glyph) {
                continue;
             }
 

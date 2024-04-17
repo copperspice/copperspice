@@ -78,11 +78,13 @@ Qt::ItemFlags QUrlModel::flags(const QModelIndex &index) const
 QMimeData *QUrlModel::mimeData(const QModelIndexList &indexes) const
 {
    QList<QUrl> list;
+
    for (int i = 0; i < indexes.count(); ++i) {
       if (indexes.at(i).column() == 0) {
          list.append(indexes.at(i).data(UrlRole).toUrl());
       }
    }
+
    QMimeData *data = new QMimeData();
    data->setUrls(list);
    return data;
@@ -91,7 +93,7 @@ QMimeData *QUrlModel::mimeData(const QModelIndexList &indexes) const
 #ifndef QT_NO_DRAGANDDROP
 bool QUrlModel::canDrop(QDragEnterEvent *event)
 {
-   if (!event->mimeData()->formats().contains(mimeTypes().first())) {
+   if (! event->mimeData()->formats().contains(mimeTypes().first())) {
       return false;
    }
 
@@ -102,6 +104,7 @@ bool QUrlModel::canDrop(QDragEnterEvent *event)
          return false;
       }
    }
+
    return true;
 }
 
@@ -129,27 +132,30 @@ bool QUrlModel::setData(const QModelIndex &index, const QVariant &value, int rol
       QModelIndex dirIndex = fileSystemModel->index(url.toLocalFile());
 
       //On windows the popup display the "C:\", convert to nativeSeparators
-      if (showFullPath)
+      if (showFullPath) {
          QStandardItemModel::setData(index, QDir::toNativeSeparators(fileSystemModel->data(dirIndex,
-                  QFileSystemModel::FilePathRole).toString()));
+               QFileSystemModel::FilePathRole).toString()));
 
-      else {
+      } else {
          QStandardItemModel::setData(index, QDir::toNativeSeparators(fileSystemModel->data(dirIndex,
-                  QFileSystemModel::FilePathRole).toString()), Qt::ToolTipRole);
+               QFileSystemModel::FilePathRole).toString()), Qt::ToolTipRole);
 
          QStandardItemModel::setData(index, fileSystemModel->data(dirIndex).toString());
       }
 
       QStandardItemModel::setData(index, fileSystemModel->data(dirIndex, Qt::DecorationRole), Qt::DecorationRole);
       QStandardItemModel::setData(index, url, UrlRole);
+
       return true;
    }
+
    return QStandardItemModel::setData(index, value, role);
 }
 
 void QUrlModel::setUrl(const QModelIndex &index, const QUrl &url, const QModelIndex &dirIndex)
 {
    setData(index, url, UrlRole);
+
    if (url.path().isEmpty()) {
       setData(index, fileSystemModel->myComputer());
       setData(index, fileSystemModel->myComputer(Qt::DecorationRole), Qt::DecorationRole);
@@ -477,6 +483,7 @@ bool QSidebar::event(QEvent *event)
          return true;
       }
    }
+
    return QListView::event(event);
 }
 

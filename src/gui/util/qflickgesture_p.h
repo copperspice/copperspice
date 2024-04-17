@@ -32,8 +32,6 @@
 
 #ifndef QT_NO_GESTURES
 
-
-
 class QFlickGesturePrivate;
 class QGraphicsItem;
 
@@ -60,7 +58,7 @@ class QFlickGesturePrivate : public QGesturePrivate
 
    QPointer<QObject> receiver;
    QScroller *receiverScroller;
-   Qt::MouseButton button; // NoButton == Touch
+   Qt::MouseButton button;          // NoButton == Touch
    bool macIgnoreWheel;
    static PressDelayHandler *pressDelayHandler;
 };
@@ -75,10 +73,8 @@ class QFlickGestureRecognizer : public QGestureRecognizer
    void reset(QGesture *state) override;
 
  private:
-   Qt::MouseButton button; // NoButton == Touch
+   Qt::MouseButton button;          // NoButton == Touch
 };
-
-
 
 #endif // QT_NO_GESTURES
 

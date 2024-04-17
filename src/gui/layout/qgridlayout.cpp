@@ -1428,7 +1428,7 @@ void QGridLayout::addLayout(QLayout *layout, int row, int column, Qt::Alignment 
 }
 
 void QGridLayout::addLayout(QLayout *layout, int row, int column,
-   int rowSpan, int columnSpan, Qt::Alignment alignment)
+      int rowSpan, int columnSpan, Qt::Alignment alignment)
 {
    Q_D(QGridLayout);
    if (!d->checkLayout(layout)) {
@@ -1508,7 +1508,6 @@ void QGridLayout::setOriginCorner(Qt::Corner corner)
       corner == Qt::TopRightCorner || corner == Qt::BottomRightCorner);
 }
 
-
 Qt::Corner QGridLayout::originCorner() const
 {
    Q_D(const QGridLayout);
@@ -1519,11 +1518,9 @@ Qt::Corner QGridLayout::originCorner() const
    }
 }
 
-
 void QGridLayout::invalidate()
 {
    Q_D(QGridLayout);
    d->setDirty();
    QLayout::invalidate();
 }
-

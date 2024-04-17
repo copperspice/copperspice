@@ -62,10 +62,8 @@ QOpenGLPaintDevice::~QOpenGLPaintDevice()
 }
 
 QOpenGLPaintDevicePrivate::QOpenGLPaintDevicePrivate(const QSize &sz)
-    : size(sz), ctx(QOpenGLContext::currentContext())
-    , dpmx(qt_defaultDpiX() * 100. / 2.54)
-    , dpmy(qt_defaultDpiY() * 100. / 2.54)
-    , devicePixelRatio(1.0), flipped(false), engine(nullptr)
+    : size(sz), ctx(QOpenGLContext::currentContext()), dpmx(qt_defaultDpiX() * 100. / 2.54),
+      dpmy(qt_defaultDpiY() * 100. / 2.54), devicePixelRatio(1.0), flipped(false), engine(nullptr)
 {
 }
 
@@ -133,34 +131,34 @@ void QOpenGLPaintDevice::setDevicePixelRatio(qreal devicePixelRatio)
 int QOpenGLPaintDevice::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
     switch (metric) {
-    case PdmWidth:
-        return d_ptr->size.width();
-    case PdmHeight:
-        return d_ptr->size.height();
-    case PdmDepth:
-        return 32;
-    case PdmWidthMM:
-        return qRound(d_ptr->size.width() * 1000 / d_ptr->dpmx);
-    case PdmHeightMM:
-        return qRound(d_ptr->size.height() * 1000 / d_ptr->dpmy);
-    case PdmNumColors:
-        return 0;
-    case PdmDpiX:
-        return qRound(d_ptr->dpmx * 0.0254);
-    case PdmDpiY:
-        return qRound(d_ptr->dpmy * 0.0254);
-    case PdmPhysicalDpiX:
-        return qRound(d_ptr->dpmx * 0.0254);
-    case PdmPhysicalDpiY:
-        return qRound(d_ptr->dpmy * 0.0254);
-    case PdmDevicePixelRatio:
-        return d_ptr->devicePixelRatio;
-    case PdmDevicePixelRatioScaled:
-        return d_ptr->devicePixelRatio * QPaintDevice::devicePixelRatioFScale();
+       case PdmWidth:
+           return d_ptr->size.width();
+       case PdmHeight:
+           return d_ptr->size.height();
+       case PdmDepth:
+           return 32;
+       case PdmWidthMM:
+           return qRound(d_ptr->size.width() * 1000 / d_ptr->dpmx);
+       case PdmHeightMM:
+           return qRound(d_ptr->size.height() * 1000 / d_ptr->dpmy);
+       case PdmNumColors:
+           return 0;
+       case PdmDpiX:
+           return qRound(d_ptr->dpmx * 0.0254);
+       case PdmDpiY:
+           return qRound(d_ptr->dpmy * 0.0254);
+       case PdmPhysicalDpiX:
+           return qRound(d_ptr->dpmx * 0.0254);
+       case PdmPhysicalDpiY:
+           return qRound(d_ptr->dpmy * 0.0254);
+       case PdmDevicePixelRatio:
+           return d_ptr->devicePixelRatio;
+       case PdmDevicePixelRatioScaled:
+           return d_ptr->devicePixelRatio * QPaintDevice::devicePixelRatioFScale();
 
-    default:
-        qWarning("QOpenGLPaintDevice::metric() - metric %d not known", metric);
-        return 0;
+       default:
+           qWarning("QOpenGLPaintDevice::metric() - metric %d not known", metric);
+           return 0;
     }
 }
 

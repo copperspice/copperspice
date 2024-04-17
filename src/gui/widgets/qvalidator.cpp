@@ -27,6 +27,7 @@
 #ifndef QT_NO_VALIDATOR
 
 #include <qlocale_p.h>
+
 #include <limits.h>
 #include <cmath>
 
@@ -44,7 +45,6 @@ class QValidatorPrivate
 
  protected:
    QValidator *q_ptr;
-
 };
 
 QValidator::QValidator(QObject *parent)
@@ -218,7 +218,6 @@ void QIntValidator::setTop(int top)
    setRange(bottom(), top);
 }
 
-
 #ifndef QT_NO_REGEXP
 
 class QDoubleValidatorPrivate : public QValidatorPrivate
@@ -227,8 +226,7 @@ class QDoubleValidatorPrivate : public QValidatorPrivate
 
  public:
    QDoubleValidatorPrivate()
-      : QValidatorPrivate()
-      , notation(QDoubleValidator::ScientificNotation)
+      : QValidatorPrivate(), notation(QDoubleValidator::ScientificNotation)
    { }
 
    QDoubleValidator::Notation notation;

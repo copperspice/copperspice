@@ -97,7 +97,6 @@ static const QFontEngine::HintStyle ftInitialDefaultHintStyle =
    QFontEngineFT::HintNone;
 #endif
 
-
 // -------------------------- Freetype support ------------------------------
 
 class QtFreetypeData
@@ -1636,6 +1635,7 @@ void QFontEngineFT::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int
       if (obliquen) {
          FT_GlyphSlot_Oblique(g);
       }
+
       QFreetypeFace::addGlyphToPath(face, g, positions[gl], path, xsize, ysize);
    }
 
@@ -1703,17 +1703,19 @@ bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num
 
          if (! glyphs->glyphs[glyph_pos] ) {
 
-
             glyph_t glyph = FT_Get_Char_Index(face, uc);
-            if (!glyph && (uc == 0xa0 || uc == 0x9)) {
+
+            if (! glyph && (uc == 0xa0 || uc == 0x9)) {
                uc = 0x20;
                glyph = FT_Get_Char_Index(face, uc);
             }
-            if (!glyph) {
+
+            if (! glyph) {
                FT_Set_Charmap(face, freetype->symbol_map);
                glyph = FT_Get_Char_Index(face, uc);
                FT_Set_Charmap(face, freetype->unicode_map);
             }
+
             glyphs->glyphs[glyph_pos] = glyph;
             if (uc < QFreetypeFace::CmapCacheSize) {
                freetype->cmapCache[uc] = glyph;
@@ -1736,7 +1738,7 @@ bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num
             {
             redo:
                glyph_t glyph = FT_Get_Char_Index(face, uc);
-               if (!glyph && (uc == 0xa0 || uc == 0x9)) {
+               if (! glyph && (uc == 0xa0 || uc == 0x9)) {
                   uc = 0x20;
                   goto redo;
                }

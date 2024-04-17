@@ -40,7 +40,7 @@
 #include <qplatform_menu.h>
 
 #define QAPP_CHECK(functionName) \
-    if (!qApp) { \
+    if (! qApp) { \
         qWarning("QShortcut()::" functionName " QApplication must be started before calling this method"); \
         return; \
     }
@@ -192,6 +192,7 @@ static bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidge
 #if defined(DEBUG_QSHORTCUTMAP)
    qDebug().nospace() << "..true [Pass-through]";
 #endif
+
    return true;
 }
 
@@ -205,7 +206,7 @@ static bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsW
    }
 #endif
 
-   if (!visible || !w->isEnabled() || !w->scene()) {
+   if (! visible || !w->isEnabled() || !w->scene()) {
       return false;
    }
 
@@ -321,9 +322,11 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
       }
    }
 #endif
+
    return false;
 }
 #endif // QT_NO_ACTION
+
 class QShortcutPrivate
 {
    Q_DECLARE_PUBLIC(QShortcut)

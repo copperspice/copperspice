@@ -127,6 +127,7 @@ bool qt_get_hex_rgb(QStringView str, QRgb *rgb)
 #ifdef rgb
 #  undef rgb
 #endif
+
 #define rgb(r,g,b) (0xff000000 | (r << 16) |  (g << 8) | b)
 
 struct RGBData {
@@ -354,7 +355,6 @@ bool qt_get_named_rgb(const QStringView name, QRgb *rgb)
    return get_named_rgb(name_no_space, rgb);
 }
 
-
 uint qt_get_rgb_val(const char *name)
 {
    QRgb r = 0;
@@ -389,9 +389,11 @@ uint qt_get_rgb_val(const char *)
 {
    return 0;
 }
+
 QStringList qt_get_colornames()
 {
    return QStringList();
 }
+
 #endif // QT_NO_COLORNAMES
 

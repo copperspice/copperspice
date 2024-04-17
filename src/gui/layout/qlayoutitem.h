@@ -38,10 +38,11 @@ static constexpr const int QLAYOUTSIZE_MAX = INT_MAX / 256 / 16;
 
 class Q_GUI_EXPORT QLayoutItem
 {
-
  public:
    inline explicit QLayoutItem(Qt::Alignment alignment = Qt::Alignment());
+
    virtual ~QLayoutItem();
+
    virtual QSize sizeHint() const = 0;
    virtual QSize minimumSize() const = 0;
    virtual QSize maximumSize() const = 0;

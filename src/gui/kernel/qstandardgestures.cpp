@@ -306,6 +306,7 @@ QGestureRecognizer::Result QSwipeGestureRecognizer::recognize(QGesture *state,
 
          if (d->state == QSwipeGesturePrivate::NoGesture) {
             result = QGestureRecognizer::CancelGesture;
+
          } else if (ev->touchPoints().size() == 3) {
             d->state = QSwipeGesturePrivate::ThreePointsReached;
             QTouchEvent::TouchPoint p1 = ev->touchPoints().at(0);
@@ -317,6 +318,7 @@ QGestureRecognizer::Result QSwipeGestureRecognizer::recognize(QGesture *state,
                d->lastPositions[1] = p2.startScreenPos().toPoint();
                d->lastPositions[2] = p3.startScreenPos().toPoint();
             }
+
             d->hotSpot = p1.screenPos();
             d->isHotSpotSet = true;
 
@@ -329,9 +331,11 @@ QGestureRecognizer::Result QSwipeGestureRecognizer::recognize(QGesture *state,
 
             const int distance = xDistance >= yDistance ? xDistance : yDistance;
             int elapsedTime = d->time.restart();
+
             if (!elapsedTime) {
                elapsedTime = 1;
             }
+
             d->velocityValue = 0.9 * d->velocityValue + distance / elapsedTime;
             d->swipeAngle = QLineF(p1.startScreenPos(), p1.screenPos()).angle();
 
@@ -440,6 +444,7 @@ QGestureRecognizer::Result QTapGestureRecognizer::recognize(QGesture *state,
          result = QGestureRecognizer::TriggerGesture;
          break;
       }
+
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd: {
          static constexpr const int TapRadius = 40;
@@ -458,11 +463,13 @@ QGestureRecognizer::Result QTapGestureRecognizer::recognize(QGesture *state,
          }
          break;
       }
+
       case QEvent::MouseButtonPress:
       case QEvent::MouseMove:
       case QEvent::MouseButtonRelease:
          result = QGestureRecognizer::Ignore;
          break;
+
       default:
          result = QGestureRecognizer::Ignore;
          break;
@@ -519,6 +526,7 @@ QGestureRecognizer::Result QTapAndHoldGestureRecognizer::recognize(QGesture *sta
          return QGestureRecognizer::MayBeGesture; // we don't show a sign of life until the timeout
       }
 #endif
+
       case QEvent::MouseButtonPress: {
          const QMouseEvent *me = static_cast<const QMouseEvent *>(event);
          d->position = me->globalPos();

@@ -39,12 +39,6 @@ class QTreeWidgetPrivate;
 
 class Q_GUI_EXPORT QTreeWidgetItem
 {
-   friend class QTreeModel;
-   friend class QTreeWidget;
-   friend class QTreeWidgetPrivate;
-   friend class QTreeWidgetItemIterator;
-   friend class QTreeWidgetItemPrivate;
-
  public:
    enum ItemType {
       Type     = 0,
@@ -251,6 +245,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    void executePendingSort() const;
 
    int rtti;
+
    // One item has a vector of column entries. Each column has a vector of (role, value) pairs.
    QVector< QVector<QWidgetItemData>> values;
    QTreeWidget *view;
@@ -258,6 +253,12 @@ class Q_GUI_EXPORT QTreeWidgetItem
    QTreeWidgetItem *par;
    QList<QTreeWidgetItem *> children;
    Qt::ItemFlags itemFlags;
+
+   friend class QTreeModel;
+   friend class QTreeWidget;
+   friend class QTreeWidgetPrivate;
+   friend class QTreeWidgetItemIterator;
+   friend class QTreeWidgetItemPrivate;
 };
 
 inline void QTreeWidgetItem::setText(int column, const QString &text)

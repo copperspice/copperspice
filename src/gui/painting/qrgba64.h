@@ -49,9 +49,6 @@ class QRgba64
 
    };
 
-
-
-
    explicit constexpr QRgba64(quint64 c)
       : rgba(c)
    { }
@@ -94,12 +91,15 @@ class QRgba64
    constexpr quint16 red()   const {
       return quint16(rgba >> RedShift);
    }
+
    constexpr quint16 green() const {
       return quint16(rgba >> GreenShift);
    }
+
    constexpr quint16 blue()  const {
       return quint16(rgba >> BlueShift);
    }
+
    constexpr quint16 alpha() const {
       return quint16(rgba >> AlphaShift);
    }
@@ -203,6 +203,7 @@ class QRgba64
       if (isOpaque() || isTransparent()) {
          return *this;
       }
+
       const quint64 a = alpha();
       const quint64 fa = (Q_UINT64_C(0xffff00008000) + a / 2) / a;
       const quint16 r = quint16((red()   * fa + 0x80000000) >> 32);

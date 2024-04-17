@@ -55,7 +55,6 @@ class Q_GUI_EXPORT QBasicDrag : public QPlatformDrag, public QObject
    virtual void drop(const QPoint &globalPos) = 0;
    virtual void endDrag();
 
-
    void moveShapedPixmapWindow(const QPoint &deviceIndependentPosition);
    QShapedPixmapWindow *shapedPixmapWindow() const {
       return m_drag_icon_window;
@@ -125,6 +124,5 @@ class Q_GUI_EXPORT QSimpleDrag : public QBasicDrag
 };
 
 #endif // QT_NO_DRAGANDDROP
-
 
 #endif

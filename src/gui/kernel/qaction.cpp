@@ -521,10 +521,11 @@ void QAction::setText(const QString &text)
 QString QAction::text() const
 {
    Q_D(const QAction);
+
    QString s = d->text;
    if (s.isEmpty()) {
       s = d->iconText;
-      s.replace(QLatin1Char('&'), QLatin1String("&&"));
+      s.replace(QLatin1Char('&'), QString("&&"));
    }
    return s;
 }

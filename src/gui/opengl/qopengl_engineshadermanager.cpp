@@ -39,8 +39,8 @@ class QOpenGLEngineSharedShadersResource : public QOpenGLSharedResource
 {
 public:
     QOpenGLEngineSharedShadersResource(QOpenGLContext *ctx)
-        : QOpenGLSharedResource(ctx->shareGroup())
-        , m_shaders(new QOpenGLEngineSharedShaders(ctx))
+        : QOpenGLSharedResource(ctx->shareGroup()),
+          m_shaders(new QOpenGLEngineSharedShaders(ctx))
     {
     }
 
@@ -182,11 +182,11 @@ QOpenGLEngineSharedShaders::QOpenGLEngineSharedShaders(QOpenGLContext* context)
         code[ExclusionCompositionModeFragmentShader] = ""; //###
 
 #if defined(QT_DEBUG)
-        // Check that all the elements have been filled:
+        // Check that all the elements have been filled
         for (int i = 0; i < TotalSnippetCount; ++i) {
-            if (qShaderSnippets[i] == nullptr) {
-                qFatal("Shader snippet for %s (#%d) is missing ", csPrintable(snippetNameStr(SnippetName(i))), i);
-            }
+           if (qShaderSnippets[i] == nullptr) {
+              qFatal("Shader snippet for %s (#%d) is missing ", csPrintable(snippetNameStr(SnippetName(i))), i);
+           }
         }
 #endif
         snippetsPopulated = true;
@@ -290,6 +290,7 @@ QOpenGLEngineSharedShaders::~QOpenGLEngineSharedShaders()
 #ifdef QT_GL_SHARED_SHADER_DEBUG
     qDebug(" -> ~QOpenGLEngineSharedShaders() %p for thread %p.", this, QThread::currentThread());
 #endif
+
     qDeleteAll(shaders);
     shaders.clear();
 
@@ -430,6 +431,7 @@ QOpenGLEngineShaderProg *QOpenGLEngineSharedShaders::findProgramInCache(const QO
         } else {
             QString error;
             error = QLatin1String("Shader program failed to link,");
+
 #if defined(QT_DEBUG)
             QLatin1String br("\n");
             error += QLatin1String("\n  Shaders Used:\n");
@@ -439,8 +441,8 @@ QOpenGLEngineShaderProg *QOpenGLEngineSharedShaders::findProgramInCache(const QO
                          + QLatin1String(shader->sourceCode()) + br;
             }
 #endif
-            error += QLatin1String("  Error Log:\n")
-                     + QLatin1String("    ") + newProg->program->log();
+
+            error += QLatin1String("  Error Log:\n") + QLatin1String("    ") + newProg->program->log();
             qWarning() << error;
             break;
         }

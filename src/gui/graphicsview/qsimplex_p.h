@@ -34,7 +34,6 @@ struct QSimplexVariable {
    int index;
 };
 
-
 /*
   internal
 
@@ -47,13 +46,15 @@ struct QSimplexVariable {
     Where (ci, Xi) are the pairs in "variables" and K the real "constant".
 */
 struct QSimplexConstraint {
-   QSimplexConstraint() : constant(0), ratio(Equal), artificial(nullptr) {}
-
    enum Ratio {
       LessOrEqual = 0,
       Equal,
       MoreOrEqual
    };
+
+   QSimplexConstraint()
+      : constant(0), ratio(Equal), artificial(nullptr)
+   { }
 
    QHash<QSimplexVariable *, qreal> variables;
    qreal constant;

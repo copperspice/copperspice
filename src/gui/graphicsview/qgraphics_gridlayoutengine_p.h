@@ -40,12 +40,13 @@ class QGraphicsGridLayoutEngineItem : public QGridLayoutItem
  public:
    QGraphicsGridLayoutEngineItem(QGraphicsLayoutItem *item, int row, int columns, int rowSpan = 1, int columnSpan = 1,
       Qt::Alignment alignment = Qt::EmptyFlag)
-      : QGridLayoutItem(row, columns, rowSpan, columnSpan, alignment), q_layoutItem(item) {}
+      : QGridLayoutItem(row, columns, rowSpan, columnSpan, alignment), q_layoutItem(item)
+   { }
 
    QLayoutPolicy::Policy sizePolicy(Qt::Orientation orientation) const override {
       QSizePolicy sizePolicy(q_layoutItem->sizePolicy());
-      return (QLayoutPolicy::Policy)((orientation == Qt::Horizontal) ? sizePolicy.horizontalPolicy()
-            : sizePolicy.verticalPolicy());
+      return (QLayoutPolicy::Policy)((orientation == Qt::Horizontal)
+            ? sizePolicy.horizontalPolicy() : sizePolicy.verticalPolicy());
    }
 
    QLayoutPolicy::ControlTypes controlTypes(LayoutSide) const override {

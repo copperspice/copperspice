@@ -48,16 +48,24 @@ class QBspTree
       int pos;
       Type type;
    };
+
    typedef Node::Type NodeType;
 
    struct Data {
-      Data(void *p) : ptr(p) {}
-      Data(int n) : i(n) {}
+      Data(void *p)
+         : ptr(p)
+      { }
+
+      Data(int n)
+         : i(n)
+      { }
+
       union {
          void *ptr;
          int i;
       };
    };
+
    typedef QBspTree::Data QBspTreeData;
    typedef void callback(QVector<int> &leaf, const QRect &area, uint visited, QBspTreeData data);
 
@@ -109,7 +117,5 @@ class QBspTree
    QVector<Node> nodes;
    mutable QVector< QVector<int>> leaves; // the leaves are just indices into the items
 };
-
-
 
 #endif // QBSPTREE_P_H

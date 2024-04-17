@@ -189,7 +189,9 @@ class QMacStylePrivate : public QCommonStylePrivate
 
    NSView *cocoaControl(QCocoaWidget widget) const;
 
-   void drawNSViewInRect(QCocoaWidget widget, NSView *view, const QRect &rect, QPainter *p, bool isQWidget = true, QCocoaDrawRectBlock drawRectBlock = nil) const;
+   void drawNSViewInRect(QCocoaWidget widget, NSView *view, const QRect &rect, QPainter *p, bool isQWidget = true,
+         QCocoaDrawRectBlock drawRectBlock = nil) const;
+
    void resolveCurrentNSView(QWindow *window);
 
    void drawFocusRing(QPainter *p, const QRect &targetRect, int hMargin, int vMargin, qreal radius = 0) const;
@@ -225,6 +227,5 @@ class QMacStylePrivate : public QCommonStylePrivate
    NSView *backingStoreNSView;
    QHash<QCocoaWidget, NSView *> cocoaControls;
 };
-
 
 #endif

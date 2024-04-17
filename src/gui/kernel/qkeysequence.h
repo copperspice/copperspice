@@ -192,6 +192,7 @@ class Q_GUI_EXPORT QKeySequence
  private:
    static int decodeString(const QString &ks);
    static QString encodeString(int key);
+
    int assign(const QString &str);
    int assign(const QString &str, SequenceFormat format);
    void setKey(int key, int index);
@@ -213,11 +214,7 @@ class Q_GUI_EXPORT QKeySequence
 
 };
 
-
-
-
 Q_GUI_EXPORT QDebug operator<<(QDebug, const QKeySequence &);
-
 
 #else
 

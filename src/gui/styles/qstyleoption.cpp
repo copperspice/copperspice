@@ -49,18 +49,23 @@ void QStyleOption::initFrom(const QWidget *widget)
    if (widget->isEnabled()) {
       state |= QStyle::State_Enabled;
    }
+
    if (widget->hasFocus()) {
       state |= QStyle::State_HasFocus;
    }
+
    if (window->testAttribute(Qt::WA_KeyboardFocusChange)) {
       state |= QStyle::State_KeyboardFocusChange;
    }
+
    if (widget->underMouse()) {
       state |= QStyle::State_MouseOver;
    }
+
    if (window->isActiveWindow()) {
       state |= QStyle::State_Active;
    }
+
    if (widget->isWindow()) {
       state |= QStyle::State_Window;
    }
@@ -488,6 +493,7 @@ QStyleHintReturnMask::QStyleHintReturnMask() : QStyleHintReturn(Version, Type)
 QStyleHintReturnMask::~QStyleHintReturnMask()
 {
 }
+
 QStyleHintReturnVariant::QStyleHintReturnVariant() : QStyleHintReturn(Version, Type)
 {
 }
@@ -564,6 +570,7 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
       case QStyleOption::SO_Slider:
          debug << "SO_Slider";
          break;
+
       case QStyleOption::SO_SpinBox:
          debug << "SO_SpinBox";
          break;

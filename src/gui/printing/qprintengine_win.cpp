@@ -52,7 +52,7 @@ extern QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::Unit f
 // #define QT_DEBUG_METRICS
 
 static void draw_text_item_win(const QPointF &_pos, const QTextItemInt &ti, HDC hdc,
-   const QTransform &xform, const QPointF &topLeft);
+      const QTransform &xform, const QPointF &topLeft);
 
 enum HBitmapFormat {
    HBitmapNoAlpha,
@@ -654,9 +654,8 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
       }
    }
 
-   if (start >= 0
-      && path.elementAt(start).x == path.elementAt(path.elementCount() - 1).x
-      && path.elementAt(start).y == path.elementAt(path.elementCount() - 1).y) {
+   if (start >= 0 && path.elementAt(start).x == path.elementAt(path.elementCount() - 1).x
+         && path.elementAt(start).y == path.elementAt(path.elementCount() - 1).y) {
       CloseFigure(hdc);
    }
 
@@ -1633,7 +1632,7 @@ void QWin32PrintEnginePrivate::debugMetrics() const {
 }
 
 static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC hdc,
-                               const QTransform & xform, const QPointF & topLeft) {
+      const QTransform & xform, const QPointF & topLeft) {
    QPointF baseline_pos = xform.inverted().map(xform.map(pos) - topLeft);
 
    SetTextAlign(hdc, TA_BASELINE);

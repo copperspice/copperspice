@@ -1542,12 +1542,14 @@ void QGuiApplicationPrivate::processWindowSystemEvent(QWindowSystemInterfacePriv
          QGuiApplicationPrivate::processFileOpenEvent(
             static_cast<QWindowSystemInterfacePrivate::FileOpenEvent *>(e));
          break;
+
 #ifndef QT_NO_CONTEXTMENU
       case QWindowSystemInterfacePrivate::ContextMenu:
          QGuiApplicationPrivate::processContextMenuEvent(
             static_cast<QWindowSystemInterfacePrivate::ContextMenuEvent *>(e));
          break;
 #endif
+
       case QWindowSystemInterfacePrivate::EnterWhatsThisMode:
          QGuiApplication::postEvent(QGuiApplication::instance(), new QEvent(QEvent::EnterWhatsThisMode));
          break;
@@ -3445,6 +3447,7 @@ void QGuiApplicationPrivate::_q_updateFocusObject(QObject *object)
    if (inputContext) {
       inputContext->setFocusObject(object);
    }
+
    emit q->focusObjectChanged(object);
 }
 

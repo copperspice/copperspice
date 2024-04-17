@@ -499,12 +499,13 @@ void QRollEffect::scroll()
       anim.stop();
 
       if (widget) {
-         if (!showWidget) {
+         if (! showWidget) {
 #ifdef Q_OS_WIN
             setEnabled(true);
             setFocus();
 #endif
             widget->hide();
+
          } else {
             //Since we are faking the visibility of the widget
             //we need to unset the hidden state on it before calling show
@@ -513,6 +514,7 @@ void QRollEffect::scroll()
             lower();
          }
       }
+
       q_roll = nullptr;
       deleteLater();
    }
@@ -525,7 +527,7 @@ void qScrollEffect(QWidget *w, QEffects::DirFlags orient, int time)
       q_roll = nullptr;
    }
 
-   if (!w) {
+   if (! w) {
       return;
    }
 

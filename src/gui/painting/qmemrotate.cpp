@@ -30,9 +30,11 @@ static constexpr const int tileSize = 32;
 #endif
 
 #if Q_BYTE_ORDER == Q_BIG_ENDIAN
+
 #if QT_ROTATION_ALGORITHM == QT_ROTATION_PACKED || QT_ROTATION_ALGORITHM == QT_ROTATION_TILED
 #error Big endian version not implemented for the transformed driver!
 #endif
+
 #endif
 
 template <class T>

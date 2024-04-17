@@ -127,6 +127,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    // "variables" is a list that provides a stable, indexed list of all variables
    // used in this problem.
    QSet<QSimplexVariable *> variablesSet;
+
    for (int i = 0; i < constraints.size(); ++i)
       variablesSet += \
          QSet<QSimplexVariable *>::fromList(constraints[i]->variables.keys());
@@ -508,6 +509,7 @@ qreal QSimplex::solver(SolverFactor factor)
    // Set new objective in the first row of the simplex matrix
    qreal resultOffset = 0;
    QHash<QSimplexVariable *, qreal>::const_iterator iter;
+
    for (iter = objective->variables.constBegin();
       iter != objective->variables.constEnd();
       ++iter) {

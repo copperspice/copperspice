@@ -1097,6 +1097,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
       // 3. see if we have a bitmap scalable font
       if (! size && style->bitmapScalable && (styleStrategy & QFont::PreferMatch)) {
          size = style->fontSize(0);
+
          if (size) {
             FM_DEBUG("          found bitmap scalable font (%d pixels)", pixelSize);
             px = pixelSize;
@@ -1143,6 +1144,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
       }
 
       uint currentScore = 0x0000;
+
       enum {
          PitchMismatch       = 0x4000,
          StyleMismatch       = 0x2000,
@@ -1177,6 +1179,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
          desc->foundry = &fontFoundry;
          desc->style   = style;
          desc->size    = size;
+
       } else {
          FM_DEBUG("          score %x no better than best %x", currentScore, score);
       }
@@ -1195,7 +1198,7 @@ static bool matchFamilyName(const QString &familyName, QtFontFamily *family)
 }
 
 QtFontFamily *match(int script, const QFontDef &request, const QString &familyName, const QString &foundryName,
-                    QtFontDesc *desc, const QList<QtFontFamily *> &blacklistedFamilies)
+      QtFontDesc *desc, const QList<QtFontFamily *> &blacklistedFamilies)
 {
    QtFontFamily *retval = nullptr;
 
@@ -1222,7 +1225,7 @@ QtFontFamily *match(int script, const QFontDef &request, const QString &familyNa
    loadDb(familyName, script);
 
    size_t writingSystem = std::find(scriptForWritingSystem, scriptForWritingSystem +
-                  QFontDatabase::WritingSystemsCount, script) - scriptForWritingSystem;
+         QFontDatabase::WritingSystemsCount, script) - scriptForWritingSystem;
 
    if (writingSystem >= QFontDatabase::WritingSystemsCount) {
       writingSystem = QFontDatabase::Any;

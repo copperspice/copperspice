@@ -66,8 +66,6 @@ NSView *getEmbeddableView(QWindow *qtWindow)
     return qtView; // qtView is ready for use.
 }
 
-
-
 QMacNativeWidget::QMacNativeWidget(NSView *parentView)
     : QWidget(nullptr)
 {
@@ -103,5 +101,3 @@ bool QMacNativeWidget::event(QEvent *ev)
 {
    return QWidget::event(ev);
 }
-
-

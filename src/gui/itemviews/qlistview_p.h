@@ -40,10 +40,6 @@ class QListViewPrivate;
 
 class QListViewItem
 {
-   friend class QListViewPrivate;
-   friend class QListModeViewBase;
-   friend class QIconModeViewBase;
-
  public:
    QListViewItem()
       : x(-1), y(-1), w(0), h(0), indexHint(-1), visited(0xffff)
@@ -92,6 +88,10 @@ class QListViewItem
    }
 
  private:
+   friend class QListViewPrivate;
+   friend class QListModeViewBase;
+   friend class QIconModeViewBase;
+
    QRect rect() const {
       return QRect(x, y, w, h);
    }

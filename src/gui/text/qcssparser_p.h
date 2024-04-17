@@ -359,9 +359,18 @@ struct BrushData {
       DependsOnThePalette
    };
 
-   BrushData() : role(QPalette::NoRole), type(Invalid) {}
-   BrushData(const QBrush &br) : brush(br), role(QPalette::NoRole), type(Brush) {}
-   BrushData(QPalette::ColorRole r) : role(r), type(Role) {}
+   BrushData()
+      : role(QPalette::NoRole), type(Invalid)
+   { }
+
+   BrushData(const QBrush &br)
+      : brush(br), role(QPalette::NoRole), type(Brush)
+   { }
+
+   BrushData(QPalette::ColorRole r)
+      : role(r), type(Role)
+   { }
+
    QBrush brush;
    QPalette::ColorRole role;
 

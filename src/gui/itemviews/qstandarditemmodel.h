@@ -40,7 +40,6 @@ class QStandardItemModelPrivate;
 
 class Q_GUI_EXPORT QStandardItem
 {
-
  public:
    enum ItemType {
       Type     = 0,
@@ -86,6 +85,7 @@ class Q_GUI_EXPORT QStandardItem
    inline QString whatsThis() const {
       return (data(Qt::WhatsThisRole)).value<QString>();
    }
+
    inline void setWhatsThis(const QString &whatsThis);
 #endif
 
@@ -221,6 +221,7 @@ class Q_GUI_EXPORT QStandardItem
    virtual void read(QDataStream &in);
    virtual void write(QDataStream &out) const;
 #endif
+
    virtual bool operator<(const QStandardItem &other) const;
 
  protected:
@@ -479,7 +480,6 @@ inline bool QStandardItemModel::insertColumn(int column, const QModelIndex &pare
 
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &in, QStandardItem &item);
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QStandardItem &item);
-
 
 #endif // QT_NO_STANDARDITEMMODEL
 

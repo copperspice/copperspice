@@ -45,6 +45,7 @@
 class QSplashScreenPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QSplashScreen)
+
  public:
    QPixmap pixmap;
    QString currStatus;
@@ -124,6 +125,7 @@ static inline bool waitForWindowExposed(QWindow *window, int timeout = 1000)
       if (remaining <= 0) {
          break;
       }
+
       QCoreApplication::processEvents(QEventLoop::AllEvents, remaining);
       QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
 

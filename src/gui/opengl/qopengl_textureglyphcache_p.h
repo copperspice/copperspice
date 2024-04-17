@@ -41,9 +41,7 @@ class QOpenGLGlyphTexture : public QOpenGLSharedResource
 {
 public:
     explicit QOpenGLGlyphTexture(QOpenGLContext *ctx)
-        : QOpenGLSharedResource(ctx->shareGroup())
-        , m_width(0)
-        , m_height(0)
+        : QOpenGLSharedResource(ctx->shareGroup()), m_width(0), m_height(0)
     {
         if (!ctx->d_func()->workaround_brokenFBOReadBack)
             QOpenGLFunctions(ctx).glGenFramebuffers(1, &m_fbo);
@@ -51,6 +49,7 @@ public:
 #ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
         qDebug(" -> QOpenGLGlyphTexture() %p for context %p.", this, ctx);
 #endif
+
     }
 
     void freeResource(QOpenGLContext *context) override
@@ -59,6 +58,7 @@ public:
 #ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
         qDebug("~QOpenGLGlyphTexture() %p for context %p.", this, ctx);
 #endif
+
         if (!ctx->d_func()->workaround_brokenFBOReadBack)
             ctx->functions()->glDeleteFramebuffers(1, &m_fbo);
         if (m_width || m_height)

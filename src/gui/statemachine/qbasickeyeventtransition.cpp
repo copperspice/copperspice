@@ -33,6 +33,7 @@
 class QBasicKeyEventTransitionPrivate : public QAbstractTransitionPrivate
 {
    Q_DECLARE_PUBLIC(QBasicKeyEventTransition)
+
  public:
    QBasicKeyEventTransitionPrivate();
 
@@ -70,8 +71,7 @@ QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
 }
 
 QBasicKeyEventTransition::QBasicKeyEventTransition(QEvent::Type type, int key,
-      Qt::KeyboardModifiers modifierMask,
-      QState *sourceState)
+      Qt::KeyboardModifiers modifierMask, QState *sourceState)
    : QAbstractTransition(*new QBasicKeyEventTransitionPrivate, sourceState)
 {
    Q_D(QBasicKeyEventTransition);
@@ -123,11 +123,13 @@ void QBasicKeyEventTransition::setModifierMask(Qt::KeyboardModifiers modifierMas
 bool QBasicKeyEventTransition::eventTest(QEvent *event)
 {
    Q_D(const QBasicKeyEventTransition);
+
    if (event->type() == d->eventType) {
       QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-      return (ke->key() == d->key)
-             && ((ke->modifiers() & d->modifierMask) == d->modifierMask);
+
+      return (ke->key() == d->key) && ((ke->modifiers() & d->modifierMask) == d->modifierMask);
    }
+
    return false;
 }
 

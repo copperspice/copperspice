@@ -126,8 +126,9 @@ bool QWindowsStyle::eventFilter(QObject *o, QEvent *e)
       return QObject::eventFilter(o, e);
    }
 
-   QWidget *widget = qobject_cast<QWidget *>(o);
    Q_D(QWindowsStyle);
+
+   QWidget *widget = qobject_cast<QWidget *>(o);
 
    switch (e->type()) {
       case QEvent::KeyPress:
@@ -560,6 +561,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
          ret = 1;
 
          break;
+
       case SH_ItemView_ShowDecorationSelected:
 #ifndef QT_NO_LISTVIEW
          if (qobject_cast<const QListView *>(widget)) {
@@ -567,9 +569,11 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
          }
 #endif
          break;
+
       case SH_ItemView_ChangeHighlightOnFocus:
          ret = 1;
          break;
+
       case SH_ToolBox_SelectedPageTitleBold:
          ret = 0;
          break;
@@ -583,6 +587,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
 
          // Do nothing if we always paint underlines
          Q_D(const QWindowsStyle);
+
          if (!ret && widget && d) {
 
 #ifndef QT_NO_MENUBAR
@@ -653,12 +658,15 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
          ret = QWizard::ModernStyle;
          break;
 #endif
+
       case SH_ItemView_ArrowKeysNavigateIntoChildren:
          ret = true;
          break;
+
       case SH_DialogButtonBox_ButtonsHaveIcons:
          ret = 0;
          break;
+
       default:
          ret = QCommonStyle::styleHint(hint, opt, widget, returnData);
          break;
@@ -668,7 +676,7 @@ int QWindowsStyle::styleHint(StyleHint hint, const QStyleOption *opt, const QWid
 
 
 void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter *p,
-   const QWidget *w) const
+      const QWidget *w) const
 {
    // Used to restore across fallthrough cases. Currently only used in PE_IndicatorCheckBox
    bool doRestore = false;
@@ -692,6 +700,7 @@ void QWindowsStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, 
                rect.bottomLeft().y() - margin,
                rect.topLeft().x() + offset + 1,
                rect.topLeft().y() + margin);
+
          } else {
             // draw vertical separator
 
@@ -1814,9 +1823,10 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
 
             // Correct the highlight color if it is the same as the background
             if (pal2.highlight() == pal2.background())
-               pal2.setColor(QPalette::Highlight, pb->palette.color(QPalette::Active,
-                     QPalette::Highlight));
+               pal2.setColor(QPalette::Highlight, pb->palette.color(QPalette::Active, QPalette::Highlight));
+
             bool reverse = ((!vertical && (pb->direction == Qt::RightToLeft)) || vertical);
+
             if (inverted) {
                reverse = !reverse;
             }
@@ -1983,6 +1993,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
 QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, const QWidget *w) const
 {
    QRect r;
+
    switch (sr) {
       case SE_SliderFocusRect:
       case SE_ToolBoxTabContents:
@@ -2020,9 +2031,10 @@ QRect QWindowsStyle::subElementRect(SubElement sr, const QStyleOption *opt, cons
 }
 
 void QWindowsStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
-   QPainter *p, const QWidget *widget) const
+      QPainter *p, const QWidget *widget) const
 {
    switch (cc) {
+
 #ifndef QT_NO_SLIDER
       case CC_Slider:
          if (const QStyleOptionSlider *slider = qstyleoption_cast<const QStyleOptionSlider *>(opt)) {
@@ -2434,7 +2446,7 @@ void QWindowsStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComp
 }
 
 QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
-   const QSize &csz, const QWidget *widget) const
+      const QSize &csz, const QWidget *widget) const
 {
    QSize sz(csz);
 

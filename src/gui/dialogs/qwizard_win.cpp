@@ -511,7 +511,7 @@ bool QVistaHelper::winEvent(MSG *msg, long *result)
             // DWM didn't return a hit, process using DefWindowProc
             lResult = DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
             // If DefWindowProc returns a window caption button, just return HTCLIENT (client area).
-            // This avoid unnecessary hits to Windows NT style caption buttons which aren't visible but are
+            // This avoid unnecessary hits to Windows NT style caption buttons which are not visible but are
             // located just under the Aero style window close button.
             if (lResult == HTCLOSE || lResult == HTMAXBUTTON || lResult == HTMINBUTTON || lResult == HTHELP) {
                *result = HTCLIENT;
@@ -953,19 +953,18 @@ int QVistaHelper::glowSize()
 {
    return QStyleHelper::dpiScaled(10);
 }
+
 int QVistaHelper::topOffset()
 {
    if (vistaState() != VistaAero) {
       return titleBarSize() + 3;
    }
 
-   static const int aeroOffset = QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS7 ?
-      QStyleHelper::dpiScaled(4) : QStyleHelper::dpiScaled(13);
+   static const int aeroOffset = QSysInfo::WindowsVersion == QSysInfo::WV_WINDOWS7
+         ? QStyleHelper::dpiScaled(4) : QStyleHelper::dpiScaled(13);
 
    return aeroOffset + titleBarSize();
 }
-
-
 
 #endif // QT_NO_STYLE_WINDOWSVISTA
 

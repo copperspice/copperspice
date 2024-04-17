@@ -49,6 +49,7 @@ static quint64 xpmHash(const char *str)
 #ifdef QRGB
 #undef QRGB
 #endif
+
 #define QRGB(r,g,b) (r*65536 + g*256 + b)
 
 static constexpr const int xpmRgbTblSize = 657;
@@ -1279,17 +1280,18 @@ bool QXpmHandler::canRead()
 
 bool QXpmHandler::canRead(QIODevice *device)
 {
-   if (!device) {
+   if (! device) {
       qWarning("QXpmHandler::canRead() No device");
       return false;
    }
 
    char head[6];
+
    if (device->peek(head, sizeof(head)) != sizeof(head)) {
       return false;
    }
 
-   return qstrncmp(head, "/* XPM", 6) == 0;
+   return qstrncmp(head, "/* XPM", 6) == 0;      /* comment */
 }
 
 bool QXpmHandler::read(QImage *image)
@@ -1307,9 +1309,7 @@ bool QXpmHandler::write(const QImage &image)
 
 bool QXpmHandler::supportsOption(ImageOption option) const
 {
-   return option == Name
-      || option == Size
-      || option == ImageFormat;
+   return option == Name || option == Size || option == ImageFormat;
 }
 
 QVariant QXpmHandler::option(ImageOption option)

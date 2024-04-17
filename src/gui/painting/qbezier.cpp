@@ -615,19 +615,24 @@ qreal QBezier::tAtLength(qreal l) const
 {
    qreal len = length();
    qreal t   = qreal(1.0);
+
    const qreal error = qreal(0.01);
+
    if (l > len || qFuzzyCompare(l, len)) {
       return t;
    }
 
    t *= qreal(0.5);
+
    qreal lastBigger = qreal(1.0);
 
    while (true) {
       QBezier right = *this;
       QBezier left;
+
       right.parameterSplitLeft(t, &left);
       qreal lLen = left.length();
+
       if (qAbs(lLen - l) < error) {
          break;
       }
@@ -640,6 +645,7 @@ qreal QBezier::tAtLength(qreal l) const
       }
       //++iters;
    }
+
    return t;
 }
 

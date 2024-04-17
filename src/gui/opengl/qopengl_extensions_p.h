@@ -314,7 +314,6 @@ inline void QOpenGLExtensions::glGetBufferSubData(GLenum target, qopengl_GLintpt
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
-
 inline void QOpenGLExtensions::glDiscardFramebufferEXT (GLenum target, GLsizei numAttachments, const GLenum *attachments)
 {
     Q_D(QOpenGLExtensions);

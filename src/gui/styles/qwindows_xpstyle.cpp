@@ -1346,9 +1346,9 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
       data.hadInvalidAlpha = wasAlphaFixed;
       alphaCache.insert(key, data);
    }
+
    return true;
 }
-
 
 QWindowsXPStyle::QWindowsXPStyle()
    : QWindowsStyle(*new QWindowsXPStylePrivate)
@@ -1367,6 +1367,7 @@ void QWindowsXPStyle::unpolish(QApplication *app)
 void QWindowsXPStyle::polish(QApplication *app)
 {
    QWindowsStyle::polish(app);
+
    if (!QWindowsXPStylePrivate::useXP()) {
       return;
    }
@@ -1375,6 +1376,7 @@ void QWindowsXPStyle::polish(QApplication *app)
 void QWindowsXPStyle::polish(QWidget *widget)
 {
    QWindowsStyle::polish(widget);
+
    if (! QWindowsXPStylePrivate::useXP()) {
       return;
    }
@@ -1490,6 +1492,7 @@ QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option,
    }
 
    QRect rect(option->rect);
+
    switch (sr) {
       case SE_DockWidgetCloseButton:
       case SE_DockWidgetFloatButton:
@@ -1585,11 +1588,11 @@ QRect QWindowsXPStyle::subElementRect(SubElement sr, const QStyleOption *option,
 }
 
 void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *option, QPainter *p,
-   const QWidget *widget) const
+      const QWidget *widget) const
 {
    QWindowsXPStylePrivate *d = const_cast<QWindowsXPStylePrivate *>(d_func());
 
-   if (!QWindowsXPStylePrivate::useXP()) {
+   if (! QWindowsXPStylePrivate::useXP()) {
       QWindowsStyle::drawPrimitive(pe, option, p, widget);
       return;
    }
@@ -2214,10 +2217,11 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
 }
 
 void QWindowsXPStyle::drawControl(ControlElement element, const QStyleOption *option, QPainter *p,
-   const QWidget *widget) const
+      const QWidget *widget) const
 {
    QWindowsXPStylePrivate *d = const_cast<QWindowsXPStylePrivate *>(d_func());
-   if (!QWindowsXPStylePrivate::useXP()) {
+
+   if (! QWindowsXPStylePrivate::useXP()) {
       QWindowsStyle::drawControl(element, option, p, widget);
       return;
    }
@@ -3716,10 +3720,12 @@ int QWindowsXPStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, cons
             : GetSystemMetrics(SM_CYCAPTION)   + GetSystemMetrics(SM_CXSIZEFRAME);
 
       case QStyle::PM_MdiSubWindowFrameWidth:
-         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_FRAMELEFT, FS_ACTIVE).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme,
+               WP_FRAMELEFT, FS_ACTIVE).width();
 
       case QStyle::PM_DockWidgetFrameWidth:
-         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme, WP_SMALLFRAMERIGHT, FS_ACTIVE).width();
+         return XPThemeData::themeSize(widget, nullptr, QWindowsXPStylePrivate::WindowTheme,
+               WP_SMALLFRAMERIGHT, FS_ACTIVE).width();
 
       default:
          break;
@@ -3750,6 +3756,7 @@ int QWindowsXPStyle::pixelMetric(PixelMetric pm, const QStyleOption *option, con
       case PM_DefaultFrameWidth:
          res = qobject_cast<const QListView *>(widget) ? 2 : 1;
          break;
+
       case PM_MenuPanelWidth:
       case PM_SpinBoxFrameWidth:
          res = 1;
@@ -3770,10 +3777,12 @@ int QWindowsXPStyle::pixelMetric(PixelMetric pm, const QStyleOption *option, con
                case QTabBar::TriangularWest:
                   res = 1;
                   break;
+
                case QTabBar::RoundedSouth:
                case QTabBar::TriangularSouth:
                   res = 2;
                   break;
+
                case QTabBar::RoundedEast:
                case QTabBar::TriangularEast:
                   res = 3;
@@ -3883,7 +3892,7 @@ static bool buttonVisible(const QStyle::SubControl sc, const QStyleOptionTitleBa
 }
 
 QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *option,
-   SubControl subControl, const QWidget *widget) const
+      SubControl subControl, const QWidget *widget) const
 {
    if (! QWindowsXPStylePrivate::useXP()) {
       return QWindowsStyle::subControlRect(cc, option, subControl, widget);
@@ -4116,6 +4125,7 @@ QRect QWindowsXPStyle::subControlRect(ComplexControl cc, const QStyleOptionCompl
                QWindowsStyle::subControlRect(cc, option, subControl, widget));
          break;
    }
+
    return visualRect(option->direction, option->rect, rect);
 }
 
@@ -4210,9 +4220,10 @@ QSize QWindowsXPStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt
 }
 
 int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const QWidget *widget,
-   QStyleHintReturn *returnData) const
+      QStyleHintReturn *returnData) const
 {
    QWindowsXPStylePrivate *d = const_cast<QWindowsXPStylePrivate *>(d_func());
+
    if (!QWindowsXPStylePrivate::useXP()) {
       return QWindowsStyle::styleHint(hint, option, widget, returnData);
    }
@@ -4304,8 +4315,9 @@ QPalette QWindowsXPStyle::standardPalette() const
    }
 }
 
+
 QPixmap QWindowsXPStyle::standardPixmap(StandardPixmap standardPixmap, const QStyleOption *option,
-   const QWidget *widget) const
+      const QWidget *widget) const
 {
    if (!QWindowsXPStylePrivate::useXP()) {
       return QWindowsStyle::standardPixmap(standardPixmap, option, widget);
@@ -4324,14 +4336,16 @@ QPixmap QWindowsXPStyle::standardPixmap(StandardPixmap standardPixmap, const QSt
             }
          }
          break;
+
       default:
          break;
    }
+
    return QWindowsStyle::standardPixmap(standardPixmap, option, widget);
 }
 
 QIcon QWindowsXPStyle::standardIcon(StandardPixmap standardIcon,
-   const QStyleOption *option, const QWidget *widget) const
+      const QStyleOption *option, const QWidget *widget) const
 {
    if (!QWindowsXPStylePrivate::useXP()) {
       return QWindowsStyle::standardIcon(standardIcon, option, widget);
@@ -4465,7 +4479,6 @@ QWindowsXPStyle::QWindowsXPStyle(QWindowsXPStylePrivate &dd) : QWindowsStyle(dd)
 {
 }
 
-
 // Debugging code ---------------------------------------------------------------------[ START ]---
 // The code for this point on is not compiled by default, but only used as assisting
 // debugging code when you uncomment the DEBUG_XP_STYLE define at the top of the file.
@@ -4542,19 +4555,24 @@ static void showProperty(XPThemeData &themeData, const PropPair &prop)
    PROPERTYORIGIN origin = PO_NOTFOUND;
    pGetThemePropertyOrigin(themeData.handle(), themeData.partId, themeData.stateId, prop.propValue, &origin);
    const char *originStr;
+
    switch (origin) {
       case PO_STATE:
          originStr = "State ";
          break;
+
       case PO_PART:
          originStr = "Part  ";
          break;
+
       case PO_CLASS:
          originStr = "Class ";
          break;
+
       case PO_GLOBAL:
          originStr = "Globl ";
          break;
+
       case PO_NOTFOUND:
       default:
          originStr = "Unkwn ";

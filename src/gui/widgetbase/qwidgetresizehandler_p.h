@@ -106,6 +106,7 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
    QPoint moveOffset;
    QPoint invertedMoveOffset;
    MousePosition mode;
+
    int fw;
    int extrahei;
    int range;
@@ -126,7 +127,6 @@ class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
       return moveResizeMode && !isMove();
    }
 };
-
 
 #endif // QT_NO_RESIZEHANDLER
 

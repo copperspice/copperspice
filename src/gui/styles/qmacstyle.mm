@@ -3537,12 +3537,16 @@ void QMacStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption * opt, QPa
          p->restore();
       }
          break;
+
       case PE_IndicatorToolBarHandle: {
          static constexpr const int RectHeight = 2;
+
          p->save();
+
          QPainterPath path;
          int x = opt->rect.x() + 6;
          int y = opt->rect.y() + 7;
+
          if (opt->state & State_Horizontal) {
             while (y < opt->rect.height() - RectHeight - 5) {
                path.moveTo(x, y);

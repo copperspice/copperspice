@@ -171,6 +171,7 @@ class QPixelFormat
    constexpr inline uchar redSize() const {
       return get(FirstField, FirstFieldWidth);
    }
+
    constexpr inline uchar greenSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
@@ -181,12 +182,15 @@ class QPixelFormat
    constexpr inline uchar cyanSize() const  {
       return get(FirstField, FirstFieldWidth);
    }
+
    constexpr inline uchar magentaSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
+
    constexpr inline uchar yellowSize() const  {
       return get(ThirdField, ThirdFieldWidth);
    }
+
    constexpr inline uchar blackSize() const  {
       return get(FourthField, FourthFieldWidth);
    }
@@ -194,9 +198,11 @@ class QPixelFormat
    constexpr inline uchar hueSize() const  {
       return get(FirstField, FirstFieldWidth);
    }
+
    constexpr inline uchar saturationSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
+
    constexpr inline uchar lightnessSize() const  {
       return get(ThirdField, ThirdFieldWidth);
    }
@@ -220,15 +226,19 @@ class QPixelFormat
    constexpr inline AlphaUsage alphaUsage() const  {
       return AlphaUsage(get(AlphaUsageField, AlphaUsageFieldWidth));
    }
+
    constexpr inline AlphaPosition alphaPosition() const  {
       return AlphaPosition(get(AlphaPositionField, AlphaPositionFieldWidth));
    }
+
    constexpr inline AlphaPremultiplied premultiplied() const  {
       return AlphaPremultiplied(get(PremulField, PremulFieldWidth));
    }
+
    constexpr inline TypeInterpretation typeInterpretation() const  {
       return TypeInterpretation(get(TypeInterpretationField, TypeInterpretationFieldWidth));
    }
+
    constexpr inline ByteOrder byteOrder() const  {
       return ByteOrder(get(ByteOrderField, ByteOrderFieldWidth));
    }
@@ -236,6 +246,7 @@ class QPixelFormat
    constexpr inline YUVLayout yuvLayout() const  {
       return YUVLayout(get(SubEnumField, SubEnumFieldWidth));
    }
+
    constexpr inline uchar subEnum() const  {
       return get(SubEnumField, SubEnumFieldWidth);
    }
@@ -271,8 +282,8 @@ QPixelFormat Q_GUI_EXPORT QPixelFormat_createYUV(QPixelFormat::YUVLayout yuvLayo
 }
 
 constexpr QPixelFormat::QPixelFormat(ColorModel mdl, uchar firstSize, uchar secondSize, uchar thirdSize, uchar fourthSize,
-   uchar fifthSize, uchar alfa, AlphaUsage usage, AlphaPosition position, AlphaPremultiplied premult,
-   TypeInterpretation typeInterp, ByteOrder b_order, uchar s_enum)
+      uchar fifthSize, uchar alfa, AlphaUsage usage, AlphaPosition position, AlphaPremultiplied premult,
+      TypeInterpretation typeInterp, ByteOrder b_order, uchar s_enum)
    : data(set(ModelField, ModelFieldWidth, uchar(mdl)) |
         set(FirstField, FirstFieldWidth, firstSize) |
         set(SecondField, SecondFieldWidth, secondSize) |
@@ -290,26 +301,12 @@ constexpr QPixelFormat::QPixelFormat(ColorModel mdl, uchar firstSize, uchar seco
 {
 }
 
-constexpr inline QPixelFormat qPixelFormatRgba(uchar red,
-   uchar green,
-   uchar blue,
-   uchar alfa,
-   QPixelFormat::AlphaUsage usage,
-   QPixelFormat::AlphaPosition position,
-   QPixelFormat::AlphaPremultiplied pmul = QPixelFormat::NotPremultiplied,
-   QPixelFormat::TypeInterpretation typeInt = QPixelFormat::UnsignedInteger)
+constexpr inline QPixelFormat qPixelFormatRgba(uchar red, uchar green, uchar blue, uchar alfa,
+      QPixelFormat::AlphaUsage usage, QPixelFormat::AlphaPosition position,
+      QPixelFormat::AlphaPremultiplied pmul = QPixelFormat::NotPremultiplied,
+      QPixelFormat::TypeInterpretation typeInt = QPixelFormat::UnsignedInteger)
 {
-   return QPixelFormat(QPixelFormat::RGB,
-         red,
-         green,
-         blue,
-         0,
-         0,
-         alfa,
-         usage,
-         position,
-         pmul,
-         typeInt);
+   return QPixelFormat(QPixelFormat::RGB, red, green, blue, 0, 0, alfa, usage, position, pmul, typeInt);
 }
 
 constexpr inline QPixelFormat qPixelFormatGrayscale(uchar channelSize,
@@ -370,9 +367,7 @@ constexpr inline QPixelFormat qPixelFormatHsl(uchar channelSize,
    QPixelFormat::TypeInterpretation typeInt = QPixelFormat::FloatingPoint)
 {
    return QPixelFormat(QPixelFormat::HSL, channelSize, channelSize, channelSize, 0, 0, alfa, usage,
-         position,
-         QPixelFormat::NotPremultiplied,
-         typeInt);
+      position, QPixelFormat::NotPremultiplied, typeInt);
 }
 
 constexpr inline QPixelFormat qPixelFormatHsv(uchar channelSize, uchar alfa = 0,

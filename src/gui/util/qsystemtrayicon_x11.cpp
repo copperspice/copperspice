@@ -81,7 +81,7 @@ class QSystemTrayIconSys : public QWidget
    virtual void moveEvent(QMoveEvent *) override;
 
  private:
-   GUI_CS_SLOT_1(Private, void systemTrayWindowChanged(QScreen * screen))
+   GUI_CS_SLOT_1(Private, void systemTrayWindowChanged(QScreen *screen))
    GUI_CS_SLOT_2(systemTrayWindowChanged)
 
    bool addToTray();
@@ -132,20 +132,23 @@ QSystemTrayIconSys::QSystemTrayIconSys(QSystemTrayIcon *qIn)
 
 bool QSystemTrayIconSys::addToTray()
 {
-   if (!locateSystemTray()) {
+   if (! locateSystemTray()) {
       return false;
    }
+
    createWinId();
    setMouseTracking(true);
 
-   if (!QXcbWindowFunctions::requestSystemTrayWindowDock(windowHandle())) {
+   if (! QXcbWindowFunctions::requestSystemTrayWindowDock(windowHandle())) {
       return false;
    }
 
-   if (!background.isNull()) {
+   if (! background.isNull()) {
       background = QPixmap();
    }
+
    show();
+
    return true;
 }
 
@@ -155,7 +158,7 @@ void QSystemTrayIconSys::systemTrayWindowChanged(QScreen *)
       addToTray();
    } else {
       QBalloonTip::hideBalloon();
-      hide(); // still no luck
+      hide();                       // still no luck
       destroy();
    }
 }
@@ -170,9 +173,11 @@ void QSystemTrayIconSys::mousePressEvent(QMouseEvent *ev)
    QPoint globalPos = ev->globalPos();
 
 #ifndef QT_NO_CONTEXTMENU
+
    if (ev->button() == Qt::RightButton && q->contextMenu()) {
       q->contextMenu()->popup(globalPos);
    }
+
 #endif
 
    if (QBalloonTip::isBalloonVisible()) {
@@ -204,13 +209,16 @@ bool QSystemTrayIconSys::event(QEvent *e)
       case QEvent::ToolTip:
          QApplication::sendEvent(q, e);
          break;
+
 #ifndef QT_NO_WHEELEVENT
       case QEvent::Wheel:
          return QApplication::sendEvent(q, e);
 #endif
+
       default:
          break;
    }
+
    return QWidget::event(e);
 }
 
@@ -224,16 +232,20 @@ void QSystemTrayIconSys::paintEvent(QPaintEvent *)
    if (testAttribute(Qt::WA_TranslucentBackground)) {
       painter.setCompositionMode(QPainter::CompositionMode_Source);
       painter.fillRect(rect, Qt::transparent);
+
    } else {
       // clearRegion() was called on XEMBED_EMBEDDED_NOTIFY, so we hope that got done by now.
       // Grab the tray background pixmap, before rendering the icon for the first time.
+
       if (background.isNull()) {
          background = QGuiApplication::primaryScreen()->grabWindow(winId(),
                0, 0, rect.size().width(), rect.size().height());
       }
+
       // Then paint over the icon area with the background before compositing the icon on top.
       painter.drawPixmap(QPoint(0, 0), background);
    }
+
    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
    q->icon().paint(&painter, rect);
 }
@@ -241,6 +253,7 @@ void QSystemTrayIconSys::paintEvent(QPaintEvent *)
 void QSystemTrayIconSys::moveEvent(QMoveEvent *event)
 {
    QWidget::moveEvent(event);
+
    if (QBalloonTip::isBalloonVisible()) {
       QBalloonTip::updateBalloonPosition(globalGeometry().center());
    }
@@ -250,6 +263,7 @@ void QSystemTrayIconSys::resizeEvent(QResizeEvent *event)
 {
    update();
    QWidget::resizeEvent(event);
+
    if (QBalloonTip::isBalloonVisible()) {
       QBalloonTip::updateBalloonPosition(globalGeometry().center());
    }
@@ -279,7 +293,7 @@ void QSystemTrayIconPrivate::install_sys()
       sys = new QSystemTrayIconSys(q);
 
       QObject::connect(QApplication::platformNativeInterface(), SIGNAL(systemTrayWindowChanged(QScreen *)),
-         sys, SLOT(systemTrayWindowChanged(QScreen *)));
+            sys, SLOT(systemTrayWindowChanged(QScreen *)));
    }
 }
 
@@ -289,7 +303,7 @@ QRect QSystemTrayIconPrivate::geometry_sys() const
       return geometry_sys_qpa();
    }
 
-   if (!sys) {
+   if (! sys) {
       return QRect();
    }
 
@@ -308,8 +322,8 @@ void QSystemTrayIconPrivate::remove_sys()
    }
 
    QBalloonTip::hideBalloon();
-   sys->hide(); // this should do the trick, but...
-   delete sys; // wm may resize system tray only for DestroyEvents
+   sys->hide();      // this should do the trick, but...
+   delete sys;       // wm may resize system tray only for DestroyEvents
    sys = nullptr;
 }
 
@@ -319,6 +333,7 @@ void QSystemTrayIconPrivate::updateIcon_sys()
       updateIcon_sys_qpa();
       return;
    }
+
    if (sys) {
       sys->updateIcon();
    }
@@ -337,7 +352,8 @@ void QSystemTrayIconPrivate::updateToolTip_sys()
       updateToolTip_sys_qpa();
       return;
    }
-   if (!sys) {
+
+   if (! sys) {
       return;
    }
 
@@ -349,41 +365,46 @@ void QSystemTrayIconPrivate::updateToolTip_sys()
 bool QSystemTrayIconPrivate::isSystemTrayAvailable_sys()
 {
    QScopedPointer<QPlatformSystemTrayIcon> sys(QGuiApplicationPrivate::platformTheme()->createPlatformSystemTrayIcon());
+
    if (sys && sys->isSystemTrayAvailable()) {
       return true;
    }
 
    // no QPlatformSystemTrayIcon so fall back to default xcb platform behavior
    const QString platform = QGuiApplication::platformName();
+
    if (platform.compare("xcb", Qt::CaseInsensitive) == 0) {
       return locateSystemTray();
    }
+
    return false;
 }
 
 bool QSystemTrayIconPrivate::supportsMessages_sys()
 {
    QScopedPointer<QPlatformSystemTrayIcon> sys(QGuiApplicationPrivate::platformTheme()->createPlatformSystemTrayIcon());
+
    if (sys) {
       return sys->supportsMessages();
    }
+
    return true;
 }
 
 void QSystemTrayIconPrivate::showMessage_sys(const QString &title, const QString &message,
-   QSystemTrayIcon::MessageIcon icon, int msecs)
+      QSystemTrayIcon::MessageIcon icon, int msecs)
 {
    if (qpa_sys) {
       showMessage_sys_qpa(title, message, icon, msecs);
       return;
    }
 
-   if (!sys) {
+   if (! sys) {
       return;
    }
 
    QBalloonTip::showBalloon(icon, title, message, sys->systemTrayIcon(),
-      sys->globalGeometry().center(), msecs);
+         sys->globalGeometry().center(), msecs);
 }
 
 #endif //QT_NO_SYSTEMTRAYICON

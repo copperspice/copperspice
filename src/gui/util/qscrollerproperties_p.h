@@ -57,6 +57,4 @@ class QScrollerPropertiesPrivate
    QScrollerProperties::FrameRates frameRate;
 };
 
-
 #endif // QSCROLLERPROPERTIES_P_H
-

@@ -42,32 +42,34 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 {
    const QStyleOptionComplex *complexOption = qstyleoption_cast<const QStyleOptionComplex *>(option);
    QString tmp = key + HexString<uint>(option->state)
-      + HexString<uint>(option->direction)
-      + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
-      + HexString<uint>(size.width())
-      + HexString<uint>(size.height());
+         + HexString<uint>(option->direction)
+         + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
+         + HexString<uint>(size.width())
+         + HexString<uint>(size.height());
 
 #ifndef QT_NO_SPINBOX
    if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
       tmp = tmp + HexString<uint>(spinBox->buttonSymbols)
-         + HexString<uint>(spinBox->stepEnabled)
-         + QLatin1Char(spinBox->frame ? '1' : '0'); ;
+            + HexString<uint>(spinBox->stepEnabled)
+            + QChar(spinBox->frame ? '1' : '0');
    }
 #endif
 
    if (option->palette != QGuiApplication::palette()) {
-      tmp.append(QLatin1Char('P'));
+      tmp.append('P');
 
       QByteArray key;
       key.reserve(5120); // Observed 5040B for a serialized palette on 64bit
+
       {
          QDataStream str(&key, QIODevice::WriteOnly);
          str << option->palette;
       }
+
       const QByteArray sha1 = QCryptographicHash::hash(key, QCryptographicHash::Sha1).toHex();
       tmp.append(QString::fromLatin1(sha1));
-
    }
+
    return tmp;
 }
 
@@ -151,14 +153,15 @@ static QPointF calcRadialPos(const QStyleOptionSlider *dial, qreal offset)
 qreal angle(const QPointF &p1, const QPointF &p2)
 {
    static constexpr const qreal rad_factor = 180 / Q_PI;
-   qreal _angle = 0;
+   qreal retval = 0;
 
    if (p1.x() == p2.x()) {
       if (p1.y() < p2.y()) {
-         _angle = 270;
+         retval = 270;
       } else {
-         _angle = 90;
+         retval = 90;
       }
+
    } else  {
       qreal x1, x2, y1, y2;
 
@@ -167,6 +170,7 @@ qreal angle(const QPointF &p1, const QPointF &p2)
          y1 = p1.y();
          x2 = p2.x();
          y2 = p2.y();
+
       } else {
          x2 = p1.x();
          y2 = p1.y();
@@ -175,35 +179,43 @@ qreal angle(const QPointF &p1, const QPointF &p2)
       }
 
       qreal m = -(y2 - y1) / (x2 - x1);
-      _angle = qAtan(m) *  rad_factor;
+      retval  = qAtan(m) * rad_factor;
 
       if (p1.x() < p2.x()) {
-         _angle = 180 - _angle;
+         retval = 180 - retval;
       } else {
-         _angle = -_angle;
+         retval = -retval;
       }
    }
-   return _angle;
+
+   return retval;
 }
 
 QPolygonF calcLines(const QStyleOptionSlider *dial)
 {
    QPolygonF poly;
-   int width = dial->rect.width();
+
+   int width  = dial->rect.width();
    int height = dial->rect.height();
-   qreal r = qMin(width, height) / 2;
+   qreal r    = qMin(width, height) / 2;
+
    int bigLineSize = calcBigLineSize(int(r));
 
    qreal xc = width / 2 + 0.5;
    qreal yc = height / 2 + 0.5;
+
    const int ns = dial->tickInterval;
-   if (!ns) { // Invalid values may be set by Qt Designer.
+
+   if (! ns) {
+      // Invalid values may be set by Qt Designer.
       return poly;
    }
+
    int notches = (dial->maximum + ns - 1 - dial->minimum) / ns;
    if (notches <= 0) {
       return poly;
    }
+
    if (dial->maximum < dial->minimum || dial->maximum - dial->minimum > 1000) {
       int maximum = dial->minimum + 1000;
       notches = (maximum + ns - 1 - dial->minimum) / ns;
@@ -211,21 +223,26 @@ QPolygonF calcLines(const QStyleOptionSlider *dial)
 
    poly.resize(2 + 2 * notches);
    int smallLineSize = bigLineSize / 2;
+
    for (int i = 0; i <= notches; ++i) {
       qreal angle = dial->dialWrapping ? Q_PI * 3 / 2 - i * 2 * Q_PI / notches
          : (Q_PI * 8 - i * 10 * Q_PI / notches) / 6;
+
       qreal s = qSin(angle);
       qreal c = qCos(angle);
+
       if (i == 0 || (((ns * i) % (dial->pageStep ? dial->pageStep : 1)) == 0)) {
          poly[2 * i] = QPointF(xc + (r - bigLineSize) * c,
                yc - (r - bigLineSize) * s);
          poly[2 * i + 1] = QPointF(xc + r * c, yc - r * s);
+
       } else {
          poly[2 * i] = QPointF(xc + (r - 1 - smallLineSize) * c,
                yc - (r - 1 - smallLineSize) * s);
          poly[2 * i + 1] = QPointF(xc + (r - 1) * c, yc - (r - 1) * s);
       }
    }
+
    return poly;
 }
 
@@ -236,11 +253,14 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
 {
    QPalette pal = option->palette;
    QColor buttonColor = pal.button().color();
-   const int width = option->rect.width();
-   const int height = option->rect.height();
+
+   const int width    = option->rect.width();
+   const int height   = option->rect.height();
    const bool enabled = option->state & QStyle::State_Enabled;
+
    qreal r = qMin(width, height) / 2;
    r -= r / 50;
+
    const qreal penSize = r / 20.0;
 
    painter->save();
@@ -261,23 +281,27 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
    const qreal dy = option->rect.y() + d_ + (height - 2 * r) / 2 + 1;
 
    QRectF br = QRectF(dx + 0.5, dy + 0.5,
-         int(r * 2 - 2 * d_ - 2),
-         int(r * 2 - 2 * d_ - 2));
+         int(r * 2 - 2 * d_ - 2), int(r * 2 - 2 * d_ - 2));
+
    buttonColor.setHsv(buttonColor .hue(),
-      qMin(140, buttonColor .saturation()),
-      qMax(180, buttonColor.value()));
+         qMin(140, buttonColor .saturation()), qMax(180, buttonColor.value()));
+
    QColor shadowColor(0, 0, 0, 20);
 
    if (enabled) {
       // Drop shadow
       qreal shadowSize = qMax(1.0, penSize / 2.0);
+
       QRectF shadowRect = br.adjusted(-2 * shadowSize, -2 * shadowSize,
             2 * shadowSize, 2 * shadowSize);
+
       QRadialGradient shadowGradient(shadowRect.center().x(),
          shadowRect.center().y(), shadowRect.width() / 2.0,
          shadowRect.center().x(), shadowRect.center().y());
+
       shadowGradient.setColorAt(qreal(0.91), QColor(0, 0, 0, 40));
       shadowGradient.setColorAt(qreal(1.0), Qt::transparent);
+
       p->setBrush(shadowGradient);
       p->setPen(Qt::NoPen);
       p->translate(shadowSize, shadowSize);
@@ -288,11 +312,13 @@ void drawDial(const QStyleOptionSlider *option, QPainter *painter)
       QRadialGradient gradient(br.center().x() - br.width() / 3, dy,
          br.width() * 1.3, br.center().x(),
          br.center().y() - br.height() / 2);
+
       gradient.setColorAt(0, buttonColor.lighter(110));
       gradient.setColorAt(qreal(0.5), buttonColor);
       gradient.setColorAt(qreal(0.501), buttonColor.darker(102));
       gradient.setColorAt(1, buttonColor.darker(115));
       p->setBrush(gradient);
+
    } else {
       p->setBrush(Qt::NoBrush);
    }

@@ -98,14 +98,14 @@ class QScrollerPrivate : public QObject
 
    void updateVelocity(const QPointF &deltaPixelRaw, qint64 deltaTime);
    void pushSegment(ScrollType type, qreal deltaTime, qreal stopProgress, qreal startPos, qreal deltaPos, qreal stopPos,
-      QEasingCurve::Type curve, Qt::Orientation orientation);
+         QEasingCurve::Type curve, Qt::Orientation orientation);
    void recalcScrollingSegments(bool forceRecalc = false);
    qreal scrollingSegmentsEndPos(Qt::Orientation orientation) const;
    bool scrollingSegmentsValid(Qt::Orientation orientation);
    void createScrollToSegments(qreal v, qreal deltaTime, qreal endPos, Qt::Orientation orientation, ScrollType type);
+
    void createScrollingSegments(qreal v, qreal startPos,
-      qreal deltaTime, qreal deltaPos,
-      Qt::Orientation orientation);
+         qreal deltaTime, qreal deltaPos, Qt::Orientation orientation);
    void createScrollingSegments(const QPointF &v, const QPointF &startPos, const QPointF &ppm);
 
    void setContentPositionHelperDragging(const QPointF &deltaPos);
@@ -142,19 +142,18 @@ class QScrollerPrivate : public QObject
    QPointF overshootPosition; // the number of pixels we are overshooting (before overshootDragResistanceFactor)
 
    // state
-
    bool enabled;
    QScroller::State state;
-   bool firstScroll; // true if we haven't already send a scroll event
+   bool firstScroll;          // true if we haven't already send a scroll event
 
-   QPointF oldVelocity; // the release velocity of the last drag
+   QPointF oldVelocity;       // the release velocity of the last drag
 
    QPointF pressPosition;
    QPointF lastPosition;
    qint64  pressTimestamp;
    qint64  lastTimestamp;
 
-   QPointF dragDistance; // the distance we should move during the next drag timer event
+   QPointF dragDistance;      // the distance we should move during the next drag timer event
 
    QQueue<ScrollSegment> xSegments;
    QQueue<ScrollSegment> ySegments;
@@ -171,7 +170,7 @@ class QScrollerPrivate : public QObject
 
    QElapsedTimer monotonicTimer;
 
-   QPointF releaseVelocity; // the starting velocity of the scrolling state
+   QPointF releaseVelocity;   // the starting velocity of the scrolling state
 
 #ifndef QT_NO_ANIMATION
    QScrollTimer *scrollTimer;
@@ -180,6 +179,4 @@ class QScrollerPrivate : public QObject
    QScroller *q_ptr;
 };
 
-
 #endif
-

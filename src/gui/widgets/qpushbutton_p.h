@@ -40,7 +40,8 @@ class QPushButtonPrivate : public QAbstractButtonPrivate
 
    QPushButtonPrivate()
       : QAbstractButtonPrivate(QSizePolicy::PushButton), autoDefault(Auto),
-        defaultButton(false), flat(false), menuOpen(false), lastAutoDefault(false) {}
+        defaultButton(false), flat(false), menuOpen(false), lastAutoDefault(false)
+   { }
 
    void init() {
       resetLayoutItemMargins();

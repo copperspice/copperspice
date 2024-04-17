@@ -197,6 +197,7 @@ void QOpenGLBuffer::allocate(const void *data, int count)
         qWarning("QOpenGLBuffer::allocate(): buffer not created");
     }
 #endif
+
     Q_D(QOpenGLBuffer);
 
     if (d->guard && d->guard->id()) {
@@ -211,6 +212,7 @@ bool QOpenGLBuffer::bind()
         qWarning("QOpenGLBuffer::bind(): buffer not created");
     }
 #endif
+
     Q_D(const QOpenGLBuffer);
     GLuint bufferId = d->guard ? d->guard->id() : 0;
 
@@ -344,4 +346,3 @@ bool QOpenGLBuffer::unmap()
 
     return d->funcs->glUnmapBuffer(d->type) == GL_TRUE;
 }
-

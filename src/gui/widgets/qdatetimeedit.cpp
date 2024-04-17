@@ -78,7 +78,6 @@ QDateTimeEdit::QDateTimeEdit(const QTime &time, QWidget *parent)
    d->init(time.isValid() ? time : QDATETIME_TIME_MIN);
 }
 
-
 QDateTimeEdit::QDateTimeEdit(const QVariant &var, QVariant::Type parserType, QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -611,6 +610,7 @@ QSize QDateTimeEdit::sizeHint() const
 bool QDateTimeEdit::event(QEvent *event)
 {
    Q_D(QDateTimeEdit);
+
    switch (event->type()) {
       case QEvent::ApplicationLayoutDirectionChange: {
          const bool was = d->formatExplicitlySet;
@@ -620,9 +620,11 @@ bool QDateTimeEdit::event(QEvent *event)
          d->formatExplicitlySet = was;
          break;
       }
+
       case QEvent::LocaleChange:
          d->updateEdit();
          break;
+
       case QEvent::StyleChange:
 
 #ifdef Q_OS_DARWIN
@@ -630,6 +632,7 @@ bool QDateTimeEdit::event(QEvent *event)
 #endif
          d->setLayoutItemMargins(QStyle::SE_DateTimeEditLayoutItem);
          break;
+
       default:
          break;
    }
@@ -659,6 +662,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
             return;
          }
          break;
+
       case Qt::Key_Select:
          if (QApplication::keypadNavigationEnabled()) {
             if (hasEditFocus()) {
@@ -671,6 +675,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                }
                setEditFocus(false);
                selectAll();
+
             } else {
                setEditFocus(true);
 
@@ -876,6 +881,7 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
       case QDateTimeParser::FirstSection:
       case QDateTimeParser::LastSection:
          return QAbstractSpinBox::focusNextPrevChild(next);
+
       default:
          d->edit->deselect();
          d->edit->setCursorPosition(d->sectionPos(newSection));
@@ -888,16 +894,20 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
 void QDateTimeEdit::stepBy(int steps)
 {
    Q_D(QDateTimeEdit);
+
 #ifdef QT_KEYPAD_NAVIGATION
    // with keypad navigation and not editFocus, left right change the date/time by a fixed amount.
+
    if (QApplication::keypadNavigationEnabled() && !hasEditFocus()) {
       // if date based, shift by day.  else shift by 15min
       if (d->sections & DateSections_Mask) {
          setDateTime(dateTime().addDays(steps));
+
       } else {
          int minutes = time().hour() * 60 + time().minute();
          int blocks = minutes / 15;
          blocks += steps;
+
          /* rounding involved */
          if (minutes % 15) {
             if (steps < 0) {
@@ -925,6 +935,7 @@ void QDateTimeEdit::stepBy(int steps)
       return;
    }
 #endif
+
    // do not optimize away steps == 0, this is the only way to select the currentSection
 
    if (d->specialValue() && displayedSections() != AmPmSection) {
@@ -1664,6 +1675,7 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
             setSelected(selSection, true);
          }
          c = -1;
+
       } else {
          int closest = closestSection(newpos, forward);
          c = sectionPos(closest) + (forward ? 0 : qMax(0, sectionSize(closest)));
@@ -1789,7 +1801,8 @@ QDateTimeEdit::Sections QDateTimeEditPrivate::convertSections(QDateTimeParser::S
 void QDateTimeEdit::paintEvent(QPaintEvent *event)
 {
    Q_D(QDateTimeEdit);
-   if (!d->calendarPopupEnabled()) {
+
+   if (! d->calendarPopupEnabled()) {
       QAbstractSpinBox::paintEvent(event);
       return;
    }

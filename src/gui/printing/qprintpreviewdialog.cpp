@@ -51,7 +51,7 @@ class QPrintPreviewMainWindow : public QMainWindow
  public:
    QPrintPreviewMainWindow(QWidget *parent)
       : QMainWindow(parent)
-   {}
+   { }
 
    QMenu *createPopupMenu() override {
       return nullptr;
@@ -62,10 +62,12 @@ class ZoomFactorValidator : public QDoubleValidator
 {
  public:
    ZoomFactorValidator(QObject *parent)
-      : QDoubleValidator(parent) {}
+      : QDoubleValidator(parent)
+   { }
 
    ZoomFactorValidator(qreal bottom, qreal top, int decimals, QObject *parent)
-      : QDoubleValidator(bottom, top, decimals, parent) {}
+      : QDoubleValidator(bottom, top, decimals, parent)
+   { }
 
    State validate(QString &input, int &pos) const override {
       bool replacePercent = false;
@@ -73,18 +75,21 @@ class ZoomFactorValidator : public QDoubleValidator
          input = input.left(input.length() - 1);
          replacePercent = true;
       }
+
       State state = QDoubleValidator::validate(input, pos);
       if (replacePercent) {
          input += QLatin1Char('%');
       }
+
       const int num_size = 4;
       if (state == Intermediate) {
          int i = input.indexOf(QLocale::system().decimalPoint());
-         if ((i == -1 && input.size() > num_size)
-            || (i != -1 && i > num_size)) {
+
+         if ((i == -1 && input.size() > num_size) || (i != -1 && i > num_size)) {
             return Invalid;
          }
       }
+
       return state;
    }
 };
@@ -95,7 +100,8 @@ class LineEdit : public QLineEdit
 
  public:
    LineEdit(QWidget *parent = nullptr)
-      : QLineEdit(parent) {
+      : QLineEdit(parent)
+   {
       setContextMenuPolicy(Qt::NoContextMenu);
       connect(this, &LineEdit::returnPressed, this, &LineEdit::handleReturnPressed);
    }
@@ -107,9 +113,10 @@ class LineEdit : public QLineEdit
    }
 
    void focusOutEvent(QFocusEvent *e) override {
-      if (isModified() && !hasAcceptableInput()) {
+      if (isModified() && ! hasAcceptableInput()) {
          setText(origText);
       }
+
       QLineEdit::focusOutEvent(e);
    }
 
@@ -118,7 +125,6 @@ class LineEdit : public QLineEdit
    GUI_CS_SLOT_2(handleReturnPressed)
 
    QString origText;
-
 };
 
 void LineEdit::handleReturnPressed()
@@ -782,5 +788,3 @@ void QPrintPreviewDialog::_q_zoomFactorChanged()
 }
 
 #endif // QT_NO_PRINTPREVIEWDIALOG
-
-

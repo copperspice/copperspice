@@ -53,7 +53,7 @@
 
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 
-#if ! defined(QT_NO_DOCKWIDGET) && ! defined(QT_NO_DEBUG_STREAM)
+#if ! defined(QT_NO_DOCKWIDGET)
 
 static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QString indent);
 
@@ -146,9 +146,7 @@ QDebug operator<<(QDebug debug, const QMainWindowLayout *layout)
    debug << layout->layoutState.dockAreaLayout;
    return debug;
 }
-#endif
 
-#ifndef QT_NO_DOCKWIDGET
 class QDockWidgetGroupLayout : public QLayout
 {
    QDockAreaLayoutInfo info;
@@ -262,6 +260,7 @@ bool QDockWidgetGroupWindow::event(QEvent *e)
       default:
          break;
    }
+
    return QWidget::event(e);
 }
 

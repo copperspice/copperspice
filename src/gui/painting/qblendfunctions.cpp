@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmath.h>
+
 #include <qblendfunctions_p.h>
 
 struct SourceOnlyAlpha {
@@ -33,7 +34,6 @@ struct SourceOnlyAlpha {
       return spix;
    }
 };
-
 
 struct SourceAndConstAlpha {
    SourceAndConstAlpha(int a) : m_alpha256(a) {
@@ -309,11 +309,13 @@ static void qt_blend_rgb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *sr
 
    while (dst < dstEnd) {
       const quint32 *srcEnd = src + w;
+
       while (src < srcEnd) {
          *dst = qConvertRgb32To16(*src);
          ++dst;
          ++src;
       }
+
       dst += dstExtraStride;
       src += srcExtraStride;
    }
@@ -329,11 +331,13 @@ static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *
 #ifdef QT_DEBUG_DRAW
    fprintf(stdout, "qt_blend_argb32_on_argb32: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
       destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
+
    fflush(stdout);
 #endif
 
    const uint *src = (const uint *) srcPixels;
    uint *dst = (uint *) destPixels;
+
    if (const_alpha == 256) {
       for (int y = 0; y < h; ++y) {
          for (int x = 0; x < w; ++x) {
@@ -347,6 +351,7 @@ static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *
          dst = (quint32 *)(((uchar *) dst) + dbpl);
          src = (const quint32 *)(((const uchar *) src) + sbpl);
       }
+
    } else if (const_alpha != 0) {
       const_alpha = (const_alpha * 255) >> 8;
       for (int y = 0; y < h; ++y) {
@@ -359,7 +364,6 @@ static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *
       }
    }
 }
-
 
 void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
    int w, int h, int const_alpha)

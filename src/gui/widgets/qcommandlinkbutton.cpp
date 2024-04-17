@@ -238,6 +238,7 @@ QCommandLinkButton::QCommandLinkButton(const QString &text, const QString &descr
 QCommandLinkButton::~QCommandLinkButton()
 {
 }
+
 bool QCommandLinkButton::event(QEvent *e)
 {
    return QPushButton::event(e);
@@ -275,6 +276,7 @@ int QCommandLinkButton::heightForWidth(int width) const
 void QCommandLinkButton::paintEvent(QPaintEvent *)
 {
    Q_D(QCommandLinkButton);
+
    QStylePainter p(this);
    p.save();
 
@@ -339,4 +341,3 @@ QString QCommandLinkButton::description() const
    Q_D(const QCommandLinkButton);
    return d->description;
 }
-

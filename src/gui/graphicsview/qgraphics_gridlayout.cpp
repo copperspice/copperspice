@@ -55,6 +55,7 @@ QGraphicsLayoutStyleInfo *QGraphicsGridLayoutPrivate::styleInfo() const
    if (!m_styleInfo) {
       m_styleInfo.reset(new QGraphicsLayoutStyleInfo(this));
    }
+
    return m_styleInfo.data();
 }
 
@@ -382,6 +383,7 @@ QGraphicsLayoutItem *QGraphicsGridLayout::itemAt(int index) const
 void QGraphicsGridLayout::removeAt(int index)
 {
    Q_D(QGraphicsGridLayout);
+
    if (index < 0 || index >= d->engine.itemCount()) {
       qWarning("QGraphicsGridLayout::removeAt() Invalid index %d", index);
       return;
@@ -398,6 +400,7 @@ void QGraphicsGridLayout::removeAt(int index)
       for (int j = 0; j < GridOrientation_Count; ++j) {
          const Qt::Orientation orient = (j == 0 ? Qt::Horizontal : Qt::Vertical);
          const int oldCount = d->engine.rowCount(orient);
+
          if (gridItem->lastRow(orient) == oldCount - 1) {
             const int newCount = d->engine.effectiveLastRow(orient) + 1;
             d->engine.removeRows(newCount, oldCount - newCount, orient);
@@ -438,6 +441,7 @@ void QGraphicsGridLayoutPrivate::dump(int indent) const
 void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsGridLayout);
+
    QGraphicsLayout::setGeometry(rect);
    QRectF effectiveRect = geometry();
    qreal left, top, right, bottom;
@@ -465,9 +469,11 @@ void QGraphicsGridLayout::setGeometry(const QRectF &rect)
 QSizeF QGraphicsGridLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
    Q_D(const QGraphicsGridLayout);
+
    qreal left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
    const QSizeF extraMargins(left + right, top + bottom);
+
    return d->engine.sizeHint(which, constraint - extraMargins, d->styleInfo()) + extraMargins;
 }
 

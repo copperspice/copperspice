@@ -38,12 +38,6 @@
 // To enable verbose output uncomment below
 //#define DEBUG_QSHORTCUTMAP
 
-/* \internal
-    Entry data for QShortcutMap
-    Contains:
-        Keysequence for entry
-        Pointer to parent owning the sequence
-*/
 struct QShortcutEntry {
    QShortcutEntry()
       : keyseq(0), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr) {
@@ -182,8 +176,9 @@ int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key
 #if defined(DEBUG_QSHORTCUTMAP)
    qDebug().nospace()
          << "QShortcutMap::removeShortcut(" << id << ", " << owner << ", "
-            << key << ") = " << itemsRemoved;
+         << key << ") = " << itemsRemoved;
 #endif
+
    return itemsRemoved;
 }
 
@@ -220,8 +215,9 @@ int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner, const 
 #if defined(DEBUG_QSHORTCUTMAP)
    qDebug().nospace()
          << "QShortcutMap::setShortcutEnabled(" << enable << ", " << id << ", "
-            << owner << ", " << key << ") = " << itemsChanged;
+         << owner << ", " << key << ") = " << itemsChanged;
 #endif
+
    return itemsChanged;
 }
 
@@ -258,8 +254,9 @@ int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner, const Q
 #if defined(DEBUG_QSHORTCUTMAP)
    qDebug().nospace()
          << "QShortcutMap::setShortcutAutoRepeat(" << on << ", " << id << ", "
-            << owner << ", " << key << ") = " << itemsChanged;
+         << owner << ", " << key << ") = " << itemsChanged;
 #endif
+
    return itemsChanged;
 }
 
@@ -373,12 +370,14 @@ QKeySequence::SequenceMatch QShortcutMap::nextState(QKeyEvent *e)
 #if defined(DEBUG_QSHORTCUTMAP)
    qDebug().nospace() << "QShortcutMap::nextState(" << e << ") = " << result;
 #endif
+
    return result;
 }
 
 bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
 {
    Q_D(const QShortcutMap);
+
    QShortcutEntry entry(seq); // needed for searching
    QList<QShortcutEntry>::const_iterator itEnd = d->sequences.constEnd();
    QList<QShortcutEntry>::const_iterator it = std::lower_bound(d->sequences.constBegin(), itEnd, entry);
@@ -670,6 +669,7 @@ void QShortcutMap::dispatchEvent(QKeyEvent *e)
 void QShortcutMap::dumpMap() const
 {
    Q_D(const QShortcutMap);
+
    for (int i = 0; i < d->sequences.size(); ++i) {
       qDebug().nospace() << &(d->sequences.at(i));
    }

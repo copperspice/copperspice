@@ -96,7 +96,6 @@ struct my_jpeg_source_mgr : public jpeg_source_mgr {
    my_jpeg_source_mgr(QIODevice *device);
 };
 
-
 extern "C" {
 
    static void qt_init_source(j_decompress_ptr)

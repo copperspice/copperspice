@@ -40,8 +40,12 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 
    void setSteps(int single, int page);
 
-   int minimum, maximum, pageStep, value, position, pressValue;
-
+   int minimum;
+   int maximum;
+   int pageStep;
+   int value;
+   int position;
+   int pressValue;
    int singleStep;
 
    float offset_accumulated;
@@ -70,11 +74,13 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 #endif
 
    int effectiveSingleStep() const {
-      return singleStep
+
 #ifdef QT_KEYPAD_NAVIGATION
-         * repeatMultiplier
+      return singleStep * repeatMultiplier;
+#else
+      return singleStep;
 #endif
-         ;
+
    }
 
    virtual int bound(int val) const {
@@ -83,11 +89,13 @@ class QAbstractSliderPrivate : public QWidgetPrivate
 
    int overflowSafeAdd(int add) const {
       int newValue = value + add;
+
       if (add > 0 && newValue < value) {
          newValue = maximum;
       } else if (add < 0 && newValue > value) {
          newValue = minimum;
       }
+
       return newValue;
    }
 
@@ -101,11 +109,11 @@ class QAbstractSliderPrivate : public QWidgetPrivate
             return;
          }
       }
+
       q->triggerAction(repeatAction);
    }
+
    bool scrollByDelta(Qt::Orientation orientation, Qt::KeyboardModifiers modifiers, int delta);
 };
-
-
 
 #endif // QABSTRACTSLIDER_P_H

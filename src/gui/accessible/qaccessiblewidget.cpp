@@ -49,11 +49,11 @@ static QList<QWidget *> childWidgets(const QWidget *widget)
 
       if (tmpWidget && ! tmpWidget->isWindow() && ! qobject_cast<QFocusFrame *>(tmpWidget)
 
-#if !defined(QT_NO_MENU)
-         && ! qobject_cast<QMenu *>(tmpWidget)
+#if ! defined(QT_NO_MENU)
+            && ! qobject_cast<QMenu *>(tmpWidget)
 #endif
 
-         && tmpWidget->objectName() != "qt_rubberband" && tmpWidget->objectName() != "qt_spinbox_lineedit") {
+            && tmpWidget->objectName() != "qt_rubberband" && tmpWidget->objectName() != "qt_spinbox_lineedit") {
 
          widgets.append(tmpWidget);
       }
@@ -69,7 +69,8 @@ static QString buddyString(const QWidget *widget)
    }
 
    QWidget *parent = widget->parentWidget();
-   if (!parent) {
+
+   if (! parent) {
       return QString();
    }
 
@@ -351,6 +352,7 @@ QAccessibleInterface *QAccessibleWidget::parent() const
 QAccessibleInterface *QAccessibleWidget::child(int index) const
 {
    Q_ASSERT(widget());
+
    QWidgetList childList = childWidgets(widget());
    if (index >= 0 && index < childList.size()) {
       return QAccessible::queryAccessibleInterface(childList.at(index));
@@ -427,6 +429,7 @@ QString QAccessibleWidget::text(QAccessible::Text t) const
          }
 #endif
          break;
+
       case QAccessible::Help:
 #ifndef QT_NO_WHATSTHIS
          str = widget()->whatsThis();
@@ -443,12 +446,14 @@ QString QAccessibleWidget::text(QAccessible::Text t) const
       default:
          break;
    }
+
    return str;
 }
 
 QStringList QAccessibleWidget::actionNames() const
 {
    QStringList names;
+
    if (widget()->isEnabled()) {
       if (widget()->focusPolicy() != Qt::NoFocus) {
          names << setFocusAction();
@@ -468,6 +473,7 @@ void QAccessibleWidget::doAction(const QString &actionName)
       if (widget()->isWindow()) {
          widget()->activateWindow();
       }
+
       widget()->setFocus();
    }
 }
@@ -491,22 +497,28 @@ QAccessible::State QAccessibleWidget::state() const
    if (w->testAttribute(Qt::WA_WState_Visible) == false) {
       state.invisible = true;
    }
+
    if (w->focusPolicy() != Qt::NoFocus) {
       state.focusable = true;
    }
+
    if (w->hasFocus()) {
       state.focused = true;
    }
-   if (!w->isEnabled()) {
+
+   if (! w->isEnabled()) {
       state.disabled = true;
    }
+
    if (w->isWindow()) {
       if (w->windowFlags() & Qt::WindowSystemMenuHint) {
          state.movable = true;
       }
+
       if (w->minimumSize() != w->maximumSize()) {
          state.sizeable = true;
       }
+
       if (w->isActiveWindow()) {
          state.active = true;
       }
@@ -519,11 +531,13 @@ QColor QAccessibleWidget::foregroundColor() const
 {
    return widget()->palette().color(widget()->foregroundRole());
 }
+
 QColor QAccessibleWidget::backgroundColor() const
 {
 
    return widget()->palette().color(widget()->backgroundRole());
 }
+
 void *QAccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 {
 

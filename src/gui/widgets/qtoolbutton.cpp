@@ -55,7 +55,6 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
       MenuButtonPressed = 1,
       ToolButtonPressed = 2
    };
-   void init();
 
 #ifndef QT_NO_MENU
    void _q_buttonPressed();
@@ -65,22 +64,27 @@ class QToolButtonPrivate : public QAbstractButtonPrivate
    void _q_menuTriggered(QAction *);
 #endif
 
+   void init();
    bool updateHoverControl(const QPoint &pos);
    void _q_actionTriggered();
    QStyle::SubControl newHoverControl(const QPoint &pos);
+
    QStyle::SubControl hoverControl;
    QRect hoverRect;
-   QPointer<QAction> menuAction; //the menu set by the user (setMenu)
+   QPointer<QAction> menuAction;       // menu set by the user (setMenu)
    QBasicTimer popupTimer;
    int delay;
    Qt::ArrowType arrowType;
    Qt::ToolButtonStyle toolButtonStyle;
    QToolButton::ToolButtonPopupMode popupMode;
-   uint buttonPressed : 2;
-   uint menuButtonDown          : 1;
-   uint autoRaise             : 1;
-   uint repeat                : 1;
+
+   uint buttonPressed  : 2;
+   uint menuButtonDown : 1;
+   uint autoRaise      : 1;
+   uint repeat         : 1;
+
    QAction *defaultAction;
+
 #ifndef QT_NO_MENU
    bool hasMenu() const;
    QList<QAction *> actionsCopy;
@@ -239,6 +243,7 @@ QToolButton::~QToolButton()
 QSize QToolButton::sizeHint() const
 {
    Q_D(const QToolButton);
+
    if (d->sizeHint.isValid()) {
       return d->sizeHint;
    }
@@ -392,14 +397,18 @@ QStyle::SubControl QToolButtonPrivate::newHoverControl(const QPoint &pos)
 bool QToolButtonPrivate::updateHoverControl(const QPoint &pos)
 {
    Q_Q(QToolButton);
+
    QRect lastHoverRect = hoverRect;
    QStyle::SubControl lastHoverControl = hoverControl;
+
    bool doesHover = q->testAttribute(Qt::WA_Hover);
+
    if (lastHoverControl != newHoverControl(pos) && doesHover) {
       q->update(lastHoverRect);
       q->update(hoverRect);
       return true;
    }
+
    return !doesHover;
 }
 
@@ -414,12 +423,15 @@ void QToolButtonPrivate::_q_actionTriggered()
 void QToolButton::enterEvent(QEvent *e)
 {
    Q_D(QToolButton);
+
    if (d->autoRaise) {
       update();
    }
+
    if (d->defaultAction) {
       d->defaultAction->hover();
    }
+
    QAbstractButton::enterEvent(e);
 }
 
@@ -502,13 +514,15 @@ void QToolButton::mouseReleaseEvent(QMouseEvent *e)
 bool QToolButton::hitButton(const QPoint &pos) const
 {
    Q_D(const QToolButton);
+
    if (QAbstractButton::hitButton(pos)) {
       return (d->buttonPressed != QToolButtonPrivate::MenuButtonPressed);
    }
+
    return false;
 }
 
-#ifndef QT_NO_MENU
+#if ! defined(QT_NO_MENU)
 
 void QToolButton::setMenu(QMenu *menu)
 {
@@ -517,6 +531,7 @@ void QToolButton::setMenu(QMenu *menu)
    if (d->menuAction == (menu ? menu->menuAction() : nullptr)) {
       return;
    }
+
    if (d->menuAction) {
       removeAction(d->menuAction);
    }
@@ -527,6 +542,7 @@ void QToolButton::setMenu(QMenu *menu)
    } else {
       d->menuAction = nullptr;
    }
+
    d->sizeHint = QSize();
    updateGeometry();
    update();
@@ -535,6 +551,7 @@ void QToolButton::setMenu(QMenu *menu)
 QMenu *QToolButton::menu() const
 {
    Q_D(const QToolButton);
+
    if (d->menuAction) {
       return d->menuAction->menu();
    }
@@ -685,6 +702,7 @@ void QToolButtonPrivate::popupTimerDone()
    if (! that) {
       return;
    }
+
    QObject::disconnect(actualMenu.data(), &QMenu::aboutToHide, q, &QToolButton::_q_updateButtonDown);
 
    if (mustDeleteActualMenu) {
@@ -703,7 +721,9 @@ void QToolButtonPrivate::popupTimerDone()
 void QToolButtonPrivate::_q_updateButtonDown()
 {
    Q_Q(QToolButton);
+
    menuButtonDown = false;
+
    if (q->isDown()) {
       q->setDown(false);
    } else {
@@ -749,10 +769,12 @@ bool QToolButton::autoRaise() const
 void QToolButton::setDefaultAction(QAction *action)
 {
    Q_D(QToolButton);
-#ifndef QT_NO_MENU
+
+#if ! defined(QT_NO_MENU)
    bool hadMenu = false;
    hadMenu = d->hasMenu();
 #endif
+
    d->defaultAction = action;
    if (!action) {
       return;
@@ -785,7 +807,7 @@ void QToolButton::setDefaultAction(QAction *action)
    setWhatsThis(action->whatsThis());
 #endif
 
-#ifndef QT_NO_MENU
+#if ! defined(QT_NO_MENU)
    if (action->menu() && !hadMenu) {
       // 'default' popup mode defined introduced by tool bar.
       // should have changed QToolButton's default instead.
@@ -811,6 +833,7 @@ QAction *QToolButton::defaultAction() const
 void QToolButton::nextCheckState()
 {
    Q_D(QToolButton);
+
    if (!d->defaultAction) {
       QAbstractButton::nextCheckState();
    } else {
@@ -828,13 +851,15 @@ bool QToolButton::event(QEvent *event)
             d_func()->updateHoverControl(he->pos());
          }
          break;
+
       default:
          break;
    }
+
    return QAbstractButton::event(event);
 }
 
-#ifndef QT_NO_MENU
+#if ! defined(QT_NO_MENU)
 void QToolButton::_q_buttonPressed()
 {
    Q_D(QToolButton);

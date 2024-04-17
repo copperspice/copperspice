@@ -53,18 +53,20 @@ bool QPixmapCache::Key::operator ==(const Key &key) const
    return (d == key.d);
 }
 
-
 QPixmapCache::Key &QPixmapCache::Key::operator =(const Key &other)
 {
    if (d != other.d) {
       if (other.d) {
          ++(other.d->ref);
       }
+
       if (d && --(d->ref) == 0) {
          delete d;
       }
+
       d = other.d;
    }
+
    return *this;
 }
 
@@ -163,6 +165,7 @@ void QPMCache::timerEvent(QTimerEvent *)
    if (!flushDetachedPixmaps(nt)) {
       killTimer(theid);
       theid = 0;
+
    } else if (nt != t) {
       killTimer(theid);
       theid = startTimer(nt ? TimeSoon : TimeFlush);
@@ -229,17 +232,19 @@ bool QPMCache::insert(const QString &key, const QPixmap &pixmap, int cost)
 QPixmapCache::Key QPMCache::insert(const QPixmap &pixmap, int cost)
 {
    QPixmapCache::Key cacheKey = createKey();
-   bool success = QCache<QPixmapCache::Key, QPixmapCacheEntry>::insert(cacheKey, new QPixmapCacheEntry(cacheKey, pixmap),
-         cost);
+   bool success = QCache<QPixmapCache::Key, QPixmapCacheEntry>::insert(cacheKey, new QPixmapCacheEntry(cacheKey, pixmap), cost);
+
    if (success) {
-      if (!theid) {
+      if (! theid) {
          theid = startTimer(TimeFlush);
          t = false;
       }
+
    } else {
       // Insertion failed we released the key and return an invalid one
       releaseKey(cacheKey);
    }
+
    return cacheKey;
 }
 
@@ -251,28 +256,33 @@ bool QPMCache::replace(const QPixmapCache::Key &key, const QPixmap &pixmap, int 
 
    QPixmapCache::Key cacheKey = createKey();
 
-   bool success = QCache<QPixmapCache::Key, QPixmapCacheEntry>::insert(cacheKey, new QPixmapCacheEntry(cacheKey, pixmap),
-         cost);
+   bool success = QCache<QPixmapCache::Key, QPixmapCacheEntry>::insert(cacheKey, new QPixmapCacheEntry(cacheKey, pixmap), cost);
+
    if (success) {
-      if (!theid) {
+      if (! theid) {
          theid = startTimer(TimeFlush);
          t = false;
       }
+
       const_cast<QPixmapCache::Key &>(key) = cacheKey;
+
    } else {
       //Insertion failed we released the key
       releaseKey(cacheKey);
    }
+
    return success;
 }
 
 bool QPMCache::remove(const QString &key)
 {
    QPixmapCache::Key cacheKey = cacheKeys.value(key);
-   if (!cacheKey.d) {
+
    // the key was not in the cache
+   if (! cacheKey.d) {
       return false;
    }
+
    cacheKeys.remove(key);
    return QCache<QPixmapCache::Key, QPixmapCacheEntry>::remove(cacheKey);
 }

@@ -61,11 +61,14 @@ class QLayoutStyleInfo
    }
 
    QLayoutStyleInfo(QStyle *style, QWidget *widget)
-      : m_valid(true), m_style(style), m_widget(widget) {
+      : m_valid(true), m_style(style), m_widget(widget)
+   {
       Q_ASSERT(style);
-      if (widget) { //###
+
+      if (widget) {
          m_styleOption.initFrom(widget);
       }
+
       m_defaultSpacing[0] = style->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
       m_defaultSpacing[1] = style->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
    }
@@ -135,7 +138,6 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    qreal left, top, right, bottom;
    bool activated;
 };
-
 
 #endif //QT_NO_GRAPHICSVIEW
 

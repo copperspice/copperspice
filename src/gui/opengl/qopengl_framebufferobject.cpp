@@ -220,27 +220,38 @@ bool QOpenGLFramebufferObjectFormat::operator!=(const QOpenGLFramebufferObjectFo
 
 bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx) const
 {
-    if (!ctx)
+    if (! ctx) {
         return false;   // Context no longer exists.
+    }
+
     GLenum status = ctx->functions()->glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
     switch(status) {
+
     case GL_NO_ERROR:
     case GL_FRAMEBUFFER_COMPLETE:
         return true;
+
     case GL_FRAMEBUFFER_UNSUPPORTED:
         qDebug("QOpenGLFramebufferObject: Unsupported framebuffer format.");
+
         break;
+
     case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete attachment.");
         break;
+
     case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.");
         break;
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT
     case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT:
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, duplicate attachment.");
+
         break;
 #endif
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS
     case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attached images must have same dimensions.");
@@ -266,10 +277,12 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attachments must have same number of samples per pixel.");
         break;
 #endif
+
     default:
         qDebug() <<"QOpenGLFramebufferObject: An undefined error has occurred: "<< status;
         break;
     }
+
     return false;
 }
 

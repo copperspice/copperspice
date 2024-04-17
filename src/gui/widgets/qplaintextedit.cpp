@@ -127,7 +127,7 @@ QRectF QPlainTextDocumentLayout::frameBoundingRect(QTextFrame *) const
 
 QRectF QPlainTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 {
-   if (!block.isValid()) {
+   if (! block.isValid()) {
       return QRectF();
    }
 
@@ -186,7 +186,6 @@ void QPlainTextDocumentLayout::requestUpdate()
    emit update(QRectF(0., -document()->documentMargin(), 1000000000., 1000000000.));
 }
 
-
 void QPlainTextDocumentLayout::setTextWidth(qreal newWidth)
 {
    Q_D(QPlainTextDocumentLayout);
@@ -203,18 +202,21 @@ qreal QPlainTextDocumentLayout::textWidth() const
 void QPlainTextDocumentLayoutPrivate::relayout()
 {
    Q_Q(QPlainTextDocumentLayout);
+
    QTextBlock block = q->document()->firstBlock();
    while (block.isValid()) {
       block.layout()->clearLayout();
       block.setLineCount(block.isVisible() ? 1 : 0);
       block = block.next();
    }
+
    emit q->update();
 }
 
 void QPlainTextDocumentLayout::documentChanged(int from, int charsRemoved, int charsAdded)
 {
    Q_D(QPlainTextDocumentLayout);
+
    QTextDocument *doc = document();
    int newBlockCount = doc->blockCount();
    int charsChanged = charsRemoved + charsAdded;
@@ -228,6 +230,7 @@ void QPlainTextDocumentLayout::documentChanged(int from, int charsRemoved, int c
       if (block.isValid() && block.length()) {
          QRectF oldBr = blockBoundingRect(block);
          layoutBlock(block);
+
          QRectF newBr = blockBoundingRect(block);
          if (newBr.height() == oldBr.height()) {
             if (!d->blockUpdate) {
@@ -238,12 +241,14 @@ void QPlainTextDocumentLayout::documentChanged(int from, int charsRemoved, int c
       }
    } else {
       QTextBlock block = changeStartBlock;
+
       do {
          block.clearLayout();
          if (block == changeEndBlock) {
             break;
          }
          block = block.next();
+
       } while (block.isValid());
    }
 
@@ -1689,6 +1694,7 @@ void QPlainTextEdit::mousePressEvent(QMouseEvent *e)
 void QPlainTextEdit::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QPlainTextEdit);
+
    d->inDrag = false; // paranoia
    const QPoint pos = e->pos();
    d->sendControlEvent(e);
@@ -1735,6 +1741,7 @@ bool QPlainTextEdit::focusNextPrevChild(bool next)
    if (! d->tabChangesFocus && d->control->textInteractionFlags() & Qt::TextEditable) {
       return false;
    }
+
    return QAbstractScrollArea::focusNextPrevChild(next);
 }
 
@@ -1767,9 +1774,11 @@ void QPlainTextEdit::dragMoveEvent(QDragMoveEvent *e)
 {
    Q_D(QPlainTextEdit);
    d->autoScrollDragPos = e->pos();
-   if (!d->autoScrollTimer.isActive()) {
+
+   if (! d->autoScrollTimer.isActive()) {
       d->autoScrollTimer.start(100, this);
    }
+
    d->sendControlEvent(e);
 }
 
@@ -1786,14 +1795,15 @@ void QPlainTextEdit::dropEvent(QDropEvent *e)
 void QPlainTextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
    Q_D(QPlainTextEdit);
+
 #ifdef QT_KEYPAD_NAVIGATION
    if (d->control->textInteractionFlags() & Qt::TextEditable
-      && QApplication::keypadNavigationEnabled()
-      && !hasEditFocus()) {
+         && QApplication::keypadNavigationEnabled() && ! hasEditFocus()) {
       setEditFocus(true);
       selectAll();    // so text is replaced rather than appended to
    }
 #endif
+
    d->sendControlEvent(e);
    ensureCursorVisible();
 }
@@ -1823,12 +1833,16 @@ QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant a
    switch (v.type()) {
       case QVariant::RectF:
          return v.toRectF().translated(offset);
+
       case QVariant::PointF:
          return v.toPointF() + offset;
+
       case QVariant::Rect:
          return v.toRect().translated(offset.toPoint());
+
       case QVariant::Point:
          return v.toPoint() + offset.toPoint();
+
       default:
          break;
    }
@@ -1839,9 +1853,11 @@ QVariant QPlainTextEdit::inputMethodQuery(Qt::InputMethodQuery query, QVariant a
 void QPlainTextEdit::focusInEvent(QFocusEvent *e)
 {
    Q_D(QPlainTextEdit);
+
    if (e->reason() == Qt::MouseFocusReason) {
       d->clickCausedFocus = 1;
    }
+
    QAbstractScrollArea::focusInEvent(e);
    d->sendControlEvent(e);
 }
@@ -1867,8 +1883,7 @@ void QPlainTextEdit::changeEvent(QEvent *e)
    Q_D(QPlainTextEdit);
    QAbstractScrollArea::changeEvent(e);
 
-   if (e->type() == QEvent::ApplicationFontChange
-      || e->type() == QEvent::FontChange) {
+   if (e->type() == QEvent::ApplicationFontChange || e->type() == QEvent::FontChange) {
       d->control->document()->setDefaultFont(font());
 
    }  else if (e->type() == QEvent::ActivationChange) {
@@ -1909,31 +1924,37 @@ void QPlainTextEdit::zoomIn(int range)
 {
    zoomInF(range);
 }
+
 void QPlainTextEdit::zoomOut(int range)
 {
    zoomInF(-range);
 }
+
 void QPlainTextEdit::zoomInF(float range)
 {
    if (range == 0.f) {
       return;
    }
+
    QFont f = font();
    const float newSize = f.pointSizeF() + range;
+
    if (newSize <= 0) {
       return;
    }
+
    f.setPointSizeF(newSize);
    setFont(f);
 }
-#ifndef QT_NO_CONTEXTMENU
 
+#ifndef QT_NO_CONTEXTMENU
 
 QMenu *QPlainTextEdit::createStandardContextMenu()
 {
    Q_D(QPlainTextEdit);
    return d->control->createStandardContextMenu(QPointF(), this);
 }
+
 QMenu *QPlainTextEdit::createStandardContextMenu(const QPoint &position)
 {
    Q_D(QPlainTextEdit);
@@ -2047,12 +2068,15 @@ bool QPlainTextEdit::isReadOnly() const
 void QPlainTextEdit::setReadOnly(bool ro)
 {
    Q_D(QPlainTextEdit);
+
    Qt::TextInteractionFlags flags = Qt::NoTextInteraction;
+
    if (ro) {
       flags = Qt::TextSelectableByMouse;
    } else {
       flags = Qt::TextEditorInteraction;
    }
+
    setAttribute(Qt::WA_InputMethodEnabled, shouldEnableInputMethod(this));
    d->control->setTextInteractionFlags(flags);
    QEvent event(QEvent::ReadOnlyChange);
@@ -2165,7 +2189,6 @@ void QPlainTextEdit::setWordWrapMode(QTextOption::WrapMode mode)
    d->updateDefaultTextOption();
 }
 
-
 bool QPlainTextEdit::backgroundVisible() const
 {
    Q_D(const QPlainTextEdit);
@@ -2227,7 +2250,7 @@ void QPlainTextEditPrivate::append(const QString &text, Qt::TextFormat format)
       && (control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
          <= viewport->rect().bottom());
 
-   if (!q->isVisible()) {
+   if (! q->isVisible()) {
       showCursorOnInitialShow = true;
    }
 
@@ -2264,11 +2287,10 @@ void QPlainTextEditPrivate::append(const QString &text, Qt::TextFormat format)
    documentLayout->priv()->blockDocumentSizeChanged = documentSizeChangedBlocked;
    _q_adjustScrollbars();
 
-
    if (atBottom) {
-      const bool needScroll =  !centerOnScroll
-         || control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset()
-         > viewport->rect().bottom();
+      const bool needScroll = ! centerOnScroll
+         || control->blockBoundingRect(document->lastBlock()).bottom() - verticalOffset() > viewport->rect().bottom();
+
       if (needScroll) {
          vbar->setValue(vbar->maximum());
       }

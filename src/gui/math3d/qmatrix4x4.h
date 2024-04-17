@@ -124,6 +124,7 @@ class Q_GUI_EXPORT QMatrix4x4
    void translate(qreal x, qreal y);
    void translate(qreal x, qreal y, qreal z);
    void rotate(qreal angle, qreal x, qreal y, qreal z = 0.0f);
+
 #ifndef QT_NO_QUATERNION
    void rotate(const QQuaternion &quaternion);
 #endif
@@ -159,6 +160,7 @@ class Q_GUI_EXPORT QMatrix4x4
 #ifndef QT_NO_VECTOR4D
    QVector4D map(const QVector4D &point) const;
 #endif
+
    QRect mapRect(const QRect &rect) const;
    QRectF mapRect(const QRectF &rect) const;
 
@@ -181,9 +183,6 @@ class Q_GUI_EXPORT QMatrix4x4
    friend Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QMatrix4x4 &m);
 
  private:
-   qreal m[4][4];          // Column-major order to match OpenGL.
-   int flagBits;           // Flag bits from the enum below.
-
    enum MatrixType {
       Identity        = 0x0000,   // Identity matrix
       Translation     = 0x0001,   // Contains a simple translation
@@ -193,6 +192,9 @@ class Q_GUI_EXPORT QMatrix4x4
       Perspective     = 0x0010,   // Last row is different from (0, 0, 0, 1)
       General         = 0x001f    // General matrix, unknown contents
    };
+
+   qreal m[4][4];          // Column-major order to match OpenGL.
+   int flagBits;           // Flag bits from the MatrixType enum
 
    // Construct without initializing identity matrix
    explicit QMatrix4x4(int) {
@@ -206,9 +208,9 @@ class Q_GUI_EXPORT QMatrix4x4
 };
 
 inline QMatrix4x4::QMatrix4x4(qreal m11, qreal m12, qreal m13, qreal m14,
-                  qreal m21, qreal m22, qreal m23, qreal m24,
-                  qreal m31, qreal m32, qreal m33, qreal m34,
-                  qreal m41, qreal m42, qreal m43, qreal m44)
+      qreal m21, qreal m22, qreal m23, qreal m24,
+      qreal m31, qreal m32, qreal m33, qreal m34,
+      qreal m41, qreal m42, qreal m43, qreal m44)
 {
    m[0][0] = m11;
    m[0][1] = m21;

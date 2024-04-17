@@ -611,8 +611,8 @@ void QZipReaderPrivate::scanFiles()
 
    comment = device->read(qMin(comment_length, i));
 
-
    device->seek(start_of_directory);
+
    for (i = 0; i < num_dir_entries; ++i) {
       FileHeader header;
       int read = device->read((char *) &header.h, sizeof(CentralFileHeader));
@@ -671,6 +671,7 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
 
    // don't compress small files
    QZipWriter::CompressionPolicy compression = compressionPolicy;
+
    if (compressionPolicy == QZipWriter::AutoCompress) {
       if (contents.length() < 64) {
          compression = QZipWriter::NeverCompress;
@@ -686,7 +687,9 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
    writeUShort(header.h.version_needed, ZIP_VERSION);
    writeUInt(header.h.uncompressed_size, contents.length());
    writeMSDosDate(header.h.last_mod_file, QDateTime::currentDateTime());
+
    QByteArray data = contents;
+
    if (compression == QZipWriter::AlwaysCompress) {
       writeUShort(header.h.compression_method, CompressionMethodDeflated);
 
@@ -922,6 +925,7 @@ QByteArray QZipReader::fileData(const QString &fileName) const
       // no compression
       compressed.truncate(uncompressed_size);
       return compressed;
+
    } else if (compression_method == CompressionMethodDeflated) {
       // Deflate
 
@@ -1201,6 +1205,7 @@ void QZipWriter::close()
    }
 
    d->device->seek(d->start_of_directory);
+
    // write new directory
    for (int i = 0; i < d->fileHeaders.size(); ++i) {
       const FileHeader &header = d->fileHeaders.at(i);
@@ -1209,11 +1214,14 @@ void QZipWriter::close()
       d->device->write(header.extra_field);
       d->device->write(header.file_comment);
    }
+
    int dir_size = d->device->pos() - d->start_of_directory;
+
    // write end of directory
    EndOfDirectory eod;
    memset(&eod, 0, sizeof(EndOfDirectory));
    writeUInt(eod.signature, 0x06054b50);
+
    //uchar this_disk[2];
    //uchar start_of_directory_disk[2];
    writeUShort(eod.num_dir_entries_this_disk, d->fileHeaders.size());

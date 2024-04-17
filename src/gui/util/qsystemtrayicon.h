@@ -105,9 +105,8 @@ class Q_GUI_EXPORT QSystemTrayIcon : public QObject
    GUI_CS_SLOT_2(hide)
 
    GUI_CS_SLOT_1(Public, void showMessage(const QString &title, const QString &msg,
-         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information, int msecs = 10000))
+               QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::Information, int msecs = 10000))
    GUI_CS_SLOT_2(showMessage)
-
 
    GUI_CS_SIGNAL_1(Public, void activated(QSystemTrayIcon::ActivationReason reason))
    GUI_CS_SIGNAL_2(activated, reason)

@@ -1099,7 +1099,7 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    QPointF pos = event->pos();
    QPointer<QWidget> receiver = d->widget->childAt(pos.toPoint());
 
-   if (!receiver) {
+   if (! receiver) {
       receiver = d->widget;
    }
 

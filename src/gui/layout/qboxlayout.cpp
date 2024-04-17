@@ -33,8 +33,8 @@
 #include <qlayout_p.h>
 
 struct QBoxLayoutItem {
-   QBoxLayoutItem(QLayoutItem *it, int stretch_ = 0)
-      : item(it), stretch(stretch_), magic(false)
+   QBoxLayoutItem(QLayoutItem *it, int stretchX = 0)
+      : item(it), stretch(stretchX), magic(false)
    { }
 
    ~QBoxLayoutItem() {
@@ -48,6 +48,7 @@ struct QBoxLayoutItem {
          return item->sizeHint().height();
       }
    }
+
    int mhfw(int w) {
       if (item->hasHeightForWidth()) {
          return item->heightForWidth(w);
@@ -55,6 +56,7 @@ struct QBoxLayoutItem {
          return item->minimumSize().height();
       }
    }
+
    int hStretch() {
       if (stretch == 0 && item->widget()) {
          return item->widget()->sizePolicy().horizontalStretch();
@@ -62,6 +64,7 @@ struct QBoxLayoutItem {
          return stretch;
       }
    }
+
    int vStretch() {
       if (stretch == 0 && item->widget()) {
          return item->widget()->sizePolicy().verticalStretch();
@@ -136,6 +139,7 @@ void QBoxLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *b
 
 #ifdef Q_OS_DARWIN
    Q_Q(const QBoxLayout);
+
    if (horz(dir)) {
       QBoxLayoutItem *leftBox  = nullptr;
       QBoxLayoutItem *rightBox = nullptr;
@@ -143,6 +147,7 @@ void QBoxLayoutPrivate::effectiveMargins(int *left, int *top, int *right, int *b
       if (left || right) {
          leftBox = list.value(0);
          rightBox = list.value(list.count() - 1);
+
          if (dir == QBoxLayout::RightToLeft) {
             qSwap(leftBox, rightBox);
          }
@@ -416,8 +421,9 @@ void QBoxLayoutPrivate::setupGeom()
 void QBoxLayoutPrivate::calcHfw(int w)
 {
    QVector<QLayoutStruct> &a = geomArray;
-   int n = a.count();
-   int h = 0;
+
+   int n  = a.count();
+   int h  = 0;
    int mh = 0;
 
    Q_ASSERT(n == list.size());
@@ -568,8 +574,10 @@ int QBoxLayout::minimumHeightForWidth(int w) const
 
    // return value is unused
    (void) heightForWidth(w);
+
    int top, bottom;
    d->effectiveMargins(nullptr, &top, nullptr, &bottom);
+
    return d->hasHfw ? (d->hfwMinHeight + top + bottom) : -1;
 }
 
@@ -718,7 +726,9 @@ void QBoxLayout::addItem(QLayoutItem *item)
 void QBoxLayout::insertItem(int index, QLayoutItem *item)
 {
    Q_D(QBoxLayout);
-   if (index < 0) {                              // append
+
+   // append
+   if (index < 0) {
       index = d->list.count();
    }
 
@@ -730,7 +740,9 @@ void QBoxLayout::insertItem(int index, QLayoutItem *item)
 void QBoxLayout::insertSpacing(int index, int size)
 {
    Q_D(QBoxLayout);
-   if (index < 0) {                              // append
+
+   // append
+   if (index < 0) {
       index = d->list.count();
    }
 
@@ -757,7 +769,9 @@ void QBoxLayout::insertSpacing(int index, int size)
 void QBoxLayout::insertStretch(int index, int stretch)
 {
    Q_D(QBoxLayout);
-   if (index < 0) {                              // append
+
+   // append
+   if (index < 0) {
       index = d->list.count();
    }
 
@@ -799,7 +813,8 @@ void QBoxLayout::insertLayout(int index, QLayout *layout, int stretch)
       return;
    }
 
-   if (index < 0) {                              // append
+   // append
+   if (index < 0) {
       index = d->list.count();
    }
 
@@ -812,13 +827,15 @@ void QBoxLayout::insertWidget(int index, QWidget *widget, int stretch,
    Qt::Alignment alignment)
 {
    Q_D(QBoxLayout);
-   if (!d->checkWidget(widget)) {
+
+   if (! d->checkWidget(widget)) {
       return;
    }
 
    addChildWidget(widget);
 
-   if (index < 0) {                              // append
+   // append
+   if (index < 0) {
       index = d->list.count();
    }
    QWidgetItem *b = QLayoutPrivate::createWidgetItem(this, widget);
@@ -927,7 +944,6 @@ void QBoxLayout::setStretch(int index, int stretch)
    }
 }
 
-
 int QBoxLayout::stretch(int index) const
 {
    Q_D(const QBoxLayout);
@@ -951,8 +967,10 @@ void QBoxLayout::setDirection(Direction direction)
 
       for (int i = 0; i < d->list.size(); ++i) {
          QBoxLayoutItem *box = d->list.at(i);
+
          if (box->magic) {
             QSpacerItem *sp = box->item->spacerItem();
+
             if (sp) {
                if (sp->expandingDirections() == Qt::Orientations(Qt::EmptyFlag)) {
                   //spacing or strut
@@ -974,6 +992,7 @@ void QBoxLayout::setDirection(Direction direction)
          }
       }
    }
+
    d->dir = direction;
    invalidate();
 }
@@ -1007,7 +1026,6 @@ QVBoxLayout::QVBoxLayout()
    : QBoxLayout(TopToBottom)
 {
 }
-
 
 QVBoxLayout::~QVBoxLayout()
 {

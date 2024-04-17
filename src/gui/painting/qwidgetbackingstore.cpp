@@ -67,7 +67,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 {
 #ifdef QT_NO_OPENGL
    (void) widgetTextures;
-   Q_ASSERT(!region.isEmpty());
+   Q_ASSERT(! region.isEmpty());
 #else
    Q_ASSERT(!region.isEmpty() || widgetTextures);
 #endif
@@ -165,7 +165,7 @@ static void showYellowThing_win(QWidget *widget, const QRegion &region, int msec
       return;
    }
 
-   void *hdcV = QGuiApplication::platformNativeInterface()->nativeResourceForWindow(QByteArrayLiteral("getDC"), nativeWindow);
+   void *hdcV = QGuiApplication::platformNativeInterface()->nativeResourceForWindow("getDC", nativeWindow);
    if (! hdcV) {
       return;
    }
@@ -330,8 +330,9 @@ bool QWidgetBackingStore::bltRect(const QRect &rect, int dx, int dy, QWidget *wi
 {
    const QPoint pos(tlwOffset + widget->mapTo(tlw, rect.topLeft()));
    const QRect tlwRect(QRect(pos, rect.size()));
+
    if (fullUpdatePending || dirty.intersects(tlwRect)) {
-      return false;   // We don't want to scroll junk.
+      return false;   // do not want to scroll
    }
 
    return store->scroll(tlwRect, dx, dy);
@@ -350,7 +351,7 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
    (void) widget;
    (void) toCleanIsInTopLevelCoordinates;
 
-   // Always flush repainted areas.
+   // always flush repainted areas
    dirtyOnScreen += toClean;
 
 #ifdef QT_NO_PAINT_DEBUG
@@ -359,10 +360,10 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
 #else
    returnInfo->wasFlushed = QWidgetBackingStore::flushPaint(tlw, toClean);
 
-   // Avoid deadlock with QT_FLUSH_PAINT: the server will wait for
-   // the BackingStore lock, so if we hold that, the server will
-   // never release the Communication lock that we are waiting for in sendSynchronousCommand
-   if (!returnInfo->wasFlushed) {
+   // Avoid deadlock with QT_FLUSH_PAINT, server waits for the BackingStore lock and
+   // will never release the Communication lock needed in sendSynchronousCommand
+
+   if (! returnInfo->wasFlushed) {
       backingStore->beginPaint(toClean);
    }
 #endif
@@ -377,9 +378,11 @@ void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backin
    } else {
       QWidgetBackingStore::unflushPaint(tlw, cleaned);
    }
+
 #else
 
    backingStore->endPaint();
+
 #endif
 
    flush();
@@ -925,6 +928,7 @@ void QWidgetPrivate::moveRect(const QRect &rect, int dx, int dy)
          // invalidateBuffer() excludes anything outside the mask
          parentR += newRect & clipR;
       }
+
       pd->invalidateBuffer(parentR);
       invalidateBuffer((newRect & clipR).translated(- (m_privateData.crect.topLeft()) ));
 
@@ -1676,11 +1680,13 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
             parentExpose -= m_privateData.crect;   // Offset is unchanged, safe to do this.
          }
          q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
+
       } else {
          if (hasStaticChildren && !graphicsEffect) {
             QRegion parentExpose(QRect(oldPos, oldSize));
             parentExpose -= m_privateData.crect; // Offset is unchanged, safe to do this.
             q->parentWidget()->d_func()->invalidateBuffer(parentExpose);
+
          } else {
             q->parentWidget()->d_func()->invalidateBuffer(effectiveRectFor(QRect(oldPos, oldSize)));
          }

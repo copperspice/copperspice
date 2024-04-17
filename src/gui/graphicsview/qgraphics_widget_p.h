@@ -25,6 +25,7 @@
 #define QGRAPHICS_WIDGET_P_H
 
 #include <qgraphicswidget.h>
+
 #include <qfont.h>
 #include <qpalette.h>
 #include <qsizepolicy.h>
@@ -35,7 +36,7 @@
 class QGraphicsLayout;
 class QStyleOptionTitleBar;
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
 {

@@ -30,25 +30,19 @@
 void qt_memfill32(quint32 *dest, quint32 value, int count);
 void qt_memfill16(quint16 *dest, quint16 value, int count);
 void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
-   const uchar *src, int width, int height, int stride);
+   const QRgba64 &color, const uchar *src, int width, int height, int stride);
 
 void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
-   const uchar *src, int width, int height, int stride);
+   const QRgba64 &color, const uchar *src, int width, int height, int stride);
 
 void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
-   const uchar *src, int width, int height, int stride);
+   const QRgba64 &color, const uchar *src, int width, int height, int stride);
 
 void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
-   const uchar *srcPixels, int sbpl,
-   int w, int h,
-   int const_alpha);
+   const uchar *srcPixels, int sbpl, int w, int h, int const_alpha);
 
 void qt_blend_rgb32_on_rgb32_sse2(uchar *destPixels, int dbpl,
-   const uchar *srcPixels, int sbpl,
-   int w, int h, int const_alpha);
+   const uchar *srcPixels, int sbpl, int w, int h, int const_alpha);
 
 extern CompositionFunction qt_functionForModeSSE2[];
 extern CompositionFunctionSolid qt_functionForModeSolidSSE2[];

@@ -52,8 +52,11 @@
         int *value = 0; \
         *value = 0; \
     }
+
 #else
+
 #define Q_OPENGL_FUNCTIONS_DEBUG
+
 #endif
 
 struct QOpenGLFunctionsPrivate;

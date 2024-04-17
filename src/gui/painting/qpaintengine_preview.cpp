@@ -135,6 +135,7 @@ bool QPreviewPaintEngine::newPage()
 
    QPicture *page = new QPicture;
    page->d_func()->in_memory_only = true;
+
    QPainter *tmp_painter = new QPainter(page);
    QPaintEngine *tmp_engine = tmp_painter->paintEngine();
 
@@ -142,8 +143,8 @@ bool QPreviewPaintEngine::newPage()
    Q_ASSERT(painter()->d_func()->state && tmp_painter->d_func()->state);
    *tmp_painter->d_func()->state = *painter()->d_func()->state;
 
-   // composition modes aren't supported on a QPrinter and yields a
-   // warning, so ignore it for now
+   // composition modes are not supported on a QPrinter and yields a warning
+   // ignore it for now
    tmp_engine->setDirty(DirtyFlags(AllDirty & ~DirtyCompositionMode));
    tmp_engine->syncState();
 

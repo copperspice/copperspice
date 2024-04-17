@@ -1836,6 +1836,7 @@ void QFileSystemModelPrivate::_q_fileSystemChanged(const QString &path, const QV
               continue;
           }
       }*/
+
       max = value;
       min = value;
 

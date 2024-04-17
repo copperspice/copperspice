@@ -64,8 +64,7 @@ QSpacerItem::~QSpacerItem()
 {
 }
 
-void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hPolicy,
-   QSizePolicy::Policy vPolicy)
+void QSpacerItem::changeSize(int w, int h, QSizePolicy::Policy hPolicy, QSizePolicy::Policy vPolicy)
 {
    width = w;
    height = h;
@@ -525,4 +524,3 @@ int QWidgetItemV2::heightForWidth(int width) const
    q_cachedHfws[q_firstCachedHfw] = QSize(width, height);
    return height;
 }
-

@@ -878,6 +878,7 @@ static bool bidiItemize(QTextEngine *engine, QScriptAnalysis *analysis, QBidiCon
 #if (BIDI_DEBUG >= 1)
    qDebug() << "reached end of line current=" << current << ", eor=" << eor;
 #endif
+
    eor = current - 1; // remove dummy char
 
    if (sor <= eor) {
@@ -911,7 +912,7 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
 
    // reversing is only done up to the lowest odd level
    if (! (levelLow % 2)) {
-      levelLow++;
+      ++levelLow;
    }
 
    int count = numItems - 1;
@@ -924,25 +925,28 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
 
       while (i < count) {
          while (i < count && levels[i] < levelHigh) {
-            i++;
+            ++i;
          }
 
          int start = i;
          while (i <= count && levels[i] >= levelHigh) {
-            i++;
+            ++i;
          }
          int end = i - 1;
 
          if (start != end) {
+
             for (int j = 0; j < (end - start + 1) / 2; j++) {
                int tmp = visualOrder[start + j];
                visualOrder[start + j] = visualOrder[end - j];
-               visualOrder[end - j] = tmp;
+               visualOrder[end - j]   = tmp;
             }
          }
-         i++;
+
+         ++i;
       }
-      levelHigh--;
+
+      --levelHigh;
    }
 }
 
@@ -1965,7 +1969,7 @@ QFixed QTextEngine::width(int from, int len) const
          int glyphStart = logClusters[charFrom];
          if (charFrom > 0 && logClusters[charFrom - 1] == glyphStart)
             while (charFrom < ilen && logClusters[charFrom] == glyphStart) {
-               charFrom++;
+               ++charFrom;
             }
 
          if (charFrom < ilen) {
@@ -1978,8 +1982,9 @@ QFixed QTextEngine::width(int from, int len) const
 
             int glyphEnd = logClusters[charEnd];
             while (charEnd < ilen && logClusters[charEnd] == glyphEnd) {
-               charEnd++;
+               ++charEnd;
             }
+
             glyphEnd = (charEnd == ilen) ? si->num_glyphs : logClusters[charEnd];
 
             for (int i = glyphStart; i < glyphEnd; i++) {
@@ -2448,6 +2453,7 @@ void QTextEngine::justify(const QScriptLine &line)
             case Justification_Arabic_Space:
                if (kashida_pos >= 0) {
                   set(&justificationPoints[nPoints], kashida_type, g.mid(kashida_pos), fontEngine(si));
+
                   if (justificationPoints[nPoints].kashidaWidth > 0) {
                      minKashida = qMin(minKashida, justificationPoints[nPoints].kashidaWidth);
                      maxJustify = qMax(maxJustify, justificationPoints[nPoints].type);
@@ -3822,8 +3828,8 @@ QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFo
    initWithScriptItem(si);
 }
 
-QTextItemInt::QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin, const QString::const_iterator end,
-            QFontEngine *fe, const QTextCharFormat &format)
+QTextItemInt::QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin,
+      const QString::const_iterator end, QFontEngine *fe, const QTextCharFormat &format)
    : flags(Qt::EmptyFlag), justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
      m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), fontEngine(fe)
 {

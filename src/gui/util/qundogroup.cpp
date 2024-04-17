@@ -71,11 +71,13 @@ void QUndoGroup::addStack(QUndoStack *stack)
    if (d->stack_list.contains(stack)) {
       return;
    }
+
    d->stack_list.append(stack);
 
    if (QUndoGroup *other = stack->d_func()->group) {
       other->removeStack(stack);
    }
+
    stack->d_func()->group = this;
 }
 
@@ -86,9 +88,11 @@ void QUndoGroup::removeStack(QUndoStack *stack)
    if (d->stack_list.removeAll(stack) == 0) {
       return;
    }
+
    if (stack == d->active) {
       setActiveStack(nullptr);
    }
+
    stack->d_func()->group = nullptr;
 }
 
@@ -153,6 +157,7 @@ QUndoStack *QUndoGroup::activeStack() const
 void QUndoGroup::undo()
 {
    Q_D(QUndoGroup);
+
    if (d->active != nullptr) {
       d->active->undo();
    }
@@ -161,6 +166,7 @@ void QUndoGroup::undo()
 void QUndoGroup::redo()
 {
    Q_D(QUndoGroup);
+
    if (d->active != nullptr) {
       d->active->redo();
    }
@@ -201,6 +207,7 @@ bool QUndoGroup::isClean() const
 QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) const
 {
    QUndoAction *result = new QUndoAction(prefix, parent);
+
    if (prefix.isEmpty()) {
       result->setTextFormat(tr("Undo %1"), tr("Undo", "Default text for undo action"));
    }
@@ -218,6 +225,7 @@ QAction *QUndoGroup::createUndoAction(QObject *parent, const QString &prefix) co
 QAction *QUndoGroup::createRedoAction(QObject *parent, const QString &prefix) const
 {
    QUndoAction *result = new QUndoAction(prefix, parent);
+
    if (prefix.isEmpty()) {
       result->setTextFormat(tr("Redo %1"), tr("Redo", "Default text for redo action"));
    }

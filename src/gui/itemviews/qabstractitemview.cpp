@@ -1041,12 +1041,14 @@ void QAbstractItemView::mouseMoveEvent(QMouseEvent *event)
 #ifndef QT_NO_DRAGANDDROP
    if (state() == DraggingState) {
       topLeft = d->pressedPosition - d->offset();
+
       if ((topLeft - bottomRight).manhattanLength() > QApplication::startDragDistance()) {
          d->pressedIndex = QModelIndex();
          startDrag(d->model->supportedDragActions());
          setState(NoState); // the startDrag will return when the dnd operation is done
          stopAutoScroll();
       }
+
       return;
    }
 #endif
@@ -2376,9 +2378,10 @@ void QAbstractItemView::update(const QModelIndex &index)
 
    if (index.isValid()) {
       const QRect rect = visualRect(index);
-      //this test is important for peformance reason
-      //For example in dataChanged we simply update all the cells without checking
-      //it can be a major bottleneck to update rects that aren't even part of the viewport
+      // this test is important for peformance reason
+      // For example in dataChanged we simply update all the cells without checking
+      // it can be a major bottleneck to update rects that are not even part of the viewport
+
       if (d->viewport->rect().intersects(rect)) {
          d->viewport->update(rect);
       }
@@ -2728,20 +2731,28 @@ void QAbstractItemView::currentChanged(const QModelIndex &current, const QModelI
 void QAbstractItemView::startDrag(Qt::DropActions supportedActions)
 {
    Q_D(QAbstractItemView);
+
    QModelIndexList indexes = d->selectedDraggableIndexes();
+
    if (indexes.count() > 0) {
       QMimeData *data = d->model->mimeData(indexes);
-      if (!data) {
+
+      if (! data) {
          return;
       }
+
       QRect rect;
+
       QPixmap pixmap = d->renderToPixmap(indexes, &rect);
       rect.adjust(horizontalOffset(), verticalOffset(), 0, 0);
+
       QDrag *drag = new QDrag(this);
       drag->setPixmap(pixmap);
       drag->setMimeData(data);
       drag->setHotSpot(d->pressedPosition - rect.topLeft());
+
       Qt::DropAction defaultDropAction = Qt::IgnoreAction;
+
       if (d->defaultDropAction != Qt::IgnoreAction && (supportedActions & d->defaultDropAction)) {
          defaultDropAction = d->defaultDropAction;
       } else if (supportedActions & Qt::CopyAction && dragDropMode() != QAbstractItemView::InternalMove) {

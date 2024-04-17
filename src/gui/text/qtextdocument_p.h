@@ -57,7 +57,7 @@ class QTextFrame;
 class QAbstractUndoItem;
 
 #define QTextBeginningOfFrame QChar(0xfdd0)
-#define QTextEndOfFrame QChar(0xfdd1)
+#define QTextEndOfFrame       QChar(0xfdd1)
 
 class QTextFragmentData : public QFragment<>
 {

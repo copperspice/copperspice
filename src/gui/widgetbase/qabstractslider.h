@@ -120,7 +120,6 @@ class Q_GUI_EXPORT QAbstractSlider : public QWidget
    GUI_CS_SLOT_1(Public, void setRange(int min, int max))
    GUI_CS_SLOT_2(setRange)
 
-
    GUI_CS_SIGNAL_1(Public, void valueChanged(int value))
    GUI_CS_SIGNAL_2(valueChanged, value)
 

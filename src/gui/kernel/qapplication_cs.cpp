@@ -198,16 +198,13 @@ FontHash *cs_app_fonts_hash()
    return &retval;
 }
 
-/*!
-    \internal
-*/
 void QApplicationPrivate::process_cmdline()
 {
    if (styleOverride.isEmpty() && ! qgetenv("QT_STYLE_OVERRIDE").isEmpty()) {
       styleOverride = QString::fromUtf8(qgetenv("QT_STYLE_OVERRIDE"));
    }
 
-   if (!styleOverride.isEmpty()) {
+   if (! styleOverride.isEmpty()) {
       if (app_style) {
          delete app_style;
          app_style = nullptr;
@@ -369,7 +366,7 @@ void QApplicationPrivate::initializeWidgetPaletteHash()
 void QApplicationPrivate::initializeWidgetFontHash()
 {
    const QPlatformTheme *theme = QGuiApplicationPrivate::platformTheme();
-   if (!theme) {
+   if (! theme) {
       return;
    }
    FontHash *fontHash = cs_app_fonts_hash();
@@ -495,7 +492,7 @@ QWidget *QApplication::widgetAt(const QPoint &p)
 
    QWidget *child = nullptr;
 
-   if (!window->testAttribute(Qt::WA_TransparentForMouseEvents)) {
+   if (! window->testAttribute(Qt::WA_TransparentForMouseEvents)) {
       child = window->childAt(window->mapFromGlobal(p));
    }
 
@@ -601,9 +598,11 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 
    if (styleSheet.isEmpty()) {
       // application style sheet removed
+
       if (! proxy) {
          return;   // there was no stylesheet before
       }
+
       setStyle(proxy->base);
 
    } else if (proxy) {
@@ -967,8 +966,11 @@ bool QApplicationPrivate::tryCloseAllWidgetWindows(QWindowList *processedWindows
       if (! w->isVisible() || w->m_widgetData->is_closing) {
          break;
       }
+
       QWindow *window = w->windowHandle();
-      if (!window->close()) { // Qt::WA_DeleteOnClose may cause deletion.
+
+      if (! window->close()) {
+         // Qt::WA_DeleteOnClose may cause deletion.
          return false;
       }
       if (window) {
@@ -979,19 +981,25 @@ bool QApplicationPrivate::tryCloseAllWidgetWindows(QWindowList *processedWindows
    QWidgetList list = QApplication::topLevelWidgets();
    for (int i = 0; i < list.size(); ++i) {
       QWidget *w = list.at(i);
+
       if (w->isVisible() && w->windowType() != Qt::Desktop &&
             ! w->testAttribute(Qt::WA_DontShowOnScreen) && ! w->m_widgetData->is_closing) {
          QWindow *window = w->windowHandle();
-         if (!window->close()) { // Qt::WA_DeleteOnClose may cause deletion.
+
+         if (! window->close()) {
+            // Qt::WA_DeleteOnClose may cause deletion.
             return false;
          }
+
          if (window) {
             processedWindows->append(window);
          }
+
          list = QApplication::topLevelWidgets();
          i = -1;
       }
    }
+
    return true;
 }
 
@@ -1024,7 +1032,6 @@ void QApplication::aboutQt()
 }
 
 
-
 // ### FIXME: topLevelWindows does not contain QWidgets without a parent until
 // create_sys is called. Need to override QGuiApplication::notifyLayoutDirectionChange
 // to do the right thing
@@ -1050,24 +1057,6 @@ void QApplicationPrivate::notifyLayoutDirectionChange()
    }
 }
 
-/*!
-    \fn void QApplication::setActiveWindow(QWidget* active)
-
-    Sets the active window to the \a active widget in response to a system
-    event. The function is called from the platform specific event handlers.
-
-    \warning This function does \e not set the keyboard focus to the active
-    widget. Call QWidget::activateWindow() instead.
-
-    It sets the activeWindow() and focusWidget() attributes and sends proper
-    \l{QEvent::WindowActivate}{WindowActivate}/\l{QEvent::WindowDeactivate}
-    {WindowDeactivate} and \l{QEvent::FocusIn}{FocusIn}/\l{QEvent::FocusOut}
-    {FocusOut} events to all appropriate widgets. The window will then be
-    painted in active state (e.g. cursors in line edits will blink), and it
-    will have tool tips enabled.
-
-    \sa activeWindow(), QWidget::activateWindow()
-*/
 void QApplication::setActiveWindow(QWidget *act)
 {
    QWidget *window = act ? act->window() : nullptr;
@@ -1713,11 +1702,8 @@ bool QApplicationPrivate::modalState()
    return !self->modalWindowList.isEmpty();
 }
 
-/*
-   \internal
-*/
 QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint &windowPos,
-            QPoint *pos, QEvent::Type type, Qt::MouseButtons buttons, QWidget *buttonDown, QWidget *alienWidget)
+      QPoint *pos, QEvent::Type type, Qt::MouseButtons buttons, QWidget *buttonDown, QWidget *alienWidget)
 {
    Q_ASSERT(candidate);
 
@@ -1750,9 +1736,8 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
    return receiver;
 }
 
-bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
-            QWidget *alienWidget, QWidget *nativeWidget, QWidget **buttonDown,
-            QPointer<QWidget> &lastMouseReceiver, bool spontaneous)
+bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event, QWidget *alienWidget,
+      QWidget *nativeWidget, QWidget **buttonDown, QPointer<QWidget> &lastMouseReceiver, bool spontaneous)
 {
    Q_ASSERT(receiver);
    Q_ASSERT(event);
@@ -1780,7 +1765,7 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
    }
 
    if (*buttonDown) {
-      if (!graphicsWidget) {
+      if (! graphicsWidget) {
          // Register the widget that shall receive a leave event
          // after the last button is released.
          if ((alienWidget || !receiver->internalWinId()) && !leaveAfterRelease && !QWidget::mouseGrabber()) {
@@ -1797,9 +1782,10 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event,
       // 1) from an alien widget to another alien widget or
       //    from a native widget to an alien widget (first OR case)
       // 2) from an alien widget to a native widget (second OR case)
+
       if ((alienWidget && alienWidget != lastMouseReceiver) || (isAlien(lastMouseReceiver) && !alienWidget)) {
          if (activePopupWidget) {
-            if (!QWidget::mouseGrabber()) {
+            if (! QWidget::mouseGrabber()) {
                dispatchEnterLeave(alienWidget ? alienWidget : nativeWidget, lastMouseReceiver, event->screenPos());
             }
 

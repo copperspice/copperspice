@@ -61,7 +61,6 @@ QSystemTrayIcon::~QSystemTrayIcon()
 }
 
 #ifndef QT_NO_MENU
-
 void QSystemTrayIcon::setContextMenu(QMenu *menu)
 {
    Q_D(QSystemTrayIcon);
@@ -156,7 +155,7 @@ bool QSystemTrayIcon::supportsMessages()
 }
 
 void QSystemTrayIcon::showMessage(const QString &title, const QString &msg,
-   QSystemTrayIcon::MessageIcon icon, int msecs)
+      QSystemTrayIcon::MessageIcon icon, int msecs)
 {
    Q_D(QSystemTrayIcon);
 
@@ -174,14 +173,16 @@ void QSystemTrayIconPrivate::_q_emitActivated(QPlatformSystemTrayIcon::Activatio
 static QBalloonTip *theSolitaryBalloonTip = nullptr;
 
 void QBalloonTip::showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,
-   const QString &message, QSystemTrayIcon *trayIcon, const QPoint &pos, int timeout, bool showArrow)
+      const QString &message, QSystemTrayIcon *trayIcon, const QPoint &pos, int timeout, bool showArrow)
 {
    hideBalloon();
+
    if (message.isEmpty() && title.isEmpty()) {
       return;
    }
 
    theSolitaryBalloonTip = new QBalloonTip(icon, title, message, trayIcon);
+
    if (timeout < 0) {
       timeout = 10000;   //10 s default
    }
@@ -191,9 +192,10 @@ void QBalloonTip::showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &
 
 void QBalloonTip::hideBalloon()
 {
-   if (!theSolitaryBalloonTip) {
+   if (! theSolitaryBalloonTip) {
       return;
    }
+
    theSolitaryBalloonTip->hide();
    delete theSolitaryBalloonTip;
    theSolitaryBalloonTip = nullptr;
@@ -215,7 +217,7 @@ bool QBalloonTip::isBalloonVisible()
 }
 
 QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
-            const QString &message, QSystemTrayIcon *ti)
+      const QString &message, QSystemTrayIcon *ti)
    : QWidget(nullptr, Qt::ToolTip), trayIcon(ti), timerId(-1), showArrow(true)
 {
    setAttribute(Qt::WA_DeleteOnClose);
@@ -253,8 +255,10 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
 
    if (msgLabel->sizeHint().width() > limit) {
       msgLabel->setWordWrap(true);
+
       if (msgLabel->sizeHint().width() > limit) {
          msgLabel->d_func()->ensureTextControl();
+
          if (QTextControl *control = msgLabel->d_func()->control) {
             QTextOption opt = control->document()->defaultTextOption();
             opt.setWrapMode(QTextOption::WrapAnywhere);
@@ -268,6 +272,7 @@ QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title
    }
 
    QIcon si;
+
    switch (icon) {
       case QSystemTrayIcon::Warning:
          si = style()->standardIcon(QStyle::SP_MessageBoxWarning);
@@ -342,7 +347,8 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
 
    int ml, mr, mt, mb;
    QSize sz = sizeHint();
-   if (!arrowAtTop) {
+
+   if (! arrowAtTop) {
       ml = mt = 0;
       mr = sz.width() - 1;
       mb = sz.height() - ah - 1;
@@ -355,41 +361,50 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
 
    QPainterPath path;
    path.moveTo(ml + rc, mt);
+
    if (arrowAtTop && arrowAtLeft) {
       if (showArrow) {
          path.lineTo(ml + ao, mt);
          path.lineTo(ml + ao, mt - ah);
          path.lineTo(ml + ao + aw, mt);
       }
+
       move(qMax(pos.x() - ao, scr.left() + 2), pos.y());
+
    } else if (arrowAtTop && !arrowAtLeft) {
       if (showArrow) {
          path.lineTo(mr - ao - aw, mt);
          path.lineTo(mr - ao, mt - ah);
          path.lineTo(mr - ao, mt);
       }
+
       move(qMin(pos.x() - sh.width() + ao, scr.right() - sh.width() - 2), pos.y());
    }
+
    path.lineTo(mr - rc, mt);
    path.arcTo(QRect(mr - rc * 2, mt, rc * 2, rc * 2), 90, -90);
    path.lineTo(mr, mb - rc);
    path.arcTo(QRect(mr - rc * 2, mb - rc * 2, rc * 2, rc * 2), 0, -90);
-   if (!arrowAtTop && !arrowAtLeft) {
+
+   if (! arrowAtTop && !arrowAtLeft) {
       if (showArrow) {
          path.lineTo(mr - ao, mb);
          path.lineTo(mr - ao, mb + ah);
          path.lineTo(mr - ao - aw, mb);
       }
-      move(qMin(pos.x() - sh.width() + ao, scr.right() - sh.width() - 2),
-         pos.y() - sh.height());
+
+      move(qMin(pos.x() - sh.width() + ao, scr.right() - sh.width() - 2), pos.y() - sh.height());
+
    } else if (!arrowAtTop && arrowAtLeft) {
       if (showArrow) {
          path.lineTo(ao + aw, mb);
          path.lineTo(ao, mb + ah);
          path.lineTo(ao, mb);
       }
+
       move(qMax(pos.x() - ao, scr.x() + 2), pos.y() - sh.height());
    }
+
    path.lineTo(ml + rc, mb);
    path.arcTo(QRect(ml, mb - rc * 2, rc * 2, rc * 2), -90, -90);
    path.lineTo(ml, mt + rc);
@@ -414,12 +429,14 @@ void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
    if (msecs > 0) {
       timerId = startTimer(msecs);
    }
+
    show();
 }
 
 void QBalloonTip::mousePressEvent(QMouseEvent *e)
 {
    close();
+
    if (e->button() == Qt::LeftButton) {
       emit trayIcon->messageClicked();
    }
@@ -429,9 +446,11 @@ void QBalloonTip::timerEvent(QTimerEvent *e)
 {
    if (e->timerId() == timerId) {
       killTimer(timerId);
+
       if (!underMouse()) {
          close();
       }
+
       return;
    }
 
@@ -504,7 +523,7 @@ void QSystemTrayIconPrivate::showMessage_sys_qpa(const QString &title,
    }
 
    qpa_sys->showMessage(title, message, notificationIcon,
-      static_cast<QPlatformSystemTrayIcon::MessageIcon>(icon), msecs);
+         static_cast<QPlatformSystemTrayIcon::MessageIcon>(icon), msecs);
 }
 
 void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
@@ -516,8 +535,10 @@ void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
    // The recursion depth is the same as menu depth, so should not
    // be higher than 3 levels.
    QListIterator<QAction *> it(menu->actions());
+
    while (it.hasNext()) {
       QAction *action = it.next();
+
       if (action->menu()) {
          addPlatformMenu(action->menu());
       }
@@ -526,6 +547,7 @@ void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
    // This menu should be processed *after* its children, otherwise
    // setMenu() is not called on respective QPlatformMenuItems.
    QPlatformMenu *platformMenu = qpa_sys->createMenu();
+
    if (platformMenu) {
       menu->setPlatformMenu(platformMenu);
    }

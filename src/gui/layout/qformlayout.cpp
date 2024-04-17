@@ -127,7 +127,7 @@ void FixedColumnMatrix<T, NumColumns>::storageIndexToPosition(int idx, int *rowP
 // special values for unset fields; must not clash with values of FieldGrowthPolicy or
 // RowWrapPolicy
 const uint DefaultFieldGrowthPolicy = 255;
-const uint DefaultRowWrapPolicy = 255;
+const uint DefaultRowWrapPolicy     = 255;
 
 static constexpr const int ColumnCount = 2;
 
@@ -1123,6 +1123,7 @@ QFormLayout::~QFormLayout()
        m_things so that QLayout and the rest of the world know that we don't babysit
        the layout items anymore and don't care if they are destroyed.
    */
+
    d->m_things.clear();
    qDeleteAll(d->m_matrix.storage());
    d->m_matrix.clear();
@@ -1211,6 +1212,7 @@ void QFormLayout::insertRow(int row, const QString &labelText, QWidget *field)
 #endif
 
    }
+
    insertRow(row, label, field);
 }
 
@@ -1612,7 +1614,6 @@ Qt::Alignment QFormLayout::formAlignment() const
    }
 }
 
-
 void QFormLayout::setHorizontalSpacing(int spacing)
 {
    Q_D(QFormLayout);
@@ -1720,11 +1721,13 @@ void QFormLayoutPrivate::arrangeWidgets(const QVector<QLayoutStruct> &layouts, Q
          QSize sz(field->layoutWidth, layouts.at(field->vLayoutIndex).size);
          QPoint p(field->layoutPos + leftOffset + rect.x(), layouts.at(field->vLayoutIndex).pos);
          /*
-                     if ((field->widget() && field->widget()->sizePolicy().horizontalPolicy() & (QSizePolicy::GrowFlag | QSizePolicy::ExpandFlag | QSizePolicy::IgnoreFlag))
-                         || (field->layout() && sz.width() < field->maxSize.width())) {
-                         sz.rwidth() = field->layoutWidth;
-                     }
+            if ((field->widget() && field->widget()->sizePolicy().horizontalPolicy() & (QSizePolicy::GrowFlag
+                  | QSizePolicy::ExpandFlag | QSizePolicy::IgnoreFlag))
+                  || (field->layout() && sz.width() < field->maxSize.width())) {
+                sz.rwidth() = field->layoutWidth;
+            }
          */
+
          if (field->maxSize.isValid()) {
             sz = sz.boundedTo(field->maxSize);
          }

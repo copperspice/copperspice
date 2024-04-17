@@ -57,6 +57,7 @@ inline int q_round_bound(qreal d) //### (int)(qreal) INT_MAX != INT_MAX for sing
 {
    if (d <= (qreal) INT_MIN) {
       return INT_MIN;
+
    } else if (d >= (qreal) INT_MAX) {
       return INT_MAX;
    }
@@ -146,19 +147,23 @@ void QGraphicsViewPrivate::recalculateContentSize()
 
    bool useHorizontalScrollBar = (viewRect.width() > width) && hbarpolicy == Qt::ScrollBarAsNeeded;
    bool useVerticalScrollBar = (viewRect.height() > height) && vbarpolicy == Qt::ScrollBarAsNeeded;
+
    if (useHorizontalScrollBar && vbarpolicy == Qt::ScrollBarAsNeeded) {
       if (viewRect.height() > height - scrollBarExtent) {
          useVerticalScrollBar = true;
       }
    }
+
    if (useVerticalScrollBar && hbarpolicy == Qt::ScrollBarAsNeeded) {
       if (viewRect.width() > width - scrollBarExtent) {
          useHorizontalScrollBar = true;
       }
    }
+
    if (useHorizontalScrollBar) {
       height -= scrollBarExtent;
    }
+
    if (useVerticalScrollBar) {
       width -= scrollBarExtent;
    }
@@ -999,11 +1004,13 @@ void QGraphicsView::setRenderHint(QPainter::RenderHint hint, bool enabled)
 {
    Q_D(QGraphicsView);
    QPainter::RenderHints oldHints = d->renderHints;
+
    if (enabled) {
       d->renderHints |= hint;
    } else {
       d->renderHints &= ~hint;
    }
+
    if (oldHints != d->renderHints) {
       d->updateAll();
    }
@@ -1293,14 +1300,18 @@ void QGraphicsView::setScene(QGraphicsScene *scene)
 QRectF QGraphicsView::sceneRect() const
 {
    Q_D(const QGraphicsView);
+
    if (d->hasSceneRect) {
       return d->sceneRect;
    }
+
    if (d->scene) {
       return d->scene->sceneRect();
    }
+
    return QRectF();
 }
+
 void QGraphicsView::setSceneRect(const QRectF &rect)
 {
    Q_D(QGraphicsView);
@@ -1424,7 +1435,6 @@ void QGraphicsView::ensureVisible(const QRectF &rect, int xmargin, int ymargin)
       }
    }
 }
-
 
 void QGraphicsView::ensureVisible(const QGraphicsItem *item, int xmargin, int ymargin)
 {
@@ -2019,7 +2029,8 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          // ### This is a temporary fix until we have proper mouse grab events
          // mouseGrabberItem should be set to 0 if we lose he mouse grab.
          // Remove all popups when the scene loses focus.
-         if (!d->scene->d_func()->popupWidgets.isEmpty()) {
+
+         if (! d->scene->d_func()->popupWidgets.isEmpty()) {
             d->scene->d_func()->removePopup(d->scene->d_func()->popupWidgets.first());
          }
          QApplication::sendEvent(d->scene, event);
@@ -2045,12 +2056,14 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          //  activeMouseGrabberItem should be set to 0 if we lose the mouse grab.
 
          if ((QApplication::activePopupWidget() && QApplication::activePopupWidget() != window())
-            || (QApplication::activeModalWidget() && QApplication::activeModalWidget() != window())
-            || (QApplication::activeWindow() != window())) {
-            if (!d->scene->d_func()->popupWidgets.isEmpty()) {
+               || (QApplication::activeModalWidget() && QApplication::activeModalWidget() != window())
+               || (QApplication::activeWindow() != window())) {
+
+            if (! d->scene->d_func()->popupWidgets.isEmpty()) {
                d->scene->d_func()->removePopup(d->scene->d_func()->popupWidgets.first());
             }
          }
+
          d->useLastMouseEvent = false;
          // a hack to pass a viewport pointer to the scene inside the leave event
          Q_ASSERT(event->d == nullptr);

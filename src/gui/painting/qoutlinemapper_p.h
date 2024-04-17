@@ -79,8 +79,8 @@ class QOutlineMapper
       m_contours.clear();
 
       m_outline.flags = fillRule == Qt::WindingFill
-         ? QT_FT_OUTLINE_NONE
-         : QT_FT_OUTLINE_EVEN_ODD_FILL;
+         ? QT_FT_OUTLINE_NONE : QT_FT_OUTLINE_EVEN_ODD_FILL;
+
       m_subpath_start = 0;
    }
 
@@ -105,6 +105,7 @@ class QOutlineMapper
 #ifdef QT_DEBUG_CONVERT
       printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
+
       m_elements.append(pt);
       m_element_types << QPainterPath::LineToElement;
    }
@@ -119,6 +120,7 @@ class QOutlineMapper
 #ifdef QT_DEBUG_CONVERT
             printf(" - implicitly closing\n");
 #endif
+
             // Put the object on the stack to avoid the odd case where
             // lineTo reallocs the databuffer and the QPointF & will
             // be invalidated.

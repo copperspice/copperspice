@@ -741,6 +741,7 @@ QVariant QIcoHandler::option(ImageOption option)
       QIODevice *device = QImageIOHandler::device();
       qint64 oldPos = device->pos();
       ICONDIRENTRY iconEntry;
+
       if (device->seek(oldPos + ICONDIR_SIZE + (m_currentIconIndex * ICONDIRENTRY_SIZE))) {
          if (readIconDirEntry(device, &iconEntry)) {
             device->seek(oldPos);
@@ -830,4 +831,3 @@ bool QIcoHandler::jumpToNextImage()
 {
    return jumpToImage(m_currentIconIndex + 1);
 }
-

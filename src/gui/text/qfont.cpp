@@ -1565,6 +1565,7 @@ void QFontCache::clear()
                FC_DEBUG("QFontCache::clear: engine %p still has refcount %d",
                      static_cast<void *>(engine), engine->m_refCount.load());
             }
+
             it.value().data = nullptr;
          }
       }
@@ -1580,14 +1581,14 @@ void QFontCache::clear()
 
 QFontEngineData *QFontCache::findEngineData(const QFontDef &def) const
 {
-   EngineDataCache::const_iterator it = engineDataCache.constFind(def);
+   EngineDataCache::const_iterator iter = engineDataCache.constFind(def);
 
-   if (it == engineDataCache.constEnd()) {
+   if (iter == engineDataCache.constEnd()) {
       return nullptr;
    }
 
    // found
-   return it.value();
+   return iter.value();
 }
 
 void QFontCache::insertEngineData(const QFontDef &def, QFontEngineData *engineData)
@@ -1689,6 +1690,7 @@ void QFontCache::decreaseCost(uint cost)
 {
    cost = (cost + 512) / 1024; // cost is stored in kb
    cost = cost > 0 ? cost : 1;
+
    Q_ASSERT(cost <= total_cost);
    total_cost -= cost;
 
@@ -1774,6 +1776,7 @@ void QFontCache::decreaseCache()
       }
 
       return;
+
    } else if (! fast) {
       FC_DEBUG("  dropping into passing gear");
 

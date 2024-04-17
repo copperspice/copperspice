@@ -289,7 +289,7 @@ typedef GLintptr GLvdpauSurfaceNV;
 #endif
 
 
-// Types that aren't defined in all system's gl.h files.
+// Types that are not defined in all system's gl.h files.
 typedef ptrdiff_t qopengl_GLintptr;
 typedef ptrdiff_t qopengl_GLsizeiptr;
 

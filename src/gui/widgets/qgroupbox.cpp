@@ -185,13 +185,11 @@ void QGroupBox::setTitle(const QString &title)
 #endif
 }
 
-
 QString QGroupBox::title() const
 {
    Q_D(const QGroupBox);
    return d->title;
 }
-
 
 Qt::Alignment QGroupBox::alignment() const
 {
@@ -223,6 +221,7 @@ void QGroupBox::paintEvent(QPaintEvent *)
 bool QGroupBox::event(QEvent *e)
 {
    Q_D(QGroupBox);
+
 #ifndef QT_NO_SHORTCUT
    if (e->type() == QEvent::Shortcut) {
       QShortcutEvent *se = static_cast<QShortcutEvent *>(e);
@@ -237,9 +236,12 @@ bool QGroupBox::event(QEvent *e)
       }
    }
 #endif
+
    QStyleOptionGroupBox box;
    initStyleOption(&box);
    switch (e->type()) {
+
+
       case QEvent::HoverEnter:
       case QEvent::HoverMove: {
          QStyle::SubControl control = style()->hitTestComplexControl(QStyle::CC_GroupBox, &box,
@@ -262,6 +264,7 @@ bool QGroupBox::event(QEvent *e)
             update(rect);
          }
          return true;
+
       case QEvent::KeyPress: {
          QKeyEvent *k = static_cast<QKeyEvent *>(e);
          if (!k->isAutoRepeat() && (k->key() == Qt::Key_Select || k->key() == Qt::Key_Space)) {
@@ -271,6 +274,7 @@ bool QGroupBox::event(QEvent *e)
          }
          break;
       }
+
       case QEvent::KeyRelease: {
          QKeyEvent *k = static_cast<QKeyEvent *>(e);
          if (!k->isAutoRepeat() && (k->key() == Qt::Key_Select || k->key() == Qt::Key_Space)) {
@@ -284,6 +288,7 @@ bool QGroupBox::event(QEvent *e)
          }
          break;
       }
+
       default:
          break;
    }
@@ -321,7 +326,7 @@ void QGroupBoxPrivate::_q_fixFocus(Qt::FocusReason reason)
    Q_Q(QGroupBox);
    QWidget *fw = q->focusWidget();
 
-   if (!fw || fw == q) {
+   if (! fw || fw == q) {
       QWidget *best      = nullptr;
       QWidget *candidate = nullptr;
       QWidget *w = q;
@@ -453,11 +458,10 @@ bool QGroupBox::isChecked() const
    return d->checkable && d->checked;
 }
 
-
-
 void QGroupBox::setChecked(bool b)
 {
    Q_D(QGroupBox);
+
    if (d->checkable && b != d->checked) {
       update();
       d->checked = b;
@@ -476,9 +480,12 @@ void QGroupBox::setChecked(bool b)
 void QGroupBoxPrivate::_q_setChildrenEnabled(bool b)
 {
    Q_Q(QGroupBox);
+
    QObjectList childList = q->children();
+
    for (int i = 0; i < childList.size(); ++i) {
       QObject *o = childList.at(i);
+
       if (o->isWidgetType()) {
          QWidget *w = static_cast<QWidget *>(o);
          if (b) {
@@ -498,6 +505,7 @@ void QGroupBoxPrivate::_q_setChildrenEnabled(bool b)
 void QGroupBox::changeEvent(QEvent *ev)
 {
    Q_D(QGroupBox);
+
    if (ev->type() == QEvent::EnabledChange) {
       if (d->checkable && isEnabled()) {
          // we are being enabled - disable children
@@ -505,10 +513,13 @@ void QGroupBox::changeEvent(QEvent *ev)
             d->_q_setChildrenEnabled(false);
          }
       }
+
    } else if (ev->type() == QEvent::FontChange
+
 #ifdef Q_OS_DARWIN
       || ev->type() == QEvent::MacSizeChange
 #endif
+
       || ev->type() == QEvent::StyleChange) {
       d->calculateFrame();
    }
@@ -523,10 +534,13 @@ void QGroupBox::mousePressEvent(QMouseEvent *event)
    }
 
    Q_D(QGroupBox);
+
    QStyleOptionGroupBox box;
    initStyleOption(&box);
+
    d->pressedControl = style()->hitTestComplexControl(QStyle::CC_GroupBox, &box,
          event->pos(), this);
+
    if (d->checkable && (d->pressedControl & (QStyle::SC_GroupBoxCheckBox | QStyle::SC_GroupBoxLabel))) {
       d->overCheckBox = true;
       update(style()->subControlRect(QStyle::CC_GroupBox, &box, QStyle::SC_GroupBoxCheckBox, this));
@@ -538,11 +552,12 @@ void QGroupBox::mouseMoveEvent(QMouseEvent *event)
    Q_D(QGroupBox);
    QStyleOptionGroupBox box;
    initStyleOption(&box);
-   QStyle::SubControl pressed = style()->hitTestComplexControl(QStyle::CC_GroupBox, &box,
-         event->pos(), this);
+   QStyle::SubControl pressed = style()->hitTestComplexControl(QStyle::CC_GroupBox, &box, event->pos(), this);
+
    bool oldOverCheckBox = d->overCheckBox;
    d->overCheckBox = (pressed == QStyle::SC_GroupBoxCheckBox || pressed == QStyle::SC_GroupBoxLabel);
-   if (d->checkable && (d->pressedControl == QStyle::SC_GroupBoxCheckBox || d->pressedControl == QStyle::SC_GroupBoxLabel)
+
+   if (d->checkable && (d->pressedControl  == QStyle::SC_GroupBoxCheckBox || d->pressedControl == QStyle::SC_GroupBoxLabel)
       && (d->overCheckBox != oldOverCheckBox)) {
       update(style()->subControlRect(QStyle::CC_GroupBox, &box, QStyle::SC_GroupBoxCheckBox, this));
    }

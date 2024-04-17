@@ -46,13 +46,10 @@ struct QIconDirInfo {
       Threshold
    };
 
-   QIconDirInfo(const QString &_path = QString()) :
-      path(_path),
-      size(0),
-      maxSize(0),
-      minSize(0),
-      threshold(0),
-      type(Threshold) {}
+   QIconDirInfo(const QString &_path = QString())
+      : path(_path), size(0), maxSize(0), minSize(0), threshold(0), type(Threshold)
+   { }
+
    QString path;
    short size;
    short maxSize;

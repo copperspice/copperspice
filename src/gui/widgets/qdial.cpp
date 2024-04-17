@@ -181,14 +181,17 @@ void QDial::paintEvent(QPaintEvent *)
 void QDial::mousePressEvent(QMouseEvent *e)
 {
    Q_D(QDial);
+
    if (d->maximum == d->minimum ||
       (e->button() != Qt::LeftButton)  ||
       (e->buttons() ^ e->button())) {
       e->ignore();
       return;
    }
+
    e->accept();
    setSliderPosition(d->valueFromPoint(e->pos()));
+
    // ### This isn't quite right,
    // we should be doing a hit test and only setting this if it's
    // the actual dial thingie (similar to what QSlider does), but we have no
@@ -199,11 +202,13 @@ void QDial::mousePressEvent(QMouseEvent *e)
 void QDial::mouseReleaseEvent(QMouseEvent *e)
 {
    Q_D(QDial);
+
    if (e->buttons() & (~e->button()) ||
       (e->button() != Qt::LeftButton)) {
       e->ignore();
       return;
    }
+
    e->accept();
    setValue(d->valueFromPoint(e->pos()));
    setSliderDown(false);
@@ -212,10 +217,12 @@ void QDial::mouseReleaseEvent(QMouseEvent *e)
 void QDial::mouseMoveEvent(QMouseEvent *e)
 {
    Q_D(QDial);
+
    if (!(e->buttons() & Qt::LeftButton)) {
       e->ignore();
       return;
    }
+
    e->accept();
    d->doNotEmit = true;
    setSliderPosition(d->valueFromPoint(e->pos()));
@@ -246,25 +253,32 @@ bool QDial::wrapping() const
 int QDial::notchSize() const
 {
    Q_D(const QDial);
+
    // radius of the arc
    int r = qMin(width(), height()) / 2;
+
    // length of the whole arc
    int l = (int)(r * (d->wrapping ? 6 : 5) * Q_PI / 6);
+
    // length of the arc from minValue() to minValue()+pageStep()
    if (d->maximum > d->minimum + d->pageStep) {
       l = (int)(0.5 + l * d->pageStep / (d->maximum - d->minimum));
    }
+
    // length of a singleStep arc
    l = l * d->singleStep / (d->pageStep ? d->pageStep : 1);
    if (l < 1) {
       l = 1;
    }
+
    // how many times singleStep can be draw in d->target pixels
    l = (int)(0.5 + d->target / l);
+
    // we want notchSize() to be a non-zero multiple of lineStep()
    if (!l) {
       l = 1;
    }
+
    return d->singleStep * l;
 }
 
@@ -280,7 +294,6 @@ qreal QDial::notchTarget() const
    Q_D(const QDial);
    return d->target;
 }
-
 
 void QDial::setNotchesVisible(bool visible)
 {

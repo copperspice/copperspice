@@ -40,6 +40,7 @@ class QGIFFormat
 
    int decode(QImage *image, const uchar *buffer, int length,
       int *nextFrameDelay, int *loopCount);
+
    static void scan(QIODevice *device, QVector<QSize> *imageSizes, int *loopCount);
 
    bool newFrame;
@@ -47,18 +48,7 @@ class QGIFFormat
 
  private:
    static constexpr const int max_lzw_bits = 12;
-   void fillRect(QImage *image, int x, int y, int w, int h, QRgb col);
-   inline QRgb color(uchar index) const;
 
-   // GIF specific stuff
-   QRgb *globalcmap;
-   QRgb *localcmap;
-   QImage backingstore;
-   unsigned char hold[16];
-   bool gif89;
-   int count;
-   int ccount;
-   int expectcount;
    enum State {
       Header,
       LogicalScreenDescriptor,
@@ -87,8 +77,24 @@ class QGIFFormat
       RestoreImage
    };
 
+   void fillRect(QImage *image, int x, int y, int w, int h, QRgb col);
+   inline QRgb color(uchar index) const;
+
+   // GIF specific stuff
+   QRgb *globalcmap;
+   QRgb *localcmap;
+   QImage backingstore;
+
+   unsigned char hold[16];
+   bool gif89;
+
    State state;
    Disposal disposal;
+
+   int count;
+   int ccount;
+   int expectcount;
+
    int gncols;
    int lncols;
    int ncols;
@@ -294,6 +300,7 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                count = 0;
             }
             break;
+
          case Introducer:
             hold[count++] = ch;
             switch (ch) {
@@ -313,6 +320,7 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
                   state = Error;
             }
             break;
+
          case ImageDescriptor:
             hold[count++] = ch;
             if (count == 10) {

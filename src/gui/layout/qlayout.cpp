@@ -46,6 +46,7 @@ static int menuBarHeightForWidth(QWidget *menubar, int w)
 
       const int min = qSmartMinSize(menubar).height();
       result = qBound(min, result, menubar->maximumSize().height());
+
       if (result != -1) {
          return result;
       }
@@ -402,8 +403,10 @@ static bool removeWidgetRecursively(QLayoutItem *li, QObject *w)
          delete lay->takeAt(i);
          lay->invalidate();
          return true;
+
       } else if (removeWidgetRecursively(child, w)) {
          return true;
+
       } else {
          ++i;
       }
@@ -597,7 +600,6 @@ QSize QLayout::totalMaximumSize() const
    return s;
 }
 
-
 QLayout::~QLayout()
 {
    Q_D(QLayout);
@@ -668,7 +670,9 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
                csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
+
          bool needShow = mwVisible && !(w->isHidden() && w->testAttribute(Qt::WA_WState_ExplicitShowHide));
+
          if (pw != mw) {
             w->setParent(mw);
          }
@@ -703,6 +707,7 @@ bool QLayoutPrivate::checkWidget(QWidget *widget) const
    }
    return true;
 }
+
 bool QLayoutPrivate::checkLayout(QLayout *otherLayout) const
 {
    Q_Q(const QLayout);
@@ -737,6 +742,7 @@ void QLayout::addChildWidget(QWidget *w)
                csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
+
       }
    }
 
@@ -747,6 +753,7 @@ void QLayout::addChildWidget(QWidget *w)
          qWarning("QLayout::addChildWidget() %s \"%s\" had an incorrect parent, moved to correct parent",
             csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
+
       pw = nullptr;
    }
 
@@ -1006,6 +1013,7 @@ QRect QLayout::alignmentRect(const QRect &r) const
      QSize(QLAYOUTSIZE_MAX, QLAYOUTSIZE_MAX), the value consistently
      returned by QLayoutItems that have an alignment.
    */
+
    QLayout *that = const_cast<QLayout *>(this);
    that->setAlignment(Qt::EmptyFlag);
    QSize ms = that->maximumSize();
@@ -1090,7 +1098,9 @@ QSize QLayout::closestAcceptableSize(const QWidget *widget, const QSize &size)
 {
    QSize result = size.boundedTo(qSmartMaxSize(widget));
    result = result.expandedTo(qSmartMinSize(widget));
+
    QLayout *l = widget->layout();
+
    if (l && l->hasHeightForWidth() && result.height() < l->minimumHeightForWidth(result.width()) ) {
       QSize current = widget->size();
       int currentHfw =  l->minimumHeightForWidth(current.width());
@@ -1125,4 +1135,3 @@ QSize QLayout::closestAcceptableSize(const QWidget *widget, const QSize &size)
    }
    return result;
 }
-

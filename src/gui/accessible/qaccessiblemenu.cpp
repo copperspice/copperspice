@@ -167,7 +167,8 @@ QAccessibleMenuItem::QAccessibleMenuItem(QWidget *owner, QAction *action)
 }
 
 QAccessibleMenuItem::~QAccessibleMenuItem()
-{}
+{
+}
 
 QAccessibleInterface *QAccessibleMenuItem::childAt(int x, int y ) const
 {
@@ -227,6 +228,7 @@ QObject *QAccessibleMenuItem::object() const
 QWindow *QAccessibleMenuItem::window() const
 {
    QWindow *result = nullptr;
+
    if (!m_owner.isNull()) {
       result = m_owner->windowHandle();
       if (!result) {
@@ -235,6 +237,7 @@ QWindow *QAccessibleMenuItem::window() const
          }
       }
    }
+
    return result;
 }
 
@@ -242,18 +245,22 @@ QRect QAccessibleMenuItem::rect() const
 {
    QRect rect;
    QWidget *own = owner();
+
 #ifndef QT_NO_MENUBAR
    if (QMenuBar *menuBar = qobject_cast<QMenuBar *>(own)) {
       rect = menuBar->actionGeometry(m_action);
       QPoint globalPos = menuBar->mapToGlobal(QPoint(0, 0));
       rect = rect.translated(globalPos);
+
    } else
 #endif
+
       if (QMenu *menu = qobject_cast<QMenu *>(own)) {
          rect = menu->actionGeometry(m_action);
          QPoint globalPos = menu->mapToGlobal(QPoint(0, 0));
          rect = rect.translated(globalPos);
       }
+
    return rect;
 }
 
@@ -279,13 +286,16 @@ QAccessible::State QAccessibleMenuItem::state() const
       if (menu->activeAction() == m_action) {
          s.focused = true;
       }
+
 #ifndef QT_NO_MENUBAR
    } else if (QMenuBar *menuBar = qobject_cast<QMenuBar *>(own)) {
       if (menuBar->activeAction() == m_action) {
          s.focused = true;
       }
 #endif
+
    }
+
    if (own && own->style()->styleHint(QStyle::SH_Menu_MouseTracking)) {
       s.hotTracked = true;
    }
@@ -306,6 +316,7 @@ QString QAccessibleMenuItem::text(QAccessible::Text t) const
       case QAccessible::Name:
          str = qt_accStripAmp(m_action->text());
          break;
+
       case QAccessible::Accelerator: {
 #ifndef QT_NO_SHORTCUT
          QKeySequence key = m_action->shortcut();
@@ -318,6 +329,7 @@ QString QAccessibleMenuItem::text(QAccessible::Text t) const
          }
          break;
       }
+
       default:
          break;
    }
@@ -327,7 +339,8 @@ QString QAccessibleMenuItem::text(QAccessible::Text t) const
 QStringList QAccessibleMenuItem::actionNames() const
 {
    QStringList actions;
-   if (!m_action || m_action->isSeparator()) {
+
+   if (! m_action || m_action->isSeparator()) {
       return actions;
    }
 
@@ -336,12 +349,13 @@ QStringList QAccessibleMenuItem::actionNames() const
    } else {
       actions << pressAction();
    }
+
    return actions;
 }
 
 void QAccessibleMenuItem::doAction(const QString &actionName)
 {
-   if (!m_action->isEnabled()) {
+   if (! m_action->isEnabled()) {
       return;
    }
 

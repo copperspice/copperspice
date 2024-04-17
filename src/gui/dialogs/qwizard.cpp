@@ -580,7 +580,7 @@ class QWizardAntiFlickerWidget : public QWidget
 
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *wizardPrivate)
       : QWidget(wizard), wizardPrivate(wizardPrivate)
-   {}
+   { }
 
  protected:
    void paintEvent(QPaintEvent *) override;
@@ -589,7 +589,7 @@ class QWizardAntiFlickerWidget : public QWidget
  public:
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *)
       : QWidget(wizard)
-   {}
+   { }
 
 #endif
 
@@ -600,46 +600,26 @@ class QWizardPrivate : public QDialogPrivate
    Q_DECLARE_PUBLIC(QWizard)
 
  public:
-   typedef QMap<int, QWizardPage *> PageMap;
+   using PageMap = QMap<int, QWizardPage *> ;
 
    enum Direction {
       Backward,
       Forward
    };
 
-   inline QWizardPrivate()
-      : start(-1)
-      , startSetByUser(false)
-      , current(-1)
-      , canContinue(false)
-      , canFinish(false)
-      , disableUpdatesCount(0)
-      , wizStyle(QWizard::ClassicStyle)
-      , opts(Qt::EmptyFlag)
-      , buttonsHaveCustomLayout(false)
-      , titleFmt(Qt::AutoText)
-      , subTitleFmt(Qt::AutoText)
-      , placeholderWidget1(nullptr)
-      , placeholderWidget2(nullptr)
-      , headerWidget(nullptr)
-      , watermarkLabel(nullptr)
-      , sideWidget(nullptr)
-      , pageFrame(nullptr)
-      , titleLabel(nullptr)
-      , subTitleLabel(nullptr)
-      , bottomRuler(nullptr)
-#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
-      , vistaHelper(nullptr)
-      , vistaInitPending(false)
-      , vistaState(QVistaHelper::VistaState::Dirty)
-      , vistaStateChanged(false)
-      , inHandleAeroStyleChange(false)
-#endif
-      , minimumWidth(0)
-      , minimumHeight(0)
-      , maximumWidth(QWIDGETSIZE_MAX)
-      , maximumHeight(QWIDGETSIZE_MAX)
+   QWizardPrivate()
+      : start(-1), startSetByUser(false), current(-1), canContinue(false), canFinish(false),
+        disableUpdatesCount(0), wizStyle(QWizard::ClassicStyle), opts(Qt::EmptyFlag),
+        buttonsHaveCustomLayout(false), titleFmt(Qt::AutoText), subTitleFmt(Qt::AutoText),
+        placeholderWidget1(nullptr), placeholderWidget2(nullptr), headerWidget(nullptr),
+        watermarkLabel(nullptr), sideWidget(nullptr), pageFrame(nullptr), titleLabel(nullptr),
+        subTitleLabel(nullptr), bottomRuler(nullptr),
 
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
+        vistaHelper(nullptr), vistaInitPending(false), vistaState(QVistaHelper::VistaState::Dirty),
+        vistaStateChanged(false), inHandleAeroStyleChange(false),
+#endif
+        minimumWidth(0), minimumHeight(0), maximumWidth(QWIDGETSIZE_MAX) , maximumHeight(QWIDGETSIZE_MAX)
    {
       std::fill(btns, btns + QWizard::NButtons, static_cast<QAbstractButton *>(nullptr));
 
@@ -656,7 +636,9 @@ class QWizardPrivate : public QDialogPrivate
    void addField(const QWizardField &field);
    void removeFieldAt(int index);
    void switchToPage(int newId, Direction direction);
+
    QWizardLayoutInfo layoutInfoForCurrentPage();
+
    void recreateLayout(const QWizardLayoutInfo &info);
    void updateLayout();
    void updateMinMaxSizes(const QWizardLayoutInfo &info);

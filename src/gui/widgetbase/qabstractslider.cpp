@@ -41,13 +41,15 @@ QAbstractSliderPrivate::QAbstractSliderPrivate()
      blocktracking(false), pressed(false),
      invertedAppearance(false), invertedControls(false),
      orientation(Qt::Horizontal), repeatAction(QAbstractSlider::SliderNoAction)
+
 #ifdef QT_KEYPAD_NAVIGATION
-   , isAutoRepeating(false)
-   , repeatMultiplier(1)
+   , isAutoRepeating(false), repeatMultiplier(1)
 {
    firstRepeat.invalidate();
+
 #else
 {
+
 #endif
 
 }
@@ -63,6 +65,7 @@ void QAbstractSlider::setRange(int min, int max)
    int oldMax = d->maximum;
    d->minimum = min;
    d->maximum = qMax(min, max);
+
    if (oldMin != d->minimum || oldMax != d->maximum) {
       sliderChange(SliderRangeChange);
       emit rangeChanged(d->minimum, d->maximum);
@@ -95,17 +98,20 @@ QAbstractSlider::~QAbstractSlider()
 void QAbstractSlider::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QAbstractSlider);
+
    if (d->orientation == orientation) {
       return;
    }
 
    d->orientation = orientation;
+
    if (!testAttribute(Qt::WA_WState_OwnSizePolicy)) {
       QSizePolicy sp = sizePolicy();
       sp.transpose();
       setSizePolicy(sp);
       setAttribute(Qt::WA_WState_OwnSizePolicy, false);
    }
+
    update();
    updateGeometry();
 }
@@ -143,6 +149,7 @@ int QAbstractSlider::maximum() const
 void QAbstractSlider::setSingleStep(int step)
 {
    Q_D(QAbstractSlider);
+
    if (step != d->singleStep) {
       d->setSteps(step, d->pageStep);
    }
@@ -154,11 +161,10 @@ int QAbstractSlider::singleStep() const
    return d->singleStep;
 }
 
-
-
 void QAbstractSlider::setPageStep(int step)
 {
    Q_D(QAbstractSlider);
+
    if (step != d->pageStep) {
       d->setSteps(d->singleStep, step);
    }
@@ -169,6 +175,7 @@ int QAbstractSlider::pageStep() const
    Q_D(const QAbstractSlider);
    return d->pageStep;
 }
+
 void QAbstractSlider::setTracking(bool enable)
 {
    Q_D(QAbstractSlider);
@@ -211,11 +218,13 @@ void QAbstractSlider::setSliderPosition(int position)
 {
    Q_D(QAbstractSlider);
    position = d->bound(position);
+
    if (position == d->position) {
       return;
    }
 
    d->position = position;
+
    if (!d->tracking) {
       update();
    }
@@ -245,13 +254,16 @@ void QAbstractSlider::setValue(int value)
 {
    Q_D(QAbstractSlider);
    value = d->bound(value);
+
    if (d->value == value && d->position == value) {
       return;
    }
 
    d->value = value;
+
    if (d->position != value) {
       d->position = value;
+
       if (d->pressed) {
          emit sliderMoved((d->position = value));
       }
@@ -265,7 +277,6 @@ void QAbstractSlider::setValue(int value)
    sliderChange(SliderValueChange);
    emit valueChanged(value);
 }
-
 
 bool QAbstractSlider::invertedAppearance() const
 {
@@ -296,6 +307,7 @@ void QAbstractSlider::triggerAction(SliderAction action)
 {
    Q_D(QAbstractSlider);
    d->blocktracking = true;
+
    switch (action) {
       case SliderSingleStepAdd:
          setSliderPosition(d->overflowSafeAdd(d->effectiveSingleStep()));
@@ -327,7 +339,9 @@ void QAbstractSlider::triggerAction(SliderAction action)
    };
 
    emit actionTriggered(action);
+
    d->blocktracking = false;
+
    setValue(d->position);
 }
 
@@ -352,11 +366,13 @@ QAbstractSlider::SliderAction QAbstractSlider::repeatAction() const
 void QAbstractSlider::timerEvent(QTimerEvent *e)
 {
    Q_D(QAbstractSlider);
+
    if (e->timerId() == d->repeatActionTimer.timerId()) {
       if (d->repeatActionTime) { // was threshold time, use repeat time next time
          d->repeatActionTimer.start(d->repeatActionTime, this);
          d->repeatActionTime = 0;
       }
+
       if (d->repeatAction == SliderPageStepAdd) {
          d->setAdjustedSliderPosition(d->overflowSafeAdd(d->pageStep));
       } else if (d->repeatAction == SliderPageStepSub) {
@@ -381,6 +397,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
    if (orientation == Qt::Horizontal) {
       delta = -delta;
    }
+
    qreal offset = qreal(delta) / 120;
 
    if ((modifiers & Qt::ControlModifier) || (modifiers & Qt::ShiftModifier)) {
@@ -396,7 +413,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
       qreal stepsToScrollF = offset * effectiveSingleStep();
 
 #ifndef QT_NO_WHEELEVENT
-         stepsToScrollF *= QApplication::wheelScrollLines();
+      stepsToScrollF *= QApplication::wheelScrollLines();
 #endif
 
       // Check if wheel changed direction since last event:
@@ -410,10 +427,12 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
       stepsToScroll = qBound(-pageStep, int(offset_accumulated), pageStep);
 
       offset_accumulated -= int(offset_accumulated);
+
       if (stepsToScroll == 0) {
          // We moved less than a line, but might still have accumulated partial scroll,
          // unless we already are at one of the ends.
          const float effective_offset = invertedControls ? -offset_accumulated : offset_accumulated;
+
          if (effective_offset > 0.f && value < maximum) {
             return true;
          }
@@ -439,6 +458,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
       offset_accumulated = 0;
       return false;
    }
+
    return true;
 }
 
@@ -448,11 +468,11 @@ void QAbstractSlider::wheelEvent(QWheelEvent *e)
    Q_D(QAbstractSlider);
    e->ignore();
    int delta = e->delta();
+
    if (d->scrollByDelta(e->orientation(), e->modifiers(), delta)) {
       e->accept();
    }
 }
-
 #endif
 
 void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
@@ -462,8 +482,9 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
    SliderAction action = SliderNoAction;
 
 #ifdef QT_KEYPAD_NAVIGATION
+
    if (ev->isAutoRepeat()) {
-      if (!d->firstRepeat.isValid()) {
+      if (! d->firstRepeat.isValid()) {
          d->firstRepeat.start();
       } else if (1 == d->repeatMultiplier) {
          // This is the interval in milli seconds which one key repetition
@@ -494,12 +515,14 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 
    switch (ev->key()) {
 #ifdef QT_KEYPAD_NAVIGATION
+
       case Qt::Key_Select:
          if (QApplication::keypadNavigationEnabled()) {
             setEditFocus(!hasEditFocus());
          } else {
             ev->ignore();
          }
+
          break;
 
       case Qt::Key_Back:
@@ -509,6 +532,7 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
          } else {
             ev->ignore();
          }
+
          break;
 #endif
 
@@ -516,14 +540,15 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
       case Qt::Key_Left:
 
 #ifdef QT_KEYPAD_NAVIGATION
+
          // In QApplication::KeypadNavigationDirectional, we want to change the slider
          // value if there is no left/right navigation possible and if this slider is not
          // inside a tab widget.
 
          if (QApplication::keypadNavigationEnabled()
                && (! hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
-               || d->orientation == Qt::Vertical || ! hasEditFocus()
-               && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
+                     || d->orientation == Qt::Vertical || ! hasEditFocus()
+                     && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
 
             ev->ignore();
             return;
@@ -538,13 +563,15 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
             } else {
                action = !d->invertedAppearance ? SliderSingleStepSub : SliderSingleStepAdd;
             }
+
          break;
 
       case Qt::Key_Right:
 #ifdef QT_KEYPAD_NAVIGATION
+
          // Same logic as in Qt::Key_Left
          if (QApplication::keypadNavigationEnabled()
-               && (!hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
+               && (! hasEditFocus() && QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
                || d->orientation == Qt::Vertical || !hasEditFocus()
                && (QWidgetPrivate::canKeypadNavigate(Qt::Horizontal) || QWidgetPrivate::inTabWidget(this)))) {
 
@@ -561,10 +588,12 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
             } else {
                action = !d->invertedAppearance ? SliderSingleStepAdd : SliderSingleStepSub;
             }
+
          break;
 
       case Qt::Key_Up:
 #ifdef QT_KEYPAD_NAVIGATION
+
          // In QApplication::KeypadNavigationDirectional, we want to change the slider
          // value if there is no up/down navigation possible.
          if (QApplication::keypadNavigationEnabled()
@@ -574,11 +603,14 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
             ev->ignore();
             break;
          }
+
 #endif
          action = d->invertedControls ? SliderSingleStepSub : SliderSingleStepAdd;
          break;
+
       case Qt::Key_Down:
 #ifdef QT_KEYPAD_NAVIGATION
+
          // Same logic as in Qt::Key_Up
          if (QApplication::keypadNavigationEnabled()
                && (QApplication::navigationMode() == Qt::NavigationModeKeypadTabOrder
@@ -587,6 +619,7 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
             ev->ignore();
             break;
          }
+
 #endif
          action = d->invertedControls ? SliderSingleStepAdd : SliderSingleStepSub;
          break;
@@ -620,12 +653,14 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
 void QAbstractSlider::changeEvent(QEvent *ev)
 {
    Q_D(QAbstractSlider);
+
    switch (ev->type()) {
       case QEvent::EnabledChange:
-         if (!isEnabled()) {
+         if (! isEnabled()) {
             d->repeatActionTimer.stop();
             setSliderDown(false);
          }
+
          [[fallthrough]];
 
       default:
@@ -637,6 +672,7 @@ bool QAbstractSlider::event(QEvent *e)
 {
 #ifdef QT_KEYPAD_NAVIGATION
    Q_D(QAbstractSlider);
+
    switch (e->type()) {
       case QEvent::FocusIn:
          d->origValue = d->value;
@@ -645,8 +681,8 @@ bool QAbstractSlider::event(QEvent *e)
       default:
          break;
    }
+
 #endif
 
    return QWidget::event(e);
 }
-

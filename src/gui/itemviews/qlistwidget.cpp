@@ -707,6 +707,7 @@ QListWidget::~QListWidget()
 QListWidgetItem *QListWidget::item(int row) const
 {
    Q_D(const QListWidget);
+
    if (row < 0 || row >= d->model->rowCount()) {
       return nullptr;
    }
@@ -723,6 +724,7 @@ int QListWidget::row(const QListWidgetItem *item) const
 void QListWidget::insertItem(int row, QListWidgetItem *item)
 {
    Q_D(QListWidget);
+
    if (item && !item->view) {
       d->listModel()->insert(row, item);
    }
@@ -918,6 +920,7 @@ QList<QListWidgetItem *> QListWidget::findItems(const QString &text, Qt::MatchFl
    for (int i = 0; i < indexes.size(); ++i) {
       items.append(d->listModel()->at(indexes.at(i).row()));
    }
+
    return items;
 }
 
@@ -931,32 +934,28 @@ void QListWidget::setItemHidden(const QListWidgetItem *item, bool hide)
    setRowHidden(row(item), hide);
 }
 
-
-
 void QListWidget::scrollToItem(const QListWidgetItem *item, QAbstractItemView::ScrollHint hint)
 {
    Q_D(QListWidget);
+
    QModelIndex index = d->listModel()->index(const_cast<QListWidgetItem *>(item));
    QListView::scrollTo(index, hint);
 }
 
-
 void QListWidget::clear()
 {
    Q_D(QListWidget);
+
    selectionModel()->clear();
    d->listModel()->clear();
 }
-
 
 QStringList QListWidget::mimeTypes() const
 {
    return d_func()->listModel()->QAbstractListModel::mimeTypes();
 }
 
-
 QMimeData *QListWidget::mimeData(const QList<QListWidgetItem *> &items) const
-
 {
    Q_D(const QListWidget);
    QModelIndexList &cachedIndexes = d->listModel()->cachedIndexes;
@@ -977,8 +976,10 @@ QMimeData *QListWidget::mimeData(const QList<QListWidgetItem *> &items) const
 bool QListWidget::dropMimeData(int index, const QMimeData *data, Qt::DropAction action)
 {
    QModelIndex idx;
-   int row = index;
+
+   int row    = index;
    int column = 0;
+
    if (dropIndicatorPosition() == QAbstractItemView::OnItem) {
       // QAbstractListModel::dropMimeData will overwrite on the index if row == -1 and column == -1
       idx = model()->index(row, column);
@@ -987,7 +988,6 @@ bool QListWidget::dropMimeData(int index, const QMimeData *data, Qt::DropAction 
    }
    return d_func()->listModel()->QAbstractListModel::dropMimeData(data, action, row, column, idx);
 }
-
 
 void QListWidget::dropEvent(QDropEvent *event)
 {
@@ -1127,7 +1127,5 @@ void QListWidget::_q_dataChanged(const QModelIndex &topLeft, const QModelIndex &
    Q_D(QListWidget);
    d->_q_dataChanged(topLeft, bottomRight);
 }
-
-
 
 #endif // QT_NO_LISTWIDGET

@@ -54,7 +54,9 @@ class QUndoStackPrivate
    {
    }
 
-   virtual ~QUndoStackPrivate() {}
+   virtual ~QUndoStackPrivate()
+   {
+   }
 
    QList<QUndoCommand *> command_list;
    QList<QUndoCommand *> macro_stack;
@@ -88,8 +90,6 @@ class QUndoAction : public QAction
 
 };
 #endif // QT_NO_ACTION
-
-
 
 #endif // QT_NO_UNDOSTACK
 #endif // QUNDOSTACK_P_H

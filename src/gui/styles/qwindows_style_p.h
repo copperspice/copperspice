@@ -94,7 +94,9 @@ class QWindowsStylePrivate : public QCommonStylePrivate
    static constexpr const int InvalidMetric = -23576;
    QWindowsStylePrivate();
 
-   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = nullptr, const QWidget *widget = nullptr);
+   static int pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option = nullptr,
+         const QWidget *widget = nullptr);
+
    static int fixedPixelMetric(QStyle::PixelMetric pm);
 
    static qreal devicePixelRatio(const QWidget *widget = nullptr) {

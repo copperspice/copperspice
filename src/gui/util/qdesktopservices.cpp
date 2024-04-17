@@ -94,7 +94,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
          insideOpenUrlHandler = true;
 
          bool result = QMetaObject::invokeMethod(handler->receiver, handler->name,
-               Qt::DirectConnection, Q_ARG(const QUrl &, url));
+                     Qt::DirectConnection, Q_ARG(const QUrl &, url));
 
          insideOpenUrlHandler = false;
          return result;
@@ -106,6 +106,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
    }
 
    QPlatformIntegration *platformIntegration = QGuiApplicationPrivate::platformIntegration();
+
    if (! platformIntegration) {
       return false;
    }
@@ -118,7 +119,7 @@ bool QDesktopServices::openUrl(const QUrl &url)
    }
 
    return url.scheme() == "file" ?
-      platformServices->openDocument(url) : platformServices->openUrl(url);
+         platformServices->openDocument(url) : platformServices->openUrl(url);
 }
 
 void QDesktopServices::setUrlHandler(const QString &scheme, QObject *receiver, const char *method)
@@ -158,6 +159,7 @@ QString QDesktopServices::storageLocationImpl(QStandardPaths::StandardLocation t
 
 #if defined(Q_OS_WIN) || defined(Q_OS_DARWIN)
       QString result = baseDir;
+
       if (! QCoreApplication::organizationName().isEmpty()) {
          result += '/' + QCoreApplication::organizationName();
       }

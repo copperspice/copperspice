@@ -35,6 +35,7 @@
 #include <qstylehelper_p.h>
 
 
+class QWizard;
 
 class QVistaBackButton : public QAbstractButton
 {
@@ -51,8 +52,6 @@ class QVistaBackButton : public QAbstractButton
    void leaveEvent(QEvent *event) override;
    void paintEvent(QPaintEvent *event) override;
 };
-
-class QWizard;
 
 class QVistaHelper : public QObject
 {
@@ -110,6 +109,7 @@ class QVistaHelper : public QObject
 
    static int topOffset();
    static HDC backingStoreDC(const QWidget *wizard, QPoint *offset);
+
  private:
    enum Changes {
       resizeTop,
@@ -174,8 +174,7 @@ class QVistaHelper : public QObject
    static int m_devicePixelRatio;
 };
 
-
-
 #endif // QT_NO_STYLE_WINDOWSVISTA
 #endif // QT_NO_WIZARD
+
 #endif

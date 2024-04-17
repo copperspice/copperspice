@@ -240,13 +240,16 @@ bool QSlider::event(QEvent *event)
             d->updateHoverControl(he->pos());
          }
          break;
+
       case QEvent::StyleChange:
       case QEvent::MacSizeChange:
          d->resetLayoutItemMargins();
          break;
+
       default:
          break;
    }
+
    return QAbstractSlider::event(event);
 }
 
@@ -316,10 +319,12 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
 void QSlider::mouseMoveEvent(QMouseEvent *ev)
 {
    Q_D(QSlider);
+
    if (d->pressedControl != QStyle::SC_SliderHandle) {
       ev->ignore();
       return;
    }
+
    ev->accept();
    int newPosition = d->pixelPosToRangeValue(d->pick(ev->pos()) - d->clickOffset);
    QStyleOptionSlider opt;
@@ -354,10 +359,13 @@ void QSlider::mouseReleaseEvent(QMouseEvent *ev)
 QSize QSlider::sizeHint() const
 {
    Q_D(const QSlider);
+
    ensurePolished();
    const int SliderLength = 84, TickSpace = 5;
+
    QStyleOptionSlider opt;
    initStyleOption(&opt);
+
    int thick = style()->pixelMetric(QStyle::PM_SliderThickness, &opt, this);
 
    if (d->tickPosition & TicksAbove) {
@@ -378,15 +386,18 @@ QSize QSlider::sizeHint() const
 QSize QSlider::minimumSizeHint() const
 {
    Q_D(const QSlider);
+
    QSize s = sizeHint();
    QStyleOptionSlider opt;
    initStyleOption(&opt);
    int length = style()->pixelMetric(QStyle::PM_SliderLength, &opt, this);
+
    if (d->orientation == Qt::Horizontal) {
       s.setWidth(length);
    } else {
       s.setHeight(length);
    }
+
    return s;
 }
 

@@ -87,8 +87,8 @@ class QBalloonTip : public QWidget
 
  public:
    static void showBalloon(QSystemTrayIcon::MessageIcon icon, const QString &title,
-      const QString &msg, QSystemTrayIcon *trayIcon,
-      const QPoint &pos, int timeout, bool showArrow = true);
+         const QString &msg, QSystemTrayIcon *trayIcon,
+         const QPoint &pos, int timeout, bool showArrow = true);
 
    static void hideBalloon();
    static bool isBalloonVisible();
@@ -96,7 +96,7 @@ class QBalloonTip : public QWidget
 
  private:
    QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
-      const QString &msg, QSystemTrayIcon *trayIcon);
+         const QString &msg, QSystemTrayIcon *trayIcon);
 
    ~QBalloonTip();
    void balloon(const QPoint &, int, bool);
@@ -118,4 +118,3 @@ class QBalloonTip : public QWidget
 #endif // QT_NO_SYSTEMTRAYICON
 
 #endif // QSYSTEMTRAYICON_P_H
-

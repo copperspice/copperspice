@@ -72,6 +72,7 @@ typedef struct __GLsync *GLsync;
  */
 
 #ifndef GL_KHR_blend_equation_advanced
+
 #define GL_KHR_blend_equation_advanced 1
 #define GL_MULTIPLY_KHR                   0x9294
 #define GL_SCREEN_KHR                     0x9295
@@ -89,6 +90,7 @@ typedef struct __GLsync *GLsync;
 #define GL_HSL_COLOR_KHR                  0x92AF
 #define GL_HSL_LUMINOSITY_KHR             0x92B0
 typedef void (GL_APIENTRYP PFNGLBLENDBARRIERKHRPROC) (void);
+
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glBlendBarrierKHR (void);
 #endif
@@ -108,51 +110,58 @@ GL_APICALL void GL_APIENTRY glBlendBarrierKHR (void);
 
 #ifndef GL_KHR_debug
 #define GL_KHR_debug 1
-typedef void (GL_APIENTRY  *GLDEBUGPROCKHR)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-#define GL_SAMPLER                        0x82E6
-#define GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR   0x8242
+
+typedef void (GL_APIENTRY  *GLDEBUGPROCKHR)(GLenum source,GLenum type,GLuint id,GLenum severity, GLsizei length,
+      const GLchar *message,const void *userParam);
+
+#define GL_SAMPLER                              0x82E6
+#define GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR         0x8242
 #define GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_KHR 0x8243
-#define GL_DEBUG_CALLBACK_FUNCTION_KHR    0x8244
-#define GL_DEBUG_CALLBACK_USER_PARAM_KHR  0x8245
-#define GL_DEBUG_SOURCE_API_KHR           0x8246
-#define GL_DEBUG_SOURCE_WINDOW_SYSTEM_KHR 0x8247
-#define GL_DEBUG_SOURCE_SHADER_COMPILER_KHR 0x8248
-#define GL_DEBUG_SOURCE_THIRD_PARTY_KHR   0x8249
-#define GL_DEBUG_SOURCE_APPLICATION_KHR   0x824A
-#define GL_DEBUG_SOURCE_OTHER_KHR         0x824B
-#define GL_DEBUG_TYPE_ERROR_KHR           0x824C
-#define GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_KHR 0x824D
-#define GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_KHR 0x824E
-#define GL_DEBUG_TYPE_PORTABILITY_KHR     0x824F
-#define GL_DEBUG_TYPE_PERFORMANCE_KHR     0x8250
-#define GL_DEBUG_TYPE_OTHER_KHR           0x8251
-#define GL_DEBUG_TYPE_MARKER_KHR          0x8268
-#define GL_DEBUG_TYPE_PUSH_GROUP_KHR      0x8269
-#define GL_DEBUG_TYPE_POP_GROUP_KHR       0x826A
-#define GL_DEBUG_SEVERITY_NOTIFICATION_KHR 0x826B
-#define GL_MAX_DEBUG_GROUP_STACK_DEPTH_KHR 0x826C
-#define GL_DEBUG_GROUP_STACK_DEPTH_KHR    0x826D
-#define GL_BUFFER_KHR                     0x82E0
-#define GL_SHADER_KHR                     0x82E1
-#define GL_PROGRAM_KHR                    0x82E2
-#define GL_VERTEX_ARRAY_KHR               0x8074
-#define GL_QUERY_KHR                      0x82E3
-#define GL_SAMPLER_KHR                    0x82E6
-#define GL_MAX_LABEL_LENGTH_KHR           0x82E8
-#define GL_MAX_DEBUG_MESSAGE_LENGTH_KHR   0x9143
-#define GL_MAX_DEBUG_LOGGED_MESSAGES_KHR  0x9144
-#define GL_DEBUG_LOGGED_MESSAGES_KHR      0x9145
-#define GL_DEBUG_SEVERITY_HIGH_KHR        0x9146
-#define GL_DEBUG_SEVERITY_MEDIUM_KHR      0x9147
-#define GL_DEBUG_SEVERITY_LOW_KHR         0x9148
-#define GL_DEBUG_OUTPUT_KHR               0x92E0
-#define GL_CONTEXT_FLAG_DEBUG_BIT_KHR     0x00000002
-#define GL_STACK_OVERFLOW_KHR             0x0503
-#define GL_STACK_UNDERFLOW_KHR            0x0504
-typedef void (GL_APIENTRYP PFNGLDEBUGMESSAGECONTROLKHRPROC) (GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled);
-typedef void (GL_APIENTRYP PFNGLDEBUGMESSAGEINSERTKHRPROC) (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf);
+#define GL_DEBUG_CALLBACK_FUNCTION_KHR          0x8244
+#define GL_DEBUG_CALLBACK_USER_PARAM_KHR        0x8245
+#define GL_DEBUG_SOURCE_API_KHR                 0x8246
+#define GL_DEBUG_SOURCE_WINDOW_SYSTEM_KHR       0x8247
+#define GL_DEBUG_SOURCE_SHADER_COMPILER_KHR     0x8248
+#define GL_DEBUG_SOURCE_THIRD_PARTY_KHR         0x8249
+#define GL_DEBUG_SOURCE_APPLICATION_KHR         0x824A
+#define GL_DEBUG_SOURCE_OTHER_KHR               0x824B
+#define GL_DEBUG_TYPE_ERROR_KHR                 0x824C
+#define GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_KHR   0x824D
+#define GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_KHR    0x824E
+#define GL_DEBUG_TYPE_PORTABILITY_KHR           0x824F
+#define GL_DEBUG_TYPE_PERFORMANCE_KHR           0x8250
+#define GL_DEBUG_TYPE_OTHER_KHR                 0x8251
+#define GL_DEBUG_TYPE_MARKER_KHR                0x8268
+#define GL_DEBUG_TYPE_PUSH_GROUP_KHR            0x8269
+#define GL_DEBUG_TYPE_POP_GROUP_KHR             0x826A
+#define GL_DEBUG_SEVERITY_NOTIFICATION_KHR      0x826B
+#define GL_MAX_DEBUG_GROUP_STACK_DEPTH_KHR      0x826C
+#define GL_DEBUG_GROUP_STACK_DEPTH_KHR          0x826D
+#define GL_BUFFER_KHR                           0x82E0
+#define GL_SHADER_KHR                           0x82E1
+#define GL_PROGRAM_KHR                          0x82E2
+#define GL_VERTEX_ARRAY_KHR                     0x8074
+#define GL_QUERY_KHR                            0x82E3
+#define GL_SAMPLER_KHR                          0x82E6
+#define GL_MAX_LABEL_LENGTH_KHR                 0x82E8
+#define GL_MAX_DEBUG_MESSAGE_LENGTH_KHR         0x9143
+#define GL_MAX_DEBUG_LOGGED_MESSAGES_KHR        0x9144
+#define GL_DEBUG_LOGGED_MESSAGES_KHR            0x9145
+#define GL_DEBUG_SEVERITY_HIGH_KHR              0x9146
+#define GL_DEBUG_SEVERITY_MEDIUM_KHR            0x9147
+#define GL_DEBUG_SEVERITY_LOW_KHR               0x9148
+#define GL_DEBUG_OUTPUT_KHR                     0x92E0
+#define GL_CONTEXT_FLAG_DEBUG_BIT_KHR           0x00000002
+#define GL_STACK_OVERFLOW_KHR                   0x0503
+#define GL_STACK_UNDERFLOW_KHR                  0x0504
+
+typedef void (GL_APIENTRYP PFNGLDEBUGMESSAGECONTROLKHRPROC) (GLenum source, GLenum type, GLenum severity, GLsizei count,
+      const GLuint *ids, GLboolean enabled);
+typedef void (GL_APIENTRYP PFNGLDEBUGMESSAGEINSERTKHRPROC) (GLenum source, GLenum type, GLuint id, GLenum severity,
+      GLsizei length, const GLchar *buf);
 typedef void (GL_APIENTRYP PFNGLDEBUGMESSAGECALLBACKKHRPROC) (GLDEBUGPROCKHR callback, const void *userParam);
-typedef GLuint (GL_APIENTRYP PFNGLGETDEBUGMESSAGELOGKHRPROC) (GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog);
+typedef GLuint (GL_APIENTRYP PFNGLGETDEBUGMESSAGELOGKHRPROC) (GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types,
+      GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog);
 typedef void (GL_APIENTRYP PFNGLPUSHDEBUGGROUPKHRPROC) (GLenum source, GLuint id, GLsizei length, const GLchar *message);
 typedef void (GL_APIENTRYP PFNGLPOPDEBUGGROUPKHRPROC) (void);
 typedef void (GL_APIENTRYP PFNGLOBJECTLABELKHRPROC) (GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
@@ -160,11 +169,15 @@ typedef void (GL_APIENTRYP PFNGLGETOBJECTLABELKHRPROC) (GLenum identifier, GLuin
 typedef void (GL_APIENTRYP PFNGLOBJECTPTRLABELKHRPROC) (const void *ptr, GLsizei length, const GLchar *label);
 typedef void (GL_APIENTRYP PFNGLGETOBJECTPTRLABELKHRPROC) (const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label);
 typedef void (GL_APIENTRYP PFNGLGETPOINTERVKHRPROC) (GLenum pname, void **params);
+
 #ifdef GL_GLEXT_PROTOTYPES
-GL_APICALL void GL_APIENTRY glDebugMessageControlKHR (GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled);
-GL_APICALL void GL_APIENTRY glDebugMessageInsertKHR (GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf);
+GL_APICALL void GL_APIENTRY glDebugMessageControlKHR (GLenum source, GLenum type, GLenum severity, GLsizei count,
+      const GLuint *ids, GLboolean enabled);
+GL_APICALL void GL_APIENTRY glDebugMessageInsertKHR (GLenum source, GLenum type, GLuint id, GLenum severity,
+      GLsizei length, const GLchar *buf);
 GL_APICALL void GL_APIENTRY glDebugMessageCallbackKHR (GLDEBUGPROCKHR callback, const void *userParam);
-GL_APICALL GLuint GL_APIENTRY glGetDebugMessageLogKHR (GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog);
+GL_APICALL GLuint GL_APIENTRY glGetDebugMessageLogKHR (GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids,
+      GLenum *severities, GLsizei *lengths, GLchar *messageLog);
 GL_APICALL void GL_APIENTRY glPushDebugGroupKHR (GLenum source, GLuint id, GLsizei length, const GLchar *message);
 GL_APICALL void GL_APIENTRY glPopDebugGroupKHR (void);
 GL_APICALL void GL_APIENTRY glObjectLabelKHR (GLenum identifier, GLuint name, GLsizei length, const GLchar *label);
@@ -173,6 +186,7 @@ GL_APICALL void GL_APIENTRY glObjectPtrLabelKHR (const void *ptr, GLsizei length
 GL_APICALL void GL_APIENTRY glGetObjectPtrLabelKHR (const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label);
 GL_APICALL void GL_APIENTRY glGetPointervKHR (GLenum pname, void **params);
 #endif
+
 #endif /* GL_KHR_debug */
 
 #ifndef GL_KHR_robust_buffer_access_behavior
@@ -189,11 +203,13 @@ GL_APICALL void GL_APIENTRY glGetPointervKHR (GLenum pname, void **params);
 #define GL_RESET_NOTIFICATION_STRATEGY_KHR 0x8256
 #define GL_NO_RESET_NOTIFICATION_KHR      0x8261
 #define GL_CONTEXT_LOST_KHR               0x0507
+
 typedef GLenum (GL_APIENTRYP PFNGLGETGRAPHICSRESETSTATUSKHRPROC) (void);
 typedef void (GL_APIENTRYP PFNGLREADNPIXELSKHRPROC) (GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data);
 typedef void (GL_APIENTRYP PFNGLGETNUNIFORMFVKHRPROC) (GLuint program, GLint location, GLsizei bufSize, GLfloat *params);
 typedef void (GL_APIENTRYP PFNGLGETNUNIFORMIVKHRPROC) (GLuint program, GLint location, GLsizei bufSize, GLint *params);
 typedef void (GL_APIENTRYP PFNGLGETNUNIFORMUIVKHRPROC) (GLuint program, GLint location, GLsizei bufSize, GLuint *params);
+
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL GLenum GL_APIENTRY glGetGraphicsResetStatusKHR (void);
 GL_APICALL void GL_APIENTRY glReadnPixelsKHR (GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void *data);
@@ -205,6 +221,7 @@ GL_APICALL void GL_APIENTRY glGetnUniformuivKHR (GLuint program, GLint location,
 #endif
 
 #ifndef GL_KHR_texture_compression_astc_hdr
+
 #define GL_KHR_texture_compression_astc_hdr 1
 #define GL_COMPRESSED_RGBA_ASTC_4x4_KHR   0x93B0
 #define GL_COMPRESSED_RGBA_ASTC_5x4_KHR   0x93B1

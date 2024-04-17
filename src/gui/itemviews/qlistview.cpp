@@ -293,12 +293,16 @@ bool QListView::isRowHidden(int row) const
 void QListView::setRowHidden(int row, bool hide)
 {
    Q_D(QListView);
+
    const bool hidden = d->isHidden(row);
-   if (hide && !hidden) {
+
+   if (hide && ! hidden) {
       d->commonListView->appendHiddenRow(row);
-   } else if (!hide && hidden) {
+
+   } else if (! hide && hidden) {
       d->commonListView->removeHiddenRow(row);
    }
+
    d->doDelayedItemsLayout();
    d->viewport->update();
 }
@@ -1676,7 +1680,9 @@ int QCommonListViewBase::verticalScrollToValue(int, QListView::ScrollHint hint,
       bool above, bool below, const QRect &area, const QRect &rect) const
 {
    int verticalValue = verticalScrollBar()->value();
+
    QRect adjusted = rect.adjusted(-spacing(), -spacing(), spacing(), spacing());
+
    if (hint == QListView::PositionAtTop || above) {
       verticalValue += adjusted.top();
    } else if (hint == QListView::PositionAtBottom || below) {
@@ -1684,6 +1690,7 @@ int QCommonListViewBase::verticalScrollToValue(int, QListView::ScrollHint hint,
    } else if (hint == QListView::PositionAtCenter) {
       verticalValue += adjusted.top() - ((area.height() - adjusted.height()) / 2);
    }
+
    return verticalValue;
 }
 
@@ -1697,6 +1704,7 @@ int QCommonListViewBase::horizontalScrollToValue(const int, QListView::ScrollHin
       bool leftOf, bool rightOf, const QRect &area, const QRect &rect) const
 {
    int horizontalValue = horizontalScrollBar()->value();
+
    if (isRightToLeft()) {
       if (hint == QListView::PositionAtCenter) {
          horizontalValue += ((area.width() - rect.width()) / 2) - rect.left();
@@ -1707,6 +1715,7 @@ int QCommonListViewBase::horizontalScrollToValue(const int, QListView::ScrollHin
             horizontalValue += qMin(rect.left(), area.width() - rect.right());
          }
       }
+
    } else {
       if (hint == QListView::PositionAtCenter) {
          horizontalValue += rect.left() - ((area.width() - rect.width()) / 2);
@@ -1718,6 +1727,7 @@ int QCommonListViewBase::horizontalScrollToValue(const int, QListView::ScrollHin
          }
       }
    }
+
    return horizontalValue;
 }
 
@@ -1726,7 +1736,6 @@ QListModeViewBase::QListModeViewBase(QListView *q, QListViewPrivate *d)
 {
    dd->defaultDropAction = Qt::CopyAction;
 }
-
 
 #ifndef QT_NO_DRAGANDDROP
 QAbstractItemView::DropIndicatorPosition QListModeViewBase::position(const QPoint &pos, const QRect &rect,

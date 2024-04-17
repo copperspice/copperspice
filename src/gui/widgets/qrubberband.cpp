@@ -64,8 +64,6 @@ void QRubberBand::initStyleOption(QStyleOptionRubberBand *option) const
 #endif
 }
 
-
-
 QRubberBand::QRubberBand(Shape s, QWidget *p)
    : QWidget(*new QRubberBandPrivate, p, (p  && p->windowType() != Qt::Desktop) ? Qt::Widget : RUBBERBAND_WINDOW_TYPE)
 {
@@ -90,13 +88,15 @@ QRubberBand::Shape QRubberBand::shape() const
    return d->shape;
 }
 
-
 void QRubberBandPrivate::updateMask()
 {
    Q_Q(QRubberBand);
+
    QStyleHintReturnMask mask;
    QStyleOptionRubberBand opt;
+
    q->initStyleOption(&opt);
+
    if (q->style()->styleHint(QStyle::SH_RubberBand_Mask, &opt, q, &mask)) {
       q->setMask(mask.region);
    } else {
@@ -123,6 +123,7 @@ void QRubberBand::changeEvent(QEvent *e)
             setWindowFlags(windowFlags() | RUBBERBAND_WINDOW_TYPE);
          }
          break;
+
       default:
          break;
    }
@@ -149,7 +150,6 @@ void QRubberBand::moveEvent(QMoveEvent *)
    Q_D(QRubberBand);
    d->updateMask();
 }
-
 
 void QRubberBand::setGeometry(const QRect &geom)
 {

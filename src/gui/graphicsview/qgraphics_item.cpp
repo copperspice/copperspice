@@ -1454,11 +1454,14 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
          // Item is shown
          QGraphicsItem *p = parent;
          bool done = false;
+
          while (p) {
             if (p->flags() & QGraphicsItem::ItemIsFocusScope) {
                QGraphicsItem *fsi = p->d_ptr->focusScopeItem;
+
                if (q_ptr == fsi || q_ptr->isAncestorOf(fsi)) {
                   done = true;
+
                   while (fsi->d_ptr->focusScopeItem && fsi->d_ptr->focusScopeItem->isVisible()) {
                      fsi = fsi->d_ptr->focusScopeItem;
                   }
@@ -1485,6 +1488,7 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
          // Item is hidden
          if (hasFocus) {
             QGraphicsItem *p = parent;
+
             while (p) {
                if (p->flags() & QGraphicsItem::ItemIsFocusScope) {
                   if (p->d_ptr->visible) {

@@ -41,8 +41,9 @@ class QDockWidget;
 class QMainWindow;
 class QWidgetAnimator;
 class QMainWindowLayout;
-struct QLayoutStruct;
 class QTabBar;
+
+struct QLayoutStruct;
 
 // The classes in this file represent the tree structure that represents all the docks
 // Also see the wiki internal documentation
@@ -210,7 +211,7 @@ class QDockAreaLayout
       FloatingDockWidgetTabMarker = 0xf9
    };
 
-   Qt::DockWidgetArea corners[4];    // use a Qt::Corner for indexing
+   Qt::DockWidgetArea corners[4];      // use a Qt::Corner for indexing
    QRect rect;
    QLayoutItem *centralWidgetItem;
    QMainWindow *mainWindow;

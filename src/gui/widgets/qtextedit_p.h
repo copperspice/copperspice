@@ -107,6 +107,7 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
    QString anchorToScrollToWhenVisible;
 
    QString placeholderText;
+
 #ifdef QT_KEYPAD_NAVIGATION
    QBasicTimer deleteAllTimer;
 #endif
@@ -114,6 +115,5 @@ class QTextEditPrivate : public QAbstractScrollAreaPrivate
 };
 
 #endif // QT_NO_TEXTEDIT
-
 
 #endif // QTEXTEDIT_P_H

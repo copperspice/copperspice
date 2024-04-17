@@ -193,7 +193,6 @@ class QFragmentMapData
 
    uint createFragment();
    void freeFragment(uint f);
-
 };
 
 template <class Fragment>

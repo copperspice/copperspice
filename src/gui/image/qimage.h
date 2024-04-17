@@ -105,7 +105,8 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    QImage(const QImage &other);
 
    QImage(QImage &&other)
-      : QPaintDevice(), d(nullptr) {
+      : QPaintDevice(), d(nullptr)
+   {
       qSwap(d, other.d);
    }
 

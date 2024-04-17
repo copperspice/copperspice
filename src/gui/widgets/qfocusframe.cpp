@@ -72,18 +72,23 @@ void QFocusFramePrivate::update()
 void QFocusFramePrivate::updateSize()
 {
    Q_Q(QFocusFrame);
+
    if (!widget) {
       return;
    }
 
    int vmargin = q->style()->pixelMetric(QStyle::PM_FocusFrameVMargin),
-       hmargin = q->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+         hmargin = q->style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+
    QPoint pos(widget->x(), widget->y());
+
    if (q->parentWidget() != widget->parentWidget()) {
       pos = widget->parentWidget()->mapTo(q->parentWidget(), pos);
    }
+
    QRect geom(pos.x() - hmargin, pos.y() - vmargin,
-      widget->width() + (hmargin * 2), widget->height() + (vmargin * 2));
+         widget->width() + (hmargin * 2), widget->height() + (vmargin * 2));
+
    if (q->geometry() == geom) {
       return;
    }
@@ -92,6 +97,7 @@ void QFocusFramePrivate::updateSize()
    QStyleHintReturnMask mask;
    QStyleOption opt;
    q->initStyleOption(&opt);
+
    if (q->style()->styleHint(QStyle::SH_FocusFrame_Mask, &opt, q, &mask)) {
       q->setMask(mask.region);
    }
@@ -147,6 +153,7 @@ void QFocusFrame::setWidget(QWidget *widget)
    if (widget && !widget->isWindow() && widget->parentWidget()->windowType() != Qt::SubWindow) {
       d->widget = widget;
       d->widget->installEventFilter(this);
+
       QWidget *p = widget->parentWidget();
       QWidget *prev = nullptr;
 
@@ -192,16 +199,21 @@ QWidget *QFocusFrame::widget() const
 void QFocusFrame::paintEvent(QPaintEvent *)
 {
    Q_D(QFocusFrame);
+
    if (!d->widget) {
       return;
    }
+
    QStylePainter p(this);
    QStyleOption option;
+
    initStyleOption(&option);
    int vmargin = style()->pixelMetric(QStyle::PM_FocusFrameVMargin);
    int hmargin = style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+
    QWidgetPrivate *wd = qt_widget_private(d->widget);
    QRect rect = wd->clipRect().adjusted(0, 0, hmargin * 2, vmargin * 2);
+
    p.setClipRect(rect);
    p.drawControl(QStyle::CE_FocusFrame, option);
 }
@@ -280,4 +292,3 @@ bool QFocusFrame::event(QEvent *e)
 {
    return QWidget::event(e);
 }
-

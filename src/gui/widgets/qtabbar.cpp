@@ -763,12 +763,10 @@ int QTabBar::addTab(const QIcon &icon, const QString &text)
    return insertTab(-1, icon, text);
 }
 
-
 int QTabBar::insertTab(int index, const QString &text)
 {
    return insertTab(index, QIcon(), text);
 }
-
 
 int QTabBar::insertTab(int index, const QIcon &icon, const QString &text)
 {
@@ -1249,7 +1247,7 @@ static QString computeElidedText(Qt::TextElideMode mode, const QString &text)
       return text;
    }
 
-   static const QLatin1String Ellipses("...");
+   static const QString Ellipses("...");
    QString ret;
    switch (mode) {
       case Qt::ElideRight:
@@ -1982,7 +1980,6 @@ void QTabBar::mouseReleaseEvent(QMouseEvent *event)
       return;
    }
 
-
    if (d->movable && d->dragInProgress && d->validIndex(d->pressedIndex)) {
       int length = d->tabList[d->pressedIndex]->dragOffset;
 
@@ -2024,6 +2021,7 @@ void QTabBar::keyPressEvent(QKeyEvent *event)
 }
 
 #ifndef QT_NO_WHEELEVENT
+
 void QTabBar::wheelEvent(QWheelEvent *event)
 {
 #ifndef Q_OS_DARWIN
@@ -2054,13 +2052,14 @@ void QTabBarPrivate::setCurrentNextEnabledIndex(int offset)
 void QTabBar::changeEvent(QEvent *event)
 {
    Q_D(QTabBar);
+
    switch (event->type()) {
       case QEvent::StyleChange:
-         if (!d->elideModeSetByUser) {
+         if (! d->elideModeSetByUser) {
             d->elideMode = Qt::TextElideMode(style()->styleHint(QStyle::SH_TabBar_ElideMode, nullptr, this));
          }
 
-         if (!d->useScrollButtonsSetByUser) {
+         if (! d->useScrollButtonsSetByUser) {
             d->useScrollButtons = !style()->styleHint(QStyle::SH_TabBar_PreferNoArrows, nullptr, this);
          }
 
@@ -2077,6 +2076,7 @@ void QTabBar::changeEvent(QEvent *event)
 
    QWidget::changeEvent(event);
 }
+
 void QTabBar::timerEvent(QTimerEvent *event)
 {
    Q_D(QTabBar);

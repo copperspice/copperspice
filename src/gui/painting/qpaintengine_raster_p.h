@@ -485,6 +485,7 @@ inline void QRasterPaintEngine::ensureOutlineMapper()
 inline const QClipData *QRasterPaintEnginePrivate::clip() const
 {
    Q_Q(const QRasterPaintEngine);
+
    if (q->state() && q->state()->clip && q->state()->clip->enabled) {
       return q->state()->clip;
    }
@@ -494,6 +495,7 @@ inline const QClipData *QRasterPaintEnginePrivate::clip() const
 inline const QClipData *QRasterPaintEngine::clipData() const
 {
    Q_D(const QRasterPaintEngine);
+
    if (state() && state()->clip && state()->clip->enabled) {
       return state()->clip;
    }

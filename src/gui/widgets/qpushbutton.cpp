@@ -87,12 +87,14 @@ QDialog *QPushButtonPrivate::dialogParent() const
 {
    Q_Q(const QPushButton);
    const QWidget *p = q;
+
    while (p && !p->isWindow()) {
       p = p->parentWidget();
       if (const QDialog *dialog = qobject_cast<const QDialog *>(p)) {
          return const_cast<QDialog *>(dialog);
       }
    }
+
    return nullptr;
 }
 
@@ -105,6 +107,7 @@ void QPushButton::initStyleOption(QStyleOptionButton *option) const
    Q_D(const QPushButton);
    option->initFrom(this);
    option->features = QStyleOptionButton::None;
+
    if (d->flat) {
       option->features |= QStyleOptionButton::Flat;
    }
@@ -118,15 +121,19 @@ void QPushButton::initStyleOption(QStyleOptionButton *option) const
    if (autoDefault()) {
       option->features |= QStyleOptionButton::AutoDefaultButton;
    }
+
    if (d->defaultButton) {
       option->features |= QStyleOptionButton::DefaultButton;
    }
+
    if (d->down || d->menuOpen) {
       option->state |= QStyle::State_Sunken;
    }
+
    if (d->checked) {
       option->state |= QStyle::State_On;
    }
+
    if (!d->flat && !d->down) {
       option->state |= QStyle::State_Raised;
    }
@@ -139,10 +146,12 @@ void QPushButton::initStyleOption(QStyleOptionButton *option) const
 void QPushButton::setAutoDefault(bool enable)
 {
    Q_D(QPushButton);
+
    uint state = enable ? QPushButtonPrivate::On : QPushButtonPrivate::Off;
    if (d->autoDefault != QPushButtonPrivate::Auto && d->autoDefault == state) {
       return;
    }
+
    d->autoDefault = state;
    d->sizeHint = QSize();
    update();
@@ -152,6 +161,7 @@ void QPushButton::setAutoDefault(bool enable)
 bool QPushButton::autoDefault() const
 {
    Q_D(const QPushButton);
+
    if (d->autoDefault == QPushButtonPrivate::Auto) {
       return ( d->dialogParent() != nullptr);
    }
@@ -162,6 +172,7 @@ bool QPushButton::autoDefault() const
 void QPushButton::setDefault(bool enable)
 {
    Q_D(QPushButton);
+
    if (d->defaultButton == enable) {
       return;
    }
@@ -192,6 +203,7 @@ bool QPushButton::isDefault() const
 QSize QPushButton::sizeHint() const
 {
    Q_D(const QPushButton);
+
    if (d->sizeHint.isValid() && d->lastAutoDefault == autoDefault()) {
       return d->sizeHint;
    }
@@ -216,19 +228,25 @@ QSize QPushButton::sizeHint() const
       h = qMax(h, ih);
    }
 #endif
+
    QString s(text());
    bool empty = s.isEmpty();
+
    if (empty) {
       s = QString::fromLatin1("XXXX");
    }
+
    QFontMetrics fm = fontMetrics();
    QSize sz = fm.size(Qt::TextShowMnemonic, s);
+
    if (!empty || !w) {
       w += sz.width();
    }
+
    if (!empty || !h) {
       h = qMax(h, sz.height());
    }
+
    opt.rect.setSize(QSize(w, h)); // PM_MenuButtonIndicator depends on the height
 
 #ifndef QT_NO_MENU
@@ -276,19 +294,23 @@ void QPushButton::keyPressEvent(QKeyEvent *e)
 void QPushButton::focusInEvent(QFocusEvent *e)
 {
    Q_D(QPushButton);
-   if (e->reason() != Qt::PopupFocusReason && autoDefault() && !d->defaultButton) {
+
+   if (e->reason() != Qt::PopupFocusReason && autoDefault() && ! d->defaultButton) {
       d->defaultButton = true;
       QDialog *dlg = qobject_cast<QDialog *>(window());
+
       if (dlg) {
          dlg->d_func()->setDefault(this);
       }
    }
+
    QAbstractButton::focusInEvent(e);
 }
 
 void QPushButton::focusOutEvent(QFocusEvent *e)
 {
    Q_D(QPushButton);
+
    if (e->reason() != Qt::PopupFocusReason && autoDefault() && d->defaultButton) {
       QDialog *dlg = qobject_cast<QDialog *>(window());
 
@@ -394,10 +416,11 @@ QPoint QPushButtonPrivate::adjustedMenuPosition()
    QRect rect = item.geometry();
    rect.setRect(rect.x() - q->x(), rect.y() - q->y(), rect.width(), rect.height());
 
-   QSize menuSize = menu->sizeHint();
+   QSize menuSize   = menu->sizeHint();
    QPoint globalPos = q->mapToGlobal(rect.topLeft());
    int x = globalPos.x();
    int y = globalPos.y();
+
    if (horizontal) {
       if (globalPos.y() + rect.height() + menuSize.height() <= QApplication::desktop()->availableGeometry(q).height()) {
          y += rect.height();
@@ -431,12 +454,15 @@ void QPushButtonPrivate::resetLayoutItemMargins()
 void QPushButton::setFlat(bool flat)
 {
    Q_D(QPushButton);
+
    if (d->flat == flat) {
       return;
    }
+
    d->flat = flat;
    d->resetLayoutItemMargins();
    d->sizeHint = QSize();
+
    update();
    updateGeometry();
 }
@@ -450,6 +476,7 @@ bool QPushButton::isFlat() const
 bool QPushButton::event(QEvent *e)
 {
    Q_D(QPushButton);
+
    if (e->type() == QEvent::ParentChange) {
       if (QDialog *dialog = d->dialogParent()) {
          if (d->defaultButton) {

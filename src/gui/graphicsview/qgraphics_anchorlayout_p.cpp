@@ -1706,7 +1706,8 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
    // from v1 or v2. "data" however is shared between the two references
    // so we still know that the anchor direction is from 1 to 2.
    data->from = v1;
-   data->to = v2;
+   data->to   = v2;
+
 #ifdef QT_DEBUG
    data->name = QString::fromLatin1("%1 --to--> %2").formatArg(v1->toString()).formatArg(v2->toString());
 #endif
@@ -2822,6 +2823,7 @@ bool QGraphicsAnchorLayoutPrivate::solveMinMax(const QList<QSimplexConstraint *>
          ad->sizeAtMaximum = ad->result - g_offset;
       }
    }
+
    return feasible;
 }
 

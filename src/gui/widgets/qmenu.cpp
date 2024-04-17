@@ -1199,9 +1199,12 @@ void QMenuPrivate::scrollMenu(QMenuScroller::ScrollDirection direction, bool pag
 bool QMenuPrivate::mouseEventTaken(QMouseEvent *e)
 {
    Q_Q(QMenu);
+
    QPoint pos = q->mapFromGlobal(e->globalPos());
+
    if (scroll && !activeMenu) { //let the scroller "steal" the event
       bool isScroll = false;
+
       if (pos.x() >= 0 && pos.x() < q->width()) {
          for (int dir = QMenuScroller::ScrollUp; dir <= QMenuScroller::ScrollDown; dir = dir << 1) {
             if (scroll->scrollFlags & dir) {
@@ -1210,6 +1213,7 @@ bool QMenuPrivate::mouseEventTaken(QMouseEvent *e)
                } else if (dir == QMenuScroller::ScrollDown) {
                   isScroll = (pos.y() >= q->height() - scrollerHeight());
                }
+
                if (isScroll) {
                   scroll->scrollDirection = dir;
                   break;
@@ -1217,6 +1221,7 @@ bool QMenuPrivate::mouseEventTaken(QMouseEvent *e)
             }
          }
       }
+
       if (isScroll) {
          scroll->scrollTimer.start(50, q);
          return true;
@@ -1293,8 +1298,8 @@ bool QMenuPrivate::mouseEventTaken(QMouseEvent *e)
    return false;
 }
 
-void QMenuPrivate::activateCausedStack(const QVector<QPointer<QWidget>> &causedStack, QAction *action, QAction::ActionEvent action_e,
-   bool self)
+void QMenuPrivate::activateCausedStack(const QVector<QPointer<QWidget>> &causedStack,
+      QAction *action, QAction::ActionEvent action_e, bool self)
 {
    bool oldValue = activationRecursionGuard;
    activationRecursionGuard = true;
@@ -1615,7 +1620,8 @@ QAction *QMenu::addAction(const QIcon &icon, const QString &text)
    return ret;
 }
 
-QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QString &member, const QKeySequence &shortcut)
+QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QString &member,
+      const QKeySequence &shortcut)
 {
    QAction *action = new QAction(text, this);
 
@@ -1631,7 +1637,7 @@ QAction *QMenu::addAction(const QString &text, const QObject *receiver, const QS
 }
 
 QAction *QMenu::addAction(const QIcon &icon, const QString &text, const QObject *receiver,
-   const QString &member, const QKeySequence &shortcut)
+      const QString &member, const QKeySequence &shortcut)
 {
    QAction *action = new QAction(icon, text, this);
 
@@ -1675,6 +1681,7 @@ QAction *QMenu::addSeparator()
    addAction(action);
    return action;
 }
+
 QAction *QMenu::addSection(const QString &text)
 {
    QAction *action = new QAction(text, this);
@@ -1682,6 +1689,7 @@ QAction *QMenu::addSection(const QString &text)
    addAction(action);
    return action;
 }
+
 QAction *QMenu::addSection(const QIcon &icon, const QString &text)
 {
    QAction *action = new QAction(icon, text, this);
@@ -1704,6 +1712,7 @@ QAction *QMenu::insertSeparator(QAction *before)
    insertAction(before, action);
    return action;
 }
+
 QAction *QMenu::insertSection(QAction *before, const QString &text)
 {
    QAction *action = new QAction(text, this);
@@ -1711,6 +1720,7 @@ QAction *QMenu::insertSection(QAction *before, const QString &text)
    insertAction(before, action);
    return action;
 }
+
 QAction *QMenu::insertSection(QAction *before, const QIcon &icon, const QString &text)
 {
    QAction *action = new QAction(icon, text, this);
@@ -1732,12 +1742,15 @@ QAction *QMenu::defaultAction() const
 void QMenu::setTearOffEnabled(bool b)
 {
    Q_D(QMenu);
+
    if (d->tearoff == b) {
       return;
    }
-   if (!b) {
+
+   if (! b) {
       hideTearOffMenu();
    }
+
    d->tearoff = b;
 
    d->itemsDirty = true;
@@ -1769,7 +1782,9 @@ void QMenu::hideTearOffMenu()
 void QMenu::setActiveAction(QAction *act)
 {
    Q_D(QMenu);
+
    d->setCurrentAction(act, 0);
+
    if (d->scroll) {
       d->scrollMenu(act, QMenuPrivate::QMenuScroller::ScrollCenter);
    }
@@ -1780,16 +1795,17 @@ QAction *QMenu::activeAction() const
    return d_func()->currentAction;
 }
 
-
 bool QMenu::isEmpty() const
 {
    bool ret = true;
+
    for (int i = 0; ret && i < actions().count(); ++i) {
       const QAction *action = actions().at(i);
       if (!action->isSeparator() && action->isVisible()) {
          ret = false;
       }
    }
+
    return ret;
 }
 
@@ -1865,6 +1881,7 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
       if (d->scroll->scrollOffset) {
          d->itemsDirty = 1;   // sizeHint will be incorrect if there is previous scroll
       }
+
       d->scroll->scrollOffset = 0;
       d->scroll->scrollFlags = QMenuPrivate::QMenuScroller::ScrollNone;
    }
@@ -1920,7 +1937,6 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
       size = d->adjustMenuSizeForScreen(screen);
       adjustToDesktop = true;
    }
-
 
 #ifdef QT_KEYPAD_NAVIGATION
    if (!atAction && QApplication::keypadNavigationEnabled()) {
@@ -2002,6 +2018,7 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
          if (pos.x() + size.width() - 1 > screen.right() - desktopFrame) {
             pos.setX(qMax(p.x() - size.width(), screen.right() - desktopFrame - size.width() + 1));
          }
+
       } else {
          if (pos.x() + size.width() - 1 > screen.right() - desktopFrame) {
             pos.setX(screen.right() - desktopFrame - size.width() + 1);
@@ -2078,9 +2095,10 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
          }
       }
    }
-   setGeometry(QRect(pos, size));
-#ifndef QT_NO_EFFECTS
 
+   setGeometry(QRect(pos, size));
+
+#ifndef QT_NO_EFFECTS
    int hGuess = isRightToLeft() ? QEffects::LeftScroll : QEffects::RightScroll;
    int vGuess = QEffects::DownScroll;
 
@@ -2134,8 +2152,10 @@ void QMenu::popup(const QPoint &p, QAction *atAction)
 
          show();
       }
+
    } else
 #endif
+
    {
       show();
    }
@@ -2529,6 +2549,7 @@ bool QMenu::event(QEvent *e)
       default:
          break;
    }
+
    return QWidget::event(e);
 }
 

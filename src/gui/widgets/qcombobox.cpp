@@ -3015,7 +3015,6 @@ void QComboBox::keyReleaseEvent(QKeyEvent *e)
 #ifndef QT_NO_WHEELEVENT
 void QComboBox::wheelEvent(QWheelEvent *e)
 {
-
 #ifdef Q_OS_DARWIN
    // no code here
    (void) e;
@@ -3029,7 +3028,7 @@ void QComboBox::wheelEvent(QWheelEvent *e)
          --newIndex;
 
          while ((newIndex >= 0) &&
-                  ! (d->model->flags(d->model->index(newIndex, d->modelColumn, d->root)) & Qt::ItemIsEnabled)) {
+               ! (d->model->flags(d->model->index(newIndex, d->modelColumn, d->root)) & Qt::ItemIsEnabled)) {
             --newIndex;
          }
 
@@ -3037,7 +3036,7 @@ void QComboBox::wheelEvent(QWheelEvent *e)
          ++newIndex;
 
          while ((newIndex < count()) &&
-                  ! (d->model->flags(d->model->index(newIndex, d->modelColumn, d->root)) & Qt::ItemIsEnabled)) {
+               ! (d->model->flags(d->model->index(newIndex, d->modelColumn, d->root)) & Qt::ItemIsEnabled)) {
             ++newIndex;
          }
       }

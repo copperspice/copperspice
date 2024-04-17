@@ -219,11 +219,14 @@ QVariant QUndoModel::data(const QModelIndex &index, int role) const
       if (index.row() == 0) {
          return m_emty_label;
       }
+
       return m_stack->text(index.row() - 1);
+
    } else if (role == Qt::DecorationRole) {
       if (index.row() == m_stack->cleanIndex() && !m_clean_icon.isNull()) {
          return m_clean_icon;
       }
+
       return QVariant();
    }
 
@@ -261,8 +264,8 @@ class QUndoViewPrivate : public QListViewPrivate
 #ifdef QT_NO_UNDOGROUP
    QUndoViewPrivate()
       : model(nullptr)
-  {
-  }
+   {
+   }
 
 #else
    QUndoViewPrivate()
@@ -304,7 +307,6 @@ QUndoView::QUndoView(QUndoStack *stack, QWidget *parent)
 }
 
 #ifndef QT_NO_UNDOGROUP
-
 QUndoView::QUndoView(QUndoGroup *group, QWidget *parent)
    : QListView(*new QUndoViewPrivate(), parent)
 {
@@ -312,7 +314,6 @@ QUndoView::QUndoView(QUndoGroup *group, QWidget *parent)
    d->init();
    setGroup(group);
 }
-
 #endif
 
 QUndoView::~QUndoView()

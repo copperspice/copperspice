@@ -200,7 +200,6 @@ class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
    GUI_CS_SLOT_2(_q_editorCursorPositionChanged)
 
    friend class QAccessibleAbstractSpinBox;
-
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QAbstractSpinBox::StepEnabled)
