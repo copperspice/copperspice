@@ -24,8 +24,6 @@
 #ifndef QEVENTDISPATCHER_CF_P_H
 #define QEVENTDISPATCHER_CF_P_H
 
-#define DEBUG_EVENT_DISPATCHER 0
-
 #include <qabstracteventdispatcher.h>
 #include <qdebug.h>
 

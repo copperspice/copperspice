@@ -29,7 +29,7 @@
 #include <qcore_unix_p.h>
 #include <qabstracteventdispatcher_p.h>
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
 #  include <qdebug.h>
 #  include <qthread.h>
 #endif
@@ -201,7 +201,7 @@ static timespec roundToMillisecond(timespec val)
    return normalizedTimespec(val);
 }
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
 QDebug operator<<(QDebug s, timeval tv)
 {
    QDebugStateSaver saver(s);
@@ -352,7 +352,7 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
             t->timeout += t->interval;
          }
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
          t->expected += t->interval;
 
          if (t->expected < currentTime) {
@@ -376,7 +376,7 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
             t->timeout.tv_sec = currentTime.tv_sec + t->interval;
          }
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
          t->expected.tv_sec += t->interval;
 
          if (t->expected.tv_sec <= currentTime.tv_sec) {
@@ -387,13 +387,11 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
          return;
    }
 
-#ifdef QTIMERINFO_UNIX_DEBUG
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (t->timerType != Qt::PreciseTimer)
       qDebug() << "timer" << t->timerType << hex << t->id << dec << "interval" << t->interval
             << "originally expected at" << t->expected << "will fire at" << t->timeout
             << "or" << (t->timeout - t->expected) << "s late";
-
 #endif
 }
 
@@ -454,8 +452,8 @@ int QTimerInfoList::timerRemainingTime(int timerId)
       }
    }
 
-#if defined(QT_DEBUG)
-   qWarning("QTimerInfoList::timerRemainingTime() Timer id %i not found", timerId);
+#if defined(CS_SHOW_DEBUG_CORE)
+   qWarning("QTimerInfoList::timerRemainingTime() Timer id %d was not found", timerId);
 #endif
 
    return -1;
@@ -522,7 +520,7 @@ void QTimerInfoList::registerTimer(int timerId, int interval, Qt::TimerType time
 
    timerInsert(t);
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
    t->expected = expected;
    t->cumulativeError = 0;
    t->count = 0;
@@ -655,7 +653,7 @@ int QTimerInfoList::activateTimers()
       // remove from list
       removeFirst();
 
-#ifdef QTIMERINFO_UNIX_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
       float diff;
 
       if (currentTime < currentTimerInfo->expected) {

@@ -86,7 +86,7 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
    bool looping = (loopCount != currentLoopCount);
 
-#ifdef QTIMELINE_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
    qDebug() << "QTimeLinePrivate::setCurrentTime:" << msecs << duration << "with loopCount" << loopCount
          << "currentLoopCount" << currentLoopCount << "looping" << looping;
 #endif
@@ -113,7 +113,7 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
 
    int currentFrame = q->frameForTime(currentTime);
 
-#ifdef QTIMELINE_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
    qDebug() << "QTimeLinePrivate::setCurrentTime: frameForTime" << currentTime << currentFrame;
 #endif
 
@@ -125,13 +125,15 @@ void QTimeLinePrivate::setCurrentTime(int msecs)
       const int transitionframe = (direction == QTimeLine::Forward ? endFrame : startFrame);
 
       if (looping && !finished && transitionframe != currentFrame) {
-#ifdef QTIMELINE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_CORE)
          qDebug() << "QTimeLinePrivate::setCurrentTime: transitionframe";
 #endif
+
          emit q->frameChanged(transitionframe);
       }
 
-#ifdef QTIMELINE_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
       else {
          QByteArray reason;
 

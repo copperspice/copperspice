@@ -26,8 +26,7 @@
 static void dumpRecursive(int level, QObject *object)
 {
 
-#if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (object) {
       QByteArray buffer;
 
@@ -62,7 +61,7 @@ void QObject::dumpObjectTree()
 void QObject::dumpObjectInfo()
 {
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
    qDebug("\n--  dumpObjectInfo  --\n");
    qDebug("  OBJECT %s::%s", csPrintable(this->metaObject()->className()), objectName().isEmpty() ? "unnamed" :
          csPrintable(objectName()) );

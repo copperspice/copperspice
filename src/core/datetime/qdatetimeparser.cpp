@@ -30,15 +30,6 @@
 #include <qplatformdefs.h>
 #include <qset.h>
 
-//#define QDATETIMEPARSER_DEBUG
-#if defined (QDATETIMEPARSER_DEBUG)
-#  define QDTPDEBUG qDebug()
-#  define QDTPDEBUGN qDebug
-#else
-#  define QDTPDEBUG if (false) qDebug()
-#  define QDTPDEBUGN if (false) qDebug
-#endif
-
 int QDateTimeParser::getDigit(const QDateTime &t, int index) const
 {
    if (index < 0 || index >= sectionNodes.size()) {
@@ -369,7 +360,9 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
       return true;
    }
 
-   QDTPDEBUGN("parseFormat: %s", newFormat.toLatin1().constData());
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug("parseFormat: %s", csPrintable(newFormat));
+#endif
 
    QVector<SectionNode> newSectionNodes;
    Sections newDisplay = Qt::EmptyFlag;
@@ -547,8 +540,10 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    display = newDisplay;
    last.pos = -1;
 
-   QDTPDEBUG << newFormat << displayFormat;
-   QDTPDEBUGN("separators:\n'%s'", separators.join(QString("\n")).toLatin1().constData());
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug() << newFormat << displayFormat;
+   qDebug("separators:\n'%s'", separators.join(QString("\n")).toLatin1().constData());
+#endif
 
    return true;
 }
@@ -720,9 +715,11 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
    QString sectiontext = text.mid(index, sectionmaxsize);
    int sectiontextSize = sectiontext.size();
 
-   QDTPDEBUG << "sectionValue for" << sn.name()
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug() << "sectionValue for" << sn.name()
          << "with text" << text << "and st" << sectiontext
          << text.mid(index, sectionmaxsize) << index;
+#endif
 
    int used = 0;
 
@@ -750,11 +747,17 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 
             case Neither:
                state = Invalid;
-               QDTPDEBUG << "invalid because findAmPm(" << sectiontext << ") returned -1";
+
+#if defined(CS_SHOW_DEBUG_CORE)
+               qDebug() << "Invalid, findAmPm(" << sectiontext << ") returned -1";
+#endif
+
                break;
 
             default:
-               QDTPDEBUGN("This should never happen (findAmPm returned %d)", ampm);
+#if defined(CS_SHOW_DEBUG_CORE)
+               qDebug("This should never happen (findAmPm returned %d)", ampm);
+#endif
                break;
          }
 
@@ -841,7 +844,9 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                }
 
                if (ok && tmp <= absMax) {
-                  QDTPDEBUG << sectiontext.left(digits) << tmp << digits;
+#if defined(CS_SHOW_DEBUG_CORE)
+                  qDebug() << sectiontext.left(digits) << tmp << digits;
+#endif
                   last = tmp;
                   used = digits;
                   break;
@@ -876,9 +881,11 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                if (num < absMin) {
                   state = done ? Invalid : Intermediate;
 
+#if defined(CS_SHOW_DEBUG_CORE)
                   if (done) {
-                     QDTPDEBUG << "invalid because" << num << "is less than absoluteMin" << absMin;
+                     qDebug() << "invalid because" << num << "is less than absoluteMin" << absMin;
                   }
+#endif
 
                } else if (num > absMax) {
                   state = Intermediate;
@@ -928,7 +935,9 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
    bool conflicts = false;
    const int sectionNodesCount = sectionNodes.size();
 
-   QDTPDEBUG << "parse" << input;
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug() << "parse" << input;
+#endif
 
    {
       int pos = 0;
@@ -951,9 +960,10 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
 
          if (input.midView(pos, separators.at(index).size()) != separators.at(index)) {
 
-            QDTPDEBUG << "invalid because" << input.mid(pos, separators.at(index).size())
-                  << "!=" << separators.at(index)
-                  << index << pos << currentSectionIndex;
+#if defined(CS_SHOW_DEBUG_CORE)
+            qDebug() << "invalid because" << input.mid(pos, separators.at(index).size())
+                  << "!=" << separators.at(index) << index << pos << currentSectionIndex;
+#endif
 
             state = Invalid;
             goto end;
@@ -968,8 +978,10 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
 
          num = parseSection(currentValue, index, input, cursorPosition, pos, tmpstate, &used);
 
-         QDTPDEBUG << "sectionValue" << sn.name() << input
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << "sectionValue" << sn.name() << input
                << "pos" << pos << "used" << used << stateName(tmpstate);
+#endif
 
          if (fixup && tmpstate == Intermediate && used < sn.count) {
             const FieldInfo fi = fieldInfo(index);
@@ -990,8 +1002,9 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
             break;
          }
 
-         QDTPDEBUG << index << sn.name() << "is set to"
-               << pos << "state is" << stateName(state);
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << index << sn.name() << "is set to" << pos << "state is" << stateName(state);
+#endif
 
          if (state != Invalid) {
             switch (sn.type) {
@@ -1052,7 +1065,9 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
             }
 
             if (isSet & sn.type && *current != num) {
-               QDTPDEBUG << "CONFLICT " << sn.name() << *current << num;
+#if defined(CS_SHOW_DEBUG_CORE)
+               qDebug() << "CONFLICT " << sn.name() << *current << num;
+#endif
                conflicts = true;
 
                if (index != currentSectionIndex || num == -1) {
@@ -1069,8 +1084,10 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
       }
 
       if (state != Invalid && input.midView(pos) != separators.last()) {
-         QDTPDEBUG << "invalid because" << input.mid(pos)
-               << "!=" << separators.last() << pos;
+
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << "invalid because" << input.mid(pos) << "!=" << separators.last() << pos;
+#endif
 
          state = Invalid;
       }
@@ -1113,8 +1130,9 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
                      day -= 7;
                   }
 
-                  QDTPDEBUG << year << month << day << dayofweek
-                        << diff << QDate(year, month, day).dayOfWeek();
+#if defined(CS_SHOW_DEBUG_CORE)
+                  qDebug() << year << month << day << dayofweek << diff << QDate(year, month, day).dayOfWeek();
+#endif
                }
             }
 
@@ -1203,12 +1221,18 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
 
          newCurrentValue = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), m_timeZone);
 
-         QDTPDEBUG << year << month << day << hour << minute << second << msec;
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << year << month << day << hour << minute << second << msec;
+#endif
+
       }
 
-      QDTPDEBUGN("'%s' => '%s'(%s)", input.toLatin1().constData(),
-            newCurrentValue.toString(QString("yyyy/MM/dd hh:mm:ss.zzz")).toLatin1().constData(),
-            stateName(state).toLatin1().constData());
+#if defined(CS_SHOW_DEBUG_CORE)
+      qDebug("'%s' => '%s'(%s)", csPrintable(input),
+            csPrintable(newCurrentValue.toString("yyyy/MM/dd hh:mm:ss.zzz")),
+            csPrintable(stateName(state)));
+#endif
+
    }
 
 end:
@@ -1311,8 +1335,10 @@ end:
                      const int maxChange = sn.maxChange();
 
                      if (toMin > maxChange) {
-                        QDTPDEBUG << "invalid because toMin > maxChange" << toMin
+#if defined(CS_SHOW_DEBUG_CORE)
+                        qDebug() << "invalid because toMin > maxChange" << toMin
                               << maxChange << t << newCurrentValue << minimum;
+#endif
 
                         state = Invalid;
                         done = true;
@@ -1339,8 +1365,10 @@ end:
                      }
 
                      if (! potentialValue(t.simplified(), min, max, i, newCurrentValue, pos)) {
-                        QDTPDEBUG << "invalid because potentialValue(" << t.simplified() << min << max
+#if defined(CS_SHOW_DEBUG_CORE)
+                        qDebug() << "invalid because potentialValue(" << t.simplified() << min << max
                               << sn.name() << "returned" << toMax << toMin << pos;
+#endif
 
                         state = Invalid;
                         done = true;
@@ -1370,8 +1398,10 @@ end:
             }
          }
 
-         QDTPDEBUG << "not checking intermediate because newCurrentValue is" << newCurrentValue
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << "not checking intermediate because newCurrentValue is" << newCurrentValue
                << getMinimum() << getMaximum();
+#endif
       }
    }
 
@@ -1406,8 +1436,11 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
          QString str2 = l.monthName(month, type).toLower();
 
          if (str1.startsWith(str2)) {
+
             if (used) {
-               QDTPDEBUG << "used is set to" << str2.size();
+#if defined(CS_SHOW_DEBUG_CORE)
+               qDebug() << "used is set to" << str2.size();
+#endif
                *used = str2.size();
             }
 
@@ -1424,7 +1457,10 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
 
          const int limit = qMin(str1.size(), str2.size());
 
-         QDTPDEBUG << "limit is" << limit << str1 << str2;
+#if defined(CS_SHOW_DEBUG_CORE)
+         qDebug() << "limit is" << limit << str1 << str2;
+#endif
+
          bool equal = true;
 
          for (int i = 0; i < limit; ++i) {
@@ -1459,7 +1495,10 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
    }
 
    if (used) {
-      QDTPDEBUG << "used is set to" << bestCount;
+#if defined(CS_SHOW_DEBUG_CORE)
+      qDebug() << "used is set to" << bestCount;
+#endif
+
       *used = bestCount;
    }
 
@@ -1541,7 +1580,9 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
       ampm[i].truncate(size);
    }
 
-   QDTPDEBUG << "findAmPm" << str << ampm[0] << ampm[1];
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug() << "findAmPm" << str << ampm[0] << ampm[1];
+#endif
 
    if (str.indexOf(ampm[am_index], 0, Qt::CaseInsensitive) == 0) {
       str = ampm[am_index];
@@ -1566,28 +1607,37 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
             if (! broken[j]) {
                int index = ampm[j].indexOf(str.at(i));
 
-               QDTPDEBUG << "looking for" << str.at(i)
+#if defined(CS_SHOW_DEBUG_CORE)
+               qDebug() << "looking for" << str.at(i)
                      << "in" << ampm[j] << "and got" << index;
+#endif
 
                if (index == -1) {
                   if (str.at(i).category() == QChar::Letter_Uppercase) {
                      index = ampm[j].indexOf(str.at(i).toLower());
 
-                     QDTPDEBUG << "trying with" << str.at(i).toLower()
+#if defined(CS_SHOW_DEBUG_CORE)
+                     qDebug() << "trying with" << str.at(i).toLower()
                            << "in" << ampm[j] << "and got" << index;
+#endif
 
                   } else if (str.at(i).category() == QChar::Letter_Lowercase) {
                      index = ampm[j].indexOf(str.at(i).toUpper());
 
-                     QDTPDEBUG << "trying with" << str.at(i).toUpper()
+#if defined(CS_SHOW_DEBUG_CORE)
+                     qDebug() << "trying with" << str.at(i).toUpper()
                            << "in" << ampm[j] << "and got" << index;
+#endif
+
                   }
 
                   if (index == -1) {
                      broken[j] = true;
 
                      if (broken[am_index] && broken[pm_index]) {
-                        QDTPDEBUG << str << "did not work";
+#if defined(CS_SHOW_DEBUG_CORE)
+                        qDebug() << str << "did not work";
+#endif
                         return Neither;
                      }
 

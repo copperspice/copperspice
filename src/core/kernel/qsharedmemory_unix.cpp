@@ -47,7 +47,6 @@
 #endif
 
 #ifndef QT_NO_SHAREDMEMORY
-//#define QSHAREDMEMORY_DEBUG
 
 QSharedMemoryPrivate::QSharedMemoryPrivate()
    : memory(nullptr), size(0), error(QSharedMemory::NoError),
@@ -102,7 +101,7 @@ void QSharedMemoryPrivate::setErrorString(const QString &function)
          errorString = QSharedMemory::tr("%1: unknown error %2").formatArgs(function, errno);
          error = QSharedMemory::UnknownError;
 
-#ifdef QSHAREDMEMORY_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
          qDebug() << errorString << "key" << key << "errno" << errno << EINVAL;
 #endif
          break;

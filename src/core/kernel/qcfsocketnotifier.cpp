@@ -102,7 +102,7 @@ void QCFSocketNotifier::registerSocketNotifier(QSocketNotifier *notifier)
    int nativeSocket = notifier->socket();
    int type = notifier->type();
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
       qWarning("QSocketNotifier::registerSocketNotifier() Internal error");
@@ -179,8 +179,7 @@ void QCFSocketNotifier::unregisterSocketNotifier(QSocketNotifier *notifier)
    int nativeSocket = notifier->socket();
    int type = notifier->type();
 
-#if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (nativeSocket < 0 || nativeSocket > FD_SETSIZE) {
       qWarning("QSocketNotifier::unregisterSocketNotifier() Internal error");
       return;

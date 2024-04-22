@@ -36,8 +36,6 @@
 
 class QLibraryStore;
 
-bool qt_debug_component();
-
 class QLibraryHandle
 {
  public:

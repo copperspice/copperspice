@@ -25,8 +25,6 @@
 
 #include <qparallelanimationgroup_p.h>
 
-// #define QANIMATION_DEBUG
-
 #ifndef QT_NO_ANIMATION
 
 QParallelAnimationGroup::QParallelAnimationGroup(QObject *parent)
@@ -96,7 +94,7 @@ void QParallelAnimationGroup::updateCurrentTime(int currentTime)
       }
    }
 
-#ifdef QANIMATION_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
    qDebug("QParallellAnimationGroup %5d: setCurrentTime(%d), loop:%d, last:%d, timeFwd:%d, lastcurrent:%d, %d",
          __LINE__, d->currentTime, d->currentLoop, d->lastLoop, timeFwd, d->lastCurrentTime, state());
 #endif

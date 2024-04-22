@@ -723,7 +723,7 @@ bool QCoreApplication::notify(QObject *receiver, QEvent *event)
       return true;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
    d->checkReceiverThread(receiver);
 #endif
 
@@ -1255,12 +1255,10 @@ void QCoreApplication::removePostedEvents(QObject *receiver, int eventType)
       }
    }
 
-#ifdef QT_DEBUG
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (receiver && eventType == 0) {
       Q_ASSERT(CSInternalEvents::get_m_PostedEvents(receiver) == 0);
    }
-
 #endif
 
    if (! data->postEventList.recursion) {
@@ -1287,7 +1285,7 @@ void QCoreApplicationPrivate::removePostedEvent(QEvent *event)
 
    if (data->postEventList.size() == 0) {
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
       qDebug("QCoreApplication::removePostedEvent() Internal error, %p %d is posted", (void *)event, event->type());
       return;
 #endif

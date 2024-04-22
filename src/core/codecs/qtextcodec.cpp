@@ -511,8 +511,7 @@ static void setup()
       return;
    }
 
-#ifdef Q_DEBUG_TEXTCODEC
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (destroying_is_ok) {
       qWarning("QTextCodec() Creating new codec during codec cleanup");
    }

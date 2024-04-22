@@ -497,7 +497,7 @@ class cs_number<0>
    cs_regTrigger(cs_number<cntValue + 1>{} );                                                \
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
 #define CS_NUMBER_TO_STRING_INTERNAL(number)       #number
 #define CS_NUMBER_TO_STRING(number)                CS_NUMBER_TO_STRING_INTERNAL(number)

@@ -48,7 +48,6 @@
 
 #ifndef QT_NO_PROCESS
 
-//#define QPROCESS_DEBUG
 #define NOTIFYTIMEOUT 100
 
 static void qt_create_pipe(Q_PIPE *pipe, bool isInputPipe)
@@ -508,7 +507,7 @@ void QProcessPrivate::startProcess()
       args += nativeArguments;
    }
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("Creating process");
    qDebug("   program : [%s]", program.toLatin1().constData());
    qDebug("   args : %s", args.toLatin1().constData());
@@ -588,7 +587,7 @@ qint64 QProcessPrivate::bytesAvailableInChannel(const Channel *channel) const
 
    DWORD bytesAvail = channel->reader->bytesAvailable();
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcessPrivate::bytesAvailableInChannel(%d) == %d", channel - &stdinChannel, bytesAvail);
 #endif
 
@@ -792,7 +791,7 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
 
 bool QProcessPrivate::waitForFinished(int msecs)
 {
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcessPrivate::waitForFinished(%d)", msecs);
 #endif
 

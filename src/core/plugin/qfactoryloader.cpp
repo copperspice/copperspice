@@ -247,9 +247,9 @@ void QFactoryLoader::setup()
 #else
    Q_D(QFactoryLoader);
 
-   if (qt_debug_component()) {
-      qDebug() << "QFactoryLoader::QFactoryLoader() ignoring" << d->iid << "since plugins are disabled in static builds";
-   }
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+   qDebug() << "QFactoryLoader::QFactoryLoader() ignoring" << d->iid << "since plugins are disabled in static builds";
+#endif
 
 #endif
 }

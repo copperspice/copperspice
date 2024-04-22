@@ -763,7 +763,7 @@ void QEventDispatcherWin32::registerSocketNotifier(QSocketNotifier *notifier)
    int sockfd = notifier->socket();
    int type   = notifier->type();
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (sockfd < 0) {
       qWarning("QEventDispatcherWin32::registerSocketNotifier() Internal error");
@@ -837,7 +837,7 @@ void QEventDispatcherWin32::unregisterSocketNotifier(QSocketNotifier *notifier)
 {
    Q_ASSERT(notifier);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
    int sockfd = notifier->socket();
 
    if (sockfd < 0) {
@@ -897,7 +897,7 @@ void QEventDispatcherWin32::doUnregisterSocketNotifier(QSocketNotifier *notifier
 
 void QEventDispatcherWin32::registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (timerId < 1 || interval < 0 || !object) {
       qWarning("QEventDispatcherWin32::registerTimer() Invalid arguments");
@@ -937,7 +937,7 @@ void QEventDispatcherWin32::registerTimer(int timerId, int interval, Qt::TimerTy
 
 bool QEventDispatcherWin32::unregisterTimer(int timerId)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (timerId < 1) {
       qWarning("QEventDispatcherWin32::unregisterTimer() Invalid argument");
@@ -974,7 +974,7 @@ bool QEventDispatcherWin32::unregisterTimer(int timerId)
 
 bool QEventDispatcherWin32::unregisterTimers(QObject *object)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (! object) {
       qWarning("QEventDispatcherWin32::unregisterTimers() Iinvalid argument");
@@ -1095,7 +1095,7 @@ void QEventDispatcherWin32::activateEventNotifiers()
 
 int QEventDispatcherWin32::remainingTime(int timerId)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (timerId < 1) {
       qWarning("QEventDispatcherWin32::remainingTime() Invalid argument");
@@ -1127,7 +1127,7 @@ int QEventDispatcherWin32::remainingTime(int timerId)
       }
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
    qWarning("QEventDispatcherWin32::remainingTime() Timer id %d was not found", timerId);
 #endif
 

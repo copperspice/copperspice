@@ -49,21 +49,8 @@
 #include <sys/sysctl.h>
 #endif
 
-#if defined(Q_OS_DARWIN)
-# ifdef qDebug
-#   define old_qDebug qDebug
-#   undef qDebug
-# endif
-
-#if ! defined(Q_OS_IOS)
-# include <CoreServices/CoreServices.h>    // emerald, may delete
-#endif
-
-# ifdef old_qDebug
-#   undef qDebug
-#   define qDebug QT_NO_QDEBUG_MACRO
-#   undef old_qDebug
-# endif
+#if defined(Q_OS_DARWIN) && ! defined(Q_OS_IOS)
+#  include <CoreServices/CoreServices.h>    // emerald, may delete
 #endif
 
 #if defined(Q_OS_LINUX) && ! defined(QT_LINUXBASE)

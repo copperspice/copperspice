@@ -915,8 +915,7 @@ QFileSystemEntry QFileSystemEngine::currentPath()
       result = QFileSystemEntry(QByteArray(currentName), QFileSystemEntry::FromNativePath());
    }
 
-# if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (result.isEmpty()) {
       qWarning("QFileSystemEngine::currentPath() Call to getcwd() failed");
    }

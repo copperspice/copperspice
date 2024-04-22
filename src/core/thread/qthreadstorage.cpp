@@ -30,27 +30,6 @@
 
 #include <string.h>
 
-#ifdef THREADSTORAGE_DEBUG
-#define DEBUG_MSG qtsDebug
-
-#include <stdio.h>
-#include <stdarg.h>
-
-void qtsDebug(const char *fmt, ...)
-{
-   va_list va;
-   va_start(va, fmt);
-
-   fprintf(stderr, "QThreadStorage: ");
-   vfprintf(stderr, fmt, va);
-   fprintf(stderr, "\n");
-
-   va_end(va);
-}
-#else
-#  define DEBUG_MSG if(false)qDebug
-#endif
-
 using DestructorMap = QVector<void (*)(void *)>;
 
 static QMutex *mutex()
@@ -101,7 +80,9 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
 
 QThreadStorageData::~QThreadStorageData()
 {
-   DEBUG_MSG("QThreadStorageData: Released id %d", id);
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug("QThreadStorageData() Released id %d", id);
+#endif
 
    QMutexLocker locker(mutex());
 
@@ -127,8 +108,10 @@ void **QThreadStorageData::get() const
 
    void **v = &tls[id];
 
-   DEBUG_MSG("QThreadStorageData: Returning storage %d, data %p, for thread %p",
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug("QThreadStorageData::get() Returning storage %d, data %p, for thread %p",
          id, static_cast<void *>(*v), static_cast<void *>(data->thread.load()));
+#endif
 
    return *v ? v : nullptr;
 }
@@ -152,8 +135,11 @@ void **QThreadStorageData::set(void *p)
 
    // delete any previous data
    if (value != nullptr) {
-      DEBUG_MSG("QThreadStorageData: Deleting previous storage %d, data %p, for thread %p",
+
+#if defined(CS_SHOW_DEBUG_CORE)
+      qDebug("QThreadStorageData::set() Deleting previous storage %d, data %p, for thread %p",
             id, static_cast<void *>(value), static_cast<void *>(data->thread.load()));
+#endif
 
       QMutexLocker locker(mutex());
       DestructorMap *destr = destructors();
@@ -170,8 +156,11 @@ void **QThreadStorageData::set(void *p)
 
    // store new data
    value = p;
-   DEBUG_MSG("QThreadStorageData: Set storage %d for thread %p to %p",
+
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug("QThreadStorageData::set() Set storage %d for thread %p to %p",
          id, static_cast<void *>(data->thread.load()), static_cast<void *>(p));
+#endif
 
    return &value;
 }
@@ -184,7 +173,9 @@ void QThreadStorageData::finish(void **p)
       return;   // nothing to do
    }
 
-   DEBUG_MSG("QThreadStorageData: Destroying storage for thread %p", static_cast<void *>(QThread::currentThread()));
+#if defined(CS_SHOW_DEBUG_CORE)
+   qDebug("QThreadStorageData::finish() Destroying storage for thread %p", static_cast<void *>(QThread::currentThread()));
+#endif
 
    while (! tls->isEmpty()) {
       void *&value = tls->last();

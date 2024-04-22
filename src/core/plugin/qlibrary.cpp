@@ -101,15 +101,14 @@ inline void QLibraryStore::cleanup()
       }
    }
 
-   if (qt_debug_component()) {
-      for (auto lib : data->libraryMap) {
-
-         if (lib) {
-            qDebug() << "During Application shutdown, " << lib->fileName << " was still open with "
-                  << lib->libraryRefCount.load() << " references";
-         }
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+   for (auto lib : data->libraryMap) {
+      if (lib) {
+         qDebug() << "During Application shutdown, " << lib->fileName << " was still open with "
+               << lib->libraryRefCount.load() << " references";
       }
    }
+#endif
 
    delete data;
 }
@@ -244,9 +243,9 @@ bool QLibraryHandle::tryload()
 
    bool retval = load_sys();
 
-   if (qt_debug_component()) {
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
       qDebug() << "loaded library" << fileName;
-   }
+#endif
 
    if (retval) {
       // when loading a library add a reference so the QLibraryHandle will not be deleted
@@ -270,9 +269,10 @@ bool QLibraryHandle::unload(UnloadFlag flag)
       delete pluginObj.data();
 
       if (flag == NoUnloadSys || unload_sys()) {
-         if (qt_debug_component()) {
-            qWarning() << "QLibraryHandle::unload() Succeeded on" << fileName;
-         }
+
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+         qWarning() << "QLibraryHandle::unload() Succeeded on" << fileName;
+#endif
 
          // when the library is unloaded release the reference so 'this' can get deleted
          libraryRefCount.deref();
@@ -303,9 +303,9 @@ bool QLibraryHandle::loadPlugin()
       return true;
    }
 
-   if (qt_debug_component()) {
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
       qWarning() << "QLibraryHandle::loadPlugin() Failed on" << fileName << ":" << errorString;
-   }
+#endif
 
    pluginState = IsNotAPlugin;
 
@@ -470,11 +470,11 @@ void QLibraryHandle::updatePluginState()
 
    if ((version & 0x00ff00) > (CS_VERSION & 0x00ff00) || (version & 0xff0000) != (CS_VERSION & 0xff0000)) {
 
-      if (qt_debug_component()) {
-         qWarning("QLibraryHandle::updatePluginState() In %s\n"
-               " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
-               (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
-      }
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+      qWarning("QLibraryHandle::updatePluginState() In %s\n"
+            " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
+            (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
+#endif
 
       errorString = QLibrary::tr("Plugin '%1' uses an incompatible CopperSpice library (%2.%3.%4)")
             .formatArg(fileName).formatArg((version & 0xff0000) >> 16).formatArg((version & 0xff00) >> 8)

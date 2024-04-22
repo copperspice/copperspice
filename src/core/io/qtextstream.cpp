@@ -41,8 +41,6 @@
 
 static constexpr const int QTEXTSTREAM_BUFFERSIZE = 16384;
 
-// #define QTEXTSTREAM_DEBUG
-
 #define CHECK_VALID_STREAM(x) do { \
       if (! d->m_string && ! d->device) { \
          qWarning("QTextStream() No device was available"); \
@@ -778,8 +776,7 @@ QTextStream::QTextStream()
 QTextStream::QTextStream(QIODevice *device)
    : d_ptr(new QTextStreamPrivate(this))
 {
-
-#if defined (QTEXTSTREAM_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QTextStream::QTextStream(QIODevice *device == *%p)", device);
 #endif
 
@@ -828,7 +825,7 @@ QTextStream::QTextStream(const QByteArray &array, QIODevice::OpenMode openMode)
 QTextStream::QTextStream(FILE *fileHandle, QIODevice::OpenMode openMode)
    : d_ptr(new QTextStreamPrivate(this))
 {
-#if defined (QTEXTSTREAM_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QTextStream::QTextStream(FILE *fileHandle = %p, openMode = %d)", fileHandle, int(openMode));
 #endif
 
@@ -848,7 +845,7 @@ QTextStream::~QTextStream()
 {
    Q_D(QTextStream);
 
-#if defined (QTEXTSTREAM_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QTextStream::~QTextStream()");
 #endif
 

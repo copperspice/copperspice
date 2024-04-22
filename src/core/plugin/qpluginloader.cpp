@@ -129,8 +129,6 @@ static QString locatePlugin(const QString &fileName)
    const QStringView baseName = fileName.midView(slash + 1);
    const QStringView basePath  = isAbsolute ? QStringView() : fileName.leftView(slash + 1);    // keep the '/'
 
-   const bool debug = qt_debug_component();
-
    QStringList paths;
 
    if (isAbsolute) {
@@ -145,9 +143,9 @@ static QString locatePlugin(const QString &fileName)
          for (const QString &suffix : suffixes) {
             const QString fn = path + '/' + basePath + prefix + baseName + suffix;
 
-            if (debug) {
-               qDebug() << "Trying..." << fn;
-            }
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+            qDebug() << "Trying..." << fn;
+#endif
 
             if (QFileInfo(fn).isFile()) {
                return fn;
@@ -156,9 +154,9 @@ static QString locatePlugin(const QString &fileName)
       }
    }
 
-   if (debug) {
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
       qDebug() << fileName << "not found";
-   }
+#endif
 
    return QString();
 }
@@ -186,10 +184,10 @@ void QPluginLoader::setFileName(const QString &fileName)
 
 #else
 
-   if (qt_debug_component()) {
-      qWarning("QPluginLoader::setFileName() Unable to load %s into a statically linked CopperSpice library",
-            QFile::encodeName(fileName).constData() );
-   }
+#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
+   qWarning("QPluginLoader::setFileName() Unable to load %s into a statically linked CopperSpice library",
+         QFile::encodeName(fileName).constData() );
+#endif
 
 #endif
 }

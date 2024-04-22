@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-//#define QPROCESS_DEBUG
-
 #include <qprocess.h>
 
 #include <qbytearray.h>
@@ -45,7 +43,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
    if (! data) {
@@ -509,7 +507,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
    if (readBytes == -1) {
       setErrorAndEmit(QProcess::ReadError);
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
       qDebug("QProcessPrivate::tryReadFromChannel(%d), failed to read from the process", channel - &stdinChannel);
 #endif
 
@@ -524,15 +522,15 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
 
       closeChannel(channel);
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
       qDebug("QProcessPrivate::tryReadFromChannel(%d), 0 bytes available", channel - &stdinChannel);
 #endif
       return false;
    }
 
-#if defined QPROCESS_DEBUG
-   qDebug("QProcessPrivate::tryReadFromChannel(%d), read %d bytes from the process' output", channel - &stdinChannel
-         int(readBytes));
+#if defined(CS_SHOW_DEBUG_CORE_IO)
+   qDebug("QProcessPrivate::tryReadFromChannel(%d), read %d bytes from the process output",
+         channel - &stdinChannel, int(readBytes));
 #endif
 
    if (channel->closed) {
@@ -586,8 +584,8 @@ bool QProcessPrivate::_q_canWrite()
 
    if (stdinChannel.buffer.isEmpty()) {
 
-#if defined QPROCESS_DEBUG
-      qDebug("QProcessPrivate::canWrite(), not writing anything (empty write buffer).");
+#if defined(CS_SHOW_DEBUG_CORE_IO)
+      qDebug("QProcessPrivate::canWrite() Not writing anything (empty write buffer)");
 #endif
 
       return false;
@@ -678,7 +676,7 @@ bool QProcessPrivate::_q_processDied()
       emit q->finished(exitCode, exitStatus);
    }
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcessPrivate::_q_processDied() process is dead");
 #endif
 
@@ -689,7 +687,7 @@ bool QProcessPrivate::_q_startupNotification()
 {
    Q_Q(QProcess);
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcessPrivate::startupNotification()");
 #endif
 
@@ -751,8 +749,7 @@ bool QProcess::_q_processDied()
 
 void QProcessPrivate::closeWriteChannel()
 {
-
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcessPrivate::closeWriteChannel()");
 #endif
 
@@ -772,8 +769,7 @@ void QProcessPrivate::closeWriteChannel()
 QProcess::QProcess(QObject *parent)
    : QIODevice(*new QProcessPrivate, parent)
 {
-
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcess::QProcess(%p)", parent);
 #endif
 }
@@ -1000,7 +996,7 @@ qint64 QProcess::bytesAvailable() const
    const QRingBuffer *readBuffer = (d->processChannel == QProcess::StandardError)
          ? &d->stderrChannel.buffer : &d->stdoutChannel.buffer;
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcess::bytesAvailable() == %i (%s)", readBuffer->size(),
          (d->processChannel == QProcess::StandardError) ? "stderr" : "stdout");
 #endif
@@ -1165,7 +1161,7 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
 
       if (c == -1) {
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
          qDebug("QProcess::readData(%p \"%s\", %d) == -1",
                data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
@@ -1175,7 +1171,7 @@ qint64 QProcess::readData(char *data, qint64 maxlen)
 
       *data = (char) c;
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
       qDebug("QProcess::readData(%p \"%s\", %d) == 1",
             data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
 #endif
@@ -1261,7 +1257,7 @@ qint64 QProcess::writeData(const char *data, qint64 len)
 
 #endif
 
-#if defined QPROCESS_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QProcess::writeData(%p \"%s\", %lld) == %lld (written to buffer)",
          data, qt_prettyDebug(data, len, 16).constData(), len, len);
 #endif

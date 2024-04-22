@@ -466,7 +466,7 @@ void QEventDispatcherGlib::registerSocketNotifier(QSocketNotifier *notifier)
    int sockfd = notifier->socket();
    int type = notifier->type();
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (sockfd < 0) {
       qWarning("QEventDispatcher::registerSocketNotifier() Internal error");
@@ -509,7 +509,7 @@ void QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier *notifier)
 {
    Q_ASSERT(notifier);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
    int sockfd = notifier->socket();
 
    if (sockfd < 0) {
@@ -520,7 +520,6 @@ void QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier *notifier)
       qWarning("QEventDispatcher::unregisterSocketNotifier() Socket notifiers can not be disabled from another thread");
       return;
    }
-
 #endif
 
    Q_D(QEventDispatcherGlib);
@@ -542,8 +541,7 @@ void QEventDispatcherGlib::unregisterSocketNotifier(QSocketNotifier *notifier)
 
 void QEventDispatcherGlib::registerTimer(int timerId, int interval, Qt::TimerType timerType, QObject *object)
 {
-#if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (timerId < 1 || interval < 0 || ! object) {
       qWarning("QEventDispatcher::registerTimer() Invalid arguments");
       return;
@@ -552,7 +550,6 @@ void QEventDispatcherGlib::registerTimer(int timerId, int interval, Qt::TimerTyp
       qWarning("QEventDispatcher::registerTimer() Timers can not be started from another thread");
       return;
    }
-
 #endif
 
    Q_D(QEventDispatcherGlib);
@@ -561,7 +558,7 @@ void QEventDispatcherGlib::registerTimer(int timerId, int interval, Qt::TimerTyp
 
 bool QEventDispatcherGlib::unregisterTimer(int timerId)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (timerId < 1) {
       qWarning("QEventDispatcher::unregisterTimer() Invalid argument");
@@ -579,7 +576,7 @@ bool QEventDispatcherGlib::unregisterTimer(int timerId)
 
 bool QEventDispatcherGlib::unregisterTimers(QObject *object)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_CORE)
 
    if (! object) {
       qWarning("QEventDispatcher::unregisterTimers() Invalid argument");
@@ -610,8 +607,7 @@ QList<QTimerInfo> QEventDispatcherGlib::registeredTimers(QObject *object) const
 
 int QEventDispatcherGlib::remainingTime(int timerId)
 {
-#if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_CORE)
    if (timerId < 1) {
       qWarning("QEventDispatcher::remainingTimeTime() Invalid argument");
       return -1;

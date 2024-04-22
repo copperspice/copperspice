@@ -25,7 +25,7 @@
 
 #include <qdebug.h>
 
-#ifdef QT_QCONTIGUOUSCACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_CORE)
 void QContiguousCacheData::dump() const
 {
    qDebug() << "capacity:" << alloc;
