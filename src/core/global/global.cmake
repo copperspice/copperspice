@@ -41,6 +41,7 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflag.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qflags.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/global/qglobal_debug.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlibraryinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qlog.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qnamespace.h
@@ -48,8 +49,8 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformdefs.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qplatformposix.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qsysinfo.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
    ${CMAKE_CURRENT_SOURCE_DIR}/global/qt_windows.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/global/qtcore.h
 )
 
 list(APPEND CORE_PRIVATE_INCLUDES

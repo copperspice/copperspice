@@ -30,6 +30,7 @@
 
 #include <qexport.h>
 #include <qfeatures.h>
+#include <qglobal_debug.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -684,18 +685,6 @@ Q_CORE_EXPORT const char *csVersion();
 
 // avoid "unused parameter" warnings
 #define Q_UNUSED(x) (void)x;
-
-#if defined(CS_DISABLE_DEBUG)
-# undef  QT_DEBUG
-#else
-# define QT_DEBUG
-#endif
-
-// enables more debug messages (uncomment or pass in build files)
-// #define(CS_SHOW_DEBUG)
-
-// asserts (uncomment or pass in build files)
-// #define CS_DISABLE_ASSERT
 
 Q_CORE_EXPORT void qt_check_pointer(const char *, int);
 Q_CORE_EXPORT void qBadAlloc();
