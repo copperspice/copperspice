@@ -918,8 +918,6 @@ int QWindowsFontEngine::synthesized() const
          if (tm.tmWeight >= 500 && !(macStyle & 1)) {
             synthesized_flags |= SynthesizedBold;
          }
-         //qDebug() << "font is" << _name <<
-         //    "it=" << (macStyle & 2) << fontDef.style << "flags=" << synthesized_flags;
       }
    }
    return synthesized_flags;

@@ -483,8 +483,6 @@ bool QSimplex::iterate()
    // Update first column
    setValueAt(pivotRow, 0, pivotColumn);
 
-   //    dumpMatrix();
-   //    qDebug("------------ end of iteration --------------\n");
    return true;
 }
 

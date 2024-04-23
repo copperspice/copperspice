@@ -586,7 +586,6 @@ QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge,
    QByteArray opaque = options.value("opaque");
    QByteArray qop = options.value("qop");
 
-   //    qDebug() << "calculating digest: method=" << method << "path=" << path;
    QByteArray response = digestMd5ResponseHelper(options.value("algorithm"), user.toLatin1(),
                          realm.toLatin1(), password.toLatin1(),
                          nonce, nonceCountString,

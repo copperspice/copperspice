@@ -51,7 +51,6 @@ bool QSvgNode::isDescendantOf(const QSvgNode *parent) const
 
 void QSvgNode::appendStyleProperty(QSvgStyleProperty *prop, const QString &id)
 {
-   //qDebug()<<"appending "<<prop->type()<< " ("<< id <<") "<<"to "<<this<<this->type();
    QSvgTinyDocument *doc;
 
    switch (prop->type()) {

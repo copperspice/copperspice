@@ -447,7 +447,6 @@ void QHeaderView::moveSection(int from, int to)
       d->lastSectionSize = sectionSize(from);
    }
 
-   // int oldHeaderLength = length(); // ### for debugging, remove later
    d->initializeIndexMapping();
 
    int *visualIndices = d->visualIndices.data();
@@ -2922,13 +2921,11 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
          }
 
          int newSectionSize = qMax(currentSectionSize - delta, minimumSize);
-         //qDebug() << "### cascading to" << i << newSectionSize - currentSectionSize << delta;
 
          resizeSectionItem(i, currentSectionSize, newSectionSize);
          saveCascadingSectionSize(i, currentSectionSize);
          delta = delta - (currentSectionSize - newSectionSize);
 
-         //qDebug() << "new delta" << delta;
          //if (newSectionSize != minimumSize)
 
          if (delta <= 0) {
@@ -2954,7 +2951,6 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
          int newSectionSize = currentSectionSize - delta;
          resizeSectionItem(i, currentSectionSize, newSectionSize);
          if (newSectionSize >= originalSectionSize && false) {
-            //qDebug() << "section" << i << "restored to" << originalSectionSize;
             cascadingSectionSize.remove(i); // the section is now restored
          }
          sectionResized = true;

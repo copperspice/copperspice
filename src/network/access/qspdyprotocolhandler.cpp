@@ -211,31 +211,6 @@ static const char spdyDictionary[] = {
    0x2c, 0x65, 0x6e, 0x71, 0x3d, 0x30, 0x2e         // .enq.0.
 };
 
-// uncomment to debug
-//static void printHex(const QByteArray &ba)
-//{
-//    QByteArray hex;
-//    QByteArray clearText;
-//    for (int a = 0; a < ba.count(); ++a) {
-//        QByteArray currentHexChar = QByteArray(1, ba.at(a)).toHex().rightJustified(2, ' ');
-//        QByteArray currentChar;
-//        if (ba.at(a) >= 32 && ba.at(a) < 126) { // if ASCII, print the letter
-//            currentChar = QByteArray(1, ba.at(a));
-//        } else {
-//            currentChar = " ";
-//        }
-//        clearText.append(currentChar.rightJustified(2, ' '));
-//        hex.append(currentHexChar);
-//            hex.append(' ');
-//            clearText.append(' ');
-//    }
-//    int chunkSize = 102; // 12 == 4 bytes per line
-//    for (int a = 0; a < hex.count(); a += chunkSize) {
-//        qDebug() << hex.mid(a, chunkSize);
-//        qDebug() << clearText.mid(a, chunkSize);
-//    }
-//}
-
 QSpdyProtocolHandler::QSpdyProtocolHandler(QHttpNetworkConnectionChannel *channel)
    : QObject(nullptr), QAbstractProtocolHandler(channel), m_nextStreamID(-1),
      m_maxConcurrentStreams(100),

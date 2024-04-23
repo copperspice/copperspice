@@ -107,12 +107,10 @@ class QSvgRefCounted
    virtual ~QSvgRefCounted() {}
    void ref() {
       ++_ref;
-      //        qDebug() << this << ": adding ref, now " << _ref;
    }
+
    void deref() {
-      //        qDebug() << this << ": removing ref, now " << _ref;
       if (!--_ref) {
-         //            qDebug("     deleting");
          delete this;
       }
    }

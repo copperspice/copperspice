@@ -137,11 +137,6 @@ void QUnifiedTimer::restartAnimationTimer()
    if (runningLeafAnimations == 0 && !runningPauseAnimations.isEmpty()) {
       int closestTimeToFinish = closestPauseAnimationTimeToFinish();
 
-      if (closestTimeToFinish < 0) {
-         qDebug() << runningPauseAnimations;
-         qDebug() << closestPauseAnimationTimeToFinish();
-      }
-
       driver->stop();
       animationTimer.start(closestTimeToFinish, this);
       isPauseTimerActive = true;

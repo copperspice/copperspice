@@ -447,16 +447,25 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
       QString forceName = objectName().mid(26);
 
       if (forceName == "poller") {
+#if defined(CS_SHOW_DEBUG_CORE)
          qDebug() << "QFileSystemWatcher: skipping native engine, using only polling engine";
+#endif
+
          d_func()->initPollerEngine();
          engine = d->poller;
 
       } else if (forceName == "native") {
+#if defined(CS_SHOW_DEBUG_CORE)
          qDebug() << "QFileSystemWatcher: skipping polling engine, using only native engine";
+#endif
+
          engine = d->native;
 
       } else {
+#if defined(CS_SHOW_DEBUG_CORE)
          qDebug() << "QFileSystemWatcher: skipping polling and native engine, using only explicit" << forceName << "engine";
+#endif
+
          d_func()->initForcedEngine(forceName);
          engine = d->forced;
       }

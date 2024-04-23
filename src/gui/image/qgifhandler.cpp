@@ -1005,8 +1005,6 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          // if (!out_of_bounds) {
          //     ### Changed: QRect(left, y, right - left + 1, my + 1);
          // }
-         //        if (!out_of_bounds)
-         //            qDebug("consumer->changed(QRect(%d, %d, %d, %d))", left, y, right-left+1, my+1);
          y += 8;
          if (y > bottom) {
             interlace++;

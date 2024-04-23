@@ -593,7 +593,6 @@ static void convertLineOffset(QAccessibleTextInterface *text, int *line, int *of
 {
    QAccessibleInterface *iface = QAccessible::accessibleInterface(axid);
    if (!iface || !iface->isValid()) {
-      //        qDebug() << "Hit test: INVALID";
       return NSAccessibilityUnignoredAncestor(self);
    }
 

@@ -122,9 +122,6 @@ void QObject::dumpObjectInfo()
          qDebug("          <-- %s::%s", csPrintable(senderMetaObject->className()),
                obj->objectName().isEmpty() ? "unnamed" : csPrintable(obj->objectName()));
 
-         //   qDebug("          <-- %s::%s  %s",
-         //   slot.methodSignature().constData());
-
       } else {
          // sender does not inherit from QObject
          qDebug("          --> %s", typeid (*sender).name() );

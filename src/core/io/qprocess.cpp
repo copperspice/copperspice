@@ -608,10 +608,6 @@ bool QProcessPrivate::_q_processDied()
 {
    Q_Q(QProcess);
 
-#if defined QPROCESS_DEBUG
-   qDebug("QProcessPrivate::_q_processDied()");
-#endif
-
 #ifdef Q_OS_UNIX
 
    if (! waitForDeadChild()) {

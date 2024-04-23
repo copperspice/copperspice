@@ -1363,8 +1363,6 @@ bool QDockAreaLayoutInfo::insertGap(const QList<int> &path, QLayoutItem *dockWid
    // finally, insert the gap
    item_list.insert(index, gap_item);
 
-   //    dump(qDebug() << "insertGap() after:" << index << tabIndex, *this, QString());
-
    return true;
 }
 

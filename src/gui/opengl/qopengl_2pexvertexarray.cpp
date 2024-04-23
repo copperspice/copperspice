@@ -84,7 +84,6 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
 
     do {
         if (! elements) {
-//         qDebug("QVectorPath has no elements");
            // If the path has a null elements pointer, the elements implicitly
            // start with a moveTo (already added) and continue with lineTos:
            for (int i=1; i<path.elementCount(); ++i)
@@ -93,14 +92,11 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
            break;
         }
 
-//      qDebug("QVectorPath has element types");
-
         for (int i=1; i<path.elementCount(); ++i) {
             switch (elements[i]) {
             case QPainterPath::MoveToElement:
                 if (!outline)
                     addClosingLine(lastMoveTo);
-//                qDebug("element[%d] is a MoveToElement", i);
                 vertexArrayStops.append(vertexArray.size());
                 if (!outline) {
                     if (!path.isConvex()) addCentroid(path, i);
@@ -110,7 +106,6 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
                 break;
 
             case QPainterPath::LineToElement:
-//                qDebug("element[%d] is a LineToElement", i);
                 lineToArray(points[i].x(), points[i].y());
                 break;
 

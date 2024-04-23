@@ -834,10 +834,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::get
                   bool firstLoop = true;
                   int index = k + 1;
 
-#if defined(CS_INTERNAL_DEBUG)
-                  qDebug("Debug (bigArg):  Passed full name %s",  csPrintable(fullName) );
-#endif
-
                   while (k < tokenMax)  {
                      bool found = false;
 
@@ -864,11 +860,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::get
 
                            firstLoop   = false;
                            bigArg      = true;
-
-#if defined(CS_INTERNAL_DEBUG)
-                           qDebug("Debug (bigArg):  Inside 'first loop'  %s", csPrintable(typeArg));
-#endif
-
                         }
 
                         typeArg += " " + nextWord;
@@ -982,13 +973,6 @@ std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::get
 
                   if (bigArg)  {
                      // we are on a comma, var name, right paren, star, ampersand
-
-#if defined(CS_INTERNAL_DEBUG)
-                     // parse the following:   &  *  (  )
-                     qDebug("Debug (bigArg):  Args:     %s", csPrintable(typeArg) );
-                     qDebug("Debug (bigArg):  NextWord  %s", csPrintable(nextWord) );
-#endif
-
                      break;
 
                   } else if (nextWord == "*" || nextWord == "&" || nextWord == "<" || nextWord == "[" || nextWord == "(") {
@@ -1944,7 +1928,7 @@ void QMetaObject_X::register_method_s2_part2(QString className, const QString &n
          QString msg = className;
          msg += "::" + name + " Unable to register overloaded method pointer, verify signal/slot";
 
-         qDebug("%s", csPrintable(msg));
+         qWarning("%s", csPrintable(msg));
          throw std::logic_error(std::string {msg.constData()});
 
       } else {
@@ -1969,7 +1953,7 @@ void QMetaObject_X::register_method_s2_part2(QString className, const QString &n
          QString msg = className;
          msg += "::" + name + " Unable to register method pointer, verify signal/slot";
 
-         qDebug("%s", csPrintable(msg));
+         qWarning("%s", csPrintable(msg));
          throw std::logic_error(std::string {msg.constData()});
       }
 

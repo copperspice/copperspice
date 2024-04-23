@@ -363,7 +363,6 @@ void QNetworkAccessFtpBackend::ftpReadyRead()
 
 void QNetworkAccessFtpBackend::ftpRawCommandReply(int code, const QString &text)
 {
-   //qDebug() << "FTP reply:" << code << text;
    int id = ftp->currentId();
 
    if ((id == helpId) && ((code == 200) || (code == 214))) {     // supported commands

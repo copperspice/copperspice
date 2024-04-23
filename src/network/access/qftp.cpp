@@ -962,10 +962,6 @@ void QFtpPI::connected()
 {
    state = Begin;
 
-#if defined(QFTPPI_DEBUG)
-   //    qDebug("QFtpPI state: %d [connected()]", state);
-#endif
-
    // try to improve performance by setting TCP_NODELAY
    commandSocket.setSocketOption(QAbstractSocket::LowDelayOption, 1);
 
@@ -1069,7 +1065,6 @@ void QFtpPI::readyRead()
 bool QFtpPI::processReply()
 {
 #if defined(QFTPPI_DEBUG)
-   //    qDebug("QFtpPI state: %d [processReply() begin]", state);
 
    if (m_replyText.length() < 400) {
       qDebug("QFtpPI recv: %d %s", 100 * m_replyCode[0] + 10 * m_replyCode[1] + m_replyCode[2],
@@ -1141,10 +1136,6 @@ bool QFtpPI::processReply()
          // ignore unrequested message
          return true;
    }
-
-#if defined(QFTPPI_DEBUG)
-   //    qDebug("QFtpPI state: %d [processReply() intermediate]", state);
-#endif
 
    // special actions on certain replies
    emit rawFtpReply(replyCodeX, m_replyText);
@@ -1263,10 +1254,6 @@ bool QFtpPI::processReply()
 
          break;
    }
-
-#if defined(QFTPPI_DEBUG)
-   //    qDebug("QFtpPI state: %d [processReply() end]", state);
-#endif
 
    return true;
 }

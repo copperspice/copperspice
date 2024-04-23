@@ -420,9 +420,8 @@ static bool _q_dontOverrideCtrlLMB = false;
 
 - (void)windowNotification: (NSNotification *) windowNotification
 {
-   // qDebug() << "windowNotification" << QCFString::toQString([windowNotification name]);
-
    NSString *notificationName = [windowNotification name];
+
    if (notificationName == NSWindowDidBecomeKeyNotification) {
       if (!m_platformWindow->windowIsPopupType() && ! m_isMenuView) {
          QWindowSystemInterface::handleWindowActivated(m_window);

@@ -210,19 +210,4 @@ class Q_CORE_EXPORT QEventDispatcherCoreFoundation : public QAbstractEventDispat
    void invalidateTimer();
 };
 
-#if DEBUG_EVENT_DISPATCHER
-extern uint g_eventDispatcherIndentationLevel;
-#define qEventDispatcherDebug() qDebug().nospace() \
-         << csPrintable(QString(QLatin1String("| ")).repeated(g_eventDispatcherIndentationLevel)) \
-         << __FUNCTION__ << "(): "
-#define qIndent() ++g_eventDispatcherIndentationLevel
-#define qUnIndent() --g_eventDispatcherIndentationLevel
-
-#else
-#define qEventDispatcherDebug() QT_NO_QDEBUG_MACRO()
-#define qIndent()
-#define qUnIndent()
-
-#endif
-
 #endif // QEVENTDISPATCHER_CF_P_H

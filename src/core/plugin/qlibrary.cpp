@@ -652,15 +652,3 @@ QLibrary::LoadHints QLibrary::loadHints() const
       return QLibrary::LoadHints();
    }
 }
-
-// internal
-bool qt_debug_component()
-{
-   static int debug_env = -1;
-
-   if (debug_env == -1) {
-      debug_env = qgetenv("QT_DEBUG_PLUGINS").toInt();
-   }
-
-   return debug_env != 0;
-}

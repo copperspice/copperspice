@@ -862,7 +862,6 @@ void QCocoaWindow::setVisible(bool visible)
       }
 
    } else {
-      // qDebug() << "close" << this;
 
 #ifndef QT_NO_OPENGL
       if (m_glContext) {
@@ -1175,7 +1174,6 @@ bool QCocoaWindow::isAlertState() const
 
 void QCocoaWindow::raise()
 {
-   //qDebug() << "raise" << this;
    // ### handle spaces (see raise_sys in qwidget_mac.mm)
 
    if (! m_nsWindow) {

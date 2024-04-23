@@ -168,7 +168,6 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 
    pieceTable->beginEditBlock();
 
-   // qDebug("---> createTable: rows=%d, cols=%d at %d", rows, cols, pos);
    // add block after table
    QTextCharFormat charFmt;
    charFmt.setObjectIndex(table->objectIndex());
@@ -186,12 +185,10 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 
    for (int i = 1; i < rows * cols; ++i) {
       d->cells.append(pieceTable->insertBlock(QTextBeginningOfFrame, pos, cellIdx, charIdx));
-      // qDebug("      addCell at %d", pos);
       ++pos;
    }
 
    d->fragment_end = pieceTable->insertBlock(QTextEndOfFrame, pos, cellIdx, charIdx);
-   //    qDebug("      addEOR at %d", pos);
    ++pos;
 
    d->blockFragmentUpdates = false;
@@ -288,7 +285,6 @@ void QTextTablePrivate::update() const
    nCols = q->format().columns();
    nRows = (cells.size() + nCols - 1) / nCols;
 
-   // qDebug(">>>> QTextTablePrivate::update, nRows=%d, nCols=%d", nRows, nCols);
 
    grid = q_check_ptr((int *)realloc(grid, nRows * nCols * sizeof(int)));
    memset(grid, 0, nRows * nCols * sizeof(int));
@@ -325,11 +321,9 @@ void QTextTablePrivate::update() const
          for (int jj = 0; jj < colspan; ++jj) {
             Q_ASSERT(grid[(r + ii)*nCols + c + jj] == 0);
             grid[(r + ii)*nCols + c + jj] = fragment;
-            //           qDebug("    setting cell %d span=%d/%d at %d/%d", fragment, rowspan, colspan, r+ii, c+jj);
          }
       }
    }
-   //     qDebug("<<<< end: nRows=%d, nCols=%d", nRows, nCols);
 
    dirty = false;
 }
@@ -432,7 +426,6 @@ void QTextTable::insertRows(int pos, int num)
       pos = d->nRows;
    }
 
-   //     qDebug() << "-------- insertRows" << pos << num;
    QTextDocumentPrivate *p = d->pieceTable;
    QTextFormatCollection *c = p->formatCollection();
    p->beginEditBlock();
@@ -476,14 +469,11 @@ void QTextTable::insertRows(int pos, int num)
       int cfmt = p->formatCollection()->indexForFormat(fmt);
       int bfmt = p->formatCollection()->indexForFormat(QTextBlockFormat());
 
-      //          qDebug("inserting %d cells, nCols=%d extended=%d", num*(d->nCols-extended), d->nCols, extended);
-
       for (int i = 0; i < num * (d->nCols - extended); ++i) {
          p->insertBlock(QTextBeginningOfFrame, pos, bfmt, cfmt, QTextUndoCommand::MoveCursor);
       }
    }
 
-   //     qDebug() << "-------- end insertRows" << pos << num;
    p->endEditBlock();
 }
 
@@ -502,7 +492,6 @@ void QTextTable::insertColumns(int pos, int num)
       pos = d->nCols;
    }
 
-   //     qDebug() << "-------- insertCols" << pos << num;
    QTextDocumentPrivate *p = d->pieceTable;
    QTextFormatCollection *c = p->formatCollection();
    p->beginEditBlock();
@@ -591,7 +580,6 @@ void QTextTable::insertColumns(int pos, int num)
    tfmt.setColumnWidthConstraints (columnWidths);
    QTextObject::setFormat(tfmt);
 
-   //     qDebug() << "-------- end insertCols" << pos << num;
    p->endEditBlock();
 }
 
@@ -608,7 +596,6 @@ void QTextTable::appendColumns(int count)
 void QTextTable::removeRows(int pos, int num)
 {
    Q_D(QTextTable);
-   //     qDebug() << "-------- removeRows" << pos << num;
 
    if (num <= 0 || pos < 0) {
       return;
@@ -664,13 +651,11 @@ void QTextTable::removeRows(int pos, int num)
    }
 
    p->endEditBlock();
-   //     qDebug() << "-------- end removeRows" << pos << num;
 }
 
 void QTextTable::removeColumns(int pos, int num)
 {
    Q_D(QTextTable);
-   //     qDebug() << "-------- removeCols" << pos << num;
 
    if (num <= 0 || pos < 0) {
       return;
@@ -733,7 +718,6 @@ void QTextTable::removeColumns(int pos, int num)
    QTextObject::setFormat(tfmt);
 
    p->endEditBlock();
-   //     qDebug() << "-------- end removeCols" << pos << num;
 }
 
 void QTextTable::mergeCells(int row, int column, int numRows, int numCols)

@@ -345,10 +345,6 @@ void QWindowsFileSystemWatcherEngineThread::run()
                return;
             }
 
-            if (m != '@')  {
-               qDebug("QWindowsFileSystemWatcherEngine: unknown message '%c' send to thread", char(m));
-            }
-
             break;
 
          } else if (r > WAIT_OBJECT_0 && r < WAIT_OBJECT_0 + uint(handlesCopy.count())) {

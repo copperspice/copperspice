@@ -572,8 +572,6 @@ static void populateFromPattern(FcPattern *pattern)
    QPlatformFontDatabase::registerFont(familyName, styleName, QString::fromUtf8((const char *)foundry_value), weight, style,
       stretch, antialias, scalable, pixel_size, fixedPitch, writingSystems, fontFile);
 
-   //  qDebug() << familyName << (const char *)foundry_value << weight << style << &writingSystems << scalable << true << pixel_size;
-
    for (int k = 1; FcPatternGetString(pattern, FC_FAMILY, k, &value) == FcResultMatch; ++k) {
       QPlatformFontDatabase::registerAliasToFontFamily(familyName, QString::fromUtf8((const char *)value));
    }
@@ -884,8 +882,6 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
       }
       FcFontSetDestroy(fontSet);
    }
-
-   //  qDebug() << "fallbackFamilies for:" << family << style << styleHint << script << fallbackFamilies;
 
    return fallbackFamilies;
 }

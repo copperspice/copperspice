@@ -41,12 +41,6 @@ void qt_scale_image_16bit(uchar *destPixels, int dbpl,
    int ix = 0x00010000 / sx;
    int iy = 0x00010000 / sy;
 
-   //     qDebug() << "scale:" << endl
-   //              << " - target" << targetRect << endl
-   //              << " - source" << srcRect << endl
-   //              << " - clip" << clip << endl
-   //              << " - sx=" << sx << " sy=" << sy << " ix=" << ix << " iy=" << iy;
-
    int cx1 = clip.x();
    int cx2 = clip.x() + clip.width();
    int cy1 = clip.top();
@@ -164,12 +158,6 @@ void qt_scale_image_32bit(uchar *destPixels, int dbpl, const uchar *srcPixels, i
 
    int ix = 0x00010000 / sx;
    int iy = 0x00010000 / sy;
-
-   //     qDebug() << "scale:" << endl
-   //              << " - target" << targetRect << endl
-   //              << " - source" << srcRect << endl
-   //              << " - clip" << clip << endl
-   //              << " - sx=" << sx << " sy=" << sy << " ix=" << ix << " iy=" << iy;
 
    int cx1 = clip.x();
    int cx2 = clip.x() + clip.width();

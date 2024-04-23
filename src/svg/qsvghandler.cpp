@@ -3060,8 +3060,6 @@ static void parseBaseGradient(QSvgNode *node, const QXmlStreamAttributes &attrib
    if (!link.isEmpty()) {
       QSvgStyleProperty *prop = node->styleProperty(link);
 
-      //qDebug()<<"inherited "<<prop<<" ("<<link<<")";
-
       if (prop && prop->type() == QSvgStyleProperty::GRADIENT) {
          QSvgGradientStyle *inherited =  static_cast<QSvgGradientStyle *>(prop);
 
@@ -4214,7 +4212,6 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
       }
 
    } else {
-      //qWarning()<<"Skipping unknown element!"<<namespaceURI<<"::"<<localName;
       m_skipNodes.push(Unknown);
       return true;
    }
@@ -4223,7 +4220,6 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
       m_nodes.push(node);
       m_skipNodes.push(Graphics);
    } else {
-      //qDebug()<<"Skipping "<<localName;
       m_skipNodes.push(Style);
    }
 

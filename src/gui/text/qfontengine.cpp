@@ -1011,7 +1011,6 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
    }
 
    if (version != 0) {
-      // qDebug("wrong version");
       return;
    }
 
@@ -1041,11 +1040,9 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
             goto end;
          }
 
-         // qDebug("subtable: version=%d, coverage=%x",version, coverage);
          if (version == 0 && coverage == 0x0001) {
 
             if (offset + length > tab.size()) {
-               // qDebug("length ouf ot bounds");
                goto end;
             }
             const uchar *data = table + offset + 6;
@@ -1446,7 +1443,7 @@ quint32 QFontEngine::getTrueTypeGlyphIndex(const uchar *cmap, int cmapSize, char
       }
 
    } else {
-      qDebug("cmap table of format %d not implemented", format);
+      qWarning("QFontEngine::getTrueTypeGlyphIndex() cmap table of format %d not implemented", format);
    }
 
    return 0;

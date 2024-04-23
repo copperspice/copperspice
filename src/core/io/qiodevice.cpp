@@ -118,22 +118,12 @@ QIODevice::QIODevice()
    : QObject(nullptr), d_ptr(new QIODevicePrivate)
 {
    d_ptr->q_ptr = this;
-
-#if defined QIODEVICE_DEBUG
-   QFile *file = qobject_cast<QFile *>(this);
-   printf("%p QIODevice::QIODevice(\"%s\") %s\n", this, metaObject()->className(),
-         csPrintable(file ? file->fileName() : QString()));
-#endif
 }
 
 QIODevice::QIODevice(QObject *parent)
    : QObject(parent), d_ptr(new QIODevicePrivate)
 {
    d_ptr->q_ptr = this;
-
-#if defined QIODEVICE_DEBUG
-   printf("%p QIODevice::QIODevice(%p \"%s\")\n", this, parent, metaObject()->className());
-#endif
 }
 
 QIODevice::QIODevice(QIODevicePrivate &dd, QObject *parent)
@@ -144,9 +134,6 @@ QIODevice::QIODevice(QIODevicePrivate &dd, QObject *parent)
 
 QIODevice::~QIODevice()
 {
-#if defined QIODEVICE_DEBUG
-   printf("%p QIODevice::~QIODevice()\n", this);
-#endif
 }
 
 bool QIODevice::isSequential() const
@@ -961,6 +948,7 @@ qint64 QIODevicePrivate::peek(char *data, qint64 maxSize)
 
    buffer.ungetBlock(data, readBytes);
    *pPos -= readBytes;
+
    return readBytes;
 }
 

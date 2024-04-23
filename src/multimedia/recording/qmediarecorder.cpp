@@ -61,7 +61,6 @@ void QMediaRecorderPrivate::_q_stateChanged(QMediaRecorder::State newState)
       notifyTimer->stop();
    }
 
-   //  qDebug() << "Recorder state changed:" << ENUM_NAME(QMediaRecorder,"State", newState);
    if (m_state != newState) {
       emit q->stateChanged(newState);
    }

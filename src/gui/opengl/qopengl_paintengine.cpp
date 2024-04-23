@@ -232,7 +232,6 @@ void QOpenGL2PaintEngineExPrivate::updateBrushTexture()
 {
    Q_Q(QOpenGL2PaintEngineEx);
 
-   // qDebug("QOpenGL2PaintEngineExPrivate::updateBrushTexture()");
    Qt::BrushStyle style = currentBrush.style();
 
    bool smoothPixmapTransform = q->state()->renderHints & QPainter::SmoothPixmapTransform;
@@ -281,7 +280,6 @@ void QOpenGL2PaintEngineExPrivate::updateBrushTexture()
 
 void QOpenGL2PaintEngineExPrivate::updateBrushUniforms()
 {
-   // qDebug("QOpenGL2PaintEngineExPrivate::updateBrushUniforms()");
    Qt::BrushStyle style = currentBrush.style();
 
    if (style == Qt::NoBrush) {
@@ -407,8 +405,6 @@ void QOpenGL2PaintEngineExPrivate::updateBrushUniforms()
 // This assumes the shader manager has already setup the correct shader program
 void QOpenGL2PaintEngineExPrivate::updateMatrix()
 {
-   //     qDebug("QOpenGL2PaintEngineExPrivate::updateMatrix()");
-
    const QTransform &transform = q->state()->matrix;
 
    // The projection matrix converts from Qt's coordinate system to GL's coordinate system
@@ -479,7 +475,6 @@ void QOpenGL2PaintEngineExPrivate::updateCompositionMode()
 {
    // NOTE: The entire paint engine works on pre-multiplied data - which is why some of these
    //       composition modes look odd.
-   //     qDebug() << "QOpenGL2PaintEngineExPrivate::updateCompositionMode() - Setting GL composition mode for " << q->state()->composition_mode;
    switch (q->state()->composition_mode) {
       case QPainter::CompositionMode_SourceOver:
          funcs.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -1040,7 +1035,6 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
 {
    Q_ASSERT(count || stops);
 
-   // qDebug("QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray()");
    funcs.glStencilMask(0xff); // Enable stencil writes
 
    if (dirtyStencilRegion.intersects(currentScissorBounds)) {
@@ -1267,11 +1261,7 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, const int
    int previousStop = 0;
    for (int i = 0; i < stopCount; ++i) {
       int stop = stops[i];
-      /*
-              qDebug("Drawing triangle fan for vertecies %d -> %d:", previousStop, stop-1);
-              for (int i=previousStop; i<stop; ++i)
-                  qDebug("   %02d: [%.2f, %.2f]", i, vertexArray.data()[i].x, vertexArray.data()[i].y);
-      */
+
       funcs.glDrawArrays(primitive, previousStop, stop - previousStop);
       previousStop = stop;
    }
@@ -1416,7 +1406,6 @@ void QOpenGL2PaintEngineEx::brushOriginChanged()
 
 void QOpenGL2PaintEngineEx::opacityChanged()
 {
-   //    qDebug("QOpenGL2PaintEngineEx::opacityChanged()");
    Q_D(QOpenGL2PaintEngineEx);
    state()->opacityChanged = true;
 
@@ -1427,7 +1416,6 @@ void QOpenGL2PaintEngineEx::opacityChanged()
 
 void QOpenGL2PaintEngineEx::compositionModeChanged()
 {
-   // qDebug("QOpenGL2PaintEngineEx::compositionModeChanged()");
    Q_D(QOpenGL2PaintEngineEx);
    state()->compositionModeChanged = true;
    d->compositionModeDirty = true;
@@ -1457,7 +1445,6 @@ void QOpenGL2PaintEngineEx::renderHintsChanged()
    d->lastTextureUsed = GLuint(-1);
 
    d->brushTextureDirty = true;
-   // qDebug("QOpenGL2PaintEngineEx::renderHintsChanged() not implemented!");
 }
 
 void QOpenGL2PaintEngineEx::transformChanged()
@@ -2522,8 +2509,6 @@ void QOpenGL2PaintEngineExPrivate::systemStateChanged()
 
 void QOpenGL2PaintEngineEx::setState(QPainterState *new_state)
 {
-   //     qDebug("QOpenGL2PaintEngineEx::setState()");
-
    Q_D(QOpenGL2PaintEngineEx);
 
    QOpenGL2PaintEngineState *s = static_cast<QOpenGL2PaintEngineState *>(new_state);
