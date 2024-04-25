@@ -120,7 +120,7 @@ function build_from_source()
         sed -i 's#${_IMPORT_PREFIX}/include;#${_IMPORT_PREFIX}/include/copperspice;#g' CopperSpiceLibraryTargets.cmake
         sed -i 's#${_IMPORT_PREFIX}/include/Qt#${_IMPORT_PREFIX}/include/copperspice/Qt#g' CopperSpiceLibraryTargets.cmake
     fi
-    
+
 }
 
 function dev_deb()

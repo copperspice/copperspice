@@ -266,7 +266,7 @@ void QLocalServerPrivate::_q_onNewConnection()
 {
    Q_Q(QLocalServer);
 
-   if (listenSocket != -1) {
+   if (listenSocket == -1) {
       return;
    }
 
