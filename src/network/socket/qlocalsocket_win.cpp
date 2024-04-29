@@ -80,7 +80,7 @@ void QLocalSocketPrivate::_q_winError(ulong windowsError, const QString &functio
          error = QLocalSocket::UnknownSocketError;
          errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(windowsError);
 
-#if defined QLOCALSOCKET_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qWarning() << "QLocalSocket::_q_winError() Error not handled, " << errorString;
 #endif
 

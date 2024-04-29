@@ -56,7 +56,7 @@
 #define QT_CONNECT_TIMEOUT 30000
 #define QT_TRANSFER_TIMEOUT 120000
 
-#if defined QABSTRACTSOCKET_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
 
 #include <ctype.h>
 
@@ -136,7 +136,7 @@ QAbstractSocketPrivate::~QAbstractSocketPrivate()
 
 void QAbstractSocketPrivate::resetSocketLayer()
 {
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::resetSocketLayer()");
 #endif
 
@@ -167,7 +167,7 @@ bool QAbstractSocketPrivate::initSocketLayer(QAbstractSocket::NetworkLayerProtoc
 
    Q_Q(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    QString typeStr;
 
    if (q->socketType() == QAbstractSocket::TcpSocket) {
@@ -210,7 +210,7 @@ bool QAbstractSocketPrivate::initSocketLayer(QAbstractSocket::NetworkLayerProtoc
 
    if (! socketEngine->initialize(q->socketType(), protocol)) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::initSocketLayer(%s, %s) failed (%s)",
             typeStr.toLatin1().constData(), csPrintable(protocolStr),
             csPrintable(socketEngine->errorString());
@@ -228,7 +228,7 @@ bool QAbstractSocketPrivate::initSocketLayer(QAbstractSocket::NetworkLayerProtoc
       socketEngine->setReceiver(this);
    }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::initSocketLayer(%s, %s) success",
          csPrintable(typeStr), csPrintable(protocolStr));
 #endif
@@ -243,7 +243,7 @@ bool QAbstractSocketPrivate::canReadNotification()
 {
    Q_Q(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::canReadNotification()");
 #endif
 
@@ -270,7 +270,7 @@ bool QAbstractSocketPrivate::canReadNotification()
       // Return if there is no space in the buffer
       if (readBufferMaxSize && buffer.size() >= readBufferMaxSize) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocketPrivate::canReadNotification() Buffer is full");
 #endif
          return false;
@@ -280,7 +280,7 @@ bool QAbstractSocketPrivate::canReadNotification()
       newBytes = buffer.size();
 
       if (! readFromSocket()) {
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocketPrivate::canReadNotification() Disconnecting socket");
 #endif
          q->disconnectFromHost();
@@ -316,7 +316,7 @@ bool QAbstractSocketPrivate::canReadNotification()
    // if we were closed as a result of the readyRead() signal, return.
    if (state == QAbstractSocket::UnconnectedState || state == QAbstractSocket::ClosingState) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::canReadNotification() Socket is closing, returning");
 #endif
 
@@ -344,7 +344,7 @@ void QAbstractSocketPrivate::canCloseNotification()
 
    // this method is only called on Windows, other platforms close in the canReadNotification()
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::canCloseNotification()");
 #endif
 
@@ -391,7 +391,7 @@ bool QAbstractSocketPrivate::canWriteNotification()
    }
 #endif
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::canWriteNotification() flushing");
 #endif
 
@@ -420,7 +420,8 @@ void QAbstractSocketPrivate::connectionNotification()
    // established, otherwise flush pending data
 
    if (state == QAbstractSocket::ConnectingState) {
-#if defined (QABSTRACTSOCKET_DEBUG)
+
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::connectionNotification() testing connection");
 #endif
 
@@ -435,7 +436,7 @@ bool QAbstractSocketPrivate::flush()
    if (! socketEngine || ! socketEngine->isValid() || (writeBuffer.isEmpty()
          && socketEngine->bytesToWrite() == 0)) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::flush() nothing to do: valid ? %s, writeBuffer.isEmpty() ? %s",
              (socketEngine && socketEngine->isValid()) ? "yes" : "no", writeBuffer.isEmpty() ? "yes" : "no");
 #endif
@@ -458,7 +459,7 @@ bool QAbstractSocketPrivate::flush()
       socketError = socketEngine->error();
       q->setErrorString(socketEngine->errorString());
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "QAbstractSocketPrivate::flush() write error, aborting." << socketEngine->errorString();
 #endif
 
@@ -468,7 +469,7 @@ bool QAbstractSocketPrivate::flush()
       return false;
    }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::flush() %lld bytes written to the network", written);
 #endif
 
@@ -542,7 +543,7 @@ void QAbstractSocketPrivate::startConnectingByName(const QString &host)
       return;
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::startConnectingByName(host == %s)", csPrintable(host));
 #endif
 
@@ -599,7 +600,7 @@ void QAbstractSocketPrivate::_q_startConnecting(const QHostInfo &hostInfo)
       }
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    QString s = "{";
 
    for (int i = 0; i < addresses.count(); ++i) {
@@ -622,7 +623,7 @@ void QAbstractSocketPrivate::_q_startConnecting(const QHostInfo &hostInfo)
 
    if (addresses.isEmpty()) {
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::_q_startConnecting(), host not found");
 #endif
 
@@ -659,7 +660,7 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       // Check for more pending addresses
       if (addresses.isEmpty()) {
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocketPrivate::_q_connectToNextAddress(), all addresses failed.");
 #endif
 
@@ -690,7 +691,7 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       // Pick the first host address candidate
       host = addresses.takeFirst();
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::_q_connectToNextAddress(), connecting to %s:%i, %d left to try",
              csPrintable(host.toString()), port, addresses.count());
 #endif
@@ -698,7 +699,7 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       if (cachedSocketDescriptor == -1 && !initSocketLayer(host.protocol())) {
          // hope the next address is better
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocketPrivate::_q_connectToNextAddress(), failed to initialize sock layer");
 #endif
          continue;
@@ -716,7 +717,7 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       // Check that we are in delayed connection state. If not, try the next address
       if (socketEngine->state() != QAbstractSocket::ConnectingState) {
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocketPrivate::_q_connectToNextAddress(), connection failed (%s)",
                 csPrintable(socketEngine->errorString()));
 #endif
@@ -781,7 +782,7 @@ void QAbstractSocketPrivate::_q_testConnection()
       }
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::_q_testConnection() Connection failed,"
          " checking for alternative addresses");
 #endif
@@ -793,7 +794,7 @@ void QAbstractSocketPrivate::_q_abortConnectionAttempt()
 {
    Q_Q(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::_q_abortConnectionAttempt() (timed out)");
 #endif
 
@@ -846,7 +847,7 @@ bool QAbstractSocketPrivate::readFromSocket()
       bytesToRead = readBufferMaxSize - buffer.size();
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::readFromSocket() about to read %d bytes", int(bytesToRead));
 #endif
 
@@ -862,7 +863,7 @@ bool QAbstractSocketPrivate::readFromSocket()
 
    buffer.chop(bytesToRead - (readBytes < 0 ? qint64(0) : readBytes));
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::readFromSocket() got %lld bytes, buffer size = %lld",
           readBytes, buffer.size());
 #endif
@@ -872,7 +873,7 @@ bool QAbstractSocketPrivate::readFromSocket()
       q->setErrorString(socketEngine->errorString());
       emit q->error(socketError);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocketPrivate::readFromSocket() read failed: %s",
             q->errorString().toLatin1().constData());
 #endif
@@ -903,7 +904,7 @@ void QAbstractSocketPrivate::fetchConnectionParameters()
    emit q->stateChanged(state);
    emit q->connected();
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocketPrivate::fetchConnectionParameters() connection to %s:%i established",
           csPrintable(host.toString()), port);
 #endif
@@ -963,7 +964,7 @@ QAbstractSocket::QAbstractSocket(SocketType socketType, QAbstractSocketPrivate &
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::QAbstractSocket(%sSocket, QAbstractSocketPrivate == %p, parent == %p)",
           socketType == TcpSocket ? "Tcp" : socketType == UdpSocket ? "Udp" : "Unknown", &dd, parent);
 #endif
@@ -976,7 +977,7 @@ QAbstractSocket::QAbstractSocket(SocketType socketType, QObject *parent)
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::QAbstractSocket(%p)", parent);
 #endif
 
@@ -987,7 +988,7 @@ QAbstractSocket::~QAbstractSocket()
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::~QAbstractSocket()");
 #endif
 
@@ -1095,7 +1096,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::connectToHost(\"%s\", %i, %i)...", csPrintable(hostName), port, (int) openMode);
 #endif
 
@@ -1189,7 +1190,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
       }
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::connectToHost(\"%s\", %i) == %s%s", csPrintable(hostName), port,
           (d->state == ConnectedState) ? "true" : "false",
           (d->state == ConnectingState || d->state == HostLookupState)
@@ -1199,7 +1200,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
 
 void QAbstractSocket::connectToHost(const QHostAddress &address, quint16 port, OpenMode openMode)
 {
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::connectToHost([%s], %i, %i)...",
           csPrintable(address.toString()), port, (int) openMode);
 #endif
@@ -1211,7 +1212,7 @@ qint64 QAbstractSocket::bytesToWrite() const
 {
    Q_D(const QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::bytesToWrite() == %lld", d->writeBuffer.size());
 #endif
 
@@ -1227,7 +1228,7 @@ qint64 QAbstractSocket::bytesAvailable() const
       available += d->socketEngine->bytesAvailable();
    }
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::bytesAvailable() == %lld", available);
 #endif
 
@@ -1268,7 +1269,7 @@ bool QAbstractSocket::canReadLine() const
 {
    bool hasLine = QIODevice::canReadLine();
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::canReadLine() == %s, buffer size = %lld, size = %lld",
           hasLine ? "true" : "false", d_func()->buffer.size(), d_func()->buffer.size());
 #endif
@@ -1420,13 +1421,13 @@ bool QAbstractSocket::waitForConnected(int msecs)
 {
    Q_D(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::waitForConnected(%i)", msecs);
 #endif
 
    if (state() == ConnectedState) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::waitForConnected(%i) already connected", msecs);
 #endif
       return true;
@@ -1439,7 +1440,7 @@ bool QAbstractSocket::waitForConnected(int msecs)
 
    if (d->state == HostLookupState) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::waitForConnected(%i) doing host name lookup", msecs);
 #endif
 
@@ -1475,7 +1476,7 @@ bool QAbstractSocket::waitForConnected(int msecs)
 
    bool timedOut = true;
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    int attempt = 1;
 #endif
 
@@ -1486,7 +1487,7 @@ bool QAbstractSocket::waitForConnected(int msecs)
          timeout = QT_CONNECT_TIMEOUT;
       }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::waitForConnected(%i) waiting %.2f secs for connection attempt #%i",
              msecs, timeout / 1000.0, attempt++);
 #endif
@@ -1511,7 +1512,7 @@ bool QAbstractSocket::waitForConnected(int msecs)
 
    }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::waitForConnected(%i) == %s", msecs,
           state() == ConnectedState ? "true" : "false");
 #endif
@@ -1530,7 +1531,7 @@ bool QAbstractSocket::waitForReadyRead(int msecs)
 {
    Q_D(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::waitForReadyRead(%i)", msecs);
 #endif
 
@@ -1565,7 +1566,7 @@ bool QAbstractSocket::waitForReadyRead(int msecs)
       if (! d->socketEngine->waitForReadOrWrite(&readyToRead, &readyToWrite, true, !d->writeBuffer.isEmpty(),
             qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::waitForReadyRead(%i) failed (%i, %s)",
                 msecs, d->socketEngine->error(), d->socketEngine->errorString().toLatin1().constData());
 #endif
@@ -1599,7 +1600,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
 {
    Q_D(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::waitForBytesWritten(%i)", msecs);
 #endif
 
@@ -1630,7 +1631,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
       if (! d->socketEngine->waitForReadOrWrite(&readyToRead, &readyToWrite, true, ! d->writeBuffer.isEmpty(),
             qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::waitForBytesWritten(%i) failed (%i, %s)",
                 msecs, d->socketEngine->error(), d->socketEngine->errorString().toLatin1().constData());
 #endif
@@ -1648,7 +1649,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
 
       if (readyToRead) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::waitForBytesWritten Calls canReadNotification");
 #endif
          if (! d->canReadNotification()) {
@@ -1660,7 +1661,7 @@ bool QAbstractSocket::waitForBytesWritten(int msecs)
       if (readyToWrite) {
          if (d->canWriteNotification()) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
             qDebug("QAbstractSocket::waitForBytesWritten returns true");
 #endif
             return true;
@@ -1705,7 +1706,7 @@ bool QAbstractSocket::waitForDisconnected(int msecs)
       if (! d->socketEngine->waitForReadOrWrite(&readyToRead, &readyToWrite, state() == ConnectedState,
             ! d->writeBuffer.isEmpty(), qt_subtract_from_timeout(msecs, stopWatch.elapsed()))) {
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::waitForReadyRead(%i) failed (%i, %s)",
                 msecs, d->socketEngine->error(), csPrintable(d->socketEngine->errorString()));
 #endif
@@ -1740,7 +1741,7 @@ void QAbstractSocket::abort()
 {
    Q_D(QAbstractSocket);
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::abort()");
 #endif
 
@@ -1843,7 +1844,7 @@ qint64 QAbstractSocket::readData(char *data, qint64 maxSize)
       d->socketEngine->setReadNotificationEnabled(true);
    }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::readData(%p \"%s\", %lli) == %lld [engine]",
           data, qt_prettyDebug(data, 32, readBytes).data(), maxSize, readBytes);
 #endif
@@ -1897,7 +1898,7 @@ qint64 QAbstractSocket::writeData(const char *data, qint64 size)
          d->socketEngine->setWriteNotificationEnabled(true);
       }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::writeData(%p \"%s\", %lli) == %lli", data,
              qt_prettyDebug(data, qMin((int)size, 32), size).data(), size, written);
 #endif
@@ -1929,7 +1930,7 @@ qint64 QAbstractSocket::writeData(const char *data, qint64 size)
       d->socketEngine->setWriteNotificationEnabled(true);
    }
 
-#if defined (QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::writeData(%p \"%s\", %lli) == %lli", data,
           qt_prettyDebug(data, qMin((int)size, 32), size).data(), size, written);
 #endif
@@ -1971,7 +1972,7 @@ void QAbstractSocket::close()
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::close()");
 #endif
 
@@ -1993,12 +1994,12 @@ void QAbstractSocket::disconnectFromHost()
 {
    Q_D(QAbstractSocket);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::disconnectFromHost()");
 #endif
 
    if (d->state == UnconnectedState) {
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::disconnectFromHost() was called on an unconnected socket");
 #endif
 
@@ -2006,7 +2007,7 @@ void QAbstractSocket::disconnectFromHost()
    }
 
    if (! d->abortCalled && (d->state == ConnectingState || d->state == HostLookupState)) {
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::disconnectFromHost() but we're still connecting");
 #endif
 
@@ -2022,7 +2023,7 @@ void QAbstractSocket::disconnectFromHost()
 
    if (d->abortCalled) {
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QAbstractSocket::disconnectFromHost() aborting immediately");
 #endif
 
@@ -2037,7 +2038,7 @@ void QAbstractSocket::disconnectFromHost()
       if (d->state != ClosingState) {
          d->state = ClosingState;
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::disconnectFromHost() emits stateChanged()(ClosingState)");
 #endif
 
@@ -2045,7 +2046,7 @@ void QAbstractSocket::disconnectFromHost()
 
       } else {
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::disconnectFromHost() return from delayed close");
 #endif
 
@@ -2076,13 +2077,13 @@ void QAbstractSocket::disconnectFromHost()
 
          d->socketEngine->setWriteNotificationEnabled(true);
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::disconnectFromHost() delaying disconnect");
 #endif
          return;
 
       } else {
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QAbstractSocket::disconnectFromHost() disconnecting immediately");
 #endif
       }
@@ -2105,7 +2106,7 @@ void QAbstractSocket::disconnectFromHost()
    d->peerAddress.clear();
    d->writeBuffer.clear();
 
-#if defined(QABSTRACTSOCKET_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QAbstractSocket::disconnectFromHost() disconnected");
 #endif
 

@@ -116,7 +116,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
          slice << records[j];
       }
 
-#ifdef QDNSLOOKUP_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("qt_qdnsservicerecord_sort() : priority %i (size: %i, total weight: %i)",
              slicePriority, slice.size(), sliceWeight);
 #endif
@@ -130,7 +130,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
 
             if (summedWeight >= weightThreshold) {
 
-#ifdef QDNSLOOKUP_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
                qDebug("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
                       csPrintable(slice[j].target()), slice[j].port(),
                       slice[j].weight());
@@ -503,7 +503,7 @@ void QDnsLookupPrivate::_q_lookupFinished(const QDnsLookupReply &_reply)
 
    if (runnable == q->sender()) {
 
-#ifdef QDNSLOOKUP_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("DNS reply for %s: %i (%s)", csPrintable(name), _reply.error, csPrintable(_reply.errorString));
 #endif
 

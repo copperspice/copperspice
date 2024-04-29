@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-//#define QHOSTINFO_DEBUG
-
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
@@ -50,8 +48,6 @@
 #if defined (QT_NO_GETADDRINFO)
 static QMutex getHostByNameMutex;
 #endif
-
-// #define QHOSTINFO_DEBUG
 
 // Almost always the same. If not, specify in qplatformdefs.h.
 #if ! defined(QT_SOCKOPTLEN_T)
@@ -110,7 +106,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 {
    QHostInfo results;
 
-#if defined(QHOSTINFO_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QHostInfoAgent::fromName(%s) looking up...", hostName.toLatin1().constData());
 #endif
 
@@ -213,7 +209,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       QList<QHostAddress> addresses;
 
       while (node) {
-#ifdef QHOSTINFO_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug() << "getaddrinfo node: flags:" << node->ai_flags << "family:" << node->ai_family << "ai_socktype:" <<
                   node->ai_socktype << "ai_protocol:" << node->ai_protocol << "ai_addrlen:" << node->ai_addrlen;
 #endif
@@ -302,7 +298,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    }
 #endif //  !defined (QT_NO_GETADDRINFO)
 
-#if defined(QHOSTINFO_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    if (results.error() != QHostInfo::NoError) {
       qDebug("QHostInfoAgent::fromName(): error #%d %s",
              h_errno, results.errorString().toLatin1().constData());

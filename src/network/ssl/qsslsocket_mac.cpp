@@ -1056,7 +1056,11 @@ bool QSslSocketBackendPrivate::setSessionProtocol()
    // where MINIMUM_STREAM_VERSION is SSL_Version_3_0, MAXIMUM_STREAM_VERSION is TLS_Version_1_2.
 
    if (configuration.protocol == QSsl::SslV2) {
+
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "protocol QSsl::SslV2 is disabled";
+#endif
+
       return false;
    }
 
@@ -1319,7 +1323,10 @@ bool QSslSocketBackendPrivate::startHandshake()
 
    // Connection aborted during handshake phase.
    if (q->state() != QAbstractSocket::ConnectedState) {
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "Connection aborted";
+#endif
+
       return false;
    }
 

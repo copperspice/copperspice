@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-//#define QNATIVESOCKETENGINE_DEBUG
-
 #include <qnativesocketengine_p.h>
 #include <qnet_unix_p.h>
 #include <qiodevice.h>
@@ -33,6 +31,7 @@
 #include <time.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <netinet/tcp.h>
 
 #ifndef QT_NO_IPV6IFNAME
 #include <net/if.h>
@@ -46,14 +45,10 @@
 #include <net/if_dl.h>
 #endif
 
-#if defined QNATIVESOCKETENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
 #include <qstring.h>
 #include <ctype.h>
-#endif
 
-#include <netinet/tcp.h>
-
-#if defined QNATIVESOCKETENGINE_DEBUG
 
 // Returns a human readable representation of the first \a len characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
@@ -296,7 +291,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
             break;
       }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNativeSocketEnginePrivate::createNewSocket(%d, %d) == false (%s)",
              socketType, socketProtocol, strerror(ecopy));
 #endif
@@ -304,7 +299,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
       return false;
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::createNewSocket(%d, %d) == true", socketType, socketProtocol);
 #endif
 
@@ -365,13 +360,13 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
 
          int flags = ::fcntl(socketDescriptor, F_GETFL, 0);
          if (flags == -1) {
-#ifdef QNATIVESOCKETENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
             perror("QNativeSocketEnginePrivate::setOption(): fcntl(F_GETFL) failed");
 #endif
             return false;
          }
          if (::fcntl(socketDescriptor, F_SETFL, flags | O_NONBLOCK) == -1) {
-#ifdef QNATIVESOCKETENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
             perror("QNativeSocketEnginePrivate::setOption(): fcntl(F_SETFL) failed");
 #endif
             return false;
@@ -405,7 +400,7 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
 
 bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16 port)
 {
-#ifdef QNATIVESOCKETENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "QNativeSocketEnginePrivate::nativeConnect() " << socketDescriptor;
 #endif
 
@@ -414,7 +409,8 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16
    setPortAndAddress(port, addr, &aa, &sockAddrSize);
 
    int connectResult = qt_safe_connect(socketDescriptor, &aa.a, sockAddrSize);
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+
+#if defined(CS_SHOW_DEBUG_NETWORK)
    int ecopy = errno;
 #endif
 
@@ -465,7 +461,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16
       }
 
       if (socketState != QAbstractSocket::ConnectedState) {
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QNativeSocketEnginePrivate::nativeConnect(%s, %i) == false (%s)",
                 addr.toString().toLatin1().constData(), port,
                 socketState == QAbstractSocket::ConnectingState
@@ -475,7 +471,7 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &addr, quint16
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeConnect(%s, %i) == true",
           addr.toString().toLatin1().constData(), port);
 #endif
@@ -518,7 +514,7 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &address, quint16
 
 
    if (bindResult < 0) {
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       int ecopy = errno;
 #endif
       switch (errno) {
@@ -538,7 +534,7 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &address, quint16
             break;
       }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == false (%s)",
              address.toString().toLatin1().constData(), port, strerror(ecopy));
 #endif
@@ -546,7 +542,7 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &address, quint16
       return false;
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeBind(%s, %i) == true",
           address.toString().toLatin1().constData(), port);
 #endif
@@ -557,7 +553,7 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &address, quint16
 bool QNativeSocketEnginePrivate::nativeListen(int backlog)
 {
    if (qt_safe_listen(socketDescriptor, backlog) < 0) {
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       int ecopy = errno;
 #endif
       switch (errno) {
@@ -569,14 +565,14 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
             break;
       }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNativeSocketEnginePrivate::nativeListen(%i) == false (%s)",
              backlog, strerror(ecopy));
 #endif
       return false;
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeListen(%i) == true", backlog);
 #endif
 
@@ -801,7 +797,7 @@ qint64 QNativeSocketEnginePrivate::nativeBytesAvailable() const
       available = (qint64) nbytes;
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeBytesAvailable() == %lli", available);
 #endif
    return available;
@@ -826,7 +822,7 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
    // pending datagram.
    bool result = (readBytes != -1) || errno == EMSGSIZE;
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeHasPendingDatagrams() == %s",
           result ? "true" : "false");
 #endif
@@ -855,7 +851,7 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
       udpMessagePeekBuffer.resize(udpMessagePeekBuffer.size() * 2);
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativePendingDatagramSize() == %zd", recvResult);
 #endif
 
@@ -964,7 +960,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxS
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeReceiveDatagram(%p \"%s\", %lli, %s, %i) == %lli",
           data, qt_prettyDebug(data, qMin(recvResult, ssize_t(16)), recvResult).data(), maxSize,
           (recvResult != -1 && options != QAbstractSocketEngine::WantNone)
@@ -1070,7 +1066,7 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEngine::sendDatagram(%p \"%s\", %lli, \"%s\", %i) == %lli", data,
           qt_prettyDebug(data, qMin<int>(len, 16), len).data(), len,
           header.destinationAddress.toString().toLatin1().constData(),
@@ -1157,7 +1153,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    QString socketProtocolStr = "UnknownProtocol";
 
    if (socketProtocol == QAbstractSocket::IPv4Protocol) {
@@ -1186,7 +1182,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 
 void QNativeSocketEnginePrivate::nativeClose()
 {
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEngine::nativeClose()");
 #endif
 
@@ -1219,7 +1215,7 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeWrite(%p \"%s\", %llu) == %i",
           data, qt_prettyDebug(data, qMin((int) len, 16),
                                (int) len).data(), len, (int) writtenBytes);
@@ -1265,7 +1261,7 @@ qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxSize)
       }
    }
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeRead(%p \"%s\", %llu) == %zd",
           data, qt_prettyDebug(data, qMin(r, ssize_t(16)), r).data(),
           maxSize, r);

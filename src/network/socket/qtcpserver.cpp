@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-//#define QTCPSERVER_DEBUG
-
 #include <qtcpserver.h>
 #include <qtcpserver_p.h>
 
@@ -106,7 +104,7 @@ void QTcpServerPrivate::readNotification()
    for (;;) {
       if (pendingConnections.count() >= maxConnections) {
 
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug("QTcpServerPrivate::_q_processIncomingConnection() too many connections");
 #endif
 
@@ -128,7 +126,7 @@ void QTcpServerPrivate::readNotification()
          break;
       }
 
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QTcpServerPrivate::_q_processIncomingConnection() accepted socket %i", descriptor);
 #endif
 
@@ -148,7 +146,7 @@ QTcpServer::QTcpServer(QObject *parent)
 {
    d_ptr->q_ptr = this;
 
-#if defined(QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QTcpServer::QTcpServer(%p)", parent);
 #endif
 
@@ -159,7 +157,7 @@ QTcpServer::QTcpServer(QTcpServerPrivate &dd, QObject *parent)
 {
    d_ptr->q_ptr = this;
 
-#if defined(QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QTcpServer::QTcpServer(QTcpServerPrivate == %p, parent == %p)", &dd, parent);
 #endif
 }
@@ -231,7 +229,7 @@ bool QTcpServer::listen(const QHostAddress &address, quint16 port)
    d->address = d->socketEngine->localAddress();
    d->port = d->socketEngine->localPort();
 
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QTcpServer::listen(%i, \"%s\") == true (listening on port %i)", port,
           address.toString().toLatin1().constData(), d->socketEngine->localPort());
 #endif
@@ -302,7 +300,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
       d->serverSocketError = d->socketEngine->error();
       d->serverSocketErrorString = d->socketEngine->errorString();
 
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QTcpServer::setSocketDescriptor(%i) failed (%s)", socketDescriptor,
              d->serverSocketErrorString.toLatin1().constData());
 #endif
@@ -317,7 +315,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
    d->address = d->socketEngine->localAddress();
    d->port = d->socketEngine->localPort();
 
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QTcpServer::setSocketDescriptor(%i) succeeded.", socketDescriptor);
 #endif
 
@@ -383,7 +381,7 @@ QTcpSocket *QTcpServer::nextPendingConnection()
 
 void QTcpServer::incomingConnection(qintptr socketDescriptor)
 {
-#if defined (QTCPSERVER_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QTcpServer::incomingConnection(%i)", socketDescriptor);
 #endif
 

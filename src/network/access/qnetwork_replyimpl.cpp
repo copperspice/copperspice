@@ -50,7 +50,9 @@ void QNetworkReplyImplPrivate::_q_startOperation()
 {
    // ensure this function is only being called once
    if (state == ReplyState::Working || state == ReplyState::Finished) {
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl::_q_startOperation was called more than once");
+#endif
       return;
    }
 
@@ -577,8 +579,10 @@ void QNetworkReplyImplPrivate::setCachingEnabled(bool enable)
    } else {
       // someone told us to turn on, then back off?
       // ok... but you should make up your mind
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl: setCachingEnabled(true) called after setCachingEnabled(false) -- "
              "backend %s probably needs to be fixed", csPrintable(backend->metaObject()->className())) ;
+#endif
 
       networkCache()->remove(url);
       cacheSaveDevice = nullptr;

@@ -31,7 +31,6 @@
 #include <qdnslookup.h>
 #include <qhostaddress.h>
 
-//#define QDNSLOOKUP_DEBUG
 class QDnsLookupRunnable;
 
 class QDnsLookupReply

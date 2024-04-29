@@ -585,7 +585,7 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
       return false;
    }
 
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "response_is_fresh" << CacheLoadControlAttribute;
 #endif
 
@@ -1260,7 +1260,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
    }
 
    if (statusCode == 304) {
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "Received a 304 from" << request.url();
 #endif
 
@@ -1357,7 +1357,7 @@ void QNetworkReplyHttpImplPrivate::proxyAuthenticationRequired(const QNetworkPro
 void QNetworkReplyHttpImplPrivate::httpError(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
 
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "http error!" << errorCode << errorMsg;
 #endif
 
@@ -1477,8 +1477,8 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
 
    if (!contents) {
 
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
-      qDebug() << "Can not send cache, the contents are 0" << url;
+#if defined(CS_SHOW_DEBUG_NETWORK)
+      qDebug() << "Can not send cache, contents are 0" << url;
 #endif
       return false;
    }
@@ -1523,7 +1523,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    QMetaObject::invokeMethod(q, "_q_metaDataChanged",    Qt::QueuedConnection);
    QMetaObject::invokeMethod(q, "_q_cacheLoadReadyRead", Qt::QueuedConnection);
 
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "Successfully sent cache:" << url << contents->size() << "bytes";
 #endif
 
@@ -1605,7 +1605,7 @@ QNetworkCacheMetaData QNetworkReplyHttpImplPrivate::fetchCacheMetaData(const QNe
          }
       }
 
-#if defined(QNETWORKACCESSHTTPBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       QByteArray n = q->rawHeader(header);
       QByteArray o;
 
@@ -1804,7 +1804,9 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
 
    // ensure this function is only being called once
    if (state == Working) {
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl::_q_startOperation was called more than once");
+#endif
       return;
    }
    state = Working;
@@ -2320,7 +2322,9 @@ void QNetworkReplyHttpImplPrivate::setCachingEnabled(bool enable)
 
    if (enable) {
       if (bytesDownloaded) {
+#if defined(CS_SHOW_DEBUG_NETWORK)
          qDebug() << "setCachingEnabled: " << bytesDownloaded << " bytesDownloaded";
+#endif
 
          // refuse to enable in this case
          qCritical("QNetworkReplyImpl: backend error: caching was enabled after some bytes had been written");
@@ -2330,7 +2334,9 @@ void QNetworkReplyHttpImplPrivate::setCachingEnabled(bool enable)
       createCache();
 
    } else {
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl: setCachingEnabled(true) called after setCachingEnabled(false)");
+#endif
       managerPrivate->networkCache->remove(url);
       cacheSaveDevice = nullptr;
       cacheEnabled = false;

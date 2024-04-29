@@ -34,8 +34,6 @@
 # include <qtcpserver.h>
 #endif
 
-//#define QNATIVESOCKETENGINE_DEBUG
-
 // Common constructs
 #define Q_CHECK_STATE(function, checkState, returnValue) do { \
     if (d->socketState != (checkState)) { \
@@ -291,7 +289,7 @@ bool QNativeSocketEngine::initialize(QAbstractSocket::SocketType socketType, QAb
    // Create the socket
    if (!d->createNewSocket(socketType, protocol)) {
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       QString typeStr = "UnknownSocketType";
 
       if (socketType == QAbstractSocket::TcpSocket) {
@@ -352,7 +350,7 @@ bool QNativeSocketEngine::initialize(qintptr socketDescriptor, QAbstractSocket::
    // determine socket type and protocol
    if (! d->fetchConnectionParameters()) {
 
-#if defined (QNATIVESOCKETENGINE_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "QNativeSocketEngine::initialize(socketDescriptor) failed:"
                << socketDescriptor << d->socketErrorString;
 #endif

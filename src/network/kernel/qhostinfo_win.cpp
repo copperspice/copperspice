@@ -31,7 +31,6 @@
 #include <qsystemlibrary_p.h>
 #include <qurl.h>
 
-//#define QHOSTINFO_DEBUG
 
 // Older SDKs do not include the addrinfo struct declaration, so we
 // include a copy of it here.
@@ -241,7 +240,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       }
    }
 
-#if defined(QHOSTINFO_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    if (results.error() != QHostInfo::NoError) {
       qDebug("QHostInfoAgent::run(): error (%s)", results.errorString().toLatin1().constData());
 

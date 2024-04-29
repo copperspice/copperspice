@@ -44,8 +44,6 @@
 
 static constexpr const int MaxWriteBufferSize = 128 * 1024;
 
-//#define QSOCKS5SOCKETLAYER_DEBUG
-
 #define MAX_DATA_DUMP 256
 #define SOCKS5_BLOCKING_BIND_TIMEOUT 5000
 
@@ -77,7 +75,7 @@ static constexpr const int MaxWriteBufferSize = 128 * 1024;
 
 #define S5_PASSWORDAUTH_VERSION 0x01
 
-#ifdef QSOCKS5SOCKETLAYER_DEBUG
+#if defined(CS_SHOW_DEBUG_NETWORK)
 #  define QSOCKS5_Q_DEBUG qDebug() << this
 #  define QSOCKS5_D_DEBUG qDebug() << q_ptr
 #  define QSOCKS5_DEBUG qDebug() << "[QSocks5]"
@@ -255,7 +253,11 @@ static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddre
    } else if (pBuf[pos] == S5_DOMAINNAME) {
       // just skip it
       pos++;
+
+#if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "skipping hostname of len" << uint(pBuf[pos]);
+#endif
+
       pos += uchar(pBuf[pos]);
 
    } else {

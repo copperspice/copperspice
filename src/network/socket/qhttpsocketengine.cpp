@@ -36,8 +36,6 @@
 
 #include <qdebug.h>
 
-#define DEBUG
-
 QHttpSocketEngine::QHttpSocketEngine(QObject *parent)
    : QAbstractSocketEngine(*new QHttpSocketEnginePrivate, parent)
 {
@@ -788,9 +786,12 @@ void QHttpSocketEngine::slotSocketError(QAbstractSocket::SocketError error)
 
    d->state = None;
    setError(error, d->socket->errorString());
+
+#if defined(CS_SHOW_DEBUG_NETWORK)
    if (error != QAbstractSocket::RemoteHostClosedError) {
       qDebug() << "QHttpSocketEngine::slotSocketError: got weird error =" << error;
    }
+#endif
 
    //read notification needs to always be emitted, otherwise the higher layer doesn't get the disconnected signal
    emitReadNotification();

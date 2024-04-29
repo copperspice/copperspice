@@ -30,8 +30,6 @@
 #include <qdir.h>
 #include <qcoreapplication.h>
 
-//#define QNETWORKACCESSCACHEBACKEND_DEBUG
-
 QNetworkAccessCacheBackend::QNetworkAccessCacheBackend()
    : QNetworkAccessBackend()
 {
@@ -103,7 +101,7 @@ bool QNetworkAccessCacheBackend::sendCacheContents()
       writeDownstreamData(contents);
    }
 
-#if defined(QNETWORKACCESSCACHEBACKEND_DEBUG)
+#if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "Successfully sent cache:" << url();
 #endif
    return true;
