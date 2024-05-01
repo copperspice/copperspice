@@ -30,8 +30,6 @@
 #include <qstack.h>
 #include <qdebug.h>
 
-//#define QT_QXML_DEBUG
-
 // Error strings for the XML reader
 #define XMLERR_OK                         cs_mark_tr("QXml", "no error occurred")
 #define XMLERR_ERRORBYCONSUMER            cs_mark_tr("QXml", "error triggered by consumer")
@@ -1808,7 +1806,7 @@ bool QXmlSimpleReaderPrivate::parseProlog()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseProlog (cont) in state %d", state);
 #endif
 
@@ -1818,7 +1816,7 @@ bool QXmlSimpleReaderPrivate::parseProlog()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -2024,7 +2022,7 @@ bool QXmlSimpleReaderPrivate::parseElement()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseElement (cont) in state %d", state);
 #endif
 
@@ -2034,7 +2032,7 @@ bool QXmlSimpleReaderPrivate::parseElement()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -2428,7 +2426,7 @@ bool QXmlSimpleReaderPrivate::parseContent()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseContent (cont) in state %d", state);
 #endif
 
@@ -2438,7 +2436,7 @@ bool QXmlSimpleReaderPrivate::parseContent()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -2762,7 +2760,7 @@ bool QXmlSimpleReaderPrivate::parseMisc()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseMisc (cont) in state %d", state);
 #endif
 
@@ -2772,7 +2770,7 @@ bool QXmlSimpleReaderPrivate::parseMisc()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -2936,7 +2934,7 @@ bool QXmlSimpleReaderPrivate::parsePI()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parsePI (cont) in state %d", state);
 #endif
 
@@ -2945,7 +2943,7 @@ bool QXmlSimpleReaderPrivate::parsePI()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -3200,7 +3198,7 @@ bool QXmlSimpleReaderPrivate::parseDoctype()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseDoctype (cont) in state %d", state);
 #endif
 
@@ -3209,7 +3207,7 @@ bool QXmlSimpleReaderPrivate::parseDoctype()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -3430,7 +3428,7 @@ bool QXmlSimpleReaderPrivate::parseExternalID()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseExternalID (cont) in state %d", state);
 #endif
 
@@ -3440,7 +3438,7 @@ bool QXmlSimpleReaderPrivate::parseExternalID()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -3613,7 +3611,7 @@ bool QXmlSimpleReaderPrivate::parseMarkupdecl()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseMarkupdecl (cont) in state %d", state);
 #endif
 
@@ -3623,7 +3621,7 @@ bool QXmlSimpleReaderPrivate::parseMarkupdecl()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -3800,7 +3798,7 @@ bool QXmlSimpleReaderPrivate::parsePEReference()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parsePEReference (cont) in state %d", state);
 #endif
 
@@ -3810,7 +3808,7 @@ bool QXmlSimpleReaderPrivate::parsePEReference()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -3993,7 +3991,7 @@ bool QXmlSimpleReaderPrivate::parseAttlistDecl()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseAttlistDecl (cont) in state %d", state);
 #endif
 
@@ -4002,7 +4000,7 @@ bool QXmlSimpleReaderPrivate::parseAttlistDecl()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -4234,7 +4232,7 @@ bool QXmlSimpleReaderPrivate::parseAttType()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseAttType (cont) in state %d", state);
 #endif
 
@@ -4244,7 +4242,7 @@ bool QXmlSimpleReaderPrivate::parseAttType()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -4490,7 +4488,7 @@ bool QXmlSimpleReaderPrivate::parseAttValue()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseAttValue (cont) in state %d", state);
 #endif
 
@@ -4500,7 +4498,7 @@ bool QXmlSimpleReaderPrivate::parseAttValue()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -4644,7 +4642,7 @@ bool QXmlSimpleReaderPrivate::parseElementDecl()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseElementDecl (cont) in state %d", state);
 #endif
 
@@ -4654,7 +4652,7 @@ bool QXmlSimpleReaderPrivate::parseElementDecl()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -4883,7 +4881,7 @@ bool QXmlSimpleReaderPrivate::parseNotationDecl()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseNotationDecl (cont) in state %d", state);
 #endif
 
@@ -4893,7 +4891,7 @@ bool QXmlSimpleReaderPrivate::parseNotationDecl()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -5039,14 +5037,14 @@ bool QXmlSimpleReaderPrivate::parseChoiceSeq()
       state = Init;
    } else {
       state = parseStack->pop().state;
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseChoiceSeq (cont) in state %d", state);
 #endif
       if (!parseStack->isEmpty()) {
          ParseFunction function = parseStack->top().function;
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -5286,7 +5284,7 @@ bool QXmlSimpleReaderPrivate::parseEntityDecl()
 
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseEntityDecl (cont) in state %d", state);
 #endif
 
@@ -5296,7 +5294,7 @@ bool QXmlSimpleReaderPrivate::parseEntityDecl()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
 
@@ -5584,14 +5582,14 @@ bool QXmlSimpleReaderPrivate::parseEntityValue()
       state = Init;
    } else {
       state = parseStack->pop().state;
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseEntityValue (cont) in state %d", state);
 #endif
       if (!parseStack->isEmpty()) {
          ParseFunction function = parseStack->top().function;
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -5713,7 +5711,7 @@ bool QXmlSimpleReaderPrivate::parseComment()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseComment (cont) in state %d", state);
 #endif
 
@@ -5723,7 +5721,7 @@ bool QXmlSimpleReaderPrivate::parseComment()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -5844,7 +5842,7 @@ bool QXmlSimpleReaderPrivate::parseAttribute()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseAttribute (cont) in state %d", state);
 #endif
 
@@ -5853,7 +5851,7 @@ bool QXmlSimpleReaderPrivate::parseAttribute()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -5954,7 +5952,7 @@ bool QXmlSimpleReaderPrivate::parseName()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseName (cont) in state %d", state);
 #endif
 
@@ -5964,7 +5962,7 @@ bool QXmlSimpleReaderPrivate::parseName()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -6045,7 +6043,7 @@ bool QXmlSimpleReaderPrivate::parseNmtoken()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseNmtoken (cont) in state %d", state);
 #endif
 
@@ -6054,7 +6052,7 @@ bool QXmlSimpleReaderPrivate::parseNmtoken()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -6158,7 +6156,7 @@ bool QXmlSimpleReaderPrivate::parseReference()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseReference (cont) in state %d", state);
 #endif
 
@@ -6168,7 +6166,7 @@ bool QXmlSimpleReaderPrivate::parseReference()
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }
@@ -6564,7 +6562,7 @@ bool QXmlSimpleReaderPrivate::parseString()
    } else {
       state = parseStack->pop().state;
 
-#if defined(QT_QXML_DEBUG)
+#if defined(CS_SHOW_DEBUG_XML)
       qDebug("QXmlSimpleReader: parseString (cont) in state %d", state);
 #endif
 
@@ -6573,7 +6571,8 @@ bool QXmlSimpleReaderPrivate::parseString()
 
          if (function == &QXmlSimpleReaderPrivate::eat_ws) {
             parseStack->pop();
-#if defined(QT_QXML_DEBUG)
+
+#if defined(CS_SHOW_DEBUG_XML)
             qDebug("QXmlSimpleReader: eat_ws (cont)");
 #endif
          }

@@ -29,8 +29,6 @@
 #include <qdebug.h>
 
 #include <qwavedecoder_p.h>
-// #define QT_SAMPLECACHE_DEBUG
-
 
 QSampleCache::QSampleCache(QObject *parent)
    : QObject(parent), m_networkAccessManager(nullptr), m_capacity(0), m_usage(0), m_loadingRefCount(0)
@@ -105,7 +103,7 @@ QSample *QSampleCache::requestSample(const QUrl &url)
       m_loadingThread.start();
    }
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSampleCache: request sample [" << url << "]";
 #endif
 
@@ -137,7 +135,7 @@ void QSampleCache::setCapacity(qint64 capacity)
       return;
    }
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSampleCache: capacity changes from " << m_capacity << "to " << capacity;
 #endif
 
@@ -175,7 +173,7 @@ void QSampleCache::refresh(qint64 usageChange)
       return;
    }
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qint64 recoveredSize = 0;
 #endif
 
@@ -187,7 +185,7 @@ void QSampleCache::refresh(qint64 usageChange)
          continue;
       }
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
       recoveredSize += sample->m_soundData.size();
 #endif
 
@@ -198,7 +196,7 @@ void QSampleCache::refresh(qint64 usageChange)
       }
    }
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSampleCache: refresh(" << usageChange
       << ") recovered size =" << recoveredSize
       << "new usage =" << m_usage;
@@ -225,7 +223,7 @@ QSample::~QSample()
 
    QMutexLocker locker(&m_mutex);
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "~QSample" << this << ": deleted [" << m_url << "]" << QThread::currentThread();
 #endif
 
@@ -265,7 +263,7 @@ void QSample::release()
 {
    QMutexLocker locker(&m_mutex);
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "Sample:: release" << this << QThread::currentThread() << m_ref;
 #endif
 
@@ -304,7 +302,7 @@ void QSample::readSample()
 
    QMutexLocker m(&m_mutex);
 
-#ifdef  QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSample: readSample";
 #endif
 
@@ -330,7 +328,7 @@ void QSample::decoderReady()
 
    QMutexLocker m(&m_mutex);
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSample: decoder ready";
 #endif
 
@@ -363,7 +361,7 @@ void QSample::load()
 {
    Q_ASSERT(QThread::currentThread()->objectName() == "QSampleCache::LoadingThread");
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSample: load [" << m_url << "]";
 #endif
 
@@ -382,7 +380,7 @@ void QSample::decoderError()
    Q_ASSERT(QThread::currentThread()->objectName() == "QSampleCache::LoadingThread");
    QMutexLocker m(&m_mutex);
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSample: decoder error";
 #endif
 
@@ -397,7 +395,7 @@ void QSample::onReady()
 {
    Q_ASSERT(QThread::currentThread()->objectName() == "QSampleCache::LoadingThread");
 
-#ifdef QT_SAMPLECACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "QSample: load ready";
 #endif
 

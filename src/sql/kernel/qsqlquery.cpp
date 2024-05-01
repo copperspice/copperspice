@@ -23,8 +23,6 @@
 
 #include <qsqlquery.h>
 
-//#define QT_DEBUG_SQL
-
 #include <qatomic.h>
 #include <qsqlrecord.h>
 #include <qsqlresult.h>
@@ -759,7 +757,7 @@ bool QSqlQuery::prepare(const QString &query)
       return false;
    }
 
-#ifdef QT_DEBUG_SQL
+#if defined(CS_SHOW_DEBUG_SQL)
    qDebug("\n QSqlQuery::prepare: %s", query.toLocal8Bit().constData());
 #endif
 

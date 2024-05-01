@@ -267,16 +267,16 @@ void QCameraPrivate::updateLockStatus()
       }
    }
 
-   /*
-       qDebug() << "Requested locks:" << (requestedLocks & QCamera::LockExposure ? 'e' : ' ')
-               << (requestedLocks & QCamera::LockFocus ? 'f' : ' ')
-               << (requestedLocks & QCamera::LockWhiteBalance ? 'w' : ' ');
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
+   qDebug() << "Requested locks:" << (requestedLocks & QCamera::LockExposure ? 'e' : ' ')
+         << (requestedLocks & QCamera::LockFocus ? 'f' : ' ')
+         << (requestedLocks & QCamera::LockWhiteBalance ? 'w' : ' ');
 
-       qDebug() << "Lock status: f:" << q->lockStatus(QCamera::LockFocus)
-                << " e:" << q->lockStatus(QCamera::LockExposure)
-                << " w:" << q->lockStatus(QCamera::LockWhiteBalance)
-                << " composite:" << lockStatus;
-   */
+   qDebug() << "Lock status: f:" << q->lockStatus(QCamera::LockFocus)
+         << " e:" << q->lockStatus(QCamera::LockExposure)
+         << " w:" << q->lockStatus(QCamera::LockWhiteBalance)
+         << " composite:" << lockStatus;
+#endif
 
 }
 

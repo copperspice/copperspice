@@ -1588,8 +1588,6 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    return texture;
 }
 
-// #define QGL_BIND_TEXTURE_DEBUG
-
 #ifndef GL_UNSIGNED_INT_8_8_8_8_REV
 #define GL_UNSIGNED_INT_8_8_8_8_REV 0x8367
 #endif
@@ -1624,14 +1622,12 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    Q_Q(QGLContext);
    QOpenGLFunctions *funcs = qgl_functions();
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
    printf("QGLContextPrivate::bindTexture(), imageSize=(%d,%d), internalFormat =0x%x, options=%x, key=%llx\n",
       image.width(), image.height(), internalFormat, int(options), key);
    QTime time;
    time.start();
-#endif
 
-#if defined(QT_DEBUG)
    // Reset the gl error stack...git
    while (funcs->glGetError() != GL_NO_ERROR) ;
 #endif
@@ -1649,7 +1645,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       && (target == GL_TEXTURE_2D && (tx_w != image.width() || tx_h != image.height()))) {
       img = img.scaled(tx_w, tx_h);
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
       printf(" - upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
 
 #endif
@@ -1685,7 +1681,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       funcs->glTexParameteri(target, GL_TEXTURE_MIN_FILTER, options & QGLContext::LinearFilteringBindOption
          ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
       printf(" - generating mipmaps (%d ms)\n", time.elapsed());
 #endif
    } else {
@@ -1724,16 +1720,18 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       case QImage::Format_ARGB32:
          if (premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32_Premultiplied);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted ARGB32 -> ARGB32_Premultiplied (%d ms) \n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted ARGB32 to ARGB32_Premultiplied (%d ms)\n", time.elapsed());
 #endif
          }
          break;
       case QImage::Format_ARGB32_Premultiplied:
          if (!premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted ARGB32_Premultiplied -> ARGB32 (%d ms)\n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted ARGB32_Premultiplied to ARGB32 (%d ms)\n", time.elapsed());
 #endif
          }
          break;
@@ -1741,8 +1739,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       case QImage::Format_RGBA8888:
          if (premul) {
             img = img.convertToFormat(target_format = QImage::Format_RGBA8888_Premultiplied);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted RGBA8888 -> RGBA8888_Premultiplied (%d ms) \n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted RGBA8888 to RGBA8888_Premultiplied (%d ms)\n", time.elapsed());
 #endif
          }
          break;
@@ -1750,8 +1749,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       case QImage::Format_RGBA8888_Premultiplied:
          if (!premul) {
             img = img.convertToFormat(target_format = QImage::Format_RGBA8888);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted RGBA8888_Premultiplied -> RGBA8888 (%d ms) \n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted RGBA8888_Premultiplied to RGBA8888 (%d ms)\n", time.elapsed());
 #endif
          }
          break;
@@ -1770,13 +1770,14 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
             img = img.convertToFormat(premul
                   ? QImage::Format_ARGB32_Premultiplied
                   : QImage::Format_ARGB32);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted to 32-bit alpha format (%d ms)\n", time.elapsed());
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted to 32-bit alpha format (%d ms)\n", time.elapsed());
 #endif
          } else {
             img = img.convertToFormat(QImage::Format_RGB32);
-#ifdef QGL_BIND_TEXTURE_DEBUG
-            printf(" - converted to 32-bit (%d ms)\n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+            printf("Converted to 32-bit (%d ms)\n", time.elapsed());
 #endif
          }
    }
@@ -1799,8 +1800,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          // data twice.  This version should only do it once.
          img = img.mirrored();
       }
-#ifdef QGL_BIND_TEXTURE_DEBUG
-      printf(" - flipped bits over y (%d ms)\n", time.elapsed());
+
+#if defined(CS_SHOW_DEBUG_OPENGL)
+      printf("Flipped bits over y (%d ms)\n", time.elapsed());
 #endif
    }
 
@@ -1811,7 +1813,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       Q_ASSERT(img.depth() == 32);
       qgl_byteSwapImage(img, pixel_type);
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
       printf(" - did byte swapping (%d ms)\n", time.elapsed());
 #endif
    }
@@ -1822,7 +1824,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       internalFormat = externalFormat;
    }
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
    printf(" - uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
       img.format(), externalFormat, internalFormat, pixel_type);
 #endif
@@ -1836,14 +1838,14 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       q->functions()->glGenerateMipmap(target);
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_OPENGL)
    GLenum error = funcs->glGetError();
    if (error != GL_NO_ERROR) {
       qWarning(" - texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
    }
 #endif
 
-#ifdef QGL_BIND_TEXTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_OPENGL)
    static int totalUploadTime = 0;
    totalUploadTime += time.elapsed();
    printf(" - upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);

@@ -2998,7 +2998,10 @@ static QSvgNode *createImageNode(QSvgNode *parent, const QXmlStreamAttributes &a
          QByteArray data = QByteArray::fromBase64(dataStr.toLatin1());
          image = QImage::fromData(data);
       } else {
+
+#if defined(CS_SHOW_DEBUG_SVG)
          qDebug() << "QSvgHandler::createImageNode: Unrecognized inline image format!";
+#endif
       }
 
    } else {
@@ -3006,7 +3009,10 @@ static QSvgNode *createImageNode(QSvgNode *parent, const QXmlStreamAttributes &a
    }
 
    if (image.isNull()) {
+#if defined(CS_SHOW_DEBUG_SVG)
       qDebug() << "Unable to create image from " << filename;
+#endif
+
       return nullptr;
    }
 

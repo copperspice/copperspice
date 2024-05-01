@@ -31,8 +31,6 @@
 
 #include <qmediaobject_p.h>
 
-//# define DEBUG_EXPOSURE_CHANGES 1
-
 class QCameraExposurePrivate
 {
  public:
@@ -121,7 +119,7 @@ void QCameraExposurePrivate::_q_exposureParameterChanged(int parameter)
 {
    Q_Q(QCameraExposure);
 
-#if DEBUG_EXPOSURE_CHANGES
+#if defined(CS_SHOW_DEBUG_MULTIMEDIA)
    qDebug() << "Exposure parameter changed:"
             << QCameraExposureControl::ExposureParameter(parameter)
             << exposureControl->actualValue(QCameraExposureControl::ExposureParameter(parameter));

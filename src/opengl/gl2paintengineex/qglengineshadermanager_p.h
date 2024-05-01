@@ -298,7 +298,7 @@ class Q_OPENGL_EXPORT QGLEngineSharedShaders
       TotalSnippetCount, InvalidSnippetName
    };
 
-#if defined (QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_OPENGL)
    CS_ENUM(SnippetName)
    static QString snippetNameStr(SnippetName snippetName);
 #endif
