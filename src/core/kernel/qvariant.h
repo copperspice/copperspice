@@ -522,6 +522,8 @@ Q_CORE_EXPORT QDataStream &operator>> (QDataStream &stream, QVariant::Type &type
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant &data);
 Q_CORE_EXPORT QDataStream &operator<< (QDataStream &stream, const QVariant::Type typeId);
 
+Q_CORE_EXPORT QDebug &operator<<(QDebug &debug, const QVariant &value);
+
 //
 template <class T>
 struct cs_is_flag : public std::integral_constant<bool, false> {

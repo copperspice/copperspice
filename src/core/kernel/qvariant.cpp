@@ -4332,3 +4332,19 @@ QDataStream &operator<<(QDataStream &stream, const QVariant::Type typeId)
 
    return stream;
 }
+
+QDebug &operator<<(QDebug &debug, const QVariant &value)
+{
+   if (! value.isValid()) {
+      debug << "QVariant(Invalid)";
+
+   } else if (value.canConvert<QString>()) {
+      debug << "QVariant(" << value.typeName() << "," << value.toString() << ")";
+
+   } else {
+      debug << "QVariant(" << value.typeName() << ", unknown)";
+
+   }
+
+   return debug;
+}
