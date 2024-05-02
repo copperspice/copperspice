@@ -1207,8 +1207,9 @@ QVariant QStateMachinePrivate::savedValueForRestorable(const QList<QAbstractStat
       if (it != restorables.constEnd()) {
 
 #if defined(CS_SHOW_DEBUG_CORE_STATEMACHINE)
-         qDebug() << q_func() << ":   using" << it.value() << "from" << s;
+   qDebug() << q_func() << ":   using" << it.value() << "from" << s;
 #endif
+
          return it.value();
       }
    }
@@ -1293,7 +1294,7 @@ QVector<QPropertyAssignment> QStateMachinePrivate::restorablesToPropertyList(con
       }
 
 #if defined(CS_SHOW_DEBUG_CORE_STATEMACHINE)
-      qDebug() << q_func() << ": restoring" << id.object() << id.proertyName() << "to" << it.value();
+      qDebug() << q_func() << ": restoring" << id.object() << id.propertyName() << "to" << it.value();
 #endif
 
       result.append(QPropertyAssignment(id.object(), id.propertyName(), it.value(), false));

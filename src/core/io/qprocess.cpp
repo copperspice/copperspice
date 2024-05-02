@@ -508,7 +508,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
       setErrorAndEmit(QProcess::ReadError);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("QProcessPrivate::tryReadFromChannel(%d), failed to read from the process", channel - &stdinChannel);
+      qDebug("QProcessPrivate::tryReadFromChannel(%lld), failed to read from the process", channel - &stdinChannel);
 #endif
 
       return false;
@@ -523,13 +523,13 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
       closeChannel(channel);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("QProcessPrivate::tryReadFromChannel(%d), 0 bytes available", channel - &stdinChannel);
+      qDebug("QProcessPrivate::tryReadFromChannel(%lld), 0 bytes available", channel - &stdinChannel);
 #endif
       return false;
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::tryReadFromChannel(%d), read %d bytes from the process output",
+   qDebug("QProcessPrivate::tryReadFromChannel(%lld), read %d bytes from the process output",
          channel - &stdinChannel, int(readBytes));
 #endif
 

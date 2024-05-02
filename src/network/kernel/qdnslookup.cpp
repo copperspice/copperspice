@@ -117,7 +117,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
       }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("qt_qdnsservicerecord_sort() : priority %i (size: %i, total weight: %i)",
+      qDebug("qt_qdnsservicerecord_sort() Priority %i (size: %lli, total weight: %i)",
              slicePriority, slice.size(), sliceWeight);
 #endif
 
@@ -131,9 +131,8 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
             if (summedWeight >= weightThreshold) {
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-               qDebug("qt_qdnsservicerecord_sort() : adding %s %i (weight: %i)",
-                      csPrintable(slice[j].target()), slice[j].port(),
-                      slice[j].weight());
+               qDebug("qt_qdnsservicerecord_sort() Adding %s %i (weight: %i)",
+                     csPrintable(slice[j].target()), slice[j].port(), slice[j].weight());
 #endif
 
                // Adjust the slice weight and take the current record.

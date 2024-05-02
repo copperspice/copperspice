@@ -32,45 +32,6 @@
 #include <ctype.h>
 #include <limits.h>
 
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-
-void debugBinaryString(const QByteArray &input)
-{
-   QByteArray tmp;
-   int startOffset = 0;
-
-   for (int i = 0; i < input.size(); ++i) {
-      tmp += input[i];
-
-      if ((i % 16) == 15 || i == (input.size() - 1)) {
-         printf("\n%15d:", startOffset);
-         startOffset += tmp.size();
-
-         for (int j = 0; j < tmp.size(); ++j) {
-            printf(" %02x", int(uchar(tmp[j])));
-         }
-
-         for (int j = tmp.size(); j < 16 + 1; ++j) {
-            printf("   ");
-         }
-
-         for (int j = 0; j < tmp.size(); ++j) {
-            printf("%c", isprint(int(uchar(tmp[j]))) ? tmp[j] : '.');
-         }
-
-         tmp.clear();
-      }
-   }
-
-   printf("\n\n");
-}
-
-void debugBinaryString(const char *data, qint64 maxlen)
-{
-   debugBinaryString(QByteArray(data, maxlen));
-}
-#endif
-
 #define CHECK_MAXLEN(function, returnType) \
    do { \
       if (maxSize < 0) { \
@@ -151,7 +112,7 @@ void QIODevice::setOpenMode(OpenMode openMode)
    Q_D(QIODevice);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::setOpenMode(0x%x)\n", this, int(openMode));
+   printf("QIODevice::setOpenMode(0x%x) Device = %p\n", int(openMode), this);
 #endif
 
    d->openMode = openMode;
@@ -209,7 +170,7 @@ bool QIODevice::open(OpenMode mode)
    d->firstRead = true;
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::open(0x%x)\n", this, quint32(mode));
+   printf("QIODevice::open(0x%x) Device = %p\n", quint32(mode), this);
 #endif
 
    return true;
@@ -224,7 +185,7 @@ void QIODevice::close()
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::close()\n", this);
+   printf("QIODevice::close() Device = %p\n", this);
 #endif
 
    emit aboutToClose();
@@ -242,7 +203,7 @@ qint64 QIODevice::pos() const
    Q_D(const QIODevice);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::pos() == %d\n", this, int(d->pos));
+   printf("QIODevice::pos() Device = %p, pos = %d\n", this, int(d->pos));
 #endif
 
    return d->pos;
@@ -268,8 +229,8 @@ bool QIODevice::seek(qint64 pos)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::seek(%d), before: d->pos = %d, d->buffer.size() = %d\n",
-         this, int(pos), int(d->pos), d->buffer.size());
+   printf("QIODevice::seek(%d) Device = %p, before: pos = %d, buffer.size() = %d\n",
+         int(pos), this, int(d->pos), d->buffer.size());
 #endif
 
    qint64 offset = pos - d->pos;
@@ -291,9 +252,10 @@ bool QIODevice::seek(qint64 pos)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p \tafter: d->pos == %d, d->buffer.size() == %d\n", this, int(d->pos),
-         d->buffer.size());
+   printf("QIODevice::seek() Device = %p, pos == %d, buffer.size() == %d\n",
+         this, int(d->pos), d->buffer.size());
 #endif
+
    return true;
 }
 
@@ -302,8 +264,8 @@ bool QIODevice::atEnd() const
    Q_D(const QIODevice);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::atEnd() returns %s, d->openMode == %d, d->pos == %d\n", this, (d->openMode == NotOpen ||
-         d->pos == size()) ? "true" : "false", int(d->openMode), int(d->pos));
+   printf("QIODevice::atEnd() Device = %p, returns %s, openMode == %d, pos == %d\n",
+      this, (d->openMode == NotOpen || d->pos == size()) ? "true" : "false", int(d->openMode), int(d->pos));
 #endif
 
    return d->openMode == NotOpen || (d->buffer.isEmpty() && bytesAvailable() == 0);
@@ -312,7 +274,7 @@ bool QIODevice::atEnd() const
 bool QIODevice::reset()
 {
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::reset()\n", this);
+   printf("QIODevice::reset() Device = %p\n", this);
 #endif
 
    return seek(0);
@@ -339,8 +301,8 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
    Q_D(QIODevice);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::read(%p, %d), d->pos = %d, d->buffer.size() = %d\n",
-         this, data, int(maxSize), int(d->pos), int(d->buffer.size()));
+   printf("QIODevice::read(%p, %d) Device = %p, pos = %d, buffer.size() = %d\n",
+         data, int(maxSize), this, int(d->pos), int(d->buffer.size()));
 #endif
 
    // Short circuit for getChar()
@@ -358,9 +320,6 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
 
          *data = c;
 
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-         printf("%p \tread 0x%hhx (%c) returning 1 (shortcut)\n", this, int(c), isprint(c) ? c : '?');
-#endif
          return qint64(1);
       }
    }
@@ -384,11 +343,6 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
 
          data += lastReadChunkSize;
          maxSize -= lastReadChunkSize;
-
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-         printf("%p \treading %d bytes from buffer into position %d\n", this, lastReadChunkSize,
-               int(readSoFar) - lastReadChunkSize);
-#endif
 
       } else {
          if (d->firstRead) {
@@ -429,21 +383,12 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
             if (readFromDevice > 0) {
                *d->pDevicePos += readFromDevice;
 
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-               printf("%p \treading %d from device into buffer\n", this, int(readFromDevice));
-#endif
-
                if (!d->buffer.isEmpty()) {
                   lastReadChunkSize = d->buffer.read(data, maxSize);
                   readSoFar += lastReadChunkSize;
                   data      += lastReadChunkSize;
                   maxSize   -= lastReadChunkSize;
                   *d->pPos  += lastReadChunkSize;
-
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-                  printf("%p \treading %d bytes from buffer at position %d\n", this,
-                        lastReadChunkSize, int(readSoFar));
-#endif
                }
             }
          }
@@ -457,10 +402,6 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
          }
 
          qint64 readFromDevice = readData(data, maxSize);
-
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-         printf("%p \treading %d bytes from device (total %d)\n", this, int(readFromDevice), int(readSoFar));
-#endif
 
          if (readFromDevice == -1 && readSoFar == 0) {
             // error and we haven't read anything: return immediately
@@ -516,9 +457,8 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
    } while (moreToRead);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p \treturning %d, d->pos == %d, d->buffer.size() == %d\n", this,
-         int(readSoFar), int(d->pos), d->buffer.size());
-   debugBinaryString(data - readSoFar, readSoFar);
+   printf("QIODevice::read() Device = %p, read %d, pos == %d, buffer.size() == %d\n",
+         this, int(readSoFar), int(d->pos), d->buffer.size());
 #endif
 
    return readSoFar;
@@ -532,14 +472,14 @@ QByteArray QIODevice::read(qint64 maxSize)
    CHECK_MAXLEN(read, result);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::read(%d), d->pos = %d, d->buffer.size() = %d\n",
-         this, int(maxSize), int(d->pos), int(d->buffer.size()));
+   printf("QIODevice::read(%d) device = %p, pos = %d, buffer.size() = %d\n",
+         int(maxSize), this, int(d->pos), int(d->buffer.size()));
 #else
    (void) d;
 #endif
 
    if (maxSize != qint64(int(maxSize))) {
-      qWarning("QIODevice::read() maxSize exceeds QByteArray size limit");
+      qWarning("QIODevice::read(maxSize) Passed size exceeds QByteArray size limit");
       maxSize = INT_MAX;
    }
 
@@ -579,7 +519,7 @@ QByteArray QIODevice::readAll()
    Q_D(QIODevice);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::readAll(), d->pos = %d, d->buffer.size() = %d\n",
+   printf("QIODevice::readAll() Device = %p, pos = %d, buffer.size() = %d\n",
          this, int(d->pos), int(d->buffer.size()));
 #endif
 
@@ -635,8 +575,8 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::readLine(%p, %d), d->pos = %d, d->buffer.size() = %d\n",
-         this, data, int(maxSize), int(d->pos), int(d->buffer.size()));
+   printf("QIODevice::readLine(%p, %d) Device = %p, pos = %d, buffer.size() = %d\n",
+         data, int(maxSize), this, int(d->pos), int(d->buffer.size()));
 #endif
 
    // Leave room for a '\0'
@@ -654,7 +594,8 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
       }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      printf("%p \tread from buffer: %d bytes, last character read: %hhx\n", this, int(readSoFar), data[int(readSoFar) - 1]);
+      printf("QIODevice::readLine() Device = %p, read from buffer = %d bytes, last character read = %hhx\n",
+            this, int(readSoFar), data[int(readSoFar) - 1]);
 #endif
 
       if (readSoFar && data[readSoFar - 1] == '\n') {
@@ -679,7 +620,8 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
    qint64 readBytes = readLineData(data + readSoFar, maxSize - readSoFar);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p \tread from readLineData: %d bytes, readSoFar = %d bytes\n", this, int(readBytes), int(readSoFar));
+   printf("QIODevice::readLine() Device = %p, read from readLineData = %d bytes, readSoFar = %d bytes\n",
+         this, int(readBytes), int(readSoFar));
 #endif
 
    if (readBytes < 0) {
@@ -708,7 +650,7 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p \treturning %d, d->pos = %d, d->buffer.size() = %d, size() = %d\n",
+   printf("QIODevice::readLine() Device = %p, returning %d, pos = %d, buffer.size() = %d, size() = %d\n",
          this, int(readSoFar), int(d->pos), d->buffer.size(), int(size()));
 #endif
 
@@ -724,8 +666,8 @@ QByteArray QIODevice::readLine(qint64 maxSize)
 #if defined(CS_SHOW_DEBUG_CORE_IO)
    Q_D(QIODevice);
 
-   printf("%p QIODevice::readLine(%d), d->pos = %d, d->buffer.size() = %d\n",
-         this, int(maxSize), int(d->pos), int(d->buffer.size()));
+   printf("QIODevice::readLine(%d) Device = %p, pos = %d, buffer.size() = %d\n",
+         int(maxSize), this, int(d->pos), int(d->buffer.size()));
 #endif
 
    if (maxSize > INT_MAX) {
@@ -789,8 +731,8 @@ qint64 QIODevice::readLineData(char *data, qint64 maxSize)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::readLineData(%p, %d), d->pos = %d, d->buffer.size() = %d, returns %d\n",
-         this, data, int(maxSize), int(d->pos), int(d->buffer.size()), int(readSoFar));
+   printf("QIODevice::readLineData(%p, %d) Device = %p, d->pos = %d, d->buffer.size() = %d, returns %d\n",
+         data, int(maxSize), this, int(d->pos), int(d->buffer.size()), int(readSoFar));
 #endif
 
    if (lastReadReturn != 1 && readSoFar == 0) {
@@ -918,7 +860,7 @@ void QIODevice::ungetChar(char c)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   printf("%p QIODevice::ungetChar(0x%hhx '%c')\n", this, c, isprint(c) ? c : '?');
+   printf("QIODevice::ungetChar(0x%hhx '%c') Device = %p\n", c, isprint(c) ? c : '?', this);
 #endif
 
    d->buffer.ungetChar(c);

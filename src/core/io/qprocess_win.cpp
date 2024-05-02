@@ -588,7 +588,7 @@ qint64 QProcessPrivate::bytesAvailableInChannel(const Channel *channel) const
    DWORD bytesAvail = channel->reader->bytesAvailable();
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::bytesAvailableInChannel(%d) == %d", channel - &stdinChannel, bytesAvail);
+   qDebug("QProcessPrivate::bytesAvailableInChannel(%lld) == %ld", channel - &stdinChannel, bytesAvail);
 #endif
 
    return bytesAvail;

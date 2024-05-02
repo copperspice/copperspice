@@ -26,6 +26,7 @@
 #include <qlocalsocket.h>
 #include <qsystemerror_p.h>
 #include <qstring.h>
+#include <qscopedarraypointer.h>
 #include <qdebug.h>
 
 #include <aclapi.h>
@@ -98,15 +99,22 @@ bool QLocalServerPrivate::addListener()
       SID_NAME_USE groupNameUse;
       LPWSTR groupNameSid;
 
-      LookupAccountSid(0, pTokenGroup->PrimaryGroup, 0, &groupNameSize, 0, &domainNameSize, &groupNameUse);
-      QScopedPointer<wchar_t, QScopedPointerArrayDeleter<wchar_t>> groupName(new wchar_t[groupNameSize]);
-      QScopedPointer<wchar_t, QScopedPointerArrayDeleter<wchar_t>> domainName(new wchar_t[domainNameSize]);
+      LookupAccountSid(nullptr, pTokenGroup->PrimaryGroup, nullptr, &groupNameSize, nullptr, &domainNameSize, &groupNameUse);
 
-      if (LookupAccountSid(0, pTokenGroup->PrimaryGroup, groupName.data(), &groupNameSize, domainName.data(), &domainNameSize, &groupNameUse)) {
-         qDebug() << "primary group" << QString::fromWCharArray(domainName.data()) << "\\" << QString::fromWCharArray(groupName.data()) << "type=" << groupNameUse;
+      std::wstring groupName(groupNameSize, L'0');
+      std::wstring domainName(domainNameSize, L'0');
+
+      if (LookupAccountSid(nullptr, pTokenGroup->PrimaryGroup, groupName.data(), &groupNameSize, domainName.data(),
+            &domainNameSize, &groupNameUse)) {
+
+         qDebug() << "primary group" << QString::fromStdWString(domainName) << "\\"
+               << QString::fromStdWString(groupName) << "type=" << groupNameUse;
       }
+
       if (ConvertSidToStringSid(pTokenGroup->PrimaryGroup, &groupNameSid)) {
-         qDebug() << "primary group SID" << QString::fromWCharArray(groupNameSid) << "valid" << IsValidSid(pTokenGroup->PrimaryGroup);
+         qDebug() << "primary group SID" << QString::fromStdWString(std::wstring(groupNameSid)) << "valid"
+               << IsValidSid(pTokenGroup->PrimaryGroup);
+
          LocalFree(groupNameSid);
       }
 #endif

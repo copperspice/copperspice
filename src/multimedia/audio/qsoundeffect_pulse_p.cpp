@@ -24,6 +24,7 @@
 #include <qsoundeffect_pulse_p.h>
 
 #include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qtime.h>
 #include <qtimer.h>
 #include <qaudioformat.h>
@@ -1245,8 +1246,9 @@ void QSoundEffectPrivate::stream_underrun_callback(pa_stream *s, void *userdata)
    }
 
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
-   else
+   else {
       qDebug() << "underun corked =" << pa_stream_is_corked(s);
+   }
 #endif
 }
 

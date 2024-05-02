@@ -101,15 +101,6 @@ inline void QLibraryStore::cleanup()
       }
    }
 
-#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-   for (auto lib : data->libraryMap) {
-      if (lib) {
-         qDebug() << "During Application shutdown, " << lib->fileName << " was still open with "
-               << lib->libraryRefCount.load() << " references";
-      }
-   }
-#endif
-
    delete data;
 }
 
@@ -244,7 +235,7 @@ bool QLibraryHandle::tryload()
    bool retval = load_sys();
 
 #if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-      qDebug() << "loaded library" << fileName;
+   qDebug() << "QLibraryHandle::tryload(): Loaded library "  << fileName;
 #endif
 
    if (retval) {
@@ -269,11 +260,6 @@ bool QLibraryHandle::unload(UnloadFlag flag)
       delete pluginObj.data();
 
       if (flag == NoUnloadSys || unload_sys()) {
-
-#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-         qWarning() << "QLibraryHandle::unload() Succeeded on" << fileName;
-#endif
-
          // when the library is unloaded release the reference so 'this' can get deleted
          libraryRefCount.deref();
          pHnd = nullptr;
@@ -408,9 +394,7 @@ void QLibraryHandle::updatePluginState()
    bool success = false;
 
 #if defined(Q_OS_UNIX) && ! defined(Q_OS_DARWIN)
-
    if (fileName.endsWith(".debug")) {
-
       // do not load a file which ends in .debug, these are the debug symbols from the libraries
       // they are valid shared library files and dlopen is known to crash while opening them
 
@@ -420,7 +404,6 @@ void QLibraryHandle::updatePluginState()
 
       return;
    }
-
 #endif
 
    if (pHnd) {
@@ -469,13 +452,6 @@ void QLibraryHandle::updatePluginState()
    int version = m_metaObject->classInfo(index).value().toInteger<int>();
 
    if ((version & 0x00ff00) > (CS_VERSION & 0x00ff00) || (version & 0xff0000) != (CS_VERSION & 0xff0000)) {
-
-#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-      qWarning("QLibraryHandle::updatePluginState() In %s\n"
-            " plugin uses incompatible CopperSpice library (%d.%d.%d)", QFile::encodeName(fileName).constData(),
-            (version & 0xff0000) >> 16, (version & 0xff00) >> 8, version & 0xff);
-#endif
-
       errorString = QLibrary::tr("Plugin '%1' uses an incompatible CopperSpice library (%2.%3.%4)")
             .formatArg(fileName).formatArg((version & 0xff0000) >> 16).formatArg((version & 0xff00) >> 8)
             .formatArg(version & 0xff);

@@ -24,6 +24,7 @@
 #include <qsoundeffect_qaudio_p.h>
 
 #include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qiodevice.h>
 
 static QSampleCache *sampleCache()

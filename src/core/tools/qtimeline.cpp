@@ -24,6 +24,7 @@
 #include <qtimeline.h>
 
 #include <qcoreevent.h>
+#include <qdebug.h>
 #include <qelapsedtimer.h>
 #include <qmath.h>
 

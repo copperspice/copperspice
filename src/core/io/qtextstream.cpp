@@ -845,10 +845,6 @@ QTextStream::~QTextStream()
 {
    Q_D(QTextStream);
 
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QTextStream::~QTextStream()");
-#endif
-
    if (! d->writeBuffer.isEmpty()) {
       d->flushWriteBuffer();
    }

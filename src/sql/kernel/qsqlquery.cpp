@@ -758,7 +758,7 @@ bool QSqlQuery::prepare(const QString &query)
    }
 
 #if defined(CS_SHOW_DEBUG_SQL)
-   qDebug("\n QSqlQuery::prepare: %s", query.toLocal8Bit().constData());
+   qDebug("\n QSqlQuery::prepare: %s", csPrintable(query));
 #endif
 
    return d->sqlResult->savePrepare(query);

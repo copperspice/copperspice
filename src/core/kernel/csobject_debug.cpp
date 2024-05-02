@@ -47,6 +47,9 @@ static void dumpRecursive(int level, QObject *object)
          }
       }
    }
+#else
+   (void) level;
+   (void) object;
 #endif
 
 }

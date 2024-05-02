@@ -301,8 +301,8 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
       d->serverSocketErrorString = d->socketEngine->errorString();
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("QTcpServer::setSocketDescriptor(%i) failed (%s)", socketDescriptor,
-             d->serverSocketErrorString.toLatin1().constData());
+      qDebug("QTcpServer::setSocketDescriptor(%lli) failed (%s)", socketDescriptor,
+            csPrintable(d->serverSocketErrorString));
 #endif
 
       return false;
@@ -316,7 +316,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
    d->port = d->socketEngine->localPort();
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QTcpServer::setSocketDescriptor(%i) succeeded.", socketDescriptor);
+   qDebug("QTcpServer::setSocketDescriptor(%lli) succeeded.", socketDescriptor);
 #endif
 
    return true;
@@ -382,7 +382,7 @@ QTcpSocket *QTcpServer::nextPendingConnection()
 void QTcpServer::incomingConnection(qintptr socketDescriptor)
 {
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QTcpServer::incomingConnection(%i)", socketDescriptor);
+   qDebug("QTcpServer::incomingConnection(%lli)", socketDescriptor);
 #endif
 
    QTcpSocket *socket = new QTcpSocket(this);

@@ -23,18 +23,6 @@
 
 #include <qcontiguouscache.h>
 
-#include <qdebug.h>
-
-#if defined(CS_SHOW_DEBUG_CORE)
-void QContiguousCacheData::dump() const
-{
-   qDebug() << "capacity:" << alloc;
-   qDebug() << "count:" << count;
-   qDebug() << "start:" << start;
-   qDebug() << "offset:" << offset;
-}
-#endif
-
 QContiguousCacheData *QContiguousCacheData::allocate(int size, int alignment)
 {
    return static_cast<QContiguousCacheData *>(qMallocAligned(size, alignment));

@@ -1646,8 +1646,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       img = img.scaled(tx_w, tx_h);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf(" - upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
-
+      printf("Upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
 #endif
    }
 
@@ -1682,7 +1681,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf(" - generating mipmaps (%d ms)\n", time.elapsed());
+      printf("Generating mipmaps (%d ms)\n", time.elapsed());
 #endif
    } else {
       funcs->glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filtering);
@@ -1814,7 +1813,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       qgl_byteSwapImage(img, pixel_type);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf(" - did byte swapping (%d ms)\n", time.elapsed());
+      printf("Byte swapping (%d ms)\n", time.elapsed());
 #endif
    }
 
@@ -1825,7 +1824,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    }
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   printf(" - uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
+   printf("Uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
       img.format(), externalFormat, internalFormat, pixel_type);
 #endif
 
@@ -1841,14 +1840,14 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #if defined(CS_SHOW_DEBUG_OPENGL)
    GLenum error = funcs->glGetError();
    if (error != GL_NO_ERROR) {
-      qWarning(" - texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
+      qWarning("Texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
    }
 #endif
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    static int totalUploadTime = 0;
    totalUploadTime += time.elapsed();
-   printf(" - upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);
+   printf("Upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);
 #endif
 
    // this assumes the size of a texture is always smaller than the max cache size

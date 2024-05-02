@@ -102,7 +102,7 @@ bool QNetworkAccessCacheBackend::sendCacheContents()
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug() << "Successfully sent cache:" << url();
+   qDebug() << "Cache successfully sent:" << url();
 #endif
    return true;
 }

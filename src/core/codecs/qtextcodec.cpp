@@ -511,12 +511,6 @@ static void setup()
       return;
    }
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   if (destroying_is_ok) {
-      qWarning("QTextCodec() Creating new codec during codec cleanup");
-   }
-#endif
-
    all = new QList<QTextCodec *>;
    // create the cleanup object to cleanup all codecs on exit
    (void) createQTextCodecCleanup();

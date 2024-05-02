@@ -274,14 +274,14 @@ QGLEngineSharedShaders::QGLEngineSharedShaders(const QGLContext *context)
    }
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   qDebug(" -> QGLEngineSharedShaders() %p for thread %p.", this, QThread::currentThread());
+   qDebug("QGLEngineSharedShaders() %p for thread %p", this, QThread::currentThread());
 #endif
 }
 
 QGLEngineSharedShaders::~QGLEngineSharedShaders()
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   qDebug(" -> ~QGLEngineSharedShaders() %p for thread %p.", this, QThread::currentThread());
+   qDebug("~QGLEngineSharedShaders() %p for thread %p", this, QThread::currentThread());
 #endif
 
    qDeleteAll(shaders);

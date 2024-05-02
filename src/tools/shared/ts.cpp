@@ -231,20 +231,15 @@ bool TSReader::read(Translator &translator)
       readNext();
 
       if (isStartDocument()) {
-         // <!DOCTYPE TS>
-         //qDebug() << attributes();
+         // ignore state
 
       } else if (isEndDocument()) {
-         // <!DOCTYPE TS>
-         //qDebug() << attributes();
+         // ignore state
 
       } else if (isDTD()) {
-         // <!DOCTYPE TS>
-         //qDebug() << tokenString();
+         // ignore state
 
       } else if (elementStarts(text_TS)) {
-         // <TS>
-         //qDebug() << "TS " << attributes();
          QHash<QString, int> currentLine;
          QString currentFile;
          bool maybeRelative = false, maybeAbsolute = false;

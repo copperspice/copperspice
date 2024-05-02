@@ -300,8 +300,8 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
    if (results.error() != QHostInfo::NoError) {
-      qDebug("QHostInfoAgent::fromName(): error #%d %s",
-             h_errno, results.errorString().toLatin1().constData());
+      qDebug("QHostInfoAgent::fromName() Error #%d %s", h_errno, csPrintable(results.errorString()));
+
    } else {
       QString tmp;
       QList<QHostAddress> addresses = results.addresses();
@@ -312,8 +312,8 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          tmp += addresses.at(i).toString();
       }
 
-      qDebug("QHostInfoAgent::fromName(): found %i entries for \"%s\": {%s}",
-             addresses.count(), hostName.toLatin1().constData(), tmp.toLatin1().constData());
+      qDebug("QHostInfoAgent::fromName() Found %ld entries for %s: {%s}",
+            addresses.count(), csPrintable(hostName), csPrintable(tmp));
    }
 #endif
    return results;

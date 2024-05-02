@@ -413,7 +413,7 @@ void QNetworkDiskCache::updateMetaData(const QNetworkCacheMetaData &metaData)
 
    if (!newDevice) {
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug() << "QNetworkDiskCache::updateMetaData(), no new device!" << url;
+      qDebug() << "QNetworkDiskCache::updateMetaData(), no new device" << url;
 #endif
       return;
    }
@@ -510,8 +510,7 @@ qint64 QNetworkDiskCache::expire()
 #if defined(CS_SHOW_DEBUG_NETWORK)
    if (removedFiles > 0) {
       qDebug() << "QNetworkDiskCache::expire()"
-               << "Removed:" << removedFiles
-               << "Kept:" << cacheItems.count() - removedFiles;
+            << "Removed:" << removedFiles << "Kept:" << cacheItems.count() - removedFiles;
    }
 #endif
 
