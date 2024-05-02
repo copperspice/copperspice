@@ -32,6 +32,7 @@
 #include <qset.h>
 #include <qstring.h>
 #include <qtextstream.h>
+#include <qurl.h>
 #include <qvector.h>
 
 class QDebugStateSaverPrivate;
@@ -274,6 +275,11 @@ class Q_CORE_EXPORT QDebug
    QDebug &operator<<(std::nullptr_t) {
       stream->ts << "(nullptr)";
       return maybeSpace();
+   }
+
+   QDebug &operator<<(const QUrl &url) {
+      maybeSpace() << "QUrl(" << url.toString() << ')';
+      return *this;
    }
 
    QDebug &operator<<(QTextStreamFunction f) {
