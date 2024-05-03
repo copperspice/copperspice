@@ -122,20 +122,17 @@ QList<QSharedDataPointer<QNetworkInterfacePrivate> > QNetworkInterfaceManager::a
 
 QString QNetworkInterfacePrivate::makeHwAddress(int len, uchar *data)
 {
-   QString result;
+   QString retval;
 
    for (int i = 0; i < len; ++i) {
-      if (i) {
-         result += QLatin1Char(':');
+      if (i != 0) {
+         retval += QChar(':');
       }
 
-      char buf[3];
-
-      sprintf(buf, "%02hX", ushort(data[i]));
-      result += QLatin1String(buf);
+      retval += QString("%1X").formatArg(data[i], 2, '0');
    }
 
-   return result;
+   return retval;
 }
 
 QNetworkAddressEntry::QNetworkAddressEntry()

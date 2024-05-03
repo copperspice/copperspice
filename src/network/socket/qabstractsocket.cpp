@@ -88,10 +88,8 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
                break;
 
             default:
-               QString tmp;
-               tmp.sprintf("\\%o", c);
-               out += tmp.toLatin1();
-         }
+               out += QString("\\%1").formatArgs(c, 8).toLatin1();
+      }
    }
 
    if (len < maxLength) {
