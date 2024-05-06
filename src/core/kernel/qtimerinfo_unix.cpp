@@ -185,10 +185,48 @@ inline timespec &operator+=(timespec &t1, int ms)
    return normalizedTimespec(t1);
 }
 
+inline timeval &operator+=(timeval &t1, int ms)
+{
+   t1.tv_sec  += ms / 1000;
+   t1.tv_usec += ms % 1000 * 1000;
+
+   return normalizedTimeval(t1);
+}
+
 inline timespec operator+(const timespec &t1, int ms)
 {
    timespec t2 = t1;
    return t2 += ms;
+}
+
+inline timeval operator-(const timespec &t1, const timeval &t2)
+{
+   timeval retval;
+
+   retval.tv_sec  = t1.tv_sec - t2.tv_sec;
+   retval.tv_usec = (t1.tv_nsec / 1000) - t2.tv_usec;
+
+   return normalizedTimeval(retval);
+}
+
+inline timeval operator-(const timeval &t1, const timespec &t2)
+{
+   timeval retval = t1;
+
+   retval.tv_sec  -= t2.tv_sec;
+   retval.tv_usec -= t2.tv_nsec / 1000;
+
+   return normalizedTimeval(retval);
+}
+
+inline bool operator<(const timeval &t1, const timespec &t2)
+{
+   return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_usec * 1000 < t2.tv_nsec);
+}
+
+inline bool operator<(const timespec &t1, const timeval &t2)
+{
+   return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_nsec < t2.tv_usec * 1000);
 }
 
 static timespec roundToMillisecond(timespec val)
@@ -206,6 +244,14 @@ QDebug operator<<(QDebug s, timeval tv)
 {
    QDebugStateSaver saver(s);
    s.nospace() << tv.tv_sec << "." << qSetFieldWidth(6) << qSetPadChar(QChar(48)) << tv.tv_usec << reset;
+
+   return s;
+}
+
+QDebug operator<<(QDebug s, timespec ts)
+{
+   QDebugStateSaver saver(s);
+   s.nospace() << ts.tv_sec << "." << qSetFieldWidth(9) << qSetPadChar(QChar(48)) << ts.tv_nsec << reset;
 
    return s;
 }
@@ -356,10 +402,10 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
          t->expected += t->interval;
 
          if (t->expected < currentTime) {
-            t->expected = currentTime;
+            t->expected.tv_sec  = currentTime.tv_sec;
+            t->expected.tv_usec = currentTime.tv_nsec / 1000;
             t->expected += t->interval;
          }
-
 #endif
 
          if (t->timerType == Qt::CoarseTimer) {
@@ -388,10 +434,11 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE)
-   if (t->timerType != Qt::PreciseTimer)
+   if (t->timerType != Qt::PreciseTimer) {
       qDebug() << "timer" << t->timerType << hex << t->id << dec << "interval" << t->interval
             << "originally expected at" << t->expected << "will fire at" << t->timeout
             << "or" << (t->timeout - t->expected) << "s late";
+   }
 #endif
 }
 
@@ -521,13 +568,15 @@ void QTimerInfoList::registerTimer(int timerId, int interval, Qt::TimerType time
    timerInsert(t);
 
 #if defined(CS_SHOW_DEBUG_CORE)
-   t->expected = expected;
+   t->expected.tv_sec  = expected.tv_sec;
+   t->expected.tv_usec = expected.tv_nsec / 1000;
    t->cumulativeError = 0;
    t->count = 0;
 
-   if (t->timerType != Qt::PreciseTimer)
+   if (t->timerType != Qt::PreciseTimer) {
       qDebug() << "timer" << t->timerType << hex << t->id << dec << "interval" << t->interval << "expected at"
             << t->expected << "will fire first at" << t->timeout;
+   }
 #endif
 }
 
@@ -669,12 +718,13 @@ int QTimerInfoList::activateTimers()
       currentTimerInfo->cumulativeError += diff;
       ++currentTimerInfo->count;
 
-      if (currentTimerInfo->timerType != Qt::PreciseTimer)
+      if (currentTimerInfo->timerType != Qt::PreciseTimer) {
          qDebug() << "timer" << currentTimerInfo->timerType << hex << currentTimerInfo->id << dec << "interval"
                << currentTimerInfo->interval << "firing at" << currentTime
                << "(orig" << currentTimerInfo->expected << "scheduled at" << currentTimerInfo->timeout
                << ") off by" << diff << "activation" << currentTimerInfo->count
                << "avg error" << (currentTimerInfo->cumulativeError / currentTimerInfo->count);
+      }
 #endif
 
       // determine next timeout time

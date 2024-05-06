@@ -66,6 +66,21 @@ inline timespec &normalizedTimespec(timespec &t)
    return t;
 }
 
+inline timeval &normalizedTimeval(timeval &t)
+{
+   while (t.tv_usec >= 1000000) {
+      ++t.tv_sec;
+      t.tv_usec -= 1000000;
+   }
+
+   while (t.tv_usec < 0) {
+      --t.tv_sec;
+      t.tv_usec += 1000000;
+   }
+
+   return t;
+}
+
 inline bool operator<(const timespec &t1, const timespec &t2)
 {
    return t1.tv_sec < t2.tv_sec || (t1.tv_sec == t2.tv_sec && t1.tv_nsec < t2.tv_nsec);
