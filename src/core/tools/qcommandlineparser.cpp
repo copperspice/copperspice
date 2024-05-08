@@ -620,17 +620,17 @@ QString QCommandLineParserPrivate::helpText() const
    int longestOptionNameString = 0;
 
    for (const QCommandLineOption &option : commandLineOptionList) {
-      QStringList optionNames;
+      QStringList tmpOptionNames;
 
       for (const QString &optionName : option.names()) {
          if (optionName.length() == 1) {
-            optionNames.append(QChar('-') + optionName);
+            tmpOptionNames.append(QChar('-') + optionName);
          } else {
-            optionNames.append(QString("--") + optionName);
+            tmpOptionNames.append(QString("--") + optionName);
          }
       }
 
-      QString optionNamesString = optionNames.join(QString(", "));
+      QString optionNamesString = tmpOptionNames.join(QString(", "));
 
       if (! option.valueName().isEmpty()) {
          optionNamesString += QString(" <") + option.valueName() + QChar('>');

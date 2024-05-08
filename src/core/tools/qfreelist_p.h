@@ -25,6 +25,7 @@
 #define QFREELIST_P_H
 
 #include <qatomic.h>
+#include <qglobal.h>
 
 template <typename T>
 struct QFreeListElement {
@@ -107,7 +108,6 @@ class QFreeList
 
    // take the current serial number from \a o, increment it, and store it in \a n
    static int incrementserial(int o, int n) {
-      using uint = unsigned int;
       return int((uint(n) & ConstantsType::IndexMask) | ((uint(o) + ConstantsType::SerialCounter) & ConstantsType::SerialMask));
    }
 

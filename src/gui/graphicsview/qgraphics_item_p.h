@@ -189,32 +189,33 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    inline QVariant extra(Extra type) const {
       for (int i = 0; i < extras.size(); ++i) {
          const ExtraStruct &extra = extras.at(i);
-         if (extra.type == type) {
-            return extra.value;
+
+         if (extra.m_type == type) {
+            return extra.m_value;
          }
       }
       return QVariant();
    }
 
    inline void setExtra(Extra type, const QVariant &value) {
-      int index = -1;
+      int key = -1;
       for (int i = 0; i < extras.size(); ++i) {
-         if (extras.at(i).type == type) {
-            index = i;
+         if (extras.at(i).m_type == type) {
+            key = i;
             break;
          }
       }
 
-      if (index == -1) {
+      if (key == -1) {
          extras << ExtraStruct(type, value);
       } else {
-         extras[index].value = value;
+         extras[key].m_value = value;
       }
    }
 
    inline void unsetExtra(Extra type) {
       for (int i = 0; i < extras.size(); ++i) {
-         if (extras.at(i).type == type) {
+         if (extras.at(i).m_type == type) {
             extras.removeAt(i);
             return;
          }
@@ -225,14 +226,14 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       ExtraStruct() {}
 
       ExtraStruct(Extra type, QVariant value)
-         : type(type), value(value) {
+         : m_type(type), m_value(value) {
       }
 
-      Extra type;
-      QVariant value;
+      Extra m_type;
+      QVariant m_value;
 
       bool operator<(Extra extra) const {
-         return type < extra;
+         return m_type < extra;
       }
    };
 

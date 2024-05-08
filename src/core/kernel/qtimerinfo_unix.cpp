@@ -663,12 +663,12 @@ int QTimerInfoList::activateTimers()
    int maxCount   = 0;
    firstTimerInfo = nullptr;
 
-   timespec currentTime = updateCurrentTime();
+   timespec newTime = updateCurrentTime();
    repairTimersIfNeeded();
 
    // Find out how many timer have expired
    for (QTimerInfoList::const_iterator it = constBegin(); it != constEnd(); ++it) {
-      if (currentTime < (*it)->timeout) {
+      if (newTime < (*it)->timeout) {
          break;
       }
 
@@ -683,7 +683,7 @@ int QTimerInfoList::activateTimers()
 
       QTimerInfo_Unix *currentTimerInfo = first();
 
-      if (currentTime < currentTimerInfo->timeout) {
+      if (newTime < currentTimerInfo->timeout) {
          break;   // no timer has expired
       }
 
@@ -705,13 +705,13 @@ int QTimerInfoList::activateTimers()
 #if defined(CS_SHOW_DEBUG_CORE)
       float diff;
 
-      if (currentTime < currentTimerInfo->expected) {
+      if (newTime < currentTimerInfo->expected) {
          // early
-         timeval early = currentTimerInfo->expected - currentTime;
+         timeval early = currentTimerInfo->expected - newTime;
          diff = -(early.tv_sec + early.tv_usec / 1000000.0);
 
       } else {
-         timeval late = currentTime - currentTimerInfo->expected;
+         timeval late = newTime - currentTimerInfo->expected;
          diff = late.tv_sec + late.tv_usec / 1000000.0;
       }
 
@@ -720,7 +720,7 @@ int QTimerInfoList::activateTimers()
 
       if (currentTimerInfo->timerType != Qt::PreciseTimer) {
          qDebug() << "timer" << currentTimerInfo->timerType << hex << currentTimerInfo->id << dec << "interval"
-               << currentTimerInfo->interval << "firing at" << currentTime
+               << currentTimerInfo->interval << "firing at" << newTime
                << "(orig" << currentTimerInfo->expected << "scheduled at" << currentTimerInfo->timeout
                << ") off by" << diff << "activation" << currentTimerInfo->count
                << "avg error" << (currentTimerInfo->cumulativeError / currentTimerInfo->count);
@@ -728,7 +728,7 @@ int QTimerInfoList::activateTimers()
 #endif
 
       // determine next timeout time
-      calculateNextTimeout(currentTimerInfo, currentTime);
+      calculateNextTimeout(currentTimerInfo, newTime);
 
       // reinsert timer
       timerInsert(currentTimerInfo);

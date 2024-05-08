@@ -84,26 +84,26 @@ class QDeviceClosedNotifier : public QObject
    QDeviceClosedNotifier()
    { }
 
-   void setupDevice(QTextStream *stream, QIODevice *device) {
+   void setupDevice(QTextStream *newStream, QIODevice *device) {
       disconnect();
 
       if (device) {
          connect(device, &QIODevice::aboutToClose, this, &QDeviceClosedNotifier::flushStream);
       }
 
-      this->stream = stream;
+      m_stream = newStream;
    }
 
    CORE_CS_SLOT_1(Public, void flushStream())
    CORE_CS_SLOT_2(flushStream)
 
  private:
-   QTextStream *stream;
+   QTextStream *m_stream;
 };
 
 void  QDeviceClosedNotifier::flushStream()
 {
-   stream->flush();
+   m_stream->flush();
 }
 
 class QTextStreamPrivate
@@ -111,7 +111,7 @@ class QTextStreamPrivate
    Q_DECLARE_PUBLIC(QTextStream)
 
  public:
-   QTextStreamPrivate(QTextStream *q_ptr);
+   QTextStreamPrivate(QTextStream *stream);
    ~QTextStreamPrivate();
 
    void reset();
@@ -193,7 +193,7 @@ class QTextStreamPrivate
    QTextStream *q_ptr;
 };
 
-QTextStreamPrivate::QTextStreamPrivate(QTextStream *q_ptr)
+QTextStreamPrivate::QTextStreamPrivate(QTextStream *stream)
 
 #ifndef QT_NO_TEXTCODEC
    :  readConverterSavedState(nullptr), readConverterSavedStateOffset(0), locale(QLocale::c())
@@ -202,7 +202,7 @@ QTextStreamPrivate::QTextStreamPrivate(QTextStream *q_ptr)
 #endif
 
 {
-   this->q_ptr = q_ptr;
+   this->q_ptr = stream;
    reset();
 }
 

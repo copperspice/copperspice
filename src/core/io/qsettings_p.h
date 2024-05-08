@@ -241,8 +241,8 @@ class QSettingsPrivate
 
    static QStringList splitArgs(const QString &s, int idx);
 
-   QSettings::Format format;
-   QSettings::Scope scope;
+   QSettings::Format m_format;
+   QSettings::Scope m_scope;
    QString organizationName;
    QString applicationName;
    QTextCodec *iniCodec;
@@ -253,7 +253,7 @@ class QSettingsPrivate
    int m_spec;
    bool fallbacks;
    bool pendingChanges;
-   mutable QSettings::Status status;
+   mutable QSettings::Status m_status;
 
    QSettings *q_ptr;
 

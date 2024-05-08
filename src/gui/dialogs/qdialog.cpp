@@ -379,9 +379,8 @@ void QDialog::contextMenuEvent(QContextMenuEvent *e)
       QAction *wt = p.data()->addAction(tr("What's This?"));
 
       if (p.data()->exec(e->globalPos()) == wt) {
-         QHelpEvent e(QEvent::WhatsThis, w->rect().center(),
-            w->mapToGlobal(w->rect().center()));
-         QApplication::sendEvent(w, &e);
+         QHelpEvent helpEvent(QEvent::WhatsThis, w->rect().center(), w->mapToGlobal(w->rect().center()));
+         QApplication::sendEvent(w, &helpEvent);
       }
       delete p.data();
    }

@@ -118,13 +118,13 @@ QModelIndex QCompletionModel::mapToSource(const QModelIndex &index) const
 
       Q_ASSERT(index.row() < engine->matchCount());
 
-      QIndexMapper &rootIndices = engine->historyMatch.indices;
+      QIndexMapper &rootIndices = engine->historyMatch.m_indices;
 
       if (index.row() < rootIndices.count()) {
          row = rootIndices[index.row()];
          parent = QModelIndex();
       } else {
-         row = engine->curMatch.indices[index.row() - rootIndices.count()];
+         row = engine->curMatch.m_indices[index.row() - rootIndices.count()];
       }
 
    } else {
@@ -147,7 +147,7 @@ QModelIndex QCompletionModel::mapFromSource(const QModelIndex &idx) const
          return QModelIndex();
       }
 
-      QIndexMapper &rootIndices = engine->historyMatch.indices;
+      QIndexMapper &rootIndices = engine->historyMatch.m_indices;
 
       if (idx.parent().isValid()) {
          if (idx.parent() != engine->curParent) {
@@ -163,7 +163,7 @@ QModelIndex QCompletionModel::mapFromSource(const QModelIndex &idx) const
       }
 
       if (row == -1) {
-         QIndexMapper &indices = engine->curMatch.indices;
+         QIndexMapper &indices = engine->curMatch.m_indices;
          engine->filterOnDemand(idx.row() - indices.last());
          row = indices.indexOf(idx.row()) + rootIndices.count();
       }
@@ -211,7 +211,7 @@ QModelIndex QCompletionModel::currentIndex(bool sourceIndex) const
    int row = engine->curRow;
 
    if (showAll) {
-      row = engine->curMatch.indices[engine->curRow];
+      row = engine->curMatch.m_indices[engine->curRow];
    }
 
    QModelIndex idx = createIndex(row, m_completerPrivate->column);
@@ -236,7 +236,7 @@ QModelIndex QCompletionModel::index(int row, int column, const QModelIndex &pare
          return QModelIndex();
       }
 
-      if (row >= engine->historyMatch.indices.count()) {
+      if (row >= engine->historyMatch.m_indices.count()) {
          int want = row + 1 - engine->matchCount();
 
          if (want > 0) {
@@ -427,7 +427,7 @@ QMatchData QCompletionEngine::filterHistory()
 
    QVector<int> v;
    QIndexMapper im(v);
-   QMatchData m(im, -1, true);
+   QMatchData match(im, -1, true);
 
    for (int i = 0; i < source->rowCount(); i++) {
       QString str = source->index(i, m_completerPrivate->column).data().toString();
@@ -444,11 +444,11 @@ QMatchData QCompletionEngine::filterHistory()
             ((! isFsModel && ! isDirModel) || (QDir::toNativeSeparators(str) != QString(QDir::separator())))) {
 #endif
 
-         m.indices.append(i);
+         match.m_indices.append(i);
       }
    }
 
-   return m;
+   return match;
 }
 
 // Returns a match hint from the cache by chopping the search string
@@ -474,7 +474,7 @@ bool QCompletionEngine::matchHint(QString part, const QModelIndex &parent, QMatc
    return false;
 }
 
-bool QCompletionEngine::lookupCache(QString part, const QModelIndex &parent, QMatchData *m)
+bool QCompletionEngine::lookupCache(QString part, const QModelIndex &parent, QMatchData *match)
 {
    if (m_completerPrivate->cs == Qt::CaseInsensitive) {
       part = part.toLower();
@@ -486,20 +486,20 @@ bool QCompletionEngine::lookupCache(QString part, const QModelIndex &parent, QMa
       return false;
    }
 
-   *m = map[part];
+   *match = map[part];
 
    return true;
 }
 
 // When the cache size exceeds 1MB, it clears out about 1/2 of the cache.
-void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, const QMatchData &m)
+void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, const QMatchData &match)
 {
    if (m_completerPrivate->filterMode == Qt::MatchEndsWith) {
       return;
    }
 
    QMatchData old = cache[parent].take(part);
-   cost = cost + m.indices.cost() - old.indices.cost();
+   cost = cost + match.m_indices.cost() - old.m_indices.cost();
 
    if (cost * sizeof(int) > 1024 * 1024) {
       QMap<QModelIndex, CacheItem>::iterator it1 = cache.begin();
@@ -507,11 +507,12 @@ void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, con
       while (it1 != cache.end()) {
          CacheItem &ci = it1.value();
          int sz = ci.count() / 2;
+
          QMap<QString, QMatchData>::iterator it2 = ci.begin();
          int i = 0;
 
          while (it2 != ci.end() && i < sz) {
-            cost -= it2.value().indices.cost();
+            cost -= it2.value().m_indices.cost();
             it2 = ci.erase(it2);
             i++;
          }
@@ -528,7 +529,7 @@ void QCompletionEngine::saveInCache(QString part, const QModelIndex &parent, con
       part = part.toLower();
    }
 
-   cache[parent][part] = m;
+   cache[parent][part] = match;
 }
 
 QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &parent, Qt::SortOrder order)
@@ -552,9 +553,9 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &pare
 
       if (value.isValid()) {
          if (order == Qt::AscendingOrder) {
-            from = value.indices.last() + 1;
+            from = value.m_indices.last() + 1;
          } else {
-            to = value.indices.first() - 1;
+            to = value.m_indices.first() - 1;
          }
 
          break;
@@ -567,9 +568,9 @@ QIndexMapper QSortedModelEngine::indexHint(QString part, const QModelIndex &pare
 
       if (value.isValid() && !it2.key().startsWith(part)) {
          if (order == Qt::AscendingOrder) {
-            to = value.indices.first() - 1;
+            to = value.m_indices.first() - 1;
          } else {
-            from = value.indices.first() + 1;
+            from = value.m_indices.first() + 1;
          }
 
          break;
@@ -614,7 +615,8 @@ QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &pa
          return QMatchData();
       }
 
-      indices = hint.indices;
+      indices = hint.m_indices;
+
    } else {
       indices = indexHint(part, parent, order);
    }
@@ -742,7 +744,7 @@ int QUnsortedModelEngine::buildIndices(const QString &str, const QModelIndex &pa
             break;
       }
 
-      m->indices.append(indices[i]);
+      m->m_indices.append(indices[i]);
       ++count;
 
       if (m->exactMatchIndex == -1 && QString::compare(data, str, m_completerPrivate->cs) == 0) {
@@ -769,7 +771,7 @@ void QUnsortedModelEngine::filterOnDemand(int n)
 
    const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
    int lastRow = model->rowCount(curParent) - 1;
-   QIndexMapper im(curMatch.indices.last() + 1, lastRow);
+   QIndexMapper im(curMatch.m_indices.last() + 1, lastRow);
 
    int lastIndex = buildIndices(curParts.last(), curParent, n, im, &curMatch);
    curMatch.partial = (lastRow != lastIndex);
@@ -782,10 +784,10 @@ QMatchData QUnsortedModelEngine::filter(const QString &part, const QModelIndex &
 
    QVector<int> v;
    QIndexMapper im(v);
-   QMatchData m(im, -1, true);
+   QMatchData match(im, -1, true);
 
    const QAbstractItemModel *model = m_completerPrivate->proxy->sourceModel();
-   bool foundInCache = lookupCache(part, parent, &m);
+   bool foundInCache = lookupCache(part, parent, &match);
 
    if (!foundInCache) {
       if (matchHint(part, parent, &hint) && ! hint.isValid()) {
@@ -796,29 +798,30 @@ QMatchData QUnsortedModelEngine::filter(const QString &part, const QModelIndex &
    if (!foundInCache && !hint.isValid()) {
       const int lastRow = model->rowCount(parent) - 1;
       QIndexMapper all(0, lastRow);
-      int lastIndex = buildIndices(part, parent, n, all, &m);
-      m.partial = (lastIndex != lastRow);
+      int lastIndex = buildIndices(part, parent, n, all, &match);
+      match.partial = (lastIndex != lastRow);
 
    } else {
       if (! foundInCache) {
          // build from hint as much as we can
-         buildIndices(part, parent, INT_MAX, hint.indices, &m);
-         m.partial = hint.partial;
+         buildIndices(part, parent, INT_MAX, hint.m_indices, &match);
+         match.partial = hint.partial;
       }
 
-      if (m.partial && ((n == -1 && m.exactMatchIndex == -1) || (m.indices.count() < n))) {
+      if (match.partial && ((n == -1 && match.exactMatchIndex == -1) || (match.m_indices.count() < n))) {
          // need more and have more
          const int lastRow = model->rowCount(parent) - 1;
-         QIndexMapper rest(hint.indices.last() + 1, lastRow);
-         int want = n == -1 ? -1 : n - m.indices.count();
-         int lastIndex = buildIndices(part, parent, want, rest, &m);
-         m.partial = (lastRow != lastIndex);
+
+         QIndexMapper rest(hint.m_indices.last() + 1, lastRow);
+         int want = n == -1 ? -1 : n - match.m_indices.count();
+         int lastIndex = buildIndices(part, parent, want, rest, &match);
+         match.partial = (lastRow != lastIndex);
       }
    }
 
-   saveInCache(part, parent, m);
+   saveInCache(part, parent, match);
 
-   return m;
+   return match;
 }
 
 QCompleterPrivate::QCompleterPrivate()

@@ -602,7 +602,7 @@ void QMacSettingsPrivate::sync()
                domains[i].userName, hostNames[j]);
 
          // only report failures for the primary file (the one we write to)
-         if (! ok && i == 0 && hostNames[j] == hostName.toCFStringRef() && status == QSettings::NoError) {
+         if (! ok && i == 0 && hostNames[j] == hostName.toCFStringRef() && m_status == QSettings::NoError) {
             setStatus(QSettings::AccessError);
          }
       }
@@ -619,16 +619,16 @@ bool QMacSettingsPrivate::isWritable() const
    QMacSettingsPrivate *that = const_cast<QMacSettingsPrivate *>(this);
    QString impossibleKey("qt_internal/");
 
-   QSettings::Status oldStatus = that->status;
-   that->status = QSettings::NoError;
+   QSettings::Status oldStatus = that->m_status;
+   that->m_status = QSettings::NoError;
 
    that->set(impossibleKey, QVariant());
    that->sync();
-   bool writable = (status == QSettings::NoError) && that->get(impossibleKey, nullptr);
+   bool writable = (m_status == QSettings::NoError) && that->get(impossibleKey, nullptr);
    that->remove(impossibleKey);
    that->sync();
 
-   that->status = oldStatus;
+   that->m_status = oldStatus;
 
    return writable;
 }

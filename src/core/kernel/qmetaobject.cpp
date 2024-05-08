@@ -832,12 +832,12 @@ std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::get
                } else if (bigArg_test && (word == "signed" || word == "unsigned" || word == "short" || word == "long"))  {
 
                   bool firstLoop = true;
-                  int index = k + 1;
+                  int argIndex   = k + 1;
 
                   while (k < tokenMax)  {
                      bool found = false;
 
-                     nextWord = tokens[index];
+                     nextWord = tokens[argIndex];
 
                      if ((word == "long") && (nextWord == "double" || nextWord == "int" || nextWord == "long")) {
                         found = true;
@@ -866,7 +866,7 @@ std::tuple<std::vector<QString>, QString, std::vector<QString>> QMetaObject::get
                         ++k;
 
                         // used for nextWord
-                        index = k;
+                        argIndex = k;
 
                      }  else {
                         // all done
@@ -1446,8 +1446,8 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
 
             if (metaObject->className() == className)  {
                // obtain the enum object
-               int index = metaObject->indexOfEnumerator(enumName);
-               QMetaEnum enumObj = metaObject->enumerator(index);
+               int enumIndex     = metaObject->indexOfEnumerator(enumName);
+               QMetaEnum enumObj = metaObject->enumerator(enumIndex);
 
                int answer = enumObj.keyToValue(enumKey);
 
@@ -1475,10 +1475,10 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
 
          } else  {
             // look up the value for the enum
-            auto index = valueMap.find(word);
+            auto mapIndex = valueMap.find(word);
 
-            if (index != valueMap.end() )  {
-               valueStack.append(index.value());
+            if (mapIndex != valueMap.end() )  {
+               valueStack.append(mapIndex.value());
             }
          }
       }

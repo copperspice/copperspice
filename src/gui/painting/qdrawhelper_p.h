@@ -388,7 +388,8 @@ static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, con
       return buffer;
    }
 
-   const BlendType *b = buffer;
+   const BlendType *retvalPtr = buffer;
+
    qreal rx = data->m21 * (y + qreal(0.5))
       + data->dx + data->m11 * (x + qreal(0.5));
    qreal ry = data->m22 * (y + qreal(0.5))
@@ -469,7 +470,7 @@ static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, con
       }
    }
 
-   return b;
+   return retvalPtr;
 }
 
 template <class Simd>

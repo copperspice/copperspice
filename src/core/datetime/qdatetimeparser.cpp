@@ -519,8 +519,8 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    if ((newDisplay & (AmPmSection | Hour12Section)) == Hour12Section) {
       const int count = newSectionNodes.size();
 
-      for (int i = 0; i < count; ++i) {
-         SectionNode &node = newSectionNodes[i];
+      for (int j = 0; j < count; ++j) {
+         SectionNode &node = newSectionNodes[j];
 
          if (node.type == Hour12Section) {
             node.type = Hour24Section;
@@ -566,7 +566,7 @@ int QDateTimeParser::sectionSize(int sectionIndex) const
       // The size difference is always due to leading zeroes.
       int sizeAdjustment = 0;
 
-      if (displayText().size() != text.size()) {
+      if (displayText().size() != m_text.size()) {
          // Any zeroes added before this section will affect our size.
          int preceedingZeroesAdded = 0;
 
@@ -815,7 +815,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
             const int absMax = absoluteMax(sectionIndex);
             QLocale loc;
             bool ok = true;
-            int last = -1;
+            int lastNode = -1;
             used = -1;
 
             QString digitsStr(sectiontext);
@@ -847,16 +847,16 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 #if defined(CS_SHOW_DEBUG_CORE)
                   qDebug() << sectiontext.left(digits) << tmp << digits;
 #endif
-                  last = tmp;
+                  lastNode = tmp;
                   used = digits;
                   break;
                }
             }
 
-            if (last == -1) {
-               QChar first(sectiontext.at(0));
+            if (lastNode == -1) {
+               QChar firstCh(sectiontext.at(0));
 
-               if (separators.at(sectionIndex + 1).startsWith(first)) {
+               if (separators.at(sectionIndex + 1).startsWith(firstCh)) {
                   used = 0;
                   state = Intermediate;
                } else {
@@ -864,7 +864,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                }
 
             } else {
-               num += last;
+               num += lastNode;
                const FieldInfo fi = fieldInfo(sectionIndex);
                const bool done = (used == sectionmaxsize);
 
@@ -1410,7 +1410,7 @@ end:
    node.state     = state;
    node.conflicts = conflicts;
    node.value     = newCurrentValue.toTimeZone(m_timeZone);
-   text           = input;
+   m_text         = input;
 
    return node;
 }
@@ -1994,23 +1994,23 @@ bool QDateTimeParser::fromString(const QString &t, QDate *date, QTime *time) con
    }
 
    if (time) {
-      const QTime t = tmp.value.time();
+      const QTime newTime = tmp.value.time();
 
-      if (! t.isValid()) {
+      if (! newTime.isValid()) {
          return false;
       }
 
-      *time = t;
+      *time = newTime;
    }
 
    if (date) {
-      const QDate d = tmp.value.date();
+      const QDate newDate = tmp.value.date();
 
-      if (! d.isValid()) {
+      if (! newDate.isValid()) {
          return false;
       }
 
-      *date = d;
+      *date = newDate;
    }
 
    return true;

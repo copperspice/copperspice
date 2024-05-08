@@ -156,7 +156,7 @@ class Q_CORE_EXPORT QDataStream
  private:
    QScopedPointer<QDataStreamPrivate> d;
 
-   QIODevice *dev;
+   QIODevice *m_device;
    bool owndev;
    bool noswap;
    ByteOrder byteorder;
@@ -166,7 +166,7 @@ class Q_CORE_EXPORT QDataStream
 
 inline QIODevice *QDataStream::device() const
 {
-   return dev;
+   return m_device;
 }
 
 inline QDataStream::ByteOrder QDataStream::byteOrder() const

@@ -292,7 +292,7 @@ void QWellArray::paintEvent(QPaintEvent *e)
 
    QPainter painter(this);
    QPainter *p = &painter;
-   QRect rect(0, 0, cellWidth(), cellHeight());
+   QRect newRect(0, 0, cellWidth(), cellHeight());
 
    if (collast < 0 || collast >= ncols) {
       collast = ncols - 1;
@@ -302,20 +302,22 @@ void QWellArray::paintEvent(QPaintEvent *e)
    }
 
    // Go through the rows
-   for (int r = rowfirst; r <= rowlast; ++r) {
       // get row position and height
-      int rowp = rowY(r);
+   for (int row = rowfirst; row <= rowlast; ++row) {
 
       // Go through the columns in the row r
       // if we know from where to where, go through [colfirst, collast],
       // else go through all of them
-      for (int c = colfirst; c <= collast; ++c) {
          // get position and width of column c
-         int colp = columnX(c);
+      int rowPos = rowY(row);
+
+      for (int col = colfirst; col <= collast; ++col) {
+         int colPos = columnX(col);
+
          // Translate painter and draw the cell
-         rect.translate(colp, rowp);
-         paintCell(p, r, c, rect);
-         rect.translate(-colp, -rowp);
+         newRect.translate(colPos, rowPos);
+         paintCell(p, row, col, newRect);
+         newRect.translate(-colPos, -rowPos);
       }
    }
 }
@@ -355,11 +357,11 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
 
    if ((row == curRow) && (col == curCol)) {
       if (hasFocus()) {
-         QStyleOptionFocusRect opt;
-         opt.palette = g;
-         opt.rect = rect;
-         opt.state = QStyle::State_None | QStyle::State_KeyboardFocusChange;
-         style()->drawPrimitive(QStyle::PE_FrameFocusRect, &opt, p, this);
+         QStyleOptionFocusRect tmpOption;
+         tmpOption.palette = g;
+         tmpOption.rect    = rect;
+         tmpOption.state   = QStyle::State_None | QStyle::State_KeyboardFocusChange;
+         style()->drawPrimitive(QStyle::PE_FrameFocusRect, &tmpOption, p, this);
       }
    }
    paintCellContents(p, row, col, opt.rect.adjusted(dfw, dfw, -dfw, -dfw));

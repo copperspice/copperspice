@@ -85,30 +85,30 @@ class QIndexMapper
 {
  public:
    QIndexMapper()
-      : v(false), f(0), t(-1)
+      : v(false), m_from(0), m_to(-1)
    {
    }
 
    QIndexMapper(int f, int t)
-      : v(false), f(f), t(t)
+      : v(false), m_from(f), m_to(t)
    {
    }
 
-   QIndexMapper(const QVector<int> &vec)
-      : v(true), vector(vec), f(-1), t(-1)
+   QIndexMapper(const QVector<int> &newVector)
+      : m_vector(newVector), v(true), m_from(-1), m_to(-1)
    {
    }
 
    int count() const {
-      return v ? vector.count() : t - f + 1;
+      return v ? m_vector.count() : m_to - m_from + 1;
    }
 
    int operator[] (int index) const {
-      return v ? vector[index] : f + index;
+      return v ? m_vector[index] : m_from + index;
    }
 
    int indexOf(int x) const {
-      return v ? vector.indexOf(x) : ((t < f) ? -1 : x - f);
+      return v ? m_vector.indexOf(x) : ((m_to < m_from) ? -1 : x - m_from);
    }
 
    bool isValid() const {
@@ -116,41 +116,42 @@ class QIndexMapper
    }
 
    bool isEmpty() const {
-      return v ? vector.isEmpty() : (t < f);
+      return v ? m_vector.isEmpty() : (m_to < m_from);
    }
 
    void append(int x) {
       Q_ASSERT(v);
-      vector.append(x);
+      m_vector.append(x);
    }
 
    int first() const {
-      return v ? vector.first() : f;
+      return v ? m_vector.first() : m_from;
    }
 
    int last() const {
-      return v ? vector.last() : t;
+      return v ? m_vector.last() : m_to;
    }
 
    int from() const {
       Q_ASSERT(!v);
-      return f;
+      return m_from;
    }
 
    int to() const {
       Q_ASSERT(!v);
-      return t;
+      return m_to;
    }
 
    int cost() const {
-      return vector.count() + 2;
+      return m_vector.count() + 2;
    }
 
  private:
+   QVector<int> m_vector;
+
    bool v;
-   QVector<int> vector;
-   int f;
-   int t;
+   int m_from;
+   int m_to;
 };
 
 struct QMatchData {
@@ -160,15 +161,15 @@ struct QMatchData {
    }
 
    QMatchData(const QIndexMapper &indices, int em, bool p)
-      : indices(indices), exactMatchIndex(em), partial(p)
+      : m_indices(indices), exactMatchIndex(em), partial(p)
    {
    }
 
-   QIndexMapper indices;
-
    bool isValid() const {
-      return indices.isValid();
+      return m_indices.isValid();
    }
+
+   QIndexMapper m_indices;
 
    int  exactMatchIndex;
    bool partial;
@@ -201,7 +202,7 @@ class QCompletionEngine
    virtual QMatchData filter(const QString &, const QModelIndex &, int) = 0;
 
    int matchCount() const {
-      return curMatch.indices.count() + historyMatch.indices.count();
+      return curMatch.m_indices.count() + historyMatch.m_indices.count();
    }
 
    QMatchData curMatch, historyMatch;
@@ -246,7 +247,7 @@ class QCompleterItemDelegate : public QItemDelegate
 {
  public:
    QCompleterItemDelegate(QAbstractItemView *view)
-      : QItemDelegate(view), view(view)
+      : QItemDelegate(view), m_view(view)
    {
    }
 
@@ -254,7 +255,7 @@ class QCompleterItemDelegate : public QItemDelegate
       QStyleOptionViewItem optCopy = opt;
       optCopy.showDecorationSelected = true;
 
-      if (view->currentIndex() == idx) {
+      if (m_view->currentIndex() == idx) {
          optCopy.state |= QStyle::State_HasFocus;
       }
 
@@ -262,7 +263,7 @@ class QCompleterItemDelegate : public QItemDelegate
    }
 
  private:
-   QAbstractItemView *view;
+   QAbstractItemView *m_view;
 };
 
 class QCompletionModel : public QAbstractProxyModel

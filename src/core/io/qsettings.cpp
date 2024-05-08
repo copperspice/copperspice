@@ -230,15 +230,15 @@ void QConfFile::clearCache()
 }
 
 QSettingsPrivate::QSettingsPrivate(QSettings::Format format)
-   : format(format), scope(QSettings::UserScope), iniCodec(nullptr), m_spec(0), fallbacks(true),
-     pendingChanges(false), status(QSettings::NoError)
+   : m_format(format), m_scope(QSettings::UserScope), iniCodec(nullptr), m_spec(0), fallbacks(true),
+     pendingChanges(false), m_status(QSettings::NoError)
 {
 }
 
 QSettingsPrivate::QSettingsPrivate(QSettings::Format format, QSettings::Scope scope,
       const QString &organization, const QString &application)
-   : format(format), scope(scope), organizationName(organization), applicationName(application),
-     iniCodec(nullptr), m_spec(0), fallbacks(true), pendingChanges(false), status(QSettings::NoError)
+   : m_format(format), m_scope(scope), organizationName(organization), applicationName(application),
+     iniCodec(nullptr), m_spec(0), fallbacks(true), pendingChanges(false), m_status(QSettings::NoError)
 {
 }
 
@@ -346,8 +346,8 @@ void QSettingsPrivate::beginGroupOrArray(const QSettingsGroup &group)
 
 void QSettingsPrivate::setStatus(QSettings::Status status) const
 {
-   if (status == QSettings::NoError || this->status == QSettings::NoError) {
-      this->status = status;
+   if (status == QSettings::NoError || m_status == QSettings::NoError) {
+      m_status = status;
    }
 }
 
@@ -578,7 +578,7 @@ void QSettingsPrivate::iniEscapedKey(const QString &key, QByteArray &result)
 
          QByteArray hexCode;
 
-         for (int i = 0; i < 4; ++i) {
+         for (int j = 0; j < 4; ++j) {
             hexCode.prepend(hexDigits[ch % 16]);
             ch >>= 4;
          }
@@ -1012,21 +1012,21 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
 
 void QConfFileSettingsPrivate::initFormat()
 {
-   extension = (format == QSettings::NativeFormat) ? QString(".conf") : QString(".ini");
+   extension = (m_format == QSettings::NativeFormat) ? QString(".conf") : QString(".ini");
    readFunc  = nullptr;
    writeFunc = nullptr;
 
 #if defined(Q_OS_DARWIN)
-   caseSensitivity = (format == QSettings::NativeFormat) ? Qt::CaseSensitive : IniCaseSensitivity;
+   caseSensitivity = (m_format == QSettings::NativeFormat) ? Qt::CaseSensitive : IniCaseSensitivity;
 #else
    caseSensitivity = IniCaseSensitivity;
 #endif
 
-   if (format > QSettings::IniFormat) {
+   if (m_format > QSettings::IniFormat) {
       QMutexLocker locker(globalMutex());
       const CustomFormatVector *customFormatVector = customFormatVectorFunc();
 
-      int i = (int)format - (int)QSettings::CustomFormat1;
+      int i = (int)m_format - (int)QSettings::CustomFormat1;
 
       if (i >= 0 && i < customFormatVector->size()) {
          QConfFileCustomFormat info = customFormatVector->at(i);
@@ -1041,7 +1041,7 @@ void QConfFileSettingsPrivate::initFormat()
 void QConfFileSettingsPrivate::initAccess()
 {
    if (! m_confFiles.isEmpty()) {
-      if (format > QSettings::IniFormat) {
+      if (m_format > QSettings::IniFormat) {
          if (! readFunc) {
             setStatus(QSettings::AccessError);
          }
@@ -1501,7 +1501,7 @@ QString QConfFileSettingsPrivate::fileName() const
 
 bool QConfFileSettingsPrivate::isWritable() const
 {
-   if (format > QSettings::IniFormat && ! writeFunc) {
+   if (m_format > QSettings::IniFormat && ! writeFunc) {
       return false;
    }
 
@@ -1583,12 +1583,13 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
 
 #ifdef Q_OS_DARWIN
 
-         if (format == QSettings::NativeFormat) {
+         if (m_format == QSettings::NativeFormat) {
             ok = readPlistFile(filePtr->name, &filePtr->originalKeys);
+
          } else
 #endif
          {
-            if (format <= QSettings::IniFormat) {
+            if (m_format <= QSettings::IniFormat) {
                QByteArray data = file.readAll();
                ok = readIniFile(data, &filePtr->unparsedIniSections);
 
@@ -1628,8 +1629,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
       ParsedSettingsMap mergedKeys = filePtr->mergedKeyMap();
 
 #ifdef Q_OS_DARWIN
-
-      if (format == QSettings::NativeFormat) {
+      if (m_format == QSettings::NativeFormat) {
          ok = writePlistFile(filePtr->name, mergedKeys);
 
       } else
@@ -1642,7 +1642,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
             setStatus(QSettings::AccessError);
             ok = false;
 
-         } else if (format <= QSettings::IniFormat) {
+         } else if (m_format <= QSettings::IniFormat) {
             ok = writeIniFile(sf, mergedKeys);
 
          } else {
@@ -1674,12 +1674,12 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
          filePtr->addedKeys.clear();
          filePtr->removedKeys.clear();
 
-         QFileInfo fileInfo(filePtr->name);
-         filePtr->size = fileInfo.size();
-         filePtr->timeStamp = fileInfo.lastModified();
+         QFileInfo tmpFileInfo(filePtr->name);
+         filePtr->size      = tmpFileInfo.size();
+         filePtr->timeStamp = tmpFileInfo.lastModified();
 
          if (createFile) {
-            QFile::Permissions perms = fileInfo.permissions() | QFile::ReadOwner | QFile::WriteOwner;
+            QFile::Permissions perms = tmpFileInfo.permissions() | QFile::ReadOwner | QFile::WriteOwner;
 
             if (! filePtr->userPerms) {
                perms |= QFile::ReadGroup | QFile::ReadOther;
@@ -1735,13 +1735,13 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
 
       } else if (ch == '\\') {
          if (i < dataLen) {
-            char ch = data.at(i++);
+            char ch2 = data.at(i++);
 
             if (i < dataLen) {
-               char ch2 = data.at(i);
+               char ch3 = data.at(i);
 
                // \n, \r, \r\n, and \n\r are legitimate line terminators in INI files
-               if ((ch == '\n' && ch2 == '\r') || (ch == '\r' && ch2 == '\n')) {
+               if ((ch2 == '\n' && ch3 == '\r') || (ch2 == '\r' && ch3 == '\n')) {
                   ++i;
                }
             }
@@ -1754,9 +1754,9 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
          Q_ASSERT(ch == ';');
 
          if (i == lineStart + 1) {
-            char ch;
+            char ch4;
 
-            while (i < dataLen && ((ch = data.at(i) != '\n') && ch != '\r')) {
+            while (i < dataLen && ((ch4 = data.at(i) != '\n') && ch4 != '\r')) {
                ++i;
             }
 
@@ -1946,8 +1946,8 @@ struct QSettingsIniSection {
 
 bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSettingsMap &map)
 {
-   QMap<QString, QSettingsIniSection> iniMap;
-   QMap<QString, QSettingsIniSection>::const_iterator i;
+   QMap<QString, QSettingsIniSection> tmpMap;
+   QMap<QString, QSettingsIniSection>::const_iterator iterMap;
 
 #ifdef Q_OS_WIN
    const char *const eol = "\r\n";
@@ -1965,7 +1965,7 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
          key.remove(0, slashPos + 1);
       }
 
-      QSettingsIniSection &iniSection = iniMap[section];
+      QSettingsIniSection &iniSection = tmpMap[section];
 
       // -1 means infinity
       if (uint(key.position) < uint(iniSection.position)) {
@@ -1975,26 +1975,26 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
       iniSection.keyMap[key] = j.value();
    }
 
-   const int sectionCount = iniMap.size();
+   const int sectionCount = tmpMap.size();
 
    QVector<QSettingsIniKey> sections;
    sections.reserve(sectionCount);
 
-   for (i = iniMap.constBegin(); i != iniMap.constEnd(); ++i) {
-      sections.append(QSettingsIniKey(i.key(), i.value().position));
+   for (iterMap = tmpMap.constBegin(); iterMap != tmpMap.constEnd(); ++iterMap) {
+      sections.append(QSettingsIniKey(iterMap.key(), iterMap.value().position));
    }
 
    std::sort(sections.begin(), sections.end());
 
    bool writeError = false;
 
-   for (int j = 0; !writeError && j < sectionCount; ++j) {
-      i = iniMap.constFind(sections.at(j));
-      Q_ASSERT(i != iniMap.constEnd());
+   for (int cnt = 0; ! writeError && cnt < sectionCount; ++cnt) {
+      iterMap = tmpMap.constFind(sections.at(cnt));
+      Q_ASSERT(iterMap != tmpMap.constEnd());
 
       QByteArray realSection;
 
-      iniEscapedKey(i.key(), realSection);
+      iniEscapedKey(iterMap.key(), realSection);
 
       if (realSection.isEmpty()) {
          realSection = "[General]";
@@ -2005,7 +2005,7 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
          realSection.append(']');
       }
 
-      if (j != 0) {
+      if (cnt != 0) {
          realSection.prepend(eol);
       }
 
@@ -2013,14 +2013,14 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
 
       device.write(realSection);
 
-      const QMap<QSettingsIniKey, QVariant> &ents = i.value().keyMap;
+      const QMap<QSettingsIniKey, QVariant> &ents = iterMap.value().keyMap;
 
-      for (auto j = ents.constBegin(); j != ents.constEnd(); ++j) {
+      for (auto i = ents.constBegin(); i != ents.constEnd(); ++i) {
          QByteArray block;
-         iniEscapedKey(j.key(), block);
+         iniEscapedKey(i.key(), block);
          block += '=';
 
-         const QVariant &value = j.value();
+         const QVariant &value = i.value();
 
          //  The size() != 1 trick is necessary because
          //  QVariant(QString("foo")).toList() returns an empty
@@ -2174,13 +2174,13 @@ QString QSettings::fileName() const
 QSettings::Format QSettings::format() const
 {
    Q_D(const QSettings);
-   return d->format;
+   return d->m_format;
 }
 
 QSettings::Scope QSettings::scope() const
 {
    Q_D(const QSettings);
-   return d->scope;
+   return d->m_scope;
 }
 
 QString QSettings::organizationName() const
@@ -2223,7 +2223,7 @@ QTextCodec *QSettings::iniCodec() const
 QSettings::Status QSettings::status() const
 {
    Q_D(const QSettings);
-   return d->status;
+   return d->m_status;
 }
 
 void QSettings::beginGroup(const QString &prefix)

@@ -589,8 +589,8 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
 
    // Activate
    if (panel) {
-      QEvent event(QEvent::WindowActivate);
-      q->sendEvent(panel, &event);
+      QEvent activateEvent(QEvent::WindowActivate);
+      q->sendEvent(panel, &activateEvent);
 
       // Set focus on the panel's focus item.
       if (QGraphicsItem *focusItem = panel->focusItem()) {
@@ -615,10 +615,11 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
 
    } else if (q->isActive()) {
       // Activate the scene
-      QEvent event(QEvent::WindowActivate);
+      QEvent activateEvent(QEvent::WindowActivate);
+
       for (QGraphicsItem *item : q->items()) {
          if (item->isVisible() && !item->isPanel() && !item->parentItem()) {
-            q->sendEvent(item, &event);
+            q->sendEvent(item, &activateEvent);
          }
       }
    }
@@ -626,26 +627,27 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
    emit q->focusItemChanged(focusItem, oldFocusItem, Qt::ActiveWindowFocusReason);
 }
 
-void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *item,
+void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *newItem,
       Qt::FocusReason focusReason, bool emitFocusChanged)
 {
    Q_Q(QGraphicsScene);
 
-   if (item == focusItem) {
+   if (newItem == focusItem) {
       return;
    }
 
    // Clear focus if asked to set focus on something that can't
    // accept input focus.
-   if (item && (!(item->flags() & QGraphicsItem::ItemIsFocusable)
-         || !item->isVisible() || !item->isEnabled())) {
-      item = nullptr;
+   if (newItem && (! (newItem->flags() & QGraphicsItem::ItemIsFocusable) ||
+         ! newItem->isVisible() || ! newItem->isEnabled())) {
+      newItem = nullptr;
    }
 
    // Set focus on the scene if an item requests focus.
-   if (item) {
+   if (newItem != nullptr) {
       q->setFocus(focusReason);
-      if (item == focusItem) {
+
+      if (newItem == focusItem) {
          if (emitFocusChanged) {
             emit q->focusItemChanged(focusItem, (QGraphicsItem *)nullptr, focusReason);
          }
@@ -655,7 +657,7 @@ void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *item,
 
    QGraphicsItem *oldFocusItem = focusItem;
 
-   if (focusItem) {
+   if (focusItem != nullptr) {
       lastFocusItem = focusItem;
 
 #ifndef QT_NO_IM
@@ -677,18 +679,18 @@ void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *item,
 
    // This handles the case that the item has been removed from the
    // scene in response to the FocusOut event.
-   if (item && item->scene() != q) {
-      item = nullptr;
+   if (newItem != nullptr && newItem->scene() != q) {
+      newItem = nullptr;
    }
 
-   if (item) {
-      focusItem = item;
+   if (newItem != nullptr) {
+      focusItem = newItem;
    }
    updateInputMethodSensitivityInViews();
 
-   if (item) {
+   if (newItem != nullptr) {
       QFocusEvent event(QEvent::FocusIn, focusReason);
-      sendEvent(item, &event);
+      sendEvent(newItem, &event);
    }
 
    if (emitFocusChanged) {
@@ -2506,11 +2508,11 @@ bool QGraphicsScene::event(QEvent *event)
 
             } else {
                // Activate all toplevel items.
-               QEvent event(QEvent::WindowActivate);
+               QEvent activateEvent(QEvent::WindowActivate);
 
                for (QGraphicsItem *item : items()) {
                   if (item->isVisible() && !item->isPanel() && !item->parentItem()) {
-                     sendEvent(item, &event);
+                     sendEvent(item, &activateEvent);
                   }
                }
             }
@@ -2528,10 +2530,11 @@ bool QGraphicsScene::event(QEvent *event)
                d->lastActivePanel = lastActivePanel;
             } else {
                // Activate all toplevel items.
-               QEvent event(QEvent::WindowDeactivate);
+               QEvent deactivateEvent(QEvent::WindowDeactivate);
+
                for (QGraphicsItem *item : items()) {
                   if (item->isVisible() && !item->isPanel() && !item->parentItem()) {
-                     sendEvent(item, &event);
+                     sendEvent(item, &deactivateEvent);
                   }
                }
             }
@@ -3303,15 +3306,14 @@ static inline bool transformIsSimple(const QTransform &transform)
 }
 
 void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painter,
-      const QStyleOptionGraphicsItem *option, QWidget *widget, bool painterStateProtection)
+      const QStyleOptionGraphicsItem *option, QWidget *widget, bool newProtection)
 {
    QGraphicsItemPrivate *itemd = item->d_ptr.data();
    QGraphicsItem::CacheMode cacheMode = QGraphicsItem::CacheMode(itemd->cacheMode);
 
    // Render directly, using no cache.
    if (cacheMode == QGraphicsItem::NoCache) {
-
-      _q_paintItem(static_cast<QGraphicsWidget *>(item), painter, option, widget, true, painterStateProtection);
+      _q_paintItem(static_cast<QGraphicsWidget *>(item), painter, option, widget, true, newProtection);
       return;
    }
 
@@ -3415,7 +3417,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
 
          // Render.
          _q_paintIntoCache(&pix, item, pixmapExposed, itemToPixmap, painter->renderHints(),
-            &styleOptionTmp, painterStateProtection);
+               &styleOptionTmp, newProtection);
 
          // insert this pixmap into the cache.
          itemCache->key = QPixmapCache::insert(pix);
@@ -3461,7 +3463,8 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
          && (deviceRect.width() > maximumCacheSize.width()
             || deviceRect.height() > maximumCacheSize.height())) {
          _q_paintItem(static_cast<QGraphicsWidget *>(item), painter, option, widget,
-            oldPainterOpacity != newPainterOpacity, painterStateProtection);
+               oldPainterOpacity != newPainterOpacity, newProtection);
+
          return;
       }
 
@@ -3522,7 +3525,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
          // Copy / "scroll" the old pixmap onto the new ole and calculate
          // scrolled exposure.
          if (newCacheIndent != deviceData->cacheIndent || deviceRect.size() != pix.size()) {
-            QPoint diff = newCacheIndent - deviceData->cacheIndent;
+            QPoint newDiff = newCacheIndent - deviceData->cacheIndent;
             QPixmap newPix(deviceRect.size());
 
             // ### Investigate removing this fill (test with Plasma and
@@ -3532,7 +3535,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
 
             if (!pix.isNull()) {
                QPainter newPixPainter(&newPix);
-               newPixPainter.drawPixmap(-diff, pix);
+               newPixPainter.drawPixmap(-newDiff, pix);
                newPixPainter.end();
             }
 
@@ -3540,7 +3543,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
             exposed += newPix.rect();
 
             if (!pix.isNull()) {
-               exposed -= QRect(-diff, pix.size());
+               exposed -= QRect(-newDiff, pix.size());
             }
             scrollExposure = exposed;
 
@@ -3609,7 +3612,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
 
          // Render the exposed areas.
          _q_paintIntoCache(&pix, item, pixmapExposed, itemToPixmap, painter->renderHints(),
-            &styleOptionTmp, painterStateProtection);
+            &styleOptionTmp, newProtection);
 
          // Reset expose data
          pixModified = true;

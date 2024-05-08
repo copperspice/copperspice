@@ -1139,13 +1139,16 @@ class QResourceFileEnginePrivate : public QAbstractFileEnginePrivate
  private:
    uchar *map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags);
    bool unmap(uchar *ptr);
-   qint64 offset;
+
+   qint64 m_offset;
 
    QResource resource;
    QByteArray uncompressed;
 
  protected:
-   QResourceFileEnginePrivate() : offset(0) { }
+   QResourceFileEnginePrivate()
+      : m_offset(0)
+   { }
 };
 
 bool QResourceFileEngine::mkdir(const QString &, bool) const
@@ -1217,7 +1220,7 @@ bool QResourceFileEngine::open(QIODevice::OpenMode flags)
 bool QResourceFileEngine::close()
 {
    Q_D(QResourceFileEngine);
-   d->offset = 0;
+   d->m_offset = 0;
    d->uncompressed.clear();
 
    return true;
@@ -1232,8 +1235,8 @@ qint64 QResourceFileEngine::read(char *data, qint64 len)
 {
    Q_D(QResourceFileEngine);
 
-   if (len > size() - d->offset) {
-      len = size() - d->offset;
+   if (len > size() - d->m_offset) {
+      len = size() - d->m_offset;
    }
 
    if (len <= 0) {
@@ -1241,12 +1244,13 @@ qint64 QResourceFileEngine::read(char *data, qint64 len)
    }
 
    if (d->resource.isCompressed()) {
-      memcpy(data, d->uncompressed.constData() + d->offset, len);
+      memcpy(data, d->uncompressed.constData() + d->m_offset, len);
    } else {
-      memcpy(data, d->resource.data() + d->offset, len);
+      memcpy(data, d->resource.data() + d->m_offset, len);
    }
 
-   d->offset += len;
+   d->m_offset += len;
+
    return len;
 }
 
@@ -1293,7 +1297,7 @@ qint64 QResourceFileEngine::size() const
 qint64 QResourceFileEngine::pos() const
 {
    Q_D(const QResourceFileEngine);
-   return d->offset;
+   return d->m_offset;
 }
 
 bool QResourceFileEngine::atEnd() const
@@ -1304,7 +1308,7 @@ bool QResourceFileEngine::atEnd() const
       return true;
    }
 
-   return d->offset == size();
+   return d->m_offset == size();
 }
 
 bool QResourceFileEngine::seek(qint64 pos)
@@ -1315,11 +1319,11 @@ bool QResourceFileEngine::seek(qint64 pos)
       return false;
    }
 
-   if (d->offset > size()) {
+   if (d->m_offset > size()) {
       return false;
    }
 
-   d->offset = pos;
+   d->m_offset = pos;
    return true;
 }
 

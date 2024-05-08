@@ -183,13 +183,14 @@ static QString changed_signal(int which)
 class QWizardDefaultProperty
 {
  public:
-   QString className;
-   QString property;
-   QString changedSignal;
+   QWizardDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
+      : m_className(className), m_property(property), m_changedSignal(changedSignal)
+   { }
 
+   QString m_className;
+   QString m_property;
+   QString m_changedSignal;
    inline QWizardDefaultProperty() {}
-   inline QWizardDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
-      : className(className), property(property), changedSignal(changedSignal) {}
 };
 
 class QWizardField
@@ -238,10 +239,10 @@ void QWizardField::findProperty(const QWizardDefaultProperty *properties, int pr
    QString className;
 
    for (int i = 0; i < propertyCount; ++i) {
-      if (objectInheritsXAndXIsCloserThanY(object, properties[i].className, className)) {
-         className    = properties[i].className;
-         property      = properties[i].property;
-         changedSignal = properties[i].changedSignal;
+      if (objectInheritsXAndXIsCloserThanY(object, properties[i].m_className, className)) {
+         className     = properties[i].m_className;
+         property      = properties[i].m_property;
+         changedSignal = properties[i].m_changedSignal;
       }
    }
 }
@@ -647,7 +648,7 @@ class QWizardPrivate : public QDialogPrivate
    void connectButton(QWizard::WizardButton which) const;
    void updateButtonTexts();
    void updateButtonLayout();
-   void setButtonLayout(const QWizard::WizardButton *array, int size);
+   void setButtonLayout(const QWizard::WizardButton *array, int maxSize);
    bool buttonLayoutContains(QWizard::WizardButton which);
    void updatePixmap(QWizard::WizardPixmap which);
 
@@ -1635,7 +1636,7 @@ void QWizardPrivate::updateButtonLayout()
    }
 }
 
-void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int size)
+void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int maxSize)
 {
    QWidget *prev = pageFrame;
 
@@ -1647,7 +1648,7 @@ void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int siz
       delete item;
    }
 
-   for (int i = 0; i < size; ++i) {
+   for (int i = 0; i < maxSize; ++i) {
       QWizard::WizardButton which = array[i];
       if (which == QWizard::Stretch) {
          buttonLayout->addStretch(1);
@@ -2465,7 +2466,7 @@ void QWizard::setDefaultProperty(const QString &className, const QString &proper
    Q_D(QWizard);
 
    for (int i = d->defaultPropertyTable.count() - 1; i >= 0; --i) {
-      if (d->defaultPropertyTable.at(i).className == className) {
+      if (d->defaultPropertyTable.at(i).m_className == className) {
          d->defaultPropertyTable.remove(i);
          break;
       }
