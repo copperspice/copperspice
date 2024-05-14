@@ -140,7 +140,6 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    void updatePageLayout();
 
    void updateMetrics();
-   void debugMetrics() const;
 
    // Windows GDI printer references.
    HANDLE hPrinter;

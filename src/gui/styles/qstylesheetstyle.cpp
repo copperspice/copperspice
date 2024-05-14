@@ -34,7 +34,6 @@
 #include <qcombobox.h>
 #include <qdialog.h>
 #include <qdockwidget.h>
-#include <qdebug.h>
 #include <qdrawutil.h>
 #include <qfile.h>
 #include <qheaderview.h>
@@ -763,9 +762,6 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
                knownStyleHint = true;
                break;
             }
-         }
-         if (! knownStyleHint) {
-            qDebug("Unknown property %s", csPrintable(decl.d->property));
          }
       }
    }

@@ -39,12 +39,6 @@
 // only basic support of this version is implemented but it is enough for now
 #define ZIP_VERSION 20
 
-#if 0
-#define ZDEBUG qDebug
-#else
-#define ZDEBUG if (0) qDebug
-#endif
-
 static inline uint readUInt(const uchar *data)
 {
    return (data[0]) + (data[1] << 8) + (data[2] << 16) + (data[3] << 24);
@@ -602,7 +596,11 @@ void QZipReaderPrivate::scanFiles()
    // have the eod
    start_of_directory = readUInt(eod.dir_start_offset);
    num_dir_entries = readUShort(eod.num_dir_entries);
-   ZDEBUG("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
+
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+   qDebug("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
+#endif
+
    int comment_length = readUShort(eod.comment_length);
 
    if (comment_length != i) {
@@ -644,7 +642,9 @@ void QZipReaderPrivate::scanFiles()
          break;
       }
 
-      ZDEBUG("Found file '%s'", header.file_name.data());
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+      qDebug("Found file '%s'", header.file_name.data());
+#endif
 
       fileHeaders.append(header);
    }
@@ -652,15 +652,15 @@ void QZipReaderPrivate::scanFiles()
 
 void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const QByteArray &contents)
 {
-#ifndef NDEBUG
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
    static const char *const entryTypes[] = {
       "directory",
       "file     ",
       "symlink  "
    };
 
-   ZDEBUG() << "adding" << entryTypes[type] << ":" << fileName.constData() << (type == 2 ? QByteArray(" -> " +
-            contents).constData() : "");
+   qDebug() << "adding" << entryTypes[type] << ":" << fileName.constData() << (type == 2 ? QByteArray(" -> " +
+         contents).constData() : "");
 #endif
 
    if (! (device->isOpen() || device->open(QIODevice::WriteOnly))) {

@@ -27,7 +27,6 @@
 #include <qmacstyle_p.h>
 
 #define QMAC_QAQUASTYLE_SIZE_CONSTRAIN
-//#define DEBUG_SIZE_CONSTRAINT
 
 #include <qcore_mac_p.h>
 #include <qcombobox_p.h>
@@ -64,7 +63,6 @@
 #include <qtreeview.h>
 #include <qtableview.h>
 #include <qwizard.h>
-#include <qdebug.h>
 #include <qlibrary.h>
 #include <qdatetimeedit.h>
 #include <qmath.h>
@@ -799,7 +797,6 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
    QSize ret(-1, -1);
 
    if (sz != QAquaSizeSmall && sz != QAquaSizeLarge && sz != QAquaSizeMini) {
-      qDebug("qt_aqua_get_known_size(), invalid size parameter");
       return ret;
    }
 
@@ -1117,7 +1114,7 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
 }
 
 
-#if defined(QMAC_QAQUASTYLE_SIZE_CONSTRAIN) || defined(DEBUG_SIZE_CONSTRAINT)
+#if defined(QMAC_QAQUASTYLE_SIZE_CONSTRAIN)
 static QAquaWidgetSize qt_aqua_guess_size(const QWidget *widg, QSize large, QSize small, QSize mini)
 {
    if (large == QSize(-1, -1)) {
@@ -1257,7 +1254,7 @@ void QMacStylePrivate::drawFocusRing(QPainter *p, const QRect &targetRect, int h
 QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
                                                     QStyle::ContentsType ct, QSize szHint, QSize *insz) const
 {
-#if defined(QMAC_QAQUASTYLE_SIZE_CONSTRAIN) || defined(DEBUG_SIZE_CONSTRAINT)
+#if defined(QMAC_QAQUASTYLE_SIZE_CONSTRAIN)
    if (option) {
       if (option->state & QStyle::State_Small) {
          return QAquaSizeSmall;
@@ -1316,22 +1313,7 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
    if (insz) {
       *insz = sz ? *sz : QSize(-1, -1);
    }
-#ifdef DEBUG_SIZE_CONSTRAINT
-   if (sz) {
-      const char *size_desc = "Unknown";
-      if (sz == &small) {
-         size_desc = "Small";
-      } else if (sz == &large) {
-         size_desc = "Large";
-      } else if (sz == &mini) {
-         size_desc = "Mini";
-      }
-      qDebug("%s - %s: %s taken (%d, %d) [%d, %d]",
-             widg ? widg->objectName().toLatin1().constData() : "*Unknown*",
-             widg ? widg->metaObject()->className() : "*Unknown*", size_desc, widg->width(), widg->height(),
-             sz->width(), sz->height());
-   }
-#endif
+
    return ret;
 #else
    if (insz) {
@@ -7664,9 +7646,6 @@ QMacCGContext::QMacCGContext(QPainter *p)
          // Scale to paint in device-independent pixels.
          CGContextScaleCTM(context, devicePixelRatio, devicePixelRatio);
       }
-
-   } else {
-      qDebug() << "QMacCGContext:: Unsupported painter devtype type" << devType;
    }
 }
 
@@ -7703,8 +7682,6 @@ CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
          QImage *image = data->buffer();
          ret = CGBitmapContextCreate(image->bits(), image->width(), image->height(),
                                      8, image->bytesPerLine(), colorspace, flags);
-      } else {
-         qDebug("qt_mac_cg_context: Unsupported pixmap class");
       }
 
       CGContextTranslateCTM(ret, 0, pm->height());
@@ -7719,7 +7696,6 @@ CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
       //   CGContextRetain(ret);
       //   return ret;
 
-      qDebug("qt_mac_cg_context: not implemented: Widget class");
       return nullptr;
    }
 

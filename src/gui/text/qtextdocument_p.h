@@ -41,11 +41,6 @@
 #include <qurl.h>
 #include <qvariant.h>
 
-// #define QT_QMAP_DEBUG
-
-#ifdef QT_QMAP_DEBUG
-#include <iostream>
-#endif
 
 class QTextFormatCollection;
 class QTextFormat;

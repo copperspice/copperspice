@@ -412,7 +412,6 @@ QTextHtmlImporter::QTextHtmlImporter(QTextDocument *_doc, const QString &_html, 
    }
 
    parse(html, resourceProvider ? resourceProvider : doc);
-   //  dumpHtml();
 }
 
 void QTextHtmlImporter::import()

@@ -48,9 +48,6 @@ Q_GUI_EXPORT HBITMAP qt_pixmapToWinHBITMAP(const QPixmap &p, int hbitmapFormat =
 extern QPainterPath qt_regionToPath(const QRegion &region);
 extern QMarginsF qt_convertMargins(const QMarginsF &margins, QPageLayout::Unit fromUnits, QPageLayout::Unit toUnits);
 
-// #define QT_DEBUG_DRAW
-// #define QT_DEBUG_METRICS
-
 static void draw_text_item_win(const QPointF &_pos, const QTextItemInt &ti, HDC hdc,
       const QTransform &xform, const QPointF &topLeft);
 
@@ -668,8 +665,7 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
 
 void QWin32PrintEnginePrivate::fillPath_dev(const QPainterPath & path, const QColor & color)
 {
-
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << " --- QWin32PrintEnginePrivate::fillPath() bound:" << path.boundingRect() << color;
 #endif
 
@@ -754,7 +750,7 @@ void QWin32PrintEnginePrivate::strokePath(const QPainterPath & path, const QColo
 
 void QWin32PrintEngine::drawPath(const QPainterPath & path)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << " - QWin32PrintEngine::drawPath(), bounds: " << path.boundingRect();
 #endif
 
@@ -776,7 +772,7 @@ void QWin32PrintEngine::drawPath(const QPainterPath & path)
 
 void QWin32PrintEngine::drawPolygon(const QPointF * points, int pointCount, PolygonDrawMode mode)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << " - QWin32PrintEngine::drawPolygon(), pointCount: " << pointCount;
 #endif
 
@@ -1618,17 +1614,6 @@ void QWin32PrintEnginePrivate::updateMetrics() {
    QMarginsF margins = m_pageLayout.margins(QPageSize::Unit::Millimeter) / 25.4;
    origin_x = qRound(margins.left() * dpi_x) - GetDeviceCaps(hdc, PHYSICALOFFSETX);
    origin_y = qRound(margins.top() * dpi_y)  - GetDeviceCaps(hdc, PHYSICALOFFSETY);
-}
-
-void QWin32PrintEnginePrivate::debugMetrics() const {
-   qDebug() << "    " << "m_pageLayout      = " << m_pageLayout;
-   qDebug() << "    " << "m_paintRectPixels = " << m_paintRectPixels;
-   qDebug() << "    " << "m_paintSizeMM     = " << m_paintSizeMM;
-   qDebug() << "    " << "resolution        = " << resolution;
-   qDebug() << "    " << "stretch           = " << stretch_x << stretch_y;
-   qDebug() << "    " << "origin            = " << origin_x << origin_y;
-   qDebug() << "    " << "dpi               = " << dpi_x << dpi_y;
-   qDebug() << "";
 }
 
 static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC hdc,

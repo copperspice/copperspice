@@ -515,10 +515,6 @@ QApplication::~QApplication()
    d->cleanupMultitouch();
    qt_cleanup();
 
-   if (QApplicationPrivate::widgetCount) {
-      qDebug("Widgets left: %i    Max widgets: %i \n", QWidgetPrivate::instanceCounter, QWidgetPrivate::maxInstances);
-   }
-
    QApplicationPrivate::obey_desktop_settings = true;
 
    QApplicationPrivate::app_strut = QSize(0, 0);

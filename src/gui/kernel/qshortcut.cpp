@@ -189,7 +189,7 @@ static bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidge
       return sw == focus_widget;
    }
 
-#if defined(DEBUG_QSHORTCUTMAP)
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug().nospace() << "..true [Pass-through]";
 #endif
 
@@ -268,7 +268,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 {
    const QList<QWidget *> &widgets = static_cast<QActionPrivate *>(QActionPrivate::get(a))->widgets;
 
-#if defined(DEBUG_QSHORTCUTMAP)
+#if defined(CS_SHOW_DEBUG_GUI)
    if (widgets.isEmpty()) {
       qDebug() << a << "not connected to any widgets, will not trigger";
    }
@@ -309,7 +309,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 #ifndef QT_NO_GRAPHICSVIEW
    const QList<QGraphicsWidget *> &graphicsWidgets = static_cast<QActionPrivate *>(QActionPrivate::get(a))->graphicsWidgets;
 
-#if defined(DEBUG_QSHORTCUTMAP)
+#if defined(CS_SHOW_DEBUG_GUI)
    if (graphicsWidgets.isEmpty()) {
       qDebug() << a << " is not connected to any widgets and will not trigger";
    }

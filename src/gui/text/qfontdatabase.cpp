@@ -48,17 +48,6 @@
 
 #define SMOOTH_SCALABLE 0xffff
 
-// #define FONT_MATCH_DEBUG
-#ifdef FONT_MATCH_DEBUG
-#define FM_DEBUG qDebug
-
-#else
-#define FM_DEBUG \
-   if (false)    \
-   qDebug
-
-#endif
-
 static void initializeDb();
 
 static int getFontWeight(const QString &weightString)
@@ -1046,7 +1035,9 @@ static QtFontStyle *bestStyle(QtFontFoundry *foundry, const QtFontStyle::Key &st
       }
    }
 
-   FM_DEBUG("          best style has distance 0x%x", dist);
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+   qDebug("          best style has distance 0x%x", dist);
+#endif
 
    return retval;
 }
@@ -1088,8 +1079,12 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
       // 2. see if we have a smoothly scalable font
       if (! size && style->smoothScalable && ! (styleStrategy & QFont::PreferBitmap)) {
          size = style->fontSize(SMOOTH_SCALABLE);
+
          if (size) {
-            FM_DEBUG("          found smoothly scalable font (%d pixels)", pixelSize);
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+            qDebug("          found smoothly scalable font (%d pixels)", pixelSize);
+#endif
+
             px = pixelSize;
          }
       }
@@ -1099,7 +1094,10 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
          size = style->fontSize(0);
 
          if (size) {
-            FM_DEBUG("          found bitmap scalable font (%d pixels)", pixelSize);
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+            qDebug("          found bitmap scalable font (%d pixels)", pixelSize);
+#endif
+
             px = pixelSize;
          }
       }
@@ -1123,12 +1121,17 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
             if (tmpDist < distance) {
                distance = tmpDist;
                size     = &fontSize;
-               FM_DEBUG("          best size so far: %3d (%d)", size->pixelSize, pixelSize);
+
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+               qDebug("          best size so far: %3d (%d)", size->pixelSize, pixelSize);
+#endif
             }
          }
 
          if (! size) {
-            FM_DEBUG("          no size supports the script we want");
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+            qDebug("          no size supports the script we want");
+#endif
             continue;
          }
 
@@ -1173,7 +1176,9 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
       }
 
       if (currentScore < score) {
-         FM_DEBUG("          found a match: score %x best score so far %x", currentScore, score);
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+         qDebug("          found a match: score %x best score so far %x", currentScore, score);
+#endif
 
          score         = currentScore;
          desc->foundry = &fontFoundry;
@@ -1181,7 +1186,10 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
          desc->size    = size;
 
       } else {
-         FM_DEBUG("          score %x no better than best %x", currentScore, score);
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+         qDebug("          score %x no better than best %x", currentScore, score);
+#endif
+
       }
    }
 
@@ -2497,7 +2505,10 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
    engine = fontCache->findEngine(key);
 
    if (engine != nullptr) {
-      FM_DEBUG("Cache hit level 1");
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+      qDebug("Cache hit level 1");
+#endif
+
       return engine;
    }
 
@@ -2520,7 +2531,10 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
       }
 
    } else {
-      FM_DEBUG("  NO MATCH FOUND\n");
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+      qDebug("  NO MATCH FOUND\n");
+#endif
+
    }
 
    if (engine == nullptr) {
@@ -2576,7 +2590,10 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
          engine = new QFontEngineBox(request.pixelSize);
       }
 
-      FM_DEBUG("returning box engine");
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+      qDebug("returning box engine");
+#endif
+
    }
 
    return engine;

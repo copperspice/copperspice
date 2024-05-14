@@ -185,15 +185,11 @@ QList<QSpanCollection::Span *> QSpanCollection::spansInRect(int x, int y, int w,
    return list.toList();
 }
 
-#undef DEBUG_SPAN_UPDATE
-
-#ifdef DEBUG_SPAN_UPDATE
 QDebug operator<<(QDebug str, const QSpanCollection::Span &span)
 {
    str << "(" << span.top() << "," << span.left() << "," << span.bottom() << "," << span.right() << ")";
    return str;
 }
-#endif
 
 void QSpanCollection::updateInsertedRows(int start, int end)
 {

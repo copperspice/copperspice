@@ -504,8 +504,7 @@ QStyleHintReturnVariant::~QStyleHintReturnVariant()
 
 QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
 {
-#if defined(QT_DEBUG)
-
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
    switch (optionType) {
       case QStyleOption::SO_Default:
          debug << "SO_Default";
@@ -618,7 +617,7 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
 
 QDebug operator<<(QDebug debug, const QStyleOption &option)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
    debug << "QStyleOption(";
    debug << QStyleOption::OptionType(option.type);
    debug << ',' << (option.direction == Qt::RightToLeft ? "RightToLeft" : "LeftToRight");

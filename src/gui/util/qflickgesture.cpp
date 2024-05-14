@@ -39,14 +39,6 @@
 
 #ifndef QT_NO_GESTURES
 
-//#define QFLICKGESTURE_DEBUG
-
-#ifdef QFLICKGESTURE_DEBUG
-#   define qFGDebug  qDebug
-#else
-#   define qFGDebug  while (false) qDebug
-#endif
-
 extern bool qt_sendSpontaneousEvent(QObject *receiver, QEvent *event);
 
 static QMouseEvent *copyMouseEvent(QEvent *e)
@@ -126,9 +118,15 @@ class PressDelayHandler : public QObject
          mouseTarget = QApplication::widgetAt(pressDelayEvent->globalPos());
          mouseButton = pressDelayEvent->button();
          mouseEventSource = pressDelayEvent->source();
-         qFGDebug("QFG: consuming/delaying mouse press");
+
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug("QFG: consuming/delaying mouse press");
+#endif
+
       } else {
-         qFGDebug("QFG: NOT consuming/delaying mouse press");
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug("QFG: NOT consuming/delaying mouse press");
+#endif
       }
 
       e->setAccepted(true);
@@ -148,10 +146,16 @@ class PressDelayHandler : public QObject
       if (pressDelayEvent && mouseTarget && !scrollerIsActive) {
          QScopedPointer<QMouseEvent> releaseEvent(copyMouseEvent(e));
 
-         qFGDebug() << "QFG: re-sending mouse press (due to release) for " << mouseTarget;
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug() << "QFG: re-sending mouse press (due to release) for " << mouseTarget;
+#endif
+
          sendMouseEvent(pressDelayEvent.data(), UngrabMouseBefore);
 
-         qFGDebug() << "QFG: faking mouse release (due to release) for " << mouseTarget;
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug() << "QFG: faking mouse release (due to release) for " << mouseTarget;
+#endif
+
          sendMouseEvent(releaseEvent.data());
 
          result = true; // consume this event
@@ -167,7 +171,9 @@ class PressDelayHandler : public QObject
    }
 
    void scrollerWasIntercepted() {
-      qFGDebug("QFG: deleting delayed mouse press, since scroller was only intercepted");
+#if defined(CS_SHOW_DEBUG_GUI)
+      qDebug("QFG: deleting delayed mouse press, since scroller was only intercepted");
+#endif
 
       if (pressDelayEvent) {
          // we still have not even sent the press, just throw it away now
@@ -185,7 +191,11 @@ class PressDelayHandler : public QObject
    void scrollerBecameActive() {
       if (pressDelayEvent) {
          // we still have not even sent the press, just throw it away now
-         qFGDebug("QFG: deleting delayed mouse press, since scroller is active now");
+
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug("QFG: deleting delayed mouse press, since scroller is active now");
+#endif
+
          if (pressDelayTimer) {
             killTimer(pressDelayTimer);
             pressDelayTimer = 0;
@@ -205,7 +215,10 @@ class PressDelayHandler : public QObject
                     mouseButtons &= ~b;
                     QPoint farFarAway(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX);
 
-                    qFGDebug() << "QFG: sending a fake mouse release at far-far-away to " << mouseTarget;
+#if defined(CS_SHOW_DEBUG_GUI)
+                    qDebug() << "QFG: sending a fake mouse release at far-far-away to " << mouseTarget;
+#endif
+
                     QMouseEvent re(QEvent::MouseButtonRelease, QPoint(), farFarAway,
                                    b, mouseButtons, QApplication::keyboardModifiers());
                     sendMouseEvent(&re);
@@ -214,7 +227,10 @@ class PressDelayHandler : public QObject
 
          QPoint farFarAway(-QWIDGETSIZE_MAX, -QWIDGETSIZE_MAX);
 
-         qFGDebug() << "QFG: sending a fake mouse release at far-far-away to " << mouseTarget;
+#if defined(CS_SHOW_DEBUG_GUI)
+         qDebug() << "QFG: sending a fake mouse release to " << mouseTarget;
+#endif
+
          QMouseEvent re(QEvent::MouseButtonRelease, QPoint(), farFarAway, farFarAway,
                mouseButton, QApplication::mouseButtons() & ~mouseButton,
                QApplication::keyboardModifiers(), mouseEventSource);
@@ -229,7 +245,11 @@ class PressDelayHandler : public QObject
    void timerEvent(QTimerEvent *e) override {
       if (e->timerId() == pressDelayTimer) {
          if (pressDelayEvent && mouseTarget) {
-            qFGDebug() << "QFG: timer event: re-sending mouse press to " << mouseTarget;
+
+#if defined(CS_SHOW_DEBUG_GUI)
+            qDebug() << "QFG: timer event: re-sending mouse press to " << mouseTarget;
+#endif
+
             sendMouseEvent(pressDelayEvent.data(), UngrabMouseBefore);
          }
 
@@ -262,7 +282,10 @@ class PressDelayHandler : public QObject
             // we need to ungrab the mouse before re-sending the press,
             // since the scene had already set the mouse grabber to the
             // original (and consumed) event's receiver
-            qFGDebug() << "QFG: ungrabbing" << grabber;
+
+#if defined(CS_SHOW_DEBUG_GUI)
+            qDebug() << "QFG: ungrabbing" << grabber;
+#endif
             grabber->ungrabMouse();
          }
 
@@ -282,7 +305,10 @@ class PressDelayHandler : public QObject
             // we need to re-grab the mouse after sending a faked mouse
             // release, since we still need the mouse moves for the gesture
             // (the scene will clear the item's mouse grabber status on release)
-            qFGDebug() << "QFG: re-grabbing" << grabber;
+
+#if defined(CS_SHOW_DEBUG_GUI)
+            qDebug() << "QFG: re-grabbing" << grabber;
+#endif
             grabber->grabMouse();
          }
 

@@ -58,6 +58,10 @@ class Q_GUI_EXPORT QShortcutMap
    bool tryShortcut(QKeyEvent *event);
    bool hasShortcutForKeySequence(const QKeySequence &seq) const;
 
+#if defined(CS_SHOW_DEBUG_GUI)
+   void dumpMap() const;
+#endif
+
  private:
    void resetState();
    QKeySequence::SequenceMatch nextState(QKeyEvent *e);

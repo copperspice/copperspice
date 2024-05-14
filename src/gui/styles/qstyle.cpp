@@ -32,10 +32,6 @@
 
 #include <qguiapplication_p.h>
 
-#if defined(QT_DEBUG)
-#include <qdebug.h>
-#endif
-
 #include <algorithm>
 #include <limits.h>
 

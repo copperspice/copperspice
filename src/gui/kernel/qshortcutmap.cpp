@@ -35,9 +35,6 @@
 
 #ifndef QT_NO_SHORTCUT
 
-// To enable verbose output uncomment below
-//#define DEBUG_QSHORTCUTMAP
-
 struct QShortcutEntry {
    QShortcutEntry()
       : keyseq(0), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr) {
@@ -173,7 +170,8 @@ int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key
       }
       --i;
    }
-#if defined(DEBUG_QSHORTCUTMAP)
+
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug().nospace()
          << "QShortcutMap::removeShortcut(" << id << ", " << owner << ", "
          << key << ") = " << itemsRemoved;
@@ -212,7 +210,8 @@ int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner, const 
       }
       --i;
    }
-#if defined(DEBUG_QSHORTCUTMAP)
+
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug().nospace()
          << "QShortcutMap::setShortcutEnabled(" << enable << ", " << id << ", "
          << owner << ", " << key << ") = " << itemsChanged;
@@ -251,7 +250,8 @@ int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner, const Q
       }
       --i;
    }
-#if defined(DEBUG_QSHORTCUTMAP)
+
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug().nospace()
          << "QShortcutMap::setShortcutAutoRepeat(" << on << ", " << id << ", "
          << owner << ", " << key << ") = " << itemsChanged;
@@ -367,7 +367,7 @@ QKeySequence::SequenceMatch QShortcutMap::nextState(QKeyEvent *e)
    }
    d->currentState = result;
 
-#if defined(DEBUG_QSHORTCUTMAP)
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug().nospace() << "QShortcutMap::nextState(" << e << ") = " << result;
 #endif
 
@@ -665,7 +665,7 @@ void QShortcutMap::dispatchEvent(QKeyEvent *e)
    QCoreApplication::sendEvent(const_cast<QObject *>(next->owner), &se);
 }
 
-#if defined(Dump_QShortcutMap)
+#if defined(CS_SHOW_DEBUG_GUI)
 void QShortcutMap::dumpMap() const
 {
    Q_D(const QShortcutMap);

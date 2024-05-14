@@ -286,8 +286,6 @@ class QTextHtmlParser
       return at(i).padding[MarginRight];
    }
 
-   void dumpHtml();
-
    void parse(const QString &text, const QTextDocument *resourceProvider);
 
    static int lookupElement(const QString &element);

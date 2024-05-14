@@ -271,7 +271,7 @@ void QOpenGLWidgetPrivate::initialize()
 
    if (! shareContext) {
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
       qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context");
 #endif
 

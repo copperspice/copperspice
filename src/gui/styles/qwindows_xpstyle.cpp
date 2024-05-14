@@ -647,7 +647,7 @@ HBITMAP QWindowsXPStylePrivate::buffer(int w, int h)
    bufferW = w;
    bufferH = h;
 
-#ifdef DEBUG_XP_STYLE
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
    qDebug("Creating new dib section (%d, %d)", w, h);
 #endif
 
@@ -962,7 +962,7 @@ bool QWindowsXPStylePrivate::drawBackgroundDirectly(HDC dc, XPThemeData &themeDa
    HRGN hrgn = qt_hrgn_from_qregion(sysRgn);
    SelectClipRgn(dc, hrgn);
 
-#ifdef DEBUG_XP_STYLE
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
    printf("---[ DIRECT PAINTING ]------------------> Name(%-10s) Part(%d) State(%d)\n",
       csPrintable(themeData.name), themeData.partId, themeData.stateId);
    showProperties(themeData);
@@ -1090,9 +1090,10 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
 
       haveCachedPixmap = QPixmapCache::find(pixmapCacheKey, cachedPixmap);
 
-#ifdef DEBUG_XP_STYLE
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
       char buf[25];
-      ::sprintf(buf, "+ Pixmap(%3d, %3d) ]", w, h);
+      std::sprintf(buf, "+ Pixmap(%3d, %3d) ]", w, h);
+
       printf("---[ CACHED %s--------> Name(%-10s) Part(%d) State(%d)\n",
          haveCachedPixmap ? buf : "]-------------------",
          csPrintable(themeData.name), themeData.partId, themeData.stateId);
@@ -1117,11 +1118,12 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
          potentialInvalidAlpha = partIsTransparent && tmt_glyphtype == GT_IMAGEGLYPH;
       }
 
-#ifdef DEBUG_XP_STYLE
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
       printf("---[ NOT CACHED ]-----------------------> Name(%-10s) Part(%d) State(%d)\n",
          csPrintable(themeData.name), themeData.partId, themeData.stateId);
       printf("-->partIsTransparen      = %d\n", partIsTransparent);
       printf("-->potentialInvalidAlpha = %d\n", potentialInvalidAlpha);
+
       showProperties(themeData);
 #endif
 
@@ -1328,7 +1330,8 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
    if (!haveCachedPixmap && w && h) {
       QPixmap pix = QPixmap::fromImage(img).copy(rect);
       QPixmapCache::insert(pixmapCacheKey, pix);
-#ifdef DEBUG_XP_STYLE
+
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
       printf("+++Adding pixmap to cache, size(%d, %d), wasAlphaSwapped(%d), wasAlphaFixed(%d), name(%s)\n",
          w, h, wasAlphaSwapped, wasAlphaFixed, csPrintable(pixmapCacheKey));
 #endif
@@ -4479,11 +4482,7 @@ QWindowsXPStyle::QWindowsXPStyle(QWindowsXPStylePrivate &dd) : QWindowsStyle(dd)
 {
 }
 
-// Debugging code ---------------------------------------------------------------------[ START ]---
-// The code for this point on is not compiled by default, but only used as assisting
-// debugging code when you uncomment the DEBUG_XP_STYLE define at the top of the file.
-
-#ifdef DEBUG_XP_STYLE
+#if defined(CS_SHOW_DEBUG_GUI_STYLES)
 
 // schema file expects these to be defined by the user.
 #define TMT_ENUMDEF 8
@@ -4747,6 +4746,6 @@ void QWindowsXPStylePrivate::showProperties(XPThemeData &themeData)
       }
    }
 }
-#endif
+#endif   // defined(CS_SHOW_DEBUG_GUI_STYLES)
 
 #endif //QT_NO_WINDOWSXP

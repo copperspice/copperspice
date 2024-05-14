@@ -464,14 +464,6 @@ int QTextHtmlParser::lookupElement(const QString &element)
    return e->id;
 }
 
-// quotes newlines as "\\n"
-static QString quoteNewline(const QString &s)
-{
-   QString n = s;
-   n.replace(QLatin1Char('\n'), QLatin1String("\\n"));
-   return n;
-}
-
 QTextHtmlParserNode::QTextHtmlParserNode()
    : parent(0), id(Html_unknown),
      cssFloat(QTextFrameFormat::InFlow), hasOwnListStyle(false),
@@ -486,16 +478,6 @@ QTextHtmlParserNode::QTextHtmlParserNode()
    margin[QTextHtmlParser::MarginRight] = 0;
    margin[QTextHtmlParser::MarginTop] = 0;
    margin[QTextHtmlParser::MarginBottom] = 0;
-}
-
-void QTextHtmlParser::dumpHtml()
-{
-   for (int i = 0; i < count(); ++i) {
-      qDebug().nospace() << csPrintable(QString(depth(i) * 4, QLatin1Char(' ')))
-         << csPrintable(at(i).tag) << ':'
-         << quoteNewline(at(i).text);
-      ;
-   }
 }
 
 QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
@@ -567,7 +549,6 @@ void QTextHtmlParser::parse(const QString &text, const QTextDocument *_resourceP
    textEditMode = false;
    resourceProvider = _resourceProvider;
    parse();
-   //dumpHtml();
 }
 
 int QTextHtmlParser::depth(int i) const

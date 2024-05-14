@@ -86,7 +86,9 @@ void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *
             pixelSize, false, writingSystems, handle);
       }
    } else {
+#if defined(CS_SHOW_DEBUG_GUI)
       qDebug() << "header verification of QPF2 font failed. maybe it is corrupt?";
+#endif
    }
 }
 

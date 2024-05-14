@@ -82,8 +82,6 @@
 #include <cmath>
 #include <stdlib.h>
 
-// #define ALIEN_DEBUG
-
 void qt_init(QApplicationPrivate *priv, int type);
 void qt_init_tooltip_palette();
 void qt_cleanup();
@@ -1304,7 +1302,8 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
    if ((!enter && !leave) || (enter == leave)) {
       return;
    }
-#ifdef ALIEN_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << "QApplicationPrivate::dispatchEnterLeave, ENTER:" << enter << "LEAVE:" << leave;
 #endif
 
@@ -1727,7 +1726,7 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
       receiver = mouseGrabber;
       *pos = receiver->mapFromGlobal(candidate->mapToGlobal(windowPos));
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI)
       qDebug() << "  ** receiver adjusted to:" << receiver << "pos:" << pos;
 #endif
 
@@ -1796,7 +1795,7 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event, 
       }
    }
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << "QApplicationPrivate::sendMouseEvent: receiver:" << receiver
       << "pos:" << event->pos() << "alien" << alienWidget << "button down"
       << *buttonDown << "last" << lastMouseReceiver << "leave after release"
@@ -1982,7 +1981,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
       return true;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI)
    d->checkReceiverThread(receiver);
 #endif
 

@@ -30,8 +30,6 @@
 
 #include <algorithm>
 
-//#define QLAYOUT_EXTRA_DEBUG
-
 typedef qint64 Fixed64;
 
 static inline Fixed64 toFixed(int i)
@@ -361,7 +359,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
       }
    }
 
-#ifdef QLAYOUT_EXTRA_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI)
    qDebug() << "qGeomCalc" << "start" << start <<  "count" << count <<  "pos" << pos
       <<  "space" << space <<  "spacer" << spacer;
    for (i = start; i < start + count; ++i) {

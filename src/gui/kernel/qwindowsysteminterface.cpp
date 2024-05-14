@@ -816,7 +816,6 @@ void QWindowSystemInterface::handleEnterWhatsThisEvent()
 }
 #endif
 
-#ifndef QT_NO_DEBUG_STREAM
 Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QWindowSystemInterface::TouchPoint &p)
 {
    QDebugStateSaver saver(dbg);
@@ -826,7 +825,6 @@ Q_GUI_EXPORT QDebug operator<<(QDebug dbg, const QWindowSystemInterface::TouchPo
 
    return dbg;
 }
-#endif
 
 QWindowSystemEventHandler::~QWindowSystemEventHandler()
 {

@@ -45,7 +45,11 @@ static inline qreal initialGlobalScaleFactor()
 
       const qreal f = env_1.toDouble(&ok);
       if (ok && f > 0) {
-         qDebug() << "QHighDpiScaling initialGlobalScaleFactor(): Apply =" << scaleFactorEnvVar << f;
+
+#if defined(CS_SHOW_DEBUG_GUI_DPI)
+         qDebug() << "QHighDpiScaling initialGlobalScaleFactor() Factor =" << scaleFactorEnvVar << f;
+#endif
+
          result = f;
       }
 
