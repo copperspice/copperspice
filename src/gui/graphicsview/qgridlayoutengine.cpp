@@ -115,7 +115,7 @@ void QGridLayoutBox::normalize()
    Q_ASSERT((q_minimumDescent < 0.0) == (q_minimumAscent < 0.0));
 }
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
 void QGridLayoutBox::dump(int indent) const
 {
    qDebug("%*sBox (%g <= %g <= %g [%g/%g])", indent, "", q_minimumSize, q_preferredSize,
@@ -445,7 +445,7 @@ void QGridLayoutRowData::stealBox(int start, int end, int which, qreal *position
    }
 }
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
 void QGridLayoutRowData::dump(int indent) const
 {
    qDebug("%*sData", indent, "");
@@ -716,7 +716,7 @@ QSizeF QGridLayoutItem::effectiveMaxSize(const QSizeF &constraint) const
    return size;
 }
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
 void QGridLayoutItem::dump(int indent) const
 {
    qDebug("%*s (%d, %d) %d x %d", indent, "", firstRow(), firstColumn(),
@@ -749,7 +749,7 @@ void QGridLayoutRowInfo::insertOrRemoveRows(int row, int delta)
    insertOrRemoveItems(boxes, row, delta);
 }
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
 void QGridLayoutRowInfo::dump(int indent) const
 {
    qDebug("%*sInfo (count: %d)", indent, "", count);
@@ -1212,11 +1212,11 @@ Qt::LayoutDirection QGridLayoutEngine::visualDirection() const
    return m_visualDirection;
 }
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
 void QGridLayoutEngine::dump(int indent) const
 {
    qDebug("%*sEngine", indent, "");
-   qDebug("%*s Items (%d)", indent, "", q_items.count());
+   qDebug("%*s Items (%lld)", indent, "", q_items.count());
 
    int i;
 
@@ -1259,8 +1259,7 @@ void QGridLayoutEngine::dump(int indent) const
       QString message;
 
       for (i = 0; i < cellPos->count(); ++i) {
-         message += QLatin1String((message.isEmpty() ? "[" : ", "));
-
+         message += message.isEmpty() ? QString("[") : QString(", ");
          message += QString::number(cellPos->at(i));
       }
 

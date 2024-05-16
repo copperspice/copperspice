@@ -36,7 +36,7 @@
 #include <qopengl_extensions_p.h>
 #include <qfont_p.h>
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
 #define QT_RESET_GLERROR()                                \
 {                                                         \
     while (QOpenGLContext::currentContext()->functions()->glGetError() != GL_NO_ERROR) {} \
@@ -233,53 +233,80 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
         return true;
 
     case GL_FRAMEBUFFER_UNSUPPORTED:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Unsupported framebuffer format.");
+#endif
 
         break;
 
     case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete attachment.");
+#endif
         break;
 
     case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.");
+#endif
         break;
 
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT
     case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, duplicate attachment.");
+#endif
 
         break;
 #endif
 
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS
     case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attached images must have same dimensions.");
+#endif
+
         break;
 #endif
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_FORMATS
     case GL_FRAMEBUFFER_INCOMPLETE_FORMATS:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attached images must have same format.");
+#endif
         break;
 #endif
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER
     case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing draw buffer.");
+#endif
+
         break;
 #endif
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER
     case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing read buffer.");
+#endif
+
         break;
 #endif
+
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE
     case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attachments must have same number of samples per pixel.");
+#endif
         break;
 #endif
 
     default:
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug() <<"QOpenGLFramebufferObject: An undefined error has occurred: "<< status;
+#endif
         break;
     }
 
@@ -728,7 +755,7 @@ bool QOpenGLFramebufferObject::bind()
         return false;
     }
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group()) {
         qWarning("QOpenGLFramebufferObject::bind() called from incompatible context");
     }
@@ -764,7 +791,7 @@ bool QOpenGLFramebufferObject::release()
 
     Q_D(QOpenGLFramebufferObject);
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group()) {
         qWarning("QOpenGLFramebufferObject::release() called from incompatible context");
     }
@@ -1024,7 +1051,7 @@ bool QOpenGLFramebufferObject::bindDefault()
         QOpenGLContextPrivate::get(ctx)->qgl_current_fbo = nullptr;
     }
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     else
         qWarning("QOpenGLFramebufferObject::bindDefault() called without current context.");
 #endif
@@ -1065,7 +1092,7 @@ void QOpenGLFramebufferObject::setAttachment(QOpenGLFramebufferObject::Attachmen
         return;
     }
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group())
         qWarning("QOpenGLFramebufferObject::setAttachment() called from incompatible context");
 #endif

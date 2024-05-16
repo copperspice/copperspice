@@ -56,14 +56,14 @@ void QBackingStore::flush(const QRegion &region, QWindow *win, const QPoint &off
    }
 
    if (! win->handle()) {
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qWarning("QBackingStore::flush() Unable to flush a window without a handle");
 #endif
       return;
    }
 
    if (win && win->isTopLevel() && ! qt_window_private(win)->receivedExpose) {
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qWarning("QBackingStore::flush() Unable to flush a non-exposed window");
 #endif
    }
@@ -126,7 +126,7 @@ void QBackingStore::beginPaint(const QRegion &region)
 
       if (needsNewImage) {
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug() << "QBackingStore::beginPaint(): " << d_ptr->window << "\n  "
                   << "Source size =" << source->size() << " DP ratio =" << source->devicePixelRatio();
 #endif
@@ -137,7 +137,7 @@ void QBackingStore::beginPaint(const QRegion &region)
          qreal targetDevicePixelRatio = d_ptr->window->devicePixelRatio();
          d_ptr->highDpiBackingstore->setDevicePixelRatio(targetDevicePixelRatio);
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug() << "   Destination Size =" << d_ptr->highDpiBackingstore->size()
                   << "DP ratio = " << targetDevicePixelRatio;
 #endif

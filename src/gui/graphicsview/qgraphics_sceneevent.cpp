@@ -25,10 +25,6 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#if defined(QT_DEBUG)
-#include <qdebug.h>
-#endif
-
 #include <qmap.h>
 #include <qpoint.h>
 #include <qsize.h>

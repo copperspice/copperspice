@@ -177,7 +177,7 @@ bool QOpenGLBuffer::read(int offset, void *data, int count)
 
 void QOpenGLBuffer::write(int offset, const void *data, int count)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::allocate(): buffer not created");
     }
@@ -192,7 +192,7 @@ void QOpenGLBuffer::write(int offset, const void *data, int count)
 
 void QOpenGLBuffer::allocate(const void *data, int count)
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::allocate(): buffer not created");
     }
@@ -207,7 +207,7 @@ void QOpenGLBuffer::allocate(const void *data, int count)
 
 bool QOpenGLBuffer::bind()
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::bind(): buffer not created");
     }
@@ -219,7 +219,7 @@ bool QOpenGLBuffer::bind()
     if (bufferId) {
         if (d->guard->group() != QOpenGLContextGroup::currentContextGroup()) {
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
             qWarning("QOpenGLBuffer::bind(): Buffer is not valid in the current context");
 #endif
             return false;
@@ -235,7 +235,7 @@ bool QOpenGLBuffer::bind()
 
 void QOpenGLBuffer::release()
 {
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::release(): buffer not created");
     }
@@ -280,7 +280,7 @@ void *QOpenGLBuffer::map(QOpenGLBuffer::Access access)
 {
     Q_D(QOpenGLBuffer);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::map(): buffer not created");
     }
@@ -317,7 +317,7 @@ void *QOpenGLBuffer::mapRange(int offset, int count, QOpenGLBuffer::RangeAccessF
 {
     Q_D(QOpenGLBuffer);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::mapRange(): buffer not created");
     }
@@ -334,7 +334,7 @@ bool QOpenGLBuffer::unmap()
 {
     Q_D(QOpenGLBuffer);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! isCreated()) {
         qWarning("QOpenGLBuffer::unmap(): buffer not created");
     }

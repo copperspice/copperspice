@@ -432,10 +432,6 @@ class QRasterBuffer
       return m_buffer + y * bytes_per_line;
    }
 
-#if defined(QT_DEBUG)
-   QImage bufferImage() const;
-#endif
-
    void flushToARGBImage(QImage *image) const;
 
    int width() const {

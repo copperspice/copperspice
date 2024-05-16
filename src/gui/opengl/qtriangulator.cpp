@@ -25,7 +25,9 @@
 #include <qtriangulator_p.h>
 
 #include <qalgorithms.h>
+#include <qdialog.h>
 #include <qevent.h>
+#include <qmath.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qvector.h>
@@ -39,8 +41,6 @@
 #include <qopengl_extensions_p.h>
 #include <qopenglcontext_p.h>
 #include <qrbtree_p.h>
-
-//#define Q_TRIANGULATOR_DEBUG
 
 #define Q_FIXED_POINT_SCALE 32
 
@@ -187,7 +187,7 @@ static inline qint64 qCross(const QPodPoint &u, const QPodPoint &v)
     return qint64(u.x) * qint64(v.y) - qint64(u.y) * qint64(v.x);
 }
 
-#ifdef Q_TRIANGULATOR_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
 static inline qint64 qDot(const QPodPoint &u, const QPodPoint &v)
 {
     return qint64(u.x) * qint64(v.x) + qint64(u.y) * qint64(v.y);
@@ -621,7 +621,7 @@ public:
             int edge;
         };
 
-#ifdef Q_TRIANGULATOR_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         friend class DebugDialog;
         friend class QTriangulator;
 
@@ -631,10 +631,10 @@ public:
             DebugDialog(ComplexToSimple *parent, int currentVertex);
 
          protected:
-            void paintEvent(QPaintEvent *);
-            void wheelEvent(QWheelEvent *);
-            void mouseMoveEvent(QMouseEvent *);
-            void mousePressEvent(QMouseEvent *);
+            void paintEvent(QPaintEvent *) override;
+            void wheelEvent(QWheelEvent *) override;
+            void mouseMoveEvent(QMouseEvent *) override;
+            void mousePressEvent(QMouseEvent *) override;
 
          private:
             ComplexToSimple *m_parent;
@@ -675,7 +675,7 @@ public:
         int m_initialPointCount;
     };
 
-#ifdef Q_TRIANGULATOR_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     friend class ComplexToSimple::DebugDialog;
 #endif
 
@@ -1305,7 +1305,7 @@ void QTriangulator<T>::ComplexToSimple::sortEdgeList(const QPodPoint eventPoint)
         while (!m_topIntersection.isEmpty() && m_topIntersection.top().intersectionPoint <= currentIntersectionPoint)
             m_topIntersection.pop();
 
-#ifdef Q_TRIANGULATOR_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         DebugDialog dialog(this, intersection.vertex);
         dialog.exec();
 #endif
@@ -1402,7 +1402,8 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
         }
         while (!m_topIntersection.isEmpty() && m_topIntersection.top().intersectionPoint <= eventPoint)
             m_topIntersection.pop();
-#ifdef Q_TRIANGULATOR_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         DebugDialog dialog(this, vertex);
         dialog.exec();
 #endif
@@ -1674,8 +1675,7 @@ inline bool QTriangulator<T>::ComplexToSimple::Event::operator < (const Event &o
     return other.point < point;
 }
 
-
-#ifdef Q_TRIANGULATOR_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
 
 template <typename T>
 QTriangulator<T>::ComplexToSimple::DebugDialog::DebugDialog(ComplexToSimple *parent, int currentVertex)

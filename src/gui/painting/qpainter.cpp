@@ -63,11 +63,6 @@
 #define QGradient_StretchToDevice     0x10000000
 #define QPaintEngine_OpaqueBackground 0x40000000
 
-// #define QT_DEBUG_DRAW
-#ifdef QT_DEBUG_DRAW
-bool qt_show_painter_debug_output = true;
-#endif
-
 extern QPixmap qt_pixmapForBrush(int style, bool invert);
 
 void qt_format_text(const QFont &font,
@@ -137,7 +132,7 @@ static inline uint line_emulation(uint emulation)
          | QPaintEngine_OpaqueBackground);
 }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
 static bool qt_painter_thread_test(int devType, int engineType, const char *what)
 {
    const QPlatformIntegration *platformIntegration = QGuiApplicationPrivate::platformIntegration();
@@ -457,7 +452,7 @@ void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperatio
 
    p.drawPath(originalPath);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    static bool do_fallback_overlay = qgetenv("QT_PAINT_FALLBACK_OVERLAY").size() > 0;
 
    if (do_fallback_overlay) {
@@ -1121,10 +1116,8 @@ bool QPainter::begin(QPaintDevice *pd)
       pd = rpd;
    }
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::begin(), device=%p, type=%d\n", pd, pd->devType());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::begin(), device=%p, type=%d\n", pd, pd->devType());
 #endif
 
    if (pd->devType() == QInternal::Pixmap) {
@@ -1419,10 +1412,8 @@ void QPainter::setBrushOrigin(const QPointF &p)
 {
    Q_D(QPainter);
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setBrushOrigin(), (%.2f,%.2f)\n", p.x(), p.y());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setBrushOrigin(), (%.2f,%.2f)\n", p.x(), p.y());
 #endif
 
    if (! d->engine) {
@@ -1519,9 +1510,8 @@ void QPainter::setClipping(bool enable)
 {
    Q_D(QPainter);
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::setClipping(), enable=%s, was=%s\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setClipping(), enable=%s, was=%s\n",
          enable ? "on" : "off", hasClipping() ? "on" : "off");
 #endif
 
@@ -1854,11 +1844,10 @@ void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
 {
    Q_D(QPainter);
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    QRect rect = r.boundingRect();
 
-   if (qt_show_painter_debug_output)
-      printf("QPainter::setClipRegion(), size=%d, [%d,%d,%d,%d]\n",
+   printf("QPainter::setClipRegion(), size=%lld, [%d,%d,%d,%d]\n",
          r.rects().size(), rect.x(), rect.y(), rect.width(), rect.height());
 #endif
 
@@ -1991,11 +1980,8 @@ bool QPainter::matrixEnabled() const
 
 void QPainter::scale(qreal sx, qreal sy)
 {
-
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::scale(), sx=%f, sy=%f\n", sx, sy);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::scale(), sx=%f, sy=%f\n", sx, sy);
 #endif
 
    Q_D(QPainter);
@@ -2011,10 +1997,8 @@ void QPainter::scale(qreal sx, qreal sy)
 
 void QPainter::shear(qreal sh, qreal sv)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::shear(), sh=%f, sv=%f\n", sh, sv);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::shear(), sh=%f, sv=%f\n", sh, sv);
 #endif
 
    Q_D(QPainter);
@@ -2031,10 +2015,8 @@ void QPainter::shear(qreal sh, qreal sv)
 
 void QPainter::rotate(qreal a)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::rotate(), angle=%f\n", a);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::rotate(), angle=%f\n", a);
 #endif
 
    Q_D(QPainter);
@@ -2054,10 +2036,8 @@ void QPainter::translate(const QPointF &offset)
    qreal dx = offset.x();
    qreal dy = offset.y();
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::translate(), dx=%f, dy=%f\n", dx, dy);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::translate(), dx=%f, dy=%f\n", dx, dy);
 #endif
 
    Q_D(QPainter);
@@ -2074,12 +2054,11 @@ void QPainter::translate(const QPointF &offset)
 
 void QPainter::setClipPath(const QPainterPath &path, Qt::ClipOperation op)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      QRectF b = path.boundingRect();
-      printf("QPainter::setClipPath(), size=%d, op=%d, bounds=[%.2f,%.2f,%.2f,%.2f]\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   QRectF b = path.boundingRect();
+
+   printf("QPainter::setClipPath(), size=%d, op=%d, bounds=[%.2f,%.2f,%.2f,%.2f]\n",
          path.elementCount(), op, b.x(), b.y(), b.width(), b.height());
-   }
 #endif
 
    Q_D(QPainter);
@@ -2189,10 +2168,10 @@ void QPainter::fillPath(const QPainterPath &path, const QBrush &brush)
 
 void QPainter::drawPath(const QPainterPath &path)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    QRectF pathBounds = path.boundingRect();
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawPath(), size=%d, [%.2f,%.2f,%.2f,%.2f]\n",
+
+   printf("QPainter::drawPath(), size=%d, [%.2f,%.2f,%.2f,%.2f]\n",
          path.elementCount(), pathBounds.x(), pathBounds.y(), pathBounds.width(), pathBounds.height());
 #endif
 
@@ -2218,10 +2197,8 @@ void QPainter::drawPath(const QPainterPath &path)
 
 void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawRects(), count=%d\n", rectCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawRects(), count=%d\n", rectCount);
 #endif
 
    Q_D(QPainter);
@@ -2278,10 +2255,8 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 
 void QPainter::drawRects(const QRect *rectPtr, int rectCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawRects(), count=%d\n", rectCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawRects(), count=%d\n", rectCount);
 #endif
 
    Q_D(QPainter);
@@ -2338,10 +2313,8 @@ void QPainter::drawRects(const QRect *rectPtr, int rectCount)
 
 void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPoints(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPoints(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -2401,10 +2374,8 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
 
 void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPoints(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPoints(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -2462,10 +2433,8 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
 
 void QPainter::setBackgroundMode(Qt::BGMode mode)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setBackgroundMode(), mode=%d\n", mode);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setBackgroundMode(), mode=%d\n", mode);
 #endif
 
    Q_D(QPainter);
@@ -2500,10 +2469,8 @@ Qt::BGMode QPainter::backgroundMode() const
 
 void QPainter::setPen(const QColor &color)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setPen(), color=%04x\n", color.rgb());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setPen(), color=%04x\n", color.rgb());
 #endif
 
    Q_D(QPainter);
@@ -2528,10 +2495,8 @@ void QPainter::setPen(const QColor &color)
 
 void QPainter::setPen(const QPen &pen)
 {
-
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::setPen(), color=%04x, (brushStyle=%d) style=%d, cap=%d, join=%d\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setPen(), color=%04x, (brushStyle=%d) style=%d, cap=%d, join=%d\n",
          pen.color().rgb(), pen.brush().style(), pen.style(), pen.capStyle(), pen.joinStyle());
 #endif
 
@@ -2594,10 +2559,8 @@ const QPen &QPainter::pen() const
 
 void QPainter::setBrush(const QBrush &brush)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setBrush(), color=%04x, style=%d\n", brush.color().rgb(), brush.style());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setBrush(), color=%04x, style=%d\n", brush.color().rgb(), brush.style());
 #endif
 
    Q_D(QPainter);
@@ -2658,10 +2621,8 @@ const QBrush &QPainter::brush() const
 
 void QPainter::setBackground(const QBrush &bg)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setBackground(), color=%04x, style=%d\n", bg.color().rgb(), bg.style());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setBackground(), color=%04x, style=%d\n", bg.color().rgb(), bg.style());
 #endif
 
    Q_D(QPainter);
@@ -2682,10 +2643,8 @@ void QPainter::setFont(const QFont &font)
 {
    Q_D(QPainter);
 
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setFont(), family=%s, pointSize=%d\n", font.family().toLatin1().constData(), font.pointSize());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setFont(), family=%s, pointSize=%d\n", font.family().toLatin1().constData(), font.pointSize());
 #endif
 
    if (!d->engine) {
@@ -2713,11 +2672,10 @@ const QFont &QPainter::font() const
 
 void QPainter::drawRoundedRect(const QRectF &rect, qreal xRadius, qreal yRadius, Qt::SizeMode mode)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawRoundedRect(), [%.2f,%.2f,%.2f,%.2f]\n", rect.x(), rect.y(), rect.width(), rect.height());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawRoundedRect(), [%.2f,%.2f,%.2f,%.2f]\n", rect.x(), rect.y(), rect.width(), rect.height());
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2746,10 +2704,8 @@ void QPainter::drawRoundRect(const QRectF &r, int xRnd, int yRnd)
 
 void QPainter::drawEllipse(const QRectF &r)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawEllipse(), [%.2f,%.2f,%.2f,%.2f]\n", r.x(), r.y(), r.width(), r.height());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawEllipse(), [%.2f,%.2f,%.2f,%.2f]\n", r.x(), r.y(), r.width(), r.height());
 #endif
 
    Q_D(QPainter);
@@ -2783,11 +2739,10 @@ void QPainter::drawEllipse(const QRectF &r)
 
 void QPainter::drawEllipse(const QRect &r)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawEllipse(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawEllipse(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
 #endif
+
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2820,9 +2775,8 @@ void QPainter::drawEllipse(const QRect &r)
 
 void QPainter::drawArc(const QRectF &r, int a, int alen)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawArc(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawArc(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
          r.x(), r.y(), r.width(), r.height(), a / 16, alen / 16);
 #endif
 
@@ -2842,9 +2796,8 @@ void QPainter::drawArc(const QRectF &r, int a, int alen)
 
 void QPainter::drawPie(const QRectF &r, int a, int alen)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawPie(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPie(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
          r.x(), r.y(), r.width(), r.height(), a / 16, alen / 16);
 #endif
 
@@ -2877,9 +2830,8 @@ void QPainter::drawPie(const QRectF &r, int a, int alen)
 
 void QPainter::drawChord(const QRectF &r, int a, int alen)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawChord(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawChord(), [%.2f,%.2f,%.2f,%.2f], angle=%d, sweep=%d\n",
          r.x(), r.y(), r.width(), r.height(), a / 16, alen / 16);
 #endif
 
@@ -2900,10 +2852,8 @@ void QPainter::drawChord(const QRectF &r, int a, int alen)
 
 void QPainter::drawLines(const QLineF *lines, int lineCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawLines(), line count=%d\n", lineCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawLines(), line count=%d\n", lineCount);
 #endif
 
    Q_D(QPainter);
@@ -2945,10 +2895,8 @@ void QPainter::drawLines(const QLineF *lines, int lineCount)
 
 void QPainter::drawLines(const QLine *lines, int lineCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawLine(), line count=%d\n", lineCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawLine(), line count=%d\n", lineCount);
 #endif
 
    Q_D(QPainter);
@@ -3003,10 +2951,8 @@ void QPainter::drawLines(const QPoint *pointPairs, int lineCount)
 
 void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPolyline(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPolyline(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3046,10 +2992,8 @@ void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
 
 void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPolyline(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPolyline(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3089,10 +3033,8 @@ void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
 
 void QPainter::drawPolygon(const QPointF *pointPtr, int pointCount, Qt::FillRule fillRule)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPolygon(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPolygon(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3128,10 +3070,8 @@ void QPainter::drawPolygon(const QPointF *pointPtr, int pointCount, Qt::FillRule
 
 void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule fillRule)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawPolygon(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPolygon(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3168,10 +3108,8 @@ void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule 
 
 void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3209,10 +3147,8 @@ void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
 
 void QPainter::drawConvexPolygon(const QPointF *pointPtr, int pointCount)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
 #endif
 
    Q_D(QPainter);
@@ -3254,9 +3190,8 @@ static inline QPointF roundInDeviceCoordinates(const QPointF &p, const QTransfor
 
 void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 {
-#if defined QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawPixmap(), p=[%.2f,%.2f], pix=[%d,%d]\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPixmap(), p=[%.2f,%.2f], pix=[%d,%d]\n",
          p.x(), p.y(), pm.width(), pm.height());
 #endif
 
@@ -3266,7 +3201,7 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
       return;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawPixmap()");
 #endif
 
@@ -3328,9 +3263,8 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 
 void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 {
-#if defined QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], source=[%.2f,%.2f,%.2f,%.2f]\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], source=[%.2f,%.2f,%.2f,%.2f]\n",
          r.x(), r.y(), r.width(), r.height(), pm.width(), pm.height(),
          sr.x(), sr.y(), sr.width(), sr.height());
 #endif
@@ -3341,7 +3275,7 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
       return;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawPixmap()");
 #endif
 
@@ -3904,11 +3838,8 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
 // internal
 void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justificationPadding)
 {
-
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawText(), pos=[%.2f,%.2f], str='%s'\n", p.x(), p.y(), csPrintable(str));
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawText(), pos=[%.2f,%.2f], str='%s'\n", p.x(), p.y(), csPrintable(str));
 #endif
 
    Q_D(QPainter);
@@ -4000,11 +3931,9 @@ void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justif
 
 void QPainter::drawText(const QRect &r, int flags, const QString &str, QRect *br)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawText(), r=[%d,%d,%d,%d], flags=%d, str='%s'\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawText(), r=[%d,%d,%d,%d], flags=%d, str='%s'\n",
          r.x(), r.y(), r.width(), r.height(), flags, str.toLatin1().constData());
-   }
 #endif
 
    Q_D(QPainter);
@@ -4027,9 +3956,8 @@ void QPainter::drawText(const QRect &r, int flags, const QString &str, QRect *br
 
 void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *br)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawText(), r=[%.2f,%.2f,%.2f,%.2f], flags=%d, str='%s'\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawText(), r=[%.2f,%.2f,%.2f,%.2f], flags=%d, str='%s'\n",
          r.x(), r.y(), r.width(), r.height(), flags, str.toLatin1().constData());
 #endif
 
@@ -4048,11 +3976,9 @@ void QPainter::drawText(const QRectF &r, int flags, const QString &str, QRectF *
 
 void QPainter::drawText(const QRectF &r, const QString &text, const QTextOption &o)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::drawText(), r=[%.2f,%.2f,%.2f,%.2f], str='%s'\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawText(), r=[%.2f,%.2f,%.2f,%.2f], str='%s'\n",
          r.x(), r.y(), r.width(), r.height(), text.toLatin1().constData());
-   }
 #endif
 
    Q_D(QPainter);
@@ -4494,9 +4420,8 @@ QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextO
 
 void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &sp)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output)
-      printf("QPainter::drawTiledPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], offset=[%.2f,%.2f]\n",
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::drawTiledPixmap(), target=[%.2f,%.2f,%.2f,%.2f], pix=[%d,%d], offset=[%.2f,%.2f]\n",
          r.x(), r.y(), r.width(), r.height(), pixmap.width(), pixmap.height(), sp.x(), sp.y());
 #endif
 
@@ -4506,7 +4431,7 @@ void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPo
       return;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qt_painter_thread_test(d->device->devType(), d->engine->type(), "drawTiledPixmap()");
 #endif
 
@@ -4711,13 +4636,9 @@ void QPainter::fillRect(const QRectF &r, const QColor &color)
 
 void QPainter::setRenderHint(RenderHint hint, bool on)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setRenderHint: hint=%x, %s\n", hint, on ? "on" : "off");
-   }
-#endif
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setRenderHint: hint=%x, %s\n", hint, on ? "on" : "off");
 
-#if defined(QT_DEBUG)
    static const bool antialiasingDisabled = qgetenv("QT_NO_ANTIALIASING").toInt();
 
    if (hint == QPainter::Antialiasing && antialiasingDisabled) {
@@ -4773,10 +4694,8 @@ bool QPainter::viewTransformEnabled() const
 
 void QPainter::setWindow(const QRect &r)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setWindow(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setWindow(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
 #endif
 
    Q_D(QPainter);
@@ -4807,10 +4726,8 @@ QRect QPainter::window() const
 
 void QPainter::setViewport(const QRect &r)
 {
-#ifdef QT_DEBUG_DRAW
-   if (qt_show_painter_debug_output) {
-      printf("QPainter::setViewport(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
-   }
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("QPainter::setViewport(), [%d,%d,%d,%d]\n", r.x(), r.y(), r.width(), r.height());
 #endif
 
    Q_D(QPainter);
@@ -5474,7 +5391,7 @@ void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragment
       return;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    for (int i = 0; i < fragmentCount; ++i) {
       QRectF sourceRect(fragments[i].sourceLeft, fragments[i].sourceTop,
          fragments[i].width, fragments[i].height);

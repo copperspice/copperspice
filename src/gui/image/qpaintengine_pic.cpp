@@ -38,7 +38,6 @@
 #include <qrect.h>
 #include <qtextengine_p.h>
 
-//#define QT_PICTURE_DEBUG
 #include <qdebug.h>
 
 
@@ -74,7 +73,7 @@ bool QPicturePaintEngine::begin(QPaintDevice *pd)
 {
    Q_D(QPicturePaintEngine);
 
-#ifdef QT_PICTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << "QPicturePaintEngine::begin()";
 #endif
 
@@ -112,9 +111,11 @@ bool QPicturePaintEngine::begin(QPaintDevice *pd)
 bool QPicturePaintEngine::end()
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << "QPicturePaintEngine::end()";
 #endif
+
    d->pic_d->trecs++;
    d->s << (quint8) QPicturePrivate::PdcEnd << (quint8) 0;
    int cs_start = sizeof(quint32);                // pos of checksum word
@@ -149,7 +150,8 @@ bool QPicturePaintEngine::end()
 void QPicturePaintEngine::updatePen(const QPen &pen)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updatePen(): width:" << pen.width() << "style:"
       << pen.style() << "color:" << pen.color();
 #endif
@@ -170,7 +172,8 @@ void QPicturePaintEngine::updatePen(const QPen &pen)
 void QPicturePaintEngine::updateCompositionMode(QPainter::CompositionMode cmode)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateCompositionMode():" << cmode;
 #endif
 
@@ -183,7 +186,8 @@ void QPicturePaintEngine::updateCompositionMode(QPainter::CompositionMode cmode)
 void QPicturePaintEngine::updateClipEnabled(bool enabled)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateClipEnabled():" << enabled;
 #endif
 
@@ -196,7 +200,8 @@ void QPicturePaintEngine::updateClipEnabled(bool enabled)
 void QPicturePaintEngine::updateOpacity(qreal opacity)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateOpacity():" << opacity;
 #endif
 
@@ -209,7 +214,8 @@ void QPicturePaintEngine::updateOpacity(qreal opacity)
 void QPicturePaintEngine::updateBrush(const QBrush &brush)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateBrush(): style:" << brush.style();
 #endif
 
@@ -229,7 +235,8 @@ void QPicturePaintEngine::updateBrush(const QBrush &brush)
 void QPicturePaintEngine::updateBrushOrigin(const QPointF &p)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateBrushOrigin(): " << p;
 #endif
 
@@ -242,7 +249,8 @@ void QPicturePaintEngine::updateBrushOrigin(const QPointF &p)
 void QPicturePaintEngine::updateFont(const QFont &font)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateFont(): pt sz:" << font.pointSize();
 #endif
 
@@ -256,7 +264,8 @@ void QPicturePaintEngine::updateFont(const QFont &font)
 void QPicturePaintEngine::updateBackground(Qt::BGMode bgMode, const QBrush &bgBrush)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateBackground(): mode:" << bgMode << "style:" << bgBrush.style();
 #endif
 
@@ -273,7 +282,8 @@ void QPicturePaintEngine::updateBackground(Qt::BGMode bgMode, const QBrush &bgBr
 void QPicturePaintEngine::updateMatrix(const QTransform &matrix)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateMatrix():" << matrix;
 #endif
 
@@ -286,10 +296,12 @@ void QPicturePaintEngine::updateMatrix(const QTransform &matrix)
 void QPicturePaintEngine::updateClipRegion(const QRegion &region, Qt::ClipOperation op)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateClipRegion(): op:" << op
       << "bounding rect:" << region.boundingRect();
 #endif
+
    int pos;
    SERIALIZE_CMD(QPicturePrivate::PdcSetClipRegion);
    d->s << region << qint8(op);
@@ -299,10 +311,12 @@ void QPicturePaintEngine::updateClipRegion(const QRegion &region, Qt::ClipOperat
 void QPicturePaintEngine::updateClipPath(const QPainterPath &path, Qt::ClipOperation op)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateClipPath(): op:" << op
       << "bounding rect:" << path.boundingRect();
 #endif
+
    int pos;
 
    SERIALIZE_CMD(QPicturePrivate::PdcSetClipPath);
@@ -313,9 +327,11 @@ void QPicturePaintEngine::updateClipPath(const QPainterPath &path, Qt::ClipOpera
 void QPicturePaintEngine::updateRenderHints(QPainter::RenderHints hints)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> updateRenderHints(): " << hints;
 #endif
+
    int pos;
    SERIALIZE_CMD(QPicturePrivate::PdcSetRenderHint);
    d->s << (quint32) hints;
@@ -378,7 +394,8 @@ void QPicturePaintEngine::writeCmdLength(int pos, const QRectF &r, bool corr)
 void QPicturePaintEngine::drawEllipse(const QRectF &rect)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawEllipse():" << rect;
 #endif
 
@@ -391,7 +408,8 @@ void QPicturePaintEngine::drawEllipse(const QRectF &rect)
 void QPicturePaintEngine::drawPath(const QPainterPath &path)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawPath():" << path.boundingRect();
 #endif
 
@@ -404,7 +422,8 @@ void QPicturePaintEngine::drawPath(const QPainterPath &path)
 void QPicturePaintEngine::drawPolygon(const QPointF *points, int numPoints, PolygonDrawMode mode)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawPolygon(): size=" << numPoints;
 #endif
 
@@ -430,7 +449,8 @@ void QPicturePaintEngine::drawPolygon(const QPointF *points, int numPoints, Poly
 void QPicturePaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawPixmap():" << r;
 #endif
 
@@ -450,7 +470,8 @@ void QPicturePaintEngine::drawPixmap(const QRectF &r, const QPixmap &pm, const Q
 void QPicturePaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawTiledPixmap():" << r << s;
 #endif
 
@@ -471,7 +492,8 @@ void QPicturePaintEngine::drawImage(const QRectF &r, const QImage &image, const 
    Qt::ImageConversionFlags flags)
 {
    Q_D(QPicturePaintEngine);
-#ifdef QT_PICTURE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawImage():" << r << sr;
 #endif
 
@@ -493,7 +515,7 @@ void QPicturePaintEngine::drawTextItem(const QPointF &p, const QTextItem &ti)
 {
    Q_D(QPicturePaintEngine);
 
-#ifdef QT_PICTURE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
    qDebug() << " -> drawTextItem():" << p << ti.text();
 #endif
 

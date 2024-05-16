@@ -633,18 +633,6 @@ bool QLayout::adoptLayout(QLayout *layout)
    return ok;
 }
 
-#ifdef QT_DEBUG
-static bool layoutDebug()
-{
-   static int checked_env = -1;
-   if (checked_env == -1) {
-      checked_env = !!qgetenv("QT_LAYOUT_DEBUG").toInt();
-   }
-
-   return checked_env;
-}
-#endif
-
 void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
 {
    Q_Q(QLayout);

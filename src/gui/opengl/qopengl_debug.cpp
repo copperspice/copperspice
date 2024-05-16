@@ -916,7 +916,7 @@ bool QOpenGLDebugLogger::initialize()
 
     QOpenGLContext::currentContext()->functions()->glGetIntegerv(GL_MAX_DEBUG_MESSAGE_LENGTH, &d->maxMessageLength);
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (! d->context->format().testOption(QSurfaceFormat::DebugContext)) {
         qWarning("QOpenGLDebugLogger::initialize(): the current context is not a debug context:\n"
                  "    which means the GL may not generate any debug output.\n"

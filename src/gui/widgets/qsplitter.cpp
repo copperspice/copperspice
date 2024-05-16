@@ -413,7 +413,7 @@ void QSplitterPrivate::doResize()
    for (i = 0; i < n; ++i) {
       QSplitterLayoutStruct *s = list.at(i);
 
-#ifdef QSPLITTER_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       qDebug("widget %d hidden: %d collapsed: %d handle hidden: %d", i, s->widget->isHidden(),
          s->collapsed, s->handle->isHidden());
 #endif
@@ -454,7 +454,7 @@ void QSplitterPrivate::doResize()
 
    qGeomCalc(a, 0, n * 2, pick(r.topLeft()), pick(r.size()), 0);
 
-#ifdef QSPLITTER_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    for (i = 0; i < n * 2; ++i) {
       qDebug("%*s%d: stretch %d, sh %d, minS %d, maxS %d, exp %d, emp %d -> %d, %d",
          i, "", i,
@@ -717,7 +717,7 @@ void QSplitterPrivate::doMove(bool backwards, int hPos, int index, int delta, bo
       return;
    }
 
-#ifdef QSPLITTER_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    qDebug() << "QSplitterPrivate::doMove" << backwards << hPos << index << delta << mayCollapse;
 #endif
 
@@ -1103,14 +1103,14 @@ void QSplitter::moveSplitter(int pos, int index)
    int max;
    int farMax;
 
-#ifdef QSPLITTER_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    int debugp = pos;
 #endif
 
    pos = d->adjustPos(pos, index, &farMin, &min, &max, &farMax);
    int oldP = d->pick(s->rect.topLeft());
 
-#ifdef QSPLITTER_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    qDebug() << "QSplitter::moveSplitter" << debugp << index << "adjusted" << pos << "oldP" << oldP;
 #endif
 

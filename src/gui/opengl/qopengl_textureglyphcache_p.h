@@ -33,7 +33,6 @@
 #include <qopenglfunctions.h>
 #include <qopenglcontext_p.h>
 
-// #define QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
 
 class QOpenGL2PaintEngineExPrivate;
 
@@ -46,7 +45,7 @@ public:
         if (!ctx->d_func()->workaround_brokenFBOReadBack)
             QOpenGLFunctions(ctx).glGenFramebuffers(1, &m_fbo);
 
-#ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug(" -> QOpenGLGlyphTexture() %p for context %p.", this, ctx);
 #endif
 
@@ -55,7 +54,8 @@ public:
     void freeResource(QOpenGLContext *context) override
     {
         QOpenGLContext *ctx = context;
-#ifdef QT_GL_TEXTURE_GLYPH_CACHE_DEBUG
+
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("~QOpenGLGlyphTexture() %p for context %p.", this, ctx);
 #endif
 

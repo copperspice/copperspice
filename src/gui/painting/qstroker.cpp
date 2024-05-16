@@ -432,7 +432,7 @@ void QStroker::processCurrentSubpath()
 
 void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine, LineJoinMode join)
 {
-#if defined(CS_PAINT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf(" -----> joinPoints: around=(%.0f, %.0f), next_p1=(%.0f, %.f) next_p2=(%.0f, %.f)\n",
       qt_fixed_to_real(focal_x), qt_fixed_to_real(focal_y),
       nextLine.x1(), nextLine.y1(), nextLine.x2(), nextLine.y2());
@@ -642,8 +642,8 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
    qfixed2d start = first_element;
 
-#if defined(CS_PAINT_DEBUG)
-   qDebug(" -> (side) [%.2f, %.2f], startPos=%d", qt_fixed_to_real(start.x), qt_fixed_to_real(start.y));
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   qDebug(" -> (side) [%.2f, %.2f]", qt_fixed_to_real(start.x), qt_fixed_to_real(start.y));
 #endif
 
    qfixed2d prev = start;
@@ -656,7 +656,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
       // LineToElement
       if (e.isLineTo()) {
 
-#if defined(CS_PAINT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
 #endif
 
@@ -692,7 +692,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
          QStrokerOps::Element cp2 = it->next();    // control point 2
          QStrokerOps::Element ep = it->next();     // end point
 
-#if defined(CS_PAINT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug("\n ---> (side) cubicTo [%.2f, %.2f]", qt_fixed_to_real(ep.x), qt_fixed_to_real(ep.y));
 #endif
 
@@ -742,7 +742,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
    if (start == prev) {
       // closed subpath, join first and last point
 
-#if defined(CS_PAINT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qDebug("\n ---> (side) closed subpath");
 #endif
 
@@ -755,7 +755,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
    } else {
 
-#if defined(CS_PAINT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qDebug("\n ---> (side) open subpath");
 #endif
 

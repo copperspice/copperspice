@@ -1790,24 +1790,13 @@ static QOpenGLES3Helper *qgles3Helper()
 
 bool QOpenGLES3Helper::init()
 {
-
 # ifdef Q_OS_WIN
-
-#  ifndef QT_DEBUG
-    m_gl.setFileName("libGLESv2");
-#  else
-    m_gl.setFileName("libGLESv2d");
-#  endif
+   m_gl.setFileName("libGLESv2");
 
 # else
+   m_gl.setFileNameAndVersion("GLESv2", 2);
 
-#  ifdef Q_OS_ANDROID
-    m_gl.setFileName("GLESv2");
-#  else
-    m_gl.setFileNameAndVersion("GLESv2", 2);
-#  endif
-
-# endif // Q_OS_WIN
+# endif
 
    return m_gl.load();
 }
@@ -1824,7 +1813,9 @@ QOpenGLES3Helper::QOpenGLES3Helper()
     if (init()) {
         const QPair<int, int> contextVersion = QOpenGLContext::currentContext()->format().version();
 
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         qDebug("Resolving OpenGL ES 3.0 entry points");
+#endif
 
         BeginQuery = (void (QOPENGLF_APIENTRYP) (GLenum, GLuint)) resolve("glBeginQuery");
         BeginTransformFeedback = (void (QOPENGLF_APIENTRYP) (GLenum)) resolve("glBeginTransformFeedback");
@@ -1940,7 +1931,9 @@ QOpenGLES3Helper::QOpenGLES3Helper()
         m_supportedVersion = qMakePair(3, 0);
 
         if (contextVersion >= qMakePair(3, 1)) {
+#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
             qDebug("Resolving OpenGL ES 3.1 entry points");
+#endif
 
             ActiveShaderProgram = (void (QOPENGLF_APIENTRYP) (GLuint, GLuint)) resolve("glActiveShaderProgram");
             BindImageTexture = (void (QOPENGLF_APIENTRYP) (GLuint, GLuint, GLint, GLboolean, GLint, GLenum, GLenum)) resolve("glBindImageTexture");

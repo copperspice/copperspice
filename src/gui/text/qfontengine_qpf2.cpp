@@ -57,43 +57,58 @@ static const QFontEngineQPF2::TagType tagTypes[QFontEngineQPF2::NumTags] = {
    QFontEngineQPF2::BitFieldType// WritingSystems
 };
 
-// #define DEBUG_HEADER
-// #define DEBUG_FONTENGINE
-
-#if defined(DEBUG_HEADER)
-# define DEBUG_VERIFY qDebug
-#else
-# define DEBUG_VERIFY if (0) qDebug
-#endif
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
 
 #define READ_VERIFY(type, variable) \
     if (tagPtr + sizeof(type) > endPtr) { \
-        DEBUG_VERIFY() << "read verify failed in line" << __LINE__; \
+        qDebug() << "read verify failed in line" << __LINE__; \
         return nullptr; \
     } \
     variable = qFromBigEndian<type>(tagPtr); \
-    DEBUG_VERIFY() << "read value" << variable << "of type " #type; \
+    qDebug() << "read value" << variable << "of type " #type; \
     tagPtr += sizeof(type)
+
+#define VERIFY(condition) \
+    if (! (condition)) { \
+        qDebug() << "condition " #condition " failed in line" << __LINE__; \
+        return 0; \
+    }
+
+#define VERIFY_TAG(condition) \
+    if (! (condition)) { \
+        qDebug() << "verifying tag condition " #condition " failed in line" << __LINE__ << "with tag" << tag; \
+        return nullptr; \
+    }
+
+#else
+
+#define READ_VERIFY(type, variable) \
+    if (tagPtr + sizeof(type) > endPtr) { \
+        return nullptr; \
+    } \
+    variable = qFromBigEndian<type>(tagPtr); \
+    tagPtr += sizeof(type)
+
+#define VERIFY(condition) \
+    if (!(condition)) { \
+        return 0; \
+    }
+
+#define VERIFY_TAG(condition) \
+    if (!(condition)) { \
+        return nullptr; \
+    }
+
+#endif
 
 template <typename T>
 T readValue(const uchar *&data)
 {
    T value = qFromBigEndian<T>(data);
    data += sizeof(T);
+
    return value;
 }
-
-#define VERIFY(condition) \
-    if (!(condition)) { \
-        DEBUG_VERIFY() << "condition " #condition " failed in line" << __LINE__; \
-        return 0; \
-    }
-
-#define VERIFY_TAG(condition) \
-    if (!(condition)) { \
-        DEBUG_VERIFY() << "verifying tag condition " #condition " failed in line" << __LINE__ << "with tag" << tag; \
-        return nullptr; \
-    }
 
 static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
 {
@@ -125,7 +140,7 @@ static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
             break;
       }
 
-#if defined(DEBUG_HEADER)
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
       if (length == 1) {
          qDebug() << "tag data" << hex << *tagPtr;
 
@@ -150,7 +165,7 @@ const QFontEngineQPF2::Glyph *QFontEngineQPF2::findGlyph(glyph_t g) const
          return nullptr;
       }
 
-#if defined(DEBUG_FONTENGINE)
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
       qDebug() << "glyph" << g << "outside of glyphData, remapping font file";
 #endif
 
@@ -241,13 +256,9 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    kerning_pairs_loaded = false;
    readOnly = true;
 
-#if defined(DEBUG_FONTENGINE)
-   qDebug() << "QFontEngineQPF2::QFontEngineQPF2( fd =" << fd << ", renderingFontEngine =" << renderingFontEngine << ')';
-#endif
-
    if (!verifyHeader(fontData, dataSize)) {
-#if defined(DEBUG_FONTENGINE)
-      qDebug() << "verifyHeader failed!";
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+      qDebug() << "VerifyHeader failed";
 #endif
       return;
    }
@@ -310,12 +321,12 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
       }
    }
 
-#if defined(DEBUG_FONTENGINE)
-   if (!isValid())
-      qDebug() << "fontData" <<  fontData << "dataSize" << dataSize
-         << "cmap" << cmap << "cmapOffset" << cmapOffset
-         << "glyphMapOffset" << glyphMapOffset << "glyphDataOffset" << glyphDataOffset
-         << "fd" << fd << "glyphDataSize" << glyphDataSize;
+#if defined(CS_SHOW_DEBUG_GUI_TEXT)
+   if (! isValid()) {
+      qDebug() << "fontData" <<  fontData << "dataSize" << dataSize  << "cmap" << cmap
+         << "cmapOffset" << cmapOffset << "glyphMapOffset" << glyphMapOffset
+         << "glyphDataOffset" << glyphDataOffset << "glyphDataSize" << glyphDataSize;
+   }
 #endif
 }
 

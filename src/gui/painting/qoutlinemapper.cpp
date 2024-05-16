@@ -219,7 +219,7 @@ void QOutlineMapper::endOutline()
 
    controlPointRect = boundingRect(elements, m_elements.size());
 
-#ifdef QT_DEBUG_CONVERT
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf(" - control point rect (%.2f, %.2f) %.2f x %.2f, clip=(%d,%d, %dx%d)\n",
       controlPointRect.x(), controlPointRect.y(),
       controlPointRect.width(), controlPointRect.height(),
@@ -324,7 +324,7 @@ void QOutlineMapper::convertElements(const QPointF *elements,
    m_outline.tags = m_tags.data();
    m_outline.contours = m_contours.data();
 
-#ifdef QT_DEBUG_CONVERT
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf("QOutlineMapper::endOutline\n");
 
    printf(" - contours: %d\n", m_outline.n_contours);

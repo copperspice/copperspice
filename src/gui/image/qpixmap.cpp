@@ -444,7 +444,7 @@ bool QPixmap::load(const QString &fileName, const QString &format, Qt::ImageConv
 
    if (isNull()) {
       if (! fileName.isEmpty()) {
-         qDebug("QPixmap::load(): Unable to load pixmap file %s", csPrintable(fileName));
+         qWarning("QPixmap::load() Unable to load pixmap file %s", csPrintable(fileName));
       }
 
    } else {

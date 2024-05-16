@@ -89,7 +89,7 @@ struct QSimplexConstraint {
       }
    }
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    QString toString() {
       QString result;
       result += QString::fromLatin1("-- QSimplexConstraint %1 --").formatArg(quintptr(this), 0, 16);

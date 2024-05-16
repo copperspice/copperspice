@@ -36,7 +36,6 @@
 // rasterization of shapes will produce incorrect results.
 const int QT_RASTER_COORD_LIMIT = 32767;
 
-//#define QT_DEBUG_CONVERT
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
@@ -67,7 +66,8 @@ class QOutlineMapper
    }
 
    void beginOutline(Qt::FillRule fillRule) {
-#ifdef QT_DEBUG_CONVERT
+
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       printf("QOutlineMapper::beginOutline() rule=%d\n", fillRule);
 #endif
 
@@ -91,7 +91,8 @@ class QOutlineMapper
    void convertElements(const QPointF *points, const QPainterPath::ElementType *types, int count);
 
    void moveTo(const QPointF &pt) {
-#ifdef QT_DEBUG_CONVERT
+
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       printf("QOutlineMapper::moveTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
 
@@ -102,7 +103,8 @@ class QOutlineMapper
    }
 
    void lineTo(const QPointF &pt) {
-#ifdef QT_DEBUG_CONVERT
+
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
 #endif
 
@@ -117,7 +119,7 @@ class QOutlineMapper
 
       if (element_count > 0) {
          if (m_elements.at(element_count - 1) != m_elements.at(m_subpath_start)) {
-#ifdef QT_DEBUG_CONVERT
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
             printf(" - implicitly closing\n");
 #endif
 

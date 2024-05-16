@@ -125,12 +125,11 @@ struct Blend_ARGB32_on_RGB16_SourceAndConstAlpha {
 void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int srch,
    const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
-   printf("qt_scale_rgb16_on_rgb16: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-      destPixels, dbpl, srcPixels, sbpl,
-      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-      const_alpha);
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("qt_scale_rgb16_on_rgb16() dst=(%p, %d), src=(%p, %d), target=(%f, %f), [%f x %f], "
+         "src=(%f, %f) [%f x %f] alpha=%d\n", destPixels, dbpl, srcPixels, sbpl,
+         targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+         sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(), const_alpha);
 #endif
 
    if (const_alpha == 256) {
@@ -147,12 +146,11 @@ void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl, const uchar *src
 void qt_scale_image_argb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int srch,
    const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
-   printf("qt_scale_argb32_on_rgb16: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-      destPixels, dbpl, srcPixels, sbpl,
-      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-      const_alpha);
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("qt_scale_argb32_on_rgb16() dst=(%p, %d), src=(%p, %d), target=(%f, %f), [%f x %f], "
+         "src=(%f, %f) [%f x %f] alpha=%d\n", destPixels, dbpl, srcPixels, sbpl,
+         targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+         sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(), const_alpha);
 #endif
 
    if (const_alpha == 256) {
@@ -168,7 +166,7 @@ void qt_scale_image_argb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *sr
 
 void qt_blend_rgb16_on_rgb16(uchar *dst, int dbpl, const uchar *src, int sbpl, int w, int h, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf("qt_blend_rgb16_on_rgb16: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
       dst, dbpl, src, sbpl, w, h, const_alpha);
 #endif
@@ -287,7 +285,7 @@ static void qt_blend_argb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *s
 static void qt_blend_rgb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
    int w, int h, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf("qt_blend_rgb32_on_rgb16: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
       destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
 #endif
@@ -328,7 +326,7 @@ static void qt_blend_rgb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *sr
 static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
    int w, int h, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    fprintf(stdout, "qt_blend_argb32_on_argb32: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
       destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
 
@@ -368,7 +366,7 @@ static void qt_blend_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *
 void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl,
    int w, int h, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    fprintf(stdout, "qt_blend_rgb32_on_rgb32: dst=(%p, %d), src=(%p, %d), dim=(%d, %d) alpha=%d\n",
       destPixels, dbpl, srcPixels, sbpl, w, h, const_alpha);
    fflush(stdout);
@@ -442,12 +440,11 @@ struct Blend_ARGB32_on_ARGB32_SourceAndConstAlpha {
 void qt_scale_image_rgb32_on_rgb32(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int srch,
    const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
-   printf("qt_scale_rgb32_on_rgb32: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-      destPixels, dbpl, srcPixels, sbpl,
-      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-      const_alpha);
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("qt_scale_rgb32_on_rgb32() dst=(%p, %d), src=(%p, %d), target=(%f, %f), [%f x %f], "
+         "src=(%f, %f) [%f x %f] alpha=%d\n", destPixels, dbpl, srcPixels, sbpl,
+         targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+         sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(), const_alpha);
 #endif
 
    if (const_alpha == 256) {
@@ -465,12 +462,11 @@ void qt_scale_image_rgb32_on_rgb32(uchar *destPixels, int dbpl, const uchar *src
 void qt_scale_image_argb32_on_argb32(uchar *destPixels, int dbpl, const uchar *srcPixels, int sbpl, int srch,
    const QRectF &targetRect, const QRectF &sourceRect, const QRect &clip, int const_alpha)
 {
-#ifdef QT_DEBUG_DRAW
-   printf("qt_scale_argb32_on_argb32: dst=(%p, %d), src=(%p, %d), target=(%d, %d), [%d x %d], src=(%d, %d) [%d x %d] alpha=%d\n",
-      destPixels, dbpl, srcPixels, sbpl,
-      targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
-      sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(),
-      const_alpha);
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+   printf("qt_scale_argb32_on_argb32() dst=(%p, %d), src=(%p, %d), target=(%f, %f), [%f x %f], "
+         "src=(%f, %f) [%f x %f] alpha=%d\n", destPixels, dbpl, srcPixels, sbpl,
+         targetRect.x(), targetRect.y(), targetRect.width(), targetRect.height(),
+         sourceRect.x(), sourceRect.y(), sourceRect.width(), sourceRect.height(), const_alpha);
 #endif
 
    if (const_alpha == 256) {

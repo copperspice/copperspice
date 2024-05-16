@@ -113,10 +113,6 @@ Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal
 #define qt_swap_int(x, y) { int tmp = (x); (x) = (y); (y) = tmp; }
 #define qt_swap_qreal(x, y) { qreal tmp = (x); (x) = (y); (y) = tmp; }
 
-#ifdef QT_DEBUG_DRAW
-void dumpClip(int width, int height, const QClipData *clip);
-#endif
-
 #define QT_FAST_SPANS
 
 // A little helper macro to get a better approximation of dimensions.
@@ -174,31 +170,6 @@ struct QRasterFloatPoint {
    qreal x;
    qreal y;
 };
-
-#ifdef QT_DEBUG_DRAW
-static const QRectF boundingRect(const QPointF *points, int pointCount)
-{
-   const QPointF *e = points;
-   const QPointF *last = points + pointCount;
-   qreal minx, maxx, miny, maxy;
-   minx = maxx = e->x();
-   miny = maxy = e->y();
-
-   while (++e < last) {
-      if (e->x() < minx) {
-         minx = e->x();
-      } else if (e->x() > maxx) {
-         maxx = e->x();
-      }
-      if (e->y() < miny) {
-         miny = e->y();
-      } else if (e->y() > maxy) {
-         maxy = e->y();
-      }
-   }
-   return QRectF(QPointF(minx, miny), QPointF(maxx, maxy));
-}
-#endif
 
 static void qt_ft_outline_move_to(qfixed x, qfixed y, void *data)
 {
@@ -367,14 +338,9 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
 
    setDirty(DirtyBrushOrigin);
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::begin(" << (void *) device
-      << ") devType:" << device->devType()
-      << "devRect:" << d->deviceRect;
-
-   if (d->baseClip) {
-      dumpClip(d->rasterBuffer->width(), d->rasterBuffer->height(), &*d->baseClip);
-   }
+         << ") devType:" << device->devType() << "devRect:" << d->deviceRect;
 #endif
 
    if (d->mono_surface) {
@@ -406,14 +372,9 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
 
 bool QRasterPaintEngine::end()
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    Q_D(QRasterPaintEngine);
-
    qDebug() << "QRasterPaintEngine::end devRect:" << d->deviceRect;
-
-   if (d->baseClip) {
-      dumpClip(d->rasterBuffer->width(), d->rasterBuffer->height(), &*d->baseClip);
-   }
 #endif
 
    return true;
@@ -538,7 +499,7 @@ void QRasterPaintEngine::setState(QPainterState *s)
 // internal
 void QRasterPaintEngine::penChanged()
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::penChanged():" << state()->pen;
 #endif
 
@@ -555,7 +516,7 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::updatePen():" << s->pen;
 #endif
 
@@ -630,7 +591,7 @@ void QRasterPaintEngine::brushOriginChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::brushOriginChanged()" << s->brushOrigin;
 #endif
 
@@ -642,7 +603,7 @@ void QRasterPaintEngine::brushChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::brushChanged():" << s->brush;
 #endif
 
@@ -652,7 +613,7 @@ void QRasterPaintEngine::brushChanged()
 // internal
 void QRasterPaintEngine::updateBrush(const QBrush &brush)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::updateBrush()" << brush;
 #endif
 
@@ -703,7 +664,7 @@ void QRasterPaintEngine::opacityChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::opacityChanged()" << s->opacity;
 #endif
 
@@ -720,7 +681,7 @@ void QRasterPaintEngine::compositionModeChanged()
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::compositionModeChanged()" << s->composition_mode;
 #endif
 
@@ -738,7 +699,7 @@ void QRasterPaintEngine::renderHintsChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::renderHintsChanged()" << hex << s->renderHints;
 #endif
 
@@ -767,7 +728,7 @@ void QRasterPaintEngine::transformChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::transformChanged()" << s->matrix;
 #endif
 
@@ -785,7 +746,7 @@ void QRasterPaintEngine::clipEnabledChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::clipEnabledChanged()" << s->clipEnabled;
 #endif
 
@@ -878,7 +839,7 @@ void QRasterPaintEnginePrivate::systemStateChanged()
       baseClip->setClipRect(deviceRect);
    }
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "systemStateChanged" << this << "deviceRect" << deviceRect << deviceRectUnclipped << systemClip;
 #endif
 
@@ -975,17 +936,12 @@ static void qrasterpaintengine_dirty_clip(QRasterPaintEnginePrivate *d, QRasterP
 
    d->solid_color_filler.clip = d->clip();
    d->solid_color_filler.adjustSpanMethods();
-
-#ifdef QT_DEBUG_DRAW
-   dumpClip(d->rasterBuffer->width(), d->rasterBuffer->height(), &*d->clip());
-#endif
-
 }
 
 // internal
 void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::clip(): " << path << op;
 
    if (path.elements()) {
@@ -1009,9 +965,10 @@ void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
    if (op != Qt::IntersectClip || !s->clip || s->clip->hasRectClip || s->clip->hasRegionClip) {
       if (s->matrix.type() <= QTransform::TxScale && path.isRect()) {
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug() << " --- optimizing vector clip to rect clip...";
 #endif
+
          const qreal *points = path.points();
 
          QRectF r(points[0], points[1], points[4] - points[0], points[5] - points[1]);
@@ -1064,7 +1021,7 @@ void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
 // internal
 void QRasterPaintEngine::clip(const QRect &rect, Qt::ClipOperation op)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::clip(): " << rect << op;
 #endif
 
@@ -1140,7 +1097,7 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
 // internal
 void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::clip(): " << region << op;
 #endif
 
@@ -1195,7 +1152,7 @@ void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
 // internal
 void QRasterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " --- fillPath, bounds=" << path.boundingRect();
 #endif
 
@@ -1306,7 +1263,7 @@ static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEng
 
 void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug(" - QRasterPaintEngine::drawRect(), rectCount=%d", rectCount);
 #endif
 
@@ -1360,7 +1317,7 @@ void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 
 void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug(" - QRasterPaintEngine::drawRect(QRectF*), rectCount=%d", rectCount);
 #endif
 
@@ -1520,7 +1477,7 @@ void QRasterPaintEngine::fill(const QVectorPath &path, const QBrush &brush)
       return;
    }
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    QRectF rf = path.controlPointRect();
 
    qDebug() << "QRasterPaintEngine::fill(): "
@@ -1630,7 +1587,7 @@ void QRasterPaintEngine::fillRect(const QRectF &r, QSpanData *data)
 
 void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::fillRecct(): " << r << brush;
 #endif
 
@@ -1646,7 +1603,7 @@ void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
 
 void QRasterPaintEngine::fillRect(const QRectF &r, const QColor &color)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::fillRect(): " << r << color;
 #endif
 
@@ -1758,7 +1715,7 @@ void QRasterPaintEngine::drawPolygon(const QPointF *points, int pointCount, Poly
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug(" - QRasterPaintEngine::drawPolygon(F), pointCount=%d", pointCount);
 
    for (int i = 0; i < pointCount; ++i) {
@@ -1802,7 +1759,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug(" - QRasterPaintEngine::drawPolygon(I), pointCount=%d", pointCount);
 
    for (int i = 0; i < pointCount; ++i) {
@@ -1870,7 +1827,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
 
 void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " - QRasterPaintEngine::drawPixmap(), pos=" << pos << " pixmap=" << pixmap.size() << "depth=" <<
       pixmap.depth();
 #endif
@@ -1916,7 +1873,7 @@ void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
 
 void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, const QRectF &sr)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " - QRasterPaintEngine::drawPixmap(), r=" << r << " sr=" << sr << " pixmap=" << pixmap.size() << "depth=" <<
       pixmap.depth();
 #endif
@@ -1983,7 +1940,7 @@ static inline const QRect toAlignedRect_positive(const QRectF &rect)
 
 void QRasterPaintEngine::drawImage(const QPointF &p, const QImage &img)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QRasterPaintEngine::drawImage(): P =" <<  p << " Image =" << img.size() << " Depth=" << img.depth();
 #endif
 
@@ -2079,7 +2036,7 @@ inline bool isPixelAligned(const QRectF &rect)
 
 void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRectF &sr, Qt::ImageConversionFlags)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " - QRasterPaintEngine::drawImage(), r=" << r << " sr=" << sr << " image="
             << img.size() << "depth=" << img.depth();
 #endif
@@ -2334,7 +2291,7 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
 
 void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &sr)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " - QRasterPaintEngine::drawTiledPixmap(), r=" << r << "pixmap=" << pixmap.size();
 #endif
 
@@ -3118,7 +3075,7 @@ void QRasterPaintEnginePrivate::rasterizeLine_dashed(QLineF line,
 
 void QRasterPaintEngine::drawLines(const QLineF *lines, int lineCount)
 {
-#ifdef QT_DEBUG_DRAW
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << " - QRasterPaintEngine::drawLines(QLineF *)" << lineCount;
 #endif
 
@@ -4019,23 +3976,6 @@ static void qt_span_clip(int count, const QSpan *spans, void *userData)
    }
 }
 
-#if defined(QT_DEBUG)
-QImage QRasterBuffer::bufferImage() const
-{
-   QImage image(m_width, m_height, QImage::Format_ARGB32_Premultiplied);
-
-   for (int y = 0; y < m_height; ++y) {
-      uint *span = (uint *)const_cast<QRasterBuffer *>(this)->scanLine(y);
-
-      for (int x = 0; x < m_width; ++x) {
-         uint argb = span[x];
-         image.setPixel(x, y, argb);
-      }
-   }
-   return image;
-}
-#endif
-
 void QRasterBuffer::flushToARGBImage(QImage *target) const
 {
    int w = qMin(m_width, target->width());
@@ -4730,41 +4670,3 @@ static void drawEllipse_midpoint_i(const QRect &rect, const QRect &clip,
          pen_func, brush_func, pen_data, brush_data);
    }
 }
-
-#ifdef QT_DEBUG_DRAW
-void dumpClip(int width, int height, const QClipData *clip)
-{
-   QImage clipImg(width, height, QImage::Format_ARGB32_Premultiplied);
-   clipImg.fill(0xffff0000);
-
-   int x0 = width;
-   int x1 = 0;
-   int y0 = height;
-   int y1 = 0;
-
-   ((QClipData *) clip)->spans(); // Force allocation of the spans structure...
-
-   for (int i = 0; i < clip->count; ++i) {
-      const QSpan *span = ((QClipData *) clip)->spans() + i;
-      for (int j = 0; j < span->len; ++j) {
-         clipImg.setPixel(span->x + j, span->y, 0xffffff00);
-      }
-      x0 = qMin(x0, int(span->x));
-      x1 = qMax(x1, int(span->x + span->len - 1));
-
-      y0 = qMin(y0, int(span->y));
-      y1 = qMax(y1, int(span->y));
-   }
-
-   static int counter = 0;
-
-   Q_ASSERT(y0 >= 0);
-   Q_ASSERT(x0 >= 0);
-   Q_ASSERT(y1 >= 0);
-   Q_ASSERT(x1 >= 0);
-
-   fprintf(stderr, "clip %d: %d %d - %d %d\n", counter, x0, y0, x1, y1);
-   clipImg.save(QString::fromLatin1("clip-%0.png").formatArg(counter++));
-}
-#endif
-

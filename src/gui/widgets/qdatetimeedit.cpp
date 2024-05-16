@@ -41,15 +41,6 @@
 
 #ifndef QT_NO_DATETIMEEDIT
 
-//#define QDATETIMEEDIT_QDTEDEBUG
-#ifdef QDATETIMEEDIT_QDTEDEBUG
-#  define QDTEDEBUG qDebug() << QString::fromLatin1("%1:%2").formatArg(__FILE__).formatArg(__LINE__)
-#  define QDTEDEBUGN qDebug
-#else
-#  define QDTEDEBUG if (false) qDebug()
-#  define QDTEDEBUGN if (false) qDebug
-#endif
-
 QDateTimeEdit::QDateTimeEdit(QWidget *parent)
    : QAbstractSpinBox(*new QDateTimeEditPrivate, parent)
 {
@@ -345,7 +336,10 @@ void QDateTimeEdit::setCurrentSection(Section section)
       while (index < size) {
          if (d->convertToPublic(d->sectionType(index)) == section) {
             d->edit->setCursorPosition(d->sectionPos(index));
-            QDTEDEBUG << d->sectionPos(index);
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+            qDebug() << "QDateTimeEdit" << d->sectionPos(index);
+#endif
             return;
          }
 
@@ -785,8 +779,10 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
                || d->skipToNextSection(oldCurrent, d->value.toDateTime(), d->sectionText(oldCurrent)))) {
 
-            QDTEDEBUG << "Setting currentsection to " << d->closestSection(d->edit->cursorPosition(), true)
-                      << event->key() << oldCurrent << str;
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+            qDebug() << "QDateTimeEdit" <<  "Setting currentsection to " << d->closestSection(d->edit->cursorPosition(), true)
+                     << event->key() << oldCurrent << str;
+#endif
 
             const int tmp = d->closestSection(d->edit->cursorPosition(), true);
 
@@ -885,7 +881,10 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
       default:
          d->edit->deselect();
          d->edit->setCursorPosition(d->sectionPos(newSection));
-         QDTEDEBUG << d->sectionPos(newSection);
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+         qDebug() << "QDateTimeEdit" <<  d->sectionPos(newSection);
+#endif
          d->setSelected(newSection, true);
          return false;
    }
@@ -1199,17 +1198,30 @@ void QDateTimeEditPrivate::updateEdit()
 #endif
 
       int cursor = sectionPos(currentSectionIndex);
-      QDTEDEBUG << "cursor is " << cursor << currentSectionIndex;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+      qDebug() << "QDateTimeEdit Cursor is " << cursor << currentSectionIndex;
+#endif
+
       cursor = qBound(0, cursor, displayText().size());
-      QDTEDEBUG << cursor;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+      qDebug() << "QDateTimeEdit" <<  cursor;
+#endif
 
       if (selsize > 0) {
          edit->setSelection(cursor, selsize);
-         QDTEDEBUG << cursor << selsize;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+         qDebug() << "QDateTimeEdit" <<  cursor << selsize;
+#endif
 
       } else {
          edit->setCursorPosition(cursor);
-         QDTEDEBUG << cursor;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+         qDebug() << "QDateTimeEdit" <<  cursor;
+#endif
 
       }
    }
@@ -1371,7 +1383,10 @@ void QDateTimeEditPrivate::clearSection(int index)
    t.replace(pos, size, QString().fill(space, size));
    edit->setText(t);
    edit->setCursorPosition(cursorPos);
-   QDTEDEBUG << cursorPos;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+   qDebug() << "QDateTimeEdit" << cursorPos;
+#endif
 
    edit->blockSignals(blocked);
 }
@@ -1682,7 +1697,10 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
 
          if (allowChange) {
             edit->setCursorPosition(c);
-            QDTEDEBUG << c;
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+            qDebug() << "QDateTimeEdit" <<  c;
+#endif
          }
          s = closest;
       }

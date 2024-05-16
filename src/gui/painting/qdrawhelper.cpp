@@ -4404,7 +4404,11 @@ void blend_color_generic_rgb64(int count, const QSpan *spans, void *userData)
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    Operator op = getOperator(data, spans, count);
    if (!op.funcSolid64) {
-      qDebug("unsupported 64bit blend attempted");
+
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+      qDebug("blend_color_generic_rgb64() Unsupported 64-bit blend operation");
+#endif
+
       return blend_color_generic(count, spans, userData);
    }
 
@@ -4646,7 +4650,10 @@ static void blend_src_generic_rgb64(int count, const QSpan *spans, void *userDat
       handleSpans(count, spans, data, blend64);
 
    } else {
-      qDebug("blend_src_generic_rgb64: unsupported 64-bit blend attempted");
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+      qDebug("blend_src_generic_rgb64() Unsupported 64-bit blend operation");
+#endif
+
       BlendSrcGeneric blend32(data, op);
       handleSpans(count, spans, data, blend32);
    }
@@ -4962,8 +4969,12 @@ static void blend_tiled_generic_rgb64(int count, const QSpan *spans, void *userD
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
 
    Operator op = getOperator(data, spans, count);
-   if (!op.func64) {
-      qDebug("unsupported rgb64 blend");
+
+   if (! op.func64) {
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+      qDebug("blend_tiled_generic_rgb64() Unsupported rgb64 blend operation");
+#endif
+
       return blend_tiled_generic(count, spans, userData);
    }
    QRgba64 buffer[buffer_size];

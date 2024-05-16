@@ -48,13 +48,6 @@
 # include <qaccessible.h>
 #endif
 
-//#define QABSTRACTSPINBOX_QSBDEBUG
-#ifdef QABSTRACTSPINBOX_QSBDEBUG
-#  define QASBDEBUG qDebug
-#else
-#  define QASBDEBUG if (false) qDebug
-#endif
-
 QAbstractSpinBox::QAbstractSpinBox(QWidget *parent)
    : QWidget(*new QAbstractSpinBoxPrivate, parent, Qt::EmptyFlag)
 {
@@ -1445,10 +1438,13 @@ void QAbstractSpinBoxPrivate::interpret(EmitPolicy ep)
    if (q->validate(tmp, pos) != QValidator::Acceptable) {
       const QString copy = tmp;
       q->fixup(tmp);
-      QASBDEBUG() << "QAbstractSpinBoxPrivate::interpret() text '"
-         << edit->displayText()
-         << "' >> '" << copy << '\''
-         << "' >> '" << tmp << '\'';
+
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
+      qDebug() << "QAbstractSpinBoxPrivate::interpret() text '"
+            << edit->displayText()
+            << "' >> '" << copy << '\''
+            << "' >> '" << tmp << '\'';
+#endif
 
       doInterpret = tmp != copy && (q->validate(tmp, pos) == QValidator::Acceptable);
 

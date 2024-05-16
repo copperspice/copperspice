@@ -32,8 +32,6 @@
 
 #include <qnumeric_p.h>
 
-//#define QDEBUG_BEZIER
-
 QBezier QBezier::fromPoints(const QPointF &p1, const QPointF &p2,
    const QPointF &p3, const QPointF &p4)
 {
@@ -469,17 +467,6 @@ give_up:
    Q_ASSERT(o - curveSegments <= maxSegments);
    return o - curveSegments;
 }
-
-#ifdef QDEBUG_BEZIER
-static QDebug operator<<(QDebug dbg, const QBezier &bz)
-{
-   dbg << '[' << bz.x1 << ", " << bz.y1 << "], "
-      << '[' << bz.x2 << ", " << bz.y2 << "], "
-      << '[' << bz.x3 << ", " << bz.y3 << "], "
-      << '[' << bz.x4 << ", " << bz.y4 << ']';
-   return dbg;
-}
-#endif
 
 qreal QBezier::length(qreal error) const
 {

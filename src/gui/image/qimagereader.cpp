@@ -23,12 +23,9 @@
 
 #include <qimagereader.h>
 
-#ifdef QIMAGEREADER_DEBUG
-#include <qdebug.h>
-#endif
-
 #include <qcolor.h>
 #include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qimage.h>

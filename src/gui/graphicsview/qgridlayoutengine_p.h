@@ -145,6 +145,10 @@ class QGridLayoutBox
         q_minimumDescent(-1), q_minimumAscent(-1)
    { }
 
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
+   void dump(int indent = 0) const;
+#endif
+
    void add(const QGridLayoutBox &other, int stretch, qreal spacing);
    void combine(const QGridLayoutBox &other);
    void normalize();
@@ -229,6 +233,11 @@ typedef QMap<QPair<int, int>, QGridLayoutMultiCellData> MultiCellMap;
 class QGridLayoutRowData
 {
  public:
+
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
+   void dump(int indent = 0) const;
+#endif
+
    void reset(int count);
    void distributeMultiCells(const QGridLayoutRowInfo &rowInfo, bool snapToPixelGrid);
    void calculateGeometries(int start, int end, qreal targetSize, qreal *positions, qreal *sizes,
@@ -255,7 +264,7 @@ class QGridLayoutRowInfo
 
    void insertOrRemoveRows(int row, int delta);
 
-#ifdef QGRIDLAYOUTENGINE_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    void dump(int indent = 0) const;
 #endif
 
@@ -274,6 +283,10 @@ class QGridLayoutItem
       Qt::Alignment alignment = Qt::EmptyFlag);
 
    virtual ~QGridLayoutItem() {}
+
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
+   void dump(int indent = 0) const;
+#endif
 
    inline int firstRow() const {
       return q_firstRows[GridOrientation_Vertical];
@@ -360,6 +373,10 @@ class QGridLayoutEngine
       qDeleteAll(q_items);
    }
 
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
+   void dump(int indent = 0) const;
+#endif
+
    int rowCount(Qt::Orientation orientation) const;
    int columnCount(Qt::Orientation orientation) const;
 
@@ -433,7 +450,6 @@ class QGridLayoutEngine
    bool ensureDynamicConstraint() const;
    bool hasDynamicConstraint() const;
    Qt::Orientation constraintOrientation() const;
-
 
    QLayoutPolicy::ControlTypes controlTypes(LayoutSide side) const;
    void transpose();

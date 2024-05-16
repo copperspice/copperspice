@@ -82,7 +82,10 @@ int QPaintDevice::metric(PaintDeviceMetric m) const
    } else if (m == PdmDevicePixelRatio) {
       return 1;
    } else {
-      qDebug("Unrecognised metric %d!", m);
+
+#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
+      qDebug("Unrecognised metric %d", m);
+#endif
       return 0;
    }
 }

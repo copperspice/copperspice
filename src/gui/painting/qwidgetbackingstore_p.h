@@ -83,7 +83,6 @@ class QWidgetBackingStore
 
    ~QWidgetBackingStore();
 
-   static void showYellowThing(QWidget *widget, const QRegion &rgn, int msec, bool);
    void sync(QWidget *exposedWidget, const QRegion &exposedRegion);
    void sync();
    void flush(QWidget *widget = nullptr);
@@ -130,8 +129,6 @@ class QWidgetBackingStore
 
    void sendUpdateRequest(QWidget *widget, UpdateTime updateTime);
 
-   static bool flushPaint(QWidget *widget, const QRegion &rgn);
-   static void unflushPaint(QWidget *widget, const QRegion &rgn);
    static void qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
       QWidget *tlw, const QPoint &tlwOffset,
       QPlatformTextureList *widgetTextures,

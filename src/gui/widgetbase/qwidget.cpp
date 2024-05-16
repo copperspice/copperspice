@@ -186,7 +186,7 @@ QWidgetPrivate::QWidgetPrivate()
 
    memset(high_attributes, 0, sizeof(high_attributes));
 
-#ifdef QWIDGET_EXTRA_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    static int count = 0;
    qDebug() << "widgets" << ++count;
 #endif
@@ -662,9 +662,9 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
       setAttribute(Qt::WA_NativeWindow);
    }
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    qDebug() << "QWidget::create:" << this << "parent:" << parentWidget()
-      << "Alien?" << !testAttribute(Qt::WA_NativeWindow);
+         << "Alien?" << !testAttribute(Qt::WA_NativeWindow);
 #endif
 
    d->updateIsOpaque();
@@ -1131,7 +1131,7 @@ void QWidgetPrivate::createTLExtra()
 
       x->initialScreenIndex = -1;
 
-#ifdef QWIDGET_EXTRA_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       static int count = 0;
       qDebug() << "tlextra" << ++count;
 #endif
@@ -1170,7 +1170,7 @@ void QWidgetPrivate::createExtra()
       extra->hasMask              = 0;
       createSysExtra();
 
-#ifdef QWIDGET_EXTRA_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       static int count = 0;
       qDebug() << "extra" << ++count;
 #endif
@@ -1956,7 +1956,7 @@ WId QWidget::winId() const
 {
    if (! testAttribute(Qt::WA_WState_Created) || ! internalWinId()) {
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       qDebug() << "QWidget::winId: creating native window for" << this;
 #endif
 
@@ -1974,7 +1974,7 @@ void QWidgetPrivate::createWinId()
 {
    Q_Q(QWidget);
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    qDebug() << "QWidgetPrivate::createWinId for" << q;
 #endif
 
@@ -2016,7 +2016,7 @@ void QWidget::createWinId()
 {
    Q_D(QWidget);
 
-#ifdef ALIEN_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
    qDebug()  << "QWidget::createWinId" << this;
 #endif
 
@@ -9518,7 +9518,7 @@ QOpenGLContext *QWidgetPrivate::shareContext() const
 #else
    if (! extra || ! extra->topextra || ! extra->topextra->window) {
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       qWarning("QWidget::shareContext() Requested a share context for a widget which does not have a window handle");
 #endif
 

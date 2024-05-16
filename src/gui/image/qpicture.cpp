@@ -336,9 +336,11 @@ class QFakeDevice : public QPaintDevice
 bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
 {
    Q_D(QPicture);
-#if defined(QT_DEBUG)
-   int                strm_pos;
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
+   int        strm_pos;
 #endif
+
    quint8     c;                      // command id
    quint8     tiny_len;               // 8-bit length descriptor
    qint32     len;                    // 32-bit length descriptor
@@ -378,7 +380,7 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
          len = tiny_len;
       }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
       strm_pos = s.device()->pos();
 #endif
 
@@ -825,8 +827,9 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
             }
 
       }
-#if defined(QT_DEBUG)
-      //qDebug("device->at(): %i, strm_pos: %i len: %i", (int)s.device()->pos(), strm_pos, len);
+
+#if defined(CS_SHOW_DEBUG_GUI_IMAGE)
+      qDebug("device->at(): %i, strm_pos: %i len: %i", (int)s.device()->pos(), strm_pos, len);
       Q_ASSERT(qint32(s.device()->pos() - strm_pos) == len);
 #endif
 

@@ -171,7 +171,7 @@ class Graph
       return conns;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    QString serializeToDot() {
       // traversal
 

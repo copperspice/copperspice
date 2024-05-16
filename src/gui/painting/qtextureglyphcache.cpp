@@ -27,8 +27,6 @@
 #include <qnumeric_p.h>
 #include <qfontengine_p.h>
 
-// #define CACHE_DEBUG
-
 QTextureGlyphCache::~QTextureGlyphCache()
 {
 }

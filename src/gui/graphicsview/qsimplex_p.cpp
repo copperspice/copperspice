@@ -526,7 +526,7 @@ qreal QSimplex::solver(SolverFactor factor)
    solveMaxHelper();
    collectResults();
 
-#ifdef QT_DEBUG
+#if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    for (int i = 0; i < constraints.size(); ++i) {
       Q_ASSERT(constraints[i]->isSatisfied());
    }

@@ -38,20 +38,6 @@
 class QGraphicsLayoutItem;
 class QGraphicsWidget;
 
-#ifdef QT_DEBUG
-inline bool qt_graphicsLayoutDebug()
-{
-   static int checked_env = -1;
-
-   if (checked_env == -1) {
-      checked_env = qgetenv("QT_GRAPHICSLAYOUT_DEBUG").toInt() != 0;
-   }
-
-   return checked_env;
-}
-#endif
-
-
 class QLayoutStyleInfo
 {
  public:
