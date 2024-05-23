@@ -4268,9 +4268,9 @@ int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const
       case SH_RubberBand_Mask:
          if (qstyleoption_cast<const QStyleOptionRubberBand *>(option)) {
             res = 0;
-            break;
          }
-         [[fallthrough]];
+
+         break;
 #endif
 
       case SH_ItemView_DrawDelegateFrame:
