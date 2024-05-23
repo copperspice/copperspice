@@ -65,6 +65,8 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
    QWidget *tlw, const QPoint &tlwOffset, QPlatformTextureList *widgetTextures,
    QWidgetBackingStore *widgetBackingStore)
 {
+   (void) widgetBackingStore;
+
 #ifdef QT_NO_OPENGL
    (void) widgetTextures;
    Q_ASSERT(! region.isEmpty());
@@ -156,6 +158,7 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
    BeginPaintInfo *returnInfo, bool toCleanIsInTopLevelCoordinates)
 {
    (void) widget;
+   (void) returnInfo;
    (void) toCleanIsInTopLevelCoordinates;
 
    // always flush repainted areas
@@ -166,6 +169,8 @@ void QWidgetBackingStore::beginPaint(QRegion &toClean, QWidget *widget, QBacking
 
 void QWidgetBackingStore::endPaint(const QRegion &cleaned, QBackingStore *backingStore, BeginPaintInfo *beginPaintInfo)
 {
+   (void) cleaned;
+   (void) beginPaintInfo;
 
    backingStore->endPaint();
    flush();

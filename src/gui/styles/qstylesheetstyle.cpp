@@ -727,7 +727,6 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
          // intentionally left blank...
 
       } else if (decl.d->propertyId == QCss::UnknownProperty) {
-         bool knownStyleHint = false;
 
          for (int i = 0; i < numKnownStyleHints; i++) {
             QString styleHint(knownStyleHints[i]);
@@ -759,7 +758,6 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
                }
 
                styleHints[decl.d->property] = hintValue;
-               knownStyleHint = true;
                break;
             }
          }

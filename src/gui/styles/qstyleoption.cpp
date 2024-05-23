@@ -610,6 +610,10 @@ QDebug operator<<(QDebug debug, const QStyleOption::OptionType &optionType)
          debug << "SO_GraphicsItem";
          break;
    }
+
+#else
+   (void) optionType;
+
 #endif
 
    return debug;
@@ -625,6 +629,10 @@ QDebug operator<<(QDebug debug, const QStyleOption &option)
    debug << ',' << option.rect;
    debug << ',' << option.styleObject;
    debug << ')';
+
+#else
+   (void) option;
+
 #endif
 
    return debug;
