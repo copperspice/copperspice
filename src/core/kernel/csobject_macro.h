@@ -561,7 +561,8 @@ class cs_number<0>
       using T = decltype(&cs_class::method);                                          \
       const_cast<QMetaObject_T<cs_class>&>(cs_class::staticMetaObject())              \
             .register_property_write(#name,                                           \
-            new SpiceJarWrite<cs_class, cs_argType<T>::type>(&cs_class::method));     \
+            new SpiceJarWrite<cs_class, cs_argType<T>::type>(&cs_class::method),      \
+            #method);                                                                 \
       cs_regTrigger(cs_number<CS_TOKENPASTE2(cs_counter_value, __LINE__) + 1>{});     \
    }
 

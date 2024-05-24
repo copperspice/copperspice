@@ -2017,7 +2017,7 @@ void QMetaObject_X::register_property_read(const QString &name, std::type_index 
    }
 }
 
-void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method)
+void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstract *method, const QString &methodName)
 {
    if (name.isEmpty()) {
       return;
@@ -2029,13 +2029,13 @@ void QMetaObject_X::register_property_write(const QString &name, JarWriteAbstrac
       // entry not found, construct new obj then add to container
 
       QMetaProperty data = QMetaProperty {name, this};
-      data.setWriteMethod(method);
+      data.setWriteMethod(method, methodName);
 
       m_properties.insert(name, data);
 
    } else {
       // update QMetaProperty in the container
-      iter->setWriteMethod(method);
+      iter->setWriteMethod(method, methodName);
 
    }
 }

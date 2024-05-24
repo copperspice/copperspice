@@ -280,7 +280,7 @@ class Q_CORE_EXPORT QMetaObject_X : public QMetaObject
    void register_property_read(const QString &name, std::type_index returnTypeId,
          QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar);
 
-   void register_property_write(const QString &name, JarWriteAbstract *method);
+   void register_property_write(const QString &name, JarWriteAbstract *method, const QString &methodName);
    void register_property_bool(const QString &name, JarReadAbstract *method, QMetaProperty::Kind kind);
 
    void register_property_int(const QString &name, int value, QMetaProperty::Kind kind);

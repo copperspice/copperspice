@@ -262,7 +262,7 @@ class Q_CORE_EXPORT QMetaProperty
 
    // properties
    void setReadMethod(std::type_index returnTypeId, QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead);
-   void setWriteMethod(JarWriteAbstract *method);
+   void setWriteMethod(JarWriteAbstract *method, const QString &methodName);
 
    template <class T>
    void setNotifyMethod(T method);
@@ -279,8 +279,10 @@ class Q_CORE_EXPORT QMetaProperty
    void loadTypeName() const;
 
    QMetaObject *m_metaObject;
+
    QString m_name;
    QString m_typeName;
+   QString m_writeMethodName;
 
    std::type_index m_returnTypeId;
    QString (*m_returnTypeFuncPtr)();
