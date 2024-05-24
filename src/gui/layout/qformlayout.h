@@ -61,17 +61,22 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    GUI_CS_PROPERTY_WRITE(verticalSpacing, setVerticalSpacing)
 
  public:
-   enum FieldGrowthPolicy {
-      FieldsStayAtSizeHint,
-      ExpandingFieldsGrow,
-      AllNonFixedFieldsGrow
-   };
 
-   enum RowWrapPolicy {
-      DontWrapRows,
-      WrapLongRows,
-      WrapAllRows
-   };
+   GUI_CS_REGISTER_ENUM(
+      enum FieldGrowthPolicy {
+         FieldsStayAtSizeHint,
+         ExpandingFieldsGrow,
+         AllNonFixedFieldsGrow
+      };
+   )
+
+   GUI_CS_REGISTER_ENUM(
+      enum RowWrapPolicy {
+         DontWrapRows,
+         WrapLongRows,
+         WrapAllRows
+      };
+   )
 
    enum ItemRole {
       LabelRole = 0,
