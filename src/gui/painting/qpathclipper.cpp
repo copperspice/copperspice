@@ -1876,16 +1876,17 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
    QVector<QCrossingEdge> crossings = findCrossings(list, y);
 
    Q_ASSERT(!crossings.isEmpty());
+
    std::sort(crossings.begin(), crossings.end());
 
    int windingA = 0;
    int windingB = 0;
-
    int windingD = 0;
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug() << "QPathClipper::handleCrossingEdges() Crossing:" << crossings.size();
 #endif
+
    for (int i = 0; i < crossings.size() - 1; ++i) {
       int ei = crossings.at(i).edge;
       const QPathEdge *edge = list.edge(ei);

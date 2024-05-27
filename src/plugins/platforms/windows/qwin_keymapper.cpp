@@ -630,8 +630,7 @@ void QWindowsKeyMapper::updateKeyMap(const MSG &msg)
 }
 
 // Fills keyLayout for that vk_key. Values are all characters one can type using that key
-// (in connection with every combination of modifiers) and whether these "characters" are
-// dead keys.
+// (in connection with every combination of modifiers) and whether these "characters" are dead keys.
 void QWindowsKeyMapper::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32 scancode,
    quint32 vk_key)
 {

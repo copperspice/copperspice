@@ -1276,13 +1276,6 @@ QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool 
    return w;
 }
 
-/*!
-    \fn void QApplicationPrivate::dispatchEnterLeave(QWidget* enter, QWidget* leave, const QPointF &globalPosF)
-    \internal
-
-    Creates the proper Enter/Leave event when widget \a enter is entered and
-    widget \a leave is left.
- */
 void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, const QPointF &globalPosF)
 {
 #if 0

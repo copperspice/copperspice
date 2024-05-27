@@ -525,9 +525,11 @@ static void convertCGPathToQPainterPath(void *info, const CGPathElement *element
             element->points[2].x + myInfo->pos.x(),
             element->points[2].y + myInfo->pos.y());
          break;
+
       case kCGPathElementCloseSubpath:
          myInfo->path->closeSubpath();
          break;
+
       default:
          qDebug() << "Unhandled path transform type: " << element->type;
    }

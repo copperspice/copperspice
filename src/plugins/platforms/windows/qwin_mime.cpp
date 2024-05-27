@@ -130,6 +130,7 @@ static QByteArray writeDib(const QImage &img)
    if (!writer.write(img)) {
       ba.clear();
    }
+
    return ba;
 }
 
@@ -1650,6 +1651,7 @@ QWindowsMime *QWindowsMimeConverter::converterFromMime(const FORMATETC &formatet
          return m_mimes.at(i);
       }
    }
+
    return nullptr;
 }
 

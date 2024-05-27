@@ -32,6 +32,7 @@ template <typename T>
 static void insertOrRemoveItems(QVector<T> &items, int index, int delta)
 {
    int count = items.count();
+
    if (index < count) {
       if (delta > 0) {
          items.insert(index, delta, T());
@@ -456,10 +457,12 @@ void QGridLayoutRowData::dump(int indent) const
       if (ignore.testBit(i)) {
          qDebug("%*s  Ignored", indent, "");
       }
+
       boxes.at(i).dump(indent + 2);
    }
 
    MultiCellMap::const_iterator it = multiCellMap.constBegin();
+
    while (it != multiCellMap.constEnd()) {
       qDebug("%*s Multi-cell entry <%d, %d> (stretch %d)", indent, "", it.key().first,
          it.key().second, it.value().q_stretch);

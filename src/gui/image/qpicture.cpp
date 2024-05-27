@@ -349,6 +349,7 @@ bool QPicture::exec(QPainter *painter, QDataStream &s, int nrecords)
    quint32    ul;
    double     dbl;
    bool       bl;
+
    QByteArray  str1;
    QString     str;
    QPointF     p, p1, p2;

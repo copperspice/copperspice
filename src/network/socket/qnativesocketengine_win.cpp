@@ -37,8 +37,8 @@
 #include <qstring.h>
 
 
-//Some distributions of mingw (including 4.7.2 from mingw.org) are missing this from headers.
-//Also microsoft headers don't include it when building on XP and earlier.
+// Some distributions of mingw (including 4.7.2 from mingw.org) are missing this from headers.
+//Also microsoft headers do no t include it when building on XP and earlier.
 
 #ifndef IPV6_V6ONLY
 #define IPV6_V6ONLY 27
@@ -56,138 +56,182 @@ void verboseWSErrorDebug(int r)
       case WSANOTINITIALISED :
          qDebug("WSA error : WSANOTINITIALISED");
          break;
+
       case WSAEINTR:
          qDebug("WSA error : WSAEINTR");
          break;
+
       case WSAEBADF:
          qDebug("WSA error : WSAEBADF");
          break;
+
       case WSAEACCES:
          qDebug("WSA error : WSAEACCES");
          break;
+
       case WSAEFAULT:
          qDebug("WSA error : WSAEFAULT");
          break;
+
       case WSAEINVAL:
          qDebug("WSA error : WSAEINVAL");
          break;
+
       case WSAEMFILE:
          qDebug("WSA error : WSAEMFILE");
          break;
+
       case WSAEWOULDBLOCK:
          qDebug("WSA error : WSAEWOULDBLOCK");
          break;
+
       case WSAEINPROGRESS:
          qDebug("WSA error : WSAEINPROGRESS");
          break;
+
       case WSAEALREADY:
          qDebug("WSA error : WSAEALREADY");
          break;
+
       case WSAENOTSOCK:
          qDebug("WSA error : WSAENOTSOCK");
          break;
+
       case WSAEDESTADDRREQ:
          qDebug("WSA error : WSAEDESTADDRREQ");
          break;
+
       case WSAEMSGSIZE:
          qDebug("WSA error : WSAEMSGSIZE");
          break;
+
       case WSAEPROTOTYPE:
          qDebug("WSA error : WSAEPROTOTYPE");
          break;
+
       case WSAENOPROTOOPT:
          qDebug("WSA error : WSAENOPROTOOPT");
          break;
+
       case WSAEPROTONOSUPPORT:
          qDebug("WSA error : WSAEPROTONOSUPPORT");
          break;
+
       case WSAESOCKTNOSUPPORT:
          qDebug("WSA error : WSAESOCKTNOSUPPORT");
          break;
+
       case WSAEOPNOTSUPP:
          qDebug("WSA error : WSAEOPNOTSUPP");
          break;
+
       case WSAEPFNOSUPPORT:
          qDebug("WSA error : WSAEPFNOSUPPORT");
          break;
+
       case WSAEAFNOSUPPORT:
          qDebug("WSA error : WSAEAFNOSUPPORT");
          break;
+
       case WSAEADDRINUSE:
          qDebug("WSA error : WSAEADDRINUSE");
          break;
+
       case WSAEADDRNOTAVAIL:
          qDebug("WSA error : WSAEADDRNOTAVAIL");
          break;
+
       case WSAENETDOWN:
          qDebug("WSA error : WSAENETDOWN");
          break;
+
       case WSAENETUNREACH:
          qDebug("WSA error : WSAENETUNREACH");
          break;
+
       case WSAENETRESET:
          qDebug("WSA error : WSAENETRESET");
          break;
+
       case WSAECONNABORTED:
          qDebug("WSA error : WSAECONNABORTED");
          break;
+
       case WSAECONNRESET:
          qDebug("WSA error : WSAECONNRESET");
          break;
+
       case WSAENOBUFS:
          qDebug("WSA error : WSAENOBUFS");
          break;
+
       case WSAEISCONN:
          qDebug("WSA error : WSAEISCONN");
          break;
+
       case WSAENOTCONN:
          qDebug("WSA error : WSAENOTCONN");
          break;
+
       case WSAESHUTDOWN:
          qDebug("WSA error : WSAESHUTDOWN");
          break;
+
       case WSAETOOMANYREFS:
          qDebug("WSA error : WSAETOOMANYREFS");
          break;
+
       case WSAETIMEDOUT:
          qDebug("WSA error : WSAETIMEDOUT");
          break;
+
       case WSAECONNREFUSED:
          qDebug("WSA error : WSAECONNREFUSED");
          break;
       case WSAELOOP:
          qDebug("WSA error : WSAELOOP");
          break;
+
       case WSAENAMETOOLONG:
          qDebug("WSA error : WSAENAMETOOLONG");
          break;
+
       case WSAEHOSTDOWN:
          qDebug("WSA error : WSAEHOSTDOWN");
          break;
+
       case WSAEHOSTUNREACH:
          qDebug("WSA error : WSAEHOSTUNREACH");
          break;
+
       case WSAENOTEMPTY:
          qDebug("WSA error : WSAENOTEMPTY");
          break;
+
       case WSAEPROCLIM:
          qDebug("WSA error : WSAEPROCLIM");
          break;
+
       case WSAEUSERS:
          qDebug("WSA error : WSAEUSERS");
          break;
+
       case WSAEDQUOT:
          qDebug("WSA error : WSAEDQUOT");
          break;
+
       case WSAESTALE:
          qDebug("WSA error : WSAESTALE");
          break;
+
       case WSAEREMOTE:
          qDebug("WSA error : WSAEREMOTE");
          break;
+
       case WSAEDISCON:
          qDebug("WSA error : WSAEDISCON");
          break;
+
       default:
          qDebug("WSA error : Unknown");
          break;
@@ -309,28 +353,36 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
       case QNativeSocketEngine::ReceiveBufferSocketOption:
          n = SO_RCVBUF;
          break;
+
       case QNativeSocketEngine::SendBufferSocketOption:
          n = SO_SNDBUF;
          break;
+
       case QNativeSocketEngine::BroadcastSocketOption:
          n = SO_BROADCAST;
          break;
+
       case QNativeSocketEngine::AddressReusable:
          n = SO_REUSEADDR;
          break;
+
       case QNativeSocketEngine::BindExclusively:
          n = SO_EXCLUSIVEADDRUSE;
          break;
+
       case QNativeSocketEngine::ReceiveOutOfBandData:
          n = SO_OOBINLINE;
          break;
+
       case QNativeSocketEngine::LowDelayOption:
          level = IPPROTO_TCP;
          n = TCP_NODELAY;
          break;
+
       case QNativeSocketEngine::KeepAliveOption:
          n = SO_KEEPALIVE;
          break;
+
       case QNativeSocketEngine::MulticastTtlOption:
          if (socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol) {
             level = IPPROTO_IPV6;
@@ -340,6 +392,7 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
             n = IP_MULTICAST_TTL;
          }
          break;
+
       case QNativeSocketEngine::MulticastLoopbackOption:
          if (socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol) {
             level = IPPROTO_IPV6;
@@ -349,6 +402,7 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
             n = IP_MULTICAST_LOOP;
          }
          break;
+
       case QNativeSocketEngine::ReceivePacketInformation:
          if (socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol) {
             level = IPPROTO_IPV6;
@@ -358,10 +412,12 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
             n = IP_PKTINFO;
          }
          break;
+
       case QNativeSocketEngine::ReceiveHopLimit:
          if (socketProtocol == QAbstractSocket::IPv6Protocol || socketProtocol == QAbstractSocket::AnyIPProtocol) {
             level = IPPROTO_IPV6;
             n = IPV6_HOPLIMIT;
+
          } else if (socketProtocol == QAbstractSocket::IPv4Protocol) {
             level = IPPROTO_IP;
             n = IP_HOPLIMIT;
@@ -369,6 +425,7 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
          break;
    }
 }
+
 static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescriptor)
 {
    int value = 0;
@@ -376,6 +433,7 @@ static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescri
 
    if (::getsockopt(socketDescriptor, SOL_SOCKET, SO_TYPE, (char *) &value, &valueSize) != 0) {
       WS_ERROR_DEBUG(WSAGetLastError());
+
    } else {
       if (value == SOCK_STREAM) {
          return QAbstractSocket::TcpSocket;
@@ -383,6 +441,7 @@ static inline QAbstractSocket::SocketType qt_socket_getType(qintptr socketDescri
          return QAbstractSocket::UdpSocket;
       }
    }
+
    return QAbstractSocket::UnknownSocketType;
 }
 
@@ -436,16 +495,18 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    // and recomends alwasy doing it for cross windows version comapablity.
 
    // WSA_FLAG_NO_HANDLE_INHERIT is atomic (like linux O_CLOEXEC), but requires windows 7 SP 1 or later
-   // SetHandleInformation is supported since W2K but isn't atomic
+   // SetHandleInformation is supported since W2K but is not atomic
 #ifndef WSA_FLAG_NO_HANDLE_INHERIT
 #define WSA_FLAG_NO_HANDLE_INHERIT 0x80
 #endif
 
    SOCKET socket = INVALID_SOCKET;
+
    // Windows 7 or later, try the new API
    if ((osver & QSysInfo::WV_NT_based) >= QSysInfo::WV_6_1) {
       socket = ::WSASocket(protocol, type, 0, nullptr, 0, WSA_FLAG_NO_HANDLE_INHERIT | WSA_FLAG_OVERLAPPED);
    }
+
    // previous call fails if the windows 7 service pack 1 or hot fix isn't installed.
 
    // Try the old API if the new one failed on Windows 7, or always on earlier versions
@@ -463,26 +524,30 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
          (void) handleFlags;
 #endif
       }
+
 #endif
    }
 
    if (socket == INVALID_SOCKET) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       switch (err) {
          case WSANOTINITIALISED:
-            //###
             break;
+
          case WSAEAFNOSUPPORT:
          case WSAESOCKTNOSUPPORT:
          case WSAEPROTOTYPE:
          case WSAEINVAL:
             setError(QAbstractSocket::UnsupportedSocketOperationError, ProtocolUnsupportedErrorString);
             break;
+
          case WSAEMFILE:
          case WSAENOBUFS:
             setError(QAbstractSocket::SocketResourceError, ResourceErrorString);
             break;
+
          default:
             break;
       }
@@ -490,12 +555,12 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
       return false;
    }
 
-
    if (socketType == QAbstractSocket::UdpSocket) {
       // enable new behavior using
       // SIO_UDP_CONNRESET
       DWORD dwBytesReturned = 0;
       int bNewBehavior = 1;
+
       if (::WSAIoctl(socket, SIO_UDP_CONNRESET, &bNewBehavior, sizeof(bNewBehavior),
                      nullptr, 0, &dwBytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
          // not to worry isBogusUdpReadNotification() should handle this otherwise
@@ -507,6 +572,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    // get the pointer to sendmsg and recvmsg
    DWORD bytesReturned;
    GUID recvmsgguid = WSAID_WSARECVMSG;
+
    if (WSAIoctl(socketDescriptor, SIO_GET_EXTENSION_FUNCTION_POINTER,
                 &recvmsgguid, sizeof(recvmsgguid),
                 &recvmsg, sizeof(recvmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
@@ -536,13 +602,10 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    return true;
 }
 
-/*! \internal
-
-    Returns the value of the socket option \a opt.
-*/
 int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) const
 {
    Q_Q(const QNativeSocketEngine);
+
    if (! q->isValid()) {
       return -1;
    }
@@ -569,8 +632,10 @@ int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) co
 #if Q_BYTE_ORDER != Q_LITTLE_ENDIAN
 #error code assumes windows is little endian
 #endif
+
    int n, level;
-   int v = 0; //note: windows doesn't write to all bytes if the option type is smaller than int
+   int v = 0;                         // windows does not write to all bytes if the option type is smaller than int
+
    QT_SOCKOPTLEN_T len = sizeof(v);
 
    convertToLevelAndOption(opt, socketProtocol, level, n);
@@ -582,10 +647,6 @@ int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) co
    return -1;
 }
 
-
-/*! \internal
-    Sets the socket option \a opt to \a v.
-*/
 bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt, int v)
 {
    Q_Q(const QNativeSocketEngine);
@@ -675,6 +736,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
    } else {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       if (err == WSAENOTSOCK) {
          setError(QAbstractSocket::UnsupportedSocketOperationError,
                   InvalidSocketErrorString);
@@ -744,7 +806,6 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 
 bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quint16 port)
 {
-
 #if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeConnect() to %s :: %i", address.toString().toLatin1().constData(), port);
 #endif
@@ -868,10 +929,12 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
                setError(QAbstractSocket::NetworkError, NetworkUnreachableErrorString);
                socketState = QAbstractSocket::UnconnectedState;
                break;
+
             case WSAEINVAL:
             case WSAEALREADY:
                setError(QAbstractSocket::UnfinishedSocketOperationError, InvalidSocketErrorString);
                break;
+
             default:
                break;
          }
@@ -983,20 +1046,21 @@ bool QNativeSocketEnginePrivate::nativeBind(const QHostAddress &addr, quint16 po
    return true;
 }
 
-
 bool QNativeSocketEnginePrivate::nativeListen(int backlog)
 {
    if (::listen(socketDescriptor, backlog) == SOCKET_ERROR) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       switch (err) {
          case WSANOTINITIALISED:
-            //###
             break;
+
          case WSAEADDRINUSE:
             setError(QAbstractSocket::AddressInUseError,
                      PortInuseErrorString);
             break;
+
          default:
             break;
       }
@@ -1005,6 +1069,7 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
       qDebug("QNativeSocketEnginePrivate::nativeListen(%i) == false (%s)",
              backlog, socketErrorString.toLatin1().constData());
 #endif
+
       return false;
    }
 
@@ -1289,8 +1354,7 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
       result = (err == WSAECONNRESET || err == WSAENETRESET);
 
    } else {
-      // If there's no error, or if our buffer was too small, there must be
-      // a pending datagram.
+      // If there's no error, or if our buffer was too small, there must be a pending datagram.
       result = true;
    }
 
@@ -1298,6 +1362,7 @@ bool QNativeSocketEnginePrivate::nativeHasPendingDatagrams() const
    qDebug("QNativeSocketEnginePrivate::nativeHasPendingDatagrams() == %s",
           result ? "true" : "false");
 #endif
+
    return result;
 }
 
@@ -1468,6 +1533,7 @@ qint64 QNativeSocketEnginePrivate::nativeReceiveDatagram(char *data, qint64 maxL
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
    bool printSender = (ret != -1 && (options & QNativeSocketEngine::WantDatagramSender) != 0);
+
    qDebug("QNativeSocketEnginePrivate::nativeReceiveDatagram(%p \"%s\", %lli, %s, %i) == %lli",
           data, qt_prettyDebug(data, qMin<qint64>(ret, 16), ret).data(), maxLength,
           printSender ? header->senderAddress.toString().toLatin1().constData() : "(unknown)",
@@ -1559,14 +1625,17 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
    DWORD flags = 0;
    DWORD bytesSent = 0;
    qint64 ret = -1;
+
    if (sendmsg) {
       ret = sendmsg(socketDescriptor, &msg, flags, &bytesSent, nullptr, nullptr);
    } else {
       ret = ::WSASendTo(socketDescriptor, &buf, 1, &bytesSent, flags, msg.name, msg.namelen, nullptr, nullptr);
    }
+
    if (ret == SOCKET_ERROR) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       switch (err) {
          case WSAEMSGSIZE:
             setError(QAbstractSocket::DatagramTooLargeError, DatagramTooLargeErrorString);
@@ -1615,14 +1684,17 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
          } else {
             continue;
          }
+
       } else if ((err = WSAGetLastError()) == WSAEWOULDBLOCK) {
          break;
+
       } else if (err == WSAENOBUFS) {
          // this function used to not send more than 49152 per call to WSASendTo
          // to avoid getting a WSAENOBUFS. However this is a performance regression
          // and we think it only appears with old windows versions. We now handle the
          // WSAENOBUFS and hope it never appears anyway.
          // just go on, the next loop run we will try a smaller number
+
       } else {
          WS_ERROR_DEBUG(err);
          switch (err) {
@@ -1632,6 +1704,7 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
                setError(QAbstractSocket::NetworkError, WriteErrorString);
                q->close();
                break;
+
             default:
                break;
          }
@@ -1643,7 +1716,7 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QNativeSocketEnginePrivate::nativeWrite(%p \"%s\", %li) == %li",
+   qDebug("QNativeSocketEnginePrivate::nativeWrite(%p \"%s\", %i) == %i",
           data, qt_prettyDebug(data, qMin((int)ret, 16), (int)ret).data(), (int)len, (int)ret);
 #endif
 
@@ -1662,19 +1735,23 @@ qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxLength)
    if (::WSARecv(socketDescriptor, &buf, 1, &bytesRead, &flags, nullptr, nullptr) ==  SOCKET_ERROR) {
       int err = WSAGetLastError();
       WS_ERROR_DEBUG(err);
+
       switch (err) {
          case WSAEWOULDBLOCK:
             ret = -2;
             break;
+
          case WSAEBADF:
          case WSAEINVAL:
             //error string is now set in read(), not here in nativeRead()
             break;
+
          case WSAECONNRESET:
          case WSAECONNABORTED:
             // for tcp sockets this will be handled in QNativeSocketEngine::read
             ret = 0;
             break;
+
          default:
             break;
       }
@@ -1803,6 +1880,7 @@ void QNativeSocketEnginePrivate::nativeClose()
 #if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug("QNativeSocketEnginePrivate::nativeClose()");
 #endif
+
    // We were doing a setsockopt here before with SO_DONTLINGER. (However with kind of wrong
    // usage of parameters, it wants a BOOL but we used a struct and pretended it to be bool).
    // We don't think setting this option should be done here, if a user wants it she/he can

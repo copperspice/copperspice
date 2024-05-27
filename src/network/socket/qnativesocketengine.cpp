@@ -26,6 +26,7 @@
 #include <qabstracteventdispatcher.h>
 #include <qsocketnotifier.h>
 #include <qnetworkinterface.h>
+
 #include <qthread_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)

@@ -252,4 +252,3 @@ QVariant QWindowsNativeInterface::gpu() const
 {
    return GpuDescription::detect().toVariant();
 }
-

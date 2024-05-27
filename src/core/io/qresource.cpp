@@ -1324,6 +1324,7 @@ bool QResourceFileEngine::seek(qint64 pos)
    }
 
    d->m_offset = pos;
+
    return true;
 }
 
@@ -1480,6 +1481,7 @@ uchar *QResourceFileEnginePrivate::map(qint64 offset, qint64 size, QFile::Memory
    }
 
    uchar *address = const_cast<uchar *>(resource.data());
+
    return (address + offset);
 }
 

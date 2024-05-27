@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qlocalsocket.h>
-
 #include <qlocalsocket_p.h>
+
 #include <qnet_unix_p.h>
 
 #ifndef QT_NO_LOCALSOCKET
+
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -123,37 +124,48 @@ QString QLocalSocketPrivate::generateErrorString(QLocalSocket::LocalSocketError 
       case QLocalSocket::ConnectionRefusedError:
          errorString = QLocalSocket::tr("%1: Connection refused").formatArg(function);
          break;
+
       case QLocalSocket::PeerClosedError:
          errorString = QLocalSocket::tr("%1: Remote closed").formatArg(function);
          break;
+
       case QLocalSocket::ServerNotFoundError:
          errorString = QLocalSocket::tr("%1: Invalid name").formatArg(function);
          break;
+
       case QLocalSocket::SocketAccessError:
          errorString = QLocalSocket::tr("%1: Socket access error").formatArg(function);
          break;
+
       case QLocalSocket::SocketResourceError:
          errorString = QLocalSocket::tr("%1: Socket resource error").formatArg(function);
          break;
+
       case QLocalSocket::SocketTimeoutError:
          errorString = QLocalSocket::tr("%1: Socket operation timed out").formatArg(function);
          break;
+
       case QLocalSocket::DatagramTooLargeError:
          errorString = QLocalSocket::tr("%1: Datagram too large").formatArg(function);
          break;
+
       case QLocalSocket::ConnectionError:
          errorString = QLocalSocket::tr("%1: Connection error").formatArg(function);
          break;
+
       case QLocalSocket::UnsupportedSocketOperationError:
          errorString = QLocalSocket::tr("%1: The socket operation is not supported").formatArg(function);
          break;
+
       case QLocalSocket::OperationError:
          errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").formatArg(function);
          break;
+
       case QLocalSocket::UnknownSocketError:
       default:
          errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(errno);
    }
+
    return errorString;
 }
 
@@ -476,27 +488,38 @@ void QLocalSocket::disconnectFromServer()
 QLocalSocket::LocalSocketError QLocalSocket::error() const
 {
    Q_D(const QLocalSocket);
+
    switch (d->unixSocket.error()) {
       case QAbstractSocket::ConnectionRefusedError:
          return QLocalSocket::ConnectionRefusedError;
+
       case QAbstractSocket::RemoteHostClosedError:
          return QLocalSocket::PeerClosedError;
+
       case QAbstractSocket::HostNotFoundError:
          return QLocalSocket::ServerNotFoundError;
+
       case QAbstractSocket::SocketAccessError:
          return QLocalSocket::SocketAccessError;
+
       case QAbstractSocket::SocketResourceError:
          return QLocalSocket::SocketResourceError;
+
       case QAbstractSocket::SocketTimeoutError:
          return QLocalSocket::SocketTimeoutError;
+
       case QAbstractSocket::DatagramTooLargeError:
          return QLocalSocket::DatagramTooLargeError;
+
       case QAbstractSocket::NetworkError:
          return QLocalSocket::ConnectionError;
+
       case QAbstractSocket::UnsupportedSocketOperationError:
          return QLocalSocket::UnsupportedSocketOperationError;
+
       case QAbstractSocket::UnknownSocketError:
          return QLocalSocket::UnknownSocketError;
+
       default:
 #if defined(CS_SHOW_DEBUG_NETWORK)
          qWarning() << "QLocalSocket::error() Error not handled " << d->unixSocket.error();

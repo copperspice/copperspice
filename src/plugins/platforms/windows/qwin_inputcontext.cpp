@@ -223,9 +223,11 @@ void QWindowsInputContext::cursorRectChanged()
    }
    const QInputMethod *inputMethod = QApplication::inputMethod();
    const QRectF cursorRectangleF = inputMethod->cursorRectangle();
+
    if (!cursorRectangleF.isValid()) {
       return;
    }
+
    const QRect cursorRectangle =
       QRectF(cursorRectangleF.topLeft() * m_compositionContext.factor,
          cursorRectangleF.size() * m_compositionContext.factor).toRect();
@@ -236,8 +238,10 @@ void QWindowsInputContext::cursorRectChanged()
    if (!himc) {
       return;
    }
+
    // Move candidate list window to the microfocus position.
    COMPOSITIONFORM cf;
+
    // ### need X-like inputStyle config settings
    cf.dwStyle = CFS_FORCE_POSITION;
    cf.ptCurrentPos.x = cursorRectangle.x();
@@ -350,8 +354,10 @@ bool QWindowsInputContext::startComposition(HWND hwnd)
    if (!fo) {
       return false;
    }
+
    // This should always match the object.
    QWindow *window = QApplication::focusWindow();
+
    if (!window) {
       return false;
    }
@@ -359,8 +365,10 @@ bool QWindowsInputContext::startComposition(HWND hwnd)
    if (!fo || QWindowsWindow::handleOf(window) != hwnd) {
       return false;
    }
+
    initContext(hwnd, QHighDpiScaling::factor(window), fo);
    startContextComposition();
+
    return true;
 }
 
@@ -383,6 +391,7 @@ void QWindowsInputContext::endContextComposition()
       qWarning("%s: Called out of sequence.", __FUNCTION__);
       return;
    }
+
    m_compositionContext.composition.clear();
    m_compositionContext.position = 0;
    m_compositionContext.isComposing = false;
@@ -410,10 +419,6 @@ static inline QList<QInputMethodEvent::Attribute> intermediateMarkup(int positio
    }
    return attributes;
 }
-
-/*!
-    \brief Notify focus object about markup or final text.
-*/
 
 bool QWindowsInputContext::composition(HWND hwnd, LPARAM lParamIn)
 {
@@ -481,11 +486,11 @@ bool QWindowsInputContext::endComposition(HWND hwnd)
 {
    qDebug() << __FUNCTION__ << m_endCompositionRecursionGuard << hwnd;
    // Googles Pinyin Input Method likes to call endComposition again
-   // when we call notifyIME with CPS_CANCEL, so protect ourselves
-   // against that.
+   // when we call notifyIME with CPS_CANCEL, so protect ourselves against that.
    if (m_endCompositionRecursionGuard || m_compositionContext.hwnd != hwnd) {
       return false;
    }
+
    if (m_compositionContext.focusObject.isNull()) {
       return false;
    }
@@ -554,8 +559,10 @@ bool QWindowsInputContext::handleIME_Request(WPARAM wParam,
          *result = size;
       }
       return true;
+
       case IMR_CONFIRMRECONVERTSTRING:
          return true;
+
       default:
          break;
    }
@@ -586,17 +593,6 @@ void QWindowsInputContext::handleInputLanguageChanged(WPARAM wparam, LPARAM lpar
 
 }
 
-/*!
-    \brief Determines the string for reconversion with selection.
-
-    This is triggered twice by WM_IME_REQUEST, first with reconv=0
-    to determine the length and later with a reconv struct to obtain
-    the string with the position of the selection to be reconverted.
-
-    Obtains the text from the focus object and marks the word
-    for selection (might not be entirely correct for Japanese).
-*/
-
 int QWindowsInputContext::reconvertString(RECONVERTSTRING *reconv)
 {
    QObject *fo = QApplication::focusObject();
@@ -608,6 +604,7 @@ int QWindowsInputContext::reconvertString(RECONVERTSTRING *reconv)
    if (!surroundingTextV.isValid()) {
       return -1;
    }
+
    const QString surroundingText = surroundingTextV.toString();
    const int memSize = int(sizeof(RECONVERTSTRING))
       + (surroundingText.length() + 1) * int(sizeof(ushort));

@@ -163,6 +163,7 @@ bool QIODevice::isWritable() const
 bool QIODevice::open(OpenMode mode)
 {
    Q_D(QIODevice);
+
    d->openMode = mode;
    d->pos = (mode & Append) ? size() : qint64(0);
    d->buffer.clear();
@@ -394,7 +395,7 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
          }
       }
 
-      // If we need more, try reading from the device.
+      // If we need more try reading from the device
       if (maxSize > 0) {
          // Make sure the device is positioned correctly.
          if (d->pos != d->devicePos && !d->isSequential() && !seek(d->pos)) {
@@ -467,8 +468,8 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
 QByteArray QIODevice::read(qint64 maxSize)
 {
    Q_D(QIODevice);
-   QByteArray result;
 
+   QByteArray result;
    CHECK_MAXLEN(read, result);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
@@ -500,6 +501,7 @@ QByteArray QIODevice::read(qint64 maxSize)
                readBytes += readResult;
             }
          } while (readResult == QIODEVICE_BUFFERSIZE);
+
       } else {
          readBytes = read(result.data(), result.size());
       }
@@ -633,8 +635,10 @@ qint64 QIODevice::readLine(char *data, qint64 maxSize)
 
    if (!d->baseReadLineDataCalled && !sequential) {
       d->pos += readBytes;
+
       // If the base implementation was not called, then we must
       // assume the device position is invalid and force a seek.
+
       d->devicePos = qint64(-1);
    }
 

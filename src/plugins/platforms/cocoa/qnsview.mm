@@ -331,6 +331,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 #if 0
       //geometry = qt_mac_toQRect([self frame]);
       qDebug() << "nsview updateGeometry" << m_platformWindow->window();
+
       QRect screenRect = qt_mac_toQRect([m_platformWindow->m_nsWindow convertRectToScreen: [self frame]]);
       qDebug() << "screenRect" << screenRect;
 
@@ -926,6 +927,7 @@ static bool _q_dontOverrideCtrlLMB = false;
 
    if (! (m_buttons & (m_sendUpAsRightButton ? Qt::RightButton : Qt::LeftButton))) {
       qDebug("QNSView mouseDragged: Internal mouse button tracking invalid (missing Qt::LeftButton)");
+
    }
 
    [self handleMouseEvent: theEvent];
@@ -1195,6 +1197,7 @@ QCocoaTabletDeviceDataHash &tabletDeviceDataHash()
       deviceData.device, deviceData.pointerType, buttons, pressure, xTilt, yTilt,
       tangentialPressure, rotation, z, deviceData.uid,
       keyboardModifiers);
+
    return true;
 }
 
@@ -1313,6 +1316,7 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
    const NSTimeInterval timestamp = [event timestamp];
    const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(event, [self shouldSendSingleTouch]);
    qDebug() << "touchesBeganWithEvent" << points;
+
    QWindowSystemInterface::handleTouchEvent(m_window, timestamp * 1000, touchDevice, points);
 }
 

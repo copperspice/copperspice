@@ -62,6 +62,7 @@ void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
                csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
+
          if (childParent != newParent) {
             itemChild->setParentItem(newParent);
          }

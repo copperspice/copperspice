@@ -66,10 +66,6 @@ struct QShortcutEntry {
    QShortcutMap::ContextMatcher contextMatcher;
 };
 
-
-/* \internal
-    Private data for QShortcutMap
-*/
 class QShortcutMapPrivate
 {
    Q_DECLARE_PUBLIC(QShortcutMap)
@@ -97,19 +93,12 @@ class QShortcutMapPrivate
    QVector<const QShortcutEntry *> identicals; // Last identical matches
 };
 
-
-/*! \internal
-    QShortcutMap constructor.
-*/
 QShortcutMap::QShortcutMap()
    : d_ptr(new QShortcutMapPrivate(this))
 {
    resetState();
 }
 
-/*! \internal
-    QShortcutMap destructor.
-*/
 QShortcutMap::~QShortcutMap()
 {
 }
@@ -136,13 +125,13 @@ int QShortcutMap::addShortcut(QObject *owner, const QKeySequence &key, Qt::Short
     If \a owner is 0, all entries in the map with the key sequence specified
     is removed. If \a key is null, all sequences for \a owner is removed from
     the map. If \a id is 0, any identical \a key sequences owned by \a owner
-    are removed.
-    Returns the number of sequences removed from the map.
+    are removed. Returns the number of sequences removed from the map.
 */
 
 int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key)
 {
    Q_D(QShortcutMap);
+
    int itemsRemoved = 0;
    bool allOwners = (owner == nullptr);
    bool allKeys = key.isEmpty();
@@ -156,18 +145,22 @@ int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key
    }
 
    int i = d->sequences.size() - 1;
+
    while (i >= 0) {
       const QShortcutEntry &entry = d->sequences.at(i);
       int entryId = entry.id;
+
       if ((allOwners || entry.owner == owner)
          && (allIds || entry.id == id)
          && (allKeys || entry.keyseq == key)) {
          d->sequences.removeAt(i);
          ++itemsRemoved;
       }
+
       if (id == entryId) {
          return itemsRemoved;
       }
+
       --i;
    }
 

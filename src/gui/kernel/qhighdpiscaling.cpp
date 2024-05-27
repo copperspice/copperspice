@@ -44,6 +44,7 @@ static inline qreal initialGlobalScaleFactor()
       bool ok;
 
       const qreal f = env_1.toDouble(&ok);
+
       if (ok && f > 0) {
 
 #if defined(CS_SHOW_DEBUG_GUI_DPI)
@@ -69,52 +70,41 @@ static inline qreal initialGlobalScaleFactor()
          }
       }
    }
+
    return result;
 }
 
 /*!
-    \class QHighDpiScaling
-    \brief Collection of utility functions for UI scaling.
-
-    \ingroup platform
-
-    QHighDpiScaling implements utility functions for high-dpi scaling for use
-    on operating systems that provide limited support for native scaling. In
-    addition this functionality can be used for simulation and testing purposes.
+    class QHighDpiScaling
 
     The functions support scaling between the device independent coordinate
-    system used by Qt applications and the native coordinate system used by
-    the platform plugins. Intended usage locations are the low level / platform
-    plugin interfacing parts of QtGui, for example the QWindow, QScreen and
-    QWindowSystemInterface implementation.
+    system used by CS applications and the native coordinate system used by
+    the platform plugins.
 
-    There are now up to three active coordinate systems in Qt:
+    There are now up to three active coordinate systems:
 
      ---------------------------------------------------
     |  Application            Device Independent Pixels |   devicePixelRatio
-    |  Qt Widgets                                       |         =
-    |  Qt Gui                                           |
-    |---------------------------------------------------|   Qt Scale Factor
-    |  Qt Gui QPlatform*      Native Pixels             |         *
-    |  Qt platform plugin                               |
+    |  Widgets                                          |         =
+    |  Gui                                              |
+    |---------------------------------------------------|   Cs Scale Factor
+    |  Gui QPlatform*         Native Pixels             |         *
+    |  platform plugin                                  |
     |---------------------------------------------------|   OS Scale Factor
     |  Display                Device Pixels             |
     |  (Graphics Buffers)                               |
     -----------------------------------------------------
 
-    This is an simplification and shows the main coordinate system. All layers
-    may work with device pixels in specific cases: OpenGL, creating the backing
-    store, and QPixmap management. The "Native Pixels" coordinate system is
-    internal to Qt and should not be exposed to Qt users: Seen from the outside
-    there are only two coordinate systems: device independent pixels and device
-    pixels.
+    All layers may work with device pixels in specific cases: OpenGL, creating the backing
+    store, and QPixmap management. The "Native Pixels" coordinate system is internal and
+    should not be exposed to users.
 
-    The devicePixelRatio seen by applications is the product of the Qt scale
+    The devicePixelRatio seen by applications is the product of the scale
     factor and the OS scale factor. The value of the scale factors may be 1,
     in which case two or more of the coordinate systems are equivalent. Platforms
     that (may) have an OS scale factor include \macos, iOS and Wayland.
 
-    Note that the functions in this file do not work with the OS scale factor
+    The functions in this file do not work with the OS scale factor
     directly and are limited to converting between device independent and native
     pixels. The OS scale factor is accunted for by QWindow::devicePixelRatio()
     and similar functions.
@@ -123,32 +113,32 @@ static inline qreal initialGlobalScaleFactor()
 
     'Classic': Device Independent Pixels = Native Pixels = Device Pixels
      ---------------------------------------------------    devicePixelRatio: 1
-    |  Application / Qt Gui             100 x 100       |
-    |                                                   |   Qt Scale Factor: 1
-    |  Qt Platform / OS                 100 x 100       |
+    |  Application / Cs Gui             100 x 100       |
+    |                                                   |   Cs Scale Factor: 1
+    |  Cs Platform / OS                 100 x 100       |
     |                                                   |   OS Scale Factor: 1
     |  Display                          100 x 100       |
     -----------------------------------------------------
 
     'Retina Device': Device Independent Pixels = Native Pixels
      ---------------------------------------------------    devicePixelRatio: 2
-    |  Application / Qt Gui             100 x 100       |
-    |                                                   |   Qt Scale Factor: 1
-    |  Qt Platform / OS                 100 x 100       |
+    |  Application / Cs Gui             100 x 100       |
+    |                                                   |   Cs Scale Factor: 1
+    |  Cs Platform / OS                 100 x 100       |
     |---------------------------------------------------|   OS Scale Factor: 2
     |  Display                          200 x 200       |
     -----------------------------------------------------
 
-    '2x Qt Scaling': Native Pixels = Device Pixels
+    '2x Cs Scaling': Native Pixels = Device Pixels
      ---------------------------------------------------    devicePixelRatio: 2
-    |  Application / Qt Gui             100 x 100       |
-    |---------------------------------------------------|   Qt Scale Factor: 2
-    |  Qt Platform / OS                 200 x 200       |
+    |  Application / Cs Gui             100 x 100       |
+    |---------------------------------------------------|   Cs Scale Factor: 2
+    |  Cs Platform / OS                 200 x 200       |
     |                                                   |   OS Scale Factor: 1
     |  Display                          200 x 200       |
     -----------------------------------------------------
 
-    The Qt Scale Factor is the product of two sub-scale factors, which
+    The Scale Factor is the product of two sub-scale factors, which
     are independently either set or determined by the platform plugin.
     Several APIs are offered for this, targeting both developers and
     end users. All scale factors are of type qreal.
@@ -185,22 +175,24 @@ static inline qreal initialGlobalScaleFactor()
         or to a list of name=value pairs (where name matches QScreen::name()).
 
     Coordinate conversion functions must be used when writing code that passes
-    geometry across the Qt Gui / Platform plugin boundary. The main conversion
+    geometry across the Gui / Platform plugin boundary. The main conversion
     functions are:
         T toNativePixels(T, QWindow *)
         T fromNativePixels(T, QWindow*)
 
-    The following classes in QtGui use native pixels, for the convenience of the
+    The following classes in CsGui use native pixels, for the convenience of the
     plataform plugins:
         QPlatformWindow
         QPlatformScreen
         QWindowSystemInterface (API only - Events are in device independent pixels)
 
     As a special consideration platform plugin code should be careful about
-    calling QtGui geometry accessor functions:
+    calling CsGui geometry accessor functions:
         QRect r = window->geometry();
+
     Here the returned geometry is in device independent pixels. Add a conversion call:
         QRect r = QHighDpi::toNativePixels(window->geometry());
+
     (Avoiding calling QWindow and instead using the QPlatformWindow geometry
      might be a better course of action in this case.)
 */
@@ -211,15 +203,13 @@ bool QHighDpiScaling::m_usePixelDensity           = false;  // use scale factor 
 bool QHighDpiScaling::m_pixelDensityScalingActive = false;  // pixel density scale factor > 1
 bool QHighDpiScaling::m_globalScalingActive       = false;  // global scale factor is active
 bool QHighDpiScaling::m_screenFactorSet           = false;  // QHighDpiScaling::setScreenFactor has been used
-QDpi QHighDpiScaling::m_logicalDpi = QDpi(-1, -1);          // The scaled logical DPI of the primary screen
 
-/*
-\fn static inline bool usePixelDensity()
-Initializes the QHighDpiScaling global variables. Called before the platform plugin is created.
-*/
+QDpi QHighDpiScaling::m_logicalDpi = QDpi(-1, -1);           // scaled logical DPI of the primary screen
 
 static inline bool usePixelDensity()
 {
+   // call before the platform plugin is created.
+
    // Determine if we should set a scale factor based on the pixel density
    // reported by the platform plugin. There are several enablers and several
    // disablers. A single disable may veto all other enablers.

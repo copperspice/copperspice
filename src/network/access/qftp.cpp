@@ -420,6 +420,7 @@ QByteArray QFtpDTP::readAll()
       tmp = bytesFromSocket;
       bytesFromSocket.clear();
    }
+
    return tmp;
 }
 
@@ -940,11 +941,13 @@ void QFtpPI::abort()
       commandSocket.write("ABOR\r\n", 6);
 
       dtp.abortConnection();
+
    } else {
       //Deviation from RFC 959:
       //Most FTP servers do not support ABOR, or require the telnet
       //IP & synch sequence (TCP urgent data) which is not supported by QTcpSocket.
       //Following what most FTP clients do, just reset the data connection and wait for 426
+
       abortState = WaitForAbortToFinish;
       dtp.abortConnection();
    }
@@ -1230,7 +1233,8 @@ bool QFtpPI::processReply()
 
       case Failure:
          // If the EPSV or EPRT commands fail, replace them with
-         // the old PASV and PORT instead and try again.
+         // the old PASV and PORT instead and try again
+
          if (currentCmd.startsWith(QLatin1String("EPSV"))) {
             transferConnectionExtended = false;
             pendingCommands.prepend(QLatin1String("PASV\r\n"));
@@ -1241,6 +1245,7 @@ bool QFtpPI::processReply()
 
          } else {
             emit error(QFtp::UnknownError, m_replyText);
+
          }
 
          if (state != Waiting) {
@@ -1257,7 +1262,7 @@ bool QFtpPI::processReply()
 bool QFtpPI::startNextCmd()
 {
    if (waitForDtpToConnect) {
-      // don't process any new commands until we are connected
+      // do not process any new commands until we are connected
       return true;
    }
 
@@ -1291,8 +1296,10 @@ bool QFtpPI::startNextCmd()
 
       } else if (address.protocol() == QTcpSocket::IPv4Protocol) {
          int port = dtp.setupListener(address);
+
          QString portArg;
          quint32 ip = address.toIPv4Address();
+
          portArg += QString::number((ip & 0xff000000) >> 24);
          portArg += QLatin1Char(',') + QString::number((ip & 0xff0000) >> 16);
          portArg += QLatin1Char(',') + QString::number((ip & 0xff00) >> 8);

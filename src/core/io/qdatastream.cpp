@@ -54,7 +54,7 @@
    if (q_status != Ok) \
       return retVal;
 
-// when streaming invalid QVariants,just the type should be written, no "data" after it
+// when streaming invalid QVariants just the type should be written, no "data" after it
 
 QDataStream::QDataStream()
 {
@@ -178,6 +178,7 @@ QDataStream &QDataStream::operator>>(qint8 &i)
 
    if (! m_device->getChar(&c)) {
       setStatus(ReadPastEnd);
+
    } else {
       i = qint8(c);
    }
@@ -211,6 +212,7 @@ QDataStream &QDataStream::operator>>(qint32 &i)
    if (m_device->read((char *)&i, 4) != 4) {
       i = 0;
       setStatus(ReadPastEnd);
+
    } else {
       if (!noswap) {
          i = qbswap(i);
@@ -235,6 +237,7 @@ QDataStream &QDataStream::operator>>(qint64 &i)
       if (m_device->read((char *)&i, 8) != 8) {
          i = qint64(0);
          setStatus(ReadPastEnd);
+
       } else {
          if (!noswap) {
             i = qbswap(i);

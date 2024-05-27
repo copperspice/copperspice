@@ -226,7 +226,7 @@ void QOutlineMapper::endOutline()
       m_clip_rect.x(), m_clip_rect.y(), m_clip_rect.width(), m_clip_rect.height());
 #endif
 
-   // Check for out of dev bounds...
+   // Check for out of dev bounds
    const bool do_clip = !m_in_clip_elements && ((controlPointRect.left() < -QT_RASTER_COORD_LIMIT
             || controlPointRect.right() > QT_RASTER_COORD_LIMIT
             || controlPointRect.top() < -QT_RASTER_COORD_LIMIT
@@ -245,10 +245,10 @@ void QOutlineMapper::convertElements(const QPointF *elements,
    const QPainterPath::ElementType *types,
    int element_count)
 {
-
    if (types) {
       // Translate into FT coords
       const QPointF *e = elements;
+
       for (int i = 0; i < element_count; ++i) {
          switch (*types) {
             case QPainterPath::MoveToElement: {
@@ -294,14 +294,16 @@ void QOutlineMapper::convertElements(const QPointF *elements,
                i += 2;
             }
             break;
+
             default:
                break;
          }
          ++types;
          ++e;
       }
+
    } else {
-      // Plain polygon...
+      // Plain polygon
       const QPointF *last = elements + element_count;
       const QPointF *e = elements;
       while (e < last) {

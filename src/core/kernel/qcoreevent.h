@@ -243,6 +243,7 @@ class Q_CORE_EXPORT QEvent           // event base class
 
    explicit QEvent(Type type);
    QEvent(const QEvent &other);
+
    virtual ~QEvent();
 
    QEvent &operator=(const QEvent &other);
@@ -310,6 +311,7 @@ class Q_CORE_EXPORT QTimerEvent : public QEvent
    int timerId() const {
       return id;
    }
+
  protected:
    int id;
 };

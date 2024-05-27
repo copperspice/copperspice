@@ -511,8 +511,10 @@ void QWindowsTheme::refreshIconPixmapSizes()
 
 #ifdef USE_IIMAGELIST
    sizes << fileIconSizes[ExtraLargeFileIcon]; // sHIL_EXTRALARGE
+
    if (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA) {
-      sizes << fileIconSizes[JumboFileIcon];   // SHIL_JUMBO
+      // SHIL_JUMBO
+      sizes << fileIconSizes[JumboFileIcon];
    }
 #endif
 

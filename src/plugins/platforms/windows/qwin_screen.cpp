@@ -517,11 +517,6 @@ void QWindowsScreenManager::removeScreen(int index)
    QWindowsIntegration::instance()->emitDestroyScreen(m_screens.takeAt(index));
 }
 
-/*!
-    \brief Synchronizes the screen list, adds new screens, removes deleted
-    ones and propagates resolution changes to QWindowSystemInterface.
-*/
-
 bool QWindowsScreenManager::handleScreenChanges()
 {
    // Look for changed monitors, add new ones

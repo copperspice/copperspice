@@ -238,7 +238,7 @@ void QHttpThreadDelegate::startRequestSynchronously()
 #endif
 }
 
-// This is invoked as QueuedConnection from QNetworkAccessHttpBackend in the user thread
+// invoked as QueuedConnection from QNetworkAccessHttpBackend in the user thread
 void QHttpThreadDelegate::startRequest()
 {
 #if defined(CS_SHOW_DEBUG_NETWORK)

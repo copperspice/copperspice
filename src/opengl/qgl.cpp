@@ -1592,7 +1592,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #define GL_UNSIGNED_INT_8_8_8_8_REV 0x8367
 #endif
 
-// map from Qt's ARGB endianness-dependent format to GL's big-endian RGBA layout
+// map from our ARGB endianness dependent format to GL's big-endian RGBA layout
 static inline void qgl_byteSwapImage(QImage &img, GLenum pixel_type)
 {
    const int width = img.width();
@@ -1620,15 +1620,17 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    const qint64 key, QGLContext::BindOptions options)
 {
    Q_Q(QGLContext);
+
    QOpenGLFunctions *funcs = qgl_functions();
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    printf("QGLContextPrivate::bindTexture(), imageSize=(%d,%d), internalFormat =0x%x, options=%x, key=%llx\n",
       image.width(), image.height(), internalFormat, int(options), key);
+
    QTime time;
    time.start();
 
-   // Reset the gl error stack...git
+   // Reset the gl error stack
    while (funcs->glGetError() != GL_NO_ERROR) ;
 #endif
 
@@ -1683,6 +1685,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #if defined(CS_SHOW_DEBUG_OPENGL)
       printf("Generating mipmaps (%d ms)\n", time.elapsed());
 #endif
+
    } else {
       funcs->glTexParameteri(target, GL_TEXTURE_MIN_FILTER, filtering);
    }
@@ -1725,6 +1728,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #endif
          }
          break;
+
       case QImage::Format_ARGB32_Premultiplied:
          if (!premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32);
@@ -1761,9 +1765,11 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          internalFormat = GL_RGB;
          needsbyteswap = false;
          break;
+
       case QImage::Format_RGB32:
       case QImage::Format_RGBX8888:
          break;
+
       default:
          if (img.hasAlphaChannel()) {
             img = img.convertToFormat(premul
@@ -1772,6 +1778,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #if defined(CS_SHOW_DEBUG_OPENGL)
             printf("Converted to 32-bit alpha format (%d ms)\n", time.elapsed());
 #endif
+
          } else {
             img = img.convertToFormat(QImage::Format_RGB32);
 
@@ -1785,6 +1792,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       if (img.isDetached()) {
          int ipl = img.bytesPerLine() / 4;
          int h = img.height();
+
          for (int y = 0; y < h / 2; ++y) {
             int *a = (int *) img.scanLine(y);
             int *b = (int *) img.scanLine(h - y - 1);
@@ -1792,6 +1800,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
                qSwap(a[x], b[x]);
             }
          }
+
       } else {
          // Create a new image and copy across.  If we use the
          // above in-place code then a full copy of the image is
@@ -1818,8 +1827,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    }
 
    if (ctx->isOpenGLES()) {
-      // OpenGL/ES requires that the internal and external formats be
-      // identical.
+      // OpenGL/ES requires that the internal and external formats be identical
       internalFormat = externalFormat;
    }
 
@@ -1828,7 +1836,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       img.format(), externalFormat, internalFormat, pixel_type);
 #endif
 
-   const QImage &constRef = img; // to avoid detach in bits()...
+   const QImage &constRef = img; // to avoid detach in bits()
 
    funcs->glTexImage2D(target, 0, internalFormat, img.width(), img.height(), 0, externalFormat,
       pixel_type, constRef.bits());
@@ -1870,7 +1878,6 @@ QGLTexture *QGLContextPrivate::textureCacheLookup(const qint64 key, GLenum targe
    return nullptr;
 }
 
-// internal
 QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format, QGLContext::BindOptions options)
 {
    Q_Q(QGLContext);

@@ -88,7 +88,8 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
    do {
       if (!elements) {
          // If the path has a null elements pointer, the elements implicitly
-         // start with a moveTo (already added) and continue with lineTos:
+         // start with a moveTo (already added) and continue with lineTos
+
          for (int i = 1; i < path.elementCount(); ++i) {
             lineToArray(points[i].x(), points[i].y());
          }
@@ -119,11 +120,13 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
             case QPainterPath::LineToElement:
                lineToArray(points[i].x(), points[i].y());
                break;
+
             case QPainterPath::CurveToElement: {
                QBezier b = QBezier::fromPoints(*(((const QPointF *) points) + i - 1),
                                                points[i],
                                                points[i + 1],
                                                points[i + 2]);
+
                QRectF bounds = b.bounds();
 
                // threshold based on same algorithm as in qtriangulatingstroker.cpp

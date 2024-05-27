@@ -133,22 +133,26 @@ QVector<QPointer<QObject> > QMacStylePrivate::scrollBars;
 static QLinearGradient titlebarGradientActive()
 {
    static QLinearGradient gradient;
+
    if (gradient == QLinearGradient()) {
       gradient.setColorAt(0, QColor(235, 235, 235));
       gradient.setColorAt(0.5, QColor(210, 210, 210));
       gradient.setColorAt(0.75, QColor(195, 195, 195));
       gradient.setColorAt(1, QColor(180, 180, 180));
    }
+
    return gradient;
 }
 
 static QLinearGradient titlebarGradientInactive()
 {
    static QLinearGradient gradient;
+
    if (gradient == QLinearGradient()) {
       gradient.setColorAt(0, QColor(250, 250, 250));
       gradient.setColorAt(1, QColor(225, 225, 225));
    }
+
    return gradient;
 }
 
@@ -195,6 +199,7 @@ void drawTabCloseButton(QPainter *p, bool hover, bool active, bool selected)
    p->setRenderHints(QPainter::Antialiasing);
    QRect rect(0, 0, closeButtonSize, closeButtonSize);
    QColor background;
+
    if (hover) {
       background = QColor(124, 124, 124);
    } else {
@@ -212,6 +217,7 @@ void drawTabCloseButton(QPainter *p, bool hover, bool active, bool selected)
          }
       }
    }
+
    p->setPen(Qt::transparent);
    p->setBrush(background);
    p->drawEllipse(rect);
@@ -248,6 +254,7 @@ QRect rotateTabPainter(QPainter *p, QTabBar::Shape shape, QRect tabRect)
       m.rotate(newRot);
       p->setMatrix(m, true);
    }
+
    return tabRect;
 }
 
@@ -1107,9 +1114,11 @@ static QSize qt_aqua_get_known_size(QStyle::ContentsType ct, const QWidget *widg
             }
          }
          break;
+
       default:
          break;
    }
+
    return ret;
 }
 
@@ -1315,6 +1324,7 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
    }
 
    return ret;
+
 #else
    if (insz) {
       *insz = QSize();
@@ -1328,14 +1338,11 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
 #endif
 }
 
-/**
-    Returns the free space awailable for contents inside the
-    button (and not the size of the contents itself)
-*/
 HIRect QMacStylePrivate::pushButtonContentBounds(const QStyleOptionButton *btn,
                                                  const HIThemeButtonDrawInfo *bdi) const
 {
    HIRect outerBounds = qt_hirectForQRect(btn->rect);
+
    // Adjust the bounds to correct for
    // carbon not calculating the content bounds fully correct
    if (bdi->kind == kThemePushButton || bdi->kind == kThemePushButtonSmall) {
@@ -1351,13 +1358,10 @@ HIRect QMacStylePrivate::pushButtonContentBounds(const QStyleOptionButton *btn,
    return contentBounds;
 }
 
-/**
-    Calculates the size of the button contents.
-    This includes both the text and the icon.
-*/
 QSize QMacStylePrivate::pushButtonSizeFromContents(const QStyleOptionButton *btn) const
 {
    Q_Q(const QMacStyle);
+
    QSize csz(0, 0);
    QSize iconSize = btn->icon.isNull() ? QSize(0, 0)
                                        : (btn->iconSize + QSize(QMacStylePrivate::PushButtonContentPadding, 0));
@@ -1371,11 +1375,6 @@ QSize QMacStylePrivate::pushButtonSizeFromContents(const QStyleOptionButton *btn
    return csz;
 }
 
-/**
-    Checks if the actual contents of btn fits inside the free content bounds of
-    'buttonKindToCheck'. Meant as a helper function for 'initHIThemePushButton'
-    for determining which button kind to use for drawing.
-*/
 bool QMacStylePrivate::contentFitsInPushButton(const QStyleOptionButton *btn,
                                                HIThemeButtonDrawInfo *bdi,
                                                ThemeButtonKind buttonKindToCheck) const
@@ -1385,16 +1384,11 @@ bool QMacStylePrivate::contentFitsInPushButton(const QStyleOptionButton *btn,
    QSize contentSize = pushButtonSizeFromContents(btn);
    QRect freeContentRect = qt_qrectForHIRect(pushButtonContentBounds(btn, bdi));
    bdi->kind = tmp;
+
    return freeContentRect.contains(QRect(freeContentRect.x(), freeContentRect.y(),
                                          contentSize.width(), contentSize.height()));
 }
 
-/**
-    Creates a HIThemeButtonDrawInfo structure that specifies the correct button
-    kind and other details to use for drawing the given push button. Which
-    button kind depends on the size of the button, the size of the contents,
-    explicit user style settings, etc.
-*/
 void QMacStylePrivate::initHIThemePushButton(const QStyleOptionButton *btn,
                                              const QWidget *widget, const ThemeDrawState tds, HIThemeButtonDrawInfo *bdi) const
 {
@@ -6466,6 +6460,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
             QStyleHelper::drawDial(dial, p);
          }
          break;
+
       default:
          QCommonStyle::drawComplexControl(cc, opt, p, widget);
          break;
@@ -6558,51 +6553,9 @@ QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
                }
             }
          }
+
          break;
-         /*
-          I don't know why, but we only get kWindowContentRgn here, which isn't what we want at all.
-          It would be very nice if this would work.
-          case QStyle::CC_TitleBar:
-              if (const QStyleOptionTitleBar *tbar = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
-                  HIThemeWindowDrawInfo wdi;
-                  memset(&wdi, 0, sizeof(wdi));
-                  wdi.version = qt_mac_hitheme_version;
-                  wdi.state = kThemeStateActive;
-                  wdi.windowType = QtWinType;
-                  wdi.titleWidth = tbar->rect.width();
-                  wdi.titleHeight = tbar->rect.height();
-                  if (tbar->titleBarState)
-                      wdi.attributes |= kThemeWindowHasFullZoom | kThemeWindowHasCloseBox
-                                        | kThemeWindowHasCollapseBox;
-                  else if (tbar->titleBarFlags & Qt::WindowSystemMenuHint)
-                      wdi.attributes |= kThemeWindowHasCloseBox;
-                  QRect tmpRect = tbar->rect;
-                  tmpRect.setHeight(tmpRect.height() + 100);
-                  HIRect hirect = qt_hirectForQRect(tmpRect);
-                  WindowRegionCode hit;
-                  HIPoint hipt = CGPointMake(pt.x(), pt.y());
-                  if (HIThemeGetWindowRegionHit(&hirect, &wdi, &hipt, &hit)) {
-                      switch (hit) {
-                      case kWindowCloseBoxRgn:
-                          sc = QStyle::SC_TitleBarCloseButton;
-                          break;
-                      case kWindowCollapseBoxRgn:
-                          sc = QStyle::SC_TitleBarMinButton;
-                          break;
-                      case kWindowZoomBoxRgn:
-                          sc = QStyle::SC_TitleBarMaxButton;
-                          break;
-                      case kWindowTitleTextRgn:
-                          sc = QStyle::SC_TitleBarLabel;
-                          break;
-                      default:
-                          qDebug("got something else %d", hit);
-                          break;
-                      }
-                  }
-              }
-              break;
-      */
+
       default:
          sc = QCommonStyle::hitTestComplexControl(cc, opt, pt, widget);
          break;
@@ -6614,6 +6567,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                                 const QWidget *widget) const
 {
    Q_D(const QMacStyle);
+
    QRect ret;
 
    switch (cc) {
@@ -6655,6 +6609,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
                }
                CS_HIThemeGetTrackPartBounds(&tdi, cpc, &macRect);
             }
+
             ret = qt_qrectForHIRect(macRect);
 
             // Tweak: the dark line between the sub/add line buttons belong to only one of the buttons
@@ -6671,6 +6626,7 @@ QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *op
             }
          }
          break;
+
       case CC_TitleBar:
          if (const QStyleOptionTitleBar *titlebar = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             HIThemeWindowDrawInfo wdi;
@@ -7657,15 +7613,7 @@ static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintD
    return qt_mac_displayColorSpace(isWidget ? static_cast<const QWidget *>(paintDevice) : nullptr);
 }
 
-/*! \internal
-
-   Returns the CoreGraphics CGContextRef of the paint device. 0 is
-   returned if it can't be obtained. It is the caller's responsibility to
-   CGContextRelease the context when finished using it.
-
-   \warning This function is duplicated in the Cocoa platform plugin.
-*/
-
+// internal - function is duplicated in the Cocoa platform plugin
 CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
 {
    if (pdev->devType() == QInternal::Pixmap) {

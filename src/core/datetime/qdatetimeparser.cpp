@@ -704,6 +704,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 {
    state   = Invalid;
    int num = 0;
+
    const SectionNode &sn = sectionNode(sectionIndex);
 
    if ((sn.type & Internal) == Internal) {
@@ -814,8 +815,10 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
          } else {
             const int absMax = absoluteMax(sectionIndex);
             QLocale loc;
+
             bool ok = true;
             int lastNode = -1;
+
             used = -1;
 
             QString digitsStr(sectiontext);
@@ -838,6 +841,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                   if (tmp > 12) {
                      tmp = -1;
                      ok = false;
+
                   } else if (tmp == 12) {
                      tmp = 0;
                   }
@@ -859,6 +863,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                if (separators.at(sectionIndex + 1).startsWith(firstCh)) {
                   used = 0;
                   state = Intermediate;
+
                } else {
                   state = Invalid;
                }
@@ -893,14 +898,18 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                } else if (!done && (fi & (FixedWidth | Numeric)) == (FixedWidth | Numeric)) {
                   if (skipToNextSection(sectionIndex, currentValue, digitsStr)) {
                      state = Acceptable;
+
                      const int missingZeroes = sectionmaxsize - digitsStr.size();
                      text.insert(index, QString().fill(QChar('0'), missingZeroes));
                      used = sectionmaxsize;
+
                      cursorPosition += missingZeroes;
                      ++(const_cast<QDateTimeParser *>(this)->sectionNodes[sectionIndex].zeroesAdded);
+
                   } else {
                      state = Intermediate;
                   }
+
                } else {
                   state = Acceptable;
                }

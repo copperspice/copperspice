@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qparallelanimationgroup.h>
-
 #include <qparallelanimationgroup_p.h>
 
 #ifndef QT_NO_ANIMATION
@@ -84,10 +83,10 @@ void QParallelAnimationGroup::updateCurrentTime(int currentTime)
 
    } else if (d->currentLoop < d->lastLoop) {
       // simulate completion of the loop seeking backwards
+
       for (int i = 0; i < d->animations.size(); ++i) {
          QAbstractAnimation *animation = d->animations.at(i);
-         //we need to make sure the animation is in the right state
-         //and then rewind it
+         // need to make sure the animation is in the right state and then rewind it
          d->applyGroupState(animation);
          animation->setCurrentTime(0);
          animation->stop();

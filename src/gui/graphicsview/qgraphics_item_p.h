@@ -112,6 +112,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    static const QGraphicsItemPrivate *get(const QGraphicsItem *item) {
       return item->d_ptr.data();
    }
+
    static QGraphicsItemPrivate *get(QGraphicsItem *item) {
       return item->d_ptr.data();
    }
@@ -199,6 +200,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    inline void setExtra(Extra type, const QVariant &value) {
       int key = -1;
+
       for (int i = 0; i < extras.size(); ++i) {
          if (extras.at(i).m_type == type) {
             key = i;
@@ -245,6 +247,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    void updatePaintedViewBoundingRects(bool updateChildren);
    void ensureSceneTransformRecursive(QGraphicsItem **topMostDirtyItem);
+
    inline void ensureSceneTransform() {
       QGraphicsItem *that = q_func();
       ensureSceneTransformRecursive(&that);

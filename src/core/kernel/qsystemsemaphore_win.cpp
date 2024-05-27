@@ -23,6 +23,7 @@
 
 #include <qsystemsemaphore.h>
 #include <qsystemsemaphore_p.h>
+
 #include <qcoreapplication.h>
 #include <qdebug.h>
 

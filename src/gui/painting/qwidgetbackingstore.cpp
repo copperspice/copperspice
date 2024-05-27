@@ -56,11 +56,6 @@ static QPlatformTextureList *qt_dummy_platformTextureList()
 
 #endif
 
-/**
- * Flushes the contents of the \a windowSurface into the screen area of \a widget.
- * \a tlwOffset is the position of the top level widget relative to the window surface.
- * \a region is the region to be updated in \a widget coordinates.
- */
 void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
    QWidget *tlw, const QPoint &tlwOffset, QPlatformTextureList *widgetTextures,
    QWidgetBackingStore *widgetBackingStore)

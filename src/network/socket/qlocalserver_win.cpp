@@ -91,6 +91,7 @@ bool QLocalServerPrivate::addListener()
          CloseHandle(hToken);
          return false;
       }
+
       CloseHandle(hToken);
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
@@ -135,6 +136,7 @@ bool QLocalServerPrivate::addListener()
       aclBuffer.fill(0, aclSize);
       PACL acl = (PACL)aclBuffer.data();
       InitializeAcl(acl, aclSize, ACL_REVISION_DS);
+
       if (socketOptions & QLocalServer::UserAccessOption) {
          if (!AddAccessAllowedAce(acl, ACL_REVISION, FILE_ALL_ACCESS, pTokenUser->User.Sid)) {
             setError(QLatin1String("QLocalServerPrivate::addListener"));
@@ -163,8 +165,10 @@ bool QLocalServerPrivate::addListener()
          FreeSid(worldSID);
          return false;
       }
+
       sa.lpSecurityDescriptor = pSD.data();
    }
+
    listener.handle = CreateNamedPipe(fullServerName.toStdWString().c_str(), PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                         PIPE_TYPE_BYTE |          // byte type pipe
                         PIPE_READMODE_BYTE |      // byte-read mode

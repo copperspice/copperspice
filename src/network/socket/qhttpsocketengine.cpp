@@ -488,7 +488,7 @@ void QHttpSocketEngine::slotSocketConnected()
 {
    Q_D(QHttpSocketEngine);
 
-   // Send the greeting.
+   // Send the greeting
    const char method[] = "CONNECT";
    QByteArray peerAddress = d->peerName.isEmpty() ?
                             d->peerAddress.toString().toLatin1() : QUrl::toAce(d->peerName);
@@ -805,7 +805,9 @@ void QHttpSocketEngine::slotSocketStateChanged(QAbstractSocket::SocketState stat
 void QHttpSocketEngine::emitPendingReadNotification()
 {
    Q_D(QHttpSocketEngine);
+
    d->readNotificationPending = false;
+
    if (d->readNotificationEnabled) {
       emit readNotification();
    }

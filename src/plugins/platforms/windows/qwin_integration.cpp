@@ -122,6 +122,7 @@ bool parseIntOption(const QString &parameter, const QLatin1String &option,
    if (ok) {
       if (value >= minimumValue && value <= maximumValue) {
          *target = static_cast<IntType>(value);
+
       } else {
          qWarning() << "Value" << value << "for option" << option << "out of range"
             << minimumValue << ".." << maximumValue;
@@ -168,6 +169,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
          qWarning() << "Unknown option" << param;
       }
    }
+
    return options;
 }
 
@@ -356,7 +358,9 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
          if (QWindowsOpenGLTester::supportedRenderers() & QWindowsOpenGLTester::DesktopGl) {
             return QOpenGLStaticContext::create();
          }
+
          return nullptr;
+
       default:
          break;
    }
@@ -371,11 +375,14 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
          return glCtx;
       }
    }
+
    if (QWindowsOpenGLTester::Renderers glesRenderers = supportedRenderers & QWindowsOpenGLTester::GlesMask) {
       if (QWindowsEGLStaticContext *eglCtx = QWindowsEGLStaticContext::create(glesRenderers)) {
          return eglCtx;
       }
    }
+
+
    return QOpenGLStaticContext::create(true);
 
 #elif defined(QT_OPENGL_ES_2)

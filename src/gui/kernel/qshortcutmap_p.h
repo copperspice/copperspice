@@ -28,10 +28,7 @@
 #include <qvector.h>
 #include <qscopedpointer.h>
 
-
-
 #ifndef QT_NO_SHORTCUT
-
 
 class QKeyEvent;
 class QShortcutMapPrivate;
@@ -48,6 +45,7 @@ class Q_GUI_EXPORT QShortcutMap
    ~QShortcutMap();
 
    typedef bool (*ContextMatcher)(QObject *object, Qt::ShortcutContext context);
+
    int addShortcut(QObject *owner, const QKeySequence &key, Qt::ShortcutContext context, ContextMatcher matcher);
    int removeShortcut(int id, QObject *owner, const QKeySequence &key = QKeySequence());
    int setShortcutEnabled(bool enable, int id, QObject *owner, const QKeySequence &key = QKeySequence());

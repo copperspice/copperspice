@@ -134,10 +134,13 @@ void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl, const uchar *src
 
    if (const_alpha == 256) {
       Blend_RGB16_on_RGB16_NoAlpha noAlpha;
+
       qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch,
          targetRect, sourceRect, clip, noAlpha);
+
    } else {
       Blend_RGB16_on_RGB16_ConstAlpha constAlpha(const_alpha);
+
       qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch,
          targetRect, sourceRect, clip, constAlpha);
    }

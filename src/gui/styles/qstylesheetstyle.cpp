@@ -393,34 +393,43 @@ static QList<QVariant> subControlLayout(const QString &layout)
             buttons.append(PseudoElement_MdiMinButton);
             buttons.append(PseudoElement_TitleBarMinButton);
             break;
+
          case 'M':
             buttons.append(PseudoElement_TitleBarMaxButton);
             break;
+
          case 'X':
             buttons.append(PseudoElement_MdiCloseButton);
             buttons.append(PseudoElement_TitleBarCloseButton);
             break;
+
          case 'N':
             buttons.append(PseudoElement_MdiNormalButton);
             buttons.append(PseudoElement_TitleBarNormalButton);
             break;
+
          case 'I':
             buttons.append(PseudoElement_TitleBarSysMenu);
             break;
+
          case 'T':
             buttons.append(PseudoElement_TitleBar);
             break;
+
          case 'H':
             buttons.append(PseudoElement_TitleBarContextHelpButton);
             break;
+
          case 'S':
             buttons.append(PseudoElement_TitleBarShadeButton);
             break;
+
          default:
             buttons.append(button);
             break;
       }
    }
+
    return buttons;
 }
 
@@ -724,7 +733,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
          }
 
       } else if (decl.d->property.startsWith(QLatin1String("qproperty-"), Qt::CaseInsensitive)) {
-         // intentionally left blank...
+         // intentionally left blank
 
       } else if (decl.d->propertyId == QCss::UnknownProperty) {
 
@@ -3363,6 +3372,7 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
                }
 
                QRenderRule subRule2 = renderRule(w, opt, PseudoElement_SliderAddPage);
+
                if (subRule2.hasDrawable()) {
                   QRect r(slider->orientation == Qt::Horizontal
                      ? QPoint(hr.x() + hr.width() / 2 + 1, gr.y())
@@ -3375,7 +3385,7 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
             }
 
             if (slider->subControls & SC_SliderTickmarks) {
-               // TODO...
+               // todo
             }
 
             return;
@@ -3604,12 +3614,15 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                   tf |= Qt::TextHideMnemonic;
                }
                if (!button->icon.isNull()) {
-                  //Group both icon and text
+
+                  // group both icon and text
                   QRect iconRect;
                   QIcon::Mode mode = button->state & State_Enabled ? QIcon::Normal : QIcon::Disabled;
+
                   if (mode == QIcon::Normal && button->state & State_HasFocus) {
                      mode = QIcon::Active;
                   }
+
                   QIcon::State state = QIcon::Off;
                   if (button->state & State_On) {
                      state = QIcon::On;
@@ -3621,7 +3634,9 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                   int labelWidth = pixmapWidth;
                   int labelHeight = pixmapHeight;
 
-                  int iconSpacing = 4;//### 4 is currently hardcoded in QPushButton::sizeHint()
+                  // currently hardcoded in QPushButton::sizeHint()
+                  int iconSpacing = 4;
+
                   int textWidth = button->fontMetrics.boundingRect(opt->rect, tf, button->text).width();
 
                   if (!button->text.isEmpty()) {
@@ -3837,6 +3852,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                textRect.setWidth(textRect.width() - mi.tabWidth);
                QString s = mi.text;
                p->setPen(mi.palette.buttonText().color());
+
                if (!s.isEmpty()) {
                   int text_flags = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic | Qt::TextDontClip | Qt::TextSingleLine;
                   if (!styleHint(SH_UnderlineShortcut, &mi, w)) {
@@ -5166,7 +5182,7 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
       case CT_PushButton:
          if (rule.hasBox() || !rule.hasNativeBorder()) {
             if (ct == CT_ComboBox) {
-               //add some space for the drop down.
+               // add some space for the drop down.
                QRenderRule subRule = renderRule(w, opt, PseudoElement_ComboBoxDropDown);
                QRect comboRect = positionRect(w, rule, subRule, PseudoElement_ComboBoxDropDown,
                      opt->rect, opt->direction);
@@ -5185,8 +5201,10 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
       case CT_HeaderSection: {
          if (const QStyleOptionHeader *hdr = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             QRenderRule subRule = renderRule(w, opt, PseudoElement_HeaderViewSection);
+
             if (subRule.hasGeometry() || subRule.hasBox() || !subRule.hasNativeBorder()) {
                sz = subRule.adjustSize(csz);
+
                if (!subRule.hasGeometry()) {
                   QSize nativeContentsSize;
                   bool nullIcon = hdr->icon.isNull();
@@ -5252,14 +5270,17 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
             PseudoElement pe = (mi->menuItemType == QStyleOptionMenuItem::Separator)
                ? PseudoElement_MenuSeparator : PseudoElement_Item;
             QRenderRule subRule = renderRule(w, opt, pe);
+
             if ((pe == PseudoElement_MenuSeparator) && subRule.hasContentsSize()) {
                return QSize(sz.width(), subRule.size().height());
+
             } else if ((pe == PseudoElement_Item) && (subRule.hasBox() || subRule.hasBorder())) {
                int width = csz.width();
 
                if (mi->text.contains(QLatin1Char('\t'))) {
                   width += 12;   //as in QCommonStyle
                }
+
                return subRule.boxSize(subRule.adjustSize(QSize(width, csz.height())));
             }
          }
@@ -5269,6 +5290,7 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
       case CT_MenuBarItem: {
          PseudoElement pe = (ct == CT_Splitter) ? PseudoElement_SplitterHandle : PseudoElement_Item;
          QRenderRule subRule = renderRule(w, opt, pe);
+
          if (subRule.hasBox() || subRule.hasBorder()) {
             return subRule.boxSize(sz);
          }
@@ -5291,22 +5313,28 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
 #ifndef QT_NO_TABBAR
       case CT_TabBarTab: {
          QRenderRule subRule = renderRule(w, opt, PseudoElement_TabBarTab);
+
          if (subRule.hasBox() || !subRule.hasNativeBorder()) {
             int spaceForIcon = 0;
             bool vertical = false;
+
             if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
                if (!tab->icon.isNull()) {
-                  spaceForIcon = 6 /* icon offset */ + 4 /* spacing */ + 2 /* magic */;   // ###: hardcoded to match with common style
+
+                  // hardcoded to match with common style
+                  spaceForIcon = 6 /* icon offset */ + 4 /* spacing */ + 2 /* magic */;
                }
                vertical = verticalTabs(tab->shape);
             }
+
             sz = csz + QSize(vertical ? 0 : spaceForIcon, vertical ? spaceForIcon : 0);
             return subRule.boxSize(subRule.adjustSize(sz));
          }
+
          sz = subRule.adjustSize(csz);
          break;
       }
-#endif // QT_NO_TABBAR
+#endif
 
       case CT_MdiControls:
          if (const QStyleOptionComplex *ccOpt = qstyleoption_cast<const QStyleOptionComplex *>(opt)) {
@@ -5324,10 +5352,12 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
             int width = 0, height = 0;
             for (int i = 0; i < layout.count(); i++) {
                int layoutButton = layout[i].toInt();
+
                if (layoutButton < PseudoElement_MdiCloseButton
                   || layoutButton > PseudoElement_MdiNormalButton) {
                   continue;
                }
+
                QStyle::SubControl sc = knownPseudoElements[layoutButton].subControl;
                if (!(ccOpt->subControls & sc)) {
                   continue;
@@ -5352,7 +5382,7 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
          }
          return sz;
       }
-#endif // QT_NO_ITEMVIEWS
+#endif
 
       default:
          break;
@@ -5361,120 +5391,170 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
    return baseStyle()->sizeFromContents(ct, opt, sz, w);
 }
 
-/*!
-    \internal
-*/
 static QLatin1String propertyNameForStandardPixmap(QStyle::StandardPixmap sp)
 {
    switch (sp) {
       case QStyle::SP_TitleBarMenuButton:
          return QLatin1String("titlebar-menu-icon");
+
       case QStyle::SP_TitleBarMinButton:
          return QLatin1String("titlebar-minimize-icon");
+
       case QStyle::SP_TitleBarMaxButton:
          return QLatin1String("titlebar-maximize-icon");
+
       case QStyle::SP_TitleBarCloseButton:
          return QLatin1String("titlebar-close-icon");
+
       case QStyle::SP_TitleBarNormalButton:
          return QLatin1String("titlebar-normal-icon");
+
       case QStyle::SP_TitleBarShadeButton:
          return QLatin1String("titlebar-shade-icon");
+
       case QStyle::SP_TitleBarUnshadeButton:
          return QLatin1String("titlebar-unshade-icon");
+
       case QStyle::SP_TitleBarContextHelpButton:
          return QLatin1String("titlebar-contexthelp-icon");
+
       case QStyle::SP_DockWidgetCloseButton:
          return QLatin1String("dockwidget-close-icon");
+
       case QStyle::SP_MessageBoxInformation:
          return QLatin1String("messagebox-information-icon");
+
       case QStyle::SP_MessageBoxWarning:
          return QLatin1String("messagebox-warning-icon");
+
       case QStyle::SP_MessageBoxCritical:
          return QLatin1String("messagebox-critical-icon");
+
       case QStyle::SP_MessageBoxQuestion:
          return QLatin1String("messagebox-question-icon");
+
       case QStyle::SP_DesktopIcon:
          return QLatin1String("desktop-icon");
+
       case QStyle::SP_TrashIcon:
          return QLatin1String("trash-icon");
+
       case QStyle::SP_ComputerIcon:
          return QLatin1String("computer-icon");
+
       case QStyle::SP_DriveFDIcon:
          return QLatin1String("floppy-icon");
+
       case QStyle::SP_DriveHDIcon:
          return QLatin1String("harddisk-icon");
       case QStyle::SP_DriveCDIcon:
          return QLatin1String("cd-icon");
+
       case QStyle::SP_DriveDVDIcon:
          return QLatin1String("dvd-icon");
+
       case QStyle::SP_DriveNetIcon:
          return QLatin1String("network-icon");
+
       case QStyle::SP_DirOpenIcon:
          return QLatin1String("directory-open-icon");
+
       case QStyle::SP_DirClosedIcon:
          return QLatin1String("directory-closed-icon");
+
       case QStyle::SP_DirLinkIcon:
          return QLatin1String("directory-link-icon");
+
       case QStyle::SP_FileIcon:
          return QLatin1String("file-icon");
+
       case QStyle::SP_FileLinkIcon:
          return QLatin1String("file-link-icon");
+
       case QStyle::SP_FileDialogStart:
          return QLatin1String("filedialog-start-icon");
+
       case QStyle::SP_FileDialogEnd:
          return QLatin1String("filedialog-end-icon");
+
       case QStyle::SP_FileDialogToParent:
          return QLatin1String("filedialog-parent-directory-icon");
+
       case QStyle::SP_FileDialogNewFolder:
          return QLatin1String("filedialog-new-directory-icon");
+
       case QStyle::SP_FileDialogDetailedView:
          return QLatin1String("filedialog-detailedview-icon");
+
       case QStyle::SP_FileDialogInfoView:
          return QLatin1String("filedialog-infoview-icon");
+
       case QStyle::SP_FileDialogContentsView:
          return QLatin1String("filedialog-contentsview-icon");
+
       case QStyle::SP_FileDialogListView:
          return QLatin1String("filedialog-listview-icon");
+
       case QStyle::SP_FileDialogBack:
          return QLatin1String("filedialog-backward-icon");
+
       case QStyle::SP_DirIcon:
          return QLatin1String("directory-icon");
+
       case QStyle::SP_DialogOkButton:
          return QLatin1String("dialog-ok-icon");
+
       case QStyle::SP_DialogCancelButton:
          return QLatin1String("dialog-cancel-icon");
+
       case QStyle::SP_DialogHelpButton:
          return QLatin1String("dialog-help-icon");
+
       case QStyle::SP_DialogOpenButton:
          return QLatin1String("dialog-open-icon");
+
       case QStyle::SP_DialogSaveButton:
          return QLatin1String("dialog-save-icon");
+
       case QStyle::SP_DialogCloseButton:
          return QLatin1String("dialog-close-icon");
+
       case QStyle::SP_DialogApplyButton:
          return QLatin1String("dialog-apply-icon");
+
       case QStyle::SP_DialogResetButton:
          return QLatin1String("dialog-reset-icon");
+
       case QStyle::SP_DialogDiscardButton:
          return QLatin1String("discard-icon");
+
       case QStyle::SP_DialogYesButton:
          return QLatin1String("dialog-yes-icon");
+
       case QStyle::SP_DialogNoButton:
          return QLatin1String("dialog-no-icon");
+
       case QStyle::SP_ArrowUp:
          return QLatin1String("uparrow-icon");
+
       case QStyle::SP_ArrowDown:
          return QLatin1String("downarrow-icon");
+
       case QStyle::SP_ArrowLeft:
          return QLatin1String("leftarrow-icon");
+
       case QStyle::SP_ArrowRight:
          return QLatin1String("rightarrow-icon");
+
       case QStyle::SP_ArrowBack:
          return QLatin1String("backward-icon");
+
       case QStyle::SP_ArrowForward:
          return QLatin1String("forward-icon");
+
       case QStyle::SP_DirHomeIcon:
          return QLatin1String("home-icon");
+
       default:
          return QLatin1String("");
    }
@@ -5512,8 +5592,10 @@ QPixmap QStyleSheetStyle::standardPixmap(StandardPixmap standardPixmap, const QS
       QRenderRule rule = renderRule(w, opt);
 
       if (rule.hasStyleHint(s)) {
+         // ### hardcoded return value, may want to fix this
+
          QIcon icon = rule.styleHint(s).value<QIcon>();
-         return icon.pixmap(16, 16); // ### hard-coded, may want to fix this
+         return icon.pixmap(16, 16);
       }
    }
    return baseStyle()->standardPixmap(standardPixmap, opt, w);
@@ -5539,61 +5621,80 @@ int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWi
 
    QRenderRule rule = renderRule(w, opt);
    QString s;
+
    switch (sh) {
       case SH_LineEdit_PasswordCharacter:
          s = QLatin1String("lineedit-password-character");
          break;
+
       case SH_LineEdit_PasswordMaskDelay:
          s = QLatin1String("lineedit-password-mask-delay");
          break;
+
       case SH_DitherDisabledText:
          s = QLatin1String("dither-disabled-text");
          break;
+
       case SH_EtchDisabledText:
          s = QLatin1String("etch-disabled-text");
          break;
+
       case SH_ItemView_ActivateItemOnSingleClick:
          s = QLatin1String("activate-on-singleclick");
          break;
+
       case SH_ItemView_ShowDecorationSelected:
          s = QLatin1String("show-decoration-selected");
          break;
+
       case SH_Table_GridLineColor:
          s = QLatin1String("gridline-color");
          break;
+
       case SH_DialogButtonLayout:
          s = QLatin1String("button-layout");
          break;
+
       case SH_ToolTipLabel_Opacity:
          s = QLatin1String("opacity");
          break;
+
       case SH_ComboBox_Popup:
          s = QLatin1String("combobox-popup");
          break;
+
       case SH_ComboBox_ListMouseTracking:
          s = QLatin1String("combobox-list-mousetracking");
          break;
+
       case SH_MenuBar_AltKeyNavigation:
          s = QLatin1String("menubar-altkey-navigation");
          break;
+
       case SH_Menu_Scrollable:
          s = QLatin1String("menu-scrollable");
          break;
+
       case SH_DrawMenuBarSeparator:
          s = QLatin1String("menubar-separator");
          break;
+
       case SH_MenuBar_MouseTracking:
          s = QLatin1String("mouse-tracking");
          break;
+
       case SH_SpinBox_ClickAutoRepeatRate:
          s = QLatin1String("spinbox-click-autorepeat-rate");
          break;
+
       case SH_SpinControls_DisableOnBounds:
          s = QLatin1String("spincontrol-disable-on-bounds");
          break;
+
       case SH_MessageBox_TextInteractionFlags:
          s = QLatin1String("messagebox-text-interaction-flags");
          break;
+
       case SH_ToolButton_PopupDelay:
          s = QLatin1String("toolbutton-popup-delay");
          break;
@@ -5613,18 +5714,23 @@ int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWi
       case SH_ScrollView_FrameOnlyAroundContents:
          s = QLatin1String("scrollview-frame-around-contents");
          break;
+
       case SH_ScrollBar_ContextMenu:
          s = QLatin1String("scrollbar-contextmenu");
          break;
+
       case SH_ScrollBar_LeftClickAbsolutePosition:
          s = QLatin1String("scrollbar-leftclick-absolute-position");
          break;
+
       case SH_ScrollBar_MiddleClickAbsolutePosition:
          s = QLatin1String("scrollbar-middleclick-absolute-position");
          break;
+
       case SH_ScrollBar_RollBetweenButtons:
          s = QLatin1String("scrollbar-roll-between-buttons");
          break;
+
       case SH_ScrollBar_ScrollWhenPointerLeavesControl:
          s = QLatin1String("scrollbar-scroll-when-pointer-leaves-control");
          break;
@@ -5667,6 +5773,7 @@ int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWi
 #ifndef QT_NO_COMBOBOX
          if (qobject_cast<const QComboBox *>(w)) {
             QAbstractItemView *view = w->findChild<QAbstractItemView *>();
+
             if (view) {
                view->ensurePolished();
                QRenderRule subRule = renderRule(view, PseudoElement_None);
@@ -5694,11 +5801,13 @@ int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWi
 
       case SH_TitleBar_AutoRaise: { // plain absurd
          QRenderRule subRule = renderRule(w, opt, PseudoElement_TitleBar);
+
          if (subRule.hasDrawable()) {
             return 1;
          }
          break;
       }
+
       case SH_ItemView_ArrowKeysNavigateIntoChildren:
          s = QLatin1String("arrow-keys-navigate-into-children");
          break;
@@ -5710,6 +5819,7 @@ int QStyleSheetStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWi
       default:
          break;
    }
+
    if (!s.isEmpty() && rule.hasStyleHint(s)) {
       return rule.styleHint(s).toInt();
    }
@@ -5723,6 +5833,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
    RECURSION_GUARD(return baseStyle()->subControlRect(cc, opt, sc, w))
 
    QRenderRule rule = renderRule(w, opt);
+
    switch (cc) {
       case CC_ComboBox:
          if (const QStyleOptionComboBox *cb = qstyleoption_cast<const QStyleOptionComboBox *>(opt)) {
@@ -5930,6 +6041,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                switch (sc) {
                   case SC_ScrollBarGroove:
                      return grooveRect;
+
                   case SC_ScrollBarAddPage:
                   case SC_ScrollBarSubPage:
                   case SC_ScrollBarSlider: {
@@ -5992,15 +6104,19 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                   case SC_ScrollBarAddLine:
                      pe = PseudoElement_ScrollBarAddLine;
                      break;
+
                   case SC_ScrollBarSubLine:
                      pe = PseudoElement_ScrollBarSubLine;
                      break;
+
                   case SC_ScrollBarFirst:
                      pe = PseudoElement_ScrollBarFirst;
                      break;
+
                   case SC_ScrollBarLast:
                      pe = PseudoElement_ScrollBarLast;
                      break;
+
                   default:
                      break;
                }
@@ -6026,7 +6142,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                : QWindowsStyle::subControlRect(cc, &styleOptionSlider, sc, w);
          }
          break;
-#endif // QT_NO_SCROLLBAR
+#endif
 
 #ifndef QT_NO_SLIDER
       case CC_Slider:
@@ -6070,7 +6186,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
             }
          }
          break;
-#endif // QT_NO_SLIDER
+#endif
 
       case CC_MdiControls:
          if (hasStyleRule(w, PseudoElement_MdiCloseButton)
@@ -6083,18 +6199,22 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
 
             int x = 0, width = 0;
             QRenderRule subRule;
+
             for (int i = 0; i < layout.count(); i++) {
                int layoutButton = layout[i].toInt();
                if (layoutButton < PseudoElement_MdiCloseButton
                   || layoutButton > PseudoElement_MdiNormalButton) {
                   continue;
                }
+
                QStyle::SubControl control = knownPseudoElements[layoutButton].subControl;
                if (!(opt->subControls & control)) {
                   continue;
                }
+
                subRule = renderRule(w, opt, layoutButton);
                width = subRule.size().width();
+
                if (sc == control) {
                   break;
                }
@@ -6170,9 +6290,11 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
                   opt, w);
             ir = visualRect(opt->direction, opt->rect, ir);
             int spacing = pixelMetric(isRadio ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, nullptr, w);
+
             QRect cr = rule.contentsRect(opt->rect);
             ir.setRect(ir.left() + ir.width() + spacing, cr.y(),
                cr.width() - ir.width() - spacing, cr.height());
+
             return visualRect(opt->direction, opt->rect, ir);
          }
          break;
@@ -6250,7 +6372,9 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
       case SE_ProgressBarContents:
       case SE_ProgressBarLabel:
          if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(opt)) {
+
             if (rule.hasBox() || !rule.hasNativeBorder() || rule.hasPosition() || hasStyleRule(w, PseudoElement_ProgressBarChunk)) {
+
                if (se == SE_ProgressBarGroove) {
                   return rule.borderRect(pb->rect);
                } else if (se == SE_ProgressBarContents) {
@@ -6258,6 +6382,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
                }
 
                QSize sz = pb->fontMetrics.size(0, pb->text);
+
                return QStyle::alignedRect(Qt::LeftToRight, rule.hasPosition() ? rule.position()->textAlignment : pb->textAlignment,
                      sz, pb->rect);
             }
@@ -6291,10 +6416,12 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
             QRect r = QWindowsStyle::subElementRect(pe == PseudoElement_TabWidgetPane ? SE_TabWidgetTabPane : se, opt, w);
             QRenderRule subRule = renderRule(w, opt, pe);
             r = positionRect(w, subRule, pe, r, opt->direction);
+
             if (pe == PseudoElement_TabWidgetTabBar) {
                Q_ASSERT(opt);
                r = opt->rect.intersected(r);
             }
+
             if (se == SE_TabWidgetTabContents) {
                r = subRule.contentsRect(r);
             }
@@ -6306,6 +6433,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
          QRenderRule subRule = renderRule(w, opt, PseudoElement_TabBarTear);
          if (subRule.hasContentsSize()) {
             QRect r;
+
             if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
                switch (tab->shape) {
                   case QTabBar::RoundedNorth:
@@ -6314,17 +6442,21 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
                   case QTabBar::TriangularSouth:
                      r.setRect(tab->rect.left(), tab->rect.top(), subRule.size().width(), opt->rect.height());
                      break;
+
                   case QTabBar::RoundedWest:
                   case QTabBar::TriangularWest:
                   case QTabBar::RoundedEast:
                   case QTabBar::TriangularEast:
                      r.setRect(tab->rect.left(), tab->rect.top(), opt->rect.width(), subRule.size().height());
                      break;
+
                   default:
                      break;
                }
+
                r = visualRect(opt->direction, opt->rect, r);
             }
+
             return r;
          }
          break;
@@ -6359,7 +6491,8 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
          }
          break;
 #endif
-      // On mac we make pixel adjustments to layouts which are not
+
+      // On mac make pixel adjustments to layouts which are not
       // desireable when you have custom style sheets on them
       case SE_CheckBoxLayoutItem:
       case SE_ComboBoxLayoutItem:
@@ -6429,10 +6562,6 @@ void QStyleSheetStyle::clearWidgetFont(QWidget *w) const
    w->setProperty("_q_styleSheetWidgetFont", QVariant());
 }
 
-// Polish palette that should be used for a particular widget, with particular states
-// (eg. :focus, :hover, ...)
-// this is called by widgets that paint themself in their paint event
-// Returns true if there is a new palette in pal.
 bool QStyleSheetStyle::styleSheetPalette(const QWidget *w, const QStyleOption *opt, QPalette *pal)
 {
    if (!w || !opt || !pal) {
@@ -6465,16 +6594,12 @@ Qt::Alignment QStyleSheetStyle::resolveAlignment(Qt::LayoutDirection layDir, Qt:
       src &= ~Qt::AlignRight;
       src |= Qt::AlignLeft;
    }
+
    src |= Qt::AlignAbsolute;
+
    return src;
 }
 
-// Returns whether the given QWidget has a "natural" parent, meaning that
-// the parent contains this child as part of its normal operation.
-// An example is the QTabBar inside a QTabWidget.
-// This does not mean that any QTabBar which is a child of QTabWidget will
-// match, only the one that was created by the QTabWidget initialization
-// (and hence has the correct object name).
 bool QStyleSheetStyle::isNaturalChild(const QObject *obj)
 {
    if (obj->objectName().startsWith(QLatin1String("qt_"))) {

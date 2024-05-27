@@ -647,7 +647,6 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
       }
    }
 
-
    blend(current_span, spans, &state->penData);
    current_span = 0;
 }
@@ -980,9 +979,11 @@ static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
          drawPixel(stroker, x >> 16, y, (255 - alpha) * alphaStart >> 6);
          drawPixel(stroker, (x >> 16) + 1, y, alpha * alphaStart >> 6);
       }
+
       dasher.adjust();
       x += xinc;
       ++y;
+
       if (y < ys) {
          do {
             if (dasher.on()) {
@@ -1027,6 +1028,7 @@ static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
       int xs = x2 >> 6;
 
       int alphaStart, alphaEnd;
+
       if (x == xs) {
          alphaStart = x2 - x1;
          Q_ASSERT(alphaStart >= 0 && alphaStart < 64);

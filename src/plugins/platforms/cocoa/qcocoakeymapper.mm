@@ -73,6 +73,7 @@ struct qt_mac_enum_mapper {
 #else
 #   define QT_MAC_MAP_ENUM(x) x
 #endif
+
 };
 
 //modifiers
@@ -87,32 +88,41 @@ static qt_mac_enum_mapper qt_mac_modifier_symbols[] = {
    { kEventKeyModifierNumLockMask, QT_MAC_MAP_ENUM(Qt::KeypadModifier) },
    { 0, QT_MAC_MAP_ENUM(0) }
 };
+
 Qt::KeyboardModifiers qt_mac_get_modifiers(int keys)
 {
 #ifdef DEBUG_KEY_BINDINGS_MODIFIERS
    qDebug("Qt: internal: **Mapping modifiers: %d (0x%04x)", keys, keys);
 #endif
+
    Qt::KeyboardModifiers ret = Qt::NoModifier;
+
    for (int i = 0; qt_mac_modifier_symbols[i].qt_code; i++) {
       if (keys & qt_mac_modifier_symbols[i].mac_code) {
 #ifdef DEBUG_KEY_BINDINGS_MODIFIERS
          qDebug("Qt: internal: got modifier: %s", qt_mac_modifier_symbols[i].desc);
 #endif
+
          ret |= Qt::KeyboardModifier(qt_mac_modifier_symbols[i].qt_code);
       }
    }
+
    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
       Qt::KeyboardModifiers oldModifiers = ret;
       ret &= ~(Qt::MetaModifier | Qt::ControlModifier);
+
       if (oldModifiers & Qt::ControlModifier) {
          ret |= Qt::MetaModifier;
       }
+
       if (oldModifiers & Qt::MetaModifier) {
          ret |= Qt::ControlModifier;
       }
    }
+
    return ret;
 }
+
 static int qt_mac_get_mac_modifiers(Qt::KeyboardModifiers keys)
 {
 #ifdef DEBUG_KEY_BINDINGS_MODIFIERS
@@ -131,9 +141,11 @@ static int qt_mac_get_mac_modifiers(Qt::KeyboardModifiers keys)
    if (qApp->testAttribute(Qt::AA_MacDontSwapCtrlAndMeta)) {
       int oldModifiers = ret;
       ret &= ~(controlKeyBit | cmdKeyBit);
+
       if (oldModifiers & controlKeyBit) {
          ret |= cmdKeyBit;
       }
+
       if (oldModifiers & cmdKeyBit) {
          ret |= controlKeyBit;
       }
@@ -265,6 +277,7 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 #ifdef DEBUG_KEY_BINDINGS
       qDebug("%d: got key: %d", __LINE__, key.digitValue());
 #endif
+
       return key.digitValue() + Qt::Key_0;
    }
 
@@ -308,6 +321,7 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 #ifdef DEBUG_KEY_BINDINGS
          qDebug("%d: got key: %s", __LINE__, qt_mac_keyvkey_symbols[i].desc);
 #endif
+
          return qt_mac_keyvkey_symbols[i].qt_code;
       }
    }
@@ -326,10 +340,10 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 
    }
 
-   //oh well
 #ifdef DEBUG_KEY_BINDINGS
    qDebug("Unknown case.. %s:%d %d[%d] %d", __FILE__, __LINE__, key.unicode(), key.toLatin1(), virtualKey);
 #endif
+
    return Qt::Key_unknown;
 }
 

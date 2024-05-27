@@ -42,6 +42,7 @@
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
 
 #include <stdio.h>
+
 #define Q_OPENGL_FUNCTIONS_DEBUG \
     GLenum error = glGetError(); \
     if (error != GL_NO_ERROR) { \
@@ -50,7 +51,6 @@
        printf("GL error at %s:%d: %s\n", __FILE__, __LINE__, errors[clamped]); \
        Q_ASSERT(false); \
     }
-
 #else
 
 #define Q_OPENGL_FUNCTIONS_DEBUG
@@ -567,6 +567,7 @@ inline void QOpenGLFunctions::glBindTexture(GLenum target, GLuint texture)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BindTexture(target, texture);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -578,6 +579,7 @@ inline void QOpenGLFunctions::glBlendFunc(GLenum sfactor, GLenum dfactor)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BlendFunc(sfactor, dfactor);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -589,6 +591,7 @@ inline void QOpenGLFunctions::glClear(GLbitfield mask)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Clear(mask);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -600,6 +603,7 @@ inline void QOpenGLFunctions::glClearColor(GLclampf red, GLclampf green, GLclamp
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ClearColor(red, green, blue, alpha);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -611,6 +615,7 @@ inline void QOpenGLFunctions::glClearStencil(GLint s)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ClearStencil(s);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -622,6 +627,7 @@ inline void QOpenGLFunctions::glColorMask(GLboolean red, GLboolean green, GLbool
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ColorMask(red, green, blue, alpha);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -633,6 +639,7 @@ inline void QOpenGLFunctions::glCopyTexImage2D(GLenum target, GLint level, GLenu
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->CopyTexImage2D(target, level, internalformat, x, y, width,height, border);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -644,6 +651,7 @@ inline void QOpenGLFunctions::glCopyTexSubImage2D(GLenum target, GLint level, GL
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->CopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -655,6 +663,7 @@ inline void QOpenGLFunctions::glCullFace(GLenum mode)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->CullFace(mode);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -666,6 +675,7 @@ inline void QOpenGLFunctions::glDeleteTextures(GLsizei n, const GLuint* textures
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteTextures(n, textures);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -677,6 +687,7 @@ inline void QOpenGLFunctions::glDepthFunc(GLenum func)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DepthFunc(func);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -688,6 +699,7 @@ inline void QOpenGLFunctions::glDepthMask(GLboolean flag)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DepthMask(flag);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -699,6 +711,7 @@ inline void QOpenGLFunctions::glDisable(GLenum cap)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Disable(cap);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -710,6 +723,7 @@ inline void QOpenGLFunctions::glDrawArrays(GLenum mode, GLint first, GLsizei cou
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DrawArrays(mode, first, count);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -721,6 +735,7 @@ inline void QOpenGLFunctions::glDrawElements(GLenum mode, GLsizei count, GLenum 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DrawElements(mode, count, type, indices);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -732,6 +747,7 @@ inline void QOpenGLFunctions::glEnable(GLenum cap)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Enable(cap);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -743,6 +759,7 @@ inline void QOpenGLFunctions::glFinish()
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Finish();
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -754,6 +771,7 @@ inline void QOpenGLFunctions::glFlush()
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Flush();
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -765,6 +783,7 @@ inline void QOpenGLFunctions::glFrontFace(GLenum mode)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->FrontFace(mode);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -776,6 +795,7 @@ inline void QOpenGLFunctions::glGenTextures(GLsizei n, GLuint* textures)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GenTextures(n, textures);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -798,6 +818,7 @@ inline GLenum QOpenGLFunctions::glGetError()
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLenum result = d_ptr->GetError();
 #endif
+
     return result;
 }
 
@@ -809,6 +830,7 @@ inline void QOpenGLFunctions::glGetFloatv(GLenum pname, GLfloat* params)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetFloatv(pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -820,6 +842,7 @@ inline void QOpenGLFunctions::glGetIntegerv(GLenum pname, GLint* params)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetIntegerv(pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -831,6 +854,7 @@ inline const GLubyte *QOpenGLFunctions::glGetString(GLenum name)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     const GLubyte *result = d_ptr->GetString(name);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -843,6 +867,7 @@ inline void QOpenGLFunctions::glGetTexParameterfv(GLenum target, GLenum pname, G
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetTexParameterfv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -854,6 +879,7 @@ inline void QOpenGLFunctions::glGetTexParameteriv(GLenum target, GLenum pname, G
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetTexParameteriv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -865,6 +891,7 @@ inline void QOpenGLFunctions::glHint(GLenum target, GLenum mode)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Hint(target, mode);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -876,6 +903,7 @@ inline GLboolean QOpenGLFunctions::glIsEnabled(GLenum cap)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsEnabled(cap);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -888,6 +916,7 @@ inline GLboolean QOpenGLFunctions::glIsTexture(GLuint texture)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsTexture(texture);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -900,6 +929,7 @@ inline void QOpenGLFunctions::glLineWidth(GLfloat width)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->LineWidth(width);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -922,6 +952,7 @@ inline void QOpenGLFunctions::glPolygonOffset(GLfloat factor, GLfloat units)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->PolygonOffset(factor, units);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -933,6 +964,7 @@ inline void QOpenGLFunctions::glReadPixels(GLint x, GLint y, GLsizei width, GLsi
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ReadPixels(x, y, width, height, format, type, pixels);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -944,6 +976,7 @@ inline void QOpenGLFunctions::glScissor(GLint x, GLint y, GLsizei width, GLsizei
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Scissor(x, y, width, height);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -955,6 +988,7 @@ inline void QOpenGLFunctions::glStencilFunc(GLenum func, GLint ref, GLuint mask)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilFunc(func, ref, mask);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -966,6 +1000,7 @@ inline void QOpenGLFunctions::glStencilMask(GLuint mask)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilMask(mask);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -977,6 +1012,7 @@ inline void QOpenGLFunctions::glStencilOp(GLenum fail, GLenum zfail, GLenum zpas
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilOp(fail, zfail, zpass);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -988,6 +1024,7 @@ inline void QOpenGLFunctions::glTexImage2D(GLenum target, GLint level, GLint int
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexImage2D(target, level, internalformat, width,height, border, format, type, pixels);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -999,6 +1036,7 @@ inline void QOpenGLFunctions::glTexParameterf(GLenum target, GLenum pname, GLflo
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexParameterf(target, pname, param);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1010,6 +1048,7 @@ inline void QOpenGLFunctions::glTexParameterfv(GLenum target, GLenum pname, cons
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexParameterfv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1021,6 +1060,7 @@ inline void QOpenGLFunctions::glTexParameteri(GLenum target, GLenum pname, GLint
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexParameteri(target, pname, param);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1032,6 +1072,7 @@ inline void QOpenGLFunctions::glTexParameteriv(GLenum target, GLenum pname, cons
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexParameteriv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1043,6 +1084,7 @@ inline void QOpenGLFunctions::glTexSubImage2D(GLenum target, GLint level, GLint 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->TexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1054,6 +1096,7 @@ inline void QOpenGLFunctions::glViewport(GLint x, GLint y, GLsizei width, GLsize
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Viewport(x, y, width, height);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1067,6 +1110,7 @@ inline void QOpenGLFunctions::glActiveTexture(GLenum texture)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ActiveTexture(texture);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1078,6 +1122,7 @@ inline void QOpenGLFunctions::glAttachShader(GLuint program, GLuint shader)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->AttachShader(program, shader);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1089,6 +1134,7 @@ inline void QOpenGLFunctions::glBindAttribLocation(GLuint program, GLuint index,
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BindAttribLocation(program, index, name);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1100,6 +1146,7 @@ inline void QOpenGLFunctions::glBindBuffer(GLenum target, GLuint buffer)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BindBuffer(target, buffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1113,6 +1160,7 @@ inline void QOpenGLFunctions::glBindFramebuffer(GLenum target, GLuint framebuffe
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BindFramebuffer(target, framebuffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1124,6 +1172,7 @@ inline void QOpenGLFunctions::glBindRenderbuffer(GLenum target, GLuint renderbuf
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BindRenderbuffer(target, renderbuffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1135,6 +1184,7 @@ inline void QOpenGLFunctions::glBlendColor(GLclampf red, GLclampf green, GLclamp
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BlendColor(red, green, blue, alpha);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1146,6 +1196,7 @@ inline void QOpenGLFunctions::glBlendEquation(GLenum mode)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BlendEquation(mode);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1157,6 +1208,7 @@ inline void QOpenGLFunctions::glBlendEquationSeparate(GLenum modeRGB, GLenum mod
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BlendEquationSeparate(modeRGB, modeAlpha);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1168,6 +1220,7 @@ inline void QOpenGLFunctions::glBlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1179,6 +1232,7 @@ inline void QOpenGLFunctions::glBufferData(GLenum target, qopengl_GLsizeiptr siz
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->BufferData(target, size, data, usage);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1201,6 +1255,7 @@ inline GLenum QOpenGLFunctions::glCheckFramebufferStatus(GLenum target)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLenum result = d_ptr->CheckFramebufferStatus(target);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1224,6 +1279,7 @@ inline void QOpenGLFunctions::glCompileShader(GLuint shader)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->CompileShader(shader);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1246,6 +1302,7 @@ inline void QOpenGLFunctions::glCompressedTexSubImage2D(GLenum target, GLint lev
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->CompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1257,6 +1314,7 @@ inline GLuint QOpenGLFunctions::glCreateProgram()
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLuint result = d_ptr->CreateProgram();
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1269,6 +1327,7 @@ inline GLuint QOpenGLFunctions::glCreateShader(GLenum type)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLuint result = d_ptr->CreateShader(type);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1281,6 +1340,7 @@ inline void QOpenGLFunctions::glDeleteBuffers(GLsizei n, const GLuint* buffers)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteBuffers(n, buffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1292,6 +1352,7 @@ inline void QOpenGLFunctions::glDeleteFramebuffers(GLsizei n, const GLuint* fram
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteFramebuffers(n, framebuffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1303,6 +1364,7 @@ inline void QOpenGLFunctions::glDeleteProgram(GLuint program)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteProgram(program);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1314,6 +1376,7 @@ inline void QOpenGLFunctions::glDeleteRenderbuffers(GLsizei n, const GLuint* ren
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteRenderbuffers(n, renderbuffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1325,6 +1388,7 @@ inline void QOpenGLFunctions::glDeleteShader(GLuint shader)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DeleteShader(shader);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1336,6 +1400,7 @@ inline void QOpenGLFunctions::glDepthRangef(GLclampf zNear, GLclampf zFar)
 #else
     ::glDepthRangef(zNear, zFar);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1347,6 +1412,7 @@ inline void QOpenGLFunctions::glDetachShader(GLuint program, GLuint shader)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DetachShader(program, shader);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1358,6 +1424,7 @@ inline void QOpenGLFunctions::glDisableVertexAttribArray(GLuint index)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->DisableVertexAttribArray(index);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1369,6 +1436,7 @@ inline void QOpenGLFunctions::glEnableVertexAttribArray(GLuint index)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->EnableVertexAttribArray(index);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1380,6 +1448,7 @@ inline void QOpenGLFunctions::glFramebufferRenderbuffer(GLenum target, GLenum at
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->FramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1402,6 +1471,7 @@ inline void QOpenGLFunctions::glGenBuffers(GLsizei n, GLuint* buffers)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GenBuffers(n, buffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1413,6 +1483,7 @@ inline void QOpenGLFunctions::glGenerateMipmap(GLenum target)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GenerateMipmap(target);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1424,6 +1495,7 @@ inline void QOpenGLFunctions::glGenFramebuffers(GLsizei n, GLuint* framebuffers)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GenFramebuffers(n, framebuffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1435,6 +1507,7 @@ inline void QOpenGLFunctions::glGenRenderbuffers(GLsizei n, GLuint* renderbuffer
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GenRenderbuffers(n, renderbuffers);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1446,6 +1519,7 @@ inline void QOpenGLFunctions::glGetActiveAttrib(GLuint program, GLuint index, GL
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetActiveAttrib(program, index, bufsize, length, size, type, name);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1468,6 +1542,7 @@ inline void QOpenGLFunctions::glGetAttachedShaders(GLuint program, GLsizei maxco
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetAttachedShaders(program, maxcount, count, shaders);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1479,6 +1554,7 @@ inline GLint QOpenGLFunctions::glGetAttribLocation(GLuint program, const char* n
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLint result = d_ptr->GetAttribLocation(program, name);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1491,6 +1567,7 @@ inline void QOpenGLFunctions::glGetBufferParameteriv(GLenum target, GLenum pname
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetBufferParameteriv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1513,6 +1590,7 @@ inline void QOpenGLFunctions::glGetProgramiv(GLuint program, GLenum pname, GLint
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetProgramiv(program, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1524,6 +1602,7 @@ inline void QOpenGLFunctions::glGetProgramInfoLog(GLuint program, GLsizei bufsiz
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetProgramInfoLog(program, bufsize, length, infolog);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1535,6 +1614,7 @@ inline void QOpenGLFunctions::glGetRenderbufferParameteriv(GLenum target, GLenum
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetRenderbufferParameteriv(target, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1546,6 +1626,7 @@ inline void QOpenGLFunctions::glGetShaderiv(GLuint shader, GLenum pname, GLint* 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetShaderiv(shader, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1557,6 +1638,7 @@ inline void QOpenGLFunctions::glGetShaderInfoLog(GLuint shader, GLsizei bufsize,
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetShaderInfoLog(shader, bufsize, length, infolog);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1568,6 +1650,7 @@ inline void QOpenGLFunctions::glGetShaderPrecisionFormat(GLenum shadertype, GLen
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetShaderPrecisionFormat(shadertype, precisiontype, range, precision);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1590,6 +1673,7 @@ inline void QOpenGLFunctions::glGetUniformfv(GLuint program, GLint location, GLf
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetUniformfv(program, location, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1612,6 +1696,7 @@ inline GLint QOpenGLFunctions::glGetUniformLocation(GLuint program, const char* 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLint result = d_ptr->GetUniformLocation(program, name);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1635,6 +1720,7 @@ inline void QOpenGLFunctions::glGetVertexAttribiv(GLuint index, GLenum pname, GL
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetVertexAttribiv(index, pname, params);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1646,6 +1732,7 @@ inline void QOpenGLFunctions::glGetVertexAttribPointerv(GLuint index, GLenum pna
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->GetVertexAttribPointerv(index, pname, pointer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1657,6 +1744,7 @@ inline GLboolean QOpenGLFunctions::glIsBuffer(GLuint buffer)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsBuffer(buffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1669,6 +1757,7 @@ inline GLboolean QOpenGLFunctions::glIsFramebuffer(GLuint framebuffer)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsFramebuffer(framebuffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1681,6 +1770,7 @@ inline GLboolean QOpenGLFunctions::glIsProgram(GLuint program)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsProgram(program);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1693,6 +1783,7 @@ inline GLboolean QOpenGLFunctions::glIsRenderbuffer(GLuint renderbuffer)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsRenderbuffer(renderbuffer);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1705,6 +1796,7 @@ inline GLboolean QOpenGLFunctions::glIsShader(GLuint shader)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     GLboolean result = d_ptr->IsShader(shader);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
     return result;
 }
@@ -1717,6 +1809,7 @@ inline void QOpenGLFunctions::glLinkProgram(GLuint program)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->LinkProgram(program);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1728,6 +1821,7 @@ inline void QOpenGLFunctions::glReleaseShaderCompiler()
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ReleaseShaderCompiler();
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1739,6 +1833,7 @@ inline void QOpenGLFunctions::glRenderbufferStorage(GLenum target, GLenum intern
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->RenderbufferStorage(target, internalformat, width, height);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1750,6 +1845,7 @@ inline void QOpenGLFunctions::glSampleCoverage(GLclampf value, GLboolean invert)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->SampleCoverage(value, invert);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1761,6 +1857,7 @@ inline void QOpenGLFunctions::glShaderBinary(GLint n, const GLuint* shaders, GLe
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ShaderBinary(n, shaders, binaryformat, binary, length);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1772,6 +1869,7 @@ inline void QOpenGLFunctions::glShaderSource(GLuint shader, GLsizei count, const
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ShaderSource(shader, count, string, length);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1783,6 +1881,7 @@ inline void QOpenGLFunctions::glStencilFuncSeparate(GLenum face, GLenum func, GL
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilFuncSeparate(face, func, ref, mask);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1794,6 +1893,7 @@ inline void QOpenGLFunctions::glStencilMaskSeparate(GLenum face, GLuint mask)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilMaskSeparate(face, mask);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1805,6 +1905,7 @@ inline void QOpenGLFunctions::glStencilOpSeparate(GLenum face, GLenum fail, GLen
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->StencilOpSeparate(face, fail, zfail, zpass);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1816,6 +1917,7 @@ inline void QOpenGLFunctions::glUniform1f(GLint location, GLfloat x)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform1f(location, x);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1838,6 +1940,7 @@ inline void QOpenGLFunctions::glUniform1i(GLint location, GLint x)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform1i(location, x);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1849,6 +1952,7 @@ inline void QOpenGLFunctions::glUniform1iv(GLint location, GLsizei count, const 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform1iv(location, count, v);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1860,6 +1964,7 @@ inline void QOpenGLFunctions::glUniform2f(GLint location, GLfloat x, GLfloat y)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform2f(location, x, y);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1893,6 +1998,7 @@ inline void QOpenGLFunctions::glUniform2iv(GLint location, GLsizei count, const 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform2iv(location, count, v);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1904,6 +2010,7 @@ inline void QOpenGLFunctions::glUniform3f(GLint location, GLfloat x, GLfloat y, 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform3f(location, x, y, z);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1937,6 +2044,7 @@ inline void QOpenGLFunctions::glUniform3iv(GLint location, GLsizei count, const 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform3iv(location, count, v);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1959,6 +2067,7 @@ inline void QOpenGLFunctions::glUniform4fv(GLint location, GLsizei count, const 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform4fv(location, count, v);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1970,6 +2079,7 @@ inline void QOpenGLFunctions::glUniform4i(GLint location, GLint x, GLint y, GLin
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->Uniform4i(location, x, y, z, w);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -1992,6 +2102,7 @@ inline void QOpenGLFunctions::glUniformMatrix2fv(GLint location, GLsizei count, 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->UniformMatrix2fv(location, count, transpose, value);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2003,6 +2114,7 @@ inline void QOpenGLFunctions::glUniformMatrix3fv(GLint location, GLsizei count, 
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->UniformMatrix3fv(location, count, transpose, value);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2025,6 +2137,7 @@ inline void QOpenGLFunctions::glUseProgram(GLuint program)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->UseProgram(program);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2036,6 +2149,7 @@ inline void QOpenGLFunctions::glValidateProgram(GLuint program)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->ValidateProgram(program);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2047,6 +2161,7 @@ inline void QOpenGLFunctions::glVertexAttrib1f(GLuint indx, GLfloat x)
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib1f(indx, x);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2058,6 +2173,7 @@ inline void QOpenGLFunctions::glVertexAttrib1fv(GLuint indx, const GLfloat* valu
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib1fv(indx, values);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2069,6 +2185,7 @@ inline void QOpenGLFunctions::glVertexAttrib2f(GLuint indx, GLfloat x, GLfloat y
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib2f(indx, x, y);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2080,6 +2197,7 @@ inline void QOpenGLFunctions::glVertexAttrib2fv(GLuint indx, const GLfloat* valu
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib2fv(indx, values);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2091,6 +2209,7 @@ inline void QOpenGLFunctions::glVertexAttrib3f(GLuint indx, GLfloat x, GLfloat y
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib3f(indx, x, y, z);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2102,6 +2221,7 @@ inline void QOpenGLFunctions::glVertexAttrib3fv(GLuint indx, const GLfloat* valu
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib3fv(indx, values);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2113,6 +2233,7 @@ inline void QOpenGLFunctions::glVertexAttrib4f(GLuint indx, GLfloat x, GLfloat y
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib4f(indx, x, y, z, w);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2124,6 +2245,7 @@ inline void QOpenGLFunctions::glVertexAttrib4fv(GLuint indx, const GLfloat* valu
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttrib4fv(indx, values);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
@@ -2135,6 +2257,7 @@ inline void QOpenGLFunctions::glVertexAttribPointer(GLuint indx, GLint size, GLe
     Q_ASSERT(QOpenGLFunctions::isInitialized(d_ptr));
     d_ptr->VertexAttribPointer(indx, size, type, normalized, stride, ptr);
 #endif
+
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 

@@ -152,6 +152,7 @@ bool QSslSocket::setSocketDescriptor(qintptr socketDescriptor, SocketState state
    setPeerPort(d->plainSocket->peerPort());
    setPeerAddress(d->plainSocket->peerAddress());
    setPeerName(d->plainSocket->peerName());
+
    return retVal;
 }
 
@@ -348,12 +349,15 @@ void QSslSocket::setReadBufferSize(qint64 size)
 void QSslSocket::abort()
 {
    Q_D(QSslSocket);
+
 #if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "QSslSocket::abort()";
 #endif
+
    if (d->plainSocket) {
       d->plainSocket->abort();
    }
+
    close();
 }
 

@@ -75,19 +75,23 @@ class QPlatformBackingStorePrivate
    ~QPlatformBackingStorePrivate() {
 #ifndef QT_NO_OPENGL
       QOpenGLContext *ctx = QOpenGLContext::currentContext();
+
       if (ctx) {
          if (textureId) {
             ctx->functions()->glDeleteTextures(1, &textureId);
          }
+
          if (blitter) {
             blitter->destroy();
          }
+
       } else if (textureId || blitter) {
          qWarning("QPlatformBackingStore() No current OpenGL context in destructor, resources not released");
       }
       delete blitter;
 #endif
    }
+
    QWindow *window;
 
 #ifndef QT_NO_OPENGL

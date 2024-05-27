@@ -166,6 +166,7 @@ qint64 QUdpSocket::writeDatagram(const char *data, qint64 size, const QHostAddre
    qDebug("QUdpSocket::writeDatagram(%p, %llu, \"%s\", %i)", data, size,
           address.toString().toLatin1().constData(), port);
 #endif
+
    if (! d->doEnsureInitialized(QHostAddress::Any, 0, address)) {
       return -1;
    }
@@ -185,9 +186,6 @@ qint64 QUdpSocket::writeDatagram(const char *data, qint64 size, const QHostAddre
    }
    return sent;
 }
-
-
-
 
 qint64 QUdpSocket::readDatagram(char *data, qint64 maxSize, QHostAddress *address,
                                 quint16 *port)

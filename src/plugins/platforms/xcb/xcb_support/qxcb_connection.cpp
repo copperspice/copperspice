@@ -71,11 +71,13 @@
 static constexpr bool s_isDebug = false;
 
 #if defined(Q_CC_GNU) && defined(Q_OF_ELF)
+
 static xcb_generic_event_t *local_xcb_poll_for_queued_event(xcb_connection_t *c)
 __attribute__((weakref("xcb_poll_for_queued_event")));
 
 static inline void checkXcbPollForQueuedEvent()
 { }
+
 #else
 
 #include <dlfcn.h>
@@ -207,7 +209,9 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
             crtc.rotation == XCB_RANDR_ROTATION_ROTATE_270) {
             std::swap(crtc.width, crtc.height);
          }
+
          screen->updateGeometry(QRect(crtc.x, crtc.y, crtc.width, crtc.height), crtc.rotation);
+
          if (screen->mode() != crtc.mode) {
             screen->updateRefreshRate(crtc.mode);
          }
@@ -249,6 +253,7 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
 
             if (screen) {
                QString nameWas = screen->name();
+
                // Transform the fake screen into a physical screen
                screen->setOutput(output.output, outputInfo.data());
                updateScreen(screen, output);
@@ -273,7 +278,9 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
             if (outputInfo->crtc == XCB_NONE) {
                qDebug() << "output" << screen->name() << "has been disabled";
                destroyScreen(screen);
+
             } else {
+
                qDebug() << "output" << screen->name() << "has been temporarily disabled for the mode switch";
                // Reset crtc to skip RRCrtcChangeNotify events,
                // because they may be invalid in the middle of the mode switch
@@ -847,9 +854,11 @@ void printXcbEvent(const char *message, xcb_generic_event_t *event)
          qDebug("QXcbConnection: %s: unknown event - response_type: %d - sequence: %d", message, int(event->response_type & ~0x80),
             int(event->sequence));
    }
+
 #else
    (void) message;
    (void) event;
+
 #endif
 }
 
@@ -1031,18 +1040,23 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
 #ifdef Q_XCB_DEBUG
    QMutexLocker locker(&m_callLogMutex);
    int i = 0;
+
    for (; i < m_callLog.size(); ++i) {
       if (m_callLog.at(i).sequence == error->sequence) {
          qDebug("Caused by: %s:%d", csPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
          break;
+
       } else if (m_callLog.at(i).sequence > error->sequence) {
          qDebug("Caused some time before: %s:%d", csPrintable(m_callLog.at(i).file), m_callLog.at(i).line);
+
          if (i > 0) {
             qDebug("and after: %s:%d", csPrintable(m_callLog.at(i - 1).file), m_callLog.at(i - 1).line);
          }
+
          break;
       }
    }
+
    if (i == m_callLog.size() && !m_callLog.isEmpty()) {
       qDebug("Caused some time after: %s:%d", csPrintable(m_callLog.first().file), m_callLog.first().line);
    }
@@ -1056,12 +1070,15 @@ static Qt::MouseButtons translateMouseButtons(int s)
    if (s & XCB_BUTTON_MASK_1) {
       ret |= Qt::LeftButton;
    }
+
    if (s & XCB_BUTTON_MASK_2) {
       ret |= Qt::MiddleButton;
    }
+
    if (s & XCB_BUTTON_MASK_3) {
       ret |= Qt::RightButton;
    }
+
    return ret;
 }
 
@@ -1070,59 +1087,86 @@ Qt::MouseButton QXcbConnection::translateMouseButton(xcb_button_t s)
    switch (s) {
       case 1:
          return Qt::LeftButton;
+
       case 2:
          return Qt::MiddleButton;
+
       case 3:
          return Qt::RightButton;
+
       // Button values 4-7 were already handled as Wheel events, and won't occur here.
       case 8:
          return Qt::BackButton;      // Also known as Qt::ExtraButton1
+
       case 9:
          return Qt::ForwardButton;   // Also known as Qt::ExtraButton2
+
       case 10:
          return Qt::ExtraButton3;
+
       case 11:
          return Qt::ExtraButton4;
+
       case 12:
          return Qt::ExtraButton5;
+
       case 13:
          return Qt::ExtraButton6;
+
       case 14:
          return Qt::ExtraButton7;
+
       case 15:
          return Qt::ExtraButton8;
+
       case 16:
          return Qt::ExtraButton9;
+
       case 17:
          return Qt::ExtraButton10;
+
       case 18:
          return Qt::ExtraButton11;
+
       case 19:
          return Qt::ExtraButton12;
+
       case 20:
          return Qt::ExtraButton13;
+
       case 21:
          return Qt::ExtraButton14;
+
       case 22:
          return Qt::ExtraButton15;
+
       case 23:
          return Qt::ExtraButton16;
+
       case 24:
          return Qt::ExtraButton17;
+
       case 25:
          return Qt::ExtraButton18;
+
       case 26:
          return Qt::ExtraButton19;
+
       case 27:
          return Qt::ExtraButton20;
+
       case 28:
          return Qt::ExtraButton21;
+
       case 29:
          return Qt::ExtraButton22;
+
       case 30:
          return Qt::ExtraButton23;
+
       case 31:
          return Qt::ExtraButton24;
+
       default:
          return Qt::NoButton;
    }
@@ -1139,6 +1183,7 @@ typedef union {
       xcb_timestamp_t time;
       uint8_t deviceID;
    } any;
+
    xcb_xkb_new_keyboard_notify_event_t new_keyboard_notify;
    xcb_xkb_map_notify_event_t map_notify;
    xcb_xkb_state_notify_event_t state_notify;
@@ -1157,6 +1202,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
          {
             break;
          }
+
       m_callLog.remove(0, i);
    }
 #endif
@@ -1690,6 +1736,7 @@ xcb_window_t QXcbConnection::clientLeader()
       // If we are session managed, inform the window manager about it
       QByteArray session = qGuiApp->sessionId().toLatin1();
       if (!session.isEmpty()) {
+
          Q_XCB_CALL(xcb_change_property(xcb_connection(),
                XCB_PROP_MODE_REPLACE,
                m_clientLeader,
@@ -1701,6 +1748,7 @@ xcb_window_t QXcbConnection::clientLeader()
       }
 #endif
    }
+
    return m_clientLeader;
 }
 
@@ -2529,6 +2577,7 @@ bool QXcbConnection::xEmbedSystemTrayAvailable()
    if (!QApplicationPrivate::platformIntegration()) {
       return false;
    }
+
    QXcbConnection *connection = static_cast<QXcbIntegration *>(QApplicationPrivate::platformIntegration())->defaultConnection();
    return connection->systemTrayTracker();
 }

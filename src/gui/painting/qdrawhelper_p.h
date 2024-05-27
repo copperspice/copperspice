@@ -373,6 +373,7 @@ static inline const QRgba64 &qt_gradient_pixel64(const QGradientData *data, qrea
    int ipos = int(pos * (GRADIENT_STOPTABLE_SIZE - 1) + qreal(0.5));
    return data->colorTable64[qt_gradient_clamp(data, ipos)];
 }
+
 static inline qreal qRadialDeterminant(qreal a, qreal b, qreal c)
 {
    return (b * b) - (4 * a * c);
@@ -446,6 +447,7 @@ static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, con
             qreal det = qRadialDeterminant(op->radial.a, b, op->radial.sqrfr - (gx * gx + gy * gy));
 
             BlendType result = RadialFetchFunc::null();
+
             if (det >= 0) {
                qreal detSqrt = qSqrt(det);
 

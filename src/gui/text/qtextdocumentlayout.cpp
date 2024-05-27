@@ -2123,9 +2123,11 @@ recalc_minmax_widths:
    }
 
    td->minimumWidth = td->columnPositions.at(0);
+
    for (int i = 0; i < columns; ++i) {
       td->minimumWidth += td->minWidths.at(i) + 2 * td->border + cellSpacing;
    }
+
    td->minimumWidth += rightMargin - td->border;
 
    td->maximumWidth = td->columnPositions.at(0);
@@ -2133,10 +2135,12 @@ recalc_minmax_widths:
       if (td->maxWidths.at(i) != QFIXED_MAX) {
          td->maximumWidth += td->maxWidths.at(i) + 2 * td->border + cellSpacing;
       }
+
    td->maximumWidth += rightMargin - td->border;
 
    td->updateTableSize();
    td->sizeDirty = false;
+
    return QRectF();       // invalid rect -> update everything
 }
 
@@ -3127,6 +3131,7 @@ static void markFrames(QTextFrame *current, int from, int oldLength, int length)
    fd->sizeDirty = true;
 
    QList<QTextFrame *> children = current->childFrames();
+
    for (int i = 0; i < children.size(); ++i) {
       markFrames(children.at(i), from, oldLength, length);
    }

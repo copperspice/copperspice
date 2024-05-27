@@ -106,6 +106,7 @@ QRect QStyle::itemTextRect(const QFontMetrics &metrics, const QRect &rect, int a
    QRect result;
    int x, y, w, h;
    rect.getRect(&x, &y, &w, &h);
+
    if (!text.isEmpty()) {
       result = metrics.boundingRect(x, y, w, h, alignment, text);
       if (!enabled && proxy()->styleHint(SH_EtchDisabledText)) {

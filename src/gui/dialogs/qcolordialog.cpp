@@ -275,10 +275,12 @@ class QWellArray : public QWidget
 void QWellArray::paintEvent(QPaintEvent *e)
 {
    QRect r = e->rect();
+
    int cx = r.x();
    int cy = r.y();
    int ch = r.height();
    int cw = r.width();
+
    int colfirst = columnAt(cx);
    int collast  = columnAt(cx + cw);
    int rowfirst = rowAt(cy);
@@ -292,26 +294,28 @@ void QWellArray::paintEvent(QPaintEvent *e)
 
    QPainter painter(this);
    QPainter *p = &painter;
+
    QRect newRect(0, 0, cellWidth(), cellHeight());
 
    if (collast < 0 || collast >= ncols) {
       collast = ncols - 1;
    }
+
    if (rowlast < 0 || rowlast >= nrows) {
       rowlast = nrows - 1;
    }
 
    // Go through the rows
-      // get row position and height
    for (int row = rowfirst; row <= rowlast; ++row) {
 
-      // Go through the columns in the row r
-      // if we know from where to where, go through [colfirst, collast],
-      // else go through all of them
-         // get position and width of column c
+      // get row position and height
       int rowPos = rowY(row);
 
+      // Go through the columns in the row if we know from where to where,
+      // go through [colfirst, collast], else go through all of them
+
       for (int col = colfirst; col <= collast; ++col) {
+         // get position and width of column col
          int colPos = columnX(col);
 
          // Translate painter and draw the cell
@@ -342,16 +346,19 @@ QSize QWellArray::sizeHint() const
 
 void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
 {
-   int b = 3; //margin
+   int b = 3;    // margin
 
    const QPalette &g = palette();
    QStyleOptionFrame opt;
+
    int dfw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
    opt.lineWidth = dfw;
    opt.midLineWidth = 1;
+
    opt.rect = rect.adjusted(b, b, -b, -b);
    opt.palette = g;
    opt.state = QStyle::State_Enabled | QStyle::State_Sunken;
+
    style()->drawPrimitive(QStyle::PE_Frame, &opt, p, this);
    b += dfw;
 
@@ -364,6 +371,7 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
          style()->drawPrimitive(QStyle::PE_FrameFocusRect, &tmpOption, p, this);
       }
    }
+
    paintCellContents(p, row, col, opt.rect.adjusted(dfw, dfw, -dfw, -dfw));
 }
 

@@ -367,24 +367,6 @@ bool QOpenGLContext::create()
    return isValid();
 }
 
-/*!
-    \internal
-
-    Destroy the underlying platform context associated with this context.
-
-    If any other context is directly or indirectly sharing resources with this
-    context, the shared resources, which includes vertex buffer objects, shader
-    objects, textures, and framebuffer objects, are not freed. However,
-    destroying the underlying platform context frees any state associated with
-    the context.
-
-    After \c destroy() has been called, you must call create() if you wish to
-    use the context again.
-
-    \note This implicitly calls doneCurrent() if the context is current.
-
-    \sa create()
-*/
 void QOpenGLContext::destroy()
 {
    deleteQGLContext();

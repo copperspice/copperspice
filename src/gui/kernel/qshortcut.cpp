@@ -295,10 +295,12 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
             continue;
          }
 #endif
+
          QAction *a = menu->menuAction();
          if (correctActionContext(context, a, active_window)) {
             return true;
          }
+
       } else
 #endif
          if (correctWidgetContext(context, w, active_window)) {
@@ -317,6 +319,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 
    for (int i = 0; i < graphicsWidgets.size(); ++i) {
       QGraphicsWidget *w = graphicsWidgets.at(i);
+
       if (correctGraphicsWidgetContext(context, w, active_window)) {
          return true;
       }

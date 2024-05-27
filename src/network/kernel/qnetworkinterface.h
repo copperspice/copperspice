@@ -41,6 +41,7 @@ class Q_NETWORK_EXPORT QNetworkAddressEntry
  public:
    QNetworkAddressEntry();
    QNetworkAddressEntry(const QNetworkAddressEntry &other);
+
    ~QNetworkAddressEntry();
 
    QNetworkAddressEntry &operator=(const QNetworkAddressEntry &other);

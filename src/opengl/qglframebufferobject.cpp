@@ -57,7 +57,7 @@ QImage cs_glRead_frameBuffer(const QSize &, bool, bool);
 #define QT_CHECK_GLERROR() {}
 #endif
 
-// ####TODO Properly #ifdef this class to use #define symbols actually defined
+// #### TODO Properly #ifdef this class to use #define symbols actually defined
 // by OpenGL/ES includes
 #ifndef GL_MAX_SAMPLES
 #define GL_MAX_SAMPLES 0x8D57
@@ -322,6 +322,7 @@ bool QGLFramebufferObjectPrivate::checkFramebufferStatus() const
 #endif
          break;
    }
+
    return false;
 }
 
@@ -342,7 +343,9 @@ void freeTextureFunc(QGLContext *ctx, GLuint id)
 {
    ctx->contextHandle()->functions()->glDeleteTextures(1, &id);
 }
+
 }
+
 void QGLFramebufferObjectPrivate::init(QGLFramebufferObject *q, const QSize &sz,
    QGLFramebufferObject::Attachment attachment,
    GLenum texture_target, GLenum internal_format,

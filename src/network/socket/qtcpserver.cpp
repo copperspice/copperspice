@@ -275,6 +275,7 @@ qintptr QTcpServer::socketDescriptor() const
 bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
 {
    Q_D(QTcpServer);
+
    if (isListening()) {
       qWarning("QTcpServer::setSocketDescriptor() Called when already listening");
       return false;

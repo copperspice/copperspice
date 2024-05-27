@@ -493,6 +493,7 @@ qint64 QNetworkDiskCache::expire()
          while (iterator.hasNext()) {
             iterator.next();
             QCacheItem *item = iterator.value();
+
             if (item && item->file && item->file->fileName() == name) {
                delete item->file;
                item->file = nullptr;

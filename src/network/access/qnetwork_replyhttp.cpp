@@ -1356,7 +1356,6 @@ void QNetworkReplyHttpImplPrivate::proxyAuthenticationRequired(const QNetworkPro
 
 void QNetworkReplyHttpImplPrivate::httpError(QNetworkReply::NetworkError errorCode, const QString &errorMsg)
 {
-
 #if defined(CS_SHOW_DEBUG_NETWORK)
    qDebug() << "http error!" << errorCode << errorMsg;
 #endif
@@ -1458,10 +1457,6 @@ void QNetworkReplyHttpImplPrivate::uploadByteDeviceReadyReadSlot()
    }
 }
 
-
-/*
-    A simple web page that can be used to test us: http://www.procata.com/cachetest/
- */
 bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData &metaData)
 {
    Q_Q(QNetworkReplyHttpImpl);
@@ -1802,13 +1797,16 @@ void QNetworkReplyHttpImplPrivate::_q_startOperation()
 {
    Q_Q(QNetworkReplyHttpImpl);
 
-   // ensure this function is only being called once
+   // ensure this method is only called once
+
    if (state == Working) {
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl::_q_startOperation was called more than once");
 #endif
+
       return;
    }
+
    state = Working;
 
 #ifndef QT_NO_BEARERMANAGEMENT
@@ -2316,6 +2314,7 @@ void QNetworkReplyHttpImplPrivate::setCachingEnabled(bool enable)
    if (!enable && !cacheEnabled) {
       return;
    }
+
    if (enable && cacheEnabled) {
       return;
    }
@@ -2337,6 +2336,7 @@ void QNetworkReplyHttpImplPrivate::setCachingEnabled(bool enable)
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNetworkReplyImpl: setCachingEnabled(true) called after setCachingEnabled(false)");
 #endif
+
       managerPrivate->networkCache->remove(url);
       cacheSaveDevice = nullptr;
       cacheEnabled = false;

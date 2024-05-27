@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qdebug.h>
+
 #include <qmetaobject.h>
 
 #include <qtools_p.h>

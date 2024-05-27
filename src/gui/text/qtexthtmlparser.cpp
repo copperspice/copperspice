@@ -495,7 +495,8 @@ QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
       if (lastNode->text.isEmpty()) {
          reuseLastNode = true;
 
-      } else { // last node is a text node (empty tag) with some text
+      } else {
+         // last node is a text node (empty tag) with some text
 
          if (lastNode->text.length() == 1 && lastNode->text.first().isSpace()) {
 

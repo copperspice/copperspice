@@ -871,6 +871,7 @@ cookie_t q_xcb_call_template(const cookie_t &cookie, QXcbConnection *connection,
 #define Q_XCB_CALL(x) q_xcb_call_template(x, connection(), __FILE__, __LINE__)
 #define Q_XCB_CALL2(x, connection) q_xcb_call_template(x, connection, __FILE__, __LINE__)
 #define Q_XCB_NOOP(c) q_xcb_call_template(xcb_no_operation(c->xcb_connection()), c, __FILE__, __LINE__);
+
 #else
 
 #define Q_XCB_CALL(x) x

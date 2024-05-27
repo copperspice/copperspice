@@ -345,7 +345,7 @@ void QGL2PaintEngineExPrivate::updateBrushUniforms()
    brushUniformsDirty = false;
 }
 
-// This assumes the shader manager has already setup the correct shader program
+// assumes the shader manager has already setup the correct shader program
 void QGL2PaintEngineExPrivate::updateMatrix()
 {
    const QTransform &transform = q->state()->matrix;
@@ -416,8 +416,9 @@ void QGL2PaintEngineExPrivate::updateMatrix()
 
 void QGL2PaintEngineExPrivate::updateCompositionMode()
 {
-   // NOTE: The entire paint engine works on pre-multiplied data - which is why some of these
-   //       composition modes look odd.
+   // entire paint engine works on pre-multiplied data which is why some of these
+   // composition modes look odd
+
    switch (q->state()->composition_mode) {
       case QPainter::CompositionMode_SourceOver:
          glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -1399,6 +1400,7 @@ void QGL2PaintEngineEx::opacityChanged()
 void QGL2PaintEngineEx::compositionModeChanged()
 {
    Q_D(QGL2PaintEngineEx);
+
    state()->compositionModeChanged = true;
    d->compositionModeDirty = true;
 }

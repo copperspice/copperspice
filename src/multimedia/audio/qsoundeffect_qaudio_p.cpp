@@ -145,7 +145,9 @@ void QSoundEffectPrivate::setLoopCount(int loopCount)
    if (loopCount == 0) {
       loopCount = 1;
    }
+
    m_soundSource->m_loopCount = loopCount;
+
    if (m_soundSource->m_playing) {
       setLoopsRemaining(loopCount);
    }
@@ -192,7 +194,6 @@ bool QSoundEffectPrivate::isLoaded() const
 {
    return m_soundSource->m_status == QSoundEffect::Ready;
 }
-
 
 bool QSoundEffectPrivate::isPlaying() const
 {
@@ -437,6 +438,7 @@ qint64 PrivateSoundSource::readData( char *data, qint64 len)
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
                qDebug() << "APPEND START FOR FULL PERIOD: bytesWritten=" << bytesWritten << ", offset=" << m_offset
                   << ", part2=" << wrapLen;
+
                qDebug() << "part1 + part2 should be a period " << periodSize;
 #endif
             }

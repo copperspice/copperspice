@@ -41,6 +41,7 @@
 #endif
 
 #include <qthread_p.h>
+
 #include <qdebug.h>
 #include <time.h>
 
@@ -475,8 +476,8 @@ bool QAbstractSocketPrivate::flush()
    writeBuffer.free(written);
 
    if (written > 0) {
-      // Don't emit bytesWritten() recursively.
       if (!emittedBytesWritten) {
+      // Do not emit bytesWritten() recursively.
          QScopedValueRollback<bool> r(emittedBytesWritten);
          emittedBytesWritten = true;
          emit q->bytesWritten(written);

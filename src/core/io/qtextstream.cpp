@@ -134,7 +134,6 @@ class QTextStreamPrivate
    bool autoDetectUnicode;
 #endif
 
-   // i/o
    enum TokenDelimiter {
       Space,
       NotSpace,
@@ -399,8 +398,7 @@ void QTextStreamPrivate::flushWriteBuffer()
       return;
    }
 
-   // Stream went bye-bye already. Appending further data may succeed again,
-   // but would create a corrupted stream anyway.
+   // Stream is gone, appending further data may succeed but would create a damaged stream
    if (status != QTextStream::Ok) {
       return;
    }

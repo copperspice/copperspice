@@ -60,6 +60,7 @@ public:
           mipmap(other->mipmap)
     {
     }
+
     bool equals(const QOpenGLFramebufferObjectFormatPrivate *other)
     {
         return samples == other->samples &&

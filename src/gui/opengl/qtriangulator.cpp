@@ -1750,20 +1750,25 @@ void QTriangulator<T>::ComplexToSimple::DebugDialog::paintEvent(QPaintEvent *)
 
     p.setPen(Qt::gray);
     QVector<Split> &splits = m_parent->m_splits;
+
     for (int i = 0; i < splits.size(); ++i) {
         QPodPoint q = vertices.at(splits.at(i).vertex);
         QPodPoint u = vertices.at(edges.at(splits.at(i).edge).from) - q;
         QPodPoint v = vertices.at(edges.at(splits.at(i).edge).to) - q;
+
         qreal uLen = qSqrt(qDot(u, u));
         qreal vLen = qSqrt(qDot(v, v));
+
         if (uLen) {
             u.x *= 2 * halfPointSize / uLen;
             u.y *= 2 * halfPointSize / uLen;
         }
+
         if (vLen) {
             v.x *= 2 * halfPointSize / vLen;
             v.y *= 2 * halfPointSize / vLen;
         }
+
         u += q;
         v += q;
         p.drawLine(u.x, u.y, v.x, v.y);

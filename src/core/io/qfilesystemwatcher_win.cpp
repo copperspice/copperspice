@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qfilesystemwatcher.h>
-
 #include <qfilesystemwatcher_win_p.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER

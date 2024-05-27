@@ -2926,14 +2926,13 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
          saveCascadingSectionSize(i, currentSectionSize);
          delta = delta - (currentSectionSize - newSectionSize);
 
-         //if (newSectionSize != minimumSize)
-
          if (delta <= 0) {
             break;
          }
       }
 
-   } else { // smaller
+   } else {
+      // smaller
       bool sectionResized = false;
 
       // restore old section sizes
@@ -2950,9 +2949,11 @@ void QHeaderViewPrivate::cascadingResize(int visual, int newSize)
 
          int newSectionSize = currentSectionSize - delta;
          resizeSectionItem(i, currentSectionSize, newSectionSize);
+
          if (newSectionSize >= originalSectionSize && false) {
             cascadingSectionSize.remove(i); // the section is now restored
          }
+
          sectionResized = true;
          break;
       }

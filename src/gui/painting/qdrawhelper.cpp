@@ -4418,6 +4418,7 @@ void blend_color_generic_rgb64(int count, const QSpan *spans, void *userData)
    while (count--) {
       int x = spans->x;
       int length = spans->len;
+
       while (length) {
          int l = qMin(buffer_size, length);
          QRgba64 *dest = op.destFetch64(buffer, data->rasterBuffer, x, spans->y, l);
@@ -4977,6 +4978,7 @@ static void blend_tiled_generic_rgb64(int count, const QSpan *spans, void *userD
 
       return blend_tiled_generic(count, spans, userData);
    }
+
    QRgba64 buffer[buffer_size];
    QRgba64 src_buffer[buffer_size];
 

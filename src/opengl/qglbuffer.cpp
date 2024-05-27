@@ -178,8 +178,8 @@ bool QGLBuffer::read(int offset, void *data, int count)
    return d->funcs->glGetError() == GL_NO_ERROR;
 
 #else
-
    return false;
+
 #endif
 }
 
@@ -217,8 +217,8 @@ bool QGLBuffer::bind()
    if (!isCreated()) {
       qWarning("QGLBuffer::bind(): buffer not created");
    }
-
 #endif
+
    Q_D(const QGLBuffer);
    GLuint bufferId = d->guard ? d->guard->id() : 0;
 
@@ -230,8 +230,10 @@ bool QGLBuffer::bind()
 #endif
          return false;
       }
+
       d->funcs->glBindBuffer(d->type, bufferId);
       return true;
+
    } else {
       return false;
    }

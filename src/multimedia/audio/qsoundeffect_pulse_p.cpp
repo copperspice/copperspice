@@ -270,6 +270,7 @@ class QSoundEffectRef
 
         QMutexLocker locker(&m_mutex);
         m_ref++;
+
         return this;
     }
 
@@ -290,8 +291,10 @@ class QSoundEffectRef
             qDebug() << "QSoundEffectRef(" << this << ") deleted";
 #endif
             delete this;
+
             return;
         }
+
         m_mutex.unlock();
     }
 
@@ -621,10 +624,12 @@ void QSoundEffectPrivate::playAvailable()
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
            qDebug() << this << "restart playing";
 #endif
+
             setLoopsRemaining(0);
             m_playQueued = true;
             Q_ASSERT(m_pulseStream);
             emptyStream(ReloadSampleWhenDone);
+
             return;
         }
 

@@ -1567,6 +1567,7 @@ void QComboBox::setEditable(bool editable)
          d->viewContainer()->updateScrollers();
          view()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
       }
+
       setAttribute(Qt::WA_InputMethodEnabled, false);
       d->lineEdit->hide();
       d->lineEdit->deleteLater();
@@ -1683,7 +1684,6 @@ void QComboBox::setCompleter(QCompleter *c)
 
    if (c) {
       connect(c, cs_mp_cast<const QModelIndex &>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
-
       c->setWidget(this);
    }
 }

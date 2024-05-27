@@ -473,8 +473,9 @@ void QOpenGL2PaintEngineExPrivate::updateMatrix()
 
 void QOpenGL2PaintEngineExPrivate::updateCompositionMode()
 {
-   // NOTE: The entire paint engine works on pre-multiplied data - which is why some of these
-   //       composition modes look odd.
+   // entire paint engine works on pre-multiplied data - which is why some of these
+   // composition modes look odd.
+
    switch (q->state()->composition_mode) {
       case QPainter::CompositionMode_SourceOver:
          funcs.glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
@@ -1259,6 +1260,7 @@ void QOpenGL2PaintEngineExPrivate::drawVertexArrays(const float *data, const int
    setVertexAttributePointer(QT_VERTEX_COORDS_ATTR, data);
 
    int previousStop = 0;
+
    for (int i = 0; i < stopCount; ++i) {
       int stop = stops[i];
 
@@ -1407,6 +1409,7 @@ void QOpenGL2PaintEngineEx::brushOriginChanged()
 void QOpenGL2PaintEngineEx::opacityChanged()
 {
    Q_D(QOpenGL2PaintEngineEx);
+
    state()->opacityChanged = true;
 
    Q_ASSERT(d->shaderManager);
@@ -1417,6 +1420,7 @@ void QOpenGL2PaintEngineEx::opacityChanged()
 void QOpenGL2PaintEngineEx::compositionModeChanged()
 {
    Q_D(QOpenGL2PaintEngineEx);
+
    state()->compositionModeChanged = true;
    d->compositionModeDirty = true;
 }
@@ -1450,6 +1454,7 @@ void QOpenGL2PaintEngineEx::renderHintsChanged()
 void QOpenGL2PaintEngineEx::transformChanged()
 {
    Q_D(QOpenGL2PaintEngineEx);
+
    d->matrixDirty = true;
    state()->matrixChanged = true;
 }
@@ -2415,6 +2420,7 @@ void QOpenGL2PaintEngineEx::clip(const QVectorPath &path, Qt::ClipOperation op)
                 && qFuzzyIsNull(state()->matrix.m22()))) {
          state()->rectangleClip = state()->rectangleClip.intersected(state()->matrix.mapRect(rect).toRect());
          d->updateClipScissorTest();
+
          return;
       }
    }
@@ -2622,4 +2628,3 @@ void QOpenGL2PaintEngineExPrivate::syncGlState()
       }
    }
 }
-

@@ -375,7 +375,9 @@ STDMETHODIMP QWindowsOleDropSource::QueryInterface(REFIID iid, void FAR *FAR *pp
       ++m_refs;
       return NOERROR;
    }
+
    *ppv = nullptr;
+
    return ResultFromScode(E_NOINTERFACE);
 }
 
@@ -444,10 +446,6 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
 
    return hr;
 }
-
-/*!
-    \brief Give feedback: Change cursor accoding to action.
-*/
 
 QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::GiveFeedback(DWORD dwEffect)
 {

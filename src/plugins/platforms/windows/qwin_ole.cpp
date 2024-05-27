@@ -221,13 +221,6 @@ STDMETHODIMP QWindowsOleDataObject::EnumDAdvise(LPENUMSTATDATA FAR *)
    return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
-/*!
-    \class QWindowsOleEnumFmtEtc
-    \brief Enumerates the FORMATETC structures supported by QWindowsOleDataObject.
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 QWindowsOleEnumFmtEtc::QWindowsOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs) :
    m_dwRefs(1), m_nIndex(0), m_isNull(false)
 {
@@ -235,8 +228,10 @@ QWindowsOleEnumFmtEtc::QWindowsOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs) 
       qDebug() << __FUNCTION__ << fmtetcs;
    }
    m_lpfmtetcs.reserve(fmtetcs.count());
+
    for (int idx = 0; idx < fmtetcs.count(); ++idx) {
       LPFORMATETC destetc = new FORMATETC();
+
       if (copyFormatEtc(destetc, &(fmtetcs.at(idx)))) {
          m_lpfmtetcs.append(destetc);
       } else {
@@ -254,6 +249,7 @@ QWindowsOleEnumFmtEtc::QWindowsOleEnumFmtEtc(const QVector<LPFORMATETC> &lpfmtet
       qDebug() << __FUNCTION__;
    }
    m_lpfmtetcs.reserve(lpfmtetcs.count());
+
    for (int idx = 0; idx < lpfmtetcs.count(); ++idx) {
       LPFORMATETC srcetc = lpfmtetcs.at(idx);
       LPFORMATETC destetc = new FORMATETC();

@@ -991,6 +991,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          // }
          y++;
          break;
+
       case 1: {
          int i;
          my = qMin(7, bottom - y);
@@ -1002,10 +1003,8 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
             }
          }
 
-         // if (!out_of_bounds) {
-         //     ### Changed: QRect(left, y, right - left + 1, my + 1);
-         // }
          y += 8;
+
          if (y > bottom) {
             interlace++;
             y = top + 4;
@@ -1021,6 +1020,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          }
       }
       break;
+
       case 2: {
          int i;
          my = qMin(3, bottom - y);
@@ -1032,10 +1032,8 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
             }
          }
 
-         // if (!out_of_bounds) {
-         //     ### Changed: QRect(left, y, right - left + 1, my + 1);
-         // }
          y += 8;
+
          if (y > bottom) {
             interlace++;
             y = top + 2;
@@ -1047,6 +1045,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          }
       }
       break;
+
       case 3: {
          int i;
          my = qMin(1, bottom - y);
@@ -1057,9 +1056,7 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
                   (right - left + 1)*sizeof(QRgb));
             }
          }
-         // if (!out_of_bounds) {
-         //     ### Changed: QRect(left, y, right - left + 1, my + 1);
-         // }
+
          y += 4;
          if (y > bottom) {
             interlace++;
@@ -1067,10 +1064,8 @@ void QGIFFormat::nextY(unsigned char *bits, int bpl)
          }
       }
       break;
+
       case 4:
-         // if (!out_of_bounds) {
-         //     ### Changed: QRect(left, y, right - left + 1, 1);
-         // }
          y += 2;
    }
 

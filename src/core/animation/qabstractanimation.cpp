@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstractanimation.h>
+
 #include <qanimationgroup.h>
 #include <qcoreevent.h>
 #include <qdebug.h>

@@ -107,6 +107,7 @@ class QRectVectorPath : public QVectorPath
 
    qreal pts[8];
 };
+
 Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale); // qtransform.cpp
 
 #define qreal_to_fixed_26_6(f) (int(f * 64))
@@ -116,8 +117,7 @@ Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal
 #define QT_FAST_SPANS
 
 // A little helper macro to get a better approximation of dimensions.
-// If we have a rect that starting at 0.5 of width 3.5 it should span
-// 4 pixels.
+// If we have a rectangle which starting at 0.5 of width 3.5 it should span 4 pixels.
 #define int_dim(pos, dim) (int(pos+dim) - int(pos))
 
 // use the same rounding as in qrasterizer.cpp (6 bit fixed point)
@@ -349,8 +349,10 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
 
 #if defined(Q_OS_WIN)
    else if (clearTypeFontsEnabled())
+
 #else
    else if (false)
+
 #endif
 
    {
@@ -534,8 +536,7 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
    }
 
    // Slightly ugly handling of an uncommon case... We need to change
-   // the pen because it is reused in draw_midpoint to decide dashed
-   // or non-dashed.
+   // the pen because it is reused in draw_midpoint to decide dashed or non-dashed
    if (pen_style == Qt::CustomDashLine && pen.dashPattern().size() == 0) {
       pen_style = Qt::SolidLine;
       s->lastPen.setStyle(Qt::SolidLine);
@@ -584,7 +585,6 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
 
    s->strokeFlags = 0;
 }
-
 
 // internal
 void QRasterPaintEngine::brushOriginChanged()
@@ -991,8 +991,7 @@ void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
       }
 
       // We always intersect, except when there is nothing to
-      // intersect with, in which case we simplify the operation to
-      // a replace...
+      // intersect with, in which case we simplify the operation to a replace...
       Qt::ClipOperation isectOp = Qt::IntersectClip;
       if (base == nullptr) {
          isectOp = Qt::ReplaceClip;
@@ -1306,6 +1305,7 @@ void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
             path.set(rectPtr[i]);
             stroker.drawPath(path);
          }
+
       } else {
          for (int i = 0; i < rectCount; ++i) {
             path.set(rectPtr[i]);
@@ -1803,7 +1803,7 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
       }
    }
 
-   // Do the outline...
+   // Do the outline
    if (s->penData.blend) {
       int count = pointCount * 2;
       QVarLengthArray<qreal> fpoints(count);
@@ -1913,6 +1913,7 @@ void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, cons
          } else {
             drawImage(r, d->rasterBuffer->colorizeBitmap(image, s->pen.color()), translatedSource);
          }
+
       } else {
          drawImage(r, image, translatedSource);
       }
@@ -1922,6 +1923,7 @@ void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, cons
 static inline int fast_ceil_positive(const qreal &v)
 {
    const int iv = int(v);
+
    if (v - iv == 0) {
       return iv;
    } else {
@@ -1935,6 +1937,7 @@ static inline const QRect toAlignedRect_positive(const QRectF &rect)
    const int xmax = int(fast_ceil_positive(rect.right()));
    const int ymin = int(rect.y());
    const int ymax = int(fast_ceil_positive(rect.bottom()));
+
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
 
@@ -2297,6 +2300,7 @@ void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap,
 
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
+
    Q_ASSERT(s);
 
    QImage image;

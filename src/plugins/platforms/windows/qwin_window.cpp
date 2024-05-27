@@ -62,6 +62,7 @@ static QByteArray debugWinStyle(DWORD style)
 {
    QByteArray rc = "0x";
    rc += QByteArray::number(quint64(style), 16);
+
    if (style & WS_POPUP) {
       rc += " WS_POPUP";
    }
@@ -99,6 +100,7 @@ static QByteArray debugWinExStyle(DWORD exStyle)
 {
    QByteArray rc = "0x";
    rc += QByteArray::number(quint64(exStyle), 16);
+
    if (exStyle & WS_EX_TOOLWINDOW) {
       rc += " WS_EX_TOOLWINDOW";
    }
@@ -129,6 +131,7 @@ static inline RECT RECTfromQRect(const QRect &rect)
    const int x = rect.left();
    const int y = rect.top();
    RECT result = { x, y, x + rect.width(), y + rect.height() };
+
    return result;
 }
 
@@ -151,8 +154,10 @@ QDebug operator<<(QDebug d, const NCCALCSIZE_PARAMS &p)
 {
    QDebugStateSaver saver(d);
    d.nospace();
+
    d << "NCCALCSIZE_PARAMS " << qrectFromRECT(p.rgrc[0])
       << ' ' << qrectFromRECT(p.rgrc[1]) << ' ' << qrectFromRECT(p.rgrc[2]);
+
    return d;
 }
 
@@ -160,11 +165,13 @@ QDebug operator<<(QDebug d, const MINMAXINFO &i)
 {
    QDebugStateSaver saver(d);
    d.nospace();
+
    d << "MINMAXINFO maxSize=" << i.ptMaxSize.x << ','
       << i.ptMaxSize.y << " maxpos=" << i.ptMaxPosition.x
       << ',' << i.ptMaxPosition.y << " mintrack="
       << i.ptMinTrackSize.x << ',' << i.ptMinTrackSize.y
       << " maxtrack=" << i.ptMaxTrackSize.x << ',' << i.ptMaxTrackSize.y;
+
    return d;
 }
 
@@ -621,6 +628,7 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
 
       return result;
    }
+
    if ((flags & Qt::WindowType_Mask) == Qt::ForeignWindow) {
       result.hwnd = reinterpret_cast<HWND>(w->winId());
       Q_ASSERT(result.hwnd);
@@ -1104,8 +1112,10 @@ QWindowsWindowData QWindowsWindowData::create(const QWindow *w,
    WindowCreationData creationData;
    creationData.fromWindow(w, parameters.flags);
    QWindowsWindowData result = creationData.create(w, parameters, title);
+
    // Force WM_NCCALCSIZE (with wParam=1) via SWP_FRAMECHANGED for custom margin.
    creationData.initialize(w, result.hwnd, !parameters.customMargins.isNull(), 1);
+
    return result;
 }
 

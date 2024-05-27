@@ -108,6 +108,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
       QList<QDnsServiceRecord> slice;
       const quint16 slicePriority = records[i].priority();
       unsigned int sliceWeight = 0;
+
       for (int j = i; j < records.size(); ++j) {
          if (records[j].priority() != slicePriority) {
             break;
@@ -121,10 +122,11 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
              slicePriority, slice.size(), sliceWeight);
 #endif
 
-      // Order the slice of records.
       while (!slice.isEmpty()) {
+      // Order the slice of records
          const unsigned int weightThreshold = qrand() % (sliceWeight + 1);
          unsigned int summedWeight = 0;
+
          for (int j = 0; j < slice.size(); ++j) {
             summedWeight += slice[j].weight();
 

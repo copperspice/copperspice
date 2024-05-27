@@ -382,6 +382,7 @@ void QDialog::contextMenuEvent(QContextMenuEvent *e)
          QHelpEvent helpEvent(QEvent::WhatsThis, w->rect().center(), w->mapToGlobal(w->rect().center()));
          QApplication::sendEvent(w, &helpEvent);
       }
+
       delete p.data();
    }
 #endif

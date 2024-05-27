@@ -29,7 +29,6 @@
 #include <qwaitcondition.h>
 #include <qfilesystemwatcher.h>
 #include <qfileiconprovider.h>
-
 #include <qpair.h>
 #include <qstack.h>
 #include <qdatetime.h>
@@ -37,7 +36,6 @@
 #include <qelapsedtimer.h>
 
 #include <qfilesystemengine_p.h>
-
 
 class QFileIconProvider;
 

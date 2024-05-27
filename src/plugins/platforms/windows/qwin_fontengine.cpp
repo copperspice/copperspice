@@ -245,6 +245,7 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
 #endif
 
    hfont = CreateFontIndirect(&m_logfont);
+
    if (! hfont) {
       qErrnoWarning("QWindowsFontEngine(): CreateFontIndirect failed for family '%s'", csPrintable(name));
       hfont = QWindowsFontDatabase::systemFont();
@@ -253,6 +254,7 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
    HDC hdc = m_fontEngineData->hdc;
    SelectObject(hdc, hfont);
    const BOOL res = GetTextMetrics(hdc, &tm);
+
    if (! res) {
       qErrnoWarning("QWindowsFontEngine(): GetTextMetrics failed");
       ZeroMemory(&tm, sizeof(TEXTMETRIC));
@@ -912,9 +914,11 @@ int QWindowsFontEngine::synthesized() const
          if (tm.tmItalic && !(macStyle & 2)) {
             synthesized_flags = SynthesizedItalic;
          }
+
          if (fontDef.stretch != 100 && ttf) {
             synthesized_flags |= SynthesizedStretch;
          }
+
          if (tm.tmWeight >= 500 && !(macStyle & 1)) {
             synthesized_flags |= SynthesizedBold;
          }

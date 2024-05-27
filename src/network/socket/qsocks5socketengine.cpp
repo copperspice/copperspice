@@ -143,6 +143,7 @@ static inline QString s5StateToString(QSocks5SocketEnginePrivate::Socks5State)
 {
    return QString();
 }
+
 static inline QString dump(const QByteArray &)
 {
    return QString();
@@ -168,11 +169,13 @@ static bool qt_socks5_set_host_address_and_port(const QHostAddress &address, qui
    if (address.protocol() == QAbstractSocket::IPv4Protocol) {
       data.ipv4 = qToBigEndian<quint32>(address.toIPv4Address());
       pBuf->append(S5_IP_V4);
+
       pBuf->append(QByteArray::fromRawData(&data.ptr, sizeof data.ipv4));
    } else if (address.protocol() == QAbstractSocket::IPv6Protocol) {
       data.ipv6 = address.toIPv6Address();
       pBuf->append(S5_IP_V6);
       pBuf->append(QByteArray::fromRawData(&data.ptr, sizeof data.ipv6));
+
    } else {
       return false;
    }
@@ -212,13 +215,14 @@ static bool qt_socks5_set_host_name_and_port(const QString &hostname, quint16 po
    return true;
 }
 
-
 static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddress *pAddress, quint16 *pPort,
       int *pPos)
 {
    int ret = -1;
    int pos = *pPos;
+
    const unsigned char *pBuf = reinterpret_cast<const unsigned char *>(buf.constData());
+
    QHostAddress address;
    quint16 port = 0;
 
@@ -226,6 +230,7 @@ static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddre
       QSOCKS5_DEBUG << "need more data address/port";
       return 0;
    }
+
    if (pBuf[pos] == S5_IP_V4) {
       pos++;
       if (buf.size() - pos < 4) {
@@ -235,6 +240,7 @@ static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddre
       address.setAddress(qFromBigEndian<quint32>(&pBuf[pos]));
       pos += 4;
       ret = 1;
+
    } else if (pBuf[pos] == S5_IP_V6) {
       pos++;
       if (buf.size() - pos < 16) {
@@ -1236,16 +1242,21 @@ void QSocks5SocketEnginePrivate::_q_controlSocketReadNotification()
       case AuthenticationMethodsSent:
          parseAuthenticationMethodReply();
          break;
+
       case Authenticating:
          parseAuthenticatingReply();
          break;
+
       case RequestMethodSent:
          parseRequestMethodReply();
          break;
+
       case Connected: {
          QByteArray buf;
          if (!data->authenticator->unSeal(data->controlSocket, &buf)) {
+            // no action
          }
+
          if (buf.size()) {
             QSOCKS5_DEBUG << dump(buf);
             connectData->readBuffer += buf;
@@ -1901,9 +1912,8 @@ bool QSocks5SocketEngine::waitForRead(int msecs, bool *timedOut)
             return false;
          }
       }
-#endif // QT_NO_UDPSOCKET
+#endif
    }
-
 
    bool ret = d->readNotificationActivated;
    d->readNotificationActivated = false;

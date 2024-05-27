@@ -230,12 +230,14 @@ void QXcbConnection::xi2SetupDevices()
          isTablet = true;
          tabletData.pointerType = QTabletEvent::Pen;
          dbgType = QLatin1String("pen");
+
       } else if (name.contains("waltop") && name.contains("tablet")) {
          // other "Genius" tablets
          // WALTOP International Corp. Slim Tablet
          isTablet = true;
          tabletData.pointerType = QTabletEvent::Pen;
          dbgType = QLatin1String("pen");
+
       } else {
          isTablet = false;
       }
@@ -276,6 +278,7 @@ void QXcbConnection::xi2SetupDevices()
          }
       }
    }
+
    XIFreeDeviceInfo(devices);
 }
 
@@ -621,6 +624,7 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
             if (QXcbWindow *platformWindow = platformWindowFromId(xiDeviceEvent->event)) {
                xi2ProcessTouch(xiDeviceEvent, platformWindow);
             }
+
             break;
       }
 
@@ -667,8 +671,10 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
    qreal nx = -1.0, ny = -1.0;
    qreal w = 0.0, h = 0.0;
    bool majorAxisIsY = touchPoint.area.height() > touchPoint.area.width();
+
    for (int i = 0; i < dev->xiDeviceInfo->num_classes; ++i) {
       XIAnyClassInfo *classinfo = dev->xiDeviceInfo->classes[i];
+
       if (classinfo->type == XIValuatorClass) {
          XIValuatorClassInfo *vci = reinterpret_cast<XIValuatorClassInfo *>(classinfo);
          int n = vci->number;
@@ -796,6 +802,7 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
             dev->pointPressedPosition[touchPoint.id] = QPointF(x, y);
          }
          break;
+
       case XI_TouchEnd:
          touchPoint.state = Qt::TouchPointReleased;
          if (dev->qtTouchDevice->type() == QTouchDevice::TouchPad && dev->pointPressedPosition.value(touchPoint.id) == QPointF(x, y)) {
@@ -806,8 +813,10 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
             x = dev->firstPressedPosition.x() + dx;
             y = dev->firstPressedPosition.y() + dy;
          }
+
          dev->pointPressedPosition.remove(touchPoint.id);
    }
+
    touchPoint.area = QRectF(x - w / 2, y - h / 2, w, h);
    touchPoint.normalPosition = QPointF(nx, ny);
 
@@ -931,7 +940,9 @@ void QXcbConnection::xi2HandleDeviceChangedEvent(void *event)
 
    int nrDevices = 0;
    XIDeviceInfo *xiDeviceInfo = XIQueryDevice(static_cast<Display *>(m_xlib_display), xiEvent->sourceid, &nrDevices);
+
    if (nrDevices <= 0) {
+
       qDebug("scrolling device %d no longer present", xiEvent->sourceid);
       return;
    }

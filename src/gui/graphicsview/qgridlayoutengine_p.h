@@ -134,7 +134,6 @@ class QStretchParameter : public QLayoutParameter<int>
    QStretchParameter()
       : QLayoutParameter<int>(-1)
    { }
-
 };
 
 class QGridLayoutBox
@@ -164,50 +163,63 @@ class QGridLayoutBox
 
    inline qreal &q_sizes(int which) {
       qreal *t;
+
       switch (which) {
          case Qt::MinimumSize:
             t = &q_minimumSize;
             break;
+
          case Qt::PreferredSize:
             t = &q_preferredSize;
             break;
+
          case Qt::MaximumSize:
             t = &q_maximumSize;
             break;
          case Qt::MinimumDescent:
             t = &q_minimumDescent;
             break;
+
          case (Qt::MinimumDescent + 1):
             t = &q_minimumAscent;
             break;
+
          default:
             t = nullptr;
             break;
       }
+
       return *t;
    }
    inline const qreal &q_sizes(int which) const {
       const qreal *t;
+
       switch (which) {
          case Qt::MinimumSize:
             t = &q_minimumSize;
             break;
+
          case Qt::PreferredSize:
             t = &q_preferredSize;
             break;
+
          case Qt::MaximumSize:
             t = &q_maximumSize;
             break;
+
          case Qt::MinimumDescent:
             t = &q_minimumDescent;
             break;
+
          case (Qt::MinimumDescent + 1):
             t = &q_minimumAscent;
             break;
+
          default:
             t = nullptr;
             break;
       }
+
       return *t;
    }
 };
@@ -247,8 +259,6 @@ class QGridLayoutRowData
    QGridLayoutBox totalBox(int start, int end) const;
    void stealBox(int start, int end, int which, qreal *positions, qreal *sizes);
 
-
-
    QBitArray ignore;
    QVector<QGridLayoutBox> boxes;
    MultiCellMap multiCellMap;
@@ -274,7 +284,6 @@ class QGridLayoutRowInfo
    QVector<Qt::Alignment> alignments;
    QVector<QGridLayoutBox> boxes;
 };
-
 
 class QGridLayoutItem
 {
@@ -352,7 +361,6 @@ class QGridLayoutItem
    QRectF geometryWithin(qreal x, qreal y, qreal width, qreal height, qreal rowDescent, Qt::Alignment align) const;
    QGridLayoutBox box(Qt::Orientation orientation, qreal constraint = -1.0) const;
 
-
    void transpose();
    void insertOrRemoveRows(int row, int delta, Qt::Orientation orientation = Qt::Vertical);
    QSizeF effectiveMaxSize(const QSizeF &constraint) const;
@@ -387,6 +395,7 @@ class QGridLayoutEngine
    int columnCount() const {
       return q_infos[GridOrientation_Horizontal].count;
    }
+
    // returns the number of items inserted, which may be less than (rowCount * columnCount)
    int itemCount() const;
    QGridLayoutItem *itemAt(int index) const;

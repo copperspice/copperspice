@@ -368,6 +368,7 @@ static QDateTime parseDateString(const QString &dateString)
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << dateString.mid(at);
 #endif
+
       bool isNum = isNumber(dateString[at]);
 
       // Month
@@ -380,6 +381,7 @@ static QDateTime parseDateString(const QString &dateString)
          at += 3;
          continue;
       }
+
       // Zone
       if (! isNum && zoneOffset == -1 && checkStaticArray(zoneOffset, dateString, at, zones, sizeof(zones) - 1)) {
          int sign = (at >= 0 && dateString[at - 1] == '-') ? -1 : 1;
@@ -663,6 +665,7 @@ static QDateTime parseDateString(const QString &dateString)
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "Parser failure" << year << month << day;
 #endif
+
       return QDateTime();
    }
 

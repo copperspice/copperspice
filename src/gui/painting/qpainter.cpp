@@ -117,9 +117,6 @@ static inline bool is_pen_transparent(const QPen &pen)
    return pen.style() > Qt::SolidLine || is_brush_transparent(pen.brush());
 }
 
-/* Discards the emulation flags that are not relevant for line drawing
-   and returns the result
-*/
 static inline uint line_emulation(uint emulation)
 {
    return emulation & (QPaintEngine::PrimitiveTransform
@@ -1524,7 +1521,6 @@ void QPainter::setClipping(bool enable)
       return;
    }
 
-   // we can't enable clipping if we don't have a clip
    if (enable
       && (d->state->clipInfo.isEmpty() || d->state->clipInfo.last().operation == Qt::NoClip)) {
       return;
@@ -1543,6 +1539,7 @@ void QPainter::setClipping(bool enable)
 QRegion QPainter::clipRegion() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
       qWarning("QPainter::clipRegion() Painter engine not active");
       return QRegion();
@@ -1855,6 +1852,7 @@ void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
       qWarning("QPainter::setClipRegion() Painter engine not active");
       return;
    }
+
    bool simplifyClipOp = (paintEngine()->type() != QPaintEngine::Picture);
 
    if (simplifyClipOp && (!d->state->clipEnabled && op != Qt::NoClip)) {

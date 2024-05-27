@@ -160,9 +160,7 @@ void QTimerInfoList::repairTimersIfNeeded()
 
 #endif
 
-/*
-  insert timer info into list
-*/
+// insert timer info into list
 void QTimerInfoList::timerInsert(QTimerInfo_Unix *ti)
 {
    int index = size();
@@ -182,6 +180,7 @@ inline timespec &operator+=(timespec &t1, int ms)
 {
    t1.tv_sec  += ms / 1000;
    t1.tv_nsec += ms % 1000 * 1000 * 1000;
+
    return normalizedTimespec(t1);
 }
 
@@ -236,6 +235,7 @@ static timespec roundToMillisecond(timespec val)
 
    int ns = val.tv_nsec % (1000 * 1000);
    val.tv_nsec += 1000 * 1000 - ns;
+
    return normalizedTimespec(val);
 }
 
@@ -415,7 +415,7 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
          return;
 
       case Qt::VeryCoarseTimer:
-         // we don't need to take care of the microsecond component of t->interval
+         // we do not need to take care of the microsecond component of t->interval
          t->timeout.tv_sec += t->interval;
 
          if (t->timeout.tv_sec <= currentTime.tv_sec) {
@@ -428,8 +428,8 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
          if (t->expected.tv_sec <= currentTime.tv_sec) {
             t->expected.tv_sec = currentTime.tv_sec + t->interval;
          }
-
 #endif
+
          return;
    }
 
@@ -675,7 +675,7 @@ int QTimerInfoList::activateTimers()
       ++maxCount;
    }
 
-   //fire the timers.
+   // fire the timers
    while (maxCount--) {
       if (isEmpty()) {
          break;
@@ -684,7 +684,8 @@ int QTimerInfoList::activateTimers()
       QTimerInfo_Unix *currentTimerInfo = first();
 
       if (newTime < currentTimerInfo->timeout) {
-         break;   // no timer has expired
+         // no timer has expired
+         break;
       }
 
       if (! firstTimerInfo) {

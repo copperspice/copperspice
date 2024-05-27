@@ -339,11 +339,8 @@ void QSettingsPrivate::beginGroupOrArray(const QSettingsGroup &group)
    }
 }
 
-/*
-    We only set an error if there isn't one set already. This way the user always gets the
-    first error that occurred. We always allow clearing errors.
-*/
-
+// only set an error if one is not set, user always gets the first error that occurred.
+// always allow clearing errors
 void QSettingsPrivate::setStatus(QSettings::Status status) const
 {
    if (status == QSettings::NoError || m_status == QSettings::NoError) {
@@ -1957,6 +1954,7 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
 
    for (ParsedSettingsMap::const_iterator j = map.constBegin(); j != map.constEnd(); ++j) {
       QString section;
+
       QSettingsIniKey key(j.key().originalCaseKey(), j.key().originalKeyPosition());
       int slashPos;
 
@@ -1998,8 +1996,10 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
 
       if (realSection.isEmpty()) {
          realSection = "[General]";
+
       } else if (qstricmp(realSection.constData(), "general") == 0) {
          realSection = "[%General]";
+
       } else {
          realSection.prepend('[');
          realSection.append(']');

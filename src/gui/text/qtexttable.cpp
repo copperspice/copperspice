@@ -282,9 +282,9 @@ void QTextTablePrivate::fragmentRemoved(QChar type, uint fragment)
 void QTextTablePrivate::update() const
 {
    Q_Q(const QTextTable);
+
    nCols = q->format().columns();
    nRows = (cells.size() + nCols - 1) / nCols;
-
 
    grid = q_check_ptr((int *)realloc(grid, nRows * nCols * sizeof(int)));
    memset(grid, 0, nRows * nCols * sizeof(int));
@@ -317,6 +317,7 @@ void QTextTablePrivate::update() const
       }
 
       Q_ASSERT(c + colspan <= nCols);
+
       for (int ii = 0; ii < rowspan; ++ii) {
          for (int jj = 0; jj < colspan; ++jj) {
             Q_ASSERT(grid[(r + ii)*nCols + c + jj] == 0);
@@ -480,6 +481,7 @@ void QTextTable::insertRows(int pos, int num)
 void QTextTable::insertColumns(int pos, int num)
 {
    Q_D(QTextTable);
+
    if (num <= 0) {
       return;
    }
@@ -511,6 +513,7 @@ void QTextTable::insertColumns(int pos, int num)
          // less than the logical cell index of the cell before the insertion.
          int logicalGridIndex;
          int gridArrayOffset = i * d->nCols + pos;
+
          do {
             cell = d->grid[gridArrayOffset];
             logicalGridIndex = d->findCellIndex(cell);
@@ -660,12 +663,15 @@ void QTextTable::removeColumns(int pos, int num)
    if (num <= 0 || pos < 0) {
       return;
    }
+
    if (d->dirty) {
       d->update();
    }
+
    if (pos >= d->nCols) {
       return;
    }
+
    if (pos + num > d->nCols) {
       pos = d->nCols - num;
    }

@@ -38,14 +38,12 @@
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
-
 #include <qset.h>
 #include <qstyle.h>
 #include <qvarlengtharray.h>
 #include <qwindow.h>
 
 #if defined(Q_OS_DARWIN)
-
 #include <qplatform_nativeinterface.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
@@ -72,9 +70,11 @@ const int MacLayoutBottomMargin = 17;
 static void changeSpacerSize(QLayout *layout, int index, int width, int height)
 {
    QSpacerItem *spacer = layout->itemAt(index)->spacerItem();
+
    if (! spacer) {
       return;
    }
+
    spacer->changeSize(width, height);
 }
 
@@ -448,6 +448,7 @@ void QWizardHeader::setup(const QWizardLayoutInfo &info, const QString &title,
       QSize size = layout->totalMinimumSize();
       setMinimumSize(size);
       setMaximumSize(QWIDGETSIZE_MAX, size.height());
+
    } else {
       subTitleLabel->setMinimumSize(0, 0);
       setFixedSize(banner.size() + QSize(0, 2));
@@ -780,6 +781,7 @@ void QWizardPrivate::init()
 
    antiFlickerWidget = new QWizardAntiFlickerWidget(q, this);
    wizStyle = QWizard::WizardStyle(q->style()->styleHint(QStyle::SH_WizardStyle, nullptr, q));
+
    if (wizStyle == QWizard::MacStyle) {
       opts = (QWizard::NoDefaultButton | QWizard::NoCancelButton);
    } else if (wizStyle == QWizard::ModernStyle) {
@@ -1598,12 +1600,15 @@ void QWizardPrivate::updateButtonLayout()
       for (int i = 0; i < buttonsCustomLayout.count(); ++i) {
          array[i] = buttonsCustomLayout.at(i);
       }
+
       setButtonLayout(array.constData(), array.count());
+
    } else {
       // Positions:
-      //     Help Stretch Custom1 Custom2 Custom3 Cancel Back Next Commit Finish Cancel Help
+      // Help Stretch Custom1 Custom2 Custom3 Cancel Back Next Commit Finish Cancel Help
 
       const int ArraySize = 12;
+
       QWizard::WizardButton array[ArraySize];
       memset(array, -1, sizeof(array));
       Q_ASSERT(array[0] == QWizard::NoButton);
@@ -1612,13 +1617,16 @@ void QWizardPrivate::updateButtonLayout()
          int i = (opts & QWizard::HelpButtonOnRight) ? 11 : 0;
          array[i] = QWizard::HelpButton;
       }
+
       array[1] = QWizard::Stretch;
       if (opts & QWizard::HaveCustomButton1) {
          array[2] = QWizard::CustomButton1;
       }
+
       if (opts & QWizard::HaveCustomButton2) {
          array[3] = QWizard::CustomButton2;
       }
+
       if (opts & QWizard::HaveCustomButton3) {
          array[4] = QWizard::CustomButton3;
       }
@@ -1642,16 +1650,20 @@ void QWizardPrivate::setButtonLayout(const QWizard::WizardButton *array, int max
 
    for (int i = buttonLayout->count() - 1; i >= 0; --i) {
       QLayoutItem *item = buttonLayout->takeAt(i);
+
       if (QWidget *widget = item->widget()) {
          widget->hide();
       }
+
       delete item;
    }
 
    for (int i = 0; i < maxSize; ++i) {
       QWizard::WizardButton which = array[i];
+
       if (which == QWizard::Stretch) {
          buttonLayout->addStretch(1);
+
       } else if (which != QWizard::NoButton) {
          ensureButton(which);
          buttonLayout->addWidget(btns[which]);
@@ -2231,8 +2243,8 @@ void QWizard::setWizardStyle(WizardStyle style)
 
 #if !defined(QT_NO_STYLE_WINDOWSVISTA)
       if (aeroStyleChange) {
-         //Send a resizeevent since the antiflicker widget probably needs a new size
-         //because of the backbutton in the window title
+         // Send a resizeevent since the antiflicker widget probably needs a new size
+         // because of the backbutton in the window title
          QResizeEvent ev(geometry().size(), geometry().size());
          QApplication::sendEvent(this, &ev);
       }
@@ -2443,6 +2455,7 @@ Qt::TextFormat QWizard::subTitleFormat() const
 void QWizard::setPixmap(WizardPixmap which, const QPixmap &pixmap)
 {
    Q_D(QWizard);
+
    Q_ASSERT(uint(which) < NPixmaps);
    d->defaultPixmaps[which] = pixmap;
    d->updatePixmap(which);
@@ -2480,6 +2493,7 @@ void QWizard::setSideWidget(QWidget *widget)
    Q_D(QWizard);
 
    d->sideWidget = widget;
+
    if (d->watermarkLabel) {
       d->watermarkLabel->setSideWidget(widget);
       d->updateLayout();
@@ -2496,11 +2510,13 @@ QWidget *QWizard::sideWidget() const
 void QWizard::setVisible(bool visible)
 {
    Q_D(QWizard);
+
    if (visible) {
       if (d->current == -1) {
          restart();
       }
    }
+
    QDialog::setVisible(visible);
 }
 
@@ -2527,13 +2543,16 @@ QSize QWizard::sizeHint() const
          }
       }
    }
+
    return result.expandedTo(extra);
 }
 
 void QWizard::back()
 {
    Q_D(QWizard);
+
    int n = d->history.count() - 2;
+
    if (n < 0) {
       return;
    }
@@ -2974,6 +2993,7 @@ void QWizardPage::setField(const QString &name, const QVariant &value)
    if (!d->wizard) {
       return;
    }
+
    d->wizard->setField(name, value);
 }
 
@@ -2990,6 +3010,7 @@ QVariant QWizardPage::field(const QString &name) const
 void QWizardPage::registerField(const QString &name, QWidget *widget, const QString &property, const QString &changedSignal)
 {
    Q_D(QWizardPage);
+
    QWizardField field(this, name, widget, property, changedSignal);
 
    if (d->wizard) {

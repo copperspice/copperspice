@@ -1079,7 +1079,6 @@ void QGraphicsProxyWidget::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event
    d->sendWidgetMouseEvent(event);
 }
 
-
 #ifndef QT_NO_WHEELEVENT
 
 void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)

@@ -126,6 +126,7 @@ int QPainterPath::elementCount() const
 {
     return d_ptr ? d_ptr->elements.size() : 0;
 }
+
 QPainterPath::Element QPainterPath::elementAt(int i) const
 {
     Q_ASSERT(d_ptr);
@@ -893,6 +894,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    printf("QPainterPath::toFillPolygons, subpathCount=%d\n", count);
+
    for (int i = 0; i < bounds.size(); ++i) {
       qDebug() << " bounds" << i << bounds.at(i);
    }

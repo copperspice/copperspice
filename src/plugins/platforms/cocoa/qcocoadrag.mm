@@ -245,6 +245,7 @@ QVariant QCocoaDropData::retrieveData_sys(const QString &mimeType, QVariant::Typ
       qDebug("DnD: Can not get PasteBoard");
       return data;
    }
+
    data = QMacPasteboard(board, QMacInternalPasteboardMime::MIME_DND).retrieveData(mimeType, type);
    CFRelease(board);
    return data;

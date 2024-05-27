@@ -187,6 +187,7 @@ QDebug operator<<(QDebug s, const QRegion &r)
       if (count > 1) {
          s << "size=" << count << ", bounds=(";
       }
+
       QtDebugUtils::formatQRect(s, r.boundingRect());
       if (count > 1) {
          s << ") - [";
@@ -3757,6 +3758,7 @@ QRegion QRegion::subtracted(const QRegion &r) const
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    result.d->qt_rgn->selfTest();
 #endif
+
    return result;
 }
 

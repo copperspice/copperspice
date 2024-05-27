@@ -99,7 +99,7 @@ class QWidgetBackingStore
       return !(dirtyWidgets.isEmpty() && dirty.isEmpty() && !fullUpdatePending && dirtyRenderToTextureWidgets.isEmpty());
    }
 
-   // ### merge into a template function (after MSVC isn't supported anymore).
+   // ### merge into a template function
    void markDirty(const QRegion &rgn, QWidget *widget, UpdateTime updateTime = UpdateLater,
       BufferState bufferState = BufferValid);
 

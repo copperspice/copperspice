@@ -148,7 +148,9 @@ static inline const uchar *verifyTag(const uchar *tagPtr, const uchar *endPtr)
          qDebug() << "tag data" << hex << tagPtr[0] << tagPtr[1] << tagPtr[2] << tagPtr[3];
       }
 #endif
+
    }
+
    return tagPtr + length;
 }
 
@@ -181,6 +183,7 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
 {
    VERIFY(quintptr(data) % alignof(Header) == 0);
    VERIFY(size >= int(sizeof(Header)));
+
    const Header *header = reinterpret_cast<const Header *>(data);
 
    if (header->magic[0] != 'Q'
@@ -215,29 +218,35 @@ QVariant QFontEngineQPF2::extractHeaderField(const uchar *data, HeaderTag reques
    while (tagPtr < endPtr - 3) {
       quint16 tag = readValue<quint16>(tagPtr);
       quint16 length = readValue<quint16>(tagPtr);
+
       if (tag == requestedTag) {
          switch (tagTypes[requestedTag]) {
             case StringType:
                return QVariant(QString::fromUtf8(reinterpret_cast<const char *>(tagPtr), length));
+
             case UInt32Type:
                return QVariant(readValue<quint32>(tagPtr));
+
             case UInt8Type:
                return QVariant(uint(*tagPtr));
+
             case FixedType:
                return QVariant(QFixed::fromFixed(readValue<quint32>(tagPtr)).toReal());
+
             case BitFieldType:
                return QVariant(QByteArray(reinterpret_cast<const char *>(tagPtr), length));
          }
          return QVariant();
+
       } else if (tag == Tag_EndOfHeader) {
          break;
       }
+
       tagPtr += length;
    }
 
    return QVariant();
 }
-
 
 QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    : QFontEngine(QPF2), fontData(reinterpret_cast<const uchar *>(data.constData())), dataSize(data.size())
@@ -260,6 +269,7 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
       qDebug() << "VerifyHeader failed";
 #endif
+
       return;
    }
 

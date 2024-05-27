@@ -94,14 +94,17 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
 
         for (int i=1; i<path.elementCount(); ++i) {
             switch (elements[i]) {
+
             case QPainterPath::MoveToElement:
                 if (!outline)
                     addClosingLine(lastMoveTo);
+
                 vertexArrayStops.append(vertexArray.size());
                 if (!outline) {
                     if (!path.isConvex()) addCentroid(path, i);
                     lastMoveTo = vertexArray.size();
                 }
+
                 lineToArray(points[i].x(), points[i].y()); // Add the moveTo as a new vertex
                 break;
 

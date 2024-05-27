@@ -85,6 +85,7 @@ void QPlatformFontDatabase::registerQPF2Font(const QByteArray &dataArray, void *
          registerFont(fontName, QString(), QString(), fontWeight, fontStyle, stretch, true, false,
             pixelSize, false, writingSystems, handle);
       }
+
    } else {
 #if defined(CS_SHOW_DEBUG_GUI)
       qDebug() << "header verification of QPF2 font failed. maybe it is corrupt?";
@@ -421,6 +422,7 @@ QSupportedWritingSystems QPlatformFontDatabase::writingSystemsFromTrueTypeBits(q
          index = bit / 32;
 
          flag = 1 << (bit & 31);
+
          if (bit == 127 || (unicodeRange[index] & flag)) {
             writingSystems.setSupported(QFontDatabase::WritingSystem(i));
             hasScript = true;

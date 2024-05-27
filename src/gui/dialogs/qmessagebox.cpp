@@ -34,7 +34,6 @@
 #include <qdesktopwidget.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-
 #include <qaccessible.h>
 #include <qfont.h>
 #include <qfontmetrics.h>

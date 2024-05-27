@@ -222,6 +222,7 @@ static inline XTextProperty *qstringToXTP(Display *dpy, const QString &s)
       tl[1] = nullptr;
 
       errCode = XmbTextListToTextProperty(dpy, tl, 1, XStdICCTextStyle, &tp);
+
       if (errCode < 0) {
          qWarning("XmbTextListToTextProperty result code %d", errCode);
       }
@@ -1140,6 +1141,7 @@ QXcbWindow::NetWmStates QXcbWindow::netWmStates()
          result |= NetWmStateDemandsAttention;
       }
       free(reply);
+
    } else {
 #ifdef NET_WM_STATE_DEBUG
       printf("getting net wm state (%x), empty\n", m_window);
@@ -1524,12 +1526,14 @@ void QXcbWindow::updateNetWmUserTime(xcb_timestamp_t timestamp)
                ba.length(),
                ba.constData()));
 #endif
+
       } else if (!isSupportedByWM) {
          // WM no longer supports it, then we should remove the
          // _NET_WM_USER_TIME_WINDOW atom.
          xcb_delete_property(xcb_connection(), m_window, atom(QXcbAtom::_NET_WM_USER_TIME_WINDOW));
          xcb_destroy_window(xcb_connection(), m_netWmUserTimeWindow);
          m_netWmUserTimeWindow = XCB_NONE;
+
       } else {
          wid = m_netWmUserTimeWindow;
       }

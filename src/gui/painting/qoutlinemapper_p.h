@@ -124,8 +124,7 @@ class QOutlineMapper
 #endif
 
             // Put the object on the stack to avoid the odd case where
-            // lineTo reallocs the databuffer and the QPointF & will
-            // be invalidated.
+            // lineTo reallocs the databuffer and the QPointF & will be invalidated.
             QPointF pt = m_elements.at(m_subpath_start);
 
             // only do lineTo if we have element_type array...

@@ -54,4 +54,3 @@ QTcpSocket::QTcpSocket(QAbstractSocket::SocketType socketType, QTcpSocketPrivate
    : QAbstractSocket(socketType, dd, parent)
 {
 }
-

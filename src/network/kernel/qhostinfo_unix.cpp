@@ -91,11 +91,14 @@ static void resolveLibraryInternal()
    if (!local_res_ninit) {
       // if we can't get a thread-safe context, we have to use the global _res state
       local_res = res_state_ptr(lib.resolve("_res"));
+
    } else {
       local_res_nclose = res_nclose_proto(lib.resolve("res_nclose"));
+
       if (!local_res_nclose) {
          local_res_nclose = res_nclose_proto(lib.resolve("__res_nclose"));
       }
+
       if (!local_res_nclose) {
          local_res_ninit = nullptr;
       }
@@ -213,6 +216,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          qDebug() << "getaddrinfo node: flags:" << node->ai_flags << "family:" << node->ai_family << "ai_socktype:" <<
                   node->ai_socktype << "ai_protocol:" << node->ai_protocol << "ai_addrlen:" << node->ai_addrlen;
 #endif
+
          if (node->ai_family == AF_INET) {
             QHostAddress addr;
             addr.setAddress(ntohl(((sockaddr_in *) node->ai_addr)->sin_addr.s_addr));
@@ -296,7 +300,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
       results.setError(QHostInfo::UnknownError);
       results.setErrorString(tr("Unknown error"));
    }
-#endif //  !defined (QT_NO_GETADDRINFO)
+#endif //  ! defined (QT_NO_GETADDRINFO)
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
    if (results.error() != QHostInfo::NoError) {
@@ -305,6 +309,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
    } else {
       QString tmp;
       QList<QHostAddress> addresses = results.addresses();
+
       for (int i = 0; i < addresses.count(); ++i) {
          if (i != 0) {
             tmp += ", ";
@@ -316,6 +321,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
             addresses.count(), csPrintable(hostName), csPrintable(tmp));
    }
 #endif
+
    return results;
 }
 
@@ -326,7 +332,9 @@ QString QHostInfo::localDomainName()
    if (local_res_ninit) {
       // using thread-safe version
       res_state_ptr state = res_state_ptr(malloc(sizeof(*state)));
+
       Q_CHECK_PTR(state);
+
       memset(state, 0, sizeof(*state));
       local_res_ninit(state);
 

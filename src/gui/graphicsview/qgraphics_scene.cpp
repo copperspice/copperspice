@@ -629,14 +629,13 @@ void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *newItem,
       return;
    }
 
-   // Clear focus if asked to set focus on something that can't
-   // accept input focus.
+   // Clear focus if asked to set focus on something which can not accept input focus
    if (newItem && (! (newItem->flags() & QGraphicsItem::ItemIsFocusable) ||
          ! newItem->isVisible() || ! newItem->isEnabled())) {
       newItem = nullptr;
    }
 
-   // Set focus on the scene if an item requests focus.
+   // Set focus on the scene if an item requests focus
    if (newItem != nullptr) {
       q->setFocus(focusReason);
 
@@ -644,6 +643,7 @@ void QGraphicsScenePrivate::setFocusItemHelper(QGraphicsItem *newItem,
          if (emitFocusChanged) {
             emit q->focusItemChanged(focusItem, (QGraphicsItem *)nullptr, focusReason);
          }
+
          return;
       }
    }
@@ -2516,11 +2516,12 @@ bool QGraphicsScene::event(QEvent *event)
 
          if (! d->activationRefCount) {
             if (d->activePanel) {
-               // Deactivate the active panel (but keep it so we can
-               // reactivate it later).
+               // Deactivate the active panel (but keep it so we can reactivate it later)
+
                QGraphicsItem *lastActivePanel = d->activePanel;
                d->setActivePanelHelper(nullptr, true);
                d->lastActivePanel = lastActivePanel;
+
             } else {
                // Activate all toplevel items.
                QEvent deactivateEvent(QEvent::WindowDeactivate);
@@ -3515,8 +3516,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
             pixModified = true;
          }
 
-         // Copy / "scroll" the old pixmap onto the new ole and calculate
-         // scrolled exposure.
+         // Copy / "scroll" the old pixmap onto the new ole and calculate scrolled exposure
          if (newCacheIndent != deviceData->cacheIndent || deviceRect.size() != pix.size()) {
             QPoint newDiff = newCacheIndent - deviceData->cacheIndent;
             QPixmap newPix(deviceRect.size());
@@ -3848,6 +3848,7 @@ static inline void setWorldTransform(QPainter *painter, const QTransform *const 
    const QTransform *effectTransform)
 {
    Q_ASSERT(transformPtr);
+
    if (effectTransform) {
       painter->setWorldTransform(*transformPtr **effectTransform);
    } else {
@@ -3935,6 +3936,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
             painter->restore();
             setChildClip = true;
          }
+
       } else if (itemClipsToShape) {
          // Item clips children and itself to shape. It does not have hildren stacked
          // behind, which means the clip has not yet been set. We set it now and re-use it
@@ -3948,6 +3950,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
       }
 
       painter->setOpacity(opacity);
+
       if (! item->d_ptr->cacheMode && !item->d_ptr->isWidget) {
          item->paint(painter, &styleOptionTmp, widget);
       } else {
@@ -4641,14 +4644,17 @@ void QGraphicsScene::setActiveWindow(QGraphicsWidget *widget)
 bool QGraphicsScene::sendEvent(QGraphicsItem *item, QEvent *event)
 {
    Q_D(QGraphicsScene);
+
    if (!item) {
       qWarning("QGraphicsScene::sendEvent() Unable to send event to an invalid item (nullptr)");
       return false;
    }
+
    if (item->scene() != this) {
       qWarning("QGraphicsScene::sendEvent() Item belongs to a different QGraphicsScene");
       return false;
    }
+
    return d->sendEvent(item, event);
 }
 

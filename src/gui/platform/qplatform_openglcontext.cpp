@@ -54,13 +54,11 @@ GLuint QPlatformOpenGLContext::defaultFramebufferObject(QPlatformSurface *) cons
    return 0;
 }
 
-
 QOpenGLContext *QPlatformOpenGLContext::context() const
 {
    Q_D(const QPlatformOpenGLContext);
    return d->context;
 }
-
 
 void QPlatformOpenGLContext::setContext(QOpenGLContext *context)
 {
@@ -72,6 +70,7 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
 {
    bool majorOk = false;
    bool minorOk = false;
+
    QList<QByteArray> parts = versionString.split(' ');
 
    if (versionString.startsWith(QByteArray("OpenGL ES"))) {
