@@ -2608,11 +2608,9 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
         QByteArray rectData = x1s + ' ' + y1s + ' ' + x2s + ' ' + y2s;
         xprintf("<<\n/Type /Annot\n/Subtype /Link\n/Rect [");
         xprintf(rectData.constData());
-#ifdef Q_DEBUG_PDF_LINKS
-        xprintf("]\n/Border [16 16 1]\n/A <<\n");
-#else
+
         xprintf("]\n/Border [0 0 0]\n/A <<\n");
-#endif
+
         xprintf("/Type /Action\n/S /URI\n/URI (%s)\n",
                 ti.charFormat.anchorHref().toLatin1().constData());
 
