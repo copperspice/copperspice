@@ -2,7 +2,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QBitmap
    QIcon
    QIconEngine
-   QIconEngineFactoryInterface
    QIconEnginePlugin
    QIconSet
    QImage
@@ -10,7 +9,6 @@ list(APPEND GUI_PUBLIC_INCLUDES
    QImageIOHandlerFactoryInterface
    QImageIOPlugin
    QImageReader
-   QImageTextKeyLang
    QImageWriter
    QMovie
    QPicture
@@ -25,7 +23,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qbitmap.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qicon.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengine.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconenginefactoryinterface.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconengineplugin.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qiconset.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimage.h
@@ -33,7 +30,6 @@ list(APPEND GUI_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageiohandlerfactoryinterface.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimageioplugin.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagereader.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagetextkeylang.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qimagewriter.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qmovie.h
    ${CMAKE_CURRENT_SOURCE_DIR}/image/qpicture.h
