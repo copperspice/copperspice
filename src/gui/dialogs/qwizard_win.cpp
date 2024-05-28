@@ -225,7 +225,8 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
    RECT clipRect;
    int xoffset = origin.x() + QWidget::mapToParent(r.topLeft()).x() - 1;
    int yoffset = origin.y() + QWidget::mapToParent(r.topLeft()).y() - 1;
-   const int dpr = devicePixelRatio();
+
+   const qreal dpr = devicePixelRatio();
    const QRect rDp = QRect(r.topLeft() * dpr, r.size() * dpr);
    const int xoffsetDp = xoffset * dpr;
    const int yoffsetDp = yoffset * dpr;
