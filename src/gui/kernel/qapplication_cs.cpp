@@ -164,7 +164,6 @@ bool qt_in_tab_key_event = false;
 int qt_antialiasing_threshold = -1;
 QSize QApplicationPrivate::app_strut = QSize(0, 0); // no default application strut
 int QApplicationPrivate::enabledAnimations = QPlatformTheme::GeneralUiEffect;
-bool QApplicationPrivate::widgetCount = false;
 
 #ifdef QT_KEYPAD_NAVIGATION
 Qt::NavigationMode QApplicationPrivate::navigationMode = Qt::NavigationModeKeypadTabOrder;
@@ -247,12 +246,7 @@ void QApplicationPrivate::process_cmdline()
       }
 #endif
 
-      if (arg == "-widgetcount") {
-         widgetCount = true;
-
-      } else {
-         argv[j++] = argv[i];
-      }
+      argv[j++] = argv[i];
    }
 
    if (j < argc) {

@@ -519,7 +519,6 @@ QApplication::~QApplication()
 
    QApplicationPrivate::app_strut = QSize(0, 0);
    QApplicationPrivate::enabledAnimations = QPlatformTheme::GeneralUiEffect;
-   QApplicationPrivate::widgetCount = false;
 
 #if ! defined(QT_NO_STATEMACHINE)
    // trigger unregistering of QStateMachine's GUI types
