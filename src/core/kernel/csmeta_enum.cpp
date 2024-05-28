@@ -55,11 +55,9 @@ const QString &QMetaEnum::key(int index) const
 {
    if (index < 0 || index >= m_data.size() ) {
 
-#if defined(CS_SHOW_DEBUG_CORE)
       if (m_data.isEmpty()) {
-         qDebug("QMetaEnum::key() Enum %s may not be registered", csPrintable(m_name));
+         qWarning("QMetaEnum::key() Enum %s may not be registered", csPrintable(m_name));
       }
-#endif
 
       static QString retval;
 
