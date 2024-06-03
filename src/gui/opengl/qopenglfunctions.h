@@ -48,12 +48,21 @@
     if (error != GL_NO_ERROR) { \
        unsigned clamped = qMin(unsigned(error - GL_INVALID_ENUM), 4U); \
        const char *errors[] = { "GL_INVALID_ENUM", "GL_INVALID_VALUE", "GL_INVALID_OPERATION", "Unknown" }; \
-       printf("GL error at %s:%d: %s\n", __FILE__, __LINE__, errors[clamped]); \
-       Q_ASSERT(false); \
+       qDebug("GL error at %s:%d, %s", __FILE__, __LINE__, errors[clamped]); \
     }
+
+#define Q_OPENGL_FUNCTIONS_DEBUG_ARG(var) \
+    GLenum error = glGetError(); \
+    if (error != GL_NO_ERROR) { \
+       unsigned clamped = qMin(unsigned(error - GL_INVALID_ENUM), 4U); \
+       const char *errors[] = { "GL_INVALID_ENUM", "GL_INVALID_VALUE", "GL_INVALID_OPERATION", "Unknown" }; \
+       qDebug("GL error at %s:%d, %s Argument=%d", __FILE__, __LINE__, errors[clamped], var); \
+    }
+
 #else
 
 #define Q_OPENGL_FUNCTIONS_DEBUG
+#define Q_OPENGL_FUNCTIONS_DEBUG_ARG(var)
 
 #endif
 
@@ -843,7 +852,7 @@ inline void QOpenGLFunctions::glGetIntegerv(GLenum pname, GLint* params)
     d_ptr->GetIntegerv(pname, params);
 #endif
 
-    Q_OPENGL_FUNCTIONS_DEBUG
+    Q_OPENGL_FUNCTIONS_DEBUG_ARG(pname)
 }
 
 inline const GLubyte *QOpenGLFunctions::glGetString(GLenum name)
