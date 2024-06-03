@@ -2977,28 +2977,7 @@ void QGraphicsScene::keyPressEvent(QKeyEvent *keyEvent)
 
 void QGraphicsScene::keyReleaseEvent(QKeyEvent *keyEvent)
 {
-   Q_D(QGraphicsScene);
-   QGraphicsItem *item = !d->keyboardGrabberItems.isEmpty() ? d->keyboardGrabberItems.last() : nullptr;
-   if (!item) {
-      item = focusItem();
-   }
-   if (item) {
-      QGraphicsItem *p = item;
-      do {
-         // Accept the event by default
-         keyEvent->accept();
-         // Send it; QGraphicsItem::keyPressEvent ignores it.  If the event
-         // is filtered out, stop propagating it.
-         if (p->isBlockedByModalPanel()) {
-            break;
-         }
-         if (!d->sendEvent(p, keyEvent)) {
-            break;
-         }
-      } while (!keyEvent->isAccepted() && !p->isPanel() && (p = p->parentItem()));
-   } else {
-      keyEvent->ignore();
-   }
+   QGraphicsScene::keyPressEvent(keyEvent);
 }
 
 void QGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
