@@ -3073,7 +3073,7 @@ QStyle *QApplication::style()
    }
 
    if (! qobject_cast<QApplication *>(QCoreApplication::instance())) {
-      Q_ASSERT(!"No style available without QApplication!");
+      Q_ASSERT(! "No style available without creating a QApplication");
       return nullptr;
    }
 

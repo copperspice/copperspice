@@ -133,12 +133,12 @@ class QIndexMapper
    }
 
    int from() const {
-      Q_ASSERT(!v);
+      Q_ASSERT(! v);
       return m_from;
    }
 
    int to() const {
-      Q_ASSERT(!v);
+      Q_ASSERT(! v);
       return m_to;
    }
 

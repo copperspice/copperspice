@@ -345,7 +345,7 @@ QPlatformAccessibility *QXcbIntegration::accessibility() const
 {
 #ifndef QT_NO_ACCESSIBILITY_ATSPI_BRIDGE
    if (! m_accessibility) {
-      Q_ASSERT_X(QCoreApplication::eventDispatcher(), "QXcbIntegration", "Initializing accessibility without event-dispatcher!");
+      Q_ASSERT_X(QCoreApplication::eventDispatcher(), "QXcbIntegration", "Initializing accessibility without event-dispatcher");
       m_accessibility.reset(new QSpiAccessibleBridge());
    }
 #endif

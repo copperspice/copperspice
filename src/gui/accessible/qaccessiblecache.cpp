@@ -74,12 +74,12 @@ QAccessible::Id QAccessibleCache::insert(QObject *object, QAccessibleInterface *
 {
    Q_ASSERT(iface);
 
-   // object might be 0
-   Q_ASSERT(!objectToId.contains(object));
-   Q_ASSERT_X(!interfaceToId.contains(iface), "", "Accessible interface inserted into cache twice!");
+   Q_ASSERT(! objectToId.contains(object));
+   Q_ASSERT_X(! interfaceToId.contains(iface), "", "Accessible interface inserted into cache twice");
 
    QAccessible::Id id = acquireId();
    QObject *obj = iface->object();
+
    Q_ASSERT(object == obj);
 
    if (obj) {

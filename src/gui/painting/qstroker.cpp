@@ -622,7 +622,7 @@ void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine
          }
 
       } else {
-         Q_ASSERT(!"QStroker::joinPoints(), bad join style...");
+         Q_ASSERT(! "QStroker::joinPoints() Bad join style");
       }
    }
 }

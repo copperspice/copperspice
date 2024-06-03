@@ -766,7 +766,7 @@ void QWindowsFontDatabase::populateFamily(const QString &familyName, bool regist
    EnumFontFamiliesExW(dummy, &lf, storeFont, LPARAM(registerAlias), 0);
 
    if (! storeFont_callback) {
-      Q_ASSERT_X(false, "QWindowsfontdatabase(): No font families were found for ", csPrintable(familyName));
+      Q_ASSERT_X(false, "QWindowsfontdatabase() No font families were found for ", csPrintable(familyName));
    }
 
    ReleaseDC(nullptr, dummy);

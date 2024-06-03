@@ -338,9 +338,9 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
             | notGestures);
       m_maybeGestures -= notMaybeGestures;
 
-      Q_ASSERT((startedGestures & finishedGestures).isEmpty());
-      Q_ASSERT((startedGestures & newMaybeGestures).isEmpty());
-      Q_ASSERT((startedGestures & canceledGestures).isEmpty());
+      Q_ASSERT((startedGestures  & finishedGestures).isEmpty());
+      Q_ASSERT((startedGestures  & newMaybeGestures).isEmpty());
+      Q_ASSERT((startedGestures  & canceledGestures).isEmpty());
       Q_ASSERT((finishedGestures & newMaybeGestures).isEmpty());
       Q_ASSERT((finishedGestures & canceledGestures).isEmpty());
       Q_ASSERT((canceledGestures & newMaybeGestures).isEmpty());

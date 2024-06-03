@@ -66,7 +66,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
    (void) widgetTextures;
    Q_ASSERT(! region.isEmpty());
 #else
-   Q_ASSERT(!region.isEmpty() || widgetTextures);
+   Q_ASSERT(! region.isEmpty() || widgetTextures);
 #endif
 
    Q_ASSERT(widget);
@@ -891,7 +891,7 @@ static void findAllTextureWidgetsRecursively(QWidget *tlw, QWidget *widget)
 static QPlatformTextureList *widgetTexturesFor(QWidget *tlw, QWidget *widget)
 {
    for (QPlatformTextureList *tl : QWidgetPrivate::get(tlw)->topData()->widgetTextures) {
-      Q_ASSERT(!tl->isEmpty());
+      Q_ASSERT(! tl->isEmpty());
 
       for (int i = 0; i < tl->count(); ++i) {
          QWidget *w = static_cast<QWidget *>(tl->source(i));

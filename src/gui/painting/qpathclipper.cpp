@@ -1875,7 +1875,7 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
 {
    QVector<QCrossingEdge> crossings = findCrossings(list, y);
 
-   Q_ASSERT(!crossings.isEmpty());
+   Q_ASSERT(! crossings.isEmpty());
 
    std::sort(crossings.begin(), crossings.end());
 

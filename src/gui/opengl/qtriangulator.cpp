@@ -1528,8 +1528,13 @@ void QTriangulator<T>::ComplexToSimple::removeUnwantedEdgesAndConnect()
             while (current != b.second) {
                 Q_ASSERT(current);
                 Q_ASSERT(m_edges.at(current->data).node == current);
-                Q_ASSERT(QT_PREPEND_NAMESPACE(qIntersectionPoint)(event.point).isOnLine(m_parent->m_vertices.at(m_edges.at(current->data).from), m_parent->m_vertices.at(m_edges.at(current->data).to)));
-                Q_ASSERT(m_parent->m_vertices.at(m_edges.at(current->data).from) == event.point || m_parent->m_vertices.at(m_edges.at(current->data).to) == event.point);
+
+                Q_ASSERT(QT_PREPEND_NAMESPACE(qIntersectionPoint)(event.point).isOnLine(
+                      m_parent->m_vertices.at(m_edges.at(current->data).from), m_parent->m_vertices.at(m_edges.at(current->data).to)));
+
+                Q_ASSERT(m_parent->m_vertices.at(m_edges.at(current->data).from) ==
+                      event.point || m_parent->m_vertices.at(m_edges.at(current->data).to) == event.point);
+
                 insertEdgeIntoVectorIfWanted(orderedEdges, current->data);
                 current = m_edgeList.next(current);
             }
