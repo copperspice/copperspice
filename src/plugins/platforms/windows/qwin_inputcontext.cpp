@@ -80,7 +80,7 @@ static inline QByteArray debugComposition(int lParam)
 static inline void imeNotifyCancelComposition(HWND hwnd)
 {
    if (!hwnd) {
-      qWarning() << __FUNCTION__ << "called with" << hwnd;
+      qWarning() << "imeNotifyCancelComposition() Called with" << hwnd;
       return;
    }
 
@@ -375,7 +375,7 @@ bool QWindowsInputContext::startComposition(HWND hwnd)
 void QWindowsInputContext::startContextComposition()
 {
    if (m_compositionContext.isComposing) {
-      qWarning("%s: Called out of sequence.", __FUNCTION__);
+      qWarning("QWindowsInputContext::startContextComposition() Called out of sequence");
       return;
    }
    m_compositionContext.isComposing = true;
@@ -388,7 +388,7 @@ void QWindowsInputContext::startContextComposition()
 void QWindowsInputContext::endContextComposition()
 {
    if (!m_compositionContext.isComposing) {
-      qWarning("%s: Called out of sequence.", __FUNCTION__);
+      qWarning("WindowsInputContext::endContextComposition() Called out of sequence");
       return;
    }
 

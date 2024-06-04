@@ -344,7 +344,7 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
       tme.dwHoverTime = HOVER_DEFAULT;
 
       if (!TrackMouseEvent(&tme)) {
-         qWarning("TrackMouseEvent failed.");
+         qWarning("QWindowsMouseHandler::translateMouseEvent() TrackMouseEvent failed");
       }
       m_trackedWindow =  window;
    }
@@ -514,7 +514,7 @@ bool QWindowsMouseHandler::translateTouchEvent(QWindow *window, HWND,
    typedef QList<QWindowSystemInterface::TouchPoint> QTouchPointList;
 
    if (! QWindowsContext::instance()->initTouch()) {
-      qWarning("Unable to initialize touch handling.");
+      qWarning("QWindowsMouseHandler::translateTouchEvent() Unable to initialize touch handling");
       return true;
    }
 

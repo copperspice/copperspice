@@ -99,7 +99,7 @@ static bool monitorData(HMONITOR hMonitor, QWindowsScreenData *data)
          DeleteDC(hdc);
 
       } else {
-         qWarning("monitorData(): Unable to obtain handle for monitor '%s', defaulting to %g DPI.",
+         qWarning("monitorData() Unable to obtain handle for monitor %s, defaulting to %g DPI.",
             csPrintable(QString::fromStdWString(std::wstring(info.szDevice))), data->dpi.first);
 
       } // CreateDC() failed

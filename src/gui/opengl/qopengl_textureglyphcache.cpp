@@ -167,7 +167,7 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
 {
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx == nullptr) {
-        qWarning("QOpenGLTextureGlyphCache::resizeTextureData: Called with no context");
+        qWarning("QOpenGLTextureGlyphCache::resizeTextureData() Called with no context");
         return;
     }
 

@@ -558,7 +558,7 @@ HCURSOR QWindowsCursor::createCursorFromShape(Qt::CursorShape cursorShape, const
       }
    }
 
-   qWarning("QWindowsCursor::createCursorFromShape(): Invalid cursor shape %d", cursorShape);
+   qWarning("QWindowsCursor::createCursorFromShape() Invalid cursor shape %d", cursorShape);
 
    return nullptr;
 }
@@ -641,7 +641,7 @@ void QWindowsCursor::changeCursor(QCursor *cursorIn, QWindow *window)
       QWindowsWindow::baseWindowOf(window)->setCursor(wcursor);
 
    } else {
-      qWarning("QWindowsCursor::changeCursor(): Unable to obtain system cursor for %d", cursorIn->shape());
+      qWarning("QWindowsCursor::changeCursor() Unable to obtain system cursor for %d", cursorIn->shape());
    }
 }
 

@@ -746,7 +746,7 @@ static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *t
 void QWindowsFontDatabase::populateFamily(const QString &familyName, bool registerAlias)
 {
    if (familyName.size() >= LF_FACESIZE) {
-      qWarning() << "QWindowsFontDatabase::populateFamily(): Unable to enumerate font family =" << familyName;
+      qWarning() << "QWindowsFontDatabase::populateFamily() Unable to enumerate font family =" << familyName;
       return;
    }
 
@@ -921,7 +921,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
    QString actualFontName = font.changeFamilyName(uniqueFamilyName);
 
    if (actualFontName.isEmpty()) {
-      qWarning("QWindowsFontDatabase::fontEngine: Unable to change family name of font");
+      qWarning("QWindowsFontDatabase::fontEngine() Unable to change family name of font");
       return nullptr;
    }
 
@@ -937,7 +937,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
    }
 
    if (fontHandle == nullptr) {
-      qWarning("QWindowsFontDatabase::fontEngine: AddFontMemResourceEx failed");
+      qWarning("QWindowsFontDatabase::fontEngine() AddFontMemResourceEx failed");
 
    } else {
       QFontDef request;
@@ -950,7 +950,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
 
       if (fontEngine) {
          if (request.family != fontEngine->fontDef.family) {
-            qWarning("QWindowsFontDatabase::fontEngine: Failed to load font, using fallback instead: %s ",
+            qWarning("QWindowsFontDatabase::fontEngine() Failed to load font, using fallback instead: %s ",
                csPrintable(fontEngine->fontDef.family));
 
             if (fontEngine->m_refCount.load() == 0) {

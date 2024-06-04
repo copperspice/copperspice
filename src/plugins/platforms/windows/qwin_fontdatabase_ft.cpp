@@ -308,7 +308,7 @@ void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
    qDebug() << familyName;
 
    if (familyName.size() >= LF_FACESIZE) {
-      qWarning() << "Unable to enumerate family '" << familyName << '\'';
+      qWarning() << "QWindowsFontDatabaseFT::populateFamily() Unable to enumerate family name = " << familyName;
       return;
    }
 

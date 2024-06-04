@@ -452,9 +452,9 @@ void QWindowsDialogHelperBase<BaseClass>::cleanupThread()
          m_thread->wait(300);
 
          if (m_thread->isRunning()) {
-            qCritical() << __FUNCTION__ << "Failed to terminate thread.";
+            qCritical("cleanupThread() Failed to terminate thread");
          } else {
-            qWarning() << __FUNCTION__ << "Thread terminated.";
+            qWarning("cleanupThread() Thread terminated");
          }
       }
 
@@ -467,7 +467,7 @@ template <class BaseClass>
 QWindowsNativeDialogBase *QWindowsDialogHelperBase<BaseClass>::nativeDialog() const
 {
    if (m_nativeDialog.isNull()) {
-      qWarning("%s invoked with no native dialog present.", __FUNCTION__);
+      qWarning("nativeDialog() Invoked with no native dialog present");
       return nullptr;
    }
 
@@ -994,7 +994,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
                   nullptr, IID_IShellItem, reinterpret_cast<void **>(&result));
 
       if (FAILED(hr)) {
-         qErrnoWarning("%s: SHCreateItemFromParsingName(%s)) failed", __FUNCTION__, csPrintable(url.toString()));
+         qErrnoWarning("shellItem() SHCreateItemFromParsingName(%s)) failed", csPrintable(url.toString()));
          return nullptr;
       }
 
@@ -1012,7 +1012,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       const QUuid uuid(url.path());
 
       if (uuid.isNull()) {
-         qWarning() << __FUNCTION__ << ": Invalid CLSID: " << url.path();
+         qWarning() << "shellItem() Invalid CLSID: " << url.path();
          return nullptr;
       }
 
@@ -1020,7 +1020,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       HRESULT hr = QWindowsContext::shell32dll.sHGetKnownFolderIDList(uuid, 0, nullptr, &idList);
 
       if (FAILED(hr)) {
-         qErrnoWarning("%s: SHGetKnownFolderIDList(%s)) failed", __FUNCTION__, csPrintable(url.toString()));
+         qErrnoWarning("shellItem() SHGetKnownFolderIDList(%s)) failed", csPrintable(url.toString()));
          return nullptr;
       }
 
@@ -1028,13 +1028,13 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       CoTaskMemFree(idList);
 
       if (FAILED(hr)) {
-         qErrnoWarning("%s: SHCreateItemFromIDList(%s)) failed", __FUNCTION__, csPrintable(url.toString()));
+         qErrnoWarning("shellItem() SHCreateItemFromIDList(%s)) failed", csPrintable(url.toString()));
          return nullptr;
       }
       return result;
 
    } else {
-      qWarning() << __FUNCTION__ << ": Unhandled scheme: " << url.scheme();
+      qWarning() << "shellItem() Unhandled scheme: " << url.scheme();
    }
 
    return nullptr;
@@ -1118,7 +1118,7 @@ void QWindowsNativeFileDialogBase::setMode(QPlatformFileDialogOptions::FileMode 
 #endif
 
    if (FAILED(m_fileDialog->SetOptions(flags))) {
-      qErrnoWarning("%s: SetOptions() failed", __FUNCTION__);
+      qErrnoWarning("QWindowsNativeFileDialog::setMode() SetOptions() failed");
    }
 }
 
@@ -1423,9 +1423,8 @@ void QWindowsNativeFileDialogBase::selectNameFilter(const QString &filter)
    }
    const int index = indexOfNameFilter(m_nameFilters, filter);
    if (index < 0) {
-      qWarning("%s: Invalid parameter '%s' not found in '%s'.",
-         __FUNCTION__, csPrintable(filter),
-         csPrintable(m_nameFilters.join(QString(", "))));
+      qWarning("selectNameFilter() Invalid parameter %s not found in %s",
+            csPrintable(filter), csPrintable(m_nameFilters.join(", ")));
       return;
    }
    m_fileDialog->SetFileTypeIndex(index + 1); // one-based.

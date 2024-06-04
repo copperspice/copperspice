@@ -2985,7 +2985,7 @@ static QSvgNode *createImageNode(QSvgNode *parent, const QXmlStreamAttributes &a
    }
 
    if (nwidth <= 0 || nheight <= 0) {
-        qWarning() << "QSvgHandler: Width or height for" << filename << "image was not greater than 0";
+      qWarning() << "QSvgHandler: Width or height for" << filename << "image was not greater than 0";
         return nullptr;
    }
    QImage image;

@@ -927,8 +927,8 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    } else {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
 
-      QString fatalMessage = QString("The application failed to start because the platform plugin was not found or did not load.\n"
-                  "Requested Plugin Key: \"%1\"\n\n").formatArg(pluginKey);
+      QString fatalMessage = QString("The application failed to start because the platform plugin was "
+            "not found or did not load.\nRequested Plugin Key: \"%1\"\n\n").formatArg(pluginKey);
 
       if (! keys.isEmpty()) {
          fatalMessage += QString("Available platform plugins: %1.\n\n").formatArg(keys.join(", "));

@@ -180,7 +180,7 @@ QWidgetPrivate::QWidgetPrivate()
 #endif
 {
    if (! qApp) {
-      qFatal("QWidget: Must construct a QApplication before a QWidget");
+      qFatal("QWidget() Must construct a QApplication before a QWidget");
       return;
    }
 
@@ -9517,11 +9517,7 @@ QOpenGLContext *QWidgetPrivate::shareContext() const
 
 #else
    if (! extra || ! extra->topextra || ! extra->topextra->window) {
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
       qWarning("QWidget::shareContext() Requested a share context for a widget which does not have a window handle");
-#endif
-
       return nullptr;
    }
 

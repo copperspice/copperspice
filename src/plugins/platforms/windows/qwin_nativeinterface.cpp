@@ -70,7 +70,9 @@ static int resourceType(const QByteArray &key)
 void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resource, QWindow *window)
 {
    if (! window || ! window->handle()) {
-      qWarning("%s: '%s' requested for null window or window without handle.", __FUNCTION__, resource.constData());
+      qWarning("QWindowsNativeInterface::nativeResourceForWindow() Called with a null window or a window without a handle, %s",
+            resource.constData());
+
       return nullptr;
    }
 
@@ -99,7 +101,7 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
          break;
    }
 
-   qWarning("%s: Invalid key '%s' requested.", __FUNCTION__, resource.constData());
+   qWarning("QWindowsNativeInterface::nativeResourceForWindow() Invalid key, %s", resource.constData());
 
    return nullptr;
 }
@@ -158,7 +160,7 @@ void *QWindowsNativeInterface::nativeResourceForIntegration(const QByteArray &re
 void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context)
 {
    if (!context || ! context->handle()) {
-      qWarning("nativeResourceForContext(): '%s' requested for null context or context without handle.", resource.constData());
+      qWarning("nativeResourceForContext() Called with a null context or a conttext without a handle, %s", resource.constData());
       return nullptr;
    }
 
@@ -179,7 +181,7 @@ void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resour
          break;
    }
 
-   qWarning("nativeResourceForContext(): Invalid key '%s' requested.", resource.constData());
+   qWarning("nativeResourceForContext() Invalid key, %s", resource.constData());
 
    return nullptr;
 }

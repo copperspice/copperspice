@@ -28,7 +28,8 @@
 void *QWindowsGdiNativeInterface::nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *bs)
 {
    if (! bs || ! bs->handle()) {
-      qWarning("%s: '%s' requested for null backingstore or backingstore without handle.", __FUNCTION__, resource.constData());
+      qWarning("QWindowsGdiNativeInterface::nativeResourceForBackingStore() Requested resource %s "
+            "for null backingstore or backingstore without handle", resource.constData());
       return nullptr;
    }
 
@@ -38,7 +39,7 @@ void *QWindowsGdiNativeInterface::nativeResourceForBackingStore(const QByteArray
       return wbs->getDC();
    }
 
-   qWarning("%s: Invalid key '%s' requested.", __FUNCTION__, resource.constData());
+   qWarning("QWindowsGdiNativeInterface::nativeResourceForBackingStore() Invalid key %s requested", resource.constData());
 
    return nullptr;
 }

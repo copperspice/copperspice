@@ -425,7 +425,7 @@ HTHEME QWindowsXPStylePrivate::createTheme(int theme, HWND hwnd)
       m_themes[theme] = pOpenThemeData(hwnd, name);
 
       if (!m_themes[theme]) {
-         qErrnoWarning("OpenThemeData(): Failed for theme %d (%s).", theme, csPrintable(themeName(theme)));
+         qErrnoWarning("OpenThemeData() Failed for theme %d (%s).", theme, csPrintable(themeName(theme)));
       }
    }
 

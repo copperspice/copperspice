@@ -270,11 +270,7 @@ void QOpenGLWidgetPrivate::initialize()
    QOpenGLContext *shareContext = get(tlw)->shareContext();
 
    if (! shareContext) {
-
-#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
       qWarning("QOpenGLWidget:initialize() Unable to use QOpenGLWidget without a context");
-#endif
-
       return;
    }
 
@@ -291,7 +287,7 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setScreen(shareContext->screen());
 
    if (! ctx->create()) {
-      qWarning("QOpenGLWidget::initialize() Failed to create context");
+      qWarning("QOpenGLWidget::initialize() Failed to create an OpenGL context");
       return;
    }
 
@@ -319,7 +315,7 @@ void QOpenGLWidgetPrivate::initialize()
    surface->create();
 
    if (!ctx->makeCurrent(surface)) {
-      qWarning("QOpenGLWidget::initialize() Failed to make context current");
+      qWarning("QOpenGLWidget::initialize() Failed to make the OpenGL context current");
       return;
    }
 
@@ -463,7 +459,7 @@ QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags flags)
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)) {
       d->setRenderToTexture();
    } else {
-      qWarning("QOpenGLWidget::QOpenGLWidget() Method not supported on this platform");
+      qWarning("QOpenGLWidget() Class not supported on this platform");
    }
 }
 

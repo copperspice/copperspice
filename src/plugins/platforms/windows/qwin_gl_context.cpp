@@ -172,7 +172,7 @@ bool QWindowsOpengl32DLL::init(bool softwareRendering)
    m_lib = ::LoadLibraryA(openglDll.constData());
 
    if (!m_lib) {
-      qErrnoWarning(::GetLastError(), "Failed to load %s", openglDll.constData());
+      qErrnoWarning(::GetLastError(), "QWindowsOpengl32DLL::init() Failed to load %s", openglDll.constData());
       return false;
    }
 
@@ -623,12 +623,12 @@ static inline HGLRC createContext(HDC hdc, HGLRC shared)
    HGLRC result = QOpenGLStaticContext::opengl32.wglCreateContext(hdc);
 
    if (!result) {
-      qErrnoWarning("%s: wglCreateContext failed.", __FUNCTION__);
+      qErrnoWarning("createContext() CreateContext failed");
       return nullptr;
    }
 
    if (shared && !QOpenGLStaticContext::opengl32.wglShareLists(shared, result)) {
-      qErrnoWarning("%s: wglShareLists() failed.", __FUNCTION__);
+      qErrnoWarning("createContext() Call to wglShareLists() failed");
    }
 
    return result;
@@ -849,7 +849,7 @@ static QSurfaceFormat qSurfaceFormatFromHDC(const QOpenGLStaticContext &staticCo
 
    if (!staticContext.wglGetPixelFormatAttribIVARB(hdc, pixelFormat, 0, i,
          iAttributes, iValues)) {
-      qErrnoWarning("%s: wglGetPixelFormatAttribIVARB() failed for basic parameters.", __FUNCTION__);
+      qErrnoWarning("qSurfaceFormatFromHDC() Call to wglGetPixelFormatAttribIVARB() failed for basic parameters");
       return result;
    }
 
@@ -986,18 +986,18 @@ static inline HGLRC createDummyGLContext(HDC dc)
 
    const int pixelFormat = ChoosePixelFormat(dc, &pixelFormDescriptor);
    if (! pixelFormat) {
-      qErrnoWarning("%s: ChoosePixelFormat failed.", __FUNCTION__);
+      qErrnoWarning("createDummyGLContext() ChoosePixelFormat failed");
       return nullptr;
    }
 
    if (! QOpenGLStaticContext::opengl32.setPixelFormat(dc, pixelFormat, &pixelFormDescriptor)) {
-      qErrnoWarning("%s: SetPixelFormat failed.", __FUNCTION__);
+      qErrnoWarning("createDummyGLContext() SetPixelFormat failed");
       return nullptr;
    }
 
    HGLRC rc = QOpenGLStaticContext::opengl32.wglCreateContext(dc);
    if (!rc) {
-      qErrnoWarning("%s: wglCreateContext failed.", __FUNCTION__);
+      qErrnoWarning("createDummyGLContext() Loading wglCreateContext failed");
       return nullptr;
    }
 
@@ -1162,7 +1162,7 @@ QByteArray QOpenGLStaticContext::getGlString(unsigned int which)
 QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
 {
    if (!opengl32.init(softwareRendering)) {
-      qWarning("Failed to load and resolve WGL/OpenGL functions");
+      qWarning("QOpenGLStaticContext::create() Failed to load and resolve WGL/OpenGL functions");
       return nullptr;
    }
 
@@ -1195,7 +1195,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
    if (nativeHandle.isValid()) {
       // Adopt and existing context.
       if (!nativeHandle.canConvert<QWGLNativeContext>()) {
-         qWarning("QWindowsGLContext: Requires a QWGLNativeContext");
+         qWarning("QWindowsGLContext() Requires a QWGLNativeContext");
          return;
       }
 
@@ -1204,7 +1204,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       HWND wnd = handle.window();
 
       if (! wglcontext || !wnd) {
-         qWarning("QWindowsGLContext: No context and window given");
+         qWarning("QWindowsGLContext() No context and window given");
          return;
       }
 
@@ -1215,12 +1215,12 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       bool ok = m_pixelFormat != 0;
 
       if (!ok) {
-         qWarning("QWindowsGLContext: Failed to get pixel format");
+         qWarning("QWindowsGLContext() Failed to get pixel format");
       }
 
       ok = DescribePixelFormat(dc, m_pixelFormat, sizeof(PIXELFORMATDESCRIPTOR), &m_obtainedPixelFormatDescriptor);
       if (!ok) {
-         qWarning("QWindowsGLContext: Failed to describe pixel format");
+         qWarning("QWindowsGLContext() Failed to describe pixel format");
 
       } else {
          QWindowsOpenGLAdditionalFormat obtainedAdditional;
@@ -1318,12 +1318,12 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       }
 
       if (! m_pixelFormat) {
-         qWarning("%s: Unable find a suitable pixel format.", __FUNCTION__);
+         qWarning("QWindowsGLContext() Unable to find a suitable pixel format");
          break;
       }
 
       if (! QOpenGLStaticContext::opengl32.setPixelFormat(hdc, m_pixelFormat, &m_obtainedPixelFormatDescriptor)) {
-         qErrnoWarning("SetPixelFormat failed.");
+         qErrnoWarning("QWindowsGLContext() SetPixelFormat failed");
          break;
       }
 
@@ -1343,7 +1343,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       }
 
       if (!m_renderingContext) {
-         qWarning("Unable to create a GL Context.");
+         qWarning("QWindowsGLContext() Unable to create a GL Context");
          break;
       }
 
@@ -1392,7 +1392,7 @@ bool QWindowsGLContext::updateObtainedParams(HDC hdc, int *obtainedSwapInterval)
    HDC prevSurface = QOpenGLStaticContext::opengl32.wglGetCurrentDC();
 
    if (!QOpenGLStaticContext::opengl32.wglMakeCurrent(hdc, m_renderingContext)) {
-      qWarning("Failed to make context current.");
+      qWarning("QWindowsGLContext::updateObtainedParams() Failed to make context current");
       return false;
    }
 

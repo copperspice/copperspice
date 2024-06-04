@@ -124,12 +124,12 @@ bool parseIntOption(const QString &parameter, const QLatin1String &option,
          *target = static_cast<IntType>(value);
 
       } else {
-         qWarning() << "Value" << value << "for option" << option << "out of range"
+         qWarning() << "parseIntOption() Value = " << value << "for option " << option << " out of range"
             << minimumValue << ".." << maximumValue;
       }
 
    } else {
-      qWarning() << "Invalid value" << valueView << "for option" << option;
+      qWarning() << "parseIntOption() Invalid value = " << valueView << " for option" << option;
    }
 
    return true;
@@ -166,7 +166,7 @@ static inline unsigned parseOptions(const QStringList &paramList,
          || parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware, QtWindows::ProcessPerMonitorDpiAware,
             dpiAwareness)) {
       } else {
-         qWarning() << "Unknown option" << param;
+         qWarning() << "parseOptions() Unknown option" << param;
       }
    }
 
@@ -332,12 +332,12 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
          if (QWindowsStaticOpenGLContext *glCtx = QOpenGLStaticContext::create()) {
             if ((QWindowsOpenGLTester::supportedRenderers() & QWindowsOpenGLTester::DisableRotationFlag)
                && !QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
-               qWarning("Unable to disable rotation.");
+               qWarning("QWindowsStaticOpenGLContext::doCreate() Unable to disable rotation");
             }
             return glCtx;
          }
 
-         qWarning("System OpenGL failed. Falling back to Software OpenGL.");
+         qWarning("QWindowsStaticOpenGLContext::doCreate() System OpenGL failed, Falling back to Software OpenGL");
          return QOpenGLStaticContext::create(true);
 
       // If ANGLE is requested, use it, don't try anything else.
@@ -353,7 +353,8 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
          if (QWindowsStaticOpenGLContext *swCtx = QOpenGLStaticContext::create(true)) {
             return swCtx;
          }
-         qWarning("Software OpenGL failed. Falling back to system OpenGL.");
+
+         qWarning("QWindowsStaticOpenGLContext::doCreate() Software OpenGL failed, Falling back to system OpenGL");
 
          if (QWindowsOpenGLTester::supportedRenderers() & QWindowsOpenGLTester::DesktopGl) {
             return QOpenGLStaticContext::create();
@@ -370,7 +371,7 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
       if (QWindowsStaticOpenGLContext *glCtx = QOpenGLStaticContext::create()) {
          if ((supportedRenderers & QWindowsOpenGLTester::DisableRotationFlag)
             && !QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
-            qWarning("Unable to disable rotation.");
+            qWarning("QWindowsStaticOpenGLContext::doCreate() Unable to disable rotation");
          }
          return glCtx;
       }

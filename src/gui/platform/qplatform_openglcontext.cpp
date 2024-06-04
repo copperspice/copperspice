@@ -91,7 +91,7 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
 
       } else {
          // If < 3 parts to the name, it is an unrecognised OpenGL ES
-         qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognised OpenGL ES version");
+         qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unknown OpenGL ES version");
       }
 
    } else {
@@ -106,7 +106,7 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
    }
 
    if (!majorOk || !minorOk) {
-      qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL version");
+      qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unknown OpenGL version");
    }
 
    return (majorOk && minorOk);

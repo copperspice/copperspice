@@ -715,7 +715,8 @@ void QOpenGLFramebufferObject::addColorAttachment(const QSize &size, GLenum inte
     Q_D(QOpenGLFramebufferObject);
 
     if (!QOpenGLContext::currentContext()->functions()->hasOpenGLFeature(QOpenGLFunctions::MultipleRenderTargets)) {
-        qWarning("Multiple render targets not supported, ignoring extra color attachment request");
+        qWarning("QOpenGLFramebufferObject::addColorAttachment() "
+              "Multiple render targets not supported, ignoring extra color attachment request");
         return;
     }
 
@@ -989,7 +990,7 @@ QImage QOpenGLFramebufferObject::toImage(bool flipped, int colorAttachmentIndex)
     }
 
     if (d->colorAttachments.count() <= colorAttachmentIndex) {
-        qWarning("QOpenGLFramebufferObject::toImage() called for missing color attachment");
+        qWarning("QOpenGLFramebufferObject::toImage() Called for missing color attachment");
         return QImage();
     }
 

@@ -145,7 +145,7 @@ bool QOpenGLShaderPrivate::create()
     }
 
     if (! shader) {
-        qWarning() << "QOpenGLShader: Unable to create shader";
+        qWarning("QOpenGLShader::create() Unable to create shader");
         return false;
     }
 
@@ -232,14 +232,14 @@ bool QOpenGLShaderPrivate::compile(QOpenGLShader *q)
         }
 
         if (name.isEmpty()) {
-            qWarning("QOpenGLShader::compile(%s): %s", type, csPrintable(log));
+            qWarning("QOpenGLShader::compile(%s) %s", type, csPrintable(log));
         } else {
-            qWarning("QOpenGLShader::compile(%s)[%s]: %s", type, csPrintable(name), csPrintable(log));
+            qWarning("QOpenGLShader::compile(%s)[%s] %s", type, csPrintable(name), csPrintable(log));
         }
 
         // Dump the source code if we got it
         if (sourceCodeBuffer) {
-            qWarning("*** Problematic %s shader source code ***", type);
+            qWarning("*** Problem %s shader source code ***", type);
             qWarning() << csPrintable(QString::fromLatin1(sourceCodeBuffer));
             qWarning("***");
         }
@@ -508,7 +508,7 @@ bool QOpenGLShader::compileSourceFile(const QString& fileName)
     QFile file(fileName);
 
     if (! file.open(QFile::ReadOnly)) {
-        qWarning() << "QOpenGLShader: Unable to open file" << fileName;
+        qWarning() << "QOpenGLShader::compileSourceFile() Unable to open file" << fileName;
         return false;
     }
 
@@ -671,7 +671,7 @@ bool QOpenGLShaderProgram::init()
 
     GLuint program = d->glfuncs->glCreateProgram();
     if (! program) {
-        qWarning() << "QOpenGLShaderProgram: could not create shader program";
+        qWarning("QOpenGLShaderProgram::init() Unable to compile shader program");
         return false;
     }
 
@@ -702,7 +702,7 @@ bool QOpenGLShaderProgram::addShader(QOpenGLShader *shader)
         }
 
         if (d->programGuard->group() != shader->d_func()->shaderGuard->group()) {
-            qWarning("QOpenGLShaderProgram::addShader: Program and shader are not associated with same context.");
+            qWarning("QOpenGLShaderProgram::addShader() Program and shader are not associated with same context");
             return false;
         }
 
@@ -857,9 +857,9 @@ bool QOpenGLShaderProgram::link()
             QString name = objectName();
 
             if (name.isEmpty()) {
-                qWarning() << "QOpenGLShader::link:" << d->log;
+                qWarning() << "QOpenGLShader::link()" << d->log;
             } else {
-                qWarning() << "QOpenGLShader::link[" << name << "]:" << d->log;
+                qWarning() << "QOpenGLShader::link() name =" << name << " " << d->log;
             }
         }
 
@@ -970,7 +970,7 @@ int QOpenGLShaderProgram::attributeLocation(const char *name) const
 
     } else {
         qWarning() << "QOpenGLShaderProgram::attributeLocation(" << name
-                   << "): shader program is not linked";
+                   << ") Shader program is not linked";
         return -1;
     }
 }
@@ -1115,7 +1115,7 @@ void QOpenGLShaderProgram::setAttributeValue(int location, const GLfloat *values
     (void) d;
 
     if (rows < 1 || rows > 4) {
-        qWarning() << "QOpenGLShaderProgram::setAttributeValue: rows" << rows << "not supported";
+        qWarning() << "QOpenGLShaderProgram::setAttributeValue() rows" << rows << "not supported";
         return;
     }
 
@@ -1274,8 +1274,7 @@ int QOpenGLShaderProgram::uniformLocation(const char *name) const
     if (d->linked && d->programGuard && d->programGuard->id()) {
         return d->glfuncs->glGetUniformLocation(d->programGuard->id(), name);
     } else {
-        qWarning() << "QOpenGLShaderProgram::uniformLocation(" << name
-              << "): shader program is not linked";
+        qWarning() << "QOpenGLShaderProgram::uniformLocation() Shader program is not linked " << name;
         return -1;
     }
 }
@@ -1792,7 +1791,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *val
             d->glfuncs->glUniform4fv(location, count, values);
 
         } else {
-            qWarning() << "QOpenGLShaderProgram::setUniformValue: size" << tupleSize << "not supported";
+            qWarning() << "QOpenGLShaderProgram::setUniformValue() size" << tupleSize << "not supported";
         }
     }
 }
