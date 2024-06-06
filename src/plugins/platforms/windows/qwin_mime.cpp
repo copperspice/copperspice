@@ -960,10 +960,6 @@ QVariant QWindowsMimeHtml::convertToMime(const QString &mime, IDataObject *pData
    if (canConvertToMime(mime, pDataObj)) {
       QByteArray html = getData(CF_HTML, pDataObj);
 
-#if defined(CS_SHOW_DEBUG)
-      qDebug() << "QWindowsMimeHtml::convertToMime(): Raw =" << html;
-#endif
-
       int start = html.indexOf("StartHTML:");
       int end   = html.indexOf("EndHTML:");
 
@@ -1641,10 +1637,6 @@ QStringList QWindowsMimeConverter::allMimesForFormats(IDataObject *pDataObj) con
 QWindowsMime *QWindowsMimeConverter::converterFromMime(const FORMATETC &formatetc, const QMimeData *mimeData) const
 {
    ensureInitialized();
-
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "converterFromMime():" << formatetc;
-#endif
 
    for (int i = m_mimes.size() - 1; i >= 0; --i) {
       if (m_mimes.at(i)->canConvertFromMime(formatetc, mimeData)) {

@@ -220,10 +220,6 @@ void QPainterPath::closeSubpath()
 
 void QPainterPath::moveTo(const QPointF &p)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::moveTo() (%.2f,%.2f)\n", p.x(), p.y());
-#endif
-
    if (! qt_is_finite(p.x()) || ! qt_is_finite(p.y())) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
@@ -253,10 +249,6 @@ void QPainterPath::moveTo(const QPointF &p)
 
 void QPainterPath::lineTo(const QPointF &p)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::lineTo() (%.2f,%.2f)\n", p.x(), p.y());
-#endif
-
    if (! qt_is_finite(p.x()) || ! qt_is_finite(p.y())) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
@@ -284,11 +276,6 @@ void QPainterPath::lineTo(const QPointF &p)
 
 void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &e)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::cubicTo() (%.2f,%.2f), (%.2f,%.2f), (%.2f,%.2f)\n",
-      c1.x(), c1.y(), c2.x(), c2.y(), e.x(), e.y());
-#endif
-
    if (! qt_is_finite(c1.x()) || ! qt_is_finite(c1.y()) || ! qt_is_finite(c2.x()) || ! qt_is_finite(c2.y())
       || !qt_is_finite(e.x()) || ! qt_is_finite(e.y())) {
 
@@ -321,10 +308,6 @@ void QPainterPath::cubicTo(const QPointF &c1, const QPointF &c2, const QPointF &
 
 void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::quadTo() (%.2f,%.2f), (%.2f,%.2f)\n", c.x(), c.y(), e.x(), e.y());
-#endif
-
    if (! qt_is_finite(c.x()) || !qt_is_finite(c.y()) || !qt_is_finite(e.x()) || !qt_is_finite(e.y())) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
@@ -355,11 +338,6 @@ void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 
 void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::arcTo() (%.2f, %.2f, %.2f, %.2f, angle=%.2f, sweep=%.2f\n",
-      rect.x(), rect.y(), rect.width(), rect.height(), startAngle, sweepLength);
-#endif
-
    if ((!qt_is_finite(rect.x()) && !qt_is_finite(rect.y())) || !qt_is_finite(rect.width()) || !qt_is_finite(rect.height())
       || !qt_is_finite(startAngle) || !qt_is_finite(sweepLength)) {
 
@@ -892,14 +870,6 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       bounds += subpaths.at(i).boundingRect();
    }
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainterPath::toFillPolygons, subpathCount=%d\n", count);
-
-   for (int i = 0; i < bounds.size(); ++i) {
-      qDebug() << " bounds" << i << bounds.at(i);
-   }
-#endif
-
    QVector< QList<int>> isects;
    isects.resize(count);
 
@@ -915,19 +885,6 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
          }
       }
    }
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("Intersections before flattening:\n");
-
-   for (int i = 0; i < count; ++i) {
-      printf("%d: ", i);
-      for (int j = 0; j < isects[i].size(); ++j) {
-         printf("%d ", isects[i][j]);
-      }
-
-      printf("\n");
-   }
-#endif
 
    // flatten the sets of intersections
    for (int i = 0; i < count; ++i) {
@@ -946,18 +903,6 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
          isects[isect_j].clear();
       }
    }
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("Intersections after flattening:\n");
-
-   for (int i = 0; i < count; ++i) {
-      printf("%d: ", i);
-      for (int j = 0; j < isects[i].size(); ++j) {
-         printf("%d ", isects[i][j]);
-      }
-      printf("\n");
-   }
-#endif
 
    // Join the intersected subpaths as rewinded polygons
    for (int i = 0; i < count; ++i) {

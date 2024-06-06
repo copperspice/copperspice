@@ -719,25 +719,6 @@ void QWindowsKeyMapper::updatePossibleKeyCodes(unsigned char *kbdBuffer, quint32
       ::ToAscii(VK_SPACE, 0, emptyBuffer, reinterpret_cast<LPWORD>(&buffer), 0);
       ::ToAscii(vk_key, scancode, kbdBuffer, reinterpret_cast<LPWORD>(&buffer), 0);
    }
-
-   if (QWindowsContext::verbose > 1) {
-      QString message;
-
-      QDebug debug(&message);
-      debug << __FUNCTION__ << " for virtual key = 0x" << hex << vk_key << dec << '\n';
-
-      for (size_t i = 0; i < NumMods; ++i) {
-         const quint32 qtKey = keyLayout[vk_key].qtKey[i];
-         debug << "    [" << i << "] (" << qtKey << ','
-            << hex << showbase << qtKey << noshowbase << dec
-            << ",'" << char(qtKey ? qtKey : 0x03) << "')";
-         if (keyLayout[vk_key].deadkeys & (1 << i)) {
-            debug << "  deadkey";
-         }
-         debug << '\n';
-      }
-      qDebug() << message;
-   }
 }
 
 static inline QString messageKeyText(const MSG &msg)

@@ -432,12 +432,6 @@ void QStroker::processCurrentSubpath()
 
 void QStroker::joinPoints(qfixed focal_x, qfixed focal_y, const QLineF &nextLine, LineJoinMode join)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf(" -----> joinPoints: around=(%.0f, %.0f), next_p1=(%.0f, %.f) next_p2=(%.0f, %.f)\n",
-      qt_fixed_to_real(focal_x), qt_fixed_to_real(focal_y),
-      nextLine.x1(), nextLine.y1(), nextLine.x2(), nextLine.y2());
-#endif
-
    // points connected already, do not join
 
 #if ! defined (QFIXED_26_6) && ! defined (Q_FIXED_32_32)
@@ -641,11 +635,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
    Q_ASSERT(first_element.isMoveTo());
 
    qfixed2d start = first_element;
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug(" -> (side) [%.2f, %.2f]", qt_fixed_to_real(start.x), qt_fixed_to_real(start.y));
-#endif
-
    qfixed2d prev = start;
    bool first    = true;
    qfixed offset = stroker->strokeWidth() / 2;
@@ -655,11 +644,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
       // LineToElement
       if (e.isLineTo()) {
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-         qDebug("\n ---> (side) lineto [%.2f, %.2f]", e.x, e.y);
-#endif
-
          QLineF line(qt_fixed_to_real(prev.x), qt_fixed_to_real(prev.y),
             qt_fixed_to_real(e.x), qt_fixed_to_real(e.y));
 
@@ -691,10 +675,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
          QStrokerOps::Element cp2 = it->next();    // control point 2
          QStrokerOps::Element ep = it->next();     // end point
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-         qDebug("\n ---> (side) cubicTo [%.2f, %.2f]", qt_fixed_to_real(ep.x), qt_fixed_to_real(ep.y));
-#endif
 
          QBezier bezier = QBezier::fromPoints(QPointF(qt_fixed_to_real(prev.x), qt_fixed_to_real(prev.y)),
                QPointF(qt_fixed_to_real(e.x), qt_fixed_to_real(e.y)),
@@ -742,10 +722,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
    if (start == prev) {
       // closed subpath, join first and last point
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      qDebug("\n ---> (side) closed subpath");
-#endif
-
       // do not join empty subpaths
       if (! first) {
          stroker->joinPoints(prev.x, prev.y, *startTangent, stroker->joinStyleMode());
@@ -754,11 +730,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
       return true;
 
    } else {
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      qDebug("\n ---> (side) open subpath");
-#endif
-
       return false;
    }
 }

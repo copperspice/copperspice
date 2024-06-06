@@ -928,10 +928,6 @@ QOpenGLMultiGroupSharedResource::QOpenGLMultiGroupSharedResource()
 
 QOpenGLMultiGroupSharedResource::~QOpenGLMultiGroupSharedResource()
 {
-#if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-   qDebug("Deleting context group resource %p. Group size: %d.", this, m_groups.size());
-#endif
-
    for (int i = 0; i < m_groups.size(); ++i) {
       if (!m_groups.at(i)->shares().isEmpty()) {
          QOpenGLContext *context = m_groups.at(i)->shares().first();

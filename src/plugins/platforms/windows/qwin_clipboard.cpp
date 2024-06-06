@@ -81,11 +81,6 @@ IDataObject *QWindowsClipboardRetrievalMimeData::retrieveDataObject() const
    IDataObject *pDataObj = nullptr;
 
    if (OleGetClipboard(&pDataObj) == S_OK) {
-
-      if (QWindowsContext::verbose > 1) {
-         qDebug() << "retrieveDataObject():" << pDataObj;
-      }
-
       return pDataObj;
    }
 

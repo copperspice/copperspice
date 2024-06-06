@@ -440,10 +440,6 @@ QStringList QWindowsFontDatabaseFT::fallbacksForFamily(const QString &family, QF
 QString QWindowsFontDatabaseFT::fontDir() const
 {
    const QString result = qgetenv("windir") + "/Fonts";
-
-   // QPlatformFontDatabase::fontDir();
-   qDebug() << __FUNCTION__ << result;
-
    return result;
 }
 

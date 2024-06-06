@@ -965,10 +965,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          return false;
       }
 
-      if (QWindowsContext::verbose > 1) {
-         qDebug() << "Event window: " << platformWindow->window();
-      }
-
    } else {
       qWarning("QWindowsContext::windowsProc() No Window found for event = 0x%x (%s), hwnd = 0x%p.",
             message, QWindowsGuiEventDispatcher::windowsMessageName(message), static_cast<void *>(hwnd));
@@ -1281,14 +1277,6 @@ extern "C" LRESULT QT_WIN_CALLBACK qWindowsWndProc(HWND hwnd, UINT message, WPAR
    LRESULT result;
    const QtWindows::WindowsEventType et = windowsEventType(message, wParam, lParam);
    const bool handled = QWindowsContext::instance()->windowsProc(hwnd, message, et, wParam, lParam, &result);
-
-   if (QWindowsContext::verbose > 1) {
-      if (const char *eventName = QWindowsGuiEventDispatcher::windowsMessageName(message)) {
-         qDebug() << "EVENT: hwd = " << hwnd << eventName << hex << "msg = 0x"  << message
-            << "et = x" << et << dec << " wp = " << int(wParam) << "at"
-            << GET_X_LPARAM(lParam) << GET_Y_LPARAM(lParam) << "handled=" << handled;
-      }
-   }
 
    if (!handled) {
       result = DefWindowProc(hwnd, message, wParam, lParam);

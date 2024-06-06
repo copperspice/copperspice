@@ -419,7 +419,6 @@ QWindowsEGLStaticContext *QWindowsEGLStaticContext::create(QWindowsOpenGLTester:
 
 QWindowsEGLStaticContext::~QWindowsEGLStaticContext()
 {
-   qDebug() << __FUNCTION__ << "Releasing EGL display " << m_display;
    libEGL.eglTerminate(m_display);
 }
 

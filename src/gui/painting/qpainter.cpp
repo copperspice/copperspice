@@ -448,23 +448,6 @@ void QPainterPrivate::draw_helper(const QPainterPath &originalPath, DrawOperatio
       state->renderHints & QPainter::SmoothPixmapTransform);
 
    p.drawPath(originalPath);
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   static bool do_fallback_overlay = qgetenv("QT_PAINT_FALLBACK_OVERLAY").size() > 0;
-
-   if (do_fallback_overlay) {
-      QImage block(8, 8, QImage::Format_ARGB32_Premultiplied);
-      QPainter pt(&block);
-      pt.fillRect(0, 0, 8, 8, QColor(196, 0, 196));
-      pt.drawLine(0, 0, 8, 8);
-      pt.end();
-      p.resetTransform();
-      p.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-      p.setOpacity(0.5);
-      p.fillRect(0, 0, image.width(), image.height(), QBrush(block));
-   }
-#endif
-
    p.end();
 
    q->save();
@@ -1112,10 +1095,6 @@ bool QPainter::begin(QPaintDevice *pd)
    if (rpd) {
       pd = rpd;
    }
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::begin(), device=%p, type=%d\n", pd, pd->devType());
-#endif
 
    if (pd->devType() == QInternal::Pixmap) {
       static_cast<QPixmap *>(pd)->detach();
@@ -2195,10 +2174,6 @@ void QPainter::drawPath(const QPainterPath &path)
 
 void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawRects(), count=%d\n", rectCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine) {
@@ -2253,10 +2228,6 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 
 void QPainter::drawRects(const QRect *rectPtr, int rectCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawRects(), count=%d\n", rectCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine) {
@@ -2311,10 +2282,6 @@ void QPainter::drawRects(const QRect *rectPtr, int rectCount)
 
 void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPoints(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine) {
@@ -2372,10 +2339,6 @@ void QPainter::drawPoints(const QPointF *pointPtr, int pointCount)
 
 void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPoints(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine) {
@@ -2431,10 +2394,6 @@ void QPainter::drawPoints(const QPoint *pointPtr, int pointCount)
 
 void QPainter::setBackgroundMode(Qt::BGMode mode)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::setBackgroundMode(), mode=%d\n", mode);
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2467,10 +2426,6 @@ Qt::BGMode QPainter::backgroundMode() const
 
 void QPainter::setPen(const QColor &color)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::setPen(), color=%04x\n", color.rgb());
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine) {
@@ -2850,10 +2805,6 @@ void QPainter::drawChord(const QRectF &r, int a, int alen)
 
 void QPainter::drawLines(const QLineF *lines, int lineCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawLines(), line count=%d\n", lineCount);
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine || lineCount < 1) {
@@ -2893,10 +2844,6 @@ void QPainter::drawLines(const QLineF *lines, int lineCount)
 
 void QPainter::drawLines(const QLine *lines, int lineCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawLine(), line count=%d\n", lineCount);
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine || lineCount < 1) {
@@ -2949,10 +2896,6 @@ void QPainter::drawLines(const QPoint *pointPairs, int lineCount)
 
 void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPolyline(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -2990,10 +2933,6 @@ void QPainter::drawPolyline(const QPointF *pointPtr, int pointCount)
 
 void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPolyline(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -3031,10 +2970,6 @@ void QPainter::drawPolyline(const QPoint *pointPtr, int pointCount)
 
 void QPainter::drawPolygon(const QPointF *pointPtr, int pointCount, Qt::FillRule fillRule)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPolygon(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -3068,10 +3003,6 @@ void QPainter::drawPolygon(const QPointF *pointPtr, int pointCount, Qt::FillRule
 
 void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule fillRule)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawPolygon(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -3106,10 +3037,6 @@ void QPainter::drawPolygon(const QPoint *pointPtr, int pointCount, Qt::FillRule 
 
 void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {
@@ -3145,10 +3072,6 @@ void QPainter::drawConvexPolygon(const QPoint *pointPtr, int pointCount)
 
 void QPainter::drawConvexPolygon(const QPointF *pointPtr, int pointCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QPainter::drawConvexPolygon(), count=%d\n", pointCount);
-#endif
-
    Q_D(QPainter);
 
    if (! d->engine || pointCount < 2) {

@@ -119,10 +119,6 @@ class QOutlineMapper
 
       if (element_count > 0) {
          if (m_elements.at(element_count - 1) != m_elements.at(m_subpath_start)) {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-            printf(" - implicitly closing\n");
-#endif
-
             // Put the object on the stack to avoid the odd case where
             // lineTo reallocs the databuffer and the QPointF & will be invalidated.
             QPointF pt = m_elements.at(m_subpath_start);

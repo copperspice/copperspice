@@ -238,8 +238,6 @@ class QWindowsOleDropSource : public IDropSource
    QWindowsDragCursorWindow *m_touchDragWindow;
 
    ULONG m_refs;
-
-   friend QDebug operator<<(QDebug, const QWindowsOleDropSource::CursorEntry &);
 };
 
 QWindowsOleDropSource::QWindowsOleDropSource(QWindowsDrag *drag)
@@ -252,18 +250,6 @@ QWindowsOleDropSource::~QWindowsOleDropSource()
 {
    m_cursors.clear();
    delete m_touchDragWindow;
-}
-
-QDebug operator<<(QDebug d, const QWindowsOleDropSource::CursorEntry &e)
-{
-   (void) e;
-
-#if defined(CS_SHOW_DEBUG)
-   d << "QWindowsOleDropSource: CursorEntry = " << e.pixmap.size() << '#' << e.cacheKey
-     << "HCURSOR =" << e.cursor->handle() << "Hotspot =" << e.hotSpot;
-#endif
-
-   return d;
 }
 
 void QWindowsOleDropSource::createCursors()
@@ -357,11 +343,6 @@ void QWindowsOleDropSource::createCursors()
          }
       }
    }
-
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsOleDropSource::createCursors(): Pixmap =" << pixmap.size() << m_cursors.size() << "\n  "
-            << "Cursors =" << m_cursors;
-#endif
 }
 
 //---------------------------------------------------------------------
@@ -433,16 +414,6 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
       QApplication::processEvents();
 
    } while (false);
-
-   if (QWindowsContext::verbose > 1 || hr != S_OK) {
-
-#if defined(CS_SHOW_DEBUG)
-      qDebug() << "QWindowsOleDropSource::QueryContinueDrag fEscapePressed =" << fEscapePressed
-               << "GrfKeyState =" << grfKeyState << "Buttons =" << m_currentButtons
-               << "returns 0x" << hex << int(hr) << dec;
-#endif
-
-   }
 
    return hr;
 }

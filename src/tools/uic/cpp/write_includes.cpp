@@ -130,10 +130,6 @@ void WriteIncludes::acceptUI(DomUI *node)
 
 void WriteIncludes::acceptWidget(DomWidget *node)
 {
-   if (debugWriteIncludes) {
-      fprintf(stderr, "%s '%s'\n", Q_FUNC_INFO, csPrintable(node->attributeClass()));
-   }
-
    add(node->attributeClass());
    TreeWalker::acceptWidget(node);
 }
@@ -166,10 +162,6 @@ void WriteIncludes::acceptProperty(DomProperty *node)
 
 void WriteIncludes::insertIncludeForClass(const QString &className, QString header, bool global)
 {
-   if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), csPrintable(header), global);
-   }
-
    do {
       if (!header.isEmpty()) {
          break;
@@ -223,10 +215,6 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 
 void WriteIncludes::add(const QString &className, bool determineHeader, const QString &header, bool global)
 {
-   if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s '%s' %d\n", Q_FUNC_INFO, csPrintable(className), csPrintable(header), global);
-   }
-
    if (className.isEmpty() || m_knownClasses.contains(className)) {
       return;
    }
@@ -299,10 +287,6 @@ void WriteIncludes::acceptInclude(DomInclude *node)
 
 void WriteIncludes::insertInclude(const QString &header, bool global)
 {
-   if (debugWriteIncludes) {
-      fprintf(stderr, "%s %s %d\n", Q_FUNC_INFO, csPrintable(header), global);
-   }
-
    OrderedSet &includes = global ?  m_globalIncludes : m_localIncludes;
    if (includes.contains(header)) {
       return;

@@ -185,12 +185,6 @@ QWidgetPrivate::QWidgetPrivate()
    }
 
    memset(high_attributes, 0, sizeof(high_attributes));
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-   static int count = 0;
-   qDebug() << "widgets" << ++count;
-#endif
-
 }
 
 QWidgetPrivate::~QWidgetPrivate()
@@ -1130,12 +1124,6 @@ void QWidgetPrivate::createTLExtra()
       x->shareContext     = nullptr;
 
       x->initialScreenIndex = -1;
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-      static int count = 0;
-      qDebug() << "tlextra" << ++count;
-#endif
-
    }
 }
 
@@ -1169,12 +1157,6 @@ void QWidgetPrivate::createExtra()
       extra->hasWindowContainer   = false;
       extra->hasMask              = 0;
       createSysExtra();
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-      static int count = 0;
-      qDebug() << "extra" << ++count;
-#endif
-
    }
 }
 
@@ -1973,10 +1955,6 @@ WId QWidget::winId() const
 void QWidgetPrivate::createWinId()
 {
    Q_Q(QWidget);
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-   qDebug() << "QWidgetPrivate::createWinId for" << q;
-#endif
 
    const bool forceNativeWindow = q->testAttribute(Qt::WA_NativeWindow);
 
@@ -10180,28 +10158,6 @@ void QWidgetPrivate::setNetWmWindowTypes(bool skipIfMissing)
    QXcbWindowFunctions::setWmWindowType(q->windowHandle(), static_cast<QXcbWindowFunctions::WmWindowType>(wmWindowType));
 }
 
-static inline void formatWidgetAttributes(QDebug debug, const QWidget *widget)
-{
-   const QMetaObject &metaObject = Qt::staticMetaObject();
-   const QMetaEnum me = metaObject.enumerator(metaObject.indexOfEnumerator("WidgetAttribute"));
-
-   debug << ", attributes=[";
-
-   int count = 0;
-
-   for (int a = 0; a < Qt::WA_AttributeCount; ++a) {
-      if (widget->testAttribute(static_cast<Qt::WidgetAttribute>(a))) {
-         if (count++) {
-            debug << ',';
-         }
-
-         debug << me.valueToKey(a);
-      }
-   }
-
-   debug << ']';
-}
-
 QDebug operator<<(QDebug debug, const QWidget *widget)
 {
    const QDebugStateSaver saver(debug);
@@ -10212,45 +10168,6 @@ QDebug operator<<(QDebug debug, const QWidget *widget)
 
       if (! widget->objectName().isEmpty()) {
          debug << ", name=" << widget->objectName();
-      }
-
-      if (debug.verbosity() > 2) {
-         const QRect geometry = widget->geometry();
-         const QRect frameGeometry = widget->frameGeometry();
-
-         if (widget->isVisible()) {
-            debug << ", visible";
-         }
-
-         if (!widget->isEnabled()) {
-            debug << ", disabled";
-         }
-
-         debug << ", states=" << widget->windowState()
-               << ", type=" << widget->windowType() << ", flags=" <<  widget->windowFlags();
-
-         formatWidgetAttributes(debug, widget);
-
-         if (widget->isWindow()) {
-            debug << ", window";
-         }
-
-         debug << ", " << geometry.width() << 'x' << geometry.height()
-               << forcesign << geometry.x() << geometry.y() << noforcesign;
-
-         if (frameGeometry != geometry) {
-            const QMargins margins(geometry.x() - frameGeometry.x(),
-                  geometry.y() - frameGeometry.y(),
-                  frameGeometry.right() - geometry.right(),
-                  frameGeometry.bottom() - geometry.bottom());
-            debug << ", margins=" << margins;
-         }
-
-         debug << ", devicePixelRatio=" << widget->devicePixelRatioF();
-
-         if (const WId wid = widget->internalWinId()) {
-            debug << ", winId=0x" << hex << wid << dec;
-         }
       }
 
       debug << ')';

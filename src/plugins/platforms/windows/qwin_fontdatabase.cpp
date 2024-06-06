@@ -899,10 +899,6 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QFontDef &fontDef, void *han
    QFontEngine *fe = QWindowsFontDatabase::createEngine(fontDef,
          QWindowsContext::instance()->defaultDPI(), sharedFontData());
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsFontDatabase::fontEngine():" << "Fontdef = " << fontDef << fe << handle;
-#endif
-
    return fe;
 }
 

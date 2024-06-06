@@ -1732,10 +1732,6 @@ void QFontCache::decreaseCache()
    uint in_use_cost = 0;
 
    {
-#if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("  SWEEP engine data:");
-#endif
-
       // make sure the cost of each engine data is at least 1kb
       const uint engine_data_cost =
          sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
@@ -1752,10 +1748,6 @@ void QFontCache::decreaseCache()
    }
 
    {
-#if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("  SWEEP engine:");
-#endif
-
       for (const auto &item : engineCache) {
          if (item.data->m_refCount.load() != 0) {
             in_use_cost += item.data->cache_cost / engineCacheCount.value(item.data);
@@ -1797,11 +1789,6 @@ void QFontCache::decreaseCache()
       return;
 
    } else if (! fast) {
-
-#if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("  dropping into passing gear");
-#endif
-
       killTimer(timer_id);
       timer_id = startTimer(fast_timeout);
       fast = true;

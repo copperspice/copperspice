@@ -446,9 +446,6 @@ static void describeFormats(HDC hdc)
       initPixelFormatDescriptor(&pfd);
       DescribePixelFormat(hdc, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
 
-#if defined(CS_SHOW_DEBUG)
-      qDebug() << '#' << i << '/' << pfiMax << ':' << pfd;
-#endif
 
    }
 }
@@ -783,28 +780,6 @@ static int choosePixelFormat(HDC hdc, const QOpenGLStaticContext &staticContext,
 
       pixelFormat = 0;
    }
-
-#if defined(CS_SHOW_DEBUG)
-
-   QString message;
-   QDebug nsp(&message);
-
-   nsp << __FUNCTION__;
-
-   if (sampleBuffersRequested) {
-      nsp << " samples=" << iAttributes[samplesValuePosition];
-   }
-
-   nsp << " Attributes: " << hex << showbase;
-   for (int ii = 0; ii < i; ++ii) {
-      nsp << iAttributes[ii] << ',';
-   }
-
-   nsp << noshowbase << dec << "\n    obtained px #" << pixelFormat
-      << " of " << numFormats << "\n    " << *obtainedPfd;
-   qDebug() << message;
-
-#endif
 
    return pixelFormat;
 }
@@ -1175,9 +1150,6 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
 
    QOpenGLStaticContext *result = new QOpenGLStaticContext;
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << __FUNCTION__ << *result;
-#endif
 
    return result;
 }
@@ -1279,10 +1251,6 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       hdc = GetDC(dummyWindow);
       if (! hdc) {
          break;
-      }
-
-      if (QWindowsContext::verbose > 1) {
-         describeFormats(hdc);
       }
 
       // Preferably use direct rendering and ARB extensions (unless pixmap
@@ -1469,10 +1437,6 @@ static inline const QOpenGLContextData *findByHWND(const Array<QOpenGLContextDat
 
 void QWindowsGLContext::swapBuffers(QPlatformSurface *surface)
 {
-   if (QWindowsContext::verbose > 1) {
-      qDebug() << "QWindowsGLContext::swapBuffers() " << surface;
-   }
-
    if (const QOpenGLContextData *contextData = findByHWND(m_windowContexts, handleOf(surface))) {
       QOpenGLStaticContext::opengl32.swapBuffers(contextData->hdc);
    } else {
@@ -1482,12 +1446,6 @@ void QWindowsGLContext::swapBuffers(QPlatformSurface *surface)
 
 bool QWindowsGLContext::makeCurrent(QPlatformSurface *surface)
 {
-#ifdef DEBUG_GL
-   if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << this << m_windowContexts.size() << "contexts";
-   }
-#endif // DEBUG_GL
-
    Q_ASSERT(surface->surface()->supportsOpenGL());
 
    // Do we already have a DC entry for that window?
@@ -1554,12 +1512,6 @@ bool QWindowsGLContext::makeCurrent(QPlatformSurface *surface)
 
 void QWindowsGLContext::doneCurrent()
 {
-#ifdef DEBUG_GL
-   if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ << this << m_windowContexts.size() << "contexts";
-   }
-#endif
-
    QOpenGLStaticContext::opengl32.wglMakeCurrent(nullptr, nullptr);
    releaseDCs();
 }

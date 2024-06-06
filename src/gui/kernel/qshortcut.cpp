@@ -189,10 +189,6 @@ static bool correctWidgetContext(Qt::ShortcutContext context, QWidget *w, QWidge
       return sw == focus_widget;
    }
 
-#if defined(CS_SHOW_DEBUG_GUI)
-   qDebug().nospace() << "..true [Pass-through]";
-#endif
-
    return true;
 }
 

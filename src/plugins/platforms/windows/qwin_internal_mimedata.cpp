@@ -77,11 +77,6 @@ QVariant QWindowsInternalMimeData::retrieveData_sys(const QString &mimeType, QVa
    }
    releaseDataObject(pDataObj);
 
-   if (QWindowsContext::verbose) {
-      qDebug() << __FUNCTION__ << ' '  << mimeType << ' ' << type
-               << " returns " << result.type()
-               << (result.type() != QVariant::ByteArray ? result.toString() : QString("<data>"));
-   }
 
    return result;
 }

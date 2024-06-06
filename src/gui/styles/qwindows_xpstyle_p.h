@@ -248,8 +248,6 @@ typedef struct _DTBGOPTS {
 #define CBS_INACTIVE 5
 #endif
 
-// #define DEBUG_XP_STYLE
-
 #if ! defined(QT_NO_STYLE_WINDOWSXP)
 
 class XPThemeData
@@ -519,12 +517,6 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
    QIcon dockClose;
 
  private:
-
-#ifdef DEBUG_XP_STYLE
-   void dumpNativeDIB(int w, int h);
-   void showProperties(XPThemeData &themeData);
-#endif
-
    static bool initVistaTreeViewTheming();
    static void cleanupVistaTreeViewTheming();
    static QAtomicInt ref;

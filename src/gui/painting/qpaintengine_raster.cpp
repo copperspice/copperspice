@@ -374,11 +374,6 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
 
 bool QRasterPaintEngine::end()
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   Q_D(QRasterPaintEngine);
-   qDebug() << "QRasterPaintEngine::end devRect:" << d->deviceRect;
-#endif
-
    return true;
 }
 
@@ -501,10 +496,6 @@ void QRasterPaintEngine::setState(QPainterState *s)
 // internal
 void QRasterPaintEngine::penChanged()
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::penChanged():" << state()->pen;
-#endif
-
    QRasterPaintEngineState *s = state();
    Q_ASSERT(s);
 
@@ -517,10 +508,6 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
 {
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::updatePen():" << s->pen;
-#endif
 
    Qt::PenStyle pen_style = qpen_style(pen);
 
@@ -590,11 +577,6 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
 void QRasterPaintEngine::brushOriginChanged()
 {
    QRasterPaintEngineState *s = state();
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::brushOriginChanged()" << s->brushOrigin;
-#endif
-
    s->fillFlags |= DirtyBrushOrigin;
 }
 
@@ -602,21 +584,12 @@ void QRasterPaintEngine::brushOriginChanged()
 void QRasterPaintEngine::brushChanged()
 {
    QRasterPaintEngineState *s = state();
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::brushChanged():" << s->brush;
-#endif
-
    s->fillFlags |= DirtyBrush;
 }
 
 // internal
 void QRasterPaintEngine::updateBrush(const QBrush &brush)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::updateBrush()" << brush;
-#endif
-
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
@@ -664,10 +637,6 @@ void QRasterPaintEngine::opacityChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::opacityChanged()" << s->opacity;
-#endif
-
    s->fillFlags |= DirtyOpacity;
    s->strokeFlags |= DirtyOpacity;
    s->pixmapFlags |= DirtyOpacity;
@@ -681,9 +650,6 @@ void QRasterPaintEngine::compositionModeChanged()
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::compositionModeChanged()" << s->composition_mode;
-#endif
 
    s->fillFlags |= DirtyCompositionMode;
    s->dirty |= DirtyCompositionMode;
@@ -698,10 +664,6 @@ void QRasterPaintEngine::compositionModeChanged()
 void QRasterPaintEngine::renderHintsChanged()
 {
    QRasterPaintEngineState *s = state();
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::renderHintsChanged()" << hex << s->renderHints;
-#endif
 
    bool was_aa = s->flags.antialiased;
    bool was_bilinear = s->flags.bilinear;
@@ -728,10 +690,6 @@ void QRasterPaintEngine::transformChanged()
 {
    QRasterPaintEngineState *s = state();
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::transformChanged()" << s->matrix;
-#endif
-
    s->fillFlags |= DirtyTransform;
    s->strokeFlags |= DirtyTransform;
 
@@ -745,10 +703,6 @@ void QRasterPaintEngine::transformChanged()
 void QRasterPaintEngine::clipEnabledChanged()
 {
    QRasterPaintEngineState *s = state();
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::clipEnabledChanged()" << s->clipEnabled;
-#endif
 
    if (s->clip) {
       s->clip->enabled = s->clipEnabled;
@@ -941,34 +895,12 @@ static void qrasterpaintengine_dirty_clip(QRasterPaintEnginePrivate *d, QRasterP
 // internal
 void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::clip(): " << path << op;
-
-   if (path.elements()) {
-      for (int i = 0; i < path.elementCount(); ++i) {
-         qDebug() << " - " << path.elements()[i]
-            << '(' << path.points()[i * 2] << ", " << path.points()[i * 2 + 1] << ')';
-      }
-
-   } else {
-      for (int i = 0; i < path.elementCount(); ++i) {
-         qDebug() << " ---- "
-            << '(' << path.points()[i * 2] << ", " << path.points()[i * 2 + 1] << ')';
-      }
-   }
-#endif
-
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
    // There are some cases that are not supported by clip(QRect)
    if (op != Qt::IntersectClip || !s->clip || s->clip->hasRectClip || s->clip->hasRegionClip) {
       if (s->matrix.type() <= QTransform::TxScale && path.isRect()) {
-
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-         qDebug() << " --- optimizing vector clip to rect clip...";
-#endif
-
          const qreal *points = path.points();
 
          QRectF r(points[0], points[1], points[4] - points[0], points[5] - points[1]);
@@ -1020,10 +952,6 @@ void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
 // internal
 void QRasterPaintEngine::clip(const QRect &rect, Qt::ClipOperation op)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::clip(): " << rect << op;
-#endif
-
    QRasterPaintEngineState *s = state();
 
    if (op == Qt::NoClip) {
@@ -1096,10 +1024,6 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
 // internal
 void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::clip(): " << region << op;
-#endif
-
    Q_D(QRasterPaintEngine);
 
    if (region.rectCount() == 1) {
@@ -1262,10 +1186,6 @@ static void fillRect_normalized(const QRect &r, QSpanData *data, QRasterPaintEng
 
 void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug(" - QRasterPaintEngine::drawRect(), rectCount=%d", rectCount);
-#endif
-
    Q_D(QRasterPaintEngine);
    ensureRasterState();
    QRasterPaintEngineState *s = state();
@@ -1317,10 +1237,6 @@ void QRasterPaintEngine::drawRects(const QRect *rectPtr, int rectCount)
 
 void QRasterPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug(" - QRasterPaintEngine::drawRect(QRectF*), rectCount=%d", rectCount);
-#endif
-
 #ifdef QT_FAST_SPANS
    Q_D(QRasterPaintEngine);
 
@@ -1715,13 +1631,6 @@ void QRasterPaintEngine::drawPolygon(const QPointF *points, int pointCount, Poly
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug(" - QRasterPaintEngine::drawPolygon(F), pointCount=%d", pointCount);
-
-   for (int i = 0; i < pointCount; ++i) {
-      qDebug() << "   - " << points[i];
-   }
-#endif
 
    Q_ASSERT(pointCount >= 2);
 
@@ -1759,13 +1668,6 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug(" - QRasterPaintEngine::drawPolygon(I), pointCount=%d", pointCount);
-
-   for (int i = 0; i < pointCount; ++i) {
-      qDebug() << "   - " << pointPtr[i];
-   }
-#endif
 
    Q_ASSERT(pointCount >= 2);
 
@@ -3079,10 +2981,6 @@ void QRasterPaintEnginePrivate::rasterizeLine_dashed(QLineF line,
 
 void QRasterPaintEngine::drawLines(const QLineF *lines, int lineCount)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " - QRasterPaintEngine::drawLines(QLineF *)" << lineCount;
-#endif
-
    Q_D(QRasterPaintEngine);
    QRasterPaintEngineState *s = state();
 

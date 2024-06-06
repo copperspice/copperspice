@@ -360,10 +360,6 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
       return true;
    }
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   qDebug("parseFormat: %s", csPrintable(newFormat));
-#endif
-
    QVector<SectionNode> newSectionNodes;
    Sections newDisplay = Qt::EmptyFlag;
 
@@ -540,11 +536,6 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    display = newDisplay;
    last.pos = -1;
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   qDebug() << newFormat << displayFormat;
-   qDebug("separators:\n'%s'", separators.join(QString("\n")).toLatin1().constData());
-#endif
-
    return true;
 }
 
@@ -716,12 +707,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
    QString sectiontext = text.mid(index, sectionmaxsize);
    int sectiontextSize = sectiontext.size();
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   qDebug() << "sectionValue for" << sn.name()
-         << "with text" << text << "and st" << sectiontext
-         << text.mid(index, sectionmaxsize) << index;
-#endif
-
    int used = 0;
 
    switch (sn.type) {
@@ -756,9 +741,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                break;
 
             default:
-#if defined(CS_SHOW_DEBUG_CORE)
-               qDebug("This should never happen (findAmPm returned %d)", ampm);
-#endif
                break;
          }
 
@@ -848,9 +830,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                }
 
                if (ok && tmp <= absMax) {
-#if defined(CS_SHOW_DEBUG_CORE)
-                  qDebug() << sectiontext.left(digits) << tmp << digits;
-#endif
                   lastNode = tmp;
                   used = digits;
                   break;
@@ -885,12 +864,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
 
                if (num < absMin) {
                   state = done ? Invalid : Intermediate;
-
-#if defined(CS_SHOW_DEBUG_CORE)
-                  if (done) {
-                     qDebug() << "invalid because" << num << "is less than absoluteMin" << absMin;
-                  }
-#endif
 
                } else if (num > absMax) {
                   state = Intermediate;
@@ -944,10 +917,6 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
    bool conflicts = false;
    const int sectionNodesCount = sectionNodes.size();
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   qDebug() << "parse" << input;
-#endif
-
    {
       int pos = 0;
       int year, month, day;
@@ -968,12 +937,6 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
       for (int index = 0; state != Invalid && index < sectionNodesCount; ++index) {
 
          if (input.midView(pos, separators.at(index).size()) != separators.at(index)) {
-
-#if defined(CS_SHOW_DEBUG_CORE)
-            qDebug() << "invalid because" << input.mid(pos, separators.at(index).size())
-                  << "!=" << separators.at(index) << index << pos << currentSectionIndex;
-#endif
-
             state = Invalid;
             goto end;
          }
@@ -986,11 +949,6 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
          const SectionNode sn = sectionNodes.at(index);
 
          num = parseSection(currentValue, index, input, cursorPosition, pos, tmpstate, &used);
-
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "sectionValue" << sn.name() << input
-               << "pos" << pos << "used" << used << stateName(tmpstate);
-#endif
 
          if (fixup && tmpstate == Intermediate && used < sn.count) {
             const FieldInfo fi = fieldInfo(index);
@@ -1011,9 +969,6 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
             break;
          }
 
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << index << sn.name() << "is set to" << pos << "state is" << stateName(state);
-#endif
 
          if (state != Invalid) {
             switch (sn.type) {
@@ -1138,10 +1093,6 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
                   } else if (day > date.daysInMonth()) {
                      day -= 7;
                   }
-
-#if defined(CS_SHOW_DEBUG_CORE)
-                  qDebug() << year << month << day << dayofweek << diff << QDate(year, month, day).dayOfWeek();
-#endif
                }
             }
 
@@ -1229,19 +1180,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
          }
 
          newCurrentValue = QDateTime(QDate(year, month, day), QTime(hour, minute, second, msec), m_timeZone);
-
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << year << month << day << hour << minute << second << msec;
-#endif
-
       }
-
-#if defined(CS_SHOW_DEBUG_CORE)
-      qDebug("'%s' => '%s'(%s)", csPrintable(input),
-            csPrintable(newCurrentValue.toString("yyyy/MM/dd hh:mm:ss.zzz")),
-            csPrintable(stateName(state)));
-#endif
-
    }
 
 end:
@@ -1344,11 +1283,6 @@ end:
                      const int maxChange = sn.maxChange();
 
                      if (toMin > maxChange) {
-#if defined(CS_SHOW_DEBUG_CORE)
-                        qDebug() << "invalid because toMin > maxChange" << toMin
-                              << maxChange << t << newCurrentValue << minimum;
-#endif
-
                         state = Invalid;
                         done = true;
                         break;
@@ -1374,11 +1308,6 @@ end:
                      }
 
                      if (! potentialValue(t.simplified(), min, max, i, newCurrentValue, pos)) {
-#if defined(CS_SHOW_DEBUG_CORE)
-                        qDebug() << "invalid because potentialValue(" << t.simplified() << min << max
-                              << sn.name() << "returned" << toMax << toMin << pos;
-#endif
-
                         state = Invalid;
                         done = true;
                         break;
@@ -1406,11 +1335,6 @@ end:
                state = Invalid;
             }
          }
-
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "not checking intermediate because newCurrentValue is" << newCurrentValue
-               << getMinimum() << getMaximum();
-#endif
       }
    }
 
@@ -1447,9 +1371,6 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
          if (str1.startsWith(str2)) {
 
             if (used) {
-#if defined(CS_SHOW_DEBUG_CORE)
-               qDebug() << "used is set to" << str2.size();
-#endif
                *used = str2.size();
             }
 
@@ -1465,10 +1386,6 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
          }
 
          const int limit = qMin(str1.size(), str2.size());
-
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "limit is" << limit << str1 << str2;
-#endif
 
          bool equal = true;
 
@@ -1504,10 +1421,6 @@ int QDateTimeParser::findMonth(const QString &str1, int startMonth, int sectionI
    }
 
    if (used) {
-#if defined(CS_SHOW_DEBUG_CORE)
-      qDebug() << "used is set to" << bestCount;
-#endif
-
       *used = bestCount;
    }
 
@@ -1589,10 +1502,6 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
       ampm[i].truncate(size);
    }
 
-#if defined(CS_SHOW_DEBUG_CORE)
-   qDebug() << "findAmPm" << str << ampm[0] << ampm[1];
-#endif
-
    if (str.indexOf(ampm[am_index], 0, Qt::CaseInsensitive) == 0) {
       str = ampm[am_index];
       return AM;
@@ -1616,27 +1525,12 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
             if (! broken[j]) {
                int index = ampm[j].indexOf(str.at(i));
 
-#if defined(CS_SHOW_DEBUG_CORE)
-               qDebug() << "looking for" << str.at(i)
-                     << "in" << ampm[j] << "and got" << index;
-#endif
-
                if (index == -1) {
                   if (str.at(i).category() == QChar::Letter_Uppercase) {
                      index = ampm[j].indexOf(str.at(i).toLower());
 
-#if defined(CS_SHOW_DEBUG_CORE)
-                     qDebug() << "trying with" << str.at(i).toLower()
-                           << "in" << ampm[j] << "and got" << index;
-#endif
-
                   } else if (str.at(i).category() == QChar::Letter_Lowercase) {
                      index = ampm[j].indexOf(str.at(i).toUpper());
-
-#if defined(CS_SHOW_DEBUG_CORE)
-                     qDebug() << "trying with" << str.at(i).toUpper()
-                           << "in" << ampm[j] << "and got" << index;
-#endif
 
                   }
 
@@ -1644,9 +1538,6 @@ QDateTimeParser::AmPmFinder QDateTimeParser::findAmPm(QString &str, int sectionI
                      broken[j] = true;
 
                      if (broken[am_index] && broken[pm_index]) {
-#if defined(CS_SHOW_DEBUG_CORE)
-                        qDebug() << str << "did not work";
-#endif
                         return Neither;
                      }
 

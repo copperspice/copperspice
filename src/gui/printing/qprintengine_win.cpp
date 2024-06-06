@@ -665,10 +665,6 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
 
 void QWin32PrintEnginePrivate::fillPath_dev(const QPainterPath & path, const QColor & color)
 {
-#if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << " --- QWin32PrintEnginePrivate::fillPath() bound:" << path.boundingRect() << color;
-#endif
-
    composeGdiPath(path);
 
    HBRUSH brush = CreateSolidBrush(RGB(color.red(), color.green(), color.blue()));
@@ -750,10 +746,6 @@ void QWin32PrintEnginePrivate::strokePath(const QPainterPath & path, const QColo
 
 void QWin32PrintEngine::drawPath(const QPainterPath & path)
 {
-#if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << " - QWin32PrintEngine::drawPath(), bounds: " << path.boundingRect();
-#endif
-
    Q_D(QWin32PrintEngine);
 
    QAlphaPaintEngine::drawPath(path);
@@ -772,10 +764,6 @@ void QWin32PrintEngine::drawPath(const QPainterPath & path)
 
 void QWin32PrintEngine::drawPolygon(const QPointF * points, int pointCount, PolygonDrawMode mode)
 {
-#if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << " - QWin32PrintEngine::drawPolygon(), pointCount: " << pointCount;
-#endif
-
    QAlphaPaintEngine::drawPolygon(points, pointCount, mode);
    if (!continueCall()) {
       return;

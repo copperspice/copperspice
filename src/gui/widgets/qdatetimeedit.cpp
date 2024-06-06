@@ -337,9 +337,6 @@ void QDateTimeEdit::setCurrentSection(Section section)
          if (d->convertToPublic(d->sectionType(index)) == section) {
             d->edit->setCursorPosition(d->sectionPos(index));
 
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-            qDebug() << "QDateTimeEdit" << d->sectionPos(index);
-#endif
             return;
          }
 
@@ -779,11 +776,6 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
                || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
                || d->skipToNextSection(oldCurrent, d->value.toDateTime(), d->sectionText(oldCurrent)))) {
 
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-            qDebug() << "QDateTimeEdit" <<  "Setting currentsection to " << d->closestSection(d->edit->cursorPosition(), true)
-                     << event->key() << oldCurrent << str;
-#endif
-
             const int tmp = d->closestSection(d->edit->cursorPosition(), true);
 
             if (tmp >= 0) {
@@ -881,10 +873,6 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
       default:
          d->edit->deselect();
          d->edit->setCursorPosition(d->sectionPos(newSection));
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-         qDebug() << "QDateTimeEdit" <<  d->sectionPos(newSection);
-#endif
          d->setSelected(newSection, true);
          return false;
    }
@@ -1199,30 +1187,13 @@ void QDateTimeEditPrivate::updateEdit()
 
       int cursor = sectionPos(currentSectionIndex);
 
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-      qDebug() << "QDateTimeEdit Cursor is " << cursor << currentSectionIndex;
-#endif
-
       cursor = qBound(0, cursor, displayText().size());
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-      qDebug() << "QDateTimeEdit" <<  cursor;
-#endif
 
       if (selsize > 0) {
          edit->setSelection(cursor, selsize);
 
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-         qDebug() << "QDateTimeEdit" <<  cursor << selsize;
-#endif
-
       } else {
          edit->setCursorPosition(cursor);
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-         qDebug() << "QDateTimeEdit" <<  cursor;
-#endif
-
       }
    }
 
@@ -1383,11 +1354,6 @@ void QDateTimeEditPrivate::clearSection(int index)
    t.replace(pos, size, QString().fill(space, size));
    edit->setText(t);
    edit->setCursorPosition(cursorPos);
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-   qDebug() << "QDateTimeEdit" << cursorPos;
-#endif
-
    edit->blockSignals(blocked);
 }
 
@@ -1697,10 +1663,6 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
 
          if (allowChange) {
             edit->setCursorPosition(c);
-
-#if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-            qDebug() << "QDateTimeEdit" <<  c;
-#endif
          }
          s = closest;
       }
