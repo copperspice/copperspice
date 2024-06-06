@@ -1575,10 +1575,12 @@ QWindowsGLContext::FP_Void QWindowsGLContext::getProcAddress(const QByteArray &p
    // The list has to match QOpenGLFunctions
    // Refer to QOpenGLFunctionsPrivate::QOpenGLFunctionsPrivate(QOpenGLContext *).
 
-   static struct StdFunc {
+   struct StdFunc {
       const char *name;
       void *func;
-   } standardFuncs[] = {
+   };
+
+   static StdFunc standardFuncs[] = {
       { "glBindTexture", (void *) QOpenGLStaticContext::opengl32.glBindTexture },
       { "glBlendFunc", (void *) QOpenGLStaticContext::opengl32.glBlendFunc },
       { "glClear", (void *) QOpenGLStaticContext::opengl32.glClear },
@@ -1624,27 +1626,21 @@ QWindowsGLContext::FP_Void QWindowsGLContext::getProcAddress(const QByteArray &p
       { "glTexParameteriv", (void *) QOpenGLStaticContext::opengl32.glTexParameteriv },
       { "glTexSubImage2D", (void *) QOpenGLStaticContext::opengl32.glTexSubImage2D },
       { "glViewport", (void *) QOpenGLStaticContext::opengl32.glViewport },
-
       { "glClearDepth", (void *) QOpenGLStaticContext::opengl32.glClearDepth },
       { "glDepthRange", (void *) QOpenGLStaticContext::opengl32.glDepthRange },
    };
 
-   for (size_t i = 0; i < sizeof(standardFuncs) / sizeof(StdFunc); ++i)
+   for (size_t i = 0; i < sizeof(standardFuncs) / sizeof(StdFunc); ++i) {
       if (procName == standardFuncs[i].name) {
          return reinterpret_cast<FP_Void>(standardFuncs[i].func);
       }
-
-   FP_Void procAddress = reinterpret_cast<FP_Void>(QOpenGLStaticContext::opengl32.wglGetProcAddress(
-            procName.constData()));
-
-   if (QWindowsContext::verbose > 1) {
-      qDebug() << __FUNCTION__ <<  procName << QOpenGLStaticContext::opengl32.wglGetCurrentContext() << "returns" << procAddress;
    }
 
-   if (! procAddress && QWindowsContext::verbose) {
-      qWarning("%s: Unable to resolve '%s'", __FUNCTION__, procName.constData());
+   FP_Void procAddress = reinterpret_cast<FP_Void>(QOpenGLStaticContext::opengl32.wglGetProcAddress(procName.constData()));
+
+   if (procAddress == nullptr) {
+      qWarning("QWindowsGLContext::getProcAddress() Unable to resolve %s", procName.constData());
    }
 
    return procAddress;
 }
-
