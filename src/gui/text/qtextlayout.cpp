@@ -251,7 +251,7 @@ void QTextLayout::beginLayout()
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
    if (d->layoutData && d->layoutData->layoutState == QTextEngine::InLayout) {
-      qWarning("QTextLayout::beginLayout() Layout already is in progress");
+      qDebug("QTextLayout::beginLayout() Layout was already in progress");
       return;
    }
 #endif
@@ -266,7 +266,7 @@ void QTextLayout::endLayout()
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
    if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
-      qWarning("QTextLayout::endLayout() No layout in progress");
+      qDebug("QTextLayout::endLayout() No layout in progress");
       return;
    }
 #endif
@@ -398,7 +398,7 @@ QTextLine QTextLayout::createLine()
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
    if (! d->layoutData || d->layoutData->layoutState == QTextEngine::LayoutEmpty) {
-      qWarning("QTextLayout::createLine() No layout in progress");
+      qDebug("QTextLayout::createLine() No layout in progress");
       return QTextLine();
    }
 #endif

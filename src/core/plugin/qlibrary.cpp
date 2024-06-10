@@ -290,7 +290,7 @@ bool QLibraryHandle::loadPlugin()
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-      qWarning() << "QLibraryHandle::loadPlugin() Failed on" << fileName << ":" << errorString;
+   qDebug() << "QLibraryHandle::loadPlugin() File name = " << fileName << " error = " << errorString;
 #endif
 
    pluginState = IsNotAPlugin;

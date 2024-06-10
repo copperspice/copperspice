@@ -81,7 +81,7 @@ void QRegion::exec(const QByteArray &buffer, int ver, QDataStream::ByteOrder byt
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       if (test_cnt > 0 && id != QRGN_TRANSLATE) {
-         qWarning("QRegion::exec() Internal error");
+         qDebug("QRegion::exec() Internal error");
       }
       test_cnt++;
 #endif

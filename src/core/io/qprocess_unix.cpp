@@ -590,8 +590,9 @@ void QProcessPrivate::execChild(const char *workingDir, char **path, char **argv
             argv[0] = *arg;
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-            fprintf(stderr, "QProcessPrivate::execChild() searching / starting %s\n", argv[0]);
+            qDebug("QProcess::execChild() Starting %s", argv[0]);
 #endif
+
             qt_safe_execve(argv[0], argv, envp);
             ++arg;
          }
@@ -599,8 +600,9 @@ void QProcessPrivate::execChild(const char *workingDir, char **path, char **argv
       } else {
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-         fprintf(stderr, "QProcessPrivate::execChild() starting %s\n", argv[0]);
+         qDebug("QProcess::execChild() Starting %s", argv[0]);
 #endif
+
          qt_safe_execve(argv[0], argv, envp);
       }
    }
@@ -610,7 +612,7 @@ report_errno:
    QString error = qt_error_string(errno);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   fprintf(stderr, "QProcessPrivate::execChild() failed (%s), notifying parent process\n", csPrintable(error));
+   qDebug("QProcess::execChild() Command failed with error %s", csPrintable(error));
 #endif
 
    qt_safe_write(childStartedPipe[1], error.data(), error.length() * sizeof(QChar));

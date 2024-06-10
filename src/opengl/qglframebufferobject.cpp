@@ -739,7 +739,7 @@ bool QGLFramebufferObject::bind()
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!current || QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
-      qWarning("QGLFramebufferObject::bind() called from incompatible context");
+      qDebug("QGLFramebufferObject::bind() Called from incompatible context");
    }
 #endif
 
@@ -771,7 +771,7 @@ bool QGLFramebufferObject::release()
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!current ||
       QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
-      qWarning("QGLFramebufferObject::release() called from incompatible context");
+      qDebug("QGLFramebufferObject::release() Called from incompatible context");
    }
 #endif
 
@@ -869,7 +869,7 @@ bool QGLFramebufferObject::bindDefault()
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    } else {
-      qWarning("QGLFramebufferObject::bindDefault() called without current context.");
+      qDebug("QGLFramebufferObject::bindDefault() Called without current context.");
 #endif
 
    }

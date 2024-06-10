@@ -654,7 +654,7 @@ void QLayoutPrivate::reparentChildWidgets(QWidget *mw)
 
 #if defined(CS_SHOW_DEBUG_GUI)
          if (pw && pw != mw) {
-            qWarning("QLayout::addChildLayout() Widget %s \"%s\" has an invalid parent, moved to correct parent",
+            qDebug("QLayout::addChildLayout() Widget %s \"%s\" has an invalid parent, moved to correct parent",
                csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
          }
 #endif
@@ -725,7 +725,7 @@ void QLayout::addChildWidget(QWidget *w)
       if (l && removeWidgetRecursively(l, w)) {
 
 #if defined(CS_SHOW_DEBUG_GUI)
-            qWarning("QLayout::addChildWidget() %s \"%s\" is already in the current layout, moved to new layout",
+         qDebug("QLayout::addChildWidget() %s \"%s\" is already in the current layout, moved to new layout",
                csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
 
@@ -735,7 +735,7 @@ void QLayout::addChildWidget(QWidget *w)
    if (pw && mw && pw != mw) {
 
 #if defined(CS_SHOW_DEBUG_GUI)
-         qWarning("QLayout::addChildWidget() %s \"%s\" had an incorrect parent, moved to correct parent",
+      qDebug("QLayout::addChildWidget() %s \"%s\" had an incorrect parent, moved to correct parent",
             csPrintable(w->metaObject()->className()), csPrintable(w->objectName()));
 #endif
 

@@ -1624,7 +1624,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    QOpenGLFunctions *funcs = qgl_functions();
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   printf("QGLContextPrivate::bindTexture(), imageSize=(%d,%d), internalFormat =0x%x, options=%x, key=%llx\n",
+   qDebug("QGLContext::bindTexture() imageSize = %dx%d, internalFormat = 0x%x, options = %x, key = %llx",
       image.width(), image.height(), internalFormat, int(options), key);
 
    QTime time;
@@ -1648,7 +1648,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       img = img.scaled(tx_w, tx_h);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf("Upscaled to %dx%d (%d ms)\n", tx_w, tx_h, time.elapsed());
+      qDebug("QGLContext::bindTexture() Upscaled to %dx%d (%d ms)", tx_w, tx_h, time.elapsed());
 #endif
    }
 
@@ -1683,7 +1683,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf("Generating mipmaps (%d ms)\n", time.elapsed());
+      qDebug("QGLContext::bindTexture() Generating mipmaps (%d ms)", time.elapsed());
 #endif
 
    } else {
@@ -1724,7 +1724,8 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
             img = img.convertToFormat(target_format = QImage::Format_ARGB32_Premultiplied);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-            printf("Converted ARGB32 to ARGB32_Premultiplied (%d ms)\n", time.elapsed());
+            qDebug("QGLContext::bindTexture() Converted ARGB32 to ARGB32_Premultiplied (%d ms)",
+                  time.elapsed());
 #endif
          }
          break;
@@ -1744,7 +1745,8 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
             img = img.convertToFormat(target_format = QImage::Format_RGBA8888_Premultiplied);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-            printf("Converted RGBA8888 to RGBA8888_Premultiplied (%d ms)\n", time.elapsed());
+            qDebug("QGLContext::bindTexture() Converted RGBA8888 to RGBA8888_Premultiplied (%d ms)",
+                  time.elapsed());
 #endif
          }
          break;
@@ -1754,7 +1756,8 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
             img = img.convertToFormat(target_format = QImage::Format_RGBA8888);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-            printf("Converted RGBA8888_Premultiplied to RGBA8888 (%d ms)\n", time.elapsed());
+            qDebug("QGLContext::bindTexture() Converted RGBA8888_Premultiplied to RGBA8888 (%d ms)",
+                  time.elapsed());
 #endif
          }
          break;
@@ -1776,14 +1779,14 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
                   ? QImage::Format_ARGB32_Premultiplied
                   : QImage::Format_ARGB32);
 #if defined(CS_SHOW_DEBUG_OPENGL)
-            printf("Converted to 32-bit alpha format (%d ms)\n", time.elapsed());
+            qDebug("QGLContext::bindTexture() Converted to 32-bit alpha format (%d ms)", time.elapsed());
 #endif
 
          } else {
             img = img.convertToFormat(QImage::Format_RGB32);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-            printf("Converted to 32-bit (%d ms)\n", time.elapsed());
+            qDebug("QGLContext::bindTexture() Converted to 32-bit (%d ms)", time.elapsed());
 #endif
          }
    }
@@ -1810,7 +1813,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       }
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf("Flipped bits over y (%d ms)\n", time.elapsed());
+      qDebug("QGLContext::bindTexture() Flipped bits over y (%d ms)", time.elapsed());
 #endif
    }
 
@@ -1822,7 +1825,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
       qgl_byteSwapImage(img, pixel_type);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-      printf("Byte swapping (%d ms)\n", time.elapsed());
+      qDebug("QGLContext::bindTexture() Byte swapping (%d ms)", time.elapsed());
 #endif
    }
 
@@ -1832,8 +1835,8 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    }
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   printf("Uploading, image.format=%d, externalFormat=0x%x, internalFormat=0x%x, pixel_type=0x%x\n",
-      img.format(), externalFormat, internalFormat, pixel_type);
+   qDebug("QGLContext::bindTexture() Uploading, image format = %d, externalFormat = 0x%x,"
+         "internalFormat = 0x%x, pixel_type = 0x%x", img.format(), externalFormat, internalFormat, pixel_type);
 #endif
 
    const QImage &constRef = img; // to avoid detach in bits()
@@ -1848,14 +1851,16 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 #if defined(CS_SHOW_DEBUG_OPENGL)
    GLenum error = funcs->glGetError();
    if (error != GL_NO_ERROR) {
-      qWarning("Texture upload failed, error code 0x%x, enum: %d (%x)\n", error, target, target);
+      qDebug("QGLContext::bindTexture() Texture upload failed, error code = 0x%x, enum = %d (%x)",
+            error, target, target);
    }
 #endif
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    static int totalUploadTime = 0;
    totalUploadTime += time.elapsed();
-   printf("Upload done in %d ms, (accumulated: %d ms)\n", time.elapsed(), totalUploadTime);
+   qDebug("QGLContext::bindTexture() Upload done in %d msecs, accumulated time = %d msecs",
+         time.elapsed(), totalUploadTime);
 #endif
 
    // this assumes the size of a texture is always smaller than the max cache size

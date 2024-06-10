@@ -1265,8 +1265,8 @@ bool QWindowsXPStylePrivate::drawBackgroundThruNativeBuffer(XPThemeData &themeDa
       QPixmapCache::insert(pixmapCacheKey, pix);
 
 #if defined(CS_SHOW_DEBUG_GUI_STYLES)
-      printf("Adding pixmap to cache, size(%d, %d), wasAlphaSwapped(%d), wasAlphaFixed(%d), name(%s)\n",
-            w, h, wasAlphaSwapped, wasAlphaFixed, csPrintable(pixmapCacheKey));
+      qDebug("QWindowsXPStyle::drawBackgroundThruNativeBuffer() Adding pixmap to cache, size = (%d, %d), "
+            "wasAlphaSwapped = %d, wasAlphaFixed = %d", w, h, wasAlphaSwapped, wasAlphaFixed);
 #endif
    }
 

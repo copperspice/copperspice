@@ -500,7 +500,7 @@ int QTimerInfoList::timerRemainingTime(int timerId)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE)
-   qWarning("QTimerInfoList::timerRemainingTime() Timer id %d was not found", timerId);
+   qDebug("QTimerInfoList::timerRemainingTime() Timer id %d was not found", timerId);
 #endif
 
    return -1;

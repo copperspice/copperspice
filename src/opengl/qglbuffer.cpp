@@ -187,7 +187,7 @@ void QGLBuffer::write(int offset, const void *data, int count)
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!isCreated()) {
-      qWarning("QGLBuffer::allocate(): buffer not created");
+      qDebug("QGLBuffer::allocate() Buffer was not created");
    }
 #endif
 
@@ -201,7 +201,7 @@ void QGLBuffer::allocate(const void *data, int count)
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!isCreated()) {
-      qWarning("QGLBuffer::allocate(): buffer not created");
+      qDebug("QGLBuffer::allocate() Buffer was not created");
    }
 #endif
 
@@ -215,7 +215,7 @@ bool QGLBuffer::bind()
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!isCreated()) {
-      qWarning("QGLBuffer::bind(): buffer not created");
+      qDebug("QGLBuffer::bind() Buffer was not created");
    }
 #endif
 
@@ -226,7 +226,7 @@ bool QGLBuffer::bind()
       if (d->guard->group() != QOpenGLContextGroup::currentContextGroup()) {
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-         qWarning("QGLBuffer::bind: buffer is not valid in the current context");
+         qDebug("QGLBuffer::bind() Buffer is not valid in the current context");
 #endif
          return false;
       }
@@ -243,7 +243,7 @@ void QGLBuffer::release()
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!isCreated()) {
-      qWarning("QGLBuffer::release(): buffer not created");
+      qDebug("QGLBuffer::release() Buffer was not created");
    }
 #endif
 
@@ -293,7 +293,7 @@ void *QGLBuffer::map(QGLBuffer::Access access)
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (!isCreated()) {
-      qWarning("QGLBuffer::map(): buffer not created");
+      qDebug("QGLBuffer::map() Buffer was not created");
    }
 
 #endif
@@ -311,7 +311,7 @@ bool QGLBuffer::unmap()
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
    if (! isCreated()) {
-      qWarning("QGLBuffer::unmap(): buffer not created");
+      qDebug("QGLBuffer::unmap() Buffer was not created");
    }
 #endif
 

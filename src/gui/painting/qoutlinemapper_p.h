@@ -68,7 +68,7 @@ class QOutlineMapper
    void beginOutline(Qt::FillRule fillRule) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      printf("QOutlineMapper::beginOutline() rule=%d\n", fillRule);
+      qDebug("QOutlineMapper::beginOutline() rule = %d", fillRule);
 #endif
 
       m_valid = true;
@@ -93,7 +93,7 @@ class QOutlineMapper
    void moveTo(const QPointF &pt) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      printf("QOutlineMapper::moveTo() (%f, %f)\n", pt.x(), pt.y());
+      qDebug("QOutlineMapper::moveTo() pointf = (%f, %f)", pt.x(), pt.y());
 #endif
 
       closeSubpath();
@@ -105,7 +105,7 @@ class QOutlineMapper
    void lineTo(const QPointF &pt) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      printf("QOutlineMapper::lineTo() (%f, %f)\n", pt.x(), pt.y());
+      qDebug("QOutlineMapper::lineTo() pointf = (%f, %f)", pt.x(), pt.y());
 #endif
 
       m_elements.append(pt);

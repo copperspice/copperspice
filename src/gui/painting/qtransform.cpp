@@ -186,7 +186,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(dx) | qIsNaN(dy)) {
-      qWarning("QTransform::translate() Value for x or y is invalid");
+      qDebug("QTransform::translate() Value for x or y is invalid");
       return *this;
    }
 #endif
@@ -228,7 +228,7 @@ QTransform QTransform::fromTranslate(qreal dx, qreal dy)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(dx) | qIsNaN(dy)) {
-      qWarning("QTransform::fromTranslate() Value for x or y is invalid");
+      qDebug("QTransform::fromTranslate() Value for x or y is invalid");
       return QTransform();
    }
 #endif
@@ -254,7 +254,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(sx) | qIsNaN(sy)) {
-      qWarning("QTransform::scale() Value for x or y is invalid");
+      qDebug("QTransform::scale() Value for x or y is invalid");
       return *this;
    }
 #endif
@@ -294,7 +294,7 @@ QTransform QTransform::fromScale(qreal sx, qreal sy)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(sx) | qIsNaN(sy)) {
-      qWarning("QTransform::fromScale() Value for x or y is invalid");
+      qDebug("QTransform::fromScale() Value for x or y is invalid");
       return QTransform();
    }
 #endif
@@ -320,7 +320,7 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(sh) | qIsNaN(sv)) {
-      qWarning("QTransform::shear() Value for horizontal or vertical is invalid");
+      qDebug("QTransform::shear() Value for horizontal or vertical is invalid");
       return *this;
    }
 #endif
@@ -377,7 +377,7 @@ QTransform &QTransform::rotate(qreal a, Qt::Axis axis)
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(a)) {
-      qWarning() << "QTransform::rotate() Value is invalid";
+      qDebug() << "QTransform::rotate() Value is invalid";
       return *this;
    }
 #endif
@@ -470,7 +470,7 @@ QTransform &QTransform::rotateRadians(qreal a, Qt::Axis axis)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    if (qIsNaN(a)) {
-      qWarning("QTransform::rotateRadians() Value is invalid");
+      qDebug("QTransform::rotateRadians() Value is invalid");
       return *this;
    }
 #endif

@@ -896,7 +896,7 @@ bool QOpenGLShaderProgram::bind()
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
-        qWarning("QOpenGLShaderProgram::bind: program is not valid in the current context.");
+       qDebug("QOpenGLShaderProgram::bind() Program is not valid in the current context");
         return false;
     }
 #endif
@@ -912,7 +912,7 @@ void QOpenGLShaderProgram::release()
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (d->programGuard && d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
-        qWarning("QOpenGLShaderProgram::release: program is not valid in the current context.");
+       qDebug("QOpenGLShaderProgram::release() Program is not valid in the current context");
     }
 #endif
 

@@ -1242,7 +1242,8 @@ int QWingedEdge::addEdge(int fi, int si)
    QPathEdge::Direction dirs[2] = { QPathEdge::Backward, QPathEdge::Forward };
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("** Adding edge %d / vertices: %.07f %.07f, %.07f %.07f\n", ei, fp->x, fp->y, sp->x, sp->y);
+   qDebug("QWingedEdge::addEdge() Adding edge %d, vertices = %.07f %.07f, %.07f %.07f",
+         ei, fp->x, fp->y, sp->x, sp->y);
 #endif
 
    for (int i = 0; i < 2; ++i) {

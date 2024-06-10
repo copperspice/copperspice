@@ -1144,7 +1144,7 @@ QXcbWindow::NetWmStates QXcbWindow::netWmStates()
 
    } else {
 #ifdef NET_WM_STATE_DEBUG
-      printf("getting net wm state (%x), empty\n", m_window);
+      qDebug("Net wm state (%x), empty", m_window);
 #endif
    }
 

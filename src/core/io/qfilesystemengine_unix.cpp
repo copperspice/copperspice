@@ -917,10 +917,10 @@ QFileSystemEntry QFileSystemEngine::currentPath()
 
 #if defined(CS_SHOW_DEBUG_CORE)
    if (result.isEmpty()) {
-      qWarning("QFileSystemEngine::currentPath() Call to getcwd() failed");
+      qDebug("QFileSystemEngine::currentPath() Call to getcwd() failed");
    }
+#endif
 
-# endif
 #endif
 
    return result;

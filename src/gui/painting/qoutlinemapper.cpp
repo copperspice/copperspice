@@ -220,9 +220,8 @@ void QOutlineMapper::endOutline()
    controlPointRect = boundingRect(elements, m_elements.size());
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf(" - control point rect (%.2f, %.2f) %.2f x %.2f, clip=(%d,%d, %dx%d)\n",
-      controlPointRect.x(), controlPointRect.y(),
-      controlPointRect.width(), controlPointRect.height(),
+   qDebug("QOutlineMapper::endOutline() control point rect = (%.2f, %.2f) %.2f x %.2f, clip = (%d,%d, %dx%d)",
+      controlPointRect.x(), controlPointRect.y(), controlPointRect.width(), controlPointRect.height(),
       m_clip_rect.x(), m_clip_rect.y(), m_clip_rect.width(), m_clip_rect.height());
 #endif
 
@@ -327,20 +326,7 @@ void QOutlineMapper::convertElements(const QPointF *elements,
    m_outline.contours = m_contours.data();
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   printf("QOutlineMapper::endOutline\n");
-
-   printf(" - contours: %d\n", m_outline.n_contours);
-   for (int i = 0; i < m_outline.n_contours; ++i) {
-      printf("   - %d\n", m_outline.contours[i]);
-   }
-
-   printf(" - points: %d\n", m_outline.n_points);
-   for (int i = 0; i < m_outline.n_points; ++i) {
-      printf("   - %d -- %.2f, %.2f, (%d, %d)\n", i,
-         (double) (m_outline.points[i].x / 64.0),
-         (double) (m_outline.points[i].y / 64.0),
-         (int) m_outline.points[i].x, (int) m_outline.points[i].y);
-   }
+   qDebug("QOutlineMapper::convertElements() Finished outline");
 #endif
 }
 

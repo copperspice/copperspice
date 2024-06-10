@@ -758,7 +758,7 @@ bool QOpenGLFramebufferObject::bind()
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group()) {
-        qWarning("QOpenGLFramebufferObject::bind() called from incompatible context");
+        qDebug("QOpenGLFramebufferObject::bind() Called from incompatible context");
     }
 #endif
 
@@ -794,7 +794,7 @@ bool QOpenGLFramebufferObject::release()
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group()) {
-        qWarning("QOpenGLFramebufferObject::release() called from incompatible context");
+       qDebug("QOpenGLFramebufferObject::release() Called from incompatible context");
     }
 #endif
 
@@ -1053,8 +1053,9 @@ bool QOpenGLFramebufferObject::bindDefault()
     }
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-    else
-        qWarning("QOpenGLFramebufferObject::bindDefault() called without current context.");
+    else {
+        qDebug("QOpenGLFramebufferObject::bindDefault() Called without current context");
+    }
 #endif
 
     return ctx != nullptr;
@@ -1095,7 +1096,7 @@ void QOpenGLFramebufferObject::setAttachment(QOpenGLFramebufferObject::Attachmen
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (current->shareGroup() != d->fbo_guard->group())
-        qWarning("QOpenGLFramebufferObject::setAttachment() called from incompatible context");
+        qDebug("QOpenGLFramebufferObject::setAttachment() called from incompatible context");
 #endif
 
     d->funcs.glBindFramebuffer(GL_FRAMEBUFFER, d->fbo());
