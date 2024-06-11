@@ -201,14 +201,14 @@ static bool checkProperty(const QString &fileName, const DomProperty *p)
 inline void openIfndef(QTextStream &str, const QString &symbol)
 {
    if (! symbol.isEmpty()) {
-      str << "#ifndef " << symbol << endl;
+      str << "#if ! defined(" << symbol << ")\n";
    }
 }
 
 inline void closeIfndef(QTextStream &str, const QString &symbol)
 {
-   if (!symbol.isEmpty()) {
-      str << "#endif" << endl;
+   if (! symbol.isEmpty()) {
+      str << "#endif\n\n";
    }
 }
 
@@ -487,7 +487,7 @@ void WriteInitialization::LayoutDefaultHandler::writeProperty(int p, const QStri
          bool ifndefMac = (!(m_state[p] & (HasDefaultFunction | HasDefaultValue))
                && value == defaultStyleValue);
          if (ifndefMac) {
-            str << "#ifndef Q_OS_DARWIN\n";
+            str << "#if ! defined(Q_OS_DARWIN)\n";
          }
          if (p == Margin) { // Use setContentsMargins for numeric values
             writeContentsMargins(indent, objectName, value, str);
@@ -495,7 +495,7 @@ void WriteInitialization::LayoutDefaultHandler::writeProperty(int p, const QStri
             writeSetter(indent, objectName, setter, value, str);
          }
          if (ifndefMac) {
-            str << "#endif\n";
+            str << "#endif\n\n";
          }
          return;
       }
@@ -664,7 +664,7 @@ void WriteInitialization::acceptUI(DomUI *node)
       m_output << "\n" << m_indent << "QMetaObject::connectSlotsByName(" << varName << ");\n";
    }
 
-   m_output << m_option.indent << "}  // setupUi\n\n";
+   m_output << m_option.indent << "}\n\n";
 
    if (! m_mainFormUsedInRetranslateUi) {
       m_refreshInitialization += m_indent;
@@ -676,7 +676,7 @@ void WriteInitialization::acceptUI(DomUI *node)
    m_output << m_option.indent << "void " << "retranslateUi(" << widgetClassName << " *" << varName << ")\n"
       << m_option.indent << "{\n"
       << m_refreshInitialization
-      << m_option.indent << "}  // retranslateUi\n\n";
+      << m_option.indent << "}\n\n";
 
    m_layoutChain.pop();
    m_widgetChain.pop();
@@ -1369,12 +1369,16 @@ void WriteInitialization::writeProperties(const QString &varName,
    QString indent;
    if (!m_widgetChain.top()) {
       indent = m_option.indent;
-      m_output << m_indent << "if (" << varName << "->objectName().isEmpty())\n";
+      m_output << m_indent << "if (" << varName << "->objectName().isEmpty()) {\n";
    }
 
    if (!(flags & WritePropertyIgnoreObjectName))
       m_output << m_indent << indent << varName
          << "->setObjectName(QString::fromUtf8(" << fixString(varName, m_dindent) << "));\n";
+   if (! m_widgetChain.top()) {
+      m_output << m_indent << "}\n";
+   }
+
 
    int leftMargin, topMargin, rightMargin, bottomMargin;
    leftMargin = topMargin = rightMargin = bottomMargin = -1;
@@ -1854,7 +1858,7 @@ QString WriteInitialization::writeFontProperties(const DomFont *f)
    }
    if (f->hasElementWeight() && f->elementWeight() > 0) {
       m_output << m_indent << fontName << ".setWeight("
-         << f->elementWeight() << ");" << endl;
+         << f->elementWeight() << ");\n";
    }
    if (f->hasElementStrikeOut()) {
       m_output << m_indent << fontName << ".setStrikeOut("
@@ -2865,30 +2869,25 @@ static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QS
       return;
    }
 
-   QMap<QString, bool>
-   map; // bool is dummy. The idea is to sort that (always generate in the same order) by putting a set into a map
+   std::set<QString> items;
 
    for (const QString &str : directives) {
-      map.insert(str, true);
-   }
-
-   if (map.size() == 1) {
-      outputStream << "#ifndef " << map.constBegin().key() << endl;
-      return;
+      items.insert(str);
    }
 
    outputStream << "#if";
-   bool doOr = false;
-   for (const QString &str : map.keys()) {
-      if (doOr) {
+   bool moreThanOne = false;
+
+   for (const QString &str : items) {
+      if (moreThanOne) {
          outputStream << " ||";
       }
 
-      outputStream << " !defined(" << str << ')';
-      doOr = true;
+      outputStream << " ! defined(" << str << ')';
+      moreThanOne = true;
    }
 
-   outputStream << endl;
+   outputStream << "\n";
 }
 
 static void generateMultiDirectiveEnd(QTextStream &outputStream, const QSet<QString> &directives)
@@ -2897,7 +2896,7 @@ static void generateMultiDirectiveEnd(QTextStream &outputStream, const QSet<QStr
       return;
    }
 
-   outputStream << "#endif" << endl;
+   outputStream << "#endif\n\n";
 }
 
 WriteInitialization::Item::Item(const QString &itemClassName, const QString &indent, QTextStream &setupUiStream,
@@ -2948,7 +2947,7 @@ QString WriteInitialization::Item::writeSetupUi(const QString &parent, Item::Emp
 
    while (it != m_setupUiData.setters.constEnd()) {
       openIfndef(m_setupUiStream, it.key());
-      m_setupUiStream << m_indent << uniqueName << it.value() << endl;
+      m_setupUiStream << m_indent << uniqueName << it.value() << "\n";
       closeIfndef(m_setupUiStream, it.key());
       ++it;
    }
@@ -2989,7 +2988,7 @@ void WriteInitialization::Item::writeRetranslateUi(const QString &parentPath)
          oldDirective = newDirective;
       }
 
-      m_retranslateUiStream << m_indent << uniqueName << it.value() << endl;
+      m_retranslateUiStream << m_indent << uniqueName << it.value() << "\n";
       ++it;
    }
 
