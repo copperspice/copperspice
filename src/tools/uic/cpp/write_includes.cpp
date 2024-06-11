@@ -39,28 +39,24 @@ constexpr int debugWriteIncludes   = 0;
 constexpr int warnHeaderGeneration = 0;
 
 struct ClassInfoEntry {
-   const char *klass;
-   const char *module;
-   const char *header;
+   const char *m_name;
+   const char *m_library;
+   const char *m_header;
 };
 
 static const ClassInfoEntry qclass_lib_map[] = {
 
-#define QT_CLASS_LIB(klass, module, header) { #klass, #module, #header },
-
+#define QT_CLASS_LIB(Name, Library, Header) { #Name, #Library, #Header },
 #include <qclass_lib_map.h>
 
 #undef QT_CLASS_LIB
 };
 
 // Format a module header as 'QtCore/QObject'
-static inline QString moduleHeader(const QString &module, const QString &header)
+static inline QString modifyHeader(const QString &name, const QString &header)
 {
-   QString rc = module;
-   rc += '/';
-   rc += header;
-
-   return rc;
+   QString retval = name + '/' + header;
+   return retval;
 }
 
 namespace CPP {
@@ -68,25 +64,22 @@ namespace CPP {
 WriteIncludes::WriteIncludes(Uic *uic)
    : m_uic(uic), m_output(uic->output()), m_scriptsActivated(false), m_laidOut(false)
 {
-   // When possible (no namespace) use the "QtModule/QClass" convention
-   // and create a re-mapping of the old header "qclass.h" to it.
-
    const QString namespaceDelimiter = "::";
-   const ClassInfoEntry *classLibEnd = qclass_lib_map + sizeof(qclass_lib_map) / sizeof(ClassInfoEntry);
 
-   for (const ClassInfoEntry *it = qclass_lib_map; it < classLibEnd;  ++it) {
+   for (auto item : qclass_lib_map) {
 
-      const QString klass  = QString::fromLatin1(it->klass);
-      const QString module = QString::fromLatin1(it->module);
-      QString header       = QString::fromLatin1(it->header);
+      const QString className   = QString::fromLatin1(item.m_name);
+      const QString libraryName = QString::fromLatin1(item.m_library);
+      const QString headerFName = QString::fromLatin1(item.m_header);
 
-      if (klass.contains(namespaceDelimiter)) {
-         m_classToHeader.insert(klass, moduleHeader(module, header));
+      if (className.contains(namespaceDelimiter)) {
+         m_classToHeader.insert(className, modifyHeader(libraryName, headerFName));
 
       } else {
-         const QString newHeader = moduleHeader(module, klass);
-         m_classToHeader.insert(klass, newHeader);
-         m_oldHeaderToNewHeader.insert(header, newHeader);
+         const QString newHeader = modifyHeader(libraryName, className);
+
+         m_classToHeader.insert(className, newHeader);
+         m_oldHeaderToNewHeader.insert(headerFName, newHeader);
       }
    }
 }
@@ -168,9 +161,10 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
       }
 
       // Known class
-      const StringMap::const_iterator it = m_classToHeader.constFind(className);
-      if (it != m_classToHeader.constEnd()) {
-         header = it.value();
+      const StringMap::const_iterator iter = m_classToHeader.constFind(className);
+
+      if (iter != m_classToHeader.constEnd()) {
+         header = iter.value();
          global =  true;
          break;
       }
