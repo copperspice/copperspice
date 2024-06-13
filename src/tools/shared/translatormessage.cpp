@@ -35,8 +35,8 @@ TranslatorMessage::TranslatorMessage()
 }
 
 TranslatorMessage::TranslatorMessage(const QString &context, const QString &sourceText, const QString &comment,
-            const QString &userData, const QString &fileName, int lineNumber,
-            const QStringList &translations, Type type, bool plural)
+      const QString &userData, const QString &fileName, int lineNumber,
+      const QStringList &translations, Type type, bool plural)
    : m_context(context), m_sourcetext(sourceText), m_comment(comment), m_userData(userData),
      m_translations(translations), m_fileName(fileName), m_lineNumber(lineNumber),
      m_type(type), m_plural(plural)
@@ -65,12 +65,16 @@ void TranslatorMessage::addReferenceUniq(const QString &fileName, int lineNumber
          return;
       }
 
-      if (! m_extraRefs.isEmpty()) // Rather common case, so special-case it
+      if (! m_extraRefs.isEmpty())  {
+         // Rather common case, so special-case it
+
          for (const Reference &ref : m_extraRefs) {
             if (fileName == ref.fileName() && lineNumber == ref.lineNumber()) {
                return;
             }
          }
+      }
+
       m_extraRefs.append(Reference(fileName, lineNumber));
    }
 }
@@ -84,7 +88,7 @@ void TranslatorMessage::clearReferences()
 
 void TranslatorMessage::setReferences(const QList<TranslatorMessage::Reference> &refs0)
 {
-   if (!refs0.isEmpty()) {
+   if (! refs0.isEmpty()) {
       QList<TranslatorMessage::Reference> refs = refs0;
       const Reference &ref = refs.takeFirst();
 

@@ -48,8 +48,8 @@ static const ClassInfoEntry qclass_lib_map[] = {
 
 #define QT_CLASS_LIB(Name, Library, Header) { #Name, #Library, #Header },
 #include <qclass_lib_map.h>
-
 #undef QT_CLASS_LIB
+
 };
 
 // Format a module header as 'QtCore/QObject'
@@ -88,6 +88,7 @@ void WriteIncludes::acceptUI(DomUI *node)
 {
    m_scriptsActivated = false;
    m_laidOut = false;
+
    m_localIncludes.clear();
    m_globalIncludes.clear();
    m_knownClasses.clear();
@@ -104,7 +105,6 @@ void WriteIncludes::acceptUI(DomUI *node)
    add("QApplication");
    add("QVariant");
    add("QAction");
-
    add("QButtonGroup");
    add("QHeaderView");
 
@@ -156,7 +156,7 @@ void WriteIncludes::acceptProperty(DomProperty *node)
 void WriteIncludes::insertIncludeForClass(const QString &className, QString header, bool global)
 {
    do {
-      if (!header.isEmpty()) {
+      if (! header.isEmpty()) {
          break;
       }
 
@@ -165,11 +165,11 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 
       if (iter != m_classToHeader.constEnd()) {
          header = iter.value();
-         global =  true;
+         global = true;
          break;
       }
 
-      // Quick check by class name to detect includehints provided for custom widgets.
+      // check by class name to detect includehints provided for custom widgets.
       // Remove namespaces
       QString lowerClassName = className.toLower();
 
@@ -186,7 +186,7 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
       }
 
       // Last resort: Create default header
-      if (!m_uic->option().implicitIncludes) {
+      if (! m_uic->option().implicitIncludes) {
          break;
       }
 
@@ -202,7 +202,7 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 
    } while (false);
 
-   if (!header.isEmpty()) {
+   if (! header.isEmpty()) {
       insertInclude(header, global);
    }
 }
@@ -216,7 +216,8 @@ void WriteIncludes::add(const QString &className, bool determineHeader, const QS
    m_knownClasses.insert(className);
 
    if (! m_laidOut && m_uic->customWidgetsInfo()->extends(className, "QToolBox")) {
-      add("QLayout");   // spacing property of QToolBox)
+      // spacing property of QToolBox
+      add("QLayout");
    }
 
    if (className == "Line") {
@@ -238,22 +239,24 @@ void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
    }
 
    if (const DomScript *domScript = node->elementScript())
-      if (!domScript->text().isEmpty()) {
+      if (! domScript->text().isEmpty()) {
          activateScripts();
       }
 
-   if (!node->elementHeader() || node->elementHeader()->text().isEmpty()) {
-      add(className, false); // no header specified
+   if (! node->elementHeader() || node->elementHeader()->text().isEmpty()) {
+      // no header specified
+      add(className, false);
 
    } else {
-      // custom header unless it is a built-in qt class
+      // custom header unless it is a built-in class
       QString header;
       bool global = false;
 
-      if (!m_classToHeader.contains(className)) {
+      if (! m_classToHeader.contains(className)) {
          global = node->elementHeader()->attributeLocation().toLower() == "global";
          header = node->elementHeader()->text();
       }
+
       add(className, true, header, global);
    }
 }
@@ -286,8 +289,8 @@ void WriteIncludes::insertInclude(const QString &header, bool global)
       return;
    }
 
-   // Insert. Also remember base name for quick check of suspicious custom plugins
    includes.insert(header, false);
+
    const QString lowerBaseName = QFileInfo(header).completeBaseName ().toLower();
    m_includeBaseNames.insert(lowerBaseName);
 }
@@ -329,4 +332,3 @@ void WriteIncludes::activateScripts()
 }
 
 } // namespace CPP
-

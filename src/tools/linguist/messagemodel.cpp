@@ -425,7 +425,7 @@ void DataModel::doCharCounting(const QString &text, int &trW, int &trC, int &trC
    bool inWord = false;
 
    for (int i = 0; i < text.length(); ++i) {
-      if (text[i].isLetterOrNumber() || text[i] == QLatin1Char('_')) {
+      if (text[i].isLetterOrNumber() || text[i] == QChar('_')) {
          if (! inWord) {
             ++trW;
             inWord = true;
@@ -1001,7 +1001,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
    }
 
    QString prefix = names.first();
-   if (prefix.startsWith(QLatin1Char('='))) {
+   if (prefix.startsWith('=')) {
       prefix.remove(0, 1);
    }
 
@@ -1009,7 +1009,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
    for (int i = 1; i < names.count(); ++i) {
       QString fn = names[i];
-      if (fn.startsWith(QLatin1Char('='))) {
+      if (fn.startsWith('=')) {
          fn.remove(0, 1);
       }
 
@@ -1058,7 +1058,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
       QString fn = names[j];
 
-      if (fn.startsWith(QLatin1Char('='))) {
+      if (fn.startsWith('=')) {
          ret += '=';
          ++off;
       }
@@ -1580,7 +1580,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
          switch (column - numLangs) {
             case 0:
                // Source text
-               return mci->multiMessageItem(row)->text().simplified().remove(QLatin1Char('&'));
+               return mci->multiMessageItem(row)->text().simplified().remove('&');
 
             case 1:
                // Dummy column

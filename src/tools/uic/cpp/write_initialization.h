@@ -108,7 +108,8 @@ inline bool operator <(const SizePolicyHandle &f1, const SizePolicyHandle &f2)
    return f1.compare(f2) < 0;
 }
 
-struct WriteInitialization : public TreeWalker {
+struct WriteInitialization : public TreeWalker
+{
    using DomPropertyList = QList<DomProperty *>;
    using DomPropertyMap  = QHash<QString, DomProperty *>;
 
@@ -158,6 +159,11 @@ struct WriteInitialization : public TreeWalker {
    };
 
  private:
+   enum { WritePropertyIgnoreMargin     = 1,
+          WritePropertyIgnoreSpacing    = 2,
+          WritePropertyIgnoreObjectName = 4
+   };
+
    static QString domColor2QString(const DomColor *c);
 
    QString iconCall(const DomProperty *prop);
@@ -176,8 +182,6 @@ struct WriteInitialization : public TreeWalker {
    // Apply a comma-separated list of values using a function "setSomething(int idx, value)"
    void writePropertyList(const QString &varName, const QString &setFunction, const QString &value,
       const QString &defaultValue);
-
-   enum { WritePropertyIgnoreMargin = 1, WritePropertyIgnoreSpacing = 2, WritePropertyIgnoreObjectName = 4 };
 
    QString writeStringListProperty(const DomStringList *list) const;
    void writeProperties(const QString &varName, const QString &className, const DomPropertyList &lst, unsigned flags = 0);
@@ -216,19 +220,26 @@ struct WriteInitialization : public TreeWalker {
 
     private:
       struct ItemData {
-         ItemData() : policy(DontGenerate) {}
-         QMultiMap<QString, QString> setters;       // directive to setter
+         ItemData()
+            : policy(DontGenerate)
+         { }
+
+         QMultiMap<QString, QString> setters;
          QSet<QString> directives;
 
-         enum TemporaryVariableGeneratorPolicy {   // policies with priority, number describes the priority
+         // policies with priority, number describes the priority
+         enum TemporaryVariableGeneratorPolicy {
             DontGenerate = 1,
             GenerateWithMultiDirective = 2,
             Generate = 3
-         } policy;
+         };
+
+         TemporaryVariableGeneratorPolicy policy;
       };
 
       ItemData m_setupUiData;
       ItemData m_retranslateUiData;
+
       QList<Item *> m_children;
       Item *m_parent;
 
@@ -271,7 +282,6 @@ struct WriteInitialization : public TreeWalker {
 
    bool isValidObject(const QString &name) const;
 
- private:
    QString writeFontProperties(const DomFont *f);
    QString writeIconProperties(const DomResourceIcon *i);
    QString writeSizePolicy(const DomSizePolicy *sp);

@@ -68,7 +68,7 @@ class MessageItem
    }
 
    QString pluralText() const {
-      return m_message.extra(QLatin1String("po-msgid_plural"));
+      return m_message.extra("po-msgid_plural");
    }
 
    QString comment() const {

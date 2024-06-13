@@ -216,6 +216,7 @@ QString TSReader::readTransContents()
             break;
          }
       }
+
       return result;
 
    } else {
@@ -262,7 +263,6 @@ bool TSReader::read(Translator &translator)
 
                readElementText();
                m_cd.appendError("Warning: ignoring <defaultcodec> element");
-
 
             } else if (isStartElement() && name().toString().startsWith(text_extrans)) {
 

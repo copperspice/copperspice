@@ -37,7 +37,6 @@
 #include <sourcecodeview.h>
 #include <statistics.h>
 #include <translate_dialog.h>
-
 // #include "formpreviewview.h"
 
 #include <qaction.h>
@@ -177,7 +176,6 @@ static const QVariant &pxObsolete()
       QVariant::fromValue(QPixmap(":/images/s_check_obsolete.png"));
    return v;
 }
-
 
 class SortedMessagesModel : public QSortFilterProxyModel
 {

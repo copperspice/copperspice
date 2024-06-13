@@ -34,9 +34,8 @@
 #include <QUrl>
 #include <QVBoxLayout>
 
-ErrorsView::ErrorsView(MultiDataModel *dataModel, QWidget *parent) :
-   QListView(parent),
-   m_dataModel(dataModel)
+ErrorsView::ErrorsView(MultiDataModel *dataModel, QWidget *parent)
+   : QListView(parent), m_dataModel(dataModel)
 {
    m_list = new QStandardItemModel(this);
    setModel(m_list);
