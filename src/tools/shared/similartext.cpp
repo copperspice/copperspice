@@ -24,9 +24,10 @@
 #include <similartext.h>
 
 #include <translator.h>
+
 #include <qbytearray.h>
-#include <qstring.h>
 #include <qlist.h>
+#include <qstring.h>
 
 /*
   How similar are two texts?  The approach used here relies on co-occurrence

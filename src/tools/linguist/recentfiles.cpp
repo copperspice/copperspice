@@ -21,14 +21,15 @@
 *
 ***********************************************************************/
 
-#include "recentfiles.h"
-#include "globals.h"
+#include <recentfiles.h>
 
-#include <QDebug>
-#include <QFileInfo>
-#include <QSettings>
-#include <QString>
-#include <QStringList>
+#include <globals.h>
+
+#include <qdebug.h>
+#include <qfileinfo.h>
+#include <qsettings.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 static QString configKey()
 {

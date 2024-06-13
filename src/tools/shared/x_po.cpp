@@ -24,8 +24,8 @@
 #include <translator.h>
 
 #include <qdebug.h>
-#include <qiodevice.h>
 #include <qhash.h>
+#include <qiodevice.h>
 #include <qstring.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>

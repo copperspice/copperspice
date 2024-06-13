@@ -26,9 +26,9 @@
 
 #include <treewalker.h>
 
+#include <qiodevice.h>
 #include <qstring.h>
 #include <qtextstream.h>
-#include <qiodevice.h>
 
 class Driver;
 class Uic;

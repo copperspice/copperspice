@@ -22,7 +22,9 @@
 ***********************************************************************/
 
 #include <translator.h>
+
 #include <similartext.h>
+
 #include <qdebug.h>
 #include <qdir.h>
 #include <qfile.h>

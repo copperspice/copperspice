@@ -32,10 +32,8 @@
 #include <write_iconinitialization.h>
 
 #include <qdebug.h>
-#include <qtextstream.h>
 #include <qstringfwd.h>
-
-#include <ctype.h>
+#include <qtextstream.h>
 
 namespace {
 

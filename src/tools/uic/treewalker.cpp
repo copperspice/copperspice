@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <treewalker.h>
+
 #include <ui4.h>
 
 void TreeWalker::acceptUI(DomUI *ui)

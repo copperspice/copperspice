@@ -24,7 +24,7 @@
 #ifndef ERRORSVIEW_H
 #define ERRORSVIEW_H
 
-#include <QListView>
+#include <qlistview.h>
 
 class QStandardItemModel;
 class MultiDataModel;

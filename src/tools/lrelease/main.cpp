@@ -21,19 +21,19 @@
 *
 ***********************************************************************/
 
-#include "translator.h"
+#include <translator.h>
 
 #include <qcoreapplication.h>
-#include <qtranslator.h>
 #include <qdebug.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qlibraryinfo.h>
 #include <qregularexpression.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
-#include <qlibraryinfo.h>
+#include <qtranslator.h>
 
 static void printOut(const QString &out)
 {

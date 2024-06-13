@@ -30,8 +30,8 @@
 #include <qdiriterator.h>
 #include <qdomdocument.h>
 #include <qfile.h>
-#include <qlocale.h>
 #include <qiodevice.h>
+#include <qlocale.h>
 #include <qmultihash.h>
 #include <qstack.h>
 

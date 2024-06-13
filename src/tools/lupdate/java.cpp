@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <lupdate.h>
-
 #include <translator.h>
+
+#include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qfile.h>
 #include <qregularexpression.h>
@@ -31,7 +32,6 @@
 #include <qstack.h>
 #include <qstring.h>
 #include <qtextcodec.h>
-#include <qcoreapplication.h>
 
 #include <iostream>
 

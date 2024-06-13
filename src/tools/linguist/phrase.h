@@ -24,10 +24,10 @@
 #ifndef PHRASE_H
 #define PHRASE_H
 
-#include <qobject.h>
-#include <qstring.h>
 #include <qlist.h>
 #include <qlocale.h>
+#include <qobject.h>
+#include <qstring.h>
 
 class PhraseBook;
 class QphHandler;

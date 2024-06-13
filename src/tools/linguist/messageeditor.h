@@ -24,21 +24,21 @@
 #ifndef MESSAGEEDITOR_H
 #define MESSAGEEDITOR_H
 
-#include "messagemodel.h"
+#include <messagemodel.h>
 
-#include <qlocale.h>
-#include <qtimer.h>
 #include <qframe.h>
+#include <qlocale.h>
 #include <qscrollarea.h>
+#include <qtimer.h>
 
 class QBoxLayout;
 class QMainWindow;
 class QTextEdit;
 
-class MessageEditor;
-class FormatTextEdit;
-class FormWidget;
 class FormMultiWidget;
+class FormWidget;
+class FormatTextEdit;
+class MessageEditor;
 
 struct MessageEditorData {
    QWidget *container;

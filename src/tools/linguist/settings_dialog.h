@@ -26,8 +26,8 @@
 
 #include <ui_settings_dialog.h>
 
-#include <qlocale.h>
 #include <qdialog.h>
+#include <qlocale.h>
 
 class DataModel;
 class PhraseBook;

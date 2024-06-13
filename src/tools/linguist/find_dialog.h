@@ -24,8 +24,8 @@
 #ifndef FIND_DIALOG_H
 #define FIND_DIALOG_H
 
-#include <ui_find_dialog.h>
 #include <messagemodel.h>
+#include <ui_find_dialog.h>
 
 #include <qdialog.h>
 

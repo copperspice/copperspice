@@ -21,23 +21,22 @@
 *
 ***********************************************************************/
 
-#include <mainwindow.h>
 #include <globals.h>
+#include <mainwindow.h>
 
-#include <QFile>
-#include <QLibraryInfo>
-#include <QLocale>
-#include <QSettings>
-#include <QTextCodec>
-#include <QTranslator>
-
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QPixmap>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
+#include <qfile.h>
+#include <qlibraryinfo.h>
+#include <qlocale.h>
+#include <qpixmap.h>
+#include <qsettings.h>
+#include <qtextcodec.h>
+#include <qtranslator.h>
 
 #ifdef Q_OS_DARWIN
-#include <QUrl>
-#include <QFileOpenEvent>
+#include <qfileopenevent.h>
+#include <qurl.h>
 
 class ApplicationEventFilter : public QObject
 {

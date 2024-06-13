@@ -21,27 +21,27 @@
 *
 ***********************************************************************/
 
-#include <driver.h>
 #include <uic.h>
-#include <ui4.h>
+
+#include <driver.h>
 #include <option.h>
-#include <treewalker.h>
-#include <validator.h>
-
-#ifdef QT_UIC_CPP_GENERATOR
-#include <write_includes.h>
-#include <write_declaration.h>
-#endif
-
-#ifdef QT_UIC_JAVA_GENERATOR
-#include <javawriteincludes.h>
-#include <javawritedeclaration.h>
-#endif
-
 #include <qfileinfo.h>
 #include <qregularexpression.h>
 #include <qtextstream.h>
 #include <qxmlstreamreader.h>
+#include <treewalker.h>
+#include <ui4.h>
+#include <validator.h>
+
+#ifdef QT_UIC_CPP_GENERATOR
+#include <write_declaration.h>
+#include <write_includes.h>
+#endif
+
+#ifdef QT_UIC_JAVA_GENERATOR
+#include <javawritedeclaration.h>
+#include <javawriteincludes.h>
+#endif
 
 Uic::Uic(Driver *d)
    : drv(d), out(d->output()), opt(d->option()), externalPix(true)

@@ -24,11 +24,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <ui4.h>
-
-#include <qset.h>
 #include <qlist.h>
+#include <qset.h>
 #include <qstring.h>
+#include <ui4.h>
 
 inline bool toBool(const QString &str)
 {

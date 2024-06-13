@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "mainwindow.h"
+#include <mainwindow.h>
 
 #include <batchtranslation_dialog.h>
 #include <errorsview.h>

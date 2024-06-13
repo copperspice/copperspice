@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
-#include "errorsview.h"
+#include <errorsview.h>
 
-#include "messagemodel.h"
+#include <messagemodel.h>
 
-#include <QList>
-#include <QListView>
-#include <QStandardItem>
-#include <QStandardItemModel>
-#include <QString>
-#include <QTextEdit>
-#include <QUrl>
-#include <QVBoxLayout>
+#include <qlist.h>
+#include <qlistview.h>
+#include <qstandarditem.h>
+#include <qstandarditemmodel.h>
+#include <qstring.h>
+#include <qtextedit.h>
+#include <qurl.h>
+#include <qvboxlayout.h>
 
 ErrorsView::ErrorsView(MultiDataModel *dataModel, QWidget *parent)
    : QListView(parent), m_dataModel(dataModel)

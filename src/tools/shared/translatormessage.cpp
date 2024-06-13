@@ -23,9 +23,9 @@
 
 #include <translatormessage.h>
 
-#include <qplatformdefs.h>
 #include <qdatastream.h>
 #include <qdebug.h>
+#include <qplatformdefs.h>
 
 #include <stdlib.h>
 

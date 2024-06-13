@@ -21,25 +21,25 @@
 *
 ***********************************************************************/
 
-#include "messageeditorwidgets.h"
-#include "messagehighlighter.h"
+#include <messageeditorwidgets.h>
+#include <messagehighlighter.h>
 
 #include <translator.h>
 
-#include <QAbstractTextDocumentLayout>
-#include <QAction>
-#include <QApplication>
-#include <QClipboard>
-#include <QDebug>
-#include <QLayout>
-#include <QMenu>
-#include <QMessageBox>
-#include <QPainter>
-#include <QScrollArea>
-#include <QTextBlock>
-#include <QTextDocumentFragment>
-#include <QToolButton>
-#include <QVBoxLayout>
+#include <qabstracttextdocumentlayout.h>
+#include <qaction.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qdebug.h>
+#include <qlayout.h>
+#include <qmenu.h>
+#include <qmessagebox.h>
+#include <qpainter.h>
+#include <qscrollarea.h>
+#include <qtextblock.h>
+#include <qtextdocumentfragment.h>
+#include <qtoolbutton.h>
+#include <qvboxlayout.h>
 
 ExpandingTextEdit::ExpandingTextEdit(QWidget *parent)
    : QTextEdit(parent)

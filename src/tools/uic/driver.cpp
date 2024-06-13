@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <driver.h>
-#include <uic.h>
-#include <ui4.h>
 
-#include <qfileinfo.h>
 #include <qdebug.h>
+#include <qfileinfo.h>
+#include <ui4.h>
+#include <uic.h>
 
 Driver::Driver()
    : m_stdout(stdout, QFile::WriteOnly | QFile::Text)

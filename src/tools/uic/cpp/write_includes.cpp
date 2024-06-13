@@ -28,9 +28,8 @@
 #include <ui4.h>
 #include <uic.h>
 
-#include <qstring.h>
-#include <qdebug.h>
 #include <qfileinfo.h>
+#include <qstring.h>
 #include <qtextstream.h>
 
 #include <stdio.h>

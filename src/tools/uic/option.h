@@ -24,8 +24,8 @@
 #ifndef OPTION_H
 #define OPTION_H
 
-#include <qstring.h>
 #include <qdir.h>
+#include <qstring.h>
 
 struct Option {
    enum Generator {

@@ -24,10 +24,9 @@
 #ifndef CUSTOMWIDGETSINFO_H
 #define CUSTOMWIDGETSINFO_H
 
-#include <treewalker.h>
-
-#include <qstringlist.h>
 #include <qmap.h>
+#include <qstringlist.h>
+#include <treewalker.h>
 
 class Driver;
 class DomScript;

@@ -24,8 +24,8 @@
 #ifndef BATCHTRANSLATION_DIALOG_H
 #define BATCHTRANSLATION_DIALOG_H
 
-#include <ui_batchtranslation.h>
 #include <phrase.h>
+#include <ui_batchtranslation.h>
 
 #include <qdialog.h>
 #include <qstandarditemmodel.h>

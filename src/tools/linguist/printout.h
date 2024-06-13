@@ -24,15 +24,15 @@
 #ifndef PRINTOUT_H
 #define PRINTOUT_H
 
-#include <QFont>
-#include <QPainter>
-#include <QRect>
-#include <QTextOption>
-#include <QList>
-#include <QDateTime>
+#include <qdatetime.h>
+#include <qfont.h>
+#include <qlist.h>
+#include <qpainter.h>
+#include <qrect.h>
+#include <qtextoption.h>
 
-class QPrinter;
 class QFontMetrics;
+class QPrinter;
 
 class PrintOut
 {

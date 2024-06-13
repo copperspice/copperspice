@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <lupdate.h>
-
 #include <similartext.h>
 #include <translator.h>
+
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qmap.h>

@@ -23,18 +23,18 @@
 
 #include <write_declaration.h>
 
+#include <customwidgetsinfo.h>
 #include <databaseinfo.h>
 #include <driver.h>
-#include <customwidgetsinfo.h>
 #include <extract_images.h>
 #include <ui4.h>
 #include <uic.h>
 #include <write_icondeclaration.h>
-#include <write_initialization.h>
 #include <write_iconinitialization.h>
+#include <write_initialization.h>
 
-#include <qtextstream.h>
 #include <qdebug.h>
+#include <qtextstream.h>
 
 namespace {
 

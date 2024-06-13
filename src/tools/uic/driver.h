@@ -25,7 +25,6 @@
 #define DRIVER_H
 
 #include <option.h>
-
 #include <qhash.h>
 #include <qstring.h>
 #include <qstringlist.h>

@@ -30,11 +30,11 @@
 #include <write_icondata.h>
 
 #include <qdatastream.h>
-#include <qtextstream.h>
-#include <qtextcodec.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qtextcodec.h>
+#include <qtextstream.h>
 
 namespace CPP {
 

@@ -28,7 +28,6 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
-
 #include <qxmlstreamreader.h>
 #include <qxmlstreamwriter.h>
 

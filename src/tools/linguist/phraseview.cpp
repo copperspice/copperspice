@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
-#include "globals.h"
-#include "mainwindow.h"
-#include "messagemodel.h"
-#include "phrase.h"
-#include "phraseview.h"
-#include "phrasemodel.h"
-#include "similartext.h"
+#include <phraseview.h>
+
+#include <globals.h>
+#include <mainwindow.h>
+#include <messagemodel.h>
+#include <phrase.h>
+#include <phrasemodel.h>
+#include <similartext.h>
 
 #include <qalgorithms.h>
 #include <qheaderview.h>

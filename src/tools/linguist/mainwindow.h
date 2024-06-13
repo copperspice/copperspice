@@ -26,9 +26,9 @@
 
 #include <ui_mainwindow.h>
 
+#include <messagemodel.h>
 #include <phrase.h>
 #include <recentfiles.h>
-#include <messagemodel.h>
 
 #include <qhash.h>
 #include <qlocale.h>
@@ -36,14 +36,14 @@
 
 #include <optional>
 
-class QPixmap;
 class QAction;
 class QDialog;
+class QIcon;
 class QLabel;
 class QMenu;
+class QPixmap;
 class QPrinter;
 class QProcess;
-class QIcon;
 class QSortFilterProxyModel;
 class QStackedWidget;
 class QTableView;
@@ -55,10 +55,10 @@ class FindDialog;
 class FocusWatcher;
 class MessageEditor;
 class PhraseView;
+class SettingsDialog;
 class SourceCodeView;
 class Statistics;
 class TranslateDialog;
-class SettingsDialog;
 
 // class FormPreviewView;
 

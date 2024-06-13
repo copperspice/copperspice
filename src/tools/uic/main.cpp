@@ -23,14 +23,13 @@
 
 #define UIC_VERSION_STR "1.0.0"
 
-#include <uic.h>
-#include <option.h>
 #include <driver.h>
-
-#include <qfile.h>
+#include <option.h>
 #include <qdir.h>
-#include <qtextstream.h>
+#include <qfile.h>
 #include <qtextcodec.h>
+#include <qtextstream.h>
+#include <uic.h>
 
 static const char *error = nullptr;
 

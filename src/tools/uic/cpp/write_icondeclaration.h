@@ -25,6 +25,7 @@
 #define CPPWRITEICONDECLARATION_H
 
 #include <treewalker.h>
+
 #include <qtextstream.h>
 
 class Driver;

@@ -24,8 +24,8 @@
 #ifndef MESSAGEHIGHLIGHTER_H
 #define MESSAGEHIGHLIGHTER_H
 
-#include <qtextedit.h>
 #include <qsyntaxhighlighter.h>
+#include <qtextedit.h>
 
 // Message highlighter based on HtmlSyntaxHighlighter from designer
 class MessageHighlighter : public QSyntaxHighlighter

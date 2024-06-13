@@ -24,8 +24,8 @@
 #ifndef SIMILARTEXT_H
 #define SIMILARTEXT_H
 
-#include <qstring.h>
 #include <qlist.h>
+#include <qstring.h>
 
 class Translator;
 

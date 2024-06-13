@@ -30,10 +30,10 @@ class MessageHighlighter;
 #include <qimage.h>
 #include <qlabel.h>
 #include <qmap.h>
+#include <qstringfwd.h>
 #include <qtextedit.h>
 #include <qurl.h>
 #include <qwidget.h>
-#include <qstringfwd.h>
 
 class QAbstractButton;
 class QAction;

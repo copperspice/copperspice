@@ -29,10 +29,10 @@
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qlibraryinfo.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtranslator.h>
-#include <qlibraryinfo.h>
 
 #include <iostream>
 

@@ -24,10 +24,9 @@
 #ifndef DATABASEINFO_H
 #define DATABASEINFO_H
 
-#include <treewalker.h>
-
-#include <qstringlist.h>
 #include <qmap.h>
+#include <qstringlist.h>
+#include <treewalker.h>
 
 class DatabaseInfo : public TreeWalker
 {

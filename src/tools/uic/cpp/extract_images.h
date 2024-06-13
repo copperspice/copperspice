@@ -28,9 +28,10 @@
 
 #include <qdir.h>
 
-class QTextStream;
 class Driver;
 class Uic;
+
+class QTextStream;
 
 struct Option;
 
