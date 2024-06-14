@@ -37,6 +37,12 @@
 
 namespace {
 
+QString accessibilityDefineC = "QT_NO_ACCESSIBILITY";
+QString toolTipDefineC       = "QT_NO_TOOLTIP";
+QString whatsThisDefineC     = "QT_NO_WHATSTHIS";
+QString statusTipDefineC     = "QT_NO_STATUSTIP";
+QString shortcutDefineC      = "QT_NO_SHORTCUT";
+
 // fix an enumeration name, was "BottomToolBarArea" instead of "Qt::BottomToolBarArea"
 void fixQtEnumerationName(QString &name)
 {
@@ -209,11 +215,6 @@ inline void closeIfndef(QTextStream &str, const QString &symbol)
    }
 }
 
-const char *accessibilityDefineC = "QT_NO_ACCESSIBILITY";
-const char *toolTipDefineC       = "QT_NO_TOOLTIP";
-const char *whatsThisDefineC     = "QT_NO_WHATSTHIS";
-const char *statusTipDefineC     = "QT_NO_STATUSTIP";
-const char *shortcutDefineC      = "QT_NO_SHORTCUT";
 }
 
 namespace CPP {
@@ -621,7 +622,7 @@ void WriteInitialization::acceptUI(DomUI *node)
    acceptWidget(node->elementWidget());
 
    if (m_buddies.size() > 0) {
-      openIfndef(m_output, QString::fromLatin1(shortcutDefineC));
+      openIfndef(m_output, shortcutDefineC);
    }
 
    for (int i = 0; i < m_buddies.size(); ++i) {
@@ -642,7 +643,7 @@ void WriteInitialization::acceptUI(DomUI *node)
    }
 
    if (m_buddies.size() > 0) {
-      closeIfndef(m_output, QString::fromLatin1(shortcutDefineC));
+      closeIfndef(m_output, shortcutDefineC);
    }
 
    if (node->elementTabStops()) {
@@ -1740,7 +1741,7 @@ void WriteInitialization::writeProperties(const QString &varName,
       }
 
       if (propertyValue.size()) {
-         const char *defineC = nullptr;
+         QString defineC;
 
          if (propertyName == "toolTip") {
             defineC = toolTipDefineC;
@@ -1755,24 +1756,25 @@ void WriteInitialization::writeProperties(const QString &varName,
             defineC = accessibilityDefineC;
          }
 
-         QTextStream &o = autoTrOutput(p);
+         QTextStream &outStream = autoTrOutput(p);
 
-         if (defineC) {
-            openIfndef(o, QString::fromLatin1(defineC));
+         if (! defineC.isEmpty()) {
+            openIfndef(outStream, defineC);
          }
 
-         o << m_indent << varNewName << setFunction << propertyValue;
+         outStream << m_indent << varNewName << setFunction << propertyValue;
 
-         if (!stdset) {
-            o << ')';
+         if (! stdset) {
+            outStream << ')';
          }
 
-         o << ");\n";
-         if (defineC) {
-            closeIfndef(o, QString::fromLatin1(defineC));
+         outStream << ");\n";
+
+         if (! defineC.isEmpty()) {
+            closeIfndef(outStream, defineC);
          }
 
-         if (varName == m_mainFormVarName && &o == &m_refreshOut) {
+         if ((varName == m_mainFormVarName) && (&outStream == &m_refreshOut)) {
             // only place (currently) where we output mainForm name to the retranslateUi()
             // Other places output merely instances of a certain class (which cannot be main form, e.g. QListWidget).
             m_mainFormUsedInRetranslateUi = true;
@@ -2469,9 +2471,9 @@ void WriteInitialization::addCommonInitializers(Item *item,
    addQtFlagsInitializer(item, properties, "textAlignment", column);
    addQtEnumInitializer(item,  properties, "checkState",    column);
    addStringInitializer(item,  properties, "text",          column);
-   addStringInitializer(item,  properties, "toolTip",       column, QString::fromLatin1(toolTipDefineC));
-   addStringInitializer(item,  properties, "whatsThis",     column, QString::fromLatin1(whatsThisDefineC));
-   addStringInitializer(item,  properties, "statusTip",     column, QString::fromLatin1(statusTipDefineC));
+   addStringInitializer(item,  properties, "toolTip",       column, toolTipDefineC);
+   addStringInitializer(item,  properties, "whatsThis",     column, whatsThisDefineC);
+   addStringInitializer(item,  properties, "statusTip",     column, statusTipDefineC);
 }
 
 void WriteInitialization::initializeListWidget(DomWidget *w)
