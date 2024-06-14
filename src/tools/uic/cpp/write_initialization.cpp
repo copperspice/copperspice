@@ -167,7 +167,7 @@ static bool checkProperty(const QString &fileName, const DomProperty *p)
 
             if (! isIconFormat44(dri)) {
                if (dri->text().isEmpty())  {
-                  const QString msg = QString("%1: Warning: An invalid icon property '%2' was encountered.")
+                  const QString msg = QString("%1: Warning, an invalid icon property '%2' was found")
                      .formatArg(fileName).formatArg(p->attributeName());
                   qWarning("%s", csPrintable(msg));
 
@@ -180,8 +180,7 @@ static bool checkProperty(const QString &fileName, const DomProperty *p)
       case DomProperty::Pixmap:
          if (const DomResourcePixmap *drp = p->elementPixmap())
             if (drp->text().isEmpty()) {
-
-               const QString msg = QString("%1: Warning: An invalid pixmap property '%2' was encountered.")
+               const QString msg = QString("%1: Warning, an invalid pixmap property '%2' was found")
                   .formatArg(fileName).formatArg(p->attributeName());
                qWarning("%s", csPrintable(msg));
 
@@ -629,13 +628,13 @@ void WriteInitialization::acceptUI(DomUI *node)
       const Buddy &b = m_buddies.at(i);
 
       if (!m_registeredWidgets.contains(b.objName)) {
-         fprintf(stderr, "%s: Warning: Buddy assignment: '%s' is not a valid widget.\n",
-            csPrintable(m_option.messagePrefix()), b.objName.toLatin1().data());
+         qWarning("%s: Warning: Buddy assignment '%s' is not a valid widget",
+            csPrintable(m_option.messagePrefix()), csPrintable(b.objName));
          continue;
 
       } else if (!m_registeredWidgets.contains(b.buddy)) {
-         fprintf(stderr, "%s: Warning: Buddy assignment: '%s' is not a valid widget.\n",
-            csPrintable(m_option.messagePrefix()), b.buddy.toLatin1().data());
+         qWarning("%s: Warning: Buddy assignment '%s' is not a valid widget",
+            csPrintable(m_option.messagePrefix()), csPrintable(b.buddy));
          continue;
       }
 
@@ -974,8 +973,8 @@ void WriteInitialization::acceptWidget(DomWidget *node)
       const QString name = zOrder.at(i);
 
       if (! m_registeredWidgets.contains(name)) {
-         fprintf(stderr, "%s: Warning: Z-order assignment: '%s' is not a valid widget.\n",
-            csPrintable(m_option.messagePrefix()), csPrintable(name));
+         qWarning("%s: Warning: Z-order assignment of '%s' is not a valid widget",
+               csPrintable(m_option.messagePrefix()), csPrintable(name));
          continue;
       }
 
@@ -1011,7 +1010,7 @@ void WriteInitialization::addButtonGroup(const DomWidget *buttonNode, const QStr
       newGroup->setAttributeName(attributeName);
       group = newGroup;
 
-      fprintf(stderr, "%s: Warning: Creating button group `%s'\n",
+      qWarning("%s: Warning: Creating button group `%s'",
          csPrintable(m_option.messagePrefix()), attributeName.toLatin1().data());
    }
 
@@ -1310,8 +1309,9 @@ void WriteInitialization::acceptActionRef(DomActionRef *node)
       isMenu = m_uic->isMenu(w->attributeClass());
 
    } else if (!(m_driver->actionByName(actionName) || isSeparator)) {
-      fprintf(stderr, "%s: Warning: action `%s' not declared\n",
-         csPrintable(m_option.messagePrefix()), actionName.toLatin1().data());
+      qWarning( "%s: Warning: Action `%s' not declared",
+            csPrintable(m_option.messagePrefix()), csPrintable(actionName));
+
       return;
    }
 
@@ -2185,8 +2185,8 @@ void WriteInitialization::acceptTabStops(DomTabStops *tabStops)
       const QString name = l.at(i);
 
       if (!m_registeredWidgets.contains(name)) {
-         fprintf(stderr, "%s: Warning: Tab-stop assignment: '%s' is not a valid widget.\n",
-            csPrintable(m_option.messagePrefix()), name.toLatin1().data());
+         qWarning("%s: Warning: Tab stop assignment '%s' is not a valid widget",
+               csPrintable(m_option.messagePrefix()), csPrintable(name));
 
          continue;
       }
@@ -2230,9 +2230,7 @@ QString WriteInitialization::pixCall(const DomProperty *p) const
          break;
 
       default:
-         qWarning("%s: Warning: Unknown icon format encountered. The ui file was generated with a too recent version of Designer.",
-            csPrintable(m_option.messagePrefix()));
-
+         qWarning("%s: Warning: Unknown icon format found", csPrintable(m_option.messagePrefix()));
          return "QIcon()";
    }
 

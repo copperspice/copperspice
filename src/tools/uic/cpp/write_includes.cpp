@@ -34,9 +34,6 @@
 
 #include <stdio.h>
 
-constexpr int debugWriteIncludes   = 0;
-constexpr int warnHeaderGeneration = 0;
-
 struct ClassInfoEntry {
    const char *m_name;
    const char *m_library;
@@ -191,11 +188,6 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
 
       header =  lowerClassName;
       header += ".h";
-
-      if (warnHeaderGeneration) {
-         qWarning("%s: Warning: generated header '%s' for class '%s'.",
-            csPrintable(m_uic->option().messagePrefix()), csPrintable(header), csPrintable(className));
-      }
 
       global = true;
 
