@@ -161,10 +161,10 @@ static inline unsigned parseOptions(const QStringList &paramList,
       } else if (param == QLatin1String("nomousefromtouch")) {
          options |= QWindowsIntegration::DontPassOsMouseEventsSynthesizedFromTouch;
 
-      } else if (parseIntOption(param, QLatin1String("verbose"), 0, INT_MAX, &QWindowsContext::verbose)
-         || parseIntOption(param, QLatin1String("tabletabsoluterange"), 0, INT_MAX, tabletAbsoluteRange)
-         || parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware, QtWindows::ProcessPerMonitorDpiAware,
-            dpiAwareness)) {
+      } else if (parseIntOption(param, QLatin1String("tabletabsoluterange"), 0, INT_MAX, tabletAbsoluteRange) ||
+            parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware,
+            QtWindows::ProcessPerMonitorDpiAware, dpiAwareness)) {
+
       } else {
          qWarning() << "parseOptions() Unknown option" << param;
       }

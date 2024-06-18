@@ -232,10 +232,8 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
 
    *result = 0;
 
-   if (QWindowsContext::verbose) {
       qDebug() << "QWindowsClipboard::clipboardViewerWndProc:" << hwnd << message
                << QWindowsGuiEventDispatcher::windowsMessageName(message);
-   }
 
    switch (message) {
       case WM_CHANGECBCHAIN: {

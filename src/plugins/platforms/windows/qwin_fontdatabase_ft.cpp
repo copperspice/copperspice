@@ -176,7 +176,6 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
    const QFont::Weight weight = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
    const QFont::Stretch stretch = QFont::Unstretched;
 
-   if (QWindowsContext::verbose > 2) {
 
       QString message;
       QTextStream str(&message);
@@ -195,7 +194,6 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
          << " Style=" << style << " Weight=" << weight
          << " stretch=" << stretch;
       qDebug() << message;
-   }
 
    QString englishName;
    if (registerAlias & ttf && localizedName(faceName)) {

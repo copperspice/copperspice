@@ -405,10 +405,6 @@ QDebug operator<<(QDebug d, const QOpenGLStaticContext &s)
 
    d << "\nExtensions: " << (s.extensionNames.count(' ') + 1);
 
-   if (QWindowsContext::verbose > 1) {
-      d << s.extensionNames;
-   }
-
    return d;
 }
 

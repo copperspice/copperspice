@@ -629,7 +629,6 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
 
 #if defined(CS_SHOW_DEBUG)
 
-   if (QWindowsContext::verbose > 2) {
       QString message;
       QTextStream str(&message);
 
@@ -652,7 +651,6 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
           << " Stretch =" << stretch;
 
       qDebug() << message;
-   }
 #endif
 
    QString englishName;

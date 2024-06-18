@@ -62,8 +62,6 @@
 #include <windowsx.h>
 #include <comdef.h>
 
-int QWindowsContext::verbose = 0;
-
 #if ! defined(LANG_SYRIAC)
 #  define LANG_SYRIAC 0x5a
 #endif
@@ -536,7 +534,7 @@ void QWindowsContext::unregisterWindowClasses()
    const HINSTANCE appInstance = static_cast<HINSTANCE>(GetModuleHandle(nullptr));
 
    for (const QString &name : d->m_registeredWindowClassNames) {
-      if (! UnregisterClass(name.toStdWString().data(), appInstance) && QWindowsContext::verbose) {
+      if (! UnregisterClass(name.toStdWString().data(), appInstance)) {
          qErrnoWarning("UnregisterClass failed for %s", csPrintable(name));
       }
    }

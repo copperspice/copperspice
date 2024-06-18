@@ -837,11 +837,9 @@ QWindowsEGLContext::FP_Void QWindowsEGLContext::getProcAddress(const QByteArray 
    FP_Void procAddress = reinterpret_cast<FP_Void>(QWindowsEGLStaticContext::libEGL.eglGetProcAddress(
             procName.constData()));
 
-   if (QWindowsContext::verbose > 1) {
       qDebug() << __FUNCTION__ <<  procName << QWindowsEGLStaticContext::libEGL.eglGetCurrentContext() << "returns" << procAddress;
-   }
 
-   if (!procAddress && QWindowsContext::verbose) {
+   if (! procAddress) {
       qWarning("QWindowsEGLContext::getProcAddress() Unable to resolve %s", procName.constData());
    }
 

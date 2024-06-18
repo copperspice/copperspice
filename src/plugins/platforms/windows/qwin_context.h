@@ -150,9 +150,6 @@ class QWindowsContext
 
    ~QWindowsContext();
 
-   // Verbose flag set by environment variable QT_QPA_VERBOSE
-   static int verbose;
-
    bool initTouch();
    bool initTouch(unsigned integrationOptions); // For calls from QWindowsIntegration::QWindowsIntegration() only.
 
