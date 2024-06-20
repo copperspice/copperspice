@@ -276,6 +276,11 @@
 #     define MAC_OS_X_VERSION_13     130000
 #  endif
 
+// Sonoma OS 14
+#  if ! defined(MAC_OS_X_VERSION_14)
+#     define MAC_OS_X_VERSION_14     140000
+#  endif
+
 #endif
 
 #ifdef __LSB_VERSION__
