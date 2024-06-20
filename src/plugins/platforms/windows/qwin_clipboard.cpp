@@ -38,7 +38,7 @@
 
 #include <qwin_gui_eventdispatcher_p.h>
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
 static QDebug operator<<(QDebug d, const QMimeData *mimeData)
 {
    QDebugStateSaver saver(d);
@@ -162,8 +162,8 @@ void QWindowsClipboard::registerViewer()
       m_nextClipboardViewer = SetClipboardViewer(m_clipboardViewer);
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsClipboard::registerViewer():"
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsClipboard::registerViewer() "
             << "Format listener =" << m_formatListenerRegistered << " Next =" << m_nextClipboardViewer;
 #endif
 
@@ -232,8 +232,10 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
 
    *result = 0;
 
-      qDebug() << "QWindowsClipboard::clipboardViewerWndProc:" << hwnd << message
-               << QWindowsGuiEventDispatcher::windowsMessageName(message);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsClipboard::clipboardViewerWndProc() handle =" << hwnd
+         << " message =" << message << QWindowsGuiEventDispatcher::windowsMessageName(message);
+#endif
 
    switch (message) {
       case WM_CHANGECBCHAIN: {
@@ -277,7 +279,7 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
 
 QMimeData *QWindowsClipboard::mimeData(QClipboard::Mode mode)
 {
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsClipboard::mimeData: mode =" <<  mode;
 #endif
 
@@ -294,7 +296,7 @@ QMimeData *QWindowsClipboard::mimeData(QClipboard::Mode mode)
 
 void QWindowsClipboard::setMimeData(QMimeData *mimeData, QClipboard::Mode mode)
 {
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsClipboard::setMimeData: mode =" <<  mode << mimeData;
 #endif
 
@@ -347,7 +349,7 @@ bool QWindowsClipboard::ownsMode(QClipboard::Mode mode) const
 {
    const bool result = mode == QClipboard::Clipboard ? ownsClipboard() : false;
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsClipboard::ownsMode: mode =" <<  mode << result;
 #endif
 

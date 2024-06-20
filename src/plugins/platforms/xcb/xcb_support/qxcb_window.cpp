@@ -72,9 +72,6 @@ enum {
    defaultWindowHeight = 160
 };
 
-//#ifdef NET_WM_STATE_DEBUG
-static constexpr bool s_isDebug = false;
-
 #undef FocusIn
 
 enum QX11EmbedFocusInDetail {
@@ -1143,8 +1140,9 @@ QXcbWindow::NetWmStates QXcbWindow::netWmStates()
       free(reply);
 
    } else {
-#ifdef NET_WM_STATE_DEBUG
-      qDebug("Net wm state (%x), empty", m_window);
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("QXcbWindow::netWmStates() Empty states, window = %x", m_window);
 #endif
    }
 
@@ -1515,8 +1513,9 @@ void QXcbWindow::updateNetWmUserTime(xcb_timestamp_t timestamp)
 
          xcb_delete_property(xcb_connection(), m_window, atom(QXcbAtom::_NET_WM_USER_TIME));
 
-#if defined(QT_DEBUG)
-         QByteArray ba("Qt NET_WM user time window");
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         QByteArray ba("NET_WM user time window");
+
          Q_XCB_CALL(xcb_change_property(xcb_connection(),
                XCB_PROP_MODE_REPLACE,
                m_netWmUserTimeWindow,
@@ -2573,37 +2572,33 @@ void QXcbWindow::handleXIMouseEvent(xcb_ge_event_t *event, Qt::MouseEventSource 
       }
    }
 
-   const char *sourceName = nullptr;
-
-   if (s_isDebug) {
-      // emerald
-      //   const QMetaObject *metaObject = qt_getEnumMetaObject(source);
-      //   const QMetaEnum me = metaObject->enumerator(metaObject->indexOfEnumerator(qt_getEnumName(source)));
-      //   sourceName = me.valueToKey(source);
-   }
-
    switch (ev->evtype) {
       case XI_ButtonPress:
-         if (s_isDebug) {
-            qDebug("XI2 mouse press, button %d, time %d, source %s", button, ev->time, sourceName);
-         }
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QXcbWindow::handleXIMouseEvent() XI2 mouse press, button = %d, time = %d", button, ev->time);
+#endif
 
          conn->setButton(button, true);
          handleButtonPressEvent(event_x, event_y, root_x, root_y, ev->detail, modifiers, ev->time, source);
          break;
 
       case XI_ButtonRelease:
-         if (s_isDebug) {
-            qDebug("XI2 mouse release, button %d, time %d, source %s", button, ev->time, sourceName);
-         }
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QXcbWindow::handleXIMouseEvent() XI2 mouse release, button = %d, time = %d", button, ev->time);
+#endif
+
          conn->setButton(button, false);
          handleButtonReleaseEvent(event_x, event_y, root_x, root_y, ev->detail, modifiers, ev->time, source);
          break;
 
       case XI_Motion:
-         if (s_isDebug) {
-            qDebug("XI2 mouse motion %d,%d, time %d, source %s", event_x, event_y, ev->time, sourceName);
-         }
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QXcbWindow::handleXIMouseEvent() XI2 mouse motion, postion = %d,%d, time = %d",
+               event_x, event_y, ev->time);
+#endif
+
          handleMotionNotifyEvent(event_x, event_y, root_x, root_y, modifiers, ev->time, source);
          break;
 
@@ -2633,12 +2628,21 @@ void QXcbWindow::handleXIEnterLeave(xcb_ge_event_t *event)
       case XI_Enter: {
          const int event_x = fixed1616ToInt(ev->event_x);
          const int event_y = fixed1616ToInt(ev->event_y);
-         qDebug("XI2 mouse enter %d,%d, mode %d, detail %d, time %d", event_x, event_y, ev->mode, ev->detail, ev->time);
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QXcbWindow::handleXIEnterLeave() XI2 mouse enter, position = %d,%d, mode = %d, detail = %d, time = %d",
+               event_x, event_y, ev->mode, ev->detail, ev->time);
+#endif
+
          handleEnterNotifyEvent(event_x, event_y, root_x, root_y, ev->mode, ev->detail, ev->time);
          break;
       }
+
       case XI_Leave:
-         qDebug("XI2 mouse leave, mode %d, detail %d, time %d", ev->mode, ev->detail, ev->time);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QXcbWindow::handleXIEnterLeave() XI2 mouse leave, mode = %d, detail = %d, time = %d",
+               ev->mode, ev->detail, ev->time);
+#endif
          connection()->keyboard()->updateXKBStateFromXI(&ev->mods, &ev->group);
          handleLeaveNotifyEvent(root_x, root_y, ev->mode, ev->detail, ev->time);
          break;

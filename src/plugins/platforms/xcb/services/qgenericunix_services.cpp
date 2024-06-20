@@ -30,8 +30,6 @@
 
 #include <stdlib.h>
 
-enum { debug = 0 };
-
 static inline QByteArray detectDesktopEnvironment()
 {
    const QByteArray xdgCurrentDesktop = qgetenv("XDG_CURRENT_DESKTOP");
@@ -116,9 +114,9 @@ static inline bool launch(const QString &launcher, const QUrl &url)
 {
    const QString command = launcher + QLatin1Char(' ') + url.toEncoded();
 
-   if (debug) {
-      qDebug("Launching %s", csPrintable(command));
-   }
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("launch() Starting process %s", csPrintable(command));
+#endif
 
 #if defined(QT_NO_PROCESS)
    const bool ok = ::system(csPrintable(command + " &"));

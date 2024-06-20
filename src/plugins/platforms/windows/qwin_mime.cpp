@@ -663,8 +663,8 @@ QVariant QWindowsMimeText::convertToMime(const QString &mime, LPDATAOBJECT pData
       }
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsMimeText::convertToMime:" << retval;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsMimeText::convertToMime() " << retval;
 #endif
 
    return retval;
@@ -1068,9 +1068,9 @@ QVector<FORMATETC> QWindowsMimeImage::formatsForMime(const QString &mimeType, co
       formatetcs += setCf(CF_DIB);
    }
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    if (! formatetcs.isEmpty()) {
-      qDebug() << "QWindowsMimeImage::formatsForMime():" << mimeType << "\n" << formatetcs;
+      qDebug() << "QWindowsMimeImage::formatsForMime() Mime type = " << mimeType << "\n" << formatetcs;
    }
 #endif
 
@@ -1438,9 +1438,9 @@ QVector<FORMATETC> QLastResortMimes::formatsForMime(const QString &mimeType, con
       formatetcs += setCf(cf);
    }
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    if (! formatetcs.isEmpty()) {
-      qDebug() << "QLastResortMimes::formatsForMime():" << mimeType << formatetcs;
+      qDebug() << "QLastResortMimes::formatsForMime() Mime type = " << mimeType << formatetcs;
    }
 #endif
 

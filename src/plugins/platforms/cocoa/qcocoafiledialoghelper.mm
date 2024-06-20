@@ -25,8 +25,6 @@
 
 #ifndef QT_NO_FILEDIALOG
 
-// #define DEBUG_FILEDIALOG_FILTERS
-
 #include <qapplication.h>
 #include <qcocoahelpers.h>
 #include <qcocoamenubar.h>

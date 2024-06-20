@@ -80,7 +80,7 @@ static inline QString mailCommand()
 
    keyName += "\\Shell\\Open\\Command";
 
-#ifdef CS_SHOW_DEBUG
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << __FUNCTION__ << "keyName=" << keyName;
 #endif
 
@@ -128,7 +128,7 @@ static inline bool launchMail(const QUrl &url)
    // but that cannot handle a Windows command line [yet].
    command.replace(QString("%1"), url.toString(QUrl::FullyEncoded));
 
-#ifdef CS_SHOW_DEBUG
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << __FUNCTION__ << "Launching" << command;
 #endif
 

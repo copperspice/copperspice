@@ -176,11 +176,12 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
    const QFont::Weight weight = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
    const QFont::Stretch stretch = QFont::Unstretched;
 
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   QString message;
+   QTextStream str(&message);
 
-      QString message;
-      QTextStream str(&message);
+   str << "addFontToDatabase() " << faceName << "::" << fullName << ' ' << charSet << " TTF = " << ttf;
 
-      str << __FUNCTION__ << ' ' << faceName << "::" << fullName << ' ' << charSet << " TTF=" << ttf;
       if (type & DEVICE_FONTTYPE) {
          str << " DEVICE";
       }
@@ -194,6 +195,7 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
          << " Style=" << style << " Weight=" << weight
          << " stretch=" << stretch;
       qDebug() << message;
+#endif
 
    QString englishName;
    if (registerAlias & ttf && localizedName(faceName)) {
@@ -303,7 +305,9 @@ static int QT_WIN_CALLBACK storeFont(const LOGFONT *logFont, const TEXTMETRIC *t
 
 void QWindowsFontDatabaseFT::populateFamily(const QString &familyName)
 {
-   qDebug() << familyName;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabaseFT::populateFamily() Family Name = " << familyName;
+#endif
 
    if (familyName.size() >= LF_FACESIZE) {
       qWarning() << "QWindowsFontDatabaseFT::populateFamily() Unable to enumerate family name = " << familyName;
@@ -408,7 +412,10 @@ void QWindowsFontDatabaseFT::populateFontDatabase()
 QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QFontDef &fontDef, void *handle)
 {
    QFontEngine *fe = QBasicFontDatabase::fontEngine(fontDef, handle);
-   qDebug() << __FUNCTION__ << "FONTDEF" << fontDef.family << fe << handle;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabaseFT::fontEngine() Font data = " << fontDef.family << fe << handle;
+#endif
 
    return fe;
 }
@@ -416,7 +423,11 @@ QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QFontDef &fontDef, void *h
 QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
 {
    QFontEngine *fe = QBasicFontDatabase::fontEngine(fontData, pixelSize, hintingPreference);
-   qDebug() << __FUNCTION__ << "FONTDATA" << fontData << pixelSize << hintingPreference << fe;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabaseFT::fontEngine() Font data = " << fontData << pixelSize << hintingPreference << fe;
+#endif
+
    return fe;
 }
 
@@ -429,8 +440,10 @@ QStringList QWindowsFontDatabaseFT::fallbacksForFamily(const QString &family, QF
    result.append(QWindowsFontDatabase::extraTryFontsForFamily(family));
    result.append(QBasicFontDatabase::fallbacksForFamily(family, style, styleHint, script));
 
-   qDebug() << __FUNCTION__ << family << style << styleHint
-      << script << result;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabaseFT::fallbacksForFamily() Font = "
+         << family << style << styleHint << script << result;
+#endif
 
    return result;
 }

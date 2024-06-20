@@ -80,10 +80,6 @@ Qt::DropAction QCocoaDrag::defaultAction(Qt::DropActions possibleActions,
       default_action = Qt::MoveAction;
    }
 
-#ifdef QDND_DEBUG
-   qDebug("possible actions : %s", dragActionsToString(possibleActions).latin1());
-#endif
-
    // Check if the action determined is allowed
    if (!(possibleActions & default_action)) {
       if (possibleActions & Qt::CopyAction) {
@@ -96,10 +92,6 @@ Qt::DropAction QCocoaDrag::defaultAction(Qt::DropActions possibleActions,
          default_action = Qt::IgnoreAction;
       }
    }
-
-#ifdef QDND_DEBUG
-   qDebug("default action : %s", dragActionsToString(default_action).latin1());
-#endif
 
    return default_action;
 }
@@ -228,7 +220,11 @@ QStringList QCocoaDropData::formats_sys() const
    PasteboardRef board;
 
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Can not get PasteBoard");
+
+#if defined(CS_SHOW_DEBUG_PLATFORM_PASTEBOARD)
+      qDebug("QCocoaDropData::formats_sys() Unable to create a PasteBoard");
+#endif
+
       return formats;
    }
 
@@ -242,7 +238,11 @@ QVariant QCocoaDropData::retrieveData_sys(const QString &mimeType, QVariant::Typ
    PasteboardRef board;
 
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Can not get PasteBoard");
+
+#if defined(CS_SHOW_DEBUG_PLATFORM_PASTEBOARD)
+      qDebug("QCocoaDropData::retrieveData_sys() Unable to create a PasteBoard");
+#endif
+
       return data;
    }
 
@@ -257,7 +257,11 @@ bool QCocoaDropData::hasFormat_sys(const QString &mimeType) const
    PasteboardRef board;
 
    if (PasteboardCreate(dropPasteboard, &board) != noErr) {
-      qDebug("DnD: Can not get PasteBoard");
+
+#if defined(CS_SHOW_DEBUG_PLATFORM_PASTEBOARD)
+      qDebug("QCocoaDropData::hasFormat_sys() Unable to create a PasteBoard");
+#endif
+
       return has;
    }
 

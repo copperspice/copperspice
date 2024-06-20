@@ -531,9 +531,12 @@ static void convertCGPathToQPainterPath(void *info, const CGPathElement *element
          break;
 
       default:
+#if defined(CS_SHOW_DEBUG_PLATFORM)
          qDebug() << "Unhandled path transform type: " << element->type;
-   }
+#endif
 
+         break;
+   }
 }
 
 void QCoreTextFontEngine::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nGlyphs,

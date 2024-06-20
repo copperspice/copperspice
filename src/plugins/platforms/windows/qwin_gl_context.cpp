@@ -165,8 +165,8 @@ bool QWindowsOpengl32DLL::init(bool softwareRendering)
    openglDll = openglDll.toLower();
    m_nonOpengl32 = openglDll != opengl32;
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "Using WGL and OpenGL from" << openglDll;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsOpengl32DLL::init() Using WGL and OpenGL from" << openglDll;
 #endif
 
    m_lib = ::LoadLibraryA(openglDll.constData());
@@ -597,9 +597,9 @@ static int choosePixelFormat(HDC hdc, const QSurfaceFormat &format,
             *obtainedPfd = checkPfd;
          }
 
-#if defined(CS_SHOW_DEBUG)
-         qDebug() <<  "choosePixelFormat(): Checking  " << pfi << '/' << pfiMax
-                  << " score=" << score << " (best " << bestPfi << '/' << bestScore << ") " << checkPfd;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() <<  "choosePixelFormat() Checking " << pfi << '/' << pfiMax
+               << " score = " << score << " best = " << bestPfi << '/' << bestScore << checkPfd;
 #endif
       }
    }
@@ -769,9 +769,9 @@ static int choosePixelFormat(HDC hdc, const QOpenGLStaticContext &staticContext,
 
    if (! isAcceptableFormat(additional, *obtainedPfd, true)) {
 
-#if defined(CS_SHOW_DEBUG)
-      qDebug() << "choosePixelFormat(): obtained px #" << pixelFormat
-         << " not acceptable=" << *obtainedPfd;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug() << "choosePixelFormat() Obtained px #" << pixelFormat
+            << " not acceptable=" << *obtainedPfd;
 #endif
 
       pixelFormat = 0;
@@ -1331,7 +1331,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       DestroyWindow(dummyWindow);
    }
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsGLContext(): " << this << (tryExtensions ? "ARB" : "GDI")
             << " requested: " << context->format()
             << "\n    obtained #" << m_pixelFormat << (m_extensionsUsed ? "ARB" : "GDI") << m_obtainedFormat

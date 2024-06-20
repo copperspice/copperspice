@@ -389,8 +389,8 @@ void eatMouseMove()
       PostMessage(msg.hwnd, msg.message, 0, msg.lParam);
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsDialogs::eatMouseMove():" << "Triggered =" << (msg.message == WM_MOUSEMOVE);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsDialogs::eatMouseMove() Triggered =" << (msg.message == WM_MOUSEMOVE);
 #endif
 }
 
@@ -535,8 +535,8 @@ bool QWindowsDialogHelperBase<BaseClass>::show(Qt::WindowFlags,
       m_ownerWindow = nullptr;
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsDialog::show(): Modal =" << modal
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsDialog::show() Modal =" << modal
       << "Is modal supported?" << supportsNonModalDialog(parent) << "\n  "
       << "Native =" << m_nativeDialog.data() << "Owner =" << m_ownerWindow;
 #endif
@@ -967,8 +967,8 @@ bool QWindowsNativeFileDialogBase::init(const CLSID &clsId, const IID &iid)
       return false;
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsNativeFileDialog::init():" << m_fileDialog << m_dialogEvents <<  m_cookie;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsNativeFileDialog::init() file dialog = " << m_fileDialog << m_dialogEvents <<  m_cookie;
 #endif
 
    return true;
@@ -1111,8 +1111,8 @@ void QWindowsNativeFileDialogBase::setMode(QPlatformFileDialogOptions::FileMode 
 
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsNativeFileDialog::setMode():" << "Mode = " << mode << "\n  "
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsNativeFileDialog::setMode() Mode = " << mode << "\n  "
       << "AcceptMode = " << acceptMode << " Options = " << options
       << " Results in = " << showbase << hex << flags;
 #endif
@@ -1776,8 +1776,8 @@ QWindowsNativeDialogBase *QWindowsFileDialogHelper::createNativeDialog()
 
 void QWindowsFileDialogHelper::setDirectory(const QUrl &directory)
 {
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsFileDialog::setDirectory(): Directory = " << directory.toString();
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFileDialog::setDirectory() Directory = " << directory.toString();
 #endif
 
    m_data.setDirectory(directory);
@@ -1793,8 +1793,8 @@ QUrl QWindowsFileDialogHelper::directory() const
 
 void QWindowsFileDialogHelper::selectFile(const QUrl &fileName)
 {
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsFileDialog::setDirectory(): FileName = " << fileName.toString();
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFileDialog::setDirectory() FileName = " << fileName.toString();
 #endif
 
    if (hasNativeDialog()) {

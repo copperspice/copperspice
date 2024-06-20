@@ -76,9 +76,11 @@ static Window createDummyWindow(Display *dpy, XVisualInfo *visualInfo, int scree
          0, 0, 100, 100,
          0, visualInfo->depth, InputOutput, visualInfo->visual,
          CWBackPixel | CWBorderPixel | CWColormap | CWOverrideRedirect, &a);
-#if defined(QT_DEBUG)
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    XStoreName(dpy, window, "Qt GLX dummy window");
 #endif
+
    XFreeColormap(dpy, cmap);
    return window;
 }

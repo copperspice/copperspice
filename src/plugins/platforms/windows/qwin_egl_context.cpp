@@ -154,7 +154,9 @@ bool QWindowsLibGLESv2::init()
 {
    const char dllName[] = "libGLESv2";
 
-   qDebug() << "Using OpenGL ES 2.0 from" << dllName;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsLibGLESv2::init() Using OpenGL ES 2.0 from " << dllName;
+#endif
 
 #if ! defined(QT_STATIC) || defined(QT_OPENGL_DYNAMIC)
    m_lib = ::LoadLibraryW(reinterpret_cast<LPCWSTR>(QString::fromLatin1(dllName).utf16()));
@@ -413,7 +415,10 @@ QWindowsEGLStaticContext *QWindowsEGLStaticContext::create(QWindowsOpenGLTester:
       return 0;
    }
 
-   qDebug() << __FUNCTION__ << "Created EGL display" << display << 'v' << major << '.' << minor;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsEGLStaticContext::create() Created EGL display" << display << 'v' << major << '.' << minor;
+#endif
+
    return new QWindowsEGLStaticContext(display);
 }
 
@@ -587,10 +592,19 @@ bool QWindowsEGLContext::makeCurrent(QPlatformSurface *surface)
    if (eglSurface == EGL_NO_SURFACE) {
       if (err == EGL_CONTEXT_LOST) {
          m_eglContext = EGL_NO_CONTEXT;
-         qDebug() << "Got EGL context lost in createWindowSurface() for context" << this;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() << "QWindowsEGLContext::makeCurrent() EGL context lost in createWindowSurface() for context" << this;
+#endif
+
       } else if (err == EGL_BAD_ACCESS) {
          // With ANGLE this means no (D3D) device and can happen when disabling/changing graphics adapters.
-         qDebug() << "Bad access (missing device?) in createWindowSurface() for context" << this;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() << "QWindowsEGLContext::makeCurrent() Bad access in createWindowSurface() for context, missing device?"
+               << this;
+#endif
+
          // Simulate context loss as the context is useless.
          QWindowsEGLStaticContext::libEGL.eglDestroyContext(m_eglDisplay, m_eglContext);
          m_eglContext = EGL_NO_CONTEXT;
@@ -619,7 +633,11 @@ bool QWindowsEGLContext::makeCurrent(QPlatformSurface *surface)
 
       if (err == EGL_CONTEXT_LOST) {
          m_eglContext = EGL_NO_CONTEXT;
-         qDebug() << "Got EGL context lost in makeCurrent() for context" << this;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() << "QWindowsEGLContext::makeCurrent() EGL context lost in makeCurrent() for context" << this;
+#endif
+
          // Drop the surface. Will recreate on the next makeCurrent.
          window->invalidateSurface();
 
@@ -652,7 +670,10 @@ void QWindowsEGLContext::swapBuffers(QPlatformSurface *surface)
    if (eglSurface == EGL_NO_SURFACE) {
       if (err == EGL_CONTEXT_LOST) {
          m_eglContext = EGL_NO_CONTEXT;
-         qDebug() << "Got EGL context lost in createWindowSurface() for context" << this;
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() << "QWindowsEGLContext::swapBuffers() EGL context lost in createWindowSurface() for context" << this;
+#endif
       }
 
       return;
@@ -664,7 +685,11 @@ void QWindowsEGLContext::swapBuffers(QPlatformSurface *surface)
 
       if (err == EGL_CONTEXT_LOST) {
          m_eglContext = EGL_NO_CONTEXT;
-         qDebug() << "Got EGL context lost in eglSwapBuffers()";
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug() << "QWindowsEGLContext::swapBuffers() EGL context lost in eglSwapBuffers()";
+#endif
+
       } else {
          qWarning("QWindowsEGLContext::swapBuffers() Failed to swap buffers, eglError = %d, this = %p", err, this);
       }
@@ -837,7 +862,10 @@ QWindowsEGLContext::FP_Void QWindowsEGLContext::getProcAddress(const QByteArray 
    FP_Void procAddress = reinterpret_cast<FP_Void>(QWindowsEGLStaticContext::libEGL.eglGetProcAddress(
             procName.constData()));
 
-      qDebug() << __FUNCTION__ <<  procName << QWindowsEGLStaticContext::libEGL.eglGetCurrentContext() << "returns" << procAddress;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug() << "QWindowsEGLContext::getProcAddress() "
+            << QWindowsEGLStaticContext::libEGL.eglGetCurrentContext() << " Returns = " << procAddress;
+#endif
 
    if (! procAddress) {
       qWarning("QWindowsEGLContext::getProcAddress() Unable to resolve %s", procName.constData());

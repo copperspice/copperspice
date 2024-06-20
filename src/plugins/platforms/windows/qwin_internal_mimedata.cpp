@@ -37,7 +37,7 @@ bool QWindowsInternalMimeData::hasFormat_sys(const QString &mime) const
    const bool has = mc.converterToMime(mime, pDataObj) != nullptr;
    releaseDataObject(pDataObj);
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsInternalMimeData::hasFormat_sys:" <<  mime << has;
 #endif
 
@@ -55,7 +55,7 @@ QStringList QWindowsInternalMimeData::formats_sys() const
    const QStringList fmts = mc.allMimesForFormats(pDataObj);
    releaseDataObject(pDataObj);
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsInternalMimeData::formats_sys:" <<  fmts;
 #endif
 

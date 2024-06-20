@@ -79,7 +79,7 @@ QXcbIntegration *QXcbIntegration::m_instance = nullptr;
 // or, for older Linuxes, read out 'cmdline'.
 static bool runningUnderDebugger()
 {
-#if defined(QT_DEBUG) && defined(Q_OS_LINUX)
+#if defined(CS_SHOW_DEBUG_PLATFORM) && defined(Q_OS_LINUX)
    const QString parentProc = QString("/proc/") + QString::number(getppid());
    const QFileInfo parentProcExe(parentProc + QString("/exe"));
 
@@ -170,10 +170,9 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
       doGrabArg = false;
    }
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    if (! noGrabArg && !doGrabArg && underDebugger) {
-      qDebug("Gdb: -nograb added to command-line options.\n"
-         "\t Use the -dograb option to enforce grabbing.");
+      qDebug("QXcbIntegration() Debugger detected, use -dograb option to enable grabbing");
    }
 #endif
 
@@ -188,7 +187,10 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
    m_connections << new QXcbConnection(m_nativeInterface.data(), m_canGrab, m_defaultVisualId, displayName);
 
    for (int i = 0; i < numParameters - 1; i += 2) {
-      qDebug() << "connecting to additional display: " << parameters.at(i) << parameters.at(i + 1);
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug() << "QXcbIntegration() Connecting to additional display = " << parameters.at(i) << parameters.at(i + 1);
+#endif
 
       QString display = parameters.at(i) + QLatin1Char(':') + parameters.at(i + 1);
       m_connections << new QXcbConnection(m_nativeInterface.data(), m_canGrab, m_defaultVisualId, display.toLatin1().constData());

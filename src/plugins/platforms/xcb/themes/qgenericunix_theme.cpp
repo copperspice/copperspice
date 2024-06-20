@@ -86,8 +86,8 @@ static bool isDBusTrayAvailable()
       }
 
       dbusTrayAvailableKnown = true;
-      qDebug() << "D-Bus tray available:" << dbusTrayAvailable;
    }
+
    return dbusTrayAvailable;
 }
 #endif

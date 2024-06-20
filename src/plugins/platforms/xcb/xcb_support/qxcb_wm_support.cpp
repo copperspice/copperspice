@@ -105,12 +105,12 @@ void QXcbWMSupport::updateVirtualRoots()
       free(reply);
    } while (remaining > 0);
 
-#ifdef Q_XCB_DEBUG
-   qDebug() << "======== updateVirtualRoots";
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QXcbWMSupport::updateVirtualRoots()";
+
    for (int i = 0; i < net_virtual_roots.size(); ++i) {
-      qDebug() << connection()->atomName(net_virtual_roots.at(i));
+      qDebug() << "\n   " << connection()->atomName(net_virtual_roots.at(i));
    }
-   qDebug() << "======== updateVirtualRoots";
 #endif
 }
 

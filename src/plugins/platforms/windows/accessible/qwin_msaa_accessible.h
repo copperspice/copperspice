@@ -35,7 +35,7 @@
 #include <basetyps.h>
 #include <oleacc.h>
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
 void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleInterface *iface);
 # define accessibleDebugClientCalls(iface)   accessibleDebugClientCalls_helper(Q_FUNC_INFO, iface)
 

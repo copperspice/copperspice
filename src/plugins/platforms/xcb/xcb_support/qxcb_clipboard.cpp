@@ -140,8 +140,6 @@ class INCRTransaction;
 typedef QMap<xcb_window_t, INCRTransaction *> TransactionMap;
 static TransactionMap *transactions = nullptr;
 
-//#define INCR_DEBUG
-
 class INCRTransaction : public QObject
 {
    CS_OBJECT(INCRTransaction)
@@ -155,8 +153,8 @@ class INCRTransaction : public QObject
       xcb_change_window_attributes(conn->xcb_connection(), win, XCB_CW_EVENT_MASK, values);
 
       if (! transactions) {
-#ifdef INCR_DEBUG
-         qDebug("INCRTransaction: creating the TransactionMap");
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("INCRTransaction() Creating the TransactionMap");
 #endif
 
          transactions = new TransactionMap;
@@ -176,8 +174,8 @@ class INCRTransaction : public QObject
       transactions->remove(win);
 
       if (transactions->isEmpty()) {
-#ifdef INCR_DEBUG
-         qDebug("INCRTransaction: no more INCR transactions left in the TransactionMap");
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("~INCRTransaction() No more INCR transactions in the TransactionMap");
 #endif
          delete transactions;
          transactions = nullptr;
@@ -200,8 +198,8 @@ class INCRTransaction : public QObject
          if (bytes_left > 0) {
             unsigned int bytes_to_send = qMin(increment, bytes_left);
 
-#ifdef INCR_DEBUG
-            qDebug("INCRTransaction: sending %d bytes, %d remaining (INCR transaction %p)",
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+            qDebug("updateIncrProperty() Sending = %d bytes, remaining bytes = %d, INCR transaction = %p",
                bytes_to_send, bytes_left - bytes_to_send, this);
 #endif
 
@@ -212,8 +210,8 @@ class INCRTransaction : public QObject
             offset += bytes_to_send;
 
          } else {
-#ifdef INCR_DEBUG
-            qDebug("INCRTransaction: INCR transaction %p completed", this);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+            qDebug("updateIncrProperty() INCR transaction completed = %p", this);
 #endif
             xcb_change_property(c, XCB_PROP_MODE_REPLACE, win, property,
                target, format, 0, nullptr);
@@ -234,8 +232,8 @@ class INCRTransaction : public QObject
       if (ev->timerId() == abort_timer) {
          // this can happen when the X client we are sending data
          // to decides to exit (normally or abnormally)
-#ifdef INCR_DEBUG
-         qDebug("INCRTransaction: Timed out while sending data to %p", this);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("timerEvent() Timed out while sending data to %p", this);
 #endif
 
          delete this;
@@ -272,7 +270,7 @@ QXcbClipboard::QXcbClipboard(QXcbConnection *c)
    m_timestamp[QClipboard::Selection] = XCB_CURRENT_TIME;
    m_owner = connection()->getQtSelectionOwner();
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    QByteArray ba("CS clipboard window");
 
    Q_XCB_CALL(xcb_change_property(xcb_connection(),
@@ -493,7 +491,7 @@ xcb_window_t QXcbClipboard::requestor() const
             0,                                          // value mask
             nullptr));                                 // value list
 
-#if defined(QT_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
       QByteArray ba("CS clipboard requestor window");
 
       Q_XCB_CALL(xcb_change_property(xcb_connection(),
@@ -562,11 +560,17 @@ xcb_atom_t QXcbClipboard::sendSelection(QMimeData *d, xcb_atom_t target, xcb_win
 
    if (fmt.isEmpty()) {
       // Not a MIME type we have
-      //        qDebug() << "QClipboard: send_selection(): converting to type" << connection()->atomName(target) << "is not supported";
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug() << "QXcbClipboard::sendSelection() Converting to type " << connection()->atomName(target) << "is not supported";
+#endif
+
       return XCB_NONE;
    }
 
-   //    qDebug() << "QClipboard: send_selection(): converting to type" << fmt;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QXcbClipboard::sendSelection() Converting to type " << fmt;
+#endif
 
    if (QXcbMime::mimeDataForAtom(connection(), target, d, &data, &atomFormat, &dataFormat)) {
 

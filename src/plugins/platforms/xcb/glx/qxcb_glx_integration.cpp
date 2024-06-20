@@ -72,7 +72,6 @@ typedef struct {
 QXcbGlxIntegration::QXcbGlxIntegration()
    : m_connection(nullptr), m_glx_first_event(0)
 {
-   qDebug() << "Xcb GLX gl-integration created";
 }
 
 QXcbGlxIntegration::~QXcbGlxIntegration()
@@ -111,7 +110,9 @@ bool QXcbGlxIntegration::initialize(QXcbConnection *connection)
 
    m_native_interface_handler.reset(new QXcbGlxNativeInterfaceHandler(connection->nativeInterface()));
 
-   qDebug() << "Xcb GLX gl-integration plugin successfully initialized";
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QXcbGlxIntegration::initialize() Xcb GLX gl-integration plugin successfully initialized";
+#endif
 
    return true;
 }

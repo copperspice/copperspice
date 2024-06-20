@@ -27,8 +27,6 @@
 #include <qplatform_menu.h>
 #include <qimage.h>
 
-// #define QT_COCOA_ENABLE_MENU_DEBUG
-
 #ifdef __OBJC__
 @class NSMenuItem;
 @class NSMenu;

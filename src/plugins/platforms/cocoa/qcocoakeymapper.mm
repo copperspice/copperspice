@@ -26,11 +26,6 @@
 #include <QDebug>
 #include <QApplication>
 
-// QCocoaKeyMapper debug facilities
-//#define DEBUG_KEY_BINDINGS
-//#define DEBUG_KEY_BINDINGS_MODIFIERS
-//#define DEBUG_KEY_MAPS
-
 // Possible modifier states.
 // NOTE: The order of these states match the order in updatePossibleKeyCodes()!
 static const Qt::KeyboardModifiers ModsTbl[] = {
@@ -67,7 +62,8 @@ Q_GUI_EXPORT void qt_mac_secure_keyboard(bool b)
 struct qt_mac_enum_mapper {
    int mac_code;
    int qt_code;
-#if defined(DEBUG_KEY_BINDINGS)
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
 #   define QT_MAC_MAP_ENUM(x) x, #x
    const char *desc;
 #else
@@ -91,18 +87,14 @@ static qt_mac_enum_mapper qt_mac_modifier_symbols[] = {
 
 Qt::KeyboardModifiers qt_mac_get_modifiers(int keys)
 {
-#ifdef DEBUG_KEY_BINDINGS_MODIFIERS
-   qDebug("Qt: internal: **Mapping modifiers: %d (0x%04x)", keys, keys);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("qt_mac_get_modifiers() Mapping modifiers = %d (0x%04x)", keys, keys);
 #endif
 
    Qt::KeyboardModifiers ret = Qt::NoModifier;
 
    for (int i = 0; qt_mac_modifier_symbols[i].qt_code; i++) {
       if (keys & qt_mac_modifier_symbols[i].mac_code) {
-#ifdef DEBUG_KEY_BINDINGS_MODIFIERS
-         qDebug("Qt: internal: got modifier: %s", qt_mac_modifier_symbols[i].desc);
-#endif
-
          ret |= Qt::KeyboardModifier(qt_mac_modifier_symbols[i].qt_code);
       }
    }
@@ -125,15 +117,12 @@ Qt::KeyboardModifiers qt_mac_get_modifiers(int keys)
 
 static int qt_mac_get_mac_modifiers(Qt::KeyboardModifiers keys)
 {
-#ifdef DEBUG_KEY_BINDINGS_MODIFIERS
-   qDebug("Qt: internal: **Mapping modifiers: %d (0x%04x)", (int)keys, (int)keys);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("qt_mac_get_mac_modifiers() Mapping modifiers = %d (0x%04x)", (int)keys, (int)keys);
 #endif
    int ret = 0;
    for (int i = 0; qt_mac_modifier_symbols[i].qt_code; i++) {
       if (keys & qt_mac_modifier_symbols[i].qt_code) {
-#ifdef DEBUG_KEY_BINDINGS_MODIFIERS
-         qDebug("Qt: internal: got modifier: %s", qt_mac_modifier_symbols[i].desc);
-#endif
          ret |= qt_mac_modifier_symbols[i].mac_code;
       }
    }
@@ -265,8 +254,9 @@ static qt_mac_enum_mapper qt_mac_private_unicode[] = {
 
 static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 {
-#ifdef DEBUG_KEY_BINDINGS
-   qDebug("**Mapping key: %d (0x%04x) - %d (0x%04x)", key.unicode(), key.unicode(), virtualKey, virtualKey);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("qt_mac_get_key() Mapping key = %d (0x%04x) - %d (0x%04x)",
+         key.unicode(), key.unicode(), virtualKey, virtualKey);
 #endif
 
    if (key == kClearCharCode && virtualKey == 0x47) {
@@ -274,24 +264,24 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
    }
 
    if (key.isDigit()) {
-#ifdef DEBUG_KEY_BINDINGS
-      qDebug("%d: got key: %d", __LINE__, key.digitValue());
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("qt_mac_get_key() digit key = %d", key.digitValue());
 #endif
 
       return key.digitValue() + Qt::Key_0;
    }
 
    if (key.isLetter()) {
-#ifdef DEBUG_KEY_BINDINGS
-      qDebug("%d: got key: %d", __LINE__, (key.toUpper()[0].unicode() - 'A'));
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("qt_mac_get_key() letter key = %d", key.toUpper()[0].unicode() - 'A');
 #endif
 
       return (key.toUpper()[0].unicode() - 'A') + Qt::Key_A;
    }
 
    if (key.isSymbol()) {
-#ifdef DEBUG_KEY_BINDINGS
-      qDebug("%d: got key: %d", __LINE__, (key.unicode()));
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("qt_mac_get_key() symbol key = %d", key.unicode());
 #endif
       return key.unicode();
    }
@@ -302,14 +292,14 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
          // To work like X11 we issue Backtab when Shift + Tab are pressed
          if (qt_mac_keyboard_symbols[i].qt_code == Qt::Key_Tab && (modif & Qt::ShiftModifier)) {
 
-#ifdef DEBUG_KEY_BINDINGS
-            qDebug("%d: got key: Qt::Key_Backtab", __LINE__);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+            qDebug("qt_mac_get_key() key = Qt::Key_Backtab");
 #endif
             return Qt::Key_Backtab;
          }
 
-#ifdef DEBUG_KEY_BINDINGS
-         qDebug("%d: got key: %s", __LINE__, qt_mac_keyboard_symbols[i].desc);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("qt_mac_get_key() symbol key = %s", qt_mac_keyboard_symbols[i].desc);
 #endif
          return qt_mac_keyboard_symbols[i].qt_code;
       }
@@ -318,8 +308,9 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
    //last ditch try to match the scan code
    for (int i = 0; qt_mac_keyvkey_symbols[i].qt_code; i++) {
       if (qt_mac_keyvkey_symbols[i].mac_code == virtualKey) {
-#ifdef DEBUG_KEY_BINDINGS
-         qDebug("%d: got key: %s", __LINE__, qt_mac_keyvkey_symbols[i].desc);
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("qt_mac_get_key() symbol key = %s", qt_mac_keyvkey_symbols[i].desc);
 #endif
 
          return qt_mac_keyvkey_symbols[i].qt_code;
@@ -340,8 +331,8 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
 
    }
 
-#ifdef DEBUG_KEY_BINDINGS
-   qDebug("Unknown case.. %s:%d %d[%d] %d", __FILE__, __LINE__, key.unicode(), key.toLatin1(), virtualKey);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("qt_mac_get_key() key = %d,  latin1 = %d, virtual key = %d", key.unicode(), key.toLatin1(), virtualKey);
 #endif
 
    return Qt::Key_unknown;
@@ -455,8 +446,8 @@ void QCocoaKeyMapper::updateKeyMap(unsigned short macVirtualKey, QChar unicodeKe
       }
    }
 
-#ifdef DEBUG_KEY_MAPS
-   qDebug("updateKeyMap for virtual key = 0x%02x", (uint)macVirtualKey);
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug("QCocoaKeyMapper::updateKeyMap() virtual key = 0x%02x", (uint)macVirtualKey);
 
    for (int i = 0; i < 16; ++i) {
       qDebug("    [%d] (%d,0x%02x,'%c')", i,

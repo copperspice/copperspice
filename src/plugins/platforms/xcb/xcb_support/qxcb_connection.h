@@ -65,8 +65,6 @@ struct XInput2TouchDeviceData;
 
 struct xcb_randr_get_output_info_reply_t;
 
-//#define Q_XCB_DEBUG
-
 class QXcbVirtualDesktop;
 class QXcbScreen;
 class QXcbWindow;
@@ -767,7 +765,7 @@ class QXcbConnection : public QObject
    QHash<int, XInput2TouchDeviceData *> m_touchDevices;
 #endif
 
-#ifdef Q_XCB_DEBUG
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    struct CallInfo {
       int sequence;
       QByteArray file;
@@ -859,12 +857,17 @@ union q_padded_xcb_event {
     q_padded_xcb_event<event_type> store = q_padded_xcb_event<event_type>(); \
     auto &event_var = store.event;
 
-#ifdef Q_XCB_DEBUG
+#if defined(CS_SHOW_DEBUG_PLATFORM)
 
 template <typename cookie_t>
 cookie_t q_xcb_call_template(const cookie_t &cookie, QXcbConnection *connection, const char *file, int line)
 {
-   connection->log(file, line, cookie.sequence);
+   if constexpr(std::is_pointer_v<cookie_t>) {
+      connection->log(file, line, cookie->sequence);
+   } else {
+      connection->log(file, line, cookie.sequence);
+   }
+
    return cookie;
 }
 

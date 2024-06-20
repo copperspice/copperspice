@@ -271,31 +271,24 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(c
       }
    }
 
-   qDebug() << "GPU features:" << features;
-
    if (features.contains(QString("disable_desktopgl"))) {    // Qt-specific
-      qDebug() << "Disabling Desktop GL: " << gpu;
       result &= ~QWindowsOpenGLTester::DesktopGl;
    }
 
    if (features.contains(QString("disable_angle"))) {        // Qt-specific keyword
-      qDebug() << "Disabling ANGLE: " << gpu;
       result &= ~QWindowsOpenGLTester::GlesMask;
 
    } else {
       if (features.contains(QString("disable_d3d11"))) {    // standard keyword
-         qDebug() << "Disabling D3D11: " << gpu;
          result &= ~QWindowsOpenGLTester::AngleRendererD3d11;
       }
 
       if (features.contains(QString("disable_d3d9"))) {     // Qt-specific
-         qDebug() << "Disabling D3D9: " << gpu;
          result &= ~QWindowsOpenGLTester::AngleRendererD3d9;
       }
    }
 
    if (features.contains(QString("disable_rotation"))) {
-      qDebug() << "Disabling rotation: " << gpu;
       result |= DisableRotationFlag;
    }
 
@@ -309,7 +302,6 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedGlesRenderers()
 {
    const GpuDescription gpu = GpuDescription::detect();
    const QWindowsOpenGLTester::Renderers result = detectSupportedRenderers(gpu, true);
-   qDebug() << __FUNCTION__ << gpu << "renderer: " << result;
 
    return result;
 }
@@ -318,7 +310,6 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::supportedRenderers()
 {
    const GpuDescription gpu = GpuDescription::detect();
    const QWindowsOpenGLTester::Renderers result = detectSupportedRenderers(gpu, false);
-   qDebug() << __FUNCTION__ << gpu << "renderer: " << result;
 
    return result;
 }
@@ -439,33 +430,44 @@ bool QWindowsOpenGLTester::testDesktopGL()
                const int major = version.mid(0, majorDot).toInt();
                const int minor = version.mid(majorDot + 1, minorDot - majorDot - 1).toInt();
 
-               qDebug("Basic wglCreateContext gives version %d.%d", major, minor);
                // Try to be as lenient as possible. Missing version, bogus values and
                // such are all accepted. The driver may still be functional. Only
                // check for known-bad cases, like versions "1.4.0 ...".
 
                if (major == 1) {
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+                  qDebug("QWindowsOpenGLTester::testDesktopGL() OpenGL version 1.x is unsupported");
+#endif
+
                   result = false;
-                  qDebug("OpenGL version too low");
+
+               } else {
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+                  qDebug("QWindowsOpenGLTester::testDesktopGL() OpenGL version %d.%d", major, minor);
+#endif
                }
             }
          }
 
       } else {
+         // "glGetString" was added in version 2
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QWindowsOpenGLTester::testDesktopGL() OpenGL version 1.x is unsupported");
+#endif
+
          result = false;
-         qDebug("OpenGL 1.x entry points not found");
       }
 
       // Check for a shader-specific function.
       if (WGL_GetProcAddress("glCreateShader")) {
          result = true;
-         qDebug("OpenGL 2.0 entry points available");
-      } else {
-         qDebug("OpenGL 2.0 entry points not found");
       }
 
    } else {
-      qDebug("Failed to load opengl32.dll");
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("QWindowsOpenGLTester::testDesktopGL() Failed to load opengl32.dll");
+#endif
+
    }
 
 cleanup:

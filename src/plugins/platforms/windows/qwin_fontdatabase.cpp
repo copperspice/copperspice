@@ -627,7 +627,7 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
    const QFont::Weight weight   = QPlatformFontDatabase::weightFromInteger(textmetric->tmWeight);
    const QFont::Stretch stretch = QFont::Unstretched;
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
 
       QString message;
       QTextStream str(&message);
@@ -872,8 +872,8 @@ QWindowsFontDatabase::QWindowsFontDatabase()
 {
    const QWindowsFontEngineDataPtr data = sharedFontData();
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsFontDatabase(): Clear type: " << data->clearTypeEnabled << " Gamma =" << data->fontSmoothingGamma;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabase() Clear type = " << data->clearTypeEnabled << " Gamma = " << data->fontSmoothingGamma;
 #endif
 
    qt_needs_a8_gamma_correction = true;
@@ -994,8 +994,9 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
       }
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "QWindowsFontDatabase::fontEngine Fontdata =" << fontData << pixelSize << hintingPreference << fontEngine;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabase::fontEngine() Fontdata = "
+         << fontData << pixelSize << hintingPreference << fontEngine;
 #endif
 
    return fontEngine;
@@ -1550,8 +1551,8 @@ QFont QWindowsFontDatabase::systemDefaultFont()
       sysFont.setFamily("MS Shell Dlg 2");
    }
 
-#if defined(CS_SHOW_DEBUG)
-   qDebug() << "systemDefaultFont(): " << sysFont;
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+   qDebug() << "QWindowsFontDatabase::systemDefaultFont() System font = " << sysFont;
 #endif
 
    return sysFont;

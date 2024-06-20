@@ -525,10 +525,10 @@ void *QXcbNativeInterface::atspiBus()
 
    if (defaultConnection) {
       xcb_atom_t atspiBusAtom = defaultConnection->internAtom("AT_SPI_BUS");
-      xcb_get_property_cookie_t cookie = Q_XCB_CALL(xcb_get_property(defaultConnection->xcb_connection(), false,
-               defaultConnection->rootWindow(), atspiBusAtom, XCB_ATOM_STRING, 0, 128));
+      xcb_get_property_cookie_t cookie = Q_XCB_CALL2(xcb_get_property(defaultConnection->xcb_connection(), false,
+               defaultConnection->rootWindow(), atspiBusAtom, XCB_ATOM_STRING, 0, 128), defaultConnection);
 
-      xcb_get_property_reply_t *reply = Q_XCB_CALL(xcb_get_property_reply(defaultConnection->xcb_connection(), cookie, nullptr));
+      xcb_get_property_reply_t *reply = Q_XCB_CALL2(xcb_get_property_reply(defaultConnection->xcb_connection(), cookie, nullptr), defaultConnection);
 
       Q_ASSERT(!reply->bytes_after);
       char *data = (char *)xcb_get_property_value(reply);

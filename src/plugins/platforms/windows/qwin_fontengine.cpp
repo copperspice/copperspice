@@ -239,9 +239,9 @@ QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
      widthCache(nullptr), widthCacheSize(0), designAdvances(nullptr), designAdvancesSize(0)
 {
 
-#if defined(CS_SHOW_DEBUG)
+#if defined(CS_SHOW_DEBUG_PLATFORM)
    // emerald - saw fontSize as negative, why?
-   qDebug() << "QWindowsFontEngine():  FontName = " << name << " FontSize =" << lf.lfHeight;
+   qDebug() << "QWindowsFontEngine() FontName = " << name << " FontSize =" << lf.lfHeight;
 #endif
 
    hfont = CreateFontIndirect(&m_logfont);
