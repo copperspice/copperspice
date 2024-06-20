@@ -1670,42 +1670,40 @@ QDebug operator<<(QDebug debug, const QWindow *window)
          debug << ", Name = " << window->objectName();
       }
 
-      if (debug.verbosity() > 2) {
-         const QRect geometry = window->geometry();
+      const QRect geometry = window->geometry();
 
-         if (window->isVisible()) {
-            debug << ", visible";
-         }
+      if (window->isVisible()) {
+         debug << ", visible";
+      }
 
-         if (window->isExposed()) {
-            debug << ", exposed";
-         }
-         debug << ", State = " << window->windowState()
-               << ", Type = " << window->type() << ", Flags =" << window->flags()
-               << ", Surface Type = " << window->surfaceType();
+      if (window->isExposed()) {
+         debug << ", exposed";
+      }
+      debug << ", State = " << window->windowState()
+            << ", Type = " << window->type() << ", Flags =" << window->flags()
+            << ", Surface Type = " << window->surfaceType();
 
-         if (window->isTopLevel()) {
-            debug << ", toplevel";
-         }
+      if (window->isTopLevel()) {
+         debug << ", toplevel";
+      }
 
-         debug << ", " << geometry.width() << 'x' << geometry.height()
-            << forcesign << geometry.x() << geometry.y() << noforcesign;
+      debug << ", " << geometry.width() << 'x' << geometry.height()
+         << forcesign << geometry.x() << geometry.y() << noforcesign;
 
-         const QMargins margins = window->frameMargins();
+      const QMargins margins = window->frameMargins();
 
-         if (! margins.isNull()) {
-            debug << ", Margins = " << margins;
-         }
+      if (! margins.isNull()) {
+         debug << ", Margins = " << margins;
+      }
 
-         debug << ", DP Ratio = " << window->devicePixelRatio();
+      debug << ", DP Ratio = " << window->devicePixelRatio();
 
-         if (const QPlatformWindow *platformWindow = window->handle()) {
-            debug << ", winId = 0x" << hex << platformWindow->winId() << dec;
-         }
+      if (const QPlatformWindow *platformWindow = window->handle()) {
+         debug << ", winId = 0x" << hex << platformWindow->winId() << dec;
+      }
 
-         if (const QScreen *screen = window->screen()) {
-            debug << ", On = " << screen->name();
-         }
+      if (const QScreen *screen = window->screen()) {
+         debug << ", On = " << screen->name();
       }
 
       debug << ')';
