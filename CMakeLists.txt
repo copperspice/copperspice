@@ -20,6 +20,10 @@ set(BUILD_MAJOR "1")
 set(BUILD_MINOR "9")
 set(BUILD_MICRO "1")
 
+# used to control RPATH and cmake/pc variables when building RPM
+option(BUILDING_RPM "Are we building RPM" OFF)
+option(BUILDING_DEBIAN "Are we building DEBIAN" OFF)
+
 set(BUILD_ABI ${BUILD_MAJOR}.${BUILD_MINOR})
 
 # enable catch2 unit tests in config
@@ -37,6 +41,8 @@ include(CheckLibraryExists)
 include(ResourceMacros)
 include(TestLargeFiles)
 
+
+
 # location for install or package
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    include(GNUInstallDirs)
@@ -52,9 +58,18 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
    # rpath used for rcc and uic when compiling a user application
    file(RELATIVE_PATH CS_BIN_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}"
-                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+                                   "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin")
 
-   set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   if (BUILDING_RPM OR BUILDING_DEBIAN)
+       set(CMAKE_INSTALL_RPATH "$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   else()
+       set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/copperspice/bin:$ORIGIN/${CS_BIN_RPATH}:$ORIGIN/..")
+   endif()
+   set(CMAKE_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_PREFIX}/include/copperspice")
+
+   message( STATUS, "CMAKE_INSTALL_RPATH   ${CMAKE_INSTALL_RPATH}" )
+   message( STATUS, "CS_BIN_RPATH          ${CS_BIN_RPATH}" )
+   message( STATUS, "CMAKE_INSTALL_BINDIR  ${CMAKE_INSTALL_BINDIR}" )
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
@@ -62,6 +77,36 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_INCLUDEDIR include)
 
 endif()
+
+#
+# When building for a package we install to /usr under a 
+# fakeroot or buildroot during build. We don't want
+# the build install path but the system target path.
+#
+if (BUILDING_RPM OR BUILDING_DEBIAN)
+    message(STATUS "** We are building a package ***")
+    #
+    # wish I could get around the hard code 
+    # 
+    set(CS_INST_PREFIX  "/usr")    
+    set(CS_INST_LIB     "${CS_INST_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+    set(CS_INST_INCLUDE "${CS_INST_PREFIX}/include/copperspice")
+else()
+    set(CS_INST_PREFIX  "${CMAKE_INSTALL_PREFIX}")    
+    set(CS_INST_LIB     "${CMAKE_INSTALL_FULL_LIBDIR}")
+    set(CS_INST_INCLUDE "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+endif()
+
+# Note: webkit2.pc.in also uses prefix
+#
+set(prefix "${CS_INST_PREFIX}")
+
+
+message(STATUS "   ***   ")
+message(STATUS "   CS_INST_PREFIX     ${CS_INST_PREFIX}")
+message(STATUS "   CS_INST_LIB        ${CS_INST_LIB}")
+message(STATUS "   CS_INST_INCLUDE    ${CS_INST_INCLUDE}")
+message(STATUS "   CMAKE_BINARY_DIR   ${CMAKE_BINARY_DIR}")
 
 # required libraries
 set(BUILD_COMPONENTS "Core Xml")
@@ -77,10 +122,14 @@ set(PACKAGE_TARNAME   "copperspice")
 set(PACKAGE_BUGREPORT "info@copperspice.com")
 set(PACKAGE_URL       "https://www.copperspice.com/")
 
+set(RPM_VERSION       "${BUILD_MAJOR}.${BUILD_MINOR}")
+set(RPM_RELEASE       "${BUILD_MICRO}")
+
+
 # values used in cs_build_info.h.in
 set(HEX_VERSION "0x0${BUILD_MAJOR}0${BUILD_MINOR}0${BUILD_MICRO}")
 set(VERSION     "${PACKAGE_VERSION}")
-set(prefix      "${CMAKE_INSTALL_PREFIX}")
+
 
 if (MSVC)
    enable_language(ASM_MASM)
@@ -109,9 +158,9 @@ else()
    set(target "${CMAKE_SYSTEM}")
 endif()
 
-set(CPACK_PACKAGE_NAME    ${PROJECT_NAME})
-set(CPACK_PACKAGE_VENDOR  "CopperSpice")
-set(CPACK_PACKAGE_CONTACT "info@copperspice.com")
+set(CPACK_PACKAGE_NAME    "LS-CS")
+set(CPACK_PACKAGE_VENDOR  "Logikal Solutions")
+set(CPACK_PACKAGE_CONTACT "originalseasonedgeek@gmail.com")
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${BUILD_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${BUILD_MINOR})
@@ -125,6 +174,8 @@ set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY  OFF)
 
 set(CPACK_SOURCE_PACKAGE_FILE_NAME    "${PROJECT_NAME}-${PACKAGE_VERSION}")
 set(CPACK_SOURCE_GENERATOR            ZIP TBZ2)
+
+file (READ "description.txt" CPACK_PACKAGE_DESCRIPTION_TEXT)
 
 file(STRINGS cmake/dist_ignore.txt    CPACK_SOURCE_IGNORE_FILES)
 
@@ -729,6 +780,61 @@ else()
 
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
+    #  Update files needed for Debian
+    #  Note: You need to update CPACK_PACKAGE_INSTALLED_SIZE to reflect current installed size
+    #
+   set(CPACK_PACKAGE_INSTALLED_SIZE "173793313")
+
+   # this architecture value is only used on the control file for a debian package.
+   # if the value is bogus or empty on other platforms it simply doesn't matter.
+   #
+   EXECUTE_PROCESS( COMMAND dpkg --print-architecture  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE CPACK_PACKAGE_ARCHITECTURE)
+
+
+   message( STATUS "Architecture: ${CPACK_PACKAGE_ARCHITECTURE}")
+
+
+    configure_file(
+       ${CMAKE_SOURCE_DIR}/deb_build.etc/control.in
+       deb_build.etc/control
+    )
+
+    configure_file(
+       ${CMAKE_SOURCE_DIR}/copperspice.spec.in
+       copperspice.spec
+    )
+
+    #  postrm has some heavy syntax - just copy
+    configure_file(
+       ${CMAKE_SOURCE_DIR}/deb_build.etc/postrm.in
+       deb_build.etc/postrm
+       COPYONLY
+    )
+
+    #  postinst needs to know package name for logging
+    configure_file(
+       ${CMAKE_SOURCE_DIR}/deb_build.etc/postinst.in
+       deb_build.etc/postinst
+    )
+
+    #  hopefully we never need to replace values in rules
+    configure_file(
+       ${CMAKE_SOURCE_DIR}/deb_build.etc/rules.in
+       deb_build.etc/rules
+       COPYONLY
+    )
+
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/README.md
+        README.md
+        COPYONLY
+    )
+
+endif()
+
+
+
 install(
    FILES
       ${CMAKE_BINARY_DIR}/CopperSpiceConfig.cmake
@@ -738,6 +844,14 @@ install(
       ${CMAKE_SOURCE_DIR}/cmake/CopperSpiceMacros.cmake
       ${CMAKE_SOURCE_DIR}/cmake/InstallMinGW.cmake
    DESTINATION ${PKG_PREFIX}
+)
+
+install(
+    FILES
+       ${CMAKE_SOURCE_DIR}/license/LGPL_EXCEPTION.txt
+       ${CMAKE_SOURCE_DIR}/license/LICENSE.FDL
+       ${CMAKE_SOURCE_DIR}/license/LICENSE.LGPL
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}/${PROJECT_NAME}/LICENSE
 )
 
 install(
@@ -773,4 +887,5 @@ message("")
 message("CopperSpice configured to run on:  ${CMAKE_SYSTEM_NAME} ${TARGETBITS} bit, ${CMAKE_BUILD_TYPE} Mode")
 message("CopperSpice will be built in:      ${CMAKE_BINARY_DIR}")
 message("CopperSpice will be installed in:  ${CMAKE_INSTALL_PREFIX}")
+message("prefix:                            ${prefix}")
 message("\n")
