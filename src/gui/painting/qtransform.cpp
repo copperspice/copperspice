@@ -185,7 +185,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   if (qIsNaN(dx) | qIsNaN(dy)) {
+   if (qIsNaN(dx) || qIsNaN(dy)) {
       qDebug("QTransform::translate() Value for x or y is invalid");
       return *this;
    }
@@ -227,7 +227,7 @@ QTransform &QTransform::translate(qreal dx, qreal dy)
 QTransform QTransform::fromTranslate(qreal dx, qreal dy)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   if (qIsNaN(dx) | qIsNaN(dy)) {
+   if (qIsNaN(dx) || qIsNaN(dy)) {
       qDebug("QTransform::fromTranslate() Value for x or y is invalid");
       return QTransform();
    }
@@ -253,7 +253,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   if (qIsNaN(sx) | qIsNaN(sy)) {
+   if (qIsNaN(sx) || qIsNaN(sy)) {
       qDebug("QTransform::scale() Value for x or y is invalid");
       return *this;
    }
@@ -293,7 +293,7 @@ QTransform &QTransform::scale(qreal sx, qreal sy)
 QTransform QTransform::fromScale(qreal sx, qreal sy)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   if (qIsNaN(sx) | qIsNaN(sy)) {
+   if (qIsNaN(sx) || qIsNaN(sy)) {
       qDebug("QTransform::fromScale() Value for x or y is invalid");
       return QTransform();
    }
@@ -319,7 +319,7 @@ QTransform &QTransform::shear(qreal sh, qreal sv)
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   if (qIsNaN(sh) | qIsNaN(sv)) {
+   if (qIsNaN(sh) || qIsNaN(sv)) {
       qDebug("QTransform::shear() Value for horizontal or vertical is invalid");
       return *this;
    }
