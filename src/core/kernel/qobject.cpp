@@ -910,21 +910,18 @@ QDebug operator<<(QDebug debug, const QObject *object)
 {
    QString8 msg;
 
-   if (object) {
+   if (object == nullptr) {
+      msg = "QObject(nullptr) ";
 
+   } else {
       msg =  object->metaObject()->className() + "(";
-      msg += QString8::number(static_cast<quint64>(object - static_cast<const QObject *>(nullptr)), 16);
+      msg += QString8::number(bit_cast<quintptr>(object), 16);
 
       if (! object->objectName().isEmpty())  {
-         msg += ", name = ";
-         msg += object->objectName();
+         msg += ", name = " + object->objectName();
       }
 
       msg += ")";
-
-   } else {
-      msg = "QObject(nullptr) ";
-
    }
 
    return debug << msg;
