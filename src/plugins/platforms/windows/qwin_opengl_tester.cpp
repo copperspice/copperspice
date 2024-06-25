@@ -96,18 +96,6 @@ GpuDescription GpuDescription::detect()
    return result;
 }
 
-QDebug operator<<(QDebug d, const GpuDescription &gd)
-{
-   QDebugStateSaver s(d);
-   d.nospace();
-   d << hex << showbase << "GpuDescription(vendorId=" << gd.vendorId
-      << ", deviceId=" << gd.deviceId << ", subSysId=" << gd.subSysId
-      << dec << noshowbase << ", revision=" << gd.revision
-      << ", driver: " << gd.driverName
-      << ", version=" << gd.driverVersion << ", " << gd.description << ')';
-   return d;
-}
-
 // Return printable string formatted like the output of the dxdiag tool.
 QString GpuDescription::toString() const
 {

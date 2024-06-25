@@ -1991,10 +1991,6 @@ void QPainter::shear(qreal sh, qreal sv)
 
 void QPainter::rotate(qreal a)
 {
-#if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug("QPainter::rotate() angle = %f", a);
-#endif
-
    Q_D(QPainter);
 
    if (!d->engine) {

@@ -333,10 +333,6 @@ void QProcessPrivate::startProcess()
 {
    Q_Q(QProcess);
 
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::startProcess()");
-#endif
-
    // Initialize pipes
    if (! openChannel(stdinChannel) || ! openChannel(stdoutChannel) ||
          ! openChannel(stderrChannel) || qt_create_pipe(childStartedPipe) != 0) {
@@ -727,10 +723,6 @@ bool QProcessPrivate::writeToStdin()
 
 void QProcessPrivate::terminateProcess()
 {
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::terminateProcess()");
-#endif
-
    if (pid) {
       ::kill(pid_t(pid), SIGTERM);
    }
@@ -738,10 +730,6 @@ void QProcessPrivate::terminateProcess()
 
 void QProcessPrivate::killProcess()
 {
-#if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::killProcess()");
-#endif
-
    if (pid) {
       ::kill(pid_t(pid), SIGKILL);
    }

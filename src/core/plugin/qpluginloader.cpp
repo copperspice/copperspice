@@ -143,10 +143,6 @@ static QString locatePlugin(const QString &fileName)
          for (const QString &suffix : suffixes) {
             const QString fn = path + '/' + basePath + prefix + baseName + suffix;
 
-#if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-            qDebug() << "Trying..." << fn;
-#endif
-
             if (QFileInfo(fn).isFile()) {
                return fn;
             }
