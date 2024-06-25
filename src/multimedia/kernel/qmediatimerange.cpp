@@ -74,18 +74,6 @@ QMediaTimeInterval::QMediaTimeInterval(qint64 start, qint64 end)
 }
 
 /*!
-    \fn QMediaTimeInterval::QMediaTimeInterval(const QMediaTimeInterval &other)
-
-    Constructs an interval by taking a copy of \a other.
-*/
-QMediaTimeInterval::QMediaTimeInterval(const QMediaTimeInterval &other)
-   : s(other.s)
-   , e(other.e)
-{
-
-}
-
-/*!
     \fn QMediaTimeInterval::start() const
 
     Returns the start time of the interval.

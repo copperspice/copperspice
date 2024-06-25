@@ -63,9 +63,6 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
             : ownerId(0u), groupId(0u), permissions(Qt::EmptyFlag)
          { }
 
-         File(const File &o) : path(o.path), ownerId(o.ownerId),
-            groupId(o.groupId), permissions(o.permissions), lastWrite(o.lastWrite)
-         {}
 
          QString path;
          bool updateInfo();
