@@ -2359,16 +2359,13 @@ QString QLocaleData::longLongToString(const QChar zero, const QChar group, const
       num_str = qulltoa(l, base, zero);
    }
 
-   uint cnt_thousand_sep = 0;
-
    if (flags & ThousandsGroup && base == 10) {
       for (int i = num_str.length() - 3; i > 0; i -= 3) {
          num_str.insert(i, group);
-         ++cnt_thousand_sep;
       }
    }
 
-   for (int i = num_str.length()/* - cnt_thousand_sep*/; i < precision; ++i) {
+   for (int i = num_str.length(); i < precision; ++i) {
       num_str.prepend(base == 10 ? zero : QChar::fromLatin1('0'));
    }
 
@@ -2442,12 +2439,10 @@ QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, co
    }
 
    QString num_str = qulltoa(l, base, zero);
-   uint cnt_thousand_sep = 0;
 
    if (flags & ThousandsGroup && base == 10) {
       for (int i = num_str.length() - 3; i > 0; i -= 3) {
          num_str.insert(i, group);
-         ++cnt_thousand_sep;
       }
    }
 
