@@ -805,17 +805,19 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
             static bool allowTouchWarningShown = false;
             if (!allowTouchWarningShown) {
                allowTouchWarningShown = true;
-               qWarning("Skipping XIAllowTouchEvents() because it was not possible to detect libXi version at build time."
-                  " Minimum libXi version required is 1.7.4."
-                  " Expect issues with touch behavior.");
+               qWarning("QXcbConnection::xi2ProcessTouch() "
+                  "Skipping XIAllowTouchEvents() because it was not possible to detect libXi version at build time. "
+                  "Minimum libXi version required is 1.7.4, possible issues with touch behavior.");
             }
 #elif LIBXI_MAJOR == 1 && (LIBXI_MINOR < 7 || (LIBXI_MINOR == 7 && LIBXI_PATCH < 4))
             static bool allowTouchWarningShown = false;
             if (!allowTouchWarningShown) {
                allowTouchWarningShown = true;
-               qWarning("Skipping XIAllowTouchEvents() due to not having libXi >= 1.7.4."
-                  " libXi version at build time was %d.%d.%d."
-                  " Expect issues with touch behavior.", LIBXI_MAJOR, LIBXI_MINOR, LIBXI_PATCH);
+
+               qWarning("QXcbConnection::xi2ProcessTouch() "
+                  "Skipping XIAllowTouchEvents() since libXi is less than version 1.7.4. "
+                  "libXi version at build time was %d.%d.%d, possible issues with touch behavior",
+                  LIBXI_MAJOR, LIBXI_MINOR, LIBXI_PATCH);
             }
 #else
             XIAllowTouchEvents(static_cast<Display *>(m_xlib_display), xiDeviceEvent->deviceid,

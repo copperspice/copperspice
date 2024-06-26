@@ -1479,7 +1479,7 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
    QWindow *unused = nullptr;
 
    if (! window) {
-      qWarning().nospace() << "QApplication::isWindowBlocked() Invalid window (nullptr)";
+      qWarning("QApplication::isWindowBlocked() Invalid window (nullptr)");
       return false;
    }
 

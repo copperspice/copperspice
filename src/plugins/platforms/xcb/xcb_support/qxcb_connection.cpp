@@ -145,7 +145,7 @@ static int ioErrorHandler(Display *dpy)
          str = xcbConnectionErrors[code];
       }
 
-      qWarning("The X11 connection broke: %s (code %d)", str, code);
+      qWarning("X11 connection broke, code = %d, message = %s", code, str);
    }
    return _XDefaultIOError(dpy);
 }
@@ -337,7 +337,7 @@ bool QXcbConnection::checkOutputIsPrimary(xcb_window_t rootWindow, xcb_randr_out
       xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
 
    if (! primary || error) {
-      qWarning("failed to get the primary output of the screen");
+      qWarning("QXcbConnection::checkOutputIsPrimary() Failed to obtain the primary output");
       free(error);
       error = nullptr;
    }
@@ -456,7 +456,7 @@ void QXcbConnection::initializeScreens()
          QScopedPointer<xcb_randr_get_screen_resources_current_reply_t, QMallocDeleter> resources_current(
             xcb_randr_get_screen_resources_current_reply(xcb_connection(), resourcesCookie, &error));
          if (!resources_current || error) {
-            qWarning("failed to get the current screen resources");
+            qWarning("QXcbConnection::initializeScreens() Failed to obtain the current screen resources");
             free(error);
          } else {
             xcb_timestamp_t timestamp;
@@ -470,7 +470,7 @@ void QXcbConnection::initializeScreens()
                   xcb_randr_get_screen_resources(xcb_connection(), xcbScreen->root);
                resources.reset(xcb_randr_get_screen_resources_reply(xcb_connection(), resourcesCookie, &error));
                if (!resources || error) {
-                  qWarning("failed to get the screen resources");
+                  qWarning("QXcbConnection::initializeScreens() Failed to obtain the screen resources");
                   free(error);
                } else {
                   timestamp = resources->config_timestamp;
@@ -485,7 +485,7 @@ void QXcbConnection::initializeScreens()
                QScopedPointer<xcb_randr_get_output_primary_reply_t, QMallocDeleter> primary(
                   xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
                if (!primary || error) {
-                  qWarning("failed to get the primary output of the screen");
+                  qWarning("QXcbConnection::initializeScreens() Failed to obtain the primary output of the screen");
                   free(error);
                } else {
                   for (int i = 0; i < outputCount; i++) {
@@ -586,7 +586,8 @@ void QXcbConnection::initializeScreens()
    }
 
    if (m_virtualDesktops.isEmpty()) {
-      qFatal("QXcbConnection: no screens available");
+      qFatal("QXcbConnection::initializeScreens() No screens available");
+
    } else {
       // Ensure the primary screen is first on the list
       if (primaryScreen) {
@@ -1088,11 +1089,9 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
    uint clamped_major_code = qMin<uint>(error->major_code,
          (sizeof(xcb_protocol_request_codes) / sizeof(xcb_protocol_request_codes[0])) - 1);
 
-   qWarning("QXcbConnection: XCB error: %d (%s), sequence: %d, resource id: %d, major code: %d (%s), minor code: %d",
-      int(error->error_code), xcb_errors[clamped_error_code],
-      int(error->sequence), int(error->resource_id),
-      int(error->major_code), xcb_protocol_request_codes[clamped_major_code],
-      int(error->minor_code));
+   qWarning("QXcbConnection::handleXcbError() XCB error = %d (%s), sequence = %d, resource id = %d, major code = %d (%s), minor code = %d",
+      int(error->error_code), xcb_errors[clamped_error_code], int(error->sequence), int(error->resource_id),
+      int(error->major_code), xcb_protocol_request_codes[clamped_major_code], int(error->minor_code));
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    QMutexLocker locker(&m_callLogMutex);
@@ -1948,7 +1947,7 @@ void QXcbConnection::processXcbEvents()
    int connection_error = xcb_connection_has_error(xcb_connection());
 
    if (connection_error) {
-      qWarning("X11 connection broke (error %d). Verify X11 server is running", connection_error);
+      qWarning("QXcbConnection::processXcbEvents() X11 connection broke, error = %d, verify X11 server is running", connection_error);
       exit(1);
    }
 
@@ -2318,7 +2317,7 @@ QByteArray QXcbConnection::atomName(xcb_atom_t atom)
    xcb_get_atom_name_reply_t *reply  = xcb_get_atom_name_reply(xcb_connection(), cookie, &error);
 
    if (error) {
-      qWarning() << "QXcbConnection::atomName: bad Atom" << atom;
+      qWarning() << "QXcbConnection::atomName() Invalid X11 Atom = " << atom;
       free(error);
    }
 
@@ -2371,7 +2370,7 @@ void QXcbConnection::initializeXFixes()
          xfixes_query_cookie, &error);
 
    if (!xfixes_query || error || xfixes_query->major_version < 2) {
-      qWarning("QXcbConnection: Failed to initialize XFixes");
+      qWarning("QXcbConnection::initializeXFixes() Failed to initialize XFixes");
       free(error);
       xfixes_first_event = 0;
    }
@@ -2397,7 +2396,7 @@ reply || !reply->present) {
          xrender_query_cookie, &error);
 
    if (! xrender_query || error || (xrender_query->major_version == 0 && xrender_query->minor_version < 5)) {
-      qWarning("QXcbConnection: Failed to initialize XRender");
+      qWarning("QXcbConnection::initializeXRender() Failed to initialize XRender");
       free(error);
    }
 
@@ -2425,7 +2424,7 @@ void QXcbConnection::initializeXRandr()
 
    if (! xrandr_query || error || (xrandr_query->major_version < 1 || (xrandr_query->major_version == 1 &&
             xrandr_query->minor_version < 2))) {
-      qWarning("QXcbConnection: Failed to initialize XRandr");
+      qWarning("QXcbConnection::initializeXRandr()) Failed to initialize XRandr");
       free(error);
       has_randr_extension = false;
    }
@@ -2474,7 +2473,7 @@ void QXcbConnection::initializeXShape()
    xcb_shape_query_version_reply_t *shape_query = xcb_shape_query_version_reply(m_connection, cookie, nullptr);
 
    if (!shape_query) {
-      qWarning("QXcbConnection: Failed to initialize SHAPE extension");
+      qWarning("QXcbConnection::initializeXShape()) Failed to initialize SHAPE extension");
 
    } else if (shape_query->major_version > 1 || (shape_query->major_version == 1 && shape_query->minor_version >= 1)) {
       // The input shape is the only thing added in SHAPE 1.1
@@ -2490,7 +2489,7 @@ void QXcbConnection::initializeXKB()
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_xkb_id);
 
    if (!reply || !reply->present) {
-      qWarning() << "XKEYBOARD extension not present on the X server.";
+      qWarning("QXcbConnection::initializeXKB() XKEYBOARD extension not present on the X server");
       xkb_first_event = 0;
       return;
    }
@@ -2505,11 +2504,11 @@ void QXcbConnection::initializeXKB()
    xkb_query = xcb_xkb_use_extension_reply(c, xkb_query_cookie, nullptr);
 
    if (! xkb_query) {
-      qWarning("Failed to initialize XKB extension");
+      qWarning("QXcbConnection::initializeXKB() Failed to initialize XKB extension");
       return;
 
    } else if (! xkb_query->supported) {
-      qWarning("Unsupported XKB version (We want %d %d, but X server has %d %d)",
+      qWarning("QXcbConnection::initializeXKB() Unsupported XKB version,requested %d %d, X server has %d %d",
          XCB_XKB_MAJOR_VERSION, XCB_XKB_MINOR_VERSION,
          xkb_query->serverMajor, xkb_query->serverMinor);
 
@@ -2543,7 +2542,7 @@ void QXcbConnection::initializeXKB()
 
    if (error) {
       free(error);
-      qWarning() << "Failed to select notify events from xcb-xkb";
+      qWarning("QXcbConnection::initializeXKB() Failed to enable notify events from xcb-xkb");
       return;
    }
 #endif

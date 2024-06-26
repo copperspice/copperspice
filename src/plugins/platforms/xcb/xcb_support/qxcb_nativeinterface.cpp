@@ -214,7 +214,7 @@ void *QXcbNativeInterface::nativeResourceForContext(const QByteArray &resourceSt
 void *QXcbNativeInterface::nativeResourceForScreen(const QByteArray &resourceString, QScreen *screen)
 {
    if (!screen) {
-      qWarning() << "nativeResourceForScreen: null screen";
+      qWarning("QXcbNativeInterface::nativeResourceForContext() Screen is invalid (nullptr)");
       return nullptr;
    }
 

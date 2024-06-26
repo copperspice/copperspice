@@ -125,7 +125,7 @@ static inline bool launch(const QString &launcher, const QUrl &url)
 #endif
 
    if (!ok) {
-      qWarning("Launch failed (%s)", csPrintable(command));
+      qWarning("launch() Failed to start process %s", csPrintable(command));
    }
 
    return ok;

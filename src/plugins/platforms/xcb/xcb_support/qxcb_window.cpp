@@ -2603,7 +2603,7 @@ void QXcbWindow::handleXIMouseEvent(xcb_ge_event_t *event, Qt::MouseEventSource 
          break;
 
       default:
-         qWarning() << "Unrecognized XI2 mouse event" << ev->evtype;
+         qWarning() << "QXcbWindow::handleXIMouseEvent() Unrecognized XI2 mouse event" << ev->evtype;
          break;
    }
 }
