@@ -3113,7 +3113,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
    if (ET.ymax - ET.ymin > 100000) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      qWarning("QRegion::PolygonRegion() Polygon is too large");
+      qDebug("QRegion::PolygonRegion() Polygon is too large");
 #endif
 
       // clean up region ptr
