@@ -294,129 +294,137 @@ static inline void initPixelFormatDescriptor(PIXELFORMATDESCRIPTOR *d)
    d->nVersion = 1;
 }
 
-QDebug operator<<(QDebug d, const PIXELFORMATDESCRIPTOR &pd)
+QDebug operator<<(QDebug debug, const PIXELFORMATDESCRIPTOR &pd)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d << "PIXELFORMATDESCRIPTOR "
-      << "dwFlags=" << hex << showbase << pd.dwFlags << dec << noshowbase;
+   debug << "PIXELFORMATDESCRIPTOR "
+      << "dwFlags =" << hex << showbase << pd.dwFlags << dec << noshowbase;
 
    if (pd.dwFlags & PFD_DRAW_TO_WINDOW) {
-      d << " PFD_DRAW_TO_WINDOW";
+      debug << " PFD_DRAW_TO_WINDOW";
    }
+
    if (pd.dwFlags & PFD_DRAW_TO_BITMAP) {
-      d << " PFD_DRAW_TO_BITMAP";
+      debug << " PFD_DRAW_TO_BITMAP";
    }
+
    if (pd.dwFlags & PFD_SUPPORT_GDI) {
-      d << " PFD_SUPPORT_GDI";
+      debug << " PFD_SUPPORT_GDI";
    }
 
    if (pd.dwFlags & PFD_SUPPORT_OPENGL) {
-      d << " PFD_SUPPORT_OPENGL";
+      debug << " PFD_SUPPORT_OPENGL";
    }
+
    if (pd.dwFlags & PFD_GENERIC_ACCELERATED) {
-      d << " PFD_GENERIC_ACCELERATED";
+      debug << " PFD_GENERIC_ACCELERATED";
    }
+
    if (pd.dwFlags & PFD_SUPPORT_DIRECTDRAW) {
-      d << " PFD_SUPPORT_DIRECTDRAW";
+      debug << " PFD_SUPPORT_DIRECTDRAW";
    }
 
    if (pd.dwFlags & PFD_DIRECT3D_ACCELERATED) {
-      d << " PFD_DIRECT3D_ACCELERATED";
+      debug << " PFD_DIRECT3D_ACCELERATED";
    }
 
    if (pd.dwFlags & PFD_SUPPORT_COMPOSITION) {
-      d << " PFD_SUPPORT_COMPOSITION";
+      debug << " PFD_SUPPORT_COMPOSITION";
    }
 
    if (pd.dwFlags & PFD_GENERIC_FORMAT) {
-      d << " PFD_GENERIC_FORMAT";
+      debug << " PFD_GENERIC_FORMAT";
    }
 
    if (pd.dwFlags & PFD_NEED_PALETTE) {
-      d << " PFD_NEED_PALETTE";
+      debug << " PFD_NEED_PALETTE";
    }
 
    if (pd.dwFlags & PFD_NEED_SYSTEM_PALETTE) {
-      d << " PFD_NEED_SYSTEM_PALETTE";
+      debug << " PFD_NEED_SYSTEM_PALETTE";
    }
 
    if (pd.dwFlags & PFD_DOUBLEBUFFER) {
-      d << " PFD_DOUBLEBUFFER";
+      debug << " PFD_DOUBLEBUFFER";
    }
 
    if (pd.dwFlags & PFD_STEREO) {
-      d << " PFD_STEREO";
+      debug << " PFD_STEREO";
    }
+
    if (pd.dwFlags & PFD_SWAP_LAYER_BUFFERS) {
-      d << " PFD_SWAP_LAYER_BUFFERS";
+      debug << " PFD_SWAP_LAYER_BUFFERS";
    }
 
    if (hasGLOverlay(pd)) {
-      d << " overlay";
+      debug << " overlay";
    }
-   d << " iPixelType=" << pd.iPixelType << " cColorBits=" << pd.cColorBits
-      << " cRedBits=" << pd.cRedBits << " cRedShift=" << pd.cRedShift
-      << " cGreenBits=" << pd.cGreenBits << " cGreenShift=" << pd.cGreenShift
-      << " cBlueBits=" << pd.cBlueBits << " cBlueShift=" << pd.cBlueShift;
-   d  << " cDepthBits=" << pd.cDepthBits;
+
+   debug  << " iPixelType =" << pd.iPixelType << " cColorBits =" << pd.cColorBits
+      << " cRedBits =" << pd.cRedBits << " cRedShift =" << pd.cRedShift
+      << " cGreenBits =" << pd.cGreenBits << " cGreenShift =" << pd.cGreenShift
+      << " cBlueBits =" << pd.cBlueBits << " cBlueShift =" << pd.cBlueShift;
+
+   debug  << " cDepthBits =" << pd.cDepthBits;
 
    if (pd.cStencilBits) {
-      d << " cStencilBits=" << pd.cStencilBits;
+      debug << " cStencilBits =" << pd.cStencilBits;
    }
 
    if (pd.cAuxBuffers) {
-      d << " cAuxBuffers=" << pd.cAuxBuffers;
+      debug << " cAuxBuffers =" << pd.cAuxBuffers;
    }
 
-   d << " iLayerType=" << pd.iLayerType;
+   debug << " iLayerType=" << pd.iLayerType;
+
    if (pd.dwVisibleMask) {
-      d << " dwVisibleMask=" << pd.dwVisibleMask;
+      debug << " dwVisibleMask =" << pd.dwVisibleMask;
    }
 
    if (pd.cAlphaBits) {
-      d << " cAlphaBits=" << pd.cAlphaBits << " cAlphaShift=" << pd.cAlphaShift;
+      debug << " cAlphaBits =" << pd.cAlphaBits << " cAlphaShift =" << pd.cAlphaShift;
    }
 
-   if (pd.cAccumBits)
-      d  << " cAccumBits=" << pd.cAccumBits << " cAccumRedBits=" << pd.cAccumRedBits
-         << " cAccumGreenBits=" << pd.cAccumGreenBits << " cAccumBlueBits=" << pd.cAccumBlueBits
-         << " cAccumAlphaBits=" << pd.cAccumAlphaBits;
+   if (pd.cAccumBits) {
+      debug  << " cAccumBits =" << pd.cAccumBits << " cAccumRedBits =" << pd.cAccumRedBits
+         << " cAccumGreenBits =" << pd.cAccumGreenBits << " cAccumBlueBits =" << pd.cAccumBlueBits
+         << " cAccumAlphaBits =" << pd.cAccumAlphaBits;
+   }
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const QOpenGLStaticContext &s)
+QDebug operator<<(QDebug debug, const QOpenGLStaticContext &s)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d << "OpenGL: " << s.vendor << ',' << s.renderer << " default "
-      <<  s.defaultFormat;
+   debug << "OpenGL: " << s.vendor << ',' << s.renderer << " default format =" <<  s.m_defaultFormat;
 
    if (s.extensions &  QOpenGLStaticContext::SampleBuffers) {
-      d << ",SampleBuffers";
+      debug << ", SampleBuffers";
    }
 
    if (s.hasExtensions()) {
-      d << ", Extension-API present";
+      debug << ", Extension-API present";
    }
 
-   d << "\nExtensions: " << (s.extensionNames.count(' ') + 1);
+   debug << "\nExtensions: " << (s.extensionNames.count(' ') + 1);
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const QWindowsOpenGLContextFormat &f)
+QDebug operator<<(QDebug debug, const QWindowsOpenGLContextFormat &f)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d << "ContextFormat: v" << (f.version >> 8) << '.' << (f.version & 0xFF)
-      << " profile: " << f.profile << " options: " << f.options;
+   debug << "Context Format version = " << (f.m_version >> 8) << '.' << (f.m_version & 0xFF)
+      << ", profile = " << f.profile << ", options = " << f.options;
 
-   return d;
+   return debug;
 }
 
 
@@ -874,7 +882,8 @@ static HGLRC createContext(const QOpenGLStaticContext &staticContext,
    // wglCreateContextAttribsARB fails and returns nullptr if the requested context
    // version is not supported. This means that we will get the closest supported
    // context format that that which was requested and is supported by the driver
-   const int requestedVersion = qMin((format.majorVersion() << 8) + format.minorVersion(), staticContext.defaultFormat.version);
+
+   const int requestedVersion = qMin((format.majorVersion() << 8) + format.minorVersion(), staticContext.m_defaultFormat.m_version);
    const int majorVersion = requestedVersion >> 8;
    const int minorVersion = requestedVersion & 0xFF;
 
@@ -993,7 +1002,7 @@ static inline QOpenGLContextData createDummyWindowOpenGLContextData()
 }
 
 QWindowsOpenGLContextFormat::QWindowsOpenGLContextFormat()
-   : profile(QSurfaceFormat::NoProfile), version(0), options(Qt::EmptyFlag)
+   : profile(QSurfaceFormat::NoProfile), options(Qt::EmptyFlag), m_version(0)
 {
 }
 
@@ -1004,12 +1013,12 @@ QWindowsOpenGLContextFormat QWindowsOpenGLContextFormat::current()
    int major, minor;
    // v2
    if (QPlatformOpenGLContext::parseOpenGLVersion(version, major, minor)) {
-      result.version = (major << 8) + minor;
+      result.m_version = (major << 8) + minor;
    } else {
-      result.version = 0x0200;
+      result.m_version = 0x0200;
    }
    result.profile = QSurfaceFormat::NoProfile;
-   if (result.version < 0x0300) {
+   if (result.m_version < 0x0300) {
       result.options |= QSurfaceFormat::DeprecatedFunctions;
       return result;
    }
@@ -1030,7 +1039,8 @@ QWindowsOpenGLContextFormat QWindowsOpenGLContextFormat::current()
    if (value == LOSE_CONTEXT_ON_RESET_ARB) {
       result.options |= QSurfaceFormat::ResetNotification;
    }
-   if (result.version < 0x0302) {
+
+   if (result.m_version < 0x0302) {
       return result;
    }
 
@@ -1049,8 +1059,8 @@ QWindowsOpenGLContextFormat QWindowsOpenGLContextFormat::current()
 
 void QWindowsOpenGLContextFormat::apply(QSurfaceFormat *format) const
 {
-   format->setMajorVersion(version >> 8);
-   format->setMinorVersion(version & 0xFF);
+   format->setMajorVersion(m_version >> 8);
+   format->setMinorVersion(m_version & 0xFF);
    format->setProfile(profile);
 
    if (options & QSurfaceFormat::DebugContext) {
@@ -1098,7 +1108,7 @@ QOpenGLStaticContext::QOpenGLStaticContext() :
    renderer(QOpenGLStaticContext::getGlString(GL_RENDERER)),
    extensionNames(QOpenGLStaticContext::getGlString(GL_EXTENSIONS)),
    extensions(0),
-   defaultFormat(QWindowsOpenGLContextFormat::current()),
+     m_defaultFormat(QWindowsOpenGLContextFormat::current()),
 
    wglGetPixelFormatAttribIVARB(cs_bitCast<WglGetPixelFormatAttribIVARB>(
          QOpenGLStaticContext::opengl32.wglGetProcAddress("wglGetPixelFormatAttribivARB"))),
@@ -1336,8 +1346,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
             << " requested: " << context->format()
             << "\n    obtained #" << m_pixelFormat << (m_extensionsUsed ? "ARB" : "GDI") << m_obtainedFormat
             << "\n    " << m_obtainedPixelFormatDescriptor << " swap interval: " << obtainedSwapInterval
-            << "\n    default: " << m_staticContext->defaultFormat
-            << "\n    HGLRC=" << m_renderingContext;
+            << "\n   Default Format :" << m_staticContext->m_defaultFormat;
 #endif
 
 }

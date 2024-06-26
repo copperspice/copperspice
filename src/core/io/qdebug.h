@@ -365,14 +365,16 @@ template <class T>
 inline QDebug operator<<(QDebug debug, const QList<T> &list)
 {
    const bool oldSetting = debug.autoInsertSpaces();
-   debug.nospace() << '(';
+   debug.nospace();
 
-   for (typename QList<T>::size_type i = 0; i < list.count(); ++i) {
-      if (i) {
+   debug << '(';
+
+   for (auto cnt = 0; cnt < list.count(); ++cnt) {
+      if (cnt) {
          debug << ", ";
       }
 
-      debug << list.at(i);
+      debug << list.at(cnt);
    }
 
    debug << ')';

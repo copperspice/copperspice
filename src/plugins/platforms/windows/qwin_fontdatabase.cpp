@@ -331,36 +331,36 @@ qreal QWindowsFontDatabase::fontSmoothingGamma()
    return result;
 }
 
-QDebug operator<<(QDebug d, const QFontDef &def)
+QDebug operator<<(QDebug debug, const QFontDef &def)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d.noquote();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug.noquote();
 
-   d << "QFontDef(Family=\"" << def.family << '"';
+   debug << "QFontDef(Family=\"" << def.family << '"';
 
    if (! def.styleName.isEmpty()) {
-      d << ", stylename=" << def.styleName;
+      debug << ", stylename=" << def.styleName;
    }
 
-   d << ", pointsize=" << def.pointSize << ", pixelsize=" << def.pixelSize
+   debug << ", pointsize=" << def.pointSize << ", pixelsize=" << def.pixelSize
      << ", styleHint=" << def.styleHint << ", weight=" << def.weight
      << ", stretch=" << def.stretch << ", hintingPreference="
      << def.hintingPreference << ')';
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const LOGFONT &lf)
+QDebug operator<<(QDebug debug, const LOGFONT &lf)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d.noquote();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug.noquote();
 
-   d << "LOGFONT(\"" << QString::fromStdWString(std::wstring(lf.lfFaceName))
+   debug << "LOGFONT(\"" << QString::fromStdWString(std::wstring(lf.lfFaceName))
       << "\", lfWidth=" << lf.lfWidth << ", lfHeight=" << lf.lfHeight << ')';
 
-   return d;
+   return debug;
 }
 
 static inline QFontDatabase::WritingSystem writingSystemFromCharSet(uchar charSet)

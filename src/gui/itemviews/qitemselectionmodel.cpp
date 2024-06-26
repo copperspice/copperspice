@@ -1309,13 +1309,14 @@ void QItemSelectionModel::emitSelectionChanged(const QItemSelection &newSelectio
    }
 }
 
-QDebug operator<<(QDebug dbg, const QItemSelectionRange &range)
+QDebug operator<<(QDebug debug, const QItemSelectionRange &range)
 {
-   QDebugStateSaver saver(dbg);
-   dbg.nospace() << "QItemSelectionRange(" << range.topLeft()
-      << ',' << range.bottomRight() << ')';
-   return dbg;
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
+   debug << "QItemSelectionRange(" << range.topLeft() << ", " << range.bottomRight() << ')';
+
+   return debug;
 }
 
 void QItemSelectionModel::_q_columnsAboutToBeRemoved(const QModelIndex &parent, int start, int end)

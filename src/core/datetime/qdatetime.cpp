@@ -2653,30 +2653,37 @@ QDataStream &operator>>(QDataStream &stream, QDateTime &dateTime)
    return stream;
 }
 
-QDebug operator<<(QDebug dbg, const QDate &date)
+QDebug operator<<(QDebug debug, const QDate &date)
 {
-   QDebugStateSaver saver(dbg);
-   dbg.nospace() << "QDate(" << date.toString(Qt::ISODate) << ')';
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   return dbg;
+   debug << "QDate(" << date.toString(Qt::ISODate) << ')';
+
+   return debug;
 }
 
-QDebug operator<<(QDebug dbg, const QTime &time)
+QDebug operator<<(QDebug debug, const QTime &time)
 {
-   QDebugStateSaver saver(dbg);
-   dbg.nospace() << "QTime(" << time.toString("HH:mm:ss.zzz") << ')';
-   return dbg;
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+
+   debug << "QTime(" << time.toString("HH:mm:ss.zzz") << ')';
+
+   return debug;
 }
 
-QDebug operator<<(QDebug dbg, const QDateTime &date)
+QDebug operator<<(QDebug debug, const QDateTime &date)
 {
-   QDebugStateSaver saver(dbg);
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug.noquote();
 
-   dbg.nospace() << "QDateTime(";
-   dbg.noquote() << date.toString("yyyy-MM-dd HH:mm:ss.zzz t");
-   dbg << ' ' << date.timeZone().id() << ')';
+   debug << "QDateTime(";
+   debug << date.toString("yyyy-MM-dd HH:mm:ss.zzz t");
+   debug << ' ' << date.timeZone().id() << ')';
 
-   return dbg;
+   return debug;
 }
 
 uint qHash(const QDateTime &key, uint seed)

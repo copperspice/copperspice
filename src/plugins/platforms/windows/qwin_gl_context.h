@@ -73,15 +73,14 @@ struct QWindowsOpenGLContextFormat {
    void apply(QSurfaceFormat *format) const;
 
    QSurfaceFormat::OpenGLContextProfile profile;
-   int version; //! majorVersion<<8 + minorVersion
    QSurfaceFormat::FormatOptions options;
+
+   int m_version;
 };
 
-#ifndef QT_NO_DEBUG_STREAM
-QDebug operator<<(QDebug d, const PIXELFORMATDESCRIPTOR &);
-QDebug operator<<(QDebug d, const QWindowsOpenGLContextFormat &);
-QDebug operator<<(QDebug d, const QOpenGLStaticContext &s);
-#endif
+QDebug operator<<(QDebug debug, const PIXELFORMATDESCRIPTOR &);
+QDebug operator<<(QDebug debug, const QWindowsOpenGLContextFormat &);
+QDebug operator<<(QDebug debug, const QOpenGLStaticContext &s);
 
 struct QWindowsOpengl32DLL {
    bool init(bool softwareRendering);
@@ -217,7 +216,7 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    const QByteArray renderer;
    const QByteArray extensionNames;
    unsigned extensions;
-   const QWindowsOpenGLContextFormat defaultFormat;
+   const QWindowsOpenGLContextFormat m_defaultFormat;
 
    WglGetPixelFormatAttribIVARB wglGetPixelFormatAttribIVARB;
    WglChoosePixelFormatARB wglChoosePixelFormatARB;

@@ -86,7 +86,7 @@ class QWindowsMimeConverter
    mutable int m_internalMimeCount;
 };
 
-QDebug operator<<(QDebug, const FORMATETC &);
-QDebug operator<<(QDebug d, IDataObject *);
+QDebug operator<<(QDebug debug, const FORMATETC &);
+QDebug operator<<(QDebug debug, IDataObject *);
 
 #endif // QWINDOWSMIME_H

@@ -2217,14 +2217,15 @@ void QPainterPath::computeControlPointRect() const
    d->controlBounds = QRectF(minx, miny, maxx - minx, maxy - miny);
 }
 
-QDebug operator<<(QDebug s, const QPainterPath &p)
+QDebug operator<<(QDebug debug, const QPainterPath &p)
 {
-   s.nospace() << "QPainterPath: Element count=" << p.elementCount() << endl;
+   debug.nospace() << "QPainterPath() Element count =" << p.elementCount() << endl;
    const char *types[] = {"MoveTo", "LineTo", "CurveTo", "CurveToData"};
-   for (int i = 0; i < p.elementCount(); ++i) {
-      s.nospace() << " -> " << types[p.elementAt(i).type] << "(x=" << p.elementAt(i).x << ", y=" << p.elementAt(
-            i).y << ')' << endl;
 
+   for (int i = 0; i < p.elementCount(); ++i) {
+      debug.nospace() << " -> " << types[p.elementAt(i).type]
+            << "(x =" << p.elementAt(i).x << ", y =" << p.elementAt(i).y << ")\n";
    }
-   return s;
+
+   return debug;
 }

@@ -382,56 +382,62 @@ static bool canGetData(int cf, IDataObject *pDataObj)
    return true;
 }
 
-QDebug operator<<(QDebug d, const FORMATETC &tc)
+QDebug operator<<(QDebug debug, const FORMATETC &tc)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d << "FORMATETC(cfFormat=" << tc.cfFormat << ' ';
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug << "FORMATETC(cfFormat =" << tc.cfFormat << ' ';
 
    switch (tc.cfFormat) {
       case CF_TEXT:
-         d << "CF_TEXT";
+         debug << "CF_TEXT";
          break;
+
       case CF_BITMAP:
-         d << "CF_BITMAP";
+         debug << "CF_BITMAP";
          break;
+
       case CF_TIFF:
-         d << "CF_TIFF";
+         debug << "CF_TIFF";
          break;
+
       case CF_OEMTEXT:
-         d << "CF_OEMTEXT";
+         debug << "CF_OEMTEXT";
          break;
+
       case CF_DIB:
-         d << "CF_DIB";
+         debug << "CF_DIB";
          break;
+
       case CF_DIBV5:
-         d << "CF_DIBV5";
+         debug << "CF_DIBV5";
          break;
+
       case CF_UNICODETEXT:
-         d << "CF_UNICODETEXT";
+         debug << "CF_UNICODETEXT";
          break;
 
       case CF_ENHMETAFILE:
-         d << "CF_ENHMETAFILE";
+         debug << "CF_ENHMETAFILE";
          break;
 
       default:
-         d << QWindowsMimeConverter::clipboardFormatName(tc.cfFormat);
+         debug << QWindowsMimeConverter::clipboardFormatName(tc.cfFormat);
          break;
    }
 
-   d << ", dwAspect =" << tc.dwAspect << ", lindex =" << tc.lindex
+   debug << ", dwAspect =" << tc.dwAspect << ", lindex =" << tc.lindex
      << ", tymed =" << tc.tymed << ", ptd =" << tc.ptd << ')';
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, IDataObject *dataObj)
+QDebug operator<<(QDebug debug, IDataObject *dataObj)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d.noquote();
-   d << "IDataObject(";
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug.noquote();
+   debug << "IDataObject(";
 
    if (dataObj) {
       // Output formats contained in IDataObject.
@@ -443,19 +449,19 @@ QDebug operator<<(QDebug d, IDataObject *dataObj)
 
          if (SUCCEEDED(enumFormatEtc->Reset())) {
             while (SUCCEEDED(enumFormatEtc->Next(1, formatEtc, &fetched)) && fetched) {
-               d << formatEtc[0] << ',';
+               debug << formatEtc[0] << ',';
             }
             enumFormatEtc->Release();
          }
       }
 
    } else {
-      d << '0';
+      debug << '0';
    }
 
-   d << ')';
+   debug << ')';
 
-   return d;
+   return debug;
 }
 
 QWindowsMime::QWindowsMime()

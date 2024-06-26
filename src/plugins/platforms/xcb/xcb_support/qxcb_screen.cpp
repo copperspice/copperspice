@@ -833,30 +833,33 @@ QDebug operator<<(QDebug debug, const QXcbScreen *screen)
 {
    const QDebugStateSaver saver(debug);
    debug.nospace();
-   debug << "QXcbScreen(" << (const void *)screen;
 
-   if (screen) {
+   debug << "QXcbScreen()" << (const void *)screen;
+
+   if (screen != nullptr) {
       debug << fixed << qSetRealNumberPrecision(1);
-      debug << ", name=" << screen->name();
-      debug << ", geometry=";
+      debug << ", name = " << screen->name();
+
+      debug << "\n   geometry = ";
       formatRect(debug, screen->geometry());
-      debug << ", availableGeometry=";
+      debug << ", availableGeometry = ";
       formatRect(debug, screen->availableGeometry());
-      debug << ", devicePixelRatio=" << screen->devicePixelRatio();
-      debug << ", logicalDpi=" << screen->logicalDpi();
-      debug << ", physicalSize=";
+
+      debug << "\n   devicePixelRatio = " << screen->devicePixelRatio();
+      debug << ", logicalDpi = " << screen->logicalDpi();
+      debug << ", physicalSize = ";
       formatSizeF(debug, screen->physicalSize());
-      // TODO 5.6 if (debug.verbosity() > 2) {
-      debug << ", screenNumber=" << screen->screenNumber();
-      debug << ", virtualSize=" << screen->virtualSize().width() << 'x' << screen->virtualSize().height() << " (";
+
+      debug << "\n   screenNumber = " << screen->screenNumber();
+      debug << ", virtualSize = " << screen->virtualSize().width() << 'x' << screen->virtualSize().height() << " (";
       formatSizeF(debug, screen->virtualSize());
-      debug << "), orientation=" << screen->orientation();
-      debug << ", depth=" << screen->depth();
-      debug << ", refreshRate=" << screen->refreshRate();
-      debug << ", root=" << hex << screen->root();
-      debug << ", windowManagerName=" << screen->windowManagerName();
+
+      debug << "), orientation = " << screen->orientation();
+      debug << "\n   depth = " << screen->depth();
+      debug << ", refreshRate = " << screen->refreshRate();
+      debug << ", root =" << hex << screen->root();
+      debug << ", windowManagerName = " << screen->windowManagerName();
    }
 
-   debug << ')';
    return debug;
 }

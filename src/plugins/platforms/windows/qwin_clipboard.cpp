@@ -39,40 +39,40 @@
 #include <qwin_gui_eventdispatcher_p.h>
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
-static QDebug operator<<(QDebug d, const QMimeData *mimeData)
+static QDebug operator<<(QDebug debug, const QMimeData *mimeData)
 {
-   QDebugStateSaver saver(d);
+   QDebugStateSaver saver(debug);
 
-   d.nospace();
-   d << "QMimeData(";
+   debug.nospace();
+   debug << "QMimeData(";
 
    if (mimeData) {
       const QStringList formats = mimeData->formats();
 
-      d << "formats =" << formats.join(QString(", "));
+      debug << "formats =" << formats.join(QString(", "));
       if (mimeData->hasText()) {
-         d << ", text =" << mimeData->text();
+         debug << ", text =" << mimeData->text();
       }
       if (mimeData->hasHtml()) {
-         d << ", html =" << mimeData->html();
+         debug << ", html =" << mimeData->html();
       }
       if (mimeData->hasColor()) {
-         d << ", colorData =" << (mimeData->colorData()).value<QColor>();
+         debug << ", colorData =" << (mimeData->colorData()).value<QColor>();
       }
       if (mimeData->hasImage()) {
-         d << ", imageData =" << (mimeData->imageData()).value<QImage>();
+         debug << ", imageData =" << (mimeData->imageData()).value<QImage>();
       }
       if (mimeData->hasUrls()) {
-         d << ", urls =" << mimeData->urls();
+         debug << ", urls =" << mimeData->urls();
       }
 
    } else {
-      d << '0';
+      debug << '0';
    }
 
-   d << ')';
+   debug << ')';
 
-   return d;
+   return debug;
 }
 #endif
 

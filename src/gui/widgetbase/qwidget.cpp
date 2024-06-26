@@ -10164,10 +10164,10 @@ QDebug operator<<(QDebug debug, const QWidget *widget)
    debug.nospace();
 
    if (widget != nullptr) {
-      debug << widget->metaObject()->className() << '(' << (const void *)widget;
+      debug << widget->metaObject()->className() << '(' ;
 
       if (! widget->objectName().isEmpty()) {
-         debug << ", name=" << widget->objectName();
+         debug << widget->objectName();
       }
 
       debug << ')';

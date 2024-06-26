@@ -135,55 +135,58 @@ static inline RECT RECTfromQRect(const QRect &rect)
    return result;
 }
 
-QDebug operator<<(QDebug d, const RECT &r)
+QDebug operator<<(QDebug debug, const RECT &r)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d << "RECT: left/top=" << r.left << ',' << r.top
-      << " right/bottom=" << r.right << ',' << r.bottom;
-   return d;
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+
+   debug << "left = " << r.left << " top = " << r.top << " right = " << r.right << " bottom = " << r.bottom;
+
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const POINT &p)
+QDebug operator<<(QDebug debug, const POINT &p)
 {
-   d << p.x << ',' << p.y;
-   return d;
+   debug << p.x << ',' << p.y;
+
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const NCCALCSIZE_PARAMS &p)
+QDebug operator<<(QDebug debug, const NCCALCSIZE_PARAMS &p)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d << "NCCALCSIZE_PARAMS " << qrectFromRECT(p.rgrc[0])
+   debug << "NCCALCSIZE_PARAMS " << qrectFromRECT(p.rgrc[0])
       << ' ' << qrectFromRECT(p.rgrc[1]) << ' ' << qrectFromRECT(p.rgrc[2]);
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const MINMAXINFO &i)
+QDebug operator<<(QDebug debug, const MINMAXINFO &i)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d << "MINMAXINFO maxSize=" << i.ptMaxSize.x << ','
+   debug << "MINMAXINFO maxSize=" << i.ptMaxSize.x << ','
       << i.ptMaxSize.y << " maxpos=" << i.ptMaxPosition.x
       << ',' << i.ptMaxPosition.y << " mintrack="
       << i.ptMinTrackSize.x << ',' << i.ptMinTrackSize.y
       << " maxtrack=" << i.ptMaxTrackSize.x << ',' << i.ptMaxTrackSize.y;
 
-   return d;
+   return debug;
 }
 
-QDebug operator<<(QDebug d, const WINDOWPLACEMENT &wp)
+QDebug operator<<(QDebug debug, const WINDOWPLACEMENT &wp)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
+   QDebugStateSaver saver(debug);
+   debug.nospace();
 
-   d <<  "WINDOWPLACEMENT(flags=0x" << hex << wp.flags << dec << ", showCmd="
+   debug <<  "WINDOWPLACEMENT(flags=0x" << hex << wp.flags << dec << ", showCmd="
       << wp.showCmd << ", ptMinPosition=" << wp.ptMinPosition << ", ptMaxPosition=" << wp.ptMaxPosition
       << ", rcNormalPosition=" << wp.rcNormalPosition;
-   return d;
+
+   return debug;
 }
 
 // QTBUG-43872, for windows that do not have WS_EX_TOOLWINDOW set, WINDOWPLACEMENT
@@ -435,26 +438,26 @@ struct WindowCreationData {
    bool hasAlpha;
 };
 
-QDebug operator<<(QDebug debug, const WindowCreationData &d)
+QDebug operator<<(QDebug debug, const WindowCreationData &windowData)
 {
    QDebugStateSaver saver(debug);
-
    debug.nospace();
    debug.noquote();
 
-   debug << "WindowCreationData: " << d.flags
-         << "\n  topLevel=" << d.topLevel;
+   debug << "WindowCreationData: " << windowData.flags
+         << "\n   topLevel =" << windowData.topLevel;
 
-   if (d.parentHandle) {
-      debug << " parent=" << d.parentHandle;
+   if (windowData.parentHandle) {
+      debug << "  parent =" << windowData.parentHandle;
    }
 
-   debug << " popup=" << d.popup << " dialog=" << d.dialog << " desktop=" << d.desktop
-      << " embedded=" << d.embedded << " tool=" << d.tool
-      << "\n  style=" << debugWinStyle(d.style);
+   debug << " popup =" << windowData.popup << " dialog =" << windowData.dialog << " desktop =" << windowData.desktop
+      << " embedded =" << windowData.embedded << " tool =" << windowData.tool;
 
-   if (d.exStyle) {
-      debug << "\n  exStyle=" << debugWinExStyle(d.exStyle);
+   debug << "\n   style =" << debugWinStyle(windowData.style);
+
+   if (windowData.exStyle) {
+      debug << "\n   exStyle =" << debugWinExStyle(windowData.exStyle);
    }
 
    return debug;

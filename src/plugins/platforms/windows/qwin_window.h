@@ -323,12 +323,12 @@ class QWindowsWindow : public QPlatformWindow
    void *m_surface;
 };
 
-QDebug operator<<(QDebug d, const RECT &r);
-QDebug operator<<(QDebug d, const POINT &);
+QDebug operator<<(QDebug debug, const RECT &r);
+QDebug operator<<(QDebug debug, const POINT &);
 
-QDebug operator<<(QDebug d, const MINMAXINFO &i);
-QDebug operator<<(QDebug d, const NCCALCSIZE_PARAMS &p);
-QDebug operator<<(QDebug d, const WINDOWPLACEMENT &);
+QDebug operator<<(QDebug debug, const MINMAXINFO &i);
+QDebug operator<<(QDebug debug, const NCCALCSIZE_PARAMS &p);
+QDebug operator<<(QDebug debug, const WINDOWPLACEMENT &);
 
 // ---------- QWindowsGeometryHint inline functions.
 QPoint QWindowsGeometryHint::mapToGlobal(HWND hwnd, const QPoint &qp)

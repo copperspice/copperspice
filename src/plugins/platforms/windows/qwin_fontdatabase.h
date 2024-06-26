@@ -105,6 +105,6 @@ class QWindowsFontDatabase : public QPlatformFontDatabase
    QMap<QString, UniqueFontData> m_uniqueFontData;
 };
 
-QDebug operator<<(QDebug, const QFontDef &def);
+QDebug operator<<(QDebug debug, const QFontDef &def);
 
 #endif

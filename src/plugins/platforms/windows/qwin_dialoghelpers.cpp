@@ -366,13 +366,13 @@ static inline QString guidToString(const GUID &g)
    return rc;
 }
 
-inline QDebug operator<<(QDebug d, const GUID &g)
+inline QDebug operator<<(QDebug debug, const GUID &g)
 {
-   QDebugStateSaver saver(d);
-   d.nospace();
-   d << guidToString(g);
+   QDebugStateSaver saver(debug);
+   debug.nospace();
+   debug << guidToString(g);
 
-   return d;
+   return debug;
 }
 
 namespace QWindowsDialogs {

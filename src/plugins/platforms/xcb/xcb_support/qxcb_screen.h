@@ -259,7 +259,6 @@ class Q_XCB_EXPORT QXcbScreen : public QXcbObject, public QPlatformScreen
    int m_antialiasingEnabled;
 };
 
-Q_GUI_EXPORT QDebug operator<<(QDebug, const QXcbScreen *);
-
+QDebug operator<<(QDebug debug, const QXcbScreen *screen);
 
 #endif
