@@ -360,14 +360,15 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
    }
 
 #if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << "qGeomCalc" << "start" << start <<  "count" << count <<  "pos" << pos
-      <<  "space" << space <<  "spacer" << spacer;
+   qDebug() << "qGeomCalc()" << "start =" << start << " count =" << count << " pos =" << pos
+      <<  " space =" << space << " spacer =" << spacer;
+
    for (i = start; i < start + count; ++i) {
-      qDebug() << i << ':' << chain[i].minimumSize << chain[i].smartSizeHint()
-         << chain[i].maximumSize << "stretch" << chain[i].stretch
-         << "empty" << chain[i].empty << "expansive" << chain[i].expansive
-         << "spacing" << chain[i].spacing;
-      qDebug() << "result pos" << chain[i].pos << "size" << chain[i].size;
+      qDebug() << "   " << i << ':' << chain[i].minimumSize << chain[i].smartSizeHint()
+         << chain[i].maximumSize << " stretch =" << chain[i].stretch
+         << " empty =" << chain[i].empty << " expansive =" << chain[i].expansive
+         << " spacing =" << chain[i].spacing << " Result: pos ="
+         << chain[i].pos << "size =" << chain[i].size;
    }
 #endif
 }

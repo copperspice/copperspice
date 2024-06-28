@@ -435,9 +435,9 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
 
 #if defined(CS_SHOW_DEBUG_CORE)
    if (t->timerType != Qt::PreciseTimer) {
-      qDebug() << "timer" << t->timerType << hex << t->id << dec << "interval" << t->interval
-            << "originally expected at" << t->expected << "will fire at" << t->timeout
-            << "or" << (t->timeout - t->expected) << "s late";
+      qDebug() << "calculateNextTimeout() timer =" << t->timerType << hex << t->id << dec
+            << "interval =" << t->interval << "originally expected at =" << t->expected
+            << "time out =" << t->timeout << "late by =" << (t->timeout - t->expected);
    }
 #endif
 }
@@ -574,8 +574,8 @@ void QTimerInfoList::registerTimer(int timerId, int interval, Qt::TimerType time
    t->count = 0;
 
    if (t->timerType != Qt::PreciseTimer) {
-      qDebug() << "timer" << t->timerType << hex << t->id << dec << "interval" << t->interval << "expected at"
-            << t->expected << "will fire first at" << t->timeout;
+      qDebug() << "QTimerInfoList::registerTimer() timer =" << t->timerType << hex << t->id << dec
+            << "interval =" << t->interval << "expected at =" << t->expected << "timeout =" << t->timeout;
    }
 #endif
 }
@@ -720,11 +720,11 @@ int QTimerInfoList::activateTimers()
       ++currentTimerInfo->count;
 
       if (currentTimerInfo->timerType != Qt::PreciseTimer) {
-         qDebug() << "timer" << currentTimerInfo->timerType << hex << currentTimerInfo->id << dec << "interval"
-               << currentTimerInfo->interval << "firing at" << newTime
-               << "(orig" << currentTimerInfo->expected << "scheduled at" << currentTimerInfo->timeout
-               << ") off by" << diff << "activation" << currentTimerInfo->count
-               << "avg error" << (currentTimerInfo->cumulativeError / currentTimerInfo->count);
+         qDebug() << "QTimerInfoList::activateTimers() timer =" << currentTimerInfo->timerType << hex << currentTimerInfo->id << dec
+               << "interval =" << currentTimerInfo->interval << "new time =" << newTime
+               << "expected at =" << currentTimerInfo->expected << "scheduled at =" << currentTimerInfo->timeout
+               << "late by =" << diff << "activation" << currentTimerInfo->count
+               << "error =" << (currentTimerInfo->cumulativeError / currentTimerInfo->count);
       }
 #endif
 

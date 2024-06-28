@@ -452,8 +452,8 @@ void QGridLayoutRowData::dump(int indent) const
    qDebug("%*sData", indent, "");
 
    for (int i = 0; i < ignore.count(); ++i) {
-      qDebug("%*s Row %d (stretch %d, spacing %g)", indent, "", i, stretches.at(i),
-         spacings.at(i));
+      qDebug("%*s Row %d (stretch %d, spacing %g)", indent, "", i, stretches.at(i), spacings.at(i));
+
       if (ignore.testBit(i)) {
          qDebug("%*s  Ignored", indent, "");
       }

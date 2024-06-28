@@ -735,7 +735,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                state = Invalid;
 
 #if defined(CS_SHOW_DEBUG_CORE)
-               qDebug() << "Invalid, findAmPm(" << sectiontext << ") returned -1";
+               qDebug() << "QDateTimeParser::parseSection() Invalid findAmPm(" << sectiontext << ") returned -1";
 #endif
 
                break;
@@ -1030,7 +1030,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
 
             if (isSet & sn.type && *current != num) {
 #if defined(CS_SHOW_DEBUG_CORE)
-               qDebug() << "CONFLICT " << sn.name() << *current << num;
+               qDebug() << "QDateTimeParser::parse() Conflict " << sn.name() << *current << num;
 #endif
                conflicts = true;
 
@@ -1050,7 +1050,7 @@ QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPos
       if (state != Invalid && input.midView(pos) != separators.last()) {
 
 #if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "invalid because" << input.mid(pos) << "!=" << separators.last() << pos;
+         qDebug() << "QDateTimeParser::parse() Invalid " << input.mid(pos) << "!=" << separators.last() << pos;
 #endif
 
          state = Invalid;

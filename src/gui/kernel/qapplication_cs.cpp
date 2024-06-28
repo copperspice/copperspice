@@ -1291,7 +1291,7 @@ void QApplicationPrivate::dispatchEnterLeave(QWidget *enter, QWidget *leave, con
    }
 
 #if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << "QApplicationPrivate::dispatchEnterLeave, ENTER:" << enter << "LEAVE:" << leave;
+   qDebug() << "QApplication::dispatchEnterLeave() Enter =" << enter << "Leave =" << leave;
 #endif
 
    QWidgetList leaveList;
@@ -1714,7 +1714,7 @@ QWidget *QApplicationPrivate::pickMouseReceiver(QWidget *candidate, const QPoint
       *pos = receiver->mapFromGlobal(candidate->mapToGlobal(windowPos));
 
 #if defined(CS_SHOW_DEBUG_GUI)
-      qDebug() << "  ** receiver adjusted to:" << receiver << "pos:" << pos;
+      qDebug() << "QApplication::pickMouseReceiver() receiver adjusted to =" << receiver << " pos =" << pos;
 #endif
 
    }
@@ -1783,10 +1783,9 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event, 
    }
 
 #if defined(CS_SHOW_DEBUG_GUI)
-   qDebug() << "QApplicationPrivate::sendMouseEvent: receiver:" << receiver
-      << "pos:" << event->pos() << "alien" << alienWidget << "button down"
-      << *buttonDown << "last" << lastMouseReceiver << "leave after release"
-      << leaveAfterRelease;
+   qDebug() << "QApplication::sendMouseEvent() receiver =" << receiver << "pos =" << event->pos()
+      << "\n   Is Native =" << ! alienWidget << " button down =" << *buttonDown << " last =" << lastMouseReceiver
+      << "\n   Leave after release =" << leaveAfterRelease;
 #endif
 
    // We need this quard in case someone opens a modal dialog / popup. If that's the case

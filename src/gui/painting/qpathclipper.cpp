@@ -1780,7 +1780,7 @@ static void traverse(QWingedEdge &list, int edge, QPathEdge::Traversal traversal
       ep->flag |= (flag | (flag << 4));
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-      qDebug() << "traverse: adding edge " << status.edge << ", mask:" << (flag << 4) << ep->flag;
+      qDebug() << "traverse() adding edge = " << status.edge << ", mask = " << (flag << 4) << ep->flag;
 #endif
 
       status = list.next(status);
@@ -1873,7 +1873,7 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
    int windingD = 0;
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QPathClipper::handleCrossingEdges() Crossing:" << crossings.size();
+   qDebug() << "QPathClipper::handleCrossingEdges() Crossing = " << crossings.size();
 #endif
 
    for (int i = 0; i < crossings.size() - 1; ++i) {

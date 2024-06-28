@@ -127,7 +127,7 @@ void QBackingStore::beginPaint(const QRegion &region)
       if (needsNewImage) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-         qDebug() << "QBackingStore::beginPaint(): " << d_ptr->window << "\n  "
+         qDebug() << "QBackingStore::beginPaint() window =" << d_ptr->window << "\n  "
                   << "Source size =" << source->size() << " DP ratio =" << source->devicePixelRatio();
 #endif
 
@@ -139,7 +139,7 @@ void QBackingStore::beginPaint(const QRegion &region)
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
          qDebug() << "   Destination Size =" << d_ptr->highDpiBackingstore->size()
-                  << "DP ratio = " << targetDevicePixelRatio;
+                  << "DP ratio =" << targetDevicePixelRatio;
 #endif
       }
    }

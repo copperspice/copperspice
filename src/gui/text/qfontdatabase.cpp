@@ -1036,7 +1036,7 @@ static QtFontStyle *bestStyle(QtFontFoundry *foundry, const QtFontStyle::Key &st
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("          best style has distance 0x%x", dist);
+   qDebug("QtFontStyle::bestStyle() Style has a distance 0x%x", dist);
 #endif
 
    return retval;
@@ -1082,7 +1082,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
 
          if (size) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("          found smoothly scalable font (%d pixels)", pixelSize);
+            qDebug("bestFoundry() Scalable font is %d pixels", pixelSize);
 #endif
 
             px = pixelSize;
@@ -1095,7 +1095,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
 
          if (size) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("          found bitmap scalable font (%d pixels)", pixelSize);
+            qDebug("bestFoundry() Found bitmap scalable font of %d pixels", pixelSize);
 #endif
 
             px = pixelSize;
@@ -1123,14 +1123,14 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
                size     = &fontSize;
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-               qDebug("          best size so far: %3d (%d)", size->pixelSize, pixelSize);
+               qDebug("bestFoundry() Best size so far is %3d (%d)", size->pixelSize, pixelSize);
 #endif
             }
          }
 
          if (! size) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("          no size supports the script we want");
+            qDebug("bestFoundry() No size supports requiested script");
 #endif
             continue;
          }
@@ -1177,7 +1177,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
 
       if (currentScore < score) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-         qDebug("          found a match: score %x best score so far %x", currentScore, score);
+         qDebug("bestFoundry() Found a match, score %x best score so far %x", currentScore, score);
 #endif
 
          score         = currentScore;
@@ -1187,7 +1187,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
 
       } else {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-         qDebug("          score %x no better than best %x", currentScore, score);
+         qDebug("bestFoundry() Score %x no better than best %x", currentScore, score);
 #endif
 
       }
@@ -2506,7 +2506,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
 
    if (engine != nullptr) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("Cache hit level 1");
+      qDebug("QFontDatabase::findFont() Cache hit level 1");
 #endif
 
       return engine;
@@ -2532,7 +2532,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
 
    } else {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("  NO MATCH FOUND\n");
+      qDebug("QFontDatabase::findFont() No match found");
 #endif
 
    }
@@ -2591,7 +2591,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
       }
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("returning box engine");
+      qDebug("QFontDatabase::findFont() Returning box engine");
 #endif
 
    }

@@ -627,7 +627,7 @@ HBITMAP QWindowsXPStylePrivate::buffer(int w, int h)
    bufferH = h;
 
 #if defined(CS_SHOW_DEBUG_GUI_STYLES)
-   qDebug("Creating new dib section (%d, %d)", w, h);
+   qDebug("QWindowsXPStyle::buffer() Creating new dib section, size = (%d, %d)", w, h);
 #endif
 
    return bufferBitmap;

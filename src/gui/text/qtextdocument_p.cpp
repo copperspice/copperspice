@@ -904,7 +904,8 @@ bool QTextDocumentPrivate::unite(uint f)
 int QTextDocumentPrivate::undoRedo(bool undo)
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("%s, undoState=%d, undoStack size=%zd", undo ? "undo:" : "redo:", undoState, undoStack.size());
+   qDebug("QTextDocument::undoRedo() %s, undoState = %d, undoStack size = %zd",
+         undo ? "Undo" : "Redo", undoState, undoStack.size());
 #endif
 
    if (!undoEnabled || (undo && undoState == 0) || (!undo && undoState == undoStack.size())) {
@@ -928,7 +929,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             remove(c.pos, c.length, (QTextUndoCommand::Operation)c.operation);
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   erase: from %d, length %d", c.pos, c.length);
+            qDebug("QTextDocument::undoRedo() Erase from = %d, length = %d", c.pos, c.length);
 #endif
 
             c.command = QTextUndoCommand::Removed;
@@ -938,7 +939,8 @@ int QTextDocumentPrivate::undoRedo(bool undo)
 
          case QTextUndoCommand::Removed:
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   insert: format %d (from %d, length %d, strpos=%d)", c.format, c.pos, c.length, c.strPos);
+            qDebug("QTextDocument::undoRedo() Insert format = %d, from = %d, length = %d, strpos = %d",
+                  c.format, c.pos, c.length, c.strPos);
 #endif
 
             insert_string(c.pos, c.strPos, c.length, c.format, (QTextUndoCommand::Operation)c.operation);
@@ -955,7 +957,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             remove_block(c.pos, &c.blockFormat, c.command, (QTextUndoCommand::Operation)c.operation);
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   blockremove: from %d", c.pos);
+            qDebug("QTextDocument::undoRedo() Block remove from = %d", c.pos);
 #endif
 
             if (c.command == QTextUndoCommand::BlockInserted) {
@@ -971,8 +973,8 @@ int QTextDocumentPrivate::undoRedo(bool undo)
          case QTextUndoCommand::BlockDeleted:
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   blockinsert: charformat %d blockformat %d (pos %d, strpos=%d)", c.format,
-                  c.blockFormat, c.pos, c.strPos);
+            qDebug("QTextDocument::undoRedo() Block insert charformat = %d, blockformat = %d, pos = %d, strpos = %d",
+                  c.format, c.blockFormat, c.pos, c.strPos);
 #endif
 
             insert_block(c.pos, c.strPos, c.format, c.blockFormat, (QTextUndoCommand::Operation)c.operation, c.command);
@@ -993,7 +995,8 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             resetBlockRevision = -1; // ## TODO
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   charFormat: format %d (from %d, length %d)", c.format, c.pos, c.length);
+            qDebug("QTextDocument::undoRedo() Char Format format = %d,  from = %d,  length = %d",
+                  c.format, c.pos, c.length);
 #endif
 
             FragmentIterator it = find(c.pos);
@@ -1014,7 +1017,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             resetBlockRevision = -1; // ## TODO
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   blockformat: format %d pos %d", c.format, c.pos);
+            qDebug("QTextDocument::undoRedo() Block Format format = %d, pos = %d", c.format, c.pos);
 #endif
 
             QTextBlock it = blocksFind(c.pos);
@@ -1043,7 +1046,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             resetBlockRevision = -1; // ## TODO
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-            qDebug("   group format change");
+            qDebug("QTextDocument::undoRedo() Group format change");
 #endif
 
             QTextObject *object = objectForIndex(c.objectIndex);
@@ -1137,7 +1140,7 @@ void QTextDocumentPrivate::appendUndoItem(QAbstractUndoItem *item)
 void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("appendUndoItem, command=%d enabled=%d", c.command, undoEnabled);
+   qDebug("QTextDocument::appendUndoItem() command = %d  enabled = %d", c.command, undoEnabled);
 #endif
 
    if (! undoEnabled) {

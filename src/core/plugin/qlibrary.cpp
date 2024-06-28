@@ -235,7 +235,7 @@ bool QLibraryHandle::tryload()
    bool retval = load_sys();
 
 #if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-   qDebug() << "QLibraryHandle::tryload(): Loaded library "  << fileName;
+   qDebug() << "QLibraryHandle::tryload() Loaded library "  << fileName;
 #endif
 
    if (retval) {

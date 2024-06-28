@@ -266,7 +266,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 
 #if defined(CS_SHOW_DEBUG_GUI)
    if (widgets.isEmpty()) {
-      qDebug() << a << "not connected to any widgets, will not trigger";
+      qDebug() << "QShortCut() " << a << "is not connected to any widget, will not trigger";
    }
 #endif
 
@@ -309,7 +309,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
 
 #if defined(CS_SHOW_DEBUG_GUI)
    if (graphicsWidgets.isEmpty()) {
-      qDebug() << a << " is not connected to any widgets and will not trigger";
+      qDebug() << "QShortCut() " << a << " is not connected to any widget, will not trigger";
    }
 #endif
 

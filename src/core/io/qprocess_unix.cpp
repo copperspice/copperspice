@@ -479,7 +479,7 @@ void QProcessPrivate::startProcess()
       // Cleanup, report error and return
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("fork() failed: %s", csPrintable(qt_error_string(lastForkErrno)));
+      qDebug("QProcess::startProcess() Call to fork() failed, %s", csPrintable(qt_error_string(lastForkErrno)));
 #endif
 
       q->setProcessState(QProcess::NotRunning);
@@ -631,7 +631,7 @@ bool QProcessPrivate::processStarted(QString *errorMessage)
    childStartedPipe[0] = -1;
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::processStarted() == %s", i <= 0 ? "true" : "false");
+   qDebug("QProcess::processStarted() Returning %s", i <= 0 ? "true" : "false");
 #endif
 
    // did we read an error message?
@@ -654,7 +654,8 @@ qint64 QProcessPrivate::bytesAvailableInChannel(const Channel *channel) const
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::bytesAvailableInChannel(%d) == %lld", int(channel - &stdinChannel), available);
+   qDebug("QProcess::bytesAvailableInChannel() channel = %d, available = %lld",
+         int(channel - &stdinChannel), available);
 #endif
 
    return available;
@@ -668,8 +669,8 @@ qint64 QProcessPrivate::readFromChannel(const Channel *channel, char *data, qint
 #if defined(CS_SHOW_DEBUG_CORE_IO)
    int save_errno = errno;
 
-   qDebug("QProcessPrivate::readFromChannel(%d, %p \"%s\", %lld) == %lld",
-         int(channel - &stdinChannel), data, qt_prettyDebug(data, bytesRead, 16).constData(), maxlen, bytesRead);
+   qDebug("QProcess::readFromChannel() channel = %d, data = %s, maxlen = %lld, bytes read = %lld",
+         int(channel - &stdinChannel), qt_prettyDebug(data, bytesRead, 16).constData(), maxlen, bytesRead);
 
    errno = save_errno;
 #endif
@@ -689,11 +690,11 @@ bool QProcessPrivate::writeToStdin()
    qint64 written = qt_safe_write_nosignal(stdinChannel.pipe[1], data, bytesToWrite);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::writeToStdin(), write(%p \"%s\", %lld) == %lld",
-         data, qt_prettyDebug(data, bytesToWrite, 16).constData(), bytesToWrite, written);
+   qDebug("QProcess::writeToStdin() data = %s, bytes to write = %lld, written = %lld",
+         qt_prettyDebug(data, bytesToWrite, 16).constData(), bytesToWrite, written);
 
    if (written == -1)  {
-      qDebug("QProcessPrivate::writeToStdin(), failed to write (%s)", csPrintable(qt_error_string(errno)));
+      qDebug("QProcess::writeToStdin() Failed to write, %s", csPrintable(qt_error_string(errno)));
    }
 #endif
 
@@ -738,8 +739,8 @@ void QProcessPrivate::killProcess()
 bool QProcessPrivate::waitForStarted(int msecs)
 {
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::waitForStarted(%d) waiting for child to start (fd = %d)", msecs,
-         childStartedPipe[0]);
+   qDebug("QProcess::waitForStarted() Waiting %d msecs for child to start, fd = %d",
+      msecs, childStartedPipe[0]);
 #endif
 
    fd_set fds;
@@ -750,7 +751,7 @@ bool QProcessPrivate::waitForStarted(int msecs)
       setError(QProcess::Timedout);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("QProcessPrivate::waitForStarted(%d) == false (timed out)", msecs);
+      qDebug("QProcess::waitForStarted() Timed out");
 #endif
 
       return false;
@@ -759,7 +760,7 @@ bool QProcessPrivate::waitForStarted(int msecs)
    bool startedEmitted = _q_startupNotification();
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::waitForStarted() == %s", startedEmitted ? "true" : "false");
+   qDebug("QProcess::waitForStarted() Returning %s", startedEmitted ? "true" : "false");
 #endif
 
    return startedEmitted;
@@ -767,9 +768,8 @@ bool QProcessPrivate::waitForStarted(int msecs)
 
 bool QProcessPrivate::waitForReadyRead(int msecs)
 {
-
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::waitForReadyRead(%d)", msecs);
+   qDebug("QProcess::waitForReadyRead() Waiting %d msecs", msecs);
 #endif
 
    QElapsedTimer stopWatch;
@@ -859,7 +859,7 @@ bool QProcessPrivate::waitForReadyRead(int msecs)
 bool QProcessPrivate::waitForBytesWritten(int msecs)
 {
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::waitForBytesWritten(%d)", msecs);
+   qDebug("QProcess::waitForBytesWritten() Waiting %d msecs", msecs);
 #endif
 
    QElapsedTimer stopWatch;
@@ -934,7 +934,7 @@ bool QProcessPrivate::waitForBytesWritten(int msecs)
 bool QProcessPrivate::waitForFinished(int msecs)
 {
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::waitForFinished(%d)", msecs);
+   qDebug("QProcess::waitForFinished() Waiting %d msecs", msecs);
 #endif
 
    QElapsedTimer stopWatch;
@@ -1039,8 +1039,8 @@ bool QProcessPrivate::waitForDeadChild()
    forkfd = -1; // Child is dead, don't try to kill it anymore
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug() << "QProcessPrivate::waitForDeadChild() dead with exitCode"
-         << exitCode << ", crashed?" << crashed;
+   qDebug() << "QProcess::waitForDeadChild() exitCode = "
+         << exitCode << ", crashed = " << crashed;
 #endif
 
    return true;

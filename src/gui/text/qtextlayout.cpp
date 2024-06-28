@@ -1084,7 +1084,8 @@ const QFixed LineBreakHelper::RightBearingNotCalculated = QFixed(1);
 inline bool LineBreakHelper::checkFullOtherwiseExtend(QScriptLine &line)
 {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("Possible break width %f, space w = %f", tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
+   qDebug("checkFullOtherwiseExtend() Possible break width %f, space w = %f",
+         tmpData.textWidth.toReal(), spaceData.textWidth.toReal());
 #endif
 
    QFixed newWidth = calculateNewWidth(line);
@@ -1169,8 +1170,8 @@ void QTextLine::layout_helper(int maxGlyphs)
    Q_ASSERT(newItem >= 0);
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("From = %d: Item = %d, Total = %zd, Width available = %f",
-                  line.from, newItem, m_textEngine->layoutData->items.size(), line.width.toReal());
+   qDebug("QTextLine::layout_helper() From = %d: Item = %d, Total = %zd, Width available = %f",
+         line.from, newItem, m_textEngine->layoutData->items.size(), line.width.toReal());
 #endif
 
    Qt::Alignment alignment = m_textEngine->option.alignment();
@@ -1438,20 +1439,16 @@ found:
    if (line.length == 0) {
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-      qDebug("No break available in line, adding temp: length %d, width %f, space: length %d, width %f",
-         lbh.tmpData.length, lbh.tmpData.textWidth.toReal(),
-         lbh.spaceData.length, lbh.spaceData.textWidth.toReal());
+      qDebug("QTextLine::layout_helper() No break available, adding a new line");
 #endif
 
       line += lbh.tmpData;
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
-   qDebug("Line length =%d, Ascent =%f, Descent =%f, textWidth =%f (spacew =%f)",
-                  line.length, line.ascent.toReal(), line.descent.toReal(), line.textWidth.toReal(),
-                  lbh.spaceData.width.toReal());
-
-   qDebug("        : '%s'", csPrintable(m_textEngine->layoutData->string.mid(line.from, line.length)));
+   qDebug("QTextLine::layout_helper() Line length = %d, Ascent = %f, Descent = %f\n   textWidth = %f, spaceWidth = %f : %s",
+         line.length, line.ascent.toReal(), line.descent.toReal(), line.textWidth.toReal(),
+         lbh.spaceData.width.toReal(), csPrintable(m_textEngine->layoutData->string.mid(line.from, line.length)) );
 #endif
 
 

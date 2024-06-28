@@ -234,27 +234,27 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 
     case GL_FRAMEBUFFER_UNSUPPORTED:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Unsupported framebuffer format.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Unsupported framebuffer format");
 #endif
 
         break;
 
     case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete attachment.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete attachment");
 #endif
         break;
 
     case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing attachment.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, missing attachment");
 #endif
         break;
 
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT
     case GL_FRAMEBUFFER_INCOMPLETE_DUPLICATE_ATTACHMENT:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, duplicate attachment.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, duplicate attachment");
 #endif
 
         break;
@@ -263,7 +263,7 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS
     case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attached images must have same dimensions.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, attached images must have same dimensions");
 #endif
 
         break;
@@ -272,7 +272,7 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_FORMATS
     case GL_FRAMEBUFFER_INCOMPLETE_FORMATS:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attached images must have same format.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, attached images must have same format");
 #endif
         break;
 #endif
@@ -280,7 +280,7 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER
     case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing draw buffer.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, missing draw buffer");
 #endif
 
         break;
@@ -289,7 +289,7 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER
     case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, missing read buffer.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, missing read buffer");
 #endif
 
         break;
@@ -298,15 +298,17 @@ bool QOpenGLFramebufferObjectPrivate::checkFramebufferStatus(QOpenGLContext *ctx
 #ifdef GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE
     case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug("QOpenGLFramebufferObject: Framebuffer incomplete, attachments must have same number of samples per pixel.");
+        qDebug("QOpenGLFramebufferObject::checkFramebufferStatus() Framebuffer incomplete, attachments "
+              "must have same number of samples per pixel");
 #endif
         break;
 #endif
 
     default:
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-        qDebug() <<"QOpenGLFramebufferObject: An undefined error has occurred: "<< status;
+        qDebug() <<"QOpenGLFramebufferObject::checkFramebufferStatus() An undefined error has occurred: " << status;
 #endif
+
         break;
     }
 

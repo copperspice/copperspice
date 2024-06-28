@@ -657,8 +657,8 @@ void QWidget::create(WId window, bool initializeWindow, bool destroyOldWindow)
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-   qDebug() << "QWidget::create:" << this << "parent:" << parentWidget()
-         << "Alien?" << !testAttribute(Qt::WA_NativeWindow);
+   qDebug() << "QWidget::create() " << this << " parent =" << parentWidget()
+         << "Is Native =" << testAttribute(Qt::WA_NativeWindow);
 #endif
 
    d->updateIsOpaque();
@@ -1939,7 +1939,7 @@ WId QWidget::winId() const
    if (! testAttribute(Qt::WA_WState_Created) || ! internalWinId()) {
 
 #if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-      qDebug() << "QWidget::winId: creating native window for" << this;
+      qDebug() << "QWidget::winId() Creating native window for " << this;
 #endif
 
       QWidget *that = const_cast<QWidget *>(this);
@@ -1995,7 +1995,7 @@ void QWidget::createWinId()
    Q_D(QWidget);
 
 #if defined(CS_SHOW_DEBUG_GUI_WIDGETS)
-   qDebug()  << "QWidget::createWinId" << this;
+   qDebug() << "QWidget::createWinId() Creating Window id for " << this;
 #endif
 
    d->createWinId();

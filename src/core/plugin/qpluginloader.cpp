@@ -151,7 +151,7 @@ static QString locatePlugin(const QString &fileName)
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_PLUGIN)
-      qDebug() << fileName << "not found";
+      qDebug() << "locatePlugin() filename = " << fileName << " was not found";
 #endif
 
    return QString();

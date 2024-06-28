@@ -1342,10 +1342,12 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
    }
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
-   qDebug() << "QWindowsGLContext(): " << this << (tryExtensions ? "ARB" : "GDI")
-            << " requested: " << context->format()
-            << "\n    obtained #" << m_pixelFormat << (m_extensionsUsed ? "ARB" : "GDI") << m_obtainedFormat
-            << "\n    " << m_obtainedPixelFormatDescriptor << " swap interval: " << obtainedSwapInterval
+   qDebug() << "QWindowsGLContext() Extension Requested :" << (tryExtensions ? "ARB" : "GDI")
+            << "  Extension Used :" << (m_extensionsUsed ? "ARB" : "GDI") << "  Using pixel format # " << m_pixelFormat
+            << "\n   Requested :" << context->format()
+            << "\n   Obtained :"  << m_obtainedFormat
+            << "\n   Format Descriptor:" << m_obtainedPixelFormatDescriptor
+            << "\n   Swap interval :" << obtainedSwapInterval
             << "\n   Default Format :" << m_staticContext->m_defaultFormat;
 #endif
 

@@ -339,8 +339,8 @@ bool QRasterPaintEngine::begin(QPaintDevice *device)
    setDirty(DirtyBrushOrigin);
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::begin(" << (void *) device
-         << ") devType:" << device->devType() << "devRect:" << d->deviceRect;
+   qDebug() << "QRasterPaintEngine::begin() Device =" <<  device << " devType ="
+         << device->devType() << " device rectangle =" << d->deviceRect;
 #endif
 
    if (d->mono_surface) {
@@ -794,7 +794,8 @@ void QRasterPaintEnginePrivate::systemStateChanged()
    }
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "systemStateChanged" << this << "deviceRect" << deviceRect << deviceRectUnclipped << systemClip;
+   qDebug() << "QRasterPaintEngine::systemStateChanged() Device rectangle ="
+         << deviceRect << deviceRectUnclipped << systemClip;
 #endif
 
    exDeviceRect = deviceRect;
@@ -1076,7 +1077,7 @@ void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
 void QRasterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " --- fillPath, bounds=" << path.boundingRect();
+   qDebug() << " QRasterPaintEngine::fillPath() bounding rectangle =" << path.boundingRect();
 #endif
 
    if (! fillData->blend) {
@@ -1396,10 +1397,9 @@ void QRasterPaintEngine::fill(const QVectorPath &path, const QBrush &brush)
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    QRectF rf = path.controlPointRect();
 
-   qDebug() << "QRasterPaintEngine::fill(): "
-      << "size=" << path.elementCount()
-      << ", hints=" << hex << path.hints()
-      << rf << brush;
+   qDebug() << "QRasterPaintEngine::fill() "
+      << "size =" << path.elementCount() << ", hints =" << hex << path.hints()
+      << " rectangle =" << rf << " brush =" << brush;
 #endif
 
    Q_D(QRasterPaintEngine);
@@ -1504,7 +1504,7 @@ void QRasterPaintEngine::fillRect(const QRectF &r, QSpanData *data)
 void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::fillRecct(): " << r << brush;
+   qDebug() << "QRasterPaintEngine::fillRect() bounding rectangle =" << r << " brush =" << brush;
 #endif
 
    QRasterPaintEngineState *s = state();
@@ -1520,7 +1520,7 @@ void QRasterPaintEngine::fillRect(const QRectF &r, const QBrush &brush)
 void QRasterPaintEngine::fillRect(const QRectF &r, const QColor &color)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::fillRect(): " << r << color;
+   qDebug() << "QRasterPaintEngine::fillRect() bounding rectangle =" << r << "color =" << color;
 #endif
 
    Q_D(QRasterPaintEngine);
@@ -1730,8 +1730,8 @@ void QRasterPaintEngine::drawPolygon(const QPoint *pointPtr, int pointCount, Pol
 void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " - QRasterPaintEngine::drawPixmap(), pos=" << pos << " pixmap=" << pixmap.size() << "depth=" <<
-      pixmap.depth();
+   qDebug() << "QRasterPaintEngine::drawPixmap() pointf =" << pos
+         << " pixmap =" << pixmap.size() << "depth =" << pixmap.depth();
 #endif
 
    QPlatformPixmap *pd = pixmap.handle();
@@ -1776,8 +1776,8 @@ void QRasterPaintEngine::drawPixmap(const QPointF &pos, const QPixmap &pixmap)
 void QRasterPaintEngine::drawPixmap(const QRectF &r, const QPixmap &pixmap, const QRectF &sr)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " - QRasterPaintEngine::drawPixmap(), r=" << r << " sr=" << sr << " pixmap=" << pixmap.size() << "depth=" <<
-      pixmap.depth();
+   qDebug() << "QRasterPaintEngine::drawPixmap() target rectangle =" << r
+         << " source rectangle =" << sr << "\n   pixmap =" << pixmap.size() << " depth =" << pixmap.depth();
 #endif
 
    QPlatformPixmap *pd = pixmap.handle();
@@ -1846,7 +1846,8 @@ static inline const QRect toAlignedRect_positive(const QRectF &rect)
 void QRasterPaintEngine::drawImage(const QPointF &p, const QImage &img)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << "QRasterPaintEngine::drawImage(): P =" <<  p << " Image =" << img.size() << " Depth=" << img.depth();
+   qDebug() << "QRasterPaintEngine::drawImage() pointf =" <<  p <<
+         " image =" << img.size() << " depth=" << img.depth();
 #endif
 
    Q_D(QRasterPaintEngine);
@@ -1942,8 +1943,8 @@ inline bool isPixelAligned(const QRectF &rect)
 void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRectF &sr, Qt::ImageConversionFlags)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " - QRasterPaintEngine::drawImage(), r=" << r << " sr=" << sr << " image="
-            << img.size() << "depth=" << img.depth();
+   qDebug() << "QRasterPaintEngine::drawImage() target rectangle =" << r << ", source rectangle =" << sr
+         << "\n   image =" << img.size() << ", depth =" << img.depth();
 #endif
 
    if (r.isEmpty()) {
@@ -2197,7 +2198,8 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
 void QRasterPaintEngine::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &sr)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
-   qDebug() << " - QRasterPaintEngine::drawTiledPixmap(), r=" << r << "pixmap=" << pixmap.size();
+   qDebug() << "QRasterPaintEngine::drawTiledPixmap() target rectangle =" << r
+         << " source rectangle =" << sr << " pixmap =" << pixmap.size();
 #endif
 
    Q_D(QRasterPaintEngine);

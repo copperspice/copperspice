@@ -448,7 +448,7 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
 
       if (forceName == "poller") {
 #if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "QFileSystemWatcher: skipping native engine, using only polling engine";
+         qDebug("QFileSystemWatcher::addPaths() Do not use native engine, use only polling engine");
 #endif
 
          d_func()->initPollerEngine();
@@ -456,14 +456,15 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
 
       } else if (forceName == "native") {
 #if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "QFileSystemWatcher: skipping polling engine, using only native engine";
+         qDebug("QFileSystemWatcher::addPaths() Do not use polling engine, use only native engine");
 #endif
 
          engine = d->native;
 
       } else {
 #if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "QFileSystemWatcher: skipping polling and native engine, using only explicit" << forceName << "engine";
+         qDebug() << "QFileSystemWatcher::addPaths() Do not use native engine or polling engine, using explicit"
+               << forceName << "engine";
 #endif
 
          d_func()->initForcedEngine(forceName);
