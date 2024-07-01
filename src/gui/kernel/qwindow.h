@@ -230,7 +230,7 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    void setBaseSize(const QSize &size);
    void setSizeIncrement(const QSize &size);
 
-   void setGeometry(int posx, int posy, int w, int h);
+   void setGeometry(int x_pos, int y_pos, int w, int h);
    void setGeometry(const QRect &rect);
    QRect geometry() const;
 
@@ -265,7 +265,7 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    }
 
    void setPosition(const QPoint &pt);
-   void setPosition(int posx, int posy);
+   void setPosition(int x_pos, int y_pos);
 
    void resize(const QSize &newSize);
    void resize(int w, int h);
@@ -335,13 +335,13 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SLOT_1(Public, void setTitle(const QString &title))
    GUI_CS_SLOT_2(setTitle)
 
-   GUI_CS_SLOT_1(Public, void setX(int arg))
+   GUI_CS_SLOT_1(Public, void setX(int x_value))
    GUI_CS_SLOT_2(setX)
-   GUI_CS_SLOT_1(Public, void setY(int arg))
+   GUI_CS_SLOT_1(Public, void setY(int y_value))
    GUI_CS_SLOT_2(setY)
-   GUI_CS_SLOT_1(Public, void setWidth(int arg))
+   GUI_CS_SLOT_1(Public, void setWidth(int width))
    GUI_CS_SLOT_2(setWidth)
-   GUI_CS_SLOT_1(Public, void setHeight(int arg))
+   GUI_CS_SLOT_1(Public, void setHeight(int height))
    GUI_CS_SLOT_2(setHeight)
 
    GUI_CS_SLOT_1(Public, void setMinimumWidth(int width))
@@ -365,32 +365,32 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SIGNAL_2(modalityChanged, modality)
    GUI_CS_SIGNAL_1(Public, void windowStateChanged(Qt::WindowState windowState))
    GUI_CS_SIGNAL_2(windowStateChanged, windowState)
-   GUI_CS_SIGNAL_1(Public, void windowTitleChanged(const QString &title))
-   GUI_CS_SIGNAL_2(windowTitleChanged, title)
+   GUI_CS_SIGNAL_1(Public, void windowTitleChanged(const QString &newTitle))
+   GUI_CS_SIGNAL_2(windowTitleChanged, newTitle)
 
-   GUI_CS_SIGNAL_1(Public, void xChanged(int arg))
-   GUI_CS_SIGNAL_2(xChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void yChanged(int arg))
-   GUI_CS_SIGNAL_2(yChanged, arg)
+   GUI_CS_SIGNAL_1(Public, void xChanged(int newX))
+   GUI_CS_SIGNAL_2(xChanged, newX)
+   GUI_CS_SIGNAL_1(Public, void yChanged(int newY))
+   GUI_CS_SIGNAL_2(yChanged, newY)
 
-   GUI_CS_SIGNAL_1(Public, void widthChanged(int arg))
-   GUI_CS_SIGNAL_2(widthChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void heightChanged(int arg))
-   GUI_CS_SIGNAL_2(heightChanged, arg)
+   GUI_CS_SIGNAL_1(Public, void widthChanged(int newWidth))
+   GUI_CS_SIGNAL_2(widthChanged, newWidth)
+   GUI_CS_SIGNAL_1(Public, void heightChanged(int newHeight))
+   GUI_CS_SIGNAL_2(heightChanged, newHeight)
 
-   GUI_CS_SIGNAL_1(Public, void minimumWidthChanged(int arg))
-   GUI_CS_SIGNAL_2(minimumWidthChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void minimumHeightChanged(int arg))
-   GUI_CS_SIGNAL_2(minimumHeightChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void maximumWidthChanged(int arg))
-   GUI_CS_SIGNAL_2(maximumWidthChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void maximumHeightChanged(int arg))
-   GUI_CS_SIGNAL_2(maximumHeightChanged, arg)
+   GUI_CS_SIGNAL_1(Public, void minimumWidthChanged(int newMinWidth))
+   GUI_CS_SIGNAL_2(minimumWidthChanged, newMinWidth)
+   GUI_CS_SIGNAL_1(Public, void minimumHeightChanged(int newMinHeight))
+   GUI_CS_SIGNAL_2(minimumHeightChanged, newMinHeight)
+   GUI_CS_SIGNAL_1(Public, void maximumWidthChanged(int newMaxWidth))
+   GUI_CS_SIGNAL_2(maximumWidthChanged, newMaxWidth)
+   GUI_CS_SIGNAL_1(Public, void maximumHeightChanged(int newMaxHeight))
+   GUI_CS_SIGNAL_2(maximumHeightChanged, newMaxHeight)
 
-   GUI_CS_SIGNAL_1(Public, void visibleChanged(bool arg))
-   GUI_CS_SIGNAL_2(visibleChanged, arg)
-   GUI_CS_SIGNAL_1(Public, void visibilityChanged(QWindow::Visibility visibility))
-   GUI_CS_SIGNAL_2(visibilityChanged, visibility)
+   GUI_CS_SIGNAL_1(Public, void visibleChanged(bool newVisible))
+   GUI_CS_SIGNAL_2(visibleChanged, newVisible)
+   GUI_CS_SIGNAL_1(Public, void visibilityChanged(QWindow::Visibility newVisibility))
+   GUI_CS_SIGNAL_2(visibilityChanged, newVisibility)
    GUI_CS_SIGNAL_1(Public, void activeChanged())
    GUI_CS_SIGNAL_2(activeChanged)
    GUI_CS_SIGNAL_1(Public, void contentOrientationChanged(Qt::ScreenOrientation orientation))
@@ -399,8 +399,8 @@ class Q_GUI_EXPORT QWindow : public QObject, public QSurface
    GUI_CS_SIGNAL_1(Public, void focusObjectChanged(QObject *object))
    GUI_CS_SIGNAL_2(focusObjectChanged, object)
 
-   GUI_CS_SIGNAL_1(Public, void opacityChanged(qreal opacity))
-   GUI_CS_SIGNAL_2(opacityChanged, opacity)
+   GUI_CS_SIGNAL_1(Public, void opacityChanged(qreal newOpacity))
+   GUI_CS_SIGNAL_2(opacityChanged, newOpacity)
 
  protected:
    virtual void exposeEvent(QExposeEvent *event);

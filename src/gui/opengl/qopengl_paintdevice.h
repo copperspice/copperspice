@@ -61,8 +61,8 @@ class Q_GUI_EXPORT QOpenGLPaintDevice : public QPaintDevice
     qreal dotsPerMeterX() const;
     qreal dotsPerMeterY() const;
 
-    void setDotsPerMeterX(qreal);
-    void setDotsPerMeterY(qreal);
+    void setDotsPerMeterX(qreal dpmx);
+    void setDotsPerMeterY(qreal dpmy);
 
     void setPaintFlipped(bool flipped);
     bool paintFlipped() const;

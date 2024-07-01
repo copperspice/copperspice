@@ -778,37 +778,39 @@ void QWindow::setMinimumSize(const QSize &size)
    }
 }
 
-void QWindow::setX(int arg)
+void QWindow::setX(int newX)
 {
    Q_D(QWindow);
-   if (x() != arg) {
-      setGeometry(QRect(arg, y(), width(), height()));
+
+   if (x() != newX) {
+      setGeometry(QRect(newX, y(), width(), height()));
    } else {
       d->positionAutomatic = false;
    }
 }
 
-void QWindow::setY(int arg)
+void QWindow::setY(int newY)
 {
    Q_D(QWindow);
-   if (y() != arg) {
-      setGeometry(QRect(x(), arg, width(), height()));
+
+   if (y() != newY) {
+      setGeometry(QRect(x(), newY, width(), height()));
    } else {
       d->positionAutomatic = false;
    }
 }
 
-void QWindow::setWidth(int arg)
+void QWindow::setWidth(int newWidth)
 {
-   if (width() != arg) {
-      resize(arg, height());
+   if (width() != newWidth) {
+      resize(newWidth, height());
    }
 }
 
-void QWindow::setHeight(int arg)
+void QWindow::setHeight(int newHeight)
 {
-   if (height() != arg) {
-      resize(width(), arg);
+   if (height() != newHeight) {
+      resize(width(), newHeight);
    }
 }
 
@@ -876,9 +878,9 @@ void QWindow::setSizeIncrement(const QSize &size)
    }
 }
 
-void QWindow::setGeometry(int posx, int posy, int w, int h)
+void QWindow::setGeometry(int x_pos, int y_pos, int w, int h)
 {
-   setGeometry(QRect(posx, posy, w, h));
+   setGeometry(QRect(x_pos, y_pos, w, h));
 }
 
 void QWindow::setGeometry(const QRect &rect)
@@ -999,9 +1001,9 @@ void QWindow::setPosition(const QPoint &pt)
    setGeometry(QRect(pt, size()));
 }
 
-void QWindow::setPosition(int posx, int posy)
+void QWindow::setPosition(int x_pos, int y_pos)
 {
-   setPosition(QPoint(posx, posy));
+   setPosition(QPoint(x_pos, y_pos));
 }
 
 void QWindow::resize(int w, int h)
