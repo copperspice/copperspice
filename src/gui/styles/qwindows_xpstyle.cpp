@@ -476,6 +476,15 @@ bool QWindowsXPStylePrivate::isLineEditBaseColorSet(const QStyleOption *option, 
    return (resolveMask & (1 << QPalette::Base)) != 0;
 }
 
+static inline Qt::Orientation progressBarOrientation(const QStyleOption *option = nullptr)
+{
+   if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
+      return pb->orientation;
+   }
+
+   return Qt::Horizontal;
+}
+
 HWND QWindowsXPStylePrivate::winId(const QWidget *widget)
 {
    if (widget)
@@ -3757,14 +3766,6 @@ void QWindowsXPStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCo
          QWindowsStyle::drawComplexControl(cc, option, p, widget);
          break;
    }
-}
-
-static inline Qt::Orientation progressBarOrientation(const QStyleOption *option = nullptr)
-{
-   if (const QStyleOptionProgressBar *pb = qstyleoption_cast<const QStyleOptionProgressBar *>(option)) {
-      return pb->orientation;
-   }
-   return Qt::Horizontal;
 }
 
 int QWindowsXPStylePrivate::pixelMetricFromSystemDp(QStyle::PixelMetric pm, const QStyleOption *option, const QWidget *widget)

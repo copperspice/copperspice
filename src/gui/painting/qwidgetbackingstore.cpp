@@ -109,7 +109,10 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
    }
 
    // re-test since we may have been forced to this path via the dummy texture list above
-   if (widgetTextures) {
+   if (widgetTextures == nullptr) {
+      backingStore->flush(effectiveRegion, widget->windowHandle(), offset);
+
+   } else {
       qt_window_private(tlw->windowHandle())->compositing = true;
       widget->window()->d_func()->sendComposeStatus(widget->window(), false);
 
@@ -120,14 +123,18 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 
       // Use the tlw's context, not widget's. The difference is important with native child
       // widgets where tlw != widget.
-      backingStore->handle()->composeAndFlush(widget->windowHandle(), effectiveRegion, offset, widgetTextures,
-         tlw->d_func()->shareContext(), translucentBackground);
+      backingStore->handle()->composeAndFlush(widget->windowHandle(), effectiveRegion, offset,
+            widgetTextures, tlw->d_func()->shareContext(), translucentBackground);
 
       widget->window()->d_func()->sendComposeStatus(widget->window(), true);
-   } else
+   }
+
+#else
+   backingStore->flush(effectiveRegion, widget->windowHandle(), offset);
+
 #endif
 
-      backingStore->flush(effectiveRegion, widget->windowHandle(), offset);
+
 }
 
 bool QWidgetBackingStore::bltRect(const QRect &rect, int dx, int dy, QWidget *widget)
@@ -910,18 +917,21 @@ static QPlatformTextureList *widgetTexturesFor(QWidget *tlw, QWidget *widget)
       static bool switchableWidgetComposition = QGuiApplicationPrivate::instance()->platformIntegration()
          ->hasCapability(QPlatformIntegration::SwitchableWidgetComposition);
 
-      if (! switchableWidgetComposition
+#if defined(Q_OS_WIN)
 
+      if (! switchableWidgetComposition ||
+            tlw->windowState().testFlag(Qt::WindowFullScreen) || tlw->testAttribute(Qt::WA_TranslucentBackground)) {
+
+#else
+      if (! switchableWidgetComposition) {
          // The Windows compositor handles fullscreen OpenGL window specially. Besides
          // having trouble with popups, it also has issues with flip-flopping between
          // OpenGL-based and normal flushing. Therefore, stick with GL for fullscreen
          // windows (QTBUG-53515). Similary, translucent windows should not switch to
          // layered native windows (QTBUG-54734).
 
-#if defined(Q_OS_WIN)
-         || tlw->windowState().testFlag(Qt::WindowFullScreen) || tlw->testAttribute(Qt::WA_TranslucentBackground)
 #endif
-      ) {
+
          return qt_dummy_platformTextureList();
       }
    }
