@@ -84,11 +84,11 @@ static const int BMP_BITFIELDS = 3;
 
 static const char dibFormatC[] = "dib";
 
-static inline QString msgConversionError(const QString &func, const QString &format)
+static inline QString msgConversionError(const QString &format)
 {
-   QString retval = func;
+   QString retval;
 
-   retval += ": Unable to convert DIB image. The image converter plugin for '";
+   retval += "Unable to convert DIB image. The image converter plugin for '";
    retval += format;
    retval += "' is not available. Available formats: ";
 
@@ -107,8 +107,7 @@ static inline QImage readDib(QByteArray data)
    QImageReader reader(&buffer, dibFormatC);
 
    if (! reader.canRead()) {
-      qWarning("%s", csPrintable(msgConversionError("readDib", dibFormatC)));
-
+      qWarning("readDib() %s", csPrintable(msgConversionError(dibFormatC)));
       return QImage();
    }
 
@@ -118,16 +117,17 @@ static inline QImage readDib(QByteArray data)
 static QByteArray writeDib(const QImage &img)
 {
    QByteArray ba;
+
    QBuffer buffer(&ba);
    buffer.open(QIODevice::ReadWrite);
    QImageWriter writer(&buffer, dibFormatC);
 
    if (! writer.canWrite()) {
-      qWarning("%s", csPrintable(msgConversionError("writeDib", dibFormatC)));
+      qWarning("writeDib() %s", csPrintable(msgConversionError(dibFormatC)));
       return ba;
    }
 
-   if (!writer.write(img)) {
+   if (! writer.write(img)) {
       ba.clear();
    }
 
