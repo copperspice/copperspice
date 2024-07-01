@@ -3120,9 +3120,20 @@ QStyle *QApplication::style()
 #ifndef QT_NO_STYLE_STYLESHEET
    if (! QApplicationPrivate::styleSheet.isEmpty()) {
       qApp->setStyleSheet(QApplicationPrivate::styleSheet);
-   } else
-#endif
+
+   } else {
       QApplicationPrivate::app_style->polish(qApp);
+   }
+
+#else
+   QApplicationPrivate::app_style->polish(qApp);
+
+#endif
+
+#if defined(CS_SHOW_DEBUG_GUI)
+   qDebug("QApplication::style() Style class = %s",
+         csPrintable(QApplicationPrivate::app_style->metaObject()->className()));
+#endif
 
    return QApplicationPrivate::app_style;
 }

@@ -182,19 +182,22 @@ static bool addFontToDatabase(const QString &faceName, const QString &fullName, 
 
    str << "addFontToDatabase() " << faceName << "::" << fullName << ' ' << charSet << " TTF = " << ttf;
 
-      if (type & DEVICE_FONTTYPE) {
-         str << " DEVICE";
-      }
-      if (type & RASTER_FONTTYPE) {
-         str << " RASTER";
-      }
-      if (type & TRUETYPE_FONTTYPE) {
-         str << " TRUETYPE";
-      }
-      str << " scalable=" << scalable << " Size=" << size
-         << " Style=" << style << " Weight=" << weight
-         << " stretch=" << stretch;
-      qDebug() << message;
+   if (type & DEVICE_FONTTYPE) {
+      str << " DEVICE";
+   }
+
+   if (type & RASTER_FONTTYPE) {
+      str << " RASTER";
+   }
+
+   if (type & TRUETYPE_FONTTYPE) {
+      str << " TRUETYPE";
+   }
+
+   str << " scalable = " << scalable << " Size = " << size
+      << " Style = " << style << " Weight = " << weight << " stretch = " << stretch;
+
+   qDebug() << message;
 #endif
 
    QString englishName;

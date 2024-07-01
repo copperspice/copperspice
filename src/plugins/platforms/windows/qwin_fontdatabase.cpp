@@ -628,29 +628,28 @@ static bool addFontToDatabase(const QString &familyName, uchar charSet,
    const QFont::Stretch stretch = QFont::Unstretched;
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
+   QString message;
+   QTextStream str(&message);
 
-      QString message;
-      QTextStream str(&message);
+   str << "addFontToDatabase() FamilyName = " << familyName << " CharSet = " << charSet << " TTF = " << ttf;
 
-      str << "addFontToDatabase(): FamilyName = " << familyName << " CharSet = " << charSet << " TTF = " << ttf;
-      if (type & DEVICE_FONTTYPE) {
-         str << " DEVICE";
-      }
+   if (type & DEVICE_FONTTYPE) {
+      str << " DEVICE";
+   }
 
-      if (type & RASTER_FONTTYPE) {
-         str << " RASTER";
-      }
+   if (type & RASTER_FONTTYPE) {
+      str << " RASTER";
+   }
 
-      if (type & TRUETYPE_FONTTYPE) {
-         str << " TRUETYPE";
-      }
+   if (type & TRUETYPE_FONTTYPE) {
+      str << " TRUETYPE";
+   }
 
-      str << "\n  "
-          << " Scalable =" << scalable << " Size =" << size
-          << " Style =" << style << " Weight =" << weight
-          << " Stretch =" << stretch;
+   str << "\n  "
+       << " Scalable = " << scalable << " Size = " << size
+       << " Style = " << style << " Weight =" << weight << " Stretch = " << stretch;
 
-      qDebug() << message;
+   qDebug() << message;
 #endif
 
    QString englishName;

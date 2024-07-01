@@ -215,7 +215,7 @@ bool Uic::write(QIODevice *in)
 
       rtn = write (ui);
 #else
-      fprintf(stderr, "Uic: option to generate cpp code not compiled in\n");
+      fprintf(stderr, "Uic: option to generate cpp code not compiled into this program\n");
 #endif
    }
 

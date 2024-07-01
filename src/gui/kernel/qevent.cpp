@@ -587,73 +587,76 @@ QShortcutEvent::~QShortcutEvent()
 
 #endif
 
-// start of debbug stream
-static inline void formatTouchEvent(QDebug d, const QTouchEvent &t)
+static inline void formatTouchEvent(QDebug debug, const QTouchEvent &t)
 {
-   d << "QTouchEvent(";
-   QtDebugUtils::formatQEnum(d, t.type());
-   d << " device: " << t.device()->name();
-   d << " states: ";
-   QtDebugUtils::formatQFlags(d, t.touchPointStates());
-   d << ", " << t.touchPoints().size() << " points: " << t.touchPoints() << ')';
+   debug << "QTouchEvent(";
+   QtDebugUtils::formatQEnum(debug, t.type());
+
+   debug << " device: " << t.device()->name();
+   debug << " states: ";
+   QtDebugUtils::formatQFlags(debug, t.touchPointStates());
+
+   debug << ", " << t.touchPoints().size() << " points: " << t.touchPoints() << ')';
 }
 
-static void formatUnicodeString(QDebug d, const QString &s)
+static void formatUnicodeString(QDebug debug, const QString &s)
 {
-   d << '"' << hex;
+   debug << '"' << hex;
 
    for (int i = 0; i < s.size(); ++i) {
       if (i) {
-         d << ',';
+         debug << ',';
       }
-      d << "U+" << s.at(i).unicode();
+      debug << "U+" << s.at(i).unicode();
    }
 
-   d << dec << '"';
+   debug << dec << '"';
 }
 
-static inline void formatInputMethodEvent(QDebug d, const QInputMethodEvent *e)
+static inline void formatInputMethodEvent(QDebug debug, const QInputMethodEvent *e)
 {
-   d << "QInputMethodEvent(";
+   debug << "QInputMethodEvent(";
 
    if (! e->preeditString().isEmpty()) {
-      d << "preedit=";
-      formatUnicodeString(d, e->preeditString());
+      debug << "preedit=";
+      formatUnicodeString(debug, e->preeditString());
    }
 
    if (! e->commitString().isEmpty()) {
-      d << ", commit=";
-      formatUnicodeString(d, e->commitString());
+      debug << ", commit=";
+      formatUnicodeString(debug, e->commitString());
    }
 
    if (e->replacementLength()) {
-      d << ", replacementStart=" << e->replacementStart() << ", replacementLength="
+      debug << ", replacementStart=" << e->replacementStart() << ", replacementLength="
          << e->replacementLength();
    }
 
    if (const int attributeCount = e->attributes().size()) {
-      d << ", attributes= {";
+      debug << ", attributes= {";
 
       for (int a = 0; a < attributeCount; ++a) {
          const QInputMethodEvent::Attribute &at = e->attributes().at(a);
 
          if (a) {
-            d << ',';
+            debug << ',';
          }
 
-         d << "[type= " << at.type << ", start=" << at.start << ", length=" << at.length
+         debug << "[type= " << at.type << ", start=" << at.start << ", length=" << at.length
            << ", value=" << at.value.toString() << ']';
       }
 
-      d << '}';
+      debug << '}';
    }
 
-   d << ')';
+   debug << ')';
 }
-static inline void formatInputMethodQueryEvent(QDebug d, const QInputMethodQueryEvent *e)
+
+static inline void formatInputMethodQueryEvent(QDebug debug, const QInputMethodQueryEvent *e)
 {
    const Qt::InputMethodQueries queries = e->queries();
-   d << "QInputMethodQueryEvent(queries=" << showbase << hex << int(queries)
+
+   debug << "QInputMethodQueryEvent(queries=" << showbase << hex << int(queries)
      << noshowbase << dec << ", {";
 
    for (unsigned mask = 1; mask <= Qt::ImTextAfterCursor; mask <<= 1) {
@@ -661,12 +664,12 @@ static inline void formatInputMethodQueryEvent(QDebug d, const QInputMethodQuery
          const QVariant value = e->value(static_cast<Qt::InputMethodQuery>(mask));
 
          if (value.isValid()) {
-            d << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value.toString() << "],";
+            debug << '[' << showbase << hex << mask <<  noshowbase << dec << '=' << value.toString() << "],";
          }
       }
    }
 
-   d << "})";
+   debug << "})";
 }
 
 static const char *eventClassName(QEvent::Type t)
@@ -793,54 +796,61 @@ static const char *eventClassName(QEvent::Type t)
 }
 
 #ifndef QT_NO_DRAGANDDROP
-static void formatDropEvent(QDebug d, const QDropEvent *e)
+static void formatDropEvent(QDebug debug, const QDropEvent *e)
 {
    const QEvent::Type type = e->type();
-   d << eventClassName(type) << "(dropAction=";
-   QtDebugUtils::formatQEnum(d, e->dropAction());
-   d << ", proposedAction=";
-   QtDebugUtils::formatQEnum(d, e->proposedAction());
-   d << ", possibleActions=";
-   QtDebugUtils::formatQFlags(d, e->possibleActions());
-   d << ", posF=";
-   QtDebugUtils::formatQPoint(d,  e->posF());
+   debug << eventClassName(type) << "(dropAction=";
+   QtDebugUtils::formatQEnum(debug, e->dropAction());
+
+   debug << ", proposedAction=";
+   QtDebugUtils::formatQEnum(debug, e->proposedAction());
+
+   debug << ", possibleActions=";
+   QtDebugUtils::formatQFlags(debug, e->possibleActions());
+
+   debug << ", posF=";
+   QtDebugUtils::formatQPoint(debug,  e->posF());
+
    if (type == QEvent::DragMove || type == QEvent::DragEnter) {
-      d << ", answerRect=" << static_cast<const QDragMoveEvent *>(e)->answerRect();
+      debug << ", answerRect=" << static_cast<const QDragMoveEvent *>(e)->answerRect();
    }
-   d << ", formats=" << e->mimeData()->formats();
-   QtDebugUtils::formatNonNullQFlags(d, ", keyboardModifiers=", e->keyboardModifiers());
-   d << ", ";
-   QtDebugUtils::formatQFlags(d, e->mouseButtons());
+
+   debug << ", formats=" << e->mimeData()->formats();
+   QtDebugUtils::formatNonNullQFlags(debug, ", keyboardModifiers=", e->keyboardModifiers());
+
+   debug << ", ";
+   QtDebugUtils::formatQFlags(debug, e->mouseButtons());
 }
 #endif
 
 #ifndef QT_NO_TABLETEVENT
-
-static void formatTabletEvent(QDebug d, const QTabletEvent *e)
+static void formatTabletEvent(QDebug debug, const QTabletEvent *e)
 {
    const QEvent::Type type = e->type();
 
-   d << eventClassName(type)  << '(';
-   QtDebugUtils::formatQEnum(d, type);
-   d << ", device=";
-   QtDebugUtils::formatQEnum(d, e->device());
-   d << ", pointerType=";
-   QtDebugUtils::formatQEnum(d, e->pointerType());
-   d << ", uniqueId=" << e->uniqueId()
-      << ", pos=" << e->posF()
-      << ", z=" << e->z()
-      << ", xTilt=" << e->xTilt()
-      << ", yTilt=" << e->yTilt()
-      << ", ";
-   QtDebugUtils::formatQFlags(d, e->buttons());
+   debug << eventClassName(type)  << '(';
+   QtDebugUtils::formatQEnum(debug, type);
+
+   debug << ", device =";
+   QtDebugUtils::formatQEnum(debug, e->device());
+
+   debug << ", pointerType =";
+   QtDebugUtils::formatQEnum(debug, e->pointerType());
+
+   debug << ", uniqueId =" << e->uniqueId() << ", pos =" << e->posF() << ", z =" << e->z() << ", xTilt  =" << e->xTilt()
+         << ", yTilt=" << e->yTilt() << ", ";
+   QtDebugUtils::formatQFlags(debug, e->buttons());
+
    if (type == QEvent::TabletPress || type == QEvent::TabletMove) {
-      d << ", pressure=" << e->pressure();
+      debug << ", pressure =" << e->pressure();
    }
+
    if (e->device() == QTabletEvent::RotationStylus || e->device() == QTabletEvent::FourDMouse) {
-      d << ", rotation=" << e->rotation();
+      debug << ", rotation =" << e->rotation();
    }
+
    if (e->device() == QTabletEvent::Airbrush) {
-      d << ", tangentialPressure=" << e->tangentialPressure();
+      debug << ", tangentialPressure =" << e->tangentialPressure();
    }
 }
 

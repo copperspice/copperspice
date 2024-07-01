@@ -25,14 +25,11 @@
 
 #include <qelapsedtimer.h>
 #include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qthread.h>
 
 #include <qcore_unix_p.h>
 #include <qabstracteventdispatcher_p.h>
-
-#if defined(CS_SHOW_DEBUG_CORE)
-#  include <qdebug.h>
-#  include <qthread.h>
-#endif
 
 #include <sys/times.h>
 

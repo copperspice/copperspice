@@ -6870,7 +6870,7 @@ QDebug operator<<(QDebug debug, const QGraphicsItem *item)
          debug << ')';
 
       } else {
-         debug << "QWidget(0)";
+         debug << "QWidget(nullptr)";
       }
    }
 
@@ -6886,7 +6886,7 @@ QDebug operator<<(QDebug debug, const QGraphicsObject *item)
    debug.nospace();
 
    if (!item) {
-      debug << "QGraphicsObject(0)";
+      debug << "QGraphicsObject(nullptr)";
       return debug;
    }
 

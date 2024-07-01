@@ -482,14 +482,14 @@ QPointF QGestureEvent::mapToGraphicsScene(const QPointF &gesturePoint) const
 }
 #endif
 
-static void formatGestureHeader(QDebug d, const char *className, const QGesture *gesture)
+static void formatGestureHeader(QDebug debug, const char *className, const QGesture *gesture)
 {
-     d << className << "(state=";
-     QtDebugUtils::formatQEnum(d, gesture->state());
+     debug << className << "(state = ";
+     QtDebugUtils::formatQEnum(debug, gesture->state());
 
      if (gesture->hasHotSpot()) {
-         d << ",hotSpot=";
-         QtDebugUtils::formatQPoint(d, gesture->hotSpot());
+         debug << ", hotSpot = ";
+         QtDebugUtils::formatQPoint(debug, gesture->hotSpot());
      }
 }
 
