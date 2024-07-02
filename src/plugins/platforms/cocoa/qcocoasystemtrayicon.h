@@ -33,7 +33,7 @@
 
 class QSystemTrayIconSys;
 
-class Q_GUI_EXPORT QCocoaSystemTrayIcon : public QPlatformSystemTrayIcon
+class QCocoaSystemTrayIcon : public QPlatformSystemTrayIcon
 {
  public:
    QCocoaSystemTrayIcon()
