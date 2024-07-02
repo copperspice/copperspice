@@ -639,7 +639,7 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
       QWidget *receiver = m_gestureTargets.value(gesture, nullptr);
       Q_ASSERT(receiver);
 
-      if (receiver) {
+      if (receiver != nullptr) {
          gestureByTypes[gesture->gestureType()].insert(receiver, gesture);
       }
    }

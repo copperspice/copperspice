@@ -581,7 +581,7 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
    QApplication::sendEvent(q, &event);
 
    // Activate
-   if (panel) {
+   if (panel != nullptr) {
       QEvent activateEvent(QEvent::WindowActivate);
       q->sendEvent(panel, &activateEvent);
 

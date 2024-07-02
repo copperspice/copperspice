@@ -523,7 +523,7 @@ void *QXcbNativeInterface::atspiBus()
    QXcbIntegration *integration = static_cast<QXcbIntegration *>(QApplicationPrivate::platformIntegration());
    QXcbConnection *defaultConnection = integration->defaultConnection();
 
-   if (defaultConnection) {
+   if (defaultConnection != nullptr) {
       xcb_atom_t atspiBusAtom = defaultConnection->internAtom("AT_SPI_BUS");
       xcb_get_property_cookie_t cookie = Q_XCB_CALL2(xcb_get_property(defaultConnection->xcb_connection(), false,
                defaultConnection->rootWindow(), atspiBusAtom, XCB_ATOM_STRING, 0, 128), defaultConnection);

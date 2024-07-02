@@ -87,7 +87,7 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 #ifndef QT_NO_OPENGL
    const bool compositionWasActive = widget->d_func()->renderToTextureComposeActive;
 
-   if (! widgetTextures) {
+   if (widgetTextures == nullptr) {
       widget->d_func()->renderToTextureComposeActive = false;
       // Detect the case of falling back to the normal flush path when no
       // render-to-texture widgets are visible anymore. We will force one

@@ -26,11 +26,11 @@
 #include <qblendfunctions_p.h>
 
 struct SourceOnlyAlpha {
-   inline uchar alpha(uchar src) const {
+   uchar alpha(uchar src) const {
       return src;
    }
 
-   inline quint16 bytemul(quint16 spix) const {
+   quint16 bytemul(quint16 spix) const {
       return spix;
    }
 };
@@ -40,11 +40,11 @@ struct SourceAndConstAlpha {
       m_alpha255 = (m_alpha256 * 255) >> 8;
    };
 
-   inline uchar alpha(uchar src) const {
+   uchar alpha(uchar src) const {
       return (src * m_alpha256) >> 8;
    }
 
-   inline quint16 bytemul(quint16 x) const {
+   quint16 bytemul(quint16 x) const {
       uint t = (((x & 0x07e0) * m_alpha255) >> 8) & 0x07e0;
       t |= (((x & 0xf81f) * (m_alpha255 >> 2)) >> 6) & 0xf81f;
       return t;
@@ -59,31 +59,33 @@ struct SourceAndConstAlpha {
                        RGB16 (565) format target format
  ************************************************************************/
 struct Blend_RGB16_on_RGB16_NoAlpha {
-   inline void write(quint16 *dst, quint16 src) {
+   void write(quint16 *dst, quint16 src) {
       *dst = src;
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 };
 
 struct Blend_RGB16_on_RGB16_ConstAlpha {
-   inline Blend_RGB16_on_RGB16_ConstAlpha(quint32 alpha) {
+   Blend_RGB16_on_RGB16_ConstAlpha(quint32 alpha) {
       m_alpha = (alpha * 255) >> 8;
       m_ialpha = 255 - m_alpha;
    }
 
-   inline void write(quint16 *dst, quint16 src) {
+   void write(quint16 *dst, quint16 src) {
       *dst = BYTE_MUL_RGB16(src, m_alpha) + BYTE_MUL_RGB16(*dst, m_ialpha);
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 
    quint32 m_alpha;
    quint32 m_ialpha;
 };
 
 struct Blend_ARGB32_on_RGB16_SourceAlpha {
-   inline void write(quint16 *dst, quint32 src) {
+   void write(quint16 *dst, quint32 src) {
       const quint8 alpha = qAlpha(src);
 
       if (alpha) {
@@ -96,15 +98,16 @@ struct Blend_ARGB32_on_RGB16_SourceAlpha {
       }
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 };
 
 struct Blend_ARGB32_on_RGB16_SourceAndConstAlpha {
-   inline Blend_ARGB32_on_RGB16_SourceAndConstAlpha(quint32 alpha) {
+   Blend_ARGB32_on_RGB16_SourceAndConstAlpha(quint32 alpha) {
       m_alpha = (alpha * 255) >> 8;
    }
 
-   inline void write(quint16 *dst, quint32 src) {
+   void write(quint16 *dst, quint32 src) {
       src = BYTE_MUL(src, m_alpha);
       const quint8 alpha = qAlpha(src);
       if (alpha) {
@@ -117,7 +120,8 @@ struct Blend_ARGB32_on_RGB16_SourceAndConstAlpha {
       }
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 
    quint32 m_alpha;
 };
@@ -389,49 +393,53 @@ void qt_blend_rgb32_on_rgb32(uchar *destPixels, int dbpl, const uchar *srcPixels
 }
 
 struct Blend_RGB32_on_RGB32_NoAlpha {
-   inline void write(quint32 *dst, quint32 src) {
+   void write(quint32 *dst, quint32 src) {
       *dst = src;
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 };
 
 struct Blend_RGB32_on_RGB32_ConstAlpha {
-   inline Blend_RGB32_on_RGB32_ConstAlpha(quint32 alpha) {
+   Blend_RGB32_on_RGB32_ConstAlpha(quint32 alpha) {
       m_alpha = (alpha * 255) >> 8;
       m_ialpha = 255 - m_alpha;
    }
 
-   inline void write(quint32 *dst, quint32 src) {
+   void write(quint32 *dst, quint32 src) {
       *dst = BYTE_MUL(src, m_alpha) + BYTE_MUL(*dst, m_ialpha);
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 
    quint32 m_alpha;
    quint32 m_ialpha;
 };
 
 struct Blend_ARGB32_on_ARGB32_SourceAlpha {
-   inline void write(quint32 *dst, quint32 src) {
+   void write(quint32 *dst, quint32 src) {
       *dst = src + BYTE_MUL(*dst, qAlpha(~src));
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 };
 
 struct Blend_ARGB32_on_ARGB32_SourceAndConstAlpha {
-   inline Blend_ARGB32_on_ARGB32_SourceAndConstAlpha(quint32 alpha) {
+   Blend_ARGB32_on_ARGB32_SourceAndConstAlpha(quint32 alpha) {
       m_alpha = (alpha * 255) >> 8;
       m_ialpha = 255 - m_alpha;
    }
 
-   inline void write(quint32 *dst, quint32 src) {
+   void write(quint32 *dst, quint32 src) {
       src  = BYTE_MUL(src, m_alpha);
       *dst = src + BYTE_MUL(*dst, qAlpha(~src));
    }
 
-   inline void flush(void *) {}
+   void flush(void *) {
+   }
 
    quint32 m_alpha;
    quint32 m_ialpha;

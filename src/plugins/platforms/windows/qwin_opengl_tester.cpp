@@ -203,7 +203,7 @@ static inline QString resolveBugListFile(const QString &fileName)
    // then resolve via QStandardPaths::ConfigLocation.
    const QString settingsPath = QLibraryInfo::location(QLibraryInfo::SettingsPath);
    if (!settingsPath.isEmpty()) { // SettingsPath is empty unless specified in qt.conf.
-      const QFileInfo fi(settingsPath + QLatin1Char('/') + fileName);
+      const QFileInfo fi(settingsPath + QChar('/') + fileName);
       if (fi.isFile()) {
          return fi.absoluteFilePath();
       }
@@ -227,7 +227,7 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(c
 {
 
 #if defined(QT_NO_OPENGL)
-   return 0;
+   return Qt::EmptyFlag;
 
 #else
    QOpenGLConfig::Gpu qgpu = QOpenGLConfig::Gpu::fromDevice(gpu.vendorId, gpu.deviceId, gpu.driverVersion, gpu.description);
@@ -259,24 +259,25 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(c
       }
    }
 
-   if (features.contains(QString("disable_desktopgl"))) {    // Qt-specific
+   if (features.contains("disable_desktopgl")) {
       result &= ~QWindowsOpenGLTester::DesktopGl;
    }
 
-   if (features.contains(QString("disable_angle"))) {        // Qt-specific keyword
+   if (features.contains("disable_angle")) {
       result &= ~QWindowsOpenGLTester::GlesMask;
 
    } else {
-      if (features.contains(QString("disable_d3d11"))) {    // standard keyword
+      if (features.contains("disable_d3d11")) {
+         // standard keyword
          result &= ~QWindowsOpenGLTester::AngleRendererD3d11;
       }
 
-      if (features.contains(QString("disable_d3d9"))) {     // Qt-specific
+      if (features.contains("disable_d3d9")) {
          result &= ~QWindowsOpenGLTester::AngleRendererD3d9;
       }
    }
 
-   if (features.contains(QString("disable_rotation"))) {
+   if (features.contains("disable_rotation")) {
       result |= DisableRotationFlag;
    }
 
@@ -404,7 +405,7 @@ bool QWindowsOpenGLTester::testDesktopGL()
       typedef const GLubyte * (APIENTRY * GetString_t)(GLenum name);
       GetString_t GetString = cs_bitCast<GetString_t>(::GetProcAddress(lib, "glGetString"));
 
-      if (GetString) {
+      if (GetString != nullptr) {
          if (const char *versionStr = reinterpret_cast<const char *>(GetString(GL_VERSION))) {
             const QByteArray version(versionStr);
             const int majorDot = version.indexOf('.');

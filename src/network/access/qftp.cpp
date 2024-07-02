@@ -589,15 +589,15 @@ static void _q_parseUnixDir(const QStringList &tokens, const QString &userName, 
    // Resolve permissions
    int permissions = 0;
    QString p = tokens.at(2);
-   permissions |= (p[0] == QLatin1Char('r') ? QUrlInfo::ReadOwner : 0);
-   permissions |= (p[1] == QLatin1Char('w') ? QUrlInfo::WriteOwner : 0);
-   permissions |= (p[2] == QLatin1Char('x') ? QUrlInfo::ExeOwner : 0);
-   permissions |= (p[3] == QLatin1Char('r') ? QUrlInfo::ReadGroup : 0);
-   permissions |= (p[4] == QLatin1Char('w') ? QUrlInfo::WriteGroup : 0);
-   permissions |= (p[5] == QLatin1Char('x') ? QUrlInfo::ExeGroup : 0);
-   permissions |= (p[6] == QLatin1Char('r') ? QUrlInfo::ReadOther : 0);
-   permissions |= (p[7] == QLatin1Char('w') ? QUrlInfo::WriteOther : 0);
-   permissions |= (p[8] == QLatin1Char('x') ? QUrlInfo::ExeOther : 0);
+   permissions |= (p[0] == QChar('r') ? QUrlInfo::ReadOwner : 0);
+   permissions |= (p[1] == QChar('w') ? QUrlInfo::WriteOwner : 0);
+   permissions |= (p[2] == QChar('x') ? QUrlInfo::ExeOwner : 0);
+   permissions |= (p[3] == QChar('r') ? QUrlInfo::ReadGroup : 0);
+   permissions |= (p[4] == QChar('w') ? QUrlInfo::WriteGroup : 0);
+   permissions |= (p[5] == QChar('x') ? QUrlInfo::ExeGroup : 0);
+   permissions |= (p[6] == QChar('r') ? QUrlInfo::ReadOther : 0);
+   permissions |= (p[7] == QChar('w') ? QUrlInfo::WriteOther : 0);
+   permissions |= (p[8] == QChar('x') ? QUrlInfo::ExeOther : 0);
    info->setPermissions(permissions);
 
    bool isOwner = info->owner() == userName;
@@ -637,7 +637,7 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
                      | QUrlInfo::ReadGroup | QUrlInfo::WriteGroup
                      | QUrlInfo::ReadOther | QUrlInfo::WriteOther;
    QString ext;
-   int extIndex = name.lastIndexOf(QLatin1Char('.'));
+   int extIndex = name.lastIndexOf(QChar('.'));
 
    if (extIndex != -1) {
       ext = name.mid(extIndex + 1);
@@ -932,7 +932,7 @@ void QFtpPI::abort()
       return;   //no command in progress
    }
 
-   if (currentCmd.startsWith(QLatin1String("STOR "))) {
+   if (currentCmd.startsWith("STOR ")) {
       abortState = AbortStarted;
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
@@ -1235,13 +1235,13 @@ bool QFtpPI::processReply()
          // If the EPSV or EPRT commands fail, replace them with
          // the old PASV and PORT instead and try again
 
-         if (currentCmd.startsWith(QLatin1String("EPSV"))) {
+         if (currentCmd.startsWith("EPSV")) {
             transferConnectionExtended = false;
-            pendingCommands.prepend(QLatin1String("PASV\r\n"));
+            pendingCommands.prepend("PASV\r\n");
 
-         } else if (currentCmd.startsWith(QLatin1String("EPRT"))) {
+         } else if (currentCmd.startsWith("EPRT")) {
             transferConnectionExtended = false;
-            pendingCommands.prepend(QLatin1String("PORT\r\n"));
+            pendingCommands.prepend("PORT\r\n");
 
          } else {
             emit error(QFtp::UnknownError, m_replyText);
@@ -1289,10 +1289,10 @@ bool QFtpPI::startNextCmd()
    if (currentCmd.startsWith(QLatin1String("PORT"))) {
       if ((address.protocol() == QTcpSocket::IPv6Protocol) && transferConnectionExtended) {
          int port = dtp.setupListener(address);
-         currentCmd = QLatin1String("EPRT |");
-         currentCmd += (address.protocol() == QTcpSocket::IPv4Protocol) ? QLatin1Char('1') : QLatin1Char('2');
-         currentCmd += QLatin1Char('|') + address.toString() + QLatin1Char('|') + QString::number(port);
-         currentCmd += QLatin1Char('|');
+         currentCmd = "EPRT |";
+         currentCmd += (address.protocol() == QTcpSocket::IPv4Protocol) ? QChar('1') : QChar('2');
+         currentCmd += QChar('|') + address.toString() + QChar('|') + QString::number(port);
+         currentCmd += QChar('|');
 
       } else if (address.protocol() == QTcpSocket::IPv4Protocol) {
          int port = dtp.setupListener(address);
@@ -1301,11 +1301,11 @@ bool QFtpPI::startNextCmd()
          quint32 ip = address.toIPv4Address();
 
          portArg += QString::number((ip & 0xff000000) >> 24);
-         portArg += QLatin1Char(',') + QString::number((ip & 0xff0000) >> 16);
-         portArg += QLatin1Char(',') + QString::number((ip & 0xff00) >> 8);
-         portArg += QLatin1Char(',') + QString::number(ip & 0xff);
-         portArg += QLatin1Char(',') + QString::number((port & 0xff00) >> 8);
-         portArg += QLatin1Char(',') + QString::number(port & 0xff);
+         portArg += QChar(',') + QString::number((ip & 0xff0000) >> 16);
+         portArg += QChar(',') + QString::number((ip & 0xff00) >> 8);
+         portArg += QChar(',') + QString::number(ip & 0xff);
+         portArg += QChar(',') + QString::number((port & 0xff00) >> 8);
+         portArg += QChar(',') + QString::number(port & 0xff);
 
          currentCmd = QLatin1String("PORT ");
          currentCmd += portArg;
@@ -1315,11 +1315,11 @@ bool QFtpPI::startNextCmd()
          return false;
       }
 
-      currentCmd += QLatin1String("\r\n");
+      currentCmd += "\r\n";
 
-   } else if (currentCmd.startsWith(QLatin1String("PASV"))) {
+   } else if (currentCmd.startsWith("PASV")) {
       if ((address.protocol() == QTcpSocket::IPv6Protocol) && transferConnectionExtended) {
-         currentCmd = QLatin1String("EPSV\r\n");
+         currentCmd = "EPSV\r\n";
       }
    }
 

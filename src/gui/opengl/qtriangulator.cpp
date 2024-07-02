@@ -1400,8 +1400,10 @@ void QTriangulator<T>::ComplexToSimple::calculateIntersections()
                 }
             }
         }
-        while (!m_topIntersection.isEmpty() && m_topIntersection.top().intersectionPoint <= eventPoint)
+
+        while (! m_topIntersection.isEmpty() && m_topIntersection.top().intersectionPoint <= eventPoint) {
             m_topIntersection.pop();
+        }
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
         DebugDialog dialog(this, vertex);

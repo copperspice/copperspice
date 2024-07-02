@@ -187,7 +187,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    virtual bool isProxyWidget() const;
 
-   inline QVariant extra(Extra type) const {
+   QVariant extra(Extra type) const {
       for (int i = 0; i < extras.size(); ++i) {
          const ExtraStruct &extra = extras.at(i);
 
@@ -198,7 +198,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return QVariant();
    }
 
-   inline void setExtra(Extra type, const QVariant &value) {
+   void setExtra(Extra type, const QVariant &value) {
       int key = -1;
 
       for (int i = 0; i < extras.size(); ++i) {
@@ -215,7 +215,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       }
    }
 
-   inline void unsetExtra(Extra type) {
+   void unsetExtra(Extra type) {
       for (int i = 0; i < extras.size(); ++i) {
          if (extras.at(i).m_type == type) {
             extras.removeAt(i);

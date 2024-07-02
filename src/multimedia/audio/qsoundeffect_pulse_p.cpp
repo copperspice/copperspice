@@ -557,10 +557,15 @@ void QSoundEffectPrivate::setPlaying(bool playing)
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
     qDebug() << this << "setPlaying(" << playing << ")";
 #endif
-    if (m_playing == playing)
+
+    if (m_playing == playing) {
         return;
-    if (!playing)
+    }
+
+    if (! playing) {
         m_playQueued = false;
+    }
+
     m_playing = playing;
     emit playingChanged();
 }
@@ -570,13 +575,19 @@ void QSoundEffectPrivate::setStatus(QSoundEffect::Status status)
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
     qDebug() << this << "setStatus" << status;
 #endif
-    if (m_status == status)
+
+    if (m_status == status) {
         return;
+    }
+
     bool oldLoaded = isLoaded();
     m_status = status;
+
     emit statusChanged();
-    if (oldLoaded != isLoaded())
+
+    if (oldLoaded != isLoaded()) {
         emit loadedChanged();
+   }
 }
 
 void QSoundEffectPrivate::setLoopsRemaining(int loopsRemaining)
@@ -584,16 +595,20 @@ void QSoundEffectPrivate::setLoopsRemaining(int loopsRemaining)
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
     qDebug() << this << "setLoopsRemaining " << loopsRemaining;
 #endif
-    if (m_runningCount == loopsRemaining)
+
+    if (m_runningCount == loopsRemaining) {
         return;
+    }
+
     m_runningCount = loopsRemaining;
     emit loopsRemainingChanged();
 }
 
 void QSoundEffectPrivate::play()
 {
-    if (!m_resourcesAvailable)
+    if (! m_resourcesAvailable) {
         return;
+    }
 
     playAvailable();
 }
@@ -679,10 +694,11 @@ void QSoundEffectPrivate::emptyComplete(void *stream, bool reload)
         pa_operation *op = pa_stream_cork(m_pulseStream, 1, reload ?
                   stream_cork_callback : nullptr, m_ref->getRef());
 
-        if (op)
+        if (op) {
             pa_operation_unref(op);
-        else
+        } else {
             qWarning("QSoundEffect::emptyComplete() Failed to cork stream");
+        }
     }
 }
 

@@ -1958,7 +1958,7 @@ bool QConfFileSettingsPrivate::writeIniFile(QIODevice &device, const ParsedSetti
       QSettingsIniKey key(j.key().originalCaseKey(), j.key().originalKeyPosition());
       int slashPos;
 
-      if ((slashPos = key.indexOf(QLatin1Char('/'))) != -1) {
+      if ((slashPos = key.indexOf(QChar('/'))) != -1) {
          section = key.left(slashPos);
          key.remove(0, slashPos + 1);
       }

@@ -183,6 +183,9 @@ static QString changed_signal(int which)
 class QWizardDefaultProperty
 {
  public:
+   QWizardDefaultProperty()
+   { }
+
    QWizardDefaultProperty(const QString &className, const QString &property, const QString &changedSignal)
       : m_className(className), m_property(property), m_changedSignal(changedSignal)
    { }
@@ -190,7 +193,6 @@ class QWizardDefaultProperty
    QString m_className;
    QString m_property;
    QString m_changedSignal;
-   inline QWizardDefaultProperty() {}
 };
 
 class QWizardField
@@ -250,7 +252,7 @@ void QWizardField::findProperty(const QWizardDefaultProperty *properties, int pr
 class QWizardLayoutInfo
 {
  public:
-   inline QWizardLayoutInfo()
+   QWizardLayoutInfo()
       : topLevelMarginLeft(-1), topLevelMarginRight(-1), topLevelMarginTop(-1),
         topLevelMarginBottom(-1), childMarginLeft(-1), childMarginRight(-1),
         childMarginTop(-1), childMarginBottom(-1), hspacing(-1), vspacing(-1),

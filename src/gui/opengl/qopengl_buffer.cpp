@@ -286,8 +286,9 @@ void *QOpenGLBuffer::map(QOpenGLBuffer::Access access)
     }
 #endif
 
-    if (! d->guard || ! d->guard->id())
+    if (! d->guard || ! d->guard->id()) {
         return nullptr;
+    }
 
     if (d->funcs->hasOpenGLExtension(QOpenGLExtensions::MapBufferRange)) {
         QOpenGLBuffer::RangeAccessFlags rangeAccess = Qt::EmptyFlag;

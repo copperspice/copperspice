@@ -241,14 +241,15 @@ bool QIODevice::seek(qint64 pos)
       d->devicePos = pos;
    }
 
-   if (offset < 0 || offset >= qint64(d->buffer.size()))
+   if (offset < 0 || offset >= qint64(d->buffer.size())) {
       // When seeking backwards, an operation that is only allowed for
       // random-access devices, the buffer is cleared. The next read
       // operation will then refill the buffer. We can optimize this, if we
       // find that seeking backwards becomes a significant performance hit.
-   {
+
       d->buffer.clear();
-   } else if (!d->buffer.isEmpty()) {
+
+   } else if (! d->buffer.isEmpty()) {
       d->buffer.skip(int(offset));
    }
 
@@ -1003,7 +1004,7 @@ QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
    }
 
    std::sort(modeList.begin(), modeList.end());
-   debug << modeList.join(QLatin1String("|"));
+   debug << modeList.join("|");
    debug << ')';
 
    return debug;

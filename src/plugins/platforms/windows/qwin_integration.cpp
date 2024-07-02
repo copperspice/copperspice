@@ -105,8 +105,8 @@ struct QWindowsIntegrationPrivate {
 };
 
 template <typename IntType>
-bool parseIntOption(const QString &parameter, const QLatin1String &option,
-   IntType minimumValue, IntType maximumValue, IntType *target)
+bool parseIntOption(const QString &parameter, const QString &option, IntType minimumValue,
+      IntType maximumValue, IntType *target)
 {
    const int valueLength = parameter.size() - option.size() - 1;
 
@@ -141,28 +141,32 @@ static inline unsigned parseOptions(const QStringList &paramList,
    unsigned options = 0;
 
    for (const QString &param : paramList) {
-      if (param.startsWith(QLatin1String("fontengine="))) {
-         if (param.endsWith(QLatin1String("freetype"))) {
+      if (param.startsWith("fontengine=")) {
+
+         if (param.endsWith("freetype")) {
             options |= QWindowsIntegration::FontDatabaseFreeType;
-         } else if (param.endsWith(QLatin1String("native"))) {
+
+         } else if (param.endsWith("native")) {
             options |= QWindowsIntegration::FontDatabaseNative;
          }
 
-      } else if (param.startsWith(QLatin1String("dialogs="))) {
-         if (param.endsWith(QLatin1String("xp"))) {
+      } else if (param.startsWith("dialogs=")) {
+
+         if (param.endsWith("xp")) {
             options |= QWindowsIntegration::XpNativeDialogs;
-         } else if (param.endsWith(QLatin1String("none"))) {
+
+         } else if (param.endsWith("none")) {
             options |= QWindowsIntegration::NoNativeDialogs;
          }
 
-      } else if (param == QLatin1String("gl=gdi")) {
+      } else if (param == "gl=gdi") {
          options |= QWindowsIntegration::DisableArb;
 
-      } else if (param == QLatin1String("nomousefromtouch")) {
+      } else if (param == "nomousefromtouch") {
          options |= QWindowsIntegration::DontPassOsMouseEventsSynthesizedFromTouch;
 
-      } else if (parseIntOption(param, QLatin1String("tabletabsoluterange"), 0, INT_MAX, tabletAbsoluteRange) ||
-            parseIntOption(param, QLatin1String("dpiawareness"), QtWindows::ProcessDpiUnaware,
+       } else if (parseIntOption(param, "tabletabsoluterange", 0, INT_MAX, tabletAbsoluteRange) ||
+            parseIntOption(param, "dpiawareness", QtWindows::ProcessDpiUnaware,
             QtWindows::ProcessPerMonitorDpiAware, dpiAwareness)) {
 
       } else {
@@ -406,7 +410,9 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::create()
 
 QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
-   if (QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext()) {
+   QWindowsStaticOpenGLContext *staticOpenGLContext = QWindowsIntegration::staticOpenGLContext();
+
+   if (staticOpenGLContext != nullptr) {
       QScopedPointer<QWindowsOpenGLContext> result(staticOpenGLContext->createContext(context));
 
       if (result->isValid()) {

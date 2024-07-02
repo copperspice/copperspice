@@ -35,17 +35,20 @@ void QOpenGL2PEXVertexArray::clear()
 
 QOpenGLRect QOpenGL2PEXVertexArray::boundingRect() const
 {
-    if (boundingRectDirty)
+    if (boundingRectDirty) {
         return QOpenGLRect(0.0, 0.0, 0.0, 0.0);
-    else
+    } else {
         return QOpenGLRect(minX, minY, maxX, maxY);
+    }
 }
 
 void QOpenGL2PEXVertexArray::addClosingLine(int index)
 {
     QPointF point(vertexArray.at(index));
-    if (point != QPointF(vertexArray.last()))
+
+    if (point != QPointF(vertexArray.last())) {
         vertexArray.append(point);
+    }
 }
 
 void QOpenGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathIndex)
@@ -96,12 +99,17 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
             switch (elements[i]) {
 
             case QPainterPath::MoveToElement:
-                if (!outline)
-                    addClosingLine(lastMoveTo);
+                if (! outline) {
+                   addClosingLine(lastMoveTo);
+                }
 
                 vertexArrayStops.append(vertexArray.size());
-                if (!outline) {
-                    if (!path.isConvex()) addCentroid(path, i);
+
+                if (! outline) {
+                    if (! path.isConvex()) {
+                       addCentroid(path, i);
+                    }
+
                     lastMoveTo = vertexArray.size();
                 }
 

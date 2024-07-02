@@ -363,18 +363,20 @@ void QDialog::contextMenuEvent(QContextMenuEvent *e)
 
 #else
    QWidget *w = childAt(e->pos());
-   if (!w) {
+
+   if (w == nullptr) {
       w = rect().contains(e->pos()) ? this : nullptr;
-      if (!w) {
+
+      if (w == nullptr) {
          return;
       }
    }
 
-   while (w && w->whatsThis().size() == 0 && !w->testAttribute(Qt::WA_CustomWhatsThis)) {
+   while (w != nullptr && w->whatsThis().size() == 0 && ! w->testAttribute(Qt::WA_CustomWhatsThis)) {
       w = w->isWindow() ? nullptr : w->parentWidget();
    }
 
-   if (w) {
+   if (w != nullptr) {
       QPointer<QMenu> p = new QMenu(this);
       QAction *wt = p.data()->addAction(tr("What's This?"));
 

@@ -865,14 +865,14 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
 
    QWindowSystemInterface::handleTouchEvent(platformWindow->window(), xiDeviceEvent->time, dev->qtTouchDevice, dev->touchPoints.values());
 
-   if (touchPoint.state == Qt::TouchPointReleased)
+   if (touchPoint.state == Qt::TouchPointReleased) {
       // If a touchpoint was released, we can forget it, because the ID won't be reused.
-   {
-      dev->touchPoints.remove(touchPoint.id);
-   } else
+       dev->touchPoints.remove(touchPoint.id);
+
+   } else {
       // Make sure that we don't send TouchPointPressed/Moved in more than one QTouchEvent
       // with this touch point if the next XI2 event is about a different touch point.
-   {
+
       touchPoint.state = Qt::TouchPointStationary;
    }
 }

@@ -87,7 +87,7 @@ class QDeviceClosedNotifier : public QObject
    void setupDevice(QTextStream *newStream, QIODevice *device) {
       disconnect();
 
-      if (device) {
+      if (device != nullptr) {
          connect(device, &QIODevice::aboutToClose, this, &QDeviceClosedNotifier::flushStream);
       }
 

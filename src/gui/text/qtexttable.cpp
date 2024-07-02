@@ -200,9 +200,9 @@ QTextTable *QTextTablePrivate::createTable(QTextDocumentPrivate *pieceTable, int
 }
 
 struct QFragmentFindHelper {
-   inline QFragmentFindHelper(int _pos, const QTextDocumentPrivate::FragmentMap &map)
+   QFragmentFindHelper(int _pos, const QTextDocumentPrivate::FragmentMap &map)
       : pos(_pos), fragmentMap(map)
-  {}
+   { }
 
    uint pos;
    const QTextDocumentPrivate::FragmentMap &fragmentMap;

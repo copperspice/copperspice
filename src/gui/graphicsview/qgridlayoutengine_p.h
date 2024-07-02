@@ -161,7 +161,7 @@ class QGridLayoutBox
    qreal q_minimumDescent;
    qreal q_minimumAscent;
 
-   inline qreal &q_sizes(int which) {
+   qreal &q_sizes(int which) {
       qreal *t;
 
       switch (which) {
@@ -191,7 +191,8 @@ class QGridLayoutBox
 
       return *t;
    }
-   inline const qreal &q_sizes(int which) const {
+
+   const qreal &q_sizes(int which) const {
       const qreal *t;
 
       switch (which) {
@@ -234,7 +235,9 @@ inline bool operator!=(const QGridLayoutBox &box1, const QGridLayoutBox &box2)
 class QGridLayoutMultiCellData
 {
  public:
-   inline QGridLayoutMultiCellData() : q_stretch(-1) {}
+   QGridLayoutMultiCellData()
+      : q_stretch(-1)
+   { }
 
    QGridLayoutBox q_box;
    int q_stretch;
@@ -270,7 +273,9 @@ class QGridLayoutRowData
 class QGridLayoutRowInfo
 {
  public:
-   inline QGridLayoutRowInfo() : count(0) {}
+   QGridLayoutRowInfo()
+      : count(0)
+   { }
 
    void insertOrRemoveRows(int row, int delta);
 

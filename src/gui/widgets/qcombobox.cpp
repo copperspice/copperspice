@@ -1356,7 +1356,7 @@ void QComboBox::setAutoCompletion(bool enable)
 
    d->autoCompletion = enable;
 
-   if (! d->lineEdit) {
+   if (d->lineEdit == nullptr) {
       return;
    }
 
@@ -1676,13 +1676,13 @@ void QComboBox::setCompleter(QCompleter *c)
 {
    Q_D(QComboBox);
 
-   if (! d->lineEdit) {
+   if (d->lineEdit == nullptr) {
       return;
    }
 
    d->lineEdit->setCompleter(c);
 
-   if (c) {
+   if (c != nullptr) {
       connect(c, cs_mp_cast<const QModelIndex &>(&QCompleter::activated), this, &QComboBox::_q_completerActivated);
       c->setWidget(this);
    }

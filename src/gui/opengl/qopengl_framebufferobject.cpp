@@ -135,19 +135,24 @@ QOpenGLFramebufferObjectFormat::QOpenGLFramebufferObjectFormat(const QOpenGLFram
 
 QOpenGLFramebufferObjectFormat &QOpenGLFramebufferObjectFormat::operator=(const QOpenGLFramebufferObjectFormat &other)
 {
-    if (d != other.d) {
-        other.d->ref.ref();
-        if (!d->ref.deref())
-            delete d;
-        d = other.d;
-    }
-    return *this;
+   if (d != other.d) {
+      other.d->ref.ref();
+
+      if (! d->ref.deref()) {
+         delete d;
+      }
+
+      d = other.d;
+   }
+
+   return *this;
 }
 
 QOpenGLFramebufferObjectFormat::~QOpenGLFramebufferObjectFormat()
 {
-    if (!d->ref.deref())
-        delete d;
+   if (! d->ref.deref()) {
+      delete d;
+   }
 }
 
 void QOpenGLFramebufferObjectFormat::setSamples(int samples)
@@ -342,8 +347,9 @@ void QOpenGLFramebufferObjectPrivate::init(QOpenGLFramebufferObject *, const QSi
 
     funcs.initializeOpenGLFunctions();
 
-    if (!funcs.hasOpenGLFeature(QOpenGLFunctions::Framebuffers))
+    if (! funcs.hasOpenGLFeature(QOpenGLFunctions::Framebuffers)) {
         return;
+    }
 
     // Fall back to using a normal non-msaa FBO if we don't have support for MSAA
     if (!funcs.hasOpenGLExtension(QOpenGLExtensions::FramebufferMultisample)
@@ -378,19 +384,21 @@ void QOpenGLFramebufferObjectPrivate::init(QOpenGLFramebufferObject *, const QSi
     format.setInternalTextureFormat(internal_format);
     format.setMipmap(mipmap);
 
-    if (samples == 0)
-        initTexture(0);
-    else
-        initColorBuffer(0, &samples);
+    if (samples == 0) {
+       initTexture(0);
+    } else {
+       initColorBuffer(0, &samples);
+    }
 
     format.setSamples(int(samples));
 
     initDepthStencilAttachments(ctx, attachment);
 
-    if (valid)
-        fbo_guard = new QOpenGLSharedResourceGuard(ctx, fbo, freeFramebufferFunc);
-    else
-        funcs.glDeleteFramebuffers(1, &fbo);
+    if (valid) {
+       fbo_guard = new QOpenGLSharedResourceGuard(ctx, fbo, freeFramebufferFunc);
+    } else {
+       funcs.glDeleteFramebuffers(1, &fbo);
+    }
 
     QT_CHECK_GLERROR();
 }
@@ -411,8 +419,9 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
     ColorAttachment &color(colorAttachments[idx]);
 
     GLuint pixelType = GL_UNSIGNED_BYTE;
-    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10)
+    if (color.internalFormat == GL_RGB10_A2 || color.internalFormat == GL_RGB10) {
         pixelType = GL_UNSIGNED_INT_2_10_10_10_REV;
+    }
 
     funcs.glTexImage2D(target, 0, color.internalFormat, color.size.width(), color.size.height(), 0,
                        GL_RGBA, pixelType, nullptr);
@@ -452,10 +461,11 @@ void QOpenGLFramebufferObjectPrivate::initColorBuffer(int idx, GLint *samples)
     GLenum storageFormat = color.internalFormat;
     // ES requires a sized format. The older desktop extension does not. Correct the format on ES.
     if (ctx->isOpenGLES() && color.internalFormat == GL_RGBA) {
-        if (funcs.hasOpenGLExtension(QOpenGLExtensions::Sized8Formats))
+        if (funcs.hasOpenGLExtension(QOpenGLExtensions::Sized8Formats)) {
             storageFormat = GL_RGBA8;
-        else
+        } else {
             storageFormat = GL_RGBA4;
+        }
     }
 
     funcs.glGenRenderbuffers(1, &color_buffer);
@@ -689,13 +699,17 @@ QOpenGLFramebufferObject::QOpenGLFramebufferObject(const QSize &size, Attachment
 QOpenGLFramebufferObject::~QOpenGLFramebufferObject()
 {
     Q_D(QOpenGLFramebufferObject);
-    if (isBound())
-        release();
+
+    if (isBound()) {
+       release();
+    }
 
     for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments) {
-        if (color.guard)
-            color.guard->free();
+        if (color.guard) {
+           color.guard->free();
+        }
     }
+
     d->colorAttachments.clear();
 
     if (d->depth_buffer_guard)
@@ -821,12 +835,17 @@ QVector<GLuint> QOpenGLFramebufferObject::textures() const
 {
     Q_D(const QOpenGLFramebufferObject);
     QVector<GLuint> ids;
-    if (d->format.samples() != 0)
-        return ids;
+
+    if (d->format.samples() != 0) {
+       return ids;
+    }
+
     ids.reserve(d->colorAttachments.count());
 
-    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments)
-        ids.append(color.guard ? color.guard->id() : 0);
+    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments) {
+       ids.append(color.guard ? color.guard->id() : 0);
+    }
+
     return ids;
 }
 
@@ -841,8 +860,11 @@ GLuint QOpenGLFramebufferObject::takeTexture(int colorAttachmentIndex)
     GLuint id = 0;
     if (isValid() && d->format.samples() == 0 && d->colorAttachments.count() > colorAttachmentIndex) {
         QOpenGLContext *current = QOpenGLContext::currentContext();
-        if (current && current->shareGroup() == d->fbo_guard->group() && isBound())
+
+        if (current && current->shareGroup() == d->fbo_guard->group() && isBound()) {
             release();
+        }
+
         id = d->colorAttachments[colorAttachmentIndex].guard ? d->colorAttachments[colorAttachmentIndex].guard->id() : 0;
         // Do not call free() on texture_guard, just null it out.
         // This way the texture will not be deleted when the guard is destroyed.
@@ -863,8 +885,10 @@ QVector<QSize> QOpenGLFramebufferObject::sizes() const
     QVector<QSize> sz;
     sz.reserve(d->colorAttachments.size());
 
-    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments)
+    for (const QOpenGLFramebufferObjectPrivate::ColorAttachment &color : d->colorAttachments) {
         sz.append(color.size);
+    }
+
     return sz;
 }
 
@@ -981,7 +1005,7 @@ QImage QOpenGLFramebufferObject::toImage(bool flipped, int colorAttachmentIndex)
 {
     Q_D(const QOpenGLFramebufferObject);
 
-    if (!d->valid) {
+    if (! d->valid) {
         return QImage();
     }
 
@@ -999,8 +1023,9 @@ QImage QOpenGLFramebufferObject::toImage(bool flipped, int colorAttachmentIndex)
     GLuint prevFbo = 0;
     ctx->functions()->glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &prevFbo);
 
-    if (prevFbo != d->fbo())
+    if (prevFbo != d->fbo()) {
         const_cast<QOpenGLFramebufferObject *>(this)->bind();
+    }
 
     QImage image;
     QOpenGLExtraFunctions *extraFuncs = ctx->extraFunctions();
@@ -1097,8 +1122,9 @@ void QOpenGLFramebufferObject::setAttachment(QOpenGLFramebufferObject::Attachmen
     }
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
-    if (current->shareGroup() != d->fbo_guard->group())
+    if (current->shareGroup() != d->fbo_guard->group()) {
         qDebug("QOpenGLFramebufferObject::setAttachment() called from incompatible context");
+    }
 #endif
 
     d->funcs.glBindFramebuffer(GL_FRAMEBUFFER, d->fbo());

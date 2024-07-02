@@ -81,7 +81,7 @@ class QGraphicsSceneMouseEventPrivate : public QGraphicsSceneEventPrivate
    Q_DECLARE_PUBLIC(QGraphicsSceneMouseEvent)
 
  public:
-   inline QGraphicsSceneMouseEventPrivate()
+   QGraphicsSceneMouseEventPrivate()
       : button(Qt::NoButton), buttons(Qt::EmptyFlag), modifiers(Qt::EmptyFlag),
         source(Qt::MouseEventNotSynthesized), flags(Qt::EmptyFlag)
    { }

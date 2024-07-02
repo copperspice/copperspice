@@ -2382,8 +2382,8 @@ void QXcbConnection::initializeXRender()
 {
 #ifdef XCB_USE_RENDER
    const xcb_query_extension_reply_t *reply = xcb_get_extension_data(m_connection, &xcb_render_id);
-   if (!
-reply || !reply->present) {
+
+   if (! reply || ! reply->present) {
       return;
    }
 

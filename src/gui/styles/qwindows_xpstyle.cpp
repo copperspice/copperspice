@@ -460,7 +460,7 @@ bool QWindowsXPStylePrivate::isItemViewDelegateLineEdit(const QWidget *widget)
 bool QWindowsXPStylePrivate::isLineEditBaseColorSet(const QStyleOption *option, const QWidget *widget)
 {
    uint resolveMask = option->palette.resolve();
-   if (widget) {
+   if (widget != nullptr) {
       // Since spin box includes a line edit we need to resolve the palette mask also from
       // the parent, as while the color is always correct on the palette supplied by panel,
       // the mask can still be empty. If either mask specifies custom base color, use that.
@@ -487,22 +487,25 @@ static inline Qt::Orientation progressBarOrientation(const QStyleOption *option 
 
 HWND QWindowsXPStylePrivate::winId(const QWidget *widget)
 {
-   if (widget)
+   if (widget != nullptr) {
       if (const HWND hwnd = QApplicationPrivate::getHWNDForWidget(const_cast<QWidget *>(widget))) {
          return hwnd;
       }
+   }
 
    // Find top level with native window (there might be dialogs that do not have one).
    for (const QWidget *toplevel : QApplication::topLevelWidgets())
-      if (toplevel->windowHandle() && toplevel->windowHandle()->handle())
+      if (toplevel->windowHandle() && toplevel->windowHandle()->handle()) {
          if (const HWND topLevelHwnd = QApplicationPrivate::getHWNDForWidget(toplevel)) {
             return topLevelHwnd;
          }
+      }
 
-   if (QDesktopWidget *desktop = qApp->desktop())
+   if (QDesktopWidget *desktop = qApp->desktop()) {
       if (const HWND desktopHwnd = QApplicationPrivate::getHWNDForWidget(desktop)) {
          return desktopHwnd;
       }
+   }
 
    Q_ASSERT(false);
 
@@ -1624,10 +1627,11 @@ void QWindowsXPStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt
 
       case PE_PanelButtonTool:
          if (widget && widget->inherits("QDockWidgetTitleButton")) {
-            if (const QWidget *dw = widget->parentWidget())
+            if (const QWidget *dw = widget->parentWidget()) {
                if (dw->isWindow()) {
                   return;
                }
+            }
          }
 
          themeNumber = QWindowsXPStylePrivate::ToolBarTheme;
@@ -3177,21 +3181,25 @@ void QWindowsXPStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCo
                         v_, available) + fudge;
 
                   if (slider->orientation == Qt::Horizontal) {
-                     if (ticks & QSlider::TicksAbove)
+                     if (ticks & QSlider::TicksAbove) {
                         lines.append(QLine(pos, tickOffset - 1 - bothOffset,
                               pos, tickOffset - 1 - bothOffset - tickLength));
+                     }
 
-                     if (ticks & QSlider::TicksBelow)
+                     if (ticks & QSlider::TicksBelow) {
                         lines.append(QLine(pos, tickOffset + thickness + bothOffset,
                               pos, tickOffset + thickness + bothOffset + tickLength));
+                     }
                   } else {
-                     if (ticks & QSlider::TicksAbove)
+                     if (ticks & QSlider::TicksAbove) {
                         lines.append(QLine(tickOffset - 1 - bothOffset, pos,
                               tickOffset - 1 - bothOffset - tickLength, pos));
+                     }
 
-                     if (ticks & QSlider::TicksBelow)
+                     if (ticks & QSlider::TicksBelow) {
                         lines.append(QLine(tickOffset + thickness + bothOffset, pos,
                               tickOffset + thickness + bothOffset + tickLength, pos));
+                     }
                   }
                   // in the case where maximum is max int
                   int nextInterval = v + interval;
@@ -4335,7 +4343,7 @@ int QWindowsXPStyle::styleHint(StyleHint hint, const QStyleOption *option, const
          break;
 
       case SH_GroupBox_TextLabelColor:
-         if (!widget || (widget && widget->isEnabled())) {
+         if (widget == nullptr || widget->isEnabled()) {
             res = d->groupBoxTextColor;
          } else {
             res = d->groupBoxTextColorDisabled;
