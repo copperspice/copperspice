@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QXCBWINDOWFUNCTIONS_H
-#define QXCBWINDOWFUNCTIONS_H
+#ifndef QCOCOA_WINDOWFUNCTIONS_H
+#define QCOCOA_WINDOWFUNCTIONS_H
 
 #include <QPlatform_HeaderHelper>
 
