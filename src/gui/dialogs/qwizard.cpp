@@ -580,11 +580,11 @@ class QWizardAntiFlickerWidget : public QWidget
 
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA)
  public:
-   QWizardPrivate *wizardPrivate;
-
    QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *wizardPrivate)
       : QWidget(wizard), wizardPrivate(wizardPrivate)
    { }
+
+   QWizardPrivate *wizardPrivate;
 
  protected:
    void paintEvent(QPaintEvent *) override;

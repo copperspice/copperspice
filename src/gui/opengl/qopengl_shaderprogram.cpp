@@ -1269,11 +1269,13 @@ void QOpenGLShaderProgram::disableAttributeArray(const char *name)
 int QOpenGLShaderProgram::uniformLocation(const char *name) const
 {
     Q_D(const QOpenGLShaderProgram);
-    (void) d;
 
     if (d->linked && d->programGuard && d->programGuard->id()) {
         return d->glfuncs->glGetUniformLocation(d->programGuard->id(), name);
+
     } else {
+        (void) d;
+
         qWarning() << "QOpenGLShaderProgram::uniformLocation() Shader program is not linked " << name;
         return -1;
     }
@@ -1775,7 +1777,6 @@ void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLuint *
 void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *values, int count, int tupleSize)
 {
     Q_D(QOpenGLShaderProgram);
-    (void) d;
 
     if (location != -1) {
         if (tupleSize == 1) {
@@ -1791,6 +1792,7 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *val
             d->glfuncs->glUniform4fv(location, count, values);
 
         } else {
+            (void) d;
             qWarning() << "QOpenGLShaderProgram::setUniformValue() size" << tupleSize << "not supported";
         }
     }

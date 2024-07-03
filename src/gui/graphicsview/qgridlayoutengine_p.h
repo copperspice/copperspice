@@ -277,11 +277,11 @@ class QGridLayoutRowInfo
       : count(0)
    { }
 
-   void insertOrRemoveRows(int row, int delta);
-
 #if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    void dump(int indent = 0) const;
 #endif
+
+   void insertOrRemoveRows(int row, int delta);
 
    int count;
    QVector<QStretchParameter> stretches;

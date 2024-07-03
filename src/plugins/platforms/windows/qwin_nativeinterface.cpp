@@ -67,6 +67,8 @@ static int resourceType(const QByteArray &key)
    return int(result - names);
 }
 
+static QString customMarginPropertyC = "WindowsCustomMargins";
+
 void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resource, QWindow *window)
 {
    if (! window || ! window->handle()) {
@@ -105,8 +107,6 @@ void *QWindowsNativeInterface::nativeResourceForWindow(const QByteArray &resourc
 
    return nullptr;
 }
-
-static QString customMarginPropertyC = "WindowsCustomMargins";
 
 QVariant QWindowsNativeInterface::windowProperty(QPlatformWindow *window, const QString &name) const
 {

@@ -68,6 +68,17 @@
 static constexpr const int sHIL_EXTRALARGE = 0x2;      // 48x48 or user-defined
 static constexpr const int sHIL_JUMBO      = 0x4;      // 256x256 (Vista or later)
 
+enum FileIconSize {
+   SmallFileIcon,         // Standard icons obtainable via shGetFileInfo(), SHGFI_SMALLICON, SHGFI_LARGEICON
+   LargeFileIcon,
+   ExtraLargeFileIcon,    // Larger icons obtainable via SHGetImageList()
+   JumboFileIcon,         // Vista onwards
+   FileIconSizeCount
+};
+
+QString QWindowsTheme::name              = "windows";
+QWindowsTheme *QWindowsTheme::m_instance = nullptr;
+
 static inline QColor COLORREFToQColor(COLORREF cr)
 {
    return QColor(GetRValue(cr), GetGValue(cr), GetBValue(cr));
@@ -292,9 +303,6 @@ static inline QPalette *menuBarPalette(const QPalette &menuPalette)
    return result;
 }
 
-QString QWindowsTheme::name = "windows";
-QWindowsTheme *QWindowsTheme::m_instance = nullptr;
-
 QWindowsTheme::QWindowsTheme()
 {
    m_instance = this;
@@ -473,15 +481,6 @@ void QWindowsTheme::refreshFonts()
    m_fonts[ItemViewFont] = new QFont(iconTitleFont);
    m_fonts[FixedFont] = new QFont(fixedFont);
 }
-
-enum FileIconSize {
-   // Standard icons obtainable via shGetFileInfo(), SHGFI_SMALLICON, SHGFI_LARGEICON
-   SmallFileIcon, LargeFileIcon,
-   // Larger icons obtainable via SHGetImageList()
-   ExtraLargeFileIcon,
-   JumboFileIcon, // Vista onwards
-   FileIconSizeCount
-};
 
 bool QWindowsTheme::usePlatformNativeDialog(DialogType type) const
 {

@@ -186,10 +186,8 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
 
    const Header *header = reinterpret_cast<const Header *>(data);
 
-   if (header->magic[0] != 'Q'
-      || header->magic[1] != 'P'
-      || header->magic[2] != 'F'
-      || header->magic[3] != '2') {
+   if (header->magic[0] != 'Q' || header->magic[1] != 'P'
+         || header->magic[2] != 'F' || header->magic[3] != '2') {
       return false;
    }
 

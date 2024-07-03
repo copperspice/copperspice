@@ -231,7 +231,12 @@ class Q_CORE_EXPORT QDateTimeParser
    mutable QString m_text;
 
    QVector<SectionNode> sectionNodes;
-   SectionNode first, last, none, popup;
+
+   SectionNode first;
+   SectionNode last;
+   SectionNode none;
+   SectionNode popup;
+
    QStringList separators;
    QString displayFormat;
    QLocale defaultLocale;

@@ -124,6 +124,7 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QCoreGraphicsPaintEngine)
  public:
+   enum { CosmeticNone, CosmeticTransformPath, CosmeticSetPenWidth } cosmeticPen;
 
    static constexpr const int CGStroke = 0x01;
    static constexpr const int CGEOFill = 0x02;
@@ -150,7 +151,6 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
    int stackCount;
    bool complexXForm;
    bool disabledSmoothFonts;
-   enum { CosmeticNone, CosmeticTransformPath, CosmeticSetPenWidth } cosmeticPen;
 
    // pixel and cosmetic pen size in user coordinates.
    QPointF pixelSize;

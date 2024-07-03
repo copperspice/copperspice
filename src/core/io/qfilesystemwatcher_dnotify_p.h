@@ -63,9 +63,9 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
             : ownerId(0u), groupId(0u), permissions(Qt::EmptyFlag)
          { }
 
+         bool updateInfo();
 
          QString path;
-         bool updateInfo();
          uint ownerId;
          uint groupId;
          QFile::Permissions permissions;

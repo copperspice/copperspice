@@ -2840,7 +2840,9 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
          }
          line.setLeadingIncluded(true);
 
-         QFixed left, right;
+         QFixed left;
+         QFixed right;
+
          floatMargins(layoutStruct->y, layoutStruct, &left, &right);
          left = qMax(left, l);
          right = qMin(right, r);

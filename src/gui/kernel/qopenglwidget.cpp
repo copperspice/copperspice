@@ -483,11 +483,11 @@ QOpenGLWidget::UpdateBehavior QOpenGLWidget::updateBehavior() const
 
 void QOpenGLWidget::setFormat(const QSurfaceFormat &format)
 {
-   (void) format;
-
    Q_D(QOpenGLWidget);
 
    if (d->initialized) {
+      (void) format;
+
       qWarning("QOpenGLWidget::setFormat() Already initialized, setting the format again has no effect");
       return;
    }

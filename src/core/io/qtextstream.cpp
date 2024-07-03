@@ -111,6 +111,12 @@ class QTextStreamPrivate
    Q_DECLARE_PUBLIC(QTextStream)
 
  public:
+   enum TokenDelimiter {
+      Space,
+      NotSpace,
+      EndOfLine
+   };
+
    QTextStreamPrivate(QTextStream *stream);
    ~QTextStreamPrivate();
 
@@ -133,12 +139,6 @@ class QTextStreamPrivate
    QTextCodec::ConverterState *readConverterSavedState;
    bool autoDetectUnicode;
 #endif
-
-   enum TokenDelimiter {
-      Space,
-      NotSpace,
-      EndOfLine
-   };
 
    QString read(int maxlen);
    bool scan(QString *newToken, int maxlen, TokenDelimiter delimiter);

@@ -1010,13 +1010,17 @@ QWindowsOpenGLContextFormat QWindowsOpenGLContextFormat::current()
 {
    QWindowsOpenGLContextFormat result;
    const QByteArray version = QOpenGLStaticContext::getGlString(GL_VERSION);
-   int major, minor;
-   // v2
+
+   int major;
+   int minor;
+
    if (QPlatformOpenGLContext::parseOpenGLVersion(version, major, minor)) {
       result.m_version = (major << 8) + minor;
    } else {
       result.m_version = 0x0200;
    }
+
+   // v2
    result.profile = QSurfaceFormat::NoProfile;
    if (result.m_version < 0x0300) {
       result.options |= QSurfaceFormat::DeprecatedFunctions;
