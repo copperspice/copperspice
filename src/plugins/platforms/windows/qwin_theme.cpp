@@ -64,6 +64,10 @@
 #  define USE_IIMAGELIST
 #endif
 
+// Shell image list ids
+static constexpr const int sHIL_EXTRALARGE = 0x2;      // 48x48 or user-defined
+static constexpr const int sHIL_JUMBO      = 0x4;      // 256x256 (Vista or later)
+
 static inline QColor COLORREFToQColor(COLORREF cr)
 {
    return QColor(GetRValue(cr), GetGValue(cr), GetBValue(cr));
@@ -652,11 +656,6 @@ QPixmap QWindowsTheme::standardPixmap(StandardPixmap sp, const QSizeF &pixmapSiz
 
    return QPlatformTheme::standardPixmap(sp, pixmapSize);
 }
-
-enum { // Shell image list ids
-   sHIL_EXTRALARGE = 0x2, // 48x48 or user-defined
-   sHIL_JUMBO = 0x4 // 256x256 (Vista or later)
-};
 
 static QString dirIconPixmapCacheKey(int iIcon, int iconSize, int imageListSize)
 {

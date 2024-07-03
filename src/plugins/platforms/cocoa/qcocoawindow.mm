@@ -46,10 +46,8 @@
 
 #include <qdebug.h>
 
-enum {
-   defaultWindowWidth  = 160,
-   defaultWindowHeight = 160
-};
+static constexpr const int defaultWindowWidth  = 160;
+static constexpr const int defaultWindowHeight = 160;
 
 static bool isMouseEvent(NSEvent *ev)
 {

@@ -26,7 +26,7 @@
 #include <qcocoahelpers.h>
 #include <qwidget.h>
 
-static const int dragImageMaxChars = 26;
+static constexpr const int dragImageMaxChars = 26;
 
 QCocoaDrag::QCocoaDrag()
    : m_drag(nullptr)

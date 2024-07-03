@@ -90,10 +90,8 @@ bool qt_mac_execute_apple_script(const QString &script, AEDesc *ret);
 // text - since menu text is sometimes decorated with these for Windows accelerators.
 QString qt_mac_removeAmpersandEscapes(QString s);
 
-enum {
-   QtCocoaEventSubTypeWakeup       = SHRT_MAX,
-   QtCocoaEventSubTypePostMessage  = SHRT_MAX - 1
-};
+static constexpr const auto QtCocoaEventSubTypeWakeup      = SHRT_MAX;
+static constexpr const auto QtCocoaEventSubTypePostMessage = SHRT_MAX - 1;
 
 class QCocoaPostMessageArgs
 {

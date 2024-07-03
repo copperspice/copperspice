@@ -579,7 +579,8 @@ qreal QWindowsFontEngine::maxCharWidth() const
    return tm.tmMaxCharWidth;
 }
 
-enum { max_font_count = 256 };
+static constexpr const int max_font_count = 256;
+
 static const ushort char_table[] = {
    40,
    67,

@@ -246,7 +246,8 @@ void QWindowsInputContext::invokeAction(QInputMethod::Action action, int cursorP
 
 static inline QString getCompositionString(HIMC himc, DWORD dwIndex)
 {
-   enum { bufferSize = 256 };
+   static constexpr const int bufferSize = 256;
+
    wchar_t buffer[bufferSize];
 
    const int length = ImmGetCompositionString(himc, dwIndex, buffer, bufferSize * sizeof(wchar_t));
@@ -257,7 +258,7 @@ static inline QString getCompositionString(HIMC himc, DWORD dwIndex)
 // Determine the converted string range as pair of start/length to be selected.
 static inline void getCompositionStringConvertedRange(HIMC himc, int *selStart, int *selLength)
 {
-   enum { bufferSize = 256 };
+   static constexpr const int bufferSize = 256;
 
    // Find the range of bytes with ATTR_TARGET_CONVERTED set.
    char attrBuffer[bufferSize];

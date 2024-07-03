@@ -54,7 +54,7 @@ static inline bool shellExecute(const QUrl &url)
 // command line for the mailto: shell command.
 static inline QString mailCommand()
 {
-   enum { BufferSize = sizeof(wchar_t) * MAX_PATH };
+   static constexpr const auto BufferSize = sizeof(wchar_t) * MAX_PATH;
 
    const wchar_t mailUserKey[] = L"Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\mailto\\UserChoice";
 

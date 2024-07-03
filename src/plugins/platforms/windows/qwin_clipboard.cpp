@@ -228,7 +228,7 @@ void QWindowsClipboard::propagateClipboardMessage(UINT message, WPARAM wParam, L
 
 bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam, LRESULT *result)
 {
-   enum { wMClipboardUpdate = 0x031D };
+   static constexpr const int wMClipboardUpdate = 0x031D;
 
    *result = 0;
 

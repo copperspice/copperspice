@@ -654,7 +654,9 @@ QPoint QWindowsCursor::mousePosition()
 
 QWindowsCursor::CursorState QWindowsCursor::cursorState()
 {
-   enum { cursorShowing = 0x1, cursorSuppressed = 0x2 }; // Windows 8: CURSOR_SUPPRESSED
+   static constexpr const int cursorShowing    = 0x1;
+   static constexpr const int cursorSuppressed = 0x2;    // Windows 8: CURSOR_SUPPRESSED
+
    CURSORINFO cursorInfo;
    cursorInfo.cbSize = sizeof(CURSORINFO);
 

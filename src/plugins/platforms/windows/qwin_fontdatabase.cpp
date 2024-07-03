@@ -40,6 +40,14 @@
 
 #include <wchar.h>
 
+static constexpr const int PlatformId_Unicode   = 0;
+static constexpr const int PlatformId_Apple     = 1;
+static constexpr const int PlatformId_Microsoft = 3;
+
+static constexpr const int NameRecordSize       = 12;
+static constexpr const int FamilyId             = 1;
+static constexpr const int MS_LangIdEnglish     = 0x009;
+
 // Helper classes for creating font engines directly from font data
 namespace {
 
@@ -436,12 +444,6 @@ static QString getEnglishName(const uchar *table, quint32 bytes)
 {
    QString i18n_name;
 
-   enum {
-      NameRecordSize = 12,
-      FamilyId = 1,
-      MS_LangIdEnglish = 0x009
-   };
-
    // get the name table
    quint16 count;
    quint16 string_offset;
@@ -474,12 +476,6 @@ static QString getEnglishName(const uchar *table, quint32 bytes)
       if (name_id != FamilyId) {
          continue;
       }
-
-      enum {
-         PlatformId_Unicode = 0,
-         PlatformId_Apple = 1,
-         PlatformId_Microsoft = 3
-      };
 
       quint16 length = getUShort(names + 8  + i * NameRecordSize);
       quint16 offset = getUShort(names + 10 + i * NameRecordSize);

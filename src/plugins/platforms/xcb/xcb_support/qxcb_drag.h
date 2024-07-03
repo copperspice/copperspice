@@ -87,6 +87,12 @@ class QXcbDrag : public QXcbObject, public QBasicDrag
    void timerEvent(QTimerEvent *e) override;
 
  private:
+   // 10 minute timer used to discard old XdndDrop transactions
+   static constexpr const int XdndDropTransactionTimeout = 600000;
+
+   // the types in this drop. 100 is no good, but at least it's big.
+   static constexpr const int xdnd_max_type = 100;
+
    friend class QXcbDropData;
 
    void init();
@@ -109,8 +115,6 @@ class QXcbDrag : public QXcbObject, public QBasicDrag
 
    xcb_atom_t xdnd_dragsource;
 
-   // the types in this drop. 100 is no good, but at least it's big.
-   enum { xdnd_max_type = 100 };
    QVector<xcb_atom_t> xdnd_types;
 
    // timestamp from XdndPosition and XdndDroptime for retrieving the data
@@ -127,9 +131,6 @@ class QXcbDrag : public QXcbObject, public QBasicDrag
    xcb_window_t current_proxy_target;
 
    QXcbVirtualDesktop *current_virtual_desktop;
-
-   // 10 minute timer used to discard old XdndDrop transactions
-   enum { XdndDropTransactionTimeout = 600000 };
    int cleanup_timer;
 
    QVector<xcb_atom_t> drag_types;

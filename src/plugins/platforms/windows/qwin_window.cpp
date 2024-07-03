@@ -51,10 +51,8 @@
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 
-enum {
-   defaultWindowWidth = 160,
-   defaultWindowHeight = 160
-};
+static constexpr const int defaultWindowWidth  = 160;
+static constexpr const int defaultWindowHeight = 160;
 
 Q_GUI_EXPORT HICON qt_pixmapToWinHICON(const QPixmap &);
 
@@ -279,7 +277,8 @@ static inline bool windowIsOpenGL(const QWindow *w)
 
 static bool applyBlurBehindWindow(HWND hwnd)
 {
-   enum { dwmBbEnable = 0x1, dwmBbBlurRegion = 0x2 };
+   static constexpr const int dwmBbEnable     = 0x1;
+   static constexpr const int dwmBbBlurRegion = 0x2;
 
    struct DwmBlurBehind {
       DWORD dwFlags;

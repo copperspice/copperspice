@@ -31,11 +31,9 @@
 
 #include <qplatform_nativeinterface.h>
 
-enum {
-   SystemTrayRequestDock = 0,
-   SystemTrayBeginMessage = 1,
-   SystemTrayCancelMessage = 2
-};
+static constexpr const int SystemTrayRequestDock   = 0;
+static constexpr const int SystemTrayBeginMessage  = 1;
+static constexpr const int SystemTrayCancelMessage = 2;
 
 // QXcbSystemTrayTracker provides API for accessing the tray window and tracks
 // its lifecyle by listening for its destruction and recreation.

@@ -33,7 +33,7 @@ template <class T>
 class Array
 {
  public:
-   enum { initialSize = 5 };
+   static constexpr const int initialSize = 5;
 
    using const_iterator = T*;
 

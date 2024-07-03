@@ -67,10 +67,9 @@
 #endif
 
 #define XCOORD_MAX 16383
-enum {
-   defaultWindowWidth = 160,
-   defaultWindowHeight = 160
-};
+
+static constexpr const int defaultWindowWidth  = 160;
+static constexpr const int defaultWindowHeight = 160;
 
 #undef FocusIn
 
@@ -277,11 +276,7 @@ QXcbWindow::QXcbWindow(QWindow *window)
    setConnection(xcbScreen()->connection());
 }
 
-#ifdef Q_COMPILER_CLASS_ENUM
 enum : quint32 {
-#else
-enum {
-#endif
    baseEventMask
       = XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY
          | XCB_EVENT_MASK_PROPERTY_CHANGE | XCB_EVENT_MASK_FOCUS_CHANGE,

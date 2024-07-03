@@ -44,10 +44,8 @@ typedef int (*PtrXcursorLibraryGetDefaultSize)(void *);
 
 #if defined(XCB_USE_XLIB)
 #include <X11/Xlib.h>
-enum {
-   XCursorShape = CursorShape
-};
 
+static constexpr const auto XCursorShape = CursorShape;
 #undef CursorShape
 
 static PtrXcursorLibraryLoadCursor ptrXcursorLibraryLoadCursor = nullptr;

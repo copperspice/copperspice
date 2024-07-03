@@ -2199,7 +2199,7 @@ class QWindowsNativeColorDialog : public QWindowsNativeDialogBase
 {
    CS_OBJECT(QWindowsNativeColorDialog)
  public:
-   enum { CustomColorCount = 16 };
+   static constexpr const int CustomColorCount = 16;
 
    explicit QWindowsNativeColorDialog(const QSharedPointer<QColor> &color);
 

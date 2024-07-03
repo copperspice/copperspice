@@ -98,7 +98,7 @@ QWindowsKeyMapper::~QWindowsKeyMapper()
 
 // We not only need the scancode itself but also the extended bit of key messages. Thus we need
 // the additional bit when masking the scancode.
-enum { scancodeBitmask = 0x1ff };
+static constexpr const int scancodeBitmask = 0x1ff;
 
 // Key recorder ------------------------------------------------------------------------[ start ] --
 struct KeyRecord {

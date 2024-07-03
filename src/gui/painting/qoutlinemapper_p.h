@@ -34,8 +34,7 @@
 
 // This limitations comes from qgrayraster.c. Any higher and
 // rasterization of shapes will produce incorrect results.
-const int QT_RASTER_COORD_LIMIT = 32767;
-
+static constexpr const int QT_RASTER_COORD_LIMIT = 32767;
 
 Q_GUI_EXPORT bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
