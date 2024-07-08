@@ -26,6 +26,8 @@
 
 #include <qrefcount.h>
 
+#include <new>
+
 struct Q_CORE_EXPORT QArrayData {
    QtPrivate::RefCount ref;
    int size;
@@ -36,12 +38,12 @@ struct Q_CORE_EXPORT QArrayData {
 
    void *data() {
       Q_ASSERT(size == 0 || offset < 0 || size_t(offset) >= sizeof(QArrayData));
-      return reinterpret_cast<char *>(this) + offset;
+      return std::launder(reinterpret_cast<char *>(this) + offset);
    }
 
    const void *data() const {
       Q_ASSERT(size == 0 || offset < 0 || size_t(offset) >= sizeof(QArrayData));
-      return reinterpret_cast<const char *>(this) + offset;
+      return std::launder(reinterpret_cast<const char *>(this) + offset);
    }
 
    // This refers to array data mutability, not "header data" represented by
