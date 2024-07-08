@@ -38,7 +38,7 @@ class QScopedValueRollback
    explicit QScopedValueRollback(T &var, T value)
       : varRef(var), oldValue(var)
    {
-      varRef = qMove(value);
+      varRef = std::move(value);
    }
 
    QScopedValueRollback(const QScopedValueRollback &) = delete;
