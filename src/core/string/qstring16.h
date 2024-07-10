@@ -1009,8 +1009,11 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       const_iterator cs_internal_rfind_fast(QChar32 c, const_iterator iter_begin) const;
       const_iterator cs_internal_rfind_fast(const QString16 &str, const_iterator iter_begin) const;
 
-      iterator replace(const_iterator iter, const QString16 &str) {
-         return CsString::CsString_utf16::replace(iter, str);
+      iterator replace(const_iterator iter_begin, const QString16 &str) {
+         auto iter = CsString::CsString_utf16::replace(iter_begin, str);
+         iter = iter.advance_storage(str.size_storage());
+
+         return iter;
       }
 };
 

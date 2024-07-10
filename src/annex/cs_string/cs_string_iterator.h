@@ -83,6 +83,8 @@ class CsStringIterator
       CsStringIterator operator--(int);
 
       typename std::pair<v_iter, v_iter> codePointRange() const;
+
+      CsStringIterator advance_storage(size_type n) const;
       v_iter codePointBegin() const;
       v_iter codePointEnd() const;
 
@@ -236,6 +238,13 @@ template <typename E, typename A>
 auto CsStringIterator<E,A>::codePointRange() const -> typename std::pair<v_iter, v_iter>
 {
    return std::make_pair(m_iter, m_iter + E::walk(1, m_iter));
+}
+
+template <typename E, typename A>
+CsStringIterator<E,A> CsStringIterator<E,A>::advance_storage(size_type n) const
+{
+   CsStringIterator retval = CsStringIterator(m_iter + n);
+   return retval;
 }
 
 template <typename E, typename A>
