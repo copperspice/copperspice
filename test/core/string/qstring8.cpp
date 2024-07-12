@@ -294,6 +294,39 @@ TEST_CASE("QString8 index_ignore_case", "[qstring]")
    }
 }
 
+TEST_CASE("QString8 insert", "[qstring]")
+{
+   QString str1 = "Sunday Tuesday";
+   QString str2 = "Monday ";
+
+   SECTION ("insert_a") {
+      str1.insert(7, str2);
+      REQUIRE(str1 == "Sunday Monday Tuesday");
+   }
+
+   SECTION ("insert_b") {
+      str1.insert(str1.begin() + 7, str2);
+      REQUIRE(str1 == "Sunday Monday Tuesday");
+   }
+
+   SECTION ("insert_c") {
+      str1.insert(str1.begin() + 7, str2.begin(), str2.end());
+      REQUIRE(str1 == "Sunday Monday Tuesday");
+   }
+
+   SECTION ("insert_d") {
+      str1.insert(6, QChar('!'));
+      REQUIRE(str1 == "Sunday! Tuesday");
+   }
+
+   SECTION ("insert_e") {
+      QChar32 data[] = {'M', 'o', 'n', 'd', 'a', 'y', ' '};
+
+      str1.insert(7, data, std::size(data));
+      REQUIRE(str1 == "Sunday Monday Tuesday");
+   }
+}
+
 TEST_CASE("QString8 justify", "[qstring]")
 {
    QString str = "grapefruit";
@@ -442,6 +475,15 @@ TEST_CASE("QString8 replace_b", "[qstring]")
    str2.replace("ß", "Found eszett");
 
    REQUIRE(str2 == "Found eszett");
+}
+
+TEST_CASE("QString8 replace_c", "[qstring]")
+{
+   QString str = "cow";
+
+   str.replace('c', "cr");
+
+   REQUIRE(str == "crow");
 }
 
 TEST_CASE("QString8 replace_regex_a", "[qstring]")
