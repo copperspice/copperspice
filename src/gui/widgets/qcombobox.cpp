@@ -192,10 +192,8 @@ void QComboBoxPrivate::_q_completerActivated(const QModelIndex &index)
    }
 
 #ifdef QT_KEYPAD_NAVIGATION
-   if ( QApplication::keypadNavigationEnabled()
-      && q->isEditable()
-      && q->completer()
-      && q->completer()->completionMode() == QCompleter::UnfilteredPopupCompletion ) {
+   if (QApplication::keypadNavigationEnabled() && q->isEditable() && q->completer()
+         && q->completer()->completionMode() == QCompleter::UnfilteredPopupCompletion ) {
       q->setEditFocus(false);
    }
 #endif
@@ -1578,7 +1576,7 @@ void QComboBox::setEditable(bool editable)
    d->updateFocusPolicy();
    d->viewContainer()->updateTopBottomMargin();
 
-   if (!testAttribute(Qt::WA_Resized)) {
+   if (! testAttribute(Qt::WA_Resized)) {
       adjustSize();
    }
 }

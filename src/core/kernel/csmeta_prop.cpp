@@ -261,7 +261,7 @@ QMetaMethod QMetaProperty::notifySignal() const
 
    if (id == -1) {
       return QMetaMethod(str, str, std::vector<QString>(), QMetaMethod::Private, QMetaMethod::Slot,
-                  QMetaMethod::Attributes(), m_metaObject);
+            QMetaMethod::Attributes(), m_metaObject);
 
    } else  {
       return m_metaObject->method(id);

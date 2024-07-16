@@ -35,8 +35,7 @@ class QOpenGLBufferPrivate
 public:
     QOpenGLBufferPrivate(QOpenGLBuffer::Type t)
         : ref(1), type(t), guard(nullptr), usagePattern(QOpenGLBuffer::StaticDraw),
-          actualUsagePattern(QOpenGLBuffer::StaticDraw),
-          funcs(nullptr)
+          actualUsagePattern(QOpenGLBuffer::StaticDraw), funcs(nullptr)
     { }
 
     QAtomicInt ref;
@@ -171,6 +170,7 @@ bool QOpenGLBuffer::read(int offset, void *data, int count)
     (void) offset;
     (void) data;
     (void) count;
+
     return false;
 #endif
 }
@@ -222,7 +222,7 @@ bool QOpenGLBuffer::bind()
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
            qDebug("QOpenGLBuffer::bind() Buffer is not valid in the current context");
 #endif
-            return false;
+           return false;
         }
 
         d->funcs->glBindBuffer(d->type, bufferId);
@@ -272,8 +272,8 @@ int QOpenGLBuffer::size() const
 
     GLint value = -1;
     d->funcs->glGetBufferParameteriv(d->type, GL_BUFFER_SIZE, &value);
-    return value;
 
+    return value;
 }
 
 void *QOpenGLBuffer::map(QOpenGLBuffer::Access access)

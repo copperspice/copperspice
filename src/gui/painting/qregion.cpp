@@ -114,21 +114,24 @@ void QRegion::exec(const QByteArray &buffer, int ver, QDataStream::ByteOrder byt
             case QRGN_OR:
                rgn = r1.united(r2);
                break;
+
             case QRGN_AND:
                rgn = r1.intersected(r2);
                break;
+
             case QRGN_SUB:
                rgn = r1.subtracted(r2);
                break;
+
             case QRGN_XOR:
                rgn = r1.xored(r2);
                break;
          }
 
       } else if (id == QRGN_RECTS) {
-         // (This is the only form used in Qt 2.0)
          quint32 n;
          s >> n;
+
          QRect r;
 
          for (int i = 0; i < (int)n; i++) {
@@ -210,10 +213,12 @@ QRegion QRegion::operator|(const QRegion &r) const
 {
    return united(r);
 }
+
 QRegion QRegion::operator+(const QRegion &r) const
 {
    return united(r);
 }
+
 QRegion QRegion::operator+(const QRect &r) const
 {
    return united(r);
@@ -256,7 +261,6 @@ QRegion &QRegion::operator&=(const QRegion &r)
    return *this = *this & r;
 }
 
-
 #if defined (Q_OS_UNIX) || defined (Q_OS_WIN)
 QRegion &QRegion::operator&=(const QRect &r)
 {
@@ -268,7 +272,6 @@ QRegion &QRegion::operator&=(const QRect &r)
    return *this &= (QRegion(r));
 }
 #endif
-
 
 QRegion &QRegion::operator-=(const QRegion &r)
 {
@@ -289,6 +292,7 @@ QRegion QRegion::translated(int dx, int dy) const
 {
    QRegion ret(*this);
    ret.translate(dx, dy);
+
    return ret;
 }
 
@@ -326,9 +330,7 @@ bool QRegion::intersects(const QRegion &region) const
    return false;
 }
 
-
 #if ! defined (Q_OS_UNIX) && ! defined (Q_OS_WIN)
-
 QRegion QRegion::intersect(const QRect &r) const
 {
    return intersect(QRegion(r));
@@ -559,7 +561,6 @@ struct QRegionPrivate {
    }
 
    void vectorize() {
-
       if (numRects == 1) {
 
          if (rects.isEmpty()) {
@@ -736,7 +737,6 @@ void QRegionPrivate::intersect(const QRect &rect)
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    selfTest();
 #endif
-
 }
 
 void QRegionPrivate::append(const QRect *r)
@@ -854,7 +854,6 @@ void QRegionPrivate::append(const QRegionPrivate *r)
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    selfTest();
 #endif
-
 }
 
 void QRegionPrivate::prepend(const QRegionPrivate *r)
@@ -3029,19 +3028,7 @@ static void PtsToRegion(int numFullPtBlocks, int iCurPtBlock, POINTBLOCK *FirstP
    }
 }
 
-/*
- *     polytoregion
- *
- *     Scan converts a polygon by returning a run-length
- *     encoding of the resultant bitmap -- the run-length
- *     encoding is in the form of an array of rectangles.
- *
- *     Can return nullptr in case of errors.
- */
 static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
-//Point     *Pts;                   /* the pts                 */
-//int       Count;                  /* number of pts           */
-//int       rule;                   /* winding rule            */
 {
    QRegionPrivate *region;
    EdgeTableEntry *pAET;            /* Active Edge Table       */
@@ -3124,34 +3111,27 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
    try {
       if (rule == EvenOddRule) {
-         /*
-          *  for each scanline
-          */
-         for (y = ET.ymin; y < ET.ymax; ++y) {
+         //  for each scanline
 
-            /*
-             *  Add a new edge to the active edge table when we
-             *  get to the next edge.
-             */
+         for (y = ET.ymin; y < ET.ymax; ++y) {
+            //  Add a new edge to the active edge table when we get to the next edge.
+
             if (pSLL && y == pSLL->scanline) {
                loadAET(AET, pSLL->edgelist);
                pSLL = pSLL->next;
             }
+
             pPrevAET = AET;
             pAET = AET->next;
 
-            /*
-             *  for each active edge
-             */
+            //  for each active edge
             while (pAET) {
                pts->setX(pAET->bres.minor_axis);
                pts->setY(y);
                ++pts;
                ++iPts;
 
-               /*
-                *  send out the buffer
-                */
+               //  send out the buffer
                if (iPts == NUMPTSTOBUFFER) {
                   tmpPtBlock = (POINTBLOCK *)malloc(sizeof(POINTBLOCK));
                   Q_CHECK_PTR(tmpPtBlock);
@@ -3269,6 +3249,7 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
             xr.setCoords(prev1, y, x-1, y); \
             UnionRectWithRegion(&xr, region, *region); \
         }
+
    const uchar zero = 0;
    bool little = image.format() == QImage::Format_MonoLSB;
 
@@ -3339,6 +3320,7 @@ QRegionPrivate *qt_bitmapToRegion(const QBitmap &bitmap)
          AddSpan
       }
    }
+
 #undef AddSpan
 
    return region;

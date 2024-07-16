@@ -499,7 +499,7 @@ void QProcessPrivate::startProcess()
       envlist = qt_create_environment(environment.d.constData()->hash);
    }
 
-   if (!nativeArguments.isEmpty()) {
+   if (! nativeArguments.isEmpty()) {
       if (! args.isEmpty()) {
          args += ' ';
       }

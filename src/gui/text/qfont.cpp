@@ -1733,8 +1733,7 @@ void QFontCache::decreaseCache()
 
    {
       // make sure the cost of each engine data is at least 1kb
-      const uint engine_data_cost =
-         sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
+      const uint engine_data_cost = sizeof(QFontEngineData) > 1024 ? sizeof(QFontEngineData) : 1024;
 
       EngineDataCache::const_iterator it  = engineDataCache.constBegin();
       EngineDataCache::const_iterator end = engineDataCache.constEnd();

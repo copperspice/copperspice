@@ -381,7 +381,7 @@ static inline qreal qRadialDeterminant(qreal a, qreal b, qreal c)
 
 template <class RadialFetchFunc, typename BlendType>
 static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, const Operator *op,
-   const QSpanData *data, int y, int x, int length)
+      const QSpanData *data, int y, int x, int length)
 {
    // avoid division by zero
    if (qFuzzyIsNull(op->radial.a)) {
@@ -391,11 +391,9 @@ static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, con
 
    const BlendType *retvalPtr = buffer;
 
-   qreal rx = data->m21 * (y + qreal(0.5))
-      + data->dx + data->m11 * (x + qreal(0.5));
-   qreal ry = data->m22 * (y + qreal(0.5))
-      + data->dy + data->m12 * (x + qreal(0.5));
-   bool affine = !data->m13 && !data->m23;
+   qreal rx = data->m21 * (y + qreal(0.5)) + data->dx + data->m11 * (x + qreal(0.5));
+   qreal ry = data->m22 * (y + qreal(0.5)) + data->dy + data->m12 * (x + qreal(0.5));
+   bool affine = ! data->m13 && ! data->m23;
 
    BlendType *end = buffer + length;
 
@@ -433,17 +431,17 @@ static const BlendType *qt_fetch_radial_gradient_template(BlendType *buffer, con
       RadialFetchFunc::fetch(buffer, end, op, data, det, delta_det, delta_delta_det, b, delta_b);
 
    } else {
-      qreal rw = data->m23 * (y + qreal(0.5))
-         + data->m33 + data->m13 * (x + qreal(0.5));
+      qreal rw = data->m23 * (y + qreal(0.5)) + data->m33 + data->m13 * (x + qreal(0.5));
 
       while (buffer < end) {
          if (rw == 0) {
             *buffer = 0;
+
          } else {
             qreal invRw = 1 / rw;
-            qreal gx = rx * invRw - data->gradient.radial.focal.x;
-            qreal gy = ry * invRw - data->gradient.radial.focal.y;
-            qreal b  = 2 * (op->radial.dr * data->gradient.radial.focal.radius + gx * op->radial.dx + gy * op->radial.dy);
+            qreal gx  = rx * invRw - data->gradient.radial.focal.x;
+            qreal gy  = ry * invRw - data->gradient.radial.focal.y;
+            qreal b   = 2 * (op->radial.dr * data->gradient.radial.focal.radius + gx * op->radial.dx + gy * op->radial.dy);
             qreal det = qRadialDeterminant(op->radial.a, b, op->radial.sqrfr - (gx * gx + gy * gy));
 
             BlendType result = RadialFetchFunc::null();

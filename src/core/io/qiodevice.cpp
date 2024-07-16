@@ -115,11 +115,11 @@ void QIODevice::setOpenMode(OpenMode openMode)
    qDebug("QIODevice::setOpenMode(0x%x) Device = %p", int(openMode), this);
 #endif
 
-   d->openMode = openMode;
+   d->openMode   = openMode;
    d->accessMode = QIODevicePrivate::Unset;
-   d->firstRead = true;
+   d->firstRead  = true;
 
-   if (!isReadable()) {
+   if (! isReadable()) {
       d->buffer.clear();
    }
 }
@@ -165,10 +165,11 @@ bool QIODevice::open(OpenMode mode)
    Q_D(QIODevice);
 
    d->openMode = mode;
-   d->pos = (mode & Append) ? size() : qint64(0);
+   d->pos      = (mode & Append) ? size() : qint64(0);
+
    d->buffer.clear();
    d->accessMode = QIODevicePrivate::Unset;
-   d->firstRead = true;
+   d->firstRead  = true;
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
    qDebug("QIODevice::open(0x%x) Device = %p", quint32(mode), this);
@@ -375,7 +376,7 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
             char *writePointer = d->buffer.reserve(bytesToBuffer);
 
             // Make sure the device is positioned correctly.
-            if (d->pos != d->devicePos && !d->isSequential() && !seek(d->pos)) {
+            if (d->pos != d->devicePos && ! d->isSequential() && ! seek(d->pos)) {
                return readSoFar ? readSoFar : qint64(-1);
             }
 
@@ -385,7 +386,7 @@ qint64 QIODevice::read(char *data, qint64 maxSize)
             if (readFromDevice > 0) {
                *d->pDevicePos += readFromDevice;
 
-               if (!d->buffer.isEmpty()) {
+               if (! d->buffer.isEmpty()) {
                   lastReadChunkSize = d->buffer.read(data, maxSize);
                   readSoFar += lastReadChunkSize;
                   data      += lastReadChunkSize;
@@ -843,7 +844,7 @@ qint64 QIODevice::write(const char *data, qint64 maxSize)
          d->devicePos += written;
       }
 
-      if (!d->buffer.isEmpty() && !sequential) {
+      if (! d->buffer.isEmpty() && ! sequential) {
          d->buffer.skip(written);
       }
    }

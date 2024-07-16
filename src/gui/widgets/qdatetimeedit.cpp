@@ -473,6 +473,7 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
             d->displayFormat += d->separators.at(i + 1);
             d->displayFormat += d->sectionNode(i).format();
          }
+
          d->displayFormat += d->separators.at(0);
          d->separators = reverse(d->separators);
          d->sectionNodes = reverse(d->sectionNodes);
@@ -756,7 +757,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
             return;
          }
 #endif
-         //key tab and backtab will be managed thrgout QWidget::event
+         // key tab and backtab will be managed by QWidget::event
          if (event->key() != Qt::Key_Backtab && event->key() != Qt::Key_Tab) {
             focusNextPrevChild(forward);
          }
@@ -874,6 +875,7 @@ bool QDateTimeEdit::focusNextPrevChild(bool next)
          d->edit->deselect();
          d->edit->setCursorPosition(d->sectionPos(newSection));
          d->setSelected(newSection, true);
+
          return false;
    }
 }
@@ -1352,6 +1354,7 @@ void QDateTimeEditPrivate::clearSection(int index)
 
    const int size = sectionSize(index);
    t.replace(pos, size, QString().fill(space, size));
+
    edit->setText(t);
    edit->setCursorPosition(cursorPos);
    edit->blockSignals(blocked);
@@ -1664,6 +1667,7 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
          if (allowChange) {
             edit->setCursorPosition(c);
          }
+
          s = closest;
       }
    }

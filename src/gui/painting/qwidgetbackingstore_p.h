@@ -96,7 +96,7 @@ class QWidgetBackingStore
    }
 
    bool isDirty() const {
-      return !(dirtyWidgets.isEmpty() && dirty.isEmpty() && !fullUpdatePending && dirtyRenderToTextureWidgets.isEmpty());
+      return ! (dirtyWidgets.isEmpty() && dirty.isEmpty() && !fullUpdatePending && dirtyRenderToTextureWidgets.isEmpty());
    }
 
    // ### merge into a template function
@@ -108,9 +108,10 @@ class QWidgetBackingStore
 
  private:
    QWidget *tlw;
-   QRegion dirtyOnScreen; // needsFlush
-   QRegion dirty; // needsRepaint
+   QRegion dirtyOnScreen;       // needsFlush
+   QRegion dirty;               // needsRepaint
    QRegion dirtyFromPreviousSync;
+
    QVector<QWidget *> dirtyWidgets;
    QVector<QWidget *> dirtyRenderToTextureWidgets;
    QVector<QWidget *> *dirtyOnScreenWidgets;
@@ -130,8 +131,7 @@ class QWidgetBackingStore
    void sendUpdateRequest(QWidget *widget, UpdateTime updateTime);
 
    static void qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
-      QWidget *tlw, const QPoint &tlwOffset,
-      QPlatformTextureList *widgetTextures,
+      QWidget *tlw, const QPoint &tlwOffset, QPlatformTextureList *widgetTextures,
       QWidgetBackingStore *widgetBackingStore);
 
    void doSync();

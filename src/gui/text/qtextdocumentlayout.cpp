@@ -2023,11 +2023,11 @@ recalc_minmax_widths:
 
          const QTextFormat fmt = cell.format();
 
-         const QFixed topPadding = td->topPadding(fmt);
+         const QFixed topPadding    = td->topPadding(fmt);
          const QFixed bottomPadding = td->bottomPadding(fmt);
-         const QFixed leftPadding = td->leftPadding(fmt);
-         const QFixed rightPadding = td->rightPadding(fmt);
-         const QFixed widthPadding = leftPadding + rightPadding;
+         const QFixed leftPadding   = td->leftPadding(fmt);
+         const QFixed rightPadding  = td->rightPadding(fmt);
+         const QFixed widthPadding  = leftPadding + rightPadding;
 
          ++rowCellCount;
 
@@ -2129,12 +2129,13 @@ recalc_minmax_widths:
    }
 
    td->minimumWidth += rightMargin - td->border;
+   td->maximumWidth =  td->columnPositions.at(0);
 
-   td->maximumWidth = td->columnPositions.at(0);
-   for (int i = 0; i < columns; ++i)
+   for (int i = 0; i < columns; ++i) {
       if (td->maxWidths.at(i) != QFIXED_MAX) {
          td->maximumWidth += td->maxWidths.at(i) + 2 * td->border + cellSpacing;
       }
+   }
 
    td->maximumWidth += rightMargin - td->border;
 
@@ -2758,8 +2759,7 @@ static inline void getLineHeightParams(const QTextBlockFormat &blockFormat, cons
    }
 }
 
-void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosition,
-   const QTextBlockFormat &blockFormat,
+void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosition, const QTextBlockFormat &blockFormat,
    QTextLayoutStruct *layoutStruct, int layoutFrom, int layoutTo, const QTextBlockFormat *previousBlockFormat)
 {
    Q_Q(QTextDocumentLayout);
@@ -2827,28 +2827,33 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
       const bool haveWordOrAnyWrapMode = (option.wrapMode() == QTextOption::WrapAtWordBoundaryOrAnywhere);
 
       const QFixed cy = layoutStruct->y;
-      const QFixed l = layoutStruct->x_left  + totalLeftMargin;
-      const QFixed r = layoutStruct->x_right - totalRightMargin;
+      const QFixed l  = layoutStruct->x_left  + totalLeftMargin;
+      const QFixed r  = layoutStruct->x_right - totalRightMargin;
 
       tl->beginLayout();
       bool firstLine = true;
 
       while (true) {
          QTextLine line = tl->createLine();
-         if (!line.isValid()) {
+
+         if (! line.isValid()) {
             break;
          }
+
          line.setLeadingIncluded(true);
 
          QFixed left;
          QFixed right;
 
          floatMargins(layoutStruct->y, layoutStruct, &left, &right);
-         left = qMax(left, l);
+         left  = qMax(left, l);
          right = qMin(right, r);
+
          QFixed text_indent;
+
          if (firstLine) {
             text_indent = QFixed::fromReal(blockFormat.textIndent());
+
             if (dir == Qt::LeftToRight) {
                left += text_indent;
             } else {
@@ -2864,7 +2869,7 @@ void QTextDocumentLayoutPrivate::layoutBlock(const QTextBlock &bl, int blockPosi
          }
 
          floatMargins(layoutStruct->y, layoutStruct, &left, &right);
-         left = qMax(left, l);
+         left  = qMax(left, l);
          right = qMin(right, r);
 
          if (dir == Qt::LeftToRight) {

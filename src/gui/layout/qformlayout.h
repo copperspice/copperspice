@@ -79,8 +79,8 @@ class Q_GUI_EXPORT QFormLayout : public QLayout
    )
 
    enum ItemRole {
-      LabelRole = 0,
-      FieldRole = 1,
+      LabelRole    = 0,
+      FieldRole    = 1,
       SpanningRole = 2
    };
 

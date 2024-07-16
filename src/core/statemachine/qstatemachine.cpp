@@ -1231,7 +1231,7 @@ void QStateMachinePrivate::registerRestorable(QAbstractState *state, QObject *ob
    RestorableId id(object, propertyName);
    QHash<RestorableId, QVariant> &restorables = registeredRestorablesForState[state];
 
-   if (!restorables.contains(id)) {
+   if (! restorables.contains(id)) {
       restorables.insert(id, value);
    }
 

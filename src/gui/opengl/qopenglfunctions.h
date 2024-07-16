@@ -31,8 +31,8 @@
 
 #ifdef __GLEW_H__
 #if defined(Q_CC_GNU)
-#warning qopenglfunctions.h is not compatible with GLEW, GLEW defines will be undefined
-#warning To use GLEW with Qt, do not include <qopengl.h> or <QOpenGLFunctions> after glew.h
+#warning Header file qopenglfunctions.h is not compatible with GLEW, GLEW defines will be undefined
+#warning To use GLEW with CS, do not include <qopengl.h> or <QOpenGLFunctions> after glew.h
 #endif
 #endif
 
@@ -455,12 +455,14 @@ struct QOpenGLFunctionsPrivate
     void (QOPENGLF_APIENTRYP StencilFunc)(GLenum func, GLint ref, GLuint mask);
     void (QOPENGLF_APIENTRYP StencilMask)(GLuint mask);
     void (QOPENGLF_APIENTRYP StencilOp)(GLenum fail, GLenum zfail, GLenum zpass);
-    void (QOPENGLF_APIENTRYP TexImage2D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid* pixels);
+    void (QOPENGLF_APIENTRYP TexImage2D)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border,
+          GLenum format, GLenum type, const GLvoid* pixels);
     void (QOPENGLF_APIENTRYP TexParameterf)(GLenum target, GLenum pname, GLfloat param);
     void (QOPENGLF_APIENTRYP TexParameterfv)(GLenum target, GLenum pname, const GLfloat* params);
     void (QOPENGLF_APIENTRYP TexParameteri)(GLenum target, GLenum pname, GLint param);
     void (QOPENGLF_APIENTRYP TexParameteriv)(GLenum target, GLenum pname, const GLint* params);
-    void (QOPENGLF_APIENTRYP TexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* pixels);
+    void (QOPENGLF_APIENTRYP TexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+          GLenum format, GLenum type, const GLvoid* pixels);
     void (QOPENGLF_APIENTRYP Viewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 
     void (QOPENGLF_APIENTRYP ActiveTexture)(GLenum texture);
@@ -477,8 +479,10 @@ struct QOpenGLFunctionsPrivate
     void (QOPENGLF_APIENTRYP BufferSubData)(GLenum target, qopengl_GLintptr offset, qopengl_GLsizeiptr size, const void* data);
     GLenum (QOPENGLF_APIENTRYP CheckFramebufferStatus)(GLenum target);
     void (QOPENGLF_APIENTRYP CompileShader)(GLuint shader);
-    void (QOPENGLF_APIENTRYP CompressedTexImage2D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data);
-    void (QOPENGLF_APIENTRYP CompressedTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void* data);
+    void (QOPENGLF_APIENTRYP CompressedTexImage2D)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height,
+          GLint border, GLsizei imageSize, const void* data);
+    void (QOPENGLF_APIENTRYP CompressedTexSubImage2D)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+          GLenum format, GLsizei imageSize, const void* data);
     GLuint (QOPENGLF_APIENTRYP CreateProgram)();
     GLuint (QOPENGLF_APIENTRYP CreateShader)(GLenum type);
     void (QOPENGLF_APIENTRYP DeleteBuffers)(GLsizei n, const GLuint* buffers);
@@ -1025,7 +1029,8 @@ inline void QOpenGLFunctions::glStencilOp(GLenum fail, GLenum zfail, GLenum zpas
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
-inline void QOpenGLFunctions::glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid* pixels)
+inline void QOpenGLFunctions::glTexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border,
+      GLenum format, GLenum type, const GLvoid* pixels)
 {
 #ifdef QT_OPENGL_ES_2
     ::glTexImage2D(target, level, internalformat, width,height, border, format, type, pixels);
@@ -1085,7 +1090,8 @@ inline void QOpenGLFunctions::glTexParameteriv(GLenum target, GLenum pname, cons
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
-inline void QOpenGLFunctions::glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* pixels)
+inline void QOpenGLFunctions::glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+      GLenum format, GLenum type, const GLvoid* pixels)
 {
 #ifdef QT_OPENGL_ES_2
     ::glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
@@ -1292,7 +1298,8 @@ inline void QOpenGLFunctions::glCompileShader(GLuint shader)
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
-inline void QOpenGLFunctions::glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data)
+inline void QOpenGLFunctions::glCompressedTexImage2D(GLenum target, GLint level, GLenum internalformat, GLsizei width,
+      GLsizei height, GLint border, GLsizei imageSize, const void* data)
 {
 #ifdef QT_OPENGL_ES_2
     ::glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
@@ -1303,7 +1310,8 @@ inline void QOpenGLFunctions::glCompressedTexImage2D(GLenum target, GLint level,
     Q_OPENGL_FUNCTIONS_DEBUG
 }
 
-inline void QOpenGLFunctions::glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void* data)
+inline void QOpenGLFunctions::glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width,
+      GLsizei height, GLenum format, GLsizei imageSize, const void* data)
 {
 #ifdef QT_OPENGL_ES_2
     ::glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data);

@@ -225,7 +225,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    struct ExtraStruct {
-      ExtraStruct() {}
+      ExtraStruct()
+      { }
 
       ExtraStruct(Extra type, QVariant value)
          : m_type(type), m_value(value) {

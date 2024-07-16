@@ -37,13 +37,11 @@ QGesture::QGesture(QObject *parent)
    d_func()->gestureType = Qt::CustomGesture;
 }
 
-
 QGesture::QGesture(QGesturePrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
    d_ptr->q_ptr = this;
 }
-
 
 QGesture::~QGesture()
 {
@@ -92,8 +90,6 @@ QGesture::GestureCancelPolicy QGesture::gestureCancelPolicy() const
    Q_D(const QGesture);
    return static_cast<GestureCancelPolicy>(d->gestureCancelPolicy);
 }
-
-
 
 QPanGesture::QPanGesture(QObject *parent)
    : QGesture(*new QPanGesturePrivate, parent)
@@ -470,14 +466,17 @@ QPointF QGestureEvent::mapToGraphicsScene(const QPointF &gesturePoint) const
 {
     QWidget *w = widget();
 
-    if (w) // we get the viewport as widget, not the graphics view
-        w = w->parentWidget();
+    if (w != nullptr) {
+       // we get the viewport as widget, not the graphics view
+       w = w->parentWidget();
+    }
 
     QGraphicsView *view = qobject_cast<QGraphicsView*>(w);
 
-    if (view) {
+    if (view != nullptr) {
         return view->mapToScene(view->mapFromGlobal(gesturePoint.toPoint()));
     }
+
     return QPointF();
 }
 #endif

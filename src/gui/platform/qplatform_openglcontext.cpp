@@ -80,11 +80,14 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
          if (versionParts.size() >= 2) {
             major = versionParts.at(0).toInt(&majorOk);
             minor = versionParts.at(1).toInt(&minorOk);
+
             // Nexus 6 has "OpenGL ES 3.0V@95.0 (GIT@I86da836d38)"
-            if (!minorOk)
+            if (! minorOk) {
                if (int idx = versionParts.at(1).indexOf('V')) {
                   minor = versionParts.at(1).left(idx).toInt(&minorOk);
                }
+            }
+
          } else {
             qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL ES version");
          }
@@ -95,17 +98,19 @@ bool QPlatformOpenGLContext::parseOpenGLVersion(const QByteArray &versionString,
       }
 
    } else {
-      // Not OpenGL ES, but regular OpenGL, the version numbers are first in the string
+      // Not OpenGL ES, but regular OpenGL the version numbers are first in the string
       QList<QByteArray> versionParts = parts.at(0).split('.');
+
       if (versionParts.size() >= 2) {
          major = versionParts.at(0).toInt(&majorOk);
          minor = versionParts.at(1).toInt(&minorOk);
+
       } else {
          qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unrecognized OpenGL version");
       }
    }
 
-   if (!majorOk || !minorOk) {
+   if (! majorOk || ! minorOk) {
       qWarning("QPlatformOpenGLContext::parseOpenGLVersion() Unknown OpenGL version");
    }
 

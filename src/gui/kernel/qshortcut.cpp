@@ -287,7 +287,7 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
          // need to check whether the QPA menu is actually disabled.
 
          QPlatformMenu *pm = menu->platformMenu();
-         if (!pm || !pm->isEnabled()) {
+         if (pm == nullptr || ! pm->isEnabled()) {
             continue;
          }
 #endif

@@ -306,7 +306,8 @@ struct ThemeMapKey {
    ThemeMapKey() : partId(-1), stateId(-1) {}
    ThemeMapKey(const XPThemeData &data)
       : theme(data.theme), partId(data.partId), stateId(data.stateId),
-        noBorder(data.noBorder), noContent(data.noContent) {}
+        noBorder(data.noBorder), noContent(data.noContent)
+   { }
 
 };
 

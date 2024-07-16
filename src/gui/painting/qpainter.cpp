@@ -143,12 +143,12 @@ static bool qt_painter_thread_test(int devType, int engineType, const char *what
 
       default:
          if (QThread::currentThread() != qApp->thread()
-            // pixmaps cannot be targets unless threaded pixmaps are supported
-            && (devType != QInternal::Pixmap || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedPixmaps))
-            // framebuffer objects and such cannot be targets unless threaded GL is supported
-            && (devType != QInternal::OpenGL || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedOpenGL))
-            // widgets cannot be targets except for QGLWidget
-            && (devType != QInternal::Widget || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedOpenGL)
+               // pixmaps cannot be targets unless threaded pixmaps are supported
+               && (devType != QInternal::Pixmap || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedPixmaps))
+               // framebuffer objects and such cannot be targets unless threaded GL is supported
+               && (devType != QInternal::OpenGL || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedOpenGL))
+               // widgets cannot be targets except for QGLWidget
+               && (devType != QInternal::Widget || !platformIntegration->hasCapability(QPlatformIntegration::ThreadedOpenGL)
                || (engineType != QPaintEngine::OpenGL && engineType != QPaintEngine::OpenGL2))) {
             qDebug("qt_painter_thread() Unsafe to use %s outside the GUI thread", what);
 
@@ -1490,7 +1490,7 @@ void QPainter::setClipping(bool enable)
    qDebug("QPainter::setClipping() enable = %s, was = %s", enable ? "on" : "off", hasClipping() ? "on" : "off");
 #endif
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setClipping() Painter engine not active");
       return;
    }
@@ -1499,8 +1499,7 @@ void QPainter::setClipping(bool enable)
       return;
    }
 
-   if (enable
-      && (d->state->clipInfo.isEmpty() || d->state->clipInfo.last().operation == Qt::NoClip)) {
+   if (enable && (d->state->clipInfo.isEmpty() || d->state->clipInfo.last().operation == Qt::NoClip)) {
       return;
    }
    d->state->clipEnabled = enable;
@@ -1826,7 +1825,7 @@ void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
          r.rects().size(), rect.x(), rect.y(), rect.width(), rect.height());
 #endif
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setClipRegion() Painter engine not active");
       return;
    }
@@ -1993,7 +1992,7 @@ void QPainter::rotate(qreal a)
 {
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::rotate() Painter engine not active");
       return;
    }
@@ -2187,7 +2186,7 @@ void QPainter::drawRects(const QRectF *rectPtr, int rectCount)
 
    d->updateState(d->state);
 
-   if (!d->state->emulationSpecifier) {
+   if (! d->state->emulationSpecifier) {
       d->engine->drawRects(rectPtr, rectCount);
       return;
    }
@@ -2391,7 +2390,7 @@ void QPainter::setBackgroundMode(Qt::BGMode mode)
 {
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setBackgroundMode() Painter engine not active");
       return;
    }
@@ -2400,6 +2399,7 @@ void QPainter::setBackgroundMode(Qt::BGMode mode)
    }
 
    d->state->bgMode = mode;
+
    if (d->extended) {
       d->checkEmulation();
    } else {
@@ -2560,10 +2560,11 @@ const QBrush &QPainter::brush() const
 {
    Q_D(const QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::brush() Painter engine not active");
       return d->fakeState()->brush;
    }
+
    return d->state->brush;
 }
 
@@ -2575,7 +2576,7 @@ void QPainter::setBackground(const QBrush &bg)
 
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setBackground() Painter engine not active");
       return;
    }
@@ -2595,7 +2596,7 @@ void QPainter::setFont(const QFont &font)
    qDebug("QPainter::setFont() family = %s, pointSize = %d", csPrintable(font.family()), font.pointSize());
 #endif
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setFont() Painter engine not active");
       return;
    }
@@ -2611,10 +2612,11 @@ const QFont &QPainter::font() const
 {
    Q_D(const QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::font() Painter engine not active");
       return d->fakeState()->font;
    }
+
    return d->state->font;
 }
 
@@ -2660,7 +2662,7 @@ void QPainter::drawEllipse(const QRectF &r)
 
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       return;
    }
 
@@ -2732,7 +2734,7 @@ void QPainter::drawArc(const QRectF &r, int a, int alen)
 
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       return;
    }
 
@@ -4596,10 +4598,12 @@ QPainter::RenderHints QPainter::renderHints() const
 bool QPainter::viewTransformEnabled() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
       qWarning("QPainter::viewTransformEnabled() Painter engine not active");
       return false;
    }
+
    return d->state->VxF;
 }
 
@@ -4611,7 +4615,7 @@ void QPainter::setWindow(const QRect &r)
 
    Q_D(QPainter);
 
-   if (!d->engine) {
+   if (! d->engine) {
       qWarning("QPainter::setWindow() Painter engine not active");
       return;
    }
@@ -4628,10 +4632,12 @@ void QPainter::setWindow(const QRect &r)
 QRect QPainter::window() const
 {
    Q_D(const QPainter);
+
    if (!d->engine) {
       qWarning("QPainter::window() Painter engine not active");
       return QRect();
    }
+
    return QRect(d->state->wx, d->state->wy, d->state->ww, d->state->wh);
 }
 
@@ -5304,8 +5310,7 @@ void QPainter::drawPixmapFragments(const PixmapFragment *fragments, int fragment
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    for (int i = 0; i < fragmentCount; ++i) {
-      QRectF sourceRect(fragments[i].sourceLeft, fragments[i].sourceTop,
-         fragments[i].width, fragments[i].height);
+      QRectF sourceRect(fragments[i].sourceLeft, fragments[i].sourceTop, fragments[i].width, fragments[i].height);
 
       if (! (QRectF(pixmap.rect()).contains(sourceRect))) {
          qDebug("QPainter::drawPixmapFragments() Source rectangle is not contained by the pixmap rectangle");

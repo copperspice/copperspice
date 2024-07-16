@@ -59,7 +59,7 @@ void QOpenGL2PEXVertexArray::addCentroid(const QVectorPath &path, int subPathInd
     QPointF sum = points[subPathIndex];
     int count = 1;
 
-    for (int i = subPathIndex + 1; i < path.elementCount() && (!elements || elements[i] != QPainterPath::MoveToElement); ++i) {
+    for (int i = subPathIndex + 1; i < path.elementCount() && (! elements || elements[i] != QPainterPath::MoveToElement); ++i) {
         sum += points[i];
         ++count;
     }
@@ -122,9 +122,8 @@ void QOpenGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInver
 
             case QPainterPath::CurveToElement: {
                 QBezier b = QBezier::fromPoints(*(((const QPointF *) points) + i - 1),
-                                                points[i],
-                                                points[i+1],
-                                                points[i+2]);
+                      points[i], points[i+1], points[i+2]);
+
                 QRectF bounds = b.bounds();
                 // threshold based on same algorithm as in qtriangulatingstroker.cpp
                 int threshold = qMin<float>(64, qMax(bounds.width(), bounds.height()) * 3.14f / (curveInverseScale * 6));

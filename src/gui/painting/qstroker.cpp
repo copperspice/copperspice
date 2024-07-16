@@ -636,6 +636,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
    qfixed2d start = first_element;
    qfixed2d prev = start;
+
    bool first    = true;
    qfixed offset = stroker->strokeWidth() / 2;
 
@@ -756,7 +757,7 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
     given a function f(x) and initial guess x_0
     x_1 = f(x_0) / f'(x_0)
     x_2 = f(x_1) / f'(x_1)
-    etc...
+    etc.
 */
 
 qreal qt_t_for_arc_angle(qreal angle)

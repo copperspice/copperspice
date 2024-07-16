@@ -57,8 +57,8 @@ static QPlatformTextureList *qt_dummy_platformTextureList()
 #endif
 
 void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBackingStore *backingStore,
-   QWidget *tlw, const QPoint &tlwOffset, QPlatformTextureList *widgetTextures,
-   QWidgetBackingStore *widgetBackingStore)
+      QWidget *tlw, const QPoint &tlwOffset, QPlatformTextureList *widgetTextures,
+      QWidgetBackingStore *widgetBackingStore)
 {
    (void) widgetBackingStore;
 
@@ -89,10 +89,12 @@ void QWidgetBackingStore::qt_flush(QWidget *widget, const QRegion &region, QBack
 
    if (widgetTextures == nullptr) {
       widget->d_func()->renderToTextureComposeActive = false;
+
       // Detect the case of falling back to the normal flush path when no
       // render-to-texture widgets are visible anymore. We will force one
       // last flush to go through the OpenGL-based composition to prevent
       // artifacts. The next flush after this one will use the normal path.
+
       if (compositionWasActive) {
          widgetTextures = qt_dummy_platformTextureList();
       }
@@ -849,9 +851,11 @@ static void findTextureWidgetsRecursively(QWidget *tlw, QWidget *widget, QPlatfo
 
    if (wd->renderToTexture) {
       QPlatformTextureList::Flags flags = Qt::EmptyFlag;
+
       if (widget->testAttribute(Qt::WA_AlwaysStackOnTop)) {
          flags |= QPlatformTextureList::StacksOnTop;
       }
+
       const QRect rect(widget->mapTo(tlw, QPoint()), widget->size());
       widgetTextures->appendTexture(widget, wd->textureId(), rect, wd->clipRect(), flags);
    }
@@ -902,7 +906,8 @@ static QPlatformTextureList *widgetTexturesFor(QWidget *tlw, QWidget *widget)
 
       for (int i = 0; i < tl->count(); ++i) {
          QWidget *w = static_cast<QWidget *>(tl->source(i));
-         if ((w->internalWinId() && w == widget) || (!w->internalWinId() && w->nativeParentWidget() == widget)) {
+
+         if ((w->internalWinId() && w == widget) || (! w->internalWinId() && w->nativeParentWidget() == widget)) {
             return tl;
          }
       }
@@ -914,21 +919,21 @@ static QPlatformTextureList *widgetTexturesFor(QWidget *tlw, QWidget *widget)
       // without OpenGL-based compositing. This is very desirable normally. However,
       // some platforms cannot handle switching between the non-GL and GL paths for
       // their windows so it has to be opt-in.
+
       static bool switchableWidgetComposition = QGuiApplicationPrivate::instance()->platformIntegration()
          ->hasCapability(QPlatformIntegration::SwitchableWidgetComposition);
 
 #if defined(Q_OS_WIN)
+      // Windows compositor handles fullscreen OpenGL window specially. It has
+      // issues with popups and changing between OpenGL-based and normal flushing.
+      // Stay with GL for fullscreen windows.
+      // Similary, translucent windows should not switch to layered native windows.
 
       if (! switchableWidgetComposition ||
             tlw->windowState().testFlag(Qt::WindowFullScreen) || tlw->testAttribute(Qt::WA_TranslucentBackground)) {
 
 #else
       if (! switchableWidgetComposition) {
-         // The Windows compositor handles fullscreen OpenGL window specially. Besides
-         // having trouble with popups, it also has issues with flip-flopping between
-         // OpenGL-based and normal flushing. Therefore, stick with GL for fullscreen
-         // windows (QTBUG-53515). Similary, translucent windows should not switch to
-         // layered native windows (QTBUG-54734).
 
 #endif
 
@@ -1029,13 +1034,6 @@ bool QWidgetBackingStore::syncAllowed()
    return true;
 }
 
-/*!
-    Synchronizes the \a exposedRegion of the \a exposedWidget with the backing store.
-
-    If there's nothing to repaint, the area is flushed and painting does not occur;
-    otherwise the area is marked as dirty on screen and will be flushed right after
-    we are done with all painting.
-*/
 void QWidgetBackingStore::sync(QWidget *exposedWidget, const QRegion &exposedRegion)
 {
    QTLWExtra *tlwExtra = tlw->d_func()->maybeTopData();
@@ -1217,12 +1215,13 @@ void QWidgetBackingStore::doSync()
    // has its own list for the subtree below it.
    QTLWExtra *tlwExtra = tlw->d_func()->topData();
    qDeleteAll(tlwExtra->widgetTextures);
+
    tlwExtra->widgetTextures.clear();
    findAllTextureWidgetsRecursively(tlw, tlw);
+
    qt_window_private(tlw->windowHandle())->compositing = false; // will get updated in qt_flush()
    fullUpdatePending = false;
 #endif
-
 
    if (toClean.isEmpty()) {
       // Nothing to repaint. However renderToTexture widgets are handled

@@ -938,7 +938,6 @@ void QEventDispatcherWin32::registerTimer(int timerId, int interval, Qt::TimerTy
 bool QEventDispatcherWin32::unregisterTimer(int timerId)
 {
 #if defined(CS_SHOW_DEBUG_CORE)
-
    if (timerId < 1) {
       qDebug("QEventDispatcherWin32::unregisterTimer() Invalid argument");
       return false;
@@ -950,7 +949,6 @@ bool QEventDispatcherWin32::unregisterTimer(int timerId)
       qDebug("QEventDispatcherWin32::unregisterTimer() Timers can not be stopped from another thread");
       return false;
    }
-
 #endif
 
    Q_D(QEventDispatcherWin32);
@@ -975,7 +973,6 @@ bool QEventDispatcherWin32::unregisterTimer(int timerId)
 bool QEventDispatcherWin32::unregisterTimers(QObject *object)
 {
 #if defined(CS_SHOW_DEBUG_CORE)
-
    if (! object) {
       qDebug("QEventDispatcherWin32::unregisterTimers() Invalid argument");
       return false;
@@ -987,7 +984,6 @@ bool QEventDispatcherWin32::unregisterTimers(QObject *object)
       qDebug("QEventDispatcherWin32::unregisterTimers() Timers can not be stopped from another thread");
       return false;
    }
-
 #endif
 
    Q_D(QEventDispatcherWin32);
@@ -1096,12 +1092,10 @@ void QEventDispatcherWin32::activateEventNotifiers()
 int QEventDispatcherWin32::remainingTime(int timerId)
 {
 #if defined(CS_SHOW_DEBUG_CORE)
-
    if (timerId < 1) {
       qDebug("QEventDispatcherWin32::remainingTime() Invalid argument");
       return -1;
    }
-
 #endif
 
    Q_D(QEventDispatcherWin32);

@@ -374,8 +374,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
 }
 
 Q_GUI_EXPORT QSize qSmartMinSize(const QSize &sizeHint, const QSize &minSizeHint,
-   const QSize &minSize, const QSize &maxSize,
-   const QSizePolicy &sizePolicy)
+   const QSize &minSize, const QSize &maxSize, const QSizePolicy &sizePolicy)
 {
    QSize s(0, 0);
 

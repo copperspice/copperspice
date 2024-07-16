@@ -255,7 +255,7 @@ bool QLibraryHandle::unload(UnloadFlag flag)
       return false;
    }
 
-   if (libraryUnloadCount.load() > 0 && !libraryUnloadCount.deref()) {
+   if (libraryUnloadCount.load() > 0 && ! libraryUnloadCount.deref()) {
       // only unload if ALL QLibrary instances wanted to
       delete pluginObj.data();
 

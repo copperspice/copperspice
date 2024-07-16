@@ -132,7 +132,7 @@ static QString locatePlugin(const QString &fileName)
    QStringList paths;
 
    if (isAbsolute) {
-      paths.append(fileName.left(slash));         // don't include the '/'
+      paths.append(fileName.left(slash));         // do not include the '/'
    } else {
       paths = QCoreApplication::libraryPaths();
       paths.prepend(".");                         // search in current dir first

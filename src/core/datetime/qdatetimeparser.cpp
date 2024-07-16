@@ -531,10 +531,10 @@ bool QDateTimeParser::parseFormat(const QString &newFormat)
    }
 
    displayFormat = newFormat;
-   separators = newSeparators;
-   sectionNodes = newSectionNodes;
-   display = newDisplay;
-   last.pos = -1;
+   separators    = newSeparators;
+   sectionNodes  = newSectionNodes;
+   display       = newDisplay;
+   last.pos      = -1;
 
    return true;
 }
@@ -790,8 +790,8 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
       case SecondSection:
       case MSecSection: {
          if (sectiontextSize == 0) {
-            num = 0;
-            used = 0;
+            num   = 0;
+            used  = 0;
             state = Intermediate;
 
          } else {
@@ -822,7 +822,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                if (ok && sn.type == Hour12Section) {
                   if (tmp > 12) {
                      tmp = -1;
-                     ok = false;
+                     ok  = false;
 
                   } else if (tmp == 12) {
                      tmp = 0;
@@ -840,7 +840,7 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
                QChar firstCh(sectiontext.at(0));
 
                if (separators.at(sectionIndex + 1).startsWith(firstCh)) {
-                  used = 0;
+                  used  = 0;
                   state = Intermediate;
 
                } else {

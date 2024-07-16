@@ -1261,7 +1261,7 @@ void QMacStylePrivate::drawFocusRing(QPainter *p, const QRect &targetRect, int h
 }
 
 QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, const QWidget *widg,
-                                                    QStyle::ContentsType ct, QSize szHint, QSize *insz) const
+      QStyle::ContentsType ct, QSize szHint, QSize *insz) const
 {
 #if defined(QMAC_QAQUASTYLE_SIZE_CONSTRAIN)
    if (option) {
@@ -1273,7 +1273,7 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
       }
    }
 
-   if (!widg) {
+   if (! widg) {
       if (insz) {
          *insz = QSize();
       }
@@ -1339,7 +1339,7 @@ QAquaWidgetSize QMacStylePrivate::aquaSizeConstrain(const QStyleOption *option, 
 }
 
 HIRect QMacStylePrivate::pushButtonContentBounds(const QStyleOptionButton *btn,
-                                                 const HIThemeButtonDrawInfo *bdi) const
+      const HIThemeButtonDrawInfo *bdi) const
 {
    HIRect outerBounds = qt_hirectForQRect(btn->rect);
 
@@ -1376,8 +1376,7 @@ QSize QMacStylePrivate::pushButtonSizeFromContents(const QStyleOptionButton *btn
 }
 
 bool QMacStylePrivate::contentFitsInPushButton(const QStyleOptionButton *btn,
-                                               HIThemeButtonDrawInfo *bdi,
-                                               ThemeButtonKind buttonKindToCheck) const
+      HIThemeButtonDrawInfo *bdi, ThemeButtonKind buttonKindToCheck) const
 {
    ThemeButtonKind tmp = bdi->kind;
    bdi->kind = buttonKindToCheck;
@@ -1390,7 +1389,7 @@ bool QMacStylePrivate::contentFitsInPushButton(const QStyleOptionButton *btn,
 }
 
 void QMacStylePrivate::initHIThemePushButton(const QStyleOptionButton *btn,
-                                             const QWidget *widget, const ThemeDrawState tds, HIThemeButtonDrawInfo *bdi) const
+      const QWidget *widget, const ThemeDrawState tds, HIThemeButtonDrawInfo *bdi) const
 {
    ThemeDrawState tdsModified = tds;
    if (btn->state & QStyle::State_On) {
@@ -6468,7 +6467,7 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
 }
 
 QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
-            const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget) const
+      const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget) const
 {
    Q_D(const QMacStyle);
    SubControl sc = QStyle::SC_None;
@@ -6564,7 +6563,7 @@ QStyle::SubControl QMacStyle::hitTestComplexControl(ComplexControl cc,
 }
 
 QRect QMacStyle::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, SubControl sc,
-                                const QWidget *widget) const
+      const QWidget *widget) const
 {
    Q_D(const QMacStyle);
 
@@ -7555,8 +7554,9 @@ QMacCGContext::QMacCGContext(QPainter *p)
    context = nullptr;
 
    int devType = p->device()->devType();
+
    if (pe->type() == QPaintEngine::Raster && (devType == QInternal::Widget || devType == QInternal::Pixmap
-            || devType == QInternal::Image)) {
+         || devType == QInternal::Image)) {
 
       CGColorSpaceRef colorspace = qt_mac_colorSpaceForDeviceType(pe->paintDevice());
       uint flags = kCGImageAlphaPremultipliedFirst;
@@ -7629,7 +7629,7 @@ CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
       if (data->classId() == QPlatformPixmap::RasterClass) {
          QImage *image = data->buffer();
          ret = CGBitmapContextCreate(image->bits(), image->width(), image->height(),
-                                     8, image->bytesPerLine(), colorspace, flags);
+               8, image->bytesPerLine(), colorspace, flags);
       }
 
       CGContextTranslateCTM(ret, 0, pm->height());

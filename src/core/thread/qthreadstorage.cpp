@@ -49,7 +49,7 @@ QThreadStorageData::QThreadStorageData(void (*func)(void *))
    QMutexLocker locker(mutex());
    DestructorMap *destr = destructors();
 
-   if (!destr) {
+   if (! destr) {
       /*
        the destructors vector has already been destroyed, yet a new
        QThreadStorage is being allocated. this can only happen during global
@@ -91,7 +91,7 @@ void **QThreadStorageData::get() const
 {
    QThreadData *data = QThreadData::current();
 
-   if (!data) {
+   if (! data) {
       qWarning("QThreadStorage::get() Only valid from threads started with QThread");
       return nullptr;
    }
@@ -127,6 +127,7 @@ void **QThreadStorageData::set(void *p)
    // delete any previous data
    if (value != nullptr) {
       QMutexLocker locker(mutex());
+
       DestructorMap *destr = destructors();
       void (*destructor)(void *) = destr ? destr->value(id) : nullptr;
       locker.unlock();

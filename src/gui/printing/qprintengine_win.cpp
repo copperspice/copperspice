@@ -765,6 +765,7 @@ void QWin32PrintEngine::drawPath(const QPainterPath & path)
 void QWin32PrintEngine::drawPolygon(const QPointF * points, int pointCount, PolygonDrawMode mode)
 {
    QAlphaPaintEngine::drawPolygon(points, pointCount, mode);
+
    if (!continueCall()) {
       return;
    }
@@ -1605,7 +1606,8 @@ void QWin32PrintEnginePrivate::updateMetrics() {
 }
 
 static void draw_text_item_win(const QPointF & pos, const QTextItemInt & ti, HDC hdc,
-      const QTransform & xform, const QPointF & topLeft) {
+      const QTransform & xform, const QPointF & topLeft)
+{
    QPointF baseline_pos = xform.inverted().map(xform.map(pos) - topLeft);
 
    SetTextAlign(hdc, TA_BASELINE);

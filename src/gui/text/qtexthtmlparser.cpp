@@ -474,9 +474,9 @@ QTextHtmlParserNode::QTextHtmlParserNode()
      borderBrush(Qt::darkGray), borderStyle(QTextFrameFormat::BorderStyle_Outset),
      userState(-1), cssListIndent(0), wsm(WhiteSpaceModeUndefined)
 {
-   margin[QTextHtmlParser::MarginLeft] = 0;
-   margin[QTextHtmlParser::MarginRight] = 0;
-   margin[QTextHtmlParser::MarginTop] = 0;
+   margin[QTextHtmlParser::MarginLeft]   = 0;
+   margin[QTextHtmlParser::MarginRight]  = 0;
+   margin[QTextHtmlParser::MarginTop]    = 0;
    margin[QTextHtmlParser::MarginBottom] = 0;
 }
 
@@ -503,7 +503,7 @@ QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
             int lastSibling = count() - 2;
 
             while (lastSibling && at(lastSibling).parent != lastNode->parent
-               && at(lastSibling).displayMode == QTextHtmlElement::DisplayInline) {
+                  && at(lastSibling).displayMode == QTextHtmlElement::DisplayInline) {
 
                lastSibling = at(lastSibling).parent;
             }

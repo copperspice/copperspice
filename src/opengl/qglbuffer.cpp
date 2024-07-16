@@ -169,7 +169,7 @@ bool QGLBuffer::read(int offset, void *data, int count)
 #if ! defined(QT_OPENGL_ES)
    Q_D(QGLBuffer);
 
-   if (!d->funcs->hasOpenGLFeature(QOpenGLFunctions::Buffers) || !d->guard->id()) {
+   if (! d->funcs->hasOpenGLFeature(QOpenGLFunctions::Buffers) || !d->guard->id()) {
       return false;
    }
 
@@ -186,7 +186,7 @@ bool QGLBuffer::read(int offset, void *data, int count)
 void QGLBuffer::write(int offset, const void *data, int count)
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!isCreated()) {
+   if (! isCreated()) {
       qDebug("QGLBuffer::allocate() Buffer was not created");
    }
 #endif
@@ -200,7 +200,7 @@ void QGLBuffer::write(int offset, const void *data, int count)
 void QGLBuffer::allocate(const void *data, int count)
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!isCreated()) {
+   if (! isCreated()) {
       qDebug("QGLBuffer::allocate() Buffer was not created");
    }
 #endif
@@ -214,7 +214,7 @@ void QGLBuffer::allocate(const void *data, int count)
 bool QGLBuffer::bind()
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!isCreated()) {
+   if (! isCreated()) {
       qDebug("QGLBuffer::bind() Buffer was not created");
    }
 #endif
@@ -242,7 +242,7 @@ bool QGLBuffer::bind()
 void QGLBuffer::release()
 {
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!isCreated()) {
+   if (! isCreated()) {
       qDebug("QGLBuffer::release() Buffer was not created");
    }
 #endif
@@ -292,10 +292,9 @@ void *QGLBuffer::map(QGLBuffer::Access access)
    Q_D(QGLBuffer);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!isCreated()) {
+   if (! isCreated()) {
       qDebug("QGLBuffer::map() Buffer was not created");
    }
-
 #endif
 
    if (! d->guard || !d->guard->id()) {
@@ -315,10 +314,9 @@ bool QGLBuffer::unmap()
    }
 #endif
 
-   if (! d->guard || !d->guard->id()) {
+   if (! d->guard || ! d->guard->id()) {
       return false;
    }
 
    return d->funcs->glUnmapBuffer(d->type) == GL_TRUE;
 }
-

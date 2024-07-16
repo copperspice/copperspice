@@ -611,7 +611,7 @@ QMatchData QSortedModelEngine::filter(const QString &part, const QModelIndex &pa
    Qt::SortOrder order = sortOrder(parent);
 
    if (matchHint(part, parent, &hint)) {
-      if (!hint.isValid()) {
+      if (! hint.isValid()) {
          return QMatchData();
       }
 

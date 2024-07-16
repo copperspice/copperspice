@@ -490,7 +490,7 @@ QSupportedWritingSystems QPlatformFontDatabase::writingSystemsFromTrueTypeBits(q
       hasScript = false;
    }
 
-   if (!hasScript) {
+   if (! hasScript) {
       writingSystems.setSupported(QFontDatabase::Symbol);
    }
 

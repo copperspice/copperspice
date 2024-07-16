@@ -37,15 +37,16 @@
 
 struct QShortcutEntry {
    QShortcutEntry()
-      : keyseq(0), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr) {
-   }
+      : keyseq(0), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr)
+   { }
 
    QShortcutEntry(const QKeySequence &k)
-      : keyseq(k), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr) {
-   }
+      : keyseq(k), context(Qt::WindowShortcut), enabled(false), autorepeat(1), id(0), owner(nullptr)
+   { }
 
    QShortcutEntry(QObject *o, const QKeySequence &k, Qt::ShortcutContext c, int i, bool a, QShortcutMap::ContextMatcher m)
-      : keyseq(k), context(c), enabled(true), autorepeat(a), id(i), owner(o), contextMatcher(m) {
+      : keyseq(k), context(c), enabled(true), autorepeat(a), id(i), owner(o), contextMatcher(m)
+   {
    }
 
    bool correctContext() const {
@@ -72,7 +73,8 @@ class QShortcutMapPrivate
 
  public:
    QShortcutMapPrivate(QShortcutMap *parent)
-      : q_ptr(parent), currentId(0), ambigCount(0), currentState(QKeySequence::NoMatch) {
+      : q_ptr(parent), currentId(0), ambigCount(0), currentState(QKeySequence::NoMatch)
+   {
       identicals.reserve(10);
       currentSequences.reserve(10);
    }
@@ -151,8 +153,7 @@ int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key
       int entryId = entry.id;
 
       if ((allOwners || entry.owner == owner)
-         && (allIds || entry.id == id)
-         && (allKeys || entry.keyseq == key)) {
+            && (allIds || entry.id == id) && (allKeys || entry.keyseq == key)) {
          d->sequences.removeAt(i);
          ++itemsRemoved;
       }

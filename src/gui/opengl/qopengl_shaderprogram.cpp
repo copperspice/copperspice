@@ -897,7 +897,7 @@ bool QOpenGLShaderProgram::bind()
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
     if (d->programGuard->group() != QOpenGLContextGroup::currentContextGroup()) {
        qDebug("QOpenGLShaderProgram::bind() Program is not valid in the current context");
-        return false;
+       return false;
     }
 #endif
 
@@ -1797,7 +1797,6 @@ void QOpenGLShaderProgram::setUniformValueArray(int location, const GLfloat *val
         }
     }
 }
-
 
 void QOpenGLShaderProgram::setUniformValueArray(const char *name, const GLfloat *values, int count, int tupleSize)
 {

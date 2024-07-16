@@ -49,10 +49,8 @@ class QOpenGLVersionProfilePrivate
 {
  public:
    QOpenGLVersionProfilePrivate()
-      : majorVersion(0),
-        minorVersion(0),
-        profile(QSurfaceFormat::NoProfile)
-   {}
+      : majorVersion(0), minorVersion(0), profile(QSurfaceFormat::NoProfile)
+   { }
 
    int majorVersion;
    int minorVersion;
@@ -195,7 +193,7 @@ int QOpenGLContextPrivate::maxTextureSize()
    funcs->glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max_texture_size);
 
 #ifndef QT_OPENGL_ES
-   if (!q->isOpenGLES()) {
+   if (! q->isOpenGLES()) {
       GLenum proxy = GL_PROXY_TEXTURE_2D;
 
       GLint size;
@@ -350,14 +348,14 @@ bool QOpenGLContext::create()
 
    d->platformGLContext = QGuiApplicationPrivate::platformIntegration()->createPlatformOpenGLContext(this);
 
-   if (!d->platformGLContext) {
+   if (! d->platformGLContext) {
       return false;
    }
 
    d->platformGLContext->initialize();
    d->platformGLContext->setContext(this);
 
-   if (!d->platformGLContext->isSharing()) {
+   if (! d->platformGLContext->isSharing()) {
       d->shareContext = nullptr;
    }
 

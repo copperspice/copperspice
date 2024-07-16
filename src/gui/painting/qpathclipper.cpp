@@ -1904,19 +1904,20 @@ bool QPathClipper::handleCrossingEdges(QWingedEdge &list, qreal y, ClipperMode m
          qreal y1 = list.vertex(edge->second)->y;
 
          if (y0 < y1) {
-            if (!(edge->flag & 1)) {
+            if (! (edge->flag & 1)) {
                traverse(list, ei, QPathEdge::LeftTraversal);
             }
 
-            if (!(edge->flag & 2)) {
+            if (! (edge->flag & 2)) {
                clear(list, ei, QPathEdge::RightTraversal);
             }
+
          } else {
-            if (!(edge->flag & 1)) {
+            if (! (edge->flag & 1)) {
                clear(list, ei, QPathEdge::LeftTraversal);
             }
 
-            if (!(edge->flag & 2)) {
+            if (! (edge->flag & 2)) {
                traverse(list, ei, QPathEdge::RightTraversal);
             }
          }

@@ -37,7 +37,6 @@
 #include <zlib.h>
 #endif
 
-
 QSvgTinyDocument::QSvgTinyDocument()
    : QSvgStructureNode(nullptr), m_widthPercent(false), m_heightPercent(false)
    , m_animated(false), m_animationDuration(0), m_fps(30)
@@ -254,7 +253,7 @@ void QSvgTinyDocument::draw(QPainter *p, const QString &id, const QRectF &bounds
 {
    QSvgNode *node = scopeNode(id);
 
-   if (!node) {
+   if (! node) {
 #if defined(CS_SHOW_DEBUG_SVG)
       qDebug("Unable to find node %s, skipping rendering.", csPrintable(id));
 #endif
@@ -445,7 +444,7 @@ QMatrix QSvgTinyDocument::matrixForElement(const QString &id) const
 {
    QSvgNode *node = scopeNode(id);
 
-   if (!node) {
+   if (! node) {
 #if defined(CS_SHOW_DEBUG_SVG)
       qDebug("Unable to find node %s, skipping rendering.", csPrintable(id));
 #endif

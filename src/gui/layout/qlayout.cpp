@@ -718,7 +718,7 @@ void QLayout::addChildWidget(QWidget *w)
    QWidget *mw = parentWidget();
    QWidget *pw = w->parentWidget();
 
-   //Qt::WA_LaidOut is never reset. It only means that the widget at some point has been in a layout.
+   // Qt::WA_LaidOut is never reset. It only means that the widget at some point has been in a layout.
    if (pw && w->testAttribute(Qt::WA_LaidOut)) {
       QLayout *l = pw->layout();
 

@@ -1283,7 +1283,7 @@ qint64 QResourceFileEngine::size() const
 {
    Q_D(const QResourceFileEngine);
 
-   if (!d->resource.isValid()) {
+   if (! d->resource.isValid()) {
       return 0;
    }
 
@@ -1304,7 +1304,7 @@ bool QResourceFileEngine::atEnd() const
 {
    Q_D(const QResourceFileEngine);
 
-   if (!d->resource.isValid()) {
+   if (! d->resource.isValid()) {
       return true;
    }
 
@@ -1315,7 +1315,7 @@ bool QResourceFileEngine::seek(qint64 pos)
 {
    Q_D(QResourceFileEngine);
 
-   if (!d->resource.isValid()) {
+   if (! d->resource.isValid()) {
       return false;
    }
 

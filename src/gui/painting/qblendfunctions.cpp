@@ -36,7 +36,9 @@ struct SourceOnlyAlpha {
 };
 
 struct SourceAndConstAlpha {
-   SourceAndConstAlpha(int a) : m_alpha256(a) {
+   SourceAndConstAlpha(int a)
+      : m_alpha256(a)
+   {
       m_alpha255 = (m_alpha256 * 255) >> 8;
    };
 
@@ -146,7 +148,7 @@ void qt_scale_image_rgb16_on_rgb16(uchar *destPixels, int dbpl, const uchar *src
       Blend_RGB16_on_RGB16_ConstAlpha constAlpha(const_alpha);
 
       qt_scale_image_16bit<quint16>(destPixels, dbpl, srcPixels, sbpl, srch,
-         targetRect, sourceRect, clip, constAlpha);
+            targetRect, sourceRect, clip, constAlpha);
    }
 }
 
@@ -162,12 +164,13 @@ void qt_scale_image_argb32_on_rgb16(uchar *destPixels, int dbpl, const uchar *sr
 
    if (const_alpha == 256) {
       Blend_ARGB32_on_RGB16_SourceAlpha noAlpha;
-      qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch,
-         targetRect, sourceRect, clip, noAlpha);
+      qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch, targetRect, sourceRect, clip, noAlpha);
+
    } else {
       Blend_ARGB32_on_RGB16_SourceAndConstAlpha constAlpha(const_alpha);
+
       qt_scale_image_16bit<quint32>(destPixels, dbpl, srcPixels, sbpl, srch,
-         targetRect, sourceRect, clip, constAlpha);
+            targetRect, sourceRect, clip, constAlpha);
    }
 }
 
@@ -575,7 +578,8 @@ void QDrawHelperFunctions::initBlendFunctions()
    scaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
    scaleFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
    scaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_scale_image_rgb32_on_rgb32;
-   scaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_scale_image_argb32_on_argb32;
+   scaleFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] =
+         qt_scale_image_argb32_on_argb32;
 #endif
 
    blendFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_blend_rgb32_on_rgb32;
@@ -596,7 +600,8 @@ void QDrawHelperFunctions::initBlendFunctions()
    transformFunctions[QImage::Format_RGB32][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
    transformFunctions[QImage::Format_RGB32][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
    transformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_RGB32] = qt_transform_image_rgb32_on_rgb32;
-   transformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   transformFunctions[QImage::Format_ARGB32_Premultiplied][QImage::Format_ARGB32_Premultiplied] =
+         qt_transform_image_argb32_on_argb32;
    transformFunctions[QImage::Format_RGB16][QImage::Format_ARGB32_Premultiplied] = qt_transform_image_argb32_on_rgb16;
    transformFunctions[QImage::Format_RGB16][QImage::Format_RGB16] = qt_transform_image_rgb16_on_rgb16;
 
@@ -604,7 +609,8 @@ void QDrawHelperFunctions::initBlendFunctions()
    transformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
    transformFunctions[QImage::Format_RGBX8888][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
    transformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBX8888] = qt_transform_image_rgb32_on_rgb32;
-   transformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] = qt_transform_image_argb32_on_argb32;
+   transformFunctions[QImage::Format_RGBA8888_Premultiplied][QImage::Format_RGBA8888_Premultiplied] =
+         qt_transform_image_argb32_on_argb32;
 #endif
 
 }

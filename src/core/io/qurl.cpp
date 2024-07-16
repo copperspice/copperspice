@@ -1973,7 +1973,7 @@ QUrl QUrl::resolved(const QUrl &relative) const
 
 bool QUrl::isRelative() const
 {
-   if (!d) {
+   if (! d) {
       return true;
    }
 

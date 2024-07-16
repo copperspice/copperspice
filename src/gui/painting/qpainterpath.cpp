@@ -338,8 +338,8 @@ void QPainterPath::quadTo(const QPointF &c, const QPointF &e)
 
 void QPainterPath::arcTo(const QRectF &rect, qreal startAngle, qreal sweepLength)
 {
-   if ((!qt_is_finite(rect.x()) && !qt_is_finite(rect.y())) || !qt_is_finite(rect.width()) || !qt_is_finite(rect.height())
-      || !qt_is_finite(startAngle) || !qt_is_finite(sweepLength)) {
+   if ((! qt_is_finite(rect.x()) && ! qt_is_finite(rect.y())) || ! qt_is_finite(rect.width()) || ! qt_is_finite(rect.height())
+      || ! qt_is_finite(startAngle) || ! qt_is_finite(sweepLength)) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qDebug("QPainterPath::arcTo() Value for point x or y is invalid");
@@ -856,7 +856,6 @@ QList<QPolygonF> QPainterPath::toSubpathPolygons(const QMatrix &matrix) const
 
 QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
 {
-
    QList<QPolygonF> polys;
 
    QList<QPolygonF> subpaths = toSubpathPolygons(matrix);
@@ -879,6 +878,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       if (subpaths.at(j).size() <= 2) {
          continue;
       }
+
       QRectF cbounds = bounds.at(j);
       for (int i = 0; i < count; ++i) {
          if (cbounds.intersects(bounds.at(i))) {
@@ -892,9 +892,11 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
       const QList<int> &current_isects = isects.at(i);
       for (int j = 0; j < current_isects.size(); ++j) {
          int isect_j = current_isects.at(j);
+
          if (isect_j == i) {
             continue;
          }
+
          for (int k = 0; k < isects[isect_j].size(); ++k) {
             int isect_k = isects[isect_j][k];
             if (isect_k != i && !isects.at(i).contains(isect_k)) {
@@ -908,8 +910,10 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QTransform &matrix) const
    // Join the intersected subpaths as rewinded polygons
    for (int i = 0; i < count; ++i) {
       const QList<int> &subpath_list = isects[i];
+
       if (!subpath_list.isEmpty()) {
          QPolygonF buildUp;
+
          for (int j = 0; j < subpath_list.size(); ++j) {
             const QPolygonF &subpath = subpaths.at(subpath_list.at(j));
             buildUp += subpath;
@@ -933,10 +937,7 @@ QList<QPolygonF> QPainterPath::toFillPolygons(const QMatrix &matrix) const
 }
 
 //same as qt_polygon_isect_line in qpolygon.cpp
-static void qt_painterpath_isect_line(const QPointF &p1,
-   const QPointF &p2,
-   const QPointF &pos,
-   int *winding)
+static void qt_painterpath_isect_line(const QPointF &p1, const QPointF &p2, const QPointF &pos, int *winding)
 {
    qreal x1 = p1.x();
    qreal y1 = p1.y();
@@ -2193,6 +2194,7 @@ void QPainterPath::computeControlPointRect() const
 {
    QPainterPathData *d = d_func();
    d->dirtyControlBounds = false;
+
    if (!d_ptr) {
       d->controlBounds = QRect();
       return;
@@ -2201,6 +2203,7 @@ void QPainterPath::computeControlPointRect() const
    qreal minx, maxx, miny, maxy;
    minx = maxx = d->elements.at(0).x;
    miny = maxy = d->elements.at(0).y;
+
    for (int i = 1; i < d->elements.size(); ++i) {
       const Element &e = d->elements.at(i);
       if (e.x > maxx) {

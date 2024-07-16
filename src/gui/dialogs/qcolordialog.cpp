@@ -352,12 +352,12 @@ void QWellArray::paintCell(QPainter *p, int row, int col, const QRect &rect)
    QStyleOptionFrame opt;
 
    int dfw = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-   opt.lineWidth = dfw;
+   opt.lineWidth    = dfw;
    opt.midLineWidth = 1;
 
-   opt.rect = rect.adjusted(b, b, -b, -b);
+   opt.rect    = rect.adjusted(b, b, -b, -b);
    opt.palette = g;
-   opt.state = QStyle::State_Enabled | QStyle::State_Sunken;
+   opt.state   = QStyle::State_Enabled | QStyle::State_Sunken;
 
    style()->drawPrimitive(QStyle::PE_Frame, &opt, p, this);
    b += dfw;

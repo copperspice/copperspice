@@ -56,6 +56,7 @@ struct QGLGlyphTexture : public QOpenGLSharedResource
 #else
         (void) ctx;
 #endif
+
         if (ctx && m_fbo)
             ctx->contextHandle()->functions()->glDeleteFramebuffers(1, &m_fbo);
         if (m_width || m_height)
@@ -64,9 +65,9 @@ struct QGLGlyphTexture : public QOpenGLSharedResource
 
     void invalidateResource() override {
         m_texture = 0;
-        m_fbo = 0;
-        m_width = 0;
-        m_height = 0;
+        m_fbo     = 0;
+        m_width   = 0;
+        m_height  = 0;
     }
 
    GLuint m_texture;

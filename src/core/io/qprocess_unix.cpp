@@ -387,7 +387,6 @@ void QProcessPrivate::startProcess()
          encodedProgramName += "/Contents/MacOS/" + str.toQString().toUtf8();
       }
    }
-
 #endif
 
    // Add the program name to the argument list.

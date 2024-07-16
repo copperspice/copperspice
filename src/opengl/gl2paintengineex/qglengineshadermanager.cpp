@@ -265,8 +265,9 @@ QGLEngineSharedShaders::QGLEngineSharedShaders(const QGLContext *context)
    }
 
    blitShaderProg->link();
+
    if (blitShaderProg->isLinked()) {
-      if (!inCache) {
+      if (! inCache) {
          blitShaderCache.store(blitShaderProg, context);
       }
    } else {

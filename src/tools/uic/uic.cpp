@@ -188,8 +188,6 @@ bool Uic::write(QIODevice *in)
    }
 
    QString language = ui->attributeLanguage();
-
-
    bool rtn = false;
 
    if (option().generator == Option::JavaGenerator) {
@@ -200,7 +198,7 @@ bool Uic::write(QIODevice *in)
          return false;
       }
 
-      rtn = jwrite (ui);
+      rtn = jwrite(ui);
 #else
       fprintf(stderr, "Uic: option to generate java code not compiled in\n");
 #endif
@@ -213,7 +211,7 @@ bool Uic::write(QIODevice *in)
          return false;
       }
 
-      rtn = write (ui);
+      rtn = write(ui);
 #else
       fprintf(stderr, "Uic: option to generate cpp code not compiled into this program\n");
 #endif

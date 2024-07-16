@@ -1463,9 +1463,6 @@ Q_GUI_EXPORT bool qt_tryModalHelper(QWidget *widget, QWidget **rettop)
    return QApplicationPrivate::tryModalHelper(widget, rettop);
 }
 
-/*! \internal
-    Returns \c true if \a widget is blocked by a modal window.
- */
 bool QApplicationPrivate::isBlockedByModal(QWidget *widget)
 {
    widget = widget->window();

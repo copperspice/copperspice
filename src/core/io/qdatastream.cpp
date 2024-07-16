@@ -70,10 +70,10 @@ QDataStream::QDataStream(QIODevice *device)
 {
    m_device  = device;                             // set device
    owndev    = false;
-   byteorder = BigEndian;                         // default byte order
+   byteorder = BigEndian;                          // default byte order
    ver       = CS_DefaultStreamVersion;
    noswap    = (QSysInfo::ByteOrder == QSysInfo::BigEndian);
-   q_status = Ok;
+   q_status  = Ok;
 }
 
 QDataStream::QDataStream(QByteArray *a, QIODevice::OpenMode flags)
@@ -194,8 +194,9 @@ QDataStream &QDataStream::operator>>(qint16 &i)
    if (m_device->read((char *)&i, 2) != 2) {
       i = 0;
       setStatus(ReadPastEnd);
+
    } else {
-      if (!noswap) {
+      if (! noswap) {
          i = qbswap(i);
       }
    }

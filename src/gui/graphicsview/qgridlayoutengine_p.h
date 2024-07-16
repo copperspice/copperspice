@@ -152,7 +152,6 @@ class QGridLayoutBox
    void combine(const QGridLayoutBox &other);
    void normalize();
 
-
    // This code could use the union-struct-array trick, but a compiler
    // bug prevents this from working.
    qreal q_minimumSize;
@@ -296,7 +295,8 @@ class QGridLayoutItem
    QGridLayoutItem(int row, int column, int rowSpan = 1, int columnSpan = 1,
       Qt::Alignment alignment = Qt::EmptyFlag);
 
-   virtual ~QGridLayoutItem() {}
+   virtual ~QGridLayoutItem()
+   { }
 
 #if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
    void dump(int indent = 0) const;

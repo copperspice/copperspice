@@ -112,7 +112,7 @@ class QIndexMapper
    }
 
    bool isValid() const {
-      return !isEmpty();
+      return ! isEmpty();
    }
 
    bool isEmpty() const {

@@ -26,7 +26,7 @@
 
 #include <qglobal.h>
 
-#if !defined(QT_NO_GRAPHICSVIEW)
+#if ! defined(QT_NO_GRAPHICSVIEW)
 
 #include <qgraphicslayout.h>
 #include <qstyle.h>

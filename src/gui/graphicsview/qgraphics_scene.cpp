@@ -564,7 +564,7 @@ void QGraphicsScenePrivate::setActivePanelHelper(QGraphicsItem *item, bool durin
       QEvent event(QEvent::WindowDeactivate);
       q->sendEvent(activePanel, &event);
 
-   } else if (panel && !duringActivationEvent) {
+   } else if (panel && ! duringActivationEvent) {
       // Deactivate the scene if changing activation to a panel.
       QEvent event(QEvent::WindowDeactivate);
 
@@ -2489,7 +2489,7 @@ bool QGraphicsScene::event(QEvent *event)
          break;
 
       case QEvent::WindowActivate:
-         if (!d->activationRefCount++) {
+         if (! d->activationRefCount++) {
             if (d->lastActivePanel) {
                // Activate the last panel.
                d->setActivePanelHelper(d->lastActivePanel, true);
@@ -2504,7 +2504,7 @@ bool QGraphicsScene::event(QEvent *event)
                QEvent activateEvent(QEvent::WindowActivate);
 
                for (QGraphicsItem *item : items()) {
-                  if (item->isVisible() && !item->isPanel() && !item->parentItem()) {
+                  if (item->isVisible() && ! item->isPanel() && ! item->parentItem()) {
                      sendEvent(item, &activateEvent);
                   }
                }
@@ -2527,7 +2527,7 @@ bool QGraphicsScene::event(QEvent *event)
                QEvent deactivateEvent(QEvent::WindowDeactivate);
 
                for (QGraphicsItem *item : items()) {
-                  if (item->isVisible() && !item->isPanel() && !item->parentItem()) {
+                  if (item->isVisible() && ! item->isPanel() && ! item->parentItem()) {
                      sendEvent(item, &deactivateEvent);
                   }
                }
@@ -3430,10 +3430,10 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
 
       // Resort to direct rendering if the device rect exceeds the
       // (optional) maximum bounds. (QGraphicsSvgItem uses this).
-      QSize maximumCacheSize =
-         itemd->extra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize).toSize();
-      if (!maximumCacheSize.isEmpty()
-         && (deviceRect.width() > maximumCacheSize.width()
+      QSize maximumCacheSize = itemd->extra(QGraphicsItemPrivate::ExtraMaxDeviceCoordCacheSize).toSize();
+
+      if (! maximumCacheSize.isEmpty()
+            && (deviceRect.width() > maximumCacheSize.width()
             || deviceRect.height() > maximumCacheSize.height())) {
          _q_paintItem(static_cast<QGraphicsWidget *>(item), painter, option, widget,
                oldPainterOpacity != newPainterOpacity, newProtection);
@@ -3505,7 +3505,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
 
             newPix.fill(Qt::transparent);
 
-            if (!pix.isNull()) {
+            if (! pix.isNull()) {
                QPainter newPixPainter(&newPix);
                newPixPainter.drawPixmap(-newDiff, pix);
                newPixPainter.end();
@@ -3514,7 +3514,7 @@ void QGraphicsScenePrivate::drawItemHelper(QGraphicsItem *item, QPainter *painte
             QRegion exposed;
             exposed += newPix.rect();
 
-            if (!pix.isNull()) {
+            if (! pix.isNull()) {
                exposed -= QRect(-newDiff, pix.size());
             }
             scrollExposure = exposed;
@@ -3924,7 +3924,7 @@ void QGraphicsScenePrivate::draw(QGraphicsItem *item, QPainter *painter, const Q
          setChildClip = false;
       }
 
-      if (painterStateProtection && !restorePainterClip) {
+      if (painterStateProtection && ! restorePainterClip) {
          painter->save();
       }
 

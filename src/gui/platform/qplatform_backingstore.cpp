@@ -271,11 +271,11 @@ static void blitTextureForWidget(const QPlatformTextureList *textures, int idx, 
 void QPlatformBackingStore::composeAndFlush(QWindow *window, const QRegion &region,
    const QPoint &offset, QPlatformTextureList *textures, QOpenGLContext *context, bool translucentBackground)
 {
-   if (!qt_window_private(window)->receivedExpose) {
+   if (! qt_window_private(window)->receivedExpose) {
       return;
    }
 
-   if (!context->makeCurrent(window)) {
+   if (! context->makeCurrent(window)) {
       qWarning("QPlatformBackingStore::composeAndFlush() Unable to set the current OpenGL context");
       return;
    }

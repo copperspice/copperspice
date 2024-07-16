@@ -1135,8 +1135,7 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
             continue;
          }
 
-         if (style->bitmapScalable && ! (styleStrategy & QFont::PreferQuality) &&
-                  (distance * 10 / pixelSize) >= 2) {
+         if (style->bitmapScalable && ! (styleStrategy & QFont::PreferQuality) && (distance * 10 / pixelSize) >= 2) {
             // closest size is not close enough, go ahead and use a bitmap scaled font
             size = style->fontSize(0);
             px   = pixelSize;
@@ -1155,7 +1154,6 @@ static unsigned int bestFoundry(int script, unsigned int score, int styleStrateg
       };
 
       if (pitch != '*') {
-
          if ((pitch == 'm' && ! family->m_fixedPitch) || (pitch == 'p' && family->m_fixedPitch)) {
             currentScore += PitchMismatch;
          }

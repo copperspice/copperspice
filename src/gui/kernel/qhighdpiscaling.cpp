@@ -198,11 +198,11 @@ static inline qreal initialGlobalScaleFactor()
 */
 
 qreal QHighDpiScaling::m_factor                   = 1.0;
-bool QHighDpiScaling::m_active                    = false;  //"overall active" - is there any scale factor set.
-bool QHighDpiScaling::m_usePixelDensity           = false;  // use scale factor from platform plugin
-bool QHighDpiScaling::m_pixelDensityScalingActive = false;  // pixel density scale factor > 1
-bool QHighDpiScaling::m_globalScalingActive       = false;  // global scale factor is active
-bool QHighDpiScaling::m_screenFactorSet           = false;  // QHighDpiScaling::setScreenFactor has been used
+bool QHighDpiScaling::m_active                    = false;   // "overall active" - is there any scale factor set.
+bool QHighDpiScaling::m_usePixelDensity           = false;   // use scale factor from platform plugin
+bool QHighDpiScaling::m_pixelDensityScalingActive = false;   // pixel density scale factor > 1
+bool QHighDpiScaling::m_globalScalingActive       = false;   // global scale factor is active
+bool QHighDpiScaling::m_screenFactorSet           = false;   // QHighDpiScaling::setScreenFactor has been used
 
 QDpi QHighDpiScaling::m_logicalDpi = QDpi(-1, -1);           // scaled logical DPI of the primary screen
 

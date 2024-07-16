@@ -1759,7 +1759,7 @@ bool QConfFileSettingsPrivate::readIniLine(const QByteArray &data, int &dataPos,
 
             lineStart = i;
 
-         } else if (!inQuotes) {
+         } else if (! inQuotes) {
             --i;
             goto break_out_of_outer_loop;
          }

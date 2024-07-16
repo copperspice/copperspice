@@ -1208,7 +1208,6 @@ void QTextLine::layout_helper(int maxGlyphs)
          }
 
          lbh.m_currentPosition = qMax(line.from, current.position);
-
          end = current.position + m_textEngine->length(item);
 
          lbh.glyphs = m_textEngine->shapedGlyphs(&current);
@@ -1273,7 +1272,7 @@ void QTextLine::layout_helper(int maxGlyphs)
             }
 
             addNextCluster(lbh.m_currentPosition, end, lbh.tmpData, lbh.glyphCount,
-               current, lbh.glyphs, lbh.logClusters);
+                  current, lbh.glyphs, lbh.logClusters);
 
          } else {
             lbh.tmpData.length++;

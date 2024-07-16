@@ -56,7 +56,7 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
    struct Directory {
       Directory()
          : fd(0), parentFd(0), isMonitored(false)
-      {}
+      { }
 
       struct File {
          File()

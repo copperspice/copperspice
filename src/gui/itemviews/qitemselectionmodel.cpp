@@ -1293,6 +1293,7 @@ void QItemSelectionModel::emitSelectionChanged(const QItemSelection &newSelectio
             ++o;
          }
       }
+
       // split selected
       for (int s = 0; s < selected.count();) {
          if (selected.at(s).intersects(intersections.at(i))) {

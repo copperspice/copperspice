@@ -1599,7 +1599,7 @@ static inline void qgl_byteSwapImage(QImage &img, GLenum pixel_type)
    const int height = img.height();
 
    if (pixel_type == GL_UNSIGNED_INT_8_8_8_8_REV
-      || (pixel_type == GL_UNSIGNED_BYTE && QSysInfo::ByteOrder == QSysInfo::LittleEndian)) {
+         || (pixel_type == GL_UNSIGNED_BYTE && QSysInfo::ByteOrder == QSysInfo::LittleEndian)) {
       for (int i = 0; i < height; ++i) {
          uint *p = (uint *) img.scanLine(i);
          for (int x = 0; x < width; ++x) {
@@ -1631,7 +1631,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
    time.start();
 
    // Reset the gl error stack
-   while (funcs->glGetError() != GL_NO_ERROR) ;
+   while (funcs->glGetError() != GL_NO_ERROR) {
+      // do nothing
+   }
 #endif
 
    // Scale the pixmap if needed. GL textures needs to have the
@@ -1642,9 +1644,9 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 
    QImage img = image;
 
-   if (!qgl_extensions()->hasOpenGLFeature(QOpenGLFunctions::NPOTTextures)
-      && !(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
-      && (target == GL_TEXTURE_2D && (tx_w != image.width() || tx_h != image.height()))) {
+   if (! qgl_extensions()->hasOpenGLFeature(QOpenGLFunctions::NPOTTextures)
+         && !(QGLFormat::openGLVersionFlags() & QGLFormat::OpenGL_ES_Version_2_0)
+         && (target == GL_TEXTURE_2D && (tx_w != image.width() || tx_h != image.height()))) {
       img = img.scaled(tx_w, tx_h);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
@@ -1731,7 +1733,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          break;
 
       case QImage::Format_ARGB32_Premultiplied:
-         if (!premul) {
+         if (! premul) {
             img = img.convertToFormat(target_format = QImage::Format_ARGB32);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
@@ -1752,7 +1754,7 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
          break;
 
       case QImage::Format_RGBA8888_Premultiplied:
-         if (!premul) {
+         if (! premul) {
             img = img.convertToFormat(target_format = QImage::Format_RGBA8888);
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
@@ -1775,9 +1777,8 @@ QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, G
 
       default:
          if (img.hasAlphaChannel()) {
-            img = img.convertToFormat(premul
-                  ? QImage::Format_ARGB32_Premultiplied
-                  : QImage::Format_ARGB32);
+            img = img.convertToFormat(premul ? QImage::Format_ARGB32_Premultiplied : QImage::Format_ARGB32);
+
 #if defined(CS_SHOW_DEBUG_OPENGL)
             qDebug("QGLContext::bindTexture() Converted to 32-bit alpha format (%d ms)", time.elapsed());
 #endif
@@ -1883,7 +1884,8 @@ QGLTexture *QGLContextPrivate::textureCacheLookup(const qint64 key, GLenum targe
    return nullptr;
 }
 
-QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format, QGLContext::BindOptions options)
+QGLTexture *QGLContextPrivate::bindTexture(const QPixmap &pixmap, GLenum target, GLint format,
+      QGLContext::BindOptions options)
 {
    Q_Q(QGLContext);
 

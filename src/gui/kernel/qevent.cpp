@@ -580,10 +580,10 @@ QToolBarChangeEvent::~QToolBarChangeEvent()
 
 QShortcutEvent::QShortcutEvent(const QKeySequence &key, int id, bool ambiguous)
    : QEvent(Shortcut), sequence(key), ambig(ambiguous), sid(id)
-{}
+{ }
 
 QShortcutEvent::~QShortcutEvent()
-{}
+{ }
 
 #endif
 
@@ -853,8 +853,7 @@ static void formatTabletEvent(QDebug debug, const QTabletEvent *e)
       debug << ", tangentialPressure =" << e->tangentialPressure();
    }
 }
-
-#endif // !QT_NO_TABLETEVENT
+#endif
 
 QDebug operator<<(QDebug debug, const QTouchEvent::TouchPoint &tp)
 {
@@ -1129,7 +1128,7 @@ QWindowStateChangeEvent::~QWindowStateChangeEvent()
 {}
 
 QTouchEvent::QTouchEvent(QEvent::Type eventType, QTouchDevice *device, Qt::KeyboardModifiers modifiers,
-            Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
+      Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
    : QInputEvent(eventType, modifiers), _window(nullptr), _target(nullptr), _device(device),
      _touchPointStates(touchPointStates), _touchPoints(touchPoints)
 {

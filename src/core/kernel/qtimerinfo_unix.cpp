@@ -643,7 +643,7 @@ QList<QTimerInfo> QTimerInfoList::registeredTimers(QObject *object) const
 
       if (t->obj == object) {
          list << QTimerInfo(t->id,
-                     (t->timerType == Qt::VeryCoarseTimer ? t->interval * 1000 : t->interval), t->timerType);
+               (t->timerType == Qt::VeryCoarseTimer ? t->interval * 1000 : t->interval), t->timerType);
       }
    }
 
@@ -735,7 +735,7 @@ int QTimerInfoList::activateTimers()
          n_act++;
       }
 
-      if (!currentTimerInfo->activateRef) {
+      if (! currentTimerInfo->activateRef) {
          // send event, but don't allow it to recurse
          currentTimerInfo->activateRef = &currentTimerInfo;
 

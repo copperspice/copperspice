@@ -59,12 +59,13 @@
 
 // These terms were needed a few places to obtain pixel-perfect results
 const int GapBetweenLogoAndRightEdge = 5;
-const int ModernHeaderTopMargin = 2;
-const int ClassicHMargin = 4;
-const int MacButtonTopMargin = 13;
-const int MacLayoutLeftMargin = 20;
-//const int MacLayoutTopMargin = 14; // Unused. Save some space and avoid warning.
-const int MacLayoutRightMargin = 20;
+const int ModernHeaderTopMargin      = 2;
+const int ClassicHMargin             = 4;
+const int MacButtonTopMargin         = 13;
+const int MacLayoutLeftMargin        = 20;
+
+//const int MacLayoutTopMargin  = 14;       // Unused, Save some space and avoid warning.
+const int MacLayoutRightMargin  = 20;
 const int MacLayoutBottomMargin = 17;
 
 static void changeSpacerSize(QLayout *layout, int index, int width, int height)
@@ -198,7 +199,8 @@ class QWizardDefaultProperty
 class QWizardField
 {
  public:
-   QWizardField() {}
+   QWizardField()
+   { }
 
    QWizardField(QWizardPage *page, const QString &spec, QObject *object, const QString &property, const QString &changedSignal);
 
@@ -217,8 +219,7 @@ class QWizardField
 };
 
 QWizardField::QWizardField(QWizardPage *page, const QString &spec, QObject *object,
-   const QString &property, const QString &changedSignal)
-
+      const QString &property, const QString &changedSignal)
    : page(page), object(object), mandatory(false), name(spec), property(property), changedSignal(changedSignal)
 {
    if (name.endsWith('*')) {
@@ -257,7 +258,8 @@ class QWizardLayoutInfo
         topLevelMarginBottom(-1), childMarginLeft(-1), childMarginRight(-1),
         childMarginTop(-1), childMarginBottom(-1), hspacing(-1), vspacing(-1),
         wizStyle(QWizard::ClassicStyle), header(false), watermark(false), title(false),
-        subTitle(false), extension(false), sideWidget(false) {}
+        subTitle(false), extension(false), sideWidget(false)
+   { }
 
    int topLevelMarginLeft;
    int topLevelMarginRight;
@@ -563,7 +565,9 @@ bool QWizardPagePrivate::cachedIsComplete() const
 void QWizardPagePrivate::_q_maybeEmitCompleteChanged()
 {
    Q_Q(QWizardPage);
+
    TriState newState = q->isComplete() ? Tri_True : Tri_False;
+
    if (newState != completeState) {
       emit q->completeChanged();
    }
@@ -604,7 +608,7 @@ class QWizardPrivate : public QDialogPrivate
    Q_DECLARE_PUBLIC(QWizard)
 
  public:
-   using PageMap = QMap<int, QWizardPage *> ;
+   using PageMap = QMap<int, QWizardPage *>;
 
    enum Direction {
       Backward,
@@ -864,14 +868,14 @@ void QWizardPrivate::addField(const QWizardField &field)
    myField.resolve(defaultPropertyTable);
 
    if (fieldIndexMap.contains(myField.name)) {
-      qWarning("QWizardPage::addField() Duplicate field '%s'", csPrintable(myField.name));
+      qWarning("QWizardPage::addField() Duplicate field %s", csPrintable(myField.name));
       return;
    }
 
    fieldIndexMap.insert(myField.name, fields.count());
    fields += myField;
 
-   if (myField.mandatory && !myField.changedSignal.isEmpty()) {
+   if (myField.mandatory && ! myField.changedSignal.isEmpty()) {
       QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
@@ -885,7 +889,7 @@ void QWizardPrivate::removeFieldAt(int index)
    const QWizardField &field = fields.at(index);
    fieldIndexMap.remove(field.name);
 
-   if (field.mandatory && !field.changedSignal.isEmpty()) {
+   if (field.mandatory && ! field.changedSignal.isEmpty()) {
       QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_maybeEmitCompleteChanged()));
    }
 
@@ -2235,7 +2239,7 @@ void QWizard::setWizardStyle(WizardStyle style)
 #endif
 
    if (styleChange
-#if !defined(QT_NO_STYLE_WINDOWSVISTA)
+#if ! defined(QT_NO_STYLE_WINDOWSVISTA)
       || aeroStyleChange
 #endif
    ) {
@@ -2992,7 +2996,7 @@ void QWizardPage::setField(const QString &name, const QVariant &value)
 {
    Q_D(QWizardPage);
 
-   if (!d->wizard) {
+   if (! d->wizard) {
       return;
    }
 

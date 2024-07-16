@@ -944,10 +944,12 @@ int QTextDocumentPrivate::undoRedo(bool undo)
 #endif
 
             insert_string(c.pos, c.strPos, c.length, c.format, (QTextUndoCommand::Operation)c.operation);
+
             c.command = QTextUndoCommand::Inserted;
             if (editPos != (int)c.pos) {
                editLength = 0;
             }
+
             editPos = c.pos;
             editLength += c.length;
             break;
@@ -979,14 +981,17 @@ int QTextDocumentPrivate::undoRedo(bool undo)
 
             insert_block(c.pos, c.strPos, c.format, c.blockFormat, (QTextUndoCommand::Operation)c.operation, c.command);
             resetBlockRevision += 1;
+
             if (c.command == QTextUndoCommand::BlockRemoved) {
                c.command = QTextUndoCommand::BlockInserted;
             } else {
                c.command = QTextUndoCommand::BlockAdded;
             }
+
             if (editPos != (int)c.pos) {
                editLength = 0;
             }
+
             editPos = c.pos;
             editLength += 1;
             break;
@@ -1028,6 +1033,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
             QTextBlockGroup *oldGroup = qobject_cast<QTextBlockGroup *>(objectForFormat(formats.blockFormat(oldFormat)));
             QTextBlockGroup *group = qobject_cast<QTextBlockGroup *>(objectForFormat(formats.blockFormat(c.format)));
             c.format = oldFormat;
+
             if (group != oldGroup) {
                if (oldGroup) {
                   oldGroup->blockRemoved(it);

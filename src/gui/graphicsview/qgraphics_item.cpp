@@ -6885,7 +6885,7 @@ QDebug operator<<(QDebug debug, const QGraphicsObject *item)
    QDebugStateSaver saver(debug);
    debug.nospace();
 
-   if (!item) {
+   if (! item) {
       debug << "QGraphicsObject(nullptr)";
       return debug;
    }
@@ -7010,7 +7010,9 @@ QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemChange change)
          str = "ItemTransformOriginPointHasChanged";
          break;
    }
+
    debug << str;
+
    return debug;
 }
 
@@ -7119,7 +7121,9 @@ QDebug operator<<(QDebug debug, QGraphicsItem::GraphicsItemFlags flags)
          debug << QGraphicsItem::GraphicsItemFlag(int(flags & (1 << i)));
       }
    }
+
    debug << ')';
+
    return debug;
 }
 

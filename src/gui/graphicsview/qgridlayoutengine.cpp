@@ -120,7 +120,7 @@ void QGridLayoutBox::normalize()
 void QGridLayoutBox::dump(int indent) const
 {
    qDebug("%*sBox (%g <= %g <= %g [%g/%g])", indent, "", q_minimumSize, q_preferredSize,
-      q_maximumSize, q_minimumAscent, q_minimumDescent);
+         q_maximumSize, q_minimumAscent, q_minimumDescent);
 }
 #endif
 
@@ -465,7 +465,8 @@ void QGridLayoutRowData::dump(int indent) const
 
    while (it != multiCellMap.constEnd()) {
       qDebug("%*s Multi-cell entry <%d, %d> (stretch %d)", indent, "", it.key().first,
-         it.key().second, it.value().q_stretch);
+            it.key().second, it.value().q_stretch);
+
       it.value().q_box.dump(indent + 2);
    }
 }

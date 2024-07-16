@@ -211,8 +211,9 @@ bool QFontEngineQPF2::verifyHeader(const uchar *data, int size)
 QVariant QFontEngineQPF2::extractHeaderField(const uchar *data, HeaderTag requestedTag)
 {
    const Header *header = reinterpret_cast<const Header *>(data);
-   const uchar *tagPtr = data + sizeof(Header);
-   const uchar *endPtr = tagPtr + qFromBigEndian<quint16>(header->dataSize);
+   const uchar *tagPtr  = data + sizeof(Header);
+   const uchar *endPtr  = tagPtr + qFromBigEndian<quint16>(header->dataSize);
+
    while (tagPtr < endPtr - 3) {
       quint16 tag = readValue<quint16>(tagPtr);
       quint16 length = readValue<quint16>(tagPtr);
@@ -263,7 +264,7 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    kerning_pairs_loaded = false;
    readOnly = true;
 
-   if (!verifyHeader(fontData, dataSize)) {
+   if (! verifyHeader(fontData, dataSize)) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
       qDebug() << "VerifyHeader failed";
 #endif
@@ -276,7 +277,7 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    readOnly = (header->lock == 0xffffffff);
 
    const uchar *imgData = fontData + sizeof(Header) + qFromBigEndian<quint16>(header->dataSize);
-   const uchar *endPtr = fontData + dataSize;
+   const uchar *endPtr  = fontData + dataSize;
 
    while (imgData <= endPtr - 8) {
       quint16 blockTag = readValue<quint16>(imgData);
@@ -322,7 +323,7 @@ QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
 
          if (glyphDataPos >= glyphDataSize) {
             // error
-            glyphMapOffset = 0;
+            glyphMapOffset  = 0;
             glyphMapEntries = 0;
             break;
          }

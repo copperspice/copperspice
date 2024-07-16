@@ -45,7 +45,8 @@ class QOpenGLWidgetPaintDevicePrivate : public QOpenGLPaintDevicePrivate
 {
  public:
    QOpenGLWidgetPaintDevicePrivate(QOpenGLWidget *widget)
-      : QOpenGLPaintDevicePrivate(QSize()), w(widget) { }
+      : QOpenGLPaintDevicePrivate(QSize()), w(widget)
+   { }
 
    void beginPaint() override;
 
@@ -56,7 +57,9 @@ class QOpenGLWidgetPaintDevice : public QOpenGLPaintDevice
 {
  public:
    QOpenGLWidgetPaintDevice(QOpenGLWidget *widget)
-      : QOpenGLPaintDevice(*new QOpenGLWidgetPaintDevicePrivate(widget)) { }
+      : QOpenGLPaintDevice(*new QOpenGLWidgetPaintDevicePrivate(widget))
+   { }
+
    void ensureActiveTarget() override;
 };
 
@@ -66,11 +69,9 @@ class QOpenGLWidgetPrivate : public QWidgetPrivate
 
  public:
    QOpenGLWidgetPrivate()
-      : context(nullptr), fbo(nullptr), resolvedFbo(nullptr), surface(nullptr),
-        initialized(false), fakeHidden(false), inBackingStorePaint(false),
-        hasBeenComposed(false), flushPending(false),
-        paintDevice(nullptr), updateBehavior(QOpenGLWidget::NoPartialUpdate),
-        requestedSamples(0), inPaintGL(false)
+      : context(nullptr), fbo(nullptr), resolvedFbo(nullptr), surface(nullptr), initialized(false),
+        fakeHidden(false), inBackingStorePaint(false), hasBeenComposed(false), flushPending(false),
+        paintDevice(nullptr), updateBehavior(QOpenGLWidget::NoPartialUpdate), requestedSamples(0), inPaintGL(false)
    {
       requestedFormat = QSurfaceFormat::defaultFormat();
    }
@@ -119,7 +120,7 @@ class QOpenGLWidgetPrivate : public QWidgetPrivate
 
 void QOpenGLWidgetPaintDevicePrivate::beginPaint()
 {
-   // NB! autoFillBackground is and must be false by default. Otherwise we would clear on
+   // autoFillBackground is and must be false by default. Otherwise we would clear on
    // every QPainter begin() which is not desirable. This is only for legacy use cases,
    // like using QOpenGLWidget as the viewport of a graphics view, that expect clearing
    // with the palette's background color.
@@ -134,6 +135,7 @@ void QOpenGLWidgetPaintDevicePrivate::beginPaint()
          float alpha = c.alphaF();
          f->glClearColor(c.redF() * alpha, c.greenF() * alpha, c.blueF() * alpha, alpha);
       }
+
       f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
    }
 }
@@ -142,12 +144,14 @@ void QOpenGLWidgetPaintDevice::ensureActiveTarget()
 {
    QOpenGLWidgetPaintDevicePrivate *d = static_cast<QOpenGLWidgetPaintDevicePrivate *>(d_ptr.data());
    QOpenGLWidgetPrivate *wd = static_cast<QOpenGLWidgetPrivate *>(QWidgetPrivate::get(d->w));
-   if (!wd->initialized) {
+
+   if (! wd->initialized) {
       return;
    }
 
    if (QOpenGLContext::currentContext() != wd->context) {
       d->w->makeCurrent();
+
    } else {
       wd->fbo->bind();
    }
@@ -243,6 +247,7 @@ void QOpenGLWidgetPrivate::beginCompose()
    if (flushPending) {
       flushPending = false;
       q->makeCurrent();
+
       static_cast<QOpenGLExtensions *>(context->functions())->flushShared();
    }
 
@@ -314,7 +319,7 @@ void QOpenGLWidgetPrivate::initialize()
    surface->setScreen(ctx->screen());
    surface->create();
 
-   if (!ctx->makeCurrent(surface)) {
+   if (! ctx->makeCurrent(surface)) {
       qWarning("QOpenGLWidget::initialize() Failed to make the OpenGL context current");
       return;
    }
@@ -335,6 +340,7 @@ void QOpenGLWidgetPrivate::resolveSamples()
 
    if (resolvedFbo) {
       q->makeCurrent();
+
       QRect rect(QPoint(0, 0), fbo->size());
       QOpenGLFramebufferObject::blitFramebuffer(resolvedFbo, rect, fbo, rect);
       flushPending = true;
@@ -353,8 +359,10 @@ void QOpenGLWidgetPrivate::invokeUserPaint()
 
    f->glViewport(0, 0, q->width() * q->devicePixelRatioF(), q->height() * q->devicePixelRatioF());
    inPaintGL = true;
+
    q->paintGL();
-   inPaintGL = false;
+
+   inPaintGL    = false;
    flushPending = true;
 
    QOpenGLContextPrivate::get(ctx)->defaultFboRedirect = 0;
@@ -364,7 +372,7 @@ void QOpenGLWidgetPrivate::render()
 {
    Q_Q(QOpenGLWidget);
 
-   if (fakeHidden || !initialized) {
+   if (fakeHidden || ! initialized) {
       return;
    }
 
@@ -382,9 +390,9 @@ void QOpenGLWidgetPrivate::invalidateFbo()
 {
    QOpenGLExtensions *f = static_cast<QOpenGLExtensions *>(QOpenGLContext::currentContext()->functions());
    if (f->hasOpenGLExtension(QOpenGLExtensions::DiscardFramebuffer)) {
-      const int gl_color_attachment0 = 0x8CE0;  // GL_COLOR_ATTACHMENT0
-      const int gl_depth_attachment = 0x8D00;   // GL_DEPTH_ATTACHMENT
-      const int gl_stencil_attachment = 0x8D20; // GL_STENCIL_ATTACHMENT
+      const int gl_color_attachment0  = 0x8CE0;  // GL_COLOR_ATTACHMENT0
+      const int gl_depth_attachment   = 0x8D00;  // GL_DEPTH_ATTACHMENT
+      const int gl_stencil_attachment = 0x8D20;  // GL_STENCIL_ATTACHMENT
 
       const GLenum attachments[] = {
          gl_color_attachment0, gl_depth_attachment, gl_stencil_attachment
@@ -402,17 +410,19 @@ extern Q_GUI_EXPORT QImage qt_gl_read_framebuffer(const QSize &size, bool alpha_
 QImage QOpenGLWidgetPrivate::grabFramebuffer()
 {
    Q_Q(QOpenGLWidget);
-   if (!initialized) {
+
+   if (! initialized) {
       return QImage();
    }
 
-   if (!inPaintGL) {
+   if (! inPaintGL) {
       render();
    }
 
    if (resolvedFbo) {
       resolveSamples();
       resolvedFbo->bind();
+
    } else {
       q->makeCurrent();
    }
@@ -433,19 +443,22 @@ QImage QOpenGLWidgetPrivate::grabFramebuffer()
 void QOpenGLWidgetPrivate::initializeViewportFramebuffer()
 {
    Q_Q(QOpenGLWidget);
+
    // Legacy behavior for compatibility with QGLWidget when used as a graphics view
    // viewport: enable clearing on each painter begin.
+
    q->setAutoFillBackground(true);
 }
 
 void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
 {
    Q_Q(QOpenGLWidget);
-   if (!initialized) {
+
+   if (! initialized) {
       return;
    }
 
-   if (!fbo || q->size() * q->devicePixelRatioF() != fbo->size()) {
+   if (! fbo || q->size() * q->devicePixelRatioF() != fbo->size()) {
       recreateFbo();
       q->update();
    }
@@ -501,7 +514,6 @@ QSurfaceFormat QOpenGLWidget::format() const
    return d->initialized ? d->context->format() : d->requestedFormat;
 }
 
-
 bool QOpenGLWidget::isValid() const
 {
    Q_D(const QOpenGLWidget);
@@ -511,13 +523,15 @@ bool QOpenGLWidget::isValid() const
 void QOpenGLWidget::makeCurrent()
 {
    Q_D(QOpenGLWidget);
-   if (!d->initialized) {
+
+   if (! d->initialized) {
       return;
    }
 
    d->context->makeCurrent(d->surface);
 
-   if (d->fbo) { // there may not be one if we are in reset()
+   if (d->fbo) {
+      // there may not be one if we are in reset()
       d->fbo->bind();
    }
 }
@@ -525,7 +539,8 @@ void QOpenGLWidget::makeCurrent()
 void QOpenGLWidget::doneCurrent()
 {
    Q_D(QOpenGLWidget);
-   if (!d->initialized) {
+
+   if (! d->initialized) {
       return;
    }
 
@@ -553,7 +568,6 @@ void QOpenGLWidget::resizeGL(int w, int h)
    (void) w;
    (void) h;
 }
-
 
 void QOpenGLWidget::paintGL()
 { }
@@ -584,7 +598,7 @@ void QOpenGLWidget::paintEvent(QPaintEvent *e)
 
    Q_D(QOpenGLWidget);
 
-   if (!d->initialized) {
+   if (! d->initialized) {
       return;
    }
 

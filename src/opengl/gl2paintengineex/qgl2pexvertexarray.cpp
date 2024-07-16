@@ -123,9 +123,7 @@ void QGL2PEXVertexArray::addPath(const QVectorPath &path, GLfloat curveInverseSc
 
             case QPainterPath::CurveToElement: {
                QBezier b = QBezier::fromPoints(*(((const QPointF *) points) + i - 1),
-                                               points[i],
-                                               points[i + 1],
-                                               points[i + 2]);
+                     points[i], points[i + 1], points[i + 2]);
 
                QRectF bounds = b.bounds();
 

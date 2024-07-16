@@ -37,6 +37,7 @@ class QSqlQueryPrivate
  public:
    QSqlQueryPrivate(QSqlResult *result);
    ~QSqlQueryPrivate();
+
    QAtomicInt ref;
    QSqlResult *sqlResult;
 
@@ -744,14 +745,17 @@ bool QSqlQuery::prepare(const QString &query)
       d->sqlResult->setAt(QSql::BeforeFirstRow);
       d->sqlResult->setNumericalPrecisionPolicy(d->sqlResult->numericalPrecisionPolicy());
    }
-   if (!driver()) {
+
+   if (! driver()) {
       qWarning("QSqlQuery::prepare: no driver");
       return false;
    }
-   if (!driver()->isOpen() || driver()->isOpenError()) {
+
+   if (! driver()->isOpen() || driver()->isOpenError()) {
       qWarning("QSqlQuery::prepare: database not open");
       return false;
    }
+
    if (query.isEmpty()) {
       qWarning("QSqlQuery::prepare: empty query");
       return false;

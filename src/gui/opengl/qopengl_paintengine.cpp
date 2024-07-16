@@ -1036,7 +1036,7 @@ void QOpenGL2PaintEngineExPrivate::fillStencilWithVertexArray(const float *data,
 {
    Q_ASSERT(count || stops);
 
-   funcs.glStencilMask(0xff); // Enable stencil writes
+   funcs.glStencilMask(0xff);  // Enable stencil writes
 
    if (dirtyStencilRegion.intersects(currentScissorBounds)) {
       QVector<QRect> clearRegion = dirtyStencilRegion.intersected(currentScissorBounds).rects();
@@ -1398,13 +1398,16 @@ void QOpenGL2PaintEngineExPrivate::stroke(const QVectorPath &path, const QPen &p
 }
 
 void QOpenGL2PaintEngineEx::penChanged()
-{ }
+{
+}
 
 void QOpenGL2PaintEngineEx::brushChanged()
-{ }
+{
+}
 
 void QOpenGL2PaintEngineEx::brushOriginChanged()
-{ }
+{
+}
 
 void QOpenGL2PaintEngineEx::opacityChanged()
 {
@@ -2414,10 +2417,8 @@ void QOpenGL2PaintEngineEx::clip(const QVectorPath &path, Qt::ClipOperation op)
       const QPointF *const points = reinterpret_cast<const QPointF *>(path.points());
       QRectF rect(points[0], points[2]);
 
-      if (state()->matrix.type() <= QTransform::TxScale
-            || (state()->matrix.type() == QTransform::TxRotate
-                && qFuzzyIsNull(state()->matrix.m11())
-                && qFuzzyIsNull(state()->matrix.m22()))) {
+      if (state()->matrix.type() <= QTransform::TxScale || (state()->matrix.type() == QTransform::TxRotate
+            && qFuzzyIsNull(state()->matrix.m11()) && qFuzzyIsNull(state()->matrix.m22()))) {
          state()->rectangleClip = state()->rectangleClip.intersected(state()->matrix.mapRect(rect).toRect());
          d->updateClipScissorTest();
 

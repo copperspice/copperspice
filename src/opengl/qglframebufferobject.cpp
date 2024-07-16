@@ -42,19 +42,22 @@ QImage cs_glRead_frameBuffer(const QSize &, bool, bool);
 
 #define QT_RESET_GLERROR()                                \
 {                                                         \
-    while (QOpenGLContext::currentContext()->functions()->glGetError() != GL_NO_ERROR) {} \
+   while (QOpenGLContext::currentContext()->functions()->glGetError() != GL_NO_ERROR) { } \
 }
+
 #define QT_CHECK_GLERROR()                                \
 {                                                         \
-    GLenum err = QOpenGLContext::currentContext()->functions()->glGetError(); \
-    if (err != GL_NO_ERROR) {                             \
-        qDebug("[%s line %d] GL Error: %d",               \
-               __FILE__, __LINE__, (int)err);             \
-    }                                                     \
+   GLenum err = QOpenGLContext::currentContext()->functions()->glGetError();  \
+   if (err != GL_NO_ERROR) {                              \
+      qDebug("[%s line %d] GL Error: %d", __FILE__, __LINE__, (int)err);      \
+   }                                                      \
 }
+
 #else
-#define QT_RESET_GLERROR() {}
-#define QT_CHECK_GLERROR() {}
+
+#define QT_RESET_GLERROR() { }
+#define QT_CHECK_GLERROR() { }
+
 #endif
 
 // #### TODO Properly #ifdef this class to use #define symbols actually defined
@@ -239,7 +242,7 @@ QGLContext *QGLFBOGLPaintDevice::context() const
 bool QGLFramebufferObjectPrivate::checkFramebufferStatus() const
 {
    QGL_FUNCP_CONTEXT;
-   if (!ctx) {
+   if (! ctx) {
       return false;   // Context no longer exists.
    }
 
@@ -347,15 +350,14 @@ void freeTextureFunc(QGLContext *ctx, GLuint id)
 }
 
 void QGLFramebufferObjectPrivate::init(QGLFramebufferObject *q, const QSize &sz,
-   QGLFramebufferObject::Attachment attachment,
-   GLenum texture_target, GLenum internal_format,
-   GLint samples, bool mipmap)
+      QGLFramebufferObject::Attachment attachment, GLenum texture_target,
+      GLenum internal_format, GLint samples, bool mipmap)
 {
    QGLContext *ctx = const_cast<QGLContext *>(QGLContext::currentContext());
 
    funcs.initializeOpenGLFunctions();
 
-   if (!funcs.hasOpenGLFeature(QOpenGLFunctions::Framebuffers)) {
+   if (! funcs.hasOpenGLFeature(QOpenGLFunctions::Framebuffers)) {
       return;
    }
 
@@ -738,7 +740,7 @@ bool QGLFramebufferObject::bind()
    const QGLContext *current = QGLContext::currentContext();
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!current || QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
+   if (! current || QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
       qDebug("QGLFramebufferObject::bind() Called from incompatible context");
    }
 #endif
@@ -769,8 +771,7 @@ bool QGLFramebufferObject::release()
    const QGLContext *current = QGLContext::currentContext();
 
 #if defined(CS_SHOW_DEBUG_OPENGL)
-   if (!current ||
-      QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
+   if (! current || QGLContextPrivate::contextGroup(current) != QGLContextPrivate::contextGroup(ctx)) {
       qDebug("QGLFramebufferObject::release() Called from incompatible context");
    }
 #endif

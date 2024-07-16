@@ -427,7 +427,7 @@ void QTextTable::insertRows(int pos, int num)
       pos = d->nRows;
    }
 
-   QTextDocumentPrivate *p = d->pieceTable;
+   QTextDocumentPrivate *p  = d->pieceTable;
    QTextFormatCollection *c = p->formatCollection();
    p->beginEditBlock();
 

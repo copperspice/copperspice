@@ -266,7 +266,7 @@ class Q_GUI_EXPORT QWizardPage : public QWidget
    void setField(const QString &name, const QVariant &value);
    QVariant field(const QString &name) const;
    void registerField(const QString &name, QWidget *widget, const QString &property = QString(),
-      const QString &changedSignal = QString());
+         const QString &changedSignal = QString());
    QWizard *wizard() const;
 
  private:

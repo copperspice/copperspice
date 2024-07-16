@@ -3081,7 +3081,7 @@ QStyle *QApplication::style()
       // Compile-time search for default style
       QString style;
 
-      if (!QApplicationPrivate::styleOverride.isEmpty()) {
+      if (! QApplicationPrivate::styleOverride.isEmpty()) {
          style = QApplicationPrivate::styleOverride;
       } else {
          style = QApplicationPrivate::desktopStyleKey();
@@ -3090,7 +3090,7 @@ QStyle *QApplication::style()
       QStyle *&app_style = QApplicationPrivate::app_style;
       app_style = QStyleFactory::create(style);
 
-      if (!app_style) {
+      if (! app_style) {
          QStringList styles = QStyleFactory::keys();
 
          for (int i = 0; i < styles.size(); ++i) {
@@ -3099,6 +3099,7 @@ QStyle *QApplication::style()
             }
          }
       }
+
       if (! app_style) {
          Q_ASSERT(! "No styles are available");
          return nullptr;

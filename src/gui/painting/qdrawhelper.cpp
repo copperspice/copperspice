@@ -4403,7 +4403,8 @@ void blend_color_generic_rgb64(int count, const QSpan *spans, void *userData)
 {
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    Operator op = getOperator(data, spans, count);
-   if (!op.funcSolid64) {
+
+   if (! op.funcSolid64) {
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
       qDebug("blend_color_generic_rgb64() Unsupported 64-bit blend operation");

@@ -1024,7 +1024,7 @@ static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
 
       Dasher dasher(stroker, swapped, x1, x2);
 
-      int x = x1 >> 6;
+      int x  = x1 >> 6;
       int xs = x2 >> 6;
 
       int alphaStart, alphaEnd;
