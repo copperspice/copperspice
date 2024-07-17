@@ -75,8 +75,8 @@ QVariant QWindowsInternalMimeData::retrieveData_sys(const QString &mimeType, QVa
    if (const QWindowsMime *converter = mc.converterToMime(mimeType, pDataObj)) {
       result = converter->convertToMime(mimeType, pDataObj, type);
    }
-   releaseDataObject(pDataObj);
 
+   releaseDataObject(pDataObj);
 
    return result;
 }

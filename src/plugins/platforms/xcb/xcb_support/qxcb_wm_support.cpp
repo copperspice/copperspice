@@ -82,10 +82,11 @@ void QXcbWMSupport::updateVirtualRoots()
    int offset = 0;
    int remaining = 0;
    do {
-      xcb_get_property_cookie_t cookie = xcb_get_property(xcb_connection(), false, root, atom(QXcbAtom::_NET_VIRTUAL_ROOTS), XCB_ATOM_WINDOW,
-            offset, 1024);
+      xcb_get_property_cookie_t cookie = xcb_get_property(xcb_connection(), false, root, atom(QXcbAtom::_NET_VIRTUAL_ROOTS),
+            XCB_ATOM_WINDOW, offset, 1024);
       xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
-      if (!reply) {
+
+      if (! reply) {
          break;
       }
 
@@ -103,6 +104,7 @@ void QXcbWMSupport::updateVirtualRoots()
       }
 
       free(reply);
+
    } while (remaining > 0);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)

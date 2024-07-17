@@ -65,7 +65,7 @@ struct qt_mac_enum_mapper {
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
 #   define QT_MAC_MAP_ENUM(x) x, #x
-   const char *desc;
+    const char *desc;
 #else
 #   define QT_MAC_MAP_ENUM(x) x
 #endif
@@ -120,7 +120,9 @@ static int qt_mac_get_mac_modifiers(Qt::KeyboardModifiers keys)
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug("qt_mac_get_mac_modifiers() Mapping modifiers = %d (0x%04x)", (int)keys, (int)keys);
 #endif
+
    int ret = 0;
+
    for (int i = 0; qt_mac_modifier_symbols[i].qt_code; i++) {
       if (keys & qt_mac_modifier_symbols[i].qt_code) {
          ret |= qt_mac_modifier_symbols[i].mac_code;
@@ -305,7 +307,7 @@ static int qt_mac_get_key(int modif, const QChar &key, int virtualKey)
       }
    }
 
-   //last ditch try to match the scan code
+   // last ditch try to match the scan code
    for (int i = 0; qt_mac_keyvkey_symbols[i].qt_code; i++) {
       if (qt_mac_keyvkey_symbols[i].mac_code == virtualKey) {
 
@@ -482,5 +484,6 @@ QList<int> QCocoaKeyMapper::possibleKeys(const QKeyEvent *event) const
          ret << int(key + (keyMods & ~neededMods));
       }
    }
+
    return ret;
 }

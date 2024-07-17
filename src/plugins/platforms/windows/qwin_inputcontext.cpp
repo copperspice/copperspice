@@ -44,7 +44,7 @@
 // Cancel current IME composition.
 static inline void imeNotifyCancelComposition(HWND hwnd)
 {
-   if (!hwnd) {
+   if (! hwnd) {
       qWarning() << "imeNotifyCancelComposition() Called with" << hwnd;
       return;
    }
@@ -131,7 +131,7 @@ void QWindowsInputContext::setFocusObject(QObject *)
 
 void QWindowsInputContext::updateEnabled()
 {
-   if (!QApplication::focusObject()) {
+   if (! QApplication::focusObject()) {
       return;
    }
 
@@ -294,6 +294,7 @@ static inline QTextFormat standardFormat(StandardFormat format)
       case PreeditFormat:
          result.setUnderlineStyle(QTextCharFormat::DashUnderline);
          break;
+
       case SelectionFormat: {
          // TODO: Should be that of the widget?
          const QPalette palette = QApplication::palette();
@@ -319,7 +320,8 @@ bool QWindowsInputContext::startComposition(HWND hwnd)
    if (!window) {
       return false;
    }
-   if (!fo || QWindowsWindow::handleOf(window) != hwnd) {
+
+   if (! fo || QWindowsWindow::handleOf(window) != hwnd) {
       return false;
    }
 
@@ -380,17 +382,20 @@ static inline QList<QInputMethodEvent::Attribute> intermediateMarkup(int positio
 bool QWindowsInputContext::composition(HWND hwnd, LPARAM lParamIn)
 {
    const int lParam = int(lParamIn);
+
    if (m_compositionContext.focusObject.isNull() || m_compositionContext.hwnd != hwnd || !lParam) {
       return false;
    }
+
    const HIMC himc = ImmGetContext(m_compositionContext.hwnd);
-   if (!himc) {
+
+   if (! himc) {
       return false;
    }
 
    QScopedPointer<QInputMethodEvent> event;
    if (lParam & (GCS_COMPSTR | GCS_COMPATTR | GCS_CURSORPOS)) {
-      if (!m_compositionContext.isComposing) {
+      if (! m_compositionContext.isComposing) {
          startContextComposition();
       }
 
@@ -428,9 +433,12 @@ bool QWindowsInputContext::composition(HWND hwnd, LPARAM lParamIn)
          endContextComposition();
       }
    }
+
    const bool result = QCoreApplication::sendEvent(m_compositionContext.focusObject, event.data());
+
    update(Qt::ImQueryAll);
    ImmReleaseContext(m_compositionContext.hwnd, himc);
+
    return result;
 }
 
@@ -559,6 +567,7 @@ int QWindowsInputContext::reconvertString(RECONVERTSTRING *reconv)
    const QString surroundingText = surroundingTextV.toString();
    const int memSize = int(sizeof(RECONVERTSTRING))
       + (surroundingText.length() + 1) * int(sizeof(ushort));
+
    // If memory is not allocated, return the required size.
    if (!reconv) {
       return surroundingText.isEmpty() ? -1 : memSize;

@@ -101,6 +101,7 @@ QString GpuDescription::toString() const
 {
    QString result;
    QTextStream str(&result);
+
    str <<   "         Card name: " << description
       << "\n       Driver Name: " << driverName
       << "\n    Driver Version: " << driverVersion.toString()
@@ -110,12 +111,14 @@ QString GpuDescription::toString() const
       << "\n         SubSys ID: 0x" << qSetFieldWidth(8) << subSysId
       << "\n       Revision ID: 0x" << qSetFieldWidth(4) << revision
       << dec;
+
    return result;
 }
 
 QVariant GpuDescription::toVariant() const
 {
    QVariantMap result;
+
    result.insert(QString("vendorId"), QVariant(vendorId));
    result.insert(QString("deviceId"), QVariant(deviceId));
    result.insert(QString("subSysId"), QVariant(subSysId));
@@ -128,6 +131,7 @@ QVariant GpuDescription::toVariant() const
    result.insert(QString("driverVersionString"), driverVersion.toString());
    result.insert(QString("description"), QVariant(QLatin1String(description)));
    result.insert(QString("printable"), QVariant(toString()));
+
    return result;
 }
 
@@ -202,18 +206,22 @@ static inline QString resolveBugListFile(const QString &fileName)
    // Try QLibraryInfo::SettingsPath which is typically empty unless specified in qt.conf,
    // then resolve via QStandardPaths::ConfigLocation.
    const QString settingsPath = QLibraryInfo::location(QLibraryInfo::SettingsPath);
-   if (!settingsPath.isEmpty()) { // SettingsPath is empty unless specified in qt.conf.
+
+   if (!settingsPath.isEmpty()) {
+      // SettingsPath is empty unless specified in cs.conf
+
       const QFileInfo fi(settingsPath + QChar('/') + fileName);
       if (fi.isFile()) {
          return fi.absoluteFilePath();
       }
    }
+
    return QStandardPaths::locate(QStandardPaths::ConfigLocation, fileName);
 }
 
 #ifndef QT_NO_OPENGL
 
-using SupportedRenderersCache = QHash<QOpenGLConfig::Gpu, QWindowsOpenGLTester::Renderers> ;
+using SupportedRenderersCache = QHash<QOpenGLConfig::Gpu, QWindowsOpenGLTester::Renderers>;
 
 static SupportedRenderersCache *supportedRenderersCache()
 {
@@ -225,16 +233,17 @@ static SupportedRenderersCache *supportedRenderersCache()
 
 QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(const GpuDescription &gpu, bool glesOnly)
 {
-
 #if defined(QT_NO_OPENGL)
    return Qt::EmptyFlag;
 
 #else
    QOpenGLConfig::Gpu qgpu = QOpenGLConfig::Gpu::fromDevice(gpu.vendorId, gpu.deviceId, gpu.driverVersion, gpu.description);
    SupportedRenderersCache *srCache = supportedRenderersCache();
-   SupportedRenderersCache::const_iterator it = srCache->find(qgpu);
-   if (it != srCache->cend()) {
-      return *it;
+
+   SupportedRenderersCache::const_iterator iter = srCache->find(qgpu);
+
+   if (iter != srCache->cend()) {
+      return *iter;
    }
 
    QWindowsOpenGLTester::Renderers result(QWindowsOpenGLTester::AngleRendererD3d11
@@ -242,7 +251,7 @@ QWindowsOpenGLTester::Renderers QWindowsOpenGLTester::detectSupportedRenderers(c
       | QWindowsOpenGLTester::AngleRendererD3d11Warp
       | QWindowsOpenGLTester::SoftwareRasterizer);
 
-   if (!glesOnly && testDesktopGL()) {
+   if (! glesOnly && testDesktopGL()) {
       result |= QWindowsOpenGLTester::DesktopGl;
    }
 
@@ -323,6 +332,7 @@ bool QWindowsOpenGLTester::testDesktopGL()
    // Test #1: Load opengl32.dll and try to resolve an OpenGL 2 function.
    // This will typically fail on systems that do not have a real OpenGL driver.
    lib = LoadLibraryA("opengl32.dll");
+
    if (lib) {
       CreateContext = cs_bitCast<HGLRC (WINAPI *)(HDC)>(::GetProcAddress(lib, "wglCreateContext"));
       if (!CreateContext) {
@@ -383,25 +393,24 @@ bool QWindowsOpenGLTester::testDesktopGL()
       // Use the GDI functions. Under the hood this will call the wgl variants in opengl32.dll.
       int pixelFormat = ChoosePixelFormat(dc, &pfd);
 
-      if (!pixelFormat) {
+      if (! pixelFormat) {
          goto cleanup;
       }
 
-      if (!SetPixelFormat(dc, pixelFormat, &pfd)) {
+      if (! SetPixelFormat(dc, pixelFormat, &pfd)) {
          goto cleanup;
       }
 
       context = CreateContext(dc);
-      if (!context) {
-         goto cleanup;
-      }
-      if (!MakeCurrent(dc, context)) {
+      if (! context) {
          goto cleanup;
       }
 
-      // Now that there is finally a context current, try doing something useful.
+      if (! MakeCurrent(dc, context)) {
+         goto cleanup;
+      }
 
-      // Check the version. If we got 1.x then it's all hopeless and we can stop right here.
+      // Check the version, if it is 1.x then stop
       typedef const GLubyte * (APIENTRY * GetString_t)(GLenum name);
       GetString_t GetString = cs_bitCast<GetString_t>(::GetProcAddress(lib, "glGetString"));
 
@@ -416,12 +425,9 @@ bool QWindowsOpenGLTester::testDesktopGL()
                if (minorDot == -1) {
                   minorDot = version.size();
                }
+
                const int major = version.mid(0, majorDot).toInt();
                const int minor = version.mid(majorDot + 1, minorDot - majorDot - 1).toInt();
-
-               // Try to be as lenient as possible. Missing version, bogus values and
-               // such are all accepted. The driver may still be functional. Only
-               // check for known-bad cases, like versions "1.4.0 ...".
 
                if (major == 1) {
 #if defined(CS_SHOW_DEBUG_PLATFORM)
@@ -447,8 +453,8 @@ bool QWindowsOpenGLTester::testDesktopGL()
          result = false;
       }
 
-      // Check for a shader-specific function.
-      if (WGL_GetProcAddress("glCreateShader")) {
+      // Check for a shader specific function
+      if (result || WGL_GetProcAddress("glCreateShader")) {
          result = true;
       }
 
@@ -476,12 +482,14 @@ cleanup:
       DestroyWindow(wnd);
       UnregisterClass(className, GetModuleHandle(nullptr));
    }
-   // No FreeLibrary. Some implementations, Mesa in particular, deadlock when trying to unload.
+
+   // No calls to FreeLibrary, some implementations like Mesa in particular deadlock when trying to unload
 
    return result;
 
 #else
    return false;
+
 #endif
 }
 

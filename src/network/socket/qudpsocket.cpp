@@ -187,8 +187,7 @@ qint64 QUdpSocket::writeDatagram(const char *data, qint64 size, const QHostAddre
    return sent;
 }
 
-qint64 QUdpSocket::readDatagram(char *data, qint64 maxSize, QHostAddress *address,
-                                quint16 *port)
+qint64 QUdpSocket::readDatagram(char *data, qint64 maxSize, QHostAddress *address, quint16 *port)
 {
    Q_D(QUdpSocket);
 

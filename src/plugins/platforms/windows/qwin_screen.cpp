@@ -36,9 +36,9 @@
 #include <QScreen>
 #include <QDebug>
 
-QWindowsScreenData::QWindowsScreenData() :
-   dpi(96, 96), depth(32), format(QImage::Format_ARGB32_Premultiplied),
-   flags(VirtualDesktop), orientation(Qt::LandscapeOrientation), refreshRateHz(60)
+QWindowsScreenData::QWindowsScreenData()
+   : dpi(96, 96), depth(32), format(QImage::Format_ARGB32_Premultiplied),
+     flags(VirtualDesktop), orientation(Qt::LandscapeOrientation), refreshRateHz(60)
 {
 }
 
@@ -184,8 +184,9 @@ static QDebug operator<<(QDebug debug, const QWindowsScreenData &d)
 }
 #endif
 
-QWindowsScreen::QWindowsScreen(const QWindowsScreenData &data) :
-   m_data(data)
+QWindowsScreen::QWindowsScreen(const QWindowsScreenData &data)
+   : m_data(data)
+
 #ifndef QT_NO_CURSOR
    , m_cursor(new QWindowsCursor(this))
 #endif
@@ -513,6 +514,7 @@ void QWindowsScreenManager::removeScreen(int index)
          QWindowSystemInterface::flushWindowSystemEvents();
       }
    }
+
    QWindowsIntegration::instance()->emitDestroyScreen(m_screens.takeAt(index));
 }
 
@@ -556,7 +558,7 @@ bool QWindowsScreenManager::handleScreenChanges()
 void QWindowsScreenManager::clearScreens()
 {
    // Delete screens in reverse order to avoid crash in case of multiple screens
-   while (!m_screens.isEmpty()) {
+   while (! m_screens.isEmpty()) {
       QWindowsIntegration::instance()->emitDestroyScreen(m_screens.takeLast());
    }
 }

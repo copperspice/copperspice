@@ -101,10 +101,12 @@ STDMETHODIMP QWindowsOleDataObject::GetData(LPFORMATETC pformatetc, LPSTGMEDIUM 
 
    if (data) {
       const QWindowsMimeConverter &mc = QWindowsContext::instance()->mimeConverter();
-      if (QWindowsMime *converter = mc.converterFromMime(*pformatetc, data))
+
+      if (QWindowsMime *converter = mc.converterFromMime(*pformatetc, data)) {
          if (converter->convertFromMime(*pformatetc, data, pmedium)) {
             hr = ResultFromScode(S_OK);
          }
+      }
    }
 
    return hr;
@@ -124,6 +126,7 @@ STDMETHODIMP QWindowsOleDataObject::QueryGetData(LPFORMATETC pformatetc)
       hr = mc.converterFromMime(*pformatetc, data) ?
          ResultFromScode(S_OK) : ResultFromScode(S_FALSE);
    }
+
    return hr;
 }
 
@@ -146,6 +149,7 @@ STDMETHODIMP QWindowsOleDataObject::SetData(LPFORMATETC pFormatetc, STGMEDIUM *p
       }
       hr = ResultFromScode(S_OK);
    }
+
    return hr;
 }
 
@@ -200,7 +204,7 @@ STDMETHODIMP QWindowsOleDataObject::EnumDAdvise(LPENUMSTATDATA FAR *)
 }
 
 QWindowsOleEnumFmtEtc::QWindowsOleEnumFmtEtc(const QVector<FORMATETC> &fmtetcs) :
-   m_dwRefs(1), m_nIndex(0), m_isNull(false)
+      m_dwRefs(1), m_nIndex(0), m_isNull(false)
 {
    m_lpfmtetcs.reserve(fmtetcs.count());
 

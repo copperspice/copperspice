@@ -122,8 +122,8 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
              slicePriority, slice.size(), sliceWeight);
 #endif
 
-      while (!slice.isEmpty()) {
       // Order the slice of records
+      while (! slice.isEmpty()) {
          const unsigned int weightThreshold = qrand() % (sliceWeight + 1);
          unsigned int summedWeight = 0;
 

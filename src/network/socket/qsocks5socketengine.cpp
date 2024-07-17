@@ -76,9 +76,11 @@ static constexpr const int MaxWriteBufferSize = 128 * 1024;
 #define S5_PASSWORDAUTH_VERSION 0x01
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-#  define QSOCKS5_Q_DEBUG qDebug() << this
-#  define QSOCKS5_D_DEBUG qDebug() << q_ptr
-#  define QSOCKS5_DEBUG qDebug() << "[QSocks5]"
+
+#define QSOCKS5_Q_DEBUG qDebug() << this
+#define QSOCKS5_D_DEBUG qDebug() << q_ptr
+#define QSOCKS5_DEBUG   qDebug() << "[QSocks5]"
+
 static QString s5StateToString(QSocks5SocketEnginePrivate::Socks5State s)
 {
    switch (s) {
@@ -149,9 +151,10 @@ static QString dump(const QByteArray &buf)
 }
 
 #else
-#  define QSOCKS5_DEBUG if (0) qDebug()
-#  define QSOCKS5_Q_DEBUG if (0) qDebug()
-#  define QSOCKS5_D_DEBUG if (0) qDebug()
+
+#define QSOCKS5_DEBUG   if (0) qDebug()
+#define QSOCKS5_Q_DEBUG if (0) qDebug()
+#define QSOCKS5_D_DEBUG if (0) qDebug()
 
 static inline QString s5StateToString(QSocks5SocketEnginePrivate::Socks5State)
 {
@@ -229,8 +232,7 @@ static bool qt_socks5_set_host_name_and_port(const QString &hostname, quint16 po
    return true;
 }
 
-static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddress *pAddress, quint16 *pPort,
-      int *pPos)
+static int qt_socks5_get_host_address_and_port(const QByteArray &buf, QHostAddress *pAddress, quint16 *pPort, int *pPos)
 {
    int ret = -1;
    int pos = *pPos;
@@ -1267,7 +1269,7 @@ void QSocks5SocketEnginePrivate::_q_controlSocketReadNotification()
 
       case Connected: {
          QByteArray buf;
-         if (!data->authenticator->unSeal(data->controlSocket, &buf)) {
+         if (! data->authenticator->unSeal(data->controlSocket, &buf)) {
             // no action
          }
 

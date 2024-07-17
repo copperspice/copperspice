@@ -96,7 +96,7 @@ extern "C" LRESULT QT_WIN_CALLBACK qClipboardViewerWndProc(HWND hwnd, UINT messa
 {
    LRESULT result = 0;
    if (QWindowsClipboard::instance()
-            && QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
+         && QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
       return result;
    }
 

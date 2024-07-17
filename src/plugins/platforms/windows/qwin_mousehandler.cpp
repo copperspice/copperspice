@@ -224,7 +224,7 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
          // Bit 7 indicates touch event, else tablet pen.
          source = Qt::MouseEventSynthesizedBySystem;
 
-         if (!passSynthesizedMouseEvents) {
+         if (! passSynthesizedMouseEvents) {
             return false;
          }
       }

@@ -423,7 +423,8 @@ QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QFontDef &fontDef, void *h
    return fe;
 }
 
-QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
+QFontEngine *QWindowsFontDatabaseFT::fontEngine(const QByteArray &fontData, qreal pixelSize,
+      QFont::HintingPreference hintingPreference)
 {
    QFontEngine *fe = QBasicFontDatabase::fontEngine(fontData, pixelSize, hintingPreference);
 
@@ -461,4 +462,3 @@ QFont QWindowsFontDatabaseFT::defaultFont() const
 {
    return QWindowsFontDatabase::systemDefaultFont();
 }
-

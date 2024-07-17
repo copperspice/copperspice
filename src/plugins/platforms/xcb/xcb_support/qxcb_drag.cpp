@@ -401,6 +401,7 @@ void QXcbDrag::move(const QPoint &globalPos)
 
       if (!target || target == shapedPixmapWindow()->handle()->winId()) {
          target = findRealWindow(globalPos, rootwin, 6, true);
+
          if (target == 0) {
             target = findRealWindow(globalPos, rootwin, 6, false);
          }
@@ -896,6 +897,7 @@ void QXcbDrag::handlePosition(QPlatformWindow *w, const xcb_client_message_event
 void QXcbDrag::handle_xdnd_status(const xcb_client_message_event_t *event)
 {
    waiting_for_status = false;
+
    // ignore late status messages
    if (event->data.data32[0] && event->data.data32[0] != current_target) {
       return;
@@ -1081,7 +1083,6 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
 
 void QXcbDrag::handleFinished(const xcb_client_message_event_t *event)
 {
-
    if (event->window != connection()->clipboard()->owner()) {
       return;
    }
@@ -1190,8 +1191,7 @@ static xcb_window_t findXdndAwareParent(QXcbConnection *c, xcb_window_t window)
       xcb_get_property_cookie_t gpCookie = Q_XCB_CALL2(xcb_get_property(c->xcb_connection(), false, window,
             c->atom(QXcbAtom::XdndAware), XCB_GET_PROPERTY_TYPE_ANY, 0, 0), c);
 
-      xcb_get_property_reply_t *gpReply = xcb_get_property_reply(
-            c->xcb_connection(), gpCookie, nullptr);
+      xcb_get_property_reply_t *gpReply = xcb_get_property_reply(c->xcb_connection(), gpCookie, nullptr);
 
       bool aware = gpReply && gpReply->type != XCB_NONE;
       free(gpReply);
@@ -1203,7 +1203,7 @@ static xcb_window_t findXdndAwareParent(QXcbConnection *c, xcb_window_t window)
 
       // try window's parent
       xcb_query_tree_cookie_t qtCookie = Q_XCB_CALL2(xcb_query_tree_unchecked(c->xcb_connection(), window), c);
-      xcb_query_tree_reply_t *qtReply = xcb_query_tree_reply(c->xcb_connection(), qtCookie, nullptr);
+      xcb_query_tree_reply_t *qtReply  = xcb_query_tree_reply(c->xcb_connection(), qtCookie, nullptr);
 
       if (! qtReply) {
          break;
@@ -1296,13 +1296,12 @@ void QXcbDrag::handleSelectionRequest(const xcb_selection_request_event_t *event
    xcb_send_event(xcb_connection(), false, proxy_target, XCB_EVENT_MASK_NO_EVENT, (const char *)&notify);
 }
 
-
 bool QXcbDrag::dndEnable(QXcbWindow *w, bool on)
 {
    if (on) {
       QXcbWindow *xdnd_widget = nullptr;
 
-      if ((w->window()->type() == Qt::Desktop)) {
+      if (w->window()->type() == Qt::Desktop) {
          if (desktop_proxy) {
             // already have one
             return false;

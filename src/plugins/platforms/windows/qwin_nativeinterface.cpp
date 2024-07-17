@@ -159,7 +159,7 @@ void *QWindowsNativeInterface::nativeResourceForIntegration(const QByteArray &re
 #ifndef QT_NO_OPENGL
 void *QWindowsNativeInterface::nativeResourceForContext(const QByteArray &resource, QOpenGLContext *context)
 {
-   if (!context || ! context->handle()) {
+   if (! context || ! context->handle()) {
       qWarning("nativeResourceForContext() Called with a null context or a conttext without a handle, %s", resource.constData());
       return nullptr;
    }

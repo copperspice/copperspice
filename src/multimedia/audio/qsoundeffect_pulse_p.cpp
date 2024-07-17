@@ -269,7 +269,7 @@ class QSoundEffectRef
 #endif
 
         QMutexLocker locker(&m_mutex);
-        m_ref++;
+        ++m_ref;
 
         return this;
     }
@@ -333,7 +333,9 @@ QSoundEffectPrivate::QSoundEffectPrivate(QObject* parent)
     Q_ASSERT(m_resources);
 
     m_resourcesAvailable = m_resources->isAvailable();
-    connect(m_resources, &QMediaPlayerResourceSetInterface::availabilityChanged, this, &QSoundEffectPrivate::handleAvailabilityChanged);
+
+    connect(m_resources, &QMediaPlayerResourceSetInterface::availabilityChanged, this,
+          &QSoundEffectPrivate::handleAvailabilityChanged);
 }
 
 void QSoundEffectPrivate::handleAvailabilityChanged(bool available)
@@ -1063,7 +1065,9 @@ void QSoundEffectPrivate::createPulseStream()
         pa_proplist_sets(propList, PA_PROP_MEDIA_ROLE, m_category.toLatin1().constData());
    }
 
-    pa_stream *stream = pa_stream_new_with_proplist(pulseDaemon()->context(), m_name.constData(), &m_pulseSpec, nullptr, propList);
+    pa_stream *stream = pa_stream_new_with_proplist(pulseDaemon()->context(), m_name.constData(),
+          &m_pulseSpec, nullptr, propList);
+
     pa_proplist_free(propList);
 
     connect(pulseDaemon(), &PulseDaemon::contextFailed, this, &QSoundEffectPrivate::contextFailed);
@@ -1212,7 +1216,9 @@ void QSoundEffectPrivate::stream_reset_buffer_callback(pa_stream *s, int success
         pa_buffer_attr newBufferAttr;
         newBufferAttr = *bufferAttr;
         newBufferAttr.prebuf = self->m_sample->data().size();
-        pa_operation *op = pa_stream_set_buffer_attr(self->m_pulseStream, &newBufferAttr, stream_adjust_prebuffer_callback, userdata);
+
+        pa_operation *op = pa_stream_set_buffer_attr(self->m_pulseStream,
+              &newBufferAttr, stream_adjust_prebuffer_callback, userdata);
 
         if (op) {
             pa_operation_unref(op);
@@ -1262,7 +1268,7 @@ void QSoundEffectPrivate::stream_underrun_callback(pa_stream *s, void *userdata)
    qDebug() << self << "stream_underrun_callback";
 #endif
 
-   if (self->m_runningCount == 0 && !self->m_playQueued) {
+   if (self->m_runningCount == 0 && ! self->m_playQueued) {
       QMetaObject::invokeMethod(self, "underRun", Qt::QueuedConnection);
    }
 

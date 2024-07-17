@@ -213,8 +213,7 @@ static const char spdyDictionary[] = {
 
 QSpdyProtocolHandler::QSpdyProtocolHandler(QHttpNetworkConnectionChannel *channel)
    : QObject(nullptr), QAbstractProtocolHandler(channel), m_nextStreamID(-1),
-     m_maxConcurrentStreams(100),
-     m_initialWindowSize(0), m_waitingForCompleteStream(false)
+     m_maxConcurrentStreams(100), m_initialWindowSize(0), m_waitingForCompleteStream(false)
 {
    // 100 is recommended for m_maxConcurrentStreams in the SPDY RFC
 

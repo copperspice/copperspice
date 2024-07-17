@@ -318,13 +318,13 @@ QPlatformWindow *QWindowsIntegration::createPlatformWindow(QWindow *window) cons
    return result;
 }
 
-// Overridden to return a QWindowsDirect2DWindow in Direct2D plugin.
+// Overridden to return a QWindowsDirect2DWindow in Direct2D plugin
 QWindowsWindow *QWindowsIntegration::createPlatformWindowHelper(QWindow *window, const QWindowsWindowData &data) const
 {
    return new QWindowsWindow(window, data);
 }
 
-#ifndef QT_NO_OPENGL
+#if ! defined(QT_NO_OPENGL)
 
 QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
 {
@@ -335,7 +335,7 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
       case QWindowsOpenGLTester::DesktopGl:
          if (QWindowsStaticOpenGLContext *glCtx = QOpenGLStaticContext::create()) {
             if ((QWindowsOpenGLTester::supportedRenderers() & QWindowsOpenGLTester::DisableRotationFlag)
-               && !QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
+                  && !QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
                qWarning("QWindowsStaticOpenGLContext::doCreate() Unable to disable rotation");
             }
             return glCtx;
@@ -344,7 +344,7 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
          qWarning("QWindowsStaticOpenGLContext::doCreate() System OpenGL failed, Falling back to Software OpenGL");
          return QOpenGLStaticContext::create(true);
 
-      // If ANGLE is requested, use it, don't try anything else.
+      // If ANGLE is requested use it, do not try anything else
       case QWindowsOpenGLTester::AngleRendererD3d9:
       case QWindowsOpenGLTester::AngleRendererD3d11:
       case QWindowsOpenGLTester::AngleRendererD3d11Warp:
@@ -371,10 +371,12 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
    }
 
    const QWindowsOpenGLTester::Renderers supportedRenderers = QWindowsOpenGLTester::supportedRenderers();
+
    if (supportedRenderers & QWindowsOpenGLTester::DesktopGl) {
       if (QWindowsStaticOpenGLContext *glCtx = QOpenGLStaticContext::create()) {
+
          if ((supportedRenderers & QWindowsOpenGLTester::DisableRotationFlag)
-            && !QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
+               && ! QWindowsScreen::setOrientationPreference(Qt::LandscapeOrientation)) {
             qWarning("QWindowsStaticOpenGLContext::doCreate() Unable to disable rotation");
          }
          return glCtx;
@@ -387,17 +389,18 @@ QWindowsStaticOpenGLContext *QWindowsStaticOpenGLContext::doCreate()
       }
    }
 
-
    return QOpenGLStaticContext::create(true);
 
 #elif defined(QT_OPENGL_ES_2)
    QWindowsOpenGLTester::Renderers glesRenderers = QWindowsOpenGLTester::requestedGlesRenderer();
+
    if (glesRenderers == QWindowsOpenGLTester::InvalidRenderer) {
       glesRenderers = QWindowsOpenGLTester::supportedGlesRenderers();
    }
+
    return QWindowsEGLStaticContext::create(glesRenderers);
 
-#elif !defined(QT_NO_OPENGL)
+#else
    return QOpenGLStaticContext::create();
 
 #endif
@@ -426,9 +429,9 @@ QPlatformOpenGLContext *QWindowsIntegration::createPlatformOpenGLContext(QOpenGL
 QOpenGLContext::OpenGLModuleType QWindowsIntegration::openGLModuleType()
 {
 #if defined(QT_OPENGL_ES_2)
-
    return QOpenGLContext::LibGLES;
-#elif !defined(QT_OPENGL_DYNAMIC)
+
+#elif ! defined(QT_OPENGL_DYNAMIC)
    return QOpenGLContext::LibGL;
 
 #else
@@ -443,6 +446,7 @@ QOpenGLContext::OpenGLModuleType QWindowsIntegration::openGLModuleType()
 QWindowsStaticOpenGLContext *QWindowsIntegration::staticOpenGLContext()
 {
    QWindowsIntegration *integration = QWindowsIntegration::instance();
+
    if (! integration) {
       return nullptr;
    }
@@ -458,7 +462,6 @@ QWindowsStaticOpenGLContext *QWindowsIntegration::staticOpenGLContext()
 }
 
 #endif // ! QT_NO_OPENGL
-
 
 QPlatformFontDatabase *QWindowsIntegration::fontDatabase() const
 {

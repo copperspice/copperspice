@@ -1332,7 +1332,7 @@ bool QSslSocketBackendPrivate::startHandshake()
 
    // check protocol version ourselves, as Secure Transport does not enforce
    // the requested min / max versions.
-   if (!verifySessionProtocol()) {
+   if (! verifySessionProtocol()) {
       setErrorAndEmit(QAbstractSocket::SslHandshakeFailedError, "Protocol version mismatch");
       plainSocket->disconnectFromHost();
       return false;

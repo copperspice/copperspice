@@ -1073,7 +1073,7 @@ static bool _q_dontOverrideCtrlLMB = false;
       return [super rightMouseDragged: theEvent];
    }
 
-   if (!(m_buttons & Qt::RightButton)) {
+   if (! (m_buttons & Qt::RightButton)) {
 #if defined(CS_SHOW_DEBUG_PLATFORM_WINDOW)
       qDebug("QNSView rightMouseDragged: Internal mouse button tracking invalid (missing Qt::RightButton)");
 #endif
@@ -1327,7 +1327,8 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 - (void)touchesBeganWithEvent: (NSEvent *)event
 {
    const NSTimeInterval timestamp = [event timestamp];
-   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(event, [self shouldSendSingleTouch]);
+   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(
+         event, [self shouldSendSingleTouch]);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM_WINDOW)
    qDebug() << "touchesBeganWithEvent" << points;
@@ -1339,7 +1340,8 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 - (void)touchesMovedWithEvent: (NSEvent *)event
 {
    const NSTimeInterval timestamp = [event timestamp];
-   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(event, [self shouldSendSingleTouch]);
+   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(
+         event, [self shouldSendSingleTouch]);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM_WINDOW)
    qDebug() << "touchesMovedWithEvent" << points;
@@ -1351,7 +1353,8 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 - (void)touchesEndedWithEvent: (NSEvent *)event
 {
    const NSTimeInterval timestamp = [event timestamp];
-   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(event, [self shouldSendSingleTouch]);
+   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(
+         event, [self shouldSendSingleTouch]);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM_WINDOW)
    qDebug() << "touchesEndedWithEvent" << points;
@@ -1363,7 +1366,9 @@ static QTabletEvent::TabletDevice wacomTabletDevice(NSEvent *theEvent)
 - (void)touchesCancelledWithEvent: (NSEvent *)event
 {
    const NSTimeInterval timestamp = [event timestamp];
-   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(event, [self shouldSendSingleTouch]);
+   const QList<QWindowSystemInterface::TouchPoint> points = QCocoaTouch::getCurrentTouchPointList(
+         event, [self shouldSendSingleTouch]);
+
 #if defined(CS_SHOW_DEBUG_PLATFORM_WINDOW)
    qDebug() << "touchesCancelledWithEvent" << points;
 #endif

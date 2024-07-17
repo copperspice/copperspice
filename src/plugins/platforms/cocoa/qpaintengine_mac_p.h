@@ -123,6 +123,7 @@ class QCoreGraphicsPaintEngine : public QPaintEngine
 class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
 {
    Q_DECLARE_PUBLIC(QCoreGraphicsPaintEngine)
+
  public:
    enum { CosmeticNone, CosmeticTransformPath, CosmeticSetPenWidth } cosmeticPen;
 
@@ -131,8 +132,8 @@ class QCoreGraphicsPaintEnginePrivate : public QPaintEnginePrivate
    static constexpr const int CGFill   = 0x04;
 
    QCoreGraphicsPaintEnginePrivate()
-      : hd(nullptr), shading(nullptr), stackCount(0), complexXForm(false), disabledSmoothFonts(false) {
-   }
+      : hd(nullptr), shading(nullptr), stackCount(0), complexXForm(false), disabledSmoothFonts(false)
+   { }
 
    struct {
       QPen pen;

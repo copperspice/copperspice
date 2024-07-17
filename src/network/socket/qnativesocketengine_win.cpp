@@ -41,11 +41,11 @@
 //Also microsoft headers do no t include it when building on XP and earlier.
 
 #ifndef IPV6_V6ONLY
-#define IPV6_V6ONLY 27
+#define IPV6_V6ONLY  27
 #endif
 
 #ifndef IP_HOPLIMIT
-#define IP_HOPLIMIT               21 // Receive packet hop limit.
+#define IP_HOPLIMIT  21       // Receive packet hop limit
 #endif
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
@@ -188,7 +188,8 @@ void verboseWSErrorDebug(int r)
       case WSAECONNREFUSED:
          qDebug("WSA error : WSAECONNREFUSED");
          break;
-      case WSAELOOP:
+
+     case WSAELOOP:
          qDebug("WSA error : WSAELOOP");
          break;
 
@@ -287,11 +288,11 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxLength)
 #endif
 
 #ifndef AF_INET6
-#define AF_INET6   23              /* Internetwork Version 6 */
+#define AF_INET6   23                                 /* Internetwork Version 6 */
 #endif
 
 #ifndef SO_EXCLUSIVEADDRUSE
-#define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR)) /* disallow local address reuse */
+#define SO_EXCLUSIVEADDRUSE ((int)(~SO_REUSEADDR))    /* disallow local address reuse */
 #endif
 
 static inline void qt_socket_getPortAndAddress(SOCKET socketDescriptor, const qt_sockaddr *sa,
@@ -340,7 +341,7 @@ static inline void qt_socket_getPortAndAddress(SOCKET socketDescriptor, const qt
 }
 
 static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
-                                    QAbstractSocket::NetworkLayerProtocol socketProtocol, int &level, int &n)
+      QAbstractSocket::NetworkLayerProtocol socketProtocol, int &level, int &n)
 {
    n = 0;
    level = SOL_SOCKET; // default
@@ -471,7 +472,7 @@ inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid
 }
 
 bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType,
-                  QAbstractSocket::NetworkLayerProtocol &socketProtocol)
+      QAbstractSocket::NetworkLayerProtocol &socketProtocol)
 {
    //### no ip6 support on winsocket 1.1 but we will try not to use this
 
@@ -486,8 +487,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
 
    //Windows XP and 2003 support IPv6 but not dual stack sockets
    int protocol = (socketProtocol == QAbstractSocket::IPv6Protocol
-                   || (socketProtocol == QAbstractSocket::AnyIPProtocol &&
-                       osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
+         || (socketProtocol == QAbstractSocket::AnyIPProtocol && osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
 
    int type = (socketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
 
@@ -562,7 +562,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
       int bNewBehavior = 1;
 
       if (::WSAIoctl(socket, SIO_UDP_CONNRESET, &bNewBehavior, sizeof(bNewBehavior),
-                     nullptr, 0, &dwBytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
+            nullptr, 0, &dwBytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
          // not to worry isBogusUdpReadNotification() should handle this otherwise
          int err = WSAGetLastError();
          WS_ERROR_DEBUG(err);
@@ -574,15 +574,14 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    GUID recvmsgguid = WSAID_WSARECVMSG;
 
    if (WSAIoctl(socketDescriptor, SIO_GET_EXTENSION_FUNCTION_POINTER,
-                &recvmsgguid, sizeof(recvmsgguid),
-                &recvmsg, sizeof(recvmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
+         &recvmsgguid, sizeof(recvmsgguid), &recvmsg, sizeof(recvmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
       recvmsg = nullptr;
    }
 
    GUID sendmsgguid = WSAID_WSASENDMSG;
+
    if (WSAIoctl(socketDescriptor, SIO_GET_EXTENSION_FUNCTION_POINTER,
-                &sendmsgguid, sizeof(sendmsgguid),
-                &sendmsg, sizeof(sendmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
+         &sendmsgguid, sizeof(sendmsgguid), &sendmsg, sizeof(sendmsg), &bytesReturned, nullptr, nullptr) == SOCKET_ERROR) {
       sendmsg = nullptr;
    }
 
@@ -650,7 +649,8 @@ int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) co
 bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt, int v)
 {
    Q_Q(const QNativeSocketEngine);
-   if (!q->isValid()) {
+
+   if (! q->isValid()) {
       return false;
    }
    // handle non-setsockopt options
@@ -738,8 +738,7 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
       WS_ERROR_DEBUG(err);
 
       if (err == WSAENOTSOCK) {
-         setError(QAbstractSocket::UnsupportedSocketOperationError,
-                  InvalidSocketErrorString);
+         setError(QAbstractSocket::UnsupportedSocketOperationError, InvalidSocketErrorString);
          return false;
       }
    }
@@ -747,10 +746,10 @@ bool QNativeSocketEnginePrivate::fetchConnectionParameters()
    // determine if local address is dual mode
    DWORD ipv6only = 0;
    QT_SOCKOPTLEN_T optlen = sizeof(ipv6only);
-   if (localAddress == QHostAddress::AnyIPv6
-         && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0
-         && !getsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, &optlen )) {
-      if (!ipv6only) {
+
+   if (localAddress == QHostAddress::AnyIPv6 && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0
+         && ! getsockopt(socketDescriptor, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&ipv6only, &optlen )) {
+      if (! ipv6only) {
          socketProtocol = QAbstractSocket::AnyIPProtocol;
          localAddress = QHostAddress::Any;
       }
@@ -942,9 +941,8 @@ bool QNativeSocketEnginePrivate::nativeConnect(const QHostAddress &address, quin
          if (socketState != QAbstractSocket::ConnectedState) {
 #if defined(CS_SHOW_DEBUG_NETWORK)
             qDebug("QNativeSocketEnginePrivate::nativeConnect(%s, %i) == false (%s)",
-                   address.toString().toLatin1().constData(), port,
-                   socketState == QAbstractSocket::ConnectingState
-                   ? "Connection in progress" : socketErrorString.toLatin1().constData());
+                  csPrintable(address.toString()), port, socketState == QAbstractSocket::ConnectingState
+                  ? "Connection in progress" : csPrintable(socketErrorString));
 #endif
 
             return false;
@@ -1057,8 +1055,7 @@ bool QNativeSocketEnginePrivate::nativeListen(int backlog)
             break;
 
          case WSAEADDRINUSE:
-            setError(QAbstractSocket::AddressInUseError,
-                     PortInuseErrorString);
+            setError(QAbstractSocket::AddressInUseError, PortInuseErrorString);
             break;
 
          default:

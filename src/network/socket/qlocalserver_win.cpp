@@ -60,13 +60,14 @@ bool QLocalServerPrivate::addListener()
    // create security descriptor if access options were specified
    if ((socketOptions & QLocalServer::WorldAccessOption)) {
       pSD.reset(new SECURITY_DESCRIPTOR);
-      if (!InitializeSecurityDescriptor(pSD.data(), SECURITY_DESCRIPTOR_REVISION)) {
+
+      if (! InitializeSecurityDescriptor(pSD.data(), SECURITY_DESCRIPTOR_REVISION)) {
          setError("QLocalServerPrivate::addListener");
          return false;
       }
 
       HANDLE hToken = nullptr;
-      if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
+      if (! OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
          return false;
       }
 
@@ -78,6 +79,7 @@ bool QLocalServerPrivate::addListener()
       if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwBufferSize, &dwBufferSize)) {
          setError("QLocalServerPrivate::addListener");
          CloseHandle(hToken);
+
          return false;
       }
 
@@ -86,7 +88,7 @@ bool QLocalServerPrivate::addListener()
       tokenGroupBuffer.fill(0, dwBufferSize);
       PTOKEN_PRIMARY_GROUP pTokenGroup = (PTOKEN_PRIMARY_GROUP)tokenGroupBuffer.data();
 
-      if (!GetTokenInformation(hToken, TokenPrimaryGroup, pTokenGroup, dwBufferSize, &dwBufferSize)) {
+      if (! GetTokenInformation(hToken, TokenPrimaryGroup, pTokenGroup, dwBufferSize, &dwBufferSize)) {
          setError("QLocalServerPrivate::addListener");
          CloseHandle(hToken);
          return false;
@@ -121,9 +123,8 @@ bool QLocalServerPrivate::addListener()
 #endif
 
       SID_IDENTIFIER_AUTHORITY WorldAuth = { SECURITY_WORLD_SID_AUTHORITY };
-      if (!AllocateAndInitializeSid(&WorldAuth, 1, SECURITY_WORLD_RID,
-                                    0, 0, 0, 0, 0, 0, 0,
-                                    &worldSID)) {
+
+      if (! AllocateAndInitializeSid(&WorldAuth, 1, SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, &worldSID)) {
          setError("QLocalServerPrivate::addListener");
          return false;
       }
@@ -138,9 +139,10 @@ bool QLocalServerPrivate::addListener()
       InitializeAcl(acl, aclSize, ACL_REVISION_DS);
 
       if (socketOptions & QLocalServer::UserAccessOption) {
-         if (!AddAccessAllowedAce(acl, ACL_REVISION, FILE_ALL_ACCESS, pTokenUser->User.Sid)) {
+         if (! AddAccessAllowedAce(acl, ACL_REVISION, FILE_ALL_ACCESS, pTokenUser->User.Sid)) {
             setError("QLocalServerPrivate::addListener");
             FreeSid(worldSID);
+
             return false;
          }
       }
@@ -158,8 +160,10 @@ bool QLocalServerPrivate::addListener()
             return false;
          }
       }
+
       SetSecurityDescriptorOwner(pSD.data(), pTokenUser->User.Sid, FALSE);
       SetSecurityDescriptorGroup(pSD.data(), pTokenGroup->PrimaryGroup, FALSE);
+
       if (!SetSecurityDescriptorDacl(pSD.data(), TRUE, acl, FALSE)) {
          setError("QLocalServerPrivate::addListener");
          FreeSid(worldSID);
@@ -182,6 +186,7 @@ bool QLocalServerPrivate::addListener()
    if (listener.handle == INVALID_HANDLE_VALUE) {
       setError("QLocalServerPrivate::addListener");
       listeners.removeLast();
+
       return false;
    }
 

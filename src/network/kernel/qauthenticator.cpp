@@ -587,11 +587,8 @@ QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge,
    QByteArray qop = options.value("qop");
 
    QByteArray response = digestMd5ResponseHelper(options.value("algorithm"), user.toLatin1(),
-                         realm.toLatin1(), password.toLatin1(),
-                         nonce, nonceCountString,
-                         cnonce, qop, method,
-                         path, QByteArray());
-
+         realm.toLatin1(), password.toLatin1(), nonce, nonceCountString,
+         cnonce, qop, method, path, QByteArray());
 
    QByteArray credentials;
    credentials += "username=\"" + user.toLatin1() + "\", ";

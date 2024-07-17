@@ -141,6 +141,7 @@ static int ioErrorHandler(Display *dpy)
       int code = xcb_connection_has_error(conn);
       const char *str = "Unknown error";
       int arrayLength = sizeof(xcbConnectionErrors) / sizeof(xcbConnectionErrors[0]);
+
       if (code >= 0 && code < arrayLength) {
          str = xcbConnectionErrors[code];
       }
@@ -221,9 +222,9 @@ void QXcbConnection::updateScreens(const xcb_randr_notify_event_t *event)
    } else if (event->subCode == XCB_RANDR_NOTIFY_OUTPUT_CHANGE) {
       xcb_randr_output_change_t output = event->u.oc;
       QXcbVirtualDesktop *virtualDesktop = virtualDesktopForRootWindow(output.window);
-      if (!virtualDesktop)
+
+      if (! virtualDesktop) {
          // Not for us
-      {
          return;
       }
 
@@ -436,39 +437,51 @@ void QXcbConnection::initializeScreens()
    xcb_screen_iterator_t it = xcb_setup_roots_iterator(m_setup);
    int xcbScreenNumber = 0;    // screen number in the xcb sense
    QXcbScreen *primaryScreen = nullptr;
+
    while (it.rem) {
       // Each "screen" in xcb terminology is a virtual desktop,
       // potentially a collection of separate juxtaposed monitors.
       // But we want a separate QScreen for each output (e.g. DVI-I-1, VGA-1, etc.)
       // which will become virtual siblings.
       xcb_screen_t *xcbScreen = it.data;
+
       QXcbVirtualDesktop *virtualDesktop = new QXcbVirtualDesktop(this, xcbScreen, xcbScreenNumber);
       m_virtualDesktops.append(virtualDesktop);
+
       QList<QPlatformScreen *> siblings;
+
       if (has_randr_extension) {
          xcb_generic_error_t *error = nullptr;
+
          // RRGetScreenResourcesCurrent is fast but it may return nothing if the
          // configuration is not initialized wrt to the hardware. We should call
          // RRGetScreenResources in this case.
          QScopedPointer<xcb_randr_get_screen_resources_reply_t, QMallocDeleter> resources;
+
          xcb_randr_get_screen_resources_current_cookie_t resourcesCookie =
             xcb_randr_get_screen_resources_current(xcb_connection(), xcbScreen->root);
+
          QScopedPointer<xcb_randr_get_screen_resources_current_reply_t, QMallocDeleter> resources_current(
             xcb_randr_get_screen_resources_current_reply(xcb_connection(), resourcesCookie, &error));
-         if (!resources_current || error) {
+
+         if (! resources_current || error) {
             qWarning("QXcbConnection::initializeScreens() Failed to obtain the current screen resources");
             free(error);
+
          } else {
             xcb_timestamp_t timestamp;
             xcb_randr_output_t *outputs = nullptr;
             int outputCount = xcb_randr_get_screen_resources_current_outputs_length(resources_current.data());
+
             if (outputCount) {
                timestamp = resources_current->config_timestamp;
                outputs = xcb_randr_get_screen_resources_current_outputs(resources_current.data());
             } else {
                xcb_randr_get_screen_resources_cookie_t resourcesCookie =
                   xcb_randr_get_screen_resources(xcb_connection(), xcbScreen->root);
+
                resources.reset(xcb_randr_get_screen_resources_reply(xcb_connection(), resourcesCookie, &error));
+
                if (!resources || error) {
                   qWarning("QXcbConnection::initializeScreens() Failed to obtain the screen resources");
                   free(error);
@@ -482,11 +495,14 @@ void QXcbConnection::initializeScreens()
             if (outputCount) {
                xcb_randr_get_output_primary_cookie_t primaryCookie =
                   xcb_randr_get_output_primary(xcb_connection(), xcbScreen->root);
+
                QScopedPointer<xcb_randr_get_output_primary_reply_t, QMallocDeleter> primary(
                   xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
+
                if (!primary || error) {
                   qWarning("QXcbConnection::initializeScreens() Failed to obtain the primary output of the screen");
                   free(error);
+
                } else {
                   for (int i = 0; i < outputCount; i++) {
                      QScopedPointer<xcb_randr_get_output_info_reply_t, QMallocDeleter> output(
@@ -545,7 +561,7 @@ void QXcbConnection::initializeScreens()
 
       } else if (has_xinerama_extension) {
          // Xinerama is available
-         xcb_xinerama_query_screens_cookie_t cookie = xcb_xinerama_query_screens(m_connection);
+         xcb_xinerama_query_screens_cookie_t cookie  = xcb_xinerama_query_screens(m_connection);
          xcb_xinerama_query_screens_reply_t *screens = xcb_xinerama_query_screens_reply(m_connection, cookie, nullptr);
 
          if (screens) {
@@ -558,6 +574,7 @@ void QXcbConnection::initializeScreens()
                m_screens << screen;
                xcb_xinerama_screen_info_next(&it);
             }
+
             free(screens);
          }
       }
@@ -1081,6 +1098,7 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
 {
    long result = 0;
    QAbstractEventDispatcher *dispatcher = QAbstractEventDispatcher::instance();
+
    if (dispatcher && dispatcher->filterNativeEvent(m_nativeInterface->genericEventFilterType(), error, &result)) {
       return;
    }
@@ -1281,7 +1299,7 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             xcb_button_press_event_t *ev = (xcb_button_press_event_t *)event;
             m_keyboard->updateXKBStateFromCore(ev->state);
 
-            // the event explicitly contains the state of the three first buttons,
+            // event explicitly contains the state of the three first buttons,
             // the rest we need to manage ourselves
             m_buttons = (m_buttons & ~0x7) | translateMouseButtons(ev->state);
             m_buttons |= translateMouseButton(ev->detail);
@@ -1787,7 +1805,8 @@ xcb_window_t QXcbConnection::clientLeader()
 #if ! defined(QT_NO_SESSIONMANAGER) && defined(XCB_USE_SM)
       // If we are session managed, inform the window manager about it
       QByteArray session = qGuiApp->sessionId().toLatin1();
-      if (!session.isEmpty()) {
+
+      if (! session.isEmpty()) {
 
          Q_XCB_CALL(xcb_change_property(xcb_connection(),
                XCB_PROP_MODE_REPLACE,
@@ -1927,6 +1946,7 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
       return false;
    }
 #endif
+
    if (responseType == XCB_CONFIGURE_NOTIFY) {
       // compress multiple configure notify events for the same window
       for (int j = nextIndex; j < eventqueue->size(); ++j) {
@@ -2428,6 +2448,7 @@ void QXcbConnection::initializeXRandr()
       free(error);
       has_randr_extension = false;
    }
+
    free(xrandr_query);
 
    xcb_screen_iterator_t rootIter = xcb_setup_roots_iterator(m_setup);

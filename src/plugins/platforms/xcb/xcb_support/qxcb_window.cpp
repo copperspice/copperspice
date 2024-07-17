@@ -75,8 +75,8 @@ static constexpr const int defaultWindowHeight = 160;
 
 enum QX11EmbedFocusInDetail {
    XEMBED_FOCUS_CURRENT = 0,
-   XEMBED_FOCUS_FIRST = 1,
-   XEMBED_FOCUS_LAST = 2
+   XEMBED_FOCUS_FIRST   = 1,
+   XEMBED_FOCUS_LAST    = 2
 };
 
 enum QX11EmbedInfoFlags {
@@ -84,19 +84,19 @@ enum QX11EmbedInfoFlags {
 };
 
 enum QX11EmbedMessageType {
-   XEMBED_EMBEDDED_NOTIFY = 0,
-   XEMBED_WINDOW_ACTIVATE = 1,
-   XEMBED_WINDOW_DEACTIVATE = 2,
-   XEMBED_REQUEST_FOCUS = 3,
-   XEMBED_FOCUS_IN = 4,
-   XEMBED_FOCUS_OUT = 5,
-   XEMBED_FOCUS_NEXT = 6,
-   XEMBED_FOCUS_PREV = 7,
-   XEMBED_MODALITY_ON = 10,
-   XEMBED_MODALITY_OFF = 11,
-   XEMBED_REGISTER_ACCELERATOR = 12,
+   XEMBED_EMBEDDED_NOTIFY        = 0,
+   XEMBED_WINDOW_ACTIVATE        = 1,
+   XEMBED_WINDOW_DEACTIVATE      = 2,
+   XEMBED_REQUEST_FOCUS          = 3,
+   XEMBED_FOCUS_IN               = 4,
+   XEMBED_FOCUS_OUT              = 5,
+   XEMBED_FOCUS_NEXT             = 6,
+   XEMBED_FOCUS_PREV             = 7,
+   XEMBED_MODALITY_ON            = 10,
+   XEMBED_MODALITY_OFF           = 11,
+   XEMBED_REGISTER_ACCELERATOR   = 12,
    XEMBED_UNREGISTER_ACCELERATOR = 13,
-   XEMBED_ACTIVATE_ACCELERATOR = 14
+   XEMBED_ACTIVATE_ACCELERATOR   = 14
 };
 
 const quint32 XEMBED_VERSION = 0;
@@ -106,7 +106,6 @@ QXcbScreen *QXcbWindow::parentScreen()
    return parent() ? static_cast<QXcbWindow *>(parent())->parentScreen() : xcbScreen();
 }
 
-// Returns \c true if we should set WM_TRANSIENT_FOR on \a w
 static inline bool isTransient(const QWindow *w)
 {
    return w->type() == Qt::Dialog
@@ -255,11 +254,12 @@ static QWindow *childWindowAt(QWindow *win, const QPoint &p)
          }
       }
    }
-   if (!win->isTopLevel()
-      && !(win->flags() & Qt::WindowTransparentForInput)
-      && win->geometry().contains(win->parent()->mapFromGlobal(p))) {
+
+   if (!win->isTopLevel() && !(win->flags() & Qt::WindowTransparentForInput)
+         && win->geometry().contains(win->parent()->mapFromGlobal(p))) {
       return win;
    }
+
    return nullptr;
 }
 
@@ -277,9 +277,8 @@ QXcbWindow::QXcbWindow(QWindow *window)
 }
 
 enum : quint32 {
-   baseEventMask
-      = XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY
-         | XCB_EVENT_MASK_PROPERTY_CHANGE | XCB_EVENT_MASK_FOCUS_CHANGE,
+   baseEventMask = XCB_EVENT_MASK_EXPOSURE | XCB_EVENT_MASK_STRUCTURE_NOTIFY
+      | XCB_EVENT_MASK_PROPERTY_CHANGE | XCB_EVENT_MASK_FOCUS_CHANGE,
 
    defaultEventMask = baseEventMask
       | XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE

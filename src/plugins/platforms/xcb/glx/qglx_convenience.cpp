@@ -33,14 +33,14 @@
 #include <GL/glxext.h>
 
 enum {
-    XFocusOut = FocusOut,
-    XFocusIn = FocusIn,
-    XKeyPress = KeyPress,
-    XKeyRelease = KeyRelease,
-    XNone = None,
+    XFocusOut       = FocusOut,
+    XFocusIn        = FocusIn,
+    XKeyPress       = KeyPress,
+    XKeyRelease     = KeyRelease,
+    XNone           = None,
     XRevertToParent = RevertToParent,
-    XGrayScale = GrayScale,
-    XCursorShape = CursorShape
+    XGrayScale      = GrayScale,
+    XCursorShape    = CursorShape
 };
 
 #undef FocusOut

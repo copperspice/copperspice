@@ -119,10 +119,12 @@ typedef int GETPROPERTYSTOREFLAGS;
 #endif
 
 typedef int (QT_WIN_CALLBACK *BFFCALLBACK)(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
+
 // message from browser
 #define BFFM_INITIALIZED        1
 #define BFFM_SELCHANGED         2
 #define BFFM_ENABLEOK           (WM_USER + 101)
+
 // Browsing for directory.
 #define BIF_NONEWFOLDERBUTTON  0x0200
 #define BIF_NOTRANSLATETARGETS 0x0400
@@ -131,13 +133,14 @@ typedef int (QT_WIN_CALLBACK *BFFCALLBACK)(HWND hwnd, UINT uMsg, LPARAM lParam, 
 #define BIF_BROWSEINCLUDEFILES 0x4000
 #define BIF_SHAREABLE          0x8000
 
-//the enums
+
 typedef enum {
    SIATTRIBFLAGS_AND   = 0x1,
    SIATTRIBFLAGS_OR    = 0x2,
    SIATTRIBFLAGS_APPCOMPAT     = 0x3,
    SIATTRIBFLAGS_MASK  = 0x3
 }       SIATTRIBFLAGS;
+
 #ifndef __MINGW64_VERSION_MAJOR
 typedef enum {
    SIGDN_NORMALDISPLAY = 0x00000000,
@@ -150,22 +153,26 @@ typedef enum {
    SIGDN_URL = 0x80068000
 } SIGDN;
 #endif
+
 typedef enum {
    FDAP_BOTTOM = 0x00000000,
    FDAP_TOP = 0x00000001
 } FDAP;
+
 typedef enum {
    FDESVR_DEFAULT = 0x00000000,
    FDESVR_ACCEPT = 0x00000001,
    FDESVR_REFUSE = 0x00000002
 } FDE_SHAREVIOLATION_RESPONSE;
+
 typedef FDE_SHAREVIOLATION_RESPONSE FDE_OVERWRITE_RESPONSE;
 
-//the structs
+
 typedef struct {
    LPCWSTR pszName;
    LPCWSTR pszSpec;
 } qt_COMDLG_FILTERSPEC;
+
 typedef struct {
    GUID fmtid;
    DWORD pid;
@@ -175,10 +182,13 @@ typedef struct {
    USHORT      cb;
    BYTE        abID[1];
 } qt_SHITEMID, *qt_LPSHITEMID;
+
 typedef struct {
    qt_SHITEMID mkid;
 } qt_ITEMIDLIST, *qt_LPITEMIDLIST;
+
 typedef const qt_ITEMIDLIST *qt_LPCITEMIDLIST;
+
 typedef struct {
    HWND          hwndOwner;
    qt_LPCITEMIDLIST pidlRoot;
@@ -1001,7 +1011,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
       return result;
 
    } else if (url.scheme() == "clsid") {
-      if (! QWindowsContext::shell32dll.sHGetKnownFolderIDList || !QWindowsContext::shell32dll.sHCreateItemFromIDList) {
+      if (! QWindowsContext::shell32dll.sHGetKnownFolderIDList || ! QWindowsContext::shell32dll.sHCreateItemFromIDList) {
          return nullptr;
       }
 
@@ -1042,7 +1052,7 @@ IShellItem *QWindowsNativeFileDialogBase::shellItem(const QUrl &url)
 
 void QWindowsNativeFileDialogBase::setDirectory(const QUrl &directory)
 {
-   if (!directory.isEmpty()) {
+   if (! directory.isEmpty()) {
       if (IShellItem *psi = QWindowsNativeFileDialogBase::shellItem(directory)) {
          m_fileDialog->SetFolder(psi);
          psi->Release();
@@ -1421,24 +1431,30 @@ void QWindowsNativeFileDialogBase::selectNameFilter(const QString &filter)
    if (filter.isEmpty()) {
       return;
    }
+
    const int index = indexOfNameFilter(m_nameFilters, filter);
+
    if (index < 0) {
       qWarning("selectNameFilter() Invalid parameter %s not found in %s",
             csPrintable(filter), csPrintable(m_nameFilters.join(", ")));
       return;
    }
-   m_fileDialog->SetFileTypeIndex(index + 1); // one-based.
+
+   // one-based
+   m_fileDialog->SetFileTypeIndex(index + 1);
 }
 
 QString QWindowsNativeFileDialogBase::selectedNameFilter() const
 {
    UINT uIndex = 0;
+
    if (SUCCEEDED(m_fileDialog->GetFileTypeIndex(&uIndex))) {
       const int index = uIndex - 1; // one-based
       if (index < m_nameFilters.size()) {
          return m_nameFilters.at(index);
       }
    }
+
    return QString();
 }
 
@@ -2198,15 +2214,17 @@ QString QWindowsXpFileDialogHelper::selectedNameFilter() const
 class QWindowsNativeColorDialog : public QWindowsNativeDialogBase
 {
    CS_OBJECT(QWindowsNativeColorDialog)
+
  public:
    static constexpr const int CustomColorCount = 16;
 
    explicit QWindowsNativeColorDialog(const QSharedPointer<QColor> &color);
 
-   void setWindowTitle(const QString &) override {}
+   void setWindowTitle(const QString &) override {
+   }
 
- public :
-   void close() override {}
+   void close() override {
+   }
 
  private:
    void doExec(HWND owner = 0) override;

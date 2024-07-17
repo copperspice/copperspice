@@ -426,7 +426,7 @@ QByteArray QFtpDTP::readAll()
 
 void QFtpDTP::writeData()
 {
-   if (!socket) {
+   if (! socket) {
       return;
    }
 
@@ -808,7 +808,7 @@ void QFtpDTP::socketError(QAbstractSocket::SocketError errorCode)
 
 void QFtpDTP::socketConnectionClosed()
 {
-   if (!is_ba && data.dev) {
+   if (! is_ba && data.dev) {
       clearData();
    }
 
@@ -855,7 +855,7 @@ void QFtpDTP::setupSocket()
 
 void QFtpDTP::clearData()
 {
-   is_ba = false;
+   is_ba    = false;
    data.dev = nullptr;
 }
 
@@ -938,8 +938,8 @@ void QFtpPI::abort()
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QFtpPI send: ABOR");
 #endif
-      commandSocket.write("ABOR\r\n", 6);
 
+      commandSocket.write("ABOR\r\n", 6);
       dtp.abortConnection();
 
    } else {

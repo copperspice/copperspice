@@ -27,7 +27,6 @@
 #include <qtcpsocket.h>
 #include <qhostaddress.h>
 
-
 QTcpSocket::QTcpSocket(QObject *parent)
    : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)
 {

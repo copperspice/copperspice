@@ -411,7 +411,7 @@ void QNetworkDiskCache::updateMetaData(const QNetworkCacheMetaData &metaData)
 
    QIODevice *newDevice = prepare(metaData);
 
-   if (!newDevice) {
+   if (! newDevice) {
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "QNetworkDiskCache::updateMetaData(), no new device" << url;
 #endif

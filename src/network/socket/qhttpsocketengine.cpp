@@ -491,7 +491,7 @@ void QHttpSocketEngine::slotSocketConnected()
    // Send the greeting
    const char method[] = "CONNECT";
    QByteArray peerAddress = d->peerName.isEmpty() ?
-                            d->peerAddress.toString().toLatin1() : QUrl::toAce(d->peerName);
+         d->peerAddress.toString().toLatin1() : QUrl::toAce(d->peerName);
 
    QByteArray path = peerAddress + ':' + QByteArray::number(d->peerPort);
    QByteArray data = method;

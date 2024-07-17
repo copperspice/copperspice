@@ -84,7 +84,7 @@ static void resolveLibraryInternal()
    }
 
    local_res_ninit = res_ninit_proto(lib.resolve("__res_ninit"));
-   if (!local_res_ninit) {
+   if (! local_res_ninit) {
       local_res_ninit = res_ninit_proto(lib.resolve("res_ninit"));
    }
 

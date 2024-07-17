@@ -231,8 +231,7 @@ int QWindowsFontEngine::getGlyphIndexes(QStringView strView, QGlyphLayout *glyph
 }
 
 QWindowsFontEngine::QWindowsFontEngine(const QString &name, LOGFONT lf,
-   const QSharedPointer<QWindowsFontEngineData> &fontEngineData)
-
+      const QSharedPointer<QWindowsFontEngineData> &fontEngineData)
    : QFontEngine(Win), m_fontEngineData(fontEngineData), _name(name), hfont(nullptr),
      m_logfont(lf), ttf(0), hasOutline(0), cmap(nullptr), cmapSize(0), lbearing(SHRT_MIN),
      rbearing(SHRT_MIN), x_height(-1), synthesized_flags(-1), lineWidth(-1),

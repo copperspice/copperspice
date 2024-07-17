@@ -122,6 +122,8 @@ struct OS2Table {
 
 #   pragma pack()
 
+
+
 class EmbeddedFont
 {
  public:
@@ -281,6 +283,7 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
    quint32 *tableEnd = reinterpret_cast<quint32 *>(newNameTable.data() + fullSize);
 
    quint32 checkSum = 0;
+
    while (p < tableEnd) {
       checkSum += qFromBigEndian<quint32>(*(p++));
    }
@@ -294,8 +297,7 @@ QString EmbeddedFont::changeFamilyName(const QString &newFamilyName)
    return oldFamilyName;
 }
 
-} // Anonymous namespace
-
+}   // end namespace
 
 QWindowsFontEngineData::QWindowsFontEngineData()
    : clearTypeEnabled(false), fontSmoothingGamma(QWindowsFontDatabase::fontSmoothingGamma())
@@ -405,6 +407,7 @@ static inline QFontDatabase::WritingSystem writingSystemFromCharSet(uchar charSe
       default:
          break;
    }
+
    return QFontDatabase::Any;
 }
 
@@ -783,7 +786,7 @@ struct PopulateFamiliesContext {
    QString m_systemDefaultFont;
    bool m_seenSystemDefaultFont;
 };
-} // namespace
+}   // end namespace
 
 static int QT_WIN_CALLBACK populateFontFamilies(const LOGFONT *logFont, const TEXTMETRIC *textmetric,
    DWORD, LPARAM lparam)
@@ -895,7 +898,8 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QFontDef &fontDef, void *han
    return fe;
 }
 
-QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize, QFont::HintingPreference hintingPreference)
+QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal pixelSize,
+      QFont::HintingPreference hintingPreference)
 {
    EmbeddedFont font(fontData);
    QFontEngine *fontEngine = nullptr;

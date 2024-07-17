@@ -69,6 +69,7 @@ class QOpenGLStaticContext;
 
 struct QWindowsOpenGLContextFormat {
    QWindowsOpenGLContextFormat();
+
    static QWindowsOpenGLContextFormat current();
    void apply(QSurfaceFormat *format) const;
 
@@ -177,10 +178,10 @@ class QOpenGLStaticContext : public QWindowsStaticOpenGLContext
    };
 
    using WglGetPixelFormatAttribIVARB = bool  (APIENTRY *) (HDC hdc, int iPixelFormat, int iLayerPlane, uint nAttributes,
-                  const int *piAttributes, int *piValues);
+         const int *piAttributes, int *piValues);
 
    using WglChoosePixelFormatARB      = bool  (APIENTRY *)(HDC hdc, const int *piAttribList, const float *pfAttribFList,
-                  uint nMaxFormats, int *piFormats, UINT *nNumFormats);
+         uint nMaxFormats, int *piFormats, UINT *nNumFormats);
 
    using WglCreateContextAttribsARB   = HGLRC (APIENTRY *)(HDC, HGLRC, const int *);
    using WglSwapInternalExt           = BOOL  (APIENTRY *)(int interval);

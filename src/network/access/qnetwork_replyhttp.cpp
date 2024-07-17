@@ -1462,7 +1462,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    Q_Q(QNetworkReplyHttpImpl);
 
    setCachingEnabled(false);
-   if (!metaData.isValid()) {
+   if (! metaData.isValid()) {
       return false;
    }
 
@@ -1470,7 +1470,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    Q_ASSERT(nc);
    QIODevice *contents = nc->data(url);
 
-   if (!contents) {
+   if (! contents) {
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug() << "Can not send cache, contents are 0" << url;
@@ -1526,7 +1526,7 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    if (httpRequest.isFollowRedirects() && QHttpNetworkReply::isHttpRedirect(status)) {
 
       QMetaObject::invokeMethod(q, "onRedirected", Qt::QueuedConnection, Q_ARG(QUrl, redirectUrl),
-                  Q_ARG(int, status), Q_ARG(int, httpRequest.redirectCount() - 1));
+            Q_ARG(int, status), Q_ARG(int, httpRequest.redirectCount() - 1));
    }
 
    // Set the following flag so we can ignore some signals from HTTP thread
@@ -2311,7 +2311,7 @@ bool QNetworkReplyHttpImplPrivate::isCachingEnabled() const
 
 void QNetworkReplyHttpImplPrivate::setCachingEnabled(bool enable)
 {
-   if (!enable && !cacheEnabled) {
+   if (! enable && ! cacheEnabled) {
       return;
    }
 

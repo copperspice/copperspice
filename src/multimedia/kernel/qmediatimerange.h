@@ -64,6 +64,7 @@ class Q_MULTIMEDIA_EXPORT QMediaTimeRange
    QMediaTimeRange();
    QMediaTimeRange(qint64 start, qint64 end);
    QMediaTimeRange(const QMediaTimeInterval &interval);
+
    QMediaTimeRange(const QMediaTimeRange &other);
 
    ~QMediaTimeRange();

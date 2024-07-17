@@ -53,7 +53,7 @@
 // Returns a human readable representation of the first \a len characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 {
-   if (!data) {
+   if (! data) {
       return "(null)";
    }
 
@@ -149,7 +149,7 @@ inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid
 }
 
 static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
-                                    QAbstractSocket::NetworkLayerProtocol socketProtocol, int &level, int &n)
+      QAbstractSocket::NetworkLayerProtocol socketProtocol, int &level, int &n)
 {
    n = -1;
    level = SOL_SOCKET; // default
@@ -343,7 +343,8 @@ int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) co
 bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt, int v)
 {
    Q_Q(QNativeSocketEngine);
-   if (!q->isValid()) {
+
+   if (! q->isValid()) {
       return false;
    }
 
@@ -382,7 +383,8 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
 
    int n, level;
    convertToLevelAndOption(opt, socketProtocol, level, n);
-#if defined(SO_REUSEPORT) && !defined(Q_OS_LINUX)
+
+#if defined(SO_REUSEPORT) && ! defined(Q_OS_LINUX)
    if (opt == QNativeSocketEngine::AddressReusable) {
       // on OS X, SO_REUSEADDR isn't sufficient to allow multiple binds to the
       // same port (which is useful for multicast UDP). SO_REUSEPORT is, but
@@ -1235,7 +1237,8 @@ qint64 QNativeSocketEnginePrivate::nativeWrite(const char *data, qint64 len)
 qint64 QNativeSocketEnginePrivate::nativeRead(char *data, qint64 maxSize)
 {
    Q_Q(QNativeSocketEngine);
-   if (!q->isValid()) {
+
+   if (! q->isValid()) {
       qWarning("QNativeSocketEngine::nativeRead() Invalid socket");
       return -1;
    }

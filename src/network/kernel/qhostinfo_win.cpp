@@ -259,4 +259,3 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
 
    return results;
 }
-

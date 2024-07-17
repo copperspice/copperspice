@@ -140,7 +140,7 @@ class QWindowsContext
  public:
    enum SystemInfoFlags {
       SI_RTL_Extensions = 0x1,
-      SI_SupportsTouch = 0x2
+      SI_SupportsTouch  = 0x2
    };
 
    explicit QWindowsContext();

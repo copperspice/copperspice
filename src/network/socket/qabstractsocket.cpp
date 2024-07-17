@@ -476,8 +476,8 @@ bool QAbstractSocketPrivate::flush()
    writeBuffer.free(written);
 
    if (written > 0) {
-      if (!emittedBytesWritten) {
       // Do not emit bytesWritten() recursively.
+      if (! emittedBytesWritten) {
          QScopedValueRollback<bool> r(emittedBytesWritten);
          emittedBytesWritten = true;
          emit q->bytesWritten(written);
@@ -485,7 +485,7 @@ bool QAbstractSocketPrivate::flush()
    }
 
    if (writeBuffer.isEmpty() && socketEngine && socketEngine->isWriteNotificationEnabled()
-         && !socketEngine->bytesToWrite()) {
+         && ! socketEngine->bytesToWrite()) {
       socketEngine->setWriteNotificationEnabled(false);
    }
 

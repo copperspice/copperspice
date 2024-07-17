@@ -518,8 +518,9 @@ QString QWindowsContext::registerWindowClass(QString cname, WNDPROC proc, unsign
 
    ATOM atom = RegisterClassEx(&wc);
 
-   if (! atom)
+   if (! atom) {
       qErrnoWarning("QApplication::regClass() Registering window class %s failed", csPrintable(cname));
+   }
 
    d->m_registeredWindowClassNames.insert(cname);
 
@@ -808,9 +809,8 @@ static inline QWindowsInputContext *windowsInputContext()
    return dynamic_cast<QWindowsInputContext *>(QWindowsIntegration::instance()->inputContext());
 }
 
-bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
-   QtWindows::WindowsEventType et,
-   WPARAM wParam, LPARAM lParam, LRESULT *result)
+bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEventType et,
+      WPARAM wParam, LPARAM lParam, LRESULT *result)
 {
    *result = 0;
 
@@ -826,7 +826,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       msg.pt.y = GET_Y_LPARAM(lParam);
       // For non-client-area messages, these are screen coordinates (as expected
       // in the MSG structure), otherwise they are client coordinates.
-      if (!(et & QtWindows::NonClientEventFlag)) {
+      if (! (et & QtWindows::NonClientEventFlag)) {
          ClientToScreen(msg.hwnd, &msg.pt);
       }
 
@@ -886,8 +886,8 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
    switch (et) {
       case QtWindows::GestureEvent:
 #if ! defined(QT_NO_SESSIONMANAGER)
-         return platformSessionManager()->isInteractionBlocked() ? true : d->m_mouseHandler.translateGestureEvent(platformWindow->window(),
-               hwnd, et, msg, result);
+         return platformSessionManager()->isInteractionBlocked() ? true :
+               d->m_mouseHandler.translateGestureEvent(platformWindow->window(), hwnd, et, msg, result);
 #else
          return d->m_mouseHandler.translateGestureEvent(platformWindow->window(), hwnd, et, msg, result);
 #endif
@@ -935,7 +935,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
    // Before CreateWindowEx() returns, some events are sent,
    // for example WM_GETMINMAXINFO asking for size constraints for top levels.
    // Pass on to current creation context
-   if (!platformWindow && ! d->m_creationContext.isNull()) {
+   if (! platformWindow && ! d->m_creationContext.isNull()) {
       switch (et) {
          case QtWindows::QuerySizeHints:
             d->m_creationContext->applyToMinMaxInfo(reinterpret_cast<MINMAXINFO *>(lParam));
@@ -986,7 +986,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       case QtWindows::AppCommandEvent:
 #if ! defined(QT_NO_SESSIONMANAGER)
          return platformSessionManager()->isInteractionBlocked() ? true
-                  : d->m_keyMapper.translateKeyEvent(platformWindow->window(), hwnd, msg, result);
+               : d->m_keyMapper.translateKeyEvent(platformWindow->window(), hwnd, msg, result);
 #else
          return d->m_keyMapper.translateKeyEvent(platformWindow->window(), hwnd, msg, result);
 #endif
@@ -1057,8 +1057,9 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
          handleFocusEvent(et, platformWindow);
          return true;
 
-      case QtWindows::ShowEventOnParentRestoring: // QTBUG-40696, prevent Windows from re-showing hidden transient children (dialogs).
-         if (!platformWindow->window()->isVisible()) {
+      case QtWindows::ShowEventOnParentRestoring:
+         // QTBUG-40696, prevent Windows from re-showing hidden transient children (dialogs)
+         if (! platformWindow->window()->isVisible()) {
             *result = 0;
             return true;
          }
@@ -1075,15 +1076,17 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
       case QtWindows::ThemeChanged: {
          // Switch from Aero to Classic changes margins
          const Qt::WindowFlags flags = platformWindow->window()->flags();
-         if ((flags & Qt::WindowType_Mask) != Qt::Desktop && !(flags & Qt::FramelessWindowHint)) {
+         if ((flags & Qt::WindowType_Mask) != Qt::Desktop && ! (flags & Qt::FramelessWindowHint)) {
             platformWindow->setFlag(QWindowsWindow::FrameDirty);
          }
 
          if (QWindowsTheme *theme = QWindowsTheme::instance()) {
             theme->windowsThemeChanged(platformWindow->window());
          }
+
          return true;
       }
+
       case QtWindows::CompositionSettingsChanged:
          platformWindow->handleCompositionSettingsChanged();
          return true;
@@ -1094,10 +1097,11 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message,
             return true;
          }
 
-         if (platformWindow->testFlag(QWindowsWindow::BlockedByModal))
+         if (platformWindow->testFlag(QWindowsWindow::BlockedByModal)) {
             if (const QWindow *modalWindow = QApplication::modalWindow()) {
                QWindowsWindow::baseWindowOf(modalWindow)->alertWindow();
             }
+         }
          break;
 
       case QtWindows::MouseActivateWindowEvent:

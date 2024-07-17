@@ -37,7 +37,7 @@
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
 
-// required since  xkb.h is using a variable called 'explicit'
+// required since xkb.h is using a variable called 'explicit'
 #ifndef QT_NO_XKB
 #define explicit dont_use_cxx_explicit
 #include <xcb/xkb.h>

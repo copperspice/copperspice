@@ -286,7 +286,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
    }
 
    d->socketEngine = QAbstractSocketEngine::createSocketEngine(socketDescriptor, this);
-   if (!d->socketEngine) {
+   if (! d->socketEngine) {
       d->serverSocketError = QAbstractSocket::UnsupportedSocketOperationError;
       d->serverSocketErrorString = tr("Operation on socket is not supported");
       return false;

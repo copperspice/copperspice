@@ -191,7 +191,6 @@ QDebug operator<<(QDebug debug, const WINDOWPLACEMENT &wp)
 // is in workspace/available area coordinates.
 static QPoint windowPlacementOffset(HWND hwnd, const QPoint &point)
 {
-
    if (GetWindowLongPtr(hwnd, GWL_EXSTYLE) & WS_EX_TOOLWINDOW) {
       return QPoint(0, 0);
    }
@@ -268,8 +267,10 @@ static inline bool windowIsOpenGL(const QWindow *w)
    switch (w->surfaceType()) {
       case QSurface::OpenGLSurface:
          return true;
+
       case QSurface::RasterGLSurface:
          return qt_window_private(const_cast<QWindow *>(w))->compositing;
+
       default:
          return false;
    }
@@ -992,7 +993,8 @@ static inline QWindow *findTransientChild(const QWindow *parent)
 
 void QWindowsWindow::destroyWindow()
 {
-   if (m_data.hwnd) { // Stop event dispatching before Window is destroyed.
+   if (m_data.hwnd) {
+      // Stop event dispatching before Window is destroyed.
       setFlag(WithinDestroy);
 
       // Clear any transient child relationships as Windows will otherwise destroy them (QTBUG-35499, QTBUG-36666)
@@ -1109,9 +1111,7 @@ QWindow *QWindowsWindow::topLevelOf(QWindow *w)
    return w;
 }
 
-QWindowsWindowData QWindowsWindowData::create(const QWindow *w,
-   const QWindowsWindowData &parameters,
-   const QString &title)
+QWindowsWindowData QWindowsWindowData::create(const QWindow *w, const QWindowsWindowData &parameters, const QString &title)
 {
    WindowCreationData creationData;
    creationData.fromWindow(w, parameters.flags);
@@ -2185,7 +2185,8 @@ void QWindowsWindow::getSizeHints(MINMAXINFO *mmi) const
          // If you have the taskbar on top, or on the left you don't want it at (0,0):
          mmi->ptMaxPosition.x = availableGeometry.x();
          mmi->ptMaxPosition.y = availableGeometry.y();
-      } else if (!screen) {
+
+      } else if (! screen) {
          qWarning("QWindowsWindow::getSizeHints() Screen invalid (nullptr)");
       }
    }
@@ -2196,9 +2197,10 @@ bool QWindowsWindow::handleNonClientHitTest(const QPoint &globalPos, LRESULT *re
    // QTBUG-32663, suppress resize cursor for fixed size windows.
    const QWindow *w = window();
 
-   if (!w->isTopLevel() // Task 105852, minimized windows need to respond to user input.
-      || (m_windowState != Qt::WindowNoState && m_windowState != Qt::WindowActive)
-      || (m_data.flags & Qt::FramelessWindowHint)) {
+   if (! w->isTopLevel() || (m_windowState != Qt::WindowNoState && m_windowState != Qt::WindowActive)
+         || (m_data.flags & Qt::FramelessWindowHint)) {
+
+      // Task 105852, minimized windows need to respond to user input
       return false;
    }
 

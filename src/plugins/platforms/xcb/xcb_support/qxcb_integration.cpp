@@ -171,7 +171,7 @@ QXcbIntegration::QXcbIntegration(const QStringList &parameters, int &argc, char 
    }
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
-   if (! noGrabArg && !doGrabArg && underDebugger) {
+   if (! noGrabArg && ! doGrabArg && underDebugger) {
       qDebug("QXcbIntegration() Debugger detected, use -dograb option to enable grabbing");
    }
 #endif
