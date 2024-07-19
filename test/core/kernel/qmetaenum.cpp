@@ -88,6 +88,9 @@ TEST_CASE("QMetaEnum enum_count_b", "[qmetaenum]")
 
 TEST_CASE("QMetaEnum enum_count_c", "[qmetaenum]")
 {
+   // disable QWarning() for this test
+   csInstallMsgHandler([](QtMsgType, QStringView){ });
+
    const QMetaObject &metaObject = Qt::staticMetaObject();
 
    int index = metaObject.indexOfEnumerator("SortOrder");
@@ -104,6 +107,8 @@ TEST_CASE("QMetaEnum enum_count_c", "[qmetaenum]")
 
    REQUIRE(enumObj.key(0)   == "");
    REQUIRE(enumObj.value(0) == -1);
+
+   csInstallMsgHandler(nullptr);
 }
 
 TEST_CASE("QMetaEnum enum_count_d", "[qmetaenum]")
