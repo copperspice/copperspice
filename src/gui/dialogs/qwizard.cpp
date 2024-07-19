@@ -539,7 +539,7 @@ class QWizardPagePrivate : public QWidgetPrivate
    { }
 
    bool cachedIsComplete() const;
-   void _q_maybeEmitCompleteChanged();
+   void _q_changedSignal();
    void _q_updateCachedCompleteState();
 
    QWizard *wizard;
@@ -562,7 +562,7 @@ bool QWizardPagePrivate::cachedIsComplete() const
    return completeState == Tri_True;
 }
 
-void QWizardPagePrivate::_q_maybeEmitCompleteChanged()
+void QWizardPagePrivate::_q_changedSignal()
 {
    Q_Q(QWizardPage);
 
@@ -876,7 +876,7 @@ void QWizardPrivate::addField(const QWizardField &field)
    fields += myField;
 
    if (myField.mandatory && ! myField.changedSignal.isEmpty()) {
-      QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_changedSignal()));
    }
 
    QObject::connect(myField.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
@@ -890,7 +890,7 @@ void QWizardPrivate::removeFieldAt(int index)
    fieldIndexMap.remove(field.name);
 
    if (field.mandatory && ! field.changedSignal.isEmpty()) {
-      QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_maybeEmitCompleteChanged()));
+      QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_changedSignal()));
    }
 
    QObject::disconnect(field.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
@@ -3050,10 +3050,10 @@ void QWizard::_q_handleFieldObjectDestroyed(QObject *obj)
    d->_q_handleFieldObjectDestroyed(obj);
 }
 
-void QWizardPage::_q_maybeEmitCompleteChanged()
+void QWizardPage::_q_changedSignal()
 {
    Q_D(QWizardPage);
-   d->_q_maybeEmitCompleteChanged();
+   d->_q_changedSignal();
 }
 
 void QWizardPage::_q_updateCachedCompleteState()
