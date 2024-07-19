@@ -964,7 +964,6 @@ qint64 QTextStream::pos() const
 void QTextStream::skipWhiteSpace()
 {
    Q_D(QTextStream);
-   CHECK_VALID_STREAM();
 
    d->scan(nullptr, 0, QTextStreamPrivate::NotSpace);
    d->consumeLastToken();
