@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qfile.h>
 #include <qcoreapplication.h>
+#include <qfile.h>
+#include <qplatformdefs.h>
 
-#include <qlibrary_p.h>
 #include <qfilesystementry_p.h>
+#include <qlibrary_p.h>
 
 #ifdef Q_OS_DARWIN
 #  include <qcore_mac_p.h>

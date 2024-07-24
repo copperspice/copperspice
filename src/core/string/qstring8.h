@@ -28,11 +28,11 @@
 
 #include <cs_string.h>
 
-#include <qglobal.h>
 #include <qbytearray.h>
 #include <qchar32.h>
-#include <qstringview.h>
+#include <qglobal.h>
 #include <qstringfwd.h>
+#include <qstringview.h>
 
 #include <cstddef>
 #include <string>

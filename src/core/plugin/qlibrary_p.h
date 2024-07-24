@@ -25,10 +25,10 @@
 #define QLIBRARY_P_H
 
 #include <qlibrary.h>
-#include <qpointer.h>
-#include <qstringlist.h>
 #include <qplugin.h>
+#include <qpointer.h>
 #include <qsharedpointer.h>
+#include <qstringlist.h>
 
 #ifdef Q_OS_WIN
 # include <qt_windows.h>

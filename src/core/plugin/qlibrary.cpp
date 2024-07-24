@@ -22,18 +22,18 @@
 ***********************************************************************/
 
 #include <qlibrary.h>
+#include <qlibrary_p.h>
 
-#include <qstringlist.h>
+#include <qdebug.h>
+#include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qmutex.h>
 #include <qmap.h>
-#include <qdebug.h>
-#include <qvector.h>
-#include <qdir.h>
+#include <qmutex.h>
 #include <qplatformdefs.h>
+#include <qstringlist.h>
+#include <qvector.h>
 
-#include <qlibrary_p.h>
 #include <qcoreapplication_p.h>
 
 #ifdef Q_OS_DARWIN

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstractanimation.h>
+#include <qabstractanimation_p.h>
 
 #include <qanimationgroup.h>
 #include <qcoreevent.h>
@@ -29,8 +30,6 @@
 #include <qmath.h>
 #include <qpointer.h>
 #include <qthreadstorage.h>
-
-#include <qabstractanimation_p.h>
 
 #ifndef QT_NO_ANIMATION
 

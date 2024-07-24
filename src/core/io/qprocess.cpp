@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qprocess.h>
+#include <qprocess_p.h>
 
 #include <qbytearray.h>
 #include <qcoreapplication.h>
@@ -31,8 +32,6 @@
 #include <qsocketnotifier.h>
 #include <qstring.h>
 #include <qtimer.h>
-
-#include <qprocess_p.h>
 
 #ifdef Q_OS_WIN
 #include <qwineventnotifier.h>

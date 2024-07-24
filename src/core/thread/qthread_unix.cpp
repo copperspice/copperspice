@@ -22,13 +22,13 @@
 ***********************************************************************/
 
 #include <qthread.h>
+#include <qthread_p.h>
 
 #include <qdebug.h>
 #include <qplatformdefs.h>
 #include <qthreadstorage.h>
 
 #include <qcoreapplication_p.h>
-#include <qthread_p.h>
 
 #if defined(Q_OS_DARWIN)
 #  include <qeventdispatcher_cf_p.h>

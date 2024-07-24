@@ -23,9 +23,9 @@
 
 #include <qtimerinfo_unix_p.h>
 
-#include <qelapsedtimer.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qelapsedtimer.h>
 #include <qthread.h>
 
 #include <qcore_unix_p.h>

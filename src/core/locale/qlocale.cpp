@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
 #include <qlocale.h>
 
-#include <qplatformdefs.h>
 #include <qdatastream.h>
 #include <qdatetime.h>
+#include <qglobal.h>
 #include <qhashfunc.h>
 #include <qnamespace.h>
+#include <qplatformdefs.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
@@ -36,8 +36,8 @@
 
 #include <qdatetime_p.h>
 #include <qdatetimeparser_p.h>
-#include <qlocale_p.h>
 #include <qlocale_data_p.h>
+#include <qlocale_p.h>
 #include <qlocale_tools_p.h>
 #include <qnumeric_p.h>
 #include <qsystemlibrary_p.h>

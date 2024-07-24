@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qabstracteventdispatcher.h>
+#include <qabstracteventdispatcher_p.h>
 
 #include <qabstractnativeeventfilter.h>
 #include <qthread.h>
 
-#include <qabstracteventdispatcher_p.h>
 #include <qcoreapplication_p.h>
 #include <qfreelist_p.h>
 #include <qthread_p.h>

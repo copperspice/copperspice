@@ -24,11 +24,11 @@
 #ifndef QFACTORYLOADER_P_H
 #define QFACTORYLOADER_P_H
 
-#include <qobject.h>
-#include <qstringlist.h>
 #include <qmultimap.h>
-#include <qset.h>
+#include <qobject.h>
 #include <qscopedpointer.h>
+#include <qset.h>
+#include <qstringlist.h>
 
 #include <qlibrary_p.h>
 

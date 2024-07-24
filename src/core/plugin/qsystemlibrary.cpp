@@ -23,10 +23,10 @@
 
 #include <qsystemlibrary_p.h>
 
-#include <qvarlengtharray.h>
+#include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
-#include <qfileinfo.h>
+#include <qvarlengtharray.h>
 
 extern QString qAppFileName();
 

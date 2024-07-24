@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qdatetime.h>
+#include <qdatetime_p.h>
 
 #include <qdatastream.h>
 #include <qdebug.h>
@@ -30,7 +31,6 @@
 #include <qstringlist.h>
 #include <qstringparser.h>
 
-#include <qdatetime_p.h>
 #include <qdatetimeparser_p.h>
 #include <qtimezone_p.h>
 

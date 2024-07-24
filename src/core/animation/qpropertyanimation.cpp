@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qpropertyanimation.h>
+#include <qpropertyanimation_p.h>
 
 #include <qanimationgroup.h>
 #include <qhash.h>
 
-#include <qpropertyanimation_p.h>
 #include <qmutexpool_p.h>
 
 #ifndef QT_NO_ANIMATION

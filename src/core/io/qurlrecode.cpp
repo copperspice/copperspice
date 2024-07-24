@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qurl.h>
 #include <qstring.h>
+#include <qurl.h>
 
-#include <qutfcodec_p.h>
 #include <qtools_p.h>
+#include <qutfcodec_p.h>
 
 enum EncodingAction {
    DecodeCharacter = 0,

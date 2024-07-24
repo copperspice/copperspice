@@ -22,12 +22,11 @@
 ***********************************************************************/
 
 #include <qdatastream.h>
+#include <qdatastream_p.h>
 
 #include <qbuffer.h>
 #include <qendian.h>
 #include <qstring.h>
-
-#include <qdatastream_p.h>
 
 #include <ctype.h>
 #include <stdio.h>

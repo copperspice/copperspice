@@ -24,9 +24,9 @@
 #ifndef QLOCALE_TOOLS_P_H
 #define QLOCALE_TOOLS_P_H
 
-#include <cmath>
-
 #include <qlocale_p.h>
+
+#include <cmath>
 
 QString qulltoa(quint64 l, int base, const QChar _zero);
 QString qlltoa(qint64 l, int base, const QChar zero);

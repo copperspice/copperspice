@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#ifndef QVariantAnimation_P_H
-#define QVariantAnimation_P_H
+#ifndef QVARIANTANIMATION_P_H
+#define QVARIANTANIMATION_P_H
+
+#include <qvariantanimation.h>
 
 #include <qeasingcurve.h>
-#include <qvariantanimation.h>
 #include <qvector.h>
 
 #include <qabstractanimation_p.h>

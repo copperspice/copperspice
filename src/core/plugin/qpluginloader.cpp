@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
+#include <qpluginloader.h>
 
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qplatformdefs.h>
 #include <qplugin.h>
-#include <qpluginloader.h>
 #include <qstringview.h>
 
 #include <qlibrary_p.h>

@@ -26,8 +26,8 @@
 
 #include "regex/regex.h"
 
-#include <qglobal.h>
 #include <qchar32.h>
+#include <qglobal.h>
 #include <qlist.h>
 #include <qstringfwd.h>
 

@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qstringlist.h>
 #include <qtimezone.h>
 
-#include <qtimezone_p.h>
 #include <qcore_mac_p.h>
-#include <qstringlist.h>
-#include <qdebug.h>
+#include <qtimezone_p.h>
 
 #include <Foundation/NSTimeZone.h>
 

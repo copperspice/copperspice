@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qxmlstream.h>
+#include <qxmlstream_p.h>
 
 #include <qbuffer.h>
 #include <qcoreapplication.h>
@@ -30,7 +31,6 @@
 #include <qstack.h>
 #include <qtextcodec.h>
 
-#include <qxmlstream_p.h>
 #include <qxmlutils_p.h>
 
 #include <stdlib.h>

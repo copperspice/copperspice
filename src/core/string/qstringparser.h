@@ -24,8 +24,8 @@
 #ifndef QSTRING_PARSER_H
 #define QSTRING_PARSER_H
 
-#include <qglobal.h>
 #include <qchar32.h>
+#include <qglobal.h>
 #include <qlist.h>
 #include <qlocale.h>
 #include <qlog.h>

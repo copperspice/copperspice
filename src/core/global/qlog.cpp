@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#include <cstdlib>
-#include <cstdio>
-
 #include <qlog.h>
 #include <qstring8.h>
 
 #if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #endif
+
+#include <cstdio>
+#include <cstdlib>
 
 #if defined(Q_OS_WIN)
 extern bool usingWinMain;

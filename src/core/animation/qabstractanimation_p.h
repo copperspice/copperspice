@@ -25,6 +25,7 @@
 #define QABSTRACTANIMATION_P_H
 
 #include <qabstractanimation.h>
+
 #include <qbasictimer.h>
 #include <qdatetime.h>
 #include <qelapsedtimer.h>
@@ -36,8 +37,8 @@
 
 #ifndef QT_NO_ANIMATION
 
-class QAnimationGroup;
 class QAbstractAnimation;
+class QAnimationGroup;
 class QUnifiedTimer;
 
 class QAbstractAnimationPrivate

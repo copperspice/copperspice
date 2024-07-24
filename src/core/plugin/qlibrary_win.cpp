@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qfile.h>
 #include <qdir.h>
+#include <qfile.h>
 #include <qfileinfo.h>
+#include <qplatformdefs.h>
 #include <qt_windows.h>
 
-#include <qlibrary_p.h>
 #include <qfilesystementry_p.h>
+#include <qlibrary_p.h>
 
 extern QString qt_error_string(int code);
 

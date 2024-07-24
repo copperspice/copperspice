@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qprocess.h>
+#include <qprocess_p.h>
 
 #include <qdatetime.h>
 #include <qdebug.h>
@@ -36,7 +37,6 @@
 #include <qwineventnotifier.h>
 
 #include <qfsfileengine_p.h>
-#include <qprocess_p.h>
 #include <qsystemlibrary_p.h>
 #include <qthread_p.h>
 #include <qwindowspipereader_p.h>

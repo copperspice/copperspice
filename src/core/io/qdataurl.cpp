@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qurl.h>
 #include <qdataurl_p.h>
 
+#include <qplatformdefs.h>
+#include <qurl.h>
 
 Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &uri)
 {

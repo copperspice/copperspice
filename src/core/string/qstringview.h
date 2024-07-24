@@ -28,9 +28,9 @@
 
 #include <cs_string_view.h>
 
-#include <qglobal.h>
 #include <qbytearray.h>
 #include <qchar32.h>
+#include <qglobal.h>
 #include <qstringfwd.h>
 
 class QStringParser;

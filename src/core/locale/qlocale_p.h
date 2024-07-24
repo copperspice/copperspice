@@ -25,6 +25,7 @@
 #define QLOCALE_P_H
 
 #include <qlocale.h>
+
 #include <qvarlengtharray.h>
 
 #include <cmath>

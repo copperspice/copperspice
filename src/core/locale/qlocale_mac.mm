@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qlocale_p.h>
-
 #include <qdatetime.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+
+#include <qlocale_p.h>
 
 #if defined(Q_OS_DARWIN)
 #include <qcore_mac_p.h>

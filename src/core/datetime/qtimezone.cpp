@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qtimezone.h>
+#include <qtimezone_p.h>
 
 #include <qdatetime.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 
-#include <qtimezone_p.h>
 #include <qtimezone_data_p.h>
 
 #include <algorithm>

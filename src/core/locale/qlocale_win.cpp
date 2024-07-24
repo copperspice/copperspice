@@ -21,13 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qlocale_p.h>
-
 #include <qdatetime.h>
 #include <qdebug.h>
 #include <qstringlist.h>
 #include <qvariant.h>
 
+#include <qlocale_p.h>
 #include <qlocale_tools_p.h>
 #include <qsystemlibrary_p.h>
 

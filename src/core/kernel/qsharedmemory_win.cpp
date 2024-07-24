@@ -22,10 +22,9 @@
 ***********************************************************************/
 
 #include <qsharedmemory.h>
+#include <qsharedmemory_p.h>
 
 #include <qdebug.h>
-
-#include <qsharedmemory_p.h>
 
 #ifndef QT_NO_SHAREDMEMORY
 

@@ -34,8 +34,8 @@
 #include <qplatformdefs.h>
 #include <qprocess.h>
 #include <qsemaphore.h>
-#include <qstring.h>
 #include <qsocketnotifier.h>
+#include <qstring.h>
 #include <qthread.h>
 
 #include <qcore_unix_p.h>

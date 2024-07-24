@@ -29,11 +29,11 @@
 
 #ifndef QT_NO_ANIMATION
 
+class QAbstractAnimationPrivate;
+class QAnimationDriver;
+class QAnimationDriverPrivate;
 class QAnimationGroup;
 class QSequentialAnimationGroup;
-class QAnimationDriver;
-class QAbstractAnimationPrivate;
-class QAnimationDriverPrivate;
 
 class Q_CORE_EXPORT QAbstractAnimation : public QObject
 {

@@ -25,8 +25,6 @@
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qstate.h>
-
 #include <qabstractstate.h>
 #include <qabstracttransition.h>
 #include <qalgorithms.h>
@@ -35,6 +33,7 @@
 #include <qhistorystate.h>
 #include <qmetaobject.h>
 #include <qsignaltransition.h>
+#include <qstate.h>
 #include <qvarlengtharray.h>
 
 #include <qabstractstate_p.h>

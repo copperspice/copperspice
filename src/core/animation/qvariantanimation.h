@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QVariantAnimation_H
-#define QVariantAnimation_H
+#ifndef QVARIANTANIMATION_H
+#define QVARIANTANIMATION_H
 
 #include <qabstractanimation.h>
 #include <qeasingcurve.h>

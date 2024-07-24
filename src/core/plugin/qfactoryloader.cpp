@@ -23,10 +23,10 @@
 
 #include <qfactoryloader_p.h>
 
+#include <qdebug.h>
+#include <qdir.h>
 #include <qfactoryinterface.h>
 #include <qmap.h>
-#include <qdir.h>
-#include <qdebug.h>
 #include <qmutex.h>
 #include <qplugin.h>
 #include <qpluginloader.h>
