@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qlayout.h>
+#include <qlayout_p.h>
 
 #include <qapplication.h>
 #include <qevent.h>
@@ -32,7 +33,6 @@
 #include <qtoolbar.h>
 #include <qvariant.h>
 
-#include <qlayout_p.h>
 #include <qlayoutengine_p.h>
 #include <qwidget_p.h>
 

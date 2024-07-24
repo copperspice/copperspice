@@ -29,12 +29,12 @@
 #include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qevent.h>
-#include <qtimer.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qplatform_theme.h>
 #include <qpushbutton.h>
 #include <qstyle.h>
+#include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qwidgetaction.h>

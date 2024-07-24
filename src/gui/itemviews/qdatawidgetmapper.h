@@ -24,16 +24,16 @@
 #ifndef QDATAWIDGETMAPPER_H
 #define QDATAWIDGETMAPPER_H
 
-#include <qobject.h>
 #include <qabstractitemdelegate.h>
+#include <qobject.h>
 #include <qscopedpointer.h>
 
 #ifndef QT_NO_DATAWIDGETMAPPER
 
 class QAbstractItemDelegate;
 class QAbstractItemModel;
-class QModelIndex;
 class QDataWidgetMapperPrivate;
+class QModelIndex;
 
 class Q_GUI_EXPORT QDataWidgetMapper : public QObject
 {

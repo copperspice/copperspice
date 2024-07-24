@@ -23,23 +23,22 @@
 
 #include <qtextengine_p.h>
 
+#include <qabstracttextdocumentlayout.h>
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qfont.h>
 #include <qstring.h>
-#include <qvarlengtharray.h>
-
-#include <qapplication.h>
-#include <qabstracttextdocumentlayout.h>
-#include <qdebug.h>
+#include <qtextboundaryfinder.h>
 #include <qtextformat.h>
 #include <qtextlayout.h>
-#include <qtextboundaryfinder.h>
+#include <qvarlengtharray.h>
 
 #include <qfont_p.h>
 #include <qfontengine_p.h>
 #include <qrawfont_p.h>
+#include <qtextdocument_p.h>
 #include <qtextformat_p.h>
 #include <qunicodetables_p.h>
-#include <qtextdocument_p.h>
 
 #include <algorithm>
 #include <stdlib.h>

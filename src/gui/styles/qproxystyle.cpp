@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qproxystyle.h>
+#include <qproxystyle_p.h>
 
 #include <qstyle.h>
 #include <qstylefactory.h>
 
 #include <qapplication_p.h>
-#include <qproxystyle_p.h>
 #include <qstyle_p.h>
 
 #if ! defined(QT_NO_STYLE_PROXY) || defined(QT_PLUGIN)

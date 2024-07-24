@@ -36,9 +36,8 @@
 #include <qsize.h>
 #include <qvariant.h>
 
-#include <qfactoryloader_p.h>
-
 #include <qbmphandler_p.h>
+#include <qfactoryloader_p.h>
 #include <qppmhandler_p.h>
 #include <qxbmhandler_p.h>
 #include <qxpmhandler_p.h>

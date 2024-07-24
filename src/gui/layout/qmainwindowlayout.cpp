@@ -26,30 +26,30 @@
 
 #ifndef QT_NO_MAINWINDOW
 
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qdockwidget.h>
 #include <qmainwindow.h>
-#include <qtoolbar.h>
+#include <qmap.h>
 #include <qrubberband.h>
-#include <qapplication.h>
+#include <qstack.h>
 #include <qstatusbar.h>
 #include <qstring.h>
 #include <qstyle.h>
 #include <qstylepainter.h>
-#include <qvarlengtharray.h>
-#include <qstack.h>
-#include <qmap.h>
-#include <qtimer.h>
-#include <qdebug.h>
 #include <qtextstream.h>
+#include <qtimer.h>
+#include <qtoolbar.h>
+#include <qvarlengtharray.h>
 
 #include <qapplication_p.h>
+#include <qdockwidget_p.h>
 #include <qlayoutengine_p.h>
-#include <qwidgetresizehandler_p.h>
+#include <qtabbar_p.h>
+#include <qtoolbar_p.h>
 #include <qtoolbarlayout_p.h>
 #include <qwidgetanimator_p.h>
-#include <qdockwidget_p.h>
-#include <qtoolbar_p.h>
-#include <qtabbar_p.h>
+#include <qwidgetresizehandler_p.h>
 
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qfileinfogatherer_p.h>
+
 #include <qdebug.h>
 #include <qdiriterator.h>
 

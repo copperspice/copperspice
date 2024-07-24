@@ -25,20 +25,20 @@
 #include <qopenglcontext_p.h>
 
 #include <qdebug.h>
-#include <qwindow.h>
-#include <qscreen.h>
-#include <qthreadstorage.h>
-#include <qthread.h>
+#include <qplatform_integration.h>
 #include <qplatform_nativeinterface.h>
 #include <qplatform_openglcontext.h>
-#include <qplatform_integration.h>
+#include <qscreen.h>
+#include <qthread.h>
+#include <qthreadstorage.h>
+#include <qwindow.h>
 
 #include <qapplication_p.h>
-#include <qopengl_p.h>
-#include <qwindow_p.h>
 #include <qopengl_extensions_p.h>
-#include <qopengl_version_functions_p.h>
+#include <qopengl_p.h>
 #include <qopengl_texturehelper_p.h>
+#include <qopengl_version_functions_p.h>
+#include <qwindow_p.h>
 
 #ifndef QT_OPENGL_ES_2
 #include <QOpenGLFunctions_1_0>

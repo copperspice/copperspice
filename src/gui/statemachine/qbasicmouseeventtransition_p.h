@@ -30,8 +30,8 @@
 
 #include <qevent.h>
 
-class QPainterPath;
 class QBasicMouseEventTransitionPrivate;
+class QPainterPath;
 
 class QBasicMouseEventTransition : public QAbstractTransition
 {

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtableview.h>
+#include <qtableview_p.h>
 
 #ifndef QT_NO_TABLEVIEW
 
@@ -29,7 +30,6 @@
 #include <qapplication.h>
 #include <qbitarray.h>
 #include <qevent.h>
-#include <qheaderview.h>
 #include <qitemdelegate.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
@@ -37,7 +37,6 @@
 #include <qstyle.h>
 
 #include <qheaderview_p.h>
-#include <qtableview_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

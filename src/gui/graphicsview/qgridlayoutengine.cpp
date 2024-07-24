@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-#include <qvarlengtharray.h>
-#include <qdebug.h>
-#include <qmath.h>
-
 #include <qgridlayoutengine_p.h>
+
+#include <qdebug.h>
+#include <qglobal.h>
+#include <qmath.h>
+#include <qvarlengtharray.h>
 
 template <typename T>
 static void insertOrRemoveItems(QVector<T> &items, int index, int delta)

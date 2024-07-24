@@ -27,13 +27,13 @@
 #ifndef QT_NO_WIZARD
 #ifndef QT_NO_STYLE_WINDOWSVISTA
 
-#include <qt_windows.h>
-#include <qobject.h>
-#include <qwidget.h>
 #include <qabstractbutton.h>
-#include <qwidget_p.h>
-#include <qstylehelper_p.h>
+#include <qobject.h>
+#include <qt_windows.h>
+#include <qwidget.h>
 
+#include <qstylehelper_p.h>
+#include <qwidget_p.h>
 
 class QWizard;
 

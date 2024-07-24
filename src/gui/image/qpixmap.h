@@ -28,12 +28,12 @@
 #include <cs_carbon_wrapper.h>
 #endif
 
-#include <qpaintdevice.h>
 #include <qcolor.h>
-#include <qnamespace.h>
-#include <qstring.h>
-#include <qsharedpointer.h>
 #include <qimage.h>
+#include <qnamespace.h>
+#include <qpaintdevice.h>
+#include <qsharedpointer.h>
+#include <qstring.h>
 #include <qtransform.h>
 #include <qvariant.h>
 

@@ -28,13 +28,13 @@
 #include <qabstractspinbox.h>
 #include <qalgorithms.h>
 #include <qapplication.h>
-#include <qdebug.h>
 #include <qboxlayout.h>
-#include <qlayoutitem.h>
+#include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qevent.h>
 #include <qframe.h>
 #include <qlabel.h>
+#include <qlayoutitem.h>
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
@@ -47,8 +47,8 @@
 #include <qplatform_nativeinterface.h>
 
 #elif ! defined(QT_NO_STYLE_WINDOWSVISTA)
-#include <qwizard_win_p.h>
 #include <qtimer.h>
+#include <qwizard_win_p.h>
 
 #endif
 

@@ -25,13 +25,13 @@
 
 #ifndef QT_NO_TEXTODFWRITER
 
-#include <qzipreader_p.h>
-#include <qzipwriter_p.h>
 #include <qdatetime.h>
-
-#include <qendian.h>
 #include <qdebug.h>
 #include <qdir.h>
+#include <qendian.h>
+
+#include <qzipreader_p.h>
+#include <qzipwriter_p.h>
 
 #include <zlib.h>
 

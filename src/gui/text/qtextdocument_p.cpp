@@ -21,19 +21,21 @@
 *
 ***********************************************************************/
 
-#include <qtools_p.h>
-#include <qdebug.h>
-#include <qtextdocument_p.h>
 #include <qtextdocument.h>
-#include <qtextformat.h>
-#include <qtextformat_p.h>
-#include <qtextobject_p.h>
+#include <qtextdocument_p.h>
+
+#include <qdebug.h>
 #include <qtextcursor.h>
-#include <qtextimagehandler_p.h>
+#include <qtextformat.h>
+#include <qtexttable.h>
+
 #include <qtextcursor_p.h>
 #include <qtextdocumentlayout_p.h>
-#include <qtexttable.h>
 #include <qtextengine_p.h>
+#include <qtextformat_p.h>
+#include <qtextimagehandler_p.h>
+#include <qtextobject_p.h>
+#include <qtools_p.h>
 
 #include <stdlib.h>
 

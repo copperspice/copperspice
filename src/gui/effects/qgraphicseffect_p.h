@@ -25,6 +25,7 @@
 #define QGRAPHICSEFFECT_P_H
 
 #include <qgraphicseffect.h>
+
 #include <qpixmapcache.h>
 #include <qscopedpointer.h>
 

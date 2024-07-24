@@ -29,10 +29,10 @@
 
 #ifndef QT_NO_MESSAGEBOX
 
-class QLabel;
-class QMessageBoxPrivate;
 class QAbstractButton;
 class QCheckBox;
+class QLabel;
+class QMessageBoxPrivate;
 
 class Q_GUI_EXPORT QMessageBox : public QDialog
 {

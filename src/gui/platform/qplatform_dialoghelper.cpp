@@ -23,11 +23,11 @@
 
 #include <qplatform_dialoghelper.h>
 
-#include <qshareddata.h>
-#include <qsettings.h>
-#include <qurl.h>
 #include <qcolor.h>
 #include <qregularexpression.h>
+#include <qsettings.h>
+#include <qshareddata.h>
+#include <qurl.h>
 #include <qvariant.h>
 
 #include <algorithm>

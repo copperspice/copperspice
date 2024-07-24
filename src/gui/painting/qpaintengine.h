@@ -25,19 +25,19 @@
 #define QPAINTENGINE_H
 
 #include <qnamespace.h>
-#include <qscopedpointer.h>
 #include <qpainter.h>
+#include <qscopedpointer.h>
 
 class QFontEngine;
 class QLineF;
 class QPaintDevice;
 class QPaintEnginePrivate;
+class QPaintEngineState;
 class QPainterPath;
 class QPointF;
 class QPolygonF;
 class QRectF;
 class QTextItemInt;
-class QPaintEngineState;
 
 struct QGlyphLayout;
 

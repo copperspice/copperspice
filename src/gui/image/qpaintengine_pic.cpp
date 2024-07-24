@@ -21,25 +21,24 @@
 *
 ***********************************************************************/
 
-#include <qpaintengine_p.h>
-#include <qpainter_p.h>
-#include <qpicture_p.h>
-#include <qfont_p.h>
+#include <qpaintengine_pic_p.h>
 
 #ifndef QT_NO_PICTURE
 
 #include <qbuffer.h>
 #include <qbytearray.h>
 #include <qdatastream.h>
+#include <qdebug.h>
 #include <qmath.h>
-#include <qpaintengine_pic_p.h>
 #include <qpicture.h>
 #include <qpolygon.h>
 #include <qrect.h>
+
+#include <qfont_p.h>
+#include <qpaintengine_p.h>
+#include <qpainter_p.h>
+#include <qpicture_p.h>
 #include <qtextengine_p.h>
-
-#include <qdebug.h>
-
 
 class QPicturePaintEnginePrivate : public QPaintEnginePrivate
 {

@@ -24,8 +24,8 @@
 #ifndef QPAINTDEVICEWINDOW_H
 #define QPAINTDEVICEWINDOW_H
 
-#include <QWindow>
-#include <QPaintDevice>
+#include <qpaintdevice.h>
+#include <qwindow.h>
 
 class QPaintDeviceWindowPrivate;
 class QPaintEvent;

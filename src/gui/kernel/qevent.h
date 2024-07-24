@@ -24,21 +24,21 @@
 #ifndef QEVENT_H
 #define QEVENT_H
 
-#include <qwindowdefs.h>
+#include <qcoreevent.h>
+#include <qfile.h>
+#include <qkeysequence.h>
+#include <qmap.h>
+#include <qnamespace.h>
 #include <qobject.h>
 #include <qregion.h>
-#include <qnamespace.h>
-#include <qstring.h>
-#include <qkeysequence.h>
-#include <qcoreevent.h>
-#include <qvariant.h>
-#include <qmap.h>
 #include <qset.h>
-#include <qvector.h>
-#include <qurl.h>
-#include <qfile.h>
-#include <qvector2d.h>
+#include <qstring.h>
 #include <qtouchdevice.h>
+#include <qurl.h>
+#include <qvariant.h>
+#include <qvector.h>
+#include <qvector2d.h>
+#include <qwindowdefs.h>
 
 class QAction;
 class QScreen;

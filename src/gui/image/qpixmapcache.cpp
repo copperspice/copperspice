@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qpixmapcache.h>
-#include <qobject.h>
+
 #include <qdebug.h>
+#include <qobject.h>
+
 #include <qpixmapcache_p.h>
 
 static int CacheLimit = 10240;    // 10 MB cache limit for desktop

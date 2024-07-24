@@ -22,14 +22,15 @@
 ***********************************************************************/
 
 #include <qregion.h>
-#include <qpainterpath.h>
-#include <qpolygon.h>
+
+#include <qbitmap.h>
 #include <qbuffer.h>
 #include <qdatastream.h>
+#include <qimage.h>
+#include <qpainterpath.h>
+#include <qpolygon.h>
 #include <qvariant.h>
 #include <qvarlengtharray.h>
-#include <qimage.h>
-#include <qbitmap.h>
 
 #include <qdebug_p.h>
 

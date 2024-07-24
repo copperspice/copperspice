@@ -28,12 +28,13 @@
 #include <qmessagebox.h>
 #include <qstylepainter.h>
 
+#include <qfiledialog_p.h>
+
+#include <ui_qfiledialog.h>
+
 #if ! defined(QT_NO_MIMETYPE)
 // emerald   #include <qmimedatabase.h>
 #endif
-
-#include <qfiledialog_p.h>
-#include <ui_qfiledialog.h>
 
 #if defined(Q_OS_UNIX)
 #include <pwd.h>

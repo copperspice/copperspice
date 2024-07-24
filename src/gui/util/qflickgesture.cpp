@@ -24,6 +24,7 @@
 #include <qflickgesture_p.h>
 
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qgesture.h>
 #include <qgraphicsitem.h>
@@ -34,7 +35,6 @@
 #include <qwidget.h>
 
 #include <qapplication_p.h>
-#include <qdebug.h>
 #include <qevent_p.h>
 
 #ifndef QT_NO_GESTURES

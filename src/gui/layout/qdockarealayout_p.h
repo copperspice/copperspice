@@ -24,24 +24,25 @@
 #ifndef QDOCKAREALAYOUT_P_H
 #define QDOCKAREALAYOUT_P_H
 
-#include <qrect.h>
-#include <qpair.h>
-#include <qlist.h>
-#include <qvector.h>
 #include <qlayout.h>
+#include <qlist.h>
+#include <qpair.h>
+#include <qrect.h>
+#include <qvector.h>
 
 #ifndef QT_NO_DOCKWIDGET
 
-class QLayoutItem;
-class QWidget;
-class QLayoutItem;
 class QDockAreaLayoutInfo;
-class QPlaceHolderItem;
 class QDockWidget;
+class QLayoutItem;
+class QLayoutItem;
 class QMainWindow;
-class QWidgetAnimator;
 class QMainWindowLayout;
+class QPainter;
+class QPlaceHolderItem;
 class QTabBar;
+class QWidget;
+class QWidgetAnimator;
 
 struct QLayoutStruct;
 

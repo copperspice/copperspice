@@ -24,25 +24,23 @@
 #ifndef QTEXTENGINE_P_H
 #define QTEXTENGINE_P_H
 
+#include <qdebug.h>
 #include <qglobal.h>
-
+#include <qnamespace.h>
+#include <qpaintengine.h>
 #include <qset.h>
 #include <qstring.h>
-#include <qvector.h>
-#include <qvarlengtharray.h>
-
-#include <qdebug.h>
-#include <qnamespace.h>
+#include <qtextcursor.h>
 #include <qtextlayout.h>
-#include <qpaintengine.h>
 #include <qtextobject.h>
 #include <qtextoption.h>
-#include <qtextcursor.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
 
 #include <qfixed_p.h>
 #include <qfont_p.h>
-#include <qtextformat_p.h>
 #include <qtextdocument_p.h>
+#include <qtextformat_p.h>
 #include <qunicodetools_p.h>
 
 #if ! defined(CS_BUILDING_CUPS)
@@ -50,15 +48,15 @@
 #include <qharfbuzz_p.h>
 #endif
 
-#include <stdlib.h>
-
-class QTextFormatCollection;
+class QAbstractTextDocumentLayout;
 class QFontEngine;
 class QPainter;
-class QAbstractTextDocumentLayout;
+class QTextFormatCollection;
 
 struct QScriptItem;
 struct QScriptLine;
+
+#include <stdlib.h>
 
 using QScriptItemArray = QVector<QScriptItem>;
 using QScriptLineArray = QVector<QScriptLine>;

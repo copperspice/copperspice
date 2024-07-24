@@ -26,8 +26,8 @@
 #ifndef QT_NO_IMAGEFORMAT_PNG
 
 #include <qcoreapplication.h>
-#include <qiodevice.h>
 #include <qimage.h>
+#include <qiodevice.h>
 #include <qlist.h>
 #include <qtextcodec.h>
 #include <qvariant.h>

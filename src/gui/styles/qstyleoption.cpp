@@ -22,14 +22,14 @@
 ***********************************************************************/
 
 #include <qstyleoption.h>
+
 #include <qapplication.h>
+#include <qdebug.h>
+#include <qmath.h>
 
 #ifdef Q_OS_DARWIN
 # include <qmacstyle.h>
 #endif
-
-#include <qdebug.h>
-#include <qmath.h>
 
 QStyleOption::QStyleOption(int version, int type)
    : version(version), type(type), state(QStyle::State_None),

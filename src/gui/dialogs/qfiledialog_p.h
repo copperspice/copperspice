@@ -25,42 +25,44 @@
 #define QFILEDIALOG_P_H
 
 #include <qglobal.h>
+
 #ifndef QT_NO_FILEDIALOG
 
 #include <qfiledialog.h>
-#include <qdialog_p.h>
-#include <qplatformdefs.h>
-#include <qlistview.h>
-#include <qtreeview.h>
-#include <qcombobox.h>
-#include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qevent.h>
-#include <qlineedit.h>
-#include <qurl.h>
-#include <qstackedwidget.h>
-#include <qdialogbuttonbox.h>
-#include <qabstractproxymodel.h>
-#include <qcompleter.h>
-#include <qpointer.h>
-#include <qdebug.h>
 
+#include <qabstractproxymodel.h>
+#include <qcombobox.h>
+#include <qcompleter.h>
+#include <qdebug.h>
+#include <qdialogbuttonbox.h>
+#include <qevent.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qlistview.h>
+#include <qplatformdefs.h>
+#include <qpointer.h>
+#include <qstackedwidget.h>
+#include <qtoolbutton.h>
+#include <qtreeview.h>
+#include <qurl.h>
+
+#include <qdialog_p.h>
 #include <qfilesystemmodel_p.h>
-#include <qsidebar_p.h>
 #include <qfscompleter_p.h>
+#include <qsidebar_p.h>
 
 #if defined (Q_OS_UNIX)
 #include <unistd.h>
 #endif
 
+class QCompleter;
+class QFileDialogLineEdit;
 class QFileDialogListView;
 class QFileDialogTreeView;
-class QFileDialogLineEdit;
 class QGridLayout;
-class QCompleter;
 class QHBoxLayout;
-class Ui_QFileDialog;
 class QPlatformDialogHelper;
+class Ui_QFileDialog;
 
 struct QFileDialogArgs {
    QFileDialogArgs()

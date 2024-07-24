@@ -29,6 +29,7 @@
 #include <qmap.h>
 #include <qt_windows.h>
 
+#include <limits.h>
 #include <uxtheme.h>
 
 #if WINVER >= 0x0600
@@ -41,8 +42,6 @@
 #define _WIN32_WINNT 0x0501       // Windows XP
 #include <commctrl.h>
 */
-
-#include <limits.h>
 
 #if ! defined(QT_NO_STYLE_WINDOWSXP)
 

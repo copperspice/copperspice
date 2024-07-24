@@ -24,8 +24,8 @@
 #ifndef QGENERICMATRIX_H
 #define QGENERICMATRIX_H
 
-#include <qdebug.h>
 #include <qdatastream.h>
+#include <qdebug.h>
 
 template <int N, int M, typename T>
 class QGenericMatrix

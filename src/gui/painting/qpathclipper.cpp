@@ -22,11 +22,13 @@
 ***********************************************************************/
 
 #include <qpathclipper_p.h>
-#include <qbezier_p.h>
-#include <qvector.h>
+
 #include <qdebug.h>
-#include <qnumeric_p.h>
 #include <qmath.h>
+#include <qvector.h>
+
+#include <qbezier_p.h>
+#include <qnumeric_p.h>
 
 #include <algorithm>
 

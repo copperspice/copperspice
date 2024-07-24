@@ -24,13 +24,13 @@
 #ifndef QOUTLINEMAPPER_P_H
 #define QOUTLINEMAPPER_P_H
 
+#include <qpainterpath.h>
 #include <qrect.h>
 #include <qtransform.h>
-#include <qpainterpath.h>
 #include <qvector.h>
 
-#include <qrasterdefs_p.h>
 #include <qpaintengineex_p.h>
+#include <qrasterdefs_p.h>
 
 // This limitations comes from qgrayraster.c. Any higher and
 // rasterization of shapes will produce incorrect results.

@@ -22,13 +22,15 @@
 ***********************************************************************/
 
 #include <qstyle.h>
+#include <qstyle_p.h>
+
 #include <qapplication.h>
-#include <qpainter.h>
-#include <qwidget.h>
 #include <qbitmap.h>
+#include <qdebug.h>
+#include <qpainter.h>
 #include <qpixmapcache.h>
 #include <qstyleoption.h>
-#include <qstyle_p.h>
+#include <qwidget.h>
 
 #include <qguiapplication_p.h>
 

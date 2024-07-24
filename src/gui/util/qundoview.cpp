@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qundoview.h>
+#include <qlistview_p.h>
 
 #ifndef QT_NO_UNDOVIEW
 
@@ -30,8 +31,6 @@
 #include <qpointer.h>
 #include <qundogroup.h>
 #include <qundostack.h>
-
-#include <qlistview_p.h>
 
 class QUndoModel : public QAbstractItemModel
 {

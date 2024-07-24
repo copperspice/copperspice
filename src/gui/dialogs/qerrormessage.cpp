@@ -30,13 +30,13 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qmessagebox.h>
+#include <qmetaobject.h>
+#include <qpixmap.h>
 #include <qpushbutton.h>
+#include <qset.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
-#include <qpixmap.h>
-#include <qmetaobject.h>
 #include <qthread.h>
-#include <qset.h>
 
 #include <qdialog_p.h>
 

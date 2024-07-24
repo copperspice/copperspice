@@ -23,17 +23,17 @@
 
 #include <qgesturemanager_p.h>
 
-#include <qgesture.h>
-#include <qevent.h>
-#include <qgraphicsitem.h>
 #include <qdebug.h>
+#include <qevent.h>
+#include <qgesture.h>
+#include <qgraphicsitem.h>
 
-#include <qstandardgestures_p.h>
-#include <qwidget_p.h>
+#include <qapplication_p.h>
+#include <qevent_p.h>
 #include <qgesture_p.h>
 #include <qgraphics_item_p.h>
-#include <qevent_p.h>
-#include <qapplication_p.h>
+#include <qstandardgestures_p.h>
+#include <qwidget_p.h>
 #include <qwidgetwindow_p.h>
 
 #ifdef Q_OS_DARWIN

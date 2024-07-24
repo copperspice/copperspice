@@ -28,21 +28,22 @@
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
-#include <qabstractitemmodel_p.h>
 #include <qabstractitemmodel.h>
-#include <qfileinfogatherer_p.h>
-#include <qpair.h>
 #include <qdir.h>
-#include <qicon.h>
 #include <qdir.h>
-#include <qicon.h>
 #include <qfileinfo.h>
-#include <qtimer.h>
 #include <qhash.h>
+#include <qicon.h>
+#include <qicon.h>
+#include <qpair.h>
+#include <qtimer.h>
+
+#include <qabstractitemmodel_p.h>
+#include <qfileinfogatherer_p.h>
 
 class ExtendedInformation;
-class QFileSystemModelPrivate;
 class QFileIconProvider;
+class QFileSystemModelPrivate;
 
 class QFileSystemModelPrivate : public QAbstractItemModelPrivate
 {

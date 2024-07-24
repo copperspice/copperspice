@@ -22,11 +22,13 @@
 ***********************************************************************/
 
 #include <qstroker_p.h>
+
+#include <qline.h>
+#include <qmath.h>
+#include <qtransform.h>
+
 #include <qbezier_p.h>
 #include <qmath_p.h>
-#include <qline.h>
-#include <qtransform.h>
-#include <qmath.h>
 
 class QSubpathForwardIterator
 {

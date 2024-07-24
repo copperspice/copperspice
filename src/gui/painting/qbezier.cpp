@@ -25,10 +25,10 @@
 
 #include <qdebug.h>
 #include <qline.h>
-#include <qpolygon.h>
-#include <qvector.h>
 #include <qlist.h>
 #include <qmath.h>
+#include <qpolygon.h>
+#include <qvector.h>
 
 #include <qnumeric_p.h>
 

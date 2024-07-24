@@ -26,21 +26,21 @@
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <qgraphicsproxywidget.h>
+#include <qgraphics_proxywidget_p.h>
 
-#include <qgraphicslayout.h>
 #include <qdebug.h>
 #include <qevent.h>
+#include <qgraphicslayout.h>
 #include <qgraphicsscene.h>
 #include <qgraphicssceneevent.h>
+#include <qgraphicsview.h>
 #include <qlayout.h>
+#include <qlineedit.h>
+#include <qlistview.h>
 #include <qpainter.h>
 #include <qstyleoption.h>
-#include <qgraphicsview.h>
-#include <qlistview.h>
-#include <qlineedit.h>
 #include <qtextedit.h>
 
-#include <qgraphics_proxywidget_p.h>
 #include <qwidget_p.h>
 #include <qapplication_p.h>
 

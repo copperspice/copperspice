@@ -26,14 +26,14 @@
 #ifndef QT_NO_SPLASHSCREEN
 
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qdesktopwidget.h>
+#include <qelapsedtimer.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qtextdocument.h>
 #include <qtextcursor.h>
+#include <qtextdocument.h>
 #include <qwindow.h>
-#include <qdebug.h>
-#include <qelapsedtimer.h>
 
 #include <qwidget_p.h>
 #ifdef Q_OS_WIN

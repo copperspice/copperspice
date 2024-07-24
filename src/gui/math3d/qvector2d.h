@@ -26,15 +26,14 @@
 
 #include <qpoint.h>
 
+class QVariant;
 class QVector3D;
 class QVector4D;
-class QVariant;
 
 #ifndef QT_NO_VECTOR2D
 
 class Q_GUI_EXPORT QVector2D
 {
-
  public:
    QVector2D();
    QVector2D(qreal xpos, qreal ypos);

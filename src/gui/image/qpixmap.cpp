@@ -24,29 +24,29 @@
 #include <qpixmap.h>
 
 #include <qbitmap.h>
-#include <qdebug.h>
-#include <qglobal.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qdatastream.h>
 #include <qbuffer.h>
+#include <qdatastream.h>
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qpixmapcache.h>
-#include <qdatetime.h>
+#include <qglobal.h>
+#include <qimage.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
 #include <qpaintengine.h>
-#include <qscreen.h>
-#include <qthread.h>
+#include <qpainter.h>
+#include <qpixmapcache.h>
 #include <qplatform_integration.h>
 #include <qplatform_pixmap.h>
+#include <qscreen.h>
+#include <qthread.h>
 
-#include <qimagepixmapcleanuphooks_p.h>
 #include <qapplication_p.h>
-#include <qpixmap_raster_p.h>
 #include <qhexstring_p.h>
+#include <qimagepixmapcleanuphooks_p.h>
+#include <qpixmap_raster_p.h>
 
 static bool qt_pixmap_thread_test()
 {

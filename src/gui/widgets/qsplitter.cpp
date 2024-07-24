@@ -27,6 +27,7 @@
 
 #include <qapplication.h>
 #include <qcursor.h>
+#include <qdebug.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qlayout.h>
@@ -36,10 +37,9 @@
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qtextstream.h>
+#include <qtimer.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
-#include <qtimer.h>
-#include <qdebug.h>
 
 #include <qlayoutengine_p.h>
 #include <qsplitter_p.h>

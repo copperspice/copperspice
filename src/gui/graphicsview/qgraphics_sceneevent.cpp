@@ -25,13 +25,14 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qgesture.h>
+#include <qgraphicsitem.h>
+#include <qgraphicsview.h>
 #include <qmap.h>
 #include <qpoint.h>
 #include <qsize.h>
 #include <qstring.h>
-#include <qgraphicsview.h>
-#include <qgraphicsitem.h>
-#include <qgesture.h>
+
 #include <qevent_p.h>
 
 class QGraphicsSceneEventPrivate

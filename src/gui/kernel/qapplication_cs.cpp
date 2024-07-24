@@ -21,59 +21,60 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
-#include <qabstracteventdispatcher.h>
 #include <qapplication.h>
+#include <qguiapplication_p.h>
+
+#include <qabstracteventdispatcher.h>
 #include <qclipboard.h>
+#include <qcolormap.h>
 #include <qcursor.h>
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qdir.h>
 #include <qevent.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qgesture.h>
+#include <qgraphicsproxywidget.h>
 #include <qgraphicsscene.h>
 #include <qhash.h>
-#include <qset.h>
+#include <qinputmethod.h>
 #include <qlayout.h>
+#include <qmessagebox.h>
+#include <qplatform_fontdatabase.h>
+#include <qplatform_theme.h>
+#include <qplatform_window.h>
+#include <qplatformdefs.h>
+#include <qset.h>
 #include <qstyle.h>
-#include <qstyleoption.h>
 #include <qstylefactory.h>
+#include <qstylehints.h>
+#include <qstyleoption.h>
 #include <qtextcodec.h>
+#include <qthread.h>
 #include <qtooltip.h>
 #include <qtranslator.h>
 #include <qvariant.h>
 #include <qwidget.h>
+
+#include <qaccessiblewidget_factory_p.h>
+#include <qapplication_p.h>
 #include <qdnd_p.h>
-#include <qguiapplication_p.h>
-#include <qcolormap.h>
-#include <qdebug.h>
-#include <qstylesheetstyle_p.h>
+#include <qevent_p.h>
+#include <qfont_p.h>
+#include <qgesturemanager_p.h>
+#include <qkeymapper_p.h>
 #include <qstyle_p.h>
-#include <qmessagebox.h>
+#include <qstylesheetstyle_p.h>
+#include <qthread_p.h>
+#include <qwidget_p.h>
 #include <qwidgetwindow_p.h>
-#include <qgraphicsproxywidget.h>
-#include <qstylehints.h>
-#include <qinputmethod.h>
 #include <qwindow_p.h>
-#include <qplatform_theme.h>
-#include <qplatform_fontdatabase.h>
-#include <qdatetime.h>
-#include <qplatform_window.h>
-#include <qgesture.h>
-#include <qthread.h>
 
 #ifndef QT_NO_WHATSTHIS
 #include <qwhatsthis.h>
 #endif
-
-#include <qkeymapper_p.h>
-#include <qaccessiblewidget_factory_p.h>
-#include <qthread_p.h>
-#include <qfont_p.h>
-#include <qapplication_p.h>
-#include <qevent_p.h>
-#include <qwidget_p.h>
-#include <qgesturemanager_p.h>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>       // for qt_win_display_dc()

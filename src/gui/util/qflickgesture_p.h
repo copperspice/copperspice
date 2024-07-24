@@ -26,9 +26,10 @@
 
 #include <qevent.h>
 #include <qgesturerecognizer.h>
-#include <qgesture_p.h>
-#include <qscroller.h>
 #include <qscopedpointer.h>
+#include <qscroller.h>
+
+#include <qgesture_p.h>
 
 #ifndef QT_NO_GESTURES
 

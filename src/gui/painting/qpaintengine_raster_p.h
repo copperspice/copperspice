@@ -27,14 +27,14 @@
 #include <qpainterpath.h>
 #include <qvector.h>
 
-#include <qpaintengineex_p.h>
 #include <qdrawhelper_p.h>
+#include <qoutlinemapper_p.h>
 #include <qpaintengine_p.h>
+#include <qpaintengineex_p.h>
+#include <qpainter_p.h>
 #include <qrasterizer_p.h>
 #include <qstroker_p.h>
-#include <qpainter_p.h>
 #include <qtextureglyphcache_p.h>
-#include <qoutlinemapper_p.h>
 
 #include <stdlib.h>
 

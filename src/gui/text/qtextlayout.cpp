@@ -22,25 +22,25 @@
 ***********************************************************************/
 
 #include <qtextlayout.h>
-#include <qtextengine_p.h>
 
+#include <qabstracttextdocumentlayout.h>
 #include <qdebug.h>
 #include <qfont.h>
+#include <qglyphrun.h>
 #include <qmath.h>
 #include <qpainter.h>
-#include <qvarlengtharray.h>
-#include <qtextformat.h>
-#include <qabstracttextdocumentlayout.h>
 #include <qrawfont.h>
-#include <qglyphrun.h>
+#include <qtextformat.h>
+#include <qvarlengtharray.h>
 
-#include <qtextdocument_p.h>
-#include <qtextformat_p.h>
-#include <qpainterpath.h>
-#include <qglyphrun_p.h>
-#include <qrawfont_p.h>
 #include <qfontengine_p.h>
+#include <qglyphrun_p.h>
 #include <qpainter_p.h>
+#include <qpainterpath.h>
+#include <qrawfont_p.h>
+#include <qtextdocument_p.h>
+#include <qtextengine_p.h>
+#include <qtextformat_p.h>
 
 #include <limits.h>
 

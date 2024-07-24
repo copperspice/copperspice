@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-#include <qbitarray.h>
 #include <qapplication.h>
+#include <qbitarray.h>
 #include <qlabel.h>
 
 class QHeaderViewPrivate: public QAbstractItemViewPrivate

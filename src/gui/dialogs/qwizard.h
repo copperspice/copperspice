@@ -30,8 +30,8 @@
 
 class QAbstractButton;
 class QWizardPage;
-class QWizardPrivate;
 class QWizardPagePrivate;
+class QWizardPrivate;
 
 class Q_GUI_EXPORT QWizard : public QDialog
 {

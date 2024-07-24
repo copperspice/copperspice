@@ -28,28 +28,32 @@
 
 #define QMAC_QAQUASTYLE_SIZE_CONSTRAIN
 
-#include <qcore_mac_p.h>
-#include <qcombobox_p.h>
-#include <qpainter_p.h>
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qdatetimeedit.h>
 #include <qdialogbuttonbox.h>
 #include <qdockwidget.h>
 #include <qevent.h>
 #include <qfocusframe.h>
 #include <qformlayout.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsview.h>
 #include <qgroupbox.h>
 #include <qhash.h>
 #include <qheaderview.h>
+#include <qlibrary.h>
 #include <qlineedit.h>
 #include <qmainwindow.h>
+#include <qmath.h>
 #include <qmdisubwindow.h>
 #include <qmenubar.h>
 #include <qpaintdevice.h>
 #include <qpainter.h>
 #include <qpixmapcache.h>
+#include <qplatform_fontdatabase.h>
+#include <qplatform_theme.h>
 #include <qpointer.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
@@ -58,21 +62,18 @@
 #include <qscrollbar.h>
 #include <qsizegrip.h>
 #include <qstyleoption.h>
+#include <qtableview.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qtreeview.h>
-#include <qtableview.h>
-#include <qwizard.h>
-#include <qlibrary.h>
-#include <qdatetimeedit.h>
-#include <qmath.h>
-#include <qgraphicsproxywidget.h>
-#include <qgraphicsview.h>
 #include <qvariant.h>
-#include <qstylehelper_p.h>
+#include <qwizard.h>
+
+#include <qcombobox_p.h>
+#include <qcore_mac_p.h>
+#include <qpainter_p.h>
 #include <qstyleanimation_p.h>
-#include <qplatform_fontdatabase.h>
-#include <qplatform_theme.h>
+#include <qstylehelper_p.h>
 
 static QWindow *qt_getWindow(const QWidget *widget)
 {

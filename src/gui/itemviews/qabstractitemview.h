@@ -24,17 +24,17 @@
 #ifndef QABSTRACTITEMVIEW_H
 #define QABSTRACTITEMVIEW_H
 
-#include <qabstractscrollarea.h>
-#include <qabstractitemmodel.h>
-#include <qitemselectionmodel.h>
 #include <qabstractitemdelegate.h>
+#include <qabstractitemmodel.h>
+#include <qabstractscrollarea.h>
+#include <qitemselectionmodel.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QMenu;
+class QAbstractItemViewPrivate;
 class QDrag;
 class QEvent;
-class QAbstractItemViewPrivate;
+class QMenu;
 
 class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 {

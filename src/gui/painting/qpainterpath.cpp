@@ -28,12 +28,12 @@
 #include <qdebug.h>
 #include <qiodevice.h>
 #include <qlist.h>
+#include <qmath.h>
 #include <qmatrix.h>
 #include <qpen.h>
 #include <qpolygon.h>
 #include <qtextlayout.h>
 #include <qvarlengtharray.h>
-#include <qmath.h>
 
 #include <qbezier_p.h>
 #include <qfontengine_p.h>

@@ -30,11 +30,11 @@
 #include <qdrawutil.h>
 #include <qelapsedtimer.h>
 #include <qlabel.h>
+#include <qpainter.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
-#include <qpainter.h>
-#include <qstyle.h>
 #include <qshortcut.h>
+#include <qstyle.h>
 #include <qtimer.h>
 #include <qvboxlayout.h>
 

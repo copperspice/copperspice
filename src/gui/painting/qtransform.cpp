@@ -22,15 +22,17 @@
 ***********************************************************************/
 
 #include <qtransform.h>
+
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qhashfunc.h>
-#include <qmatrix.h>
-#include <qregion.h>
-#include <qpainterpath.h>
-#include <qvariant.h>
 #include <qmath.h>
+#include <qmatrix.h>
 #include <qnumeric.h>
+#include <qpainterpath.h>
+#include <qregion.h>
+#include <qvariant.h>
+
 #include <qbezier_p.h>
 #include <qpainterpath_p.h>
 

@@ -29,8 +29,8 @@
 
 #ifndef QT_NO_CLIPBOARD
 
-class QMimeData;
 class QImage;
+class QMimeData;
 class QPixmap;
 
 class Q_GUI_EXPORT QClipboard : public QObject

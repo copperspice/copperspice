@@ -25,12 +25,12 @@
 #define QUNDOGROUP_H
 
 #include <qobject.h>
-#include <qstring.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
+class QAction;
 class QUndoGroupPrivate;
 class QUndoStack;
-class QAction;
 
 #ifndef QT_NO_UNDOGROUP
 

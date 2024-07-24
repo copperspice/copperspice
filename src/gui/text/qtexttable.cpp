@@ -22,13 +22,15 @@
 ***********************************************************************/
 
 #include <qtexttable.h>
+
+#include <qdebug.h>
 #include <qtextcursor.h>
 #include <qtextformat.h>
-#include <qdebug.h>
+#include <qvarlengtharray.h>
 
 #include <qtextcursor_p.h>
 #include <qtexttable_p.h>
-#include <qvarlengtharray.h>
+
 #include <algorithm>
 #include <stdlib.h>
 

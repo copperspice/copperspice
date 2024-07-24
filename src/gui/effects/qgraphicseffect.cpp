@@ -23,12 +23,12 @@
 
 #include <qgraphicseffect_p.h>
 
+#include <qdebug.h>
 #include <qgraphicsitem.h>
 #include <qimage.h>
-#include <qpainter.h>
 #include <qpaintengine.h>
+#include <qpainter.h>
 #include <qrect.h>
-#include <qdebug.h>
 
 #include <qdrawhelper_p.h>
 #include <qgraphics_item_p.h>

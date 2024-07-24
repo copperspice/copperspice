@@ -23,6 +23,7 @@
 
 #include <qitemselectionmodel.h>
 #include <qitemselectionmodel_p.h>
+
 #include <qdebug.h>
 
 #include <algorithm>

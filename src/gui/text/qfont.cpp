@@ -22,29 +22,28 @@
 ***********************************************************************/
 
 #include <qfont.h>
-#include <qdebug.h>
-#include <qpaintdevice.h>
-#include <qfontdatabase.h>
-#include <qfontmetrics.h>
-#include <qfontinfo.h>
-#include <qpainter.h>
-#include <qhash.h>
-#include <qdatastream.h>
-#include <qapplication.h>
-#include <qstringlist.h>
-#include <qscreen.h>
+#include <qfont_p.h>
 
+#include <qapplication.h>
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qfontdatabase.h>
+#include <qfontinfo.h>
+#include <qfontmetrics.h>
+#include <qhash.h>
+#include <qmutex.h>
+#include <qmutexlocker.h>
+#include <qpaintdevice.h>
+#include <qpainter.h>
+#include <qplatform_fontdatabase.h>
+#include <qplatform_integration.h>
+#include <qplatform_screen.h>
+#include <qscreen.h>
+#include <qstringlist.h>
 #include <qthread.h>
 #include <qthreadstorage.h>
-#include <qplatform_screen.h>
-#include <qplatform_integration.h>
-#include <qplatform_fontdatabase.h>
-
-#include <qmutexlocker.h>
-#include <qmutex.h>
 
 #include <qapplication_p.h>
-#include <qfont_p.h>
 #include <qfontengine_p.h>
 #include <qpainter_p.h>
 #include <qtextengine_p.h>

@@ -25,16 +25,16 @@
 #define QFILESYSTEMMODEL_H
 
 #include <qabstractitemmodel.h>
-#include <qpair.h>
 #include <qdir.h>
-#include <qicon.h>
 #include <qdiriterator.h>
+#include <qicon.h>
+#include <qpair.h>
 
 #ifndef QT_NO_FILESYSTEMMODEL
 
 class ExtendedInformation;
-class QFileSystemModelPrivate;
 class QFileIconProvider;
+class QFileSystemModelPrivate;
 
 class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 {

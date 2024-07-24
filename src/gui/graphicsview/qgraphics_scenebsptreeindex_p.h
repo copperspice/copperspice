@@ -28,12 +28,12 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-#include <qrect.h>
 #include <qlist.h>
+#include <qrect.h>
 
-#include <qgraphics_sceneindex_p.h>
 #include <qgraphics_item_p.h>
 #include <qgraphics_scene_bsp_p.h>
+#include <qgraphics_sceneindex_p.h>
 
 static constexpr const int QGRAPHICSSCENE_INDEXTIMER_TIMEOUT = 2000;
 

@@ -21,6 +21,9 @@
 *
 ***********************************************************************/
 
+#include <qpainter.h>
+#include <qpainter_p.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qdebug.h>
@@ -30,7 +33,6 @@
 #include <qmutex.h>
 #include <qpaintdevice.h>
 #include <qpaintengine.h>
-#include <qpainter.h>
 #include <qpainterpath.h>
 #include <qpicture.h>
 #include <qpixmapcache.h>
@@ -52,7 +54,6 @@
 #include <qmath_p.h>
 #include <qpaintengine_p.h>
 #include <qpaintengine_raster_p.h>
-#include <qpainter_p.h>
 #include <qpainterpath_p.h>
 #include <qrawfont_p.h>
 #include <qstatictext_p.h>

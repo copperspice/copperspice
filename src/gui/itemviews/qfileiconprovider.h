@@ -25,8 +25,8 @@
 #define QFILEICONPROVIDER_H
 
 #include <qfileinfo.h>
-#include <qscopedpointer.h>
 #include <qicon.h>
+#include <qscopedpointer.h>
 
 class QFileIconProviderPrivate;
 

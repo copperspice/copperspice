@@ -27,14 +27,16 @@
 #include <qdir.h>
 #include <qglobal.h>
 #include <qpixmapcache.h>
-#include <qguiapplication_p.h>
-#include <qicon_p.h>
 #include <qplatform_integration.h>
 #include <qplatform_services.h>
 #include <qplatform_theme.h>
 
+#include <qguiapplication_p.h>
+#include <qicon_p.h>
+
 #if defined(Q_OS_WIN)
 #  include <qt_windows.h>
+
 #  include <commctrl.h>
 #  include <objbase.h>
 #endif

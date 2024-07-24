@@ -24,9 +24,9 @@
 #include <qshortcutmap_p.h>
 
 #include <qcoreapplication.h>
-#include <qkeysequence.h>
 #include <qdebug.h>
 #include <qevent.h>
+#include <qkeysequence.h>
 #include <qvector.h>
 
 #include <qkeymapper_p.h>

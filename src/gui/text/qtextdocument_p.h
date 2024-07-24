@@ -24,32 +24,32 @@
 #ifndef QTEXTDOCUMENT_P_H
 #define QTEXTDOCUMENT_P_H
 
+#include <qtextdocument.h>
+
 #include <qglobal.h>
-#include <qstring.h>
 #include <qlist.h>
 #include <qmap.h>
-#include <qvector.h>
-
-#include <qfragmentmap_p.h>
-#include <qcssparser_p.h>
-#include <qtextlayout.h>
-#include <qtextoption.h>
-#include <qtextformat_p.h>
-#include <qtextdocument.h>
-#include <qtextobject.h>
+#include <qstring.h>
 #include <qtextcursor.h>
+#include <qtextlayout.h>
+#include <qtextobject.h>
+#include <qtextoption.h>
 #include <qurl.h>
 #include <qvariant.h>
+#include <qvector.h>
 
+#include <qcssparser_p.h>
+#include <qfragmentmap_p.h>
+#include <qtextformat_p.h>
 
-class QTextFormatCollection;
-class QTextFormat;
+class QAbstractTextDocumentLayout;
+class QAbstractUndoItem;
 class QTextBlockFormat;
 class QTextCursorPrivate;
-class QAbstractTextDocumentLayout;
 class QTextDocument;
+class QTextFormat;
+class QTextFormatCollection;
 class QTextFrame;
-class QAbstractUndoItem;
 
 #define QTextBeginningOfFrame QChar(0xfdd0)
 #define QTextEndOfFrame       QChar(0xfdd1)

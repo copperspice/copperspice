@@ -29,8 +29,8 @@
 #include <qvector.h>
 #include <qwidget.h>
 
-#include <qlayoutengine_p.h>
 #include <qlayout_p.h>
+#include <qlayoutengine_p.h>
 
 struct QBoxLayoutItem {
    QBoxLayoutItem(QLayoutItem *it, int stretchX = 0)

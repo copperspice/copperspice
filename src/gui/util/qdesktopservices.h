@@ -29,9 +29,9 @@
 
 #ifndef QT_NO_DESKTOPSERVICES
 
+class QObject;
 class QStringList;
 class QUrl;
-class QObject;
 
 class Q_GUI_EXPORT QDesktopServices
 {

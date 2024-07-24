@@ -21,18 +21,19 @@
 *
 ***********************************************************************/
 
-#include <qstyleoption.h>
+#include <qstylehelper_p.h>
+
+#include <qabstractscrollarea.h>
+#include <qcryptographichash.h>
+#include <qmath.h>
 #include <qpainter.h>
 #include <qpixmapcache.h>
-#include <qmath.h>
 #include <qscrollbar.h>
-#include <qabstractscrollarea.h>
+#include <qstyleoption.h>
 #include <qwindow.h>
-#include <qcryptographichash.h>
 
 #include <qmath_p.h>
 #include <qstyle_p.h>
-#include <qstylehelper_p.h>
 
 Q_GUI_EXPORT int qt_defaultDpiX();
 

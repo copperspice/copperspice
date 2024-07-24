@@ -22,25 +22,25 @@
 ***********************************************************************/
 
 #include <qdialog.h>
+#include <qdialog_p.h>
 
 #include <qapplication.h>
 #include <qcolordialog.h>
 #include <qcursor.h>
 #include <qdesktopwidget.h>
 #include <qerrormessage.h>
-#include <qfontdialog.h>
-#include <qfiledialog.h>
 #include <qevent.h>
+#include <qfiledialog.h>
+#include <qfontdialog.h>
 #include <qlayout.h>
-#include <qplatform_theme.h>
-#include <qpushbutton.h>
 #include <qmenu.h>
 #include <qmessagebox.h>
+#include <qplatform_theme.h>
+#include <qpushbutton.h>
 #include <qsizegrip.h>
 #include <qwhatsthis.h>
 
 #include <qguiapplication_p.h>
-#include <qdialog_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

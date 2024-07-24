@@ -24,11 +24,11 @@
 #ifndef QMATRIX4X4_H
 #define QMATRIX4X4_H
 
+#include <qgenericmatrix.h>
+#include <qquaternion.h>
+#include <qrect.h>
 #include <qvector3d.h>
 #include <qvector4d.h>
-#include <qquaternion.h>
-#include <qgenericmatrix.h>
-#include <qrect.h>
 
 #ifndef QT_NO_MATRIX4X4
 

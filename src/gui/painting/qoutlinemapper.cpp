@@ -22,9 +22,12 @@
 ***********************************************************************/
 
 #include <qoutlinemapper_p.h>
-#include <qpainterpath_p.h>
+
 #include <qmath.h>
+
 #include <qbezier_p.h>
+#include <qpainterpath_p.h>
+
 #include <stdlib.h>
 
 #define qreal_to_fixed_26_6(f) (qRound(f * 64))

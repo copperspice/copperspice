@@ -26,18 +26,17 @@
 
 #ifndef QT_NO_SHORTCUT
 
+#include <qapplication.h>
 #include <qevent.h>
-#include <qwhatsthis.h>
 #include <qmenu.h>
 #include <qmenubar.h>
-#include <qapplication.h>
-
-#include <qapplication_p.h>
-#include <qshortcutmap_p.h>
+#include <qplatform_menu.h>
+#include <qwhatsthis.h>
 
 #include <qaction_p.h>
+#include <qapplication_p.h>
+#include <qshortcutmap_p.h>
 #include <qwidgetwindow_p.h>
-#include <qplatform_menu.h>
 
 #define QAPP_CHECK(functionName) \
     if (! qApp) { \

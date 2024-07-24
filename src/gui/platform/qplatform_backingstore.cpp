@@ -23,19 +23,18 @@
 
 #include <qplatform_backingstore.h>
 
-#include <qpixmap.h>
-#include <qwindow.h>
-#include <qwindow_p.h>
-
-#include <qplatform_graphicsbuffer.h>
-#include <qplatform_graphicsbufferhelper.h>
-
-#include <qopengl.h>
-#include <qopenglcontext.h>
 #include <qmatrix4x4.h>
+#include <qopengl.h>
 #include <qopengl_shaderprogram.h>
 #include <qopenglcontext.h>
+#include <qopenglcontext.h>
 #include <qopenglfunctions.h>
+#include <qpixmap.h>
+#include <qplatform_graphicsbuffer.h>
+#include <qplatform_graphicsbufferhelper.h>
+#include <qwindow.h>
+
+#include <qwindow_p.h>
 
 #ifndef QT_NO_OPENGL
 #include <qopengl_textureblitter_p.h>

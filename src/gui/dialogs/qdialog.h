@@ -26,8 +26,8 @@
 
 #include <qwidget.h>
 
-class QPushButton;
 class QDialogPrivate;
+class QPushButton;
 
 class Q_GUI_EXPORT QDialog : public QWidget
 {

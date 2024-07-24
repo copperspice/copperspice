@@ -21,22 +21,23 @@
 *
 ***********************************************************************/
 
-#include <qapplication.h>
-#include <qwidget.h>
-#include <qtabbar.h>
-#include <qstyle.h>
-#include <qdesktopwidget.h>
-#include <qvariant.h>
 #include <qdockarealayout_p.h>
+
+#include <qapplication.h>
+#include <qdesktopwidget.h>
 #include <qdockwidget.h>
 #include <qmainwindow.h>
 #include <qpainter.h>
+#include <qstyle.h>
 #include <qstyleoption.h>
+#include <qtabbar.h>
+#include <qvariant.h>
+#include <qwidget.h>
 
-#include <qwidgetanimator_p.h>
-#include <qmainwindowlayout_p.h>
 #include <qdockwidget_p.h>
 #include <qlayoutengine_p.h>
+#include <qmainwindowlayout_p.h>
+#include <qwidgetanimator_p.h>
 
 #ifndef QT_NO_DOCKWIDGET
 

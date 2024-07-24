@@ -31,18 +31,17 @@
 #include <qpair.h>
 #include <qvector.h>
 
+#include <qabstractlayoutstyleinfo_p.h>
 #include <qgraphics_layout_p.h>
 #include <qlayoutpolicy_p.h>
-#include <qabstractlayoutstyleinfo_p.h>
 
 #include <float.h>
 
+class QGraphicsLayoutItem;
+class QGridLayoutEngine;
+class QGridLayoutRowInfo;
 class QStyle;
 class QWidget;
-
-class QGraphicsLayoutItem;
-class QGridLayoutRowInfo;
-class QGridLayoutEngine;
 
 // deal with Descent in a similar way
 enum GridSize {

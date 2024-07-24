@@ -23,23 +23,23 @@
 
 #include <qtextdocumentlayout_p.h>
 
-#include <qglobal.h>
-#include <qtexttable.h>
-#include <qtextlist.h>
-#include <qpainter.h>
-#include <qmath.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qvarlengtharray.h>
 #include <qbasictimer.h>
+#include <qglobal.h>
+#include <qmath.h>
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qrect.h>
+#include <qtextlist.h>
+#include <qtexttable.h>
+#include <qvarlengtharray.h>
 
-#include <qguiapplication_p.h>
-#include <qtextdocument_p.h>
-#include <qtextimagehandler_p.h>
-#include <qtextengine_p.h>
-#include <qcssutil_p.h>
 #include <qabstracttextdocumentlayout_p.h>
 #include <qcssparser_p.h>
+#include <qcssutil_p.h>
+#include <qguiapplication_p.h>
+#include <qtextdocument_p.h>
+#include <qtextengine_p.h>
+#include <qtextimagehandler_p.h>
 
 #include <algorithm>
 #include <limits.h>

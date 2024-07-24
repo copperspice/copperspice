@@ -27,16 +27,17 @@
 
 #include <qabstractitemdelegate.h>
 #include <qapplication.h>
-#include <qdrag.h>
-#include <qpainter.h>
 #include <qbitmap.h>
-#include <qvector.h>
-#include <qstyle.h>
-#include <qevent.h>
-#include <qscrollbar.h>
-#include <qrubberband.h>
-#include <qlistview_p.h>
 #include <qdebug.h>
+#include <qdrag.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qrubberband.h>
+#include <qscrollbar.h>
+#include <qstyle.h>
+#include <qvector.h>
+
+#include <qlistview_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

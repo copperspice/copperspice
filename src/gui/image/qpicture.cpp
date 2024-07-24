@@ -27,10 +27,10 @@
 #ifndef QT_NO_PICTURE
 
 #include <qalgorithms.h>
-#include <qguiapplication.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qfile.h>
+#include <qguiapplication.h>
 #include <qimage.h>
 #include <qmutex.h>
 #include <qpainter.h>
@@ -39,13 +39,13 @@
 #include <qregion.h>
 
 #ifndef QT_NO_PICTUREIO
-#include <qregularexpression.h>
 #include <qpictureformatplugin.h>
+#include <qregularexpression.h>
 #endif
 
 #include <qfactoryloader_p.h>
-#include <qpaintengine_pic_p.h>
 #include <qfont_p.h>
+#include <qpaintengine_pic_p.h>
 
 #include <algorithm>
 

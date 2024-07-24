@@ -26,8 +26,9 @@
 
 #include <qalgorithms.h>
 #include <qdebug.h>
-#include <qlist.h>
+#include <qheaderview.h>
 #include <qlinkedlist.h>
+#include <qlist.h>
 #include <qmap.h>
 #include <qset.h>
 

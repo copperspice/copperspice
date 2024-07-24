@@ -27,10 +27,10 @@
 #ifndef QT_NO_ANIMATION
 
 #include <qcolor.h>
+#include <qquaternion.h>
 #include <qvector2d.h>
 #include <qvector3d.h>
 #include <qvector4d.h>
-#include <qquaternion.h>
 
 template <>
 inline QColor cs_genericFormula(const QColor &from, const QColor &to, double progress)

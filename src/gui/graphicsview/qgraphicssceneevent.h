@@ -26,26 +26,26 @@
 
 #include <qcoreevent.h>
 #include <qpoint.h>
-#include <qscopedpointer.h>
-#include <qrect.h>
 #include <qpolygon.h>
+#include <qrect.h>
+#include <qscopedpointer.h>
 #include <qset.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
+class QGraphicsSceneContextMenuEventPrivate;
+class QGraphicsSceneDragDropEventPrivate;
+class QGraphicsSceneEventPrivate;
+class QGraphicsSceneHelpEventPrivate;
+class QGraphicsSceneHoverEventPrivate;
+class QGraphicsSceneMouseEventPrivate;
+class QGraphicsSceneMoveEventPrivate;
+class QGraphicsSceneResizeEventPrivate;
+class QGraphicsSceneWheelEventPrivate;
 class QMimeData;
 class QPointF;
 class QSizeF;
 class QWidget;
-class QGraphicsSceneEventPrivate;
-class QGraphicsSceneMouseEventPrivate;
-class QGraphicsSceneWheelEventPrivate;
-class QGraphicsSceneContextMenuEventPrivate;
-class QGraphicsSceneHoverEventPrivate;
-class QGraphicsSceneHelpEventPrivate;
-class QGraphicsSceneDragDropEventPrivate;
-class QGraphicsSceneResizeEventPrivate;
-class QGraphicsSceneMoveEventPrivate;
 
 class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
 {

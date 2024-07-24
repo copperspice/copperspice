@@ -21,20 +21,21 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
 #include <qtexthtmlparser_p.h>
-#include <qbytearray.h>
-#include <qtextcodec.h>
-#include <qapplication.h>
-#include <qstack.h>
-#include <qdebug.h>
-#include <qthread.h>
-#include <qtextdocument.h>
 
-#include <qtextformat_p.h>
-#include <qtextdocument_p.h>
-#include <qtextcursor.h>
+#include <qapplication.h>
+#include <qbytearray.h>
+#include <qdebug.h>
+#include <qglobal.h>
+#include <qstack.h>
+#include <qtextcodec.h>
+#include <qtextdocument.h>
+#include <qthread.h>
+
 #include <qfont_p.h>
+#include <qtextcursor.h>
+#include <qtextdocument_p.h>
+#include <qtextformat_p.h>
 
 #include <algorithm>
 

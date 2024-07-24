@@ -28,16 +28,16 @@
 #include <qapplication.h>
 #include <qcombobox.h>
 #include <qdialogbuttonbox.h>
+#include <qevent.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
-#include <qplaintextedit.h>
 #include <qlistwidget.h>
+#include <qplaintextedit.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qstackedlayout.h>
 #include <qvalidator.h>
-#include <qevent.h>
 
 #include <qdialog_p.h>
 

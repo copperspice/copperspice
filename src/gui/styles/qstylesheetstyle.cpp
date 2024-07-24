@@ -27,8 +27,8 @@
 
 #include <qstylesheetstyle_p.h>
 
-#include <qabstractspinbox.h>
 #include <qabstractscrollarea.h>
+#include <qabstractspinbox.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -39,25 +39,24 @@
 #include <qheaderview.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qmenu.h>
-#include <qmenubar.h>
 #include <qmainwindow.h>
 #include <qmdisubwindow.h>
+#include <qmenu.h>
+#include <qmenubar.h>
 #include <qpainter.h>
 #include <qradiobutton.h>
 #include <qscrollbar.h>
+#include <qshareddata.h>
 #include <qstatusbar.h>
 #include <qstring.h>
 #include <qstyleoption.h>
-#include <qshareddata.h>
 #include <qtabbar.h>
-#include <qtooltip.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
+#include <qtooltip.h>
 
-#include <qcssparser_p.h>
-#include <qwindows_style_p.h>
 #include <qabstractscrollarea_p.h>
+#include <qcssparser_p.h>
 #include <qcssutil_p.h>
 #include <qmath_p.h>
 #include <qstyleanimation_p.h>

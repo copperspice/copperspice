@@ -26,29 +26,29 @@
 #ifndef QT_NO_COLORDIALOG
 
 #include <qapplication.h>
+#include <qcursor.h>
 #include <qdesktopwidget.h>
+#include <qdialogbuttonbox.h>
+#include <qdrag.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qimage.h>
-#include <qdrag.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qmenu.h>
+#include <qmimedata.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
+#include <qscreen.h>
 #include <qsettings.h>
 #include <qsharedpointer.h>
+#include <qspinbox.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qvalidator.h>
-#include <qmimedata.h>
-#include <qspinbox.h>
-#include <qdialogbuttonbox.h>
-#include <qscreen.h>
-#include <qcursor.h>
 #include <qtimer.h>
+#include <qvalidator.h>
 #include <qwindow.h>
 
 #include <qdialog_p.h>
@@ -57,9 +57,9 @@
 
 class QColorLuminancePicker;
 class QColorPicker;
+class QColorPickingEventFilter;
 class QColorShower;
 class QWellArray;
-class QColorPickingEventFilter;
 
 class QColorDialogPrivate : public QDialogPrivate
 {

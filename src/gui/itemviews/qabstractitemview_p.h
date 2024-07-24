@@ -24,18 +24,19 @@
 #ifndef QABSTRACTITEMVIEW_P_H
 #define QABSTRACTITEMVIEW_P_H
 
-#include <qabstractscrollarea_p.h>
-#include <qabstractitemmodel_p.h>
 #include <qapplication.h>
+#include <qbasictimer.h>
+#include <qdebug.h>
+#include <qelapsedtimer.h>
 #include <qevent.h>
 #include <qmimedata.h>
 #include <qpainter.h>
 #include <qpair.h>
 #include <qregion.h>
-#include <qdebug.h>
 #include <qvector.h>
-#include <qbasictimer.h>
-#include <qelapsedtimer.h>
+
+#include <qabstractitemmodel_p.h>
+#include <qabstractscrollarea_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 

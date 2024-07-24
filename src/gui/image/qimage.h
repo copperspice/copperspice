@@ -27,19 +27,19 @@
 #include <qbytearray.h>
 #include <qcolor.h>
 #include <qcontainerfwd.h>
-#include <qrgb.h>
 #include <qpaintdevice.h>
 #include <qpixelformat.h>
-#include <qtransform.h>
 #include <qrect.h>
+#include <qrgb.h>
 #include <qstring.h>
+#include <qtransform.h>
 
 class QIODevice;
-class QStringList;
+class QImageDataMisc;
 class QMatrix;
+class QStringList;
 class QTransform;
 class QVariant;
-class QImageDataMisc;
 
 struct QImageData;
 

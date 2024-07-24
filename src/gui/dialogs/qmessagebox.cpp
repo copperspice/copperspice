@@ -25,29 +25,29 @@
 
 #ifndef QT_NO_MESSAGEBOX
 
-#include <qdialogbuttonbox.h>
-#include <qlist.h>
-#include <qdebug.h>
-#include <qstyle.h>
-#include <qstyleoption.h>
-#include <qgridlayout.h>
-#include <qdesktopwidget.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
 #include <qaccessible.h>
+#include <qapplication.h>
+#include <qcheckbox.h>
+#include <qclipboard.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qdialogbuttonbox.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
-#include <qclipboard.h>
+#include <qgridlayout.h>
 #include <qicon.h>
-#include <qtextdocument.h>
-#include <qapplication.h>
-#include <qtextedit.h>
-#include <qtextbrowser.h>
+#include <qlist.h>
 #include <qmenu.h>
+#include <qpushbutton.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qtextbrowser.h>
+#include <qtextdocument.h>
+#include <qtextedit.h>
 
-#include <qlabel_p.h>
 #include <qapplication_p.h>
 #include <qdialog_p.h>
+#include <qlabel_p.h>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>

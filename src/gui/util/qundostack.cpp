@@ -22,12 +22,11 @@
 ***********************************************************************/
 
 #include <qundostack.h>
+#include <qundostack_p.h>
 
 #include <qalgorithms.h>
 #include <qdebug.h>
 #include <qundogroup.h>
-
-#include <qundostack_p.h>
 
 #ifndef QT_NO_UNDOCOMMAND
 

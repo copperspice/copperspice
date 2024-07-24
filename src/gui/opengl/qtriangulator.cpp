@@ -25,17 +25,17 @@
 #include <qtriangulator_p.h>
 
 #include <qalgorithms.h>
+#include <qbitarray.h>
 #include <qdialog.h>
 #include <qevent.h>
+#include <qglobal.h>
 #include <qmath.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
-#include <qvector.h>
-#include <qbitarray.h>
-#include <qvarlengtharray.h>
-#include <qqueue.h>
-#include <qglobal.h>
 #include <qpoint.h>
+#include <qqueue.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
 
 #include <qbezier_p.h>
 #include <qopengl_extensions_p.h>

@@ -21,6 +21,7 @@
 *
 ***********************************************************************/
 
+#include <qdebug.h>
 #include <qmath.h>
 
 #include <qblendfunctions_p.h>

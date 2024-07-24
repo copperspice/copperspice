@@ -23,17 +23,17 @@
 
 #include <qbackingstore.h>
 
-#include <qwindow.h>
+#include <qdebug.h>
 #include <qpixmap.h>
 #include <qplatform_backingstore.h>
 #include <qplatform_integration.h>
-#include <qscreen.h>
-#include <qdebug.h>
 #include <qscopedpointer.h>
+#include <qscreen.h>
+#include <qwindow.h>
 
 #include <qguiapplication_p.h>
-#include <qwindow_p.h>
 #include <qhighdpiscaling_p.h>
+#include <qwindow_p.h>
 
 class QBackingStorePrivate
 {

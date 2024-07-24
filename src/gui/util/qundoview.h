@@ -29,10 +29,10 @@
 
 #ifndef QT_NO_UNDOVIEW
 
-class QUndoViewPrivate;
-class QUndoStack;
-class QUndoGroup;
 class QIcon;
+class QUndoGroup;
+class QUndoStack;
+class QUndoViewPrivate;
 
 class Q_GUI_EXPORT QUndoView : public QListView
 {

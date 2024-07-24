@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qquaternion.h>
+
+#include <qdebug.h>
 #include <qmath.h>
 #include <qvariant.h>
-#include <qdebug.h>
 
 #ifndef QT_NO_QUATERNION
 

@@ -24,16 +24,16 @@
 #ifndef QFILEINFOGATHERER_P_H
 #define QFILEINFOGATHERER_P_H
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qfilesystemwatcher.h>
-#include <qfileiconprovider.h>
-#include <qpair.h>
-#include <qstack.h>
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qelapsedtimer.h>
+#include <qfileiconprovider.h>
+#include <qfilesystemwatcher.h>
+#include <qmutex.h>
+#include <qpair.h>
+#include <qstack.h>
+#include <qthread.h>
+#include <qwaitcondition.h>
 
 #include <qfilesystemengine_p.h>
 

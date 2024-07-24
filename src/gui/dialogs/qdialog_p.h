@@ -24,12 +24,13 @@
 #ifndef QDIALOG_P_H
 #define QDIALOG_P_H
 
-#include <qwidget_p.h>
-#include <qeventloop.h>
-#include <qpointer.h>
 #include <qdialog.h>
-#include <qpushbutton.h>
+#include <qeventloop.h>
 #include <qplatform_dialoghelper.h>
+#include <qpointer.h>
+#include <qpushbutton.h>
+
+#include <qwidget_p.h>
 
 class QSizeGrip;
 

@@ -23,10 +23,10 @@
 
 #include <qfontengine_qpf2_p.h>
 
-#include <QBuffer>
-#include <QFile>
-#include <QFileInfo>
-#include <QDir>
+#include <qbuffer.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <qplatform_fontdatabase.h>
 #include <qplatform_integration.h>
 

@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qplatform_backingstore.h>
 #include <qwidgetbackingstore_p.h>
 
 #include <qapplication.h>
@@ -30,12 +29,13 @@
 #include <qglobal.h>
 #include <qgraphicsproxywidget.h>
 #include <qpaintengine.h>
+#include <qplatform_backingstore.h>
 #include <qplatformdefs.h>
 #include <qvarlengtharray.h>
 
 #include <qapplication_p.h>
-#include <qpaintengine_raster_p.h>
 #include <qgraphicseffect_p.h>
+#include <qpaintengine_raster_p.h>
 #include <qwidget_p.h>
 #include <qwindow_p.h>
 

@@ -24,20 +24,19 @@
 #ifndef QLISTWIDGET_H
 #define QLISTWIDGET_H
 
+#include <qitemselectionmodel.h>
 #include <qlistview.h>
 #include <qvariant.h>
 #include <qvector.h>
-#include <qitemselectionmodel.h>
 
 #ifndef QT_NO_LISTWIDGET
 
 class QEvent;
-class QListWidget;
 class QListModel;
-class QWidgetItemData;
-
-class QListWidgetPrivate;
+class QListWidget;
 class QListWidgetItemPrivate;
+class QListWidgetPrivate;
+class QWidgetItemData;
 
 class Q_GUI_EXPORT QListWidgetItem
 {

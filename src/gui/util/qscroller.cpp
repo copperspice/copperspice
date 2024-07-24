@@ -29,13 +29,11 @@
 #include <qdesktopwidget.h>
 #include <qelapsedtimer.h>
 #include <qevent.h>
-#include <qevent.h>
 #include <qgraphicsobject.h>
 #include <qgraphicsscene.h>
 #include <qgraphicsview.h>
 #include <qmap.h>
 #include <qmath.h>
-#include <qnumeric.h>
 #include <qnumeric.h>
 #include <qscrollerproperties.h>
 #include <qtime.h>

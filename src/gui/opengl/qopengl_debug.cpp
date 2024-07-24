@@ -25,10 +25,10 @@
 #include <qopengl_debug.h>
 
 #include <qglobal.h>
-#include <qvarlengtharray.h>
+#include <qoffscreensurface.h>
 #include <qopengl.h>
 #include <qopenglfunctions.h>
-#include <qoffscreensurface.h>
+#include <qvarlengtharray.h>
 
 // When using OpenGL ES 2.0, all the necessary GL_KHR_debug constants are
 // provided in qopengles2ext.h. Unfortunately, newer versions of that file

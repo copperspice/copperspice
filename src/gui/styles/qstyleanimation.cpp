@@ -26,9 +26,8 @@
 #ifndef QT_NO_ANIMATION
 
 #include <qcoreapplication.h>
-#include <qwidget.h>
 #include <qevent.h>
-
+#include <qwidget.h>
 
 static constexpr const qreal ScrollBarFadeOutDuration = 200.0;
 static constexpr const qreal ScrollBarFadeOutDelay    = 450.0;

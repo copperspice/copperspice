@@ -29,8 +29,8 @@
 #include <qobject.h>
 #include <qpoint.h>
 #include <qrect.h>
-#include <qstring.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
 #ifndef QT_NO_COMPLETER
 

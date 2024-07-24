@@ -28,9 +28,9 @@
 
 #ifndef QT_NO_OPENGL
 
-#include <qpaintdevicewindow.h>
-#include <qopenglcontext.h>
 #include <qimage.h>
+#include <qopenglcontext.h>
+#include <qpaintdevicewindow.h>
 
 class QOpenGLWindowPrivate;
 

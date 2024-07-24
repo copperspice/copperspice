@@ -25,16 +25,16 @@
 #include <qopengl_framebufferobject.h>
 #include <qopengl_framebufferobject_p.h>
 
-#include <qdebug.h>
-#include <qwindow.h>
-#include <qlibrary.h>
-#include <qimage.h>
 #include <qbytearray.h>
+#include <qdebug.h>
+#include <qimage.h>
+#include <qlibrary.h>
+#include <qwindow.h>
 
+#include <qfont_p.h>
+#include <qopengl_extensions_p.h>
 #include <qopengl_p.h>
 #include <qopenglcontext_p.h>
-#include <qopengl_extensions_p.h>
-#include <qfont_p.h>
 
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
 #define QT_RESET_GLERROR()                                \

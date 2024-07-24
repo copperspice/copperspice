@@ -28,15 +28,16 @@
 #include <qscopedarraypointer.h>
 #include <qtextstream.h>
 #include <qvariant.h>
+
 #include <qimage_p.h>
 
 #if defined(QT_USE_FREETYPE)
 
-#include <qfile.h>
-#include <qscopedvaluerollback.h>
 #include <qabstractfileengine.h>
-#include <qthreadstorage.h>
+#include <qfile.h>
 #include <qmath.h>
+#include <qscopedvaluerollback.h>
+#include <qthreadstorage.h>
 
 #include <qharfbuzz_p.h>
 

@@ -25,18 +25,17 @@
 
 #include <qplatform_theme.h>
 
-#include <qkeysequence_p.h>
 #include <qapplication_p.h>
+#include <qkeysequence_p.h>
 
 #ifndef QT_NO_SHORTCUT
 
+#include <qdatastream.h>
+#include <qdatastream.h>
 #include <qdebug.h>
-#include <qdatastream.h>
 #include <qhashfunc.h>
-#include <qdatastream.h>
-
-#include <qshortcut.h>
 #include <qregularexpression.h>
+#include <qshortcut.h>
 #include <qvariant.h>
 
 #include <algorithm>

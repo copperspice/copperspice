@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qvector4d.h>
-#include <qvector3d.h>
-#include <qvector2d.h>
+
 #include <qdebug.h>
-#include <qvariant.h>
 #include <qmath.h>
+#include <qvariant.h>
+#include <qvector2d.h>
+#include <qvector3d.h>
 
 #ifndef QT_NO_VECTOR4D
 

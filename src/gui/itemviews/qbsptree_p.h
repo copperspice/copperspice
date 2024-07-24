@@ -24,10 +24,8 @@
 #ifndef QBSPTREE_P_H
 #define QBSPTREE_P_H
 
-#include <qvector.h>
 #include <qrect.h>
-
-
+#include <qvector.h>
 
 class QBspTree
 {

@@ -23,15 +23,15 @@
 
 #include <qpaintengineex_p.h>
 
-#include <qvarlengtharray.h>
 #include <qdebug.h>
+#include <qvarlengtharray.h>
 
-#include <qpainter_p.h>
-#include <qstroker_p.h>
 #include <qbezier_p.h>
-#include <qpainterpath_p.h>
 #include <qfontengine_p.h>
+#include <qpainter_p.h>
+#include <qpainterpath_p.h>
 #include <qstatictext_p.h>
+#include <qstroker_p.h>
 
 #if ! defined(QT_MAX_CACHED_GLYPH_SIZE)
 #  define QT_MAX_CACHED_GLYPH_SIZE 64

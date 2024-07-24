@@ -39,8 +39,8 @@
 #include <qtimer.h>
 #include <qwindow.h>
 
-#include <platformheaders/qxcbwindowfunctions.h>
 #include <platformheaders/qxcbintegrationfunctions.h>
+#include <platformheaders/qxcbwindowfunctions.h>
 
 #include <qapplication_p.h>
 #include <qsystemtrayicon_p.h>

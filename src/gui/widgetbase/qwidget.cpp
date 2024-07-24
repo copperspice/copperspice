@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qwidget.h>
+#include <qwidget_p.h>
 
 #include <qabstractscrollarea.h>
 #include <qapplication.h>
@@ -52,6 +53,7 @@
 #include <qtooltip.h>
 #include <qvariant.h>
 #include <qwhatsthis.h>
+
 #include <platformheaders/qxcbwindowfunctions.h>
 
 #ifndef QT_NO_ACCESSIBILITY
@@ -72,7 +74,6 @@
 #include <qpaintengine_raster_p.h>
 #include <qstyle_p.h>
 #include <qstylesheetstyle_p.h>
-#include <qwidget_p.h>
 #include <qwidgetbackingstore_p.h>
 #include <qwidgetwindow_p.h>
 #include <qwindow_p.h>

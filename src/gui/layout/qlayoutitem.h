@@ -24,16 +24,17 @@
 #ifndef QLAYOUTITEM_H
 #define QLAYOUTITEM_H
 
-#include <qsizepolicy.h>
 #include <qrect.h>
-#include <limits.h>
-
+#include <qsizepolicy.h>
 
 class QLayout;
 class QLayoutItem;
+class QSize;
 class QSpacerItem;
 class QWidget;
-class QSize;
+
+#include <limits.h>
+
 static constexpr const int QLAYOUTSIZE_MAX = INT_MAX / 256 / 16;
 
 class Q_GUI_EXPORT QLayoutItem

@@ -27,9 +27,9 @@
 
 #include <qgraphics_layout_p.h>
 
+#include <qapplication.h>
 #include <qgraphicslayout.h>
 #include <qgraphicswidget.h>
-#include <qapplication.h>
 
 void QGraphicsLayoutPrivate::reparentChildItems(QGraphicsItem *newParent)
 {

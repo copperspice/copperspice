@@ -24,9 +24,9 @@
 #ifndef QFONTDIALOG_P_H
 #define QFONTDIALOG_P_H
 
+#include <qfontdialog.h>
 
 #include <qfontdatabase.h>
-#include <qfontdialog.h>
 #include <qplatform_dialoghelper.h>
 #include <qsharedpointer.h>
 

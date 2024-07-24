@@ -24,18 +24,18 @@
 #ifndef QFILEDIALOG_H
 #define QFILEDIALOG_H
 
-#include <qdir.h>
-#include <qstring.h>
 #include <qdialog.h>
-#include <qurl.h>
+#include <qdir.h>
 #include <qmodelindex.h>
+#include <qstring.h>
+#include <qurl.h>
 
 #ifndef QT_NO_FILEDIALOG
 
 class QAbstractItemDelegate;
 class QAbstractProxyModel;
-class QFileIconProvider;
 class QFileDialogPrivate;
+class QFileIconProvider;
 class QItemSelection;
 
 struct QFileDialogArgs;

@@ -27,12 +27,12 @@
 
 #include <qtextureglyphcache_p.h>
 
-#include <qopengl_shaderprogram.h>
 #include <qopengl_buffer.h>
+#include <qopengl_shaderprogram.h>
 #include <qopengl_vertexarrayobject.h>
 #include <qopenglfunctions.h>
-#include <qopenglcontext_p.h>
 
+#include <qopenglcontext_p.h>
 
 class QOpenGL2PaintEngineExPrivate;
 

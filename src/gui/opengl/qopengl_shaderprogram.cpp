@@ -24,15 +24,15 @@
 
 #include <qopengl_shaderprogram.h>
 
-#include <qdebug.h>
 #include <qcolor.h>
+#include <qdebug.h>
 #include <qfile.h>
 #include <qopenglfunctions.h>
+#include <qregularexpression.h>
+#include <qsurfaceformat.h>
+#include <qtransform.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
-#include <qregularexpression.h>
-#include <qtransform.h>
-#include <qsurfaceformat.h>
 
 #if ! defined(QT_OPENGL_ES_2)
 #include <qopenglfunctions_4_0_core.h>

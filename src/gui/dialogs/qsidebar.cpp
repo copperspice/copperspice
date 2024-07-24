@@ -28,8 +28,8 @@
 #include <qaction.h>
 #include <qdebug.h>
 #include <qevent.h>
-#include <qfileiconprovider.h>
 #include <qfiledialog.h>
+#include <qfileiconprovider.h>
 #include <qfilesystemmodel.h>
 #include <qmenu.h>
 #include <qmimedata.h>
