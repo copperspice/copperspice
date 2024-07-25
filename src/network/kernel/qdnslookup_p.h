@@ -24,12 +24,13 @@
 #ifndef QDNSLOOKUP_P_H
 #define QDNSLOOKUP_P_H
 
+#include <qdnslookup.h>
+
+#include <qhostaddress.h>
 #include <qmutex.h>
 #include <qrunnable.h>
 #include <qsharedpointer.h>
 #include <qthreadpool.h>
-#include <qdnslookup.h>
-#include <qhostaddress.h>
 
 class QDnsLookupRunnable;
 

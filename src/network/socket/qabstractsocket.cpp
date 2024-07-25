@@ -22,7 +22,10 @@
 ***********************************************************************/
 
 #include <qabstractsocket.h>
+#include <qabstractsocket_p.h>
+
 #include <qabstracteventdispatcher.h>
+#include <qdebug.h>
 #include <qelapsedtimer.h>
 #include <qhostaddress.h>
 #include <qhostinfo.h>
@@ -32,17 +35,14 @@
 #include <qstring.h>
 #include <qtimer.h>
 
-#include <qabstractsocket_p.h>
-#include <qhostinfo_p.h>
-#include <qnetworksession_p.h>
-
 #ifdef QT_SSL
 #include <qsslsocket.h>
 #endif
 
+#include <qhostinfo_p.h>
+#include <qnetworksession_p.h>
 #include <qthread_p.h>
 
-#include <qdebug.h>
 #include <time.h>
 
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \

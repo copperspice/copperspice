@@ -27,10 +27,11 @@
 #include <qalgorithms.h>
 #include <qhostaddress.h>
 #include <qlist.h>
-#include <qpointer.h>
-#include <qabstractsocketengine_p.h>
-#include <qtcpsocket.h>
 #include <qnetworkproxy.h>
+#include <qpointer.h>
+#include <qtcpsocket.h>
+
+#include <qabstractsocketengine_p.h>
 
 #define Q_CHECK_SOCKETENGINE(returnValue) do { \
     if (! d->socketEngine) { \

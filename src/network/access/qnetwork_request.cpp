@@ -22,15 +22,16 @@
 ***********************************************************************/
 
 #include <qnetwork_request.h>
-#include <qnetwork_request_p.h>
 
-#include <qlocale.h>
 #include <qdatetime.h>
+#include <qlocale.h>
 #include <qnetwork_cookie.h>
 #include <qplatformdefs.h>
-#include <qsslconfiguration.h>
 #include <qshareddata.h>
+#include <qsslconfiguration.h>
 #include <qtimezone.h>
+
+#include <qnetwork_request_p.h>
 
 #include <ctype.h>
 #include <stdio.h>

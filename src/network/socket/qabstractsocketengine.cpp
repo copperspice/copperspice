@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qabstractsocketengine_p.h>
-#include <qnativesocketengine_p.h>
+
 #include <qmutex.h>
 #include <qnetworkproxy.h>
+
+#include <qnativesocketengine_p.h>
 
 class QSocketEngineHandlerList : public QList<QSocketEngineHandler *>
 {

@@ -24,17 +24,14 @@
 #ifndef QTCPSERVER_H
 #define QTCPSERVER_H
 
-#include <qobject.h>
 #include <qabstractsocket.h>
 #include <qhostaddress.h>
+#include <qobject.h>
 #include <qscopedpointer.h>
 
+class QNetworkProxy;
 class QTcpServerPrivate;
 class QTcpSocket;
-
-#ifndef QT_NO_NETWORKPROXY
-   class QNetworkProxy;
-#endif
 
 class Q_NETWORK_EXPORT QTcpServer : public QObject
 {

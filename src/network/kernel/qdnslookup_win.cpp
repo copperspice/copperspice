@@ -21,16 +21,19 @@
 *
 ***********************************************************************/
 
-#include <winsock2.h>
-#include <qdnslookup_p.h>
-
 #include <qurl.h>
+
+#include <qdnslookup_p.h>
 #include <qmutexpool_p.h>
 #include <qsystemerror_p.h>
 
-#include <qt_windows.h>
-#include <windns.h>
+// order dependent
 #include <memory.h>
+#include <winsock2.h>
+#include <windns.h>
+
+// order dependent, must be after winsock2.h
+#include <qt_windows.h>
 
 void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
                                const QHostAddress &nameserver, QDnsLookupReply *reply)

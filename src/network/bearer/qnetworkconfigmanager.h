@@ -24,8 +24,8 @@
 #ifndef QNETWORKCONFIGMANAGER_H
 #define QNETWORKCONFIGMANAGER_H
 
-#include <qobject.h>
 #include <qnetworkconfiguration.h>
+#include <qobject.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

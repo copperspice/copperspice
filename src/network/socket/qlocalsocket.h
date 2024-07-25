@@ -24,8 +24,8 @@
 #ifndef QLOCALSOCKET_H
 #define QLOCALSOCKET_H
 
-#include <qiodevice.h>
 #include <qabstractsocket.h>
+#include <qiodevice.h>
 
 #ifndef QT_NO_LOCALSOCKET
 

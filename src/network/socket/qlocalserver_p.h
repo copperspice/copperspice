@@ -27,6 +27,7 @@
 #ifndef QT_NO_LOCALSERVER
 
 #include <qlocalserver.h>
+
 #include <qqueue.h>
 
 #if defined(QT_LOCALSOCKET_TCP)

@@ -24,12 +24,12 @@
 #ifndef QHOSTINFO_H
 #define QHOSTINFO_H
 
+#include <qhostaddress.h>
 #include <qlist.h>
 #include <qscopedpointer.h>
-#include <qhostaddress.h>
 
-class QObject;
 class QHostInfoPrivate;
+class QObject;
 
 class Q_NETWORK_EXPORT QHostInfo
 {

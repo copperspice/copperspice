@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include <atomic>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
 #include <qhostinfo_p.h>
+
+#include <qurl.h>
+
 #include <qmutexpool_p.h>
 #include <qnativesocketengine_p.h>
 #include <qsystemlibrary_p.h>
-#include <qurl.h>
 
+#include <atomic>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
 // Older SDKs do not include the addrinfo struct declaration, so we
 // include a copy of it here.

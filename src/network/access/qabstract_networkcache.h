@@ -24,15 +24,15 @@
 #ifndef QABSTRACT_NETWORKCACHE_H
 #define QABSTRACT_NETWORKCACHE_H
 
-#include <qobject.h>
-#include <qshareddata.h>
-#include <qpair.h>
 #include <qnetwork_request.h>
+#include <qobject.h>
+#include <qpair.h>
+#include <qshareddata.h>
 
-class QIODevice;
-class QDateTime;
-class QNetworkCacheMetaDataPrivate;
 class QAbstractNetworkCachePrivate;
+class QDateTime;
+class QIODevice;
+class QNetworkCacheMetaDataPrivate;
 class QUrl;
 
 template <class T>

@@ -25,10 +25,10 @@
 #define QNETWORKCONFIGMANAGER_P_H
 
 #include <qnetworkconfigmanager.h>
+#include <qnetworkconfiguration_p.h>
+
 #include <qmutex.h>
 #include <qset.h>
-
-#include <qnetworkconfiguration_p.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

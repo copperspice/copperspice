@@ -25,10 +25,11 @@
 #define QTCPSERVER_P_H
 
 #include <qtcpserver.h>
+
 #include <qabstractsocket.h>
-#include <qnetworkproxy.h>
-#include <qlist.h>
 #include <qhostaddress.h>
+#include <qlist.h>
+#include <qnetworkproxy.h>
 
 #include <qabstractsocketengine_p.h>
 

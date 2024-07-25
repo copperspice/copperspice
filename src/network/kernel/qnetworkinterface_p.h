@@ -24,12 +24,12 @@
 #ifndef QNETWORKINTERFACE_P_H
 #define QNETWORKINTERFACE_P_H
 
+#include <qabstractsocket.h>
 #include <qatomic.h>
+#include <qhostaddress.h>
 #include <qlist.h>
 #include <qreadwritelock.h>
 #include <qstring.h>
-#include <qhostaddress.h>
-#include <qabstractsocket.h>
 
 #include <qhostaddress_p.h>
 

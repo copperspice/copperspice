@@ -23,18 +23,18 @@
 
 #include <qhttp_networkconnection_p.h>
 
-#include <qpair.h>
 #include <qdebug.h>
+#include <qpair.h>
 
 #include <qhttp_networkconnectionchannel_p.h>
-#include <qnoncontiguousbytedevice_p.h>
 #include <qhttp_protocolhandler_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 #include <qspdyprotocolhandler_p.h>
 
 #ifdef QT_SSL
-#    include <qsslkey.h>
-#    include <qsslcipher.h>
-#    include <qsslconfiguration.h>
+#include <qsslcipher.h>
+#include <qsslconfiguration.h>
+#include <qsslkey.h>
 #endif
 
 #ifndef QT_NO_BEARERMANAGEMENT

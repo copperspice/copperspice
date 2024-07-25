@@ -29,8 +29,8 @@
 
 #ifndef QT_NO_LOCALSERVER
 
-class QLocalSocket;
 class QLocalServerPrivate;
+class QLocalSocket;
 
 class Q_NETWORK_EXPORT QLocalServer : public QObject
 {

@@ -30,10 +30,10 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
-class QUrl;
 class QNetworkConfiguration;
-class QNetworkProxyQueryPrivate;
 class QNetworkProxyPrivate;
+class QNetworkProxyQueryPrivate;
+class QUrl;
 
 class Q_NETWORK_EXPORT QNetworkProxyQuery
 {

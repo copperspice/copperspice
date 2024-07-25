@@ -25,15 +25,16 @@
 
 #ifndef QT_NO_NETWORKPROXY
 
-#include <CFNetwork/CFNetwork.h>
-#include <CoreFoundation/CoreFoundation.h>
-#include <SystemConfiguration/SystemConfiguration.h>
-
 #include <qendian.h>
-#include <qcore_mac_p.h>
 #include <qregularexpression.h>
 #include <qstringlist.h>
 #include <qurl.h>
+
+#include <qcore_mac_p.h>
+
+#include <CFNetwork/CFNetwork.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <SystemConfiguration/SystemConfiguration.h>
 
 /*
  * MacOS X has a proxy configuration module in System Preferences (on

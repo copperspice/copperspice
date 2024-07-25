@@ -30,8 +30,8 @@
 #include <qthread_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)
-# include <qnetworkproxy.h>
 # include <qabstractsocket.h>
+# include <qnetworkproxy.h>
 # include <qtcpserver.h>
 #endif
 

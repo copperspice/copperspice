@@ -24,11 +24,11 @@
 #ifndef QNETWORKSESSION_H
 #define QNETWORKSESSION_H
 
+#include <qnetworkconfiguration.h>
+#include <qnetworkinterface.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <qnetworkinterface.h>
 #include <qvariant.h>
-#include <qnetworkconfiguration.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

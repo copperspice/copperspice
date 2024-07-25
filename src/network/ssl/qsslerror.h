@@ -26,8 +26,8 @@
 
 #ifdef QT_SSL
 
-#include <qvariant.h>
 #include <qsslcertificate.h>
+#include <qvariant.h>
 
 class QDebug;
 class QSslErrorPrivate;

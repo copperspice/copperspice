@@ -23,6 +23,7 @@
 
 #include <qauthenticator.h>
 #include <qauthenticator_p.h>
+
 #include <qbytearray.h>
 #include <qcryptographichash.h>
 #include <qdatastream.h>
@@ -37,8 +38,11 @@
 #include <qtimezone.h>
 
 #ifdef Q_OS_WIN
+
 #include <qmutex.h>
+
 #include <qmutexpool_p.h>
+
 #include <rpc.h>
 
 #define SECURITY_WIN32 1

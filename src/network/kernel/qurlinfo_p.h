@@ -25,8 +25,8 @@
 #define QURLINFO_P_H
 
 #include <qdatetime.h>
-#include <qstring.h>
 #include <qiodevice.h>
+#include <qstring.h>
 
 #ifndef QT_NO_FTP
 

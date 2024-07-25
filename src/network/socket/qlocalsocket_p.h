@@ -27,6 +27,7 @@
 #ifndef QT_NO_LOCALSOCKET
 
 #include <qlocalsocket.h>
+
 #include <qtimer.h>
 
 #include <qiodevice_p.h>

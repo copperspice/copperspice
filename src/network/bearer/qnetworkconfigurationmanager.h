@@ -21,4 +21,9 @@
 *
 ***********************************************************************/
 
+#ifndef QNETWORK_CONFIGURATION_MANAGER_H
+#define QNETWORK_CONFIGURATION_MANAGER_H
+
 #include <qnetworkconfigmanager.h>
+
+#endif

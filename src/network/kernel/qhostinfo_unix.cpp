@@ -21,25 +21,25 @@
 *
 ***********************************************************************/
 
+#include <qhostinfo_p.h>
+
+#include <qbytearray.h>
+#include <qfile.h>
+#include <qiodevice.h>
+#include <qlibrary.h>
+#include <qplatformdefs.h>
+#include <qurl.h>
+
+#include <qmutexpool_p.h>
+#include <qnativesocketengine_p.h>
+#include <qnet_unix_p.h>
+
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <resolv.h>
 #include <stdlib.h>
-
-#include <qhostinfo_p.h>
-#include <qnativesocketengine_p.h>
-#include <qnet_unix_p.h>
-
-#include <qurl.h>
-
-#include <qbytearray.h>
-#include <qfile.h>
-#include <qplatformdefs.h>
-#include <qiodevice.h>
-#include <qlibrary.h>
-#include <qmutexpool_p.h>
 
 #if defined(__GNU_LIBRARY__) && ! defined(__UCLIBC__)
 #  include <gnu/lib-names.h>

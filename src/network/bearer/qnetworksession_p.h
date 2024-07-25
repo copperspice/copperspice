@@ -25,6 +25,7 @@
 #define QNETWORKSESSION_P_H
 
 #include <qnetworksession.h>
+
 #include <qsharedpointer.h>
 
 #include <qnetworkconfiguration_p.h>

@@ -24,8 +24,9 @@
 #ifndef QSOCKS5SOCKETENGINE_P_H
 #define QSOCKS5SOCKETENGINE_P_H
 
-#include <qabstractsocketengine_p.h>
 #include <qnetworkproxy.h>
+
+#include <qabstractsocketengine_p.h>
 
 #ifndef QT_NO_SOCKS5
 

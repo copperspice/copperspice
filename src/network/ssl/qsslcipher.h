@@ -24,9 +24,9 @@
 #ifndef QSSLCIPHER_H
 #define QSSLCIPHER_H
 
-#include <qstring.h>
 #include <qscopedpointer.h>
 #include <qssl.h>
+#include <qstring.h>
 
 #ifdef QT_SSL
 

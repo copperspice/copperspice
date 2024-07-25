@@ -21,24 +21,21 @@
 *
 ***********************************************************************/
 
-// Prevent windows system header files from defining min/max as macros.
-#define NOMINMAX 1
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <qabstracteventdispatcher.h>
+#include <qbytearray.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qnetworkinterface.h>
+#include <qsocketnotifier.h>
+#include <qstring.h>
 
 #include <qnativesocketengine_p.h>
 
-#include <qabstracteventdispatcher.h>
-#include <qbytearray.h>
-#include <qsocketnotifier.h>
-#include <qdebug.h>
-#include <qdatetime.h>
-#include <qnetworkinterface.h>
-#include <qstring.h>
+// Prevent windows system header files from defining min/max as macros
+#define NOMINMAX 1
 
-
-// Some distributions of mingw (including 4.7.2 from mingw.org) are missing this from headers.
-//Also microsoft headers do no t include it when building on XP and earlier.
+#include <winsock2.h>
+#include <ws2tcpip.h>
 
 #ifndef IPV6_V6ONLY
 #define IPV6_V6ONLY  27

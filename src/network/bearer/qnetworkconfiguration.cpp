@@ -23,6 +23,7 @@
 
 #include <qnetworkconfiguration.h>
 #include <qnetworkconfiguration_p.h>
+
 #include <qdebug.h>
 
 QNetworkConfiguration::QNetworkConfiguration()

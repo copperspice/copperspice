@@ -22,19 +22,22 @@
 ***********************************************************************/
 
 #include <qnetworkinterface.h>
+
 #include <qnetworkinterface_p.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
-#include <qhostinfo.h>
 #include <qhash.h>
+#include <qhostinfo.h>
 #include <qurl.h>
 
-// order dependant include files
+// order dependent
 #include <winsock2.h>
 #include <ws2ipdef.h>
 #include <iphlpapi.h>
 #include <ws2tcpip.h>
+
+// order dependent, must be after winsock2.h
 #include <qt_windows.h>
 
 #ifndef NETIO_STATUS

@@ -36,15 +36,14 @@
 #ifdef QT_SSL
 
 class QDateTime;
+class QDebug;
 class QIODevice;
+class QSslCertificate;
+class QSslCertificateExtension;
+class QSslCertificatePrivate;
 class QSslError;
 class QSslKey;
-class QSslCertificateExtension;
 class QStringList;
-class QSslCertificatePrivate;
-class QSslCertificate;
-
-class QDebug;
 
 Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed = 0);
 

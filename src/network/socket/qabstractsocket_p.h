@@ -25,14 +25,15 @@
 #define QABSTRACTSOCKET_P_H
 
 #include <qabstractsocket.h>
+
 #include <qbytearray.h>
 #include <qlist.h>
-#include <qtimer.h>
 #include <qnetworkproxy.h>
+#include <qtimer.h>
 
-#include <qringbuffer_p.h>
-#include <qiodevice_p.h>
 #include <qabstractsocketengine_p.h>
+#include <qiodevice_p.h>
+#include <qringbuffer_p.h>
 
 class QHostInfo;
 

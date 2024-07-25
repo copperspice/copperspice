@@ -24,20 +24,20 @@
 #ifndef QDNSLOOKUP_H
 #define QDNSLOOKUP_H
 
-#include <qlist.h>
 #include <qhostaddress.h>
+#include <qlist.h>
 #include <qobject.h>
 #include <qshareddata.h>
 #include <qsharedpointer.h>
 #include <qstring.h>
 
-class QDnsLookupPrivate;
 class QDnsDomainNameRecordPrivate;
 class QDnsHostAddressRecordPrivate;
+class QDnsLookupPrivate;
+class QDnsLookupReply;
 class QDnsMailExchangeRecordPrivate;
 class QDnsServiceRecordPrivate;
 class QDnsTextRecordPrivate;
-class QDnsLookupReply;
 
 class Q_NETWORK_EXPORT QDnsDomainNameRecord
 {

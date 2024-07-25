@@ -32,12 +32,12 @@
 #include <qnetworkconfigmanager.h>
 #endif
 
-#include <qnetaccess_cache_p.h>
-#include <qnetaccess_backend_p.h>
 #include <qnetaccess_authenticationmanager_p.h>
+#include <qnetaccess_backend_p.h>
+#include <qnetaccess_cache_p.h>
 
-class QAuthenticator;
 class QAbstractNetworkCache;
+class QAuthenticator;
 class QNetworkAuthenticationCredential;
 class QNetworkCookieJar;
 class QSslPreSharedKeyAuthenticator;

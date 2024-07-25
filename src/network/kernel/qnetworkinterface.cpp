@@ -23,6 +23,7 @@
 
 #include <qnetworkinterface.h>
 #include <qnetworkinterface_p.h>
+
 #include <qdebug.h>
 #include <qendian.h>
 

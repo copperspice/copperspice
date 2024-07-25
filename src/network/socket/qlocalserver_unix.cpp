@@ -22,11 +22,10 @@
 ***********************************************************************/
 
 #include <qlocalserver.h>
-#include <qlocalserver_p.h>
-
 #include <qlocalsocket.h>
 #include <qtemporarydir.h>
 
+#include <qlocalserver_p.h>
 #include <qlocalsocket_p.h>
 #include <qnet_unix_p.h>
 

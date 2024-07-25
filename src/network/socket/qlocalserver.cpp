@@ -23,8 +23,9 @@
 
 #include <qlocalserver.h>
 #include <qlocalserver_p.h>
-#include <qlocalsocket.h>
+
 #include <qalgorithms.h>
+#include <qlocalsocket.h>
 
 #ifndef QT_NO_LOCALSERVER
 

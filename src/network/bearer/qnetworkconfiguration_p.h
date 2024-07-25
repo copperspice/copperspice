@@ -25,9 +25,10 @@
 #define QNETWORKCONFIGURATION_P_H
 
 #include <qnetworkconfiguration.h>
-#include <qshareddata.h>
-#include <qmutex.h>
+
 #include <qmap.h>
+#include <qmutex.h>
+#include <qshareddata.h>
 
 using QNetworkConfigurationPrivatePointer = QExplicitlySharedDataPointer<QNetworkConfigurationPrivate>;
 

@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#ifndef QSHAREDNETWORKSESSION_P_H
-#define QSHAREDNETWORKSESSION_P_H
+#ifndef QSHAREDNETWORK_SESSION_P_H
+#define QSHAREDNETWORK_SESSION_P_H
 
 #include <qhash.h>
+#include <qmutex.h>
+#include <qnetworkconfiguration.h>
+#include <qnetworksession.h>
 #include <qsharedpointer.h>
 #include <qweakpointer.h>
-#include <qmutex.h>
-#include <qnetworksession.h>
-#include <qnetworkconfiguration.h>
 
 #ifndef QT_NO_BEARERMANAGEMENT
 

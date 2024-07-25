@@ -23,12 +23,12 @@
 
 #include <qnetaccess_cachebackend_p.h>
 
-#include <qassert.h>
-#include <qurlinfo_p.h>
 #include <qabstract_networkcache.h>
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <qassert.h>
 #include <qcoreapplication.h>
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qurlinfo_p.h>
 
 QNetworkAccessCacheBackend::QNetworkAccessCacheBackend()
    : QNetworkAccessBackend()

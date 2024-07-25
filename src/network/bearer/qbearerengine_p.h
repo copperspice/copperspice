@@ -24,15 +24,15 @@
 #ifndef QBEARERENGINE_P_H
 #define QBEARERENGINE_P_H
 
-#include <qobject.h>
 #include <qglobal.h>
-#include <qlist.h>
-#include <qstring.h>
 #include <qhash.h>
-#include <qsharedpointer.h>
+#include <qlist.h>
 #include <qmutex.h>
-#include <qnetworksession.h>
 #include <qnetworkconfigmanager.h>
+#include <qnetworksession.h>
+#include <qobject.h>
+#include <qsharedpointer.h>
+#include <qstring.h>
 
 #include <qnetworkconfiguration_p.h>
 

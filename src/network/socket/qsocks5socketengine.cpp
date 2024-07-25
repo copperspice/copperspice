@@ -25,22 +25,23 @@
 
 #ifndef QT_NO_SOCKS5
 
-#include <qtcpsocket.h>
-#include <qudpsocket.h>
-#include <qtcpserver.h>
-#include <qdebug.h>
-#include <qhash.h>
-#include <qqueue.h>
-#include <qelapsedtimer.h>
-#include <qmutex.h>
-#include <qthread.h>
-#include <qcoreapplication.h>
-#include <qurl.h>
 #include <qauthenticator.h>
-#include <qiodevice_p.h>
+#include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qelapsedtimer.h>
 #include <qendian.h>
+#include <qhash.h>
+#include <qmutex.h>
 #include <qnetworkinterface.h>
+#include <qqueue.h>
 #include <qstring.h>
+#include <qtcpserver.h>
+#include <qtcpsocket.h>
+#include <qthread.h>
+#include <qudpsocket.h>
+#include <qurl.h>
+
+#include <qiodevice_p.h>
 
 static constexpr const int MaxWriteBufferSize = 128 * 1024;
 

@@ -23,10 +23,10 @@
 
 #include <qhttp_threaddelegate_p.h>
 
-#include <qthread.h>
-#include <qtimer.h>
 #include <qauthenticator.h>
 #include <qeventloop.h>
+#include <qthread.h>
+#include <qtimer.h>
 
 #include <qhttp_networkreply_p.h>
 #include <qnetaccess_cache_p.h>

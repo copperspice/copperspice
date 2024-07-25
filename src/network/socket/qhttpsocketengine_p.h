@@ -24,18 +24,17 @@
 #ifndef QHTTPSOCKETENGINE_P_H
 #define QHTTPSOCKETENGINE_P_H
 
-#include <qabstractsocketengine_p.h>
-
 #include <qabstractsocket.h>
 #include <qnetworkproxy.h>
 
+#include <qabstractsocketengine_p.h>
 #include <qauthenticator_p.h>
 
 #if ! defined(QT_NO_NETWORKPROXY)
 
-class QTcpSocket;
 class QHttpNetworkReply;
 class QHttpSocketEnginePrivate;
+class QTcpSocket;
 
 class QHttpSocketEngine : public QAbstractSocketEngine
 {

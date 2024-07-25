@@ -24,15 +24,15 @@
 #ifndef QHOSTADDRESS_H
 #define QHOSTADDRESS_H
 
-#include <qpair.h>
-#include <qstring.h>
-#include <qscopedpointer.h>
 #include <qabstractsocket.h>
+#include <qpair.h>
+#include <qscopedpointer.h>
+#include <qstring.h>
+
+class QHostAddress;
+class QHostAddressPrivate;
 
 struct sockaddr;
-
-class QHostAddressPrivate;
-class QHostAddress;
 
 Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed = 0);
 

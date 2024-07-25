@@ -24,22 +24,23 @@
 #ifndef QHOSTINFO_P_H
 #define QHOSTINFO_P_H
 
-#include <qcoreapplication.h>
 #include <qhostinfo.h>
+
+#include <qcache.h>
+#include <qcoreapplication.h>
+#include <qelapsedtimer.h>
+#include <qlist.h>
 #include <qmutex.h>
-#include <qwaitcondition.h>
+#include <qmutex.h>
+#include <qnetworksession.h>
 #include <qobject.h>
 #include <qpointer.h>
+#include <qqueue.h>
+#include <qrunnable.h>
+#include <qsharedpointer.h>
 #include <qthread.h>
 #include <qthreadpool.h>
-#include <qmutex.h>
-#include <qrunnable.h>
-#include <qlist.h>
-#include <qqueue.h>
-#include <qelapsedtimer.h>
-#include <qcache.h>
-#include <qnetworksession.h>
-#include <qsharedpointer.h>
+#include <qwaitcondition.h>
 
 #include <qcoreapplication_p.h>
 

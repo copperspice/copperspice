@@ -21,17 +21,20 @@
 *
 ***********************************************************************/
 
+#include <qelapsedtimer.h>
+#include <qhostaddress.h>
+#include <qiodevice.h>
+#include <qnetworkinterface.h>
+#include <qstring.h>
+#include <qvarlengtharray.h>
+
 #include <qnativesocketengine_p.h>
 #include <qnet_unix_p.h>
-#include <qiodevice.h>
-#include <qhostaddress.h>
-#include <qelapsedtimer.h>
-#include <qvarlengtharray.h>
-#include <qnetworkinterface.h>
-#include <time.h>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <netinet/tcp.h>
+#include <time.h>
 
 #ifndef QT_NO_IPV6IFNAME
 #include <net/if.h>
@@ -46,9 +49,8 @@
 #endif
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-#include <qstring.h>
-#include <ctype.h>
 
+#include <ctype.h>
 
 // Returns a human readable representation of the first \a len characters in \a data.
 static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)

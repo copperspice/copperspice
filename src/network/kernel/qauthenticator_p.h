@@ -24,17 +24,15 @@
 #ifndef QAUTHENTICATOR_P_H
 #define QAUTHENTICATOR_P_H
 
-#include <qhash.h>
-#include <qbytearray.h>
-#include <qstring.h>
 #include <qauthenticator.h>
+
+#include <qbytearray.h>
+#include <qhash.h>
+#include <qstring.h>
 #include <qvariant.h>
 
 class QHttpResponseHeader;
-
-#ifdef Q_OS_WIN
 class QNtlmWindowsHandles;
-#endif
 
 class QAuthenticatorPrivate
 {

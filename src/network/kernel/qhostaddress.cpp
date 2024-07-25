@@ -23,8 +23,13 @@
 
 #include <qhostaddress.h>
 #include <qhostaddress_p.h>
-#include <qipaddress_p.h>
+
+#include <qdatastream.h>
 #include <qdebug.h>
+#include <qendian.h>
+#include <qstringlist.h>
+
+#include <qipaddress_p.h>
 
 #if defined(Q_OS_WIN)
 # include <winsock2.h>
@@ -32,10 +37,8 @@
 # include <netinet/in.h>
 #endif
 
+// order dependent, must be after winsock2.h
 #include <qplatformdefs.h>
-#include <qstringlist.h>
-#include <qendian.h>
-#include <qdatastream.h>
 
 #ifdef __SSE2__
 #  include <qsimd_p.h>

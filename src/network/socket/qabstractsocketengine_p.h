@@ -28,13 +28,9 @@
 #include <qhostaddress.h>
 #include <qscopedpointer.h>
 
-class QAuthenticator;
 class QAbstractSocketEnginePrivate;
-
-#ifndef QT_NO_NETWORKINTERFACE
+class QAuthenticator;
 class QNetworkInterface;
-#endif
-
 class QNetworkProxy;
 
 class QIpPacketHeader

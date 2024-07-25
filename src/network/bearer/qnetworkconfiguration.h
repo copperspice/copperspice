@@ -25,9 +25,9 @@
 #define QNETWORKCONFIGURATION_H
 
 #include <qglobal.h>
+#include <qlist.h>
 #include <qshareddata.h>
 #include <qstring.h>
-#include <qlist.h>
 
 class QNetworkConfigurationPrivate;
 

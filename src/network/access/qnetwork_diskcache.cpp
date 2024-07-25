@@ -22,17 +22,16 @@
 ***********************************************************************/
 
 #include <qnetwork_diskcache.h>
-
-#include <qscopedpointer.h>
-#include <qfile.h>
-#include <qdir.h>
-#include <qdatetime.h>
-#include <qdiriterator.h>
-#include <qurl.h>
-#include <qcryptographichash.h>
-#include <qdebug.h>
-
 #include <qnetwork_diskcache_p.h>
+
+#include <qcryptographichash.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qdiriterator.h>
+#include <qfile.h>
+#include <qscopedpointer.h>
+#include <qurl.h>
 
 #define CACHE_POSTFIX  QString(".d")
 #define PREPARED_SLASH QString("prepared/")

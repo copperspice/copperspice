@@ -24,17 +24,17 @@
 #ifndef QNETWORKINTERFACE_H
 #define QNETWORKINTERFACE_H
 
-#include <qshareddata.h>
-#include <qscopedpointer.h>
 #include <qhostaddress.h>
+#include <qscopedpointer.h>
+#include <qshareddata.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
 template <typename T>
 class QList;
 
-class QNetworkInterfacePrivate;
 class QNetworkAddressEntryPrivate;
+class QNetworkInterfacePrivate;
 
 class Q_NETWORK_EXPORT QNetworkAddressEntry
 {

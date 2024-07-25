@@ -25,6 +25,7 @@
 #define QTCPSOCKET_P_H
 
 #include <qtcpsocket.h>
+
 #include <qabstractsocket_p.h>
 
 class QTcpSocketPrivate : public QAbstractSocketPrivate

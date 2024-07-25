@@ -24,11 +24,11 @@
 #ifndef QNETWORK_ACCESS_CACHE_P_H
 #define QNETWORK_ACCESS_CACHE_P_H
 
-#include <qobject.h>
 #include <qbasictimer.h>
 #include <qbytearray.h>
 #include <qdatetime.h>
 #include <qhash.h>
+#include <qobject.h>
 #include <qqueue.h>
 
 class QNetworkRequest;

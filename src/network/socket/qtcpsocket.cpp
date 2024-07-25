@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-
-#include <qlist.h>
-#include <qtcpsocket_p.h>
 #include <qtcpsocket.h>
+#include <qtcpsocket_p.h>
+
 #include <qhostaddress.h>
+#include <qlist.h>
 
 QTcpSocket::QTcpSocket(QObject *parent)
    : QAbstractSocket(TcpSocket, *new QTcpSocketPrivate, parent)

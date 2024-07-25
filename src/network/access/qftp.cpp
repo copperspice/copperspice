@@ -22,22 +22,22 @@
 ***********************************************************************/
 
 #include <qftp_p.h>
+
 #include <qabstractsocket.h>
 
 #ifndef QT_NO_FTP
 
-#include <qtcpsocket.h>
-#include <qurlinfo_p.h>
-#include <qtcpserver.h>
-
 #include <qcoreapplication.h>
 #include <qfileinfo.h>
 #include <qhash.h>
+#include <qlocale.h>
 #include <qregularexpression.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtcpserver.h>
+#include <qtcpsocket.h>
 #include <qtimer.h>
-#include <qlocale.h>
+#include <qurlinfo_p.h>
 
 class QFtpPI;
 

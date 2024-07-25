@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include <qlocalserver.h>
-#include <qlocalserver_p.h>
-#include <qlocalsocket.h>
-#include <qsystemerror_p.h>
-#include <qstring.h>
-#include <qscopedarraypointer.h>
 #include <qdebug.h>
+#include <qlocalserver.h>
+#include <qlocalsocket.h>
+#include <qscopedarraypointer.h>
+#include <qstring.h>
 
-#include <aclapi.h>
+#include <qlocalserver_p.h>
+#include <qsystemerror_p.h>
+
 #include <accctrl.h>
+#include <aclapi.h>
 #include <sddl.h>
 
 // The buffer size need to be 0 otherwise data could be

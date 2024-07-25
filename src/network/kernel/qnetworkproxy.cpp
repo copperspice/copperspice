@@ -31,17 +31,17 @@
 #include <qstringlist.h>
 #include <qurl.h>
 
-#include <qnetworkproxy_p.h>
-#include <qnetwork_request_p.h>
-#include <qsocks5socketengine_p.h>
-#include <qhttpsocketengine_p.h>
-
 #ifndef QT_NO_BEARERMANAGEMENT
 #include <qnetworkconfiguration.h>
 #endif
 
-class QSocks5SocketEngineHandler;
+#include <qhttpsocketengine_p.h>
+#include <qnetwork_request_p.h>
+#include <qnetworkproxy_p.h>
+#include <qsocks5socketengine_p.h>
+
 class QHttpSocketEngineHandler;
+class QSocks5SocketEngineHandler;
 
 class QGlobalNetworkProxy
 {

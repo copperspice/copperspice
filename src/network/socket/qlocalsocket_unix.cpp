@@ -22,24 +22,24 @@
 ***********************************************************************/
 
 #include <qlocalsocket.h>
-#include <qlocalsocket_p.h>
 
+#include <qlocalsocket_p.h>
 #include <qnet_unix_p.h>
 
 #ifndef QT_NO_LOCALSOCKET
 
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-
-#include <qdir.h>
 #include <qdebug.h>
+#include <qdir.h>
 #include <qelapsedtimer.h>
 #include <qstring.h>
+
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/un.h>
+
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #define QT_CONNECT_TIMEOUT 30000
 

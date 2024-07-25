@@ -25,13 +25,13 @@
 #define QHTTP_MULTIPART_H
 
 #include <qbytearray.h>
-#include <qshareddatapointer.h>
 #include <qnetwork_request.h>
 #include <qscopedpointer.h>
+#include <qshareddatapointer.h>
 
-class QHttpPartPrivate;
 class QHttpMultiPart;
 class QHttpMultiPartPrivate;
+class QHttpPartPrivate;
 
 class Q_NETWORK_EXPORT QHttpPart
 {

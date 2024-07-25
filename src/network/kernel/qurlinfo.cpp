@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qurlinfo_p.h"
+#include <qurlinfo_p.h>
 
 #ifndef QT_NO_FTP
 
-#include <qurl.h>
 #include <qdir.h>
+#include <qurl.h>
+
 #include <limits.h>
 
 class QUrlInfoPrivate

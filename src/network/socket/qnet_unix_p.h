@@ -26,12 +26,12 @@
 
 #include <qcore_unix_p.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <resolv.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 
 // Almost always the same. If not, specify in qplatformdefs.h.
 #if !defined(QT_SOCKOPTLEN_T)

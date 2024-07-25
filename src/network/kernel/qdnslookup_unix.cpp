@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
-#include <qdnslookup_p.h>
-
 #include <qlibrary.h>
 #include <qscopedpointer.h>
 #include <qurl.h>
+
+#include <qdnslookup_p.h>
 #include <qmutexpool_p.h>
 
-#include <sys/types.h>
-#include <netinet/in.h>
 #include <arpa/nameser.h>
 #include <arpa/nameser_compat.h>
+#include <netinet/in.h>
 #include <resolv.h>
+#include <sys/types.h>
 
 #if defined(__GNU_LIBRARY__) && ! defined(__UCLIBC__)
 #  include <gnu/lib-names.h>

@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qnetworkinterface.h>
-#include <qnetworkinterface_p.h>
-#include <qnet_unix_p.h>
-
 #include <qalgorithms.h>
+#include <qnetworkinterface.h>
 #include <qplatformdefs.h>
 #include <qset.h>
 #include <qvarlengtharray.h>
+
+#include <qnet_unix_p.h>
+#include <qnetworkinterface_p.h>
 
 #ifndef QT_NO_NETWORKINTERFACE
 
