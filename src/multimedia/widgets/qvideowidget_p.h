@@ -34,11 +34,10 @@
 #include <qpaintervideosurface_p.h>
 
 class QMediaService;
-class QVideoWidgetControl;
-class QVideoRendererControl;
-class QVideoWindowControl;
-class QMediaService;
 class QVideoOutputControl;
+class QVideoRendererControl;
+class QVideoWidgetControl;
+class QVideoWindowControl;
 
 class QVideoWidgetControlInterface
 {

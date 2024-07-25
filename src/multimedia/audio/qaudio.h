@@ -24,8 +24,8 @@
 #ifndef QAUDIO_H
 #define QAUDIO_H
 
-#include <qmultimedia.h>
 #include <qglobal.h>
+#include <qmultimedia.h>
 #include <qstring.h>
 
 namespace QAudio {

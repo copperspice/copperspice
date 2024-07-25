@@ -21,22 +21,22 @@
 *
 ***********************************************************************/
 
-#ifndef QMEDIARECORDER_H
-#define QMEDIARECORDER_H
+#ifndef QMEDIA_RECORDER_H
+#define QMEDIA_RECORDER_H
 
+#include <qmediabindableinterface.h>
+#include <qmediaencodersettings.h>
+#include <qmediaobject.h>
+#include <qmultimedia.h>
 #include <qpair.h>
 #include <qurl.h>
-#include <qmultimedia.h>
-#include <qmediaobject.h>
-#include <qmediaencodersettings.h>
-#include <qmediabindableinterface.h>
 
-class QSize;
-class QAudioFormat;
-class QMediaRecorderService;
 class QAudioEncoderSettings;
-class QVideoEncoderSettings;
+class QAudioFormat;
 class QMediaRecorderPrivate;
+class QMediaRecorderService;
+class QSize;
+class QVideoEncoderSettings;
 
 class Q_MULTIMEDIA_EXPORT QMediaRecorder : public QObject, public QMediaBindableInterface
 {

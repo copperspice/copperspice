@@ -26,8 +26,8 @@
 #include <qcamera.h>
 #include <qcameraexposurecontrol.h>
 #include <qcameraflashcontrol.h>
-#include <qmetaobject.h>
 #include <qdebug.h>
+#include <qmetaobject.h>
 
 #include <qmediaobject_p.h>
 

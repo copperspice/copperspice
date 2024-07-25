@@ -27,10 +27,10 @@
 #include <qcameracontrol.h>
 #include <qcameraexposurecontrol.h>
 #include <qcamerafocuscontrol.h>
+#include <qcameraimagecapturecontrol.h>
 #include <qcamerazoomcontrol.h>
 #include <qdebug.h>
 #include <qmediarecordercontrol.h>
-#include <qcameraimagecapturecontrol.h>
 #include <qvideodeviceselectorcontrol.h>
 
 #include <qmediaobject_p.h>

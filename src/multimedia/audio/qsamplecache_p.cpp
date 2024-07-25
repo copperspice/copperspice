@@ -23,10 +23,10 @@
 
 #include <qsamplecache_p.h>
 
+#include <qdebug.h>
 #include <qnetaccess_manager.h>
 #include <qnetwork_reply.h>
 #include <qnetwork_request.h>
-#include <qdebug.h>
 
 #include <qwavedecoder_p.h>
 

@@ -24,10 +24,9 @@
 #ifndef QMEDIASTREAMSCONTROL_H
 #define QMEDIASTREAMSCONTROL_H
 
-#include <qstring.h>
-
 #include <qmediacontrol.h>
 #include <qmultimedia.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaStreamsControl : public QMediaControl
 {

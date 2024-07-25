@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
 #include <qaudioformat.h>
+
+#include <qdebug.h>
 
 class QAudioFormatPrivate : public QSharedData
 {

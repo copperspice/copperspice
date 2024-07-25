@@ -23,11 +23,11 @@
 
 #include <qpaintervideosurface_p.h>
 
+#include <qdebug.h>
 #include <qmath.h>
 #include <qpainter.h>
 #include <qvariant.h>
 #include <qvideosurfaceformat.h>
-#include <qdebug.h>
 
 #include <qmediaopenglhelper_p.h>
 

@@ -24,9 +24,9 @@
 #include <qgraphicsvideoitem.h>
 
 #include <qcoreevent.h>
-#include <qpointer.h>
 #include <qmediaobject.h>
 #include <qmediaservice.h>
+#include <qpointer.h>
 #include <qvideorenderercontrol.h>
 #include <qvideosurfaceformat.h>
 

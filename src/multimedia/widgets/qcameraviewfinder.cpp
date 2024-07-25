@@ -27,8 +27,8 @@
 #include <qdebug.h>
 #include <qvideodeviceselectorcontrol.h>
 
-#include <qvideowidget_p.h>
 #include <qmediaobject_p.h>
+#include <qvideowidget_p.h>
 
 class QCameraViewfinderPrivate : public QVideoWidgetPrivate
 {

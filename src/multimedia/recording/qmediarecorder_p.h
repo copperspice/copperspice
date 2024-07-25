@@ -21,20 +21,22 @@
 *
 ***********************************************************************/
 
-#ifndef QMEDIARECORDER_P_H
-#define QMEDIARECORDER_P_H
+#ifndef QMEDIA_RECORDER_P_H
+#define QMEDIA_RECORDER_P_H
 
 #include <qmediarecorder.h>
-#include <qmediaobject_p.h>
+
 #include <qurl.h>
 
-class QMediaRecorderControl;
-class QMediaContainerControl;
+#include <qmediaobject_p.h>
+
 class QAudioEncoderSettingsControl;
-class QVideoEncoderSettingsControl;
-class QMetaDataWriterControl;
 class QMediaAvailabilityControl;
+class QMediaContainerControl;
+class QMediaRecorderControl;
+class QMetaDataWriterControl;
 class QTimer;
+class QVideoEncoderSettingsControl;
 
 class QMediaRecorderPrivate
 {

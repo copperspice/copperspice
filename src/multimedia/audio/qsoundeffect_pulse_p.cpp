@@ -23,11 +23,11 @@
 
 #include <qsoundeffect_pulse_p.h>
 
+#include <qaudioformat.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qtime.h>
 #include <qtimer.h>
-#include <qaudioformat.h>
 
 #include <qaudiohelpers_p.h>
 #include <qmediaresourcepolicy_p.h>

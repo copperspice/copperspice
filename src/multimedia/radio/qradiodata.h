@@ -24,9 +24,9 @@
 #ifndef QRADIODATA_H
 #define QRADIODATA_H
 
-#include <qobject.h>
-#include <qmediaobject.h>
 #include <qmediabindableinterface.h>
+#include <qmediaobject.h>
+#include <qobject.h>
 
 class QRadioDataPrivate;
 

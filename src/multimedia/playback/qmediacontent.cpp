@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qurl.h>
-#include <qvariant.h>
-#include <QPointer>
+#include <qmediacontent.h>
 
 #include <qmediaplaylist.h>
-#include <qmediacontent.h>
+#include <qpointer.h>
+#include <qurl.h>
+#include <qvariant.h>
 
 class QMediaContentPrivate : public QSharedData
 {

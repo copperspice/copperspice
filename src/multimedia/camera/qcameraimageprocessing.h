@@ -24,11 +24,11 @@
 #ifndef QCAMERAIMAGEPROCESSING_H
 #define QCAMERAIMAGEPROCESSING_H
 
-#include <qstringlist.h>
 #include <qpair.h>
-#include <qsize.h>
 #include <qpoint.h>
 #include <qrect.h>
+#include <qsize.h>
+#include <qstringlist.h>
 
 #include <qmediacontrol.h>
 #include <qmediaobject.h>

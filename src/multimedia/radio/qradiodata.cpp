@@ -23,8 +23,8 @@
 
 #include <qradiodata.h>
 
-#include <qpair.h>
 #include <qmediaservice.h>
+#include <qpair.h>
 #include <qradiodatacontrol.h>
 
 #include <qmediaobject_p.h>

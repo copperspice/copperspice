@@ -26,11 +26,11 @@
 
 #include <qgraphicsitem.h>
 
-#include <qvideowidget.h>
 #include <qmediabindableinterface.h>
+#include <qvideowidget.h>
 
-class QVideoSurfaceFormat;
 class QGraphicsVideoItemPrivate;
+class QVideoSurfaceFormat;
 
 class Q_MULTIMEDIA_EXPORT QGraphicsVideoItem : public QGraphicsObject, public QMediaBindableInterface
 {

@@ -23,13 +23,13 @@
 
 #include <qaudiorecorder.h>
 
-#include <qdebug.h>
-#include <qurl.h>
-#include <qstringlist.h>
-#include <qmetaobject.h>
 #include <qaudioformat.h>
 #include <qaudioinputselectorcontrol.h>
+#include <qdebug.h>
 #include <qmediaservice.h>
+#include <qmetaobject.h>
+#include <qstringlist.h>
+#include <qurl.h>
 
 #include <qmediaobject_p.h>
 #include <qmediarecorder_p.h>

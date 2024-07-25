@@ -24,15 +24,14 @@
 #ifndef QCAMERAVIEWFINDER_H
 #define QCAMERAVIEWFINDER_H
 
-#include <qstringlist.h>
-#include <qpair.h>
-#include <qsize.h>
-#include <qpoint.h>
-#include <qrect.h>
-
 #include <qmediacontrol.h>
 #include <qmediaobject.h>
 #include <qmediaservice.h>
+#include <qpair.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qstringlist.h>
 #include <qvideowidget.h>
 
 class QCamera;

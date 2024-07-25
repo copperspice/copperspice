@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#ifndef QMEDIAPLAYLISTNAVIGATOR_P_H
-#define QMEDIAPLAYLISTNAVIGATOR_P_H
+#ifndef QMEDIAPLAYLIST_NAVIGATOR_P_H
+#define QMEDIAPLAYLIST_NAVIGATOR_P_H
 
-#include <qmediaplaylistprovider_p.h>
 #include <qmediaplaylist.h>
 #include <qobject.h>
+
+#include <qmediaplaylistprovider_p.h>
 
 class QMediaPlaylistNavigatorPrivate;
 

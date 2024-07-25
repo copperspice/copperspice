@@ -25,8 +25,8 @@
 #define QMEDIARESOURCE_H
 
 #include <qmap.h>
-#include <qstring.h>
 #include <qnetwork_request.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaResource
 {

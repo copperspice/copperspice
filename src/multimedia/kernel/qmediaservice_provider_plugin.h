@@ -24,10 +24,10 @@
 #ifndef QMEDIASERVICE_PROVIDER_PLUGIN_H
 #define QMEDIASERVICE_PROVIDER_PLUGIN_H
 
-#include <qstringlist.h>
-#include <qplugin.h>
-#include <qmultimedia.h>
 #include <qcamera.h>
+#include <qmultimedia.h>
+#include <qplugin.h>
+#include <qstringlist.h>
 
 class QMediaService;
 class QMediaServiceProviderHintPrivate;

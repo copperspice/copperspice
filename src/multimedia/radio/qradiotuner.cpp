@@ -23,10 +23,10 @@
 
 #include <qradiotuner.h>
 
-#include <qpair.h>
 #include <qmediaservice.h>
-#include <qradiotunercontrol.h>
+#include <qpair.h>
 #include <qradiodata.h>
+#include <qradiotunercontrol.h>
 
 #include <qmediaobject_p.h>
 #include <qmediaserviceprovider_p.h>

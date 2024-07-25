@@ -23,8 +23,8 @@
 
 #include <qcamerainfo.h>
 
-#include <qvideodeviceselectorcontrol.h>
 #include <qcamerainfocontrol.h>
+#include <qvideodeviceselectorcontrol.h>
 
 #include <qcamera_p.h>
 #include <qmediaserviceprovider_p.h>

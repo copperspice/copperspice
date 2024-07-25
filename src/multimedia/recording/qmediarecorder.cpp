@@ -23,21 +23,21 @@
 
 #include <qmediarecorder.h>
 
+#include <qaudioencodersettingscontrol.h>
+#include <qaudioformat.h>
 #include <qcamera.h>
 #include <qcameracontrol.h>
+#include <qdebug.h>
+#include <qmediaavailabilitycontrol.h>
+#include <qmediacontainercontrol.h>
 #include <qmediarecordercontrol.h>
 #include <qmediaservice.h>
 #include <qmediaserviceprovider_p.h>
 #include <qmetadatawritercontrol.h>
-#include <qaudioencodersettingscontrol.h>
-#include <qvideoencodersettingscontrol.h>
-#include <qmediacontainercontrol.h>
-#include <qmediaavailabilitycontrol.h>
-#include <qdebug.h>
-#include <qurl.h>
-#include <qstringlist.h>
 #include <qmetaobject.h>
-#include <qaudioformat.h>
+#include <qstringlist.h>
+#include <qurl.h>
+#include <qvideoencodersettingscontrol.h>
 
 #include <qmediaobject_p.h>
 #include <qmediarecorder_p.h>

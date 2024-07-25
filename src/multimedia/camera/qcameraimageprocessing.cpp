@@ -22,16 +22,17 @@
 ***********************************************************************/
 
 #include <qcameraimageprocessing.h>
-#include <qmediaobject_p.h>
 
 #include <qcameracontrol.h>
 #include <qcameraexposurecontrol.h>
 #include <qcamerafocuscontrol.h>
+#include <qcameraimagecapturecontrol.h>
+#include <qcameraimageprocessingcontrol.h>
 #include <qdebug.h>
 #include <qmediarecordercontrol.h>
-#include <qcameraimageprocessingcontrol.h>
-#include <qcameraimagecapturecontrol.h>
 #include <qvideodeviceselectorcontrol.h>
+
+#include <qmediaobject_p.h>
 
 class QCameraImageProcessingFakeControl : public QCameraImageProcessingControl
 {

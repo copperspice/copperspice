@@ -23,11 +23,11 @@
 
 #include <playlistfileparser_p.h>
 
-#include <qfileinfo.h>
 #include <qdebug.h>
+#include <qfileinfo.h>
+#include <qmediametadata.h>
 #include <qnetwork_reply.h>
 #include <qnetwork_request.h>
-#include <qmediametadata.h>
 
 #include <qmediaobject_p.h>
 

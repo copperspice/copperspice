@@ -24,8 +24,8 @@
 #ifndef QVIDEOWIDGET_H
 #define QVIDEOWIDGET_H
 
-#include <qwidget.h>
 #include <qmediabindableinterface.h>
+#include <qwidget.h>
 
 class QMediaObject;
 class QVideoWidgetPrivate;

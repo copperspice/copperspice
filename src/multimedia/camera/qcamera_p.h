@@ -27,16 +27,15 @@
 #include <qcamera.h>
 
 #include <qmediaobject_p.h>
-
 #include <qvideosurfaceoutput_p.h>
 
-class QMediaServiceProvider;
 class QCameraControl;
-class QVideoDeviceSelectorControl;
-class QCameraLocksControl;
 class QCameraInfoControl;
-class QCameraViewfinderSettingsControl;
+class QCameraLocksControl;
 class QCameraViewfinderSettingsControl2;
+class QCameraViewfinderSettingsControl;
+class QMediaServiceProvider;
+class QVideoDeviceSelectorControl;
 
 class QCameraPrivate : public QMediaObjectPrivate
 {

@@ -22,22 +22,21 @@
 ***********************************************************************/
 
 #include <qmediaplaylist.h>
-#include <qmediaservice.h>
-#include <qmediaplayercontrol.h>
-
 #include <qmediaplaylist_p.h>
-#include <qmediaplaylistprovider_p.h>
-#include <qmediaplaylistioplugin_p.h>
-#include <qmedianetworkplaylistprovider_p.h>
-#include <qmediaplaylistcontrol_p.h>
 
-#include <qcoreevent.h>
 #include <qcoreapplication.h>
-#include <qlist.h>
+#include <qcoreevent.h>
 #include <qfile.h>
+#include <qlist.h>
+#include <qmediaplayercontrol.h>
+#include <qmediaservice.h>
 #include <qurl.h>
 
 #include <qfactoryloader_p.h>
+#include <qmedianetworkplaylistprovider_p.h>
+#include <qmediaplaylistcontrol_p.h>
+#include <qmediaplaylistioplugin_p.h>
+#include <qmediaplaylistprovider_p.h>
 
 static QFactoryLoader *loader()
 {

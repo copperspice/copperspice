@@ -24,11 +24,11 @@
 #ifndef QMEDIACONTENT_H
 #define QMEDIACONTENT_H
 
-#include <qshareddata.h>
 #include <qmediaresource.h>
+#include <qshareddata.h>
 
-class QMediaPlaylist;
 class QMediaContentPrivate;
+class QMediaPlaylist;
 
 class Q_MULTIMEDIA_EXPORT QMediaContent
 {

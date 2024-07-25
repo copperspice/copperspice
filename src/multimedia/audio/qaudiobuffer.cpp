@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qaudiobuffer.h>
-#include <qaudiobuffer_p.h>
 
-#include <qobject.h>
 #include <qdebug.h>
+#include <qobject.h>
+
+#include <qaudiobuffer_p.h>
 
 class QAudioBufferPrivate : public QSharedData
 {

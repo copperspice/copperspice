@@ -24,15 +24,15 @@
 #ifndef QMEDIAPLAYLISTIOPLUGIN_P_H
 #define QMEDIAPLAYLISTIOPLUGIN_P_H
 
+#include <qmediacontent.h>
 #include <qobject.h>
+#include <qplugin.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qplugin.h>
-#include <qmediacontent.h>
 
-class QUrl;
 class QByteArray;
 class QIODevice;
+class QUrl;
 
 class Q_MULTIMEDIA_EXPORT QMediaPlaylistReader
 {

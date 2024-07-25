@@ -24,9 +24,9 @@
 #ifndef QRADIOTUNER_H
 #define QRADIOTUNER_H
 
+#include <qmediaobject.h>
 #include <qobject.h>
 #include <qpair.h>
-#include <qmediaobject.h>
 #include <qradiodata.h>
 
 class QRadioTunerPrivate;

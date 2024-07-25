@@ -24,13 +24,13 @@
 #ifndef QMEDIAPLAYLIST_H
 #define QMEDIAPLAYLIST_H
 
-#include <qobject.h>
+#include <qmediabindableinterface.h>
 #include <qmediacontent.h>
 #include <qmediaobject.h>
-#include <qmediabindableinterface.h>
+#include <qobject.h>
 
-class QMediaPlaylistProvider;
 class QMediaPlaylistPrivate;
+class QMediaPlaylistProvider;
 
 class Q_MULTIMEDIA_EXPORT QMediaPlaylist : public QObject, public QMediaBindableInterface
 {

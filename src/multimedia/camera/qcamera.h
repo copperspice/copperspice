@@ -24,26 +24,24 @@
 #ifndef QCAMERA_H
 #define QCAMERA_H
 
-#include <qstringlist.h>
-#include <qpair.h>
-#include <qsize.h>
-#include <qpoint.h>
-#include <qrect.h>
-
-#include <qmediacontrol.h>
-#include <qmediaobject.h>
-#include <qmediaservice.h>
-
 #include <qcameraexposure.h>
 #include <qcamerafocus.h>
 #include <qcameraimageprocessing.h>
 #include <qcameraviewfindersettings.h>
+#include <qmediacontrol.h>
+#include <qmediaobject.h>
+#include <qmediaservice.h>
+#include <qpair.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qstringlist.h>
 
 class QAbstractVideoSurface;
-class QVideoWidget;
-class QGraphicsVideoItem;
 class QCameraInfo;
 class QCameraPrivate;
+class QGraphicsVideoItem;
+class QVideoWidget;
 
 class Q_MULTIMEDIA_EXPORT QCamera : public QMediaObject
 {

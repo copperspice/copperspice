@@ -25,9 +25,9 @@
 #define QCAMERAVIEWFINDERSETTINGS_H
 
 #include <qglobal.h>
-#include <qvideoframe.h>
 #include <qshareddata.h>
 #include <qsize.h>
+#include <qvideoframe.h>
 
 class QCameraViewfinderSettingsPrivate;
 

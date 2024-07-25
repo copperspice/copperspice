@@ -23,14 +23,14 @@
 
 #include <qcamera_p.h>
 
-#include <qcamerainfo.h>
 #include <qcameracontrol.h>
-#include <qcameralockscontrol.h>
 #include <qcameraexposurecontrol.h>
 #include <qcamerafocuscontrol.h>
-#include <qcameraimageprocessingcontrol.h>
 #include <qcameraimagecapturecontrol.h>
+#include <qcameraimageprocessingcontrol.h>
+#include <qcamerainfo.h>
 #include <qcamerainfocontrol.h>
+#include <qcameralockscontrol.h>
 #include <qcameraviewfindersettingscontrol.h>
 #include <qdebug.h>
 #include <qmediarecordercontrol.h>

@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
+#include <qmedianetworkplaylistprovider_p.h>
+
 #include <qmediacontent.h>
 
-#include <qmedianetworkplaylistprovider_p.h>
-#include <qmediaplaylistprovider_p.h>
 #include <qmediaobject_p.h>
+#include <qmediaplaylistprovider_p.h>
 
 class QMediaNetworkPlaylistProviderPrivate: public QMediaPlaylistProviderPrivate
 {

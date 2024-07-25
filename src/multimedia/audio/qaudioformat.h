@@ -24,9 +24,9 @@
 #ifndef QAUDIOFORMAT_H
 #define QAUDIOFORMAT_H
 
+#include <qmultimedia.h>
 #include <qobject.h>
 #include <qshareddata.h>
-#include <qmultimedia.h>
 
 class QAudioFormatPrivate;
 

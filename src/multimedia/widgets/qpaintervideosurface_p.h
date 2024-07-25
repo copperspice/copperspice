@@ -24,11 +24,11 @@
 #ifndef QPAINTERVIDEOSURFACE_P_H
 #define QPAINTERVIDEOSURFACE_P_H
 
-#include <qsize.h>
+#include <qabstractvideosurface.h>
 #include <qimage.h>
 #include <qmatrix4x4.h>
 #include <qpaintengine.h>
-#include <qabstractvideosurface.h>
+#include <qsize.h>
 #include <qvideoframe.h>
 
 class QGLContext;

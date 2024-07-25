@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#ifndef QMEDIAENCODERSETTINGS_H
-#define QMEDIAENCODERSETTINGS_H
+#ifndef QMEDIA_ENCODERSETTINGS_H
+#define QMEDIA_ENCODERSETTINGS_H
 
-#include <qsharedpointer.h>
-#include <qstring.h>
-#include <qsize.h>
-#include <qvariant.h>
 #include <qmultimedia.h>
+#include <qsharedpointer.h>
+#include <qsize.h>
+#include <qstring.h>
+#include <qvariant.h>
 
 class QAudioEncoderSettingsPrivate;
 class QImageEncoderSettingsPrivate;
