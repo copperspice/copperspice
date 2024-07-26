@@ -22,12 +22,11 @@
 ***********************************************************************/
 
 #include <qsqlquerymodel.h>
+#include <qsqlquerymodel_p.h>
 
 #include <qdebug.h>
 #include <qsqldriver.h>
 #include <qsqlfield.h>
-
-#include <qsqlquerymodel_p.h>
 
 #define QSQL_PREFETCH 255
 

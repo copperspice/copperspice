@@ -30,13 +30,13 @@
 
 #include <qobject.h>
 #include <qrect.h>
-#include <qsize.h>
 #include <qscopedpointer.h>
+#include <qsize.h>
 #include <qxmlstream.h>
 
-class QSvgRendererPrivate;
-class QPainter;
 class QByteArray;
+class QPainter;
+class QSvgRendererPrivate;
 
 class Q_SVG_EXPORT QSvgRenderer : public QObject
 {

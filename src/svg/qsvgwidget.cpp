@@ -25,8 +25,8 @@
 
 #ifndef QT_NO_SVGWIDGET
 
-#include <qsvgrenderer.h>
 #include <qpainter.h>
+#include <qsvgrenderer.h>
 
 #include <qwidget_p.h>
 

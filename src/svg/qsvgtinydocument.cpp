@@ -21,17 +21,18 @@
 *
 ***********************************************************************/
 
-#include "qsvgtinydocument_p.h"
+#include <qsvgtinydocument_p.h>
 
-#include "qsvghandler_p.h"
-#include "qsvgfont_p.h"
-#include "qpainter.h"
-#include "qfile.h"
-#include "qbuffer.h"
-#include "qbytearray.h"
-#include "qqueue.h"
-#include "qstack.h"
-#include "qdebug.h"
+#include <qbuffer.h>
+#include <qbytearray.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qpainter.h>
+#include <qqueue.h>
+#include <qstack.h>
+
+#include <qsvgfont_p.h>
+#include <qsvghandler_p.h>
 
 #ifndef QT_NO_COMPRESS
 #include <zlib.h>

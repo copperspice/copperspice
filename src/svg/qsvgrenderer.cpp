@@ -26,8 +26,8 @@
 #ifndef QT_NO_SVGRENDERER
 
 #include <qbytearray.h>
-#include <qtimer.h>
 #include <qdebug.h>
+#include <qtimer.h>
 
 #include <qsvgtinydocument_p.h>
 

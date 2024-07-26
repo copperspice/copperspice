@@ -23,9 +23,9 @@
 
 #include <qsvgfont_p.h>
 
+#include <qdebug.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qdebug.h>
 #include <qpicture.h>
 
 QSvgGlyph::QSvgGlyph(QChar unicode, const QPainterPath &path, qreal horizAdvX)

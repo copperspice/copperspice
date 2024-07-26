@@ -23,12 +23,13 @@
 
 #include <qsvggraphics_p.h>
 
-#include <qsvgfont_p.h>
-#include <qpainter.h>
-#include <qtextdocument.h>
 #include <qabstracttextdocumentlayout.h>
-#include <qtextcursor.h>
 #include <qdebug.h>
+#include <qpainter.h>
+#include <qtextcursor.h>
+#include <qtextdocument.h>
+
+#include <qsvgfont_p.h>
 
 #include <math.h>
 #include <limits.h>

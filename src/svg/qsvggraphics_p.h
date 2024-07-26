@@ -24,13 +24,13 @@
 #ifndef QSVGGRAPHICS_P_H
 #define QSVGGRAPHICS_P_H
 
-#include "qsvgnode_p.h"
+#include <qimage.h>
+#include <qpainterpath.h>
+#include <qstack.h>
+#include <qtextlayout.h>
+#include <qtextoption.h>
 
-#include "QtGui/qpainterpath.h"
-#include "QtGui/qimage.h"
-#include "QtGui/qtextlayout.h"
-#include "QtGui/qtextoption.h"
-#include "QtCore/qstack.h"
+#include <qsvgnode_p.h>
 
 class QTextCharFormat;
 

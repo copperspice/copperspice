@@ -22,14 +22,14 @@
 ***********************************************************************/
 
 #include <qglengineshadermanager_p.h>
-#include <qglengineshadersource_p.h>
-#include <qpaintengineex_opengl2_p.h>
-#include <qglshadercache_p.h>
 
 #include <qalgorithms.h>
 #include <qmetaenum.h>
 
+#include <qglengineshadersource_p.h>
+#include <qglshadercache_p.h>
 #include <qopenglcontext_p.h>
+#include <qpaintengineex_opengl2_p.h>
 
 class QGLEngineSharedShadersResource : public QOpenGLSharedResource
 {

@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_SVGGENERATOR
 
-#include <qnamespace.h>
 #include <qiodevice.h>
+#include <qnamespace.h>
 #include <qscopedpointer.h>
 
 class QSvgGeneratorPrivate;

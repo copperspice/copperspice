@@ -24,17 +24,16 @@
 #ifndef QSVGSTYLE_P_H
 #define QSVGSTYLE_P_H
 
-#include <qpainter.h>
+#include <qbrush.h>
+#include <qcolor.h>
+#include <qdebug.h>
+#include <qfont.h>
+#include <qmatrix.h>
 #include <qpainter.h>
 #include <qpen.h>
-#include <qbrush.h>
-#include <qmatrix.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qdebug.h>
 
-class QSvgNode;
 class QSvgFont;
+class QSvgNode;
 class QSvgTinyDocument;
 
 template <class T> class QSvgRefCounter

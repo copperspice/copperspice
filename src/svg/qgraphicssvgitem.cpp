@@ -25,10 +25,10 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW) && ! defined(QT_NO_SVGWIDGET)
 
+#include <qdebug.h>
 #include <qpainter.h>
 #include <qstyleoption.h>
 #include <qsvgrenderer.h>
-#include <qdebug.h>
 
 #include <qgraphics_item_p.h>
 

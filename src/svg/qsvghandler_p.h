@@ -24,19 +24,19 @@
 #ifndef QSVGHANDLER_P_H
 #define QSVGHANDLER_P_H
 
-#include <qxmlstream.h>
-
 #include <qhash.h>
 #include <qstack.h>
-#include <qsvgstyle_p.h>
+#include <qxmlstream.h>
+
 #include <qcssparser_p.h>
 #include <qsvggraphics_p.h>
+#include <qsvgstyle_p.h>
 
-class QSvgNode;
-class QSvgTinyDocument;
-class QSvgHandler;
 class QColor;
+class QSvgHandler;
+class QSvgNode;
 class QSvgStyleSelector;
+class QSvgTinyDocument;
 class QXmlStreamReader;
 
 #ifndef QT_NO_CSSPARSER

@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qglbuffer.h>
+
 #include <qgl.h>
 #include <qatomic.h>
-#include <qglbuffer.h>
 
 #include <qgl_p.h>
 #include <qopengl_extensions_p.h>

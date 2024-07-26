@@ -23,28 +23,28 @@
 
 #include <qsvghandler_p.h>
 
-#include <qplatformdefs.h>
-#include <qpen.h>
-#include <qpainterpath.h>
 #include <qbrush.h>
 #include <qcolor.h>
-#include <qtextformat.h>
-#include <qvector.h>
-#include <qfileinfo.h>
-#include <qfile.h>
 #include <qdebug.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <qmath.h>
 #include <qnumeric.h>
+#include <qpainterpath.h>
+#include <qpen.h>
+#include <qplatformdefs.h>
+#include <qtextformat.h>
 #include <qvarlengtharray.h>
+#include <qvector.h>
 
 #include <qmath_p.h>
-#include <qsvgtinydocument_p.h>
-#include <qsvgstructure_p.h>
+#include <qsvgfont_p.h>
 #include <qsvggraphics_p.h>
 #include <qsvgnode_p.h>
-#include <qsvgfont_p.h>
+#include <qsvgstructure_p.h>
+#include <qsvgtinydocument_p.h>
 
-#include "float.h"
+#include <float.h>
 
 Q_CORE_EXPORT double qstrtod(const char *s00, char const **se, bool *ok);
 

@@ -24,18 +24,18 @@
 #ifndef QSVGTINYDOCUMENT_P_H
 #define QSVGTINYDOCUMENT_P_H
 
-#include <qsvgstructure_p.h>
-
-#include <qrect.h>
-#include <qlist.h>
-#include <qhash.h>
 #include <qdatetime.h>
+#include <qhash.h>
+#include <qlist.h>
+#include <qrect.h>
 #include <qxmlstream.h>
-#include <qsvgstyle_p.h>
-#include <qsvgfont_p.h>
 
-class QPainter;
+#include <qsvgfont_p.h>
+#include <qsvgstructure_p.h>
+#include <qsvgstyle_p.h>
+
 class QByteArray;
+class QPainter;
 class QSvgFont;
 
 class Q_SVG_EXPORT QSvgTinyDocument : public QSvgStructureNode

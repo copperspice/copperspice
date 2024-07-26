@@ -24,15 +24,15 @@
 #ifndef QSVGSTRUCTURE_P_H
 #define QSVGSTRUCTURE_P_H
 
+#include <qhash.h>
+#include <qlist.h>
+
 #include <qsvgnode_p.h>
 
-#include <qlist.h>
-#include <qhash.h>
-
-class QSvgTinyDocument;
-class QSvgNode;
 class QPainter;
 class QSvgDefs;
+class QSvgNode;
+class QSvgTinyDocument;
 
 class QSvgStructureNode : public QSvgNode
 {

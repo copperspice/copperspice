@@ -24,11 +24,12 @@
 #ifndef QTEXTUREGLYPHCACHE_GL_P_H
 #define QTEXTUREGLYPHCACHE_GL_P_H
 
-#include <qglshaderprogram.h>
+#include <qtextureglyphcache_p.h>
+
 #include <qglframebufferobject.h>
+#include <qglshaderprogram.h>
 #include <qopenglfunctions.h>
 
-#include <qtextureglyphcache_p.h>
 #include <qgl_p.h>
 
 class QGL2PaintEngineExPrivate;

@@ -25,16 +25,17 @@
 
 #ifndef QT_NO_SVGGENERATOR
 
-#include <qpainterpath.h>
-#include <qpaintengine_p.h>
-#include <qtextengine_p.h>
-#include <qdrawhelper_p.h>
+#include <qbuffer.h>
+#include <qdebug.h>
 #include <qfile.h>
+#include <qmath.h>
+#include <qpainterpath.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
-#include <qbuffer.h>
-#include <qmath.h>
-#include <qdebug.h>
+
+#include <qdrawhelper_p.h>
+#include <qpaintengine_p.h>
+#include <qtextengine_p.h>
 
 static void translate_color(const QColor &color, QString *color_string, QString *opacity_string)
 {

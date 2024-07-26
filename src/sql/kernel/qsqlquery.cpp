@@ -24,13 +24,14 @@
 #include <qsqlquery.h>
 
 #include <qatomic.h>
+#include <qmap.h>
+#include <qsqldatabase.h>
+#include <qsqldriver.h>
 #include <qsqlrecord.h>
 #include <qsqlresult.h>
-#include <qsqldriver.h>
-#include <qsqldatabase.h>
-#include <qsqlnulldriver_p.h>
 #include <qvector.h>
-#include <qmap.h>
+
+#include <qsqlnulldriver_p.h>
 
 class QSqlQueryPrivate
 {

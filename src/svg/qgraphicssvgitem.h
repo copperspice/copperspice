@@ -30,8 +30,8 @@
 
 #include <qgraphicsitem.h>
 
-class QSvgRenderer;
 class QGraphicsSvgItemPrivate;
+class QSvgRenderer;
 
 class Q_SVG_EXPORT QGraphicsSvgItem : public QGraphicsObject
 {

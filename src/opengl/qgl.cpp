@@ -22,31 +22,31 @@
 ***********************************************************************/
 
 #include <qgl.h>
+#include <qgl_p.h>
 
 #include <qapplication.h>
 #include <qcolormap.h>
-#include <qdebug.h>
 #include <qdatetime.h>
+#include <qdebug.h>
 #include <qfile.h>
+#include <qglframebufferobject.h>
+#include <qglfunctions.h>
+#include <qglpixelbuffer.h>
 #include <qimage.h>
 #include <qlibrary.h>
-#include <qglfunctions.h>
 #include <qmutex.h>
 #include <qpixmap.h>
+#include <qplatform_openglcontext.h>
+#include <qplatform_openglcontext.h>
 #include <qplatform_pixmap.h>
-#include <qplatform_openglcontext.h>
 #include <qplatform_window.h>
-#include <qplatform_openglcontext.h>
 #include <qsurfaceformat.h>
 
 #include <qapplication_p.h>
+#include <qglpixelbuffer_p.h>
 #include <qimage_p.h>
 #include <qimagepixmapcleanuphooks_p.h>
-#include <qgl_p.h>
-#include <qglpixelbuffer_p.h>
 #include <qpaintengineex_opengl2_p.h>
-#include <qglpixelbuffer.h>
-#include <qglframebufferobject.h>
 
 #ifndef QT_OPENGL_ES_2
 #include <qopenglfunctions_1_1.h>

@@ -24,9 +24,9 @@
 #include <qsvgstructure_p.h>
 
 #include <qalgorithms.h>
-#include <qpainter.h>
-#include <qlocale.h>
 #include <qdebug.h>
+#include <qlocale.h>
+#include <qpainter.h>
 
 #include <qsvgnode_p.h>
 #include <qsvgstyle_p.h>

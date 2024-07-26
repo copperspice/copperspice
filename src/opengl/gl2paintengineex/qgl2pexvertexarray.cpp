@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qgl2pexvertexarray_p.h>
-#include <qbezier_p.h>
+
 #include <qmath.h>
+
+#include <qbezier_p.h>
 
 void QGL2PEXVertexArray::clear()
 {

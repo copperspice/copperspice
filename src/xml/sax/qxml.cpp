@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qxml.h>
-#include <qtextcodec.h>
+
 #include <qbuffer.h>
-#include <qregularexpression.h>
-#include <qmap.h>
-#include <qhash.h>
-#include <qstack.h>
 #include <qdebug.h>
+#include <qhash.h>
+#include <qmap.h>
+#include <qregularexpression.h>
+#include <qstack.h>
+#include <qtextcodec.h>
 
 // Error strings for the XML reader
 #define XMLERR_OK                         cs_mark_tr("QXml", "no error occurred")

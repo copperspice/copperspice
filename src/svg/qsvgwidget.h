@@ -30,9 +30,9 @@
 
 #include <qwidget.h>
 
-class QSvgWidgetPrivate;
 class QPaintEvent;
 class QSvgRenderer;
+class QSvgWidgetPrivate;
 
 class Q_SVG_EXPORT QSvgWidget : public QWidget
 {

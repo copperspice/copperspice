@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qtextureglyphcache_gl_p.h"
-#include "qpaintengineex_opengl2_p.h"
-#include "qglfunctions.h"
+#include <qtextureglyphcache_gl_p.h>
 
-#include "qglengineshadersource_p.h"
+#include <qglfunctions.h>
 
+#include <qglengineshadersource_p.h>
+#include <qpaintengineex_opengl2_p.h>
 
 QAtomicInt qgltextureglyphcache_serial_number = 1;
 

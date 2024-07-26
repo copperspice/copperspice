@@ -24,10 +24,10 @@
 #ifndef QSVGNODE_P_H
 #define QSVGNODE_P_H
 
-#include <qsvgstyle_p.h>
-
-#include <qstring.h>
 #include <qhash.h>
+#include <qstring.h>
+
+#include <qsvgstyle_p.h>
 
 class QPainter;
 class QSvgTinyDocument;

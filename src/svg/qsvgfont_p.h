@@ -24,10 +24,10 @@
 #ifndef QSVGFONT_P_H
 #define QSVGFONT_P_H
 
-#include <qpainterpath.h>
-
 #include <qhash.h>
+#include <qpainterpath.h>
 #include <qstring.h>
+
 #include <qsvgstyle_p.h>
 
 class QSvgGlyph

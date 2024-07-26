@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qsvgnode_p.h"
-#include "qsvgtinydocument_p.h"
+#include <qsvgnode_p.h>
 
-#include "qdebug.h"
-#include "qstack.h"
+#include <qdebug.h>
+#include <qstack.h>
+
+#include <qsvgtinydocument_p.h>
 
 QSvgNode::QSvgNode(QSvgNode *parent)
    : m_parent(parent), m_visible(true), m_displayMode(BlockMode)
