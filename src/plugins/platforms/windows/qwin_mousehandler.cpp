@@ -22,19 +22,19 @@
 ***********************************************************************/
 
 #include <qwin_mousehandler.h>
-#include <qwin_keymapper.h>
-#include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_integration.h>
-#include <qwin_screen.h>
 
-#include <qwindowsysteminterface.h>
 #include <qapplication.h>
-#include <qscreen.h>
-#include <qwindow.h>
 #include <qcursor.h>
 #include <qdebug.h>
 #include <qscopedarraypointer.h>
+#include <qscreen.h>
+#include <qwin_context.h>
+#include <qwin_integration.h>
+#include <qwin_keymapper.h>
+#include <qwin_screen.h>
+#include <qwin_window.h>
+#include <qwindow.h>
+#include <qwindowsysteminterface.h>
 
 #include <windowsx.h>
 

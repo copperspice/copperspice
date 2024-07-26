@@ -23,8 +23,8 @@
 
 #include <qfontengine_coretext_p.h>
 
-#include <qplatform_fontdatabase.h>
 #include <qendian.h>
+#include <qplatform_fontdatabase.h>
 #include <qsettings.h>
 #include <qstring16.h>
 

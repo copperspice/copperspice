@@ -25,17 +25,17 @@
 
 #include <Carbon/Carbon.h>
 
-#include <qnsview.h>
-#include <qcocoawindow.h>
-#include <qcocoahelpers.h>
-#include <qcocoadrag.h>
-#include <qcocoainputcontext.h>
-#include <qplatform_integration.h>
-#include <qwindowsysteminterface.h>
-#include <qtextformat.h>
-#include <qdebug.h>
-#include <qsysinfo.h>
 #include <qcocoabackingstore.h>
+#include <qcocoadrag.h>
+#include <qcocoahelpers.h>
+#include <qcocoainputcontext.h>
+#include <qcocoawindow.h>
+#include <qdebug.h>
+#include <qnsview.h>
+#include <qplatform_integration.h>
+#include <qsysinfo.h>
+#include <qtextformat.h>
+#include <qwindowsysteminterface.h>
 
 #include <qapplication_p.h>
 #include <qmultitouch_mac_p.h>

@@ -23,14 +23,12 @@
 
 #include <Carbon/Carbon.h>
 
-#include "qnsview.h"
-#include "qcocoahelpers.h"
-#include "qcocoaaccessibility.h"
-#include "qcocoaaccessibilityelement.h"
-#include "qcocoaintegration.h"
-
 #include <qaccessible.h>
-#include <QDebug>
+#include <qcocoaaccessibility.h>
+#include <qcocoaaccessibilityelement.h>
+#include <qcocoahelpers.h>
+#include <qcocoaintegration.h>
+#include <qnsview.h>
 
 #import <AppKit/NSAccessibility.h>
 

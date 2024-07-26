@@ -22,11 +22,20 @@
 ***********************************************************************/
 
 #include <qwin_window.h>
-#include <qwin_nativeimage.h>
+#include <qwindow_p.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qopenglcontext.h>
+#include <qregion.h>
+#include <qscreen.h>
 #include <qwin_context.h>
 #include <qwin_drag.h>
-#include <qwin_screen.h>
 #include <qwin_integration.h>
+#include <qwin_nativeimage.h>
+#include <qwin_screen.h>
+#include <qwindow.h>
+#include <qwindowsysteminterface.h>
 
 #ifdef QT_OPENGL_DYNAMIC
 #  include <qwin_gl_context.h>
@@ -38,16 +47,7 @@
 #  include <qwindowscursor.h>
 #endif
 
-#include <QApplication>
-#include <QDebug>
-#include <QScreen>
-#include <QWindow>
-#include <QRegion>
-#include <QOpenGLContext>
-#include <qwindowsysteminterface.h>
-
 #include <qsystemlibrary_p.h>
-#include <qwindow_p.h>
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 

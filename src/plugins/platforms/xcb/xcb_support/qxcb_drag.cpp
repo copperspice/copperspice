@@ -23,26 +23,26 @@
 
 #include <qxcb_drag.h>
 
-#include <qxcb_connection.h>
-#include <qxcb_clipboard.h>
-#include <qxcb_mime.h>
-#include <qxcb_window.h>
-#include <qxcb_screen.h>
-#include <qxcb_cursor.h>
 #include <qapplication.h>
 #include <qdebug.h>
-#include <qdnd_p.h>
 #include <qevent.h>
-#include <qrect.h>
 #include <qpainter.h>
+#include <qrect.h>
 #include <qtimer.h>
 #include <qwindow.h>
 #include <qwindowsysteminterface.h>
+#include <qxcb_clipboard.h>
+#include <qxcb_connection.h>
+#include <qxcb_cursor.h>
+#include <qxcb_mime.h>
+#include <qxcb_screen.h>
+#include <qxcb_window.h>
 
 #include <qapplication_p.h>
+#include <qdnd_p.h>
+#include <qhighdpiscaling_p.h>
 #include <qshapedpixmapdndwindow_p.h>
 #include <qsimpledrag_p.h>
-#include <qhighdpiscaling_p.h>
 
 #include <xcb/xcb.h>
 

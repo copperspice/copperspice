@@ -22,31 +22,34 @@
 ***********************************************************************/
 
 #include <qwin_integration.h>
-#include <qwin_window.h>
+
+#include <qplatform_nativeinterface.h>
+#include <qvariant.h>
 #include <qwin_context.h>
-#include <qwin_opengl_context.h>
-#include <qwin_screen.h>
-#include <qwin_theme.h>
-#include <qwin_services.h>
+#include <qwin_fontdatabase.h>
 #include <qwin_inputcontext.h>
 #include <qwin_keymapper.h>
+#include <qwin_opengl_context.h>
 #include <qwin_opengl_tester.h>
+#include <qwin_screen.h>
+#include <qwin_services.h>
+#include <qwin_theme.h>
+#include <qwin_window.h>
+#include <qwindowsysteminterface.h>
+
+#ifndef QT_NO_ACCESSIBILITY
+#  include <qwin_accessibility.h>
+#endif
 
 #if defined(QT_USE_FREETYPE)
 #  include <qwin_fontdatabase_ft.h>
 #endif
-
-#include <qwin_fontdatabase.h>
 
 #ifndef QT_NO_CLIPBOARD
 #  include <qwin_clipboard.h>
 #ifndef QT_NO_DRAGANDDROP
 #  include <qwin_drag.h>
 #endif
-#endif
-
-#ifndef QT_NO_ACCESSIBILITY
-#  include <qwin_accessibility.h>
 #endif
 
 #if ! defined(QT_NO_SESSIONMANAGER)
@@ -60,11 +63,6 @@
 #if ! defined(QT_NO_OPENGL) && ! defined(QT_OPENGL_ES_2)
 #  include <qwin_gl_context.h>
 #endif
-
-#include <qdebug.h>
-#include <qvariant.h>
-#include <qplatform_nativeinterface.h>
-#include <qwindowsysteminterface.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>

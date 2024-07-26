@@ -27,6 +27,7 @@
 #include <qglobal.h>
 
 class QAbstractEventDispatcher;
+
 QAbstractEventDispatcher *createUnixEventDispatcher();
 
 #endif

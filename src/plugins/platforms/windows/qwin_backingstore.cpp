@@ -23,12 +23,11 @@
 
 #include <qwin_backingstore.h>
 
-#include <qdebug.h>
-#include <qwindow.h>
 #include <qpainter.h>
-#include <qwin_window.h>
-#include <qwin_nativeimage.h>
 #include <qwin_context.h>
+#include <qwin_nativeimage.h>
+#include <qwin_window.h>
+#include <qwindow.h>
 
 #include <qhighdpiscaling_p.h>
 #include <qimage_p.h>

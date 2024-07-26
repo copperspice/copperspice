@@ -22,9 +22,9 @@
 ***********************************************************************/
 
 #include <qwin_internal_mimedata.h>
+
 #include <qwin_context.h>
 #include <qwin_mime.h>
-#include <qdebug.h>
 
 bool QWindowsInternalMimeData::hasFormat_sys(const QString &mime) const
 {

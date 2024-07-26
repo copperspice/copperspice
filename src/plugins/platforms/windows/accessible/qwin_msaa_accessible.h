@@ -28,9 +28,9 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include <qwin_additional.h>
-#include <qsharedpointer.h>
 #include <qaccessible.h>
+#include <qsharedpointer.h>
+#include <qwin_additional.h>
 
 #include <basetyps.h>
 #include <oleacc.h>

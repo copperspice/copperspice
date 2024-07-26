@@ -22,18 +22,18 @@
 ***********************************************************************/
 
 #include <qwin_fontdatabase.h>
-#include <qwin_fontdatabase_ft.h>
-#include <qwin_context.h>
-#include <qwin_fontengine.h>
-#include <qwin_additional.h>
 
-#include <qfont.h>
 #include <qapplication.h>
-#include <qmath.h>
 #include <qdebug.h>
 #include <qendian.h>
+#include <qfont.h>
+#include <qmath.h>
 #include <qtextcodec.h>
 #include <qthreadstorage.h>
+#include <qwin_additional.h>
+#include <qwin_context.h>
+#include <qwin_fontdatabase_ft.h>
+#include <qwin_fontengine.h>
 
 #include <qhighdpiscaling_p.h>
 #include <qsystemlibrary_p.h>

@@ -26,9 +26,9 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-#include <qwin_global.h>
-#include <qwin_context.h>
 #include <qplatform_accessibility.h>
+#include <qwin_context.h>
+#include <qwin_global.h>
 
 #include <oleacc.h>
 

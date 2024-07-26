@@ -23,15 +23,15 @@
 
 #include <qwin_nativeinterface.h>
 
-#include <qwin_window.h>
+#include <qopenglcontext.h>
 #include <qwin_context.h>
 #include <qwin_fontdatabase.h>
-#include <qwin_opengl_context.h>
-#include <qwin_opengl_tester.h>
 #include <qwin_integration.h>
 #include <qwin_mime.h>
+#include <qwin_opengl_context.h>
+#include <qwin_opengl_tester.h>
+#include <qwin_window.h>
 #include <qwindow.h>
-#include <qopenglcontext.h>
 
 enum ResourceType {
    RenderingContextType,

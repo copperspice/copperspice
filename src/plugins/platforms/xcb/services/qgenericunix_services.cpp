@@ -23,10 +23,10 @@
 
 #include <qgenericunix_services_p.h>
 
-#include <qstandardpaths.h>
-#include <qprocess.h>
-#include <qurl.h>
 #include <qdebug.h>
+#include <qprocess.h>
+#include <qstandardpaths.h>
+#include <qurl.h>
 
 #include <stdlib.h>
 

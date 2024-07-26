@@ -22,14 +22,15 @@
 ***********************************************************************/
 
 #include <qwin_gl_context.h>
-#include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_integration.h>
-#include <qdebug.h>
-#include <qsysinfo.h>
+
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qplatform_nativeinterface.h>
+#include <qsysinfo.h>
 #include <qwglnativecontext.h>
+#include <qwin_context.h>
+#include <qwin_integration.h>
+#include <qwin_window.h>
 
 #include <algorithm>
 

@@ -25,6 +25,7 @@
 #define QFONTENGINE_MULTIFONTCONFIG_P_H
 
 #include <qvector.h>
+
 #include <qfontengine_p.h>
 
 // unix libraray

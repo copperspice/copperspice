@@ -25,6 +25,7 @@
 #define QUNIX_EVENTDISPATCHER_P_H
 
 #include <qglobal.h>
+
 #include <qeventdispatcher_unix_p.h>
 
 class QUnixEventDispatcherPrivate;

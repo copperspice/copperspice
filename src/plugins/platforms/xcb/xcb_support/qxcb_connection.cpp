@@ -22,24 +22,24 @@
 ***********************************************************************/
 
 #include <qxcb_connection.h>
-#include <qxcb_keyboard.h>
-#include <qxcb_screen.h>
-#include <qxcb_window.h>
+
+#include <qabstracteventdispatcher.h>
+#include <qbytearray.h>
+#include <qdebug.h>
+#include <qscopedpointer.h>
+#include <qsocketnotifier.h>
+#include <qtimer.h>
 #include <qxcb_clipboard.h>
 #include <qxcb_drag.h>
-#include <qxcb_wm_support.h>
-#include <qxcb_nativeinterface.h>
-#include <qxcb_integration.h>
-#include <qxcb_systemtraytracker.h>
-#include <qxcb_gl_integrationfactory.h>
 #include <qxcb_gl_integration.h>
-
-#include <qdebug.h>
-#include <qsocketnotifier.h>
-#include <qabstracteventdispatcher.h>
-#include <qtimer.h>
-#include <qbytearray.h>
-#include <qscopedpointer.h>
+#include <qxcb_gl_integrationfactory.h>
+#include <qxcb_integration.h>
+#include <qxcb_keyboard.h>
+#include <qxcb_nativeinterface.h>
+#include <qxcb_screen.h>
+#include <qxcb_systemtraytracker.h>
+#include <qxcb_window.h>
+#include <qxcb_wm_support.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>

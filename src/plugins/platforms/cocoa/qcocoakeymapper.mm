@@ -23,8 +23,8 @@
 
 #include <qcocoakeymapper.h>
 
-#include <QDebug>
-#include <QApplication>
+#include <qapplication.h>
+#include <qdebug.h>
 
 // Possible modifier states.
 // NOTE: The order of these states match the order in updatePossibleKeyCodes()!

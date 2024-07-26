@@ -35,7 +35,6 @@
 #include <qwin_window.h>
 #include <qwin_mousehandler.h>
 #include <qwin_cursor.h>
-#include <qdebug.h>
 #include <qbuffer.h>
 #include <qpoint.h>
 #include <QMouseEvent>

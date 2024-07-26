@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
 #include <qendian.h>
+#include <qglobal.h>
 #include <qsettings.h>
 
 #include <qcoretextfontdatabase_p.h>

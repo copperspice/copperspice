@@ -25,9 +25,9 @@
 #define QCORETEXTFONTDATABASE_H
 
 #include <qglobal.h>
-
 #include <qplatform_fontdatabase.h>
 #include <qplatform_theme.h>
+
 #include <qcore_mac_p.h>
 
 #include <ApplicationServices/ApplicationServices.h>

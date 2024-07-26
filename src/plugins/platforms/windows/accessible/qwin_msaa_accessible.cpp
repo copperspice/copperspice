@@ -24,20 +24,20 @@
 #ifndef QT_NO_ACCESSIBILITY
 
 #include <qwin_msaa_accessible.h>
-#include <qwin_accessibility.h>
-#include <comutils.h>
 
+#include <qapplication.h>
 #include <qdebug.h>
 #include <qmap.h>
 #include <qpair.h>
-#include <qsettings.h>
-#include <qapplication.h>
 #include <qplatform_nativeinterface.h>
-#include <qwindow.h>
+#include <qsettings.h>
+#include <qwin_accessibility.h>
 #include <qwin_additional.h>
+#include <qwindow.h>
 
 #include <qhighdpiscaling_p.h>
 
+#include <comutils.h>
 #include <servprov.h>
 #include <winuser.h>
 

@@ -27,26 +27,26 @@
 #  define _WIN32_WINNT 0x0600
 #endif
 
-#include <qalgorithms.h>
 #include <qwin_theme.h>
-#include <qwin_dialoghelpers.h>
-#include <qwin_context.h>
-#include <qwin_integration.h>
-#include <qwin_fontdatabase.h>
 
-#include <qwindowsysteminterface.h>
+#include <qalgorithms.h>
+#include <qapplication.h>
+#include <qcache.h>
+#include <qcolor.h>
+#include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qpixmapcache.h>
+#include <qsysinfo.h>
 #include <qt_windows.h>
-#include <QVariant>
-#include <QCoreApplication>
-#include <QDebug>
-#include <QTextStream>
-#include <QSysInfo>
-#include <QCache>
-#include <QColor>
-#include <QPalette>
-#include <QApplication>
-#include <QPainter>
-#include <QPixmapCache>
+#include <qtextstream.h>
+#include <qvariant.h>
+#include <qwin_context.h>
+#include <qwin_dialoghelpers.h>
+#include <qwin_fontdatabase.h>
+#include <qwin_integration.h>
+#include <qwindowsysteminterface.h>
 
 #include <qhighdpiscaling_p.h>
 #include <qsystemlibrary_p.h>

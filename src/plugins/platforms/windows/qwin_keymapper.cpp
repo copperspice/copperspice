@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qwin_keymapper.h>
-#include <qwin_context.h>
-#include <qwin_integration.h>
-#include <qwin_window.h>
-#include <qwin_inputcontext.h>
-#include <qwin_gui_eventdispatcher_p.h>
+
 #include <qapplication.h>
 #include <qkeyevent.h>
+#include <qwin_context.h>
+#include <qwin_gui_eventdispatcher_p.h>
+#include <qwin_inputcontext.h>
+#include <qwin_integration.h>
+#include <qwin_window.h>
 #include <qwindow.h>
 #include <qwindowsysteminterface.h>
 

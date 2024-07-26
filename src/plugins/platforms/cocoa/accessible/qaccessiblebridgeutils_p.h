@@ -24,8 +24,8 @@
 #ifndef QACCESSIBLEBRIDGEUTILS_H
 #define QACCESSIBLEBRIDGEUTILS_H
 
-#include <qstringlist.h>
 #include <qaccessible.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

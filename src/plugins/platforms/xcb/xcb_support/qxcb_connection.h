@@ -29,8 +29,8 @@
 #include <qmutex.h>
 #include <qobject.h>
 #include <qthread.h>
-#include <qvector.h>
 #include <qvarlengtharray.h>
+#include <qvector.h>
 #include <qwindowsysteminterface.h>
 #include <qxcb_export.h>
 
@@ -65,19 +65,18 @@ struct XInput2TouchDeviceData;
 
 struct xcb_randr_get_output_info_reply_t;
 
-class QXcbVirtualDesktop;
-class QXcbScreen;
-class QXcbWindow;
-class QXcbDrag;
-class QXcbKeyboard;
-class QXcbClipboard;
-class QXcbWMSupport;
-class QXcbNativeInterface;
-class QXcbSystemTrayTracker;
-class QXcbGlIntegration;
-
 class QAbstractEventDispatcher;
+class QXcbClipboard;
 class QXcbConnection;
+class QXcbDrag;
+class QXcbGlIntegration;
+class QXcbKeyboard;
+class QXcbNativeInterface;
+class QXcbScreen;
+class QXcbSystemTrayTracker;
+class QXcbVirtualDesktop;
+class QXcbWMSupport;
+class QXcbWindow;
 class QXcbWindowEventListener;
 
 using QXcbEventArray = QVarLengthArray<xcb_generic_event_t *, 64>;

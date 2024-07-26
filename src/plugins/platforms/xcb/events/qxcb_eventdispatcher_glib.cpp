@@ -24,8 +24,8 @@
 #include <qxcb_eventdispatcher_glib_p.h>
 
 #include <qapplication.h>
-#include <qplatformdefs.h>
 #include <qdebug.h>
+#include <qplatformdefs.h>
 
 #include <qapplication_p.h>
 

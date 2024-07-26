@@ -22,16 +22,15 @@
 ***********************************************************************/
 
 #include <qwin_ole.h>
-#include <qwin_mime.h>
-#include <qwin_context.h>
 
-#include <qmouseevent.h>
-#include <qwindow.h>
-#include <qpainter.h>
-#include <qcursor.h>
 #include <qapplication.h>
+#include <qcursor.h>
 #include <qmimedata.h>
-#include <qdebug.h>
+#include <qmouseevent.h>
+#include <qpainter.h>
+#include <qwin_context.h>
+#include <qwin_mime.h>
+#include <qwindow.h>
 
 #include <shlobj.h>
 

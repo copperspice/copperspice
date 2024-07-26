@@ -25,19 +25,19 @@
 
 #ifndef QT_NO_FILEDIALOG
 
+#include <qabstracteventdispatcher.h>
 #include <qapplication.h>
+#include <qbuffer.h>
+#include <qcocoaeventdispatcher.h>
 #include <qcocoahelpers.h>
 #include <qcocoamenubar.h>
-#include <qcocoaeventdispatcher.h>
-#include <qbuffer.h>
 #include <qdebug.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-#include <qvarlengtharray.h>
-#include <qabstracteventdispatcher.h>
 #include <qdir.h>
 #include <qplatform_nativeinterface.h>
 #include <qregularexpression.h>
+#include <qstringlist.h>
+#include <qtextcodec.h>
+#include <qvarlengtharray.h>
 
 #include <qapplication_p.h>
 #include <qt_mac_p.h>

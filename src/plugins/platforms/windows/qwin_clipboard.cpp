@@ -26,15 +26,14 @@
 #include <qwin_ole.h>
 #include <qwin_mime.h>
 
-#include <QApplication>
-#include <QClipboard>
-#include <QColor>
-#include <QImage>
-#include <QDebug>
-#include <QMimeData>
-#include <QStringList>
-#include <QVariant>
-#include <QUrl>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qcolor.h>
+#include <qimage.h>
+#include <qmimedata.h>
+#include <qstringlist.h>
+#include <qurl.h>
+#include <qvariant.h>
 
 #include <qwin_gui_eventdispatcher_p.h>
 

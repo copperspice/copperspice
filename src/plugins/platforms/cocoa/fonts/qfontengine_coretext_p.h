@@ -24,8 +24,8 @@
 #ifndef QFONTENGINE_CORETEXT_P_H
 #define QFONTENGINE_CORETEXT_P_H
 
-#include <qfontengine_p.h>
 #include <qcore_mac_p.h>
+#include <qfontengine_p.h>
 
 #include <ApplicationServices/ApplicationServices.h>
 

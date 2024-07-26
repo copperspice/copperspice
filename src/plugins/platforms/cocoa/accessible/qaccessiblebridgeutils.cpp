@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qaccessiblebridgeutils_p.h>
+
 #include <qmath.h>
 
 #ifndef QT_NO_ACCESSIBILITY

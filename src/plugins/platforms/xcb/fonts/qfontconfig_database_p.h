@@ -25,6 +25,7 @@
 #define QFONTCONFIG_DATABASE_P_H
 
 #include <qplatform_fontdatabase.h>
+
 #include <qbasicfontdatabase_p.h>
 
 class QFontEngineFT;

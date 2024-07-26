@@ -23,11 +23,11 @@
 
 #include <qxcb_systemtraytracker.h>
 
-#include <qxcb_connection.h>
-#include <qxcb_screen.h>
 #include <qdebug.h>
 #include <qrect.h>
 #include <qscreen.h>
+#include <qxcb_connection.h>
+#include <qxcb_screen.h>
 
 #include <qplatform_nativeinterface.h>
 

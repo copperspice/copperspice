@@ -22,40 +22,40 @@
 ***********************************************************************/
 
 #include <qwin_context.h>
-#include <qwin_integration.h>
-#include <qwin_window.h>
-#include <qwin_keymapper.h>
-#include <qwin_mousehandler.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qhash.h>
+#include <qplatform_nativeinterface.h>
+#include <qscopedarraypointer.h>
+#include <qset.h>
+#include <qstringlist.h>
+#include <qsysinfo.h>
 #include <qwin_global.h>
-#include <qwin_mime.h>
 #include <qwin_inputcontext.h>
-#include <qwin_theme.h>
+#include <qwin_integration.h>
+#include <qwin_keymapper.h>
+#include <qwin_mime.h>
+#include <qwin_mousehandler.h>
 #include <qwin_screen.h>
 #include <qwin_theme.h>
+#include <qwin_theme.h>
+#include <qwin_window.h>
+#include <qwindow.h>
+#include <qwindowsysteminterface.h>
+
+#include <qapplication_p.h>
+#include <qsystemlibrary_p.h>
+#include <qwin_gui_eventdispatcher_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 # include <qwin_accessibility.h>
 #endif
 
 #if ! defined(QT_NO_SESSIONMANAGER)
-# include <qsessionmanager_p.h>
 # include <qwin_session_manager.h>
+# include <qsessionmanager_p.h>
 #endif
-
-#include <qwindow.h>
-#include <qwindowsysteminterface.h>
-#include <qplatform_nativeinterface.h>
-#include <QApplication>
-#include <QSet>
-#include <QHash>
-#include <QStringList>
-#include <QDebug>
-#include <QSysInfo>
-#include <QScopedArrayPointer>
-
-#include <qapplication_p.h>
-#include <qsystemlibrary_p.h>
-#include <qwin_gui_eventdispatcher_p.h>
 
 #include <stdlib.h>
 #include <stdio.h>

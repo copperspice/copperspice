@@ -23,9 +23,9 @@
 
 #include <qwin_gui_eventdispatcher_p.h>
 
-#include <qwindowsysteminterface.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qwindowsysteminterface.h>
 
 QWindowsGuiEventDispatcher::QWindowsGuiEventDispatcher(QObject *parent) :
     QEventDispatcherWin32(parent), m_flags(Qt::EmptyFlag)

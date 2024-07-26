@@ -22,29 +22,28 @@
 ***********************************************************************/
 
 #include <qcocoawindow.h>
-#include <qcocoaintegration.h>
-#include <qnswindowdelegate.h>
+
 #include <qcocoaeventdispatcher.h>
+#include <qcocoahelpers.h>
+#include <qcocoaintegration.h>
+#include <qcocoanativeinterface.h>
+#include <qdebug.h>
+#include <qfileinfo.h>
+#include <qnsview.h>
+#include <qnswindowdelegate.h>
+#include <qplatform_screen.h>
+#include <qwindow.h>
+#include <qwindowsysteminterface.h>
 
 #ifndef QT_NO_OPENGL
 #include <qcocoaglcontext.h>
 #endif
-
-#include <qcocoahelpers.h>
-#include <qcocoanativeinterface.h>
-#include <qnsview.h>
-#include <qfileinfo.h>
-#include <qwindow.h>
-#include <qwindowsysteminterface.h>
-#include <qplatform_screen.h>
 
 #include <qcore_mac_p.h>
 #include <qwindow_p.h>
 
 #include <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
-
-#include <qdebug.h>
 
 static constexpr const int defaultWindowWidth  = 160;
 static constexpr const int defaultWindowHeight = 160;

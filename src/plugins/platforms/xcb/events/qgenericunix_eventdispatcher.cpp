@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qgenericunix_eventdispatcher_p.h>
+
 #include <qunix_eventdispatcher_p.h>
 
 #if ! defined(QT_NO_GLIB) && ! defined(Q_OS_WIN)

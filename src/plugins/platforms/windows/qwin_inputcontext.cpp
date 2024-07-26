@@ -21,21 +21,21 @@
 *
 ***********************************************************************/
 
-#include <qwin_inputcontext.h>
 #include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_integration.h>
-#include <qwin_mousehandler.h>
 
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qinputmethodevent.h>
 #include <qobject.h>
+#include <qpalette.h>
 #include <qrect.h>
 #include <qrectf.h>
 #include <qtextboundaryfinder.h>
-#include <qinputmethodevent.h>
 #include <qtextcharformat.h>
-#include <qpalette.h>
-#include <qapplication.h>
+#include <qwin_inputcontext.h>
+#include <qwin_integration.h>
+#include <qwin_mousehandler.h>
+#include <qwin_window.h>
 
 #include <qhighdpiscaling_p.h>
 

@@ -22,19 +22,20 @@
 ***********************************************************************/
 
 #include <qwin_screen.h>
-#include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_integration.h>
-#include <qwin_cursor.h>
-#include <qwin_additional.h>
 
-#include <QSettings>
-#include <QPixmap>
-#include <QApplication>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qpixmap.h>
+#include <qscreen.h>
+#include <qsettings.h>
+#include <qwin_additional.h>
+#include <qwin_context.h>
+#include <qwin_cursor.h>
+#include <qwin_integration.h>
+#include <qwin_window.h>
 #include <qwindowsysteminterface.h>
+
 #include <qhighdpiscaling_p.h>
-#include <QScreen>
-#include <QDebug>
 
 QWindowsScreenData::QWindowsScreenData()
    : dpi(96, 96), depth(32), format(QImage::Format_ARGB32_Premultiplied),

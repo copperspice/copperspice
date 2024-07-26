@@ -23,14 +23,13 @@
 
 #include <qunix_eventdispatcher_p.h>
 
+#include <qatomicint.h>
 #include <qcoreapplication.h>
-#include <qapplication_p.h>
-
+#include <qelapsedtimer.h>
+#include <qsemaphore.h>
 #include <qwindowsysteminterface.h>
-#include <QElapsedTimer>
-#include <QAtomicInt>
-#include <QSemaphore>
-#include <QDebug>
+
+#include <qapplication_p.h>
 
 #include <errno.h>
 

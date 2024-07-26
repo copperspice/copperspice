@@ -24,12 +24,14 @@
 #ifndef QWINDOWSGLCONTEXT_H
 #define QWINDOWSGLCONTEXT_H
 
-#include <array.h>
+#include <qdebug.h>
+#include <qopenglcontext.h>
 #include <qwin_additional.h>
 #include <qwin_opengl_context.h>
-#include <qopenglcontext.h>
 
-class QDebug;
+#include <array.h>
+
+class QOpenGLStaticContext;
 
 enum QWindowsGLFormatFlags {
    QWindowsGLDirectRendering = 0x1,
@@ -64,8 +66,6 @@ struct QOpenGLContextData {
    HWND hwnd;
    HDC hdc;
 };
-
-class QOpenGLStaticContext;
 
 struct QWindowsOpenGLContextFormat {
    QWindowsOpenGLContextFormat();

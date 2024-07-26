@@ -26,10 +26,11 @@
 
 #include <qeventdispatcher_glib_p.h>
 
-using GMainContext = struct _GMainContext;
-
 class QXcbEventDispatcherGlibPrivate;
+
 struct GUserEventSource;
+
+using GMainContext = struct _GMainContext;
 
 class QXcbEventDispatcherGlib : public QEventDispatcherGlib
 {

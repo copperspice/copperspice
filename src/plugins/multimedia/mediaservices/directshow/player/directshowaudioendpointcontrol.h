@@ -24,7 +24,7 @@
 #ifndef DIRECTSHOWAUDIOENDPOINTCONTROL_H
 #define DIRECTSHOWAUDIOENDPOINTCONTROL_H
 
-#include "qaudiooutputselectorcontrol.h"
+#include <qaudiooutputselectorcontrol.h>
 
 #include <dshow.h>
 

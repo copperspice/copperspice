@@ -25,7 +25,7 @@
 #define COMUTILS_H
 
 #if ! defined(_WINDOWS_) && ! defined(_WINDOWS_H) && ! defined(__WINDOWS__)
-#error Must include windows.h first
+#error Must include windows.h before including this header
 #endif
 
 #include <qstring.h>

@@ -23,21 +23,21 @@
 
 #include <qgenericunix_theme_p.h>
 
-#include <QPalette>
-#include <QFont>
-#include <QApplication>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QDebug>
-#include <QHash>
-#include <QSettings>
-#include <QVariant>
-#include <QStandardPaths>
-#include <QStringList>
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qfont.h>
+#include <qhash.h>
+#include <qpalette.h>
+#include <qplatform_dialoghelper.h>
 #include <qplatform_integration.h>
 #include <qplatform_services.h>
-#include <qplatform_dialoghelper.h>
+#include <qsettings.h>
+#include <qstandardpaths.h>
+#include <qstringlist.h>
+#include <qvariant.h>
 
 #include <qapplication_p.h>
 #include <qgenericunix_services_p.h>

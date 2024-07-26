@@ -24,11 +24,11 @@
 #ifndef QWINDOWSCONTEXT_H
 #define QWINDOWSCONTEXT_H
 
-#include <qwin_global.h>
-#include <qwin_additional.h>
+#include <qlist.h>
 #include <qscopedpointer.h>
 #include <qsharedpointer.h>
-#include <qlist.h>
+#include <qwin_additional.h>
+#include <qwin_global.h>
 
 #define STRICT_TYPED_ITEMIDS
 #include <shlobj.h>

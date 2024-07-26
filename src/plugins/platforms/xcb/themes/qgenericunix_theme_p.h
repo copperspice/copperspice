@@ -24,10 +24,10 @@
 #ifndef QGENERICUNIX_THEME_P_H
 #define QGENERICUNIX_THEME_P_H
 
+#include <qfont.h>
 #include <qplatform_theme.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qfont.h>
 
 class QGenericUnixThemePrivate;
 class QGnomeThemePrivate;

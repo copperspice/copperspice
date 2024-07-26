@@ -24,25 +24,24 @@
 #include <qxcb_window.h>
 
 #include <qdebug.h>
-#include <qtextcodec.h>
-#include <qmetaenum.h>
-#include <qscreen.h>
 #include <qicon.h>
-#include <qregion.h>
-
-#include <qxcb_integration.h>
-#include <qxcb_connection.h>
-#include <qxcb_screen.h>
-#include <qxcb_drag.h>
-#include <qxcb_keyboard.h>
-#include <qxcb_wm_support.h>
-#include <qxcb_image.h>
-#include <qxcb_nativeinterface.h>
-#include <qxcb_systemtraytracker.h>
-#include <qplatform_integration.h>
-#include <qplatform_cursor.h>
+#include <qmetaenum.h>
 #include <qplatform_backingstore.h>
+#include <qplatform_cursor.h>
+#include <qplatform_integration.h>
+#include <qregion.h>
+#include <qscreen.h>
+#include <qtextcodec.h>
 #include <qwindowsysteminterface.h>
+#include <qxcb_connection.h>
+#include <qxcb_drag.h>
+#include <qxcb_image.h>
+#include <qxcb_integration.h>
+#include <qxcb_keyboard.h>
+#include <qxcb_nativeinterface.h>
+#include <qxcb_screen.h>
+#include <qxcb_systemtraytracker.h>
+#include <qxcb_wm_support.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
@@ -50,11 +49,11 @@
 
 #include <algorithm>
 
+#include <stdio.h>
+
 #include <xcb/xcb_icccm.h>
 #include <xcb/xfixes.h>
 #include <xcb/shape.h>
-
-#include <stdio.h>
 
 #ifdef XCB_USE_XLIB
 #include <X11/Xlib.h>

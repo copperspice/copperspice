@@ -26,7 +26,6 @@
 #include <qtextcodec.h>
 #include <qimagewriter.h>
 #include <qbuffer.h>
-#include <qdebug.h>
 
 #include <X11/Xutil.h>
 

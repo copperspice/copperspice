@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
+#include <qdebug.h>
+#include <qtouchdevice.h>
+#include <qwindowsysteminterface.h>
 #include <qxcb_connection.h>
 #include <qxcb_keyboard.h>
 #include <qxcb_screen.h>
 #include <qxcb_window.h>
-#include <qtouchdevice.h>
-#include <qwindowsysteminterface.h>
-#include <qdebug.h>
 
 #include <cmath>
 
