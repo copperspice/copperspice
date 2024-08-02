@@ -1160,6 +1160,18 @@ QOpenGLStaticContext *QOpenGLStaticContext::create(bool softwareRendering)
 
    QOpenGLStaticContext *result = new QOpenGLStaticContext;
 
+   // test OpenGL version
+   const QWindowsOpenGLContextFormat format = QWindowsOpenGLContextFormat::current();
+
+   const int majorVersion = format.m_version >> 8;
+   const int minorVersion = format.m_version & 0xFF;
+
+   if (majorVersion < 2) {
+      qWarning("\n ** QOpenGLWidget::create() OpenGL version %d.%d is too low, update video drivers", majorVersion, minorVersion);
+      delete result;
+
+      return nullptr;
+   }
 
    return result;
 }

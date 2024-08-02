@@ -292,9 +292,17 @@ void QOpenGLWidgetPrivate::initialize()
    ctx->setScreen(shareContext->screen());
 
    if (! ctx->create()) {
+      // will happen if OpenGL version is too low
+
+      // moved call to initialize()
+      // setRenderToTexture();
+
       qWarning("QOpenGLWidget::initialize() Failed to create an OpenGL context");
       return;
    }
+
+   // moved from QOpenGLWidget constructor
+   setRenderToTexture();
 
    // Propagate settings that make sense only for the tlw.
    QSurfaceFormat tlwFormat = tlw->windowHandle()->format();
@@ -467,10 +475,10 @@ void QOpenGLWidgetPrivate::resizeViewportFramebuffer()
 QOpenGLWidget::QOpenGLWidget(QWidget *parent, Qt::WindowFlags flags)
    : QWidget(*(new QOpenGLWidgetPrivate), parent, flags)
 {
-   Q_D(QOpenGLWidget);
-
    if (QGuiApplicationPrivate::platformIntegration()->hasCapability(QPlatformIntegration::RasterGLSurface)) {
-      d->setRenderToTexture();
+      // moved to initialize() after testing for context and version
+      // d->setRenderToTexture();
+
    } else {
       qWarning("QOpenGLWidget() Class not supported on this platform");
    }
