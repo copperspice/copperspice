@@ -354,7 +354,12 @@ const QString &QMetaObject_T<T>::getInterface_iid() const
 template<class T>
 const QMetaObject *QMetaObject_T<T>::superClass() const
 {
-   return &T::cs_parent::staticMetaObject();
+   if constexpr (std::is_same_v<typename T::cs_parent, CSGadget_Fake_Parent>) {
+      return nullptr;
+
+   } else {
+      return &T::cs_parent::staticMetaObject();
+   }
 }
 
 template<>

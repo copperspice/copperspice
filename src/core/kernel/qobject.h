@@ -485,10 +485,9 @@ class Q_CORE_EXPORT CSAbstractDeclarativeData
 };
 
 // **
-class Q_CORE_EXPORT CSGadget_Fake_Parent
+class Q_CORE_EXPORT CSGadget_Fake_Parent final
 {
- public:
-   static const QMetaObject &staticMetaObject();
+   // no code should appear here
 };
 
 // **

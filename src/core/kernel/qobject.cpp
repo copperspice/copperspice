@@ -1298,10 +1298,3 @@ void (*CSAbstractDeclarativeData::destroyed)(CSAbstractDeclarativeData *, QObjec
 void (*CSAbstractDeclarativeData::parentChanged)(CSAbstractDeclarativeData *, QObject *, QObject *) = nullptr;
 void (*CSAbstractDeclarativeData::signalEmitted)(CSAbstractDeclarativeData *, QObject *, int, void **) = nullptr;
 int  (*CSAbstractDeclarativeData::receivers)(CSAbstractDeclarativeData *, const QObject *, int) = nullptr;
-
-// **
-const QMetaObject &CSGadget_Fake_Parent::staticMetaObject()
-{
-   const QMetaObject *retval = nullptr;
-   return *retval;
-}
