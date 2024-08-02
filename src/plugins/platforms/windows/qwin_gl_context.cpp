@@ -439,20 +439,8 @@ static inline bool isAcceptableFormat(const QWindowsOpenGLAdditionalFormat &addi
    const bool colorOk =  !pixmapRequested || pfd.cColorBits == additional.pixmapDepth;
    const bool glOk = ignoreGLSupport || testFlag(pfd.dwFlags, PFD_SUPPORT_OPENGL);
    const bool overlayOk = hasGLOverlay(pfd) == testFlag(additional.formatFlags, QWindowsGLOverlay);
+
    return pixmapOk && glOk && overlayOk && colorOk;
-}
-
-static void describeFormats(HDC hdc)
-{
-   const int pfiMax = DescribePixelFormat(hdc, 0, 0, nullptr);
-
-   for (int i = 0; i < pfiMax; i++) {
-      PIXELFORMATDESCRIPTOR pfd;
-      initPixelFormatDescriptor(&pfd);
-      DescribePixelFormat(hdc, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
-
-
-   }
 }
 
 // Classic GDI API
