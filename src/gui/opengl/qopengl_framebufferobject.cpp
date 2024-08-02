@@ -414,6 +414,10 @@ void QOpenGLFramebufferObjectPrivate::initTexture(int idx)
     funcs.glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     funcs.glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+    if (idx < 0 || idx >= colorAttachments.size()) {
+      return;
+    }
+
     ColorAttachment &color(colorAttachments[idx]);
 
     GLuint pixelType = GL_UNSIGNED_BYTE;
@@ -458,6 +462,9 @@ void QOpenGLFramebufferObjectPrivate::initColorBuffer(int idx, GLint *samples)
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     GLuint color_buffer = 0;
 
+    if (idx < 0 || idx >= colorAttachments.size()) {
+      return;
+    }
 
     ColorAttachment &color(colorAttachments[idx]);
     GLenum storageFormat = color.internalFormat;
@@ -867,7 +874,13 @@ bool QOpenGLFramebufferObject::release()
 GLuint QOpenGLFramebufferObject::texture() const
 {
     Q_D(const QOpenGLFramebufferObject);
-    return d->colorAttachments[0].guard ? d->colorAttachments[0].guard->id() : 0;
+
+    if (d->colorAttachments.isEmpty()) {
+       return 0;
+
+    } else {
+       return d->colorAttachments[0].guard ? d->colorAttachments[0].guard->id() : 0;
+    }
 }
 
 QVector<GLuint> QOpenGLFramebufferObject::textures() const
