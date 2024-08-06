@@ -23,7 +23,16 @@
 *
 ***********************************************************************</comment>
  <class>TranslateDialog</class>
- <widget class="QDialog" name="translateDialog">
+ <widget class="QDialog" name="TranslateDialog">
+  <property name="whatsThis">
+   <string>This window allows you to search for some text in the translation source file.</string>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,20 +41,20 @@
     <height>174</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="whatsThis">
-   <string>This window allows you to search for some text in the translation source file.</string>
-  </property>
   <layout class="QHBoxLayout">
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
     <number>9</number>
    </property>
    <item>
@@ -53,12 +62,30 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <property name="spacing">
@@ -108,11 +135,11 @@
        <layout class="QVBoxLayout">
         <item>
          <widget class="QCheckBox" name="ckMatchCase">
-          <property name="whatsThis">
-           <string>Texts such as 'TeX' and 'tex' are considered as different when checked.</string>
-          </property>
           <property name="text">
            <string>Match &amp;case</string>
+          </property>
+          <property name="whatsThis">
+           <string>Texts such as 'TeX' and 'tex' are considered as different when checked.</string>
           </property>
          </widget>
         </item>
@@ -125,14 +152,14 @@
         </item>
         <item>
          <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>40</height>
            </size>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
          </spacer>
         </item>
@@ -146,22 +173,31 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="findNxt">
-       <property name="whatsThis">
-        <string>Click here to find the next occurrence of the text you typed in.</string>
-       </property>
-       <property name="text">
-        <string>Find Next</string>
+       <property name="flat">
+        <bool>false</bool>
        </property>
        <property name="default">
         <bool>true</bool>
        </property>
-       <property name="flat">
-        <bool>false</bool>
+       <property name="text">
+        <string>Find Next</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to find the next occurrence of the text you typed in.</string>
        </property>
       </widget>
      </item>
@@ -181,19 +217,16 @@
      </item>
      <item>
       <widget class="QPushButton" name="cancel">
-       <property name="whatsThis">
-        <string>Click here to close this window.</string>
-       </property>
        <property name="text">
         <string>Cancel</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to close this window.</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
        <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
@@ -202,6 +235,9 @@
          <width>20</width>
          <height>51</height>
         </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </spacer>
      </item>
@@ -221,22 +257,5 @@
   <tabstop>ckMarkFinished</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>cancel</sender>
-   <signal>clicked()</signal>
-   <receiver>translateDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>360</x>
-     <y>132</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>357</x>
-     <y>151</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

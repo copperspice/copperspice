@@ -24,6 +24,9 @@
 ***********************************************************************</comment>
  <class>QFileDialog</class>
  <widget class="QDialog" name="QFileDialog">
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -31,9 +34,6 @@
     <width>521</width>
     <height>316</height>
    </rect>
-  </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
   </property>
   <layout class="QGridLayout">
    <item row="0" column="0">
@@ -63,6 +63,9 @@
      </item>
      <item>
       <widget class="QToolButton" name="backButton">
+       <property name="shortcut">
+        <string>Alt+Left</string>
+       </property>
        <property name="toolTip">
         <string>Back</string>
        </property>
@@ -72,13 +75,13 @@
        <property name="accessibleDescription">
         <string>Go back</string>
        </property>
-       <property name="shortcut">
-        <string>Alt+Left</string>
-       </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="forwardButton">
+       <property name="shortcut">
+        <string>Alt+Right</string>
+       </property>
        <property name="toolTip">
         <string>Forward</string>
        </property>
@@ -88,13 +91,13 @@
        <property name="accessibleDescription">
         <string>Go forward</string>
        </property>
-       <property name="shortcut">
-        <string>Alt+Right</string>
-       </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="toParentButton">
+       <property name="shortcut">
+        <string>Alt+Up</string>
+       </property>
        <property name="toolTip">
         <string>Parent Directory</string>
        </property>
@@ -103,9 +106,6 @@
        </property>
        <property name="accessibleDescription">
         <string>Go to the parent directory</string>
-       </property>
-       <property name="shortcut">
-        <string>Alt+Up</string>
        </property>
       </widget>
      </item>
@@ -152,17 +152,17 @@
    </item>
    <item row="1" column="0" colspan="3">
     <widget class="QSplitter" name="splitter">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="childrenCollapsible">
       <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
      <widget class="QSidebar" name="sidebar">
       <property name="accessibleName">
@@ -286,24 +286,24 @@
    </item>
    <item row="2" column="2" rowspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
     </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="fileTypeLabel">
+     <property name="text">
+      <string>Files of type:</string>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Files of type:</string>
      </property>
     </widget>
    </item>

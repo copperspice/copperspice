@@ -23,7 +23,10 @@
 *
 ***********************************************************************</comment>
  <class>Statistics</class>
- <widget class="QDialog" name="linguist_stats">
+ <widget class="QDialog" name="Statistics">
+  <property name="windowTitle">
+   <string>Statistics</string>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,17 +35,11 @@
     <height>169</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Statistics</string>
-  </property>
   <layout class="QGridLayout">
    <item row="1" column="0">
     <layout class="QHBoxLayout">
      <item>
       <spacer name="spacer4_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
        <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
@@ -51,6 +48,9 @@
          <width>40</width>
          <height>20</height>
         </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </spacer>
      </item>
@@ -63,9 +63,6 @@
      </item>
      <item>
       <spacer name="spacer4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
        <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
@@ -74,6 +71,9 @@
          <width>40</width>
          <height>20</height>
         </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </spacer>
      </item>
@@ -172,22 +172,5 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>closeBtn</sender>
-   <signal>clicked()</signal>
-   <receiver>linguist_stats</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>179</x>
-     <y>144</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>239</x>
-     <y>142</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

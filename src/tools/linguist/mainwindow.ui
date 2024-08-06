@@ -24,6 +24,9 @@
 ***********************************************************************</comment>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,9 +35,6 @@
     <height>461</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
-  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -42,7 +42,7 @@
      <x>0</x>
      <y>0</y>
      <width>673</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPhrases">
@@ -191,25 +191,25 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
-   <property name="text">
-    <string>&amp;Open</string>
-   </property>
    <property name="whatsThis">
     <string>Open a translation source file (TS file) for editing</string>
+   </property>
+   <property name="text">
+    <string>&amp;Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="whatsThis">
+    <string>Close this window and exit.</string>
+   </property>
    <property name="text">
     <string>E&amp;xit</string>
    </property>
    <property name="statusTip">
     <string/>
-   </property>
-   <property name="whatsThis">
-    <string>Close this window and exit.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -219,52 +219,49 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
-   </property>
    <property name="whatsThis">
     <string>Save changes made to this translation source file</string>
    </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
   </action>
   <action name="actionSaveAs">
+   <property name="whatsThis">
+    <string>Save changes made to this translation source file into a new file.</string>
+   </property>
    <property name="text">
     <string>Save &amp;As</string>
    </property>
    <property name="iconText">
     <string>Save As</string>
    </property>
-   <property name="whatsThis">
-    <string>Save changes made to this translation source file into a new file.</string>
-   </property>
   </action>
   <action name="actionRelease">
-   <property name="text">
-    <string>Release</string>
-   </property>
    <property name="whatsThis">
     <string>Create a message file suitable for released applications from the current message file.</string>
    </property>
+   <property name="text">
+    <string>Release</string>
+   </property>
   </action>
   <action name="actionPrint">
-   <property name="text">
-    <string>&amp;Print</string>
-   </property>
    <property name="whatsThis">
     <string>Print a list of all the translation units in the current translation source file.</string>
+   </property>
+   <property name="text">
+    <string>&amp;Print</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionUndo">
-   <property name="enabled">
-    <bool>false</bool>
+   <property name="whatsThis">
+    <string>Undo the last editing operation performed on the current translation.</string>
    </property>
    <property name="text">
     <string>&amp;Undo</string>
-   </property>
-   <property name="whatsThis">
-    <string>Undo the last editing operation performed on the current translation.</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -272,16 +269,16 @@
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionRedo">
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text">
-    <string>&amp;Redo</string>
-   </property>
+  </action>
+  <action name="actionRedo">
    <property name="whatsThis">
     <string>Redo an undone editing operation performed on the translation.</string>
+   </property>
+   <property name="text">
+    <string>&amp;Redo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
@@ -289,72 +286,72 @@
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionCut">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="whatsThis">
+    <string>Copy the selected translation text to the clipboard and deletes it.</string>
    </property>
    <property name="text">
     <string>Cu&amp;t</string>
    </property>
-   <property name="whatsThis">
-    <string>Copy the selected translation text to the clipboard and deletes it.</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
    </property>
-  </action>
-  <action name="actionCopy">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="whatsThis">
+    <string>Copy the selected translation text to the clipboard.</string>
    </property>
    <property name="text">
     <string>&amp;Copy</string>
    </property>
-   <property name="whatsThis">
-    <string>Copy the selected translation text to the clipboard.</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
    </property>
-  </action>
-  <action name="actionPaste">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="whatsThis">
+    <string>Paste the clipboard text into the translation.</string>
    </property>
    <property name="text">
     <string>&amp;Paste</string>
    </property>
-   <property name="whatsThis">
-    <string>Paste the clipboard text into the translation.</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
    </property>
-  </action>
-  <action name="actionSelectAll">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="whatsThis">
+    <string>Select the whole translation text.</string>
    </property>
    <property name="text">
     <string>Select &amp;All</string>
    </property>
-   <property name="whatsThis">
-    <string>Select the whole translation text.</string>
-   </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
    </property>
-  </action>
-  <action name="actionFind">
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text">
-    <string>&amp;Find</string>
-   </property>
+  </action>
+  <action name="actionFind">
    <property name="whatsThis">
     <string>Search for some text in the translation source file.</string>
+   </property>
+   <property name="text">
+    <string>&amp;Find</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
@@ -362,16 +359,16 @@
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionFindNext">
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text">
-    <string>Find &amp;Next</string>
-   </property>
+  </action>
+  <action name="actionFindNext">
    <property name="whatsThis">
     <string>Continue the search where it was left.</string>
+   </property>
+   <property name="text">
+    <string>Find &amp;Next</string>
    </property>
    <property name="shortcut">
     <string>F3</string>
@@ -379,16 +376,19 @@
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionPrevUnfinished">
-   <property name="text">
-    <string>&amp;Previous Unfinished</string>
+   <property name="whatsThis">
+    <string>Move to the previous unfinished item.</string>
    </property>
    <property name="toolTip">
     <string>Previous unfinished item</string>
    </property>
-   <property name="whatsThis">
-    <string>Move to the previous unfinished item.</string>
+   <property name="text">
+    <string>&amp;Previous Unfinished</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K</string>
@@ -398,14 +398,14 @@
    </property>
   </action>
   <action name="actionNextUnfinished">
-   <property name="text">
-    <string>&amp;Next Unfinished</string>
+   <property name="whatsThis">
+    <string>Move to the next unfinished item.</string>
    </property>
    <property name="toolTip">
     <string>Next unfinished item</string>
    </property>
-   <property name="whatsThis">
-    <string>Move to the next unfinished item.</string>
+   <property name="text">
+    <string>&amp;Next Unfinished</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+J</string>
@@ -415,14 +415,14 @@
    </property>
   </action>
   <action name="actionPrev">
-   <property name="text">
-    <string>P&amp;revious</string>
+   <property name="whatsThis">
+    <string>Move to the previous item.</string>
    </property>
    <property name="toolTip">
     <string>Move to previous item</string>
    </property>
-   <property name="whatsThis">
-    <string>Move to the previous item.</string>
+   <property name="text">
+    <string>P&amp;revious</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+K</string>
@@ -432,14 +432,14 @@
    </property>
   </action>
   <action name="actionNext">
-   <property name="text">
-    <string>Ne&amp;xt</string>
+   <property name="whatsThis">
+    <string>Move to the next item.</string>
    </property>
    <property name="toolTip">
     <string>Next item</string>
    </property>
-   <property name="whatsThis">
-    <string>Move to the next item.</string>
+   <property name="text">
+    <string>Ne&amp;xt</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+J</string>
@@ -449,37 +449,31 @@
    </property>
   </action>
   <action name="actionDoneAndNext">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Done and Next</string>
+   <property name="whatsThis">
+    <string>Mark this item as done and move to the next unfinished item.</string>
    </property>
    <property name="toolTip">
     <string>Mark item as done and move to the next unfinished item</string>
    </property>
-   <property name="whatsThis">
-    <string>Mark this item as done and move to the next unfinished item.</string>
+   <property name="text">
+    <string>&amp;Done and Next</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionBeginFromSource">
    <property name="enabled">
     <bool>false</bool>
    </property>
-   <property name="text">
-    <string>Copy from source text</string>
-   </property>
-   <property name="iconText">
-    <string>Copy from source text</string>
+  </action>
+  <action name="actionBeginFromSource">
+   <property name="whatsThis">
+    <string>Copies the source text into the translation field.</string>
    </property>
    <property name="toolTip">
     <string>Copies the source text into the translation field</string>
    </property>
-   <property name="whatsThis">
-    <string>Copies the source text into the translation field.</string>
+   <property name="text">
+    <string>Copy from source text</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+B</string>
@@ -487,81 +481,87 @@
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="iconText">
+    <string>Copy from source text</string>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionAccelerators">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Accelerators</string>
+   <property name="whatsThis">
+    <string>Toggle the validity check of accelerators, i.e. whether the number of ampersands in the source and translation text is the same. If the check fails, a message is shown in the warnings window.</string>
    </property>
    <property name="toolTip">
     <string>Toggle the validity check of accelerators</string>
    </property>
-   <property name="whatsThis">
-    <string>Toggle the validity check of accelerators, i.e. whether the number of ampersands in the source and translation text is the same. If the check fails, a message is shown in the warnings window.</string>
+   <property name="text">
+    <string>&amp;Accelerators</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionEndingPunctuation">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text">
-    <string>&amp;Ending Punctuation</string>
+  </action>
+  <action name="actionEndingPunctuation">
+   <property name="whatsThis">
+    <string>Toggle the validity check of ending punctuation. If the check fails, a message is shown in the warnings window.</string>
    </property>
    <property name="toolTip">
     <string>Toggle the validity check of ending punctuation</string>
    </property>
-   <property name="whatsThis">
-    <string>Toggle the validity check of ending punctuation. If the check fails, a message is shown in the warnings window.</string>
+   <property name="text">
+    <string>&amp;Ending Punctuation</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionPhraseMatches">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text">
-    <string>&amp;Phrase matches</string>
+  </action>
+  <action name="actionPhraseMatches">
+   <property name="whatsThis">
+    <string>Toggle checking that phrase suggestions are used. If the check fails, a message is shown in the warnings window.</string>
    </property>
    <property name="toolTip">
     <string>Toggle checking that phrase suggestions are used</string>
    </property>
-   <property name="whatsThis">
-    <string>Toggle checking that phrase suggestions are used. If the check fails, a message is shown in the warnings window.</string>
+   <property name="text">
+    <string>&amp;Phrase matches</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionPlaceMarkerMatches">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text">
-    <string>Place &amp;Marker Matches</string>
+  </action>
+  <action name="actionPlaceMarkerMatches">
+   <property name="whatsThis">
+    <string>Toggle the validity check of place markers. Check if %1, %2, etc are used consistently in the source text and translation text.</string>
    </property>
    <property name="toolTip">
     <string>Toggle the validity check of place markers</string>
    </property>
-   <property name="whatsThis">
-    <string>Toggle the validity check of place markers. Check if %1, %2, etc are used consistently in the source text and translation text.</string>
+   <property name="text">
+    <string>Place &amp;Marker Matches</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionNewPhraseBook">
-   <property name="text">
-    <string>&amp;New Phrase Book</string>
-   </property>
    <property name="whatsThis">
     <string>Create a new phrase book.</string>
+   </property>
+   <property name="text">
+    <string>&amp;New Phrase Book</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -571,11 +571,11 @@
    </property>
   </action>
   <action name="actionSelectPhraseBook">
-   <property name="text">
-    <string>&amp;Open Phrase Book</string>
-   </property>
    <property name="whatsThis">
     <string>Open a phrase book to assist translation.</string>
+   </property>
+   <property name="text">
+    <string>&amp;Open Phrase Book</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+H</string>
@@ -585,62 +585,62 @@
    </property>
   </action>
   <action name="actionResetSorting">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="checked">
-    <bool>false</bool>
+   <property name="whatsThis">
+    <string>Sort the items back in the same order as in the message file.</string>
    </property>
    <property name="text">
     <string>&amp;Reset Sorting</string>
    </property>
-   <property name="whatsThis">
-    <string>Sort the items back in the same order as in the message file.</string>
-   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionDisplayGuesses">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
+   <property name="whatsThis">
+    <string>Set whether or not to display translation guesses.</string>
    </property>
    <property name="text">
     <string>&amp;Display Guesses</string>
    </property>
-   <property name="whatsThis">
-    <string>Set whether or not to display translation guesses.</string>
-   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionStatistics">
-   <property name="checkable">
-    <bool>false</bool>
-   </property>
-   <property name="checked">
-    <bool>false</bool>
+   <property name="whatsThis">
+    <string>Display translation statistics.</string>
    </property>
    <property name="text">
     <string>&amp;Statistics</string>
    </property>
-   <property name="whatsThis">
-    <string>Display translation statistics.</string>
-   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionManual">
-   <property name="text">
-    <string>&amp;Manual</string>
-   </property>
    <property name="whatsThis">
     <string/>
+   </property>
+   <property name="text">
+    <string>&amp;Manual</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -658,119 +658,119 @@
    </property>
   </action>
   <action name="actionSearchAndTranslate">
-   <property name="enabled">
-    <bool>false</bool>
+   <property name="whatsThis">
+    <string>Replace the translation on all entries that matches the search source text.</string>
    </property>
    <property name="text">
     <string>&amp;Search And Translate</string>
    </property>
-   <property name="whatsThis">
-    <string>Replace the translation on all entries that matches the search source text.</string>
-   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionBatchTranslate">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionBatchTranslate">
+   <property name="whatsThis">
+    <string>Batch translate all entries using the information in the phrase books.</string>
    </property>
    <property name="text">
     <string>&amp;Batch Translation</string>
    </property>
-   <property name="whatsThis">
-    <string>Batch translate all entries using the information in the phrase books.</string>
-   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionReleaseAs">
+   <property name="whatsThis">
+    <string>Create a message file suitable for released applications from the current message file. The filename will automatically be determined from the name of the TS file.</string>
+   </property>
    <property name="text">
     <string>Release As</string>
    </property>
    <property name="iconText">
     <string>Release As</string>
    </property>
-   <property name="whatsThis">
-    <string>Create a message file suitable for released applications from the current message file. The filename will automatically be determined from the name of the TS file.</string>
-   </property>
   </action>
   <action name="actionFile">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>File</string>
    </property>
-  </action>
-  <action name="actionEdit">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionEdit">
    <property name="text">
     <string>Edit</string>
    </property>
-  </action>
-  <action name="actionTranslation">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionTranslation">
    <property name="text">
     <string>Translation</string>
    </property>
-  </action>
-  <action name="actionValidation">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionValidation">
    <property name="text">
     <string>Validation</string>
    </property>
-  </action>
-  <action name="actionHelp">
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="checkable">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
    </property>
    <property name="checked">
     <bool>true</bool>
    </property>
-   <property name="text">
-    <string>Help</string>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionSettings">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
    <property name="text">
     <string>Settings</string>
    </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>
-  </action>
-  <action name="actionAddToPhraseBook">
    <property name="enabled">
     <bool>false</bool>
    </property>
+  </action>
+  <action name="actionAddToPhraseBook">
    <property name="text">
     <string>&amp;Add to Phrase Book</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionOpenAux">
@@ -805,22 +805,22 @@
    </property>
   </action>
   <action name="actionLengthVariants">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Length Variants</string>
    </property>
-  </action>
-  <action name="actionVisualizeWhitespace">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionVisualizeWhitespace">
+   <property name="toolTip">
+    <string>Toggle visualize whitespace in editors</string>
    </property>
    <property name="text">
     <string>Visualize whitespace</string>
    </property>
-   <property name="toolTip">
-    <string>Toggle visualize whitespace in editors</string>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionIncreaseZoom">

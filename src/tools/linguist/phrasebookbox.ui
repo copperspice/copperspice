@@ -24,6 +24,12 @@
 ***********************************************************************</comment>
  <class>PhraseBookBox</class>
  <widget class="QDialog" name="PhraseBookBox">
+  <property name="windowTitle">
+   <string>Edit Phrase Book</string>
+  </property>
+  <property name="whatsThis">
+   <string>This window allows you to add, modify, or delete entries in a phrase book.</string>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -31,12 +37,6 @@
     <width>596</width>
     <height>454</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Edit Phrase Book</string>
-  </property>
-  <property name="whatsThis">
-   <string>This window allows you to add, modify, or delete entries in a phrase book.</string>
   </property>
   <layout class="QHBoxLayout" name="hboxLayout">
    <item>
@@ -98,17 +98,17 @@
      </item>
      <item>
       <widget class="QTreeView" name="phraseList">
-       <property name="rootIsDecorated">
-        <bool>false</bool>
-       </property>
        <property name="uniformRowHeights">
         <bool>true</bool>
        </property>
-       <property name="itemsExpandable">
-        <bool>false</bool>
-       </property>
        <property name="sortingEnabled">
         <bool>true</bool>
+       </property>
+       <property name="rootIsDecorated">
+        <bool>false</bool>
+       </property>
+       <property name="itemsExpandable">
+        <bool>false</bool>
        </property>
        <property name="expandsOnDoubleClick">
         <bool>false</bool>
@@ -121,21 +121,21 @@
     <layout class="QVBoxLayout" name="buttonLayout">
      <item>
       <widget class="QPushButton" name="newBut">
-       <property name="whatsThis">
-        <string>Click here to add the phrase to the phrase book.</string>
-       </property>
        <property name="text">
         <string>&amp;New Entry</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to add the phrase to the phrase book.</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="removeBut">
-       <property name="whatsThis">
-        <string>Click here to remove the entry from the phrase book.</string>
-       </property>
        <property name="text">
         <string>&amp;Remove Entry</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to remove the entry from the phrase book.</string>
        </property>
       </widget>
      </item>
@@ -148,29 +148,26 @@
      </item>
      <item>
       <widget class="QPushButton" name="saveBut">
-       <property name="whatsThis">
-        <string>Click here to save the changes made.</string>
-       </property>
        <property name="text">
         <string>&amp;Save</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to save the changes made.</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="closeBut">
-       <property name="whatsThis">
-        <string>Click here to close this window.</string>
-       </property>
        <property name="text">
         <string>Close</string>
+       </property>
+       <property name="whatsThis">
+        <string>Click here to close this window.</string>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="spacer1">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
        <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
@@ -179,6 +176,9 @@
          <width>20</width>
          <height>51</height>
         </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
       </spacer>
      </item>
