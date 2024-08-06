@@ -1,3 +1,4 @@
+
 /***********************************************************************
 *
 * Copyright (c) 2012-2024 Barbara Geller
@@ -3017,7 +3018,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
                QAction *act = d->actions.at(i);
                QKeySequence sequence = QKeySequence::mnemonic(act->text());
 
-               char32_t key = sequence[0];
+               char32_t key = sequence[0] & 0xFFFF;
 
                if (key == c.unicode()) {
                   ++clashCount;
