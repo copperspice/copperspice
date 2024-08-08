@@ -439,6 +439,8 @@ bool QWindowsOpenGLTester::testDesktopGL()
                } else {
 #if defined(CS_SHOW_DEBUG_PLATFORM)
                   qDebug("QWindowsOpenGLTester::testDesktopGL() OpenGL version %d.%d", major, minor);
+#else
+                  (void) minor;
 #endif
                }
             }

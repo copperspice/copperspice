@@ -234,6 +234,8 @@ bool QWindowsClipboard::clipboardViewerWndProc(HWND hwnd, UINT message, WPARAM w
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsClipboard::clipboardViewerWndProc() handle =" << hwnd
          << " message =" << message << QWindowsGuiEventDispatcher::windowsMessageName(message);
+#else
+   (void) hwnd;
 #endif
 
    switch (message) {
