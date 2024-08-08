@@ -302,12 +302,13 @@ class Q_CORE_EXPORT QUrl
    }
 
  private:
-   friend class QUrlQuery;
    friend Q_CORE_EXPORT uint qHash(const QUrl &url, uint seed);
 
    static QString fromEncodedComponent_helper(const QByteArray &ba);
 
    QUrlPrivate *d;
+
+   friend class QUrlQuery;
 };
 
 Q_DECLARE_SHARED(QUrl)

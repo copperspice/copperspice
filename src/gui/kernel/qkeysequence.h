@@ -189,6 +189,10 @@ class Q_GUI_EXPORT QKeySequence
 
    bool isDetached() const;
 
+   QKeySequencePrivate * &data_ptr() {
+      return d;
+   }
+
  private:
    static int decodeString(const QString &ks);
    static QString encodeString(int key);
@@ -207,10 +211,6 @@ class Q_GUI_EXPORT QKeySequence
 
  public:
    typedef QKeySequencePrivate *DataPtr;
-
-   DataPtr &data_ptr() {
-      return d;
-   }
 
 };
 

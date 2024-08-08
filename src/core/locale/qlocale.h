@@ -1003,7 +1003,15 @@ class Q_CORE_EXPORT QLocale
    QString amText() const;
    QString pmText() const;
 
+   QString createSeparatedList(const QStringList &list) const;
+
    MeasurementSystem measurementSystem() const;
+
+   QString quoteString(const QString &str, QuotationStyle style = StandardQuotation) const;
+   QString quoteString(QStringView str, QuotationStyle style = StandardQuotation) const;
+
+   void setNumberOptions(NumberOptions options);
+   NumberOptions numberOptions() const;
 
    Qt::LayoutDirection textDirection() const;
 
@@ -1037,23 +1045,16 @@ class Q_CORE_EXPORT QLocale
    static QLocale system();
    static QList<QLocale> matchingLocales(QLocale::Language language, QLocale::Script script, QLocale::Country country);
 
-   void setNumberOptions(NumberOptions options);
-   NumberOptions numberOptions() const;
-
-   QString quoteString(const QString &str, QuotationStyle style = StandardQuotation) const;
-   QString quoteString(QStringView str, QuotationStyle style = StandardQuotation) const;
-
-   QString createSeparatedList(const QStringList &list) const;
 
  private:
    QLocale(QLocalePrivate &dd);
    QSharedDataPointer<QLocalePrivate> d;
 
-   friend class QLocalePrivate;
    friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed);
    friend class QByteArray;
-   friend class QIntValidator;
    friend class QDoubleValidatorPrivate;
+   friend class QIntValidator;
+   friend class QLocalePrivate;
    friend class QTextStream;
    friend class QTextStreamPrivate;
 };
