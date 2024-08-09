@@ -124,14 +124,15 @@ class Q_NETWORK_EXPORT QSslCertificate
    static bool importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *certificate,
                   QList<QSslCertificate> *caCertificates = nullptr, const QByteArray &passPhrase = QByteArray());
 
+   static Q_NETWORK_EXPORT uint hash(const QSslCertificate &key, uint seed);
+
    Qt::HANDLE handle() const;
 
  private:
    QExplicitlySharedDataPointer<QSslCertificatePrivate> d;
+
    friend class QSslCertificatePrivate;
    friend class QSslSocketBackendPrivate;
-
-   friend Q_NETWORK_EXPORT uint qHash(const QSslCertificate &key, uint seed);
 };
 
 Q_NETWORK_EXPORT QDebug operator<<(QDebug debug, const QSslCertificate &certificate);

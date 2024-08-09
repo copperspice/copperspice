@@ -1036,15 +1036,19 @@ bool QKeySequence::operator==(const QKeySequence &other) const
          d->key[3] == other.d->key[3]);
 }
 
-uint qHash(const QKeySequence &key, uint seed)
+uint QKeySequence::hash(const QKeySequence &key, uint seed)
 {
-
    seed = qHash(key.d->key[0], seed);
    seed = qHash(key.d->key[1], seed);
    seed = qHash(key.d->key[2], seed);
    seed = qHash(key.d->key[3], seed);
 
    return seed;
+}
+
+uint qHash(const QKeySequence &key, uint seed)
+{
+   return QKeySequence::hash(key, seed);
 }
 
 bool QKeySequence::operator< (const QKeySequence &other) const

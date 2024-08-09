@@ -1045,12 +1045,12 @@ class Q_CORE_EXPORT QLocale
    static QLocale system();
    static QList<QLocale> matchingLocales(QLocale::Language language, QLocale::Script script, QLocale::Country country);
 
+   static uint hash(const QLocale &key, uint seed = 0);
 
  private:
    QLocale(QLocalePrivate &dd);
    QSharedDataPointer<QLocalePrivate> d;
 
-   friend Q_CORE_EXPORT uint qHash(const QLocale &key, uint seed);
    friend class QByteArray;
    friend class QDoubleValidatorPrivate;
    friend class QIntValidator;

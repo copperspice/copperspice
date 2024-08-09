@@ -124,6 +124,28 @@ void QBitArray::fill(bool value, int begin, int end)
    }
 }
 
+uint QBitArray::hash(const QBitArray &bitArray, uint seed)
+{
+   int m = bitArray.d.size() - 1;
+   uint result = qHashBits(bitArray.d.constData(), qMax(0, m), seed);
+
+   // deal with the last 0 to 7 bits manually, because we can't trust that
+   // the padding is initialized to 0 in bitArray.d
+
+   int n = bitArray.size();
+
+   if (n & 0x7) {
+      result = ((result << 4) + bitArray.d.at(m)) & ((1 << n) - 1);
+   }
+
+   return result;
+}
+
+uint qHash(const QBitArray &bitArray, uint seed)
+{
+   return QBitArray::hash(bitArray, seed);
+}
+
 QBitArray &QBitArray::operator&=(const QBitArray &other)
 {
    resize(qMax(size(), other.size()));

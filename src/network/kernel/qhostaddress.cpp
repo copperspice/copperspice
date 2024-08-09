@@ -849,10 +849,15 @@ QDebug operator<<(QDebug d, const QHostAddress &address)
    return d;
 }
 
-uint qHash(const QHostAddress &key, uint seed)
+uint QHostAddress::hash(const QHostAddress &key, uint seed)
 {
    QT_ENSURE_PARSED(&key);
    return qHashBits(key.d->a6.c, 16, seed);
+}
+
+uint qHash(const QHostAddress &key, uint seed)
+{
+   return QHostAddress::hash(key, seed);
 }
 
 QDataStream &operator<<(QDataStream &out, const QHostAddress &address)

@@ -130,7 +130,8 @@ class Q_NETWORK_EXPORT QHostAddress
    }
 
    static QPair<QHostAddress, int> parseSubnet(const QString &subnet);
-   friend Q_NETWORK_EXPORT uint qHash(const QHostAddress &key, uint seed);
+
+   static uint hash(const QHostAddress &key, uint seed);
 
  protected:
    QScopedPointer<QHostAddressPrivate> d;

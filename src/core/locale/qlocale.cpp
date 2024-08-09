@@ -893,12 +893,17 @@ bool QLocale::operator!=(const QLocale &other) const
    return d->m_data != other.d->m_data || d->m_numberOptions != other.d->m_numberOptions;
 }
 
-uint qHash(const QLocale &key, uint seed)
+uint QLocale::hash(const QLocale &key, uint seed)
 {
    seed = qHash(key.d->m_data, seed);
    seed = qHash(key.d->m_numberOptions, seed);
 
    return seed;
+}
+
+uint qHash(const QLocale &key, uint seed)
+{
+   return QLocale::hash(key, seed);
 }
 
 void QLocale::setNumberOptions(NumberOptions options)

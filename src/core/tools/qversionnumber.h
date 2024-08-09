@@ -144,9 +144,10 @@ class QVersionNumber
    Q_CORE_EXPORT QString toString() const;
    Q_CORE_EXPORT static QVersionNumber fromString(const QString &string, int *suffixIndex = nullptr);
 
+   static uint hash(const QVersionNumber &key, uint seed = 0);
+
  private:
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QVersionNumber &version);
-   friend Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed);
 };
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVersionNumber &version);

@@ -47,7 +47,7 @@ bool QSslCertificate::operator==(const QSslCertificate &other) const
    return false;
 }
 
-uint qHash(const QSslCertificate &key, uint seed)
+uint QSslCertificate::hash(const QSslCertificate &key, uint seed)
 {
    if (X509 *const x509 = key.d->x509) {
       // populate x509->sha1_hash
@@ -67,6 +67,11 @@ uint qHash(const QSslCertificate &key, uint seed)
    } else {
       return seed;
    }
+}
+
+uint qHash(const QSslCertificate &key, uint seed)
+{
+   return QSslCertificate::hash(key, seed);
 }
 
 bool QSslCertificate::isNull() const

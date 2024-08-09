@@ -44,9 +44,14 @@ bool QSslCertificate::operator==(const QSslCertificate &other) const
    return d->derData == other.d->derData;
 }
 
-uint qHash(const QSslCertificate &key, uint seed) {
+uint QSslCertificate::hash(const QSslCertificate &key, uint seed) {
    // DER is the native encoding here, so toDer() is just "return d->derData":
    return qHash(key.toDer(), seed);
+}
+
+uint qHash(const QSslCertificate &key, uint seed)
+{
+   return QSslCertificate::hash(key, seed);
 }
 
 bool QSslCertificate::isNull() const

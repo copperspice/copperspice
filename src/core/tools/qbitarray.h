@@ -126,12 +126,13 @@ class Q_CORE_EXPORT QBitArray
       return d.data_ptr();
    }
 
+   static uint hash(const QBitArray &bitArray, uint seed = 0);
+
  private:
    QByteArray d;
 
    friend Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QBitArray &bitArray);
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QBitArray &bitArray);
-   friend Q_CORE_EXPORT uint qHash(const QBitArray &key, uint seed);
 };
 
 inline bool QBitArray::fill(bool value, int size)

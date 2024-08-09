@@ -209,11 +209,16 @@ QDebug operator<<(QDebug debug, const QVersionNumber &version)
    return debug;
 }
 
-uint qHash(const QVersionNumber &key, uint seed)
+uint QVersionNumber::hash(const QVersionNumber &key, uint seed)
 {
    for (int i = 0; i < key.segmentCount(); ++i) {
       seed = qHash(key.segmentAt(i), seed);
    }
 
    return seed;
+}
+
+uint qHash(const QVersionNumber &key, uint seed)
+{
+   return QVersionNumber::hash(key, seed);
 }
