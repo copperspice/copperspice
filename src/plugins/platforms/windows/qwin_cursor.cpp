@@ -661,9 +661,10 @@ QWindowsCursor::CursorState QWindowsCursor::cursorState()
    cursorInfo.cbSize = sizeof(CURSORINFO);
 
    if (GetCursorInfo(&cursorInfo)) {
-      if (cursorInfo.flags & CursorShowing) {
+      if (cursorInfo.flags & cursorShowing) {
          return CursorShowing;
       }
+
       if (cursorInfo.flags & cursorSuppressed) {
          return CursorSuppressed;
       }
