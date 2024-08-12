@@ -3476,6 +3476,7 @@ QClipData::~QClipData()
    if (m_clipLines) {
       free(m_clipLines);
    }
+
    if (m_spans) {
       free(m_spans);
    }
@@ -3487,8 +3488,8 @@ void QClipData::initialize()
       return;
    }
 
-   if (!m_clipLines) {
-      m_clipLines = (ClipLine *)calloc(sizeof(ClipLine), clipSpanHeight);
+   if (! m_clipLines) {
+      m_clipLines = (ClipLine *)calloc(clipSpanHeight, sizeof(ClipLine));
    }
 
    Q_CHECK_PTR(m_clipLines);
