@@ -79,8 +79,8 @@ class QAbstractXmlForwardIterator : public QSharedData
    virtual qint64 sizeHint() const;
 
  private:
-   QAbstractXmlForwardIterator<T>(const QAbstractXmlForwardIterator<T> &) = delete;
-   QAbstractXmlForwardIterator<T> &operator=(const QAbstractXmlForwardIterator<T> &) = delete;
+   QAbstractXmlForwardIterator(const QAbstractXmlForwardIterator<T> &) = delete;
+   QAbstractXmlForwardIterator &operator=(const QAbstractXmlForwardIterator<T> &) = delete;
 
    QAbstractXmlForwardIteratorPrivate *d_ptr; /* Currently not used. */
 };
