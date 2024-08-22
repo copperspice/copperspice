@@ -354,6 +354,18 @@ class QFlatMap
       return std::equal_range(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
    }
 
+   size_type erase(const Key &key) {
+      auto iter = find(key);
+
+      if (iter != m_data.end()) {
+         erase(iter);
+         return 1;
+
+      } else {
+         return 0;
+      }
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter.m_iter);
    }
@@ -400,6 +412,10 @@ class QFlatMap
       return iter;
    }
 
+   iterator insert(const std::pair<const Key, Val> &data) {
+      return insert(data.first, data.second);
+   }
+
    iterator insert(const Key &key, const Val &value) {
       auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
 
@@ -411,6 +427,21 @@ class QFlatMap
 
       // update value
       iter->second = value;
+
+      return iter;
+   }
+
+   iterator insert(const Key &key, Val &&value) {
+      auto iter = std::lower_bound(m_data.begin(), m_data.end(), key, CompareFilter{m_compare} );
+
+      if (iter == m_data.end() || m_compare(key, iter->first)) {
+         // add new element, emplace returns an std::pair, first is the iterator
+
+         return m_data.emplace(iter, key, std::move(value));
+      }
+
+      // update value
+      iter->second = std::move(value);
 
       return iter;
    }

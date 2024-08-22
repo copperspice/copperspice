@@ -323,6 +323,10 @@ class QMultiMap
       return m_data.equal_range(key);
    }
 
+   size_type erase(const Key &key) {
+      return m_data.erase(key);
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter.m_iter);
    }
@@ -389,6 +393,10 @@ class QMultiMap
       return insertMulti(key, value);
    }
 
+   iterator insert(const Key &key, Val &&value) {
+      return insertMulti(key, std::move(value));
+   }
+
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
       auto iter = m_data.emplace_hint(hint.m_iter, key, value);
       return iter;
@@ -403,6 +411,11 @@ class QMultiMap
    iterator insertMulti(const_iterator hint, const Key &key, const Val &value) {
       auto iter = m_data.emplace_hint(hint.m_iter, key, value);
       return iter;
+   }
+
+   iterator insertMulti(const Key &key, Val &&value)  {
+      // emplace returns an iterator
+      return m_data.emplace(key, std::move(value));
    }
 
    const Key key(const Val &value, const Key &defaultKey = Key()) const;

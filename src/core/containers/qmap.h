@@ -321,6 +321,10 @@ class QMap
       return m_data.equal_range(key);
    }
 
+   size_type erase(const Key &key) {
+      return m_data.erase(key);
+   }
+
    iterator erase(const_iterator iter) {
       return m_data.erase(iter.m_iter);
    }
@@ -356,6 +360,10 @@ class QMap
 
    iterator insert(const Key &key, const Val &value) {
       return m_data.insert_or_assign(key, value).first;
+   }
+
+   iterator insert(const Key &key, Val &&value) {
+      return m_data.insert_or_assign(key, std::move(value)).first;
    }
 
    iterator insert(const_iterator hint, const Key &key, const Val &value) {
