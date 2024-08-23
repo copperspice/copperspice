@@ -84,16 +84,34 @@ TEST_CASE("QMultiMap erase", "[qmultimap]")
                                    { 3, "quince"},
                                    { 4, "grapefruit"} };
 
-   auto iter = map.find(2);
-   map.erase(iter);
+   SECTION ("iterator") {
+      auto iter = map.find(2);
+      map.erase(iter);
 
-   REQUIRE(map.value(2) == "");
+      REQUIRE(map.value(2) == "");
 
-   REQUIRE(map.value(1) == "watermelon");
-   REQUIRE(map.value(3) == "quince");
-   REQUIRE(map.value(4) == "grapefruit");
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(3) == "quince");
+      REQUIRE(map.value(4) == "grapefruit");
 
-   REQUIRE(map.size() == 4);
+      REQUIRE(map.size() == 4);
+   }
+
+   SECTION ("key") {
+      auto count = map.erase(3);
+
+      REQUIRE(map.value(3) == "");
+      REQUIRE(count == 2);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(2) == "apple");
+      REQUIRE(map.value(4) == "grapefruit");
+
+      REQUIRE(map.size() == 3);
+
+      count = map.erase(3);
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QMultiMap equality", "[qmultimap]")
@@ -149,17 +167,45 @@ TEST_CASE("QMultiMap first", "[qmultimap]")
    REQUIRE(map.first() == "watermelon");
 }
 
-TEST_CASE("QMultiMap insert", "[qmultimap]")
+TEST_CASE("QMultiMap insert_copy", "[qmultimap]")
 {
    QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 3, "quince"},
-                                   { 4, "grapefruit"} };
+                                    { 2, "apple"},
+                                    { 3, "pear"},
+                                    { 3, "quince"},
+                                    { 4, "grapefruit"} };
+
    map.insert( {6, "mango"} );
 
    REQUIRE(map.value(6) == "mango");
    REQUIRE(map.size() == 6);
+}
+
+TEST_CASE("QMultiMap insert_move", "[qmultimap]")
+{
+   QMultiMap<int, QUniquePointer<QString> > map;
+
+   map.insert(1, QMakeUnique<QString>("watermelon"));
+   map.insert(2, QMakeUnique<QString>("apple"));
+   map.insert(3, QMakeUnique<QString>("pear"));
+   map.insert(4, QMakeUnique<QString>("grapefruit"));
+
+   REQUIRE(*(map[3]) == "pear");
+   REQUIRE(map.size() == 4);
+}
+
+TEST_CASE("QMultiMap operator_bracket", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(map[4] == "grapefruit");
+   REQUIRE(map[5] == "");
+
+   REQUIRE(map.contains(5) == true);
+   REQUIRE(map[5] == "");
 }
 
 TEST_CASE("QMultiMap insert_hint", "[qmultimap]")
@@ -195,21 +241,6 @@ TEST_CASE("QMultiMap last", "[qmultimap]")
 
    REQUIRE(map.lastKey() == 4);
    REQUIRE(map.last() == "grapefruit");
-}
-
-TEST_CASE("QMultiMap operator_bracket", "[qmultimap]")
-{
-   QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 3, "quince"},
-                                   { 4, "grapefruit"} };
-
-   REQUIRE(map[4] == "grapefruit");
-   REQUIRE(map[5] == "");
-
-   REQUIRE(map.contains(5) == true);
-   REQUIRE(map[5] == "");
 }
 
 TEST_CASE("QMultiMap remove", "[qmultimap]")

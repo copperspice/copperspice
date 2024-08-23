@@ -80,16 +80,34 @@ TEST_CASE("QMap erase", "[qmap]")
                               { 3, "pear"},
                               { 4, "grapefruit"} };
 
-   auto iter = map.find(2);
-   map.erase(iter);
+   SECTION ("iterator") {
+      auto iter = map.find(2);
+      map.erase(iter);
 
-   REQUIRE(map.value(2) == "");
+      REQUIRE(map.value(2) == "");
 
-   REQUIRE(map.value(1) == "watermelon");
-   REQUIRE(map.value(3) == "pear");
-   REQUIRE(map.value(4) == "grapefruit");
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(3) == "pear");
+      REQUIRE(map.value(4) == "grapefruit");
 
-   REQUIRE(map.size() == 3);
+      REQUIRE(map.size() == 3);
+   }
+
+   SECTION ("key") {
+      auto count = map.erase(2);
+
+      REQUIRE(map.value(2) == "");
+      REQUIRE(count == 1);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(3) == "pear");
+      REQUIRE(map.value(4) == "grapefruit");
+
+      REQUIRE(map.size() == 3);
+
+      count = map.erase(2);
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QMap equality", "[qmap]")
@@ -141,7 +159,7 @@ TEST_CASE("QMap first", "[qmap]")
    REQUIRE(map.first() == "watermelon");
 }
 
-TEST_CASE("QMap insert", "[qmap]")
+TEST_CASE("QMap insert_copy", "[qmap]")
 {
    QMap<int, QString> map = { { 1, "watermelon"},
                               { 2, "apple"},
@@ -152,6 +170,19 @@ TEST_CASE("QMap insert", "[qmap]")
 
    REQUIRE(map.value(6) == "mango");
    REQUIRE(map.size() == 5);
+}
+
+TEST_CASE("QMap insert_move", "[qmap]")
+{
+   QMap<int, QUniquePointer<QString> > map;
+
+   map.insert(1, QMakeUnique<QString>("watermelon"));
+   map.insert(2, QMakeUnique<QString>("apple"));
+   map.insert(3, QMakeUnique<QString>("pear"));
+   map.insert(4, QMakeUnique<QString>("grapefruit"));
+
+   REQUIRE(*(map[3]) == "pear");
+   REQUIRE(map.size() == 4);
 }
 
 TEST_CASE("QMap insert_hint", "[qmap]")

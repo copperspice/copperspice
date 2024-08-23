@@ -84,16 +84,33 @@ TEST_CASE("QMultiHash erase", "[qmultihash]")
                                      { 3, "pear"},
                                      { 3, "quince"},
                                      { 4, "grapefruit"} };
+   SECTION ("iterator") {
+      auto iter = hash.find(2);
+      hash.erase(iter);
 
-   auto iter = hash.find(2);
-   hash.erase(iter);
+      REQUIRE(hash.value(2) == "");
 
-   REQUIRE(hash.value(2) == "");
+      REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(4) == "grapefruit");
 
-   REQUIRE(hash.value(1) == "watermelon");
-   REQUIRE(hash.value(4) == "grapefruit");
+      REQUIRE(hash.size() == 4);
+   }
 
-   REQUIRE(hash.size() == 4);
+   SECTION ("key") {
+      auto count = hash.erase(3);
+
+      REQUIRE(hash.value(3) == "");
+      REQUIRE(count == 2);
+
+      REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(2) == "apple");
+      REQUIRE(hash.value(4) == "grapefruit");
+
+      REQUIRE(hash.size() == 3);
+
+      count = hash.erase(3);
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QMultiHash equality", "[qmultihash]")
@@ -137,7 +154,7 @@ TEST_CASE("QMultiHash equal_range", "[qmultihash]")
    REQUIRE(data.second == "apple");
 }
 
-TEST_CASE("QMultiHash insert", "[qmultihash]")
+TEST_CASE("QMultiHash insert_copy", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},
                                      { 2, "apple"},
@@ -151,12 +168,25 @@ TEST_CASE("QMultiHash insert", "[qmultihash]")
    REQUIRE(hash.size() == 6);
 }
 
+TEST_CASE("QMultiHash insert_move", "[qmultihash]")
+{
+   QMultiHash<int, QUniquePointer<QString> > hash;
+
+   hash.insert(1, QMakeUnique<QString>("watermelon"));
+   hash.insert(2, QMakeUnique<QString>("apple"));
+   hash.insert(3, QMakeUnique<QString>("pear"));
+   hash.insert(4, QMakeUnique<QString>("grapefruit"));
+
+   REQUIRE(*(hash[3]) == "pear");
+   REQUIRE(hash.size() == 4);
+}
+
 TEST_CASE("QMultiHash operator_bracket", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 4, "grapefruit"} };
+                                     { 2, "apple"},
+                                     { 3, "pear"},
+                                     { 4, "grapefruit"} };
 
    REQUIRE(hash[4] == "grapefruit");
    REQUIRE(hash[5] == "");

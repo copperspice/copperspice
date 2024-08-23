@@ -80,16 +80,34 @@ TEST_CASE("QHash erase", "[qhash]")
                                 { 3, "pear"},
                                 { 4, "grapefruit"} };
 
-   auto iter = hash.find(2);
-   hash.erase(iter);
+   SECTION ("iterator") {
+      auto iter = hash.find(2);
+      hash.erase(iter);
 
-   REQUIRE(hash.value(2) == "");
+      REQUIRE(hash.value(2) == "");
 
-   REQUIRE(hash.value(1) == "watermelon");
-   REQUIRE(hash.value(3) == "pear");
-   REQUIRE(hash.value(4) == "grapefruit");
+      REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(3) == "pear");
+      REQUIRE(hash.value(4) == "grapefruit");
 
-   REQUIRE(hash.size() == 3);
+      REQUIRE(hash.size() == 3);
+   }
+
+   SECTION ("key") {
+      auto count = hash.erase(2);
+
+      REQUIRE(hash.value(2) == "");
+      REQUIRE(count == 1);
+
+      REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(3) == "pear");
+      REQUIRE(hash.value(4) == "grapefruit");
+
+      REQUIRE(hash.size() == 3);
+
+      count = hash.erase(2);
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QHash equality", "[qhash]")
@@ -130,7 +148,7 @@ TEST_CASE("QHash equal_range", "[qhash]")
    REQUIRE(data.second == "apple");
 }
 
-TEST_CASE("QHash insert", "[qhash]")
+TEST_CASE("QHash insert_copy", "[qhash]")
 {
    QHash<int, QString> hash = { { 1, "watermelon"},
                                 { 2, "apple"},
@@ -141,6 +159,19 @@ TEST_CASE("QHash insert", "[qhash]")
 
    REQUIRE(hash.value(6) == "mango");
    REQUIRE(hash.size() == 5);
+}
+
+TEST_CASE("QHash insert_move", "[qhash]")
+{
+   QHash<int, QUniquePointer<QString> > hash;
+
+   hash.insert(1, QMakeUnique<QString>("watermelon"));
+   hash.insert(2, QMakeUnique<QString>("apple"));
+   hash.insert(3, QMakeUnique<QString>("pear"));
+   hash.insert(4, QMakeUnique<QString>("grapefruit"));
+
+   REQUIRE(*(hash[3]) == "pear");
+   REQUIRE(hash.size() == 4);
 }
 
 TEST_CASE("QHash operator_bracket", "[qhash]")
