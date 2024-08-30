@@ -567,7 +567,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       )
    endif()
 
-   if (WITH_OPENGL)
+   if (WITH_GUI)
       find_package(OpenGL)
       set_package_properties(OpenGL PROPERTIES
          PURPOSE "Required for OpenGL support"
