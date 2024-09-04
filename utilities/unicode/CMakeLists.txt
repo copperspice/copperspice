@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18.0 FATAL_ERROR)
 
-cmake_policy(VERSION 3.16..3.23)
+cmake_policy(VERSION 3.18.0..3.29.6)
 
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20.0")
    # enable RTTI on MSVC
