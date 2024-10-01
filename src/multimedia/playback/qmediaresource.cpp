@@ -79,37 +79,21 @@ bool QMediaResource::operator ==(const QMediaResource &other) const
    return true;
 }
 
-/*!
-    Compares a media resource to \a other.
-
-    Returns true if they are different, and false otherwise.
-*/
 bool QMediaResource::operator !=(const QMediaResource &other) const
 {
    return !(*this == other);
 }
 
-/*!
-    Identifies if a media resource is null.
-
-    Returns true if the resource is null, and false otherwise.
-*/
 bool QMediaResource::isNull() const
 {
    return values.isEmpty();
 }
 
-/*!
-    Returns the URL of a media resource.
-*/
 QUrl QMediaResource::url() const
 {
    return (values.value(Url)).value<QUrl>();
 }
 
-/*!
-    Returns the network request associated with this media resource.
-*/
 QNetworkRequest QMediaResource::request() const
 {
    if (values.contains(Request)) {
@@ -119,29 +103,16 @@ QNetworkRequest QMediaResource::request() const
    return QNetworkRequest(url());
 }
 
-/*!
-    Returns the MIME type of a media resource.
-
-    This may be null if the MIME type is unknown.
-*/
 QString QMediaResource::mimeType() const
 {
    return (values.value(MimeType)).value<QString>();
 }
 
-/*!
-    Returns the language of a media resource as an ISO 639-2 code.
-
-    This may be null if the language is unknown.
-*/
 QString QMediaResource::language() const
 {
    return (values.value(Language)).value<QString>();
 }
 
-/*!
-    Sets the \a language of a media resource.
-*/
 void QMediaResource::setLanguage(const QString &language)
 {
    if (! language.isEmpty()) {
@@ -151,20 +122,12 @@ void QMediaResource::setLanguage(const QString &language)
    }
 }
 
-/*!
-    Returns the audio codec of a media resource.
-
-    This may be null if the media resource does not contain an audio stream, or the codec is
-    unknown.
-*/
 QString QMediaResource::audioCodec() const
 {
    return (values.value(AudioCodec)).value<QString>();
 }
 
-/*!
-    Sets the audio \a codec of a media resource.
-*/
+
 void QMediaResource::setAudioCodec(const QString &codec)
 {
    if (! codec.isEmpty()) {
@@ -174,20 +137,11 @@ void QMediaResource::setAudioCodec(const QString &codec)
    }
 }
 
-/*!
-    Returns the video codec of a media resource.
-
-    This may be null if the media resource does not contain a video stream, or the codec is
-    unknonwn.
-*/
 QString QMediaResource::videoCodec() const
 {
    return (values.value(VideoCodec)).value<QString>();
 }
 
-/*!
-    Sets the video \a codec of media resource.
-*/
 void QMediaResource::setVideoCodec(const QString &codec)
 {
    if (! codec.isEmpty()) {
@@ -197,19 +151,11 @@ void QMediaResource::setVideoCodec(const QString &codec)
    }
 }
 
-/*!
-    Returns the size in bytes of a media resource.
-
-    This may be zero if the size is unknown.
-*/
 qint64 QMediaResource::dataSize() const
 {
    return (values.value(DataSize)).value<qint64>();
 }
 
-/*!
-    Sets the \a size in bytes of a media resource.
-*/
 void QMediaResource::setDataSize(const qint64 size)
 {
    if (size != 0) {
@@ -219,19 +165,11 @@ void QMediaResource::setDataSize(const qint64 size)
    }
 }
 
-/*!
-    Returns the bit rate in bits per second of a media resource's audio stream.
-
-    This may be zero if the bit rate is unknown, or the resource contains no audio stream.
-*/
 int QMediaResource::audioBitRate() const
 {
    return values.value(AudioBitRate).toInt();
 }
 
-/*!
-    Sets the bit \a rate in bits per second of a media resource's video stream.
-*/
 void QMediaResource::setAudioBitRate(int rate)
 {
    if (rate != 0) {
@@ -241,19 +179,11 @@ void QMediaResource::setAudioBitRate(int rate)
    }
 }
 
-/*!
-    Returns the audio sample rate of a media resource.
-
-    This may be zero if the sample size is unknown, or the resource contains no audio stream.
-*/
 int QMediaResource::sampleRate() const
 {
    return (values.value(SampleRate)).value<int>();
 }
 
-/*!
-    Sets the audio \a sampleRate of a media resource.
-*/
 void QMediaResource::setSampleRate(int sampleRate)
 {
    if (sampleRate != 0) {
@@ -263,19 +193,11 @@ void QMediaResource::setSampleRate(int sampleRate)
    }
 }
 
-/*!
-    Returns the number of audio channels in a media resource.
-
-    This may be zero if the sample size is unknown, or the resource contains no audio stream.
-*/
 int QMediaResource::channelCount() const
 {
    return (values.value(ChannelCount)).value<int>();
 }
 
-/*!
-    Sets the number of audio \a channels in a media resource.
-*/
 void QMediaResource::setChannelCount(int channels)
 {
    if (channels != 0) {
@@ -285,19 +207,11 @@ void QMediaResource::setChannelCount(int channels)
    }
 }
 
-/*!
-    Returns the bit rate in bits per second of a media resource's video stream.
-
-    This may be zero if the bit rate is unknown, or the resource contains no video stream.
-*/
 int QMediaResource::videoBitRate() const
 {
    return values.value(VideoBitRate).toInt();
 }
 
-/*!
-    Sets the bit \a rate in bits per second of a media resource's video stream.
-*/
 void QMediaResource::setVideoBitRate(int rate)
 {
    if (rate != 0) {
@@ -307,20 +221,11 @@ void QMediaResource::setVideoBitRate(int rate)
    }
 }
 
-/*!
-    Returns the resolution in pixels of a media resource.
-
-    This may be null is the resolution is unknown, or the resource contains no pixel data (i.e. the
-    resource is an audio stream.
-*/
 QSize QMediaResource::resolution() const
 {
    return (values.value(Resolution)).value<QSize>();
 }
 
-/*!
-    Sets the \a resolution in pixels of a media resource.
-*/
 void QMediaResource::setResolution(const QSize &resolution)
 {
    if (resolution.width() != -1 || resolution.height() != -1) {
@@ -330,9 +235,6 @@ void QMediaResource::setResolution(const QSize &resolution)
    }
 }
 
-/*!
-    Sets the \a width and \a height in pixels of a media resource.
-*/
 void QMediaResource::setResolution(int width, int height)
 {
    if (width != -1 || height != -1) {

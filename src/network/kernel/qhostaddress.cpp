@@ -369,9 +369,6 @@ QHostAddress::QHostAddress()
 {
 }
 
-/*!
-    Constructs a host address object with the IPv4 address \a ip4Addr.
-*/
 QHostAddress::QHostAddress(quint32 ip4Addr)
    : d(new QHostAddressPrivate)
 {
@@ -418,9 +415,6 @@ QHostAddress::QHostAddress(const QHostAddress &address)
 {
 }
 
-/*!
-    Constructs a QHostAddress object for \a address.
-*/
 QHostAddress::QHostAddress(SpecialAddress address)
    : d(new QHostAddressPrivate)
 {

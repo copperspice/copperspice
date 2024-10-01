@@ -71,35 +71,19 @@ class QAudioDeviceInfoPrivate : public QSharedData
    QAbstractAudioDeviceInfo *info;
 };
 
-/*!
-    Constructs an empty QAudioDeviceInfo object.
-*/
-
 QAudioDeviceInfo::QAudioDeviceInfo():
    d(new QAudioDeviceInfoPrivate)
 {
 }
-
-/*!
-    Constructs a copy of \a other.
-*/
 
 QAudioDeviceInfo::QAudioDeviceInfo(const QAudioDeviceInfo &other):
    d(other.d)
 {
 }
 
-/*!
-    Destroy this audio device info.
-*/
-
 QAudioDeviceInfo::~QAudioDeviceInfo()
 {
 }
-
-/*!
-    Sets the QAudioDeviceInfo object to be equal to \a other.
-*/
 
 QAudioDeviceInfo &QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
 {
@@ -107,9 +91,6 @@ QAudioDeviceInfo &QAudioDeviceInfo::operator=(const QAudioDeviceInfo &other)
    return *this;
 }
 
-/*!
-    Returns whether this QAudioDeviceInfo object holds a device definition.
-*/
 bool QAudioDeviceInfo::operator ==(const QAudioDeviceInfo &other) const
 {
    if (d == other.d) {
@@ -133,56 +114,20 @@ bool QAudioDeviceInfo::isNull() const
    return d->info == nullptr;
 }
 
-/*!
-    Returns human readable name of audio device.
-
-    Device names vary depending on platform/audio plugin being used.
-
-    They are a unique string identifiers for the audio device.
-
-    eg. default, Intel, U0x46d0x9a4
-*/
-
 QString QAudioDeviceInfo::deviceName() const
 {
    return isNull() ? QString() : d->info->deviceName();
 }
-
-/*!
-    Returns true if \a settings are supported by the audio device of this QAudioDeviceInfo.
-*/
 
 bool QAudioDeviceInfo::isFormatSupported(const QAudioFormat &settings) const
 {
    return isNull() ? false : d->info->isFormatSupported(settings);
 }
 
-/*!
-    Returns QAudioFormat of default settings.
-
-    These settings are provided by the platform/audio plugin being used.
-
-    They also are dependent on the QAudio::Mode being used.
-
-    A typical audio system would provide something like:
-    \list
-    \o Input settings: 8000Hz mono 8 bit.
-    \o Output settings: 44100Hz stereo 16 bit little endian.
-    \endlist
-*/
-
 QAudioFormat QAudioDeviceInfo::preferredFormat() const
 {
    return isNull() ? QAudioFormat() : d->info->preferredFormat();
 }
-
-/*!
-    Returns closest QAudioFormat to \a settings that system audio supports.
-
-    These settings are provided by the platform/audio plugin being used.
-
-    They also are dependent on the QAudio::Mode being used.
-*/
 
 QAudioFormat QAudioDeviceInfo::nearestFormat(const QAudioFormat &settings) const
 {

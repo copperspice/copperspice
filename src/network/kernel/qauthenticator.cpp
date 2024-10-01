@@ -70,9 +70,6 @@ QAuthenticator::~QAuthenticator()
    }
 }
 
-/*!
-    Constructs a copy of \a other.
-*/
 QAuthenticator::QAuthenticator(const QAuthenticator &other)
    : d(nullptr)
 {
@@ -164,9 +161,6 @@ void QAuthenticator::detach()
    }
 }
 
-/*!
-  returns the realm requiring authentication.
-*/
 QString QAuthenticator::realm() const
 {
    return d ? d->realm : QString();

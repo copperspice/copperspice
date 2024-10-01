@@ -54,25 +54,16 @@ Q_CORE_EXPORT bool qIsFinite(float f)
    return qt_is_finite(f);
 }
 
-/*!
-    Returns the bit pattern of a signalling NaN as a double.
-*/
 Q_CORE_EXPORT double qSNaN()
 {
    return qt_snan();
 }
 
-/*!
-    Returns the bit pattern of a quiet NaN as a double.
-*/
 Q_CORE_EXPORT double qQNaN()
 {
    return qt_qnan();
 }
 
-/*!
-    Returns the bit pattern for an infinite number as a double.
-*/
 Q_CORE_EXPORT double qInf()
 {
    return qt_inf();

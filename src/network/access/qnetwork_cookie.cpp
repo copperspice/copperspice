@@ -699,17 +699,6 @@ static QDateTime parseDateString(const QString &dateString)
    return dateTime;
 }
 
-/*!
-    Parses the cookie string \a cookieString as received from a server
-    response in the "Set-Cookie:" header. If there's a parsing error,
-    this function returns an empty list.
-
-    Since the HTTP header can set more than one cookie at the same
-    time, this function returns a QList<QNetworkCookie>, one for each
-    cookie that is parsed.
-
-    \sa toRawForm()
-*/
 QList<QNetworkCookie> QNetworkCookie::parseCookies(const QByteArray &cookieString)
 {
    // cookieString can be a number of set-cookie header strings joined together

@@ -690,10 +690,6 @@ bool QNativeSocketEnginePrivate::setOption(QNativeSocketEngine::SocketOption opt
    return true;
 }
 
-/*!
-    Fetches information about both ends of the connection: whatever is
-    available.
-*/
 bool QNativeSocketEnginePrivate::fetchConnectionParameters()
 {
    localPort = 0;

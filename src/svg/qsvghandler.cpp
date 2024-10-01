@@ -868,10 +868,6 @@ static QString idFromUrl(const QString &url)
    return id;
 }
 
-/**
- * returns true when successfuly set the color. false signifies
- * that the color should be inherited
- */
 static bool resolveColor(QStringView colorStr, QColor &color, QSvgHandler *handler)
 {
    QStringView colorStrTr = colorStr.trimmed();

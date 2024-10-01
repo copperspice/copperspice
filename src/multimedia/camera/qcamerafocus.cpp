@@ -170,45 +170,27 @@ QCameraFocusZone &QCameraFocusZone::operator=(const QCameraFocusZone &other)
    return *this;
 }
 
-/*!
- * Returns true if this focus zone is the same as \a other.
- */
 bool QCameraFocusZone::operator==(const QCameraFocusZone &other) const
 {
    return d == other.d ||
           (d->area == other.d->area && d->status == other.d->status);
 }
 
-/*!
- * Returns true if this focus zone is not the same as \a other.
- */
 bool QCameraFocusZone::operator!=(const QCameraFocusZone &other) const
 {
    return !(*this == other);
 }
 
-/*!
- * Returns true if this focus zone has a valid area and status.
- */
 bool QCameraFocusZone::isValid() const
 {
    return d->status != Invalid && !d->area.isValid();
 }
 
-/*!
- * Returns the area of the camera frame that this focus zone encompasses.
- *
- * Coordinates are in frame relative coordinates - \c QPointF(0,0) is the top
- * left of the frame, and \c QPointF(1,1) is the bottom right.
- */
 QRectF QCameraFocusZone::area() const
 {
    return d->area;
 }
 
-/*!
- * Returns the current status of this focus zone.
- */
 QCameraFocusZone::FocusZoneStatus QCameraFocusZone::status() const
 {
    return d->status;

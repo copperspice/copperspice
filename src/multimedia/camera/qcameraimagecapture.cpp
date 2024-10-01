@@ -319,11 +319,6 @@ QList<QVideoFrame::PixelFormat> QCameraImageCapture::supportedBufferFormats() co
    }
 }
 
-/*!
-    Returns the buffer image capture format being used.
-
-    \sa supportedBufferFormats(), setBufferFormat()
-*/
 QVideoFrame::PixelFormat QCameraImageCapture::bufferFormat() const
 {
    if (d_func()->bufferFormatControl) {
@@ -333,11 +328,6 @@ QVideoFrame::PixelFormat QCameraImageCapture::bufferFormat() const
    }
 }
 
-/*!
-    Sets the buffer image capture \a format to be used.
-
-    \sa bufferFormat(), supportedBufferFormats(), captureDestination()
-*/
 void QCameraImageCapture::setBufferFormat(const QVideoFrame::PixelFormat format)
 {
    if (d_func()->bufferFormatControl) {
