@@ -202,10 +202,6 @@ bool QActionGroup::isEnabled() const
    return d->enabled;
 }
 
-/*!
-  Returns the currently checked action in the group, or 0 if none
-  are checked.
-*/
 QAction *QActionGroup::checkedAction() const
 {
    Q_D(const QActionGroup);

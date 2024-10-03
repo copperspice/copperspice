@@ -64,12 +64,6 @@ QPlatformTheme *QPlatformThemeFactory::create(const QString &key, const QString 
    return nullptr;
 }
 
-/*!
-    Returns the list of valid keys, i.e. the keys this factory can
-    create styles for.
-
-    \sa create()
-*/
 QStringList QPlatformThemeFactory::keys(const QString &platformPluginPath)
 {
    QStringList list;
@@ -95,4 +89,3 @@ QStringList QPlatformThemeFactory::keys(const QString &platformPluginPath)
    return list;
 
 }
-

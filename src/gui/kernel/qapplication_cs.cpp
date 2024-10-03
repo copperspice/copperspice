@@ -612,10 +612,6 @@ void QApplication::setStyleSheet(const QString &styleSheet)
 
 #endif // QT_NO_STYLE_STYLESHEET
 
-/*!
-    string must be one of the QStyleFactory::keys(), typically
-    "windows", "fusion", "windowsxp", or "macintosh". Style names are case insensitive.
-*/
 QStyle *QApplication::setStyle(const QString &style)
 {
    QStyle *s = QStyleFactory::create(style);
@@ -849,19 +845,6 @@ QWidgetList QApplication::topLevelWidgets()
    return list;
 }
 
-/*!
-    Returns a list of all the widgets in the application.
-
-    The list is empty (QList::isEmpty()) if there are no widgets.
-
-    \note Some of the widgets may be hidden.
-
-    Example:
-    \snippet code/src_gui_kernel_qapplication.cpp 5
-
-    \sa topLevelWidgets(), QWidget::isVisible()
-*/
-
 QWidgetList QApplication::allWidgets()
 {
    if (QWidgetPrivate::allWidgets) {
@@ -869,13 +852,6 @@ QWidgetList QApplication::allWidgets()
    }
    return QWidgetList();
 }
-
-/*!
-    Returns the application widget that has the keyboard input focus, or 0 if
-    no widget in this application has the focus.
-
-    \sa QWidget::setFocus(), QWidget::hasFocus(), activeWindow(), focusChanged()
-*/
 
 QWidget *QApplication::focusWidget()
 {
@@ -3070,17 +3046,6 @@ static inline int uiEffectToFlag(Qt::UIEffect effect)
    return 0;
 }
 
-/*!
-    \fn void QApplication::setEffectEnabled(Qt::UIEffect effect, bool enable)
-
-    Enables the UI effect \a effect if \a enable is true, otherwise the effect
-    will not be used.
-
-    \note All effects are disabled on screens running at less than 16-bit color
-    depth.
-
-    \sa isEffectEnabled(), Qt::UIEffect, setDesktopSettingsAware()
-*/
 void QApplication::setEffectEnabled(Qt::UIEffect effect, bool enable)
 {
    int effectFlags = uiEffectToFlag(effect);

@@ -252,11 +252,6 @@ QTextDocumentFragment::QTextDocumentFragment()
 {
 }
 
-/*!
-    Converts the given \a document into a QTextDocumentFragment.
-    Note that the QTextDocumentFragment only stores the document contents, not meta information
-    like the document's title.
-*/
 QTextDocumentFragment::QTextDocumentFragment(const QTextDocument *document)
    : d(nullptr)
 {
@@ -269,12 +264,6 @@ QTextDocumentFragment::QTextDocumentFragment(const QTextDocument *document)
    d = new QTextDocumentFragmentPrivate(cursor);
 }
 
-/*!
-    Creates a QTextDocumentFragment from the \a{cursor}'s selection.
-    If the cursor doesn't have a selection, the created fragment is empty.
-
-    \sa isEmpty() QTextCursor::selection()
-*/
 QTextDocumentFragment::QTextDocumentFragment(const QTextCursor &cursor)
    : d(nullptr)
 {
@@ -285,11 +274,6 @@ QTextDocumentFragment::QTextDocumentFragment(const QTextCursor &cursor)
    d = new QTextDocumentFragmentPrivate(cursor);
 }
 
-/*!
-    \fn QTextDocumentFragment::QTextDocumentFragment(const QTextDocumentFragment &other)
-
-    Copy constructor. Creates a copy of the \a other fragment.
-*/
 QTextDocumentFragment::QTextDocumentFragment(const QTextDocumentFragment &rhs)
    : d(rhs.d)
 {
@@ -298,11 +282,6 @@ QTextDocumentFragment::QTextDocumentFragment(const QTextDocumentFragment &rhs)
    }
 }
 
-/*!
-    \fn QTextDocumentFragment &QTextDocumentFragment::operator=(const QTextDocumentFragment &other)
-
-    Assigns the \a other fragment to this fragment.
-*/
 QTextDocumentFragment &QTextDocumentFragment::operator=(const QTextDocumentFragment &rhs)
 {
    if (rhs.d) {
@@ -315,9 +294,6 @@ QTextDocumentFragment &QTextDocumentFragment::operator=(const QTextDocumentFragm
    return *this;
 }
 
-/*!
-    Destroys the document fragment.
-*/
 QTextDocumentFragment::~QTextDocumentFragment()
 {
    if (d && !d->ref.deref()) {
@@ -325,20 +301,11 @@ QTextDocumentFragment::~QTextDocumentFragment()
    }
 }
 
-/*!
-    Returns true if the fragment is empty; otherwise returns false.
-*/
 bool QTextDocumentFragment::isEmpty() const
 {
    return !d || !d->doc || d->doc->docHandle()->length() <= 1;
 }
 
-/*!
-    Returns the document fragment's text as plain text (i.e. with no
-    formatting information).
-
-    \sa toHtml()
-*/
 QString QTextDocumentFragment::toPlainText() const
 {
    if (!d) {

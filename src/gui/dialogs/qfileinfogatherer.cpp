@@ -57,9 +57,6 @@ QFileInfoGatherer::QFileInfoGatherer(QObject *parent)
    start(LowPriority);
 }
 
-/*!
-    Destroys thread
-*/
 QFileInfoGatherer::~QFileInfoGatherer()
 {
    abort.store(true);

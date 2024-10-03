@@ -724,15 +724,6 @@ void QIcon::detach()
    }
 }
 
-/*!
-    Adds \a pixmap to the icon, as a specialization for \a mode and
-    \a state.
-
-    Custom icon engines are free to ignore additionally added
-    pixmaps.
-
-    \sa addFile()
-*/
 void QIcon::addPixmap(const QPixmap &pixmap, Mode mode, State state)
 {
    if (pixmap.isNull()) {

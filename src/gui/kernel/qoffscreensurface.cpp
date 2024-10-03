@@ -80,29 +80,12 @@ QOffscreenSurface::~QOffscreenSurface()
    destroy();
 }
 
-/*!
-    Returns the surface type of the offscreen surface.
-
-    The surface type of an offscreen surface is always QSurface::OpenGLSurface.
-*/
 QOffscreenSurface::SurfaceType QOffscreenSurface::surfaceType() const
 {
    Q_D(const QOffscreenSurface);
    return d->surfaceType;
 }
 
-/*!
-    Allocates the platform resources associated with the offscreen surface.
-
-    It is at this point that the surface format set using setFormat() gets resolved
-    into an actual native surface.
-
-    Call destroy() to free the platform resources if necessary.
-
-    \note Some platforms require this function to be called on the main (GUI) thread.
-
-    \sa destroy()
-*/
 void QOffscreenSurface::create()
 {
    Q_D(QOffscreenSurface);
@@ -131,11 +114,6 @@ void QOffscreenSurface::create()
    }
 }
 
-/*!
-    Releases the native platform resources associated with this offscreen surface.
-
-    \sa create()
-*/
 void QOffscreenSurface::destroy()
 {
    Q_D(QOffscreenSurface);
@@ -153,13 +131,6 @@ void QOffscreenSurface::destroy()
    }
 }
 
-/*!
-    Returns \c true if this offscreen surface is valid; otherwise returns \c false.
-
-    The offscreen surface is valid if the platform resources have been successfuly allocated.
-
-    \sa create()
-*/
 bool QOffscreenSurface::isValid() const
 {
    Q_D(const QOffscreenSurface);
@@ -167,45 +138,18 @@ bool QOffscreenSurface::isValid() const
       || (d->offscreenWindow && d->offscreenWindow->handle());
 }
 
-/*!
-    Sets the offscreen surface \a format.
-
-    The surface format will be resolved in the create() function. Calling
-    this function after create() will not re-resolve the surface format of the native surface.
-
-    \sa create(), destroy()
-*/
 void QOffscreenSurface::setFormat(const QSurfaceFormat &format)
 {
    Q_D(QOffscreenSurface);
    d->requestedFormat = format;
 }
 
-/*!
-    Returns the requested surfaceformat of this offscreen surface.
-
-    If the requested format was not supported by the platform implementation,
-    the requestedFormat will differ from the actual offscreen surface format.
-
-    This is the value set with setFormat().
-
-    \sa setFormat(), format()
- */
 QSurfaceFormat QOffscreenSurface::requestedFormat() const
 {
    Q_D(const QOffscreenSurface);
    return d->requestedFormat;
 }
 
-/*!
-    Returns the actual format of this offscreen surface.
-
-    After the offscreen surface has been created, this function will return the actual
-    surface format of the surface. It might differ from the requested format if the requested
-    format could not be fulfilled by the platform.
-
-    \sa create(), requestedFormat()
-*/
 QSurfaceFormat QOffscreenSurface::format() const
 {
    Q_D(const QOffscreenSurface);
@@ -218,33 +162,18 @@ QSurfaceFormat QOffscreenSurface::format() const
    return d->requestedFormat;
 }
 
-/*!
-    Returns the size of the offscreen surface.
-*/
 QSize QOffscreenSurface::size() const
 {
    Q_D(const QOffscreenSurface);
    return d->size;
 }
 
-/*!
-    Returns the screen to which the offscreen surface is connected.
-
-    \sa setScreen()
-*/
 QScreen *QOffscreenSurface::screen() const
 {
    Q_D(const QOffscreenSurface);
    return d->screen;
 }
 
-/*!
-    Sets the screen to which the offscreen surface is connected.
-
-    If the offscreen surface has been created, it will be recreated on the \a newScreen.
-
-    \sa screen()
-*/
 void QOffscreenSurface::setScreen(QScreen *newScreen)
 {
    Q_D(QOffscreenSurface);
@@ -287,14 +216,6 @@ void QOffscreenSurface::screenDestroyed(QObject *object)
       setScreen(nullptr);
    }
 }
-
-/*!
-    \fn QOffscreenSurface::screenChanged(QScreen *screen)
-
-    This signal is emitted when an offscreen surface's \a screen changes, either
-    by being set explicitly with setScreen(), or automatically when
-    the window's screen is removed.
-*/
 
 /*!
     Returns the platform offscreen surface corresponding to the offscreen surface.

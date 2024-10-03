@@ -213,11 +213,6 @@ void QGIFFormat::disposePrevious(QImage *image)
    disposed = true;
 }
 
-/*!
-    This function decodes some data into image changes.
-
-    Returns the number of bytes consumed.
-*/
 int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
    int *nextFrameDelay, int *loopCount)
 {
@@ -684,10 +679,6 @@ int QGIFFormat::decode(QImage *image, const uchar *buffer, int length,
    return initial - length;
 }
 
-/*!
-   Scans through the data stream defined by \a device and returns the image
-   sizes found in the stream in the \a imageSizes vector.
-*/
 void QGIFFormat::scan(QIODevice *device, QVector<QSize> *imageSizes, int *loopCount)
 {
    if (!device) {

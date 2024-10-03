@@ -344,10 +344,6 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
       return QPoint(q->horizontalOffset(), q->verticalOffset());
    }
 
-   /**
-    * For now, assume that we have few editors, if we need a more efficient implementation
-    * we should add a QMap<QAbstractItemDelegate*, int> member.
-    */
    int delegateRefCount(const QAbstractItemDelegate *delegate) const {
       int ref = 0;
       if (itemDelegate == delegate) {

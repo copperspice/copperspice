@@ -591,23 +591,11 @@ void QDirModel::setFilter(QDir::Filters filters)
    emit layoutChanged();
 }
 
-/*!
-  Returns the filter specification for the directory model.
-
-  \sa QDir::Filters
-*/
-
 QDir::Filters QDirModel::filter() const
 {
    Q_D(const QDirModel);
    return d->filters;
 }
-
-/*!
-  Sets the directory model's sorting order to that specified by \a sort.
-
-  \sa QDir::SortFlags
-*/
 
 void QDirModel::setSorting(QDir::SortFlags sort)
 {
@@ -622,24 +610,12 @@ void QDirModel::setSorting(QDir::SortFlags sort)
    emit layoutChanged();
 }
 
-/*!
-  Returns the sorting method used for the directory model.
-
-  \sa QDir::SortFlags */
-
 QDir::SortFlags QDirModel::sorting() const
 {
    Q_D(const QDirModel);
    return d->sort;
 }
 
-/*!
-    \property QDirModel::resolveSymlinks
-    \brief Whether the directory model should resolve symbolic links
-
-    This is only relevant on operating systems that support symbolic
-    links.
-*/
 void QDirModel::setResolveSymlinks(bool enable)
 {
    Q_D(QDirModel);
@@ -651,16 +627,6 @@ bool QDirModel::resolveSymlinks() const
    Q_D(const QDirModel);
    return d->resolveSymlinks;
 }
-
-/*!
-  \property QDirModel::readOnly
-  \brief Whether the directory model allows writing to the file system
-
-  If this property is set to false, the directory model will allow renaming, copying
-  and deleting of files and directories.
-
-  This property is true by default
-*/
 
 void QDirModel::setReadOnly(bool enable)
 {
@@ -674,19 +640,6 @@ bool QDirModel::isReadOnly() const
    return d->readOnly;
 }
 
-/*!
-  \property QDirModel::lazyChildCount
-  \brief Whether the directory model optimizes the hasChildren function
-  to only check if the item is a directory.
-
-  If this property is set to false, the directory model will make sure that a directory
-  actually containes any files before reporting that it has children.
-  Otherwise the directory model will report that an item has children if the item
-  is a directory.
-
-  This property is false by default
-*/
-
 void QDirModel::setLazyChildCount(bool enable)
 {
    Q_D(QDirModel);
@@ -698,13 +651,6 @@ bool QDirModel::lazyChildCount() const
    Q_D(const QDirModel);
    return d->lazyChildCount;
 }
-
-/*!
-  QDirModel caches file information. This function updates the
-  cache. The \a parent parameter is the directory from which the
-  model is updated; the default value will update the model from
-  root directory of the file system (the entire model).
-*/
 
 void QDirModel::refresh(const QModelIndex &parent)
 {
@@ -730,12 +676,6 @@ void QDirModel::refresh(const QModelIndex &parent)
    d->restorePersistentIndexes();
    emit layoutChanged();
 }
-
-/*!
-    \overload
-
-    Returns the model item index for the given \a path.
-*/
 
 QModelIndex QDirModel::index(const QString &path, int column) const
 {
@@ -861,11 +801,6 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    return idx;
 }
 
-/*!
-  Returns true if the model item \a index represents a directory;
-  otherwise returns false.
-*/
-
 bool QDirModel::isDir(const QModelIndex &index) const
 {
    Q_D(const QDirModel);
@@ -873,10 +808,6 @@ bool QDirModel::isDir(const QModelIndex &index) const
    QDirModelPrivate::QDirNode *node = d->node(index);
    return node->info.isDir();
 }
-
-/*!
-  Create a directory with the \a name in the \a parent model item.
-*/
 
 QModelIndex QDirModel::mkdir(const QModelIndex &parent, const QString &name)
 {
@@ -939,17 +870,6 @@ bool QDirModel::rmdir(const QModelIndex &index)
    return true;
 }
 
-/*!
-  Removes the model item \a index from the directory model and \bold{deletes the
-  corresponding file from the file system}, returning true if successful. If the
-  item cannot be removed, false is returned.
-
-  \warning This function deletes files from the file system; it does \bold{not}
-  move them to a location where they can be recovered.
-
-  \sa rmdir()
-*/
-
 bool QDirModel::remove(const QModelIndex &index)
 {
    Q_D(QDirModel);
@@ -989,12 +909,6 @@ QString QDirModel::filePath(const QModelIndex &index) const
    return QString(); // root path
 }
 
-/*!
-  Returns the name of the item stored in the model under the
-  \a index given.
-
-*/
-
 QString QDirModel::fileName(const QModelIndex &index) const
 {
    Q_D(const QDirModel);
@@ -1011,11 +925,6 @@ QString QDirModel::fileName(const QModelIndex &index) const
    return info.fileName();
 }
 
-/*!
-  Returns the icons for the item stored in the model under the given
-  \a index.
-*/
-
 QIcon QDirModel::fileIcon(const QModelIndex &index) const
 {
    Q_D(const QDirModel);
@@ -1028,17 +937,6 @@ QIcon QDirModel::fileIcon(const QModelIndex &index) const
    }
    return node->icon;
 }
-
-/*!
-  Returns the file information for the specified model \a index.
-
-  \bold{Note:} If the model index represents a symbolic link in the
-  underlying filing system, the file information returned will contain
-  information about the symbolic link itself, regardless of whether
-  resolveSymlinks is enabled or not.
-
-  \sa QFileInfo::symLinkTarget()
-*/
 
 QFileInfo QDirModel::fileInfo(const QModelIndex &index) const
 {

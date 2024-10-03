@@ -160,9 +160,6 @@ class QAccessibleTabButton: public QAccessibleInterface, public QAccessibleActio
 
 };
 
-/*!
-  Constructs a QAccessibleTabBar object for \a w.
-*/
 QAccessibleTabBar::QAccessibleTabBar(QWidget *w)
    : QAccessibleWidget(w, QAccessible::PageTabList)
 {
@@ -176,7 +173,6 @@ QAccessibleTabBar::~QAccessibleTabBar()
    }
 }
 
-/*! Returns the QTabBar. */
 QTabBar *QAccessibleTabBar::tabBar() const
 {
    return qobject_cast<QTabBar *>(object());
@@ -251,19 +247,12 @@ QString QAccessibleTabBar::text(QAccessible::Text t) const
 
   \ingroup accessibility
 */
-
-/*!
-  Constructs a QAccessibleComboBox object for \a w.
-*/
 QAccessibleComboBox::QAccessibleComboBox(QWidget *w)
    : QAccessibleWidget(w, QAccessible::ComboBox)
 {
    Q_ASSERT(comboBox());
 }
 
-/*!
-  Returns the combobox.
-*/
 QComboBox *QAccessibleComboBox::comboBox() const
 {
    return qobject_cast<QComboBox *>(object());

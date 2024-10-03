@@ -764,14 +764,6 @@ bool QWindowsXPStylePrivate::fixAlphaChannel(const QRect &rect)
    return hasFixedAlphaValue;
 }
 
-/*! Swaps the alpha values on certain pixels:
-        0xFF?????? -> 0x00??????
-        0x00?????? -> 0xFF??????
-
-    Used to determine the mask of a non-alpha transparent pixmap in the native doublebuffer,
-    and swap the alphas so we may paint the image as a Premultiplied QImage with drawImage(),
-    and obtain the mask transparency.
-*/
 bool QWindowsXPStylePrivate::swapAlphaChannel(const QRect &rect, bool allPixels)
 {
    const int startX = rect.left();

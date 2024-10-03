@@ -899,9 +899,6 @@ QPainter::QPainter(QPaintDevice *pd)
    Q_ASSERT(d_ptr);
 }
 
-/*!
-    Destroys the painter.
-*/
 QPainter::~QPainter()
 {
    d_ptr->inDestructor = true;

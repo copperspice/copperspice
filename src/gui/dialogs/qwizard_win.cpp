@@ -167,10 +167,6 @@ int QVistaHelper::m_devicePixelRatio = 1;
 bool QVistaHelper::is_vista = false;
 QVistaHelper::VistaState QVistaHelper::cachedVistaState = QVistaHelper::VistaState::Dirty;
 
-/******************************************************************************
-** QVistaBackButton
-*/
-
 QVistaBackButton::QVistaBackButton(QWidget *widget)
    : QAbstractButton(widget)
 {
@@ -251,10 +247,6 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
 
    pDrawThemeBackground(theme, hdc, buttonType, state, &clipRect, &clipRect);
 }
-
-/******************************************************************************
-** QVistaHelper
-*/
 
 QVistaHelper::QVistaHelper(QWizard *wizard)
    : QObject(wizard), pressed(false), wizard(wizard), backButton_(nullptr)

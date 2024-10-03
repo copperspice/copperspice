@@ -405,15 +405,6 @@ void QGraphicsWidgetPrivate::windowFrameMousePressEvent(QGraphicsSceneMouseEvent
    event->setAccepted(windowData->grabbedSection != Qt::NoSection);
 }
 
-/*!
-  Used to calculate the
-  Precondition:
-  \a widget should support either hfw or wfh
-
-  If \a heightForWidth is set to false, this function will query the width for height
-  instead. \a width will then be interpreted as height, \a minh and \a maxh will be interpreted
-  as minimum width and maximum width.
- */
 static qreal minimumHeightForWidth(qreal width, qreal minh, qreal maxh,
    const QGraphicsWidget *widget,
    bool heightForWidth = true)

@@ -2443,9 +2443,6 @@ static inline bool is_monochrome(const QVector<QRgb> &colorTable)
         ;
 }
 
-/*!
- * Adds an image to the pdf and return the pdf-object id. Returns -1 if adding the image failed.
- */
 int QPdfEnginePrivate::addImage(const QImage &img, bool *bitmap, qint64 serial_no)
 {
     if (img.isNull())

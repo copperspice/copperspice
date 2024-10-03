@@ -167,10 +167,6 @@ void QAbstractPrintDialog::setFromTo(int from, int to)
    }
 }
 
-/*!
-    Returns the first page to be printed
-    By default, this value is set to 0.
-*/
 int QAbstractPrintDialog::fromPage() const
 {
    Q_D(const QAbstractPrintDialog);

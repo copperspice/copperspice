@@ -1045,9 +1045,6 @@ void QFileDialog::setItemDelegate(QAbstractItemDelegate *delegate)
    d->qFileDialogUi->treeView->setItemDelegate(delegate);
 }
 
-/*!
-  Returns the item delegate used to render the items in the views in the filedialog.
-*/
 QAbstractItemDelegate *QFileDialog::itemDelegate() const
 {
    Q_D(const QFileDialog);
@@ -1057,9 +1054,6 @@ QAbstractItemDelegate *QFileDialog::itemDelegate() const
    return d->qFileDialogUi->listView->itemDelegate();
 }
 
-/*!
-    Sets the icon provider used by the filedialog to the specified \a provider.
-*/
 void QFileDialog::setIconProvider(QFileIconProvider *provider)
 {
    Q_D(QFileDialog);
@@ -1071,9 +1065,6 @@ void QFileDialog::setIconProvider(QFileIconProvider *provider)
    d->qFileDialogUi->sidebar->setUrls(d->qFileDialogUi->sidebar->urls());
 }
 
-/*!
-    Returns the icon provider used by the filedialog.
-*/
 QFileIconProvider *QFileDialog::iconProvider() const
 {
    Q_D(const QFileDialog);

@@ -341,10 +341,6 @@ int QSyntaxHighlighter::previousBlockState() const
    return previous.userState();
 }
 
-/*!
-    Returns the state of the current text block. If no value is set,
-    the returned value is -1.
-*/
 int QSyntaxHighlighter::currentBlockState() const
 {
    Q_D(const QSyntaxHighlighter);

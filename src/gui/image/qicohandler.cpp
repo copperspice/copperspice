@@ -382,11 +382,6 @@ void ICOReader::readBMP(QImage &image)
    }
 }
 
-/**
- * A 1 bit BMP is only flipped vertically, and not horizontally like all other color depths
- * (This is the same with the bitmask)
- *
- */
 void ICOReader::read1BitBMP(QImage &image)
 {
    if (iod) {

@@ -269,20 +269,11 @@ bool QImageWriterPrivate::canWriteHelper()
    return true;
 }
 
-/*!
-    Constructs an empty QImageWriter object. Before writing, you must
-    call setFormat() to set an image format, then setDevice() or
-    setFileName().
-*/
 QImageWriter::QImageWriter()
    : d(new QImageWriterPrivate(this))
 {
 }
 
-/*!
-    Constructs a QImageWriter object using the device \a device and
-    image format \a format.
-*/
 QImageWriter::QImageWriter(QIODevice *device, const QString &format)
    : d(new QImageWriterPrivate(this))
 {
@@ -290,12 +281,6 @@ QImageWriter::QImageWriter(QIODevice *device, const QString &format)
    d->format = format;
 }
 
-/*!
-    Constructs a QImageWriter objects that will write to a file with
-    the name \a fileName, using the image format \a format. If \a
-    format is not provided, QImageWriter will detect the image format
-    by inspecting the extension of \a fileName.
-*/
 QImageWriter::QImageWriter(const QString &fileName, const QString &format)
    : d(new QImageWriterPrivate(this))
 {
@@ -305,9 +290,6 @@ QImageWriter::QImageWriter(const QString &fileName, const QString &format)
    d->format = format;
 }
 
-/*!
-    Destructs the QImageWriter object.
-*/
 QImageWriter::~QImageWriter()
 {
    if (d->deleteDevice) {
@@ -339,22 +321,11 @@ void QImageWriter::setDevice(QIODevice *device)
    d->handler = nullptr;
 }
 
-/*!
-    Returns the device currently assigned to QImageWriter, or 0 if no
-    device has been assigned.
-*/
 QIODevice *QImageWriter::device() const
 {
    return d->device;
 }
 
-/*!
-    Sets the file name of QImageWriter to \a fileName. Internally,
-    QImageWriter will create a QFile and open it in \l
-    QIODevice::WriteOnly mode, and use this file when writing images.
-
-    \sa fileName(), setDevice()
-*/
 void QImageWriter::setFileName(const QString &fileName)
 {
    setDevice(new QFile(fileName));
@@ -384,36 +355,16 @@ void QImageWriter::setCompression(int compression)
    d->compression = compression;
 }
 
-/*!
-    Returns the compression of the image.
-
-    \sa setCompression()
-*/
 int QImageWriter::compression() const
 {
    return d->compression;
 }
 
-/*!
-    This is an image format specific function that sets the gamma
-    level of the image to \a gamma. For image formats that do not
-    support setting the gamma level, this value is ignored.
-
-    The value range of \a gamma depends on the image format. For
-    example, the "png" format supports a gamma range from 0.0 to 1.0.
-
-    \sa quality()
-*/
 void QImageWriter::setGamma(float gamma)
 {
    d->gamma = gamma;
 }
 
-/*!
-    Returns the gamma level of the image.
-
-    \sa setGamma()
-*/
 float QImageWriter::gamma() const
 {
    return d->gamma;

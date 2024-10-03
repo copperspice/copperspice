@@ -292,11 +292,6 @@ void QPrinter::setEngines(QPrintEngine *printEngine, QPaintEngine *paintEngine)
    d->use_default_engine = false;
 }
 
-/*!
-    Destroys the printer object and frees any allocated resources. If
-    the printer is destroyed while a print job is in progress this may
-    or may not affect the print job.
-*/
 QPrinter::~QPrinter()
 {
    Q_D(QPrinter);

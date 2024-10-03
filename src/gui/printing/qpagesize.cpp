@@ -1009,26 +1009,14 @@ QPageSize::QPageSize(QPageSizePrivate &dd)
 {
 }
 
-/*!
-    Copy constructor, copies \a other to this.
-*/
-
 QPageSize::QPageSize(const QPageSize &other)
    : d(other.d)
 {
 }
 
-/*!
-    Destroys the page.
-*/
-
 QPageSize::~QPageSize()
 {
 }
-
-/*!
-    Assignment operator, assigns \a other to this.
-*/
 
 QPageSize &QPageSize::operator=(const QPageSize &other)
 {
@@ -1036,45 +1024,11 @@ QPageSize &QPageSize::operator=(const QPageSize &other)
    return *this;
 }
 
-/*!
-    \fn void QPageSize::swap(QPageSize &other)
-
-    Swaps this QPageSize with \a other. This function is very fast and
-    never fails.
-*/
-
-/*!
-    \fn QPageSize &QPageSize::operator=(QPageSize &&other)
-
-    Move-assigns \a other to this QPageSize instance, transferring the
-    ownership of the managed pointer to this instance.
-*/
-
-/*!
-    \relates QPageSize
-
-    Returns \c true if page size \a lhs is equal to page size \a rhs,
-    i.e. if the page sizes have the same attributes. Current
-    attributes are size and name.
-*/
 
 bool operator==(const QPageSize &lhs, const QPageSize &rhs)
 {
    return lhs.d == rhs.d || *lhs.d == *rhs.d;
 }
-/*!
-    \fn bool operator!=(const QPageSize &lhs, const QPageSize &rhs)
-    \relates QPageSize
-
-    Returns \c true if page size \a lhs is unequal to page size \a
-    rhs, i.e. if the page size has different attributes. Current
-    attributes are size and name.
-*/
-
-/*!
-    Returns \c true if this page is equivalent to the \a other page, i.e. if the
-    page has the same size regardless of other attributes like name.
-*/
 
 bool QPageSize::isEquivalentTo(const QPageSize &other) const
 {
@@ -1084,75 +1038,25 @@ bool QPageSize::isEquivalentTo(const QPageSize &other) const
    return d && other.d && d->isEquivalentTo(*other.d);
 }
 
-/*!
-    Returns \c true if this page size is valid.
-
-    The page size may be invalid if created with an invalid PageSizeId, or a
-    negative or invalid QSize or QSizeF, or the null constructor.
-*/
-
 bool QPageSize::isValid() const
 {
    return d && d->isValid();
 }
-
-/*!
-    Returns the unique key of the page size.
-
-    By default this is the PPD standard mediaOption keyword for the page size,
-    or the PPD custom format key.  If the QPageSize instance was obtained from
-    a print device then this will be the key provided by the print device and
-    may differ from the standard key.
-
-    If the QPageSize is invalid then the key will be an empty string.
-
-    This key should never be shown to end users, it is an internal key only.
-    For a human-readable name use name().
-
-    \sa name()
-*/
 
 QString QPageSize::key() const
 {
    return isValid() ? d->m_key : QString();
 }
 
-/*!
-    Returns a localized human-readable name for the page size.
-
-    If the QPageSize instance was obtained from a print device then the name
-    used is that provided by the print device.  Note that a print device may
-    not support the current default locale language.
-
-    If the QPageSize is invalid then the name will be an empty string.
-*/
-
 QString QPageSize::name() const
 {
    return isValid() ? d->m_name : QString();
 }
 
-/*!
-    Returns the standard QPageSize::PageSizeId of the page, or QPageSize::Custom.
-
-    If the QPageSize is invalid then the ID will be QPageSize::Custom.
-*/
-
 QPageSize::PageSizeId QPageSize::id() const
 {
    return isValid() ? d->m_id : Custom;
 }
-
-/*!
-    Returns the Windows DMPAPER enum value for the page size.
-
-    Not all valid PPD page sizes have a Windows equivalent, in which case 0
-    will be returned.
-
-    If the QPageSize is invalid then the Windows ID will be 0.
-
-    \sa id()
-*/
 
 int QPageSize::windowsId() const
 {
@@ -1162,119 +1066,45 @@ int QPageSize::windowsId() const
    return d->m_windowsId > 0 ? d->m_windowsId : windowsId(d->m_id);
 }
 
-/*!
-    Returns the definition size of the page size.
-
-    For a standard page size this will be the size as defined in the relevant
-    standard, i.e. ISO A4 will be defined in millimeters while ANSI Letter will
-    be defined in inches.
-
-    For a custom page size this will be the original size used to create the
-    page size object.
-
-    If the QPageSize is invalid then the QSizeF will be invalid.
-
-    \sa definitionUnits()
-*/
-
 QSizeF QPageSize::definitionSize() const
 {
    return isValid() ? d->m_size : QSizeF();
 }
-
-/*!
-    Returns the definition units of the page size.
-
-    For a standard page size this will be the units as defined in the relevant
-    standard, i.e. ISO A4 will be defined in millimeters while ANSI Letter will
-    be defined in inches.
-
-    For a custom page size this will be the original units used to create the
-    page size object.
-
-    If the QPageSize is invalid then the QPageSize::Unit will be invalid.
-
-    \sa definitionSize()
-*/
 
 QPageSize::Unit QPageSize::definitionUnits() const
 {
    return isValid() ? d->m_units : Unit(-1);
 }
 
-/*!
-    Returns the size of the page in the required \a units.
-
-    If the QPageSize is invalid then the QSizeF will be invalid.
-*/
-
 QSizeF QPageSize::size(Unit units) const
 {
    return isValid() ? d->size(units) : QSize();
 }
-
-/*!
-    Returns the size of the page in Postscript Points (1/72 of an inch).
-
-    If the QPageSize is invalid then the QSize will be invalid.
-*/
 
 QSize QPageSize::sizePoints() const
 {
    return isValid() ? d->m_pointSize : QSize();
 }
 
-/*!
-    Returns the size of the page in Device Pixels at the given \a resolution.
-
-    If the QPageSize is invalid then the QSize will be invalid.
-*/
-
 QSize QPageSize::sizePixels(int resolution) const
 {
    return isValid() ? d->sizePixels(resolution) : QSize();
 }
-
-/*!
-    Returns the page rectangle in the required \a units.
-
-    If the QPageSize is invalid then the QRect will be invalid.
-*/
 
 QRectF QPageSize::rect(Unit units) const
 {
    return isValid() ? QRectF(QPointF(0, 0), d->size(units)) : QRectF();
 }
 
-/*!
-    Returns the page rectangle in Postscript Points (1/72 of an inch).
-
-    If the QPageSize is invalid then the QRect will be invalid.
-*/
-
 QRect QPageSize::rectPoints() const
 {
    return isValid() ? QRect(QPoint(0, 0), d->m_pointSize) : QRect();
 }
 
-/*!
-    Returns the page rectangle in Device Pixels at the given \a resolution.
-
-    If the QPageSize is invalid then the QRect will be invalid.
-*/
-
 QRect QPageSize::rectPixels(int resolution) const
 {
    return isValid() ? QRect(QPoint(0, 0), d->sizePixels(resolution)) : QRect();
 }
-
-// Statics
-
-/*!
-    Returns the PPD mediaOption keyword of the standard \a pageSizeId.
-
-    If the QPageSize is invalid then the key will be empty.
-*/
 
 QString QPageSize::key(PageSizeId pageSizeId)
 {
@@ -1289,12 +1119,6 @@ static QString msgImperialPageSizeInch(int width, int height)
    //: Page size in 'Inch'.
    return QCoreApplication::translate("QPageSize", "%1 x %2 in").formatArg(width).formatArg(height);
 }
-
-/*!
-    Returns the localized name of the standard \a pageSizeId.
-
-    If the QPageSize is invalid then the name will be empty.
-*/
 
 QString QPageSize::name(PageSizeId pageSizeId)
 {
@@ -1545,30 +1369,10 @@ QString QPageSize::name(PageSizeId pageSizeId)
    return QString();
 }
 
-/*!
-    Returns the standard QPageSize::PageSizeId of the given \a pointSize in
-    points using the given \a matchPolicy.
-
-    If using FuzzyMatch then the point size of the PageSizeId returned may not
-    exactly match the \a pointSize you passed in. You should call
-    QPageSize::sizePoints() using the returned PageSizeId to find out the actual
-    point size of the PageSizeId before using it in any calculations.
-*/
-
 QPageSize::PageSizeId QPageSize::id(const QSize &pointSize, SizeMatchPolicy matchPolicy)
 {
    return qt_idForPointSize(pointSize, matchPolicy, nullptr);
 }
-
-/*!
-    Returns the standard QPageSize::PageSizeId of the given \a size in \a units
-    using the given \a matchPolicy.
-
-    If using FuzzyMatch then the unit size of the PageSizeId returned may not
-    exactly match the \a size you passed in. You should call
-    QPageSize::size() using the returned PageSizeId to find out the actual
-    unit size of the PageSizeId before using it in any calculations.
-*/
 
 QPageSize::PageSizeId QPageSize::id(const QSizeF &size, Unit units,
    SizeMatchPolicy matchPolicy)
@@ -1576,34 +1380,15 @@ QPageSize::PageSizeId QPageSize::id(const QSizeF &size, Unit units,
    return qt_idForSize(size, units, matchPolicy, nullptr);
 }
 
-/*!
-    Returns the PageSizeId for the given Windows DMPAPER enum value \a windowsId.
-
-    If there is no matching PageSizeId then QPageSize::Custom is returned.
-*/
-
 QPageSize::PageSizeId QPageSize::id(int windowsId)
 {
    return qt_idForWindowsID(windowsId);
 }
 
-/*!
-    Returns the Windows DMPAPER enum value of the standard \a pageSizeId.
-
-    Not all valid PPD page sizes have a Windows equivalent, in which case 0
-    will be returned.
-*/
-
 int QPageSize::windowsId(PageSizeId pageSizeId)
 {
    return qt_pageSizes[pageSizeId].windowsId;
 }
-
-/*!
-    Returns the definition size of the standard \a pageSizeId.
-
-    To obtain the definition units, call QPageSize::definitionUnits().
-*/
 
 QSizeF QPageSize::definitionSize(PageSizeId pageSizeId)
 {
@@ -1613,12 +1398,6 @@ QSizeF QPageSize::definitionSize(PageSizeId pageSizeId)
    return qt_definitionSize(pageSizeId);
 }
 
-/*!
-    Returns the definition units of the standard \a pageSizeId.
-
-    To obtain the definition size, call QPageSize::definitionSize().
-*/
-
 QPageSize::Unit QPageSize::definitionUnits(PageSizeId pageSizeId)
 {
    if (pageSizeId == Custom) {
@@ -1626,10 +1405,6 @@ QPageSize::Unit QPageSize::definitionUnits(PageSizeId pageSizeId)
    }
    return qt_pageSizes[pageSizeId].definitionUnits;
 }
-
-/*!
-    Returns the size of the standard \a pageSizeId in the requested \a units.
-*/
 
 QSizeF QPageSize::size(PageSizeId pageSizeId, Unit units)
 {
@@ -1639,10 +1414,6 @@ QSizeF QPageSize::size(PageSizeId pageSizeId, Unit units)
    return qt_unitSize(pageSizeId, units);
 }
 
-/*!
-    Returns the size of the standard \a pageSizeId in Points.
-*/
-
 QSize QPageSize::sizePoints(PageSizeId pageSizeId)
 {
    if (pageSizeId == Custom) {
@@ -1650,11 +1421,6 @@ QSize QPageSize::sizePoints(PageSizeId pageSizeId)
    }
    return QSize(qt_pageSizes[pageSizeId].widthPoints, qt_pageSizes[pageSizeId].heightPoints);
 }
-
-/*!
-    Returns the size of the standard \a pageSizeId in Device Pixels
-    for the given \a resolution.
-*/
 
 QSize QPageSize::sizePixels(PageSizeId pageSizeId, int resolution)
 {

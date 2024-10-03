@@ -42,68 +42,6 @@ QMatrix4x4::QMatrix4x4(const qreal *values)
 }
 
 /*!
-    \fn QMatrix4x4::QMatrix4x4(qreal m11, qreal m12, qreal m13, qreal m14, qreal m21, qreal m22, qreal m23, qreal m24, qreal m31, qreal m32, qreal m33, qreal m34, qreal m41, qreal m42, qreal m43, qreal m44)
-
-    Constructs a matrix from the 16 elements \a m11, \a m12, \a m13, \a m14,
-    \a m21, \a m22, \a m23, \a m24, \a m31, \a m32, \a m33, \a m34,
-    \a m41, \a m42, \a m43, and \a m44.  The elements are specified in
-    row-major order.
-
-    If the matrix has a special type (identity, translate, scale, etc),
-    the programmer should follow this constructor with a call to
-    optimize() if they wish QMatrix4x4 to optimize further
-    calls to translate(), scale(), etc.
-
-    \sa optimize()
-*/
-
-/*!
-    \fn QMatrix4x4::QMatrix4x4(const QGenericMatrix<N, M, qreal>& matrix)
-
-    Constructs a 4x4 matrix from the left-most 4 columns and top-most
-    4 rows of \a matrix.  If \a matrix has less than 4 columns or rows,
-    the remaining elements are filled with elements from the identity
-    matrix.
-
-    \sa toGenericMatrix()
-*/
-
-/*!
-    \fn QGenericMatrix<N, M, qreal> QMatrix4x4::toGenericMatrix() const
-
-    Constructs a NxM generic matrix from the left-most N columns and
-    top-most M rows of this 4x4 matrix.  If N or M is greater than 4,
-    then the remaining elements are filled with elements from the
-    identity matrix.
-*/
-
-/*!
-    \fn QMatrix4x4 qGenericMatrixToMatrix4x4(const QGenericMatrix<N, M, qreal>& matrix)
-    \relates QMatrix4x4
-    \obsolete
-
-    Returns a 4x4 matrix constructed from the left-most 4 columns and
-    top-most 4 rows of \a matrix.  If \a matrix has less than 4 columns
-    or rows, the remaining elements are filled with elements from the
-    identity matrix.
-
-    \sa QMatrix4x4(const QGenericMatrix &)
-*/
-
-/*!
-    \fn QGenericMatrix<N, M, qreal> qGenericMatrixFromMatrix4x4(const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-    \obsolete
-
-    Returns a NxM generic matrix constructed from the left-most N columns
-    and top-most M rows of \a matrix.  If N or M is greater than 4,
-    then the remaining elements are filled with elements from the
-    identity matrix.
-
-    \sa QMatrix4x4::toGenericMatrix()
-*/
-
-/*!
     \internal
 */
 QMatrix4x4::QMatrix4x4(const qreal *values, int cols, int rows)
@@ -122,17 +60,6 @@ QMatrix4x4::QMatrix4x4(const qreal *values, int cols, int rows)
    flagBits = General;
 }
 
-/*!
-    Constructs a 4x4 matrix from a conventional Qt 2D affine
-    transformation \a matrix.
-
-    If \a matrix has a special type (identity, translate, scale, etc),
-    the programmer should follow this constructor with a call to
-    optimize() if they wish QMatrix4x4 to optimize further
-    calls to translate(), scale(), etc.
-
-    \sa toAffine(), optimize()
-*/
 QMatrix4x4::QMatrix4x4(const QMatrix &matrix)
 {
    m[0][0] = matrix.m11();
@@ -154,17 +81,6 @@ QMatrix4x4::QMatrix4x4(const QMatrix &matrix)
    flagBits = General;
 }
 
-/*!
-    Constructs a 4x4 matrix from the conventional Qt 2D
-    transformation matrix \a transform.
-
-    If \a transform has a special type (identity, translate, scale, etc),
-    the programmer should follow this constructor with a call to
-    optimize() if they wish QMatrix4x4 to optimize further
-    calls to translate(), scale(), etc.
-
-    \sa toTransform(), optimize()
-*/
 QMatrix4x4::QMatrix4x4(const QTransform &transform)
 {
    m[0][0] = transform.m11();
@@ -185,78 +101,6 @@ QMatrix4x4::QMatrix4x4(const QTransform &transform)
    m[3][3] = transform.m33();
    flagBits = General;
 }
-
-/*!
-    \fn const qreal& QMatrix4x4::operator()(int row, int column) const
-
-    Returns a constant reference to the element at position
-    (\a row, \a column) in this matrix.
-
-    \sa column(), row()
-*/
-
-/*!
-    \fn qreal& QMatrix4x4::operator()(int row, int column)
-
-    Returns a reference to the element at position (\a row, \a column)
-    in this matrix so that the element can be assigned to.
-
-    \sa optimize(), setColumn(), setRow()
-*/
-
-/*!
-    \fn QVector4D QMatrix4x4::column(int index) const
-
-    Returns the elements of column \a index as a 4D vector.
-
-    \sa setColumn(), row()
-*/
-
-/*!
-    \fn void QMatrix4x4::setColumn(int index, const QVector4D& value)
-
-    Sets the elements of column \a index to the components of \a value.
-
-    \sa column(), setRow()
-*/
-
-/*!
-    \fn QVector4D QMatrix4x4::row(int index) const
-
-    Returns the elements of row \a index as a 4D vector.
-
-    \sa setRow(), column()
-*/
-
-/*!
-    \fn void QMatrix4x4::setRow(int index, const QVector4D& value)
-
-    Sets the elements of row \a index to the components of \a value.
-
-    \sa row(), setColumn()
-*/
-
-/*!
-    \fn bool QMatrix4x4::isIdentity() const
-
-    Returns true if this matrix is the identity; false otherwise.
-
-    \sa setToIdentity()
-*/
-
-/*!
-    \fn void QMatrix4x4::setToIdentity()
-
-    Sets this matrix to the identity.
-
-    \sa isIdentity()
-*/
-
-/*!
-    \fn void QMatrix4x4::fill(qreal value)
-
-    Fills all elements of this matrx with \a value.
-*/
 
 // The 4x4 matrix inverse algorithm is based on that described at:
 // http://www.j3d.org/matrix_faq/matrfaq_latest.html#Q24
@@ -293,26 +137,11 @@ static inline qreal matrixDet4(const qreal m[4][4])
    return det;
 }
 
-/*!
-    Returns the determinant of this matrix.
-*/
 qreal QMatrix4x4::determinant() const
 {
    return qreal(matrixDet4(m));
 }
 
-/*!
-    Returns the inverse of this matrix.  Returns the identity if
-    this matrix cannot be inverted; i.e. determinant() is zero.
-    If \a invertible is not null, then true will be written to
-    that location if the matrix can be inverted; false otherwise.
-
-    If the matrix is recognized as the identity or an orthonormal
-    matrix, then this function will quickly invert the matrix
-    using optimized routines.
-
-    \sa determinant(), normalMatrix()
-*/
 QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
 {
    // Handle some of the easy cases first.
@@ -372,14 +201,6 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
    return inv;
 }
 
-/*!
-    Returns the normal matrix corresponding to this 4x4 transformation.
-    The normal matrix is the transpose of the inverse of the top-left
-    3x3 part of this 4x4 matrix.  If the 3x3 sub-matrix is not invertible,
-    this function returns the identity.
-
-    \sa inverted()
-*/
 QMatrix3x3 QMatrix4x4::normalMatrix() const
 {
    QMatrix3x3 inv;
@@ -419,9 +240,6 @@ QMatrix3x3 QMatrix4x4::normalMatrix() const
    return inv;
 }
 
-/*!
-    Returns this matrix, transposed about its diagonal.
-*/
 QMatrix4x4 QMatrix4x4::transposed() const
 {
    QMatrix4x4 result(1); // The "1" says to not load the identity.
@@ -433,36 +251,6 @@ QMatrix4x4 QMatrix4x4::transposed() const
    return result;
 }
 
-/*!
-    \fn QMatrix4x4& QMatrix4x4::operator+=(const QMatrix4x4& other)
-
-    Adds the contents of \a other to this matrix.
-*/
-
-/*!
-    \fn QMatrix4x4& QMatrix4x4::operator-=(const QMatrix4x4& other)
-
-    Subtracts the contents of \a other from this matrix.
-*/
-
-/*!
-    \fn QMatrix4x4& QMatrix4x4::operator*=(const QMatrix4x4& other)
-
-    Multiplies the contents of \a other by this matrix.
-*/
-
-/*!
-    \fn QMatrix4x4& QMatrix4x4::operator*=(qreal factor)
-    \overload
-
-    Multiplies all elements of this matrix by \a factor.
-*/
-
-/*!
-    \overload
-
-    Divides all elements of this matrix by \a divisor.
-*/
 QMatrix4x4 &QMatrix4x4::operator/=(qreal divisor)
 {
    m[0][0] /= divisor;
@@ -485,140 +273,6 @@ QMatrix4x4 &QMatrix4x4::operator/=(qreal divisor)
    return *this;
 }
 
-/*!
-    \fn bool QMatrix4x4::operator==(const QMatrix4x4& other) const
-
-    Returns true if this matrix is identical to \a other; false otherwise.
-    This operator uses an exact floating-point comparison.
-*/
-
-/*!
-    \fn bool QMatrix4x4::operator!=(const QMatrix4x4& other) const
-
-    Returns true if this matrix is not identical to \a other; false otherwise.
-    This operator uses an exact floating-point comparison.
-*/
-
-/*!
-    \fn QMatrix4x4 operator+(const QMatrix4x4& m1, const QMatrix4x4& m2)
-    \relates QMatrix4x4
-
-    Returns the sum of \a m1 and \a m2.
-*/
-
-/*!
-    \fn QMatrix4x4 operator-(const QMatrix4x4& m1, const QMatrix4x4& m2)
-    \relates QMatrix4x4
-
-    Returns the difference of \a m1 and \a m2.
-*/
-
-/*!
-    \fn QMatrix4x4 operator*(const QMatrix4x4& m1, const QMatrix4x4& m2)
-    \relates QMatrix4x4
-
-    Returns the product of \a m1 and \a m2.
-*/
-
-#ifndef QT_NO_VECTOR3D
-
-/*!
-    \fn QVector3D operator*(const QVector3D& vector, const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a vector according to \a matrix,
-    with the matrix applied post-vector.
-*/
-
-/*!
-    \fn QVector3D operator*(const QMatrix4x4& matrix, const QVector3D& vector)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a vector according to \a matrix,
-    with the matrix applied pre-vector.
-*/
-
-#endif
-
-#ifndef QT_NO_VECTOR4D
-
-/*!
-    \fn QVector4D operator*(const QVector4D& vector, const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a vector according to \a matrix,
-    with the matrix applied post-vector.
-*/
-
-/*!
-    \fn QVector4D operator*(const QMatrix4x4& matrix, const QVector4D& vector)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a vector according to \a matrix,
-    with the matrix applied pre-vector.
-*/
-
-#endif
-
-/*!
-    \fn QPoint operator*(const QPoint& point, const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a point according to \a matrix,
-    with the matrix applied post-point.
-*/
-
-/*!
-    \fn QPointF operator*(const QPointF& point, const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a point according to \a matrix,
-    with the matrix applied post-point.
-*/
-
-/*!
-    \fn QPoint operator*(const QMatrix4x4& matrix, const QPoint& point)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a point according to \a matrix,
-    with the matrix applied pre-point.
-*/
-
-/*!
-    \fn QPointF operator*(const QMatrix4x4& matrix, const QPointF& point)
-    \relates QMatrix4x4
-
-    Returns the result of transforming \a point according to \a matrix,
-    with the matrix applied pre-point.
-*/
-
-/*!
-    \fn QMatrix4x4 operator-(const QMatrix4x4& matrix)
-    \overload
-    \relates QMatrix4x4
-
-    Returns the negation of \a matrix.
-*/
-
-/*!
-    \fn QMatrix4x4 operator*(qreal factor, const QMatrix4x4& matrix)
-    \relates QMatrix4x4
-
-    Returns the result of multiplying all elements of \a matrix by \a factor.
-*/
-
-/*!
-    \fn QMatrix4x4 operator*(const QMatrix4x4& matrix, qreal factor)
-    \relates QMatrix4x4
-
-    Returns the result of multiplying all elements of \a matrix by \a factor.
-*/
-
-/*!
-    \relates QMatrix4x4
-
-    Returns the result of dividing all elements of \a matrix by \a divisor.
-*/
 QMatrix4x4 operator/(const QMatrix4x4 &matrix, qreal divisor)
 {
    QMatrix4x4 m(1); // The "1" says to not load the identity.
@@ -641,22 +295,8 @@ QMatrix4x4 operator/(const QMatrix4x4 &matrix, qreal divisor)
    return m;
 }
 
-/*!
-    \fn bool qFuzzyCompare(const QMatrix4x4& m1, const QMatrix4x4& m2)
-    \relates QMatrix4x4
-
-    Returns true if \a m1 and \a m2 are equal, allowing for a small
-    fuzziness factor for floating-point comparisons; false otherwise.
-*/
-
 #ifndef QT_NO_VECTOR3D
 
-/*!
-    Multiplies this matrix by another that scales coordinates by
-    the components of \a vector.
-
-    \sa translate(), rotate()
-*/
 void QMatrix4x4::scale(const QVector3D &vector)
 {
    qreal vx = vector.x();
@@ -694,14 +334,6 @@ void QMatrix4x4::scale(const QVector3D &vector)
 }
 #endif
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that scales coordinates by the
-    components \a x, and \a y.
-
-    \sa translate(), rotate()
-*/
 void QMatrix4x4::scale(qreal x, qreal y)
 {
    if (flagBits == Identity) {
@@ -728,14 +360,6 @@ void QMatrix4x4::scale(qreal x, qreal y)
    }
 }
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that scales coordinates by the
-    components \a x, \a y, and \a z.
-
-    \sa translate(), rotate()
-*/
 void QMatrix4x4::scale(qreal x, qreal y, qreal z)
 {
    if (flagBits == Identity) {
@@ -769,14 +393,6 @@ void QMatrix4x4::scale(qreal x, qreal y, qreal z)
    }
 }
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that scales coordinates by the
-    given \a factor.
-
-    \sa translate(), rotate()
-*/
 void QMatrix4x4::scale(qreal factor)
 {
    if (flagBits == Identity) {
@@ -811,12 +427,7 @@ void QMatrix4x4::scale(qreal factor)
 }
 
 #ifndef QT_NO_VECTOR3D
-/*!
-    Multiplies this matrix by another that translates coordinates by
-    the components of \a vector.
 
-    \sa scale(), rotate()
-*/
 void QMatrix4x4::translate(const QVector3D &vector)
 {
    qreal vx = vector.x();
@@ -855,14 +466,6 @@ void QMatrix4x4::translate(const QVector3D &vector)
 
 #endif
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that translates coordinates
-    by the components \a x, and \a y.
-
-    \sa scale(), rotate()
-*/
 void QMatrix4x4::translate(qreal x, qreal y)
 {
    if (flagBits == Identity) {
@@ -893,14 +496,6 @@ void QMatrix4x4::translate(qreal x, qreal y)
    }
 }
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that translates coordinates
-    by the components \a x, \a y, and \a z.
-
-    \sa scale(), rotate()
-*/
 void QMatrix4x4::translate(qreal x, qreal y, qreal z)
 {
    if (flagBits == Identity) {
@@ -936,12 +531,6 @@ void QMatrix4x4::translate(qreal x, qreal y, qreal z)
 
 #ifndef QT_NO_VECTOR3D
 
-/*!
-    Multiples this matrix by another that rotates coordinates through
-    \a angle degrees about \a vector.
-
-    \sa scale(), translate()
-*/
 void QMatrix4x4::rotate(qreal angle, const QVector3D &vector)
 {
    rotate(angle, vector.x(), vector.y(), vector.z());
@@ -949,14 +538,6 @@ void QMatrix4x4::rotate(qreal angle, const QVector3D &vector)
 
 #endif
 
-/*!
-    \overload
-
-    Multiplies this matrix by another that rotates coordinates through
-    \a angle degrees about the vector (\a x, \a y, \a z).
-
-    \sa scale(), translate()
-*/
 void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
 {
    if (angle == 0.0f) {
@@ -1454,10 +1035,6 @@ void QMatrix4x4::flipCoordinates()
    }
 }
 
-/*!
-    Retrieves the 16 items in this matrix and copies them to \a values
-    in row-major order.
-*/
 void QMatrix4x4::copyDataTo(qreal *values) const
 {
    for (int row = 0; row < 4; ++row)
@@ -1466,13 +1043,6 @@ void QMatrix4x4::copyDataTo(qreal *values) const
       }
 }
 
-/*!
-    Returns the conventional Qt 2D affine transformation matrix that
-    corresponds to this matrix.  It is assumed that this matrix
-    only contains 2D affine transformation elements.
-
-    \sa toTransform()
-*/
 QMatrix QMatrix4x4::toAffine() const
 {
    return QMatrix(m[0][0], m[0][1],
@@ -1480,17 +1050,6 @@ QMatrix QMatrix4x4::toAffine() const
                   m[3][0], m[3][1]);
 }
 
-/*!
-    Returns the conventional Qt 2D transformation matrix that
-    corresponds to this matrix.
-
-    The returned QTransform is formed by simply dropping the
-    third row and third column of the QMatrix4x4.  This is suitable
-    for implementing orthographic projections where the z co-ordinate
-    should be dropped rather than projected.
-
-    \sa toAffine()
-*/
 QTransform QMatrix4x4::toTransform() const
 {
    return QTransform(m[0][0], m[0][1], m[0][3],
@@ -1498,23 +1057,6 @@ QTransform QMatrix4x4::toTransform() const
                      m[3][0], m[3][1], m[3][3]);
 }
 
-/*!
-    Returns the conventional Qt 2D transformation matrix that
-    corresponds to this matrix.
-
-    If \a distanceToPlane is non-zero, it indicates a projection
-    factor to use to adjust for the z co-ordinate.  The value of
-    1024 corresponds to the projection factor used
-    by QTransform::rotate() for the x and y axes.
-
-    If \a distanceToPlane is zero, then the returned QTransform
-    is formed by simply dropping the third row and third column
-    of the QMatrix4x4.  This is suitable for implementing
-    orthographic projections where the z co-ordinate should
-    be dropped rather than projected.
-
-    \sa toAffine()
-*/
 QTransform QMatrix4x4::toTransform(qreal distanceToPlane) const
 {
    if (distanceToPlane == 1024.0f) {
@@ -1545,64 +1087,6 @@ QTransform QMatrix4x4::toTransform(qreal distanceToPlane) const
    }
 }
 
-/*!
-    \fn QPoint QMatrix4x4::map(const QPoint& point) const
-
-    Maps \a point by multiplying this matrix by \a point.
-
-    \sa mapRect()
-*/
-
-/*!
-    \fn QPointF QMatrix4x4::map(const QPointF& point) const
-
-    Maps \a point by multiplying this matrix by \a point.
-
-    \sa mapRect()
-*/
-
-#ifndef QT_NO_VECTOR3D
-
-/*!
-    \fn QVector3D QMatrix4x4::map(const QVector3D& point) const
-
-    Maps \a point by multiplying this matrix by \a point.
-
-    \sa mapRect(), mapVector()
-*/
-
-/*!
-    \fn QVector3D QMatrix4x4::mapVector(const QVector3D& vector) const
-
-    Maps \a vector by multiplying the top 3x3 portion of this matrix
-    by \a vector.  The translation and projection components of
-    this matrix are ignored.
-
-    \sa map()
-*/
-
-#endif
-
-#ifndef QT_NO_VECTOR4D
-
-/*!
-    \fn QVector4D QMatrix4x4::map(const QVector4D& point) const;
-
-    Maps \a point by multiplying this matrix by \a point.
-
-    \sa mapRect()
-*/
-
-#endif
-
-/*!
-    Maps \a rect by multiplying this matrix by the corners
-    of \a rect and then forming a new rectangle from the results.
-    The returned rectangle will be an ordinary 2D rectangle
-    with sides parallel to the horizontal and vertical axes.
-
-    \sa map()
-*/
 QRect QMatrix4x4::mapRect(const QRect &rect) const
 {
    if (flagBits == (Translation | Scale) || flagBits == Scale) {
@@ -1639,14 +1123,6 @@ QRect QMatrix4x4::mapRect(const QRect &rect) const
    return QRect(xmin, ymin, xmax - xmin, ymax - ymin);
 }
 
-/*!
-    Maps \a rect by multiplying this matrix by the corners
-    of \a rect and then forming a new rectangle from the results.
-    The returned rectangle will be an ordinary 2D rectangle
-    with sides parallel to the horizontal and vertical axes.
-
-    \sa map()
-*/
 QRectF QMatrix4x4::mapRect(const QRectF &rect) const
 {
    if (flagBits == (Translation | Scale) || flagBits == Scale) {
@@ -1680,30 +1156,6 @@ QRectF QMatrix4x4::mapRect(const QRectF &rect) const
    return QRectF(QPointF(xmin, ymin), QPointF(xmax, ymax));
 }
 
-/*!
-    \fn qreal *QMatrix4x4::data()
-
-    Returns a pointer to the raw data of this matrix.
-
-    \sa constData(), optimize()
-*/
-
-/*!
-    \fn const qreal *QMatrix4x4::data() const
-
-    Returns a constant pointer to the raw data of this matrix.
-
-    \sa constData()
-*/
-
-/*!
-    \fn const qreal *QMatrix4x4::constData() const
-
-    Returns a constant pointer to the raw data of this matrix.
-
-    \sa data()
-*/
-
 // Helper routine for inverting orthonormal matrices that consist
 // of just rotations and translations.
 QMatrix4x4 QMatrix4x4::orthonormalInverse() const
@@ -1734,26 +1186,6 @@ QMatrix4x4 QMatrix4x4::orthonormalInverse() const
    return result;
 }
 
-/*!
-    Optimize the usage of this matrix from its current elements.
-
-    Some operations such as translate(), scale(), and rotate() can be
-    performed more efficiently if the matrix being modified is already
-    known to be the identity, a previous translate(), a previous
-    scale(), etc.
-
-    Normally the QMatrix4x4 class keeps track of this special type internally
-    as operations are performed.  However, if the matrix is modified
-    directly with operator()() or data(), then QMatrix4x4 will lose track of
-    the special type and will revert to the safest but least efficient
-    operations thereafter.
-
-    By calling optimize() after directly modifying the matrix,
-    the programmer can force QMatrix4x4 to recover the special type if
-    the elements appear to conform to one of the known optimized types.
-
-    \sa operator()(), data(), translate()
-*/
 void QMatrix4x4::optimize()
 {
    // If the last element is not 1, then it can never be special.
@@ -1793,9 +1225,6 @@ void QMatrix4x4::optimize()
    }
 }
 
-/*!
-    Returns the matrix as a QVariant.
-*/
 QMatrix4x4::operator QVariant() const
 {
    return QVariant(QVariant::Matrix4x4, this);
@@ -1837,16 +1266,6 @@ QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
 
 #ifndef QT_NO_DATASTREAM
 
-/*!
-    \fn QDataStream &operator<<(QDataStream &stream, const QMatrix4x4 &matrix)
-    \relates QMatrix4x4
-
-    Writes the given \a matrix to the given \a stream and returns a
-    reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
-
 QDataStream &operator<<(QDataStream &stream, const QMatrix4x4 &matrix)
 {
    for (int row = 0; row < 4; ++row)
@@ -1855,16 +1274,6 @@ QDataStream &operator<<(QDataStream &stream, const QMatrix4x4 &matrix)
       }
    return stream;
 }
-
-/*!
-    \fn QDataStream &operator>>(QDataStream &stream, QMatrix4x4 &matrix)
-    \relates QMatrix4x4
-
-    Reads a 4x4 matrix from the given \a stream into the given \a matrix
-    and returns a reference to the stream.
-
-    \sa {Serializing Qt Data Types}
-*/
 
 QDataStream &operator>>(QDataStream &stream, QMatrix4x4 &matrix)
 {

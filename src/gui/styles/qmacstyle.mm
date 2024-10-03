@@ -1461,13 +1461,6 @@ bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOpti
    macStyle->d_func()->initHIThemePushButton(option, pushButton, kThemeStateActive, &bdi);
    return bdi.kind == kThemeBevelButton;
 }
-
-/**
-    Creates a HIThemeButtonDrawInfo structure that specifies the correct button
-    kind and other details to use for drawing the given combobox. Which button
-    kind depends on the size of the combo, wether or not it is editable,
-    explicit user style settings, etc.
-*/
 void QMacStylePrivate::initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
                                        const QWidget *widget, const ThemeDrawState &tds) const
 {

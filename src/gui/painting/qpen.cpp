@@ -91,38 +91,15 @@ QPen::QPen(Qt::PenStyle style)
    }
 }
 
-
-/*!
-    Constructs a solid line pen with 0 width and the given \a color.
-
-    \sa setBrush(), setColor()
-*/
-
 QPen::QPen(const QColor &color)
 {
    d = new QPenData(color, 1, Qt::SolidLine, qpen_default_cap, qpen_default_join);
 }
 
-
-/*!
-    \fn QPen::QPen(const QBrush &brush, qreal width, Qt::PenStyle style, Qt::PenCapStyle cap, Qt::PenJoinStyle join)
-
-    Constructs a pen with the specified \a brush, \a width, pen \a style,
-    \a cap style and \a join style.
-
-    \sa setBrush(), setWidth(), setStyle(),  setCapStyle(), setJoinStyle()
-*/
-
 QPen::QPen(const QBrush &brush, qreal width, Qt::PenStyle s, Qt::PenCapStyle c, Qt::PenJoinStyle j)
 {
    d = new QPenData(brush, width, s, c, j, false);
 }
-
-/*!
-    \fn QPen::QPen(const QPen &pen)
-
-    Constructs a pen that is a copy of the given \a pen.
-*/
 
 QPen::QPen(const QPen &p)
 {
@@ -132,27 +109,12 @@ QPen::QPen(const QPen &p)
    }
 }
 
-
-/*!
-    Destroys the pen.
-*/
-
 QPen::~QPen()
 {
    if (d && ! d->ref.deref()) {
       delete d;
    }
 }
-
-/*!
-    \fn void QPen::detach()
-    Detaches from shared pen data to make sure that this pen is the
-    only one referring the data.
-
-    If multiple pens share common data, this pen dereferences the data
-    and gets a copy of the data. Nothing is done if there is just a
-    single reference.
-*/
 
 void QPen::detach()
 {
@@ -168,14 +130,6 @@ void QPen::detach()
    x->ref.store(1);
    d = x;
 }
-
-
-/*!
-    \fn QPen &QPen::operator=(const QPen &pen)
-
-    Assigns the given \a pen to this pen and returns a reference to
-    this pen.
-*/
 
 QPen &QPen::operator=(const QPen &p)
 {

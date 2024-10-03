@@ -3417,25 +3417,10 @@ static void QOPENGLF_APIENTRY qopenglfResolveVertexBindingDivisor(GLuint binding
         RESOLVE_FUNC_VOID(0, VertexBindingDivisor)(bindingindex, divisor);
 }
 
-/*!
-    Constructs a default function resolver. The resolver cannot be used until
-    \l {QOpenGLFunctions::}{initializeOpenGLFunctions()} is called to specify
-    the context.
-*/
 QOpenGLExtraFunctions::QOpenGLExtraFunctions()
 {
 }
 
-/*!
-    Constructs a function resolver for context. If \a context is null, then
-    the resolver will be created for the current QOpenGLContext.
-
-    The context or another context in the group must be current.
-
-    An object constructed in this way can only be used with context and other
-    contexts that share with it. Use \l {QOpenGLFunctions::}
-    {initializeOpenGLFunctions()} to change the object's context association.
-*/
 QOpenGLExtraFunctions::QOpenGLExtraFunctions(QOpenGLContext *context)
     : QOpenGLFunctions(context)
 {

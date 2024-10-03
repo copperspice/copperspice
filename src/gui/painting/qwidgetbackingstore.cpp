@@ -230,11 +230,6 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
    return r;
 }
 
-/*!
-    Returns the static content inside the \a parent if non-zero; otherwise the static content
-    for the entire backing store is returned. The content will be clipped to \a withinClipRect
-    if non-empty.
-*/
 QRegion QWidgetBackingStore::staticContents(QWidget *parent, const QRect &withinClipRect) const
 {
    if (!parent && tlw->testAttribute(Qt::WA_StaticContents)) {
@@ -450,13 +445,6 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
    }
 }
 
-/*!
-    This function is equivalent to calling markDirty(QRegion(rect), ...), but
-    is more efficient as it eliminates QRegion operations/allocations and can
-    use the rect more precisely for additional cut-offs.
-
-    ### Merge into a template function (after MSVC isn't supported anymore).
-*/
 void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    UpdateTime updateTime, BufferState bufferState)
 {
@@ -550,12 +538,6 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    }
 }
 
-/*!
-    Marks the \a region of the \a widget as dirty on screen. The \a region will be copied from
-    the backing store to the \a widget's native parent next time flush() is called.
-
-    Paint on screen widgets are ignored.
-*/
 void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widget, const QPoint &topLevelOffset)
 {
    if (!widget || widget->d_func()->paintOnScreen() || region.isEmpty()) {
@@ -1420,10 +1402,6 @@ static inline bool discardInvalidateBufferRequest(QWidget *widget, QTLWExtra *tl
    return false;
 }
 
-/*!
-    Invalidates the buffer when the widget is resized.
-    Static areas are never invalidated unless absolutely needed.
-*/
 void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const QSize &oldSize)
 {
    Q_Q(QWidget);
@@ -1522,13 +1500,6 @@ void QWidgetPrivate::invalidateBuffer_resizeHelper(const QPoint &oldPos, const Q
    }
 }
 
-/*!
-    Invalidates the \a rgn (in widget's coordinates) of the backing store, i.e.
-    all widgets intersecting with the region will be repainted when the backing store
-    is synced.
-
-    ### Merge into a template function (after MSVC isn't supported anymore).
-*/
 void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
 {
    Q_Q(QWidget);
@@ -1551,13 +1522,6 @@ void QWidgetPrivate::invalidateBuffer(const QRegion &rgn)
       QWidgetBackingStore::UpdateLater, QWidgetBackingStore::BufferInvalid);
 }
 
-/*!
-    This function is equivalent to calling invalidateBuffer(QRegion(rect), ...), but
-    is more efficient as it eliminates QRegion operations/allocations and can
-    use the rect more precisely for additional cut-offs.
-
-    ### Merge into a template function (after MSVC isn't supported anymore).
-*/
 void QWidgetPrivate::invalidateBuffer(const QRect &rect)
 {
    Q_Q(QWidget);

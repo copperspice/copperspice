@@ -91,14 +91,6 @@ int QFontMetrics::descent() const
    return qRound(engine->descent());
 }
 
-/*!
-    Returns the height of the font.
-
-    This is always equal to ascent()+descent()+1 (the 1 is for the
-    base line).
-
-    \sa leading(), lineSpacing()
-*/
 int QFontMetrics::height() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -107,13 +99,6 @@ int QFontMetrics::height() const
    return qRound(engine->ascent()) + qRound(engine->descent());
 }
 
-/*!
-    Returns the leading of the font.
-
-    This is the natural inter-line spacing.
-
-    \sa height(), lineSpacing()
-*/
 int QFontMetrics::leading() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -122,13 +107,6 @@ int QFontMetrics::leading() const
    return qRound(engine->leading());
 }
 
-/*!
-    Returns the distance from one base line to the next.
-
-    This value is always equal to leading()+height().
-
-    \sa height(), leading()
-*/
 int QFontMetrics::lineSpacing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -137,16 +115,6 @@ int QFontMetrics::lineSpacing() const
    return qRound(engine->leading()) + qRound(engine->ascent()) + qRound(engine->descent());
 }
 
-/*!
-    Returns the minimum left bearing of the font.
-
-    This is the smallest leftBearing(char) of all characters in the
-    font.
-
-    Note that this function can be very slow if the font is large.
-
-    \sa minRightBearing(), leftBearing()
-*/
 int QFontMetrics::minLeftBearing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -155,16 +123,6 @@ int QFontMetrics::minLeftBearing() const
    return qRound(engine->minLeftBearing());
 }
 
-/*!
-    Returns the minimum right bearing of the font.
-
-    This is the smallest rightBearing(char) of all characters in the
-    font.
-
-    Note that this function can be very slow if the font is large.
-
-    \sa minLeftBearing(), rightBearing()
-*/
 int QFontMetrics::minRightBearing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -173,9 +131,6 @@ int QFontMetrics::minRightBearing() const
    return qRound(engine->minRightBearing());
 }
 
-/*!
-    Returns the width of the widest character in the font.
-*/
 int QFontMetrics::maxWidth() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -184,10 +139,6 @@ int QFontMetrics::maxWidth() const
    return qRound(engine->maxCharWidth());
 }
 
-/*!
-    Returns the 'x' height of the font. This is often but not always
-    the same as the height of the character 'x'.
-*/
 int QFontMetrics::xHeight() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -447,12 +398,6 @@ QString QFontMetrics::elidedText(const QString &text, Qt::TextElideMode mode, in
    return engine.elidedText(mode, width, flags);
 }
 
-/*!
-    Returns the distance from the base line to where an underscore
-    should be drawn.
-
-    \sa overlinePos(), strikeOutPos(), lineWidth()
-*/
 int QFontMetrics::underlinePos() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -460,35 +405,17 @@ int QFontMetrics::underlinePos() const
    return qRound(engine->underlinePosition());
 }
 
-/*!
-    Returns the distance from the base line to where an overline
-    should be drawn.
-
-    \sa underlinePos(), strikeOutPos(), lineWidth()
-*/
 int QFontMetrics::overlinePos() const
 {
    return ascent() + 1;
 }
 
-/*!
-    Returns the distance from the base line to where the strikeout
-    line should be drawn.
-
-    \sa underlinePos(), overlinePos(), lineWidth()
-*/
 int QFontMetrics::strikeOutPos() const
 {
    int pos = ascent() / 3;
    return pos > 0 ? pos : 1;
 }
 
-/*!
-    Returns the width of the underline and strikeout lines, adjusted
-    for the point size of the font.
-
-    \sa underlinePos(), overlinePos(), strikeOutPos()
-*/
 int QFontMetrics::lineWidth() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -566,14 +493,6 @@ qreal QFontMetricsF::descent() const
    return engine->descent().toReal();
 }
 
-/*!
-    Returns the height of the font.
-
-    This is always equal to ascent()+descent()+1 (the 1 is for the
-    base line).
-
-    \sa leading(), lineSpacing()
-*/
 qreal QFontMetricsF::height() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -582,13 +501,6 @@ qreal QFontMetricsF::height() const
    return (engine->ascent() + engine->descent()).toReal();
 }
 
-/*!
-    Returns the leading of the font.
-
-    This is the natural inter-line spacing.
-
-    \sa height(), lineSpacing()
-*/
 qreal QFontMetricsF::leading() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -597,13 +509,6 @@ qreal QFontMetricsF::leading() const
    return engine->leading().toReal();
 }
 
-/*!
-    Returns the distance from one base line to the next.
-
-    This value is always equal to leading()+height().
-
-    \sa height(), leading()
-*/
 qreal QFontMetricsF::lineSpacing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -612,16 +517,6 @@ qreal QFontMetricsF::lineSpacing() const
    return (engine->leading() + engine->ascent() + engine->descent()).toReal();
 }
 
-/*!
-    Returns the minimum left bearing of the font.
-
-    This is the smallest leftBearing(char) of all characters in the
-    font.
-
-    Note that this function can be very slow if the font is large.
-
-    \sa minRightBearing(), leftBearing()
-*/
 qreal QFontMetricsF::minLeftBearing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -630,16 +525,6 @@ qreal QFontMetricsF::minLeftBearing() const
    return engine->minLeftBearing();
 }
 
-/*!
-    Returns the minimum right bearing of the font.
-
-    This is the smallest rightBearing(char) of all characters in the
-    font.
-
-    Note that this function can be very slow if the font is large.
-
-    \sa minLeftBearing(), rightBearing()
-*/
 qreal QFontMetricsF::minRightBearing() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -648,9 +533,6 @@ qreal QFontMetricsF::minRightBearing() const
    return engine->minRightBearing();
 }
 
-/*!
-    Returns the width of the widest character in the font.
-*/
 qreal QFontMetricsF::maxWidth() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -659,10 +541,6 @@ qreal QFontMetricsF::maxWidth() const
    return engine->maxCharWidth();
 }
 
-/*!
-    Returns the 'x' height of the font. This is often but not always
-    the same as the height of the character 'x'.
-*/
 qreal QFontMetricsF::xHeight() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -885,12 +763,6 @@ QString QFontMetricsF::elidedText(const QString &text, Qt::TextElideMode mode, q
    return engine.elidedText(mode, QFixed::fromReal(width), flags);
 }
 
-/*!
-    Returns the distance from the base line to where an underscore
-    should be drawn.
-
-    \sa overlinePos(), strikeOutPos(), lineWidth()
-*/
 qreal QFontMetricsF::underlinePos() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
@@ -899,34 +771,16 @@ qreal QFontMetricsF::underlinePos() const
    return engine->underlinePosition().toReal();
 }
 
-/*!
-    Returns the distance from the base line to where an overline
-    should be drawn.
-
-    \sa underlinePos(), strikeOutPos(), lineWidth()
-*/
 qreal QFontMetricsF::overlinePos() const
 {
    return ascent() + 1;
 }
 
-/*!
-    Returns the distance from the base line to where the strikeout
-    line should be drawn.
-
-    \sa underlinePos(), overlinePos(), lineWidth()
-*/
 qreal QFontMetricsF::strikeOutPos() const
 {
    return ascent() / 3.;
 }
 
-/*!
-    Returns the width of the underline and strikeout lines, adjusted
-    for the point size of the font.
-
-    \sa underlinePos(), overlinePos(), strikeOutPos()
-*/
 qreal QFontMetricsF::lineWidth() const
 {
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);

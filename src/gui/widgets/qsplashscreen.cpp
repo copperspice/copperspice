@@ -77,12 +77,6 @@ void QSplashScreen::mousePressEvent(QMouseEvent *)
    hide();
 }
 
-/*!
-    This overrides QWidget::repaint(). It differs from the standard
-    repaint function in that it also calls QApplication::flush() to
-    ensure the updates are displayed, even when there is no event loop
-    present.
-*/
 void QSplashScreen::repaint()
 {
    QWidget::repaint();

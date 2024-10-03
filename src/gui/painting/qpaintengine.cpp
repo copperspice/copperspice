@@ -473,10 +473,6 @@ void QPaintEngine::setPaintDevice(QPaintDevice *device)
    d_func()->pdev = device;
 }
 
-/*!
-    Returns the device that this engine is painting on, if painting is
-    active; otherwise returns 0.
-*/
 QPaintDevice *QPaintEngine::paintDevice() const
 {
    return d_func()->pdev;

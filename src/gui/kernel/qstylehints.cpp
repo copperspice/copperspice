@@ -152,14 +152,6 @@ int QStyleHints::startDragTime() const
       themeableHint(QPlatformTheme::StartDragTime, QPlatformIntegration::StartDragTime).toInt();
 }
 
-/*!
-    \property QStyleHints::startDragVelocity
-    \brief the limit for the velocity, in pixels per second, that the mouse may
-    be moved, with a button held down, for a drag and drop operation to begin.
-    A value of 0 means there is no such limit.
-
-    \sa startDragDistance, {Drag and Drop}
-*/
 int QStyleHints::startDragVelocity() const
 {
    return themeableHint(QPlatformTheme::StartDragVelocity, QPlatformIntegration::StartDragVelocity).toInt();
@@ -175,11 +167,6 @@ void QStyleHints::setKeyboardInputInterval(int keyboardInputInterval)
    emit keyboardInputIntervalChanged(keyboardInputInterval);
 }
 
-/*!
-    \property QStyleHints::keyboardInputInterval
-    \brief the time limit, in milliseconds, that distinguishes a key press
-    from two consecutive key presses.
-*/
 int QStyleHints::keyboardInputInterval() const
 {
    Q_D(const QStyleHints);
@@ -189,11 +176,6 @@ int QStyleHints::keyboardInputInterval() const
       themeableHint(QPlatformTheme::KeyboardInputInterval, QPlatformIntegration::KeyboardInputInterval).toInt();
 }
 
-/*!
-    \property QStyleHints::keyboardAutoRepeatRate
-    \brief the rate, in events per second,  in which additional repeated key
-    presses will automatically be generated if a key is being held down.
-*/
 int QStyleHints::keyboardAutoRepeatRate() const
 {
    return themeableHint(QPlatformTheme::KeyboardAutoRepeatRate, QPlatformIntegration::KeyboardAutoRepeatRate).toInt();
@@ -209,14 +191,6 @@ void QStyleHints::setCursorFlashTime(int cursorFlashTime)
    emit cursorFlashTimeChanged(cursorFlashTime);
 }
 
-/*!
-    \property QStyleHints::cursorFlashTime
-    \brief the text cursor's flash (blink) time in milliseconds.
-
-    The flash time is the time used to display, invert and restore the
-    caret display. Usually the text cursor is displayed for half the cursor
-    flash time, then hidden for the same amount of time.
-*/
 int QStyleHints::cursorFlashTime() const
 {
    Q_D(const QStyleHints);

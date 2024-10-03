@@ -1009,19 +1009,12 @@ QKeySequence::operator QVariant() const
    return QVariant(QVariant::KeySequence, this);
 }
 
-/*!
-    Returns a reference to the element at position \a index in the key
-    sequence. This can only be used to read an element.
- */
 int QKeySequence::operator[](uint index) const
 {
    Q_ASSERT_X(index < QKeySequencePrivate::MaxKeyCount, "QKeySequence::operator[]", "index out of range");
    return d->key[index];
 }
 
-/*!
-    Assignment operator. Assigns the \a other key sequence to this object.
- */
 QKeySequence &QKeySequence::operator=(const QKeySequence &other)
 {
    qAtomicAssign(d, other.d);

@@ -2814,10 +2814,6 @@ void QStyleSheetStyleCaches::styleDestroyed(QObject *o)
    styleSheetCache.remove(o);
 }
 
-/*!
- *  Make sure that the cache will be clean by connecting destroyed if needed.
- *  return false if the widget is not stylable;
- */
 bool QStyleSheetStyle::initObject(const QObject *obj) const
 {
    if (! obj) {

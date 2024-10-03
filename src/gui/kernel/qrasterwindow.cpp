@@ -54,9 +54,6 @@ class QRasterWindowPrivate : public QPaintDeviceWindowPrivate
    QScopedPointer<QBackingStore> backingstore;
 };
 
-/*!
-  Constructs a new QRasterWindow with \a parent.
-*/
 QRasterWindow::QRasterWindow(QWindow *parent)
    : QPaintDeviceWindow(* (new QRasterWindowPrivate), parent)
 {

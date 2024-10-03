@@ -267,10 +267,6 @@ void QLineEditPrivate::resetInputMethod()
    }
 }
 
-/*!
-  This function is not intended as polymorphic usage. Just a shared code
-  fragment that calls QInputContext::mouseHandler for this class.
-*/
 bool QLineEditPrivate::sendMouseEventToInputContext( QMouseEvent *e )
 {
 #if !defined QT_NO_IM

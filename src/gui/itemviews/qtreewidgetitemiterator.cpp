@@ -37,15 +37,6 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &
    d->m_model->iterators.append(this);
 }
 
-/*!
-    Constructs an iterator for the given \a widget that uses the specified \a flags
-    to determine which items are found during iteration.
-    The iterator is set to point to the first top-level item contained in the widget,
-    or the next matching item if the top-level item doesn't match the flags.
-
-    \sa QTreeWidgetItemIterator::iteratorFlag
-*/
-
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFlags flags)
    : current(nullptr), flags(flags)
 {
@@ -61,15 +52,6 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
       ++(*this);
    }
 }
-
-/*!
-    Constructs an iterator for the given \a item that uses the specified \a flags
-    to determine which items are found during iteration.
-    The iterator is set to point to \a item, or the next matching item if \a item
-    doesn't match the flags.
-
-    \sa QTreeWidgetItemIterator::iteratorFlag
-*/
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags)
    : d_ptr(new QTreeWidgetItemIteratorPrivate(
@@ -101,19 +83,10 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, Iterator
    }
 }
 
-/*!
-    Destroys the iterator.
-*/
-
 QTreeWidgetItemIterator::~QTreeWidgetItemIterator()
 {
    d_func()->m_model->iterators.removeAll(this);
 }
-
-/*!
-    Assignment. Makes a copy of \a it and returns a reference to its
-    iterator.
-*/
 
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator=(const QTreeWidgetItemIterator &it)
 {
@@ -128,12 +101,6 @@ QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator=(const QTreeWidgetIte
    return *this;
 }
 
-/*!
-    The prefix ++ operator (++it) advances the iterator to the next matching item
-    and returns a reference to the resulting iterator.
-    Sets the current pointer to 0 if the current item is the last matching item.
-*/
-
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator++()
 {
    if (current)
@@ -142,12 +109,6 @@ QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator++()
       } while (current && !matchesFlags(current));
    return *this;
 }
-
-/*!
-    The prefix -- operator (--it) advances the iterator to the previous matching item
-    and returns a reference to the resulting iterator.
-    Sets the current pointer to 0 if the current item is the first matching item.
-*/
 
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator--()
 {
@@ -241,9 +202,6 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
    return true;
 }
 
-/*
- * Implementation of QTreeWidgetItemIteratorPrivate
- */
 QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::nextSibling(const QTreeWidgetItem *item) const
 {
    Q_ASSERT(item);

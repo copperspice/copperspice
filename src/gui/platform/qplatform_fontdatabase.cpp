@@ -127,26 +127,17 @@ class QWritingSystemsPrivate
    QVector<bool> vector;
 };
 
-/*!
-    Constructs a new object to handle supported writing systems.
-*/
 QSupportedWritingSystems::QSupportedWritingSystems()
 {
    d = new QWritingSystemsPrivate;
 }
 
-/*!
-    Constructs a copy of the \a other writing systems object.
-*/
 QSupportedWritingSystems::QSupportedWritingSystems(const QSupportedWritingSystems &other)
 {
    d = other.d;
    d->ref.ref();
 }
 
-/*!
-    Constructs a copy of the \a other writing systems object.
-*/
 QSupportedWritingSystems &QSupportedWritingSystems::operator=(const QSupportedWritingSystems &other)
 {
    if (d != other.d) {
@@ -159,9 +150,6 @@ QSupportedWritingSystems &QSupportedWritingSystems::operator=(const QSupportedWr
    return *this;
 }
 
-/*!
-    Destroys the supported writing systems object.
-*/
 QSupportedWritingSystems::~QSupportedWritingSystems()
 {
    if (!d->ref.deref()) {
@@ -183,20 +171,12 @@ void QSupportedWritingSystems::detach()
    }
 }
 
-/*!
-    Sets or clears support for the specified \a writingSystem based on the
-    value given by \a support.
-*/
 void QSupportedWritingSystems::setSupported(QFontDatabase::WritingSystem writingSystem, bool support)
 {
    detach();
    d->vector[writingSystem] = support;
 }
 
-/*!
-    Returns \c true if the writing system specified by \a writingSystem is
-    supported; otherwise returns \c false.
-*/
 bool QSupportedWritingSystems::supported(QFontDatabase::WritingSystem writingSystem) const
 {
    return d->vector.at(writingSystem);

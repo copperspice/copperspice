@@ -830,9 +830,6 @@ bool QZipReader::isReadable() const
    return d->device->isReadable();
 }
 
-/*!
-    Returns true if the file exists; otherwise returns false.
-*/
 bool QZipReader::exists() const
 {
    QFile *f = qobject_cast<QFile *> (d->device);
@@ -842,9 +839,6 @@ bool QZipReader::exists() const
    return f->exists();
 }
 
-/*!
-    Returns the list of files the archive contains.
-*/
 QVector<QZipReader::FileInfo> QZipReader::fileInfoList() const
 {
    d->scanFiles();
@@ -963,11 +957,6 @@ QByteArray QZipReader::fileData(const QString &fileName) const
    return QByteArray();
 }
 
-/*!
-    Extracts the full contents of the zip file into \a destinationDir on
-    the local filesystem.
-    In case writing or linking a file fails, the extraction will be aborted.
-*/
 bool QZipReader::extractAll(const QString &destinationDir) const
 {
    QDir baseDir(destinationDir);
@@ -1062,11 +1051,6 @@ QZipWriter::QZipWriter(const QString &fileName, QIODevice::OpenMode mode)
    d->status = status;
 }
 
-/*!
-    Create a new zip archive that operates on the archive found in \a device.
-    You have to open the device previous to calling the constructor and
-    only a device that is readable will be scanned for zip filecontent.
- */
 QZipWriter::QZipWriter(QIODevice *device)
    : d(new QZipWriterPrivate(device, /*ownDevice=*/false))
 {
@@ -1079,25 +1063,16 @@ QZipWriter::~QZipWriter()
    delete d;
 }
 
-/*!
-    Returns device used for writing zip archive.
-*/
 QIODevice *QZipWriter::device() const
 {
    return d->device;
 }
 
-/*!
-    Returns true if the user can write to the archive; otherwise returns false.
-*/
 bool QZipWriter::isWritable() const
 {
    return d->device->isWritable();
 }
 
-/*!
-    Returns true if the file exists; otherwise returns false.
-*/
 bool QZipWriter::exists() const
 {
    QFile *f = qobject_cast<QFile *> (d->device);
@@ -1136,30 +1111,11 @@ QFile::Permissions QZipWriter::creationPermissions() const
    return d->permissions;
 }
 
-/*!
-    Add a file to the archive with \a data as the file contents.
-    The file will be stored in the archive using the \a fileName which
-    includes the full path in the archive.
-
-    The new file will get the file permissions based on the current
-    creationPermissions and it will be compressed using the zip compression
-    based on the current compression policy.
-
-    \sa setCreationPermissions()
-    \sa setCompressionPolicy()
-*/
 void QZipWriter::addFile(const QString &fileName, const QByteArray &data)
 {
    d->addEntry(QZipWriterPrivate::File, QDir::fromNativeSeparators(fileName), data);
 }
 
-/*!
-    Add a file to the archive with \a device as the source of the contents.
-    The contents returned from QIODevice::readAll() will be used as the
-    filedata.
-    The file will be stored in the archive using the \a fileName which
-    includes the full path in the archive.
-*/
 void QZipWriter::addFile(const QString &fileName, QIODevice *device)
 {
    Q_ASSERT(device);
@@ -1178,10 +1134,6 @@ void QZipWriter::addFile(const QString &fileName, QIODevice *device)
    }
 }
 
-/*!
-    Create a new directory in the archive with the specified \a dirName and
-    the \a permissions;
-*/
 void QZipWriter::addDirectory(const QString &dirName)
 {
    QString name(QDir::fromNativeSeparators(dirName));
