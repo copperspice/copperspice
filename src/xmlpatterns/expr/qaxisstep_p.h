@@ -37,32 +37,20 @@ class AxisStep : public EmptyContainer
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   /**
-    * Returns @p node if it matches the node test this step is using, otherwise @c null.
-    */
    inline Item mapToItem(const QXmlNodeModelIndex &node,
                          const DynamicContext::Ptr &context) const;
 
    SequenceType::List expectedOperandTypes() const override;
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * Rewrites to ParentNodeAxis, if possible.
-    */
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   /**
-    * @returns always BuiltinTypes::node;
-    */
    ItemType::Ptr expectedContextItemType() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    Properties properties() const override;
 
-   /**
-    * @returns the axis this step is using.
-    */
    QXmlNodeModelIndex::Axis axis() const;
 
    inline ItemType::Ptr nodeTest() const {

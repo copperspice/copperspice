@@ -403,10 +403,6 @@ CGColorSpaceRef qt_mac_genericColorSpace()
 #endif
 }
 
-/*
-    Ideally we should pass the widget in here and use CGGetDisplaysWithRect() etc.
-    to support multiple displays correctly.
-*/
 CGColorSpaceRef qt_mac_displayColorSpace(const QWidget *widget)
 {
    CGColorSpaceRef colorSpace;

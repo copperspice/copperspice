@@ -38,20 +38,6 @@ class IndexOfIterator : public Item::Iterator
 {
  public:
 
-   /**
-    * Creates an IndexOfIterator, whose next() function returns integers being
-    * the index positions of where @p searchParam was found in @p inputSequence.
-    *
-    * @param comp the AtomicComparator to be used for comparing values. This may be @c null,
-    * meaning the IndexOfIterator iterator will dynamically determine what comparator to use
-    * on an item per item basis, which is slower.
-    * @param searchParam the item which should be compared to the items in @p inputSequence.
-    * @param inputSequence the input sequence which indexes of the @p searchParam should
-    * be returned for.
-    * @param context the usual DynamicContext
-    * @param expr the Expression that this IndexOfIterator is evaluating
-    * for. It is used for error reporting, via actualReflection().
-    */
    IndexOfIterator(const Item::Iterator::Ptr &inputSequence,
                    const Item &searchParam,
                    const AtomicComparator::Ptr &comp,

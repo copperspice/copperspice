@@ -33,14 +33,6 @@ template<typename TResult, typename TSource, typename TMapper>
 class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
 {
  public:
-   /**
-    * Constructs a SequenceMappingIterator.
-    *
-    * @param mapper the object that has the mapToItem() sequence.
-    * @param sourceIterator the QAbstractXmlForwardIterator whose items should be mapped.
-    * @param context the DynamicContext that will be passed to the map function.
-    * May be null.
-    */
    SequenceMappingIterator(const TMapper &mapper,
                            const typename QAbstractXmlForwardIterator<TSource>::Ptr &sourceIterator,
                            const DynamicContext::Ptr &context);
@@ -82,8 +74,6 @@ SequenceMappingIterator<TResult, TSource, TMapper>::SequenceMappingIterator(
 template<typename TResult, typename TSource, typename TMapper>
 TResult SequenceMappingIterator<TResult, TSource, TMapper>::next()
 {
-   /* This was once implemented with a recursive function, but the stack
-    * got blown for some inputs by that approach. */
    while (true) {
       while (! m_currentIterator) {
          const TSource mainItem(m_mainIterator->next());

@@ -43,13 +43,6 @@ public:
     virtual void clear() = 0;
 
     virtual QAbstractVideoBuffer::HandleType handleType() const = 0;
-
-    /*!
-      Build an QAbstractVideoBuffer instance from GstBuffer.
-      Returns NULL if GstBuffer is not compatible with this buffer pool.
-
-      This method is called from gstreamer video sink thread.
-     */
     virtual QAbstractVideoBuffer *prepareVideoBuffer(GstBuffer *buffer, int bytesPerLine) = 0;
 };
 
@@ -70,13 +63,6 @@ public:
     virtual void clear() = 0;
 
     virtual QAbstractVideoBuffer::HandleType handleType() const = 0;
-
-    /*!
-      Build an QAbstractVideoBuffer instance from compatible GstBuffer.
-      Returns NULL if GstBuffer is not compatible with this buffer pool.
-
-      This method is called from gstreamer video sink thread.
-     */
     virtual QAbstractVideoBuffer *prepareVideoBuffer(GstBuffer *buffer, int bytesPerLine) = 0;
 };
 

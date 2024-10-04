@@ -35,26 +35,14 @@ class Untyped : public AnyType
 
    typedef QExplicitlySharedDataPointer<Untyped> Ptr;
 
-   /**
-    * @returns always BuiltinTypes::xsAnyType.
-    */
    SchemaType::Ptr wxsSuperType() const override;
 
    QXmlName name(const NamePool::Ptr &np) const override;
 
-   /**
-    * @returns always <tt>xs:untypedAtomic</tt>
-    */
    virtual ItemType::Ptr atomizedType() const;
 
-   /**
-    * @returns always SchemaType::ComplexType
-    */
    TypeCategory category() const override;
 
-   /**
-    * @returns always NoDerivation
-    */
    DerivationMethod derivationMethod() const override;
 
  protected:

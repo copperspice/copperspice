@@ -61,9 +61,6 @@ class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLoca
    QAbstractXmlReceiver *const m_receiver;
    const DynamicContext::Ptr m_context;
 
-   /**
-    * Keeps the current received attributes, in order to check uniqueness.
-    */
    QSet<QXmlName> m_attributes;
    const bool m_isXSLT;
 };

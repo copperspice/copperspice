@@ -33,9 +33,6 @@ class StaticNamespaceContext : public DelegatingStaticContext
  public:
    StaticNamespaceContext(const NamespaceResolver::Ptr &resolver, const StaticContext::Ptr &context);
 
-   /**
-    * @returns the resolver passed in the constructor.
-    */
    NamespaceResolver::Ptr namespaceBindings() const override;
 
  private:

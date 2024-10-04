@@ -31,12 +31,6 @@ namespace QPatternist {
 class LiteralSequence : public EmptyContainer
 {
  public:
-   /**
-    * Creates a LiteralSequence that represents @p item.
-    *
-    * @param list the list of item. No entry may be @c null. The list
-    * must at least be two entries large.
-    */
    LiteralSequence(const Item::List &list);
 
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;

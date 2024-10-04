@@ -54,14 +54,6 @@ class OrderSpecTransfer
    OrderBy::OrderSpec  orderSpec;
 };
 
-/**
- * @short The value the parser, but not the tokenizers, uses for tokens and
- * non-terminals.
- *
- * It is inefficient but ensures nothing leaks, by invoking C++
- * destructors even in the cases the code throws exceptions. This might be
- * able to be done in a more efficient way -- suggestions are welcome.
- */
 class TokenValue
 {
  public:
@@ -77,9 +69,6 @@ class TokenValue
    FunctionArgument::Ptr           functionArgument;
    QVector<QXmlName>               qNameVector;
    QXmlName                        qName;
-   /**
-    * Holds enum values.
-    */
    EnumUnion                       enums;
 
    AttributeHolder                 attributeHolder;
@@ -89,10 +78,6 @@ class TokenValue
 };
 }
 
-/**
- * Macro for the data type of semantic values; int by default.
- * See section Data Types of Semantic Values.
- */
 #define YYSTYPE QPatternist::TokenValue
 
 #include "qquerytransformparser_p.h" /* This inclusion must be after TokenValue. */
@@ -108,28 +93,9 @@ class Tokenizer : public TokenSource
 
    typedef QExplicitlySharedDataPointer<Tokenizer> Ptr;
 
-   /**
-    * Switches the Tokenizer to only do scanning, and returns complete
-    * strings for attribute value templates as opposed to the tokens for
-    * the contained expressions.
-    *
-    * The current position in the stream is returned. It can be used to
-    * later resume regular tokenization.
-    */
    virtual int commenceScanOnly() = 0;
-
-   /**
-    * Resumes regular parsing from @p position. The tokenizer must be in
-    * the scan-only state, which the commenceScanOnly() call transists to.
-    *
-    * The tokenizer will return the token POSITION_SET once after this
-    * function has been called.
-    */
    virtual void resumeTokenizationFrom(const int position) = 0;
 
-   /**
-    * @returns the URI of the resource being tokenized.
-    */
    inline const QUrl &queryURI() const {
       return m_queryURI;
    }
@@ -137,12 +103,6 @@ class Tokenizer : public TokenSource
    virtual void setParserContext(const ParserContext::Ptr &parseInfo) = 0;
 
  protected:
-   /**
-    * Returns a string representation of @p token.
-    *
-    * This function is used for debugging purposes. The implementation of
-    * this function is in querytransformparser.ypp.
-    */
    static QString tokenToString(const Token &token);
 
  private:

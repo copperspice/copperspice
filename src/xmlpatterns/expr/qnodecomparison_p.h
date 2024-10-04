@@ -39,27 +39,10 @@ class NodeComparison : public PairContainer
    SequenceType::List expectedOperandTypes() const override;
 
    virtual QXmlNodeModelIndex::DocumentOrder operatorID() const;
-   /**
-    * If any operator is the empty sequence, the NodeComparison rewrites
-    * into that, since the empty sequence is always the result in that case.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   /**
-    * @returns either CommonSequenceTypes::ZeroOrOneBoolean or
-    * CommonSequenceTypes::ExactlyOneBoolean depending on the static
-    * cardinality of its operands.
-    */
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * Determines the string representation for a node comparison operator.
-    *
-    * @returns
-    * - "<<" if @p op is Precedes
-    * - ">>" if @p op is Follows
-    * - "is" if @p op is Is
-    */
    static QString displayName(const QXmlNodeModelIndex::DocumentOrder op);
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

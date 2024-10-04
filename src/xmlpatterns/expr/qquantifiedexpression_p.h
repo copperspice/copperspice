@@ -47,12 +47,6 @@ class QuantifiedExpression : public PairContainer
 
    Operator operatorID() const;
 
-   /**
-    * Determines the string representation for a quantification operator.
-    *
-    * @return "some" if @p quantifier is Some, or "every" if @p quantifier
-    * is Every
-    */
    static QString displayName(const Operator quantifier);
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

@@ -39,11 +39,6 @@ class QXmlFormatterPrivate : public QXmlSerializerPrivate
    int             currentDepth;
    QString         characterBuffer;
    QString         indentString;
-
-   /**
-    * Whether we /have/ sent nodes like processing instructions and comments
-    * to QXmlSerializer.
-    */
    QStack<bool>    canIndent;
 };
 
@@ -226,24 +221,12 @@ void QXmlFormatter::item(const QPatternist::Item &item)
    QXmlSerializer::item(item);
 }
 
-/*!
-  Returns the number of spaces QXmlFormatter will output for each
-  indentation level. The default is four.
-
- \sa setIndentationDepth()
- */
 int QXmlFormatter::indentationDepth() const
 {
    Q_D(const QXmlFormatter);
    return d->indentationDepth;
 }
 
-/*!
-  Sets \a depth to be the number of spaces QXmlFormatter will
-  output for level of indentation. The default is four.
-
- \sa indentationDepth()
- */
 void QXmlFormatter::setIndentationDepth(int depth)
 {
    Q_D(QXmlFormatter);

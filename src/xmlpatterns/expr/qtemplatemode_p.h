@@ -52,9 +52,6 @@ class TemplateMode : public QSharedData
    TemplateMode(const TemplateMode &) = delete;
    TemplateMode &operator=(const TemplateMode &) = delete;
 
-   /**
-    * Operator for std::sort()
-    */
    static inline bool lessThanByPriority(const TemplatePattern::Ptr &t1, const TemplatePattern::Ptr &t2);
 };
 

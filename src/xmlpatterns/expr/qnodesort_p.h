@@ -40,9 +40,6 @@ class NodeSortExpression : public SingleContainer
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
    Properties properties() const override;
 
-   /**
-    * Ensures that result delivered from @p operand, is in document order.
-    */
    static Expression::Ptr wrapAround(const Expression::Ptr &operand, const StaticContext::Ptr &context);
 
  private:

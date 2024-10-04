@@ -33,10 +33,6 @@
 #include <QSharedData>
 
 namespace QPatternist {
-/**
- * @short A namespace class that contains identifiers for the different
- *        scopes a tag from the xml schema spec can appear in.
- */
 class XsdTagScope
 {
  public:
@@ -104,71 +100,23 @@ class XsdTagScope
    };
 };
 
-/**
- * A hash that keeps the mapping between the single components that can appear
- * in a schema document (e.g. elements, attributes, type definitions) and their
- * source locations inside the document.
- */
 typedef QHash<NamedSchemaComponent::Ptr, QSourceLocation> ComponentLocationHash;
 
 class XsdSchemaParserContext : public QSharedData
 {
  public:
-   /**
-    * A smart pointer wrapping XsdSchemaParserContext instances.
-    */
    typedef QExplicitlySharedDataPointer<XsdSchemaParserContext> Ptr;
 
-   /**
-    * Creates a new schema parser context object.
-    *
-    * @param namePool The name pool where all names of the schema will be stored in.
-    * @param context The schema context to use for error reporting etc.
-    */
    XsdSchemaParserContext(const NamePool::Ptr &namePool, const XsdSchemaContext::Ptr &context);
 
-   /**
-    * Returns the name pool of the schema parser context.
-    */
    NamePool::Ptr namePool() const;
-
-   /**
-    * Returns the schema resolver of the schema context.
-    */
    XsdSchemaResolver::Ptr resolver() const;
-
-   /**
-    * Returns the schema resolver of the schema context.
-    */
    XsdSchemaChecker::Ptr checker() const;
-
-   /**
-    * Returns the schema object of the schema context.
-    */
    XsdSchema::Ptr schema() const;
-
-   /**
-    * Returns the element descriptions for the schema parser.
-    *
-    * The element descriptions are a fast lookup table for
-    * verifying whether certain attributes are allowed for
-    * a given element type.
-    */
    ElementDescription<XsdSchemaToken, XsdTagScope::Type>::Hash elementDescriptions() const;
-
-   /**
-    * Returns an unique name that is used by the schema parser
-    * for anonymous types.
-    *
-    * @param targetNamespace The namespace of the name.
-    */
    QXmlName createAnonymousName(const QString &targetNamespace) const;
 
  private:
-   /**
-    * Fills the element description hash with the required and prohibited
-    * attributes.
-    */
    static ElementDescription<XsdSchemaToken, XsdTagScope::Type>::Hash setupElementDescriptions();
 
    NamePool::Ptr                                                     m_namePool;

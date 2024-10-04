@@ -33,9 +33,6 @@ class StaticCurrentContext : public DelegatingStaticContext
  public:
    StaticCurrentContext(const ItemType::Ptr &currentItemType,
                         const StaticContext::Ptr &context);
-   /**
-    * @returns the type passed in the constructor.
-    */
    ItemType::Ptr currentItemType() const override;
 
  private:

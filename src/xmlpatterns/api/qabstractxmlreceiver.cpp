@@ -47,17 +47,11 @@ QAbstractXmlReceiver::QAbstractXmlReceiver(QAbstractXmlReceiverPrivate *d)
 {
 }
 
-/*!
-  Constructs an abstract xml receiver.
- */
 QAbstractXmlReceiver::QAbstractXmlReceiver()
    : d_ptr(nullptr)
 {
 }
 
-/*!
-  Destroys the xml receiver.
- */
 QAbstractXmlReceiver::~QAbstractXmlReceiver()
 {
 }

@@ -28,9 +28,6 @@
 #include <qnetwork_reply.h>
 
 namespace QPatternist {
-/**
- * This is read-only currently.
- */
 class QIODeviceDelegate : public QNetworkReply
 {
    XMLP_CS_OBJECT(QIODeviceDelegate)
@@ -63,9 +60,6 @@ class QIODeviceDelegate : public QNetworkReply
 
  private:
    enum {
-      /**
-       * 20 seconds expressed in milliseconds.
-       */
       Timeout = 20000
    };
 

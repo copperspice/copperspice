@@ -53,20 +53,6 @@ class ExpressionFactory : public QSharedData
       GlobalVariableTypeCheck = 1 << 5
    };
 
-   /**
-    * Creates a compiled representation of the XPath expression @p expr, with Static
-    * Context information supplied via @p context. This is for example whether the expression
-    * is an XPath 1.0 or XPath 2.0 expression, or what functions that are available.
-    *
-    * @p requiredType specifies what type results of the evaluating the expression
-    * must match. Passing CommonValues::ZeroOrMoreItems allows anything as result, while
-    * passing CommonSequenceTypes::EBV means anything but an Effective %Boolean Value extractable
-    * result is a type error, for example.
-    *
-    * @note An empty @p expr is an invalid XPath expression. It will be reported as such,
-    * but it is neverthless the caller's resonsibility to ensure that it's not that(since
-    * it is likely invalid already in the medium it was stored).
-    */
    virtual Expression::Ptr createExpression(const QString &expr,
          const StaticContext::Ptr &context,
          const QXmlQuery::QueryLanguage lang,
@@ -81,13 +67,6 @@ class ExpressionFactory : public QSharedData
          const QUrl &queryURI,
          const QXmlName &initialTemplateName);
 
-   /**
-    * Finds the last paths of a set of paths(if any) and tells the Path
-    * so, such that it can generate the code for checking XPTY0018.
-    *
-    * Must be called before typeCheck() is called on the operand, since
-    * the typeCheck() uses the information for type checking.
-    */
    static void registerLastPath(const Expression::Ptr &operand);
 
  protected:
@@ -97,17 +76,6 @@ class ExpressionFactory : public QSharedData
       TemplateCompress        = 1 << 2
    };
 
-   /**
-    * This function is called by createExpression() each time
-    * after a pass on the AST has been completed. Under a typical
-    * compilation this function is thus called three times: after the initial
-    * build, after the Expression::typeCheck() stage, and after
-    * Expression::compress(). @p tree is the AST after each pass.
-    *
-    * This mechanism is currently used for debugging, since it provides a
-    * way of introspecting what the compilation process do to the tree. The
-    * current implementation do nothing.
-    */
    virtual void processTreePass(const Expression::Ptr &tree,
                                 const CompilationStage stage);
 

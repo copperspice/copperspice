@@ -30,26 +30,13 @@ namespace QPatternist {
 class EmptyContainer : public Expression
 {
  public:
-   /**
-    * @returns always an empty list.
-    */
    Expression::List operands() const override;
 
-   /**
-    * Does nothing, since sub-classes has no operands. Calling
-    * it makes hence no sense, and it also results in an assert crash.
-    */
    void setOperands(const Expression::List &) override;
 
  protected:
-   /**
-    * @returns always @c true
-    */
    bool compressOperands(const StaticContext::Ptr &context) override;
 
-   /**
-    * @returns always an empty list since it has no operands.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
 };

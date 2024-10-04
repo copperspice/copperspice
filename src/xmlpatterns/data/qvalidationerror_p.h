@@ -36,30 +36,10 @@ class ValidationError : public AtomicValue
    static AtomicValue::Ptr createError(const QString &description = QString(),
                                        const ReportContext::ErrorCode = ReportContext::FORG0001);
 
-   /**
-    * A human readable, translated message describing the error.
-    */
    QString message() const;
-
-   /**
-    * @returns always @c true
-    */
    bool hasError() const override;
-
-   /**
-    * Always results in an assert crash.
-    */
    ItemType::Ptr type() const override;
-
-   /**
-    * Always results in an assert crash.
-    */
    QString stringValue() const override;
-
-   /**
-    * @returns the error code this ValidationError represents. Typically, this
-    * is ReportContext::FORG0001.
-    */
    ReportContext::ErrorCode errorCode() const;
 
  protected:

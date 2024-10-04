@@ -31,9 +31,6 @@ namespace QPatternist {
 class ForClause : public PairContainer
 {
  public:
-   /**
-    * If @p positionSlot is -1, no positional variable will be used.
-    */
    ForClause(const VariableSlotID varSlot,
              const Expression::Ptr &bindingSequence,
              const Expression::Ptr &returnExpression,
@@ -54,9 +51,6 @@ class ForClause : public PairContainer
 
    inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;
 
-   /**
-    * Sets m_allowsMany properly.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
@@ -66,9 +60,6 @@ class ForClause : public PairContainer
    typedef QExplicitlySharedDataPointer<const ForClause> ConstPtr;
    const VariableSlotID m_varSlot;
    const VariableSlotID m_positionSlot;
-   /**
-    * Initialized to @c false. This default is always safe.
-    */
    bool m_allowsMany;
 };
 

@@ -31,12 +31,6 @@ namespace QPatternist {
 class ToCodepointsIterator : public Item::Iterator
 {
  public:
-   /**
-    * Constructs a ToCodepointsIterator.
-    *
-    * @param string the string to retrieve Unicode codepoints from. Can not be
-    * empty.
-    */
    ToCodepointsIterator(const QString &string);
    Item next() override;
    Item current() const override;

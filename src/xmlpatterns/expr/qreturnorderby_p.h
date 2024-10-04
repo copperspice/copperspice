@@ -32,10 +32,6 @@ namespace QPatternist {
 class ReturnOrderBy : public UnlimitedContainer
 {
  public:
-   /**
-    * In @p operands the first item is the return expression, and the
-    * rest, which is at least one, are the sort keys.
-    */
    ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs,
                   const Expression::List &operands);
 
@@ -55,13 +51,6 @@ class ReturnOrderBy : public UnlimitedContainer
       return m_stability;
    }
 
-   /**
-    * In the case of that we don't have a for-expression beloning us, but
-    * only a let clause, this ReturnOrderBy breaks if it stays in the AST.
-    * So, by default we assume that we should write ourselves away, unless
-    * this function is called. The associated ForClause will call it
-    * during typeCheck(), if it exists.
-    */
    void setStay(const bool a) {
       m_flyAway = !a;
    }
@@ -69,18 +58,10 @@ class ReturnOrderBy : public UnlimitedContainer
    Properties properties() const override;
 
  private:
-   /**
-    * This variable is unfortunately only used at compile time. However,
-    * it's tricky to get rid of it due to how QueryTransformParser would
-    * have to be adapted.
-    */
    const OrderBy::Stability    m_stability;
 
    OrderBy::OrderSpec::Vector  m_orderSpecs;
 
-   /**
-    * @see stay()
-    */
    bool                        m_flyAway;
 };
 

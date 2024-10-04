@@ -33,44 +33,26 @@ template<typename T>
 class EmptyIterator : public QAbstractXmlForwardIterator<T>
 {
  public:
-   /**
-    * @returns always a default constructed value, T().
-    */
    T next() override {
       return T();
    }
 
-   /**
-    * @returns always a default constructed value, T().
-    */
    T current() const override {
       return T();
    }
 
-   /**
-    * @returns always 0.
-    */
    xsInteger position() const override {
       return 0;
    }
 
-   /**
-    * @returns always @c this, the reverse of <tt>()</tt> is <tt>()</tt>.
-    */
    typename QAbstractXmlForwardIterator<T>::Ptr toReversed() override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator<T> *>(this));
    }
 
-   /**
-    * @returns always 0
-    */
    xsInteger count() override {
       return 0;
    }
 
-   /**
-    * @returns @c this
-    */
    typename QAbstractXmlForwardIterator<T>::Ptr copy() const override {
       return typename QAbstractXmlForwardIterator<T>::Ptr(const_cast<EmptyIterator *>(this));
    }

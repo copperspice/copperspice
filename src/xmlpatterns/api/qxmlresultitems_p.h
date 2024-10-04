@@ -44,10 +44,6 @@ class QXmlResultItemsPrivate
    bool hasError;
 
  private:
-   /**
-    * We never use it. We only keep a ref to it such that it doesn't get
-    * de-allocated.
-    */
    QPatternist::DynamicContext::Ptr    m_context;
 };
 

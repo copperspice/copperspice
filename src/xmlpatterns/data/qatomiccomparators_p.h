@@ -36,28 +36,14 @@ class StringComparator : public AtomicComparator
  public:
    ComparisonResult compare(const Item &op1, const AtomicComparator::Operator op, const Item &op2) const override;
 
-   /**
-    * Compares two strings, and returns @c true if they are considered equal as per
-    * an ordinary string comparison. In other words, this is an implementation with
-    * the Unicode code point collation.
-    *
-    * @see <a href="http://www.w3.org/TR/xpath-functions/#string-compare">XQuery 1.0 and XPath
-    * 2.0 Functions and Operators, 7.3 ValueComparison::Equality and Comparison of Strings</a>
-    */
    bool equals(const Item &op1, const Item &op2) const override;
 };
 
 class CaseInsensitiveStringComparator : public AtomicComparator
 {
  public:
-   /**
-    * Converts both string values to upper case and afterwards compare them.
-    */
    ComparisonResult compare(const Item &op1, const AtomicComparator::Operator op, const Item &op2) const override;
 
-   /**
-    * Converts both string values case insensitively.
-    */
    bool equals(const Item &op1, const Item &op2) const override;
 };
 

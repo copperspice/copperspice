@@ -82,34 +82,18 @@ QXmlNamePool &QSimpleXmlNodeModel::namePool() const
    return d->namePool;
 }
 
-/*!
-  Always returns an empty QVector. This signals that no namespace
-  bindings are in scope for \a node.
- */
 QVector<QXmlName> QSimpleXmlNodeModel::namespaceBindings(const QXmlNodeModelIndex &node) const
 {
    (void) node;
    return QVector<QXmlName>();
 }
 
-/*!
-  Always returns a default constructed QXmlNodeModelIndex instance,
-  regardless of \a id.
-
-  This effectively means the model has no elements that have an id.
- */
 QXmlNodeModelIndex QSimpleXmlNodeModel::elementById(const QXmlName &id) const
 {
    (void) id;
    return QXmlNodeModelIndex();
 }
 
-/*!
-  Always returns an empty vector, regardless of \a idref.
-
-  This effectively means the model has no elements or attributes of
-  type \c IDREF.
- */
 QVector<QXmlNodeModelIndex> QSimpleXmlNodeModel::nodesByIdref(const QXmlName &idref) const
 {
    (void) idref;

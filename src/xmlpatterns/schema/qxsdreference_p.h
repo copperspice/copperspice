@@ -34,52 +34,20 @@ class XsdReference : public XsdTerm
  public:
    typedef QExplicitlySharedDataPointer<XsdReference> Ptr;
 
-   /**
-    * Describes the type of the reference.
-    */
    enum Type {
       Element,        ///< The reference points to an element.
       ModelGroup      ///< The reference points to a model group.
    };
 
-   /**
-    * Returns always @c true, used to avoid dynamic casts.
-    */
    bool isReference() const override;
 
-   /**
-    * Sets the @p type of the reference.
-    *
-    * @see Type
-    */
    void setType(Type type);
-
-   /**
-    * Returns the type of the reference.
-    */
    Type type() const;
 
-   /**
-    * Sets the @p name of the referenced object.
-    *
-    * The name can either be a top-level element declaration
-    * or a top-level group declaration.
-    */
    void setReferenceName(const QXmlName &ame);
-
-   /**
-    * Returns the name of the referenced object.
-    */
    QXmlName referenceName() const;
 
-   /**
-    * Sets the source @p location where the reference is located.
-    */
    void setSourceLocation(const QSourceLocation &location);
-
-   /**
-    * Returns the source location where the reference is located.
-    */
    QSourceLocation sourceLocation() const;
 
  private:

@@ -40,11 +40,6 @@ class StringJoinFN : public FunctionCall
  public:
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * Optimization: when the cardinality of the sequence of items to join
-    * cannot be two or more, we have no effect and therefore rewrite
-    * ourselves to our first operand.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 };
 
@@ -71,9 +66,6 @@ class NormalizeSpaceFN : public FunctionCall
 class NormalizeUnicodeFN : public FunctionCall
 {
  public:
-   /**
-    * Initializes private data.
-    */
    NormalizeUnicodeFN();
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
@@ -104,18 +96,9 @@ class TranslateFN : public FunctionCall
 class EncodeString : public FunctionCall
 {
  public:
-   /**
-    * Evaluates its first operand. If it is the empty sequence, an empty string
-    * is returned. Otherwise, the item's string value is returned percent encoded
-    * as specified in this class's constructor.
-    */
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
  protected:
-   /**
-    * Encodes its operand with QUrl::toPercentEncoding(), with @p includeChars as
-    * the characters to encode, and @p excludeChars as the characters to not encode.
-    */
    EncodeString(const QByteArray &excludeChars, const QByteArray &includeChars);
 
  private:
@@ -126,9 +109,6 @@ class EncodeString : public FunctionCall
 class EncodeForURIFN : public EncodeString
 {
  public:
-   /**
-    * Performs internal initialization.
-    */
    EncodeForURIFN();
 
  private:
@@ -138,9 +118,6 @@ class EncodeForURIFN : public EncodeString
 class IriToURIFN : public EncodeString
 {
  public:
-   /**
-    * Performs internal initialization.
-    */
    IriToURIFN();
 
  private:
@@ -150,9 +127,6 @@ class IriToURIFN : public EncodeString
 class EscapeHtmlURIFN : public EncodeString
 {
  public:
-   /**
-    * Performs internal initialization.
-    */
    EscapeHtmlURIFN();
 
  private:

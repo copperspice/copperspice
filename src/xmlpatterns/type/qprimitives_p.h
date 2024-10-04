@@ -34,22 +34,7 @@ typedef qreal xsDouble;
 typedef xsDouble xsFloat;
 typedef xsDouble xsDecimal;
 
-/**
- * This is the native C++ scalar type holding the value space
- * for atomic values of type xs:integer. Taking this type, xsInteger,
- * as parameter, is the most efficient way to integrate with xs:integer.
- *
- * @ingroup Patternist_cppWXSTypes
- */
 typedef qint64 xsInteger;
-
-/**
- * This is the native C++ scalar type holding the value space
- * for atomic values of type xs:integer. Taking this type, xsInteger,
- * as parameter, is the most efficient way to integrate with xs:integer.
- *
- * @ingroup Patternist_cppWXSTypes
- */
 typedef qint32 VariableSlotID;
 
 typedef qint32  DayCountProperty;
@@ -65,35 +50,12 @@ typedef qint8   HourProperty;
 typedef qint8   MinuteProperty;
 typedef qint8   MonthProperty;
 
-/**
- * Milliseconds. 1 equals 0.001 SecondProperty.
- */
 typedef qint16  MSecondProperty;
-
-/**
- * The hour property of a zone offset. For example, -13 in the
- * zone offset "-13:08".
- */
 typedef qint8   ZOHourProperty;
-
-/**
- * The minute property of a zone offset. For example, -08 in the
- * zone offset "-13:08".
- */
 typedef qint8   ZOMinuteProperty;
-
-/**
- * The full zone offset in minutes.
- */
 typedef qint32  ZOTotal;
 
 typedef xsDouble PatternPriority;
-
-/**
- * Signifies the import precedence of a template. For instance, the first
- * stylesheet module has 1, the first import 2, and so forth. Smaller means
- * higher import precedence. 0 is reserved for builtin templates.
- */
 typedef int ImportPrecedence;
 
 QString escape(const QString &input);

@@ -66,12 +66,6 @@ class NamespaceBinding
       return m_prefix == InvalidCode;
    }
 
-   /**
-    * @short Constructs a NamespaceBinding whose prefix and namespace is
-    * taken from @p qName.
-    *
-    * The local name in @p qName is ignored. @p qName may not be null.
-    */
    static inline NamespaceBinding fromQXmlName(const QXmlName qName) {
       Q_ASSERT(!qName.isNull());
       return NamespaceBinding(qName.prefix(), qName.namespaceURI());
@@ -82,9 +76,6 @@ class NamespaceBinding
    QXmlName::NamespaceCode   m_namespace;
 };
 
-/**
- * @relates NamespaceBinding
- */
 static inline uint qHash(const NamespaceBinding nb)
 {
    return (nb.prefix() << 16) + nb.namespaceURI();

@@ -33,17 +33,6 @@ class InsertionIterator : public Item::Iterator
 {
  public:
 
-   /**
-    * Creates an InsertionIterator whose result is a merge of the
-    * iterator @p insertIterator into the iterator @p target at position @p
-    * position.
-    *
-    * @param target the iterator containing the items that the
-    * item in @p insertIterator will be inserted into.
-    * @param position the insertion position. Must be 1 or larger
-    * @param insertIterator the iterator containing the items to insert
-    * at position @p position
-    */
    InsertionIterator(const Item::Iterator::Ptr &target,
                      const xsInteger position,
                      const Item::Iterator::Ptr &insertIterator);

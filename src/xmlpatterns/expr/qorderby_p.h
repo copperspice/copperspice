@@ -40,17 +40,11 @@ class OrderBy : public SingleContainer
       UnstableOrder
    };
 
-   /**
-    * This class is value based.
-    */
    class OrderSpec : public ComparisonPlatform<OrderBy::OrderSpec,
       true, /* Yes, issue errors. */
       AtomicComparator::AsValueComparison>
    {
     public:
-      /**
-       * We want this guy to be public.
-       */
       using ComparisonPlatform<OrderBy::OrderSpec, true, AtomicComparator::AsValueComparison>::detailedFlexibleCompare;
 
       typedef QVector<OrderSpec> Vector;
@@ -60,9 +54,6 @@ class OrderBy : public SingleContainer
          Descending
       };
 
-      /**
-       * @short Default constructor, which is needed by QVector.
-       */
       inline OrderSpec() {
       }
 
@@ -82,10 +73,6 @@ class OrderBy : public SingleContainer
       Expression::Ptr m_expr;
 
     public:
-      /**
-       * We place these afterwards, such that m_expr gets aligned at the
-       * start of the address.
-       */
       Direction direction;
 
       StaticContext::OrderingEmptySequence orderingEmptySequence;
@@ -113,9 +100,6 @@ class OrderBy : public SingleContainer
    Properties properties() const override;
 
  private:
-   /**
-    * Needed when calling makeSequenceMappingIterator().
-    */
    typedef QExplicitlySharedDataPointer<const OrderBy> ConstPtr;
 
    const Stability             m_stability;

@@ -99,7 +99,6 @@ class QXmlQueryPrivate
       if (m_staticContext && m_expr) {
          return m_staticContext;
       }
-      /* Else, re-create the staticContext. */
 
       if (!messageHandler) {
          messageHandler = new QPatternist::ColoringMessageHandler(ownerObject());
@@ -205,15 +204,11 @@ class QXmlQueryPrivate
          return m_expr;
       }
 
-      /* If we need to update, but we don't have any source code, we can
-       * never create an Expression. */
       if (!queryDevice) {
          return QPatternist::Expression::Ptr();
       }
 
       try {
-         /* The static context has source locations, and they need to be
-          * updated to the new query. */
          m_staticContext.reset();
 
          if (!m_expressionFactory) {
@@ -242,9 +237,6 @@ class QXmlQueryPrivate
 
    QXmlNamePool                                namePool;
    QPointer<QAbstractMessageHandler>           messageHandler;
-   /**
-    * Must be absolute and valid.
-    */
    QUrl                                        queryURI;
    const QAbstractUriResolver                 *uriResolver;
    QXmlItem                                    contextItem;
@@ -269,16 +261,9 @@ class QXmlQueryPrivate
    QPatternist::StaticContext::Ptr             m_staticContext;
    QPatternist::VariableLoader::Ptr            m_variableLoader;
    QPatternist::DeviceResourceLoader::Ptr      m_resourceLoader;
-   /**
-    * This is the AST for the query.
-    */
    QPatternist::Expression::Ptr                m_expr;
    QPatternist::ReferenceCountedValue<QObject>::Ptr m_owner;
 
-   /**
-    * This is our effective network manager, that we end up using. The one the
-    * user sets is userNetworkManager.
-    */
    QPatternist::SequenceType::Ptr              m_requiredType;
    QPatternist::FunctionFactory::Ptr           m_functionFactory;
    QPatternist::NetworkAccessDelegator::Ptr    m_networkAccessDelegator;

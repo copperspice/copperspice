@@ -40,89 +40,31 @@ namespace QPatternist {
 class XsdSchemaContext : public ReportContext
 {
  public:
-   /**
-    * A smart pointer wrapping XsdSchemaContext instances.
-    */
    typedef QExplicitlySharedDataPointer<XsdSchemaContext> Ptr;
 
-   /**
-    * Creates a new schema context object.
-    *
-    * @param namePool The name pool all names belong to.
-    */
    XsdSchemaContext(const NamePool::Ptr &namePool);
 
-   /**
-    * Returns the name pool of the schema context.
-    */
    NamePool::Ptr namePool() const override;
 
-   /**
-    * Sets the base URI for the main schema.
-    *
-    * The main schema is the one that includes resp. imports
-    * all the other schema files.
-    */
    virtual void setBaseURI(const QUrl &uri);
-
-   /**
-    * Returns the base URI of the main schema.
-    */
    virtual QUrl baseURI() const;
 
-   /**
-    * Sets the network access manager that should be used
-    * to access referenced schema definitions.
-    */
    void setNetworkAccessManager(QNetworkAccessManager *accessManager);
 
-   /**
-    * Returns the network access manager that is used to
-    * access referenced schema definitions.
-    */
    virtual QNetworkAccessManager *networkAccessManager() const;
 
-   /**
-    * Sets the message @p handler used by the context for error reporting.
-    */
    void setMessageHandler(QAbstractMessageHandler *handler);
-
-   /**
-    * Returns the message handler used by the context for
-    * error reporting.
-    */
    QAbstractMessageHandler *messageHandler() const override;
 
-   /**
-    * Always returns an empty source location.
-    */
    QSourceLocation locationFor(const SourceLocationReflection *const reflection) const override;
 
-   /**
-    * Sets the uri @p resolver that is used for resolving URIs in the
-    * schema parser.
-    */
    void setUriResolver(const QAbstractUriResolver *resolver);
-
-   /**
-    * Returns the uri resolver that is used for resolving URIs in the
-    * schema parser.
-    */
    const QAbstractUriResolver *uriResolver() const override;
 
-   /**
-    * Returns the list of facets for the given simple @p type.
-    */
    XsdFacet::Hash facetsForType(const AnySimpleType::Ptr &type) const;
 
-   /**
-    * Returns a schema type factory that contains some predefined schema types.
-    */
    SchemaTypeFactory::Ptr schemaTypeFactory() const;
 
-   /**
-    * The following variables should not be accessed directly.
-    */
    mutable SchemaTypeFactory::Ptr                 m_schemaTypeFactory;
    mutable QHash<SchemaType::Ptr, XsdFacet::Hash> m_builtinTypesFacetList;
 

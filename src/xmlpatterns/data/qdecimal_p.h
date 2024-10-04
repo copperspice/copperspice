@@ -42,9 +42,6 @@ class Decimal : public Numeric
 
    QString stringValue() const override;
 
-   /**
-    * @returns always BuiltinTypes::xsDecimal
-    */
    ItemType::Ptr type() const override;
 
    xsDouble toDouble() const override;
@@ -59,25 +56,10 @@ class Decimal : public Numeric
    Numeric::Ptr ceiling() const override;
    Numeric::Ptr abs() const override;
 
-   /**
-    * @returns always @c false, xs:decimal doesn't have
-    * not-a-number in its value space.
-    */
    bool isNaN() const override;
-
-   /**
-    * @returns always @c false, xs:decimal doesn't have
-    * infinity in its value space.
-    */
    bool isInf() const override;
 
    Item toNegated() const override;
-
-   /**
-    * Converts @p value into a canonical string representation for @c xs:decimal. This
-    * function is used internally by various classes. Users probably wants to call
-    * stringValue() which in turn calls this function.
-    */
    static QString toString(const xsDecimal value);
 
    bool isSigned() const override;

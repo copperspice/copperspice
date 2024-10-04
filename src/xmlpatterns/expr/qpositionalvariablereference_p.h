@@ -36,17 +36,8 @@ class PositionalVariableReference : public VariableReference
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * Returns always @c true, since a positional variable is always one or more, and the
-    * Effective %Boolean Value for that range is always @c true.
-    *
-    * @returns always @c true
-    */
    bool evaluateEBV(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * @returns always CommonSequenceTypes::ExactlyOneInteger
-    */
    SequenceType::Ptr staticType() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

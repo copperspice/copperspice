@@ -102,13 +102,6 @@ struct Tga32Reader : public TgaReader
     do that.
 */
 
-/*!
-    Construct a new QTgaFile object getting data from \a device.
-
-    The object does not take ownership of the \a device, but until the
-    object is destroyed do not do any non-const operations, eg seek or
-    read on the device.
-*/
 QTgaFile::QTgaFile(QIODevice *device)
     : mDevice(device)
 {

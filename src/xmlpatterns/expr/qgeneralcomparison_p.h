@@ -47,23 +47,14 @@ class GeneralComparison : public PairContainer, public ComparisonPlatform<Genera
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * @returns always IDGeneralComparison
-    */
    ID id() const override;
 
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
-   /**
-    * @returns the operator that this GeneralComparison is using.
-    */
    AtomicComparator::Operator operatorID() const {
       return m_operator;
    }
 
-   /**
-    * Overridden to optimize case-insensitive compares.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:

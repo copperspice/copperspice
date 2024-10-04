@@ -46,15 +46,6 @@ class CallTemplate : public TemplateInvoker
    Properties properties() const override;
    Properties dependencies() const override;
 
-   /**
-    * This is a bit complicated by that we have two required types, one
-    * specified by @c xsl:param in the template declaration, and one on @c
-    * xsl:with-param.
-    *
-    * @see UserFunctionCallsite::expectedOperandTypes()
-    * @see <a href="http://www.w3.org/TR/xslt20/#with-param">XSL
-    * Transformations (XSLT) Version 2.0, 10.1.1 Passing Parameters to Templates</a>
-    */
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
 

@@ -523,16 +523,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
     return S_FALSE;
 }
 
-/*
- It is recommended to read
-    "Implementing a Microsoft Active Accessibility (MSAA) Server.
-    Practical Tips for Developers and How Mozilla Does It"
-    (https://developer.mozilla.org/En/Accessibility/Implementing_an_MSAA_Server)
-
- to get an overview of what's important to implement and what parts of MSAA
- can be ignored. All stuff prefixed with "moz" are information from that page.
-*/
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accLocation(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varID)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -687,7 +677,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
     return S_FALSE;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accChild(VARIANT varChildID, IDispatch** ppdispChild)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -707,7 +696,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accChild(VARIANT varChildI
     return E_FAIL;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accChildCount(long* pcountChildren)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -719,7 +707,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accChildCount(long* pcount
     return S_OK;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accParent(IDispatch** ppdispParent)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -739,9 +726,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accParent(IDispatch** ppdi
     return S_FALSE;
 }
 
-/*
-  Properties and methods
-*/
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accDoDefaultAction(VARIANT varID)
 {
     (void) varID;
@@ -872,7 +856,6 @@ static QAccessibleInterface *relatedInterface(QAccessibleInterface *iface, QAcce
     return rels.value(0).first;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accName(VARIANT varID, BSTR* pszName)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -925,7 +908,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::put_accName(VARIANT, BSTR)
     return DISP_E_MEMBERNOTFOUND;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accRole(VARIANT varID, VARIANT *pvarRole)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -966,7 +948,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accRole(VARIANT varID, VAR
     return S_OK;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accState(VARIANT varID, VARIANT *pvarState)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -1047,7 +1028,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accState(VARIANT varID, VA
     return S_OK;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accValue(VARIANT varID, BSTR* pszValue)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -1084,7 +1064,6 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::put_accValue(VARIANT, BSTR)
     return DISP_E_MEMBERNOTFOUND;
 }
 
-// moz: [important]
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VARIANT varID)
 {
     (void) flagsSelect;

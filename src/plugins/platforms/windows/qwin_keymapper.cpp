@@ -528,9 +528,6 @@ static const Qt::KeyboardModifiers ModsTbl[] = {
 static const size_t NumMods = sizeof ModsTbl / sizeof * ModsTbl;
 static_assert((NumMods == KeyboardLayoutItem::NumQtKeys), "Size mismatch");
 
-/**
-  Remap return or action key to select key for windows mobile.
-*/
 inline quint32 winceKeyBend(quint32 keyCode)
 {
    return KeyTbl[keyCode];
@@ -793,10 +790,6 @@ static inline void sendExtendedPressRelease(QWindow *w, int k,
    QWindowSystemInterface::handleExtendedKeyEvent(w, QEvent::KeyRelease, k, mods, nativeScanCode, nativeVirtualKey, nativeModifiers, text,
       autorep, count);
 }
-
-/*!
-    \brief To be called from the window procedure.
-*/
 
 bool QWindowsKeyMapper::translateKeyEvent(QWindow *widget, HWND hwnd,
    const MSG &msg, LRESULT *result)

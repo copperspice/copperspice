@@ -51,10 +51,6 @@ class ResourceDelegator : public DeviceResourceLoader
    Item::Iterator::Ptr openCollection(const QUrl &uri) override;
    SequenceType::Ptr announceCollection(const QUrl &uri) override;
 
-   /**
-    * Returns the union of the deviceURIs() that ResourceDelegator's two
-    * resource loaders has.
-    */
    QSet<QUrl> deviceURIs() const override;
 
  private:

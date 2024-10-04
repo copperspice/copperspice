@@ -37,32 +37,12 @@ class GenericNamespaceResolver : public NamespaceResolver
 
    QXmlName::NamespaceCode lookupNamespaceURI(const QXmlName::PrefixCode prefix) const override;
 
-   /**
-    * Returns a GenericNamespaceResolver containing the following bindings:
-    *
-    * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
-    * - <tt>xs</tt> = <tt>http://www.w3.org/2001/XMLSchema</tt>
-    * - <tt>xsi</tt> = <tt>http://www.w3.org/2001/XMLSchema-instance</tt>
-    * - <tt>fn</tt> = <tt>http://www.w3.org/2005/xpath-functions</tt>
-    * - <tt>xdt</tt> = <tt>http://www.w3.org/2005/xpath-datatypes</tt>
-    * - no prefix = empty namespace
-    */
    static NamespaceResolver::Ptr defaultXQueryBindings();
-
-   /**
-    * Returns a GenericNamespaceResolver containing the following bindings:
-    *
-    * - <tt>xml</tt> = <tt>http://www.w3.org/XML/1998/namespace</tt>
-    * - no prefix = empty namespace
-    */
    static NamespaceResolver::Ptr defaultXSLTBindings();
 
    Bindings bindings() const override;
 
  private:
-   /**
-    * The key is the prefix, the value the namespace URI.
-    */
    Bindings m_bindings;
 };
 }

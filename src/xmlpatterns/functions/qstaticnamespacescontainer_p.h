@@ -31,24 +31,14 @@ namespace QPatternist {
 class StaticNamespacesContainer : public FunctionCall
 {
  public:
-   /**
-    * Reimplemented to store data from the @p context.
-    */
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
  protected:
-   /**
-    * Before typeCheck(), behavior of this function is undefined. After
-    * typeCheck(), this function guarantees to return a valid pointer.
-    */
    const NamespaceResolver::Ptr &staticNamespaces() const {
       Q_ASSERT(m_resolver);
       return m_resolver;
    }
 
-   /**
-    * This constructor only exists to ensure this class is subclassed.
-    */
    StaticNamespacesContainer() {
    }
 

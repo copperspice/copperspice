@@ -44,9 +44,6 @@ class IfThenClause : public TripleContainer
    SequenceType::Ptr staticType() const override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * @returns IDIfThenClause
-    */
    ID id() const override;
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
    //virtual Properties properties() const;

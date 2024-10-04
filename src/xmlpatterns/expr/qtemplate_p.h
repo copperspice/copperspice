@@ -49,35 +49,18 @@ class Template : public QSharedData, public SourceLocationReflection
 
    Expression::Ptr body;
 
-   /**
-    * Returns @c this.
-    */
    const SourceLocationReflection *actualReflection() const override;
 
    const ImportPrecedence importPrecedence;
 
    VariableDeclaration::List templateParameters;
 
-   /**
-    * If @p isCallTemplate, the caller is @c xsl:call-template, as opposed
-    * to for instance @c xsl:apply-templates. This affects error
-    * reporting.
-    */
    DynamicContext::Ptr createContext(const TemplateInvoker *const invoker,
                                      const DynamicContext::Ptr &context,
                                      const bool isCallTemplate) const;
 
-   /**
-    * Since we have our template parameters in templateParameters, we need
-    * this separate step to do the regular phases:
-    * Expression::typeCheck(), and Expression::compress().
-    */
    void compileParameters(const StaticContext::Ptr &context);
 
-   /**
-    * A value which takes into account the body and its template
-    * parameters.
-    */
    Expression::Properties properties() const;
 
    Expression::Properties dependencies() const;

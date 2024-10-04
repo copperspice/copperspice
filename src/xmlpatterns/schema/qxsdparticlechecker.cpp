@@ -35,10 +35,6 @@
 using namespace QPatternist;
 
 namespace QPatternist {
-/**
- * This template specialization is picked up by XsdStateMachine and allows us
- * to print nice edge labels.
- */
 template <>
 QString XsdStateMachine<XsdTerm::Ptr>::transitionTypeToString(XsdTerm::Ptr term) const
 {
@@ -57,10 +53,6 @@ QString XsdStateMachine<XsdTerm::Ptr>::transitionTypeToString(XsdTerm::Ptr term)
 }
 }
 
-/**
- * This method is used by the isUPAConform method to check whether @p term and @p otherTerm
- * are the same resp. match each other.
- */
 static bool termMatches(const XsdTerm::Ptr &term, const XsdTerm::Ptr &otherTerm, const NamePool::Ptr &namePool)
 {
    if (term->isElement()) {
@@ -130,15 +122,6 @@ static bool termMatches(const XsdTerm::Ptr &term, const XsdTerm::Ptr &otherTerm,
    return false;
 }
 
-/**
- * This method is used by the subsumes algorithm to check whether the @p derivedTerm is validly derived from the @p baseTerm.
- *
- * @param baseTerm The term of the base component (type or group).
- * @param derivedTerm The term of the derived component (type or group).
- * @param particles A hash to map the passed base and derived term to the particles they belong to.
- * @param context The schema context.
- * @param errorMsg The error message in the case that an error occurs.
- */
 static bool derivedTermValid(const XsdTerm::Ptr &baseTerm, const XsdTerm::Ptr &derivedTerm,
                              const QHash<XsdTerm::Ptr, XsdParticle::Ptr> &particles, const XsdSchemaContext::Ptr &context, QString &errorMsg)
 {
@@ -310,10 +293,6 @@ static bool derivedTermValid(const XsdTerm::Ptr &baseTerm, const XsdTerm::Ptr &d
 
 typedef QHash<QXmlName, XsdElement::Ptr> ElementHash;
 
-/**
- * Internal helper method that checks if the given @p particle contains an element with the
- * same name and type twice.
- */
 static bool hasDuplicatedElementsInternal(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool,
       ElementHash &hash, XsdElement::Ptr &conflictingElement)
 {
@@ -358,13 +337,6 @@ bool XsdParticleChecker::hasDuplicatedElements(const XsdParticle::Ptr &particle,
 
 bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool)
 {
-
-   /**
-    * In case we encounter an <xsd:all> element, don't construct a state machine, but use the approach
-    * described at http://www.w3.org/TR/xmlschema-1/#non-ambig
-    * Reason: For n elements inside the <xsd:all>, represented in the NDA, the state machine
-    * constructs n! states in the DFA, which does not scale.
-    */
    if (particle->term()->isModelGroup()) {
       const XsdModelGroup::Ptr group(particle->term());
       if (group->compositor() == XsdModelGroup::AllCompositor) {
@@ -448,9 +420,6 @@ bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const Na
 
 bool XsdParticleChecker::isUPAConformXsdAll(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool)
 {
-   /**
-    * see http://www.w3.org/TR/xmlschema-1/#non-ambig
-    */
    const XsdModelGroup::Ptr group(particle->term());
    const XsdParticle::List particles = group->particles();
    const int count = particles.count();

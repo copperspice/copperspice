@@ -37,14 +37,8 @@ class HexBinary : public Base64Binary
    QString stringValue() const override;
    ItemType::Ptr type() const override;
 
-   /**
-    * Creates a @c xs:hexBinary from the lexical representation @p value.
-    */
    static AtomicValue::Ptr fromLexical(const NamePool::Ptr &np, const QString &value);
 
-   /**
-    * Creates an instance representing @p value.
-    */
    static HexBinary::Ptr fromValue(const QByteArray &data);
 
  protected:

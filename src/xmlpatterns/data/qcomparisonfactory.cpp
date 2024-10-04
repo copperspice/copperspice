@@ -30,12 +30,6 @@
 
 using namespace QPatternist;
 
-/**
- * @short Helper class for ComparisonFactory::fromLexical() which exposes
- * CastingPlatform appropriately.
- *
- * @relates ComparisonFactory
- */
 class PerformComparison : public ComparisonPlatform<PerformComparison, true>
    , public SourceLocationReflection
 {
@@ -52,15 +46,6 @@ class PerformComparison : public ComparisonPlatform<PerformComparison, true>
                    const ReportContext::Ptr &context) {
       const ItemType::Ptr asItemType((AtomicType::Ptr(type)));
 
-      /* One area where the Query Transform world differs from the Schema
-       * world is that @c xs:duration is not considedered comparable, because
-       * it's according to Schema is partially comparable. This means
-       * ComparisonPlatform::fetchComparator() flags it as impossible, and
-       * hence we need to override that.
-       *
-       * SchemaType::wxsTypeMatches() will return true for sub-types of @c
-       * xs:duration as well, but that's ok since AbstractDurationComparator
-       * works for them too. */
       if (BuiltinTypes::xsDuration->wxsTypeMatches(type)) {
          prepareComparison(AtomicComparator::Ptr(new AbstractDurationComparator()));
       } else if (BuiltinTypes::xsGYear->wxsTypeMatches(type) ||

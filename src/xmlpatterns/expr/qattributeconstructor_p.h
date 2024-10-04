@@ -38,17 +38,10 @@ class AttributeConstructor : public PairContainer
 
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * The first operand must be exactly one @c xs:QName, and the second
-    * argument can be zero or more items.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * @returns always IDAttributeConstructor.
-    */
    ID id() const override;
 
    Properties properties() const override;

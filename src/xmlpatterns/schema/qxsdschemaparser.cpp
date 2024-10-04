@@ -37,64 +37,14 @@
 #include <QFile>
 #include <QXmlQuery>
 
-/**
- * @page schema_overview Overview
- * @section structure_and_components Structure and Components
- *
- * The schema validator code consists of 4 major components
- *
- * <dl>
- *  <dt>The schema parser (QPatternist::XsdSchemaParser)</dt>
- *  <dd>This component parses a XML document that is supplied via a QIODevice. It creates
- *      a so called (incomplete) 'compiled schema', which is a representation of the XML Schema
- *      structure as C++ objects.
- *      As the parser is a streaming parser, it can't resolve references to types or elements/attributes
- *      in place, therefor it creates resolver tasks which are passed to the schema resolver component
- *      for resolving at a later point in time.
- *      The parser does furthermore the basic XML structure constraint checking, e.g. if all required
- *      attributes are available or the order of the elements is correct.</dd>
- *
- *  <dt>The schema resolver (QPatternist::XsdSchemaResolver)</dt>
- *  <dd>This component is activated after the schema parser component has been finished the parsing
- *      of all schemas. The resolver has been supplied with resolve tasks by the schema parser that
- *      it will resolve in this step now. Between working on the single resolver tasks, the resolver
- *      calls check methods from the schema checker component to make sure that some assertions are
- *      valid (e.g. no circular inheritance of types), so that the resolver can work without hassle.
- *      During resoving references to attribute or element groups it also checks for circular references
- *      of these groups.
- *      At the end of that phase we have a compiled schema that is fully resolved (not necessarily valid though).</dd>
- *
- *  <dt>The schema checker (QPatternist::XsdSchemaChecker)</dt>
- *  <dd>This component does all the schema constraint checking as given by the Schema specification.
- *      At the end of that phase we have fully resolved and valid compiled schema that can be used for validation
- *      of instance documents.</dd>
- *
- *  <dt>The validator (QPatternist::XsdValidatingInstanceReader)</dt>
- *  <dd>This component is responsible for validating a XML instance document, provided via a QIODevice, against
- *      a valid compiled schema.</dd>
- * </dl>
- *
- * @ingroup Patternist_schema
- */
 
 using namespace QPatternist;
 
 namespace QPatternist {
 
-/**
- * @short A helper class for automatically handling namespace scopes of elements.
- *
- * This class should be instantiated at the beginning of each parse XYZ method.
- */
 class ElementNamespaceHandler
 {
  public:
-   /**
-    * Creates a new element namespace handler object.
-    *
-    * It checks whether the @p parser is on the right @p tag and it creates a new namespace
-    * context that contains the inherited and local namespace declarations.
-    */
    ElementNamespaceHandler(const XsdSchemaToken::NodeName &tag, XsdSchemaParser *parser)
       : m_parser(parser) {
       Q_ASSERT(m_parser->isStartElement() && (XsdSchemaToken::toToken(m_parser->name()) == tag) &&
@@ -106,11 +56,6 @@ class ElementNamespaceHandler
       m_parser->m_namespaceSupport.setPrefixes(m_parser->namespaceDeclarations());
    }
 
-   /**
-    * Destroys the element namespace handler object.
-    *
-    * It destroys the local namespace context.
-    */
    ~ElementNamespaceHandler() {
       m_parser->m_namespaceSupport.popContext();
    }
@@ -119,10 +64,6 @@ class ElementNamespaceHandler
    XsdSchemaParser *m_parser;
 };
 
-/**
- * A helper class that checks for the right occurrence of
- * xml tags with the help of a DFA.
- */
 class TagValidationHandler
 {
  public:
@@ -185,10 +126,6 @@ class TagValidationHandler
 
 }
 
-/**
- * Returns a list of all particles with group references that appear at any level of
- * the given unresolved @p group.
- */
 static XsdParticle::List collectGroupRef(const XsdModelGroup::Ptr &group)
 {
    XsdParticle::List refParticles;
@@ -209,10 +146,6 @@ static XsdParticle::List collectGroupRef(const XsdModelGroup::Ptr &group)
    return refParticles;
 }
 
-/**
- * Helper function that works around the limited facilities of
- * QUrl/AnyURI::fromLexical to detect invalid URIs
- */
 static inline bool isValidUri(const QString &string)
 {
    // an empty URI points to the current document as defined in RFC 2396 (4.2)

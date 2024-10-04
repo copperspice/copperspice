@@ -40,21 +40,11 @@ class ReplaceFN : public PatternPlatform
  public:
    ReplaceFN();
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
-   /**
-    * Overridden to attempt to pre-compile the replacement string.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
-   /**
-    * @short Centralizes the translation string.
-    */
    static inline QString errorAtEnd(const char ch);
 
-   /**
-    * Reads the string in the third argument and converts it to a a QRegularExpression compatible
-    * replacement string, containing sub-group references and so forth.
-    */
    QString parseReplacement(const int captureCount, const DynamicContext::Ptr &context) const;
 
    QString m_replacementString;

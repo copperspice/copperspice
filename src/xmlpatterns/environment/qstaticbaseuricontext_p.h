@@ -30,10 +30,6 @@ namespace QPatternist {
 class StaticBaseURIContext : public DelegatingStaticContext
 {
  public:
-   /**
-    * The @p bURI is the new static base URI, and it must be valid
-    * and absolute.
-    */
    StaticBaseURIContext(const QUrl &bURI, const StaticContext::Ptr &prevContext);
 
    QUrl baseURI() const override;

@@ -38,9 +38,6 @@ struct TokenMap;
 class XQueryTokenizer : public Tokenizer
 {
  public:
-   /**
-    * Tokenizer states. Organized alphabetically.
-    */
    enum State {
       AfterAxisSeparator,
       AposAttributeContent,
@@ -73,22 +70,9 @@ class XQueryTokenizer : public Tokenizer
    int commenceScanOnly() override;
    void resumeTokenizationFrom(const int position) override;
 
-   /**
-    * Does nothing.
-    */
    void setParserContext(const ParserContext::Ptr &parseInfo) override;
 
  private:
-
-   /**
-    * Returns the character corresponding to the builtin reference @p
-    * reference. For instance, passing @c gt will give you '>' in return.
-    *
-    * If @p reference is an invalid character reference, a null QChar is
-    * returned.
-    *
-    * @see QChar::isNull()
-    */
    QChar charForReference(const QString &reference);
 
    inline Token tokenAndChangeState(const TokenType code,
@@ -104,16 +88,7 @@ class XQueryTokenizer : public Tokenizer
    inline Token tokenizeStringLiteral();
    inline Token tokenizeNumberLiteral();
 
-   /**
-    * @returns the character @p length characters from the current
-    * position.
-    */
    inline QChar peekAhead(const int length = 1) const;
-
-   /**
-    * @returns whether the stream, starting from @p offset from the
-    * current position, matches @p chs. The length of @p chs is @p len.
-    */
    inline bool aheadEquals(const char *const chs,
                            const int len,
                            const int offset = 1) const;
@@ -127,21 +102,8 @@ class XQueryTokenizer : public Tokenizer
 
    inline QChar peekCurrent() const;
 
-   /**
-    * Disregarding encoding conversion, equivalent to calling:
-    *
-    * @code
-    * peekAhead(0);
-    * @endcode
-    */
    inline const QChar current() const;
 
-   /**
-    * @p hadWhitespace is always set to a proper value.
-    *
-    * @returns the length of whitespace scanned before reaching "::", or
-    * -1 if something else was found.
-    */
    int peekForColonColon() const;
 
    static inline bool isNCNameStart(const QChar ch);
@@ -154,65 +116,18 @@ class XQueryTokenizer : public Tokenizer
    static bool isTypeToken(const TokenType t);
 
    inline Token tokenizeNCNameOrQName();
-   /**
-    * Advances m_pos until content is encountered.
-    *
-    * Returned is the length stretching from m_pos when starting, until
-    * @p content is encountered. @p content is not included in the length.
-    */
    int scanUntil(const char *const content);
 
-   /**
-    * Same as calling:
-    * @code
-    * pushState(currentState());
-    * @endcode
-    */
    inline void pushState();
 
-   /**
-    * Consumes only whitespace, in the traditional sense. The function exits
-    * if non-whitespace is encountered, such as the start of a comment.
-    *
-    * @returns @c true if the end was reached, otherwise @c false
-    */
    inline bool consumeRawWhitespace();
 
-   /**
-    * @short Parses comments: <tt>(: comment content :)</tt>. It recurses for
-    * parsing nested comments.
-    *
-    * It is assumed that the start token for the comment, "(:", has
-    * already been parsed.
-    *
-    * Typically, don't call this function, but ignoreWhitespace().
-    *
-    * @see <a href="http://www.w3.org/TR/xpath20/#comments">XML Path Language (XPath)
-    * 2.0, 2.6 Comments</a>
-    * @returns
-    * - SUCCESS if everything went ok
-    * - ERROR if there was an error in parsing one or more comments
-    * - END_OF_FILE if the end was reached
-    */
    Tokenizer::TokenType consumeComment();
 
-   /**
-    * Determines whether @p code is a keyword
-    * that is followed by a second keyword. For instance <tt>declare
-    * function</tt>.
-    */
    static inline bool isPhraseKeyword(const TokenType code);
 
-   /**
-    * A set of indexes into a QString, the one being passed to
-    * normalizeEOL() whose characters shouldn't be normalized. */
    typedef QSet<int> CharacterSkips;
 
-   /**
-    * Returns @p input, normalized according to
-    * <a href="http://www.w3.org/TR/xquery/#id-eol-handling">XQuery 1.0:
-    * An XML Query Language, A.2.3 End-of-Line Handling</a>
-    */
    static QString normalizeEOL(const QString &input,
                                const CharacterSkips &characterSkips);
 
@@ -221,21 +136,6 @@ class XQueryTokenizer : public Tokenizer
    }
 
    Token nextToken();
-   /**
-    * Instead of recognizing and tokenizing embedded expressions in
-    * direct attriute constructors, this function is essentially a mini
-    * recursive-descent parser that has the necessary logic to recognize
-    * embedded expressions and their potentially interfering string literals, in
-    * order to scan to the very end of the attribute value, and return the
-    * whole as a string.
-    *
-    * There is of course syntax errors this function will not detect, but
-    * that is ok since the attributes will be parsed once more.
-    *
-    * An inelegant solution, but which gets the job done.
-    *
-    * @see commenceScanOnly(), resumeTokenizationFrom()
-    */
    Token attributeAsRaw(const QChar separator, int &stack, const int startPos,
                   const bool inLiteral, QString &result);
 
@@ -245,20 +145,8 @@ class XQueryTokenizer : public Tokenizer
    QStack<State>           m_stateStack;
    int                     m_pos;
 
-   /**
-    * The current line number.
-    *
-    * The line number and column number both starts at 1.
-    */
    int                     m_line;
 
-   /**
-    * The offset into m_length for where
-    * the current column starts. So m_length - m_columnOffset
-    * is the current column.
-    *
-    * The line number and column number both starts at 1.
-    */
    int                     m_columnOffset;
 
    const NamePool::Ptr     m_namePool;

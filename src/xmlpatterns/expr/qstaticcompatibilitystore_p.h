@@ -31,10 +31,6 @@ namespace QPatternist {
 class StaticCompatibilityStore : public SingleContainer
 {
  public:
-   /**
-    * @p baseURI must be valid, not empty, and either relative or
-    * absolute.
-    */
    StaticCompatibilityStore(const Expression::Ptr &operand);
 
    Expression::Ptr typeCheck(const StaticContext::Ptr &context,const SequenceType::Ptr &reqType) override;

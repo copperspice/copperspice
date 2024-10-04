@@ -45,9 +45,6 @@ class EvaluationCache : public SingleContainer
 
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * The first operand must be exactly one @c xs:string.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
@@ -64,14 +61,6 @@ class EvaluationCache : public SingleContainer
    static DynamicContext::Ptr topFocusContext(const DynamicContext::Ptr &context);
    const VariableDeclaration *m_declaration;
    bool m_declarationUsedByMany;
-   /**
-    * This variable must not be called m_slot. If it so, a compiler bug on
-    * HP-UX-aCC-64 is triggered in the constructor initializor. See the
-    * preprocessor output.
-    *
-    * Note that this is the cache slot, and is disjoint to any variable's
-    * regular slot.
-    */
    const VariableSlotID m_varSlot;
 };
 

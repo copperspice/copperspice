@@ -31,11 +31,6 @@ namespace QPatternist {
 class Literal : public EmptyContainer
 {
  public:
-   /**
-    * Creates a Literal that represents @p item.
-    *
-    * @param item must be non-null and cannot be a QXmlNodeModelIndex.
-    */
    Literal(const Item &item);
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
@@ -47,15 +42,7 @@ class Literal : public EmptyContainer
    ID id() const override;
    QString description() const override;
 
-   /**
-    * @returns Expression::DisableElimination and Expression::IsEvaluated
-    */
    Properties properties() const override;
-
-   /**
-    * Declaring the return value of this function a const reference, leads
-    * to crashes in patternistview, for a to me unknown reason.
-    */
    Item item() const {
       return m_item;
    }
@@ -64,26 +51,6 @@ class Literal : public EmptyContainer
    const Item m_item;
 };
 
-/**
- * @short Creates a Literal that wraps @p item, and returns it.
- *
- * This simplifies code. Instead of writing:
- *
- * @code
- * Expression::Ptr(new Literal(item));
- * @endcode
- *
- * One can write:
- *
- * @code
- * wrapLiteral(item);
- * @endcode
- *
- * This function is not declared static, because it breaks the build on
- * at least aix-xlc-64.
- *
- * @relates Literal
- */
 inline Expression::Ptr wrapLiteral(const Item &item,
                                    const StaticContext::Ptr &context,
                                    const SourceLocationReflection *const r)

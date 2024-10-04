@@ -77,16 +77,10 @@ class VariableDeclaration : public QSharedData
       m_expression = expr;
    }
 
-   /**
-    * @short Returns how many times this variable is used.
-    */
    inline bool usedByMany() const {
       return references.count() > 1;
    }
 
-   /**
-    * @short Returns @c true if @p list contains @p lookup.
-    */
    static bool contains(const VariableDeclaration::List &list,
                         const QXmlName &lookup);
 
@@ -94,20 +88,9 @@ class VariableDeclaration : public QSharedData
    const VariableSlotID            slot;
    const Type                      type;
 
-   /**
-    * The declared type of the variable. What the value might be, depends
-    * on the context which VariableDeclaration is used in. Note that
-    * sequenceType is hence not in anyway obligated to the type of
-    * expression().
-    */
    const SequenceType::Ptr         sequenceType;
    VariableReference::List         references;
 
-   /**
-    * @short Whether a reference can rewrite itself to expression().
-    *
-    * The default value is @c true.
-    */
    bool canSourceRewrite;
 
  private:
@@ -117,11 +100,6 @@ class VariableDeclaration : public QSharedData
    VariableDeclaration &operator=(const VariableDeclaration &) = delete;
 };
 
-/**
- * @short Formats @p var appropriately for display.
- *
- * @relates VariableDeclaration
- */
 static inline QString formatKeyword(const VariableDeclaration::Ptr &var,
                                     const NamePool::Ptr &np)
 {

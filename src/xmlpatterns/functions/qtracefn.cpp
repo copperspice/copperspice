@@ -39,9 +39,6 @@ class TraceCallback : public QSharedData
       m_msg(msg) {
    }
 
-   /**
-    * Performs the actual tracing.
-    */
    Item mapToItem(const Item &item,
                   const DynamicContext::Ptr &context) {
       QTextStream out(stderr);

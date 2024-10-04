@@ -102,9 +102,6 @@ template <const bool IsInteger>
 class NumericToDecimalCaster : public AtomicCaster
 {
  public:
-   /**
-    * Used by NumericToDerivedIntegerCaster in addition to this class.
-    */
    static inline QString errorMessage() {
       return QtXmlPatterns::tr("When casting to %1 from %2, the source value cannot be %3.");
    }
@@ -163,10 +160,6 @@ class BooleanToIntegerCaster : public AtomicCaster
 class SelfToSelfCaster : public AtomicCaster
 {
  public:
-
-   /**
-    * This function simply returns @p from.
-    */
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 

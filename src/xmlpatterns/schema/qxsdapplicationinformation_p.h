@@ -36,29 +36,10 @@ class XsdApplicationInformation : public NamedSchemaComponent
    typedef QExplicitlySharedDataPointer<XsdApplicationInformation> Ptr;
    typedef QList<XsdApplicationInformation::Ptr> List;
 
-   /**
-    * Sets the @p source of the application information.
-    *
-    * The source points to an URL that contains more
-    * information.
-    */
    void setSource(const AnyURI::Ptr &source);
-
-   /**
-    * Returns the source of the application information.
-    */
    AnyURI::Ptr source() const;
 
-   /**
-    * Sets the @p content of the application information.
-    *
-    * The content can be of abritrary type.
-    */
    void setContent(const QString &content);
-
-   /**
-    * Returns the content of the application information.
-    */
    QString content() const;
 
  private:

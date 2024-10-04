@@ -37,49 +37,17 @@ class XsdDocumentation : public NamedSchemaComponent
    typedef QExplicitlySharedDataPointer<XsdDocumentation> Ptr;
    typedef QList<XsdDocumentation::Ptr> List;
 
-   /**
-    * Creates a new documentation object.
-    */
    XsdDocumentation();
 
-   /**
-    * Destroys the documentation object.
-    */
    ~XsdDocumentation();
 
-   /**
-    * Sets the @p source of the documentation.
-    *
-    * The source points to an URL that contains more
-    * information.
-    */
    void setSource(const AnyURI::Ptr &source);
-
-   /**
-    * Returns the source of the documentation.
-    */
    AnyURI::Ptr source() const;
 
-   /**
-    * Sets the @p language of the documentation.
-    */
    void setLanguage(const DerivedString<TypeLanguage>::Ptr &language);
-
-   /**
-    * Returns the language of the documentation.
-    */
    DerivedString<TypeLanguage>::Ptr language() const;
 
-   /**
-    * Sets the @p content of the documentation.
-    *
-    * The content can be of abritrary type.
-    */
    void setContent(const QString &content);
-
-   /**
-    * Returns the content of the documentation.
-    */
    QString content() const;
 
  private:

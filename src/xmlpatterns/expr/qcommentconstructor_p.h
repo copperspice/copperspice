@@ -38,9 +38,6 @@ class CommentConstructor : public SingleContainer
 
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * The first operand must be exactly one @c xs:string.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

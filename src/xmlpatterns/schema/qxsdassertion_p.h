@@ -38,16 +38,8 @@ class XsdAssertion : public NamedSchemaComponent, public XsdAnnotated
    typedef QExplicitlySharedDataPointer<XsdAssertion> Ptr;
    typedef QList<XsdAssertion::Ptr> List;
 
-   /**
-    * Sets the @p test of the assertion.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#as-test">Test Definition</a>
-    */
    void setTest(const XsdXPathExpression::Ptr &test);
 
-   /**
-    * Returns the test of the assertion.
-    */
    XsdXPathExpression::Ptr test() const;
 
  private:

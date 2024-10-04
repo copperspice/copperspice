@@ -35,9 +35,6 @@ class Base64Binary : public AtomicValue
 
    typedef AtomicValue::Ptr Ptr;
 
-   /**
-    * Creates an instance representing @p value.
-    */
    static AtomicValue::Ptr fromLexical(const QString &value);
 
    static Base64Binary::Ptr fromValue(const QByteArray &data);
@@ -55,17 +52,6 @@ class Base64Binary : public AtomicValue
    const QByteArray m_value;
 
  private:
-   /**
-    * @short Assumes @p in is a lexical representation of @c xs:base64Binary, and
-    * converts it to the binary data set in @p out.
-    *
-    * If @p instr is invalid Base64 content, @p ok is set to
-    * false, and the returned QByteArray has an undefined value.
-    *
-    *  We cannot use QByteArray::fromBase64() because it doesn't do the
-    *  necessary validation that we need to properly implement W3C XML
-    *  Schema's xs:base64Binary type.
-    */
    static void base64Decode(const QByteArray &in, QByteArray &out, bool &ok);
 
    static const char Base64DecMap[128];

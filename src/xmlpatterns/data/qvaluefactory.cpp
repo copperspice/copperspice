@@ -28,12 +28,6 @@
 
 using namespace QPatternist;
 
-/**
- * @short Helper class for ValueFactory::fromLexical() which exposes
- * CastingPlatform appropriately.
- *
- * @relates ValueFactory
- */
 class PerformValueConstruction : public CastingPlatform<PerformValueConstruction, false>
    , public SourceLocationReflection
 {

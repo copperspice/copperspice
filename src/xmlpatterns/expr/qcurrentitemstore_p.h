@@ -43,9 +43,6 @@ class CurrentItemStore : public SingleContainer
 
    Properties properties() const override;
 
-   /**
-    * @returns the staticType() of its operand.
-    */
    SequenceType::Ptr staticType() const override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
    const SourceLocationReflection *actualReflection() const override;

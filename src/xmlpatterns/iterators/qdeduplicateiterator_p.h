@@ -44,13 +44,6 @@ class DeduplicateIterator : public ListIterator<Item>
    xsInteger count() override;
 
  private:
-   /**
-    * m_position in ListIteratorPlatform is the position that we
-    * show to the outside through position) but do not correspond
-    * to the position in m_list, since we skip entries in that one.
-    *
-    * However, this guy, m_listPos, is the position into m_list.
-    */
    int m_listPos;
 };
 

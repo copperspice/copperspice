@@ -35,14 +35,6 @@ namespace QPatternist {
 class ComparisonFactory
 {
  public:
-   /**
-    * @short Returns the result of evaluating operator @p op applied to the atomic
-    * values @p operand1 and @p operand2.
-    *
-    * The caller guarantees that both values are of type @p type.
-    *
-    * ComparisonFactory does not take ownership of @p sourceLocationReflection.
-    */
    static bool compare(const AtomicValue::Ptr &operand1,
                        const AtomicComparator::Operator op,
                        const AtomicValue::Ptr &operand2,
@@ -50,17 +42,6 @@ class ComparisonFactory
                        const ReportContext::Ptr &context,
                        const SourceLocationReflection *const sourceLocationReflection);
 
-   /**
-    * @short Returns the result of evaluating operator @p op applied to the atomic
-    * values @p operand1 and @p operand2.
-    *
-    * In opposite to compare() it converts the operands from string type
-    * to @p type and compares these constructed types.
-    *
-    * The caller guarantees that both values are of type @p type.
-    *
-    * ComparisonFactory does not take ownership of @p sourceLocationReflection.
-    */
    static bool constructAndCompare(const DerivedString<TypeString>::Ptr &operand1,
                                    const AtomicComparator::Operator op,
                                    const DerivedString<TypeString>::Ptr &operand2,

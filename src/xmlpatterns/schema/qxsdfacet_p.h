@@ -38,9 +38,6 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
  public:
    typedef QExplicitlySharedDataPointer<XsdFacet> Ptr;
 
-   /**
-    * Describes the type of the facet.
-    */
    enum Type {
       None             = 0,        ///< An invalid facet.
       Length           = 1 << 0,   ///< Match the exact length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-length">Length Definition</a>)
@@ -60,83 +57,25 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
    typedef QHash<XsdFacet::Type, XsdFacet::Ptr> Hash;
    typedef QHashIterator<XsdFacet::Type, XsdFacet::Ptr> HashIterator;
 
-   /**
-    * Creates a new facet object of type None.
-    */
    XsdFacet();
 
-   /**
-    * Sets the @p type of the facet.
-    *
-    * @see Type
-    */
    void setType(Type type);
-
-   /**
-    * Returns the type of the facet.
-    */
    Type type() const;
 
-   /**
-    * Sets the @p value of the facet.
-    *
-    * Depending on the type of the facet the
-    * value can be a string, interger, double etc.
-    *
-    * @note This method should be used for all types of facets
-    *       except Pattern, Enumeration and Assertion.
-    */
    void setValue(const AtomicValue::Ptr &value);
 
-   /**
-    * Returns the value of the facet or an empty pointer if facet
-    * type is Pattern, Enumeration or Assertion.
-    */
    AtomicValue::Ptr value() const;
 
-   /**
-    * Sets the @p value of the facet.
-    *
-    * @note This method should be used for if the type of the
-    *       facet is Pattern or Enumeration.
-    */
    void setMultiValue(const AtomicValue::List &value);
-
-   /**
-    * Returns the value of the facet or an empty pointer if facet
-    * type is not of type Pattern or Enumeration.
-    */
    AtomicValue::List multiValue() const;
 
-   /**
-    * Sets the @p assertions of the facet.
-    *
-    * @note This method should be used if the type of the
-    *       facet is Assertion.
-    */
    void setAssertions(const XsdAssertion::List &assertions);
 
-   /**
-    * Returns the assertions of the facet or an empty pointer if facet
-    * type is not of type Assertion.
-    */
    XsdAssertion::List assertions() const;
 
-   /**
-    * Sets whether the facet is @p fixed.
-    *
-    * All facets except pattern, enumeration and assertion can be fixed.
-    */
    void setFixed(bool fixed);
-
-   /**
-    * Returns whether the facet is fixed.
-    */
    bool fixed() const;
 
-   /**
-    * Returns the textual description of the facet @p type.
-    */
    static QString typeName(Type type);
 
  private:

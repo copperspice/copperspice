@@ -93,15 +93,8 @@ class ParserContext : public QSharedData
       m_prologDeclarations |= decl;
    }
 
-   /**
-    * The namespaces declared with <tt>declare namespace</tt>.
-    */
    QStringList declaredPrefixes;
 
-   /**
-    * This is a temporary stack, used for keeping variables in scope,
-    * such as for function arguments & let clauses.
-    */
    VariableDeclaration::Stack variables;
 
    inline bool isXSLT() const {
@@ -109,42 +102,19 @@ class ParserContext : public QSharedData
    }
 
    const StaticContext::Ptr staticContext;
-   /**
-    * We don't store a Tokenizer::Ptr here, because then we would get a
-    * circular referencing between ParserContext and XSLTTokenizer, and
-    * hence they would never destruct.
-    */
+
    Tokenizer *const tokenizer;
    const QXmlQuery::QueryLanguage languageAccent;
 
-   /**
-    * Only used in the case of XSL-T. Is the name of the initial template
-    * to call. If null, no name was provided, and regular template
-    * matching should be done.
-    */
    QXmlName initialTemplateName;
 
-   /**
-    * Used when parsing direct element constructors. It is used
-    * for ensuring tags are well-balanced.
-    */
    QStack<QXmlName> tagStack;
 
    Expression::Ptr queryBody;
 
-   /**
-    * The user functions declared in the prolog.
-    */
    UserFunction::List userFunctions;
-
-   /**
-    * Contains all calls to user defined functions.
-    */
    UserFunctionCallsite::List userFunctionCallsites;
 
-   /**
-    * All variables declared with <tt>declare variable</tt>.
-    */
    VariableDeclaration::List declaredVariables;
 
    inline VariableSlotID currentPositionSlot() const {
@@ -173,82 +143,29 @@ class ParserContext : public QSharedData
 
    QStack<Expression::Ptr> typeswitchSource;
 
-   /**
-    * The library module namespace set with <tt>declare module</tt>.
-    */
    QXmlName::NamespaceCode moduleNamespace;
 
-   /**
-    * When a direct element constructor is processed, resolvers are
-    * created in order to carry the namespace declarations. In such case,
-    * the old resolver is pushed here.
-    */
    QStack<NamespaceResolver::Ptr> resolvers;
 
-   /**
-    * This is used for handling the following obscene case:
-    *
-    * - <tt>\<e\>{1}{1}\<\/e\></tt> produce <tt>\<e\>11\</e\></tt>
-    * - <tt>\<e\>{1, 1}\<\/e\></tt> produce <tt>\<e\>1 1\</e\></tt>
-    *
-    * This boolean tracks whether the previous reduction inside element
-    * content was done with an enclosed expression.
-    */
    bool isPreviousEnclosedExpr;
-
    int elementConstructorDepth;
 
    QStack<bool> scanOnlyStack;
-
    QStack<OrderBy::Stability> orderStability;
 
-   /**
-    * Whether any prolog declaration that must occur after the first
-    * group has been encountered.
-    */
    bool hasSecondPrologPart;
 
    bool preserveNamespacesMode;
    bool inheritNamespacesMode;
 
-   /**
-    * Contains all named templates. Since named templates
-    * can also have rules, each body may also be in templateRules.
-    */
    QHash<QXmlName, Template::Ptr>  namedTemplates;
    QVector<Expression::Ptr>        templateCalls;
 
-   /**
-    * If we're in XSL-T, and a variable reference is encountered
-    * which isn't in-scope, it's added to this hash since a global
-    * variable declaration may appear later on.
-    *
-    * We use a multi hash, since we can encounter several references to
-    * the same variable before it's declared.
-    */
    QMultiHash<QXmlName, Expression::Ptr> unresolvedVariableReferences;
 
-   /**
-    *
-    * Contains the encountered template rules, as opposed
-    * to named templates.
-    *
-    * The key is the name of the template mode. If it's a default
-    * constructed value, it's the default mode.
-    *
-    * Since templates rules may also be named, each body may also be in
-    * namedTemplates.
-    *
-    * To be specific, the values are not the templates, the values are
-    * modes, and the TemplateMode contains the patterns and bodies.
-    */
    QHash<QXmlName, TemplateMode::Ptr>  templateRules;
 
    TemplateMode::Ptr modeFor(const QXmlName &modeName) {
-      /* #current is not a mode, so it cannot contain templates. #current
-       * specifies how to look up templates wrt. mode. This check helps
-       * code that calls us, asking for the mode it needs to lookup in.
-       */
       if (modeName == QXmlName(StandardNamespaces::InternalXSLT, StandardLocalNames::current)) {
          return TemplateMode::Ptr();
       }
@@ -299,9 +216,6 @@ class ParserContext : public QSharedData
       return m_currentTemplateID == InitialTemplateID;
    }
 
-   /**
-    * Whether we're processing XSL-T 1.0 code.
-    */
    QStack<bool> isBackwardsCompat;
 
  private:

@@ -45,11 +45,6 @@ class BySequenceTypeIdentifier : public ExpressionIdentifier
  public:
    BySequenceTypeIdentifier(const SequenceType::Ptr &seqType);
 
-   /**
-    * @returns @c true, if the static type of @p expr is matches
-    * the SequenceType passed in the BySequenceTypeIdentifier()
-    * constructor, otherwise @c false.
-    */
    bool matches(const Expression::Ptr &expr) const override;
 
  private:
@@ -93,17 +88,10 @@ class BooleanIdentifier : public ExpressionIdentifier
 class ByIDCreator : public ExpressionCreator
 {
  public:
-   /**
-    * Creates a ByIDCreator that creates expressions
-    * of the type that @p id identifies.
-    */
    ByIDCreator(const Expression::ID id);
    Expression::Ptr create(const Expression::List &operands, const StaticContext::Ptr &context,
                   const SourceLocationReflection *const r) const override;
 
-   /**
-    * Creates an expression by id @p id with the arguments @p operands.
-    */
    static Expression::Ptr create(const Expression::ID id, const Expression::List &operands,
                   const StaticContext::Ptr &context, const SourceLocationReflection *const r);
 

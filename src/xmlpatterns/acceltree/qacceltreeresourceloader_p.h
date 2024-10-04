@@ -59,18 +59,11 @@ class NetworkLoop : public QEventLoop
 class AccelTreeResourceLoader : public DeviceResourceLoader
 {
  public:
-   /**
-    * Describes the behaviour of the resource loader in case of an
-    * error.
-    */
    enum ErrorHandling {
       FailOnError,        ///< The resource loader will report the error via the report context.
       ContinueOnError     ///< The resource loader will report no error and return an empty QNetworkReply.
    };
 
-   /**
-    * AccelTreeResourceLoader does not own @p context.
-    */
    AccelTreeResourceLoader(const NamePool::Ptr &np, const NetworkAccessDelegator::Ptr &networkDelegator,
                   AccelTreeBuilder<true>::Features = AccelTreeBuilder<true>::NoneFeature);
 
@@ -88,16 +81,9 @@ class AccelTreeResourceLoader : public DeviceResourceLoader
    static QNetworkReply *load(const QUrl &uri, QNetworkAccessManager *const networkManager,
                   const ReportContext::Ptr &context, ErrorHandling handling = FailOnError);
 
-   /**
-    * @overload
-    */
    static QNetworkReply *load(const QUrl &uri, const NetworkAccessDelegator::Ptr &networkDelegator,
                   const ReportContext::Ptr &context, ErrorHandling handling = FailOnError);
 
-   /**
-    * @short Returns the URIs this AccelTreeResourceLoader has loaded
-    * which are for devices through variable bindings.
-    */
    QSet<QUrl> deviceURIs() const override;
 
    void clear(const QUrl &uri) override;
@@ -108,9 +94,6 @@ class AccelTreeResourceLoader : public DeviceResourceLoader
 
    bool retrieveDocument(const QUrl &uri, const ReportContext::Ptr &context);
    bool retrieveDocument(QIODevice *source, const QUrl &documentUri, const ReportContext::Ptr &context);
-   /**
-    * If @p context is @c null, no error reporting should be done.
-    */
    bool retrieveUnparsedText(const QUrl &uri, const QString &encoding, const ReportContext::Ptr &context,
                   const SourceLocationReflection *const where);
 

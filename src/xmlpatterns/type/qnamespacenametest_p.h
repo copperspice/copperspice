@@ -36,9 +36,6 @@ class NamespaceNameTest : public AbstractNodeTest
 
    static ItemType::Ptr create(const ItemType::Ptr &primaryType, const QXmlName::NamespaceCode namespaceURI);
 
-   /**
-    * @note This function assumes that @p item is a QXmlNodeModelIndex.
-    */
    bool itemMatches(const Item &item) const override;
 
    QString displayName(const NamePool::Ptr &np) const override;

@@ -33,13 +33,6 @@ class SystemPropertyFN : public StaticNamespacesContainer
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
  private:
-   /**
-    * Returns a string representation for @p property as defined
-    * for the system properties in "XSL Transformations (XSLT)
-    * Version 2.0, 16.6.5 system-property". Hence, this function
-    * handles only the properties specified in the XSL namespace, and returns
-    * an empty string if an unrecognized property is asked for.
-    */
    static QString retrieveProperty(const QXmlName name);
 };
 

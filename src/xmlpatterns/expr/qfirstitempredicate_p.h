@@ -31,37 +31,16 @@ namespace QPatternist {
 class FirstItemPredicate : public SingleContainer
 {
  public:
-   /**
-    * Creates a FirstItemPredicate that filters @p source.
-    */
    FirstItemPredicate(const Expression::Ptr &source);
 
-   /**
-    * @returns the first item, if any, from evaluating the source expression.
-    */
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
-
-   /**
-    * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems instance.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
-   /**
-    * @returns a SequenceType where the item type is the same as the source expression
-    * and where the cardinality is either Cardinality::zeroOrOne() or Cardinality::exactlyOne(),
-    * depending on the source expression.
-    */
    SequenceType::Ptr staticType() const override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * Rewrites <tt>expression[1][1]</tt> into <tt>expression[1]</tt>.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   /**
-    * @returns always IDFirstItemPredicate.
-    */
    ID id() const override;
 };
 

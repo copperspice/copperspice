@@ -76,9 +76,6 @@ Item::Iterator::Ptr EvaluationCache<IsForGlobal>::evaluateSequence(const Dynamic
 
    switch (cell.cacheState) {
       case ItemSequenceCacheCell::Full: {
-         /**
-          * We don't use makeListIterator() here because the MIPSPro compiler can't handle it.
-          */
          return Item::Iterator::Ptr(new ListIterator<Item, Item::List>(cell.cachedItems));
       }
 

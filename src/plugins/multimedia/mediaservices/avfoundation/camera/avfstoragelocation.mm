@@ -32,12 +32,6 @@ AVFStorageLocation::~AVFStorageLocation()
 {
 }
 
-/*!
- * Generate the actual file name from user requested one.
- * requestedName may be either empty (the default dir and naming theme is used),
- * points to existing dir (the default name used)
- * or specify the full actual path.
- */
 QString AVFStorageLocation::generateFileName(const QString &requestedName, QCamera::CaptureMode mode,
       const QString &prefix, const QString &ext) const
 {

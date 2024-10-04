@@ -47,14 +47,8 @@ class AbstractFloatMathematician : public AtomicMathematician, public Delegating
 
 #include "qabstractfloatmathematician.cpp"
 
-/**
- * An instantiation of AbstractFloatMathematician that handles @c xs:double.
- */
 typedef AbstractFloatMathematician<true> DoubleMathematician;
 
-/**
- * An instantiation of AbstractFloatMathematician that handles @c xs:float.
- */
 typedef AbstractFloatMathematician<false> FloatMathematician;
 }
 

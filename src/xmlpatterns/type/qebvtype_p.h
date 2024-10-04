@@ -34,47 +34,20 @@ class EBVType : public ItemType, public SequenceType
  public:
    typedef QExplicitlySharedDataPointer<EBVType> Ptr;
 
-   /**
-    * @todo docs if it's an ebvable type, etc.
-    */
    bool itemMatches(const Item &item) const override;
    bool xdtTypeMatches(const ItemType::Ptr &other) const override;
 
    QString displayName(const NamePool::Ptr &np) const override;
 
-   /**
-    * @note The semantical meaning of this type's item type can
-    * surely be discussed. The function is provided due to
-    * it being mandated by the SequenceType base class.
-    *
-    * @returns always 'this' since EBVType is also an ItemType
-    */
    ItemType::Ptr itemType() const override;
 
-   /**
-    * @note The semantical meaning of this type's cardinality
-    * can surely be discussed. The function is provided due to
-    * it being mandated by the SequenceType base class.
-    *
-    * @returns always Cardinality::zeroOrMore()
-    */
    Cardinality cardinality() const override;
 
    bool isAtomicType() const override;
-
-   /**
-    * @returns always @c null
-    */
    ItemType::Ptr atomizedType() const override;
 
-   /**
-    * @returns always BuiltinTypes::item
-    */
    ItemType::Ptr xdtSuperType() const override;
 
-   /**
-    * @returns always @c false
-    */
    bool isNodeType() const override;
 
  protected:

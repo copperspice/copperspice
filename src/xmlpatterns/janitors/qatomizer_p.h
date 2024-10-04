@@ -42,11 +42,6 @@ class Atomizer : public SingleContainer
    SequenceType::List expectedOperandTypes() const override;
    const SourceLocationReflection *actualReflection() const override;
 
-   /**
-    * Makes an early compression, by returning the result of
-    * the type checked operand, if the operand has the static type
-    * xs:anyAtomicType(no atomization needed).
-    */
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    inline Item::Iterator::Ptr mapToSequence(const Item &item, const DynamicContext::Ptr &context) const;

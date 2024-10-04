@@ -39,28 +39,11 @@ class XsdNotation : public NamedSchemaComponent, public XsdAnnotated
    typedef QExplicitlySharedDataPointer<XsdNotation> Ptr;
    typedef QList<XsdNotation::Ptr> List;
 
-   /**
-    * Sets the public @p identifier of the notation.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#nd-public_identifier">Public Identifier Definition</a>
-    */
    void setPublicId(const DerivedString<TypeToken>::Ptr &identifier);
 
-   /**
-    * Returns the public identifier of the notation.
-    */
    DerivedString<TypeToken>::Ptr publicId() const;
 
-   /**
-    * Sets the system @p identifier of the notation.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#nd-system_identifier">System Identifier Definition</a>
-    */
    void setSystemId(const AnyURI::Ptr &identifier);
-
-   /**
-    * Returns the system identifier of the notation.
-    */
    AnyURI::Ptr systemId() const;
 
  private:

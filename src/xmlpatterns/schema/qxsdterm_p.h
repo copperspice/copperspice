@@ -34,32 +34,12 @@ class XsdTerm : public NamedSchemaComponent, public XsdAnnotated
  public:
    typedef QExplicitlySharedDataPointer<XsdTerm> Ptr;
 
-   /**
-    * Returns @c true if the term is an element, @c false otherwise.
-    */
    virtual bool isElement() const;
-
-   /**
-    * Returns @c true if the term is a model group (group tag), @c false otherwise.
-    */
    virtual bool isModelGroup() const;
-
-   /**
-    * Returns @c true if the term is a wildcard (any tag), @c false otherwise.
-    */
    virtual bool isWildcard() const;
-
-   /**
-    * Returns @c true if the term is a reference, @c false otherwise.
-    *
-    * @note The reference term is only used internally as helper during type resolving.
-    */
    virtual bool isReference() const;
 
  protected:
-   /**
-    * This constructor only exists to ensure this class is subclassed.
-    */
    inline XsdTerm() {};
 };
 

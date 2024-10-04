@@ -82,27 +82,9 @@ class AbstractDuration : public AtomicValue
    virtual SecondProperty seconds() const = 0;
    virtual MSecondProperty mseconds() const = 0;
 
-   /**
-    * @returns the value of this AbstractDuration. For example,
-    * in the case of xs:yearMonthDuration, that is YearMonthDuration,
-    * years times twelve plus the months is returned.
-    */
    virtual Value value() const = 0;
-
-   /**
-    * A polymorphic factory function that returns instances of the
-    * sub-class with the value @p val.
-    */
    virtual Item fromValue(const Value val) const = 0;
 
-   /**
-    * Determines whether this AbstractDuration is positive. For example,
-    * "P10H" is positive, while "-P10H" is not.
-    *
-    * @note Do not re-implement this function. Use the constructor, AbstractDuration(),
-    * for changing the value.
-    * @returns @c true if this AbstractDuration is positive, otherwise @c false.
-    */
    bool isPositive() const;
 
  protected:

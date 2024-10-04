@@ -45,10 +45,6 @@ class NamePool : public QSharedData
 
    enum {
       NoSuchValue         = -1,
-      /**
-       * This must be identical to the amount of members in
-       * StandardNamespaces.
-       */
       StandardNamespaceCount = 11,
       StandardPrefixCount = 9,
       StandardLocalNameCount = 141
@@ -58,20 +54,8 @@ class NamePool : public QSharedData
    QVector<QString> m_namespaces;
    QVector<QString> m_localNames;
 
-   /**
-    * This hash contains no essential data, but speeds up
-    * finding a prefix in m_prefixes by mapping a prefix(the key) to
-    * the index into m_prefixes(which the value is).
-    *
-    * In other words, one can skip this variable at the cost of having
-    * to linearly loop over prefixes, in order to find the entry.
-    */
    QHash<QString, QXmlName::PrefixCode> m_prefixMapping;
 
-   /**
-    * Same as m_prefixMapping but applies for URIs, and hence m_namespaces instead
-    * of m_prefixes.
-    */
    QHash<QString, QXmlName::NamespaceCode> m_namespaceMapping;
 
    QHash<QString, QXmlName::LocalNameCode> m_localNameMapping;
@@ -79,31 +63,12 @@ class NamePool : public QSharedData
    enum DefaultCapacities {
       DefaultPrefixCapacity = 10,
       DefaultURICapacity = DefaultPrefixCapacity,
-      /**
-       * It looks like it's quite common with 40-60 different local names per XML
-       * vocabulary. For background, see:
-       *
-       * - http://englich.wordpress.com/2007/01/11/representing-xml/
-       * - http://englich.wordpress.com/2007/01/09/xmlstat/
-       */
       DefaultLocalNameCapacity = 60
    };
 
  public:
    NamePool();
 
-   /**
-    * @short Allocates a namespace binding for @p prefix and @p uri.
-    *
-    * In the returned QXmlName, the local name is
-    * StandardLocalNames::empty, and QXmlName::prefix() and
-    * QXmlName::namespaceUri() returns @p prefix and @p uri, respectively.
-    *
-    * In older versions of this code, the class NamespaceBinding existed,
-    * but as part of having the public class QXmlName, it was dropped and
-    * a special interpretation/convention involving use of QXmlName was
-    * adopted.
-    */
    QXmlName allocateBinding(const QString &prefix, const QString &uri);
 
    QXmlName allocateQName(const QString &uri, const QString &localName, const QString &prefix = QString());
@@ -351,12 +316,6 @@ class StandardPrefixes
 {
  public:
    enum {
-      /**
-       * This does not mean empty in the sense of "empty", but
-       * in the sense of an empty string, "".
-       *
-       * Its value, zero, is significant.
-       */
       empty = 0,
       fn,
       local,
@@ -426,8 +385,6 @@ inline QXmlName::QXmlName(const NamespaceCode uri,
                                    (ln << LocalNameOffset)  +
                                    (p << PrefixOffset))
 {
-   /* We can't use members like prefix() here because if one of the
-    * values are to large, they would overflow into the others. */
    Q_ASSERT_X(p <= MaximumPrefixes, "",
               csPrintable(QString("NamePool prefix limits: max is %1, therefore %2 exceeds.").formatArg(MaximumPrefixes).formatArg(p)));
 

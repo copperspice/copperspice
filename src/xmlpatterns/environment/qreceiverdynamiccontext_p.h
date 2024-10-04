@@ -30,10 +30,6 @@ namespace QPatternist {
 class ReceiverDynamicContext : public DelegatingDynamicContext
 {
  public:
-   /**
-    * Construct a ReceiverDynamicContext and passes @p prevContext to its super class. This
-    * constructor is typically used when the super class is DelegatingDynamicContext.
-    */
    ReceiverDynamicContext(const DynamicContext::Ptr &prevContext,
                           QAbstractXmlReceiver *const receiver);
 

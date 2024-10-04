@@ -34,9 +34,6 @@ class ExpressionCreator : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<ExpressionCreator> Ptr;
 
-   /**
-    * For some reason this constructor cannot be synthesized.
-    */
    inline ExpressionCreator() {
    }
 
@@ -57,9 +54,6 @@ class ExpressionIdentifier : public QSharedData
    typedef QExplicitlySharedDataPointer<ExpressionIdentifier> Ptr;
    typedef QList<ExpressionIdentifier::Ptr> List;
 
-   /**
-    * For some reason this constructor cannot be synthesized.
-    */
    inline ExpressionIdentifier() {
    }
 

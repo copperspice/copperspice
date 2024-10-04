@@ -166,9 +166,6 @@ Item::Iterator::Ptr IdrefFN::evaluateSequence(const DynamicContext::Ptr &context
    return CommonValues::emptyIterator; /* TODO Haven't implemented further. */
 }
 
-/*!
- * Attemps to resolve scheme if URL does not have scheme defined.
- */
 static QUrl resolveScheme(const QUrl &url)
 {
    // On Windows and Symbian the drive letter is detected as the scheme.

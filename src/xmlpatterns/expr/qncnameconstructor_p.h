@@ -47,10 +47,6 @@ class NCNameConstructor : public SingleContainer
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    *  Validates @p lexicalNCName as a processing instruction's target
-    *  name, and raise an error if it's not an @c  NCName.
-    */
    template<typename TReportContext, const ReportContext::ErrorCode NameIsXML,
             const ReportContext::ErrorCode LexicallyInvalid>
 
@@ -58,10 +54,6 @@ class NCNameConstructor : public SingleContainer
                  const TReportContext &context, const SourceLocationReflection *const r);
  private:
 
-   /**
-    * This translation string is put here in order to avoid duplicate messages and
-    * hence reduce work for translators and increase consistency.
-    */
    static
    const QString nameIsXML(const QString &lexTarget) {
       return QtXmlPatterns::tr("The target name in a processing instruction "

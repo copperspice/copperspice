@@ -32,9 +32,6 @@ class DateTime : public AbstractDateTime
  public:
    typedef AtomicValue::Ptr Ptr;
 
-   /**
-    * Creates an instance from the lexical representation @p string.
-    */
    static DateTime::Ptr fromLexical(const QString &string);
    static DateTime::Ptr fromDateTime(const QDateTime &dt);
 

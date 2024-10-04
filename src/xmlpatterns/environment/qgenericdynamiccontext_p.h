@@ -41,10 +41,6 @@ class GenericDynamicContext : public StackContextBase<DynamicContext>
    GenericDynamicContext(const NamePool::Ptr &np, QAbstractMessageHandler *const messageHandler, const LocationHash &locations);
 
    xsInteger contextPosition() const override;
-   /**
-    * @returns always @c null, the focus is always undefined when an GenericDynamicContext
-    * is used.
-    */
    Item contextItem() const override;
    xsInteger contextSize() override;
 
@@ -75,14 +71,8 @@ class GenericDynamicContext : public StackContextBase<DynamicContext>
 
    void setUriResolver(const QAbstractUriResolver *const resolver);
 
-   /**
-    * We return a null item, we have no focus.
-    */
    Item currentItem() const override;
 
-   /**
-    * @short Returns always @c null, since we are always a top-level context.
-    */
    DynamicContext::Ptr previousContext() const override;
 
    QExplicitlySharedDataPointer<TemplateMode> currentTemplateMode() const override;

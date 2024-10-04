@@ -35,10 +35,6 @@ class StackContextBase : public TSuperClass
 {
  public:
    StackContextBase();
-   /**
-    * Construct a StackContextBase and passes @p prevContext to its super class. This
-    * constructor is typically used when the super class is DelegatingDynamicContext.
-    */
    StackContextBase(const DynamicContext::Ptr &prevContext);
 
    void setRangeVariable(const VariableSlotID slotNumber, const Item &newValue) override;
@@ -55,10 +51,6 @@ class StackContextBase : public TSuperClass
    DynamicContext::TemplateParameterHash &templateParameterStore() override;
 
  protected:
-   /**
-    * This function is protected, although it only is used in this class. I don't
-    * know why it has to be, but it won't compile when private.
-    */
    template<typename VectorType, typename UnitType>
    inline void setSlotVariable(const VariableSlotID slot, const UnitType &newValue, VectorType &container) const;
 
@@ -73,11 +65,6 @@ class StackContextBase : public TSuperClass
 
 #include "qstackcontextbase.cpp"
 
-/**
- * @short A DynamicContext that creates a new scope for variables.
- *
- * This DynamicContext is used for recursive user function calls, for example.
- */
 typedef StackContextBase<DelegatingDynamicContext> StackContext;
 }
 

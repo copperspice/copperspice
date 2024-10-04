@@ -44,25 +44,9 @@ class AnyAtomicType : public BuiltinAtomicType
    QXmlName name(const NamePool::Ptr &np) const override;
    QString displayName(const NamePool::Ptr &np) const override;
 
-   /**
-    * Overridden to return <tt>item()</tt>.
-    *
-    * @returns BuiltinTypes::item
-    */
    ItemType::Ptr xdtSuperType() const override;
-
-   /**
-    * Overridden to return @c xs:anySimpleType.
-    *
-    * @returns BuiltinTypes::xsAnySimpleType
-    */
    SchemaType::Ptr wxsSuperType() const override;
 
-   /**
-    * Overridden to return @c true, @c xs:anyAtomicType is abstract.
-    *
-    * @returns always @c true
-    */
    bool isAbstract() const override;
 
  protected:
@@ -613,11 +597,6 @@ class NOTATIONType : public BuiltinAtomicType
    QXmlName name(const NamePool::Ptr &np) const override;
    QString displayName(const NamePool::Ptr &np) const override;
 
-   /**
-    * Overridden to return @c true, xs:NOTATION is abstract.
-    *
-    * @returns always @c true
-    */
    bool isAbstract() const override;
 
  protected:

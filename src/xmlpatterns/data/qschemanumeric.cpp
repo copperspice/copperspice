@@ -32,10 +32,6 @@
 
 #include "qschemanumeric_p.h"
 
-/**
- * @file Contains class Numeric. This file was originally called qnumeric.cpp,
- * but was renamed to stay consistent with qschemanumeric_p.h
- */
 
 using namespace QPatternist;
 

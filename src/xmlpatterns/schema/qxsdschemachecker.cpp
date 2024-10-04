@@ -55,11 +55,6 @@ XsdSchemaChecker::~XsdSchemaChecker()
 {
 }
 
-/*
- * This method is called after the resolver has set the base type for every
- * type and information about deriavtion and 'is simple type vs. is complex type'
- * are available.
- */
 void XsdSchemaChecker::basicCheck()
 {
    // first check that there is no circular inheritance, only the
@@ -91,10 +86,6 @@ void XsdSchemaChecker::addComponentLocationHash(const ComponentLocationHash &has
    m_componentLocationHash.unite(hash);
 }
 
-/**
- * Checks whether the @p otherType is the same as @p myType or if one of its
- * ancestors is the same as @p myType.
- */
 static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &otherType,
                         QSet<SchemaType::Ptr> visitedTypes)
 {
@@ -140,9 +131,6 @@ static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &ot
    return retval;
 }
 
-/**
- * Checks whether there is a circular inheritance for the union inheritance.
- */
 static bool hasCircularUnionInheritance(const XsdSimpleType::Ptr &type, const SchemaType::Ptr &otherType,
                                         NamePool::Ptr &namePool)
 {

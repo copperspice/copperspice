@@ -32,30 +32,12 @@ namespace QPatternist {
 class XsdSchemaTypesFactory : public SchemaTypeFactory
 {
  public:
-   /**
-    * Creates a new schema type factory.
-    *
-    * @param namePool The name pool all type names belong to.
-    */
    XsdSchemaTypesFactory(const NamePool::Ptr &namePool);
 
-   /**
-    * Creates a primitive type for @p name. If @p name is not supported,
-    * @c null is returned.
-    *
-    * @note This does not handle user defined types, only builtin types.
-    */
    SchemaType::Ptr createSchemaType(const QXmlName) const override;
-
-   /**
-    * Returns a hash of all available types.
-    */
    SchemaType::Hash types() const override;
 
  private:
-   /**
-    * A dictonary of all predefined schema types.
-    */
    SchemaType::Hash               m_types;
 
    NamePool::Ptr                  m_namePool;

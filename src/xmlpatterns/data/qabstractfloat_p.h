@@ -40,33 +40,10 @@ class AbstractFloat : public Numeric
    static Numeric::Ptr fromValue(const xsDouble num);
    static AtomicValue::Ptr fromLexical(const QString &strNumeric);
 
-   /**
-    * @todo more extensive docs.
-    *
-    * Performs floating point comparison.
-    *
-    * @returns @c true if @p a and @p are equal, otherwise @c false.
-    */
    static bool isEqual(const xsDouble a, const xsDouble b);
 
-   /**
-    * Determines the Effective %Boolean Value of this number.
-    *
-    * @returns @c false if the number is 0 or @c NaN, otherwise @c true.
-    */
    bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const override;
 
-   /**
-    * Returns this AbstractFloat represented as an @c xs:string.
-    *
-    * @note In the XPath/XQuery languages, converting @c xs:double and @c xs:float
-    * to @c xs:string is not specified in XML Schema 1.0 Part 2: Datatypes Second Edition,
-    * but in XQuery 1.0 and XPath 2.0 Functions and Operators. This will change with W3C XML
-    * Schema 1.1
-    *
-    * @see <a href="http://www.w3.org/TR/xpath-functions/#casting-to-string">XQuery 1.0
-    * and XPath 2.0 Functions and Operators, 17.1.2 Casting to xs:string and xdt:untypedAtomic</a>
-    */
    QString stringValue() const override;
 
    xsDouble toDouble() const override;
@@ -93,14 +70,6 @@ class AbstractFloat : public Numeric
    AbstractFloat(const xsDouble num);
 
  private:
-   /**
-    * From the Open Group's man page: "The signbit() macro shall return a
-    * non-zero value if and only if the sign of its argument value is
-    * negative."
-    *
-    * MS Windows doesn't have std::signbit() so here's
-    * a reinvention of that function.
-    */
    static inline int internalSignbit(const xsDouble v);
    inline bool isZero() const;
 
@@ -112,18 +81,7 @@ Numeric::Ptr createFloat(const xsDouble num);
 
 #include "qabstractfloat.cpp"
 
-/**
- * @short An instantiation of AbsbstractFloat suitable for @c xs:double.
- *
- * @ingroup Patternist_xdm
- */
 typedef AbstractFloat<true> Double;
-
-/**
- * @short An instantiation of AbstractFloat suitable for @c xs:float.
- *
- * @ingroup Patternist_xdm
- */
 typedef AbstractFloat<false> Float;
 }
 

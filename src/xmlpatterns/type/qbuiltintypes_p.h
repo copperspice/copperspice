@@ -50,10 +50,6 @@ class BuiltinTypes
    static const AtomicType::Ptr        xsYearMonthDuration;
    static const AtomicType::Ptr        xsDayTimeDuration;
 
-   /**
-    * An artificial type for implementation purposes
-    * that represents the XPath type @c numeric.
-    */
    static const AtomicType::Ptr        numeric;
    static const AtomicType::Ptr        xsFloat;
    static const AtomicType::Ptr        xsDouble;
@@ -101,13 +97,6 @@ class BuiltinTypes
 
    static const AnyNodeType::Ptr       node;
 
-   /**
-    * When the node test node() is used without axes in a pattern in
-    * XSL-T, it doesn't match document nodes. See 5.5.3 The Meaning of a
-    * Pattern.
-    *
-    * This node test does that.
-    */
    static const ItemType::Ptr          xsltNodeTest;
 
    static const ItemType::Ptr          attribute;
@@ -118,10 +107,6 @@ class BuiltinTypes
    static const ItemType::Ptr          text;
 
  private:
-   /**
-    * The constructor is protected because this class is not meant to be instantiated,
-    * but should only be used via its static const members.
-    */
    BuiltinTypes();
 
    BuiltinTypes(const BuiltinTypes &) = delete;

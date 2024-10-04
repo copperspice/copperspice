@@ -38,9 +38,6 @@ class ExternalVariableReference : public EmptyContainer
 
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * @returns always DisableElimination
-    */
    Expression::Properties properties() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

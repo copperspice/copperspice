@@ -377,10 +377,6 @@ QWindowsOleDropSource::Release(void)
    return m_refs;
 }
 
-/*!
-    \brief Check for cancel.
-*/
-
 QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState)
 {
    HRESULT hr = S_OK;

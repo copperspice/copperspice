@@ -37,9 +37,6 @@ class DocumentConstructor : public SingleContainer
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * The first operand must be exactly one @c xs:string.
-    */
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

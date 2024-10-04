@@ -34,30 +34,13 @@ namespace QPatternist {
 class XsdParticleChecker
 {
  public:
-   /**
-    * Checks whether the given @p particle has two or more element
-    * declarations with the same name but different type definitions.
-    */
    static bool hasDuplicatedElements(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool,
                                      XsdElement::Ptr &conflictingElement);
 
-   /**
-    * Checks whether the given @p particle is valid according the
-    * UPA (http://www.w3.org/TR/xmlschema-1/#cos-nonambig) constraint.
-    */
    static bool isUPAConform(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool);
 
-   /**
-    * Checks whether the given @p particle, which must be an xsd:all element,
-    * is valid according the UPA (http://www.w3.org/TR/xmlschema-1/#cos-nonambig) constraint.
-    * For xsd:all elements, we do not want to construct a state machine.
-    */
    static bool isUPAConformXsdAll(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool);
 
-   /**
-    * Checks whether the given @p particle subsumes the given @p derivedParticle.
-    * (http://www.w3.org/TR/xmlschema-1/#cos-particle-restrict)
-    */
    static bool subsumes(const XsdParticle::Ptr &particle, const XsdParticle::Ptr &derivedParticle,
                         const XsdSchemaContext::Ptr &context, QString &errorMsg);
 };

@@ -66,12 +66,7 @@ struct CoMatrix {
       quint32 w[13];
    };
 };
-/**
- * This class is more efficient for searching through a large array of candidate strings, since we only
- * have to construct the CoMatrix for the \a stringToMatch once,
- * after that we just call getSimilarityScore(strCandidate).
- * \sa getSimilarityScore
- */
+
 class StringSimilarityMatcher
 {
  public:

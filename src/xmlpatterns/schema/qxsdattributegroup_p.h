@@ -38,33 +38,11 @@ class XsdAttributeGroup : public NamedSchemaComponent, public XsdAnnotated
    typedef QExplicitlySharedDataPointer<XsdAttributeGroup> Ptr;
    typedef QList<XsdAttributeGroup::Ptr> List;
 
-   /**
-    * Sets the list of attribute @p uses that are defined in the attribute group.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#agd-attribute_uses">Attribute Uses</a>
-    */
    void setAttributeUses(const XsdAttributeUse::List &uses);
-
-   /**
-    * Adds a new attribute @p use to the attribute group.
-    */
    void addAttributeUse(const XsdAttributeUse::Ptr &use);
-
-   /**
-    * Returns the list of all attribute uses of the attribute group.
-    */
    XsdAttributeUse::List attributeUses() const;
 
-   /**
-    * Sets the attribute @p wildcard of the attribute group.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#agd-attribute_wildcard">Attribute Wildcard</a>
-    */
    void setWildcard(const XsdWildcard::Ptr &wildcard);
-
-   /**
-    * Returns the attribute wildcard of the attribute group.
-    */
    XsdWildcard::Ptr wildcard() const;
 
  private:

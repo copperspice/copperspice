@@ -32,9 +32,6 @@
 namespace QPatternist {
 class OperandsIterator
 {
-   /**
-    * The second value, the int, is the current position in the first.
-    */
    typedef QPair<Expression::List, int> Level;
 
  public:
@@ -43,11 +40,6 @@ class OperandsIterator
       IncludeParent
    };
 
-   /**
-    * if @p treatParent is @c IncludeParent, @p start is excluded.
-    *
-    * @p start must be a valid Expression.
-    */
    inline OperandsIterator(const Expression::Ptr &start,
                            const TreatParent treatParent) {
       Q_ASSERT(start);
@@ -60,14 +52,6 @@ class OperandsIterator
       m_exprs.push(qMakePair(start->operands(), -1));
    }
 
-   /**
-    * @short Returns the current Expression and advances the iterator.
-    *
-    * If the end has been reached, a default constructed pointer is
-    * returned.
-    *
-    * We intentionally return by reference.
-    */
    inline Expression::Ptr next() {
       if (m_exprs.isEmpty()) {
          return Expression::Ptr();
@@ -109,9 +93,6 @@ class OperandsIterator
       }
    }
 
-   /**
-    * Advances this iterator by the current expression and its operands.
-    */
    Expression::Ptr skipOperands() {
       if (m_exprs.isEmpty()) {
          return Expression::Ptr();
@@ -121,7 +102,6 @@ class OperandsIterator
       ++lvl.second;
 
       if (lvl.second == lvl.first.size()) {
-         /* We've reached the end of this level, at least. */
          m_exprs.pop();
       }
 

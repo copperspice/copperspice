@@ -36,28 +36,14 @@ class AtomicString : public AtomicValue
 
    typedef AtomicValue::Ptr Ptr;
 
-   /**
-    * Creates an instance representing @p value.
-    *
-    * @note This function does not remove the string literal escaping allowed in XPath 2.0
-    */
    static AtomicString::Ptr fromValue(const QString &value);
 
    static inline AtomicString::Ptr fromValue(const QUrl &value) {
       return fromValue(value.toString());
    }
 
-   /**
-    * Get the Effective %Boolean Value of this string. A zero-length
-    * string has an effective boolean value of @c false, in all other cases @c true.
-    *
-    * @returns @c false if the contained string has a zero-length, otherwise @c true.
-    */
    bool evaluateEBV(const QExplicitlySharedDataPointer<DynamicContext> &) const override;
 
-   /**
-    * The string value of a AtomicString instance is the value space.
-    */
    QString stringValue() const override;
 
    ItemType::Ptr type() const override;

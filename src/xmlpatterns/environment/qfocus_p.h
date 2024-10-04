@@ -40,10 +40,6 @@ class Focus : public DelegatingDynamicContext
    void setFocusIterator(const Item::Iterator::Ptr &it) override;
    Item::Iterator::Ptr focusIterator() const override;
 
-   /**
-    * If there is no top level expression that sets the current item,
-    * the focus should be used. This implementation ensures that.
-    */
    Item currentItem() const override;
 
  private:

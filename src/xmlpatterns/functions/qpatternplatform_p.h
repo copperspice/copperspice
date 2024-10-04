@@ -33,75 +33,29 @@ namespace QPatternist {
 class PatternPlatform : public FunctionCall
 {
  public:
-   /**
-    * @see <a href="http://www.w3.org/TR/xpath-functions/#flags">XQuery 1.0 and
-    * XPath 2.0 Functions and Operators, 7.6.1.1 Flags</a>
-    */
    enum Flag {
-      /**
-       * No flags are set. Default behavior is used.
-       */
       NoFlags             = 0,
-
-      /**
-       * Flag @c s
-       */
       DotAllMode          = 1,
-
-      /**
-       * Flag @c m
-       */
       MultiLineMode       = 2,
-
-      /**
-       * Flag @c i
-       */
       CaseInsensitive     = 4,
-
-      /**
-       * Flag @c x
-       */
       SimplifyWhitespace  = 8
    };
    typedef QFlags<Flag> Flags;
 
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   /**
-    * Retrieves the pattern supplied in the arguments, taking care of compiling it,
-    * settings its flags, and everything else required for getting it ready to use. If an error
-    * occurs, an appropriate error is raised via @p context.
-    */
    const QRegularExpression pattern(const DynamicContext::Ptr &context) const;
 
-   /**
-    * @returns the number of captures, also called parenthesized sub-expressions, the pattern has.
-    *
-    * If the pattern isn't precompiled, -1 is returned.
-    */
    inline int captureCount() const;
 
-   /**
-    * @short Parses pattern
-    */
    static QRegularExpression parsePattern(const QString &pattern, QPatternOptionFlags flags, const ReportContext::Ptr &context,
                   const SourceLocationReflection *const location);
 
 
  protected:
-   /**
-    * @short This constructor is protected, because this class is supposed to be sub-classed.
-    *
-    * @param flagsPosition an index position specifying the operand containing the pattern
-    * flags.
-    */
    PatternPlatform(const qint8 flagsPosition);
 
  private:
-   /**
-    * Enum telling whether the flags, pattern, or both
-    * have been compiled at compile time.
-    */
    enum PreCompiledPart {
       NoPart          = 0,
       PatternPrecompiled     = 1,
@@ -120,9 +74,6 @@ class PatternPlatform : public FunctionCall
 
    static void applyFlags(const Flags flags, QRegularExpression &pattern);
 
-   /**
-    * The parts that have been pre-compiled at compile time.
-    */
    PreCompiledParts    m_compiledParts;
    Flags               m_flags;
    QRegularExpression  m_pattern;

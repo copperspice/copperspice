@@ -39,10 +39,6 @@ class SourceLocationReflection
 
    virtual const SourceLocationReflection *actualReflection() const = 0;
 
-   /**
-    * A description of what represents the source code location, for
-    * human consumption. Must be translated, as appropriate.
-    */
    virtual QString description() const {
       return QString();
    }

@@ -43,15 +43,8 @@ class AnyNodeType : public ItemType
    bool isNodeType() const override;
    bool isAtomicType() const override;
 
-   /**
-    * @see <a href="http://www.w3.org/TR/xpath-datamodel/#acc-summ-typed-value">XQuery 1.0
-    * and XPath 2.0 Data Model, G.15 dm:typed-value Accessor</a>
-    */
    ItemType::Ptr atomizedType() const override;
 
-   /**
-    * @returns the node kind this node ItemType tests for. If it matches any node, zero is returned.
-    */
    virtual QXmlNodeModelIndex::NodeKind nodeKind() const;
 
    virtual PatternPriority patternPriority() const;

@@ -42,20 +42,8 @@ class CardinalityVerifier : public SingleContainer
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * If the static cardinality of the operand is within the required cardinality,
-    * the operand is returned as is, since results will always be valid and hence
-    * is not a CardinalityVerifier necessary.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   /**
-    * A utility function for determining whether the static type of an Expression matches
-    * a cardinality. More specifically, this function performs the cardinality verification
-    * part of the Function Conversion Rules.
-    *
-    * @todo Mention the rewrite and when exactly an error is issued via @p context
-    */
    static Expression::Ptr
    verifyCardinality(const Expression::Ptr &operand, const Cardinality &card,
                      const StaticContext::Ptr &context,
@@ -66,10 +54,6 @@ class CardinalityVerifier : public SingleContainer
    ID id() const override;
 
  private:
-   /**
-    * Centralizes a message string in order to increase consistency and
-    * reduce work for translators.
-    */
    static inline QString wrongCardinality(const Cardinality &req, const Cardinality &got = Cardinality::empty());
 
    const Cardinality m_reqCard;

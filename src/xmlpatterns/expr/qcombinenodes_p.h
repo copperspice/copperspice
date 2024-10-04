@@ -49,12 +49,6 @@ class CombineNodes : public PairContainer
    Operator operatorID() const;
    ID id() const override;
 
-   /**
-    * Determines the string representation for operator @p op.
-    *
-    * @return "union" if @p op is Union, "intersect" if @p op
-    * is Intersect and "except" if @p op is Except.
-    */
    static QString displayName(const Operator op);
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

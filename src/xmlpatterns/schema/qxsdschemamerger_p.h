@@ -33,14 +33,8 @@ class XsdSchemaMerger : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<XsdSchemaMerger> Ptr;
 
-   /**
-    * Creates a new schema merger object that merges @p schema with @p otherSchema.
-    */
    XsdSchemaMerger(const XsdSchema::Ptr &schema, const XsdSchema::Ptr &otherSchema);
 
-   /**
-    * Returns the merged schema.
-    */
    XsdSchema::Ptr mergedSchema() const;
 
  private:

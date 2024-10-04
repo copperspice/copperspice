@@ -40,9 +40,6 @@ class UserFunction : public QSharedData
    typedef QExplicitlySharedDataPointer<UserFunction> Ptr;
    typedef QList<UserFunction::Ptr> List;
 
-   /**
-    * If @p slotOffset is -1, it means this function has no arguments.
-    */
    UserFunction(const FunctionSignature::Ptr &signature, const Expression::Ptr &body,
                 const VariableSlotID slotOffset, const VariableDeclaration::List &varDecls);
 

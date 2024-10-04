@@ -57,12 +57,6 @@ class CastingPlatform
                               const AtomicCaster::Ptr &caster,
                               const ReportContext::Ptr &context) const;
 
-   /**
-    * Locates the caster for casting values of type @p sourceType to targetType(), if
-    * possible.
-    *
-    * @p castImpossible is not initialized. Initialize it to @c false.
-    */
    static AtomicCaster::Ptr locateCaster(const ItemType::Ptr &sourceType,
                                          const ReportContext::Ptr &context,
                                          bool &castImpossible,

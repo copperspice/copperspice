@@ -33,9 +33,6 @@ namespace QPatternist {
 class SortTuple : public AtomicValue
 {
  public:
-   /**
-    * @p aSortKeys may be empty.
-    */
    inline SortTuple(const Item::Iterator::Ptr &aValue,
                     const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys),
       m_value(aValue) {
@@ -43,35 +40,16 @@ class SortTuple : public AtomicValue
       Q_ASSERT(!m_sortKeys.isEmpty());
    }
 
-   /**
-    * A smart pointer wrapping SortTuple instances.
-    */
    typedef QExplicitlySharedDataPointer<SortTuple> Ptr;
 
-   /**
-    * This function is sometimes called by Literal::description().
-    * This function simply returns "SortTuple".
-    */
    QString stringValue() const override;
 
-   /**
-    * @short Always asserts.
-    */
    virtual Item::Iterator::Ptr typedValue() const;
 
-   /**
-    * @short Always asserts.
-    */
    virtual bool isAtomicValue() const;
 
-   /**
-    * @short Always asserts.
-    */
    virtual bool isNode() const;
 
-   /**
-    * @short Always asserts.
-    */
    bool hasError() const override;
 
    ItemType::Ptr type() const override;

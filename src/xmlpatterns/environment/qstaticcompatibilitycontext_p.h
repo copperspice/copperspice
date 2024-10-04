@@ -32,9 +32,6 @@ class StaticCompatibilityContext : public DelegatingStaticContext
  public:
    StaticCompatibilityContext(const StaticContext::Ptr &context);
 
-   /**
-    * Returns always @c true.
-    */
    bool compatModeEnabled() const override;
 };
 }

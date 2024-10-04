@@ -75,9 +75,6 @@ class AccelTree : public QAbstractXmlNodeModel
          return m_parent;
       }
 
-      /**
-       * @see AccelTree::size()
-       */
       inline PreNumber size() const {
          /* Remember that we use the m_size to signal compression if
           * we're a text node. */
@@ -109,37 +106,14 @@ class AccelTree : public QAbstractXmlNodeModel
       }
 
     private:
-      /**
-       * This is the pre number of the parent.
-       */
-      PreNumber                       m_parent;
 
-      /**
-       * This is the count of children this node has.
-       *
-       * In the case of a text node, which cannot have children,
-       * it is set to IsCompressed, if the content has been the result
-       * of CompressedWhitespace::compress(). If it's not compressed,
-       * it is zero.
-       */
-      PreNumber                       m_size;
+      PreNumber m_parent;
+      PreNumber m_size;
+      QXmlName m_name;
 
-      /**
-       * For text nodes, and less importantly, comments,
-       * this variable is not used.
-       */
-      QXmlName                        m_name;
+      Depth m_depth;
 
-      Depth                           m_depth;
-
-      /**
-       * Technically it is sufficient with 7 bits. However, at least MSVC
-       * 2005 miscompiles it such that QXmlNodeModelIndex::Text becomes
-       * -64 instead of 64 with hilarious crashes as result.
-       *
-       * Fortunately this extra bit would be padded anyway.
-       */
-      QXmlNodeModelIndex::NodeKind    m_kind : 8;
+      QXmlNodeModelIndex::NodeKind m_kind : 8;
    };
 
    QUrl baseUri(const QXmlNodeModelIndex &ni) const override;
@@ -148,12 +122,6 @@ class AccelTree : public QAbstractXmlNodeModel
    QXmlNodeModelIndex::DocumentOrder compareOrder(const QXmlNodeModelIndex &ni1,
          const QXmlNodeModelIndex &ni2) const override;
 
-   /**
-    * @short Returns the root node.
-    *
-    * This function does not use @p n, so a default constructed
-    * QXmlNodeModelIndex may be passed.
-    */
    QXmlNodeModelIndex root(const QXmlNodeModelIndex &n) const override;
 
    virtual QXmlNodeModelIndex parent(const QXmlNodeModelIndex &ni) const;
@@ -181,19 +149,7 @@ class AccelTree : public QAbstractXmlNodeModel
       IsCompressed = 1
    };
 
-   /**
-    * The key is the pre number of an element, and the value is a vector
-    * containing the namespace declarations being declared on that
-    * element. Therefore, it does not reflect the namespaces being in
-    * scope for that element. For that, a walk along axis ancestor is
-    * necessary.
-    */
    QHash<PreNumber, QVector<QXmlName> > namespaces;
-
-   /**
-    * Stores data for nodes. The QHash's value is the data of the processing instruction, and the
-    * content of a text node or comment.
-    */
    QHash<PreNumber, QString> data;
 
    QVector<BasicNodeData> basicData;
@@ -207,23 +163,10 @@ class AccelTree : public QAbstractXmlNodeModel
       return m_baseURI;
    }
 
-   /**
-    * @short Returns @c true if the node identified by @p pre has child
-    * nodes(in the sense of the XDM), but also if it has namespace nodes,
-    * or attribute nodes.
-    */
    inline bool hasChildren(const PreNumber pre) const {
       return basicData.at(pre).size() > 0;
    }
 
-   /**
-    * @short Returns the parent node of @p pre.
-    *
-    * If @p pre parent doesn't have a parent node, the return value is
-    * undefined.
-    *
-    * @see hasParent()
-    */
    inline PreNumber parent(const PreNumber pre) const {
       return basicData.at(pre).parent();
    }
@@ -285,21 +228,11 @@ class AccelTree : public QAbstractXmlNodeModel
    QVector<QXmlNodeModelIndex> attributes(const QXmlNodeModelIndex &element) const override;
 
  private:
-   /**
-    * Returns the source location for the object with the given @p index.
-    */
    QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const;
 
-   /**
-    * Copies the children of @p node to @p receiver.
-    */
    inline void copyChildren(const QXmlNodeModelIndex &node,
                   QAbstractXmlReceiver *const receiver, const NodeCopySettings &settings) const;
 
-   /**
-    * The key is the xml:id value, and the value is the element
-    * with that value.
-    */
    QHash<QXmlName::LocalNameCode, PreNumber> m_IDs;
 };
 

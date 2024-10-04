@@ -43,15 +43,6 @@
 
 namespace QPatternist {
 
-/**
- * @short The entry point to the parser.
- *
- * @param info supplies the information the parser & scanner
- * needs to create expressions. The created expression, if everything
- * succeeds, can be retrieved via the object @p info points to.
- * @returns non-negative if the parser fails.
- * @see ExpressionFactory::createExpression()
- */
 extern int XPathparse(QPatternist::ParserContext *const info);
 
 Expression::Ptr ExpressionFactory::createExpression(const QString &expr,

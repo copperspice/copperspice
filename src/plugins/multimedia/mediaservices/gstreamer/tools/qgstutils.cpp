@@ -120,12 +120,6 @@ static void addTagToMap(const GstTagList *list, const gchar *tag, gpointer user_
    g_value_unset(&val);
 }
 
-/*!
-  Convert GstTagList structure to QMap<QByteArray, QVariant>.
-
-  Mapping to int, bool, char, string, fractions and date are supported.
-  Fraction values are converted to doubles.
-*/
 QMap<QByteArray, QVariant> QGstUtils::gstTagListToMap(const GstTagList *tags)
 {
    QMap<QByteArray, QVariant> res;
@@ -134,10 +128,6 @@ QMap<QByteArray, QVariant> QGstUtils::gstTagListToMap(const GstTagList *tags)
    return res;
 }
 
-/*!
-  Returns resolution of \a caps.
-  If caps doesn't have a valid size, and ampty QSize is returned.
-*/
 QSize QGstUtils::capsResolution(const GstCaps *caps)
 {
    if (gst_caps_get_size(caps) == 0) {
@@ -147,10 +137,6 @@ QSize QGstUtils::capsResolution(const GstCaps *caps)
    return structureResolution(gst_caps_get_structure(caps, 0));
 }
 
-/*!
-  Returns aspect ratio corrected resolution of \a caps.
-  If caps doesn't have a valid size, an empty QSize is returned.
-*/
 QSize QGstUtils::capsCorrectedResolution(const GstCaps *caps)
 {
    QSize size;
@@ -204,11 +190,6 @@ static const AudioFormat qt_audioLookup[] = {
 
 }
 #endif
-
-/*!
-  Returns audio format for caps.
-  If caps doesn't have a valid audio format, an empty QAudioFormat is returned.
-*/
 
 QAudioFormat QGstUtils::audioFormatForCaps(const GstCaps *caps)
 {
@@ -311,10 +292,7 @@ QAudioFormat QGstUtils::audioFormatForCaps(const GstCaps *caps)
 }
 
 #if GST_CHECK_VERSION(1,0,0)
-/*!
-  Returns audio format for a sample.
-  If the buffer doesn't have a valid audio format, an empty QAudioFormat is returned.
-*/
+
 QAudioFormat QGstUtils::audioFormatForSample(GstSample *sample)
 {
    GstCaps *caps = gst_sample_get_caps(sample);
@@ -325,10 +303,7 @@ QAudioFormat QGstUtils::audioFormatForSample(GstSample *sample)
    return QGstUtils::audioFormatForCaps(caps);
 }
 #else
-/*!
-  Returns audio format for a buffer.
-  If the buffer doesn't have a valid audio format, an empty QAudioFormat is returned.
-*/
+
 QAudioFormat QGstUtils::audioFormatForBuffer(GstBuffer *buffer)
 {
    GstCaps *caps = gst_buffer_get_caps(buffer);
@@ -341,12 +316,6 @@ QAudioFormat QGstUtils::audioFormatForBuffer(GstBuffer *buffer)
    return format;
 }
 #endif
-
-/*!
-  Builds GstCaps for an audio format.
-  Returns 0 if the audio format is not valid.
-  Caller must unref GstCaps.
-*/
 
 GstCaps *QGstUtils::capsForAudioFormat(const QAudioFormat &format)
 {

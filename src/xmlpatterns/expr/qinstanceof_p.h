@@ -40,10 +40,6 @@ class InstanceOf : public SingleContainer
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * @returns the SequenceType that this <tt>instance of</tt> Expression
-    * is testing its operand against.
-    */
    SequenceType::Ptr targetType() const;
 
  private:

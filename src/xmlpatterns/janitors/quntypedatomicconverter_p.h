@@ -44,9 +44,6 @@ class UntypedAtomicConverter : public SingleContainer, public CastingPlatform<Un
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   /**
-    * Overridden to call CastingPlatform::typeCheck()
-    */
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
    inline Item mapToItem(const Item &item, const DynamicContext::Ptr &context) const;

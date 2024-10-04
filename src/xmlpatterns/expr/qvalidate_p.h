@@ -31,20 +31,11 @@ namespace QPatternist {
 class Validate
 {
  public:
-
-   /**
-    * Represents the validation mode.
-    */
    enum Mode {
       Lax = 1,
       Strict
    };
 
-   /**
-    * Creates the necessary Expression instances
-    * that validates the operand node @p operandNode in mode @p validationMode,
-    * and returns it.
-    */
    static Expression::Ptr create(const Expression::Ptr &operandNode,
                                  const Mode validationMode,
                                  const StaticContext::Ptr &context);

@@ -34,18 +34,7 @@ class NamespaceConstructor : public EmptyContainer
 
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * @returns a list containing one CommonSequenceTypes::ExactlyOneString instance.
-    */
    SequenceType::List expectedOperandTypes() const override;
-
-   /**
-    * The static type is exactly one attribute node. It's unclear what
-    * affects the static type has, but specifying anything else could lead
-    * to complications wrt. node order, XQTY0024. Of course, it's not
-    * conceptually correct, since a namespace node isn't an attribute
-    * node.
-    */
    SequenceType::Ptr staticType() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

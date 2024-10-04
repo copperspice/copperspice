@@ -32,9 +32,6 @@ class YearMonthDuration : public AbstractDuration
  public:
    typedef AtomicValue::Ptr Ptr;
 
-   /**
-    * Creates an instance from the lexical representation @p string.
-    */
    static YearMonthDuration::Ptr fromLexical(const QString &string);
 
    static YearMonthDuration::Ptr fromComponents(const bool isPositive,
@@ -43,52 +40,16 @@ class YearMonthDuration : public AbstractDuration
    ItemType::Ptr type() const override;
    QString stringValue() const override;
 
-   /**
-    * @returns the value of this @c xs:yearMonthDuration in months.
-    * @see <a href="http://www.w3.org/TR/xpath-functions/#dt-yearMonthDuration">XQuery 1.0
-    * and XPath 2.0 Functions and Operators, 10.3.2.2 Calculating the value of a
-    * xs:dayTimeDuration from the lexical representation</a>
-    */
    Value value() const override;
-
-   /**
-    * If @p val is zero, is CommonValues::YearMonthDurationZero returned.
-    */
    Item fromValue(const Value val) const override;
 
-   /**
-    * @returns the years component. Always positive.
-    */
    YearProperty years() const override;
-
-   /**
-    * @returns the months component. Always positive.
-    */
    MonthProperty months() const override;
-
-   /**
-    * @returns always 0.
-    */
    DayCountProperty days() const override;
 
-   /**
-    * @returns always 0.
-    */
    HourProperty hours() const override;
-
-   /**
-    * @returns always 0.
-    */
    MinuteProperty minutes() const override;
-
-   /**
-    * @returns always 0.
-    */
    SecondProperty seconds() const override;
-
-   /**
-    * @returns always 0.
-    */
    MSecondProperty mseconds() const override;
 
  protected:

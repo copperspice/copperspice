@@ -37,21 +37,8 @@ class CallSite : public UnlimitedContainer
    bool isRecursive() const;
    void setIsRecursive(const bool value);
 
-   /**
-    * Called in the earliest stages of the compilation process. @p sign can
-    * be any function signature for a user declared function. If @p sign
-    * matches this UserFunctionCallsite, it means the UserFunction represented
-    * by @p sign is recursive and that this UserFunctionCallsite should take
-    * appropriate measures.
-    *
-    * @returns @c true if is recursive, otherwise @c false
-    */
    virtual bool configureRecursion(const CallTargetDescription::Ptr &sign) = 0;
 
-   /**
-    * @short Returns the body of the function/template/component that is
-    * being called.
-    */
    virtual Expression::Ptr body() const = 0;
 
    virtual CallTargetDescription::Ptr callTargetDescription() const = 0;

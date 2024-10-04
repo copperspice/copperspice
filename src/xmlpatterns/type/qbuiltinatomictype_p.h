@@ -34,20 +34,9 @@ class BuiltinAtomicType : public AtomicType
 
    typedef QExplicitlySharedDataPointer<BuiltinAtomicType> Ptr;
 
-   /**
-    * @returns always @c false
-    */
    bool isAbstract() const override;
 
-   /**
-    * @returns the base type as specified in the constructors baseType argument.
-    */
    SchemaType::Ptr wxsSuperType() const override;
-
-   /**
-    * @returns the same type as wxsSuperType(), except for the type @c xs:anyAtomicType, which
-    * returns item()
-    */
    ItemType::Ptr xdtSuperType() const override;
 
    AtomicComparatorLocator::Ptr comparatorLocator() const override;
@@ -57,15 +46,6 @@ class BuiltinAtomicType : public AtomicType
  protected:
    friend class BuiltinTypes;
 
-   /**
-    * @param baseType the type that is the super type of the constructed
-    * atomic type. In the case of AnyAtomicType, @c null is passed.
-    * @param comp the AtomicComparatorLocator this type should return. May be @c null.
-    * @param mather similar to @p comp, this is the AtomicMathematicianLocator
-    * that's appropriate for this type May be @c null.
-    * @param casterLocator the CasterLocator that locates classes performing
-    * casting with this type. May be @c null.
-    */
    BuiltinAtomicType(const AtomicType::Ptr &baseType,
                      const AtomicComparatorLocator::Ptr &comp,
                      const AtomicMathematicianLocator::Ptr &mather,

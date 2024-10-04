@@ -181,18 +181,6 @@ IntegerComparator::compare(const Item &o1,
    const Numeric *const num1 = o1.as<Numeric>();
    const Numeric *const num2 = o1.as<Numeric>();
 
-   /**
-    * Consider:
-    *  xs:unsignedLong("100") > xs:unsignedLong("18446744073709551615")
-    *
-    * If we perform math on the values as if they were xsInteger, the right
-    * operand overflows, wraps around, and the expression evaluates to false.
-    * Hence we have this code to deal with it.
-    *
-    * This is runtime code, it would have been better if we had separate
-    * AtomicComparator classes for signed and unsigned values, but the changes
-    * required to the lookup code are extensive.
-    */
    if (num1->isSigned() || num2->isSigned()) {
       const xsInteger v1 = o1.as<Numeric>()->toInteger();
       const xsInteger v2 = o2.as<Numeric>()->toInteger();

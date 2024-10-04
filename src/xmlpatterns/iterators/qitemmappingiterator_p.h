@@ -33,14 +33,6 @@ template<typename TResult, typename TSource, typename TMapper, typename Context 
 class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
 {
  public:
-   /**
-    * Constructs an ItemMappingIterator.
-    *
-    * @param mapper the object that has the mapToItem() sequence.
-    * @param iterator the QAbstractXmlForwardIterator whose items should be mapped.
-    * @param context the context that will be passed to the map function.
-    * May be null.
-    */
    ItemMappingIterator(const TMapper &mapper,
                        const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator,
                        const Context &context) : m_mapper(mapper)
@@ -51,10 +43,6 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
       Q_ASSERT(iterator);
    }
 
-   /**
-    * @returns the next item in the sequence, or
-    * @c null if the end have been reached.
-    */
    TResult next() override {
       const TSource sourceItem(m_it->next());
 
@@ -94,15 +82,6 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
    xsInteger                                                   m_position;
 };
 
-/**
- * @short An object generator for ItemMappingIterator.
- *
- * makeItemMappingIterator() is a convenience function for avoiding specifying
- * the full template instantiation for ItemMappingIterator. Conceptually, it
- * is identical to Qt's qMakePair().
- *
- * @relates ItemMappingIterator
- */
 template<typename TResult, typename TSource, typename TMapper, typename Context>
 static inline typename QAbstractXmlForwardIterator<TResult>::Ptr makeItemMappingIterator(
                   const TMapper &mapper,

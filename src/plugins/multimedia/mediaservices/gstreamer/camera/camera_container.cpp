@@ -137,9 +137,6 @@ GstEncodingContainerProfile *CameraBinContainer::createProfile()
 
 #endif
 
-/*!
-  Suggest file extension for current container mimetype.
- */
 QString CameraBinContainer::suggestedFileExtension(const QString &containerFormat) const
 {
    // for container names like avi instead of video/x-msvideo, use it as extension
@@ -163,4 +160,3 @@ QString CameraBinContainer::suggestedFileExtension(const QString &containerForma
 
    return extension;
 }
-

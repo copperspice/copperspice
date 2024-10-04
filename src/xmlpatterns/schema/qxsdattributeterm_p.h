@@ -34,16 +34,7 @@ class XsdAttributeTerm : public NamedSchemaComponent, public XsdAnnotated
  public:
    typedef QExplicitlySharedDataPointer<XsdAttributeTerm> Ptr;
 
-   /**
-    * Returns @c true if the term is an attribute use, @c false otherwise.
-    */
    virtual bool isAttributeUse() const;
-
-   /**
-    * Returns @c true if the term is an attribute use reference, @c false otherwise.
-    *
-    * @note The reference term is only used internally as helper during type resolving.
-    */
    virtual bool isReference() const;
 };
 

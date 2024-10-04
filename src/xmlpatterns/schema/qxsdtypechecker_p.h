@@ -45,27 +45,12 @@ class XsdSchemaSourceLocationReflection : public SourceLocationReflection
    const QSourceLocation m_sourceLocation;
 };
 
-/**
- * @short The class that provides methods for checking a string against a type.
- *
- * The class provides functionality for type-aware string handling.
- */
 class XsdTypeChecker
 {
  public:
-   /**
-    * Creates a new type checker.
-    *
-    * @param context The schema context that is used for error reporting.
-    * @param namespaceBindings The namespace bindings that shall be used to check against xs:QName based types.
-    * @param location The source location that is used for error reporting.
-    */
    XsdTypeChecker(const XsdSchemaContext::Ptr &context, const QVector<QXmlName> &namespaceBindings,
                   const QSourceLocation &location);
 
-   /**
-    * Destroys the type checker.
-    */
    ~XsdTypeChecker();
 
 

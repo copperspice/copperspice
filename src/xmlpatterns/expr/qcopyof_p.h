@@ -31,25 +31,14 @@ namespace QPatternist {
 class CopyOf : public SingleContainer
 {
  public:
-   /**
-    * Creats a CopyOf where it is checked that the expression @p operand conforms
-    * to the type @p reqType.
-    */
    CopyOf(const Expression::Ptr &operand,
           const bool inheritNSS,
           const bool preserveNSS);
 
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
-   /**
-    * @returns always the SequenceType passed in the constructor to this class. That is, the
-    * SequenceType that the operand must conform to.
-    */
    SequenceType::Ptr staticType() const override;
 
-   /**
-    * @returns a list containing one CommonSequenceTypes::ZeroOrMoreItems
-    */
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

@@ -35,14 +35,7 @@ class CollationChecker : public SingleContainer
 
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   /**
-    * Expects exactly one string.
-    */
    SequenceType::List expectedOperandTypes() const override;
-
-   /**
-    * @returns its operand's static type.
-    */
    SequenceType::Ptr staticType() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

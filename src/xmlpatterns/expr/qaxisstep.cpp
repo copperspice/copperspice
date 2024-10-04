@@ -32,10 +32,6 @@
 using namespace QPatternist;
 
 namespace QPatternist {
-/**
- * This operator is needed for the s_whenAxisNodeKindEmpty array. The @c int constructors
- * ensure we invoke another operator| such that we don't get an infinite loop.
- */
 static inline QXmlNodeModelIndex::NodeKind operator|(const QXmlNodeModelIndex::NodeKind &op1,
       const QXmlNodeModelIndex::NodeKind &op2)
 {
@@ -94,8 +90,6 @@ Item AxisStep::mapToItem(const QXmlNodeModelIndex &node,
 
 Item::Iterator::Ptr AxisStep::evaluateSequence(const DynamicContext::Ptr &context) const
 {
-   /* If we don't have a focus, it's either a bug or our parent isn't a Path
-    * that have advanced the focus iterator. Hence, attempt to advance the focus on our own. */
    if (!context->contextItem()) {
       context->focusIterator()->next();
    }
@@ -109,8 +103,6 @@ Item::Iterator::Ptr AxisStep::evaluateSequence(const DynamicContext::Ptr &contex
 
 Item AxisStep::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-   /* If we don't have a focus, it's either a bug or our parent isn't a Path
-    * that have advanced the focus iterator. Hence, attempt to advance the focus on our own. */
    if (!context->contextItem()) {
       context->focusIterator()->next();
    }
@@ -137,7 +129,6 @@ Expression::Ptr AxisStep::typeCheck(const StaticContext::Ptr &context,
                                     const SequenceType::Ptr &reqType)
 {
    if (m_axis == QXmlNodeModelIndex::AxisParent && *m_nodeTest == *BuiltinTypes::node) {
-      /* We only rewrite parent::node() to ParentNodeAxis. */
       return rewrite(Expression::Ptr(new ParentNodeAxis()), context)->typeCheck(context, reqType);
    }
    /* TODO temporarily disabled
@@ -195,7 +186,6 @@ QString AxisStep::axisName(const QXmlNodeModelIndex::Axis axis)
    const char *result = nullptr;
 
    switch (axis) {
-      /* These must not be translated. */
       case QXmlNodeModelIndex::AxisAncestorOrSelf:
          result = "ancestor-or-self";
          break;

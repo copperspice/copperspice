@@ -84,18 +84,8 @@ class DurationDurationMathematician : public AtomicMathematician
 class OperandSwitcherMathematician : public AtomicMathematician
 {
  public:
-   /**
-    * Creates an OperandSwitcherMathematician.
-    *
-    * @param mathematician the AtomicMathematician this OperandSwitcherMathematician
-    * should switch the operands for. Must be a non @c null, valid pointer.
-    */
    OperandSwitcherMathematician(const AtomicMathematician::Ptr &mathematician);
 
-   /**
-    * Switch @p o1 and @p o2, and returns the value from the AtomicMathematician
-    * this OperandSwitcherMathematician represents.
-    */
    Item calculate(const Item &o1, const Operator op, const Item &o2,
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 
@@ -111,10 +101,6 @@ class DateTimeDurationMathematician : public AtomicMathematician, public Delegat
       : DelegatingSourceLocationReflection(r)
    { }
 
-   /**
-    * @p o1 is an AbstractDateTime and @p o2 is an AbstractDuration.
-    *
-    */
    Item calculate(const Item &o1, const Operator op, const Item &o2,
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };

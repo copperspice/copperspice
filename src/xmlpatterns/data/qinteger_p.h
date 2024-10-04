@@ -54,22 +54,9 @@ class Integer : public Numeric
    Numeric::Ptr abs() const override;
    quint64 toUnsignedInteger() const override;
 
-   /**
-    * @returns always @c false, @c xs:integer doesn't have
-    * not-a-number in its value space.
-    */
    bool isNaN() const  override;
-
-   /**
-    * @returns always @c false, @c xs:integer doesn't have
-    * infinity in its value space.
-    */
    bool isInf() const  override;
    Item toNegated() const  override;
-
-   /**
-    * @short Returns always @c true.
-    */
    bool isSigned() const  override;
 
  protected:

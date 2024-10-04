@@ -46,20 +46,6 @@ class TemplatePattern : public QSharedData
    inline const Template::Ptr &templateTarget() const;
    inline ID id() const;
 
-   /**
-    * This ID is used to ensure that, as 6.4 Conflict Resolution for
-    * Template Rules reads:
-    *
-    * "If the pattern contains multiple alternatives separated by |, then
-    * the template rule is treated equivalently to a set of template
-    * rules, one for each alternative. However, it is not an error if a
-    * node matches more than one of the alternatives."
-    *
-    * For patterns separated by @c |, we have one Template instance for
-    * each alternative, but they all have the same ID, hence if several
-    * alternatives match, we don't flag it as an error if they have the
-    * same ID.
-    */
  private:
    Expression::Ptr m_matchPattern;
    PatternPriority m_priority;

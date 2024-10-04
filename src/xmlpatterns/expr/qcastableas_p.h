@@ -36,12 +36,6 @@ class CastableAs : public SingleContainer, public CastingPlatform<CastableAs, fa
 
    bool evaluateEBV(const DynamicContext::Ptr &) const override;
 
-   /**
-    * Overridden to const fold to @c true when the target type
-    * is a type which casting to always succeeds. This is
-    * the type identical to the target type, <tt>xs:string</tt>,
-    * and <tt>xs:untypedAtomic</tt>.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 

@@ -31,10 +31,6 @@ namespace QPatternist {
 class ContextNodeChecker : public FunctionCall
 {
  protected:
-   /**
-    * @short Checks that the root node of @p node is a document node, and
-    * otherwise issues an error.
-    */
    void checkTargetNode(const QXmlNodeModelIndex &node,
                         const DynamicContext::Ptr &context,
                         const ReportContext::ErrorCode) const;

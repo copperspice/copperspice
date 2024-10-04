@@ -32,14 +32,6 @@ class RemovalIterator : public Item::Iterator
 {
  public:
 
-   /**
-    * Creates an RemovalIterator.
-    *
-    * @param target the QAbstractXmlForwardIterator containing the sequence of items
-    * which the item at position @p position should be removed from.
-    * @param position the position of the item to remove. Must be
-    * 1 or larger.
-    */
    RemovalIterator(const Item::Iterator::Ptr &target,
                    const xsInteger position);
 
@@ -47,10 +39,6 @@ class RemovalIterator : public Item::Iterator
    Item current() const override;
    xsInteger position() const override;
 
-   /**
-    * The QAbstractXmlForwardIterator's count is computed by subtracting one from the source
-    * QAbstractXmlForwardIterator's count.
-    */
    xsInteger count() override;
 
    Item::Iterator::Ptr copy() const override;

@@ -37,61 +37,18 @@ class XsdParticle : public NamedSchemaComponent
    typedef QExplicitlySharedDataPointer<XsdParticle> Ptr;
    typedef QList<XsdParticle::Ptr> List;
 
-   /**
-    * Creates a new particle object.
-    */
    XsdParticle();
 
-   /**
-    * Sets the minimum @p occurrence of the particle.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-min_occurs">Minimum Occurrence Definition</a>
-    */
    void setMinimumOccurs(unsigned int occurrence);
-
-   /**
-    * Returns the minimum occurrence of the particle.
-    */
    unsigned int minimumOccurs() const;
 
-   /**
-    * Sets the maximum @p occurrence of the particle.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
-    */
    void setMaximumOccurs(unsigned int occurrence);
-
-   /**
-    * Returns the maximum occurrence of the particle.
-    *
-    * @note This value has only a meaning if maximumOccursUnbounded is @c false.
-    */
    unsigned int maximumOccurs() const;
 
-   /**
-    * Sets whether the maximum occurrence of the particle is unbounded.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-max_occurs">Maximum Occurrence Definition</a>
-    */
    void setMaximumOccursUnbounded(bool unbounded);
-
-   /**
-    * Returns whether the maximum occurrence of the particle is unbounded.
-    */
    bool maximumOccursUnbounded() const;
 
-   /**
-    * Sets the @p term of the particle.
-    *
-    * The term can be an element, a model group or an element wildcard.
-    *
-    * @see <a href="http://www.w3.org/TR/xmlschema11-1/#p-term">Term Definition</a>
-    */
    void setTerm(const XsdTerm::Ptr &term);
-
-   /**
-    * Returns the term of the particle.
-    */
    XsdTerm::Ptr term() const;
 
  private:

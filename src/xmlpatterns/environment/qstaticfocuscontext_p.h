@@ -31,13 +31,7 @@ namespace QPatternist {
 class StaticFocusContext : public DelegatingStaticContext
 {
  public:
-   /**
-    * @p contextItemType may be @c null.
-    */
    StaticFocusContext(const ItemType::Ptr &contextItemType, const StaticContext::Ptr &context);
-   /**
-    * @returns the type passed in the constructor.
-    */
    ItemType::Ptr contextItemType() const override;
 
  private:

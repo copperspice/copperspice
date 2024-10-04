@@ -35,9 +35,6 @@ class NamedSchemaComponent : public SchemaComponent
  public:
    typedef QExplicitlySharedDataPointer<NamedSchemaComponent> Ptr;
 
-   /**
-    * Describes the blocking constraints that are given by the 'block' attributes.
-    */
    enum BlockingConstraint {
       RestrictionConstraint = 1,
       ExtensionConstraint = 2,
@@ -45,33 +42,13 @@ class NamedSchemaComponent : public SchemaComponent
    };
    using BlockingConstraints = QFlags<BlockingConstraint>;
 
-   /**
-    * Creates a new named schema component.
-    */
    NamedSchemaComponent();
 
-   /**
-    * Destroys the named schema component.
-    */
    virtual ~NamedSchemaComponent();
 
-   /**
-    * Sets the @p name of the schema component.
-    */
    void setName(const QXmlName &name);
-
-   /**
-    * Returns the name of the schema component.
-    *
-    * @param namePool The name pool the name belongs to.
-    */
    virtual QXmlName name(const NamePool::Ptr &namePool) const;
 
-   /**
-    * Returns the display name of the schema component.
-    *
-    * @param namePool The name pool the name belongs to.
-    */
    virtual QString displayName(const NamePool::Ptr &namePool) const;
 
  private:

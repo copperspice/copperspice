@@ -43,9 +43,7 @@ class PullBridge : public AbstractXmlPullProvider
    Event next() override;
    Event current() const override;
    QXmlName name() const override;
-   /**
-    * Returns always an empty QVariant.
-    */
+
    QVariant atomicValue() const override;
    QString stringValue() const override;
    QHash<QXmlName, QString> attributes() override;

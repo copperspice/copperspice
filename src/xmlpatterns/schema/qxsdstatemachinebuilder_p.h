@@ -43,51 +43,18 @@ class XsdStateMachineBuilder : public QSharedData
       ValidatingMode
    };
 
-   /**
-    * Creates a new state machine builder.
-    *
-    * @param machine The state machine it should work on.
-    * @param namePool The name pool used by all schema components.
-    * @param mode The mode the machine shall be build for.
-    */
    XsdStateMachineBuilder(XsdStateMachine<XsdTerm::Ptr> *machine, const NamePool::Ptr &namePool, Mode mode = CheckingMode);
 
-   /**
-    * Resets the state machine.
-    *
-    * @returns The initial end state.
-    */
    XsdStateMachine<XsdTerm::Ptr>::StateId reset();
 
-   /**
-    * Prepends a start state to the given @p state.
-    * That is needed to allow the conversion of the state machine from a FSA to a DFA.
-    */
    XsdStateMachine<XsdTerm::Ptr>::StateId addStartState(XsdStateMachine<XsdTerm::Ptr>::StateId state);
 
-   /**
-    * Creates the state machine for the given @p particle that should have the
-    * given @p endState.
-    *
-    * @returns The new start state.
-    */
    XsdStateMachine<XsdTerm::Ptr>::StateId buildParticle(const XsdParticle::Ptr &particle,
          XsdStateMachine<XsdTerm::Ptr>::StateId endState);
 
-   /**
-    * Creates the state machine for the given @p term that should have the
-    * given @p endState.
-    *
-    * @returns The new start state.
-    */
    XsdStateMachine<XsdTerm::Ptr>::StateId buildTerm(const XsdTerm::Ptr &term,
          XsdStateMachine<XsdTerm::Ptr>::StateId endState);
 
-   /**
-    * Returns a hash that maps each term that appears inside @p particle, to the particle it belongs.
-    *
-    * @note These information are used by XsdParticleChecker to check particle inheritance.
-    */
    static QHash<XsdTerm::Ptr, XsdParticle::Ptr> particleLookupMap(const XsdParticle::Ptr &particle);
 
  private:

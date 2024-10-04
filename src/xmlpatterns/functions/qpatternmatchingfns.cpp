@@ -164,9 +164,6 @@ TokenizeFN::TokenizeFN() : PatternPlatform(2)
 {
 }
 
-/**
- * Used by QAbstractXmlForwardIterator.
- */
 static inline bool qIsForwardIteratorEnd(const QString &item)
 {
    return item.isEmpty();

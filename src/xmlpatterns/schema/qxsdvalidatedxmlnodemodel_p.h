@@ -38,14 +38,8 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    typedef QExplicitlySharedDataPointer<XsdValidatedXmlNodeModel> Ptr;
    typedef QList<Ptr> List;
 
-   /**
-    * Creates a new validated xml node model.
-    */
    XsdValidatedXmlNodeModel(const QAbstractXmlNodeModel *model);
 
-   /**
-    * Destroys the validated xml node model.
-    */
    virtual ~XsdValidatedXmlNodeModel();
 
    QUrl baseUri(const QXmlNodeModelIndex &ni) const override;
@@ -78,53 +72,20 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver,
                   const NodeCopySettings &) const override;
 
-   /**
-    * Sets the @p element that is assigned to the xml node at @p index.
-    */
    void setAssignedElement(const QXmlNodeModelIndex &index, const XsdElement::Ptr &element);
 
-   /**
-    * Returns the element that is assigned to the xml node at @p index.
-    */
    XsdElement::Ptr assignedElement(const QXmlNodeModelIndex &index) const;
-
-   /**
-    * Sets the @p attribute that is assigned to the xml node at @p index.
-    */
    void setAssignedAttribute(const QXmlNodeModelIndex &index, const XsdAttribute::Ptr &attribute);
 
-   /**
-    * Returns the attribute that is assigned to the xml node at @p index.
-    */
    XsdAttribute::Ptr assignedAttribute(const QXmlNodeModelIndex &index) const;
-
-   /**
-    * Sets the @p type that is assigned to the xml node at @p index.
-    *
-    * @note The type can be a different than the type of the element or
-    *       attribute that is assigned to the index, since the instance
-    *       document can overwrite it by xsi:type.
-    */
    void setAssignedType(const QXmlNodeModelIndex &index, const SchemaType::Ptr &type);
 
-   /**
-    * Returns the type that is assigned to the xml node at @p index.
-    */
    SchemaType::Ptr assignedType(const QXmlNodeModelIndex &index) const;
 
-   /**
-    * Adds the attribute or element @p binding with the given @p id.
-    */
    void addIdIdRefBinding(const QString &id, const NamedSchemaComponent::Ptr &binding);
 
-   /**
-    * Returns a list of all binding ids.
-    */
    QStringList idIdRefBindingIds() const;
 
-   /**
-    * Returns the set of bindings with the given @p id.
-    */
    QSet<NamedSchemaComponent::Ptr> idIdRefBindings(const QString &id) const;
 
  protected:

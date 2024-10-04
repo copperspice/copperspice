@@ -32,9 +32,6 @@ class GMonth : public AbstractDateTime
  public:
    typedef AtomicValue::Ptr Ptr;
 
-   /**
-    * Creates an instance from the lexical representation @p string.
-    */
    static GMonth::Ptr fromLexical(const QString &string);
    static GMonth::Ptr fromDateTime(const QDateTime &dt);
 

@@ -31,40 +31,17 @@ namespace QPatternist {
 class AnyItemType : public ItemType
 {
  public:
-   /**
-    * @returns always "item()"
-    */
    QString displayName(const NamePool::Ptr &np) const override;
 
-   /**
-    * @returns always @c true
-    */
    bool itemMatches(const Item &item) const override;
 
-   /**
-    * @returns always 0, item() is the super type in the
-    * XPath Data Model hierarchy
-    */
    ItemType::Ptr xdtSuperType() const override;
 
-   /**
-    * @returns always @c false
-    */
    bool isNodeType() const override;
-
-   /**
-    * @returns always @c false
-    */
    bool isAtomicType() const override;
 
-   /**
-    * @returns always @c true
-    */
    bool xdtTypeMatches(const ItemType::Ptr &type) const override;
 
-   /**
-    * @returns xs:anyAtomicType
-    */
    ItemType::Ptr atomizedType() const override;
 
  protected:

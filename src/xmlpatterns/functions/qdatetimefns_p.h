@@ -40,10 +40,6 @@ template<typename TSubClass>
 class ExtractFromDurationFN : public FunctionCall
 {
  public:
-   /**
-    * Takes care of the argument handling, and, if applicable,
-    * calls extract() with the value of the operand.
-    */
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
@@ -93,10 +89,6 @@ template<typename TSubClass>
 class ExtractFromDateTimeFN : public FunctionCall
 {
  public:
-   /**
-    * Takes care of the argument handling, and, if applicable,
-    * calls extract() with the value of the operand.
-    */
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 

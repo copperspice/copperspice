@@ -39,42 +39,20 @@ class ValueComparison : public PairContainer,
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-   /**
-    * @returns always CommonSequenceTypes::ExactlyOneBoolean
-    */
    SequenceType::Ptr staticType() const override;
-
    SequenceType::List expectedOperandTypes() const override;
 
-   /**
-    * @returns IDValueComparison
-    */
    ID id() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
 
-   /**
-    * Overridden to optimize case-insensitive compares.
-    */
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   /**
-    * @returns the operator that this ValueComparison is using.
-    */
    AtomicComparator::Operator operatorID() const {
       return m_operator;
    }
 
-   /**
-    * It is considered that the string value from @p op1 will be compared against @p op2. This
-    * function determines whether the user intends the comparison to be case insensitive. If
-    * that is the case @c true is returned, and the operands are re-written appropriately.
-    *
-    * This is a helper function for Expression classes that compares strings.
-    *
-    * @see ComparisonPlatform::useCaseInsensitiveComparator()
-    */
    static bool isCaseInsensitiveCompare(Expression::Ptr &op1, Expression::Ptr &op2);
 
  private:
