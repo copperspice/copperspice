@@ -720,13 +720,8 @@ configure_file(
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
    set(PKG_PREFIX "CopperSpice.framework/Resources")
-
-elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
-   set(PKG_PREFIX "cmake/CopperSpice")
-
 else()
    set(PKG_PREFIX "${CMAKE_INSTALL_LIBDIR}/cmake/CopperSpice")
-
 endif()
 
 install(
