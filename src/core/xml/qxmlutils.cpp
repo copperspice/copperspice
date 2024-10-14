@@ -284,16 +284,6 @@ bool QXmlUtils::isPublicID(const QString &candidate)
    return true;
 }
 
-/*!
-   \internal
-
-   Determines whether \a c is a valid instance of
-   production [4]NCName in the XML 1.0 Namespaces specification. If it
-   is, true is returned, otherwise false.
-
-    \sa \l {http://www.w3.org/TR/REC-xml-names/#NT-NCName}
-           {W3CNamespaces in XML 1.0 (Second Edition), [4] NCName}
- */
 bool QXmlUtils::isNCName(QStringView ncName)
 {
    if (ncName.isEmpty()) {

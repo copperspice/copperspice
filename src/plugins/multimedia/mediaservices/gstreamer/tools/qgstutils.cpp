@@ -51,7 +51,6 @@ template<typename T, int N> static int lengthOf(const T (&)[N])
 
 #include <qgstreamervideoinputdevicecontrol_p.h>
 
-//internal
 static void addTagToMap(const GstTagList *list, const gchar *tag, gpointer user_data)
 {
    QMap<QByteArray, QVariant> *map = reinterpret_cast<QMap<QByteArray, QVariant>* >(user_data);

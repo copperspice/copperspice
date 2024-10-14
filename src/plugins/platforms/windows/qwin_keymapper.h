@@ -31,7 +31,6 @@ class QKeyEvent;
 class QWindow;
 
 /*
-    \internal
     A Windows KeyboardLayoutItem has 8 possible states:
         1. Unmodified
         2. Shift

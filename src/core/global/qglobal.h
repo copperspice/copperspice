@@ -759,13 +759,11 @@ constexpr inline bool qFuzzyCompare(float p1, float p2)
    return (qAbs(p1 - p2) <= 0.00001f * qMin(qAbs(p1), qAbs(p2)));
 }
 
-// internal
 constexpr inline bool qFuzzyIsNull(double d)
 {
    return qAbs(d) <= 0.000000000001;
 }
 
-// internal
 constexpr inline bool qFuzzyIsNull(float f)
 {
    return qAbs(f) <= 0.00001f;

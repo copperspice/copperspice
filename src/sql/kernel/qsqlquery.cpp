@@ -105,9 +105,6 @@ QSqlQuery::QSqlQuery(const QSqlQuery &other)
    d->ref.ref();
 }
 
-/*!
-    \internal
-*/
 static void qInit(QSqlQuery *q, const QString &query, QSqlDatabase db)
 {
    QSqlDatabase database = db;

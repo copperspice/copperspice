@@ -50,7 +50,6 @@ QThreadPoolThread::QThreadPoolThread(QThreadPoolPrivate *manager)
    : manager(manager), runnable(nullptr)
 { }
 
-// internal
 void QThreadPoolThread::run()
 {
    QMutexLocker locker(&manager->mutex);

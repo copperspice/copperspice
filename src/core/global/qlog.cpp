@@ -140,7 +140,6 @@ QtMsgHandler csInstallMsgHandler(QtMsgHandler handler)
    return previous;
 }
 
-// internal
 void qt_message_output(QtMsgType msgType, QStringView msg)
 {
    if (s_handler != nullptr) {
@@ -165,7 +164,6 @@ void qt_message_output(QtMsgType msgType, QStringView msg)
 
 }
 
-// internal
 static void qEmergencyOut(QtMsgType msgType, const char *msg, va_list ap)
 {
    char emergency_buf[256] = { '\0' };
@@ -179,7 +177,6 @@ static void qEmergencyOut(QtMsgType msgType, const char *msg, va_list ap)
    qt_message_output(msgType, str);
 }
 
-// internal
 static void qt_message(QtMsgType msgType, const char *msg, va_list ap)
 {
    if (std::uncaught_exceptions() != 0) {

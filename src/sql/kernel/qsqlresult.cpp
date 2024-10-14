@@ -546,8 +546,6 @@ QVariant QSqlResult::lastInsertId() const
    return QVariant();
 }
 
-/*! \internal
-*/
 void QSqlResult::virtual_hook(int, void *)
 {
 }

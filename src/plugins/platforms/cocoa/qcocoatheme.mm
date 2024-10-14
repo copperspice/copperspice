@@ -142,7 +142,6 @@ const QFont *QCocoaTheme::font(Font type) const
    return m_fonts.value(type, nullptr);
 }
 
-//! \internal
 QPixmap qt_mac_convert_iconref(const IconRef icon, int width, int height)
 {
    QPixmap ret(width, height);

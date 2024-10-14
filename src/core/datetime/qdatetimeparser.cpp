@@ -208,7 +208,6 @@ int QDateTimeParser::absoluteMax(int s, const QDateTime &cur) const
    return -1;
 }
 
-// internal
 int QDateTimeParser::absoluteMin(int s) const
 {
    const SectionNode &sn = sectionNode(s);
@@ -904,7 +903,6 @@ int QDateTimeParser::parseSection(const QDateTime &currentValue, int sectionInde
    return (state != Invalid ? num : -1);
 }
 
-// internal
 QDateTimeParser::StateNode QDateTimeParser::parse(QString &input, int &cursorPosition,
       const QDateTime &currentValue, bool fixup) const
 {

@@ -532,7 +532,6 @@ void QCoreApplicationPrivate::initLocale()
 #endif
 }
 
-// internal
 QCoreApplication::QCoreApplication(QCoreApplicationPrivate &p)
    : QObject(nullptr), d_ptr(&p)
 {
@@ -998,10 +997,6 @@ void QCoreApplication::postEvent(QObject *receiver, QEvent *event, int priority)
    }
 }
 
-/*!
-  \internal
-  Returns true if event was compressed away (possibly deleted) and should not be added to the list.
-*/
 bool QCoreApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents)
 {
    int peCount = CSInternalEvents::get_m_PostedEvents(receiver);

@@ -129,9 +129,6 @@ void QSqlField::setDefaultValue(const QVariant &value)
    d->def = value;
 }
 
-/*!
-    \internal
-*/
 void QSqlField::setSqlType(int type)
 {
    detach();

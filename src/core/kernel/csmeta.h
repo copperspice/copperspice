@@ -100,7 +100,6 @@ class Q_CORE_EXPORT QMetaMethod
       Constructor
    };
 
-   // might be internal
    enum Attributes {
       Compatibility = 0x1,
       Cloned        = 0x2,

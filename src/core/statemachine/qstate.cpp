@@ -70,7 +70,6 @@ QState::QState(ChildMode childMode, QState *parent)
    d->childMode = childMode;
 }
 
-// internal
 QState::QState(QStatePrivate &dd, QState *parent)
    : QAbstractState(dd, parent)
 {

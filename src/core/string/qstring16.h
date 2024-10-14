@@ -278,12 +278,10 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          : CsString::CsString_utf16(begin, end)
       { }
 
-      // internal
       QString16(const CsString::CsString_utf16 &other)
          : CsString::CsString_utf16(other)
       { }
 
-      // internal
       QString16(CsString::CsString_utf16 &&other)
          : CsString::CsString_utf16(std::move(other))
       { }
@@ -303,9 +301,9 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       static inline QString16 fromUtf8(const char8_t *str, size_type numOfChars = -1);
 #endif
 
-      using CsString::CsString_utf16::append;         // internal
-      using CsString::CsString_utf16::operator=;      // internal
-      using CsString::CsString_utf16::operator+=;     // internal
+      using CsString::CsString_utf16::append;
+      using CsString::CsString_utf16::operator=;
+      using CsString::CsString_utf16::operator+=;
 
       // methods
       QString16 &append(char32_t c)  {

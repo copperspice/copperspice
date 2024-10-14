@@ -28,7 +28,6 @@
 
 #include <sys/time.h>
 
-// internal timer info
 struct QTimerInfo_Unix {
    int id;                           // timer identifier
    int interval;                     // timer interval in milliseconds

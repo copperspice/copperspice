@@ -803,11 +803,6 @@ QList<QByteArray> QMacPasteboardMimeVCard::convertFromMime(const QString &mime, 
    return retval;
 }
 
-/*!
-  \internal
-
-  This is an internal function.
-*/
 void QMacInternalPasteboardMime::initializeMimeTypes()
 {
    if (globalMimeList().isEmpty()) {

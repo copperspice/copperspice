@@ -25,7 +25,6 @@
 #include <qobject.h>
 #include <csmeta_callevent.h>
 
-// internal class
 CSMetaCallEvent::CSMetaCallEvent(const CsSignal::Internal::BentoAbstract *bento,
       const CsSignal::Internal::TeaCupAbstract *dataPack,
       const QObject *sender, int signal_index, QSemaphore *semaphore)

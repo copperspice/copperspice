@@ -179,7 +179,6 @@ class DSCameraSession : public QObject
    int m_currentImageId;
    QVideoFrame m_capturedFrame;
 
-   // Internal state
    QCamera::Status m_status;
 
    CS_SLOT_1(Private, void presentFrame())

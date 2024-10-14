@@ -318,12 +318,6 @@ void MessageEditor::reallyFixTabOrder()
    }
 }
 
-/*! internal
-    Returns all translations for an item.
-    The number of translations is dependent on if we have a plural form or not.
-    If we don't have a plural form, then this should only contain one item.
-    Otherwise it will contain the number of numerus forms for the particular language.
-*/
 QStringList MessageEditor::translations(int model) const
 {
    QStringList translations;

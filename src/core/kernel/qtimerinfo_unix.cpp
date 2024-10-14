@@ -35,11 +35,6 @@
 
 Q_CORE_EXPORT bool qt_disable_lowpriority_timers = false;
 
-/*
- * Internal functions for manipulating timer data structures.  The
- * timerBitVec array is used for keeping track of timer identifiers.
- */
-
 QTimerInfoList::QTimerInfoList()
 {
 #if (_POSIX_MONOTONIC_CLOCK-0 <= 0) && ! defined(Q_OS_DARWIN) && ! defined(Q_OS_NACL)

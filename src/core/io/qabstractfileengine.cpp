@@ -358,7 +358,6 @@ QString QAbstractFileEngineIterator::path() const
    return d->path;
 }
 
-// internal
 void QAbstractFileEngineIterator::setPath(const QString &path)
 {
    d->path = path;
@@ -414,7 +413,6 @@ QAbstractFileEngineIterator *QAbstractFileEngine::beginEntryList(QDir::Filters f
    return nullptr;
 }
 
-// internal
 QAbstractFileEngineIterator *QAbstractFileEngine::endEntryList()
 {
    return nullptr;

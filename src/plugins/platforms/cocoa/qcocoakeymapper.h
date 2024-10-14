@@ -33,7 +33,6 @@
 #include <QKeyEvent>
 
 /*
-    \internal
     A Mac KeyboardLayoutItem has 8 possible states:
         1. Unmodified
         2. Shift

@@ -1867,18 +1867,6 @@ static inline bool isValid(xcb_generic_event_t *event)
    return event && (event->response_type & ~0x80);
 }
 
-/*! \internal
-
-    Compresses events of the same type to avoid swamping the event queue.
-    If event compression is not desired there are several options what developers can do:
-
-    1) Write responsive applications. We drop events that have been buffered in the event
-       queue while waiting on unresponsive GUI thread.
-    2) Use QAbstractNativeEventFilter to get all events from X connection. This is not optimal
-       because it requires working with native event types.
-    3) Or add public API to CS for disabling event compression QTBUG-44964
-
-*/
 bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex, QXcbEventArray *eventqueue) const
 {
    uint responseType = event->response_type & ~0x80;

@@ -433,7 +433,6 @@ class Q_CORE_EXPORT QRegularExpressionMatch
       QRegularExpressionMatch(const QRegularExpressionMatch &other) = default;
       QRegularExpressionMatch(QRegularExpressionMatch &&other) = default;
 
-      // internal only
       QRegularExpressionMatch(cs_regex_ns::match_results<QRegexTraits<S>> match, QMatchType matchType, QMatchOptionFlags matchOptions)
          : m_results(std::move(match)), m_matchType(matchType), m_matchOptions(matchOptions), m_valid(true)
       {

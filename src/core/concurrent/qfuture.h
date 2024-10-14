@@ -42,7 +42,6 @@ class QFuture
       : d(QFutureInterface<T>::canceledResult()) {
    }
 
-   // internal
    explicit QFuture(QFutureInterface<T> *p)
       : d(*p)
    {
@@ -374,7 +373,6 @@ class QFuture<void>
    {
    }
 
-   // internal
    explicit QFuture(QFutureInterfaceBase *p)
       : d(*p)
    {

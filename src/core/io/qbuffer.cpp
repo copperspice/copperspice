@@ -281,7 +281,6 @@ qint64 QBuffer::writeData(const char *data, qint64 len)
    return len;
 }
 
-// internal
 void QBuffer::connectNotify(const QMetaMethod &signalMethod) const
 {
    if (signalMethod.name() == "readyRead" || signalMethod.name() == "bytesWritten") {
@@ -289,7 +288,6 @@ void QBuffer::connectNotify(const QMetaMethod &signalMethod) const
    }
 }
 
-// internal
 void QBuffer::disconnectNotify(const QMetaMethod &signalMethod) const
 {
    if (signalMethod.name() == "readyRead" || signalMethod.name() == "bytesWritten") {

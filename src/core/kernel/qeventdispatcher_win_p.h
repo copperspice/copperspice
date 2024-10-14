@@ -100,7 +100,7 @@ struct QSockFd {
 };
 using QSFDict = QHash<int, QSockFd>;
 
-struct WinTimerInfo {                           // internal timer info
+struct WinTimerInfo {
    QObject *dispatcher;
    int timerId;
    int interval;

@@ -1522,7 +1522,6 @@ int QMetaObject::enum_calculate(QString enumData, QMap<QString, int> valueMap)
    return retval;
 }
 
-// internal
 void QMetaObject_X::register_classInfo(const QString &name, const QString &value)
 {
    if (name.isEmpty()) {
@@ -1992,7 +1991,6 @@ void QMetaObject_X::register_tag(const QString &name, const QString &method)
    }
 }
 
-// internal properties
 void QMetaObject_X::register_property_read(const QString &name, std::type_index returnTypeId,
       QString (*returnTypeFuncPtr)(), JarReadAbstract *readJar)
 {

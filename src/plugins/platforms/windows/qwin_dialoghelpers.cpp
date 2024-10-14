@@ -501,15 +501,6 @@ QWindowsNativeDialogBase *QWindowsDialogHelperBase<BaseClass>::ensureNativeDialo
    return m_nativeDialog.data();
 }
 
-/*!
-    \class QWindowsDialogThread
-    \brief Run a non-modal native dialog in a separate thread.
-
-    \sa QWindowsDialogHelperBase
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 class QWindowsDialogThread : public QThread
 {
  public:
@@ -734,18 +725,6 @@ inline void QWindowsFileDialogSharedData::fromOptions(const QSharedPointer<QPlat
    m_data->selectedFiles = o->initiallySelectedFiles();
    m_data->selectedNameFilter = o->initiallySelectedNameFilter();
 }
-
-/*!
-    \class QWindowsNativeFileDialogEventHandler
-    \brief Listens to IFileDialog events and forwards them to QWindowsNativeFileDialogBase
-
-    Events like 'folder change' that have an equivalent signal
-    in QFileDialog are forwarded.
-
-    \sa QWindowsNativeFileDialogBase, QWindowsFileDialogHelper
-    \internal
-    \ingroup qt-lighthouse-win
-*/
 
 class QWindowsNativeFileDialogBase;
 
@@ -1527,16 +1506,6 @@ HRESULT QWindowsNativeFileDialogEventHandler::OnFileOk(IFileDialog *)
    return m_nativeFileDialog->onFileOk() ? S_OK : S_FALSE;
 }
 
-/*!
-    \class QWindowsNativeSaveFileDialog
-    \brief Windows native file save dialog wrapper around IFileSaveDialog.
-
-    Implements single-selection methods.
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 class QWindowsNativeSaveFileDialog : public QWindowsNativeFileDialogBase
 {
    CS_OBJECT(QWindowsNativeSaveFileDialog)
@@ -2279,18 +2248,6 @@ void QWindowsNativeColorDialog::doExec(HWND owner)
       emit rejected();
    }
 }
-
-/*!
-    \class QWindowsColorDialogHelper
-    \brief Helper for native Windows color dialogs
-
-    Not currently in use as QColorDialog is equivalent.
-
-    \sa #define USE_NATIVE_COLOR_DIALOG
-    \sa QWindowsNativeColorDialog
-    \internal
-    \ingroup qt-lighthouse-win
-*/
 
 class QWindowsColorDialogHelper : public QWindowsDialogHelperBase<QPlatformColorDialogHelper>
 {

@@ -237,7 +237,6 @@ QGLFormat::QGLFormat(QGL::FormatOptions options, int plane)
    d->pln = plane;
 }
 
-// internal
 void QGLFormat::detach()
 {
    if (d->ref.load() != 1) {
@@ -1554,7 +1553,6 @@ static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum textu
    }
 }
 
-/*! \internal */
 QGLTexture *QGLContextPrivate::bindTexture(const QImage &image, GLenum target, GLint format,
    QGLContext::BindOptions options)
 {
@@ -2255,7 +2253,6 @@ void QGLContext::setFormat(const QGLFormat &format)
    d->glFormat = d->reqFormat = format;
 }
 
-// internal
 void QGLContext::setDevice(QPaintDevice *pDev)
 {
    Q_D(QGLContext);

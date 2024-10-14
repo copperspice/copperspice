@@ -351,10 +351,6 @@ QGLFormat QGLPixelBuffer::format() const
    return d->format;
 }
 
-/*! \fn int QGLPixelBuffer::devType() const
-    \internal
-*/
-
 bool QGLPixelBufferPrivate::init(const QSize &, const QGLFormat &f, QGLWidget *shareWidget)
 {
    widget = new QGLWidget(f, nullptr, shareWidget);

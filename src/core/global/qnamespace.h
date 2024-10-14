@@ -386,7 +386,7 @@ class Q_CORE_EXPORT Qt
       WA_KeyboardFocusChange = 77,
 
       WA_AcceptDrops = 78,
-      WA_DropSiteRegistered = 79,       // internal
+      WA_DropSiteRegistered = 79,
 
       WA_WindowPropagation = 80,
 
@@ -405,13 +405,13 @@ class Q_CORE_EXPORT Qt
       WA_MacMiniSize = 91,    // Mac only
 
       WA_LayoutUsesWidgetRect = 92,
-      WA_StyledBackground = 93, // internal
+      WA_StyledBackground = 93,
       WA_MSWindowsUseDirect3D = 94, // Win only
-      WA_CanHostQMdiSubWindowTitleBar = 95, // Internal
+      WA_CanHostQMdiSubWindowTitleBar = 95,
 
       WA_MacAlwaysShowToolWindow = 96, // Mac only
 
-      WA_StyleSheet = 97, // internal
+      WA_StyleSheet = 97,
 
       WA_ShowWithoutActivating = 98,
 
@@ -442,7 +442,7 @@ class Q_CORE_EXPORT Qt
       WA_MacFrameworkScaled  = 117,
 
       WA_SetWindowModality = 118,
-      WA_WState_WindowOpacitySet = 119, // internal
+      WA_WState_WindowOpacitySet = 119,
       WA_TranslucentBackground = 120,
 
       WA_AcceptTouchEvents = 121,
@@ -1158,7 +1158,6 @@ class Q_CORE_EXPORT Qt
       };
    )
 
-   // internal
    enum DockWidgetAreaSizes {
       NDockWidgetAreas = 4
    };
@@ -1183,7 +1182,6 @@ class Q_CORE_EXPORT Qt
 
    using ToolBarAreas = QFlags<ToolBarArea>;
 
-   // internal
    enum ToolBarAreaSizes {
       NToolBarAreas = 4
    };
@@ -1599,7 +1597,6 @@ class Q_CORE_EXPORT Qt
       TitleBarArea                 // For move
    };
 
-   // internal
    struct NoDataOverload {
    };
 

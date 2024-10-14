@@ -143,7 +143,6 @@ const QMetaObject_T<Qt> &Qt::staticMetaObject()
    }
 }
 
-// internal
 bool Qt::mightBeRichText(const QString &text)
 {
    if (text.isEmpty()) {
@@ -283,7 +282,7 @@ QString Qt::convertFromPlainText(const QString &plain, Qt::WhiteSpaceMode mode)
 }
 
 #ifndef QT_NO_TEXTCODEC
-// internal
+
 QTextCodec *Qt::codecForHtml(const QByteArray &ba)
 {
    return QTextCodec::codecForHtml(ba);

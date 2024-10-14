@@ -161,10 +161,8 @@ class Q_CORE_EXPORT QByteArray
       other.d = Data::sharedNull();
    }
 
-   // internal
    QByteArray(int size, Qt::NoDataOverload dummy);
 
-   // internal
    QByteArray(QByteArrayDataPtr dd)
       : d(static_cast<Data *>(dd.ptr)) {
    }

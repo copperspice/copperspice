@@ -277,12 +277,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          : CsString::CsString(begin, end)
       { }
 
-      // internal
       QString8(const CsString::CsString &other)
          : CsString::CsString(other)
       { }
 
-      // internal
       QString8(CsString::CsString &&other)
          : CsString::CsString(std::move(other))
       { }
@@ -305,9 +303,9 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       static inline QString8 fromUtf8(const char8_t *str, size_type numOfChars = -1);
 #endif
 
-      using CsString::CsString::append;          // internal
-      using CsString::CsString::operator=;      // internal
-      using CsString::CsString::operator+=;     // internal
+      using CsString::CsString::append;
+      using CsString::CsString::operator=;
+      using CsString::CsString::operator+=;
 
       // methods
       QString8 &append(char32_t c)  {

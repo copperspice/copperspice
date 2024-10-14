@@ -165,10 +165,6 @@ QWindow *QWindowsAccessibility::windowHelper(const QAccessibleInterface *iface)
     return window;
 }
 
-/*!
-  \internal
-  helper to wrap a QAccessibleInterface inside a IAccessible*
-*/
 IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 {
     if (! acc)

@@ -93,10 +93,6 @@ inline QString QTgaFile::errorMessage() const
     return mErrorMessage;
 }
 
-/*!
-    \internal
-    Returns the integer encoded in the two little endian bytes at \a d.
-*/
 inline quint16 QTgaFile::littleEndianInt(const unsigned char *d)
 {
     return d[0] + d[1] * 256;

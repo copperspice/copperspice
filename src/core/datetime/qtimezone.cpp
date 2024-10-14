@@ -908,7 +908,6 @@ QTimeZone::QTimeZone(const QByteArray &ianaId, int offsetSeconds, const QString 
    }
 }
 
-// internal
 QTimeZone::QTimeZone(QTimeZonePrivate &dd)
    : d(&dd)
 {

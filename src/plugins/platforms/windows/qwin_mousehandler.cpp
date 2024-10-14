@@ -154,7 +154,6 @@ static inline QTouchDevice *createTouchDevice()
    return result;
 }
 
-// internal
 QWindowsMouseHandler::QWindowsMouseHandler()
    : m_windowUnderMouse(nullptr), m_trackedWindow(nullptr), m_touchDevice(nullptr),
      m_leftButtonDown(false), m_previousCaptureWindow(nullptr)

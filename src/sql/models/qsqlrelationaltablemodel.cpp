@@ -483,7 +483,6 @@ void QSqlRelationalTableModel::setTable(const QString &table)
    QSqlTableModel::setTable(table);
 }
 
-// internal
 void QSqlRelationalTableModelPrivate::translateFieldNames(QSqlRecord &values) const
 {
    for (int i = 0; i < values.count(); ++i) {

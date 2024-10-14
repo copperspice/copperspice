@@ -113,7 +113,6 @@ const QString &QMetaEnum::name() const
    return m_name;
 }
 
-// internal
 void QMetaEnum::setData(QMap<QString, int> valueMap)
 {
    m_data = valueMap;

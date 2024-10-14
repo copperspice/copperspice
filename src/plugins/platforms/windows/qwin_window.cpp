@@ -783,17 +783,6 @@ static QSize toNativeSizeConstrained(QSize dip, const QWindow *w)
    return dip;
 }
 
-/*!
-    \class QWindowsGeometryHint
-    \brief Stores geometry constraints and provides utility functions.
-
-    Geometry constraints ready to apply to a MINMAXINFO taking frame
-    into account.
-
-    \internal
-    \ingroup qt-lighthouse-win
-*/
-
 QWindowsGeometryHint::QWindowsGeometryHint(const QWindow *w, const QMargins &cm) :
    minimumSize(toNativeSizeConstrained(w->minimumSize(), w)),
    maximumSize(toNativeSizeConstrained(w->maximumSize(), w)),

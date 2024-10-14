@@ -323,31 +323,26 @@ bool QMetaProperty::reset(QObject *object) const
    return retval;
 }
 
-// internal
 int QMetaProperty::revision() const
 {
    return m_revision;
 }
 
-// internal
 void QMetaProperty::setConstant()
 {
    m_constant = true;
 }
 
-// internal
 void QMetaProperty::setFinal()
 {
    m_final = true;
 }
 
-// internal
 void QMetaProperty::setRevision(int value)
 {
    m_revision = value;
 }
 
-// internal
 void QMetaProperty::setTypeName(const QString &typeName)
 {
    m_typeName = typeName;
@@ -415,7 +410,6 @@ bool QMetaProperty::write(QObject *object, const QVariant &value) const
    return  m_writeJar->runV(object, value);
 }
 
-// internal
 void QMetaProperty::setReadMethod(std::type_index returnTypeId,
       QString (*returnTypeFuncPtr)(), JarReadAbstract *jarRead)
 {

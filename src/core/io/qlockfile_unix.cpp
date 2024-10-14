@@ -147,10 +147,6 @@ static QCache<QString, bool> *fcntlOK()
 
 static QMutex fcntlLock;
 
-/*!
-  \internal
-  Checks that the OS is not using POSIX locks to emulate flock(), this happens on macos
-*/
 static bool fcntlWorksAfterFlock(const QString &fn)
 {
    QMutexLocker lock(&fcntlLock);

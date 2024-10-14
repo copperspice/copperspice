@@ -55,9 +55,6 @@ QSqlRecordPrivate::QSqlRecordPrivate(const QSqlRecordPrivate &other): fields(oth
    ref = 1;
 }
 
-/*! \internal
-    Just for compat
-*/
 QString QSqlRecordPrivate::createField(int index, const QString &prefix) const
 {
    QString f;
@@ -257,9 +254,6 @@ void QSqlRecord::setValue(const QString &name, const QVariant &val)
    setValue(indexOf(name), val);
 }
 
-
-/*! \internal
-*/
 void QSqlRecord::detach()
 {
    qAtomicDetach(d);
