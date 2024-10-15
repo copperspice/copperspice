@@ -520,9 +520,6 @@ extern "C" {
    }
 }
 
-/*!
-    \internal
-*/
 void Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngTexts(png_info *info)
 {
 
@@ -552,7 +549,6 @@ void Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngTexts(png_info *info)
 
 }
 
-// internal
 bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngHeader()
 {
    state = Error;
@@ -606,9 +602,6 @@ bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngHeader()
    return true;
 }
 
-/*!
-    \internal
-*/
 bool Q_INTERNAL_WIN_NO_THROW QPngHandlerPrivate::readPngImage(QImage *outImage)
 {
    if (state == Error) {

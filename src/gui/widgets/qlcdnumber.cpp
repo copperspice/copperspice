@@ -649,7 +649,6 @@ void QLCDNumberPrivate::drawString(const QString &s, QPainter &p, QBitArray *new
    }
 }
 
-// internal
 void QLCDNumberPrivate::drawDigit(const QPoint &pos, QPainter &p, int segLen,
    char newCh, char oldCh)
 {
@@ -706,7 +705,6 @@ static void addPoint(QPolygon &a, const QPoint &p)
    a.setPoint(n, p);
 }
 
-// internal
 void QLCDNumberPrivate::drawSegment(const QPoint &pos, char segmentNo, QPainter &p,
    int segLen, bool erase)
 {

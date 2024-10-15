@@ -504,14 +504,6 @@ void QNetworkHeadersPrivate::setRawHeader(const QByteArray &key, const QByteArra
    parseAndSetHeader(key, value);
 }
 
-/*!
-    \internal
-    Sets the internal raw headers list to match \a list. The cooked headers
-    will also be updated.
-
-    If \a list contains duplicates, they will be stored, but only the first one
-    is usually accessed.
-*/
 void QNetworkHeadersPrivate::setAllRawHeaders(const RawHeadersList &list)
 {
    cookedHeaders.clear();

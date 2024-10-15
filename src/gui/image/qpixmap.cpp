@@ -108,7 +108,6 @@ QPixmap::QPixmap(const QSize &size)
    }
 }
 
-// internal
 QPixmap::QPixmap(const QSize &s, int type)
 {
    if (! qt_pixmap_thread_test()) {
@@ -118,7 +117,6 @@ QPixmap::QPixmap(const QSize &s, int type)
    }
 }
 
-// internal
 QPixmap::QPixmap(QPlatformPixmap *d)
    : QPaintDevice(), data(d)
 {
@@ -177,7 +175,6 @@ QPixmap::~QPixmap()
    Q_ASSERT(! data || data->ref.load() >= 1); // Catch if ref-counting changes again
 }
 
-// internal
 int QPixmap::devType() const
 {
    return QInternal::Pixmap;
@@ -496,7 +493,6 @@ bool QPixmap::save(QIODevice *device, const QString &format, int quality) const
    return doImageIO(&writer, quality);
 }
 
-// internal
 bool QPixmap::doImageIO(QImageWriter *writer, int quality) const
 {
    if (quality > 100  || quality < -1) {
@@ -594,7 +590,6 @@ QDataStream &operator>>(QDataStream &stream, QPixmap &pixmap)
    return stream;
 }
 
-// internal
 bool QPixmap::isDetached() const
 {
    return data && data->ref.load() == 1;

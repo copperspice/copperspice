@@ -50,7 +50,7 @@ void QRegion::detach()
 
 // duplicates in qregion_win.cpp and qregion_wce.cpp
 #define QRGN_SETRECT          1                // region stream commands
-#define QRGN_SETELLIPSE       2                //  (these are internal)
+#define QRGN_SETELLIPSE       2
 #define QRGN_SETPTARRAY_ALT   3
 #define QRGN_SETPTARRAY_WIND  4
 #define QRGN_TRANSLATE        5
@@ -3418,10 +3418,6 @@ QRegion &QRegion::operator=(const QRegion &r)
    return *this;
 }
 
-
-/*!
-    \internal
-*/
 QRegion QRegion::copy() const
 {
    QRegion r;

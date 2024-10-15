@@ -777,8 +777,6 @@ QFont QApplication::font(const QString &className)
 
 
 
-/*! \internal
-*/
 void QApplicationPrivate::setSystemFont(const QFont &font)
 {
    if (!sys_font) {
@@ -792,8 +790,6 @@ void QApplicationPrivate::setSystemFont(const QFont &font)
    }
 }
 
-/*! \internal
-*/
 QString QApplicationPrivate::desktopStyleKey()
 {
    // The platform theme might return a style that is not available, find first valid one
@@ -1187,11 +1183,6 @@ void QApplicationPrivate::notifyActiveWindowChange(QWindow *previous)
    }
 }
 
-/*! internal
- * Helper function that returns the new focus widget, but does not set the focus reason.
- * Returns 0 if a new focus widget could not be found.
- * Shared with QGraphicsProxyWidgetPrivate::findFocusChild()
-*/
 QWidget *QApplicationPrivate::focusNextPrevChild_helper(QWidget *toplevel, bool next, bool *wrappingOccurred)
 {
    uint focus_flag = qt_tab_all_widgets() ? Qt::TabFocus : Qt::StrongFocus;
@@ -1598,11 +1589,6 @@ bool QApplicationPrivate::isWindowBlocked(QWindow *window, QWindow **blockingWin
    return false;
 }
 
-/*!\internal
-
-  Called from qapplication_\e{platform}.cpp, returns \c true
-  if the widget should accept the event.
- */
 bool QApplicationPrivate::tryModalHelper(QWidget *widget, QWidget **rettop)
 {
    QWidget *top = QApplication::activeModalWidget();

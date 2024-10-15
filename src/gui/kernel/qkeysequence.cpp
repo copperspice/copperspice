@@ -1055,7 +1055,6 @@ bool QKeySequence::operator< (const QKeySequence &other) const
    return false;
 }
 
-// internal
 bool QKeySequence::isDetached() const
 {
    return d->ref.load() == 1;

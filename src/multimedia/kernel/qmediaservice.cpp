@@ -32,7 +32,6 @@ QMediaService::QMediaService(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-// internal
 QMediaService::QMediaService(QMediaServicePrivate &dd, QObject *parent)
    : QObject(parent)
    , d_ptr(&dd)

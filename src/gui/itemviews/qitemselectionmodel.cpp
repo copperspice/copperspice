@@ -608,12 +608,7 @@ static QItemSelection mergeRowLengths(const QVector<QPair<QPersistentModelIndex,
    }
    return result;
 }
-/*!
-    \internal
 
-    Merges \a indexes into an item selection made up of ranges.
-    Assumes that the indexes are sorted.
-*/
 static QItemSelection mergeIndexes(const QVector<QPersistentModelIndex> &indexes)
 {
    QItemSelection colSpans;

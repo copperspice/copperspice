@@ -683,9 +683,6 @@ inline bool qt_notclosestLeaf(const QGraphicsItem *item1, const QGraphicsItem *i
    return qt_closestLeaf(item2, item1);
 }
 
-/*
-   return the full transform of the item to the parent.  This include the position and all the transform data
-*/
 inline QTransform QGraphicsItemPrivate::transformToParent() const
 {
    QTransform matrix;
@@ -693,7 +690,6 @@ inline QTransform QGraphicsItemPrivate::transformToParent() const
    return matrix;
 }
 
-// internal
 inline void QGraphicsItemPrivate::ensureSortedChildren()
 {
    if (needSortChildren) {
@@ -713,7 +709,6 @@ inline void QGraphicsItemPrivate::ensureSortedChildren()
    }
 }
 
-// internal
 inline bool QGraphicsItemPrivate::insertionOrder(QGraphicsItem *a, QGraphicsItem *b)
 {
    return a->d_ptr->siblingIndex < b->d_ptr->siblingIndex;

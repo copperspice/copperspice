@@ -54,8 +54,6 @@ class Q_XMLPATTERNS_EXPORT QXmlFormatter : public QXmlSerializer
    int indentationDepth() const;
    void setIndentationDepth(int depth);
 
-   /* The members below are internal, not part of the public API, and
-    * unsupported. Using them leads to undefined behavior. */
    void item(const QPatternist::Item &item) override;
 
  private:

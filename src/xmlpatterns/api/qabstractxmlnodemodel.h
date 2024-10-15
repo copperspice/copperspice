@@ -42,8 +42,6 @@ class QAbstractXmlForwardIterator;
 template<typename T>
 class QVector;
 
-/* The members in the namespace QPatternist are internal, not part of the public API, and
- * unsupported. Using them leads to undefined behavior. */
 namespace QPatternist {
 
 class DynamicContext;
@@ -166,9 +164,6 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
       return ! m_storage.model;
    }
 
-   // The members below are internal and not part of the public API. They are unsupported.
-   // using them in your application can lead to undefined behavior.
-
    inline QXmlName name() const;
    inline QXmlNodeModelIndex root() const;
 
@@ -256,8 +251,6 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    virtual QString stringValue(const QXmlNodeModelIndex &index) const = 0;
    virtual QVariant typedValue(const QXmlNodeModelIndex &index) const = 0;
 
-   /* The members below are internal, not part of the public API, and
-    * unsupported. Using them leads to undefined behavior. */
    virtual QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > iterate(
             const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const;
 

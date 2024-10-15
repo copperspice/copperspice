@@ -40,7 +40,6 @@ QAbstractVideoBuffer::QAbstractVideoBuffer(HandleType type)
 {
 }
 
-// internal
 QAbstractVideoBuffer::QAbstractVideoBuffer(QAbstractVideoBufferPrivate &dd, HandleType type)
    : d_ptr(&dd), m_type(type)
 {

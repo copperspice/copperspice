@@ -123,8 +123,6 @@ class QMoviePrivate
 
 };
 
-/*! \internal
- */
 QMoviePrivate::QMoviePrivate(QMovie *qq)
    : reader(nullptr), speed(100), movieState(QMovie::NotRunning), currentFrameNumber(-1), nextFrameNumber(0),
      greatestFrameNumber(-1), nextDelay(0), playCounter(-1),
@@ -134,8 +132,6 @@ QMoviePrivate::QMoviePrivate(QMovie *qq)
    nextImageTimer.setSingleShot(true);
 }
 
-/*! \internal
- */
 void QMoviePrivate::reset()
 {
    nextImageTimer.stop();
@@ -152,38 +148,15 @@ void QMoviePrivate::reset()
    frameMap.clear();
 }
 
-/*! \internal
- */
 bool QMoviePrivate::isDone()
 {
    return (playCounter == 0);
 }
-
-/*!
-    \internal
-
-    Given the original \a delay, this function returns the
-    actual number of milliseconds to delay according to
-    the current speed. E.g. if the speed is 200%, the
-    result will be half of the original delay.
-*/
 int QMoviePrivate::speedAdjustedDelay(int delay) const
 {
    return int( (qint64(delay) * qint64(100) ) / qint64(speed) );
 }
 
-/*!
-    \internal
-
-    Returns the QFrameInfo for the given \a frameNumber.
-
-    If the frame number is invalid, an invalid QFrameInfo is
-    returned.
-
-    If the end of the animation has been reached, a
-    special end marker QFrameInfo is returned.
-
-*/
 QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
 {
    if (frameNumber < 0) {
@@ -284,17 +257,6 @@ QFrameInfo QMoviePrivate::infoForFrame(int frameNumber)
    return frameMap.value(frameNumber);
 }
 
-/*!
-    \internal
-
-    Attempts to advance the animation to the next frame.
-    If successful, currentFrameNumber, currentPixmap and
-    nextDelay are updated accordingly, and true is returned.
-    Otherwise, false is returned.
-    When false is returned, isDone() can be called to
-    determine whether the animation ended gracefully or
-    an error occurred when reading the frame.
-*/
 bool QMoviePrivate::next()
 {
    QTime time;
@@ -344,8 +306,6 @@ bool QMoviePrivate::next()
    return true;
 }
 
-/*! \internal
- */
 void QMoviePrivate::_q_loadNextFrame()
 {
    _q_loadNextFrame(false);
@@ -388,18 +348,12 @@ void QMoviePrivate::_q_loadNextFrame(bool starting)
    }
 }
 
-/*!
-    \internal
-*/
 bool QMoviePrivate::isValid() const
 {
    return (greatestFrameNumber >= 0) // have we seen valid data
       || reader->canRead(); // or does the reader see valid data
 }
 
-/*!
-    \internal
-*/
 bool QMoviePrivate::jumpToFrame(int frameNumber)
 {
    if (frameNumber < 0) {

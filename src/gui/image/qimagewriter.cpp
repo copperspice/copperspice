@@ -221,9 +221,6 @@ class QImageWriterPrivate
    QImageWriter *q;
 };
 
-/*!
-    \internal
-*/
 QImageWriterPrivate::QImageWriterPrivate(QImageWriter *qq)
 {
    device       = nullptr;

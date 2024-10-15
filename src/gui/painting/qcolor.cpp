@@ -120,7 +120,7 @@ QColor::QColor(QRgba64 rgba64)
 {
    setRgba64(rgba64);
 }
-// internal
+
 QColor::QColor(Spec spec)
 {
    switch (spec) {
@@ -1458,8 +1458,6 @@ QColor::operator QVariant() const
    return QVariant(QVariant::Color, this);
 }
 
-
-// internal
 void QColor::invalidate()
 {
    cspec = Invalid;

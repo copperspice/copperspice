@@ -81,8 +81,6 @@ QHttpHeader::QHttpHeader(const QString &str)
    parse(str);
 }
 
-/*! \internal
- */
 QHttpHeader::QHttpHeader(QHttpHeaderPrivate &dd, const QString &str)
    : d_ptr(&dd)
 {
@@ -94,8 +92,6 @@ QHttpHeader::QHttpHeader(QHttpHeaderPrivate &dd, const QString &str)
    }
 }
 
-/*! \internal
- */
 QHttpHeader::QHttpHeader(QHttpHeaderPrivate &dd, const QHttpHeader &header)
    : d_ptr(&dd)
 {
@@ -123,15 +119,6 @@ bool QHttpHeader::isValid() const
    return d->valid;
 }
 
-/*! \internal
-    Parses the HTTP header string \a str for header fields and adds
-    the keys/values it finds. If the string is not parsed successfully
-    the QHttpHeader becomes \link isValid() invalid\endlink.
-
-    Returns true if \a str was successfully parsed; otherwise returns false.
-
-    \sa toString()
-*/
 bool QHttpHeader::parse(const QString &str)
 {
    Q_D(QHttpHeader);
@@ -177,8 +164,6 @@ bool QHttpHeader::parse(const QString &str)
    return true;
 }
 
-/*! \internal
-*/
 void QHttpHeader::setValid(bool v)
 {
    Q_D(QHttpHeader);
@@ -315,14 +300,6 @@ void QHttpHeader::removeAllValues(const QString &key)
    }
 }
 
-/*! \internal
-    Parses the single HTTP header line \a line which has the format
-    key, colon, space, value, and adds key/value to the headers. The
-    linenumber is \a number. Returns true if the line was successfully
-    parsed and the key/value added; otherwise returns false.
-
-    \sa parse()
-*/
 bool QHttpHeader::parseLine(const QString &line, int)
 {
    int i = line.indexOf(QLatin1Char(':'));
@@ -482,8 +459,6 @@ int QHttpRequestHeader::minorVersion() const
    return d->minVer;
 }
 
-/*! \internal
-*/
 bool QHttpRequestHeader::parseLine(const QString &line, int number)
 {
    Q_D(QHttpRequestHeader);
@@ -608,8 +583,6 @@ int QHttpResponseHeader::minorVersion() const
    return d->minVer;
 }
 
-/*! \internal
-*/
 bool QHttpResponseHeader::parseLine(const QString &line, int number)
 {
    Q_D(QHttpResponseHeader);

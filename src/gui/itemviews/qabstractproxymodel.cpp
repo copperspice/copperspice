@@ -44,7 +44,6 @@ QAbstractProxyModel::QAbstractProxyModel(QObject *parent)
    setSourceModel(QAbstractItemModelPrivate::staticEmptyModel());
 }
 
-// internal (cs)
 QAbstractProxyModel::QAbstractProxyModel(QAbstractProxyModelPrivate &dd, QObject *parent)
    : QAbstractItemModel(dd, parent)
 {

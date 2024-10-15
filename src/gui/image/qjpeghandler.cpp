@@ -905,9 +905,6 @@ static QImageIOHandler::Transformations exif2Qt(int exifOrientation)
    return QImageIOHandler::TransformationNone;
 }
 
-/*!
-    \internal
-*/
 bool QJpegHandlerPrivate::readJpegHeader(QIODevice *device)
 {
    if (state == Ready) {

@@ -330,7 +330,6 @@ QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
    d_func()->init();
 }
 
-// internal
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsSceneIndexPrivate &dd, QGraphicsScene *scene)
    : QObject(scene), d_ptr(&dd)
 {

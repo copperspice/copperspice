@@ -121,7 +121,6 @@ QKeySequenceEdit::QKeySequenceEdit(const QKeySequence &keySequence, QWidget *par
    setKeySequence(keySequence);
 }
 
-// internal
 QKeySequenceEdit::QKeySequenceEdit(QKeySequenceEditPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
    : QWidget(dd, parent, flags)
 {

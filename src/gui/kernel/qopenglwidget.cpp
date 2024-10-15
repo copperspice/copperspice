@@ -716,7 +716,6 @@ int QOpenGLWidget::metric(QPaintDevice::PaintDeviceMetric metric) const
    }
 }
 
-// internal
 QPaintDevice *QOpenGLWidget::redirected(QPoint *p) const
 {
    Q_D(const QOpenGLWidget);
@@ -727,7 +726,6 @@ QPaintDevice *QOpenGLWidget::redirected(QPoint *p) const
    return d->paintDevice;
 }
 
-// internal
 QPaintEngine *QOpenGLWidget::paintEngine() const
 {
    Q_D(const QOpenGLWidget);
@@ -745,7 +743,6 @@ QPaintEngine *QOpenGLWidget::paintEngine() const
    return d->paintDevice->paintEngine();
 }
 
-// internal
 bool QOpenGLWidget::event(QEvent *e)
 {
    Q_D(QOpenGLWidget);

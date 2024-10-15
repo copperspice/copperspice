@@ -594,12 +594,6 @@ OSStatus qt_mac_shape2QRegionHelper(int inMessage, HIShapeRef, const CGRect *inR
    return noErr;
 }
 
-
-/*!
-    \internal
-     Create's a mutable shape, it's the caller's responsibility to release.
-     WARNING: this function clamps the coordinates to SHRT_MIN/MAX on 10.4 and below.
-*/
 HIMutableShapeRef qt_mac_toHIMutableShape(const QRegion &region)
 {
    HIMutableShapeRef shape = HIShapeCreateMutable();
@@ -2313,9 +2307,6 @@ QMacStyle::~QMacStyle()
    qt_mac_backgroundPattern = nullptr;
 }
 
-/*! \internal
-    Generates the standard widget background pattern.
-*/
 QPixmap QMacStylePrivate::generateBackgroundPattern() const
 {
    QMacAutoReleasePool pool;
@@ -2327,10 +2318,6 @@ QPixmap QMacStylePrivate::generateBackgroundPattern() const
    return px;
 }
 
-/*! \internal
-    Fills the given \a rect with the pattern stored in \a brush. As an optimization,
-    HIThemeSetFill us used directly if we are filling with the standard background.
-*/
 void qt_mac_fill_background(QPainter *painter, const QRegion &rgn, const QBrush &brush)
 {
 

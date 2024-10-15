@@ -41,9 +41,6 @@
         return; \
     }
 
-/*
-  internal: guesses a descriptive text from a text suited for a menu entry
- */
 static QString qt_strippedText(QString s)
 {
    s.remove("...");
@@ -232,7 +229,6 @@ QAction::QAction(const QIcon &icon, const QString &text, QObject *parent)
    }
 }
 
-// internal
 QAction::QAction(QActionPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {

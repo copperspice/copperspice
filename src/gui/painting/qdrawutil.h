@@ -91,8 +91,6 @@ struct QTileRules {
    Qt::TileRule vertical;
 };
 
-
-// For internal use only
 namespace QDrawBorderPixmap {
 
 enum DrawingHint {

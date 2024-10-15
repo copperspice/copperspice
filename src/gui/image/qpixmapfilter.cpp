@@ -49,7 +49,6 @@ class QPixmapFilterPrivate
    QPixmapFilter *q_ptr;
 };
 
-// internal
 QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
    : QObject(parent), d_ptr(new QPixmapFilterPrivate)
 {
@@ -57,7 +56,6 @@ QPixmapFilter::QPixmapFilter(FilterType type, QObject *parent)
    d_func()->type = type;
 }
 
-// internal
 QPixmapFilter::QPixmapFilter(QPixmapFilterPrivate &d, QPixmapFilter::FilterType type, QObject *parent)
    : QObject(parent), d_ptr(&d)
 {
@@ -69,14 +67,12 @@ QPixmapFilter::~QPixmapFilter()
 {
 }
 
-// internal
 QPixmapFilter::FilterType QPixmapFilter::type() const
 {
    Q_D(const QPixmapFilter);
    return d->type;
 }
 
-// internal
 QRectF QPixmapFilter::boundingRectFor(const QRectF &rect) const
 {
    return rect;
@@ -100,7 +96,6 @@ class QPixmapConvolutionFilterPrivate : public QPixmapFilterPrivate
    bool convoluteAlpha;
 };
 
-// internal
 QPixmapConvolutionFilter::QPixmapConvolutionFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapConvolutionFilterPrivate, ConvolutionFilter, parent)
 {
@@ -331,7 +326,6 @@ void QPixmapConvolutionFilter::draw(QPainter *painter, const QPointF &p, const Q
    }
 }
 
-// internal
 class QPixmapBlurFilterPrivate : public QPixmapFilterPrivate
 {
  public:
@@ -341,18 +335,15 @@ class QPixmapBlurFilterPrivate : public QPixmapFilterPrivate
    QGraphicsBlurEffect::BlurHints hints;
 };
 
-// internal
 QPixmapBlurFilter::QPixmapBlurFilter(QObject *parent)
    : QPixmapFilter(*new QPixmapBlurFilterPrivate, BlurFilter, parent)
 {
 }
 
-// internal
 QPixmapBlurFilter::~QPixmapBlurFilter()
 {
 }
 
-// internal
 void QPixmapBlurFilter::setRadius(qreal radius)
 {
    Q_D(QPixmapBlurFilter);

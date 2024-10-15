@@ -27,7 +27,6 @@
 #include <qmediaservice.h>
 #include <qvideorenderercontrol.h>
 
-// internal
 QVideoSurfaceOutput::QVideoSurfaceOutput(QObject *parent)
    :  QObject(parent)
 {

@@ -740,7 +740,6 @@ bool QTextFormat::operator==(const QTextFormat &rhs) const
 
 QTextCharFormat::QTextCharFormat() : QTextFormat(CharFormat) {}
 
-// internal (cs)
 QTextCharFormat::QTextCharFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
@@ -864,7 +863,6 @@ QFont QTextCharFormat::font() const
 
 QTextBlockFormat::QTextBlockFormat() : QTextFormat(BlockFormat) {}
 
-// internal (cs)
 QTextBlockFormat::QTextBlockFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
@@ -910,7 +908,6 @@ QTextListFormat::QTextListFormat()
    setIndent(1);
 }
 
-// internal (cs)
 QTextListFormat::QTextListFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
@@ -922,7 +919,6 @@ QTextFrameFormat::QTextFrameFormat() : QTextFormat(FrameFormat)
    setBorderBrush(Qt::darkGray);
 }
 
-// internal (cs)
 QTextFrameFormat::QTextFrameFormat(const QTextFormat &fmt)
    : QTextFormat(fmt)
 {
@@ -977,7 +973,6 @@ QTextTableFormat::QTextTableFormat()
    setBorder(1);
 }
 
-// internal (cs)
 QTextTableFormat::QTextTableFormat(const QTextFormat &fmt)
    : QTextFrameFormat(fmt)
 {
@@ -988,7 +983,6 @@ QTextImageFormat::QTextImageFormat() : QTextCharFormat()
    setObjectType(ImageObject);
 }
 
-// internal (cs)
 QTextImageFormat::QTextImageFormat(const QTextFormat &fmt)
    : QTextCharFormat(fmt)
 {
@@ -1000,7 +994,6 @@ QTextTableCellFormat::QTextTableCellFormat()
    setObjectType(TableCellObject);
 }
 
-// internal (cs)
 QTextTableCellFormat::QTextTableCellFormat(const QTextFormat &fmt)
    : QTextCharFormat(fmt)
 {

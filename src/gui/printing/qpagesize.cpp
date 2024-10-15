@@ -976,33 +976,15 @@ QPageSize::QPageSize(const QSizeF &size, Unit units,
 {
 }
 
-/*!
-    \internal
-
-    Create page with given key, size and name, for use by printer plugin.
-*/
-
 QPageSize::QPageSize(const QString &key, const QSize &pointSize, const QString &name)
    : d(new QPageSizePrivate(key, pointSize, name))
 {
 }
 
-/*!
-    \internal
-
-    Create page with given windows ID, size and name, for use by printer plugin.
-*/
-
 QPageSize::QPageSize(int windowsId, const QSize &pointSize, const QString &name)
    : d(new QPageSizePrivate(windowsId, pointSize, name))
 {
 }
-
-/*!
-    \internal
-
-    Create page with given private backend
-*/
 
 QPageSize::QPageSize(QPageSizePrivate &dd)
    : d(&dd)

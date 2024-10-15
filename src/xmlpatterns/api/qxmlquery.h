@@ -39,8 +39,6 @@ class QXmlQueryPrivate;
 class QXmlResultItems;
 class QXmlSerializer;
 
-/* The members in the namespace QPatternistSDK are internal, not part of the public API, and
- * unsupported. Using them leads to undefined behavior. */
 namespace QPatternistSDK {
 class TestCase;
 }

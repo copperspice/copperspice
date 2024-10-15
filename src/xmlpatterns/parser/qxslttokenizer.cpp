@@ -1525,7 +1525,7 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
                      queueToken(LET, to);
                      queueToken(INTERNAL, to);
                      queueToken(DOLLAR, to);
-                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to); // TODO we need an internal name
+                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to);
                      queueToken(ASSIGN, to);
                      queueToken(LPAREN, to);
                      pushState(InsideSequenceConstructor);
@@ -1556,7 +1556,7 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
                      queueToken(CURLY_RBRACE, to);
                      queueToken(CURLY_LBRACE, to);
                      queueToken(DOLLAR, to);
-                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to); // TODO we need an internal name
+                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to);
                      queueToken(CURLY_RBRACE, to);
 
                      /* else if(self::document-node()) then */
@@ -1576,7 +1576,7 @@ bool XSLTTokenizer::insideSequenceConstructor(TokenSource::Queue *const to,
                      queueToken(INTERNAL, to);
                      queueToken(CURLY_LBRACE, to);
                      queueToken(DOLLAR, to);
-                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to); // TODO we need an internal name
+                     queueToken(Token(NCNAME, QString(QLatin1Char('b'))), to);
                      queueToken(CURLY_RBRACE, to);
 
                      /* else . */

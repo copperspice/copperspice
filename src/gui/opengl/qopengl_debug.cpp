@@ -488,7 +488,6 @@ class QOpenGLDebugMessagePrivate : public QSharedData
     QOpenGLDebugMessage::Severity severity;
 };
 
-// internal
 QOpenGLDebugMessagePrivate::QOpenGLDebugMessagePrivate()
     : message(), id(0), source(QOpenGLDebugMessage::InvalidSource),
       type(QOpenGLDebugMessage::InvalidType), severity(QOpenGLDebugMessage::InvalidSeverity)
@@ -668,7 +667,6 @@ class QOpenGLDebugLoggerPrivate
    QOpenGLDebugLogger *q_ptr;
 };
 
-// internal
 QOpenGLDebugLoggerPrivate::QOpenGLDebugLoggerPrivate()
     : glDebugMessageControl(nullptr), glDebugMessageInsert(nullptr), glDebugMessageCallback(nullptr),
       glGetDebugMessageLog(nullptr), glPushDebugGroup(nullptr), glPopDebugGroup(nullptr),
@@ -678,7 +676,6 @@ QOpenGLDebugLoggerPrivate::QOpenGLDebugLoggerPrivate()
 {
 }
 
-// internal
 void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source, GLenum type, GLuint id,
       GLenum severity, GLsizei length, const GLchar *rawMessage)
 {
@@ -702,7 +699,6 @@ void QOpenGLDebugLoggerPrivate::handleMessage(GLenum source, GLenum type, GLuint
     emit q->messageLogged(message);
 }
 
-// internal
 void QOpenGLDebugLoggerPrivate::controlDebugMessages(QOpenGLDebugMessage::Sources sources,
       QOpenGLDebugMessage::Types types, QOpenGLDebugMessage::Severities severities,
       const QVector<GLuint> &ids, const QByteArray &callerName, bool enable)
@@ -786,7 +782,6 @@ void QOpenGLDebugLoggerPrivate::controlDebugMessages(QOpenGLDebugMessage::Source
     }
 }
 
-// internal
 void QOpenGLDebugLoggerPrivate::_q_contextAboutToBeDestroyed()
 {
     Q_ASSERT(context);

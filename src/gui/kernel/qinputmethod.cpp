@@ -28,13 +28,11 @@
 #include <qplatform_inputcontext_p.h>
 #include <QDebug>
 
-// internal
 QInputMethod::QInputMethod()
    : d_ptr(new QInputMethodPrivate)
 {
 }
 
-// internal
 QInputMethod::~QInputMethod()
 {
 }

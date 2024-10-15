@@ -315,9 +315,6 @@ void QGtkStylePrivate::gtkWidgetSetFocus(GtkWidget *widget, bool focus)
    }
 }
 
-/*! \internal
- *  Get references to gtk functions after we dynamically load the library.
- */
 void QGtkStylePrivate::resolveGtk() const
 {
    // enforce the "0" suffix, so we'll open libgtk-x11-2.0.so.0
@@ -423,10 +420,6 @@ void QGtkStylePrivate::resolveGtk() const
    gnome_vfs_init = (Ptr_gnome_vfs_init)QLibrary::resolve(QLS("gnomevfs-2"), 0, "gnome_vfs_init");
 }
 
-/* \internal
- * Initializes a number of gtk menu widgets.
- * The widgets are cached.
- */
 void QGtkStylePrivate::initGtkMenu() const
 {
    // Create menubar
@@ -467,11 +460,6 @@ void QGtkStylePrivate::initGtkTreeview() const
    addWidget(gtkTreeView);
 }
 
-
-/* \internal
- * Initializes a number of gtk widgets that we can later on use to determine some of our styles.
- * The widgets are cached.
- */
 void QGtkStylePrivate::initGtkWidgets() const
 {
    // From gtkmain.c
@@ -573,9 +561,6 @@ void QGtkStylePrivate::initGtkWidgets() const
    }
 }
 
-/*! \internal
- * destroys all previously buffered widgets.
- */
 void QGtkStylePrivate::cleanupGtkWidgets()
 {
    if (!widgetMap) {
@@ -711,9 +696,6 @@ void QGtkStylePrivate::applyCustomPaletteHash()
    qApp->setPalette(menuBarPal, "QMenuBar");
 }
 
-/*! \internal
- *  Returns the gtk Widget that should be used to determine text foreground and background colors.
-*/
 GtkWidget *QGtkStylePrivate::getTextColorWidget() const
 {
    return  gtkWidget("GtkEntry");

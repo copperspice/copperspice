@@ -437,7 +437,6 @@ QImage &QImage::operator=(const QImage &image)
    return *this;
 }
 
-// internal
 int QImage::devType() const
 {
    return QInternal::Image;
@@ -448,7 +447,6 @@ QImage::operator QVariant() const
    return QVariant(QVariant::Image, this);
 }
 
-// internal
 void QImage::detach()
 {
    if (d) {
@@ -2227,7 +2225,6 @@ bool QImage::save(QIODevice *device, const QString &format, int quality) const
    return d->doImageIO(this, &writer, quality);
 }
 
-// internal
 bool QImageData::doImageIO(const QImage *image, QImageWriter *writer, int quality) const
 {
    if (quality > 100  || quality < -1) {
@@ -2426,7 +2423,6 @@ void QImage::setText(const QString &key, const QString &value)
    }
 }
 
-// internal
 QPaintEngine *QImage::paintEngine() const
 {
    if (!d) {
@@ -2447,7 +2443,6 @@ QPaintEngine *QImage::paintEngine() const
    return d->paintEngine;
 }
 
-// internal
 int QImage::metric(PaintDeviceMetric metric) const
 {
    if (! d) {
@@ -2650,7 +2645,6 @@ qint64 QImage::cacheKey() const
    }
 }
 
-// internal
 bool QImage::isDetached() const
 {
    return d && d->ref.load() == 1;

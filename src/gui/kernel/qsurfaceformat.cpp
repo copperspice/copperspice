@@ -102,9 +102,6 @@ QSurfaceFormat::QSurfaceFormat(QSurfaceFormat::FormatOptions options) :
 {
 }
 
-/*!
-    \internal
-*/
 void QSurfaceFormat::detach()
 {
    if (d->ref.load() != 1) {

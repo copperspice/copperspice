@@ -76,7 +76,7 @@ class QToolBarLayout : public QLayout
    QSize expandedSize(const QSize &size) const;
    bool expanded, animating;
 
-   void setUsePopupMenu(bool set);    // there's no getter, this is internal but public
+   void setUsePopupMenu(bool set);
    void checkUsePopupMenu();
 
    bool movable() const;

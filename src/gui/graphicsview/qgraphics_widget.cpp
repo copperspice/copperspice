@@ -57,7 +57,6 @@ QGraphicsWidget::QGraphicsWidget(QGraphicsItem *parent, Qt::WindowFlags flags)
    d->init(parent, flags);
 }
 
-// internal
 QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *parent, Qt::WindowFlags wFlags)
    : QGraphicsObject(dd, nullptr), QGraphicsLayoutItem(nullptr, false)
 {
@@ -65,7 +64,6 @@ QGraphicsWidget::QGraphicsWidget(QGraphicsWidgetPrivate &dd, QGraphicsItem *pare
    d->init(parent, wFlags);
 }
 
-// internal
 class QGraphicsWidgetStyles
 {
  public:
@@ -737,7 +735,6 @@ QVariant QGraphicsWidget::itemChange(GraphicsItemChange change, const QVariant &
    return QGraphicsItem::itemChange(change, value);
 }
 
-// internal
 QVariant QGraphicsWidget::propertyChange(const QString &propertyName, const QVariant &value)
 {
    (void) propertyName;

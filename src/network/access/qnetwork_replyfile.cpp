@@ -163,9 +163,6 @@ qint64 QNetworkReplyFileImpl::size() const
    return d->realFileSize;
 }
 
-/*!
-    \internal
-*/
 qint64 QNetworkReplyFileImpl::readData(char *data, qint64 maxlen)
 {
    Q_D(QNetworkReplyFileImpl);

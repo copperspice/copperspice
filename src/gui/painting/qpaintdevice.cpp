@@ -41,13 +41,11 @@ void QPaintDevice::initPainter(QPainter *) const
 {
 }
 
-// internal
 QPaintDevice *QPaintDevice::redirected(QPoint *) const
 {
    return nullptr;
 }
 
-// internal
 QPainter *QPaintDevice::sharedPainter() const
 {
    return nullptr;

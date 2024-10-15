@@ -203,7 +203,6 @@ QAbstractItemView::QAbstractItemView(QWidget *parent)
    d_func()->init();
 }
 
-// internal
 QAbstractItemView::QAbstractItemView(QAbstractItemViewPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {
@@ -2856,20 +2855,16 @@ QPoint QAbstractItemView::dirtyRegionOffset() const
    return d->scrollDelayOffset;
 }
 
-
-// internal
 void QAbstractItemView::startAutoScroll()
 {
    d_func()->startAutoScroll();
 }
 
-// internal
 void QAbstractItemView::stopAutoScroll()
 {
    d_func()->stopAutoScroll();
 }
 
-// internal
 void QAbstractItemView::doAutoScroll()
 {
    // find how much we should scroll with

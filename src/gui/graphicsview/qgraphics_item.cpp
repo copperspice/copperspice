@@ -89,7 +89,6 @@ static QGraphicsItemCustomDataStore *qt_dataStore()
    return &retval;
 }
 
-// internal
 static QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath &path, const QPen &pen)
 {
    // We unfortunately need this adjustment since QPainterPathStroker will set a width of 1.0
@@ -701,7 +700,6 @@ void QGraphicsItemPrivate::initStyleOption(QStyleOptionGraphicsItem *option, con
    }
 }
 
-// internal
 void QGraphicsItemCache::purge()
 {
    QPixmapCache::remove(key);
@@ -728,7 +726,6 @@ QGraphicsItem::QGraphicsItem(QGraphicsItem *parent)
    setParentItem(parent);
 }
 
-// internal
 QGraphicsItem::QGraphicsItem(QGraphicsItemPrivate &dd, QGraphicsItem *parent)
    : d_ptr(&dd)
 {
@@ -2142,7 +2139,6 @@ QGraphicsItem *QGraphicsItem::focusItem() const
    return d_ptr->subFocusItem;
 }
 
-// internal
 QGraphicsItem *QGraphicsItem::focusScopeItem() const
 {
    return d_ptr->focusScopeItem;
@@ -3086,7 +3082,6 @@ QList<QGraphicsItem *> QGraphicsItem::collidingItems(Qt::ItemSelectionMode mode)
    return QList<QGraphicsItem *>();
 }
 
-// internal
 static bool qt_QGraphicsItem_isObscured(const QGraphicsItem *item,
    const QGraphicsItem *other,
    const QRectF &rect)
@@ -3227,7 +3222,6 @@ int QGraphicsItemPrivate::depth() const
    return itemDepth;
 }
 
-// internal
 #ifndef QT_NO_GRAPHICSEFFECT
 void QGraphicsItemPrivate::invalidateParentGraphicsEffectsRecursively()
 {
@@ -3325,13 +3319,11 @@ void QGraphicsItemPrivate::removeChild(QGraphicsItem *child)
    }
 }
 
-// internal
 QGraphicsItemCache *QGraphicsItemPrivate::maybeExtraItemCache() const
 {
    return (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
 }
 
-// internal
 QGraphicsItemCache *QGraphicsItemPrivate::extraItemCache() const
 {
    QGraphicsItemCache *c = (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
@@ -3345,7 +3337,6 @@ QGraphicsItemCache *QGraphicsItemPrivate::extraItemCache() const
    return c;
 }
 
-// internal
 void QGraphicsItemPrivate::removeExtraItemCache()
 {
    QGraphicsItemCache *c = (QGraphicsItemCache *)(extra(ExtraCacheData)).value<void *>();
@@ -4411,28 +4402,24 @@ QVariant QGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &va
    return value;
 }
 
-// internal
 bool QGraphicsItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsItem::extension(const QVariant &variant) const
 {
    (void) variant;
    return QVariant();
 }
 
-// internal
 void QGraphicsItem::addToIndex()
 {
    if (d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
@@ -4446,7 +4433,6 @@ void QGraphicsItem::addToIndex()
    }
 }
 
-// internal
 void QGraphicsItem::removeFromIndex()
 {
    if (d_ptr->ancestorFlags & QGraphicsItemPrivate::AncestorClipsChildren
@@ -4559,7 +4545,6 @@ QGraphicsObject::QGraphicsObject(QGraphicsItem *parent)
    QGraphicsItem::d_ptr->isObject = true;
 }
 
-// internal
 QGraphicsObject::QGraphicsObject(QGraphicsItemPrivate &dd, QGraphicsItem *parent)
    : QGraphicsItem(dd, parent)
 {
@@ -4715,7 +4700,6 @@ QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QGraphicsItem *parent)
 {
 }
 
-// internal
 QAbstractGraphicsShapeItem::QAbstractGraphicsShapeItem(QAbstractGraphicsShapeItemPrivate &dd, QGraphicsItem *parent)
    : QGraphicsItem(dd, parent)
 {
@@ -4870,21 +4854,18 @@ int QGraphicsPathItem::type() const
    return Type;
 }
 
-// internal
 bool QGraphicsPathItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsPathItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsPathItem::extension(const QVariant &variant) const
 {
    (void) variant;
@@ -5002,7 +4983,6 @@ bool QGraphicsRectItem::supportsExtension(Extension extension) const
    return false;
 }
 
-// internal
 void QGraphicsRectItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
@@ -5188,7 +5168,6 @@ void QGraphicsEllipseItem::setExtension(Extension extension, const QVariant &var
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsEllipseItem::extension(const QVariant &variant) const
 {
    (void) variant;
@@ -5315,21 +5294,18 @@ int QGraphicsPolygonItem::type() const
    return Type;
 }
 
-// internal
 bool QGraphicsPolygonItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsPolygonItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsPolygonItem::extension(const QVariant &variant) const
 {
    (void) variant;
@@ -5470,21 +5446,18 @@ int QGraphicsLineItem::type() const
    return Type;
 }
 
-// internal
 bool QGraphicsLineItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsLineItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsLineItem::extension(const QVariant &variant) const
 {
    (void) variant;
@@ -5606,7 +5579,6 @@ void QGraphicsPixmapItem::setOffset(const QPointF &offset)
    update();
 }
 
-// internal
 QRectF QGraphicsPixmapItem::boundingRect() const
 {
    Q_D(const QGraphicsPixmapItem);
@@ -5624,7 +5596,6 @@ QRectF QGraphicsPixmapItem::boundingRect() const
    }
 }
 
-// internal
 QPainterPath QGraphicsPixmapItem::shape() const
 {
    Q_D(const QGraphicsPixmapItem);
@@ -5636,13 +5607,11 @@ QPainterPath QGraphicsPixmapItem::shape() const
    return d_func()->shape;
 }
 
-// internal
 bool QGraphicsPixmapItem::contains(const QPointF &point) const
 {
    return QGraphicsItem::contains(point);
 }
 
-// internal
 void QGraphicsPixmapItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
    QWidget *widget)
 {
@@ -5690,21 +5659,18 @@ void QGraphicsPixmapItem::setShapeMode(ShapeMode mode)
    d->hasShape = false;
 }
 
-// internal
 bool QGraphicsPixmapItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsPixmapItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsPixmapItem::extension(const QVariant &variant) const
 {
    (void) variant;
@@ -6151,28 +6117,24 @@ QVariant QGraphicsTextItem::inputMethodQuery(Qt::InputMethodQuery query) const
    return v;
 }
 
-// internal
 bool QGraphicsTextItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsTextItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsTextItem::extension(const QVariant &variant) const
 {
    (void) variant;
    return QVariant();
 }
 
-// internal
 void QGraphicsTextItemPrivate::_q_update(QRectF rect)
 {
    if (rect.isValid()) {
@@ -6186,7 +6148,6 @@ void QGraphicsTextItemPrivate::_q_update(QRectF rect)
    }
 }
 
-// internal
 void QGraphicsTextItemPrivate::_q_updateBoundingRect(const QSizeF &size)
 {
    if (! control) {
@@ -6205,7 +6166,6 @@ void QGraphicsTextItemPrivate::_q_updateBoundingRect(const QSizeF &size)
    qq->update();
 }
 
-// internal
 void QGraphicsTextItemPrivate::_q_ensureVisible(QRectF rect)
 {
    if (qq->hasFocus()) {
@@ -6242,7 +6202,6 @@ QTextControl *QGraphicsTextItemPrivate::textControl() const
    return control;
 }
 
-// internal
 bool QGraphicsTextItemPrivate::_q_mouseOnEdge(QGraphicsSceneMouseEvent *event)
 {
    QPainterPath path;
@@ -6488,21 +6447,18 @@ int QGraphicsSimpleTextItem::type() const
    return Type;
 }
 
-// internal
 bool QGraphicsSimpleTextItem::supportsExtension(Extension extension) const
 {
    (void) extension;
    return false;
 }
 
-// internal
 void QGraphicsSimpleTextItem::setExtension(Extension extension, const QVariant &variant)
 {
    (void) extension;
    (void) variant;
 }
 
-// internal
 QVariant QGraphicsSimpleTextItem::extension(const QVariant &variant) const
 {
    (void) variant;

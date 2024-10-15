@@ -39,12 +39,6 @@ struct QGridLayoutSizeTriple {
    QSize maxS;
 };
 
-/*
-  Three internal classes related to QGridLayout: (1) QGridBox is a
-  QLayoutItem with (row, column) information and (torow, tocolumn) information; (3) QGridLayoutData is
-  the internal representation of a QGridLayout.
-*/
-
 class QGridBox
 {
  public:

@@ -56,9 +56,6 @@ void QPaintDeviceWindow::paintEvent(QPaintEvent *event)
    (void) event;
 }
 
-/*!
-  \internal
- */
 int QPaintDeviceWindow::metric(PaintDeviceMetric metric) const
 {
    QScreen *screen = this->screen();
@@ -124,7 +121,6 @@ int QPaintDeviceWindow::metric(PaintDeviceMetric metric) const
    return QPaintDevice::metric(metric);
 }
 
-// internal
 void QPaintDeviceWindow::exposeEvent(QExposeEvent *exposeEvent)
 {
    (void) exposeEvent;
@@ -145,7 +141,6 @@ void QPaintDeviceWindow::exposeEvent(QExposeEvent *exposeEvent)
    }
 }
 
-// internal
 bool QPaintDeviceWindow::event(QEvent *event)
 {
    Q_D(QPaintDeviceWindow);
@@ -162,13 +157,11 @@ bool QPaintDeviceWindow::event(QEvent *event)
    return QWindow::event(event);
 }
 
-// internal
 QPaintDeviceWindow::QPaintDeviceWindow(QPaintDeviceWindowPrivate &dd, QWindow *parent)
    : QWindow(dd, parent)
 {
 }
 
-// internal
 QPaintEngine *QPaintDeviceWindow::paintEngine() const
 {
    return nullptr;

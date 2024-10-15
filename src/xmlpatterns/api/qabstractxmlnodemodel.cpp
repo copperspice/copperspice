@@ -113,11 +113,6 @@ class IteratorVector : public
 };
 }
 
-/*!
- \internal
- This function is not a private member of QAbstractXmlNodeModel
- because it would be messy to forward declare the required types.
-*/
 static inline QXmlNodeModelIndexIteratorPointer mergeIterators(const QXmlNodeModelIndex &node,
       const QXmlNodeModelIndexIteratorPointer &it2)
 {
@@ -140,53 +135,6 @@ QAbstractXmlNodeModel::mapToSequence(const QXmlNodeModelIndex &ni, const Dynamic
                          ni.iterate(QXmlNodeModelIndex::AxisChild),
                          DynamicContext::Ptr()));
 }
-
-/*!
-  \internal
-
-  Performs navigation, starting from \a ni, by returning an
-  QAbstractXmlForwardIterator that returns nodes the \a axis emanating
-  from \a ni.
-
-  The implementation returns the nodes on the \a axis, without
-  duplicates and in \a axis order. This means that if \a axis is a
-  reverse axis, which is the case for the \c parent, \c ancestor, \c
-  ancestor-or-self, \c preceding, and \c preceding-sibling, the nodes
-  are delivered in reverse document order. Otherwise the nodes are
-  delivered in document order.
-
-  The implementor guarantees that the nodes delivered for the axes are
-  consistent with the XPath Data Model. This just implies common
-  sense, e.g., The child axis for a comment node can't contain any
-  children; a document node can't be a child of an element, etc.
-  Attributes aren't considered children of an element, but are only
-  available on AxisAttribute.
-
-  The value past in \a axis is not guaranteed based on what is used in
-  a query. QtXmlPatterns may call this function arbitrarily with any
-  value for \a axis. This is because QtXmlPatterns may rewrite queries
-  to be more efficient, using axes in different ways from the original
-  query.
-
-  QAbstractXmlNodeModel::Axis has a good overview of the axes and what
-  they select.
-
-  The caller guarantees that \a ni is not \c null and that it belongs
-  to this QAbstractXmlNodeModel instance.
-
-  Implementing iterate() can involve significant work, since it
-  requires different iterators for all the axes used. In the worst
-  case, it could require writing as many QAbstractXmlForwardIterator
-  subclasses as there are axes, but the number can often be reduced
-  with clever use of lists and template classes. It is better to use
-  or subclass QSimpleXmlNodeModel, which makes it easier to write the
-  node navigation code without loss of efficiency or flexibility.
-
-  \sa QSimpleXmlNodeModel
-  \sa QXmlNodeModelIndex::Axis
-  \sa {http://www.w3.org/TR/xquery/#axes}{XQuery 1.0: An XML Query Language, 3.2.1.1 Axes}
-  \sa {http://www.w3.org/TR/xpath-datamodel/}{W3CXQuery 1.0 and XPath 2.0 Data Model (XDM)}
- */
 
 QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> >
 
@@ -392,23 +340,6 @@ QXmlName::NamespaceCode QAbstractXmlNodeModel::namespaceForPrefix(const QXmlNode
    return NamespaceResolver::NoBinding;
 }
 
-
-/*!
-  \internal
-
-  Determines whether \a ni1 is deep equal to \a ni2.
-
-  isDeepEqual() is defined as evaluating the expression \c
-  fn:deep-equal($n1, $n2) where \c $n1 is \a ni1 and \c $n1 is \a
-  ni2. This function is associative, meaning the same value is
-  returned regardless of if isDeepEqual() is invoked with \a ni1 as
-  first argument or second. It is guaranteed that \a ni1 and \a ni2
-  are nodes, as opposed to the definition of \c fn:deep-equal().
-
-  Returns true if \a ni1 is deep-equal to \a ni2, otherwise false
-
-  \sa {"http://www.w3.org/TR/xpath-functions/#func-deep-equal"}{XQuery 1.0 and XPath 2.0 Functions and Operators, 15.3.1 fn:deep-equal}
- */
 bool QAbstractXmlNodeModel::isDeepEqual(const QXmlNodeModelIndex &n1, const QXmlNodeModelIndex &n2) const
 {
    Q_ASSERT(!n1.isNull());

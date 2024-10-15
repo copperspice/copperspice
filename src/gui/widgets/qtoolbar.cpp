@@ -921,9 +921,6 @@ QWidget *QToolBar::widgetForAction(QAction *action) const
 
 extern QMainWindowLayout *qt_mainwindow_layout(const QMainWindow *window);
 
-/*!
-    \internal
-*/
 void QToolBar::initStyleOption(QStyleOptionToolBar *option) const
 {
    Q_D(const QToolBar);

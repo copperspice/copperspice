@@ -30,7 +30,6 @@
 
 typedef QPenPrivate QPenData;
 
-// internal
 inline QPenPrivate::QPenPrivate(const QBrush &_brush, qreal _width, Qt::PenStyle penStyle,
    Qt::PenCapStyle _capStyle, Qt::PenJoinStyle _joinStyle, bool _defaultWidth)
    : ref(1), dashOffset(0), miterLimit(2), cosmetic(false), defaultWidth(_defaultWidth)

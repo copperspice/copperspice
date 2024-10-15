@@ -42,7 +42,6 @@ QNetworkReply::QNetworkReply(QObject *parent)
 {
 }
 
-// internal
 QNetworkReply::QNetworkReply(QNetworkReplyPrivate &dd, QObject *parent)
    : QIODevice(dd, parent)
 {
@@ -57,7 +56,6 @@ void QNetworkReply::close()
    QIODevice::close();
 }
 
-// internal
 bool QNetworkReply::isSequential() const
 {
    return true;
@@ -184,7 +182,6 @@ void QNetworkReply::ignoreSslErrors()
 {
 }
 
-// internal
 qint64 QNetworkReply::writeData(const char *, qint64)
 {
    return -1;                  // unable to write

@@ -111,8 +111,8 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
       Reset              = 0x04000000,
       RestoreDefaults    = 0x08000000,
 
-      FirstButton        = Ok,                // internal
-      LastButton         = RestoreDefaults,   // internal
+      FirstButton        = Ok,
+      LastButton         = RestoreDefaults,
 
       YesAll             = YesToAll,          // obsolete
       NoAll              = NoToAll,           // obsolete

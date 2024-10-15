@@ -141,7 +141,7 @@ class QTreeModel : public QAbstractItemModel
    QList<QTreeWidgetItemIterator *> iterators;
 
    mutable QBasicTimer sortPendingTimer;
-   mutable bool skipPendingSort; //while doing internal operation we don't care about sorting
+   mutable bool skipPendingSort;
    bool inline executePendingSort() const;
 
    bool isChanging() const;

@@ -1097,9 +1097,6 @@ QPainterPath QRenderRule::borderClip(QRect r)
    return path;
 }
 
-/*! \internal
-  Clip the painter to the border (in case we are using radius border)
- */
 void QRenderRule::setClip(QPainter *p, const QRect &rect)
 {
    if (clipset++) {
@@ -2405,11 +2402,6 @@ QRect QStyleSheetStyle::positionRect(const QWidget *w, const QRenderRule &rule1,
    return positionRect(w, rule2, pe, originRect, dir);
 }
 
-
-/** \internal
-   For widget that have an embedded widget (such as combobox) return that embedded widget.
-   otherwise return the widget itself
- */
 static QWidget *embeddedWidget(QWidget *w)
 {
 #ifndef QT_NO_COMBOBOX
@@ -2437,13 +2429,6 @@ static QWidget *embeddedWidget(QWidget *w)
    return w;
 }
 
-/** \internal
-  in case w is an embedded widget, return the container widget
-  (i.e, the widget for which the rules actualy apply)
-  (exemple, if w is a lineedit embedded in a combobox, return the combobox)
-
-  if w is not embedded, return w itself
-*/
 static QWidget *containerWidget(const QWidget *w)
 {
 #ifndef QT_NO_LINEEDIT
@@ -2476,9 +2461,6 @@ static QWidget *containerWidget(const QWidget *w)
    return const_cast<QWidget *>(w);
 }
 
-/** \internal
-    returns true if the widget can NOT be styled directly
- */
 static bool unstylable(const QWidget *w)
 {
    if (w->windowType() == Qt::Desktop) {

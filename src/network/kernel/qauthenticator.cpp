@@ -84,9 +84,6 @@ QAuthenticator &QAuthenticator::operator=(const QAuthenticator &other)
       return *this;
    }
 
-   // Do not share the d since challenge reponse/based changes
-   // could corrupt the internal store and different network requests
-   // can utilize different types of proxies.
    detach();
 
    if (other.d) {
@@ -146,9 +143,6 @@ void QAuthenticator::setPassword(const QString &password)
    d->password = password;
 }
 
-/*!
-  \internal
-*/
 void QAuthenticator::detach()
 {
    if (!d) {

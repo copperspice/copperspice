@@ -39,9 +39,6 @@ void QAbstractXmlReceiver::sendFromAxis(const QXmlNodeModelIndex &node)
    }
 }
 
-/*!
- \internal
- */
 QAbstractXmlReceiver::QAbstractXmlReceiver(QAbstractXmlReceiverPrivate *d)
    : d_ptr(d)
 {
@@ -114,9 +111,6 @@ void QAbstractXmlReceiver::whitespaceOnly(QStringView value)
    characters(QStringView(v));
 }
 
-/*!
-  \internal
- */
 void QAbstractXmlReceiver::item(const QPatternist::Item &item)
 {
    if (item.isNode()) {

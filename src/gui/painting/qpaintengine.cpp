@@ -312,7 +312,6 @@ QPaintEngine::QPaintEngine(PaintEngineFeatures caps)
    d_ptr->q_ptr = this;
 }
 
-// internal
 QPaintEngine::QPaintEngine(QPaintEnginePrivate &dptr, PaintEngineFeatures caps)
    : state(nullptr), gccaps(caps), active(0), selfDestruct(false), extended(false), d_ptr(&dptr)
 {
@@ -464,10 +463,6 @@ void QPaintEngine::drawRects(const QRectF *rectPtr, int rectCount)
    }
 }
 
-/*!
-    \internal
-    Sets the paintdevice that this engine operates on to \a device
-*/
 void QPaintEngine::setPaintDevice(QPaintDevice *device)
 {
    d_func()->pdev = device;
@@ -496,25 +491,11 @@ void QPaintEngine::setSystemClip(const QRegion &region)
    }
 }
 
-/*!
-    \internal
-
-    Returns the system clip. The system clip is read only while the
-    painter is active. An empty region indicates that system clip
-    is not in use.
-*/
-
 QRegion QPaintEngine::systemClip() const
 {
    return d_func()->systemClip;
 }
 
-/*!
-    \internal
-
-    Sets the target rect for drawing within the backing store. This
-    function should ONLY be used by the backing store.
-*/
 void QPaintEngine::setSystemRect(const QRect &rect)
 {
    if (isActive()) {
@@ -524,12 +505,6 @@ void QPaintEngine::setSystemRect(const QRect &rect)
    d_func()->systemRect = rect;
 }
 
-/*!
-    \internal
-
-    Retrieves the rect for drawing within the backing store. This
-    function should ONLY be used by the backing store.
- */
 QRect QPaintEngine::systemRect() const
 {
    return d_func()->systemRect;

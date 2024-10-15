@@ -384,9 +384,6 @@ void QOpenGLWindow::resizeEvent(QResizeEvent *event)
    resizeGL(width(), height());
 }
 
-/*!
-  \internal
- */
 int QOpenGLWindow::metric(PaintDeviceMetric metric) const
 {
    Q_D(const QOpenGLWindow);
@@ -403,9 +400,6 @@ int QOpenGLWindow::metric(PaintDeviceMetric metric) const
    return QPaintDeviceWindow::metric(metric);
 }
 
-/*!
-  \internal
- */
 QPaintDevice *QOpenGLWindow::redirected(QPoint *) const
 {
    Q_D(const QOpenGLWindow);

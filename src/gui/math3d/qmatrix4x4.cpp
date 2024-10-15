@@ -41,9 +41,6 @@ QMatrix4x4::QMatrix4x4(const qreal *values)
    flagBits = General;
 }
 
-/*!
-    \internal
-*/
 QMatrix4x4::QMatrix4x4(const qreal *values, int cols, int rows)
 {
    for (int col = 0; col < 4; ++col) {
@@ -642,9 +639,6 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
    }
 }
 
-/*!
-    \internal
-*/
 void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
 {
    // Used by QGraphicsRotation::applyTo() to perform a rotation

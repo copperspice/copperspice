@@ -385,13 +385,11 @@ QFont::QFont(const QFont &font, QPaintDevice *pd)
    }
 }
 
-// internal
 QFont::QFont(QFontPrivate *data)
    : d(data), resolve_mask(QFont::AllPropertiesResolved)
 {
 }
 
-// internal
 void QFont::detach()
 {
    if (d->ref.load() == 1) {

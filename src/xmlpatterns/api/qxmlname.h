@@ -58,8 +58,6 @@ class Q_XMLPATTERNS_EXPORT QXmlName
    static bool isNCName(const QString &candidate);
    static QXmlName fromClarkName(const QString &clarkName, const QXmlNamePool &namePool);
 
-   /* The members below are internal, not part of the public API, and
-    * unsupported. Using them is undefined behavior. */
    typedef qint64 Code;
 
    inline QXmlName(const NamespaceCode uri, const LocalNameCode ln, const PrefixCode p = 0);

@@ -233,10 +233,7 @@ QTransform QPainterPrivate::hidpiScaleTransform() const
    const qreal devicePixelRatio = effectiveDevicePixelRatio();
    return QTransform::fromScale(devicePixelRatio, devicePixelRatio);
 }
-/*
-   \internal
-   Returns true if using a shared painter; otherwise false.
-*/
+
 bool QPainterPrivate::attachPainterPrivate(QPainter *q, QPaintDevice *pdev)
 {
    Q_ASSERT(q);
@@ -3752,7 +3749,6 @@ void QPainter::drawStaticText(const QPointF &topLeftPosition, const QStaticText 
    }
 }
 
-// internal
 void QPainter::drawText(const QPointF &p, const QString &str, int tf, int justificationPadding)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)

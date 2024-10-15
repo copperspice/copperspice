@@ -156,13 +156,11 @@ void qt_gl_set_global_share_context(QOpenGLContext *context)
    global_share_context = context;
 }
 
-// internal
 QOpenGLContext *qt_gl_global_share_context()
 {
    return global_share_context;
 }
 
-// internal
 QOpenGLContext *QOpenGLContextPrivate::setCurrentContext(QOpenGLContext *context)
 {
    QGuiGLThreadContext *threadContext = qwindow_context_storage()->localData();
@@ -259,14 +257,12 @@ bool QOpenGLContext::areSharing(QOpenGLContext *first, QOpenGLContext *second)
    return first->shareGroup() == second->shareGroup();
 }
 
-// internal
 QPlatformOpenGLContext *QOpenGLContext::handle() const
 {
    Q_D(const QOpenGLContext);
    return d->platformGLContext;
 }
 
-// internal
 QPlatformOpenGLContext *QOpenGLContext::shareHandle() const
 {
    Q_D(const QOpenGLContext);
@@ -654,14 +650,12 @@ QScreen *QOpenGLContext::screen() const
    return d->screen;
 }
 
-// internal
 void *QOpenGLContext::qGLContextHandle() const
 {
    Q_D(const QOpenGLContext);
    return d->qGLContextHandle;
 }
 
-// internal
 void QOpenGLContext::setQGLContextHandle(void *handle, void (*qGLContextDeleteFunction)(void *))
 {
    Q_D(QOpenGLContext);
@@ -669,7 +663,6 @@ void QOpenGLContext::setQGLContextHandle(void *handle, void (*qGLContextDeleteFu
    d->qGLContextDeleteFunction = qGLContextDeleteFunction;
 }
 
-// internal
 void QOpenGLContext::deleteQGLContext()
 {
    Q_D(QOpenGLContext);
@@ -720,14 +713,12 @@ QOpenGLContext *QOpenGLContext::globalShareContext()
    return qt_gl_global_share_context();
 }
 
-// internal
 QOpenGLVersionFunctionsBackend *QOpenGLContext::functionsBackend(const QOpenGLVersionStatus &v) const
 {
    Q_D(const QOpenGLContext);
    return d->versionFunctionsBackend.value(v, nullptr);
 }
 
-// internal
 void QOpenGLContext::insertFunctionsBackend(const QOpenGLVersionStatus &v,
    QOpenGLVersionFunctionsBackend *backend)
 {
@@ -735,35 +726,30 @@ void QOpenGLContext::insertFunctionsBackend(const QOpenGLVersionStatus &v,
    d->versionFunctionsBackend.insert(v, backend);
 }
 
-// internal
 void QOpenGLContext::removeFunctionsBackend(const QOpenGLVersionStatus &v)
 {
    Q_D(QOpenGLContext);
    d->versionFunctionsBackend.remove(v);
 }
 
-// internal
 void QOpenGLContext::insertExternalFunctions(QAbstractOpenGLFunctions *f)
 {
    Q_D(QOpenGLContext);
    d->externalVersionFunctions.insert(f);
 }
 
-// internal
 void QOpenGLContext::removeExternalFunctions(QAbstractOpenGLFunctions *f)
 {
    Q_D(QOpenGLContext);
    d->externalVersionFunctions.remove(f);
 }
 
-// internal
 QOpenGLTextureHelper *QOpenGLContext::textureFunctions() const
 {
    Q_D(const QOpenGLContext);
    return d->textureFunctions;
 }
 
-// internal
 void QOpenGLContext::setTextureFunctions(QOpenGLTextureHelper *textureFuncs)
 {
    Q_D(QOpenGLContext);
@@ -776,7 +762,6 @@ QOpenGLContextGroup::QOpenGLContextGroup()
    d_ptr->q_ptr = this;
 }
 
-// internal
 QOpenGLContextGroup::~QOpenGLContextGroup()
 {
    Q_D(QOpenGLContextGroup);
@@ -905,7 +890,6 @@ void QOpenGLSharedResource::free()
    }
 }
 
-// internal
 void QOpenGLSharedResourceGuard::freeResource(QOpenGLContext *context)
 {
    if (m_id) {
@@ -915,7 +899,6 @@ void QOpenGLSharedResourceGuard::freeResource(QOpenGLContext *context)
    }
 }
 
-// internal
 QOpenGLMultiGroupSharedResource::QOpenGLMultiGroupSharedResource()
    : active(0)
 {

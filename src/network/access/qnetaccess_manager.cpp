@@ -398,7 +398,6 @@ QNetworkAccessManager::NetworkAccessibility QNetworkAccessManager::networkAccess
    }
 }
 
-// internal
 const QWeakPointer<const QNetworkSession> QNetworkAccessManagerPrivate::getNetworkSession(const QNetworkAccessManager *q)
 {
    return q->d_func()->networkSessionWeakRef;

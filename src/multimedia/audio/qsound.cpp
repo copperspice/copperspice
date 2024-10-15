@@ -99,13 +99,9 @@ void QSound::stop()
    m_soundEffect->stop();
 }
 
-/*!
-    \internal
-*/
 void QSound::deleteOnComplete()
 {
    if (!m_soundEffect->isPlaying()) {
       deleteLater();
    }
 }
-

@@ -33,9 +33,6 @@ public:
     bool active;
 };
 
-/*!
-  \internal
- */
 QVideoFilterRunnable::~QVideoFilterRunnable()
 {
 }
@@ -46,9 +43,6 @@ QAbstractVideoFilter::QAbstractVideoFilter(QObject *parent) :
 {
 }
 
-/*!
-  \internal
- */
 QAbstractVideoFilter::~QAbstractVideoFilter()
 {
     delete d_ptr;

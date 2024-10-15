@@ -210,7 +210,6 @@ void QOpenGLVertexArrayObjectPrivate::destroy()
     vao = 0;
 }
 
-// internal
 void QOpenGLVertexArrayObjectPrivate::_q_contextAboutToBeDestroyed()
 {
     destroy();
@@ -269,7 +268,6 @@ QOpenGLVertexArrayObject::QOpenGLVertexArrayObject(QObject* parent)
    d_ptr->q_ptr = this;
 }
 
-// internal
 QOpenGLVertexArrayObject::QOpenGLVertexArrayObject(QOpenGLVertexArrayObjectPrivate &dd)
     : d_ptr(&dd)
 {

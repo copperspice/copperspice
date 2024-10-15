@@ -330,8 +330,6 @@ QPrinter::OutputFormat QPrinter::outputFormat() const
 
 
 
-/*! \internal
-*/
 int QPrinter::devType() const
 {
    return QInternal::Printer;

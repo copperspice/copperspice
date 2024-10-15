@@ -222,7 +222,6 @@ QFocusEvent::QFocusEvent(Type type, Qt::FocusReason reason)
 {
 }
 
-// internal
 QFocusEvent::~QFocusEvent()
 {
 }
@@ -242,7 +241,6 @@ QPaintEvent::QPaintEvent(const QRect &paintRect)
 {
 }
 
-// internal
 QPaintEvent::~QPaintEvent()
 { }
 
@@ -250,7 +248,6 @@ QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
    : QEvent(Move), p(pos), oldp(oldPos)
 {}
 
-// internal
 QMoveEvent::~QMoveEvent()
 { }
 
@@ -443,7 +440,6 @@ QDropEvent::QDropEvent(const QPointF &pos, Qt::DropActions actions, const QMimeD
    ignore();
 }
 
-// internal
 QDropEvent::~QDropEvent()
 {}
 
@@ -470,7 +466,6 @@ QDragEnterEvent::QDragEnterEvent(const QPoint &point, Qt::DropActions actions, c
    : QDragMoveEvent(point, actions, data, buttons, modifiers, DragEnter)
 {}
 
-// internal
 QDragEnterEvent::~QDragEnterEvent()
 {}
 
@@ -478,7 +473,6 @@ QDragLeaveEvent::QDragLeaveEvent()
    : QEvent(DragLeave)
 {}
 
-// internal
 QDragLeaveEvent::~QDragLeaveEvent()
 {}
 #endif // QT_NO_DRAGANDDROP
@@ -496,7 +490,6 @@ QStatusTipEvent::QStatusTipEvent(const QString &tip)
    : QEvent(StatusTip), s(tip)
 {}
 
-// internal
 QStatusTipEvent::~QStatusTipEvent()
 {}
 
@@ -508,7 +501,6 @@ QWhatsThisClickedEvent::QWhatsThisClickedEvent(const QString &href)
    : QEvent(WhatsThisClicked), s(href)
 {}
 
-// internal
 QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
 {
 }
@@ -521,7 +513,6 @@ QActionEvent::QActionEvent(int type, QAction *action, QAction *before)
    : QEvent(static_cast<QEvent::Type>(type)), act(action), bef(before)
 {}
 
-// internal
 QActionEvent::~QActionEvent()
 {}
 
@@ -531,7 +522,6 @@ QHideEvent::QHideEvent()
    : QEvent(Hide)
 {}
 
-// internal
 QHideEvent::~QHideEvent()
 {}
 
@@ -539,21 +529,17 @@ QShowEvent::QShowEvent()
    : QEvent(Show)
 {}
 
-// internal
 QShowEvent::~QShowEvent()
 {}
 
-// internal
 QFileOpenEvent::QFileOpenEvent(const QString &file)
    : QEvent(FileOpen), f(file), m_url(QUrl::fromLocalFile(file))
 {}
 
-// internal
 QFileOpenEvent::QFileOpenEvent(const QUrl &url)
    : QEvent(FileOpen), f(url.toLocalFile()), m_url(url)
 {}
 
-// internal
 QFileOpenEvent::~QFileOpenEvent()
 {}
 
@@ -565,12 +551,10 @@ bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
 
 #ifndef QT_NO_TOOLBAR
 
-// internal
 QToolBarChangeEvent::QToolBarChangeEvent(bool t)
    : QEvent(ToolBarChange), tog(t)
 {}
 
-// internal
 QToolBarChangeEvent::~QToolBarChangeEvent()
 {}
 
@@ -1117,13 +1101,11 @@ QWindowStateChangeEvent::QWindowStateChangeEvent(Qt::WindowStates s, bool isOver
 {
 }
 
-// internal
 bool QWindowStateChangeEvent::isOverride() const
 {
    return m_override;
 }
 
-// internal
 QWindowStateChangeEvent::~QWindowStateChangeEvent()
 {}
 
@@ -1138,20 +1120,17 @@ QTouchEvent::~QTouchEvent()
 {
 }
 
-// internal
 QTouchEvent::TouchPoint::TouchPoint(int id)
    : d(new QTouchEventTouchPointPrivate(id))
 {
 }
 
-// internal
 QTouchEvent::TouchPoint::TouchPoint(const QTouchEvent::TouchPoint &other)
    : d(other.d)
 {
    d->ref.ref();
 }
 
-// internal
 QTouchEvent::TouchPoint::~TouchPoint()
 {
    if (d && ! d->ref.deref()) {
@@ -1264,7 +1243,6 @@ QVector<QPointF> QTouchEvent::TouchPoint::rawScreenPositions() const
    return d->rawScreenPositions;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setId(int id)
 {
    if (d->ref.load() != 1) {
@@ -1273,7 +1251,6 @@ void QTouchEvent::TouchPoint::setId(int id)
    d->id = id;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setState(Qt::TouchPointStates state)
 {
    if (d->ref.load() != 1) {
@@ -1282,7 +1259,6 @@ void QTouchEvent::TouchPoint::setState(Qt::TouchPointStates state)
    d->state = state;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setPos(const QPointF &pos)
 {
    if (d->ref.load() != 1) {
@@ -1291,7 +1267,6 @@ void QTouchEvent::TouchPoint::setPos(const QPointF &pos)
    d->rect.moveCenter(pos);
 }
 
-// internal
 void QTouchEvent::TouchPoint::setScenePos(const QPointF &scenePos)
 {
    if (d->ref.load() != 1) {
@@ -1300,7 +1275,6 @@ void QTouchEvent::TouchPoint::setScenePos(const QPointF &scenePos)
    d->sceneRect.moveCenter(scenePos);
 }
 
-// internal
 void QTouchEvent::TouchPoint::setScreenPos(const QPointF &screenPos)
 {
    if (d->ref.load() != 1) {
@@ -1309,7 +1283,6 @@ void QTouchEvent::TouchPoint::setScreenPos(const QPointF &screenPos)
    d->screenRect.moveCenter(screenPos);
 }
 
-// internal
 void QTouchEvent::TouchPoint::setNormalizedPos(const QPointF &normalizedPos)
 {
    if (d->ref.load() != 1) {
@@ -1318,7 +1291,6 @@ void QTouchEvent::TouchPoint::setNormalizedPos(const QPointF &normalizedPos)
    d->normalizedPos = normalizedPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setStartPos(const QPointF &startPos)
 {
    if (d->ref.load() != 1) {
@@ -1327,7 +1299,6 @@ void QTouchEvent::TouchPoint::setStartPos(const QPointF &startPos)
    d->startPos = startPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setStartScenePos(const QPointF &startScenePos)
 {
    if (d->ref.load() != 1) {
@@ -1337,7 +1308,6 @@ void QTouchEvent::TouchPoint::setStartScenePos(const QPointF &startScenePos)
    d->startScenePos = startScenePos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setStartScreenPos(const QPointF &startScreenPos)
 {
    if (d->ref.load() != 1) {
@@ -1346,7 +1316,6 @@ void QTouchEvent::TouchPoint::setStartScreenPos(const QPointF &startScreenPos)
    d->startScreenPos = startScreenPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setStartNormalizedPos(const QPointF &startNormalizedPos)
 {
    if (d->ref.load() != 1) {
@@ -1355,7 +1324,6 @@ void QTouchEvent::TouchPoint::setStartNormalizedPos(const QPointF &startNormaliz
    d->startNormalizedPos = startNormalizedPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setLastPos(const QPointF &lastPos)
 {
    if (d->ref.load() != 1) {
@@ -1364,7 +1332,6 @@ void QTouchEvent::TouchPoint::setLastPos(const QPointF &lastPos)
    d->lastPos = lastPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setLastScenePos(const QPointF &lastScenePos)
 {
    if (d->ref.load() != 1) {
@@ -1373,7 +1340,6 @@ void QTouchEvent::TouchPoint::setLastScenePos(const QPointF &lastScenePos)
    d->lastScenePos = lastScenePos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setLastScreenPos(const QPointF &lastScreenPos)
 {
    if (d->ref.load() != 1) {
@@ -1382,7 +1348,6 @@ void QTouchEvent::TouchPoint::setLastScreenPos(const QPointF &lastScreenPos)
    d->lastScreenPos = lastScreenPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setLastNormalizedPos(const QPointF &lastNormalizedPos)
 {
    if (d->ref.load() != 1) {
@@ -1391,7 +1356,6 @@ void QTouchEvent::TouchPoint::setLastNormalizedPos(const QPointF &lastNormalized
    d->lastNormalizedPos = lastNormalizedPos;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setRect(const QRectF &rect)
 {
    if (d->ref.load() != 1) {
@@ -1400,7 +1364,6 @@ void QTouchEvent::TouchPoint::setRect(const QRectF &rect)
    d->rect = rect;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setSceneRect(const QRectF &sceneRect)
 {
    if (d->ref.load() != 1) {
@@ -1409,7 +1372,6 @@ void QTouchEvent::TouchPoint::setSceneRect(const QRectF &sceneRect)
    d->sceneRect = sceneRect;
 }
 
-/*! \internal */
 void QTouchEvent::TouchPoint::setScreenRect(const QRectF &screenRect)
 {
    if (d->ref.load() != 1) {
@@ -1418,7 +1380,6 @@ void QTouchEvent::TouchPoint::setScreenRect(const QRectF &screenRect)
    d->screenRect = screenRect;
 }
 
-// internal
 void QTouchEvent::TouchPoint::setPressure(qreal pressure)
 {
    if (d->ref.load() != 1) {

@@ -92,9 +92,6 @@ class QHostInfoPrivate
    int lookupId;
 };
 
-// These functions are outside of the QHostInfo class and strictly internal.
-// Do NOT use them outside of QAbstractSocket.
-
 QHostInfo Q_NETWORK_EXPORT qt_qhostinfo_lookup(const QString &name, QObject *receiver, const QString &member, bool *valid, int *id);
 void qt_qhostinfo_clear_cache();
 void qt_qhostinfo_enable_cache(bool e);

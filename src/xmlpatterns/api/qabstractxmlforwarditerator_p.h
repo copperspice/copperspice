@@ -85,8 +85,6 @@ class QAbstractXmlForwardIterator : public QSharedData
    QAbstractXmlForwardIteratorPrivate *d_ptr; /* Currently not used. */
 };
 
-/* The namespace QPatternist and its members are internal, not part of the public API, and
- * unsupported. Using them leads to undefined behavior. */
 namespace QPatternist {
 class DeduplicateIterator;
 

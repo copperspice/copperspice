@@ -502,9 +502,6 @@ int QShortcut::id() const
    return d->sc_id;
 }
 
-/*!
-    \internal
-*/
 bool QShortcut::event(QEvent *e)
 {
    Q_D(QShortcut);

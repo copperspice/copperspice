@@ -47,7 +47,6 @@
 extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
 Q_GUI_EXPORT extern bool qt_tab_all_widgets();
 
-// internal
 void QGraphicsProxyWidgetPrivate::init()
 {
    Q_Q(QGraphicsProxyWidget);
@@ -55,7 +54,6 @@ void QGraphicsProxyWidgetPrivate::init()
    q->setAcceptDrops(true);
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneHoverEvent *event)
 {
    QGraphicsSceneMouseEvent mouseEvent(QEvent::GraphicsSceneMouseMove);
@@ -68,7 +66,6 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneHoverEvent 
    event->setAccepted(mouseEvent.isAccepted());
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent *event)
 {
    if (! event || ! widget || ! widget->isVisible()) {
@@ -193,7 +190,6 @@ void QGraphicsProxyWidgetPrivate::sendWidgetKeyEvent(QKeyEvent *event)
    } while (receiver);
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::removeSubFocusHelper(QWidget *widget, Qt::FocusReason reason)
 {
    QFocusEvent event(QEvent::FocusOut, reason);
@@ -205,7 +201,6 @@ void QGraphicsProxyWidgetPrivate::removeSubFocusHelper(QWidget *widget, Qt::Focu
    }
 }
 
-// internal
 QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) const
 {
    if (! widget) {
@@ -243,7 +238,6 @@ QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) 
    return nullptr;
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::_q_removeWidgetSlot()
 {
    Q_Q(QGraphicsProxyWidget);
@@ -258,12 +252,10 @@ void QGraphicsProxyWidgetPrivate::_q_removeWidgetSlot()
    delete q;
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::updateWidgetGeometryFromProxy()
 {
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::updateProxyGeometryFromWidget()
 {
    Q_Q(QGraphicsProxyWidget);
@@ -300,7 +292,6 @@ void QGraphicsProxyWidgetPrivate::updateProxyGeometryFromWidget()
    sizeChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::updateProxyInputMethodAcceptanceFromWidget()
 {
    Q_Q(QGraphicsProxyWidget);
@@ -316,7 +307,6 @@ void QGraphicsProxyWidgetPrivate::updateProxyInputMethodAcceptanceFromWidget()
       focusWidget->testAttribute(Qt::WA_InputMethodEnabled));
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::embedSubWindow(QWidget *subWin)
 {
    QWExtra *extra;
@@ -326,7 +316,6 @@ void QGraphicsProxyWidgetPrivate::embedSubWindow(QWidget *subWin)
    }
 }
 
-// internal
 void QGraphicsProxyWidgetPrivate::unembedSubWindow(QWidget *subWin)
 {
    for (QGraphicsItem *child : children) {
@@ -349,7 +338,6 @@ bool QGraphicsProxyWidgetPrivate::isProxyWidget() const
    return true;
 }
 
-// internal
 QPointF QGraphicsProxyWidgetPrivate::mapToReceiver(const QPointF &pos, const QWidget *receiver) const
 {
    QPointF p = pos;

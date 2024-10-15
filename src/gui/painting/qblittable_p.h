@@ -49,7 +49,6 @@ class Q_GUI_EXPORT QBlittable
       SubPixelGlyphsCapability         = 0x0080,
       ComplexClipCapability            = 0x0100,
 
-      // Internal ones
       OutlineCapability                = 0x0001000,
    };
    using Capabilities = QFlags<Capability>;

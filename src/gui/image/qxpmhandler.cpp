@@ -1043,9 +1043,6 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
    return true;
 }
 
-//
-// INTERNAL
-//
 // Reads an .xpm from either the QImageIO or from the QString *.
 // One of the two HAS to be 0, the other one is used.
 //

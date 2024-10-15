@@ -47,9 +47,6 @@ QBezier QBezier::fromPoints(const QPointF &p1, const QPointF &p2,
    return b;
 }
 
-/*!
-  \internal
-*/
 QPolygonF QBezier::toPolygon(qreal bezier_flattening_threshold) const
 {
    // flattening is done by splitting the bezier until we can replace the segment by a straight

@@ -62,9 +62,9 @@ class Q_NETWORK_EXPORT QNetworkRequest
       CookieLoadControlAttribute,
       AuthenticationReuseAttribute,
       CookieSaveControlAttribute,
-      MaximumDownloadBufferSizeAttribute, // internal
-      DownloadBufferAttribute, // internal
-      SynchronousRequestAttribute, // internal
+      MaximumDownloadBufferSizeAttribute,
+      DownloadBufferAttribute,
+      SynchronousRequestAttribute,
       BackgroundRequestAttribute,
       SpdyAllowedAttribute,
       SpdyWasUsedAttribute,

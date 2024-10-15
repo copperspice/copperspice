@@ -76,7 +76,6 @@ qreal QGraphicsWidgetPrivate::titleBarHeight(const QStyleOptionTitleBar &options
    return (qreal)height;
 }
 
-// internal
 QGraphicsWidgetPrivate::~QGraphicsWidgetPrivate()
 {
    // Remove any lazily allocated data

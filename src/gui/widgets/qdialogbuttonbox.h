@@ -88,7 +88,6 @@ class Q_GUI_EXPORT QDialogButtonBox : public QWidget
       };
    )
 
-   // internal values
    static constexpr const auto FirstButton = StandardButton::Ok;
    static constexpr const auto LastButton  = StandardButton::RestoreDefaults;
 

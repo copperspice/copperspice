@@ -55,17 +55,11 @@ QOpenGLPixelTransferOptions::QOpenGLPixelTransferOptions()
 {
 }
 
-/*!
- * \internal
- */
 QOpenGLPixelTransferOptions::QOpenGLPixelTransferOptions(const QOpenGLPixelTransferOptions &rhs)
     : data(rhs.data)
 {
 }
 
-/*!
- * \internal
- */
 QOpenGLPixelTransferOptions &QOpenGLPixelTransferOptions::operator=(const QOpenGLPixelTransferOptions &rhs)
 {
     if (this != &rhs)

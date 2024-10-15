@@ -67,7 +67,6 @@ QGraphicsTransform::QGraphicsTransform(QObject *parent)
    d_ptr->q_ptr = this;
 }
 
-// internal
 QGraphicsTransform::QGraphicsTransform(QGraphicsTransformPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {

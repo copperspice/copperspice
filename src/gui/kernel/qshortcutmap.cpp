@@ -105,10 +105,6 @@ QShortcutMap::~QShortcutMap()
 {
 }
 
-/*! \internal
-    Adds a shortcut to the global map.
-    Returns the id of the newly added shortcut.
-*/
 int QShortcutMap::addShortcut(QObject *owner, const QKeySequence &key, Qt::ShortcutContext context, ContextMatcher matcher)
 {
    Q_ASSERT_X(owner, "QShortcutMap::addShortcut", "All shortcuts need an owner");
@@ -121,14 +117,6 @@ int QShortcutMap::addShortcut(QObject *owner, const QKeySequence &key, Qt::Short
 
    return d->currentId;
 }
-
-/*! \internal
-    Removes a shortcut from the global map.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, any identical \a key sequences owned by \a owner
-    are removed. Returns the number of sequences removed from the map.
-*/
 
 int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key)
 {
@@ -174,14 +162,6 @@ int QShortcutMap::removeShortcut(int id, QObject *owner, const QKeySequence &key
    return itemsRemoved;
 }
 
-/*! \internal
-    Changes the enable state of a shortcut to \a enable.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, any identical \a key sequences owned by \a owner
-    are changed.
-    Returns the number of sequences which are matched in the map.
-*/
 int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner, const QKeySequence &key)
 {
    Q_D(QShortcutMap);
@@ -214,14 +194,6 @@ int QShortcutMap::setShortcutEnabled(bool enable, int id, QObject *owner, const 
    return itemsChanged;
 }
 
-/*! \internal
-    Changes the auto repeat state of a shortcut to \a enable.
-    If \a owner is 0, all entries in the map with the key sequence specified
-    is removed. If \a key is null, all sequences for \a owner is removed from
-    the map. If \a id is 0, any identical \a key sequences owned by \a owner
-    are changed.
-    Returns the number of sequences which are matched in the map.
-*/
 int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner, const QKeySequence &key)
 {
    Q_D(QShortcutMap);
@@ -254,9 +226,6 @@ int QShortcutMap::setShortcutAutoRepeat(bool on, int id, QObject *owner, const Q
    return itemsChanged;
 }
 
-/*! \internal
-    Resets the state of the statemachine to NoMatch
-*/
 void QShortcutMap::resetState()
 {
    Q_D(QShortcutMap);
@@ -264,21 +233,12 @@ void QShortcutMap::resetState()
    clearSequence(d->currentSequences);
 }
 
-/*! \internal
-    Returns the current state of the statemachine
-*/
 QKeySequence::SequenceMatch QShortcutMap::state()
 {
    Q_D(QShortcutMap);
    return d->currentState;
 }
 
-/*! \internal
-    Uses ShortcutOverride event to see if any widgets want to override
-    the event. If not, uses nextState(QKeyEvent) to check for a grabbed
-    Shortcut, and dispatchEvent() is found an identical.
-    \sa nextState dispatchEvent
-*/
 bool QShortcutMap::tryShortcut(QKeyEvent *e)
 {
    Q_D(QShortcutMap);
@@ -320,12 +280,6 @@ bool QShortcutMap::tryShortcut(QKeyEvent *e)
    return false;
 }
 
-/*! \internal
-    Returns the next state of the statemachine
-    If return value is SequenceMatch::ExactMatch, then a call to matches()
-    will return a QObjects* list of all matching objects for the last matching
-    sequence.
-*/
 QKeySequence::SequenceMatch QShortcutMap::nextState(QKeyEvent *e)
 {
    Q_D(QShortcutMap);
@@ -386,13 +340,6 @@ bool QShortcutMap::hasShortcutForKeySequence(const QKeySequence &seq) const
    return false;
 }
 
-/*! \internal
-    Returns the next state of the statemachine, based
-    on the new key event \a e.
-    Matches are appended to the vector of identicals,
-    which can be access through matches().
-    \sa matches
-*/
 QKeySequence::SequenceMatch QShortcutMap::find(QKeyEvent *e, int ignoredModifiers)
 {
    Q_D(QShortcutMap);
@@ -492,21 +439,12 @@ QKeySequence::SequenceMatch QShortcutMap::find(QKeyEvent *e, int ignoredModifier
    return QKeySequence::SequenceMatch(result);
 }
 
-/*! \internal
-    Clears \a seq to an empty QKeySequence.
-    Same as doing (the slower)
-    \snippet doc/src/snippets/code/src_gui_kernel_qshortcutmap.cpp 0
-*/
 void QShortcutMap::clearSequence(QVector<QKeySequence> &ksl)
 {
    ksl.clear();
    d_func()->newEntries.clear();
 }
 
-/*! \internal
-    Alters \a seq to the new sequence state, based on the
-    current sequence state, and the new key event \a e.
-*/
 void QShortcutMap::createNewSequences(QKeyEvent *e, QVector<QKeySequence> &ksl, int ignoredModifiers)
 {
    Q_D(QShortcutMap);
@@ -545,11 +483,6 @@ void QShortcutMap::createNewSequences(QKeyEvent *e, QVector<QKeySequence> &ksl, 
    }
 }
 
-/*! \internal
-    Basically the same function as QKeySequence::matches(const QKeySequence &seq) const
-    only that is specially handles Key_hyphen as Key_Minus, as people mix these up all the time and
-    they conceptually the same.
-*/
 QKeySequence::SequenceMatch QShortcutMap::matches(const QKeySequence &seq1,
    const QKeySequence &seq2) const
 {
@@ -582,9 +515,6 @@ QKeySequence::SequenceMatch QShortcutMap::matches(const QKeySequence &seq1,
    return match;
 }
 
-/*! \internal
-    Converts keyboard button states into modifier states
-*/
 int QShortcutMap::translateModifiers(Qt::KeyboardModifiers modifiers)
 {
    int result = 0;
@@ -603,18 +533,12 @@ int QShortcutMap::translateModifiers(Qt::KeyboardModifiers modifiers)
    return result;
 }
 
-/*! \internal
-    Returns the vector of QShortcutEntry's matching the last Identical state.
-*/
 QVector<const QShortcutEntry *> QShortcutMap::matches() const
 {
    Q_D(const QShortcutMap);
    return d->identicals;
 }
 
-/*! \internal
-    Dispatches QShortcutEvents to widgets who grabbed the matched key sequence.
-*/
 void QShortcutMap::dispatchEvent(QKeyEvent *e)
 {
    Q_D(QShortcutMap);

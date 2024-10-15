@@ -49,8 +49,8 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
 
  public:
    enum SubWindowOption {
-      AllowOutsideAreaHorizontally = 0x1,    // internal
-      AllowOutsideAreaVertically = 0x2,      // internal
+      AllowOutsideAreaHorizontally = 0x1,
+      AllowOutsideAreaVertically = 0x2,
       RubberBandResize = 0x4,
       RubberBandMove = 0x8
    };
@@ -69,8 +69,8 @@ class Q_GUI_EXPORT QMdiSubWindow : public QWidget
    void setWidget(QWidget *widget);
    QWidget *widget() const;
 
-   QWidget *maximizedButtonsWidget() const; // internal
-   QWidget *maximizedSystemMenuIconWidget() const; // internal
+   QWidget *maximizedButtonsWidget() const;
+   QWidget *maximizedSystemMenuIconWidget() const;
 
    bool isShaded() const;
 

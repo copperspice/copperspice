@@ -117,13 +117,6 @@ void QAccessible::removeFactory(InterfaceFactory factory)
    qAccessibleFactories()->removeAll(factory);
 }
 
-/*!
-    \internal
-
-    Installs the given \a handler as the function to be used by
-    updateAccessibility(), and returns the previously installed
-    handler.
-*/
 QAccessible::UpdateHandler QAccessible::installUpdateHandler(UpdateHandler handler)
 {
    UpdateHandler old = updateHandler;
@@ -311,13 +304,7 @@ void QAccessible::updateAccessibility(QAccessibleEvent *event)
       pfAccessibility->notifyAccessibilityUpdate(event);
    }
 }
-/*!
-    \internal
-    \brief getBoundaries is a helper function to find the accessible text boundaries for QTextCursor based documents.
-    \param documentCursor a valid cursor bound to the document (not null). It needs to ba at the position to look for the boundary
-    \param boundaryType the type of boundary to find
-    \return the boundaries as pair
-*/
+
 QPair< int, int > QAccessible::qAccessibleTextBoundaryHelper(const QTextCursor &offsetCursor, TextBoundaryType boundaryType)
 {
    Q_ASSERT(!offsetCursor.isNull());

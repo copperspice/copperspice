@@ -71,11 +71,6 @@ QMediaObject *QMediaPlaylist::mediaObject() const
    return d_func()->mediaObject;
 }
 
-/*!
-  \internal
-  If \a mediaObject is null or doesn't have an intrinsic playlist,
-  internal local memory playlist source will be created.
-*/
 bool QMediaPlaylist::setMediaObject(QMediaObject *mediaObject)
 {
    Q_D(QMediaPlaylist);
@@ -278,10 +273,6 @@ bool QMediaPlaylistPrivate::writeItems(QMediaPlaylistWriter *writer)
    return true;
 }
 
-/*!
- * \internal
- * Copy playlist items, sync playback mode and sync current index between old control and new control
-*/
 void QMediaPlaylistPrivate::syncControls(QMediaPlaylistControl *oldControl, QMediaPlaylistControl *newControl,
    int *removedStart, int *removedEnd,
    int *insertedStart, int *insertedEnd)

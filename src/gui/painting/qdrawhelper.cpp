@@ -2169,10 +2169,6 @@ static const QRgba64 *fetchTransformed64(QRgba64 *buffer, const Operator *, cons
    return buffer;
 }
 
-/** \internal
-  interpolate 4 argb pixels with the distx and disty factor.
-  distx and disty bust be between 0 and 16
- */
 static inline uint interpolate_4_pixels_16(uint tl, uint tr, uint bl, uint br, int distx, int disty)
 {
    uint distxy = distx * disty;

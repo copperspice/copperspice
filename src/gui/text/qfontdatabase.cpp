@@ -1866,7 +1866,6 @@ int QFontDatabase::weight(const QString &family, const QString &style) const
    return fontStyle == nullptr ? -1 : fontStyle->key.weight;
 }
 
-// internal
 bool QFontDatabase::hasFamily(const QString &family) const
 {
    QString parsedFamily, foundry;

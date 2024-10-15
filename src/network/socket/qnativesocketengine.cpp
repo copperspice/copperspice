@@ -957,7 +957,6 @@ bool QNativeSocketEngine::isReadNotificationEnabled() const
    return d->readNotifier && d->readNotifier->isEnabled();
 }
 
-// internal
 class QReadNotifier : public QSocketNotifier
 {
  public:
@@ -985,14 +984,6 @@ bool QReadNotifier::event(QEvent *e)
    return QSocketNotifier::event(e);
 }
 
-/*
-  \internal
-  \class QWriteNotifier
-  \brief The QWriteNotifer class is used to improve performance.
-
-  QWriteNotifier is a private class used for performance reasons vs
-  connecting to the QSocketNotifier activated() signal.
- */
 class QWriteNotifier : public QSocketNotifier
 {
  public:

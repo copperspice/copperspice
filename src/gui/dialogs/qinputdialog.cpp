@@ -91,12 +91,6 @@ static QString signalForMember(const QString &member)
    return QString("accepted()");
 }
 
-/*
-    These internal classes add extra validation to QSpinBox and QDoubleSpinBox by emitting
-    textChanged(bool) after events that may potentially change the visible text. Return or
-    Enter key presses are not propagated if the visible text is invalid. Instead, the visible
-    text is modified to the last valid value.
-*/
 class QInputDialogSpinBox : public QSpinBox
 {
    GUI_CS_OBJECT(QInputDialogSpinBox)

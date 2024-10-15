@@ -264,7 +264,6 @@ void QNetworkSessionPrivate::setUsagePolicies(QNetworkSession &session, QNetwork
    session.d->setUsagePolicies(policies);
 }
 
-// internal
 void QNetworkSession::connectNotify(const QMetaMethod &signal) const
 {
    QObject::connectNotify(signal);
@@ -284,7 +283,6 @@ void QNetworkSession::connectNotify(const QMetaMethod &signal) const
    }
 }
 
-// internal
 void QNetworkSession::disconnectNotify(const QMetaMethod &signal) const
 {
    QObject::disconnectNotify(signal);

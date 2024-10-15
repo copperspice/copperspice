@@ -685,7 +685,6 @@ void QGridLayoutItem::insertOrRemoveRows(int row, int delta, Qt::Orientation ori
    }
 }
 
-// internal
 QSizeF QGridLayoutItem::effectiveMaxSize(const QSizeF &constraint) const
 {
    QSizeF size = constraint;
@@ -958,7 +957,6 @@ Qt::Alignment QGridLayoutEngine::effectiveAlignment(const QGridLayoutItem *layou
    return align;
 }
 
-// internal
 void QGridLayoutEngine::insertItem(QGridLayoutItem *item, int index)
 {
    maybeExpandGrid(item->lastRow(), item->lastColumn());

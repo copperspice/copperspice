@@ -562,8 +562,6 @@ void QPrintDialog::accept()
 
 #if defined (Q_OS_UNIX)
 
-/*! \internal
-*/
 QUnixPrintWidgetPrivate::QUnixPrintWidgetPrivate(QUnixPrintWidget *p, QPrinter *prn)
    : parent(p), propertiesDialog(nullptr), printer(prn), optionsPane(nullptr),
      filePrintersAdded(false), propertiesDialogShown(false)
@@ -919,26 +917,17 @@ void QUnixPrintWidgetPrivate::setupPrinter()
    }
 }
 
-
-/*! \internal
-*/
 QUnixPrintWidget::QUnixPrintWidget(QPrinter *printer, QWidget *parent)
    : QWidget(parent), d(new QUnixPrintWidgetPrivate(this, printer))
 {
    d->applyPrinterProperties();
 }
 
-/*! \internal
-*/
 QUnixPrintWidget::~QUnixPrintWidget()
 {
    delete d;
 }
 
-/*! \internal
-
-    Updates the printer with the states held in the QUnixPrintWidget.
-*/
 void QUnixPrintWidget::updatePrinter()
 {
    d->setupPrinter();

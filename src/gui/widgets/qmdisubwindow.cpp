@@ -271,8 +271,6 @@ static void showToolTip(QHelpEvent *helpEvent, QWidget *widget, const QStyleOpti
 
 namespace QMdi {
 
-
-// internal class
 class ControlLabel : public QWidget
 {
    GUI_CS_OBJECT(ControlLabel)

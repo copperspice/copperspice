@@ -33,20 +33,6 @@
 
 using namespace QPatternist;
 
-/*!
-  \brief Bridges a QPatternist::SequenceIterator to QAbstractXmlPullProvider.
-  \class QPatternist::PullBridge
-  \internal
-  \reentrant
-  \ingroup xml-tools
-
-  The approach of this class is rather straight forward since QPatternist::SequenceIterator
-  and QAbstractXmlPullProvider are conceptually similar. While QPatternist::SequenceIterator only
-  delivers top level items(since it's not an event stream, it's a list of items), PullBridge
-  needs to recursively iterate the children of nodes too, which is achieved through the
-  stack m_iterators.
- */
-
 AbstractXmlPullProvider::Event PullBridge::next()
 {
    m_index = m_iterators.top().second->next();

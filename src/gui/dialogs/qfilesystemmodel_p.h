@@ -304,11 +304,6 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    }
 
    void init();
-   /*
-     \internal
-
-     Return true if index which is owned by node is hidden by the filter.
-   */
    inline bool isHiddenByFilter(QFileSystemNode *indexNode, const QModelIndex &index) const {
       return (indexNode != &root && !index.isValid());
    }

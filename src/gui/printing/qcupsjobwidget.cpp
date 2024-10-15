@@ -37,7 +37,6 @@
 
 #if ! defined(QT_NO_PRINTER) && ! defined(QT_NO_CUPS)
 
-// internal
 QCupsJobWidget::QCupsJobWidget(QWidget *parent)
     : QWidget(parent)
 {

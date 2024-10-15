@@ -234,13 +234,6 @@ QImage QBlendStyleAnimation::currentImage() const
    return _current;
 }
 
-/*! \internal
-
-    A helper function to blend two images.
-
-    The result consists of ((alpha)*startImage) + ((1-alpha)*endImage)
-
-*/
 static QImage blendedImage(const QImage &start, const QImage &end, float alpha)
 {
    if (start.isNull() || end.isNull()) {

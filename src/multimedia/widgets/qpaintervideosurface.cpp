@@ -1395,7 +1395,6 @@ QAbstractVideoSurface::Error QVideoSurfaceGlslPainter::paint(
 
 #endif
 
-// internal
 QPainterVideoSurface::QPainterVideoSurface(QObject *parent)
    : QAbstractVideoSurface(parent), m_painter(nullptr),
 

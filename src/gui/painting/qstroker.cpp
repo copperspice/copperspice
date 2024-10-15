@@ -737,31 +737,6 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
    }
 }
 
-/*!
-    // internal
-
-    For a given angle in the range [0 .. 90], finds the corresponding parameter t
-    of the prototype cubic bezier arc segment
-    b = fromPoints(QPointF(1, 0), QPointF(1, KAPPA), QPointF(KAPPA, 1), QPointF(0, 1));
-
-    From the bezier equation:
-    b.pointAt(t).x() = (1-t)^3 + t*(1-t)^2 + t^2*(1-t)*KAPPA
-    b.pointAt(t).y() = t*(1-t)^2 * KAPPA + t^2*(1-t) + t^3
-
-    Third degree coefficients:
-    b.pointAt(t).x() = at^3 + bt^2 + ct + d
-    where a = 2-3*KAPPA, b = 3*(KAPPA-1), c = 0, d = 1
-
-    b.pointAt(t).y() = at^3 + bt^2 + ct + d
-    where a = 3*KAPPA-2, b = 6*KAPPA+3, c = 3*KAPPA, d = 0
-
-    Newton's method to find the zero of a function:
-    given a function f(x) and initial guess x_0
-    x_1 = f(x_0) / f'(x_0)
-    x_2 = f(x_1) / f'(x_1)
-    etc.
-*/
-
 qreal qt_t_for_arc_angle(qreal angle)
 {
    if (qFuzzyIsNull(angle)) {

@@ -65,7 +65,6 @@ QFileDialog::QFileDialog(QWidget *parent, const QString &caption, const QString 
    d->init(QUrl::fromLocalFile(directory), filter, caption);
 }
 
-// internal
 QFileDialog::QFileDialog(const QFileDialogArgs &args)
    : QDialog(*new QFileDialogPrivate, args.parent, Qt::EmptyFlag)
 {

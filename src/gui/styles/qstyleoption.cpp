@@ -160,9 +160,6 @@ QStyleOptionHeader::QStyleOptionHeader()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionHeader::QStyleOptionHeader(int version)
    : QStyleOption(version, SO_Header),
      section(0), textAlignment(Qt::AlignLeft), iconAlignment(Qt::AlignLeft),
@@ -177,9 +174,6 @@ QStyleOptionButton::QStyleOptionButton()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionButton::QStyleOptionButton(int version)
    : QStyleOption(version, SO_Button), features(None)
 {
@@ -193,9 +187,6 @@ QStyleOptionToolBar::QStyleOptionToolBar()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionToolBar::QStyleOptionToolBar(int version)
    : QStyleOption(version, SO_ToolBar), positionOfLine(OnlyOne), positionWithinLine(OnlyOne),
      toolBarArea(Qt::TopToolBarArea), features(None), lineWidth(0), midLineWidth(0)
@@ -213,9 +204,6 @@ QStyleOptionTab::QStyleOptionTab()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionTab::QStyleOptionTab(int version)
    : QStyleOption(version, SO_Tab), shape(QTabBar::RoundedNorth), row(0),
      position(Beginning), selectedPosition(NotAdjacent), cornerWidgets(QStyleOptionTab::NoCornerWidgets),
@@ -246,9 +234,6 @@ QStyleOptionMenuItem::QStyleOptionMenuItem()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionMenuItem::QStyleOptionMenuItem(int version)
    : QStyleOption(version, SO_MenuItem), menuItemType(Normal),
      checkType(NotCheckable), checked(false), menuHasCheckableItems(true), maxIconWidth(0), tabWidth(0)
@@ -270,9 +255,6 @@ QStyleOptionSlider::QStyleOptionSlider()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionSlider::QStyleOptionSlider(int version)
    : QStyleOptionComplex(version, SO_Slider), orientation(Qt::Horizontal), minimum(0), maximum(0),
      tickPosition(QSlider::NoTicks), tickInterval(0), upsideDown(false),
@@ -291,9 +273,6 @@ QStyleOptionSpinBox::QStyleOptionSpinBox()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionSpinBox::QStyleOptionSpinBox(int version)
    : QStyleOptionComplex(version, SO_SpinBox), buttonSymbols(QAbstractSpinBox::UpDownArrows),
      stepEnabled(QAbstractSpinBox::StepNone), frame(false)
@@ -308,9 +287,6 @@ QStyleOptionDockWidget::QStyleOptionDockWidget()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionDockWidget::QStyleOptionDockWidget(int version)
    : QStyleOption(version, SO_DockWidget), closable(false),
      movable(false), floatable(false), verticalTitleBar(false)
@@ -336,9 +312,6 @@ QStyleOptionComboBox::QStyleOptionComboBox()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionComboBox::QStyleOptionComboBox(int version)
    : QStyleOptionComplex(version, SO_ComboBox), editable(false), frame(true)
 {
@@ -349,9 +322,6 @@ QStyleOptionToolBox::QStyleOptionToolBox()
 {
 }
 
-/*!
-    \internal
-*/
 QStyleOptionToolBox::QStyleOptionToolBox(int version)
    : QStyleOption(version, SO_ToolBox), position(Beginning), selectedPosition(NotAdjacent)
 {
@@ -364,7 +334,6 @@ QStyleOptionRubberBand::QStyleOptionRubberBand()
 {
 }
 
-// internal
 QStyleOptionRubberBand::QStyleOptionRubberBand(int version)
    : QStyleOption(version, SO_RubberBand), shape(QRubberBand::Line), opaque(false)
 {
@@ -377,7 +346,6 @@ QStyleOptionTitleBar::QStyleOptionTitleBar()
 {
 }
 
-// internal
 QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
    : QStyleOptionComplex(version, SO_TitleBar), titleBarState(0), titleBarFlags(Qt::EmptyFlag)
 {
@@ -393,7 +361,6 @@ QStyleOptionViewItem::QStyleOptionViewItem()
 {
 }
 
-// internal
 QStyleOptionViewItem::QStyleOptionViewItem(int version)
    : QStyleOption(version, SO_ViewItem),
      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
@@ -412,7 +379,6 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame()
 {
 }
 
-// internal
 QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
    : QStyleOption(version, SO_TabWidgetFrame), lineWidth(0), midLineWidth(0),
      shape(QTabBar::RoundedNorth)
@@ -429,7 +395,6 @@ QStyleOptionTabBarBase::QStyleOptionTabBarBase()
 {
 }
 
-// internal
 QStyleOptionTabBarBase::QStyleOptionTabBarBase(int version)
    : QStyleOption(version, SO_TabBarBase), shape(QTabBar::RoundedNorth),
      documentMode(false)
@@ -445,7 +410,6 @@ QStyleOptionSizeGrip::QStyleOptionSizeGrip()
 {
 }
 
-// internal
 QStyleOptionSizeGrip::QStyleOptionSizeGrip(int version)
    : QStyleOptionComplex(version, Type), corner(Qt::BottomRightCorner)
 {
@@ -458,7 +422,6 @@ QStyleOptionGraphicsItem::QStyleOptionGraphicsItem()
 {
 }
 
-// internal
 QStyleOptionGraphicsItem::QStyleOptionGraphicsItem(int version)
    : QStyleOption(version, Type), levelOfDetail(1)
 {

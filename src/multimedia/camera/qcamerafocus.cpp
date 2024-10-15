@@ -146,10 +146,6 @@ QCameraFocusZone::QCameraFocusZone()
 {
 }
 
-/*!
- * \internal
- * Creates a new QCameraFocusZone with the supplied \a area and \a status.
- */
 QCameraFocusZone::QCameraFocusZone(const QRectF &area, QCameraFocusZone::FocusZoneStatus status)
    : d(new QCameraFocusZoneData(area, status))
 {
@@ -196,10 +192,6 @@ QCameraFocusZone::FocusZoneStatus QCameraFocusZone::status() const
    return d->status;
 }
 
-/*!
- * \internal
- * Sets the current status of this focus zone to \a status.
- */
 void QCameraFocusZone::setStatus(QCameraFocusZone::FocusZoneStatus status)
 {
    d->status = status;
@@ -253,7 +245,6 @@ void QCameraFocusPrivate::initControls()
    q->connect(zoomControl,  &QCameraZoomControl::maximumDigitalZoomChanged, q, &QCameraFocus::maximumDigitalZoomChanged);
 }
 
-// internal
 QCameraFocus::QCameraFocus(QCamera *camera)
    : QObject(camera), d_ptr(new QCameraFocusPrivate)
 {

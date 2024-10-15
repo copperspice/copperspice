@@ -949,7 +949,6 @@ QGraphicsView::QGraphicsView(QGraphicsScene *scene, QWidget *parent)
    viewport()->setAttribute(Qt::WA_InputMethodEnabled);
 }
 
-// internal
 QGraphicsView::QGraphicsView(QGraphicsViewPrivate &dd, QWidget *parent)
    : QAbstractScrollArea(dd, parent)
 {

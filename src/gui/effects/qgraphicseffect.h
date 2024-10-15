@@ -80,7 +80,7 @@ class Q_GUI_EXPORT QGraphicsEffect : public QObject
 
    bool isEnabled() const;
 
-   QGraphicsEffectSource *source() const; // internal
+   QGraphicsEffectSource *source() const;
 
    GUI_CS_SLOT_1(Public, void setEnabled(bool enable))
    GUI_CS_SLOT_2(setEnabled)

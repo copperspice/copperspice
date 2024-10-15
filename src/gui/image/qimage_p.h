@@ -25,13 +25,12 @@
 #define QIMAGE_P_H
 
 #include <qglobal.h>
-
 #include <qmap.h>
 #include <qvector.h>
 
 class QImageWriter;
 
-struct Q_GUI_EXPORT QImageData {        // internal image data
+struct Q_GUI_EXPORT QImageData {
    QImageData();
    ~QImageData();
 

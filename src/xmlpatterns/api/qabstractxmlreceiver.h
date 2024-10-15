@@ -58,8 +58,6 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlReceiver
    virtual void startOfSequence() = 0;
    virtual void endOfSequence() = 0;
 
-   /* The members below are internal, not part of the public API, and
-    * unsupported. Using them leads to undefined behavior. */
    virtual void whitespaceOnly(QStringView value);
    virtual void item(const QPatternist::Item &item);
 

@@ -1436,8 +1436,6 @@ void QMdiAreaPrivate::showRubberBandFor(QMdiSubWindow *subWindow)
    rubberBand->show();
 }
 
-// internal
-
 void QMdiAreaPrivate::setViewMode(QMdiArea::ViewMode mode)
 {
    Q_Q(QMdiArea);

@@ -333,7 +333,6 @@ void QGraphicsLinearLayout::invalidate()
    QGraphicsLayout::invalidate();
 }
 
-// internal
 void QGraphicsLinearLayout::dump(int indent) const
 {
    (void) indent;

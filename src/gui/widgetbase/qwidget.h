@@ -312,7 +312,7 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
    int devType() const override;
 
    WId winId() const;
-   void createWinId();       // internal, may go away
+   void createWinId();
 
    WId internalWinId() const {
       return m_widgetData->winid;

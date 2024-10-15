@@ -34,7 +34,6 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-// internal
 struct AnchorVertex {
    enum Type {
       Normal = 0,
@@ -60,7 +59,6 @@ struct AnchorVertex {
    qreal distance;
 };
 
-// internal
 // Represents an edge (anchor) in the internal graph.
 
 struct AnchorData : public QSimplexVariable {
@@ -275,7 +273,6 @@ class GraphPath
 
 class QGraphicsAnchorLayoutPrivate;
 
-// internal
 class QGraphicsAnchorPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsAnchor)

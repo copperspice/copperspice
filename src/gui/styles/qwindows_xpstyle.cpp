@@ -195,7 +195,6 @@ bool XPThemeData::isValid()
    return QWindowsXPStylePrivate::useXP() && theme >= 0 && handle();
 }
 
-// internal
 HTHEME XPThemeData::handle()
 {
    if (! QWindowsXPStylePrivate::useXP()) {
@@ -209,7 +208,6 @@ HTHEME XPThemeData::handle()
    return htheme;
 }
 
-// internal
 RECT XPThemeData::toRECT(const QRect &qr)
 {
    RECT r;
@@ -221,7 +219,6 @@ RECT XPThemeData::toRECT(const QRect &qr)
    return r;
 }
 
-// internal
 HRGN XPThemeData::mask(QWidget *widget)
 {
    if (! QWindowsXPStylePrivate::pIsThemeBackgroundPartiallyTransparent(handle(), partId, stateId)) {

@@ -181,7 +181,6 @@ QPalette::~QPalette()
    }
 }
 
-// internal
 void QPalette::init()
 {
    d = new QPalettePrivate;
@@ -260,9 +259,6 @@ bool QPalette::isBrushSet(ColorGroup cg, ColorRole cr) const
    return (resolve_mask & (1 << cr));
 }
 
-/*!
-    \internal
-*/
 void QPalette::detach()
 {
    if (d->ref.load() != 1) {
@@ -412,8 +408,6 @@ void QPalette::setColorGroup(ColorGroup cg, const QBrush &windowText, const QBru
    resolve_mask &= ~(1 << Link);
 }
 
-
-/*!\internal*/
 void QPalette::setColorGroup(ColorGroup cg, const QBrush &foreground, const QBrush &button,
    const QBrush &light, const QBrush &dark, const QBrush &mid,
    const QBrush &text, const QBrush &bright_text,
@@ -429,7 +423,6 @@ void QPalette::setColorGroup(ColorGroup cg, const QBrush &foreground, const QBru
       link, link_visited, background, foreground);
 }
 
-/* internal*/
 void QPalette::setColorGroup(ColorGroup cg, const QBrush &foreground, const QBrush &button,
    const QBrush &light, const QBrush &dark, const QBrush &mid,
    const QBrush &text, const QBrush &bright_text,

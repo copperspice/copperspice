@@ -1238,9 +1238,6 @@ void QFileDialogPrivate::_q_showContextMenu(const QPoint &position)
 #endif // QT_NO_MENU
 }
 
-/*!
-    \internal
-*/
 void QFileDialogPrivate::_q_renameCurrent()
 {
    Q_Q(QFileDialog);
@@ -1348,9 +1345,6 @@ void QFileDialogPrivate::_q_autoCompleteFileName(const QString &text)
    }
 }
 
-/*!
-    \internal
-*/
 void QFileDialogPrivate::_q_updateOkButton()
 {
    Q_Q(QFileDialog);
@@ -1457,21 +1451,12 @@ void QFileDialogPrivate::_q_updateOkButton()
    updateOkButtonText(isOpenDirectory);
 }
 
-/*!
-    \internal
-*/
 void QFileDialogPrivate::_q_currentChanged(const QModelIndex &index)
 {
    _q_updateOkButton();
    emit q_func()->currentChanged(index.data(QFileSystemModel::FilePathRole).toString());
 }
 
-/*!
-    \internal
-
-    This is called when the user double clicks on a file with the corresponding
-    model item \a index.
-*/
 void QFileDialogPrivate::_q_enterDirectory(const QModelIndex &index)
 {
    Q_Q(QFileDialog);
@@ -1594,11 +1579,6 @@ void QFileDialogPrivate::_q_selectionChanged()
    }
 }
 
-/*!
-    \internal
-
-    Includes hidden files and directories in the items displayed in the dialog.
-*/
 void QFileDialogPrivate::_q_showHidden()
 {
    Q_Q(QFileDialog);
@@ -1611,12 +1591,6 @@ void QFileDialogPrivate::_q_showHidden()
    q->setFilter(dirFilters);
 }
 
-/*!
-    \internal
-
-    When parent is root and rows have been inserted when none was there before
-    then select the first one.
-*/
 void QFileDialogPrivate::_q_rowsInserted(const QModelIndex &parent)
 {
    if (!qFileDialogUi->treeView

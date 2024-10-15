@@ -40,9 +40,6 @@ QGlyphRun::~QGlyphRun()
    // Required for QExplicitlySharedDataPointer
 }
 
-/*!
-    \internal
-*/
 void QGlyphRun::detach()
 {
    if (d->ref.load() != 1) {

@@ -76,7 +76,6 @@ QTextDocument::QTextDocument(const QString &text, QObject *parent)
    QTextCursor(this).insertText(text);
 }
 
-// internal
 QTextDocument::QTextDocument(QTextDocumentPrivate &dd, QObject *parent)
    : QObject(parent), d_ptr(&dd)
 {
@@ -780,11 +779,6 @@ QTextObject *QTextDocument::createObject(const QTextFormat &f)
    return obj;
 }
 
-/*!
-    \internal
-
-    Returns the frame that contains the text cursor position \a pos.
-*/
 QTextFrame *QTextDocument::frameAt(int pos) const
 {
    Q_D(const QTextDocument);

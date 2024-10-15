@@ -1215,7 +1215,6 @@ class Q_GUI_EXPORT QTouchEvent : public QInputEvent
       InfoFlags flags() const;
       QVector<QPointF> rawScreenPositions() const;
 
-      // internal
       void setId(int id);
       void setState(Qt::TouchPointStates state);
       void setPos(const QPointF &pos);
@@ -1271,7 +1270,6 @@ class Q_GUI_EXPORT QTouchEvent : public QInputEvent
       return _device;
    }
 
-   // internal
    void setWindow(QWindow *xWindow) {
       _window = xWindow;
    }

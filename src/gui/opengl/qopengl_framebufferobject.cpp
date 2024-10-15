@@ -110,7 +110,6 @@
 #define GL_UNSIGNED_INT_2_10_10_10_REV    0x8368
 #endif
 
-// internal
 void QOpenGLFramebufferObjectFormat::detach()
 {
     if (d->ref.load() != 1) {

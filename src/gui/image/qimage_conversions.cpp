@@ -87,10 +87,6 @@ void qGamma_correct_back_to_linear_cs(QImage *image)
    }
 }
 
-/*****************************************************************************
-  Internal routines for converting image depth.
- *****************************************************************************/
-
 // The drawhelper conversions from/to RGB32 are passthroughs which is not always correct for general image conversion.
 static const uint *convertRGB32FromARGB32PM(uint *buffer, const uint *src, int count,
    const QPixelLayout *, const QRgb *)

@@ -204,11 +204,6 @@ void QOffscreenSurface::setScreen(QScreen *newScreen)
    }
 }
 
-/*!
-    Called when the offscreen surface's screen is destroyed.
-
-    \internal
-*/
 void QOffscreenSurface::screenDestroyed(QObject *object)
 {
    Q_D(QOffscreenSurface);
@@ -217,22 +212,12 @@ void QOffscreenSurface::screenDestroyed(QObject *object)
    }
 }
 
-/*!
-    Returns the platform offscreen surface corresponding to the offscreen surface.
-
-    \internal
-*/
 QPlatformOffscreenSurface *QOffscreenSurface::handle() const
 {
    Q_D(const QOffscreenSurface);
    return d->platformOffscreenSurface;
 }
 
-/*!
-    Returns the platform surface corresponding to the offscreen surface.
-
-    \internal
-*/
 QPlatformSurface *QOffscreenSurface::surfaceHandle() const
 {
    Q_D(const QOffscreenSurface);

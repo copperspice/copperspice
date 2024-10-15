@@ -700,15 +700,11 @@ bool QIcon::isNull() const
    return !d;
 }
 
-/*!\internal
- */
 bool QIcon::isDetached() const
 {
    return !d || d->ref.load() == 1;
 }
 
-/*! \internal
- */
 void QIcon::detach()
 {
    if (d) {

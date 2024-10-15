@@ -157,9 +157,6 @@ QSupportedWritingSystems::~QSupportedWritingSystems()
    }
 }
 
-/*!
-    \internal
-*/
 void QSupportedWritingSystems::detach()
 {
    if (d->ref.load() != 1) {
@@ -182,9 +179,6 @@ bool QSupportedWritingSystems::supported(QFontDatabase::WritingSystem writingSys
    return d->vector.at(writingSystem);
 }
 
-/*!
-    \internal
- */
 QPlatformFontDatabase::~QPlatformFontDatabase()
 {
 }

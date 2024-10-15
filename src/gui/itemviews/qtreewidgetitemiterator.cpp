@@ -119,9 +119,6 @@ QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator--()
    return *this;
 }
 
-/*!
-  \internal
-*/
 bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
 {
    if (!item) {

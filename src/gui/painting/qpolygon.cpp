@@ -84,11 +84,6 @@ QPolygon::QPolygon(const QRect &rectangle, bool closed)
    }
 }
 
-/*!
-    // internal (cs)
-    Equivalent to setPoints(nPoints, points)
-*/
-
 QPolygon::QPolygon(int pointCount, const int *pointPtr)
 {
    setPoints(pointCount, pointPtr);
@@ -159,7 +154,6 @@ void QPolygon::setPoints(int nPoints, int firstx, int firsty, ...)
    va_end(ap);
 }
 
-// internal (cs)
 void QPolygon::putPoints(int index, int nPoints, const int *points)
 {
    if (index + nPoints > size()) {

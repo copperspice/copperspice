@@ -300,7 +300,6 @@ void QFontDialogPrivate::init()
    sampleEdit->setObjectName("qt_fontDialog_sampleEdit");
 }
 
-// internal
 QFontDialog::~QFontDialog()
 {
 }

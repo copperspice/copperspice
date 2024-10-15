@@ -2142,7 +2142,6 @@ bool QOpenGLShaderProgram::hasOpenGLShaderPrograms(QOpenGLContext *context)
 #endif
 }
 
-// internal
 void QOpenGLShaderProgram::shaderDestroyed()
 {
     Q_D(QOpenGLShaderProgram);

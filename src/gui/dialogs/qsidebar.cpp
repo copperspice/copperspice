@@ -420,7 +420,6 @@ void QSidebar::selectUrl(const QUrl &url)
 }
 
 #ifndef QT_NO_MENU
-// internal
 void QSidebar::showContextMenu(const QPoint &position)
 {
    QList<QAction *> actions;
@@ -442,7 +441,6 @@ void QSidebar::showContextMenu(const QPoint &position)
 }
 #endif
 
-// internal
 void QSidebar::removeEntry()
 {
    QList<QModelIndex> idxs = selectionModel()->selectedIndexes();

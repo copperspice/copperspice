@@ -51,9 +51,6 @@ QStaticText::~QStaticText()
    Q_ASSERT(!data || data->ref.load() >= 1);
 }
 
-/*!
-    \internal
-*/
 void QStaticText::detach()
 {
    if (data->ref.load() != 1) {

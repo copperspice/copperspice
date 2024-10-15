@@ -240,13 +240,7 @@ QString QAccessibleTabBar::text(QAccessible::Text t) const
 #endif // QT_NO_TABBAR
 
 #ifndef QT_NO_COMBOBOX
-/*!
-  \class QAccessibleComboBox
-  \brief The QAccessibleComboBox class implements the QAccessibleInterface for editable and read-only combo boxes.
-  \internal
 
-  \ingroup accessibility
-*/
 QAccessibleComboBox::QAccessibleComboBox(QWidget *w)
    : QAccessibleWidget(w, QAccessible::ComboBox)
 {

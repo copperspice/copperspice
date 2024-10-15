@@ -171,14 +171,12 @@ void QPainterPath::detach()
     setDirty(true);
 }
 
-// internal
 void QPainterPath::detach_helper()
 {
    QPainterPathPrivate *data = new QPainterPathData(*d_func());
    d_ptr.reset(data);
 }
 
-// internal
 void QPainterPath::ensureData_helper()
 {
    QPainterPathPrivate *data = new QPainterPathData;

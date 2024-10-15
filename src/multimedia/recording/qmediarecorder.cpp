@@ -183,7 +183,6 @@ QMediaObject *QMediaRecorder::mediaObject() const
    return d_func()->mediaObject;
 }
 
-// internal
 bool QMediaRecorder::setMediaObject(QMediaObject *object)
 {
    Q_D(QMediaRecorder);

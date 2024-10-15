@@ -61,9 +61,6 @@ QRasterWindow::QRasterWindow(QWindow *parent)
    d_func()->backingstore.reset(new QBackingStore(this));
 }
 
-/*!
-  \internal
-*/
 int QRasterWindow::metric(PaintDeviceMetric metric) const
 {
    Q_D(const QRasterWindow);
@@ -77,12 +74,8 @@ int QRasterWindow::metric(PaintDeviceMetric metric) const
    return QPaintDeviceWindow::metric(metric);
 }
 
-/*!
-  \internal
-*/
 QPaintDevice *QRasterWindow::redirected(QPoint *) const
 {
    Q_D(const QRasterWindow);
    return d->backingstore->paintDevice();
 }
-

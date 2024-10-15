@@ -448,7 +448,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    QSize iconSize;
    Qt::TextElideMode textElideMode;
 
-   QRegion updateRegion; // used for the internal update system
+   QRegion updateRegion;
    QPoint scrollDelayOffset;
 
    QBasicTimer updateTimer;

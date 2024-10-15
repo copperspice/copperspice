@@ -378,21 +378,18 @@ bool QRasterPaintEngine::end()
    return true;
 }
 
-// internal
 void QRasterPaintEngine::releaseBuffer()
 {
    Q_D(QRasterPaintEngine);
    d->rasterBuffer.reset(new QRasterBuffer);
 }
 
-// internal
 QSize QRasterPaintEngine::size() const
 {
    Q_D(const QRasterPaintEngine);
    return QSize(d->rasterBuffer->width(), d->rasterBuffer->height());
 }
 
-// internal
 void QRasterPaintEngine::updateMatrix(const QTransform &matrix)
 {
    QRasterPaintEngineState *s = state();
@@ -472,7 +469,6 @@ QRasterPaintEngineState::QRasterPaintEngineState(QRasterPaintEngineState &s)
    flags.has_clip_ownership = false;
 }
 
-// internal
 QPainterState *QRasterPaintEngine::createState(QPainterState *orig) const
 {
    QRasterPaintEngineState *s;
@@ -486,7 +482,6 @@ QPainterState *QRasterPaintEngine::createState(QPainterState *orig) const
    return s;
 }
 
-// internal
 void QRasterPaintEngine::setState(QPainterState *s)
 {
    Q_D(QRasterPaintEngine);
@@ -494,7 +489,6 @@ void QRasterPaintEngine::setState(QPainterState *s)
    d->rasterBuffer->compositionMode = s->composition_mode;
 }
 
-// internal
 void QRasterPaintEngine::penChanged()
 {
    QRasterPaintEngineState *s = state();
@@ -504,7 +498,6 @@ void QRasterPaintEngine::penChanged()
    s->dirty |= DirtyPen;
 }
 
-// internal
 void QRasterPaintEngine::updatePen(const QPen &pen)
 {
    Q_D(QRasterPaintEngine);
@@ -574,21 +567,18 @@ void QRasterPaintEngine::updatePen(const QPen &pen)
    s->strokeFlags = 0;
 }
 
-// internal
 void QRasterPaintEngine::brushOriginChanged()
 {
    QRasterPaintEngineState *s = state();
    s->fillFlags |= DirtyBrushOrigin;
 }
 
-// internal
 void QRasterPaintEngine::brushChanged()
 {
    QRasterPaintEngineState *s = state();
    s->fillFlags |= DirtyBrush;
 }
 
-// internal
 void QRasterPaintEngine::updateBrush(const QBrush &brush)
 {
    Q_D(QRasterPaintEngine);
@@ -632,8 +622,6 @@ void QRasterPaintEngine::updateRasterState()
    s->dirty = 0;
 }
 
-
-// internal
 void QRasterPaintEngine::opacityChanged()
 {
    QRasterPaintEngineState *s = state();
@@ -645,7 +633,6 @@ void QRasterPaintEngine::opacityChanged()
    s->intOpacity = (int) (s->opacity * 256);
 }
 
-// internal
 void QRasterPaintEngine::compositionModeChanged()
 {
    Q_D(QRasterPaintEngine);
@@ -661,7 +648,6 @@ void QRasterPaintEngine::compositionModeChanged()
    d->recalculateFastImages();
 }
 
-// internal
 void QRasterPaintEngine::renderHintsChanged()
 {
    QRasterPaintEngineState *s = state();
@@ -686,7 +672,6 @@ void QRasterPaintEngine::renderHintsChanged()
    d->recalculateFastImages();
 }
 
-// internal
 void QRasterPaintEngine::transformChanged()
 {
    QRasterPaintEngineState *s = state();
@@ -700,7 +685,6 @@ void QRasterPaintEngine::transformChanged()
    d->recalculateFastImages();
 }
 
-// internal
 void QRasterPaintEngine::clipEnabledChanged()
 {
    QRasterPaintEngineState *s = state();
@@ -893,7 +877,6 @@ static void qrasterpaintengine_dirty_clip(QRasterPaintEnginePrivate *d, QRasterP
    d->solid_color_filler.adjustSpanMethods();
 }
 
-// internal
 void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
 {
    Q_D(QRasterPaintEngine);
@@ -950,7 +933,6 @@ void QRasterPaintEngine::clip(const QVectorPath &path, Qt::ClipOperation op)
    qrasterpaintengine_dirty_clip(d, s);
 }
 
-// internal
 void QRasterPaintEngine::clip(const QRect &rect, Qt::ClipOperation op)
 {
    QRasterPaintEngineState *s = state();
@@ -1022,7 +1004,6 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
    return true;
 }
 
-// internal
 void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
 {
    Q_D(QRasterPaintEngine);
@@ -1073,7 +1054,6 @@ void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
    }
 }
 
-// internal
 void QRasterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
@@ -3041,21 +3021,18 @@ void QRasterPaintEngine::drawEllipse(const QRectF &rect)
 
 
 #ifdef Q_OS_WIN
-// internal
 void QRasterPaintEngine::setDC(HDC hdc)
 {
    Q_D(QRasterPaintEngine);
    d->hdc = hdc;
 }
 
-// internal
 HDC QRasterPaintEngine::getDC() const
 {
    Q_D(const QRasterPaintEngine);
    return d->hdc;
 }
 
-// internal
 void QRasterPaintEngine::releaseDC(HDC) const
 {
 }

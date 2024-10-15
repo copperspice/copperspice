@@ -1171,7 +1171,6 @@ void QPlainTextEdit::selectAll()
    d->control->selectAll();
 }
 
-// internal
 bool QPlainTextEdit::event(QEvent *e)
 {
    Q_D(QPlainTextEdit);
@@ -1236,7 +1235,6 @@ bool QPlainTextEdit::event(QEvent *e)
    return QAbstractScrollArea::event(e);
 }
 
-// internal
 void QPlainTextEdit::timerEvent(QTimerEvent *e)
 {
    Q_D(QPlainTextEdit);
