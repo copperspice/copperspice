@@ -60,7 +60,7 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
    set(CMAKE_INSTALL_BINDIR bin)
    set(CMAKE_INSTALL_LIBDIR lib)
    set(CMAKE_INSTALL_INCLUDEDIR include)
-
+   set(CMAKE_DEBUG_POSTFIX d)
 endif()
 
 # required libraries
