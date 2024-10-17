@@ -2130,9 +2130,10 @@ bool QListModeViewBase::doBatchedItemLayout(const QListViewLayoutInfo &info, int
       flowPositions.resize(flowPositions.count());
       segmentPositions.resize(segmentPositions.count());
       segmentStartRows.resize(segmentStartRows.count());
-      return true; // done
+      return true;
    }
-   return false; // not done
+
+   return false;
 }
 
 static inline int cs_vector_query(const QVector<int> &vector, int item, int start, int end)

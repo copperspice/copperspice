@@ -48,7 +48,7 @@ void QRegion::detach()
    }
 }
 
-// duplicates in qregion_win.cpp and qregion_wce.cpp
+// duplicates in qregion_win.cpp
 #define QRGN_SETRECT          1                // region stream commands
 #define QRGN_SETELLIPSE       2
 #define QRGN_SETPTARRAY_ALT   3
@@ -1131,19 +1131,17 @@ SOFTWARE.
 
 #include <limits.h>
 
-/*  1 if two BOXes overlap.
- *  0 if two BOXes do not overlap.
- *  Remember, x2 and y2 are not in the region
- */
+//  1 if two boxes overlap
+//  0 if two boxes do not overlap
+//  x2 and y2 are not in the region
+
 #define EXTENTCHECK(r1, r2) \
         ((r1)->right() >= (r2)->left() && \
          (r1)->left() <= (r2)->right() && \
          (r1)->bottom() >= (r2)->top() && \
          (r1)->top() <= (r2)->bottom())
 
-/*
- *  update region extents
- */
+// update region extents
 #define EXTENTS(r,idRect){\
             if((r)->left() < (idRect)->extents.left())\
               (idRect)->extents.setLeft((r)->left());\
@@ -1155,9 +1153,6 @@ SOFTWARE.
               (idRect)->extents.setBottom((r)->bottom());\
         }
 
-/*
- *   Check to see if there is enough memory in the present region.
- */
 #define MEMCHECK(dest, rect, firstrect){\
         if ((dest).numRects >= ((dest).rects.size()-1)){\
           firstrect.resize(firstrect.size() * 2); \
@@ -1166,16 +1161,10 @@ SOFTWARE.
       }
 
 
-/*
- * number of points to buffer before sending them off
- * to scanlines(): Must be an even number
- */
+// number of points to buffer before sending them off to scanlines(): Must be an even number
 #define NUMPTSTOBUFFER 200
 
-/*
- * used to allocate buffers for points and link
- * the buffers together
- */
+// used to allocate buffers for points and link the buffers together
 typedef struct _POINTBLOCK {
    char data[NUMPTSTOBUFFER * sizeof(QPoint)];
    QPoint *pts;
@@ -2950,14 +2939,6 @@ static inline void flushRow(const QRegionSpan *spans, int y, int numSpans, QRegi
    }
 }
 
-/*
- *     Create an array of rectangles from a list of points.
- *     If indeed these things (POINTS, RECTS) are the same,
- *     then this proc is still needed, because it allocates
- *     storage for the array, which was allocated on the
- *     stack by the calling procedure.
- *
- */
 static void PtsToRegion(int numFullPtBlocks, int iCurPtBlock, POINTBLOCK *FirstPtBlock, QRegionPrivate *reg)
 {
    bool needsExtend = false;
@@ -2974,7 +2955,7 @@ static void PtsToRegion(int numFullPtBlocks, int iCurPtBlock, POINTBLOCK *FirstP
    POINTBLOCK *CurPtBlock = FirstPtBlock;
 
    for (; numFullPtBlocks >= 0; --numFullPtBlocks) {
-      /* the loop uses 2 points per iteration */
+      // the loop uses 2 points per iteration
       int i = NUMPTSTOBUFFER >> 1;
 
       if (! numFullPtBlocks) {
@@ -3112,10 +3093,10 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
    try {
       if (rule == EvenOddRule) {
-         //  for each scanline
+         // for each scanline
 
          for (y = ET.ymin; y < ET.ymax; ++y) {
-            //  Add a new edge to the active edge table when we get to the next edge.
+            // Add a new edge to the active edge table when we get to the next edge.
 
             if (pSLL && y == pSLL->scanline) {
                loadAET(AET, pSLL->edgelist);
@@ -3125,14 +3106,14 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
             pPrevAET = AET;
             pAET = AET->next;
 
-            //  for each active edge
+            // for each active edge
             while (pAET) {
                pts->setX(pAET->bres.minor_axis);
                pts->setY(y);
                ++pts;
                ++iPts;
 
-               //  send out the buffer
+               // send out the buffer
                if (iPts == NUMPTSTOBUFFER) {
                   tmpPtBlock = (POINTBLOCK *)malloc(sizeof(POINTBLOCK));
                   Q_CHECK_PTR(tmpPtBlock);
@@ -3149,14 +3130,11 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
          }
 
       } else {
-         /*
-          *  for each scanline
-          */
+         // for each scanline
+
          for (y = ET.ymin; y < ET.ymax; ++y) {
-            /*
-             *  Add a new edge to the active edge table when we
-             *  get to the next edge.
-             */
+
+            // Add a new edge to the active edge table when we get to the next edge.
             if (pSLL && y == pSLL->scanline) {
                loadAET(AET, pSLL->edgelist);
                computeWAET(AET);
@@ -3166,23 +3144,17 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
             pAET = AET->next;
             pWETE = pAET;
 
-            /*
-             *  for each active edge
-             */
+            // for each active edge
             while (pAET) {
-               /*
-                *  add to the buffer only those edges that
-                *  are in the Winding active edge table.
-                */
+
+               // add to the buffer only those edges that are in the Winding active edge table.
                if (pWETE == pAET) {
                   pts->setX(pAET->bres.minor_axis);
                   pts->setY(y);
                   ++pts;
                   ++iPts;
 
-                  /*
-                   *  send out the buffer
-                   */
+                  // send out the buffer
                   if (iPts == NUMPTSTOBUFFER) {
                      tmpPtBlock = static_cast<POINTBLOCK *>(malloc(sizeof(POINTBLOCK)));
                      tmpPtBlock->pts = reinterpret_cast<QPoint *>(tmpPtBlock->data);
@@ -3197,10 +3169,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
                EVALUATEEDGEWINDING(pAET, pPrevAET, y, fixWAET)
             }
 
-            /*
-             *  recompute the winding active edge table if
-             *  we just resorted or have exited an edge.
-             */
+            // recompute the winding active edge table if we just resorted or have exited an edge.
             if (InsertionSort(AET) || fixWAET) {
                computeWAET(AET);
                fixWAET = false;

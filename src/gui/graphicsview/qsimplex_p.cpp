@@ -458,8 +458,7 @@ void QSimplex::collectResults()
    }
 
    // Basic variables
-   // Update the variable indicated in the first column with the value
-   // in the last column.
+   // Update the variable indicated in the first column with the value in the last column.
    for (int i = 1; i < rows; ++i) {
       int index = valueAt(i, 0) - 1;
       if (index < variables.size()) {

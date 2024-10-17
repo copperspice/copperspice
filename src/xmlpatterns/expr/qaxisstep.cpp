@@ -39,9 +39,9 @@ static inline QXmlNodeModelIndex::NodeKind operator|(const QXmlNodeModelIndex::N
 }
 }
 
-/**
- * @note The order is significant. It is of the same order as the values in QXmlNodeModelIndex::Axis is declared.
- */
+
+// order is significant. It is of the same order as the values in QXmlNodeModelIndex::Axis is declared.
+
 const QXmlNodeModelIndex::NodeKind AxisStep::s_whenAxisNodeKindEmpty[] = {
    QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // child;
    QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // descendant;

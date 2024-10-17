@@ -117,8 +117,8 @@ QTextDocument *QTextDocument::clone(QObject *parent) const
 bool QTextDocument::isEmpty() const
 {
    Q_D(const QTextDocument);
-   /* because if we're empty we still have one single paragraph as
-    * one single fragment */
+
+   // if we are empty we still have one single paragraph as one single fragment
    return d->length() <= 1;
 }
 

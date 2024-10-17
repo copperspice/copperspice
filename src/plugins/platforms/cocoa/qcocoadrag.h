@@ -43,10 +43,9 @@ class QCocoaDrag : public QPlatformDrag
    Qt::DropAction defaultAction(Qt::DropActions possibleActions,
       Qt::KeyboardModifiers modifiers) const override;
 
-   /**
-   * to meet NSView dragImage:at guarantees, we need to record the original
-   * event and view when handling an event in QNSView
-   */
+   // to meet NSView dragImage:at guarantees, record the original
+   // event and view when handling an event in QNSView
+
    void setLastMouseEvent(NSEvent *event, NSView *view);
 
    void setAcceptedAction(Qt::DropAction act);

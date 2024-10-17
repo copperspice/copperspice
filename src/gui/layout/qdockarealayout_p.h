@@ -47,13 +47,14 @@ class QWidgetAnimator;
 struct QLayoutStruct;
 
 // The classes in this file represent the tree structure that represents all the docks
+
 // At the root of the tree is: QDockAreaLayout, which handles all 4 sides, so there is only one.
 // For each side it has one QDockAreaLayoutInfo child. (See QDockAreaLayout::docks.)
 // The QDockAreaLayoutInfo have QDockAreaLayoutItems as children (See QDockAreaLayoutInfo::item_list),
 // which then has one QDockAreaLayoutInfo as a child. (QDockAreaLayoutItem::subInfo) or
 // a widgetItem if this is a node of the tree (QDockAreaLayoutItem::widgetItem)
-//
-// A path indetifies uniquely one object in this tree, the first number being the side and all the following
+
+// A path identifies uniquely one object in this tree, the first number being the side and all the following
 // indexes into the QDockAreaLayoutInfo::item_list.
 
 struct QDockAreaLayoutItem {

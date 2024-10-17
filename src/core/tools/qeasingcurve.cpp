@@ -292,7 +292,7 @@ static QEasingCurve::EasingFunction curveToFunc(QEasingCurve::Type curve)
       case QEasingCurve::OutInCirc:
          return &easeOutInCirc;
 
-      // Internal for, compatibility with QTimeLine only ??
+      // for compatibility with QTimeLine only (verify)
       case QEasingCurve::InCurve:
          return &easeInCurve;
 

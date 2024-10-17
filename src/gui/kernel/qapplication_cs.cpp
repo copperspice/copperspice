@@ -610,7 +610,7 @@ void QApplication::setStyleSheet(const QString &styleSheet)
    }
 }
 
-#endif // QT_NO_STYLE_STYLESHEET
+#endif
 
 QStyle *QApplication::setStyle(const QString &style)
 {
@@ -1596,7 +1596,7 @@ bool QApplicationPrivate::tryModalHelper(QWidget *widget, QWidget **rettop)
       *rettop = top;
    }
 
-   // the active popup widget always gets the input event
+   // active popup widget always gets the input event
    if (QApplication::activePopupWidget()) {
       return true;
    }

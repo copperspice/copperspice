@@ -287,7 +287,8 @@ bool QMoviePrivate::next()
       // Loop no more. Done
       return false;
    }
-   // Image and delay OK, update internal state
+
+   // Image and delay OK, update state
    currentFrameNumber = nextFrameNumber++;
    QSize scaledSize = reader->scaledSize();
    if (scaledSize.isValid() && (scaledSize != info.pixmap.size())) {

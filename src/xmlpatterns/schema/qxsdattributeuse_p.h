@@ -43,8 +43,8 @@ class XsdAttributeUse : public XsdAttributeTerm
       typedef QExplicitlySharedDataPointer<ValueConstraint> Ptr;
 
       enum Variety {
-         Default,  ///< The attribute use has a default value set.
-         Fixed     ///< The attribute use has a fixed value set.
+         Default,      // attribute use has a default value set
+         Fixed         // attribute use has a fixed value set
       };
 
       void setVariety(Variety variety);
@@ -65,9 +65,9 @@ class XsdAttributeUse : public XsdAttributeTerm
    };
 
    enum UseType {
-      OptionalUse,        ///< The attribute can be there but doesn't need to.
-      RequiredUse,        ///< The attribute must be there.
-      ProhibitedUse       ///< The attribute is not allowed to be there.
+      OptionalUse,        // attribute can be there but doesn't need to.
+      RequiredUse,        // attribute must be there.
+      ProhibitedUse       // attribute is not allowed to be there.
    };
 
    XsdAttributeUse();

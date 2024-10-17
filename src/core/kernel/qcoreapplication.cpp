@@ -802,7 +802,7 @@ bool QCoreApplicationPrivate::sendThroughObjectEventFilters(QObject *receiver, Q
    return false;
 }
 
-// internal methods called by notify()
+// called by various other CS notify() methods
 bool QCoreApplicationPrivate::notify_helper(QObject *receiver, QEvent *event)
 {
    // send to all application event filters

@@ -738,9 +738,8 @@ static bool qt_macWindowMainWindow(const QWidget *window)
    return false;
 }
 
-/*****************************************************************************
-  QMacCGStyle globals
- *****************************************************************************/
+// QMacCGStyle globals
+
 const int qt_mac_hitheme_version  = 0;                     // HITheme version we speak
 const int macItemFrame            = 2;                     // menu item frame width
 const int macItemHMargin          = 3;                     // menu item hor text margin
@@ -748,9 +747,6 @@ const int macRightBorder          = 12;                    // right border on ma
 const ThemeWindowType QtWinType   = kThemeDocumentWindow;  // Window type we use for QTitleBar.
 QPixmap *qt_mac_backgroundPattern = nullptr;               // stores the standard widget background.
 
-/*****************************************************************************
-  QMacCGStyle utility functions
- *****************************************************************************/
 static inline int qt_mac_hitheme_tab_version()
 {
    return 1;
@@ -1536,10 +1532,9 @@ void QMacStylePrivate::initComboboxBdi(const QStyleOptionComboBox *combo, HIThem
    }
 }
 
-/**
-    Carbon draws comboboxes (and other views) outside the rect given as argument. Use this function to obtain
-    the corresponding inner rect for drawing the same combobox so that it stays inside the given outerBounds.
-*/
+// Carbon draws comboboxes (and other views) outside the rect given as argument. Use this function to obtain
+// the corresponding inner rect for drawing the same combobox so that it stays inside the given outerBounds.
+
 HIRect QMacStylePrivate::comboboxInnerBounds(const HIRect &outerBounds, int buttonKind)
 {
    HIRect innerBounds = outerBounds;
@@ -1589,10 +1584,9 @@ HIRect QMacStylePrivate::comboboxInnerBounds(const HIRect &outerBounds, int butt
    return innerBounds;
 }
 
-/**
-    Inside a combobox Qt places a line edit widget. The size of this widget should depend on the kind
-    of combobox we choose to draw. This function calculates and returns this size.
-*/
+// Inside a combobox Qt places a line edit widget. The size of this widget should depend on the kind
+// of combobox we choose to draw. This function calculates and returns this size.
+
 QRect QMacStylePrivate::comboboxEditBounds(const QRect &outerBounds, const HIThemeButtonDrawInfo &bdi)
 {
    QRect ret = outerBounds;
@@ -1622,11 +1616,10 @@ QRect QMacStylePrivate::comboboxEditBounds(const QRect &outerBounds, const HIThe
    return ret;
 }
 
-/**
-    Carbon comboboxes don't scale (sight). If the size of the combo suggest a scaled version,
-    create it manually by drawing a small Carbon combo onto a pixmap (use pixmap cache), chop
-    it up, and copy it back onto the widget. Othervise, draw the combobox supplied by Carbon directly.
-*/
+// Carbon comboboxes don't scale (sight). If the size of the combo suggest a scaled version,
+// create it manually by drawing a small Carbon combo onto a pixmap (use pixmap cache), chop
+// it up, and copy it back onto the widget. Othervise, draw the combobox supplied by Carbon directly.
+
 void QMacStylePrivate::drawCombobox(const HIRect &outerBounds, const HIThemeButtonDrawInfo &bdi, QPainter *p)
 {
    if (!(bdi.kind == kThemeComboBox && outerBounds.size.height > 28)) {
@@ -1676,10 +1669,9 @@ void QMacStylePrivate::drawCombobox(const HIRect &outerBounds, const HIThemeButt
    }
 }
 
-/**
-    Carbon tableheaders don't scale (sight). So create it manually by drawing a small Carbon header
-    onto a pixmap (use pixmap cache), chop it up, and copy it back onto the widget.
-*/
+// Carbon tableheaders don't scale (sight). So create it manually by drawing a small Carbon header
+// onto a pixmap (use pixmap cache), chop it up, and copy it back onto the widget.
+
 void QMacStylePrivate::drawTableHeader(const HIRect &outerBounds,
                                        bool drawTopBorder, bool drawLeftBorder, const HIThemeButtonDrawInfo &bdi, QPainter *p)
 {
@@ -6946,14 +6938,14 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
          }
          break;
       case QStyle::CT_TabWidget:
-         // the size between the pane and the "contentsRect" (+4,+4)
+         // size between the pane and the "contentsRect" (+4,+4)
          // (the "contentsRect" is on the inside of the pane)
+
          sz = QCommonStyle::sizeFromContents(ct, opt, csz, widget);
-         /**
-             This is supposed to show the relationship between the tabBar and
-             the stack widget of a QTabWidget.
-             Unfortunately ascii is not a good way of representing graphics.....
-             PS: The '=' line is the painted frame.
+
+         /*
+             shows the relationship between the tabBar and the stack widget of a QTabWidget
+             the '=' line is the painted frame.
 
                 top    ---+
                           |
@@ -6979,10 +6971,10 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
                 (same value as used in SE_TabWidgetTabContents)
               * overlap is how much the pane should overlap the tab bar
          */
-         // then add the size between the stackwidget and the "contentsRect"
 
          if (const QStyleOptionTabWidgetFrame * twf
              = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
+            // add the size between the stackwidget and the "contentsRect"
             QSize extra(0, 0);
             const int overlap = pixelMetric(PM_TabBarBaseOverlap, opt, widget);
             const int gapBetweenTabbarAndStackWidget = 2 + 14 - overlap;
@@ -7594,7 +7586,7 @@ static CGColorSpaceRef qt_mac_colorSpaceForDeviceType(const QPaintDevice *paintD
    return qt_mac_displayColorSpace(isWidget ? static_cast<const QWidget *>(paintDevice) : nullptr);
 }
 
-// internal - function is duplicated in the Cocoa platform plugin
+// function is duplicated in the Cocoa platform plugin
 CGContextRef qt_mac_cg_context(const QPaintDevice *pdev)
 {
    if (pdev->devType() == QInternal::Pixmap) {

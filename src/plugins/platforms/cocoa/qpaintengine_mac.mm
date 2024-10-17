@@ -560,10 +560,6 @@ static void qt_mac_dispose_pattern(void *info)
    delete pat;
 }
 
-/*****************************************************************************
-  QCoreGraphicsPaintEngine member functions
- *****************************************************************************/
-
 static inline QPaintEngine::PaintEngineFeatures qt_mac_cg_features()
 {
    return QPaintEngine::PaintEngineFeatures(QPaintEngine::AllFeatures & ~QPaintEngine::PaintOutsidePaintEvent

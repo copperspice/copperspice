@@ -76,7 +76,7 @@ class QTipLabel : public QLabel
 
 #ifndef QT_NO_STYLE_STYLESHEET
  public:
-   // internal, Cleanup the _q_stylesheet_parent propery
+   // cleanup the _q_stylesheet_parent propery
    GUI_CS_SLOT_1(Public, void styleSheetParentDestroyed())
    GUI_CS_SLOT_2(styleSheetParentDestroyed)
 

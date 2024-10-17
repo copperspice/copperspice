@@ -1960,8 +1960,7 @@ void QGraphicsScene::addItem(QGraphicsItem *item)
       d->enterModal(item);
    }
 
-   // Update creation order focus chain. Make sure to leave the widget's
-   // internal tab order intact.
+   // Update creation order focus chain. Make sure to leave the CS widget tab order intact.
    if (item->isWidget()) {
       QGraphicsWidget *widget = static_cast<QGraphicsWidget *>(item);
       if (!d->tabFocusFirst) {

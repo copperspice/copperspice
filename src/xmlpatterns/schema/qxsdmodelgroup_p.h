@@ -38,9 +38,9 @@ class XsdModelGroup : public XsdTerm
    typedef QList<XsdModelGroup::Ptr> List;
 
    enum ModelCompositor {
-      SequenceCompositor,     ///< The model group is a sequence.
-      ChoiceCompositor,       ///< The model group is a choice.
-      AllCompositor           ///< The model group contains elements only.
+      SequenceCompositor,     // model group is a sequence.
+      ChoiceCompositor,       // model group is a choice.
+      AllCompositor           // model group contains elements only.
    };
 
    XsdModelGroup();

@@ -89,12 +89,9 @@ class Q_GUI_EXPORT QPaintEngine
       ObjectBoundingModeGradients = 0x00010000, // Can do object bounding mode gradients
       RasterOpModes               = 0x00020000, // Can do logical raster operations
       PaintOutsidePaintEvent      = 0x20000000, // Engine is capable of painting outside paint events
-      /*                          0x10000000, // Used for emulating
-                                  QGradient::StretchToDevice,
-                                  defined in qpainter.cpp
 
-                                  0x40000000, // Used internally for emulating opaque backgrounds
-      */
+      //                            0x10000000,   // emulating QGradient::StretchToDevice, defined in qpainter.cpp
+      //                            0x40000000,   // emulating opaque backgrounds
 
       AllFeatures               = 0xffffffff  // For convenience
    };

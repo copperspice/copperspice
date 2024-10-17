@@ -122,7 +122,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
       FlagMask           = 0x00000300,        // obsolete
       ButtonMask         = ~FlagMask          // obsolete
    };
-   typedef StandardButton Button;  // obsolete
+   typedef StandardButton Button;             // obsolete
 
    using StandardButtons = QFlags<StandardButton>;
 

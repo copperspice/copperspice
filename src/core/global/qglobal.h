@@ -1043,7 +1043,7 @@ typename Wrapper::pointer qGetPtrHelper(const Wrapper &p)
 #define QT_TR_NOOP(text)                            cs_mark_tr_old(text)
 #define QT_TRANSLATE_NOOP3(context, text, comment)  cs_mark_tr_old(text, comment)
 
-// used internally
+// used internally by copperspice
 #define QT_TRANSLATE_NOOP(context, text)            cs_mark_tr_old(text)
 
 // not used in copperspice

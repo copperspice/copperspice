@@ -143,11 +143,12 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
 
         if (ppdKey.isEmpty()) {
             // Is using a custom page size as defined in the Print Dialog custom settings using mm or inches.
-            // We can't ask PMPaper what those units actually are, we can only get the point size which may return
+            // We can not ask PMPaper what those units actually are, we can only get the point size which may return
             // slightly wrong results due to rounding.
-            // Testing shows if using metric/mm then is rounded mm, if imperial/inch is rounded to 2 decimal places
-            // Even if we pass in our own custom size in mm with decimal places, the dialog will still round it!
-            // Suspect internal storage is in rounded mm?
+
+            // Testing shows using metric/mm is rounded to mm when imperial/inch is rounded to 2 decimal places
+            // if we pass a custom size with decimal places the dialog will still round it.
+            // usually the storage is rounded to the nearest mm
 
             if (QLocale().measurementSystem() == QLocale::MetricSystem) {
                 QSizeF sizef = QSizeF(width, height) / qt_pointMultiplier(QPageSize::Unit::Millimeter);

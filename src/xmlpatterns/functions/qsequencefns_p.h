@@ -86,8 +86,8 @@ class Existence : public FunctionCall
 
       const Cardinality card(m_operands.first()->staticType()->cardinality());
       if (myCard.isMatch(card)) {
-         /* Since the dynamic type always is narrower than the static type or equal, and that the
-            static type is in scope, it means we will always be true. */
+         // Since the dynamic type always is narrower than the static type or equal, and that the
+         // static type is in scope, it means we will always be true.
          return wrapLiteral(CommonValues::BooleanTrue, context, this);
 
       } else {

@@ -43,9 +43,9 @@ class XsdElement : public XsdTerm
    typedef QList<XsdElement *> WeakList;
 
    enum ConstraintType {
-      NoneConstraint,     ///< The value of the element has no constraints.
-      DefaultConstraint,  ///< The element has a default value set.
-      FixedConstraint     ///< The element has a fixed value set.
+      NoneConstraint,     // value of the element has no constraints.
+      DefaultConstraint,  // element has a default value set.
+      FixedConstraint     // element has a fixed value set.
    };
 
    class Scope : public QSharedData
@@ -54,8 +54,8 @@ class XsdElement : public XsdTerm
       typedef QExplicitlySharedDataPointer<Scope> Ptr;
 
       enum Variety {
-         Global,    ///< The element is defined globally as child of the <em>schema</em> object.
-         Local      ///< The element is defined locally as child of a complex type or model group definition.
+         Global,    // element is defined globally as child of the <em>schema</em> object.
+         Local      // element is defined locally as child of a complex type or model group definition.
       };
 
       void setVariety(Variety variety);
@@ -91,8 +91,8 @@ class XsdElement : public XsdTerm
       typedef QExplicitlySharedDataPointer<ValueConstraint> Ptr;
 
       enum Variety {
-         Default,  ///< The element has a default value set.
-         Fixed     ///< The element has a fixed value set.
+         Default,     // element has a default value set.
+         Fixed        // element has a fixed value set.
       };
 
       void setVariety(Variety variety);

@@ -208,7 +208,7 @@ QModelIndex QDirModel::index(int row, int column, const QModelIndex &parent) con
       return QModelIndex();
    }
 
-   // now get the internal pointer for the index
+   // now get the pointer for the index
    QDirModelPrivate::QDirNode *n = d->node(row, d->indexValid(parent) ? p : nullptr);
    Q_ASSERT(n);
 
@@ -818,8 +818,8 @@ QModelIndex QDirModel::mkdir(const QModelIndex &parent, const QString &name)
 
    QDirModelPrivate::QDirNode *p = d->node(parent);
    QString path = p->info.absoluteFilePath();
-   // For the indexOf() method to work, the new directory has to be a direct child of
-   // the parent directory.
+
+   // For indexOf() method to work the new directory has to be a direct child of the parent directory.
 
    QDir newDir(name);
    QDir dir(path);

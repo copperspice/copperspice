@@ -226,7 +226,7 @@ struct StandardPageSize {
 // NB! This table needs to be in sync with QPageSize::PageSizeId
 static const StandardPageSize qt_pageSizes[] = {
 
-   // Existing Qt sizes including ISO, US, ANSI and other standards
+   // existing sizes including ISO, US, ANSI and other standards
    {QPageSize::A4,   DMPAPER_A4,   QPageSize::Millimeter,    595,  842,      210,  297,       8.27,  11.69,    "A4"},
    {QPageSize::B5,   DMPAPER_NONE,   QPageSize::Millimeter,    499,  709,      176,  250,       6.9,   9.8,    "ISOB5"},
    {QPageSize::Letter,   DMPAPER_LETTER,   QPageSize::Inch,    612,  792,      215.9,  279.4,       8.5,  11,    "Letter"},

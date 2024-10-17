@@ -133,7 +133,7 @@ static QSet<QByteArray> interfaceNames(int socket)
             break;
          }
       } else {
-         // internal error
+         // system error
          return result;
       }
 

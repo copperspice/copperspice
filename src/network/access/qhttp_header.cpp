@@ -369,8 +369,6 @@ void QHttpHeader::setContentType(const QString &type)
    setValue(QLatin1String("content-type"), type);
 }
 
-// * *    Request Header
-
 class QHttpRequestHeaderPrivate : public QHttpHeaderPrivate
 {
    Q_DECLARE_PUBLIC(QHttpRequestHeader)
@@ -495,9 +493,6 @@ QString QHttpRequestHeader::toString() const
 
    return first.formatArg(d->m).formatArg(d->p) + last.formatArg(d->majVer).formatArg(d->minVer).formatArg(QHttpHeader::toString());
 }
-
-
-// * *    Response Header
 
 class QHttpResponseHeaderPrivate : public QHttpHeaderPrivate
 {

@@ -83,7 +83,7 @@ inline bool is_combining<QChar32>(QChar32 c)
 }   // namespace
 
 
-// type traits, internal only
+// type traits, only used by CS
 template <typename S>
 class QRegexTraits
 {

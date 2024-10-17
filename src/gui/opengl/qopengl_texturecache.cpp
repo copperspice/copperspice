@@ -224,10 +224,10 @@ GLuint QOpenGLTextureCache::bindTexture(QOpenGLContext *context, qint64 key, con
             if (static_cast<QOpenGLExtensions*>(context->functions())->hasOpenGLExtension(QOpenGLExtensions::BGRATextureFormat)) {
                 // GL_EXT_bgra or GL_EXT_texture_format_BGRA8888 extensions.
                 if (context->isOpenGLES()) {
-                    // The GL_EXT_texture_format_BGRA8888 extension requires the internal format to match the external.
+                    // The GL_EXT_texture_format_BGRA8888 extension requires the formats to match
                     externalFormat = internalFormat = GL_BGRA;
                 } else {
-                    // OpenGL BGRA/BGR format is not allowed as an internal format
+                    // OpenGL BGRA/BGR format is not allowed as a format
                     externalFormat = GL_BGRA;
                     internalFormat = GL_RGBA;
                 }

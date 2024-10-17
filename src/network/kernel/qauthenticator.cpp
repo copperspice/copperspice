@@ -752,9 +752,9 @@ QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge,
 //#define NTLMV1_CLIENT
 
 
-//************************Global variables***************************
+// Global variables
 
-const int blockSize = 64;        // as per RFC2104 Block-size is 512 bits
+const int blockSize        = 64;        // as per RFC2104 Block-size is 512 bits
 
 const quint8 respversion = 1;
 const quint8 hirespversion = 1;
@@ -771,7 +771,7 @@ const quint8 hirespversion = 1;
 */
 
 /*
-   TODO:
+   Pending-CS
     - Fix unicode handling
     - add v2 handling
 */

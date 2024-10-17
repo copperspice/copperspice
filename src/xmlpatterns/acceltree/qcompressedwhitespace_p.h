@@ -36,9 +36,7 @@ class CompressedWhitespace
    static QString decompress(const QString &input);
 
  private:
-   /**
-    * We use the two upper bits for communicating what space it is.
-    */
+   // use the two upper bits for communicating what space it is
    enum CharIdentifier {
       Space   = 0x0,
       CR      = 0x80,

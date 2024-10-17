@@ -116,7 +116,7 @@ int QAbstractEventDispatcher::registerTimer(int interval, Qt::TimerType timerTyp
    return id;
 }
 
-// ### Are these called when the _application_ starts/stops or just when the current _event loop_ starts/stops?
+// ### are these called when the _application_ starts/stops or just when the current _event loop_ starts/stops?
 
 void QAbstractEventDispatcher::startingUp()
 { }

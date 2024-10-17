@@ -2433,7 +2433,6 @@ static QWidget *containerWidget(const QWidget *w)
 {
 #ifndef QT_NO_LINEEDIT
    if (qobject_cast<const QLineEdit *>(w)) {
-      //if the QLineEdit is an embeddedWidget, we need the rule of the real widget
 
 #ifndef QT_NO_COMBOBOX
       if (qobject_cast<const QComboBox *>(w->parentWidget())) {
@@ -2448,7 +2447,7 @@ static QWidget *containerWidget(const QWidget *w)
 #endif
 
    }
-#endif // QT_NO_LINEEDIT
+#endif
 
 #ifndef QT_NO_SCROLLAREA
    if (const QAbstractScrollArea *sa = qobject_cast<const QAbstractScrollArea *>(w->parentWidget())) {
@@ -2491,7 +2490,7 @@ static bool unstylable(const QWidget *w)
 
 #ifndef QT_NO_TABBAR
    if (w->metaObject() == &QWidget::staticMetaObject() && qobject_cast<const QTabBar *>(w->parentWidget())) {
-      // the moving tab of a QTabBar
+      // moving tab of a QTabBar
       return true;
    }
 #endif
@@ -2522,12 +2521,11 @@ static quint64 extendedPseudoClass(const QWidget *w)
    return pc;
 }
 
-// sets up the geometry of the widget. We set a dynamic property when
-// we modify the min/max size of the widget. The min/max size is restored
-// to their original value when a new stylesheet that does not contain
-// the CSS properties is set and when the widget has this dynamic property set.
-// This way we don't trample on users who had setup a min/max size in code and
-// don't use stylesheets at all.
+// sets up the geometry of the widget. We set a dynamic property when we modify the min/max size
+// of the widget. The min/max size is restored to their original value when a new stylesheet that
+// does not contain the CSS properties is set and when the widget has this dynamic property set.
+// This way we do not trample on users who had setup a min/max size and do not use stylesheets.
+
 void QStyleSheetStyle::setGeometry(QWidget *w)
 {
    QRenderRule rule = renderRule(w, PseudoElement_None, QCss::PseudoClass_Enabled | extendedPseudoClass(w));

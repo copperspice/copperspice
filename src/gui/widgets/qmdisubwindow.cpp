@@ -1200,13 +1200,13 @@ void QMdiSubWindowPrivate::setNormalMode()
       q->setVisible(false);
    }
 
-   // Restore minimum size if set by user.
+   // Restore minimum size if set by the user
    if (!userMinimumSize.isNull()) {
       q->setMinimumSize(userMinimumSize);
       userMinimumSize = QSize(0, 0);
    }
 
-   // Show the internal widget if it was hidden by us,
+   // Show the widget if it was hidden by CS
    if (baseWidget && isWidgetHiddenByUs) {
       baseWidget->show();
       isWidgetHiddenByUs = false;
@@ -1289,7 +1289,7 @@ void QMdiSubWindowPrivate::setMaximizeMode()
       q->setVisible(false);
    }
 
-   // Show the internal widget if it was hidden by us.
+   // Show the widget if it was hidden by CS
    if (baseWidget && isWidgetHiddenByUs) {
       baseWidget->show();
       isWidgetHiddenByUs = false;
@@ -2197,7 +2197,7 @@ void QMdiSubWindowPrivate::setSizeGripVisible(bool visible) const
       grip->setVisible(visible);
    }
 }
-#endif // QT_NO_SIZEGRIP
+#endif
 
 void QMdiSubWindowPrivate::updateInternalWindowTitle()
 {
@@ -2533,7 +2533,7 @@ void QMdiSubWindow::showShaded()
    }
    resize(d->internalMinimumSize);
 
-   // Hide the internal widget if not already hidden by the user.
+   // Hide the widget if not already hidden by the user.
    if (d->baseWidget && !d->baseWidget->isHidden()) {
       d->baseWidget->hide();
       d->isWidgetHiddenByUs = true;
@@ -2702,7 +2702,8 @@ bool QMdiSubWindow::event(QEvent *event)
          bool wasShaded = isShaded();
          bool wasMinimized = isMinimized();
          bool wasMaximized = isMaximized();
-         // Don't emit subWindowActivated, the app doesn't have to know about our hacks
+
+         // Do not emit subWindowActivated, the program does not have to know about this
          const QScopedValueRollback<bool> activationEnabledSaver(d->activationEnabled);
          d->activationEnabled = false;
 

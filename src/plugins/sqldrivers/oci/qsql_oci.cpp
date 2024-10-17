@@ -700,12 +700,7 @@ static QSqlField qFromOraInf(const OraFieldInfo &ofi)
    return f;
 }
 
-/*!
-    \internal
-
-    Convert QDateTime to the internal Oracle DATE format NB!
-    It does not handle BCE dates.
-*/
+// converts QDateTime to the internal Oracle DATE format NB. Does not handle BCE dates.
 QByteArray qMakeOraDate(const QDateTime &dt)
 {
    QByteArray ba;
@@ -722,11 +717,7 @@ QByteArray qMakeOraDate(const QDateTime &dt)
    return ba;
 }
 
-/*!
-  \internal
-
-   Convert qint64 to the internal Oracle OCINumber format.
-  */
+// convert qint64 to the internal Oracle OCINumber format
 QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err)
 {
    QByteArray ba(sizeof(OCINumber), 0);
@@ -735,11 +726,7 @@ QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err)
    return ba;
 }
 
-/*!
-  \internal
-
-   Convert quint64 to the internal Oracle OCINumber format.
-  */
+// converts quint64 to the internal Oracle OCINumber format
 QByteArray qMakeOCINumber(const quint64 &ull, OCIError *err)
 {
    QByteArray ba(sizeof(OCINumber), 0);

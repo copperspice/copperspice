@@ -41,8 +41,8 @@ QCupsJobWidget::QCupsJobWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_ui.setupUi(this);
-    //set all the default values
-    //TODO restore last used values
+    // set all the default values
+    // TODO - restore last used values
     initJobHold();
     initJobBilling();
     initJobPriority();

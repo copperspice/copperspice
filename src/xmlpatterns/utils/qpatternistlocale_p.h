@@ -45,7 +45,7 @@ class QtXmlPatterns
    QtXmlPatterns &operator=(const QtXmlPatterns &) = delete;
 };
 
-// don't make this function static, otherwise xlC 7 cannot find it
+// don't make this function static, otherwise xlC 7 ca nnot find it
 inline QString formatKeyword(const QString &keyword)
 {
    return QLatin1String("<span class='XQuery-keyword'>")   +

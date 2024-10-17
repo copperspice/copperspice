@@ -53,7 +53,7 @@ struct QEditorInfo {
    bool isStatic;
 };
 
-//  Fast associativity between Persistent editors and indices.
+// Fast associativity between Persistent editors and indices.
 typedef QHash<QWidget *, QPersistentModelIndex> QEditorIndexHash;
 typedef QHash<QPersistentModelIndex, QEditorInfo> QIndexEditorHash;
 
@@ -440,8 +440,8 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
    QBasicTimer autoScrollTimer;
    int autoScrollMargin;
    int autoScrollCount;
-   bool shouldScrollToCurrentOnShow; //used to know if we should scroll to current on show event
-   bool shouldClearStatusTip; //if there is a statustip currently shown that need to be cleared when leaving.
+   bool shouldScrollToCurrentOnShow;    // used to know if we should scroll to current on show event
+   bool shouldClearStatusTip;           // if there is a statustip currently shown that need to be cleared when leaving.
 
    bool alternatingColors;
 
@@ -453,7 +453,7 @@ class QAbstractItemViewPrivate : public QAbstractScrollAreaPrivate
 
    QBasicTimer updateTimer;
    QBasicTimer delayedEditing;
-   QBasicTimer delayedAutoScroll; //used when an item is clicked
+   QBasicTimer delayedAutoScroll;       // used when an item is clicked
    QBasicTimer delayedReset;
 
    QAbstractItemView::ScrollMode verticalScrollMode;

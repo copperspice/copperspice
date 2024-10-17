@@ -44,8 +44,8 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
       typedef QExplicitlySharedDataPointer<Scope> Ptr;
 
       enum Variety {
-         Global,    ///< The attribute is defined globally as child of the <em>schema</em> object.
-         Local      ///< The attribute is defined locally as child of a complex type or attribute group definition.
+         Global,       // defined globally as child of the <em>schema</em> object.
+         Local         // defined locally as child of a complex type or attribute group definition.
       };
 
       void setVariety(Variety variety);
@@ -66,8 +66,8 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
       typedef QExplicitlySharedDataPointer<ValueConstraint> Ptr;
 
       enum Variety {
-         Default,  ///< The attribute has a default value set.
-         Fixed     ///< The attribute has a fixed value set.
+         Default,     // attribute has a default value set.
+         Fixed        // attribute has a fixed value set.
       };
 
       void setVariety(Variety variety);

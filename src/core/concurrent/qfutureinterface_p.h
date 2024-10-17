@@ -111,8 +111,7 @@ class QFutureInterfaceBasePrivate
    QString m_progressText;
    QRunnable *runnable;
 
-   // Internal functions that does not change the mutex state.
-   // The mutex must be locked when calling these.
+   // mutex must be locked when calling these.
    int internal_resultCount() const;
    bool internal_isResultReadyAt(int index) const;
    bool internal_waitForNextResult();

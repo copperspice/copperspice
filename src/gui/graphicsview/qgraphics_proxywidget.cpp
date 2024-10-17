@@ -583,8 +583,7 @@ QVariant QGraphicsProxyWidget::itemChange(GraphicsItemChange change,
          }
          break;
       case ItemPositionHasChanged:
-         // Move the internal widget if we're in widget-to-proxy
-         // mode. Otherwise the widget has already moved.
+         // Move the CS widget if we are in widget-to-proxy mode, otherwise the widget has already moved.
          if (d->widget && d->posChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
             d->widget->move(value.toPoint());
          }

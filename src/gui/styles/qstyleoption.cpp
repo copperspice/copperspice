@@ -279,7 +279,7 @@ QStyleOptionSpinBox::QStyleOptionSpinBox(int version)
 {
 }
 
-#endif // QT_NO_SPINBOX
+#endif
 
 QStyleOptionDockWidget::QStyleOptionDockWidget()
    : QStyleOption(Version, SO_DockWidget), closable(false),
@@ -339,7 +339,7 @@ QStyleOptionRubberBand::QStyleOptionRubberBand(int version)
 {
 }
 
-#endif // QT_NO_RUBBERBAND
+#endif
 
 QStyleOptionTitleBar::QStyleOptionTitleBar()
    : QStyleOptionComplex(Version, SO_TitleBar), titleBarState(0), titleBarFlags(Qt::EmptyFlag)
@@ -370,7 +370,8 @@ QStyleOptionViewItem::QStyleOptionViewItem(int version)
 {
 }
 
-#endif // QT_NO_ITEMVIEWS
+#endif
+
 #ifndef QT_NO_TABWIDGET
 
 QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame()
@@ -385,7 +386,7 @@ QStyleOptionTabWidgetFrame::QStyleOptionTabWidgetFrame(int version)
 {
 }
 
-#endif // QT_NO_TABWIDGET
+#endif
 
 #ifndef QT_NO_TABBAR
 
@@ -401,7 +402,7 @@ QStyleOptionTabBarBase::QStyleOptionTabBarBase(int version)
 {
 }
 
-#endif // QT_NO_TABBAR
+#endif
 
 #ifndef QT_NO_SIZEGRIP
 
@@ -415,7 +416,7 @@ QStyleOptionSizeGrip::QStyleOptionSizeGrip(int version)
 {
 }
 
-#endif // QT_NO_SIZEGRIP
+#endif
 
 QStyleOptionGraphicsItem::QStyleOptionGraphicsItem()
    : QStyleOption(Version, Type), levelOfDetail(1)

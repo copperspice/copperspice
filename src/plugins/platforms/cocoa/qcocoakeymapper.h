@@ -33,7 +33,7 @@
 #include <QKeyEvent>
 
 /*
-    A Mac KeyboardLayoutItem has 8 possible states:
+    A Mac KeyboardLayoutItem has 8 possible states
         1. Unmodified
         2. Shift
         3. Control
@@ -53,7 +53,7 @@
 */
 struct KeyboardLayoutItem {
    bool dirty;
-   quint32 qtKey[16]; // Can by any Qt::Key_<foo>, or unicode character
+   quint32 qtKey[16];             // can by any Qt::Key_<foo>, or unicode character
 };
 
 

@@ -56,10 +56,10 @@ class QTextDocumentLayout : public QAbstractTextDocumentLayout
    void setCursorWidth(int width);
    int cursorWidth() const;
 
-   // internal, to support the ugly FixedColumnWidth wordwrap mode in QTextEdit
+   // support the FixedColumnWidth wordwrap mode in QTextEdit
    void setFixedColumnWidth(int width);
 
-   // internal for QTextEdit's NoWrap mode
+   // QTextEdit NoWrap mode
    void setViewport(const QRectF &viewport);
 
    QRectF frameBoundingRect(QTextFrame *frame) const override;

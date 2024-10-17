@@ -223,9 +223,8 @@ class QXmlQueryPrivate
       } catch (const QPatternist::Exception) {
          m_expr.reset();
 
-         /* We don't call m_staticContext.reset() because it shouldn't be
-          * necessary, since m_staticContext is changed when the expression
-          * is changed. */
+         // We do not call m_staticContext.reset() because it should not be
+         // necessary, since m_staticContext is changed when the expression is changed.
       }
 
       return m_expr;
@@ -261,6 +260,7 @@ class QXmlQueryPrivate
    QPatternist::StaticContext::Ptr             m_staticContext;
    QPatternist::VariableLoader::Ptr            m_variableLoader;
    QPatternist::DeviceResourceLoader::Ptr      m_resourceLoader;
+
    QPatternist::Expression::Ptr                m_expr;
    QPatternist::ReferenceCountedValue<QObject>::Ptr m_owner;
 

@@ -252,7 +252,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
          qWarning("QMimeData::retrieveData() Invalid color format");
       }
    } else if (data.type() != type && data.type() == QVariant::ByteArray) {
-      // try to use mime data's internal conversion stuf.
+      // try to use the mime data conversion
       QInternalMimeData *that = const_cast<QInternalMimeData *>(this);
       that->setData(mimeType, data.toByteArray());
       data = QMimeData::retrieveData(mimeType, type);
@@ -266,7 +266,7 @@ bool QInternalMimeData::canReadData(const QString &mimeType)
    return imageReadMimeFormats().contains(mimeType);
 }
 
-// helper functions for rendering mimedata to the system, this is needed because QMimeData is in core.
+// for rendering mimedata to the system, this is needed because QMimeData is in core
 QStringList QInternalMimeData::formatsHelper(const QMimeData *data)
 {
    QStringList realFormats = data->formats();

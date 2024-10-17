@@ -29,8 +29,7 @@ AccelTreeBuilder<FromDocument>::AccelTreeBuilder(const QUrl &docURI, const QUrl 
 {
    Q_ASSERT(m_namePool);
 
-   /* TODO Perhaps we can merge m_ancestors and m_size
-    * into one, and store a struct for the two instead? */
+   // TODO - Perhaps we can merge m_ancestors and m_size into one, and store a struct for the two instead?
    m_ancestors.reserve(DefaultNodeStackSize);
    m_ancestors.push(-1);
 
@@ -42,9 +41,8 @@ template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::startStructure()
 {
    if (m_hasCharacters) {
-      /* We create a node even if m_characters is empty.
-       * Remember that `text {""}' creates one text node
-       * with string value "". */
+      // create a node even if m_characters is empty. Remember that `text {""}' creates one
+      // text node * with string value "".
 
       ++m_preNumber;
       m_document->basicData.append(AccelTree::BasicNodeData(currentDepth(),
@@ -54,7 +52,7 @@ void AccelTreeBuilder<FromDocument>::startStructure()
       m_document->data.insert(m_preNumber, m_characters);
       ++m_size.top();
 
-      m_characters.clear(); /* We don't want it added twice. */
+      m_characters.clear();          // do not want it added twice
       m_hasCharacters = false;
 
       if (m_isCharactersCompressed) {
@@ -109,12 +107,13 @@ void AccelTreeBuilder<FromDocument>::startElement(const QXmlName &name, qint64 l
    ++m_size.top();
    m_size.push(0);
 
-   /* With node constructors, we can receive names for which we have no namespace
-    * constructors, such as in the query '<xs:space/>'. Since the 'xs' prefix has no
-    * NamespaceConstructor in this case, we synthesize the namespace.
-    *
-    * In case we're constructing from an XML document we avoid the call because
-    * although it's redundant, it's on extra virtual call for each element. */
+   // With node constructors, we can receive names for which we have no namespace
+   // constructors, such as in the query '<xs:space/>'. Since the 'xs' prefix has no
+   // NamespaceConstructor in this case, we synthesize the namespace.
+
+   // In case we are constructing from an XML document we avoid the call because
+   // although it's redundant, it's on extra virtual call for each element.
+
    if (!FromDocument) {
       namespaceBinding(QXmlName(name.namespaceURI(), 0, name.prefix()));
    }
@@ -129,8 +128,8 @@ void AccelTreeBuilder<FromDocument>::endElement()
    const AccelTree::PreNumber index = m_ancestors.pop();
    AccelTree::BasicNodeData &data = m_document->basicData[index];
 
-   /* Sub trees needs to be included in upper trees, so we add the count of this element
-    * to our parent. */
+   // Sub trees needs to be included in upper trees, so we add the count of this element
+   // to our parent.
    m_size[m_size.count() - 2] += m_size.top();
 
    data.setSize(m_size.pop());
@@ -140,10 +139,9 @@ void AccelTreeBuilder<FromDocument>::endElement()
 template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView value)
 {
-   /* Attributes adds a namespace binding, so lets synthesize one.
-    *
-    * We optimize by checking whether we have a namespace for which a binding would
-    * be generated. Happens relatively rarely. */
+   // this method adds a namespace binding, which we need to create
+   // optimize by checking if we already have the namespace
+
    if (name.hasPrefix()) {
       namespaceBinding(QXmlName(name.namespaceURI(), 0, name.prefix()));
    }
@@ -163,28 +161,29 @@ void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView
 
          const int oldSize = m_document->m_IDs.count();
          m_document->m_IDs.insert(id, currentParent());
-         /* We don't run the value through m_attributeCompress here, because
-          * the likelyhood of it deing identical to another attribute is
-          * very small. */
+
+         // do not run the value through m_attributeCompress, because
+         // the likelyhood of it being identical to another attribute is very small
          m_document->data.insert(m_preNumber, normalized);
 
-         /**
-          * In the case that we're called for doc-available(), m_context is
-          * null, and we need to flag somehow that we failed to load this
-          * document.
-          */
-         if (oldSize == m_document->m_IDs.count() && m_context) { // TODO
+         // if this method is called for doc-available() and m_context is null,
+         // need to mark that we failed to load this document
+         if (oldSize == m_document->m_IDs.count() && m_context) {
+            // TODO
             Q_ASSERT(m_context);
             m_context->error(QtXmlPatterns::tr("An %1-attribute with value %2 has already been declared.")
                   .formatArgs(formatKeyword("xml:id"),
                   formatData(normalized)),
                   FromDocument ? ReportContext::FODC0002 : ReportContext::XQDY0091, this);
          }
-      } else if (m_context) { // TODO
+
+      } else if (m_context) {
+         // TODO
          Q_ASSERT(m_context);
 
-         /* If we're building from an XML Document(e.g, we're fed from QXmlStreamReader, we raise FODC0002,
-          * otherwise XQDY0091. */
+         // If we are building from an XML Document, for example using a QXmlStreamReader,
+         // we raise error FODC0002 otherwise raise error XQDY0091
+
          m_context->error(QtXmlPatterns::tr("An %1-attribute must have a valid %2 as value, which %3 is not.")
                   .formatArgs(formatKeyword("xml:id"),
                   formatType(m_namePool, BuiltinTypes::xsNCName), formatData(value.toString())),
@@ -198,13 +197,11 @@ void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView
 template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::characters(QStringView ch)
 {
+   // If a text node constructor appears by itself, a node needs to
+   // be created. Therefore, we set m_hasCharacters if we are the only node.
+   // However, if the text node appears as a child of a document or element
+   // node it is discarded if it's empty.
 
-   /* If a text node constructor appears by itself, a node needs to
-    * be created. Therefore, we set m_hasCharacters
-    * if we're the only node.
-    * However, if the text node appears as a child of a document or element
-    * node it is discarded if it's empty.
-    */
    if (m_hasCharacters && m_isCharactersCompressed) {
       m_characters = CompressedWhitespace::decompress(m_characters);
       m_isCharactersCompressed = false;
@@ -213,7 +210,7 @@ void AccelTreeBuilder<FromDocument>::characters(QStringView ch)
    m_characters += ch;
 
    m_isPreviousAtomic = false;
-   m_hasCharacters = !m_characters.isEmpty() || m_preNumber == -1; /* -1 is our start value. */
+   m_hasCharacters = !m_characters.isEmpty() || m_preNumber == -1;    // -1 is our start value.
 }
 
 template <bool FromDocument>
@@ -222,13 +219,13 @@ void AccelTreeBuilder<FromDocument>::whitespaceOnly(QStringView ch)
    Q_ASSERT(!ch.isEmpty());
    Q_ASSERT(ch.toString().trimmed().isEmpty());
 
-   /* This gets problematic due to how QXmlStreamReader works(which
-    * is the only one we get whitespaceOnly() events from). Namely, text intermingled
-    * with CDATA gets reported as individual Characters events, and
-    * QXmlStreamReader::isWhitespace() can return differently for each of those. However,
-    * it will occur very rarely, so this workaround of 1) mistakenly compressing 2) decompressing 3)
-    * appending, will happen infrequently.
-    */
+   // This gets problematic due to how QXmlStreamReader works(which
+   // is the only one we get whitespaceOnly() events from). Namely, text intermingled
+   // with CDATA gets reported as individual Characters events, and
+   // QXmlStreamReader::isWhitespace() can return differently for each of those. However,
+   // it will occur very rarely, so this workaround of 1) mistakenly compressing 2) decompressing 3)
+   // appending, will happen infrequently.
+
    if (m_hasCharacters) {
       if (m_isCharactersCompressed) {
          m_characters = CompressedWhitespace::decompress(m_characters);
@@ -237,7 +234,7 @@ void AccelTreeBuilder<FromDocument>::whitespaceOnly(QStringView ch)
 
       m_characters.append(ch.toString());
    } else {
-      /* We haven't received a text node previously. */
+      // We haven't received a text node previously.
       m_characters = CompressedWhitespace::compress(ch);
       m_isCharactersCompressed = true;
       m_isPreviousAtomic = false;
@@ -275,23 +272,23 @@ void AccelTreeBuilder<FromDocument>::comment(const QString &content)
 template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::namespaceBinding(const QXmlName &nb)
 {
-   /* Note, because attribute() sometimes generate namespaceBinding() calls, this function
-    * can be called after attributes, in contrast to what the class documentation says. This is ok,
-    * as long as we're not dealing with public API. */
+   // Note, because attribute() sometimes generate namespaceBinding() calls, this function
+   // can be called after attributes, in contrast to what the class documentation says. This is ok,
+   // as long as we're not dealing with public API.
 
-   /* If we've received attributes, it means the element's size have changed and m_preNumber have advanced,
-    * so "reverse back" to the actual element. */
+   // If we've received attributes, it means the element's size have changed and m_preNumber have advanced,
+   // so "reverse back" to the actual element.
    const AccelTree::PreNumber pn = m_preNumber - m_size.top();
 
    QVector<QXmlName> &nss = m_document->namespaces[pn];
 
-   /* "xml" hasn't been declared for each node, AccelTree::namespaceBindings() adds it, so avoid it
-    * such that we don't get duplicates. */
+   // "xml" hasn't been declared for each node, AccelTree::namespaceBindings() adds it, so avoid it
+   // such that we don't get duplicates.
    if (nb.prefix() == StandardPrefixes::xml) {
       return;
    }
 
-   /* If we already have the binding, skip it. */
+   // If we already have the binding, skip it.
    const int len = nss.count();
    for (int i = 0; i < len; ++i) {
       if (nss.at(i).prefix() == nb.prefix()) {
@@ -305,8 +302,9 @@ void AccelTreeBuilder<FromDocument>::namespaceBinding(const QXmlName &nb)
 template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::startDocument()
 {
-   /* If we have already received nodes, we can't add a document node. */
-   if (m_preNumber == -1) { /* -1 is our start value. */
+   // If we have already received nodes, we can't add a document node.
+   if (m_preNumber == -1) {
+      // -1 is our start value./
       m_size.push(0);
       m_document->basicData.append(AccelTree::BasicNodeData(0, -1, QXmlNodeModelIndex::Document, -1));
       ++m_preNumber;
@@ -322,13 +320,13 @@ template <bool FromDocument>
 void AccelTreeBuilder<FromDocument>::endDocument()
 {
    if (m_skippedDocumentNodes == 0) {
-      /* Create text nodes, if we've received any. We do this only if we're the
-       * top node because if we're getting this event as being a child of an element,
-       * text nodes or atomic values can appear after us, and which must get
-       * merged with the previous text.
-       *
-       * We call startStructure() before we pop the ancestor, such that the text node becomes
-       * a child of this document node. */
+      // Create text nodes, if we've received any. We do this only if we're the
+      // top node because if we're getting this event as being a child of an element,
+      // text nodes or atomic values can appear after us, and which must get
+      // merged with the previous text.
+
+      // We call startStructure() before we pop the ancestor, such that the text node becomes
+      // a child of this document node.
       startStructure();
 
       m_document->basicData.first().setSize(m_size.pop());
@@ -350,7 +348,7 @@ void AccelTreeBuilder<FromDocument>::atomicValue(const QVariant &value)
 template <bool FromDocument>
 QAbstractXmlNodeModel::Ptr AccelTreeBuilder<FromDocument>::builtDocument()
 {
-   /* Create a text node, if we have received text in some way. */
+   // Create a text node, if we have received text in some way./
    startStructure();
    m_document->printStats(m_namePool);
 

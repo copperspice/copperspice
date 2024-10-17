@@ -416,7 +416,7 @@ void QToolBox::removeItem(int index)
 
       w->setParent(this);
 
-      // destroy internal data
+      // destroy class data
       d->_q_widgetDestroyed(w);
       itemRemoved(index);
    }

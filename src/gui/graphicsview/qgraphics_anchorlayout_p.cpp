@@ -32,12 +32,12 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-// To ensure that all variables inside the simplex solver are non-negative,
-// we limit the size of anchors in the interval [-limit, limit]. Then before
-// sending them to the simplex solver we add "limit" as an offset, so that
-// they are actually calculated in the interval [0, 2 * limit]
-// To avoid numerical errors in platforms where we use single precision,
-// we use a tighter limit for the variables range.
+// To ensure all variables inside the simplex solver are non-negative, we limit the size of anchors
+// in the interval [-limit, limit]. Then before sending them to the simplex solver we add "limit" as
+// an offset, so that they are actually calculated in the interval [0, 2 * limit]
+// To avoid numerical errors in platforms where we use single precision, a tighter limit for the
+// variables range is used
+
 const qreal g_offset = (sizeof(qreal) == sizeof(double)) ? QWIDGETSIZE_MAX : QWIDGETSIZE_MAX / 32;
 
 QGraphicsAnchorPrivate::QGraphicsAnchorPrivate()
@@ -49,8 +49,7 @@ QGraphicsAnchorPrivate::QGraphicsAnchorPrivate()
 QGraphicsAnchorPrivate::~QGraphicsAnchorPrivate()
 {
    if (data) {
-      // The QGraphicsAnchor was already deleted at this moment. We must clean
-      // the dangling pointer to avoid double deletion in the AnchorData dtor.
+      // QGraphicsAnchor was already deleted, must clean up this pointer to avoid a double deletion
       data->graphicsAnchor = nullptr;
 
       layoutPrivate->removeAnchor(data->from, data->to);
@@ -76,7 +75,7 @@ void QGraphicsAnchorPrivate::setSpacing(qreal value)
       return;
    }
 
-   // The anchor has an user-defined size
+   // anchor has an user-defined size
    hasSize = true;
    preferredSize = value;
 
@@ -165,7 +164,7 @@ void AnchorData::refreshSizeHints(const QLayoutStyleInfo *styleInfo)
    qreal maxSizeHint;
 
    if (item) {
-      // It is an internal anchor, fetch size information from the item
+      // this is a CS anchor, fetch size information from the item
       if (isLayoutAnchor) {
          minSize = 0;
          prefSize = 0;
@@ -696,16 +695,7 @@ AnchorData *QGraphicsAnchorLayoutPrivate::addAnchorMaybeParallel(AnchorData *new
    return newAnchor;
 }
 
-/*!
-    \internal
-
-    Takes the sequence of vertices described by (\a before, \a vertices, \a after) and removes
-    all anchors connected to the vertices in \a vertices, returning one simplified anchor between
-    \a before and \a after.
-
-    Note that this function doesn't add the created anchor to the graph. This should be done by
-    the caller.
-*/
+// does not add the created anchor to the graph. This should be done by the caller
 static AnchorData *createSequence(Graph<AnchorVertex, AnchorData> *graph,
    AnchorVertex *before,
    const QVector<AnchorVertex *> &vertices,
@@ -1291,7 +1281,7 @@ void QGraphicsAnchorLayoutPrivate::createItemEdges(QGraphicsLayoutItem *item)
 {
    items.append(item);
 
-   // Create horizontal and vertical internal anchors for the item and
+   // Create horizontal and vertical CS anchors for the item and
    // refresh its size hint / policy values.
    AnchorData *data = new AnchorData;
    addAnchor_helper(item, Qt::AnchorLeft, item, Qt::AnchorRight, data);
@@ -1432,7 +1422,7 @@ void QGraphicsAnchorLayoutPrivate::removeCenterAnchors(
 
    } else {
       // this is only called from removeAnchors()
-      // first, remove all non-internal anchors
+      // first remove all non CS anchors
       QList<AnchorVertex *> adjacents = g.adjacentVertices(center);
       for (int i = 0; i < adjacents.count(); ++i) {
          AnchorVertex *v = adjacents.at(i);
@@ -1440,9 +1430,10 @@ void QGraphicsAnchorLayoutPrivate::removeCenterAnchors(
             removeAnchor_helper(center, internalVertex(v->m_item, v->m_edge));
          }
       }
-      // when all non-internal anchors is removed it will automatically merge the
-      // center anchor into a left-right (or top-bottom) anchor. We must also delete that.
-      // by this time, the center vertex is deleted and merged into a non-centered internal anchor
+
+      // when all non CS anchors are removed it will automatically merge the
+      // center anchor into a left-right (or top-bottom) anchor. We must also delete this,
+      // by this time, the center vertex is deleted and merged into a non-centered CS anchor
       removeAnchor_helper(first, internalVertex(item, lastEdge));
    }
 
@@ -1455,9 +1446,8 @@ void QGraphicsAnchorLayoutPrivate::removeCenterConstraints(QGraphicsLayoutItem *
    Orientation orientation)
 {
    // Remove the item center constraints associated to this item
-   // ### This is a temporary solution. We should probably use a better
-   // data structure to hold items and/or their associated constraints
-   // so that we can remove those easily
+   // temporary solution - we should probably use a better data structure to hold items
+   // and/or their associated constraints so that we can remove those easily
 
    AnchorVertex *first = internalVertex(item, orientation == Horizontal ?
          Qt::AnchorLeft :
@@ -1466,7 +1456,7 @@ void QGraphicsAnchorLayoutPrivate::removeCenterConstraints(QGraphicsLayoutItem *
          Qt::AnchorHorizontalCenter :
          Qt::AnchorVerticalCenter);
 
-   // Skip if no center constraints exist
+   // skip if no center constraints exist
    if (!center) {
       return;
    }
@@ -1474,7 +1464,7 @@ void QGraphicsAnchorLayoutPrivate::removeCenterConstraints(QGraphicsLayoutItem *
    Q_ASSERT(first);
    AnchorData *internalAnchor = graph[orientation].edgeData(first, center);
 
-   // Look for our anchor in all item center constraints, then remove it
+   // look for our anchor in all item center constraints, then remove it
    for (int i = 0; i < itemCenterConstraints[orientation].size(); ++i) {
       if (itemCenterConstraints[orientation].at(i)->variables.contains(internalAnchor)) {
          delete itemCenterConstraints[orientation].takeAt(i);
@@ -1511,14 +1501,13 @@ QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::addAnchor(QGraphicsLayoutItem *fi
       return nullptr;
    }
 
-   // In QGraphicsAnchorLayout, items are represented in its internal
-   // graph as four anchors that connect:
+   // In QGraphicsAnchorLayout, items are represented by a CS graph as four anchors which connect
    //  - Left -> HCenter
    //  - HCenter-> Right
    //  - Top -> VCenter
    //  - VCenter -> Bottom
 
-   // Ensure that the internal anchors have been created for both items.
+   // ensure the CS anchors have been created for both items
    if (firstItem != q && !items.contains(firstItem)) {
       createItemEdges(firstItem);
       addChildLayoutItem(firstItem);
@@ -1528,11 +1517,11 @@ QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::addAnchor(QGraphicsLayoutItem *fi
       addChildLayoutItem(secondItem);
    }
 
-   // Create center edges if needed
+   // create center edges if needed
    createCenterAnchors(firstItem, firstEdge);
    createCenterAnchors(secondItem, secondEdge);
 
-   // Use heuristics to find out what the user meant with this anchor.
+   // use heuristics to find out what the user meant with this anchor.
    correctEdgeDirection(firstItem, firstEdge, secondItem, secondEdge);
 
    AnchorData *data = new AnchorData;
@@ -1583,7 +1572,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
       removeAnchor_helper(v1, v2);
    }
 
-   // If its an internal anchor, set the associated item
+   // If this is a CS set the associated item
    if (firstItem == secondItem) {
       data->item = firstItem;
    }
@@ -1600,7 +1589,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
    data->name = QString::fromLatin1("%1 --to--> %2").formatArg(v1->toString()).formatArg(v2->toString());
 #endif
 
-   // tracks internal anchors, currently inside AnchorData methods
+   // tracks CS anchors currently inside AnchorData methods
    // access to the 'q' pointer is not available
    data->isLayoutAnchor = (data->item == q);
 
@@ -1610,7 +1599,7 @@ void QGraphicsAnchorLayoutPrivate::addAnchor_helper(QGraphicsLayoutItem *firstIt
 QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::getAnchor(QGraphicsLayoutItem *firstItem,
    Qt::AnchorPoint firstEdge, QGraphicsLayoutItem *secondItem, Qt::AnchorPoint secondEdge)
 {
-   // Do not expose internal anchors
+   // Do not expose CS anchors
    if (firstItem == secondItem) {
       return nullptr;
    }
@@ -1624,11 +1613,11 @@ QGraphicsAnchor *QGraphicsAnchorLayoutPrivate::getAnchor(QGraphicsLayoutItem *fi
    AnchorData *data = graph[orientation].edgeData(v1, v2);
    if (data) {
       // We could use "acquireGraphicsAnchor" here, but to avoid a regression where
-      // an internal anchor was wrongly exposed, I want to ensure no new
-      // QGraphicsAnchor instances are created by this call.
-      // This assumption must hold because anchors are either user-created (and already
-      // have their public object created), or they are internal (and must not reach
-      // this point).
+      // a CS anchor was wrongly exposed, ensure no new QGraphicsAnchor instances are
+      // created by this call. This assumption must hold because anchors are either
+      // user-created (and already have their public object created), or they are
+      // a CS anchor (and must not reach this point).
+
       Q_ASSERT(data->graphicsAnchor);
       graphicsAnchor = data->graphicsAnchor;
    }
@@ -1862,8 +1851,7 @@ void QGraphicsAnchorLayoutPrivate::calculateGraphs()
    calculateGraphCacheDirty = false;
 }
 
-// ### Maybe getGraphParts could return the variables when traversing, at least
-// for trunk...
+// Maybe getGraphParts could return the variables when traversing
 QList<AnchorData *> getVariables(const QList<QSimplexConstraint *> &constraints)
 {
    QSet<AnchorData *> variableSet;
@@ -2206,9 +2194,7 @@ QList<QSimplexConstraint *> QGraphicsAnchorLayoutPrivate::constraintsFromSizeHin
          c->ratio = QSimplexConstraint::MoreOrEqual;
          anchorConstraints += c;
 
-         // We avoid adding restrictions to the layout internal anchors. That's
-         // to prevent unnecessary fair distribution from happening due to this
-         // artificial restriction.
+         // avoid adding restrictions to the layout CS anchors
          if (ad == layoutEdge) {
             continue;
          }

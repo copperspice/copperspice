@@ -71,23 +71,20 @@ static constexpr const int slow_timeout = 300000;  //  5m
 bool QFontDef::exactMatch(const QFontDef &other) const
 {
    /*
-     QFontDef comparison is more complicated than just simple
-     per-member comparisons.
+     QFontDef comparison is more complicated than just simple per-member comparisons.
 
-     When comparing point/pixel sizes, either point or pixelsize
-     could be -1.  in This case we have to compare the non negative
-     size value.
+     When comparing point/pixel sizes, either point or pixelsize could be -1.
+     In this case we have to compare the non negative size value.
 
-     This test will fail if the point-sizes differ by 1/2 point or
-     more or they do not round to the same value.  We have to do this
-     since our API still uses 'int' point-sizes in the API, but store
-     deci-point-sizes internally.
+     This test will fail if the point-sizes differ by 1/2 point or more or they do not
+     round to the same value. We need to do this since our API uses 'int' point sizes
+     however we store decimal point sizes in the code.
 
-     To compare the family members, we need to parse the font names
-     and compare the family/foundry strings separately.  This allows
-     us to compare e.g. "Helvetica" and "Helvetica [Adobe]" with
-     positive results.
+     To compare the family members parse the font names and compare the family/foundry
+     strings separately.  This allows us to compare font like  "Helvetica" and
+     "Helvetica [Adobe]" sucessfully.
    */
+
    if (pixelSize != -1 && other.pixelSize != -1) {
       if (pixelSize != other.pixelSize) {
          return false;

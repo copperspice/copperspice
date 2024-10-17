@@ -173,18 +173,18 @@ QNetworkReplyHttpImpl::QNetworkReplyHttpImpl(QNetworkAccessManager *const manage
    d->sslConfiguration = request.sslConfiguration();
 #endif
 
-   // FIXME Later maybe set to Unbuffered, especially if it is zerocopy or from cache?
+   // FIXME - maybe set to Unbuffered, especially if it is zerocopy or from cache?
    QIODevice::open(QIODevice::ReadOnly);
 
-   // Internal code that does a HTTP reply for the synchronous Ajax in WebKit.
+   // does an HTTP reply for the synchronous Ajax in WebKit
    QVariant synchronousHttpAttribute = request.attribute(
                                           static_cast<QNetworkRequest::Attribute>(QNetworkRequest::SynchronousRequestAttribute));
 
    if (synchronousHttpAttribute.isValid()) {
       d->synchronous = synchronousHttpAttribute.toBool();
       if (d->synchronous && outgoingData) {
-         // The synchronous HTTP is a corner case, we will put all upload data in one big QByteArray in the outgoingDataBuffer.
-         // Yes, this is not the most efficient thing to do, but on the other hand synchronous XHR needs to die anyway.
+         // synchronous HTTP is a corner case, put all uploaded data in one big QByteArray in the outgoingDataBuffer.
+         // most efficient way to do this, however synchronous XHR is a slow protocol
          d->outgoingDataBuffer = QSharedPointer<QRingBuffer>::create();
          qint64 previousDataSize = 0;
 
@@ -1041,10 +1041,9 @@ void QNetworkReplyHttpImplPrivate::replyDownloadData(const QByteArray &data)
    for (int i = 0; i < pendingDownloadDataCopy.bufferCount(); i++) {
       QByteArray const &item = pendingDownloadDataCopy[i];
 
-      // this may look a bit strange. When downloading data while a
-      // HTTP redirect is happening and enabled we write the redirect
-      // response to the cache. However, we do not append it to our internal
-      // buffer as that will contain the response data only for the final response
+      // When downloading data during an HTTP redirect, write the redirect response to the cache.
+      // However, we do not append it to our CS buffer since the buffer should contain the
+      // data only for the final response
 
       if (cacheSaveDevice != nullptr) {
          cacheSaveDevice->write(item.constData(), item.size());

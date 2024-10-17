@@ -138,10 +138,10 @@ bool QHttpSocketEngine::connectInternal()
       setState(QAbstractSocket::UnconnectedState);
    }
 
-   // Handshake isn't done. If unconnected, start connecting.
+   // Handshake is not done, if unconnected, then start connecting
    if (d->state == None && d->socket->state() == QAbstractSocket::UnconnectedState) {
       setState(QAbstractSocket::ConnectingState);
-      //limit buffer in internal socket, data is buffered in the external socket under application control
+      // limit buffer in this socket, data is buffered in the external socket under application control
       d->socket->setReadBufferSize(65536);
       d->socket->connectToHost(d->proxy.hostName(), d->proxy.port());
    }

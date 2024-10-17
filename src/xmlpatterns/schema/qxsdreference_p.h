@@ -35,8 +35,8 @@ class XsdReference : public XsdTerm
    typedef QExplicitlySharedDataPointer<XsdReference> Ptr;
 
    enum Type {
-      Element,        ///< The reference points to an element.
-      ModelGroup      ///< The reference points to a model group.
+      Element,        // reference points to an element.
+      ModelGroup      // reference points to a model group.
    };
 
    bool isReference() const override;

@@ -67,10 +67,10 @@ class XsdComplexType : public XsdUserSchemaType<AnyType>
       typedef QExplicitlySharedDataPointer<ContentType> Ptr;
 
       enum Variety {
-         Empty = 0,    ///< The complex type has no further content.
-         Simple,       ///< The complex type has only simple type content (e.g. text, number etc.)
-         ElementOnly,  ///< The complex type has further elements or attributes but no text as content.
-         Mixed         ///< The complex type has further elements or attributes and text as content.
+         Empty = 0,       // complex type has no further content.
+         Simple,          // complex type has only simple type content (e.g. text, number etc.)
+         ElementOnly,     // complex type has further elements or attributes but no text as content.
+         Mixed            // complex type has further elements or attributes and text as content.
       };
 
       void setVariety(Variety variety);

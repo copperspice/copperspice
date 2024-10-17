@@ -52,7 +52,7 @@ class AccelTree : public QAbstractXmlNodeModel
    class BasicNodeData
    {
     public:
-      /* No need to initialize the members. See AccelTreeBuilder. */
+      // No need to initialize the members. See AccelTreeBuilder.
       inline BasicNodeData() {
       }
 
@@ -76,8 +76,7 @@ class AccelTree : public QAbstractXmlNodeModel
       }
 
       inline PreNumber size() const {
-         /* Remember that we use the m_size to signal compression if
-          * we're a text node. */
+         // Remember that we use the m_size to signal compression if we're a text node.
          if (m_kind == QXmlNodeModelIndex::Text) {
             return 0;
          } else {
@@ -100,8 +99,7 @@ class AccelTree : public QAbstractXmlNodeModel
       inline bool isCompressed() const {
          Q_ASSERT_X(m_kind == QXmlNodeModelIndex::Text, Q_FUNC_INFO,
                     "Currently, only text nodes are compressed.");
-         /* Note, we don't call size() here, since it has logic for text
-          * nodes. */
+         // we do not call size() here since it has logic for text nodes
          return m_size == IsCompressed;
       }
 

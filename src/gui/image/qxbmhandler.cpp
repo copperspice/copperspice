@@ -33,11 +33,6 @@
 #include <stdio.h>
 #include <ctype.h>
 
-
-/*****************************************************************************
-  X bitmap image read/write functions
- *****************************************************************************/
-
 static inline int hex2byte(char *p)
 {
    return ((isdigit((uchar) * p) ? *p - '0' : toupper((uchar) * p) - 'A' + 10) << 4) |

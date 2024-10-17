@@ -1164,7 +1164,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
 
 #ifndef QT_NO_NETWORKPROXY
    } else if (d->proxyInUse.capabilities() & QNetworkProxy::HostNameLookupCapability) {
-      // the proxy supports connection by name, so use it
+      // proxy supports connection by name, so use it
       d->startConnectingByName(hostName);
       return;
 #endif
@@ -1173,9 +1173,7 @@ void QAbstractSocket::connectToHost(const QString &hostName, quint16 port,
       QThreadData *threadData = CSInternalThreadData::get_m_ThreadData(this);
 
       if (threadData->eventDispatcher) {
-         // internal API for QHostInfo either immediately gives us the desired
-         // QHostInfo from cache or later calls the _q_startConnecting slot
-
+         // QHostInfo either returns requestedd QHostInfo from cache or calls q_startConnecting() slot later on
          bool immediateResultValid = false;
 
          QHostInfo hostInfo = qt_qhostinfo_lookup(hostName, this, SLOT(_q_startConnecting(const QHostInfo &)),

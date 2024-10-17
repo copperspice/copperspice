@@ -42,10 +42,9 @@ class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
    TResult current() const override;
    xsInteger position() const override;
 
-   /**
-    * The reason the implementation is placed in line here, is due to a bug
-    * in MSVC-2005 version 14.00.50727.762. Note that it works with version 14.00.50727.42.
-    */
+   // implementation is placed in line here, is due to a bug in MSVC-2005 version 14.00.50727.762.
+   // works with version 14.00.50727.42
+
    typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const override {
       return typename QAbstractXmlForwardIterator<TResult>::Ptr
              (new SequenceMappingIterator<TResult, TSource, TMapper>(m_mapper,

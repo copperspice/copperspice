@@ -1158,8 +1158,8 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
          sessionManager->allowsInteraction();
          const bool endsession = wParam != 0;
 
-         // we receive the message for each toplevel window included internal hidden ones,
-         // but the aboutToQuit signal should be emitted only once.
+         // we receive the message for each toplevel window including hidden ones,
+         // the aboutToQuit signal should be emitted only once.
          QApplicationPrivate *qGuiAppPriv = static_cast<QApplicationPrivate *>(QApplicationPrivate::instance());
 
          if (endsession && !qGuiAppPriv->aboutToQuitEmitted) {
@@ -1172,7 +1172,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
          }
          return true;
       }
-#endif // ! defined(QT_NO_SESSIONMANAGER)
+#endif
 
       default:
          break;

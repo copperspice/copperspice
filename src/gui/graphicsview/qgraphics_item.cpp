@@ -4481,8 +4481,7 @@ void QGraphicsItem::prepareGeometryChange()
    d_ptr->markParentDirty(true);
 }
 
-// internal
-// This function is a duplicate of qt_graphicsItem_highlightSelected() in qgraphicssvgitem.cpp
+// duplicate of qt_graphicsItem_highlightSelected() in qgraphicssvgitem.cpp
 static void qt_graphicsItem_highlightSelected(
    QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
 {

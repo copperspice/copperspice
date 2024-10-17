@@ -32,11 +32,10 @@
 
 #include <algorithm>
 
-/**
-  The algorithm is as follows:
-
+/*
   1. Find all intersections between the two paths (including self-intersections),
      and build a winged edge structure of non-intersecting parts.
+
   2. While there are more unhandled edges:
     3. Pick a y-coordinate from an unhandled edge.
     4. Intersect the horizontal line at y-coordinate with all edges.
@@ -44,10 +43,12 @@
     6. If the subpath should be added, traverse the winged-edge structure and add the edges to
        a separate winged edge structure.
     7. Mark all edges in subpaths crossing the horizontal line as handled.
- 8. (Optional) Simplify the resulting winged edge structure by merging shared edges.
- 9. Convert the resulting winged edge structure to a painter path.
- */
 
+ 8. (Optional) Simplify the resulting winged edge structure by merging shared edges.
+
+ 9. Convert the resulting winged edge structure to a painter path.
+
+*/
 
 static inline bool fuzzyIsNull(qreal d)
 {

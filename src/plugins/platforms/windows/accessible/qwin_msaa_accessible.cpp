@@ -171,11 +171,8 @@ void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleIn
 }
 #endif
 
-/**************************************************************\
- *                                                             *
- *                        IUnknown                             *
- *                                                             *
- **************************************************************/
+
+// IUnknown
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID id, LPVOID *iface)
 {
     *iface = nullptr;
@@ -225,11 +222,7 @@ ULONG STDMETHODCALLTYPE QWindowsMsaaAccessible::Release()
     return ref;
 }
 
-
-/*
-  IDispatch
-*/
-
+// IDispatch
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetTypeInfoCount(unsigned int * pctinfo)
 {
     // We don't use a type library
@@ -253,7 +246,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetIDsOfNames(const _GUID &, w
    return DISP_E_MEMBERNOTFOUND;
 
 #else
-    // PROPERTIES:  Hierarchical
+    // PROPERTIES: Hierarchical
 
     if (_bstr_t(rgszNames[0]) == _bstr_t(L"accParent"))
         rgdispid[0] = DISPID_ACC_PARENT;
@@ -469,9 +462,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, cons
 }
 
 /*
-  IAccessible
-
-IAccessible::accHitTest documents the value returned in pvarID like this:
+  IAccessible - IAccessible::accHitTest documents the value returned in pvarID like this:
 
 | *Point location*                                       | *vt member* | *Value member*          |
 +========================================================+=============+=========================+
@@ -544,7 +535,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accLocation(long *pxLeft, long
     return S_OK;
 }
 
-// moz: [important, but no need to implement up/down/left/right]
+// no need to implement up/down/left/right
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIANT varStart, VARIANT *pvarEnd)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -1077,9 +1068,9 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VA
     bool res = false;
 
 /*
-  ### Check for accessibleTableInterface() or accessibleTextInterface()
+  // Check for accessibleTableInterface() or accessibleTextInterface()
+  // and if there are no ia2 interfaces we should do nothing??
 
-  ### and if there are no ia2 interfaces we should do nothing??
     if (flagsSelect & SELFLAG_TAKEFOCUS)
         res = accessible()->doAction(SetFocus, varID.lVal, QVariantList());
     if (flagsSelect & SELFLAG_TAKESELECTION) {
@@ -1096,22 +1087,12 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VA
     return res ? S_OK : S_FALSE;
 }
 
-/*!
-    \internal
-    Can return:
 
-  +-------------+------------------------------------------------------------------------------+
-  | VT_EMPTY    | None. Neither this object nor any of its children has the keyboard focus.    |
-  +-------------+------------------------------------------------------------------------------+
-  | VT_I4       | lVal is CHILDID_SELF. The object itself has the keyboard focus.              |
-  +-------------+------------------------------------------------------------------------------+
-  | VT_I4       | lVal contains the child ID of the child element that has the keyboard focus. |
-  +-------------+------------------------------------------------------------------------------+
-  | VT_DISPATCH | pdispVal member is the address of the IDispatch interface for the child      |
-  |             | object that has the keyboard focus.                                          |
-  +-------------+------------------------------------------------------------------------------+
-    moz: [important]
-*/
+//  VT_EMPTY    - None. Neither this object nor any of its children has the keyboard focus.
+//  VT_I4       - lVal is CHILDID_SELF. The object itself has the keyboard focus.
+//  VT_I4       - lVal contains the child ID of the child element that has the keyboard focus.
+//  VT_DISPATCH - pdispVal member is the address of the IDispatch interface for the child object that has the keyboard focus.
+
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accFocus(VARIANT *pvarID)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -1183,9 +1164,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accSelection(VARIANT *pvar
     return S_OK;
 }
 
-/**************************************************************\
- *                         IOleWindow                          *
- **************************************************************/
+// IOleWindow
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetWindow(HWND *phwnd)
 {
     *phwnd = nullptr;

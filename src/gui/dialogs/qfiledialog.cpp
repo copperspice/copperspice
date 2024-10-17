@@ -1706,10 +1706,9 @@ QSize QFileDialogTreeView::sizeHint() const
    return QSize(sizeHint.width() * 4, height * 30);
 }
 
-/*!
-    // FIXME: this is a hack to avoid propagating key press events
-    // to the dialog and from there to the "Ok" button
-*/
+// design a better solution to avoid propagating key press events to the dialog
+// and from there to the "Ok" button
+
 void QFileDialogLineEdit::keyPressEvent(QKeyEvent *e)
 {
 #ifdef QT_KEYPAD_NAVIGATION
@@ -1717,7 +1716,7 @@ void QFileDialogLineEdit::keyPressEvent(QKeyEvent *e)
       QLineEdit::keyPressEvent(e);
       return;
    }
-#endif // QT_KEYPAD_NAVIGATION
+#endif
 
    int key = e->key();
    QLineEdit::keyPressEvent(e);

@@ -191,7 +191,7 @@ void QCoreTextFontDatabase::populateFontDatabase()
       CFStringRef familyNameRef = (CFStringRef) CFArrayGetValueAtIndex(familyNames, i);
       QString familyName = QCFString::toQString(familyNameRef);
 
-      // do not populate internal fonts
+      // do not populate system fonts
       if (familyName.startsWith('.') || familyName == "LastResort") {
          continue;
       }

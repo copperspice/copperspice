@@ -39,9 +39,9 @@ class XsdIdentityConstraint : public NamedSchemaComponent, public XsdAnnotated
    typedef QList<XsdIdentityConstraint::Ptr> List;
 
    enum Category {
-      Key = 1,        ///< The constraint is a key constraint
-      KeyReference,   ///< The constraint is a keyref constraint
-      Unique          ///< The constraint is an unique constraint
+      Key = 1,        // constraint is a key constraint
+      KeyReference,   // constraint is a keyref constraint
+      Unique          // constraint is an unique constraint
    };
 
    void setCategory(Category category);

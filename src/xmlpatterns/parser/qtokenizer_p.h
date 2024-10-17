@@ -80,7 +80,7 @@ class TokenValue
 
 #define YYSTYPE QPatternist::TokenValue
 
-#include "qquerytransformparser_p.h" /* This inclusion must be after TokenValue. */
+#include "qquerytransformparser_p.h"       // inclusion must be after TokenValue
 
 namespace QPatternist {
 
@@ -114,6 +114,6 @@ class Tokenizer : public TokenSource
 
 }
 
-#undef Patternist_DEBUG_PARSER // disable it for now
+#undef Patternist_DEBUG_PARSER       // disable for now
 
 #endif

@@ -59,7 +59,7 @@ struct AnchorVertex {
    qreal distance;
 };
 
-// Represents an edge (anchor) in the internal graph.
+// Represents an edge (anchor) in the CS graph.
 
 struct AnchorData : public QSimplexVariable {
    enum Type {
@@ -125,7 +125,7 @@ struct AnchorData : public QSimplexVariable {
    QGraphicsAnchor *graphicsAnchor;
 
    uint type : 2;            // either Normal, Sequential or Parallel
-   uint isLayoutAnchor : 1;  // if this anchor is an internal layout anchor
+   uint isLayoutAnchor : 1;  // if this anchor is a CS layout anchor
    uint isCenterAnchor : 1;
    uint orientation : 1;
    uint dependency : 2;      // either Independent, Master or Slave
@@ -318,7 +318,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
       MaxPreferredToMaximum
    };
 
-   // Several structures internal to the layout are duplicated to handle
+   // Several structures in the layout are duplicated to handle
    // both Horizontal and Vertical restrictions.
    //
    // Orientation is used to reference the right structure in each context
@@ -476,7 +476,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    // ones (Graph Vertices)
    QHash<QPair<QGraphicsLayoutItem *, Qt::AnchorPoint>, QPair<AnchorVertex *, int>> m_vertexList;
 
-   // Internal graph of anchorage points and anchors, for both orientations
+   // CS graph of anchorage points and anchors for both orientations
    Graph<AnchorVertex, AnchorData> graph[2];
 
    AnchorVertex *layoutFirstVertex[2];

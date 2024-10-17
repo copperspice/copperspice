@@ -74,7 +74,7 @@ class NamePool : public QSharedData
    QXmlName allocateQName(const QString &uri, const QString &localName, const QString &prefix = QString());
 
    inline QXmlName allocateQName(const QXmlName::NamespaceCode uri, const QString &ln) {
-      /* We don't lock here, but we do in allocateLocalName(). */
+      // do not lock here, do this in allocateLocalName()
       return QXmlName(uri, allocateLocalName(ln));
    }
 

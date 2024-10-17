@@ -150,7 +150,7 @@ class Q_GUI_EXPORT QTextFormat
       BackgroundBrush        = 0x820,
       ForegroundBrush        = 0x821,
 
-      // internal, used in qtextlayout.cpp
+      // used in qtextlayout.cpp
       // ObjectSelectionBrush = 0x822,
 
       BackgroundImageUrl     = 0x823,
@@ -243,7 +243,7 @@ class Q_GUI_EXPORT QTextFormat
       ImageWidth             = 0x5010,
       ImageHeight            = 0x5011,
 
-      // internal
+      // unused
       /*
          SuppressText        = 0x5012,
          SuppressBackground  = 0x513,

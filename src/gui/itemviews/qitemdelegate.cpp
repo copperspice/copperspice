@@ -689,7 +689,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
    }
 
    if (! hint) {
-      // only need to do the internal layout if we are going to paint
+      // only need to do the layout if we are going to paint
 
       *checkRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
             checkRect->size(), check);

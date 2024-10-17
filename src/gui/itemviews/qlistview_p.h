@@ -168,7 +168,6 @@ class QCommonListViewBase
    }
 #endif
 
-   //other inline members
    inline int spacing() const;
    inline bool isWrapping() const;
    inline QSize gridSize() const;
@@ -517,8 +516,6 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    QRect elasticBand;
    bool showElasticBand;
 };
-
-// inline implementations
 
 inline int QCommonListViewBase::spacing() const
 {

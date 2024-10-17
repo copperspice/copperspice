@@ -84,12 +84,7 @@ QGraphicsWidgetPrivate::~QGraphicsWidgetPrivate()
    delete windowData;
 }
 
-/*!
-    \internal
-
-     Ensures that margins is allocated.
-     This function must be called before any dereferencing.
-*/
+// must be called before any dereferencing
 void QGraphicsWidgetPrivate::ensureMargins() const
 {
    if (!margins) {
@@ -100,12 +95,7 @@ void QGraphicsWidgetPrivate::ensureMargins() const
    }
 }
 
-/*!
-    \internal
-
-     Ensures that windowFrameMargins is allocated.
-     This function must be called before any dereferencing.
-*/
+// must be called before any dereferencing
 void QGraphicsWidgetPrivate::ensureWindowFrameMargins() const
 {
    if (!windowFrameMargins) {
@@ -116,12 +106,7 @@ void QGraphicsWidgetPrivate::ensureWindowFrameMargins() const
    }
 }
 
-/*!
-    \internal
-
-     Ensures that windowData is allocated.
-     This function must be called before any dereferencing.
-*/
+// must be called before any dereferencing
 void QGraphicsWidgetPrivate::ensureWindowData()
 {
    if (!windowData) {

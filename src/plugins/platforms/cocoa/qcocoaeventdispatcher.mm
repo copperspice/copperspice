@@ -372,9 +372,10 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
             }
 
             if (! d->interrupt && session == d->currentModalSessionCached) {
-               // Someone called [NSApp stopModal:] from outside the event
-               // dispatcher (e.g to stop a native dialog). But that call wrongly stopped
-               // 'session' as well. As a result, we need to restart all internal sessions:
+               // Someone called [NSApp stopModal:] from outside the event dispatcher
+               // then something was called incorrectly to stop the session,
+               // as a result, we need to restart all sessions
+
                d->temporarilyStopAllModalSessions();
             }
 
@@ -402,7 +403,7 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
          int lastSerialCopy = d->lastSerial;
          bool hadModalSession = d->currentModalSessionCached != nullptr;
 
-         // We cannot block the thread (and run in a tight loop).
+         // can not block the thread (and run in a tight loop).
          // Instead we will process all current pending events and return.
          d->ensureNSAppInitialized();
 
@@ -418,9 +419,10 @@ bool QCocoaEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
                NSInteger status = [NSApp runModalSession: session];
                if (status != NSModalResponseContinue && session == d->currentModalSessionCached) {
-                  // INVARIANT: Someone called [NSApp stopModal:] from outside the event
-                  // dispatcher (e.g to stop a native dialog). But that call wrongly stopped
-                  // 'session' as well. As a result, we need to restart all internal sessions:
+                  // Someone called [NSApp stopModal:] from outside the event dispatcher
+                  // then something was called incorrectly to stop the session,
+                  // as a result, we need to restart all sessions
+
                   d->temporarilyStopAllModalSessions();
                }
 
@@ -563,10 +565,6 @@ void QCocoaEventDispatcher::wakeUp()
    CFRunLoopSourceSignal(d->postedEventsSource);
    CFRunLoopWakeUp(mainRunLoop());
 }
-
-/*****************************************************************************
-  QEventDispatcherMac Implementation
- *****************************************************************************/
 
 void QCocoaEventDispatcherPrivate::ensureNSAppInitialized()
 {

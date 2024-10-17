@@ -257,7 +257,7 @@ AbstractDateTimeComparator::compare(const Item &operand1,
 bool AbstractDurationComparator::equals(const Item &o1,
                                         const Item &o2) const
 {
-   /* We use AbstractDuration::operator==() */
+   // use AbstractDuration::operator==()
    return *o1.as<AbstractDuration>() ==
           *o2.as<AbstractDuration>();
 }

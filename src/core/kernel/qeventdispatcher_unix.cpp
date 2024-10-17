@@ -214,8 +214,8 @@ int QEventDispatcherUNIXPrivate::doSelect(QEventLoop::ProcessEventsFlags flags, 
    return (nevents + q->activateSocketNotifiers());
 }
 
-// Internal functions for manipulating timer data structures.  The
-// timerBitVec array is used for keeping track of timer identifiers.
+// methods for changing timer data structures
+// timerBitVec array is used for keeping track of timer identifiers
 
 int QEventDispatcherUNIXPrivate::initThreadWakeUp()
 {

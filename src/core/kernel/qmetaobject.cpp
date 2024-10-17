@@ -378,7 +378,7 @@ int QMetaObject::indexOfSlot(const QString &slot) const
    return retval;
 }
 
-// internal method wrapping the global enum map
+// wraps the global enum map
 QMap<std::type_index, std::pair<QMetaObject *, QString>> &QMetaObject::m_enumsAll()
 {
    static QMap<std::type_index, std::pair<QMetaObject *, QString>> enums_All;

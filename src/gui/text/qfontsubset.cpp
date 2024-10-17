@@ -508,7 +508,7 @@ static QTtfTable generateHead(const qttf_head_table &head)
       // quint16  flags  Bit 0: Baseline for font at y=0;
       // Bit 1: Left sidebearing point at x=0;
       // Bit 2: Instructions may depend on point size;
-      // Bit 3: Force ppem to integer values for all internal scaler math; may use fractional ppem sizes if this bit is clear;
+      // Bit 3: Force ppem to integer values for all internal scaler math; may use fractional ppem sizes if this bit is clear
       // Bit 4: Instructions may alter advance width (the advance widths might not scale linearly);
       // Bits 5-10: These should be set according to  Apple's specification . However, they are not implemented in OpenType.
       // Bit 11: Font data is 'lossless,' as a result of having been compressed and decompressed with the Agfa MicroType Express engine.

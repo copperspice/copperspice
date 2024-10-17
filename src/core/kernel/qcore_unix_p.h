@@ -50,7 +50,7 @@ struct sockaddr;
       var = cmd;                              \
    } while (var == -1 && errno == EINTR)
 
-// Internal operator functions for timespecs
+// functions for timespecs
 inline timespec &normalizedTimespec(timespec &t)
 {
    while (t.tv_nsec >= 1000000000) {

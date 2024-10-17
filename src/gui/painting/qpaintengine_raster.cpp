@@ -2634,7 +2634,7 @@ bool QRasterPaintEnginePrivate::isUnclipped_normalized(const QRect &r) const
 
 
    if (cl->hasRectClip) {
-      // currently all painting functions clips to deviceRect internally
+      // currently all painting functions clips to deviceRect
       if (cl->clipRect == deviceRect) {
          return true;
       }
@@ -2663,7 +2663,7 @@ bool QRasterPaintEnginePrivate::isUnclipped(const QRect &rect,
    }
 
 
-   // currently all painting functions that call this function clip to deviceRect internally
+   // currently all painting methods whioch this method clip to deviceRect
    if (cl->hasRectClip && cl->clipRect == deviceRect) {
       return true;
    }
@@ -3057,11 +3057,9 @@ bool QRasterPaintEngine::shouldDrawCachedGlyphs(QFontEngine *fontEngine, const Q
       return false;
    }
 
-   // The font engine might not support filling the glyph cache
-   // with the given transform applied, in which case we need to
-   // fall back to the QPainterPath code-path. This does not apply
-   // for engines with internal caching, as we don't use the engine
-   // to fill up our cache in that case.
+   // font engine might not support filling the glyph cache with the given transform applied,
+   // in which case we need to fall back to the QPainterPath code path. This does not apply
+   // for engines with caching, as we do not use the engine to fill up our cache in that case.
 
    if (!fontEngine->hasInternalCaching() && !fontEngine->supportsTransformation(m)) {
       return false;

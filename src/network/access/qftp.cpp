@@ -140,12 +140,6 @@ class QFtpDTP : public QObject
 
 };
 
-/**********************************************************************
- *
- * QFtpPI - Protocol Interpreter
- *
- *********************************************************************/
-
 class QFtpPI : public QObject
 {
    NET_CS_OBJECT(QFtpPI)
@@ -243,11 +237,6 @@ class QFtpPI : public QObject
    friend class QFtpDTP;
 };
 
-/**********************************************************************
- *
- * QFtpCommand implemenatation
- *
- *********************************************************************/
 class QFtpCommand
 {
 
@@ -295,11 +284,6 @@ QFtpCommand::~QFtpCommand()
    }
 }
 
-/**********************************************************************
- *
- * QFtpDTP implemenatation
- *
- *********************************************************************/
 QFtpDTP::QFtpDTP(QFtpPI *p, QObject *parent)
    : QObject(parent), socket(nullptr), listener(this), pi(p), callWriteData(false)
 {
@@ -859,11 +843,6 @@ void QFtpDTP::clearData()
    data.dev = nullptr;
 }
 
-/**********************************************************************
- *
- * QFtpPI implemenatation
- *
- *********************************************************************/
 QFtpPI::QFtpPI(QObject *parent)
    : QObject(parent), rawCommand(false), transferConnectionExtended(true), dtp(this),
      commandSocket(nullptr), state(Begin), abortState(None), currentCmd(QString()),

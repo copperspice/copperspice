@@ -42,17 +42,18 @@
 #include <qaccessible.h>
 #endif
 
-// internal - Add a span to the collection. the collection takes the ownership.
+// the collection takes the ownership
 void QSpanCollection::addSpan(QSpanCollection::Span *span)
 {
    spans.append(span);
    Index::iterator it_y = index.lowerBound(-span->top());
 
    if (it_y == index.end() || it_y.key() != -span->top()) {
-      //there is no spans that starts with the row in the index, so create a sublist for it.
+      // there is no spans that starts with the row in the index, so create a sublist for it.
       SubIndex sub_index;
+
       if (it_y != index.end()) {
-         //the previouslist is the list of spans that sarts _before_ the row of the span.
+         // previouslist is the list of spans that sarts _before_ the row of the span.
          // and which may intersect this row.
          const SubIndex previousList = it_y.value();
 

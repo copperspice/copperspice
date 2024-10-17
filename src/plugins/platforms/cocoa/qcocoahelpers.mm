@@ -634,15 +634,7 @@ QString qt_mac_removeAmpersandEscapes(QString s)
    return qt_mac_removeMnemonics(s).trimmed();
 }
 
-/*! \internal
-
-   Returns the CoreGraphics CGContextRef of the paint device. 0 is
-   returned if it can't be obtained. It is the caller's responsibility to
-   CGContextRelease the context when finished using it.
-
-   \warning This function is duplicated in qmacstyle_mac.mm
-*/
-
+// duplicated in qmacstyle_mac.mm
 CGContextRef qt_mac_cg_context(QPaintDevice *pdev)
 {
    // QWidget and QPixmap (and QImage) paint devices are all QImages under the hood

@@ -60,8 +60,8 @@ class AccelTreeResourceLoader : public DeviceResourceLoader
 {
  public:
    enum ErrorHandling {
-      FailOnError,        ///< The resource loader will report the error via the report context.
-      ContinueOnError     ///< The resource loader will report no error and return an empty QNetworkReply.
+      FailOnError,        // report the error via the report context
+      ContinueOnError     // report no error and return an empty QNetworkReply
    };
 
    AccelTreeResourceLoader(const NamePool::Ptr &np, const NetworkAccessDelegator::Ptr &networkDelegator,

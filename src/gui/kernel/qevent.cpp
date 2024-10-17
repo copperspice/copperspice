@@ -475,7 +475,7 @@ QDragLeaveEvent::QDragLeaveEvent()
 
 QDragLeaveEvent::~QDragLeaveEvent()
 {}
-#endif // QT_NO_DRAGANDDROP
+#endif
 
 QHelpEvent::QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos)
    : QEvent(type), p(pos), gp(globalPos)

@@ -48,8 +48,8 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    typedef QExplicitlySharedDataPointer<AccelTreeBuilder> Ptr;
 
    enum Feature {
-      NoneFeature,                ///< No special features are enabled.
-      SourceLocationsFeature = 1  ///< The accel tree builder will store source locations for each start element.
+      NoneFeature,                   // No special features are enabled.
+      SourceLocationsFeature = 1     // The accel tree builder will store source locations for each start element.
    };
    using Features = QFlags<Feature>;
 

@@ -1984,7 +1984,7 @@ void QWindowsVistaStyle::drawComplexControl(ComplexControl control, const QStyle
          }
          break;
 
-#endif // QT_NO_SPINBOX
+#endif
 
       default:
          QWindowsXPStyle::drawComplexControl(control, option, painter, widget);

@@ -879,7 +879,7 @@ static bool resolveColor(QStringView colorStr, QColor &color, QSvgHandler *handl
    switch (colorStrTr.at(0).unicode()) {
 
       case '#': {
-         // #rrggbb is very common, so let's tackle it here  rather than falling back to QColor
+         // #rrggbb is very common so handle it here rather than falling back to QColor
 
          QRgb rgb;
          bool ok = qsvg_get_hex_rgb(colorStrTr, &rgb);

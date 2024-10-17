@@ -53,7 +53,7 @@ Expression::Ptr CardinalityVerifier::verifyCardinality(const Expression::Ptr &op
       return GenericPredicate::createFirstItem(operand);
 
    } else {
-      /* Sequences within this cardinality can never match. */
+      // Sequences within this cardinality can never match.
       context->error(wrongCardinality(requiredCard, opCard), code, operand.data());
       return operand;
    }
@@ -86,7 +86,7 @@ Item::Iterator::Ptr CardinalityVerifier::evaluateSequence(const DynamicContext::
             return CommonValues::emptyIterator;
          }
       } else {
-         /* We might be instantiated for the empty sequence. */
+         // We might be instantiated for the empty sequence.
          if (m_reqCard.isEmpty()) {
             context->error(wrongCardinality(m_reqCard, Cardinality::twoOrMore()), m_errorCode, this);
             return CommonValues::emptyIterator;

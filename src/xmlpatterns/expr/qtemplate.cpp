@@ -123,7 +123,8 @@ void Template::compileParameters(const StaticContext::Ptr &context)
 
 Expression::Properties Template::properties() const
 {
-   return Expression::DisableElimination; /* We're having issues with recursion detection, so this path currently loops infintely. */
+   // having issues with recursion detection, this path currently loops infintely.
+   return Expression::DisableElimination;
 
    Expression::Properties collect(body->properties());
 
@@ -142,7 +143,8 @@ Expression::Properties Template::properties() const
 
 Expression::Properties Template::dependencies() const
 {
-   return Expression::DisableElimination; /* We're having issues with recursion detection, so this path currently loops infintely. */
+   // having issues with recursion detection, this path currently loops infintely.
+   return Expression::DisableElimination;
 
    Expression::Properties collect(body->dependencies());
 

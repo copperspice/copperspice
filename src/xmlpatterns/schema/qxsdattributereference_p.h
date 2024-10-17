@@ -35,8 +35,8 @@ class XsdAttributeReference : public XsdAttributeUse
    typedef QExplicitlySharedDataPointer<XsdAttributeReference> Ptr;
 
    enum Type {
-      AttributeUse,   ///< The reference points to an attribute use.
-      AttributeGroup  ///< The reference points to an attribute group.
+      AttributeUse,      // reference points to an attribute use
+      AttributeGroup     // reference points to an attribute group
    };
 
    bool isAttributeUse() const override;

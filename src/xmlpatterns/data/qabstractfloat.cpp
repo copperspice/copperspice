@@ -21,9 +21,7 @@
 *
 ***********************************************************************/
 
-/**   \cond INTERNAL (notation so DoxyPress will not parse this class  */
 #include <stdlib.h>
-/**   \endcond   */
 
 template <const bool isDouble>
 AbstractFloat<isDouble>::AbstractFloat(const xsDouble num) : m_value(num)
@@ -78,8 +76,7 @@ int AbstractFloat<isDouble>::internalSignbit(const xsDouble num)
 
    value.asDouble = num;
 
-   /* The highest bit, the 64'th for those who have 64bit floats, is the sign bit. So we pull it down until that bit is the
-    * only one left. */
+   // highest bit, the 64'th for those who have 64 bit floats, is the sign bit.
    if constexpr (sizeof(xsDouble) == 8) {
       return value.asInt >> 63;
    } else {
@@ -196,7 +193,7 @@ Numeric::Ptr AbstractFloat<isDouble>::roundHalfToEven(const xsInteger precision)
    if (isNaN() || isInf() || isZero()) {
       return Numeric::Ptr(const_cast<AbstractFloat<isDouble> *>(this));
    } else {
-      /* The cast to double helps finding the correct pow() version on irix-cc. */
+      // cast to double helps finding the correct pow() version on irix-cc
       const xsDouble powered = pow(double(10), double(precision));
       xsDouble val = powered * m_value;
       bool isHalf = false;
@@ -233,8 +230,7 @@ Numeric::Ptr AbstractFloat<isDouble>::ceiling() const
 template <const bool isDouble>
 Numeric::Ptr AbstractFloat<isDouble>::abs() const
 {
-   /* We must use fabs() instead of qAbs() because qAbs()
-    * doesn't return 0 for -0.0. */
+   // must use fabs() instead of qAbs() because qAbs() does npt return 0 for -0.0.
    return AbstractFloat<isDouble>::fromValue(static_cast<xsDouble>(fabs(m_value)));
 }
 

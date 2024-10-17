@@ -651,9 +651,9 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
 
    // The only problem with this approach is that we consume the
    // MouseRelease when we start the scrolling with a flick gesture. We
-   // have to fake a MouseRelease "somewhere" to not mess with the internal
-   // states of widgets (a QPushButton would stay in 'pressed' state
-   // forever, if it does not receive a MouseRelease).
+   // have to fake a MouseRelease "somewhere" to not mess with the
+   // state of the widgets (a QPushButton would stay in 'pressed' state
+   // forever if it does not receive a MouseRelease).
 
 #ifndef QT_NO_GRAPHICSVIEW
    if (me || gsme) {

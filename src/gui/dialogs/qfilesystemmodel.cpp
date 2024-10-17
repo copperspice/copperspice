@@ -100,7 +100,7 @@ QModelIndex QFileSystemModel::index(int row, int column, const QModelIndex &pare
          const_cast<QFileSystemModelPrivate::QFileSystemNode *>(&d->root));
    Q_ASSERT(parentNode);
 
-   // get the internal pointer for the index
+   // get the pointer for the index
    const QString &childName = parentNode->visibleChildren[d->translateVisibleLocation(parentNode, row)];
    const QFileSystemModelPrivate::QFileSystemNode *indexNode = parentNode->children.value(childName);
 
@@ -1125,7 +1125,7 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
    // update the new visible list
    indexNode->visibleChildren.clear();
 
-   // No more dirty item we reset our internal dirty index
+   // no more dirty items since we reset our dirty index
    indexNode->dirtyChildrenIndex = -1;
 
    for (int i = 0; i < values.count(); ++i) {

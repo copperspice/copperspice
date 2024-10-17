@@ -60,7 +60,7 @@ class XPathHelper
 
       for (int i = 0; i < len; ++i) {
          if (! string.at(i).isSpace()) {
-            // TODO and this is wrong, see sdk/TODO
+            // emerald - return value might be incorrect
             return false;
          }
       }

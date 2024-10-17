@@ -62,7 +62,7 @@ class Q_XMLPATTERNS_EXPORT QXmlName
 
    inline QXmlName(const NamespaceCode uri, const LocalNameCode ln, const PrefixCode p = 0);
 
-   /* implementations are in utils/qnamepool_p.h. */
+   // implementations are in utils/qnamepool_p.h.
    inline LocalNameCode localName() const;
    inline PrefixCode prefix() const;
    inline bool hasPrefix() const;

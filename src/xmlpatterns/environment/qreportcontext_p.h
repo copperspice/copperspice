@@ -59,9 +59,8 @@ class ReportContext : public QSharedData
       XPTY0004,
       XPST0005,
 
-      XPTY0006,
-
-      XPTY0007,
+      XPTY0006,         // not currently used
+      XPTY0007,         // not currently used
 
       XPST0008,
 
@@ -72,31 +71,28 @@ class ReportContext : public QSharedData
       XQST0012,
       XQST0013,
 
-      XQST0014,
-
-      XQST0015,
+      XQST0014,         // not currently used
+      XQST0015,         // not currently used
 
       XQST0016,
-
       XPST0017,
       XPTY0018,
       XPTY0019,
       XPTY0020,
 
-      XPDY0021,
+      XPDY0021,         // not currently used
 
       XQST0022,
 
-      XQTY0023,
+      XQTY0023,         // not currently used
 
       XQTY0024,
       XQDY0025,
       XQDY0026,
       XQDY0027,
 
-      XQTY0028,
-
-      XQDY0029,
+      XQTY0028,         // not currently used
+      XQDY0029,         // not currently used
 
       XQTY0030,
       XQST0031,
@@ -108,18 +104,15 @@ class ReportContext : public QSharedData
       XQST0035,
       XQST0036,
 
-      XQST0037,
+      XQST0037,         // not currently used
 
       XQST0038,
       XQST0039,
-
       XQST0040,
-
       XQDY0041,
 
-      XQST0042,
-
-      XQST0043,
+      XQST0042,         // not currently used
+      XQST0043,         // not currently used
 
       XQDY0044,
       XQST0045,
@@ -132,14 +125,13 @@ class ReportContext : public QSharedData
       XPDY0050,
       XPST0051,
 
-      XQDY0052,
-
-      XQST0053,
+      XQDY0052,         // not currently used
+      XQST0053,         // not currently used
 
       XQST0054,
       XQST0055,
 
-      XQST0056,
+      XQST0056,         // not currently used
 
       XQST0057,
 
@@ -149,9 +141,8 @@ class ReportContext : public QSharedData
 
       XQDY0061,
 
-      XQDY0062,
-
-      XQST0063,
+      XQDY0062,         // not currently used
+      XQST0063,         // not currently used
 
       XQDY0064,
 
@@ -170,16 +161,15 @@ class ReportContext : public QSharedData
       XQST0075,
       XQST0076,
 
-      XQST0077,
-      XQST0078,
+      XQST0077,         // not currently used
+      XQST0078,         // not currently used
 
       XQST0079,
       XPST0080,
       XPST0081,
 
-      XQST0082,
-
-      XPST0083,
+      XQST0082,         // not currently used
+      XPST0083,         // not currently used
 
       XQDY0084,
       XQST0085,

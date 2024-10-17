@@ -39,20 +39,20 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
    typedef QExplicitlySharedDataPointer<XsdFacet> Ptr;
 
    enum Type {
-      None             = 0,        ///< An invalid facet.
-      Length           = 1 << 0,   ///< Match the exact length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-length">Length Definition</a>)
-      MinimumLength    = 1 << 1,   ///< Match the minimum length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minLength">Minimum Length Definition</a>)
-      MaximumLength    = 1 << 2,   ///< Match the maximum length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxLength">Maximum Length Definition</a>)
-      Pattern          = 1 << 3,   ///< Match a regular expression (<a href="http://www.w3.org/TR/xmlschema-2/#rf-pattern">Pattern Definition</a>)
-      WhiteSpace       = 1 << 4,   ///< Match a whitespace rule (<a href="http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace">White Space Definition</a>)
-      MaximumInclusive = 1 << 5,   ///< Match a maximum inclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxInclusive">Maximum Inclusive Definition</a>)
-      MaximumExclusive = 1 << 6,   ///< Match a maximum exclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxExclusive">Maximum Exclusive Definition</a>)
-      MinimumInclusive = 1 << 7,   ///< Match a minimum inclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minInclusive">Minimum Inclusive Definition</a>)
-      MinimumExclusive = 1 << 8,   ///< Match a minimum exclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minExclusive">Minimum Exclusive Definition</a>)
-      TotalDigits      = 1 << 9,   ///< Match some integer digits (<a href="http://www.w3.org/TR/xmlschema-2/#rf-totalDigits">Total Digits Definition</a>)
-      FractionDigits   = 1 << 10,  ///< Match some double digits (<a href="http://www.w3.org/TR/xmlschema-2/#rf-fractionDigits">Fraction Digits Definition</a>)
-      Enumeration      = 1 << 11,  ///< Match an enumeration (<a href="http://www.w3.org/TR/xmlschema-2/#rf-enumeration">Enumeration Definition</a>)
-      Assertion        = 1 << 12,  ///< Match an assertion (<a href="http://www.w3.org/TR/xmlschema-2/#rf-assertion">Assertion Definition</a>)
+      None             = 0,        // An invalid facet.
+      Length           = 1 << 0,   // Match the exact length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-length">Length Definition</a>)
+      MinimumLength    = 1 << 1,   // Match the minimum length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minLength">Minimum Length Definition</a>)
+      MaximumLength    = 1 << 2,   // Match the maximum length (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxLength">Maximum Length Definition</a>)
+      Pattern          = 1 << 3,   // Match a regular expression (<a href="http://www.w3.org/TR/xmlschema-2/#rf-pattern">Pattern Definition</a>)
+      WhiteSpace       = 1 << 4,   // Match a whitespace rule (<a href="http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace">White Space Definition</a>)
+      MaximumInclusive = 1 << 5,   // Match a maximum inclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxInclusive">Maximum Inclusive Definition</a>)
+      MaximumExclusive = 1 << 6,   // Match a maximum exclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-maxExclusive">Maximum Exclusive Definition</a>)
+      MinimumInclusive = 1 << 7,   // Match a minimum inclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minInclusive">Minimum Inclusive Definition</a>)
+      MinimumExclusive = 1 << 8,   // Match a minimum exclusive (<a href="http://www.w3.org/TR/xmlschema-2/#rf-minExclusive">Minimum Exclusive Definition</a>)
+      TotalDigits      = 1 << 9,   // Match some integer digits (<a href="http://www.w3.org/TR/xmlschema-2/#rf-totalDigits">Total Digits Definition</a>)
+      FractionDigits   = 1 << 10,  // Match some double digits (<a href="http://www.w3.org/TR/xmlschema-2/#rf-fractionDigits">Fraction Digits Definition</a>)
+      Enumeration      = 1 << 11,  // Match an enumeration (<a href="http://www.w3.org/TR/xmlschema-2/#rf-enumeration">Enumeration Definition</a>)
+      Assertion        = 1 << 12,  // Match an assertion (<a href="http://www.w3.org/TR/xmlschema-2/#rf-assertion">Assertion Definition</a>)
    };
    typedef QHash<XsdFacet::Type, XsdFacet::Ptr> Hash;
    typedef QHashIterator<XsdFacet::Type, XsdFacet::Ptr> HashIterator;

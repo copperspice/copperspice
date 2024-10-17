@@ -611,25 +611,28 @@ void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState, Qt
       return;
    }
 
-   // windowActivated
    if (!(oldState & Qt::WindowActive) && (newState & Qt::WindowActive)) {
+      // windowActivated
       emitWindowActivated(child);
    }
 
-   // windowDeactivated
    else if ((oldState & Qt::WindowActive) && ! (newState & Qt::WindowActive)) {
+      // windowDeactivated
       resetActiveWindow(child);
    }
 
-   // windowMinimized
    if (!(oldState & Qt::WindowMinimized) && (newState & Qt::WindowMinimized)) {
+      // windowMinimized
       isSubWindowsTiled = false;
       arrangeMinimizedSubWindows();
-      // windowMaximized
+
    } else if (!(oldState & Qt::WindowMaximized) && (newState & Qt::WindowMaximized)) {
+      // windowMaximized
       internalRaise(child);
-      // windowRestored
+
    } else if (!(newState & (Qt::WindowMaximized | Qt::WindowMinimized))) {
+      // windowRestored
+
       internalRaise(child);
       if (oldState & Qt::WindowMinimized) {
          arrangeMinimizedSubWindows();

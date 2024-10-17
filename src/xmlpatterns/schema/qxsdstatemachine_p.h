@@ -40,10 +40,10 @@ class XsdStateMachine
    typedef qint32 StateId;
 
    enum StateType {
-      StartState,     ///< The state the machine will start with.
-      StartEndState,  ///< The state the machine will start with, can be end state as well.
-      InternalState,  ///< Any state that is not start or end state.
-      EndState        ///< Any state where the machine is allowed to stop.
+      StartState,     // The state the machine will start with.
+      StartEndState,  // The state the machine will start with, can be end state as well.
+      InternalState,  // Any state that is not start or end state.
+      EndState        // Any state where the machine is allowed to stop.
    };
 
    XsdStateMachine();
@@ -88,14 +88,16 @@ class XsdStateMachine
    StateId dfaStateForNfaState(QSet<StateId> nfaState, QList< QPair< QSet<StateId>, StateId> > &stateTable,
                                XsdStateMachine<TransitionType> &dfa) const;
 
+   // implementation was inlined to workaround a compiler bug on Symbian/winscw.
    QSet<StateId> epsilonClosure(const QSet<StateId> &input) const {
-      // every state can reach itself by epsilon transition, so include the input states
-      // in the result as well
+      // every state can reach itself by epsilon transition, so include the input states in the result as well
       QSet<StateId> result = input;
 
       // add the input states to the list of to be processed states
       QList<StateId> workStates = input.toList();
-      while (!workStates.isEmpty()) { // while there are states to be processed left...
+
+      while (!workStates.isEmpty()) {
+         // while there are states to be processed
 
          // dequeue one state from list
          const StateId state = workStates.takeFirst();
@@ -104,7 +106,8 @@ class XsdStateMachine
          // from the current 'state'
          const QVector<StateId> targetStates = m_epsilonTransitions.value(state);
          for (int i = 0; i < targetStates.count(); ++i) {
-            // if we have this target state not in our result set yet...
+            // if we have this target state not in our result set yet
+
             if (!result.contains(targetStates.at(i))) {
                // ... add it to the result set
                result.insert(targetStates.at(i));

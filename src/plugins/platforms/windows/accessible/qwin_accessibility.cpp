@@ -185,7 +185,7 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, WPARAM wParam, LPARAM lParam, LRESULT *lResult)
 {
     if (static_cast<long>(lParam) == static_cast<long>(UiaRootObjectId)) {
-        /* For UI Automation */
+        // For UI Automation
 
     } else if (DWORD(lParam) == DWORD(OBJID_CLIENT)) {
         // Start handling accessibility internally

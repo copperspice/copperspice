@@ -621,12 +621,6 @@ class QDomDocumentPrivate : public QDomNodePrivate
    long nodeListTime;
 };
 
-/**************************************************************
- *
- * QDomHandler
- *
- **************************************************************/
-
 class QDomHandler : public QXmlDefaultHandler
 {
  public:
@@ -678,11 +672,8 @@ class QDomHandler : public QXmlDefaultHandler
 
 };
 
-/**************************************************************
- *
- * Functions for verifying legal data
- *
- **************************************************************/
+// Functions for verifying legal data
+
 QDomImplementation::InvalidDataPolicy QDomImplementationPrivate::invalidDataPolicy
    = QDomImplementation::AcceptInvalidChars;
 
@@ -917,22 +908,10 @@ static QString fixedSystemLiteral(const QString &data, bool *ok)
    return result;
 }
 
-/**************************************************************
- *
- * QDomImplementationPrivate
- *
- **************************************************************/
-
 QDomImplementationPrivate *QDomImplementationPrivate::clone()
 {
    return new QDomImplementationPrivate;
 }
-
-/**************************************************************
- *
- * QDomImplementation
- *
- **************************************************************/
 
 QDomImplementation::QDomImplementation()
 {
@@ -1208,12 +1187,6 @@ int QDomNodeListPrivate::length() const
 
    return list.count();
 }
-
-/**************************************************************
- *
- * QDomNodeList
- *
- **************************************************************/
 
 QDomNodeList::QDomNodeList()
 {
@@ -1849,12 +1822,6 @@ void QDomNodePrivate::setLocation(int lineNumber, int columnNumber)
    this->columnNumber = columnNumber;
 }
 
-/**************************************************************
- *
- * QDomNode
- *
- **************************************************************/
-
 #define IMPL ((QDomNodePrivate*)impl)
 
 QDomNode::QDomNode()
@@ -2344,13 +2311,6 @@ int QDomNode::columnNumber() const
    return impl ? impl->columnNumber : -1;
 }
 
-
-/**************************************************************
- *
- * QDomNamedNodeMapPrivate
- *
- **************************************************************/
-
 QDomNamedNodeMapPrivate::QDomNamedNodeMapPrivate(QDomNodePrivate *n)
 {
    ref = 1;
@@ -2510,12 +2470,6 @@ bool QDomNamedNodeMapPrivate::containsNS(const QString &nsURI, const QString &lo
    return namedItemNS(nsURI, localName) != nullptr;
 }
 
-/**************************************************************
- *
- * QDomNamedNodeMap
- *
- **************************************************************/
-
 #define IMPL ((QDomNamedNodeMapPrivate*)impl)
 
 QDomNamedNodeMap::QDomNamedNodeMap()
@@ -2653,12 +2607,6 @@ bool QDomNamedNodeMap::contains(const QString &name) const
 }
 
 #undef IMPL
-
-/**************************************************************
- *
- * QDomDocumentTypePrivate
- *
- **************************************************************/
 
 QDomDocumentTypePrivate::QDomDocumentTypePrivate(QDomDocumentPrivate *doc, QDomNodePrivate *parent)
    : QDomNodePrivate(doc, parent)
@@ -2843,12 +2791,6 @@ void QDomDocumentTypePrivate::save(QTextStream &s, int, int indent) const
    s << '>' << endl;
 }
 
-/**************************************************************
- *
- * QDomDocumentType
- *
- **************************************************************/
-
 #define IMPL ((QDomDocumentTypePrivate*)impl)
 
 QDomDocumentType::QDomDocumentType() : QDomNode()
@@ -2920,12 +2862,6 @@ QString QDomDocumentType::internalSubset() const
 
 #undef IMPL
 
-/**************************************************************
- *
- * QDomDocumentFragmentPrivate
- *
- **************************************************************/
-
 QDomDocumentFragmentPrivate::QDomDocumentFragmentPrivate(QDomDocumentPrivate *doc, QDomNodePrivate *parent)
    : QDomNodePrivate(doc, parent)
 {
@@ -2945,12 +2881,6 @@ QDomNodePrivate *QDomDocumentFragmentPrivate::cloneNode(bool deep)
    return p;
 }
 
-/**************************************************************
- *
- * QDomDocumentFragment
- *
- **************************************************************/
-
 QDomDocumentFragment::QDomDocumentFragment()
 {
 }
@@ -2969,12 +2899,6 @@ QDomDocumentFragment &QDomDocumentFragment::operator= (const QDomDocumentFragmen
 {
    return (QDomDocumentFragment &) QDomNode::operator=(x);
 }
-
-/**************************************************************
- *
- * QDomCharacterDataPrivate
- *
- **************************************************************/
 
 QDomCharacterDataPrivate::QDomCharacterDataPrivate(QDomDocumentPrivate *d, QDomNodePrivate *p,
       const QString &data)
@@ -3026,12 +2950,6 @@ void QDomCharacterDataPrivate::appendData(const QString &arg)
 {
    value += arg;
 }
-
-/**************************************************************
- *
- * QDomCharacterData
- *
- **************************************************************/
 
 #define IMPL ((QDomCharacterDataPrivate*)impl)
 
@@ -3123,12 +3041,6 @@ QDomNode::NodeType QDomCharacterData::nodeType() const
 }
 
 #undef IMPL
-
-/**************************************************************
- *
- * QDomAttrPrivate
- *
- **************************************************************/
 
 QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &name_)
    : QDomNodePrivate(d, parent)
@@ -3270,12 +3182,6 @@ void QDomAttrPrivate::save(QTextStream &s, int, int) const
    }
 }
 
-/**************************************************************
- *
- * QDomAttr
- *
- **************************************************************/
-
 #define IMPL ((QDomAttrPrivate*)impl)
 
 QDomAttr::QDomAttr()
@@ -3339,14 +3245,7 @@ void QDomAttr::setValue(const QString &v)
    IMPL->m_specified = true;
 }
 
-
 #undef IMPL
-
-/**************************************************************
- *
- * QDomElementPrivate
- *
- **************************************************************/
 
 QDomElementPrivate::QDomElementPrivate(QDomDocumentPrivate *d, QDomNodePrivate *p, const QString &tagname)
    : QDomNodePrivate(d, p)
@@ -3528,13 +3427,12 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
    QString nsDecl(QLatin1String(""));
 
    if (!namespaceURI.isEmpty()) {
-      /**
-       * TODO: If we still have QDom, optimize this so that we only declare namespaces that are not
-       * yet declared. We loose default namespace mappings, so maybe we should rather store
-       * the information that we get from startPrefixMapping()/endPrefixMapping() and use them.
-       * Modifications becomes more complex then, however.
-       *
-       */
+
+       // Pending-CS
+       // If we still have QDom optimize so we only declare namespaces that are not yet declared.
+       // We loose default namespace mappings, so maybe we should rather store
+       // the information that we get from startPrefixMapping()/endPrefixMapping() and use them.
+       // Modifications becomes more complex then, however.
 
       if (prefix.isEmpty()) {
          nsDecl = QLatin1String(" xmlns");
@@ -3548,7 +3446,7 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
 
    QSet<QString> outputtedPrefixes;
 
-   /* Write out attributes. */
+   // Write out attributes.
    if (! m_attr->m_nodeMap.isEmpty()) {
 
       QMultiMap<QString, QDomNodePrivate *>::const_iterator it = m_attr->m_nodeMap.constBegin();
@@ -3609,12 +3507,6 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
       }
    }
 }
-
-/**************************************************************
- *
- * QDomElement
- *
- **************************************************************/
 
 #define IMPL ((QDomElementPrivate*)impl)
 
@@ -3863,12 +3755,6 @@ QString QDomElement::text() const
 
 #undef IMPL
 
-/**************************************************************
- *
- * QDomTextPrivate
- *
- **************************************************************/
-
 QDomTextPrivate::QDomTextPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &val)
    : QDomCharacterDataPrivate(d, parent, val)
 {
@@ -3909,12 +3795,6 @@ void QDomTextPrivate::save(QTextStream &s, int, int) const
    s << encodeText(value, s, !(that->parent() && that->parent()->isElement()), false, true);
 }
 
-/**************************************************************
- *
- * QDomText
- *
- **************************************************************/
-
 #define IMPL ((QDomTextPrivate*)impl)
 
 QDomText::QDomText()
@@ -3946,12 +3826,6 @@ QDomText QDomText::splitText(int offset)
 }
 
 #undef IMPL
-
-/**************************************************************
- *
- * QDomCommentPrivate
- *
- **************************************************************/
 
 QDomCommentPrivate::QDomCommentPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &val)
    : QDomCharacterDataPrivate(d, parent, val)
@@ -3991,12 +3865,6 @@ void QDomCommentPrivate::save(QTextStream &s, int depth, int indent) const
    }
 }
 
-/**************************************************************
- *
- * QDomComment
- *
- **************************************************************/
-
 QDomComment::QDomComment()
    : QDomCharacterData()
 {
@@ -4016,13 +3884,6 @@ QDomComment &QDomComment::operator= (const QDomComment &x)
 {
    return (QDomComment &) QDomNode::operator=(x);
 }
-
-
-/**************************************************************
- *
- * QDomCDATASectionPrivate
- *
- **************************************************************/
 
 QDomCDATASectionPrivate::QDomCDATASectionPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
       const QString &val)
@@ -4051,12 +3912,6 @@ void QDomCDATASectionPrivate::save(QTextStream &s, int, int) const
    s << "<![CDATA[" << value << "]]>";
 }
 
-/**************************************************************
- *
- * QDomCDATASection
- *
- **************************************************************/
-
 QDomCDATASection::QDomCDATASection()
    : QDomText()
 {
@@ -4076,12 +3931,6 @@ QDomCDATASection &QDomCDATASection::operator= (const QDomCDATASection &x)
 {
    return (QDomCDATASection &) QDomNode::operator=(x);
 }
-
-/**************************************************************
- *
- * QDomNotationPrivate
- *
- **************************************************************/
 
 QDomNotationPrivate::QDomNotationPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
       const QString &aname,
@@ -4125,12 +3974,6 @@ void QDomNotationPrivate::save(QTextStream &s, int, int) const
    s << '>' << endl;
 }
 
-/**************************************************************
- *
- * QDomNotation
- *
- **************************************************************/
-
 #define IMPL ((QDomNotationPrivate*)impl)
 
 QDomNotation::QDomNotation()
@@ -4170,12 +4013,6 @@ QString QDomNotation::systemId() const
 }
 
 #undef IMPL
-
-/**************************************************************
- *
- * QDomEntityPrivate
- *
- **************************************************************/
 
 QDomEntityPrivate::QDomEntityPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
                                      const QString &aname,
@@ -4265,11 +4102,6 @@ void QDomEntityPrivate::save(QTextStream &s, int, int) const
    }
 }
 
-/**************************************************************
- *
- * QDomEntity
- *
- **************************************************************/
 
 #define IMPL ((QDomEntityPrivate*)impl)
 
@@ -4319,12 +4151,6 @@ QString QDomEntity::notationName() const
 
 #undef IMPL
 
-/**************************************************************
- *
- * QDomEntityReferencePrivate
- *
- **************************************************************/
-
 QDomEntityReferencePrivate::QDomEntityReferencePrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
       const QString &aname)
    : QDomNodePrivate(d, parent)
@@ -4350,12 +4176,6 @@ void QDomEntityReferencePrivate::save(QTextStream &s, int, int) const
    s << '&' << name << ';';
 }
 
-/**************************************************************
- *
- * QDomEntityReference
- *
- **************************************************************/
-
 QDomEntityReference::QDomEntityReference()
    : QDomNode()
 {
@@ -4376,13 +4196,6 @@ QDomEntityReference &QDomEntityReference::operator= (const QDomEntityReference &
    return (QDomEntityReference &) QDomNode::operator=(x);
 }
 
-
-/**************************************************************
- *
- * QDomProcessingInstructionPrivate
- *
- **************************************************************/
-
 QDomProcessingInstructionPrivate::QDomProcessingInstructionPrivate(QDomDocumentPrivate *d,
       QDomNodePrivate *parent, const QString &target, const QString &data)
    : QDomNodePrivate(d, parent)
@@ -4396,7 +4209,6 @@ QDomProcessingInstructionPrivate::QDomProcessingInstructionPrivate(QDomProcessin
 {
 }
 
-
 QDomNodePrivate *QDomProcessingInstructionPrivate::cloneNode(bool deep)
 {
    QDomNodePrivate *p = new QDomProcessingInstructionPrivate(this, deep);
@@ -4409,12 +4221,6 @@ void QDomProcessingInstructionPrivate::save(QTextStream &s, int, int) const
 {
    s << "<?" << name << ' ' << value << "?>" << endl;
 }
-
-/**************************************************************
- *
- * QDomProcessingInstruction
- *
- **************************************************************/
 
 QDomProcessingInstruction::QDomProcessingInstruction()
    : QDomNode()
@@ -4459,12 +4265,6 @@ void QDomProcessingInstruction::setData(const QString &d)
    }
    impl->setNodeValue(d);
 }
-
-/**************************************************************
- *
- * QDomDocumentPrivate
- *
- **************************************************************/
 
 QDomDocumentPrivate::QDomDocumentPrivate()
    : QDomNodePrivate(nullptr), impl(new QDomImplementationPrivate), nodeListTime(1)
@@ -4880,12 +4680,6 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
    }
 }
 
-/**************************************************************
- *
- * QDomDocument
- *
- **************************************************************/
-
 #define IMPL ((QDomDocumentPrivate*)impl)
 
 QDomDocument::QDomDocument()
@@ -5242,12 +5036,6 @@ QDomComment QDomNode::toComment() const
    }
    return QDomComment();
 }
-
-/**************************************************************
- *
- * QDomHandler
- *
- **************************************************************/
 
 QDomHandler::QDomHandler(QDomDocumentPrivate *adoc, bool namespaceProcessing)
    : errorLine(0), errorColumn(0), doc(adoc), node(adoc), cdata(false),

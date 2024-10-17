@@ -643,11 +643,9 @@ void QGraphicsWidget::updateGeometry()
          }
 
       } else {
-         /**
-          * If this is the topmost widget, post a LayoutRequest event to the widget.
-          * When the event is received, it will start flowing all the way down to the leaf
-          * widgets in one go. This will make a relayout flicker-free.
-          */
+         // If this is the topmost widget, post a LayoutRequest event to the widget.
+         // When the event is received, it will start flowing all the way down to the leaf
+         // widgets in one go. This will make a relayout flicker-free.
 
          if (QGraphicsLayout::instantInvalidatePropagation()) {
 

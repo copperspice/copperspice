@@ -54,7 +54,7 @@
 
 namespace QPrint {
 
-    // Note: Keep in sync with QPrinter::PrinterState for now
+    // Keep in sync with QPrinter::PrinterState for now
     // Replace later with more detailed status reporting
     enum DeviceState {
         Idle,
@@ -63,7 +63,7 @@ namespace QPrint {
         Error
     };
 
-    // Note: Keep in sync with QPrinter::DuplexMode
+    // Keep in sync with QPrinter::DuplexMode
     enum DuplexMode {
         DuplexNone = 0,
         DuplexAuto,
@@ -76,7 +76,7 @@ namespace QPrint {
         Color
     };
 
-    // Note: Keep in sync with QPrinter::PaperSource for now
+    // Keep in sync with QPrinter::PaperSource for now
     // If/when made public, rearrange and rename
     enum InputSlotId {
         Upper,
@@ -92,7 +92,7 @@ namespace QPrint {
         LargeCapacity,
         Cassette,
         FormSource,
-        MaxPageSource, // Deprecated, kept for compatibility to QPrinter
+        MaxPageSource,                      // Deprecated, kept for compatibility to QPrinter
         CustomInputSlot,
         LastInputSlot = CustomInputSlot,
         OnlyOne = Upper
@@ -128,7 +128,7 @@ struct InputSlotMap {
     const char *key;
 };
 
-// Note: PPD standard does not define a standard set of InputSlot keywords,
+// PPD standard does not define a standard set of InputSlot keywords,
 // it is a free form text field left to the PPD writer to decide,
 // but it does suggest some names for consistency with the Windows enum.
 static const InputSlotMap inputSlotMap[] = {
@@ -147,7 +147,7 @@ static const InputSlotMap inputSlotMap[] = {
     { QPrint::FormSource,      DMBIN_FORMSOURCE,     "FormSource"     },
     { QPrint::Manual,          DMBIN_MANUAL,         "ManualFeed"     },
     { QPrint::OnlyOne,         DMBIN_ONLYONE,        "OnlyOne"        }, // = QPrint::Upper
-    { QPrint::CustomInputSlot, DMBIN_USER,           ""               }  // Must always be last row
+    { QPrint::CustomInputSlot, DMBIN_USER,           ""               }  // must always be last the row
 };
 
 struct OutputBinMap {
@@ -156,11 +156,11 @@ struct OutputBinMap {
 };
 
 static const OutputBinMap outputBinMap[] = {
-    { QPrint::AutoOutputBin,   ""      }, // Not a PPD defined value, internal use only
+    { QPrint::AutoOutputBin,   ""      },    // not a PPD defined value, CS only
     { QPrint::UpperBin,        "Upper" },
     { QPrint::LowerBin,        "Lower" },
     { QPrint::RearBin,         "Rear"  },
-    { QPrint::CustomOutputBin, ""      }  // Must always be last row
+    { QPrint::CustomOutputBin, ""      }     // must always be the last row
 };
 
 // Print utilities shared by print plugins
@@ -218,9 +218,7 @@ public:
 #if (defined Q_OS_DARWIN && !defined Q_OS_IOS) || (defined Q_OS_UNIX && !defined QT_NO_CUPS)
 
     // PPD utilities shared by CUPS and Mac plugins requiring CUPS headers
-    // May turn into a proper internal QPpd class if enough shared between Mac and CUPS,
-    // but where would it live?  Not in base module as don't want to link to CUPS.
-    // May have to have two copies in plugins to keep in sync.
+    // May turn into a QPpd class if enough code is shared between Mac and CUPS
 
     static QPrint::InputSlot ppdChoiceToInputSlot(const ppd_choice_t &choice)
     {

@@ -1346,7 +1346,7 @@ void QSortFilterProxyModelPrivate::_q_sourceReset()
    invalidatePersistentIndexes();
    _q_clearMapping();
 
-   // All internal structures are deleted in clear()
+   // All structures in this class are deleted in clear()
    q->endResetModel();
    update_source_sort_column();
 

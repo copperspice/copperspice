@@ -43,10 +43,10 @@ class QWindow;
 */
 struct KeyboardLayoutItem {
    uint dirty : 1;
-   uint exists : 1; // whether this item has been initialized (by updatePossibleKeyCodes)
+   uint exists : 1;                      // whether this item has been initialized (by updatePossibleKeyCodes)
    quint8 deadkeys;
    static const size_t NumQtKeys = 9;
-   quint32 qtKey[NumQtKeys]; // Can by any Qt::Key_<foo>, or unicode character
+   quint32 qtKey[NumQtKeys];             // Can by any Qt::Key_<foo>, or unicode character
 };
 
 class QWindowsKeyMapper

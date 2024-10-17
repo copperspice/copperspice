@@ -55,10 +55,6 @@ static void swapPixel01(QImage *image)        // 1-bpp: swap 0 and 1 pixels
                                read_bmp_image, write_bmp_image);
 */
 
-/*****************************************************************************
-  BMP (DIB) image read/write functions
- *****************************************************************************/
-
 const int BMP_FILEHDR_SIZE = 14;                // size of BMP_FILEHDR data
 
 static QDataStream &operator>>(QDataStream &s, BMP_FILEHDR &bf)

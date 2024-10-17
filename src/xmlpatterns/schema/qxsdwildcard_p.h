@@ -42,9 +42,9 @@ class XsdWildcard : public XsdTerm
       typedef QExplicitlySharedDataPointer<NamespaceConstraint> Ptr;
 
       enum Variety {
-         Any,         ///< Any namespace is allowed.
-         Enumeration, ///< Namespaces in the namespaces set are allowed.
-         Not          ///< Namespaces in the namespaces set are not allowed.
+         Any,               // Any namespace is allowed.
+         Enumeration,       // Namespaces in the namespaces set are allowed.
+         Not                // Namespaces in the namespaces set are not allowed.
       };
 
       void setVariety(Variety variety);

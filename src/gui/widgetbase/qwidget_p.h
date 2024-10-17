@@ -436,9 +436,9 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setLayoutItemMargins(int left, int top, int right, int bottom);
    void setLayoutItemMargins(QStyle::SubElement element, const QStyleOption *opt = nullptr);
 
-   // aboutToDestroy() is called just before the contents of
-   // QWidget::destroy() is executed. It's used to signal QWidget
-   // sub-classes that their internals are about to be released.
+   // aboutToDestroy() is called just before the contents of QWidget::destroy() is called
+   // this is used to signal any QWidget sub classes that class data is about to be released.
+
    virtual void aboutToDestroy() {
    }
 

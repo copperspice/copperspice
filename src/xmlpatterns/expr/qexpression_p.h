@@ -245,7 +245,7 @@ inline void Expression::rewrite(Expression::Ptr &old,
                << '(' << old->actualReflection() << "to" << New->actualReflection() << ", "
                << old->description() << "to" << New->description() << ')';
 
-      /* The order of these two lines is significant.. */
+      // The order of these two lines is significant
       context->addLocation(New.data(), context->locationFor(old->actualReflection()));
       old = New;
    }

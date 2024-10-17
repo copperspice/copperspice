@@ -87,7 +87,7 @@ QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
          context->error(QtXmlPatterns::tr("No namespace binding exists for the prefix %1 in %2")
                   .formatArgs(formatKeyword(prefix), formatKeyword(lexicalQName)), NoBinding, r);
 
-         return QXmlName(); /* Silence compiler warning. */
+         return QXmlName();
 
       } else {
          return context->namePool()->allocateQName(context->namePool()->stringForNamespace(nsCode), local, prefix);
@@ -96,7 +96,7 @@ QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
       context->error(QtXmlPatterns::tr("%1 is an invalid %2")
                      .formatArg(formatData(lexicalQName)).formatArg(formatType(context->namePool(), BuiltinTypes::xsQName)), InvalidQName, r);
 
-      return QXmlName(); /* Silence compiler warning. */
+      return QXmlName();
    }
 }
 

@@ -344,10 +344,7 @@ bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const Na
       }
    }
 
-   /**
-    * The algorithm is implemented like described in http://www.ltg.ed.ac.uk/~ht/XML_Europe_2003.html#S2.2
-    */
-
+   // The algorithm is implemented like described in http://www.ltg.ed.ac.uk/~ht/XML_Europe_2003.html#S2.2
    // create a state machine for the given particle
    XsdStateMachine<XsdTerm::Ptr> stateMachine(namePool);
 
@@ -436,9 +433,7 @@ bool XsdParticleChecker::isUPAConformXsdAll(const XsdParticle::Ptr &particle, co
 bool XsdParticleChecker::subsumes(const XsdParticle::Ptr &particle, const XsdParticle::Ptr &derivedParticle,
                                   const XsdSchemaContext::Ptr &context, QString &errorMsg)
 {
-   /**
-    * The algorithm is implemented like described in http://www.ltg.ed.ac.uk/~ht/XML_Europe_2003.html#S2.3
-    */
+    // The algorithm is implemented like described in http://www.ltg.ed.ac.uk/~ht/XML_Europe_2003.html#S2.3
 
    const NamePool::Ptr namePool(context->namePool());
 

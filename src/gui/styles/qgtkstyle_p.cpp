@@ -282,7 +282,7 @@ GtkWidget *QGtkStylePrivate::gtkWidget(const QHashableLatin1Literal &path)
 {
    GtkWidget *widget = gtkWidgetMap()->value(path);
    if (!widget) {
-      // Theme might have rearranged widget internals
+      // theme might have rearranged widget data
       widget = gtkWidgetMap()->value(path);
    }
    return widget;

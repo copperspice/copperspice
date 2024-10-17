@@ -1112,7 +1112,7 @@ void QCommonStylePrivate::viewItemLayout(const QStyleOptionViewItem *opt,  QRect
    }
 
    if (! sizehint) {
-      // we only need to do the internal layout if we are going to paint
+      // only need to do the layout if we are going to paint
 
       *checkRect = QStyle::alignedRect(opt->direction, Qt::AlignCenter,
             checkRect->size(), check);

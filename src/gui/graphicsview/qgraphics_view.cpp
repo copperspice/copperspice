@@ -841,15 +841,14 @@ void QGraphicsViewPrivate::freeStyleOptionsArray(QStyleOptionGraphicsItem *array
 
 extern QPainterPath qt_regionToPath(const QRegion &region);
 
-/*!
-    ### Adjustments in findItems: mapToScene(QRect) forces us to adjust the
-    input rectangle by (0, 0, 1, 1), because it uses QRect::bottomRight()
-    (etc) when mapping the rectangle to a polygon (which is _wrong_). In
-    addition, as QGraphicsItem::boundingRect() is defined in logical space,
-    but the default pen for QPainter is cosmetic with a width of 0, QPainter
-    is at risk of painting 1 pixel outside the bounding rect. Therefore we
-    must search for items with an adjustment of (-1, -1, 1, 1).
-*/
+//  Adjustments in findItems: mapToScene(QRect) forces us to adjust the
+//  input rectangle by (0, 0, 1, 1), because it uses QRect::bottomRight()
+//  (etc) when mapping the rectangle to a polygon (which is _wrong_). In
+//  addition, as QGraphicsItem::boundingRect() is defined in logical space,
+//  but the default pen for QPainter is cosmetic with a width of 0, QPainter
+//  is at risk of painting 1 pixel outside the bounding rect. Therefore we
+//  must search for items with an adjustment of (-1, -1, 1, 1).
+
 QList<QGraphicsItem *> QGraphicsViewPrivate::findItems(const QRegion &exposedRegion, bool *allItems,
    const QTransform &viewTransform) const
 {

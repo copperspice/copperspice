@@ -486,21 +486,16 @@ void QAbstractSlider::keyPressEvent(QKeyEvent *ev)
    if (ev->isAutoRepeat()) {
       if (! d->firstRepeat.isValid()) {
          d->firstRepeat.start();
+
       } else if (1 == d->repeatMultiplier) {
-         // This is the interval in milli seconds which one key repetition
-         // takes.
+         // interval for one key repetition
          const int repeatMSecs = d->firstRepeat.elapsed();
 
-         /**
-          * The time it takes to currently navigate the whole slider.
-          */
+         // time it takes to currently navigate the whole slider
          const qreal currentTimeElapse = (qreal(maximum()) / singleStep()) * repeatMSecs;
 
-         /**
-          * This is an arbitrarily determined constant in msecs that
-          * specifies how long time it should take to navigate from the
-          * start to the end(excluding starting key auto repeat).
-          */
+         // arbitrarily constant in msecs which specifies how long it should take to navigate from the
+         // start to the end, excluding starting key auto repeat
          const int SliderRepeatElapse = 2500;
 
          d->repeatMultiplier = currentTimeElapse / SliderRepeatElapse;

@@ -36,20 +36,13 @@ class ResourceLoader : public QSharedData
 {
  public:
    enum Usage {
-      /**
-       * Communicates that the URI may be used during query evaluation.
-       * For example, zero times or very many times.
-       *
-       * Typically this hint is given when the URI is available at
-       * compile-time, but it is used inside a conditional statement
-       * whose branching cannot be determined at compile time.
-       */
+      // Communicates the URI may be used during query evaluation.
+      // Typically this hint is given when the URI is available at
+      // compile-time, but it is used inside a conditional statement
+      // whose branching cannot be determined at compile time.
       MayUse,
 
-      /**
-       * Communicates that the URI will always be used at query
-       * evaluation.
-       */
+      // Communicates the URI will always be used at query evaluation.
       WillUse
    };
 

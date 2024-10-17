@@ -57,10 +57,6 @@ struct SourceAndConstAlpha {
    int m_alpha256;
 };
 
-
-/************************************************************************
-                       RGB16 (565) format target format
- ************************************************************************/
 struct Blend_RGB16_on_RGB16_NoAlpha {
    void write(quint16 *dst, quint16 src) {
       *dst = src;

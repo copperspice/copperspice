@@ -61,7 +61,7 @@ class OperandsIterator
       ++lvl.second;
 
       if (lvl.second == lvl.first.size()) {
-         /* Resume iteration above us. */
+         // Resume iteration above current position
          m_exprs.pop();
 
          if (m_exprs.isEmpty()) {

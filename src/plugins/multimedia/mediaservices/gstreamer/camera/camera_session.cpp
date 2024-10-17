@@ -1158,8 +1158,8 @@ void CameraBinSession::stopVideoRecording()
    g_signal_emit_by_name(G_OBJECT(m_camerabin), CAPTURE_STOP, nullptr);
 }
 
-//internal, only used by CameraBinSession::supportedFrameRates.
-//recursively fills the list of framerates res from value data.
+// used by CameraBinSession::supportedFrameRates.
+// recursively fills the list of framerates res from value data.
 static void readValue(const GValue *value, QList< QPair<int, int> > *res, bool *continuous)
 {
    if (GST_VALUE_HOLDS_FRACTION(value)) {
@@ -1289,8 +1289,8 @@ QList< QPair<int, int> > CameraBinSession::supportedFrameRates(const QSize &fram
    return res;
 }
 
-//internal, only used by CameraBinSession::supportedResolutions
-//recursively find the supported resolutions range.
+// only used by CameraBinSession::supportedResolutions
+// recursively find the supported resolutions range.
 static QPair<int, int> valueRange(const GValue *value, bool *continuous)
 {
    int minValue = 0;
