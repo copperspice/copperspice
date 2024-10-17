@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-//#define DEBUG_DECODER
-
 #include <qgstreameraudiodecodersession.h>
 
 #include <qdatetime.h>
@@ -161,7 +159,7 @@ bool QGstreamerAudioDecoderSession::processBusMessage(const QGstreamerMessage &m
 
                gst_message_parse_state_changed(gm, &oldState, &newState, &pending);
 
-#ifdef DEBUG_DECODER
+#if defined(CS_SHOW_DEBUG_PLATFORM_MEDIA)
                QStringList states;
                states << "GST_STATE_VOID_PENDING" <<  "GST_STATE_NULL" << "GST_STATE_READY" << "GST_STATE_PAUSED" << "GST_STATE_PLAYING";
 
@@ -234,7 +232,7 @@ bool QGstreamerAudioDecoderSession::processBusMessage(const QGstreamerMessage &m
             }
             break;
 
-#ifdef DEBUG_DECODER
+#if defined(CS_SHOW_DEBUG_PLATFORM_MEDIA)
             case GST_MESSAGE_INFO: {
                GError *err;
                gchar *debug;
