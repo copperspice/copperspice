@@ -120,8 +120,6 @@ class QSimplex
    bool setConstraints(const QList<QSimplexConstraint *> &constraints);
    void setObjective(QSimplexConstraint *objective);
 
-   void dumpMatrix();
-
  private:
    enum SolverFactor {
       Minimum = -1,

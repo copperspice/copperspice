@@ -267,30 +267,6 @@ void QSimplex::clearColumns(int first, int last)
    }
 }
 
-void QSimplex::dumpMatrix()
-{
-   qDebug("---- Simplex Matrix ----\n");
-
-   QString str(QLatin1String("       "));
-   for (int j = 0; j < columns; ++j) {
-      str += QString::fromLatin1("  <%1 >").formatArg(j, 2);
-   }
-
-   qDebug("%s", csPrintable(str));
-
-   for (int i = 0; i < rows; ++i) {
-      str = QString::fromLatin1("Row %1:").formatArg(i, 2);
-
-      qreal *row = matrix + i * columns;
-      for (int j = 0; j < columns; ++j) {
-         str += QString::fromLatin1("%1").formatArg(row[j], 7, 'f', 2);
-      }
-      qDebug("%s", csPrintable(str));
-   }
-
-   qDebug("------------------------\n");
-}
-
 void QSimplex::combineRows(int toIndex, int fromIndex, qreal factor)
 {
    if (!factor) {
