@@ -124,7 +124,7 @@ class Q_NETWORK_EXPORT QSslCertificate
    static bool importPkcs12(QIODevice *device, QSslKey *key, QSslCertificate *certificate,
                   QList<QSslCertificate> *caCertificates = nullptr, const QByteArray &passPhrase = QByteArray());
 
-   static Q_NETWORK_EXPORT uint hash(const QSslCertificate &key, uint seed);
+   static uint hash(const QSslCertificate &key, uint seed);
 
    Qt::HANDLE handle() const;
 
