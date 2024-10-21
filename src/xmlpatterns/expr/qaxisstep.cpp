@@ -68,8 +68,7 @@ AxisStep::AxisStep(const QXmlNodeModelIndex::Axis a,
    m_nodeTest(nt)
 {
    Q_ASSERT(m_nodeTest);
-   Q_ASSERT_X(BuiltinTypes::node->xdtTypeMatches(m_nodeTest), Q_FUNC_INFO,
-              "We assume we're a node type.");
+   Q_ASSERT_X(BuiltinTypes::node->xdtTypeMatches(m_nodeTest), Q_FUNC_INFO, "Assume we are a node type.");
 }
 
 Item AxisStep::mapToItem(const QXmlNodeModelIndex &node,

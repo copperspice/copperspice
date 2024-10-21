@@ -67,7 +67,7 @@ template <const bool isDouble>
 int AbstractFloat<isDouble>::internalSignbit(const xsDouble num)
 {
    Q_ASSERT_X(sizeof(xsDouble) == 8 || sizeof(xsDouble) == 4, Q_FUNC_INFO,
-              "This implementation of signbit assumes xsDouble, that is qreal, is 64 bits large.");
+              "Implementation of signbit assumes xsDouble is 64 bits");
 
    union {
       xsDouble asDouble;

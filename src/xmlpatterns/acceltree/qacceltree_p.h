@@ -97,8 +97,8 @@ class AccelTree : public QAbstractXmlNodeModel
       }
 
       inline bool isCompressed() const {
-         Q_ASSERT_X(m_kind == QXmlNodeModelIndex::Text, Q_FUNC_INFO,
-                    "Currently, only text nodes are compressed.");
+         Q_ASSERT_X(m_kind == QXmlNodeModelIndex::Text, Q_FUNC_INFO, "Only text nodes are compressed.");
+
          // we do not call size() here since it has logic for text nodes
          return m_size == IsCompressed;
       }

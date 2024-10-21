@@ -979,7 +979,7 @@ QColor QColor::toHsv() const
       } else if (qFuzzyCompare(b, max)) {
          hue = (qreal(4.0) + (r - g) / delta);
       } else {
-         Q_ASSERT_X(false, "QColor::toHsv", "internal error");
+         Q_ASSERT_X(false, "QColor::toHsv", "Internal error");
       }
       hue *= qreal(60.0);
       if (hue < qreal(0.0)) {
@@ -1035,7 +1035,7 @@ QColor QColor::toHsl() const
       } else if (qFuzzyCompare(b, max)) {
          hue = (qreal(4.0) + (r - g) / delta);
       } else {
-         Q_ASSERT_X(false, "QColor::toHsv", "internal error");
+         Q_ASSERT_X(false, "QColor::toHsv", "Internal error");
       }
       hue *= qreal(60.0);
       if (hue < qreal(0.0)) {

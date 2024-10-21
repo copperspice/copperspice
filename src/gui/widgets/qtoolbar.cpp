@@ -666,7 +666,7 @@ void QToolBar::actionEvent(QActionEvent *event)
          int index = d->layout->count();
          if (event->before()) {
             index = d->layout->indexOf(event->before());
-            Q_ASSERT_X(index != -1, "QToolBar::insertAction", "internal error");
+            Q_ASSERT_X(index != -1, "QToolBar::insertAction", "Internal error");
          }
          d->layout->insertAction(index, action);
          break;
@@ -685,7 +685,7 @@ void QToolBar::actionEvent(QActionEvent *event)
       }
 
       default:
-         Q_ASSERT_X(false, "QToolBar::actionEvent", "internal error");
+         Q_ASSERT_X(false, "QToolBar::actionEvent", "Internal error");
    }
 }
 

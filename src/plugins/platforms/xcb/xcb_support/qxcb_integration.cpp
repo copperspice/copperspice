@@ -218,8 +218,9 @@ QPlatformWindow *QXcbIntegration::createPlatformWindow(QWindow *window) const
       }
    }
 
-   Q_ASSERT(window->type() == Qt::Desktop || !window->supportsOpenGL()
-      || (!glIntegration && window->surfaceType() == QSurface::RasterGLSurface)); // for VNC
+   Q_ASSERT(window->type() == Qt::Desktop || ! window->supportsOpenGL()
+      || (! glIntegration && window->surfaceType() == QSurface::RasterGLSurface));    // for VNC
+
    QXcbWindow *xcbWindow = new QXcbWindow(window);
    xcbWindow->create();
    return xcbWindow;

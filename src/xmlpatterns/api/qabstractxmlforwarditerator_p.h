@@ -255,7 +255,7 @@ T QAbstractXmlForwardIterator<T>::last()
 template<typename T>
 typename QAbstractXmlForwardIterator<T>::Ptr QAbstractXmlForwardIterator<T>::copy() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Method is internal and should never be called");
    return typename QAbstractXmlForwardIterator<T>::Ptr();
 }
 
@@ -268,7 +268,7 @@ bool QAbstractXmlForwardIterator<T>::isEmpty()
 template<typename T>
 qint64 QAbstractXmlForwardIterator<T>::sizeHint() const
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This function is internal, unsupported, and should never be called.");
+   Q_ASSERT_X(false, Q_FUNC_INFO, "Method is internal and should never be called");
    return -1;
 }
 

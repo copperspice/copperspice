@@ -277,14 +277,14 @@ void QMediaPlaylistPrivate::syncControls(QMediaPlaylistControl *oldControl, QMed
    int *removedStart, int *removedEnd,
    int *insertedStart, int *insertedEnd)
 {
-   Q_ASSERT(oldControl != NULL && newControl != NULL);
-   Q_ASSERT(removedStart != NULL && removedEnd != NULL
-      && insertedStart != NULL && insertedEnd != NULL);
+   Q_ASSERT(oldControl != nullptr && newControl != nullptr);
+   Q_ASSERT(removedStart != nullptr && removedEnd != nullptr
+      && insertedStart != nullptr && insertedEnd != nullptr);
 
    QMediaPlaylistProvider *oldPlaylist = oldControl->playlistProvider();
    QMediaPlaylistProvider *newPlaylist = newControl->playlistProvider();
 
-   Q_ASSERT(oldPlaylist != NULL && newPlaylist != NULL);
+   Q_ASSERT(oldPlaylist != nullptr && newPlaylist != NULL);
 
    *removedStart = -1;
    *removedEnd = -1;

@@ -792,7 +792,7 @@ void QSslSocket::connectToHost(const QString &hostName, quint16 port, OpenMode o
    if (!d->plainSocket) {
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug() << "\tcreating internal plain socket";
+      qDebug() << ", Creating plain socket";
 #endif
 
       d->createPlainSocket(openMode);
@@ -1138,7 +1138,7 @@ bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstrac
    if (! plainSocket) {
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug() << ", Creating internal plain socket";
+      qDebug() << ", Creating plain socket";
 #endif
 
       createPlainSocket(QIODevice::ReadWrite);
