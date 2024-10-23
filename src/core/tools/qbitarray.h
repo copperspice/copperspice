@@ -221,9 +221,9 @@ class Q_CORE_EXPORT QBitRef
    }
 
  private:
-   inline QBitRef(QBitArray &array, int idx)
+   QBitRef(QBitArray &array, int idx)
       : a(array), i(idx)
-   {}
+   { }
 
    QBitArray &a;
    int i;

@@ -36,7 +36,7 @@ class QSqlRecordPrivate
    QSqlRecordPrivate();
    QSqlRecordPrivate(const QSqlRecordPrivate &other);
 
-   inline bool contains(int index) {
+   bool contains(int index) {
       return index >= 0 && index < fields.count();
    }
    QString createField(int index, const QString &prefix) const;

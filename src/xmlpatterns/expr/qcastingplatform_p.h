@@ -42,9 +42,9 @@ template<typename TSubClass, const bool issueError>
 class CastingPlatform
 {
  protected:
-
-   inline CastingPlatform(const ReportContext::ErrorCode code = ReportContext::FORG0001) : m_errorCode(code) {
-   }
+   CastingPlatform(const ReportContext::ErrorCode code = ReportContext::FORG0001)
+      : m_errorCode(code)
+   { }
 
    Item cast(const Item &sourceValue, const ReportContext::Ptr &context) const;
 
@@ -68,7 +68,7 @@ class CastingPlatform
                               const DynamicContext::Ptr &context) const;
 
 
-   inline ItemType::Ptr targetType() const {
+   ItemType::Ptr targetType() const {
       Q_ASSERT(static_cast<const TSubClass *>(this)->targetType());
       return static_cast<const TSubClass *>(this)->targetType();
    }

@@ -418,7 +418,7 @@ void QNetworkProxy::setRawHeader(const QByteArray &headerName, const QByteArray 
 class QNetworkProxyQueryPrivate: public QSharedData
 {
  public:
-   inline QNetworkProxyQueryPrivate()
+   QNetworkProxyQueryPrivate()
       : localPort(-1), type(QNetworkProxyQuery::TcpSocket) {
    }
 

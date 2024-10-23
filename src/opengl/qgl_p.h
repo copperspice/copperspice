@@ -273,7 +273,7 @@ class QGLContextPrivate
    QGLFunctions *functions;
    bool vertexAttributeArraysEnabledState[QT_GL_VERTEX_ARRAY_TRACKED_COUNT];
 
-   static inline QGLContextGroup *contextGroup(const QGLContext *ctx) {
+   static QGLContextGroup *contextGroup(const QGLContext *ctx) {
       return ctx->d_ptr->group;
    }
 

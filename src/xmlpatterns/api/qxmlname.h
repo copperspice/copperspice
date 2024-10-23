@@ -96,7 +96,7 @@ class Q_XMLPATTERNS_EXPORT QXmlName
       LexicalQNameMask    = LocalNameMask | PrefixMask
    };
 
-   inline QXmlName(const int c)
+   QXmlName(const int c)
       : m_qNameCode(c)
    {
    }

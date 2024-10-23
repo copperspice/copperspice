@@ -33,7 +33,7 @@ class AtomicMathematicianLocator : public ParameterizedAtomicTypeVisitor
  public:
    typedef QExplicitlySharedDataPointer<AtomicMathematicianLocator> Ptr;
 
-   inline AtomicMathematicianLocator() {
+   AtomicMathematicianLocator() {
    }
 
    virtual ~AtomicMathematicianLocator();

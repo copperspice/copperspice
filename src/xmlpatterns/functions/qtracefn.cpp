@@ -35,8 +35,9 @@ class TraceCallback : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<TraceCallback> Ptr;
 
-   inline TraceCallback(const QString &msg) : m_position(0),
-      m_msg(msg) {
+   TraceCallback(const QString &msg)
+      : m_position(0), m_msg(msg)
+   {
    }
 
    Item mapToItem(const Item &item,

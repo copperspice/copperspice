@@ -41,7 +41,8 @@ class XPathHelper
 
    template<const ReportContext::ErrorCode code, typename TReportContext>
 
-   static inline void checkCollationSupport(const QString &collation, const TReportContext &context, const SourceLocationReflection *const r) {
+   static void checkCollationSupport(const QString &collation, const TReportContext &context,
+            const SourceLocationReflection *const r) {
       Q_ASSERT(context);
       Q_ASSERT(r);
 
@@ -55,7 +56,7 @@ class XPathHelper
    static QPatternist::ItemType::Ptr typeFromKind(const QXmlNodeModelIndex::NodeKind nodeKind);
    static QUrl normalizeQueryURI(const QUrl &uri);
 
-   static inline bool isWhitespaceOnly(QStringView string) {
+   static bool isWhitespaceOnly(QStringView string) {
       const int len = string.length();
 
       for (int i = 0; i < len; ++i) {
@@ -68,7 +69,7 @@ class XPathHelper
       return true;
    }
 
-   static inline bool isWhitespaceOnly(const QString &string) {
+   static bool isWhitespaceOnly(const QString &string) {
       return isWhitespaceOnly(QStringView(string));
    }
 

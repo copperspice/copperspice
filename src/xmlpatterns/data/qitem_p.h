@@ -76,7 +76,7 @@ class AtomicValue : public QSharedData, public CppCastingHelper<AtomicValue>
 
    static QVariant toQt(const AtomicValue *const value);
 
-   static inline QVariant toQt(const AtomicValue::Ptr &value) {
+   static QVariant toQt(const AtomicValue::Ptr &value) {
       return toQt(value.data());
    }
 
@@ -85,7 +85,7 @@ class AtomicValue : public QSharedData, public CppCastingHelper<AtomicValue>
    static ItemType::Ptr qtToXDMType(const QXmlItem &item);
 
  protected:
-   inline AtomicValue() {
+   AtomicValue() {
    }
 };
 
@@ -98,16 +98,16 @@ class Item
    typedef QPatternist::SingletonIterator<Item> SingletonIterator;
    typedef QPatternist::EmptyIterator<Item> EmptyIterator;
 
-   inline Item()
+   Item()
    {
    }
 
-   inline Item(const QXmlNodeModelIndex &tmp)
+   Item(const QXmlNodeModelIndex &tmp)
       : m_data(tmp.m_storage)
    {
    }
 
-   inline Item(const Item &other)
+   Item(const Item &other)
       : m_data(other.m_data)
    {
       if (isAtomicValue()) {
@@ -115,7 +115,7 @@ class Item
       }
    }
 
-   inline Item(const AtomicValue::Ptr &a)
+   Item(const AtomicValue::Ptr &a)
    {
       if (a) {
          m_data = a.data();
@@ -123,7 +123,7 @@ class Item
       }
    }
 
-   inline Item(const AtomicValue *a)
+   Item(const AtomicValue *a)
    {
       if (a) {
          m_data = a;
@@ -131,13 +131,13 @@ class Item
       }
    }
 
-   inline ~Item() {
+   ~Item() {
       if (isAtomicValue() && ! std::get<const AtomicValue *>(m_data)->ref.deref()) {
          delete std::get<const AtomicValue *>(m_data);
       }
    }
 
-   inline Item &operator=(const Item &other) {
+   Item &operator=(const Item &other) {
 
       if (other.isAtomicValue()) {
          std::get<const AtomicValue *>(other.m_data)->ref.ref();
@@ -155,11 +155,11 @@ class Item
    }
 
    template<typename TCastTarget>
-   inline TCastTarget *as() const {
+   TCastTarget *as() const {
       return const_cast<TCastTarget *>(static_cast<const TCastTarget *>(std::get<const AtomicValue *>(m_data)));
    }
 
-   inline QString stringValue() const {
+   QString stringValue() const {
       if (isAtomicValue()) {
          return std::get<const AtomicValue *>(m_data)->stringValue();
       } else {
@@ -169,15 +169,15 @@ class Item
 
    Item::Iterator::Ptr sequencedTypedValue() const;
 
-   inline bool isAtomicValue() const {
+   bool isAtomicValue() const {
       return std::holds_alternative<const AtomicValue *>(m_data);
    }
 
-   inline bool isNode() const {
+   bool isNode() const {
       return std::holds_alternative<NodeIndexStorage>(m_data);
    }
 
-   inline QExplicitlySharedDataPointer<ItemType> type() const {
+   QExplicitlySharedDataPointer<ItemType> type() const {
       if (isAtomicValue()) {
          return std::get<const AtomicValue *>(m_data)->type();
       } else {
@@ -185,12 +185,12 @@ class Item
       }
    }
 
-   inline const AtomicValue *asAtomicValue() const {
+   const AtomicValue *asAtomicValue() const {
       Q_ASSERT(isAtomicValue());
       return std::get<const AtomicValue *>(m_data);
    }
 
-   inline QXmlNodeModelIndex asNode() const {
+   QXmlNodeModelIndex asNode() const {
       Q_ASSERT_X(isNode() || isNull(), Q_FUNC_INFO, "This item is not a valid QXmlNodeModelIndex.");
       Q_ASSERT_X(sizeof(QXmlNodeModelIndex) == sizeof(QPatternist::NodeIndexStorage), Q_FUNC_INFO, "Size mismatch");
 
@@ -203,15 +203,15 @@ class Item
       return retval;
    }
 
-   inline operator bool() const {
+   operator bool() const {
       return ! isNull();
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return std::holds_alternative<std::monostate>(m_data);
    }
 
-   inline void reset() {
+   void reset() {
       // Delete the atomicValue if necessary
 
       if (isAtomicValue() && ! std::get<const AtomicValue *>(m_data)->ref.deref()) {
@@ -221,7 +221,7 @@ class Item
       m_data = std::monostate();
    }
 
-   static inline Item fromPublic(const QXmlItem &tmp) {
+   static Item fromPublic(const QXmlItem &tmp) {
       const Item it(tmp.m_node);
 
       if (it.isAtomicValue()) {
@@ -231,7 +231,7 @@ class Item
       return it;
    }
 
-   static inline QXmlItem toPublic(const Item &tmp) {
+   static QXmlItem toPublic(const Item &tmp) {
       return QXmlItem(tmp);
    }
 

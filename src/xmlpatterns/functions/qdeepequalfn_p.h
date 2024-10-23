@@ -33,8 +33,9 @@ namespace QPatternist {
 class DeepEqualFN : public FunctionCall, public ComparisonPlatform<DeepEqualFN, false>
 {
  public:
-   inline DeepEqualFN() : ComparisonPlatform<DeepEqualFN, false>() {
-   }
+   DeepEqualFN()
+      : ComparisonPlatform<DeepEqualFN, false>()
+   { }
 
    bool evaluateEBV(const DynamicContext::Ptr &context) const override;
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;

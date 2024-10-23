@@ -55,7 +55,7 @@ class AnyType : public SchemaType
    bool isComplexType() const override;
 
  protected:
-   inline AnyType() {
+   AnyType() {
    }
 };
 

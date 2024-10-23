@@ -42,8 +42,8 @@ class AnyURI : public AtomicString
    static AnyURI::Ptr fromValue(const QUrl &uri);
 
    template<const ReportContext::ErrorCode code, typename TReportContext>
-   static inline QUrl toQUrl(const QString &value, const TReportContext &context,
-               const SourceLocationReflection *const r, bool *const isValid = nullptr, const bool issueError = true) {
+   static QUrl toQUrl(const QString &value, const TReportContext &context,
+         const SourceLocationReflection *const r, bool *const isValid = nullptr, const bool issueError = true) {
 
       /* QUrl doesn't flag ":/..." so we workaround it. */
       const QString simplified(value.simplified());
@@ -74,9 +74,8 @@ class AnyURI : public AtomicString
    static bool isValid(const QString &candidate);
 
    template<const ReportContext::ErrorCode code, typename TReportContext>
-   static inline AnyURI::Ptr fromLexical(const QString &value, const TReportContext &context,
-                  const SourceLocationReflection *const r) {
-
+   static AnyURI::Ptr fromLexical(const QString &value, const TReportContext &context,
+         const SourceLocationReflection *const r) {
       return AnyURI::Ptr(new AnyURI(toQUrl<code>(value, context, r).toString()));
    }
 
@@ -85,7 +84,7 @@ class AnyURI : public AtomicString
 
    ItemType::Ptr type() const override;
 
-   inline QUrl toQUrl() const {
+   QUrl toQUrl() const {
       Q_ASSERT_X(QUrl(m_value).isValid(), Q_FUNC_INFO, csPrintable(QString("%1 is not a valid QUrl").formatArg(m_value)));
       return QUrl(m_value);
    }

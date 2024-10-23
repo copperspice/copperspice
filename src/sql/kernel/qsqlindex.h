@@ -37,12 +37,12 @@ class Q_SQL_EXPORT QSqlIndex : public QSqlRecord
 
    QSqlIndex &operator=(const QSqlIndex &other);
    void setCursorName(const QString &cursorName);
-   inline QString cursorName() const {
+   QString cursorName() const {
       return cursor;
    }
 
    void setName(const QString &name);
-   inline QString name() const {
+   QString name() const {
       return nm;
    }
 

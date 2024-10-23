@@ -35,7 +35,8 @@ class ExternalVariableLoader : public QSharedData
 {
  public:
    typedef QExplicitlySharedDataPointer<ExternalVariableLoader> Ptr;
-   inline ExternalVariableLoader() {}
+   ExternalVariableLoader()
+   { }
 
    virtual ~ExternalVariableLoader();
 

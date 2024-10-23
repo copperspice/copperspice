@@ -32,10 +32,11 @@ class ReferenceCountedValue : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<ReferenceCountedValue<T> > Ptr;
 
-   inline ReferenceCountedValue(T *const v) : value(v) {
-   }
+   ReferenceCountedValue(T *const v)
+      : value(v)
+   { }
 
-   inline ~ReferenceCountedValue() {
+   ~ReferenceCountedValue() {
       delete value;
    }
 

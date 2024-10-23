@@ -132,7 +132,7 @@ class Expression : public QSharedData, public CppCastingHelper<Expression>, publ
       IDCardinalityVerifier
    };
 
-   inline Expression() {
+   Expression() {
    }
    virtual ~Expression();
 

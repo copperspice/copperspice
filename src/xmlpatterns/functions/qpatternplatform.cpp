@@ -34,12 +34,13 @@ class PatternFlag
  public:
    typedef QHash<QChar, PatternFlag> Hash;
 
-   inline PatternFlag() : flag(PatternPlatform::NoFlags) {
-   }
+   PatternFlag()
+      : flag(PatternPlatform::NoFlags)
+   { }
 
-   inline PatternFlag(const PatternPlatform::Flag opt, const QString &descr) : flag(opt),
-      description(descr) {
-   }
+   PatternFlag(const PatternPlatform::Flag opt, const QString &descr)
+      : flag(opt), description(descr)
+   { }
 
    PatternPlatform::Flag   flag;
    QString                 description;

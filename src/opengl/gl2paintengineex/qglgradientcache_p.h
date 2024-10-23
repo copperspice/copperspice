@@ -60,7 +60,7 @@ class QGL2GradientCache : public QOpenGLSharedResource
    void freeResource(QOpenGLContext *ctx) override;
 
  private:
-   inline int maxCacheSize() const {
+   int maxCacheSize() const {
       return 60;
    }
 

@@ -36,8 +36,9 @@ class TemplateMode : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<TemplateMode> Ptr;
 
-   inline TemplateMode(const QXmlName &modeName) : m_modeName(modeName) {
-   }
+   TemplateMode(const QXmlName &modeName)
+      : m_modeName(modeName)
+   { }
 
    TemplatePattern::Vector templatePatterns;
 

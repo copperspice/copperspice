@@ -54,11 +54,10 @@ class OrderBy : public SingleContainer
          Descending
       };
 
-      inline OrderSpec() {
-      }
+      OrderSpec()
+      { }
 
-      inline OrderSpec(const Direction dir,
-                       const StaticContext::OrderingEmptySequence orderingEmpty) : direction(dir),
+      OrderSpec(const Direction dir, const StaticContext::OrderingEmptySequence orderingEmpty) : direction(dir),
          orderingEmptySequence(orderingEmpty) {
       }
 
@@ -77,7 +76,7 @@ class OrderBy : public SingleContainer
 
       StaticContext::OrderingEmptySequence orderingEmptySequence;
 
-      inline AtomicComparator::Operator operatorID() const {
+      AtomicComparator::Operator operatorID() const {
          return orderingEmptySequence == StaticContext::Least ? AtomicComparator::OperatorLessThanNaNLeast
                 : AtomicComparator::OperatorLessThanNaNGreatest;
       }

@@ -87,7 +87,7 @@ class Q_OPENGL_EXPORT QGLBuffer
    void write(int offset, const void *data, int count);
 
    void allocate(const void *data, int count);
-   inline void allocate(int count) {
+   void allocate(int count) {
       allocate(nullptr, count);
    }
 

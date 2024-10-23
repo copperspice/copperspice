@@ -58,7 +58,7 @@ class QAbstractXmlForwardIterator : public QSharedData
    typedef QList<QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<T> > > List;
    typedef QVector<QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<T> > > Vector;
 
-   inline QAbstractXmlForwardIterator()
+   QAbstractXmlForwardIterator()
       : d_ptr(nullptr)
    {
    }
@@ -131,7 +131,9 @@ class ListIteratorPlatform : public QAbstractXmlForwardIterator<OutputType>
    }
 
  protected:
-   inline ListIteratorPlatform(const ListType &list) : m_list(list), m_position(0) { }
+   ListIteratorPlatform(const ListType &list)
+      : m_list(list), m_position(0)
+   { }
 
    const ListType  m_list;
    qint64          m_position;
@@ -163,8 +165,9 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
    }
 
  public:
-   inline ListIterator(const ListType &list) : ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>(list) {
-   }
+   ListIterator(const ListType &list)
+      : ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>(list)
+   { }
 
    QList<T> toList() override {
       return toList(m_list);
@@ -175,7 +178,7 @@ class ListIterator : public ListIteratorPlatform<T, T, ListIterator<T, ListType>
    }
 
  private:
-   inline const T &inputToOutputItem(const T &inputType) const {
+   const T &inputToOutputItem(const T &inputType) const {
       return inputType;
    }
    friend class ListIteratorPlatform<T, T, ListIterator<T, ListType>, ListType>;

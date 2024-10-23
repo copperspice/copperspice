@@ -43,7 +43,7 @@ class ComparisonPlatform
  protected:
    void prepareComparison(const AtomicComparator::Ptr &comparator);
 
-   inline ComparisonPlatform() {
+   ComparisonPlatform() {
    }
 
    AtomicComparator::Ptr
@@ -66,16 +66,16 @@ class ComparisonPlatform
                            const Item &it2,
                            const DynamicContext::Ptr &context) const;
 
-   inline const AtomicComparator::Ptr &comparator() const {
+   const AtomicComparator::Ptr &comparator() const {
       return m_comparator;
    }
 
-   inline void useCaseInsensitiveComparator() {
+   void useCaseInsensitiveComparator() {
       m_comparator = AtomicComparator::Ptr(new CaseInsensitiveStringComparator());
    }
 
  private:
-   inline AtomicComparator::Operator operatorID() const {
+   AtomicComparator::Operator operatorID() const {
       Q_ASSERT(static_cast<const TSubClass *>(this)->operatorID());
       return static_cast<const TSubClass *>(this)->operatorID();
    }

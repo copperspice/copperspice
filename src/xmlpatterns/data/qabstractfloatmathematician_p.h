@@ -37,9 +37,9 @@ template <const bool isDouble>
 class AbstractFloatMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
-
-   inline AbstractFloatMathematician(const SourceLocationReflection *const r) : DelegatingSourceLocationReflection(r) {
-   }
+   AbstractFloatMathematician(const SourceLocationReflection *const r)
+      : DelegatingSourceLocationReflection(r)
+   { }
 
    Item calculate(const Item &o1, const Operator op, const Item &o2,
                           const QExplicitlySharedDataPointer<DynamicContext> &context) const override;

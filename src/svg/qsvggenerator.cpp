@@ -311,7 +311,7 @@ class QSvgPaintEngine : public QPaintEngine
       *d_func()->stream << QLatin1String(">\n");
    }
 
-   inline QTextStream &stream() {
+   QTextStream &stream() {
       return *d_func()->stream;
    }
 

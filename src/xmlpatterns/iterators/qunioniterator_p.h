@@ -40,7 +40,7 @@ class UnionIterator : public Item::Iterator
    Item::Iterator::Ptr copy() const override;
 
  private:
-   inline Item nextFromFirstOperand() {
+   Item nextFromFirstOperand() {
       ++m_position;
       m_current = m_node1;
       m_node1 = m_it1->next();

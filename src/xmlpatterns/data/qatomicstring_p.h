@@ -38,7 +38,7 @@ class AtomicString : public AtomicValue
 
    static AtomicString::Ptr fromValue(const QString &value);
 
-   static inline AtomicString::Ptr fromValue(const QUrl &value) {
+   static AtomicString::Ptr fromValue(const QUrl &value) {
       return fromValue(value.toString());
    }
 

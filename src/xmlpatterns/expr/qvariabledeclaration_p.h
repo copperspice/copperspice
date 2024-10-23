@@ -65,19 +65,19 @@ class VariableDeclaration : public QSharedData
       Q_ASSERT(t == ExternalVariable || t == TemplateParameter || varSlot > -1);
    }
 
-   inline bool isUsed() const {
+   bool isUsed() const {
       return !references.isEmpty();
    }
 
-   inline const Expression::Ptr &expression() const {
+   const Expression::Ptr &expression() const {
       return m_expression;
    }
 
-   inline void setExpression(const Expression::Ptr &expr) {
+   void setExpression(const Expression::Ptr &expr) {
       m_expression = expr;
    }
 
-   inline bool usedByMany() const {
+   bool usedByMany() const {
       return references.count() > 1;
    }
 

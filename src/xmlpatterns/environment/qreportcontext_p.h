@@ -44,7 +44,8 @@ class ReportContext : public QSharedData
 
    typedef QExplicitlySharedDataPointer<ReportContext> Ptr;
 
-   inline ReportContext() {}
+   ReportContext()
+   { }
 
    virtual ~ReportContext();
 

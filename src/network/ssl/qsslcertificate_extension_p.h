@@ -29,7 +29,7 @@
 class QSslCertificateExtensionPrivate : public QSharedData
 {
  public:
-    inline QSslCertificateExtensionPrivate()
+    QSslCertificateExtensionPrivate()
         : critical(false), supported(false)
     { }
 

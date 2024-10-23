@@ -42,14 +42,14 @@ class Q_SQL_EXPORT QSqlField
    QSqlField &operator=(const QSqlField &other);
    bool operator==(const QSqlField &other) const;
 
-   inline bool operator!=(const QSqlField &other) const {
+   bool operator!=(const QSqlField &other) const {
       return !operator==(other);
    }
 
    ~QSqlField();
 
    void setValue(const QVariant &value);
-   inline QVariant value() const {
+   QVariant value() const {
       return val;
    }
 
@@ -65,7 +65,7 @@ class Q_SQL_EXPORT QSqlField
    void setType(QVariant::Type type);
 
    void setRequiredStatus(RequiredStatus status);
-   inline void setRequired(bool status) {
+   void setRequired(bool status) {
       setRequiredStatus(status ? Required : Optional);
    }
 

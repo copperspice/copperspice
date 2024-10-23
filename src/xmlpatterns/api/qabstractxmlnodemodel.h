@@ -134,7 +134,7 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
       AxisAttributeOrTop      = 65536 | ForwardAxis
    };
 
-   inline QXmlNodeModelIndex() {
+   QXmlNodeModelIndex() {
       reset();
    }
 
@@ -144,27 +144,27 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    bool operator==(const QXmlNodeModelIndex &other) const;
    bool operator!=(const QXmlNodeModelIndex &other) const;
 
-   inline qint64 data() const {
+   qint64 data() const {
       return m_storage.data;
    }
 
-   inline void *internalPointer() const {
+   void *internalPointer() const {
       return m_storage.pointer();
    }
 
-   inline const QAbstractXmlNodeModel *model() const {
+   const QAbstractXmlNodeModel *model() const {
       return m_storage.model;
    }
 
-   inline qint64 additionalData() const {
+   qint64 additionalData() const {
       return m_storage.additionalData;
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return ! m_storage.model;
    }
 
-   inline QXmlName name() const;
+   QXmlName name() const;
    inline QXmlNodeModelIndex root() const;
 
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex>> iterate(const Axis axis) const;
@@ -183,12 +183,12 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
    inline QExplicitlySharedDataPointer<QPatternist::ItemType> type() const;
    inline bool is(const QXmlNodeModelIndex &other) const;
 
-   inline void reset() {
+   void reset() {
       m_storage.reset();
    }
 
  private:
-   static inline QXmlNodeModelIndex create(const qint64 d, const QAbstractXmlNodeModel *const nm) {
+   static QXmlNodeModelIndex create(const qint64 d, const QAbstractXmlNodeModel *const nm) {
       QXmlNodeModelIndex n;
       n.m_storage.data = d;
       n.m_storage.model = nm;
@@ -196,9 +196,8 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
       return n;
    }
 
-   static inline QXmlNodeModelIndex create(const qint64 data,
-                                           const QAbstractXmlNodeModel *const nm,
-                                           const qint64 addData) {
+   static QXmlNodeModelIndex create(const qint64 data,
+         const QAbstractXmlNodeModel *const nm, const qint64 addData) {
       QXmlNodeModelIndex n;
       n.m_storage.data = data;
       n.m_storage.model = nm;
@@ -206,8 +205,9 @@ class Q_XMLPATTERNS_EXPORT QXmlNodeModelIndex
       return n;
    }
 
-   inline QXmlNodeModelIndex(const QPatternist::NodeIndexStorage &storage) : m_storage(storage) {
-   }
+   QXmlNodeModelIndex(const QPatternist::NodeIndexStorage &storage)
+      : m_storage(storage)
+   { }
 
    friend class QAbstractXmlNodeModel;
    friend class QPatternist::Item;
@@ -284,15 +284,15 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
 
    QAbstractXmlNodeModel(QAbstractXmlNodeModelPrivate *d);
 
-   inline QXmlNodeModelIndex createIndex(qint64 data) const {
+   QXmlNodeModelIndex createIndex(qint64 data) const {
       return QXmlNodeModelIndex::create(data, this);
    }
 
-   inline QXmlNodeModelIndex createIndex(void *pointer, qint64 additionalData = 0) const {
+   QXmlNodeModelIndex createIndex(void *pointer, qint64 additionalData = 0) const {
       return QXmlNodeModelIndex::create(qptrdiff(pointer), this, additionalData);
    }
 
-   inline QXmlNodeModelIndex createIndex(qint64 data, qint64 additionalData) const {
+   QXmlNodeModelIndex createIndex(qint64 data, qint64 additionalData) const {
       return QXmlNodeModelIndex::create(data, this, additionalData);
    }
 

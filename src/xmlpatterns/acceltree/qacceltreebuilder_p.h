@@ -74,7 +74,7 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
    void startOfSequence() override;
    void endOfSequence() override;
 
-   inline AccelTree::Ptr builtDocument() const {
+   AccelTree::Ptr builtDocument() const {
       return m_document;
    }
 
@@ -86,11 +86,11 @@ class AccelTreeBuilder : public NodeBuilder, public SourceLocationReflection
  private:
    inline void startStructure();
 
-   inline AccelTree::PreNumber currentDepth() const {
+   AccelTree::PreNumber currentDepth() const {
       return m_ancestors.count() - 1;
    }
 
-   inline AccelTree::PreNumber currentParent() const {
+   AccelTree::PreNumber currentParent() const {
       return m_ancestors.isEmpty() ? -1 : m_ancestors.top();
    }
 

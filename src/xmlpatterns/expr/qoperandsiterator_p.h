@@ -40,8 +40,7 @@ class OperandsIterator
       IncludeParent
    };
 
-   inline OperandsIterator(const Expression::Ptr &start,
-                           const TreatParent treatParent) {
+   OperandsIterator(const Expression::Ptr &start, const TreatParent treatParent) {
       Q_ASSERT(start);
       if (treatParent == IncludeParent) {
          Expression::List l;
@@ -52,7 +51,7 @@ class OperandsIterator
       m_exprs.push(qMakePair(start->operands(), -1));
    }
 
-   inline Expression::Ptr next() {
+   Expression::Ptr next() {
       if (m_exprs.isEmpty()) {
          return Expression::Ptr();
       }

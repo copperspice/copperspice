@@ -40,13 +40,14 @@ namespace QPatternist {
 class VariantListIterator : public ListIteratorPlatform<QVariant, Item, VariantListIterator>
 {
  public:
-   inline VariantListIterator(const QVariantList &list) : ListIteratorPlatform<QVariant, Item, VariantListIterator>(list) {
-   }
+   VariantListIterator(const QVariantList &list)
+      : ListIteratorPlatform<QVariant, Item, VariantListIterator>(list)
+   { }
 
  private:
    friend class ListIteratorPlatform<QVariant, Item, VariantListIterator>;
 
-   inline Item inputToOutputItem(const QVariant &inputType) const {
+   Item inputToOutputItem(const QVariant &inputType) const {
       return AtomicValue::toXDM(inputType);
    }
 };
@@ -54,13 +55,14 @@ class VariantListIterator : public ListIteratorPlatform<QVariant, Item, VariantL
 class StringListIterator : public ListIteratorPlatform<QString, Item, StringListIterator>
 {
  public:
-   inline StringListIterator(const QStringList &list) : ListIteratorPlatform<QString, Item, StringListIterator>(list) {
-   }
+   StringListIterator(const QStringList &list)
+      : ListIteratorPlatform<QString, Item, StringListIterator>(list)
+   { }
 
  private:
    friend class ListIteratorPlatform<QString, Item, StringListIterator>;
 
-   static inline Item inputToOutputItem(const QString &inputType) {
+   static Item inputToOutputItem(const QString &inputType) {
       return AtomicString::fromValue(inputType);
    }
 };

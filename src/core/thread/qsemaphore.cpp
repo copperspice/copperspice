@@ -31,7 +31,10 @@
 class QSemaphorePrivate
 {
  public:
-   inline QSemaphorePrivate(int n) : avail(n) { }
+   QSemaphorePrivate(int n)
+      : avail(n)
+   {
+   }
 
    QMutex mutex;
    QWaitCondition cond;

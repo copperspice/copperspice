@@ -39,7 +39,7 @@ class IntersectIterator : public Item::Iterator
    Item::Iterator::Ptr copy() const override;
 
  private:
-   inline Item closedExit() {
+   Item closedExit() {
       m_position = -1;
       m_current = Item();
       return Item();

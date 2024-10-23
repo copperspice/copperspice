@@ -105,7 +105,9 @@ class DistinctValuesFN : public FunctionCall,
    public ComparisonPlatform<IndexOfFN, false>
 {
  public:
-   inline DistinctValuesFN() : ComparisonPlatform<IndexOfFN, false>() {
+   DistinctValuesFN()
+      : ComparisonPlatform<IndexOfFN, false>()
+   {
    }
 
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;

@@ -44,7 +44,7 @@ class AbstractDateTime : public AtomicValue
       DefaultDay      = 1
    };
 
-   inline const QDateTime &toDateTime() const {
+   const QDateTime &toDateTime() const {
       return m_dateTime;
    }
 

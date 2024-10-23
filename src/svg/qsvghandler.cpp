@@ -484,15 +484,15 @@ class QSvgStyleSelector : public QCss::StyleSelector
    {
    }
 
-   inline QString nodeToName(QSvgNode *node) const {
+   QString nodeToName(QSvgNode *node) const {
       return QString::fromLatin1(QSvgStyleSelector_nodeString[node->type()]);
    }
 
-   inline QSvgNode *svgNode(NodePtr node) const {
+   QSvgNode *svgNode(NodePtr node) const {
       return (QSvgNode *)node.ptr;
    }
 
-   inline QSvgStructureNode *nodeToStructure(QSvgNode *n) const {
+   QSvgStructureNode *nodeToStructure(QSvgNode *n) const {
       if (n &&
             (n->type() == QSvgNode::DOC ||
              n->type() == QSvgNode::G ||
@@ -504,7 +504,7 @@ class QSvgStyleSelector : public QCss::StyleSelector
       return nullptr;
    }
 
-   inline QSvgStructureNode *svgStructure(NodePtr node) const {
+   QSvgStructureNode *svgStructure(NodePtr node) const {
       QSvgNode *n = svgNode(node);
       QSvgStructureNode *st = nodeToStructure(n);
       return st;

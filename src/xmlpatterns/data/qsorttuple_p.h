@@ -33,9 +33,8 @@ namespace QPatternist {
 class SortTuple : public AtomicValue
 {
  public:
-   inline SortTuple(const Item::Iterator::Ptr &aValue,
-                    const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys),
-      m_value(aValue) {
+   SortTuple(const Item::Iterator::Ptr &aValue, const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys), m_value(aValue)
+   {
       Q_ASSERT(m_value);
       Q_ASSERT(!m_sortKeys.isEmpty());
    }

@@ -68,7 +68,7 @@ class QSvgHandler
 
    QSvgTinyDocument *document() const;
 
-   inline bool ok() const {
+   bool ok() const {
       return document() != nullptr && !xml->hasError();
    }
 
@@ -102,7 +102,7 @@ class QSvgHandler
    void parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *attributes);
 #endif
 
-   inline QPen defaultPen() const {
+   QPen defaultPen() const {
       return m_defaultPen;
    }
 

@@ -32,7 +32,7 @@ namespace QPatternist {
 class DecimalMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
-   inline DecimalMathematician(const SourceLocationReflection *const r)
+   DecimalMathematician(const SourceLocationReflection *const r)
       : DelegatingSourceLocationReflection(r)
    { }
 
@@ -44,7 +44,7 @@ class DecimalMathematician : public AtomicMathematician, public DelegatingSource
 class IntegerMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
-   inline IntegerMathematician(const SourceLocationReflection *const r)
+   IntegerMathematician(const SourceLocationReflection *const r)
       : DelegatingSourceLocationReflection(r)
    { }
 
@@ -56,7 +56,7 @@ class IntegerMathematician : public AtomicMathematician, public DelegatingSource
 class DurationNumericMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
-   inline DurationNumericMathematician(const SourceLocationReflection *const r)
+   DurationNumericMathematician(const SourceLocationReflection *const r)
       : DelegatingSourceLocationReflection(r)
    { }
 
@@ -97,7 +97,7 @@ class DateTimeDurationMathematician : public AtomicMathematician, public Delegat
 {
  public:
 
-   inline DateTimeDurationMathematician(const SourceLocationReflection *const r)
+   DateTimeDurationMathematician(const SourceLocationReflection *const r)
       : DelegatingSourceLocationReflection(r)
    { }
 

@@ -34,7 +34,7 @@ class NodeBuilder : public QAbstractXmlReceiver
  public:
    using Ptr = std::unique_ptr<NodeBuilder>;
 
-   inline NodeBuilder() {
+   NodeBuilder() {
    }
 
    virtual QAbstractXmlNodeModel::Ptr builtDocument() = 0;

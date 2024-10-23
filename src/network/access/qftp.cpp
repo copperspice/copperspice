@@ -1350,10 +1350,10 @@ class QFtpPrivate
    Q_DECLARE_PUBLIC(QFtp)
 
  public:
-
-   inline QFtpPrivate() : close_waitForStateChange(false), state(QFtp::Unconnected),
-      transferMode(QFtp::Passive), error(QFtp::NoError) {
-   }
+   QFtpPrivate()
+      : close_waitForStateChange(false), state(QFtp::Unconnected), transferMode(QFtp::Passive),
+         error(QFtp::NoError)
+   { }
 
    virtual ~QFtpPrivate() {
       while (!pending.isEmpty()) {

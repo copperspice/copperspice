@@ -76,7 +76,7 @@ class StaticContext : public ReportContext
       NoPreserve
    };
 
-   inline StaticContext() {
+   StaticContext() {
    }
 
    virtual ~StaticContext();

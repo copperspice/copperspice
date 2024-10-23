@@ -31,7 +31,7 @@ namespace QPatternist {
 class SourceLocationReflection
 {
  public:
-   inline SourceLocationReflection() {
+   SourceLocationReflection() {
    }
 
    virtual ~SourceLocationReflection() {
@@ -53,7 +53,9 @@ class SourceLocationReflection
 class DelegatingSourceLocationReflection : public SourceLocationReflection
 {
  public:
-   inline DelegatingSourceLocationReflection(const SourceLocationReflection *const r) : m_r(r) {
+   DelegatingSourceLocationReflection(const SourceLocationReflection *const r)
+      : m_r(r)
+   {
       Q_ASSERT(r);
    }
 

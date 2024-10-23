@@ -266,7 +266,9 @@ class DerivedInteger : public Numeric
 
    const StorageType m_value;
 
-   inline DerivedInteger(const StorageType num) : m_value(num) {
+   DerivedInteger(const StorageType num)
+      : m_value(num)
+   {
    }
 
    template<typename A, typename B>
@@ -372,7 +374,7 @@ class DerivedInteger : public Numeric
       }
    }
 
-   inline StorageType storedValue() const {
+   StorageType storedValue() const {
       return m_value;
    }
 

@@ -54,7 +54,7 @@ class FunctionFactory : public QSharedData
    bool hasSignature(const FunctionSignature::Ptr &signature) const;
 
  protected:
-   inline FunctionFactory() {
+   FunctionFactory() {
    }
 
    virtual FunctionSignature::Ptr retrieveFunctionSignature(const NamePool::Ptr &np, const QXmlName name) = 0;

@@ -37,7 +37,7 @@ template<TypeOfDerivedString DerivedType>
 class DerivedString : public AtomicValue
 {
  private:
-   static inline ItemType::Ptr itemType() {
+   static ItemType::Ptr itemType() {
       switch (DerivedType) {
          case TypeNormalizedString:
             return BuiltinTypes::xsNormalizedString;
@@ -67,10 +67,11 @@ class DerivedString : public AtomicValue
 
    const QString m_value;
 
-   inline DerivedString(const QString &value) : m_value(value) {
+   DerivedString(const QString &value)
+      : m_value(value) {
    }
 
-   static inline bool isNameChar(const QChar &ch) {
+   static bool isNameChar(const QChar &ch) {
       return ch.isLetter()            ||
              ch.isDigit()             ||
              ch == QLatin1Char('.')   ||
@@ -79,7 +80,7 @@ class DerivedString : public AtomicValue
              ch == QLatin1Char(':');
    }
 
-   static inline bool isValidName(const QString &input) {
+   static bool isValidName(const QString &input) {
       if (input.isEmpty()) {
          return false;
       }
@@ -107,7 +108,7 @@ class DerivedString : public AtomicValue
       }
    }
 
-   static inline bool isValidNMTOKEN(const QString &input) {
+   static bool isValidNMTOKEN(const QString &input) {
       const int len = input.length();
 
       if (len == 0) {

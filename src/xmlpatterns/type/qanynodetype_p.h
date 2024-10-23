@@ -52,9 +52,8 @@ class AnyNodeType : public ItemType
  protected:
    friend class BuiltinTypes;
 
-   inline AnyNodeType() {
+   AnyNodeType() {
    }
-
 };
 
 }

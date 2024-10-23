@@ -39,8 +39,9 @@ class ItemCacheCell
       Empty
    };
 
-   inline ItemCacheCell() : cacheState(Empty) {
-   }
+   ItemCacheCell()
+      : cacheState(Empty)
+   { }
 
    Item        cachedItem;
    CacheState  cacheState;
@@ -58,9 +59,9 @@ class ItemSequenceCacheCell
       PartiallyPopulated
    };
 
-   inline ItemSequenceCacheCell() : cacheState(Empty)
-      , inUse(false) {
-   }
+   ItemSequenceCacheCell()
+      : cacheState(Empty), inUse(false)
+   { }
 
    Item::List          cachedItems;
    Item::Iterator::Ptr sourceIterator;

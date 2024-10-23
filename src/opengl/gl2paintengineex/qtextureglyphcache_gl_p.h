@@ -112,7 +112,7 @@ class Q_OPENGL_EXPORT QGLTextureGlyphCache : public QImageTextureGlyphCache
       pex = p;
    }
 
-   inline const QOpenGLContextGroup *contextGroup() const {
+   const QOpenGLContextGroup *contextGroup() const {
       return m_textureResource ? m_textureResource->group() : nullptr;
    }
 

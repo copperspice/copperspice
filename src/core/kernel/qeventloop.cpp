@@ -34,7 +34,7 @@ class QEventLoopPrivate
    Q_DECLARE_PUBLIC(QEventLoop)
 
  public:
-   inline QEventLoopPrivate()
+   QEventLoopPrivate()
       : exit(true), inExec(false), returnCode(-1)
    { }
 

@@ -33,7 +33,7 @@ class QMetaDataReaderControl;
 class QMediaAvailabilityControl;
 
 #define Q_DECLARE_NON_CONST_PUBLIC(T) \
-    inline T *q_func() { return static_cast<T *>(q_ptr); } \
+    T *q_func() { return static_cast<T *>(q_ptr); } \
     friend class Ts;
 
 class QMediaObjectPrivate

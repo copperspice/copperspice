@@ -76,7 +76,7 @@ class ItemType : public virtual QSharedData
 
    virtual InstanceOf instanceOf() const;
 
-   inline ItemType() {
+   ItemType() {
    }
 
  private:

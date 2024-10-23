@@ -85,10 +85,11 @@ template <class T> class QSvgRefCounter
       }
    }
 
-   inline T *operator->() const {
+   T *operator->() const {
       return t;
    }
-   inline operator T *() const {
+
+   operator T *() const {
       return t;
    }
 

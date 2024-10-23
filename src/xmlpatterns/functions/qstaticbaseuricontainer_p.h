@@ -32,8 +32,8 @@ namespace QPatternist {
 class StaticBaseUriContainer : public FunctionCall
 {
  protected:
-   inline StaticBaseUriContainer() {
-   }
+   StaticBaseUriContainer()
+   { }
 
    void prepareStaticBaseURI(const StaticContext::Ptr &context) {
       m_staticBaseURI = context->baseURI();

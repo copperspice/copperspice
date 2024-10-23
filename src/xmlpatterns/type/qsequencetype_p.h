@@ -36,8 +36,8 @@ class ItemType;
 class SequenceType : public virtual QSharedData
 {
  public:
-   inline SequenceType() {
-   }
+   SequenceType()
+   { }
 
    typedef QExplicitlySharedDataPointer<const SequenceType> Ptr;
    typedef QList<SequenceType::Ptr> List;

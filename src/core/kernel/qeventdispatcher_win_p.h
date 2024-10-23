@@ -93,10 +93,12 @@ struct QSockNot {
 using QSNDict = QHash<int, QSockNot *>;
 
 struct QSockFd {
+   explicit QSockFd(long ev = 0)
+      : event(ev), selected(false)
+   { }
+
    long event;
    bool selected;
-
-   explicit inline QSockFd(long ev = 0) : event(ev), selected(false) { }
 };
 using QSFDict = QHash<int, QSockFd>;
 
@@ -114,7 +116,7 @@ struct WinTimerInfo {
 class QZeroTimerEvent : public QTimerEvent
 {
  public:
-   explicit inline QZeroTimerEvent(int timerId)
+   explicit QZeroTimerEvent(int timerId)
       : QTimerEvent(timerId)
    {
       t = QEvent::ZeroTimerEvent;

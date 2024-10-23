@@ -47,9 +47,10 @@ class ResourceLoader : public QSharedData
    };
 
    typedef QExplicitlySharedDataPointer<ResourceLoader> Ptr;
-   inline ResourceLoader() {}
    virtual ~ResourceLoader();
 
+   ResourceLoader()
+   { }
    virtual bool isUnparsedTextAvailable(const QUrl &uri,
                                         const QString &encoding);
 

@@ -35,7 +35,9 @@ namespace QPatternist {
 class PullBridge : public AbstractXmlPullProvider
 {
  public:
-   inline PullBridge(const QXmlNodeModelIndex::Iterator::Ptr &it) : m_current(StartOfInput) {
+   PullBridge(const QXmlNodeModelIndex::Iterator::Ptr &it)
+      : m_current(StartOfInput)
+   {
       Q_ASSERT(it);
       m_iterators.push(qMakePair(StartOfInput, it));
    }

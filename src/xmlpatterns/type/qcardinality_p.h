@@ -39,44 +39,45 @@ class Cardinality
       ExcludeExplanation
    };
 
-   inline Cardinality(const Cardinality &other) : m_min(other.m_min),
-      m_max(other.m_max) {
-   }
+   Cardinality(const Cardinality &other)
+      : m_min(other.m_min), m_max(other.m_max)
+   { }
 
-   inline Cardinality() : m_min(-1), m_max(0) {
-   }
+   Cardinality()
+      : m_min(-1), m_max(0)
+   { }
 
-   static inline Cardinality empty() {
+   static Cardinality empty() {
       return Cardinality(0, 0);
    }
 
-   static inline Cardinality exactlyOne() {
+   static Cardinality exactlyOne() {
       return Cardinality(1, 1);
    }
 
-   static inline Cardinality zeroOrOne() {
+   static Cardinality zeroOrOne() {
       return Cardinality(0, 1);
    }
 
-   static inline Cardinality zeroOrMore() {
+   static Cardinality zeroOrMore() {
       return Cardinality(0, -1);
    }
 
-   static inline Cardinality oneOrMore() {
+   static Cardinality oneOrMore() {
       return Cardinality(1, -1);
    }
 
-   static inline Cardinality twoOrMore() {
+   static Cardinality twoOrMore() {
       return Cardinality(2, -1);
    }
 
-   static inline Cardinality fromCount(const Count count) {
+   static Cardinality fromCount(const Count count) {
       Q_ASSERT_X(count > -1, Q_FUNC_INFO,
                  "A count smaller than 0 makes no sense.");
       return Cardinality(count, count);
    }
 
-   static inline Cardinality fromRange(const Count minimum, const Count maximum) {
+   static Cardinality fromRange(const Count minimum, const Count maximum) {
       Q_ASSERT_X(minimum > -1, Q_FUNC_INFO,
                  "minimum should never be less than 0.");
       Q_ASSERT_X(minimum <= maximum || maximum == -1, Q_FUNC_INFO,
@@ -85,37 +86,37 @@ class Cardinality
       return Cardinality(minimum, maximum);
    }
 
-   static inline Cardinality fromExact(const Count count) {
+   static Cardinality fromExact(const Count count) {
       Q_ASSERT(count >= 0);
       return Cardinality(count, count);
    }
 
-   inline Count minimum() const {
+   Count minimum() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality are invalid.");
       return m_min;
    }
 
-   inline Count maximum() const {
+   Count maximum() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality are invalid.");
       return m_max;
    }
 
-   inline bool allowsMany() const {
+   bool allowsMany() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality are invalid.");
       return m_max == -1 || m_max > 1;
    }
 
-   inline bool allowsEmpty() const {
+   bool allowsEmpty() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality are invalid.");
       return m_min == 0;
    }
 
-   inline Cardinality toWithoutMany() const {
+   Cardinality toWithoutMany() const {
       return m_min == 0 ? Cardinality(0, 1)
              : Cardinality(1, 1);
    }
 
-   inline bool isMatch(const Cardinality &other) const {
+   bool isMatch(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
       if (other.m_min < m_min) {
          return false;
@@ -131,7 +132,7 @@ class Cardinality
       }
    }
 
-   inline bool canMatch(const Cardinality &other) const {
+   bool canMatch(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
       if (m_max == -1) {
          return m_min <= other.m_min || other.m_max >= m_min || other.m_max == -1;
@@ -146,34 +147,34 @@ class Cardinality
       }
    }
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality is invalid.");
       return m_min == 0 && m_max == 0;
    }
 
-   inline bool isZeroOrOne() const {
+   bool isZeroOrOne() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality is invalid.");
       return m_min == 0 && m_max == 1;
    }
 
-   inline bool isExactlyOne() const {
+   bool isExactlyOne() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality is invalid.");
       return m_min == 1 && m_max == 1;
    }
 
-   inline bool isOneOrMore() const {
+   bool isOneOrMore() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality is invalid.");
       return m_min > 0 && (m_max == -1 || m_max >= 1);
    }
 
-   inline bool isExact() const {
+   bool isExact() const {
       Q_ASSERT_X(m_min != -1, Q_FUNC_INFO, "The cardinality is invalid.");
       return m_min == m_max;
    }
 
    QString displayName(const CustomizeDisplayName explanation) const;
 
-   inline Cardinality operator|(const Cardinality &other) const {
+   Cardinality operator|(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
       if (m_max == -1 || other.m_max == -1) {
          return Cardinality(qMin(m_min, other.m_min), -1);
@@ -182,7 +183,7 @@ class Cardinality
       }
    }
 
-   inline Cardinality &operator|=(const Cardinality &other) {
+   Cardinality &operator|=(const Cardinality &other) {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
       m_min = qMin(m_min, other.m_min);
 
@@ -197,7 +198,7 @@ class Cardinality
       return *this;
    }
 
-   inline Cardinality operator&(const Cardinality &other) const {
+   Cardinality operator&(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
 
       if (m_max < other.m_min) { /* No intersection. */
@@ -215,7 +216,7 @@ class Cardinality
       }
    }
 
-   inline Cardinality operator+(const Cardinality &other) const {
+   Cardinality operator+(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
       if (m_max == -1 || other.m_max == -1) {
          return Cardinality(m_min + other.m_min, -1);
@@ -224,7 +225,7 @@ class Cardinality
       }
    }
 
-   inline Cardinality &operator+=(const Cardinality &other) {
+   Cardinality &operator+=(const Cardinality &other) {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO,
                  "One of the cardinalities are invalid.");
       m_min += other.m_min;
@@ -241,7 +242,7 @@ class Cardinality
       return *this;
    }
 
-   inline Cardinality operator*(const Cardinality &other) const {
+   Cardinality operator*(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO,
                  "One of the cardinalities are invalid.");
       if (m_max == -1 || other.m_max == -1) {
@@ -251,26 +252,26 @@ class Cardinality
       }
    }
 
-   inline Cardinality &operator=(const Cardinality &other) {
+   Cardinality &operator=(const Cardinality &other) {
       Q_ASSERT_X(this != &other, Q_FUNC_INFO, "Assigning to oneself makes no sense.");
       m_min = other.m_min;
       m_max = other.m_max;
       return *this;
    }
 
-   inline bool operator==(const Cardinality &other) const {
+   bool operator==(const Cardinality &other) const {
       return m_min == other.m_min &&
              m_max == other.m_max;
    }
 
-   inline bool operator!=(const Cardinality &other) const {
+   bool operator!=(const Cardinality &other) const {
       return m_min != other.m_min ||
              m_max != other.m_max;
    }
 
  private:
-   inline Cardinality(const Count min, const Count max) : m_min(min),
-      m_max(max) {
+   Cardinality(const Count min, const Count max)
+      : m_min(min), m_max(max) {
    }
 
    Count m_min;

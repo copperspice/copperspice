@@ -114,8 +114,8 @@ class Q_CORE_EXPORT QJsonValue
 
  private:
    // avoid implicit conversions from char * to bool
-   inline QJsonValue(const void *)
-   {}
+   QJsonValue(const void *)
+   { }
 
    std::shared_ptr<QJsonData> m_data;
 };

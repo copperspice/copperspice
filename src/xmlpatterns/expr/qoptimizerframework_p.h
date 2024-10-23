@@ -34,8 +34,8 @@ class ExpressionCreator : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<ExpressionCreator> Ptr;
 
-   inline ExpressionCreator() {
-   }
+   ExpressionCreator()
+   { }
 
    virtual ~ExpressionCreator();
 
@@ -54,8 +54,8 @@ class ExpressionIdentifier : public QSharedData
    typedef QExplicitlySharedDataPointer<ExpressionIdentifier> Ptr;
    typedef QList<ExpressionIdentifier::Ptr> List;
 
-   inline ExpressionIdentifier() {
-   }
+   ExpressionIdentifier()
+   { }
 
    virtual ~ExpressionIdentifier();
    virtual bool matches(const Expression::Ptr &expr) const = 0;

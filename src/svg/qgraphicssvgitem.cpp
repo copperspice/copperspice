@@ -56,7 +56,7 @@ class QGraphicsSvgItemPrivate : public QGraphicsItemPrivate
       q_func()->update();
    }
 
-   inline void updateDefaultSize() {
+   void updateDefaultSize() {
       QRectF bounds;
       if (elemId.isEmpty()) {
          bounds = QRectF(QPointF(0, 0), renderer->defaultSize());

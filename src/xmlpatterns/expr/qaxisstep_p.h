@@ -53,7 +53,7 @@ class AxisStep : public EmptyContainer
 
    QXmlNodeModelIndex::Axis axis() const;
 
-   inline ItemType::Ptr nodeTest() const {
+   ItemType::Ptr nodeTest() const {
       return m_nodeTest;
    }
 

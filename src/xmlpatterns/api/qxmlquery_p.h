@@ -55,7 +55,7 @@ class QXmlQueryPrivate
 {
  public:
 
-   inline QXmlQueryPrivate(const QXmlNamePool &np = QXmlNamePool())
+   QXmlQueryPrivate(const QXmlNamePool &np = QXmlNamePool())
       : namePool(np), messageHandler(nullptr), uriResolver(nullptr), queryLanguage(QXmlQuery::XQuery10),
         m_networkAccessDelegator(new QPatternist::NetworkAccessDelegator(nullptr, nullptr))
    {
@@ -83,11 +83,11 @@ class QXmlQueryPrivate
       return expression();
    }
 
-   inline void recompileRequired() {
+   void recompileRequired() {
       m_expr.reset();
    }
 
-   inline QPatternist::VariableLoader::Ptr variableLoader() {
+   QPatternist::VariableLoader::Ptr variableLoader() {
       if (!m_variableLoader) {
          m_variableLoader = QPatternist::VariableLoader::Ptr(new QPatternist::VariableLoader(namePool.d));
       }
@@ -95,7 +95,7 @@ class QXmlQueryPrivate
       return m_variableLoader;
    }
 
-   inline QPatternist::GenericStaticContext::Ptr staticContext() {
+   QPatternist::GenericStaticContext::Ptr staticContext() {
       if (m_staticContext && m_expr) {
          return m_staticContext;
       }
@@ -140,7 +140,7 @@ class QXmlQueryPrivate
       return m_staticContext;
    }
 
-   inline QPatternist::DynamicContext::Ptr dynamicContext(QAbstractXmlReceiver *const callback = nullptr) {
+   QPatternist::DynamicContext::Ptr dynamicContext(QAbstractXmlReceiver *const callback = nullptr) {
       const QPatternist::StaticContext::Ptr statContext(staticContext());
       Q_ASSERT(statContext);
 
@@ -172,7 +172,7 @@ class QXmlQueryPrivate
       }
    }
 
-   inline QPatternist::AccelTreeResourceLoader::Ptr resourceLoader() {
+   QPatternist::AccelTreeResourceLoader::Ptr resourceLoader() {
       if (!m_resourceLoader) {
          m_resourceLoader = (new QPatternist::AccelTreeResourceLoader(namePool.d, m_networkAccessDelegator));
       }
@@ -230,7 +230,7 @@ class QXmlQueryPrivate
       return m_expr;
    }
 
-   inline void addAdditionalNamespaceBinding(const QXmlName &binding) {
+   void addAdditionalNamespaceBinding(const QXmlName &binding) {
       m_additionalNamespaceBindings.append(binding);
    }
 
@@ -241,14 +241,14 @@ class QXmlQueryPrivate
    QXmlItem                                    contextItem;
    QXmlName                                    initialTemplateName;
 
-   inline void setExpressionFactory(const QPatternist::ExpressionFactory::Ptr &expr) {
+   void setExpressionFactory(const QPatternist::ExpressionFactory::Ptr &expr) {
       m_expressionFactory = expr;
    }
 
    QXmlQuery::QueryLanguage                    queryLanguage;
    QPointer<QNetworkAccessManager>             userNetworkManager;
 
-   inline QObject *ownerObject() {
+   QObject *ownerObject() {
       if (!m_owner) {
          m_owner = new QPatternist::ReferenceCountedValue<QObject>(new QObject());
       }

@@ -67,9 +67,16 @@ class TokenSource : public QSharedData
    class Token
    {
     public:
-      inline Token() {}
-      inline Token(const TokenType t) : type(t) {}
-      inline Token(const TokenType t, const QString &val) : type(t), value(val) {}
+      Token()
+      { }
+
+      Token(const TokenType t)
+         : type(t)
+      { }
+
+      Token(const TokenType t, const QString &val)
+         : type(t), value(val)
+      { }
 
       bool hasError() const {
          return type == ERROR;

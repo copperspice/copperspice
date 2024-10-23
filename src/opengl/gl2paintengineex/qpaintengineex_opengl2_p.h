@@ -211,7 +211,7 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    bool prepareForCachedGlyphDraw(const QFontEngineGlyphCache &cache);
 
    inline void useSimpleShader();
-   inline GLuint location(const QGLEngineShaderManager::Uniform uniform) {
+   GLuint location(const QGLEngineShaderManager::Uniform uniform) {
       return shaderManager->getUniformLocation(uniform);
    }
 

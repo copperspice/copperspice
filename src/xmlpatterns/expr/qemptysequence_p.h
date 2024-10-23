@@ -34,7 +34,7 @@ class EmptySequence : public EmptyContainer
 
    static Expression::Ptr create(const Expression *const replacementFor, const StaticContext::Ptr &context);
 
-   inline EmptySequence() {
+   EmptySequence() {
    }
 
    virtual QString stringValue() const;

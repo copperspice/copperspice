@@ -146,7 +146,7 @@ static QGLFormat *qgl_default_format()
 class QGLDefaultOverlayFormat: public QGLFormat
 {
  public:
-   inline QGLDefaultOverlayFormat() {
+   QGLDefaultOverlayFormat() {
       setOption(QGL::FormatOption(0xffff << 16)); // turn off all options
       setOption(QGL::DirectRendering);
       setPlane(1);

@@ -53,29 +53,23 @@ class AccelTree : public QAbstractXmlNodeModel
    {
     public:
       // No need to initialize the members. See AccelTreeBuilder.
-      inline BasicNodeData() {
+      BasicNodeData() {
       }
 
-      inline BasicNodeData(const PreNumber aDepth,
-                           const PreNumber aParent,
-                           const QXmlNodeModelIndex::NodeKind k,
-                           const PreNumber s,
-                           const QXmlName n = QXmlName()) : m_parent(aParent)
-         , m_size(s)
-         , m_name(n)
-         , m_depth(aDepth)
-         , m_kind(k) {
+      BasicNodeData(const PreNumber aDepth, const PreNumber aParent, const QXmlNodeModelIndex::NodeKind k,
+            const PreNumber s, const QXmlName n = QXmlName())
+         : m_parent(aParent), m_size(s), m_name(n), m_depth(aDepth), m_kind(k) {
       }
 
-      inline Depth depth() const {
+      Depth depth() const {
          return m_depth;
       }
 
-      inline PreNumber parent() const {
+      PreNumber parent() const {
          return m_parent;
       }
 
-      inline PreNumber size() const {
+      PreNumber size() const {
          // Remember that we use the m_size to signal compression if we're a text node.
          if (m_kind == QXmlNodeModelIndex::Text) {
             return 0;
@@ -84,19 +78,19 @@ class AccelTree : public QAbstractXmlNodeModel
          }
       }
 
-      inline void setSize(const PreNumber aSize) {
+      void setSize(const PreNumber aSize) {
          m_size = aSize;
       }
 
-      inline QXmlNodeModelIndex::NodeKind kind() const {
+      QXmlNodeModelIndex::NodeKind kind() const {
          return m_kind;
       }
 
-      inline QXmlName name() const {
+      QXmlName name() const {
          return m_name;
       }
 
-      inline bool isCompressed() const {
+      bool isCompressed() const {
          Q_ASSERT_X(m_kind == QXmlNodeModelIndex::Text, Q_FUNC_INFO, "Only text nodes are compressed.");
 
          // we do not call size() here since it has logic for text nodes
@@ -153,64 +147,64 @@ class AccelTree : public QAbstractXmlNodeModel
    QVector<BasicNodeData> basicData;
    QHash<PreNumber, QPair<qint64, qint64> > sourcePositions;
 
-   inline QUrl documentUri() const {
+   QUrl documentUri() const {
       return m_documentURI;
    }
 
-   inline QUrl baseUri() const {
+   QUrl baseUri() const {
       return m_baseURI;
    }
 
-   inline bool hasChildren(const PreNumber pre) const {
+   bool hasChildren(const PreNumber pre) const {
       return basicData.at(pre).size() > 0;
    }
 
-   inline PreNumber parent(const PreNumber pre) const {
+   PreNumber parent(const PreNumber pre) const {
       return basicData.at(pre).parent();
    }
 
-   inline bool hasParent(const PreNumber pre) const {
+   bool hasParent(const PreNumber pre) const {
       return basicData.at(pre).depth() > 0;
    }
 
-   inline bool hasFollowingSibling(const PreNumber pre) const {
+   bool hasFollowingSibling(const PreNumber pre) const {
       return pre < maximumPreNumber();
    }
 
-   inline PostNumber postNumber(const PreNumber pre) const {
+   PostNumber postNumber(const PreNumber pre) const {
       const BasicNodeData &b = basicData.at(pre);
       return pre + b.size() - b.depth();
    }
 
-   inline QXmlNodeModelIndex::NodeKind kind(const PreNumber pre) const {
+   QXmlNodeModelIndex::NodeKind kind(const PreNumber pre) const {
       return basicData.at(pre).kind();
    }
 
-   inline PreNumber maximumPreNumber() const {
+   PreNumber maximumPreNumber() const {
       return basicData.count() - 1;
    }
 
-   inline PreNumber toPreNumber(const QXmlNodeModelIndex n) const {
+   PreNumber toPreNumber(const QXmlNodeModelIndex n) const {
       return n.data();
    }
 
-   inline PreNumber size(const PreNumber pre) const {
+   PreNumber size(const PreNumber pre) const {
       Q_ASSERT_X(basicData.at(pre).size() != -1, Q_FUNC_INFO,
                  "The size cannot be -1. That means an uninitialized value is attempted to be used.");
       return basicData.at(pre).size();
    }
 
-   inline Depth depth(const PreNumber pre) const {
+   Depth depth(const PreNumber pre) const {
       return basicData.at(pre).depth();
    }
 
    void printStats(const NamePool::Ptr &np) const;
 
-   inline QXmlName name(const PreNumber pre) const {
+   QXmlName name(const PreNumber pre) const {
       return basicData.at(pre).name();
    }
 
-   inline bool isCompressed(const PreNumber pre) const {
+   bool isCompressed(const PreNumber pre) const {
       return basicData.at(pre).isCompressed();
    }
 

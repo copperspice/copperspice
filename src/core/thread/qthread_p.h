@@ -43,13 +43,14 @@ class QPostEvent
    QEvent *event;
 
    int priority;
-   inline QPostEvent()
-      : receiver(nullptr), event(nullptr), priority(0) {
-   }
 
-   inline QPostEvent(QObject *r, QEvent *e, int p)
-      : receiver(r), event(e), priority(p) {
-   }
+   QPostEvent()
+      : receiver(nullptr), event(nullptr), priority(0)
+   { }
+
+   QPostEvent(QObject *r, QEvent *e, int p)
+      : receiver(r), event(e), priority(p)
+   { }
 };
 
 inline bool operator<(const QPostEvent &first, const QPostEvent &second)
@@ -72,7 +73,7 @@ class QPostEventList : public QVector<QPostEvent>
 
    QMutex mutex;
 
-   inline QPostEventList()
+   QPostEventList()
       : QVector<QPostEvent>(), recursion(0), startOffset(0), insertionOffset(0)
    { }
 

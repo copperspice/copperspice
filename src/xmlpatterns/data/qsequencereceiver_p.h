@@ -35,7 +35,8 @@ class QAbstractXmlReceiver : public QSharedData
  public:
    typedef QExplicitlySharedDataPointer<QAbstractXmlReceiver> Ptr;
 
-   inline QAbstractXmlReceiver() {
+   QAbstractXmlReceiver()
+   {
    }
 
    virtual ~QAbstractXmlReceiver();

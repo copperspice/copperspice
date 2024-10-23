@@ -35,19 +35,19 @@ class Q_SQL_EXPORT QSqlRelation
    QSqlRelation(const QString &tableName, const QString &indexColumn, const QString &displayColumn)
       : tName(tableName), iColumn(indexColumn), dColumn(displayColumn) {}
 
-   inline QString tableName() const {
+   QString tableName() const {
       return tName;
    }
 
-   inline QString indexColumn() const {
+   QString indexColumn() const {
       return iColumn;
    }
 
-   inline QString displayColumn() const {
+   QString displayColumn() const {
       return dColumn;
    }
 
-   inline bool isValid() const {
+   bool isValid() const {
       return !(tName.isEmpty() || iColumn.isEmpty() || dColumn.isEmpty());
    }
 

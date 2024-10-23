@@ -39,8 +39,8 @@ class VariableLoader : public ExternalVariableLoader
    typedef QHash<QXmlName, QVariant> BindingHash;
    typedef QExplicitlySharedDataPointer<VariableLoader> Ptr;
 
-   inline VariableLoader(const NamePool::Ptr &np,
-                  const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr())
+   VariableLoader(const NamePool::Ptr &np,
+         const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr())
                   : m_namePool(np), m_previousLoader(previousLoader)
    {
    }

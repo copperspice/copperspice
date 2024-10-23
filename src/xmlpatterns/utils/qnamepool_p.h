@@ -73,29 +73,29 @@ class NamePool : public QSharedData
 
    QXmlName allocateQName(const QString &uri, const QString &localName, const QString &prefix = QString());
 
-   inline QXmlName allocateQName(const QXmlName::NamespaceCode uri, const QString &ln) {
+   QXmlName allocateQName(const QXmlName::NamespaceCode uri, const QString &ln) {
       // do not lock here, do this in allocateLocalName()
       return QXmlName(uri, allocateLocalName(ln));
    }
 
-   inline const QString &stringForLocalName(const QXmlName::LocalNameCode code) const {
+   const QString &stringForLocalName(const QXmlName::LocalNameCode code) const {
       const QReadLocker l(&lock);
       return m_localNames.at(code);
    }
 
-   inline const QString &stringForPrefix(const QXmlName::PrefixCode code) const {
+   const QString &stringForPrefix(const QXmlName::PrefixCode code) const {
       const QReadLocker l(&lock);
       return m_prefixes.at(code);
    }
 
-   inline const QString &stringForNamespace(const QXmlName::NamespaceCode code) const {
+   const QString &stringForNamespace(const QXmlName::NamespaceCode code) const {
       const QReadLocker l(&lock);
       return m_namespaces.at(code);
    }
 
    QString displayName(const QXmlName qName) const;
 
-   inline QString toLexical(const QXmlName qName) const {
+   QString toLexical(const QXmlName qName) const {
       const QReadLocker l(&lock);
       Q_ASSERT_X(!qName.isNull(), "", "It makes no sense to call toLexical() on a null name.");
 
@@ -107,17 +107,17 @@ class NamePool : public QSharedData
       }
    }
 
-   inline QXmlName::NamespaceCode allocateNamespace(const QString &uri) {
+   QXmlName::NamespaceCode allocateNamespace(const QString &uri) {
       const QWriteLocker l(&lock);
       return unlockedAllocateNamespace(uri);
    }
 
-   inline QXmlName::LocalNameCode allocateLocalName(const QString &ln) {
+   QXmlName::LocalNameCode allocateLocalName(const QString &ln) {
       const QWriteLocker l(&lock);
       return unlockedAllocateLocalName(ln);
    }
 
-   inline QXmlName::PrefixCode allocatePrefix(const QString &prefix) {
+   QXmlName::PrefixCode allocatePrefix(const QString &prefix) {
       const QWriteLocker l(&lock);
       return unlockedAllocatePrefix(prefix);
    }

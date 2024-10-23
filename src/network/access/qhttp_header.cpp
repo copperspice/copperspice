@@ -48,7 +48,8 @@ class QHttpHeaderPrivate
    Q_DECLARE_PUBLIC(QHttpHeader)
 
  public:
-   inline virtual ~QHttpHeaderPrivate() {}
+   virtual ~QHttpHeaderPrivate()
+   { }
 
    QList<QPair<QString, QString> > values;
    bool valid;

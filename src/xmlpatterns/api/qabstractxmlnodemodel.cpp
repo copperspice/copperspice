@@ -73,13 +73,11 @@ namespace QPatternist {
 class MergeIterator
 {
  public:
-   inline MergeIterator() {
-   }
+   MergeIterator()
+   { }
 
-   inline
-   QXmlNodeModelIndexIteratorPointer
-   mapToSequence(const QXmlNodeModelIndexIteratorPointer &it,
-                 const DynamicContext::Ptr &) const {
+   QXmlNodeModelIndexIteratorPointer mapToSequence(
+         const QXmlNodeModelIndexIteratorPointer &it, const DynamicContext::Ptr &) const {
       return it;
    }
 

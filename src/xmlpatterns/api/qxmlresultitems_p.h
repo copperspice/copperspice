@@ -31,8 +31,8 @@
 class QXmlResultItemsPrivate
 {
  public:
-   inline QXmlResultItemsPrivate() : iterator(QPatternist::CommonValues::emptyIterator)
-      , hasError(false) {
+   QXmlResultItemsPrivate()
+      : iterator(QPatternist::CommonValues::emptyIterator), hasError(false) {
    }
 
    void setDynamicContext(const QPatternist::DynamicContext::Ptr &context) {

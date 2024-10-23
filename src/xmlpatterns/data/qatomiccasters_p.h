@@ -102,7 +102,7 @@ template <const bool IsInteger>
 class NumericToDecimalCaster : public AtomicCaster
 {
  public:
-   static inline QString errorMessage() {
+   static QString errorMessage() {
       return QtXmlPatterns::tr("When casting to %1 from %2, the source value cannot be %3.");
    }
 

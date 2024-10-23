@@ -36,19 +36,14 @@ class AccelIterator : public QXmlNodeModelIndex::Iterator
    QXmlNodeModelIndex current() const override;
 
  protected:
-   inline AccelIterator(const AccelTree *const doc,
-                        const AccelTree::PreNumber pre,
-                        const AccelTree::PreNumber currentPre) : m_document(doc)
-      , m_preNumber(pre)
-      , m_currentPre(currentPre)
-      , m_position(0)
-
+   AccelIterator(const AccelTree *const doc, const AccelTree::PreNumber pre, const AccelTree::PreNumber currentPre)
+      : m_document(doc), m_preNumber(pre), m_currentPre(currentPre), m_position(0)
    {
       Q_ASSERT(m_document);
       Q_ASSERT(m_preNumber >= 0);
    }
 
-   inline QXmlNodeModelIndex closedExit() {
+   QXmlNodeModelIndex closedExit() {
       m_position = -1;
       m_current.reset();
       return QXmlNodeModelIndex();
@@ -66,8 +61,9 @@ template<const bool IncludeSelf>
 class AncestorIterator : public AccelIterator
 {
  public:
-   inline AncestorIterator(const AccelTree *const doc,
-                           const AccelTree::PreNumber pre) : AccelIterator(doc, pre, IncludeSelf ? pre : doc->basicData.at(pre).parent()) {
+   AncestorIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+         : AccelIterator(doc, pre, IncludeSelf ? pre : doc->basicData.at(pre).parent())
+   {
       Q_ASSERT(IncludeSelf || m_document->hasParent(pre));
    }
 
@@ -91,9 +87,9 @@ class AncestorIterator : public AccelIterator
 class ChildIterator : public AccelIterator
 {
  public:
-   inline ChildIterator(const AccelTree *const doc,
-                        const AccelTree::PreNumber pre) : AccelIterator(doc, pre, pre + 1),
-      m_depth(m_document->depth(m_currentPre)) {
+   ChildIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+      : AccelIterator(doc, pre, pre + 1),m_depth(m_document->depth(m_currentPre))
+   {
       Q_ASSERT(m_document->hasChildren(pre));
 
       /* Skip the attributes, that are children in the pre/post plane, of
@@ -120,9 +116,9 @@ template<const bool IsFollowing>
 class SiblingIterator : public AccelIterator
 {
  public:
-   inline SiblingIterator(const AccelTree *const doc,
-                          const AccelTree::PreNumber pre) : AccelIterator(doc, pre, pre + (IsFollowing ? 0 : -1)),
-      m_depth(doc->depth(pre)) {
+   SiblingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+      : AccelIterator(doc, pre, pre + (IsFollowing ? 0 : -1)), m_depth(doc->depth(pre))
+   {
       Q_ASSERT_X(IsFollowing || pre != 0, "",
                  "When being preceding-sibling, the context node cannot be the first node in the document.");
       Q_ASSERT_X(!IsFollowing || pre != m_document->maximumPreNumber(), "",
@@ -179,9 +175,9 @@ template<const bool IncludeSelf>
 class DescendantIterator : public AccelIterator
 {
  public:
-   inline DescendantIterator(const AccelTree *const doc,
-                             const AccelTree::PreNumber pre) : AccelIterator(doc, pre, pre + (IncludeSelf ? 0 : 1)),
-      m_postNumber(doc->postNumber(pre)) {
+   DescendantIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+      : AccelIterator(doc, pre, pre + (IncludeSelf ? 0 : 1)), m_postNumber(doc->postNumber(pre))
+   {
       Q_ASSERT(IncludeSelf || m_document->hasChildren(pre));
 
       /* Make sure that m_currentPre is the first node part of this axis.
@@ -241,8 +237,9 @@ class DescendantIterator : public AccelIterator
 class FollowingIterator : public AccelIterator
 {
  public:
-   inline FollowingIterator(const AccelTree *const doc,
-                            const AccelTree::PreNumber pre) : AccelIterator(doc, pre, pre) {
+   FollowingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+      : AccelIterator(doc, pre, pre)
+   {
    }
 
    QXmlNodeModelIndex next() override;
@@ -267,9 +264,9 @@ class PrecedingIterator : public AccelIterator
 class AttributeIterator : public AccelIterator
 {
  public:
-   inline AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
-                  : AccelIterator(doc, pre, pre + 1) {
-
+   AttributeIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
+      : AccelIterator(doc, pre, pre + 1)
+   {
       Q_ASSERT(m_document->hasChildren(pre));
       Q_ASSERT(m_document->kind(m_currentPre) == QXmlNodeModelIndex::Attribute);
    }

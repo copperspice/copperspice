@@ -41,12 +41,13 @@ class OrderSpecTransfer
 {
  public:
    typedef QList<OrderSpecTransfer> List;
-   inline OrderSpecTransfer() {
-   }
 
-   inline OrderSpecTransfer(const Expression::Ptr &aExpr,
-                            const OrderBy::OrderSpec aOrderSpec) : expression(aExpr),
-      orderSpec(aOrderSpec) {
+   OrderSpecTransfer()
+   { }
+
+   OrderSpecTransfer(const Expression::Ptr &aExpr, const OrderBy::OrderSpec aOrderSpec)
+      : expression(aExpr), orderSpec(aOrderSpec)
+   {
       Q_ASSERT(expression);
    }
 
@@ -87,7 +88,9 @@ namespace QPatternist {
 class Tokenizer : public TokenSource
 {
  public:
-   inline Tokenizer(const QUrl &queryU) : m_queryURI(queryU) {
+   Tokenizer(const QUrl &queryU)
+      : m_queryURI(queryU)
+   {
       Q_ASSERT(queryU.isValid());
    }
 
@@ -96,7 +99,7 @@ class Tokenizer : public TokenSource
    virtual int commenceScanOnly() = 0;
    virtual void resumeTokenizationFrom(const int position) = 0;
 
-   inline const QUrl &queryURI() const {
+   const QUrl &queryURI() const {
       return m_queryURI;
    }
 

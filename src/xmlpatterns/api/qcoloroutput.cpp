@@ -60,7 +60,7 @@ class ColorOutputPrivate
    static const char *const foregrounds[];
    static const char *const backgrounds[];
 
-   inline void write(const QString &msg) {
+   void write(const QString &msg) {
       m_out.write(msg.toUtf8());
    }
 
@@ -78,7 +78,7 @@ class ColorOutputPrivate
 
    // returns true if it's suitable to send colored output to \c stderr
 
-   inline bool isColoringPossible() const {
+   bool isColoringPossible() const {
 
 #if defined(Q_OS_WIN)
       // Windows does not at all support ANSI escape codes, unless

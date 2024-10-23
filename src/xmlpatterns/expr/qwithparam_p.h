@@ -38,12 +38,12 @@ class WithParam : public FunctionArgument
                     const SequenceType::Ptr &type,
                     const Expression::Ptr &sourceExpression);
 
-   inline void setSourceExpression(const Expression::Ptr &expr) {
+   void setSourceExpression(const Expression::Ptr &expr) {
       Q_ASSERT(expr);
       m_sourceExpression = expr;
    }
 
-   inline Expression::Ptr sourceExpression() const {
+   Expression::Ptr sourceExpression() const {
       return m_sourceExpression;
    }
 

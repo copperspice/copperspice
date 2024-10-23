@@ -31,7 +31,9 @@ namespace QPatternist {
 class ContextItem : public EmptyContainer
 {
  public:
-   inline ContextItem(const Expression::Ptr &expr = Expression::Ptr()) : m_expr(expr) {
+   ContextItem(const Expression::Ptr &expr = Expression::Ptr())
+      : m_expr(expr)
+   {
    }
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;

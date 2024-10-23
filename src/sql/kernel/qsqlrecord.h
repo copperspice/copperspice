@@ -43,7 +43,7 @@ class Q_SQL_EXPORT QSqlRecord
    ~QSqlRecord();
 
    bool operator==(const QSqlRecord &other) const;
-   inline bool operator!=(const QSqlRecord &other) const {
+   bool operator!=(const QSqlRecord &other) const {
       return !operator==(other);
    }
 

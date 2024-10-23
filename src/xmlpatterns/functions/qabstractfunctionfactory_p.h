@@ -63,7 +63,7 @@ class AbstractFunctionFactory : public FunctionFactory
       return s;
    }
 
-   static inline QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const QString &name) {
+   static QXmlName::LocalNameCode argument(const NamePool::Ptr &np, const QString &name) {
       return np->allocateLocalName(name);
    }
 

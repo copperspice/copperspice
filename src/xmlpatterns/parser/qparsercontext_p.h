@@ -69,27 +69,27 @@ class ParserContext : public QSharedData
 
    void finalizePushedVariable(const int amount = 1, const bool shouldPop = true);
 
-   inline VariableSlotID allocatePositionalSlot() {
+   VariableSlotID allocatePositionalSlot() {
       ++m_positionSlot;
       return m_positionSlot;
    }
 
-   inline VariableSlotID allocateExpressionSlot() {
+   VariableSlotID allocateExpressionSlot() {
       const VariableSlotID retval = m_expressionSlot;
       ++m_expressionSlot;
       return retval;
    }
 
-   inline VariableSlotID allocateGlobalVariableSlot() {
+   VariableSlotID allocateGlobalVariableSlot() {
       ++m_globalVariableSlot;
       return m_globalVariableSlot;
    }
 
-   inline bool hasDeclaration(const PrologDeclaration decl) const {
+   bool hasDeclaration(const PrologDeclaration decl) const {
       return m_prologDeclarations.testFlag(decl);
    }
 
-   inline void registerDeclaration(const PrologDeclaration decl) {
+   void registerDeclaration(const PrologDeclaration decl) {
       m_prologDeclarations |= decl;
    }
 
@@ -97,7 +97,7 @@ class ParserContext : public QSharedData
 
    VariableDeclaration::Stack variables;
 
-   inline bool isXSLT() const {
+   bool isXSLT() const {
       return languageAccent == QXmlQuery::XSLT20;
    }
 
@@ -117,23 +117,23 @@ class ParserContext : public QSharedData
 
    VariableDeclaration::List declaredVariables;
 
-   inline VariableSlotID currentPositionSlot() const {
+   VariableSlotID currentPositionSlot() const {
       return m_positionSlot;
    }
 
-   inline VariableSlotID currentExpressionSlot() const {
+   VariableSlotID currentExpressionSlot() const {
       return m_expressionSlot;
    }
 
-   inline void restoreNodeTestSource() {
+   void restoreNodeTestSource() {
       nodeTestSource = BuiltinTypes::element;
    }
 
-   inline VariableSlotID allocateCacheSlot() {
+   VariableSlotID allocateCacheSlot() {
       return ++m_evaluationCacheSlot;
    }
 
-   inline VariableSlotID allocateCacheSlots(const int count) {
+   VariableSlotID allocateCacheSlots(const int count) {
       const VariableSlotID retval = m_evaluationCacheSlot + 1;
       m_evaluationCacheSlot += count + 1;
       return retval;
@@ -180,7 +180,7 @@ class ParserContext : public QSharedData
       return mode;
    }
 
-   inline TemplatePattern::ID allocateTemplateID() {
+   TemplatePattern::ID allocateTemplateID() {
       ++m_currentTemplateID;
       return m_currentTemplateID;
    }
@@ -188,16 +188,16 @@ class ParserContext : public QSharedData
    VariableDeclaration::List templateParameters;
    WithParam::Hash templateWithParams;
 
-   inline void templateParametersHandled() {
+   void templateParametersHandled() {
       finalizePushedVariable(templateParameters.count());
       templateParameters.clear();
    }
 
-   inline void templateWithParametersHandled() {
+   void templateWithParametersHandled() {
       templateWithParams.clear();
    }
 
-   inline bool isParsingWithParam() const {
+   bool isParsingWithParam() const {
       return m_isParsingWithParam.top();
    }
 

@@ -42,10 +42,9 @@ class Template : public QSharedData, public SourceLocationReflection
    typedef QExplicitlySharedDataPointer<Template> Ptr;
    typedef QVector<Template::Ptr> Vector;
 
-   inline Template(const ImportPrecedence ip,
-                   const SequenceType::Ptr &reqType) : importPrecedence(ip)
-      , m_reqType(reqType) {
-   }
+   Template(const ImportPrecedence ip, const SequenceType::Ptr &reqType)
+      : importPrecedence(ip), m_reqType(reqType)
+   { }
 
    Expression::Ptr body;
 

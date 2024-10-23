@@ -40,7 +40,8 @@ class XsdTerm : public NamedSchemaComponent, public XsdAnnotated
    virtual bool isReference() const;
 
  protected:
-   inline XsdTerm() {};
+   XsdTerm()
+   { };
 };
 
 }

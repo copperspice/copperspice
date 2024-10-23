@@ -131,7 +131,7 @@ class XQueryTokenizer : public Tokenizer
    static QString normalizeEOL(const QString &input,
                                const CharacterSkips &characterSkips);
 
-   inline bool atEnd() const {
+   bool atEnd() const {
       return m_pos == m_length;
    }
 

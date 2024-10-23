@@ -32,18 +32,18 @@ class QGLContext;
 class CachedShader
 {
  public:
-   inline CachedShader(const QString &, const QString &) {
+   CachedShader(const QString &, const QString &) {
    }
 
-   inline bool isCached() {
+   bool isCached() {
       return false;
    }
 
-   inline bool load(QGLShaderProgram *, const QGLContext *) {
+   bool load(QGLShaderProgram *, const QGLContext *) {
       return false;
    }
 
-   inline bool store(QGLShaderProgram *, const QGLContext *) {
+   bool store(QGLShaderProgram *, const QGLContext *) {
       return false;
    }
 };

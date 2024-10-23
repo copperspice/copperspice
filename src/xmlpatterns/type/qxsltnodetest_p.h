@@ -39,9 +39,10 @@ class XSLTNodeTest : public AnyNodeType
  protected:
    friend class BuiltinTypes;
 
-   inline XSLTNodeTest() {
-   }
+   XSLTNodeTest()
+   { }
 };
+
 }
 
 #endif

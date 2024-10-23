@@ -79,7 +79,7 @@ class QGL2PEXVertexArray
       : maxX(-2e10), maxY(-2e10), minX(2e10), minY(2e10), boundingRectDirty(true) {
    }
 
-   inline void addRect(const QRectF &rect) {
+   void addRect(const QRectF &rect) {
       qreal top = rect.top();
       qreal left = rect.left();
       qreal bottom = rect.bottom();
@@ -93,7 +93,7 @@ class QGL2PEXVertexArray
                   << QGLPoint(left, top);
    }
 
-   inline void addQuad(const QRectF &rect) {
+   void addQuad(const QRectF &rect) {
       qreal top = rect.top();
       qreal left = rect.left();
       qreal bottom = rect.bottom();
@@ -106,7 +106,7 @@ class QGL2PEXVertexArray
 
    }
 
-   inline void addVertex(const GLfloat x, const GLfloat y) {
+   void addVertex(const GLfloat x, const GLfloat y) {
       vertexArray.append(QGLPoint(x, y));
    }
 
