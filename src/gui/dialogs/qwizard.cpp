@@ -282,7 +282,7 @@ class QWizardLayoutInfo
 
    bool operator==(const QWizardLayoutInfo &other);
 
-   inline bool operator!=(const QWizardLayoutInfo &other) {
+   bool operator!=(const QWizardLayoutInfo &other) {
       return !operator==(other);
    }
 };
@@ -316,9 +316,9 @@ class QWizardHeader : public QWidget
       Ruler
    };
 
-   inline QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
-      : QWidget(parent) {
-
+   QWizardHeader(RulerType ruler, QWidget *parent = nullptr)
+      : QWidget(parent)
+   {
       (void) ruler;
       setFixedHeight(2);
    }
@@ -479,8 +479,9 @@ void QWizardHeader::paintEvent(QPaintEvent *)
 class QWizardRuler : public QWizardHeader
 {
  public:
-   inline QWizardRuler(QWidget *parent = nullptr)
-      : QWizardHeader(Ruler, parent) {}
+   QWizardRuler(QWidget *parent = nullptr)
+      : QWizardHeader(Ruler, parent)
+   { }
 };
 
 class QWatermarkLabel : public QLabel

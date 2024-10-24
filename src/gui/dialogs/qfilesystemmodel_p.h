@@ -88,28 +88,28 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       QString volumeName;
 #endif
 
-      inline qint64 size() const {
+      qint64 size() const {
          if (info && ! info->isDir()) {
             return info->size();
          }
          return 0;
       }
 
-      inline QString type() const {
+      QString type() const {
          if (info) {
             return info->displayType;
          }
          return QString("");
       }
 
-      inline QDateTime lastModified() const {
+      QDateTime lastModified() const {
          if (info) {
             return info->lastModified();
          }
          return QDateTime();
       }
 
-      inline QFile::Permissions permissions() const {
+      QFile::Permissions permissions() const {
          if (info) {
             return info->permissions();
          }
@@ -117,19 +117,19 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          return Qt::EmptyFlag;
       }
 
-      inline bool isReadable() const {
+      bool isReadable() const {
          return ((permissions() & QFile::ReadUser) != 0);
       }
 
-      inline bool isWritable() const {
+      bool isWritable() const {
          return ((permissions() & QFile::WriteUser) != 0);
       }
 
-      inline bool isExecutable() const {
+      bool isExecutable() const {
          return ((permissions() & QFile::ExeUser) != 0);
       }
 
-      inline bool isDir() const {
+      bool isDir() const {
          if (info) {
             return info->isDir();
          }
@@ -140,74 +140,74 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          return false;
       }
 
-      inline QFileInfo fileInfo() const {
+      QFileInfo fileInfo() const {
          if (info) {
             return info->fileInfo();
          }
          return QFileInfo();
       }
 
-      inline bool isFile() const {
+      bool isFile() const {
          if (info) {
             return info->isFile();
          }
          return true;
       }
 
-      inline bool isSystem() const {
+      bool isSystem() const {
          if (info) {
             return info->isSystem();
          }
          return true;
       }
 
-      inline bool isHidden() const {
+      bool isHidden() const {
          if (info) {
             return info->isHidden();
          }
          return false;
       }
 
-      inline bool isSymLink(bool ignoreNtfsSymLinks = false) const {
+      bool isSymLink(bool ignoreNtfsSymLinks = false) const {
          return info && info->isSymLink(ignoreNtfsSymLinks);
       }
 
-      inline bool caseSensitive() const {
+      bool caseSensitive() const {
          if (info) {
             return info->isCaseSensitive();
          }
          return false;
       }
 
-      inline QIcon icon() const {
+      QIcon icon() const {
          if (info) {
             return info->icon;
          }
          return QIcon();
       }
 
-      inline bool operator <(const QFileSystemNode &node) const {
+      bool operator <(const QFileSystemNode &node) const {
          if (caseSensitive() || node.caseSensitive()) {
             return fileName < node.fileName;
          }
          return QString::compare(fileName, node.fileName, Qt::CaseInsensitive) < 0;
       }
 
-      inline bool operator >(const QString &name) const {
+      bool operator >(const QString &name) const {
          if (caseSensitive()) {
             return fileName > name;
          }
          return QString::compare(fileName, name, Qt::CaseInsensitive) > 0;
       }
 
-      inline bool operator <(const QString &name) const {
+      bool operator <(const QString &name) const {
          if (caseSensitive()) {
             return fileName < name;
          }
          return QString::compare(fileName, name, Qt::CaseInsensitive) < 0;
       }
 
-      inline bool operator !=(const QExtendedInformation &fileInfo) const {
+      bool operator !=(const QExtendedInformation &fileInfo) const {
          return !operator==(fileInfo);
       }
 
@@ -222,7 +222,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          return info && (*info == fileInfo);
       }
 
-      inline bool hasInformation() const {
+      bool hasInformation() const {
          return info != nullptr;
       }
 
@@ -234,7 +234,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       }
 
       // children shouldn't normally be accessed directly, use node()
-      inline int visibleLocation(const QString &childName) {
+      int visibleLocation(const QString &childName) {
          return visibleChildren.indexOf(childName);
       }
 
@@ -304,14 +304,14 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    }
 
    void init();
-   inline bool isHiddenByFilter(QFileSystemNode *indexNode, const QModelIndex &index) const {
+   bool isHiddenByFilter(QFileSystemNode *indexNode, const QModelIndex &index) const {
       return (indexNode != &root && !index.isValid());
    }
 
    QFileSystemNode *node(const QModelIndex &index) const;
    QFileSystemNode *node(const QString &path, bool fetch = true) const;
 
-   inline QModelIndex index(const QString &path, int column = 0) {
+   QModelIndex index(const QString &path, int column = 0) {
       return index(node(path), column);
    }
 
@@ -324,7 +324,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
    void removeVisibleFile(QFileSystemNode *parentNode, int visibleLocation);
    void sortChildren(int column, const QModelIndex &parent);
 
-   inline int translateVisibleLocation(QFileSystemNode *parent, int row) const {
+   int translateVisibleLocation(QFileSystemNode *parent, int row) const {
       if (sortOrder != Qt::AscendingOrder) {
          if (parent->dirtyChildrenIndex == -1) {
             return parent->visibleChildren.count() - row - 1;
@@ -338,7 +338,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
       return row;
    }
 
-   static inline QString myComputer() {
+   static QString myComputer() {
       // ### TODO We should query the system to find out what the string should be
       // XP == "My Computer",
       // Vista == "Computer",
@@ -352,7 +352,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
 
    }
 
-   inline void delayedSort() {
+   void delayedSort() {
       if (!delayedSortTimer.isActive()) {
          delayedSortTimer.start(0);
       }

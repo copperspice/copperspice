@@ -79,15 +79,15 @@ class Q_GUI_EXPORT QPlatformPixmap
    virtual QImage toImage(const QRect &rect) const;
    virtual QPaintEngine *paintEngine() const = 0;
 
-   inline int serialNumber() const {
+   int serialNumber() const {
       return ser_no;
    }
 
-   inline PixelType pixelType() const {
+   PixelType pixelType() const {
       return type;
    }
 
-   inline ClassId classId() const {
+   ClassId classId() const {
       return static_cast<ClassId>(id);
    }
 
@@ -96,22 +96,27 @@ class Q_GUI_EXPORT QPlatformPixmap
 
    virtual QImage *buffer();
 
-   inline int width() const {
+   int width() const {
       return w;
    }
-   inline int height() const {
+
+   int height() const {
       return h;
    }
-   inline int colorCount() const {
+
+   int colorCount() const {
       return metric(QPaintDevice::PdmNumColors);
    }
-   inline int depth() const {
+
+   int depth() const {
       return d;
    }
-   inline bool isNull() const {
+
+   bool isNull() const {
       return is_null;
    }
-   inline qint64 cacheKey() const {
+
+   qint64 cacheKey() const {
       int classKey = id;
       if (classKey >= 1024) {
          classKey = -(classKey >> 10);

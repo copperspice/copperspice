@@ -517,40 +517,41 @@ class QMacCGContext
 public:
    QMacCGContext(QPainter *p);
 
-   inline QMacCGContext() {
+   QMacCGContext() {
       context = nullptr;
    }
 
-   inline QMacCGContext(const QPaintDevice *pdev) {
+   QMacCGContext(const QPaintDevice *pdev) {
       context = qt_mac_cg_context(pdev);
    }
 
-   inline QMacCGContext(CGContextRef cg, bool takeOwnership = false) {
+   QMacCGContext(CGContextRef cg, bool takeOwnership = false) {
       context = cg;
       if (! takeOwnership) {
          CGContextRetain(context);
       }
    }
 
-   inline QMacCGContext(const QMacCGContext &copy)
+   QMacCGContext(const QMacCGContext &copy)
       : context(nullptr) {
       *this = copy;
    }
 
-   inline ~QMacCGContext() {
+   ~QMacCGContext() {
       if (context) {
          CGContextRelease(context);
       }
    }
 
-   inline bool isNull() const {
-      return context;
-   }
-   inline operator CGContextRef() {
+   bool isNull() const {
       return context;
    }
 
-   inline QMacCGContext &operator=(const QMacCGContext &copy) {
+   operator CGContextRef() {
+      return context;
+   }
+
+   QMacCGContext &operator=(const QMacCGContext &copy) {
       if (context) {
          CGContextRelease(context);
       }
@@ -560,7 +561,7 @@ public:
       return *this;
    }
 
-   inline QMacCGContext &operator=(CGContextRef cg) {
+   QMacCGContext &operator=(CGContextRef cg) {
       if (context) {
          CGContextRelease(context);
       }

@@ -202,7 +202,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
 
    static void sendQWindowEventToQPlatformWindow(QWindow *window, QEvent *event);
 
-   static inline Qt::Alignment visualAlignment(Qt::LayoutDirection direction, Qt::Alignment alignment) {
+   static Qt::Alignment visualAlignment(Qt::LayoutDirection direction, Qt::Alignment alignment) {
       if (! (alignment & Qt::AlignHorizontal_Mask)) {
          alignment |= Qt::AlignLeft;
       }

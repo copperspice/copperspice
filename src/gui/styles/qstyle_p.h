@@ -34,7 +34,7 @@ class QStylePrivate
    Q_DECLARE_PUBLIC(QStyle)
 
  public:
-   inline QStylePrivate()
+   QStylePrivate()
       : layoutSpacingIndex(-1), proxyStyle(nullptr)
    {
    }

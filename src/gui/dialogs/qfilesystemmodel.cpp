@@ -1027,7 +1027,9 @@ int QFileSystemModelPrivate::naturalCompare(const QString &s1, const QString &s2
 class QFileSystemModelSorter
 {
  public:
-   inline QFileSystemModelSorter(int column) : sortColumn(column) { }
+   QFileSystemModelSorter(int column)
+      : sortColumn(column)
+   { }
 
    bool compareNodes(const QFileSystemModelPrivate::QFileSystemNode *l,
       const QFileSystemModelPrivate::QFileSystemNode *r) const {

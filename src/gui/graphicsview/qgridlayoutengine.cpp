@@ -1415,18 +1415,21 @@ void QGridLayoutEngine::fillRowData(QGridLayoutRowData *rowData,
       unsigned int q_hasButtons : 8;
       unsigned int q_hasNonButtons : 8;
 
-      inline RowAdHocData() : q_row(-1), q_hasButtons(false), q_hasNonButtons(false) {}
-      inline void init(int row) {
+      RowAdHocData()
+         : q_row(-1), q_hasButtons(false), q_hasNonButtons(false)
+      { }
+
+      void init(int row) {
          this->q_row = row;
          q_hasButtons = false;
          q_hasNonButtons = false;
       }
 
-      inline bool hasOnlyButtons() const {
+      bool hasOnlyButtons() const {
          return q_hasButtons && !q_hasNonButtons;
       }
 
-      inline bool hasOnlyNonButtons() const {
+      bool hasOnlyNonButtons() const {
          return q_hasNonButtons && !q_hasButtons;
       }
    };

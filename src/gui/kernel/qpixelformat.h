@@ -168,53 +168,54 @@ class QPixelFormat
          (get(AlphaField, AlphaFieldWidth) > 0);
    }
 
-   constexpr inline uchar redSize() const {
+   constexpr uchar redSize() const {
       return get(FirstField, FirstFieldWidth);
    }
 
-   constexpr inline uchar greenSize() const  {
+   constexpr uchar greenSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
-   constexpr inline uchar blueSize() const  {
+   constexpr uchar blueSize() const  {
       return get(ThirdField, ThirdFieldWidth);
    }
 
-   constexpr inline uchar cyanSize() const  {
+   constexpr uchar cyanSize() const  {
       return get(FirstField, FirstFieldWidth);
    }
 
-   constexpr inline uchar magentaSize() const  {
+   constexpr uchar magentaSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
 
-   constexpr inline uchar yellowSize() const  {
+   constexpr uchar yellowSize() const  {
       return get(ThirdField, ThirdFieldWidth);
    }
 
-   constexpr inline uchar blackSize() const  {
+   constexpr uchar blackSize() const  {
       return get(FourthField, FourthFieldWidth);
    }
 
-   constexpr inline uchar hueSize() const  {
+   constexpr uchar hueSize() const  {
       return get(FirstField, FirstFieldWidth);
    }
 
-   constexpr inline uchar saturationSize() const  {
+   constexpr uchar saturationSize() const  {
       return get(SecondField, SecondFieldWidth);
    }
 
-   constexpr inline uchar lightnessSize() const  {
-      return get(ThirdField, ThirdFieldWidth);
-   }
-   constexpr inline uchar brightnessSize() const  {
+   constexpr uchar lightnessSize() const  {
       return get(ThirdField, ThirdFieldWidth);
    }
 
-   constexpr inline uchar alphaSize() const  {
+   constexpr uchar brightnessSize() const  {
+      return get(ThirdField, ThirdFieldWidth);
+   }
+
+   constexpr uchar alphaSize() const  {
       return get(AlphaField, AlphaFieldWidth);
    }
 
-   constexpr inline uchar bitsPerPixel() const  {
+   constexpr uchar bitsPerPixel() const  {
       return get(FirstField, FirstFieldWidth) +
          get(SecondField, SecondFieldWidth) +
          get(ThirdField, ThirdFieldWidth) +
@@ -223,47 +224,47 @@ class QPixelFormat
          get(AlphaField, AlphaFieldWidth);
    }
 
-   constexpr inline AlphaUsage alphaUsage() const  {
+   constexpr AlphaUsage alphaUsage() const  {
       return AlphaUsage(get(AlphaUsageField, AlphaUsageFieldWidth));
    }
 
-   constexpr inline AlphaPosition alphaPosition() const  {
+   constexpr AlphaPosition alphaPosition() const  {
       return AlphaPosition(get(AlphaPositionField, AlphaPositionFieldWidth));
    }
 
-   constexpr inline AlphaPremultiplied premultiplied() const  {
+   constexpr AlphaPremultiplied premultiplied() const  {
       return AlphaPremultiplied(get(PremulField, PremulFieldWidth));
    }
 
-   constexpr inline TypeInterpretation typeInterpretation() const  {
+   constexpr TypeInterpretation typeInterpretation() const  {
       return TypeInterpretation(get(TypeInterpretationField, TypeInterpretationFieldWidth));
    }
 
-   constexpr inline ByteOrder byteOrder() const  {
+   constexpr ByteOrder byteOrder() const  {
       return ByteOrder(get(ByteOrderField, ByteOrderFieldWidth));
    }
 
-   constexpr inline YUVLayout yuvLayout() const  {
+   constexpr YUVLayout yuvLayout() const  {
       return YUVLayout(get(SubEnumField, SubEnumFieldWidth));
    }
 
-   constexpr inline uchar subEnum() const  {
+   constexpr uchar subEnum() const  {
       return get(SubEnumField, SubEnumFieldWidth);
    }
 
  private:
-   static constexpr inline ByteOrder resolveByteOrder(ByteOrder bo) {
+   static constexpr ByteOrder resolveByteOrder(ByteOrder bo) {
       return bo == CurrentSystemEndian ? Q_BYTE_ORDER == Q_LITTLE_ENDIAN ? LittleEndian : BigEndian : bo ;
    }
 
  private:
    quint64 data;
 
-   friend constexpr inline bool operator==(QPixelFormat fmt1, QPixelFormat fmt2) {
+   friend constexpr bool operator==(QPixelFormat fmt1, QPixelFormat fmt2) {
       return fmt1.data == fmt2.data;
    }
 
-   friend constexpr inline bool operator!=(QPixelFormat fmt1, QPixelFormat fmt2) {
+   friend constexpr bool operator!=(QPixelFormat fmt1, QPixelFormat fmt2) {
       return !(fmt1 == fmt2);
    }
 };

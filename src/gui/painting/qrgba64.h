@@ -187,7 +187,7 @@ class QRgba64
       return quint16((x + (x >> 16) + 0x8000U) >> 16);
    }
 
-   constexpr inline QRgba64 unpremultiplied_32bit() const {
+   constexpr QRgba64 unpremultiplied_32bit() const {
       if (isOpaque() || isTransparent()) {
          return *this;
       }

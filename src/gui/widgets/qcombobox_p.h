@@ -121,11 +121,11 @@ class QComboBoxPrivateScroller : public QWidget
    GUI_CS_SIGNAL_2(doScroll, action)
 
  protected:
-   inline void stopTimer() {
+   void stopTimer() {
       timer.stop();
    }
 
-   inline void startTimer() {
+   void startTimer() {
       timer.start(100, this);
       fast = false;
    }

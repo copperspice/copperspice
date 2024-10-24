@@ -52,14 +52,14 @@ class QItemSelectionModelPrivate
    void _q_layoutChanged(const QList<QPersistentModelIndex> &parents = QList<QPersistentModelIndex>(),
       QAbstractItemModel::LayoutChangeHint hint = QAbstractItemModel::NoLayoutChangeHint);
 
-   inline void remove(QList<QItemSelectionRange> &r) {
+   void remove(QList<QItemSelectionRange> &r) {
       QList<QItemSelectionRange>::const_iterator it = r.constBegin();
       for (; it != r.constEnd(); ++it) {
          ranges.removeAll(*it);
       }
    }
 
-   inline void finalize() {
+   void finalize() {
       ranges.merge(currentSelection, currentCommand);
       if (!currentSelection.isEmpty()) { // ### perhaps this should be in QList
          currentSelection.clear();

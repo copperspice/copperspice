@@ -1891,7 +1891,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
 class QTextHtmlStyleSelector : public QCss::StyleSelector
 {
  public:
-   inline QTextHtmlStyleSelector(const QTextHtmlParser *parser)
+   QTextHtmlStyleSelector(const QTextHtmlParser *parser)
       : parser(parser) {
       nameCaseSensitivity = Qt::CaseInsensitive;
    }

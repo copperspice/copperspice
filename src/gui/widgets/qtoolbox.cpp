@@ -50,12 +50,12 @@ class QToolBoxButton : public QAbstractButton
       setFocusPolicy(Qt::NoFocus);
    }
 
-   inline void setSelected(bool b) {
+   void setSelected(bool b) {
       selected = b;
       update();
    }
 
-   inline void setIndex(int newIndex) {
+   void setIndex(int newIndex) {
       indexInPage = newIndex;
    }
 
@@ -81,35 +81,38 @@ class QToolBoxPrivate : public QFramePrivate
       QScrollArea *sv;
       QWidget *widget;
 
-      inline void setText(const QString &text) {
+      void setText(const QString &text) {
          button->setText(text);
       }
-      inline void setIcon(const QIcon &is) {
+      void setIcon(const QIcon &is) {
          button->setIcon(is);
       }
 
 #ifndef QT_NO_TOOLTIP
-      inline void setToolTip(const QString &tip) {
+      void setToolTip(const QString &tip) {
          button->setToolTip(tip);
       }
-      inline QString toolTip() const {
+
+      QString toolTip() const {
          return button->toolTip();
       }
 #endif
-      inline QString text() const {
+
+      QString text() const {
          return button->text();
       }
-      inline QIcon icon() const {
+
+      QIcon icon() const {
          return button->icon();
       }
 
-      inline bool operator==(const Page &other) const {
+      bool operator==(const Page &other) const {
          return widget == other.widget;
       }
    };
    typedef QList<Page> PageList;
 
-   inline QToolBoxPrivate()
+   QToolBoxPrivate()
       : currentPage(nullptr) {
    }
 

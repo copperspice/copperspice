@@ -37,7 +37,7 @@ struct QRBTree
         {
         }
 
-        inline ~Node() {
+        ~Node() {
           if (left)
             delete left;
 

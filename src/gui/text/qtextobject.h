@@ -293,11 +293,11 @@ class Q_GUI_EXPORT QTextBlock
          return n == e;
       }
 
-      inline bool operator==(const iterator &other) const {
+      bool operator==(const iterator &other) const {
          return p == other.p && n == other.n;
       }
 
-      inline bool operator!=(const iterator &other) const {
+      bool operator!=(const iterator &other) const {
          return p != other.p || n != other.n;
       }
 
@@ -338,11 +338,11 @@ class Q_GUI_EXPORT QTextBlock
    QTextBlock next() const;
    QTextBlock previous() const;
 
-   inline QTextDocumentPrivate *docHandle() const {
+   QTextDocumentPrivate *docHandle() const {
       return p;
    }
 
-   inline int fragmentIndex() const {
+   int fragmentIndex() const {
       return n;
    }
 

@@ -73,7 +73,8 @@ class Q_GUI_EXPORT QRawFont
    }
 
    bool operator==(const QRawFont &other) const;
-   inline bool operator!=(const QRawFont &other) const {
+
+   bool operator!=(const QRawFont &other) const {
       return ! operator==(other);
    }
 

@@ -51,24 +51,23 @@ class QDataWidgetMapperPrivate
    QPersistentModelIndex rootIndex;
    QPersistentModelIndex currentTopLeft;
 
-   inline int itemCount() {
+   int itemCount() {
       return orientation == Qt::Horizontal
          ? model->rowCount(rootIndex)
          : model->columnCount(rootIndex);
    }
 
-   inline int currentIdx() const {
+   int currentIdx() const {
       return orientation == Qt::Horizontal ? currentTopLeft.row() : currentTopLeft.column();
    }
 
-   inline QModelIndex indexAt(int itemPos) {
+   QModelIndex indexAt(int itemPos) {
       return orientation == Qt::Horizontal
          ? model->index(currentIdx(), itemPos, rootIndex)
          : model->index(itemPos, currentIdx(), rootIndex);
    }
 
-   inline void flipEventFilters(QAbstractItemDelegate *oldDelegate, QAbstractItemDelegate *newDelegate) {
-
+   void flipEventFilters(QAbstractItemDelegate *oldDelegate, QAbstractItemDelegate *newDelegate) {
       for (auto item : widgetMap) {
          QWidget *w = item.widget;
 
@@ -90,11 +89,13 @@ class QDataWidgetMapperPrivate
    void _q_modelDestroyed();
 
    struct WidgetMapper {
-      inline WidgetMapper(QWidget *w = nullptr, int c = 0, const QModelIndex &i = QModelIndex())
-         : widget(w), section(c), currentIndex(i) {}
+      WidgetMapper(QWidget *w = nullptr, int c = 0, const QModelIndex &i = QModelIndex())
+         : widget(w), section(c), currentIndex(i)
+      { }
 
-      inline WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QString &p)
-         : widget(w), section(c), currentIndex(i), property(p) {}
+      WidgetMapper(QWidget *w, int c, const QModelIndex &i, const QString &p)
+         : widget(w), section(c), currentIndex(i), property(p)
+      { }
 
       QPointer<QWidget> widget;
       int section;

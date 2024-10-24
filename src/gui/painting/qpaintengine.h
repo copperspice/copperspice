@@ -213,7 +213,7 @@ class Q_GUI_EXPORT QPaintEngine
    QPainter *painter() const;
 
    void syncState();
-   inline bool isExtended() const {
+   bool isExtended() const {
       return extended;
    }
 

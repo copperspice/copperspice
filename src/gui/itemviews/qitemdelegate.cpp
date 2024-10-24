@@ -66,11 +66,11 @@ class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
    {
    }
 
-   inline const QItemEditorFactory *editorFactory() const {
+   const QItemEditorFactory *editorFactory() const {
       return f ? f : QItemEditorFactory::defaultFactory();
    }
 
-   inline QIcon::Mode iconMode(QStyle::State state) const {
+   QIcon::Mode iconMode(QStyle::State state) const {
       if (! (state & QStyle::State_Enabled)) {
          return QIcon::Disabled;
       }
@@ -82,11 +82,11 @@ class QItemDelegatePrivate : public QAbstractItemDelegatePrivate
       return QIcon::Normal;
    }
 
-   inline QIcon::State iconState(QStyle::State state) const {
+   QIcon::State iconState(QStyle::State state) const {
       return state & QStyle::State_Open ? QIcon::On : QIcon::Off;
    }
 
-   static inline QString replaceNewLine(QString text) {
+   static QString replaceNewLine(QString text) {
       const QChar ch = QChar::LineSeparator;
       text.replace('\n', ch);
 

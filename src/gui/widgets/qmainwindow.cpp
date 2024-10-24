@@ -50,7 +50,7 @@ class QMainWindowPrivate : public QWidgetPrivate
    Q_DECLARE_PUBLIC(QMainWindow)
 
  public:
-   inline QMainWindowPrivate()
+   QMainWindowPrivate()
       : layout(nullptr), explicitIconSize(false), toolButtonStyle(Qt::ToolButtonIconOnly)
 
 #ifdef Q_OS_DARWIN
@@ -84,7 +84,7 @@ class QMainWindowPrivate : public QWidgetPrivate
    uint cursorAdjusted : 1;
 #endif
 
-   static inline QMainWindowLayout *mainWindowLayout(const QMainWindow *mainWindow) {
+   static QMainWindowLayout *mainWindowLayout(const QMainWindow *mainWindow) {
       return mainWindow ? mainWindow->d_func()->layout : static_cast<QMainWindowLayout *>(nullptr);
    }
 };

@@ -45,10 +45,11 @@ class Q_GUI_EXPORT QGraphicsLinearLayout : public QGraphicsLayout
    void setOrientation(Qt::Orientation orientation);
    Qt::Orientation orientation() const;
 
-   inline void addItem(QGraphicsLayoutItem *item) {
+   void addItem(QGraphicsLayoutItem *item) {
       insertItem(-1, item);
    }
-   inline void addStretch(int stretch = 1) {
+
+   void addStretch(int stretch = 1) {
       insertStretch(-1, stretch);
    }
 

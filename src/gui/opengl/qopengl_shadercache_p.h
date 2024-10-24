@@ -33,21 +33,18 @@ class QOpenGLContext;
 class CachedShader
 {
 public:
-    inline CachedShader(const QByteArray &, const QByteArray &)
-    {}
+    CachedShader(const QByteArray &, const QByteArray &)
+    { }
 
-    inline bool isCached()
-    {
+    bool isCached() {
         return false;
     }
 
-    inline bool load(QOpenGLShaderProgram *, QOpenGLContext *)
-    {
+    bool load(QOpenGLShaderProgram *, QOpenGLContext *) {
         return false;
     }
 
-    inline bool store(QOpenGLShaderProgram *, QOpenGLContext *)
-    {
+    bool store(QOpenGLShaderProgram *, QOpenGLContext *) {
         return false;
     }
 };

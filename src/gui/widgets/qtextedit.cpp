@@ -65,7 +65,9 @@ static inline bool shouldEnableInputMethod(QTextEdit *textedit)
 class QTextEditControl : public QTextControl
 {
  public:
-   inline QTextEditControl(QObject *parent) : QTextControl(parent) {}
+   QTextEditControl(QObject *parent)
+      : QTextControl(parent)
+   { }
 
    QMimeData *createMimeDataFromSelection() const override {
       QTextEdit *ed = qobject_cast<QTextEdit *>(parent());

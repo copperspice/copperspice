@@ -109,18 +109,18 @@ class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
    virtual void drawStaticTextItem(QStaticTextItem *);
 
    virtual void setState(QPainterState *s);
-   inline QPainterState *state() {
+
+   QPainterState *state() {
       return static_cast<QPainterState *>(QPaintEngine::state);
    }
 
-   inline const QPainterState *state() const {
+   const QPainterState *state() const {
       return static_cast<const QPainterState *>(QPaintEngine::state);
    }
 
    virtual void sync() {}
    virtual void beginNativePainting() {}
    virtual void endNativePainting() {}
-
 
    // These flags are needed in the implementation of paint buffers.
    enum Flags {

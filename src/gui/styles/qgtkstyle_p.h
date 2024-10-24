@@ -452,13 +452,13 @@ class QGtkStylePrivate : public QCommonStylePrivate
  protected:
    typedef QHash<QHashableLatin1Literal, GtkWidget *> WidgetMap;
 
-   static inline void destroyWidgetMap() {
+   static void destroyWidgetMap() {
       cleanupGtkWidgets();
       delete widgetMap;
       widgetMap = 0;
    }
 
-   static inline WidgetMap *gtkWidgetMap() {
+   static WidgetMap *gtkWidgetMap() {
       if (!widgetMap) {
          widgetMap = new WidgetMap();
          qAddPostRoutine(destroyWidgetMap);

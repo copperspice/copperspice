@@ -118,7 +118,9 @@ struct QListViewLayoutInfo {
 class QCommonListViewBase
 {
  public:
-   inline QCommonListViewBase(QListView *q, QListViewPrivate *d) : dd(d), qq(q), batchStartRow(0), batchSavedDeltaSeg(0) {}
+   QCommonListViewBase(QListView *q, QListViewPrivate *d)
+      : dd(d), qq(q), batchStartRow(0), batchSavedDeltaSeg(0)
+   { }
    virtual ~QCommonListViewBase() {}
 
    //common interface
@@ -334,7 +336,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
 
    bool doItemsLayout(int num);
 
-   inline QVector<QModelIndex> intersectingSet(const QRect &area, bool doLayout = true) const {
+   QVector<QModelIndex> intersectingSet(const QRect &area, bool doLayout = true) const {
       if (doLayout) {
          executePostedLayout();
       }
@@ -343,30 +345,35 @@ class QListViewPrivate: public QAbstractItemViewPrivate
       return commonListView->intersectingSet(a);
    }
 
-   inline void resetBatchStartRow() {
+   void resetBatchStartRow() {
       commonListView->batchStartRow = 0;
    }
-   inline int batchStartRow() const {
+
+   int batchStartRow() const {
       return commonListView->batchStartRow;
    }
-   inline QSize contentsSize() const {
+
+   QSize contentsSize() const {
       return commonListView->contentsSize;
    }
-   inline void setContentsSize(int w, int h) {
+
+   void setContentsSize(int w, int h) {
       commonListView->contentsSize = QSize(w, h);
    }
 
-   inline int flipX(int x) const {
+   int flipX(int x) const {
       return qMax(viewport->width(), contentsSize().width()) - x;
    }
-   inline QPoint flipX(const QPoint &p) const {
+
+   QPoint flipX(const QPoint &p) const {
       return QPoint(flipX(p.x()), p.y());
    }
-   inline QRect flipX(const QRect &r) const {
+
+   QRect flipX(const QRect &r) const {
       return QRect(flipX(r.x()) - r.width(), r.y(), r.width(), r.height());
    }
 
-   inline QRect viewItemRect(const QListViewItem &item) const {
+   QRect viewItemRect(const QListViewItem &item) const {
       if (q_func()->isRightToLeft()) {
          return flipX(item.rect());
       }
@@ -374,7 +381,7 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    }
 
    QListViewItem indexToListViewItem(const QModelIndex &index) const;
-   inline QModelIndex listViewItemToIndex(const QListViewItem &item) const {
+   QModelIndex listViewItemToIndex(const QListViewItem &item) const {
       return model->index(commonListView->itemIndex(item), column, root);
    }
 
@@ -417,45 +424,52 @@ class QListViewPrivate: public QAbstractItemViewPrivate
    bool dropOn(QDropEvent *event, int *row, int *col, QModelIndex *index) override;
 #endif
 
-   inline void setGridSize(const QSize &size) {
+   void setGridSize(const QSize &size) {
       grid = size;
    }
-   inline QSize gridSize() const {
+
+   QSize gridSize() const {
       return grid;
    }
-   inline void setWrapping(bool b) {
+
+   void setWrapping(bool b) {
       wrap = b;
    }
-   inline bool isWrapping() const {
+
+   bool isWrapping() const {
       return wrap;
    }
-   inline void setSpacing(int s) {
+
+   void setSpacing(int s) {
       space = s;
    }
-   inline int spacing() const {
+
+   int spacing() const {
       return space;
    }
-   inline void setSelectionRectVisible(bool visible) {
+
+   void setSelectionRectVisible(bool visible) {
       showElasticBand = visible;
    }
-   inline bool isSelectionRectVisible() const {
+
+   bool isSelectionRectVisible() const {
       return showElasticBand;
    }
 
-   inline QModelIndex modelIndex(int row) const {
+   QModelIndex modelIndex(int row) const {
       return model->index(row, column, root);
    }
 
-   inline bool isHidden(int row) const {
+   bool isHidden(int row) const {
       QModelIndex idx = model->index(row, 0, root);
       return isPersistent(idx) && hiddenRows.contains(idx);
    }
 
-   inline bool isHiddenOrDisabled(int row) const {
+   bool isHiddenOrDisabled(int row) const {
       return isHidden(row) || !isIndexEnabled(modelIndex(row));
    }
 
-   inline void removeCurrentAndDisabled(QVector<QModelIndex> *indexes, const QModelIndex &current) const {
+   void removeCurrentAndDisabled(QVector<QModelIndex> *indexes, const QModelIndex &current) const {
       QVector<QModelIndex>::iterator it = indexes->begin();
       while (it != indexes->end()) {
          if (!isIndexEnabled(*it) || (*it) == current) {

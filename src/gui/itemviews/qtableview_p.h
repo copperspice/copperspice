@@ -55,22 +55,27 @@ class QSpanCollection
            will_be_deleted(false)
       { }
 
-      inline int top() const {
+      int top() const {
          return m_top;
       }
-      inline int left() const {
+
+      int left() const {
          return m_left;
       }
-      inline int bottom() const {
+
+      int bottom() const {
          return m_bottom;
       }
-      inline int right() const {
+
+      int right() const {
          return m_right;
       }
-      inline int height() const {
+
+      int height() const {
          return m_bottom - m_top + 1;
       }
-      inline int width() const {
+
+      int width() const {
          return m_right - m_left + 1;
       }
    };
@@ -122,27 +127,27 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
    void init();
    void trimHiddenSelections(QItemSelectionRange *range) const;
 
-   inline bool isHidden(int row, int col) const {
+   bool isHidden(int row, int col) const {
       return verticalHeader->isSectionHidden(row) || horizontalHeader->isSectionHidden(col);
    }
 
-   inline int visualRow(int logicalRow) const {
+   int visualRow(int logicalRow) const {
       return verticalHeader->visualIndex(logicalRow);
    }
 
-   inline int visualColumn(int logicalCol) const {
+   int visualColumn(int logicalCol) const {
       return horizontalHeader->visualIndex(logicalCol);
    }
 
-   inline int logicalRow(int visualRow) const {
+   int logicalRow(int visualRow) const {
       return verticalHeader->logicalIndex(visualRow);
    }
 
-   inline int logicalColumn(int visualCol) const {
+   int logicalColumn(int visualCol) const {
       return horizontalHeader->logicalIndex(visualCol);
    }
 
-   inline int accessibleTable2Index(const QModelIndex &index) const {
+   int accessibleTable2Index(const QModelIndex &index) const {
       const int vHeader = verticalHeader ? 1 : 0;
 
       return (index.row() + (horizontalHeader ? 1 : 0)) * (index.model()->columnCount() + vHeader)
@@ -180,53 +185,53 @@ class QTableViewPrivate : public QAbstractItemViewPrivate
    void setSpan(int row, int column, int rowSpan, int columnSpan);
    QSpanCollection::Span span(int row, int column) const;
 
-   inline int rowSpan(int row, int column) const {
+   int rowSpan(int row, int column) const {
       return span(row, column).height();
    }
 
-   inline int columnSpan(int row, int column) const {
+   int columnSpan(int row, int column) const {
       return span(row, column).width();
    }
 
-   inline bool hasSpans() const {
+   bool hasSpans() const {
       return !spans.spans.isEmpty();
    }
 
-   inline int rowSpanHeight(int row, int span) const {
+   int rowSpanHeight(int row, int span) const {
       return sectionSpanSize(verticalHeader, row, span);
    }
 
-   inline int columnSpanWidth(int column, int span) const {
+   int columnSpanWidth(int column, int span) const {
       return sectionSpanSize(horizontalHeader, column, span);
    }
 
-   inline int rowSpanEndLogical(int row, int span) const {
+   int rowSpanEndLogical(int row, int span) const {
       return sectionSpanEndLogical(verticalHeader, row, span);
    }
 
-   inline int columnSpanEndLogical(int column, int span) const {
+   int columnSpanEndLogical(int column, int span) const {
       return sectionSpanEndLogical(horizontalHeader, column, span);
    }
 
-   inline bool isRowHidden(int row) const {
+   bool isRowHidden(int row) const {
       return verticalHeader->isSectionHidden(row);
    }
 
-   inline bool isColumnHidden(int column) const {
+   bool isColumnHidden(int column) const {
       return horizontalHeader->isSectionHidden(column);
    }
 
-   inline bool isCellEnabled(int row, int column) const {
+   bool isCellEnabled(int row, int column) const {
       return isIndexEnabled(model->index(row, column, root));
    }
 
-   inline bool isVisualRowHiddenOrDisabled(int row, int column) const {
+   bool isVisualRowHiddenOrDisabled(int row, int column) const {
       int r = logicalRow(row);
       int c = logicalColumn(column);
       return isRowHidden(r) || !isCellEnabled(r, c);
    }
 
-   inline bool isVisualColumnHiddenOrDisabled(int row, int column) const {
+   bool isVisualColumnHiddenOrDisabled(int row, int column) const {
       int r = logicalRow(row);
       int c = logicalColumn(column);
       return isColumnHidden(c) || !isCellEnabled(r, c);

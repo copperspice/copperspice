@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QTextTableCell
    int rowSpan() const;
    int columnSpan() const;
 
-   inline bool isValid() const {
+   bool isValid() const {
       return table != nullptr;
    }
 
@@ -74,10 +74,11 @@ class Q_GUI_EXPORT QTextTableCell
    int firstPosition() const;
    int lastPosition() const;
 
-   inline bool operator==(const QTextTableCell &other) const {
+   bool operator==(const QTextTableCell &other) const {
       return table == other.table && fragment == other.fragment;
    }
-   inline bool operator!=(const QTextTableCell &other) const {
+
+   bool operator!=(const QTextTableCell &other) const {
       return !operator==(other);
    }
 

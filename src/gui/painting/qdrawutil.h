@@ -77,12 +77,12 @@ Q_GUI_EXPORT void qDrawPlainRect(QPainter *painter, const QRect &rect, const QCo
    int lineWidth = 1, const QBrush *fill = nullptr);
 
 struct QTileRules {
-   inline QTileRules(Qt::TileRule horizontalRule, Qt::TileRule verticalRule)
+   QTileRules(Qt::TileRule horizontalRule, Qt::TileRule verticalRule)
       : horizontal(horizontalRule), vertical(verticalRule)
    {
    }
 
-   inline QTileRules(Qt::TileRule rule = Qt::StretchTile)
+   QTileRules(Qt::TileRule rule = Qt::StretchTile)
       : horizontal(rule), vertical(rule)
    {
    }

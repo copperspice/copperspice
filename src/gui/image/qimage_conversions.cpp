@@ -1496,7 +1496,10 @@ static void convert_ARGB_PM_to_Mono(QImageData *dst, const QImageData *src, Qt::
 // if dithering is needed, only 1 color at most is available for alpha.
 //
 struct QRgbMap {
-   inline QRgbMap() : used(0) { }
+   QRgbMap()
+      : used(0)
+   { }
+
    uchar  pix;
    uchar used;
    QRgb  rgb;

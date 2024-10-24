@@ -93,7 +93,7 @@ class Q_GUI_EXPORT QIcon
    void paint(QPainter *painter, const QRect &rect, Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal,
       State state = Off) const;
 
-   inline void paint(QPainter *painter, int x, int y, int w, int h,
+   void paint(QPainter *painter, int x, int y, int w, int h,
       Qt::Alignment alignment = Qt::AlignCenter, Mode mode = Normal, State state = Off) const {
       paint(painter, QRect(x, y, w, h), alignment, mode, state);
    }

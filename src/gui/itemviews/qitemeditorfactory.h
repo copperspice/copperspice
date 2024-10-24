@@ -48,11 +48,11 @@ class QItemEditorCreator : public QItemEditorCreatorBase
  public:
    inline explicit QItemEditorCreator(const QString &valuePropertyName);
 
-   inline QWidget *createWidget(QWidget *parent) const override {
+   QWidget *createWidget(QWidget *parent) const override {
       return new T(parent);
    }
 
-   inline QString valuePropertyName() const override {
+   QString valuePropertyName() const override {
       return propertyName;
    }
 
@@ -64,15 +64,15 @@ template <class T>
 class QStandardItemEditorCreator: public QItemEditorCreatorBase
 {
  public:
-   inline QStandardItemEditorCreator()
+   QStandardItemEditorCreator()
       : propertyName(T::staticMetaObject.userProperty().name()) {
    }
 
-   inline QWidget *createWidget(QWidget *parent) const override {
+   QWidget *createWidget(QWidget *parent) const override {
       return new T(parent);
    }
 
-   inline QString valuePropertyName() const override {
+   QString valuePropertyName() const override {
       return propertyName;
    }
 
@@ -89,7 +89,8 @@ QItemEditorCreator<T>::QItemEditorCreator(const QString &valuePropertyName)
 class Q_GUI_EXPORT QItemEditorFactory
 {
  public:
-   inline QItemEditorFactory() {}
+   QItemEditorFactory()
+   { }
    virtual ~QItemEditorFactory();
 
    virtual QWidget *createEditor(QVariant::Type type, QWidget *parent) const;

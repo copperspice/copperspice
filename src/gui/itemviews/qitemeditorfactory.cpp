@@ -142,7 +142,8 @@ void QItemEditorFactory::registerEditor(QVariant::Type type, QItemEditorCreatorB
 class QDefaultItemEditorFactory : public QItemEditorFactory
 {
  public:
-   inline QDefaultItemEditorFactory() {}
+   QDefaultItemEditorFactory()
+   { }
 
    QWidget *createEditor(QVariant::Type type, QWidget *parent) const override;
    QString valuePropertyName(QVariant::Type) const override;
@@ -267,7 +268,8 @@ QString QDefaultItemEditorFactory::valuePropertyName(QVariant::Type type) const
 static QItemEditorFactory *q_default_factory = nullptr;
 
 struct QDefaultFactoryCleaner {
-   inline QDefaultFactoryCleaner() {}
+   QDefaultFactoryCleaner() {
+   }
 
    ~QDefaultFactoryCleaner() {
       delete q_default_factory;

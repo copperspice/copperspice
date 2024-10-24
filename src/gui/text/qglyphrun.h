@@ -76,7 +76,8 @@ class Q_GUI_EXPORT QGlyphRun
    }
 
    bool operator==(const QGlyphRun &other) const;
-   inline bool operator!=(const QGlyphRun &other) const {
+
+   bool operator!=(const QGlyphRun &other) const {
       return !operator==(other);
    }
 

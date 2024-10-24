@@ -49,15 +49,15 @@ class Q_GUI_EXPORT QRubberBand : public QWidget
    inline void setGeometry(int x, int y, int width, int height);
    inline void move(int x, int y);
 
-   inline void move(const QPoint &point) {
+   void move(const QPoint &point) {
       move(point.x(), point.y());
    }
 
-   inline void resize(int width, int height) {
+   void resize(int width, int height) {
       setGeometry(geometry().x(), geometry().y(), width, height);
    }
 
-   inline void resize(const QSize &size) {
+   void resize(const QSize &size) {
       resize(size.width(), size.height());
    }
 

@@ -57,9 +57,15 @@ class QTextFrame;
 class QTextFragmentData : public QFragment<>
 {
  public:
-   inline void initialize() {}
-   inline void invalidate() const {}
-   inline void free() {}
+   void initialize() {
+   }
+
+   void invalidate() const {
+   }
+
+   void free() {
+   }
+
    int stringPosition;
    int format;
 };
@@ -67,7 +73,7 @@ class QTextFragmentData : public QFragment<>
 class QTextBlockData : public QFragment<3>
 {
  public:
-   inline void initialize() {
+   void initialize() {
       layout    = nullptr;
       userData  = nullptr;
       userState = -1;
@@ -77,7 +83,7 @@ class QTextBlockData : public QFragment<3>
 
    void invalidate() const;
 
-   inline void free() {
+   void free() {
       delete layout;
       layout = nullptr;
 
@@ -184,17 +190,17 @@ class QTextDocumentPrivate
 
    int undoRedo(bool undo);
 
-   inline void undo() {
+   void undo() {
       undoRedo(true);
    }
 
-   inline void redo() {
+   void redo() {
       undoRedo(false);
    }
 
    void appendUndoItem(QAbstractUndoItem *);
 
-   inline void beginEditBlock() {
+   void beginEditBlock() {
       if (0 == editBlock++) {
          ++revision;
       }
@@ -203,80 +209,82 @@ class QTextDocumentPrivate
    void joinPreviousEditBlock();
    void endEditBlock();
    void finishEdit();
-   inline bool isInEditBlock() const {
+
+   bool isInEditBlock() const {
       return editBlock;
    }
 
    void enableUndoRedo(bool enable);
-   inline bool isUndoRedoEnabled() const {
+
+   bool isUndoRedoEnabled() const {
       return undoEnabled;
    }
 
-   inline bool isUndoAvailable() const {
+   bool isUndoAvailable() const {
       return undoEnabled && undoState > 0;
    }
 
-   inline bool isRedoAvailable() const {
+   bool isRedoAvailable() const {
       return undoEnabled && undoState < undoStack.size();
    }
 
-   inline int availableUndoSteps() const {
+   int availableUndoSteps() const {
       return undoEnabled ? undoState : 0;
    }
 
-   inline int availableRedoSteps() const {
+   int availableRedoSteps() const {
       return undoEnabled ? qMax(undoStack.size() - undoState - 1, 0) : 0;
    }
 
-   inline QString buffer() const {
+   QString buffer() const {
       return text;
    }
 
    QString plainText() const;
 
-   inline int length() const {
+   int length() const {
       return fragments.length();
    }
 
-   inline QTextFormatCollection *formatCollection() {
+   QTextFormatCollection *formatCollection() {
       return &formats;
    }
 
-   inline const QTextFormatCollection *formatCollection() const {
+   const QTextFormatCollection *formatCollection() const {
       return &formats;
    }
 
-   inline QAbstractTextDocumentLayout *layout() const {
+   QAbstractTextDocumentLayout *layout() const {
       return lout;
    }
 
-   inline FragmentIterator find(int pos) const {
+   FragmentIterator find(int pos) const {
       return fragments.find(pos);
    }
 
-   inline FragmentIterator begin() const {
+   FragmentIterator begin() const {
       return fragments.begin();
    }
 
-   inline FragmentIterator end() const {
+   FragmentIterator end() const {
       return fragments.end();
    }
 
-   inline QTextBlock blocksBegin() const {
+   QTextBlock blocksBegin() const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), blocks.firstNode());
    }
 
-   inline QTextBlock blocksEnd() const {
+   QTextBlock blocksEnd() const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), 0);
    }
 
-   inline QTextBlock blocksFind(int pos) const {
+   QTextBlock blocksFind(int pos) const {
       return QTextBlock(const_cast<QTextDocumentPrivate *>(this), blocks.findNode(pos));
    }
 
    int blockCharFormatIndex(int node) const;
 
-   inline int numBlocks() const {
+   int numBlocks() const {
       return blocks.numNodes();
    }
 
@@ -309,15 +317,15 @@ class QTextDocumentPrivate
 
    void setModified(bool m);
 
-   inline bool isModified() const {
+   bool isModified() const {
       return modified;
    }
 
-   inline QFont defaultFont() const {
+   QFont defaultFont() const {
       return formats.defaultFont();
    }
 
-   inline void setDefaultFont(const QFont &f) {
+   void setDefaultFont(const QFont &f) {
       formats.setDefaultFont(f);
    }
 
@@ -325,11 +333,11 @@ class QTextDocumentPrivate
 
    void documentChange(int from, int length);
 
-   inline void addCursor(QTextCursorPrivate *c) {
+   void addCursor(QTextCursorPrivate *c) {
       cursors.append(c);
    }
 
-   inline void removeCursor(QTextCursorPrivate *c) {
+   void removeCursor(QTextCursorPrivate *c) {
       cursors.removeAll(c);
    }
 

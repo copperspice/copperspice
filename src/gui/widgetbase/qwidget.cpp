@@ -348,7 +348,7 @@ QRegion qt_dirtyRegion(QWidget *widget)
 struct QWidgetExceptionCleaner {
    // cleans up when the constructor throws an exception
 
-   static inline void cleanup(QWidget *that, QWidgetPrivate *d) {
+   static void cleanup(QWidget *that, QWidgetPrivate *d) {
       QWidgetPrivate::allWidgets->remove(that);
 
       if (d->focus_next != that) {

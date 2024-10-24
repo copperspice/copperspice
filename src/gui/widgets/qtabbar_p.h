@@ -167,7 +167,7 @@ class QTabBarPrivate  : public QWidgetPrivate
 
    int indexAtPos(const QPoint &p) const;
 
-   inline bool isAnimated() const {
+   bool isAnimated() const {
       Q_Q(const QTabBar);
       return q->style()->styleHint(QStyle::SH_Widget_Animate, nullptr, q);
    }

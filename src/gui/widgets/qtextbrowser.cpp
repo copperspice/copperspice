@@ -46,7 +46,7 @@ class QTextBrowserPrivate : public QTextEditPrivate
    Q_DECLARE_PUBLIC(QTextBrowser)
 
  public:
-   inline QTextBrowserPrivate()
+   QTextBrowserPrivate()
       : textOrSourceChanged(false), forceLoadOnSourceChange(false), openExternalLinks(false),
         openLinks(true)
 #ifdef QT_KEYPAD_NAVIGATION
@@ -57,7 +57,7 @@ class QTextBrowserPrivate : public QTextEditPrivate
    void init();
 
    struct HistoryEntry {
-      inline HistoryEntry()
+      HistoryEntry()
          : hpos(0), vpos(0), focusIndicatorPosition(-1), focusIndicatorAnchor(-1)
       { }
 

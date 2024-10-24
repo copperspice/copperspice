@@ -594,12 +594,12 @@ QFontEngineFT::Glyph::~Glyph()
 }
 
 struct LcdFilterDummy {
-   static inline void filterPixel(uchar &, uchar &, uchar &)
-   {}
+   static void filterPixel(uchar &, uchar &, uchar &) {
+   }
 };
 
 struct LcdFilterLegacy {
-   static inline void filterPixel(uchar &red, uchar &green, uchar &blue) {
+   static void filterPixel(uchar &red, uchar &green, uchar &blue) {
       uint r = red, g = green, b = blue;
       // intra-pixel filter used by the legacy filter (adopted from _ft_lcd_filter_legacy)
       red   = (r * uint(65538 * 9 / 13) + g * uint(65538 * 1 / 6) + b * uint(65538 * 1 / 13)) / 65536;

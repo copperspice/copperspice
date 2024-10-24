@@ -70,8 +70,13 @@ namespace QPdf {
         QIODevice *stream();
         void clear();
 
-        static inline int maxMemorySize() { return 100000000; }
-        static inline int chunkSize()     { return 10000000; }
+        static int maxMemorySize() {
+           return 100000000;
+        }
+
+        static int chunkSize()     {
+           return 10000000;
+        }
 
     protected:
         void constructor_helper(QIODevice *dev);
@@ -204,7 +209,9 @@ public:
     QPdfEnginePrivate();
     ~QPdfEnginePrivate();
 
-    inline uint requestObject() { return currentObject++; }
+    uint requestObject() {
+       return currentObject++;
+    }
 
     void writeHeader();
     void writeTail();
@@ -277,13 +284,17 @@ private:
     void printString(const QString &string);
     void xprintf(const char* fmt, ...);
 
-    inline void write(const QByteArray &data) {
+    void write(const QByteArray &data) {
         stream->writeRawData(data.constData(), data.size());
         streampos += data.size();
     }
 
     int writeCompressed(const char *src, int len);
-    inline int writeCompressed(const QByteArray &data) { return writeCompressed(data.constData(), data.length()); }
+
+    int writeCompressed(const QByteArray &data) {
+       return writeCompressed(data.constData(), data.length());
+    }
+
     int writeCompressed(QIODevice *dev);
 
     // various PDF objects

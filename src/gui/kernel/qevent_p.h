@@ -75,7 +75,7 @@ class QTouchEventTouchPointPrivate
 class QTabletEventPrivate
 {
  public:
-   inline QTabletEventPrivate(Qt::MouseButton button, Qt::MouseButtons buttons)
+   QTabletEventPrivate(Qt::MouseButton button, Qt::MouseButtons buttons)
       : b(button), buttonState(buttons)
    {
    }

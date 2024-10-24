@@ -52,29 +52,31 @@ class Graph
          }
       }
 
-      inline Vertex *operator*() {
+      Vertex *operator*() {
          return column.key();
       }
 
-      inline Vertex *from() const {
+      Vertex *from() const {
          return row.key();
       }
 
-      inline Vertex *to() const {
+      Vertex *to() const {
          return column.key();
       }
 
-      inline bool operator==(const const_iterator &o) const {
+      bool operator==(const const_iterator &o) const {
          return !(*this != o);
       }
-      inline bool operator!=(const const_iterator &o) const {
+
+      bool operator!=(const const_iterator &o) const {
          if (row ==  g->m_graph.end()) {
             return row != o.row;
          } else {
             return row != o.row || column != o.column;
          }
       }
-      inline const_iterator &operator=(const const_iterator &o) const {
+
+      const_iterator &operator=(const const_iterator &o) const {
          row = o.row;
          column = o.column;
          return *this;

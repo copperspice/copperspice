@@ -132,25 +132,25 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
             ? Qt::Alignment(Qt::AlignCenter) : Qt::AlignLeft | Qt::AlignVCenter);
    }
 
-   inline bool isVisualIndexHidden(int visual) const {
+   bool isVisualIndexHidden(int visual) const {
       return sectionItems.at(visual).isHidden;
    }
 
-   inline void setVisualIndexHidden(int visual, bool hidden) {
+   void setVisualIndexHidden(int visual, bool hidden) {
       sectionItems[visual].isHidden = hidden;
    }
 
-   inline bool hasAutoResizeSections() const {
+   bool hasAutoResizeSections() const {
       return stretchSections || stretchLastSection || contentsSections;
    }
 
    QStyleOptionHeader getStyleOption() const;
 
-   inline void invalidateCachedSizeHint() const {
+   void invalidateCachedSizeHint() const {
       cachedSizeHint = QSize();
    }
 
-   inline void initializeIndexMapping() const {
+   void initializeIndexMapping() const {
       if (visualIndices.count() != sectionCount() || logicalIndices.count() != sectionCount()) {
          visualIndices.resize(sectionCount());
          logicalIndices.resize(sectionCount());
@@ -162,13 +162,13 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
       }
    }
 
-   inline void clearCascadingSections() {
+   void clearCascadingSections() {
       firstCascadingSection = sectionItems.count();
       lastCascadingSection  = 0;
       cascadingSectionSize.clear();
    }
 
-   inline void saveCascadingSectionSize(int visual, int size) {
+   void saveCascadingSectionSize(int visual, int size) {
       if (! cascadingSectionSize.contains(visual)) {
          cascadingSectionSize.insert(visual, size);
          firstCascadingSection = qMin(firstCascadingSection, visual);
@@ -176,32 +176,32 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
       }
    }
 
-   inline bool sectionIsCascadable(int visual) const {
+   bool sectionIsCascadable(int visual) const {
       return headerSectionResizeMode(visual) == QHeaderView::Interactive;
    }
 
-   inline int modelSectionCount() const {
+   int modelSectionCount() const {
       return (orientation == Qt::Horizontal
             ? model->columnCount(root) : model->rowCount(root));
    }
 
-   inline bool modelIsEmpty() const {
+   bool modelIsEmpty() const {
       return (model->rowCount(root) == 0 || model->columnCount(root) == 0);
    }
 
-   inline void doDelayedResizeSections() {
+   void doDelayedResizeSections() {
       if (!delayedResize.isActive()) {
          delayedResize.start(0, q_func());
       }
    }
 
-   inline void executePostedResize() const {
+   void executePostedResize() const {
       if (delayedResize.isActive() && state == NoState) {
          const_cast<QHeaderView *>(q_func())->resizeSections();
       }
    }
 
-   inline void setAllowUserMoveOfSection0(bool b) {
+   void setAllowUserMoveOfSection0(bool b) {
       allowUserMoveOfSection0 = b;
    }
 
@@ -275,29 +275,29 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
          int tmpDataStreamSectionCount;       // recalcSectionStartPos() or set sectionStartposRecalc to true
       };                                      // to ensure that calculated_startpos will be calculated afterwards.
 
-      inline SectionItem()
+      SectionItem()
          : size(0), isHidden(0), resizeMode(QHeaderView::Interactive)
       { }
 
-      inline SectionItem(int length, QHeaderView::ResizeMode mode)
+      SectionItem(int length, QHeaderView::ResizeMode mode)
          : size(length), isHidden(0), resizeMode(mode), calculated_startpos(-1)
       { }
 
-      inline int sectionSize() const {
+      int sectionSize() const {
          return size;
       }
 
-      inline int calculatedEndPos() const {
+      int calculatedEndPos() const {
          return calculated_startpos + size;
       }
 
-      inline void write(QDataStream &out) const {
+      void write(QDataStream &out) const {
          out << static_cast<int>(size);
          out << 1;
          out << (int)resizeMode;
       }
 
-      inline void read(QDataStream &in) {
+      void read(QDataStream &in) {
          int m;
          in >> m;
          size = m;
@@ -316,7 +316,7 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    void updateDefaultSectionSizeFromStyle();
    void recalcSectionStartPos() const;           // not really const
 
-   inline int headerLength() const {
+   int headerLength() const {
       // for debugging
       int len = 0;
 

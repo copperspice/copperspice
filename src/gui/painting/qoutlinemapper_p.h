@@ -144,8 +144,7 @@ class QOutlineMapper
    QT_FT_Outline *convertPath(const QPainterPath &path);
    QT_FT_Outline *convertPath(const QVectorPath &path);
 
-   inline const QPainterPath::ElementType *elementTypes() const {
-
+   const QPainterPath::ElementType *elementTypes() const {
       if (m_element_types.size() == 0) {
          return nullptr;
       } else {

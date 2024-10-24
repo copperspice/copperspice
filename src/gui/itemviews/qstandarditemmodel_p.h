@@ -37,11 +37,18 @@
 class QStandardItemData
 {
  public:
-   inline QStandardItemData() : role(-1) {}
-   inline QStandardItemData(int r, const QVariant &v) : role(r), value(v) {}
+   QStandardItemData()
+      : role(-1)
+   { }
+
+   QStandardItemData(int r, const QVariant &v)
+      : role(r), value(v)
+   { }
+
    int role;
    QVariant value;
-   inline bool operator==(const QStandardItemData &other) const {
+
+   bool operator==(const QStandardItemData &other) const {
       return role == other.role && value == other.value;
    }
 };
@@ -65,21 +72,22 @@ class QStandardItemPrivate
    Q_DECLARE_PUBLIC(QStandardItem)
 
  public:
-   inline QStandardItemPrivate()
+   QStandardItemPrivate()
       : model(nullptr), parent(nullptr), rows(0), columns(0), q_ptr(nullptr), lastIndexOf(2)
    {
    }
 
    virtual ~QStandardItemPrivate();
 
-   inline int childIndex(int row, int column) const {
+   int childIndex(int row, int column) const {
       if ((row < 0) || (column < 0)
          || (row >= rowCount()) || (column >= columnCount())) {
          return -1;
       }
       return (row * columnCount()) + column;
    }
-   inline int childIndex(const QStandardItem *child) {
+
+   int childIndex(const QStandardItem *child) {
       int start = qMax(0, lastIndexOf - 2);
       lastIndexOf = children.indexOf(const_cast<QStandardItem *>(child), start);
       if (lastIndexOf == -1 && start != 0) {
@@ -91,18 +99,19 @@ class QStandardItemPrivate
    QPair<int, int> position() const;
    void setChild(int row, int column, QStandardItem *item,
       bool emitChanged = false);
-   inline int rowCount() const {
+
+   int rowCount() const {
       return rows;
    }
 
-   inline int columnCount() const {
+   int columnCount() const {
       return columns;
    }
 
    void childDeleted(QStandardItem *child);
    void setModel(QStandardItemModel *mod);
 
-   inline void setParentAndModel(
+   void setParentAndModel(
       QStandardItem *par,
       QStandardItemModel *mod) {
       setModel(mod);
@@ -141,11 +150,11 @@ class QStandardItemModelPrivate : public QAbstractItemModelPrivate
 
    void init();
 
-   inline QStandardItem *createItem() const {
+   QStandardItem *createItem() const {
       return itemPrototype ? itemPrototype->clone() : new QStandardItem;
    }
 
-   inline QStandardItem *itemFromIndex(const QModelIndex &index) const {
+   QStandardItem *itemFromIndex(const QModelIndex &index) const {
       Q_Q(const QStandardItemModel);
 
       if (!index.isValid()) {

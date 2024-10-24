@@ -126,13 +126,13 @@ struct QScriptAnalysis {
    unsigned short bidiLevel : 6;  // Unicode Bidi algorithm embedding level (0-61)
    unsigned short flags     : 3;
 
-   inline bool operator == (const QScriptAnalysis &other) const {
+   bool operator == (const QScriptAnalysis &other) const {
       return script == other.script && bidiLevel == other.bidiLevel && flags == other.flags;
    }
 };
 
 struct QGlyphJustification {
-   inline QGlyphJustification()
+   QGlyphJustification()
       : type(0), nKashidas(0), space_18d6(0) {
    }
 
@@ -212,7 +212,7 @@ struct QGlyphLayout {
       return (advances[item] + QFixed::fromFixed(justifications[item].space_18d6)) * ! attributes[item].dontPrint;
    }
 
-   inline void clear(int first = 0, int last = -1) {
+   void clear(int first = 0, int last = -1) {
       if (last == -1) {
          last = numGlyphs;
       }
@@ -226,7 +226,7 @@ struct QGlyphLayout {
       memset(attributes + first, 0, num * sizeof(QGlyphAttributes));
    }
 
-   inline char *data() {
+   char *data() {
       return reinterpret_cast<char *>(offsets);
    }
 
@@ -277,7 +277,7 @@ struct QGlyphLayoutArray : public QGlyphLayout {
 class QTextItemInt : public QTextItem
 {
  public:
-   inline QTextItemInt()
+   QTextItemInt()
       : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), fontEngine(nullptr) {
    }
 
@@ -312,11 +312,11 @@ class QTextItemInt : public QTextItem
 };
 
 struct QScriptItem {
-   inline QScriptItem()
+   QScriptItem()
       : position(0), num_glyphs(0), descent(-1), ascent(-1), leading(-1), width(-1), glyph_data_offset(0)
    {}
 
-   inline QScriptItem(int p, const QScriptAnalysis &a)
+   QScriptItem(int p, const QScriptAnalysis &a)
       : position(p), analysis(a), num_glyphs(0), descent(-1), ascent(-1), leading(-1), width(-1), glyph_data_offset(0)
    {}
 
@@ -483,23 +483,23 @@ class Q_GUI_EXPORT QTextEngine
                   QFixed *leading = nullptr) const;
 
    QFont font(const QScriptItem &si) const;
-   inline QFont font() const {
+   QFont font() const {
       return fnt;
    }
 
-   inline unsigned short *logClusters(const QScriptItem *si) const {
+   unsigned short *logClusters(const QScriptItem *si) const {
       return layoutData->logClustersPtr + si->position;
    }
 
-   inline QGlyphLayout availableGlyphs(const QScriptItem *si) const {
+   QGlyphLayout availableGlyphs(const QScriptItem *si) const {
       return layoutData->glyphLayout.mid(si->glyph_data_offset);
    }
 
-   inline QGlyphLayout shapedGlyphs(const QScriptItem *si) const {
+   QGlyphLayout shapedGlyphs(const QScriptItem *si) const {
       return layoutData->glyphLayout.mid(si->glyph_data_offset, si->num_glyphs);
    }
 
-   inline bool ensureSpace(int nGlyphs) const {
+   bool ensureSpace(int nGlyphs) const {
       if (layoutData->glyphLayout.numGlyphs - layoutData->used < nGlyphs) {
          return layoutData->reallocate((((layoutData->used + nGlyphs) * 3 / 2 + 15) >> 4) << 4);
       }
@@ -510,7 +510,7 @@ class Q_GUI_EXPORT QTextEngine
    void freeMemory();
    int findItem(int strPos, int firstItem = 0) const;
 
-   inline QTextFormatCollection *formatCollection() const {
+   QTextFormatCollection *formatCollection() const {
       if (block.docHandle()) {
          return block.docHandle()->formatCollection();
       }
@@ -519,7 +519,7 @@ class Q_GUI_EXPORT QTextEngine
 
    QTextCharFormat format(const QScriptItem *si) const;
 
-   inline QAbstractTextDocumentLayout *docLayout() const {
+   QAbstractTextDocumentLayout *docLayout() const {
       Q_ASSERT(block.docHandle());
       return block.docHandle()->document()->documentLayout();
    }
@@ -556,23 +556,24 @@ class Q_GUI_EXPORT QTextEngine
    ItemDecorationList strikeOutList;
    ItemDecorationList overlineList;
 
-   inline bool visualCursorMovement() const {
+   bool visualCursorMovement() const {
       return visualMovement || (block.docHandle() && block.docHandle()->defaultCursorMoveStyle == Qt::VisualMoveStyle);
    }
 
-   inline int preeditAreaPosition() const {
+   int preeditAreaPosition() const {
       return specialData ? specialData->preeditPosition : -1;
    }
-   inline QString preeditAreaText() const {
+
+   QString preeditAreaText() const {
       return specialData ? specialData->preeditText : QString();
    }
    void setPreeditArea(int position, const QString &text);
 
-   inline bool hasFormats() const {
+   bool hasFormats() const {
       return block.docHandle() || (specialData && !specialData->formats.isEmpty());
    }
 
-   inline QVector<QTextLayout::FormatRange> formats() const {
+   QVector<QTextLayout::FormatRange> formats() const {
       return specialData ? specialData->formats : QVector<QTextLayout::FormatRange>();
    }
 
@@ -615,7 +616,7 @@ class Q_GUI_EXPORT QTextEngine
       mutable int prevPosition;
       mutable int prevLength;
 
-      inline void reset() {
+      void reset() {
          prevFontEngine = nullptr;
          prevScaledFontEngine = nullptr;
          prevScript = -1;

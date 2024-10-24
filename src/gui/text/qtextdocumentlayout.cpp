@@ -208,7 +208,7 @@ class QTextTableData : public QTextFrameData
    void updateTableSize();
 
  private:
-   inline QFixedPoint cellPosition(int row, int col) const {
+   QFixedPoint cellPosition(int row, int col) const {
       return QFixedPoint(columnPositions.at(col), rowPositions.at(row) + cellVerticalOffsets.at(col + row * widths.size()));
    }
 };
@@ -501,7 +501,8 @@ class QTextDocumentLayoutPrivate : public QAbstractTextDocumentLayoutPrivate
 
    void ensureLayouted(QFixed y) const;
    void ensureLayoutedByPosition(int position) const;
-   inline void ensureLayoutFinished() const {
+
+   void ensureLayoutFinished() const {
       ensureLayoutedByPosition(INT_MAX);
    }
    void layoutStep() const;

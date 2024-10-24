@@ -50,11 +50,11 @@ class QTextCopyHelper
    int appendFragment(int pos, int endPos, int objectIndex = -1);
    int convertFormatIndex(const QTextFormat &oldFormat, int objectIndexToSet = -1);
 
-   inline int convertFormatIndex(int oldFormatIndex, int objectIndexToSet = -1) {
+   int convertFormatIndex(int oldFormatIndex, int objectIndexToSet = -1) {
       return convertFormatIndex(src->formatCollection()->format(oldFormatIndex), objectIndexToSet);
    }
 
-   inline QTextFormat convertFormat(const QTextFormat &fmt) {
+   QTextFormat convertFormat(const QTextFormat &fmt) {
       return dst->formatCollection()->format(convertFormatIndex(fmt));
    }
 
@@ -124,7 +124,10 @@ class QTextHtmlImporter : public QTextHtmlParser
    ProcessNodeResult processSpecialNodes();
 
    struct List {
-      inline List() : listNode(0) {}
+      List()
+         : listNode(0)
+      { }
+
       QTextListFormat format;
       int listNode;
       QPointer<QTextList> list;
@@ -138,12 +141,12 @@ class QTextHtmlImporter : public QTextHtmlParser
    QStringList namedAnchors;
 
    struct TableCellIterator {
-      inline TableCellIterator(QTextTable *t = nullptr)
+      TableCellIterator(QTextTable *t = nullptr)
          : table(t), row(0), column(0)
       {
       }
 
-      inline TableCellIterator &operator++() {
+      TableCellIterator &operator++() {
          if (atEnd()) {
             return *this;
          }
@@ -162,7 +165,7 @@ class QTextHtmlImporter : public QTextHtmlParser
          return *this;
       }
 
-      inline bool atEnd() const {
+      bool atEnd() const {
          return table == nullptr || row >= table->rows();
       }
 

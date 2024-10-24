@@ -140,8 +140,10 @@ class Q_GUI_EXPORT QStyleOptionTabWidgetFrame : public QStyleOption
    enum StyleOptionVersion { Version = 2 };
 
    QStyleOptionTabWidgetFrame();
-   inline QStyleOptionTabWidgetFrame(const QStyleOptionTabWidgetFrame &other)
-      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type) {
+
+   QStyleOptionTabWidgetFrame(const QStyleOptionTabWidgetFrame &other)
+      : QStyleOption(StyleOptionVersion::Version, StyleOptionType::Type)
+   {
       *this = other;
    }
 

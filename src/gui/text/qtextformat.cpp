@@ -58,29 +58,33 @@ class QTextFormatPrivate : public QSharedData
    QTextFormatPrivate() : hashDirty(true), fontDirty(true), hashValue(0) {}
 
    struct Property {
-      inline Property(qint32 k, const QVariant &v) : key(k), value(v) {}
-      inline Property() {}
+      Property(qint32 k, const QVariant &v)
+         : key(k), value(v)
+      { }
+
+      Property()
+      { }
 
       qint32 key;
       QVariant value;
 
-      inline bool operator==(const Property &other) const {
+      bool operator==(const Property &other) const {
          return key == other.key && value == other.value;
       }
 
-      inline bool operator!=(const Property &other) const {
+      bool operator!=(const Property &other) const {
          return key != other.key || value != other.value;
       }
    };
 
-   inline uint hash() const {
+   uint hash() const {
       if (!hashDirty) {
          return hashValue;
       }
       return recalcHash();
    }
 
-   inline bool operator==(const QTextFormatPrivate &rhs) const {
+   bool operator==(const QTextFormatPrivate &rhs) const {
       if (hash() != rhs.hash()) {
          return false;
       }
@@ -88,7 +92,7 @@ class QTextFormatPrivate : public QSharedData
       return props == rhs.props;
    }
 
-   inline void insertProperty(qint32 key, const QVariant &value) {
+   void insertProperty(qint32 key, const QVariant &value) {
       hashDirty = true;
 
       if (key >= QTextFormat::FirstFontProperty && key <= QTextFormat::LastFontProperty) {
@@ -105,7 +109,7 @@ class QTextFormatPrivate : public QSharedData
       props.append(Property(key, value));
    }
 
-   inline void clearProperty(qint32 key) {
+   void clearProperty(qint32 key) {
       for (int i = 0; i < props.count(); ++i)
          if (props.at(i).key == key) {
             hashDirty = true;
@@ -120,7 +124,7 @@ class QTextFormatPrivate : public QSharedData
          }
    }
 
-   inline int propertyIndex(qint32 key) const {
+   int propertyIndex(qint32 key) const {
       for (int i = 0; i < props.count(); ++i) {
          if (props.at(i).key == key) {
             return i;
@@ -130,7 +134,7 @@ class QTextFormatPrivate : public QSharedData
       return -1;
    }
 
-   inline QVariant property(qint32 key) const {
+   QVariant property(qint32 key) const {
       const int idx = propertyIndex(key);
       if (idx < 0) {
          return QVariant();
@@ -139,13 +143,13 @@ class QTextFormatPrivate : public QSharedData
       return props.at(idx).value;
    }
 
-   inline bool hasProperty(qint32 key) const {
+   bool hasProperty(qint32 key) const {
       return propertyIndex(key) != -1;
    }
 
    void resolveFont(const QFont &defaultFont);
 
-   inline const QFont &font() const {
+   const QFont &font() const {
       if (fontDirty) {
          recalcFont();
       }

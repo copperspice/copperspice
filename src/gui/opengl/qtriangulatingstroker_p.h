@@ -42,10 +42,17 @@ class Q_GUI_EXPORT QTriangulatingStroker
 
     void process(const QVectorPath &path, const QPen &pen, const QRectF &clip, QPainter::RenderHints hints);
 
-    inline int vertexCount() const { return m_vertices.size(); }
-    inline const float *vertices() const { return m_vertices.data(); }
+    int vertexCount() const {
+       return m_vertices.size();
+    }
 
-    inline void setInvScale(qreal invScale) { m_inv_scale = invScale; }
+    const float *vertices() const {
+       return m_vertices.data();
+    }
+
+    void setInvScale(qreal invScale) {
+       m_inv_scale = invScale;
+    }
 
  private:
     inline void emitLineSegment(float x, float y, float nx, float ny);
@@ -83,25 +90,27 @@ class Q_GUI_EXPORT QDashedStrokeProcessor
 
     void process(const QVectorPath &path, const QPen &pen, const QRectF &clip, QPainter::RenderHints hints);
 
-    inline void addElement(QPainterPath::ElementType type, qreal x, qreal y) {
+    void addElement(QPainterPath::ElementType type, qreal x, qreal y) {
         m_points.append(x);
         m_points.append(y);
         m_types.append(type);
     }
 
-    inline int elementCount() const {
+    int elementCount() const {
        return m_types.size();
     }
 
-    inline const qreal *points() const {
+    const qreal *points() const {
        return m_points.data();
     }
 
-    inline const QPainterPath::ElementType *elementTypes() const {
+    const QPainterPath::ElementType *elementTypes() const {
        return m_types.data();
     }
 
-    inline void setInvScale(qreal invScale) { m_inv_scale = invScale; }
+    void setInvScale(qreal invScale) {
+       m_inv_scale = invScale;
+    }
 
  private:
     QVector<qreal> m_points;
@@ -110,8 +119,7 @@ class Q_GUI_EXPORT QDashedStrokeProcessor
     qreal m_inv_scale;
 };
 
-inline void QTriangulatingStroker::normalVector(float x1, float y1, float x2, float y2,
-                                                float *nx, float *ny)
+inline void QTriangulatingStroker::normalVector(float x1, float y1, float x2, float y2, float *nx, float *ny)
 {
     float dx = x2 - x1;
     float dy = y2 - y1;

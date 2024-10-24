@@ -803,21 +803,18 @@ void comp_func_XOR_rgb64(QRgba64 *__restrict dest, const QRgba64 *__restrict src
 }
 
 struct QFullCoverage {
-    inline void store(uint *dest, const uint src) const
-    {
+    void store(uint *dest, const uint src) const {
         *dest = src;
     }
 };
 
 struct QPartialCoverage {
-    inline QPartialCoverage(uint const_alpha)
-        : ca(const_alpha)
-        , ica(255 - const_alpha)
+    QPartialCoverage(uint const_alpha)
+        : ca(const_alpha), ica(255 - const_alpha)
     {
     }
 
-    inline void store(uint *dest, const uint src) const
-    {
+    void store(uint *dest, const uint src) const {
         *dest = INTERPOLATE_PIXEL_255(src, ca, *dest, ica);
     }
 

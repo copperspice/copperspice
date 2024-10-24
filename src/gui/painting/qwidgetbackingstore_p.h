@@ -204,13 +204,13 @@ class QWidgetBackingStore
       }
    }
 
-   inline void removeStaticWidget(QWidget *widget) {
+   void removeStaticWidget(QWidget *widget) {
       staticWidgets.removeAll(widget);
    }
 
    // Move the reparented widget and all its static children from this backing store
    // to the new backing store if reparented into another top-level / backing store.
-   inline void moveStaticWidgets(QWidget *reparented) {
+   void moveStaticWidgets(QWidget *reparented) {
       Q_ASSERT(reparented);
       QWidgetBackingStore *newBs = reparented->d_func()->maybeBackingStore();
       if (newBs == this) {

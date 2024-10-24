@@ -37,7 +37,7 @@ class QInputMethodPrivate
    Q_DECLARE_PUBLIC(QInputMethod)
 
  public:
-   inline QInputMethodPrivate()
+   QInputMethodPrivate()
       : testContext(nullptr)
    {
    }
@@ -50,7 +50,7 @@ class QInputMethodPrivate
       }
    }
 
-   static inline QInputMethodPrivate *get(QInputMethod *inputMethod) {
+   static QInputMethodPrivate *get(QInputMethod *inputMethod) {
       return inputMethod->d_func();
    }
 

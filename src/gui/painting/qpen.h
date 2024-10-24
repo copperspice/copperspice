@@ -113,7 +113,7 @@ class Q_GUI_EXPORT QPen
 
    typedef QPenPrivate *DataPtr;
 
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 

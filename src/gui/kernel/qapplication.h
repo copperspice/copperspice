@@ -217,7 +217,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
 
    static QWidget *widgetAt(const QPoint &point);
 
-   static inline QWidget *widgetAt(int x, int y) {
+   static QWidget *widgetAt(int x, int y) {
       return widgetAt(QPoint(x, y));
    }
    static void beep();
@@ -301,11 +301,11 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
    // wrapper for static method
    inline Qt::LayoutDirection cs_layoutDirection() const;
 
-   static inline bool isRightToLeft() {
+   static bool isRightToLeft() {
       return layoutDirection() == Qt::RightToLeft;
    }
 
-   static inline bool isLeftToRight() {
+   static bool isLeftToRight() {
       return layoutDirection() == Qt::LeftToRight;
    }
 

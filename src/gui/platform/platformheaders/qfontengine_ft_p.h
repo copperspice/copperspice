@@ -150,7 +150,7 @@ class QFontEngineFT : public QFontEngine
       void removeGlyphFromCache(glyph_t index, QFixed subPixelPosition);
       void clear();
 
-      inline bool useFastGlyphData(glyph_t index, QFixed subPixelPosition) const {
+      bool useFastGlyphData(glyph_t index, QFixed subPixelPosition) const {
          return (index < 256 && subPixelPosition == 0);
       }
 
@@ -158,11 +158,11 @@ class QFontEngineFT : public QFontEngine
 
       void setGlyph(glyph_t index, QFixed spp, Glyph *glyph);
 
-      inline bool isGlyphMissing(glyph_t index) const {
+      bool isGlyphMissing(glyph_t index) const {
          return missing_glyphs.contains(index);
       }
 
-      inline void setGlyphMissing(glyph_t index) const {
+      void setGlyphMissing(glyph_t index) const {
          missing_glyphs.insert(index);
       }
 

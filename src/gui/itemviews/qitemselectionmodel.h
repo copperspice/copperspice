@@ -41,7 +41,7 @@ CS_DECLARE_METATYPE(QItemSelection)
 class Q_GUI_EXPORT QItemSelectionRange
 {
  public:
-   inline QItemSelectionRange()
+   QItemSelectionRange()
       : tl(), br()
    { }
 
@@ -51,11 +51,11 @@ class Q_GUI_EXPORT QItemSelectionRange
    QItemSelectionRange &operator=(const QItemSelectionRange &other) = default;
    QItemSelectionRange &operator=(QItemSelectionRange &&other) = default;
 
-   inline QItemSelectionRange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+   QItemSelectionRange(const QModelIndex &topLeft, const QModelIndex &bottomRight)
       : tl(topLeft), br(bottomRight)
    { }
 
-   explicit inline QItemSelectionRange(const QModelIndex &index)
+   explicit QItemSelectionRange(const QModelIndex &index)
       : tl(index), br(index)
    { }
 
@@ -155,7 +155,7 @@ class Q_GUI_EXPORT QItemSelectionRange
       return tl.model() < other.tl.model();
    }
 
-   inline bool isValid() const {
+   bool isValid() const {
       return (tl.isValid() && br.isValid() && tl.parent() == br.parent()
             && top() <= bottom() && left() <= right());
    }

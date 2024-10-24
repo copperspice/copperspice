@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QColor
 
    static QStringList colorNames();
 
-   inline Spec spec() const {
+   Spec spec() const {
       return cspec;
    }
 

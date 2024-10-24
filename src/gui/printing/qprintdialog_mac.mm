@@ -48,7 +48,9 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
    void openCocoaPrintPanel(Qt::WindowModality modality);
    void closeCocoaPrintPanel();
 
-   inline QPrintDialog *printDialog() { return q_func(); }
+   QPrintDialog *printDialog() {
+      return q_func();
+   }
 
    NSPrintInfo *printInfo;
    NSPrintPanel *printPanel;

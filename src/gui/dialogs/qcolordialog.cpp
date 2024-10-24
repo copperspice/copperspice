@@ -186,53 +186,53 @@ class QWellArray : public QWidget
 
    QSize sizeHint() const override;
 
-   inline int cellWidth() const {
+   int cellWidth() const {
       return cellw;
    }
 
-   inline int cellHeight() const {
+   int cellHeight() const {
       return cellh;
    }
 
-   inline int rowAt(int y) const {
+   int rowAt(int y) const {
       return y / cellh;
    }
 
-   inline int columnAt(int x) const {
+   int columnAt(int x) const {
       if (isRightToLeft()) {
          return ncols - (x / cellw) - 1;
       }
       return x / cellw;
    }
 
-   inline int rowY(int row) const {
+   int rowY(int row) const {
       return cellh * row;
    }
 
-   inline int columnX(int column) const {
+   int columnX(int column) const {
       if (isRightToLeft()) {
          return cellw * (ncols - column - 1);
       }
       return cellw * column;
    }
 
-   inline int numRows() const {
+   int numRows() const {
       return nrows;
    }
 
-   inline int numCols() const {
+   int numCols() const {
       return ncols;
    }
 
-   inline QRect cellRect() const {
+   QRect cellRect() const {
       return QRect(0, 0, cellw, cellh);
    }
 
-   inline QSize gridSize() const {
+   QSize gridSize() const {
       return QSize(ncols * cellw, nrows * cellh);
    }
 
-   inline QRect cellGeometry(int row, int column) {
+   QRect cellGeometry(int row, int column) {
       QRect r;
       if (row >= 0 && row < nrows && column >= 0 && column < ncols) {
          r.setRect(columnX(column), rowY(row), cellw, cellh);
@@ -240,7 +240,7 @@ class QWellArray : public QWidget
       return r;
    }
 
-   inline void updateCell(int row, int column) {
+   void updateCell(int row, int column) {
       update(cellGeometry(row, column));
    }
 

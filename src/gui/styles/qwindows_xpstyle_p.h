@@ -506,7 +506,8 @@ class QWindowsXPStylePrivate : public QWindowsStylePrivate, public QWindowsUxThe
 
    static HTHEME createTheme(int theme, HWND hwnd);
    static QString themeName(int theme);
-   static inline bool hasTheme(int theme) {
+
+   static bool hasTheme(int theme) {
       return theme >= 0 && theme < NThemes && m_themes[theme];
    }
 

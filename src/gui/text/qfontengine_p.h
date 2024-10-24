@@ -132,7 +132,7 @@ class Q_GUI_EXPORT QFontEngine
 
    virtual ~QFontEngine();
 
-   inline Type type() const {
+   Type type() const {
       return m_type;
    }
 
@@ -262,7 +262,7 @@ class Q_GUI_EXPORT QFontEngine
    virtual void setDefaultHintStyle(HintStyle) {
    }
 
-   inline QVariant userData() const {
+   QVariant userData() const {
       return m_userData;
    }
 
@@ -290,7 +290,7 @@ class Q_GUI_EXPORT QFontEngine
       uint left_right;
       QFixed adjust;
 
-      inline bool operator<(const KernPair &other) const {
+      bool operator<(const KernPair &other) const {
          return left_right < other.left_right;
       }
    };
@@ -307,7 +307,7 @@ class Q_GUI_EXPORT QFontEngine
 
    QFixed lastRightBearing(const QGlyphLayout &glyphs, bool round = false);
 
-   inline void setUserData(const QVariant &userData) {
+   void setUserData(const QVariant &userData) {
       m_userData = userData;
    }
 
@@ -448,11 +448,11 @@ class Q_GUI_EXPORT QFontEngineMulti : public QFontEngine
 
    bool canRender(QStringView str) const override;
 
-   inline int fallbackFamilyCount() const {
+   int fallbackFamilyCount() const {
       return m_fallbackFamilies.size();
    }
 
-   inline QString fallbackFamilyAt(int at) const {
+   QString fallbackFamilyAt(int at) const {
       return m_fallbackFamilies.at(at);
    }
 

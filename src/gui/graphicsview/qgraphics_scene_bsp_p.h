@@ -69,11 +69,11 @@ class QGraphicsSceneBspTree
    QList<QGraphicsItem *> items(const QRectF &rect, bool onlyTopLevelItems = false) const;
    int leafCount() const;
 
-   inline int firstChildIndex(int index) const {
+   int firstChildIndex(int index) const {
       return index * 2 + 1;
    }
 
-   inline int parentIndex(int index) const {
+   int parentIndex(int index) const {
       return index > 0 ? ((index & 1) ? ((index - 1) / 2) : ((index - 2) / 2)) : -1;
    }
 

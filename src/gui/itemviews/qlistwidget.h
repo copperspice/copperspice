@@ -69,54 +69,54 @@ class Q_GUI_EXPORT QListWidgetItem
    inline void setHidden(bool hide);
    inline bool isHidden() const;
 
-   inline Qt::ItemFlags flags() const {
+   Qt::ItemFlags flags() const {
       return itemFlags;
    }
    void setFlags(Qt::ItemFlags flags);
 
-   inline QString text() const {
+   QString text() const {
       return data(Qt::DisplayRole).toString();
    }
    inline void setText(const QString &text);
 
-   inline QIcon icon() const {
+   QIcon icon() const {
       return data(Qt::DecorationRole).value<QIcon>();
    }
    inline void setIcon(const QIcon &icon);
 
-   inline QString statusTip() const {
+   QString statusTip() const {
       return data(Qt::StatusTipRole).toString();
    }
    inline void setStatusTip(const QString &statusTip);
 
 #ifndef QT_NO_TOOLTIP
-   inline QString toolTip() const {
+   QString toolTip() const {
       return data(Qt::ToolTipRole).toString();
    }
    inline void setToolTip(const QString &toolTip);
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-   inline QString whatsThis() const {
+   QString whatsThis() const {
       return data(Qt::WhatsThisRole).toString();
    }
    inline void setWhatsThis(const QString &whatsThis);
 #endif
 
-   inline QFont font() const {
+   QFont font() const {
       return data(Qt::FontRole).value<QFont>();
    }
 
    inline void setFont(const QFont &font);
 
-   inline int textAlignment() const {
+   int textAlignment() const {
       return data(Qt::TextAlignmentRole).toInt();
    }
-   inline void setTextAlignment(int alignment) {
+   void setTextAlignment(int alignment) {
       setData(Qt::TextAlignmentRole, alignment);
    }
 
-   inline QColor backgroundColor() const {
+   QColor backgroundColor() const {
       return data(Qt::BackgroundColorRole).value<QColor>();
    }
 
@@ -124,42 +124,43 @@ class Q_GUI_EXPORT QListWidgetItem
       setData(Qt::BackgroundColorRole, color);
    }
 
-   inline QBrush background() const {
+   QBrush background() const {
       return data(Qt::BackgroundRole).value<QBrush>();
    }
 
-   inline void setBackground(const QBrush &brush) {
+   void setBackground(const QBrush &brush) {
       setData(Qt::BackgroundRole, brush);
    }
 
-   inline QColor textColor() const {
+   QColor textColor() const {
       return data(Qt::TextColorRole).value<QColor>();
    }
 
-   inline void setTextColor(const QColor &color) {
+   void setTextColor(const QColor &color) {
       setData(Qt::TextColorRole, color);
    }
 
-   inline QBrush foreground() const {
+   QBrush foreground() const {
       return data(Qt::ForegroundRole).value<QBrush>();
    }
 
-   inline void setForeground(const QBrush &brush) {
+   void setForeground(const QBrush &brush) {
       setData(Qt::ForegroundRole, brush);
    }
 
-   inline Qt::CheckState checkState() const {
+   Qt::CheckState checkState() const {
       return static_cast<Qt::CheckState>(data(Qt::CheckStateRole).toInt());
    }
-   inline void setCheckState(Qt::CheckState state) {
+
+   void setCheckState(Qt::CheckState state) {
       setData(Qt::CheckStateRole, static_cast<int>(state));
    }
 
-   inline QSize sizeHint() const {
+   QSize sizeHint() const {
       return data(Qt::SizeHintRole).value<QSize>();
    }
 
-   inline void setSizeHint(const QSize &size) {
+   void setSizeHint(const QSize &size) {
       setData(Qt::SizeHintRole, size);
    }
 
@@ -174,7 +175,7 @@ class Q_GUI_EXPORT QListWidgetItem
 
    QListWidgetItem &operator=(const QListWidgetItem &other);
 
-   inline int type() const {
+   int type() const {
       return rtti;
    }
 

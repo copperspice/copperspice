@@ -38,7 +38,7 @@ class QFontCache;
 class QFontEngine;
 
 struct QFontDef {
-   inline QFontDef()
+   QFontDef()
       : pointSize(-1.0), pixelSize(-1), styleStrategy(QFont::PreferDefault), styleHint(QFont::AnyStyle),
         weight(50), fixedPitch(false), style(QFont::StyleNormal), stretch(100),
         hintingPreference(QFont::PreferDefaultHinting), ignorePitch(true), fixedPitchComputed(0), reserved(0) {
@@ -81,7 +81,7 @@ struct QFontDef {
          && hintingPreference == other.hintingPreference;
    }
 
-   inline bool operator<(const QFontDef &other) const {
+   bool operator<(const QFontDef &other) const {
       if (pixelSize != other.pixelSize) {
          return pixelSize < other.pixelSize;
       }
@@ -236,7 +236,7 @@ class QFontCache : public QObject
       uchar multi  : 1;
       uchar screen : 7;
 
-      inline bool operator<(const Key &other) const {
+      bool operator<(const Key &other) const {
          if (script != other.script) {
             return script < other.script;
          }
@@ -256,7 +256,7 @@ class QFontCache : public QObject
          return def < other.def;
       }
 
-      inline bool operator==(const Key &other) const {
+      bool operator==(const Key &other) const {
          return script == other.script
             && screen == other.screen
             && multi == other.multi

@@ -126,11 +126,11 @@ class QGraphicsSceneBspTreeIndexPrivate : public QGraphicsSceneIndexPrivate
 
    static void climbTree(QGraphicsItem *item, int *stackingOrder);
 
-   static inline bool closestItemFirst_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
+   static bool closestItemFirst_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
       return item1->d_ptr->globalStackingOrder < item2->d_ptr->globalStackingOrder;
    }
 
-   static inline bool closestItemLast_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
+   static bool closestItemLast_withCache(const QGraphicsItem *item1, const QGraphicsItem *item2) {
       return item1->d_ptr->globalStackingOrder >= item2->d_ptr->globalStackingOrder;
    }
 

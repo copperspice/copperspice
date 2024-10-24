@@ -52,7 +52,7 @@ class QDockWidgetPrivate : public QWidgetPrivate
    };
 
  public:
-   inline QDockWidgetPrivate()
+   QDockWidgetPrivate()
       : QWidgetPrivate(), state(nullptr),
         features(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable),
         allowedAreas(Qt::AllDockWidgetAreas), resizer(nullptr)

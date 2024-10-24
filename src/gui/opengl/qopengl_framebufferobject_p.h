@@ -120,8 +120,9 @@ public:
     };
     QVector<ColorAttachment> colorAttachments;
 
-    inline GLuint fbo() const { return fbo_guard ? fbo_guard->id() : 0; }
+    GLuint fbo() const {
+       return fbo_guard ? fbo_guard->id() : 0;
+    }
 };
-
 
 #endif

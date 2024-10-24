@@ -232,7 +232,7 @@ class QFormLayoutPrivate : public QLayoutPrivate
 
    QStyle *getStyle() const;
 
-   inline bool haveHfwCached(int width) const {
+   bool haveHfwCached(int width) const {
       return (hfw_width == width) || (width == sh_width && hfw_sh_height >= 0);
    }
 

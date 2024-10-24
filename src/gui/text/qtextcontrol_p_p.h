@@ -67,7 +67,7 @@ class QTextControlPrivate
    void setCursorPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
    void repaintCursor();
-   inline void repaintSelection() {
+   void repaintSelection() {
       repaintOldAndNewSelection(QTextCursor());
    }
    void repaintOldAndNewSelection(const QTextCursor &oldSelection);
@@ -95,7 +95,7 @@ class QTextControlPrivate
    QRectF cursorRectPlusUnicodeDirectionMarkers(const QTextCursor &cursor) const;
    QRectF rectForPosition(int position) const;
    QRectF selectionRect(const QTextCursor &cursor) const;
-   inline QRectF selectionRect() const {
+   QRectF selectionRect() const {
       return selectionRect(this->cursor);
    }
 

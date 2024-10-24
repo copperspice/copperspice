@@ -70,24 +70,24 @@ class Q_GUI_EXPORT QBrush
 
    QBrush &operator=(const QBrush &other);
 
-   inline QBrush &operator=(QBrush &&other) {
+   QBrush &operator=(QBrush &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QBrush &other) {
+   void swap(QBrush &other) {
       qSwap(d, other.d);
    }
 
    operator QVariant() const;
 
-   inline Qt::BrushStyle style() const;
+   Qt::BrushStyle style() const;
    void setStyle(Qt::BrushStyle style);
 
-   inline const QMatrix &matrix() const;
+   const QMatrix &matrix() const;
    void setMatrix(const QMatrix &matrix);
 
-   inline QTransform transform() const;
+   QTransform transform() const;
    void setTransform(const QTransform &transform);
 
    QPixmap texture() const;
@@ -96,7 +96,7 @@ class Q_GUI_EXPORT QBrush
    QImage textureImage() const;
    void setTextureImage(const QImage &image);
 
-   inline const QColor &color() const;
+   const QColor &color() const;
    void setColor(const QColor &color);
    inline void setColor(Qt::GlobalColor color);
 
@@ -105,15 +105,15 @@ class Q_GUI_EXPORT QBrush
    bool isOpaque() const;
 
    bool operator==(const QBrush &brush) const;
-   inline bool operator!=(const QBrush &brush) const {
+   bool operator!=(const QBrush &brush) const {
       return !(operator==(brush));
    }
 
-   inline bool isDetached() const;
+   bool isDetached() const;
 
    using DataPtr = QScopedPointer<QBrushData, cs_internal::QBrushDataPointerDeleter>;
 
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 
@@ -291,13 +291,13 @@ class Q_GUI_EXPORT QLinearGradient : public QGradient
 
    QPointF start() const;
    void setStart(const QPointF &start);
-   inline void setStart(qreal x, qreal y) {
+   void setStart(qreal x, qreal y) {
       setStart(QPointF(x, y));
    }
 
    QPointF finalStop() const;
    void setFinalStop(const QPointF &stop);
-   inline void setFinalStop(qreal x, qreal y) {
+   void setFinalStop(qreal x, qreal y) {
       setFinalStop(QPointF(x, y));
    }
 };
@@ -317,13 +317,13 @@ class Q_GUI_EXPORT QRadialGradient : public QGradient
 
    QPointF center() const;
    void setCenter(const QPointF &center);
-   inline void setCenter(qreal x, qreal y) {
+   void setCenter(qreal x, qreal y) {
       setCenter(QPointF(x, y));
    }
 
    QPointF focalPoint() const;
    void setFocalPoint(const QPointF &focalPoint);
-   inline void setFocalPoint(qreal x, qreal y) {
+   void setFocalPoint(qreal x, qreal y) {
       setFocalPoint(QPointF(x, y));
    }
 
@@ -346,7 +346,7 @@ class Q_GUI_EXPORT QConicalGradient : public QGradient
 
    QPointF center() const;
    void setCenter(const QPointF &center);
-   inline void setCenter(qreal x, qreal y) {
+   void setCenter(qreal x, qreal y) {
       setCenter(QPointF(x, y));
    }
 

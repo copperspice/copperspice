@@ -58,7 +58,7 @@ class QLabelPrivate : public QFramePrivate
    void updateShortcut();
 #endif
 
-   inline bool needTextControl() const {
+   bool needTextControl() const {
       return isTextLabel && (isRichText
             || (!isRichText && (textInteractionFlags & (Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard))));
    }

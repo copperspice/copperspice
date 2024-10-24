@@ -201,7 +201,7 @@ class QGraphicsScenePrivate
    void processDirtyItemsRecursive(QGraphicsItem *item, bool dirtyAncestorContainsChildren = false,
       qreal parentOpacity = qreal(1.0));
 
-   inline void resetDirtyItem(QGraphicsItem *item, bool recursive = false) {
+   void resetDirtyItem(QGraphicsItem *item, bool recursive = false) {
       Q_ASSERT(item);
       item->d_ptr->dirty = 0;
       item->d_ptr->paintedViewBoundingRectsNeedRepaint = 0;
@@ -242,7 +242,7 @@ class QGraphicsScenePrivate
 
    }
 
-   inline void ensureSortedTopLevelItems() {
+   void ensureSortedTopLevelItems() {
       if (needSortTopLevelItems) {
          std::sort(topLevelItems.begin(), topLevelItems.end(), qt_notclosestLeaf);
          topLevelSequentialOrdering = false;

@@ -89,7 +89,7 @@ class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate
    void init(const QString &txt = QString());
    void _q_repaintContents(const QRectF &contentsRect);
 
-   inline QPoint mapToContents(const QPoint &point) const {
+   QPoint mapToContents(const QPoint &point) const {
       return QPoint(point.x() + horizontalOffset(), point.y() + verticalOffset());
    }
 
@@ -100,14 +100,14 @@ class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate
 
    void pageUpDown(QTextCursor::MoveOperation op, QTextCursor::MoveMode moveMode, bool moveCursor = true);
 
-   inline int horizontalOffset() const {
+   int horizontalOffset() const {
       return (q_func()->isRightToLeft() ? (hbar->maximum() - hbar->value()) : hbar->value());
    }
 
    qreal verticalOffset(int topBlock, int topLine) const;
    qreal verticalOffset() const;
 
-   inline void sendControlEvent(QEvent *e) {
+   void sendControlEvent(QEvent *e) {
       control->processEvent(e, QPointF(horizontalOffset(), verticalOffset()), viewport);
    }
 

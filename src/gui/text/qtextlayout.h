@@ -57,7 +57,7 @@ class Q_GUI_EXPORT QTextInlineObject
    {
    }
 
-   inline QTextInlineObject()
+   QTextInlineObject()
       : itm(0), eng(nullptr)
    {
    }
@@ -242,7 +242,7 @@ class Q_GUI_EXPORT QTextLine
 
    // cursorPos gets set to the valid position
    qreal cursorToX(int *cursorPos, Edge edge = Leading) const;
-   inline qreal cursorToX(int cursorPos, Edge edge = Leading) const {
+   qreal cursorToX(int cursorPos, Edge edge = Leading) const {
       return cursorToX(&cursorPos, edge);
    }
 

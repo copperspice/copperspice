@@ -116,11 +116,11 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    void setState(QPainterState *s) override;
    QPainterState *createState(QPainterState *orig) const override;
 
-   inline QRasterPaintEngineState *state() {
+   QRasterPaintEngineState *state() {
       return static_cast<QRasterPaintEngineState *>(QPaintEngineEx::state());
    }
 
-   inline const QRasterPaintEngineState *state() const {
+   const QRasterPaintEngineState *state() const {
       return static_cast<const QRasterPaintEngineState *>(QPaintEngineEx::state());
    }
 
@@ -219,23 +219,23 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    bool setClipRectInDeviceCoords(const QRect &r, Qt::ClipOperation op);
    QRect toNormalizedFillRect(const QRectF &rect);
 
-   inline void ensureBrush(const QBrush &brush) {
+   void ensureBrush(const QBrush &brush) {
       if (! qbrush_fast_equals(state()->lastBrush, brush) || state()->fillFlags) {
          updateBrush(brush);
       }
    }
 
-   inline void ensureBrush() {
+   void ensureBrush() {
       ensureBrush(state()->brush);
    }
 
-   inline void ensurePen(const QPen &pen) {
+   void ensurePen(const QPen &pen) {
       if (! qpen_fast_equals(state()->lastPen, pen) || (pen.style() != Qt::NoPen && state()->strokeFlags)) {
          updatePen(pen);
       }
    }
 
-   inline void ensurePen() {
+   void ensurePen() {
       ensurePen(state()->pen);
    }
 
@@ -243,7 +243,7 @@ class Q_GUI_EXPORT QRasterPaintEngine : public QPaintEngineEx
    inline void ensureOutlineMapper();
 
    void updateRasterState();
-   inline void ensureRasterState() {
+   void ensureRasterState() {
       if (state()->dirty) {
          updateRasterState();
       }
@@ -338,14 +338,14 @@ class QClipData
 
    void initialize();
 
-   inline ClipLine *clipLines() {
+   ClipLine *clipLines() {
       if (! m_clipLines) {
          initialize();
       }
       return m_clipLines;
    }
 
-   inline QSpan *spans() {
+   QSpan *spans() {
       if (! m_spans) {
          initialize();
       }

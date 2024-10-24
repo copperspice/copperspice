@@ -65,7 +65,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    void initialize();
 
    int logicalIndexForTree() const;
-   inline bool isTreePosition(int logicalIndex) const {
+   bool isTreePosition(int logicalIndex) const {
       return logicalIndex == logicalIndexForTree();
    }
 
@@ -191,7 +191,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    QSet<QPersistentModelIndex> expandedIndexes;
    bool animationsEnabled;
 
-   inline bool storeExpanded(const QPersistentModelIndex &idx) {
+   bool storeExpanded(const QPersistentModelIndex &idx) {
       if (expandedIndexes.contains(idx)) {
          return false;
       }
@@ -199,7 +199,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       return true;
    }
 
-   inline bool isIndexExpanded(const QModelIndex &idx) const {
+   bool isIndexExpanded(const QModelIndex &idx) const {
       //We first check if the idx is a QPersistentModelIndex, because creating QPersistentModelIndex is slow
       return !(idx.flags() & Qt::ItemNeverHasChildren) && isPersistent(idx) && expandedIndexes.contains(idx);
    }
@@ -207,7 +207,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    // used when hiding and showing items
    QSet<QPersistentModelIndex> hiddenIndexes;
 
-   inline bool isRowHidden(const QModelIndex &idx) const {
+   bool isRowHidden(const QModelIndex &idx) const {
       if (hiddenIndexes.isEmpty()) {
          return false;
       }
@@ -215,7 +215,7 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       return isPersistent(idx) && hiddenIndexes.contains(idx);
    }
 
-   inline bool isItemHiddenOrDisabled(int i) const {
+   bool isItemHiddenOrDisabled(int i) const {
       if (i < 0 || i >= viewItems.count()) {
          return false;
       }
@@ -223,21 +223,21 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       return isRowHidden(index) || !isIndexEnabled(index);
    }
 
-   inline int above(int item) const {
+   int above(int item) const {
       int i = item;
       while (isItemHiddenOrDisabled(--item)) {} return item < 0 ? i : item;
    }
 
-   inline int below(int item) const {
+   int below(int item) const {
       int i = item;
       while (isItemHiddenOrDisabled(++item)) {} return item >= viewItems.count() ? i : item;
    }
 
-   inline void invalidateHeightCache(int item) const {
+   void invalidateHeightCache(int item) const {
       viewItems[item].height = 0;
    }
 
-   inline int accessibleTable2Index(const QModelIndex &index) const {
+   int accessibleTable2Index(const QModelIndex &index) const {
       return (viewIndex(index) + (header ? 1 : 0)) * model->columnCount() + index.column() + 1;
    }
 

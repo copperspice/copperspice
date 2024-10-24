@@ -42,14 +42,14 @@ class QAbstractTextDocumentLayoutPrivate
  public:
    Q_DECLARE_PUBLIC(QAbstractTextDocumentLayout)
 
-   inline QAbstractTextDocumentLayoutPrivate()
+   QAbstractTextDocumentLayoutPrivate()
       : paintDevice(nullptr)
    {
    }
 
    virtual ~QAbstractTextDocumentLayoutPrivate();
 
-   inline void setDocument(QTextDocument *doc) {
+   void setDocument(QTextDocument *doc) {
       document   = doc;
       docPrivate = nullptr;
 
@@ -58,11 +58,11 @@ class QAbstractTextDocumentLayoutPrivate
       }
    }
 
-   inline int _q_dynamicPageCountSlot() const {
+   int _q_dynamicPageCountSlot() const {
       return q_func()->pageCount();
    }
 
-   inline QSizeF _q_dynamicDocumentSizeSlot() const {
+   QSizeF _q_dynamicDocumentSizeSlot() const {
       return q_func()->documentSize();
    }
 

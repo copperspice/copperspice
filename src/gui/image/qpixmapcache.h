@@ -45,7 +45,7 @@ class Q_GUI_EXPORT QPixmapCache
 
       bool operator ==(const Key &other) const;
 
-      inline bool operator !=(const Key &other) const {
+      bool operator !=(const Key &other) const {
          return !operator==(other);
       }
 

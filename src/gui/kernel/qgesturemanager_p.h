@@ -80,7 +80,7 @@ class QGestureManager : public QObject
       Qt::GestureType gesture;
 
       ObjectGesture(QObject *o, const Qt::GestureType &g) : object(o), gesture(g) { }
-      inline bool operator<(const ObjectGesture &rhs) const {
+      bool operator<(const ObjectGesture &rhs) const {
          if (object < rhs.object) {
             return true;
          }

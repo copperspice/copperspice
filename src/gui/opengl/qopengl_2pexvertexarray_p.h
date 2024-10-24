@@ -78,8 +78,7 @@ public:
     {
     }
 
-    inline void addRect(const QRectF &rect)
-    {
+    void addRect(const QRectF &rect) {
         qreal top = rect.top();
         qreal left = rect.left();
         qreal bottom = rect.bottom();
@@ -93,8 +92,7 @@ public:
                     << QOpenGLPoint(left, top);
     }
 
-    inline void addQuad(const QRectF &rect)
-    {
+    void addQuad(const QRectF &rect) {
         qreal top = rect.top();
         qreal left = rect.left();
         qreal bottom = rect.bottom();
@@ -107,8 +105,7 @@ public:
 
     }
 
-    inline void addVertex(const GLfloat x, const GLfloat y)
-    {
+    void addVertex(const GLfloat x, const GLfloat y) {
         vertexArray.append(QOpenGLPoint(x, y));
     }
 

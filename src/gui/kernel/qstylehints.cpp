@@ -57,12 +57,8 @@ class QStyleHintsPrivate
    Q_DECLARE_PUBLIC(QStyleHints)
 
  public:
-   inline QStyleHintsPrivate()
-      : m_mouseDoubleClickInterval(-1)
-      , m_startDragDistance(-1)
-      , m_startDragTime(-1)
-      , m_keyboardInputInterval(-1)
-      , m_cursorFlashTime(-1)
+   QStyleHintsPrivate()
+      : m_mouseDoubleClickInterval(-1), m_startDragDistance(-1), m_startDragTime(-1), m_keyboardInputInterval(-1), m_cursorFlashTime(-1)
    {}
 
    int m_mouseDoubleClickInterval;

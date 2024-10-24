@@ -301,27 +301,27 @@ class QGridLayoutItem
    void dump(int indent = 0) const;
 #endif
 
-   inline int firstRow() const {
+   int firstRow() const {
       return q_firstRows[GridOrientation_Vertical];
    }
 
-   inline int firstColumn() const {
+   int firstColumn() const {
       return q_firstRows[GridOrientation_Horizontal];
    }
 
-   inline int rowSpan() const {
+   int rowSpan() const {
       return q_rowSpans[GridOrientation_Vertical];
    }
 
-   inline int columnSpan() const {
+   int columnSpan() const {
       return q_rowSpans[GridOrientation_Horizontal];
    }
 
-   inline int lastRow() const {
+   int lastRow() const {
       return firstRow() + rowSpan() - 1;
    }
 
-   inline int lastColumn() const {
+   int lastColumn() const {
       return firstColumn() + columnSpan() - 1;
    }
 
@@ -337,11 +337,11 @@ class QGridLayoutItem
    int stretchFactor(Qt::Orientation orientation) const;
    void setStretchFactor(int stretch, Qt::Orientation orientation);
 
-   inline Qt::Alignment alignment() const {
+   Qt::Alignment alignment() const {
       return q_alignment;
    }
 
-   inline void setAlignment(Qt::Alignment alignment) {
+   void setAlignment(Qt::Alignment alignment) {
       q_alignment = alignment;
    }
 

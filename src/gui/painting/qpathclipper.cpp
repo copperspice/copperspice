@@ -641,7 +641,7 @@ class QKdPointTree
       return &m_nodes[m_rootNode];
    }
 
-   inline int nextId() {
+   int nextId() {
       return m_id++;
    }
 
@@ -725,7 +725,7 @@ class QKdPointFinder
       pointComponents[1] = segments.pointAt(point).y();
    }
 
-   inline QKdPointTree::Traversal operator()(QKdPointTree::Node &node, int depth) {
+   QKdPointTree::Traversal operator()(QKdPointTree::Node &node, int depth) {
       if (m_result != -1) {
          return QKdPointTree::TraverseNone;
       }

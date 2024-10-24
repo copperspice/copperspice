@@ -39,7 +39,7 @@ class QToolBarPrivate : public QWidgetPrivate
    Q_DECLARE_PUBLIC(QToolBar)
 
  public:
-   inline QToolBarPrivate()
+   QToolBarPrivate()
       : explicitIconSize(false), explicitToolButtonStyle(false), movable(true), floatable(true),
         allowedAreas(Qt::AllToolBarAreas), orientation(Qt::Horizontal),
         toolButtonStyle(Qt::ToolButtonIconOnly), layout(nullptr), state(nullptr)

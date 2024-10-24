@@ -240,11 +240,11 @@ class Q_GUI_EXPORT QGraphicsScene : public QObject
 
    QList <QGraphicsView *> views() const;
 
-   inline void update(qreal x, qreal y, qreal w, qreal h) {
+   void update(qreal x, qreal y, qreal w, qreal h) {
       update(QRectF(x, y, w, h));
    }
 
-   inline void invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = AllLayers) {
+   void invalidate(qreal x, qreal y, qreal w, qreal h, SceneLayers layers = AllLayers) {
       invalidate(QRectF(x, y, w, h), layers);
    }
 

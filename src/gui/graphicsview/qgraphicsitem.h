@@ -213,11 +213,11 @@ class Q_GUI_EXPORT QGraphicsItem
    bool isVisibleTo(const QGraphicsItem *graphicsItem) const;
    void setVisible(bool visible);
 
-   inline void hide() {
+   void hide() {
       setVisible(false);
    }
 
-   inline void show() {
+   void show() {
       setVisible(true);
    }
 
@@ -329,7 +329,7 @@ class Q_GUI_EXPORT QGraphicsItem
    QPointF transformOriginPoint() const;
    void setTransformOriginPoint(const QPointF &origin);
 
-   inline void setTransformOriginPoint(qreal x, qreal y) {
+   void setTransformOriginPoint(qreal x, qreal y) {
       setTransformOriginPoint(QPointF(x, y));
    }
 
@@ -984,7 +984,7 @@ class Q_GUI_EXPORT QGraphicsLineItem : public QGraphicsItem
 
    QLineF line() const;
    void setLine(const QLineF &line);
-   inline void setLine(qreal x1, qreal y1, qreal x2, qreal y2) {
+   void setLine(qreal x1, qreal y1, qreal x2, qreal y2) {
       setLine(QLineF(x1, y1, x2, y2));
    }
 

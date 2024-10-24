@@ -548,7 +548,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    void internalDelete(bool wasBackspace = false);
    void internalRemove(int pos);
 
-   inline void internalDeselect() {
+   void internalDeselect() {
       m_selDirty |= (m_selend > m_selstart);
       m_selstart = m_selend = 0;
    }
@@ -617,7 +617,10 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    enum CommandType { Separator, Insert, Remove, Delete, RemoveSelection, DeleteSelection, SetSelection };
    struct Command {
 
-      inline Command(CommandType t, int p, QChar c, int ss, int se) : type(t), uc(c), pos(p), selStart(ss), selEnd(se) {}
+      Command(CommandType t, int p, QChar c, int ss, int se)
+         : type(t), uc(c), pos(p), selStart(ss), selEnd(se)
+      { }
+
       uint type : 4;
       QChar uc;
       int pos, selStart, selEnd;
@@ -627,7 +630,7 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
    QVector<Command> m_history;
    void addCommand(const Command &cmd);
 
-   inline void separate() {
+   void separate() {
       m_separator = true;
    }
 

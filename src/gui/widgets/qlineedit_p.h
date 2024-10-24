@@ -144,16 +144,16 @@ class QLineEditPrivate : public QWidgetPrivate
    void updatePasswordEchoEditing(bool);
 
    void resetInputMethod();
-   inline bool shouldEnableInputMethod() const {
+   bool shouldEnableInputMethod() const {
       return !control->isReadOnly();
    }
 
-   inline bool shouldShowPlaceholderText() const {
+   bool shouldShowPlaceholderText() const {
       return control->text().isEmpty() && control->preeditAreaText().isEmpty()
          && !((alignment & Qt::AlignHCenter) && q_func()->hasFocus());
    }
 
-   static inline QLineEditPrivate *get(QLineEdit *lineEdit) {
+   static QLineEditPrivate *get(QLineEdit *lineEdit) {
       return lineEdit->d_func();
    }
 
@@ -212,15 +212,15 @@ class QLineEditPrivate : public QWidgetPrivate
    void setClearButtonEnabled(bool enabled);
    void positionSideWidgets();
 
-   inline bool hasSideWidgets() const {
+   bool hasSideWidgets() const {
       return !leadingSideWidgets.isEmpty() || !trailingSideWidgets.isEmpty();
    }
 
-   inline const SideWidgetEntryList &leftSideWidgetList() const {
+   const SideWidgetEntryList &leftSideWidgetList() const {
       return q_func()->layoutDirection() == Qt::LeftToRight ? leadingSideWidgets : trailingSideWidgets;
    }
 
-   inline const SideWidgetEntryList &rightSideWidgetList() const {
+   const SideWidgetEntryList &rightSideWidgetList() const {
       return q_func()->layoutDirection() == Qt::LeftToRight ? trailingSideWidgets : leadingSideWidgets;
    }
 

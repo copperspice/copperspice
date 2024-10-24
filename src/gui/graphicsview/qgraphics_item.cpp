@@ -4999,8 +4999,9 @@ class QGraphicsEllipseItemPrivate : public QAbstractGraphicsShapeItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsEllipseItem)
 
  public:
-   inline QGraphicsEllipseItemPrivate()
-      : startAngle(0), spanAngle(360 * 16) {
+   QGraphicsEllipseItemPrivate()
+      : startAngle(0), spanAngle(360 * 16)
+   {
    }
 
    QRectF rect;
@@ -5178,8 +5179,9 @@ class QGraphicsPolygonItemPrivate : public QAbstractGraphicsShapeItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsPolygonItem)
 
  public:
-   inline QGraphicsPolygonItemPrivate()
-      : fillRule(Qt::OddEvenFill) {
+   QGraphicsPolygonItemPrivate()
+      : fillRule(Qt::OddEvenFill)
+   {
    }
 
    QPolygonF polygon;
@@ -5686,11 +5688,11 @@ class QGraphicsTextItemPrivate
    mutable QTextControl *control;
    QTextControl *textControl() const;
 
-   inline QPointF controlOffset() const {
+   QPointF controlOffset() const {
       return QPointF(0.0, pageNumber * control->document()->pageSize().height());
    }
 
-   inline void sendControlEvent(QEvent *e) {
+   void sendControlEvent(QEvent *e) {
       if (control) {
          control->processEvent(e, controlOffset());
       }
@@ -6278,7 +6280,7 @@ class QGraphicsSimpleTextItemPrivate : public QAbstractGraphicsShapeItemPrivate
    Q_DECLARE_PUBLIC(QGraphicsSimpleTextItem)
 
  public:
-   inline QGraphicsSimpleTextItemPrivate() {
+   QGraphicsSimpleTextItemPrivate() {
       pen.setStyle(Qt::NoPen);
       brush.setStyle(Qt::SolidPattern);
    }

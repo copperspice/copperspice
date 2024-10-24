@@ -76,7 +76,7 @@ class Q_GUI_EXPORT QShortcut : public QObject
 
    int id() const;
 
-   inline QWidget *parentWidget() const {
+   QWidget *parentWidget() const {
       return static_cast<QWidget *>(QObject::parent());
    }
 

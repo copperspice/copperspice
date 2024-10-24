@@ -70,7 +70,7 @@ class QDoubleSpinBoxPrivate : public QAbstractSpinBoxPrivate
    // variables
    int decimals;
 
-   inline void init() {
+   void init() {
       Q_Q(QDoubleSpinBox);
       q->setInputMethodHints(Qt::ImhFormattedNumbersOnly);
    }

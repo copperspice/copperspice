@@ -66,21 +66,21 @@ class Q_GUI_EXPORT QTextOption
 
 
    struct Q_GUI_EXPORT Tab {
-      inline Tab()
+      Tab()
          : position(80), type(QTextOption::LeftTab)
       { }
 
-      inline Tab(qreal pos, TabType tabType, QChar delim = QChar())
+      Tab(qreal pos, TabType tabType, QChar delim = QChar())
          : position(pos), type(tabType), delimiter(delim)
       { }
 
-      inline bool operator==(const Tab &other) const {
+      bool operator==(const Tab &other) const {
          return type == other.type
             && qFuzzyCompare(position, other.position)
             && delimiter == other.delimiter;
       }
 
-      inline bool operator!=(const Tab &other) const {
+      bool operator!=(const Tab &other) const {
          return !operator==(other);
       }
 

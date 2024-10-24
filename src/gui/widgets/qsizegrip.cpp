@@ -64,11 +64,12 @@ class QSizeGripPrivate : public QWidgetPrivate
    bool gotMousePress;
    QPointer<QWidget> tlw;
    Qt::Corner corner() const;
-   inline bool atBottom() const {
+
+   bool atBottom() const {
       return m_corner == Qt::BottomRightCorner || m_corner == Qt::BottomLeftCorner;
    }
 
-   inline bool atLeft() const {
+   bool atLeft() const {
       return m_corner == Qt::BottomLeftCorner || m_corner == Qt::TopLeftCorner;
    }
 

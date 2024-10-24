@@ -63,7 +63,7 @@ class QFrameInfo
       return endMark;
    }
 
-   static inline QFrameInfo endMarker() {
+   static QFrameInfo endMarker() {
       return QFrameInfo(true);
    }
 

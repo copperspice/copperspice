@@ -31,7 +31,7 @@ template <typename T>
 class QVector;
 
 struct QLayoutStruct {
-   inline void init(int stretchFactor = 0, int minSize = 0) {
+   void init(int stretchFactor = 0, int minSize = 0) {
       stretch = stretchFactor;
       minimumSize = sizeHint = minSize;
       maximumSize = QLAYOUTSIZE_MAX;

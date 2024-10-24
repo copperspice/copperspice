@@ -1028,14 +1028,14 @@ struct LineBreakHelper {
       return line.textWidth + tmpData.textWidth + spaceData.textWidth + softHyphenWidth + negativeRightBearing();
    }
 
-   inline glyph_t currentGlyph() const {
+   glyph_t currentGlyph() const {
       Q_ASSERT(m_currentPosition > 0);
       Q_ASSERT(logClusters[m_currentPosition - 1] < glyphs.numGlyphs);
 
       return glyphs.glyphs[logClusters[m_currentPosition - 1]];
    }
 
-   inline void saveCurrentGlyph() {
+   void saveCurrentGlyph() {
       previousGlyph = 0;
 
       if (m_currentPosition > 0 && (logClusters[m_currentPosition - 1] < glyphs.numGlyphs)) {
@@ -1044,13 +1044,13 @@ struct LineBreakHelper {
       }
    }
 
-   inline void calculateRightBearing(glyph_t glyph) {
+   void calculateRightBearing(glyph_t glyph) {
       qreal rb;
       fontEngine->getGlyphBearings(glyph, nullptr, &rb);
       rightBearing = qMin(QFixed::fromReal(rb), QFixed(0));
    }
 
-   inline void calculateRightBearing() {
+   void calculateRightBearing() {
       if (m_currentPosition <= 0) {
          return;
       }
@@ -1058,7 +1058,7 @@ struct LineBreakHelper {
       calculateRightBearing(currentGlyph());
    }
 
-   inline void calculateRightBearingForPreviousGlyph() {
+   void calculateRightBearingForPreviousGlyph() {
       if (previousGlyph > 0) {
          calculateRightBearing(previousGlyph);
       }
@@ -1066,11 +1066,11 @@ struct LineBreakHelper {
 
    static const QFixed RightBearingNotCalculated;
 
-   inline void resetRightBearing() {
+   void resetRightBearing() {
       rightBearing = RightBearingNotCalculated;
    }
 
-   inline QFixed negativeRightBearing() const {
+   QFixed negativeRightBearing() const {
       if (rightBearing == RightBearingNotCalculated) {
          return QFixed(0);
       }

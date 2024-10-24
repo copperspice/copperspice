@@ -565,7 +565,7 @@ struct Blend_on_RGB16_SourceAndConstAlpha_Neon {
       , m_const_alpha(const_alpha) {
    }
 
-   inline void write(quint16 *dst, quint32 src) {
+   void write(quint16 *dst, quint32 src) {
       srcBuffer[m_index++] = src;
 
       if (m_index == 8) {
@@ -574,7 +574,7 @@ struct Blend_on_RGB16_SourceAndConstAlpha_Neon {
       }
    }
 
-   inline void flush(quint16 *dst) {
+   void flush(quint16 *dst) {
       if (m_index > 0) {
          quint16 dstBuffer[8];
          for (int i = 0; i < m_index; ++i) {
@@ -1053,63 +1053,69 @@ class QSimdNeon
       float f[4];
    };
 
-   static inline Float32x4 v_dup(double x) {
+   static Float32x4 v_dup(double x) {
       return vdupq_n_f32(float(x));
    }
 
-   static inline Float32x4 v_dup(float x) {
+   static Float32x4 v_dup(float x) {
       return vdupq_n_f32(x);
    }
-   static inline Int32x4 v_dup(int x) {
-      return vdupq_n_s32(x);
-   }
-   static inline Int32x4 v_dup(uint x) {
+
+   static Int32x4 v_dup(int x) {
       return vdupq_n_s32(x);
    }
 
-   static inline Float32x4 v_add(Float32x4 a, Float32x4 b) {
+   static Int32x4 v_dup(uint x) {
+      return vdupq_n_s32(x);
+   }
+
+   static Float32x4 v_add(Float32x4 a, Float32x4 b) {
       return vaddq_f32(a, b);
    }
-   static inline Int32x4 v_add(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_add(Int32x4 a, Int32x4 b) {
       return vaddq_s32(a, b);
    }
 
-   static inline Float32x4 v_max(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_max(Float32x4 a, Float32x4 b) {
       return vmaxq_f32(a, b);
    }
-   static inline Float32x4 v_min(Float32x4 a, Float32x4 b) {
+
+   static Float32x4 v_min(Float32x4 a, Float32x4 b) {
       return vminq_f32(a, b);
    }
-   static inline Int32x4 v_min_16(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_min_16(Int32x4 a, Int32x4 b) {
       return vminq_s32(a, b);
    }
 
-   static inline Int32x4 v_and(Int32x4 a, Int32x4 b) {
+   static Int32x4 v_and(Int32x4 a, Int32x4 b) {
       return vandq_s32(a, b);
    }
 
-   static inline Float32x4 v_sub(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_sub(Float32x4 a, Float32x4 b) {
       return vsubq_f32(a, b);
    }
-   static inline Int32x4 v_sub(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_sub(Int32x4 a, Int32x4 b) {
       return vsubq_s32(a, b);
    }
 
-   static inline Float32x4 v_mul(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_mul(Float32x4 a, Float32x4 b) {
       return vmulq_f32(a, b);
    }
 
-   static inline Float32x4 v_sqrt(Float32x4 x) {
+   static Float32x4 v_sqrt(Float32x4 x) {
       Float32x4 y = vrsqrteq_f32(x);
       y = vmulq_f32(y, vrsqrtsq_f32(x, vmulq_f32(y, y)));
       return vmulq_f32(x, y);
    }
 
-   static inline Int32x4 v_toInt(Float32x4 x) {
+   static Int32x4 v_toInt(Float32x4 x) {
       return vcvtq_s32_f32(x);
    }
 
-   static inline Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) {
+   static Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) {
       return vreinterpretq_s32_u32(vcgeq_f32(a, b));
    }
 };

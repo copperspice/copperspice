@@ -26,7 +26,7 @@ class QCssScanner_Generated
  public:
    QCssScanner_Generated(const QString &str);
 
-   inline QChar next() {
+   QChar next() {
       QChar retval;
 
       if (pos != input.end()) {

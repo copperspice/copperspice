@@ -106,7 +106,10 @@ public:
     void write(int offset, const void *data, int count);
 
     void allocate(const void *data, int count);
-    inline void allocate(int count) { allocate(nullptr, count); }
+
+    void allocate(int count) {
+       allocate(nullptr, count);
+    }
 
     void *map(QOpenGLBuffer::Access access);
     void *mapRange(int offset, int count, QOpenGLBuffer::RangeAccessFlags access);

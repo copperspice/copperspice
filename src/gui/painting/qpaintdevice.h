@@ -105,7 +105,7 @@ class Q_GUI_EXPORT QPaintDevice                                // device for QPa
       return metric(PdmDepth);
    }
 
-   static inline qreal devicePixelRatioFScale() {
+   static qreal devicePixelRatioFScale() {
       return 0x10000;
    }
 

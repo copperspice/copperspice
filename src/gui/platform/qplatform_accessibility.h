@@ -41,7 +41,7 @@ class Q_GUI_EXPORT QPlatformAccessibility
    virtual void initialize();
    virtual void cleanup();
 
-   inline bool isActive() const {
+   bool isActive() const {
       return m_active;
    }
    void setActive(bool active);

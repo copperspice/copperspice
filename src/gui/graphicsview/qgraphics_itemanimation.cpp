@@ -46,8 +46,9 @@ static inline bool check_step_valid(qreal step, const char *method)
 class QGraphicsItemAnimationPrivate
 {
  public:
-   inline QGraphicsItemAnimationPrivate()
-      : q(nullptr), timeLine(nullptr), item(nullptr), step(0) {
+   QGraphicsItemAnimationPrivate()
+      : q(nullptr), timeLine(nullptr), item(nullptr), step(0)
+   {
    }
 
    QGraphicsItemAnimation *q;

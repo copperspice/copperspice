@@ -55,7 +55,7 @@ class QPaintEnginePrivate
    uint hasSystemTransform : 1;
    uint hasSystemViewport : 1;
 
-   inline void transformSystemClip() {
+   void transformSystemClip() {
       if (systemClip.isEmpty()) {
          return;
       }
@@ -78,7 +78,7 @@ class QPaintEnginePrivate
       }
    }
 
-   inline void setSystemTransform(const QTransform &xform) {
+   void setSystemTransform(const QTransform &xform) {
       systemTransform = xform;
       if ((hasSystemTransform = !xform.isIdentity()) || hasSystemViewport) {
          transformSystemClip();
@@ -86,7 +86,7 @@ class QPaintEnginePrivate
       systemStateChanged();
    }
 
-   inline void setSystemViewport(const QRegion &region) {
+   void setSystemViewport(const QRegion &region) {
       systemViewport = region;
       hasSystemViewport = !systemViewport.isEmpty();
    }

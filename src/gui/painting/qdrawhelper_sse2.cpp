@@ -486,60 +486,67 @@ class QSimdSse2
       float f[4];
    };
 
-   static inline Float32x4 v_dup(float x) {
+   static Float32x4 v_dup(float x) {
       return _mm_set1_ps(x);
    }
-   static inline Float32x4 v_dup(double x) {
+
+   static Float32x4 v_dup(double x) {
       return _mm_set1_ps(x);
    }
-   static inline Int32x4 v_dup(int x) {
-      return _mm_set1_epi32(x);
-   }
-   static inline Int32x4 v_dup(uint x) {
+
+   static Int32x4 v_dup(int x) {
       return _mm_set1_epi32(x);
    }
 
-   static inline Float32x4 v_add(Float32x4 a, Float32x4 b) {
+   static Int32x4 v_dup(uint x) {
+      return _mm_set1_epi32(x);
+   }
+
+   static Float32x4 v_add(Float32x4 a, Float32x4 b) {
       return _mm_add_ps(a, b);
    }
-   static inline Int32x4 v_add(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_add(Int32x4 a, Int32x4 b) {
       return _mm_add_epi32(a, b);
    }
 
-   static inline Float32x4 v_max(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_max(Float32x4 a, Float32x4 b) {
       return _mm_max_ps(a, b);
    }
-   static inline Float32x4 v_min(Float32x4 a, Float32x4 b) {
+
+   static Float32x4 v_min(Float32x4 a, Float32x4 b) {
       return _mm_min_ps(a, b);
    }
-   static inline Int32x4 v_min_16(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_min_16(Int32x4 a, Int32x4 b) {
       return _mm_min_epi16(a, b);
    }
 
-   static inline Int32x4 v_and(Int32x4 a, Int32x4 b) {
+   static Int32x4 v_and(Int32x4 a, Int32x4 b) {
       return _mm_and_si128(a, b);
    }
 
-   static inline Float32x4 v_sub(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_sub(Float32x4 a, Float32x4 b) {
       return _mm_sub_ps(a, b);
    }
-   static inline Int32x4 v_sub(Int32x4 a, Int32x4 b) {
+
+   static Int32x4 v_sub(Int32x4 a, Int32x4 b) {
       return _mm_sub_epi32(a, b);
    }
 
-   static inline Float32x4 v_mul(Float32x4 a, Float32x4 b) {
+   static Float32x4 v_mul(Float32x4 a, Float32x4 b) {
       return _mm_mul_ps(a, b);
    }
 
-   static inline Float32x4 v_sqrt(Float32x4 x) {
+   static Float32x4 v_sqrt(Float32x4 x) {
       return _mm_sqrt_ps(x);
    }
 
-   static inline Int32x4 v_toInt(Float32x4 x) {
+   static Int32x4 v_toInt(Float32x4 x) {
       return _mm_cvttps_epi32(x);
    }
 
-   static inline Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) {
+   static Int32x4 v_greaterOrEqual(Float32x4 a, Float32x4 b) {
       return _mm_castps_si128(_mm_cmpgt_ps(a, b));
    }
 };

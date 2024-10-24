@@ -108,11 +108,11 @@ class Q_GUI_EXPORT QPixmap : public QPaintDevice
    static QPixmap grabWindow(WId window, int x = 0, int y = 0, int width = -1, int height = -1);
    static QPixmap grabWidget(QObject *widget, const QRect &rect);
 
-   static inline QPixmap grabWidget(QObject *widget, int x = 0, int y = 0, int width = -1, int height = -1) {
+   static QPixmap grabWidget(QObject *widget, int x = 0, int y = 0, int width = -1, int height = -1) {
       return grabWidget(widget, QRect(x, y, width, height));
    }
 
-   inline QPixmap scaled(int width, int height, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
+   QPixmap scaled(int width, int height, Qt::AspectRatioMode aspectMode = Qt::IgnoreAspectRatio,
       Qt::TransformationMode transformMode = Qt::FastTransformation) const {
       return scaled(QSize(width, height), aspectMode, transformMode);
    }

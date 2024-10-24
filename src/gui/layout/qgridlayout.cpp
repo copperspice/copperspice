@@ -151,73 +151,77 @@ class QGridLayoutPrivate : public QLayoutPrivate
 
    void distribute(QRect rect, int hSpacing, int vSpacing);
 
-   inline int numRows() const {
+   int numRows() const {
       return rr;
    }
 
-   inline int numCols() const {
+   int numCols() const {
       return cc;
    }
 
-   inline void expand(int rows, int cols) {
-
+   void expand(int rows, int cols) {
       setSize(qMax(rows, rr), qMax(cols, cc));
    }
 
-   inline void setRowStretch(int r, int s) {
+   void setRowStretch(int r, int s) {
       expand(r + 1, 0);
       rStretch[r] = s;
       setDirty();
    }
 
-   inline void setColStretch(int c, int s) {
+   void setColStretch(int c, int s) {
       expand(0, c + 1);
       cStretch[c] = s;
       setDirty();
    }
 
-   inline int rowStretch(int r) const {
+   int rowStretch(int r) const {
       return rStretch.at(r);
    }
-   inline int colStretch(int c) const {
+
+   int colStretch(int c) const {
       return cStretch.at(c);
    }
-   inline void setRowMinimumHeight(int r, int s) {
+
+   void setRowMinimumHeight(int r, int s) {
       expand(r + 1, 0);
       rMinHeights[r] = s;
       setDirty();
    }
-   inline void setColumnMinimumWidth(int c, int s) {
+
+   void setColumnMinimumWidth(int c, int s) {
       expand(0, c + 1);
       cMinWidths[c] = s;
       setDirty();
    }
-   inline int rowSpacing(int r) const {
+
+   int rowSpacing(int r) const {
       return rMinHeights.at(r);
    }
-   inline int colSpacing(int c) const {
+
+   int colSpacing(int c) const {
       return cMinWidths.at(c);
    }
 
-   inline void setReversed(bool r, bool c) {
+   void setReversed(bool r, bool c) {
       hReversed = c;
       vReversed = r;
    }
 
-   inline bool horReversed() const {
+   bool horReversed() const {
       return hReversed;
    }
 
-   inline bool verReversed() const {
+   bool verReversed() const {
       return vReversed;
    }
 
-   inline void setDirty() {
+   void setDirty() {
       needRecalc = true;
       hfw_width = -1;
    }
 
-   inline bool isDirty() const {
+   bool isDirty() const {
       return needRecalc;
    }
 
@@ -225,18 +229,18 @@ class QGridLayoutPrivate : public QLayoutPrivate
    int heightForWidth(int width, int hSpacing, int vSpacing);
    int minimumHeightForWidth(int width, int hSpacing, int vSpacing);
 
-   inline void getNextPos(int &row, int &col) {
+   void getNextPos(int &row, int &col) {
       row = nextR;
       col = nextC;
    }
 
-   inline int count() const {
+   int count() const {
       return things.count();
    }
 
    QRect cellRect(int row, int col) const;
 
-   inline QLayoutItem *itemAt(int index) const {
+   QLayoutItem *itemAt(int index) const {
       if (index < things.count()) {
          return things.at(index)->item();
       } else {
@@ -244,7 +248,7 @@ class QGridLayoutPrivate : public QLayoutPrivate
       }
    }
 
-   inline QLayoutItem *takeAt(int index) {
+   QLayoutItem *takeAt(int index) {
       Q_Q(QGridLayout);
 
       if (index < things.count()) {

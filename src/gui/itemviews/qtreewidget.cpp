@@ -43,7 +43,7 @@ typedef bool(*LessThan)(const QPair<QTreeWidgetItem *, int> &, const QPair<QTree
 class QTreeModelLessThan
 {
  public:
-   inline bool operator()(QTreeWidgetItem *i1, QTreeWidgetItem *i2) const {
+   bool operator()(QTreeWidgetItem *i1, QTreeWidgetItem *i2) const {
       return *i1 < *i2;
    }
 };
@@ -51,7 +51,7 @@ class QTreeModelLessThan
 class QTreeModelGreaterThan
 {
  public:
-   inline bool operator()(QTreeWidgetItem *i1, QTreeWidgetItem *i2) const {
+   bool operator()(QTreeWidgetItem *i1, QTreeWidgetItem *i2) const {
       return *i2 < *i1;
    }
 };

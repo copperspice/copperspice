@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QTextFormatCollection
    QVector<qint32> objFormats;
    QMultiHash<uint, int> hashes;
 
-   inline QFont defaultFont() const {
+   QFont defaultFont() const {
       return defaultFnt;
    }
    void setDefaultFont(const QFont &f);

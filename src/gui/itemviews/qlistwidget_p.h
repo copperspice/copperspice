@@ -36,7 +36,7 @@
 class QListModelLessThan
 {
  public:
-   inline bool operator()(QListWidgetItem *i1, QListWidgetItem *i2) const {
+   bool operator()(QListWidgetItem *i1, QListWidgetItem *i2) const {
       return *i1 < *i2;
    }
 };
@@ -44,7 +44,7 @@ class QListModelLessThan
 class QListModelGreaterThan
 {
  public:
-   inline bool operator()(QListWidgetItem *i1, QListWidgetItem *i2) const {
+   bool operator()(QListWidgetItem *i1, QListWidgetItem *i2) const {
       return *i2 < *i1;
    }
 };
@@ -120,7 +120,7 @@ class QListWidgetPrivate : public QListViewPrivate
  public:
    QListWidgetPrivate() : QListViewPrivate(), sortOrder(Qt::AscendingOrder), sortingEnabled(false) {}
 
-   inline QListModel *listModel() const {
+   QListModel *listModel() const {
       return qobject_cast<QListModel *>(model);
    }
 

@@ -85,13 +85,11 @@ public:
 
     int evaluateMipLevels() const;
 
-    inline int maximumMipLevelCount() const
-    {
+    int maximumMipLevelCount() const {
         return 1 + std::floor(qLog2(qMax(dimensions[0], qMax(dimensions[1], dimensions[2]))));
     }
 
-    static inline int mipLevelSize(int mipLevel, int baseLevelSize)
-    {
+    static int mipLevelSize(int mipLevel, int baseLevelSize) {
         return std::floor(double(qMax(1, baseLevelSize >> mipLevel)));
     }
 

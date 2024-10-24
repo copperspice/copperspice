@@ -31,7 +31,7 @@
 class QColormapPrivate
 {
  public:
-   inline QColormapPrivate()
+   QColormapPrivate()
       : ref(1), mode(QColormap::Direct), depth(0), numcolors(0)
    { }
 

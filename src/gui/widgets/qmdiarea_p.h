@@ -213,7 +213,7 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
    void refreshTabBar();
 #endif
 
-   inline void startResizeTimer() {
+   void startResizeTimer() {
       Q_Q(QMdiArea);
       if (resizeTimerId > 0) {
          q->killTimer(resizeTimerId);
@@ -221,7 +221,7 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
       resizeTimerId = q->startTimer(200);
    }
 
-   inline void startTabToPreviousTimer() {
+   void startTabToPreviousTimer() {
       Q_Q(QMdiArea);
       if (tabToPreviousTimerId > 0) {
          q->killTimer(tabToPreviousTimerId);
@@ -229,21 +229,21 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
       tabToPreviousTimerId = q->startTimer(QApplication::keyboardInputInterval());
    }
 
-   inline bool windowStaysOnTop(QMdiSubWindow *subWindow) const {
+   bool windowStaysOnTop(QMdiSubWindow *subWindow) const {
       if (!subWindow) {
          return false;
       }
       return subWindow->windowFlags() & Qt::WindowStaysOnTopHint;
    }
 
-   inline bool isExplicitlyDeactivated(QMdiSubWindow *subWindow) const {
+   bool isExplicitlyDeactivated(QMdiSubWindow *subWindow) const {
       if (!subWindow) {
          return true;
       }
       return subWindow->d_func()->isExplicitlyDeactivated;
    }
 
-   inline void setActive(QMdiSubWindow *subWindow, bool active = true, bool changeFocus = true) const {
+   void setActive(QMdiSubWindow *subWindow, bool active = true, bool changeFocus = true) const {
       if (subWindow) {
          subWindow->d_func()->setActive(active, changeFocus);
       }
@@ -252,7 +252,7 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
 #ifndef QT_NO_RUBBERBAND
    void showRubberBandFor(QMdiSubWindow *subWindow);
 
-   inline void hideRubberBand() {
+   void hideRubberBand() {
       if (rubberBand && rubberBand->isVisible()) {
          rubberBand->hide();
       }

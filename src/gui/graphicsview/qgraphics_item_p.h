@@ -126,7 +126,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void remapItemPos(QEvent *event, QGraphicsItem *item);
    QPointF genericMapFromScene(const QPointF &pos, const QWidget *viewport) const;
 
-   inline bool itemIsUntransformable() const {
+   bool itemIsUntransformable() const {
       return (itemFlags & QGraphicsItem::ItemIgnoresTransformations) || (ancestorFlags & AncestorIgnoresTransformations);
    }
 
@@ -249,23 +249,23 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    void updatePaintedViewBoundingRects(bool updateChildren);
    void ensureSceneTransformRecursive(QGraphicsItem **topMostDirtyItem);
 
-   inline void ensureSceneTransform() {
+   void ensureSceneTransform() {
       QGraphicsItem *that = q_func();
       ensureSceneTransformRecursive(&that);
    }
 
-   inline bool hasTranslateOnlySceneTransform() {
+   bool hasTranslateOnlySceneTransform() {
       ensureSceneTransform();
       return sceneTransformTranslateOnly;
    }
 
-   inline void invalidateChildrenSceneTransform() {
+   void invalidateChildrenSceneTransform() {
       for (int i = 0; i < children.size(); ++i) {
          children.at(i)->d_ptr->dirtySceneTransform = 1;
       }
    }
 
-   inline qreal calcEffectiveOpacity() const {
+   qreal calcEffectiveOpacity() const {
       qreal retval = opacity;
       int myFlags  = itemFlags;
 
@@ -292,15 +292,15 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return retval;
    }
 
-   inline bool isOpacityNull() const {
+   bool isOpacityNull() const {
       return (opacity < qreal(0.001));
    }
 
-   static inline bool isOpacityNull(qreal opacity) {
+   static bool isOpacityNull(qreal opacity) {
       return (opacity < qreal(0.001));
    }
 
-   inline bool isFullyTransparent() const {
+   bool isFullyTransparent() const {
       if (isOpacityNull()) {
          return true;
       }
@@ -311,7 +311,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return isOpacityNull(calcEffectiveOpacity());
    }
 
-   inline qreal effectiveOpacity() const {
+   qreal effectiveOpacity() const {
       if (! parent || ! opacity) {
          return opacity;
       }
@@ -319,7 +319,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return calcEffectiveOpacity();
    }
 
-   inline qreal combineOpacityFromParent(qreal parentOpacity) const {
+   qreal combineOpacityFromParent(qreal parentOpacity) const {
       if (parent && ! (itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)
             && ! (parent->d_ptr->itemFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
          return parentOpacity * opacity;
@@ -327,7 +327,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return opacity;
    }
 
-   inline bool childrenCombineOpacity() const {
+   bool childrenCombineOpacity() const {
       if (! children.size()) {
          return true;
       }
@@ -344,15 +344,15 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       return true;
    }
 
-   inline bool childrenClippedToShape() const {
+   bool childrenClippedToShape() const {
       return (itemFlags & QGraphicsItem::ItemClipsChildrenToShape) || children.isEmpty();
    }
 
-   inline bool isInvisible() const {
+   bool isInvisible() const {
       return !visible || (childrenCombineOpacity() && isFullyTransparent());
    }
 
-   inline void markParentDirty(bool updateBoundingRect = false);
+   void markParentDirty(bool updateBoundingRect = false);
 
    void setFocusHelper(Qt::FocusReason focusReason, bool climb, bool focusFromHide);
    void clearFocusHelper(bool giveFocusToParent, bool hiddenByParentPanel);
@@ -519,10 +519,8 @@ struct QGraphicsItemPrivate::TransformData {
 };
 
 struct QGraphicsItemPaintInfo {
-   inline QGraphicsItemPaintInfo(const QTransform *const xform1, const QTransform *const xform2,
-      const QTransform *const xform3,
-      QRegion *r, QWidget *w, QStyleOptionGraphicsItem *opt,
-      QPainter *p, qreal o, bool b1, bool b2)
+   QGraphicsItemPaintInfo(const QTransform *const xform1, const QTransform *const xform2, const QTransform *const xform3,
+         QRegion *r, QWidget *w, QStyleOptionGraphicsItem *opt, QPainter *p, qreal o, bool b1, bool b2)
       : viewTransform(xform1), transformPtr(xform2), effectTransform(xform3), exposedRegion(r), widget(w),
         option(opt), painter(p), opacity(o), wasDirtySceneTransform(b1), drawItem(b2) {
    }

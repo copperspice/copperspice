@@ -55,7 +55,7 @@ class QTreeModel : public QAbstractItemModel
    explicit QTreeModel(int columns = 0, QTreeWidget *parent = nullptr);
    ~QTreeModel();
 
-   inline QTreeWidget *view() const {
+   QTreeWidget *view() const {
       return qobject_cast<QTreeWidget *>(QObject::parent());
    }
 
@@ -106,7 +106,7 @@ class QTreeModel : public QAbstractItemModel
 
    QMimeData *internalMimeData() const;
 
-   inline QModelIndex createIndexFromItem(int row, int col, QTreeWidgetItem *item) const {
+   QModelIndex createIndexFromItem(int row, int col, QTreeWidgetItem *item) const {
       return createIndex(row, col, item);
    }
 
@@ -194,15 +194,15 @@ class QTreeWidgetPrivate : public QTreeViewPrivate
  public:
    QTreeWidgetPrivate() : QTreeViewPrivate(), explicitSortColumn(-1) {}
 
-   inline QTreeModel *treeModel() const {
+   QTreeModel *treeModel() const {
       return qobject_cast<QTreeModel *>(model);
    }
 
-   inline QModelIndex index(const QTreeWidgetItem *item, int column = 0) const {
+   QModelIndex index(const QTreeWidgetItem *item, int column = 0) const {
       return treeModel()->index(item, column);
    }
 
-   inline QTreeWidgetItem *item(const QModelIndex &index) const {
+   QTreeWidgetItem *item(const QModelIndex &index) const {
       return treeModel()->item(index);
    }
    void _q_emitItemPressed(const QModelIndex &index);

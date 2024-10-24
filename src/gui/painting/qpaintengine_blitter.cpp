@@ -78,15 +78,15 @@ class CapabilitiesToStateMask
       }
    }
 
-   inline bool canBlitterFillRect() const {
+   bool canBlitterFillRect() const {
       return checkStateAgainstMask(capabillitiesState, fillRectMask);
    }
 
-   inline bool canBlitterAlphaFillRect() const {
+   bool canBlitterAlphaFillRect() const {
       return checkStateAgainstMask(capabillitiesState, alphaFillRectMask);
    }
 
-   inline bool canBlitterDrawRectMask() const {
+   bool canBlitterDrawRectMask() const {
       return checkStateAgainstMask(capabillitiesState, drawRectMask);
    }
 
@@ -134,17 +134,17 @@ class CapabilitiesToStateMask
       }
       return true;
    }
-   inline void updateState(uint mask, bool on) {
+
+   void updateState(uint mask, bool on) {
       updateStateBits(&capabillitiesState, mask, on);
    }
 
  private:
-
-   static inline void updateStateBits(uint *state, uint mask, bool on) {
+   static void updateStateBits(uint *state, uint mask, bool on) {
       *state = on ? (*state | mask) : (*state & ~mask);
    }
 
-   static inline bool checkStateAgainstMask(uint state, uint mask) {
+   static bool checkStateAgainstMask(uint state, uint mask) {
       return !state || (state & mask && !(state & ~mask));
    }
 

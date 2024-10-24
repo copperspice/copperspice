@@ -38,8 +38,9 @@ class QOpenGL2GradientCache : public QOpenGLSharedResource
 {
     struct CacheInfo
     {
-        inline CacheInfo(QVector<QPair<qreal, QColor>> s, qreal op, QGradient::InterpolationMode mode) :
-            stops(std::move(s)), opacity(op), interpolationMode(mode) {}
+        CacheInfo(QVector<QPair<qreal, QColor>> s, qreal op, QGradient::InterpolationMode mode) :
+            stops(std::move(s)), opacity(op), interpolationMode(mode)
+        { }
 
         GLuint texId;
         QVector<QPair<qreal, QColor>> stops;
@@ -56,13 +57,17 @@ public:
     ~QOpenGL2GradientCache();
 
     GLuint getBuffer(const QGradient &gradient, qreal opacity);
-    inline int paletteSize() const { return 1024; }
+    int paletteSize() const {
+       return 1024;
+    }
 
     void invalidateResource() override;
     void freeResource(QOpenGLContext *ctx) override;
 
 private:
-    inline int maxCacheSize() const { return 60; }
+    int maxCacheSize() const {
+       return 60;
+    }
     inline void generateGradientColorTable(const QGradient& gradient,
                                            QRgba64 *colorTable,
                                            int size, qreal opacity) const;

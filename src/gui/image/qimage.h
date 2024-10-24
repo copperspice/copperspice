@@ -114,12 +114,12 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    QImage &operator=(const QImage &other);
 
-   inline QImage &operator=(QImage &&other) {
+   QImage &operator=(QImage &&other) {
       qSwap(d, other.d);
       return *this;
    }
 
-   inline void swap(QImage &other) {
+   void swap(QImage &other) {
       qSwap(d, other.d);
    }
 
@@ -135,7 +135,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    bool isDetached() const;
 
    QImage copy(const QRect &rect = QRect()) const;
-   inline QImage copy(int x, int y, int width, int height) const {
+   QImage copy(int x, int y, int width, int height) const {
       return copy(QRect(x, y, width, height));
    }
 
@@ -223,7 +223,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    QImage createMaskFromColor(QRgb color, Qt::MaskMode mode = Qt::MaskInColor) const;
 
-   inline QImage scaled(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio,
+   QImage scaled(int width, int height, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio,
       Qt::TransformationMode mode = Qt::FastTransformation) const {
       return scaled(QSize(width, height), aspectRatioMode, mode);
    }
@@ -262,7 +262,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
    bool load(const QString &fileName, const QString &format = QString());
    bool loadFromData(const uchar *buffer, int len, const QString &format = QString());
 
-   inline bool loadFromData(const QByteArray &data, const QString &format = QString()) {
+   bool loadFromData(const QByteArray &data, const QString &format = QString()) {
       return loadFromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 
@@ -271,7 +271,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
 
    static QImage fromData(const uchar *data, int size, const QString &format = QString());
 
-   static inline QImage fromData(const QByteArray &data, const QString &format = QString()) {
+   static QImage fromData(const QByteArray &data, const QString &format = QString()) {
       return fromData(reinterpret_cast<const uchar *>(data.constData()), data.size(), format);
    }
 
@@ -302,7 +302,7 @@ class Q_GUI_EXPORT QImage : public QPaintDevice
  protected:
    typedef QImageData *DataPtr;
 
-   inline DataPtr &data_ptr() {
+   DataPtr &data_ptr() {
       return d;
    }
 

@@ -153,7 +153,8 @@ class Q_GUI_EXPORT QPixmapDropShadowFilter : public QPixmapFilter
 
    QPointF offset() const;
    void setOffset(const QPointF &offset);
-   inline void setOffset(qreal dx, qreal dy) {
+
+   void setOffset(qreal dx, qreal dy) {
       setOffset(QPointF(dx, dy));
    }
 };

@@ -95,7 +95,7 @@ class QPMCache : public QObject, public QCache<QPixmapCache::Key, QPixmapCacheEn
    QPixmap *object(const QString &key) const;
    QPixmap *object(const QPixmapCache::Key &key) const;
 
-   static inline QPixmapCache::KeyData *get(const QPixmapCache::Key &key) {
+   static QPixmapCache::KeyData *get(const QPixmapCache::Key &key) {
       return key.d;
    }
 

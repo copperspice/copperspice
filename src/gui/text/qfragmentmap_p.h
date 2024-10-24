@@ -66,11 +66,11 @@ class QFragmentMapData
 
    int length(uint field = 0) const;
 
-   inline Fragment *fragment(uint index) {
+   Fragment *fragment(uint index) {
       return (fragments + index);
    }
 
-   inline const Fragment *fragment(uint index) const {
+   const Fragment *fragment(uint index) const {
       return (fragments + index);
    }
 
@@ -82,11 +82,11 @@ class QFragmentMapData
       return fragments[index] ;
    }
 
-   inline bool isRoot(uint index) const {
+   bool isRoot(uint index) const {
       return !fragment(index)->parent;
    }
 
-   inline uint position(uint node, uint field = 0) const {
+   uint position(uint node, uint field = 0) const {
       Q_ASSERT(field < Fragment::size_array_max);
 
       const Fragment *f = fragment(node);
@@ -102,11 +102,13 @@ class QFragmentMapData
       }
       return offset;
    }
-   inline uint sizeRight(uint node, uint field = 0) const {
+
+   uint sizeRight(uint node, uint field = 0) const {
       Q_ASSERT(field < Fragment::size_array_max);
       uint sr = 0;
       const Fragment *f = fragment(node);
       node = f->right;
+
       while (node) {
          f = fragment(node);
          sr += f->size_left_array[field] + f->size_array[field];
@@ -114,18 +116,18 @@ class QFragmentMapData
       }
       return sr;
    }
-   inline uint sizeLeft(uint node, uint field = 0) const {
+
+   uint sizeLeft(uint node, uint field = 0) const {
       Q_ASSERT(field < Fragment::size_array_max);
       return fragment(node)->size_left_array[field];
    }
 
-
-   inline uint size(uint node, uint field = 0) const {
+   uint size(uint node, uint field = 0) const {
       Q_ASSERT(field < Fragment::size_array_max);
       return fragment(node)->size_array[field];
    }
 
-   inline void setSize(uint node, int new_size, uint field = 0) {
+   void setSize(uint node, int new_size, uint field = 0) {
       Q_ASSERT(field < Fragment::size_array_max);
       Fragment *f = fragment(node);
       int diff = new_size - f->size_array[field];
@@ -162,16 +164,17 @@ class QFragmentMapData
    uint next(uint n) const;
    uint previous(uint n) const;
 
-   inline uint root() const {
+   uint root() const {
       Q_ASSERT(!head->root || !fragment(head->root)->parent);
       return head->root;
    }
-   inline void setRoot(uint new_root) {
+
+   void setRoot(uint new_root) {
       Q_ASSERT(!head->root || !fragment(new_root)->parent);
       head->root = new_root;
    }
 
-   inline bool isValid(uint n) const {
+   bool isValid(uint n) const {
       return n > 0 && n != head->freelist;
    }
 
@@ -743,7 +746,7 @@ class QFragmentMap
       iterator(QFragmentMap *p, int node) : pt(p), n(node) {}
       iterator(const iterator &it) : pt(it.pt), n(it.n) {}
 
-      inline bool atEnd() const {
+      bool atEnd() const {
          return !n;
       }
 
@@ -811,7 +814,7 @@ class QFragmentMap
       const_iterator(const const_iterator &it) : pt(it.pt), n(it.n) {}
       const_iterator(const iterator &it) : pt(it.pt), n(it.n) {}
 
-      inline bool atEnd() const {
+      bool atEnd() const {
          return !n;
       }
 
@@ -871,34 +874,38 @@ class QFragmentMap
       }
    }
 
-   inline void clear() {
+   void clear() {
       for (iterator it = begin(); !it.atEnd(); ++it) {
          it.value()->free();
       }
       data.init();
    }
 
-   inline iterator begin() {
+   iterator begin() {
       return iterator(this, data.minimum(data.root()));
    }
-   inline iterator end() {
+
+   iterator end() {
       return iterator(this, 0);
    }
-   inline const_iterator begin() const {
+
+   const_iterator begin() const {
       return const_iterator(this, data.minimum(data.root()));
    }
-   inline const_iterator end() const {
+
+   const_iterator end() const {
       return const_iterator(this, 0);
    }
 
-   inline const_iterator last() const {
+   const_iterator last() const {
       return const_iterator(this, data.maximum(data.root()));
    }
 
-   inline bool isEmpty() const {
+   bool isEmpty() const {
       return data.head->node_count == 0;
    }
-   inline int numNodes() const {
+
+   int numNodes() const {
       return data.head->node_count;
    }
    int length(uint field = 0) const {
@@ -934,31 +941,39 @@ class QFragmentMap
       return data.erase_single(f);
    }
 
-   inline Fragment *fragment(uint index) {
+   Fragment *fragment(uint index) {
       Q_ASSERT(index != 0);
       return data.fragment(index);
    }
-   inline const Fragment *fragment(uint index) const {
+
+   const Fragment *fragment(uint index) const {
       Q_ASSERT(index != 0);
       return data.fragment(index);
    }
-   inline uint position(uint node, uint field = 0) const {
+
+   uint position(uint node, uint field = 0) const {
       return data.position(node, field);
    }
-   inline bool isValid(uint n) const {
+
+   bool isValid(uint n) const {
       return data.isValid(n);
    }
-   inline uint next(uint n) const {
+
+   uint next(uint n) const {
       return data.next(n);
    }
-   inline uint previous(uint n) const {
+
+   uint previous(uint n) const {
       return data.previous(n);
    }
-   inline uint size(uint node, uint field = 0) const {
+
+   uint size(uint node, uint field = 0) const {
       return data.size(node, field);
    }
-   inline void setSize(uint node, int new_size, uint field = 0) {
+
+   void setSize(uint node, int new_size, uint field = 0) {
       data.setSize(node, new_size, field);
+
       if (node != 0 && field == 0) {
          Fragment *frag = fragment(node);
          Q_ASSERT(frag);
@@ -966,7 +981,7 @@ class QFragmentMap
       }
    }
 
-   inline int firstNode() const {
+   int firstNode() const {
       return data.minimum(data.root());
    }
 

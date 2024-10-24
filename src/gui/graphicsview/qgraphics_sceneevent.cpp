@@ -38,13 +38,12 @@
 class QGraphicsSceneEventPrivate
 {
  public:
-   inline QGraphicsSceneEventPrivate()
+   QGraphicsSceneEventPrivate()
       : widget(nullptr), q_ptr(nullptr)
-   {
-   }
+   { }
 
-   inline virtual ~QGraphicsSceneEventPrivate() {
-   }
+   virtual ~QGraphicsSceneEventPrivate()
+   { }
 
    QWidget *widget;
    QGraphicsSceneEvent *q_ptr;
@@ -628,7 +627,7 @@ class QGraphicsSceneDragDropEventPrivate : public QGraphicsSceneEventPrivate
    Q_DECLARE_PUBLIC(QGraphicsSceneDragDropEvent)
 
  public:
-   inline QGraphicsSceneDragDropEventPrivate()
+   QGraphicsSceneDragDropEventPrivate()
       : source(nullptr), mimeData(nullptr)
    {
    }
@@ -785,7 +784,7 @@ class QGraphicsSceneResizeEventPrivate : public QGraphicsSceneEventPrivate
    Q_DECLARE_PUBLIC(QGraphicsSceneResizeEvent)
 
  public:
-   inline QGraphicsSceneResizeEventPrivate() {
+   QGraphicsSceneResizeEventPrivate() {
    }
 
    QSizeF oldSize;
@@ -830,7 +829,7 @@ class QGraphicsSceneMoveEventPrivate : public QGraphicsSceneEventPrivate
    Q_DECLARE_PUBLIC(QGraphicsSceneMoveEvent)
 
  public:
-   inline QGraphicsSceneMoveEventPrivate() {
+   QGraphicsSceneMoveEventPrivate() {
    }
 
    QPointF oldPos;

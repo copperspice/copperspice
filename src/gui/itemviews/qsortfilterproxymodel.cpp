@@ -55,13 +55,13 @@ static inline QSet<int> qVectorToSet(const QVector<int> &vector)
 class QSortFilterProxyModelLessThan
 {
  public:
-   inline QSortFilterProxyModelLessThan(int column, const QModelIndex &parent,
+   QSortFilterProxyModelLessThan(int column, const QModelIndex &parent,
       const QAbstractItemModel *source, const QSortFilterProxyModel *proxy)
          : sort_column(column), source_parent(parent), source_model(source), proxy_model(proxy)
    {
    }
 
-   inline bool operator()(int r1, int r2) const {
+   bool operator()(int r1, int r2) const {
       QModelIndex i1 = source_model->index(r1, sort_column, source_parent);
       QModelIndex i2 = source_model->index(r2, sort_column, source_parent);
       return proxy_model->lessThan(i1, i2);
@@ -77,13 +77,13 @@ class QSortFilterProxyModelLessThan
 class QSortFilterProxyModelGreaterThan
 {
  public:
-   inline QSortFilterProxyModelGreaterThan(int column, const QModelIndex &parent,
+   QSortFilterProxyModelGreaterThan(int column, const QModelIndex &parent,
       const QAbstractItemModel *source, const QSortFilterProxyModel *proxy)
       : sort_column(column), source_parent(parent), source_model(source), proxy_model(proxy)
    {
    }
 
-   inline bool operator()(int r1, int r2) const {
+   bool operator()(int r1, int r2) const {
       QModelIndex i1 = source_model->index(r1, sort_column, source_parent);
       QModelIndex i2 = source_model->index(r2, sort_column, source_parent);
       return proxy_model->lessThan(i2, i1);
@@ -172,8 +172,7 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
 
    void remove_from_mapping(const QModelIndex &sourceParent);
 
-   inline QHash<QModelIndex, Mapping *>::const_iterator index_to_iterator(
-      const QModelIndex &proxy_index) const {
+   QHash<QModelIndex, Mapping *>::const_iterator index_to_iterator(const QModelIndex &proxy_index) const {
       Q_ASSERT(proxy_index.isValid());
       Q_ASSERT(proxy_index.model() == q_func());
       const void *p = proxy_index.internalPointer();
@@ -186,7 +185,7 @@ class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
       return it;
    }
 
-   inline QModelIndex create_index(int row, int column,
+   QModelIndex create_index(int row, int column,
       QHash<QModelIndex, Mapping *>::const_iterator it) const {
       return q_func()->createIndex(row, column, *it);
    }

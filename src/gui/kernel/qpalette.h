@@ -107,7 +107,7 @@ class Q_GUI_EXPORT QPalette
 
    QPalette &operator=(const QPalette &other);
 
-   inline QPalette &operator=(QPalette &&other) {
+   QPalette &operator=(QPalette &&other) {
       resolve_mask  = other.resolve_mask;
       current_group = other.current_group;
       qSwap(d, other.d);
@@ -131,7 +131,7 @@ class Q_GUI_EXPORT QPalette
       current_group = group;
    }
 
-   inline const QColor &color(ColorGroup group, ColorRole role) const {
+   const QColor &color(ColorGroup group, ColorRole role) const {
       return brush(group, role).color();
    }
 
@@ -150,98 +150,100 @@ class Q_GUI_EXPORT QPalette
 
    bool isEqual(ColorGroup group1, ColorGroup group2) const;
 
-   inline const QColor &color(ColorRole role) const {
+   const QColor &color(ColorRole role) const {
       return color(Current, role);
    }
 
-   inline const QBrush &brush(ColorRole role) const {
+   const QBrush &brush(ColorRole role) const {
       return brush(Current, role);
    }
 
-   inline const QBrush &foreground() const {
+   const QBrush &foreground() const {
       return brush(WindowText);
    }
 
-   inline const QBrush &windowText() const {
+   const QBrush &windowText() const {
       return brush(WindowText);
    }
 
-   inline const QBrush &button() const {
+   const QBrush &button() const {
       return brush(Button);
    }
 
-   inline const QBrush &light() const {
+   const QBrush &light() const {
       return brush(Light);
    }
 
-   inline const QBrush &dark() const {
+   const QBrush &dark() const {
       return brush(Dark);
    }
 
-   inline const QBrush &mid() const {
+   const QBrush &mid() const {
       return brush(Mid);
    }
 
-   inline const QBrush &text() const {
+   const QBrush &text() const {
       return brush(Text);
    }
 
-   inline const QBrush &base() const {
+   const QBrush &base() const {
       return brush(Base);
    }
 
-   inline const QBrush &alternateBase() const {
+   const QBrush &alternateBase() const {
       return brush(AlternateBase);
    }
 
-   inline const QBrush &toolTipBase() const {
+   const QBrush &toolTipBase() const {
       return brush(ToolTipBase);
    }
 
-   inline const QBrush &toolTipText() const {
+   const QBrush &toolTipText() const {
       return brush(ToolTipText);
    }
 
-   inline const QBrush &background() const {
-      return brush(Window);
-   }
-   inline const QBrush &window() const {
+   const QBrush &background() const {
       return brush(Window);
    }
 
-   inline const QBrush &midlight() const {
+   const QBrush &window() const {
+      return brush(Window);
+   }
+
+   const QBrush &midlight() const {
       return brush(Midlight);
    }
 
-   inline const QBrush &brightText() const {
+   const QBrush &brightText() const {
       return brush(BrightText);
    }
 
-   inline const QBrush &buttonText() const {
+   const QBrush &buttonText() const {
       return brush(ButtonText);
    }
-   inline const QBrush &shadow() const {
+
+   const QBrush &shadow() const {
       return brush(Shadow);
    }
 
-   inline const QBrush &highlight() const {
+   const QBrush &highlight() const {
       return brush(Highlight);
    }
 
-   inline const QBrush &highlightedText() const {
+   const QBrush &highlightedText() const {
       return brush(HighlightedText);
    }
 
-   inline const QBrush &link() const {
+   const QBrush &link() const {
       return brush(Link);
    }
 
-   inline const QBrush &linkVisited() const {
+   const QBrush &linkVisited() const {
       return brush(LinkVisited);
    }
 
    bool operator==(const QPalette &other) const;
-   inline bool operator!=(const QPalette &other) const {
+   bool operator!=(const QPalette &other) const {
       return !(operator==(other));
    }
 

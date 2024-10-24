@@ -753,9 +753,9 @@ class Q_GUI_EXPORT QWidgetPrivate
 };
 
 struct QWidgetPaintContext {
-   inline QWidgetPaintContext(QPaintDevice *d, const QRegion &r, const QPoint &o, int f,
-         QPainter *p, QWidgetBackingStore *b)
-      : pdev(d), rgn(r), offset(o), flags(f), sharedPainter(p), backingStore(b), painter(nullptr) {}
+   QWidgetPaintContext(QPaintDevice *d, const QRegion &r, const QPoint &o, int f, QPainter *p, QWidgetBackingStore *b)
+      : pdev(d), rgn(r), offset(o), flags(f), sharedPainter(p), backingStore(b), painter(nullptr)
+   { }
 
    QPaintDevice *pdev;
    QRegion rgn;

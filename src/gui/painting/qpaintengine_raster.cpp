@@ -3888,8 +3888,9 @@ class QGradientCache
 {
  public:
    struct CacheInfo : QSpanData::Pinnable {
-      inline CacheInfo(QVector<QPair<qreal, QColor>> s, int op, QGradient::InterpolationMode mode) :
-         stops(std::move(s)), opacity(op), interpolationMode(mode) {}
+      CacheInfo(QVector<QPair<qreal, QColor>> s, int op, QGradient::InterpolationMode mode) :
+         stops(std::move(s)), opacity(op), interpolationMode(mode)
+      { }
 
       QRgba64 buffer64[GRADIENT_STOPTABLE_SIZE];
       QRgb buffer32[GRADIENT_STOPTABLE_SIZE];
@@ -3901,7 +3902,7 @@ class QGradientCache
 
    typedef QMultiHash<quint64, QSharedPointer<const CacheInfo>> QGradientColorTableHash;
 
-   inline QSharedPointer<const CacheInfo> getBuffer(const QGradient &gradient, int opacity) {
+   QSharedPointer<const CacheInfo> getBuffer(const QGradient &gradient, int opacity) {
       quint64 hash_val = 0;
 
       const QVector<QPair<qreal, QColor>> stops = gradient.stops();

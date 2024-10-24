@@ -40,13 +40,13 @@ class Q_GUI_EXPORT QBitmap : public QPixmap
 
    QBitmap &operator=(const QPixmap &pixmap);
 
-   inline void swap(QBitmap &other) {
+   void swap(QBitmap &other) {
       QPixmap::swap(other);   // prevent QBitmap<->QPixmap swaps
    }
 
    operator QVariant() const;
 
-   inline void clear() {
+   void clear() {
       fill(Qt::color0);
    }
 

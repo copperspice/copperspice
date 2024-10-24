@@ -39,7 +39,7 @@ class QVariant;
 class Q_GUI_EXPORT QMatrix4x4
 {
  public:
-   inline QMatrix4x4() {
+   QMatrix4x4() {
       setToIdentity();
    }
 
@@ -168,7 +168,8 @@ class Q_GUI_EXPORT QMatrix4x4
    QGenericMatrix<N, M, qreal> toGenericMatrix() const;
 
    inline qreal *data();
-   inline const qreal *data() const {
+
+   const qreal *data() const {
       return *m;
    }
 

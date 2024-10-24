@@ -51,15 +51,15 @@ class QExtendedInformation
    QExtendedInformation() {}
    QExtendedInformation(const QFileInfo &info) : mFileInfo(info) {}
 
-   inline bool isDir() {
+   bool isDir() {
       return type() == Dir;
    }
 
-   inline bool isFile() {
+   bool isFile() {
       return type() == File;
    }
 
-   inline bool isSystem() {
+   bool isSystem() {
       return type() == System;
    }
 

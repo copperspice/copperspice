@@ -68,21 +68,21 @@ class Q_GUI_EXPORT QStandardItem
    inline void setIcon(const QIcon &icon);
 
 #ifndef QT_NO_TOOLTIP
-   inline QString toolTip() const {
+   QString toolTip() const {
       return (data(Qt::ToolTipRole)).value<QString>();
    }
    inline void setToolTip(const QString &toolTip);
 #endif
 
 #ifndef QT_NO_STATUSTIP
-   inline QString statusTip() const {
+   QString statusTip() const {
       return (data(Qt::StatusTipRole)).value<QString>();
    }
    inline void setStatusTip(const QString &statusTip);
 #endif
 
 #ifndef QT_NO_WHATSTHIS
-   inline QString whatsThis() const {
+   QString whatsThis() const {
       return (data(Qt::WhatsThisRole)).value<QString>();
    }
 
@@ -114,12 +114,12 @@ class Q_GUI_EXPORT QStandardItem
    }
    inline void setForeground(const QBrush &brush);
 
-   inline Qt::CheckState checkState() const {
+   Qt::CheckState checkState() const {
       return Qt::CheckState((data(Qt::CheckStateRole)).value<int>());
    }
    inline void setCheckState(Qt::CheckState state);
 
-   inline QString accessibleText() const {
+   QString accessibleText() const {
       return (data(Qt::AccessibleTextRole)).value<QString>();
    }
    inline void setAccessibleText(const QString &accessibleText);

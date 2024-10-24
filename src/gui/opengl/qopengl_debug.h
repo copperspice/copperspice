@@ -110,7 +110,9 @@ public:
                                                        Type type = OtherType);
 
     bool operator==(const QOpenGLDebugMessage &debugMessage) const;
-    inline bool operator!=(const QOpenGLDebugMessage &debugMessage) const { return !operator==(debugMessage); }
+    bool operator!=(const QOpenGLDebugMessage &debugMessage) const {
+       return !operator==(debugMessage);
+    }
 
 private:
     friend class QOpenGLDebugLogger;

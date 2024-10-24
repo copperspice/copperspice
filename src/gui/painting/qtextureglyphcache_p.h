@@ -92,19 +92,19 @@ class Q_GUI_EXPORT QTextureGlyphCache : public QFontEngineGlyphCache
 
    virtual void fillTexture(const Coord &coord, glyph_t glyph, QFixed subPixelPosition) = 0;
 
-   inline void createCache(int width, int height) {
+   void createCache(int width, int height) {
       m_w = width;
       m_h = height;
       createTextureData(width, height);
    }
 
-   inline void resizeCache(int width, int height) {
+   void resizeCache(int width, int height) {
       resizeTextureData(width, height);
       m_w = width;
       m_h = height;
    }
 
-   inline bool isNull() const {
+   bool isNull() const {
       return m_h == 0;
    }
 
@@ -150,7 +150,7 @@ class Q_GUI_EXPORT QImageTextureGlyphCache : public QTextureGlyphCache
    void resizeTextureData(int width, int height) override;
    void fillTexture(const Coord &c, glyph_t glyph, QFixed subPixelPosition) override;
 
-   inline const QImage &image() const {
+   const QImage &image() const {
       return m_image;
    }
 

@@ -155,7 +155,7 @@ class QMacStylePrivate : public QCommonStylePrivate
    void getSliderInfo(QStyle::ComplexControl cc, const QStyleOptionSlider *slider,
       HIThemeTrackDrawInfo *tdi, const QWidget *needToRemoveMe) const;
 
-   inline int animateSpeed(Animates) const {
+   int animateSpeed(Animates) const {
       return 33;
    }
 

@@ -53,17 +53,17 @@ class QRawFontPrivate
       cleanUp();
    }
 
-   inline void cleanUp() {
+   void cleanUp() {
       setFontEngine(nullptr);
       hintingPreference = QFont::PreferDefaultHinting;
    }
 
-   inline bool isValid() const {
+   bool isValid() const {
       Q_ASSERT(fontEngine == nullptr || thread == QThread::currentThread());
       return fontEngine != nullptr;
    }
 
-   inline void setFontEngine(QFontEngine *engine) {
+   void setFontEngine(QFontEngine *engine) {
       Q_ASSERT(fontEngine == nullptr || thread == QThread::currentThread());
 
       if (fontEngine == engine) {

@@ -45,7 +45,8 @@ class QTextCursorPrivate : public QSharedData
    void remove();
    void clearCells(QTextTable *table, int startRow, int startCol, int numRows, int numCols,
       QTextUndoCommand::Operation op);
-   inline bool setPosition(int newPosition) {
+
+   bool setPosition(int newPosition) {
       Q_ASSERT(newPosition >= 0 && newPosition < priv->length());
       bool moved = position != newPosition;
       if (moved) {
@@ -60,11 +61,11 @@ class QTextCursorPrivate : public QSharedData
    void insertBlock(const QTextBlockFormat &format, const QTextCharFormat &charFormat);
    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
-   inline QTextBlock block() const {
+   QTextBlock block() const {
       return QTextBlock(priv, priv->blockMap().findNode(position));
    }
 
-   inline QTextBlockFormat blockFormat() const {
+   QTextBlockFormat blockFormat() const {
       return block().blockFormat();
    }
 

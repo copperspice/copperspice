@@ -31,8 +31,13 @@
 class QWidgetItemData
 {
  public:
-   inline QWidgetItemData() : role(-1) {}
-   inline QWidgetItemData(int r, QVariant v) : role(r), value(v) {}
+   QWidgetItemData()
+      : role(-1)
+   { }
+
+   QWidgetItemData(int r, QVariant v)
+      : role(r), value(v)
+   { }
 
    int role;
    QVariant value;
