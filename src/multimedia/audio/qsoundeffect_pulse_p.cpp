@@ -343,7 +343,7 @@ void QSoundEffectPrivate::handleAvailabilityChanged(bool available)
     m_resourcesAvailable = available;
 
 #if defined(CS_SHOW_DEBUG_MULTIMEDIA)
-    qDebug() << Q_FUNC_INFO << "Resource availability changed " << m_resourcesAvailable;
+    qDebug() << "QSoundEffectPrivate::handleAvailabilityChanged() Resource availability changed " << m_resourcesAvailable;
 #endif
 
     if (! m_resourcesAvailable) {

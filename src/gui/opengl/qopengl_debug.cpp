@@ -213,7 +213,7 @@ static QOpenGLDebugMessage::Source qt_messageSourceFromGL(GLenum source)
          return QOpenGLDebugMessage::OtherSource;
     }
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message source from GL");
+    Q_ASSERT_X(false, "qt_messageSourceFromGL()", "Unknown message source from GL");
 
     return QOpenGLDebugMessage::OtherSource;
 }
@@ -246,7 +246,7 @@ static GLenum qt_messageSourceToGL(QOpenGLDebugMessage::Source source)
          break;
    }
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message source");
+    Q_ASSERT_X(false, "qt_messageSourceToGL()", "Invalid message source");
     return GL_DEBUG_SOURCE_OTHER;
 }
 
@@ -278,7 +278,7 @@ static QString qt_messageSourceToString(QOpenGLDebugMessage::Source source)
          return QString("AnySource");
     }
 
-    Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message source");
+    Q_ASSERT_X(false, "qt_messageSourceToString()", "Unknown message source");
     return QString();
 }
 
@@ -313,7 +313,7 @@ static QOpenGLDebugMessage::Type qt_messageTypeFromGL(GLenum type)
          return QOpenGLDebugMessage::GroupPopType;
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type from GL");
+   Q_ASSERT_X(false, "qt_messageTypeFromGL()", "Unknown message type from GL");
 
    return QOpenGLDebugMessage::OtherType;
 }
@@ -355,7 +355,7 @@ static GLenum qt_messageTypeToGL(QOpenGLDebugMessage::Type type)
          break;
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message type");
+   Q_ASSERT_X(false, "qt_messageTypeToGL()", "Invalid message type");
    return GL_DEBUG_TYPE_OTHER;
 }
 
@@ -396,7 +396,7 @@ static QString qt_messageTypeToString(QOpenGLDebugMessage::Type type)
          return QString("AnyType");
       }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message type");
+   Q_ASSERT_X(false, "qt_messageTypeToString()", "Unknown message type");
 
    return QString();
 }
@@ -417,7 +417,7 @@ static QOpenGLDebugMessage::Severity qt_messageSeverityFromGL(GLenum severity)
          return QOpenGLDebugMessage::NotificationSeverity;
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity from GL");
+   Q_ASSERT_X(false, "qt_messageSeverityFromGL()", "Unknown message severity from GL");
 
    return QOpenGLDebugMessage::NotificationSeverity;
 }
@@ -444,7 +444,7 @@ static GLenum qt_messageSeverityToGL(QOpenGLDebugMessage::Severity severity)
          break;
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Invalid message severity");
+   Q_ASSERT_X(false, "qt_messageSeverityToGL()", "Invalid message severity");
 
    return GL_DEBUG_SEVERITY_NOTIFICATION;
 }
@@ -471,7 +471,7 @@ static QString qt_messageSeverityToString(QOpenGLDebugMessage::Severity severity
          return QString("AnySeverity");
    }
 
-   Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown message severity");
+   Q_ASSERT_X(false, "qt_messageSeverityToString()", "Unknown message severity");
 
    return QString();
 }

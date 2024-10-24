@@ -875,7 +875,7 @@ bool QSslSocketBackendPrivate::initSslContext()
 {
    Q_Q(QSslSocket);
 
-   Q_ASSERT_X(!context, Q_FUNC_INFO, "invalid socket state, context is not null");
+   Q_ASSERT_X(!context, "QSslSocketBackendPrivate::initSslContext()", "Invalid socket state, context is not null");
    Q_ASSERT(plainSocket);
 
    context.reset(qt_createSecureTransportContext(mode));
@@ -967,7 +967,7 @@ static QByteArray _q_makePkcs12(const QList<QSslCertificate> &certs, const QSslK
 
 bool QSslSocketBackendPrivate::setSessionCertificate(QString &errorDescription, QAbstractSocket::SocketError &errorCode)
 {
-   Q_ASSERT_X(context, Q_FUNC_INFO, "invalid SSL context (null)");
+   Q_ASSERT_X(context, "QSslSocketBackendPrivate::setSessionCertificate()", "Invalid SSL context (null)");
 
    QSslCertificate localCertificate;
    if (!configuration.localCertificateChain.isEmpty()) {
@@ -1047,7 +1047,7 @@ bool QSslSocketBackendPrivate::setSessionCertificate(QString &errorDescription, 
 
 bool QSslSocketBackendPrivate::setSessionProtocol()
 {
-   Q_ASSERT_X(context, Q_FUNC_INFO, "invalid SSL context (null)");
+   Q_ASSERT_X(context, "QSslSocketBackendPrivate::setSessionProtocol()", "Invalid SSL context (null)");
 
    // QSsl::SslV2 == kSSLProtocol2 is disabled in secure transport and
    // always fails with errSSLIllegalParam:
@@ -1101,7 +1101,7 @@ bool QSslSocketBackendPrivate::verifyPeerTrust()
    const QSslSocket::PeerVerifyMode verifyMode = configuration.peerVerifyMode;
    const bool canIgnoreVerify = canIgnoreTrustVerificationFailure();
 
-   Q_ASSERT_X(context, Q_FUNC_INFO, "invalid SSL context (null)");
+   Q_ASSERT_X(context, "QSslSocketBackendPrivate::verifyPeerTrust()", "Invalid SSL context (null)");
    Q_ASSERT(plainSocket);
 
    QCFType<SecTrustRef> trust;

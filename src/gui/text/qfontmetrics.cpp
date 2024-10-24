@@ -259,7 +259,7 @@ int QFontMetrics::width(const QString &text, int len, int flags) const
          glyphs.resize(numGlyphs);
 
          if (! engine->stringToCMap(text, &glyphs, &numGlyphs, Qt::EmptyFlag)) {
-            Q_ASSERT_X(false, Q_FUNC_INFO, "stringToCMap should not fail twice");
+            Q_ASSERT_X(false, "QFontMetrics::width()", "Calling stringToCMap() failed twice");
          }
       }
 

@@ -115,15 +115,15 @@ void QNetworkAccessCacheBackend::closeDownstreamChannel()
 
 void QNetworkAccessCacheBackend::closeUpstreamChannel()
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This method should not be called");
+   Q_ASSERT_X(false, "QNetworkAccessCacheBackend::closeUpstreamChannel()", "This method should not be called");
 }
 
 void QNetworkAccessCacheBackend::upstreamReadyRead()
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This method should not be called");
+   Q_ASSERT_X(false, "QNetworkAccessCacheBackend::upstreamReadyRead()", "This method should not be called");
 }
 
 void QNetworkAccessCacheBackend::downstreamReadyWrite()
 {
-   Q_ASSERT_X(false, Q_FUNC_INFO, "This method should not be called");
+   Q_ASSERT_X(false, "QNetworkAccessCacheBackend::downstreamReadyWrite()", "This method should not be called");
 }
