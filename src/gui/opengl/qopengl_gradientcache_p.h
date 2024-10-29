@@ -25,7 +25,6 @@
 #ifndef QOPENGLGRADIENTCACHE_P_H
 #define QOPENGLGRADIENTCACHE_P_H
 
-
 #include <qobject.h>
 #include <qmultihash.h>
 #include <qmutex.h>
@@ -68,12 +67,10 @@ private:
     int maxCacheSize() const {
        return 60;
     }
-    inline void generateGradientColorTable(const QGradient& gradient,
-                                           QRgba64 *colorTable,
-                                           int size, qreal opacity) const;
-    inline void generateGradientColorTable(const QGradient& gradient,
-                                           uint *colorTable,
-                                           int size, qreal opacity) const;
+
+    inline void generateGradientColorTable(const QGradient& gradient, QRgba64 *colorTable, int size, qreal opacity) const;
+    inline void generateGradientColorTable(const QGradient& gradient, uint *colorTable, int size, qreal opacity) const;
+
     GLuint addCacheElement(quint64 hash_val, const QGradient &gradient, qreal opacity);
     void cleanCache();
 

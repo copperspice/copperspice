@@ -121,6 +121,7 @@ class QCommonListViewBase
    QCommonListViewBase(QListView *q, QListViewPrivate *d)
       : dd(d), qq(q), batchStartRow(0), batchSavedDeltaSeg(0)
    { }
+
    virtual ~QCommonListViewBase() {}
 
    //common interface
@@ -535,18 +536,22 @@ inline int QCommonListViewBase::spacing() const
 {
    return dd->spacing();
 }
+
 inline bool QCommonListViewBase::isWrapping() const
 {
    return dd->isWrapping();
 }
+
 inline QSize QCommonListViewBase::gridSize() const
 {
    return dd->gridSize();
 }
+
 inline QListView::Flow QCommonListViewBase::flow() const
 {
    return dd->flow;
 }
+
 inline QListView::Movement QCommonListViewBase::movement() const
 {
    return dd->movement;
@@ -556,14 +561,17 @@ inline QPoint QCommonListViewBase::offset() const
 {
    return dd->offset();
 }
+
 inline QPoint QCommonListViewBase::pressedPosition() const
 {
    return dd->pressedPosition;
 }
+
 inline bool QCommonListViewBase::uniformItemSizes() const
 {
    return dd->uniformItemSizes;
 }
+
 inline int QCommonListViewBase::column() const
 {
    return dd->column;
@@ -573,10 +581,12 @@ inline QScrollBar *QCommonListViewBase::verticalScrollBar() const
 {
    return qq->verticalScrollBar();
 }
+
 inline QScrollBar *QCommonListViewBase::horizontalScrollBar() const
 {
    return qq->horizontalScrollBar();
 }
+
 inline QListView::ScrollMode QCommonListViewBase::verticalScrollMode() const
 {
    return qq->verticalScrollMode();
@@ -590,6 +600,7 @@ inline QModelIndex QCommonListViewBase::modelIndex(int row) const
 {
    return dd->model->index(row, dd->column, dd->root);
 }
+
 inline int QCommonListViewBase::rowCount() const
 {
    return dd->model->rowCount(dd->root);

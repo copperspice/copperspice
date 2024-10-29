@@ -1487,14 +1487,13 @@ static void convert_ARGB_PM_to_Mono(QImageData *dst, const QImageData *src, Qt::
    dither_to_Mono(dst, tmp.data(), flags, false);
 }
 
-//
 // convert_32_to_8:  Converts a 32 bits depth (true color) to an 8 bit
 // image with a colormap. If the 32 bit image has more than 256 colors,
 // we convert the red,green and blue bytes into a single byte encoded
 // as 6 shades of each of red, green and blue.
 //
 // if dithering is needed, only 1 color at most is available for alpha.
-//
+
 struct QRgbMap {
    QRgbMap()
       : used(0)

@@ -133,7 +133,6 @@ static inline QString idKey()                { return QString("id");          }
 static inline QString descriptionKey()       { return QString("description"); }
 static inline QString exceptionsKey()        { return QString("exceptions");  }
 
-
 static inline bool contains(const QJsonArray &haystack, unsigned needle)
 {
     for (auto it = haystack.constBegin(), cend = haystack.constEnd(); it != cend; ++it) {

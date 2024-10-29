@@ -767,6 +767,7 @@ void QTextHtmlParser::parseCloseTag()
 void QTextHtmlParser::parseExclamationTag()
 {
    ++pos;
+
    if (hasPrefix(QLatin1Char('-'), 1) && hasPrefix(QLatin1Char('-'), 2)) {
       pos += 3;
 
@@ -1892,7 +1893,8 @@ class QTextHtmlStyleSelector : public QCss::StyleSelector
 {
  public:
    QTextHtmlStyleSelector(const QTextHtmlParser *parser)
-      : parser(parser) {
+      : parser(parser)
+   {
       nameCaseSensitivity = Qt::CaseInsensitive;
    }
 

@@ -42,7 +42,8 @@ class QDataWidgetMapperPrivate
         orientation(Qt::Horizontal), submitPolicy(QDataWidgetMapper::AutoSubmit) {
    }
 
-   virtual ~QDataWidgetMapperPrivate() {}
+   virtual ~QDataWidgetMapperPrivate()
+   { }
 
    QAbstractItemModel *model;
    QAbstractItemDelegate *delegate;
@@ -52,9 +53,7 @@ class QDataWidgetMapperPrivate
    QPersistentModelIndex currentTopLeft;
 
    int itemCount() {
-      return orientation == Qt::Horizontal
-         ? model->rowCount(rootIndex)
-         : model->columnCount(rootIndex);
+      return orientation == Qt::Horizontal ? model->rowCount(rootIndex) : model->columnCount(rootIndex);
    }
 
    int currentIdx() const {

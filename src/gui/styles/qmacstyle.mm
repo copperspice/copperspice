@@ -1453,7 +1453,7 @@ bool qt_mac_buttonIsRenderedFlat(const QPushButton *pushButton, const QStyleOpti
    return bdi.kind == kThemeBevelButton;
 }
 void QMacStylePrivate::initComboboxBdi(const QStyleOptionComboBox *combo, HIThemeButtonDrawInfo *bdi,
-                                       const QWidget *widget, const ThemeDrawState &tds) const
+      const QWidget *widget, const ThemeDrawState &tds) const
 {
    bdi->version = qt_mac_hitheme_version;
    bdi->adornment = kThemeAdornmentArrowLeftArrow;
@@ -1542,6 +1542,7 @@ HIRect QMacStylePrivate::comboboxInnerBounds(const HIRect &outerBounds, int butt
    // Carbon draw parts of the view outside the rect.
    // So make the rect a bit smaller to compensate
    // (I wish HIThemeGetButtonBackgroundBounds worked)
+
    switch (buttonKind) {
       case kThemePopupButton:
          innerBounds.origin.x += 2;
@@ -6965,7 +6966,6 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
                                        v
                  ------------------------------  <- top of stack widget
 
-
          To summarize:
               * 2 is the distance between the pane and the contentsRect
               * The 14 and the 1's are the distance from the contentsRect to the stack widget.
@@ -6973,9 +6973,9 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
               * overlap is how much the pane should overlap the tab bar
          */
 
-         if (const QStyleOptionTabWidgetFrame * twf
-             = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
+         if (const QStyleOptionTabWidgetFrame *twf = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
             // add the size between the stackwidget and the "contentsRect"
+
             QSize extra(0, 0);
             const int overlap = pixelMetric(PM_TabBarBaseOverlap, opt, widget);
             const int gapBetweenTabbarAndStackWidget = 2 + 14 - overlap;
@@ -6989,19 +6989,25 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
          }
 
          break;
+
       case QStyle::CT_TabBarTab:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
             const QAquaWidgetSize AquaSize = d->aquaSizeConstrain(opt, widget);
+
             const bool differentFont = (widget && widget->testAttribute(Qt::WA_SetFont))
-                  || !QApplication::desktopSettingsAware();
+                  || ! QApplication::desktopSettingsAware();
+
             ThemeTabDirection ttd = getTabDirection(tab->shape);
             bool vertTabs = ttd == kThemeTabWest || ttd == kThemeTabEast;
+
             if (vertTabs) {
                sz = sz.transposed();
             }
+
             int defaultTabHeight;
             int defaultExtraSpace = proxy()->pixelMetric(PM_TabBarTabHSpace, tab, widget); // Remove spurious gcc warning (AFAIK)
             QFontMetrics fm = opt->fontMetrics;
+
             switch (AquaSize) {
                case QAquaSizeUnknown:
                case QAquaSizeLarge:
@@ -7011,14 +7017,18 @@ QSize QMacStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
                      defaultTabHeight = 21;
                   }
                   break;
+
                case QAquaSizeSmall:
                   defaultTabHeight = 18;
                   break;
+
                case QAquaSizeMini:
                   defaultTabHeight = 16;
                   break;
             }
+
             bool setWidth = false;
+
             if (differentFont || !tab->icon.isNull()) {
                sz.rheight() = qMax(defaultTabHeight, sz.height());
             } else {

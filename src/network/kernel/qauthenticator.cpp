@@ -756,17 +756,19 @@ QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge,
 
 const int blockSize        = 64;        // as per RFC2104 Block-size is 512 bits
 
-const quint8 respversion = 1;
+const quint8 respversion   = 1;
 const quint8 hirespversion = 1;
 
 /* usage:
    // fill up ctx with what we know.
    QByteArray response = qNtlmPhase1(ctx);
+
    // send response (b64 encoded??)
    // get response from server (b64 decode?)
    Phase2Block pb;
    qNtlmDecodePhase2(response, pb);
    response = qNtlmPhase3(ctx, pb);
+
    // send response (b64 encoded??)
 */
 

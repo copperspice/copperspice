@@ -159,6 +159,7 @@ class QHashableLatin1Literal
 };
 
 bool operator==(const QHashableLatin1Literal &l1, const QHashableLatin1Literal &l2);
+
 inline bool operator!=(const QHashableLatin1Literal &l1, const QHashableLatin1Literal &l2)
 {
    return !operator==(l1, l2);

@@ -1126,11 +1126,11 @@ void QMdiSubWindowPrivate::setNewGeometry(const QPoint &pos)
    QRect geometry;
    if (cflags & (HMove | VMove)) {
       int dx = getMoveDeltaComponent(cflags, HMove, HResize, posX - mousePressPosition.x(),
-            oldGeometry.width() - internalMinimumSize.width(),
-            oldGeometry.width() - q->maximumWidth());
+            oldGeometry.width() - internalMinimumSize.width(), oldGeometry.width() - q->maximumWidth());
+
       int dy = getMoveDeltaComponent(cflags, VMove, VResize, posY - mousePressPosition.y(),
-            oldGeometry.height() - internalMinimumSize.height(),
-            oldGeometry.height() - q->maximumHeight());
+            oldGeometry.height() - internalMinimumSize.height(), oldGeometry.height() - q->maximumHeight());
+
       geometry.setTopLeft(oldGeometry.topLeft() + QPoint(dx, dy));
 
    } else {
@@ -2526,6 +2526,7 @@ void QMdiSubWindow::showShaded()
    }
 
    d->updateGeometryConstraints();
+
    // Update minimum size to internalMinimumSize if set by user.
    if (!minimumSize().isNull()) {
       d->userMinimumSize = minimumSize();

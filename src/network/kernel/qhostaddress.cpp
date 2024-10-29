@@ -360,10 +360,6 @@ void QNetmaskAddress::setPrefixLength(QAbstractSocket::NetworkLayerProtocol prot
    }
 }
 
-
-
-
-
 QHostAddress::QHostAddress()
    : d(new QHostAddressPrivate)
 {
@@ -374,7 +370,6 @@ QHostAddress::QHostAddress(quint32 ip4Addr)
 {
    setAddress(ip4Addr);
 }
-
 
 QHostAddress::QHostAddress(const quint8 *ip6Addr)
    : d(new QHostAddressPrivate)
@@ -388,7 +383,6 @@ QHostAddress::QHostAddress(const Q_IPV6ADDR &ip6Addr)
 {
    setAddress(ip6Addr);
 }
-
 
 QHostAddress::QHostAddress(const QString &address)
    : d(new QHostAddressPrivate)
@@ -408,7 +402,6 @@ QHostAddress::QHostAddress(const struct sockaddr *sockaddr)
       setAddress(((const qt_sockaddr_in6 *)sockaddr)->sin6_addr.qt_s6_addr);
    }
 }
-
 
 QHostAddress::QHostAddress(const QHostAddress &address)
    : d(new QHostAddressPrivate(*address.d.data()))

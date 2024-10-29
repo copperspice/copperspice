@@ -165,6 +165,7 @@ class QFutureInterface : public QFutureInterfaceBase
    QtConcurrent::ResultStore<T> &resultStore() {
       return static_cast<QtConcurrent::ResultStore<T> &>(resultStoreBase());
    }
+
    const QtConcurrent::ResultStore<T> &resultStore() const {
       return static_cast<const QtConcurrent::ResultStore<T> &>(resultStoreBase());
    }

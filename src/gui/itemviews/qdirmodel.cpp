@@ -895,7 +895,6 @@ bool QDirModel::remove(const QModelIndex &index)
    return true;
 }
 
-
 QString QDirModel::filePath(const QModelIndex &index) const
 {
    Q_D(const QDirModel);

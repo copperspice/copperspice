@@ -3933,8 +3933,7 @@ QDomCDATASection &QDomCDATASection::operator= (const QDomCDATASection &x)
 }
 
 QDomNotationPrivate::QDomNotationPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
-      const QString &aname,
-      const QString &pub, const QString &sys)
+      const QString &aname, const QString &pub, const QString &sys)
    : QDomNodePrivate(d, parent)
 {
    name = aname;
@@ -4015,8 +4014,7 @@ QString QDomNotation::systemId() const
 #undef IMPL
 
 QDomEntityPrivate::QDomEntityPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent,
-                                     const QString &aname,
-                                     const QString &pub, const QString &sys, const QString &notation)
+      const QString &aname, const QString &pub, const QString &sys, const QString &notation)
    : QDomNodePrivate(d, parent)
 {
    name = aname;
@@ -4717,8 +4715,7 @@ QDomDocument::~QDomDocument()
 {
 }
 
-bool QDomDocument::setContent(const QString &text, bool namespaceProcessing, QString *errorMsg, int *errorLine,
-                              int *errorColumn)
+bool QDomDocument::setContent(const QString &text, bool namespaceProcessing, QString *errorMsg, int *errorLine, int *errorColumn)
 {
    if (!impl) {
       impl = new QDomDocumentPrivate();
@@ -4751,7 +4748,6 @@ bool QDomDocument::setContent(QIODevice *dev, bool namespaceProcessing, QString 
    return IMPL->setContent(&source, namespaceProcessing, errorMsg, errorLine, errorColumn);
 }
 
-
 bool QDomDocument::setContent(QXmlInputSource *source, bool namespaceProcessing, QString *errorMsg, int *errorLine, int *errorColumn )
 {
    if (!impl) {
@@ -4778,7 +4774,7 @@ bool QDomDocument::setContent(QIODevice *dev, QString *errorMsg, int *errorLine,
 }
 
 bool QDomDocument::setContent(QXmlInputSource *source, QXmlReader *reader, QString *errorMsg, int *errorLine,
-                              int *errorColumn )
+      int *errorColumn )
 {
    if (!impl) {
       impl = new QDomDocumentPrivate();

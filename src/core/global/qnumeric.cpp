@@ -68,4 +68,3 @@ Q_CORE_EXPORT double qInf()
 {
    return qt_inf();
 }
-

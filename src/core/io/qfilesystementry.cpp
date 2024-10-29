@@ -79,17 +79,12 @@ QFileSystemEntry::QFileSystemEntry()
 
 QFileSystemEntry::QFileSystemEntry(const QString &filePath)
    : m_filePath(QDir::fromNativeSeparators(filePath)),
-     m_lastSeparator(-2),
-     m_firstDotInFileName(-2),
-     m_lastDotInFileName(0)
+     m_lastSeparator(-2), m_firstDotInFileName(-2), m_lastDotInFileName(0)
 {
 }
 
 QFileSystemEntry::QFileSystemEntry(const QString &filePath, FromInternalPath)
-   : m_filePath(filePath),
-     m_lastSeparator(-2),
-     m_firstDotInFileName(-2),
-     m_lastDotInFileName(0)
+   : m_filePath(filePath), m_lastSeparator(-2), m_firstDotInFileName(-2), m_lastDotInFileName(0)
 {
 }
 

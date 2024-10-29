@@ -28,7 +28,8 @@
 
 #include <stdlib.h>
 
-QSimplex::QSimplex() : objective(nullptr), rows(0), columns(0), firstArtificial(0), matrix(nullptr)
+QSimplex::QSimplex()
+   : objective(nullptr), rows(0), columns(0), firstArtificial(0), matrix(nullptr)
 {
 }
 

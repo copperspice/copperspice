@@ -46,6 +46,7 @@
 
 #ifndef QT_NO_STATEMACHINE_EVENTFILTER
 #include <qeventtransition.h>
+
 #include <qeventtransition_p.h>
 #endif
 

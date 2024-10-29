@@ -147,7 +147,6 @@ QSoundEffect::Status QSoundEffect::status() const
    return d->status();
 }
 
-
 QString QSoundEffect::category() const
 {
    return d->category();

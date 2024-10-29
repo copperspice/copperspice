@@ -691,8 +691,7 @@ void QItemDelegate::doLayout(const QStyleOptionViewItem &option,
    if (! hint) {
       // only need to do the layout if we are going to paint
 
-      *checkRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
-            checkRect->size(), check);
+      *checkRect = QStyle::alignedRect(option.direction, Qt::AlignCenter, checkRect->size(), check);
 
       *pixmapRect = QStyle::alignedRect(option.direction, option.decorationAlignment,
             pixmapRect->size(), decoration);

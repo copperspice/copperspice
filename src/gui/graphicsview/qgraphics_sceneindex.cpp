@@ -339,7 +339,6 @@ QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsSceneIndexPrivate &dd, QGraphi
 
 QGraphicsSceneIndex::~QGraphicsSceneIndex()
 {
-
 }
 
 QGraphicsScene *QGraphicsSceneIndex::scene() const
@@ -347,7 +346,6 @@ QGraphicsScene *QGraphicsSceneIndex::scene() const
    Q_D(const QGraphicsSceneIndex);
    return d->scene;
 }
-
 
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPointF &pos, Qt::ItemSelectionMode mode,
    Qt::SortOrder order, const QTransform &deviceTransform) const

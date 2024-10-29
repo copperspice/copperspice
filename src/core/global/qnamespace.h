@@ -1489,18 +1489,22 @@ class Q_CORE_EXPORT Qt
       TextColorRole = 9,
       ForegroundRole = 9,
       CheckStateRole = 10,
+
       // Accessibility
       AccessibleTextRole = 11,
       AccessibleDescriptionRole = 12,
+
       // More general purpose
       SizeHintRole = 13,
       InitialSortOrderRole = 14,
+
       // Internal UiLib roles. Start worrying when public roles go that high.
       DisplayPropertyRole = 27,
       DecorationPropertyRole = 28,
       ToolTipPropertyRole = 29,
       StatusTipPropertyRole = 30,
       WhatsThisPropertyRole = 31,
+
       // Reserved
       UserRole = 32
    };

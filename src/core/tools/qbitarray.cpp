@@ -25,6 +25,7 @@
 
 #include <qdatastream.h>
 #include <qdebug.h>
+
 #include <string.h>
 
 QBitArray::QBitArray(int size, bool value)

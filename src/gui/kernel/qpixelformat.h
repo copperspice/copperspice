@@ -216,12 +216,9 @@ class QPixelFormat
    }
 
    constexpr uchar bitsPerPixel() const  {
-      return get(FirstField, FirstFieldWidth) +
-         get(SecondField, SecondFieldWidth) +
-         get(ThirdField, ThirdFieldWidth) +
-         get(FourthField, FourthFieldWidth) +
-         get(FifthField, FifthFieldWidth) +
-         get(AlphaField, AlphaFieldWidth);
+      return get(FirstField, FirstFieldWidth) + get(SecondField, SecondFieldWidth) +
+         get(ThirdField, ThirdFieldWidth) + get(FourthField, FourthFieldWidth) +
+         get(FifthField, FifthFieldWidth) + get(AlphaField, AlphaFieldWidth);
    }
 
    constexpr AlphaUsage alphaUsage() const  {

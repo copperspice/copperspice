@@ -424,7 +424,8 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, cons
 
         case DISPID_ACC_LOCATION:
             if (wFlags == DISPATCH_METHOD)
-                hr = accLocation(&pDispParams->rgvarg[4].lVal, &pDispParams->rgvarg[3].lVal, &pDispParams->rgvarg[2].lVal, &pDispParams->rgvarg[1].lVal, pDispParams->rgvarg[0]);
+                hr = accLocation(&pDispParams->rgvarg[4].lVal, &pDispParams->rgvarg[3].lVal, &pDispParams->rgvarg[2].lVal,
+                      &pDispParams->rgvarg[1].lVal, pDispParams->rgvarg[0]);
             else
                 hr = DISP_E_MEMBERNOTFOUND;
             break;
@@ -480,6 +481,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, cons
 |                                                        |             | interface pointer       |
 +--------------------------------------------------------+-------------+-------------------------+
 */
+
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarID)
 {
     QAccessibleInterface *accessible = accessibleInterface();
@@ -488,7 +490,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
         return E_FAIL;
 
     const QPoint pos = QHighDpi::fromNativeLocalPosition(QPoint(xLeft, yTop),
-                                                         QWindowsAccessibility::windowHelper(accessible));
+          QWindowsAccessibility::windowHelper(accessible));
 
     QAccessibleInterface *child = accessible->childAt(pos.x(), pos.y());
 
@@ -524,8 +526,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accLocation(long *pxLeft, long
     QAccessibleInterface *acc = childPointer(accessible, varID);
     if (!acc || !acc->isValid())
         return E_FAIL;
-    const QRect rect = QHighDpi::toNativePixels(acc->rect(),
-                                                QWindowsAccessibility::windowHelper(accessible));
+    const QRect rect = QHighDpi::toNativePixels(acc->rect(), QWindowsAccessibility::windowHelper(accessible));
 
     *pxLeft = rect.x();
     *pyTop = rect.y();
@@ -1073,10 +1074,12 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VA
 
     if (flagsSelect & SELFLAG_TAKEFOCUS)
         res = accessible()->doAction(SetFocus, varID.lVal, QVariantList());
+
     if (flagsSelect & SELFLAG_TAKESELECTION) {
         accessible()->doAction(ClearSelection, 0, QVariantList());
         res = accessible()->doAction(AddToSelection, varID.lVal, QVariantList());
     }
+
     if (flagsSelect & SELFLAG_EXTENDSELECTION)
         res = accessible()->doAction(ExtendSelection, varID.lVal, QVariantList());
     if (flagsSelect & SELFLAG_ADDSELECTION)
@@ -1084,6 +1087,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accSelect(long flagsSelect, VA
     if (flagsSelect & SELFLAG_REMOVESELECTION)
         res = accessible()->doAction(RemoveSelection, varID.lVal, QVariantList());
 */
+
     return res ? S_OK : S_FALSE;
 }
 

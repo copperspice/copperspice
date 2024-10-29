@@ -297,8 +297,8 @@ class Q_GUI_EXPORT QWidget : public QObject, public QPaintDevice
  public:
    enum RenderFlag {
       DrawWindowBackground = 0x1,
-      DrawChildren = 0x2,
-      IgnoreMask = 0x4
+      DrawChildren         = 0x2,
+      IgnoreMask           = 0x4
    };
    using RenderFlags = QFlags<RenderFlag>;
 

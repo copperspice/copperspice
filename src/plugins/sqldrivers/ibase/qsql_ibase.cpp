@@ -1425,8 +1425,6 @@ QVariant QIBaseResult::handle() const
    return QVariant::fromValue<isc_stmt_handle>(d->stmt);
 }
 
-/*********************************/
-
 QIBaseDriver::QIBaseDriver(QObject *parent)
    : QSqlDriver(parent)
 {

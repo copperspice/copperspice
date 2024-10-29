@@ -28,9 +28,9 @@
 
 class Q_GUI_EXPORT QPixmapCache
 {
-
  public:
    class KeyData;
+
    class Q_GUI_EXPORT Key
    {
     public:

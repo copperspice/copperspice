@@ -31,7 +31,6 @@ class QSqlFieldPrivate;
 
 class Q_SQL_EXPORT QSqlField
 {
-
  public:
    enum RequiredStatus { Unknown = -1, Optional = 0, Required = 1 };
 

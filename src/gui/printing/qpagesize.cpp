@@ -209,7 +209,7 @@ static constexpr const int windowsConversionCount = int(sizeof(qt_windowsConvers
 // Standard sizes data
 struct StandardPageSize {
    QPageSize::PageSizeId id;
-   int windowsId;                  // Windows DMPAPER value
+   int windowsId;                      // Windows DMPAPER value
    QPageSize::Unit definitionUnits;    // Standard definition size, e.g. ISO uses mm, ANSI uses inches
    int widthPoints;
    int heightPoints;
@@ -217,155 +217,162 @@ struct StandardPageSize {
    qreal heightMillimeters;
    qreal widthInches;
    qreal heightInches;
-   const char *mediaOption;  // PPD standard mediaOption ID
+   const char *mediaOption;            // PPD standard mediaOption ID
 };
 
 // Standard page sizes taken from the Postscript PPD Standard v4.3
-// See http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
+// refer to http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
 // Excludes all Transverse and Rotated sizes
-// NB! This table needs to be in sync with QPageSize::PageSizeId
+// this table needs to be in sync with QPageSize::PageSizeId
+
 static const StandardPageSize qt_pageSizes[] = {
 
    // existing sizes including ISO, US, ANSI and other standards
-   {QPageSize::A4,   DMPAPER_A4,   QPageSize::Millimeter,    595,  842,      210,  297,       8.27,  11.69,    "A4"},
-   {QPageSize::B5,   DMPAPER_NONE,   QPageSize::Millimeter,    499,  709,      176,  250,       6.9,   9.8,    "ISOB5"},
-   {QPageSize::Letter,   DMPAPER_LETTER,   QPageSize::Inch,    612,  792,      215.9,  279.4,       8.5,  11,    "Letter"},
-   {QPageSize::Legal,   DMPAPER_LEGAL,   QPageSize::Inch,    612, 1008,      215.9,  355.6,       8.5,  14,    "Legal"},
-   {QPageSize::Executive,   DMPAPER_NONE,   QPageSize::Inch,    540,  720,      190.5,  254,       7.5,  10,    "Executive.7.5x10in"},                                       // Qt size differs from Postscript / Windows
-   {QPageSize::A0,   DMPAPER_NONE,   QPageSize::Millimeter,   2384, 3370,      841, 1189,      33.11,  46.81,    "A0"},
-   {QPageSize::A1,   DMPAPER_NONE,   QPageSize::Millimeter,   1684, 2384,      594,  841,      23.39,  33.11,    "A1"},
-   {QPageSize::A2,   DMPAPER_A2,   QPageSize::Millimeter,   1191, 1684,      420,  594,      16.54,  23.39,    "A2"},
-   {QPageSize::A3,   DMPAPER_A3,   QPageSize::Millimeter,    842, 1191,      297,  420,      11.69,  16.54,    "A3"},
-   {QPageSize::A5,   DMPAPER_A5,   QPageSize::Millimeter,    420,  595,      148,  210,       5.83,   8.27,    "A5"},
-   {QPageSize::A6,   DMPAPER_A6,   QPageSize::Millimeter,    297,  420,      105,  148,       4.13,   5.83,    "A6"},
-   {QPageSize::A7,   DMPAPER_NONE,   QPageSize::Millimeter,    210,  297,       74,  105,       2.91,   4.13,    "A7"},
-   {QPageSize::A8,   DMPAPER_NONE,   QPageSize::Millimeter,    148,  210,       52,   74,       2.05,   2.91,    "A8"},
-   {QPageSize::A9,   DMPAPER_NONE,   QPageSize::Millimeter,    105,  148,       37,   52,       1.46,   2.05,    "A9"},
-   {QPageSize::B0,   DMPAPER_NONE,   QPageSize::Millimeter,   2835, 4008,     1000, 1414,      39.37,  55.67,    "ISOB0"},
-   {QPageSize::B1,   DMPAPER_NONE,   QPageSize::Millimeter,   2004, 2835,      707, 1000,      27.83,  39.37,    "ISOB1"},
-   {QPageSize::B10,   DMPAPER_NONE,   QPageSize::Millimeter,     88,  125,       31,   44,       1.22,   1.73,    "ISOB10"},
-   {QPageSize::B2,   DMPAPER_NONE,   QPageSize::Millimeter,   1417, 2004,      500,  707,      19.68,  27.83,    "ISOB2"},
-   {QPageSize::B3,   DMPAPER_NONE,   QPageSize::Millimeter,   1001, 1417,      353,  500,      13.9,  19.68,    "ISOB3"},
-   {QPageSize::B4,   DMPAPER_ISO_B4,   QPageSize::Millimeter,    709, 1001,      250,  353,       9.84,  13.9,    "ISOB4"},
-   {QPageSize::B6,   DMPAPER_NONE,   QPageSize::Millimeter,    354,  499,      125,  176,       4.92,   6.93,    "ISOB6"},
-   {QPageSize::B7,   DMPAPER_NONE,   QPageSize::Millimeter,    249,  354,       88,  125,       3.46,   4.92,    "ISOB7"},
-   {QPageSize::B8,   DMPAPER_NONE,   QPageSize::Millimeter,    176,  249,       62,   88,       2.44,   3.46,    "ISOB8"},
-   {QPageSize::B9,   DMPAPER_NONE,   QPageSize::Millimeter,    125,  176,       44,   62,       1.73,   2.44,    "ISOB9"},
-   {QPageSize::C5E,   DMPAPER_ENV_C5,   QPageSize::Millimeter,    459,  649,      162,  229,       6.38,   9.02,    "EnvC5"},
-   {QPageSize::Comm10E,   DMPAPER_ENV_10,   QPageSize::Inch,    297,  684,      104.8,  241.3,       4.12,   9.5,    "Env10"},
-   {QPageSize::DLE,   DMPAPER_ENV_DL,   QPageSize::Millimeter,    312,  624,      110,  220,       4.33,   8.66,    "EnvDL"},
-   {QPageSize::Folio,   DMPAPER_NONE,   QPageSize::Millimeter,    595,  935,      210,  330,       8.27,  13,    "Folio"},
-   {QPageSize::Ledger,   DMPAPER_LEDGER,   QPageSize::Inch,   1224,  792,      431.8,  279.4,      17,  11,    "Ledger"},
-   {QPageSize::Tabloid,   DMPAPER_TABLOID,   QPageSize::Inch,    792, 1224,      279.4,  431.8,      11,  17,    "Tabloid"},
-   {QPageSize::Custom,   DMPAPER_USER,   QPageSize::Millimeter,     -1,   -1,       -1.,   -1,      -1,  -1,    "Custom"},                                       // Special case to keep in sync with QPageSize::PageSizeId
+   {QPageSize::A4,        DMPAPER_A4,     QPageSize::Millimeter, 595,  842,    210,    297,   8.27,  11.69,  "A4"},
+   {QPageSize::B5,        DMPAPER_NONE,   QPageSize::Millimeter, 499,  709,    176,    250,    6.9,    9.8,  "ISOB5"},
+   {QPageSize::Letter,    DMPAPER_LETTER, QPageSize::Inch,       612,  792,  215.9,  279.4,    8.5,     11,  "Letter"},
+   {QPageSize::Legal,     DMPAPER_LEGAL,  QPageSize::Inch,       612, 1008,  215.9,  355.6,    8.5,     14,  "Legal"},
+
+   // size differs from Windows
+   {QPageSize::Executive, DMPAPER_NONE,   QPageSize::Inch,       540,  720,  190.5,    254,    7.5,     10,  "Executive.7.5x10in"},
+
+   {QPageSize::A0,    DMPAPER_NONE,   QPageSize::Millimeter,    2384, 3370,    841,   1189,  33.11,  46.81,  "A0"},
+   {QPageSize::A1,    DMPAPER_NONE,   QPageSize::Millimeter,    1684, 2384,    594,    841,  23.39,  33.11,  "A1"},
+   {QPageSize::A2,    DMPAPER_A2,     QPageSize::Millimeter,    1191, 1684,    420,    594,  16.54,  23.39,  "A2"},
+   {QPageSize::A3,    DMPAPER_A3,     QPageSize::Millimeter,     842, 1191,    297,    420,  11.69,  16.54,  "A3"},
+   {QPageSize::A5,    DMPAPER_A5,     QPageSize::Millimeter,     420,  595,    148,    210,   5.83,   8.27,  "A5"},
+   {QPageSize::A6,    DMPAPER_A6,     QPageSize::Millimeter,     297,  420,    105,    148,   4.13,   5.83,  "A6"},
+   {QPageSize::A7,    DMPAPER_NONE,   QPageSize::Millimeter,     210,  297,     74,    105,   2.91,   4.13,  "A7"},
+   {QPageSize::A8,    DMPAPER_NONE,   QPageSize::Millimeter,     148,  210,     52,     74,   2.05,   2.91,  "A8"},
+   {QPageSize::A9,    DMPAPER_NONE,   QPageSize::Millimeter,     105,  148,     37,     52,   1.46,   2.05,  "A9"},
+   {QPageSize::B0,    DMPAPER_NONE,   QPageSize::Millimeter,    2835, 4008,   1000,   1414,  39.37,  55.67,  "ISOB0"},
+   {QPageSize::B1,    DMPAPER_NONE,   QPageSize::Millimeter,    2004, 2835,    707,   1000,  27.83,  39.37,  "ISOB1"},
+   {QPageSize::B10,   DMPAPER_NONE,   QPageSize::Millimeter,      88,  125,     31,     44,   1.22,   1.73,  "ISOB10"},
+   {QPageSize::B2,    DMPAPER_NONE,   QPageSize::Millimeter,    1417, 2004,    500,    707,  19.68,  27.83,  "ISOB2"},
+   {QPageSize::B3,    DMPAPER_NONE,   QPageSize::Millimeter,    1001, 1417,    353,    500,   13.9,  19.68,  "ISOB3"},
+   {QPageSize::B4,    DMPAPER_ISO_B4, QPageSize::Millimeter,     709, 1001,    250,    353,   9.84,   13.9,  "ISOB4"},
+   {QPageSize::B6,    DMPAPER_NONE,   QPageSize::Millimeter,     354,  499,    125,    176,   4.92,   6.93,  "ISOB6"},
+   {QPageSize::B7,    DMPAPER_NONE,   QPageSize::Millimeter,     249,  354,     88,    125,   3.46,   4.92,  "ISOB7"},
+   {QPageSize::B8,    DMPAPER_NONE,   QPageSize::Millimeter,     176,  249,     62,     88,   2.44,   3.46,  "ISOB8"},
+   {QPageSize::B9,    DMPAPER_NONE,   QPageSize::Millimeter,     125,  176,     44,     62,   1.73,   2.44,  "ISOB9"},
+   {QPageSize::C5E,   DMPAPER_ENV_C5, QPageSize::Millimeter,     459,  649,    162,    229,   6.38,   9.02,  "EnvC5"},
+
+   {QPageSize::Comm10E,   DMPAPER_ENV_10,   QPageSize::Inch,       297,  684, 104.8,  241.3,   4.12,   9.5,  "Env10"},
+   {QPageSize::DLE,       DMPAPER_ENV_DL,   QPageSize::Millimeter, 312,  624,   110,    220,   4.33,  8.66,  "EnvDL"},
+   {QPageSize::Folio,     DMPAPER_NONE,     QPageSize::Millimeter, 595,  935,   210,    330,   8.27,    13,  "Folio"},
+   {QPageSize::Ledger,    DMPAPER_LEDGER,   QPageSize::Inch,      1224,  792, 431.8,  279.4,     17,    11,  "Ledger"},
+   {QPageSize::Tabloid,   DMPAPER_TABLOID,  QPageSize::Inch,       792, 1224, 279.4,  431.8,     11,    17,  "Tabloid"},
+
+   // Special case to keep in sync with QPageSize::PageSizeId
+   {QPageSize::Custom,    DMPAPER_USER,     QPageSize::Millimeter,  -1,   -1,  -1.0,     -1,     -1,    -1,  "Custom"},
 
    // ISO Standard Sizes
-   {QPageSize::A10,   DMPAPER_NONE,   QPageSize::Millimeter,     73,  105,       26,  37,       1.02,   1.46,    "A10"},
-   {QPageSize::A3Extra,   DMPAPER_A3_EXTRA,   QPageSize::Millimeter,    913, 1262,      322,  445,      12.67,  17.52,    "A3Extra"},
-   {QPageSize::A4Extra,   DMPAPER_A4_EXTRA,   QPageSize::Millimeter,    667,  914,      235.5,  322.3,       9.27,  12.69,    "A4Extra"},
-   {QPageSize::A4Plus,   DMPAPER_A4_PLUS,   QPageSize::Millimeter,    595,  936,      210,  330,       8.27,  13,    "A4Plus"},
-   {QPageSize::A4Small,   DMPAPER_A4SMALL,   QPageSize::Millimeter,    595,  842,      210,  297,       8.27,  11.69,    "A4Small"},
-   {QPageSize::A5Extra,   DMPAPER_A5_EXTRA,   QPageSize::Millimeter,    492,  668,      174,  235,       6.85,   9.25,    "A5Extra"},
-   {QPageSize::B5Extra,   DMPAPER_B5_EXTRA,   QPageSize::Millimeter,    570,  782,      201,  276,       7.9,  10.8,    "ISOB5Extra"},
+   {QPageSize::A10,       DMPAPER_NONE,     QPageSize::Millimeter,     73,  105,       26,      37,       1.02,   1.46,   "A10"},
+   {QPageSize::A3Extra,   DMPAPER_A3_EXTRA, QPageSize::Millimeter,    913, 1262,      322,     445,      12.67,  17.52,   "A3Extra"},
+   {QPageSize::A4Extra,   DMPAPER_A4_EXTRA, QPageSize::Millimeter,    667,  914,    235.5,   322.3,       9.27,  12.69,   "A4Extra"},
+   {QPageSize::A4Plus,    DMPAPER_A4_PLUS,  QPageSize::Millimeter,    595,  936,      210,     330,       8.27,     13,   "A4Plus"},
+   {QPageSize::A4Small,   DMPAPER_A4SMALL,  QPageSize::Millimeter,    595,  842,      210,     297,       8.27,  11.69,   "A4Small"},
+   {QPageSize::A5Extra,   DMPAPER_A5_EXTRA, QPageSize::Millimeter,    492,  668,      174,     235,       6.85,   9.25,   "A5Extra"},
+   {QPageSize::B5Extra,   DMPAPER_B5_EXTRA, QPageSize::Millimeter,    570,  782,      201,     276,       7.9,    10.8,   "ISOB5Extra"},
 
    // JIS Standard Sizes
-   {QPageSize::JisB0,   DMPAPER_NONE,   QPageSize::Millimeter,   2920, 4127,     1030, 1456,      40.55,  57.32,    "B0"},
-   {QPageSize::JisB1,   DMPAPER_NONE,   QPageSize::Millimeter,   2064, 2920,      728, 1030,      28.66,  40.55,    "B1"},
-   {QPageSize::JisB2,   DMPAPER_NONE,   QPageSize::Millimeter,   1460, 2064,      515,  728,      20.28,  28.66,    "B2"},
-   {QPageSize::JisB3,   DMPAPER_NONE,   QPageSize::Millimeter,   1032, 1460,      364,  515,      14.33,  20.28,    "B3"},
-   {QPageSize::JisB4,   DMPAPER_B4,   QPageSize::Millimeter,    729, 1032,      257,  364,      10.12,  14.33,    "B4"},
-   {QPageSize::JisB5,   DMPAPER_B5,   QPageSize::Millimeter,    516,  729,      182,  257,       7.17,  10.12,    "B5"},
-   {QPageSize::JisB6,   DMPAPER_B6_JIS,   QPageSize::Millimeter,    363,  516,      128,  182,       5.04,   7.17,    "B6"},
-   {QPageSize::JisB7,   DMPAPER_NONE,   QPageSize::Millimeter,    258,  363,       91,  128,       3.58,   5.04,    "B7"},
-   {QPageSize::JisB8,   DMPAPER_NONE,   QPageSize::Millimeter,    181,  258,       64,   91,       2.52,   3.58,    "B8"},
-   {QPageSize::JisB9,   DMPAPER_NONE,   QPageSize::Millimeter,    127,  181,       45,   64,       1.77,   2.52,    "B9"},
-   {QPageSize::JisB10,   DMPAPER_NONE,   QPageSize::Millimeter,     91,  127,       32,   45,       1.26,   1.77,    "B10"},
+   {QPageSize::JisB0,     DMPAPER_NONE,     QPageSize::Millimeter,   2920, 4127,     1030,    1456,      40.55,  57.32,    "B0"},
+   {QPageSize::JisB1,     DMPAPER_NONE,     QPageSize::Millimeter,   2064, 2920,      728,    1030,      28.66,  40.55,    "B1"},
+   {QPageSize::JisB2,     DMPAPER_NONE,     QPageSize::Millimeter,   1460, 2064,      515,     728,      20.28,  28.66,    "B2"},
+   {QPageSize::JisB3,     DMPAPER_NONE,     QPageSize::Millimeter,   1032, 1460,      364,     515,      14.33,  20.28,    "B3"},
+   {QPageSize::JisB4,     DMPAPER_B4,       QPageSize::Millimeter,    729, 1032,      257,     364,      10.12,  14.33,    "B4"},
+   {QPageSize::JisB5,     DMPAPER_B5,       QPageSize::Millimeter,    516,  729,      182,     257,       7.17,  10.12,    "B5"},
+   {QPageSize::JisB6,     DMPAPER_B6_JIS,   QPageSize::Millimeter,    363,  516,      128,     182,       5.04,   7.17,    "B6"},
+   {QPageSize::JisB7,     DMPAPER_NONE,     QPageSize::Millimeter,    258,  363,       91,     128,       3.58,   5.04,    "B7"},
+   {QPageSize::JisB8,     DMPAPER_NONE,     QPageSize::Millimeter,    181,  258,       64,      91,       2.52,   3.58,    "B8"},
+   {QPageSize::JisB9,     DMPAPER_NONE,     QPageSize::Millimeter,    127,  181,       45,      64,       1.77,   2.52,    "B9"},
+   {QPageSize::JisB10,    DMPAPER_NONE,     QPageSize::Millimeter,     91,  127,       32,      45,       1.26,   1.77,    "B10"},
 
    // ANSI / US Standard sizes
-   {QPageSize::AnsiC,   DMPAPER_NONE,   QPageSize::Inch,   1224, 1584,      431.8,  558.8,      17,  22,    "AnsiC"},
-   {QPageSize::AnsiD,   DMPAPER_NONE,   QPageSize::Inch,   1584, 2448,      558.8,  863.6,      22,  34,    "AnsiD"},
-   {QPageSize::AnsiE,   DMPAPER_NONE,   QPageSize::Inch,   2448, 3168,      863.6, 1118,      34,  44,    "AnsiE"},
-   {QPageSize::LegalExtra,   DMPAPER_LEGAL_EXTRA,   QPageSize::Inch,    684, 1080,      241.3,  381,       9.5,  15,    "LegalExtra"},
-   {QPageSize::LetterExtra,   DMPAPER_LETTER_EXTRA,   QPageSize::Inch,    684,  864,      241.3,  304.8,       9.5,  12,    "LetterExtra"},
-   {QPageSize::LetterPlus,   DMPAPER_LETTER_PLUS,   QPageSize::Inch,    612,  914,      215.9,  322.3,       8.5,  12.69,    "LetterPlus"},
-   {QPageSize::LetterSmall,   DMPAPER_LETTERSMALL,   QPageSize::Inch,    612,  792,      215.9,  279.4,       8.5,  11,    "LetterSmall"},
-   {QPageSize::TabloidExtra,   DMPAPER_TABLOID_EXTRA,   QPageSize::Inch,    864, 1296,      304.8,  457.2,      12,  18,    "TabloidExtra"},
+   {QPageSize::AnsiC,        DMPAPER_NONE,          QPageSize::Inch, 1224, 1584,    431.8,   558.8,         17,     22,    "AnsiC"},
+   {QPageSize::AnsiD,        DMPAPER_NONE,          QPageSize::Inch, 1584, 2448,    558.8,   863.6,         22,     34,    "AnsiD"},
+   {QPageSize::AnsiE,        DMPAPER_NONE,          QPageSize::Inch, 2448, 3168,    863.6,    1118,         34,     44,    "AnsiE"},
+   {QPageSize::LegalExtra,   DMPAPER_LEGAL_EXTRA,   QPageSize::Inch,  684, 1080,    241.3,     381,        9.5,     15,    "LegalExtra"},
+   {QPageSize::LetterExtra,  DMPAPER_LETTER_EXTRA,  QPageSize::Inch,  684,  864,    241.3,   304.8,        9.5,     12,    "LetterExtra"},
+   {QPageSize::LetterPlus,   DMPAPER_LETTER_PLUS,   QPageSize::Inch,  612,  914,    215.9,   322.3,        8.5,  12.69,    "LetterPlus"},
+   {QPageSize::LetterSmall,  DMPAPER_LETTERSMALL,   QPageSize::Inch,  612,  792,    215.9,   279.4,        8.5,     11,    "LetterSmall"},
+   {QPageSize::TabloidExtra, DMPAPER_TABLOID_EXTRA, QPageSize::Inch,  864, 1296,    304.8,   457.2,         12,     18,    "TabloidExtra"},
 
    // Architectural sizes
-   {QPageSize::ArchA,   DMPAPER_NONE,   QPageSize::Inch,    648,  864,      228.6,  304.8,       9,  12,    "ARCHA"},
-   {QPageSize::ArchB,   DMPAPER_NONE,   QPageSize::Inch,    864, 1296,      304.8,  457.2,      12,  18,    "ARCHB"},
-   {QPageSize::ArchC,   DMPAPER_CSHEET,   QPageSize::Inch,   1296, 1728,      457.2,  609.6,      18,  24,    "ARCHC"},
-   {QPageSize::ArchD,   DMPAPER_DSHEET,   QPageSize::Inch,   1728, 2592,      609.6,  914.4,      24,  36,    "ARCHD"},
-   {QPageSize::ArchE,   DMPAPER_ESHEET,   QPageSize::Inch,   2592, 3456,      914.4, 1219,      36,  48,    "ARCHE"},
+   {QPageSize::ArchA,        DMPAPER_NONE,          QPageSize::Inch,  648,  864,    228.6,   304.8,          9,     12,    "ARCHA"},
+   {QPageSize::ArchB,        DMPAPER_NONE,          QPageSize::Inch,  864, 1296,    304.8,   457.2,         12,     18,    "ARCHB"},
+   {QPageSize::ArchC,        DMPAPER_CSHEET,        QPageSize::Inch, 1296, 1728,    457.2,   609.6,         18,     24,    "ARCHC"},
+   {QPageSize::ArchD,        DMPAPER_DSHEET,        QPageSize::Inch, 1728, 2592,    609.6,   914.4,         24,     36,    "ARCHD"},
+   {QPageSize::ArchE,        DMPAPER_ESHEET,        QPageSize::Inch, 2592, 3456,    914.4,    1219,         36,     48,    "ARCHE"},
 
    // Inch-based Sizes
-   {QPageSize::Imperial7x9,   DMPAPER_NONE,   QPageSize::Inch,    504,  648,      177.8,  228.6,       7,   9,    "7x9"},
-   {QPageSize::Imperial8x10,   DMPAPER_NONE,   QPageSize::Inch,    576,  720,      203.2,  254,       8,  10,    "8x10"},
-   {QPageSize::Imperial9x11,   DMPAPER_9X11,   QPageSize::Inch,    648,  792,      228.6,  279.4,       9,  11,    "9x11"},
-   {QPageSize::Imperial9x12,   DMPAPER_NONE,   QPageSize::Inch,    648,  864,      228.6,  304.8,       9,  12,    "9x12"},
-   {QPageSize::Imperial10x11,   DMPAPER_10X11,   QPageSize::Inch,    720,  792,      254,  279.4,      10,  11,    "10x11"},
-   {QPageSize::Imperial10x13,   DMPAPER_NONE,   QPageSize::Inch,    720,  936,      254,  330.2,      10,  13,    "10x13"},
-   {QPageSize::Imperial10x14,   DMPAPER_10X14,   QPageSize::Inch,    720, 1008,      254,  355.6,      10,  14,    "10x14"},
-   {QPageSize::Imperial12x11,   DMPAPER_12X11,   QPageSize::Inch,    864,  792,      304.8,  279.4,      12,  11,    "12x11"},
-   {QPageSize::Imperial15x11,   DMPAPER_15X11,   QPageSize::Inch,   1080,  792,      381,  279.4,      15,  11,    "15x11"},
+   {QPageSize::Imperial7x9,        DMPAPER_NONE,    QPageSize::Inch,  504,  648,    177.8,   228.6,          7,      9,    "7x9"},
+   {QPageSize::Imperial8x10,       DMPAPER_NONE,    QPageSize::Inch,  576,  720,    203.2,     254,          8,     10,    "8x10"},
+   {QPageSize::Imperial9x11,       DMPAPER_9X11,    QPageSize::Inch,  648,  792,    228.6,   279.4,          9,     11,    "9x11"},
+   {QPageSize::Imperial9x12,       DMPAPER_NONE,    QPageSize::Inch,  648,  864,    228.6,   304.8,          9,     12,    "9x12"},
+   {QPageSize::Imperial10x11,      DMPAPER_10X11,   QPageSize::Inch,  720,  792,      254,   279.4,         10,     11,    "10x11"},
+   {QPageSize::Imperial10x13,      DMPAPER_NONE,    QPageSize::Inch,  720,  936,      254,   330.2,         10,     13,    "10x13"},
+   {QPageSize::Imperial10x14,      DMPAPER_10X14,   QPageSize::Inch,  720, 1008,      254,   355.6,         10,     14,    "10x14"},
+   {QPageSize::Imperial12x11,      DMPAPER_12X11,   QPageSize::Inch,  864,  792,    304.8,   279.4,         12,     11,    "12x11"},
+   {QPageSize::Imperial15x11,      DMPAPER_15X11,   QPageSize::Inch, 1080,  792,      381,   279.4,         15,     11,    "15x11"},
 
    // Other Page Sizes
-   {QPageSize::ExecutiveStandard,   DMPAPER_EXECUTIVE,   QPageSize::Inch,    522,  756,      184.2,  266.7,       7.25,  10.5,    "Executive"},                       // Qt size differs from Postscript / Windows
-   {QPageSize::Note,   DMPAPER_NOTE,   QPageSize::Inch,    612,  792,      215.9,  279.4,       8.5,  11,    "Note"},
-   {QPageSize::Quarto,   DMPAPER_QUARTO,   QPageSize::Inch,    610,  780,      215.9,  275.1,       8.5,  10.83,    "Quarto"},
-   {QPageSize::Statement,   DMPAPER_STATEMENT,   QPageSize::Inch,    396,  612,      139.7,  215.9,       5.5,   8.5,    "Statement"},
-   {QPageSize::SuperA,   DMPAPER_A_PLUS,   QPageSize::Millimeter,    643, 1009,      227,  356,       8.94,  14,    "SuperA"},
-   {QPageSize::SuperB,   DMPAPER_B_PLUS,   QPageSize::Millimeter,    864, 1380,      305,  487,      12,  19.17,    "SuperB"},
-   {QPageSize::Postcard,   DMPAPER_JAPANESE_POSTCARD,   QPageSize::Millimeter,    284,  419,      100,  148,       3.94,   5.83,    "Postcard"},
-   {QPageSize::DoublePostcard,   DMPAPER_DBL_JAPANESE_POSTCARD,   QPageSize::Millimeter,    567,  419,      200,  148,       7.87,   5.83,    "DoublePostcard"},
-   {QPageSize::Prc16K,   DMPAPER_P16K,   QPageSize::Millimeter,    414,  610,      146,  215,       5.75,   8.5,    "PRC16K"},
-   {QPageSize::Prc32K,   DMPAPER_P32K,   QPageSize::Millimeter,    275,  428,       97,  151,       3.82,   5.95,    "PRC32K"},
-   {QPageSize::Prc32KBig,   DMPAPER_P32KBIG,   QPageSize::Millimeter,    275,  428,       97,  151,       3.82,   5.95,    "PRC32KBig"},
+   {QPageSize::ExecutiveStandard,  DMPAPER_EXECUTIVE,             QPageSize::Inch,        522,   756,  184.2,   266.7,   7.25,   10.5,    "Executive"},
+   {QPageSize::Note,               DMPAPER_NOTE,                  QPageSize::Inch,        612,   792,  215.9,   279.4,    8.5,     11,    "Note"},
+   {QPageSize::Quarto,             DMPAPER_QUARTO,                QPageSize::Inch,        610,   780,  215.9,   275.1,    8.5,  10.83,    "Quarto"},
+   {QPageSize::Statement,          DMPAPER_STATEMENT,             QPageSize::Inch,        396,   612,  139.7,   215.9,    5.5,    8.5,    "Statement"},
+   {QPageSize::SuperA,             DMPAPER_A_PLUS,                QPageSize::Millimeter,  643,  1009,    227,     356,   8.94,     14,    "SuperA"},
+   {QPageSize::SuperB,             DMPAPER_B_PLUS,                QPageSize::Millimeter,  864,  1380,    305,     487,     12,  19.17,    "SuperB"},
+   {QPageSize::Postcard,           DMPAPER_JAPANESE_POSTCARD,     QPageSize::Millimeter,  284,   419,    100,     148,   3.94,   5.83,    "Postcard"},
+   {QPageSize::DoublePostcard,     DMPAPER_DBL_JAPANESE_POSTCARD, QPageSize::Millimeter,  567,   419,    200,     148,   7.87,   5.83,    "DoublePostcard"},
+   {QPageSize::Prc16K,             DMPAPER_P16K,                  QPageSize::Millimeter,  414,   610,    146,     215,   5.75,    8.5,    "PRC16K"},
+   {QPageSize::Prc32K,             DMPAPER_P32K,                  QPageSize::Millimeter,  275,   428,     97,     151,   3.82,   5.95,    "PRC32K"},
+   {QPageSize::Prc32KBig,          DMPAPER_P32KBIG,               QPageSize::Millimeter,  275,   428,     97,     151,   3.82,   5.95,    "PRC32KBig"},
 
    // Fan Fold Sizes
-   {QPageSize::FanFoldUS,   DMPAPER_FANFOLD_US,   QPageSize::Inch,   1071,  792,      377.8,  279.4,      14.875, 11,    "FanFoldUS"},
-   {QPageSize::FanFoldGerman,   DMPAPER_FANFOLD_STD_GERMAN,   QPageSize::Inch,    612,  864,      215.9,  304.8,       8.5,  12,    "FanFoldGerman"},
-   {QPageSize::FanFoldGermanLegal,   DMPAPER_FANFOLD_LGL_GERMAN,   QPageSize::Inch,    612,  936,      215.9,  330,       8.5,  13,    "FanFoldGermanLegal"},
+   {QPageSize::FanFoldUS,          DMPAPER_FANFOLD_US,            QPageSize::Inch,       1071,   792,   377.8,  279.4, 14.875,     11,    "FanFoldUS"},
+   {QPageSize::FanFoldGerman,      DMPAPER_FANFOLD_STD_GERMAN,    QPageSize::Inch,        612,   864,   215.9,  304.8,    8.5,     12,    "FanFoldGerman"},
+   {QPageSize::FanFoldGermanLegal, DMPAPER_FANFOLD_LGL_GERMAN,    QPageSize::Inch,        612,   936,   215.9,    330,    8.5,     13,    "FanFoldGermanLegal"},
 
    // ISO Envelopes
-   {QPageSize::EnvelopeB4,   DMPAPER_ENV_B4,   QPageSize::Millimeter,    708, 1001,      250,  353,       9.84,  13.9,    "EnvISOB4"},
-   {QPageSize::EnvelopeB5,   DMPAPER_ENV_B5,   QPageSize::Millimeter,    499,  709,      176,  250,       6.9,   9.8,    "EnvISOB5"},
-   {QPageSize::EnvelopeB6,   DMPAPER_ENV_B6,   QPageSize::Millimeter,    499,  354,      176,  125,       6.9,   4.9,    "EnvISOB6"},
-   {QPageSize::EnvelopeC0,   DMPAPER_NONE,   QPageSize::Millimeter,   2599, 3676,      917,  1297,      36.1,  51.06,    "EnvC0"},
-   {QPageSize::EnvelopeC1,   DMPAPER_NONE,   QPageSize::Millimeter,   1837, 2599,      648,  917,      25.51,  36.1,    "EnvC1"},
-   {QPageSize::EnvelopeC2,   DMPAPER_NONE,   QPageSize::Millimeter,   1298, 1837,      458,  648,      18.03,  25.51,    "EnvC2"},
-   {QPageSize::EnvelopeC3,   DMPAPER_ENV_C3,   QPageSize::Millimeter,    918, 1296,      324,  458,      12.75,  18.03,    "EnvC3"},
-   {QPageSize::EnvelopeC4,   DMPAPER_ENV_C4,   QPageSize::Millimeter,    649,  918,      229,  324,       9.02,  12.75,    "EnvC4"},
-   {QPageSize::EnvelopeC6,   DMPAPER_ENV_C6,   QPageSize::Millimeter,    323,  459,      114,  162,       4.49,   6.38,    "EnvC6"},
-   {QPageSize::EnvelopeC65,   DMPAPER_ENV_C65,   QPageSize::Millimeter,    324,  648,      114,  229,       4.5,   9,    "EnvC65"},
-   {QPageSize::EnvelopeC7,   DMPAPER_NONE,   QPageSize::Millimeter,    230,  323,       81,  114,       3.19,   4.49,    "EnvC7"},
+   {QPageSize::EnvelopeB4,       DMPAPER_ENV_B4,       QPageSize::Millimeter,    708, 1001,    250,    353,       9.84,    13.9,  "EnvISOB4"},
+   {QPageSize::EnvelopeB5,       DMPAPER_ENV_B5,       QPageSize::Millimeter,    499,  709,    176,    250,        6.9,     9.8,  "EnvISOB5"},
+   {QPageSize::EnvelopeB6,       DMPAPER_ENV_B6,       QPageSize::Millimeter,    499,  354,    176,    125,        6.9,     4.9,  "EnvISOB6"},
+   {QPageSize::EnvelopeC0,       DMPAPER_NONE,         QPageSize::Millimeter,   2599, 3676,    917,   1297,       36.1,   51.06,  "EnvC0"},
+   {QPageSize::EnvelopeC1,       DMPAPER_NONE,         QPageSize::Millimeter,   1837, 2599,    648,    917,      25.51,    36.1,  "EnvC1"},
+   {QPageSize::EnvelopeC2,       DMPAPER_NONE,         QPageSize::Millimeter,   1298, 1837,    458,    648,      18.03,   25.51,  "EnvC2"},
+   {QPageSize::EnvelopeC3,       DMPAPER_ENV_C3,       QPageSize::Millimeter,    918, 1296,    324,    458,      12.75,   18.03,  "EnvC3"},
+   {QPageSize::EnvelopeC4,       DMPAPER_ENV_C4,       QPageSize::Millimeter,    649,  918,    229,    324,       9.02,   12.75,  "EnvC4"},
+   {QPageSize::EnvelopeC6,       DMPAPER_ENV_C6,       QPageSize::Millimeter,    323,  459,    114,    162,       4.49,    6.38,  "EnvC6"},
+   {QPageSize::EnvelopeC65,      DMPAPER_ENV_C65,      QPageSize::Millimeter,    324,  648,    114,    229,        4.5,       9,  "EnvC65"},
+   {QPageSize::EnvelopeC7,       DMPAPER_NONE,         QPageSize::Millimeter,    230,  323,     81,    114,       3.19,    4.49,  "EnvC7"},
 
    // US Envelopes
-   {QPageSize::Envelope9,   DMPAPER_ENV_9,   QPageSize::Inch,    279,  639,       98.4,  225.4,       3.875,  8.875,   "Env9"},
-   {QPageSize::Envelope11,   DMPAPER_ENV_11,   QPageSize::Inch,    324,  747,      114.3,  263.5,       4.5,  10.375,   "Env11"},
-   {QPageSize::Envelope12,   DMPAPER_ENV_12,   QPageSize::Inch,    342,  792,      120.7,  279.4,       4.75,  11,    "Env12"},
-   {QPageSize::Envelope14,   DMPAPER_ENV_14,   QPageSize::Inch,    360,  828,      127,  292.1,       5,  11.5,    "Env14"},
-   {QPageSize::EnvelopeMonarch,   DMPAPER_ENV_MONARCH,   QPageSize::Inch,    279,  540,       98.43, 190.5,       3.875,  7.5,    "EnvMonarch"},
-   {QPageSize::EnvelopePersonal,   DMPAPER_ENV_PERSONAL,   QPageSize::Inch,    261,  468,       92.08, 165.1,       3.625,  6.5,    "EnvPersonal"},
+   {QPageSize::Envelope9,        DMPAPER_ENV_9,        QPageSize::Inch,          279,  639,   98.4,  225.4,      3.875,   8.875,  "Env9"},
+   {QPageSize::Envelope11,       DMPAPER_ENV_11,       QPageSize::Inch,          324,  747,  114.3,  263.5,        4.5,  10.375,  "Env11"},
+   {QPageSize::Envelope12,       DMPAPER_ENV_12,       QPageSize::Inch,          342,  792,  120.7,  279.4,       4.75,      11,  "Env12"},
+   {QPageSize::Envelope14,       DMPAPER_ENV_14,       QPageSize::Inch,          360,  828,    127,  292.1,          5,    11.5,  "Env14"},
+   {QPageSize::EnvelopeMonarch,  DMPAPER_ENV_MONARCH,  QPageSize::Inch,          279,  540,  98.43,  190.5,      3.875,     7.5,  "EnvMonarch"},
+   {QPageSize::EnvelopePersonal, DMPAPER_ENV_PERSONAL, QPageSize::Inch,          261,  468,  92.08,  165.1,      3.625,     6.5,  "EnvPersonal"},
 
    // Other Envelopes
-   {QPageSize::EnvelopeChou3,   DMPAPER_JENV_CHOU3,   QPageSize::Millimeter,    340,  666,      120,  235,       4.72,   9.25,    "EnvChou3"},
-   {QPageSize::EnvelopeChou4,   DMPAPER_JENV_CHOU4,   QPageSize::Millimeter,    255,  581,       90,  205,       3.54,   8,    "EnvChou4"},
-   {QPageSize::EnvelopeInvite,  DMPAPER_ENV_INVITE,   QPageSize::Millimeter,    624,  624,      220,  220,       8.66,   8.66,    "EnvInvite"},
-   {QPageSize::EnvelopeItalian, DMPAPER_ENV_ITALY,   QPageSize::Millimeter,    312,  652,      110,  230,       4.33,   9,    "EnvItalian"},
-   {QPageSize::EnvelopeKaku2,   DMPAPER_JENV_KAKU2,   QPageSize::Millimeter,    680,  941,      240,  332,       9.45,  13,    "EnvKaku2"},
-   {QPageSize::EnvelopeKaku3,   DMPAPER_JENV_KAKU3,   QPageSize::Millimeter,    612,  785,      216,  277,       8.5,  10.9,    "EnvKaku3"},
-   {QPageSize::EnvelopePrc1,   DMPAPER_PENV_1,   QPageSize::Millimeter,    289,  468,      102,  165,       4,   6.5,    "EnvPRC1"},
-   {QPageSize::EnvelopePrc2,   DMPAPER_PENV_2,   QPageSize::Millimeter,    289,  499,      102,  176,       4,   6.9,    "EnvPRC2"},
-   {QPageSize::EnvelopePrc3,   DMPAPER_PENV_3,   QPageSize::Millimeter,    354,  499,      125,  176,       4.9,   6.9,    "EnvPRC3"},
-   {QPageSize::EnvelopePrc4,   DMPAPER_PENV_4,   QPageSize::Millimeter,    312,  590,      110,  208,       4.33,   8.2,    "EnvPRC4"},
-   {QPageSize::EnvelopePrc5,   DMPAPER_PENV_5,   QPageSize::Millimeter,    312,  624,      110,  220,       4.33,   8.66,    "EnvPRC5"},
-   {QPageSize::EnvelopePrc6,   DMPAPER_PENV_6,   QPageSize::Millimeter,    340,  652,      120,  230,       4.7,   9,    "EnvPRC6"},
-   {QPageSize::EnvelopePrc7,   DMPAPER_PENV_7,   QPageSize::Millimeter,    454,  652,      160,  230,       6.3,   9,    "EnvPRC7"},
-   {QPageSize::EnvelopePrc8,   DMPAPER_PENV_8,   QPageSize::Millimeter,    340,  876,      120,  309,       4.7,  12.2,    "EnvPRC8"},
-   {QPageSize::EnvelopePrc9,   DMPAPER_PENV_9,   QPageSize::Millimeter,    649,  918,      229,  324,       9,  12.75,    "EnvPRC9"},
-   {QPageSize::EnvelopePrc10,  DMPAPER_PENV_10,   QPageSize::Millimeter,    918, 1298,      324,  458,      12.75,  18,    "EnvPRC10"},
-   {QPageSize::EnvelopeYou4,   DMPAPER_JENV_YOU4,   QPageSize::Millimeter,    298,  666,      105,  235,       4.13,   9.25,    "EnvYou4"}
+   {QPageSize::EnvelopeChou3,    DMPAPER_JENV_CHOU3,   QPageSize::Millimeter,    340,  666,    120,    235,       4.72,    9.25,  "EnvChou3"},
+   {QPageSize::EnvelopeChou4,    DMPAPER_JENV_CHOU4,   QPageSize::Millimeter,    255,  581,     90,    205,       3.54,       8,  "EnvChou4"},
+   {QPageSize::EnvelopeInvite,   DMPAPER_ENV_INVITE,   QPageSize::Millimeter,    624,  624,    220,    220,       8.66,    8.66,  "EnvInvite"},
+   {QPageSize::EnvelopeItalian,  DMPAPER_ENV_ITALY,    QPageSize::Millimeter,    312,  652,    110,    230,       4.33,       9,  "EnvItalian"},
+   {QPageSize::EnvelopeKaku2,    DMPAPER_JENV_KAKU2,   QPageSize::Millimeter,    680,  941,    240,    332,       9.45,      13,  "EnvKaku2"},
+   {QPageSize::EnvelopeKaku3,    DMPAPER_JENV_KAKU3,   QPageSize::Millimeter,    612,  785,    216,    277,        8.5,    10.9,  "EnvKaku3"},
+   {QPageSize::EnvelopePrc1,     DMPAPER_PENV_1,       QPageSize::Millimeter,    289,  468,    102,    165,          4,     6.5,  "EnvPRC1"},
+   {QPageSize::EnvelopePrc2,     DMPAPER_PENV_2,       QPageSize::Millimeter,    289,  499,    102,    176,          4,     6.9,  "EnvPRC2"},
+   {QPageSize::EnvelopePrc3,     DMPAPER_PENV_3,       QPageSize::Millimeter,    354,  499,    125,    176,        4.9,     6.9,  "EnvPRC3"},
+   {QPageSize::EnvelopePrc4,     DMPAPER_PENV_4,       QPageSize::Millimeter,    312,  590,    110,    208,       4.33,     8.2,  "EnvPRC4"},
+   {QPageSize::EnvelopePrc5,     DMPAPER_PENV_5,       QPageSize::Millimeter,    312,  624,    110,    220,       4.33,    8.66,  "EnvPRC5"},
+   {QPageSize::EnvelopePrc6,     DMPAPER_PENV_6,       QPageSize::Millimeter,    340,  652,    120,    230,        4.7,       9,  "EnvPRC6"},
+   {QPageSize::EnvelopePrc7,     DMPAPER_PENV_7,       QPageSize::Millimeter,    454,  652,    160,    230,        6.3,       9,  "EnvPRC7"},
+   {QPageSize::EnvelopePrc8,     DMPAPER_PENV_8,       QPageSize::Millimeter,    340,  876,    120,    309,        4.7,    12.2,  "EnvPRC8"},
+   {QPageSize::EnvelopePrc9,     DMPAPER_PENV_9,       QPageSize::Millimeter,    649,  918,    229,    324,          9,   12.75,  "EnvPRC9"},
+   {QPageSize::EnvelopePrc10,    DMPAPER_PENV_10,      QPageSize::Millimeter,    918, 1298,    324,    458,      12.75,      18,  "EnvPRC10"},
+   {QPageSize::EnvelopeYou4,     DMPAPER_JENV_YOU4,    QPageSize::Millimeter,    298,  666,    105,    235,       4.13,    9.25,  "EnvYou4"}
 };
 
 static constexpr const int pageSizesCount = int(sizeof(qt_pageSizes) / sizeof(qt_pageSizes[0]));
@@ -383,13 +390,16 @@ static QPageSize::PageSizeId qt_idForPpdKey(const QString &ppdKey, QSize *match 
    if (ppdKey.isEmpty()) {
       return QPageSize::Custom;
    }
+
    QString key = ppdKey;
+
    // Remove any Rotated or Tranverse modifiers
    if (key.endsWith(QLatin1String("Rotated"))) {
       key.chop(7);
    } else if (key.endsWith(QLatin1String(".Transverse"))) {
       key.chop(11);
    }
+
    for (int i = 0; i <= int(QPageSize::LastPageSize); ++i) {
       if (QString::fromLatin1(qt_pageSizes[i].mediaOption) == key) {
          if (match) {
@@ -762,15 +772,15 @@ class QPageSizePrivate : public QSharedData
 {
  public:
    QPageSizePrivate();
+
    explicit QPageSizePrivate(QPageSize::PageSizeId pageSizeId);
-   QPageSizePrivate(const QSize &pointSize,
-      const QString &name,
-      QPageSize::SizeMatchPolicy matchPolicy);
-   QPageSizePrivate(const QSizeF &size, QPageSize::Unit units,
-      const QString &name,
-      QPageSize::SizeMatchPolicy matchPolicy);
+
+   QPageSizePrivate(const QSize &pointSize, const QString &name, QPageSize::SizeMatchPolicy matchPolicy);
+   QPageSizePrivate(const QSizeF &size, QPageSize::Unit units, const QString &name, QPageSize::SizeMatchPolicy matchPolicy);
+
    QPageSizePrivate(const QString &key, const QSize &size, const QString &name);
    QPageSizePrivate(int windowsId, const QSize &pointSize, const QString &name);
+
    ~QPageSizePrivate();
 
    bool operator==(const QPageSizePrivate &other) const;
@@ -798,9 +808,7 @@ class QPageSizePrivate : public QSharedData
 };
 
 QPageSizePrivate::QPageSizePrivate()
-   : m_id(QPageSize::Custom),
-     m_windowsId(0),
-     m_units(QPageSize::Unit::Point)
+   : m_id(QPageSize::Custom), m_windowsId(0), m_units(QPageSize::Unit::Point)
 {
 }
 
@@ -824,10 +832,8 @@ QPageSizePrivate::QPageSizePrivate(const QSize &pointSize, const QString &name, 
 }
 
 QPageSizePrivate::QPageSizePrivate(const QSizeF &size, QPageSize::Unit units,
-   const QString &name, QPageSize::SizeMatchPolicy matchPolicy)
-   : m_id(QPageSize::Custom),
-     m_windowsId(0),
-     m_units(QPageSize::Unit::Point)
+      const QString &name, QPageSize::SizeMatchPolicy matchPolicy)
+   : m_id(QPageSize::Custom), m_windowsId(0), m_units(QPageSize::Unit::Point)
 {
    if (size.isValid()) {
       QPageSize::PageSizeId id = qt_idForSize(size, units, matchPolicy, nullptr);
@@ -836,9 +842,7 @@ QPageSizePrivate::QPageSizePrivate(const QSizeF &size, QPageSize::Unit units,
 }
 
 QPageSizePrivate::QPageSizePrivate(const QString &key, const QSize &pointSize, const QString &name)
-   : m_id(QPageSize::Custom),
-     m_windowsId(0),
-     m_units(QPageSize::Unit::Point)
+   : m_id(QPageSize::Custom), m_windowsId(0), m_units(QPageSize::Unit::Point)
 {
    if (!key.isEmpty() && pointSize.isValid()) {
       QPageSize::PageSizeId id = qt_idForPpdKey(key, nullptr);
@@ -1005,7 +1009,6 @@ QPageSize &QPageSize::operator=(const QPageSize &other)
    d = other.d;
    return *this;
 }
-
 
 bool operator==(const QPageSize &lhs, const QPageSize &rhs)
 {
@@ -1415,9 +1418,11 @@ QSize QPageSize::sizePixels(PageSizeId pageSizeId, int resolution)
 QDebug operator<<(QDebug dbg, const QPageSize &pageSize)
 {
    QDebugStateSaver saver(dbg);
+
    dbg.nospace();
    dbg.noquote();
    dbg << "QPageSize(";
+
    if (pageSize.isValid()) {
       dbg << '"' << pageSize.name() << "\", key=\"" << pageSize.key()
          << "\", " << pageSize.sizePoints().width() << 'x'
@@ -1425,8 +1430,9 @@ QDebug operator<<(QDebug dbg, const QPageSize &pageSize)
    } else {
       dbg.nospace() << "QPageSize()";
    }
+
    dbg << ')';
+
    return dbg;
 }
-
 

@@ -4482,8 +4482,7 @@ void QGraphicsItem::prepareGeometryChange()
 }
 
 // duplicate of qt_graphicsItem_highlightSelected() in qgraphicssvgitem.cpp
-static void qt_graphicsItem_highlightSelected(
-   QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
+static void qt_graphicsItem_highlightSelected(QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option)
 {
    const QRectF murect = painter->transform().mapRect(QRectF(0, 0, 1, 1));
    if (qFuzzyIsNull(qMax(murect.width(), murect.height()))) {

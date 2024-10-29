@@ -603,13 +603,13 @@ struct StyleSheet {
       : origin(StyleSheetOrigin_Unspecified), depth(0)
    { }
 
-   QVector<StyleRule> styleRules;  // only contains rules that are not indexed
+   QVector<StyleRule> styleRules;              // only contains rules that are not indexed
    QVector<MediaRule> mediaRules;
    QVector<PageRule> pageRules;
    QVector<ImportRule> importRules;
    StyleSheetOrigin origin;
 
-   int depth;                      // applicable only for inline style sheets
+   int depth;                                  // applicable only for inline style sheets
    QMultiHash<QString, StyleRule> nameIndex;
    QMultiHash<QString, StyleRule> idIndex;
 

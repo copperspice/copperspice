@@ -76,7 +76,6 @@ class QAbstractTextDocumentLayoutPrivate
 
  protected:
    QAbstractTextDocumentLayout *q_ptr;
-
 };
 
 #endif // QABSTRACTTEXTDOCUMENTLAYOUT_P_H

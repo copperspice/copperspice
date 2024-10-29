@@ -164,7 +164,6 @@ static const OutputBinMap outputBinMap[] = {
 };
 
 // Print utilities shared by print plugins
-
 class QPrintUtils
 {
 

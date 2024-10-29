@@ -56,7 +56,6 @@ class QPrintDialogPrivate : public QAbstractPrintDialogPrivate
    NSPrintPanel *printPanel;
 };
 
-
 @class QCocoaPrintPanelDelegate;
 
 @interface QCocoaPrintPanelDelegate : NSObject

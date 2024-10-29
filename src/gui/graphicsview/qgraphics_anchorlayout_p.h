@@ -311,6 +311,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    // of the items.
    //
    // Interval represents which interpolation interval are we operating in.
+
    enum Interval {
       MinimumToMinPreferred = 0,
       MinPreferredToPreferred,
@@ -322,6 +323,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    // both Horizontal and Vertical restrictions.
    //
    // Orientation is used to reference the right structure in each context
+
    enum Orientation {
       Horizontal = 0,
       Vertical,
@@ -442,7 +444,6 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
       }
    }
 
-
    AnchorVertex *addInternalVertex(QGraphicsLayoutItem *item, Qt::AnchorPoint edge);
    void removeInternalVertex(QGraphicsLayoutItem *item, Qt::AnchorPoint edge);
 
@@ -454,10 +455,8 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
    void interpolateEdge(AnchorVertex *base, AnchorData *edge);
 
    // Linear Programming solver methods
-   bool solveMinMax(const QList<QSimplexConstraint *> &constraints,
-      GraphPath path, qreal *min, qreal *max);
-   bool solvePreferred(const QList<QSimplexConstraint *> &constraints,
-      const QList<AnchorData *> &variables);
+   bool solveMinMax(const QList<QSimplexConstraint *> &constraints, GraphPath path, qreal *min, qreal *max);
+   bool solvePreferred(const QList<QSimplexConstraint *> &constraints, const QList<AnchorData *> &variables);
    bool hasConflicts() const;
 
 #if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)

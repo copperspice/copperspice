@@ -121,6 +121,7 @@ void QAbstractVideoSurface::setNativeResolution(const QSize &resolution)
       emit nativeResolutionChanged(resolution);
    }
 }
+
 QDebug operator<<(QDebug dbg, const QAbstractVideoSurface::Error &error)
 {
    QDebugStateSaver saver(dbg);
@@ -144,4 +145,3 @@ QDebug operator<<(QDebug dbg, const QAbstractVideoSurface::Error &error)
    }
    return dbg;
 }
-

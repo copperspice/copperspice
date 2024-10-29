@@ -242,12 +242,8 @@ class QBlitterPaintEnginePrivate : public QRasterPaintEnginePrivate
 
  public:
    QBlitterPaintEnginePrivate(QBlittablePlatformPixmap *p)
-      : QRasterPaintEnginePrivate()
-      , pmData(p)
-      , caps(pmData->blittable()->capabilities())
-      , hasXForm(false)
-
-   {}
+      : QRasterPaintEnginePrivate(), pmData(p), caps(pmData->blittable()->capabilities()), hasXForm(false)
+   { }
 
    void lock();
    void unlock();

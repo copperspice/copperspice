@@ -932,7 +932,6 @@ void QFileSystemModelPrivate::_q_performDelayedSort()
    q->sort(sortColumn, sortOrder);
 }
 
-
 static inline QChar getNextChar(const QString &s, int location)
 {
    return (location < s.length()) ? s.at(location) : QChar();

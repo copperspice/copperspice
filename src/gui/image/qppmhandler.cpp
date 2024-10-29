@@ -28,10 +28,8 @@
 #include <qimage.h>
 #include <qvariant.h>
 #include <qvector.h>
+
 #include <ctype.h>
-
-
-
 
 static void discard_pbm_line(QIODevice *d)
 {

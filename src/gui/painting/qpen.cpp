@@ -141,12 +141,10 @@ QPen::operator QVariant() const
    return QVariant(QVariant::Pen, this);
 }
 
-
 Qt::PenStyle QPen::style() const
 {
    return d->style;
 }
-
 
 void QPen::setStyle(Qt::PenStyle s)
 {
@@ -160,7 +158,6 @@ void QPen::setStyle(Qt::PenStyle s)
    dd->dashPattern.clear();
    dd->dashOffset = 0;
 }
-
 
 QVector<qreal> QPen::dashPattern() const
 {

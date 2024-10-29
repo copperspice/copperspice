@@ -319,13 +319,16 @@ QRect QLineControl::cursorRect() const
    return QRect(cix - 5, 0, w + 9, ch);
 }
 
-bool QLineControl::fixup() // this function assumes that validate currently returns != Acceptable
+bool QLineControl::fixup()
 {
+// this method assumes m_validator returns != Acceptable for the current input
+
 #ifndef QT_NO_VALIDATOR
    if (m_validator) {
       QString textCopy = m_text;
       int cursorCopy = m_cursor;
       m_validator->fixup(textCopy);
+
       if (m_validator->validate(textCopy, cursorCopy) == QValidator::Acceptable) {
          if (textCopy != m_text || cursorCopy != m_cursor) {
             internalSetText(textCopy, cursorCopy, false);
@@ -334,6 +337,7 @@ bool QLineControl::fixup() // this function assumes that validate currently retu
       }
    }
 #endif
+
    return false;
 }
 
@@ -1074,8 +1078,6 @@ QString QLineControl::maskString(uint pos, const QString &str, bool clear) const
    return s;
 }
 
-
-
 QString QLineControl::clearString(uint pos, uint len) const
 {
    if (pos >= (uint)m_maxLength) {
@@ -1603,13 +1605,12 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
       const bool inlineCompletion = m_completer && m_completer->completionMode() == QCompleter::InlineCompletion;
 #endif
 
-      if (hasSelectedText()
-         && (m_keyboardScheme != QPlatformTheme::WindowsKeyboardScheme
-            || inlineCompletion)) {
+      if (hasSelectedText() && (m_keyboardScheme != QPlatformTheme::WindowsKeyboardScheme || inlineCompletion)) {
          moveCursor(selectionEnd(), false);
       } else {
          cursorForward(0, visual ? 1 : (layoutDirection() == Qt::LeftToRight ? 1 : -1));
       }
+
    } else if (event == QKeySequence::SelectNextChar) {
       cursorForward(1, visual ? 1 : (layoutDirection() == Qt::LeftToRight ? 1 : -1));
    } else if (event == QKeySequence::MoveToPreviousChar) {
@@ -1620,15 +1621,15 @@ void QLineControl::processKeyEvent(QKeyEvent *event)
       const bool inlineCompletion = m_completer && m_completer->completionMode() == QCompleter::InlineCompletion;
 #endif
 
-      if (hasSelectedText()
-         && (m_keyboardScheme != QPlatformTheme::WindowsKeyboardScheme
-            || inlineCompletion)) {
+      if (hasSelectedText() && (m_keyboardScheme != QPlatformTheme::WindowsKeyboardScheme || inlineCompletion)) {
          moveCursor(selectionStart(), false);
       } else {
          cursorForward(0, visual ? -1 : (layoutDirection() == Qt::LeftToRight ? -1 : 1));
       }
+
    } else if (event == QKeySequence::SelectPreviousChar) {
       cursorForward(1, visual ? -1 : (layoutDirection() == Qt::LeftToRight ? -1 : 1));
+
    } else if (event == QKeySequence::MoveToNextWord) {
       if (echoMode() == QLineEdit::Normal) {
          layoutDirection() == Qt::LeftToRight ? cursorWordForward(0) : cursorWordBackward(0);

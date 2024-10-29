@@ -328,13 +328,10 @@ QPrinter::OutputFormat QPrinter::outputFormat() const
    return d->outputFormat;
 }
 
-
-
 int QPrinter::devType() const
 {
    return QInternal::Printer;
 }
-
 
 QString QPrinter::printerName() const
 {

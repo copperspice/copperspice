@@ -243,4 +243,3 @@ void QMediaResource::setResolution(int width, int height)
       values.remove(Resolution);
    }
 }
-

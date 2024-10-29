@@ -155,12 +155,10 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    }
 
    void dispatchPendingUpdateRequests() {
-      {
-         if (qt_widget_private(viewport)->paintOnScreen()) {
-            QCoreApplication::sendPostedEvents(viewport, QEvent::UpdateRequest);
-         } else {
-            QCoreApplication::sendPostedEvents(viewport->window(), QEvent::UpdateRequest);
-         }
+      if (qt_widget_private(viewport)->paintOnScreen()) {
+         QCoreApplication::sendPostedEvents(viewport, QEvent::UpdateRequest);
+      } else {
+         QCoreApplication::sendPostedEvents(viewport->window(), QEvent::UpdateRequest);
       }
    }
 
@@ -170,9 +168,11 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
       if (rect.isEmpty()) {
          return false;
       }
+
       if (optimizationFlags & QGraphicsView::DontAdjustForAntialiasing) {
          return updateRect(rect.toAlignedRect().adjusted(-1, -1, 1, 1));
       }
+
       return updateRect(rect.toAlignedRect().adjusted(-2, -2, 2, 2));
    }
 

@@ -79,7 +79,10 @@ class QGestureManager : public QObject
       QObject *object;
       Qt::GestureType gesture;
 
-      ObjectGesture(QObject *o, const Qt::GestureType &g) : object(o), gesture(g) { }
+      ObjectGesture(QObject *o, const Qt::GestureType &g)
+         : object(o), gesture(g)
+      { }
+
       bool operator<(const ObjectGesture &rhs) const {
          if (object < rhs.object) {
             return true;

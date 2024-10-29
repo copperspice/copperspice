@@ -473,7 +473,6 @@ QPaintDevice *QPaintEngine::paintDevice() const
    return d_func()->pdev;
 }
 
-
 QPoint QPaintEngine::coordinateOffset() const
 {
    return QPoint();

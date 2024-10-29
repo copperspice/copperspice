@@ -599,8 +599,7 @@ void QTableModel::sort(int column, Qt::SortOrder order)
    emit layoutChanged();
 }
 
-void QTableModel::ensureSorted(int column, Qt::SortOrder order,
-   int start, int end)
+void QTableModel::ensureSorted(int column, Qt::SortOrder order, int start, int end)
 {
    int count = end - start + 1;
    QVector < QPair<QTableWidgetItem *, int>> sorting;
@@ -712,8 +711,7 @@ QVector<QTableWidgetItem *> QTableModel::columnItems(int column) const
    return items;
 }
 
-void QTableModel::updateRowIndexes(QModelIndexList &indexes,
-   int movedFromRow, int movedToRow)
+void QTableModel::updateRowIndexes(QModelIndexList &indexes, int movedFromRow, int movedToRow)
 {
    QModelIndexList::iterator it;
    for (it = indexes.begin(); it != indexes.end(); ++it) {

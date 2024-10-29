@@ -91,6 +91,7 @@ class Q_GUI_EXPORT QItemEditorFactory
  public:
    QItemEditorFactory()
    { }
+
    virtual ~QItemEditorFactory();
 
    virtual QWidget *createEditor(QVariant::Type type, QWidget *parent) const;
@@ -106,7 +107,6 @@ class Q_GUI_EXPORT QItemEditorFactory
 };
 
 #endif // QT_NO_ITEMVIEWS
-
 
 
 #endif // QITEMEDITORFACTORY_H

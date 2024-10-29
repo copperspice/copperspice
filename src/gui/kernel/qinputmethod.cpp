@@ -239,4 +239,3 @@ QVariant QInputMethod::queryFocusObject(Qt::InputMethodQuery query, QVariant arg
 
    return queryEvent.value(query);
 }
-

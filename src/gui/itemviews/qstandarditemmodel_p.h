@@ -97,6 +97,7 @@ class QStandardItemPrivate
    }
 
    QPair<int, int> position() const;
+
    void setChild(int row, int column, QStandardItem *item,
       bool emitChanged = false);
 

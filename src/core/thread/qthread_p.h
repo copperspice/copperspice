@@ -58,8 +58,7 @@ inline bool operator<(const QPostEvent &first, const QPostEvent &second)
    return first.priority > second.priority;
 }
 
-// This class holds the list of posted events.
-//  The list has to be kept sorted by priority
+// this class holds the list of posted events and must be kept sorted by priority
 class QPostEventList : public QVector<QPostEvent>
 {
  public:

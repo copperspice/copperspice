@@ -213,7 +213,6 @@ bool QSqlResult::isValid() const
    return d->idx != QSql::BeforeFirstRow && d->idx != QSql::AfterLastRow;
 }
 
-
 bool QSqlResult::isActive() const
 {
    Q_D(const QSqlResult);
@@ -225,8 +224,6 @@ void QSqlResult::setAt(int index)
    Q_D(QSqlResult);
    d->idx = index;
 }
-
-
 
 void QSqlResult::setSelect(bool select)
 {
@@ -256,7 +253,6 @@ void QSqlResult::setActive(bool active)
 
    d->active = active;
 }
-
 
 void QSqlResult::setLastError(const QSqlError &error)
 {
@@ -485,7 +481,6 @@ QVector<QVariant> &QSqlResult::boundValues() const
    return const_cast<QSqlResultPrivate *>(d)->values;
 }
 
-
 QSqlResult::BindingSyntax QSqlResult::bindingSyntax() const
 {
    Q_D(const QSqlResult);
@@ -509,7 +504,6 @@ void QSqlResult::resetBindCount()
    Q_D(QSqlResult);
    d->resetBindCount();
 }
-
 
 QString QSqlResult::boundValueName(int index) const
 {

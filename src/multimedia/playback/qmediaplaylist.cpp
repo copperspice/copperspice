@@ -274,8 +274,7 @@ bool QMediaPlaylistPrivate::writeItems(QMediaPlaylistWriter *writer)
 }
 
 void QMediaPlaylistPrivate::syncControls(QMediaPlaylistControl *oldControl, QMediaPlaylistControl *newControl,
-   int *removedStart, int *removedEnd,
-   int *insertedStart, int *insertedEnd)
+   int *removedStart, int *removedEnd, int *insertedStart, int *insertedEnd)
 {
    Q_ASSERT(oldControl != nullptr && newControl != nullptr);
    Q_ASSERT(removedStart != nullptr && removedEnd != nullptr
@@ -286,10 +285,10 @@ void QMediaPlaylistPrivate::syncControls(QMediaPlaylistControl *oldControl, QMed
 
    Q_ASSERT(oldPlaylist != nullptr && newPlaylist != NULL);
 
-   *removedStart = -1;
-   *removedEnd = -1;
+   *removedStart  = -1;
+   *removedEnd    = -1;
    *insertedStart = -1;
-   *insertedEnd = -1;
+   *insertedEnd   = -1;
 
    if (newPlaylist->isReadOnly()) {
       // we can't transfer the items from the old control.
@@ -304,6 +303,7 @@ void QMediaPlaylistPrivate::syncControls(QMediaPlaylistControl *oldControl, QMed
          *insertedStart = 0;
          *insertedEnd = newPlaylist->mediaCount() - 1;
       }
+
    } else {
       const int oldPlaylistSize = oldPlaylist->mediaCount();
 

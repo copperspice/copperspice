@@ -1617,13 +1617,17 @@ void QMainWindowTabBar::mouseMoveEvent(QMouseEvent *e)
    if (!draggingDock && (mainWindow->dockOptions() & QMainWindow::GroupedDragging)) {
       int offset = QApplication::startDragDistance() + 1;
       offset *= 3;
+
       QRect r = rect().adjusted(-offset, -offset, offset, offset);
+
       if (d->dragInProgress && !r.contains(e->pos()) && d->validIndex(d->pressedIndex)) {
          QMainWindowLayout *mlayout = qt_mainwindow_layout(mainWindow);
          QDockAreaLayoutInfo *info = mlayout->dockInfo(this);
          Q_ASSERT(info);
+
          int idx = info->tabIndexToListIndex(d->pressedIndex);
          const QDockAreaLayoutItem &item = info->item_list.at(idx);
+
          if (item.widgetItem
             && (draggingDock = qobject_cast<QDockWidget *>(item.widgetItem->widget()))) {
             // We should drag this QDockWidget away by unpluging it.
@@ -1641,6 +1645,7 @@ void QMainWindowTabBar::mouseMoveEvent(QMouseEvent *e)
             // Then starts the drag using QDockWidgetPrivate
             QDockWidgetPrivate *dockPriv = static_cast<QDockWidgetPrivate *>(QWidgetPrivate::get(draggingDock));
             QDockWidgetLayout *dwlayout  = static_cast<QDockWidgetLayout *>(draggingDock->layout());
+
             dockPriv->initDrag(dwlayout->titleArea().center(), true);
             dockPriv->startDrag(false);
 

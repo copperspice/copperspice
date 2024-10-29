@@ -1068,5 +1068,3 @@ static bool drawLineAA(QCosmeticStroker *stroker, qreal rx1, qreal ry1, qreal rx
    }
    return true;
 }
-
-

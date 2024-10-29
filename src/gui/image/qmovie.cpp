@@ -276,9 +276,12 @@ bool QMoviePrivate::next()
          playCounter = reader->loopCount();
          isFirstIteration = false;
       }
+
       // Loop as appropriate
       if (playCounter != 0) {
-         if (playCounter != -1) { // Infinite?
+
+         // Infinite?
+         if (playCounter != -1) {
             playCounter--;   // Nope
          }
          nextFrameNumber = 0;
@@ -290,20 +293,26 @@ bool QMoviePrivate::next()
 
    // Image and delay OK, update state
    currentFrameNumber = nextFrameNumber++;
+
    QSize scaledSize = reader->scaledSize();
+
    if (scaledSize.isValid() && (scaledSize != info.pixmap.size())) {
       currentPixmap = QPixmap::fromImage( info.pixmap.toImage().scaled(scaledSize) );
    } else {
       currentPixmap = info.pixmap;
    }
+
    nextDelay = speedAdjustedDelay(info.delay);
+
    // Adjust delay according to the time it took to read the frame
    int processingTime = time.elapsed();
+
    if (processingTime > nextDelay) {
       nextDelay = 0;
    } else {
       nextDelay = nextDelay - processingTime;
    }
+
    return true;
 }
 

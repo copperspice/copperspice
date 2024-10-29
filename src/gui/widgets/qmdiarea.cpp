@@ -606,7 +606,9 @@ void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState, Qt
    }
 
    Q_Q(QMdiArea);
+
    QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(q->sender());
+
    if (!child) {
       return;
    }
@@ -614,9 +616,8 @@ void QMdiAreaPrivate::_q_processWindowStateChanged(Qt::WindowStates oldState, Qt
    if (!(oldState & Qt::WindowActive) && (newState & Qt::WindowActive)) {
       // windowActivated
       emitWindowActivated(child);
-   }
 
-   else if ((oldState & Qt::WindowActive) && ! (newState & Qt::WindowActive)) {
+   } else if ((oldState & Qt::WindowActive) && ! (newState & Qt::WindowActive)) {
       // windowDeactivated
       resetActiveWindow(child);
    }

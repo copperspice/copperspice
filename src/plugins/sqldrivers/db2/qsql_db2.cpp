@@ -498,8 +498,6 @@ QVariant QDB2Result::handle() const
    return QVariant::fromValue<SQLHANDLE>(d->hStmt);
 }
 
-/************************************/
-
 QDB2Result::QDB2Result(const QDB2Driver *dr, const QDB2DriverPrivate *dp)
    : QSqlResult(dr)
 {
@@ -1153,8 +1151,6 @@ void QDB2Result::virtual_hook(int id, void *data)
          QSqlResult::virtual_hook(id, data);
    }
 }
-
-/************************************/
 
 QDB2Driver::QDB2Driver(QObject *parent)
    : QSqlDriver(parent)

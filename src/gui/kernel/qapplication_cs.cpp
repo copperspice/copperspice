@@ -773,10 +773,6 @@ QFont QApplication::font(const QString &className)
    return font();
 }
 
-
-
-
-
 void QApplicationPrivate::setSystemFont(const QFont &font)
 {
    if (!sys_font) {
@@ -824,7 +820,6 @@ void QApplicationPrivate::notifyWindowIconChanged()
       QCoreApplication::sendEvent(windowList.at(i), &ev);
    }
 }
-
 
 QWidgetList QApplication::topLevelWidgets()
 {

@@ -251,6 +251,7 @@ class Q_OPENGL_EXPORT QGLContext
       DefaultBindOption                       = LinearFilteringBindOption
          | InvertedYBindOption
          | MipmapBindOption,
+
       InternalBindOption                      = MemoryManagedBindOption
          | PremultipliedAlphaBindOption
    };

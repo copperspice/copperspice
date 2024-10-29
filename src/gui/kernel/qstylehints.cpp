@@ -59,7 +59,7 @@ class QStyleHintsPrivate
  public:
    QStyleHintsPrivate()
       : m_mouseDoubleClickInterval(-1), m_startDragDistance(-1), m_startDragTime(-1), m_keyboardInputInterval(-1), m_cursorFlashTime(-1)
-   {}
+   { }
 
    int m_mouseDoubleClickInterval;
    int m_startDragDistance;
@@ -92,7 +92,6 @@ void QStyleHints::setMouseDoubleClickInterval(int mouseDoubleClickInterval)
    emit mouseDoubleClickIntervalChanged(mouseDoubleClickInterval);
 }
 
-
 int QStyleHints::mouseDoubleClickInterval() const
 {
    Q_D(const QStyleHints);
@@ -107,6 +106,7 @@ int QStyleHints::mousePressAndHoldInterval() const
    return themeableHint(QPlatformTheme::MousePressAndHoldInterval, QPlatformIntegration::MousePressAndHoldInterval).toInt();
 
 }
+
 void QStyleHints::setStartDragDistance(int startDragDistance)
 {
    Q_D(QStyleHints);
@@ -195,11 +195,11 @@ int QStyleHints::cursorFlashTime() const
       d->m_cursorFlashTime :
       themeableHint(QPlatformTheme::CursorFlashTime, QPlatformIntegration::CursorFlashTime).toInt();
 }
+
 bool QStyleHints::showIsFullScreen() const
 {
    return hint(QPlatformIntegration::ShowIsFullScreen).toBool();
 }
-
 
 bool QStyleHints::showIsMaximized() const
 {

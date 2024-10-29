@@ -27,6 +27,7 @@
 *****************************************************/
 
 #include <qcommandlineparser.h>
+
 #include <qcoreapplication.h>
 #include <qhash.h>
 #include <qstringparser.h>

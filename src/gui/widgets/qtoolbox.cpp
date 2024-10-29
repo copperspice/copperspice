@@ -75,6 +75,7 @@ class QToolBoxButton : public QAbstractButton
 class QToolBoxPrivate : public QFramePrivate
 {
    Q_DECLARE_PUBLIC(QToolBox)
+
  public:
    struct Page {
       QToolBoxButton *button;

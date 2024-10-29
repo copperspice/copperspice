@@ -1033,7 +1033,6 @@ QStringList QFileDialog::history() const
    return currentHistory;
 }
 
-
 void QFileDialog::setItemDelegate(QAbstractItemDelegate *delegate)
 {
    Q_D(QFileDialog);

@@ -29,11 +29,10 @@
 #include <qpaintengine_raster_p.h>
 
 #ifndef QDRAWHELPER_AVX
-// in AVX mode, we'll use the SSSE3 code
+
+// in AVX mode, use the SSSE3 code
 void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
-   const uchar *srcPixels, int sbpl,
-   int w, int h,
-   int const_alpha)
+      const uchar *srcPixels, int sbpl, int w, int h, int const_alpha)
 {
    const quint32 *src = (const quint32 *) srcPixels;
    quint32 *dst = (quint32 *) destPixels;

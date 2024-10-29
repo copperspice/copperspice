@@ -209,6 +209,7 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh, QFile::FileHand
 bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode openMode, FILE *fh)
 {
    Q_Q(QFSFileEngine);
+
    this->fh = fh;
    fd = -1;
 

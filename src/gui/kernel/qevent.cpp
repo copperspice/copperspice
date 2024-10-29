@@ -246,14 +246,17 @@ QPaintEvent::~QPaintEvent()
 
 QMoveEvent::QMoveEvent(const QPoint &pos, const QPoint &oldPos)
    : QEvent(Move), p(pos), oldp(oldPos)
-{}
+{
+}
 
 QMoveEvent::~QMoveEvent()
-{ }
+{
+}
 
 QExposeEvent::QExposeEvent(const QRegion &exposeRegion)
    : QEvent(Expose), rgn(exposeRegion)
-{ }
+{
+}
 
 QExposeEvent::~QExposeEvent()
 {
@@ -418,9 +421,11 @@ QNativeGestureEvent::QNativeGestureEvent(Qt::NativeGestureType type, const QPoin
      mSequenceId(sequenceId), mIntValue(intValue)
 {
 }
+
 #endif
 
 #ifndef QT_NO_DRAGANDDROP
+
 QDragMoveEvent::QDragMoveEvent(const QPoint &pos, Qt::DropActions actions, const QMimeData *data,
    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers, Type type)
    : QDropEvent(pos, actions, data, buttons, modifiers, type), rect(pos, QSize(1, 1))
@@ -441,7 +446,8 @@ QDropEvent::QDropEvent(const QPointF &pos, Qt::DropActions actions, const QMimeD
 }
 
 QDropEvent::~QDropEvent()
-{}
+{
+}
 
 QObject *QDropEvent::source() const
 {
@@ -464,34 +470,42 @@ void QDropEvent::setDropAction(Qt::DropAction action)
 QDragEnterEvent::QDragEnterEvent(const QPoint &point, Qt::DropActions actions, const QMimeData *data,
    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
    : QDragMoveEvent(point, actions, data, buttons, modifiers, DragEnter)
-{}
+{
+}
 
 QDragEnterEvent::~QDragEnterEvent()
-{}
+{
+}
 
 QDragLeaveEvent::QDragLeaveEvent()
    : QEvent(DragLeave)
-{}
+{
+}
 
 QDragLeaveEvent::~QDragLeaveEvent()
-{}
+{ }
+
 #endif
 
 QHelpEvent::QHelpEvent(Type type, const QPoint &pos, const QPoint &globalPos)
    : QEvent(type), p(pos), gp(globalPos)
-{}
+{
+}
 
 QHelpEvent::~QHelpEvent()
-{}
+{
+}
 
 #ifndef QT_NO_STATUSTIP
 
 QStatusTipEvent::QStatusTipEvent(const QString &tip)
    : QEvent(StatusTip), s(tip)
-{}
+{
+}
 
 QStatusTipEvent::~QStatusTipEvent()
-{}
+{
+}
 
 #endif
 
@@ -499,7 +513,8 @@ QStatusTipEvent::~QStatusTipEvent()
 
 QWhatsThisClickedEvent::QWhatsThisClickedEvent(const QString &href)
    : QEvent(WhatsThisClicked), s(href)
-{}
+{
+}
 
 QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
 {
@@ -511,37 +526,46 @@ QWhatsThisClickedEvent::~QWhatsThisClickedEvent()
 
 QActionEvent::QActionEvent(int type, QAction *action, QAction *before)
    : QEvent(static_cast<QEvent::Type>(type)), act(action), bef(before)
-{}
+{
+}
 
 QActionEvent::~QActionEvent()
-{}
+{
+}
 
 #endif
 
 QHideEvent::QHideEvent()
    : QEvent(Hide)
-{}
+{
+}
 
 QHideEvent::~QHideEvent()
-{}
+{
+}
 
 QShowEvent::QShowEvent()
    : QEvent(Show)
-{}
+{
+}
 
 QShowEvent::~QShowEvent()
-{}
+{
+}
 
 QFileOpenEvent::QFileOpenEvent(const QString &file)
    : QEvent(FileOpen), f(file), m_url(QUrl::fromLocalFile(file))
-{}
+{
+}
 
 QFileOpenEvent::QFileOpenEvent(const QUrl &url)
    : QEvent(FileOpen), f(url.toLocalFile()), m_url(url)
-{}
+{
+}
 
 QFileOpenEvent::~QFileOpenEvent()
-{}
+{
+}
 
 bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
 {
@@ -553,10 +577,12 @@ bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
 
 QToolBarChangeEvent::QToolBarChangeEvent(bool t)
    : QEvent(ToolBarChange), tog(t)
-{}
+{
+}
 
 QToolBarChangeEvent::~QToolBarChangeEvent()
-{}
+{
+}
 
 #endif
 
@@ -564,10 +590,12 @@ QToolBarChangeEvent::~QToolBarChangeEvent()
 
 QShortcutEvent::QShortcutEvent(const QKeySequence &key, int id, bool ambiguous)
    : QEvent(Shortcut), sequence(key), ambig(ambiguous), sid(id)
-{ }
+{
+}
 
 QShortcutEvent::~QShortcutEvent()
-{ }
+{
+}
 
 #endif
 
@@ -1107,7 +1135,8 @@ bool QWindowStateChangeEvent::isOverride() const
 }
 
 QWindowStateChangeEvent::~QWindowStateChangeEvent()
-{}
+{
+}
 
 QTouchEvent::QTouchEvent(QEvent::Type eventType, QTouchDevice *device, Qt::KeyboardModifiers modifiers,
       Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
@@ -1331,6 +1360,7 @@ void QTouchEvent::TouchPoint::setLastPos(const QPointF &lastPos)
    }
    d->lastPos = lastPos;
 }
+
 
 void QTouchEvent::TouchPoint::setLastScenePos(const QPointF &lastScenePos)
 {

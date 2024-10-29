@@ -230,10 +230,12 @@ public:
         if (options) {
             QOpenGLPixelTransferOptions oldOptions = savePixelUploadOptions();
             setPixelUploadOptions(*options);
-            (this->*CompressedTextureSubImage3D)(texture, target, bindingTarget, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, bits);
+            (this->*CompressedTextureSubImage3D)(texture, target, bindingTarget, level, xoffset, yoffset, zoffset, width, height,
+                  depth, format, imageSize, bits);
             setPixelUploadOptions(oldOptions);
         } else {
-            (this->*CompressedTextureSubImage3D)(texture, target, bindingTarget, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, bits);
+            (this->*CompressedTextureSubImage3D)(texture, target, bindingTarget, level, xoffset, yoffset, zoffset, width, height,
+                  depth, format, imageSize, bits);
         }
     }
 

@@ -25,6 +25,7 @@
 #define QBLENDFUNCTIONS_P_H
 
 #include <qmath.h>
+
 #include <qdrawhelper_p.h>
 
 template <typename SRC, typename T>

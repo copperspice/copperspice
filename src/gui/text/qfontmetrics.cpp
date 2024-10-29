@@ -467,7 +467,6 @@ QFontMetricsF &QFontMetricsF::operator=(const QFontMetricsF &fm)
    return *this;
 }
 
-
 bool QFontMetricsF::operator ==(const QFontMetricsF &other) const
 {
    return d == other.d;
@@ -480,7 +479,6 @@ qreal QFontMetricsF::ascent() const
 
    return engine->ascent().toReal();
 }
-
 
 qreal QFontMetricsF::descent() const
 {

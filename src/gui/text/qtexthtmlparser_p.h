@@ -344,13 +344,13 @@ class QTextHtmlParser
       QString url;
       QCss::StyleSheet sheet;
    };
+
    QVector<ExternalStyleSheet> externalStyleSheets;
    QVector<QCss::StyleSheet> inlineStyleSheets;
 #endif
 
    const QTextDocument *resourceProvider;
 };
-
 
 #endif // QT_NO_TEXTHTMLPARSER
 

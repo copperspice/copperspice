@@ -510,7 +510,6 @@ static void read_image_scaled(QImage *outImage, png_structp png_ptr, png_infop i
    if (unit_type == PNG_OFFSET_PIXEL) {
       outImage->setOffset(QPoint(offset_x * oxsz / ixsz, offset_y * oysz / iysz));
    }
-
 }
 
 extern "C" {

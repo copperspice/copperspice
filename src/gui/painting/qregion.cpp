@@ -1165,11 +1165,11 @@ SOFTWARE.
 #define NUMPTSTOBUFFER 200
 
 // used to allocate buffers for points and link the buffers together
-typedef struct _POINTBLOCK {
+struct POINTBLOCK {
    char data[NUMPTSTOBUFFER * sizeof(QPoint)];
    QPoint *pts;
-   struct _POINTBLOCK *next;
-} POINTBLOCK;
+   POINTBLOCK *next;
+};
 
 #endif
 
@@ -3117,6 +3117,7 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
                if (iPts == NUMPTSTOBUFFER) {
                   tmpPtBlock = (POINTBLOCK *)malloc(sizeof(POINTBLOCK));
                   Q_CHECK_PTR(tmpPtBlock);
+
                   tmpPtBlock->pts = reinterpret_cast<QPoint *>(tmpPtBlock->data);
                   curPtBlock->next = tmpPtBlock;
                   curPtBlock = tmpPtBlock;

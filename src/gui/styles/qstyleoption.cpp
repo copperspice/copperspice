@@ -293,7 +293,6 @@ QStyleOptionDockWidget::QStyleOptionDockWidget(int version)
 {
 }
 
-
 QStyleOptionToolButton::QStyleOptionToolButton()
    : QStyleOptionComplex(Version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
    , toolButtonStyle(Qt::ToolButtonIconOnly)
@@ -303,7 +302,6 @@ QStyleOptionToolButton::QStyleOptionToolButton()
 QStyleOptionToolButton::QStyleOptionToolButton(int version)
    : QStyleOptionComplex(version, SO_ToolButton), features(None), arrowType(Qt::DownArrow)
    , toolButtonStyle(Qt::ToolButtonIconOnly)
-
 {
 }
 
@@ -352,6 +350,7 @@ QStyleOptionTitleBar::QStyleOptionTitleBar(int version)
 }
 
 #ifndef QT_NO_ITEMVIEWS
+
 QStyleOptionViewItem::QStyleOptionViewItem()
    : QStyleOption(Version, SO_ViewItem),
      displayAlignment(Qt::AlignLeft), decorationAlignment(Qt::AlignLeft),
@@ -437,6 +436,7 @@ qreal QStyleOptionGraphicsItem::levelOfDetailFromTransform(const QTransform &wor
    // Two unit vectors.
    QLineF v1(0, 0, 1, 0);
    QLineF v2(0, 0, 0, 1);
+
    // LOD is the transformed area of a 1x1 rectangle.
    return qSqrt(worldTransform.map(v1).length() * worldTransform.map(v2).length());
 }

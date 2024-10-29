@@ -48,8 +48,12 @@ class QExtendedInformation
       System
    };
 
-   QExtendedInformation() {}
-   QExtendedInformation(const QFileInfo &info) : mFileInfo(info) {}
+   QExtendedInformation()
+   { }
+
+   QExtendedInformation(const QFileInfo &info)
+      : mFileInfo(info)
+   { }
 
    bool isDir() {
       return type() == Dir;

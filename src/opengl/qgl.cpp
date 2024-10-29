@@ -2258,6 +2258,7 @@ void QGLContext::setDevice(QPaintDevice *pDev)
    Q_D(QGLContext);
 
    d->paintDevice = pDev;
+
    if (d->paintDevice && (d->paintDevice->devType() != QInternal::Widget
          && d->paintDevice->devType() != QInternal::Pixmap
          && d->paintDevice->devType() != QInternal::Pbuffer)) {

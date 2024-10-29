@@ -477,7 +477,6 @@ QString QShortcut::whatsThis() const
    return d->sc_whatsthis;
 }
 
-
 void QShortcut::setAutoRepeat(bool on)
 {
    Q_D(QShortcut);
@@ -494,7 +493,6 @@ bool QShortcut::autoRepeat() const
    Q_D(const QShortcut);
    return d->sc_autorepeat;
 }
-
 
 int QShortcut::id() const
 {

@@ -390,8 +390,7 @@ void QGraphicsWidgetPrivate::windowFrameMousePressEvent(QGraphicsSceneMouseEvent
 }
 
 static qreal minimumHeightForWidth(qreal width, qreal minh, qreal maxh,
-   const QGraphicsWidget *widget,
-   bool heightForWidth = true)
+      const QGraphicsWidget *widget, bool heightForWidth = true)
 {
    qreal minimumHeightForWidth = -1;
    const bool hasHFW = QGraphicsLayoutItemPrivate::get(widget)->hasHeightForWidth();

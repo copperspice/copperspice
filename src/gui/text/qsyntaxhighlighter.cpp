@@ -24,6 +24,7 @@
 #include <qsyntaxhighlighter.h>
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
+
 #include <qtextdocument.h>
 #include <qtextlayout.h>
 #include <qpointer.h>

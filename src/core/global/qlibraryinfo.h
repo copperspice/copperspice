@@ -28,6 +28,7 @@
 #include <qdatetime.h>
 
 class QStringList;
+
 class Q_CORE_EXPORT QLibraryInfo
 {
  public:

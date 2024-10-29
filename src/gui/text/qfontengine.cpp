@@ -2318,4 +2318,3 @@ QTestFontEngine::QTestFontEngine(int size)
    : QFontEngineBox(TestFontEngine, size)
 {
 }
-

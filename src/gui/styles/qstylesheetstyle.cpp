@@ -2500,24 +2500,32 @@ static bool unstylable(const QWidget *w)
 static quint64 extendedPseudoClass(const QWidget *w)
 {
    quint64 pc = w->isWindow() ? quint64(QCss::PseudoClass_Window) : 0;
+
    if (const QAbstractSlider *slider = qobject_cast<const QAbstractSlider *>(w)) {
       pc |= ((slider->orientation() == Qt::Vertical) ? QCss::PseudoClass_Vertical : QCss::PseudoClass_Horizontal);
-   } else
 
-#ifndef QT_NO_COMBOBOX
-      if (const QComboBox *combo = qobject_cast<const QComboBox *>(w)) {
-         if (combo->isEditable()) {
-            pc |= (combo->isEditable() ? QCss::PseudoClass_Editable : QCss::PseudoClass_ReadOnly);
-         }
-      } else
+#ifdef QT_NO_COMBOBOX
+   // nothing
+
+#else
+   } else if (const QComboBox *combo = qobject_cast<const QComboBox *>(w)) {
+      if (combo->isEditable()) {
+         pc |= (combo->isEditable() ? QCss::PseudoClass_Editable : QCss::PseudoClass_ReadOnly);
+      }
+
 #endif
 
-#ifndef QT_NO_LINEEDIT
-         if (const QLineEdit *edit = qobject_cast<const QLineEdit *>(w)) {
-            pc |= (edit->isReadOnly() ? QCss::PseudoClass_ReadOnly : QCss::PseudoClass_Editable);
-         } else
+#ifdef QT_NO_LINEEDIT
+   // nothing
+
+#else
+   } else if (const QLineEdit *edit = qobject_cast<const QLineEdit *>(w)) {
+      pc |= (edit->isReadOnly() ? QCss::PseudoClass_ReadOnly : QCss::PseudoClass_Editable);
+
 #endif
-         { } // required for the above ifdef'ery to work
+
+   }
+
    return pc;
 }
 

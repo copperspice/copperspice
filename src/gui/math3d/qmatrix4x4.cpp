@@ -108,9 +108,7 @@ QMatrix4x4::QMatrix4x4(const QTransform &transform)
 //     | A B C |
 // M = | D E F |   det(M) = A * (EI - HF) - B * (DI - GF) + C * (DH - GE)
 //     | G H I |
-static inline qreal matrixDet3
-(const qreal m[4][4], int col0, int col1, int col2,
- int row0, int row1, int row2)
+static inline qreal matrixDet3(const qreal m[4][4], int col0, int col1, int col2, int row0, int row1, int row2)
 {
    return m[col0][row0] *
           (m[col1][row1] * m[col2][row2] -
@@ -1285,5 +1283,3 @@ QDataStream &operator>>(QDataStream &stream, QMatrix4x4 &matrix)
 #endif // QT_NO_DATASTREAM
 
 #endif // QT_NO_MATRIX4X4
-
-

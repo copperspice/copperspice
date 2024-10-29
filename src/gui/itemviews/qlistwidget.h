@@ -169,7 +169,6 @@ class Q_GUI_EXPORT QListWidgetItem
 
    virtual bool operator<(const QListWidgetItem &other) const;
 
-
    virtual void read(QDataStream &in);
    virtual void write(QDataStream &out) const;
 

@@ -818,12 +818,10 @@ QZipReader::~QZipReader()
    delete d;
 }
 
-
 QIODevice *QZipReader::device() const
 {
    return d->device;
 }
-
 
 bool QZipReader::isReadable() const
 {
@@ -1082,18 +1080,15 @@ bool QZipWriter::exists() const
    return f->exists();
 }
 
-
 QZipWriter::Status QZipWriter::status() const
 {
    return d->status;
 }
 
-
 void QZipWriter::setCompressionPolicy(CompressionPolicy policy)
 {
    d->compressionPolicy = policy;
 }
-
 
 QZipWriter::CompressionPolicy QZipWriter::compressionPolicy() const
 {
@@ -1104,7 +1099,6 @@ void QZipWriter::setCreationPermissions(QFile::Permissions permissions)
 {
    d->permissions = permissions;
 }
-
 
 QFile::Permissions QZipWriter::creationPermissions() const
 {

@@ -689,10 +689,13 @@ QOpenGLContext::OpenGLModuleType QOpenGLContext::openGLModuleType()
 #if defined(QT_OPENGL_DYNAMIC)
    Q_ASSERT(qGuiApp);
    return QGuiApplicationPrivate::instance()->platformIntegration()->openGLModuleType();
+
 #elif defined(QT_OPENGL_ES_2)
    return LibGLES;
+
 #else
    return LibGL;
+
 #endif
 }
 

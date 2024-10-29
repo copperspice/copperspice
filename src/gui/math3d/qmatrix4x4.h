@@ -44,6 +44,7 @@ class Q_GUI_EXPORT QMatrix4x4
    }
 
    explicit QMatrix4x4(const qreal *values);
+
    inline QMatrix4x4(qreal m11, qreal m12, qreal m13, qreal m14,
                      qreal m21, qreal m22, qreal m23, qreal m24,
                      qreal m31, qreal m32, qreal m33, qreal m34,

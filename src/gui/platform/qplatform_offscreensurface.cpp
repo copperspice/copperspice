@@ -22,17 +22,16 @@
 ***********************************************************************/
 
 #include <qplatform_offscreensurface.h>
+
 #include <qoffscreensurface.h>
 #include <qscreen.h>
 
 class QPlatformOffscreenSurfacePrivate
 {
- public:
 };
 
 QPlatformOffscreenSurface::QPlatformOffscreenSurface(QOffscreenSurface *offscreenSurface)
-   : QPlatformSurface(offscreenSurface)
-   , d_ptr(new QPlatformOffscreenSurfacePrivate)
+   : QPlatformSurface(offscreenSurface), d_ptr(new QPlatformOffscreenSurfacePrivate)
 {
 }
 
@@ -59,4 +58,3 @@ bool QPlatformOffscreenSurface::isValid() const
 {
    return false;
 }
-

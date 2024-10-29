@@ -25,6 +25,7 @@
 #define QSTATE_P_H
 
 #include <qstate.h>
+
 #include <qlist.h>
 #include <qpointer.h>
 #include <qvariant.h>

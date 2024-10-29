@@ -166,4 +166,3 @@ QPaintEngine *QPaintDeviceWindow::paintEngine() const
 {
    return nullptr;
 }
-

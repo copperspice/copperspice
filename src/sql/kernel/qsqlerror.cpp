@@ -41,6 +41,7 @@ class QSqlErrorPrivate
    QSqlError::ErrorType errorType;
    QString errorCode;
 };
+
 QSqlError::QSqlError(const QString &driverText, const QString &databaseText,
    ErrorType type, const QString &code)
 {
@@ -86,22 +87,15 @@ QString QSqlError::driverText() const
    return d->driverError;
 }
 
-
-
-
 QString QSqlError::databaseText() const
 {
    return d->databaseError;
 }
 
-
-
 QSqlError::ErrorType QSqlError::type() const
 {
    return d->errorType;
 }
-
-
 
 QString QSqlError::nativeErrorCode() const
 {

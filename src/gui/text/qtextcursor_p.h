@@ -49,12 +49,14 @@ class QTextCursorPrivate : public QSharedData
    bool setPosition(int newPosition) {
       Q_ASSERT(newPosition >= 0 && newPosition < priv->length());
       bool moved = position != newPosition;
+
       if (moved) {
          position = newPosition;
          currentCharFormat = -1;
       }
       return moved;
    }
+
    void setX();
    bool canDelete(int pos) const;
 

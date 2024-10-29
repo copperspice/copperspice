@@ -147,10 +147,7 @@ class QTreeModel : public QAbstractItemModel
    bool isChanging() const;
 
    Q_DECLARE_PRIVATE(QTreeModel)
-
 };
-
-
 
 class QTreeModelPrivate : public QAbstractItemModelPrivate
 {
@@ -171,7 +168,6 @@ class QTreeWidgetItemPrivate
    int rowGuess;
    QTreeWidgetItem::ChildIndicatorPolicy policy;
 };
-
 
 inline bool QTreeModel::executePendingSort() const
 {

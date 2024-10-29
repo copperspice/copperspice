@@ -292,17 +292,14 @@ static inline bool isEmptyBlockBeforeTable(QTextFrame::iterator it)
 static inline bool isEmptyBlockAfterTable(const QTextBlock &block, const QTextFrame *previousFrame)
 {
    return qobject_cast<const QTextTable *>(previousFrame)
-      && block.isValid()
-      && block.length() == 1
-      && previousFrame->lastPosition() == block.position() - 1
-      ;
+      && block.isValid() && block.length() == 1
+      && previousFrame->lastPosition() == block.position() - 1;
 }
 
 static inline bool isLineSeparatorBlockAfterTable(const QTextBlock &block, const QTextFrame *previousFrame)
 {
    return qobject_cast<const QTextTable *>(previousFrame)
-      && block.isValid()
-      && block.length() > 1
+      && block.isValid() && block.length() > 1
       && block.text().at(0) == QChar::LineSeparator
       && previousFrame->lastPosition() == block.position() - 1;
 }

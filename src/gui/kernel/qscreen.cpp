@@ -165,7 +165,6 @@ qreal QScreen::logicalDotsPerInchY() const
    return d->logicalDpi.second;
 }
 
-
 qreal QScreen::logicalDotsPerInch() const
 {
    Q_D(const QScreen);
@@ -197,7 +196,6 @@ QRect QScreen::geometry() const
    Q_D(const QScreen);
    return d->geometry;
 }
-
 
 QRect QScreen::availableGeometry() const
 {
@@ -231,7 +229,6 @@ QRect QScreen::virtualGeometry() const
    }
    return result;
 }
-
 
 QSize QScreen::availableVirtualSize() const
 {
@@ -267,7 +264,6 @@ Qt::ScreenOrientation QScreen::orientation() const
    Q_D(const QScreen);
    return d->filteredOrientation;
 }
-
 
 qreal QScreen::refreshRate() const
 {
@@ -411,6 +407,3 @@ Q_GUI_EXPORT QDebug operator<<(QDebug debug, const QScreen *screen)
    debug << ')';
    return debug;
 }
-
-
-

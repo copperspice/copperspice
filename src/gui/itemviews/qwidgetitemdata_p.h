@@ -26,8 +26,6 @@
 
 #include <qdatastream.h>
 
-
-
 class QWidgetItemData
 {
  public:
@@ -46,8 +44,6 @@ class QWidgetItemData
       return role == other.role && value == other.value;
    }
 };
-
-
 
 inline QDataStream &operator>>(QDataStream &in, QWidgetItemData &data)
 {

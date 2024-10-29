@@ -36,7 +36,6 @@ class QSignalTransitionPrivate : public QAbstractTransitionPrivate
 
  private:
    Q_DECLARE_PUBLIC(QSignalTransition)
-
 };
 
 #endif

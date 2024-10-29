@@ -423,9 +423,7 @@ class QNetworkProxyQueryPrivate: public QSharedData
    }
 
    bool operator==(const QNetworkProxyQueryPrivate &other) const {
-      return type == other.type &&
-             localPort == other.localPort &&
-             remote == other.remote;
+      return type == other.type && localPort == other.localPort && remote == other.remote;
    }
 
    QUrl remote;

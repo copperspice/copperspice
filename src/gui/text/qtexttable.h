@@ -90,7 +90,8 @@ class Q_GUI_EXPORT QTextTableCell
  private:
    friend class QTextTable;
    QTextTableCell(const QTextTable *t, int f)
-      : table(t), fragment(f) {}
+      : table(t), fragment(f)
+   { }
 
    const QTextTable *table;
    int fragment;

@@ -54,14 +54,15 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
 }
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags)
-   : d_ptr(new QTreeWidgetItemIteratorPrivate(
-           this, qobject_cast<QTreeModel *>(item->view->model()))),
+   : d_ptr(new QTreeWidgetItemIteratorPrivate(this, qobject_cast<QTreeModel *>(item->view->model()))),
      current(item), flags(flags)
 {
    Q_D(QTreeWidgetItemIterator);
    Q_ASSERT(item);
+
    QTreeModel *model = qobject_cast<QTreeModel *>(item->view->model());
    Q_ASSERT(model);
+
    model->iterators.append(this);
 
    // Initialize m_currentIndex and m_parentIndex as it would be if we had traversed from the beginning

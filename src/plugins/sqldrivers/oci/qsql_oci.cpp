@@ -718,7 +718,7 @@ QByteArray qMakeOraDate(const QDateTime &dt)
 }
 
 // convert qint64 to the internal Oracle OCINumber format
-QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err)
+  QByteArray qMakeOCINumber(const qint64 &ll, OCIError *err)
 {
    QByteArray ba(sizeof(OCINumber), 0);
 

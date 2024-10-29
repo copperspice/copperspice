@@ -258,8 +258,7 @@ void QNetworkAccessAuthenticationManager::cacheCredentials(const QUrl &url,
    } while (true);
 }
 
-QNetworkAuthenticationCredential
-QNetworkAccessAuthenticationManager::fetchCachedCredentials(const QUrl &url,
+QNetworkAuthenticationCredential QNetworkAccessAuthenticationManager::fetchCachedCredentials(const QUrl &url,
       const QAuthenticator *authentication)
 {
    if (!url.password().isEmpty()) {

@@ -278,8 +278,8 @@ class QTextItemInt : public QTextItem
 {
  public:
    QTextItemInt()
-      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), fontEngine(nullptr) {
-   }
+      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), fontEngine(nullptr)
+   { }
 
    QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format = QTextCharFormat());
 
@@ -314,11 +314,11 @@ class QTextItemInt : public QTextItem
 struct QScriptItem {
    QScriptItem()
       : position(0), num_glyphs(0), descent(-1), ascent(-1), leading(-1), width(-1), glyph_data_offset(0)
-   {}
+   { }
 
    QScriptItem(int p, const QScriptAnalysis &a)
       : position(p), analysis(a), num_glyphs(0), descent(-1), ascent(-1), leading(-1), width(-1), glyph_data_offset(0)
-   {}
+   { }
 
    int position;
    QScriptAnalysis analysis;
@@ -567,6 +567,7 @@ class Q_GUI_EXPORT QTextEngine
    QString preeditAreaText() const {
       return specialData ? specialData->preeditText : QString();
    }
+
    void setPreeditArea(int position, const QString &text);
 
    bool hasFormats() const {

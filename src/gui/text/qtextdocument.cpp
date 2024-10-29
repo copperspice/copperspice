@@ -155,7 +155,6 @@ void QTextDocument::clearUndoRedoStacks(Stacks stacksToClear)
    d->clearUndoRedoStacks(stacksToClear, true);
 }
 
-
 void QTextDocument::undo()
 {
    Q_D(QTextDocument);
@@ -809,7 +808,6 @@ QTextBlock QTextDocument::findBlock(int pos) const
    return QTextBlock(docHandle(), d->blockMap().findNode(pos));
 }
 
-
 QTextBlock QTextDocument::findBlockByNumber(int blockNumber) const
 {
    Q_D(const QTextDocument);
@@ -923,7 +921,6 @@ static void printPage(int index, QPainter *painter, const QTextDocument *doc, co
 
    painter->restore();
 }
-
 
 void QTextDocument::print(QPagedPaintDevice *printer) const
 {

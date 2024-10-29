@@ -243,21 +243,27 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
       QByteArray ba = data.toByteArray();
       if (ba.size() == 8) {
          ushort *colBuf = (ushort *)ba.data();
+
          c.setRgbF(qreal(colBuf[0]) / qreal(0xFFFF),
             qreal(colBuf[1]) / qreal(0xFFFF),
             qreal(colBuf[2]) / qreal(0xFFFF),
             qreal(colBuf[3]) / qreal(0xFFFF));
+
          data = c;
+
       } else {
          qWarning("QMimeData::retrieveData() Invalid color format");
       }
+
    } else if (data.type() != type && data.type() == QVariant::ByteArray) {
       // try to use the mime data conversion
       QInternalMimeData *that = const_cast<QInternalMimeData *>(this);
+
       that->setData(mimeType, data.toByteArray());
       data = QMimeData::retrieveData(mimeType, type);
       that->clear();
    }
+
    return data;
 }
 

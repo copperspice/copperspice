@@ -29,7 +29,6 @@
 #include <qsocketnotifier.h>
 #include <qthread.h>
 
-
 #include <qcoreapplication_p.h>
 #include <qcore_unix_p.h>
 #include <qthread_p.h>

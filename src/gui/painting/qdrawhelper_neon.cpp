@@ -560,9 +560,7 @@ extern "C" void blend_8_pixels_rgb16_on_rgb16_neon(quint16 *dst, const quint16 *
 template <typename SRC, typename BlendFunc>
 struct Blend_on_RGB16_SourceAndConstAlpha_Neon {
    Blend_on_RGB16_SourceAndConstAlpha_Neon(BlendFunc blender, int const_alpha)
-      : m_index(0)
-      , m_blender(blender)
-      , m_const_alpha(const_alpha) {
+      : m_index(0), m_blender(blender), m_const_alpha(const_alpha) {
    }
 
    void write(quint16 *dst, quint32 src) {
@@ -1127,4 +1125,3 @@ const uint *QT_FASTCALL qt_fetch_radial_gradient_neon(uint *buffer, const Operat
 }
 
 #endif
-

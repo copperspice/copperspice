@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmessageauthenticationcode.h>
+
 #include <qvarlengtharray.h>
 
 #include <stdint.h>

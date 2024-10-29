@@ -864,7 +864,9 @@ class QFragmentMap
    };
 
 
-   QFragmentMap() {}
+   QFragmentMap()
+   { }
+
    ~QFragmentMap() {
       if (!data.fragments) {
          return;   // in case of out-of-memory, we won't have fragments
@@ -908,6 +910,7 @@ class QFragmentMap
    int numNodes() const {
       return data.head->node_count;
    }
+
    int length(uint field = 0) const {
       return data.length(field);
    }
@@ -932,6 +935,7 @@ class QFragmentMap
       }
       return f;
    }
+
    uint erase_single(uint f) {
       if (f != 0) {
          Fragment *frag = fragment(f);

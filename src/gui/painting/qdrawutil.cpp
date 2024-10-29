@@ -279,13 +279,10 @@ void qDrawShadePanel(QPainter *p, int x, int y, int w, int h,
    p->setPen(oldPen);                        // restore pen
 }
 
-static void qDrawWinShades(QPainter *p,
-   int x, int y, int w, int h,
-   const QColor &c1, const QColor &c2,
-   const QColor &c3, const QColor &c4,
-   const QBrush *fill)
+static void qDrawWinShades(QPainter *p, int x, int y, int w, int h,
+      const QColor &c1, const QColor &c2, const QColor &c3, const QColor &c4, const QBrush *fill)
 {
-   if (w < 2 || h < 2) {                      // can't do anything with that
+   if (w < 2 || h < 2) {
       return;
    }
 

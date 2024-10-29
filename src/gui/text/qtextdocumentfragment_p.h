@@ -143,13 +143,13 @@ class QTextHtmlImporter : public QTextHtmlParser
    struct TableCellIterator {
       TableCellIterator(QTextTable *t = nullptr)
          : table(t), row(0), column(0)
-      {
-      }
+      { }
 
       TableCellIterator &operator++() {
          if (atEnd()) {
             return *this;
          }
+
          do {
             const QTextTableCell cell = table->cellAt(row, column);
             if (!cell.isValid()) {

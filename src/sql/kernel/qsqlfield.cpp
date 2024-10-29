@@ -169,7 +169,6 @@ void QSqlField::setReadOnly(bool readOnly)
    d->ro = readOnly;
 }
 
-
 QString QSqlField::name() const
 {
    return d->nm;

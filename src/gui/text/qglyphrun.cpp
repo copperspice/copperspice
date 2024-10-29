@@ -104,7 +104,6 @@ QVector<quint32> QGlyphRun::glyphIndexes() const
    }
 }
 
-
 void QGlyphRun::setGlyphIndexes(const QVector<quint32> &glyphIndexes)
 {
    detach();
@@ -143,8 +142,7 @@ void QGlyphRun::clear()
    setGlyphIndexes(QVector<quint32>());
 }
 
-void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphPositionArray,
-   int size)
+void QGlyphRun::setRawData(const quint32 *glyphIndexArray, const QPointF *glyphPositionArray, int size)
 {
    detach();
    d->glyphIndexes.clear();
@@ -162,7 +160,6 @@ bool QGlyphRun::overline() const
 
 void QGlyphRun::setOverline(bool overline)
 {
-
    setFlag(Overline, overline);
 }
 
@@ -185,18 +182,22 @@ void QGlyphRun::setStrikeOut(bool strikeOut)
 {
    setFlag(StrikeOut, strikeOut);
 }
+
 bool QGlyphRun::isRightToLeft() const
 {
    return d->flags & RightToLeft;
 }
+
 void QGlyphRun::setRightToLeft(bool rightToLeft)
 {
    setFlag(RightToLeft, rightToLeft);
 }
+
 QGlyphRun::GlyphRunFlags QGlyphRun::flags() const
 {
    return d->flags;
 }
+
 void QGlyphRun::setFlag(GlyphRunFlag flag, bool enabled)
 {
    if (d->flags.testFlag(flag) == enabled) {
@@ -226,7 +227,6 @@ void QGlyphRun::setBoundingRect(const QRectF &boundingRect)
    detach();
    d->boundingRect = boundingRect;
 }
-
 
 QRectF QGlyphRun::boundingRect() const
 {

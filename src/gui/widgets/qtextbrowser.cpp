@@ -47,12 +47,11 @@ class QTextBrowserPrivate : public QTextEditPrivate
 
  public:
    QTextBrowserPrivate()
-      : textOrSourceChanged(false), forceLoadOnSourceChange(false), openExternalLinks(false),
-        openLinks(true)
+      : textOrSourceChanged(false), forceLoadOnSourceChange(false), openExternalLinks(false), openLinks(true)
 #ifdef QT_KEYPAD_NAVIGATION
       , lastKeypadScrollValue(-1)
 #endif
-   {}
+   { }
 
    void init();
 

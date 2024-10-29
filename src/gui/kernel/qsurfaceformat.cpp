@@ -96,7 +96,6 @@ QSurfaceFormat::QSurfaceFormat() : d(new QSurfaceFormatPrivate)
 {
 }
 
-
 QSurfaceFormat::QSurfaceFormat(QSurfaceFormat::FormatOptions options) :
    d(new QSurfaceFormatPrivate(options))
 {

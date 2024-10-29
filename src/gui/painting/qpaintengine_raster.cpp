@@ -3019,8 +3019,8 @@ void QRasterPaintEngine::drawEllipse(const QRectF &rect)
 }
 
 
-
 #ifdef Q_OS_WIN
+
 void QRasterPaintEngine::setDC(HDC hdc)
 {
    Q_D(QRasterPaintEngine);
@@ -3061,7 +3061,7 @@ bool QRasterPaintEngine::shouldDrawCachedGlyphs(QFontEngine *fontEngine, const Q
    // in which case we need to fall back to the QPainterPath code path. This does not apply
    // for engines with caching, as we do not use the engine to fill up our cache in that case.
 
-   if (!fontEngine->hasInternalCaching() && !fontEngine->supportsTransformation(m)) {
+   if (! fontEngine->hasInternalCaching() && !fontEngine->supportsTransformation(m)) {
       return false;
    }
 

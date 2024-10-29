@@ -46,6 +46,7 @@ class QTextDocumentWriterPrivate
    QByteArray format;
    QIODevice *device;
    bool deleteDevice;
+
 #ifndef QT_NO_TEXTCODEC
    QTextCodec *codec;
 #endif

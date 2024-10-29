@@ -146,7 +146,6 @@ bool QSqlQuery::isNull(int field) const
    return true;
 }
 
-
 bool QSqlQuery::isNull(const QString &name) const
 {
    int index = d->sqlResult->record().indexOf(name);

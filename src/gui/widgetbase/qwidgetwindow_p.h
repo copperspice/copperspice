@@ -25,6 +25,7 @@
 #define QWIDGETWINDOW_P_H
 
 #include <qwindow.h>
+
 #include <qevent_p.h>
 
 class QCloseEvent;

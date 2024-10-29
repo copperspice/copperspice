@@ -43,10 +43,6 @@
 #include <qgesture_p.h>
 #include <qgraphicseffect_p.h>
 
-// Extra QWidget data
-//  - to minimize memory usage for members that are seldom used
-//  - top-level widgets have extra extra data to reduce cost further
-
 class QGraphicsProxyWidget;
 class QOpenGLContext;
 class QPaintEngine;

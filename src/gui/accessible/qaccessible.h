@@ -649,7 +649,6 @@ class Q_GUI_EXPORT QAccessibleEvent
       int m_child;
       QAccessible::Id m_uniqueId;
    };
-
 };
 
 class Q_GUI_EXPORT QAccessibleStateChangeEvent : public QAccessibleEvent

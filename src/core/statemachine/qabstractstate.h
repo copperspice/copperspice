@@ -31,6 +31,7 @@
 
 class QState;
 class QStateMachine;
+
 class QAbstractStatePrivate;
 
 class Q_CORE_EXPORT QAbstractState : public QObject

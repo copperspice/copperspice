@@ -30,6 +30,7 @@
 
 class QMargins;
 class QScrollBar;
+
 class QAbstractScrollAreaPrivate;
 
 class Q_GUI_EXPORT QAbstractScrollArea : public QFrame

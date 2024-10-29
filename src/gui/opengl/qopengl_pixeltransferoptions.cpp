@@ -150,4 +150,3 @@ bool QOpenGLPixelTransferOptions::isSwapBytesEnabled() const
 {
     return data->swapBytes;
 }
-

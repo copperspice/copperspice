@@ -34,7 +34,7 @@
 #ifndef QT_NO_ANIMATION
 
 #define DEFAULT_TIMER_INTERVAL 16
-#define STARTSTOP_TIMER_DELAY 0
+#define STARTSTOP_TIMER_DELAY   0
 
 static QThreadStorage<QUnifiedTimer *> *unifiedTimer()
 {

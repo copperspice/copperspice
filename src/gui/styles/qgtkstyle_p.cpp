@@ -281,7 +281,8 @@ QGtkPainter *QGtkStylePrivate::gtkPainter(QPainter *painter)
 GtkWidget *QGtkStylePrivate::gtkWidget(const QHashableLatin1Literal &path)
 {
    GtkWidget *widget = gtkWidgetMap()->value(path);
-   if (!widget) {
+
+   if (! widget) {
       // theme might have rearranged widget data
       widget = gtkWidgetMap()->value(path);
    }

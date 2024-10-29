@@ -1342,6 +1342,7 @@ void QSortFilterProxyModelPrivate::_q_sourceAboutToBeReset()
 void QSortFilterProxyModelPrivate::_q_sourceReset()
 {
    Q_Q(QSortFilterProxyModel);
+
    invalidatePersistentIndexes();
    _q_clearMapping();
 

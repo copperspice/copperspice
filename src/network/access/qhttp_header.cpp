@@ -248,6 +248,7 @@ void QHttpHeader::setValue(const QString &key, const QString &value)
       }
       ++it;
    }
+
    // not found so add
    addValue(key, value);
 }
@@ -353,6 +354,7 @@ bool QHttpHeader::hasContentType() const
 QString QHttpHeader::contentType() const
 {
    QString type = value(QLatin1String("content-type"));
+
    if (type.isEmpty()) {
       return QString();
    }
@@ -367,12 +369,13 @@ QString QHttpHeader::contentType() const
 
 void QHttpHeader::setContentType(const QString &type)
 {
-   setValue(QLatin1String("content-type"), type);
+   setValue("content-type", type);
 }
 
 class QHttpRequestHeaderPrivate : public QHttpHeaderPrivate
 {
    Q_DECLARE_PUBLIC(QHttpRequestHeader)
+
  public:
    QString m;
    QString p;

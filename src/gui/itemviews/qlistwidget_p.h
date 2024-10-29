@@ -111,8 +111,6 @@ class QListModel : public QAbstractListModel
    friend class QListWidget;
 };
 
-
-
 class QListWidgetPrivate : public QListViewPrivate
 {
    Q_DECLARE_PUBLIC(QListWidget)
