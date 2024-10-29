@@ -10,7 +10,7 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QWeakPointer
 )
 
-if (false)
+if (CsPointer_FOUND)
    # use system headers
 
 else()
@@ -21,8 +21,12 @@ else()
    )
 
    list(APPEND CORE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_enable_shared.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_shared_array_pointer.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_shared_pointer.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_unique_pointer.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_unique_array_pointer.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_weak_pointer.h
    )
 endif()
 
