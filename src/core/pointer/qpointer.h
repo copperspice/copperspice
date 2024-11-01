@@ -26,6 +26,8 @@
 
 #include <qsharedpointer.h>
 
+class CSInternalRefCount;
+class QObject;
 class QVariant;
 
 template <class T>

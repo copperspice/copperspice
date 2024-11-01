@@ -258,7 +258,8 @@ class Q_CORE_EXPORT QObject : public virtual CsSignal::SignalBase, public virtua
    QString m_objectName;
    int m_postedEvents;
 
-   mutable std::atomic<QtSharedPointer::ExternalRefCountData *> m_sharedRefCount;
+   // non owning smart pointer to this object
+   QSharedPointer<QObject> m_self;
 
    uint m_pendTimer           : 1;
    uint m_wasDeleted          : 1;
@@ -548,14 +549,13 @@ class Q_CORE_EXPORT CSInternalRefCount
 {
  private:
    static bool get_m_wasDeleted(const QObject *object);
-   static std::atomic<QtSharedPointer::ExternalRefCountData *> &get_m_SharedRefCount(const QObject *object);
-
    static void set_m_wasDeleted(QObject *object, bool data);
+
+   static QSharedPointer<QObject> get_m_self(const QObject *object);
 
    friend class QGraphicsItem;
    friend class QStackedLayout;
    friend class QtFriendlyLayoutWidget;
-   friend struct QtSharedPointer::ExternalRefCountData;
 };
 
 class Q_CORE_EXPORT CSInternalSender

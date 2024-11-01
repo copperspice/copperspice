@@ -30,5 +30,7 @@
 
 #include <qglobal.h>
 
+class CSInternalRefCount;
+class QObject;
 
 #endif
