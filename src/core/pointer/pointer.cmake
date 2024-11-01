@@ -39,7 +39,6 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qshareddata.h
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qshareddatapointer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer_impl.h
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/quniquepointer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.h
 )
@@ -52,4 +51,3 @@ target_sources(CsCore
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/quniquepointer.cpp
 )
-
