@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qnamespace.h>
-
 #ifndef QSHAREDPOINTER_H
 #define QSHAREDPOINTER_H
 
-#include <qassert.h>
-#include <qatomic.h>
-#include <qshareddata.h>
-#include <qsharedpointer_impl.h>
+#include <cs_enable_shared.h>
+#include <cs_shared_pointer.h>
+#include <cs_weak_pointer.h>
+
+#include <qglobal.h>
+
 
 #endif
