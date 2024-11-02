@@ -33,17 +33,6 @@ class QVariant;
 template <class T>
 class QPointer
 {
-   template<typename U>
-   struct TypeSelector {
-      typedef QObject Type;
-   };
-
-   template<typename U>
-   struct TypeSelector<const U> {
-      typedef const QObject Type;
-   };
-
-   typedef typename TypeSelector<T>::Type QObjectType;
    QWeakPointer<QObjectType> wp;
 
  public:
