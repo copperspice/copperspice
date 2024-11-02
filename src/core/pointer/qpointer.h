@@ -33,16 +33,19 @@ class QVariant;
 template <class T>
 class QPointer
 {
-   QWeakPointer<QObjectType> wp;
-
  public:
    QPointer()
    {
    }
 
-   inline QPointer(T *ptr)
-      : wp(ptr, true)
-   { }
+#if ! defined(CS_DOXYPRESS)
+   template <class X = CSInternalRefCount>
+#endif
+   QPointer(T *ptr)
+      : wp( X::get_m_self(ptr).template staticCast<T>() )
+   {
+      static_assert( std::is_base_of_v<QObject, T>, "T must be a class which inherits from QObject");
+   }
 
    ~QPointer () = default;
 
@@ -54,7 +57,7 @@ class QPointer
    }
 
    T *data() const {
-      return static_cast<T *>( wp.data());
+      return wp.data();
    }
 
    T *operator->() const {
@@ -76,6 +79,9 @@ class QPointer
    bool isNull() const {
       return wp.isNull();
    }
+
+ private:
+   QWeakPointer<T> wp;
 };
 
 template <class T>
