@@ -49,10 +49,19 @@ class QPointer
 
    ~QPointer () = default;
 
-   // compiler-generated copy/move ctor/assignment operators are fine
+   QPointer(const QPointer &other) = default;
+   QPointer &operator=(const QPointer &other) = default;
 
-   inline QPointer<T> &operator=(T *ptr) {
-      wp.assign(static_cast<QObjectType *>(ptr));
+   QPointer(QPointer &&other) = default;
+   QPointer &operator=(QPointer && other) = default;
+
+#if ! defined(CS_DOXYPRESS)
+   template <class X = CSInternalRefCount>
+#endif
+   QPointer<T> &operator=(T *ptr) {
+      static_assert( std::is_base_of_v<QObject, T>, "T must be a class which inherits from QObject");
+
+      wp = X::get_m_self(ptr).template staticCast<T>();
       return *this;
    }
 
@@ -139,15 +148,9 @@ inline bool operator!= (const QPointer<T> &ptr1, T *ptr2)
 }
 
 template<class T>
-inline bool operator!= (const QPointer<T> &p1, const QPointer<T> &p2)
+inline bool operator!= (const QPointer<T> &ptr1, const QPointer<T> &ptr2)
 {
-   return p1.operator->() != p2.operator->() ;
-}
-
-template<typename T>
-QPointer<T> qPointerFromVariant(const QVariant &variant)
-{
-   return QPointer<T>(qobject_cast<T *>(QtSharedPointer::weakPointerFromVariant_internal(variant).data()));
+   return ptr1.operator->() != ptr2.operator->();
 }
 
 #endif
