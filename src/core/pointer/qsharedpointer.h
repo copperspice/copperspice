@@ -33,4 +33,50 @@
 class CSInternalRefCount;
 class QObject;
 
+#if ! defined(CS_DOXYPRESS)
+
+template <typename T>
+class QSharedPointer : public CsPointer::CsSharedPointer<T>
+{
+ public:
+   using CsPointer::CsSharedPointer<T>::CsSharedPointer;
+
+   QSharedPointer(CsPointer::CsSharedPointer<T> p) noexcept
+      : CsPointer::CsSharedPointer<T>(std::move(p))
+   {
+   }
+
+   QSharedPointer(const QSharedPointer &) = default;
+   QSharedPointer &operator=(const QSharedPointer &) = default;
+
+   QSharedPointer(QSharedPointer &&other) = default;
+   QSharedPointer &operator=(QSharedPointer && other) = default;
+
+   bool isNull() const {
+      return CsPointer::CsSharedPointer<T>::is_null();
+   }
+
+   template <typename U>
+   QSharedPointer<U> constCast() const {
+      return CsPointer::const_pointer_cast<U>(*this);
+   }
+
+   template <typename U>
+   QSharedPointer<U> dynamicCast() const {
+      return CsPointer::dynamic_pointer_cast<U>(*this);
+   }
+
+   template <typename U>
+   QSharedPointer<U> objectCast() const {
+      return CsPointer::dynamic_pointer_cast<U>(*this);
+   }
+
+   template <typename U>
+   QSharedPointer<U> staticCast() const {
+      return CsPointer::static_pointer_cast<U>(*this);
+   }
+};
+
+#endif
+
 #endif
