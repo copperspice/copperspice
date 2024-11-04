@@ -881,7 +881,7 @@ static const char *property_string =
 
    R"(struct CaseFoldTraits
    {
-      static inline char32_t caseValue(char32_t ch)
+      static char32_t caseValue(char32_t ch)
       {
          if (ch >= QChar::SpecialCharacter::LastValidCodePoint) {
             return ch;
@@ -891,7 +891,7 @@ static const char *property_string =
          }
       }
 
-      static inline const char32_t *caseSpecial(char32_t ch)
+      static const char32_t *caseSpecial(char32_t ch)
       {
          return QUnicodeTables::uc_caseFoldSpecial(ch);
       }
@@ -901,7 +901,7 @@ static const char *property_string =
 
    R"(struct LowerCaseTraits
    {
-      static inline char32_t caseValue(char32_t ch)
+      static char32_t caseValue(char32_t ch)
       {
          if (ch >= QChar::SpecialCharacter::LastValidCodePoint) {
             return ch;
@@ -911,7 +911,7 @@ static const char *property_string =
          }
       }
 
-      static inline const char32_t *caseSpecial(char32_t ch)
+      static const char32_t *caseSpecial(char32_t ch)
       {
          return QUnicodeTables::uc_lowerCaseSpecial(ch);
       }
@@ -921,7 +921,7 @@ static const char *property_string =
 
    R"(struct TitleCaseTraits
    {
-      static inline char32_t caseValue(char32_t ch)
+      static char32_t caseValue(char32_t ch)
       {
          if (ch >= QChar::SpecialCharacter::LastValidCodePoint) {
             return ch;
@@ -931,7 +931,7 @@ static const char *property_string =
          }
       }
 
-      static inline const char32_t *caseSpecial(char32_t ch)
+      static const char32_t *caseSpecial(char32_t ch)
       {
          return QUnicodeTables::uc_titleCaseSpecial(ch);
       }
@@ -941,7 +941,7 @@ static const char *property_string =
 
    R"(struct UpperCaseTraits
    {
-      static inline char32_t caseValue(char32_t ch)
+      static char32_t caseValue(char32_t ch)
       {
          if (ch >= QChar::SpecialCharacter::LastValidCodePoint) {
             return ch;
@@ -951,7 +951,7 @@ static const char *property_string =
          }
       }
 
-      static inline const char32_t *caseSpecial(char32_t ch)
+      static const char32_t *caseSpecial(char32_t ch)
       {
          return QUnicodeTables::uc_upperCaseSpecial(ch);
       }
