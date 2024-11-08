@@ -94,6 +94,7 @@ class AccelTreeResourceLoader : public DeviceResourceLoader
 
    bool retrieveDocument(const QUrl &uri, const ReportContext::Ptr &context);
    bool retrieveDocument(QIODevice *source, const QUrl &documentUri, const ReportContext::Ptr &context);
+
    bool retrieveUnparsedText(const QUrl &uri, const QString &encoding, const ReportContext::Ptr &context,
                   const SourceLocationReflection *const where);
 

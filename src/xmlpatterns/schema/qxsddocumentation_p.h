@@ -51,9 +51,9 @@ class XsdDocumentation : public NamedSchemaComponent
    QString content() const;
 
  private:
-   AnyURI::Ptr                      m_source;
+   AnyURI::Ptr m_source;
    DerivedString<TypeLanguage>::Ptr m_language;
-   QString                          m_content;
+   QString m_content;
 };
 
 }

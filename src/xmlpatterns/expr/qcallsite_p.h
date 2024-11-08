@@ -50,8 +50,8 @@ class CallSite : public UnlimitedContainer
    CallSite(const CallSite &) = delete;
    CallSite &operator=(const CallSite &) = delete;
 
-   bool            m_isRecursive;
-   const QXmlName  m_name;
+   bool m_isRecursive;
+   const QXmlName m_name;
 };
 
 }

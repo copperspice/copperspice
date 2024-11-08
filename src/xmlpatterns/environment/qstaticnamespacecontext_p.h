@@ -38,6 +38,7 @@ class StaticNamespaceContext : public DelegatingStaticContext
  private:
    const NamespaceResolver::Ptr m_namespaceBindings;
 };
+
 }
 
 #endif

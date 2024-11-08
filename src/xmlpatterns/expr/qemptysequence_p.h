@@ -31,7 +31,6 @@ namespace QPatternist {
 class EmptySequence : public EmptyContainer
 {
  public:
-
    static Expression::Ptr create(const Expression *const replacementFor, const StaticContext::Ptr &context);
 
    EmptySequence() {

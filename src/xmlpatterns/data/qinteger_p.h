@@ -27,10 +27,10 @@
 #include <qschemanumeric_p.h>
 
 namespace QPatternist {
+
 class Integer : public Numeric
 {
  public:
-
    typedef Numeric::Ptr Ptr;
 
    static AtomicValue::Ptr fromLexical(const QString &strNumeric);
@@ -65,6 +65,7 @@ class Integer : public Numeric
  private:
    const xsInteger m_value;
 };
+
 }
 
 #endif

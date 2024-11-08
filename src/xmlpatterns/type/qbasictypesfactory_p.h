@@ -32,11 +32,9 @@ namespace QPatternist {
 class BasicTypesFactory : public SchemaTypeFactory
 {
  public:
-
    SchemaType::Ptr createSchemaType(const QXmlName ) const override;
 
    SchemaType::Hash types() const override;
-
    static SchemaTypeFactory::Ptr self(const NamePool::Ptr &np);
 
  protected:

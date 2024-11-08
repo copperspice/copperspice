@@ -37,7 +37,6 @@ class CommentConstructor : public SingleContainer
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    SequenceType::Ptr staticType() const override;
-
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
@@ -47,6 +46,7 @@ class CommentConstructor : public SingleContainer
  private:
    inline QString evaluateContent(const DynamicContext::Ptr &context) const;
 };
+
 }
 
 #endif

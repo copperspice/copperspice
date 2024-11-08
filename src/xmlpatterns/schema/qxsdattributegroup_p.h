@@ -47,7 +47,7 @@ class XsdAttributeGroup : public NamedSchemaComponent, public XsdAnnotated
 
  private:
    XsdAttributeUse::List m_attributeUses;
-   XsdWildcard::Ptr      m_wildcard;
+   XsdWildcard::Ptr m_wildcard;
 };
 
 }

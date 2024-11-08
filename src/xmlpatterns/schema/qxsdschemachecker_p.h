@@ -77,8 +77,7 @@ class XsdSchemaChecker : public QSharedData
 
    void checkElementDuplicates();
 
-   void checkElementDuplicates(const XsdParticle::Ptr &particle, DuplicatedElementMap &elementMap,
-                               DuplicatedWildcardMap &wildcardMap);
+   void checkElementDuplicates(const XsdParticle::Ptr &particle, DuplicatedElementMap &elementMap, DuplicatedWildcardMap &wildcardMap);
 
    void setupAllowedAtomicFacets();
    QSourceLocation sourceLocation(const NamedSchemaComponent::Ptr &component) const;

@@ -54,6 +54,7 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
       Enumeration      = 1 << 11,  // Match an enumeration (<a href="http://www.w3.org/TR/xmlschema-2/#rf-enumeration">Enumeration Definition</a>)
       Assertion        = 1 << 12,  // Match an assertion (<a href="http://www.w3.org/TR/xmlschema-2/#rf-assertion">Assertion Definition</a>)
    };
+
    typedef QHash<XsdFacet::Type, XsdFacet::Ptr> Hash;
    typedef QHashIterator<XsdFacet::Type, XsdFacet::Ptr> HashIterator;
 
@@ -63,14 +64,12 @@ class XsdFacet : public NamedSchemaComponent, public XsdAnnotated
    Type type() const;
 
    void setValue(const AtomicValue::Ptr &value);
-
    AtomicValue::Ptr value() const;
 
    void setMultiValue(const AtomicValue::List &value);
    AtomicValue::List multiValue() const;
 
    void setAssertions(const XsdAssertion::List &assertions);
-
    XsdAssertion::List assertions() const;
 
    void setFixed(bool fixed);

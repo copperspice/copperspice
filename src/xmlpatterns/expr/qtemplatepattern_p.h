@@ -56,13 +56,9 @@ class TemplatePattern : public QSharedData
    TemplatePattern &operator=(const TemplatePattern &) = delete;
 };
 
-TemplatePattern::TemplatePattern(const Expression::Ptr &matchPattern,
-                                 const PatternPriority pri,
-                                 const ID id,
-                                 const Template::Ptr templ) : m_matchPattern(matchPattern)
-   , m_priority(pri)
-   , m_id(id)
-   , m_templateTarget(templ)
+TemplatePattern::TemplatePattern(const Expression::Ptr &matchPattern, const PatternPriority pri,
+      const ID id, const Template::Ptr templ) : m_matchPattern(matchPattern)
+   , m_priority(pri), m_id(id), m_templateTarget(templ)
 
 {
    Q_ASSERT(m_matchPattern);

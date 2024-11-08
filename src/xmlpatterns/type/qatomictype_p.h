@@ -39,7 +39,6 @@ class SourceLocationReflection;
 class AtomicType : public ItemType, public AnySimpleType
 {
  public:
-
    typedef QExplicitlySharedDataPointer<AtomicType> Ptr;
 
    virtual ~AtomicType();
@@ -56,7 +55,6 @@ class AtomicType : public ItemType, public AnySimpleType
    ItemType::Ptr atomizedType() const override;
 
    TypeCategory category() const override;
-
    DerivationMethod derivationMethod() const override;
 
    virtual AtomicTypeVisitorResult::Ptr

@@ -34,6 +34,7 @@ class QList;
 #include <qvariabledeclaration_p.h>
 
 namespace QPatternist {
+
 class UserFunction : public QSharedData
 {
  public:

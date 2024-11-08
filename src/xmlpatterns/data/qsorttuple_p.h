@@ -33,20 +33,19 @@ namespace QPatternist {
 class SortTuple : public AtomicValue
 {
  public:
+   typedef QExplicitlySharedDataPointer<SortTuple> Ptr;
+
    SortTuple(const Item::Iterator::Ptr &aValue, const Item::Vector &aSortKeys) : m_sortKeys(aSortKeys), m_value(aValue)
    {
       Q_ASSERT(m_value);
       Q_ASSERT(!m_sortKeys.isEmpty());
    }
 
-   typedef QExplicitlySharedDataPointer<SortTuple> Ptr;
-
    QString stringValue() const override;
 
    virtual Item::Iterator::Ptr typedValue() const;
 
    virtual bool isAtomicValue() const;
-
    virtual bool isNode() const;
 
    bool hasError() const override;
@@ -62,9 +61,10 @@ class SortTuple : public AtomicValue
    }
 
  private:
-   const Item::Vector          m_sortKeys;
-   const Item::Iterator::Ptr   m_value;
+   const Item::Vector m_sortKeys;
+   const Item::Iterator::Ptr m_value;
 };
+
 }
 
 #endif

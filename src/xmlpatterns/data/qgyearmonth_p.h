@@ -44,6 +44,7 @@ class GYearMonth : public AbstractDateTime
 
    GYearMonth(const QDateTime &dateTime);
 };
+
 }
 
 #endif

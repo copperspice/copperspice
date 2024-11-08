@@ -32,6 +32,7 @@
 using namespace QPatternist;
 
 namespace QPatternist {
+
 static inline QXmlNodeModelIndex::NodeKind operator|(const QXmlNodeModelIndex::NodeKind &op1,
       const QXmlNodeModelIndex::NodeKind &op2)
 {
@@ -43,19 +44,21 @@ static inline QXmlNodeModelIndex::NodeKind operator|(const QXmlNodeModelIndex::N
 // order is significant. It is of the same order as the values in QXmlNodeModelIndex::Axis is declared.
 
 const QXmlNodeModelIndex::NodeKind AxisStep::s_whenAxisNodeKindEmpty[] = {
-   QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // child;
-   QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // descendant;
-   QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // attribute;
-   QXmlNodeModelIndex::NodeKind(0),                         // self;
-   QXmlNodeModelIndex::NodeKind(0),                         // descendant-or-self;
-   QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace, // namespace;
-   QXmlNodeModelIndex::Document,                                         // following;
-   QXmlNodeModelIndex::Document,                                         // parent;
-   QXmlNodeModelIndex::Document,                                         // ancestor
+   QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace,
+                                                                        // child;
+   QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace,
+                                                                        // descendant;
+   QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace,                                          // attribute;
+   QXmlNodeModelIndex::NodeKind(0),                                     // self;
+   QXmlNodeModelIndex::NodeKind(0),                                     // descendant-or-self;
+   QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Text | QXmlNodeModelIndex::ProcessingInstruction | QXmlNodeModelIndex::Comment | QXmlNodeModelIndex::Namespace,                                          // namespace;
+   QXmlNodeModelIndex::Document,                                        // following;
+   QXmlNodeModelIndex::Document,                                        // parent;
+   QXmlNodeModelIndex::Document,                                        // ancestor
    QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Namespace,     // preceding-sibling;
    QXmlNodeModelIndex::Document | QXmlNodeModelIndex::Attribute | QXmlNodeModelIndex::Namespace,     // following-sibling;
-   QXmlNodeModelIndex::Document,                                         // preceding;
-   QXmlNodeModelIndex::NodeKind(0)                          // ancestor-or-self;
+   QXmlNodeModelIndex::Document,                                        // preceding;
+   QXmlNodeModelIndex::NodeKind(0)                                      // ancestor-or-self;
 };
 
 bool AxisStep::isAlwaysEmpty(const QXmlNodeModelIndex::Axis axis, const QXmlNodeModelIndex::NodeKind nodeKind)
@@ -63,16 +66,14 @@ bool AxisStep::isAlwaysEmpty(const QXmlNodeModelIndex::Axis axis, const QXmlNode
    return (s_whenAxisNodeKindEmpty[(1 >> axis) - 1] & nodeKind) != 0;
 }
 
-AxisStep::AxisStep(const QXmlNodeModelIndex::Axis a,
-                   const ItemType::Ptr &nt) : m_axis(a),
+AxisStep::AxisStep(const QXmlNodeModelIndex::Axis a, const ItemType::Ptr &nt) : m_axis(a),
    m_nodeTest(nt)
 {
    Q_ASSERT(m_nodeTest);
    Q_ASSERT_X(BuiltinTypes::node->xdtTypeMatches(m_nodeTest), Q_FUNC_INFO, "Assume we are a node type.");
 }
 
-Item AxisStep::mapToItem(const QXmlNodeModelIndex &node,
-                         const DynamicContext::Ptr &context) const
+Item AxisStep::mapToItem(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context) const
 {
    Q_ASSERT(!node.isNull());
    Q_ASSERT(Item(node).isNode());
@@ -124,17 +125,15 @@ Item AxisStep::evaluateSingleton(const DynamicContext::Ptr &context) const
    return Item();
 }
 
-Expression::Ptr AxisStep::typeCheck(const StaticContext::Ptr &context,
-                                    const SequenceType::Ptr &reqType)
+Expression::Ptr AxisStep::typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType)
 {
    if (m_axis == QXmlNodeModelIndex::AxisParent && *m_nodeTest == *BuiltinTypes::node) {
       return rewrite(Expression::Ptr(new ParentNodeAxis()), context)->typeCheck(context, reqType);
-   }
    /* TODO temporarily disabled
    else if(isAlwaysEmpty(m_axis, static_cast<const AnyNodeType *>(m_nodeTest.data())->nodeKind()))
        return EmptySequence::create(this, context);
        */
-   else {
+   } else {
       return EmptyContainer::typeCheck(context, reqType);
    }
 }
@@ -149,8 +148,7 @@ SequenceType::Ptr AxisStep::staticType() const
       cardinality = Cardinality::zeroOrMore();
    }
 
-   return makeGenericSequenceType(m_nodeTest,
-                                  cardinality);
+   return makeGenericSequenceType(m_nodeTest, cardinality);
 }
 
 SequenceType::List AxisStep::expectedOperandTypes() const

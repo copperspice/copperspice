@@ -27,6 +27,7 @@
 #include <qemptycontainer_p.h>
 
 namespace QPatternist {
+
 class NamespaceConstructor : public EmptyContainer
 {
  public:
@@ -49,6 +50,7 @@ class NamespaceConstructor : public EmptyContainer
  private:
    const QXmlName m_binding;
 };
+
 }
 
 #endif

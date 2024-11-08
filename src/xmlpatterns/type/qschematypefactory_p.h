@@ -47,6 +47,7 @@ class SchemaTypeFactory : public QSharedData
    SchemaTypeFactory(const SchemaTypeFactory &) = delete;
    SchemaTypeFactory &operator=(const SchemaTypeFactory &) = delete;
 };
+
 }
 
 #endif

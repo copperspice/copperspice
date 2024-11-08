@@ -36,7 +36,6 @@ class Base64Binary : public AtomicValue
    typedef AtomicValue::Ptr Ptr;
 
    static AtomicValue::Ptr fromLexical(const QString &value);
-
    static Base64Binary::Ptr fromValue(const QByteArray &data);
 
    QString stringValue() const override;
@@ -53,9 +52,9 @@ class Base64Binary : public AtomicValue
 
  private:
    static void base64Decode(const QByteArray &in, QByteArray &out, bool &ok);
-
    static const char Base64DecMap[128];
 };
+
 }
 
 #endif

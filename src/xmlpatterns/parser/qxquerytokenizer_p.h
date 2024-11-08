@@ -75,23 +75,17 @@ class XQueryTokenizer : public Tokenizer
  private:
    QChar charForReference(const QString &reference);
 
-   inline Token tokenAndChangeState(const TokenType code,
-                                    const State state,
-                                    const int advance = 1);
-   inline Token tokenAndChangeState(const TokenType code,
-                                    const QString &value,
-                                    const State state);
-   inline Token tokenAndAdvance(const TokenType code,
-                                const int advance = 1);
+   inline Token tokenAndChangeState(const TokenType code, const State state, const int advance = 1);
+   inline Token tokenAndChangeState(const TokenType code, const QString &value, const State state);
+   inline Token tokenAndAdvance(const TokenType code, const int advance = 1);
+
    QString tokenizeCharacterReference();
 
    inline Token tokenizeStringLiteral();
    inline Token tokenizeNumberLiteral();
 
    inline QChar peekAhead(const int length = 1) const;
-   inline bool aheadEquals(const char *const chs,
-                           const int len,
-                           const int offset = 1) const;
+   inline bool aheadEquals(const char *const chs, const int len, const int offset = 1) const;
 
    inline Token tokenizeNCName();
    static inline bool isOperatorKeyword(const TokenType);
@@ -101,7 +95,6 @@ class XQueryTokenizer : public Tokenizer
    inline TokenType consumeWhitespace();
 
    inline QChar peekCurrent() const;
-
    inline const QChar current() const;
 
    int peekForColonColon() const;
@@ -121,32 +114,29 @@ class XQueryTokenizer : public Tokenizer
    inline void pushState();
 
    inline bool consumeRawWhitespace();
-
    Tokenizer::TokenType consumeComment();
 
    static inline bool isPhraseKeyword(const TokenType code);
 
    typedef QSet<int> CharacterSkips;
 
-   static QString normalizeEOL(const QString &input,
-                               const CharacterSkips &characterSkips);
+   static QString normalizeEOL(const QString &input, const CharacterSkips &characterSkips);
 
    bool atEnd() const {
       return m_pos == m_length;
    }
 
    Token nextToken();
-   Token attributeAsRaw(const QChar separator, int &stack, const int startPos,
-                  const bool inLiteral, QString &result);
+
+   Token attributeAsRaw(const QChar separator, int &stack, const int startPos, const bool inLiteral, QString &result);
 
    const QString           m_data;
    const int               m_length;
    State                   m_state;
    QStack<State>           m_stateStack;
+
    int                     m_pos;
-
    int                     m_line;
-
    int                     m_columnOffset;
 
    const NamePool::Ptr     m_namePool;
@@ -157,7 +147,7 @@ class XQueryTokenizer : public Tokenizer
    XQueryTokenizer(const XQueryTokenizer &) = delete;
    XQueryTokenizer &operator=(const XQueryTokenizer &) = delete;
 };
-}
 
+}
 
 #endif

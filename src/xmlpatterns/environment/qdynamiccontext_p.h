@@ -39,6 +39,7 @@ template<typename T>
 class QVector;
 
 namespace QPatternist {
+
 class DayTimeDuration;
 class Expression;
 class TemplateMode;
@@ -46,11 +47,11 @@ class TemplateMode;
 class DynamicContext : public ReportContext
 {
  public:
-   virtual ~DynamicContext() { }
-
    typedef QHash<QXmlName, QExplicitlySharedDataPointer<Expression> > TemplateParameterHash;
    typedef QExplicitlySharedDataPointer<DynamicContext> Ptr;
 
+   virtual ~DynamicContext()
+   { }
 
    virtual ItemCacheCell &itemCacheCell(const VariableSlotID slot) = 0;
    virtual ItemSequenceCacheCell::Vector &itemSequenceCacheCells(const VariableSlotID slot) = 0;
@@ -89,17 +90,14 @@ class DynamicContext : public ReportContext
    DynamicContext::Ptr createReceiverContext(QAbstractXmlReceiver *const receiver);
 
    virtual void addNodeModel(const QAbstractXmlNodeModel::Ptr &nm) = 0;
-
    virtual ItemCacheCell &globalItemCacheCell(const VariableSlotID slot) = 0;
 
    virtual TemplateParameterHash &templateParameterStore() = 0;
-
    virtual ItemSequenceCacheCell::Vector &globalItemSequenceCacheCells(const VariableSlotID slot) = 0;
-
    virtual DynamicContext::Ptr previousContext() const = 0;
-
    virtual QExplicitlySharedDataPointer<TemplateMode> currentTemplateMode() const = 0;
 };
+
 }
 
 #endif

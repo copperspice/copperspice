@@ -31,8 +31,7 @@ namespace QPatternist {
 class CardinalityVerifier : public SingleContainer
 {
  public:
-   CardinalityVerifier(const Expression::Ptr &operand, const Cardinality &card,
-                       const ReportContext::ErrorCode code);
+   CardinalityVerifier(const Expression::Ptr &operand, const Cardinality &card, const ReportContext::ErrorCode code);
 
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
@@ -41,13 +40,10 @@ class CardinalityVerifier : public SingleContainer
    SequenceType::Ptr staticType() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
-
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
-   static Expression::Ptr
-   verifyCardinality(const Expression::Ptr &operand, const Cardinality &card,
-                     const StaticContext::Ptr &context,
-                     const ReportContext::ErrorCode code = ReportContext::XPTY0004);
+   static Expression::Ptr verifyCardinality(const Expression::Ptr &operand, const Cardinality &card,
+         const StaticContext::Ptr &context, const ReportContext::ErrorCode code = ReportContext::XPTY0004);
 
    const SourceLocationReflection *actualReflection() const override;
 

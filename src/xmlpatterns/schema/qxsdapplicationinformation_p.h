@@ -44,7 +44,7 @@ class XsdApplicationInformation : public NamedSchemaComponent
 
  private:
    AnyURI::Ptr  m_source;
-   QString      m_content;
+   QString m_content;
 };
 
 }

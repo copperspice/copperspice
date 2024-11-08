@@ -35,6 +35,7 @@
 using namespace QPatternist;
 
 namespace QPatternist {
+
 template <>
 QString XsdStateMachine<XsdTerm::Ptr>::transitionTypeToString(XsdTerm::Ptr term) const
 {
@@ -51,6 +52,7 @@ QString XsdStateMachine<XsdTerm::Ptr>::transitionTypeToString(XsdTerm::Ptr term)
       return QString();
    }
 }
+
 }
 
 static bool termMatches(const XsdTerm::Ptr &term, const XsdTerm::Ptr &otherTerm, const NamePool::Ptr &namePool)
@@ -346,6 +348,7 @@ bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const Na
 
    // The algorithm is implemented like described in http://www.ltg.ed.ac.uk/~ht/XML_Europe_2003.html#S2.2
    // create a state machine for the given particle
+
    XsdStateMachine<XsdTerm::Ptr> stateMachine(namePool);
 
    XsdStateMachineBuilder builder(&stateMachine, namePool);
@@ -363,7 +366,9 @@ bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const Na
        }
        ::system(QString("dot -Tpng /tmp/file_upa%1.dot -o/tmp/file_upa%1.png").formatArg(counter).toLatin1().data());
    */
+
    const XsdStateMachine<XsdTerm::Ptr> dfa = stateMachine.toDFA();
+
    /*
        {
            QFile file(QString("/tmp/file_upa%1dfa.dot").formatArg(counter));
@@ -373,6 +378,7 @@ bool XsdParticleChecker::isUPAConform(const XsdParticle::Ptr &particle, const Na
        }
        ::system(QString("dot -Tpng /tmp/file_upa%1dfa.dot -o/tmp/file_upa%1dfa.png").formatArg(counter).toLatin1().data());
    */
+
    const QHash<XsdStateMachine<XsdTerm::Ptr>::StateId, XsdStateMachine<XsdTerm::Ptr>::StateType> states = dfa.states();
    const QHash<XsdStateMachine<XsdTerm::Ptr>::StateId, QHash<XsdTerm::Ptr, QVector<XsdStateMachine<XsdTerm::Ptr>::StateId> > >
    transitions = dfa.transitions();
@@ -420,6 +426,7 @@ bool XsdParticleChecker::isUPAConformXsdAll(const XsdParticle::Ptr &particle, co
    const XsdModelGroup::Ptr group(particle->term());
    const XsdParticle::List particles = group->particles();
    const int count = particles.count();
+
    for (int left = 0; left < count; ++left) {
       for (int right = left + 1; right < count; ++right) {
          if (termMatches(particles.at(left)->term(), particles.at(right)->term(), namePool)) {

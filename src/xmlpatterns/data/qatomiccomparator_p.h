@@ -59,26 +59,19 @@ class AtomicComparator : public AtomicTypeVisitorResult
       Incomparable = 8
    };
 
-   virtual ComparisonResult compare(const Item &op1,
-                                    const AtomicComparator::Operator op,
-                                    const Item &op2) const;
-
-   virtual bool equals(const Item &op1,
-                       const Item &op2) const = 0;
+   virtual ComparisonResult compare(const Item &op1, const AtomicComparator::Operator op, const Item &op2) const;
+   virtual bool equals(const Item &op1, const Item &op2) const = 0;
 
    enum ComparisonType {
       AsGeneralComparison = 1,
       AsValueComparison
    };
 
-   static QString displayName(const AtomicComparator::Operator op,
-                              const ComparisonType type);
+   static QString displayName(const AtomicComparator::Operator op, const ComparisonType type);
 
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AtomicComparator::Operators)
 }
-
-
 
 #endif

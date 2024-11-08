@@ -50,6 +50,7 @@ class QXmlSerializerPrivate : public QAbstractXmlReceiverPrivate
    QIODevice                          *device;
    const QTextCodec                   *codec;
    QTextCodec::ConverterState          converterState;
+
    QHash<QXmlName::Code, QByteArray>   nameCache;
    const QXmlQuery                     query;
 
@@ -58,7 +59,6 @@ class QXmlSerializerPrivate : public QAbstractXmlReceiverPrivate
  private:
    enum Constants {
       EstimatedTreeDepth = 10,
-
       EstimatedNameCount = 60
    };
 };
@@ -67,6 +67,5 @@ void QXmlSerializerPrivate::write(const char c)
 {
    device->putChar(c);
 }
-
 
 #endif

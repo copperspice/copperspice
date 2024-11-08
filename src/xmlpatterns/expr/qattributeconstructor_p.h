@@ -37,7 +37,6 @@ class AttributeConstructor : public PairContainer
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    SequenceType::Ptr staticType() const override;
-
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;

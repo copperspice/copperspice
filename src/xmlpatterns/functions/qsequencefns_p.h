@@ -39,12 +39,12 @@ class BooleanFN : public FunctionCall
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 };
 
-
-class IndexOfFN : public FunctionCall,
-   public ComparisonPlatform<IndexOfFN, false>
+class IndexOfFN : public FunctionCall, public ComparisonPlatform<IndexOfFN, false>
 {
  public:
-   IndexOfFN() : ComparisonPlatform<IndexOfFN, false>() {
+   IndexOfFN()
+      : ComparisonPlatform<IndexOfFN, false>()
+   {
    }
 
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
@@ -54,7 +54,6 @@ class IndexOfFN : public FunctionCall,
       return AtomicComparator::OperatorEqual;
    }
 };
-
 
 template<const Expression::ID Id>
 class Existence : public FunctionCall
@@ -100,9 +99,7 @@ class Existence : public FunctionCall
    }
 };
 
-
-class DistinctValuesFN : public FunctionCall,
-   public ComparisonPlatform<IndexOfFN, false>
+class DistinctValuesFN : public FunctionCall, public ComparisonPlatform<IndexOfFN, false>
 {
  public:
    DistinctValuesFN()
@@ -121,7 +118,6 @@ class DistinctValuesFN : public FunctionCall,
    }
 };
 
-
 class InsertBeforeFN : public FunctionCall
 {
  public:
@@ -130,7 +126,6 @@ class InsertBeforeFN : public FunctionCall
 
    SequenceType::Ptr staticType() const override;
 };
-
 
 class RemoveFN : public FunctionCall
 {
@@ -141,11 +136,9 @@ class RemoveFN : public FunctionCall
    SequenceType::Ptr staticType() const override;
 };
 
-
 class ReverseFN : public FunctionCall
 {
  public:
-
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
@@ -161,7 +154,6 @@ class SubsequenceFN : public FunctionCall
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
-
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    SequenceType::Ptr staticType() const override;

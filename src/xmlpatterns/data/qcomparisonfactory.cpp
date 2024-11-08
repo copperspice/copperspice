@@ -30,13 +30,11 @@
 
 using namespace QPatternist;
 
-class PerformComparison : public ComparisonPlatform<PerformComparison, true>
-   , public SourceLocationReflection
+class PerformComparison : public ComparisonPlatform<PerformComparison, true>, public SourceLocationReflection
 {
  public:
    PerformComparison(const SourceLocationReflection *const sourceLocationReflection,
-                     const AtomicComparator::Operator op) : m_sourceReflection(sourceLocationReflection)
-      , m_operator(op) {
+         const AtomicComparator::Operator op) : m_sourceReflection(sourceLocationReflection), m_operator(op) {
       Q_ASSERT(m_sourceReflection);
    }
 

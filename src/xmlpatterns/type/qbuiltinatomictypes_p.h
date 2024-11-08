@@ -596,7 +596,6 @@ class NOTATIONType : public BuiltinAtomicType
 
    QXmlName name(const NamePool::Ptr &np) const override;
    QString displayName(const NamePool::Ptr &np) const override;
-
    bool isAbstract() const override;
 
  protected:

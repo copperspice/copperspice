@@ -33,12 +33,9 @@ template<typename TResult, typename TSource, typename TMapper, typename Context 
 class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
 {
  public:
-   ItemMappingIterator(const TMapper &mapper,
-                       const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator,
-                       const Context &context) : m_mapper(mapper)
-      , m_it(iterator)
-      , m_context(context)
-      , m_position(0) {
+   ItemMappingIterator(const TMapper &mapper, const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator, const Context &context)
+      : m_mapper(mapper), m_it(iterator), m_context(context), m_position(0)
+   {
       Q_ASSERT(mapper);
       Q_ASSERT(iterator);
    }
@@ -75,18 +72,17 @@ class ItemMappingIterator : public QAbstractXmlForwardIterator<TResult>
    }
 
  private:
-   const TMapper                                               m_mapper;
-   const typename QAbstractXmlForwardIterator<TSource>::Ptr    m_it;
-   const Context                                               m_context;
-   TResult                                                     m_current;
-   xsInteger                                                   m_position;
+   const TMapper m_mapper;
+   const typename QAbstractXmlForwardIterator<TSource>::Ptr m_it;
+   const Context m_context;
+
+   TResult m_current;
+   xsInteger m_position;
 };
 
 template<typename TResult, typename TSource, typename TMapper, typename Context>
-static inline typename QAbstractXmlForwardIterator<TResult>::Ptr makeItemMappingIterator(
-                  const TMapper &mapper,
-                  const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
-                  const Context &context)
+static inline typename QAbstractXmlForwardIterator<TResult>::Ptr makeItemMappingIterator(const TMapper &mapper,
+      const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source, const Context &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new ItemMappingIterator<TResult, TSource, TMapper, Context>(mapper, source, context));

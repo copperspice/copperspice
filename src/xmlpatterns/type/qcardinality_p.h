@@ -29,6 +29,7 @@
 #include <qstringfwd.h>
 
 namespace QPatternist {
+
 class Cardinality
 {
  public:
@@ -112,14 +113,15 @@ class Cardinality
    }
 
    Cardinality toWithoutMany() const {
-      return m_min == 0 ? Cardinality(0, 1)
-             : Cardinality(1, 1);
+      return m_min == 0 ? Cardinality(0, 1) : Cardinality(1, 1);
    }
 
    bool isMatch(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
+
       if (other.m_min < m_min) {
          return false;
+
       } else {
          /* Ok, we now know the minimum will always be ok. */
          if (m_max == -1) {
@@ -134,6 +136,7 @@ class Cardinality
 
    bool canMatch(const Cardinality &other) const {
       Q_ASSERT_X(m_min != -1 && other.m_min != -1, Q_FUNC_INFO, "One of the cardinalities are invalid.");
+
       if (m_max == -1) {
          return m_min <= other.m_min || other.m_max >= m_min || other.m_max == -1;
       } else {
@@ -277,6 +280,7 @@ class Cardinality
    Count m_min;
    Count m_max;
 };
+
 }
 
 #endif

@@ -58,6 +58,7 @@ class ValueComparison : public PairContainer,
  private:
    const AtomicComparator::Operator m_operator;
 };
+
 }
 
 #endif

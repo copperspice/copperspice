@@ -55,6 +55,7 @@ class XsdReference : public XsdTerm
    QXmlName        m_referenceName;
    QSourceLocation m_sourceLocation;
 };
+
 }
 
 #endif

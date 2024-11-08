@@ -48,15 +48,15 @@ class AtomicMathematician : public AtomicTypeVisitorResult
 
    typedef QFlags<Operator> Operators;
 
-   virtual Item calculate(const Item &operand1,
-                          const Operator op,
-                          const Item &operand2,
-                          const QExplicitlySharedDataPointer<DynamicContext> &context) const = 0;
+   virtual Item calculate(const Item &operand1, const Operator op, const Item &operand2,
+         const QExplicitlySharedDataPointer<DynamicContext> &context) const = 0;
 
    static QString displayName(const AtomicMathematician::Operator op);
 
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(AtomicMathematician::Operators)
+
 }
 
 #endif

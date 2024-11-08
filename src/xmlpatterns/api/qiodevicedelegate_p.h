@@ -28,6 +28,7 @@
 #include <qnetwork_reply.h>
 
 namespace QPatternist {
+
 class QIODeviceDelegate : public QNetworkReply
 {
    XMLP_CS_OBJECT(QIODeviceDelegate)
@@ -54,11 +55,10 @@ class QIODeviceDelegate : public QNetworkReply
  protected:
    qint64 readData(char *data, qint64 maxSize) override;
 
- private :
+ private:
    XMLP_CS_SLOT_1(Private, void networkTimeout())
    XMLP_CS_SLOT_2(networkTimeout)
 
- private:
    enum {
       Timeout = 20000
    };

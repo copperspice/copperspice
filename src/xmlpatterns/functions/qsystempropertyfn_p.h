@@ -27,6 +27,7 @@
 #include <qstaticnamespacescontainer_p.h>
 
 namespace QPatternist {
+
 class SystemPropertyFN : public StaticNamespacesContainer
 {
  public:

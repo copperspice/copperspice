@@ -58,8 +58,7 @@ class UserFunctionCallsite : public CallSite
 
    ID id() const override;
 
-   void setSource(const UserFunction::Ptr &userFunction,
-                  const VariableSlotID cacheSlotOffset);
+   void setSource(const UserFunction::Ptr &userFunction, const VariableSlotID cacheSlotOffset);
 
    bool isSignatureValid(const FunctionSignature::Ptr &sign) const;
 
@@ -76,21 +75,18 @@ class UserFunctionCallsite : public CallSite
    DynamicContext::Ptr bindVariables(const DynamicContext::Ptr &context) const;
 
    const FunctionSignature::Arity  m_arity;
-   VariableSlotID                  m_expressionSlotOffset;
+   VariableSlotID m_expressionSlotOffset;
 
-   Expression::Ptr                 m_body;
-   UserFunction::Ptr               m_functionDeclaration;
+   Expression::Ptr m_body;
+   UserFunction::Ptr m_functionDeclaration;
 };
 
 static inline QString formatFunction(const UserFunctionCallsite::Ptr &func)
 {
    (void) func;
-
-   return QLatin1String("<span class='XQuery-function'>")  +
-          QString() +
-          //escape(func->name()->toString())                 +
-          QLatin1String("</span>");
+   return QLatin1String("<span class='XQuery-function'></span>");
 }
+
 }
 
 #endif

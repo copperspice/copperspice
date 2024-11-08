@@ -36,9 +36,8 @@ class Validate
       Strict
    };
 
-   static Expression::Ptr create(const Expression::Ptr &operandNode,
-                                 const Mode validationMode,
-                                 const StaticContext::Ptr &context);
+   static Expression::Ptr create(const Expression::Ptr &operandNode, const Mode validationMode,  const StaticContext::Ptr &context);
+
  private:
    Validate();
 

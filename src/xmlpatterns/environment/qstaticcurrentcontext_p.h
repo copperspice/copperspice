@@ -31,12 +31,12 @@ namespace QPatternist {
 class StaticCurrentContext : public DelegatingStaticContext
 {
  public:
-   StaticCurrentContext(const ItemType::Ptr &currentItemType,
-                        const StaticContext::Ptr &context);
+   StaticCurrentContext(const ItemType::Ptr &currentItemType, const StaticContext::Ptr &context);
+
    ItemType::Ptr currentItemType() const override;
 
  private:
-   const ItemType::Ptr         m_currentItemType;
+   const ItemType::Ptr m_currentItemType;
 };
 
 }

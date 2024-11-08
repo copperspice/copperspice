@@ -35,14 +35,14 @@ class XsdParticleChecker
 {
  public:
    static bool hasDuplicatedElements(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool,
-                                     XsdElement::Ptr &conflictingElement);
+         XsdElement::Ptr &conflictingElement);
 
    static bool isUPAConform(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool);
 
    static bool isUPAConformXsdAll(const XsdParticle::Ptr &particle, const NamePool::Ptr &namePool);
 
    static bool subsumes(const XsdParticle::Ptr &particle, const XsdParticle::Ptr &derivedParticle,
-                        const XsdSchemaContext::Ptr &context, QString &errorMsg);
+         const XsdSchemaContext::Ptr &context, QString &errorMsg);
 };
 
 }

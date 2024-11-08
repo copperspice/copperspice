@@ -62,7 +62,7 @@ class CastingPlatform
                                          bool &castImpossible,
                                          const SourceLocationReflection *const location,
                                          const ItemType::Ptr &targetType);
- private:
+
    inline Item castWithCaster(const Item &sourceValue,
                               const AtomicCaster::Ptr &caster,
                               const DynamicContext::Ptr &context) const;

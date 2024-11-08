@@ -132,8 +132,7 @@ class StaticContext : public ReportContext
    virtual ExternalVariableLoader::Ptr externalVariableLoader() const = 0;
    virtual ResourceLoader::Ptr resourceLoader() const = 0;
 
-   virtual void addLocation(const SourceLocationReflection *const reflection,
-                            const QSourceLocation &location) = 0;
+   virtual void addLocation(const SourceLocationReflection *const reflection, const QSourceLocation &location) = 0;
 
    virtual LocationHash sourceLocations() const = 0;
 
@@ -141,8 +140,9 @@ class StaticContext : public ReportContext
    virtual VariableSlotID allocateRangeSlot() = 0;
 
    void wrapExpressionWith(const SourceLocationReflection *const existingNode,
-                           const QExplicitlySharedDataPointer<Expression> &newNode);
+         const QExplicitlySharedDataPointer<Expression> &newNode);
 };
+
 }
 
 #endif

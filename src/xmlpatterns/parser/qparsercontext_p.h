@@ -154,16 +154,14 @@ class ParserContext : public QSharedData
    QStack<OrderBy::Stability> orderStability;
 
    bool hasSecondPrologPart;
-
    bool preserveNamespacesMode;
    bool inheritNamespacesMode;
 
-   QHash<QXmlName, Template::Ptr>  namedTemplates;
-   QVector<Expression::Ptr>        templateCalls;
+   QHash<QXmlName, Template::Ptr> namedTemplates;
+   QVector<Expression::Ptr> templateCalls;
 
    QMultiHash<QXmlName, Expression::Ptr> unresolvedVariableReferences;
-
-   QHash<QXmlName, TemplateMode::Ptr>  templateRules;
+   QHash<QXmlName, TemplateMode::Ptr> templateRules;
 
    TemplateMode::Ptr modeFor(const QXmlName &modeName) {
       if (modeName == QXmlName(StandardNamespaces::InternalXSLT, StandardLocalNames::current)) {
@@ -235,6 +233,7 @@ class ParserContext : public QSharedData
    ParserContext(const ParserContext &) = delete;
    ParserContext &operator=(const ParserContext &) = delete;
 };
+
 }
 
 #endif

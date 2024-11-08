@@ -77,11 +77,9 @@ class XsdSchemaResolver : public QSharedData
 
    void addComplexContentType(const XsdComplexType::Ptr &complexType, const XsdParticle::Ptr &content, bool mixed);
    void addAttributeType(const XsdAttribute::Ptr &attribute, const QXmlName &typeName, const QSourceLocation &location);
-   void addAlternativeType(const XsdAlternative::Ptr &alternative, const QXmlName &typeName,
-                           const QSourceLocation &location);
+   void addAlternativeType(const XsdAlternative::Ptr &alternative, const QXmlName &typeName, const QSourceLocation &location);
    void addAlternativeType(const XsdAlternative::Ptr &alternative, const XsdElement::Ptr &element);
-   void addSubstitutionGroupAffiliation(const XsdElement::Ptr &element, const QList<QXmlName> &elementName,
-                                        const QSourceLocation &location);
+   void addSubstitutionGroupAffiliation(const XsdElement::Ptr &element, const QList<QXmlName> &elementName, const QSourceLocation &location);
    void addSubstitutionGroupType(const XsdElement::Ptr &element);
    void addComponentLocationHash(const QHash<NamedSchemaComponent::Ptr, QSourceLocation> &hash);
    void addEnumerationFacetValue(const AtomicValue::Ptr &facetValue, const NamespaceSupport &namespaceSupport);

@@ -44,7 +44,7 @@ class QXmlResultItemsPrivate
    bool hasError;
 
  private:
-   QPatternist::DynamicContext::Ptr    m_context;
+   QPatternist::DynamicContext::Ptr m_context;
 };
 
 #endif

@@ -31,14 +31,11 @@ namespace QPatternist {
 class CopyOf : public SingleContainer
 {
  public:
-   CopyOf(const Expression::Ptr &operand,
-          const bool inheritNSS,
-          const bool preserveNSS);
+   CopyOf(const Expression::Ptr &operand, const bool inheritNSS,  const bool preserveNSS);
 
    void evaluateToSequenceReceiver(const DynamicContext::Ptr &context) const override;
 
    SequenceType::Ptr staticType() const override;
-
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
@@ -52,9 +49,9 @@ class CopyOf : public SingleContainer
 
  private:
    typedef QExplicitlySharedDataPointer<const CopyOf> ConstPtr;
-   const bool                                      m_inheritNamespaces;
-   const bool                                      m_preserveNamespaces;
-   const QAbstractXmlNodeModel::NodeCopySettings   m_settings;
+   const bool m_inheritNamespaces;
+   const bool m_preserveNamespaces;
+   const QAbstractXmlNodeModel::NodeCopySettings m_settings;
 };
 
 }

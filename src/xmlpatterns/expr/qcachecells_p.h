@@ -34,6 +34,7 @@ class ItemCacheCell
  public:
    typedef QList<ItemCacheCell> List;
    typedef QVector<ItemCacheCell> Vector;
+
    enum CacheState {
       Full,
       Empty

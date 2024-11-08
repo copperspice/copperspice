@@ -42,18 +42,12 @@ class QNameConstructor : public SingleContainer
    SequenceType::Ptr staticType() const override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
-   template<typename TReportContext, const ReportContext::ErrorCode InvalidQName,
-            const ReportContext::ErrorCode NoBinding>
-
-   static QXmlName expandQName(const QString &lexicalQName,
-                        const TReportContext &context,
-                        const NamespaceResolver::Ptr &nsResolver,
-                        const SourceLocationReflection *const r,
-                        const bool asForAttribute = false);
+   template<typename TReportContext, const ReportContext::ErrorCode InvalidQName, const ReportContext::ErrorCode NoBinding>
+   static QXmlName expandQName(const QString &lexicalQName, const TReportContext &context,
+         const NamespaceResolver::Ptr &nsResolver, const SourceLocationReflection *const r, const bool asForAttribute = false);
 
    static QXmlName::NamespaceCode namespaceForPrefix(const QXmlName::PrefixCode prefix,
-         const StaticContext::Ptr &context,
-         const SourceLocationReflection *const r);
+         const StaticContext::Ptr &context, const SourceLocationReflection *const r);
 
    const SourceLocationReflection *actualReflection() const override;
 
@@ -61,14 +55,9 @@ class QNameConstructor : public SingleContainer
    const NamespaceResolver::Ptr m_nsResolver;
 };
 
-template<typename TReportContext,
-         const ReportContext::ErrorCode InvalidQName,
-         const ReportContext::ErrorCode NoBinding>
-QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
-                                       const TReportContext &context,
-                                       const NamespaceResolver::Ptr &nsResolver,
-                                       const SourceLocationReflection *const r,
-                                       const bool asForAttribute)
+template<typename TReportContext, const ReportContext::ErrorCode InvalidQName, const ReportContext::ErrorCode NoBinding>
+QXmlName QNameConstructor::expandQName(const QString &lexicalQName, const TReportContext &context,
+      const NamespaceResolver::Ptr &nsResolver, const SourceLocationReflection *const r, const bool asForAttribute)
 {
    Q_ASSERT(nsResolver);
    Q_ASSERT(context);
@@ -92,6 +81,7 @@ QXmlName QNameConstructor::expandQName(const QString &lexicalQName,
       } else {
          return context->namePool()->allocateQName(context->namePool()->stringForNamespace(nsCode), local, prefix);
       }
+
    } else {
       context->error(QtXmlPatterns::tr("%1 is an invalid %2")
                      .formatArg(formatData(lexicalQName)).formatArg(formatType(context->namePool(), BuiltinTypes::xsQName)), InvalidQName, r);

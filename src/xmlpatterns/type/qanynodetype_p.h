@@ -31,7 +31,6 @@ namespace QPatternist {
 class AnyNodeType : public ItemType
 {
  public:
-
    typedef QExplicitlySharedDataPointer<AnyNodeType> Ptr;
 
    bool xdtTypeMatches(const ItemType::Ptr &other) const override;
@@ -46,7 +45,6 @@ class AnyNodeType : public ItemType
    ItemType::Ptr atomizedType() const override;
 
    virtual QXmlNodeModelIndex::NodeKind nodeKind() const;
-
    virtual PatternPriority patternPriority() const;
 
  protected:

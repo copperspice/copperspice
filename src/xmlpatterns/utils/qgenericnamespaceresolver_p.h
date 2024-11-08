@@ -45,6 +45,7 @@ class GenericNamespaceResolver : public NamespaceResolver
  private:
    Bindings m_bindings;
 };
+
 }
 
 #endif

@@ -65,8 +65,8 @@ class XsdElement : public XsdTerm
       NamedSchemaComponent::Ptr parent() const;
 
     private:
-      Variety                   m_variety;
-      NamedSchemaComponent      *m_parent;
+      Variety m_variety;
+      NamedSchemaComponent *m_parent;
    };
 
    class TypeTable : public QSharedData
@@ -130,7 +130,6 @@ class XsdElement : public XsdTerm
    bool isAbstract() const;
 
    void setIsNillable(bool nillable);
-
    bool isNillable() const;
 
    void setDisallowedSubstitutions(const BlockingConstraints &substitutions);
@@ -147,7 +146,6 @@ class XsdElement : public XsdTerm
 
    XsdElement::List substitutionGroupAffiliations() const;
    void addSubstitutionGroup(const XsdElement::Ptr &elements);
-
    XsdElement::WeakList substitutionGroups() const;
 
  private:

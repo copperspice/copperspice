@@ -417,4 +417,3 @@ void ExpressionFactory::processNamedTemplate(const QXmlName &name,
 }
 
 } // namespace QPatternist
-

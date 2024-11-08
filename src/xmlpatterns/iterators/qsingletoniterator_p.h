@@ -33,8 +33,7 @@ template<typename T>
 class SingletonIterator : public QAbstractXmlForwardIterator<T>
 {
  public:
-   SingletonIterator(const T &item) : m_item(item),
-      m_position(0) {
+   SingletonIterator(const T &item) : m_item(item), m_position(0) {
       Q_ASSERT(!qIsForwardIteratorEnd(item));
    }
 

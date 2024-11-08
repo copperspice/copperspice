@@ -60,7 +60,6 @@ class OutputValidator : public QAbstractXmlReceiver, public DelegatingSourceLoca
    bool m_hasReceivedChildren;
    QAbstractXmlReceiver *const m_receiver;
    const DynamicContext::Ptr m_context;
-
    QSet<QXmlName> m_attributes;
    const bool m_isXSLT;
 };

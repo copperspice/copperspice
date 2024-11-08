@@ -28,13 +28,11 @@
 #include "qpatternistlocale_p.h"
 #include "qxmlutils_p.h"
 
-
 namespace QPatternist {
 
 class NCNameConstructor : public SingleContainer
 {
  public:
-
    NCNameConstructor(const Expression::Ptr &source);
 
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
@@ -53,13 +51,9 @@ class NCNameConstructor : public SingleContainer
    static inline void validateTargetName(const QString &lexicalNCName,
                  const TReportContext &context, const SourceLocationReflection *const r);
  private:
-
-   static
-   const QString nameIsXML(const QString &lexTarget) {
-      return QtXmlPatterns::tr("The target name in a processing instruction "
-                               "cannot be %1 in any combination of upper "
-                               "and lower case. Therefore, %2 is invalid.")
-             .formatArgs(formatKeyword("xml"), formatKeyword(lexTarget));
+   static const QString nameIsXML(const QString &lexTarget) {
+      return QtXmlPatterns::tr("The target name in a processing instruction can not be %1 in any combination of upper "
+            "and lower case. Therefore, %2 is invalid.").formatArgs(formatKeyword("xml"), formatKeyword(lexTarget));
    }
 };
 
@@ -76,11 +70,12 @@ inline void NCNameConstructor::validateTargetName(const QString &lexicalTarget, 
 
    } else {
       context->error(QtXmlPatterns::tr("%1 is not a valid target name in a processing instruction. It "
-                     "must be a %2 value, e.g. %3.")
-                     .formatArg(formatKeyword(lexicalTarget)).formatArg(formatType(context->namePool(), BuiltinTypes::xsNCName))
-                     .formatArg(formatKeyword("my-name.123")), LexicallyInvalid, r);
+            "must be a %2 value, for example %3.")
+            .formatArg(formatKeyword(lexicalTarget)).formatArg(formatType(context->namePool(), BuiltinTypes::xsNCName))
+            .formatArg(formatKeyword("my-name.123")), LexicallyInvalid, r);
    }
 }
+
 }
 
 #endif

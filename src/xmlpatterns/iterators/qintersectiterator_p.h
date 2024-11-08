@@ -31,7 +31,7 @@ namespace QPatternist {
 class IntersectIterator : public Item::Iterator
 {
  public:
-   IntersectIterator(const Item::Iterator::Ptr &it1,                           const Item::Iterator::Ptr &it2);
+   IntersectIterator(const Item::Iterator::Ptr &it1, const Item::Iterator::Ptr &it2);
 
    Item next() override;
    Item current() const override;

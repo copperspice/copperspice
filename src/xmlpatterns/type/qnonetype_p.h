@@ -44,7 +44,6 @@ class NoneType : public ItemType, public SequenceType
    Cardinality cardinality() const override;
 
    bool isAtomicType() const override;
-
    ItemType::Ptr atomizedType() const override;
 
    bool isNodeType() const override;
@@ -54,7 +53,6 @@ class NoneType : public ItemType, public SequenceType
    const ItemType &operator|(const ItemType &other) const override;
 
  protected:
-
    friend class CommonSequenceTypes;
    NoneType();
 };

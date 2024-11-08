@@ -41,6 +41,7 @@ class GenericDynamicContext : public StackContextBase<DynamicContext>
    GenericDynamicContext(const NamePool::Ptr &np, QAbstractMessageHandler *const messageHandler, const LocationHash &locations);
 
    xsInteger contextPosition() const override;
+
    Item contextItem() const override;
    xsInteger contextSize() override;
 
@@ -70,7 +71,6 @@ class GenericDynamicContext : public StackContextBase<DynamicContext>
    ItemSequenceCacheCell::Vector &globalItemSequenceCacheCells(const VariableSlotID slot) override;
 
    void setUriResolver(const QAbstractUriResolver *const resolver);
-
    Item currentItem() const override;
 
    DynamicContext::Ptr previousContext() const override;

@@ -44,6 +44,7 @@ class GYear : public AbstractDateTime
 
    GYear(const QDateTime &dateTime);
 };
+
 }
 
 #endif

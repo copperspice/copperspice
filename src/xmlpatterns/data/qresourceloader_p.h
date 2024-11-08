@@ -32,6 +32,7 @@
 class QUrl;
 
 namespace QPatternist {
+
 class ResourceLoader : public QSharedData
 {
  public:
@@ -47,33 +48,26 @@ class ResourceLoader : public QSharedData
    };
 
    typedef QExplicitlySharedDataPointer<ResourceLoader> Ptr;
-   virtual ~ResourceLoader();
 
    ResourceLoader()
    { }
-   virtual bool isUnparsedTextAvailable(const QUrl &uri,
-                                        const QString &encoding);
 
+   virtual ~ResourceLoader();
+
+   virtual bool isUnparsedTextAvailable(const QUrl &uri, const QString &encoding);
    virtual ItemType::Ptr announceUnparsedText(const QUrl &uri);
 
-   virtual Item openUnparsedText(const QUrl &uri,
-                                 const QString &encoding,
-                                 const ReportContext::Ptr &context,
-                                 const SourceLocationReflection *const where);
+   virtual Item openUnparsedText(const QUrl &uri, const QString &encoding,
+         const ReportContext::Ptr &context, const SourceLocationReflection *const where);
 
-   virtual Item openDocument(const QUrl &uri,
-                             const ReportContext::Ptr &context);
-
+   virtual Item openDocument(const QUrl &uri, const ReportContext::Ptr &context);
    virtual SequenceType::Ptr announceDocument(const QUrl &uri, const Usage usageHint);
-
    virtual bool isDocumentAvailable(const QUrl &uri);
-
    virtual Item::Iterator::Ptr openCollection(const QUrl &uri);
-
    virtual SequenceType::Ptr announceCollection(const QUrl &uri);
-
    virtual void clear(const QUrl &uri);
 };
+
 }
 
 #endif

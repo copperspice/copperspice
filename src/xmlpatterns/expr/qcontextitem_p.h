@@ -37,10 +37,9 @@ class ContextItem : public EmptyContainer
    }
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
+
    SequenceType::Ptr staticType() const override;
-
    Expression::Properties properties() const override;
-
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
    Expression::Ptr compress(const StaticContext::Ptr &context) override;

@@ -27,10 +27,10 @@
 #include <qpaircontainer_p.h>
 
 namespace QPatternist {
+
 class GenericPredicate : public PairContainer
 {
  public:
-
    static Expression::Ptr create(const Expression::Ptr &sourceExpression,
                                  const Expression::Ptr &predicateExpression,
                                  const StaticContext::Ptr &context,
@@ -53,15 +53,14 @@ class GenericPredicate : public PairContainer
    QString description() const override;
 
  protected:
-
-   GenericPredicate(const Expression::Ptr &sourceExpression,
-                    const Expression::Ptr &predicate);
+   GenericPredicate(const Expression::Ptr &sourceExpression, const Expression::Ptr &predicate);
 
    ItemType::Ptr newFocusType() const override;
 
  private:
    typedef QExplicitlySharedDataPointer<const GenericPredicate> ConstPtr;
 };
+
 }
 
 #endif

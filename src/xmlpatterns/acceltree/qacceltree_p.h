@@ -39,6 +39,7 @@ template<bool> class AccelTreeBuilder;
 class AccelTree : public QAbstractXmlNodeModel
 {
    friend class AccelTreePrivate;
+
  public:
    using QAbstractXmlNodeModel::createIndex;
 
@@ -223,7 +224,7 @@ class AccelTree : public QAbstractXmlNodeModel
    QSourceLocation sourceLocation(const QXmlNodeModelIndex &index) const;
 
    inline void copyChildren(const QXmlNodeModelIndex &node,
-                  QAbstractXmlReceiver *const receiver, const NodeCopySettings &settings) const;
+         QAbstractXmlReceiver *const receiver, const NodeCopySettings &settings) const;
 
    QHash<QXmlName::LocalNameCode, PreNumber> m_IDs;
 };

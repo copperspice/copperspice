@@ -30,10 +30,10 @@
 #include <qstringfwd.h>
 
 namespace QPatternist {
+
 typedef qreal xsDouble;
 typedef xsDouble xsFloat;
 typedef xsDouble xsDecimal;
-
 typedef qint64 xsInteger;
 typedef qint32 VariableSlotID;
 
@@ -59,6 +59,7 @@ typedef xsDouble PatternPriority;
 typedef int ImportPrecedence;
 
 QString escape(const QString &input);
+
 }
 
 #endif

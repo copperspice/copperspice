@@ -46,6 +46,7 @@ class IfThenClause : public TripleContainer
 
    ID id() const override;
    QList<QExplicitlySharedDataPointer<OptimizationPass> > optimizationPasses() const override;
+
    //virtual Properties properties() const;
 };
 

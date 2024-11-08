@@ -40,6 +40,7 @@ class PatternPlatform : public FunctionCall
       CaseInsensitive     = 4,
       SimplifyWhitespace  = 8
    };
+
    typedef QFlags<Flag> Flags;
 
    Expression::Ptr compress(const StaticContext::Ptr &context) override;

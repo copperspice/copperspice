@@ -43,9 +43,10 @@ class ExternalVariableReference : public EmptyContainer
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 
  private:
-   const QXmlName             m_name;
+   const QXmlName m_name;
    const SequenceType::Ptr m_seqType;
 };
+
 }
 
 #endif

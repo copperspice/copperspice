@@ -42,6 +42,7 @@ class OperandsIterator
 
    OperandsIterator(const Expression::Ptr &start, const TreatParent treatParent) {
       Q_ASSERT(start);
+
       if (treatParent == IncludeParent) {
          Expression::List l;
          l.append(start);
@@ -113,6 +114,7 @@ class OperandsIterator
 
    QStack<Level> m_exprs;
 };
+
 }
 
 #endif

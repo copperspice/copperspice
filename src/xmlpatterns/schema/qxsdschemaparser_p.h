@@ -59,8 +59,7 @@ class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Ty
       RedefineParser
    };
 
-   XsdSchemaParser(const XsdSchemaContext::Ptr &context, const XsdSchemaParserContext::Ptr &parserContext,
-                   QIODevice *device);
+   XsdSchemaParser(const XsdSchemaContext::Ptr &context, const XsdSchemaParserContext::Ptr &parserContext, QIODevice *device);
 
    bool parse(ParserType parserType = TopLevelParser);
 
@@ -86,7 +85,7 @@ class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Ty
    virtual void error(const QString &msg);
 
    void attributeContentError(const char *attributeName, const char *elementName, const QString &value,
-                              const SchemaType::Ptr &type = SchemaType::Ptr());
+         const SchemaType::Ptr &type = SchemaType::Ptr());
 
    void setTargetNamespaceExtended(const QString &targetNamespace);
 
@@ -214,34 +213,37 @@ class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Ty
    void setupBuiltinTypeNames();
 
    inline bool isSchemaTag(XsdSchemaToken::NodeName tag, XsdSchemaToken::NodeName token,
-                           XsdSchemaToken::NodeName namespaceToken) const;
+         XsdSchemaToken::NodeName namespaceToken) const;
 
-   XsdSchemaContext                                                     *m_context;
-   XsdSchemaParserContext                                               *m_parserContext;
-   NamePool                                                             *m_namePool;
-   NamespaceSupport                                                     m_namespaceSupport;
-   XsdSchemaResolver                                                    *m_schemaResolver;
-   XsdSchema                                                            *m_schema;
+   XsdSchemaContext *m_context;
+   XsdSchemaParserContext *m_parserContext;
+   NamePool *m_namePool;
+   NamespaceSupport  m_namespaceSupport;
+   XsdSchemaResolver *m_schemaResolver;
+   XsdSchema *m_schema;
 
-   QString                                                              m_targetNamespace;
-   QString                                                              m_attributeFormDefault;
-   QString                                                              m_elementFormDefault;
-   QString                                                              m_blockDefault;
-   QString                                                              m_finalDefault;
-   QString                                                              m_xpathDefaultNamespace;
-   QXmlName                                                             m_defaultAttributes;
-   XsdComplexType::OpenContent::Ptr                                     m_defaultOpenContent;
-   bool                                                                 m_defaultOpenContentAppliesToEmpty;
+   QString m_targetNamespace;
+   QString m_attributeFormDefault;
+   QString m_elementFormDefault;
+   QString m_blockDefault;
+   QString m_finalDefault;
+   QString m_xpathDefaultNamespace;
 
-   NamespaceSet                                                         m_includedSchemas;
-   NamespaceSet                                                         m_importedSchemas;
-   NamespaceSet                                                         m_redefinedSchemas;
-   QUrl                                                                 m_documentURI;
-   XsdIdCache::Ptr                                                      m_idCache;
+   QXmlName m_defaultAttributes;
+   XsdComplexType::OpenContent::Ptr m_defaultOpenContent;
+   bool m_defaultOpenContentAppliesToEmpty;
+
+   NamespaceSet m_includedSchemas;
+   NamespaceSet m_importedSchemas;
+   NamespaceSet m_redefinedSchemas;
+
+   QUrl m_documentURI;
+   XsdIdCache::Ptr m_idCache;
    QHash<XsdTagScope::Type, XsdStateMachine<XsdSchemaToken::NodeName> > m_stateMachines;
-   ComponentLocationHash                                                m_componentLocationHash;
-   QSet<QXmlName>                                                       m_builtinTypeNames;
+   ComponentLocationHash m_componentLocationHash;
+   QSet<QXmlName> m_builtinTypeNames;
 };
+
 }
 
 #endif

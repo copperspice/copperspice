@@ -55,13 +55,12 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    QVariant typedValue(const QXmlNodeModelIndex &n) const override;
 
    QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> >
-                  iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const override;
+         iterate(const QXmlNodeModelIndex &ni, QXmlNodeModelIndex::Axis axis) const override;
 
    QPatternist::ItemIteratorPtr sequencedTypedValue(const QXmlNodeModelIndex &ni) const override;
    QPatternist::ItemType::Ptr type(const QXmlNodeModelIndex &ni) const override;
 
-   QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni,
-                  const QXmlName::PrefixCode prefix) const override;
+   QXmlName::NamespaceCode namespaceForPrefix(const QXmlNodeModelIndex &ni, const QXmlName::PrefixCode prefix) const override;
 
    bool isDeepEqual(const QXmlNodeModelIndex &ni1, const QXmlNodeModelIndex &ni2) const override;
    void sendNamespaces(const QXmlNodeModelIndex &n, QAbstractXmlReceiver *const receiver) const override;
@@ -69,8 +68,7 @@ class XsdValidatedXmlNodeModel : public QAbstractXmlNodeModel
    QXmlNodeModelIndex elementById(const QXmlName &NCName) const override;
    QVector<QXmlNodeModelIndex> nodesByIdref(const QXmlName &NCName) const override;
 
-   void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver,
-                  const NodeCopySettings &) const override;
+   void copyNodeTo(const QXmlNodeModelIndex &node, QAbstractXmlReceiver *const receiver, const NodeCopySettings &) const override;
 
    void setAssignedElement(const QXmlNodeModelIndex &index, const XsdElement::Ptr &element);
 

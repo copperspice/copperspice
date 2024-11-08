@@ -48,7 +48,6 @@ class CallTemplate : public TemplateInvoker
 
    Expression::Ptr typeCheck(const StaticContext::Ptr &context, const SequenceType::Ptr &reqType) override;
 
-
    void setTemplate(const Template::Ptr &templ) {
       m_template = templ;
    }

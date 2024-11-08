@@ -42,17 +42,17 @@ class CallTargetDescription : public QSharedData
 
    QXmlName name() const;
 
-   static void checkCallsiteCircularity(CallTargetDescription::List &signList,
-                                        const Expression::Ptr expr);
+   static void checkCallsiteCircularity(CallTargetDescription::List &signList, const Expression::Ptr expr);
+
  private:
-   static void checkArgumentsCircularity(CallTargetDescription::List &signList,
-                                         const Expression::Ptr callsite);
+   static void checkArgumentsCircularity(CallTargetDescription::List &signList, const Expression::Ptr callsite);
 
    CallTargetDescription(const CallTargetDescription &) = delete;
    CallTargetDescription &operator=(const CallTargetDescription &) = delete;
 
    const QXmlName m_name;
 };
+
 }
 
 #endif

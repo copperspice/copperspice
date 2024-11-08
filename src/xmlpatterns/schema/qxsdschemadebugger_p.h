@@ -27,6 +27,7 @@
 #include <qxsdschema_p.h>
 
 namespace QPatternist {
+
 class XsdSchemaDebugger
 {
  public:

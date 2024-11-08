@@ -47,9 +47,9 @@ class AbstractFloatMathematician : public AtomicMathematician, public Delegating
 
 #include "qabstractfloatmathematician.cpp"
 
-typedef AbstractFloatMathematician<true> DoubleMathematician;
-
+typedef AbstractFloatMathematician<true>  DoubleMathematician;
 typedef AbstractFloatMathematician<false> FloatMathematician;
+
 }
 
 #endif

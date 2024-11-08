@@ -33,6 +33,7 @@
 #include <qbuiltintypes_p.h>
 
 namespace QPatternist {
+
 template <const bool isDouble>
 class AbstractFloat : public Numeric
 {
@@ -83,6 +84,7 @@ Numeric::Ptr createFloat(const xsDouble num);
 
 typedef AbstractFloat<true> Double;
 typedef AbstractFloat<false> Float;
+
 }
 
 #endif

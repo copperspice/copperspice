@@ -99,4 +99,3 @@ QVector<QXmlNodeModelIndex> QSimpleXmlNodeModel::nodesByIdref(const QXmlName &id
    (void) idref;
    return QVector<QXmlNodeModelIndex>();
 }
-

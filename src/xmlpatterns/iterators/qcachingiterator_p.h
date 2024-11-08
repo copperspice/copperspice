@@ -46,8 +46,7 @@ class CachingIterator : public Item::Iterator
    Item      m_current;
    xsInteger m_position;
 
-   const VariableSlotID        m_varSlot;
-
+   const VariableSlotID m_varSlot;
    const DynamicContext::Ptr   m_context;
 
    ItemSequenceCacheCell::Vector &m_cacheCells;

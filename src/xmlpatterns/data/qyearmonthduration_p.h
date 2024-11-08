@@ -27,6 +27,7 @@
 #include <qabstractduration_p.h>
 
 namespace QPatternist {
+
 class YearMonthDuration : public AbstractDuration
 {
  public:
@@ -61,6 +62,7 @@ class YearMonthDuration : public AbstractDuration
    const YearProperty  m_years;
    const MonthProperty m_months;
 };
+
 }
 
 #endif

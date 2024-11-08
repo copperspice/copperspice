@@ -32,7 +32,6 @@ namespace QPatternist {
 class CastAs : public SingleContainer, public CastingPlatform<CastAs, true /* issueError */>
 {
  public:
-
    CastAs(const Expression::Ptr &source, const SequenceType::Ptr &targetType);
 
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;

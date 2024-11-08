@@ -32,12 +32,9 @@
 
 namespace QPatternist {
 
-class IndexOfIterator : public Item::Iterator
-   , public ComparisonPlatform<IndexOfIterator, false>
-   , public SourceLocationReflection
+class IndexOfIterator : public Item::Iterator, public ComparisonPlatform<IndexOfIterator, false>, public SourceLocationReflection
 {
  public:
-
    IndexOfIterator(const Item::Iterator::Ptr &inputSequence,
                    const Item &searchParam,
                    const AtomicComparator::Ptr &comp,

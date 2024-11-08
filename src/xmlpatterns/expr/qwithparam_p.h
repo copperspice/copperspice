@@ -34,9 +34,7 @@ class WithParam : public FunctionArgument
    typedef QExplicitlySharedDataPointer<WithParam> Ptr;
    typedef QHash<QXmlName, Ptr> Hash;
 
-   inline WithParam(const QXmlName name,
-                    const SequenceType::Ptr &type,
-                    const Expression::Ptr &sourceExpression);
+   inline WithParam(const QXmlName name, const SequenceType::Ptr &type, const Expression::Ptr &sourceExpression);
 
    void setSourceExpression(const Expression::Ptr &expr) {
       Q_ASSERT(expr);
@@ -51,10 +49,8 @@ class WithParam : public FunctionArgument
    Expression::Ptr m_sourceExpression;
 };
 
-WithParam::WithParam(const QXmlName name,
-                     const SequenceType::Ptr &type,
-                     const Expression::Ptr &sourceExpression) : FunctionArgument(name, type)
-   , m_sourceExpression(sourceExpression)
+WithParam::WithParam(const QXmlName name, const SequenceType::Ptr &type, const Expression::Ptr &sourceExpression)
+   : FunctionArgument(name, type), m_sourceExpression(sourceExpression)
 {
    Q_ASSERT(m_sourceExpression);
 }

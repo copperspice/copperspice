@@ -39,6 +39,7 @@ class NodeComparison : public PairContainer
    SequenceType::List expectedOperandTypes() const override;
 
    virtual QXmlNodeModelIndex::DocumentOrder operatorID() const;
+
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    SequenceType::Ptr staticType() const override;
@@ -53,10 +54,12 @@ class NodeComparison : public PairContainer
       True,
       False
    };
+
    inline Result evaluate(const DynamicContext::Ptr &context) const;
 
    const QXmlNodeModelIndex::DocumentOrder m_op;
 };
+
 }
 
 #endif

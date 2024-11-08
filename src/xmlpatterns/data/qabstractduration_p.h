@@ -35,7 +35,6 @@ class AbstractDuration : public AtomicValue
    typedef QExplicitlySharedDataPointer<AbstractDuration> Ptr;
    typedef qint64 Value;
 
-
    class CaptureTable
    {
     public:

@@ -92,10 +92,10 @@ class XsdComplexType : public XsdUserSchemaType<AnyType>
       XsdSimpleType::Ptr m_simpleType;
    };
 
-
    XsdComplexType();
 
-   ~XsdComplexType() {};
+   ~XsdComplexType()
+   { };
 
    QString displayName(const NamePool::Ptr &namePool) const override;
 
@@ -103,7 +103,6 @@ class XsdComplexType : public XsdUserSchemaType<AnyType>
    SchemaType::Ptr wxsSuperType() const override;
 
    void setContext(const NamedSchemaComponent::Ptr &component);
-
    NamedSchemaComponent::Ptr context() const;
 
    void setDerivationMethod(DerivationMethod method);

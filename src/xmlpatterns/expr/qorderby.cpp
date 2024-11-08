@@ -59,9 +59,7 @@ class less<Item::List>
 {
  private:
    static bool isNaN(const Item &i) {
-
-      return BuiltinTypes::xsDouble->xdtTypeMatches(i.type()) &&
-             i.as<Numeric>()->isNaN();
+      return BuiltinTypes::xsDouble->xdtTypeMatches(i.type()) && i.as<Numeric>()->isNaN();
    }
 
  public:

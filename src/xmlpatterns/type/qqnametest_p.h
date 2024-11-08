@@ -28,6 +28,7 @@
 #include <qcontainerfwd.h>
 
 namespace QPatternist {
+
 class QNameTest : public AbstractNodeTest
 {
  public:
@@ -51,6 +52,7 @@ class QNameTest : public AbstractNodeTest
 
    const QXmlName m_qName;
 };
+
 }
 
 #endif

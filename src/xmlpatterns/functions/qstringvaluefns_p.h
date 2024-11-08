@@ -43,13 +43,11 @@ class StringJoinFN : public FunctionCall
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 };
 
-
 class SubstringFN : public FunctionCall
 {
  public:
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
-
 
 class StringLengthFN : public FunctionCall
 {

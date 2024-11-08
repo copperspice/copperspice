@@ -40,7 +40,6 @@ class DecimalMathematician : public AtomicMathematician, public DelegatingSource
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class IntegerMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
@@ -52,7 +51,6 @@ class IntegerMathematician : public AtomicMathematician, public DelegatingSource
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class DurationNumericMathematician : public AtomicMathematician, public DelegatingSourceLocationReflection
 {
  public:
@@ -63,7 +61,6 @@ class DurationNumericMathematician : public AtomicMathematician, public Delegati
    Item calculate(const Item &o1, const Operator op, const Item &o2,
       const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class DurationDurationDivisor : public AtomicMathematician
 {
@@ -79,7 +76,6 @@ class DurationDurationMathematician : public AtomicMathematician
    Item calculate(const Item &o1, const Operator op, const Item &o2,
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class OperandSwitcherMathematician : public AtomicMathematician
 {
@@ -104,7 +100,6 @@ class DateTimeDurationMathematician : public AtomicMathematician, public Delegat
    Item calculate(const Item &o1, const Operator op, const Item &o2,
          const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class AbstractDateTimeMathematician : public AtomicMathematician
 {

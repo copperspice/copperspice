@@ -31,9 +31,7 @@ namespace QPatternist {
 class ContextNodeChecker : public FunctionCall
 {
  protected:
-   void checkTargetNode(const QXmlNodeModelIndex &node,
-                        const DynamicContext::Ptr &context,
-                        const ReportContext::ErrorCode) const;
+   void checkTargetNode(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context, const ReportContext::ErrorCode) const;
 };
 
 }

@@ -40,10 +40,10 @@ class TraceCallback : public QSharedData
    {
    }
 
-   Item mapToItem(const Item &item,
-                  const DynamicContext::Ptr &context) {
+   Item mapToItem(const Item &item, const DynamicContext::Ptr &context) {
       QTextStream out(stderr);
       ++m_position;
+
       if (m_position == 1) {
          if (item) {
             out << csPrintable(m_msg)

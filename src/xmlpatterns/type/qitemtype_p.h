@@ -84,8 +84,7 @@ class ItemType : public virtual QSharedData
    ItemType &operator=(const ItemType &) = delete;
 };
 
-inline ItemType::Ptr operator|(const ItemType::Ptr &op1,
-                               const ItemType::Ptr &op2)
+inline ItemType::Ptr operator|(const ItemType::Ptr &op1, const ItemType::Ptr &op2)
 {
    return ItemType::Ptr(const_cast<ItemType *>(&(*op1 | *op2)));
 }

@@ -43,7 +43,6 @@ class ToStringCaster : public AtomicCaster
    }
 };
 
-
 class ToUntypedAtomicCaster : public AtomicCaster
 {
  public:
@@ -62,13 +61,11 @@ class HexBinaryToBase64BinaryCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class Base64BinaryToHexBinaryCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToBase64BinaryCaster : public AtomicCaster
 {
@@ -76,13 +73,11 @@ class StringToBase64BinaryCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToHexBinaryCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class NumericToBooleanCaster : public AtomicCaster
 {
@@ -90,13 +85,11 @@ class NumericToBooleanCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToBooleanCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 template <const bool IsInteger>
 class NumericToDecimalCaster : public AtomicCaster
@@ -128,13 +121,11 @@ class NumericToDecimalCaster : public AtomicCaster
    }
 };
 
-
 class StringToDecimalCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToIntegerCaster : public AtomicCaster
 {
@@ -142,13 +133,11 @@ class StringToIntegerCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class BooleanToDecimalCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class BooleanToIntegerCaster : public AtomicCaster
 {
@@ -156,20 +145,17 @@ class BooleanToIntegerCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class SelfToSelfCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToGYearCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToGDayCaster : public AtomicCaster
 {
@@ -183,13 +169,11 @@ class StringToGMonthCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToGYearMonthCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToGMonthDayCaster : public AtomicCaster
 {
@@ -197,13 +181,11 @@ class StringToGMonthDayCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToDateTimeCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToTimeCaster : public AtomicCaster
 {
@@ -211,13 +193,11 @@ class StringToTimeCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToDateCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class StringToDurationCaster : public AtomicCaster
 {
@@ -225,20 +205,17 @@ class StringToDurationCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToDayTimeDurationCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class StringToYearMonthDurationCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class AbstractDateTimeToGYearCaster : public AtomicCaster
 {
@@ -252,13 +229,11 @@ class AbstractDateTimeToGYearMonthCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class AbstractDateTimeToGMonthCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class AbstractDateTimeToGMonthDayCaster : public AtomicCaster
 {
@@ -266,20 +241,17 @@ class AbstractDateTimeToGMonthDayCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class AbstractDateTimeToGDayCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class AbstractDateTimeToDateTimeCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class AbstractDateTimeToDateCaster : public AtomicCaster
 {
@@ -299,13 +271,11 @@ class AbstractDurationToDurationCaster : public AtomicCaster
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
 
-
 class AbstractDurationToDayTimeDurationCaster : public AtomicCaster
 {
  public:
    Item castFrom(const Item &from, const QExplicitlySharedDataPointer<DynamicContext> &context) const override;
 };
-
 
 class AbstractDurationToYearMonthDurationCaster : public AtomicCaster
 {
@@ -332,7 +302,6 @@ class BooleanToDerivedIntegerCaster : public AtomicCaster
                   from.template as<AtomicValue>()->evaluateEBV(context) ? 1 : 0);
    }
 };
-
 
 template<TypeOfDerivedString type>
 class AnyToDerivedStringCaster : public AtomicCaster

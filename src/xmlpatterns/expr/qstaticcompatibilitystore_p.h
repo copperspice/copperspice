@@ -38,6 +38,7 @@ class StaticCompatibilityStore : public SingleContainer
    SequenceType::List expectedOperandTypes() const override;
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
+
 }
 
 #endif

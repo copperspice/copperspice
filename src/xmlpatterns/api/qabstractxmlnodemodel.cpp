@@ -92,6 +92,7 @@ class IteratorVector : public
    ListIterator<QXmlNodeModelIndexIteratorPointer, QVector<QXmlNodeModelIndexIteratorPointer> >
 {
    typedef QVector<QXmlNodeModelIndexIteratorPointer> ItVector;
+
  public:
    typedef QAbstractXmlForwardIterator<QXmlNodeModelIndexIteratorPointer>::Ptr Ptr;
 
@@ -109,6 +110,7 @@ class IteratorVector : public
       return Ptr(new IteratorVector(result));
    }
 };
+
 }
 
 static inline QXmlNodeModelIndexIteratorPointer mergeIterators(const QXmlNodeModelIndex &node,

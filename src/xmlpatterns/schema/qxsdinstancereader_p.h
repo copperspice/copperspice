@@ -60,7 +60,7 @@ class XsdInstanceReader
    QXmlItem attributeItem(const QXmlName &name) const;
    QVector<QXmlName> namespaceBindings(const QXmlNodeModelIndex &index) const;
 
-   XsdSchemaContext::Ptr     m_context;
+   XsdSchemaContext::Ptr m_context;
 
  private:
    PullBridge                m_model;

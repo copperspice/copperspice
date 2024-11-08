@@ -34,10 +34,9 @@
 
 namespace QPatternist {
 
-template <typename TSubClass,
-          bool issueError,
-          AtomicComparator::ComparisonType comparisonType = AtomicComparator::AsValueComparison,
-          ReportContext::ErrorCode errorCode = ReportContext::XPTY0004>
+template <typename TSubClass, bool issueError,
+      AtomicComparator::ComparisonType comparisonType = AtomicComparator::AsValueComparison,
+      ReportContext::ErrorCode errorCode = ReportContext::XPTY0004>
 class ComparisonPlatform
 {
  protected:
@@ -46,25 +45,14 @@ class ComparisonPlatform
    ComparisonPlatform() {
    }
 
-   AtomicComparator::Ptr
-   fetchComparator(const ItemType::Ptr &type1,
-                   const ItemType::Ptr &type2,
-                   const ReportContext::Ptr &context) const;
+   AtomicComparator::Ptr fetchComparator(const ItemType::Ptr &type1,
+         const ItemType::Ptr &type2, const ReportContext::Ptr &context) const;
 
-   bool compare(const Item &i1,
-                const Item &i2,
-                const AtomicComparator::Ptr &comp,
-                const AtomicComparator::Operator op) const;
+   bool compare(const Item &i1, const Item &i2, const AtomicComparator::Ptr &comp, const AtomicComparator::Operator op) const;
 
-   bool
-   flexibleCompare(const Item &it1,
-                   const Item &it2,
-                   const DynamicContext::Ptr &context) const;
+   bool flexibleCompare(const Item &it1, const Item &it2, const DynamicContext::Ptr &context) const;
 
-   AtomicComparator::ComparisonResult
-   detailedFlexibleCompare(const Item &it1,
-                           const Item &it2,
-                           const DynamicContext::Ptr &context) const;
+   AtomicComparator::ComparisonResult detailedFlexibleCompare(const Item &it1, const Item &it2, const DynamicContext::Ptr &context) const;
 
    const AtomicComparator::Ptr &comparator() const {
       return m_comparator;
@@ -83,7 +71,7 @@ class ComparisonPlatform
    AtomicComparator::Ptr m_comparator;
 };
 
-#include "qcomparisonplatform.cpp"
+#include <qcomparisonplatform.cpp>
 
 }
 

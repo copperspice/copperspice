@@ -33,9 +33,8 @@ template<typename TResult, typename TSource, typename TMapper>
 class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
 {
  public:
-   SequenceMappingIterator(const TMapper &mapper,
-                           const typename QAbstractXmlForwardIterator<TSource>::Ptr &sourceIterator,
-                           const DynamicContext::Ptr &context);
+   SequenceMappingIterator(const TMapper &mapper, const typename QAbstractXmlForwardIterator<TSource>::Ptr &sourceIterator,
+         const DynamicContext::Ptr &context);
 
    TResult next() override;
    xsInteger count() override;
@@ -47,8 +46,7 @@ class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
 
    typename QAbstractXmlForwardIterator<TResult>::Ptr copy() const override {
       return typename QAbstractXmlForwardIterator<TResult>::Ptr
-             (new SequenceMappingIterator<TResult, TSource, TMapper>(m_mapper,
-                   m_mainIterator->copy(), m_context));
+             (new SequenceMappingIterator<TResult, TSource, TMapper>(m_mapper, m_mainIterator->copy(), m_context));
    }
 
  private:
@@ -62,8 +60,7 @@ class SequenceMappingIterator : public QAbstractXmlForwardIterator<TResult>
 
 template<typename TResult, typename TSource, typename TMapper>
 SequenceMappingIterator<TResult, TSource, TMapper>::SequenceMappingIterator(
-   const TMapper &mapper, const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator,
-   const DynamicContext::Ptr &context)
+      const TMapper &mapper, const typename QAbstractXmlForwardIterator<TSource>::Ptr &iterator, const DynamicContext::Ptr &context)
    : m_position(0), m_mainIterator(iterator), m_context(context), m_mapper(mapper)
 {
    Q_ASSERT(mapper);
@@ -128,8 +125,7 @@ xsInteger SequenceMappingIterator<TResult, TSource, TMapper>::position() const
 template<typename TResult, typename TSource, typename TMapper>
 static inline typename QAbstractXmlForwardIterator<TResult>::Ptr
 makeSequenceMappingIterator(const TMapper &mapper,
-                  const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source,
-                  const DynamicContext::Ptr &context)
+                  const QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<TSource> > &source, const DynamicContext::Ptr &context)
 {
    return typename QAbstractXmlForwardIterator<TResult>::Ptr
           (new SequenceMappingIterator<TResult, TSource, TMapper>(mapper, source, context));

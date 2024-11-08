@@ -86,7 +86,7 @@ class XsdStateMachine
 
  private:
    StateId dfaStateForNfaState(QSet<StateId> nfaState, QList< QPair< QSet<StateId>, StateId> > &stateTable,
-                               XsdStateMachine<TransitionType> &dfa) const;
+         XsdStateMachine<TransitionType> &dfa) const;
 
    // implementation was inlined to workaround a compiler bug on Symbian/winscw.
    QSet<StateId> epsilonClosure(const QSet<StateId> &input) const {
@@ -104,6 +104,7 @@ class XsdStateMachine
 
          // get the list of states that can be reached by the epsilon transition
          // from the current 'state'
+
          const QVector<StateId> targetStates = m_epsilonTransitions.value(state);
          for (int i = 0; i < targetStates.count(); ++i) {
             // if we have this target state not in our result set yet
@@ -155,6 +156,7 @@ class XsdStateMachine
 };
 
 #include "qxsdstatemachine.cpp"
+
 }
 
 #endif

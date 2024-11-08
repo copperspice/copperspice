@@ -27,6 +27,7 @@
 #include <qatomictype_p.h>
 
 namespace QPatternist {
+
 class NumericType : public AtomicType
 {
  public:
@@ -50,12 +51,11 @@ class NumericType : public AtomicType
          const SourceLocationReflection *const) const override;
 
    AtomicTypeVisitorResult::Ptr accept(const ParameterizedAtomicTypeVisitor::Ptr &visitor,
-                  const qint16 op, const SourceLocationReflection *const) const override;
+         const qint16 op, const SourceLocationReflection *const) const override;
 
    AtomicComparatorLocator::Ptr comparatorLocator() const override;
 
    AtomicMathematicianLocator::Ptr mathematicianLocator() const override;
-
 
    AtomicCasterLocator::Ptr casterLocator() const override;
 
@@ -63,6 +63,7 @@ class NumericType : public AtomicType
    friend class BuiltinTypes;
    NumericType();
 };
+
 }
 
 #endif

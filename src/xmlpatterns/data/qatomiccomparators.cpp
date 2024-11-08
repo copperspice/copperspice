@@ -192,6 +192,7 @@ IntegerComparator::compare(const Item &o1,
       } else {
          return GreaterThan;
       }
+
    } else {
       const quint64 v1 = o1.as<Numeric>()->toUnsignedInteger();
       const quint64 v2 = o2.as<Numeric>()->toUnsignedInteger();
@@ -206,21 +207,17 @@ IntegerComparator::compare(const Item &o1,
    }
 }
 
-bool IntegerComparator::equals(const Item &o1,
-                               const Item &o2) const
+bool IntegerComparator::equals(const Item &o1, const Item &o2) const
 {
    return o1.as<Numeric>()->toInteger() == o2.as<Numeric>()->toInteger();
 }
 
-bool QNameComparator::equals(const Item &o1,
-                             const Item &o2) const
+bool QNameComparator::equals(const Item &o1, const Item &o2) const
 {
-   return o1.as<QNameValue>()->m_qName ==
-          o2.as<QNameValue>()->m_qName;
+   return o1.as<QNameValue>()->m_qName == o2.as<QNameValue>()->m_qName;
 }
 
-bool AbstractDateTimeComparator::equals(const Item &o1,
-                                        const Item &o2) const
+bool AbstractDateTimeComparator::equals(const Item &o1, const Item &o2) const
 {
    const QDateTime dt1(o1.as<AbstractDateTime>()->toDateTime());
    const QDateTime dt2(o2.as<AbstractDateTime>()->toDateTime());
@@ -237,10 +234,8 @@ bool AbstractDateTimeComparator::equals(const Item &o1,
    return dt1 == dt2 && dt1.timeZone() == dt2.timeZone();
 }
 
-AtomicComparator::ComparisonResult
-AbstractDateTimeComparator::compare(const Item &operand1,
-                                    const AtomicComparator::Operator,
-                                    const Item &operand2) const
+AtomicComparator::ComparisonResult AbstractDateTimeComparator::compare(const Item &operand1,
+      const AtomicComparator::Operator, const Item &operand2) const
 {
    const QDateTime &dt1 = operand1.as<AbstractDateTime>()->toDateTime();
    const QDateTime &dt2 = operand2.as<AbstractDateTime>()->toDateTime();
@@ -254,12 +249,10 @@ AbstractDateTimeComparator::compare(const Item &operand1,
    }
 }
 
-bool AbstractDurationComparator::equals(const Item &o1,
-                                        const Item &o2) const
+bool AbstractDurationComparator::equals(const Item &o1, const Item &o2) const
 {
    // use AbstractDuration::operator==()
-   return *o1.as<AbstractDuration>() ==
-          *o2.as<AbstractDuration>();
+   return *o1.as<AbstractDuration>() == *o2.as<AbstractDuration>();
 }
 
 QDateTime AbstractDurationComparator::addDurationToDateTime(const QDateTime &dateTime,
@@ -284,10 +277,8 @@ QDateTime AbstractDurationComparator::addDurationToDateTime(const QDateTime &dat
    return result;
 }
 
-AtomicComparator::ComparisonResult
-AbstractDurationComparator::compare(const Item &o1,
-                                    const AtomicComparator::Operator,
-                                    const Item &o2) const
+AtomicComparator::ComparisonResult AbstractDurationComparator::compare(const Item &o1,
+      const AtomicComparator::Operator, const Item &o2) const
 {
    const AbstractDuration *const duration = o1.as<AbstractDuration>();
    const AbstractDuration *const otherDuration = o2.as<AbstractDuration>();
@@ -325,4 +316,3 @@ AbstractDurationComparator::compare(const Item &o1,
       return Incomparable;
    }
 }
-

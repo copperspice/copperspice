@@ -31,7 +31,6 @@ namespace QPatternist {
 class UnionIterator : public Item::Iterator
 {
  public:
-
    UnionIterator(const Item::Iterator::Ptr &it1, const Item::Iterator::Ptr &it2);
 
    Item next() override;

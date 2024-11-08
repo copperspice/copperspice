@@ -52,13 +52,16 @@ class DerivedIntegerDetails<TypeByte>
 {
  private:
    friend class DerivedInteger<TypeByte>;
+
    typedef qint8                           StorageType;
    typedef xsInteger                       TemporaryStorageType;
+
    static const StorageType                maxInclusive = 127;
    static const StorageType                minInclusive = -128;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -69,13 +72,16 @@ class DerivedIntegerDetails<TypeInt>
 {
  private:
    friend class DerivedInteger<TypeInt>;
+
    typedef qint32                          StorageType;
    typedef xsInteger                       TemporaryStorageType;
+
    static const StorageType                maxInclusive = Q_INT64_C(2147483647);
    static const StorageType                minInclusive = Q_INT64_C(-2147483648);
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -86,15 +92,16 @@ class DerivedIntegerDetails<TypeLong>
 {
  private:
    friend class DerivedInteger<TypeLong>;
+
    typedef qint64                          StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = Q_INT64_C(9223372036854775807);
-
    static const StorageType                minInclusive = -(Q_INT64_C(9223372036854775807)) - 1;
-
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -105,13 +112,16 @@ class DerivedIntegerDetails<TypeNegativeInteger>
 {
  private:
    friend class DerivedInteger<TypeNegativeInteger>;
+
    typedef xsInteger                       StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = -1;
    static const StorageType                minInclusive = IgnorableSignedValue;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitUpwards;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -122,13 +132,16 @@ class DerivedIntegerDetails<TypeNonNegativeInteger>
 {
  private:
    friend class DerivedInteger<TypeNonNegativeInteger>;
+
    typedef xsInteger                       StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = IgnorableSignedValue;
    static const StorageType                minInclusive = 0;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitDownwards;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -139,13 +152,16 @@ class DerivedIntegerDetails<TypeNonPositiveInteger>
 {
  private:
    friend class DerivedInteger<TypeNonPositiveInteger>;
+
    typedef xsInteger                       StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = 0;
    static const StorageType                minInclusive = IgnorableSignedValue;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitUpwards;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -156,13 +172,16 @@ class DerivedIntegerDetails<TypePositiveInteger>
 {
  private:
    friend class DerivedInteger<TypePositiveInteger>;
+
    typedef xsInteger                       StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = IgnorableSignedValue;
    static const StorageType                minInclusive = 1;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitDownwards;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -173,13 +192,16 @@ class DerivedIntegerDetails<TypeShort>
 {
  private:
    friend class DerivedInteger<TypeShort>;
+
    typedef qint16                          StorageType;
    typedef xsInteger                       TemporaryStorageType;
+
    static const StorageType                maxInclusive = 32767;
    static const StorageType                minInclusive = -32768;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -190,13 +212,16 @@ class DerivedIntegerDetails<TypeUnsignedByte>
 {
  private:
    friend class DerivedInteger<TypeUnsignedByte>;
+
    typedef quint8                          StorageType;
    typedef qint64                          TemporaryStorageType;
+
    static const StorageType                maxInclusive = 255;
    static const StorageType                minInclusive = 0;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -207,13 +232,16 @@ class DerivedIntegerDetails<TypeUnsignedInt>
 {
  private:
    friend class DerivedInteger<TypeUnsignedInt>;
+
    typedef quint32                         StorageType;
    typedef qint64                          TemporaryStorageType;
+
    static const StorageType                maxInclusive = Q_UINT64_C(4294967295);
    static const StorageType                minInclusive = 0;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -224,13 +252,16 @@ class DerivedIntegerDetails<TypeUnsignedLong>
 {
  private:
    friend class DerivedInteger<TypeUnsignedLong>;
+
    typedef quint64                         StorageType;
    typedef StorageType                     TemporaryStorageType;
+
    static const StorageType                maxInclusive = Q_UINT64_C(18446744073709551615);
    static const StorageType                minInclusive = 0;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -241,13 +272,16 @@ class DerivedIntegerDetails<TypeUnsignedShort>
 {
  private:
    friend class DerivedInteger<TypeUnsignedShort>;
+
    typedef quint16                         StorageType;
    typedef qint64                          TemporaryStorageType;
+
    static const StorageType                maxInclusive = 65535;
    static const StorageType                minInclusive = 0;
    static const DerivedIntegerLimitsUsage  limitsUsage = LimitBoth;
 
-   DerivedIntegerDetails() {}
+   DerivedIntegerDetails()
+   { }
 
    DerivedIntegerDetails(const DerivedIntegerDetails &) = delete;
    DerivedIntegerDetails &operator=(const DerivedIntegerDetails &) = delete;
@@ -282,7 +316,6 @@ class DerivedInteger : public Numeric
    }
 
  public:
-
    static ItemType::Ptr itemType() {
       switch (DerivedType) {
          case TypeByte:
@@ -425,7 +458,7 @@ class DerivedInteger : public Numeric
 
    Numeric::Ptr abs() const override {
       return Numeric::Ptr(static_cast<Numeric *>(const_cast<AtomicValue *>(Integer::fromValue(largerOrEqual(m_value,
-                          0) ? xsInteger(m_value) : -xsInteger(m_value)).asAtomicValue())));
+            0) ? xsInteger(m_value) : -xsInteger(m_value)).asAtomicValue())));
    }
 
    bool isNaN() const override {

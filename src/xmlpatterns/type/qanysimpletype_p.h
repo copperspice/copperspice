@@ -35,12 +35,12 @@ class AnySimpleType : public AnyType
  public:
    typedef QExplicitlySharedDataPointer<AnySimpleType> Ptr;
    typedef QList<AnySimpleType::Ptr> List;
+
    friend class BuiltinTypes;
 
    virtual ~AnySimpleType();
 
    QXmlName name(const NamePool::Ptr &np) const override;
-
    QString displayName(const NamePool::Ptr &np) const override;
 
    SchemaType::Ptr wxsSuperType() const override;
@@ -50,12 +50,10 @@ class AnySimpleType : public AnyType
    SchemaType::DerivationMethod derivationMethod() const override;
 
    bool isSimpleType() const override;
-
    bool isComplexType() const override;
 
  protected:
    AnySimpleType();
-
 };
 
 }

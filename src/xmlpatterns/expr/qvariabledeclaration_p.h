@@ -38,8 +38,6 @@ class VariableDeclaration : public QSharedData
    typedef QExplicitlySharedDataPointer<VariableDeclaration> Ptr;
    typedef QStack<VariableDeclaration::Ptr> Stack;
    typedef QList<VariableDeclaration::Ptr> List;
-
-
    typedef QHash<QXmlName, VariableDeclaration::Ptr> Hash;
 
    enum Type {
@@ -52,15 +50,9 @@ class VariableDeclaration : public QSharedData
       ExternalVariable
    };
 
-
-   VariableDeclaration(const QXmlName n,
-                       const VariableSlotID varSlot,
-                       const Type t,
-                       const SequenceType::Ptr &seqType) : name(n)
-      , slot(varSlot)
-      , type(t)
-      , sequenceType(seqType)
-      , canSourceRewrite(true) {
+   VariableDeclaration(const QXmlName n, const VariableSlotID varSlot, const Type t, const SequenceType::Ptr &seqType)
+      : name(n), slot(varSlot), type(t), sequenceType(seqType), canSourceRewrite(true)
+   {
       Q_ASSERT(!name.isNull());
       Q_ASSERT(t == ExternalVariable || t == TemplateParameter || varSlot > -1);
    }
@@ -81,15 +73,14 @@ class VariableDeclaration : public QSharedData
       return references.count() > 1;
    }
 
-   static bool contains(const VariableDeclaration::List &list,
-                        const QXmlName &lookup);
+   static bool contains(const VariableDeclaration::List &list, const QXmlName &lookup);
 
-   const QXmlName                  name;
-   const VariableSlotID            slot;
-   const Type                      type;
+   const QXmlName name;
+   const VariableSlotID slot;
+   const Type type;
 
-   const SequenceType::Ptr         sequenceType;
-   VariableReference::List         references;
+   const SequenceType::Ptr sequenceType;
+   VariableReference::List references;
 
    bool canSourceRewrite;
 
@@ -100,8 +91,7 @@ class VariableDeclaration : public QSharedData
    VariableDeclaration &operator=(const VariableDeclaration &) = delete;
 };
 
-static inline QString formatKeyword(const VariableDeclaration::Ptr &var,
-                                    const NamePool::Ptr &np)
+static inline QString formatKeyword(const VariableDeclaration::Ptr &var, const NamePool::Ptr &np)
 {
    Q_ASSERT(var);
    Q_ASSERT(np);

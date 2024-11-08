@@ -69,6 +69,7 @@ class CommonValues
    CommonValues(const CommonValues &) = delete;
    CommonValues &operator=(const CommonValues &) = delete;
 };
+
 }
 
 #endif

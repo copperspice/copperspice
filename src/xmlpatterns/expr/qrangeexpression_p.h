@@ -37,11 +37,9 @@ class RangeExpression : public PairContainer
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
    SequenceType::List expectedOperandTypes() const override;
-
    SequenceType::Ptr staticType() const override;
 
    Expression::Properties properties() const override;
-
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
 };
 

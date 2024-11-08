@@ -28,13 +28,14 @@
 #include <qreportcontext_p.h>
 
 namespace QPatternist {
+
 class ValidationError : public AtomicValue
 {
  public:
    typedef QExplicitlySharedDataPointer<ValidationError> Ptr;
 
    static AtomicValue::Ptr createError(const QString &description = QString(),
-                                       const ReportContext::ErrorCode = ReportContext::FORG0001);
+         const ReportContext::ErrorCode = ReportContext::FORG0001);
 
    QString message() const;
    bool hasError() const override;
@@ -48,6 +49,7 @@ class ValidationError : public AtomicValue
    const QString m_message;
    const ReportContext::ErrorCode  m_code;
 };
+
 }
 
 #endif

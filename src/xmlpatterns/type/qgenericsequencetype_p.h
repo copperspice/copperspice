@@ -44,8 +44,7 @@ class GenericSequenceType : public SequenceType
    const Cardinality m_cardinality;
 };
 
-static inline SequenceType::Ptr
-makeGenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &cardinality)
+static inline SequenceType::Ptr makeGenericSequenceType(const ItemType::Ptr &itemType, const Cardinality &cardinality)
 {
    if (cardinality.isEmpty()) {
       return CommonSequenceTypes::Empty;

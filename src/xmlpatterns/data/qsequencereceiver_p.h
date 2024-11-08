@@ -44,18 +44,12 @@ class QAbstractXmlReceiver : public QSharedData
    virtual void startElement(const QXmlName name) = 0;
    virtual void namespaceBinding(const QXmlName &nb) = 0;
    virtual void endElement() = 0;
-   virtual void attribute(const QXmlName name,
-                          const QString &value) = 0;
-
-   virtual void processingInstruction(const QXmlName name,
-                                      const QString &value) = 0;
+   virtual void attribute(const QXmlName name, const QString &value) = 0;
+   virtual void processingInstruction(const QXmlName name, const QString &value) = 0;
    virtual void comment(const QString &value) = 0;
-
    virtual void item(const Item &item) = 0;
    virtual void characters(const QString &value) = 0;
-
    virtual void whitespaceOnly(QStringView value);
-
    virtual void startDocument() = 0;
    virtual void endDocument() = 0;
 
@@ -69,6 +63,7 @@ class QAbstractXmlReceiver : public QSharedData
    QAbstractXmlReceiver(const QAbstractXmlReceiver &) = delete;
    QAbstractXmlReceiver &operator=(const QAbstractXmlReceiver &) = delete;
 };
+
 }
 
 #endif

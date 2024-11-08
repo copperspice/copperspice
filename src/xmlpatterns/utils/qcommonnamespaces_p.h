@@ -29,24 +29,18 @@
 namespace QPatternist {
 
 namespace CommonNamespaces {
+
 const QString XML("http://www.w3.org/XML/1998/namespace");
-
 const QString XMLNS("http://www.w3.org/2000/xmlns/");
-
 const QString WXS("http://www.w3.org/2001/XMLSchema");
-
 const QString XSI("http://www.w3.org/2001/XMLSchema-instance");
-
 const QString XFN("http://www.w3.org/2005/xpath-functions");
-
 const QString XSLT("http://www.w3.org/1999/XSL/Transform");
-
 const QString XPERR("http://www.w3.org/2005/xqt-errors");
-
 const char *const UNICODE_COLLATION = "http://www.w3.org/2005/xpath-functions/collation/codepoint";
-
 const QString XDT_LOCAL("http://www.w3.org/2005/xquery-local-functions");
 }
+
 }
 
 #endif

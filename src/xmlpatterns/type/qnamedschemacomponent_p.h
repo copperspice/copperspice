@@ -36,8 +36,8 @@ class NamedSchemaComponent : public SchemaComponent
    typedef QExplicitlySharedDataPointer<NamedSchemaComponent> Ptr;
 
    enum BlockingConstraint {
-      RestrictionConstraint = 1,
-      ExtensionConstraint = 2,
+      RestrictionConstraint  = 1,
+      ExtensionConstraint    = 2,
       SubstitutionConstraint = 4
    };
    using BlockingConstraints = QFlags<BlockingConstraint>;
@@ -56,6 +56,7 @@ class NamedSchemaComponent : public SchemaComponent
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(NamedSchemaComponent::BlockingConstraints)
+
 }
 
 #endif

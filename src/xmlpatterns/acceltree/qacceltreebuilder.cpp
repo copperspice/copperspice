@@ -45,10 +45,10 @@ void AccelTreeBuilder<FromDocument>::startStructure()
       // text node * with string value "".
 
       ++m_preNumber;
-      m_document->basicData.append(AccelTree::BasicNodeData(currentDepth(),
-                                   currentParent(),
-                                   QXmlNodeModelIndex::Text,
-                                   m_isCharactersCompressed ? AccelTree::IsCompressed : 0));
+
+      m_document->basicData.append(AccelTree::BasicNodeData(currentDepth(), currentParent(),
+            QXmlNodeModelIndex::Text, m_isCharactersCompressed ? AccelTree::IsCompressed : 0));
+
       m_document->data.insert(m_preNumber, m_characters);
       ++m_size.top();
 
@@ -146,8 +146,7 @@ void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView
       namespaceBinding(QXmlName(name.namespaceURI(), 0, name.prefix()));
    }
 
-   m_document->basicData.append(AccelTree::BasicNodeData(currentDepth(), currentParent(), QXmlNodeModelIndex::Attribute, 0,
-                                name));
+   m_document->basicData.append(AccelTree::BasicNodeData(currentDepth(), currentParent(), QXmlNodeModelIndex::Attribute, 0, name));
    ++m_preNumber;
    ++m_size.top();
 
@@ -189,6 +188,7 @@ void AccelTreeBuilder<FromDocument>::attribute(const QXmlName &name, QStringView
                   formatType(m_namePool, BuiltinTypes::xsNCName), formatData(value.toString())),
                   FromDocument ? ReportContext::FODC0002 : ReportContext::XQDY0091, this);
       }
+
    } else {
       m_document->data.insert(m_preNumber, *m_attributeCompress.insert(value.toString()));
    }
@@ -309,6 +309,7 @@ void AccelTreeBuilder<FromDocument>::startDocument()
       m_document->basicData.append(AccelTree::BasicNodeData(0, -1, QXmlNodeModelIndex::Document, -1));
       ++m_preNumber;
       m_ancestors.push(m_preNumber);
+
    } else {
       ++m_skippedDocumentNodes;
    }

@@ -77,6 +77,7 @@ class TokenValue
    OrderSpecTransfer::List         orderSpecs;
    OrderSpecTransfer               orderSpec;
 };
+
 }
 
 #define YYSTYPE QPatternist::TokenValue

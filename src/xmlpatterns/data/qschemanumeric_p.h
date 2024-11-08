@@ -32,7 +32,6 @@ namespace QPatternist {
 class Numeric : public AtomicValue
 {
  public:
-
    typedef QExplicitlySharedDataPointer<Numeric> Ptr;
 
    static AtomicValue::Ptr fromLexical(const QString &number);
@@ -60,6 +59,7 @@ class Numeric : public AtomicValue
  protected:
    static xsDouble roundFloat(const xsDouble val);
 };
+
 }
 
 #endif

@@ -87,6 +87,7 @@ static inline QString formatFunction(const NamePool::Ptr &np, const FunctionSign
 {
    return QLatin1String("<span class='XQuery-function'>")  + escape(func->displayName(np)) + QLatin1String("</span>");
 }
+
 }
 
 #endif

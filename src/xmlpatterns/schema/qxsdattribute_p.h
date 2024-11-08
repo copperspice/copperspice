@@ -59,7 +59,6 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
       NamedSchemaComponent      *m_parent;
    };
 
-
    class ValueConstraint : public QSharedData
    {
     public:
@@ -85,14 +84,12 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
       QString m_lexicalForm;
    };
 
-   void setType(const AnySimpleType::Ptr &type);
-   AnySimpleType::Ptr type() const;
    void setScope(const Scope::Ptr &scope);
-
-   Scope::Ptr scope() const;
-
+   void setType(const AnySimpleType::Ptr &type);
    void setValueConstraint(const ValueConstraint::Ptr &constraint);
 
+   Scope::Ptr scope() const;
+   AnySimpleType::Ptr type() const;
    ValueConstraint::Ptr valueConstraint() const;
 
  private:
@@ -102,6 +99,5 @@ class XsdAttribute : public NamedSchemaComponent, public XsdAnnotated
 };
 
 }
-
 
 #endif

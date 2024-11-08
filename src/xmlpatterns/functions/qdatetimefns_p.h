@@ -56,13 +56,11 @@ class MonthsFromDurationFN : public ExtractFromDurationFN<MonthsFromDurationFN>
    inline Item extract(const AbstractDuration *const duration) const;
 };
 
-
 class DaysFromDurationFN : public ExtractFromDurationFN<DaysFromDurationFN>
 {
  public:
    inline Item extract(const AbstractDuration *const duration) const;
 };
-
 
 class HoursFromDurationFN : public ExtractFromDurationFN<HoursFromDurationFN>
 {
@@ -70,20 +68,17 @@ class HoursFromDurationFN : public ExtractFromDurationFN<HoursFromDurationFN>
    inline Item extract(const AbstractDuration *const duration) const;
 };
 
-
 class MinutesFromDurationFN : public ExtractFromDurationFN<MinutesFromDurationFN>
 {
  public:
    inline Item extract(const AbstractDuration *const duration) const;
 };
 
-
 class SecondsFromDurationFN : public ExtractFromDurationFN<SecondsFromDurationFN>
 {
  public:
    inline Item extract(const AbstractDuration *const duration) const;
 };
-
 
 template<typename TSubClass>
 class ExtractFromDateTimeFN : public FunctionCall
@@ -92,20 +87,17 @@ class ExtractFromDateTimeFN : public FunctionCall
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
 };
 
-
 class YearFromAbstractDateTimeFN : public ExtractFromDateTimeFN<YearFromAbstractDateTimeFN>
 {
  public:
    inline Item extract(const QDateTime &dt) const;
 };
 
-
 class DayFromAbstractDateTimeFN : public ExtractFromDateTimeFN<DayFromAbstractDateTimeFN>
 {
  public:
    inline Item extract(const QDateTime &dt) const;
 };
-
 
 class HoursFromAbstractDateTimeFN : public ExtractFromDateTimeFN<HoursFromAbstractDateTimeFN>
 {
@@ -119,20 +111,17 @@ class MinutesFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MinutesFromAb
    inline Item extract(const QDateTime &dt) const;
 };
 
-
 class SecondsFromAbstractDateTimeFN : public ExtractFromDateTimeFN<SecondsFromAbstractDateTimeFN>
 {
  public:
    inline Item extract(const QDateTime &dt) const;
 };
 
-
 class TimezoneFromAbstractDateTimeFN : public ExtractFromDateTimeFN<TimezoneFromAbstractDateTimeFN>
 {
  public:
    inline Item extract(const QDateTime &dt) const;
 };
-
 
 class MonthFromAbstractDateTimeFN : public ExtractFromDateTimeFN<MonthFromAbstractDateTimeFN>
 {

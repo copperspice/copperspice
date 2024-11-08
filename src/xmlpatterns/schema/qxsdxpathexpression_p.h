@@ -48,8 +48,6 @@ class XsdXPathExpression : public NamedSchemaComponent, public XsdAnnotated
    AnyURI::Ptr baseURI() const;
 
    void setExpression(const QString &expression);
-
-
    QString expression() const;
 
  private:

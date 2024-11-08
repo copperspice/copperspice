@@ -39,6 +39,7 @@ class ReplaceFN : public PatternPlatform
 {
  public:
    ReplaceFN();
+
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
@@ -46,7 +47,6 @@ class ReplaceFN : public PatternPlatform
    static inline QString errorAtEnd(const char ch);
 
    QString parseReplacement(const int captureCount, const DynamicContext::Ptr &context) const;
-
    QString m_replacementString;
 };
 

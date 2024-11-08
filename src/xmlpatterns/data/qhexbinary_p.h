@@ -38,14 +38,12 @@ class HexBinary : public Base64Binary
    ItemType::Ptr type() const override;
 
    static AtomicValue::Ptr fromLexical(const NamePool::Ptr &np, const QString &value);
-
    static HexBinary::Ptr fromValue(const QByteArray &data);
 
  protected:
    HexBinary(const QByteArray &val);
 
  private:
-
    static inline qint8 fromHex(const QChar &c);
 };
 }

@@ -31,7 +31,6 @@ namespace QPatternist {
 class RangeIterator : public Item::Iterator
 {
  public:
-
    enum Direction {
       Backward = 0,
       Forward = 1

@@ -37,8 +37,8 @@ class NamespaceSupport
 {
  public:
    enum NameType {
-      AttributeName,  ///< An attribute name to process.
-      ElementName     ///< An element name to process.
+      AttributeName,      // An attribute name to process.
+      ElementName         // An element name to process.
    };
 
    NamespaceSupport();
@@ -54,17 +54,17 @@ class NamespaceSupport
 
    bool processName(const QString &qualifiedName, NameType type, QXmlName &name) const;
    void pushContext();
-
    void popContext();
+
 
    QList<QXmlName> namespaceBindings() const;
 
  private:
    typedef QHash<QXmlName::PrefixCode, QXmlName::NamespaceCode> NamespaceHash;
 
-   NamePool              *m_namePool;
+   NamePool *m_namePool;
    QStack<NamespaceHash> m_nsStack;
-   NamespaceHash         m_ns;
+   NamespaceHash m_ns;
 };
 
 }

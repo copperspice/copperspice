@@ -76,8 +76,7 @@ class ExpressionFactory : public QSharedData
       TemplateCompress        = 1 << 2
    };
 
-   virtual void processTreePass(const Expression::Ptr &tree,
-                                const CompilationStage stage);
+   virtual void processTreePass(const Expression::Ptr &tree, const CompilationStage stage);
 
    virtual void processTemplateRule(const Expression::Ptr &body,
                                     const TemplatePattern::Ptr &pattern,

@@ -32,7 +32,6 @@ class AtomicType;
 class Untyped : public AnyType
 {
  public:
-
    typedef QExplicitlySharedDataPointer<Untyped> Ptr;
 
    SchemaType::Ptr wxsSuperType() const override;
@@ -50,6 +49,7 @@ class Untyped : public AnyType
 
    Untyped();
 };
+
 }
 
 #endif

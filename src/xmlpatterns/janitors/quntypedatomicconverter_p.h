@@ -34,7 +34,7 @@ class UntypedAtomicConverter : public SingleContainer, public CastingPlatform<Un
 {
  public:
    UntypedAtomicConverter(const Expression::Ptr &operand, const ItemType::Ptr &reqType,
-                  const ReportContext::ErrorCode code = ReportContext::FORG0001);
+         const ReportContext::ErrorCode code = ReportContext::FORG0001);
 
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
@@ -63,6 +63,7 @@ Item UntypedAtomicConverter::mapToItem(const Item &item, const DynamicContext::P
 {
    return cast(item, context);
 }
+
 }
 
 #endif

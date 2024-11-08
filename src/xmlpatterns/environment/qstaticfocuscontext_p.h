@@ -32,11 +32,13 @@ class StaticFocusContext : public DelegatingStaticContext
 {
  public:
    StaticFocusContext(const ItemType::Ptr &contextItemType, const StaticContext::Ptr &context);
+
    ItemType::Ptr contextItemType() const override;
 
  private:
    const ItemType::Ptr m_contextItemType;
 };
+
 }
 
 #endif

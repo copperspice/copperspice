@@ -66,12 +66,11 @@ class Path : public PairContainer
  private:
    typedef QExplicitlySharedDataPointer<const Path> ConstPtr;
 
-   bool        m_hasCreatedSorter;
+   bool m_hasCreatedSorter;
+   bool m_isLast;
+   bool m_checkXPTY0018;
 
-   bool        m_isLast;
-
-   bool        m_checkXPTY0018;
-   const Kind  m_kind;
+   const Kind m_kind;
 };
 
 void Path::setLast()

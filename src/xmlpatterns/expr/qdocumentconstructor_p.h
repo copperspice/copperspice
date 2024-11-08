@@ -48,6 +48,7 @@ class DocumentConstructor : public SingleContainer
  private:
    QUrl m_staticBaseURI;
 };
+
 }
 
 #endif

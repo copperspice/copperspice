@@ -31,9 +31,7 @@ namespace QPatternist {
 class RemovalIterator : public Item::Iterator
 {
  public:
-
-   RemovalIterator(const Item::Iterator::Ptr &target,
-                   const xsInteger position);
+   RemovalIterator(const Item::Iterator::Ptr &target, const xsInteger position);
 
    Item next() override;
    Item current() const override;

@@ -27,6 +27,7 @@
 #include <qabstractdatetime_p.h>
 
 namespace QPatternist {
+
 class DateTime : public AbstractDateTime
 {
  public:
@@ -44,6 +45,7 @@ class DateTime : public AbstractDateTime
 
    DateTime(const QDateTime &dateTime);
 };
+
 }
 
 #endif

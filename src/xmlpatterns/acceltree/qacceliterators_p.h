@@ -51,6 +51,7 @@ class AccelIterator : public QXmlNodeModelIndex::Iterator
 
    const AccelTree *const      m_document;
    const AccelTree::PreNumber  m_preNumber;
+
    AccelTree::PreNumber        m_currentPre;
    xsInteger                   m_position;
    QXmlNodeModelIndex          m_current;
@@ -121,6 +122,7 @@ class SiblingIterator : public AccelIterator
    {
       Q_ASSERT_X(IsFollowing || pre != 0, "",
                  "When being preceding-sibling, the context node cannot be the first node in the document.");
+
       Q_ASSERT_X(!IsFollowing || pre != m_document->maximumPreNumber(), "",
                  "When being following-sibling, the context node cannot be the last node in the document.");
    }
@@ -250,8 +252,8 @@ class PrecedingIterator : public AccelIterator
 {
  public:
    PrecedingIterator(const AccelTree *const doc, const AccelTree::PreNumber pre)
-                  : AccelIterator(doc, pre, pre - 1 /* currentPre */),
-                  m_postNumber(m_document->postNumber(m_preNumber)) {
+         : AccelIterator(doc, pre, pre - 1 ), m_postNumber(m_document->postNumber(m_preNumber))
+   {
    }
 
    QXmlNodeModelIndex next() override;

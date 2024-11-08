@@ -32,7 +32,6 @@ namespace QPatternist {
 class InsertionIterator : public Item::Iterator
 {
  public:
-
    InsertionIterator(const Item::Iterator::Ptr &target,
                      const xsInteger position,
                      const Item::Iterator::Ptr &insertIterator);

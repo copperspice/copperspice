@@ -27,6 +27,7 @@
 #include <qitem_p.h>
 
 namespace QPatternist {
+
 class Boolean : public AtomicValue
 {
  public:
@@ -35,8 +36,7 @@ class Boolean : public AtomicValue
    static bool evaluateEBV(const Item::Iterator::Ptr &e,
                            const QExplicitlySharedDataPointer<DynamicContext> &);
 
-   static bool evaluateEBV(const Item &first,
-                           const Item::Iterator::Ptr &e,
+   static bool evaluateEBV(const Item &first, const Item::Iterator::Ptr &e,
                            const QExplicitlySharedDataPointer<DynamicContext> &);
 
    static bool evaluateEBV(const Item &item,
@@ -62,6 +62,7 @@ class Boolean : public AtomicValue
  private:
    const bool m_value;
 };
+
 }
 
 #endif

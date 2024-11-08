@@ -54,6 +54,7 @@ class AtomicString : public AtomicValue
    AtomicString(const QString &value);
    const QString m_value;
 };
+
 }
 
 #endif

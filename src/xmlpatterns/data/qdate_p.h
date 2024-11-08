@@ -45,6 +45,7 @@ class Date : public AbstractDateTime
 
    Date(const QDateTime &dateTime);
 };
+
 }
 
 #endif

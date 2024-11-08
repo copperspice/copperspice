@@ -30,6 +30,7 @@
 #include <qexpression_p.h>
 
 namespace QPatternist {
+
 template<typename TSuperClass>
 class StackContextBase : public TSuperClass
 {

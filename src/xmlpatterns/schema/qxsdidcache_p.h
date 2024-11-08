@@ -42,7 +42,7 @@ class XsdIdCache : public QSharedData
    bool hasId(const QString &id) const;
 
  private:
-   QSet<QString>          m_ids;
+   QSet<QString> m_ids;
    mutable QReadWriteLock m_lock;
 };
 

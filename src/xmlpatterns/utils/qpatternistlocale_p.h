@@ -33,6 +33,7 @@
 #include <qprimitives_p.h>
 
 namespace QPatternist {
+
 class QtXmlPatterns
 {
  public:

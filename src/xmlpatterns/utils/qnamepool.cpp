@@ -60,7 +60,8 @@ NamePool::NamePool()
       unlockedAllocateNamespace(QLatin1String("  |  InternalXSLT"));
 
       Q_ASSERT_X(m_namespaces.count() == StandardNamespaceCount, Q_FUNC_INFO,
-                 csPrintable(QString::fromLatin1("Expected is %1, actual is %2.").formatArg(StandardNamespaceCount).formatArg(m_namespaces.count())));
+            csPrintable(QString::fromLatin1("Expected is %1, actual is %2.")
+            .formatArg(StandardNamespaceCount).formatArg(m_namespaces.count())));
    }
 
    /* Prefixes. */

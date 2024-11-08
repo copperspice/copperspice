@@ -51,20 +51,13 @@ class XsdValidatingInstanceReader : public XsdInstanceReader
    bool validate(bool &hasStateMachine, XsdElement::Ptr &element);
 
    bool validateElement(const XsdElement::Ptr &declaration, bool &hasStateMachine);
-   bool validateElementType(const XsdElement::Ptr &declaration, const SchemaType::Ptr &type, bool isNilled,
-                            bool &hasStateMachine);
-
+   bool validateElementType(const XsdElement::Ptr &declaration, const SchemaType::Ptr &type, bool isNilled, bool &hasStateMachine);
    bool validateElementSimpleType(const XsdElement::Ptr &declaration, const SchemaType::Ptr &type, bool isNilled);
-
-   bool validateElementComplexType(const XsdElement::Ptr &declaration, const SchemaType::Ptr &type, bool isNilled,
-                                   bool &hasStateMachine);
+   bool validateElementComplexType(const XsdElement::Ptr &declaration, const SchemaType::Ptr &type, bool isNilled, bool &hasStateMachine);
 
    bool validateAttribute(const XsdAttributeUse::Ptr &declaration, const QString &value);
-
    bool validateAttribute(const XsdAttribute::Ptr &declaration, const QString &value);
-
    bool validateAttributeWildcard(const QXmlName &attributeName, const XsdWildcard::Ptr &wildcard);
-
    bool validateIdentityConstraint(const XsdElement::Ptr &element, const QXmlItem &currentItem);
 
    bool validateUniqueIdentityConstraint(const XsdElement::Ptr &element, const XsdIdentityConstraint::Ptr &constraint,
@@ -79,8 +72,7 @@ class XsdValidatingInstanceReader : public XsdInstanceReader
    bool selectNodeSets(const XsdElement::Ptr &element, const QXmlItem &currentItem,
                        const XsdIdentityConstraint::Ptr &constraint, TargetNode::Set &targetNodeSet, TargetNode::Set &qualifiedNodeSet);
 
-   QXmlQuery createXQuery(const QList<QXmlName> &namespaceBindings, const QXmlItem &contextNode,
-                          const QString &query) const;
+   QXmlQuery createXQuery(const QList<QXmlName> &namespaceBindings, const QXmlItem &contextNode, const QString &query) const;
 
    XsdElement::Ptr elementByName(const QXmlName &name) const;
    XsdAttribute::Ptr attributeByName(const QXmlName &name) const;
@@ -88,7 +80,6 @@ class XsdValidatingInstanceReader : public XsdInstanceReader
    SchemaType::Ptr typeByName(const QXmlName &name) const;
 
    void addIdIdRefBinding(const QString &id, const NamedSchemaComponent::Ptr &binding);
-
    QString qNameAttribute(const QXmlName &attributeName);
 
    XsdComplexType::Ptr anyType();

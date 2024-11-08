@@ -53,6 +53,7 @@ class ComparisonFactory
    ComparisonFactory(const ComparisonFactory &) = delete;
    ComparisonFactory &operator=(const ComparisonFactory &) = delete;
 };
+
 }
 
 #endif

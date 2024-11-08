@@ -46,6 +46,7 @@ AtomicValue::Ptr AbstractFloat<isDouble>::fromLexical(const QString &strNumeric)
    }
 
    const QString toUpper(strNumeric.toUpper());
+
    if (toUpper == QLatin1String("-INF") ||
          toUpper == QLatin1String("INF")  ||
          toUpper == QLatin1String("+INF") ||
@@ -117,18 +118,21 @@ QString AbstractFloat<isDouble>::stringValue() const
 {
    if (qIsNaN(m_value)) {
       return QLatin1String("NaN");
+
    } else if (qIsInf(m_value)) {
       return internalSignbit(m_value) == 0 ? QLatin1String("INF") : QLatin1String("-INF");
-   }
-   else if (0.000001 <= qAbs(m_value) && qAbs(m_value) < 1000000.0) {
+
+   } else if (0.000001 <= qAbs(m_value) && qAbs(m_value) < 1000000.0) {
       return Decimal::toString(toDecimal());
-   }
-   else if (isZero()) {
+
+   } else if (isZero()) {
       return internalSignbit(m_value) == 0 ? QLatin1String("0") : QLatin1String("-0");
+
    } else {
       int sign;
       int decimalPoint;
       char *result = nullptr;
+
       static_cast<void>(qdtoa(m_value, -1, 0, &decimalPoint, &sign, nullptr, &result));
 
       const QString qret(QString::fromLatin1(result));
@@ -192,6 +196,7 @@ Numeric::Ptr AbstractFloat<isDouble>::roundHalfToEven(const xsInteger precision)
 {
    if (isNaN() || isInf() || isZero()) {
       return Numeric::Ptr(const_cast<AbstractFloat<isDouble> *>(this));
+
    } else {
       // cast to double helps finding the correct pow() version on irix-cc
       const xsDouble powered = pow(double(10), double(precision));
@@ -271,4 +276,3 @@ quint64 AbstractFloat<isDouble>::toUnsignedInteger() const
    Q_ASSERT_X(false, Q_FUNC_INFO, "This function should never be called.");
    return 0;
 }
-

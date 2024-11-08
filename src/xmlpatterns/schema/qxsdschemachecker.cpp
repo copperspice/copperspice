@@ -42,11 +42,8 @@
 
 using namespace QPatternist;
 
-XsdSchemaChecker::XsdSchemaChecker(const QExplicitlySharedDataPointer<XsdSchemaContext> &context,
-                                   const XsdSchemaParserContext *parserContext)
-   : m_context(context)
-   , m_namePool(parserContext->namePool())
-   , m_schema(parserContext->schema())
+XsdSchemaChecker::XsdSchemaChecker(const QExplicitlySharedDataPointer<XsdSchemaContext> &context, const XsdSchemaParserContext *parserContext)
+   : m_context(context), m_namePool(parserContext->namePool()), m_schema(parserContext->schema())
 {
    setupAllowedAtomicFacets();
 }
@@ -86,8 +83,7 @@ void XsdSchemaChecker::addComponentLocationHash(const ComponentLocationHash &has
    m_componentLocationHash.unite(hash);
 }
 
-static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &otherType,
-                        QSet<SchemaType::Ptr> visitedTypes)
+static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &otherType, QSet<SchemaType::Ptr> visitedTypes)
 {
    bool retval = false;
 
@@ -131,8 +127,7 @@ static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &ot
    return retval;
 }
 
-static bool hasCircularUnionInheritance(const XsdSimpleType::Ptr &type, const SchemaType::Ptr &otherType,
-                                        NamePool::Ptr &namePool)
+static bool hasCircularUnionInheritance(const XsdSimpleType::Ptr &type, const SchemaType::Ptr &otherType, NamePool::Ptr &namePool)
 {
    if (type == otherType) {
       return true;

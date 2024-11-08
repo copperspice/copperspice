@@ -27,17 +27,18 @@
 #include <qdelegatingdynamiccontext_p.h>
 
 namespace QPatternist {
+
 class ReceiverDynamicContext : public DelegatingDynamicContext
 {
  public:
-   ReceiverDynamicContext(const DynamicContext::Ptr &prevContext,
-                          QAbstractXmlReceiver *const receiver);
+   ReceiverDynamicContext(const DynamicContext::Ptr &prevContext, QAbstractXmlReceiver *const receiver);
 
    QAbstractXmlReceiver *outputReceiver() const override;
 
  private:
    QAbstractXmlReceiver *const m_receiver;
 };
+
 }
 
 #endif

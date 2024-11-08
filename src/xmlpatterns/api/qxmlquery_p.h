@@ -54,7 +54,6 @@
 class QXmlQueryPrivate
 {
  public:
-
    QXmlQueryPrivate(const QXmlNamePool &np = QXmlNamePool())
       : namePool(np), messageHandler(nullptr), uriResolver(nullptr), queryLanguage(QXmlQuery::XQuery10),
         m_networkAccessDelegator(new QPatternist::NetworkAccessDelegator(nullptr, nullptr))
@@ -72,10 +71,11 @@ class QXmlQueryPrivate
       m_networkAccessDelegator->m_variableURIManager = new QPatternist::URILoader(ownerObject(), namePool.d, m_variableLoader);
 
       if (m_resourceLoader) {
-         const QPatternist::AccelTreeResourceLoader::Ptr nev(new QPatternist::AccelTreeResourceLoader(namePool.d, m_networkAccessDelegator));
+         const QPatternist::AccelTreeResourceLoader::Ptr nev(
+               new QPatternist::AccelTreeResourceLoader(namePool.d, m_networkAccessDelegator));
 
-         m_resourceLoader = QPatternist::ResourceLoader::Ptr(new QPatternist::ResourceDelegator(m_resourceLoader->deviceURIs(),
-               m_resourceLoader, nev));
+         m_resourceLoader = QPatternist::ResourceLoader::Ptr(
+               new QPatternist::ResourceDelegator(m_resourceLoader->deviceURIs(), m_resourceLoader, nev));
       }
    }
 
@@ -126,11 +126,11 @@ class QXmlQueryPrivate
       if (!contextItem.isNull()) {
          m_staticContext = QPatternist::StaticContext::Ptr(new QPatternist::StaticFocusContext(
                               QPatternist::AtomicValue::qtToXDMType(contextItem), m_staticContext));
-      } else if (   queryLanguage == QXmlQuery::XmlSchema11IdentityConstraintField
-                    || queryLanguage == QXmlQuery::XmlSchema11IdentityConstraintSelector
-                    || queryLanguage == QXmlQuery::XPath20) {
-         m_staticContext = QPatternist::StaticContext::Ptr(new QPatternist::StaticFocusContext(QPatternist::BuiltinTypes::node,
-                           m_staticContext));
+
+      } else if (queryLanguage == QXmlQuery::XmlSchema11IdentityConstraintField
+            || queryLanguage == QXmlQuery::XmlSchema11IdentityConstraintSelector || queryLanguage == QXmlQuery::XPath20) {
+         m_staticContext = QPatternist::StaticContext::Ptr(new QPatternist::StaticFocusContext(
+               QPatternist::BuiltinTypes::node, m_staticContext));
       }
 
       for (int i = 0; i < m_additionalNamespaceBindings.count(); ++i) {
@@ -234,41 +234,40 @@ class QXmlQueryPrivate
       m_additionalNamespaceBindings.append(binding);
    }
 
-   QXmlNamePool                                namePool;
-   QPointer<QAbstractMessageHandler>           messageHandler;
-   QUrl                                        queryURI;
-   const QAbstractUriResolver                 *uriResolver;
-   QXmlItem                                    contextItem;
-   QXmlName                                    initialTemplateName;
-
    void setExpressionFactory(const QPatternist::ExpressionFactory::Ptr &expr) {
       m_expressionFactory = expr;
    }
 
-   QXmlQuery::QueryLanguage                    queryLanguage;
-   QPointer<QNetworkAccessManager>             userNetworkManager;
-
    QObject *ownerObject() {
-      if (!m_owner) {
+      if (! m_owner) {
          m_owner = new QPatternist::ReferenceCountedValue<QObject>(new QObject());
       }
 
       return m_owner->value;
    }
 
-   QPatternist::ExpressionFactory::Ptr         m_expressionFactory;
-   QPatternist::StaticContext::Ptr             m_staticContext;
-   QPatternist::VariableLoader::Ptr            m_variableLoader;
-   QPatternist::DeviceResourceLoader::Ptr      m_resourceLoader;
+   QXmlNamePool namePool;
+   QPointer<QAbstractMessageHandler> messageHandler;
+   QUrl queryURI;
+   const QAbstractUriResolver *uriResolver;
+   QXmlItem contextItem;
+   QXmlName initialTemplateName;
 
-   QPatternist::Expression::Ptr                m_expr;
+   QXmlQuery::QueryLanguage queryLanguage;
+   QPointer<QNetworkAccessManager> userNetworkManager;
+   QList<QXmlName> m_additionalNamespaceBindings;
+
+   QPatternist::ExpressionFactory::Ptr m_expressionFactory;
+   QPatternist::StaticContext::Ptr m_staticContext;
+   QPatternist::VariableLoader::Ptr m_variableLoader;
+   QPatternist::DeviceResourceLoader::Ptr m_resourceLoader;
+
+   QPatternist::Expression::Ptr m_expr;
    QPatternist::ReferenceCountedValue<QObject>::Ptr m_owner;
 
-   QPatternist::SequenceType::Ptr              m_requiredType;
-   QPatternist::FunctionFactory::Ptr           m_functionFactory;
-   QPatternist::NetworkAccessDelegator::Ptr    m_networkAccessDelegator;
-
-   QList<QXmlName>                             m_additionalNamespaceBindings;
+   QPatternist::SequenceType::Ptr m_requiredType;
+   QPatternist::FunctionFactory::Ptr m_functionFactory;
+   QPatternist::NetworkAccessDelegator::Ptr m_networkAccessDelegator;
 };
 
 #endif

@@ -28,19 +28,16 @@
 
 using namespace QPatternist;
 
-class PerformValueConstruction : public CastingPlatform<PerformValueConstruction, false>
-   , public SourceLocationReflection
+class PerformValueConstruction : public CastingPlatform<PerformValueConstruction, false>, public SourceLocationReflection
 {
  public:
-   PerformValueConstruction(const SourceLocationReflection *const sourceLocationReflection,
-                            const SchemaType::Ptr &toType) : m_sourceReflection(sourceLocationReflection)
-      , m_targetType(AtomicType::Ptr(toType)) {
+   PerformValueConstruction(const SourceLocationReflection *const sourceLocationReflection, const SchemaType::Ptr &toType)
+      : m_sourceReflection(sourceLocationReflection), m_targetType(AtomicType::Ptr(toType)) {
       Q_ASSERT(m_sourceReflection);
    }
 
-   AtomicValue::Ptr operator()(const AtomicValue::Ptr &lexicalValue,
-                               const SchemaType::Ptr & /*type*/,
-                               const ReportContext::Ptr &context) {
+   AtomicValue::Ptr operator()(const AtomicValue::Ptr &lexicalValue, const SchemaType::Ptr &,const ReportContext::Ptr &context)
+   {
       prepareCasting(context, BuiltinTypes::xsString);
       return AtomicValue::Ptr(const_cast<AtomicValue *>(cast(lexicalValue, context).asAtomicValue()));
    }
@@ -55,13 +52,11 @@ class PerformValueConstruction : public CastingPlatform<PerformValueConstruction
 
  private:
    const SourceLocationReflection *const m_sourceReflection;
-   const ItemType::Ptr                   m_targetType;
+   const ItemType::Ptr m_targetType;
 };
 
-AtomicValue::Ptr ValueFactory::fromLexical(const QString &lexicalValue,
-      const SchemaType::Ptr &type,
-      const ReportContext::Ptr &context,
-      const SourceLocationReflection *const sourceLocationReflection)
+AtomicValue::Ptr ValueFactory::fromLexical(const QString &lexicalValue, const SchemaType::Ptr &type,
+      const ReportContext::Ptr &context, const SourceLocationReflection *const sourceLocationReflection)
 {
    Q_ASSERT(context);
    Q_ASSERT(type);

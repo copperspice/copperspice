@@ -31,9 +31,7 @@ namespace QPatternist {
 class SubsequenceIterator : public Item::Iterator
 {
  public:
-   SubsequenceIterator(const Item::Iterator::Ptr &iterator,
-                       const xsInteger start,
-                       const xsInteger length);
+   SubsequenceIterator(const Item::Iterator::Ptr &iterator, const xsInteger start, const xsInteger length);
 
    Item next() override;
    Item current() const override;

@@ -51,9 +51,7 @@ class Literal : public EmptyContainer
    const Item m_item;
 };
 
-inline Expression::Ptr wrapLiteral(const Item &item,
-                                   const StaticContext::Ptr &context,
-                                   const SourceLocationReflection *const r)
+inline Expression::Ptr wrapLiteral(const Item &item, const StaticContext::Ptr &context, const SourceLocationReflection *const r)
 {
    Q_ASSERT(item);
 

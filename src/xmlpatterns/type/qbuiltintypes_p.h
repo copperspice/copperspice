@@ -98,7 +98,6 @@ class BuiltinTypes
    static const AnyNodeType::Ptr       node;
 
    static const ItemType::Ptr          xsltNodeTest;
-
    static const ItemType::Ptr          attribute;
    static const ItemType::Ptr          comment;
    static const ItemType::Ptr          document;

@@ -63,6 +63,8 @@ class TokenSource : public QSharedData
 {
  public:
    typedef yytokentype TokenType;
+   typedef QExplicitlySharedDataPointer<TokenSource> Ptr;
+   typedef QQueue<Ptr> Queue;
 
    class Token
    {
@@ -86,9 +88,6 @@ class TokenSource : public QSharedData
       QString value;
    };
 
-   typedef QExplicitlySharedDataPointer<TokenSource> Ptr;
-   typedef QQueue<Ptr> Queue;
-
    TokenSource() = default;
 
    virtual ~TokenSource();
@@ -99,6 +98,7 @@ class TokenSource : public QSharedData
    TokenSource(const TokenSource &) = delete;
    TokenSource &operator=(const TokenSource &) = delete;
 };
+
 }
 
 #endif

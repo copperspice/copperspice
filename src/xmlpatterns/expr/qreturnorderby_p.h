@@ -32,8 +32,7 @@ namespace QPatternist {
 class ReturnOrderBy : public UnlimitedContainer
 {
  public:
-   ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs,
-                  const Expression::List &operands);
+   ReturnOrderBy(const OrderBy::Stability stability, const OrderBy::OrderSpec::Vector &oSpecs, const Expression::List &operands);
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    bool evaluateEBV(const DynamicContext::Ptr &context) const override;
@@ -58,11 +57,10 @@ class ReturnOrderBy : public UnlimitedContainer
    Properties properties() const override;
 
  private:
-   const OrderBy::Stability    m_stability;
+   const OrderBy::Stability m_stability;
+   OrderBy::OrderSpec::Vector m_orderSpecs;
 
-   OrderBy::OrderSpec::Vector  m_orderSpecs;
-
-   bool                        m_flyAway;
+   bool m_flyAway;
 };
 
 }

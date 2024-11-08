@@ -58,6 +58,7 @@ class SequenceType : public virtual QSharedData
    SequenceType(const SequenceType &) = delete;
    SequenceType &operator=(const SequenceType &) = delete;
 };
+
 }
 
 #endif

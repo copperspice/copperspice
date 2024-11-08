@@ -37,8 +37,7 @@ class AxisStep : public EmptyContainer
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &) const override;
    Item evaluateSingleton(const DynamicContext::Ptr &) const override;
 
-   inline Item mapToItem(const QXmlNodeModelIndex &node,
-                         const DynamicContext::Ptr &context) const;
+   inline Item mapToItem(const QXmlNodeModelIndex &node, const DynamicContext::Ptr &context) const;
 
    SequenceType::List expectedOperandTypes() const override;
    SequenceType::Ptr staticType() const override;
@@ -74,7 +73,6 @@ class AxisStep : public EmptyContainer
    static const QXmlNodeModelIndex::NodeKind s_whenAxisNodeKindEmpty[];
 
    static bool isAlwaysEmpty(const QXmlNodeModelIndex::Axis axis, const QXmlNodeModelIndex::NodeKind nodeKind);
-
 
    QXmlNodeModelIndex::Axis m_axis;
    ItemType::Ptr m_nodeTest;

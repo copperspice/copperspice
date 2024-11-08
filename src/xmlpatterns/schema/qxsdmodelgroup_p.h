@@ -27,7 +27,8 @@
 #include <qxsdparticle_p.h>
 #include <qxsdterm_p.h>
 
-template<typename N> class QList;
+template<typename N>
+class QList;
 
 namespace QPatternist {
 

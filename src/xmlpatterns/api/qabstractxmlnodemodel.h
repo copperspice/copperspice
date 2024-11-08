@@ -308,8 +308,7 @@ class Q_XMLPATTERNS_EXPORT QAbstractXmlNodeModel : public QSharedData
    friend class QPatternist::XsdValidatedXmlNodeModel;
 
    inline QExplicitlySharedDataPointer<QAbstractXmlForwardIterator<QXmlNodeModelIndex> > mapToSequence(
-      const QXmlNodeModelIndex &ni,
-      const QExplicitlySharedDataPointer<QPatternist::DynamicContext> &) const;
+      const QXmlNodeModelIndex &ni, const QExplicitlySharedDataPointer<QPatternist::DynamicContext> &) const;
 
    static inline bool isIgnorableInDeepEqual(const QXmlNodeModelIndex &n);
    QAbstractXmlNodeModel(const QAbstractXmlNodeModel &) = delete;

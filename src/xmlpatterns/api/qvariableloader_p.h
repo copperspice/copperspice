@@ -41,7 +41,7 @@ class VariableLoader : public ExternalVariableLoader
 
    VariableLoader(const NamePool::Ptr &np,
          const VariableLoader::Ptr &previousLoader = VariableLoader::Ptr())
-                  : m_namePool(np), m_previousLoader(previousLoader)
+      : m_namePool(np), m_previousLoader(previousLoader)
    {
    }
 
@@ -64,7 +64,6 @@ class VariableLoader : public ExternalVariableLoader
    bool invalidationRequired(const QXmlName &name, const QVariant &variant) const;
 
  private:
-
    inline QPatternist::Item itemForName(const QXmlName &name) const;
 
    const NamePool::Ptr                 m_namePool;

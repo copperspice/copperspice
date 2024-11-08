@@ -32,7 +32,6 @@ namespace QPatternist {
 
 class StringComparator : public AtomicComparator
 {
-
  public:
    ComparisonResult compare(const Item &op1, const AtomicComparator::Operator op, const Item &op2) const override;
 
@@ -47,7 +46,6 @@ class CaseInsensitiveStringComparator : public AtomicComparator
    bool equals(const Item &op1, const Item &op2) const override;
 };
 
-
 class BinaryDataComparator : public AtomicComparator
 {
  public:
@@ -61,7 +59,6 @@ class BooleanComparator : public AtomicComparator
 
    bool equals(const Item &op1, const Item &op2) const override;
 };
-
 
 class AbstractFloatComparator : public AtomicComparator
 {
@@ -103,7 +100,6 @@ class AbstractFloatSortComparator : public AbstractFloatComparator
 
 };
 
-
 class DecimalComparator : public AtomicComparator
 {
  public:
@@ -112,7 +108,6 @@ class DecimalComparator : public AtomicComparator
    bool equals(const Item &op1, const Item &op2) const override;
 };
 
-
 class IntegerComparator : public AtomicComparator
 {
  public:
@@ -120,7 +115,6 @@ class IntegerComparator : public AtomicComparator
 
    bool equals(const Item &op1, const Item &op2) const override;
 };
-
 
 class QNameComparator : public AtomicComparator
 {
@@ -135,7 +129,6 @@ class AbstractDateTimeComparator : public AtomicComparator
    bool equals(const Item &op1, const Item &op2) const override;
 };
 
-
 class AbstractDurationComparator : public AtomicComparator
 {
  public:
@@ -146,6 +139,7 @@ class AbstractDurationComparator : public AtomicComparator
    static inline QDateTime addDurationToDateTime(const QDateTime &dateTime,
          const AbstractDuration *const duration);
 };
+
 }
 
 #endif

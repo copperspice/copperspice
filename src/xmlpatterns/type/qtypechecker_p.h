@@ -28,47 +28,39 @@
 #include <qexpression_p.h>
 
 namespace QPatternist {
+
 class TypeChecker
 {
  public:
    enum Option {
       AutomaticallyConvert = 1,
       CheckFocus = 2,
-
       GeneratePromotion
    };
    typedef QFlags<Option> Options;
 
-   static Expression::Ptr
-   applyFunctionConversion(const Expression::Ptr &operand,
-                           const SequenceType::Ptr &reqType,
-                           const StaticContext::Ptr &context,
-                           const ReportContext::ErrorCode code = ReportContext::XPTY0004,
-                           const Options = Options(AutomaticallyConvert | CheckFocus));
+   static Expression::Ptr applyFunctionConversion(const Expression::Ptr &operand,
+         const SequenceType::Ptr &reqType, const StaticContext::Ptr &context,
+         const ReportContext::ErrorCode code = ReportContext::XPTY0004,
+         const Options = Options(AutomaticallyConvert | CheckFocus));
+
  private:
 
-   static inline Expression::Ptr typeCheck(Expression *const op,
-                                           const StaticContext::Ptr &context,
-                                           const SequenceType::Ptr &reqType);
-   static Expression::Ptr verifyType(const Expression::Ptr &operand,
-                                     const SequenceType::Ptr &reqSeqType,
-                                     const StaticContext::Ptr &context,
-                                     const ReportContext::ErrorCode code,
-                                     const Options options);
+   static inline Expression::Ptr typeCheck(Expression *const op, const StaticContext::Ptr &context, const SequenceType::Ptr &reqType);
 
-   static bool promotionPossible(const ItemType::Ptr &fromType,
-                                 const ItemType::Ptr &toType,
-                                 const StaticContext::Ptr &context);
+   static Expression::Ptr verifyType(const Expression::Ptr &operand, const SequenceType::Ptr &reqSeqType, const StaticContext::Ptr &context,
+         const ReportContext::ErrorCode code, const Options options);
 
-   static inline QString wrongType(const NamePool::Ptr &np,
-                                   const ItemType::Ptr &reqType,
-                                   const ItemType::Ptr &opType);
+   static bool promotionPossible(const ItemType::Ptr &fromType, const ItemType::Ptr &toType, const StaticContext::Ptr &context);
+
+   static inline QString wrongType(const NamePool::Ptr &np, const ItemType::Ptr &reqType, const ItemType::Ptr &opType);
 
    inline TypeChecker();
 
    TypeChecker(const TypeChecker &) = delete;
    TypeChecker &operator=(const TypeChecker &) = delete;
 };
+
 }
 
 #endif

@@ -54,12 +54,12 @@ class ForClause : public PairContainer
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
  private:
-   inline void riggPositionalVariable(const DynamicContext::Ptr &context,
-                                      const Item::Iterator::Ptr &source) const;
+   inline void riggPositionalVariable(const DynamicContext::Ptr &context, const Item::Iterator::Ptr &source) const;
 
    typedef QExplicitlySharedDataPointer<const ForClause> ConstPtr;
    const VariableSlotID m_varSlot;
    const VariableSlotID m_positionSlot;
+
    bool m_allowsMany;
 };
 

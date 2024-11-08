@@ -65,7 +65,7 @@ class XsdSchemaContext : public ReportContext
 
    SchemaTypeFactory::Ptr schemaTypeFactory() const;
 
-   mutable SchemaTypeFactory::Ptr                 m_schemaTypeFactory;
+   mutable SchemaTypeFactory::Ptr m_schemaTypeFactory;
    mutable QHash<SchemaType::Ptr, XsdFacet::Hash> m_builtinTypesFacetList;
 
  private:

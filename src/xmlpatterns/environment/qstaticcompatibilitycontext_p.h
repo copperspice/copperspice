@@ -27,6 +27,7 @@
 #include <qdelegatingstaticcontext_p.h>
 
 namespace QPatternist {
+
 class StaticCompatibilityContext : public DelegatingStaticContext
 {
  public:
@@ -34,6 +35,7 @@ class StaticCompatibilityContext : public DelegatingStaticContext
 
    bool compatModeEnabled() const override;
 };
+
 }
 
 #endif

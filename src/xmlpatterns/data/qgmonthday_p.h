@@ -44,6 +44,7 @@ class GMonthDay : public AbstractDateTime
 
    GMonthDay(const QDateTime &dateTime);
 };
+
 }
 
 #endif

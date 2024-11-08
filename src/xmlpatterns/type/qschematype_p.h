@@ -36,7 +36,6 @@ class AtomicType;
 class SchemaType : public SchemaComponent
 {
  public:
-
    typedef QExplicitlySharedDataPointer<SchemaType> Ptr;
    typedef QHash<QXmlName, SchemaType::Ptr> Hash;
    typedef QList<SchemaType::Ptr> List;
@@ -50,18 +49,18 @@ class SchemaType : public SchemaComponent
    };
 
    enum DerivationMethod {
-      DerivationRestriction   = 1,
-      DerivationExtension     = 2,
-      DerivationUnion         = 4,
-      DerivationList          = 8,
-      NoDerivation            = 16
+      DerivationRestriction  = 1,
+      DerivationExtension    = 2,
+      DerivationUnion        = 4,
+      DerivationList         = 8,
+      NoDerivation           = 16
    };
 
    enum DerivationConstraint {
       RestrictionConstraint = 1,
-      ExtensionConstraint = 2,
-      ListConstraint = 4,
-      UnionConstraint = 8
+      ExtensionConstraint   = 2,
+      ListConstraint        = 4,
+      UnionConstraint       = 8
    };
    using DerivationConstraints = QFlags<DerivationConstraint>;
 
@@ -74,11 +73,9 @@ class SchemaType : public SchemaComponent
    virtual bool isAbstract() const = 0;
 
    virtual QXmlName name(const NamePool::Ptr &np) const = 0;
-
    virtual QString displayName(const NamePool::Ptr &np) const = 0;
 
    virtual SchemaType::Ptr wxsSuperType() const = 0;
-
    virtual bool wxsTypeMatches(const SchemaType::Ptr &other) const = 0;
 
    virtual TypeCategory category() const = 0;
@@ -89,6 +86,7 @@ class SchemaType : public SchemaComponent
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(SchemaType::DerivationConstraints)
+
 }
 
 #endif

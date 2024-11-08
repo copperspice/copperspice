@@ -31,7 +31,6 @@ namespace QPatternist {
 class BuiltinAtomicType : public AtomicType
 {
  public:
-
    typedef QExplicitlySharedDataPointer<BuiltinAtomicType> Ptr;
 
    bool isAbstract() const override;
@@ -59,6 +58,5 @@ class BuiltinAtomicType : public AtomicType
 };
 
 }
-
 
 #endif

@@ -31,10 +31,12 @@
 #include <qschematypefactory_p.h>
 
 namespace QPatternist {
+
 class GenericStaticContext : public StaticContext
 {
  public:
    typedef QExplicitlySharedDataPointer<GenericStaticContext> Ptr;
+
    GenericStaticContext(const NamePool::Ptr &np, QAbstractMessageHandler *const errorHandler,
                   const QUrl &aBaseURI, const FunctionFactory::Ptr &factory, const QXmlQuery::QueryLanguage lang);
 
@@ -128,6 +130,7 @@ class GenericStaticContext : public StaticContext
    VariableSlotID              m_rangeSlot;
    bool                        m_compatModeEnabled;
 };
+
 }
 
 #endif

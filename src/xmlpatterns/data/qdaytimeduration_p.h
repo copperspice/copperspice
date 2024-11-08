@@ -31,7 +31,6 @@ namespace QPatternist {
 class DayTimeDuration : public AbstractDuration
 {
  public:
-
    typedef QExplicitlySharedDataPointer<DayTimeDuration> Ptr;
 
    static DayTimeDuration::Ptr fromLexical(const QString &string);
@@ -42,6 +41,7 @@ class DayTimeDuration : public AbstractDuration
          const MinuteProperty minutes,
          const SecondProperty seconds,
          const MSecondProperty mseconds);
+
    static DayTimeDuration::Ptr fromSeconds(const SecondCountProperty secs, const MSecondProperty msecs = 0);
 
    ItemType::Ptr type() const override;
@@ -54,7 +54,6 @@ class DayTimeDuration : public AbstractDuration
    MinuteProperty minutes() const override;
    MSecondProperty mseconds() const override;
    SecondProperty seconds() const override;
-
    Value value() const override;
    Item fromValue(const Value val) const override;
 
@@ -62,7 +61,7 @@ class DayTimeDuration : public AbstractDuration
    friend class CommonValues;
 
    DayTimeDuration(const bool isPositive, const DayCountProperty days, const HourProperty hours,
-                  const MinuteProperty minutes, const SecondProperty seconds, const MSecondProperty mseconds);
+         const MinuteProperty minutes, const SecondProperty seconds, const MSecondProperty mseconds);
 
  private:
    const DayCountProperty  m_days;

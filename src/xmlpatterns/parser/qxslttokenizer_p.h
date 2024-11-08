@@ -63,7 +63,6 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
 
    int commenceScanOnly() override;
    void resumeTokenizationFrom(const int position) override;
-
    void setParserContext(const ParserContext::Ptr &parseInfo) override;
 
    QUrl documentURI() const override {
@@ -99,8 +98,10 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
    inline void queueToken(const Token &token, TokenSource::Queue *const ts);
    void queueEmptySequence(TokenSource::Queue *const to);
    void queueSequenceType(const QString &expr);
+
    void queueSimpleContentConstructor(const ReportContext::ErrorCode code,
                   const bool emptynessAllowed, TokenSource::Queue *const to, const bool selectOnlyFirst = false);
+
    void queueAVT(const QString &expr, TokenSource::Queue *const to);
 
    void hasWrittenExpression(bool &beacon);
@@ -117,21 +118,15 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
 
    bool isElement(const NodeName &name) const;
 
-   void queueTextConstructor(QString &chars,
-                             bool &hasWrittenExpression,
-                             TokenSource::Queue *const to);
+   void queueTextConstructor(QString &chars, bool &hasWrittenExpression, TokenSource::Queue *const to);
 
    void insideStylesheetModule();
    void insideTemplate();
 
-   void queueExpression(const QString &expr,
-                        TokenSource::Queue *const to,
-                        const bool wrapWithParantheses = true);
-
+   void queueExpression(const QString &expr, TokenSource::Queue *const to, const bool wrapWithParantheses = true);
    void skipBodyOfParam(const ReportContext::ErrorCode code);
 
-   void queueParams(const NodeName parentName,
-                    TokenSource::Queue *const to);
+   void queueParams(const NodeName parentName, TokenSource::Queue *const to);
 
    void queueWithParams(const NodeName parentName,
                         TokenSource::Queue *const to,
@@ -187,11 +182,10 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
                       const bool isInstruction = true,
                       const QXmlStreamAttributes *atts = nullptr);
 
+
    QString readElementText();
 
-   void queueSorting(const bool oneSortRequired,
-                     TokenSource::Queue *const to,
-                     const bool speciallyTreatWhitespace = false);
+   void queueSorting(const bool oneSortRequired, TokenSource::Queue *const to, const bool speciallyTreatWhitespace = false);
 
    static ElementDescription<XSLTTokenLookup>::Hash createElementDescriptions();
    static QHash<QString, int> createValidationAlternatives();
@@ -215,13 +209,12 @@ class XSLTTokenizer : public Tokenizer, private MaintainingReader<XSLTTokenLooku
       NormalProcessing
    };
 
-   QStack<ProcessMode>                         m_processingMode;
+   QStack<ProcessMode> m_processingMode;
 
    inline bool isXSLT() const;
 
-   const QHash<QString, int>                   m_validationAlternatives;
-
-   ParserContext::Ptr                          m_parseInfo;
+   const QHash<QString, int>  m_validationAlternatives;
+   ParserContext::Ptr m_parseInfo;
 };
 
 }

@@ -37,9 +37,8 @@ using namespace QPatternist;
 Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
    enum {
-      MSecLimit = 14 * 60/*M*/ * 60/*S*/ * 1000/*ms*/
+      MSecLimit = 14 * 60 * 60 * 1000
    };
-
 
    const Item arg(m_operands.first()->evaluateSingleton(context));
    if (!arg) {
@@ -47,6 +46,7 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
    }
 
    QDateTime dt(arg.as<AbstractDateTime>()->toDateTime());
+
    // TODO DT dt.setDateOnly(false);
    Q_ASSERT(dt.isValid());
    DayTimeDuration::Ptr tz;
@@ -87,7 +87,6 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
          return createValue(dt);
 
       } else {
-
          dt = dt.toUTC();
          dt = dt.addSecs(tzSecs);
 
@@ -98,7 +97,6 @@ Item AdjustTimezone::evaluateSingleton(const DynamicContext::Ptr &context) const
       }
 
    } else {
-
       if (dt.timeZone() == QTimeZone::systemTimeZone()) {
          return arg;
 

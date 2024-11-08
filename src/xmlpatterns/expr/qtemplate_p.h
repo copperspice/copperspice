@@ -55,18 +55,15 @@ class Template : public QSharedData, public SourceLocationReflection
    VariableDeclaration::List templateParameters;
 
    DynamicContext::Ptr createContext(const TemplateInvoker *const invoker,
-                                     const DynamicContext::Ptr &context,
-                                     const bool isCallTemplate) const;
+         const DynamicContext::Ptr &context, const bool isCallTemplate) const;
 
    void compileParameters(const StaticContext::Ptr &context);
 
    Expression::Properties properties() const;
-
    Expression::Properties dependencies() const;
 
-   static void raiseXTSE0680(const ReportContext::Ptr &context,
-                             const QXmlName &name,
-                             const SourceLocationReflection *const reflection);
+   static void raiseXTSE0680(const ReportContext::Ptr &context, const QXmlName &name,
+         const SourceLocationReflection *const reflection);
 
  private:
    DynamicContext::TemplateParameterHash parametersAsHash() const;

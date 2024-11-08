@@ -40,16 +40,15 @@ class XPathHelper
    static bool isReservedNamespace(const QXmlName::NamespaceCode ns);
 
    template<const ReportContext::ErrorCode code, typename TReportContext>
-
    static void checkCollationSupport(const QString &collation, const TReportContext &context,
             const SourceLocationReflection *const r) {
       Q_ASSERT(context);
       Q_ASSERT(r);
 
       if (collation != QString::fromLatin1(CommonNamespaces::UNICODE_COLLATION)) {
-         context->error(QtXmlPatterns::tr("Only the Unicode Codepoint Collation is supported(%1). %2 is unsupported.")
-                        .formatArg(formatURI(QString::fromLatin1(CommonNamespaces::UNICODE_COLLATION)))
-                        .formatArg(formatURI(collation)), code, r);
+         context->error(QtXmlPatterns::tr("Only Unicode Codepoint Collation is supported(%1), %2 is unsupported.")
+               .formatArg(formatURI(QString::fromLatin1(CommonNamespaces::UNICODE_COLLATION)))
+               .formatArg(formatURI(collation)), code, r);
       }
    }
 

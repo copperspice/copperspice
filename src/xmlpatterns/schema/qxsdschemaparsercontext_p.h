@@ -33,6 +33,7 @@
 #include <QSharedData>
 
 namespace QPatternist {
+
 class XsdTagScope
 {
  public:

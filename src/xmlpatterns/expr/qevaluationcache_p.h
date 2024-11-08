@@ -44,7 +44,6 @@ class EvaluationCache : public SingleContainer
    Expression::Ptr compress(const StaticContext::Ptr &context) override;
 
    SequenceType::Ptr staticType() const override;
-
    SequenceType::List expectedOperandTypes() const override;
 
    ExpressionVisitorResult::Ptr accept(const ExpressionVisitor::Ptr &visitor) const override;
@@ -59,7 +58,9 @@ class EvaluationCache : public SingleContainer
 
  private:
    static DynamicContext::Ptr topFocusContext(const DynamicContext::Ptr &context);
+
    const VariableDeclaration *m_declaration;
+
    bool m_declarationUsedByMany;
    const VariableSlotID m_varSlot;
 };

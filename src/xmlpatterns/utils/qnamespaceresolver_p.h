@@ -38,7 +38,6 @@ class NamespaceResolver : public QSharedData
    };
 
    typedef QExplicitlySharedDataPointer<NamespaceResolver> Ptr;
-
    typedef QHash<QXmlName::PrefixCode, QXmlName::NamespaceCode> Bindings;
 
    NamespaceResolver();

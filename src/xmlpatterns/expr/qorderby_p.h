@@ -40,19 +40,16 @@ class OrderBy : public SingleContainer
       UnstableOrder
    };
 
-   class OrderSpec : public ComparisonPlatform<OrderBy::OrderSpec,
-      true, /* Yes, issue errors. */
-      AtomicComparator::AsValueComparison>
+   class OrderSpec : public ComparisonPlatform<OrderBy::OrderSpec, true, AtomicComparator::AsValueComparison>
    {
     public:
-      using ComparisonPlatform<OrderBy::OrderSpec, true, AtomicComparator::AsValueComparison>::detailedFlexibleCompare;
-
-      typedef QVector<OrderSpec> Vector;
-
       enum Direction {
          Ascending,
          Descending
       };
+
+      using ComparisonPlatform<OrderBy::OrderSpec, true, AtomicComparator::AsValueComparison>::detailedFlexibleCompare;
+      using Vector = QVector<OrderSpec>;
 
       OrderSpec()
       { }
@@ -61,17 +58,12 @@ class OrderBy : public SingleContainer
          orderingEmptySequence(orderingEmpty) {
       }
 
-      void prepare(const Expression::Ptr &source,
-                   const StaticContext::Ptr &context);
+      void prepare(const Expression::Ptr &source, const StaticContext::Ptr &context);
 
       const SourceLocationReflection *actualReflection() const {
          return m_expr.data();
       }
 
-    private:
-      Expression::Ptr m_expr;
-
-    public:
       Direction direction;
 
       StaticContext::OrderingEmptySequence orderingEmptySequence;
@@ -81,6 +73,8 @@ class OrderBy : public SingleContainer
                 : AtomicComparator::OperatorLessThanNaNGreatest;
       }
 
+    private:
+      Expression::Ptr m_expr;
    };
 
    OrderBy(const Stability stability,

@@ -27,6 +27,7 @@
 #include <qexpression_p.h>
 
 namespace QPatternist {
+
 class EmptyContainer : public Expression
 {
  public:
@@ -38,7 +39,6 @@ class EmptyContainer : public Expression
    bool compressOperands(const StaticContext::Ptr &context) override;
 
    SequenceType::List expectedOperandTypes() const override;
-
 };
 
 }
