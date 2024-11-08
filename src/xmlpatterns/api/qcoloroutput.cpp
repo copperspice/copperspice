@@ -29,7 +29,6 @@
 
 // TODO: rename insertMapping() to insertColorMapping()
 // TODO: Use a smart pointer for managing ColorOutputPrivate *d;
-// TODO: break out the C++ example into a snippet file
 
 #ifndef Q_OS_WIN
 #include <unistd.h>
@@ -46,7 +45,7 @@ class ColorOutputPrivate
 
    {
       // QIODevice::Unbuffered because we want it to appear when the user actually calls, performance
-      //  is considered of lower priority.
+      // is considered of lower priority.
 
       m_out.open(stderr, QIODevice::WriteOnly | QIODevice::Unbuffered);
 
@@ -76,14 +75,11 @@ class ColorOutputPrivate
  private:
    QFile m_out;
 
-   // returns true if it's suitable to send colored output to \c stderr
-
+   // returns true if it is suitable to send colored output to stderr
    bool isColoringPossible() const {
 
 #if defined(Q_OS_WIN)
-      // Windows does not at all support ANSI escape codes, unless
-      // the user install a "device driver".
-
+      // Windows does not support ANSI escape codes unless the user installs a "device driver"
       return false;
 
 #else
@@ -208,4 +204,3 @@ void ColorOutput::insertMapping(int colorID, const ColorCode colorCode)
 {
    d->colorMapping.insert(colorID, colorCode);
 }
-

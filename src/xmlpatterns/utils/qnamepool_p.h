@@ -160,7 +160,6 @@ class StandardNamespaces
    };
 };
 
-// const QString * a = &*qset.insert("foo");
 class StandardLocalNames
 {
  public:

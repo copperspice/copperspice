@@ -380,7 +380,7 @@ class DerivedInteger : public Numeric
       switch (DerivedType) {
          case TypeUnsignedLong: {
 
-            /* flag '-' as invalid, so remove it before. */
+            // flag '-' as invalid, so remove it before.
             if (strNumeric.contains(QLatin1Char('-'))) {
                num = QString(strNumeric).remove('-').toInteger<quint64>(&conversionOk);
 

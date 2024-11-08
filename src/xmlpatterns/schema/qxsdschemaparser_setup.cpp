@@ -100,7 +100,9 @@ void XsdSchemaParser::setupStateMachines()
    {
       XsdStateMachine<XsdSchemaToken::NodeName> machine(namePool);
 
-      // setup state machine for (annotation?, (simpleContent | complexContent | (openContent?, (group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*))) : complexType
+      // setup state machine for (annotation?, (simpleContent | complexContent | (openContent?, (group | all | choice | sequence)?,
+      // ((attribute | attributeGroup)*, anyAttribute?), assert*))) : complexType
+
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId startState = machine.addState(
                XsdStateMachine<XsdSchemaToken::NodeName>::StartEndState);
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId s1 = machine.addState(
@@ -195,7 +197,10 @@ void XsdSchemaParser::setupStateMachines()
    {
       XsdStateMachine<XsdSchemaToken::NodeName> machine(namePool);
 
-      // setup state machine for (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion)*)?, ((attribute | attributeGroup)*, anyAttribute?), assert*) : simpleContent restriction
+      // setup state machine for (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive |
+      // totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion)*)?,
+      // ((attribute | attributeGroup)*, anyAttribute?), assert*) : simpleContent restriction
+
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId startState = machine.addState(
                XsdStateMachine<XsdSchemaToken::NodeName>::StartEndState);
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId s1 = machine.addState(
@@ -339,7 +344,9 @@ void XsdSchemaParser::setupStateMachines()
    {
       XsdStateMachine<XsdSchemaToken::NodeName> machine(namePool);
 
-      // setup state machine for (annotation?, openContent?, ((group | all | choice | sequence)?, ((attribute | attributeGroup)*, anyAttribute?), assert*)) : complex content restriction/complex content extension
+      // setup state machine for (annotation?, openContent?, ((group | all | choice | sequence)?, ((attribute | attributeGroup)*,
+      // anyAttribute?), assert*)) : complex content restriction/complex content extension
+
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId startState = machine.addState(
                XsdStateMachine<XsdSchemaToken::NodeName>::StartEndState);
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId s1 = machine.addState(
@@ -643,7 +650,8 @@ void XsdSchemaParser::setupStateMachines()
    {
       XsdStateMachine<XsdSchemaToken::NodeName> machine(namePool);
 
-      // setup state machine for (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive | totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion)*)) : simple type restriction
+      // setup state machine for (annotation?, (simpleType?, (minExclusive | minInclusive | maxExclusive | maxInclusive |
+      // totalDigits | fractionDigits | length | minLength | maxLength | enumeration | whiteSpace | pattern | assertion)*)) : simple type restriction
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId startState = machine.addState(
                XsdStateMachine<XsdSchemaToken::NodeName>::StartEndState);
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId s1 = machine.addState(
@@ -757,7 +765,9 @@ void XsdSchemaParser::setupStateMachines()
    {
       XsdStateMachine<XsdSchemaToken::NodeName> machine(namePool);
 
-      // setup state machine for ((include | import | redefine |i override |  annotation)*, (defaultOpenContent, annotation*)?, (((simpleType | complexType | group | attributeGroup) | element | attribute | notation), annotation*)*) : schema
+      // setup state machine for ((include | import | redefine |i override |  annotation)*, (defaultOpenContent, annotation*)?,
+      // (((simpleType | complexType | group | attributeGroup) | element | attribute | notation), annotation*)*) : schema
+
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId startState = machine.addState(
                XsdStateMachine<XsdSchemaToken::NodeName>::StartEndState);
       const XsdStateMachine<XsdSchemaToken::NodeName>::StateId s1 = machine.addState(

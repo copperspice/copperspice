@@ -510,7 +510,8 @@ bool XsdParticleChecker::subsumes(const XsdParticle::Ptr &particle, const XsdPar
    processedSet.append(qMakePair<XsdStateMachine<XsdTerm::Ptr>::StateId, XsdStateMachine<XsdTerm::Ptr>::StateId>
                        (baseStartState, derivedStartState));
 
-   while (!workSet.isEmpty()) { // while there are state sets to process
+   while (!workSet.isEmpty()) {
+      // while there are state sets to process
 
       // 3) dequeue on state set
       const QPair<XsdStateMachine<XsdTerm::Ptr>::StateId, XsdStateMachine<XsdTerm::Ptr>::StateId> set = workSet.takeFirst();

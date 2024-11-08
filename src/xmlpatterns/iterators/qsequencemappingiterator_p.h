@@ -74,7 +74,7 @@ TResult SequenceMappingIterator<TResult, TSource, TMapper>::next()
       while (! m_currentIterator) {
          const TSource mainItem(m_mainIterator->next());
 
-         if (qIsForwardIteratorEnd(mainItem)) { /* We've reached the very end. */
+         if (qIsForwardIteratorEnd(mainItem)) {
             m_position = -1;
             m_current = TResult();
             return TResult();

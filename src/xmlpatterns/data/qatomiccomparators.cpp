@@ -222,15 +222,6 @@ bool AbstractDateTimeComparator::equals(const Item &o1, const Item &o2) const
    const QDateTime dt1(o1.as<AbstractDateTime>()->toDateTime());
    const QDateTime dt2(o2.as<AbstractDateTime>()->toDateTime());
 
-   /*
-   pDebug() << "COMPARING:"
-       << o1->as<AbstractDateTime>()->toDateTime().toString()
-          << o2->as<AbstractDateTime>()->toDateTime().toString();
-   pDebug() << "DATE ONLY:"
-       << o1->as<AbstractDateTime>()->toDateTime().isDateOnly()
-          << o2->as<AbstractDateTime>()->toDateTime().isDateOnly();
-   */
-
    return dt1 == dt2 && dt1.timeZone() == dt2.timeZone();
 }
 

@@ -45,7 +45,7 @@ class AnyURI : public AtomicString
    static QUrl toQUrl(const QString &value, const TReportContext &context,
          const SourceLocationReflection *const r, bool *const isValid = nullptr, const bool issueError = true) {
 
-      /* QUrl doesn't flag ":/..." so we workaround it. */
+      // QUrl does not flag ":/..." so we workaround it
       const QString simplified(value.simplified());
       const QUrl uri(simplified, QUrl::StrictMode);
 

@@ -30,8 +30,7 @@
 
 namespace QPatternist {
 
-class GeneralComparison : public PairContainer, public ComparisonPlatform<GeneralComparison,
-   true /* We want to report errors. */, AtomicComparator::AsGeneralComparison>
+class GeneralComparison : public PairContainer, public ComparisonPlatform<GeneralComparison, true, AtomicComparator::AsGeneralComparison>
 {
  public:
    GeneralComparison(const Expression::Ptr &op1,

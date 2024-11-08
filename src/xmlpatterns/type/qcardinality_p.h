@@ -123,11 +123,12 @@ class Cardinality
          return false;
 
       } else {
-         /* Ok, we now know the minimum will always be ok. */
+         // we now know the minimum will always be ok.
+
          if (m_max == -1) {
-            return true;   /* We allow infinite, so anything can match. */
+            return true;                     // allow infinite so anything can match
          } else if (other.m_max == -1) {
-            return false;   /* other allows infinity, while we don't. */
+            return false;                    // other allows infinity while we do not
          } else {
             return m_max >= other.m_max;
          }
@@ -144,7 +145,8 @@ class Cardinality
             return true;
          } else if (m_max > other.m_min) {
             return other.m_max >= m_min || other.m_max == -1;
-         } else { /* m_max < other.m_min */
+         } else {
+            // m_max < other.m_min
             return false;
          }
       }

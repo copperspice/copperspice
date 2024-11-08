@@ -129,10 +129,6 @@ Expression::Ptr AxisStep::typeCheck(const StaticContext::Ptr &context, const Seq
 {
    if (m_axis == QXmlNodeModelIndex::AxisParent && *m_nodeTest == *BuiltinTypes::node) {
       return rewrite(Expression::Ptr(new ParentNodeAxis()), context)->typeCheck(context, reqType);
-   /* TODO temporarily disabled
-   else if(isAlwaysEmpty(m_axis, static_cast<const AnyNodeType *>(m_nodeTest.data())->nodeKind()))
-       return EmptySequence::create(this, context);
-       */
    } else {
       return EmptyContainer::typeCheck(context, reqType);
    }
