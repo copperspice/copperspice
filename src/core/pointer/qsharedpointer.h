@@ -132,4 +132,36 @@ QSharedPointer<U> qSharedPointerStaticCast(const QSharedPointer<T> &ptr)
    return ptr.template staticCast<U>();
 }
 
+#if ! defined(CS_DOXYPRESS)
+
+template <typename T>
+class QWeakPointer : public CsPointer::CsWeakPointer<T>
+{
+public:
+   using CsPointer::CsWeakPointer<T>::CsWeakPointer;
+
+   QWeakPointer(CsPointer::CsWeakPointer<T> other) noexcept
+      : CsPointer::CsWeakPointer<T>(std::move(other))
+   {
+   }
+
+   template <typename Base = QObject, typename X = CSInternalRefCount>
+   QWeakPointer(T *ptr)
+      : CsPointer::CsWeakPointer<T>( X::get_m_self(ptr).template staticCast<T>() )
+   {
+      // T must inherit from QObject
+   }
+
+   template <typename Base = QObject, typename = std::enable_if_t<std::is_base_of_v<Base, T>>>
+   T * data() const noexcept {
+      return CsPointer::CsWeakPointer<T>::lock().data();
+   }
+
+   bool isNull() const {
+      return CsPointer::CsWeakPointer<T>::is_null();
+   }
+};
+
+#endif
+
 #endif
