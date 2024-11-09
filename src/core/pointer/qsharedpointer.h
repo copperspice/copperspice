@@ -79,4 +79,57 @@ class QSharedPointer : public CsPointer::CsSharedPointer<T>
 
 #endif
 
+template <typename T>
+using QEnableSharedFromThis = CsPointer::CsEnableSharedFromThis<T>;
+
+// free functions
+template <typename T>
+uint qHash(const QSharedPointer<T> &ptr, uint seed = 0)
+{
+   return qHash(ptr.data(), seed);
+}
+
+template <typename T>
+void swap(QSharedPointer<T> &ptr1, QSharedPointer<T> &ptr2) noexcept
+{
+   ptr1.swap(ptr2);
+}
+
+template < typename T, typename... Args, typename = typename std::enable_if_t < ! std::is_array_v<T >>>
+QSharedPointer<T> QMakeShared(Args && ... args)
+{
+   return CsPointer::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template <typename U, typename T>
+[[deprecated("Use qSharedPointerStaticCast()")]]
+QSharedPointer<U> qSharedPointerCast(const QSharedPointer<T> &ptr)
+{
+   return ptr.template staticCast<U>();
+}
+
+template <typename U, typename T>
+QSharedPointer<U> qSharedPointerDynamicCast(const QSharedPointer<T> &ptr)
+{
+   return ptr.template dynamicCast<U>();
+}
+
+template <typename U, typename T>
+QSharedPointer<U> qSharedPointerConstCast(const QSharedPointer<T> &ptr)
+{
+   return ptr.template constCast<U>();
+}
+
+template <typename U, typename T>
+QSharedPointer<U> qSharedPointerObjectCast(const QSharedPointer<T> &ptr)
+{
+   return ptr.template objectCast<U>();
+}
+
+template <typename U, typename T>
+QSharedPointer<U> qSharedPointerStaticCast(const QSharedPointer<T> &ptr)
+{
+   return ptr.template staticCast<U>();
+}
+
 #endif
