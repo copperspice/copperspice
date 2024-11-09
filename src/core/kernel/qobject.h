@@ -553,6 +553,12 @@ class Q_CORE_EXPORT CSInternalRefCount
 
    static QSharedPointer<QObject> get_m_self(const QObject *object);
 
+   template <class T>
+   friend class QPointer;
+
+   template <class T>
+   friend class QWeakPointer;
+
    friend class QGraphicsItem;
    friend class QStackedLayout;
    friend class QtFriendlyLayoutWidget;
