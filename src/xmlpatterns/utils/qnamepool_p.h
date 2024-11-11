@@ -35,20 +35,12 @@
 #include <qprimitives_p.h>
 
 namespace QPatternist {
+
 class NamePool : public QSharedData
 {
  public:
    typedef QExplicitlySharedDataPointer<NamePool> Ptr;
 
- private:
-   enum {
-      NoSuchValue         = -1,
-      StandardNamespaceCount = 11,
-      StandardPrefixCount = 9,
-      StandardLocalNameCount = 141
-   };
-
- public:
    NamePool();
 
    QXmlName allocateBinding(const QString &prefix, const QString &uri);
@@ -107,6 +99,11 @@ class NamePool : public QSharedData
    QXmlName fromClarkName(const QString &clarkName);
 
  private:
+   static constexpr const int NoSuchValue            = -1;
+   static constexpr const int StandardNamespaceCount = 11;
+   static constexpr const int StandardPrefixCount    = 9;
+   static constexpr const int StandardLocalNameCount = 141;
+
    enum DefaultCapacities {
       DefaultPrefixCapacity    = 10,
       DefaultURICapacity       = DefaultPrefixCapacity,
