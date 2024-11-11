@@ -123,6 +123,9 @@ Expression::Properties Template::properties() const
    // having issues with recursion detection, this path currently loops infintely.
    return Expression::DisableElimination;
 
+/*
+   // dead code, out for right now
+
    Expression::Properties collect(body->properties());
 
    VariableDeclaration::List::const_iterator end(templateParameters.constEnd());
@@ -134,12 +137,18 @@ Expression::Properties Template::properties() const
    }
 
    return collect & (Expression::RequiresFocus | Expression::IsEvaluated | Expression::DisableElimination);
+*/
+
 }
 
 Expression::Properties Template::dependencies() const
 {
    // having issues with recursion detection, this path currently loops infintely.
    return Expression::DisableElimination;
+
+
+/*
+   // dead code, out for right now
 
    Expression::Properties collect(body->dependencies());
 
@@ -154,4 +163,6 @@ Expression::Properties Template::dependencies() const
    }
 
    return collect & (Expression::RequiresFocus | Expression::IsEvaluated | Expression::DisableElimination);
+*/
+
 }
