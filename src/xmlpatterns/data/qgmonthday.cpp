@@ -33,8 +33,7 @@ GMonthDay::GMonthDay(const QDateTime &dateTime) : AbstractDateTime(dateTime)
 
 GMonthDay::Ptr GMonthDay::fromLexical(const QString &lexical)
 {
-   static const CaptureTable captureTable( // STATIC DATA
-      /* The extra paranthesis is a build fix for GCC 3.3. */
+   static const CaptureTable captureTable(
       (QRegularExpression(QLatin1String(
                   "^\\s*"                             /* Any preceding whitespace. */
                   "--"                                /* Delimiter. */

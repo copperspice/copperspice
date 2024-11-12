@@ -305,7 +305,7 @@ void XsdSchemaChecker::checkBasicSimpleTypeConstraints()
       const SchemaType::Ptr baseType = simpleType->wxsSuperType();
 
       if (baseType->isComplexType() && (simpleType->name(m_namePool) != BuiltinTypes::xsAnySimpleType->name(m_namePool))) {
-         m_context->error(QtXmlPatterns::tr("Base type of simple type %1 cannot be complex type %2.")
+         m_context->error(QtXmlPatterns::tr("Base type of simple type %1 can not be complex type %2.")
                           .formatArg(formatType(m_namePool, simpleType))
                           .formatArg(formatType(m_namePool, baseType)),
                           XsdSchemaContext::XSDError, location);
@@ -314,7 +314,7 @@ void XsdSchemaChecker::checkBasicSimpleTypeConstraints()
 
       if (baseType == BuiltinTypes::xsAnyType) {
          if (type->name(m_namePool) != BuiltinTypes::xsAnySimpleType->name(m_namePool)) {
-            m_context->error(QtXmlPatterns::tr("Simple type %1 cannot have direct base type %2.")
+            m_context->error(QtXmlPatterns::tr("Simple type %1 can not have direct base type %2.")
                              .formatArg(formatType(m_namePool, simpleType))
                              .formatArg(formatType(m_namePool, BuiltinTypes::xsAnyType)),
                              XsdSchemaContext::XSDError, location);
@@ -376,7 +376,7 @@ void XsdSchemaChecker::checkSimpleTypeConstraints()
          }
          // 1.2
          if (simpleType->wxsSuperType()->derivationConstraints() & SchemaType::RestrictionConstraint) {
-            m_context->error(QtXmlPatterns::tr("Simple type %1 cannot derive from %2 as the latter defines restriction as final.")
+            m_context->error(QtXmlPatterns::tr("Simple type %1 can not derive from %2 as the latter defines restriction as final.")
                              .formatArg(formatType(m_namePool, simpleType->wxsSuperType()))
                              .formatArg(formatType(m_namePool, simpleType)),
                              XsdSchemaContext::XSDError, location);
@@ -389,8 +389,8 @@ void XsdSchemaChecker::checkSimpleTypeConstraints()
 
          // 2.1 or @see http://www.w3.org/TR/xmlschema-2/#cos-list-of-atomic
          if (itemType->category() != SchemaType::SimpleTypeAtomic && itemType->category() != SchemaType::SimpleTypeUnion) {
-            m_context->error(QtXmlPatterns::tr("Variety of item type of %1 must be either atomic or union.").formatArg(formatType(
-                                m_namePool, simpleType)), XsdSchemaContext::XSDError, location);
+            m_context->error(QtXmlPatterns::tr("Item type for %1 must be atomic or a union.")
+                  .formatArg(formatType(m_namePool, simpleType)), XsdSchemaContext::XSDError, location);
             return;
          }
 
@@ -551,7 +551,7 @@ void XsdSchemaChecker::checkSimpleTypeConstraints()
                   const AnySimpleType::Ptr baseMemberType = baseMemberTypes.at(i);
 
                   if (!XsdSchemaHelper::isSimpleDerivationOk(memberType, baseMemberType, SchemaType::DerivationConstraints())) {
-                     m_context->error(QtXmlPatterns::tr("Member type %1 cannot be derived from member type %2 of %3's base type %4.")
+                     m_context->error(QtXmlPatterns::tr("Member type %1 can not be derived from member type %2 of %3's base type %4.")
                                       .formatArg(formatType(m_namePool, memberType))
                                       .formatArg(formatType(m_namePool, baseMemberType))
                                       .formatArg(formatType(m_namePool, simpleType))
@@ -815,7 +815,7 @@ void XsdSchemaChecker::checkComplexTypeConstraints()
          }
 
          if (!derivationOk) {
-            m_context->error(QtXmlPatterns::tr("Complex type %1 cannot be derived from base type %2%3.")
+            m_context->error(QtXmlPatterns::tr("Complex type %1 can not be derived from base type %2%3.")
                              .formatArg(formatType(m_namePool, complexType))
                              .formatArg(formatType(m_namePool, baseType))
                              .formatArg(errorMsg.isEmpty() ? QString() : QLatin1String(": ") + errorMsg),
@@ -844,7 +844,7 @@ void XsdSchemaChecker::checkComplexTypeConstraints()
       // built in complex type xs:AnyType
       if (complexType->contentType()->variety() == XsdComplexType::ContentType::Simple) {
          if (baseType->name(m_namePool) == BuiltinTypes::xsAnyType->name(m_namePool)) {
-            m_context->error(QtXmlPatterns::tr("Complex type %1 with simple content cannot be derived from complex base type %2.")
+            m_context->error(QtXmlPatterns::tr("Complex type %1 with simple content can not be derived from complex base type %2.")
                              .formatArg(formatType(m_namePool, complexType))
                              .formatArg(formatType(m_namePool, baseType)),
                              XsdSchemaContext::XSDError, location);
@@ -881,7 +881,7 @@ void XsdSchemaChecker::checkSimpleDerivationRestrictions()
          const AnySimpleType::Ptr itemType = simpleType->itemType();
 
          if (itemType->isComplexType()) {
-            m_context->error(QtXmlPatterns::tr("Item type of simple type %1 cannot be a complex type.")
+            m_context->error(QtXmlPatterns::tr("Item type of simple type %1 can not be a complex type.")
                              .formatArg(formatType(m_namePool, simpleType)),
                              XsdSchemaContext::XSDError, location);
             return;
@@ -901,8 +901,8 @@ void XsdSchemaChecker::checkSimpleDerivationRestrictions()
 
          // @see http://www.w3.org/TR/xmlschema-2/#cos-list-of-atomic
          if (itemType->category() != SchemaType::SimpleTypeAtomic && itemType->category() != SchemaType::SimpleTypeUnion) {
-            m_context->error(QtXmlPatterns::tr("Variety of item type of %1 must be either atomic or union.").formatArg(formatType(
-                                m_namePool, simpleType)), XsdSchemaContext::XSDError, location);
+            m_context->error(QtXmlPatterns::tr("Item type for %1 must be atomic or a union.")
+                  .formatArg(formatType(m_namePool, simpleType)), XsdSchemaContext::XSDError, location);
             return;
          }
 
@@ -927,7 +927,7 @@ void XsdSchemaChecker::checkSimpleDerivationRestrictions()
             const AnySimpleType::Ptr memberType = memberTypes.at(i);
 
             if (memberType->isComplexType()) {
-               m_context->error(QtXmlPatterns::tr("Member type of simple type %1 cannot be a complex type.")
+               m_context->error(QtXmlPatterns::tr("Member type of simple type %1 can not be a complex type.")
                                 .formatArg(formatType(m_namePool, simpleType)),
                                 XsdSchemaContext::XSDError, location);
                return;
@@ -1205,7 +1205,7 @@ void XsdSchemaChecker::checkConstrainingFacets(const XsdFacet::Hash &facets, con
             if (value == XsdSchemaToken::toString(XsdSchemaToken::Replace) ||
                   value == XsdSchemaToken::toString(XsdSchemaToken::Preserve)) {
                if (baseValue == XsdSchemaToken::toString(XsdSchemaToken::Collapse)) {
-                  m_context->error(QtXmlPatterns::tr("%1 facet cannot be %2 or %3 if %4 facet of base type is %5.")
+                  m_context->error(QtXmlPatterns::tr("%1 facet can not be %2 or %3 if %4 facet of base type is %5.")
                                    .formatArg(formatKeyword("whiteSpace"))
                                    .formatArg(formatData("replace"))
                                    .formatArg(formatData("preserve"))
@@ -1217,7 +1217,7 @@ void XsdSchemaChecker::checkConstrainingFacets(const XsdFacet::Hash &facets, con
             }
             if (value == XsdSchemaToken::toString(XsdSchemaToken::Preserve) &&
                   baseValue == XsdSchemaToken::toString(XsdSchemaToken::Replace)) {
-               m_context->error(QtXmlPatterns::tr("%1 facet cannot be %2 if %3 facet of base type is %4.")
+               m_context->error(QtXmlPatterns::tr("%1 facet can not be %2 if %3 facet of base type is %4.")
                                 .formatArg(formatKeyword("whiteSpace"))
                                 .formatArg(formatData("preserve"))
                                 .formatArg(formatKeyword("whiteSpace"))
@@ -1283,7 +1283,7 @@ void XsdSchemaChecker::checkConstrainingFacets(const XsdFacet::Hash &facets, con
 
       // @see http://www.w3.org/TR/xmlschema-2/#maxInclusive-maxExclusive
       if (facets.contains(XsdFacet::MaximumInclusive)) {
-         m_context->error(QtXmlPatterns::tr("%1 facet and %2 facet cannot appear together.")
+         m_context->error(QtXmlPatterns::tr("%1 facet and %2 facet can not appear together.")
                           .formatArg(formatKeyword("maxExclusive"))
                           .formatArg(formatKeyword("maxInclusive")),
                           XsdSchemaContext::XSDError, sourceLocation(simpleType));
@@ -1368,7 +1368,7 @@ void XsdSchemaChecker::checkConstrainingFacets(const XsdFacet::Hash &facets, con
 
       // @see http://www.w3.org/TR/xmlschema-2/#minInclusive-minExclusive
       if (facets.contains(XsdFacet::MinimumInclusive)) {
-         m_context->error(QtXmlPatterns::tr("%1 facet and %2 facet cannot appear together.")
+         m_context->error(QtXmlPatterns::tr("%1 facet and %2 facet can not appear together.")
                           .formatArg(formatKeyword("minExclusive"))
                           .formatArg(formatKeyword("minInclusive")),
                           XsdSchemaContext::XSDError, sourceLocation(simpleType));
@@ -1848,7 +1848,7 @@ void XsdSchemaChecker::checkElementConstraints()
 
             if (!derivationOk) {
                m_context->error(
-                  QtXmlPatterns::tr("Type of element %1 cannot be derived from type of substitution group affiliation.").formatArg(
+                  QtXmlPatterns::tr("Type of element %1 can not be derived from type of substitution group affiliation.").formatArg(
                      formatKeyword(element->displayName(m_namePool))),
                   XsdSchemaContext::XSDError, sourceLocation(element));
                return;

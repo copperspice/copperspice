@@ -364,8 +364,7 @@ XsdStateMachine<TransitionType> XsdStateMachine<TransitionType>::toDFA() const
       // mark as processed
       isMarked.append(states);
 
-      // select a list of all inputs that are possible for
-      // the 'states' set
+      // select a list of all inputs that are possible for the 'states' set
       QList<TransitionType> input;
 
       {

@@ -765,8 +765,8 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
 
          if (usesIt.value()->isRequired()) {
             if (!attributes.contains(usesIt.key())) {
-               error(QtXmlPatterns::tr("Element %1 is missing required attribute %2.").formatArg(formatKeyword(declaration->displayName(
-                        m_namePool)))
+               error(QtXmlPatterns::tr("Element %1 is missing required attribute %2.")
+                     .formatArg(formatKeyword(declaration->displayName(m_namePool)))
                      .formatArg(formatKeyword(m_namePool->displayName(usesIt.key()))));
                return false;
             }
@@ -1032,8 +1032,8 @@ bool XsdValidatingInstanceReader::validateUniqueIdentityConstraint(const XsdElem
          }
 
          if (node.fieldsAreEqual(innerNode, m_namePool, m_context, &reflection)) {
-            error(QtXmlPatterns::tr("Non-unique value found for constraint %1.").formatArg(formatKeyword(constraint->displayName(
-                     m_namePool))));
+            error(QtXmlPatterns::tr("Non-unique value found for constraint %1.")
+                  .formatArg(formatKeyword(constraint->displayName(m_namePool))));
             return false;
          }
       }
@@ -1055,8 +1055,8 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
 
    // 4.2.1
    if (targetNodeSet.count() != qualifiedNodeSet.count()) {
-      error(QtXmlPatterns::tr("Key constraint %1 contains absent fields.").formatArg(formatKeyword(constraint->displayName(
-               m_namePool))));
+      error(QtXmlPatterns::tr("Key constraint %1 contains absent fields.")
+            .formatArg(formatKeyword(constraint->displayName(m_namePool))));
       return false;
    }
 

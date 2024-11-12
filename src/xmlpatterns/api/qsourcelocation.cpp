@@ -72,8 +72,7 @@ qint64 QSourceLocation::column() const
 
 void QSourceLocation::setColumn(qint64 newColumn)
 {
-   Q_ASSERT_X(newColumn != 0, Q_FUNC_INFO,
-              "0 is an invalid column number. The first column number is 1.");
+   Q_ASSERT_X(newColumn != 0, Q_FUNC_INFO, "Zero is an invalid column number. The first column number is 1.");
    m_column = newColumn;
 }
 
@@ -116,6 +115,5 @@ bool QSourceLocation::isNull() const
 
 uint qHash(const QSourceLocation &location)
 {
-   /* Not the world's best hash function exactly. */
    return qHash(location.uri().toString()) + location.line() + location.column();
 }

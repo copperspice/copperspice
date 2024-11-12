@@ -256,7 +256,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
          }
       }
 
-      /* Type check and compress template rules. */
+      // Type check and compress template rules
       {
          QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
 
@@ -273,7 +273,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
             patternContext = StaticContext::Ptr(new StaticFocusContext(BuiltinTypes::node, context));
          }
 
-         /* For each template pattern. */
+         // For each template pattern
          while (it.hasNext()) {
             it.next();
             const TemplateMode::Ptr &mode = it.value();
@@ -281,10 +281,9 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
             TemplatePattern::ID currentTemplateID = -1;
             bool hasDoneItOnce = false;
 
-            /* For each template pattern. */
             for (int i = 0; i < len; ++i) {
-               /* We can't use references for these two members, since we
-                * assign to them. */
+               // do not use references for these two members since we assign to them
+
                const TemplatePattern::Ptr &pattern = mode->templatePatterns.at(i);
                Expression::Ptr matchPattern(pattern->matchPattern());
 
@@ -307,11 +306,9 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
                currentTemplateID = pattern->id();
                Expression::Ptr body(pattern->templateTarget()->body);
 
-               /* Patterns for a new template has started, we must
-                * deal with the body & parameters. */
+               // Patterns for a new template has started, we must deal with the body & parameters
                {
-                  /* TODO type is wrong, it has to be the union of all
-                   * patterns. */
+                  // type may be incorrect, it should be the union of all patterns
                   const StaticContext::Ptr focusContext(new StaticFocusContext(matchPattern->staticType()->itemType(),
                                                         context));
                   body = body->typeCheck(focusContext, CommonSequenceTypes::ZeroOrMoreItems);
