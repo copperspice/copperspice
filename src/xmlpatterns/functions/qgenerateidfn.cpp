@@ -29,14 +29,18 @@ using namespace QPatternist;
 
 Item GenerateIDFN::evaluateSingleton(const DynamicContext::Ptr &context) const
 {
-   const QXmlNodeModelIndex &node = m_operands.first()->evaluateSingleton(context).asNode();
+   const auto &data = m_operands.first()->evaluateSingleton(context);
+
+   if (data.isNull()) {
+      return AtomicString::fromValue(QString());
+   }
+
+   const QXmlNodeModelIndex &node = data.asNode();
 
    if (node.isNull()) {
       return AtomicString::fromValue(QString());
    }
 
-   return AtomicString::fromValue(QLatin1Char('T')
-                                  + QString::number(qptrdiff(node.model()))
-                                  + QString::number(qptrdiff(node.internalPointer()))
-                                  + QString::number(node.additionalData()));
+   return AtomicString::fromValue('T' + QString::number(qptrdiff(node.model()))
+         + QString::number(qptrdiff(node.internalPointer())) + QString::number(node.additionalData()));
 }
