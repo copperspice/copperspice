@@ -34,14 +34,15 @@ GMonthDay::GMonthDay(const QDateTime &dateTime) : AbstractDateTime(dateTime)
 GMonthDay::Ptr GMonthDay::fromLexical(const QString &lexical)
 {
    static const CaptureTable captureTable(
-      (QRegularExpression(QLatin1String(
+
+      QRegularExpression(
                   "^\\s*"                             /* Any preceding whitespace. */
                   "--"                                /* Delimiter. */
                   "(\\d{2})"                          /* The month part. */
                   "-"                                 /* Delimiter. */
                   "(\\d{2})"                          /* The day part. */
                   "(?:(\\+|-)(\\d{2}):(\\d{2})|(Z))?" /* The zone offset, "+08:24". */
-                  "\\s*$"                             /* Any terminating whitespace. */))),
+                  "\\s*$"                             /* Any terminating whitespace. */),
       /*zoneOffsetSignP*/         3,
       /*zoneOffsetHourP*/         4,
       /*zoneOffsetMinuteP*/       5,
