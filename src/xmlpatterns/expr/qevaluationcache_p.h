@@ -37,7 +37,7 @@ template<bool IsForGlobal>
 class EvaluationCache : public SingleContainer
 {
  public:
-   EvaluationCache(const Expression::Ptr &operand, const VariableDeclaration *varDecl, const VariableSlotID slot);
+   EvaluationCache(const Expression::Ptr &operand, const VariableDeclaration::Ptr &varDecl, const VariableSlotID slot);
 
    Item evaluateSingleton(const DynamicContext::Ptr &context) const override;
    Item::Iterator::Ptr evaluateSequence(const DynamicContext::Ptr &context) const override;
@@ -59,9 +59,8 @@ class EvaluationCache : public SingleContainer
  private:
    static DynamicContext::Ptr topFocusContext(const DynamicContext::Ptr &context);
 
-   const VariableDeclaration *m_declaration;
+   const VariableDeclaration::Ptr m_declaration;
 
-   bool m_declarationUsedByMany;
    const VariableSlotID m_varSlot;
 };
 

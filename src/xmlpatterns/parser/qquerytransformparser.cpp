@@ -899,11 +899,9 @@ static Expression::Ptr pushVariable(const QXmlName name,
     * In some cases the EvaluationCache instance isn't necessary, but in those cases EvaluationCache
     * optimizes itself away. */
    if (type == VariableDeclaration::ExpressionVariable) {
-      checked = create(new EvaluationCache<false>(checked, var.data(), parseInfo->allocateCacheSlot()), sourceLocator,
-                       parseInfo);
+      checked = create(new EvaluationCache<false>(checked, var, parseInfo->allocateCacheSlot()), sourceLocator, parseInfo);
    } else if (type == VariableDeclaration::GlobalVariable) {
-      checked = create(new EvaluationCache<true>(checked, var.data(), parseInfo->allocateCacheSlot()), sourceLocator,
-                       parseInfo);
+      checked = create(new EvaluationCache<true>(checked, var, parseInfo->allocateCacheSlot()), sourceLocator, parseInfo);
    }
 
    var->setExpression(checked);
