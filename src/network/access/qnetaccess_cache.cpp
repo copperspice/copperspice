@@ -116,10 +116,6 @@ void QNetworkAccessCache::linkEntry(const QByteArray &key)
    newest = node;
 }
 
-/*!
-    Removes the entry pointed by @p key from the linked list.
-    Returns true if the entry removed was the oldest one.
- */
 bool QNetworkAccessCache::unlinkEntry(const QByteArray &key)
 {
    auto it = hash.find(key);

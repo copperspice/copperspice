@@ -23,38 +23,6 @@
 
 #include <qmediabindableinterface.h>
 
-/*!
-    \class QMediaBindableInterface
-    \inmodule QtMultimedia
-
-    \ingroup multimedia
-    \ingroup multimedia_core
-
-
-    \brief The QMediaBindableInterface class is the base class for objects extending media objects functionality.
-
-    \sa
-*/
-
-/*!
-    Destroys a media helper object.
-*/
-
 QMediaBindableInterface::~QMediaBindableInterface()
 {
 }
-
-/*!
-    \fn QMediaBindableInterface::mediaObject() const;
-
-    Return the currently attached media object.
-*/
-
-
-/*!
-    \fn QMediaBindableInterface::setMediaObject(QMediaObject *object);
-
-    Attaches to the media \a object.
-    Returns true if attached successfully, otherwise returns false.
-*/
-

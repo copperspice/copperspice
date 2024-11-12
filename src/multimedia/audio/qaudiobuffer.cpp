@@ -179,9 +179,7 @@ QAudioBuffer::QAudioBuffer(QAbstractAudioBuffer *provider)
    : d(new QAudioBufferPrivate(provider))
 {
 }
-/*!
-    Generally this will have copy-on-write semantics - a copy will only be made when it has to be.
- */
+
 QAudioBuffer::QAudioBuffer(const QAudioBuffer &other)
 {
    d = QAudioBufferPrivate::acquire(other.d);

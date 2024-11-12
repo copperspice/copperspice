@@ -1436,8 +1436,6 @@ bool QPainterVideoSurface::isFormatSupported(const QVideoSurfaceFormat &format) 
    return m_painter->isFormatSupported(format);
 }
 
-/*!
-*/
 bool QPainterVideoSurface::start(const QVideoSurfaceFormat &format)
 {
    if (isActive()) {
@@ -1471,8 +1469,6 @@ bool QPainterVideoSurface::start(const QVideoSurfaceFormat &format)
    return false;
 }
 
-/*!
-*/
 void QPainterVideoSurface::stop()
 {
    if (isActive()) {
@@ -1483,8 +1479,6 @@ void QPainterVideoSurface::stop()
    }
 }
 
-/*!
-*/
 bool QPainterVideoSurface::present(const QVideoFrame &frame)
 {
    if (!m_ready) {
@@ -1514,15 +1508,11 @@ bool QPainterVideoSurface::present(const QVideoFrame &frame)
    return false;
 }
 
-/*!
-*/
 int QPainterVideoSurface::brightness() const
 {
    return m_brightness;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setBrightness(int brightness)
 {
    m_brightness = brightness;
@@ -1530,15 +1520,11 @@ void QPainterVideoSurface::setBrightness(int brightness)
    m_colorsDirty = true;
 }
 
-/*!
-*/
 int QPainterVideoSurface::contrast() const
 {
    return m_contrast;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setContrast(int contrast)
 {
    m_contrast = contrast;
@@ -1546,15 +1532,11 @@ void QPainterVideoSurface::setContrast(int contrast)
    m_colorsDirty = true;
 }
 
-/*!
-*/
 int QPainterVideoSurface::hue() const
 {
    return m_hue;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setHue(int hue)
 {
    m_hue = hue;
@@ -1562,15 +1544,11 @@ void QPainterVideoSurface::setHue(int hue)
    m_colorsDirty = true;
 }
 
-/*!
-*/
 int QPainterVideoSurface::saturation() const
 {
    return m_saturation;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setSaturation(int saturation)
 {
    m_saturation = saturation;
@@ -1578,22 +1556,16 @@ void QPainterVideoSurface::setSaturation(int saturation)
    m_colorsDirty = true;
 }
 
-/*!
-*/
 bool QPainterVideoSurface::isReady() const
 {
    return m_ready;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setReady(bool ready)
 {
    m_ready = ready;
 }
 
-/*!
-*/
 void QPainterVideoSurface::paint(QPainter *painter, const QRectF &target, const QRectF &source)
 {
    if (!isActive()) {
@@ -1620,21 +1592,13 @@ void QPainterVideoSurface::paint(QPainter *painter, const QRectF &target, const 
    }
 }
 
-/*!
-    \fn QPainterVideoSurface::frameChanged()
-*/
-
 #if !defined(QT_NO_OPENGL) && !defined(QT_OPENGL_ES_1_CL) && !defined(QT_OPENGL_ES_1)
 
-/*!
-*/
 const QGLContext *QPainterVideoSurface::glContext() const
 {
    return m_glContext;
 }
 
-/*!
-*/
 void QPainterVideoSurface::setGLContext(QGLContext *context)
 {
    if (m_glContext == context) {

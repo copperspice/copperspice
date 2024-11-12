@@ -122,26 +122,12 @@ static void qInit(QSqlQuery *q, const QString &query, QSqlDatabase db)
    }
 }
 
-/*!
-    Constructs a QSqlQuery object using the SQL \a query and the
-    database \a db. If \a db is not specified, or is invalid, the application's
-    default database is used. If \a query is not an empty string, it
-    will be executed.
-
-    \sa QSqlDatabase
-*/
 QSqlQuery::QSqlQuery(const QString &query, QSqlDatabase db)
 {
    d = QSqlQueryPrivate::shared_null();
    qInit(this, query, db);
 }
 
-/*!
-    Constructs a QSqlQuery object using the database \a db.
-    If \a db is invalid, the application's default database will be used.
-
-    \sa QSqlDatabase
-*/
 
 QSqlQuery::QSqlQuery(QSqlDatabase db)
 {
@@ -149,25 +135,11 @@ QSqlQuery::QSqlQuery(QSqlDatabase db)
    qInit(this, QString(), db);
 }
 
-
-/*!
-    Assigns \a other to this object.
-*/
-
 QSqlQuery &QSqlQuery::operator=(const QSqlQuery &other)
 {
    qAtomicAssign(d, other.d);
    return *this;
 }
-
-/*!
-  Returns true if the query is \l{isActive()}{active} and positioned
-  on a valid record and the \a field is NULL; otherwise returns
-  false. Note that for some drivers, isNull() will not return accurate
-  information until after an attempt is made to retrieve data.
-
-  \sa isActive(), isValid(), value()
-*/
 
 bool QSqlQuery::isNull(int field) const
 {
@@ -254,72 +226,16 @@ QString QSqlQuery::lastQuery() const
    return d->sqlResult->lastQuery();
 }
 
-/*!
-    Returns the database driver associated with the query.
-*/
-
 const QSqlDriver *QSqlQuery::driver() const
 {
    return d->sqlResult->driver();
 }
-
-/*!
-    Returns the result associated with the query.
-*/
 
 const QSqlResult *QSqlQuery::result() const
 {
    return d->sqlResult;
 }
 
-/*!
-  Retrieves the record at position \a index, if available, and
-  positions the query on the retrieved record. The first record is at
-  position 0. Note that the query must be in an \l{isActive()}
-  {active} state and isSelect() must return true before calling this
-  function.
-
-  If \a relative is false (the default), the following rules apply:
-
-  \list
-
-  \o If \a index is negative, the result is positioned before the
-  first record and false is returned.
-
-  \o Otherwise, an attempt is made to move to the record at position
-  \a index. If the record at position \a index could not be retrieved,
-  the result is positioned after the last record and false is
-  returned. If the record is successfully retrieved, true is returned.
-
-  \endlist
-
-  If \a relative is true, the following rules apply:
-
-  \list
-
-  \o If the result is currently positioned before the first record or
-  on the first record, and \a index is negative, there is no change,
-  and false is returned.
-
-  \o If the result is currently located after the last record, and \a
-  index is positive, there is no change, and false is returned.
-
-  \o If the result is currently located somewhere in the middle, and
-  the relative offset \a index moves the result below zero, the result
-  is positioned before the first record and false is returned.
-
-  \o Otherwise, an attempt is made to move to the record \a index
-  records ahead of the current record (or \a index records behind the
-  current record if \a index is negative). If the record at offset \a
-  index could not be retrieved, the result is positioned after the
-  last record if \a index >= 0, (or before the first record if \a
-  index is negative), and false is returned. If the record is
-  successfully retrieved, true is returned.
-
-  \endlist
-
-  \sa next() previous() first() last() at() isActive() isValid()
-*/
 bool QSqlQuery::seek(int index, bool relative)
 {
    if (!isSelect() || !isActive()) {
@@ -387,35 +303,6 @@ bool QSqlQuery::seek(int index, bool relative)
    return true;
 }
 
-/*!
-
-  Retrieves the next record in the result, if available, and positions
-  the query on the retrieved record. Note that the result must be in
-  the \l{isActive()}{active} state and isSelect() must return true
-  before calling this function or it will do nothing and return false.
-
-  The following rules apply:
-
-  \list
-
-  \o If the result is currently located before the first record,
-  e.g. immediately after a query is executed, an attempt is made to
-  retrieve the first record.
-
-  \o If the result is currently located after the last record, there
-  is no change and false is returned.
-
-  \o If the result is located somewhere in the middle, an attempt is
-  made to retrieve the next record.
-
-  \endlist
-
-  If the record could not be retrieved, the result is positioned after
-  the last record and false is returned. If the record is successfully
-  retrieved, true is returned.
-
-  \sa previous() first() last() seek() at() isActive() isValid()
-*/
 bool QSqlQuery::next()
 {
    if (!isSelect() || !isActive()) {
@@ -437,35 +324,6 @@ bool QSqlQuery::next()
    }
 }
 
-/*!
-
-  Retrieves the previous record in the result, if available, and
-  positions the query on the retrieved record. Note that the result
-  must be in the \l{isActive()}{active} state and isSelect() must
-  return true before calling this function or it will do nothing and
-  return false.
-
-  The following rules apply:
-
-  \list
-
-  \o If the result is currently located before the first record, there
-  is no change and false is returned.
-
-  \o If the result is currently located after the last record, an
-  attempt is made to retrieve the last record.
-
-  \o If the result is somewhere in the middle, an attempt is made to
-  retrieve the previous record.
-
-  \endlist
-
-  If the record could not be retrieved, the result is positioned
-  before the first record and false is returned. If the record is
-  successfully retrieved, true is returned.
-
-  \sa next() first() last() seek() at() isActive() isValid()
-*/
 bool QSqlQuery::previous()
 {
    if (!isSelect() || !isActive()) {
@@ -492,16 +350,6 @@ bool QSqlQuery::previous()
    }
 }
 
-/*!
-  Retrieves the first record in the result, if available, and
-  positions the query on the retrieved record. Note that the result
-  must be in the \l{isActive()}{active} state and isSelect() must
-  return true before calling this function or it will do nothing and
-  return false.  Returns true if successful. If unsuccessful the query
-  position is set to an invalid position and false is returned.
-
-  \sa next() previous() last() seek() at() isActive() isValid()
- */
 bool QSqlQuery::first()
 {
    if (!isSelect() || !isActive()) {
@@ -516,18 +364,6 @@ bool QSqlQuery::first()
    return b;
 }
 
-/*!
-
-  Retrieves the last record in the result, if available, and positions
-  the query on the retrieved record. Note that the result must be in
-  the \l{isActive()}{active} state and isSelect() must return true
-  before calling this function or it will do nothing and return false.
-  Returns true if successful. If unsuccessful the query position is
-  set to an invalid position and false is returned.
-
-  \sa next() previous() first() seek() at() isActive() isValid()
-*/
-
 bool QSqlQuery::last()
 {
    if (!isSelect() || !isActive()) {
@@ -538,18 +374,6 @@ bool QSqlQuery::last()
    return b;
 }
 
-/*!
-  Returns the size of the result (number of rows returned), or -1 if
-  the size cannot be determined or if the database does not support
-  reporting information about query sizes. Note that for non-\c SELECT
-  statements (isSelect() returns false), size() will return -1. If the
-  query is not active (isActive() returns false), -1 is returned.
-
-  To determine the number of rows affected by a non-\c SELECT
-  statement, use numRowsAffected().
-
-  \sa isActive() numRowsAffected() QSqlDriver::hasFeature()
-*/
 int QSqlQuery::size() const
 {
    if (isActive() && d->sqlResult->driver()->hasFeature(QSqlDriver::QuerySize)) {
@@ -557,15 +381,6 @@ int QSqlQuery::size() const
    }
    return -1;
 }
-
-/*!
-  Returns the number of rows affected by the result's SQL statement,
-  or -1 if it cannot be determined. Note that for \c SELECT
-  statements, the value is undefined; use size() instead. If the query
-  is not \l{isActive()}{active}, -1 is returned.
-
-  \sa size() QSqlDriver::hasFeature()
-*/
 
 int QSqlQuery::numRowsAffected() const
 {
@@ -575,118 +390,36 @@ int QSqlQuery::numRowsAffected() const
    return -1;
 }
 
-/*!
-  Returns error information about the last error (if any) that
-  occurred with this query.
-
-  \sa QSqlError, QSqlDatabase::lastError()
-*/
-
 QSqlError QSqlQuery::lastError() const
 {
    return d->sqlResult->lastError();
 }
-
-/*!
-  Returns true if the query is currently positioned on a valid
-  record; otherwise returns false.
-*/
 
 bool QSqlQuery::isValid() const
 {
    return d->sqlResult->isValid();
 }
 
-/*!
-
-  Returns true if the query is \e{active}. An active QSqlQuery is one
-  that has been \l{QSqlQuery::exec()} {exec()'d} successfully but not
-  yet finished with.  When you are finished with an active query, you
-  can make make the query inactive by calling finish() or clear(), or
-  you can delete the QSqlQuery instance.
-
-  \note Of particular interest is an active query that is a \c{SELECT}
-  statement. For some databases that support transactions, an active
-  query that is a \c{SELECT} statement can cause a \l{QSqlDatabase::}
-  {commit()} or a \l{QSqlDatabase::} {rollback()} to fail, so before
-  committing or rolling back, you should make your active \c{SELECT}
-  statement query inactive using one of the ways listed above.
-
-  \sa isSelect()
- */
 bool QSqlQuery::isActive() const
 {
    return d->sqlResult->isActive();
 }
-
-/*!
-  Returns true if the current query is a \c SELECT statement;
-  otherwise returns false.
-*/
 
 bool QSqlQuery::isSelect() const
 {
    return d->sqlResult->isSelect();
 }
 
-/*!
-  Returns true if you can only scroll forward through a result set;
-  otherwise returns false.
-
-  \sa setForwardOnly(), next()
-*/
 bool QSqlQuery::isForwardOnly() const
 {
    return d->sqlResult->isForwardOnly();
 }
 
-/*!
-  Sets forward only mode to \a forward. If \a forward is true, only
-  next() and seek() with positive values, are allowed for navigating
-  the results.
-
-  Forward only mode can be (depending on the driver) more memory
-  efficient since results do not need to be cached. It will also
-  improve performance on some databases. For this to be true, you must
-  call \c setForwardOnly() before the query is prepared or executed.
-  Note that the constructor that takes a query and a database may
-  execute the query.
-
-  Forward only mode is off by default.
-
-  Setting forward only to false is a suggestion to the database engine,
-  which has the final say on whether a result set is forward only or
-  scrollable. isForwardOnly() will always return the correct status of
-  the result set.
-
-  \note Calling setForwardOnly after execution of the query will result
-  in unexpected results at best, and crashes at worst.
-
-  \sa isForwardOnly(), next(), seek(), QSqlResult::setForwardOnly()
-*/
 void QSqlQuery::setForwardOnly(bool forward)
 {
    d->sqlResult->setForwardOnly(forward);
 }
 
-/*!
-  Returns a QSqlRecord containing the field information for the
-  current query. If the query points to a valid row (isValid() returns
-  true), the record is populated with the row's values.  An empty
-  record is returned when there is no active query (isActive() returns
-  false).
-
-  To retrieve values from a query, value() should be used since
-  its index-based lookup is faster.
-
-  In the following example, a \c{SELECT * FROM} query is executed.
-  Since the order of the columns is not defined, QSqlRecord::indexOf()
-  is used to obtain the index of a column.
-
-  \snippet doc/src/snippets/code/src_sql_kernel_qsqlquery.cpp 1
-
-  \sa value()
-*/
 QSqlRecord QSqlQuery::record() const
 {
    QSqlRecord rec = d->sqlResult->record();
@@ -699,40 +432,11 @@ QSqlRecord QSqlQuery::record() const
    return rec;
 }
 
-/*!
-  Clears the result set and releases any resources held by the
-  query. Sets the query state to inactive. You should rarely if ever
-  need to call this function.
-*/
 void QSqlQuery::clear()
 {
    *this = QSqlQuery(driver()->createResult());
 }
 
-/*!
-  Prepares the SQL query \a query for execution. Returns true if the
-  query is prepared successfully; otherwise returns false.
-
-  The query may contain placeholders for binding values. Both Oracle
-  style colon-name (e.g., \c{:surname}), and ODBC style (\c{?})
-  placeholders are supported; but they cannot be mixed in the same
-  query. See the \l{QSqlQuery examples}{Detailed Description} for
-  examples.
-
-  Portability note: Some databases choose to delay preparing a query
-  until it is executed the first time. In this case, preparing a
-  syntactically wrong query succeeds, but every consecutive exec()
-  will fail.
-
-  For SQLite, the query string can contain only one statement at a time.
-  If more than one statements are give, the function returns false.
-
-  Example:
-
-  \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 9
-
-  \sa exec(), bindValue(), addBindValue()
-*/
 bool QSqlQuery::prepare(const QString &query)
 {
    if (d->ref.load() != 1) {

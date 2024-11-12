@@ -1740,11 +1740,6 @@ void QNetworkReplyHttpImplPrivate::setResumeOffset(quint64 offset)
    resumeOffset = offset;
 }
 
-/*!
-    Starts the backend.  Returns \c true if the backend is started.  Returns \c false if the backend
-    could not be started due to an unopened or roaming session.  The caller should recall this
-    function once the session has been opened or the roaming process has finished.
-*/
 bool QNetworkReplyHttpImplPrivate::start(const QNetworkRequest &newHttpRequest)
 {
 

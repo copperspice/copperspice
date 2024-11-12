@@ -166,114 +166,55 @@ void QMediaPlaylist::setPlaybackMode(QMediaPlaylist::PlaybackMode mode)
    d->control->setPlaybackMode(mode);
 }
 
-/*!
-  Returns position of the current media content in the playlist.
-*/
 int QMediaPlaylist::currentIndex() const
 {
    return d_func()->control->currentIndex();
 }
-
-/*!
-  Returns the current media content.
-*/
 
 QMediaContent QMediaPlaylist::currentMedia() const
 {
    return d_func()->playlist()->media(currentIndex());
 }
 
-/*!
-  Returns the index of the item, which would be current after calling next()
-  \a steps times.
-
-  Returned value depends on the size of playlist, current position
-  and playback mode.
-
-  \sa QMediaPlaylist::playbackMode(), previousIndex()
-*/
 int QMediaPlaylist::nextIndex(int steps) const
 {
    return d_func()->control->nextIndex(steps);
 }
-
-/*!
-  Returns the index of the item, which would be current after calling previous()
-  \a steps times.
-
-  \sa QMediaPlaylist::playbackMode(), nextIndex()
-*/
 
 int QMediaPlaylist::previousIndex(int steps) const
 {
    return d_func()->control->previousIndex(steps);
 }
 
-
-/*!
-  Returns the number of items in the playlist.
-
-  \sa isEmpty()
-  */
 int QMediaPlaylist::mediaCount() const
 {
    return d_func()->playlist()->mediaCount();
 }
 
-/*!
-  Returns true if the playlist contains no items, otherwise returns false.
-
-  \sa mediaCount()
-  */
 bool QMediaPlaylist::isEmpty() const
 {
    return mediaCount() == 0;
 }
 
-/*!
-  Returns true if the playlist can be modified, otherwise returns false.
-
-  \sa mediaCount()
-  */
 bool QMediaPlaylist::isReadOnly() const
 {
    return d_func()->playlist()->isReadOnly();
 }
-
-/*!
-  Returns the media content at \a index in the playlist.
-*/
 
 QMediaContent QMediaPlaylist::media(int index) const
 {
    return d_func()->playlist()->media(index);
 }
 
-/*!
-  Append the media \a content to the playlist.
-
-  Returns true if the operation is successful, otherwise returns false.
-  */
 bool QMediaPlaylist::addMedia(const QMediaContent &content)
 {
    return d_func()->control->playlistProvider()->addMedia(content);
 }
 
-/*!
-  Append multiple media content \a items to the playlist.
-
-  Returns true if the operation is successful, otherwise returns false.
-  */
 bool QMediaPlaylist::addMedia(const QList<QMediaContent> &items)
 {
    return d_func()->control->playlistProvider()->addMedia(items);
 }
-
-/*!
-  Insert the media \a content to the playlist at position \a pos.
-
-  Returns true if the operation is successful, otherwise returns false.
-*/
 
 bool QMediaPlaylist::insertMedia(int pos, const QMediaContent &content)
 {
@@ -281,23 +222,12 @@ bool QMediaPlaylist::insertMedia(int pos, const QMediaContent &content)
    return playlist->insertMedia(qBound(0, pos, playlist->mediaCount()), content);
 }
 
-/*!
-  Insert multiple media content \a items to the playlist at position \a pos.
-
-  Returns true if the operation is successful, otherwise returns false.
-*/
-
 bool QMediaPlaylist::insertMedia(int pos, const QList<QMediaContent> &items)
 {
    QMediaPlaylistProvider *playlist = d_func()->playlist();
    return playlist->insertMedia(qBound(0, pos, playlist->mediaCount()), items);
 }
 
-/*!
-  Remove the item from the playlist at position \a pos.
-
-  Returns true if the operation is successful, otherwise return false.
-  */
 bool QMediaPlaylist::removeMedia(int pos)
 {
    QMediaPlaylistProvider *playlist = d_func()->playlist();
@@ -308,11 +238,6 @@ bool QMediaPlaylist::removeMedia(int pos)
    }
 }
 
-/*!
-  Remove items in the playlist from \a start to \a end inclusive.
-
-  Returns true if the operation is successful, otherwise return false.
-  */
 bool QMediaPlaylist::removeMedia(int start, int end)
 {
    QMediaPlaylistProvider *playlist = d_func()->playlist();
@@ -325,11 +250,6 @@ bool QMediaPlaylist::removeMedia(int start, int end)
    }
 }
 
-/*!
-  Remove all the items from the playlist.
-
-  Returns true if the operation is successful, otherwise return false.
-  */
 bool QMediaPlaylist::clear()
 {
    Q_D(QMediaPlaylist);
@@ -453,30 +373,11 @@ void QMediaPlaylist::load(const QNetworkRequest &request, const char *format)
    return;
 }
 
-/*!
-  Load playlist from \a location. If \a format is specified, it is used,
-  otherwise format is guessed from location name and data.
-
-  New items are appended to playlist.
-
-  QMediaPlaylist::loaded() signal is emitted if playlist was loaded successfully,
-  otherwise the playlist emits loadFailed().
-*/
-
 void QMediaPlaylist::load(const QUrl &location, const char *format)
 {
    load(QNetworkRequest(location), format);
 }
 
-/*!
-  Load playlist from QIODevice \a device. If \a format is specified, it is used,
-  otherwise format is guessed from device data.
-
-  New items are appended to playlist.
-
-  QMediaPlaylist::loaded() signal is emitted if playlist was loaded successfully,
-  otherwise the playlist emits loadFailed().
-*/
 void QMediaPlaylist::load(QIODevice *device, const char *format)
 {
    Q_D(QMediaPlaylist);
@@ -522,12 +423,6 @@ void QMediaPlaylist::load(QIODevice *device, const char *format)
    return;
 }
 
-/*!
-  Save playlist to \a location. If \a format is specified, it is used,
-  otherwise format is guessed from location name.
-
-  Returns true if playlist was saved successfully, otherwise returns false.
-  */
 bool QMediaPlaylist::save(const QUrl &location, const char *format)
 {
    Q_D(QMediaPlaylist);

@@ -145,11 +145,6 @@ bool QGLBuffer::create()
 
 #define ctx QGLContext::currentContext()
 
-/*!
-    Returns true if this buffer has been created; false otherwise.
-
-    \sa create(), destroy()
-*/
 bool QGLBuffer::isCreated() const
 {
    Q_D(const QGLBuffer);

@@ -360,9 +360,6 @@ QResource::QResource(const QString &file, const QLocale &locale)
    d->locale = locale;
 }
 
-/*!
-    Releases the resources of the QResource object.
-*/
 QResource::~QResource()
 {
 }
@@ -374,23 +371,11 @@ void QResource::setLocale(const QLocale &locale)
    d->locale = locale;
 }
 
-/*!
-    Returns the locale used to locate the data for the QResource.
-*/
-
 QLocale QResource::locale() const
 {
    Q_D(const QResource);
    return d->locale;
 }
-
-/*!
-    Sets a QResource to point to \a file. \a file can either be absolute,
-    in which case it is opened directly, if relative then the file will be
-    tried to be found in QDir::searchPaths().
-
-    \sa absoluteFilePath()
-*/
 
 void QResource::setFileName(const QString &file)
 {
@@ -398,13 +383,6 @@ void QResource::setFileName(const QString &file)
    d->clear();
    d->fileName = file;
 }
-
-/*!
-    Returns the full path to the file that this QResource represents as it
-    was passed.
-
-    \sa absoluteFilePath()
-*/
 
 QString QResource::fileName() const
 {

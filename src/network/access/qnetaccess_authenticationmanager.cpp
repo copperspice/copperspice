@@ -258,17 +258,6 @@ void QNetworkAccessAuthenticationManager::cacheCredentials(const QUrl &url,
    } while (true);
 }
 
-/*!
-    Fetch the credential data from the credential cache.
-
-    If auth is 0 (as it is when called from createRequest()), this will try to
-    look up with an empty realm. That fails in most cases for HTTP (because the
-    realm is seldom empty for HTTP challenges). In any case, QHttpNetworkConnection
-    never sends the credentials on the first attempt: it needs to find out what
-    authentication methods the server supports.
-
-    For FTP, realm is always empty.
-*/
 QNetworkAuthenticationCredential
 QNetworkAccessAuthenticationManager::fetchCachedCredentials(const QUrl &url,
       const QAuthenticator *authentication)

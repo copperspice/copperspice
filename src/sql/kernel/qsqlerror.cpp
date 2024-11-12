@@ -52,19 +52,12 @@ QSqlError::QSqlError(const QString &driverText, const QString &databaseText,
    d->errorCode = code;
 }
 
-/*!
-    Creates a copy of \a other.
-*/
 QSqlError::QSqlError(const QSqlError &other)
 {
    d = new QSqlErrorPrivate;
 
    *d = *other.d;
 }
-
-/*!
-    Assigns the \a other error's values to this error.
-*/
 
 QSqlError &QSqlError::operator=(const QSqlError &other)
 {
@@ -73,41 +66,21 @@ QSqlError &QSqlError::operator=(const QSqlError &other)
    return *this;
 }
 
-/*!
-    Compare the \a other error's values to this error and returns true, if it equal.
-*/
-
 bool QSqlError::operator==(const QSqlError &other) const
 {
    return (d->errorType == other.d->errorType);
 }
-
-
-/*!
-    Compare the \a other error's values to this error and returns true if it is not equal.
-*/
 
 bool QSqlError::operator!=(const QSqlError &other) const
 {
    return (d->errorType != other.d->errorType);
 }
 
-
-/*!
-    Destroys the object and frees any allocated resources.
-*/
-
 QSqlError::~QSqlError()
 {
    delete d;
 }
 
-/*!
-    Returns the text of the error as reported by the driver. This may
-    contain database-specific descriptions. It may also be empty.
-
-    \sa setDriverText() databaseText() text()
-*/
 QString QSqlError::driverText() const
 {
    return d->driverError;

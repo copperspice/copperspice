@@ -93,9 +93,6 @@ void QFSFileEnginePrivate::init()
 
 }
 
-/*!
-    Constructs a QFSFileEngine for the file name \a file.
-*/
 QFSFileEngine::QFSFileEngine(const QString &file)
    : QAbstractFileEngine(*new QFSFileEnginePrivate)
 {
@@ -180,10 +177,6 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode)
    return d->nativeOpen(openMode);
 }
 
-/*!
-    Opens the file handle \a fh in \a openMode mode. Returns true on
-    success; otherwise returns false.
-*/
 bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh)
 {
    return open(openMode, fh, QFile::DontCloseHandle);
@@ -213,9 +206,6 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh, QFile::FileHand
    return d->openFh(openMode, fh);
 }
 
-/*!
-    Opens the file handle \a fh using the open mode \a flags.
-*/
 bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode openMode, FILE *fh)
 {
    Q_Q(QFSFileEngine);

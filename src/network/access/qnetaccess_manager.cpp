@@ -154,13 +154,6 @@ QNetworkAccessManager::QNetworkAccessManager(QObject *parent)
 #endif
 }
 
-/*!
-    Destroys the QNetworkAccessManager object and frees up any
-    resources. Note that QNetworkReply objects that are returned from
-    this class have this object set as their parents, which means that
-    they will be deleted along with it if you don't call
-    QObject::setParent() on them.
-*/
 QNetworkAccessManager::~QNetworkAccessManager()
 {
 

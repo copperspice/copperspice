@@ -33,9 +33,6 @@ QLocalSocket::QLocalSocket(QObject *parent)
    d->init();
 }
 
-/*!
-    Destroys the socket, closing the connection if necessary.
- */
 QLocalSocket::~QLocalSocket()
 {
    close();
@@ -73,13 +70,6 @@ QString QLocalSocket::serverName() const
    return d->serverName;
 }
 
-/*!
-    Returns the server path that the socket is connected to.
-
-    \note The return value of this function is platform specific.
-
-    \sa connectToServer(), serverName()
- */
 QString QLocalSocket::fullServerName() const
 {
    Q_D(const QLocalSocket);

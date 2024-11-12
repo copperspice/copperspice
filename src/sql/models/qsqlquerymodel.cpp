@@ -383,36 +383,12 @@ QSqlRecord QSqlQueryModel::record(int row) const
    return rec;
 }
 
-/*! \overload
-
-    Returns an empty record containing information about the fields
-    of the current query.
-
-    If the model is not initialized, an empty record will be
-    returned.
-
-    \sa QSqlRecord::isEmpty()
- */
 QSqlRecord QSqlQueryModel::record() const
 {
    Q_D(const QSqlQueryModel);
    return d->rec;
 }
 
-/*!
-    Inserts \a count columns into the model at position \a column. The
-    \a parent parameter must always be an invalid QModelIndex, since
-    the model does not support parent-child relationships.
-
-    Returns true if \a column is within bounds; otherwise returns false.
-
-    By default, inserted columns are empty. To fill them with data,
-    reimplement data() and handle any inserted column separately:
-
-    \snippet doc/src/snippets/sqldatabase/sqldatabase.cpp 23
-
-    \sa removeColumns()
-*/
 bool QSqlQueryModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
    Q_D(QSqlQueryModel);

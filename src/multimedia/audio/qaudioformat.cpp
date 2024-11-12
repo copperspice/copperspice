@@ -143,47 +143,25 @@ void QAudioFormat::setCodec(const QString &codec)
    d->codec = codec;
 }
 
-/*!
-    Returns the current codec value.
-
-   \sa QAudioDeviceInfo::supportedCodecs()
-*/
-
 QString QAudioFormat::codec() const
 {
    return d->codec;
 }
-
-/*!
-   Sets the byteOrder to \a byteOrder.
-*/
 
 void QAudioFormat::setByteOrder(QAudioFormat::Endian byteOrder)
 {
    d->byteOrder = byteOrder;
 }
 
-/*!
-    Returns the current byteOrder value.
-*/
-
 QAudioFormat::Endian QAudioFormat::byteOrder() const
 {
    return d->byteOrder;
 }
 
-/*!
-   Sets the sampleType to \a sampleType.
-*/
-
 void QAudioFormat::setSampleType(QAudioFormat::SampleType sampleType)
 {
    d->sampleType = sampleType;
 }
-
-/*!
-    Returns the current SampleType value.
-*/
 
 QAudioFormat::SampleType QAudioFormat::sampleType() const
 {
