@@ -22,10 +22,11 @@ else()
 
    list(APPEND CORE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_enable_shared.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_pointer_traits.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_shared_array_pointer.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_shared_pointer.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_unique_pointer.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_unique_array_pointer.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_unique_pointer.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../annex/cs_pointer/cs_weak_pointer.h
    )
 endif()
