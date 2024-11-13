@@ -25,6 +25,7 @@
 #define QSHAREDPOINTER_H
 
 #include <cs_enable_shared.h>
+#include <cs_shared_array_pointer.h>
 #include <cs_shared_pointer.h>
 #include <cs_weak_pointer.h>
 
@@ -79,6 +80,26 @@ class QSharedPointer : public CsPointer::CsSharedPointer<T>
 
 #endif
 
+#if ! defined(CS_DOXYPRESS)
+
+template <typename T>
+class QSharedArrayPointer : public CsPointer::CsSharedArrayPointer<T>
+{
+public:
+   using CsPointer::CsSharedArrayPointer<T>::CsSharedArrayPointer;
+
+   QSharedArrayPointer(CsPointer::CsSharedArrayPointer<T> other) noexcept
+      : CsPointer::CsSharedArrayPointer<T>(std::move(other))
+   {
+   }
+
+   bool isNull() const {
+      return CsPointer::CsSharedArrayPointer<T>::is_null();
+   }
+};
+
+#endif
+
 template <typename T>
 using QEnableSharedFromThis = CsPointer::CsEnableSharedFromThis<T>;
 
@@ -99,6 +120,12 @@ template < typename T, typename... Args, typename = typename std::enable_if_t < 
 QSharedPointer<T> QMakeShared(Args && ... args)
 {
    return CsPointer::make_shared<T>(std::forward<Args>(args)...);
+}
+
+template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
+QSharedArrayPointer<T> QMakeShared(std::size_t size)
+{
+   return CsPointer::make_shared<T>(size);
 }
 
 template <typename U, typename T>
