@@ -287,8 +287,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
                const TemplatePattern::Ptr &pattern = mode->templatePatterns.at(i);
                Expression::Ptr matchPattern(pattern->matchPattern());
 
-               processTemplateRule(pattern->templateTarget()->body,
-                                   pattern, mode->name(), TemplateInitial);
+               processTemplateRule(pattern->templateTarget()->body, pattern, mode->name(), TemplateInitial);
 
                matchPattern = matchPattern->typeCheck(patternContext, CommonSequenceTypes::ZeroOrMoreItems);
                matchPattern = matchPattern->compress(patternContext);
@@ -297,9 +296,11 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
                if (currentTemplateID == -1 && hasDoneItOnce) {
                   currentTemplateID = pattern->id();
                   continue;
+
                } else if (currentTemplateID == pattern->id() && hasDoneItOnce) {
                   hasDoneItOnce = false;
                   continue;
+
                }
 
                hasDoneItOnce = true;
@@ -309,8 +310,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
                // Patterns for a new template has started, we must deal with the body & parameters
                {
                   // type may be incorrect, it should be the union of all patterns
-                  const StaticContext::Ptr focusContext(new StaticFocusContext(matchPattern->staticType()->itemType(),
-                                                        context));
+                  const StaticContext::Ptr focusContext(new StaticFocusContext(matchPattern->staticType()->itemType(), context));
                   body = body->typeCheck(focusContext, CommonSequenceTypes::ZeroOrMoreItems);
 
                   pattern->templateTarget()->compileParameters(focusContext);

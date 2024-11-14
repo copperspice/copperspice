@@ -87,8 +87,10 @@ void XsdStateMachine<TransitionType>::reset()
 {
    // reset the machine to the start state
    QHashIterator<StateId, StateType> it(m_states);
+
    while (it.hasNext()) {
       it.next();
+
       if (it.value() == StartState || it.value() == StartEndState) {
          m_currentState = it.key();
          return;

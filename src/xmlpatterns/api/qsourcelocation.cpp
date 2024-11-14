@@ -44,9 +44,7 @@ QSourceLocation::~QSourceLocation()
 
 bool QSourceLocation::operator==(const QSourceLocation &other) const
 {
-   return    m_line == other.m_line
-             && m_column == other.m_column
-             && m_uri == other.m_uri;
+   return m_line == other.m_line && m_column == other.m_column && m_uri == other.m_uri;
 }
 
 bool QSourceLocation::operator!=(const QSourceLocation &other) const

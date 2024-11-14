@@ -1061,7 +1061,7 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
    }
 
    // 4.2.2
-   if (!validateUniqueIdentityConstraint(element, constraint, qualifiedNodeSet)) {
+   if (! validateUniqueIdentityConstraint(element, constraint, qualifiedNodeSet)) {
       return false;
    }
 
@@ -1070,14 +1070,18 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
    while (it.hasNext()) {
       const TargetNode node = it.next();
       const QVector<QXmlItem> fieldItems = node.fieldItems();
+
       for (int i = 0; i < fieldItems.count(); ++i) {
          const QXmlNodeModelIndex index = fieldItems.at(i).toNodeModelIndex();
+
          if (m_model->kind(index) == QXmlNodeModelIndex::Element) {
             const XsdElement::Ptr declaration = m_model->assignedElement(index);
+
             if (declaration && declaration->isNillable()) {
                error(QtXmlPatterns::tr("Key constraint %1 contains references nillable element %2.")
                      .formatArg(formatKeyword(constraint->displayName(m_namePool)))
                      .formatArg(formatKeyword(declaration->displayName(m_namePool))));
+
                return false;
             }
          }
@@ -1115,9 +1119,9 @@ bool XsdValidatingInstanceReader::validateKeyRefIdentityConstraint(const XsdElem
          }
       }
 
-      if (!foundMatching) {
-         error(QtXmlPatterns::tr("No referenced value found for key reference %1.").formatArg(formatKeyword(constraint->displayName(
-                  m_namePool))));
+      if (! foundMatching) {
+         error(QtXmlPatterns::tr("No referenced value found for key reference %1.")
+               .formatArg(formatKeyword(constraint->displayName(m_namePool))));
          return false;
       }
    }

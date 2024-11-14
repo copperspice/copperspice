@@ -124,7 +124,8 @@ class XsdStateMachine
       return result;
    }
 
-   QSet<StateId> move(const QSet<StateId> &states, TransitionType input) const {
+   QSet<StateId> move(const QSet<StateId> &states, TransitionType input) const
+   {
       QSet<StateId> result;
 
       QSetIterator<StateId> it(states);
