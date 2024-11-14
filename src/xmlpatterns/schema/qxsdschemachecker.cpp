@@ -397,11 +397,16 @@ void XsdSchemaChecker::checkSimpleTypeConstraints()
          // 2.1 second part
          if (itemType->category() == SchemaType::SimpleTypeUnion && itemType->isDefinedBySchema()) {
             const XsdSimpleType::Ptr simpleItemType = itemType;
-            const AnySimpleType::List memberTypes = simpleItemType->memberTypes();
+            const AnySimpleType::List memberTypes   = simpleItemType->memberTypes();
+
             for (int j = 0; j < memberTypes.count(); ++j) {
-               if (memberTypes.at(j)->category() != SchemaType::SimpleTypeAtomic) {
-                  m_context->error(QtXmlPatterns::tr("Variety of member types of %1 must be atomic.").formatArg(formatType(m_namePool,
-                                   simpleItemType)), XsdSchemaContext::XSDError, location);
+
+               if (memberTypes.at(j)->category() != SchemaType::SimpleTypeAtomic &&
+                     memberTypes.at(j)->category() != SchemaType::SimpleTypeUnion) {
+
+                  m_context->error(QtXmlPatterns::tr("Member types for %1 must be atomic or a union.")
+                        .formatArg(formatType(m_namePool, simpleItemType)), XsdSchemaContext::XSDError, location);
+
                   return;
                }
             }
@@ -909,10 +914,13 @@ void XsdSchemaChecker::checkSimpleDerivationRestrictions()
          if (itemType->category() == SchemaType::SimpleTypeUnion && itemType->isDefinedBySchema()) {
             const XsdSimpleType::Ptr simpleItemType = itemType;
             const AnySimpleType::List memberTypes = simpleItemType->memberTypes();
+
             for (int j = 0; j < memberTypes.count(); ++j) {
-               if (memberTypes.at(j)->category() != SchemaType::SimpleTypeAtomic) {
-                  m_context->error(QtXmlPatterns::tr("Variety of member types of %1 must be atomic.").formatArg(formatType(m_namePool,
-                                   simpleItemType)), XsdSchemaContext::XSDError, location);
+               if (memberTypes.at(j)->category() != SchemaType::SimpleTypeAtomic &&
+                     memberTypes.at(j)->category() != SchemaType::SimpleTypeUnion) {
+
+                  m_context->error(QtXmlPatterns::tr("Member types for %1 must be atomic or a union.")
+                        .formatArg(formatType(m_namePool, simpleItemType)), XsdSchemaContext::XSDError, location);
                   return;
                }
             }
