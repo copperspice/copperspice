@@ -1748,10 +1748,8 @@ void XsdSchemaChecker::checkDuplicatedAttributeUses()
 void XsdSchemaChecker::checkElementConstraints()
 {
    const QSet<XsdElement::Ptr> elements = collectAllElements(m_schema);
-   QSetIterator<XsdElement::Ptr> it(elements);
-   while (it.hasNext()) {
-      const XsdElement::Ptr element = it.next();
 
+   for (const auto &element : elements) {
       // @see http://www.w3.org/TR/xmlschema11-1/#e-props-correct
 
       // 2 and xs:ID check

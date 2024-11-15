@@ -151,9 +151,8 @@ bool XsdSchemaHelper::wildcardAllowsExpandedName(const QXmlName &name, const Xsd
 template<class T>
 static inline bool containsSet(const QSet<T> &super, const QSet<T> &sub)
 {
-   QSetIterator<T> it(sub);
-   while (it.hasNext()) {
-      if (!super.contains(it.next())) {
+   for (const auto &item : sub) {
+      if (! super.contains(item)) {
          return false;
       }
    }

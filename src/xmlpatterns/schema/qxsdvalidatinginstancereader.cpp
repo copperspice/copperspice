@@ -156,9 +156,8 @@ bool XsdValidatingInstanceReader::read()
 
    // check IDREF occurrences
    const QStringList ids = m_model->idIdRefBindingIds();
-   QSetIterator<QString> it(m_idRefs);
-   while (it.hasNext()) {
-      const QString id = it.next();
+
+   for (const auto &id : m_idRefs) {
       if (!ids.contains(id)) {
          error(QtXmlPatterns::tr("There is one IDREF value with no corresponding ID: %1.").formatArg(formatKeyword(id)));
          return false;
@@ -776,11 +775,9 @@ bool XsdValidatingInstanceReader::validateElementComplexType(const XsdElement::P
       bool hasIDAttribute = hasIDAttributeUse(complexType->attributeUses());
 
       // 2
-      QSetIterator<QXmlName> it(attributes);
-      while (it.hasNext()) {
-         const QXmlName attributeName = it.next();
-
+      for (const auto &attributeName : attributes) {
          // skip builtin attributes
+
          if (attributeName == m_xsiNilName ||
                attributeName == m_xsiTypeName ||
                attributeName == m_xsiSchemaLocationName ||
@@ -1020,14 +1017,11 @@ bool XsdValidatingInstanceReader::validateUniqueIdentityConstraint(const XsdElem
    // 4.1
    const XsdSchemaSourceLocationReflection reflection(sourceLocation());
 
-   QSetIterator<TargetNode> it(qualifiedNodeSet);
-   while (it.hasNext()) {
-      const TargetNode node = it.next();
-      QSetIterator<TargetNode> innerIt(qualifiedNodeSet);
-      while (innerIt.hasNext()) {
-         const TargetNode innerNode = innerIt.next();
+   for (const auto &node : qualifiedNodeSet) {
 
-         if (node == innerNode) { // do not compare with ourself
+      for (const auto &innerNode : qualifiedNodeSet) {
+
+         if (node == innerNode) {
             continue;
          }
 
@@ -1066,9 +1060,7 @@ bool XsdValidatingInstanceReader::validateKeyIdentityConstraint(const XsdElement
    }
 
    // 4.2.3
-   QSetIterator<TargetNode> it(qualifiedNodeSet);
-   while (it.hasNext()) {
-      const TargetNode node = it.next();
+   for (const auto &node : qualifiedNodeSet) {
       const QVector<QXmlItem> fieldItems = node.fieldItems();
 
       for (int i = 0; i < fieldItems.count(); ++i) {
@@ -1103,16 +1095,10 @@ bool XsdValidatingInstanceReader::validateKeyRefIdentityConstraint(const XsdElem
 
    const TargetNode::Set keySet = m_idcKeys.value(constraint->referencedKey()->name(m_namePool));
 
-   QSetIterator<TargetNode> it(qualifiedNodeSet);
-   while (it.hasNext()) {
-      const TargetNode node = it.next();
-
+   for (const auto &node : qualifiedNodeSet) {
       bool foundMatching = false;
 
-      QSetIterator<TargetNode> keyIt(keySet);
-      while (keyIt.hasNext()) {
-         const TargetNode keyNode = keyIt.next();
-
+      for (const auto &keyNode : keySet) {
          if (node.fieldsAreEqual(keyNode, m_namePool, m_context, &reflection)) {
             foundMatching = true;
             break;
@@ -1253,9 +1239,7 @@ bool XsdValidatingInstanceReader::selectNodeSets(const XsdElement::Ptr &, const 
    }
 
    // copy all items from target node set to qualified node set, that have no empty fields
-   QSetIterator<TargetNode> it(targetNodeSet);
-   while (it.hasNext()) {
-      const TargetNode node = it.next();
+   for (const auto &node : targetNodeSet) {
       if (node.emptyFieldsCount() == 0) {
          qualifiedNodeSet.insert(node);
       }

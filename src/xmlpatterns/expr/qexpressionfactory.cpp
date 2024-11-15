@@ -258,7 +258,6 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
 
       // Type check and compress template rules
       {
-         QHashIterator<QXmlName, TemplateMode::Ptr> it(info->templateRules);
 
          /* Since a pattern can exist of AxisStep, its typeCheck() stage
           * requires a focus. In the case that we're invoked with a name but
@@ -267,6 +266,7 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
           * expression, since the static type of the pattern is used as the
           * static type for the focus of the template body. */
          StaticContext::Ptr patternContext;
+
          if (hasExternalFocus) {
             patternContext = context;
          } else {
@@ -274,10 +274,9 @@ Expression::Ptr ExpressionFactory::createExpression(const Tokenizer::Ptr &tokeni
          }
 
          // For each template pattern
-         while (it.hasNext()) {
-            it.next();
-            const TemplateMode::Ptr &mode = it.value();
+         for (const auto &mode : info->templateRules) {
             const int len = mode->templatePatterns.count();
+
             TemplatePattern::ID currentTemplateID = -1;
             bool hasDoneItOnce = false;
 
