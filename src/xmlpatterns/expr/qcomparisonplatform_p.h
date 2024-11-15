@@ -25,10 +25,10 @@
 #define QComparisonPlatform_P_H
 
 #include <qatomiccomparators_p.h>
-#include <qitem_p.h>
+#include <qbuiltintypes_p.h>
 #include <qcommonsequencetypes_p.h>
 #include <qdynamiccontext_p.h>
-#include <qbuiltintypes_p.h>
+#include <qitem_p.h>
 #include <qitemtype_p.h>
 #include <qpatternistlocale_p.h>
 

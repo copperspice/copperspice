@@ -24,6 +24,8 @@
 #ifndef QXsdSchemaResolver_P_H
 #define QXsdSchemaResolver_P_H
 
+#include <qexplicitlyshareddatapointer.h>
+
 #include <qnamespacesupport_p.h>
 #include <qschematype_p.h>
 #include <qschematypefactory_p.h>
@@ -37,7 +39,6 @@
 #include <qxsdschema_p.h>
 #include <qxsdschemachecker_p.h>
 #include <qxsdsimpletype_p.h>
-#include <QExplicitlySharedDataPointer>
 
 namespace QPatternist {
 

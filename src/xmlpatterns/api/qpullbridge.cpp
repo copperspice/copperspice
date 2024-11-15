@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#include <QVariant>
+#include <qpullbridge_p.h>
 
-#include "qabstractxmlnodemodel_p.h"
-#include "qitemmappingiterator_p.h"
-#include "qitem_p.h"
-#include "qxmlname.h"
-#include "qxmlquery_p.h"
+#include <qvariant.h>
 
-#include "qpullbridge_p.h"
+#include <qabstractxmlnodemodel_p.h>
+#include <qitem_p.h>
+#include <qitemmappingiterator_p.h>
+#include <qxmlname.h>
+#include <qxmlquery_p.h>
 
 using namespace QPatternist;
 

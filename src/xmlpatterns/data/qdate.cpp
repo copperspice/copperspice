@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qbuiltintypes_p.h"
-#include "qitem_p.h"
+#include <qdate_p.h>
 
-#include "qdate_p.h"
+#include <qbuiltintypes_p.h>
+#include <qitem_p.h>
 
 using namespace QPatternist;
 

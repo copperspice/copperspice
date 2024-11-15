@@ -24,7 +24,8 @@
 #ifndef QDocumentConstructor_P_H
 #define QDocumentConstructor_P_H
 
-#include <QUrl>
+#include <qurl.h>
+
 #include <qsinglecontainer_p.h>
 
 namespace QPatternist {

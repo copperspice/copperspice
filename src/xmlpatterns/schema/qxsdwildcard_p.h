@@ -24,8 +24,9 @@
 #ifndef QXsdWildcard_P_H
 #define QXsdWildcard_P_H
 
+#include <qset.h>
+
 #include <qxsdterm_p.h>
-#include <QSet>
 
 namespace QPatternist {
 

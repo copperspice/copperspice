@@ -24,6 +24,8 @@
 #ifndef QXsdComplexType_P_H
 #define QXsdComplexType_P_H
 
+#include <qset.h>
+
 #include <qanytype_p.h>
 #include <qxsdassertion_p.h>
 #include <qxsdattributeuse_p.h>
@@ -31,7 +33,6 @@
 #include <qxsdsimpletype_p.h>
 #include <qxsduserschematype_p.h>
 #include <qxsdwildcard_p.h>
-#include <QSet>
 
 namespace QPatternist {
 

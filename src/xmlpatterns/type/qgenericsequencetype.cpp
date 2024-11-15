@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <QString>
+#include <qstring.h>
 
-#include "qgenericsequencetype_p.h"
+#include <qgenericsequencetype_p.h>
 
 using namespace QPatternist;
 

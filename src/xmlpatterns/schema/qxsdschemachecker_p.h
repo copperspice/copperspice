@@ -24,6 +24,8 @@
 #ifndef QXsdSchemaChecker_P_H
 #define QXsdSchemaChecker_P_H
 
+#include <qexplicitlyshareddatapointer.h>
+
 #include <qschematype_p.h>
 #include <qxsdattribute_p.h>
 #include <qxsdattributegroup_p.h>
@@ -32,8 +34,6 @@
 #include <qxsdnotation_p.h>
 #include <qxsdschema_p.h>
 #include <qxsdsimpletype_p.h>
-
-#include <QExplicitlySharedDataPointer>
 
 namespace QPatternist {
 

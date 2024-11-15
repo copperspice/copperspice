@@ -24,12 +24,12 @@
 #ifndef QXMLSERIALIZER_P_H
 #define QXMLSERIALIZER_P_H
 
-#include <QIODevice>
-#include <QStack>
-#include <QTextCodec>
-#include <QXmlQuery>
-#include <QXmlNamePool>
-#include <QXmlSerializer>
+#include <qiodevice.h>
+#include <qstack.h>
+#include <qtextcodec.h>
+#include <qxmlnamepool.h>
+#include <qxmlquery.h>
+#include <qxmlserializer.h>
 
 #include <qnamepool_p.h>
 #include <qabstractxmlreceiver_p.h>

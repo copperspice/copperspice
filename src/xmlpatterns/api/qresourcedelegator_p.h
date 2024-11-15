@@ -24,8 +24,9 @@
 #ifndef QResourceDelegator_P_H
 #define QResourceDelegator_P_H
 
-#include <QSet>
-#include <QUrl>
+#include <qset.h>
+#include <qurl.h>
+
 #include <qdeviceresourceloader_p.h>
 
 namespace QPatternist {

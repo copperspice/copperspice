@@ -25,10 +25,10 @@
 #define QAtomicComparator_P_H
 
 #include <qflags.h>
-#include <qitem_p.h>
 #include <qstringfwd.h>
 
 #include <qatomictypedispatch_p.h>
+#include <qitem_p.h>
 
 namespace QPatternist {
 class AtomicComparator : public AtomicTypeVisitorResult

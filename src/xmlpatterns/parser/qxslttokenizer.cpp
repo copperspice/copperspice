@@ -27,9 +27,9 @@
 
 #include <qbuiltintypes_p.h>
 #include <qcommonnamespaces_p.h>
+#include <qpatternistlocale_p.h>
 #include <qquerytransformparser_p.h>
 #include <qxquerytokenizer_p.h>
-#include <qpatternistlocale_p.h>
 
 using namespace QPatternist;
 

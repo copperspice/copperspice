@@ -24,8 +24,9 @@
 #ifndef QXsdAttributeReference_P_H
 #define QXsdAttributeReference_P_H
 
+#include <qsourcelocation.h>
+
 #include <qxsdattributeuse_p.h>
-#include <QSourceLocation>
 
 namespace QPatternist {
 

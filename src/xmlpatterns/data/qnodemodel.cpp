@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qurl.h>
 
-#include "qnamespaceresolver_p.h"
-#include "qitem_p.h"
+#include <qitem_p.h>
+#include <qnamespaceresolver_p.h>

@@ -24,13 +24,13 @@
 #ifndef QStaticContext_P_H
 #define QStaticContext_P_H
 
+#include <qcontainerfwd.h>
 #include <qexternalvariableloader_p.h>
 #include <qitemtype_p.h>
 #include <qnamepool_p.h>
 #include <qnamespaceresolver_p.h>
 #include <qreportcontext_p.h>
 #include <qresourceloader_p.h>
-#include <qcontainerfwd.h>
 
 class QUrl;
 

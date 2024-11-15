@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
+#include "qaxisstep_p.h"
+
 #include "qbuiltintypes_p.h"
 #include "qcommonsequencetypes_p.h"
 #include "qitemmappingiterator_p.h"
 #include "qgenericsequencetype_p.h"
 #include "qparentnodeaxis_p.h"
-
-#include "qaxisstep_p.h"
 
 using namespace QPatternist;
 

@@ -24,7 +24,8 @@
 #ifndef QElementConstructor_P_H
 #define QElementConstructor_P_H
 
-#include <QUrl>
+#include <qurl.h>
+
 #include <qpaircontainer_p.h>
 
 namespace QPatternist {

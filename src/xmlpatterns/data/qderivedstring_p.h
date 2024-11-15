@@ -24,12 +24,13 @@
 #ifndef QDerivedString_P_H
 #define QDerivedString_P_H
 
+#include <qstringfwd.h>
 #include <qregularexpression.h>
+
 #include <qxmlutils_p.h>
 #include <qbuiltintypes_p.h>
 #include <qpatternistlocale_p.h>
 #include <qvalidationerror_p.h>
-#include <qstringfwd.h>
 
 namespace QPatternist {
 

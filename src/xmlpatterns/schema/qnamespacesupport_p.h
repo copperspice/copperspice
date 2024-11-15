@@ -24,12 +24,13 @@
 #ifndef QNamespaceSupport_P_H
 #define QNamespaceSupport_P_H
 
+#include <qexplicitlyshareddatapointer.h>
+#include <qhash.h>
+#include <qset.h>
+#include <qstack.h>
+#include <qxmlstreamnamespacedeclarations.h>
+
 #include <qnamepool_p.h>
-#include <QExplicitlySharedDataPointer>
-#include <QHash>
-#include <QSet>
-#include <QStack>
-#include <QXmlStreamNamespaceDeclarations>
 
 namespace QPatternist {
 

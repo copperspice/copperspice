@@ -24,8 +24,8 @@
 #ifndef QOperandsIterator_P_H
 #define QOperandsIterator_P_H
 
-#include <QPair>
-#include <QStack>
+#include <qpair.h>
+#include <qstack.h>
 
 #include <qexpression_p.h>
 

@@ -21,11 +21,10 @@
 *
 ***********************************************************************/
 
-#include <QString>
+#include <qstring.h>
 
-#include "qbuiltintypes_p.h"
-#include "qsorttuple_p.h"
-
+#include <qbuiltintypes_p.h>
+#include <qsorttuple_p.h>
 
 using namespace QPatternist;
 

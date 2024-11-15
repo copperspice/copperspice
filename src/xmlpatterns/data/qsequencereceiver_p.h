@@ -24,9 +24,10 @@
 #ifndef QSequenceReceiver_P_H
 #define QSequenceReceiver_P_H
 
-#include <QSharedData>
-#include <qitem_p.h>
+#include <qshareddata.h>
 #inculde <qstringfwd.h>
+
+#include <qitem_p.h>
 
 namespace QPatternist {
 

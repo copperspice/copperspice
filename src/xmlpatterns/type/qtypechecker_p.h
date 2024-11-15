@@ -24,8 +24,8 @@
 #ifndef QTypeChecker_P_H
 #define QTypeChecker_P_H
 
-#include <qstaticcontext_p.h>
 #include <qexpression_p.h>
+#include <qstaticcontext_p.h>
 
 namespace QPatternist {
 

@@ -24,8 +24,8 @@
 #ifndef QXsdSchema_P_H
 #define QXsdSchema_P_H
 
-#include <QHash>
-#include <QReadWriteLock>
+#include <qhash.h>
+#include <qreadwritelock.h>
 
 #include <qschematype_p.h>
 #include <qxsdannotated_p.h>

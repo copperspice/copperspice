@@ -24,12 +24,13 @@
 #ifndef QFunctionFactory_P_H
 #define QFunctionFactory_P_H
 
-#include <QHash>
-#include <QSharedData>
+#include <qhash.h>
+#include <qshareddata.h>
+#include <qxmlname.h>
+
 #include <qexpression_p.h>
 #include <qfunctionsignature_p.h>
 #include <qprimitives_p.h>
-#include <qxmlname.h>
 
 namespace QPatternist {
 

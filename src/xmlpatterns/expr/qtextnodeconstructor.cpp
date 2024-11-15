@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qtextnodeconstructor_p.h>
 
-#include "qcommonsequencetypes_p.h"
-#include "qnodebuilder_p.h"
+#include <qurl.h>
 
-#include "qtextnodeconstructor_p.h"
+#include <qcommonsequencetypes_p.h>
+#include <qnodebuilder_p.h>
 
 using namespace QPatternist;
 

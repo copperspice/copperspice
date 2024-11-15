@@ -26,8 +26,8 @@
 
 #include <qatomiccomparator_p.h>
 #include <qcomparisonplatform_p.h>
-#include <qliteral_p.h>
 #include <qfunctioncall_p.h>
+#include <qliteral_p.h>
 
 namespace QPatternist {
 

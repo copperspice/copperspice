@@ -24,7 +24,8 @@
 #ifndef QBasicTypesFactory_P_H
 #define QBasicTypesFactory_P_H
 
-#include <QHash>
+#include <qhash.h>
+
 #include <qschematypefactory_p.h>
 
 namespace QPatternist {

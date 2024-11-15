@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <math.h>
+#include "qschemanumeric_p.h"
 
 #include "qabstractfloat_p.h"
 #include "qboolean_p.h"
@@ -30,8 +30,7 @@
 #include "qdecimal_p.h"
 #include "qinteger_p.h"
 
-#include "qschemanumeric_p.h"
-
+#include <math.h>
 
 using namespace QPatternist;
 

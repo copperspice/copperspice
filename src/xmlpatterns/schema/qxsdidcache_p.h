@@ -24,10 +24,10 @@
 #ifndef QXsdIdCache_P_H
 #define QXsdIdCache_P_H
 
-#include <QExplicitlySharedDataPointer>
-#include <QReadWriteLock>
-#include <QSet>
-#include <QString>
+#include <qexplicitlyshareddatapointer.h>
+#include <qreadwritelock.h>
+#include <qset.h>
+#include <qstring.h>
 
 #include <qschemacomponent_p.h>
 

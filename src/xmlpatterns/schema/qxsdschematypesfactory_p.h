@@ -24,7 +24,8 @@
 #ifndef QXsdSchemaTypesFactory_P_H
 #define QXsdSchemaTypesFactory_P_H
 
-#include <QHash>
+#include <qhash.h>
+
 #include <qschematypefactory_p.h>
 
 namespace QPatternist {

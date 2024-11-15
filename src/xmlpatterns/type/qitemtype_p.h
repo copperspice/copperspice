@@ -24,8 +24,8 @@
 #ifndef QItemType_P_H
 #define QItemType_P_H
 
-#include <qshareddata.h>
 #include <qcontainerfwd.h>
+#include <qshareddata.h>
 
 #include <qnamepool_p.h>
 

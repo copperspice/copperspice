@@ -24,7 +24,7 @@
 #ifndef QXmlPatternIstcli_P_H
 #define QXmlPatternIstcli_P_H
 
-#include <QCoreApplication>
+#include <qcoreapplication.h>
 
 class QXmlPatternistCLI
 {

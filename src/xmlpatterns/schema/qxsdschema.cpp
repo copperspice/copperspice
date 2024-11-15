@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qxsdschema_p.h"
+#include <qxsdschema_p.h>
 
-#include <QReadLocker>
-#include <QWriteLocker>
+#include <qreadlocker.h>
+#include <qwritelocker.h>
 
 using namespace QPatternist;
 

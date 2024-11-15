@@ -24,7 +24,8 @@
 #ifndef QVariableDeclaration_P_H
 #define QVariableDeclaration_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
+
 #include <qexpression_p.h>
 #include <qpatternistlocale_p.h>
 #include <qvariablereference_p.h>

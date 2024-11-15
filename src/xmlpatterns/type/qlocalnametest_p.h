@@ -24,8 +24,9 @@
 #ifndef QLocalNameTest_P_H
 #define QLocalNameTest_P_H
 
-#include <qabstractnodetest_p.h>
 #include <qcontainerfwd.h>
+
+#include <qabstractnodetest_p.h>
 
 namespace QPatternist {
 

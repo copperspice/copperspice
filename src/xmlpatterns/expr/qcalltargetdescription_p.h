@@ -24,9 +24,10 @@
 #ifndef QCallTargetDescription_P_H
 #define QCallTargetDescription_P_H
 
-#include <QSharedData>
-#include <qexpression_p.h>
+#include <qshareddata.h>
 #include <qcontainerfwd.h>
+
+#include <qexpression_p.h>
 
 namespace QPatternist {
 

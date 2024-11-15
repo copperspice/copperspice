@@ -24,9 +24,9 @@
 #ifndef QXMLRESULTITEMS_P_H
 #define QXMLRESULTITEMS_P_H
 
-#include "qcommonvalues_p.h"
-#include "qdynamiccontext_p.h"
-#include "qitem_p.h"
+#include <qcommonvalues_p.h>
+#include <qdynamiccontext_p.h>
+#include <qitem_p.h>
 
 class QXmlResultItemsPrivate
 {

@@ -24,14 +24,14 @@
 #ifndef QUserFunction_P_H
 #define QUserFunction_P_H
 
-template<typename T>
-class QList;
-
-#include <QSharedData>
+#include <qshareddata.h>
 
 #include <qexpression_p.h>
 #include <qfunctionsignature_p.h>
 #include <qvariabledeclaration_p.h>
+
+template<typename T>
+class QList;
 
 namespace QPatternist {
 

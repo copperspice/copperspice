@@ -24,8 +24,8 @@
 #ifndef QNCNameConstructor_P_H
 #define QNCNameConstructor_P_H
 
-#include "qsinglecontainer_p.h"
 #include "qpatternistlocale_p.h"
+#include "qsinglecontainer_p.h"
 #include "qxmlutils_p.h"
 
 namespace QPatternist {

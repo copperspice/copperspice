@@ -24,7 +24,7 @@
 #ifndef QPath_P_H
 #define QPath_P_H
 
-#include "qpaircontainer_p.h"
+#include <qpaircontainer_p.h>
 
 namespace QPatternist {
 

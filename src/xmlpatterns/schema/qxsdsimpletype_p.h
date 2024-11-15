@@ -24,10 +24,11 @@
 #ifndef QXsdSimpleType_P_H
 #define QXsdSimpleType_P_H
 
+#include <qset.h>
+
 #include <qanysimpletype_p.h>
 #include <qxsdfacet_p.h>
 #include <qxsduserschematype_p.h>
-#include <QSet>
 
 namespace QPatternist {
 

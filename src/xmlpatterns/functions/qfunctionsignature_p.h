@@ -24,14 +24,14 @@
 #ifndef QFunctionSignature_P_H
 #define QFunctionSignature_P_H
 
-#include <QSharedData>
+#include <qcontainerfwd.h>
+#include <qshareddata.h>
 
 #include <qcalltargetdescription_p.h>
 #include <qexpression_p.h>
 #include <qfunctionargument_p.h>
 #include <qpatternistlocale_p.h>
 #include <qprimitives_p.h>
-#include <qcontainerfwd.h>
 
 namespace QPatternist {
 

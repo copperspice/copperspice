@@ -24,12 +24,14 @@
 #ifndef QAtomicMathematician_P_H
 #define QAtomicMathematician_P_H
 
-#include <QFlags>
+#include <qflags.h>
+
+#include <qatomictypedispatch_p.h>
 #include <qdynamiccontext_p.h>
 #include <qitem_p.h>
-#include <qatomictypedispatch_p.h>
 
 namespace QPatternist {
+
 class AtomicMathematician : public AtomicTypeVisitorResult
 {
  public:

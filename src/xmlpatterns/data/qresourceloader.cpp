@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qurl.h>
 
 #include <qresourceloader_p.h>
 

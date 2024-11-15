@@ -21,16 +21,15 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
+#include <qdebug.h>
 
-#include "qaxisstep_p.h"
-#include "qcommonsequencetypes_p.h"
-#include "qcommonvalues_p.h"
-#include "qitemmappingiterator_p.h"
-#include "qsequencemappingiterator_p.h"
-#include "qpatternistlocale_p.h"
-
-#include "qapplytemplate_p.h"
+#include <qapplytemplate_p.h>
+#include <qaxisstep_p.h>
+#include <qcommonsequencetypes_p.h>
+#include <qcommonvalues_p.h>
+#include <qitemmappingiterator_p.h>
+#include <qpatternistlocale_p.h>
+#include <qsequencemappingiterator_p.h>
 
 using namespace QPatternist;
 

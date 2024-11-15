@@ -24,11 +24,12 @@
 #ifndef QExpressionFactory_P_H
 #define QExpressionFactory_P_H
 
-#include <QXmlQuery>
+#include <qshareddata.h>
+#include <qurl.h>
+#include <qxmlquery.h>
+
 #include <qexpression_p.h>
 #include <qtokenizer_p.h>
-#include <QSharedData>
-#include <QUrl>
 
 class QIODevice;
 

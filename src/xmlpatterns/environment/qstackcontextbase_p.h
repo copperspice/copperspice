@@ -24,7 +24,8 @@
 #ifndef QStackContextBase_P_H
 #define QStackContextBase_P_H
 
-#include <QVector>
+#include <qvector.h>
+
 #include <qdaytimeduration_p.h>
 #include <qdelegatingdynamiccontext_p.h>
 #include <qexpression_p.h>

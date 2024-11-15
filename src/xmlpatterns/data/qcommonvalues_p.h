@@ -25,8 +25,8 @@
 #define QCommonValues_P_H
 
 #include <qdaytimeduration_p.h>
-#include <qyearmonthduration_p.h>
 #include <qemptyiterator_p.h>
+#include <qyearmonthduration_p.h>
 
 namespace QPatternist {
 

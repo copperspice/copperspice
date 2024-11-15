@@ -24,7 +24,8 @@
 #ifndef QStaticBaseUriContainer_P_H
 #define QStaticBaseUriContainer_P_H
 
-#include <QUrl>
+#include <qurl.h>
+
 #include <qfunctioncall_p.h>
 
 namespace QPatternist {

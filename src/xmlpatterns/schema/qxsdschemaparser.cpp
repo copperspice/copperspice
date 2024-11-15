@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qxsdschemaparser_p.h"
-#include "qxmlutils_p.h"
+#include <qfile.h>
+#include <qxmlquery.h>
+
 #include "qacceltreeresourceloader_p.h"
 #include "qboolean_p.h"
 #include "qcommonnamespaces_p.h"
@@ -30,13 +31,12 @@
 #include "qderivedstring_p.h"
 #include "qqnamevalue_p.h"
 #include "qxmlquery_p.h"
+#include "qxmlutils_p.h"
 #include "qxpathhelper_p.h"
 #include "qxsdattributereference_p.h"
 #include "qxsdreference_p.h"
+#include "qxsdschemaparser_p.h"
 #include "qxsdschematoken_p.h"
-#include <QFile>
-#include <QXmlQuery>
-
 
 using namespace QPatternist;
 

@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include <QUrl>
+#include <qattributeconstructor_p.h>
 
-#include "qcommonsequencetypes_p.h"
-#include "qnodebuilder_p.h"
-#include "qqnamevalue_p.h"
+#include <qurl.h>
 
-#include "qattributeconstructor_p.h"
+#include <qcommonsequencetypes_p.h>
+#include <qnodebuilder_p.h>
+#include <qqnamevalue_p.h>
 
 using namespace QPatternist;
 

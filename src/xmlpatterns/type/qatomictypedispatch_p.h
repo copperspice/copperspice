@@ -24,7 +24,7 @@
 #ifndef QAtomicTypeDispatch_P_H
 #define QAtomicTypeDispatch_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
 
 namespace QPatternist {
 
@@ -48,9 +48,9 @@ class HexBinaryType;
 class IntegerType;
 class NOTATIONType;
 class QNameType;
+class SchemaTimeType;
 class SourceLocationReflection;
 class StringType;
-class SchemaTimeType;
 class UntypedAtomicType;
 class YearMonthDurationType;
 

@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <QDebug>
+#include <qdebug.h>
+#include <qxmlformatter.h>
 
-#include "qxmlformatter.h"
-#include "qxpathhelper_p.h"
-#include "qxmlserializer_p.h"
+#include <qxmlserializer_p.h>
+#include <qxpathhelper_p.h>
 
 using namespace QPatternist;
 

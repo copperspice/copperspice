@@ -24,12 +24,13 @@
 #ifndef QReportContext_P_H
 #define QReportContext_P_H
 
-#include <QSharedData>
-#include <QAbstractUriResolver>
-#include <QSourceLocation>
-#include <qnamepool_p.h>
-#include <qxmlname.h>
+#include <qabstracturiresolver.h>
+#include <qshareddata.h>
+#include <qsourcelocation.h>
 #include <qstringfwd.h>
+#include <qxmlname.h>
+
+#include <qnamepool_p.h>
 
 class QAbstractMessageHandler;
 class QSourceLocation;

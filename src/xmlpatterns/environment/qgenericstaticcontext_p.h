@@ -24,11 +24,12 @@
 #ifndef QGenericStaticContext_P_H
 #define QGenericStaticContext_P_H
 
-#include <QUrl>
-#include <QXmlQuery>
-#include <qstaticcontext_p.h>
+#include <qurl.h>
+#include <qxmlquery.h>
+
 #include <qfunctionfactory_p.h>
 #include <qschematypefactory_p.h>
+#include <qstaticcontext_p.h>
 
 namespace QPatternist {
 

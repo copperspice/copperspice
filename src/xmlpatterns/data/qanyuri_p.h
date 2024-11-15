@@ -24,8 +24,9 @@
 #ifndef QAnyURI_P_H
 #define QAnyURI_P_H
 
-#include <QUrl>
-#include <QDebug>
+#include <qurl.h>
+#include <qdebug.h>
+
 #include <qatomicstring_p.h>
 #include <qbuiltintypes_p.h>
 #include <qpatternistlocale_p.h>

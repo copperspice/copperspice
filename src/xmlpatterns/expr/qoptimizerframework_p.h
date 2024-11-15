@@ -24,7 +24,8 @@
 #ifndef QOptimizerFramework_P_H
 #define QOptimizerFramework_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
+
 #include <qexpression_p.h>
 
 namespace QPatternist {

@@ -24,18 +24,18 @@
 #ifndef QExpression_P_H
 #define QExpression_P_H
 
-#include <QFlags>
-#include <QSharedData>
+#include <qflags.h>
+#include <qshareddata.h>
 #include <qcontainerfwd.h>
 
 #include <qcppcastinghelper_p.h>
-#include <qxmlpatterns_debug_p.h>
 #include <qdynamiccontext_p.h>
 #include <qexpressiondispatch_p.h>
 #include <qitem_p.h>
 #include <qsequencetype_p.h>
 #include <qsourcelocationreflection_p.h>
 #include <qstaticcontext_p.h>
+#include <qxmlpatterns_debug_p.h>
 
 namespace QPatternist {
 

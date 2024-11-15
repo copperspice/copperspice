@@ -24,7 +24,7 @@
 #ifndef QExpressionDispatch_P_H
 #define QExpressionDispatch_P_H
 
-#include <QSharedData>
+#include <qshareddata.h>
 
 namespace QPatternist {
 

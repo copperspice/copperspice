@@ -25,8 +25,9 @@
 #define QFunctionArgument_P_H
 
 #include <qlist.h>
-#include <QSharedData>
+#include <qshareddata.h>
 #include <qxmlname.h>
+
 #include <qsequencetype_p.h>
 
 namespace QPatternist {

@@ -24,8 +24,9 @@
 #ifndef QPatternPlatform_P_H
 #define QPatternPlatform_P_H
 
-#include <QFlags>
+#include <qflags.h>
 #include <qregularexpression.h>
+
 #include <qfunctioncall_p.h>
 
 namespace QPatternist {

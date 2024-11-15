@@ -24,9 +24,9 @@
 #ifndef QVARIABLELOADER_P_H
 #define QVARIABLELOADER_P_H
 
-#include <QSet>
-#include <QXmlQuery>
-#include <QDebug>
+#include <qdebug.h>
+#include <qset.h>
+#include <qxmlquery.h>
 
 #include <qdynamiccontext_p.h>
 #include <qexternalvariableloader_p.h>

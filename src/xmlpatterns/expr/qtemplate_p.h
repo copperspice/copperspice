@@ -24,14 +24,14 @@
 #ifndef QTemplate_P_H
 #define QTemplate_P_H
 
-#include <QSharedData>
-#include <QVector>
+#include <qshareddata.h>
+#include <qvector.h>
 
-#include "qdynamiccontext_p.h"
-#include "qexpression_p.h"
-#include "qsourcelocationreflection_p.h"
-#include "qtemplateinvoker_p.h"
-#include "qvariabledeclaration_p.h"
+#include <qdynamiccontext_p.h>
+#include <qexpression_p.h>
+#include <qsourcelocationreflection_p.h>
+#include <qtemplateinvoker_p.h>
+#include <qvariabledeclaration_p.h>
 
 namespace QPatternist {
 

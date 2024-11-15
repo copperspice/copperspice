@@ -24,11 +24,12 @@
 #ifndef QXsdValidatingInstanceReader_P_H
 #define QXsdValidatingInstanceReader_P_H
 
+#include <qstack.h>
+
 #include <qxsdidchelper_p.h>
 #include <qxsdinstancereader_p.h>
 #include <qxsdstatemachine_p.h>
 #include <qxsdvalidatedxmlnodemodel_p.h>
-#include <QStack>
 
 class QXmlQuery;
 

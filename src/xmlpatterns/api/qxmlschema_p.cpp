@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
-#include "qacceltreeresourceloader_p.h"
-#include "qxmlschema.h"
-#include "qxmlschema_p.h"
+#include <qxmlschema.h>
+#include <qxmlschema_p.h>
 
-#include <QBuffer>
-#include <QIODevice>
-#include <QUrl>
+#include <qbuffer.h>
+#include <qiodevice.h>
+#include <qurl.h>
+
+#include <qacceltreeresourceloader_p.h>
 
 QXmlSchemaPrivate::QXmlSchemaPrivate(const QXmlNamePool &namePool)
    : m_namePool(namePool), m_userMessageHandler(nullptr), m_uriResolver(nullptr), m_userNetworkAccessManager(nullptr),

@@ -25,7 +25,6 @@
 #define QSortTuple_P_H
 
 #include <qitem_p.h>
-#include <qitem_p.h>
 #include <qitemtype_p.h>
 
 namespace QPatternist {

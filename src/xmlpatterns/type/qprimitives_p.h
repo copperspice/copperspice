@@ -26,8 +26,8 @@
 
 #include <qglobal.h>
 #include <qhash.h>
-#include <qurl.h>
 #include <qstringfwd.h>
+#include <qurl.h>
 
 namespace QPatternist {
 

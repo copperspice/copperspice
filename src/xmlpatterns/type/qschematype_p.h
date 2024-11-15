@@ -24,10 +24,11 @@
 #ifndef QSchemaType_P_H
 #define QSchemaType_P_H
 
+#include <qcontainerfwd.h>
+#include <qxmlname.h>
+
 #include <qnamepool_p.h>
 #include <qschemacomponent_p.h>
-#include <qxmlname.h>
-#include <qcontainerfwd.h>
 
 namespace QPatternist {
 

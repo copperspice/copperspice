@@ -21,9 +21,8 @@
 *
 ***********************************************************************/
 
-#include "qxsdschemaparser_p.h"
-
-#include "qbuiltintypes_p.h"
+#include <qbuiltintypes_p.h>
+#include <qxsdschemaparser_p.h>
 
 using namespace QPatternist;
 

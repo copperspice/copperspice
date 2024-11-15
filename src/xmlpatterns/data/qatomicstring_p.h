@@ -24,7 +24,8 @@
 #ifndef QAtomicString_P_H
 #define QAtomicString_P_H
 
-#include <QUrl>
+#include <qurl.h>
+
 #include <qitem_p.h>
 
 namespace QPatternist {

@@ -24,7 +24,8 @@
 #ifndef QXsdTypeChecker_P_H
 #define QXsdTypeChecker_P_H
 
-#include <QSourceLocation>
+#include <qsourcelocation.h>
+
 #include <qschematype_p.h>
 #include <qsourcelocationreflection_p.h>
 #include <qxsdschemacontext_p.h>

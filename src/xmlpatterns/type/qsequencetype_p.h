@@ -24,8 +24,8 @@
 #ifndef QSequenceType_P_H
 #define QSequenceType_P_H
 
-#include <qshareddata.h>
 #include <qcontainerfwd.h>
+#include <qshareddata.h>
 
 #include <qcardinality_p.h>
 #include <qitemtype_p.h>

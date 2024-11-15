@@ -24,9 +24,10 @@
 #ifndef QXsdIdcHelper_P_H
 #define QXsdIdcHelper_P_H
 
+#include <qxmlitem.h>
+
 #include <qreportcontext_p.h>
 #include <qschematype_p.h>
-#include <QXmlItem>
 
 namespace QPatternist {
 class FieldNode

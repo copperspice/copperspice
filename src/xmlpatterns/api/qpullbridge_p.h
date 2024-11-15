@@ -24,14 +24,15 @@
 #ifndef QPULLBRIDGE_P_H
 #define QPULLBRIDGE_P_H
 
-#include <QPair>
-#include <QStack>
+#include <qpair.h>
+#include <qstack.h>
 
 #include <qabstractxmlforwarditerator_p.h>
 #include <qabstractxmlpullprovider_p.h>
 #include <qitem_p.h>
 
 namespace QPatternist {
+
 class PullBridge : public AbstractXmlPullProvider
 {
  public:

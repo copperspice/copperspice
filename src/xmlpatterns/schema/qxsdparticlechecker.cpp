@@ -23,14 +23,14 @@
 
 #include "qxsdparticlechecker_p.h"
 
+#include <qfile.h>
+
 #include "qxsdelement_p.h"
 #include "qxsdmodelgroup_p.h"
 #include "qxsdschemahelper_p.h"
 #include "qxsdstatemachine_p.h"
 #include "qxsdstatemachinebuilder_p.h"
 #include "qxsdtypechecker_p.h"
-
-#include <QFile>
 
 using namespace QPatternist;
 

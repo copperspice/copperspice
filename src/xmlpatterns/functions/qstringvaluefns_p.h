@@ -24,7 +24,8 @@
 #ifndef QStringValueFNs_P_H
 #define QStringValueFNs_P_H
 
-#include <QByteArray>
+#include <qbytearray.h>
+
 #include <qfunctioncall_p.h>
 
 namespace QPatternist {

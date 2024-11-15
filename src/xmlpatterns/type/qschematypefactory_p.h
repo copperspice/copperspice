@@ -24,9 +24,10 @@
 #ifndef QSchemaTypeFactory_P_H
 #define QSchemaTypeFactory_P_H
 
-#include <QSharedData>
-#include <qreportcontext_p.h>
+#include <qshareddata.h>
+
 #include <qitemtype_p.h>
+#include <qreportcontext_p.h>
 #include <qschematype_p.h>
 
 namespace QPatternist {

@@ -24,10 +24,11 @@
 #ifndef QXsdStateMachine_P_H
 #define QXsdStateMachine_P_H
 
+#include <qhash.h>
+#include <qset.h>
+#include <qtextstream.h>
+
 #include <qnamepool_p.h>
-#include <QHash>
-#include <QSet>
-#include <QTextStream>
 
 class QIODevice;
 

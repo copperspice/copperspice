@@ -24,6 +24,12 @@
 #ifndef QXsdSchemaParser_P_H
 #define QXsdSchemaParser_P_H
 
+#include <qhash.h>
+#include <qset.h>
+#include <qurl.h>
+#include <qxmlstreamreader.h>
+#include <qxmlnamepool.h>
+
 #include <qnamespacesupport_p.h>
 #include <qxsdalternative_p.h>
 #include <qxsdattribute_p.h>
@@ -34,18 +40,13 @@
 #include <qxsdidcache_p.h>
 #include <qxsdmodelgroup_p.h>
 #include <qxsdnotation_p.h>
-#include <qxsdsimpletype_p.h>
 #include <qxsdschemacontext_p.h>
 #include <qxsdschemaparsercontext_p.h>
+#include <qxsdsimpletype_p.h>
 #include <qxsdstatemachine_p.h>
 
-#include <QHash>
-#include <QSet>
-#include <QUrl>
-#include <QXmlStreamReader>
-#include <QXmlNamePool>
-
 namespace QPatternist {
+
 class XsdSchemaParser : public MaintainingReader<XsdSchemaToken, XsdTagScope::Type>
 {
    friend class ElementNamespaceHandler;
