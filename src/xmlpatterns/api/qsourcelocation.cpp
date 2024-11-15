@@ -49,7 +49,7 @@ bool QSourceLocation::operator==(const QSourceLocation &other) const
 
 bool QSourceLocation::operator!=(const QSourceLocation &other) const
 {
-   return operator==(other);
+   return !operator==(other);
 }
 
 QSourceLocation &QSourceLocation::operator=(const QSourceLocation &other)
