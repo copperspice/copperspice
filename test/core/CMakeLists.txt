@@ -125,6 +125,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qscopedarraypointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qscopedpointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedpointer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedarraypointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.cpp
