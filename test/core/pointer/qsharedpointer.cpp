@@ -18,6 +18,7 @@
 ***********************************************************************/
 
 #include <qsharedpointer.h>
+#include <qfile.h>
 
 #include <cs_catch2.h>
 
@@ -30,6 +31,65 @@ TEST_CASE("QSharedPointer traits", "[qsharedpointer]")
    REQUIRE(std::is_move_assignable_v<QSharedPointer<int>> == true);
 
    REQUIRE(std::has_virtual_destructor_v<QSharedPointer<int>> == false);
+}
+
+TEST_CASE("QSharedPointer cast", "[qsharedpointer]")
+{
+   class Fruit
+   {
+   };
+
+   class Apple : public Fruit
+   {
+   };
+
+   CsPointer::CsSharedPointer<Fruit> ptr1;
+   CsPointer::CsSharedPointer<Apple> ptr2 = CsPointer::make_shared<Apple>();
+
+   {
+      ptr1 = CsPointer::static_pointer_cast<Fruit>(ptr2);
+
+      REQUIRE(ptr1 == ptr2);
+   }
+
+   {
+      ptr1 = CsPointer::dynamic_pointer_cast<Fruit>(ptr2);
+
+      REQUIRE(ptr1 == ptr2);
+   }
+
+   {
+      CsPointer::CsSharedPointer<const Apple> ptr3 = ptr2;
+      CsPointer::CsSharedPointer<Apple> ptr4;
+
+      ptr4 = CsPointer::const_pointer_cast<Apple>(ptr3);
+
+      REQUIRE(ptr3 == ptr4);
+   }
+}
+
+TEST_CASE("QSharedPointer convert_a", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1 = QMakeShared<int>(42);
+
+   std::shared_ptr<int> ptr2 = std::move(ptr1);
+
+   REQUIRE(ptr1 == nullptr);
+   REQUIRE(ptr2 != nullptr);
+
+   REQUIRE(*ptr2 == 42);
+}
+
+TEST_CASE("QSharedPointer convert_b", "[qsharedpointer]")
+{
+   QSharedPointer<QFileDevice> ptr1 = QSharedPointer<QFile>(new QFile());
+
+   std::shared_ptr<QIODevice> ptr2 = ptr1;
+
+   REQUIRE(ptr1 != nullptr);
+   REQUIRE(ptr2 != nullptr);
+
+   REQUIRE(ptr1.get() == ptr2.get());
 }
 
 TEST_CASE("QSharedPointer copy", "[qsharedpointer]")
@@ -70,26 +130,85 @@ TEST_CASE("QSharedPointer empty", "[qsharedpointer]")
 
    REQUIRE(ptr == nullptr);
    REQUIRE(ptr.isNull() == true);
+   REQUIRE(ptr == ptr);
+
+   REQUIRE(! (ptr != nullptr));
+   REQUIRE(! (nullptr != ptr));
+   REQUIRE(! (ptr != ptr)) ;
 }
 
-TEST_CASE("QSharedPointer move_a", "[qsharedpointer]")
+TEST_CASE("QSharedPointer move_assign", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1;
+   int *rawPointer = nullptr;
+
+   {
+      QSharedPointer<int> ptr2(new int);
+      rawPointer = ptr2.data();
+      ptr1 = std::move(ptr2);
+
+      REQUIRE(ptr2.isNull());
+   }
+
+   REQUIRE(rawPointer == ptr1.data());
+}
+
+TEST_CASE("QSharedPointer move_construct", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1 = QMakeShared<int>();
    QSharedPointer<int> ptr2(std::move(ptr1));
 
+   REQUIRE(ptr1.isNull() == true);
    REQUIRE(ptr2.isNull() == false);
 }
 
-TEST_CASE("QSharedPointer move_b", "[qsharedpointer]")
+TEST_CASE("QSharedPointer nullptr", "[qsharedpointer]")
 {
-   QSharedPointer<int> ptr1 = QMakeShared<int>();
+   QSharedPointer<int> ptr = nullptr;
+
+   REQUIRE(ptr == nullptr);
+   REQUIRE(nullptr == ptr);
+
+   REQUIRE(ptr.isNull() == true);
+
+   ptr = nullptr;
+
+   REQUIRE(ptr == nullptr);
+   REQUIRE(nullptr == ptr);
+
+   REQUIRE(ptr.isNull() == true);
+}
+
+TEST_CASE("QSharedPointer operators", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1;
    QSharedPointer<int> ptr2 = QMakeShared<int>();
+   QSharedPointer<int> ptr3 = ptr2;
 
-   int *rawPointer = ptr2.data();
+   REQUIRE( (ptr1 < ptr2) == true);
+   REQUIRE( (ptr2 < ptr1) == false);
+   REQUIRE( (ptr2 < ptr2) == false);
+   REQUIRE( (ptr1 < ptr1) == false);
 
-   ptr1 = std::move(ptr2);
+   REQUIRE( (ptr1 > ptr2) == false);
+   REQUIRE( (ptr2 > ptr1) == true);
+   REQUIRE( (ptr2 > ptr2) == false);
+   REQUIRE( (ptr1 > ptr1) == false);
 
-   REQUIRE(ptr1.data() == rawPointer);
+   REQUIRE( (ptr1 <= ptr2) == true);
+   REQUIRE( (ptr2 <= ptr1) == false);
+   REQUIRE( (ptr2 <= ptr2) == true);
+   REQUIRE( (ptr1 <= ptr1) == true);
+
+   REQUIRE( (ptr1 >= ptr2) == false);
+   REQUIRE( (ptr2 >= ptr1) == true);
+   REQUIRE( (ptr2 >= ptr2) == true);
+   REQUIRE( (ptr1 >= ptr1) == true);
+
+   REQUIRE( (ptr2 <  ptr3) == false);
+   REQUIRE( (ptr2 >  ptr3) == false);
+   REQUIRE( (ptr2 <= ptr3) == true);
+   REQUIRE( (ptr2 >= ptr3) == true);
 }
 
 TEST_CASE("QSharedPointer reset", "[qsharedpointer]")
@@ -129,5 +248,4 @@ TEST_CASE("QSharedPointer swap", "[qsharedpointer]")
 
    REQUIRE(*ptr1 == 8);
    REQUIRE(ptr2 == nullptr);
-
 }

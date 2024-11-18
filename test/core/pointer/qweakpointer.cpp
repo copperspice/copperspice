@@ -17,6 +17,7 @@
 *
 ***********************************************************************/
 
+#include <qobject.h>
 #include <qsharedpointer.h>
 
 #include <cs_catch2.h>
@@ -43,23 +44,54 @@ TEST_CASE("QWeakPointer clear", "[qweakpointer]")
    REQUIRE(weakPointer.isNull() == true);
 }
 
+TEST_CASE("QWeakPointer data", "[qweakpointer]")
+{
+   QObject *obj = new QObject;
+
+   QWeakPointer<QObject> weakPointer = obj;
+
+   REQUIRE(weakPointer.data() == obj);
+
+   delete obj;
+
+   REQUIRE(weakPointer.data() == nullptr);
+}
+
 TEST_CASE("QWeakPointer nullptr", "[qweakpointer]")
 {
-   QSharedPointer<int> ptr = QMakeShared<int>();
+   QSharedPointer<int> sharedPtr = QMakeShared<int>();
+   QWeakPointer<int> weakPointer = sharedPtr.toWeakRef();
 
-   QWeakPointer<int> weakPointer = ptr.toWeakRef();
-   ptr.reset();
+   REQUIRE(sharedPtr == weakPointer);
+   REQUIRE(weakPointer == sharedPtr);
 
+   REQUIRE(sharedPtr == weakPointer.lock());
+   REQUIRE(sharedPtr == weakPointer.toStrongRef());
+
+   REQUIRE(sharedPtr != nullptr);
+   REQUIRE(sharedPtr.isNull() == false);
+
+   REQUIRE(static_cast<bool>(sharedPtr) == true);
+   REQUIRE(static_cast<bool>(weakPointer) == true);
+
+   sharedPtr.reset();
+
+   REQUIRE(static_cast<bool>(sharedPtr) == false);
    REQUIRE(static_cast<bool>(weakPointer) == false);
-   REQUIRE(static_cast<bool>(ptr) == false);
 
-   REQUIRE(ptr == nullptr);
-   REQUIRE(ptr.isNull() == true);
+   REQUIRE(sharedPtr == nullptr);
+   REQUIRE(sharedPtr.isNull() == true);
 
    REQUIRE(weakPointer == nullptr);
-   REQUIRE(weakPointer.isNull()  == true);
+   REQUIRE(weakPointer.isNull() == true);
 
-   REQUIRE(ptr != weakPointer);
-   REQUIRE(weakPointer != ptr);
+   REQUIRE(sharedPtr != weakPointer);   // unusual but accurate
+   REQUIRE(weakPointer != sharedPtr);
+
+   REQUIRE(sharedPtr == weakPointer.lock());
+   REQUIRE(weakPointer.lock() == sharedPtr);
+
+   REQUIRE(sharedPtr == weakPointer.toStrongRef());
+   REQUIRE(weakPointer.toStrongRef() == sharedPtr);
 }
 
