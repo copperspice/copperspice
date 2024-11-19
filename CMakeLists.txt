@@ -66,7 +66,6 @@ endif()
 # required libraries
 set(BUILD_COMPONENTS "Core Xml")
 
-# unused at this time: DBus, Declarative, and ScriptTools
 set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg Vulkan WebKit XmlPatterns)
 
 set(PACKAGE           "copperspice")

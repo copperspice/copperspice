@@ -9,7 +9,6 @@
 /src/plugins/imageformats/tga
 /src/plugins/imageformats/tiff
 /src/plugins/sqldrivers/tds
-/src/scripttools
 /utilities
 
 /src/3rdparty/*/ANNOUNCE

@@ -133,12 +133,6 @@
 #      define Q_SCRIPT_EXPORT        Q_DECL_IMPORT
 #    endif
 
-#    if defined(QT_BUILD_SCRIPTTOOLS_LIB)
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_EXPORT
-#    else
-#      define Q_SCRIPTTOOLS_EXPORT   Q_DECL_IMPORT
-#    endif
-
 #    if defined(QT_BUILD_VULKAN_LIB)
 #      define Q_VULKAN_EXPORT        Q_DECL_EXPORT
 #    else
@@ -187,7 +181,6 @@
 #    define Q_XML_EXPORT            Q_DECL_EXPORT
 #    define Q_XMLPATTERNS_EXPORT    Q_DECL_EXPORT
 #    define Q_SCRIPT_EXPORT         Q_DECL_EXPORT
-#    define Q_SCRIPTTOOLS_EXPORT    Q_DECL_EXPORT
 #  else
 #    define Q_CORE_EXPORT
 #    define Q_DBUS_EXPORT
@@ -202,7 +195,6 @@
 #    define Q_XML_EXPORT
 #    define Q_XMLPATTERNS_EXPORT
 #    define Q_SCRIPT_EXPORT
-#    define Q_SCRIPTTOOLS_EXPORT
 #  endif
 
 #endif
