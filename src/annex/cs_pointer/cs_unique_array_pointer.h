@@ -19,23 +19,11 @@
 #ifndef LIB_CS_UNIQUE_ARRAY_POINTER_H
 #define LIB_CS_UNIQUE_ARRAY_POINTER_H
 
+#include <cs_pointer_traits.h>
 #include <cs_unique_pointer.h>
 #include <memory>
 
 namespace CsPointer {
-
-template <typename T>
-struct cs_add_missing_extent {
-   using type = T[];
-};
-
-template <typename T>
-struct cs_add_missing_extent<T[]> {
-   using type = T[];
-};
-
-template <typename T>
-using cs_add_missing_extent_t = typename cs_add_missing_extent<T>::type;
 
 template <typename T, typename Deleter = std::default_delete<cs_add_missing_extent_t<T>>>
 class CsUniqueArrayPointer : public CsUniquePointer<cs_add_missing_extent_t<T>, Deleter>

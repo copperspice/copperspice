@@ -34,13 +34,13 @@
 
 QObject::QObject(QObject *t_parent)
 {
+   // lambda is a Deleter which does nothing
+   m_self = QSharedPointer<QObject>(this, [] (QObject *) {} );
 
    m_parent                   = nullptr;     // no parent yet, set by setParent()
    m_currentChildBeingDeleted = nullptr;
    m_declarativeData          = nullptr;
    m_postedEvents             = 0;
-   m_sharedRefCount           = nullptr;
-
    m_pendTimer                = false;       // no timers yet
    m_wasDeleted               = false;       // double delete flag
    m_sentChildRemoved         = false;
@@ -94,22 +94,13 @@ QObject::~QObject()
    // this line needs to be located after the emit destroyed
    this->m_wasDeleted = true;
 
-   QtSharedPointer::ExternalRefCountData *sharedRefCount = m_sharedRefCount.exchange(nullptr);
-
-   if (sharedRefCount) {
-
-      if (sharedRefCount->strongref.load() > 0) {
-         // continue deleting, unclear what else to do
-         qWarning("QObject:~QObject() Shared QObject was deleted directly, application may crash.");
-      }
-
-      // indicate to all QWeakPointers QObject has now been deleted
-      sharedRefCount->strongref.store(0);
-
-      if (! sharedRefCount->weakref.deref()) {
-         delete sharedRefCount;
-      }
+   if (m_self.use_count() != 1) {
+      // continue with delete
+      qWarning("QObject:~QObject() Shared QObject was deleted directly, application may crash.");
    }
+
+   // mark internal shared pointer with a ref count of zero
+   m_self.reset();
 
    //
    if (this->m_declarativeData) {

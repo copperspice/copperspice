@@ -105,10 +105,35 @@ void Ginger::bags(int value) const
 
 TEST_CASE("QObject children", "[qobject]")
 {
-   Ginger obj;
+   Ginger *objA = new Ginger();
 
-   REQUIRE(obj.children().isEmpty() == true);
-   REQUIRE(obj.parent() == nullptr);
+   REQUIRE(objA->children().isEmpty() == true);
+   REQUIRE(objA->parent() == nullptr);
+
+   Ginger *objB = new Ginger;
+   objB->setParent(objA);
+   objB->setObjectName("B");
+
+   Ginger *objC = new Ginger;
+   objC->setParent(objA);
+
+   REQUIRE(objA->children().size() == 2);
+   REQUIRE(objB->parent() == objA);
+
+   QList<QObject *> list = objA->children();
+   REQUIRE(list[0] == objB);
+   REQUIRE(list[1] == objC);
+
+   QObject *tmp = objA->findChild<QObject *>("B");
+   REQUIRE(tmp == objB);
+
+   Ginger *objD = new Ginger;
+   objD->setObjectName("D");
+
+   list = objA->findChildren<QObject *>("D");
+   REQUIRE(list.isEmpty() == true);
+
+   delete objA;
 }
 
 TEST_CASE("QObject connect", "[qobject]")

@@ -185,16 +185,16 @@ void QPropertyAnimation::updateState(QAbstractAnimation::State newState, QAbstra
             // check if start and end values exist
             if (! startValue().isValid() && (d->direction == Backward || ! d->m_defaultValue.isValid())) {
 
-               qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no start value available",
-                        csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),
-                        csPrintable(d->target.data()->objectName()));
+               qWarning("QPropertyAnimation::updateState() Trying to start an animation, no start value available (%s, %s, %s)",
+                     csPrintable(d->propertyName), csPrintable(d->target.lock()->metaObject()->className()),
+                     csPrintable(d->target.lock()->objectName()));
             }
 
             if (! endValue().isValid() && (d->direction == Forward || ! d->m_defaultValue.isValid())) {
 
-               qWarning("QPropertyAnimation::updateState (%s, %s, %s): Trying to start an animation, no end value available",
-                        csPrintable(d->propertyName), csPrintable(d->target.data()->metaObject()->className()),
-                        csPrintable(d->target.data()->objectName()));
+               qWarning("QPropertyAnimation::updateState() Trying to start an animation, no end value available (%s, %s, %s)",
+                     csPrintable(d->propertyName), csPrintable(d->target.lock()->metaObject()->className()),
+                     csPrintable(d->target.lock()->objectName()));
             }
          }
 

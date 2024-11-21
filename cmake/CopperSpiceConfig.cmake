@@ -73,6 +73,7 @@ endforeach()
 # export variable
 set(CS_INSTALL_MODE     "@CS_INSTALL_MODE@")
 set(CsLibGuarded_Deploy "@CsLibGuarded_FOUND@")
+set(CsPointer_Deploy    "@CsPointer_FOUND@")
 set(CsSignal_Deploy     "@CsSignal_FOUND@")
 set(CsString_Deploy     "@CsString_FOUND@")
 
@@ -82,6 +83,13 @@ if ("${CS_INSTALL_MODE}" STREQUAL "Package")
    if (NOT TARGET CsLibGuarded::CsLibGuarded)
       message("CMake Issue: CopperSpice was built in Package Mode\n"
          "  Target library CsLibGuarded::CsLibGuarded was not found. Perhaps a find_package() call is missing?\n\n")
+
+      message(FATAL_ERROR "Aborting CMake...\n")
+   endif()
+
+   if (NOT TARGET CsPointer::CsPointer)
+      message("CMake Issue: CopperSpice was built in Package Mode\n"
+         "  Target library CsPointer::CsPointer was not found. Perhaps a find_package() call is missing?\n\n")
 
       message(FATAL_ERROR "Aborting CMake...\n")
    endif()
@@ -108,6 +116,15 @@ if ("${CS_INSTALL_MODE}" STREQUAL "Deploy")
 
       message("CMake Issue: CopperSpice was built in Deploy Mode\n"
          "  Target library CsLibGuarded::CsLibGuarded was found, system library in CS must be used.\n\n")
+
+      message(FATAL_ERROR "Aborting CMake...\n")
+   endif()
+
+   if (TARGET CsPointer::CsPointer)
+      # CS was built with the system library, downstream project must use the version in CS
+
+      message("CMake Issue: CopperSpice was built in Deploy Mode\n"
+         "  Target library CsPointer::CsPointer was found, system library in CS must be used.\n\n")
 
       message(FATAL_ERROR "Aborting CMake...\n")
    endif()
