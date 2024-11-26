@@ -97,7 +97,7 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
          }
 
          if (hasLine) {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4 \n   Description: %5")
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2, at line %3, column %4\n   Description: %5")
                   .formatArgs(colorify(errorId, ErrorCode),
                   colorify(location, Location),
                   colorify(QString::number(sourceLocation.line()), Location),
@@ -105,7 +105,7 @@ void ColoringMessageHandler::handleMessage(QtMsgType type,
                   colorifyDescription(description)));
 
          } else {
-            writeUncolored(QXmlPatternistCLI::tr("Error %1 in \"%2\" \n   Description: %3")
+            writeUncolored(QXmlPatternistCLI::tr("Error %1 in %2\n   Description: %3")
                   .formatArgs(colorify(errorId, ErrorCode), colorify(location, Location),
                   colorifyDescription(description)));
          }

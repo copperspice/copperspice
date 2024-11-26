@@ -7418,7 +7418,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location filename="../src/xmlpatterns/api/qcoloringmessagehandler.cpp" line="108"/>
-        <source>Error %1 in &quot;%2&quot; 
+        <source>Error %1 in %2
    Description: %3</source>
         <translation type="unfinished"></translation>
     </message>
