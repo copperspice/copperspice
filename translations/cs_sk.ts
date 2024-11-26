@@ -4573,7 +4573,7 @@ CopperSpice is licensed under the GNU LGPL version 2.1</source>
         <location filename="../src/gui/printing/qprintdialog_unix.cpp" line="806"/>
         <source>%1 is a directory.
 Please choose a different file name.</source>
-        <translation>%1 je priečinok. 
+        <translation>%1 je priečinok.
 Prosím zvoľte iný názov súboru.</translation>
     </message>
     <message>

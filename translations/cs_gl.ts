@@ -3472,7 +3472,7 @@ CopperSpice is licensed under the GNU LGPL version 2.1</source>
         <location filename="../src/plugins/sqldrivers/odbc/qsql_odbc.cpp" line="972"/>
         <location filename="../src/plugins/sqldrivers/odbc/qsql_odbc.cpp" line="1336"/>
         <source>QODBCResult::reset: Unable to set &apos;SQL_CURSOR_STATIC&apos; as statement attribute. Please check your ODBC driver configuration</source>
-        <translation>QODBCResult::reset: Non foi posíbel estabelecer «SQL_CURSOR_STATIC» como 
+        <translation>QODBCResult::reset: Non foi posíbel estabelecer «SQL_CURSOR_STATIC» como
 atributo da sentenza. Comprobe a configuración do controlador ODBC</translation>
     </message>
     <message>

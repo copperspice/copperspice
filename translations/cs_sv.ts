@@ -1128,7 +1128,7 @@ Press ESC to cancel</source>
         <location filename="../src/gui/dialogs/qfiledialog.cpp" line="1397"/>
         <source>%1 already exists.
 Do you want to replace it?</source>
-        <translation>%1 finns redan. 
+        <translation>%1 finns redan.
 Vill du ersätta den?</translation>
     </message>
     <message>
@@ -1136,8 +1136,8 @@ Vill du ersätta den?</translation>
         <source>%1
 File not found.
 Please verify the correct file name was given.</source>
-        <translation>%1 
-Filen hittades inte. 
+        <translation>%1
+Filen hittades inte.
 Kontrollera att det korrekta filnamnet angavs.</translation>
     </message>
     <message>
@@ -1262,8 +1262,8 @@ Kontrollera att det korrekta filnamnet angavs.</translation>
         <source>%1
 Directory not found.
 Please verify the correct directory name was given.</source>
-        <translation>%1 
-Katalogen hittades inte. 
+        <translation>%1
+Katalogen hittades inte.
 Kontrollera att det korrekta katalognamnet angavs.</translation>
     </message>
     <message>
@@ -1397,7 +1397,7 @@ Kontrollera att det korrekta katalognamnet angavs.</translation>
         <location filename="../src/gui/dialogs/qfiledialog_p.cpp" line="1267"/>
         <source>&apos;%1&apos; is write protected.
 Do you want to delete it anyway?</source>
-        <translation type="unfinished">\&quot;%1\&quot; är skrivskyddad. 
+        <translation type="unfinished">\&quot;%1\&quot; är skrivskyddad.
 Vill du ta bort den ändå?</translation>
     </message>
     <message>
@@ -1912,63 +1912,63 @@ Vill du ta bort den ändå?</translation>
         <location filename="../src/network/access/qftp.cpp" line="2203"/>
         <source>Connecting to host failed:
 %1</source>
-        <translation>Anslutning till värden misslyckades: 
+        <translation>Anslutning till värden misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2207"/>
         <source>Login failed:
 %1</source>
-        <translation>Inloggning misslyckades: 
+        <translation>Inloggning misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2211"/>
         <source>Listing directory failed:
 %1</source>
-        <translation>Listning av katalogen misslyckades: 
+        <translation>Listning av katalogen misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2215"/>
         <source>Changing directory failed:
 %1</source>
-        <translation>Byte av katalog misslyckades: 
+        <translation>Byte av katalog misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2219"/>
         <source>Downloading file failed:
 %1</source>
-        <translation>Nedladdningen av filen misslyckades: 
+        <translation>Nedladdningen av filen misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2223"/>
         <source>Uploading file failed:
 %1</source>
-        <translation>Uppladdningen av filen misslyckades: 
+        <translation>Uppladdningen av filen misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2227"/>
         <source>Removing file failed:
 %1</source>
-        <translation>Borttagning av filen misslyckades: 
+        <translation>Borttagning av filen misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2231"/>
         <source>Creating directory failed:
 %1</source>
-        <translation>Skapandet av katalogen misslyckades: 
+        <translation>Skapandet av katalogen misslyckades:
 %1</translation>
     </message>
     <message>
         <location filename="../src/network/access/qftp.cpp" line="2235"/>
         <source>Removing directory failed:
 %1</source>
-        <translation>Borttagning av katalogen misslyckades: 
+        <translation>Borttagning av katalogen misslyckades:
 %1</translation>
     </message>
     <message>
@@ -4525,14 +4525,14 @@ CopperSpice is licensed under the GNU LGPL version 2.1</source>
         <location filename="../src/gui/printing/qprintdialog_unix.cpp" line="811"/>
         <source>File %1 is not writable.
 Please choose a different file name.</source>
-        <translation>Filen %1 är inte skrivbar. 
+        <translation>Filen %1 är inte skrivbar.
 Välj ett annat filnamn.</translation>
     </message>
     <message>
         <location filename="../src/gui/printing/qprintdialog_unix.cpp" line="816"/>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
-        <translation>%1 finns redan. 
+        <translation>%1 finns redan.
 Vill du skriva över den?</translation>
     </message>
     <message>
