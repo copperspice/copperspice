@@ -428,7 +428,7 @@ set_package_properties(SQLite3 PROPERTIES
 )
 
 if (WITH_VULKAN)
-   find_package(Vulkan 1.1)
+   find_package(Vulkan 1.2.170)
    set_package_properties(Vulkan PROPERTIES
       PURPOSE "Required for Vulkan support"
       DESCRIPTION "The Vulkan SDK"
