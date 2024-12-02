@@ -3788,8 +3788,9 @@ uint QVariant::getTypeId(const std::type_index &index)
 
    for (const auto &item : builtinTypes) {
 
-#if defined(Q_OS_DARWIN) || defined(Q_OS_FREEBSD)
-      // does not support comparing hash_code()
+#if defined( _LIBCPP_VERSION )
+      // libC++ does not support comparing hash_code(), happens mostly when using clang
+      // prior testing: defined(Q_OS_DARWIN) || defined(Q_OS_FREEBSD)
 
       if (strcmp(item.meta_typeT.name(), index.name()) == 0) {
          retval = item.meta_typeId;
