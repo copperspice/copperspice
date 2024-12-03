@@ -2463,9 +2463,13 @@ target_link_libraries(CsWebKit
    CsScript
 )
 
+target_compile_options(CsWebKit
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_WEBKIT_CXXFLAGS}>
+)
+
 set_target_properties(CsWebKit
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_WEBKIT_CXXFLAGS}
    LINK_FLAGS ${EXTRA_WEBKIT_LDFLAGS}
 )
 
