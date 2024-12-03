@@ -298,10 +298,14 @@ if(MSVC)
    endif()
 endif()
 
+target_compile_options(CsCore
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_CORE_CXXFLAGS}>
+)
+
 set_target_properties(CsCore
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_CORE_CXXFLAGS}
-   LINK_FLAGS    ${EXTRA_CORE_LDFLAGS}
+   LINK_FLAGS ${EXTRA_CORE_LDFLAGS}
 )
 
 function_generate_resources(CsCore)

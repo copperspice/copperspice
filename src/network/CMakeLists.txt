@@ -96,9 +96,13 @@ target_link_libraries(CsNetwork
    CsCore
 )
 
+target_compile_options(CsNetwork
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_NETWORK_CXXFLAGS}>
+)
+
 set_target_properties(CsNetwork
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_NETWORK_CXXFLAGS}
    LINK_FLAGS ${EXTRA_NETWORK_LDFLAGS}
 )
 

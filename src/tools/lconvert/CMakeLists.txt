@@ -54,9 +54,13 @@ target_link_libraries(lconvert${TOOLS_SUFFIX}
    ${EXTRA_LCONVERT_LIBS}
 )
 
+target_compile_options(lconvert${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_LCONVERT_CXXFLAGS}>
+)
+
 set_target_properties(lconvert${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_LCONVERT_CXXFLAGS}
    LINK_FLAGS ${EXTRA_LCONVERT_LDFLAGS}
    EXPORT_NAME lconvert
 )

@@ -68,9 +68,13 @@ target_link_libraries(CsXmlPatterns
    CsNetwork
 )
 
+target_compile_options(CsXmlPatterns
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_XMLPATTERNS_CXXFLAGS}>
+)
+
 set_target_properties(CsXmlPatterns
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_XMLPATTERNS_CXXFLAGS}
    LINK_FLAGS ${EXTRA_XMLPATTERNS_LDFLAGS}
 )
 

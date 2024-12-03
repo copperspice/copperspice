@@ -133,9 +133,13 @@ target_link_libraries(CsOpenGL
    ${OPENGL_LIBRARIES}
 )
 
+target_compile_options(CsOpenGL
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_OPENGL_CXXFLAGS}>
+)
+
 set_target_properties(CsOpenGL
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_OPENGL_CXXFLAGS}
    LINK_FLAGS ${EXTRA_OPENGL_LDFLAGS}
 )
 

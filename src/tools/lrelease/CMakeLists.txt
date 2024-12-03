@@ -47,9 +47,13 @@ target_link_libraries(lrelease${TOOLS_SUFFIX}
    ${EXTRA_LRELEASE_LIBS}
 )
 
+target_compile_options(lrelease${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_LRELEASE_CXXFLAGS}>
+)
+
 set_target_properties(lrelease${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_LRELEASE_CXXFLAGS}
    LINK_FLAGS ${EXTRA_LRELEASE_LDFLAGS}
    EXPORT_NAME lrelease
 )

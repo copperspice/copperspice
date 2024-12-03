@@ -48,9 +48,13 @@ target_link_libraries(rcc${TOOLS_SUFFIX}
    ${EXTRA_RCC_LIBS}
 )
 
+target_compile_options(rcc${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_RCC_CXXFLAGS}>
+)
+
 set_target_properties(rcc${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_RCC_CXXFLAGS}
    LINK_FLAGS ${EXTRA_RCC_LDFLAGS}
    EXPORT_NAME rcc
 )

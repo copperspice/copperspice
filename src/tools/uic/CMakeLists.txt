@@ -86,9 +86,13 @@ target_link_libraries(uic${TOOLS_SUFFIX}
    ${EXTRA_UIC_LIBS}
 )
 
+target_compile_options(uic${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_UIC_CXXFLAGS}>
+)
+
 set_target_properties(uic${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_UIC_CXXFLAGS}
    LINK_FLAGS ${EXTRA_UIC_LDFLAGS}
    EXPORT_NAME uic
 )

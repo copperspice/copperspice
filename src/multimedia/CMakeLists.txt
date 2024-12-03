@@ -78,9 +78,13 @@ target_include_directories(CsMultimedia
    ${GSTREAMER_INCLUDE_DIRS}
 )
 
+target_compile_options(CsMultimedia
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_MULTIMEDIA_CXXFLAGS}>
+)
+
 set_target_properties(CsMultimedia
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_MULTIMEDIA_CXXFLAGS}
    LINK_FLAGS ${EXTRA_MULTIMEDIA_LDFLAGS}
 )
 

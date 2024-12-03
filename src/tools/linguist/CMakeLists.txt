@@ -109,9 +109,13 @@ target_link_libraries(linguist${TOOLS_SUFFIX}
    ${EXTRA_LINGUIST_LIBS}
 )
 
+target_compile_options(linguist${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_LINGUIST_CXXFLAGS}>
+)
+
 set_target_properties(linguist${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_LINGUIST_CXXFLAGS}
    LINK_FLAGS ${EXTRA_LINGUIST_LDFLAGS}
    EXPORT_NAME linguist
 )

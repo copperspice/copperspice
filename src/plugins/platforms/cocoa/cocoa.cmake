@@ -144,9 +144,13 @@ if(BUILD_PLATFORMS_COCOA_PLUGIN)
       -DQT_USE_FREETYPE
    )
 
+   target_compile_options(CsGuiCocoa
+      PRIVATE
+      $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_PLATFORMS_COCOA_CXXFLAGS}>
+   )
+
    set_target_properties(CsGuiCocoa
        PROPERTIES
-       COMPILE_FLAGS ${EXTRA_PLATFORMS_COCOA_CXXFLAGS}
        LINK_FLAGS ${EXTRA_PLATFORMS_COCOA_LDFLAGS}
    )
 

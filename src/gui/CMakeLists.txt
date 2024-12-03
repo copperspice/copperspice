@@ -195,9 +195,13 @@ if (${JPEG_FOUND})
    )
 endif()
 
+target_compile_options(CsGui
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_GUI_CXXFLAGS}>
+)
+
 set_target_properties(CsGui
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_GUI_CXXFLAGS}
    LINK_FLAGS ${EXTRA_GUI_LDFLAGS}
 )
 

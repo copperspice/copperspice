@@ -70,9 +70,13 @@ target_link_libraries(CsVulkan
    Vulkan::Vulkan
 )
 
+target_compile_options(CsVulkan
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_VULKAN_CXXFLAGS}>
+)
+
 set_target_properties(CsVulkan
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_VULKAN_CXXFLAGS}
    LINK_FLAGS ${EXTRA_VULKAN_LDFLAGS}
 )
 

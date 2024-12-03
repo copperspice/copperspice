@@ -91,9 +91,13 @@ target_link_libraries(CsSvg
    CsGui
 )
 
+target_compile_options(CsSvg
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_SVG_CXXFLAGS}>
+)
+
 set_target_properties(CsSvg
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_SVG_CXXFLAGS}
    LINK_FLAGS ${EXTRA_SVG_LDFLAGS}
 )
 

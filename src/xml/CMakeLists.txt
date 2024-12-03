@@ -47,9 +47,13 @@ target_link_libraries(CsXml
    CsCore
 )
 
+target_compile_options(CsXml
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_XML_CXXFLAGS}>
+)
+
 set_target_properties(CsXml
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_XML_CXXFLAGS}
    LINK_FLAGS ${EXTRA_XML_LDFLAGS}
 )
 

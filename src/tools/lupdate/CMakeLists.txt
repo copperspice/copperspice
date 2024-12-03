@@ -60,9 +60,13 @@ target_link_libraries(lupdate${TOOLS_SUFFIX}
    ${EXTRA_LUPDATE_LIBS}
 )
 
+target_compile_options(lupdate${TOOLS_SUFFIX}
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_LUPDATE_CXXFLAGS}>
+)
+
 set_target_properties(lupdate${TOOLS_SUFFIX}
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_LUPDATE_CXXFLAGS}
    LINK_FLAGS ${EXTRA_LUPDATE_LDFLAGS}
    EXPORT_NAME lupdate
 )

@@ -22,8 +22,8 @@ target_sources(sharedtools
    ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
 )
 
-function_variable_fixup("${SHAREDTOOLS_EXTRA_CXXFLAGS}" SHAREDTOOLS_EXTRA_CXXFLAGS)
-function_variable_fixup("${SHAREDTOOLS_EXTRA_LDFLAGS}"  SHAREDTOOLS_EXTRA_LDFLAGS)
+function_variable_fixup("${EXTRA_SHAREDTOOLS_CXXFLAGS}" EXTRA_SHAREDTOOLS_CXXFLAGS)
+function_variable_fixup("${EXTRA_SHAREDTOOLS_LDFLAGS}"  EXTRA_SHAREDTOOLS_LDFLAGS)
 
 target_compile_definitions(sharedtools PRIVATE ${SHAREDTOOLS_DEFINITIONS})
 target_include_directories(sharedtools PRIVATE ${SHAREDTOOLS_INCLUDES})
@@ -33,8 +33,12 @@ target_link_libraries(sharedtools
    CsXml
 )
 
+target_compile_options(sharedtools
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_SHAREDTOOLS_CXXFLAGS}>
+)
+
 set_target_properties(sharedtools
    PROPERTIES
-   COMPILE_FLAGS ${SHAREDTOOLS_EXTRA_CXXFLAGS}
-   LINK_FLAGS ${SHAREDTOOLS_EXTRA_LDFLAGS}
+   LINK_FLAGS ${EXTRA_SHAREDTOOLS_LDFLAGS}
 )

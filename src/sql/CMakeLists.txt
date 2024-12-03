@@ -74,9 +74,13 @@ target_link_libraries(CsSql
    CsCore
 )
 
+target_compile_options(CsSql
+   PRIVATE
+   $<$<COMPILE_LANGUAGE:CXX>:SHELL:${EXTRA_SQL_CXXFLAGS}>
+)
+
 set_target_properties(CsSql
    PROPERTIES
-   COMPILE_FLAGS ${EXTRA_SQL_CXXFLAGS}
    LINK_FLAGS ${EXTRA_SQL_LDFLAGS}
 )
 
