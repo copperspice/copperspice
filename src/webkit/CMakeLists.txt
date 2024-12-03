@@ -2354,6 +2354,9 @@ target_sources(CsWebKit
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/dom/QualifiedName.cpp
    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/platform/graphics/FontCache.cpp
+
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/Source/WebCore/WebCore.qrc
+   ${CMAKE_CURRENT_BINARY_DIR}/qrc_WebCore.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
