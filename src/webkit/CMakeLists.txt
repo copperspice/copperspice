@@ -33,7 +33,35 @@ add_definitions(
 )
 
 if(NOT MSVC)
-   set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC)
+   if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+      set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC
+         -Wno-expansion-to-defined -Wno-zero-as-null-pointer-constant -Wno-suggest-override
+         -Wno-unused-local-typedefs -Wno-sign-compare -Wno-nonnull-compare -Wno-volatile
+         -Wno-class-memaccess -Wno-implicit-fallthrough -Wno-deprecated-enum-enum-conversion
+         -Wno-int-in-bool-context -Wno-unused-but-set-variable -Wno-deprecated-copy -Wno-misleading-indentation
+         -Wno-deprecated-copy -Wno-stringop-truncation -Wno-free-nonheap-object -Wno-array-bounds
+         -Wno-format -Wno-unused-parameter -Wno-mismatched-new-delete -Wno-unused-function
+         -Wno-maybe-uninitialized -Wno-deprecated-enum-float-conversion -Wno-deprecated-declarations
+         -Wno-strict-aliasing -Wno-switch -Wno-range-loop-construct -Wno-address -Wno-cast-function-type
+         -Wno-pedantic)
+
+   elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      set(EXTRA_WEBKIT_CXXFLAGS -O2 -fPIC
+         -Wno-expansion-to-defined -Wno-zero-as-null-pointer-constant -Wno-suggest-override
+         -Wno-unused-local-typedefs -Wno-sign-compare
+         -Wno-implicit-fallthrough -Wno-deprecated-enum-enum-conversion
+         -Wno-int-in-bool-context -Wno-deprecated-copy -Wno-misleading-indentation
+         -Wno-deprecated-copy -Wno-free-nonheap-object -Wno-array-bounds
+         -Wno-format -Wno-unused-parameter -Wno-mismatched-new-delete -Wno-unused-function
+         -Wno-deprecated-enum-float-conversion -Wno-deprecated-declarations
+         -Wno-strict-aliasing -Wno-switch -Wno-range-loop-construct -Wno-address
+         -Wno-undefined-bool-conversion -Wno-undefined-var-template -Wno-inconsistent-missing-override
+         -Wno-unused-private-field -Wno-unused-const-variable -Wno-bitwise-instead-of-logical
+         -Wno-implicit-const-int-float-conversion -Wno-unused-variable -Wno-null-pointer-arithmetic
+         -Wno-tautological-bitwise-compare -Wno-tautological-overlap-compare
+         -Wno-unknown-warning-option
+         -Wno-pedantic)
+   endif()
 endif()
 
 target_include_directories(CsWebKit
