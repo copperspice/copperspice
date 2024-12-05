@@ -22,15 +22,15 @@
 ***********************************************************************/
 
 #include <qstate.h>
+#include <qstate_p.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qhistorystate.h>
 #include <qabstracttransition.h>
+#include <qhistorystate.h>
 #include <qsignaltransition.h>
 #include <qstatemachine.h>
 
-#include <qstate_p.h>
 #include <qabstracttransition_p.h>
 #include <qhistorystate_p.h>
 #include <qstatemachine_p.h>

@@ -23,9 +23,9 @@
 
 #include <qstandardpaths.h>
 
+#include <qcoreapplication.h>
 #include <qdir.h>
 #include <qurl.h>
-#include <qcoreapplication.h>
 
 #include <qcore_mac_p.h>
 

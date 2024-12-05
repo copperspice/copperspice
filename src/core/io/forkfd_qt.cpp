@@ -25,8 +25,9 @@
 ** Copyright (c) 2014 Intel Corporation
 *******************************************/
 
-#include <atomic>
 #include <qprocess_p.h>
+
+#include <atomic>
 
 #define FORKFD_NO_SPAWNFD
 

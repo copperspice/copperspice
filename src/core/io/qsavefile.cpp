@@ -26,14 +26,13 @@
 *****************************************************/
 
 #include <qsavefile.h>
+#include <qsavefile_p.h>
 
-#include <qplatformdefs.h>
-
-#include <qfileinfo.h>
 #include <qdebug.h>
+#include <qfileinfo.h>
+#include <qplatformdefs.h>
 #include <qtemporaryfile.h>
 
-#include <qsavefile_p.h>
 #include <qabstractfileengine_p.h>
 #include <qiodevice_p.h>
 #include <qtemporaryfile_p.h>

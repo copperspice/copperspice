@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstractnativeeventfilter.h>
+
 #include <qabstracteventdispatcher.h>
 
 QAbstractNativeEventFilter::QAbstractNativeEventFilter()

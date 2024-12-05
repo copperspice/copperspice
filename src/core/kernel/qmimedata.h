@@ -24,12 +24,12 @@
 #ifndef QMIMEDATA_H
 #define QMIMEDATA_H
 
-#include <qvariant.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <qvariant.h>
 
-class QUrl;
 class QMimeDataPrivate;
+class QUrl;
 
 class Q_CORE_EXPORT QMimeData : public QObject
 {

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qthread.h>
+#include <qthread_p.h>
 
 #include <qcoreapplication.h>
 #include <qmutex.h>
@@ -31,7 +32,6 @@
 
 #include <qcoreapplication_p.h>
 #include <qeventdispatcher_win_p.h>
-#include <qthread_p.h>
 
 #ifndef _MT
 #define _MT

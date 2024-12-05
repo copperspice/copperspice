@@ -31,6 +31,7 @@
 
 class QDebug;
 class QDirIterator;
+
 class QDirPrivate;
 
 class Q_CORE_EXPORT QDir

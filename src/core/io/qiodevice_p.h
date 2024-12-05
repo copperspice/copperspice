@@ -25,6 +25,7 @@
 #define QIODEVICE_P_H
 
 #include <qiodevice.h>
+
 #include <qbytearray.h>
 #include <qstring.h>
 

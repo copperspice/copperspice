@@ -27,9 +27,9 @@
 
 #include <qlockfile.h>
 
-#include <qthread.h>
-#include <qelapsedtimer.h>
 #include <qdatetime.h>
+#include <qelapsedtimer.h>
+#include <qthread.h>
 
 #include <qlockfile_p.h>
 

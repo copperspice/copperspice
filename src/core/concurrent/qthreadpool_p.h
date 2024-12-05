@@ -25,9 +25,9 @@
 #define QTHREADPOOL_P_H
 
 #include <qmutex.h>
-#include <qwaitcondition.h>
-#include <qset.h>
 #include <qqueue.h>
+#include <qset.h>
+#include <qwaitcondition.h>
 
 class QThreadPoolThread;
 

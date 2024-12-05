@@ -22,10 +22,9 @@
 ***********************************************************************/
 
 #include <qsystemsemaphore.h>
+#include <qsystemsemaphore_p.h>
 
 #include <qglobal.h>
-
-#include <qsystemsemaphore_p.h>
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 

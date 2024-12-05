@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
+#include <qfilesystemwatcher_dnotify_p.h>
+
 #include <qfilesystemwatcher.h>
 #include <qplatformdefs.h>
 
-#include <qfilesystemwatcher_dnotify_p.h>
-
 #ifndef QT_NO_FILESYSTEMWATCHER
 
-#include <dirent.h>
 #include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
@@ -39,6 +38,7 @@
 
 #include <qcore_unix_p.h>
 
+#include <dirent.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/stat.h>

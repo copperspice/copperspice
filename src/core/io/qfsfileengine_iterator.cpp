@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qfsfileengine_iterator_p.h>
-#include <qfileinfo_p.h>
+
 #include <qvariant.h>
+
+#include <qfileinfo_p.h>
 
 #ifndef QT_NO_FSFILEENGINE
 #ifndef QT_NO_FILESYSTEMITERATOR

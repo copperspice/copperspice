@@ -24,8 +24,8 @@
 #ifndef QLIBRARYINFO_H
 #define QLIBRARYINFO_H
 
-#include <qstring8.h>
 #include <qdatetime.h>
+#include <qstring8.h>
 
 class QStringList;
 

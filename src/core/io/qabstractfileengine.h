@@ -30,12 +30,13 @@
 #error qabstractfileengine.h must be included before any header file that defines open
 #endif
 
+class QAbstractFileEngineIterator;
 class QFileExtension;
 class QFileExtensionResult;
 class QVariant;
-class QAbstractFileEngineIterator;
-class QAbstractFileEnginePrivate;
+
 class QAbstractFileEngineIteratorPrivate;
+class QAbstractFileEnginePrivate;
 
 class Q_CORE_EXPORT QAbstractFileEngine
 {

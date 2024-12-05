@@ -29,8 +29,9 @@
 #include <qshareddata.h>
 
 class QDir;
-class QDirIteratorPrivate;
 class QDateTime;
+
+class QDirIteratorPrivate;
 class QFileInfoPrivate;
 
 class Q_CORE_EXPORT QFileInfo

@@ -24,9 +24,9 @@
 #include <qtldurl_p.h>
 
 #include <qplatformdefs.h>
-#include <qurl.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
+#include <qurl.h>
 
 #include <qurltlds_p.h>
 

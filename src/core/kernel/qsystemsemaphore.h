@@ -24,8 +24,8 @@
 #ifndef QSYSTEMSEMAPHORE_H
 #define QSYSTEMSEMAPHORE_H
 
-#include <qstring.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
 #ifndef QT_NO_SYSTEMSEMAPHORE
 

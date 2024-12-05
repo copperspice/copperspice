@@ -43,6 +43,7 @@
 #include <qthreadpool.h>
 #include <qthreadstorage.h>
 #include <qvarlengtharray.h>
+
 #include <qcorecmdlineargs_p.h>
 #include <qfactoryloader_p.h>
 #include <qlocale_p.h>

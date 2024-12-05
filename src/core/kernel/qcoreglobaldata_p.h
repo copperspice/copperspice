@@ -25,8 +25,8 @@
 #define QCOREGLOBALDATA_P_H
 
 #include <qmap.h>
-#include <qstringlist.h>
 #include <qreadwritelock.h>
+#include <qstringlist.h>
 
 struct QCoreGlobalData {
    QMap<QString, QStringList> dirSearchPaths;

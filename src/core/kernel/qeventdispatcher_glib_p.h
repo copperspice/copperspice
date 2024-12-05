@@ -25,7 +25,6 @@
 #define QEVENTDISPATCHER_GLIB_P_H
 
 #include <qabstracteventdispatcher.h>
-
 #include <qhash.h>
 
 #include <qabstracteventdispatcher_p.h>

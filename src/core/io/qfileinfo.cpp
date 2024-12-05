@@ -22,12 +22,11 @@
 ***********************************************************************/
 
 #include <qfileinfo.h>
+#include <qfileinfo_p.h>
 
 #include <qdir.h>
 #include <qglobal.h>
 #include <qplatformdefs.h>
-
-#include <qfileinfo_p.h>
 
 QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
 {

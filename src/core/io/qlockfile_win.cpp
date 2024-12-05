@@ -29,11 +29,11 @@
 #include <qdatetime.h>
 #include <qdebug.h>
 #include <qfileinfo.h>
-#include <qthread.h>
 #include <qt_windows.h>
+#include <qthread.h>
 
-#include <qlockfile_p.h>
 #include <qfilesystementry_p.h>
+#include <qlockfile_p.h>
 
 #include <psapi.h>
 

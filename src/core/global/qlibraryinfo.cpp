@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qlibraryinfo.h>
+
 #include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qlibraryinfo.h>
 #include <qregularexpression.h>
 #include <qscopedpointer.h>
 #include <qsettings.h>

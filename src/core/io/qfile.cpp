@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qfile.h>
+#include <qfile_p.h>
 
 #include <qcoreapplication.h>
 #include <qdebug.h>
@@ -31,7 +32,6 @@
 #include <qplatformdefs.h>
 #include <qtemporaryfile.h>
 
-#include <qfile_p.h>
 #include <qfilesystemengine_p.h>
 #include <qiodevice_p.h>
 #include <qsystemerror_p.h>

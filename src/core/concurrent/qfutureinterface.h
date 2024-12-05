@@ -25,17 +25,17 @@
 #define QFUTUREINTERFACE_H
 
 #include <qglobal.h>
-#include <qrunnable.h>
 #include <qmutex.h>
+#include <qrunnable.h>
 #include <qtconcurrentexception.h>
 #include <qtconcurrentresultstore.h>
 
 template <typename T>
 class QFuture;
 
-class QFutureInterfaceBasePrivate;
-
 class QFutureWatcherBase;
+
+class QFutureInterfaceBasePrivate;
 class QFutureWatcherBasePrivate;
 
 class Q_CORE_EXPORT QFutureInterfaceBase

@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qfilesystemengine_p.h>
-
 #include <qabstractfileengine.h>
 #include <qdatetime.h>
 #include <qdebug.h>
@@ -34,6 +32,7 @@
 #include <qt_windows.h>
 #include <qvarlengtharray.h>
 
+#include <qfilesystemengine_p.h>
 #include <qfsfileengine_p.h>
 #include <qmutexpool_p.h>
 #include <qsystemlibrary_p.h>

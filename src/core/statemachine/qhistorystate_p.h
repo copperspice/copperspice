@@ -24,11 +24,12 @@
 #ifndef QHISTORYSTATE_P_H
 #define QHISTORYSTATE_P_H
 
-#include <qabstractstate_p.h>
+#include <qhistorystate.h>
 
 #include <qabstracttransition.h>
-#include <qhistorystate.h>
 #include <qlist.h>
+
+#include <qabstractstate_p.h>
 
 class QHistoryStatePrivate : public QAbstractStatePrivate
 {

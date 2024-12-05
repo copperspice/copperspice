@@ -22,11 +22,10 @@
 ***********************************************************************/
 
 #include <qcoreapplication.h>
-
 #include <qfileinfo.h>
 #include <qmutex.h>
-#include <qstringlist.h>
 #include <qstring16.h>
+#include <qstringlist.h>
 #include <qt_windows.h>
 #include <qvector.h>
 

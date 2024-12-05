@@ -24,8 +24,9 @@
 #ifndef QTEXTCODEC_P_H
 #define QTEXTCODEC_P_H
 
-#include <string.h>
 #include <qtextcodec.h>
+
+#include <string.h>
 
 #ifndef QT_NO_TEXTCODEC
 

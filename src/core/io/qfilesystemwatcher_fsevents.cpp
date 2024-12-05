@@ -23,11 +23,10 @@
 
 #define _DARWIN_USE_64_BIT_INODE
 
-#include <qfilesystemwatcher.h>
-
-#include <qplatformdefs.h>
-
 #include <qfilesystemwatcher_fsevents_p.h>
+
+#include <qfilesystemwatcher.h>
+#include <qplatformdefs.h>
 
 #ifndef QT_NO_FILESYSTEMWATCHER
 

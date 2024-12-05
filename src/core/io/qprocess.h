@@ -25,8 +25,8 @@
 #define QPROCESS_H
 
 #include <qiodevice.h>
-#include <qstringlist.h>
 #include <qshareddata.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_PROCESS
 

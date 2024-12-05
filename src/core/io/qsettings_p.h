@@ -25,9 +25,9 @@
 #define QSETTINGS_P_H
 
 #include <qdatetime.h>
+#include <qiodevice.h>
 #include <qmap.h>
 #include <qmutex.h>
-#include <qiodevice.h>
 #include <qstack.h>
 #include <qstringlist.h>
 

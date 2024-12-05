@@ -43,6 +43,7 @@
 #include <qstring.h>
 
 #include <qcrashhandler_p.h>
+
 // file is only compiled for unix ( not windows or darwin )
 
 #if ! defined(QT_NO_CRASHHANDLER)

@@ -25,9 +25,9 @@
 #define QURL_H
 
 #include <qbytearray.h>
+#include <qhash.h>
 #include <qpair.h>
 #include <qstring.h>
-#include <qhash.h>
 
 class QDataStream;
 class QUrl;

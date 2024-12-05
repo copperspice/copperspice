@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qcore_mac_p.h>
+
 #include <new>
 
 QString QCFString::toQString(CFStringRef str)

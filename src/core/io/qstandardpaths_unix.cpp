@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qstandardpaths.h>
-
 #include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qhash.h>
-#include <qtextstream.h>
 #include <qregularexpression.h>
+#include <qstandardpaths.h>
+#include <qtextstream.h>
 
 #include <qfilesystemengine_p.h>
 

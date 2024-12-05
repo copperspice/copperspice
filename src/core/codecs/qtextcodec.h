@@ -24,14 +24,14 @@
 #ifndef QTEXTCODEC_H
 #define QTEXTCODEC_H
 
+#include <qlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qlist.h>
 
 #ifndef QT_NO_TEXTCODEC
 
-class QTextCodec;
 class QIODevice;
+class QTextCodec;
 class QTextDecoder;
 class QTextEncoder;
 

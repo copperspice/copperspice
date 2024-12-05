@@ -28,9 +28,10 @@
 #ifndef QCOMMANDLINEPARSER_H
 #define QCOMMANDLINEPARSER_H
 
-#include <qcoreapplication.h>
 #include <qcommandlineoption.h>
+#include <qcoreapplication.h>
 #include <qstringlist.h>
+
 class QCommandLineParserPrivate;
 class QCoreApplication;
 

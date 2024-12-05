@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qbasictimer.h>
+
 #include <qcoreapplication.h>
 
 #include <qabstracteventdispatcher_p.h>

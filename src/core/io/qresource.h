@@ -24,10 +24,10 @@
 #ifndef QRESOURCE_H
 #define QRESOURCE_H
 
-#include <qstring.h>
-#include <qlocale.h>
-#include <qstringlist.h>
 #include <qlist.h>
+#include <qlocale.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
 class QResourcePrivate;
 

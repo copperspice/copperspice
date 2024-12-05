@@ -24,8 +24,8 @@
 #ifndef QTEMPORARYFILE_H
 #define QTEMPORARYFILE_H
 
-#include <qiodevice.h>
 #include <qfile.h>
+#include <qiodevice.h>
 
 #ifdef open
 #error qtemporaryfile.h must be included before any header file that defines open
@@ -33,8 +33,8 @@
 
 #ifndef QT_NO_TEMPORARYFILE
 
-class QTemporaryFilePrivate;
 class QLockFilePrivate;
+class QTemporaryFilePrivate;
 
 class Q_CORE_EXPORT QTemporaryFile : public QFile
 {

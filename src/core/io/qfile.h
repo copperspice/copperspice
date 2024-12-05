@@ -26,6 +26,7 @@
 
 #include <qfiledevice.h>
 #include <qstring.h>
+
 #include <stdio.h>
 
 #ifdef open
@@ -33,6 +34,7 @@
 #endif
 
 class QTemporaryFile;
+
 class QFilePrivate;
 
 class Q_CORE_EXPORT QFile : public QFileDevice

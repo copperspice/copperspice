@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qsocketnotifier.h>
+
 #include <qcfsocketnotifier_p.h>
 #include <qcoreapplication.h>
-#include <qsocketnotifier.h>
 #include <qthread.h>
 
 void qt_mac_socket_callback(CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef,

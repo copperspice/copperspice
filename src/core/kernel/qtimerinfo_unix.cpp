@@ -28,8 +28,8 @@
 #include <qelapsedtimer.h>
 #include <qthread.h>
 
-#include <qcore_unix_p.h>
 #include <qabstracteventdispatcher_p.h>
+#include <qcore_unix_p.h>
 
 #include <sys/times.h>
 

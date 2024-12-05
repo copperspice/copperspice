@@ -26,9 +26,10 @@
 
 #include <qglobal.h>
 
-class QWaitConditionPrivate;
 class QMutex;
 class QReadWriteLock;
+
+class QWaitConditionPrivate;
 
 #include <limits.h>
 

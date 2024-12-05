@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qbytearray.h>
 #include <qglobal.h>
+
+#include <qbytearray.h>
 #include <qlog.h>
 #include <qscopedarraypointer.h>
 #include <qstring.h>

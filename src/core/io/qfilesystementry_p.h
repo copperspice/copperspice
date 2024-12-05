@@ -24,9 +24,9 @@
 #ifndef QFILESYSTEMENTRY_P_H
 #define QFILESYSTEMENTRY_P_H
 
+#include <qbytearray.h>
 #include <qglobal.h>
 #include <qstring.h>
-#include <qbytearray.h>
 
 class QFileSystemEntry
 {

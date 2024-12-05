@@ -29,6 +29,7 @@
 #ifndef QT_NO_SYSTEMSEMAPHORE
 
 #include <qsharedmemory_p.h>
+
 #include <sys/types.h>
 
 #ifdef QT_POSIX_IPC

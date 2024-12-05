@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtemporaryfile.h>
+#include <qtemporaryfile_p.h>
 
 #ifndef QT_NO_TEMPORARYFILE
 
@@ -30,7 +31,6 @@
 #include <qregularexpression.h>
 
 #include <qfile_p.h>
-#include <qtemporaryfile_p.h>
 #include <qsystemerror_p.h>
 
 #if ! defined(Q_OS_WIN)

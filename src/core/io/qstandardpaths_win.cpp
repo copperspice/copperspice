@@ -21,11 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qstandardpaths.h>
-
-#include <qdir.h>
-#include <qstringlist.h>
 #include <qcoreapplication.h>
+#include <qdir.h>
+#include <qstandardpaths.h>
+#include <qstringlist.h>
 #include <qt_windows.h>
 
 #include <qsystemlibrary_p.h>

@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <errno.h>
-
 #include <qglobal.h>
 #include <qlog.h>
 
 #include <qsystemerror_p.h>
+
+#include <errno.h>
 
 #ifdef Q_OS_WIN
 #include <windows.h>

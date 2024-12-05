@@ -22,11 +22,10 @@
 ***********************************************************************/
 
 #include <qthreadpool.h>
+#include <qthreadpool_p.h>
 
 #include <qelapsedtimer.h>
 #include <qpair.h>
-
-#include <qthreadpool_p.h>
 
 static QThreadPool *theInstance()
 {

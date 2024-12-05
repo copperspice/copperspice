@@ -22,16 +22,16 @@
 ***********************************************************************/
 
 #include <qsignaltransition.h>
+#include <qsignaltransition_p.h>
 
 #ifndef QT_NO_STATEMACHINE
 
-#include <qstate.h>
-#include <qstate_p.h>
-#include <qstatemachine.h>
 #include <qdebug.h>
+#include <qstate.h>
+#include <qstatemachine.h>
 
+#include <qstate_p.h>
 #include <qstatemachine_p.h>
-#include <qsignaltransition_p.h>
 
 void QSignalTransition::unregister()
 {

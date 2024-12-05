@@ -25,9 +25,9 @@
 #define QSETTINGS_H
 
 #include <qobject.h>
-#include <qvariant.h>
-#include <qstring.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_SETTINGS
 

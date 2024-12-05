@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qmargins.h>
+
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qmargins.h>
 
 QDataStream &operator<<(QDataStream &stream, const QMargins &margin)
 {

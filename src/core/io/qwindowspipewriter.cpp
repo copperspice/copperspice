@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
-#include <string.h>
-
 #include <qwindowspipewriter_p.h>
+
 #include <qiodevice_p.h>
+
+#include <string.h>
 
 QWindowsPipeWriter::Overlapped::Overlapped(QWindowsPipeWriter *pipeWriter)
    : pipeWriter(pipeWriter)

@@ -25,8 +25,6 @@
 ** Copyright (c) 2013 David Faure <faure+bluesystems@kde.org>
 *****************************************************************/
 
-#include <qlockfile_p.h>
-
 #include <qcache.h>
 #include <qcoreapplication.h>
 #include <qdatetime.h>
@@ -35,8 +33,9 @@
 #include <qmutex.h>
 #include <qtemporaryfile.h>
 
-#include <qcore_unix_p.h>
 #include <qabstractfileengine_p.h>
+#include <qcore_unix_p.h>
+#include <qlockfile_p.h>
 #include <qtemporaryfile_p.h>
 
 #include <signal.h>    // kill

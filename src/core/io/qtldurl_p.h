@@ -24,8 +24,8 @@
 #ifndef QTLDURL_P_H
 #define QTLDURL_P_H
 
-#include <qurl.h>
 #include <qstring.h>
+#include <qurl.h>
 
 Q_CORE_EXPORT QString qTopLevelDomain(const QString &domain);
 Q_CORE_EXPORT bool qIsEffectiveTLD(const QString &domain);

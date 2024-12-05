@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtranslator.h>
+#include <qtranslator_p.h>
 
 #include <qalgorithms.h>
 #include <qcoreapplication.h>
@@ -39,7 +40,6 @@
 #include <qstringlist.h>
 
 #include <qcoreapplication_p.h>
-#include <qtranslator_p.h>
 
 #if defined(Q_OS_UNIX)
 

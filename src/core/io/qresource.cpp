@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qresource.h>
+#include <qresource_p.h>
 
 #include <qbytearray.h>
 #include <qdatetime.h>
@@ -38,7 +39,6 @@
 #include <qvector.h>
 
 #include <qabstractfileengine_p.h>
-#include <qresource_p.h>
 #include <qresource_iterator_p.h>
 
 #ifdef Q_OS_UNIX

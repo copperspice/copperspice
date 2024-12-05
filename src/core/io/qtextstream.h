@@ -24,11 +24,11 @@
 #ifndef QTEXTSTREAM_H
 #define QTEXTSTREAM_H
 
-#include <qiodevice.h>
-#include <qstring.h>
 #include <qchar.h>
+#include <qiodevice.h>
 #include <qlocale.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
 #include <stdio.h>
 

@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qfiledevice.h>
+#include <qfiledevice_p.h>
+
 #include <qplatformdefs.h>
 
-#include <qfiledevice_p.h>
 #include <qfsfileengine_p.h>
 
 static constexpr const int QFILE_WRITEBUFFER_SIZE = 16384;

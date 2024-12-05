@@ -35,13 +35,13 @@
 using MSG = struct tagMSG;
 #endif
 
-class QCoreApplicationPrivate;
-class QTextCodec;
-class QTranslator;
-class QPostEventList;
-class QStringList;
 class QAbstractEventDispatcher;
 class QAbstractNativeEventFilter;
+class QCoreApplicationPrivate;
+class QPostEventList;
+class QStringList;
+class QTextCodec;
+class QTranslator;
 
 #define qApp QCoreApplication::instance()
 

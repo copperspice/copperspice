@@ -21,9 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qdir.h>
+#include <qdir_p.h>
+
 #include <qdatetime.h>
 #include <qdebug.h>
-#include <qdir.h>
 #include <qdiriterator.h>
 #include <qplatformdefs.h>
 #include <qregularexpression.h>
@@ -35,7 +37,6 @@
 
 #include <qabstractfileengine_p.h>
 #include <qcoreglobaldata_p.h>
-#include <qdir_p.h>
 #include <qfilesystemengine_p.h>
 #include <qfilesystementry_p.h>
 #include <qfilesystemmetadata_p.h>

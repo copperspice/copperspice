@@ -27,8 +27,8 @@
 #include <qcoreevent.h>
 #include <qlist.h>
 #include <qobject.h>
-#include <qstate.h>
 #include <qset.h>
+#include <qstate.h>
 #include <qvariant.h>
 
 #ifndef QT_NO_STATEMACHINE

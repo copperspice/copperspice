@@ -25,7 +25,6 @@
 #define QEVENTDISPATCHER_WIN_P_H
 
 #include <qabstracteventdispatcher.h>
-
 #include <qhash.h>
 #include <qt_windows.h>
 

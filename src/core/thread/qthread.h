@@ -31,9 +31,10 @@
 
 #include <limits.h>
 
-class QThreadData;
-class QThreadPrivate;
 class QAbstractEventDispatcher;
+class QThreadData;
+
+class QThreadPrivate;
 
 class Q_CORE_EXPORT QThread : public QObject
 {

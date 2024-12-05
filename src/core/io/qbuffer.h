@@ -24,10 +24,11 @@
 #ifndef QBUFFER_H
 #define QBUFFER_H
 
-#include <qiodevice.h>
 #include <qbytearray.h>
+#include <qiodevice.h>
 
 class QObject;
+
 class QBufferPrivate;
 
 class Q_CORE_EXPORT QBuffer : public QIODevice

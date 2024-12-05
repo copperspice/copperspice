@@ -25,13 +25,13 @@
 #define QABSTRACTTRANSITION_P_H
 
 #include <qlist.h>
-#include <qvector.h>
 #include <qsharedpointer.h>
+#include <qvector.h>
 
 class QAbstractState;
+class QAbstractTransition;
 class QState;
 class QStateMachine;
-class QAbstractTransition;
 
 class Q_CORE_EXPORT QAbstractTransitionPrivate
 {
