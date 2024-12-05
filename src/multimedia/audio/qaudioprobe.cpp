@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qaudioprobe.h>
+
 #include <qmediaaudioprobecontrol.h>
-#include <qmediaservice.h>
 #include <qmediarecorder.h>
-#include <qsharedpointer.h>
+#include <qmediaservice.h>
 #include <qpointer.h>
+#include <qsharedpointer.h>
 
 class QAudioProbePrivate {
  public:

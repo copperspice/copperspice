@@ -24,10 +24,11 @@
 #include <qnetaccess_filebackend_p.h>
 
 #include <qcoreapplication.h>
-#include <qfileinfo.h>
 #include <qdir.h>
-#include <qnoncontiguousbytedevice_p.h>
+#include <qfileinfo.h>
 #include <qstring.h>
+
+#include <qnoncontiguousbytedevice_p.h>
 #include <qurlinfo_p.h>
 
 QStringList QNetworkAccessFileBackendFactory::supportedSchemes() const

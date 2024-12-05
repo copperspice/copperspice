@@ -24,8 +24,9 @@
 #ifndef QSSLSOCKET_OPENSSL_SYMBOLS_P_H
 #define QSSLSOCKET_OPENSSL_SYMBOLS_P_H
 
-#include <qsslsocket_openssl_p.h>
 #include <qglobal.h>
+
+#include <qsslsocket_openssl_p.h>
 
 #define DUMMYARG
 

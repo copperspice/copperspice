@@ -24,10 +24,10 @@
 #ifndef QNETWORK_ACCESS_CACHEBACKEND_P_H
 #define QNETWORK_ACCESS_CACHEBACKEND_P_H
 
-#include <qnetaccess_backend_p.h>
-
-#include <qnetwork_request.h>
 #include <qnetwork_reply.h>
+#include <qnetwork_request.h>
+
+#include <qnetaccess_backend_p.h>
 
 class QNetworkAccessCacheBackend : public QNetworkAccessBackend
 {

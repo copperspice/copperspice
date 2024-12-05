@@ -24,24 +24,24 @@
 #ifndef QHTTP_THREADDELEGATE_P_H
 #define QHTTP_THREADDELEGATE_P_H
 
-#include <qobject.h>
 #include <qlist.h>
-#include <qsharedpointer.h>
-#include <qthreadstorage.h>
+#include <qnetwork_reply.h>
 #include <qnetworkproxy.h>
+#include <qobject.h>
+#include <qsharedpointer.h>
+#include <qsslconfiguration.h>
 #include <qsslconfiguration.h>
 #include <qsslerror.h>
-#include <qnetwork_reply.h>
-#include <qsslconfiguration.h>
+#include <qthreadstorage.h>
 
-#include <qhttp_networkrequest_p.h>
 #include <qhttp_networkconnection_p.h>
-#include <qnoncontiguousbytedevice_p.h>
+#include <qhttp_networkrequest_p.h>
 #include <qnetaccess_authenticationmanager_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 class QAuthenticator;
-class QHttpNetworkReply;
 class QEventLoop;
+class QHttpNetworkReply;
 class QNetworkAccessCache;
 class QNetworkAccessCachedHttpConnection;
 

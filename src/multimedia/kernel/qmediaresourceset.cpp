@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include "qmediaresourceset_p.h"
+#include <qmediaresourceset_p.h>
 
 QMediaPlayerResourceSetInterface::QMediaPlayerResourceSetInterface(QObject *parent)
    : QObject(parent)

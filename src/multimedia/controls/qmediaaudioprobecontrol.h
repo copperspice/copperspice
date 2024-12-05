@@ -24,8 +24,8 @@
 #ifndef QMEDIAAUDIOPROBECONTROL_H
 #define QMEDIAAUDIOPROBECONTROL_H
 
-#include <qmediacontrol.h>
 #include <qaudiobuffer.h>
+#include <qmediacontrol.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaAudioProbeControl : public QMediaControl
 {

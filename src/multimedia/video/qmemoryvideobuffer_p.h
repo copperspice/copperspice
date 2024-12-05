@@ -26,8 +26,6 @@
 
 #include <qabstractvideobuffer.h>
 
-
-
 class QMemoryVideoBufferPrivate;
 
 class Q_MULTIMEDIA_EXPORT QMemoryVideoBuffer : public QAbstractVideoBuffer
@@ -42,6 +40,5 @@ class Q_MULTIMEDIA_EXPORT QMemoryVideoBuffer : public QAbstractVideoBuffer
    uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
    void unmap() override;
 };
-
 
 #endif

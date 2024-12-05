@@ -24,8 +24,9 @@
 #ifndef QMEDIAPLAYLISTCONTROL_P_H
 #define QMEDIAPLAYLISTCONTROL_P_H
 
-#include <qobject.h>
 #include <qmediacontrol.h>
+#include <qobject.h>
+
 #include <qmediaplaylistnavigator_p.h>
 
 class QMediaPlaylistProvider;

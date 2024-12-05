@@ -25,11 +25,12 @@
 #define QSSLCONFIGURATION_P_H
 
 #include <qsslconfiguration.h>
+
 #include <qlist.h>
 #include <qsslcertificate.h>
 #include <qsslcipher.h>
-#include <qsslkey.h>
 #include <qsslellipticcurve.h>
+#include <qsslkey.h>
 
 class QSslConfigurationPrivate : public QSharedData
 {

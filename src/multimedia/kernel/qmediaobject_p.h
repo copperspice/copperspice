@@ -24,13 +24,14 @@
 #ifndef QMEDIAOBJECT_P_H
 #define QMEDIAOBJECT_P_H
 
+#include <qmediaobject.h>
+
 #include <qbytearray.h>
 #include <qset.h>
 #include <qtimer.h>
-#include <qmediaobject.h>
 
-class QMetaDataReaderControl;
 class QMediaAvailabilityControl;
+class QMetaDataReaderControl;
 
 #define Q_DECLARE_NON_CONST_PUBLIC(T) \
     T *q_func() { return static_cast<T *>(q_ptr); } \

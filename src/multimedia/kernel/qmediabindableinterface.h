@@ -26,8 +26,6 @@
 
 #include <qmediaobject.h>
 
-class QMediaObject;
-
 class Q_MULTIMEDIA_EXPORT QMediaBindableInterface
 {
  public:

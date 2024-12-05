@@ -24,9 +24,9 @@
 #ifndef QMEDIAGAPLESSPLAYBACKCONTROL_H
 #define QMEDIAGAPLESSPLAYBACKCONTROL_H
 
-#include <qstring.h>
-#include <qmediacontrol.h>
 #include <qmediacontent.h>
+#include <qmediacontrol.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaGaplessPlaybackControl : public QMediaControl
 {

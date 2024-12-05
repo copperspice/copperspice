@@ -24,11 +24,12 @@
 #ifndef QAUDIOPROBE_H
 #define QAUDIOPROBE_H
 
-#include <qobject.h>
 #include <qaudiobuffer.h>
+#include <qobject.h>
 
 class QMediaObject;
 class QMediaRecorder;
+
 class QAudioProbePrivate;
 
 class Q_MULTIMEDIA_EXPORT QAudioProbe : public QObject

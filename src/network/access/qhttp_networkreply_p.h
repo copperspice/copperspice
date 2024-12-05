@@ -26,29 +26,30 @@
 
 #include <qplatformdefs.h>
 
-#ifndef QT_NO_COMPRESS
-struct z_stream_s;
-#endif
-
 #include <qbuffer.h>
-#include <qnetwork_request.h>
 #include <qnetwork_reply.h>
-#include <qsslsocket.h>
-#include <qsslerror.h>
-#include <qtcpsocket.h>
+#include <qnetwork_request.h>
 #include <qscopedpointer.h>
+#include <qsslerror.h>
+#include <qsslsocket.h>
+#include <qtcpsocket.h>
 
+#include <qauthenticator_p.h>
+#include <qbytedata_p.h>
 #include <qhttp_networkheader_p.h>
 #include <qhttp_networkrequest_p.h>
-#include <qauthenticator_p.h>
 #include <qringbuffer_p.h>
-#include <qbytedata_p.h>
 
 class QHttpNetworkConnection;
 class QHttpNetworkConnectionChannel;
 class QHttpNetworkRequest;
+
 class QHttpNetworkConnectionPrivate;
 class QHttpNetworkReplyPrivate;
+
+#ifndef QT_NO_COMPRESS
+struct z_stream_s;
+#endif
 
 class QHttpNetworkReply : public QObject, public QHttpNetworkHeader
 {

@@ -24,11 +24,10 @@
 #ifndef QNETWORK_REPLYFILE_P_H
 #define QNETWORK_REPLYFILE_P_H
 
-#include <qnetwork_reply.h>
-
 #include <qabstractfileengine.h>
 #include <qfile.h>
 #include <qnetaccess_manager.h>
+#include <qnetwork_reply.h>
 
 #include <qnetwork_reply_p.h>
 

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmediaplayercontrol.h>
+
 #include <qmediaplayer.h>
 
 #include <qmediacontrol_p.h>

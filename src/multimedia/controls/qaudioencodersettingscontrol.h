@@ -25,13 +25,13 @@
 #define QAUDIOENCODERSETTINGSCONTROL_H
 
 #include <qlist.h>
-#include <qstring.h>
-#include <qpair.h>
 #include <qmediacontrol.h>
 #include <qmediarecorder.h>
+#include <qpair.h>
+#include <qstring.h>
 
-class QStringList;
 class QAudioFormat;
+class QStringList;
 
 class Q_MULTIMEDIA_EXPORT QAudioEncoderSettingsControl : public QMediaControl
 {

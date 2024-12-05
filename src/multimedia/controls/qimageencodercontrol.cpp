@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qimageencodercontrol.h>
+
 #include <qstringlist.h>
 
 QImageEncoderControl::QImageEncoderControl(QObject *parent)

@@ -24,9 +24,8 @@
 #ifndef QVIDEOFRAMECONVERSIONHELPER_P_H
 #define QVIDEOFRAMECONVERSIONHELPER_P_H
 
-#include <qvideoframe.h>
 #include <qsimd_p.h>
-
+#include <qvideoframe.h>
 
 using VideoFrameConvertFunc = void (*)(const QVideoFrame &frame, uchar *output);
 

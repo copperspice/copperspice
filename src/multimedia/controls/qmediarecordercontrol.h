@@ -24,9 +24,9 @@
 #ifndef QMEDIARECORDERCONTROL_H
 #define QMEDIARECORDERCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
 #include <qmediarecorder.h>
+#include <qstring.h>
 
 class QUrl;
 

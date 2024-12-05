@@ -24,8 +24,8 @@
 #ifndef QCAMERAIMAGECAPTURECONTROL_H
 #define QCAMERAIMAGECAPTURECONTROL_H
 
-#include <qmediacontrol.h>
 #include <qcameraimagecapture.h>
+#include <qmediacontrol.h>
 #include <qstring.h>
 
 class QImage;

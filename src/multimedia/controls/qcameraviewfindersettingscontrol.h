@@ -24,8 +24,8 @@
 #ifndef QCAMERAVIEWFINDERSETTINGSCONTROL_H
 #define QCAMERAVIEWFINDERSETTINGSCONTROL_H
 
-#include <qmediacontrol.h>
 #include <qcamera.h>
+#include <qmediacontrol.h>
 #include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QCameraViewfinderSettingsControl : public QMediaControl

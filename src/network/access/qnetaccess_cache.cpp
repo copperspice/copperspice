@@ -23,8 +23,8 @@
 
 #include <qnetaccess_cache_p.h>
 
-#include <qpointer.h>
 #include <qnetwork_request.h>
+#include <qpointer.h>
 
 #include <qnetaccess_manager_p.h>
 #include <qnetwork_reply_p.h>

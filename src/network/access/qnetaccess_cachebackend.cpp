@@ -28,6 +28,7 @@
 #include <qcoreapplication.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+
 #include <qurlinfo_p.h>
 
 QNetworkAccessCacheBackend::QNetworkAccessCacheBackend()

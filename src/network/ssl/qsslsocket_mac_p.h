@@ -26,8 +26,8 @@
 
 #include <qabstractsocket.h>
 #include <qglobal.h>
-#include <qstring.h>
 #include <qlist.h>
+#include <qstring.h>
 
 #include <qsslsocket_p.h>
 

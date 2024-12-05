@@ -24,22 +24,22 @@
 #include <qnetwork_replyhttp_p.h>
 
 #include <qabstract_networkcache.h>
-#include <qnetwork_request.h>
-#include <qnetwork_reply.h>
-#include <qnetwork_cookie.h>
-#include <qsslconfiguration.h>
-#include <qnetwork_cookiejar.h>
 #include <qcoreapplication.h>
 #include <qdatetime.h>
 #include <qelapsedtimer.h>
+#include <qnetwork_cookie.h>
+#include <qnetwork_cookiejar.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
+#include <qsslconfiguration.h>
 #include <qthread.h>
 
-#include <qthread_p.h>
-#include <qnetaccess_manager_p.h>
-#include <qnetaccess_cache_p.h>
-#include <qnetwork_request_p.h>
 #include <qhttp_threaddelegate_p.h>
+#include <qnetaccess_cache_p.h>
+#include <qnetaccess_manager_p.h>
 #include <qnetwork_cookie_p.h>
+#include <qnetwork_request_p.h>
+#include <qthread_p.h>
 
 #include <string.h>             // for strchr
 

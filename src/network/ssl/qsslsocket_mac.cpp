@@ -21,20 +21,20 @@
 *
 ***********************************************************************/
 
-#include <qsslsocket.h>
+#include <qsslsocket_mac_p.h>
 
-#include <qmessageauthenticationcode.h>
 #include <qcryptographichash.h>
 #include <qdatastream.h>
-#include <qsysinfo.h>
-#include <qvector.h>
-#include <qmutex.h>
 #include <qdebug.h>
+#include <qmessageauthenticationcode.h>
+#include <qmutex.h>
+#include <qsslsocket.h>
+#include <qsysinfo.h>
 #include <qvarlengtharray.h>
+#include <qvector.h>
 
 #include <qasn1element_p.h>
 #include <qcore_mac_p.h>
-#include <qsslsocket_mac_p.h>
 #include <qsslcertificate_p.h>
 #include <qsslcipher_p.h>
 #include <qsslkey_p.h>

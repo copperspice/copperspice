@@ -24,8 +24,8 @@
 #ifndef QCAMERACAPTUREBUFFERFORMATCONTROL_H
 #define QCAMERACAPTUREBUFFERFORMATCONTROL_H
 
-#include <qmediacontrol.h>
 #include <qcameraimagecapture.h>
+#include <qmediacontrol.h>
 #include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QCameraCaptureBufferFormatControl : public QMediaControl

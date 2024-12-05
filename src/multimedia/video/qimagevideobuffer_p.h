@@ -26,7 +26,6 @@
 
 #include <qabstractvideobuffer.h>
 
-
 class QImage;
 class QImageVideoBufferPrivate;
 

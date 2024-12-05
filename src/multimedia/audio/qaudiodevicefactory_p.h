@@ -24,14 +24,14 @@
 #ifndef QAUDIODEVICEFACTORY_P_H
 #define QAUDIODEVICEFACTORY_P_H
 
+#include <qaudiodeviceinfo.h>
 #include <qglobal.h>
 #include <qlist.h>
 #include <qmultimedia.h>
-#include <qaudiodeviceinfo.h>
 
+class QAbstractAudioDeviceInfo;
 class QAbstractAudioInput;
 class QAbstractAudioOutput;
-class QAbstractAudioDeviceInfo;
 
 class QAudioDeviceFactory
 {

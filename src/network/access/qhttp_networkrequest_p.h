@@ -26,8 +26,8 @@
 
 #include <qhttp_networkheader_p.h>
 
-class QNonContiguousByteDevice;
 class QHttpNetworkRequestPrivate;
+class QNonContiguousByteDevice;
 
 class QHttpNetworkRequest: public QHttpNetworkHeader
 {

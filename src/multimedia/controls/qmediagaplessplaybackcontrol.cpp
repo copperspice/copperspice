@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmediagaplessplaybackcontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QMediaGaplessPlaybackControl::~QMediaGaplessPlaybackControl()

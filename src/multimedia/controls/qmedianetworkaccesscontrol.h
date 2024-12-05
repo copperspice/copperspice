@@ -24,11 +24,10 @@
 #ifndef QMEDIANETWORKACCESSCONTROL_H
 #define QMEDIANETWORKACCESSCONTROL_H
 
-#include <qmediacontrol.h>
-
 #include <qlist.h>
-#include <qstring.h>
+#include <qmediacontrol.h>
 #include <qnetworkconfiguration.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaNetworkAccessControl : public QMediaControl
 {

@@ -24,9 +24,9 @@
 #ifndef QAUDIOOUTPUTSELECTORCONTROL_H
 #define QAUDIOOUTPUTSELECTORCONTROL_H
 
-#include <qstring.h>
 #include <qaudio.h>
 #include <qmediacontrol.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QAudioOutputSelectorControl : public QMediaControl
 {

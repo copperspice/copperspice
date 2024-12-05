@@ -24,13 +24,12 @@
 #ifndef QAUDIOSYSTEMPLUGIN_H
 #define QAUDIOSYSTEMPLUGIN_H
 
-#include <qstring.h>
-#include <qplugin.h>
-
-#include <qmultimedia.h>
-#include <qaudioformat.h>
 #include <qaudiodeviceinfo.h>
+#include <qaudioformat.h>
 #include <qaudiosystem.h>
+#include <qmultimedia.h>
+#include <qplugin.h>
+#include <qstring.h>
 
 struct Q_MULTIMEDIA_EXPORT QAudioSystemFactoryInterface {
    virtual QList<QString> availableDevices(QAudio::Mode) const = 0;

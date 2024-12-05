@@ -24,14 +24,15 @@
 #ifndef QMEDIAOBJECT_H
 #define QMEDIAOBJECT_H
 
+#include <qmultimedia.h>
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qmultimedia.h>
 
 #include <functional>
 
-class QMediaService;
 class QMediaBindableInterface;
+class QMediaService;
+
 class QMediaObjectPrivate;
 
 class Q_MULTIMEDIA_EXPORT QMediaObject : public QObject

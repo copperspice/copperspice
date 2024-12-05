@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
+#include <qsslcertificate.h>
+
 #include <qdebug.h>
 #include <qdir.h>
 #include <qdiriterator.h>
 #include <qfile.h>
-#include <qsslcertificate.h>
+#include <qglobal.h>
 
 #ifdef QT_OPENSSL
 #include <qsslsocket_openssl_symbols_p.h>

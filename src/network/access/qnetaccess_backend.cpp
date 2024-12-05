@@ -24,17 +24,17 @@
 #include <qnetaccess_backend_p.h>
 
 #include <qabstract_networkcache.h>
-#include <qnetworkconfigmanager.h>
-#include <qnetwork_request.h>
-#include <qnetwork_reply.h>
 #include <qhash.h>
 #include <qhostinfo.h>
 #include <qmutex.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
+#include <qnetworkconfigmanager.h>
 
+#include <qnetaccess_cachebackend_p.h>
 #include <qnetaccess_manager_p.h>
 #include <qnetwork_reply_p.h>
 #include <qnetworksession_p.h>
-#include <qnetaccess_cachebackend_p.h>
 #include <qnoncontiguousbytedevice_p.h>
 
 class QNetworkAccessBackendFactoryData: public QList<QNetworkAccessBackendFactory *>

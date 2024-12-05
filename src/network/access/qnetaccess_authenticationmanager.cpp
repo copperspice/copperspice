@@ -23,14 +23,14 @@
 
 #include <qnetaccess_authenticationmanager_p.h>
 
-#include <qsslerror.h>
 #include <qauthenticator.h>
 #include <qbuffer.h>
 #include <qmutex.h>
+#include <qnetaccess_manager.h>
+#include <qsslerror.h>
 #include <qurl.h>
 #include <qvector.h>
 
-#include <qnetaccess_manager.h>
 #include <qnetaccess_manager_p.h>
 
 #include <algorithm>

@@ -23,12 +23,12 @@
 
 #include <qmediaobject_p.h>
 
-#include <qmetaobject.h>
 #include <qdebug.h>
+#include <qmediaavailabilitycontrol.h>
+#include <qmediabindableinterface.h>
 #include <qmediaservice.h>
 #include <qmetadatareadercontrol.h>
-#include <qmediabindableinterface.h>
-#include <qmediaavailabilitycontrol.h>
+#include <qmetaobject.h>
 
 void QMediaObjectPrivate::_q_notify()
 {

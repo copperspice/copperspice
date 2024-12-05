@@ -25,6 +25,7 @@
 #define QSSLKEY_P_H
 
 #include <qsslkey.h>
+
 #include <qsslsocket_p.h>       // includes wincrypt.h
 
 #ifdef QT_OPENSSL

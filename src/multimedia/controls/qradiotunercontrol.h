@@ -24,9 +24,9 @@
 #ifndef QRADIOTUNERCONTROL_H
 #define QRADIOTUNERCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
 #include <qradiotuner.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QRadioTunerControl : public QMediaControl
 {

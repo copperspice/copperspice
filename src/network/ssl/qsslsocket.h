@@ -29,15 +29,16 @@
 
 #ifdef QT_SSL
 
-#include <qtcpsocket.h>
 #include <qsslerror.h>
+#include <qtcpsocket.h>
 
 class QDir;
-class QSslCipher;
 class QSslCertificate;
+class QSslCipher;
 class QSslConfiguration;
 class QSslEllipticCurve;
 class QSslPreSharedKeyAuthenticator;
+
 class QSslSocketPrivate;
 
 class Q_NETWORK_EXPORT QSslSocket : public QTcpSocket

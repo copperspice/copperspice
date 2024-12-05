@@ -24,11 +24,10 @@
 #ifndef QAUDIOBUFFER_H
 #define QAUDIOBUFFER_H
 
-#include <qshareddata.h>
-
-#include <qmultimedia.h>
 #include <qaudio.h>
 #include <qaudioformat.h>
+#include <qmultimedia.h>
+#include <qshareddata.h>
 
 class QAbstractAudioBuffer;
 class QAudioBufferPrivate;

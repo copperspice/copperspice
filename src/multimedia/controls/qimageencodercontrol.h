@@ -24,12 +24,12 @@
 #ifndef QIMAGEENCODERCONTROL_H
 #define QIMAGEENCODERCONTROL_H
 
+#include <qmediacontrol.h>
+#include <qmediaencodersettings.h>
+#include <qmediarecorder.h>
 #include <qsize.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qmediacontrol.h>
-#include <qmediarecorder.h>
-#include <qmediaencodersettings.h>
 
 class QByteArray;
 

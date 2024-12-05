@@ -30,6 +30,7 @@
 #include <qstringlist.h>
 
 class QMediaService;
+
 class QMediaServiceProviderHintPrivate;
 
 class Q_MULTIMEDIA_EXPORT QMediaServiceProviderHint

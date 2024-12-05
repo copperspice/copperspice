@@ -26,9 +26,9 @@
 
 #include <qnetwork_reply.h>
 
+#include <qelapsedtimer.h>
 #include <qnetwork_request.h>
 #include <qpointer.h>
-#include <qelapsedtimer.h>
 
 #include <qiodevice_p.h>
 #include <qnetwork_request_p.h>

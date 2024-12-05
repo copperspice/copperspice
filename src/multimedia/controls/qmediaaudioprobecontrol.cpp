@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmediaaudioprobecontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QMediaAudioProbeControl::QMediaAudioProbeControl(QObject *parent)

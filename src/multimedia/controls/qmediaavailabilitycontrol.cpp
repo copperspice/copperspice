@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmediaavailabilitycontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QMediaAvailabilityControl::QMediaAvailabilityControl(QObject *parent)

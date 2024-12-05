@@ -24,9 +24,9 @@
 #ifndef QAUDIOROLECONTROL_H
 #define QAUDIOROLECONTROL_H
 
-#include <qstring.h>
-#include <qmediacontrol.h>
 #include <qaudio.h>
+#include <qmediacontrol.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QAudioRoleControl : public QMediaControl
 {

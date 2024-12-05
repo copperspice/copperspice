@@ -22,13 +22,12 @@
 ***********************************************************************/
 
 #include <qabstract_networkcache.h>
+#include <qabstract_networkcache_p.h>
 
 #include <qdatetime.h>
-#include <qurl.h>
 #include <qdebug.h>
 #include <qscopedpointer.h>
-
-#include <qabstract_networkcache_p.h>
+#include <qurl.h>
 
 class QNetworkCacheMetaDataPrivate : public QSharedData
 {

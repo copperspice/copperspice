@@ -23,8 +23,8 @@
 
 #include <qhttp_protocolhandler_p.h>
 
-#include <qnoncontiguousbytedevice_p.h>
 #include <qhttp_networkconnectionchannel_p.h>
+#include <qnoncontiguousbytedevice_p.h>
 
 QHttpProtocolHandler::QHttpProtocolHandler(QHttpNetworkConnectionChannel *channel)
    : QAbstractProtocolHandler(channel)

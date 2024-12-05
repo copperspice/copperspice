@@ -23,10 +23,10 @@
 
 #include <qnetwork_replyfile_p.h>
 
-#include <qdatetime.h>
 #include <qcoreapplication.h>
-#include <qfileinfo.h>
+#include <qdatetime.h>
 #include <qdebug.h>
+#include <qfileinfo.h>
 
 QNetworkReplyFileImplPrivate::QNetworkReplyFileImplPrivate()
    : QNetworkReplyPrivate(), realFileSize(0)

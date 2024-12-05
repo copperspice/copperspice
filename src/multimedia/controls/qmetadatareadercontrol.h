@@ -24,11 +24,11 @@
 #ifndef QMETADATAREADERCONTROL_H
 #define QMETADATAREADERCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
 #include <qmediaobject.h>
 #include <qmediaresource.h>
 #include <qmultimedia.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMetaDataReaderControl : public QMediaControl
 {

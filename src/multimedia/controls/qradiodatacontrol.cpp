@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qradiodatacontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QRadioDataControl::QRadioDataControl(QObject *parent)

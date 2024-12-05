@@ -24,13 +24,13 @@
 #ifndef QSAMPLECACHE_P_H
 #define QSAMPLECACHE_P_H
 
+#include <qaudioformat.h>
+#include <qmap.h>
+#include <qmutex.h>
 #include <qobject.h>
+#include <qset.h>
 #include <qthread.h>
 #include <qurl.h>
-#include <qmutex.h>
-#include <qmap.h>
-#include <qset.h>
-#include <qaudioformat.h>
 
 class QIODevice;
 class QNetworkAccessManager;

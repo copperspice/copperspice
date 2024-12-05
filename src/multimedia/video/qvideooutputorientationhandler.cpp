@@ -23,8 +23,8 @@
 
 #include <qvideooutputorientationhandler_p.h>
 
-#include <QGuiApplication>
-#include <QScreen>
+#include <qapplication.h>
+#include <qscreen.h>
 
 QVideoOutputOrientationHandler::QVideoOutputOrientationHandler(QObject *parent)
     : QObject(parent), m_currentOrientation(0)

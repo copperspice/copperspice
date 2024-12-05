@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qsslellipticcurve.h>
-#include <qsslsocket_p.h>
 
 #include <qsslsocket_openssl_symbols_p.h>
+#include <qsslsocket_p.h>
 
-#include <openssl/ssl.h>
 #include <openssl/obj_mac.h>
+#include <openssl/ssl.h>
 
 #include <algorithm>
 

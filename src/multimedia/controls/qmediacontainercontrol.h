@@ -24,8 +24,8 @@
 #ifndef QMEDIACONTAINERCONTROL_H
 #define QMEDIACONTAINERCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaContainerControl : public QMediaControl
 {

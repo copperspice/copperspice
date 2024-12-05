@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include "qmediaservice.h"
-#include "qmediaservice_p.h"
+#include <qmediaservice.h>
+#include <qmediaservice_p.h>
 
 #include <qtimer.h>
 

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qhttp_networkrequest_p.h>
+
 #include <qnoncontiguousbytedevice_p.h>
 
 QHttpNetworkRequestPrivate::QHttpNetworkRequestPrivate(QHttpNetworkRequest::Operation op,

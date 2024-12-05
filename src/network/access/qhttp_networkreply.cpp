@@ -22,12 +22,13 @@
 ***********************************************************************/
 
 #include <qhttp_networkreply_p.h>
+
 #include <qhttp_networkconnection_p.h>
 
 #ifdef QT_SSL
-#  include <qsslkey.h>
 #  include <qsslcipher.h>
 #  include <qsslconfiguration.h>
+#  include <qsslkey.h>
 #endif
 
 #ifndef QT_NO_COMPRESS

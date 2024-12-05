@@ -24,9 +24,10 @@
 #ifndef QABSTRACTVIDEOBUFFER_P_H
 #define QABSTRACTVIDEOBUFFER_P_H
 
-#include <qshareddata.h>
 #include <qabstractvideobuffer.h>
+
 #include <qmultimedia.h>
+#include <qshareddata.h>
 
 class QAbstractVideoBufferPrivate
 {

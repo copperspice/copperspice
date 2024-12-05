@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qsound.h>
-#include <qsoundeffect.h>
+
 #include <qcoreapplication.h>
+#include <qsoundeffect.h>
 
 void QSound::play(const QString &filename)
 {

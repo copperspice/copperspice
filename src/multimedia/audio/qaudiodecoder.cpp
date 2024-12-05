@@ -23,13 +23,13 @@
 
 #include <qaudiodecoder.h>
 
-#include <qcoreevent.h>
-#include <qmetaobject.h>
-#include <qtimer.h>
-#include <qdebug.h>
-#include <qpointer.h>
-#include <qmediaservice.h>
 #include <qaudiodecodercontrol.h>
+#include <qcoreevent.h>
+#include <qdebug.h>
+#include <qmediaservice.h>
+#include <qmetaobject.h>
+#include <qpointer.h>
+#include <qtimer.h>
 
 #include <qmediaobject_p.h>
 #include <qmediaserviceprovider_p.h>

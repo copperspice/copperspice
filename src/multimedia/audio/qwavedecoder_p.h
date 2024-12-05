@@ -24,8 +24,8 @@
 #ifndef QWAVEDECODER_H
 #define QWAVEDECODER_H
 
-#include <qiodevice.h>
 #include <qaudioformat.h>
+#include <qiodevice.h>
 
 class QWaveDecoder : public QIODevice
 {

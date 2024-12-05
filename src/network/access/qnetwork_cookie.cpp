@@ -28,8 +28,8 @@
 #include <qdebug.h>
 #include <qlist.h>
 #include <qlocale.h>
-#include <qnetwork_request.h>
 #include <qnetwork_reply.h>
+#include <qnetwork_request.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtimezone.h>

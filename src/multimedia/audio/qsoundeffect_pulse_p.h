@@ -24,16 +24,15 @@
 #ifndef QSOUNDEFFECT_PULSE_H
 #define QSOUNDEFFECT_PULSE_H
 
+#include <qdatetime.h>
+#include <qmediaplayer.h>
+#include <qobject.h>
+#include <qreadwritelock.h>
 #include <qsoundeffect.h>
 
-#include <qobject.h>
-#include <qdatetime.h>
-#include <qreadwritelock.h>
-#include <qmediaplayer.h>
-
-#include <qsamplecache_p.h>
 #include <qmediaresourcepolicy_p.h>
 #include <qmediaresourceset_p.h>
+#include <qsamplecache_p.h>
 
 #include <pulse/pulseaudio.h>
 

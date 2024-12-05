@@ -29,20 +29,20 @@
 
 #include <qnetwork_replyimpl_p.h>
 
+class QAbstractNetworkCache;
 class QAuthenticator;
+class QNetworkCacheMetaData;
 class QNetworkProxy;
 class QNetworkProxyQuery;
 class QNetworkRequest;
+class QNonContiguousByteDevice;
+class QSslConfiguration;
 class QStringList;
 class QUrl;
 class QUrlInfo;
-class QSslConfiguration;
 
 class QNetworkAccessManagerPrivate;
 class QNetworkReplyImplPrivate;
-class QAbstractNetworkCache;
-class QNetworkCacheMetaData;
-class QNonContiguousByteDevice;
 
 // Should support direct file upload from disk or download to disk.
 //

@@ -27,9 +27,9 @@
 #include <qmultimedia.h>
 #include <qstring.h>
 
-class QVariant;
-class QAbstractVideoBufferPrivate;
 class QAbstractPlanarVideoBufferPrivate;
+class QAbstractVideoBufferPrivate;
+class QVariant;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoBuffer
 {

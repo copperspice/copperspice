@@ -24,11 +24,11 @@
 #ifndef QAUDIOOUTPUT_H
 #define QAUDIOOUTPUT_H
 
+#include <qaudio.h>
+#include <qaudiodeviceinfo.h>
+#include <qaudioformat.h>
 #include <qiodevice.h>
 #include <qmultimedia.h>
-#include <qaudio.h>
-#include <qaudioformat.h>
-#include <qaudiodeviceinfo.h>
 
 class QAbstractAudioOutput;
 

@@ -24,9 +24,9 @@
 #ifndef QSSLCONTEXT_OPENSSL_P_H
 #define QSSLCONTEXT_OPENSSL_P_H
 
-#include <qvariant.h>
 #include <qsslcertificate.h>
 #include <qsslconfiguration.h>
+#include <qvariant.h>
 
 #include <openssl/ssl.h>
 

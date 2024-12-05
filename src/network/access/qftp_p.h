@@ -24,9 +24,9 @@
 #ifndef QFTP_P_H
 #define QFTP_P_H
 
-#include <qstring.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
 #include <qurlinfo_p.h>
 

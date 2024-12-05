@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qmediacontrol_p.h>
 #include <qaudiorolecontrol.h>
+
+#include <qmediacontrol_p.h>
 
 QAudioRoleControl::QAudioRoleControl(QObject *parent)
    : QMediaControl(*new QMediaControlPrivate, parent)

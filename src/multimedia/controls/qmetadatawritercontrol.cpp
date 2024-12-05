@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qmediacontrol_p.h>
 #include <qmetadatawritercontrol.h>
+
+#include <qmediacontrol_p.h>
 
 QMetaDataWriterControl::QMetaDataWriterControl(QObject *parent):
     QMediaControl(*new QMediaControlPrivate, parent)

@@ -26,8 +26,8 @@
 
 #include <qnetwork_reply.h>
 
-#include <qbytedata_p.h>
 #include <qabstract_protocolhandler_p.h>
+#include <qbytedata_p.h>
 #include <qhttp_networkrequest_p.h>
 
 #include <zlib.h>
@@ -35,6 +35,7 @@
 #ifdef QT_SSL
 
 class QHttpNetworkRequest;
+
 using HttpMessagePair = QPair<QHttpNetworkRequest, QHttpNetworkReply*>;
 
 class QSpdyProtocolHandler : public QObject, public QAbstractProtocolHandler {

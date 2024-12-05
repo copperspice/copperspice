@@ -24,42 +24,42 @@
 #ifndef QHTTP_NETWORKCONNECTION_P_H
 #define QHTTP_NETWORKCONNECTION_P_H
 
-#include <qnetwork_request.h>
-#include <qnetwork_reply.h>
 #include <qabstractsocket.h>
-#include <qnetworksession.h>
 #include <qauthenticator.h>
-#include <qnetworkproxy.h>
 #include <qbuffer.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
+#include <qnetworkproxy.h>
+#include <qnetworksession.h>
 #include <qscopedpointer.h>
 #include <qtimer.h>
 
-#include <qhttp_networkheader_p.h>
-#include <qhttp_networkrequest_p.h>
-#include <qhttp_networkreply_p.h>
 #include <qhttp_networkconnectionchannel_p.h>
+#include <qhttp_networkheader_p.h>
+#include <qhttp_networkreply_p.h>
+#include <qhttp_networkrequest_p.h>
 
 #ifdef QT_SSL
+
+#include <qsslerror.h>
 
 #ifdef QT_OPENSSL
 #include <qsslcontext_openssl_p.h>
 #endif
 
 #include <qsslsocket_p.h>
-#include <qsslsocket.h>
-#include <qsslerror.h>
 
 #else
 #include <qtcpsocket.h>
 
 #endif
 
-class QHttpNetworkRequest;
-class QHttpNetworkReply;
-class QHttpThreadDelegate;
 class QByteArray;
 class QHostInfo;
 class QHttpNetworkConnectionPrivate;
+class QHttpNetworkReply;
+class QHttpNetworkRequest;
+class QHttpThreadDelegate;
 
 using HttpMessagePair = QPair<QHttpNetworkRequest, QHttpNetworkReply*>;
 

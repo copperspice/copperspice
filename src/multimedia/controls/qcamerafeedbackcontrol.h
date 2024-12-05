@@ -24,9 +24,9 @@
 #ifndef QCAMERAFEEDBACKCONTROL_H
 #define QCAMERAFEEDBACKCONTROL_H
 
+#include <qcamera.h>
 #include <qmediacontrol.h>
 #include <qmediaobject.h>
-#include <qcamera.h>
 #include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QCameraFeedbackControl : public QMediaControl

@@ -21,10 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qaudioinput.h>
+
 #include <qaudio.h>
 #include <qaudiodeviceinfo.h>
 #include <qaudiosystem.h>
-#include <qaudioinput.h>
 
 #include <qaudiodevicefactory_p.h>
 

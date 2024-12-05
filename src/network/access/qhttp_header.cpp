@@ -23,25 +23,24 @@
 
 #include <qhttp_header_p.h>
 
-#include <qplatformdefs.h>
-#include <qnetworkproxy.h>
 #include <qauthenticator.h>
-#include <qauthenticator_p.h>
-#include <qtcpsocket.h>
-#include <qsslsocket.h>
-
 #include <qbuffer.h>
 #include <qcoreevent.h>
-#include <qtextstream.h>
-#include <qmap.h>
+#include <qdebug.h>
 #include <qlist.h>
+#include <qmap.h>
+#include <qnetworkproxy.h>
+#include <qplatformdefs.h>
+#include <qsslsocket.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtcpsocket.h>
+#include <qtextstream.h>
 #include <qtimer.h>
-#include <qringbuffer_p.h>
 #include <qurl.h>
 
-#include <qdebug.h>
+#include <qauthenticator_p.h>
+#include <qringbuffer_p.h>
 
 class QHttpHeaderPrivate
 {

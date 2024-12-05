@@ -29,8 +29,8 @@
 #include <qvideoframe.h>
 #include <qvideosurfaceformat.h>
 
-class QRectF;
 class QAbstractVideoSurfacePrivate;
+class QRectF;
 
 class Q_MULTIMEDIA_EXPORT QAbstractVideoSurface : public QObject
 {

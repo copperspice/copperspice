@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstract_protocolhandler_p.h>
+
 #include <qhttp_networkconnectionchannel_p.h>
 
 QAbstractProtocolHandler::QAbstractProtocolHandler(QHttpNetworkConnectionChannel *channel)

@@ -25,9 +25,10 @@
 #define QNETWORK_REQUEST_P_H
 
 #include <qnetwork_request.h>
+
 #include <qbytearray.h>
-#include <qlist.h>
 #include <qhash.h>
+#include <qlist.h>
 #include <qshareddata.h>
 #include <qsharedpointer.h>
 

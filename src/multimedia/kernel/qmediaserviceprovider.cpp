@@ -21,14 +21,15 @@
 *
 ***********************************************************************/
 
+#include <qmediaserviceprovider_p.h>
+
 #include <qdebug.h>
 #include <qmap.h>
-#include <qmediaservice.h>
 #include <qmediaplayer.h>
 #include <qmediaplayercontrol.h>
+#include <qmediaservice.h>
 
 #include <qfactoryloader_p.h>
-#include <qmediaserviceprovider_p.h>
 #include <qmediaservice_provider_plugin.h>
 
 QMediaServiceProviderPlugin::~QMediaServiceProviderPlugin()

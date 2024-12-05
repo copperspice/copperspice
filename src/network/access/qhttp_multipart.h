@@ -30,6 +30,7 @@
 #include <qshareddatapointer.h>
 
 class QHttpMultiPart;
+
 class QHttpMultiPartPrivate;
 class QHttpPartPrivate;
 

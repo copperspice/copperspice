@@ -24,11 +24,11 @@
 #ifndef QVIDEOSURFACEFORMAT_H
 #define QVIDEOSURFACEFORMAT_H
 
+#include <qimage.h>
 #include <qlist.h>
 #include <qpair.h>
 #include <qshareddata.h>
 #include <qsize.h>
-#include <qimage.h>
 #include <qvideoframe.h>
 
 class QDebug;

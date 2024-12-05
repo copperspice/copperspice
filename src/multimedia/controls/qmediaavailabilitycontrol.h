@@ -24,10 +24,10 @@
 #ifndef QMEDIAAVAILABILITYCONTROL_H
 #define QMEDIAAVAILABILITYCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
 #include <qmediaobject.h>
 #include <qmultimedia.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaAvailabilityControl : public QMediaControl
 {

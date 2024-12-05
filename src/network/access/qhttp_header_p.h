@@ -24,11 +24,11 @@
 #ifndef QHTTP_HEADER_P_H
 #define QHTTP_HEADER_P_H
 
-#include <qobject.h>
-#include <qstringlist.h>
 #include <qmap.h>
+#include <qobject.h>
 #include <qpair.h>
 #include <qscopedpointer.h>
+#include <qstringlist.h>
 
 class QHttpHeaderPrivate;
 class QHttpRequestHeaderPrivate;

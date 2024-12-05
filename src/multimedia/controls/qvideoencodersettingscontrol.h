@@ -26,7 +26,6 @@
 
 #include <qmediacontrol.h>
 #include <qmediarecorder.h>
-
 #include <qpair.h>
 #include <qsize.h>
 #include <qstring.h>

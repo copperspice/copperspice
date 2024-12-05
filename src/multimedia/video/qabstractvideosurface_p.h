@@ -27,11 +27,8 @@
 #include <qabstractvideosurface.h>
 #include <qvideosurfaceformat.h>
 
-
-
 class QAbstractVideoSurfacePrivate
 {
-
  public:
    QAbstractVideoSurfacePrivate()
       : error(QAbstractVideoSurface::NoError), active(false)

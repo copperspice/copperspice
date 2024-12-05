@@ -24,8 +24,8 @@
 #ifndef QCAMERAFLASHCONTROL_H
 #define QCAMERAFLASHCONTROL_H
 
-#include <qcameraexposure.h>
 #include <qcamera.h>
+#include <qcameraexposure.h>
 #include <qmediacontrol.h>
 #include <qmediaobject.h>
 #include <qstring.h>

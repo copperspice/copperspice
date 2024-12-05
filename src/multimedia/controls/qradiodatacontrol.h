@@ -24,9 +24,9 @@
 #ifndef QRADIODATACONTROL_H
 #define QRADIODATACONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
 #include <qradiodata.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QRadioDataControl : public QMediaControl
 {

@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
+#include <qaudiodevicefactory_p.h>
+
 #include <qaudiosystem.h>
 #include <qaudiosystemplugin.h>
+#include <qdebug.h>
 
-#include <qaudiodevicefactory_p.h>
 #include <qfactoryloader_p.h>
 
 static QString defaultKey()

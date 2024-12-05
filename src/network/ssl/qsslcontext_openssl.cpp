@@ -23,13 +23,13 @@
 
 #include <qsslcontext_openssl_p.h>
 
-#include <qsslsocket.h>
 #include <qmutex.h>
+#include <qsslsocket.h>
 #include <qstring.h>
 
-#include <qsslsocket_p.h>
 #include <qsslsocket_openssl_p.h>
 #include <qsslsocket_openssl_symbols_p.h>
+#include <qsslsocket_p.h>
 
 // defined in qsslsocket_openssl.cpp:
 extern int q_X509Callback(int ok, X509_STORE_CTX *ctx);

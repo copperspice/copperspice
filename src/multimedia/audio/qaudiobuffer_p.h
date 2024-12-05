@@ -24,9 +24,9 @@
 #ifndef QAUDIOBUFFER_P_H
 #define QAUDIOBUFFER_P_H
 
-#include <qstring.h>
-#include <qmultimedia.h>
 #include <qaudioformat.h>
+#include <qmultimedia.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QAbstractAudioBuffer
 {

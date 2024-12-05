@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qaudiodecodercontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QAudioDecoderControl::~QAudioDecoderControl()

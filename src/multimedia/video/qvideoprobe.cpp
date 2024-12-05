@@ -23,11 +23,11 @@
 
 #include <qvideoprobe.h>
 
-#include <qsharedpointer.h>
-#include <qpointer.h>
-#include <qmediavideoprobecontrol.h>
-#include <qmediaservice.h>
 #include <qmediarecorder.h>
+#include <qmediaservice.h>
+#include <qmediavideoprobecontrol.h>
+#include <qpointer.h>
+#include <qsharedpointer.h>
 
 class QVideoProbePrivate {
   public:

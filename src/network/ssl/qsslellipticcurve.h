@@ -25,8 +25,8 @@
 #define QSSLELLIPTICCURVE_H
 
 #include <qglobal.h>
-#include <qstring.h>
 #include <qhashfunc.h>
+#include <qstring.h>
 
 class QDebug;
 class QSslEllipticCurve;

@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qabstractvideobuffer_p.h>
+
+#include <qdebug.h>
 #include <qvariant.h>
-#include <QDebug>
 
 int QAbstractVideoBufferPrivate::map(
    QAbstractVideoBuffer::MapMode mode,

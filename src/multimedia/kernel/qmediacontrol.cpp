@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qmetaobject.h>
 #include <qmediacontrol.h>
-#include <qtimer.h>
-
 #include <qmediacontrol_p.h>
+
+#include <qmetaobject.h>
+#include <qtimer.h>
 
 QMediaControl::~QMediaControl()
 {

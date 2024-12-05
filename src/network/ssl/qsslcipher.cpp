@@ -23,9 +23,10 @@
 
 #include <qsslcipher.h>
 #include <qsslcipher_p.h>
-#include <qsslsocket.h>
-#include <qsslconfiguration.h>
+
 #include <qdebug.h>
+#include <qsslconfiguration.h>
+#include <qsslsocket.h>
 
 QSslCipher::QSslCipher()
    : d(new QSslCipherPrivate)

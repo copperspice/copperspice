@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qcameraimagecapturecontrol.h>
+
 #include <qstringlist.h>
 
 QCameraImageCaptureControl::QCameraImageCaptureControl(QObject *parent)

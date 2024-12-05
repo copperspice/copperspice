@@ -24,8 +24,8 @@
 #ifndef QHTTP_MULTIPART_P_H
 #define QHTTP_MULTIPART_P_H
 
-#include <qshareddata.h>
 #include <qhttp_part.h>
+#include <qshareddata.h>
 
 #include <qnetwork_request_p.h>       // for deriving QHttpPartPrivate from QNetworkHeadersPrivate
 
@@ -33,7 +33,6 @@ class QHttpMultiPartPrivate;
 
 class QHttpPartPrivate: public QSharedData, public QNetworkHeadersPrivate
 {
-
  public:
    QHttpPartPrivate()
       : bodyDevice(nullptr), headerCreated(false), readPointer(0)

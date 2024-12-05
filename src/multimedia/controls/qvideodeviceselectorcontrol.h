@@ -24,8 +24,8 @@
 #ifndef QVIDEODEVICESELECTORCONTROL_H
 #define QVIDEODEVICESELECTORCONTROL_H
 
-#include <qstring.h>
 #include <qmediacontrol.h>
+#include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QVideoDeviceSelectorControl : public QMediaControl
 {

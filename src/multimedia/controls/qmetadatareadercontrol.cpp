@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qmediacontrol_p.h>
 #include <qmetadatareadercontrol.h>
+
+#include <qmediacontrol_p.h>
 
 QMetaDataReaderControl::QMetaDataReaderControl(QObject *parent):
    QMediaControl(*new QMediaControlPrivate, parent)
@@ -32,5 +33,3 @@ QMetaDataReaderControl::QMetaDataReaderControl(QObject *parent):
 QMetaDataReaderControl::~QMetaDataReaderControl()
 {
 }
-
-

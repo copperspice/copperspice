@@ -25,8 +25,8 @@
 #define QSOUNDEFFECT_H
 
 #include <qobject.h>
-#include <qurl.h>
 #include <qstringlist.h>
+#include <qurl.h>
 
 class QSoundEffectPrivate;
 

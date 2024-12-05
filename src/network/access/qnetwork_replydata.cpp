@@ -23,9 +23,10 @@
 
 #include <qnetwork_replydata_p.h>
 
-#include <qdataurl_p.h>
 #include <qcoreapplication.h>
 #include <qmetaobject.h>
+
+#include <qdataurl_p.h>
 
 QNetworkReplyDataImplPrivate::QNetworkReplyDataImplPrivate()
    : QNetworkReplyPrivate()

@@ -24,18 +24,18 @@
 #ifndef QNETWORK_REPLYIMPL_P_H
 #define QNETWORK_REPLYIMPL_P_H
 
-#include <qnetwork_reply.h>
-#include <qnetaccess_manager.h>
-#include <qnetworkproxy.h>
-#include <qnetworksession.h>
 #include <qbuffer.h>
 #include <qmap.h>
+#include <qnetaccess_manager.h>
+#include <qnetwork_reply.h>
+#include <qnetworkproxy.h>
+#include <qnetworksession.h>
 #include <qqueue.h>
 #include <qsharedpointer.h>
 
+#include <qbytedata_p.h>
 #include <qnetwork_reply_p.h>
 #include <qringbuffer_p.h>
-#include <qbytedata_p.h>
 
 class QAbstractNetworkCache;
 class QNetworkAccessBackend;

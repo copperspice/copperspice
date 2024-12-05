@@ -26,10 +26,10 @@
 
 #include <qglobal.h>
 
-class QHttpNetworkConnectionChannel;
-class QHttpNetworkReply;
 class QAbstractSocket;
 class QHttpNetworkConnection;
+class QHttpNetworkConnectionChannel;
+class QHttpNetworkReply;
 
 class QAbstractProtocolHandler
 {

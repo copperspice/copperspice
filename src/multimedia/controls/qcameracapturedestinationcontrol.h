@@ -24,8 +24,8 @@
 #ifndef QCAMERACAPTUREDESTINATIONCONTROL_H
 #define QCAMERACAPTUREDESTINATIONCONTROL_H
 
-#include <qmediacontrol.h>
 #include <qcameraimagecapture.h>
+#include <qmediacontrol.h>
 #include <qstring.h>
 
 class Q_MULTIMEDIA_EXPORT QCameraCaptureDestinationControl : public QMediaControl

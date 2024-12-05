@@ -25,8 +25,8 @@
 #define QSSLPRESHAREDKEYAUTHENTICATOR_H
 
 #include <qglobal.h>
-#include <qstring.h>
 #include <qshareddatapointer.h>
+#include <qstring.h>
 
 class QSslPreSharedKeyAuthenticatorPrivate;
 

@@ -25,8 +25,8 @@
 #define QSSLCONFIGURATION_H
 
 #include <qshareddata.h>
-#include <qsslsocket.h>
 #include <qssl.h>
+#include <qsslsocket.h>
 
 #ifdef QT_SSL
 
@@ -35,8 +35,8 @@ class QList;
 
 class QSslCertificate;
 class QSslCipher;
-class QSslKey;
 class QSslEllipticCurve;
+class QSslKey;
 
 class QSslConfigurationPrivate;
 

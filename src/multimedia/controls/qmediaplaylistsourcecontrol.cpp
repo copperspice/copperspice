@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qmediaplaylistsourcecontrol_p.h"
-#include "qmediacontrol_p.h"
+#include <qmediaplaylistsourcecontrol_p.h>
+
+#include <qmediacontrol_p.h>
 
 QMediaPlaylistSourceControl::QMediaPlaylistSourceControl(QObject *parent):
    QMediaControl(*new QMediaControlPrivate, parent)

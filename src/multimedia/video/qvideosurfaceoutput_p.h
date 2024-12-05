@@ -25,8 +25,8 @@
 #define QVIDEOSURFACEOUTPUT_P_H
 
 #include <qmediabindableinterface.h>
-#include <qsharedpointer.h>
 #include <qpointer.h>
+#include <qsharedpointer.h>
 
 class QAbstractVideoSurface;
 class QVideoRendererControl;

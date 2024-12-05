@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qradiotunercontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QRadioTunerControl::QRadioTunerControl(QObject *parent):

@@ -24,11 +24,11 @@
 #ifndef QSOUNDEFFECT_QAUDIO_H
 #define QSOUNDEFFECT_QAUDIO_H
 
-#include <qobject.h>
-#include <qurl.h>
 #include <qaudiooutput.h>
+#include <qobject.h>
 #include <qsamplecache_p.h>
 #include <qsoundeffect.h>
+#include <qurl.h>
 
 class QSoundEffectPrivate;
 

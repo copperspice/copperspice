@@ -24,8 +24,8 @@
 #ifndef QNETWORK_ACCESS_MANAGER_H
 #define QNETWORK_ACCESS_MANAGER_H
 
-#include <qobject.h>
 #include <qnetworksession.h>
+#include <qobject.h>
 #include <qstringlist.h>
 
 #ifdef QT_SSL
@@ -33,15 +33,15 @@
 #include <qsslpresharedkeyauthenticator.h>
 #endif
 
-class QIODevice;
 class QAbstractNetworkCache;
 class QAuthenticator;
 class QByteArray;
+class QIODevice;
 class QNetworkCookieJar;
-class QNetworkRequest;
-class QNetworkReply;
 class QNetworkProxy;
 class QNetworkProxyFactory;
+class QNetworkReply;
+class QNetworkRequest;
 class QSslError;
 
 #ifndef QT_NO_BEARERMANAGEMENT

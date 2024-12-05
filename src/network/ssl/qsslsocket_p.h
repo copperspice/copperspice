@@ -25,19 +25,19 @@
 #define QSSLSOCKET_P_H
 
 #include <qsslsocket.h>
-#include <qsslkey.h>
 
-#include <qtcpsocket_p.h>
+#include <qsslkey.h>
+#include <qstringlist.h>
+
+#include <qringbuffer_p.h>
 #include <qsslconfiguration_p.h>
+#include <qtcpsocket_p.h>
 
 #ifdef QT_OPENSSL
 #   include <qsslcontext_openssl_p.h>
 #else
    class QSslContext;
 #endif
-
-#include <qstringlist.h>
-#include <qringbuffer_p.h>
 
 #if defined(Q_OS_DARWIN)
 #  include <Security/SecCertificate.h>

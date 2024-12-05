@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmediavideoprobecontrol.h>
+
 #include <qmediacontrol_p.h>
 
 QMediaVideoProbeControl::QMediaVideoProbeControl(QObject *parent)

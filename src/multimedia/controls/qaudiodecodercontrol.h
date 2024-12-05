@@ -24,10 +24,10 @@
 #ifndef QAUDIODECODERCONTROL_H
 #define QAUDIODECODERCONTROL_H
 
-#include <qpair.h>
-#include <qmediacontrol.h>
-#include <qaudiodecoder.h>
 #include <qaudiobuffer.h>
+#include <qaudiodecoder.h>
+#include <qmediacontrol.h>
+#include <qpair.h>
 
 class QIODevice;
 

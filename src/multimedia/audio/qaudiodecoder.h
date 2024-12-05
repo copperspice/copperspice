@@ -24,8 +24,8 @@
 #ifndef QAUDIODECODER_H
 #define QAUDIODECODER_H
 
-#include <qmediaobject.h>
 #include <qaudiobuffer.h>
+#include <qmediaobject.h>
 
 class QAudioDecoderPrivate;
 

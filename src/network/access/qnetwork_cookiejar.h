@@ -25,10 +25,11 @@
 #define QNETWORK_COOKIEJAR_H
 
 #include <qobject.h>
-#include <qurl.h>
 #include <qscopedpointer.h>
+#include <qurl.h>
 
 class QNetworkCookie;
+
 class QNetworkCookieJarPrivate;
 
 class Q_NETWORK_EXPORT QNetworkCookieJar: public QObject

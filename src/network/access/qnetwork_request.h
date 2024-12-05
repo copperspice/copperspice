@@ -29,8 +29,8 @@
 #include <qurl.h>
 #include <qvariant.h>
 
-class QSslConfiguration;
 class QNetworkRequestPrivate;
+class QSslConfiguration;
 
 class Q_NETWORK_EXPORT QNetworkRequest
 {

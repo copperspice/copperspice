@@ -24,9 +24,9 @@
 #ifndef QVIDEOFRAME_H
 #define QVIDEOFRAME_H
 
-#include <qshareddata.h>
-#include <qimage.h>
 #include <qabstractvideobuffer.h>
+#include <qimage.h>
+#include <qshareddata.h>
 #include <qvariant.h>
 
 class QSize;

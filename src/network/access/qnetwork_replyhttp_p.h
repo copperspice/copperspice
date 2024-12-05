@@ -24,24 +24,23 @@
 #ifndef QNETWORK_REPLYHTTPIMPL_P_H
 #define QNETWORK_REPLYHTTPIMPL_P_H
 
-#include <qnetwork_reply.h>
-
-#include <qnetwork_request.h>
-#include <qpointer.h>
-#include <qdatetime.h>
-#include <qsharedpointer.h>
 #include <qatomic.h>
+#include <qdatetime.h>
 #include <qnetwork_cachemetadata.h>
+#include <qnetwork_reply.h>
+#include <qnetwork_request.h>
 #include <qnetworkproxy.h>
 #include <qnetworksession.h>
-
-#include <qhttp_networkrequest_p.h>
-#include <qbytedata_p.h>
-#include <qnetwork_reply_p.h>
+#include <qpointer.h>
+#include <qsharedpointer.h>
 
 #ifdef QT_SSL
 #include <qsslconfiguration.h>
 #endif
+
+#include <qbytedata_p.h>
+#include <qhttp_networkrequest_p.h>
+#include <qnetwork_reply_p.h>
 
 class QIODevice;
 class QNetworkReplyHttpImplPrivate;

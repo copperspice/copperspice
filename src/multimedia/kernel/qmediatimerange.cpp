@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
-
 #include <qmediatimerange.h>
+
+#include <qdebug.h>
 
 QMediaTimeInterval::QMediaTimeInterval()
    : s(0), e(0)

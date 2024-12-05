@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qnetwork_reply_p.h>
-
 #include <qabstract_networkcache.h>
 #include <qcoreapplication.h>
 #include <qdatetime.h>
@@ -33,6 +31,7 @@
 
 #include <qnetaccess_backend_p.h>
 #include <qnetaccess_manager_p.h>
+#include <qnetwork_reply_p.h>
 
 inline QNetworkReplyImplPrivate::QNetworkReplyImplPrivate()
    : backend(nullptr), outgoingData(nullptr), copyDevice(nullptr),

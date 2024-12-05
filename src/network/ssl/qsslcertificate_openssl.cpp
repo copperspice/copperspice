@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qsslsocket_openssl_symbols_p.h>
+#include <qmutexpool_p.h>
+#include <qsslcertificate_extension_p.h>
 #include <qsslcertificate_p.h>
 #include <qsslkey_p.h>
-#include <qsslcertificate_extension_p.h>
-#include <qmutexpool_p.h>
+#include <qsslsocket_openssl_symbols_p.h>
 
 // forward declaration
 static QMultiMap<QByteArray, QString> _q_mapFromX509Name(X509_NAME *name);

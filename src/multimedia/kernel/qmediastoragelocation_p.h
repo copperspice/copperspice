@@ -25,8 +25,8 @@
 #define QMEDIASTORAGELOCATION_H
 
 #include <qdir.h>
-#include <qmap.h>
 #include <qhash.h>
+#include <qmap.h>
 #include <qmutex.h>
 
 class Q_MULTIMEDIA_EXPORT QMediaStorageLocation

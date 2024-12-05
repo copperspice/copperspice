@@ -23,10 +23,9 @@
 
 #include <qabstractvideosurface_p.h>
 
-#include <qvideosurfaceformat.h>
+#include <qdebug.h>
 #include <qvariant.h>
-#include <QDebug>
-
+#include <qvideosurfaceformat.h>
 
 QAbstractVideoSurface::QAbstractVideoSurface(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractVideoSurfacePrivate)
