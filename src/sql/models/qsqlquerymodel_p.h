@@ -24,14 +24,14 @@
 #ifndef QSQLQUERYMODEL_P_H
 #define QSQLQUERYMODEL_P_H
 
-#include <qabstractitemmodel_p.h>
+#include <qhash.h>
 #include <qsqlerror.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
-#include <qhash.h>
 #include <qvarlengtharray.h>
 #include <qvector.h>
 
+#include <qabstractitemmodel_p.h>
 
 class QSqlQueryModelPrivate: public QAbstractItemModelPrivate
 {

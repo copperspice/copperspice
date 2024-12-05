@@ -23,8 +23,8 @@
 
 #include <qsqlcachedresult_p.h>
 
-#include <qvariant.h>
 #include <qdatetime.h>
+#include <qvariant.h>
 #include <qvector.h>
 
 static const uint initial_cache_size = 128;

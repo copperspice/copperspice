@@ -24,9 +24,9 @@
 #ifndef QSQLRELATIONALDELEGATE_H
 #define QSQLRELATIONALDELEGATE_H
 
+#include <qcombobox.h>
 #include <qitemdelegate.h>
 #include <qlistview.h>
-#include <qcombobox.h>
 #include <qsqlrelationaltablemodel.h>
 
 class QSqlRelationalDelegate: public QItemDelegate

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qsqlfield.h>
+
 #include <qatomic.h>
 #include <qdebug.h>
 

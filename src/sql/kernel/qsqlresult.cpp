@@ -22,20 +22,20 @@
 ***********************************************************************/
 
 #include <qsqlresult.h>
-#include <qvariant.h>
+#include <qsqlresult_p.h>
+
+#include <qdebug.h>
 #include <qhash.h>
+#include <qpointer.h>
 #include <qregularexpression.h>
+#include <qsqldriver.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlrecord.h>
-
+#include <qvariant.h>
 #include <qvector.h>
-#include <qsqldriver.h>
-#include <qpointer.h>
 
-#include "qsqlresult_p.h"
-#include "qsqldriver_p.h"
-#include <qdebug.h>
+#include <qsqldriver_p.h>
 
 QString QSqlResultPrivate::holderAt(int index) const
 {

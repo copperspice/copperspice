@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qsqldriver.h>
+#include <qsqldriver_p.h>
 
 #include <qdatetime.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
 #include <qsqlindex.h>
-#include <qsqldriver_p.h>
 
 static QString prepareIdentifier(const QString &identifier, QSqlDriver::IdentifierType type, const QSqlDriver *driver)
 {

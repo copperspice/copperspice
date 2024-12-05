@@ -27,10 +27,11 @@
 #include <qabstractitemmodel.h>
 #include <qsqldatabase.h>
 
-class QSqlQueryModelPrivate;
 class QSqlError;
-class QSqlRecord;
 class QSqlQuery;
+class QSqlRecord;
+
+class QSqlQueryModelPrivate;
 
 class Q_SQL_EXPORT QSqlQueryModel: public QAbstractTableModel
 {

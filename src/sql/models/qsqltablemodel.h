@@ -26,12 +26,13 @@
 
 #include <qsqldatabase.h>
 #include <qsqlquerymodel.h>
-#include <QSqlRecord>
+#include <qsqlrecord.h>
 
-class QSqlTableModelPrivate;
-class QSqlRecord;
 class QSqlField;
 class QSqlIndex;
+class QSqlRecord;
+
+class QSqlTableModelPrivate;
 
 class Q_SQL_EXPORT QSqlTableModel: public QSqlQueryModel
 {

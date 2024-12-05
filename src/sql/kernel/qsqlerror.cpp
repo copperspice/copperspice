@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qsqlerror.h>
+
 #include <qdebug.h>
 
 QDebug operator<<(QDebug dbg, const QSqlError &s)

@@ -23,6 +23,7 @@
 
 #include <qsqltablemodel.h>
 
+#include <qdebug.h>
 #include <qsqldriver.h>
 #include <qsqlerror.h>
 #include <qsqlfield.h>
@@ -32,8 +33,6 @@
 #include <qsqlresult.h>
 
 #include <qsqltablemodel_p.h>
-
-#include <qdebug.h>
 
 typedef QSqlTableModelSql Sql;
 

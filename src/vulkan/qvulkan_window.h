@@ -24,9 +24,9 @@
 #ifndef QVULKAN_WINDOW_H
 #define QVULKAN_WINDOW_H
 
-#include <qwindow.h>
 #include <qvulkan_instance.h>
 #include <qvulkan_window_renderer.h>
+#include <qwindow.h>
 
 #include <vulkan/vulkan.hpp>
 

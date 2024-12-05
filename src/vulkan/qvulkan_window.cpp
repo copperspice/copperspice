@@ -24,10 +24,10 @@
 #include <qvulkan_window.h>
 
 #include <qmatrix4x4.h>
+#include <qplatform_screen.h>
+#include <qplatform_window.h>
 #include <qvulkan_device_functions.h>
 #include <qvulkan_functions.h>
-#include <qplatform_window.h>
-#include <qplatform_screen.h>
 
 #if defined(Q_OS_UNIX)
 #include <xcb/xcb.h>

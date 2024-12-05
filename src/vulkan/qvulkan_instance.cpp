@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qvulkan_instance.h>
-#include <qvulkan_functions.h>
-#include <qvulkan_device_functions.h>
-#include <qvulkan_window.h>
 
 #include <qapplication.h>
 #include <qplatform_window.h>
+#include <qvulkan_device_functions.h>
+#include <qvulkan_functions.h>
+#include <qvulkan_window.h>
 
 QVulkanInstance::QVulkanInstance()
    : m_errorCode(VK_SUCCESS)
