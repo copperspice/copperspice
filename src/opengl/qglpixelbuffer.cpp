@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include <qimage.h>
-#include <qglobal.h>
-#include <qopengl_framebufferobject.h>
-#include <qglframebufferobject.h>
 #include <qglpixelbuffer.h>
 
+#include <qglframebufferobject.h>
+#include <qglobal.h>
+#include <qimage.h>
+#include <qopengl_framebufferobject.h>
+
+#include <qfont_p.h>
+#include <qglpixelbuffer_p.h>
 #include <qopengl_extensions_p.h>
 #include <qpaintengineex_opengl2_p.h>
-#include <qglpixelbuffer_p.h>
-#include <qfont_p.h>
 
 QImage cs_glRead_frameBuffer(const QSize &, bool, bool);
 

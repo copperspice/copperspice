@@ -27,13 +27,13 @@
 #include <qdebug.h>
 #include <qvector.h>
 
-#include <qpaintengineex_p.h>
-#include <qglengineshadermanager_p.h>
-#include <qgl2pexvertexarray_p.h>
-#include <qglpaintdevice_p.h>
 #include <qfontengine_p.h>
-#include <qtriangulatingstroker_p.h>
+#include <qgl2pexvertexarray_p.h>
+#include <qglengineshadermanager_p.h>
+#include <qglpaintdevice_p.h>
 #include <qopengl_extensions_p.h>
+#include <qpaintengineex_p.h>
+#include <qtriangulatingstroker_p.h>
 
 enum EngineMode {
    ImageDrawingMode,

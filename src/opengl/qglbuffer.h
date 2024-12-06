@@ -24,8 +24,8 @@
 #ifndef QGLBUFFER_H
 #define QGLBUFFER_H
 
-#include <qscopedpointer.h>
 #include <qgl.h>
+#include <qscopedpointer.h>
 
 class QGLBufferPrivate;
 

@@ -26,28 +26,29 @@
 
 #include <qgl.h>
 
+#include <qatomic.h>
 #include <qcache.h>
 #include <qglcolormap.h>
+#include <qhashfunc.h>
 #include <qmap.h>
+#include <qopenglcontext.h>
 #include <qthread.h>
 #include <qthreadstorage.h>
-#include <qhashfunc.h>
-#include <qatomic.h>
-#include <qopenglcontext.h>
 
-#include <qwidget_p.h>
-#include <qopenglcontext_p.h>
-#include <qopengl_extensions_p.h>
 #include <qglpaintdevice_p.h>
+#include <qopengl_extensions_p.h>
+#include <qopenglcontext_p.h>
+#include <qwidget_p.h>
 
 class QGLContext;
+class QGLContextResourceBase;
 class QGLOverlayWidget;
-class QPixmap;
-class QOpenGLExtensions;
-class QGLTemporaryContextPrivate;
 class QGLTexture;
 class QGLTextureDestroyer;
-class QGLContextResourceBase;
+class QOpenGLExtensions;
+class QPixmap;
+
+class QGLTemporaryContextPrivate;
 
 QString cs_glGetString(GLenum data);
 QString cs_glGetStringI(GLenum data, GLuint index);

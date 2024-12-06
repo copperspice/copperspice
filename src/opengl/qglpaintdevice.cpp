@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
+#include <qglpaintdevice_p.h>
+
 #include <qopenglfunctions.h>
 #include <qwindow.h>
 
-#include <qglpaintdevice_p.h>
 #include <qgl_p.h>
-#include <qglpixelbuffer_p.h>
 #include <qglframebufferobject_p.h>
+#include <qglpixelbuffer_p.h>
 
 QGLPaintDevice::QGLPaintDevice()
    : m_thisFBO(0)

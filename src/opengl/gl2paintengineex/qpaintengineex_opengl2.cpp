@@ -48,20 +48,20 @@
 
 #include <qpaintengineex_opengl2_p.h>
 
-#include <qpaintengine.h>
 #include <qdebug.h>
+#include <qpaintengine.h>
 #include <qvector.h>
 
-#include <qpainter_p.h>
 #include <qfontengine_p.h>
-#include <qstatictext_p.h>
-#include <qtriangulator_p.h>
-#include <qgl_p.h>
-#include <qpaintengineex_p.h>
-#include <qglengineshadermanager_p.h>
 #include <qgl2pexvertexarray_p.h>
-#include <qtextureglyphcache_gl_p.h>
+#include <qgl_p.h>
+#include <qglengineshadermanager_p.h>
 #include <qglgradientcache_p.h>
+#include <qpaintengineex_p.h>
+#include <qpainter_p.h>
+#include <qstatictext_p.h>
+#include <qtextureglyphcache_gl_p.h>
+#include <qtriangulator_p.h>
 
 #include <string.h>
 #include <qmath.h>

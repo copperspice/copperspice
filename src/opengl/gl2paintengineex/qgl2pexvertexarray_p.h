@@ -27,8 +27,8 @@
 #include <qrectf.h>
 #include <qvector.h>
 
-#include <qvectorpath_p.h>
 #include <qgl_p.h>
+#include <qvectorpath_p.h>
 
 class QGLPoint
 {

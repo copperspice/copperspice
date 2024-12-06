@@ -24,11 +24,11 @@
 #ifndef QGLGradientCache_P_H
 #define QGLGradientCache_P_H
 
-#include <qgl_p.h>
-
-#include <qobject.h>
 #include <qmultihash.h>
 #include <qmutex.h>
+#include <qobject.h>
+
+#include <qgl_p.h>
 
 class QGL2GradientCache : public QOpenGLSharedResource
 {

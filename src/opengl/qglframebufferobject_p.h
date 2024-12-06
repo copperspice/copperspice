@@ -26,8 +26,8 @@
 
 #include <qglframebufferobject.h>
 
-#include <qglpaintdevice_p.h>
 #include <qgl_p.h>
+#include <qglpaintdevice_p.h>
 #include <qopengl_extensions_p.h>
 
 class QGLFramebufferObjectFormatPrivate

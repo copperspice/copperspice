@@ -23,8 +23,8 @@
 
 #include <qglbuffer.h>
 
-#include <qgl.h>
 #include <qatomic.h>
+#include <qgl.h>
 
 #include <qgl_p.h>
 #include <qopengl_extensions_p.h>

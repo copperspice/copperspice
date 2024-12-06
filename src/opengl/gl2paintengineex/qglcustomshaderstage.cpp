@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include "qglcustomshaderstage_p.h"
-#include "qglengineshadermanager_p.h"
-#include "qpaintengineex_opengl2_p.h"
+#include <qglcustomshaderstage_p.h>
+
+#include <qglengineshadermanager_p.h>
+#include <qpaintengineex_opengl2_p.h>
 #include <qpainter_p.h>
 
 class QGLCustomShaderStagePrivate

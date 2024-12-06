@@ -27,8 +27,9 @@
 #include <qgl.h>
 #include <qpaintdevice.h>
 
-class QGLFramebufferObjectPrivate;
 class QGLFramebufferObjectFormat;
+
+class QGLFramebufferObjectPrivate;
 class QGLFramebufferObjectFormatPrivate;
 
 class Q_OPENGL_EXPORT QGLFramebufferObject : public QPaintDevice

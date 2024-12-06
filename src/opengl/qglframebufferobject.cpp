@@ -29,8 +29,8 @@
 #include <qlibrary.h>
 #include <qwindow.h>
 
-#include <qgl_p.h>
 #include <qfont_p.h>
+#include <qgl_p.h>
 #include <qpaintengineex_opengl2_p.h>
 
 QImage cs_glRead_frameBuffer(const QSize &, bool, bool);

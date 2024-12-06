@@ -24,10 +24,11 @@
 #ifndef QGL_PIXELBUFFER_P_H
 #define QGL_PIXELBUFFER_P_H
 
+#include <qglobal.h>
 #include <qglpixelbuffer.h>
+
 #include <qgl_p.h>
 #include <qglpaintdevice_p.h>
-#include <qglobal.h>
 
 class QEglContext;
 class QOpenGLFramebufferObject;

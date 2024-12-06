@@ -25,13 +25,14 @@
 #define QGLSHADERPROGRAM_H
 
 #include <qgl.h>
+#include <qmatrix4x4.h>
+#include <qscopedpointer.h>
 #include <qvector2d.h>
 #include <qvector3d.h>
 #include <qvector4d.h>
-#include <qmatrix4x4.h>
-#include <qscopedpointer.h>
 
 class QGLShaderProgram;
+
 class QGLShaderPrivate;
 class QGLShaderProgramPrivate;
 

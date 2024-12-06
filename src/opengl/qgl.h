@@ -24,19 +24,20 @@
 #ifndef QGL_H
 #define QGL_H
 
-#include <qopengl.h>
-#include <qwidget.h>
-#include <qpaintengine.h>
 #include <qglcolormap.h>
 #include <qmap.h>
+#include <qopengl.h>
+#include <qpaintengine.h>
 #include <qscopedpointer.h>
 #include <qsurfaceformat.h>
+#include <qwidget.h>
 
-class QPixmap;
-class QGLWidgetPrivate;
-class QGLContextPrivate;
 class QGLFunctions;
+class QPixmap;
+
+class QGLContextPrivate;
 class QGLFormatPrivate;
+class QGLWidgetPrivate;
 
 namespace QGL {
 

@@ -25,8 +25,8 @@
 #define QGLPAINTDEVICE_P_H
 
 #include <qpaintdevice.h>
-#include <qgl.h>
 
+#include <qgl.h>
 
 class Q_OPENGL_EXPORT QGLPaintDevice : public QPaintDevice
 {

@@ -24,7 +24,7 @@
 #ifndef QGLCUSTOMSHADERSTAGE_P_H
 #define QGLCUSTOMSHADERSTAGE_P_H
 
-#include <QGLShaderProgram>
+#include <qglshaderprogram.h>
 
 class QGLCustomShaderStagePrivate;
 

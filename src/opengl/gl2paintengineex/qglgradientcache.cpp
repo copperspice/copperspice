@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qglgradientcache_p.h>
+
+#include <qmutex.h>
+
 #include <qdrawhelper_p.h>
 #include <qgl_p.h>
-#include <qmutex.h>
 
 class QGL2GradientCacheWrapper
 {

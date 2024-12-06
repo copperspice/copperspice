@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_GRAPHICSEFFECT
 
-class QGLShaderProgram;
 class QGLCustomShaderEffectStage;
+class QGLShaderProgram;
+
 class QGraphicsShaderEffectPrivate;
 
 class Q_OPENGL_EXPORT QGraphicsShaderEffect : public QGraphicsEffect

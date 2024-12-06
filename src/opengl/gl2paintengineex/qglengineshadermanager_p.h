@@ -193,9 +193,10 @@
 #ifndef QGLENGINESHADERMANAGER_P_H
 #define QGLENGINESHADERMANAGER_P_H
 
-#include <QGLShader>
-#include <QGLShaderProgram>
-#include <QPainter>
+#include <qglshader.h>
+#include <qglshaderprogram.h>
+#include <qpainter.h>
+
 #include <qgl_p.h>
 #include <qglcustomshaderstage_p.h>
 

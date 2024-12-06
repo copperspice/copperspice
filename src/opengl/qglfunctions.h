@@ -28,7 +28,6 @@
 #include <qopenglcontext.h>
 #include <qopenglfunctions.h>
 
-
 struct QGLFunctionsPrivate;
 
 class Q_OPENGL_EXPORT QGLFunctions
