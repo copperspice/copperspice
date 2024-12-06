@@ -25,12 +25,11 @@
 #define QCOCOAKEYMAPPER_H
 
 #include <qcocoahelpers.h>
+#include <qkeyevent.h>
+#include <qlist.h>
 
 #include <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
-
-#include <QList>
-#include <QKeyEvent>
 
 /*
     A Mac KeyboardLayoutItem has 8 possible states

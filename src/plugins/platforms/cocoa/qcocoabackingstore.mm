@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qcocoabackingstore.h>
-#include <QPainter>
+
 #include <qcocoahelpers.h>
+#include <qpainter.h>
 
 QCocoaBackingStore::QCocoaBackingStore(QWindow *window)
    : QPlatformBackingStore(window)

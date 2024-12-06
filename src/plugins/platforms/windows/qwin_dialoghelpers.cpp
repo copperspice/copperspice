@@ -27,28 +27,27 @@
 
 #include <qwin_dialoghelpers.h>
 
-#include <qwin_additional.h>
-#include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_integration.h>
-#include <qwin_theme.h>
-
 #include <qapplication.h>
 #include <qcolor.h>
 #include <qdebug.h>
-#include <qtimer.h>
 #include <qdir.h>
-#include <qscopedarraypointer.h>
-#include <qsharedpointer.h>
-#include <qobject.h>
-#include <qthread.h>
-#include <qsysinfo.h>
-#include <qshareddata.h>
 #include <qexplicitlyshareddatapointer.h>
 #include <qmutex.h>
 #include <qmutexlocker.h>
-#include <quuid.h>
+#include <qobject.h>
 #include <qregularexpression.h>
+#include <qscopedarraypointer.h>
+#include <qshareddata.h>
+#include <qsharedpointer.h>
+#include <qsysinfo.h>
+#include <qthread.h>
+#include <qtimer.h>
+#include <quuid.h>
+#include <qwin_additional.h>
+#include <qwin_context.h>
+#include <qwin_integration.h>
+#include <qwin_theme.h>
+#include <qwin_window.h>
 
 #include <qsystemlibrary_p.h>
 

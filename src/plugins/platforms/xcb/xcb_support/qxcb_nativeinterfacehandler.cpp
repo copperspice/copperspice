@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qxcb_nativeinterfacehandler.h>
+
 #include <qxcb_nativeinterface.h>
 
 QXcbNativeInterfaceHandler::QXcbNativeInterfaceHandler(QXcbNativeInterface *nativeInterface)

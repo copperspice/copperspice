@@ -24,10 +24,10 @@
 #ifndef QWINDOWSCURSOR_H
 #define QWINDOWSCURSOR_H
 
-#include <qwin_additional.h>
+#include <qhash.h>
 #include <qplatform_cursor.h>
 #include <qsharedpointer.h>
-#include <qhash.h>
+#include <qwin_additional.h>
 
 struct QWindowsPixmapCursorCacheKey {
    explicit QWindowsPixmapCursorCacheKey(const QCursor &c);

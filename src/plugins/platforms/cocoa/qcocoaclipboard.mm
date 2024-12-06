@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qcocoaclipboard.h>
+
 #include <qapplication.h>
 
 QCocoaClipboard::QCocoaClipboard()

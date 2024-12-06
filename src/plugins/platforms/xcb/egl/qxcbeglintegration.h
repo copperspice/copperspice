@@ -24,15 +24,14 @@
 #ifndef QXCBEGLINTEGRATION_H
 #define QXCBEGLINTEGRATION_H
 
-#include "qxcbglintegration.h"
-#include "qxcbeglwindow.h"
+#include <qxcbglintegration.h>
 
-#include <QOpenGLContext>
+#include <qopenglcontext.h>
 #include <qplatform_screen.h>
-#include <QScreen>
-
-#include "qxcbscreen.h"
-#include "qxcbeglinclude.h"
+#include <qscreen.h>
+#include <qxcbeglinclude.h>
+#include <qxcbeglwindow.h>
+#include <qxcbscreen.h>
 
 class QXcbEglNativeInterfaceHandler;
 

@@ -21,9 +21,8 @@
 *
 ***********************************************************************/
 
-#include "qxcbglintegrationplugin.h"
-
-#include "qxcbeglintegration.h"
+#include <qxcbeglintegration.h>
+#include <qxcbglintegrationplugin.h>
 
 class QXcbEglIntegrationPlugin : public QXcbGlIntegrationPlugin
 {

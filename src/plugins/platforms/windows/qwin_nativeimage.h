@@ -24,8 +24,8 @@
 #ifndef QWINDOWSNATIVEIMAGE_H
 #define QWINDOWSNATIVEIMAGE_H
 
-#include <qwin_additional.h>
 #include <qimage.h>
+#include <qwin_additional.h>
 
 class QWindowsNativeImage
 {

@@ -22,32 +22,32 @@
 ***********************************************************************/
 
 #include <qwin_drag.h>
+
+#include <qapplication.h>
+#include <qbuffer.h>
+#include <qmouseevent.h>
+#include <qpainter.h>
+#include <qpixmap.h>
+#include <qpoint.h>
+#include <qrasterwindow.h>
+#include <qwin_additional.h>
 #include <qwin_context.h>
+#include <qwin_cursor.h>
+#include <qwin_integration.h>
+#include <qwin_mousehandler.h>
+#include <qwin_ole.h>
 #include <qwin_screen.h>
+#include <qwin_window.h>
+
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
+#include <qwindowsysteminterface_p.h>
+
+#include <shlobj.h>
 
 #ifndef QT_NO_CLIPBOARD
 #  include <qwin_clipboard.h>
 #endif
-
-#include <qwin_integration.h>
-#include <qwin_ole.h>
-#include <qwin_additional.h>
-#include <qwin_window.h>
-#include <qwin_mousehandler.h>
-#include <qwin_cursor.h>
-#include <qbuffer.h>
-#include <qpoint.h>
-#include <QMouseEvent>
-#include <QPixmap>
-#include <QPainter>
-#include <QRasterWindow>
-#include <QApplication>
-
-#include <qwindowsysteminterface_p.h>
-#include <qapplication_p.h>
-#include <qhighdpiscaling_p.h>
-
-#include <shlobj.h>
 
 class QWindowsDragCursorWindow : public QRasterWindow
 {

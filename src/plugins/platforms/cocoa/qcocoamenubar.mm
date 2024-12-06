@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
+#include <qcocoamenubar.h>
 
 #include <qalgorithms.h>
 #include <qapplication.h>
-#include <qdebug.h>
-#include <qcocoamenubar.h>
-#include <qcocoawindow.h>
-#include <qcocoamenuloader.h>
 #include <qcocoaapplication.h>             // for custom application category
 #include <qcocoaapplicationdelegate.h>
+#include <qcocoamenuloader.h>
+#include <qcocoawindow.h>
+#include <qdebug.h>
+
+#include <Cocoa/Cocoa.h>
 
 static QList<QCocoaMenuBar *> static_menubars;
 

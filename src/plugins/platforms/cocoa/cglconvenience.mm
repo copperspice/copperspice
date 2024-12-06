@@ -24,8 +24,9 @@
 #include <cglconvenience_p.h>
 
 #include <qglobal.h>
-#include <qcore_mac_p.h>
 #include <qvector.h>
+
+#include <qcore_mac_p.h>
 
 #include <Cocoa/Cocoa.h>
 

@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qcocoamimetypes.h>
-#include <qmacmime_p.h>
+
 #include <qcocoahelpers.h>
+
+#include <qmacmime_p.h>
 
 class QMacPasteboardMimeTraditionalMacPlainText : public QMacInternalPasteboardMime
 {

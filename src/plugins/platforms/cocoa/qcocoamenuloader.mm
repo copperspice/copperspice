@@ -27,11 +27,10 @@
 #include <qcocoahelpers.h>
 #include <qcocoamenubar.h>
 #include <qcocoamenuitem.h>
-
 #include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qdir.h>
 #include <qstring.h>
-#include <qdebug.h>
 
 #include <qapplication_p.h>
 #include <qcore_mac_p.h>

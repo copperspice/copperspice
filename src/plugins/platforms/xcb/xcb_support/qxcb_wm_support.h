@@ -24,9 +24,9 @@
 #ifndef QXCB_WM_SUPPORT_H
 #define QXCB_WM_SUPPORT_H
 
-#include <qxcb_object.h>
-#include <qxcb_connection.h>
 #include <qvector.h>
+#include <qxcb_connection.h>
+#include <qxcb_object.h>
 
 class QXcbWMSupport : public QXcbObject
 {

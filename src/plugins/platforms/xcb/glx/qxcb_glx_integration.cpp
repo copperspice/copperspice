@@ -27,12 +27,12 @@
 #include <xcb/glx.h>
 #endif
 
+#include <qglx_context.h>
 #include <qopenglcontext.h>
+#include <qxcb_glx_nativeinterfacehandler.h>
+#include <qxcb_glx_window.h>
 #include <qxcb_nativeinterface.h>
 #include <qxcb_screen.h>
-#include <qglx_context.h>
-#include <qxcb_glx_window.h>
-#include <qxcb_glx_nativeinterfacehandler.h>
 
 #include <X11/Xlibint.h>
 

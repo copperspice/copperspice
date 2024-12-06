@@ -24,8 +24,8 @@
 #ifndef QWINDOWSCLIPBOARD_H
 #define QWINDOWSCLIPBOARD_H
 
-#include <qwin_internal_mimedata.h>
 #include <qplatform_clipboard.h>
+#include <qwin_internal_mimedata.h>
 
 class QWindowsOleDataObject;
 

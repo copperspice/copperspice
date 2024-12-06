@@ -23,14 +23,14 @@
 
 #include <qwin_fontdatabase_ft.h>
 
-#include <qwin_fontdatabase.h>
+#include <qapplication.h>
+#include <qdir.h>
+#include <qdiriterator.h>
+#include <qfontdatabase.h>
+#include <qregularexpression.h>
+#include <qsettings.h>
 #include <qwin_context.h>
-#include <QDir>
-#include <QDirIterator>
-#include <QSettings>
-#include <QRegularExpression>
-#include <QApplication>
-#include <QFontDatabase>
+#include <qwin_fontdatabase.h>
 
 #include <qfontengine_ft_p.h>
 

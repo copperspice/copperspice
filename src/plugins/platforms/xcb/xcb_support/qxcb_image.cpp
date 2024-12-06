@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qxcb_image.h>
+
 #include <qcolor.h>
 
-#include <qimage_p.h>
 #include <qdrawhelper_p.h>
+#include <qimage_p.h>
 
 #ifdef XCB_USE_RENDER
 

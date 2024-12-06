@@ -23,7 +23,8 @@
 
 #include <qgstreamervideooverlay_p.h>
 
-#include <qguiapplication.h>
+#include <qapplication.h>
+
 #include <qgstutils_p.h>
 
 #if ! GST_CHECK_VERSION(1,0,0)

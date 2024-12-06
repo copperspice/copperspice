@@ -28,10 +28,11 @@
 * Refer to APPLE_LICENSE.TXT (in this directory) for license terms
 ***********************************************************************/
 
-#import <Cocoa/Cocoa.h>
-
 #include <qglobal.h>
+
 #include <qcore_mac_p.h>
+
+#import <Cocoa/Cocoa.h>
 
 @class QCocoaMenuLoader;
 

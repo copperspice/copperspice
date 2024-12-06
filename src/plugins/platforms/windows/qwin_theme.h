@@ -24,9 +24,9 @@
 #ifndef QWINDOWSTHEME_H
 #define QWINDOWSTHEME_H
 
-#include <qwin_threadpoolrunner.h>
 #include <qplatform_theme.h>
 #include <qvariant.h>
+#include <qwin_threadpoolrunner.h>
 
 class QWindow;
 

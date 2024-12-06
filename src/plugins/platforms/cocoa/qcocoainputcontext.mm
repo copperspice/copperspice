@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#include <qnsview.h>
 #include <qcocoainputcontext.h>
+
+#include <qapplication.h>
 #include <qcocoanativeinterface.h>
 #include <qcocoawindow.h>
+#include <qnsview.h>
+#include <qrect.h>
+#include <qwindow.h>
 
 #include <Carbon/Carbon.h>
-
-#include <QRect>
-#include <QApplication>
-#include <QWindow>
 
 QCocoaInputContext::QCocoaInputContext()
    : QPlatformInputContext(), mWindow(QApplication::focusWindow())

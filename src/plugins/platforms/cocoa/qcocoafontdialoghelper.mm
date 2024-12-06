@@ -25,14 +25,14 @@
 
 #ifndef QT_NO_FONTDIALOG
 
-#include <qtimer.h>
-#include <qfontdatabase.h>
 #include <qcocoaeventdispatcher.h>
+#include <qcocoahelpers.h>
+#include <qfontdatabase.h>
+#include <qtimer.h>
 
 #include <qfont_p.h>
-#include <qfontengine_p.h>
 #include <qfontengine_coretext_p.h>
-#include <qcocoahelpers.h>
+#include <qfontengine_p.h>
 
 #import <AppKit/AppKit.h>
 

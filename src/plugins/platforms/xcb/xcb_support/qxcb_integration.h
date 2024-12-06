@@ -30,8 +30,8 @@
 
 #include <xcb/xcb.h>
 
-class QXcbConnection;
 class QAbstractEventDispatcher;
+class QXcbConnection;
 class QXcbNativeInterface;
 class QXcbScreen;
 

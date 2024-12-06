@@ -23,9 +23,9 @@
 
 #include <qxcb_mime.h>
 
-#include <qtextcodec.h>
-#include <qimagewriter.h>
 #include <qbuffer.h>
+#include <qimagewriter.h>
+#include <qtextcodec.h>
 
 #include <X11/Xutil.h>
 

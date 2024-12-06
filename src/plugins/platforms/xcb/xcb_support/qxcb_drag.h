@@ -25,15 +25,15 @@
 #define QXCB_DRAG_H
 
 #include <qbackingstore.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qpixmap.h>
 #include <qplatform_drag.h>
 #include <qpoint.h>
+#include <qpointer.h>
 #include <qrect.h>
 #include <qsharedpointer.h>
-#include <qpointer.h>
 #include <qvector.h>
-#include <qdatetime.h>
-#include <qpixmap.h>
-#include <qdebug.h>
 #include <qxcb_object.h>
 
 #include <qsimpledrag_p.h>
@@ -42,14 +42,14 @@
 
 #ifndef QT_NO_DRAGANDDROP
 
-class QWindow;
+class QDrag;
 class QPlatformWindow;
+class QShapedPixmapWindow;
+class QWindow;
 class QXcbConnection;
-class QXcbWindow;
 class QXcbDropData;
 class QXcbScreen;
-class QDrag;
-class QShapedPixmapWindow;
+class QXcbWindow;
 
 class QXcbDrag : public QXcbObject, public QBasicDrag
 {

@@ -27,14 +27,14 @@
 #include <qevent.h>
 #include <qxcb_object.h>
 
+class QWindow;
+
 #include <xcb/xcb_keysyms.h>
 #include <xkbcommon/xkbcommon.h>
 
 #ifndef QT_NO_XKB
 #include <xkbcommon/xkbcommon-x11.h>
 #endif
-
-class QWindow;
 
 class QXcbKeyboard : public QXcbObject
 {

@@ -24,8 +24,8 @@
 #ifndef QXCBEGLWINDOW_H
 #define QXCBEGLWINDOW_H
 
-#include "qxcbwindow.h"
-#include "qxcbeglinclude.h"
+#include <qxcbeglinclude.h>
+#include <qxcbwindow.h>
 
 class QXcbEglIntegration;
 

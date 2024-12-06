@@ -21,11 +21,12 @@
 *
 ***********************************************************************/
 
-#include "qcocoasystemsettings.h"
+#include <qcocoasystemsettings.h>
 
-#include "qcocoahelpers.h"
-#include <qcore_mac_p.h>
+#include <qcocoahelpers.h>
 #include <qfont.h>
+
+#include <qcore_mac_p.h>
 
 #include <Carbon/Carbon.h>
 

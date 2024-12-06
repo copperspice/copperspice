@@ -21,9 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qcocoaaccessibility.h"
-#include "qcocoaaccessibilityelement.h"
+#include <qcocoaaccessibility.h>
+
 #include <qaccessible.h>
+#include <qcocoaaccessibilityelement.h>
+
 #include <qcore_mac_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY

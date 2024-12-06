@@ -24,22 +24,21 @@
 #ifndef QPLATFORMINTEGRATION_COCOA_H
 #define QPLATFORMINTEGRATION_COCOA_H
 
-#include <Cocoa/Cocoa.h>
-
-#include <qcocoacursor.h>
-#include <qcocoawindow.h>
-#include <qcocoanativeinterface.h>
-#include <qcocoainputcontext.h>
 #include <qcocoaaccessibility.h>
 #include <qcocoaclipboard.h>
+#include <qcocoacursor.h>
 #include <qcocoadrag.h>
-#include <qcocoaservices.h>
+#include <qcocoainputcontext.h>
 #include <qcocoakeymapper.h>
-
-#include <qscopedpointer.h>
+#include <qcocoanativeinterface.h>
+#include <qcocoaservices.h>
+#include <qcocoawindow.h>
 #include <qplatform_integration.h>
+#include <qscopedpointer.h>
 
 #include <qcoretextfontdatabase_p.h>
+
+#include <Cocoa/Cocoa.h>
 
 class QCocoaScreen : public QPlatformScreen
 {

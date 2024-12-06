@@ -23,19 +23,19 @@
 
 #include <qcocoamenu.h>
 
+#include <qcocoaapplication.h>
 #include <qcocoahelpers.h>
+#include <qcocoamenubar.h>
+#include <qcocoamenuloader.h>
+#include <qcocoawindow.h>
 #include <qdebug.h>
 #include <qmetaobject.h>
 #include <qvarlengtharray.h>
-#include <qcocoaapplication.h>
-#include <qcocoamenuloader.h>
-#include <qcocoamenubar.h>
-#include <qcocoawindow.h>
-
-#include <qthread_p.h>
-#include <qapplication_p.h>
 
 #import <qnsview.h>
+
+#include <qapplication_p.h>
+#include <qthread_p.h>
 
 NSString *qt_mac_removePrivateUnicode(NSString *string)
 {

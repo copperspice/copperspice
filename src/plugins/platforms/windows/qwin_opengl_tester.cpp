@@ -22,23 +22,23 @@
 ***********************************************************************/
 
 #include <qwin_opengl_tester.h>
-#include <qwin_context.h>
 
-#include <qdebug.h>
 #include <qcoreapplication.h>
+#include <qdebug.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qhash.h>
 #include <qlibraryinfo.h>
 #include <qstandardpaths.h>
+#include <qt_windows.h>
 #include <qtextstream.h>
 #include <qvariant.h>
+#include <qwin_context.h>
 
 #ifndef QT_NO_OPENGL
 #include <qopengl_p.h>
 #endif
 
-#include <qt_windows.h>
 #include <qsystemlibrary_p.h>
 
 #include <d3d9.h>

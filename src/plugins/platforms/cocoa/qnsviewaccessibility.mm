@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <Carbon/Carbon.h>
-
 #include <qaccessible.h>
 #include <qcocoaaccessibility.h>
 #include <qcocoaaccessibilityelement.h>
 #include <qcocoahelpers.h>
 #include <qcocoaintegration.h>
 #include <qnsview.h>
+
+#include <Carbon/Carbon.h>
 
 #import <AppKit/NSAccessibility.h>
 

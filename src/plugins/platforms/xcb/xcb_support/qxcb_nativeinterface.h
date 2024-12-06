@@ -30,11 +30,11 @@
 
 #include <xcb/xcb.h>
 
+class QDBusMenuConnection;
 class QWidget;
-class QXcbScreen;
 class QXcbConnection;
 class QXcbNativeInterfaceHandler;
-class QDBusMenuConnection;
+class QXcbScreen;
 
 class Q_XCB_EXPORT QXcbNativeInterface : public QPlatformNativeInterface
 {

@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-#include <qstring.h>
 #include <qplatform_systemtrayicon.h>
+#include <qstring.h>
 
 class QSystemTrayIconSys;
 

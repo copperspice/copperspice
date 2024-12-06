@@ -25,14 +25,14 @@
 
 #include <qdebug.h>
 #include <qnamespace.h>
-#include <qxcb_window.h>
+#include <qwindowsysteminterface.h>
 #include <qxcb_cursor.h>
 #include <qxcb_image.h>
+#include <qxcb_window.h>
 #include <qxcb_xsettings.h>
-#include <qwindowsysteminterface.h>
 
-#include <qmath_p.h>
 #include <qhighdpiscaling_p.h>
+#include <qmath_p.h>
 
 #include <stdio.h>
 

@@ -29,6 +29,7 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+
 #import <objc/objc-class.h>
 
 void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class proxyClass, SEL replacementSel = nullptr, SEL backupSel = nullptr);

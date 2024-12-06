@@ -24,17 +24,17 @@
 #ifndef QNSVIEW_H
 #define QNSVIEW_H
 
-#include <Cocoa/Cocoa.h>
-
-#include <QPointer>
-#include <QImage>
-#include <QAccessible>
+#include <qaccessible.h>
+#include <qimage.h>
+#include <qpointer.h>
 
 #include <qcore_mac_p.h>
 
-class QCocoaWindow;
 class QCocoaBackingStore;
 class QCocoaGLContext;
+class QCocoaWindow;
+
+#include <Cocoa/Cocoa.h>
 
 #ifdef __OBJC__
 @class QNSViewMouseMoveHelper;

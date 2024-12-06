@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qwin_context.h>
+#include <qwin_inputcontext.h>
 
 #include <qapplication.h>
 #include <qdebug.h>
@@ -32,7 +32,7 @@
 #include <qrectf.h>
 #include <qtextboundaryfinder.h>
 #include <qtextcharformat.h>
-#include <qwin_inputcontext.h>
+#include <qwin_context.h>
 #include <qwin_integration.h>
 #include <qwin_mousehandler.h>
 #include <qwin_window.h>

@@ -27,14 +27,15 @@
 #include <qobject.h>
 #include <qplatform_dialoghelper.h>
 
+class QFileDialog;
+
+class QFileDialogPrivate;
+
 #ifdef __OBJC__
 @class QNSOpenSavePanelDelegate;
 #else
 using QNSOpenSavePanelDelegate = struct objc_object;
 #endif
-
-class QFileDialog;
-class QFileDialogPrivate;
 
 class QCocoaFileDialogHelper : public QPlatformFileDialogHelper
 {

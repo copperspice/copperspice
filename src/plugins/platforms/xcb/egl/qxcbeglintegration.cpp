@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qxcbeglintegration.h"
+#include <qxcbeglintegration.h>
 
-#include "qxcbeglcontext.h"
-#include <QOffscreenSurface>
-#include "qxcbeglnativeinterfacehandler.h"
+#include <qoffscreensurface.h>
+#include <qxcbeglcontext.h>
+#include <qxcbeglnativeinterfacehandler.h>
 
 QXcbEglIntegration::QXcbEglIntegration()
    : m_connection(nullptr)

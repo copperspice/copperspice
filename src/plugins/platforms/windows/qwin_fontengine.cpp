@@ -21,27 +21,27 @@
 *
 ***********************************************************************/
 
-#include <qwin_integration.h>
 #include <qwin_fontengine.h>
-#include <qwin_nativeimage.h>
-#include <qwin_context.h>
-#include <qwin_fontdatabase.h>
-#include <qwin_additional.h>
 
-#include <qdebug.h>
-#include <qpaintdevice.h>
 #include <qbitmap.h>
-#include <qpainter.h>
+#include <qdebug.h>
 #include <qendian.h>
 #include <qmath.h>
-#include <qthreadstorage.h>
+#include <qpaintdevice.h>
 #include <qpaintengine.h>
+#include <qpainter.h>
+#include <qthreadstorage.h>
+#include <qwin_additional.h>
+#include <qwin_context.h>
+#include <qwin_fontdatabase.h>
+#include <qwin_integration.h>
+#include <qwin_nativeimage.h>
 
-#include <qtextengine_p.h>
 #include <qapplication_p.h>
-#include <qpainter_p.h>
 #include <qpaintengine_raster_p.h>
+#include <qpainter_p.h>
 #include <qsystemlibrary_p.h>
+#include <qtextengine_p.h>
 
 #include <limits.h>
 

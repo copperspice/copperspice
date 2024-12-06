@@ -24,9 +24,9 @@
 #ifndef QCOCOAACCESIBILITY_H
 #define QCOCOAACCESIBILITY_H
 
-#include <Cocoa/Cocoa.h>
-
 #include <qplatform_accessibility.h>
+
+#include <Cocoa/Cocoa.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

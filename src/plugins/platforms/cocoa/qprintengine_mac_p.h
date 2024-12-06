@@ -28,13 +28,16 @@
 
 #ifndef QT_NO_PRINTER
 
-#include <qprinter.h>
-#include <qprintengine.h>
-#include <qpainter_p.h>
-#include <qpagelayout.h>
-
 #include <qcocoaprintdevice.h>
+#include <qpagelayout.h>
+#include <qpainter_p.h>
+#include <qprintengine.h>
+#include <qprinter.h>
+
 #include <qpaintengine_mac_p.h>
+
+class QMacPrintEnginePrivate;
+class QPrinterPrivate;
 
 #ifdef __OBJC__
 @class NSPrintInfo;
@@ -42,8 +45,6 @@
 typedef void NSPrintInfo;
 #endif
 
-class QPrinterPrivate;
-class QMacPrintEnginePrivate;
 class QMacPrintEngine : public QPaintEngine, public QPrintEngine
 {
    Q_DECLARE_PRIVATE(QMacPrintEngine)

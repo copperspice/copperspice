@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qcocoadrag.h>
-#include <qmacclipboard.h>
+
 #include <qcocoahelpers.h>
+#include <qmacclipboard.h>
 #include <qwidget.h>
 
 static constexpr const int dragImageMaxChars = 26;

@@ -24,10 +24,10 @@
 #ifndef QCOCOAGLCONTEXT_H
 #define QCOCOAGLCONTEXT_H
 
-#include <QPointer>
+#include <qopenglcontext.h>
 #include <qplatform_openglcontext.h>
-#include <QOpenGLContext>
-#include <QWindow>
+#include <qpointer.h>
+#include <qwindow.h>
 
 #undef slots
 #include <Cocoa/Cocoa.h>

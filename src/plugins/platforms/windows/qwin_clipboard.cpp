@@ -22,9 +22,6 @@
 ***********************************************************************/
 
 #include <qwin_clipboard.h>
-#include <qwin_context.h>
-#include <qwin_ole.h>
-#include <qwin_mime.h>
 
 #include <qapplication.h>
 #include <qclipboard.h>
@@ -34,6 +31,9 @@
 #include <qstringlist.h>
 #include <qurl.h>
 #include <qvariant.h>
+#include <qwin_context.h>
+#include <qwin_mime.h>
+#include <qwin_ole.h>
 
 #include <qwin_gui_eventdispatcher_p.h>
 

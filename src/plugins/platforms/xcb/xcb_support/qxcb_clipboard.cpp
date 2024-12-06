@@ -23,12 +23,13 @@
 
 #include <qxcb_clipboard.h>
 
-#include <qxcb_connection.h>
-#include <qxcb_screen.h>
-#include <qxcb_mime.h>
-#include <qapplication_p.h>
-#include <qelapsedtimer.h>
 #include <qdebug.h>
+#include <qelapsedtimer.h>
+#include <qxcb_connection.h>
+#include <qxcb_mime.h>
+#include <qxcb_screen.h>
+
+#include <qapplication_p.h>
 
 #include <xcb/xcb_icccm.h>
 

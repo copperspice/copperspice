@@ -24,7 +24,7 @@
 #ifndef QCOCOAFONTDIALOGHELPER_H
 #define QCOCOAFONTDIALOGHELPER_H
 
-#include <QObject>
+#include <qobject.h>
 #include <qplatform_dialoghelper.h>
 
 class QCocoaFontDialogHelper : public QPlatformFontDialogHelper

@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qprintengine_mac_p.h>
-#include <qcocoaprintersupport.h>
 
-#include <quuid.h>
-#include <qpagelayout.h>
+#include <qcocoaprintersupport.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qpagelayout.h>
+#include <quuid.h>
 
 #ifndef QT_NO_PRINTER
 

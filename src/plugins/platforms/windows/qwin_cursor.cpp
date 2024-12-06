@@ -24,17 +24,16 @@
 #ifndef  QT_NO_CURSOR
 
 #include <qwin_cursor.h>
-#include <qwin_context.h>
-#include <qwin_window.h>
-#include <qwin_screen.h>
-#include <qdebug.h>
 
-#include <QScopedArrayPointer>
-#include <QBitmap>
-#include <QImage>
-#include <QBitmap>
-#include <QApplication>
-#include <QScreen>
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qdebug.h>
+#include <qimage.h>
+#include <qscopedarraypointer.h>
+#include <qscreen.h>
+#include <qwin_context.h>
+#include <qwin_screen.h>
+#include <qwin_window.h>
 
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>

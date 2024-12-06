@@ -52,14 +52,14 @@
 
 #endif
 
+// must be included before egl since egl pulls in X headers
+#include <qapplication_p.h>
+
 #include <qgenericunix_eventdispatcher_p.h>
 #include <qgenericunix_fontdatabase_p.h>
 #include <qgenericunix_services_p.h>
 #include <qgenericunix_theme_p.h>
 #include <qplatform_inputcontextfactory_p.h>
-
-// must be included before egl since egl pulls in X headers
-#include <qapplication_p.h>
 
 #include <xcb/xcb.h>
 

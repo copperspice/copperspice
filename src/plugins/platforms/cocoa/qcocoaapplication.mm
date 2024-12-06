@@ -30,10 +30,10 @@
 
 #include <qcocoaapplication.h>
 
-#include <qcocoaintrospection.h>
+#include <qapplication.h>
 #include <qcocoaapplicationdelegate.h>
 #include <qcocoahelpers.h>
-#include <qapplication.h>
+#include <qcocoaintrospection.h>
 #include <qdebug.h>
 
 @implementation NSApplication (QApplicationIntegration)

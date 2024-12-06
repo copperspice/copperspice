@@ -24,9 +24,9 @@
 #ifndef QNSWINDOWDELEGATE_H
 #define QNSWINDOWDELEGATE_H
 
-#include <Cocoa/Cocoa.h>
-
 #include <qcocoawindow.h>
+
+#include <Cocoa/Cocoa.h>
 
 @interface QNSWindowDelegate : NSObject <NSWindowDelegate>
 {

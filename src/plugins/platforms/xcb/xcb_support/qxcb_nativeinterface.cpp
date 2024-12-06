@@ -23,17 +23,17 @@
 
 #include <qxcb_nativeinterface.h>
 
-#include <qmap.h>
 #include <qdebug.h>
+#include <qmap.h>
 #include <qopenglcontext.h>
 #include <qscreen.h>
-#include <qxcb_screen.h>
-#include <qxcb_window.h>
 #include <qxcb_integration.h>
-#include <qxcb_systemtraytracker.h>
 #include <qxcb_nativeinterfacehandler.h>
-#include <qxcbscreenfunctions.h>
+#include <qxcb_screen.h>
+#include <qxcb_systemtraytracker.h>
+#include <qxcb_window.h>
 #include <qxcbintegrationfunctions.h>
+#include <qxcbscreenfunctions.h>
 #include <qxcbwindowfunctions.h>
 
 #include <qapplication_p.h>

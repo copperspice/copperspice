@@ -23,30 +23,31 @@
 
 #include <qcocoanativeinterface.h>
 
-#include <qcocoaprintersupport.h>
-#include <qcocoawindow.h>
+#include <qapplication.h>
+#include <qbytearray.h>
+#include <qcocoaapplication.h>
+#include <qcocoaeventdispatcher.h>
+#include <qcocoahelpers.h>
+#include <qcocoaintegration.h>
 #include <qcocoamenu.h>
 #include <qcocoamenubar.h>
-#include <qcocoahelpers.h>
-#include <qcocoaapplication.h>
-#include <qcocoaintegration.h>
-#include <qcocoaeventdispatcher.h>
-#include <qapplication.h>
+#include <qcocoaprintersupport.h>
+#include <qcocoawindow.h>
 #include <qdebug.h>
-#include <qbytearray.h>
-#include <qwindow.h>
 #include <qpixmap.h>
-#include <qplatform_window.h>
 #include <qplatform_printersupport.h>
+#include <qplatform_window.h>
 #include <qsurfaceformat.h>
+#include <qwindow.h>
+
 #include <platformheaders/qcocoawindowfunctions.h>
 
 #include <qprintengine_mac_p.h>
 
 #ifndef QT_NO_OPENGL
-#include <qplatform_openglcontext.h>
-#include <qopenglcontext.h>
 #include <qcocoaglcontext.h>
+#include <qopenglcontext.h>
+#include <qplatform_openglcontext.h>
 #endif
 
 #include <Cocoa/Cocoa.h>

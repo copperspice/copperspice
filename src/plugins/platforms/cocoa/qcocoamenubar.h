@@ -24,9 +24,9 @@
 #ifndef QCOCOAMENUBAR_H
 #define QCOCOAMENUBAR_H
 
-#include <QList>
+#include <qcocoamenu.h>
+#include <qlist.h>
 #include <qplatform_menu.h>
-#include "qcocoamenu.h"
 
 class QCocoaWindow;
 

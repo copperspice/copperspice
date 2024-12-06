@@ -24,14 +24,14 @@
 #ifndef QWINDOWSWINDOW_H
 #define QWINDOWSWINDOW_H
 
+#include <qplatform_window.h>
 #include <qwin_additional.h>
 #include <qwin_cursor.h>
 
-#include <qplatform_window.h>
 #include <platformheaders/qwindowswindowfunctions.h>
 
-class QWindowsOleDropTarget;
 class QDebug;
+class QWindowsOleDropTarget;
 
 struct QWindowsGeometryHint {
    QWindowsGeometryHint()

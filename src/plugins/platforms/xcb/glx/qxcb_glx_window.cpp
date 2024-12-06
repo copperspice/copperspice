@@ -24,6 +24,7 @@
 #include <qxcb_glx_window.h>
 
 #include <qxcb_screen.h>
+
 #include <qglx_convenience_p.h>
 
 QXcbGlxWindow::QXcbGlxWindow(QWindow *window)

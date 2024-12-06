@@ -24,9 +24,9 @@
 #ifndef QCOCOAMENULOADER_P_H
 #define QCOCOAMENULOADER_P_H
 
-#import <Cocoa/Cocoa.h>
-
 #include <qcore_mac_p.h>
+
+#import <Cocoa/Cocoa.h>
 
 @interface QCocoaMenuLoader : NSResponder
 {

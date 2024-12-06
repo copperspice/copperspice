@@ -28,17 +28,20 @@
 * Refer to APPLE_LICENSE.TXT (in this directory) for license terms
 ***********************************************************************/
 
-#import "qcocoaapplicationdelegate.h"
-#import "qnswindowdelegate.h"
-#import "qcocoamenuloader.h"
-#include "qcocoaintegration.h"
+#import <qcocoaapplicationdelegate.h>
+
+#import <qcocoamenuloader.h>
+#import <qnswindowdelegate.h>
+
+#include <qapplication.h>
+#include <qcocoaintegration.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qurl.h>
-#include <qdebug.h>
-#include <qapplication.h>
-#include <qapplication_p.h>
-#include "qt_mac_p.h"
 #include <qwindowsysteminterface.h>
+
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
 
 static QCocoaApplicationDelegate *sharedCocoaApplicationDelegate = nil;
 

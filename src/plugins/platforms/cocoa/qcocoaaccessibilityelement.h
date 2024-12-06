@@ -25,14 +25,15 @@
 #define QCOCOAACCESIBILITYELEMENT_H
 
 #include <qglobal.h>
+
 #include <qt_mac_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
+#import <qaccessible.h>
+
 #import <Cocoa/Cocoa.h>
 #import <AppKit/NSAccessibility.h>
-
-#import <qaccessible.h>
 
 @class QMacAccessibilityElement;
 

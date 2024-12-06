@@ -24,10 +24,10 @@
 #ifndef QWINDOWSCURSOR_H
 #define QWINDOWSCURSOR_H
 
-#include <Cocoa/Cocoa.h>
-
 #include <qhash.h>
 #include <qplatform_cursor.h>
+
+#include <Cocoa/Cocoa.h>
 
 class QCocoaCursor : public QPlatformCursor
 {

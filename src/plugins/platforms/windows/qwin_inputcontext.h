@@ -25,8 +25,8 @@
 #define QWINDOWSINPUTCONTEXT_H
 
 #include <qlocale.h>
-#include <qpointer.h>
 #include <qplatform_inputcontext.h>
+#include <qpointer.h>
 #include <qwin_additional.h>
 
 class QInputMethodEvent;

@@ -23,11 +23,12 @@
 
 #include <qxcbeglnativeinterfacehandler.h>
 
+#include <qxcbeglcontext.h>
+#include <qxcbeglintegration.h>
+#include <qxcbeglwindow.h>
+#include <qxcbintegration.h>
+
 #include <qapplication_p.h>
-#include "qxcbeglwindow.h"
-#include "qxcbintegration.h"
-#include "qxcbeglintegration.h"
-#include "qxcbeglcontext.h"
 
 static int resourceType(const QByteArray &key)
 {

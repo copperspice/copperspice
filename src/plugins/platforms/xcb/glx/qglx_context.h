@@ -24,12 +24,12 @@
 #ifndef QGLX_CONTEXT_H
 #define QGLX_CONTEXT_H
 
-#include <qxcb_window.h>
-#include <qxcb_screen.h>
-#include <qplatform_openglcontext.h>
-#include <qplatform_offscreensurface.h>
-#include <qsurfaceformat.h>
 #include <qmutex.h>
+#include <qplatform_offscreensurface.h>
+#include <qplatform_openglcontext.h>
+#include <qsurfaceformat.h>
+#include <qxcb_screen.h>
+#include <qxcb_window.h>
 
 #include <GL/glx.h>
 

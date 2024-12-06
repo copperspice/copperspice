@@ -24,8 +24,10 @@
 #ifndef QCOCOAMENUITEM_H
 #define QCOCOAMENUITEM_H
 
-#include <qplatform_menu.h>
 #include <qimage.h>
+#include <qplatform_menu.h>
+
+class QCocoaMenu;
 
 #ifdef __OBJC__
 @class NSMenuItem;
@@ -38,8 +40,6 @@ using MSMenu     = struct objc_object;
 using NSObject   = struct objc_object;
 using NSView     = struct objc_object;
 #endif
-
-class QCocoaMenu;
 
 class QCocoaMenuObject
 {

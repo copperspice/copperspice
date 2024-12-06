@@ -24,13 +24,13 @@
 #ifndef QXCB_SYSTEMTRAYTRACKER_H
 #define QXCB_SYSTEMTRAYTRACKER_H
 
-#include <qxcb_connection.h>
 #include <qobject.h>
+#include <qxcb_connection.h>
 
 #include <xcb/xcb.h>
 
-class QXcbConnection;
 class QScreen;
+class QXcbConnection;
 
 class QXcbSystemTrayTracker : public QObject, public QXcbWindowEventListener
 {

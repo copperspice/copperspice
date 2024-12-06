@@ -24,9 +24,9 @@
 #ifndef QCOCOAINPUTCONTEXT_H
 #define QCOCOAINPUTCONTEXT_H
 
+#include <qlocale.h>
 #include <qplatform_inputcontext.h>
-#include <QLocale>
-#include <QPointer>
+#include <qpointer.h>
 
 class QCocoaInputContext : public QPlatformInputContext
 {

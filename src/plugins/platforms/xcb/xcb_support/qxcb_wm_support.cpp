@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qxcb_wm_support.h>
-#include <qxcb_screen.h>
+
 #include <qdebug.h>
+#include <qxcb_screen.h>
 
 QXcbWMSupport::QXcbWMSupport(QXcbConnection *c)
    : QXcbObject(c)

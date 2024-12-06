@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qcocoaglcontext.h>
-#include <qcocoawindow.h>
+
 #include <qcocoahelpers.h>
-#include <qdebug.h>
-#include <qcore_mac_p.h>
 #include <qcocoanativecontext.h>
+#include <qcocoawindow.h>
+#include <qdebug.h>
 
 #include <cglconvenience_p.h>
+#include <qcore_mac_p.h>
 
 #import <Cocoa/Cocoa.h>
 

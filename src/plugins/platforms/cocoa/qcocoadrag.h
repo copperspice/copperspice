@@ -24,12 +24,12 @@
 #ifndef QCOCOADRAG_H
 #define QCOCOADRAG_H
 
-#include <Cocoa/Cocoa.h>
-
 #include <qplatform_drag.h>
 
-#include <qsimpledrag_p.h>
 #include <qdnd_p.h>
+#include <qsimpledrag_p.h>
+
+#include <Cocoa/Cocoa.h>
 
 class QCocoaDrag : public QPlatformDrag
 {

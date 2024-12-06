@@ -31,14 +31,14 @@
 #define QT_MAC_SYSTEMTRAY_USE_GROWL
 
 #include <qcocoasystemtrayicon.h>
-#include <qtemporaryfile.h>
-#include <qimagewriter.h>
-#include <qdebug.h>
 
 #include <qcocoamenu.h>
+#include <qdebug.h>
+#include <qimagewriter.h>
+#include <qtemporaryfile.h>
 
-#include <qt_mac_p.h>
 #include <qcocoahelpers.h>
+#include <qt_mac_p.h>
 
 #import <AppKit/AppKit.h>
 

@@ -48,7 +48,6 @@
 #include <qwindow_p.h>
 
 #include <algorithm>
-
 #include <stdio.h>
 
 #include <xcb/xcb_icccm.h>

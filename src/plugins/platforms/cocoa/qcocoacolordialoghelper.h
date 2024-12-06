@@ -24,7 +24,7 @@
 #ifndef QCOCOACOLORDIALOGHELPER_H
 #define QCOCOACOLORDIALOGHELPER_H
 
-#include <QObject>
+#include <qobject.h>
 #include <qplatform_dialoghelper.h>
 
 class QCocoaColorDialogHelper : public QPlatformColorDialogHelper

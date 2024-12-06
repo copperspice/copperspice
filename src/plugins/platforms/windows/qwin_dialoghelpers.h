@@ -24,14 +24,14 @@
 #ifndef QWINDOWSDIALOGHELPER_H
 #define QWINDOWSDIALOGHELPER_H
 
-#include <qwin_additional.h>
 #include <qplatform_dialoghelper.h>
 #include <qplatform_theme.h>
-#include <qstringlist.h>
 #include <qsharedpointer.h>
+#include <qstringlist.h>
+#include <qwin_additional.h>
 
-class QFileDialog;
 class QDialog;
+class QFileDialog;
 class QThread;
 class QWindowsNativeDialogBase;
 

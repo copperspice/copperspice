@@ -24,10 +24,10 @@
 #ifndef QWINDOWSOLE_H
 #define QWINDOWSOLE_H
 
-#include <qwin_additional.h>
 #include <qmap.h>
 #include <qpointer.h>
 #include <qvector.h>
+#include <qwin_additional.h>
 
 #include <objidl.h>
 

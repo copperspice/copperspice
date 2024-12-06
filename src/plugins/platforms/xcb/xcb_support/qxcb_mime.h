@@ -24,10 +24,11 @@
 #ifndef QXCB_MIME_H
 #define QXCB_MIME_H
 
-#include <qdnd_p.h>
 #include <qclipboard.h>
-#include <qxcb_integration.h>
 #include <qxcb_connection.h>
+#include <qxcb_integration.h>
+
+#include <qdnd_p.h>
 
 #if ! (defined(QT_NO_DRAGANDDROP) && defined(QT_NO_CLIPBOARD))
 

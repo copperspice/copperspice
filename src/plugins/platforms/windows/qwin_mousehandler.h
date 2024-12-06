@@ -24,11 +24,11 @@
 #ifndef QWINDOWSMOUSEHANDLER_H
 #define QWINDOWSMOUSEHANDLER_H
 
-#include <qwin_global.h>
-#include <qwin_additional.h>
-#include <qpointf.h>
-#include <qpointer.h>
 #include <qhash.h>
+#include <qpointer.h>
+#include <qpointf.h>
+#include <qwin_additional.h>
+#include <qwin_global.h>
 
 class QWindow;
 class QTouchDevice;

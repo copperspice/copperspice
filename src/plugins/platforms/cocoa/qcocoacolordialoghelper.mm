@@ -25,10 +25,10 @@
 
 #ifndef QT_NO_COLORDIALOG
 
+#include <qcocoaeventdispatcher.h>
+#include <qcocoahelpers.h>
 #include <qdebug.h>
 #include <qtimer.h>
-#include <qcocoahelpers.h>
-#include <qcocoaeventdispatcher.h>
 
 #import <AppKit/AppKit.h>
 

@@ -34,6 +34,7 @@
 #include <qabstracteventdispatcher.h>
 #include <qstack.h>
 #include <qwindowdefs.h>
+
 #include <qabstracteventdispatcher_p.h>
 #include <qcfsocketnotifier_p.h>
 #include <qtimerinfo_unix_p.h>

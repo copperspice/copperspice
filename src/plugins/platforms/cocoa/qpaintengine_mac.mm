@@ -22,33 +22,31 @@
 ***********************************************************************/
 
 #include <qpaintengine_mac_p.h>
-#include <qprintengine_mac_p.h>
 
 #include <qbitmap.h>
+#include <qcocoahelpers.h>
+#include <qcoreapplication.h>
+#include <qdebug.h>
+#include <qmath.h>
 #include <qpaintdevice.h>
 #include <qpainterpath.h>
 #include <qpixmapcache.h>
-#include <qpaintengine_raster_p.h>
+#include <qplatform_pixmap.h>
 #include <qprinter.h>
 #include <qstack.h>
 #include <qtextcodec.h>
-#include <qwidget.h>
 #include <qvarlengtharray.h>
-#include <qdebug.h>
-#include <qcoreapplication.h>
-#include <qmath.h>
-
-#include <qplatform_pixmap.h>
+#include <qwidget.h>
 
 #include <qfont_p.h>
-#include <qfontengine_p.h>
 #include <qfontengine_coretext_p.h>
+#include <qfontengine_p.h>
 #include <qnumeric_p.h>
+#include <qpaintengine_raster_p.h>
 #include <qpainter_p.h>
 #include <qpainterpath_p.h>
+#include <qprintengine_mac_p.h>
 #include <qtextengine_p.h>
-
-#include <qcocoahelpers.h>
 
 #include <string.h>
 

@@ -24,13 +24,13 @@
 #ifndef QWINDOWSDRAG_H
 #define QWINDOWSDRAG_H
 
-#include <qwin_internal_mimedata.h>
-#include <qplatform_drag.h>
 #include <qpixmap.h>
-
-struct IDropTargetHelper;
+#include <qplatform_drag.h>
+#include <qwin_internal_mimedata.h>
 
 class QPlatformScreen;
+
+struct IDropTargetHelper;
 
 class QWindowsDropMimeData : public QWindowsInternalMimeData
 {

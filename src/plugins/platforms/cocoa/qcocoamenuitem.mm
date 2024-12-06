@@ -23,15 +23,15 @@
 
 #include <qcocoamenuitem.h>
 
+#include <messages.h>
+#include <qcocoaapplication.h>          // for custom application category
+#include <qcocoahelpers.h>
 #include <qcocoamenu.h>
 #include <qcocoamenubar.h>
-#include <messages.h>
-#include <qcocoahelpers.h>
-#include <qt_mac_p.h>
-#include <qcocoaapplication.h>          // for custom application category
 #include <qcocoamenuloader.h>
-
 #include <qdebug.h>
+
+#include <qt_mac_p.h>
 
 static inline QCocoaMenuLoader *getMenuLoader()
 {

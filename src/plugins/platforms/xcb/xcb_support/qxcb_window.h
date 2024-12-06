@@ -24,18 +24,18 @@
 #ifndef QXCB_WINDOW_H
 #define QXCB_WINDOW_H
 
+#include <qimage.h>
 #include <qplatform_window.h>
 #include <qsurfaceformat.h>
-#include <qimage.h>
 #include <qxcb_object.h>
 #include <qxcbwindowfunctions.h>
 
 #include <xcb/xcb.h>
 #include <xcb/sync.h>
 
+class QIcon;
 class QXcbScreen;
 class QXcbSyncWindowRequest;
-class QIcon;
 
 class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWindowEventListener, public QPlatformWindow
 {

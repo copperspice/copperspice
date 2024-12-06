@@ -29,19 +29,19 @@
 ***********************************************************************/
 
 #include <qcocoaeventdispatcher.h>
-#include <qcocoawindow.h>
 
-#include <qcocoahelpers.h>
 #include <qapplication.h>
+#include <qcocoahelpers.h>
+#include <qcocoawindow.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qmutex.h>
-#include <qsocketnotifier.h>
-#include <qplatform_window.h>
 #include <qplatform_nativeinterface.h>
-#include <qdebug.h>
+#include <qplatform_window.h>
+#include <qsocketnotifier.h>
 
-#include <qthread_p.h>
 #include <qapplication_p.h>
+#include <qthread_p.h>
 
 #undef slots
 #include <Cocoa/Cocoa.h>

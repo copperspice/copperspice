@@ -24,8 +24,8 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 
-#include <qstring.h>
 #include <qplatform_menu.h>
+#include <qstring.h>
 
 QString msgAboutCs();
 QString qt_mac_applicationmenu_string(int type);

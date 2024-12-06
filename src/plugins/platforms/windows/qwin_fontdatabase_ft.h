@@ -24,9 +24,10 @@
 #ifndef QWINDOWSFONTDATABASE_FT_H
 #define QWINDOWSFONTDATABASE_FT_H
 
-#include <qbasicfontdatabase_p.h>
 #include <qsharedpointer.h>
 #include <qwin_additional.h>
+
+#include <qbasicfontdatabase_p.h>
 
 class QWindowsFontDatabaseFT : public QBasicFontDatabase
 {

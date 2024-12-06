@@ -29,6 +29,7 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+
 #include <qcore_mac_p.h>
 
 #import <AppKit/AppKit.h>

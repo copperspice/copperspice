@@ -23,9 +23,9 @@
 
 #include <qcocoacursor.h>
 
-#include <qcocoawindow.h>
-#include <qcocoahelpers.h>
 #include <qbitmap.h>
+#include <qcocoahelpers.h>
+#include <qcocoawindow.h>
 
 QCocoaCursor::QCocoaCursor()
 {

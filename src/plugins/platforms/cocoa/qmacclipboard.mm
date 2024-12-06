@@ -21,16 +21,16 @@
 *
 ***********************************************************************/
 
-#include "qmacclipboard.h"
-#include "qclipboard.h"
-#include "qapplication.h"
-#include "qbitmap.h"
-#include "qdatetime.h"
-#include "qdebug.h"
-#include "qapplication.h"
-#include "qevent.h"
-#include "qurl.h"
-#include "qcocoahelpers.h"
+#include <qmacclipboard.h>
+
+#include <qapplication.h>
+#include <qbitmap.h>
+#include <qclipboard.h>
+#include <qcocoahelpers.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qurl.h>
 
 #include <stdlib.h>
 #include <string.h>

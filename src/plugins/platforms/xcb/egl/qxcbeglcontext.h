@@ -24,10 +24,11 @@
 #ifndef QXCBEGLCONTEXT_H
 #define QXCBEGLCONTEXT_H
 
-#include "qxcbeglwindow.h"
-#include <qeglplatformcontext_p.h>
+#include <qeglnativecontext.h>
+#include <qxcbeglwindow.h>
+
 #include <qeglpbuffer_p.h>
-#include <QEGLNativeContext>
+#include <qeglplatformcontext_p.h>
 
 //####todo remove the noops (looks like their where there in the initial commit)
 class QXcbEglContext : public QEGLPlatformContext

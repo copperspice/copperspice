@@ -22,8 +22,9 @@
 ***********************************************************************/
 
 #include <qwin_gdi_nativeinterface.h>
-#include <qwin_backingstore.h>
+
 #include <qbackingstore.h>
+#include <qwin_backingstore.h>
 
 void *QWindowsGdiNativeInterface::nativeResourceForBackingStore(const QByteArray &resource, QBackingStore *bs)
 {

@@ -28,7 +28,7 @@
 * Refer to APPLE_LICENSE.TXT (in this directory) for license terms
 ***********************************************************************/
 
-#include "qcocoaintrospection.h"
+#include <qcocoaintrospection.h>
 
 void qt_cocoa_change_implementation(Class baseClass, SEL originalSel, Class proxyClass, SEL replacementSel, SEL backupSel)
 {

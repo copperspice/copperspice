@@ -24,10 +24,10 @@
 #ifndef QWINDOWSMIME_H
 #define QWINDOWSMIME_H
 
-#include <qwin_additional.h>
-#include <qvector.h>
 #include <qlist.h>
 #include <qvariant.h>
+#include <qvector.h>
+#include <qwin_additional.h>
 
 class QDebug;
 class QMimeData;

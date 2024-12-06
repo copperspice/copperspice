@@ -27,8 +27,8 @@
 #include <qplatform_integration.h>
 #include <qscopedpointer.h>
 
-class QWindowsWindow;
 class QWindowsStaticOpenGLContext;
+class QWindowsWindow;
 
 struct QWindowsIntegrationPrivate;
 struct QWindowsWindowData;

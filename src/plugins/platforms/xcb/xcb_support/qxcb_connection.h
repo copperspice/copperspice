@@ -34,6 +34,10 @@
 #include <qwindowsysteminterface.h>
 #include <qxcb_export.h>
 
+#ifndef QT_NO_TABLETEVENT
+#include <qtabletevent.h>
+#endif
+
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
 
@@ -42,10 +46,6 @@
 #define explicit dont_use_cxx_explicit
 #include <xcb/xkb.h>
 #undef explicit
-#endif
-
-#ifndef QT_NO_TABLETEVENT
-#include <QTabletEvent>
 #endif
 
 #if XCB_USE_XINPUT2

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qmultitouch_mac_p.h>
+
 #include <qcocoahelpers.h>
 
 QHash<qint64, QCocoaTouch *> QCocoaTouch::_currentTouches;

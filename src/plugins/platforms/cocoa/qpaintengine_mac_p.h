@@ -24,12 +24,12 @@
 #ifndef QPAINTENGINE_MAC_P_H
 #define QPAINTENGINE_MAC_P_H
 
-#include <qpaintengine.h>
 #include <qhash.h>
+#include <qpaintengine.h>
 
+#include <qfont_p.h>
 #include <qpaintengine_p.h>
 #include <qpolygonclipper_p.h>
-#include <qfont_p.h>
 #include <qt_mac_p.h>
 
 typedef struct CGColorSpace *CGColorSpaceRef;

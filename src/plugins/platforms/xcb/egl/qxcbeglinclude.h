@@ -24,10 +24,11 @@
 #ifndef QXCBINCLUDE_H
 #define QXCBINCLUDE_H
 
-#include <QPalette>
-#include <QTextStream>
-#include <qmath_p.h>
+#include <qpalette.h>
+#include <qtextstream.h>
+
 #include <qcssparser_p.h>
+#include <qmath_p.h>
 #include <qtextengine_p.h>
 
 #include <EGL/egl.h>

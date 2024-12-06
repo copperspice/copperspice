@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qwin_gdi_integration.h>
-#include <qwin_context.h>
-#include <qwin_backingstore.h>
-#include <qwin_gdi_nativeinterface.h>
+
 #include <qdebug.h>
+#include <qwin_backingstore.h>
+#include <qwin_context.h>
+#include <qwin_gdi_nativeinterface.h>
 
 #include <qpixmap_raster_p.h>
 

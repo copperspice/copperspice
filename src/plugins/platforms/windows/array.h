@@ -25,6 +25,7 @@
 #define ARRAY_H
 
 #include <qglobal.h>
+
 #include <algorithm>
 
 // simple, non-shared array

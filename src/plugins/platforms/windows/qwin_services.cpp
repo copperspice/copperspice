@@ -23,9 +23,9 @@
 
 #include <qwin_services.h>
 
-#include <qurl.h>
 #include <qdebug.h>
 #include <qdir.h>
+#include <qurl.h>
 #include <qwin_additional.h>
 
 #include <shlobj.h>

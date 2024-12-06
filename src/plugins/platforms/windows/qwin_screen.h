@@ -24,12 +24,12 @@
 #ifndef QWINDOWSSCREEN_H
 #define QWINDOWSSCREEN_H
 
-#include <qwin_global.h>
 #include <qlist.h>
-#include <qvector.h>
 #include <qpair.h>
-#include <qscopedpointer.h>
 #include <qplatform_screen.h>
+#include <qscopedpointer.h>
+#include <qvector.h>
+#include <qwin_global.h>
 
 struct QWindowsScreenData {
    enum Flags {

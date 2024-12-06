@@ -21,9 +21,9 @@
 *
 ***********************************************************************/
 
-#include "qxcbeglwindow.h"
+#include <qxcbeglwindow.h>
 
-#include "qxcbeglintegration.h"
+#include <qxcbeglintegration.h>
 
 #include <qeglconvenience_p.h>
 #include <qxlibeglintegration_p.h>

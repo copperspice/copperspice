@@ -22,8 +22,10 @@
 ***********************************************************************/
 
 #include <qcocoaservices.h>
-#include <qt_mac_p.h>
+
 #include <qurl.h>
+
+#include <qt_mac_p.h>
 
 #include <AppKit/NSWorkspace.h>
 #include <Foundation/NSURL.h>

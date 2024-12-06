@@ -24,18 +24,18 @@
 #ifndef QCOCOAWINDOW_H
 #define QCOCOAWINDOW_H
 
-#include <Cocoa/Cocoa.h>
-
+#include <qnsview.h>
 #include <qplatform_window.h>
-#include <qrect.h>
 #include <qpointer.h>
+#include <qrect.h>
 
 #ifndef QT_NO_OPENGL
 #include <qcocoaglcontext.h>
 #endif
 
-#include <qnsview.h>
 #include <qt_mac_p.h>
+
+#include <Cocoa/Cocoa.h>
 
 class QCocoaWindow;
 

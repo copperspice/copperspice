@@ -25,8 +25,8 @@
 
 #include <qdebug.h>
 #include <qpainter.h>
-#include <qscreen.h>
 #include <qplatform_graphicsbuffer.h>
+#include <qscreen.h>
 #include <qxcb_connection.h>
 #include <qxcb_screen.h>
 #include <qxcb_window.h>

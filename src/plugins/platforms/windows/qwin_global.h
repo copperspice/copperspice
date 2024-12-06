@@ -24,8 +24,8 @@
 #ifndef QTWINDOWSGLOBAL_H
 #define QTWINDOWSGLOBAL_H
 
-#include <qwin_additional.h>
 #include <qnamespace.h>
+#include <qwin_additional.h>
 
 namespace QtWindows {
 

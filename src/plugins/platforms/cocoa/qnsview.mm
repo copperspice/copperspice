@@ -21,17 +21,16 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-
-#include <Carbon/Carbon.h>
+#include <qnsview.h>
 
 #include <qcocoabackingstore.h>
 #include <qcocoadrag.h>
 #include <qcocoahelpers.h>
 #include <qcocoainputcontext.h>
+#include <qcocoaintegration.h>
 #include <qcocoawindow.h>
 #include <qdebug.h>
-#include <qnsview.h>
+#include <qglobal.h>
 #include <qplatform_integration.h>
 #include <qsysinfo.h>
 #include <qtextformat.h>
@@ -44,11 +43,11 @@
 #include <qcocoaglcontext.h>
 #endif
 
-#include <qcocoaintegration.h>
-
 #ifdef QT_COCOA_ENABLE_ACCESSIBILITY_INSPECTOR
 #include <accessibilityinspector.h>
 #endif
+
+#include <Carbon/Carbon.h>
 
 static QTouchDevice *touchDevice   = nullptr;
 static bool _q_dontOverrideCtrlLMB = false;

@@ -24,7 +24,7 @@
 #ifndef QXCBEGLNATIVEINTERFACEHANDLER_H
 #define QXCBEGLNATIVEINTERFACEHANDLER_H
 
-#include "qxcbnativeinterfacehandler.h"
+#include <qxcbnativeinterfacehandler.h>
 
 class QXcbEglNativeInterfaceHandler : public QXcbNativeInterfaceHandler
 {

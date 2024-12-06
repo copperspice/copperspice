@@ -22,16 +22,16 @@
 ***********************************************************************/
 
 #include <qxcb_keyboard.h>
-#include <qxcb_window.h>
-#include <qxcb_screen.h>
 
-#include <qwindowsysteminterface.h>
+#include <qdir.h>
+#include <qmetamethod.h>
+#include <qplatform_cursor.h>
 #include <qplatform_inputcontext.h>
 #include <qplatform_integration.h>
-#include <qplatform_cursor.h>
 #include <qtextcodec.h>
-#include <qmetamethod.h>
-#include <qdir.h>
+#include <qwindowsysteminterface.h>
+#include <qxcb_screen.h>
+#include <qxcb_window.h>
 
 #include <qapplication_p.h>
 

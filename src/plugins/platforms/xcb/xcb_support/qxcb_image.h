@@ -24,10 +24,10 @@
 #ifndef QXCB_IMAGE_H
 #define QXCB_IMAGE_H
 
-#include <qxcb_screen.h>
-#include <qpair.h>
 #include <qimage.h>
+#include <qpair.h>
 #include <qpixmap.h>
+#include <qxcb_screen.h>
 
 #include <xcb/xcb_image.h>
 

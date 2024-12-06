@@ -37,14 +37,14 @@
 struct IBindCtx;
 struct _SHSTOCKICONINFO;
 
-class QWindow;
+class QKeyEvent;
 class QPlatformScreen;
+class QPoint;
+class QTouchDevice;
+class QWindow;
+class QWindowsMimeConverter;
 class QWindowsScreenManager;
 class QWindowsWindow;
-class QWindowsMimeConverter;
-class QPoint;
-class QKeyEvent;
-class QTouchDevice;
 
 struct QWindowCreationContext;
 struct QWindowsContextPrivate;

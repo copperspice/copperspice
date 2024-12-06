@@ -24,10 +24,11 @@
 #ifndef QCOCOAHELPERS_H
 #define QCOCOAHELPERS_H
 
-#include <qt_mac_p.h>
-#include <qapplication_p.h>
 #include <qscreen.h>
 #include <qstring.h>
+
+#include <qapplication_p.h>
+#include <qt_mac_p.h>
 
 class QPixmap;
 

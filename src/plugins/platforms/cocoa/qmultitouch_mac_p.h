@@ -25,12 +25,11 @@
 #define QMULTITOUCH_MAC_P_H
 
 #include <qglobal.h>
-
-#import <Cocoa/Cocoa.h>
-
-#include <qwindowsysteminterface.h>
 #include <qhash.h>
 #include <qlist.h>
+#include <qwindowsysteminterface.h>
+
+#import <Cocoa/Cocoa.h>
 
 class QCocoaTouch
 {

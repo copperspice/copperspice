@@ -23,9 +23,9 @@
 
 #include <qxcb_gl_integrationfactory.h>
 
-#include <qxcb_gl_integrationplugin.h>
 #include <qapplication.h>
 #include <qdir.h>
+#include <qxcb_gl_integrationplugin.h>
 
 #include <qfactoryloader_p.h>
 

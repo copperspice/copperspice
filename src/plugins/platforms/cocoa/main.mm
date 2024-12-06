@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include <Cocoa/Cocoa.h>
-
-#include <qplatform_integrationplugin.h>
-#include <qplatform_themeplugin.h>
 #include <qcocoaintegration.h>
 #include <qcocoatheme.h>
+#include <qplatform_integrationplugin.h>
+#include <qplatform_themeplugin.h>
+
+#include <Cocoa/Cocoa.h>
 
 class QCocoaIntegrationPlugin : public QPlatformIntegrationPlugin
 {

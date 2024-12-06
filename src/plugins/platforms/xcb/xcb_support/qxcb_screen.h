@@ -31,15 +31,15 @@
 
 #include <qfontengine_p.h>
 
-class QXcbConnection;
-class QXcbCursor;
-class QXcbXSettings;
-class QDebug;
-
 #include <xcb/xcb.h>
 #include <xcb/randr.h>
 #include <xcb/xfixes.h>
 #include <xcb/xinerama.h>
+
+class QDebug;
+class QXcbConnection;
+class QXcbCursor;
+class QXcbXSettings;
 
 class QXcbVirtualDesktop : public QXcbObject
 {

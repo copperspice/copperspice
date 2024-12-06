@@ -24,17 +24,17 @@
 #ifndef QT_MAC_P_H
 #define QT_MAC_P_H
 
-#include <qmacdefines_mac.h>
 #include <qglobal.h>
-#include <qvariant.h>
+#include <qmacdefines_mac.h>
 #include <qmimedata.h>
-#include <qpointer.h>
 #include <qpainter.h>
+#include <qpointer.h>
+#include <qvariant.h>
 
 #include <qcore_mac_p.h>
 
-class QWidget;
 class QDragMoveEvent;
+class QWidget;
 
 #ifdef __OBJC__
 #include <Cocoa/Cocoa.h>

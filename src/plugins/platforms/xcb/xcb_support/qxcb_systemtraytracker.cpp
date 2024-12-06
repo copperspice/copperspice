@@ -24,12 +24,11 @@
 #include <qxcb_systemtraytracker.h>
 
 #include <qdebug.h>
+#include <qplatform_nativeinterface.h>
 #include <qrect.h>
 #include <qscreen.h>
 #include <qxcb_connection.h>
 #include <qxcb_screen.h>
-
-#include <qplatform_nativeinterface.h>
 
 static constexpr const int SystemTrayRequestDock   = 0;
 static constexpr const int SystemTrayBeginMessage  = 1;

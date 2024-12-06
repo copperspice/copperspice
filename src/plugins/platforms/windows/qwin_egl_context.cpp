@@ -22,11 +22,11 @@
 ***********************************************************************/
 
 #include <qwin_eglcontext.h>
+
 #include <qwin_context.h>
 #include <qwin_window.h>
 #include <qdebug.h>
-
-#include <QOpenGLContext>
+#include <qopenglcontext.h>
 
 #if defined(QT_OPENGL_ES_2_ANGLE) || defined(QT_OPENGL_DYNAMIC)
 #  include <EGL/eglext.h>

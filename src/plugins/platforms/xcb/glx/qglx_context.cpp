@@ -24,12 +24,12 @@
 #include <qglx_context.h>
 
 #include <qdebug.h>
-#include <qlibrary.h>
-#include <qxcb_window.h>
-#include <qxcb_screen.h>
-#include <qopenglcontext.h>
-#include <qoffscreensurface.h>
 #include <qglxnativecontext.h>
+#include <qlibrary.h>
+#include <qoffscreensurface.h>
+#include <qopenglcontext.h>
+#include <qxcb_screen.h>
+#include <qxcb_window.h>
 
 #include <qglx_convenience_p.h>
 

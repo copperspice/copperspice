@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qwin_window.h>
-#include <qwindow_p.h>
 
 #include <qapplication.h>
 #include <qdebug.h>
@@ -47,9 +46,10 @@
 #  include <qwindowscursor.h>
 #endif
 
-#include <qsystemlibrary_p.h>
 #include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
+#include <qsystemlibrary_p.h>
+#include <qwindow_p.h>
 
 static constexpr const int defaultWindowWidth  = 160;
 static constexpr const int defaultWindowHeight = 160;

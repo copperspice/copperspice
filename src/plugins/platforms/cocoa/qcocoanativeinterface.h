@@ -24,16 +24,16 @@
 #ifndef QCOCOANATIVEINTERFACE_H
 #define QCOCOANATIVEINTERFACE_H
 
+#include <qpixmap.h>
+#include <qplatform_nativeinterface.h>
+
 #include <ApplicationServices/ApplicationServices.h>
 
-#include <qplatform_nativeinterface.h>
-#include <qpixmap.h>
-
-class QWidget;
-class QPlatformPrinterSupport;
-class QPrintEngine;
 class QPlatformMenu;
 class QPlatformMenuBar;
+class QPlatformPrinterSupport;
+class QPrintEngine;
+class QWidget;
 
 class QCocoaNativeInterface : public QPlatformNativeInterface
 {

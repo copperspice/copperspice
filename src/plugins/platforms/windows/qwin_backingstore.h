@@ -24,12 +24,12 @@
 #ifndef QWINDOWSBACKINGSTORE_H
 #define QWINDOWSBACKINGSTORE_H
 
-#include <qwin_additional.h>
 #include <qplatform_backingstore.h>
 #include <qscopedpointer.h>
+#include <qwin_additional.h>
 
-class QWindowsWindow;
 class QWindowsNativeImage;
+class QWindowsWindow;
 
 class QWindowsBackingStore : public QPlatformBackingStore
 {

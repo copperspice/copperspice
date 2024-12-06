@@ -30,8 +30,8 @@
 #include <qsharedpointer.h>
 #include <qwin_additional.h>
 
-class QWindowsNativeImage;
 class QWindowsFontEngineData;
+class QWindowsNativeImage;
 
 class QWindowsFontEngine : public QFontEngine
 {

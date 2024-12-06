@@ -21,30 +21,30 @@
 *
 ***********************************************************************/
 
-#import <Cocoa/Cocoa.h>
-
 #include <qcocoatheme.h>
+
 #include <messages.h>
-#include <qvariant.h>
-
-#include "qcocoacolordialoghelper.h"
-#include "qcocoafiledialoghelper.h"
-#include "qcocoafontdialoghelper.h"
-#include "qcocoasystemsettings.h"
-#include "qcocoasystemtrayicon.h"
-#include "qcocoamenuitem.h"
-#include "qcocoamenu.h"
-#include "qcocoamenubar.h"
-#include "qcocoahelpers.h"
-
+#include <qcocoacolordialoghelper.h>
+#include <qcocoafiledialoghelper.h>
+#include <qcocoafontdialoghelper.h>
+#include <qcocoahelpers.h>
+#include <qcocoamenu.h>
+#include <qcocoamenubar.h>
+#include <qcocoamenuitem.h>
+#include <qcocoasystemsettings.h>
+#include <qcocoasystemtrayicon.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <qplatform_integration.h>
 #include <qplatform_nativeinterface.h>
 #include <qtextformat.h>
+#include <qvariant.h>
 
 #include <qapplication_p.h>
 #include <qcoretextfontdatabase_p.h>
+
+#import <Cocoa/Cocoa.h>
+
 
 QString QCocoaTheme::name = "cocoa";
 

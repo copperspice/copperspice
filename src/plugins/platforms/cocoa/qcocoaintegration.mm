@@ -21,21 +21,21 @@
 *
 ***********************************************************************/
 
-#include "qcocoaintegration.h"
+#include <qcocoaintegration.h>
 
-#include "qcocoawindow.h"
-#include "qcocoabackingstore.h"
-#include "qcocoanativeinterface.h"
-#include "qcocoamenuloader.h"
-#include "qcocoaeventdispatcher.h"
-#include "qcocoahelpers.h"
-#include "qcocoaapplication.h"
-#include "qcocoaapplicationdelegate.h"
-#include "qcocoafiledialoghelper.h"
-#include "qcocoatheme.h"
-#include "qcocoainputcontext.h"
-#include "qcocoamimetypes.h"
-#include "qcocoaaccessibility.h"
+#include <qcocoaaccessibility.h>
+#include <qcocoaapplication.h>
+#include <qcocoaapplicationdelegate.h>
+#include <qcocoabackingstore.h>
+#include <qcocoaeventdispatcher.h>
+#include <qcocoafiledialoghelper.h>
+#include <qcocoahelpers.h>
+#include <qcocoainputcontext.h>
+#include <qcocoamenuloader.h>
+#include <qcocoamimetypes.h>
+#include <qcocoanativeinterface.h>
+#include <qcocoatheme.h>
+#include <qcocoawindow.h>
 #include <qcoreapplication.h>
 #include <qplatform_accessibility.h>
 

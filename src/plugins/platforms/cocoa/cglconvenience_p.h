@@ -24,8 +24,8 @@
 #ifndef CGLCONVENIENCE_H
 #define CGLCONVENIENCE_H
 
-#include <qsurfaceformat.h>
 #include <qstring.h>
+#include <qsurfaceformat.h>
 
 #include <OpenGL/OpenGL.h>
 

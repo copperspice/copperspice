@@ -26,8 +26,8 @@
 #include <qxcb_export.h>
 #include <qxcb_window.h>
 
-class QPlatformOffscreenSurface;
 class QOffscreenSurface;
+class QPlatformOffscreenSurface;
 class QXcbNativeInterfaceHandler;
 
 class Q_XCB_EXPORT QXcbGlIntegration

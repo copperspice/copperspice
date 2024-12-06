@@ -23,7 +23,7 @@
 
 #include <messages.h>
 
-#include <QCoreApplication>
+#include <qcoreapplication.h>
 
 // Translatable messages should go into this .cpp file for them to be picked up by lupdate.
 

@@ -24,8 +24,8 @@
 #ifndef QWINDOWSKEYMAPPER_H
 #define QWINDOWSKEYMAPPER_H
 
-#include <qwin_additional.h>
 #include <qlocale.h>
+#include <qwin_additional.h>
 
 class QKeyEvent;
 class QWindow;
