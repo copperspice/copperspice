@@ -28,14 +28,14 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-class QAbstractSpinBox;
 class QAbstractSlider;
+class QAbstractSpinBox;
+class QAccessibleLineEdit;
+class QDial;
+class QDoubleSpinBox;
 class QScrollBar;
 class QSlider;
 class QSpinBox;
-class QDoubleSpinBox;
-class QDial;
-class QAccessibleLineEdit;
 
 #ifndef QT_NO_SPINBOX
 

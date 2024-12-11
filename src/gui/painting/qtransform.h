@@ -24,14 +24,14 @@
 #ifndef QTRANSFORM_H
 #define QTRANSFORM_H
 
+#include <qline.h>
 #include <qmatrix.h>
 #include <qpainterpath.h>
+#include <qpoint.h>
 #include <qpolygon.h>
+#include <qrect.h>
 #include <qregion.h>
 #include <qwindowdefs.h>
-#include <qline.h>
-#include <qpoint.h>
-#include <qrect.h>
 
 class QVariant;
 

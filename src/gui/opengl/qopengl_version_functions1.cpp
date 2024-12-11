@@ -25,25 +25,25 @@
 #include <qopengl_version_functions_p.h>
 
 #if ! defined(QT_OPENGL_ES_2)
-#include "qopenglfunctions_4_5_core.h"
-#include "qopenglfunctions_4_5_compatibility.h"
-#include "qopenglfunctions_4_4_core.h"
-#include "qopenglfunctions_4_4_compatibility.h"
-#include "qopenglfunctions_4_3_core.h"
-#include "qopenglfunctions_4_3_compatibility.h"
-#include "qopenglfunctions_4_2_core.h"
-#include "qopenglfunctions_4_2_compatibility.h"
-#include "qopenglfunctions_4_1_core.h"
-#include "qopenglfunctions_4_1_compatibility.h"
-#include "qopenglfunctions_4_0_core.h"
-#include "qopenglfunctions_4_0_compatibility.h"
-#include "qopenglfunctions_3_3_core.h"
-#include "qopenglfunctions_3_3_compatibility.h"
-#include "qopenglfunctions_3_2_core.h"
-#include "qopenglfunctions_3_2_compatibility.h"
+#include <qopenglfunctions_3_2_compatibility.h>
+#include <qopenglfunctions_3_2_core.h>
+#include <qopenglfunctions_3_3_compatibility.h>
+#include <qopenglfunctions_3_3_core.h>
+#include <qopenglfunctions_4_0_compatibility.h>
+#include <qopenglfunctions_4_0_core.h>
+#include <qopenglfunctions_4_1_compatibility.h>
+#include <qopenglfunctions_4_1_core.h>
+#include <qopenglfunctions_4_2_compatibility.h>
+#include <qopenglfunctions_4_2_core.h>
+#include <qopenglfunctions_4_3_compatibility.h>
+#include <qopenglfunctions_4_3_core.h>
+#include <qopenglfunctions_4_4_compatibility.h>
+#include <qopenglfunctions_4_4_core.h>
+#include <qopenglfunctions_4_5_compatibility.h>
+#include <qopenglfunctions_4_5_core.h>
 
 #else
-#include "qopenglfunctions_es2.h"
+#include <qopenglfunctions_es2.h>
 
 #endif
 

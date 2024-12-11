@@ -21,22 +21,22 @@
 *
 ***********************************************************************/
 
+#include <qpixmap_raster_p.h>
+
+#include <qbitmap.h>
+#include <qbuffer.h>
+#include <qimage.h>
+#include <qimagereader.h>
+#include <qpaintengine.h>
 #include <qpixmap.h>
 
-#include <qpaintengine.h>
-#include <qbitmap.h>
-#include <qimage.h>
-#include <qbuffer.h>
-#include <qimagereader.h>
-
+#include <qdrawhelper_p.h>
 #include <qfont_p.h>
 #include <qimage_p.h>
-#include <qnativeimage_p.h>
-#include <qpixmap_raster_p.h>
 #include <qimage_p.h>
+#include <qnativeimage_p.h>
 #include <qsimd_p.h>
 #include <qwidget_p.h>
-#include <qdrawhelper_p.h>
 
 QPixmap qt_toRasterPixmap(const QImage &image)
 {

@@ -28,17 +28,17 @@
 
 #ifndef QT_NO_MDIAREA
 
+#include <qdebug.h>
+#include <qmenubar.h>
+#include <qpointer.h>
+#include <qsizegrip.h>
 #include <qstyle.h>
 #include <qstyleoptiontitlebar.h>
-#include <qmenubar.h>
-#include <qsizegrip.h>
-#include <qpointer.h>
-#include <qdebug.h>
 
 #include <qwidget_p.h>
 
-class QVBoxLayout;
 class QMouseEvent;
+class QVBoxLayout;
 
 namespace QMdi {
 

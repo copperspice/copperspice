@@ -25,14 +25,17 @@
 #define QTOOLBAR_P_H
 
 #include <qtoolbar.h>
+
 #include <qaction.h>
-#include <qwidget_p.h>
 #include <qbasictimer.h>
+#include <qlayoutitem.h>
+
+#include <qwidget_p.h>
 
 #ifndef QT_NO_TOOLBAR
 
-class QToolBarLayout;
 class QTimer;
+class QToolBarLayout;
 
 class QToolBarPrivate : public QWidgetPrivate
 {

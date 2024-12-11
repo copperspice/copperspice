@@ -26,9 +26,10 @@
 
 #include <qabstractbutton.h>
 
-class QPushButtonPrivate;
 class QMenu;
 class QStyleOptionButton;
+
+class QPushButtonPrivate;
 
 class Q_GUI_EXPORT QPushButton : public QAbstractButton
 {

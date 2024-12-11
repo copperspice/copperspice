@@ -34,9 +34,9 @@
 
 class QGraphicsItem;
 class QGraphicsSceneBspTreeVisitor;
+class QGraphicsSceneFindItemBspTreeVisitor;
 class QGraphicsSceneInsertItemBspTreeVisitor;
 class QGraphicsSceneRemoveItemBspTreeVisitor;
-class QGraphicsSceneFindItemBspTreeVisitor;
 
 class QGraphicsSceneBspTree
 {

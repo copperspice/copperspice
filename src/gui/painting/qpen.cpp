@@ -23,10 +23,11 @@
 
 #include <qpen.h>
 #include <qpen_p.h>
-#include <qdatastream.h>
-#include <qvariant.h>
+
 #include <qbrush.h>
+#include <qdatastream.h>
 #include <qdebug.h>
+#include <qvariant.h>
 
 typedef QPenPrivate QPenData;
 

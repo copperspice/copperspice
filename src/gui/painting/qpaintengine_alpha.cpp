@@ -25,12 +25,14 @@
 
 #ifndef QT_NO_PRINTER
 
-#include <qdebug.h>
 #include <qpaintengine_alpha_p.h>
+
+#include <qdebug.h>
+#include <qpicture.h>
+
+#include <qfont_p.h>
 #include <qpainter_p.h>
 #include <qpicture_p.h>
-#include <qfont_p.h>
-#include <qpicture.h>
 
 QAlphaPaintEngine::QAlphaPaintEngine(QAlphaPaintEnginePrivate &data, PaintEngineFeatures devcaps)
    : QPaintEngine(data, devcaps)

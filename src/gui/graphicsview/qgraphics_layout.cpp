@@ -26,11 +26,12 @@
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <qgraphicslayout.h>
-#include <qgraphicslayoutitem.h>
-#include <qgraphicswidget.h>
-#include <qgraphicsscene.h>
-
 #include <qgraphics_layout_p.h>
+
+#include <qgraphicslayoutitem.h>
+#include <qgraphicsscene.h>
+#include <qgraphicswidget.h>
+
 #include <qgraphics_layoutitem_p.h>
 #include <qgraphics_widget_p.h>
 

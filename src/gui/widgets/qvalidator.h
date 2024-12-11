@@ -24,17 +24,17 @@
 #ifndef QVALIDATOR_H
 #define QVALIDATOR_H
 
-#include <qobject.h>
-#include <qstring.h>
-#include <qregularexpression.h>
 #include <qlocale.h>
+#include <qobject.h>
+#include <qregularexpression.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
 
 #ifndef QT_NO_VALIDATOR
 
-class QValidatorPrivate;
 class QDoubleValidatorPrivate;
 class QRegularExpressionValidatorPrivate;
+class QValidatorPrivate;
 
 class Q_GUI_EXPORT QValidator : public QObject
 {

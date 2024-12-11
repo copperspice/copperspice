@@ -29,13 +29,14 @@
 
 #ifndef QT_NO_MDIAREA
 
-#include <QList>
-#include <QVector>
-#include <QRect>
-#include <QPoint>
 #include <qapplication.h>
-#include <qmdisubwindow_p.h>
+#include <qlist.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qvector.h>
+
 #include <qabstractscrollarea_p.h>
+#include <qmdisubwindow_p.h>
 
 class QMdiAreaTabBar;
 

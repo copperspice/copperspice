@@ -24,23 +24,24 @@
 #ifndef QPLATFORM_SCREEN_H
 #define QPLATFORM_SCREEN_H
 
-#include <qnamespace.h>
 #include <qcoreevent.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qobject.h>
 #include <qcursor.h>
 #include <qimage.h>
-#include <qwindowdefs.h>
+#include <qnamespace.h>
+#include <qobject.h>
 #include <qplatform_pixmap.h>
+#include <qrect.h>
+#include <qvariant.h>
+#include <qwindowdefs.h>
 
+class QPlatformBackingStore;
+class QPlatformCursor;
+class QPlatformOpenGLContext;
+class QPlatformWindow;
 class QScreen;
 class QSurfaceFormat;
-class QPlatformCursor;
-class QPlatformBackingStore;
-class QPlatformOpenGLContext;
+
 class QPlatformScreenPrivate;
-class QPlatformWindow;
 
 using QDpi = QPair<qreal, qreal>;
 

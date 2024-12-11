@@ -23,18 +23,18 @@
 
 #include <qpaintengine.h>
 #include <qpaintengine_p.h>
-#include <qpainter_p.h>
-#include <qpolygon.h>
-#include <qbitmap.h>
 
+#include <qapplication.h>
+#include <qbitmap.h>
 #include <qdebug.h>
 #include <qmath.h>
-#include <qguiapplication.h>
-
-#include <qtextengine_p.h>
+#include <qpolygon.h>
 #include <qvarlengtharray.h>
+
 #include <qfontengine_p.h>
 #include <qpaintengineex_p.h>
+#include <qpainter_p.h>
+#include <qtextengine_p.h>
 
 qreal QTextItem::descent() const
 {

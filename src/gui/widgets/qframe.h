@@ -26,8 +26,9 @@
 
 #include <qwidget.h>
 
-class QFramePrivate;
 class QStyleOptionFrame;
+
+class QFramePrivate;
 
 class Q_GUI_EXPORT QFrame : public QWidget
 {

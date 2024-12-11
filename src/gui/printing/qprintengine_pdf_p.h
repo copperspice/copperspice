@@ -28,25 +28,25 @@
 
 #ifndef QT_NO_PRINTER
 
+#include <qdatastream.h>
 #include <qmap.h>
 #include <qmatrix.h>
-#include <qstring.h>
-#include <qvector.h>
 #include <qpaintengine.h>
 #include <qpainterpath.h>
-#include <qdatastream.h>
+#include <qstring.h>
+#include <qvector.h>
 
+#include <qpaintengine_p.h>
+#include <qpaintengine_p.h>
 #include <qpdf_p.h>
-#include <qpaintengine_p.h>
-#include <qpaintengine_p.h>
 #include <qprint_p.h>
 
-class QImage;
 class QDataStream;
+class QFile;
+class QImage;
 class QPen;
 class QPointF;
 class QRegion;
-class QFile;
 
 class QPdfPrintEnginePrivate;
 

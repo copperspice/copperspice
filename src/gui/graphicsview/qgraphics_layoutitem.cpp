@@ -25,14 +25,14 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qgraphicslayoutitem.h>
+#include <qgraphics_layoutitem_p.h>
+
+#include <qdebug.h>
 #include <qgraphicslayout.h>
 #include <qgraphicsscene.h>
-#include <qgraphicslayoutitem.h>
-#include <qwidget.h>
 #include <qgraphicswidget.h>
-#include <qdebug.h>
-
-#include <qgraphics_layoutitem_p.h>
+#include <qwidget.h>
 
 /*
     COMBINE_SIZE() is identical to combineSize(), except that it

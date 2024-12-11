@@ -22,15 +22,15 @@
 ***********************************************************************/
 
 #include <qtextdocumentfragment.h>
+#include <qtextdocumentfragment_p.h>
 
-#include <qtextlist.h>
-#include <qdebug.h>
-#include <qtextcodec.h>
 #include <qbytearray.h>
 #include <qdatastream.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qtextcodec.h>
+#include <qtextlist.h>
 
-#include <qtextdocumentfragment_p.h>
 #include <qtextcursor_p.h>
 
 QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &_destination,

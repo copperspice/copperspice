@@ -29,7 +29,7 @@
 #include <qplatform_integration.h>
 #include <qwindow.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qwidget_p.h>
 
 class QWindowContainerPrivate : public QWidgetPrivate

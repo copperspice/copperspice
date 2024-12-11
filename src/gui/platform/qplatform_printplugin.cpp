@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#include "qplatform_printplugin.h"
-#include "qplatform_printersupport.h"
+#include <qplatform_printplugin.h>
 
-#include <qprinterinfo.h>
-#include <qfactoryloader_p.h>
 #include <qcoreapplication.h>
+#include <qplatform_printersupport.h>
+#include <qprinterinfo.h>
+
+#include <qfactoryloader_p.h>
 
 static QFactoryLoader *loader()
 {

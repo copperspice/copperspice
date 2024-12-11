@@ -24,16 +24,17 @@
 #ifndef QITEMSELECTIONMODEL_H
 #define QITEMSELECTIONMODEL_H
 
+#include <qabstractitemmodel.h>
+#include <qlist.h>
+#include <qscopedpointer.h>
 #include <qset.h>
 #include <qvector.h>
-#include <qlist.h>
-#include <qabstractitemmodel.h>
-#include <qscopedpointer.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
 class QItemSelection;
 class QItemSelectionModel;
+
 class QItemSelectionModelPrivate;
 
 CS_DECLARE_METATYPE(QItemSelection)

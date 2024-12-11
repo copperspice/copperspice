@@ -26,11 +26,12 @@
 
 #include <qstring.h>
 
-class QTextDocumentWriterPrivate;
-class QIODevice;
 class QByteArray;
+class QIODevice;
 class QTextDocument;
 class QTextDocumentFragment;
+
+class QTextDocumentWriterPrivate;
 
 class Q_GUI_EXPORT QTextDocumentWriter
 {

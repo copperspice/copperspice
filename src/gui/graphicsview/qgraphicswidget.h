@@ -25,18 +25,19 @@
 #define QGRAPHICSWIDGET_H
 
 #include <qfont.h>
+#include <qgraphicsitem.h>
 #include <qgraphicslayout.h>
 #include <qgraphicslayoutitem.h>
-#include <qgraphicsitem.h>
 #include <qpalette.h>
 
 class QFont;
 class QFontMetrics;
 class QGraphicsSceneMoveEvent;
-class QGraphicsWidgetPrivate;
 class QGraphicsSceneResizeEvent;
 class QStyle;
 class QStyleOption;
+
+class QGraphicsWidgetPrivate;
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 

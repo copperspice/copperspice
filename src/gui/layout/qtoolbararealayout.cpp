@@ -21,17 +21,18 @@
 *
 ***********************************************************************/
 
-#include <QWidgetItem>
-#include <QToolBar>
-#include <QStyleOption>
-#include <QApplication>
-#include <qdebug.h>
-
 #include <qtoolbararealayout_p.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qstyleoption.h>
+#include <qtoolbar.h>
+#include <qwidgetitem.h>
+
 #include <qmainwindowlayout_p.h>
-#include <qwidgetanimator_p.h>
-#include <qtoolbarlayout_p.h>
 #include <qtoolbar_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qwidgetanimator_p.h>
 
 #ifndef QT_NO_TOOLBAR
 

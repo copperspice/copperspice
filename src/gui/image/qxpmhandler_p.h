@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_IMAGEFORMAT_XPM
 
-
-
 class QXpmHandler : public QImageIOHandler
 {
  public:

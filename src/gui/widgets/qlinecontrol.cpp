@@ -31,6 +31,8 @@
 #include <qplatform_theme.h>
 #include <qstylehints.h>
 
+#include <qapplication_p.h>
+
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
@@ -38,8 +40,6 @@
 #ifndef QT_NO_GRAPHICSVIEW
 #include <qgraphicssceneevent.h>
 #endif
-
-#include <qguiapplication_p.h>
 
 int QLineControl::redoTextLayout() const
 {

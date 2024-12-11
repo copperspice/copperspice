@@ -24,11 +24,11 @@
 #ifndef QGRAPHICSSCENE_H
 #define QGRAPHICSSCENE_H
 
-#include <qobject.h>
 #include <qbrush.h>
 #include <qcontainerfwd.h>
 #include <qfont.h>
 #include <qmatrix.h>
+#include <qobject.h>
 #include <qpalette.h>
 #include <qpen.h>
 #include <qpoint.h>
@@ -55,13 +55,13 @@ class QGraphicsSceneDragDropEvent;
 class QGraphicsSceneEvent;
 class QGraphicsSceneHelpEvent;
 class QGraphicsSceneHoverEvent;
+class QGraphicsSceneIndex;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
 class QGraphicsSimpleTextItem;
 class QGraphicsTextItem;
 class QGraphicsView;
 class QGraphicsWidget;
-class QGraphicsSceneIndex;
 class QHelpEvent;
 class QInputMethodEvent;
 class QKeyEvent;
@@ -74,6 +74,7 @@ class QRectF;
 class QSizeF;
 class QStyle;
 class QStyleOptionGraphicsItem;
+
 class QGraphicsScenePrivate;
 
 class Q_GUI_EXPORT QGraphicsScene : public QObject

@@ -27,10 +27,10 @@
 #ifndef QT_NO_PICTURE
 
 #include <qalgorithms.h>
+#include <qapplication.h>
 #include <qdatastream.h>
 #include <qdebug.h>
 #include <qfile.h>
-#include <qguiapplication.h>
 #include <qimage.h>
 #include <qmutex.h>
 #include <qpainter.h>

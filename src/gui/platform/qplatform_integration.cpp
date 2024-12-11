@@ -29,8 +29,8 @@
 #include <qplatform_theme.h>
 
 #include <qapplication_p.h>
-#include <qpixmap_raster_p.h>
 #include <qdnd_p.h>
+#include <qpixmap_raster_p.h>
 #include <qsimpledrag_p.h>
 
 #ifndef QT_NO_SESSIONMANAGER

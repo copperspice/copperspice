@@ -24,36 +24,36 @@
 #ifndef QPAINTER_H
 #define QPAINTER_H
 
-#include <qnamespace.h>
-#include <qrect.h>
-#include <qpoint.h>
-#include <qscopedpointer.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qtextoption.h>
-
-#include <qpolygon.h>
-#include <qpen.h>
 #include <qbrush.h>
-#include <qmatrix.h>
-#include <qtransform.h>
 #include <qfontinfo.h>
 #include <qfontmetrics.h>
+#include <qimage.h>
+#include <qmatrix.h>
+#include <qnamespace.h>
+#include <qpen.h>
+#include <qpixmap.h>
+#include <qpoint.h>
+#include <qpolygon.h>
+#include <qrect.h>
+#include <qscopedpointer.h>
+#include <qtextoption.h>
+#include <qtransform.h>
 
 class QBrush;
 class QFontInfo;
 class QFontMetrics;
+class QGlyphRun;
+class QMatrix;
 class QPaintDevice;
 class QPainterPath;
-class QPainterPrivate;
 class QPen;
 class QPolygon;
-class QTextItem;
-class QTextEngine;
-class QMatrix;
-class QTransform;
 class QStaticText;
-class QGlyphRun;
+class QTextEngine;
+class QTextItem;
+class QTransform;
+
+class QPainterPrivate;
 class QPainterPrivateDeleter;
 
 class Q_GUI_EXPORT QPainter

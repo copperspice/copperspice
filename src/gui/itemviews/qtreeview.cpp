@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtreeview.h>
+#include <qtreeview_p.h>
 
 #ifndef QT_NO_TREEVIEW
 
@@ -43,7 +44,6 @@
 #endif
 
 #include <qheaderview_p.h>
-#include <qtreeview_p.h>
 
 #include <algorithm>
 

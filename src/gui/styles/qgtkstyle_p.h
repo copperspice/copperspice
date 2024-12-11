@@ -24,18 +24,18 @@
 #ifndef QGTKSTYLE_P_H
 #define QGTKSTYLE_P_H
 
-#include <qwindows_style_p.h>
-
+#include <qfiledialog.h>
+#include <qfont.h>
 #include <qglobal.h>
-#include <QPalette>
-#include <QFont>
-#include <QFileDialog>
+#include <qpalette.h>
+
+#include <qwindows_style_p.h>
 
 #if ! defined(QT_NO_STYLE_GTK)
 
-#include <qstring.h>
 #include <qcoreapplication.h>
 #include <qfiledialog.h>
+#include <qstring.h>
 
 #include <qcommonstyle_p.h>
 #include <qgtkglobal_p.h>
@@ -45,8 +45,9 @@
 
 #define Q_GTK_IS_WIDGET(widget) widget && G_TYPE_CHECK_INSTANCE_TYPE ((widget), QGtkStylePrivate::gtk_widget_get_type())
 
-class QPainterPath;;
 class QGtkPainter;
+class QPainterPath;
+
 class QGtkStylePrivate;
 
 class QGtkStyle : public QCommonStyle

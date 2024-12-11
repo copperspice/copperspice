@@ -25,22 +25,22 @@
 
 #include <qabstractbutton.h>
 #include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qprogressbar.h>
-#include <qstatusbar.h>
-#include <qradiobutton.h>
-#include <qtoolbutton.h>
-#include <qmenu.h>
-#include <qlabel.h>
 #include <qgroupbox.h>
+#include <qlabel.h>
 #include <qlcdnumber.h>
 #include <qlineedit.h>
 #include <qlineedit_p.h>
+#include <qmenu.h>
+#include <qprogressbar.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qstatusbar.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qtextdocument.h>
-#include <qwindow.h>
+#include <qtoolbutton.h>
 #include <qvarlengtharray.h>
+#include <qwindow.h>
 
 #ifdef Q_OS_DARWIN
 #include <qfocusframe.h>

@@ -25,9 +25,9 @@
 #define QPAGELAYOUT_H
 
 #include <qmargins.h>
+#include <qpagesize.h>
 #include <qsharedpointer.h>
 #include <qstring.h>
-#include <qpagesize.h>
 
 class QPageLayoutPrivate;
 

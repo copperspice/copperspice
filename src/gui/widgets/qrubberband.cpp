@@ -21,17 +21,18 @@
 *
 ***********************************************************************/
 
+#include <qrubberband.h>
+
 #include <qbitmap.h>
 #include <qevent.h>
 #include <qstylepainter.h>
-#include <qrubberband.h>
 #include <qtimer.h>
 
 #ifndef QT_NO_RUBBERBAND
 
+#include <qdebug.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qdebug.h>
 
 #include <qwidget_p.h>
 

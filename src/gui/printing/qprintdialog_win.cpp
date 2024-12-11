@@ -23,13 +23,13 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <qprintdialog.h>
-#include <qwidget.h>
 #include <qapplication.h>
 #include <qmessagebox.h>
+#include <qprintdialog.h>
+#include <qwidget.h>
 
-#include <qapplication_p.h>
 #include <qabstractprintdialog_p.h>
+#include <qapplication_p.h>
 #include <qprintengine_win_p.h>
 #include <qprinter_p.h>
 

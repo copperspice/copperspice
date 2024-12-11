@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-#import  <Cocoa/Cocoa.h>
-
 #include <qmaccocoaviewcontainer_mac.h>
 
 #include <qdebug.h>
@@ -30,6 +28,8 @@
 #include <qwindow.h>
 
 #include <qwidget_p.h>
+
+#import  <Cocoa/Cocoa.h>
 
 namespace {
 

@@ -29,6 +29,7 @@
 #include <qitemdelegate.h>
 #include <qmetaobject.h>
 #include <qwidget.h>
+
 #include <qabstractitemmodel_p.h>
 
 class QDataWidgetMapperPrivate

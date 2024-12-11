@@ -24,10 +24,10 @@
 #ifndef QMENU_H
 #define QMENU_H
 
-#include <qwidget.h>
-#include <qstring.h>
-#include <qicon.h>
 #include <qaction.h>
+#include <qicon.h>
+#include <qstring.h>
+#include <qwidget.h>
 
 #ifdef Q_OS_DARWIN
 

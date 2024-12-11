@@ -31,6 +31,7 @@
 class QPalette;
 class QPushButton;
 class QStyleOptionButton;
+
 class QMacStylePrivate;
 
 class QMacStyle : public QCommonStyle

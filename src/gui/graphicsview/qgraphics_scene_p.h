@@ -28,19 +28,19 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
+#include <qbitarray.h>
+#include <qfont.h>
 #include <qgraphicssceneevent.h>
 #include <qgraphicsview.h>
-#include <qbitarray.h>
 #include <qlist.h>
 #include <qmap.h>
-#include <qset.h>
-#include <qfont.h>
 #include <qpalette.h>
+#include <qset.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 
-#include <qgraphics_view_p.h>
 #include <qgraphics_item_p.h>
+#include <qgraphics_view_p.h>
 
 class QGraphicsSceneIndex;
 class QGraphicsView;

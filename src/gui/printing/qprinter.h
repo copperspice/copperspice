@@ -24,19 +24,20 @@
 #ifndef QPRINTER_H
 #define QPRINTER_H
 
-#include <qstring.h>
-#include <qscopedpointer.h>
 #include <qpagedpaintdevice.h>
 #include <qpagelayout.h>
+#include <qscopedpointer.h>
+#include <qstring.h>
 
 #ifndef QT_NO_PRINTER
 
-class QPrinterPrivate;
+class QPageMargins;
+class QPageSize;
 class QPaintEngine;
 class QPrintEngine;
 class QPrinterInfo;
-class QPageSize;
-class QPageMargins;
+
+class QPrinterPrivate;
 
 class Q_GUI_EXPORT QPrinter : public QPagedPaintDevice
 {

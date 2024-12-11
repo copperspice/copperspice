@@ -31,7 +31,7 @@
 #include <qplatform_services.h>
 #include <qplatform_theme.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qicon_p.h>
 
 #if defined(Q_OS_WIN)

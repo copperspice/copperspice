@@ -24,8 +24,8 @@
 #ifndef QICONENGINEPLUGIN_H
 #define QICONENGINEPLUGIN_H
 
-#include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qplugin.h>
 
 class QIconEngine;
 

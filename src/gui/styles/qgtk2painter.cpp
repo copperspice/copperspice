@@ -27,15 +27,12 @@
 
 #if ! defined(QT_NO_STYLE_GTK)
 
-// This class is primarily a wrapper around the gtk painter functions
-// and takes care of converting all such calls into cached Qt pixmaps.
+#include <qlibrary.h>
+#include <qpixmapcache.h>
+#include <qwidget.h>
 
 #include <qgtkstyle_p.h>
 #include <qhexstring_p.h>
-#include <QWidget>
-#include <QPixmapCache>
-#include <QLibrary>
-
 
 typedef GdkPixbuf* (*Ptr_gdk_pixbuf_get_from_drawable) (GdkPixbuf *, GdkDrawable *, GdkColormap *, int, int, int, int, int, int);
 typedef GdkPixmap* (*Ptr_gdk_pixmap_new) (GdkDrawable *, gint, gint, gint);

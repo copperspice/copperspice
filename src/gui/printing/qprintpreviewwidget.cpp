@@ -24,10 +24,10 @@
 #include <qprintpreviewwidget.h>
 
 #include <qalgorithms.h>
-#include <qmath.h>
 #include <qboxlayout.h>
 #include <qgraphicsitem.h>
 #include <qgraphicsview.h>
+#include <qmath.h>
 #include <qscrollbar.h>
 #include <qstyleoption.h>
 

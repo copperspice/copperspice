@@ -24,14 +24,14 @@
 #ifndef QWIDGETANIMATOR_P_H
 #define QWIDGETANIMATOR_P_H
 
-#include <qobject.h>
 #include <qhash.h>
+#include <qobject.h>
 #include <qpointer.h>
 
-class QWidget;
 class QMainWindowLayout;
 class QPropertyAnimation;
 class QRect;
+class QWidget;
 
 class QWidgetAnimator : public QObject
 {

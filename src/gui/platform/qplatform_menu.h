@@ -24,11 +24,11 @@
 #ifndef QPLATFORM_MENU_H
 #define QPLATFORM_MENU_H
 
-#include <qglobal.h>
-#include <qpointer.h>
 #include <qfont.h>
-#include <qkeysequence.h>
+#include <qglobal.h>
 #include <qicon.h>
+#include <qkeysequence.h>
+#include <qpointer.h>
 
 class QPlatformMenu;
 

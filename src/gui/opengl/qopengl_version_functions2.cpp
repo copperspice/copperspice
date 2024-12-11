@@ -25,16 +25,16 @@
 #include <qopengl_version_functions_p.h>
 
 #if ! defined(QT_OPENGL_ES_2)
-#include "qopenglfunctions_3_1.h"
-#include "qopenglfunctions_3_0.h"
-#include "qopenglfunctions_2_1.h"
-#include "qopenglfunctions_2_0.h"
-#include "qopenglfunctions_1_5.h"
-#include "qopenglfunctions_1_4.h"
-#include "qopenglfunctions_1_3.h"
-#include "qopenglfunctions_1_2.h"
-#include "qopenglfunctions_1_1.h"
-#include "qopenglfunctions_1_0.h"
+#include <qopenglfunctions_1_0.h>
+#include <qopenglfunctions_1_1.h>
+#include <qopenglfunctions_1_2.h>
+#include <qopenglfunctions_1_3.h>
+#include <qopenglfunctions_1_4.h>
+#include <qopenglfunctions_1_5.h>
+#include <qopenglfunctions_2_0.h>
+#include <qopenglfunctions_2_1.h>
+#include <qopenglfunctions_3_0.h>
+#include <qopenglfunctions_3_1.h>
 #endif
 
 QAbstractOpenGLFunctions *QOpenGLVersionFunctionsFactory::createNoProfile(const int major, const int minor)

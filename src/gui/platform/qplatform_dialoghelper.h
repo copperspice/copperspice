@@ -24,26 +24,27 @@
 #ifndef QPLATFORM_DIALOGHELPER_H
 #define QPLATFORM_DIALOGHELPER_H
 
-#include <qglobal.h>
-#include <qfont.h>
+#include <qdir.h>
 #include <qfiledialog.h>
-#include <qobject.h>
+#include <qfont.h>
+#include <qglobal.h>
 #include <qlist.h>
+#include <qobject.h>
+#include <qrgb.h>
 #include <qshareddatapointer.h>
 #include <qsharedpointer.h>
 #include <qstring.h>
-#include <qdir.h>
 #include <qurl.h>
-#include <qrgb.h>
 
 class QColor;
-class QWindow;
-class QVariant;
 class QUrl;
+class QVariant;
+class QWindow;
+
 class QColorDialogOptionsPrivate;
 class QFontDialogOptionsPrivate;
-class QPlatformFileDialogOptionsPrivate;
 class QMessageDialogOptionsPrivate;
+class QPlatformFileDialogOptionsPrivate;
 
 class Q_GUI_EXPORT QPlatformDialogHelper : public QObject
 {

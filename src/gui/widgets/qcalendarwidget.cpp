@@ -26,21 +26,21 @@
 #ifndef QT_NO_CALENDARWIDGET
 
 #include <qabstractitemmodel.h>
-#include <qitemdelegate.h>
-#include <qdatetime.h>
-#include <qtableview.h>
-#include <qlayout.h>
-#include <qevent.h>
-#include <qtextformat.h>
-#include <qheaderview.h>
-#include <qpushbutton.h>
-#include <qtoolbutton.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qmenu.h>
 #include <qapplication.h>
 #include <qbasictimer.h>
+#include <qdatetime.h>
+#include <qevent.h>
+#include <qheaderview.h>
+#include <qitemdelegate.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qmenu.h>
+#include <qpushbutton.h>
+#include <qspinbox.h>
 #include <qstylepainter.h>
+#include <qtableview.h>
+#include <qtextformat.h>
+#include <qtoolbutton.h>
 
 #include <qwidget_p.h>
 

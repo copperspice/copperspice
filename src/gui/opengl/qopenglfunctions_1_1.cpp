@@ -22,8 +22,9 @@
 *
 ***********************************************************************/
 
-#include "qopenglfunctions_1_1.h"
-#include "qopenglcontext.h"
+#include <qopenglfunctions_1_1.h>
+
+#include <qopenglcontext.h>
 
 QOpenGLFunctions_1_1::QOpenGLFunctions_1_1()
  : QAbstractOpenGLFunctions()

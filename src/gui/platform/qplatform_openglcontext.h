@@ -27,9 +27,10 @@
 #include <qnamespace.h>
 
 #ifndef QT_NO_OPENGL
+
+#include <qopengl.h>
 #include <qsurfaceformat.h>
 #include <qwindow.h>
-#include <qopengl.h>
 
 class QPlatformOpenGLContextPrivate;
 

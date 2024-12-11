@@ -23,29 +23,29 @@
 
 #include <qaccessiblewidget_common_p.h>
 
+#include <qabstractbutton.h>
+#include <qabstractitemview.h>
 #include <qabstracttextdocumentlayout.h>
 #include <qapplication.h>
-#include <qclipboard.h>
-#include <qtextedit.h>
-#include <qtextdocument.h>
-#include <qtextobject.h>
-#include <qplaintextedit.h>
-#include <qtextboundaryfinder.h>
-#include <qscrollbar.h>
 #include <qapplication.h>
-#include <qstackedwidget.h>
-#include <qtoolbox.h>
+#include <qcalendarwidget.h>
+#include <qclipboard.h>
+#include <qdialogbuttonbox.h>
+#include <qdockwidget.h>
+#include <qfocusframe.h>
+#include <qmainwindow.h>
 #include <qmdiarea.h>
 #include <qmdisubwindow.h>
-#include <qdialogbuttonbox.h>
+#include <qplaintextedit.h>
 #include <qrubberband.h>
+#include <qscrollbar.h>
+#include <qstackedwidget.h>
+#include <qtextboundaryfinder.h>
 #include <qtextbrowser.h>
-#include <qcalendarwidget.h>
-#include <qabstractitemview.h>
-#include <qdockwidget.h>
-#include <qmainwindow.h>
-#include <qabstractbutton.h>
-#include <qfocusframe.h>
+#include <qtextdocument.h>
+#include <qtextedit.h>
+#include <qtextobject.h>
+#include <qtoolbox.h>
 
 #include <qdockwidget_p.h>
 #include <qtextedit_p.h>

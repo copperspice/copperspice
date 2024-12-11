@@ -23,11 +23,11 @@
 
 #include <qcolor.h>
 #include <qcolor_p.h>
-#include <qnamespace.h>
 
 #include <qdatastream.h>
-#include <qvariant.h>
 #include <qdebug.h>
+#include <qnamespace.h>
+#include <qvariant.h>
 
 #include <stdio.h>
 #include <limits.h>

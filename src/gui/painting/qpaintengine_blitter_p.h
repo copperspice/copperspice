@@ -28,10 +28,10 @@
 
 #ifndef QT_NO_BLITTABLE
 
+class QBlittable;
+class QBlittablePlatformPixmap;
 
 class QBlitterPaintEnginePrivate;
-class QBlittablePlatformPixmap;
-class QBlittable;
 
 class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 {

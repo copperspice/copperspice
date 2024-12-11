@@ -24,8 +24,9 @@
 #ifndef QMATH_P_H
 #define QMATH_P_H
 
-#include <math.h>
 #include <qmath.h>
+
+#include <math.h>
 
 static constexpr const qreal Q_PI   = qreal(M_PI);
 static constexpr const qreal Q_2PI  = qreal(M_PI * 2);

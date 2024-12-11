@@ -41,8 +41,8 @@
 #include <qstyleoption.h>
 #include <qtextedit.h>
 
-#include <qwidget_p.h>
 #include <qapplication_p.h>
+#include <qwidget_p.h>
 
 extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
 Q_GUI_EXPORT extern bool qt_tab_all_widgets();

@@ -24,13 +24,14 @@
 #ifndef QFONT_H
 #define QFONT_H
 
-#include <qwindowdefs.h>
-#include <qstring.h>
 #include <qsharedpointer.h>
+#include <qstring.h>
+#include <qwindowdefs.h>
 
-class QFontPrivate;
 class QStringList;
 class QVariant;
+
+class QFontPrivate;
 
 class Q_GUI_EXPORT QFont
 {

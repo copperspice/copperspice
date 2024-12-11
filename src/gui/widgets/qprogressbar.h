@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_PROGRESSBAR
 
-class QProgressBarPrivate;
 class QStyleOptionProgressBar;
+
+class QProgressBarPrivate;
 
 class Q_GUI_EXPORT QProgressBar : public QWidget
 {

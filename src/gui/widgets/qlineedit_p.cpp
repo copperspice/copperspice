@@ -29,8 +29,8 @@
 #include <qabstractitemview.h>
 #include <qclipboard.h>
 #include <qdrag.h>
-#include <qpropertyanimation.h>
 #include <qmimedata.h>
+#include <qpropertyanimation.h>
 #include <qvariant.h>
 #include <qwidgetaction.h>
 

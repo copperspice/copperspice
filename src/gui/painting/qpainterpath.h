@@ -24,12 +24,12 @@
 #ifndef QPAINTERPATH_H
 #define QPAINTERPATH_H
 
-#include <qmatrix.h>
 #include <qglobal.h>
-#include <qrect.h>
 #include <qline.h>
-#include <qvector.h>
+#include <qmatrix.h>
+#include <qrect.h>
 #include <qscopedpointer.h>
+#include <qvector.h>
 
 class QFont;
 class QPen;

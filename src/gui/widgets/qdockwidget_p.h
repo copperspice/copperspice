@@ -24,19 +24,20 @@
 #ifndef QDockWidget_P_H
 #define QDockWidget_P_H
 
-#include <qstyleoption.h>
-#include <qwidget_p.h>
 #include <qboxlayout.h>
 #include <qdockwidget.h>
+#include <qstyleoption.h>
+
+#include <qwidget_p.h>
 
 #ifndef QT_NO_DOCKWIDGET
 
-class QGridLayout;
-class QWidgetResizeHandler;
-class QRubberBand;
-class QDockWidgetTitleButton;
-class QSpacerItem;
 class QDockWidgetItem;
+class QDockWidgetTitleButton;
+class QGridLayout;
+class QRubberBand;
+class QSpacerItem;
+class QWidgetResizeHandler;
 
 class QDockWidgetPrivate : public QWidgetPrivate
 {

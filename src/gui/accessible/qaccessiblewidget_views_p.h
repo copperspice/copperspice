@@ -24,11 +24,11 @@
 #ifndef ACCESSIBLE_ITEMVIEWS_H
 #define ACCESSIBLE_ITEMVIEWS_H
 
-#include <qpointer.h>
+#include <qabstractitemview.h>
 #include <qaccessible.h>
 #include <qaccessiblewidget.h>
-#include <qabstractitemview.h>
 #include <qheaderview.h>
+#include <qpointer.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

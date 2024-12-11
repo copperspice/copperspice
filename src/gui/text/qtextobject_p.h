@@ -25,12 +25,12 @@
 #define QTEXTOBJECT_P_H
 
 #include <qtextobject.h>
+
 #include <qtextdocument.h>
 
-
+class QTextFrameLayoutData;
 
 class QTextDocumentPrivate;
-class QTextFrameLayoutData;
 
 class QTextObjectPrivate
 {

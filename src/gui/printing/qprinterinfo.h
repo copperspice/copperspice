@@ -24,16 +24,17 @@
 #ifndef QPRINTERINFO_H
 #define QPRINTERINFO_H
 
-#include <qprinter.h>
 #include <qlist.h>
-#include <qpair.h>
 #include <qpagesize.h>
+#include <qpair.h>
+#include <qprinter.h>
 
 #ifndef QT_NO_PRINTER
 
+class QDebug;
+
 class QPrinterInfoPrivate;
 class QPrinterInfoPrivateDeleter;
-class QDebug;
 
 namespace cs_internal {
    struct QPrinterInfoPrivateDeleter {

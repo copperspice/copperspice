@@ -24,19 +24,19 @@
 #ifndef COMPLEXWIDGETS_H
 #define COMPLEXWIDGETS_H
 
-#include <qpointer.h>
-#include <qaccessiblewidget.h>
 #include <qabstractitemview.h>
+#include <qaccessiblewidget.h>
+#include <qpointer.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAbstractButton;
-class QHeaderView;
-class QTabBar;
-class QComboBox;
-class QTitleBar;
 class QAbstractScrollArea;
+class QComboBox;
+class QHeaderView;
 class QScrollArea;
+class QTabBar;
+class QTitleBar;
 
 #ifndef QT_NO_SCROLLAREA
 class QAccessibleAbstractScrollArea : public QAccessibleWidget

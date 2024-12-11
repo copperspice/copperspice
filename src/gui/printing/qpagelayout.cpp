@@ -23,10 +23,10 @@
 
 #include <qpagelayout.h>
 
+#include <qdebug.h>
 #include <qpoint.h>
 #include <qrect.h>
 #include <qsize.h>
-#include <qdebug.h>
 
 // multiplier for converting units to points.
 Q_GUI_EXPORT qreal qt_pointMultiplier(QPageLayout::Unit unit)

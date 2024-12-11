@@ -24,17 +24,17 @@
 #ifndef QPRINTDEVICE_H
 #define QPRINTDEVICE_H
 
-#include <qprint_p.h>
-
-#include <qsharedpointer.h>
 #include <qpagelayout.h>
+#include <qsharedpointer.h>
+
+#include <qprint_p.h>
 
 #ifndef QT_NO_PRINTER
 
-class QPlatformPrintDevice;
+class QDebug;
 class QMarginsF;
 class QMimeType;
-class QDebug;
+class QPlatformPrintDevice;
 
 class Q_GUI_EXPORT QPrintDevice
 {

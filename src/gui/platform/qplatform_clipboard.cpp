@@ -26,8 +26,8 @@
 #ifndef QT_NO_CLIPBOARD
 
 #include <qmimedata.h>
-#include <qapplication_p.h>
 
+#include <qapplication_p.h>
 
 class QClipboardData
 {

@@ -25,8 +25,8 @@
 #define QACCESSIBLECACHE_P
 
 #include <qglobal.h>
-#include <qobject.h>
 #include <qhash.h>
+#include <qobject.h>
 
 #include <qaccessible.h>
 

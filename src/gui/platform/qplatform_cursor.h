@@ -25,12 +25,12 @@
 #define QPlatform_Cursor_H
 
 #include <qcursor.h>
-#include <qlist.h>
 #include <qimage.h>
+#include <qlist.h>
 #include <qmouseevent.h>
-#include <qweakpointer.h>
 #include <qobject.h>
 #include <qplatform_screen.h>
+#include <qweakpointer.h>
 
 class QPlatformCursor;
 

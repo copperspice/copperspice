@@ -22,27 +22,27 @@
 ***********************************************************************/
 
 #include <qheaderview.h>
+#include <qheaderview_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
+#include <qabstractitemdelegate.h>
+#include <qapplication.h>
 #include <qbitarray.h>
 #include <qbrush.h>
+#include <qdatastream.h>
 #include <qdebug.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qscrollbar.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qvector.h>
-#include <qapplication.h>
-#include <qvarlengtharray.h>
-#include <qabstractitemdelegate.h>
+#include <qtooltip.h>
 #include <qvariant.h>
-#include <qdatastream.h>
+#include <qvarlengtharray.h>
+#include <qvector.h>
+#include <qwhatsthis.h>
 
-#include <qheaderview_p.h>
 #include <qabstractitemmodel_p.h>
 
 QDataStream &operator<<(QDataStream &out, const QHeaderViewPrivate::SectionItem &section)

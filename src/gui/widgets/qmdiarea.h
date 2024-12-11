@@ -30,6 +30,7 @@
 #ifndef QT_NO_MDIAREA
 
 class QMdiSubWindow;
+
 class QMdiAreaPrivate;
 
 class Q_GUI_EXPORT QMdiArea : public QAbstractScrollArea

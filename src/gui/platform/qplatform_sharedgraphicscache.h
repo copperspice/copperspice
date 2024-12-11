@@ -24,8 +24,8 @@
 #ifndef QPLATFORM_SHAREDGRAPHICSCACHE_H
 #define QPLATFORM_SHAREDGRAPHICSCACHE_H
 
-#include <qobject.h>
 #include <qimage.h>
+#include <qobject.h>
 
 class Q_GUI_EXPORT QPlatformSharedGraphicsCache: public QObject
 {

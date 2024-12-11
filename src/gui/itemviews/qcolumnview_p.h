@@ -28,16 +28,16 @@
 
 #ifndef QT_NO_QCOLUMNVIEW
 
-#include <qabstractitemview_p.h>
-
-#include <qabstractitemmodel.h>
-#include <qpropertyanimation.h>
 #include <qabstractitemdelegate.h>
+#include <qabstractitemmodel.h>
 #include <qabstractitemview.h>
+#include <qevent.h>
 #include <qitemdelegate.h>
 #include <qlistview.h>
-#include <qevent.h>
+#include <qpropertyanimation.h>
 #include <qscrollbar.h>
+
+#include <qabstractitemview_p.h>
 
 class QColumnViewPreviewColumn : public QAbstractItemView
 {

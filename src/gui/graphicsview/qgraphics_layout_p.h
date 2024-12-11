@@ -29,6 +29,7 @@
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
 #include <qgraphicslayout.h>
+
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qwidget.h>

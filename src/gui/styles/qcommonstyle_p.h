@@ -24,11 +24,13 @@
 #ifndef QCOMMONSTYLE_P_H
 #define QCOMMONSTYLE_P_H
 
-#include <qalgorithms.h>
 #include <qcommonstyle.h>
+
+#include <qalgorithms.h>
+#include <qstyleoption.h>
+
 #include <qstyle_p.h>
 #include <qstyleanimation_p.h>
-#include <qstyleoption.h>
 
 class QStringList;
 

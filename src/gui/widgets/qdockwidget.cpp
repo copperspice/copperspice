@@ -25,8 +25,8 @@
 
 #ifndef QT_NO_DOCKWIDGET
 
-#include <qalgorithms.h>
 #include <qaction.h>
+#include <qalgorithms.h>
 #include <qapplication.h>
 #include <qdebug.h>
 #include <qdesktopwidget.h>
@@ -35,14 +35,14 @@
 #include <qfontmetrics.h>
 #include <qmainwindow.h>
 #include <qrubberband.h>
-#include <qstylepainter.h>
 #include <qscreen.h>
+#include <qstylepainter.h>
 #include <qtoolbutton.h>
 #include <qwindow.h>
 
-#include <qwidgetresizehandler_p.h>
 #include <qdockwidget_p.h>
 #include <qmainwindowlayout_p.h>
+#include <qwidgetresizehandler_p.h>
 
 extern QString cs_internal_parseWindowTitle(const QString &, const QWidget *); // qwidget.cpp
 

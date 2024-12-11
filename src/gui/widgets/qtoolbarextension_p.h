@@ -26,8 +26,6 @@
 
 #include <qtoolbutton.h>
 
-
-
 #ifndef QT_NO_TOOLBUTTON
 
 class QToolBarExtension : public QToolButton

@@ -22,30 +22,27 @@
 ***********************************************************************/
 
 #include <qabstractitemview.h>
+#include <qabstractitemview_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
-#include <qpointer.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <qdatetime.h>
 #include <qdrag.h>
 #include <qevent.h>
-#include <qscrollbar.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
-#include <qdatetime.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qtreeview.h>
-#include <qtableview.h>
 #include <qheaderview.h>
+#include <qlineedit.h>
+#include <qpainter.h>
+#include <qpointer.h>
+#include <qscrollbar.h>
+#include <qspinbox.h>
+#include <qstyle.h>
 #include <qstyleditemdelegate.h>
-
-#include <qabstractitemview_p.h>
-#include <qabstractitemmodel_p.h>
-#include <qguiapplication_p.h>
+#include <qtableview.h>
+#include <qtooltip.h>
+#include <qtreeview.h>
+#include <qwhatsthis.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
@@ -54,6 +51,9 @@
 #ifndef QT_NO_GESTURES
 #include <qscroller.h>
 #endif
+
+#include <qabstractitemmodel_p.h>
+#include <qapplication_p.h>
 
 QAbstractItemViewPrivate::QAbstractItemViewPrivate()
    :   model(QAbstractItemModelPrivate::staticEmptyModel()), itemDelegate(nullptr), selectionModel(nullptr),

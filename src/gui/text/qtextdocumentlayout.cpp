@@ -34,9 +34,9 @@
 #include <qvarlengtharray.h>
 
 #include <qabstracttextdocumentlayout_p.h>
+#include <qapplication_p.h>
 #include <qcssparser_p.h>
 #include <qcssutil_p.h>
-#include <qguiapplication_p.h>
 #include <qtextdocument_p.h>
 #include <qtextengine_p.h>
 #include <qtextimagehandler_p.h>

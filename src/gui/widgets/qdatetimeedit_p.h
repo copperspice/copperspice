@@ -24,16 +24,17 @@
 #ifndef QDATETIMEEDIT_P_H
 #define QDATETIMEEDIT_P_H
 
-#include <qcombobox.h>
+#include <qdatetimeedit.h>
+
 #include <qcalendarwidget.h>
+#include <qcombobox.h>
+#include <qdebug.h>
+#include <qlabel.h>
+#include <qmenu.h>
 #include <qspinbox.h>
 #include <qtoolbutton.h>
-#include <qmenu.h>
-#include <qlabel.h>
-#include <qdatetimeedit.h>
-#include <qabstractspinbox_p.h>
-#include <qdebug.h>
 
+#include <qabstractspinbox_p.h>
 #include <qdatetimeparser_p.h>
 
 #ifndef QT_NO_DATETIMEEDIT

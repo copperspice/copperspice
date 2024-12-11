@@ -26,6 +26,7 @@
 #ifndef QT_NO_IDENTITYPROXYMODEL
 
 #include <qitemselectionmodel.h>
+
 #include <qabstractproxymodel_p.h>
 
 class QIdentityProxyModelPrivate : public QAbstractProxyModelPrivate

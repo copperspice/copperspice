@@ -23,7 +23,7 @@
 
 #include <qpaintdevicewindow_p.h>
 
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qscreen.h>
 
 void QPaintDeviceWindow::update()

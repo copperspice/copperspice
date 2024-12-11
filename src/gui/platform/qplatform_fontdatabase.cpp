@@ -23,13 +23,13 @@
 
 #include <qplatform_fontdatabase.h>
 
-#include <qfontengine_p.h>
-#include <qstandardpaths.h>
 #include <qapplication.h>
-#include <qscreen.h>
-#include <qplatform_screen.h>
-#include <qlibraryinfo.h>
 #include <qdir.h>
+#include <qfontengine_p.h>
+#include <qlibraryinfo.h>
+#include <qplatform_screen.h>
+#include <qscreen.h>
+#include <qstandardpaths.h>
 
 #include <qfontengine_qpf2_p.h>
 

@@ -24,11 +24,11 @@
 #ifndef QPLATFORM_GRAPHICSBUFFER_H
 #define QPLATFORM_GRAPHICSBUFFER_H
 
-#include <qsize.h>
-#include <qrect.h>
-#include <qpixelformat.h>
 #include <qflags.h>
 #include <qobject.h>
+#include <qpixelformat.h>
+#include <qrect.h>
+#include <qsize.h>
 
 class Q_GUI_EXPORT QPlatformGraphicsBuffer : public QObject
 {

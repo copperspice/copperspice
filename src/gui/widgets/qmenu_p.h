@@ -24,20 +24,20 @@
 #ifndef QMENU_P_H
 #define QMENU_P_H
 
-#include <qmenubar.h>
-#include <qstyleoption.h>
-#include <qdatetime.h>
-#include <qmap.h>
-#include <qhash.h>
 #include <qbasictimer.h>
-#include <qwidget_p.h>
-
+#include <qdatetime.h>
+#include <qhash.h>
+#include <qmap.h>
+#include <qmenubar.h>
 #include <qplatform_menu.h>
+#include <qstyleoption.h>
+
+#include <qwidget_p.h>
 
 #ifndef QT_NO_MENU
 
-class QTornOffMenu;
 class QEventLoop;
+class QTornOffMenu;
 
 template <typename T>
 class QSetValueOnDestroy

@@ -25,23 +25,23 @@
 
 #ifndef QT_NO_STATUSBAR
 
-#include <qlist.h>
 #include <qdebug.h>
 #include <qevent.h>
 #include <qlayout.h>
+#include <qlist.h>
+#include <qmainwindow.h>
 #include <qpainter.h>
-#include <qtimer.h>
+#include <qsizegrip.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qsizegrip.h>
-#include <qmainwindow.h>
+#include <qtimer.h>
+
+#include <qlayoutengine_p.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-
-#include <qlayoutengine_p.h>
-#include <qwidget_p.h>
 
 class QStatusBarPrivate : public QWidgetPrivate
 {

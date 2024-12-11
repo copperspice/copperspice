@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_TREEVIEW
 
-class QTreeViewPrivate;
 class QHeaderView;
+
+class QTreeViewPrivate;
 
 class Q_GUI_EXPORT QTreeView : public QAbstractItemView
 {

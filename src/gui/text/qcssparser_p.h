@@ -24,16 +24,15 @@
 #ifndef QCSSPARSER_P_H
 #define QCSSPARSER_P_H
 
-#include <qstringlist.h>
-#include <qvector.h>
-#include <qvariant.h>
-#include <qpair.h>
-#include <qsize.h>
-#include <qmultihash.h>
 #include <qfont.h>
+#include <qmultihash.h>
+#include <qpair.h>
 #include <qpalette.h>
-
 #include <qshareddata.h>
+#include <qsize.h>
+#include <qstringlist.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 #ifndef QT_NO_CSSPARSER
 

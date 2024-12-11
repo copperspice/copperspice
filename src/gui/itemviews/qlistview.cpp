@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qlistview.h>
+#include <qlistview_p.h>
 
 #ifndef QT_NO_LISTVIEW
 
@@ -36,8 +37,6 @@
 #include <qscrollbar.h>
 #include <qstyle.h>
 #include <qvector.h>
-
-#include <qlistview_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

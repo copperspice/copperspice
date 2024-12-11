@@ -25,8 +25,10 @@
 #define QSTATICTEXT_P_H
 
 #include <qstatictext.h>
-#include <qtextureglyphcache_p.h>
+
 #include <qcolor.h>
+
+#include <qtextureglyphcache_p.h>
 
 class QStaticText;
 

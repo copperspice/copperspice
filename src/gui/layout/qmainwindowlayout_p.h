@@ -28,18 +28,19 @@
 
 #ifndef QT_NO_MAINWINDOW
 
+#include <qbasictimer.h>
 #include <qlayout.h>
+#include <qset.h>
 #include <qtabbar.h>
 #include <qvector.h>
-#include <qset.h>
-#include <qbasictimer.h>
-#include <qlayoutengine_p.h>
-#include <qwidgetanimator_p.h>
-#include <qdockarealayout_p.h>
-#include <qtoolbararealayout_p.h>
 
-class QToolBar;
+#include <qdockarealayout_p.h>
+#include <qlayoutengine_p.h>
+#include <qtoolbararealayout_p.h>
+#include <qwidgetanimator_p.h>
+
 class QRubberBand;
+class QToolBar;
 
 #ifndef QT_NO_DOCKWIDGET
 class QDockWidgetGroupWindow : public QWidget

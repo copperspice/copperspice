@@ -23,14 +23,14 @@
 
 #include <qprinterinfo.h>
 #include <qprinterinfo_p.h>
+
 #include <qprintdevice_p.h>
 
 #ifndef QT_NO_PRINTER
 
 #include <qdebug.h>
-
-#include <qplatform_printplugin.h>
 #include <qplatform_printersupport.h>
+#include <qplatform_printplugin.h>
 
 static QPrinterInfoPrivate *shared_null()
 {

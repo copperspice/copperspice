@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qprintdevice_p.h>
+
 #include <qplatform_printdevice.h>
 
 #include <qdebug_p.h>

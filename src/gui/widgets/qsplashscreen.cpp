@@ -36,6 +36,7 @@
 #include <qwindow.h>
 
 #include <qwidget_p.h>
+
 #ifdef Q_OS_WIN
 #  include <qt_windows.h>
 #else

@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qplatform_graphicsbuffer.h>
-
 #include <qplatform_graphicsbufferhelper.h>
+
 #include <qdebug.h>
+#include <qimage.h>
 #include <qopengl.h>
-#include <QImage>
-#include <QOpenGLContext>
-#include <QOpenGLFunctions>
+#include <qopenglcontext.h>
+#include <qopenglfunctions.h>
+#include <qplatform_graphicsbuffer.h>
 
 #ifndef GL_RGB10_A2
 #define GL_RGB10_A2                       0x8059

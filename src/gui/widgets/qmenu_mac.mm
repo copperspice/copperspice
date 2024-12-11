@@ -21,18 +21,18 @@
 *
 ***********************************************************************/
 
-#import <Foundation/Foundation.h>
-#import <Cocoa/Cocoa.h>
-
+#include <qapplication.h>
+#include <qdebug.h>
+#include <qmacnativewidget_mac.h>
 #include <qmenu.h>
 #include <qmenubar.h>
-#include <qmacnativewidget_mac.h>
-#include <qdebug.h>
-#include <qguiapplication.h>
-#include <qwindow.h>
 #include <qplatform_nativeinterface.h>
+#include <qwindow.h>
 
 #include <qmenubar_p.h>
+
+#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
 #ifndef QT_NO_MENU
 

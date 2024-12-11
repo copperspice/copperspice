@@ -27,8 +27,8 @@
 #include <qpen.h>
 
 #include <qdrawhelper_p.h>
-#include <qvectorpath_p.h>
 #include <qpaintengine_raster_p.h>
+#include <qvectorpath_p.h>
 
 class QCosmeticStroker;
 

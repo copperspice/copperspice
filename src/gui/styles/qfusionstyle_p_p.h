@@ -25,9 +25,10 @@
 #define QFUSIONSTYLE_P_P_H
 
 #include <qcommonstyle.h>
-#include <qcommonstyle_p.h>
 #include <qplatform_theme.h>
-#include <qguiapplication_p.h>
+
+#include <qapplication_p.h>
+#include <qcommonstyle_p.h>
 
 #ifndef QT_NO_STYLE_FUSION
 

@@ -23,6 +23,7 @@
 
 #include <qimagewriter.h>
 
+#include <qcoreapplication.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qimage.h>
@@ -31,12 +32,8 @@
 #include <qset.h>
 #include <qvariant.h>
 
-// factory loader
-#include <qcoreapplication.h>
-#include <qfactoryloader_p.h>
-
-// image handlers
 #include <qbmphandler_p.h>
+#include <qfactoryloader_p.h>
 #include <qppmhandler_p.h>
 #include <qxbmhandler_p.h>
 #include <qxpmhandler_p.h>

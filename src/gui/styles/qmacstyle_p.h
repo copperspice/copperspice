@@ -28,31 +28,34 @@
 #include <cs_mac_p.h>
 
 #include <qmacstyle.h>
-#include <qcommonstyle_p.h>
-#include <qapplication_p.h>
-#include <qcombobox_p.h>
-#include <qpainter_p.h>
-#include <qstylehelper_p.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qdatetimeedit.h>
+#include <qdebug.h>
 #include <qdialogbuttonbox.h>
 #include <qdockwidget.h>
 #include <qevent.h>
 #include <qfocusframe.h>
 #include <qformlayout.h>
+#include <qgraphicsproxywidget.h>
+#include <qgraphicsview.h>
 #include <qgroupbox.h>
 #include <qhash.h>
 #include <qheaderview.h>
 #include <qlayout.h>
+#include <qlibrary.h>
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qmainwindow.h>
 #include <qmap.h>
+#include <qmath.h>
 #include <qmenubar.h>
 #include <qpaintdevice.h>
 #include <qpainter.h>
+#include <qpair.h>
 #include <qpixmapcache.h>
 #include <qpointer.h>
 #include <qprogressbar.h>
@@ -63,23 +66,20 @@
 #include <qspinbox.h>
 #include <qsplitter.h>
 #include <qstyleoption.h>
+#include <qtableview.h>
 #include <qtextedit.h>
 #include <qtextstream.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qtreeview.h>
-#include <qtableview.h>
-#include <qwizard.h>
-#include <qdebug.h>
-#include <qlibrary.h>
-#include <qdatetimeedit.h>
-#include <qmath.h>
-#include <qpair.h>
 #include <qvector.h>
+#include <qwizard.h>
 
-#include <qgraphicsproxywidget.h>
-#include <qgraphicsview.h>
-
+#include <qapplication_p.h>
+#include <qcombobox_p.h>
+#include <qcommonstyle_p.h>
+#include <qpainter_p.h>
+#include <qstylehelper_p.h>
 
 /*
     AHIG:

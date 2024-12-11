@@ -27,23 +27,23 @@
 #include <qcombobox.h>
 
 #ifndef QT_NO_COMBOBOX
+
 #include <qabstractslider.h>
 #include <qapplication.h>
+#include <qcompleter.h>
+#include <qdebug.h>
+#include <qevent.h>
 #include <qitemdelegate.h>
-#include <qstandarditemmodel.h>
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qpainter.h>
+#include <qpair.h>
+#include <qpointer.h>
+#include <qstandarditemmodel.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-
-#include <qpair.h>
 #include <qtimer.h>
 #include <qwidget_p.h>
-#include <qpointer.h>
-#include <qcompleter.h>
-#include <qevent.h>
-#include <qdebug.h>
 
 #include <limits.h>
 

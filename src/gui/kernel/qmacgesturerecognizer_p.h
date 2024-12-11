@@ -24,10 +24,9 @@
 #ifndef QMACGESTURERECOGNIZER_P_H
 #define QMACGESTURERECOGNIZER_P_H
 
-
-#include "qtimer.h"
-#include "qpoint.h"
-#include "qgesturerecognizer.h"
+#include <qgesturerecognizer.h>
+#include <qpoint.h>
+#include <qtimer.h>
 
 #ifndef QT_NO_GESTURES
 

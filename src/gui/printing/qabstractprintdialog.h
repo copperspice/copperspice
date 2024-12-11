@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_PRINTER
 
-class QAbstractPrintDialogPrivate;
 class QPrinter;
+
+class QAbstractPrintDialogPrivate;
 
 class Q_GUI_EXPORT QAbstractPrintDialog : public QDialog
 {

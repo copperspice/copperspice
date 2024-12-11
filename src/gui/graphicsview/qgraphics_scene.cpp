@@ -25,6 +25,8 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qgraphics_scene_p.h>
+
 #include <qapplication.h>
 #include <qdebug.h>
 #include <qdesktopwidget.h>
@@ -59,7 +61,6 @@
 #include <qapplication_p.h>
 #include <qgesturemanager_p.h>
 #include <qgraphics_item_p.h>
-#include <qgraphics_scene_p.h>
 #include <qgraphics_scenebsptreeindex_p.h>
 #include <qgraphics_sceneindex_p.h>
 #include <qgraphics_scenelinearindex_p.h>

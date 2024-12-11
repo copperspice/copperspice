@@ -23,24 +23,24 @@
 
 #include <qaccessiblewidget_complex_p.h>
 
+#include <qabstractbutton.h>
+#include <qabstractscrollarea.h>
 #include <qaccessible.h>
 #include <qapplication.h>
-#include <qabstractbutton.h>
+#include <qcombobox.h>
 #include <qevent.h>
 #include <qheaderview.h>
-#include <qtabbar.h>
-#include <qcombobox.h>
-#include <qlistview.h>
-#include <qtableview.h>
 #include <qlineedit.h>
-#include <qstyle.h>
-#include <qstyleoption.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qtreeview.h>
-#include <qabstractscrollarea.h>
+#include <qlistview.h>
 #include <qscrollarea.h>
 #include <qscrollbar.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qtabbar.h>
+#include <qtableview.h>
+#include <qtooltip.h>
+#include <qtreeview.h>
+#include <qwhatsthis.h>
 
 #include <qtabbar_p.h>
 

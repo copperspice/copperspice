@@ -23,8 +23,8 @@
 
 #include <qsimplex_p.h>
 
-#include <qset.h>
 #include <qdebug.h>
+#include <qset.h>
 
 #include <stdlib.h>
 

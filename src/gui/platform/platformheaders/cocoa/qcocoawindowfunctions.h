@@ -24,7 +24,7 @@
 #ifndef QCOCOA_WINDOWFUNCTIONS_H
 #define QCOCOA_WINDOWFUNCTIONS_H
 
-#include <QPlatform_HeaderHelper>
+#include <qplatform_headerhelper.h>
 
 class QWindow;
 

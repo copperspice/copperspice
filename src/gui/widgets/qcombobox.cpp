@@ -22,43 +22,42 @@
 ***********************************************************************/
 
 #include <qcombobox.h>
+#include <qcombobox_p.h>
 
 #ifndef QT_NO_COMBOBOX
 
-#include <qstylepainter.h>
-#include <qplatform_theme.h>
-#include <qplatform_menu.h>
-#include <qlineedit.h>
-#include <qapplication.h>
-#include <qdesktopwidget.h>
-#include <qlistview.h>
-#include <qtableview.h>
-#include <qitemdelegate.h>
-#include <qmap.h>
-#include <qmenu.h>
-#include <qevent.h>
-#include <qlayout.h>
-#include <qscrollbar.h>
-#include <qtreeview.h>
-#include <qheaderview.h>
-#include <qmath.h>
-#include <qmetaobject.h>
 #include <qabstractproxymodel.h>
-#include <qstylehints.h>
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qheaderview.h>
+#include <qitemdelegate.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qlistview.h>
+#include <qmap.h>
+#include <qmath.h>
+#include <qmenu.h>
+#include <qmetaobject.h>
+#include <qplatform_menu.h>
+#include <qplatform_theme.h>
+#include <qscrollbar.h>
+#include <qstylehints.h>
+#include <qstylepainter.h>
+#include <qtableview.h>
+#include <qtreeview.h>
 
-#include <qguiapplication_p.h>
-#include <qapplication_p.h>
-#include <qcombobox_p.h>
 #include <qabstractitemmodel_p.h>
 #include <qabstractscrollarea_p.h>
+#include <qapplication_p.h>
+
+#ifndef QT_NO_ACCESSIBILITY
+# include <qaccessible.h>
+#endif
 
 #ifndef QT_NO_EFFECTS
 # include <qeffects_p.h>
-#endif
-
-#ifndef QT_NO_ACCESSIBILITY
-#include <qaccessible.h>
 #endif
 
 QComboBoxPrivate::QComboBoxPrivate()

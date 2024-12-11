@@ -24,8 +24,8 @@
 #ifndef QPLATFORM_INPUTCONTEXTPLUGIN_P_H
 #define QPLATFORM_INPUTCONTEXTPLUGIN_P_H
 
-#include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qplugin.h>
 
 class QPlatformInputContext;
 

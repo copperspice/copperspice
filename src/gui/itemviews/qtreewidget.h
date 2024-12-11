@@ -31,9 +31,10 @@
 
 #ifndef QT_NO_TREEWIDGET
 
-class QTreeWidget;
 class QTreeModel;
+class QTreeWidget;
 class QWidgetItemData;
+
 class QTreeWidgetItemPrivate;
 class QTreeWidgetPrivate;
 

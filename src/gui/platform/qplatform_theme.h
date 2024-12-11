@@ -25,24 +25,24 @@
 #define QPLATFORM_THEME_H
 
 #include <qglobal.h>
-#include <qscopedpointer.h>
 #include <qkeysequence.h>
+#include <qscopedpointer.h>
 
+class QFileInfo;
+class QFont;
 class QIconEngine;
 class QMenu;
 class QMenuBar;
-class QPlatformMenuItem;
+class QPalette;
+class QPixmap;
+class QPlatformDialogHelper;
 class QPlatformMenu;
 class QPlatformMenuBar;
-class QPlatformDialogHelper;
+class QPlatformMenuItem;
 class QPlatformSystemTrayIcon;
 class QPlatformThemePrivate;
-class QVariant;
-class QPalette;
-class QFont;
-class QPixmap;
 class QSizeF;
-class QFileInfo;
+class QVariant;
 
 class Q_GUI_EXPORT QPlatformTheme
 {

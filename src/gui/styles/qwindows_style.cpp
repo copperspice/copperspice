@@ -46,7 +46,7 @@
 #include <qwidget.h>
 #include <qwizard.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 #include <qmath_p.h>
 #include <qmenubar_p.h>

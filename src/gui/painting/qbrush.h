@@ -24,18 +24,18 @@
 #ifndef QBRUSH_H
 #define QBRUSH_H
 
-#include <qpair.h>
-#include <qpoint.h>
-#include <qvector.h>
-#include <qscopedpointer.h>
 #include <qcolor.h>
-#include <qmatrix.h>
-#include <qtransform.h>
 #include <qimage.h>
+#include <qmatrix.h>
+#include <qpair.h>
 #include <qpixmap.h>
+#include <qpoint.h>
+#include <qscopedpointer.h>
+#include <qtransform.h>
+#include <qvector.h>
 
-class QPixmap;
 class QGradient;
+class QPixmap;
 class QVariant;
 
 class QGradientPrivate;

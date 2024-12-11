@@ -25,6 +25,7 @@
 #define QGRIDLAYOUT_H
 
 #include <qlayout.h>
+
 #include <limits.h>
 
 class QGridLayoutPrivate;

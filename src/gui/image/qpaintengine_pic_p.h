@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_PICTURE
 
-class QPicturePaintEnginePrivate;
 class QBuffer;
+
+class QPicturePaintEnginePrivate;
 
 class QPicturePaintEngine : public QPaintEngine
 {

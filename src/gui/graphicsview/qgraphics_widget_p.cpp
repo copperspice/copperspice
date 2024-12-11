@@ -25,18 +25,19 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <qdebug.h>
-#include <qnumeric.h>
-#include <qgraphicslayout.h>
+#include <qgraphics_widget_p.h>
+
 #include <qapplication.h>
+#include <qdebug.h>
+#include <qgraphicslayout.h>
 #include <qgraphicsscene.h>
+#include <qgraphicsscenemouseevent.h>
+#include <qnumeric.h>
 #include <qstyleoption.h>
 #include <qstyleoptiontitlebar.h>
-#include <qgraphicsscenemouseevent.h>
 
 #include <qgraphics_layoutitem_p.h>
 #include <qgraphics_scene_p.h>
-#include <qgraphics_widget_p.h>
 
 void QGraphicsWidgetPrivate::init(QGraphicsItem *parentItem, Qt::WindowFlags flags)
 {

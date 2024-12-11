@@ -30,9 +30,10 @@
 
 #include <qregularexpression.h>
 
-class QSortFilterProxyModelPrivate;
-class QSortFilterProxyModelLessThan;
 class QSortFilterProxyModelGreaterThan;
+class QSortFilterProxyModelLessThan;
+
+class QSortFilterProxyModelPrivate;
 
 class Q_GUI_EXPORT QSortFilterProxyModel : public QAbstractProxyModel
 {

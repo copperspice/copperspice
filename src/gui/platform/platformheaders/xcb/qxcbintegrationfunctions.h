@@ -24,7 +24,7 @@
 #ifndef QXCBINTEGRATIONFUNCTIONS_H
 #define QXCBINTEGRATIONFUNCTIONS_H
 
-#include <QPlatform_HeaderHelper>
+#include <qplatform_headerhelper.h>
 
 class QXcbIntegrationFunctions
 {

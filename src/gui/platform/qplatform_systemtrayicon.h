@@ -29,8 +29,8 @@
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
-class QPlatformMenu;
 class QIcon;
+class QPlatformMenu;
 class QRect;
 
 class Q_GUI_EXPORT QPlatformSystemTrayIcon : public QObject

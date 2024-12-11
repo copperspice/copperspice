@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include <qpaintengine_blitter_p.h>
+
 #include <qblittable_p.h>
 #include <qpaintengine_raster_p.h>
 #include <qpainter_p.h>
-
 #include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE

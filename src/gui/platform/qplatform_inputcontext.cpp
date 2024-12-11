@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qplatform_inputcontext.h>
-#include <qguiapplication.h>
+#include <qplatform_inputcontext_p.h>
+
+#include <qapplication.h>
 #include <qrect.h>
 
 #include <qkeymapper_p.h>
-#include <qplatform_inputcontext_p.h>
 
 bool QPlatformInputContextPrivate::s_inputMethodAccepted = false;
 

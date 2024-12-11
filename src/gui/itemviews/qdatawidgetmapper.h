@@ -32,8 +32,9 @@
 
 class QAbstractItemDelegate;
 class QAbstractItemModel;
-class QDataWidgetMapperPrivate;
 class QModelIndex;
+
+class QDataWidgetMapperPrivate;
 
 class Q_GUI_EXPORT QDataWidgetMapper : public QObject
 {

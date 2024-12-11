@@ -24,9 +24,9 @@
 #ifndef QTEXTDOCUMENT_H
 #define QTEXTDOCUMENT_H
 
-#include <qobject.h>
 #include <qcontainerfwd.h>
 #include <qfont.h>
+#include <qobject.h>
 #include <qrect.h>
 #include <qscopedpointer.h>
 #include <qsize.h>
@@ -34,23 +34,24 @@
 #include <qurl.h>
 #include <qvariant.h>
 
-class QTextFormatCollection;
-class QTextListFormat;
-class QRect;
-class QPainter;
-class QPagedPaintDevice;
 class QAbstractTextDocumentLayout;
+class QPagedPaintDevice;
+class QPainter;
 class QPoint;
-class QTextObject;
-class QTextFormat;
-class QTextFrame;
+class QRect;
+class QRectF;
 class QTextBlock;
 class QTextCodec;
-class QTextDocumentPrivate;
-class QVariant;
-class QRectF;
-class QTextOption;
 class QTextCursor;
+class QTextFormat;
+class QTextFormatCollection;
+class QTextFrame;
+class QTextListFormat;
+class QTextObject;
+class QTextOption;
+class QVariant;
+
+class QTextDocumentPrivate;
 
 namespace CsText {
 

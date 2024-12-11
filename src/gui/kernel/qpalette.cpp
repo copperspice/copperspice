@@ -24,10 +24,11 @@
 #include <qpalette.h>
 
 #include <qapplication.h>
-#include <qguiapplication_p.h>
 #include <qdatastream.h>
-#include <qvariant.h>
 #include <qdebug.h>
+#include <qvariant.h>
+
+#include <qapplication_p.h>
 
 static int qt_palette_count = 1;
 

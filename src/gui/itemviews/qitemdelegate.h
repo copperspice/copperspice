@@ -31,8 +31,9 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QItemDelegatePrivate;
 class QItemEditorFactory;
+
+class QItemDelegatePrivate;
 
 class Q_GUI_EXPORT QItemDelegate : public QAbstractItemDelegate
 {

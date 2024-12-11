@@ -22,11 +22,13 @@
 ***********************************************************************/
 
 #include <qtoolbar.h>
+#include <qtoolbar_p.h>
 
 #ifndef QT_NO_TOOLBAR
 
 #include <qapplication.h>
 #include <qcombobox.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qlayout.h>
 #include <qmainwindow.h>
@@ -35,21 +37,18 @@
 #include <qrubberband.h>
 #include <qsignalmapper.h>
 #include <qstylepainter.h>
+#include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qwidgetaction.h>
-#include <qtimer.h>
 
-#include <qwidgetaction_p.h>
 #include <qmainwindowlayout_p.h>
+#include <qtoolbarlayout_p.h>
+#include <qtoolbarseparator_p.h>
+#include <qwidgetaction_p.h>
 
 #ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
-
-#include <qtoolbar_p.h>
-#include <qtoolbarseparator_p.h>
-#include <qtoolbarlayout_p.h>
-#include <qdebug.h>
 
 #define POPUP_TIMER_INTERVAL 500
 

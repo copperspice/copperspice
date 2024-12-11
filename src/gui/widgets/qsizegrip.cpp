@@ -25,19 +25,19 @@
 
 #ifndef QT_NO_SIZEGRIP
 
+#include <qabstractscrollarea.h>
 #include <qapplication.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
 #include <qevent.h>
+#include <qlayout.h>
 #include <qpainter.h>
-#include <qwindow.h>
 #include <qplatform_window.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qlayout.h>
-#include <qdebug.h>
-#include <QDesktopWidget>
+#include <qwindow.h>
 
 #include <qwidget_p.h>
-#include <qabstractscrollarea.h>
 
 static QWidget *qt_sizegrip_topLevelWidget(QWidget *w)
 {

@@ -21,13 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qapplication.h>
+#include <qkeymapper_p.h>
 
+#include <qapplication.h>
 #include <qplatform_integration.h>
 #include <qwidget.h>
 
-#include <qguiapplication_p.h>
-#include <qkeymapper_p.h>
+#include <qapplication_p.h>
 
 QKeyMapper::QKeyMapper()
    : QObject(nullptr), d_ptr(new QKeyMapperPrivate)

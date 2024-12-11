@@ -29,12 +29,12 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
-class QStringList;
 class QAccessibleInterface;
-
-#define QAccessibleInterface_ID "com.copperspice.CS.AccessibleInterface"
+class QStringList;
 
 class QAccessiblePluginPrivate;
+
+#define QAccessibleInterface_ID "com.copperspice.CS.AccessibleInterface"
 
 class Q_GUI_EXPORT QAccessiblePlugin : public QObject
 {

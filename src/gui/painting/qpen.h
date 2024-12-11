@@ -27,10 +27,11 @@
 #include <qcolor.h>
 #include <qbrush.h>
 
-class QVariant;
-class QPenPrivate;
 class QBrush;
 class QPen;
+class QVariant;
+
+class QPenPrivate;
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QPen &pen);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QPen &pen);

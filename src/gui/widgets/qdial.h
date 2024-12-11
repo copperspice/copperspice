@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_DIAL
 
-class QDialPrivate;
 class QStyleOptionSlider;
+
+class QDialPrivate;
 
 class Q_GUI_EXPORT QDial: public QAbstractSlider
 {

@@ -27,12 +27,12 @@
 #ifndef QT_NO_PRINTER
 
 #include <qcoreapplication.h>
-#include <qpicture.h>
-#include <qprintengine.h>
-#include <qplatform_printplugin.h>
-#include <qplatform_printersupport.h>
-#include <qlist.h>
 #include <qfileinfo.h>
+#include <qlist.h>
+#include <qpicture.h>
+#include <qplatform_printersupport.h>
+#include <qplatform_printplugin.h>
+#include <qprintengine.h>
 
 #include <qprintengine_pdf_p.h>
 #include <qpaintengine_preview_p.h>

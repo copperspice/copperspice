@@ -27,8 +27,8 @@
 
 #include <qgraphicswidget.h>
 
-#include <qgraphics_layoutitem_p.h>
 #include <qgraphics_layout_p.h>
+#include <qgraphics_layoutitem_p.h>
 #include <qgraphics_widget_p.h>
 
 bool QGraphicsGridLayoutEngineItem::isHidden() const

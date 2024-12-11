@@ -24,8 +24,8 @@
 #ifndef QFONTENGINEGLYPHCACHE_P_H
 #define QFONTENGINEGLYPHCACHE_P_H
 
-#include <qglobal.h>
 #include <qatomic.h>
+#include <qglobal.h>
 #include <qvarlengtharray.h>
 
 #include <qfont_p.h>

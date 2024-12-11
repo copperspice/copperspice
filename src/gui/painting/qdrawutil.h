@@ -24,16 +24,17 @@
 #ifndef QDRAWUTIL_H
 #define QDRAWUTIL_H
 
-#include <qnamespace.h>
 #include <qmargins.h>
+#include <qnamespace.h>
+
 #include <qpixmap.h>
 
-class QPainter;
+class QBrush;
+class QColor;
 class QColorGroup;
+class QPainter;
 class QPalette;
 class QPoint;
-class QColor;
-class QBrush;
 class QRect;
 
 // Standard shade drawing

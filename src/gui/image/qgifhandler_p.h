@@ -24,11 +24,9 @@
 #ifndef QGIFHANDLER_P_H
 #define QGIFHANDLER_P_H
 
-#include <qimageiohandler.h>
-#include <qimage.h>
 #include <qbytearray.h>
-
-
+#include <qimage.h>
+#include <qimageiohandler.h>
 
 class QGIFFormat;
 

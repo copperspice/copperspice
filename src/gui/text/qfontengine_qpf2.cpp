@@ -30,8 +30,8 @@
 #include <qplatform_fontdatabase.h>
 #include <qplatform_integration.h>
 
+#include <qapplication_p.h>
 #include <qpaintengine_raster_p.h>
-#include <qguiapplication_p.h>
 
 static const QFontEngineQPF2::TagType tagTypes[QFontEngineQPF2::NumTags] = {
    QFontEngineQPF2::StringType, // FontName

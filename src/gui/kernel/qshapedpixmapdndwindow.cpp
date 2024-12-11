@@ -23,11 +23,11 @@
 
 #include <qshapedpixmapdndwindow_p.h>
 
-#include <qpainter.h>
-#include <qcursor.h>
-#include <qguiapplication.h>
-#include <qpalette.h>
+#include <qapplication.h>
 #include <qbitmap.h>
+#include <qcursor.h>
+#include <qpainter.h>
+#include <qpalette.h>
 
 QShapedPixmapWindow::QShapedPixmapWindow(QScreen *screen)
    : m_useCompositing(true)

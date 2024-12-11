@@ -29,8 +29,9 @@
 #ifndef QT_NO_PRINTPREVIEWDIALOG
 
 class QGraphicsView;
-class QPrintPreviewDialogPrivate;
 class QPrinter;
+
+class QPrintPreviewDialogPrivate;
 
 class Q_GUI_EXPORT QPrintPreviewDialog : public QDialog
 {

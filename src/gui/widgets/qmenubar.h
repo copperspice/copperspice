@@ -28,10 +28,11 @@
 
 #ifndef QT_NO_MENUBAR
 
-class QMenuBarPrivate;
+class QPlatformMenuBar;
 class QStyleOptionMenuItem;
 class QWindowsStyle;
-class QPlatformMenuBar;
+
+class QMenuBarPrivate;
 
 class Q_GUI_EXPORT QMenuBar : public QWidget
 {

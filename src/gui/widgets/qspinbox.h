@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_SPINBOX
 
-class QSpinBoxPrivate;
 class QDoubleSpinBoxPrivate;
+class QSpinBoxPrivate;
 
 class Q_GUI_EXPORT QSpinBox : public QAbstractSpinBox
 {

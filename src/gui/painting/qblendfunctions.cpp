@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qblendfunctions_p.h>
+
 #include <qdebug.h>
 #include <qmath.h>
-
-#include <qblendfunctions_p.h>
 
 struct SourceOnlyAlpha {
    uchar alpha(uchar src) const {

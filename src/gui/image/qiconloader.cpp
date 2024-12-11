@@ -25,20 +25,19 @@
 
 #include <qiconloader_p.h>
 
+#include <qdir.h>
+#include <qiconengine.h>
 #include <qiconengineplugin.h>
+#include <qlist.h>
+#include <qpainter.h>
+#include <qpalette.h>
 #include <qpixmapcache.h>
 #include <qplatform_theme.h>
-#include <qiconengine.h>
-#include <qpalette.h>
-#include <qlist.h>
-
-#include <qdir.h>
 #include <qsettings.h>
-#include <qpainter.h>
 
 #include <qapplication_p.h>
-#include <qicon_p.h>
 #include <qhexstring_p.h>
+#include <qicon_p.h>
 
 static QIconLoader *iconLoaderInstance()
 {

@@ -24,19 +24,19 @@
 #ifndef QFONTENGINE_P_H
 #define QFONTENGINE_P_H
 
-#include <qglobal.h>
 #include <qatomic.h>
-
+#include <qglobal.h>
 #include <qlinkedlist.h>
-#include <qvarlengtharray.h>
 #include <qstringfwd.h>
+#include <qvarlengtharray.h>
+
+#include <qfont_p.h>
 #include <qfontengine_faceid_p.h>
 #include <qtextengine_p.h>
-#include <qfont_p.h>
 
+class QFontEngineGlyphCache;
 class QGlyph;
 class QPainterPath;
-class QFontEngineGlyphCache;
 
 struct QGlyphLayout;
 

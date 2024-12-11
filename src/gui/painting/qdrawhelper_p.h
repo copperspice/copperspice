@@ -24,11 +24,11 @@
 #ifndef QDRAWHELPER_P_H
 #define QDRAWHELPER_P_H
 
-#include <qglobal.h>
-#include <qmath.h>
 #include <qcolor.h>
-#include <qpainter.h>
+#include <qglobal.h>
 #include <qimage.h>
+#include <qmath.h>
+#include <qpainter.h>
 #include <qrgba64.h>
 #include <qsharedpointer.h>
 
@@ -37,19 +37,19 @@
 
 #include <algorithm>
 
-struct QSolidData;
-struct QTextureData;
+class QClipData;
+class QGradient;
+class QRasterBuffer;
+class QRasterPaintEngine;
+class QRasterPaintEngineState;
+
+struct QConicalGradientData;
 struct QGradientData;
 struct QLinearGradientData;
 struct QRadialGradientData;
-struct QConicalGradientData;
+struct QSolidData;
 struct QSpanData;
-
-class QGradient;
-class QRasterBuffer;
-class QClipData;
-class QRasterPaintEngineState;
-class QRasterPaintEngine;
+struct QTextureData;
 
 static constexpr const uint AMASK = 0xff000000;
 static constexpr const uint RMASK = 0x00ff0000;

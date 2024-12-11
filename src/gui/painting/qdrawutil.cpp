@@ -22,15 +22,16 @@
 ***********************************************************************/
 
 #include <qdrawutil.h>
-#include <qbitmap.h>
-#include <qpixmapcache.h>
 
+#include <qbitmap.h>
+#include <qmath.h>
 #include <qpainter.h>
 #include <qpalette.h>
-#include <qpaintengineex_p.h>
+#include <qpixmapcache.h>
 #include <qvarlengtharray.h>
-#include <qmath.h>
+
 #include <qhexstring_p.h>
+#include <qpaintengineex_p.h>
 
 void qDrawShadeLine(QPainter *p, int x1, int y1, int x2, int y2, const QPalette &pal,
    bool sunken, int lineWidth, int midLineWidth)

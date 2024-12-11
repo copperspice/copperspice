@@ -24,8 +24,8 @@
 #ifndef QPLATFORMINTEGRATIONPLUGIN_H
 #define QPLATFORMINTEGRATIONPLUGIN_H
 
-#include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qplugin.h>
 
 class QPlatformIntegration;
 

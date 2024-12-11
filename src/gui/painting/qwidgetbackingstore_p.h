@@ -26,9 +26,9 @@
 
 #include <qdebug.h>
 #include <qwidget.h>
+#include <qbackingstore.h>
 
 #include <qwidget_p.h>
-#include <qbackingstore.h>
 
 class QPlatformTextureList;
 class QPlatformTextureListWatcher;

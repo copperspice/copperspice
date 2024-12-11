@@ -27,8 +27,6 @@
 
 #include <qaccessible.h>
 
-
-
 QAccessiblePlugin::QAccessiblePlugin(QObject *parent)
    : QObject(parent)
 {

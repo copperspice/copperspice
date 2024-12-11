@@ -26,17 +26,18 @@
 
 #include <qabstractitemmodel.h>
 #include <qbrush.h>
+#include <qdatastream.h>
 #include <qfont.h>
 #include <qicon.h>
-#include <qdatastream.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
 #include <qcontainerfwd.h>
 
 class QStandardItemModel;
-class QStandardItemPrivate;
+
 class QStandardItemModelPrivate;
+class QStandardItemPrivate;
 
 class Q_GUI_EXPORT QStandardItem
 {

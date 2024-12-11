@@ -24,17 +24,17 @@
 #include <qdialogbuttonbox.h>
 
 #include <qaction.h>
-#include <qhash.h>
-#include <qpushbutton.h>
-#include <qstyle.h>
-#include <qlayout.h>
-#include <qdialog.h>
 #include <qapplication.h>
+#include <qdialog.h>
+#include <qhash.h>
+#include <qlayout.h>
 #include <qplatform_dialoghelper.h>
 #include <qplatform_theme.h>
+#include <qpushbutton.h>
+#include <qstyle.h>
 
+#include <qapplication_p.h>
 #include <qwidget_p.h>
-#include <qguiapplication_p.h>
 
 class QDialogButtonBoxPrivate : public QWidgetPrivate
 {

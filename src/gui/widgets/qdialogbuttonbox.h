@@ -28,6 +28,7 @@
 
 class QAbstractButton;
 class QPushButton;
+
 class QDialogButtonBoxPrivate;
 
 class Q_GUI_EXPORT QDialogButtonBox : public QWidget

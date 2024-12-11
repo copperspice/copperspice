@@ -24,8 +24,8 @@
 #ifndef QINPUTCONTROL_P_H
 #define QINPUTCONTROL_P_H
 
-#include <qobject.h>
 #include <qglobal.h>
+#include <qobject.h>
 
 class QKeyEvent;
 

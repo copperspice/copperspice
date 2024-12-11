@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qlayout.h>
 #include <qlayoutengine_p.h>
+
+#include <qdebug.h>
+#include <qlayout.h>
+#include <qvarlengtharray.h>
 #include <qvector.h>
 #include <qwidget.h>
-#include <qvarlengtharray.h>
-#include <qdebug.h>
 
 #include <algorithm>
 

@@ -24,16 +24,16 @@
 #ifndef SIMPLEWIDGETS_H
 #define SIMPLEWIDGETS_H
 
-#include <qcoreapplication.h>
 #include <qaccessiblewidget.h>
+#include <qcoreapplication.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
 class QAbstractButton;
-class QLineEdit;
-class QToolButton;
 class QGroupBox;
+class QLineEdit;
 class QProgressBar;
+class QToolButton;
 
 class QAccessibleButton : public QAccessibleWidget
 {

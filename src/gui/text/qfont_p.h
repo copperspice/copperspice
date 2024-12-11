@@ -25,11 +25,12 @@
 #define QFONT_P_H
 
 #include <qfont.h>
-#include <qmap.h>
+
+#include <qfontdatabase.h>
 #include <qhash.h>
+#include <qmap.h>
 #include <qobject.h>
 #include <qstringlist.h>
-#include <qfontdatabase.h>
 
 #include <qfixed_p.h>
 #include <qunicodetables_p.h>

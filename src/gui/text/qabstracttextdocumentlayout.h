@@ -27,14 +27,15 @@
 #include <qobject.h>
 #include <qpalette.h>
 #include <qscopedpointer.h>
-#include <qtextlayout.h>
-#include <qtextdocument.h>
-#include <qtextcursor.h>
 #include <qtextblock.h>
+#include <qtextcursor.h>
+#include <qtextdocument.h>
+#include <qtextlayout.h>
+
+class QTextFrame;
+class QTextObjectInterface;
 
 class QAbstractTextDocumentLayoutPrivate;
-class QTextObjectInterface;
-class QTextFrame;
 
 class Q_GUI_EXPORT QAbstractTextDocumentLayout : public QObject
 {

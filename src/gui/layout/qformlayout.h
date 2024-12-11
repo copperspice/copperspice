@@ -24,7 +24,7 @@
 #ifndef QFORMLAYOUT_H
 #define QFORMLAYOUT_H
 
-#include <QLayout>
+#include <qlayout.h>
 
 class QFormLayoutPrivate;
 

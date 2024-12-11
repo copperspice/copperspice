@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstractprintdialog_p.h>
+
 #include <qcoreapplication.h>
 #include <qprintdialog.h>
 #include <qprinter.h>

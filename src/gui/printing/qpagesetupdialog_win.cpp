@@ -26,11 +26,11 @@
 #ifndef QT_NO_PRINTDIALOG
 
 #include <qapplication.h>
-#include <qprinter.h>
 #include <qplatform_nativeinterface.h>
+#include <qprinter.h>
 
-#include <qprintengine_win_p.h>
 #include <qpagesetupdialog_p.h>
+#include <qprintengine_win_p.h>
 
 QPageSetupDialog::QPageSetupDialog(QPrinter *printer, QWidget *parent)
    : QDialog(*(new QPageSetupDialogPrivate(printer)), parent)

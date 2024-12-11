@@ -24,15 +24,16 @@
 #ifndef QIMAGEIOHANDLER_H
 #define QIMAGEIOHANDLER_H
 
+#include <qfactoryinterface.h>
 #include <qiodevice.h>
 #include <qplugin.h>
-#include <qfactoryinterface.h>
 #include <qscopedpointer.h>
 
 class QImage;
 class QRect;
 class QSize;
 class QVariant;
+
 class QImageIOHandlerPrivate;
 
 #define QImageIOHandlerInterface_ID "com.copperspice.CS.ImageIOHandlerInterface"

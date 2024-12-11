@@ -25,17 +25,18 @@
 
 #ifndef QT_NO_SLIDER
 
-#ifndef QT_NO_ACCESSIBILITY
-#include <qaccessible.h>
-#endif
-
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
+
 #include <qabstractslider_p.h>
-#include <qdebug.h>
+
+#ifndef QT_NO_ACCESSIBILITY
+#include <qaccessible.h>
+#endif
 
 class QSliderPrivate : public QAbstractSliderPrivate
 {

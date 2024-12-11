@@ -25,10 +25,12 @@
 #define QPIXMAPCACHE_P_H
 
 #include <qpixmapcache.h>
+
+#include <qcache.h>
 #include <qpaintengine.h>
+
 #include <qimage_p.h>
 #include <qpixmap_raster_p.h>
-#include <qcache.h>
 
 uint qHash(const QPixmapCache::Key &k);
 

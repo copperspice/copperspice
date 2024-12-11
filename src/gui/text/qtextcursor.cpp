@@ -23,17 +23,18 @@
 
 #include <qtextcursor.h>
 #include <qtextcursor_p.h>
+
+#include <qabstracttextdocumentlayout.h>
+#include <qdebug.h>
 #include <qglobal.h>
 #include <qtextdocumentfragment.h>
-#include <qtextdocumentfragment_p.h>
+#include <qtextlayout.h>
 #include <qtextlist.h>
 #include <qtexttable.h>
-#include <qtexttable_p.h>
-#include <qtextengine_p.h>
-#include <qabstracttextdocumentlayout.h>
 
-#include <qtextlayout.h>
-#include <qdebug.h>
+#include <qtextdocumentfragment_p.h>
+#include <qtextengine_p.h>
+#include <qtexttable_p.h>
 
 enum {
    AdjustPrev = 0x1,

@@ -25,9 +25,9 @@
 #define QPICTURE_H
 
 #include <qiodevice.h>
-#include <qstringlist.h>
-#include <qsharedpointer.h>
 #include <qpaintdevice.h>
+#include <qsharedpointer.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_PICTURE
 

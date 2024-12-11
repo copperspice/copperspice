@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
+#include <qgraphics_anchorlayout_p.h>
+
 #include <qalgorithms.h>
 #include <qapplication.h>
 #include <qfile.h>
 #include <qlinkedlist.h>
 #include <qstack.h>
 #include <qwidget.h>
-
-#include <qgraphics_anchorlayout_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 

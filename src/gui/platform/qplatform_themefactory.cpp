@@ -23,11 +23,11 @@
 
 #include <qplatform_themefactory_p.h>
 
-#include <qplatform_themeplugin.h>
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qdir.h>
 #include <qmutex.h>
-#include <qguiapplication.h>
-#include <qdebug.h>
+#include <qplatform_themeplugin.h>
 
 #include <qfactoryloader_p.h>
 

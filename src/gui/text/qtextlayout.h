@@ -24,28 +24,28 @@
 #ifndef QTEXTLAYOUT_H
 #define QTEXTLAYOUT_H
 
-#include <qstring.h>
-#include <qnamespace.h>
-#include <qrect.h>
-#include <qvector.h>
 #include <qcolor.h>
-#include <qobject.h>
 #include <qevent.h>
-#include <qtextformat.h>
 #include <qglyphrun.h>
+#include <qnamespace.h>
+#include <qobject.h>
+#include <qrect.h>
+#include <qstring.h>
 #include <qtextcursor.h>
+#include <qtextformat.h>
+#include <qvector.h>
 
-class QTextEngine;
 class QFont;
+class QPaintDevice;
+class QPainter;
+class QPalette;
 class QRawFont;
 class QRect;
 class QRegion;
-class QTextFormat;
-class QPalette;
-class QPainter;
-class QPaintDevice;
-class QTextLine;
 class QTextBlock;
+class QTextEngine;
+class QTextFormat;
+class QTextLine;
 class QTextOption;
 
 class Q_GUI_EXPORT QTextInlineObject

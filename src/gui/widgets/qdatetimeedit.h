@@ -31,9 +31,10 @@
 
 #ifndef QT_NO_DATETIMEEDIT
 
-class QDateTimeEditPrivate;
-class QStyleOptionSpinBox;
 class QCalendarWidget;
+class QStyleOptionSpinBox;
+
+class QDateTimeEditPrivate;
 
 class Q_GUI_EXPORT QDateTimeEdit : public QAbstractSpinBox
 {

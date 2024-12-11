@@ -24,7 +24,7 @@
 #ifndef QMAC_COCOAVIEWCONTAINERMAC_H
 #define QMAC_COCOAVIEWCONTAINERMAC_H
 
-#include <QWidget>
+#include <qwidget.h>
 
 #ifdef __OBJC__
 @class NSView;

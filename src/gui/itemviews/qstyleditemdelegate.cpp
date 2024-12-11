@@ -30,9 +30,13 @@
 #include <qbitmap.h>
 #include <qbrush.h>
 #include <qdatetime.h>
+#include <qdebug.h>
+#include <qdialog.h>
 #include <qevent.h>
 #include <qitemeditorfactory.h>
 #include <qlineedit.h>
+#include <qlocale.h>
+#include <qmetaobject.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
@@ -43,14 +47,9 @@
 #include <qsize.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qtextedit.h>
-
-#include <qmetaobject.h>
-#include <qtextlayout.h>
-#include <qdebug.h>
-#include <qlocale.h>
-#include <qdialog.h>
 #include <qtableview.h>
+#include <qtextedit.h>
+#include <qtextlayout.h>
 
 #include <qabstractitemdelegate_p.h>
 #include <qitemeditorfactory_p.h>

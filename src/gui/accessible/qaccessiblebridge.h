@@ -24,13 +24,13 @@
 #ifndef QACCESSIBLEBRIDGE_H
 #define QACCESSIBLEBRIDGE_H
 
-#include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qplugin.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 
-class QAccessibleInterface;
 class QAccessibleEvent;
+class QAccessibleInterface;
 
 class QAccessibleBridge
 {

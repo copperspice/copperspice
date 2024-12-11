@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qimagepixmapcleanuphooks_p.h>
-#include <qimage_p.h>
 
 #include <qplatform_pixmap.h>
+
+#include <qimage_p.h>
 
 static QImagePixmapCleanupHooks *qt_image_and_pixmap_cleanup_hooks()
 {

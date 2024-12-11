@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qplatformdefs.h>
+
 #include <qxbmhandler_p.h>
 
 #ifndef QT_NO_IMAGEFORMAT_XBM

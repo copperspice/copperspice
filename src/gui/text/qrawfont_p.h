@@ -25,9 +25,11 @@
 #define QRAWFONT_P_H
 
 #include <qrawfont.h>
-#include <qfontengine_p.h>
+
 #include <qthread.h>
 #include <qthreadstorage.h>
+
+#include <qfontengine_p.h>
 
 namespace {
 class CustomFontFileLoader;

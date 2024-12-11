@@ -24,8 +24,9 @@
 #ifndef QFRAME_P_H
 #define QFRAME_P_H
 
-#include <qwidget_p.h>
 #include <qframe.h>
+
+#include <qwidget_p.h>
 
 class QFramePrivate : public QWidgetPrivate
 {

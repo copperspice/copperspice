@@ -24,13 +24,14 @@
 #ifndef QRENDERRULE_P_H
 #define QRENDERRULE_P_H
 
-#include <qcssparser_p.h>
 #include <qpainter.h>
 #include <qrect.h>
-#include <qsize.h>
 #include <qsharedpointer.h>
+#include <qsize.h>
 #include <qvector.h>
 #include <qwidget.h>
+
+#include <qcssparser_p.h>
 
 struct QStyleSheetBorderImageData : public QSharedData {
    QStyleSheetBorderImageData()

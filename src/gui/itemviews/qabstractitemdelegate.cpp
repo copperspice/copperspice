@@ -22,29 +22,28 @@
 ***********************************************************************/
 
 #include <qabstractitemdelegate.h>
+#include <qabstractitemdelegate_p.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
 #include <qabstractitemmodel.h>
 #include <qabstractitemview.h>
-#include <qfontmetrics.h>
-#include <qwhatsthis.h>
-#include <qtooltip.h>
-#include <qevent.h>
-#include <qstring.h>
-#include <qdebug.h>
-#include <qlineedit.h>
-#include <qtextedit.h>
-#include <qplaintextedit.h>
 #include <qapplication.h>
-#include <qtextengine_p.h>
-#include <qabstractitemdelegate_p.h>
-
-#include <qplatform_integration.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qfontmetrics.h>
+#include <qlineedit.h>
+#include <qplaintextedit.h>
 #include <qplatform_drag.h>
-#include <qguiapplication_p.h>
-#include <qdnd_p.h>
+#include <qplatform_integration.h>
+#include <qstring.h>
+#include <qtextedit.h>
+#include <qtooltip.h>
+#include <qwhatsthis.h>
 
+#include <qapplication_p.h>
+#include <qdnd_p.h>
+#include <qtextengine_p.h>
 
 QAbstractItemDelegate::QAbstractItemDelegate(QObject *parent)
    : QObject(parent), d_ptr(new QAbstractItemDelegatePrivate)

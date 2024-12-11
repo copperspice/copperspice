@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qtexttable.h>
+#include <qtexttable_p.h>
 
 #include <qdebug.h>
 #include <qtextcursor.h>
@@ -29,7 +30,6 @@
 #include <qvarlengtharray.h>
 
 #include <qtextcursor_p.h>
-#include <qtexttable_p.h>
 
 #include <algorithm>
 #include <stdlib.h>

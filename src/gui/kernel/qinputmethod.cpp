@@ -23,10 +23,12 @@
 
 #include <qinputmethod.h>
 #include <qinputmethod_p.h>
-#include <qguiapplication.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qtimer.h>
+
 #include <qplatform_inputcontext_p.h>
-#include <QDebug>
 
 QInputMethod::QInputMethod()
    : d_ptr(new QInputMethodPrivate)

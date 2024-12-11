@@ -28,11 +28,11 @@
 
 #if ! defined(QT_NO_STYLE_GTK)
 
-#include <qsize.h>
-#include <qrect.h>
-#include <qpoint.h>
-#include <qpixmap.h>
 #include <qpainter.h>
+#include <qpixmap.h>
+#include <qpoint.h>
+#include <qrect.h>
+#include <qsize.h>
 
 #include <gtk/gtk.h>
 

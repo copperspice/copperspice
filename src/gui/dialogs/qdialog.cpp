@@ -40,7 +40,7 @@
 #include <qsizegrip.h>
 #include <qwhatsthis.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

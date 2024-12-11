@@ -28,8 +28,6 @@
 
 #ifndef QT_NO_IMAGEFORMAT_XBM
 
-
-
 class QXbmHandler : public QImageIOHandler
 {
  public:

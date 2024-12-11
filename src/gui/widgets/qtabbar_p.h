@@ -25,11 +25,13 @@
 #define QTABBAR_P_H
 
 #include <qtabbar.h>
-#include <qwidget_p.h>
+
+#include <qdebug.h>
 #include <qicon.h>
 #include <qtoolbutton.h>
-#include <qdebug.h>
 #include <qvariantanimation.h>
+
+#include <qwidget_p.h>
 
 #ifndef QT_NO_TABBAR
 

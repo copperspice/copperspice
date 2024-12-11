@@ -24,20 +24,22 @@
 #include <qdirmodel.h>
 
 #ifndef QT_NO_DIRMODEL
-#include <qstack.h>
+
+#include <qapplication.h>
+#include <qdatetime.h>
+#include <qdebug.h>
 #include <qfile.h>
 #include <qfilesystemmodel.h>
-#include <qurl.h>
-#include <qmimedata.h>
-#include <qpair.h>
-#include <qvector.h>
-#include <qobject.h>
-#include <qdatetime.h>
 #include <qlocale.h>
+#include <qmimedata.h>
+#include <qobject.h>
+#include <qpair.h>
+#include <qstack.h>
 #include <qstyle.h>
-#include <qapplication.h>
+#include <qurl.h>
+#include <qvector.h>
+
 #include <qabstractitemmodel_p.h>
-#include <qdebug.h>
 
 class QDirModelPrivate : public QAbstractItemModelPrivate
 {

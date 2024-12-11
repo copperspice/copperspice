@@ -24,13 +24,14 @@
 #ifndef QCALENDARWIDGET_H
 #define QCALENDARWIDGET_H
 
-#include <qwidget.h>
 #include <qdatetime.h>
+#include <qwidget.h>
 
 #ifndef QT_NO_CALENDARWIDGET
 
 class QDate;
 class QTextCharFormat;
+
 class QCalendarWidgetPrivate;
 
 class Q_GUI_EXPORT QCalendarWidget : public QWidget

@@ -30,8 +30,9 @@
 #ifndef QT_NO_SPINBOX
 
 class QLineEdit;
-class QAbstractSpinBoxPrivate;
 class QStyleOptionSpinBox;
+
+class QAbstractSpinBoxPrivate;
 
 class Q_GUI_EXPORT QAbstractSpinBox : public QWidget
 {

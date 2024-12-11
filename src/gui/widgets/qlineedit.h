@@ -25,21 +25,22 @@
 #define QLINEEDIT_H
 
 #include <qframe.h>
-#include <qtextcursor.h>
-#include <qstring.h>
 #include <qmargins.h>
+#include <qstring.h>
+#include <qtextcursor.h>
 
 #ifndef QT_NO_LINEEDIT
 
-class QValidator;
-class QMenu;
-class QLineEditPrivate;
-class QCompleter;
-class QStyleOptionFrame;
 class QAbstractSpinBox;
+class QCompleter;
 class QDateTimeEdit;
 class QIcon;
+class QMenu;
+class QStyleOptionFrame;
 class QToolButton;
+class QValidator;
+
+class QLineEditPrivate;
 
 class Q_GUI_EXPORT QLineEdit : public QWidget
 {

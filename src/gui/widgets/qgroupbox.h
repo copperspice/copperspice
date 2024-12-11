@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_GROUPBOX
 
-class QGroupBoxPrivate;
 class QStyleOptionGroupBox;
+
+class QGroupBoxPrivate;
 
 class Q_GUI_EXPORT QGroupBox : public QWidget
 {

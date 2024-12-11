@@ -23,10 +23,10 @@
 
 #include <qplatform_accessibility.h>
 
-#include <qalgorithms.h>
-#include <qaccessibleplugin.h>
-#include <qaccessibleobject.h>
 #include <qaccessiblebridge.h>
+#include <qaccessibleobject.h>
+#include <qaccessibleplugin.h>
+#include <qalgorithms.h>
 #include <qapplication.h>
 #include <qdebug.h>
 

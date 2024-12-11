@@ -23,11 +23,10 @@
 
 #include <qpixmap_blitter_p.h>
 
-#include <qpainter.h>
 #include <qimage.h>
+#include <qpainter.h>
 #include <qscreen.h>
 
-#include <qapplication_p.h>
 #include <qapplication_p.h>
 #include <qblittable_p.h>
 #include <qdrawhelper_p.h>

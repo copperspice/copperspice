@@ -24,17 +24,16 @@
 #ifndef QPICTURE_P_H
 #define QPICTURE_P_H
 
+#include <qpicture.h>
+
 #include <qatomic.h>
+#include <qbrush.h>
 #include <qbuffer.h>
 #include <qobject.h>
-#include <qvector.h>
-#include <qpicture.h>
-#include <qpixmap.h>
 #include <qpen.h>
-#include <qbrush.h>
+#include <qpixmap.h>
 #include <qrect.h>
-
-
+#include <qvector.h>
 
 class QPaintEngine;
 

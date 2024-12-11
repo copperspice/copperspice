@@ -25,12 +25,13 @@
 #define QBLITTABLE_P_H
 
 #include <qsize.h>
+
 #include <qpixmap_blitter_p.h>
 
 #ifndef QT_NO_BLITTABLE
 
-class QImage;
 class QBlittablePrivate;
+class QImage;
 
 class Q_GUI_EXPORT QBlittable
 {

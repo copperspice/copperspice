@@ -23,9 +23,9 @@
 
 #include <qplatform_services.h>
 
-#include <qurl.h>
-#include <qstring.h>
 #include <qdebug.h>
+#include <qstring.h>
+#include <qurl.h>
 
 QPlatformServices::QPlatformServices()
 { }

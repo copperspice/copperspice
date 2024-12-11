@@ -28,31 +28,32 @@
 
 #ifndef QT_NO_TEXTEDIT
 
-#include <qfont.h>
-#include <qpainter.h>
-#include <qevent.h>
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qdatetime.h>
 #include <qdebug.h>
 #include <qdrag.h>
-#include <qclipboard.h>
+#include <qevent.h>
+#include <qfont.h>
 #include <qmenu.h>
+#include <qpainter.h>
 #include <qstyle.h>
-#include <qtimer.h>
+#include <qtextdocument.h>
 #include <qtextformat.h>
-#include <qdatetime.h>
-#include <qapplication.h>
-#include <limits.h>
+#include <qtextlist.h>
 #include <qtexttable.h>
+#include <qtimer.h>
 #include <qvariant.h>
+
+#include <qtextcontrol_p.h>
+#include <qtextdocument_p.h>
+#include <qtextdocumentlayout_p.h>
+
+#include <limits.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-
-#include <qtextdocumentlayout_p.h>
-#include <qtextdocument.h>
-#include <qtextdocument_p.h>
-#include <qtextlist.h>
-#include <qtextcontrol_p.h>
 
 #endif
 

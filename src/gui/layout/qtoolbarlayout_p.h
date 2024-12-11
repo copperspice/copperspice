@@ -25,14 +25,15 @@
 #define QTOOLBARLAYOUT_P_H
 
 #include <qlayout.h>
+#include <qvector.h>
+
 #include <qlayoutengine_p.h>
-#include <QVector>
 
 #ifndef QT_NO_TOOLBAR
 
 class QAction;
-class QToolBarExtension;
 class QMenu;
+class QToolBarExtension;
 
 class QToolBarItem : public QWidgetItem
 {

@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qharfbuzz_p.h>
-
 #include <qstring.h>
 #include <qvector.h>
+
 #include <qfontengine_p.h>
+#include <qharfbuzz_p.h>
 
 // Font routines
 static hb_bool_t cs_font_get_nominal_glyph(hb_font_t *, void *font_data, hb_codepoint_t unicode,

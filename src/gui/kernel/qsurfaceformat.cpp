@@ -23,10 +23,10 @@
 
 #include <qsurfaceformat.h>
 
+#include <qapplication.h>
 #include <qatomic.h>
 #include <qdebug.h>
-#include <QOpenGLContext>
-#include <qguiapplication.h>
+#include <qopenglcontext.h>
 
 #ifdef major
 #undef major

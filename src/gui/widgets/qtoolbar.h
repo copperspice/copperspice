@@ -29,10 +29,11 @@
 
 #ifndef QT_NO_TOOLBAR
 
-class QToolBarPrivate;
 class QIcon;
 class QMainWindow;
 class QStyleOptionToolBar;
+
+class QToolBarPrivate;
 
 class Q_GUI_EXPORT QToolBar : public QWidget
 {

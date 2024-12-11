@@ -30,6 +30,7 @@
 
 class QTextCursor;
 class QTextTable;
+
 class QTextTablePrivate;
 
 class Q_GUI_EXPORT QTextTableCell

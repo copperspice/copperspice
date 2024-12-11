@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_PROXYMODEL
 
-class QAbstractProxyModelPrivate;
 class QItemSelection;
+
+class QAbstractProxyModelPrivate;
 
 class Q_GUI_EXPORT QAbstractProxyModel : public QAbstractItemModel
 {

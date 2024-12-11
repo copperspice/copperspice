@@ -24,8 +24,8 @@
 #ifndef QPLATFORM_HEADERHELPER_H
 #define QPLATFORM_HEADERHELPER_H
 
-#include <QByteArray>
-#include <QGuiApplication>
+#include <qapplication.h>
+#include <qbytearray.h>
 
 namespace QPlatformHeaderHelper {
 

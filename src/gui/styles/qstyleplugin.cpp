@@ -22,8 +22,8 @@
 ***********************************************************************/
 
 #include <qstyleplugin.h>
-#include <qstyle.h>
 
+#include <qstyle.h>
 
 QStylePlugin::QStylePlugin(QObject *parent)
    : QObject(parent)

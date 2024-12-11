@@ -24,13 +24,15 @@
 #ifndef QMENUBAR_P_H
 #define QMENUBAR_P_H
 
-#include <qstyleoption.h>
-#include <qmenu_p.h>          // Mac needs what in this file
 #include <qplatform_menu.h>
+#include <qstyleoption.h>
+
+#include <qmenu_p.h>          // Mac needs what in this file
 
 #ifndef QT_NO_MENUBAR
-class QToolBar;
+
 class QMenuBarExtension;
+class QToolBar;
 
 class QMenuBarPrivate : public QWidgetPrivate
 {

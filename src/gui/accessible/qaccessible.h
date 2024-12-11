@@ -26,16 +26,16 @@
 
 #ifndef QT_NO_ACCESSIBILITY
 
+#include <qcolor.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
+#include <qevent.h>
 #include <qglobal.h>
 #include <qobject.h>
 #include <qrect.h>
 #include <qset.h>
-#include <qvector.h>
 #include <qvariant.h>
-#include <qcolor.h>
-#include <qevent.h>
+#include <qvector.h>
 
 #include <stdlib.h>
 

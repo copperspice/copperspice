@@ -24,20 +24,21 @@
 #ifndef QGRAPHICS_SCENEINDEX_P_H
 #define QGRAPHICS_SCENEINDEX_P_H
 
-#include <qgraphics_scene_p.h>
-
-#include <qgraphicsscene.h>
 #include <qcontainerfwd.h>
+#include <qgraphicsscene.h>
 #include <qnamespace.h>
 #include <qobject.h>
-#include <qtransform.h>
 #include <qscopedpointer.h>
+#include <qtransform.h>
+
+#include <qgraphics_scene_p.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-class QGraphicsSceneIndexPrivate;
 class QPointF;
 class QRectF;
+
+class QGraphicsSceneIndexPrivate;
 
 typedef bool (*QGraphicsSceneIndexIntersector)(const QGraphicsItem *item, const QRectF &exposeRect, Qt::ItemSelectionMode mode,
    const QTransform &deviceTransform, const void *data);

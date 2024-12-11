@@ -28,8 +28,8 @@
 
 #ifndef QT_NO_MOVIE
 
-#include <qlist.h>
 #include <qimagereader.h>
+#include <qlist.h>
 
 class QColor;
 class QIODevice;
@@ -37,6 +37,7 @@ class QImage;
 class QPixmap;
 class QRect;
 class QSize;
+
 class QMoviePrivate;
 
 class Q_GUI_EXPORT QMovie : public QObject

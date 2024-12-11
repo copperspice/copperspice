@@ -24,29 +24,29 @@
 #include <qwhatsthis.h>
 
 #ifndef QT_NO_WHATSTHIS
-#include <qpointer.h>
+
+#include <qaction.h>
 #include <qapplication.h>
-#include <qtoolbutton.h>
+#include <qbitmap.h>
+#include <qcursor.h>
 #include <qdebug.h>
 #include <qdesktopwidget.h>
 #include <qevent.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qtimer.h>
 #include <qhash.h>
-#include <qaction.h>
-#include <qcursor.h>
-#include <qbitmap.h>
-#include <qtextdocument.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 #include <qplatform_theme.h>
+#include <qpointer.h>
+#include <qtextdocument.h>
+#include <qtimer.h>
+#include <qtoolbutton.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qtextdocumentlayout_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
-
 
 class QWhatsThat : public QWidget
 {

@@ -24,18 +24,17 @@
 #ifndef QTEXTCONTROL_P_P_H
 #define QTEXTCONTROL_P_P_H
 
-#include <qtextdocumentfragment.h>
-#include <qscrollbar.h>
-#include <qtextcursor.h>
-#include <qtextformat.h>
-#include <qmenu.h>
 #include <qabstracttextdocumentlayout.h>
 #include <qbasictimer.h>
+#include <qmenu.h>
 #include <qpointer.h>
+#include <qscrollbar.h>
+#include <qtextcursor.h>
+#include <qtextdocumentfragment.h>
+#include <qtextformat.h>
 
 class QMimeData;
 class QAbstractScrollArea;
-
 
 class QTextControlPrivate
 {

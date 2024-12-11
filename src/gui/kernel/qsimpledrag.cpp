@@ -23,6 +23,7 @@
 
 #include <qsimpledrag_p.h>
 
+#include <qapplication.h>
 #include <qbitmap.h>
 #include <qbuffer.h>
 #include <qdebug.h>
@@ -31,7 +32,6 @@
 #include <qevent.h>
 #include <qeventloop.h>
 #include <qfile.h>
-#include <qguiapplication.h>
 #include <qimage.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
@@ -40,8 +40,8 @@
 #include <qregularexpression.h>
 #include <qtextcodec.h>
 
+#include <qapplication_p.h>
 #include <qdnd_p.h>
-#include <qguiapplication_p.h>
 #include <qhighdpiscaling_p.h>
 #include <qshapedpixmapdndwindow_p.h>
 

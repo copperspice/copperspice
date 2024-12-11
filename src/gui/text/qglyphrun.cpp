@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
-
 #include <qglyphrun.h>
 #include <qglyphrun_p.h>
+
+#include <qglobal.h>
 
 QGlyphRun::QGlyphRun() : d(new QGlyphRunPrivate)
 {

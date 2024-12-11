@@ -24,9 +24,9 @@
 #ifndef QGRAPHICSVIEW_H
 #define QGRAPHICSVIEW_H
 
+#include <qgraphicsscene.h>
 #include <qpainter.h>
 #include <qscrollarea.h>
-#include <qgraphicsscene.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
@@ -34,6 +34,7 @@ class QGraphicsItem;
 class QPainterPath;
 class QPolygonF;
 class QStyleOptionGraphicsItem;
+
 class QGraphicsViewPrivate;
 
 class Q_GUI_EXPORT QGraphicsView : public QAbstractScrollArea

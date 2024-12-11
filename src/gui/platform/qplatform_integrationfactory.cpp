@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qplatform_integrationfactory_p.h>
-#include <qplatform_integrationplugin.h>
-#include <qfactoryloader_p.h>
-#include <qmutex.h>
-#include <qdir.h>
 
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qdir.h>
+#include <qmutex.h>
+#include <qplatform_integrationplugin.h>
+
+#include <qfactoryloader_p.h>
 
 static QFactoryLoader *loader()
 {

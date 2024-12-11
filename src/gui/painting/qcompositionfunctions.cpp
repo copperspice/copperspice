@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qglobal.h>
+
 #include <qdrawhelper_p.h>
 #include <qrgba64_p.h>
 

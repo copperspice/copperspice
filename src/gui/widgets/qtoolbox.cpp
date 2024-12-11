@@ -25,6 +25,7 @@
 
 #ifndef QT_NO_TOOLBOX
 
+#include <qabstractbutton.h>
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qlayout.h>
@@ -34,7 +35,6 @@
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qtooltip.h>
-#include <qabstractbutton.h>
 
 #include <qframe_p.h>
 

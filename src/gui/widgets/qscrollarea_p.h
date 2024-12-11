@@ -26,8 +26,9 @@
 
 #ifndef QT_NO_SCROLLAREA
 
-#include <qabstractscrollarea_p.h>
 #include <qscrollbar.h>
+
+#include <qabstractscrollarea_p.h>
 
 class QScrollAreaPrivate: public QAbstractScrollAreaPrivate
 {

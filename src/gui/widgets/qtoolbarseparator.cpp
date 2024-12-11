@@ -25,12 +25,10 @@
 
 #ifndef QT_NO_TOOLBAR
 
+#include <qpainter.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qtoolbar.h>
-#include <qpainter.h>
-
-
 
 void QToolBarSeparator::initStyleOption(QStyleOption *option) const
 {

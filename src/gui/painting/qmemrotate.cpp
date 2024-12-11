@@ -23,8 +23,6 @@
 
 #include <qmemrotate_p.h>
 
-
-
 #if QT_ROTATION_ALGORITHM == QT_ROTATION_TILED
 static constexpr const int tileSize = 32;
 #endif

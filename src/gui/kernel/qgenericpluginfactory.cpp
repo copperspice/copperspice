@@ -23,10 +23,11 @@
 
 #include <qgenericpluginfactory.h>
 
-#include <qguiapplication.h>
-#include <qfactoryloader_p.h>
-#include <qgenericplugin.h>
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qgenericplugin.h>
+
+#include <qfactoryloader_p.h>
 
 #if ! defined(Q_OS_WIN) || defined(QT_SHARED)
    static QFactoryLoader *loader()

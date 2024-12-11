@@ -21,7 +21,7 @@
 *
 ***********************************************************************/
 
-#include <qwindow_p.h>
+#include <qwidgetwindow_p.h>
 
 #include <qlayout.h>
 #include <qplatform_theme.h>
@@ -36,7 +36,7 @@
 #include <qhighdpiscaling_p.h>
 #include <qwidget_p.h>
 #include <qwidgetbackingstore_p.h>
-#include <qwidgetwindow_p.h>
+#include <qwindow_p.h>
 #include <qwindowsysteminterface_p.h>
 
 Q_GUI_EXPORT extern bool qt_tab_all_widgets();

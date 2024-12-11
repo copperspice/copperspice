@@ -29,16 +29,17 @@
 #ifndef QT_NO_PRINTER
 
 #include <qprinter.h>
-#include <qprinterinfo.h>
-#include <qprintengine.h>
+
 #include <qpointer.h>
+#include <qprintengine.h>
+#include <qprinterinfo.h>
 #include <qset.h>
 
 #include <limits.h>
 
-class QPrintEngine;
-class QPreviewPaintEngine;
 class QPicture;
+class QPreviewPaintEngine;
+class QPrintEngine;
 
 class QPrinterPrivate
 {

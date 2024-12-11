@@ -31,7 +31,7 @@
 #include <qscreen.h>
 #include <qwindow.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 #include <qwindow_p.h>
 

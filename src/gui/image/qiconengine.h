@@ -25,9 +25,8 @@
 #define QICONENGINE_H
 
 #include <qglobal.h>
-#include <qlist.h>
 #include <qicon.h>
-
+#include <qlist.h>
 
 class Q_GUI_EXPORT QIconEngine
 {

@@ -29,8 +29,9 @@
 #ifndef QT_NO_TABBAR
 
 class QIcon;
-class QTabBarPrivate;
 class QStyleOptionTab;
+
+class QTabBarPrivate;
 
 class Q_GUI_EXPORT QTabBar: public QWidget
 {

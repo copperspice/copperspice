@@ -26,8 +26,8 @@
 
 #include <qkeysequenceedit.h>
 
-#include <qwidget_p.h>
 #include <qkeysequence_p.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_KEYSEQUENCEEDIT
 

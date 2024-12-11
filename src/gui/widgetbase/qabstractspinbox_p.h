@@ -28,14 +28,14 @@
 
 #ifndef QT_NO_SPINBOX
 
+#include <qdatetime.h>
 #include <qlineedit.h>
 #include <qstyleoption.h>
 #include <qvalidator.h>
-#include <qdatetime.h>
 #include <qvariant.h>
 
-#include <qwidget_p.h>
 #include <qdatetime_p.h>
+#include <qwidget_p.h>
 
 QVariant operator+(const QVariant &arg1, const QVariant &arg2);
 QVariant operator-(const QVariant &arg1, const QVariant &arg2);

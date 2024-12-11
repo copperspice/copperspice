@@ -22,17 +22,17 @@
 ***********************************************************************/
 
 #include <qbrush.h>
-#include <qdatastream.h>
-#include <qpixmap.h>
+
 #include <qbitmap.h>
+#include <qcoreapplication.h>
+#include <qdatastream.h>
+#include <qdebug.h>
+#include <qline.h>
+#include <qnumeric.h>
+#include <qpixmap.h>
 #include <qpixmapcache.h>
 #include <qplatform_pixmap.h>
-
 #include <qvariant.h>
-#include <qline.h>
-#include <qdebug.h>
-#include <qcoreapplication.h>
-#include <qnumeric.h>
 
 #include <qhexstring_p.h>
 

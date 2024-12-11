@@ -24,8 +24,8 @@
 #ifndef QTEXTIMAGEHANDLER_P_H
 #define QTEXTIMAGEHANDLER_P_H
 
-#include <qobject.h>
 #include <qabstracttextdocumentlayout.h>
+#include <qobject.h>
 
 class QTextImageFormat;
 

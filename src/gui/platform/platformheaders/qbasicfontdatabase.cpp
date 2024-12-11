@@ -25,11 +25,11 @@
 
 #if defined(QT_USE_FREETYPE)
 
-#include <qplatform_screen.h>
 #include <qdir.h>
-#include <qfile.h>
 #include <qendian.h>
+#include <qfile.h>
 #include <qlibraryinfo.h>
+#include <qplatform_screen.h>
 #include <quuid.h>
 
 #include <qapplication_p.h>

@@ -25,6 +25,7 @@
 #define QTEXTFORMAT_P_H
 
 #include <qtextformat.h>
+
 #include <qmultihash.h>
 #include <qvector.h>
 

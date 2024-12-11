@@ -32,7 +32,7 @@
 #include <qstyleoption.h>
 #include <qwidget.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 
 #include <algorithm>
 #include <limits.h>

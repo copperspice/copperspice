@@ -24,7 +24,7 @@
 #ifndef QMACNATIVEWIDGET_MAC_H
 #define QMACNATIVEWIDGET_MAC_H
 
-#include <QWidget>
+#include <qwidget.h>
 
 #ifdef __OBJC__
 @class NSView;

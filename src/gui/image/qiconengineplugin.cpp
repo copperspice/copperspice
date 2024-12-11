@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qiconengineplugin.h>
+
 #include <qiconengine.h>
 
 QIconEnginePlugin::QIconEnginePlugin(QObject *parent)
@@ -32,5 +33,3 @@ QIconEnginePlugin::QIconEnginePlugin(QObject *parent)
 QIconEnginePlugin::~QIconEnginePlugin()
 {
 }
-
-

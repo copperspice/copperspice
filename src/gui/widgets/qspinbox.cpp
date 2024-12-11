@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qabstractspinbox_p.h>
 #include <qspinbox.h>
+
+#include <qabstractspinbox_p.h>
 
 #ifndef QT_NO_SPINBOX
 

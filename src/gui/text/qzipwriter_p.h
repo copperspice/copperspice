@@ -26,8 +26,8 @@
 
 #ifndef QT_NO_TEXTODFWRITER
 
-#include <qstring.h>
 #include <qfile.h>
+#include <qstring.h>
 
 class QZipWriterPrivate;
 

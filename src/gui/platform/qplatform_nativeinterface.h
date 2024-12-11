@@ -24,9 +24,9 @@
 #ifndef QPLATFORM_NATIVEINTERFACE_H
 #define QPLATFORM_NATIVEINTERFACE_H
 
-#include <qwindowdefs.h>
 #include <qobject.h>
 #include <qvariant.h>
+#include <qwindowdefs.h>
 
 class QBackingStore;
 class QOpenGLContext;

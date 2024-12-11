@@ -28,10 +28,10 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qgraphicslayoutitem.h>
 #include <qsizepolicy.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qgraphicslayoutitem.h>
 
 class QGraphicsLayoutPrivate;
 

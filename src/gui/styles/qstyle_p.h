@@ -24,10 +24,8 @@
 #ifndef QSTYLE_P_H
 #define QSTYLE_P_H
 
+#include <qapplication.h>
 #include <qstyle.h>
-#include <qguiapplication.h>
-
-class QStyle;
 
 class QStylePrivate
 {

@@ -22,14 +22,13 @@
 ***********************************************************************/
 
 #include <qtextformat.h>
+#include <qtextformat_p.h>
 
-#include <qvariant.h>
 #include <qdatastream.h>
 #include <qdebug.h>
-#include <qmap.h>
 #include <qhashfunc.h>
-
-#include <qtextformat_p.h>
+#include <qmap.h>
+#include <qvariant.h>
 
 QTextLength::operator QVariant() const
 {

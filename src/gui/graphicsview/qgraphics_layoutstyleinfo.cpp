@@ -24,10 +24,11 @@
 #include <qgraphics_layoutstyleinfo_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
+
+#include <qapplication.h>
 #include <qgraphicswidget.h>
 #include <qstyle.h>
 #include <qwidget.h>
-#include <qapplication.h>
 
 #include <qgraphics_layout_p.h>
 

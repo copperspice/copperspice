@@ -26,8 +26,6 @@
 
 #include <qimage.h>
 
-
-
 /*
   This version accepts only supported formats.
 */

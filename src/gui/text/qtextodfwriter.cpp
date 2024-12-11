@@ -27,17 +27,17 @@
 
 #include <qtextodfwriter_p.h>
 
-#include <QDebug>
-#include <QImageWriter>
-#include <QTextListFormat>
-#include <QTextList>
-#include <QBuffer>
-#include <QUrl>
+#include <qbuffer.h>
+#include <qdebug.h>
+#include <qimagewriter.h>
+#include <qtextlist.h>
+#include <qtextlistformat.h>
+#include <qurl.h>
 
-#include <qtextdocument_p.h>
-#include <qtexttable.h>
 #include <qtextcursor.h>
+#include <qtextdocument_p.h>
 #include <qtextimagehandler_p.h>
+#include <qtexttable.h>
 #include <qzipwriter_p.h>
 
 // Convert pixels to postscript point units

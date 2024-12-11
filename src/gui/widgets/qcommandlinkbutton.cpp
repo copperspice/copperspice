@@ -22,13 +22,14 @@
 ***********************************************************************/
 
 #include <qcommandlinkbutton.h>
-#include <qstylepainter.h>
-#include <qstyleoption.h>
-#include <qtextdocument.h>
-#include <qtextlayout.h>
+
 #include <qcolor.h>
 #include <qfont.h>
 #include <qmath.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
+#include <qtextdocument.h>
+#include <qtextlayout.h>
 
 #include <qpushbutton_p.h>
 

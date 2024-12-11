@@ -22,14 +22,13 @@
 ***********************************************************************/
 
 #include <qabstractproxymodel.h>
+#include <qabstractproxymodel_p.h>
 
 #ifndef QT_NO_PROXYMODEL
 
 #include <qitemselectionmodel.h>
 #include <qsize.h>
 #include <qstringlist.h>
-
-#include <qabstractproxymodel_p.h>
 
 // detects the deletion of the source model
 void QAbstractProxyModelPrivate::_q_sourceModelDestroyed()

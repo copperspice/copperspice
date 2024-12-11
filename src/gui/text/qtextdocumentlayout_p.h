@@ -25,12 +25,12 @@
 #define QTEXTDOCUMENTLAYOUT_P_H
 
 #include <qabstracttextdocumentlayout.h>
-#include <qtextoption.h>
 #include <qtextobject.h>
-
+#include <qtextoption.h>
 
 class QTextListFormat;
 class QTextTableCell;
+
 class QTextDocumentLayoutPrivate;
 
 class QTextDocumentLayout : public QAbstractTextDocumentLayout

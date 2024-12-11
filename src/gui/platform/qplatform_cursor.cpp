@@ -23,11 +23,11 @@
 
 #include <qplatform_cursor.h>
 
-#include <qpainter.h>
-#include <qbitmap.h>
 #include <qapplication.h>
-#include <qscreen.h>
+#include <qbitmap.h>
+#include <qpainter.h>
 #include <qplatform_screen.h>
+#include <qscreen.h>
 
 #include <qapplication_p.h>
 

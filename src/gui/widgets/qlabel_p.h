@@ -25,16 +25,18 @@
 #define QLABEL_P_H
 
 #include <qlabel.h>
-#include <qtextdocumentlayout_p.h>
-#include <qtextcontrol_p.h>
-#include <qtextdocumentfragment.h>
-#include <qframe_p.h>
-#include <qtextdocument.h>
-#include <qmovie.h>
-#include <qimage.h>
+
 #include <qbitmap.h>
-#include <qpicture.h>
+#include <qimage.h>
 #include <qmenu.h>
+#include <qmovie.h>
+#include <qpicture.h>
+#include <qtextdocument.h>
+#include <qtextdocumentfragment.h>
+
+#include <qframe_p.h>
+#include <qtextcontrol_p.h>
+#include <qtextdocumentlayout_p.h>
 
 class QLabelPrivate : public QFramePrivate
 {

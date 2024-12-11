@@ -28,8 +28,8 @@
 
 #if !defined(QT_NO_GRAPHICSVIEW)
 
-#include <qevent.h>
 #include <qcoreapplication.h>
+#include <qevent.h>
 #include <qgraphicssceneevent.h>
 #include <qstyleoption.h>
 

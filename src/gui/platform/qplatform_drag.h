@@ -29,11 +29,12 @@
 
 #ifndef QT_NO_DRAGANDDROP
 
+class QDrag;
+class QEvent;
 class QMimeData;
 class QMouseEvent;
-class QDrag;
 class QObject;
-class QEvent;
+
 class QPlatformDragPrivate;
 
 class Q_GUI_EXPORT QPlatformDropQtResponse

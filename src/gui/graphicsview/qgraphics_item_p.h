@@ -25,14 +25,15 @@
 #define QGRAPHICS_ITEM_P_H
 
 #include <qgraphicsitem.h>
+
 #include <qgraphicseffect.h>
-#include <qset.h>
+#include <qgraphicstransform.h>
 #include <qpixmapcache.h>
 #include <qpoint.h>
-#include <qgraphicstransform.h>
+#include <qset.h>
 
-#include <qgraphics_view_p.h>
 #include <qgraphics_transform_p.h>
+#include <qgraphics_view_p.h>
 #include <qgraphicseffect_p.h>
 
 #if !defined(QT_NO_GRAPHICSVIEW)

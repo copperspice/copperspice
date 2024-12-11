@@ -34,6 +34,7 @@ class QIODevice;
 class QRect;
 class QSize;
 class QStringList;
+
 class QImageReaderPrivate;
 
 class Q_GUI_EXPORT QImageReader

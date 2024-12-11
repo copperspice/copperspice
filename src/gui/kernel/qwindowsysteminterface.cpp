@@ -22,19 +22,19 @@
 ***********************************************************************/
 
 #include <qwindowsysteminterface.h>
+#include <qwindowsysteminterface_p.h>
 
 #include <qabstracteventdispatcher.h>
 #include <qdebug.h>
-#include <qscopedvaluerollback.h>
 #include <qplatform_drag.h>
 #include <qplatform_integration.h>
 #include <qplatform_window.h>
+#include <qscopedvaluerollback.h>
 
-#include <qwindowsysteminterface_p.h>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qevent_p.h>
-#include <qtouchdevice_p.h>
 #include <qhighdpiscaling_p.h>
+#include <qtouchdevice_p.h>
 
 QElapsedTimer QWindowSystemInterfacePrivate::eventTime;
 bool QWindowSystemInterfacePrivate::synchronousWindowSystemEvents = false;

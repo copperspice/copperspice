@@ -24,22 +24,23 @@
 #ifndef QPLAINTEXTEDIT_P_H
 #define QPLAINTEXTEDIT_P_H
 
-#include <qabstractscrollarea_p.h>
-#include <qtextdocumentfragment.h>
-#include <qscrollbar.h>
-#include <qtextcursor.h>
-#include <qtextformat.h>
-#include <qmenu.h>
+#include <qplaintextedit.h>
+
 #include <qabstracttextdocumentlayout.h>
 #include <qbasictimer.h>
+#include <qmenu.h>
+#include <qscrollbar.h>
+#include <qtextcursor.h>
+#include <qtextdocumentfragment.h>
+#include <qtextformat.h>
+
+#include <qabstractscrollarea_p.h>
 #include <qtextcontrol_p.h>
-#include <qplaintextedit.h>
 
 #ifndef QT_NO_TEXTEDIT
 
-class QMimeData;
-class QPlainTextEdit;
 class ExtraArea;
+class QMimeData;
 
 class QPlainTextEditControl : public QTextControl
 {

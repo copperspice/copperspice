@@ -29,11 +29,12 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QPainter;
-class QModelIndex;
 class QAbstractItemModel;
 class QAbstractItemView;
 class QHelpEvent;
+class QModelIndex;
+class QPainter;
+
 class QAbstractItemDelegatePrivate;
 
 class Q_GUI_EXPORT QAbstractItemDelegate : public QObject

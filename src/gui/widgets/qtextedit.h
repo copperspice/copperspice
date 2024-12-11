@@ -25,19 +25,20 @@
 #define QTEXTEDIT_H
 
 #include <qabstractscrollarea.h>
-#include <qtextdocument.h>
-#include <qtextoption.h>
 #include <qtextcursor.h>
+#include <qtextdocument.h>
 #include <qtextformat.h>
+#include <qtextoption.h>
 
 #ifndef QT_NO_TEXTEDIT
 
-class QStyleSheet;
-class QTextDocument;
 class QMenu;
-class QTextEditPrivate;
 class QMimeData;
 class QPagedPaintDevice;
+class QStyleSheet;
+class QTextDocument;
+
+class QTextEditPrivate;
 
 class Q_GUI_EXPORT QTextEdit : public QAbstractScrollArea
 {

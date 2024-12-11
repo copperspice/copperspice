@@ -21,21 +21,19 @@
 *
 ***********************************************************************/
 
-#include <qaccessiblewidget_common_p.h>
-
+#include <qaccessible.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
 #include <qtreeview.h>
 #include <qvariant.h>
-#include <qaccessible.h>
 
 #include <qaccessiblemenu_p.h>
-#include <qwidget_p.h>
-
-#include <qaccessiblewidget_simple_p.h>
-#include <qaccessiblewidget_range_p.h>
+#include <qaccessiblewidget_common_p.h>
 #include <qaccessiblewidget_complex_p.h>
+#include <qaccessiblewidget_range_p.h>
+#include <qaccessiblewidget_simple_p.h>
 #include <qaccessiblewidget_views_p.h>
+#include <qwidget_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 

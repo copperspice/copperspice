@@ -24,12 +24,12 @@
 #ifndef QTREEVIEW_P_H
 #define QTREEVIEW_P_H
 
-#include <qabstractitemview_p.h>
-#include <qvariantanimation.h>
 #include <qabstractitemmodel.h>
+#include <qvariantanimation.h>
+
+#include <qabstractitemview_p.h>
 
 #ifndef QT_NO_TREEVIEW
-
 
 struct QTreeViewItem {
    QTreeViewItem() : parentItem(-1), expanded(false), spanning(false), hasChildren(false),

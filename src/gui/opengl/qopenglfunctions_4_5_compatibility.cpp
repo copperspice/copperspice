@@ -22,8 +22,9 @@
 *
 ***********************************************************************/
 
-#include "qopenglfunctions_4_5_compatibility.h"
-#include "qopenglcontext.h"
+#include <qopenglfunctions_4_5_compatibility.h>
+
+#include <qopenglcontext.h>
 
 QOpenGLFunctions_4_5_Compatibility::QOpenGLFunctions_4_5_Compatibility()
  : QAbstractOpenGLFunctions()

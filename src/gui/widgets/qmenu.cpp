@@ -23,6 +23,7 @@
 ***********************************************************************/
 
 #include <qmenu.h>
+#include <qmenu_p.h>
 
 #ifndef QT_NO_MENU
 
@@ -41,8 +42,7 @@
 #include <qwidgetaction.h>
 
 #include <qaction_p.h>
-#include <qguiapplication_p.h>
-#include <qmenu_p.h>
+#include <qapplication_p.h>
 #include <qmenubar_p.h>
 #include <qpushbutton_p.h>
 

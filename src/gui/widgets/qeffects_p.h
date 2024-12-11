@@ -28,7 +28,6 @@
 
 #ifndef QT_NO_EFFECTS
 
-
 class QWidget;
 
 struct QEffects {

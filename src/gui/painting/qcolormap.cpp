@@ -23,8 +23,8 @@
 
 #include <qcolormap.h>
 
+#include <qapplication.h>
 #include <qcolor.h>
-#include <qguiapplication.h>
 #include <qpaintdevice.h>
 #include <qscreen.h>
 

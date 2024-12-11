@@ -25,11 +25,11 @@
 #define QFONTMETRICS_H
 
 #include <qfont.h>
-#include <qsharedpointer.h>
 #include <qrect.h>
+#include <qsharedpointer.h>
 
-class QTextCodec;
 class QRect;
+class QTextCodec;
 
 class Q_GUI_EXPORT QFontMetrics
 {

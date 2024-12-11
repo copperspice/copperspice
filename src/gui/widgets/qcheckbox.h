@@ -26,8 +26,9 @@
 
 #include <qabstractbutton.h>
 
-class QCheckBoxPrivate;
 class QStyleOptionButton;
+
+class QCheckBoxPrivate;
 
 class Q_GUI_EXPORT QCheckBox : public QAbstractButton
 {

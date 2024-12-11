@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QHeaderViewPrivate;
 class QStyleOptionHeader;
+
+class QHeaderViewPrivate;
 
 class Q_GUI_EXPORT QHeaderView : public QAbstractItemView
 {

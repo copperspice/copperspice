@@ -23,7 +23,7 @@
 
 #include <qplatform_openglcontext.h>
 
-#include <QOpenGLFunctions>
+#include <qopenglfunctions.h>
 
 class QPlatformOpenGLContextPrivate
 {

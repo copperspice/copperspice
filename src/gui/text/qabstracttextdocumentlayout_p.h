@@ -24,6 +24,8 @@
 #ifndef QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 #define QABSTRACTTEXTDOCUMENTLAYOUT_P_H
 
+#include <qabstracttextdocumentlayout.h>
+
 #include <qhash.h>
 
 struct QTextObjectHandler {

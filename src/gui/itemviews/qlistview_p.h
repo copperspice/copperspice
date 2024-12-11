@@ -36,6 +36,7 @@
 #ifndef QT_NO_LISTVIEW
 
 class QListView;
+
 class QListViewPrivate;
 
 class QListViewItem

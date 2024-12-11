@@ -23,12 +23,12 @@
 
 #include <qplatform_inputcontextfactory_p.h>
 
-#include <qplatform_inputcontext.h>
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qdebug.h>
+#include <qplatform_inputcontext.h>
 
-#include <qplatform_inputcontextplugin_p.h>
 #include <qfactoryloader_p.h>
+#include <qplatform_inputcontextplugin_p.h>
 
 #include <stdlib.h>
 

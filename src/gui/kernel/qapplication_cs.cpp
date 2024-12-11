@@ -22,7 +22,7 @@
 ***********************************************************************/
 
 #include <qapplication.h>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 
 #include <qabstracteventdispatcher.h>
 #include <qclipboard.h>

@@ -26,11 +26,11 @@
 #ifndef QT_NO_GRAPHICSVIEW
 
 #include <qgraphicsitem.h>
-#include <qtimeline.h>
+#include <qmatrix.h>
+#include <qpair.h>
 #include <qpoint.h>
 #include <qpointer.h>
-#include <qpair.h>
-#include <qmatrix.h>
+#include <qtimeline.h>
 
 #include <algorithm>
 

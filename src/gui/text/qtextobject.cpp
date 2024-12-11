@@ -22,18 +22,18 @@
 ***********************************************************************/
 
 #include <qtextobject.h>
+#include <qtextobject_p.h>
 
+#include <qabstracttextdocumentlayout.h>
 #include <qdebug.h>
 #include <qtextcursor.h>
 #include <qtextdocument.h>
 #include <qtextlist.h>
-#include <qabstracttextdocumentlayout.h>
 
-#include <qtextobject_p.h>
 #include <qtextcursor_p.h>
-#include <qtextformat_p.h>
 #include <qtextdocument_p.h>
 #include <qtextengine_p.h>
+#include <qtextformat_p.h>
 
 #include <algorithm>
 

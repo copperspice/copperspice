@@ -24,8 +24,8 @@
 #ifndef QSTRINGLISTMODEL_H
 #define QSTRINGLISTMODEL_H
 
-#include <qstringlist.h>
 #include <qabstractitemview.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_STRINGLISTMODEL
 

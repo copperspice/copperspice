@@ -24,11 +24,13 @@
 #ifndef QGRAPHICS_LAYOUTSTYLEINFO_P_H
 #define QGRAPHICS_LAYOUTSTYLEINFO_P_H
 
-#include <qabstractlayoutstyleinfo_p.h>
 #include <qstyleoption.h>
+
+#include <qabstractlayoutstyleinfo_p.h>
 
 class QStyle;
 class QWidget;
+
 class QGraphicsLayoutPrivate;
 
 class QGraphicsLayoutStyleInfo : public QAbstractLayoutStyleInfo

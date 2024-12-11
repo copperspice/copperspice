@@ -23,10 +23,11 @@
 
 #include <qplatform_drag.h>
 
-#include <qdnd_p.h>
-#include <qkeyevent.h>
-#include <qguiapplication.h>
+#include <qapplication.h>
 #include <qeventloop.h>
+#include <qkeyevent.h>
+
+#include <qdnd_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 

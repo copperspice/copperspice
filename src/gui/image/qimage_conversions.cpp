@@ -22,12 +22,12 @@
 ***********************************************************************/
 
 #include <qendian.h>
-
-#include <qdrawhelper_p.h>
-#include <qapplication_p.h>
 #include <qscopedarraypointer.h>
-#include <qsimd_p.h>
+
+#include <qapplication_p.h>
+#include <qdrawhelper_p.h>
 #include <qimage_p.h>
+#include <qsimd_p.h>
 
 // table to flip bits
 static const uchar bitflip[256] = {

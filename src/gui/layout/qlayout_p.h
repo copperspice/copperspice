@@ -25,11 +25,12 @@
 #define QLAYOUT_P_H
 
 #include <qstyle.h>
+
 #include <qsizepolicy.h>
 
-class QWidgetItem;
-class QSpacerItem;
 class QLayoutItem;
+class QSpacerItem;
+class QWidgetItem;
 
 class Q_GUI_EXPORT QLayoutPrivate
 {

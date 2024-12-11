@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qplatform_printdevice.h"
+#include <qplatform_printdevice.h>
 
-#include "qprintdevice_p.h"
-#include "qprintdialog.h"
 #include <qpagelayout.h>
+#include <qprintdevice_p.h>
+#include <qprintdialog.h>
 
 #ifndef QT_NO_PRINTER
 

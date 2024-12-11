@@ -24,13 +24,14 @@
 #ifndef QSCROLLBAR_H
 #define QSCROLLBAR_H
 
-#include <qwidget.h>
 #include <qabstractslider.h>
+#include <qwidget.h>
 
 #ifndef QT_NO_SCROLLBAR
 
-class QScrollBarPrivate;
 class QStyleOptionSlider;
+
+class QScrollBarPrivate;
 
 class Q_GUI_EXPORT QScrollBar : public QAbstractSlider
 {

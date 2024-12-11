@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qtiffhandler_p.h>
-#include <qvariant.h>
+
 #include <qdebug.h>
-#include <qimage.h>
 #include <qglobal.h>
+#include <qimage.h>
+#include <qvariant.h>
 
 #include <stdlib.h>
 

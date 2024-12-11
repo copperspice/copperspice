@@ -28,10 +28,10 @@
 #include <qobject.h>
 #include <qpainterpath.h>
 #include <qpixmap.h>
+#include <qrect.h>
 #include <qscopedpointer.h>
 #include <qtextcursor.h>
 #include <qvariant.h>
-#include <qrect.h>
 
 // accurate file name
 #include <qdeclarativelistproperty.h>
@@ -45,16 +45,15 @@ class QCursor;
 class QFocusEvent;
 class QGraphicsItemGroup;
 class QGraphicsObject;
+class QGraphicsScene;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneDragDropEvent;
 class QGraphicsSceneEvent;
 class QGraphicsSceneHoverEvent;
 class QGraphicsSceneMouseEvent;
 class QGraphicsSceneWheelEvent;
-class QGraphicsScene;
 class QGraphicsTransform;
 class QGraphicsWidget;
-class QStyleOptionGraphicsItem;
 class QInputMethodEvent;
 class QKeyEvent;
 class QMatrix;
@@ -63,18 +62,19 @@ class QPainter;
 class QPen;
 class QPointF;
 class QRectF;
+class QStyleOptionGraphicsItem;
 
-class QGraphicsItemPrivate;
 class QAbstractGraphicsShapeItemPrivate;
-class QGraphicsPathItemPrivate;
-class QGraphicsRectItemPrivate;
 class QGraphicsEllipseItemPrivate;
-class QGraphicsPolygonItemPrivate;
-class QGraphicsLineItemPrivate;
-class QGraphicsPixmapItemPrivate;
-class QGraphicsTextItemPrivate;
-class QGraphicsSimpleTextItemPrivate;
 class QGraphicsItemGroupPrivate;
+class QGraphicsItemPrivate;
+class QGraphicsLineItemPrivate;
+class QGraphicsPathItemPrivate;
+class QGraphicsPixmapItemPrivate;
+class QGraphicsPolygonItemPrivate;
+class QGraphicsRectItemPrivate;
+class QGraphicsSimpleTextItemPrivate;
+class QGraphicsTextItemPrivate;
 
 class Q_GUI_EXPORT QGraphicsItem
 {

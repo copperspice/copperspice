@@ -28,16 +28,16 @@
 
 #ifndef QT_NO_LINEEDIT
 
-#include <qlineedit.h>
-#include <qtextlayout.h>
-#include <qstyleoption.h>
-#include <qpointer.h>
 #include <qclipboard.h>
-#include <qinputmethod.h>
-#include <qpoint.h>
 #include <qcompleter.h>
-#include <qthread.h>
+#include <qinputmethod.h>
+#include <qlineedit.h>
 #include <qplatformdefs.h>
+#include <qpoint.h>
+#include <qpointer.h>
+#include <qstyleoption.h>
+#include <qtextlayout.h>
+#include <qthread.h>
 
 #include <qinputcontrol_p.h>
 #include <qtextengine_p.h>

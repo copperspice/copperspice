@@ -24,12 +24,12 @@
 #ifndef QMATRIX_H
 #define QMATRIX_H
 
-#include <qpolygon.h>
-#include <qregion.h>
-#include <qwindowdefs.h>
 #include <qline.h>
 #include <qpoint.h>
+#include <qpolygon.h>
 #include <qrect.h>
+#include <qregion.h>
+#include <qwindowdefs.h>
 
 class QPainterPath;
 class QVariant;

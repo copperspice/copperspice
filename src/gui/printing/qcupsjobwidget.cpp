@@ -26,14 +26,14 @@
 #include <qcheckbox.h>
 #include <qdatetime.h>
 #include <qfontdatabase.h>
+#include <qheaderview.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qtime.h>
+#include <qprintengine.h>
+#include <qprinter.h>
 #include <qtablewidget.h>
 #include <qtablewidgetitem.h>
-#include <qheaderview.h>
-#include <qprinter.h>
-#include <qprintengine.h>
+#include <qtime.h>
 
 #if ! defined(QT_NO_PRINTER) && ! defined(QT_NO_CUPS)
 

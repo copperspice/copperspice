@@ -24,10 +24,10 @@
 #ifndef QGLYPHRUN_H
 #define QGLYPHRUN_H
 
-#include <qsharedpointer.h>
-#include <qvector.h>
 #include <qpoint.h>
 #include <qrawfont.h>
+#include <qsharedpointer.h>
+#include <qvector.h>
 
 class QGlyphRunPrivate;
 

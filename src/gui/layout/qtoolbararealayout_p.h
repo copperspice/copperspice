@@ -24,9 +24,15 @@
 #ifndef QTOOLBARAREALAYOUT_P_H
 #define QTOOLBARAREALAYOUT_P_H
 
-#include <QList>
-#include <QSize>
-#include <QRect>
+#include <qlist.h>
+#include <qrect.h>
+#include <qsize.h>
+#include <qsizepolicy.h>
+
+class QLayoutItem;
+class QMainWindow;
+class QStyleOptionToolBar;
+class QToolBar;
 
 static inline int pick(Qt::Orientation o, const QPoint &pos)
 {
@@ -75,14 +81,8 @@ static inline int &rperp(Qt::Orientation o, QSize &size)
 
 #ifndef QT_NO_TOOLBAR
 
-class QToolBar;
-class QLayoutItem;
-class QMainWindow;
-class QStyleOptionToolBar;
-
 class QToolBarAreaLayoutItem
 {
-
  public:
    QToolBarAreaLayoutItem(QLayoutItem *item = nullptr)
       : widgetItem(item), pos(0), size(-1), preferredSize(-1), gap(false) {}

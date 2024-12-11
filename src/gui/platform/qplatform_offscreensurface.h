@@ -29,6 +29,7 @@
 
 class QOffscreenSurface;
 class QPlatformScreen;
+
 class QPlatformOffscreenSurfacePrivate;
 
 class Q_GUI_EXPORT QPlatformOffscreenSurface : public QPlatformSurface

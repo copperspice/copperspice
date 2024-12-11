@@ -24,12 +24,13 @@
 #ifndef QGRAPHICS_ANCHORLAYOUT_P_H
 #define QGRAPHICS_ANCHORLAYOUT_P_H
 
-#include <qmultihash.h>
-#include <qgraphicswidget.h>
 #include <qgraphicsanchorlayout.h>
 
-#include <qgraphics_layout_p.h>
+#include <qgraphicswidget.h>
+#include <qmultihash.h>
+
 #include <qgraph_p.h>
+#include <qgraphics_layout_p.h>
 #include <qsimplex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW

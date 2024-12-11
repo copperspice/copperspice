@@ -22,22 +22,21 @@
 ***********************************************************************/
 
 #include <qstandarditemmodel.h>
+#include <qstandarditemmodel_p.h>
 
 #ifndef QT_NO_STANDARDITEMMODEL
 
 #include <qalgorithms.h>
+#include <qbitarray.h>
 #include <qdatetime.h>
 #include <qdebug.h>
 #include <qlist.h>
 #include <qmap.h>
+#include <qmimedata.h>
 #include <qpair.h>
 #include <qstringlist.h>
-#include <qbitarray.h>
-#include <qmimedata.h>
 #include <qvariant.h>
 #include <qvector.h>
-
-#include <qstandarditemmodel_p.h>
 
 #include <algorithm>
 

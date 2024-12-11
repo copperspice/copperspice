@@ -29,8 +29,8 @@
 
 #ifndef QT_NO_RESIZEHANDLER
 
-class QMouseEvent;
 class QKeyEvent;
+class QMouseEvent;
 
 class Q_GUI_EXPORT QWidgetResizeHandler : public QObject
 {

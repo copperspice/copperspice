@@ -25,6 +25,7 @@
 #define QBOXLAYOUT_H
 
 #include <qlayout.h>
+
 #include <limits.h>
 
 class QBoxLayoutPrivate;

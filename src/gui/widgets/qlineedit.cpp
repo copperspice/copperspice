@@ -27,40 +27,42 @@
 #ifndef QT_NO_LINEEDIT
 
 #include <qaction.h>
+#include <qabstractitemview.h>
 #include <qapplication.h>
 #include <qclipboard.h>
+#include <qdebug.h>
 #include <qdrag.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
-#include <qstylehints.h>
 #include <qmenu.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpointer.h>
 #include <qstringlist.h>
 #include <qstyle.h>
+#include <qstylehints.h>
 #include <qstyleoption.h>
+#include <qtextedit.h>
 #include <qtimer.h>
 #include <qvalidator.h>
 #include <qvariant.h>
 #include <qvector.h>
 #include <qwhatsthis.h>
-#include <qdebug.h>
-#include <qtextedit.h>
+
+#include <qstylesheetstyle_p.h>
 #include <qtextedit_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>
 #endif
 
-#include <qabstractitemview.h>
-#include <qstylesheetstyle_p.h>
-
 #ifndef QT_NO_SHORTCUT
+
+#include <qkeysequence.h>
+
 #include <qapplication_p.h>
 #include <qshortcutmap_p.h>
-#include <qkeysequence.h>
 
 #define ACCEL_KEY(k)   (! qApp->d_func()->shortcutMap.hasShortcutForKeySequence(k) ?  \
                         QLatin1Char('\t') + QKeySequence(k).toString(QKeySequence::NativeText) : QString())

@@ -36,7 +36,7 @@
 #include <qstandardpaths.h>
 #include <qurl.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 
 class QOpenUrlHandlerRegistry : public QObject
 {

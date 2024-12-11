@@ -43,8 +43,8 @@
 #include <qsettings.h>
 #include <qt_windows.h>
 
+#include <qapplication_p.h>
 #include <qsystemlibrary_p.h>
-#include <qguiapplication_p.h>
 
 #include <commctrl.h>
 #include <windowsx.h>

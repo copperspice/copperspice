@@ -24,16 +24,17 @@
 #ifndef QSPLITTER_H
 #define QSPLITTER_H
 
+#include <qcontainerfwd.h>
 #include <qframe.h>
 #include <qsizepolicy.h>
-#include <qcontainerfwd.h>
 
 #ifndef QT_NO_SPLITTER
 
-class QTextStream;
-class QSplitterPrivate;
-class QSplitterHandlePrivate;
 class QSplitterHandle;
+class QTextStream;
+
+class QSplitterHandlePrivate;
+class QSplitterPrivate;
 
 class Q_GUI_EXPORT QSplitter : public QFrame
 {

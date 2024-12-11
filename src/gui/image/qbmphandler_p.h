@@ -28,7 +28,6 @@
 
 #ifndef QT_NO_IMAGEFORMAT_BMP
 
-
 struct BMP_FILEHDR {                    // BMP file header
    char   bfType[2];                    // "BM"
    qint32  bfSize;                      // size of file

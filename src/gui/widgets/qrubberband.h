@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_RUBBERBAND
 
-class QRubberBandPrivate;
 class QStyleOptionRubberBand;
+
+class QRubberBandPrivate;
 
 class Q_GUI_EXPORT QRubberBand : public QWidget
 {

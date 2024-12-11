@@ -27,15 +27,15 @@
 
 #include <qaction.h>
 #include <qapplication.h>
+#include <qfocusframe.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
+#include <qmath.h>
+#include <qmenu.h>
+#include <qrubberband.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 #include <qwidget.h>
-#include <qmath.h>
-#include <qrubberband.h>
-#include <qfocusframe.h>
-#include <qmenu.h>
 
 #include <qwidget_p.h>
 

@@ -26,18 +26,17 @@
 
 #include <qpaintengine.h>
 
-
 #include <qpaintengine_p.h>
-#include <qstroker_p.h>
 #include <qpainter_p.h>
+#include <qstroker_p.h>
 #include <qvectorpath_p.h>
 
 class QPainterState;
-class QPaintEngineExPrivate;
 class QStaticTextItem;
 
-struct StrokeHandler;
+class QPaintEngineExPrivate;
 
+struct StrokeHandler;
 
 QDebug Q_GUI_EXPORT &operator<<(QDebug &, const QVectorPath &path);
 

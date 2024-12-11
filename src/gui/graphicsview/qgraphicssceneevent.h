@@ -33,6 +33,11 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
+class QMimeData;
+class QPointF;
+class QSizeF;
+class QWidget;
+
 class QGraphicsSceneContextMenuEventPrivate;
 class QGraphicsSceneDragDropEventPrivate;
 class QGraphicsSceneEventPrivate;
@@ -42,10 +47,6 @@ class QGraphicsSceneMouseEventPrivate;
 class QGraphicsSceneMoveEventPrivate;
 class QGraphicsSceneResizeEventPrivate;
 class QGraphicsSceneWheelEventPrivate;
-class QMimeData;
-class QPointF;
-class QSizeF;
-class QWidget;
 
 class Q_GUI_EXPORT QGraphicsSceneEvent : public QEvent
 {

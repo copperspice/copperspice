@@ -23,12 +23,12 @@
 
 #include <qplatform_pixmap.h>
 
-#include <qbuffer.h>
 #include <qbitmap.h>
+#include <qbuffer.h>
 #include <qimagereader.h>
 #include <qplatform_integration.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qimagepixmapcleanuphooks_p.h>
 
 QPlatformPixmap *QPlatformPixmap::create(int w, int h, PixelType type)

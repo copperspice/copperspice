@@ -30,9 +30,10 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-class QGraphicsAnchorPrivate;
 class QGraphicsAnchorLayout;
+
 class QGraphicsAnchorLayoutPrivate;
+class QGraphicsAnchorPrivate;
 
 class Q_GUI_EXPORT QGraphicsAnchor : public QObject
 {

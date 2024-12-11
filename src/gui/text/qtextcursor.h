@@ -24,24 +24,25 @@
 #ifndef QTEXTCURSOR_H
 #define QTEXTCURSOR_H
 
-#include <qstring.h>
 #include <qshareddata.h>
+#include <qstring.h>
 #include <qtextformat.h>
 
-class QTextDocument;
-class QTextCursorPrivate;
-class QTextDocumentFragment;
-class QTextCharFormat;
+class QTextBlock;
 class QTextBlockFormat;
-class QTextListFormat;
-class QTextTableFormat;
+class QTextCharFormat;
+class QTextDocument;
+class QTextDocumentFragment;
+class QTextFrame;
 class QTextFrameFormat;
 class QTextImageFormat;
-class QTextDocumentPrivate;
 class QTextList;
+class QTextListFormat;
 class QTextTable;
-class QTextFrame;
-class QTextBlock;
+class QTextTableFormat;
+
+class QTextCursorPrivate;
+class QTextDocumentPrivate;
 
 class Q_GUI_EXPORT QTextCursor
 {

@@ -21,19 +21,19 @@
 *
 ***********************************************************************/
 
+#include <qscrollbar.h>
+#include <qscrollbar_p.h>
+
 #include <qapplication.h>
 #include <qcursor.h>
+#include <qelapsedtimer.h>
 #include <qevent.h>
+#include <qmenu.h>
 #include <qpainter.h>
-#include <qscrollbar.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qmenu.h>
-#include <qelapsedtimer.h>
 
 #ifndef QT_NO_SCROLLBAR
-
-#include <qscrollbar_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

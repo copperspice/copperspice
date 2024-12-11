@@ -26,8 +26,8 @@
 #include <qpixmap.h>
 #include <qpoint.h>
 
+#include <qapplication_p.h>
 #include <qdnd_p.h>
-#include <qguiapplication_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 

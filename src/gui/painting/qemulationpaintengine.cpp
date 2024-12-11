@@ -22,10 +22,10 @@
 ***********************************************************************/
 
 #include <qemulationpaintengine_p.h>
+
+#include <qdebug.h>
 #include <qpainter_p.h>
 #include <qtextengine_p.h>
-#include <qdebug.h>
-
 
 QEmulationPaintEngine::QEmulationPaintEngine(QPaintEngineEx *engine)
    : real_engine(engine)

@@ -24,44 +24,43 @@
 #include <algorithm>
 
 #include <qgraphicsitem.h>
+#include <qgraphics_item_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW
 
+#include <qapplication.h>
+#include <qbitarray.h>
+#include <qbitmap.h>
+#include <qdebug.h>
+#include <qevent.h>
+#include <qgraphicseffect.h>
+#include <qgraphicsproxywidget.h>
 #include <qgraphicsscene.h>
 #include <qgraphicssceneevent.h>
 #include <qgraphicsview.h>
 #include <qgraphicswidget.h>
-#include <qgraphicsproxywidget.h>
-
-#include <qbitarray.h>
-#include <qdebug.h>
-#include <qpoint.h>
-#include <qstack.h>
-#include <qtimer.h>
-#include <qvariant.h>
-#include <qvarlengtharray.h>
+#include <qinputmethod.h>
 #include <qnumeric.h>
-#include <qapplication.h>
-#include <qbitmap.h>
 #include <qpainter.h>
 #include <qpainterpath.h>
 #include <qpixmapcache.h>
+#include <qpoint.h>
+#include <qstack.h>
 #include <qstyleoption.h>
-#include <qevent.h>
-#include <qinputmethod.h>
-#include <qgraphicseffect.h>
+#include <qtimer.h>
+#include <qvariant.h>
+#include <qvarlengtharray.h>
 
+#include <qapplication_p.h>
+#include <qdebug_p.h>
+#include <qgesturemanager_p.h>
 #include <qgraphics_scene_p.h>
-#include <qgraphics_item_p.h>
 #include <qgraphics_scenebsptreeindex_p.h>
 #include <qgraphics_widget_p.h>
 #include <qtextcontrol_p.h>
 #include <qtextdocumentlayout_p.h>
 #include <qtextengine_p.h>
 #include <qwidget_p.h>
-#include <qapplication_p.h>
-#include <qgesturemanager_p.h>
-#include <qdebug_p.h>
 
 static inline void _q_adjustRect(QRect *rect)
 {

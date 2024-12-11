@@ -54,9 +54,9 @@
 #include <qtreeview.h>
 #include <qwizard.h>
 
+#include <qapplication_p.h>
 #include <qcommonstyle_p.h>
 #include <qcommonstylepixmaps_p.h>
-#include <qguiapplication_p.h>
 #include <qmath_p.h>
 #include <qstyleanimation_p.h>
 #include <qstylehelper_p.h>

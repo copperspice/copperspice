@@ -22,16 +22,16 @@
 ***********************************************************************/
 
 #include <qplatform_screen.h>
+#include <qplatform_screen_p.h>
 
+#include <qapplication.h>
 #include <qdebug.h>
-#include <qguiapplication.h>
 #include <qplatform_cursor.h>
 #include <qplatform_integration.h>
 #include <qscreen.h>
 #include <qwindow.h>
 
-#include <qguiapplication_p.h>
-#include <qplatform_screen_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 
 QPlatformScreen::QPlatformScreen()

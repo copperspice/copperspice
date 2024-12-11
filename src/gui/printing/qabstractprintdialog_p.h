@@ -33,6 +33,7 @@
 #ifndef QT_NO_PRINTER
 
 class QPrinter;
+
 class QPrinterPrivate;
 
 class QAbstractPrintDialogPrivate : public QDialogPrivate

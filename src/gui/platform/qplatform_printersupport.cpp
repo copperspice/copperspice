@@ -23,12 +23,12 @@
 
 #include <qplatform_printersupport.h>
 
-#include <qplatform_printdevice.h>
 #include <qpagesize.h>
+#include <qplatform_printdevice.h>
 #include <qprinterinfo.h>
 
-#include <qprinterinfo_p.h>
 #include <qprintdevice_p.h>
+#include <qprinterinfo_p.h>
 
 #ifndef QT_NO_PRINTER
 

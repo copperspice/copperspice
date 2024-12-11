@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
+#include <qfontmetrics.h>
+
 #include <qfont.h>
 #include <qpaintdevice.h>
-#include <qfontmetrics.h>
 
 #include <qfont_p.h>
 #include <qfontengine_p.h>

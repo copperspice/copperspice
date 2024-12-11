@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qtablewidget.h>
+#include <qtablewidget_p.h>
 
 #ifndef QT_NO_TABLEWIDGET
+
 #include <qitemdelegate.h>
 #include <qpainter.h>
-#include <qtablewidget_p.h>
 
 #include <algorithm>
 

@@ -24,8 +24,9 @@
 #ifndef QSPLITTER_P_H
 #define QSPLITTER_P_H
 
-#include <qframe_p.h>
 #include <qrubberband.h>
+
+#include <qframe_p.h>
 
 static constexpr const uint Default = 2;
 

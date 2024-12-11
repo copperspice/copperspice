@@ -23,11 +23,12 @@
 
 #include <qstatictext.h>
 #include <qstatictext_p.h>
-#include <qtextengine_p.h>
-#include <qfontengine_p.h>
-#include <qabstracttextdocumentlayout.h>
 
+#include <qabstracttextdocumentlayout.h>
 #include <qapplication.h>
+
+#include <qfontengine_p.h>
+#include <qtextengine_p.h>
 
 QStaticText::QStaticText()
    : data(new QStaticTextPrivate)

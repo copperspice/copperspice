@@ -25,6 +25,7 @@
 #define QGLYPHRUN_P_H
 
 #include <qglyphrun.h>
+
 #include <qrawfont.h>
 #include <qfont.h>
 

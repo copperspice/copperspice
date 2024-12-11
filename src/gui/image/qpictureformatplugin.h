@@ -24,14 +24,14 @@
 #ifndef QPICTUREFORMATPLUGIN_H
 #define QPICTUREFORMATPLUGIN_H
 
-#include <qplugin.h>
 #include <qfactoryinterface.h>
+#include <qplugin.h>
 #include <qstringfwd.h>
 
 #if ! defined(QT_NO_PICTURE)
 
-class QPicture;
 class QImage;
+class QPicture;
 class QStringList;
 
 #define QPictureFormatInterface_ID "com.copperspice.CS.PictureFormatInterface"

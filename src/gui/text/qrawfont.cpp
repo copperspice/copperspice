@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qrawfont.h>
 #include <qrawfont_p.h>
 
 #include <qglobal.h>
 #include <qendian.h>
-#include <qrawfont.h>
 #include <qplatform_fontdatabase.h>
 #include <qplatform_integration.h>
 

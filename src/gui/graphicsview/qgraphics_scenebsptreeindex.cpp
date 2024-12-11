@@ -25,8 +25,8 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <qmath.h>
 #include <qdebug.h>
+#include <qmath.h>
 
 #include <qgraphics_scene_p.h>
 #include <qgraphics_scenebsptreeindex_p.h>

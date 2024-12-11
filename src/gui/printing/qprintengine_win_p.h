@@ -28,18 +28,19 @@
 
 #ifndef QT_NO_PRINTER
 
-#include <qpaintengine.h>
 #include <qpagelayout.h>
-#include <qprinter.h>
+#include <qpaintengine.h>
 #include <qprintengine.h>
+#include <qprinter.h>
 #include <qt_windows.h>
 
 #include <qpaintengine_alpha_p.h>
 #include <qprintdevice_p.h>
 
-class QWin32PrintEnginePrivate;
-class QPrinterPrivate;
 class QPainterState;
+
+class QPrinterPrivate;
+class QWin32PrintEnginePrivate;
 
 class Q_GUI_EXPORT QWin32PrintEngine : public QAlphaPaintEngine, public QPrintEngine
 {

@@ -26,9 +26,9 @@
 #ifndef QT_NO_ACCESSIBILITY
 
 #include <qapplication.h>
-#include <qwindow.h>
-#include <qpointer.h>
 #include <qmetaobject.h>
+#include <qpointer.h>
+#include <qwindow.h>
 
 class QAccessibleObjectPrivate
 {

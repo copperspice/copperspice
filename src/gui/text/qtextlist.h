@@ -24,11 +24,12 @@
 #ifndef QTEXTLIST_H
 #define QTEXTLIST_H
 
-#include <qtextobject.h>
 #include <qobject.h>
+#include <qtextobject.h>
+
+class QTextCursor;
 
 class QTextListPrivate;
-class QTextCursor;
 
 class Q_GUI_EXPORT QTextList : public QTextBlockGroup
 {

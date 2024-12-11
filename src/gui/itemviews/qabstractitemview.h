@@ -31,10 +31,11 @@
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QAbstractItemViewPrivate;
 class QDrag;
 class QEvent;
 class QMenu;
+
+class QAbstractItemViewPrivate;
 
 class Q_GUI_EXPORT QAbstractItemView : public QAbstractScrollArea
 {

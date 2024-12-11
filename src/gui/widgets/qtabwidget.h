@@ -24,14 +24,15 @@
 #ifndef QTABWIDGET_H
 #define QTABWIDGET_H
 
-#include <qwidget.h>
 #include <qicon.h>
+#include <qwidget.h>
 
 #ifndef QT_NO_TABWIDGET
 
 class QTabBar;
-class QTabWidgetPrivate;
 class QStyleOptionTabWidgetFrame;
+
+class QTabWidgetPrivate;
 
 class Q_GUI_EXPORT QTabWidget : public QWidget
 {

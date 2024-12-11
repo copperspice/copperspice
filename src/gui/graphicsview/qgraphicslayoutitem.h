@@ -24,14 +24,15 @@
 #ifndef QGRAPHICSLAYOUTITEM_H
 #define QGRAPHICSLAYOUTITEM_H
 
+#include <qevent.h>
 #include <qscopedpointer.h>
 #include <qsizepolicy.h>
-#include <qevent.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-class QGraphicsLayoutItemPrivate;
 class QGraphicsItem;
+
+class QGraphicsLayoutItemPrivate;
 
 class Q_GUI_EXPORT QGraphicsLayoutItem
 {

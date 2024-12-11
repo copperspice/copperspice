@@ -37,8 +37,8 @@
 #include <qtransform.h>
 #include <qvariant.h>
 
-class QImageWriter;
 class QImageReader;
+class QImageWriter;
 class QPlatformPixmap;
 
 enum QPlatformPixmap_ClassId : int;

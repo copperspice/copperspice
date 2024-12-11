@@ -35,16 +35,16 @@
 #include <qpainter.h>
 #include <qregularexpression.h>
 #include <qstyle.h>
+#include <qtextdocument.h>
 #include <qtextformat.h>
 #include <qtextlist.h>
 #include <qtexttable.h>
 #include <qtimer.h>
 #include <qvariant.h>
 
-#include <qtextdocumentlayout_p.h>
 #include <qabstracttextdocumentlayout_p.h>
-#include <qtextdocument.h>
 #include <qtextdocument_p.h>
+#include <qtextdocumentlayout_p.h>
 
 #include <limits.h>
 

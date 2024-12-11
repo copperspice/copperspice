@@ -21,20 +21,20 @@
 *
 ***********************************************************************/
 
-#include <qglobal.h>
+#include <qdrawhelper_p.h>
 
-#include <qstylehints.h>
 #include <qapplication.h>
 #include <qatomic.h>
+#include <qglobal.h>
 #include <qmath.h>
+#include <qstylehints.h>
 
-#include <qdrawhelper_p.h>
-#include <qpaintengine_raster_p.h>
-#include <qpainter_p.h>
+#include <qapplication_p.h>
+#include <qdrawhelper_neon_p.h>
 #include <qdrawhelper_x86_p.h>
 #include <qdrawingprimitive_sse2_p.h>
-#include <qdrawhelper_neon_p.h>
-#include <qapplication_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qpainter_p.h>
 #include <qrgba64_p.h>
 
 #if defined(QT_COMPILER_SUPPORTS_MIPS_DSP) || defined(QT_COMPILER_SUPPORTS_MIPS_DSPR2)

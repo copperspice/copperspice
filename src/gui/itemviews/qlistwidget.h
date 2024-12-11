@@ -34,9 +34,10 @@
 class QEvent;
 class QListModel;
 class QListWidget;
+class QWidgetItemData;
+
 class QListWidgetItemPrivate;
 class QListWidgetPrivate;
-class QWidgetItemData;
 
 class Q_GUI_EXPORT QListWidgetItem
 {

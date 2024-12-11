@@ -21,10 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qlayout.h>
-
 #include <qapplication.h>
 #include <qevent.h>
+#include <qlayout.h>
 #include <qmenubar.h>
 #include <qstyle.h>
 #include <qtoolbar.h>

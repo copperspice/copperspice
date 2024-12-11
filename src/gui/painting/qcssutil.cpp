@@ -22,9 +22,11 @@
 ***********************************************************************/
 
 #include <qcssutil_p.h>
-#include <qcssparser_p.h>
-#include <qpainter.h>
+
 #include <qmath.h>
+#include <qpainter.h>
+
+#include <qcssparser_p.h>
 
 #ifndef QT_NO_CSSPARSER
 

@@ -26,12 +26,13 @@
 
 #include <qglobal.h>
 #include <qlist.h>
-#include <qsize.h>
 #include <qpixmap.h>
+#include <qsize.h>
 #include <qvariant.h>
 
-class QIconPrivate;
 class QIconEngine;
+
+class QIconPrivate;
 
 class Q_GUI_EXPORT QIcon
 {

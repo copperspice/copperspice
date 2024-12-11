@@ -25,25 +25,25 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <qabstractprintdialog_p.h>
 #include <qdialogbuttonbox.h>
-#include <qmessagebox.h>
-#include <qprintdialog.h>
-#include <qfiledialog.h>
 #include <qdir.h>
 #include <qevent.h>
+#include <qfiledialog.h>
 #include <qfilesystemmodel.h>
-#include <qstyleditemdelegate.h>
-#include <qprinter.h>
-#include <qplatform_printplugin.h>
+#include <qmessagebox.h>
 #include <qplatform_printersupport.h>
-#include <qprintdevice_p.h>
+#include <qplatform_printplugin.h>
+#include <qprintdialog.h>
+#include <qprinter.h>
 #include <qregularexpression.h>
-
-#include <qfscompleter_p.h>
+#include <qstyleditemdelegate.h>
 #include <ui_qprintpropertieswidget.h>
 #include <ui_qprintsettingsoutput.h>
 #include <ui_qprintwidget.h>
+
+#include <qabstractprintdialog_p.h>
+#include <qfscompleter_p.h>
+#include <qprintdevice_p.h>
 
 #ifndef QT_NO_CUPS
 #include <qcups_p.h>
@@ -52,6 +52,7 @@
 
 class QOptionTreeItem;
 class QPPDOptionsModel;
+
 class QUnixPrintWidgetPrivate;
 
 static void initResources()

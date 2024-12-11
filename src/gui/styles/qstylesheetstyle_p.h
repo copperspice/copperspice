@@ -28,19 +28,20 @@
 
 #ifndef QT_NO_STYLE_STYLESHEET
 
-#include <qstyleoption.h>
+#include <qapplication.h>
 #include <qbrush.h>
 #include <qevent.h>
 #include <qhash.h>
+#include <qstyleoption.h>
 #include <qvector.h>
-#include <qapplication.h>
 
 #include <qcssparser_p.h>
 #include <qrenderrule_p.h>
 
 class QAbstractScrollArea;
-class QStyleSheetStylePrivate;
 class QStyleOptionTitleBar;
+
+class QStyleSheetStylePrivate;
 
 class QStyleSheetStyle : public QWindowsStyle
 {

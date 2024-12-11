@@ -29,6 +29,7 @@
 #ifndef QT_NO_PRINTDIALOG
 
 class QPrinter;
+
 class QPageSetupDialogPrivate;
 
 class Q_GUI_EXPORT QPageSetupDialog : public QDialog

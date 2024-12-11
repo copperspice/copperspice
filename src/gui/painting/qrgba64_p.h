@@ -25,6 +25,7 @@
 #define QRGBA64_P_H
 
 #include <qrgba64.h>
+
 #include <qdrawhelper_p.h>
 #include <qsimd_p.h>
 

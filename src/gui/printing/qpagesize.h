@@ -32,9 +32,10 @@
 #undef B0             // Terminal hang-up, assume you do not want that
 #endif
 
-class QPageSizePrivate;
 class QSize;
 class QSizeF;
+
+class QPageSizePrivate;
 
 class Q_GUI_EXPORT QPageSize
 {

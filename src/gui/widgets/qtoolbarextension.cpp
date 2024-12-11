@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qtoolbarextension_p.h>
+
 #include <qpixmap.h>
 #include <qstyle.h>
-#include <qstylepainter.h>
 #include <qstyleoption.h>
+#include <qstylepainter.h>
 
 #ifndef QT_NO_TOOLBUTTON
 

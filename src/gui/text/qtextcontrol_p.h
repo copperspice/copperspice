@@ -24,28 +24,29 @@
 #ifndef QTEXTCONTROL_P_H
 #define QTEXTCONTROL_P_H
 
-#include <qtextdocument.h>
-#include <qtextoption.h>
-#include <qtextcursor.h>
-#include <qtextformat.h>
-#include <qtextedit.h>
-#include <qmenu.h>
-#include <qrect.h>
 #include <qabstracttextdocumentlayout.h>
-#include <qtextdocumentfragment.h>
 #include <qclipboard.h>
+#include <qmenu.h>
 #include <qmimedata.h>
+#include <qrect.h>
+#include <qtextcursor.h>
+#include <qtextdocument.h>
+#include <qtextdocumentfragment.h>
+#include <qtextedit.h>
+#include <qtextformat.h>
+#include <qtextoption.h>
+
 #include <qinputcontrol_p.h>
 
 class QAbstractScrollArea;
+class QEvent;
 class QMenu;
+class QPagedPaintDevice;
 class QStyleSheet;
 class QTextDocument;
-class QTextControlPrivate;
-
-class QEvent;
 class QTimerEvent;
-class QPagedPaintDevice;
+
+class QTextControlPrivate;
 
 class Q_GUI_EXPORT QTextControl : public QInputControl
 {

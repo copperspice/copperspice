@@ -22,13 +22,15 @@
 ***********************************************************************/
 
 #include <qradiobutton.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qbuttongroup.h>
-#include <qstylepainter.h>
+#include <qevent.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qevent.h>
+#include <qstylepainter.h>
+
 #include <qabstractbutton_p.h>
 
 class QRadioButtonPrivate : public QAbstractButtonPrivate

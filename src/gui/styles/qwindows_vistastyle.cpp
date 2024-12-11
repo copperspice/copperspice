@@ -27,10 +27,10 @@
 #include <qscreen.h>
 #include <qwindow.h>
 
+#include <qapplication_p.h>
 #include <qstyleanimation_p.h>
 #include <qstylehelper_p.h>
 #include <qsystemlibrary_p.h>
-#include <qapplication_p.h>
 
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA) || defined(QT_PLUGIN)
 

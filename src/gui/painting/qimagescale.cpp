@@ -30,9 +30,10 @@
 */
 
 #include <qimagescale_p.h>
+
+#include <qcolor.h>
 #include <qdrawhelper_p.h>
 #include <qimage.h>
-#include <qcolor.h>
 
 namespace QImageScale {
 

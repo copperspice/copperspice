@@ -24,8 +24,9 @@
 #ifndef QSCROLLBAR_P_H
 #define QSCROLLBAR_P_H
 
-#include <qabstractslider_p.h>
 #include <qstyle.h>
+
+#include <qabstractslider_p.h>
 
 class QScrollBarPrivate : public QAbstractSliderPrivate
 {

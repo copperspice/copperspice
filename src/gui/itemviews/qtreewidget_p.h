@@ -24,20 +24,21 @@
 #ifndef QTREEWIDGET_P_H
 #define QTREEWIDGET_P_H
 
-#include <qabstractitemmodel.h>
-
-#include <qpair.h>
-#include <qbasictimer.h>
 #include <qtreewidget.h>
-#include <qtreeview_p.h>
+
+#include <qabstractitemmodel.h>
+#include <qbasictimer.h>
 #include <qheaderview.h>
+#include <qpair.h>
 
 #include <qabstractitemmodel_p.h>
+#include <qtreeview_p.h>
 
 #ifndef QT_NO_TREEWIDGET
 
 class QTreeWidgetItem;
 class QTreeWidgetItemIterator;
+
 class QTreeModelPrivate;
 
 class QTreeModel : public QAbstractItemModel

@@ -23,18 +23,18 @@
 
 #include <qlabel_p.h>
 
-#include <qpainter.h>
-#include <qevent.h>
-#include <qdrawutil.h>
-#include <qapplication.h>
 #include <qabstractbutton.h>
-#include <qstyle.h>
-#include <qstyleoption.h>
 #include <qaction.h>
+#include <qapplication.h>
 #include <qclipboard.h>
 #include <qdebug.h>
-#include <qurl.h>
+#include <qdrawutil.h>
+#include <qevent.h>
 #include <qmath.h>
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qurl.h>
 
 #include <qstylesheetstyle_p.h>
 #include <qtextengine_p.h>

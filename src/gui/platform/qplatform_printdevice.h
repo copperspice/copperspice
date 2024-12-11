@@ -24,10 +24,10 @@
 #ifndef QPLATFORMPRINTDEVICE_H
 #define QPLATFORMPRINTDEVICE_H
 
-#include <qprint_p.h>
-
-#include <qvector.h>
 #include <qpagelayout.h>
+#include <qvector.h>
+
+#include <qprint_p.h>
 
 // emerald   #include <qmimetype.h>
 

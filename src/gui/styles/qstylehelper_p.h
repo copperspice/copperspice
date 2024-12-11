@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
+#include <qaccessible.h>
 #include <qglobal.h>
 #include <qpoint.h>
-#include <qstring.h>
 #include <qpolygon.h>
-#include <qaccessible.h>
+#include <qstring.h>
 
 #ifndef QSTYLEHELPER_P_H
 #define QSTYLEHELPER_P_H
@@ -34,8 +34,8 @@
 
 class QPainter;
 class QPixmap;
-class QStyleOptionSlider;
 class QStyleOption;
+class QStyleOptionSlider;
 class QWindow;
 
 namespace QStyleHelper {

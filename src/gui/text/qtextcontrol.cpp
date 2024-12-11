@@ -31,8 +31,8 @@
 #include <qbuffer.h>
 #include <qclipboard.h>
 #include <qdatetime.h>
-#include <qdesktopservices.h>
 #include <qdebug.h>
+#include <qdesktopservices.h>
 #include <qdrag.h>
 #include <qevent.h>
 #include <qfont.h>
@@ -46,20 +46,20 @@
 #include <qstylehints.h>
 #include <qstyleoption.h>
 #include <qtextdocument.h>
-#include <qtimer.h>
+#include <qtextdocumentwriter.h>
 #include <qtextformat.h>
 #include <qtextlist.h>
-#include <qtextdocumentwriter.h>
-#include <qtooltip.h>
 #include <qtexttable.h>
-#include <qvariant.h>
+#include <qtimer.h>
+#include <qtooltip.h>
 #include <qurl.h>
+#include <qvariant.h>
 
-#include <qtextdocumentlayout_p.h>
 #include <qabstracttextdocumentlayout_p.h>
-#include <qtextedit_p.h>
-#include <qtextdocument_p.h>
 #include <qtextcursor_p.h>
+#include <qtextdocument_p.h>
+#include <qtextdocumentlayout_p.h>
+#include <qtextedit_p.h>
 
 #include <limits.h>
 

@@ -24,12 +24,12 @@
 #include <qstackedlayout.h>
 
 #include <qalgorithms.h>
-#include <qlayout_p.h>
 #include <qlist.h>
 #include <qwidget.h>
 
-#include <qwidget_p.h>
+#include <qlayout_p.h>
 #include <qlayoutengine_p.h>
+#include <qwidget_p.h>
 
 class QStackedLayoutPrivate : public QLayoutPrivate
 {

@@ -29,9 +29,10 @@
 #ifndef QT_NO_DOCKWIDGET
 
 class QDockAreaLayout;
-class QDockWidgetPrivate;
 class QMainWindow;
 class QStyleOptionDockWidget;
+
+class QDockWidgetPrivate;
 
 class Q_GUI_EXPORT QDockWidget : public QWidget
 {

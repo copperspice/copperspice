@@ -23,11 +23,11 @@
 
 #include <qpolygon.h>
 
-#include <qrect.h>
 #include <qdatastream.h>
-#include <qmatrix.h>
 #include <qdebug.h>
+#include <qmatrix.h>
 #include <qpainterpath.h>
+#include <qrect.h>
 #include <qvariant.h>
 
 #include <qpainterpath_p.h>

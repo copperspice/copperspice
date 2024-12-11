@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <qmainwindowlayout_p.h>
 #include <qdockarealayout_p.h>
+#include <qmainwindowlayout_p.h>
 
 #ifndef QT_NO_MAINWINDOW
 

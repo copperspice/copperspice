@@ -25,14 +25,15 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <qwidget.h>
-#include <qgraphicslayoutitem.h>
 #include <qgraphicslinearlayout.h>
-#include <qgraphicswidget.h>
 
+#include <qgraphicslayoutitem.h>
+#include <qgraphicswidget.h>
+#include <qwidget.h>
+
+#include <qgraphics_gridlayoutengine_p.h>
 #include <qgraphics_layout_p.h>
 #include <qgraphics_layoutstyleinfo_p.h>
-#include <qgraphics_gridlayoutengine_p.h>
 
 class QGraphicsLinearLayoutPrivate : public QGraphicsLayoutPrivate
 {

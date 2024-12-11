@@ -24,20 +24,19 @@
 #ifndef QPLATFORMPRINTERSUPPORT_H
 #define QPLATFORMPRINTERSUPPORT_H
 
-#include <qprinter.h>
-
-#include <qstringlist.h>
-#include <qlist.h>
 #include <qhash.h>
+#include <qlist.h>
+#include <qprinter.h>
+#include <qstringlist.h>
 
 #ifndef QT_NO_PRINTER
-
-typedef QHash<QString, QString> PrinterOptions;
 
 class QPageSize;
 class QPlatformPrintDevice;
 class QPrintDevice;
 class QPrintEngine;
+
+typedef QHash<QString, QString> PrinterOptions;
 
 class Q_GUI_EXPORT QPlatformPrinterSupport
 {

@@ -28,13 +28,12 @@
 #include <qvariant.h>
 #include <qvector.h>
 
-
-
 #ifndef QT_NO_TABLEWIDGET
 
-class QTableWidget;
 class QTableModel;
+class QTableWidget;
 class QWidgetItemData;
+
 class QTableWidgetItemPrivate;
 
 class Q_GUI_EXPORT QTableWidgetSelectionRange

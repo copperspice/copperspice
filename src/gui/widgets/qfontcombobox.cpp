@@ -25,15 +25,15 @@
 
 #ifndef QT_NO_FONTCOMBOBOX
 
-#include <qstringlistmodel.h>
+#include <qapplication.h>
+#include <qcombobox_p.h>
+#include <qdebug.h>
+#include <qdesktopwidget.h>
+#include <qevent.h>
 #include <qitemdelegate.h>
 #include <qlistview.h>
 #include <qpainter.h>
-#include <qevent.h>
-#include <qapplication.h>
-#include <qcombobox_p.h>
-#include <qdesktopwidget.h>
-#include <qdebug.h>
+#include <qstringlistmodel.h>
 
 static QFontDatabase::WritingSystem writingSystemFromScript(QLocale::Script script)
 {

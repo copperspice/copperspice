@@ -25,15 +25,16 @@
 #define QBACKINGSTORE_H
 
 #include <qrect.h>
-#include <qwindow.h>
 #include <qregion.h>
+#include <qwindow.h>
 
-class QRegion;
-class QRect;
-class QPoint;
 class QImage;
-class QBackingStorePrivate;
 class QPlatformBackingStore;
+class QPoint;
+class QRect;
+class QRegion;
+
+class QBackingStorePrivate;
 
 class Q_GUI_EXPORT QBackingStore
 {

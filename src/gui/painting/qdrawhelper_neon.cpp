@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qdrawhelper_neon_p.h>
+
 #include <qblendfunctions_p.h>
 #include <qmath_p.h>
 

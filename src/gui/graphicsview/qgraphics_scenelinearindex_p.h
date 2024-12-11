@@ -28,9 +28,9 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-#include <qrect.h>
-#include <qlist.h>
 #include <qgraphicsitem.h>
+#include <qlist.h>
+#include <qrect.h>
 
 #include <qgraphics_sceneindex_p.h>
 

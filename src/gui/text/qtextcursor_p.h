@@ -25,10 +25,12 @@
 #define QTEXTCURSOR_P_H
 
 #include <qtextcursor.h>
+
 #include <qtextdocument.h>
+#include <qtextobject.h>
+
 #include <qtextdocument_p.h>
 #include <qtextformat_p.h>
-#include <qtextobject.h>
 
 class QTextCursorPrivate : public QSharedData
 {

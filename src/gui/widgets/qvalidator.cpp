@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
 #include <qvalidator.h>
+
+#include <qdebug.h>
 
 #ifndef QT_NO_VALIDATOR
 

@@ -24,23 +24,23 @@
 #include <qicon.h>
 #include <qicon_p.h>
 
+#include <qcache.h>
+#include <qdebug.h>
 #include <qfileinfo.h>
 #include <qiconengine.h>
 #include <qiconengineplugin.h>
-#include <qpainter.h>
-#include <qplatform_theme.h>
-#include <qpixmapcache.h>
-#include <qvariant.h>
-#include <qcache.h>
-#include <qdebug.h>
-#include <qpalette.h>
 #include <qmath.h>
+#include <qpainter.h>
+#include <qpalette.h>
+#include <qpixmapcache.h>
+#include <qplatform_theme.h>
+#include <qvariant.h>
 
 #include <qapplication_p.h>
-#include <qhexstring_p.h>
-#include <qimagereader.h>
 #include <qfactoryloader_p.h>
+#include <qhexstring_p.h>
 #include <qiconloader_p.h>
+#include <qimagereader.h>
 
 #ifndef QT_NO_ICON
 

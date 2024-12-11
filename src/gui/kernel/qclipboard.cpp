@@ -25,16 +25,16 @@
 
 #ifndef QT_NO_CLIPBOARD
 
-#include <qpixmap.h>
-#include "qmimedata.h"
-#include <qvariant.h>
 #include <qbuffer.h>
 #include <qimage.h>
+#include <qmimedata.h>
+#include <qpixmap.h>
 #include <qtextcodec.h>
+#include <qvariant.h>
 
-#include <qguiapplication_p.h>
-#include <qplatform_integration.h>
+#include <qapplication_p.h>
 #include <qplatform_clipboard.h>
+#include <qplatform_integration.h>
 
 QClipboard::QClipboard(QObject *parent)
    : QObject(parent)

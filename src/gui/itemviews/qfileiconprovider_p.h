@@ -24,8 +24,8 @@
 #ifndef QFILEICONPROVIDER_P_H
 #define QFILEICONPROVIDER_P_H
 
-#include <qstring.h>
 #include <qicon.h>
+#include <qstring.h>
 #include <qstyle.h>
 
 class QFileInfo;

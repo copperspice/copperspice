@@ -32,8 +32,8 @@
 #include <qhash.h>
 #include <qmath.h>
 #include <qmutex.h>
-#include <qplatform_integration.h>
 #include <qplatform_fontdatabase.h>
+#include <qplatform_integration.h>
 #include <qplatform_theme.h>
 #include <qthread.h>
 #include <qvarlengtharray.h>

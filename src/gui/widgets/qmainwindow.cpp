@@ -22,28 +22,30 @@
 ***********************************************************************/
 
 #include <qmainwindow.h>
+
 #include <qmainwindowlayout_p.h>
 
 #ifndef QT_NO_MAINWINDOW
 
-#include <qdockwidget.h>
-#include <qtoolbar.h>
 #include <qapplication.h>
-#include <qmenubar.h>
-#include <qstatusbar.h>
-#include <qevent.h>
-#include <qstyle.h>
 #include <qdebug.h>
+#include <qdockwidget.h>
+#include <qevent.h>
+#include <qmenubar.h>
 #include <qpainter.h>
-#include <qwidget_p.h>
-#include <qtoolbar_p.h>
-#include <qwidgetanimator_p.h>
+#include <qstatusbar.h>
+#include <qstyle.h>
+#include <qtoolbar.h>
 
-// #define QT_EXPERIMENTAL_CLIENT_DECORATIONS
+#include <qtoolbar_p.h>
+#include <qwidget_p.h>
+#include <qwidgetanimator_p.h>
 
 #ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>
 #endif
+
+// #define QT_EXPERIMENTAL_CLIENT_DECORATIONS
 
 class QMainWindowPrivate : public QWidgetPrivate
 {

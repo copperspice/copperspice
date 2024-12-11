@@ -28,8 +28,9 @@
 
 #ifndef QT_NO_SLIDER
 
-class QSliderPrivate;
 class QStyleOptionSlider;
+
+class QSliderPrivate;
 
 class Q_GUI_EXPORT QSlider : public QAbstractSlider
 {

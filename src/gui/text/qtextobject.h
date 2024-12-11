@@ -24,21 +24,22 @@
 #ifndef QTEXTOBJECT_H
 #define QTEXTOBJECT_H
 
+#include <qglyphrun.h>
 #include <qobject.h>
+#include <qscopedpointer.h>
 #include <qtextformat.h>
 #include <qtextlayout.h>
-#include <qglyphrun.h>
-#include <qscopedpointer.h>
 
-class QTextObjectPrivate;
-class QTextDocument;
-class QTextDocumentPrivate;
-class QTextCursor;
 class QTextBlock;
+class QTextCursor;
+class QTextDocument;
 class QTextFragment;
 class QTextList;
+
 class QTextBlockGroupPrivate;
+class QTextDocumentPrivate;
 class QTextFramePrivate;
+class QTextObjectPrivate;
 
 class Q_GUI_EXPORT QTextObject : public QObject
 {

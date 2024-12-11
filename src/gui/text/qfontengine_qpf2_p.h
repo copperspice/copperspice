@@ -24,10 +24,10 @@
 #ifndef QFONTENGINE_QPF2_P_H
 #define QFONTENGINE_QPF2_P_H
 
-#include <qglobal.h>
-#include <qendian.h>
 #include <qbuffer.h>
+#include <qendian.h>
 #include <qfile.h>
+#include <qglobal.h>
 
 #include <qfontengine_p.h>
 

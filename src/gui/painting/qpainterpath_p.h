@@ -25,13 +25,14 @@
 #define QPAINTERPATH_P_H
 
 #include <qpainterpath.h>
-#include <qregion.h>
-#include <qlist.h>
-#include <qvarlengtharray.h>
 
 #include <qdebug.h>
-#include <qvectorpath_p.h>
+#include <qlist.h>
+#include <qregion.h>
+#include <qvarlengtharray.h>
+
 #include <qstroker_p.h>
+#include <qvectorpath_p.h>
 
 class QPainterPathPrivate
 {

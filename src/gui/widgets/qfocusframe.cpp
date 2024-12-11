@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qfocusframe.h>
-#include <qstyle.h>
+
 #include <qbitmap.h>
-#include <qstylepainter.h>
-#include <qstyleoption.h>
 #include <qdebug.h>
+#include <qstyle.h>
+#include <qstyleoption.h>
+#include <qstylepainter.h>
 
 #include <qwidget_p.h>
 

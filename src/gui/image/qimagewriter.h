@@ -26,11 +26,12 @@
 
 #include <qbytearray.h>
 #include <qcoreapplication.h>
-#include <qlist.h>
 #include <qimageiohandler.h>
+#include <qlist.h>
 
 class QIODevice;
 class QImage;
+
 class QImageWriterPrivate;
 
 class Q_GUI_EXPORT QImageWriter

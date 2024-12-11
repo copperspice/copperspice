@@ -38,10 +38,11 @@
 
 #include <stdlib.h>
 
-class QOutlineMapper;
-class QRasterPaintEnginePrivate;
-class QRasterBuffer;
 class QClipData;
+class QOutlineMapper;
+class QRasterBuffer;
+
+class QRasterPaintEnginePrivate;
 
 class QRasterPaintEngineState : public QPainterState
 {

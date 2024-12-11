@@ -28,10 +28,9 @@
 
 #ifndef QT_NO_CSSPARSER
 
-#include <qcssparser_p.h>
 #include <qsize.h>
 
-
+#include <qcssparser_p.h>
 
 class QPainter;
 

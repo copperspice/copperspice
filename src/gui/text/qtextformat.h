@@ -24,31 +24,31 @@
 #ifndef QTEXTFORMAT_H
 #define QTEXTFORMAT_H
 
+#include <qbrush.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qshareddata.h>
 #include <qpen.h>
-#include <qbrush.h>
-#include <qtextoption.h>
+#include <qshareddata.h>
 #include <qstringfwd.h>
-#include <qvector.h>
+#include <qtextoption.h>
 #include <qvariant.h>
+#include <qvector.h>
 
+class QTextBlockFormat;
+class QTextCharFormat;
 class QTextCursor;
+class QTextDocument;
 class QTextFormat;
 class QTextFormatCollection;
 class QTextFrameFormat;
-class QTextFormatPrivate;
-class QTextBlockFormat;
-class QTextCharFormat;
+class QTextImageFormat;
+class QTextLength;
 class QTextListFormat;
+class QTextObject;
+class QTextTableCellFormat;
 class QTextTableFormat;
 
-class QTextImageFormat;
-class QTextTableCellFormat;
-class QTextObject;
-class QTextDocument;
-class QTextLength;
+class QTextFormatPrivate;
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &, const QTextLength &);
 Q_GUI_EXPORT QDataStream &operator>>(QDataStream &, QTextLength &);

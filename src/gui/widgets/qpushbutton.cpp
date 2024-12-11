@@ -21,6 +21,9 @@
 *
 ***********************************************************************/
 
+#include <qpushbutton.h>
+#include <qpushbutton_p.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qdebug.h>
@@ -34,7 +37,6 @@
 #include <qmenu.h>
 #include <qpixmap.h>
 #include <qpointer.h>
-#include <qpushbutton.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
 #include <qstylepainter.h>
@@ -42,7 +44,6 @@
 
 #include <qdialog_p.h>
 #include <qmenu_p.h>
-#include <qpushbutton_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 #include <qaccessible.h>

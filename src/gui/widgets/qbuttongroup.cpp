@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "qbuttongroup_p.h"
+#include <qbuttongroup_p.h>
 
 #ifndef QT_NO_BUTTONGROUP
 
-#include "qabstractbutton_p.h"
+#include <qabstractbutton_p.h>
 
 // detect a checked button other than the current one
 void QButtonGroupPrivate::detectCheckedButton()

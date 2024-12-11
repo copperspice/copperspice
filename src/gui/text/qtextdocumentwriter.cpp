@@ -23,14 +23,14 @@
 
 #include <qtextdocumentwriter.h>
 
-#include <qfile.h>
 #include <qbytearray.h>
+#include <qdebug.h>
+#include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextcodec.h>
-#include <qtextstream.h>
-#include <qdebug.h>
 #include <qtextdocument.h>
 #include <qtextdocumentfragment.h>
+#include <qtextstream.h>
 
 #include <qtextdocumentfragment_p.h>
 #include <qtextodfwriter_p.h>

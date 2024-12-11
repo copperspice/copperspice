@@ -23,32 +23,32 @@
 
 #include <qmenubar.h>
 
-#include <qstyle.h>
-#include <qlayout.h>
 #include <qapplication.h>
 #include <qdesktopwidget.h>
+#include <qevent.h>
+#include <qlayout.h>
+#include <qmainwindow.h>
+#include <qpainter.h>
+#include <qplatform_integration.h>
+#include <qplatform_theme.h>
+#include <qstyle.h>
+#include <qstylepainter.h>
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
+#include <qwhatsthis.h>
+
+#include <qapplication_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY
 # include <qaccessible.h>
 #endif
 
-#include <qpainter.h>
-#include <qstylepainter.h>
-#include <qevent.h>
-#include <qmainwindow.h>
-#include <qtoolbar.h>
-#include <qtoolbutton.h>
-#include <qwhatsthis.h>
-#include <qplatform_theme.h>
-#include <qplatform_integration.h>
-
-#include <qguiapplication_p.h>
-
 #ifndef QT_NO_MENUBAR
+
+#include <qdebug.h>
 
 #include <qmenu_p.h>
 #include <qmenubar_p.h>
-#include <qdebug.h>
 
 class QMenuBarExtension : public QToolButton
 {

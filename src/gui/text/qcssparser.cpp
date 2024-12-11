@@ -23,13 +23,13 @@
 
 #include <qcssparser_p.h>
 
-#include <qdebug.h>
-#include <qcolor.h>
-#include <qicon.h>
-#include <qfont.h>
-#include <qfileinfo.h>
-#include <qfontmetrics.h>
 #include <qbrush.h>
+#include <qcolor.h>
+#include <qdebug.h>
+#include <qfileinfo.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
+#include <qicon.h>
 #include <qimagereader.h>
 
 #include <algorithm>

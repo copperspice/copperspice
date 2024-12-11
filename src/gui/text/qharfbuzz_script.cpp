@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qharfbuzz_p.h>
-
 #include <qstring.h>
 #include <qvector.h>
+
+#include <qharfbuzz_p.h>
 
 static const hb_script_t cs_internal_scriptTable[] = {
    HB_SCRIPT_UNKNOWN,

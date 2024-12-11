@@ -24,10 +24,10 @@
 #ifndef QCOLOR_H
 #define QCOLOR_H
 
-#include <qrgb.h>
 #include <qnamespace.h>
-#include <qstringlist.h>
+#include <qrgb.h>
 #include <qrgba64.h>
+#include <qstringlist.h>
 
 class QColor;
 class QColormap;

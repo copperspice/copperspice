@@ -32,12 +32,13 @@
 #include <qscopedpointer.h>
 #include <qtextobject.h>
 
-class QTextDocument;
-class QSyntaxHighlighterPrivate;
-class QTextCharFormat;
-class QFont;
 class QColor;
+class QFont;
 class QTextBlockUserData;
+class QTextCharFormat;
+class QTextDocument;
+
+class QSyntaxHighlighterPrivate;
 
 class Q_GUI_EXPORT QSyntaxHighlighter : public QObject
 {

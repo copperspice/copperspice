@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qlayoutpolicy_p.h>
+
 #include <qdebug.h>
 #include <qdatastream.h>
 

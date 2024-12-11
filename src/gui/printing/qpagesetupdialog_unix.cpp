@@ -21,23 +21,24 @@
 *
 ***********************************************************************/
 
+#include <qpagesetupdialog_unix_p.h>
+
 #include <qpagesetupdialog.h>
 #include <qpagesetupdialog_p.h>
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <qpainter.h>
-#include <qprintdialog.h>
 #include <qdialogbuttonbox.h>
-#include <qplatform_printplugin.h>
+#include <qpainter.h>
 #include <qplatform_printersupport.h>
+#include <qplatform_printplugin.h>
+#include <qprintdialog.h>
 #include <qprinter.h>
 #include <ui_qpagesetupwidget.h>
 
-#include <qprinter_p.h>
-#include <qpagesetupdialog_unix_p.h>
-#include <qprintdevice_p.h>
 #include <qcups_p.h>
+#include <qprintdevice_p.h>
+#include <qprinter_p.h>
 
 // Disabled until we have support for papersources on unix
 // #define PSD_ENABLE_PAPERSOURCE

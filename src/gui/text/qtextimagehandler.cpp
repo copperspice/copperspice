@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <qtextimagehandler_p.h>
+
 #include <qapplication.h>
-#include <qtextformat.h>
-#include <qpainter.h>
 #include <qdebug.h>
+#include <qpainter.h>
 #include <qpalette.h>
+#include <qtextformat.h>
 #include <qthread.h>
 
 #include <qtextengine_p.h>

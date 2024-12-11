@@ -22,12 +22,13 @@
 ***********************************************************************/
 
 #include <qsessionmanager.h>
-#include <qplatform_sessionmanager.h>
-#include <qplatform_integration.h>
+#include <qsessionmanager_p.h>
 
 #include <qapplication.h>
-#include <qguiapplication_p.h>
-#include <qsessionmanager_p.h>
+#include <qplatform_integration.h>
+#include <qplatform_sessionmanager.h>
+
+#include <qapplication_p.h>
 
 #ifndef QT_NO_SESSIONMANAGER
 

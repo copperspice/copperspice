@@ -24,32 +24,33 @@
 #include <qitemdelegate.h>
 
 #ifndef QT_NO_ITEMVIEWS
+
 #include <qabstractitemmodel.h>
 #include <qapplication.h>
+#include <qbitmap.h>
 #include <qbrush.h>
-
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdialog.h>
+#include <qevent.h>
+#include <qitemeditorfactory.h>
+#include <qlocale.h>
+#include <qmath.h>
+#include <qmetaobject.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qpixmap.h>
+#include <qpixmapcache.h>
 #include <qpoint.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <qstyle.h>
-#include <qdatetime.h>
 #include <qstyleoption.h>
-#include <qevent.h>
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <qpixmapcache.h>
-#include <qitemeditorfactory.h>
-#include <qmetaobject.h>
 #include <qtextlayout.h>
 
 #include <qabstractitemdelegate_p.h>
 #include <qtextengine_p.h>
-#include <qdebug.h>
-#include <qlocale.h>
-#include <qdialog.h>
-#include <qmath.h>
+
 #include <limits.h>
 
 #ifndef DBL_DIG

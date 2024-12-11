@@ -22,13 +22,15 @@
 ***********************************************************************/
 
 #include <qcheckbox.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
+#include <qevent.h>
 #include <qicon.h>
-#include <qstylepainter.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qevent.h>
+#include <qstylepainter.h>
+
 #include <qabstractbutton_p.h>
 
 class QCheckBoxPrivate : public QAbstractButtonPrivate

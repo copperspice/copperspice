@@ -31,13 +31,14 @@
 class QFontEngine;
 class QLineF;
 class QPaintDevice;
-class QPaintEnginePrivate;
 class QPaintEngineState;
 class QPainterPath;
 class QPointF;
 class QPolygonF;
 class QRectF;
 class QTextItemInt;
+
+class QPaintEnginePrivate;
 
 struct QGlyphLayout;
 

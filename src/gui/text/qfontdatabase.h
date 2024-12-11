@@ -29,8 +29,9 @@
 #include <qstring.h>
 #include <qwindowdefs.h>
 
-class QStringList;
 class QFontEngine;
+class QStringList;
+
 class QFontDatabasePrivate;
 
 struct QFontDef;

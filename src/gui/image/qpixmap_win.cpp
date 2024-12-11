@@ -21,10 +21,9 @@
 *
 ***********************************************************************/
 
-#include <qpixmap.h>
-
-#include <qglobal.h>
 #include <qbitmap.h>
+#include <qglobal.h>
+#include <qpixmap.h>
 #include <qplatform_pixmap.h>
 #include <qscopedarraypointer.h>
 #include <qt_windows.h>

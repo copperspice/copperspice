@@ -23,11 +23,11 @@
 
 #include <qoffscreensurface.h>
 
-#include "qscreen.h"
-#include "qplatform_offscreensurface.h"
-#include "qplatform_integration.h"
-#include "qplatform_window.h"
-#include "qwindow.h"
+#include <qplatform_integration.h>
+#include <qplatform_offscreensurface.h>
+#include <qplatform_window.h>
+#include <qscreen.h>
+#include <qwindow.h>
 
 #include <qapplication_p.h>
 

@@ -25,15 +25,16 @@
 #define QSTYLEDITEMDELEGATE_H
 
 #include <qabstractitemdelegate.h>
-#include <qstring.h>
 #include <qpixmap.h>
-#include <qvariant.h>
 #include <qscopedpointer.h>
+#include <qstring.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_ITEMVIEWS
 
-class QStyledItemDelegatePrivate;
 class QItemEditorFactory;
+
+class QStyledItemDelegatePrivate;
 
 class Q_GUI_EXPORT QStyledItemDelegate : public QAbstractItemDelegate
 {

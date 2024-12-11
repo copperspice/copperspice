@@ -24,8 +24,8 @@
 #ifndef QPLATFORM_PIXMAP_H
 #define QPLATFORM_PIXMAP_H
 
-#include <qpixmap.h>
 #include <qatomic.h>
+#include <qpixmap.h>
 
 class QImageReader;
 

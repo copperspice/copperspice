@@ -24,17 +24,18 @@
 #ifndef QLAYOUT_H
 #define QLAYOUT_H
 
-#include <qobject.h>
 #include <qlayoutitem.h>
-#include <qsizepolicy.h>
-#include <qrect.h>
 #include <qmargins.h>
+#include <qobject.h>
+#include <qrect.h>
 #include <qscopedpointer.h>
+#include <qsizepolicy.h>
 
 #include <limits.h>
 
 class QLayout;
 class QSize;
+
 class QLayoutPrivate;
 
 class Q_GUI_EXPORT QLayout : public QObject, public QLayoutItem

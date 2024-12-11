@@ -28,6 +28,7 @@
 #include <qwidget.h>
 
 #ifndef QT_NO_SPLASHSCREEN
+
 class QSplashScreenPrivate;
 
 class Q_GUI_EXPORT QSplashScreen : public QWidget

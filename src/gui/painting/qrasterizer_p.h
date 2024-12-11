@@ -25,16 +25,19 @@
 #define QRASTERIZER_P_H
 
 #include <qglobal.h>
+
 #include <qpainter.h>
+
 #include <qdrawhelper_p.h>
 #include <qrasterdefs_p.h>
 
+class QRasterBuffer;
+
+class QRasterizerPrivate;
+
 struct QSpanData;
 
-class QRasterBuffer;
-class QRasterizerPrivate;
 class QRasterizer
-
 {
  public:
    QRasterizer();

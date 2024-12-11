@@ -25,12 +25,12 @@
 
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 
+#include <qdebug.h>
+#include <qpointer.h>
+#include <qtextcursor.h>
 #include <qtextdocument.h>
 #include <qtextlayout.h>
-#include <qpointer.h>
 #include <qtextobject.h>
-#include <qtextcursor.h>
-#include <qdebug.h>
 #include <qtimer.h>
 
 #include <qtextdocument_p.h>

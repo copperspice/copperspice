@@ -24,10 +24,12 @@
 #include <qprogressbar.h>
 
 #ifndef QT_NO_PROGRESSBAR
+
 #include <qevent.h>
 #include <qpainter.h>
-#include <qstylepainter.h>
 #include <qstyleoption.h>
+#include <qstylepainter.h>
+
 #include <qwidget_p.h>
 
 #ifndef QT_NO_ACCESSIBILITY

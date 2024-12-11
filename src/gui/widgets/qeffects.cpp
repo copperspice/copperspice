@@ -25,18 +25,18 @@
 
 #ifndef QT_NO_EFFECTS
 
+#include <qeffects_p.h>
+
+#include <qdebug.h>
 #include <qdesktopwidget.h>
+#include <qelapsedtimer.h>
 #include <qevent.h>
 #include <qimage.h>
 #include <qpainter.h>
-#include <qscreen.h>
 #include <qpixmap.h>
 #include <qpointer.h>
+#include <qscreen.h>
 #include <qtimer.h>
-#include <qelapsedtimer.h>
-#include <qdebug.h>
-
-#include <qeffects_p.h>
 
 class QAlphaWidget: public QWidget, private QEffects
 {

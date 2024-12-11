@@ -22,8 +22,9 @@
 *
 ***********************************************************************/
 
-#include "qopenglfunctions_3_3_core.h"
-#include "qopenglcontext.h"
+#include <qopenglfunctions_3_3_core.h>
+
+#include <qopenglcontext.h>
 
 QOpenGLFunctions_3_3_Core::QOpenGLFunctions_3_3_Core()
  : QAbstractOpenGLFunctions()

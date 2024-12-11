@@ -25,8 +25,9 @@
 #define QDRAWINGPRIMITIVE_SSE2_P_H
 
 #include <qglobal.h>
-#include <qsimd_p.h>
+
 #include <qdrawhelper_p.h>
+#include <qsimd_p.h>
 
 #ifdef __SSE2__
 

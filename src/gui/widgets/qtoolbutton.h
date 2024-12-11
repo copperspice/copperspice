@@ -28,9 +28,10 @@
 
 #ifndef QT_NO_TOOLBUTTON
 
-class QToolButtonPrivate;
 class QMenu;
 class QStyleOptionToolButton;
+
+class QToolButtonPrivate;
 
 class Q_GUI_EXPORT QToolButton : public QAbstractButton
 {

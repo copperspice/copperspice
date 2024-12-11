@@ -24,12 +24,12 @@
 #include <qpaintengine_preview_p.h>
 
 #include <qalgorithms.h>
-#include <qprintengine.h>
 #include <qpainter.h>
 #include <qpicture.h>
+#include <qprintengine.h>
 
-#include <qpainter_p.h>
 #include <qpaintengine_p.h>
+#include <qpainter_p.h>
 #include <qpicture_p.h>
 
 #ifndef QT_NO_PRINTPREVIEWWIDGET

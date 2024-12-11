@@ -24,15 +24,16 @@
 #ifndef QTEXTHTMLPARSER_P_H
 #define QTEXTHTMLPARSER_P_H
 
-#include <qvector.h>
 #include <qbrush.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qtextdocument.h>
 #include <qtextcursor.h>
-#include <qtextformat_p.h>
-#include <qtextdocument_p.h>
+#include <qtextdocument.h>
+#include <qvector.h>
+
 #include <qcssparser_p.h>
+#include <qtextdocument_p.h>
+#include <qtextformat_p.h>
 
 #ifndef QT_NO_TEXTHTMLPARSER
 

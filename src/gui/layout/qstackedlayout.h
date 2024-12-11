@@ -26,7 +26,6 @@
 
 #include <qlayout.h>
 
-
 class QStackedLayoutPrivate;
 
 class Q_GUI_EXPORT QStackedLayout : public QLayout

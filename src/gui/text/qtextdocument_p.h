@@ -45,11 +45,12 @@
 class QAbstractTextDocumentLayout;
 class QAbstractUndoItem;
 class QTextBlockFormat;
-class QTextCursorPrivate;
 class QTextDocument;
 class QTextFormat;
 class QTextFormatCollection;
 class QTextFrame;
+
+class QTextCursorPrivate;
 
 #define QTextBeginningOfFrame QChar(0xfdd0)
 #define QTextEndOfFrame       QChar(0xfdd1)

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qpaintdevice.h>
+
 #include <qdebug.h>
 
 QPaintDevice::QPaintDevice()

@@ -30,9 +30,10 @@
 #ifndef QT_NO_ACCESSIBILITY
 
 #ifndef QT_NO_MENU
+
+class QAction;
 class QMenu;
 class QMenuBar;
-class QAction;
 
 class QAccessibleMenu : public QAccessibleWidget
 {

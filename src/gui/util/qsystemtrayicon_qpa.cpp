@@ -21,14 +21,13 @@
 *
 ***********************************************************************/
 
-#include <qsystemtrayicon_p.h>
-
 #include <qapplication.h>
 #include <qplatform_systemtrayicon.h>
 #include <qplatform_theme.h>
 #include <qstyle.h>
 
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
+#include <qsystemtrayicon_p.h>
 
 #ifndef QT_NO_SYSTEMTRAYICON
 

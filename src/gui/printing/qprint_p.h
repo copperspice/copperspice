@@ -24,10 +24,9 @@
 #ifndef QPRINT_P_H
 #define QPRINT_P_H
 
-#include <qprinter.h>
-
-#include <qstring.h>
 #include <qlist.h>
+#include <qprinter.h>
+#include <qstring.h>
 
 #if (defined Q_OS_DARWIN && ! defined Q_OS_IOS) || (defined Q_OS_UNIX && ! defined QT_NO_CUPS)
 #include <cups/ppd.h>  // Use for type defs only, do not want to actually link in main module

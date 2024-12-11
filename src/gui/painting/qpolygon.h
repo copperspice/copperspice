@@ -24,15 +24,15 @@
 #ifndef QPOLYGON_H
 #define QPOLYGON_H
 
-#include <qvector.h>
 #include <qpoint.h>
 #include <qrect.h>
+#include <qvector.h>
 
 class QMatrix;
-class QTransform;
 class QRect;
-class QVariant;
 class QRectF;
+class QTransform;
+class QVariant;
 
 class Q_GUI_EXPORT QPolygon : public QVector<QPoint>
 {

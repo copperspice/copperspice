@@ -25,17 +25,17 @@
 #define QREGION_H
 
 #include <qatomic.h>
+#include <qdatastream.h>
 #include <qrect.h>
 #include <qwindowdefs.h>
-#include <qdatastream.h>
 
 class QBitmap;
 class QVariant;
 
-struct QRegionPrivate;
-
 template <class T>
 class QVector;
+
+struct QRegionPrivate;
 
 class Q_GUI_EXPORT QRegion
 {

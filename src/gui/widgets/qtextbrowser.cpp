@@ -22,22 +22,23 @@
 ***********************************************************************/
 
 #include <qtextbrowser.h>
+
 #include <qtextedit_p.h>
 
 #ifndef QT_NO_TEXTBROWSER
 
-#include <qstack.h>
-#include <qapplication.h>
-#include <qevent.h>
-#include <qdesktopwidget.h>
-#include <qdebug.h>
 #include <qabstracttextdocumentlayout.h>
-#include <qtextcodec.h>
-#include <qpainter.h>
-#include <qdir.h>
-#include <qwhatsthis.h>
-#include <qtextobject.h>
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qdesktopservices.h>
+#include <qdesktopwidget.h>
+#include <qdir.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qstack.h>
+#include <qtextcodec.h>
+#include <qtextobject.h>
+#include <qwhatsthis.h>
 
 #include <qtextdocumentlayout_p.h>
 

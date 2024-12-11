@@ -24,14 +24,15 @@
 #ifndef QPIXMAPFILTER_H
 #define QPIXMAPFILTER_H
 
+#include <qgraphicseffect.h>
 #include <qnamespace.h>
 #include <qpixmap.h>
-#include <qgraphicseffect.h>
 
 #ifndef QT_NO_GRAPHICSEFFECT
 
 class QPainter;
 class QPlatformPixmap;
+
 class QPixmapFilterPrivate;
 
 class Q_GUI_EXPORT QPixmapFilter : public QObject

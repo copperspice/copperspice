@@ -21,15 +21,15 @@
 *
 ***********************************************************************/
 
-#include <qapplication.h>
 #include <qaction.h>
-#include <qwidgetaction.h>
-#include <qtoolbar.h>
-#include <qstyleoption.h>
-#include <qtoolbutton.h>
-#include <qmenu.h>
+#include <qapplication.h>
 #include <qdebug.h>
 #include <qmath.h>
+#include <qmenu.h>
+#include <qstyleoption.h>
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
+#include <qwidgetaction.h>
 
 #ifdef Q_OS_DARWIN
 #include <qplatform_nativeinterface.h>

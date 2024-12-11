@@ -24,9 +24,9 @@
 #ifndef QTABLEWIDGET_P_H
 #define QTABLEWIDGET_P_H
 
+#include <qabstractitemmodel.h>
 #include <qheaderview.h>
 #include <qtablewidget.h>
-#include <qabstractitemmodel.h>
 
 #include <qabstractitemmodel_p.h>
 #include <qtableview_p.h>

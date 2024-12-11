@@ -22,11 +22,13 @@
 ***********************************************************************/
 
 #include <qjpeghandler_p.h>
+
+#include <qbuffer.h>
 #include <qimage.h>
+#include <qmath.h>
 #include <qvariant.h>
 #include <qvector.h>
-#include <qbuffer.h>
-#include <qmath.h>
+
 #include <qsimd_p.h>
 
 #include <stdio.h>      // jpeglib needs this to be pre-included

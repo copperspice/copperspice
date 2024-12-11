@@ -27,6 +27,7 @@
 
 #include <qapplication.h>
 #include <qbitmap.h>
+#include <qdebug.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qlayout.h>
@@ -35,12 +36,11 @@
 #include <qstyleoption.h>
 #include <qstylepainter.h>
 
-#ifndef QT_NO_ACCESSIBILITY
-#include <qaccessible.h>
-#endif
-
 #include <qwidget_p.h>
-#include <qdebug.h>
+
+#ifndef QT_NO_ACCESSIBILITY
+# include <qaccessible.h>
+#endif
 
 class QGroupBoxPrivate : public QWidgetPrivate
 {

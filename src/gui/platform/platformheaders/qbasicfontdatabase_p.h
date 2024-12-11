@@ -25,6 +25,7 @@
 #define QBASICFONTDATABASE_P_H
 
 #include <qplatform_fontdatabase.h>
+
 #include <qbytearray.h>
 #include <qstring.h>
 

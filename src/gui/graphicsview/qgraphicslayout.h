@@ -28,9 +28,9 @@
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
-class QGraphicsLayoutPrivate;
-class QGraphicsLayoutItem;
 class QGraphicsWidget;
+
+class QGraphicsLayoutPrivate;
 
 class Q_GUI_EXPORT QGraphicsLayout : public QGraphicsLayoutItem
 {

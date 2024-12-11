@@ -34,8 +34,8 @@
 #include <qscreen.h>
 #include <qwindow.h>
 
+#include <qapplication_p.h>
 #include <qfont_p.h>
-#include <qguiapplication_p.h>
 #include <qopengl_extensions_p.h>
 #include <qopengl_paintdevice_p.h>
 #include <qopenglcontext_p.h>

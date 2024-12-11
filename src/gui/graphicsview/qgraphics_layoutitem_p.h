@@ -28,6 +28,7 @@
 #include <qsizepolicy.h>
 
 class QGraphicsLayoutItem;
+
 class QGraphicsLayoutItemPrivate
 {
    Q_DECLARE_PUBLIC(QGraphicsLayoutItem)

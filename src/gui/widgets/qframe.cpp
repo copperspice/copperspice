@@ -22,15 +22,15 @@
 ***********************************************************************/
 
 #include <qframe.h>
+#include <qframe_p.h>
+
+#include <qapplication.h>
 #include <qbitmap.h>
 #include <qdrawutil.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qstyle.h>
 #include <qstyleoption.h>
-#include <qapplication.h>
-
-#include <qframe_p.h>
 
 QFramePrivate::QFramePrivate()
    : frect(0, 0, 0, 0), frameStyle(QFrame::NoFrame | QFrame::Plain), lineWidth(1),

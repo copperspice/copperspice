@@ -24,16 +24,16 @@
 #ifndef QSTYLEOPTION_H
 #define QSTYLEOPTION_H
 
-#include <qvariant.h>
 #include <qabstractspinbox.h>
+#include <qframe.h>
 #include <qicon.h>
 #include <qmatrix.h>
+#include <qrubberband.h>
 #include <qslider.h>
 #include <qstyle.h>
 #include <qtabbar.h>
 #include <qtabwidget.h>
-#include <qrubberband.h>
-#include <qframe.h>
+#include <qvariant.h>
 
 #ifndef QT_NO_ITEMVIEWS
 #   include <qabstractitemmodel.h>

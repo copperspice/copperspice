@@ -25,12 +25,12 @@
 
 #ifndef QT_NO_PRINTER
 
-#include <qiodevice.h>
-#include <qfile.h>
-#include <qdebug.h>
 #include <qbuffer.h>
-#include <qprinterinfo.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qiodevice.h>
 #include <qpagelayout.h>
+#include <qprinterinfo.h>
 
 #ifdef Q_OS_UNIX
 #include <qcore_unix_p.h>   // overrides QT_OPEN

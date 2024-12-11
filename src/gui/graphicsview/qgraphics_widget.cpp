@@ -25,21 +25,22 @@
 
 #ifndef QT_NO_GRAPHICSVIEW
 
-#include <qgraphicswidget.h>
+#include <qgraphics_widget_p.h>
+
+#include <qapplication.h>
+#include <qdebug.h>
 #include <qgraphicslayout.h>
+#include <qgraphicsproxywidget.h>
 #include <qgraphicsscene.h>
 #include <qgraphicssceneevent.h>
-#include <qmutex.h>
-#include <qapplication.h>
 #include <qgraphicsview.h>
-#include <qgraphicsproxywidget.h>
+#include <qgraphicswidget.h>
+#include <qmutex.h>
 #include <qpalette.h>
 #include <qstyleoption.h>
-#include <qdebug.h>
 
 #include <qapplication_p.h>
 #include <qgraphics_layout_p.h>
-#include <qgraphics_widget_p.h>
 #include <qgraphics_scene_p.h>
 
 #ifndef QT_NO_ACTION

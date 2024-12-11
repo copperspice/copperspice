@@ -22,15 +22,15 @@
 ***********************************************************************/
 
 #include <qplatform_window.h>
-
-#include <qguiapplication_p.h>
-#include <qplatform_screen.h>
-#include <qwindowsysteminterface.h>
-#include <qwindow.h>
-#include <qscreen.h>
-
-#include <qhighdpiscaling_p.h>
 #include <qplatform_window_p.h>
+
+#include <qplatform_screen.h>
+#include <qscreen.h>
+#include <qwindow.h>
+#include <qwindowsysteminterface.h>
+
+#include <qapplication_p.h>
+#include <qhighdpiscaling_p.h>
 #include <qwindow_p.h>
 
 QPlatformWindow::QPlatformWindow(QWindow *window)

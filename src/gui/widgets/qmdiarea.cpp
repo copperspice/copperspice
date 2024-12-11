@@ -27,15 +27,15 @@
 
 #include <qapplication.h>
 #include <qchildevent.h>
-#include <qdesktopwidget.h>
 #include <qdebug.h>
+#include <qdesktopwidget.h>
 #include <qfontmetrics.h>
-#include <qmutablevectoriterator.h>
 #include <qmath.h>
+#include <qmutablevectoriterator.h>
 #include <qpainter.h>
 #include <qresizeevent.h>
-#include <qstyle.h>
 #include <qscrollbar.h>
+#include <qstyle.h>
 #include <qstyleoption.h>
 
 #include <qlayoutengine_p.h>

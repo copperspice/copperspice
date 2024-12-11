@@ -21,12 +21,13 @@
 *
 ***********************************************************************/
 
+#include <qwidgetanimator_p.h>
+
 #include <qpropertyanimation.h>
 #include <qstyle.h>
 #include <qwidget.h>
 
 #include <qmainwindowlayout_p.h>
-#include <qwidgetanimator_p.h>
 
 QWidgetAnimator::QWidgetAnimator(QMainWindowLayout *layout)
    : m_mainWindowLayout(layout)

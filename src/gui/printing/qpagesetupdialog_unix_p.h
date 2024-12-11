@@ -28,12 +28,12 @@
 
 #ifndef QT_NO_PRINTDIALOG
 
-#include <qprinter.h>
 #include <qpagelayout.h>
+#include <qprinter.h>
 #include <ui_qpagesetupwidget.h>
 
-class QPrinter;
 class QPagePreview;
+class QPrinter;
 
 class QPageSetupWidget : public QWidget
 {

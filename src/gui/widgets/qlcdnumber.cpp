@@ -27,6 +27,7 @@
 
 #include <qbitarray.h>
 #include <qpainter.h>
+
 #include <qframe_p.h>
 
 class QLCDNumberPrivate : public QFramePrivate

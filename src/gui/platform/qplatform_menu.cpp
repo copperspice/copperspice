@@ -24,7 +24,8 @@
 #include <qplatform_menu.h>
 
 #include <qplatform_theme.h>
-#include <qguiapplication_p.h>
+
+#include <qapplication_p.h>
 
 QPlatformMenuItem *QPlatformMenu::createMenuItem() const
 {

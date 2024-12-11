@@ -22,20 +22,20 @@
 ***********************************************************************/
 
 #include <qaccessible.h>
-#include <qaccessiblecache_p.h>
 
-#include <qapplication.h>
-#include <qaccessibleplugin.h>
-#include <qaccessibleobject.h>
 #include <qaccessiblebridge.h>
+#include <qaccessibleobject.h>
+#include <qaccessibleplugin.h>
+#include <qapplication.h>
 #include <qclipboard.h>
 #include <qhash.h>
 #include <qmetaobject.h>
-#include <qtextcursor.h>
-#include <qtextboundaryfinder.h>
 #include <qplatform_accessibility.h>
 #include <qplatform_integration.h>
+#include <qtextboundaryfinder.h>
+#include <qtextcursor.h>
 
+#include <qaccessiblecache_p.h>
 #include <qapplication_p.h>
 #include <qfactoryloader_p.h>
 

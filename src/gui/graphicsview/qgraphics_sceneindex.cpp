@@ -21,14 +21,14 @@
 *
 ***********************************************************************/
 
-#include <qgraphicsscene.h>
+#include <qgraphics_sceneindex_p.h>
 
 #include <qdebug.h>
+#include <qgraphicsscene.h>
 #include <qgraphicswidget.h>
 
 #include <qgraphics_item_p.h>
 #include <qgraphics_scene_p.h>
-#include <qgraphics_sceneindex_p.h>
 #include <qgraphics_scenebsptreeindex_p.h>
 
 #ifndef QT_NO_GRAPHICSVIEW

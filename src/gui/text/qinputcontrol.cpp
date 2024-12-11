@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qinputcontrol_p.h>
+
 #include <qevent.h>
 
 QInputControl::QInputControl(Type type, QObject *parent)

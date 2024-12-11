@@ -24,8 +24,8 @@
 #ifndef QWINDOWSWINDOWFUNCTIONS_H
 #define QWINDOWSWINDOWFUNCTIONS_H
 
-#include <QByteArray>
-#include <QGuiApplication>
+#include <qapplication.h>
+#include <qbytearray.h>
 
 class QWindow;
 

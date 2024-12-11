@@ -24,7 +24,7 @@
 #ifndef QXCBSCREENFUNCTIONS_H
 #define QXCBSCREENFUNCTIONS_H
 
-#include <QPlatform_HeaderHelper>
+#include <qplatform_headerhelper.h>
 
 class QScreen;
 

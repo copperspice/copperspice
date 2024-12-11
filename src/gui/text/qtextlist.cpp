@@ -22,10 +22,12 @@
 ***********************************************************************/
 
 #include <qtextlist.h>
-#include <qtextobject_p.h>
-#include <qtextcursor.h>
-#include <qtextdocument_p.h>
+
 #include <qdebug.h>
+#include <qtextcursor.h>
+
+#include <qtextdocument_p.h>
+#include <qtextobject_p.h>
 
 class QTextListPrivate : public QTextBlockGroupPrivate
 {

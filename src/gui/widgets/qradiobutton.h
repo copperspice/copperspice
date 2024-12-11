@@ -26,8 +26,9 @@
 
 #include <qabstractbutton.h>
 
-class QRadioButtonPrivate;
 class QStyleOptionButton;
+
+class QRadioButtonPrivate;
 
 class Q_GUI_EXPORT QRadioButton : public QAbstractButton
 {

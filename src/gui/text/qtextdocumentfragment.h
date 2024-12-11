@@ -26,10 +26,11 @@
 
 #include <qstring.h>
 
-class QTextStream;
-class QTextDocument;
-class QTextDocumentFragmentPrivate;
 class QTextCursor;
+class QTextDocument;
+class QTextStream;
+
+class QTextDocumentFragmentPrivate;
 
 class Q_GUI_EXPORT QTextDocumentFragment
 {

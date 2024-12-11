@@ -22,16 +22,17 @@
 ***********************************************************************/
 
 #include <qcursor.h>
+#include <qcursor_p.h>
+
 #include <qapplication.h>
 #include <qbitmap.h>
-#include <qimage.h>
 #include <qdatastream.h>
-#include <qvariant.h>
 #include <qdebug.h>
+#include <qimage.h>
 #include <qplatform_cursor.h>
+#include <qvariant.h>
 
-#include <qcursor_p.h>
-#include <qguiapplication_p.h>
+#include <qapplication_p.h>
 #include <qhighdpiscaling_p.h>
 
 QPoint QCursor::pos(const QScreen *screen)

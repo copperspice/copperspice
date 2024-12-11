@@ -24,9 +24,9 @@
 #ifndef QLAYOUTPOLICY_H
 #define QLAYOUTPOLICY_H
 
-#include <qobject.h>
-#include <qnamespace.h>
 #include <qdatastream.h>
+#include <qnamespace.h>
+#include <qobject.h>
 
 class QVariant;
 

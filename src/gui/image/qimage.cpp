@@ -22,29 +22,29 @@
 ***********************************************************************/
 
 #include <qimage.h>
+#include <qimage_p.h>
 
-#include <qdatastream.h>
 #include <qbuffer.h>
+#include <qdatastream.h>
 #include <qhash.h>
-#include <qmap.h>
-#include <qmatrix.h>
-#include <qtransform.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
-#include <qstringlist.h>
-#include <qvariant.h>
+#include <qmap.h>
+#include <qmatrix.h>
 #include <qplatform_integration.h>
 #include <qplatform_pixmap.h>
+#include <qstringlist.h>
+#include <qtransform.h>
+#include <qvariant.h>
 
 #include <qimagepixmapcleanuphooks_p.h>
 #include <qapplication_p.h>
 #include <qdrawhelper_p.h>
-#include <qmemrotate_p.h>
-#include <qimagescale_p.h>
-#include <qsimd_p.h>
-#include <qpaintengine_raster_p.h>
-#include <qimage_p.h>
 #include <qfont_p.h>
+#include <qimagescale_p.h>
+#include <qmemrotate_p.h>
+#include <qpaintengine_raster_p.h>
+#include <qsimd_p.h>
 
 #include <ctype.h>
 #include <stdlib.h>

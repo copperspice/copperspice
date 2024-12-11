@@ -25,6 +25,7 @@
 #define QFRAGMENTMAP_P_H
 
 #include <qglobal.h>
+
 #include <qtools_p.h>
 
 #include <stdlib.h>

@@ -24,9 +24,11 @@
 #ifndef QPROXYSTYLE_P_H
 #define QPROXYSTYLE_P_H
 
-#include <qcommonstyle.h>
-#include <qcommonstyle_p.h>
 #include <qproxystyle.h>
+
+#include <qcommonstyle.h>
+
+#include <qcommonstyle_p.h>
 
 #ifndef QT_NO_STYLE_PROXY
 

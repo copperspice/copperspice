@@ -25,17 +25,17 @@
 #define QPLATFORM_FONTDATABASE_H
 
 #include <qfontdatabase.h>
-
 #include <qlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include <qfontengine_p.h>
 #include <qfont_p.h>
+#include <qfontengine_p.h>
 
-class QWritingSystemsPrivate;
-class QFontRequestPrivate;
 class QFontEngineMulti;
+
+class QFontRequestPrivate;
+class QWritingSystemsPrivate;
 
 class Q_GUI_EXPORT QSupportedWritingSystems
 {

@@ -21,27 +21,28 @@
 *
 ***********************************************************************/
 
-#include <qplatformdefs.h>
+#include <qdnd_p.h>
+
+#include <qapplication.h>
 #include <qbitmap.h>
+#include <qbuffer.h>
+#include <qdir.h>
 #include <qdrag.h>
-#include <qpixmap.h>
 #include <qevent.h>
 #include <qfile.h>
-#include <qtextcodec.h>
-#include <qapplication.h>
-#include <qpoint.h>
-
-#include <qbuffer.h>
 #include <qimage.h>
-#include <qpainter.h>
-#include <qregularexpression.h>
-#include <qdir.h>
-#include <qdnd_p.h>
 #include <qimagereader.h>
 #include <qimagewriter.h>
-#include <qplatform_integration.h>
+#include <qpainter.h>
+#include <qpixmap.h>
 #include <qplatform_drag.h>
-#include <qguiapplication_p.h>
+#include <qplatform_integration.h>
+#include <qplatformdefs.h>
+#include <qpoint.h>
+#include <qregularexpression.h>
+#include <qtextcodec.h>
+
+#include <qapplication_p.h>
 
 #include <ctype.h>
 

@@ -29,16 +29,16 @@
 #ifndef QT_NO_LINEEDIT
 
 #include <qlineedit.h>
-#include <qtoolbutton.h>
-#include <qtextlayout.h>
-#include <qicon.h>
-#include <qstyleoption.h>
+
 #include <qbasictimer.h>
 #include <qcompleter.h>
-#include <qpointer.h>
+#include <qicon.h>
 #include <qmimedata.h>
+#include <qpointer.h>
+#include <qstyleoption.h>
+#include <qtextlayout.h>
+#include <qtoolbutton.h>
 
-#include <qlinecontrol_p.h>
 #include <qlinecontrol_p.h>
 #include <qwidget_p.h>
 

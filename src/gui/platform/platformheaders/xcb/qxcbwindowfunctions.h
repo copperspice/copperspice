@@ -24,7 +24,7 @@
 #ifndef QXCBWINDOWFUNCTIONS_H
 #define QXCBWINDOWFUNCTIONS_H
 
-#include <QPlatform_HeaderHelper>
+#include <qplatform_headerhelper.h>
 
 class QWindow;
 

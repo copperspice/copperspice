@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qabstractscrollarea.h>
+#include <qabstractscrollarea_p.h>
 
 #ifndef QT_NO_SCROLLAREA
 
@@ -37,7 +38,6 @@
 #include <qstyleoption.h>
 #include <qwidget.h>
 
-#include <qabstractscrollarea_p.h>
 #include <qapplication_p.h>
 #include <qscrollbar_p.h>
 

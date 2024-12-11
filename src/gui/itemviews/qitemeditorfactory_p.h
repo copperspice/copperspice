@@ -30,8 +30,6 @@
 
 #ifndef QT_NO_LINEEDIT
 
-
-
 class QExpandingLineEdit : public QLineEdit
 {
    GUI_CS_OBJECT(QExpandingLineEdit)

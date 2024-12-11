@@ -26,8 +26,6 @@
 
 #include <qglobal.h>
 
-
-
 class QPenPrivate
 {
  public:

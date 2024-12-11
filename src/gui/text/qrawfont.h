@@ -24,14 +24,14 @@
 #ifndef QRAWFONT_H
 #define QRAWFONT_H
 
-#include <qstring.h>
-#include <qiodevice.h>
+#include <qfont.h>
+#include <qfontdatabase.h>
 #include <qglobal.h>
+#include <qiodevice.h>
 #include <qobject.h>
 #include <qpoint.h>
-#include <qfont.h>
+#include <qstring.h>
 #include <qtransform.h>
-#include <qfontdatabase.h>
 
 class QRawFontPrivate;
 

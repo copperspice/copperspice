@@ -24,9 +24,9 @@
 #ifndef QITEMEDITORFACTORY_H
 #define QITEMEDITORFACTORY_H
 
-#include <qmetaobject.h>
 #include <qbytearray.h>
 #include <qhash.h>
+#include <qmetaobject.h>
 #include <qvariant.h>
 
 #ifndef QT_NO_ITEMVIEWS

@@ -22,7 +22,8 @@
 ***********************************************************************/
 
 #include <qplatform_sessionmanager.h>
-#include <qguiapplication_p.h>
+
+#include <qapplication_p.h>
 
 #ifndef QT_NO_SESSIONMANAGER
 

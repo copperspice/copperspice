@@ -25,28 +25,31 @@
 #define QTEXTODFWRITER_P_H
 
 #include <qglobal.h>
+
 #ifndef QT_NO_TEXTODFWRITER
 
-#include <QXmlStreamWriter>
 #include <qset.h>
 #include <qstack.h>
-#include <qtextdocument_p.h>
 #include <qtextdocumentwriter.h>
+#include <qxmlstreamwriter.h>
 
-class QTextDocumentPrivate;
-class QTextCursor;
-class QTextBlock;
+#include <qtextdocument_p.h>
+
 class QIODevice;
-class QXmlStreamWriter;
-class QTextOdfWriterPrivate;
+class QOutputStrategy;
+class QTextBlock;
 class QTextBlockFormat;
 class QTextCharFormat;
-class QTextListFormat;
-class QTextFrameFormat;
-class QTextTableCellFormat;
-class QTextFrame;
+class QTextCursor;
 class QTextFragment;
-class QOutputStrategy;
+class QTextFrame;
+class QTextFrameFormat;
+class QTextListFormat;
+class QTextTableCellFormat;
+class QXmlStreamWriter;
+
+class QTextDocumentPrivate;
+class QTextOdfWriterPrivate;
 
 class QTextOdfWriter
 {

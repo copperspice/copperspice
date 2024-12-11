@@ -22,10 +22,11 @@
 ***********************************************************************/
 
 #include <qimage.h>
-#include <qimage_p.h>
-#include <qsimd_p.h>
+
 #include <qdrawhelper_p.h>
 #include <qdrawingprimitive_sse2_p.h>
+#include <qimage_p.h>
+#include <qsimd_p.h>
 
 #ifdef __SSE2__
 

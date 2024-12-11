@@ -26,8 +26,6 @@
 
 #include <qabstractbutton_p.h>
 
-
-
 class QDialog;
 class QPushButton;
 

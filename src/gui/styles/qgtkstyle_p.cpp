@@ -21,8 +21,6 @@
 *
 ***********************************************************************/
 
-#include <qgtkstyle_p.h>
-
 // This file is responsible for resolving all GTK functions we use
 // dynamically. This is done to avoid link-time dependancy on GTK
 // as well as crashes occurring due to usage of the GTK_QT engines
@@ -31,33 +29,33 @@
 // to the GTK theme engine as many engines resort to querying the
 // actual widget pointers for details that are not covered by the state flags
 
+#include <qgtkstyle_p.h>
+
 #include <qglobal.h>
 
 #if ! defined(QT_NO_STYLE_GTK)
 
+#include <qapplication.h>
 #include <qcoreevent.h>
-#include <QFile>
-#include <QStringList>
-#include <QTextStream>
-#include <QHash>
-#include <QUrl>
-#include <QLibrary>
-#include <QDebug>
-
-#include <qgtk2painter_p.h>
+#include <qdebug.h>
+#include <qfile.h>
+#include <qhash.h>
+#include <qlibrary.h>
+#include <qmenu.h>
+#include <qmenubar.h>
+#include <qpixmapcache.h>
+#include <qplatform_fontdatabase.h>
+#include <qstatusbar.h>
+#include <qstringlist.h>
+#include <qstyle.h>
+#include <qtextstream.h>
+#include <qtoolbar.h>
+#include <qtoolbutton.h>
+#include <qurl.h>
 
 #include <qapplication_p.h>
+#include <qgtk2painter_p.h>
 #include <qiconloader_p.h>
-#include <qplatform_fontdatabase.h>
-
-#include <QMenu>
-#include <QStyle>
-#include <QApplication>
-#include <QPixmapCache>
-#include <QStatusBar>
-#include <QMenuBar>
-#include <QToolBar>
-#include <QToolButton>
 
 #ifndef Q_OS_DARWIN
 // X11 Includes:

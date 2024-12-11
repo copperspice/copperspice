@@ -26,8 +26,9 @@
 
 #include <qabstractitemmodel.h>
 #include <qabstractitemview.h>
-#include <qlistwidget.h>
 #include <qitemdelegate.h>
+#include <qlistwidget.h>
+
 #include <qlistview_p.h>
 #include <qwidgetitemdata_p.h>
 

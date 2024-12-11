@@ -24,16 +24,16 @@
 #include <qplatform_theme.h>
 #include <qplatform_theme_p.h>
 
-#include <qvariant.h>
-#include <qstringlist.h>
 #include <qfileinfo.h>
 #include <qpalette.h>
-#include <qplatform_integration.h>
 #include <qplatform_dialoghelper.h>
+#include <qplatform_integration.h>
+#include <qstringlist.h>
 #include <qtextformat.h>
+#include <qvariant.h>
 
+#include <qapplication_p.h>
 #include <qiconloader_p.h>
-#include <qguiapplication_p.h>
 
 #include <algorithm>
 

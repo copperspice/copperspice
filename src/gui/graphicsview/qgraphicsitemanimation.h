@@ -24,8 +24,8 @@
 #ifndef QGRAPHICSITEMANIMATION_H
 #define QGRAPHICSITEMANIMATION_H
 
-#include <qobject.h>
 #include <qcontainerfwd.h>
+#include <qobject.h>
 
 #if ! defined(QT_NO_GRAPHICSVIEW)
 
@@ -33,6 +33,7 @@ class QGraphicsItem;
 class QMatrix;
 class QPointF;
 class QTimeLine;
+
 class QGraphicsItemAnimationPrivate;
 
 class Q_GUI_EXPORT QGraphicsItemAnimation : public QObject

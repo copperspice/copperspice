@@ -30,6 +30,7 @@
 #ifndef QT_NO_BUTTONGROUP
 
 class QAbstractButton;
+
 class QAbstractButtonPrivate;
 class QButtonGroupPrivate;
 

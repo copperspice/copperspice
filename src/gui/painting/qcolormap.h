@@ -29,7 +29,6 @@
 #include <qvector.h>
 #include <qwindowdefs.h>
 
-
 class QColor;
 class QColormapPrivate;
 

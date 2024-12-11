@@ -24,18 +24,19 @@
 #ifndef QTEXTEDIT_P_H
 #define QTEXTEDIT_P_H
 
-#include <qabstractscrollarea_p.h>
-#include <qtextdocumentfragment.h>
-#include <qscrollbar.h>
-#include <qtextcursor.h>
-#include <qtextformat.h>
-#include <qmenu.h>
-#include <qabstracttextdocumentlayout.h>
-#include <qbasictimer.h>
-#include <qurl.h>
-#include <qtextcontrol_p.h>
 #include <qtextedit.h>
 
+#include <qabstracttextdocumentlayout.h>
+#include <qbasictimer.h>
+#include <qmenu.h>
+#include <qscrollbar.h>
+#include <qtextcursor.h>
+#include <qtextdocumentfragment.h>
+#include <qtextformat.h>
+#include <qurl.h>
+
+#include <qabstractscrollarea_p.h>
+#include <qtextcontrol_p.h>
 
 #ifndef QT_NO_TEXTEDIT
 
