@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include "qsqldriver.h"
-#include "qsqlerror.h"
+#include <qsqldriver.h>
+#include <qsqlerror.h>
 
 class Q_SQL_EXPORT QSqlDriverPrivate
 {

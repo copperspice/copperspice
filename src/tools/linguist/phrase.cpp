@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include "phrase.h"
-#include "translator.h"
+#include <phrase.h>
+#include <translator.h>
 
 #include <qapplication.h>
 #include <qalgorithms.h>
