@@ -29,7 +29,6 @@
 #include <qpointer.h>
 #include <qwindow.h>
 
-#undef slots
 #include <Cocoa/Cocoa.h>
 
 class QCocoaGLContext : public QPlatformOpenGLContext

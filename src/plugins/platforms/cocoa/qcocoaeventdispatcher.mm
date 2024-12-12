@@ -43,7 +43,6 @@
 #include <qapplication_p.h>
 #include <qthread_p.h>
 
-#undef slots
 #include <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
 

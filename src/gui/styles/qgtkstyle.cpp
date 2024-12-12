@@ -54,8 +54,6 @@
 #include <qwizard.h>
 
 #include <qapplication_p.h>
-#undef signals // Collides with GTK stymbols
-
 #include <qgtkpainter_p.h>
 #include <qstyleanimation_p.h>
 #include <qstylehelper_p.h>

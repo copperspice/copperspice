@@ -26,7 +26,6 @@
 
 #include <qmacmime_p.h>
 
-#undef slots
 #import <Cocoa/Cocoa.h>
 
 class QMacMimeData;
