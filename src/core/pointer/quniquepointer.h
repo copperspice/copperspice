@@ -90,7 +90,7 @@ QUniquePointer<T> QMakeUnique(Args && ... args)
 
 // QScopedArrayPointer
 template <typename T, typename = typename std::enable_if_t<std::is_array_v<T>>>
-QUniquePointer<T> QMakeUnique(std::size_t size)
+QUniqueArrayPointer<T> QMakeUnique(std::size_t size)
 {
    return CsPointer::make_unique<T>(size);
 }
