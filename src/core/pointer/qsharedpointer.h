@@ -100,8 +100,12 @@ public:
 
 #endif
 
+#if ! defined(CS_DOXYPRESS)
+
 template <typename T>
 using QEnableSharedFromThis = CsPointer::CsEnableSharedFromThis<T>;
+
+#endif
 
 // free functions
 template <typename T>
