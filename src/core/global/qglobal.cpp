@@ -102,6 +102,9 @@ QSysInfo::MacVersion QSysInfo::macVersion()
    } else if (osVersion.major == 14) {
       retval = MacVersion::MV_14;
 
+   } else if (osVersion.major == 15) {
+      retval = MacVersion::MV_15;
+
    } else {
       retval = QSysInfo::MV_Unknown;
 
@@ -151,6 +154,10 @@ QString QSysInfo::macEdition(MacVersion macVersion)
 
       case QSysInfo::MacVersion::MV_14:
          retval = "Sonoma";
+         break;
+
+      case QSysInfo::MacVersion::MV_15:
+         retval = "Sequoia";
          break;
 
       default:
