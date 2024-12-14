@@ -54,37 +54,36 @@ class QMacPrintEngine : public QPaintEngine, public QPrintEngine
 
    Qt::HANDLE handle() const;
 
-   bool begin(QPaintDevice *dev);
-   bool end();
+   bool begin(QPaintDevice *dev) override;
+   bool end() override;
+
    virtual QPaintEngine::Type type() const {
       return QPaintEngine::MacPrinter;
    }
 
    QPaintEngine *paintEngine() const;
 
-   void setProperty(PrintEnginePropertyKey key, const QVariant &value);
-   QVariant property(PrintEnginePropertyKey key) const;
+   void setProperty(PrintEnginePropertyKey key, const QVariant &value) override;
+   QVariant property(PrintEnginePropertyKey key) const override;
 
-   QPrinter::PrinterState printerState() const;
+   QPrinter::PrinterState printerState() const override;
 
-   bool newPage();
-   bool abort();
-   int metric(QPaintDevice::PaintDeviceMetric) const;
+   bool newPage() override;
+   bool abort() override;
+   int metric(QPaintDevice::PaintDeviceMetric) const override;
 
-   //forwarded functions
+   void updateState(const QPaintEngineState &state) override;
 
-   void updateState(const QPaintEngineState &state);
-
-   virtual void drawLines(const QLineF *lines, int lineCount);
-   virtual void drawRects(const QRectF *r, int num);
-   virtual void drawPoints(const QPointF *p, int pointCount);
-   virtual void drawEllipse(const QRectF &r);
-   virtual void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode);
-   virtual void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr);
-   virtual void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags);
-   virtual void drawTextItem(const QPointF &p, const QTextItem &ti);
-   virtual void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s);
-   virtual void drawPath(const QPainterPath &);
+   void drawLines(const QLineF *lines, int lineCount) override;
+   void drawRects(const QRectF *r, int num) override;
+   void drawPoints(const QPointF *p, int pointCount) override;
+   void drawEllipse(const QRectF &r) override;
+   void drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode) override;
+   void drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr) override;
+   void drawImage(const QRectF &r, const QImage &pm, const QRectF &sr, Qt::ImageConversionFlags flags) override;
+   void drawTextItem(const QPointF &p, const QTextItem &ti) override;
+   void drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPointF &s) override;
+   void drawPath(const QPainterPath &) override;
 
  private:
    friend class QCocoaNativeInterface;

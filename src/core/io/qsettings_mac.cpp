@@ -385,15 +385,15 @@ class QMacSettingsPrivate : public QSettingsPrivate
 
    ~QMacSettingsPrivate();
 
-   void remove(const QString &key);
-   void set(const QString &key, const QVariant &value);
-   bool get(const QString &key, QVariant *value) const;
-   QStringList children(const QString &prefix, ChildSpec spec) const;
-   void clear();
-   void sync();
-   void flush();
-   bool isWritable() const;
-   QString fileName() const;
+   void remove(const QString &key) override;
+   void set(const QString &key, const QVariant &value) override;
+   bool get(const QString &key, QVariant *value) const override;
+   QStringList children(const QString &prefix, ChildSpec spec) const override;
+   void clear() override;
+   void sync() override;
+   void flush() override;
+   bool isWritable() const override;
+   QString fileName() const override;
 
  private:
    struct SearchDomain {

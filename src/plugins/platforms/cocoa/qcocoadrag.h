@@ -68,10 +68,9 @@ class QCocoaDropData : public QInternalMimeData
    CFStringRef dropPasteboard;
 
  protected:
-   bool hasFormat_sys(const QString &mimeType) const;
-   QStringList formats_sys() const;
-   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const;
-
+   bool hasFormat_sys(const QString &mimeType) const override;
+   QStringList formats_sys() const override;
+   QVariant retrieveData_sys(const QString &mimeType, QVariant::Type type) const override;
 };
 
 #endif

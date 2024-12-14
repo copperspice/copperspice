@@ -290,11 +290,11 @@ class QMacPasteboardMimeSource : public QMimeData
    QMacPasteboardMimeSource(const QMacPasteboard *p) : QMimeData(), paste(p) { }
    ~QMacPasteboardMimeSource() { }
 
-   virtual QStringList formats() const {
+   virtual QStringList formats() const override {
       return paste->formats();
    }
 
-   virtual QVariant retrieveData(const QString &format, QVariant::Type type) const {
+   virtual QVariant retrieveData(const QString &format, QVariant::Type type) const override {
       return paste->retrieveData(format, type);
    }
 };

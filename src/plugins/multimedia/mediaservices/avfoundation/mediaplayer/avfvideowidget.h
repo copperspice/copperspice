@@ -39,14 +39,14 @@ class AVFVideoWidget : public QWidget
    AVFVideoWidget(QWidget *parent);
    virtual ~AVFVideoWidget();
 
-   QSize sizeHint() const;
+   QSize sizeHint() const override;
    Qt::AspectRatioMode aspectRatioMode() const;
    void setAspectRatioMode(Qt::AspectRatioMode mode);
    void setPlayerLayer(AVPlayerLayer *layer);
 
  protected:
-   void resizeEvent(QResizeEvent *);
-   void paintEvent(QPaintEvent *);
+   void resizeEvent(QResizeEvent *) override;
+   void paintEvent(QPaintEvent *)  override;
 
  private:
    void updateAspectRatio();
