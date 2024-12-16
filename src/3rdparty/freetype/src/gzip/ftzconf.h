@@ -215,7 +215,9 @@
 #   define FAR
 #endif
 
-#if !defined(MACOS) && !defined(TARGET_OS_MAC)
+// CopperSpice - Byte definition missing ( correction taken from newer version of FT )
+
+#if !defined(__MACTYPES__)
 typedef unsigned char  Byte;  /* 8 bits */
 #endif
 typedef unsigned int   uInt;  /* 16 bits or more */
