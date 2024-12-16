@@ -2198,6 +2198,18 @@ bool QDateTime::operator==(const QDateTime &other) const
 
 bool QDateTime::operator<(const QDateTime &other) const
 {
+   if (! isValid() && ! other.isValid()) {
+      return false;
+   }
+
+   if (! isValid() && other.isValid()) {
+      return true;
+   }
+
+   if (isValid() && ! other.isValid()) {
+      return false;
+   }
+
    if (d->m_timeZone == other.d->m_timeZone && d->m_status == other.d->m_status) {
       return (d->m_msecs < other.d->m_msecs);
    }
