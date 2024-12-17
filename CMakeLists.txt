@@ -379,6 +379,26 @@ if (PostgreSQL_FOUND AND CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT MSVC)
          message(STATUS "")
       endif()
 
+      if (EXISTS "${fname}/semaphore.h" AND PostgreSQL_FOUND)
+         # Postgres bug
+
+         message(WARNING "")
+         message(WARNING "------------------------------------------------------------")
+         message(WARNING "WARNING WARNING")
+         message(WARNING "The '${fname}' directory contains a file called semaphore.h")
+         message(WARNING "")
+         message(WARNING "A conflict exists between semaphore.h and the standard library ")
+         message(WARNING "Rename or remove semaphore.h in order to build the CsSqlPsql plugin")
+         message(WARNING "------------------------------------------------------------")
+         message(WARNING "")
+
+         # force to not found
+         set(PostgreSQL_FOUND false)
+
+         message(STATUS "PostgreSQL client library was found, CopperSpice plugin will not be built")
+         message(STATUS "")
+      endif()
+
    endforeach()
 endif()
 
