@@ -235,7 +235,7 @@ QPlatformOpenGLContext *QXcbIntegration::createPlatformOpenGLContext(QOpenGLCont
    QXcbGlIntegration *glIntegration = screen->connection()->glIntegration();
 
    if (!glIntegration) {
-      qWarning("QXcbIntegration: Cannot create platform OpenGL context, neither GLX nor EGL are enabled");
+      qWarning("QXcbIntegration: Unable to create platform OpenGL context, neither GLX nor EGL are enabled");
       return nullptr;
    }
    return glIntegration->createPlatformOpenGLContext(context);
@@ -253,7 +253,7 @@ QPlatformOffscreenSurface *QXcbIntegration::createPlatformOffscreenSurface(QOffs
    QXcbGlIntegration *glIntegration = screen->connection()->glIntegration();
 
    if (!glIntegration) {
-      qWarning("QXcbIntegration: Cannot create platform offscreen surface, neither GLX nor EGL are enabled");
+      qWarning("QXcbIntegration: Unable to create platform offscreen surface, neither GLX nor EGL are enabled");
       return nullptr;
    }
    return glIntegration->createPlatformOffscreenSurface(surface);
