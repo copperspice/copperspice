@@ -1414,13 +1414,11 @@ bool QWindowsGLContext::updateObtainedParams(HDC hdc, int *obtainedSwapInterval)
 
 void QWindowsGLContext::releaseDCs()
 {
-   const QOpenGLContextData *end = m_windowContexts.end();
-
-   for (const QOpenGLContextData *p = m_windowContexts.begin(); p < end; ++p) {
-      ReleaseDC(p->hwnd, p->hdc);
+   for (const auto &item : m_windowContexts) {
+      ReleaseDC(item.hwnd, item.hdc);
    }
 
-   m_windowContexts.resize(0);
+   m_windowContexts.clear();
 }
 
 static inline QWindowsWindow *glWindowOf(QPlatformSurface *s)
@@ -1434,13 +1432,11 @@ static inline HWND handleOf(QPlatformSurface *s)
 }
 
 // Find a window in a context list.
-static inline const QOpenGLContextData *findByHWND(const Array<QOpenGLContextData> &data, HWND hwnd)
+static inline const QOpenGLContextData *findByHWND(const QVector<QOpenGLContextData> &data, HWND hwnd)
 {
-   const QOpenGLContextData *end = data.end();
-
-   for (const QOpenGLContextData *p = data.begin(); p < end; ++p) {
-      if (p->hwnd == hwnd) {
-         return p;
+   for (const auto &item : data) {
+      if (item.hwnd == hwnd) {
+         return &item;
       }
    }
 

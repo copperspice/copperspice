@@ -29,8 +29,6 @@
 #include <qwin_additional.h>
 #include <qwin_opengl_context.h>
 
-#include <array.h>
-
 class QOpenGLStaticContext;
 
 enum QWindowsGLFormatFlags {
@@ -275,7 +273,7 @@ class QWindowsGLContext : public QWindowsOpenGLContext
    QSurfaceFormat m_obtainedFormat;
    HGLRC m_renderingContext;
 
-   Array<QOpenGLContextData> m_windowContexts;
+   QVector<QOpenGLContextData> m_windowContexts;
 
    PIXELFORMATDESCRIPTOR m_obtainedPixelFormatDescriptor;
    int m_pixelFormat;

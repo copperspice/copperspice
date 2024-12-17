@@ -1,6 +1,4 @@
 list(APPEND PLATFORMS_WIN_PRIVATE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/windows/array.h
-
    ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_additional.h
    ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_backingstore.h
    ${CMAKE_CURRENT_SOURCE_DIR}/windows/qwin_clipboard.h
