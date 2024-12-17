@@ -720,6 +720,8 @@ void QXcbDrag::handleEnter(QPlatformWindow *window, const xcb_client_message_eve
 {
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QXcbDrag::handleEnter() window =" << window;
+#else
+   (void) window;
 #endif
 
    xdnd_types.clear();
@@ -963,6 +965,8 @@ void QXcbDrag::handleLeave(QPlatformWindow *w, const xcb_client_message_event_t 
       qDebug("QXcbDrag::handleLeave() xdnd drag leave from unexpected source (%x not %x)",
             event->data.data32[0], xdnd_dragsource);
    }
+#else
+   (void) event;
 #endif
 
    QWindowSystemInterface::handleDrag(w->window(), nullptr, QPoint(), Qt::IgnoreAction);

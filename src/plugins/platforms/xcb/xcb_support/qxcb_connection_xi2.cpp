@@ -287,9 +287,10 @@ void QXcbConnection::xi2SetupDevices()
       if (! isTablet) {
          // touchDeviceForId populates XInput2DeviceData the first time it is called
          // with a new deviceId. On subsequent calls it will return the cached object.
-         XInput2TouchDeviceData *dev = touchDeviceForId(devices[i].deviceid);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
+         XInput2TouchDeviceData *dev = touchDeviceForId(devices[i].deviceid);
+
          if (dev != nullptr) {
             if (dev->qtTouchDevice->type() == QTouchDevice::TouchScreen) {
                qDebug("QXcbConnection::xi2SetupDevices()  touchscreen type = %d, capabilities = 0x%X, max touch points = %d",
@@ -368,7 +369,10 @@ void QXcbConnection::xi2Select(xcb_window_t window)
       if (result != Success) {
          qDebug("QXcbConnection::xi2Select() failed to select pointer/touch events, window = %x, result = %d", window, result);
       }
+#else
+      (void) result;
 #endif
+
    }
 
    const bool pointerSelected = isAtLeastXI22() && xi2MouseEvents();
