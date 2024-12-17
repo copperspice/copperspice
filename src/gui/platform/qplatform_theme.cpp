@@ -156,7 +156,7 @@ const QKeyBinding QPlatformThemePrivate::keyBindings[] = {
    {QKeySequence::MoveToEndOfLine,         0,          Qt::MetaModifier    | Qt::Key_Right,      KB_Mac},
    {QKeySequence::MoveToEndOfLine,         0,          Qt::ControlModifier | Qt::Key_Right,      KB_Mac },
    {QKeySequence::MoveToEndOfLine,         0,          Qt::Key_End,                              KB_Win | KB_X11},
-   {QKeySequence::MoveToEndOfLine,         0,          Qt::ControlModifier + Qt::Key_E,          KB_X11},
+   {QKeySequence::MoveToEndOfLine,         0,          Qt::ControlModifier | Qt::Key_E,          KB_X11},
    {QKeySequence::MoveToStartOfBlock,      0,          Qt::MetaModifier    | Qt::Key_A,          KB_Mac},
    {QKeySequence::MoveToStartOfBlock,      1,          Qt::AltModifier     | Qt::Key_Up,         KB_Mac}, //mac only
    {QKeySequence::MoveToEndOfBlock,        0,          Qt::MetaModifier    | Qt::Key_E,          KB_Mac},

@@ -1209,7 +1209,7 @@ bool QWindowsKeyMapper::translateKeyEventInternal(QWindow *window, const MSG &ms
          // are we  interested in the context menu key?
 
          if (modifiers == Qt::ShiftModifier && code == Qt::Key_F10
-                  && ! QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(QKeySequence(Qt::ShiftModifier + Qt::Key_F10))) {
+                  && ! QApplicationPrivate::instance()->shortcutMap.hasShortcutForKeySequence(QKeySequence(Qt::ShiftModifier | Qt::Key_F10))) {
             return false;
          }
 #endif
