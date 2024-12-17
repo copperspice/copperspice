@@ -1094,14 +1094,12 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
       mainLayout->setRowMinimumHeight(i, 0);
    }
 
-   /*
-       Now, recreate it.
-   */
-
-   bool mac = (info.wizStyle == QWizard::MacStyle);
+   // recreate it
+   bool mac     = (info.wizStyle == QWizard::MacStyle);
    bool classic = (info.wizStyle == QWizard::ClassicStyle);
-   bool modern = (info.wizStyle == QWizard::ModernStyle);
-   bool aero = (info.wizStyle == QWizard::AeroStyle);
+   bool modern  = (info.wizStyle == QWizard::ModernStyle);
+   bool aero    = (info.wizStyle == QWizard::AeroStyle);
+
    int deltaMarginLeft = info.topLevelMarginLeft - info.childMarginLeft;
    int deltaMarginRight = info.topLevelMarginRight - info.childMarginRight;
    int deltaMarginTop = info.topLevelMarginTop - info.childMarginTop;
@@ -1110,6 +1108,7 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
 
    int row = 0;
    int numColumns;
+
    if (mac) {
       numColumns = 3;
    } else if (info.watermark || info.sideWidget) {
@@ -1252,9 +1251,9 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
    }
 
    if (aero) {
-      int leftMargin   = 18; // ### hardcoded for now - should be calculated somehow
+      int leftMargin   = 18;        // ### hardcoded for now - should be calculated somehow
       int topMargin    = vMargin;
-      int rightMargin  = hMargin; // ### for now
+      int rightMargin  = hMargin;   // ### for now
       int bottomMargin = vMargin;
       pageFrame->setContentsMargins(leftMargin, topMargin, rightMargin, bottomMargin);
    } else {

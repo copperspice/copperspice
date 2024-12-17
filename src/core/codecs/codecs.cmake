@@ -45,7 +45,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "(Linux|Darwin|OpenBSD|FreeBSD|NetBSD)")
       target_link_libraries(CsCore
          PRIVATE
          ${ICONV_LIBRARIES}
-         ${CMAKE_THREAD_LIBS_INIT}
       )
 
       target_include_directories(CsCore

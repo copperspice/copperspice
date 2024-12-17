@@ -31,4 +31,4 @@
 
 Q_CORE_EXPORT QPair<QString, QByteArray> qDecodeDataUrl(const QUrl &url);
 
-#endif // QDATAURL_P_H
+#endif

@@ -1997,7 +1997,7 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
          return;   // the editor was not registered
       }
 
-      if (!isPersistent) {
+      if (! isPersistent) {
          setState(NoState);
          QModelIndex index = d->indexForEditor(editor);
          editor->removeEventFilter(d->delegateForIndex(index));
@@ -2018,12 +2018,12 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
       QApplication::sendPostedEvents(editor, 0);
       editor = ed;
 
-      if (!isPersistent && editor) {
+      if (! isPersistent && editor) {
          d->releaseEditor(editor, index);
       }
    }
 
-   // The EndEditHint part
+   // EndEditHint part
    QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::NoUpdate;
    if (d->selectionMode != NoSelection) {
       flags = QItemSelectionModel::ClearAndSelect | d->selectionBehaviorFlags();
@@ -2032,12 +2032,13 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
    switch (hint) {
       case QAbstractItemDelegate::EditNextItem: {
          QModelIndex index = moveCursor(MoveNext, Qt::NoModifier);
+
          if (index.isValid()) {
             QPersistentModelIndex persistent(index);
             d->selectionModel->setCurrentIndex(persistent, flags);
+
             // currentChanged signal would have already started editing
-            if (index.flags() & Qt::ItemIsEditable
-               && (!(editTriggers() & QAbstractItemView::CurrentChanged))) {
+            if (index.flags() & Qt::ItemIsEditable && (!(editTriggers() & QAbstractItemView::CurrentChanged))) {
                edit(persistent);
             }
          }
@@ -2046,12 +2047,13 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
 
       case QAbstractItemDelegate::EditPreviousItem: {
          QModelIndex index = moveCursor(MovePrevious, Qt::NoModifier);
+
          if (index.isValid()) {
             QPersistentModelIndex persistent(index);
             d->selectionModel->setCurrentIndex(persistent, flags);
+
             // currentChanged signal would have already started editing
-            if (index.flags() & Qt::ItemIsEditable
-               && (!(editTriggers() & QAbstractItemView::CurrentChanged))) {
+            if (index.flags() & Qt::ItemIsEditable && (!(editTriggers() & QAbstractItemView::CurrentChanged))) {
                edit(persistent);
             }
          }
@@ -3390,8 +3392,9 @@ void QAbstractItemViewPrivate::clearOrRemove()
          int count = (*it).bottom() - (*it).top() + 1;
          model->removeRows((*it).top(), count, parent);
       }
+
    } else {
-      // we can't remove the rows so reset the items (i.e. the view is like a table)
+      // unable to remove the rows, so reset the items (i.e. the view is like a table)
       QModelIndexList list = selection.indexes();
 
       for (int i = 0; i < list.size(); ++i) {

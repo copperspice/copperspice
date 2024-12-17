@@ -69,10 +69,13 @@ class Q_GUI_EXPORT QLayoutPolicy
    };
    using ControlTypes = QFlags<ControlType>;
 
-   QLayoutPolicy() : data(0) { }
+   QLayoutPolicy()
+      : data(0)
+   { }
 
    QLayoutPolicy(Policy horizontal, Policy vertical, ControlType type = DefaultType)
-      : data(0) {
+      : data(0)
+   {
       bits.horPolicy = horizontal;
       bits.verPolicy = vertical;
       setControlType(type);
@@ -81,17 +84,21 @@ class Q_GUI_EXPORT QLayoutPolicy
    Policy horizontalPolicy() const {
       return static_cast<Policy>(bits.horPolicy);
    }
+
    Policy verticalPolicy() const {
       return static_cast<Policy>(bits.verPolicy);
    }
+
    ControlType controlType() const;
 
    void setHorizontalPolicy(Policy d) {
       bits.horPolicy = d;
    }
+
    void setVerticalPolicy(Policy d) {
       bits.verPolicy = d;
    }
+
    void setControlType(ControlType type);
 
    Qt::Orientations expandingDirections() const {
@@ -102,6 +109,7 @@ class Q_GUI_EXPORT QLayoutPolicy
       if (horizontalPolicy() & ExpandFlag) {
          result |= Qt::Horizontal;
       }
+
       return result;
    }
 

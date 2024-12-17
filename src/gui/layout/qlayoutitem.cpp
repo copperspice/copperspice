@@ -313,8 +313,7 @@ QSize QWidgetItem::minimumSize() const
    }
 
    return ! wid->testAttribute(Qt::WA_LayoutUsesWidgetRect)
-      ? toLayoutItemSize(wid->d_func(), qSmartMinSize(this))
-      : qSmartMinSize(this);
+         ? toLayoutItemSize(wid->d_func(), qSmartMinSize(this)) : qSmartMinSize(this);
 }
 
 QSize QSpacerItem::maximumSize() const
@@ -329,9 +328,8 @@ QSize QWidgetItem::maximumSize() const
       return QSize(0, 0);
 
    } else {
-      return !wid->testAttribute(Qt::WA_LayoutUsesWidgetRect)
-         ? toLayoutItemSize(wid->d_func(), qSmartMaxSize(this, align))
-         : qSmartMaxSize(this, align);
+      return ! wid->testAttribute(Qt::WA_LayoutUsesWidgetRect)
+            ? toLayoutItemSize(wid->d_func(), qSmartMaxSize(this, align)) : qSmartMaxSize(this, align);
    }
 }
 

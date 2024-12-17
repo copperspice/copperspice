@@ -36,17 +36,20 @@ void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
 {
    const quint32 *src = (const quint32 *) srcPixels;
    quint32 *dst = (quint32 *) destPixels;
+
    if (const_alpha == 256) {
-      const __m128i alphaMask = _mm_set1_epi32(0xff000000);
+      const __m128i alphaMask  = _mm_set1_epi32(0xff000000);
       const __m128i nullVector = _mm_set1_epi32(0);
       const __m128i half = _mm_set1_epi16(0x80);
-      const __m128i one = _mm_set1_epi16(0xff);
+      const __m128i one  = _mm_set1_epi16(0xff);
       const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
+
       for (int y = 0; y < h; ++y) {
          BLEND_SOURCE_OVER_ARGB32_SSE2(dst, src, w, nullVector, half, one, colorMask, alphaMask);
          dst = (quint32 *)(((uchar *) dst) + dbpl);
          src = (const quint32 *)(((const uchar *) src) + sbpl);
       }
+
    } else if (const_alpha != 0) {
       // dest = (s + d * sia) * ca + d * cia
       //      = s * ca + d * (sia * ca + cia)
@@ -57,6 +60,7 @@ void qt_blend_argb32_on_argb32_sse2(uchar *destPixels, int dbpl,
       const __m128i one = _mm_set1_epi16(0xff);
       const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
       const __m128i constAlphaVector = _mm_set1_epi16(const_alpha);
+
       for (int y = 0; y < h; ++y) {
          BLEND_SOURCE_OVER_ARGB32_WITH_CONST_ALPHA_SSE2(dst, src, w, nullVector, half, one, colorMask, constAlphaVector)
          dst = (quint32 *)(((uchar *) dst) + dbpl);
@@ -425,22 +429,19 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
    }
 }
 
-void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
+void qt_bitmapblit32_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64 &color,
    const uchar *src, int width, int height, int stride)
 {
    qt_bitmapblit32_sse2_base(rasterBuffer, x, y, color.toArgb32(), src, width, height, stride);
 }
 
-void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
+void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64 &color,
    const uchar *src, int width, int height, int stride)
 {
    qt_bitmapblit32_sse2_base(rasterBuffer, x, y, ARGB2RGBA(color.toArgb32()), src, width, height, stride);
 }
 
-void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y,
-   const QRgba64 &color,
+void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64 &color,
    const uchar *src, int width, int height, int stride)
 {
    const quint16 c = qConvertRgb32To16(color.toArgb32());

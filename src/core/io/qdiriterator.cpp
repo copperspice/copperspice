@@ -136,8 +136,9 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
          it->setPath(path);
          fileEngineIterators << it;
       } else {
-         // No iterator; no entry list.
+         // No iterator, no entry list
       }
+
    } else {
 #ifndef QT_NO_FILESYSTEMITERATOR
       QFileSystemIterator *it = new QFileSystemIterator(fileInfo.d_ptr->fileEntry,
@@ -211,18 +212,18 @@ void QDirIteratorPrivate::advance()
 
 void QDirIteratorPrivate::checkAndPushDirectory(const QFileInfo &fileInfo)
 {
-   // If we're doing flat iteration, we're done.
-   if (!(iteratorFlags & QDirIterator::Subdirectories)) {
+   // If we are doing flat iteration, then we are done
+   if (! (iteratorFlags & QDirIterator::Subdirectories)) {
       return;
    }
 
    // Never follow non-directory entries
-   if (!fileInfo.isDir()) {
+   if (! fileInfo.isDir()) {
       return;
    }
 
    // Follow symlinks only when asked
-   if (!(iteratorFlags & QDirIterator::FollowSymlinks) && fileInfo.isSymLink()) {
+   if (! (iteratorFlags & QDirIterator::FollowSymlinks) && fileInfo.isSymLink()) {
       return;
    }
 
@@ -248,7 +249,7 @@ void QDirIteratorPrivate::checkAndPushDirectory(const QFileInfo &fileInfo)
 
 bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInfo &fi) const
 {
-   Q_ASSERT(!fileName.isEmpty());
+   Q_ASSERT(! fileName.isEmpty());
 
    // filter . and ..
    const int fileNameSize = fileName.size();

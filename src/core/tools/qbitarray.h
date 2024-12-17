@@ -46,7 +46,7 @@ class Q_CORE_EXPORT QBitArray
       return *this;
    }
 
-   QBitArray &operator=(QBitArray && other) {
+   QBitArray &operator=(QBitArray &&other) {
       qSwap(d, other.d);
       return *this;
    }

@@ -30,16 +30,15 @@ class Q_MULTIMEDIA_EXPORT QVideoOutputOrientationHandler : public QObject
 {
     MULTI_CS_OBJECT(QVideoOutputOrientationHandler)
 
-public:
+ public:
     explicit QVideoOutputOrientationHandler(QObject *parent = nullptr);
 
     int currentOrientation() const;
 
-public:
     MULTI_CS_SIGNAL_1(Public, void orientationChanged(int angle))
     MULTI_CS_SIGNAL_2(orientationChanged,angle)
 
-private:
+ private:
     MULTI_CS_SLOT_1(Private, void screenOrientationChanged(Qt::ScreenOrientation orientation))
     MULTI_CS_SLOT_2(screenOrientationChanged)
 

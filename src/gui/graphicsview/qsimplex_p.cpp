@@ -385,9 +385,7 @@ qreal QSimplex::solver(SolverFactor factor)
    qreal resultOffset = 0;
    QHash<QSimplexVariable *, qreal>::const_iterator iter;
 
-   for (iter = objective->variables.constBegin();
-      iter != objective->variables.constEnd();
-      ++iter) {
+   for (iter = objective->variables.constBegin(); iter != objective->variables.constEnd(); ++iter) {
 
       // Check if the variable was removed in the simplification process.
       // If so, we save its offset to the objective function and skip adding
@@ -409,8 +407,7 @@ qreal QSimplex::solver(SolverFactor factor)
    }
 #endif
 
-   // Return the value calculated by the simplex plus the value of the
-   // fixed variables.
+   // return the value calculated by the simplex plus the value of the fixed variables
    return (factor * valueAt(0, columns - 1)) + resultOffset;
 }
 

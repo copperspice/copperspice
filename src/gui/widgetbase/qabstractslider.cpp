@@ -392,7 +392,7 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::Keyb
    Q_Q(QAbstractSlider);
    int stepsToScroll = 0;
 
-   // in Qt scrolling to the right gives negative values.
+   // scrolling to the right gives negative values
    if (orientation == Qt::Horizontal) {
       delta = -delta;
    }

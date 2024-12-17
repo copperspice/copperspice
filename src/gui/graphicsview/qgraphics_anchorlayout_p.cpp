@@ -105,10 +105,8 @@ qreal QGraphicsAnchorPrivate::spacing() const
 }
 
 
-static void applySizePolicy(QSizePolicy::Policy policy,
-   qreal minSizeHint, qreal prefSizeHint, qreal maxSizeHint,
-   qreal *minSize, qreal *prefSize,
-   qreal *maxSize)
+static void applySizePolicy(QSizePolicy::Policy policy, qreal minSizeHint, qreal prefSizeHint, qreal maxSizeHint,
+      qreal *minSize, qreal *prefSize, qreal *maxSize)
 {
    // minSize, prefSize and maxSize are initialized
    // with item's preferred Size: this is QSizePolicy::Fixed.
@@ -154,7 +152,6 @@ AnchorData::~AnchorData()
    }
 }
 
-
 void AnchorData::refreshSizeHints(const QLayoutStyleInfo *styleInfo)
 {
    QSizePolicy::Policy policy;
@@ -165,9 +162,9 @@ void AnchorData::refreshSizeHints(const QLayoutStyleInfo *styleInfo)
    if (item) {
       // this is a CS anchor, fetch size information from the item
       if (isLayoutAnchor) {
-         minSize = 0;
+         minSize  = 0;
          prefSize = 0;
-         maxSize = QWIDGETSIZE_MAX;
+         maxSize  = QWIDGETSIZE_MAX;
 
          if (isCenterAnchor) {
             maxSize /= 2;

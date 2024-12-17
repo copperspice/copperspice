@@ -26,7 +26,7 @@
 #include <qnoncontiguousbytedevice_p.h>
 
 QHttpNetworkRequestPrivate::QHttpNetworkRequestPrivate(QHttpNetworkRequest::Operation op,
-                  QHttpNetworkRequest::Priority pri, const QUrl &newUrl)
+      QHttpNetworkRequest::Priority pri, const QUrl &newUrl)
    : QHttpNetworkHeaderPrivate(newUrl), operation(op), priority(pri), uploadByteDevice(nullptr),
      autoDecompress(false), pipeliningAllowed(false), spdyAllowed(false),
      withCredentials(true), preConnect(false), followRedirect(false), redirectCount(0)

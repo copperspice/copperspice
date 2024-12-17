@@ -31,5 +31,3 @@ QCameraCaptureBufferFormatControl::QCameraCaptureBufferFormatControl(QObject *pa
 QCameraCaptureBufferFormatControl::~QCameraCaptureBufferFormatControl()
 {
 }
-
-

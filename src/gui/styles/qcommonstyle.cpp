@@ -3875,12 +3875,14 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
          }
          break;
 #endif // QT_NO_DIAL
+
 #ifndef QT_NO_GROUPBOX
       case CC_GroupBox:
          if (const QStyleOptionGroupBox *groupBox = qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
             // Draw frame
             QRect textRect = proxy()->subControlRect(CC_GroupBox, opt, SC_GroupBoxLabel, widget);
             QRect checkBoxRect = proxy()->subControlRect(CC_GroupBox, opt, SC_GroupBoxCheckBox, widget);
+
             if (groupBox->subControls & QStyle::SC_GroupBoxFrame) {
                QStyleOptionFrame frame;
                frame.QStyleOption::operator=(*groupBox);
@@ -3889,7 +3891,9 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                frame.midLineWidth = groupBox->midLineWidth;
                frame.rect = proxy()->subControlRect(CC_GroupBox, opt, SC_GroupBoxFrame, widget);
                p->save();
+
                QRegion region(groupBox->rect);
+
                if (!groupBox->text.isEmpty()) {
                   bool ltr = groupBox->direction == Qt::LeftToRight;
                   QRect finalRect;
@@ -3912,7 +3916,9 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                if (textColor.isValid()) {
                   p->setPen(textColor);
                }
+
                int alignment = int(groupBox->textAlignment);
+
                if (!proxy()->styleHint(QStyle::SH_UnderlineShortcut, opt, widget)) {
                   alignment |= Qt::TextHideMnemonic;
                }

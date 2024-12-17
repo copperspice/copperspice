@@ -38,7 +38,6 @@
 
 static QByteArray locale_encode(const QString &f)
 {
-
 #if defined(Q_OS_DARWIN)
    // Mac always expects UTF-8 and decomposed
    return f.normalized(QString::NormalizationForm_D).toUtf8();

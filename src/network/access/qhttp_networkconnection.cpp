@@ -54,7 +54,6 @@ const int QHttpNetworkConnectionPrivate::defaultPipelineLength = 3;
 // This means that there are 2 requests in flight and 2 slots free that will be re-filled.
 const int QHttpNetworkConnectionPrivate::defaultRePipelineLength = 2;
 
-
 QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(const QString &hostName,
       quint16 port, bool encrypt, QHttpNetworkConnection::ConnectionType type)
    : state(RunningState), networkLayerState(Unknown),

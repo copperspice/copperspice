@@ -385,7 +385,6 @@ QDataStream &operator<<(QDataStream &s, const QPen &p)
    s << (quint16)(p.style() | p.capStyle() | p.joinStyle());
    s << (bool)(dd->cosmetic);
 
-
    s << double(p.widthF());
    s << p.brush();
    s << double(p.miterLimit());
@@ -399,15 +398,14 @@ QDataStream &operator<<(QDataStream &s, const QPen &p)
       // data that cannot be read on other platforms.
       QVector<qreal> pattern = p.dashPattern();
       s << quint32(pattern.size());
+
       for (int i = 0; i < pattern.size(); ++i) {
          s << double(pattern.at(i));
       }
    }
 
-
    s << double(p.dashOffset());
    s << bool(dd->defaultWidth);
-
 
    return s;
 }

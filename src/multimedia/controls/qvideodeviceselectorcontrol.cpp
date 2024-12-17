@@ -31,7 +31,3 @@ QVideoDeviceSelectorControl::QVideoDeviceSelectorControl(QObject *parent)
 QVideoDeviceSelectorControl::~QVideoDeviceSelectorControl()
 {
 }
-
-
-
-

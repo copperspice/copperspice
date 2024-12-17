@@ -255,7 +255,7 @@ bool QToolBarLayout::movable() const
 
 void QToolBarLayout::updateGeomArray() const
 {
-   if (!dirty) {
+   if (! dirty) {
       return;
    }
 
@@ -263,15 +263,17 @@ void QToolBarLayout::updateGeomArray() const
 
    QToolBar *tb = qobject_cast<QToolBar *>(parentWidget());
 
-   if (!tb) {
+   if (! tb) {
       return;
    }
 
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
+
    const int handleExtent = movable()
       ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+
    const int margin = this->margin();
    const int spacing = this->spacing();
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
@@ -288,12 +290,14 @@ void QToolBarLayout::updateGeomArray() const
    QVector<QLayoutStruct> a(items.count() + 1); // + 1 for the stretch
 
    int count = 0;
+
    for (int i = 0; i < items.count(); ++i) {
       QToolBarItem *item = items.at(i);
 
-      QSize max = item->maximumSize();
-      QSize min = item->minimumSize();
+      QSize max  = item->maximumSize();
+      QSize min  = item->minimumSize();
       QSize hint = item->sizeHint();
+
       Qt::Orientations exp = item->expandingDirections();
       bool empty = item->isEmpty();
 
@@ -308,23 +312,26 @@ void QToolBarLayout::updateGeomArray() const
 
       if (!empty) {
          if (count == 0) {
-            // the minimum size only displays one widget
+            // minimum size only displays one widget
             rpick(o, that->minSize) += pick(o, min);
          }
+
          int s = perp(o, minSize);
          rperp(o, that->minSize) = qMax(s, perp(o, min));
 
-         //we only add spacing before item (ie never before the first one)
+         // only add spacing before item, not before the first one
          rpick(o, that->hint) += (count == 0 ? 0 : spacing) + pick(o, hint);
+
          s = perp(o, that->hint);
          rperp(o, that->hint) = qMax(s, perp(o, hint));
          ++count;
       }
 
-      a[i].sizeHint = pick(o, hint);
+      a[i].sizeHint    = pick(o, hint);
       a[i].maximumSize = pick(o, max);
       a[i].minimumSize = pick(o, min);
-      a[i].expansive = exp & o;
+      a[i].expansive   = exp & o;
+
       if (o == Qt::Horizontal) {
          a[i].stretch = item->widget()->sizePolicy().horizontalStretch();
       } else {
@@ -338,6 +345,7 @@ void QToolBarLayout::updateGeomArray() const
 
    rpick(o, that->minSize) += handleExtent;
    that->minSize += QSize(2 * margin, 2 * margin);
+
    if (items.count() > 1) {
       rpick(o, that->minSize) += spacing + extensionExtent;
    }

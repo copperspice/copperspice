@@ -80,7 +80,8 @@ class Q_GUI_EXPORT QSizePolicy
    QSizePolicy() : data(0) { }
 
    QSizePolicy(Policy horizontal, Policy vertical, ControlType type = DefaultType)
-      : data(0) {
+      : data(0)
+   {
       bits.horPolicy = horizontal;
       bits.verPolicy = vertical;
       setControlType(type);
@@ -89,9 +90,11 @@ class Q_GUI_EXPORT QSizePolicy
    Policy horizontalPolicy() const {
       return static_cast<Policy>(bits.horPolicy);
    }
+
    Policy verticalPolicy() const {
       return static_cast<Policy>(bits.verPolicy);
    }
+
    ControlType controlType() const;
 
    void setHorizontalPolicy(Policy policy) {
@@ -101,6 +104,7 @@ class Q_GUI_EXPORT QSizePolicy
    void setVerticalPolicy(Policy policy) {
       bits.verPolicy = policy;
    }
+
    void setControlType(ControlType type);
 
    Qt::Orientations expandingDirections() const {
@@ -115,6 +119,7 @@ class Q_GUI_EXPORT QSizePolicy
    bool hasHeightForWidth() const {
       return bits.hfw;
    }
+
    void setWidthForHeight(bool isWidthForHeight) {
       bits.wfh = isWidthForHeight;
    }
@@ -166,11 +171,11 @@ class Q_GUI_EXPORT QSizePolicy
    struct Bits {
       quint32 horStretch : 8;
       quint32 verStretch : 8;
-      quint32 horPolicy : 4;
-      quint32 verPolicy : 4;
-      quint32 ctype : 5;
-      quint32 hfw : 1;
-      quint32 wfh : 1;
+      quint32 horPolicy  : 4;
+      quint32 verPolicy  : 4;
+      quint32 ctype      : 5;
+      quint32 hfw        : 1;
+      quint32 wfh        : 1;
       quint32 retainSizeWhenHidden : 1;
    };
 

@@ -294,18 +294,18 @@ int qstrcmp(const QByteArray &str1, const char *str2)
    return 0;
 }
 
-int qstrcmp(const QByteArray &str1, const QByteArray &str2)
+int qstrcmp(const QByteArray &a1, const QByteArray &a2)
 {
-   int l1  = str1.length();
-   int l2  = str2.length();
-   int ret = memcmp(str1.constData(), str2.constData(), qMin(l1, l2));
+   int len1 = a1.length();
+   int len2 = a2.length();
 
-   if (ret != 0) {
-      return ret;
+   int retval = memcmp(a1.constData(), a2.constData(), qMin(len1, len2));
+
+   if (retval != 0) {
+      return retval;
    }
 
-   // they matched qMin(l1, l2) bytes so the longer one is lexically after the shorter one
-   return l1 - l2;
+   return len1 - len2;
 }
 
 static const quint16 crc_tbl[16] = {

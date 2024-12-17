@@ -78,14 +78,12 @@ static inline bool isParentDomain(const QString &domain, const QString &referenc
    return domain.endsWith(reference) || domain == reference.mid(1);
 }
 
-bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList,
-      const QUrl &url)
+bool QNetworkCookieJar::setCookiesFromUrl(const QList<QNetworkCookie> &cookieList, const QUrl &url)
 {
    bool added = false;
 
    for (QNetworkCookie cookie : cookieList) {
       cookie.normalize(url);
-
 
       if (validateCookie(cookie, url) && insertCookie(cookie)) {
          added = true;

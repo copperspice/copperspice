@@ -3142,11 +3142,12 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 
    d->updateState(d->state);
 
-   if ((d->state->matrix.type() > QTransform::TxTranslate
-         && !d->engine->hasFeature(QPaintEngine::PixmapTransform))
-      || (!d->state->matrix.isAffine() && !d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
-      || (d->state->opacity != 1.0 && !d->engine->hasFeature(QPaintEngine::ConstantOpacity))) {
+   if ((d->state->matrix.type() > QTransform::TxTranslate && ! d->engine->hasFeature(QPaintEngine::PixmapTransform))
+         || (! d->state->matrix.isAffine() && ! d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
+         || (d->state->opacity != 1.0 && ! d->engine->hasFeature(QPaintEngine::ConstantOpacity))) {
+
       save();
+
       // If there is no rotation involved we have to make sure we use the
       // antialiased and not the aliased coordinate system by rounding the coordinates.
       if (d->state->matrix.type() <= QTransform::TxScale) {
@@ -3154,6 +3155,7 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
          x = p.x();
          y = p.y();
       }
+
       translate(x, y);
       setBackgroundMode(Qt::TransparentMode);
       setRenderHint(Antialiasing, renderHints() & SmoothPixmapTransform);
@@ -3267,12 +3269,12 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 
    d->updateState(d->state);
 
-   if ((d->state->matrix.type() > QTransform::TxTranslate
-         && !d->engine->hasFeature(QPaintEngine::PixmapTransform))
-      || (!d->state->matrix.isAffine() && !d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
-      || (d->state->opacity != 1.0 && !d->engine->hasFeature(QPaintEngine::ConstantOpacity))
-      || ((sw != w || sh != h) && !d->engine->hasFeature(QPaintEngine::PixmapTransform))) {
+   if ((d->state->matrix.type() > QTransform::TxTranslate && !d->engine->hasFeature(QPaintEngine::PixmapTransform))
+         || (!d->state->matrix.isAffine() && ! d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
+         || (d->state->opacity != 1.0 && ! d->engine->hasFeature(QPaintEngine::ConstantOpacity))
+         || ((sw != w || sh != h) && ! d->engine->hasFeature(QPaintEngine::PixmapTransform))) {
       save();
+
       // If there is no rotation involved we have to make sure we use the
       // antialiased and not the aliased coordinate system by rounding the coordinates.
       if (d->state->matrix.type() <= QTransform::TxScale) {
@@ -3292,6 +3294,7 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
       scale(w / sw, h / sh);
       setBackgroundMode(Qt::TransparentMode);
       setRenderHint(Antialiasing, renderHints() & SmoothPixmapTransform);
+
       QBrush brush;
 
       if (sw == pm.width() && sh == pm.height()) {
@@ -3305,6 +3308,7 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
 
       drawRect(QRectF(0, 0, sw, sh));
       restore();
+
    } else {
       if (!d->engine->hasFeature(QPaintEngine::PixmapTransform)) {
          x += d->state->matrix.dx();
@@ -3318,7 +3322,7 @@ void QPainter::drawImage(const QPointF &p, const QImage &image)
 {
    Q_D(QPainter);
 
-   if (!d->engine || image.isNull()) {
+   if (! d->engine || image.isNull()) {
       return;
    }
 
@@ -3336,18 +3340,20 @@ void QPainter::drawImage(const QPointF &p, const QImage &image)
 
    d->updateState(d->state);
 
-   if (((d->state->matrix.type() > QTransform::TxTranslate)
-         && !d->engine->hasFeature(QPaintEngine::PixmapTransform))
-      || (!d->state->matrix.isAffine() && !d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
-      || (d->state->opacity != 1.0 && !d->engine->hasFeature(QPaintEngine::ConstantOpacity))) {
+   if (((d->state->matrix.type() > QTransform::TxTranslate) && !d->engine->hasFeature(QPaintEngine::PixmapTransform))
+         || (!d->state->matrix.isAffine() && !d->engine->hasFeature(QPaintEngine::PerspectiveTransform))
+         || (d->state->opacity != 1.0 && !d->engine->hasFeature(QPaintEngine::ConstantOpacity))) {
       save();
+
       // If there is no rotation involved we have to make sure we use the
       // antialiased and not the aliased coordinate system by rounding the coordinates.
       if (d->state->matrix.type() <= QTransform::TxScale) {
+
          const QPointF p = roundInDeviceCoordinates(QPointF(x, y), d->state->matrix);
          x = p.x();
          y = p.y();
       }
+
       translate(x, y);
       setBackgroundMode(Qt::TransparentMode);
       setRenderHint(Antialiasing, renderHints() & SmoothPixmapTransform);
@@ -3362,8 +3368,7 @@ void QPainter::drawImage(const QPointF &p, const QImage &image)
       return;
    }
 
-   if (d->state->matrix.type() == QTransform::TxTranslate
-      && !d->engine->hasFeature(QPaintEngine::PixmapTransform)) {
+   if (d->state->matrix.type() == QTransform::TxTranslate && ! d->engine->hasFeature(QPaintEngine::PixmapTransform)) {
       x += d->state->matrix.dx();
       y += d->state->matrix.dy();
    }

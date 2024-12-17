@@ -1863,7 +1863,7 @@ template <TextureBlendType blendType>
 static const uint *fetchTransformedARGB32PM(uint *buffer, const Operator *, const QSpanData *data,
    int y, int x, int length)
 {
-   int image_width = data->texture.width;
+   int image_width  = data->texture.width;
    int image_height = data->texture.height;
 
    const qreal cx = x + qreal(0.5);
@@ -1871,15 +1871,14 @@ static const uint *fetchTransformedARGB32PM(uint *buffer, const Operator *, cons
 
    const uint *end = buffer + length;
    uint *b = buffer;
+
    if (data->fast_matrix) {
-      // The increment pr x in the scanline
+      // increment pr x in the scanline
       int fdx = (int)(data->m11 * fixed_scale);
       int fdy = (int)(data->m12 * fixed_scale);
 
-      int fx = int((data->m21 * cy
-               + data->m11 * cx + data->dx) * fixed_scale);
-      int fy = int((data->m22 * cy
-               + data->m12 * cx + data->dy) * fixed_scale);
+      int fx = int((data->m21 * cy + data->m11 * cx + data->dx) * fixed_scale);
+      int fy = int((data->m22 * cy + data->m12 * cx + data->dy) * fixed_scale);
 
       while (b < end) {
          int px = fx >> 16;
@@ -1907,6 +1906,7 @@ static const uint *fetchTransformedARGB32PM(uint *buffer, const Operator *, cons
          fy += fdy;
          ++b;
       }
+
    } else {
       const qreal fdx = data->m11;
       const qreal fdy = data->m12;
@@ -3254,14 +3254,17 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
          QRgba64 buf1[buffer_size];
          QRgba64 buf2[buffer_size];
          QRgba64 *b = buffer;
+
          while (length) {
-            int len = qMin(length, buffer_size / 2);
+            int len   = qMin(length, buffer_size / 2);
             int fracX = fx;
-            int i = 0;
+            int i     = 0;
             int disty = (fy & 0x0000ffff);
+
 #if defined(__SSE2__)
             const __m128i vdy = _mm_set1_epi16(disty);
             const __m128i vidy = _mm_set1_epi16(0x10000 - disty);
+
             if (blendType != BlendTransformedBilinearTiled && layout->bpp == QPixelLayout::BPP32) {
                for (; i < len; ++i) {
                   int x1 = (fx >> 16);
@@ -3317,6 +3320,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
             for (; i < len; ++i) {
                int x1 = (fx >> 16);
                int x2;
+
                fetchTransformedBilinear_pixelBounds<blendType>(image_width, image_x1, image_x2, x1, x2);
 
                if (layout->bpp == QPixelLayout::BPP32) {
@@ -3334,6 +3338,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
 
                fx += fdx;
             }
+
             layout->convertToARGB64PM(buf1, sbuf1, len * 2, layout, clut);
             if (disty) {
                layout->convertToARGB64PM(buf2, sbuf2, len * 2, layout, clut);
@@ -3342,7 +3347,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
             for (int i = 0; i < len; ++i) {
                int distx = (fracX & 0x0000ffff);
 #if defined(__SSE2__)
-               const __m128i vdistx = _mm_shufflelo_epi16(_mm_cvtsi32_si128(distx), _MM_SHUFFLE(0, 0, 0, 0));
+               const __m128i vdistx  = _mm_shufflelo_epi16(_mm_cvtsi32_si128(distx), _MM_SHUFFLE(0, 0, 0, 0));
                const __m128i vidistx = _mm_shufflelo_epi16(_mm_cvtsi32_si128(0x10000 - distx), _MM_SHUFFLE(0, 0, 0, 0));
                __m128i vt = _mm_loadu_si128((const __m128i *)(buf1 + i * 2));
                if (disty) {
@@ -3359,10 +3364,13 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
 #endif
                fracX += fdx;
             }
+
             length -= len;
             b += len;
          }
-      } else { //rotation
+
+      } else {
+         //rotation
          FetchPixelFunc fetch = qFetchPixel[layout->bpp];
          uint sbuf1[buffer_size];
          uint sbuf2[buffer_size];
@@ -3406,19 +3414,24 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
                const uchar *s1 = data->texture.imageData;
                const uchar *s2 = s1 + bytesPerLine;
                const __m128i vbpl = _mm_shufflelo_epi16(_mm_cvtsi32_si128(bytesPerLine / 4), _MM_SHUFFLE(0, 0, 0, 0));
+
                for (; i < len - 3; i += 4) {
                   if (fdx > 0 && (short)_mm_extract_epi16(v_fx, 7) >= image_x2) {
                      break;
                   }
+
                   if (fdx < 0 && (short)_mm_extract_epi16(v_fx, 7) < image_x1) {
                      break;
                   }
+
                   if (fdy > 0 && (short)_mm_extract_epi16(v_fy, 7) >= image_y2) {
                      break;
                   }
+
                   if (fdy < 0 && (short)_mm_extract_epi16(v_fy, 7) < image_y1) {
                      break;
                   }
+
                   const __m128i vy = _mm_packs_epi32(_mm_srai_epi32(v_fy, 16), _mm_setzero_si128());
                   __m128i voffset = _mm_unpacklo_epi16(_mm_mullo_epi16(vy, vbpl), _mm_mulhi_epu16(vy, vbpl));
                   voffset = _mm_add_epi32(voffset, _mm_srli_epi32(v_fx, 16));
@@ -3484,6 +3497,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
                fx += fdx;
                fy += fdy;
             }
+
             layout->convertToARGB64PM(buf1, sbuf1, len * 2, layout, clut);
             layout->convertToARGB64PM(buf2, sbuf2, len * 2, layout, clut);
 
@@ -3499,6 +3513,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
             b += len;
          }
       }
+
    } else {
       qreal fx = data->m21 * cy + data->m11 * cx + data->dx;
       qreal fy = data->m22 * cy + data->m12 * cx + data->dy;
@@ -3516,6 +3531,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
 
       while (length) {
          int len = qMin(length, buffer_size / 2);
+
          for (int i = 0; i < len; ++i) {
             const qreal iw = fw == 0 ? 1 : 1 / fw;
             const qreal px = fx * iw - qreal(0.5);
@@ -3551,6 +3567,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
             fx += fdx;
             fy += fdy;
             fw += fdw;
+
             //force increment to avoid /0
             if (!fw) {
                fw += fdw;
@@ -3987,16 +4004,19 @@ class GradientBase64
 
 template <class GradientBase, typename BlendType>
 static inline const BlendType *qt_fetch_linear_gradient_template(
-   BlendType *buffer, const Operator *op, const QSpanData *data,int y, int x, int length)
+   BlendType *buffer, const Operator *op, const QSpanData *data, int y, int x, int length)
 {
    const BlendType *b = buffer;
-   qreal t, inc;
+   qreal t;
+   qreal inc;
 
    bool affine = true;
-   qreal rx = 0, ry = 0;
+   qreal rx = 0;
+   qreal ry = 0;
 
    if (op->linear.l == 0) {
       t = inc = 0;
+
    } else {
       rx = data->m21 * (y + qreal(0.5)) + data->m11 * (x + qreal(0.5)) + data->dx;
       ry = data->m22 * (y + qreal(0.5)) + data->m12 * (x + qreal(0.5)) + data->dy;
@@ -4005,26 +4025,30 @@ static inline const BlendType *qt_fetch_linear_gradient_template(
       affine = !data->m13 && !data->m23;
 
       if (affine) {
-         t *= (GRADIENT_STOPTABLE_SIZE - 1);
+         t   *= (GRADIENT_STOPTABLE_SIZE - 1);
          inc *= (GRADIENT_STOPTABLE_SIZE - 1);
       }
    }
 
    const BlendType *end = buffer + length;
+
    if (affine) {
       if (inc > qreal(-1e-5) && inc < qreal(1e-5)) {
          GradientBase::memfill(buffer, GradientBase::fetchSingle(data->gradient, int(t * FIXPT_SIZE)), length);
+
       } else {
          if (t + inc * length < qreal(INT_MAX >> (FIXPT_BITS + 1)) &&
-            t + inc * length > qreal(INT_MIN >> (FIXPT_BITS + 1))) {
+               t + inc * length > qreal(INT_MIN >> (FIXPT_BITS + 1))) {
             // we can use fixed point math
-            int t_fixed = int(t * FIXPT_SIZE);
+            int t_fixed  = int(t * FIXPT_SIZE);
             int inc_fixed = int(inc * FIXPT_SIZE);
+
             while (buffer < end) {
                *buffer = GradientBase::fetchSingle(data->gradient, t_fixed);
                t_fixed += inc_fixed;
                ++buffer;
             }
+
          } else {
             // we have to fall back to float math
             while (buffer < end) {
@@ -4034,8 +4058,10 @@ static inline const BlendType *qt_fetch_linear_gradient_template(
             }
          }
       }
+
    } else { // fall back to float math here as well
       qreal rw = data->m23 * (y + qreal(0.5)) + data->m13 * (x + qreal(0.5)) + data->m33;
+
       while (buffer < end) {
          qreal x = rx / rw;
          qreal y = ry / rw;
@@ -4045,9 +4071,11 @@ static inline const BlendType *qt_fetch_linear_gradient_template(
          rx += data->m11;
          ry += data->m12;
          rw += data->m13;
-         if (!rw) {
+
+         if (! rw) {
             rw += data->m13;
          }
+
          ++buffer;
       }
    }
@@ -4056,13 +4084,13 @@ static inline const BlendType *qt_fetch_linear_gradient_template(
 }
 
 static const uint *qt_fetch_linear_gradient(uint *buffer, const Operator *op, const QSpanData *data,
-   int y, int x, int length)
+      int y, int x, int length)
 {
    return qt_fetch_linear_gradient_template<GradientBase32, uint>(buffer, op, data, y, x, length);
 }
 
 static const QRgba64 *qt_fetch_linear_gradient_rgb64(QRgba64 *buffer, const Operator *op, const QSpanData *data,
-   int y, int x, int length)
+      int y, int x, int length)
 {
    return qt_fetch_linear_gradient_template<GradientBase64, QRgba64>(buffer, op, data, y, x, length);
 }
@@ -4473,31 +4501,37 @@ static void blend_color_rgb16(int count, const QSpan *spans, void *userData)
       while (count--) {
          uint color = BYTE_MUL(data->solid.color.toArgb32(), spans->coverage);
          int ialpha = qAlpha(~color);
-         ushort c = qConvertRgb32To16(color);
+         ushort c   = qConvertRgb32To16(color);
+
          ushort *target = ((ushort *)data->rasterBuffer->scanLine(spans->y)) + spans->x;
-         int len = spans->len;
-         bool pre = (((quintptr)target) & 0x3) != 0;
+         int len   = spans->len;
+         bool pre  = (((quintptr)target) & 0x3) != 0;
          bool post = false;
+
          if (pre) {
             // skip to word boundary
             *target = c + BYTE_MUL_RGB16(*target, ialpha);
             ++target;
             --len;
          }
+
          if (len & 0x1) {
             post = true;
             --len;
          }
+
          uint *target32 = (uint *)target;
          uint c32 = c | (c << 16);
          len >>= 1;
          uint salpha = (ialpha + 1) >> 3; // calculate here rather than in loop
+
          while (len--) {
             // blend full words
             *target32 = c32 + BYTE_MUL_RGB16_32(*target32, salpha);
             ++target32;
             target += 2;
          }
+
          if (post) {
             // one last pixel beyond a full word
             *target = c + BYTE_MUL_RGB16(*target, ialpha);
@@ -4514,15 +4548,18 @@ template <typename T>
 void handleSpans(int count, const QSpan *spans, const QSpanData *data, T &handler)
 {
    uint const_alpha = 256;
+
    if (data->type == QSpanData::Texture) {
       const_alpha = data->texture.const_alpha;
    }
 
    int coverage = 0;
+
    while (count) {
-      int x = spans->x;
+      int x       = spans->x;
       const int y = spans->y;
-      int right = x + spans->len;
+
+      int right   = x + spans->len;
 
       // compute length of adjacent spans
       for (int i = 1; i < count && spans[i].y == y && spans[i].x == right; ++i) {
@@ -6089,10 +6126,8 @@ void qBlendTexture(int count, const QSpan *spans, void *userData)
 }
 
 template <class DST>
-static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer,
-   int x, int y, DST color,
-   const uchar *map,
-   int mapWidth, int mapHeight, int mapStride)
+static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer, int x, int y, DST color,
+      const uchar *map, int mapWidth, int mapHeight, int mapStride)
 {
    DST *dest = reinterpret_cast<DST *>(rasterBuffer->scanLine(y)) + x;
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(DST);
@@ -6119,15 +6154,18 @@ static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer,
                      break;
                   }
                }
+
                s <<= 1;
             }
          }
          if (n) {
             qt_memfill(dest + x0, color, n);
          }
+
          dest += destStride;
          map += mapStride;
       }
+
    } else {
       while (mapHeight--) {
          int x0 = 0;

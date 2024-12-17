@@ -58,16 +58,12 @@
 #include <qiconloader_p.h>
 
 #ifndef Q_OS_DARWIN
-// X11 Includes:
 
-// the following is necessary to work around breakage in many versions
-// of XFree86's Xlib.h still in use
-// ### which versions?
-#if defined(_XLIB_H_) // crude hack, but...
-#error "Can not include <X11/Xlib.h> before this file"
+#if defined(_XLIB_H_)
+#error "Do not include <X11/Xlib.h> before this location"
 #endif
 
-#define XRegisterIMInstantiateCallback qt_XRegisterIMInstantiateCallback
+#define XRegisterIMInstantiateCallback   qt_XRegisterIMInstantiateCallback
 #define XUnregisterIMInstantiateCallback qt_XUnregisterIMInstantiateCallback
 #define XSetIMValues qt_XSetIMValues
 

@@ -28,6 +28,5 @@
 
 Q_MULTIMEDIA_EXPORT QImage qt_imageFromVideoFrame(const QVideoFrame &frame);
 
-
 #endif
 

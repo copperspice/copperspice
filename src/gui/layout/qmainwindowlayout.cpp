@@ -2539,15 +2539,15 @@ void QMainWindowLayout::hover(QLayoutItem *widgetItem, const QPoint &mousePos)
       for (QObject *c : parentWidget()->children()) {
          QWidget *w = qobject_cast<QWidget *>(c);
 
-         if (!w) {
+         if (! w) {
             continue;
          }
 
-         if (!qobject_cast<QDockWidget *>(w) && !qobject_cast<QDockWidgetGroupWindow *>(w)) {
+         if (! qobject_cast<QDockWidget *>(w) && ! qobject_cast<QDockWidgetGroupWindow *>(w)) {
             continue;
          }
 
-         if (w != widget && w->isTopLevel() && w->isVisible() && !w->isMinimized()) {
+         if (w != widget && w->isTopLevel() && w->isVisible() && ! w->isMinimized()) {
             candidates << w;
          }
 

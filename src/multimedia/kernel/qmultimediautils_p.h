@@ -29,4 +29,3 @@
 Q_MULTIMEDIA_EXPORT void qt_real_to_fraction(qreal value, int *numerator, int *denominator);
 
 #endif
-
