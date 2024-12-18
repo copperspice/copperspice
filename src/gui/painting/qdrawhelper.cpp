@@ -43,10 +43,8 @@
 
 #define MASK(src, a) src = BYTE_MUL(src, a)
 
-enum {
-   fixed_scale = 1 << 16,
-   half_point = 1 << 15
-};
+static constexpr const int fixed_scale = 1 << 16;
+static constexpr const int half_point  = 1 << 15;
 
 // must be multiple of 4 for easier SIMD implementations
 static constexpr const int buffer_size = 2048;
