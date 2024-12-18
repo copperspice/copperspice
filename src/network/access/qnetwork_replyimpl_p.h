@@ -111,7 +111,7 @@ class QNetworkReplyImplPrivate: public QNetworkReplyPrivate
       NotifyCopyFinished
    };
 
-   typedef QQueue<InternalNotifications> NotificationQueue;
+   using NotificationQueue = QQueue<InternalNotifications>;
 
    QNetworkReplyImplPrivate();
 

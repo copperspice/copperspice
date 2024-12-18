@@ -41,9 +41,9 @@ class QList;
 class Q_NETWORK_EXPORT QNetworkCacheMetaData
 {
  public:
-   typedef QPair<QByteArray, QByteArray> RawHeader;
-   typedef QList<RawHeader> RawHeaderList;
-   typedef QHash<QNetworkRequest::Attribute, QVariant> AttributesMap;
+   using RawHeader     = QPair<QByteArray, QByteArray>;
+   using RawHeaderList = QList<RawHeader>;
+   using AttributesMap = QHash<QNetworkRequest::Attribute, QVariant>;
 
    QNetworkCacheMetaData();
    QNetworkCacheMetaData(const QNetworkCacheMetaData &other);

@@ -607,8 +607,10 @@ DEFINEFUNC(void, PKCS12_free, PKCS12 *pkcs12, pkcs12, return, DUMMYARG)
 
 
 #ifdef Q_OS_UNIX
+
 struct NumericallyLess {
-   typedef bool result_type;
+   using result_type = bool;
+
    result_type operator()(const QString &lhs, const QString &rhs) const {
       bool ok = false;
       int b = 0;
@@ -630,7 +632,7 @@ struct NumericallyLess {
 };
 
 struct LibGreaterThan {
-   typedef bool result_type;
+   using result_type = bool;
 
    result_type operator()(const QString &lhs, const QString &rhs) const {
       const QStringList lhsparts = lhs.split(QChar('.'));

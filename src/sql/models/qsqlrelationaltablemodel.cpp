@@ -36,6 +36,8 @@
 
 #include <qsqltablemodel_p.h>
 
+class QRelatedTableModel;
+
 class QSqlRelationalTableModelSql: public QSqlTableModelSql
 {
  public:
@@ -44,8 +46,7 @@ class QSqlRelationalTableModelSql: public QSqlTableModelSql
    }
 };
 
-typedef QSqlRelationalTableModelSql Sql;
-class QRelatedTableModel;
+using Sql = QSqlRelationalTableModelSql;
 
 struct QRelation {
  public:

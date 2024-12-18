@@ -45,6 +45,8 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    NET_CS_ENUM(NetworkError)
 
  public:
+   using RawHeaderPair = QPair<QByteArray, QByteArray>;
+
    enum NetworkError {
       NoError = 0,
 
@@ -115,7 +117,6 @@ class Q_NETWORK_EXPORT QNetworkReply : public QIODevice
    QList<QByteArray> rawHeaderList() const;
    QByteArray rawHeader(const QByteArray &headerName) const;
 
-   typedef QPair<QByteArray, QByteArray> RawHeaderPair;
    const QList<RawHeaderPair> &rawHeaderPairs() const;
 
    // attributes

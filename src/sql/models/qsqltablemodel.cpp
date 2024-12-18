@@ -34,7 +34,7 @@
 
 #include <qsqltablemodel_p.h>
 
-typedef QSqlTableModelSql Sql;
+using Sql = QSqlTableModelSql;
 
 QSqlTableModelPrivate::~QSqlTableModelPrivate()
 {
@@ -966,8 +966,8 @@ bool QSqlTableModel::setRecord(int row, const QSqlRecord &values)
    }
 
    // Check field names and remember mapping
-   typedef QMap<int, int> Map;
-   Map map;
+   QMap<int, int> map;
+
    for (int i = 0; i < values.count(); ++i) {
       int idx = d->nameToIndex(values.fieldName(i));
       if (idx == -1) {
@@ -977,12 +977,14 @@ bool QSqlTableModel::setRecord(int row, const QSqlRecord &values)
    }
 
    QSqlTableModelPrivate::ModifiedRow &mrow = d->cache[row];
+
    if (mrow.op() == QSqlTableModelPrivate::None)
       mrow = QSqlTableModelPrivate::ModifiedRow(QSqlTableModelPrivate::Update,
             QSqlQueryModel::record(row));
 
-   Map::const_iterator i = map.constBegin();
-   const Map::const_iterator e = map.constEnd();
+   auto i = map.constBegin();
+   auto e = map.constEnd();
+
    for ( ; i != e; ++i) {
       // have to use virtual setData() here rather than mrow.setValue()
       EditStrategy strategy = d->strategy;

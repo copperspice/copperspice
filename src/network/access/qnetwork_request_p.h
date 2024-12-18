@@ -36,10 +36,10 @@
 class QNetworkHeadersPrivate
 {
  public:
-   typedef QPair<QByteArray, QByteArray> RawHeaderPair;
-   typedef QList<RawHeaderPair> RawHeadersList;
-   typedef QHash<QNetworkRequest::KnownHeaders, QVariant> CookedHeadersMap;
-   typedef QHash<QNetworkRequest::Attribute, QVariant> AttributesMap;
+   using RawHeaderPair    = QPair<QByteArray, QByteArray>;
+   using RawHeadersList   = QList<RawHeaderPair>;
+   using CookedHeadersMap = QHash<QNetworkRequest::KnownHeaders, QVariant>;
+   using AttributesMap    = QHash<QNetworkRequest::Attribute, QVariant>;
 
    RawHeadersList rawHeaders;
    CookedHeadersMap cookedHeaders;

@@ -34,9 +34,9 @@ class QSqlCachedResultPrivate;
 class Q_SQL_EXPORT QSqlCachedResult: public QSqlResult
 {
  public:
-   virtual ~QSqlCachedResult();
+   using ValueCache = QVector<QVariant>;
 
-   typedef QVector<QVariant> ValueCache;
+   virtual ~QSqlCachedResult();
 
  protected:
    QSqlCachedResult(const QSqlDriver *db);

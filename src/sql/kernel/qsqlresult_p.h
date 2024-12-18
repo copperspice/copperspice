@@ -44,8 +44,10 @@ struct QHolder {
 
 class Q_SQL_EXPORT QSqlResultPrivate
 {
-
  public:
+   using IndexMap      = QHash<QString, QList<int>>;
+   using QHolderVector = QVector<QHolder>;
+
    QSqlResultPrivate()
       : q_ptr(nullptr),
         idx(QSql::BeforeFirstRow),
@@ -100,10 +102,8 @@ class Q_SQL_EXPORT QSqlResultPrivate
    QString executedQuery;
    QHash<int, QSql::ParamType> types;
    QVector<QVariant> values;
-   typedef QHash<QString, QList<int>> IndexMap;
-   IndexMap indexes;
 
-   typedef QVector<QHolder> QHolderVector;
+   IndexMap indexes;
    QHolderVector holders;
 };
 
