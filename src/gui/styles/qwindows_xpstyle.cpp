@@ -395,11 +395,12 @@ void QWindowsXPStylePrivate::cleanupVistaTreeViewTheming()
 
 void QWindowsXPStylePrivate::cleanupHandleMap()
 {
-   for (int i = 0; i < NThemes; ++i)
-      if (m_themes[i]) {
-         pCloseThemeData(m_themes[i]);
-         m_themes[i] = nullptr;
+   for (auto &item : m_themes) {
+      if (item != nullptr) {
+         pCloseThemeData(item);
+         item = nullptr;
       }
+   }
 
    QWindowsXPStylePrivate::cleanupVistaTreeViewTheming();
 }

@@ -677,10 +677,10 @@ void QGuiApplicationPrivate::showModalWindow(QWindow *modal)
    }
 
    QWindowList windows = QGuiApplication::topLevelWindows();
-   for (int i = 0; i < windows.count(); ++i) {
-      QWindow *window = windows.at(i);
-      if (!window->d_func()->blockedByModalWindow) {
-         updateBlockedStatus(window);
+
+   for (auto item : windows) {
+      if (! item->d_func()->blockedByModalWindow) {
+         updateBlockedStatus(item);
       }
    }
 
@@ -692,10 +692,10 @@ void QGuiApplicationPrivate::hideModalWindow(QWindow *window)
    self->modalWindowList.removeAll(window);
 
    QWindowList windows = QGuiApplication::topLevelWindows();
-   for (int i = 0; i < windows.count(); ++i) {
-      QWindow *window = windows.at(i);
-      if (window->d_func()->blockedByModalWindow) {
-         updateBlockedStatus(window);
+
+   for (auto item : windows) {
+      if (item->d_func()->blockedByModalWindow) {
+         updateBlockedStatus(item);
       }
    }
 }
@@ -847,10 +847,9 @@ bool QApplication::event(QEvent *e)
    if (e->type() == QEvent::LanguageChange) {
       QWidgetList list = topLevelWidgets();
 
-      for (int i = 0; i < list.size(); ++i) {
-         QWidget *w = list.at(i);
-         if (!(w->windowType() == Qt::Desktop)) {
-            postEvent(w, new QEvent(QEvent::LanguageChange));
+      for (auto item : list) {
+         if (! (item->windowType() == Qt::Desktop)) {
+            postEvent(item, new QEvent(QEvent::LanguageChange));
          }
       }
    }

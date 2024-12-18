@@ -3401,9 +3401,10 @@ void QAbstractItemViewPrivate::clearOrRemove()
          QModelIndex index = list.at(i);
          QMap<int, QVariant> roles = model->itemData(index);
 
-         for (QMap<int, QVariant>::iterator it = roles.begin(); it != roles.end(); ++it) {
-            it.value() = QVariant();
+         for (auto iter = roles.begin(); iter != roles.end(); ++iter) {
+            iter.value() = QVariant();
          }
+
          model->setItemData(index, roles);
       }
    }
