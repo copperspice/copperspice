@@ -122,8 +122,8 @@ class QSimplex
 
  private:
    enum SolverFactor {
-      Minimum = -1,
-      Maximum = 1
+      Minimum,
+      Maximum
    };
 
    // Matrix handling

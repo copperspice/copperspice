@@ -408,17 +408,27 @@ qreal QSimplex::solver(SolverFactor factor)
 #endif
 
    // return the value calculated by the simplex plus the value of the fixed variables
-   return (factor * valueAt(0, columns - 1)) + resultOffset;
+   switch (factor) {
+      case SolverFactor::Minimum:
+         return (-1 * valueAt(0, columns - 1)) + resultOffset;
+
+      case SolverFactor::Maximum:
+         return (1 * valueAt(0, columns - 1)) + resultOffset;
+   }
+
+   // unreachable code
+
+   return 0;
 }
 
 qreal QSimplex::solveMin()
 {
-   return solver(Minimum);
+   return solver(SolverFactor::Minimum);
 }
 
 qreal QSimplex::solveMax()
 {
-   return solver(Maximum);
+   return solver(SolverFactor::Maximum);
 }
 
 void QSimplex::collectResults()
