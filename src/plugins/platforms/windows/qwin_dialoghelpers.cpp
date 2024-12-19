@@ -1999,13 +1999,19 @@ void QWindowsXpNativeFileDialog::populateOpenFileName(OPENFILENAME *ofn, HWND ow
 
    for (const FilterSpec &spec : specs) {
       fileData.filter.append(spec.description.toStdWString());
-      fileData.filter.append(nullptr);
+      fileData.filter.append(1, L'\0');
 
       fileData.filter.append(spec.filter.toStdWString());
-      fileData.filter.append(nullptr);
+      fileData.filter.append(1, L'\0');
    }
 
-   ofn->lpstrFilter = fileData.filter.data();
+   if (specs.isEmpty()) {
+      ofn->lpstrFilter = nullptr;
+
+   } else {
+      fileData.filter.append(1, L'\0');
+      ofn->lpstrFilter = fileData.filter.data();
+   }
 
    const int nameFilterIndex = indexOfNameFilter(m_options->nameFilters(), m_data.selectedNameFilter());
 
@@ -2018,7 +2024,7 @@ void QWindowsXpNativeFileDialog::populateOpenFileName(OPENFILENAME *ofn, HWND ow
    ofn->nMaxFile = 65535;
 
    const QString initiallySelectedFile = QDir::toNativeSeparators(
-                  m_data.selectedFile()).remove('<').remove('>').remove('"').remove('|');
+         m_data.selectedFile()).remove('<').remove('>').remove('"').remove('|');
 
    fileData.file  = initiallySelectedFile.toStdWString();
    fileData.file.resize(ofn->nMaxFile);
@@ -2075,30 +2081,42 @@ QList<QUrl> QWindowsXpNativeFileDialog::execFileNames(HWND owner, int *selectedF
    QList<QUrl> result;
    const bool isSave = m_options->acceptMode() == QPlatformFileDialogOptions::AcceptSave;
 
-   if (isSave ? m_getSaveFileNameW(&ofn) : m_getOpenFileNameW(&ofn)) {
+   bool isOk;
+
+   if (isSave) {
+      isOk = m_getSaveFileNameW(&ofn);
+   } else {
+      isOk = m_getOpenFileNameW(&ofn);
+   }
+
+   if (isOk) {
       *selectedFilterIndex = ofn.nFilterIndex - 1;
 
       const QString dir = QDir::cleanPath(QString::fromStdWString(std::wstring(ofn.lpstrFile)));
       result.push_back(QUrl::fromLocalFile(dir));
 
-      // For multiselection, the first item is the path followed
-      // by "\0<file1>\0<file2>\0\0".
+      // For multiselection the first item is the path followed by "\0<file1>\0<file2>\0\0"
 
       if (ofn.Flags & (OFN_ALLOWMULTISELECT)) {
+         // multiple flag set
+
          wchar_t *ptr = ofn.lpstrFile + dir.size() + 1;
 
          if (*ptr) {
+            // has multiple files
+
             result.pop_front();
             const QString path = dir + '/';
 
             while (*ptr) {
+               // extract multiple files
+
                const QString fileName = QString::fromStdWString(std::wstring(ptr));
                result.push_back(QUrl::fromLocalFile(path + fileName));
                ptr += fileName.size() + 1;
-            } // extract multiple files
-
-         } // has multiple files
-      } // multiple flag set
+            }
+         }
+      }
    }
 
    return result;
