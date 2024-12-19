@@ -359,35 +359,32 @@ QT_ENSURE_STACK_ALIGNED_FOR_SSE STDMETHODIMP QWindowsOleDropSource::QueryContinu
 {
    HRESULT hr = S_OK;
 
-   do {
-      if (fEscapePressed) {
-         hr = ResultFromScode(DRAGDROP_S_CANCEL);
-         break;
-      }
+   if (fEscapePressed) {
+      hr = ResultFromScode(DRAGDROP_S_CANCEL);
+      return hr;
+   }
 
-      // grfKeyState is broken on CE & some Windows XP versions,
-      // therefore we need to check the state manually
-      if ((GetAsyncKeyState(VK_LBUTTON) == 0) && (GetAsyncKeyState(VK_MBUTTON) == 0) && (GetAsyncKeyState(VK_RBUTTON) == 0)) {
+   // grfKeyState is broken on CE & some Windows XP versions,
+   // therefore we need to check the state manually
+   if ((GetAsyncKeyState(VK_LBUTTON) == 0) && (GetAsyncKeyState(VK_MBUTTON) == 0) && (GetAsyncKeyState(VK_RBUTTON) == 0)) {
+      hr = ResultFromScode(DRAGDROP_S_DROP);
+      return hr;
+   }
+
+   const Qt::MouseButtons buttons = QWindowsMouseHandler::keyStateToMouseButtons(grfKeyState);
+
+   if (m_currentButtons == Qt::NoButton) {
+      m_currentButtons = buttons;
+
+   } else {
+      // button changed, complete the Drop operation
+      if (! (m_currentButtons & buttons)) {
          hr = ResultFromScode(DRAGDROP_S_DROP);
-         break;
+         return hr;
       }
+   }
 
-      const Qt::MouseButtons buttons =  QWindowsMouseHandler::keyStateToMouseButtons(grfKeyState);
-
-      if (m_currentButtons == Qt::NoButton) {
-         m_currentButtons = buttons;
-
-      } else {
-         // Button changed, complete Drop operation
-         if (! (m_currentButtons & buttons)) {
-            hr = ResultFromScode(DRAGDROP_S_DROP);
-            break;
-         }
-      }
-
-      QApplication::processEvents();
-
-   } while (false);
+   QApplication::processEvents();
 
    return hr;
 }
