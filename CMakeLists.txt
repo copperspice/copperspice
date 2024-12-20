@@ -66,7 +66,7 @@ endif()
 # required libraries
 set(BUILD_COMPONENTS "Core Xml")
 
-set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Script Sql Svg Vulkan WebKit XmlPatterns)
+set(CS_OPTIONAL_COMPONENTS Gui Multimedia Network OpenGL Sql Svg Vulkan WebKit XmlPatterns)
 
 set(PACKAGE           "copperspice")
 set(PACKAGE_NAME      "CopperSpice")
@@ -668,8 +668,8 @@ elseif (WITH_SVG AND NOT WITH_GUI)
 elseif (WITH_XMLPATTERNS AND NOT WITH_NETWORK)
    message(SEND_ERROR "CsXmlPatterns component requires CsNetwork component")
 
-elseif (WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK AND WITH_SCRIPT))
-   message(SEND_ERROR "CsWebKit component requires CsGui, CsNetwork, and CsScript components")
+elseif (WITH_WEBKIT AND NOT (WITH_GUI AND WITH_NETWORK))
+   message(SEND_ERROR "CsWebKit component requires CsGui  and CsNetwork components")
 
 endif()
 

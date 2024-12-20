@@ -74,7 +74,6 @@ include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtNetwork/private
-   ${CMAKE_BINARY_DIR}/privateinclude/QtScript/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtWebKit/private
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/webkit/include/WebCore
@@ -2460,7 +2459,6 @@ target_link_libraries(CsWebKit
    CsCore
    CsGui
    CsNetwork
-   CsScript
 )
 
 target_compile_options(CsWebKit
@@ -2479,7 +2477,7 @@ macro_generate_package(
    CsWebKit
    QtWebKit
    "${EXTRA_WEBKIT_CXXFLAGS}"
-   "CsCore CsGui CsNetwork CsScript"
+   "CsCore CsGui CsNetwork"
 )
 
 install(
