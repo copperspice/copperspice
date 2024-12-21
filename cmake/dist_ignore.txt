@@ -100,18 +100,11 @@
 /src/3rdparty/webkit/Source/JavaScriptCore/Info.plist
 /src/3rdparty/webkit/Source/JavaScriptCore/JavaScriptCore.JSVALUE32_64only.exp
 /src/3rdparty/webkit/Source/JavaScriptCore/JavaScriptCore.JSVALUE64only.exp
-/src/3rdparty/webkit/Source/JavaScriptCore/JavaScriptCore.gypi
 /src/3rdparty/webkit/Source/JavaScriptCore/JavaScriptCore.order
 /src/3rdparty/webkit/Source/JavaScriptCore/create_hash_table
 /src/3rdparty/webkit/Source/JavaScriptCore/create_jit_stubs
 /src/3rdparty/webkit/Source/JavaScriptCore/create_regex_tables
 /src/3rdparty/webkit/Source/JavaScriptCore/generated/GeneratedJITStubs_MSVC.asm
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/JavaScriptCore.gyp
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/generate-derived-sources.sh
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/generate-dtrace-header.sh
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/gtk.gyp
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/run-if-exists.sh
-/src/3rdparty/webkit/Source/JavaScriptCore/gyp/update-info-plist.sh
 /src/3rdparty/webkit/Source/JavaScriptCore/heap/MarkStackSymbian.cpp
 /src/3rdparty/webkit/Source/JavaScriptCore/jsc.cpp
 /src/3rdparty/webkit/Source/JavaScriptCore/make-generated-sources.sh
@@ -139,7 +132,6 @@
 /src/3rdparty/webkit/Source/JavaScriptCore/wtf/url/src/URLCharacterTypes.cpp
 /src/3rdparty/webkit/Source/JavaScriptCore/wtf/url/src/URLEscape.cpp
 /src/3rdparty/webkit/Source/JavaScriptCore/wtf/url/src/URLSegments.cpp
-/src/3rdparty/webkit/Source/JavaScriptCore/wtf/url/wtfurl.gyp
 /src/3rdparty/webkit/Source/WebCore/.*\\.idl
 /src/3rdparty/webkit/Source/WebCore/.*\\.in
 /src/3rdparty/webkit/Source/WebCore/.*\\.js
@@ -148,7 +140,6 @@
 /src/3rdparty/webkit/Source/WebCore/Info.plist
 /src/3rdparty/webkit/Source/WebCore/Resources
 /src/3rdparty/webkit/Source/WebCore/WebCore.exp.in
-/src/3rdparty/webkit/Source/WebCore/WebCore.gypi
 /src/3rdparty/webkit/Source/WebCore/WebCore.order
 /src/3rdparty/webkit/Source/WebCore/WebCore.qrc
 /src/3rdparty/webkit/Source/WebCore/WebCorePrefix.cpp
@@ -300,7 +291,6 @@
 /src/3rdparty/webkit/Source/WebCore/generated/DocTypeStrings.cpp
 /src/3rdparty/webkit/Source/WebCore/generated/InspectorBackendStub.qrc
 /src/3rdparty/webkit/Source/WebCore/generated/MathMLElementFactory.cpp
-/src/3rdparty/webkit/Source/WebCore/gyp
 /src/3rdparty/webkit/Source/WebCore/html/DocTypeStrings.gperf
 /src/3rdparty/webkit/Source/WebCore/html/HTMLAudioElement.cpp
 /src/3rdparty/webkit/Source/WebCore/html/HTMLElementsAllInOne.cpp
@@ -767,7 +757,6 @@
 /src/3rdparty/webkit/Source/WebKit/qt/declarative/qdeclarativewebview.cpp
 /src/3rdparty/webkit/Source/WebKit/qt/declarative/qmldir
 /src/3rdparty/webkit/Source/WebKit2
-/src/3rdparty/webkit/Source/gyp
 /src/3rdparty/webkit/WebKitLibraries/.*\\.a
 /src/3rdparty/webkit/WebKitLibraries/WebCoreSQLite3/sqlite3ext.h
 /src/3rdparty/webkit/WebKitLibraries/WebKitSystemInterface.h
