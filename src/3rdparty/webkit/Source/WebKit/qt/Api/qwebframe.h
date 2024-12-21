@@ -28,7 +28,6 @@
 #include <qurl.h>
 #include <qvariant.h>
 #include <qicon.h>
-#include <qscriptengine.h>
 #include <qnetaccess_manager.h>
 #include <qwebkitglobal.h>
 
@@ -141,7 +140,6 @@ public:
     void setContent(const QByteArray &data, const QString &mimeType = QString(), const QUrl &baseUrl = QUrl());
 
     void addToJavaScriptWindowObject(const QString &name, QObject *object);
-    void addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership owner);
 
     QString toHtml() const;
     QString toPlainText() const;

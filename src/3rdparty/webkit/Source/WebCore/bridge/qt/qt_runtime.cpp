@@ -996,7 +996,7 @@ JSValue convertQVariantToValue(ExecState* exec, PassRefPtr<RootObject> root, con
         if (!obj)
             return jsNull();
 
-        return QtInstance::getQtInstance(obj, root, QScriptEngine::QtOwnership)->createRuntimeObject(exec);
+        return QtInstance::getQtInstance(obj, root)->createRuntimeObject(exec);
     }
 
     if (QtPixmapInstance::canHandle(variant.type())) {
@@ -1977,7 +1977,7 @@ void QtConnectionObject::execute(void **argv)
                     if (m_funcObject->inherits(&JSFunction::s_info)) {
                         fimp = static_cast<JSFunction*>(m_funcObject.get());
 
-                        JSObject* qt_sender = QtInstance::getQtInstance(sender(), ro, QScriptEngine::QtOwnership)->createRuntimeObject(exec);
+                        JSObject* qt_sender = QtInstance::getQtInstance(sender(), ro)->createRuntimeObject(exec);
                         JSObject* wrapper = constructEmptyObject(exec, createEmptyObjectStructure(exec->globalData(), jsNull()));
                         PutPropertySlot slot;
                         wrapper->put(exec, Identifier(exec, "__qt_sender__"), qt_sender, slot);

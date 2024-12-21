@@ -594,41 +594,15 @@ QWebFrame::~QWebFrame()
 */
 void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object)
 {
-    addToJavaScriptWindowObject(name, object, QScriptEngine::QtOwnership);
-}
-
-/*
-    \fn void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership own)
-    \overload
-
-    Make \a object available under \a name from within the frame's JavaScript
-    context. The \a object will be inserted as a child of the frame's window
-    object.
-
-    Qt properties will be exposed as JavaScript properties and slots as
-    JavaScript methods.
-    The interaction between C++ and JavaScript is explained in the documentation of the \l{The QtWebKit Bridge}{QtWebKit bridge}.
-
-    If you want to ensure that your QObjects remain accessible after loading a
-    new URL, you should add them in a slot connected to the
-    javaScriptWindowObjectCleared() signal.
-
-    If Javascript is not enabled for this page, then this method does nothing.
-
-    The ownership of \a object is specified using \a own.
-*/
-void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object, QScriptEngine::ValueOwnership ownership)
-{
     if (!page()->settings()->testAttribute(QWebSettings::JavascriptEnabled))
         return;
+
 #if USE(JSC)
     JSC::JSLock lock(JSC::SilenceAssertionsOnly);
     JSDOMWindow* window = toJSDOMWindow(d->frame, mainThreadNormalWorld());
     JSC::Bindings::RootObject* root;
-    if (ownership == QScriptEngine::QtOwnership)
-        root = d->frame->script()->cacheableBindingRootObject();
-    else
-        root = d->frame->script()->bindingRootObject();
+
+    root = d->frame->script()->cacheableBindingRootObject();
 
     if (!window) {
         qDebug() << "Warning: could not get window object";
@@ -641,18 +615,16 @@ void QWebFrame::addToJavaScriptWindowObject(const QString &name, QObject *object
 
     JSC::ExecState* exec = window->globalExec();
 
-    JSC::JSObject* runtimeObject =
-            JSC::Bindings::QtInstance::getQtInstance(object, root, ownership)->createRuntimeObject(exec);
+    JSC::JSObject* runtimeObject = JSC::Bindings::QtInstance::getQtInstance(object, root)->createRuntimeObject(exec);
 
     JSC::PutPropertySlot slot;
     window->put(exec, JSC::Identifier(exec, reinterpret_cast_ptr<const UChar*>(name.constData()), name.length()), runtimeObject, slot);
+
 #elif USE(V8)
-    QScriptEngine* engine = d->frame->script()->qtScriptEngine();
-    if (!engine)
-        return;
-    QScriptValue v = engine->newQObject(object, ownership);
-    engine->globalObject().property("window").setProperty(name, v);
+#error "Use of V8 runtime is not supported"
+
 #endif
+
 }
 
 /*

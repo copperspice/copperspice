@@ -26,7 +26,6 @@
 
 #include "BridgeJSC.h"
 #include "runtime_root.h"
-#include <qscriptengine.h>
 #include <qhash.h>
 #include <qpointer.h>
 #include <qset.h>
@@ -66,7 +65,7 @@ public:
     QObject* getObject() const { return m_object; }
     QObject* hashKey() const { return m_hashkey; }
 
-    static PassRefPtr<QtInstance> getQtInstance(QObject*, PassRefPtr<RootObject>, QScriptEngine::ValueOwnership ownership);
+    static PassRefPtr<QtInstance> getQtInstance(QObject*, PassRefPtr<RootObject>);
 
     virtual bool getOwnPropertySlot(JSObject*, ExecState*, const Identifier&, PropertySlot&);
     virtual void put(JSObject*, ExecState*, const Identifier&, JSValue, PutPropertySlot&);
@@ -76,15 +75,16 @@ public:
     static QtInstance* getInstance(JSObject*);
 
 private:
-    static PassRefPtr<QtInstance> create(QObject *instance, PassRefPtr<RootObject> rootObject, QScriptEngine::ValueOwnership ownership)
+    static PassRefPtr<QtInstance> create(QObject *instance, PassRefPtr<RootObject> rootObject)
     {
-        return adoptRef(new QtInstance(instance, rootObject, ownership));
+        return adoptRef(new QtInstance(instance, rootObject));
     }
 
     friend class QtClass;
     friend class QtField;
 
-    QtInstance(QObject*, PassRefPtr<RootObject>, QScriptEngine::ValueOwnership ownership); // Factory produced only..
+    QtInstance(QObject*, PassRefPtr<RootObject>);    // Factory produced only
+
     mutable QtClass* m_class;
     QPointer<QObject> m_object;
     QObject* m_hashkey;
@@ -92,8 +92,6 @@ private:
     mutable QHash<QString, WriteBarrier<JSObject> > m_methods;
     mutable QHash<QString, QtField*> m_fields;
     mutable WriteBarrier<QtRuntimeMetaMethod> m_defaultMethod;
-
-    QScriptEngine::ValueOwnership m_ownership;
 };
 
 } // namespace Bindings
