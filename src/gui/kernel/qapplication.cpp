@@ -929,14 +929,29 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       QString fatalMessage = QString("The application failed to start because the platform plugin was "
             "not found or did not load.\nRequested Plugin Key: \"%1\"\n\n").formatArg(pluginKey);
 
-      if (! keys.isEmpty()) {
-         fatalMessage += QString("Available platform plugins: %1.\n\n").formatArg(keys.join(", "));
+      if (pluginKey == "cocoa") {
+         fatalMessage += "Platform plugin file name is CsGuiCocoa*.so ";
+
+      } else if (pluginKey == "windows") {
+         fatalMessage += "Platform plugin file name is CsGuiWin*.dll ";
+
+      } else if (pluginKey == "xcb") {
+         fatalMessage += "Platform plugin file name is CsGuiXcb*.so ";
+
       }
 
-      fatalMessage += "Reinstalling the application may resolve this problem.";
+      fatalMessage += "and should be located in a directory named 'platforms'\n\n";
+
+
+      if (! keys.isEmpty()) {
+         fatalMessage += QString("Available platform plugins: %1\n\n").formatArg(keys.join(", "));
+      }
+
+      fatalMessage += "Refer to the following page for a list of plugins supplied with CopperSpice\n";
+      fatalMessage += "https://copperspice.com/docs/cs_api/plugins-list.html\n";
 
 #if defined(Q_OS_WIN)
-      // display the message box unless it is a console application or debug build showing an assert box
+      // display the message box unless it is a console application
 
       if (! GetConsoleWindow()) {
          MessageBox(nullptr, &fatalMessage.toStdWString()[0],
