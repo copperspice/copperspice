@@ -3480,7 +3480,7 @@ int main(int, char **)
    f.write(header);
    f.write(note);
 
-   f.write("#include \"qunicodetables_p.h\"\n\n");
+   f.write("#include <qunicodetables_p.h>\n\n");
    f.write("namespace QUnicodeTables {\n\n");
 
    f.write("bool cs_isTurkishLocale = false;\n\n");
