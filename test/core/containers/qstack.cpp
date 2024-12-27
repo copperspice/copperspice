@@ -123,7 +123,12 @@ TEST_CASE("QStack insert", "[qstack]")
    stack.push("pear");
    stack.push("grapefruit");
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
    stack.insert(1, "mango");
+
+#pragma GCC diagnostic pop
 
    REQUIRE(stack.contains("mango"));
    REQUIRE(stack[1] == "mango");

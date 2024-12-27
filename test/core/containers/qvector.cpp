@@ -95,7 +95,12 @@ TEST_CASE("QVector insert", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
    v.insert(1, "mango");
+
+#pragma GCC diagnostic pop
 
    REQUIRE(v.contains("mango"));
    REQUIRE(v[1] == "mango");
