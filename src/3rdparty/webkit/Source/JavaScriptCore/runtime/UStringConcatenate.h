@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef UStringConcatenate_h
@@ -34,7 +34,7 @@ namespace WTF {
 template<>
 class StringTypeAdapter<JSC::UString> {
 public:
-    StringTypeAdapter<JSC::UString>(JSC::UString& string)
+    StringTypeAdapter(JSC::UString& string)
         : m_data(string.characters())
         , m_length(string.length())
     {

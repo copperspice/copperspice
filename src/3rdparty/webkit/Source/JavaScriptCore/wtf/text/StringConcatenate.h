@@ -20,7 +20,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef StringConcatenate_h
@@ -37,7 +37,7 @@ class StringTypeAdapter {
 template<>
 class StringTypeAdapter<char> {
 public:
-    StringTypeAdapter<char>(char buffer)
+    StringTypeAdapter(char buffer)
         : m_buffer(buffer)
     {
     }
@@ -52,7 +52,7 @@ private:
 template<>
 class StringTypeAdapter<UChar> {
 public:
-    StringTypeAdapter<UChar>(UChar buffer)
+    StringTypeAdapter(UChar buffer)
         : m_buffer(buffer)
     {
     }
@@ -67,7 +67,7 @@ private:
 template<>
 class StringTypeAdapter<char*> {
 public:
-    StringTypeAdapter<char*>(char* buffer)
+    StringTypeAdapter(char* buffer)
         : m_buffer(buffer)
         , m_length(strlen(buffer))
     {
@@ -91,7 +91,7 @@ private:
 template<>
 class StringTypeAdapter<const UChar*> {
 public:
-    StringTypeAdapter<const UChar*>(const UChar* buffer)
+    StringTypeAdapter(const UChar* buffer)
         : m_buffer(buffer)
     {
         size_t len = 0;
@@ -119,7 +119,7 @@ private:
 template<>
 class StringTypeAdapter<const char*> {
 public:
-    StringTypeAdapter<const char*>(const char* buffer)
+    StringTypeAdapter(const char* buffer)
         : m_buffer(buffer)
         , m_length(strlen(buffer))
     {
@@ -143,7 +143,7 @@ private:
 template<>
 class StringTypeAdapter<Vector<char> > {
 public:
-    StringTypeAdapter<Vector<char> >(const Vector<char>& buffer)
+    StringTypeAdapter(const Vector<char>& buffer)
         : m_buffer(buffer)
     {
     }
@@ -165,7 +165,7 @@ private:
 template<>
 class StringTypeAdapter<String> {
 public:
-    StringTypeAdapter<String>(const String& string)
+    StringTypeAdapter(const String& string)
         : m_buffer(string)
     {
     }
