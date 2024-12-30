@@ -1787,9 +1787,9 @@ ResumeReduction:
                break;
 
             case 229: {
-               QStringView prefix = symPrefix(1);
+               QStringView symbolPrefix = symPrefix(1);
 
-               if (prefix.isEmpty() && symString(1) == "xmlns" && namespaceProcessing) {
+               if (symbolPrefix.isEmpty() && symString(1) == "xmlns" && namespaceProcessing) {
 
                   namespaceDeclarations.push(NamespaceDeclaration());
                   NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
@@ -1857,23 +1857,23 @@ ResumeReduction:
                      attribute.value.len = n;
                   }
 
-                  if (prefix == "xmlns" && namespaceProcessing) {
+                  if (symbolPrefix == "xmlns" && namespaceProcessing) {
                      namespaceDeclarations.push(NamespaceDeclaration());
                      NamespaceDeclaration &namespaceDeclaration = namespaceDeclarations.top();
 
-                     QStringView namespacePrefix = symString(attribute.key);
-                     QStringView namespaceUri    = symString(attribute.value);
+                     QStringView nsPrefix = symString(attribute.key);
+                     QStringView nsUri    = symString(attribute.value);
 
                      attributeStack.pop();
 
-                     if ( ((namespacePrefix == "xml") ^ (namespaceUri == "http://www.w3.org/XML/1998/namespace"))
-                           || namespaceUri == "http://www.w3.org/2000/xmlns/" || namespaceUri.isEmpty() || namespacePrefix == "xmlns") {
+                     if ( ((nsPrefix == "xml") ^ (nsUri == "http://www.w3.org/XML/1998/namespace"))
+                           || nsUri == "http://www.w3.org/2000/xmlns/" || nsUri.isEmpty() || nsPrefix == "xmlns") {
 
                         raiseWellFormedError(QXmlStream::tr("Illegal namespace declaration."));
                      }
 
-                     namespaceDeclaration.prefix       = namespacePrefix;
-                     namespaceDeclaration.namespaceUri = namespaceUri;
+                     namespaceDeclaration.prefix       = nsPrefix;
+                     namespaceDeclaration.namespaceUri = nsUri;
                   }
                }
             }

@@ -462,10 +462,10 @@ QList<QAbstractTransition *> QStateMachinePrivate::selectTransitions(QEvent *eve
    QList<QAbstractTransition *> enabledTransitions;
    const_cast<QStateMachine *>(q)->beginSelectTransitions(event);
 
-   for (QAbstractState *state : configuration_sorted) {
-      QVector<QState *> lst = getProperAncestors(state, nullptr);
+   for (QAbstractState *item : configuration_sorted) {
+      QVector<QState *> lst = getProperAncestors(item, nullptr);
 
-      if (QState *grp = toStandardState(state)) {
+      if (QState *grp = toStandardState(item)) {
          lst.prepend(grp);
       }
 
@@ -864,26 +864,25 @@ void QStateMachinePrivate::enterStates(QEvent *event, const QList<QAbstractState
       {
          QVector<QPropertyAssignment> assignments = propertyAssignmentsForState.value(s);
 
-         for (int i = 0; i < assignments.size(); ++i) {
-            const QPropertyAssignment &assn = assignments.at(i);
+         for (const auto &item : assignments) {
 
             if (globalRestorePolicy == QState::RestoreProperties) {
-               if (assn.explicitlySet) {
-                  if (!hasRestorable(s, assn.object, assn.propertyName)) {
-                     QVariant value = savedValueForRestorable(exitedStates_sorted, assn.object, assn.propertyName);
-                     unregisterRestorables(exitedStates_sorted, assn.object, assn.propertyName);
-                     registerRestorable(s, assn.object, assn.propertyName, value);
+               if (item.explicitlySet) {
+                  if (!hasRestorable(s, item.object, item.propertyName)) {
+                     QVariant value = savedValueForRestorable(exitedStates_sorted, item.object, item.propertyName);
+                     unregisterRestorables(exitedStates_sorted, item.object, item.propertyName);
+                     registerRestorable(s, item.object, item.propertyName, value);
                   }
 
                } else {
                   // The property is being restored, hence no need to
                   // save the current value. Discard any saved values in
                   // exited states, since those are now stale.
-                  unregisterRestorables(exitedStates_sorted, assn.object, assn.propertyName);
+                  unregisterRestorables(exitedStates_sorted, item.object, item.propertyName);
                }
             }
 
-            assn.write();
+            item.write();
          }
       }
 
@@ -970,10 +969,10 @@ void QStateMachinePrivate::enterStates(QEvent *event, const QList<QAbstractState
    }
 }
 
-void QStateMachinePrivate::addDescendantStatesToEnter(QAbstractState *state,
+void QStateMachinePrivate::addDescendantStatesToEnter(QAbstractState *newState,
       QSet<QAbstractState *> &statesToEnter, QSet<QAbstractState *> &statesForDefaultEntry)
 {
-   if (QHistoryState *h = toHistoryState(state)) {
+   if (QHistoryState *h = toHistoryState(newState)) {
       QList<QAbstractState *> historyConfiguration = QHistoryStatePrivate::get(h)->configuration;
 
       if (! historyConfiguration.isEmpty()) {
@@ -982,13 +981,13 @@ void QStateMachinePrivate::addDescendantStatesToEnter(QAbstractState *state,
          }
 
          for (QAbstractState *s : historyConfiguration) {
-            addAncestorStatesToEnter(s, state->parentState(), statesToEnter, statesForDefaultEntry);
+            addAncestorStatesToEnter(s, newState->parentState(), statesToEnter, statesForDefaultEntry);
          }
 
 #if defined(CS_SHOW_DEBUG_CORE_STATEMACHINE)
          qDebug() << q_func() << ": restoring"
                << ((QHistoryStatePrivate::get(h)->historyType == QHistoryState::DeepHistory) ? "deep" : "shallow")
-               << "history from" << state << ':' << historyConfiguration;
+               << "history from" << newState << ':' << historyConfiguration;
 #endif
 
       } else {
@@ -1007,28 +1006,28 @@ void QStateMachinePrivate::addDescendantStatesToEnter(QAbstractState *state,
             }
 
             for (QAbstractState *s : defaultHistoryContent) {
-               addAncestorStatesToEnter(s, state->parentState(), statesToEnter, statesForDefaultEntry);
+               addAncestorStatesToEnter(s, newState->parentState(), statesToEnter, statesForDefaultEntry);
             }
 
 #if defined(CS_SHOW_DEBUG_CORE_STATEMACHINE)
-            qDebug() << q_func() << ": initial history targets for" << state << ':' << defaultHistoryContent;
+            qDebug() << q_func() << ": initial history targets for" << newState << ':' << defaultHistoryContent;
 #endif
          }
       }
 
    } else {
-      if (state == rootState()) {
+      if (newState == rootState()) {
          // Error has already been set by exitStates().
          Q_ASSERT(error != QStateMachine::NoError);
          return;
       }
 
-      statesToEnter.insert(state);
+      statesToEnter.insert(newState);
 
-      if (isCompound(state)) {
-         statesForDefaultEntry.insert(state);
+      if (isCompound(newState)) {
+         statesForDefaultEntry.insert(newState);
 
-         if (QAbstractState *initial = toStandardState(state)->initialState()) {
+         if (QAbstractState *initial = toStandardState(newState)->initialState()) {
             Q_ASSERT(initial->machine() == q_func());
 
             // FIXME: does not support initial transitions (which is a problem for parallel states).
@@ -1037,15 +1036,15 @@ void QStateMachinePrivate::addDescendantStatesToEnter(QAbstractState *state,
             statesForDefaultEntry.insert(initial);
 
             addDescendantStatesToEnter(initial, statesToEnter, statesForDefaultEntry);
-            addAncestorStatesToEnter(initial, state, statesToEnter, statesForDefaultEntry);
+            addAncestorStatesToEnter(initial, newState, statesToEnter, statesForDefaultEntry);
 
          } else {
-            setError(QStateMachine::NoInitialStateError, state);
+            setError(QStateMachine::NoInitialStateError, newState);
             return;
          }
 
-      } else if (isParallel(state)) {
-         QState *grp = toStandardState(state);
+      } else if (isParallel(newState)) {
+         QState *grp = toStandardState(newState);
 
          for (QAbstractState *child : QStatePrivate::get(grp)->childStates()) {
             if (! containsDecendantOf(statesToEnter, child)) {
@@ -1095,10 +1094,10 @@ bool QStateMachinePrivate::isCompound(const QAbstractState *s) const
       return false;
    }
 
-   bool isMachine = QStatePrivate::get(group)->isMachine;
+   bool isOk = QStatePrivate::get(group)->isMachine;
 
    // do not treat the machine as compound if it's a sub-state of this machine
-   if (isMachine && (group != rootState())) {
+   if (isOk && (group != rootState())) {
       return false;
    }
 
@@ -1185,11 +1184,11 @@ bool QStateMachinePrivate::isInFinalState(QAbstractState *s) const
    }
 }
 
-bool QStateMachinePrivate::hasRestorable(QAbstractState *state, QObject *object,
+bool QStateMachinePrivate::hasRestorable(QAbstractState *machineState, QObject *object,
       const QString &propertyName) const
 {
    RestorableId id(object, propertyName);
-   return registeredRestorablesForState.value(state).contains(id);
+   return registeredRestorablesForState.value(machineState).contains(id);
 }
 
 QVariant QStateMachinePrivate::savedValueForRestorable(const QList<QAbstractState *> &exitedStates_sorted,
@@ -1221,15 +1220,15 @@ QVariant QStateMachinePrivate::savedValueForRestorable(const QList<QAbstractStat
    return object->property(propertyName);
 }
 
-void QStateMachinePrivate::registerRestorable(QAbstractState *state, QObject *object, const QString &propertyName,
+void QStateMachinePrivate::registerRestorable(QAbstractState *machineState, QObject *object, const QString &propertyName,
       const QVariant &value)
 {
 #if defined(CS_SHOW_DEBUG_CORE_STATEMACHINE)
-   qDebug() << q_func() << ": registerRestorable(" << state << object << propertyName << value << ')';
+   qDebug() << q_func() << ": registerRestorable(" << machineState << object << propertyName << value << ')';
 #endif
 
    RestorableId id(object, propertyName);
-   QHash<RestorableId, QVariant> &restorables = registeredRestorablesForState[state];
+   QHash<RestorableId, QVariant> &restorables = registeredRestorablesForState[machineState];
 
    if (! restorables.contains(id)) {
       restorables.insert(id, value);
@@ -1354,21 +1353,21 @@ QHash<QAbstractState *, QVector<QPropertyAssignment>> QStateMachinePrivate::comp
 QAbstractState *QStateMachinePrivate::findErrorState(QAbstractState *context)
 {
    // Find error state recursively in parent hierarchy if not set explicitly for context state
-   QAbstractState *errorState = nullptr;
+   QAbstractState *retval = nullptr;
 
    if (context != nullptr) {
       QState *s = toStandardState(context);
 
       if (s != nullptr) {
-         errorState = s->errorState();
+         retval = s->errorState();
       }
 
-      if (errorState == nullptr) {
-         errorState = findErrorState(context->parentState());
+      if (retval == nullptr) {
+         retval = findErrorState(context->parentState());
       }
    }
 
-   return errorState;
+   return retval;
 }
 
 void QStateMachinePrivate::setError(QStateMachine::Error errorCode, QAbstractState *currentContext)
@@ -1476,6 +1475,7 @@ void QStateMachinePrivate::_q_animationFinished()
 
    QAbstractAnimation *anim = qobject_cast<QAbstractAnimation *>(q->sender());
    Q_ASSERT(anim != nullptr);
+
    QObject::disconnect(anim, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished);
 
    if (resetAnimationEndValues.contains(anim)) {
@@ -1483,28 +1483,26 @@ void QStateMachinePrivate::_q_animationFinished()
       resetAnimationEndValues.remove(anim);
    }
 
-   QAbstractState *state = stateForAnimation.take(anim);
-   Q_ASSERT(state != nullptr);
+   QAbstractState *animationState = stateForAnimation.take(anim);
+   Q_ASSERT(animationState != nullptr);
 
    // Set the final property value.
    QPropertyAssignment assn = propertyForAnimation.take(anim);
    assn.write();
 
    if (! assn.explicitlySet) {
-      unregisterRestorables(QList<QAbstractState *>() << state, assn.object, assn.propertyName);
+      unregisterRestorables(QList<QAbstractState *>() << animationState, assn.object, assn.propertyName);
    }
 
-   QHash<QAbstractState *, QList<QAbstractAnimation *>>::iterator it;
-   it = animationsForState.find(state);
+   auto iter = animationsForState.find(animationState);
+   Q_ASSERT(iter != animationsForState.end());
 
-   Q_ASSERT(it != animationsForState.end());
-
-   QList<QAbstractAnimation *> &animations = it.value();
+   QList<QAbstractAnimation *> &animations = iter.value();
    animations.removeOne(anim);
 
    if (animations.isEmpty()) {
-      animationsForState.erase(it);
-      QStatePrivate::get(toStandardState(state))->emitPropertiesAssigned();
+      animationsForState.erase(iter);
+      QStatePrivate::get(toStandardState(animationState))->emitPropertiesAssigned();
    }
 }
 
@@ -1532,11 +1530,11 @@ QList<QAbstractAnimation *> QStateMachinePrivate::selectAnimations(const QList<Q
    return selectedAnimations;
 }
 
-void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
+void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *machineState,
       const QHash<QAbstractState *, QVector<QPropertyAssignment>> &assignmentsForEnteredStates)
 {
    Q_Q(QStateMachine);
-   QList<QAbstractAnimation *> animations = animationsForState.take(state);
+   QList<QAbstractAnimation *> animations = animationsForState.take(machineState);
 
    for (int i = 0; i < animations.size(); ++i) {
       QAbstractAnimation *anim = animations.at(i);
@@ -1579,23 +1577,23 @@ void QStateMachinePrivate::terminateActiveAnimations(QAbstractState *state,
          assn.write();
 
          if (! assn.explicitlySet) {
-            unregisterRestorables(QList<QAbstractState *>() << state, assn.object, assn.propertyName);
+            unregisterRestorables(QList<QAbstractState *>() << machineState, assn.object, assn.propertyName);
          }
       }
    }
 }
 
-void QStateMachinePrivate::initializeAnimations(QAbstractState *state, const QList<QAbstractAnimation *> &selectedAnimations,
-      const QList<QAbstractState *> &exitedStates_sorted,
+void QStateMachinePrivate::initializeAnimations(QAbstractState *machineState,
+      const QList<QAbstractAnimation *> &selectedAnimations, const QList<QAbstractState *> &exitedStates_sorted,
       QHash<QAbstractState *, QVector<QPropertyAssignment>> &assignmentsForEnteredStates)
 {
    Q_Q(QStateMachine);
 
-   if (! assignmentsForEnteredStates.contains(state)) {
+   if (! assignmentsForEnteredStates.contains(machineState)) {
       return;
    }
 
-   QVector<QPropertyAssignment> &assignments = assignmentsForEnteredStates[state];
+   QVector<QPropertyAssignment> &assignments = assignmentsForEnteredStates[machineState];
 
    for (int i = 0; i < selectedAnimations.size(); ++i) {
       QAbstractAnimation *anim = selectedAnimations.at(i);
@@ -1612,18 +1610,18 @@ void QStateMachinePrivate::initializeAnimations(QAbstractState *state, const QLi
             for (int j = 0; j < handlers.size(); ++j) {
                QAbstractAnimation *a = handlers.at(j);
                propertyForAnimation.insert(a, assn);
-               stateForAnimation.insert(a, state);
-               animationsForState[state].append(a);
+               stateForAnimation.insert(a, machineState);
+               animationsForState[machineState].append(a);
 
                // ### connect to just the top-level animation?
                QObject::connect(a, &QAbstractAnimation::finished, q, &QStateMachine::_q_animationFinished, Qt::UniqueConnection);
             }
 
             if ((globalRestorePolicy == QState::RestoreProperties)
-                  && !hasRestorable(state, assn.object, assn.propertyName)) {
+                  && !hasRestorable(machineState, assn.object, assn.propertyName)) {
                QVariant value = savedValueForRestorable(exitedStates_sorted, assn.object, assn.propertyName);
                unregisterRestorables(exitedStates_sorted, assn.object, assn.propertyName);
-               registerRestorable(state, assn.object, assn.propertyName, value);
+               registerRestorable(machineState, assn.object, assn.propertyName, value);
             }
 
             it = assignments.erase(it);
@@ -1667,7 +1665,7 @@ void QStateMachinePrivate::initializeAnimations(QAbstractState *state, const QLi
       }
 
       if (assignments.isEmpty()) {
-         assignmentsForEnteredStates.remove(state);
+         assignmentsForEnteredStates.remove(machineState);
          break;
       }
    }
@@ -1741,10 +1739,10 @@ void QStateMachinePrivate::_q_start()
    Q_Q(QStateMachine);
    Q_ASSERT(state == Starting);
 
-   for (QAbstractState *state : configuration) {
-      QAbstractStatePrivate *abstractStatePrivate = QAbstractStatePrivate::get(state);
+   for (QAbstractState *item : configuration) {
+      QAbstractStatePrivate *abstractStatePrivate = QAbstractStatePrivate::get(item);
       abstractStatePrivate->active = false;
-      emit state->activeChanged(false);
+      emit item->activeChanged(false);
    }
 
    configuration.clear();
@@ -2200,9 +2198,9 @@ void QStateMachinePrivate::goToState(QAbstractState *targetState)
    processEvents(QueuedProcessing);
 }
 
-void QStateMachinePrivate::registerTransitions(QAbstractState *state)
+void QStateMachinePrivate::registerTransitions(QAbstractState *machineState)
 {
-   QState *group = toStandardState(state);
+   QState *group = toStandardState(machineState);
 
    if (! group) {
       return;

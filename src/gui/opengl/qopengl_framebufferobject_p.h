@@ -109,8 +109,8 @@ public:
         {
         }
 
-        ColorAttachment(const QSize &size, GLenum internalFormat)
-            : size(size), internalFormat(internalFormat), guard(nullptr)
+        ColorAttachment(const QSize &newSize, GLenum newInternalFormat)
+            : size(newSize), internalFormat(newInternalFormat), guard(nullptr)
         {
         }
 

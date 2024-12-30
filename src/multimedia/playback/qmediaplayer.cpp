@@ -194,16 +194,16 @@ void QMediaPlayerPrivate::_q_mediaStatusChanged(QMediaPlayer::MediaStatus newSta
    }
 }
 
-void QMediaPlayerPrivate::_q_error(int error, const QString &errorString)
+void QMediaPlayerPrivate::_q_error(int newError, const QString &errorMsg)
 {
    Q_Q(QMediaPlayer);
 
-   if (error == int(QMediaPlayer::MediaIsPlaylist)) {
+   if (newError == int(QMediaPlayer::MediaIsPlaylist)) {
       loadPlaylist();
 
    } else {
-      this->error = QMediaPlayer::Error(error);
-      this->errorString = errorString;
+      this->error = QMediaPlayer::Error(newError);
+      this->errorString = errorMsg;
       emit q->error(this->error);
 
       if (playlist) {

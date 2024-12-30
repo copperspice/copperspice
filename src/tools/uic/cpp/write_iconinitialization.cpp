@@ -34,10 +34,10 @@
 
 namespace CPP {
 
-WriteIconInitialization::WriteIconInitialization(Uic *uic)
-   : driver(uic->driver()), output(uic->output()), option(uic->option())
+WriteIconInitialization::WriteIconInitialization(Uic *newUic)
+   : driver(newUic->driver()), output(newUic->output()), option(newUic->option())
 {
-   this->uic = uic;
+   this->uic = newUic;
 }
 
 void WriteIconInitialization::acceptUI(DomUI *node)

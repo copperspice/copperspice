@@ -980,13 +980,13 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
 
    int index = 0;
    int len   = d->size;
-   char *d   = data();
+   char *ptr = data();
 
    if (bsize == asize) {
 
       if (bsize) {
          while ((index = this->indexOf(before, index)) != -1) {
-            memcpy(d + index, after, asize);
+            memcpy(ptr + index, after, asize);
             index += bsize;
          }
       }
@@ -1001,7 +1001,7 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
             int msize = index - movestart;
 
             if (msize > 0) {
-               memmove(d + to, d + movestart, msize);
+               memmove(ptr + to, ptr + movestart, msize);
                to += msize;
             }
 
@@ -1010,7 +1010,7 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
          }
 
          if (asize) {
-            memcpy(d + to, after, asize);
+            memcpy(ptr + to, after, asize);
             to += asize;
          }
 
@@ -1023,7 +1023,7 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
          int msize = len - movestart;
 
          if (msize > 0) {
-            memmove(d + to, d + movestart, msize);
+            memmove(ptr + to, ptr + movestart, msize);
          }
 
          resize(len - num * (bsize - asize));
@@ -1072,18 +1072,19 @@ QByteArray &QByteArray::replace(const char *before, int bsize, const char *after
             len = newlen;
          }
 
-         d = this->d->data();
+         ptr = this->d->data();
 
          while (pos) {
             pos--;
+
             int movestart = indices[pos] + bsize;
             int insertstart = indices[pos] + pos * (asize - bsize);
             int moveto = insertstart + asize;
 
-            memmove(d + moveto, d + movestart, (moveend - movestart));
+            memmove(ptr + moveto, ptr + movestart, (moveend - movestart));
 
             if (asize) {
-               memcpy(d + insertstart, after, asize);
+               memcpy(ptr + insertstart, after, asize);
             }
 
             moveend = movestart - bsize;

@@ -117,7 +117,7 @@ void QSharedMemoryPrivate::cleanHandle()
    hand = nullptr;
 }
 
-bool QSharedMemoryPrivate::create(int size)
+bool QSharedMemoryPrivate::create(int newSize)
 {
    if (nativeKey.isEmpty()) {
       error = QSharedMemory::KeyError;
@@ -126,7 +126,7 @@ bool QSharedMemoryPrivate::create(int size)
    }
 
    // Create the file mapping
-   hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, size, &nativeKey.toStdWString()[0]);
+   hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, newSize, &nativeKey.toStdWString()[0]);
    setErrorString(QLatin1String("QSharedMemory::create"));
 
    // hand is valid when it already exists unlike unix so explicitly check

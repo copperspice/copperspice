@@ -468,13 +468,13 @@ inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid
    return scopeid.toInteger<uint>();
 }
 
-bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType,
-      QAbstractSocket::NetworkLayerProtocol &socketProtocol)
+bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType newSocketType,
+      QAbstractSocket::NetworkLayerProtocol &newSocketProtocol)
 {
    //### no ip6 support on winsocket 1.1 but we will try not to use this
 
    /*
-   if (winsockVersion < 0x20 && socketProtocol == QAbstractSocket::IPv6Protocol) {
+   if (winsockVersion < 0x20 && newSocketProtocol == QAbstractSocket::IPv6Protocol) {
        //### no ip6 support
        return -1;
    }
@@ -483,10 +483,10 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
    QSysInfo::WinVersion osver = QSysInfo::windowsVersion();
 
    //Windows XP and 2003 support IPv6 but not dual stack sockets
-   int protocol = (socketProtocol == QAbstractSocket::IPv6Protocol
-         || (socketProtocol == QAbstractSocket::AnyIPProtocol && osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
+   int protocol = (newSocketProtocol == QAbstractSocket::IPv6Protocol
+         || (newSocketProtocol == QAbstractSocket::AnyIPProtocol && osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
 
-   int type = (socketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
+   int type = (newSocketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
 
    // MSDN KB179942 states that on winnt 4 WSA_FLAG_OVERLAPPED is needed if socket is to be non blocking
    // and recomends alwasy doing it for cross windows version comapablity.
@@ -552,7 +552,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
       return false;
    }
 
-   if (socketType == QAbstractSocket::UdpSocket) {
+   if (newSocketType == QAbstractSocket::UdpSocket) {
       // enable new behavior using
       // SIO_UDP_CONNRESET
       DWORD dwBytesReturned = 0;
@@ -584,8 +584,8 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
 
    socketDescriptor = socket;
    if (socket != INVALID_SOCKET) {
-      this->socketProtocol = socketProtocol;
-      this->socketType = socketType;
+      this->socketProtocol = newSocketProtocol;
+      this->socketType     = newSocketType;
    }
 
    // Make the socket nonblocking.
@@ -1570,18 +1570,20 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
                    + WSA_CMSG_SPACE(sizeof(int)));
       }
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
-         struct in6_pktinfo *data = reinterpret_cast<in6_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
-         memset(data, 0, sizeof(*data));
-         msg.Control.len += WSA_CMSG_SPACE(sizeof(*data));
-         cmsgptr->cmsg_len = WSA_CMSG_LEN(sizeof(*data));
+         struct in6_pktinfo *buffer = reinterpret_cast<in6_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
+         memset(buffer, 0, sizeof(*buffer));
+
+         msg.Control.len += WSA_CMSG_SPACE(sizeof(*buffer));
+         cmsgptr->cmsg_len   = WSA_CMSG_LEN(sizeof(*buffer));
          cmsgptr->cmsg_level = IPPROTO_IPV6;
-         cmsgptr->cmsg_type = IPV6_PKTINFO;
-         data->ipi6_ifindex = header.ifindex;
+         cmsgptr->cmsg_type  = IPV6_PKTINFO;
+         buffer->ipi6_ifindex  = header.ifindex;
 
          Q_IPV6ADDR tmp = header.senderAddress.toIPv6Address();
-         memcpy(&data->ipi6_addr, &tmp, sizeof(tmp));
+
+         memcpy(&buffer->ipi6_addr, &tmp, sizeof(tmp));
          cmsgptr = reinterpret_cast<WSACMSGHDR *>(reinterpret_cast<char *>(cmsgptr)
-                   + WSA_CMSG_SPACE(sizeof(*data)));
+                   + WSA_CMSG_SPACE(sizeof(*buffer)));
       }
    } else {
       // sending IPv4
@@ -1595,16 +1597,18 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
                    + WSA_CMSG_SPACE(sizeof(int)));
       }
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
-         struct in_pktinfo *data = reinterpret_cast<in_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
-         memset(data, 0, sizeof(*data));
-         msg.Control.len += WSA_CMSG_SPACE(sizeof(*data));
-         cmsgptr->cmsg_len = WSA_CMSG_LEN(sizeof(*data));
+         struct in_pktinfo *buffer = reinterpret_cast<in_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
+         memset(buffer, 0, sizeof(*buffer));
+
+         msg.Control.len += WSA_CMSG_SPACE(sizeof(*buffer));
+         cmsgptr->cmsg_len = WSA_CMSG_LEN(sizeof(*buffer));
          cmsgptr->cmsg_level = IPPROTO_IP;
-         cmsgptr->cmsg_type = IP_PKTINFO;
-         data->ipi_ifindex = header.ifindex;
-         WSAHtonl(socketDescriptor, header.senderAddress.toIPv4Address(), &data->ipi_addr.s_addr);
+         cmsgptr->cmsg_type  = IP_PKTINFO;
+         buffer->ipi_ifindex = header.ifindex;
+
+         WSAHtonl(socketDescriptor, header.senderAddress.toIPv4Address(), &buffer->ipi_addr.s_addr);
          cmsgptr = reinterpret_cast<WSACMSGHDR *>(reinterpret_cast<char *>(cmsgptr)
-                   + WSA_CMSG_SPACE(sizeof(*data)));
+                   + WSA_CMSG_SPACE(sizeof(*buffer)));
       }
    }
 

@@ -88,8 +88,8 @@ class Q_NETWORK_EXPORT QNetworkSessionPrivate : public QObject
    NET_CS_SIGNAL_1(Public, void error(QNetworkSession::SessionError error))
    NET_CS_SIGNAL_OVERLOAD(error, (QNetworkSession::SessionError), error)
 
-   NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State state))
-   NET_CS_SIGNAL_2(stateChanged, state)
+   NET_CS_SIGNAL_1(Public, void stateChanged(QNetworkSession::State newState))
+   NET_CS_SIGNAL_2(stateChanged, newState)
 
    NET_CS_SIGNAL_1(Public, void closed())
    NET_CS_SIGNAL_2(closed)

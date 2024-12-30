@@ -823,9 +823,10 @@ bool QApplication::event(QEvent *e)
             }
 
             if (showToolTip) {
-               QHelpEvent e(QEvent::ToolTip, d->toolTipPos, d->toolTipGlobalPos);
-               QApplication::sendEvent(d->toolTipWidget, &e);
-               if (e.isAccepted()) {
+               QHelpEvent newEvent(QEvent::ToolTip, d->toolTipPos, d->toolTipGlobalPos);
+               QApplication::sendEvent(d->toolTipWidget, &newEvent);
+
+               if (newEvent.isAccepted()) {
                   QStyle *s = d->toolTipWidget->style();
                   int sleepDelay = s->styleHint(QStyle::SH_ToolTip_FallAsleepDelay, nullptr, d->toolTipWidget, nullptr);
                   d->toolTipFallAsleep.start(sleepDelay, this);

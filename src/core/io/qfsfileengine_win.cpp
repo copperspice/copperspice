@@ -78,7 +78,7 @@ QString QFSFileEnginePrivate::longFileName(const QString &path)
    return prefix + absPath;
 }
 
-bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
+bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileMode)
 {
    Q_Q(QFSFileEngine);
 
@@ -87,18 +87,18 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
 
    int accessRights = 0;
 
-   if (openMode & QIODevice::ReadOnly) {
+   if (fileMode & QIODevice::ReadOnly) {
       accessRights |= GENERIC_READ;
    }
 
-   if (openMode & QIODevice::WriteOnly) {
+   if (fileMode & QIODevice::WriteOnly) {
       accessRights |= GENERIC_WRITE;
    }
 
    SECURITY_ATTRIBUTES securityAtts = { sizeof(SECURITY_ATTRIBUTES), nullptr, FALSE };
 
    // WriteOnly can create files, ReadOnly cannot
-   DWORD creationDisp = (openMode & QIODevice::WriteOnly) ? OPEN_ALWAYS : OPEN_EXISTING;
+   DWORD creationDisp = (fileMode & QIODevice::WriteOnly) ? OPEN_ALWAYS : OPEN_EXISTING;
 
    // Create the file handle
    fileHandle = CreateFile(&fileEntry.nativeFilePath().toStdWString()[0],
@@ -111,7 +111,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
    }
 
    // Truncate the file after successfully opening it if Truncate is passed
-   if (openMode & QIODevice::Truncate) {
+   if (fileMode & QIODevice::Truncate) {
       q->setSize(0);
    }
 

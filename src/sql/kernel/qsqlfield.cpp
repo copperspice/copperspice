@@ -29,8 +29,8 @@
 class QSqlFieldPrivate
 {
  public:
-   QSqlFieldPrivate(const QString &name, QVariant::Type type)
-      : ref(1), nm(name), ro(false), type(type), req(QSqlField::Unknown),
+   QSqlFieldPrivate(const QString &name, QVariant::Type newType)
+      : ref(1), nm(name), ro(false), type(newType), req(QSqlField::Unknown),
         len(-1), prec(-1), tp(-1), gen(true), autoval(false) {
    }
 

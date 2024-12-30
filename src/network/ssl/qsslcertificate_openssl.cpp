@@ -667,11 +667,11 @@ static QMultiMap<QByteArray, QString> _q_mapFromX509Name(X509_NAME *name)
    for (int i = 0; i < q_X509_NAME_entry_count(name); ++i) {
       X509_NAME_ENTRY *e = q_X509_NAME_get_entry(name, i);
 
-      QByteArray name = QSslCertificatePrivate::asn1ObjectName(q_X509_NAME_ENTRY_get_object(e));
+      QByteArray certName = QSslCertificatePrivate::asn1ObjectName(q_X509_NAME_ENTRY_get_object(e));
       unsigned char *data = nullptr;
 
       int size = q_ASN1_STRING_to_UTF8(&data, q_X509_NAME_ENTRY_get_data(e));
-      info.insertMulti(name, QString::fromUtf8((char *)data, size));
+      info.insertMulti(certName, QString::fromUtf8((char *)data, size));
       q_CRYPTO_free(data);
    }
 

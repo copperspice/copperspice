@@ -49,12 +49,12 @@ static constexpr bool qt_frameRateRangeLessThan(const QCamera::FrameRateRange &s
           : (s1.maximumFrameRate < s2.maximumFrameRate);
 }
 
-void QCameraPrivate::_q_error(int error, const QString &errorString)
+void QCameraPrivate::_q_error(int newError, const QString &errorMsg)
 {
    Q_Q(QCamera);
 
-   this->error = QCamera::Error(error);
-   this->errorString = errorString;
+   this->error = QCamera::Error(newError);
+   this->errorString = errorMsg;
 
    emit q->error(this->error);
 }

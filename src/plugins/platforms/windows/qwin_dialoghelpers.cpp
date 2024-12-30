@@ -1161,11 +1161,11 @@ QString QWindowsNativeFileDialogBase::libraryItemDefaultSaveFolder(IShellItem *i
    QString result;
 
    if (IShellLibrary *library = sHLoadLibraryFromItem(item, STGM_READ | STGM_SHARE_DENY_WRITE)) {
-      IShellItem *item = nullptr;
+      IShellItem *newItem = nullptr;
 
-      if (SUCCEEDED(library->GetDefaultSaveFolder(DSFT_DETECT, IID_IShellItem, reinterpret_cast<void **>(&item)))) {
-         result = QWindowsNativeFileDialogBase::itemPath(item);
-         item->Release();
+      if (SUCCEEDED(library->GetDefaultSaveFolder(DSFT_DETECT, IID_IShellItem, reinterpret_cast<void **>(&newItem)))) {
+         result = QWindowsNativeFileDialogBase::itemPath(newItem);
+         newItem->Release();
       }
       library->Release();
    }

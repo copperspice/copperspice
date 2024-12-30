@@ -164,12 +164,12 @@ static ParsedRfcDateTime rfcDateImpl(const QString &s)
    ParsedRfcDateTime result;
 
    // Matches "Wdy, DD Mon YYYY HH:mm:ss ±hhmm" (Wdy, being optional)
-   static QRegularExpression regexp("^(?:[A-Z][a-z]+,)?[ \\t]*(\\d{1,2})[ \\t]+([A-Z][a-z]+)[ \\t]+(\\d\\d\\d\\d)(?:[ \\t]+(\\d\\d):(\\d\\d)(?::(\\d\\d))?)?[ \\t]*(?:([+-])(\\d\\d)(\\d\\d))?");
+   static QRegularExpression regexp1("^(?:[A-Z][a-z]+,)?[ \\t]*(\\d{1,2})[ \\t]+([A-Z][a-z]+)[ \\t]+(\\d\\d\\d\\d)(?:[ \\t]+(\\d\\d):(\\d\\d)(?::(\\d\\d))?)?[ \\t]*(?:([+-])(\\d\\d)(\\d\\d))?");
 
-   QRegularExpressionMatch match = regexp.match(s);
+   QRegularExpressionMatch match1 = regexp1.match(s);
 
-   if (match.hasMatch() && match.capturedStart() == s.begin()) {
-      const QStringList cap = match.capturedTexts();
+   if (match1.hasMatch() && match1.capturedStart() == s.begin()) {
+      const QStringList cap = match1.capturedTexts();
       result.date = QDate(cap[3].toInteger<int>(), qt_monthNumberFromShortName(cap[2]), cap[1].toInteger<int>());
 
       if (! cap[4].isEmpty()) {
@@ -183,12 +183,12 @@ static ParsedRfcDateTime rfcDateImpl(const QString &s)
 
    } else {
       // Matches "Wdy Mon DD HH:mm:ss YYYY"
-      static QRegularExpression regexp("^[A-Z][a-z]+[ \\t]+([A-Z][a-z]+)[ \\t]+(\\d\\d)(?:[ \\t]+(\\d\\d):(\\d\\d):(\\d\\d))?[ \\t]+(\\d\\d\\d\\d)[ \\t]*(?:([+-])(\\d\\d)(\\d\\d))?");
+      static QRegularExpression regexp2("^[A-Z][a-z]+[ \\t]+([A-Z][a-z]+)[ \\t]+(\\d\\d)(?:[ \\t]+(\\d\\d):(\\d\\d):(\\d\\d))?[ \\t]+(\\d\\d\\d\\d)[ \\t]*(?:([+-])(\\d\\d)(\\d\\d))?");
 
-      QRegularExpressionMatch match = regexp.match(s);
+      QRegularExpressionMatch match2 = regexp2.match(s);
 
-      if (match.hasMatch() && match.capturedStart() == s.begin()) {
-         const QStringList cap = match.capturedTexts();
+      if (match2.hasMatch() && match2.capturedStart() == s.begin()) {
+         const QStringList cap = match2.capturedTexts();
 
          result.date = QDate(cap[6].toInteger<int>(), qt_monthNumberFromShortName(cap[1]), cap[2].toInteger<int>());
 

@@ -447,10 +447,10 @@ void QEventDispatcherUNIX::unregisterSocketNotifier(QSocketNotifier *notifier)
    if (d->sn_highest == sockfd) {                // find highest fd
       d->sn_highest = -1;
 
-      for (int i = 0; i < 3; i++) {
-         if (!d->sn_vec[i].list.isEmpty()) {
+      for (int j = 0; j < 3; j++) {
+         if (! d->sn_vec[j].list.isEmpty()) {
             // list is fd-sorted
-            d->sn_highest = qMax(d->sn_highest, d->sn_vec[i].list[0]->fd);
+            d->sn_highest = qMax(d->sn_highest, d->sn_vec[j].list[0]->fd);
          }
       }
    }

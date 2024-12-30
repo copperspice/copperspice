@@ -618,64 +618,64 @@ bool loadQM(Translator &translator, QIODevice &dev, ConversionData &cd)
                break;
 
             case TranslatorTag::Translation: {
-               quint32 len = read32(m);
+               quint32 tagLen = read32(m);
                m += 4;
 
-               if (len == 0xffffffff) {
+               if (tagLen == 0xffffffff) {
                   // indicates QByteArray was null
-                  len = 0;
+                  tagLen = 0;
                }
 
-               QString str = QString::fromUtf8((const char *)m, len);
+               QString str = QString::fromUtf8((const char *)m, tagLen);
                translations << str;
 
-               m += len;
+               m += tagLen;
 
                break;
             }
 
             case TranslatorTag::SourceText: {
-               quint32 len = read32(m);
+               quint32 tagLen = read32(m);
                m += 4;
 
-               if (len == 0xffffffff) {
+               if (tagLen == 0xffffffff) {
                   // indicates QByteArray was null
-                  len = 0;
+                  tagLen = 0;
                }
 
-               fromBytes((const char *)m, len, &sourcetext, &utf8Fail);
+               fromBytes((const char *)m, tagLen, &sourcetext, &utf8Fail);
 
-               m += len;
+               m += tagLen;
                break;
             }
 
             case TranslatorTag::Context: {
-               quint32 len = read32(m);
+               quint32 tagLen = read32(m);
                m += 4;
 
-               if (len == 0xffffffff) {
+               if (tagLen == 0xffffffff) {
                   // indicates QByteArray was null
-                  len = 0;
+                  tagLen = 0;
                }
 
-               fromBytes((const char *)m, len, &context, &utf8Fail);
+               fromBytes((const char *)m, tagLen, &context, &utf8Fail);
 
-               m += len;
+               m += tagLen;
                break;
             }
 
             case TranslatorTag::Comment: {
-               quint32 len = read32(m);
+               quint32 tagLen = read32(m);
                m += 4;
 
-               if (len == 0xffffffff) {
+               if (tagLen == 0xffffffff) {
                   // indicates QByteArray was null
-                  len = 0;
+                  tagLen = 0;
                }
 
-               fromBytes((const char *)m, len, &comment, &utf8Fail);
+               fromBytes((const char *)m, tagLen, &comment, &utf8Fail);
 
-               m += len;
+               m += tagLen;
                break;
             }
 

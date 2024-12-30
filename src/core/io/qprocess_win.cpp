@@ -350,14 +350,14 @@ static QString qt_create_commandline(const QString &program, const QStringList &
          // as escaping the quote -- rather put the \ behind the quote: e.g.
          // rather use "foo"\ than "foo\"
 
-         int i = tmp.length();
+         int j = tmp.length();
 
-         while (i > 0 && tmp.at(i - 1) == '\\') {
-            --i;
+         while (j > 0 && tmp.at(j - 1) == '\\') {
+            --j;
          }
 
-         tmp.insert(i, QLatin1Char('"'));
-         tmp.prepend(QLatin1Char('"'));
+         tmp.insert(j, QChar('"'));
+         tmp.prepend(QChar('"'));
       }
 
       args += QLatin1Char(' ') + tmp;
@@ -525,11 +525,11 @@ void QProcessPrivate::startProcess()
          workingDirectory.isEmpty() ? nullptr : &QDir::toNativeSeparators(workingDirectory).toStdWString()[0],
          &startupInfo, pid);
 
-   QString errorString;
+   QString errorMsg;
 
    if (! success) {
       // Capture the error string before we do CloseHandle below
-      errorString = QProcess::tr("Process failed to start: %1").formatArg(qt_error_string());
+      errorMsg = QProcess::tr("Process failed to start: %1").formatArg(qt_error_string());
    }
 
    if (stdinChannel.pipe[0] != INVALID_Q_PIPE) {
@@ -549,7 +549,7 @@ void QProcessPrivate::startProcess()
 
    if (!success) {
       cleanup();
-      setErrorAndEmit(QProcess::FailedToStart, errorString);
+      setErrorAndEmit(QProcess::FailedToStart, errorMsg);
 
       q->setProcessState(QProcess::NotRunning);
       return;

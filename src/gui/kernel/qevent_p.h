@@ -31,8 +31,8 @@
 class QTouchEventTouchPointPrivate
 {
  public:
-   QTouchEventTouchPointPrivate(int id)
-      : ref(1), id(id), state(Qt::TouchPointReleased), pressure(qreal(-1.))
+   QTouchEventTouchPointPrivate(int newId)
+      : ref(1), id(newId), state(Qt::TouchPointReleased), pressure(qreal(-1.))
    {
    }
 

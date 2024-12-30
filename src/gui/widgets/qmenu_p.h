@@ -43,8 +43,8 @@ template <typename T>
 class QSetValueOnDestroy
 {
  public:
-   QSetValueOnDestroy(T &toSet, T value)
-      : toSet(toSet), value(value)
+   QSetValueOnDestroy(T &newToSet, T newValue)
+      : toSet(newToSet), value(newValue)
    {
    }
 
@@ -330,8 +330,8 @@ class QMenuPrivate : public QWidgetPrivate
       {
       }
 
-      void initialize(QMenu *parent) {
-         this->parent = parent;
+      void initialize(QMenu *newParent) {
+         this->parent = newParent;
       }
 
       void start(int timeout, QAction *toStartAction) {

@@ -455,7 +455,7 @@ QNetworkReplyHttpImplPrivate::~QNetworkReplyHttpImplPrivate()
     2) If we have a cache entry for this url populate headers so the server can return 304
     3) Calculate if response_is_fresh and if so send the cache and set loadedFromCache to true
  */
-bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &httpRequest)
+bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &newHttpRequest)
 {
    QNetworkRequest::CacheLoadControl CacheLoadControlAttribute =
       (QNetworkRequest::CacheLoadControl)request.attribute(QNetworkRequest::CacheLoadControlAttribute,
@@ -466,8 +466,8 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
       // force reload from the network and tell any caching proxy servers to reload too
 
       if (!request.rawHeaderList().contains("Cache-Control")) {
-         httpRequest.setHeaderField("Cache-Control", "no-cache");
-         httpRequest.setHeaderField("Pragma", "no-cache");
+         newHttpRequest.setHeaderField("Cache-Control", "no-cache");
+         newHttpRequest.setHeaderField("Pragma", "no-cache");
       }
       return false;
    }
@@ -483,7 +483,7 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
       return false;   // no local cache
    }
 
-   QNetworkCacheMetaData metaData = nc->metaData(httpRequest.url());
+   QNetworkCacheMetaData metaData = nc->metaData(newHttpRequest.url());
    if (!metaData.isValid()) {
       return false;   // not in cache
    }
@@ -498,12 +498,12 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
 
    it = cacheHeaders.findRawHeader("etag");
    if (it != cacheHeaders.rawHeaders.constEnd()) {
-      httpRequest.setHeaderField("If-None-Match", it->second);
+      newHttpRequest.setHeaderField("If-None-Match", it->second);
    }
 
    QDateTime lastModified = metaData.lastModified();
    if (lastModified.isValid()) {
-      httpRequest.setHeaderField("If-Modified-Since", QNetworkHeadersPrivate::toHttpDate(lastModified));
+      newHttpRequest.setHeaderField("If-Modified-Since", QNetworkHeadersPrivate::toHttpDate(lastModified));
    }
 
    it = cacheHeaders.findRawHeader("Cache-Control");
@@ -566,10 +566,11 @@ bool QNetworkReplyHttpImplPrivate::loadFromCacheIfAllowed(QHttpNetworkRequest &h
       if (lastModified.isValid() && dateHeader.isValid()) {
          int diff = lastModified.secsTo(dateHeader);
          freshness_lifetime = diff / 10;
-         if (httpRequest.headerField("Warning").isEmpty()) {
+
+         if (newHttpRequest.headerField("Warning").isEmpty()) {
             QDateTime dt = currentDateTime.addSecs(current_age);
             if (currentDateTime.daysTo(dt) > 1) {
-               httpRequest.setHeaderField("Warning", "113");
+               newHttpRequest.setHeaderField("Warning", "113");
             }
          }
       }
@@ -634,11 +635,11 @@ void QNetworkReplyHttpImplPrivate::postRequest(const QNetworkRequest &newHttpReq
       thread = managerPrivate->httpThread;
    }
 
-   QUrl url = newHttpRequest.url();
-   httpRequest.setUrl(url);
+   QUrl newUrl = newHttpRequest.url();
+   httpRequest.setUrl(newUrl);
    httpRequest.setRedirectCount(newHttpRequest.maximumRedirectsAllowed());
 
-   QString scheme = url.scheme();
+   QString scheme = newUrl.scheme();
    bool ssl = (scheme == "https") || (scheme == "preconnect-https");
 
    q->setAttribute(QNetworkRequest::ConnectionEncryptedAttribute, ssl);
@@ -982,9 +983,9 @@ void QNetworkReplyHttpImplPrivate::initCacheSaveDevice()
    // save the redirect request also in the cache
    QVariant redirectionTarget = q->attribute(QNetworkRequest::RedirectionTargetAttribute);
    if (redirectionTarget.isValid()) {
-      QNetworkCacheMetaData::AttributesMap attributes = metaData.attributes();
-      attributes.insert(QNetworkRequest::RedirectionTargetAttribute, redirectionTarget);
-      metaData.setAttributes(attributes);
+      QNetworkCacheMetaData::AttributesMap newAttributes = metaData.attributes();
+      newAttributes.insert(QNetworkRequest::RedirectionTargetAttribute, redirectionTarget);
+      metaData.setAttributes(newAttributes);
    }
 
    cacheSaveDevice = managerPrivate->networkCache->prepare(metaData);
@@ -1116,12 +1117,11 @@ bool QNetworkReplyHttpImplPrivate::isHttpRedirectResponse() const
    return httpRequest.isFollowRedirects() && QHttpNetworkReply::isHttpRedirect(statusCode);
 }
 
-QNetworkRequest QNetworkReplyHttpImplPrivate::createRedirectRequest(const QNetworkRequest &originalRequest,
-      const QUrl &url,
-      int maxRedirectsRemaining)
+QNetworkRequest QNetworkReplyHttpImplPrivate::createRedirectRequest(const QNetworkRequest &oldRequest,
+      const QUrl &newUrl, int maxRedirectsRemaining)
 {
-   QNetworkRequest newRequest(originalRequest);
-   newRequest.setUrl(url);
+   QNetworkRequest newRequest(oldRequest);
+   newRequest.setUrl(newUrl);
    newRequest.setMaximumRedirectsAllowed(maxRedirectsRemaining);
 
    return newRequest;
@@ -1155,10 +1155,11 @@ void QNetworkReplyHttpImplPrivate::onRedirected(const QUrl &redirectUrl, int htt
    emit q->redirected(redirectUrl);
 }
 
-void QNetworkReplyHttpImplPrivate::checkForRedirect(const int statusCode)
+void QNetworkReplyHttpImplPrivate::checkForRedirect(const int replyCode)
 {
    Q_Q(QNetworkReplyHttpImpl);
-   switch (statusCode) {
+
+   switch (replyCode) {
       case 301:                   // Moved Permanently
       case 302:                   // Found
       case 303:                   // See Other
@@ -1166,14 +1167,16 @@ void QNetworkReplyHttpImplPrivate::checkForRedirect(const int statusCode)
          // What do we do about the caching of the HTML note?
          // The response to a 303 MUST NOT be cached, while the response to
          // all of the others is cacheable if the headers indicate it to be
-         QByteArray header = q->rawHeader("location");
-         QUrl url = QUrl(QString::fromUtf8(header));
 
-         if (! url.isValid()) {
-            url = QUrl(header);
+         QByteArray header = q->rawHeader("location");
+         QUrl newUrl = QUrl(QString::fromUtf8(header));
+
+         if (! newUrl.isValid()) {
+            newUrl = QUrl(header);
          }
 
-         q->setAttribute(QNetworkRequest::RedirectionTargetAttribute, url);
+         q->setAttribute(QNetworkRequest::RedirectionTargetAttribute, newUrl);
+         break;
    }
 }
 
@@ -1244,11 +1247,12 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
          QNetworkCacheMetaData metaData = nc->metaData(httpRequest.url());
          QNetworkHeadersPrivate cacheHeaders;
          cacheHeaders.setAllRawHeaders(metaData.rawHeaders());
-         QNetworkHeadersPrivate::RawHeadersList::const_iterator it;
-         it = cacheHeaders.findRawHeader("Cache-Control");
+
+         auto iter = cacheHeaders.findRawHeader("Cache-Control");
          bool mustReValidate = false;
-         if (it != cacheHeaders.rawHeaders.constEnd()) {
-            QHash<QByteArray, QByteArray> cacheControl = parseHttpOptionHeader(it->second);
+
+         if (iter != cacheHeaders.rawHeaders.constEnd()) {
+            QHash<QByteArray, QByteArray> cacheControl = parseHttpOptionHeader(iter->second);
             if (cacheControl.contains("must-revalidate")) {
                mustReValidate = true;
             }
@@ -1342,9 +1346,9 @@ void QNetworkReplyHttpImplPrivate::replyDownloadProgressSlot(qint64 bytesReceive
    }
 }
 
-void QNetworkReplyHttpImplPrivate::httpAuthenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *auth)
+void QNetworkReplyHttpImplPrivate::httpAuthenticationRequired(const QHttpNetworkRequest &newRequest, QAuthenticator *auth)
 {
-   managerPrivate->authenticationRequired(auth, q_func(), synchronous, url, &urlForLastAuthentication, request.withCredentials());
+   managerPrivate->authenticationRequired(auth, q_func(), synchronous, url, &urlForLastAuthentication, newRequest.withCredentials());
 }
 
 #ifndef QT_NO_NETWORKPROXY
@@ -1410,9 +1414,9 @@ void QNetworkReplyHttpImplPrivate::resetUploadDataSlot(bool *r)
 }
 
 // Coming from QNonContiguousByteDeviceThreadForwardImpl in HTTP thread
-void QNetworkReplyHttpImplPrivate::sentUploadDataSlot(qint64 pos, qint64 amount)
+void QNetworkReplyHttpImplPrivate::sentUploadDataSlot(qint64 newPos, qint64 amount)
 {
-   if (uploadByteDevicePosition + amount != pos) {
+   if (uploadByteDevicePosition + amount != newPos) {
       // Sanity check, should not happen.
       error(QNetworkReply::UnknownNetworkError, QString());
       return;
@@ -1479,8 +1483,9 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    }
    contents->setParent(q);
 
-   QNetworkCacheMetaData::AttributesMap attributes = metaData.attributes();
-   int status = attributes.value(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+   QNetworkCacheMetaData::AttributesMap newAttributes = metaData.attributes();
+   int status = newAttributes.value(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
    if (status < 100) {
       status = 200;   // fake it
    }
@@ -1488,12 +1493,13 @@ bool QNetworkReplyHttpImplPrivate::sendCacheContents(const QNetworkCacheMetaData
    statusCode = status;
 
    q->setAttribute(QNetworkRequest::HttpStatusCodeAttribute, status);
-   q->setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, attributes.value(QNetworkRequest::HttpReasonPhraseAttribute));
+   q->setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, newAttributes.value(QNetworkRequest::HttpReasonPhraseAttribute));
    q->setAttribute(QNetworkRequest::SourceIsFromCacheAttribute, true);
 
-   QNetworkCacheMetaData::RawHeaderList rawHeaders = metaData.rawHeaders();
-   auto it  = rawHeaders.constBegin();
-   auto end = rawHeaders.constEnd();
+   QNetworkCacheMetaData::RawHeaderList rawList = metaData.rawHeaders();
+
+   auto it  = rawList.constBegin();
+   auto end = rawList.constEnd();
 
    QUrl redirectUrl;
 
@@ -1687,18 +1693,18 @@ QNetworkCacheMetaData QNetworkReplyHttpImplPrivate::fetchCacheMetaData(const QNe
    }
 
    metaData.setSaveToDisk(canDiskCache);
-   QNetworkCacheMetaData::AttributesMap attributes;
+   QNetworkCacheMetaData::AttributesMap newAttributes;
 
    if (statusCode != 304) {
       // update the status code
-      attributes.insert(QNetworkRequest::HttpStatusCodeAttribute, statusCode);
-      attributes.insert(QNetworkRequest::HttpReasonPhraseAttribute, reasonPhrase);
+      newAttributes.insert(QNetworkRequest::HttpStatusCodeAttribute, statusCode);
+      newAttributes.insert(QNetworkRequest::HttpReasonPhraseAttribute, reasonPhrase);
    } else {
       // this is a redirection, keep the attributes intact
-      attributes = oldMetaData.attributes();
+      newAttributes = oldMetaData.attributes();
    }
 
-   metaData.setAttributes(attributes);
+   metaData.setAttributes(newAttributes);
 
    return metaData;
 }

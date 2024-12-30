@@ -782,14 +782,14 @@ void QNetworkAccessManagerPrivate::authenticationRequired(QAuthenticator *authen
 }
 
 #ifndef QT_NO_NETWORKPROXY
-void QNetworkAccessManagerPrivate::proxyAuthenticationRequired(const QUrl &url, const QNetworkProxy &proxy,
+void QNetworkAccessManagerPrivate::proxyAuthenticationRequired(const QUrl &url, const QNetworkProxy &newProxy,
       bool synchronous, QAuthenticator *authenticator, QNetworkProxy *lastProxyAuthentication)
 {
    Q_Q(QNetworkAccessManager);
    QAuthenticatorPrivate *priv = QAuthenticatorPrivate::getPrivate(*authenticator);
 
-   if (proxy != *lastProxyAuthentication && (!priv || !priv->hasFailed)) {
-      QNetworkAuthenticationCredential cred = authenticationManager->fetchCachedProxyCredentials(proxy);
+   if (newProxy != *lastProxyAuthentication && (!priv || !priv->hasFailed)) {
+      QNetworkAuthenticationCredential cred = authenticationManager->fetchCachedProxyCredentials(newProxy);
 
       if (!cred.isNull()) {
          authenticator->setUser(cred.user);
@@ -803,10 +803,10 @@ void QNetworkAccessManagerPrivate::proxyAuthenticationRequired(const QUrl &url, 
    QString username;
    QString password;
 
-   if (getProxyAuth(proxy.hostName(), url.scheme(), username, password)) {
+   if (getProxyAuth(newProxy.hostName(), url.scheme(), username, password)) {
       // only cache the system credentials if they are correct (or if they have changed)
       // to not run into an endless loop in case they are wrong
-      QNetworkAuthenticationCredential cred = authenticationManager->fetchCachedProxyCredentials(proxy);
+      QNetworkAuthenticationCredential cred = authenticationManager->fetchCachedProxyCredentials(newProxy);
 
       if (!priv->hasFailed || cred.user != username || cred.password != password) {
          authenticator->setUser(username);
@@ -826,9 +826,9 @@ void QNetworkAccessManagerPrivate::proxyAuthenticationRequired(const QUrl &url, 
       return;
    }
 
-   *lastProxyAuthentication = proxy;
-   emit q->proxyAuthenticationRequired(proxy, authenticator);
-   authenticationManager->cacheProxyCredentials(proxy, authenticator);
+   *lastProxyAuthentication = newProxy;
+   emit q->proxyAuthenticationRequired(newProxy, authenticator);
+   authenticationManager->cacheProxyCredentials(newProxy, authenticator);
 }
 
 QList<QNetworkProxy> QNetworkAccessManagerPrivate::queryProxy(const QNetworkProxyQuery &query)

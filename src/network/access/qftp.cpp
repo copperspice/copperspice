@@ -378,15 +378,15 @@ qint64 QFtpDTP::bytesAvailable() const
    return socket->bytesAvailable();
 }
 
-qint64 QFtpDTP::read(char *data, qint64 maxlen)
+qint64 QFtpDTP::read(char *buffer, qint64 maxlen)
 {
    qint64 read;
 
    if (socket && socket->state() == QTcpSocket::ConnectedState) {
-      read = socket->read(data, maxlen);
+      read = socket->read(buffer, maxlen);
    } else {
       read = qMin(maxlen, qint64(bytesFromSocket.size()));
-      memcpy(data, bytesFromSocket.data(), read);
+      memcpy(buffer, bytesFromSocket.data(), read);
       bytesFromSocket.remove(0, read);
    }
 
@@ -1314,9 +1314,9 @@ bool QFtpPI::startNextCmd()
    return true;
 }
 
-void QFtpPI::dtpConnectState(int state)
+void QFtpPI::dtpConnectState(int newState)
 {
-   switch (state) {
+   switch (newState) {
       case QFtpDTP::CsClosed:
          if (waitForDtpToClose) {
             // there is an unprocessed reply

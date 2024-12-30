@@ -74,8 +74,8 @@ void QLocalSocketPrivate::_q_error(QAbstractSocket::SocketError socketError)
    QString function = "QLocalSocket";
    QLocalSocket::LocalSocketError error = (QLocalSocket::LocalSocketError)socketError;
 
-   QString errorString = generateErrorString(error, function);
-   q->setErrorString(errorString);
+   QString errorMsg = generateErrorString(error, function);
+   q->setErrorString(errorMsg);
 
    emit q->error(error);
 }
@@ -118,55 +118,55 @@ void QLocalSocketPrivate::_q_stateChanged(QAbstractSocket::SocketState newState)
 
 QString QLocalSocketPrivate::generateErrorString(QLocalSocket::LocalSocketError error, const QString &function) const
 {
-   QString errorString;
+   QString errorMsg;
 
    switch (error) {
       case QLocalSocket::ConnectionRefusedError:
-         errorString = QLocalSocket::tr("%1: Connection refused").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Connection refused").formatArg(function);
          break;
 
       case QLocalSocket::PeerClosedError:
-         errorString = QLocalSocket::tr("%1: Remote closed").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Remote closed").formatArg(function);
          break;
 
       case QLocalSocket::ServerNotFoundError:
-         errorString = QLocalSocket::tr("%1: Invalid name").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Invalid name").formatArg(function);
          break;
 
       case QLocalSocket::SocketAccessError:
-         errorString = QLocalSocket::tr("%1: Socket access error").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Socket access error").formatArg(function);
          break;
 
       case QLocalSocket::SocketResourceError:
-         errorString = QLocalSocket::tr("%1: Socket resource error").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Socket resource error").formatArg(function);
          break;
 
       case QLocalSocket::SocketTimeoutError:
-         errorString = QLocalSocket::tr("%1: Socket operation timed out").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Socket operation timed out").formatArg(function);
          break;
 
       case QLocalSocket::DatagramTooLargeError:
-         errorString = QLocalSocket::tr("%1: Datagram too large").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Datagram too large").formatArg(function);
          break;
 
       case QLocalSocket::ConnectionError:
-         errorString = QLocalSocket::tr("%1: Connection error").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Connection error").formatArg(function);
          break;
 
       case QLocalSocket::UnsupportedSocketOperationError:
-         errorString = QLocalSocket::tr("%1: The socket operation is not supported").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: The socket operation is not supported").formatArg(function);
          break;
 
       case QLocalSocket::OperationError:
-         errorString = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").formatArg(function);
+         errorMsg = QLocalSocket::tr("%1: Operation not permitted when socket is in this state").formatArg(function);
          break;
 
       case QLocalSocket::UnknownSocketError:
       default:
-         errorString = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(errno);
+         errorMsg = QLocalSocket::tr("%1: Unknown error %2").formatArg(function).formatArg(errno);
    }
 
-   return errorString;
+   return errorMsg;
 }
 
 void QLocalSocketPrivate::errorOccurred(QLocalSocket::LocalSocketError error, const QString &function)
@@ -215,8 +215,9 @@ void QLocalSocketPrivate::errorOccurred(QLocalSocket::LocalSocketError error, co
          unixSocket.setSocketError(QAbstractSocket::UnknownSocketError);
    }
 
-   QString errorString = generateErrorString(error, function);
-   q->setErrorString(errorString);
+   QString errorMsg = generateErrorString(error, function);
+   q->setErrorString(errorMsg);
+
    emit q->error(error);
 
    // errors cause a disconnect

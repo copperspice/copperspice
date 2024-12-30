@@ -299,7 +299,7 @@ void QToolBarLayout::updateGeomArray() const
       QSize hint = item->sizeHint();
 
       Qt::Orientations exp = item->expandingDirections();
-      bool empty = item->isEmpty();
+      bool itemEmpty = item->isEmpty();
 
       that->expanding = expanding || exp & o;
 
@@ -310,7 +310,7 @@ void QToolBarLayout::updateGeomArray() const
          }
       }
 
-      if (!empty) {
+      if (! itemEmpty) {
          if (count == 0) {
             // minimum size only displays one widget
             rpick(o, that->minSize) += pick(o, min);
@@ -337,7 +337,8 @@ void QToolBarLayout::updateGeomArray() const
       } else {
          a[i].stretch = item->widget()->sizePolicy().verticalStretch();
       }
-      a[i].empty = empty;
+
+      a[i].empty = itemEmpty;
    }
 
    that->geomArray = a;

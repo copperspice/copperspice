@@ -153,8 +153,8 @@ class QFileInfoGatherer : public QThread
    GUI_CS_SIGNAL_1(Public, void nameResolved(const QString &fileName, const QString &resolvedName))
    GUI_CS_SIGNAL_2(nameResolved, fileName, resolvedName)
 
-   GUI_CS_SIGNAL_1(Public, void directoryLoaded(const QString &path))
-   GUI_CS_SIGNAL_2(directoryLoaded, path)
+   GUI_CS_SIGNAL_1(Public, void directoryLoaded(const QString &newPath))
+   GUI_CS_SIGNAL_2(directoryLoaded, newPath)
 
    explicit QFileInfoGatherer(QObject *parent = nullptr);
    ~QFileInfoGatherer();

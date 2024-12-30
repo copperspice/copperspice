@@ -381,8 +381,8 @@ void QWindowsFontEngine::recalcAdvances(QGlyphLayout *glyphs, QFontEngine::Shape
             designAdvances = reinterpret_cast<QFixed *>(realloc(designAdvances, size_t(newSize) * sizeof(QFixed)));
             Q_CHECK_PTR(designAdvances);
 
-            for (int i = designAdvancesSize; i < newSize; ++i) {
-               designAdvances[i] = -1000000;
+            for (int j = designAdvancesSize; j < newSize; ++j) {
+               designAdvances[j] = -1000000;
             }
             designAdvancesSize = newSize;
          }

@@ -815,16 +815,16 @@ bool QODBCDriverPrivate::setConnectionOptions(const QString &connOpts)
    SQLRETURN r = SQL_SUCCESS;
 
    for (int i = 0; i < opts.count(); ++i) {
-      const QString tmp(opts.at(i));
+      const QString connectOption(opts.at(i));
       int idx;
 
-      if ((idx = tmp.indexOf('=')) == -1) {
-         qWarning() << "QODBCDriver::open: Illegal connect option value '" << tmp << '\'';
+      if ((idx = connectOption.indexOf('=')) == -1) {
+         qWarning() << "QODBCDriver::open: Illegal connect option value '" << connectOption << '\'';
          continue;
       }
 
-      const QString opt(tmp.left(idx));
-      const QString val(tmp.mid(idx + 1).simplified());
+      const QString opt(connectOption.left(idx));
+      const QString val(connectOption.mid(idx + 1).simplified());
       SQLUINTEGER v = 0;
 
       r = SQL_SUCCESS;
@@ -1536,10 +1536,9 @@ bool QODBCResult::exec()
    memset(indicators.data(), 0, indicators.size() * sizeof(SQLLEN));
 
    // bind parameters - only positional binding allowed
-   int i;
-
    SQLRETURN r;
-   for (i = 0; i < values.count(); ++i) {
+
+   for (int i = 0; i < values.count(); ++i) {
       const QVariant &val = values.at(i);
 
       SQLLEN *ind = &indicators[i];
@@ -1761,8 +1760,8 @@ bool QODBCResult::exec()
 
    if (count) {
       setSelect(true);
-      for (int i = 0; i < count; ++i) {
-         d->rInf.append(qMakeFieldInfo(d, i));
+      for (int j = 0; j < count; ++j) {
+         d->rInf.append(qMakeFieldInfo(d, j));
       }
 
       d->fieldCache.resize(count);
@@ -1777,7 +1776,7 @@ bool QODBCResult::exec()
       return true;
    }
 
-   for (i = 0; i < values.count(); ++i) {
+   for (int i = 0; i < values.count(); ++i) {
       switch (values.at(i).type()) {
          case QVariant::Date: {
             DATE_STRUCT ds = *((DATE_STRUCT *)tmpStorage.at(i).constData());

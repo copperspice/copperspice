@@ -588,10 +588,12 @@ int main(int argc, char **argv)
                recursiveFileInfoList(dir, extensionsNameFilters, filters, &fileinfolist);
                int scanRootLen = dir.absolutePath().length();
 
-               for (const QFileInfo &fi : fileinfolist) {
-                  QString fn = QDir::cleanPath(fi.absoluteFilePath());
+               for (const QFileInfo &item : fileinfolist) {
+                  QString fn = QDir::cleanPath(item.absoluteFilePath());
+
                   if (fn.endsWith(".qrc", Qt::CaseInsensitive)) {
                      resourceFiles << fn;
+
                   } else {
                      sourceFiles << fn;
 

@@ -255,19 +255,20 @@ static void convertToLevelAndOption(QNativeSocketEngine::SocketOption opt,
    }
 }
 
-bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType socketType,
-      QAbstractSocket::NetworkLayerProtocol &socketProtocol)
+bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType newSocketType,
+      QAbstractSocket::NetworkLayerProtocol &newSocketProtocol)
 {
-   int protocol = (socketProtocol == QAbstractSocket::IPv6Protocol ||
-                   socketProtocol == QAbstractSocket::AnyIPProtocol) ? AF_INET6 : AF_INET;
+   int protocol = (newSocketProtocol == QAbstractSocket::IPv6Protocol ||
+         newSocketProtocol == QAbstractSocket::AnyIPProtocol) ? AF_INET6 : AF_INET;
 
-   int type = (socketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
-
+   int type   = (newSocketType == QAbstractSocket::UdpSocket) ? SOCK_DGRAM : SOCK_STREAM;
    int socket = qt_safe_socket(protocol, type, 0, O_NONBLOCK);
-   if (socket < 0 && socketProtocol == QAbstractSocket::AnyIPProtocol && errno == EAFNOSUPPORT) {
+
+   if (socket < 0 && newSocketProtocol == QAbstractSocket::AnyIPProtocol && errno == EAFNOSUPPORT) {
       protocol = AF_INET;
-      socket = qt_safe_socket(protocol, type, 0, O_NONBLOCK);
-      socketProtocol = QAbstractSocket::IPv4Protocol;
+      socket   = qt_safe_socket(protocol, type, 0, O_NONBLOCK);
+
+      newSocketProtocol = QAbstractSocket::IPv4Protocol;
    }
 
    if (socket < 0) {
@@ -294,20 +295,21 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType soc
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
       qDebug("QNativeSocketEnginePrivate::createNewSocket(%d, %d) == false (%s)",
-             socketType, socketProtocol, strerror(ecopy));
+             newSocketType, newSocketProtocol, strerror(ecopy));
 #endif
 
       return false;
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QNativeSocketEnginePrivate::createNewSocket(%d, %d) == true", socketType, socketProtocol);
+   qDebug("QNativeSocketEnginePrivate::createNewSocket(%d, %d) == true", newSocketType, newSocketProtocol);
 #endif
 
    socketDescriptor = socket;
+
    if (socket != -1) {
-      this->socketProtocol = socketProtocol;
-      this->socketType = socketType;
+      this->socketProtocol = newSocketProtocol;
+      this->socketType     = newSocketType;
    }
    return true;
 }
@@ -1013,17 +1015,18 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
       }
 
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
-         struct in6_pktinfo *data = reinterpret_cast<in6_pktinfo *>(CMSG_DATA(cmsgptr));
-         memset(data, 0, sizeof(*data));
-         msg.msg_controllen += CMSG_SPACE(sizeof(*data));
-         cmsgptr->cmsg_len = CMSG_LEN(sizeof(*data));
-         cmsgptr->cmsg_level = IPPROTO_IPV6;
-         cmsgptr->cmsg_type = IPV6_PKTINFO;
-         data->ipi6_ifindex = header.ifindex;
+         struct in6_pktinfo *buffer = reinterpret_cast<in6_pktinfo *>(CMSG_DATA(cmsgptr));
+         memset(buffer, 0, sizeof(*buffer));
+
+         msg.msg_controllen += CMSG_SPACE(sizeof(*buffer));
+         cmsgptr->cmsg_len    = CMSG_LEN(sizeof(*buffer));
+         cmsgptr->cmsg_level  = IPPROTO_IPV6;
+         cmsgptr->cmsg_type   = IPV6_PKTINFO;
+         buffer->ipi6_ifindex = header.ifindex;
 
          QIPv6Address tmp = header.senderAddress.toIPv6Address();
-         memcpy(&data->ipi6_addr, &tmp, sizeof(tmp));
-         cmsgptr = reinterpret_cast<cmsghdr *>(reinterpret_cast<char *>(cmsgptr) + CMSG_SPACE(sizeof(*data)));
+         memcpy(&buffer->ipi6_addr, &tmp, sizeof(tmp));
+         cmsgptr = reinterpret_cast<cmsghdr *>(reinterpret_cast<char *>(cmsgptr) + CMSG_SPACE(sizeof(*buffer)));
       }
 
    } else {
@@ -1039,20 +1042,23 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
 #if defined(IP_PKTINFO) || defined(IP_SENDSRCADDR)
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
 #  ifdef IP_PKTINFO
-         struct in_pktinfo *data = reinterpret_cast<in_pktinfo *>(CMSG_DATA(cmsgptr));
-         memset(data, 0, sizeof(*data));
-         cmsgptr->cmsg_type = IP_PKTINFO;
-         data->ipi_ifindex = header.ifindex;
-         data->ipi_addr.s_addr = htonl(header.senderAddress.toIPv4Address());
+         struct in_pktinfo *buffer = reinterpret_cast<in_pktinfo *>(CMSG_DATA(cmsgptr));
+         memset(buffer, 0, sizeof(*buffer));
+
+         cmsgptr->cmsg_type      = IP_PKTINFO;
+         buffer->ipi_ifindex     = header.ifindex;
+         buffer->ipi_addr.s_addr = htonl(header.senderAddress.toIPv4Address());
+
 #  elif defined(IP_SENDSRCADDR)
-         struct in_addr *data = reinterpret_cast<in_addr *>(CMSG_DATA(cmsgptr));
-         cmsgptr->cmsg_type = IP_SENDSRCADDR;
-         data->s_addr = htonl(header.senderAddress.toIPv4Address());
+         struct in_addr *buffer = reinterpret_cast<in_addr *>(CMSG_DATA(cmsgptr));
+         cmsgptr->cmsg_type     = IP_SENDSRCADDR;
+         buffer->s_addr         = htonl(header.senderAddress.toIPv4Address());
 #  endif
+
          cmsgptr->cmsg_level = IPPROTO_IP;
-         msg.msg_controllen += CMSG_SPACE(sizeof(*data));
-         cmsgptr->cmsg_len = CMSG_LEN(sizeof(*data));
-         cmsgptr = reinterpret_cast<cmsghdr *>(reinterpret_cast<char *>(cmsgptr) + CMSG_SPACE(sizeof(*data)));
+         msg.msg_controllen += CMSG_SPACE(sizeof(*buffer));
+         cmsgptr->cmsg_len   = CMSG_LEN(sizeof(*buffer));
+         cmsgptr = reinterpret_cast<cmsghdr *>(reinterpret_cast<char *>(cmsgptr) + CMSG_SPACE(sizeof(*buffer)));
       }
 #endif
 

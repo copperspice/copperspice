@@ -65,12 +65,12 @@ void QAudioDecoderPrivate::_q_stateChanged(QAudioDecoder::State newState)
    }
 }
 
-void QAudioDecoderPrivate::_q_error(int error, const QString &errorString)
+void QAudioDecoderPrivate::_q_error(int newError, const QString &errorMsg)
 {
    Q_Q(QAudioDecoder);
 
-   this->error = QAudioDecoder::Error(error);
-   this->errorString = errorString;
+   this->error = QAudioDecoder::Error(newError);
+   this->errorString = errorMsg;
 
    emit q->error(this->error);
 }

@@ -283,11 +283,11 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
    // Reparse credentials since we know the method now
    updateCredentials();
    challenge = headerVal.trimmed();
-   QHash<QByteArray, QByteArray> options = parseDigestAuthenticationChallenge(challenge);
+   QHash<QByteArray, QByteArray> parseOptions = parseDigestAuthenticationChallenge(challenge);
 
    switch (method) {
       case Basic:
-         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(options.value("realm"));
+         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
          if (user.isEmpty() && password.isEmpty()) {
             phase = Done;
          }
@@ -298,8 +298,8 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
          break;
 
       case DigestMd5: {
-         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(options.value("realm"));
-         if (options.value("stale").toLower() == "true") {
+         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
+         if (parseOptions.value("stale").toLower() == "true") {
             phase = Start;
          }
 
@@ -563,24 +563,25 @@ static QByteArray digestMd5ResponseHelper(
    return hash.result().toHex();
 }
 
-QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge, const QByteArray &method,
+QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &newChallenge, const QByteArray &newMethod,
       const QByteArray &path)
 {
-   QHash<QByteArray, QByteArray> options = parseDigestAuthenticationChallenge(challenge);
+   QHash<QByteArray, QByteArray> parseOptions = parseDigestAuthenticationChallenge(newChallenge);
 
    ++nonceCount;
+
    QByteArray nonceCountString = QByteArray::number(nonceCount, 16);
    while (nonceCountString.length() < 8) {
       nonceCountString.prepend('0');
    }
 
-   QByteArray nonce = options.value("nonce");
-   QByteArray opaque = options.value("opaque");
-   QByteArray qop = options.value("qop");
+   QByteArray nonce  = parseOptions.value("nonce");
+   QByteArray opaque = parseOptions.value("opaque");
+   QByteArray qop    = parseOptions.value("qop");
 
-   QByteArray response = digestMd5ResponseHelper(options.value("algorithm"), user.toLatin1(),
+   QByteArray response = digestMd5ResponseHelper(parseOptions.value("algorithm"), user.toLatin1(),
          realm.toLatin1(), password.toLatin1(), nonce, nonceCountString,
-         cnonce, qop, method, path, QByteArray());
+         cnonce, qop, newMethod, path, QByteArray());
 
    QByteArray credentials;
    credentials += "username=\"" + user.toLatin1() + "\", ";
@@ -594,11 +595,11 @@ QByteArray QAuthenticatorPrivate::digestMd5Response(const QByteArray &challenge,
 
    credentials += "response=\"" + response + '"';
 
-   if (!options.value("algorithm").isEmpty()) {
-      credentials += ", algorithm=" + options.value("algorithm");
+   if (! parseOptions.value("algorithm").isEmpty()) {
+      credentials += ", algorithm=" + parseOptions.value("algorithm");
    }
 
-   if (! options.value("qop").isEmpty()) {
+   if (! parseOptions.value("qop").isEmpty()) {
       credentials += ", qop=" + qop + ", ";
       credentials += "nc=" + nonceCountString + ", ";
       credentials += "cnonce=\"" + cnonce + '"';

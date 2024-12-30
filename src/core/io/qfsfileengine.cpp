@@ -206,15 +206,15 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, FILE *fh, QFile::FileHand
    return d->openFh(openMode, fh);
 }
 
-bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode openMode, FILE *fh)
+bool QFSFileEnginePrivate::openFh(QIODevice::OpenMode fileMode, FILE *filePtrHandle)
 {
    Q_Q(QFSFileEngine);
 
-   this->fh = fh;
+   this->fh = filePtrHandle;
    fd = -1;
 
    // Seek to the end when in Append mode.
-   if (openMode & QIODevice::Append) {
+   if (fileMode & QIODevice::Append) {
       int ret;
 
       do {
@@ -265,14 +265,15 @@ bool QFSFileEngine::open(QIODevice::OpenMode openMode, int fd, QFile::FileHandle
    return d->openFd(openMode, fd);
 }
 
-bool QFSFileEnginePrivate::openFd(QIODevice::OpenMode openMode, int fd)
+bool QFSFileEnginePrivate::openFd(QIODevice::OpenMode fileMode, int fileDescriptor)
 {
    Q_Q(QFSFileEngine);
-   this->fd = fd;
-   fh = nullptr;
+
+   this->fd = fileDescriptor;
+   this->fh = nullptr;
 
    // Seek to the end when in Append mode.
-   if (openMode & QFile::Append) {
+   if (fileMode & QFile::Append) {
       int ret;
 
       do {

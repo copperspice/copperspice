@@ -133,18 +133,18 @@ QString QCoreApplicationPrivate::macMenuBarName()
 
 QString QCoreApplicationPrivate::appName() const
 {
-   QString applicationName;
+   QString retval;
 
 #ifdef Q_OS_DARWIN
-   applicationName = macMenuBarName();
+   retval = macMenuBarName();
 #endif
 
-   if (applicationName.isEmpty() && argv[0]) {
+   if (retval.isEmpty() && argv[0]) {
       char *p = strrchr(argv[0], '/');
-      applicationName = QString::fromUtf8(p ? p + 1 : argv[0]);
+      retval = QString::fromUtf8(p ? p + 1 : argv[0]);
    }
 
-   return applicationName;
+   return retval;
 }
 #endif
 
@@ -1110,10 +1110,11 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
          // DeferredDelete events are only sent when we are explicitly asked to
          // (s.a. QEvent::DeferredDelete), and then only if the event loop that
          // posted the event has returned.
+         int eventLoopLevel = static_cast<QDeferredDeleteEvent *>(pe.event)->loopLevel();
 
-         const bool tmp1 = quintptr(pe.event->d) > unsigned(data->loopLevel);
-         const bool tmp2 = pe.event->d == nullptr && (data->loopLevel > 0);
-         const bool tmp3 = (event_type == QEvent::DeferredDelete) && (quintptr(pe.event->d) == unsigned(data->loopLevel));
+         const bool tmp1 = eventLoopLevel > data->loopLevel;
+         const bool tmp2 = (eventLoopLevel == 0) && (data->loopLevel > 0);
+         const bool tmp3 = (event_type == QEvent::DeferredDelete) && (eventLoopLevel == data->loopLevel);
 
          const bool allowDeferredDelete = tmp1 || tmp2 || tmp3;
 

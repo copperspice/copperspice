@@ -467,9 +467,9 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
    bool retval = CsSignal::internal_disconnect(*sender, signalMethod_Bento, receiver, slotMethod_Bento);
 
    if (retval) {
-      const QMetaObject *senderMetaObject = sender->metaObject();
+      senderMetaObject = sender->metaObject();
 
-      if (senderMetaObject) {
+      if (senderMetaObject != nullptr) {
          const_cast<QObject *>(sender)->disconnectNotify(signalMetaMethod);
       }
    }

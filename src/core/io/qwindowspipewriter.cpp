@@ -27,8 +27,8 @@
 
 #include <string.h>
 
-QWindowsPipeWriter::Overlapped::Overlapped(QWindowsPipeWriter *pipeWriter)
-   : pipeWriter(pipeWriter)
+QWindowsPipeWriter::Overlapped::Overlapped(QWindowsPipeWriter *newWriter)
+   : pipeWriter(newWriter)
 {
 }
 

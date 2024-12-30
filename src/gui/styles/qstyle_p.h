@@ -63,8 +63,9 @@ inline QPixmap styleCachePixmap(const QSize &size)
 
    return cachePixmap;
 }
+
 #define BEGIN_STYLE_PIXMAPCACHE(a) \
-    QRect rect = option->rect; \
+    QRect newRect = option->rect; \
     QPixmap internalPixmapCache; \
     QImage imageCache; \
     QPainter *p = painter; \
@@ -76,7 +77,7 @@ inline QPixmap styleCachePixmap(const QSize &size)
         painter->drawPixmap(option->rect.topLeft(), internalPixmapCache); \
     } else { \
         if (doPixmapCache) { \
-            rect.setRect(0, 0, option->rect.width(), option->rect.height()); \
+            newRect.setRect(0, 0, option->rect.width(), option->rect.height()); \
             imageCache = styleCacheImage(option->rect.size()); \
             imageCache.fill(0); \
             p = new QPainter(&imageCache); \

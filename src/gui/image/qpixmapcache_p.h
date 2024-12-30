@@ -60,7 +60,9 @@ class QPixmapCache::KeyData
 class QPixmapCacheEntry : public QPixmap
 {
  public:
-   QPixmapCacheEntry(const QPixmapCache::Key &key, const QPixmap &pix) : QPixmap(pix), key(key) {
+   QPixmapCacheEntry(const QPixmapCache::Key &newKey, const QPixmap &pix)
+      : QPixmap(pix), key(newKey)
+   {
       QPlatformPixmap *pd = handle();
 
       if (pd && pd->classId() == QPlatformPixmap::RasterClass) {

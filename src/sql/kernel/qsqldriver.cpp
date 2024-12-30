@@ -175,19 +175,19 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
             ? QString()
             : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QChar('.');
 
-         for (int i = 0; i < rec.count(); ++i) {
-            s.append(i ? QString(" AND ") : QString("WHERE "));
+         for (int j = 0; j < rec.count(); ++j) {
+            s.append(j ? QString(" AND ") : QString("WHERE "));
             s.append(tableNamePrefix);
-            s.append(prepareIdentifier(rec.fieldName(i), QSqlDriver::FieldName, this));
+            s.append(prepareIdentifier(rec.fieldName(j), QSqlDriver::FieldName, this));
 
-            if (rec.isNull(i)) {
+            if (rec.isNull(j)) {
                s.append(QString(" IS NULL"));
 
             } else if (preparedStatement) {
                s.append(QString(" = ?"));
 
             } else {
-               s.append(QString(" = ")).append(formatValue(rec.field(i)));
+               s.append(QString(" = ")).append(formatValue(rec.field(j)));
             }
          }
          break;

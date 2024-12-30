@@ -1144,9 +1144,9 @@ quint64 QLocale::toULongLong(const QString &s, bool *ok, int base) const
 float QLocale::toFloat(const QString &s, bool *ok) const
 {
    bool isOk;
-   double d = toDouble(s, &isOk);
+   double result = toDouble(s, &isOk);
 
-   if (! isOk || d < std::numeric_limits<float>::lowest() || d > std::numeric_limits<float>::max() )  {
+   if (! isOk || result < std::numeric_limits<float>::lowest() || result > std::numeric_limits<float>::max() )  {
 
       if (ok != nullptr) {
          *ok = false;
@@ -1159,7 +1159,7 @@ float QLocale::toFloat(const QString &s, bool *ok) const
       *ok = true;
    }
 
-   return float(d);
+   return float(result);
 }
 
 double QLocale::toDouble(const QString &s, bool *ok) const
@@ -2282,14 +2282,15 @@ QString QLocaleData::doubleToString(const QChar _zero, const QChar plus, const Q
          }
 
          case DFSignificantDigits: {
-            PrecisionMode mode = (flags & Alternate) ? PMSignificantDigits : PMChopTrailingZeros;
+            PrecisionMode newMode = (flags & Alternate) ? PMSignificantDigits : PMChopTrailingZeros;
 
             if (decpt != digits.length() && (decpt <= -4 || decpt > precision)) {
 
                num_str = exponentForm(_zero, decimal, exponential, group, plus, minus,
-                     digits, decpt, precision, mode, always_show_decpt);
+                     digits, decpt, precision, newMode, always_show_decpt);
+
             } else {
-               num_str = decimalForm(_zero, decimal, group, digits, decpt, precision, mode,
+               num_str = decimalForm(_zero, decimal, group, digits, decpt, precision, newMode,
                      always_show_decpt, flags & ThousandsGroup);
             }
 
@@ -2982,7 +2983,6 @@ QString QLocale::toCurrencyString(qint64 value, const QString &symbol) const
 
 #endif
 
-   const QLocalePrivate *d = this->d;
 
    quint8 idx = d->m_data->m_currency_format_idx;
    quint8 size = d->m_data->m_currency_format_size;

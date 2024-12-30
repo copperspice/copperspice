@@ -3103,11 +3103,11 @@ static inline QPointF roundInDeviceCoordinates(const QPointF &p, const QTransfor
    return m.inverted().map(QPointF(m.map(p).toPoint()));
 }
 
-void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
+void QPainter::drawPixmap(const QPointF &pointF, const QPixmap &pm)
 {
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    qDebug("QPainter::drawPixmap() pointf = [%.2f,%.2f], pixmap = [%d,%d]",
-         p.x(), p.y(), pm.width(), pm.height());
+         pointF.x(), pointF.y(), pm.width(), pm.height());
 #endif
 
    Q_D(QPainter);
@@ -3121,12 +3121,12 @@ void QPainter::drawPixmap(const QPointF &p, const QPixmap &pm)
 #endif
 
    if (d->extended) {
-      d->extended->drawPixmap(p, pm);
+      d->extended->drawPixmap(pointF, pm);
       return;
    }
 
-   qreal x = p.x();
-   qreal y = p.y();
+   qreal x = pointF.x();
+   qreal y = pointF.y();
 
    int w = pm.width();
    int h = pm.height();
@@ -3318,7 +3318,7 @@ void QPainter::drawPixmap(const QRectF &r, const QPixmap &pm, const QRectF &sr)
    }
 }
 
-void QPainter::drawImage(const QPointF &p, const QImage &image)
+void QPainter::drawImage(const QPointF &pointF, const QImage &image)
 {
    Q_D(QPainter);
 
@@ -3327,12 +3327,12 @@ void QPainter::drawImage(const QPointF &p, const QImage &image)
    }
 
    if (d->extended) {
-      d->extended->drawImage(p, image);
+      d->extended->drawImage(pointF, image);
       return;
    }
 
-   qreal x = p.x();
-   qreal y = p.y();
+   qreal x = pointF.x();
+   qreal y = pointF.y();
 
    int w = image.width();
    int h = image.height();

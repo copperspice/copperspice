@@ -1431,15 +1431,15 @@ QStringList QWindowsFontDatabase::extraTryFontsForFamily(const QString &family)
          }
       }
 
-      QFontDatabase db;
       const QStringList families = db.families();
       const char **tf = tryFonts;
 
       while (tf && *tf) {
          // QTBUG-31689, family might be an English alias for a localized font name.
-         const QString family = QString::fromLatin1(*tf);
-         if (families.contains(family) || db.hasFamily(family)) {
-            result << family;
+         const QString newFamily = QString::fromLatin1(*tf);
+
+         if (families.contains(newFamily) || db.hasFamily(newFamily)) {
+            result << newFamily;
          }
          ++tf;
       }

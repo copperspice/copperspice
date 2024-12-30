@@ -354,8 +354,6 @@ void Driver::reset()
    m_output = nullptr;
    m_problems.clear();
 
-   QStringList m_problems;
-
    m_widgets.clear();
    m_spacers.clear();
    m_layouts.clear();

@@ -153,9 +153,9 @@ void QMetaObject::connectSlotsByName(QObject *receiver)
 
             if (desiredSignal == testSignal)  {
                // found a matching signal for our slot
-               QMetaMethod slotMethod = metaObj->method(slotIndex);
+               QMetaMethod newSlotMethod = metaObj->method(slotIndex);
 
-               isConnected = QObject::connect(element, signalMethod, receiver, slotMethod);
+               isConnected = QObject::connect(element, signalMethod, receiver, newSlotMethod);
 
                if (isConnected) {
                   // connection set

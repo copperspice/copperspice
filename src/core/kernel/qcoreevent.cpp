@@ -31,20 +31,17 @@
 #include <atomic>
 
 QEvent::QEvent(Type type)
-   : d(nullptr), t(type), posted(false), spont(false), m_accept(true)
+   : t(type), posted(false), spont(false), m_accept(true)
 {
 }
 
 QEvent::QEvent(const QEvent &other)
-   : d(other.d), t(other.t), posted(other.posted), spont(other.spont), m_accept(other.m_accept)
+   : t(other.t), posted(other.posted), spont(other.spont), m_accept(other.m_accept)
 {
-   Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
 
 QEvent &QEvent::operator=(const QEvent &other)
 {
-   Q_ASSERT_X(! other.d, "QEvent", "QEventPrivate is not defined anywhere");
-
    t        = other.t;
    posted   = other.posted;
    spont    = other.spont;
@@ -58,8 +55,6 @@ QEvent::~QEvent()
    if (posted && QCoreApplication::instance()) {
       QCoreApplicationPrivate::removePostedEvent(this);
    }
-
-   Q_ASSERT_X(! d, "QEvent", "QEventPrivate is not defined anywhere");
 }
 
 namespace {

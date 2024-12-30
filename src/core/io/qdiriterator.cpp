@@ -62,8 +62,8 @@ class QDirIteratorPrivate
    QScopedPointer<QAbstractFileEngine> engine;
 
    QFileSystemEntry dirEntry;
-   const QStringList nameFilters;
-   const QDir::Filters filters;
+   const QStringList m_nameFilters;
+   const QDir::Filters m_filters;
    const QDirIterator::IteratorFlags iteratorFlags;
 
    QVector<QRegularExpression> nameRegExps;
@@ -83,8 +83,8 @@ class QDirIteratorPrivate
 
 QDirIteratorPrivate::QDirIteratorPrivate(const QFileSystemEntry &entry, const QStringList &nameFilters,
       QDir::Filters filters, QDirIterator::IteratorFlags flags, bool resolveEngine)
-   : dirEntry(entry), nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters),
-     filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
+   : dirEntry(entry), m_nameFilters(nameFilters.contains("*") ? QStringList() : nameFilters),
+     m_filters(QDir::NoFilter == filters ? QDir::AllEntries : filters), iteratorFlags(flags)
 {
    nameRegExps.reserve(nameFilters.size());
 
@@ -130,7 +130,7 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
 
    if (engine) {
       engine->setFileName(path);
-      QAbstractFileEngineIterator *it = engine->beginEntryList(filters, nameFilters);
+      QAbstractFileEngineIterator *it = engine->beginEntryList(m_filters, m_nameFilters);
 
       if (it) {
          it->setPath(path);
@@ -142,7 +142,7 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
    } else {
 #ifndef QT_NO_FILESYSTEMITERATOR
       QFileSystemIterator *it = new QFileSystemIterator(fileInfo.d_ptr->fileEntry,
-            filters, nameFilters, iteratorFlags);
+            m_filters, m_nameFilters, iteratorFlags);
       nativeIterators << it;
 #endif
    }
@@ -235,7 +235,7 @@ void QDirIteratorPrivate::checkAndPushDirectory(const QFileInfo &fileInfo)
    }
 
    // No hidden directories unless requested
-   if (! (filters & QDir::AllDirs) && ! (filters & QDir::Hidden) && fileInfo.isHidden()) {
+   if (! (m_filters & QDir::AllDirs) && ! (m_filters & QDir::Hidden) && fileInfo.isHidden()) {
       return;
    }
 
@@ -255,18 +255,18 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    const int fileNameSize = fileName.size();
    const bool dotOrDotDot = fileName == "." || fileName == "..";
 
-   if ((filters & QDir::NoDot) && dotOrDotDot && fileNameSize == 1) {
+   if ((m_filters & QDir::NoDot) && dotOrDotDot && fileNameSize == 1) {
       return false;
    }
 
-   if ((filters & QDir::NoDotDot) && dotOrDotDot && fileNameSize == 2) {
+   if ((m_filters & QDir::NoDotDot) && dotOrDotDot && fileNameSize == 2) {
       return false;
    }
 
    // name filter
    // Pass all entries through name filters, except dirs if the AllDirs
 
-   if (! nameFilters.isEmpty() && ! ((filters & QDir::AllDirs) && fi.isDir())) {
+   if (! m_nameFilters.isEmpty() && ! ((m_filters & QDir::AllDirs) && fi.isDir())) {
       bool matched = false;
 
       for (const auto &regExp : nameRegExps) {
@@ -282,8 +282,8 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // skip symlinks
-   const bool skipSymlinks  = (filters & QDir::NoSymLinks);
-   const bool includeSystem = (filters & QDir::System);
+   const bool skipSymlinks  = (m_filters & QDir::NoSymLinks);
+   const bool includeSystem = (m_filters & QDir::System);
 
    if (skipSymlinks && fi.isSymLink()) {
       // The only reason to save this file is if it is a broken link and we are requesting system files.
@@ -293,7 +293,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // filter hidden
-   const bool includeHidden = (filters & QDir::Hidden);
+   const bool includeHidden = (m_filters & QDir::Hidden);
 
    if (! includeHidden && ! dotOrDotDot && fi.isHidden()) {
       return false;
@@ -305,14 +305,14 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // skip directories
-   const bool skipDirs = !(filters & (QDir::Dirs | QDir::AllDirs));
+   const bool skipDirs = ! (m_filters & (QDir::Dirs | QDir::AllDirs));
 
    if (skipDirs && fi.isDir()) {
       return false;
    }
 
    // skip files
-   const bool skipFiles = !(filters & QDir::Files);
+   const bool skipFiles = ! (m_filters & QDir::Files);
 
    if (skipFiles && fi.isFile()) {
       // Basically we need a reason not to exclude this file otherwise we just eliminate it
@@ -320,10 +320,10 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // filter permissions
-   const bool filterPermissions = ((filters & QDir::PermissionMask) && (filters & QDir::PermissionMask) != QDir::PermissionMask);
-   const bool doWritable   = !filterPermissions || (filters & QDir::Writable);
-   const bool doExecutable = !filterPermissions || (filters & QDir::Executable);
-   const bool doReadable   = !filterPermissions || (filters & QDir::Readable);
+   const bool filterPermissions = ((m_filters & QDir::PermissionMask) && (m_filters & QDir::PermissionMask) != QDir::PermissionMask);
+   const bool doWritable   = ! filterPermissions || (m_filters & QDir::Writable);
+   const bool doExecutable = ! filterPermissions || (m_filters & QDir::Executable);
+   const bool doReadable   = ! filterPermissions || (m_filters & QDir::Readable);
 
    if (filterPermissions && ((doReadable && ! fi.isReadable())
          || (doWritable && ! fi.isWritable()) || (doExecutable && !fi.isExecutable()))) {

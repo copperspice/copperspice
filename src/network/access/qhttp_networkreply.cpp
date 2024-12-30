@@ -786,9 +786,10 @@ qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDa
          bOut.reserve(inflateStrm->avail_in * 3 + 512);
          inflateStrm->avail_out = bOut.capacity();
          inflateStrm->next_out = reinterpret_cast<Bytef *>(bOut.data());
-         int ret = inflate(inflateStrm, Z_NO_FLUSH);
 
-         if (ret == Z_DATA_ERROR && !triedRawDeflate) {
+         int result1 = inflate(inflateStrm, Z_NO_FLUSH);
+
+         if (result1 == Z_DATA_ERROR && !triedRawDeflate) {
             inflateEnd(inflateStrm);
             triedRawDeflate       = true;
             inflateStrm->zalloc   = nullptr;
@@ -796,9 +797,10 @@ qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDa
             inflateStrm->opaque   = nullptr;
             inflateStrm->avail_in = 0;
             inflateStrm->next_in  = nullptr;
-            int ret = inflateInit2(inflateStrm, -MAX_WBITS);
 
-            if (ret != Z_OK) {
+            int result2 = inflateInit2(inflateStrm, -MAX_WBITS);
+
+            if (result2 != Z_OK) {
                return -1;
 
             } else {
@@ -807,14 +809,14 @@ qint64 QHttpNetworkReplyPrivate::uncompressBodyData(QByteDataBuffer *in, QByteDa
                continue;
             }
 
-         } else if (ret < 0 || ret == Z_NEED_DICT) {
+         } else if (result1 < 0 || result1 == Z_NEED_DICT) {
             return -1;
          }
 
          bOut.resize(bOut.capacity() - inflateStrm->avail_out);
          out->append(bOut);
 
-         if (ret == Z_STREAM_END) {
+         if (result1 == Z_STREAM_END) {
             return out->byteAmount();
          }
 

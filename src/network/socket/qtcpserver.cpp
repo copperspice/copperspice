@@ -51,9 +51,9 @@ QTcpServerPrivate::~QTcpServerPrivate()
 
 #ifndef QT_NO_NETWORKPROXY
 
-QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint16 port)
+QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &newAddress, quint16 newPort)
 {
-   if (address.isLoopback()) {
+   if (newAddress.isLoopback()) {
       return QNetworkProxy::NoProxy;
    }
 
@@ -62,9 +62,10 @@ QNetworkProxy QTcpServerPrivate::resolveProxy(const QHostAddress &address, quint
       // a non-default proxy was set with setProxy
 
       proxies << proxy;
+
    } else {
       // try the application settings instead
-      QNetworkProxyQuery query(port, QString(), QNetworkProxyQuery::TcpServer);
+      QNetworkProxyQuery query(newPort, QString(), QNetworkProxyQuery::TcpServer);
       proxies = QNetworkProxyFactory::proxyForQuery(query);
    }
 

@@ -53,14 +53,14 @@ class Base
 {
  public:
    Base(Exception *exception)
-      : exception(exception), refCount(1), hasThrown(false)
+      : m_exception(exception), refCount(1), hasThrown(false)
    { }
 
    ~Base() {
-      delete exception;
+      delete m_exception;
    }
 
-   Exception *exception;
+   Exception *m_exception;
    QAtomicInt refCount;
    bool hasThrown;
 };
@@ -99,7 +99,7 @@ ExceptionHolder::~ExceptionHolder()
 
 Exception *ExceptionHolder::exception() const
 {
-   return base->exception;
+   return base->m_exception;
 }
 
 void ExceptionStore::setException(const Exception &e)

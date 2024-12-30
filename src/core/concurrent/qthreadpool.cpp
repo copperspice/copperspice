@@ -41,17 +41,17 @@ class QThreadPoolThread : public QThread
    void registerThreadInactive();
 
    QWaitCondition runnableReady;
-   QThreadPoolPrivate *manager;
+   QThreadPoolPrivate *m_manager;
    QRunnable *runnable;
 };
 
 QThreadPoolThread::QThreadPoolThread(QThreadPoolPrivate *manager)
-   : manager(manager), runnable(nullptr)
+   : m_manager(manager), runnable(nullptr)
 { }
 
 void QThreadPoolThread::run()
 {
-   QMutexLocker locker(&manager->mutex);
+   QMutexLocker locker(&m_manager->mutex);
 
    for (;;) {
       QRunnable *r = runnable;
@@ -81,37 +81,37 @@ void QThreadPoolThread::run()
          }
 
          // if too many threads are active, expire this thread
-         if (manager->tooManyThreadsActive()) {
+         if (m_manager->tooManyThreadsActive()) {
             break;
          }
 
-         r = ! manager->queue.isEmpty() ? manager->queue.takeFirst().first : nullptr;
+         r = ! m_manager->queue.isEmpty() ? m_manager->queue.takeFirst().first : nullptr;
 
       } while (r != nullptr);
 
-      if (manager->isExiting) {
+      if (m_manager->isExiting) {
          registerThreadInactive();
          break;
       }
 
       // if too many threads are active, expire this thread
-      bool expired = manager->tooManyThreadsActive();
+      bool expired = m_manager->tooManyThreadsActive();
 
       if (! expired) {
-         manager->waitingThreads.enqueue(this);
+         m_manager->waitingThreads.enqueue(this);
          registerThreadInactive();
 
          // wait for work, exiting after the expiry timeout is reached
-         runnableReady.wait(locker.mutex(), manager->expiryTimeout);
-         ++manager->activeThreads;
+         runnableReady.wait(locker.mutex(), m_manager->expiryTimeout);
+         ++m_manager->activeThreads;
 
-         if (manager->waitingThreads.removeOne(this)) {
+         if (m_manager->waitingThreads.removeOne(this)) {
             expired = true;
          }
       }
 
       if (expired) {
-         manager->expiredThreads.enqueue(this);
+         m_manager->expiredThreads.enqueue(this);
          registerThreadInactive();
          break;
       }
@@ -120,8 +120,8 @@ void QThreadPoolThread::run()
 
 void QThreadPoolThread::registerThreadInactive()
 {
-   if (--manager->activeThreads == 0) {
-      manager->noActiveThreads.wakeAll();
+   if (--m_manager->activeThreads == 0) {
+      m_manager->noActiveThreads.wakeAll();
    }
 }
 

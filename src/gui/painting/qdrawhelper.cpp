@@ -3342,23 +3342,27 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
                layout->convertToARGB64PM(buf2, sbuf2, len * 2, layout, clut);
             }
 
-            for (int i = 0; i < len; ++i) {
+            for (int k = 0; k < len; ++k) {
                int distx = (fracX & 0x0000ffff);
+
 #if defined(__SSE2__)
                const __m128i vdistx  = _mm_shufflelo_epi16(_mm_cvtsi32_si128(distx), _MM_SHUFFLE(0, 0, 0, 0));
                const __m128i vidistx = _mm_shufflelo_epi16(_mm_cvtsi32_si128(0x10000 - distx), _MM_SHUFFLE(0, 0, 0, 0));
-               __m128i vt = _mm_loadu_si128((const __m128i *)(buf1 + i * 2));
+
+               __m128i vt = _mm_loadu_si128((const __m128i *)(buf1 + k * 2));
+
                if (disty) {
-                  __m128i vb = _mm_loadu_si128((const __m128i *)(buf2 + i * 2));
+                  __m128i vb = _mm_loadu_si128((const __m128i *)(buf2 + k * 2));
                   vt = _mm_mulhi_epu16(vt, vidy);
                   vb = _mm_mulhi_epu16(vb, vdy);
                   vt = _mm_add_epi16(vt, vb);
                }
+
                vt = _mm_mulhi_epu16(vt, _mm_unpacklo_epi64(vidistx, vdistx));
                vt = _mm_add_epi16(vt, _mm_srli_si128(vt, 8));
-               _mm_storel_epi64((__m128i *)(b + i), vt);
+               _mm_storel_epi64((__m128i *)(b + k), vt);
 #else
-               b[i] = interpolate_4_pixels_rgb64(buf1 + i * 2, buf2 + i * 2, distx, disty);
+               b[i] = interpolate_4_pixels_rgb64(buf1 + k * 2, buf2 + k * 2, distx, disty);
 #endif
                fracX += fdx;
             }
@@ -3499,10 +3503,10 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
             layout->convertToARGB64PM(buf1, sbuf1, len * 2, layout, clut);
             layout->convertToARGB64PM(buf2, sbuf2, len * 2, layout, clut);
 
-            for (int i = 0; i < len; ++i) {
+            for (int k = 0; k < len; ++k) {
                int distx = (fracX & 0x0000ffff);
                int disty = (fracY & 0x0000ffff);
-               b[i] = interpolate_4_pixels_rgb64(buf1 + i * 2, buf2 + i * 2, distx, disty);
+               b[k] = interpolate_4_pixels_rgb64(buf1 + k * 2, buf2 + k * 2, distx, disty);
                fracX += fdx;
                fracY += fdy;
             }
@@ -4061,9 +4065,9 @@ static inline const BlendType *qt_fetch_linear_gradient_template(
       qreal rw = data->m23 * (y + qreal(0.5)) + data->m13 * (x + qreal(0.5)) + data->m33;
 
       while (buffer < end) {
-         qreal x = rx / rw;
-         qreal y = ry / rw;
-         t = (op->linear.dx * x + op->linear.dy * y) + op->linear.off;
+         qreal xNew = rx / rw;
+         qreal yNew = ry / rw;
+         t = (op->linear.dx * xNew + op->linear.dy * yNew) + op->linear.off;
 
          *buffer = GradientBase::fetchSingle(data->gradient, t);
          rx += data->m11;
@@ -4563,33 +4567,36 @@ void handleSpans(int count, const QSpan *spans, const QSpanData *data, T &handle
       for (int i = 1; i < count && spans[i].y == y && spans[i].x == right; ++i) {
          right += spans[i].len;
       }
-      int length = right - x;
 
-      while (length) {
-         int l = qMin(buffer_size, length);
-         length -= l;
+      int totalLen = right - x;
 
-         int process_length = l;
+      while (totalLen != 0) {
+         int minLen = qMin(buffer_size, totalLen);
+         totalLen -= minLen;
+
+         int process_length = minLen;
          int process_x = x;
 
          const typename T::BlendType *src = handler.fetch(process_x, y, process_length);
          int offset = 0;
-         while (l > 0) {
+
+         while (minLen > 0) {
             if (x == spans->x) {
                // new span?
                coverage = (spans->coverage * const_alpha) >> 8;
             }
 
-            int right = spans->x + spans->len;
-            int len = qMin(l, right - x);
+            int rightPos   = spans->x + spans->len;
+            int spanLength = qMin(minLen, rightPos - x);
 
-            handler.process(x, y, len, coverage, src, offset);
+            handler.process(x, y, spanLength, coverage, src, offset);
 
-            l -= len;
-            x += len;
-            offset += len;
+            minLen -= spanLength;
+            x      += spanLength;
+            offset += spanLength;
 
-            if (x == right) { // done with current span?
+            if (x == rightPos) {
+               // done with current span?
                ++spans;
                --count;
             }
@@ -6132,23 +6139,28 @@ static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer, int x, in
 
    if (mapWidth > 8) {
       while (mapHeight--) {
-         int x0 = 0;
-         int n = 0;
-         for (int x = 0; x < mapWidth; x += 8) {
-            uchar s = map[x >> 3];
+         int xStart = 0;
+         int count  = 0;
+
+         for (int xPos = 0; xPos < mapWidth; xPos += 8) {
+            uchar s = map[xPos >> 3];
+
             for (int i = 0; i < 8; ++i) {
                if (s & 0x80) {
-                  ++n;
+                  ++count;
+
                } else {
-                  if (n) {
-                     qt_memfill(dest + x0, color, n);
-                     x0 += n + 1;
-                     n = 0;
+                  if (count != 0) {
+                     qt_memfill(dest + xStart, color, count);
+                     xStart += count + 1;
+                     count = 0;
+
                   } else {
-                     ++x0;
+                     ++xStart;
                   }
-                  if (!s) {
-                     x0 += 8 - 1 - i;
+
+                  if (! s) {
+                     xStart += 8 - 1 - i;
                      break;
                   }
                }
@@ -6156,8 +6168,9 @@ static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer, int x, in
                s <<= 1;
             }
          }
-         if (n) {
-            qt_memfill(dest + x0, color, n);
+
+         if (count != 0) {
+            qt_memfill(dest + xStart, color, count);
          }
 
          dest += destStride;
@@ -6166,21 +6179,25 @@ static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer, int x, in
 
    } else {
       while (mapHeight--) {
-         int x0 = 0;
-         int n = 0;
+         int xStart = 0;
+         int count  = 0;
+
          for (uchar s = *map; s; s <<= 1) {
             if (s & 0x80) {
-               ++n;
-            } else if (n) {
-               qt_memfill(dest + x0, color, n);
-               x0 += n + 1;
-               n = 0;
+               ++count;
+
+            } else if (count != 0) {
+               qt_memfill(dest + xStart, color, count);
+               xStart += count + 1;
+               count = 0;
+
             } else {
-               ++x0;
+               ++xStart;
             }
          }
-         if (n) {
-            qt_memfill(dest + x0, color, n);
+
+         if (count != 0) {
+            qt_memfill(dest + xStart, color, count);
          }
          dest += destStride;
          map += mapStride;

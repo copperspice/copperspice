@@ -146,8 +146,8 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
       QRegion region;
       bool hover;
 
-      OperationInfo(uint changeFlags, Qt::CursorShape cursorShape, bool hover = true)
-         : changeFlags(changeFlags), cursorShape(cursorShape), hover(hover)
+      OperationInfo(uint newChangeFlags, Qt::CursorShape newCursorShape, bool newHover = true)
+         : changeFlags(newChangeFlags), cursorShape(newCursorShape), hover(newHover)
       {
       }
    };
@@ -294,12 +294,13 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
          return 0;
       }
 
-      QStyleOptionTitleBar options = titleBarOptions();
-      int height = options.rect.height();
+      QStyleOptionTitleBar newOptions = titleBarOptions();
+      int height = newOptions.rect.height();
 
-      if (hasBorder(options)) {
+      if (hasBorder(newOptions)) {
          height += q->isMinimized() ? 8 : 4;
       }
+
       return height;
    }
 
@@ -323,9 +324,9 @@ class QMdiSubWindowPrivate : public QWidgetPrivate
          q->setGeometry(*geometry);
    }
 
-   bool hasBorder(const QStyleOptionTitleBar &options) const {
+   bool hasBorder(const QStyleOptionTitleBar &newOptions) const {
       Q_Q(const QMdiSubWindow);
-      return !q->style()->styleHint(QStyle::SH_TitleBar_NoBorder, &options, q);
+      return ! q->style()->styleHint(QStyle::SH_TitleBar_NoBorder, &newOptions, q);
    }
 
    bool autoRaise() const {

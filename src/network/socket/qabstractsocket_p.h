@@ -64,9 +64,9 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
    void connectionNotification() override;
 
 #ifndef QT_NO_NETWORKPROXY
-   void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator) override {
+   void proxyAuthenticationRequired(const QNetworkProxy &networkProxy, QAuthenticator *authenticator) override {
       Q_Q(QAbstractSocket);
-      q->proxyAuthenticationRequired(proxy, authenticator);
+      q->proxyAuthenticationRequired(networkProxy, authenticator);
    }
 #endif
 
@@ -119,8 +119,8 @@ class QAbstractSocketPrivate : public QIODevicePrivate, public QAbstractSocketEn
 
 #endif
 
-   void resolveProxy(quint16 port) {
-      resolveProxy(QString(), port);
+   void resolveProxy(quint16 proxyPort) {
+      resolveProxy(QString(), proxyPort);
    }
 
    void resetSocketLayer();

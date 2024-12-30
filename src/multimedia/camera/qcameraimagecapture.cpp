@@ -74,14 +74,14 @@ QCameraImageCapturePrivate::QCameraImageCapturePrivate()
 {
 }
 
-void QCameraImageCapturePrivate::_q_error(int id, int error, const QString &errorString)
+void QCameraImageCapturePrivate::_q_error(int id, int newError, const QString &errorMsg)
 {
    Q_Q(QCameraImageCapture);
 
-   this->error = QCameraImageCapture::Error(error);
-   this->errorString = errorString;
+   this->error = QCameraImageCapture::Error(newError);
+   this->errorString = errorMsg;
 
-   emit q->error(id, this->error, errorString);
+   emit q->error(id, this->error, this->errorString);
 }
 
 void QCameraImageCapturePrivate::_q_readyChanged(bool ready)

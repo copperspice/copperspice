@@ -436,7 +436,7 @@ static void calculateNextTimeout(QTimerInfo_Unix *t, timespec currentTime)
 
 bool QTimerInfoList::timerWait(timespec &tm)
 {
-   timespec currentTime = updateCurrentTime();
+   timespec newCurrentTime = updateCurrentTime();
    repairTimersIfNeeded();
 
    // find first waiting timer not already active
@@ -453,9 +453,9 @@ bool QTimerInfoList::timerWait(timespec &tm)
       return false;
    }
 
-   if (currentTime < t->timeout) {
+   if (newCurrentTime < t->timeout) {
       // time to wait
-      tm = roundToMillisecond(t->timeout - currentTime);
+      tm = roundToMillisecond(t->timeout - newCurrentTime);
 
    } else {
       // no time to wait
@@ -473,7 +473,7 @@ bool QTimerInfoList::timerWait(timespec &tm)
 */
 int QTimerInfoList::timerRemainingTime(int timerId)
 {
-   timespec currentTime = updateCurrentTime();
+   timespec newCurrentTime = updateCurrentTime();
    repairTimersIfNeeded();
    timespec tm = {0, 0};
 
@@ -481,9 +481,9 @@ int QTimerInfoList::timerRemainingTime(int timerId)
       QTimerInfo_Unix *t = at(i);
 
       if (t->id == timerId) {
-         if (currentTime < t->timeout) {
+         if (newCurrentTime < t->timeout) {
             // time to wait
-            tm = roundToMillisecond(t->timeout - currentTime);
+            tm = roundToMillisecond(t->timeout - newCurrentTime);
             return tm.tv_sec * 1000 + tm.tv_nsec / 1000 / 1000;
          } else {
             return 0;

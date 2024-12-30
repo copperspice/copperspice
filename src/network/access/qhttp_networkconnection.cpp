@@ -54,10 +54,10 @@ const int QHttpNetworkConnectionPrivate::defaultPipelineLength = 3;
 // This means that there are 2 requests in flight and 2 slots free that will be re-filled.
 const int QHttpNetworkConnectionPrivate::defaultRePipelineLength = 2;
 
-QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(const QString &hostName,
-      quint16 port, bool encrypt, QHttpNetworkConnection::ConnectionType type)
-   : state(RunningState), networkLayerState(Unknown),
-     hostName(hostName), port(port), encrypt(encrypt), delayIpv4(true),
+QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(const QString &newHostName,
+      quint16 newPort, bool newEncrypt, QHttpNetworkConnection::ConnectionType type)
+   : state(RunningState), networkLayerState(Unknown), hostName(newHostName), port(newPort), encrypt(newEncrypt),
+     delayIpv4(true),
 
 #ifdef QT_SSL
      channelCount((type == QHttpNetworkConnection::ConnectionTypeSPDY) ? 1 : defaultHttpChannelCount),
@@ -75,10 +75,10 @@ QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(const QString &host
    channels = new QHttpNetworkConnectionChannel[channelCount];
 }
 
-QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(quint16 channelCount, const QString &hostName,
-      quint16 port, bool encrypt, QHttpNetworkConnection::ConnectionType type)
-   : state(RunningState), networkLayerState(Unknown),
-     hostName(hostName), port(port), encrypt(encrypt), delayIpv4(true), channelCount(channelCount),
+QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(quint16 newChannelCount, const QString &newHostName,
+      quint16 newPort, bool newEncrypt, QHttpNetworkConnection::ConnectionType type)
+   : state(RunningState), networkLayerState(Unknown), hostName(newHostName), port(newPort), encrypt(newEncrypt),
+     delayIpv4(true), channelCount(newChannelCount),
 
 #ifndef QT_NO_NETWORKPROXY
      networkProxy(QNetworkProxy::NoProxy),
@@ -357,10 +357,11 @@ void QHttpNetworkConnectionPrivate::prepareRequest(HttpMessagePair &messagePair)
          host = QUrl::toAce(hostName);
       }
 
-      int port = request.url().port();
-      if (port != -1) {
+      int newPort = request.url().port();
+
+      if (newPort != -1) {
          host += ':';
-         host += QByteArray::number(port);
+         host += QByteArray::number(newPort);
       }
 
       request.setHeaderField("Host", host);

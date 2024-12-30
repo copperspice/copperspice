@@ -82,8 +82,8 @@ class QDnsLookupRunnable : public QObject, public QRunnable
     NET_CS_OBJECT(QDnsLookupRunnable)
 
  public:
-    QDnsLookupRunnable(QDnsLookup::Type type, const QByteArray &name, const QHostAddress &nameserver)
-        : requestType(type), requestName(name) , nameserver(nameserver)
+    QDnsLookupRunnable(QDnsLookup::Type type, const QByteArray &name, const QHostAddress &server)
+        : requestType(type), requestName(name) , nameserver(server)
     { }
 
     void run() override;

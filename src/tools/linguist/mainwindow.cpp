@@ -2825,15 +2825,15 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
                   if (*iter == '%') {
                      ++iter;
 
-                     auto iter_start = iter;
+                     auto iter_begin2 = iter;
 
                      while (iter->isDigit()) {
                         ++iter;
                      }
 
-                     auto iter_end = iter;
+                     auto iter_end2 = iter;
                      bool ok = true;
-                     int markerIndex = QString(iter_start, iter_end).toInteger<int>(&ok);
+                     int markerIndex = QString(iter_begin2, iter_end2).toInteger<int>(&ok);
 
                      if (ok) {
                         if (pass == 0) {

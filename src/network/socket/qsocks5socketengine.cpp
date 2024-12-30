@@ -488,10 +488,10 @@ bool QSocks5Authenticator::unSeal(QTcpSocket *sealedSocket, QByteArray *buf)
    return unSeal(sealedSocket->readAll(), buf);
 }
 
-QSocks5PasswordAuthenticator::QSocks5PasswordAuthenticator(const QString &userName, const QString &password)
+QSocks5PasswordAuthenticator::QSocks5PasswordAuthenticator(const QString &newUserName, const QString &newPassword)
 {
-   this->userName = userName;
-   this->password = password;
+   this->userName = newUserName;
+   this->password = newPassword;
 }
 
 char QSocks5PasswordAuthenticator::methodId()

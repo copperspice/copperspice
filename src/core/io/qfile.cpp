@@ -67,29 +67,32 @@ QFilePrivate::~QFilePrivate()
 {
 }
 
-bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags handleFlags)
+bool QFilePrivate::openExternalFile(int flags, int fd, QFile::FileHandleFlags newHandleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
    (void) flags;
    (void) fd;
+   (void) newHandleFlags;
 
    return false;
 
 #else
    delete fileEngine;
    fileEngine = nullptr;
+
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
 
-   return fe->open(QIODevice::OpenMode(flags), fd, handleFlags);
+   return fe->open(QIODevice::OpenMode(flags), fd, newHandleFlags);
 #endif
 }
 
-bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags handleFlags)
+bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags newHandleFlags)
 {
 #ifdef QT_NO_FSFILEENGINE
    (void) flags;
    (void) fh;
+   (void) newHandleFlags;
 
    return false;
 
@@ -100,7 +103,7 @@ bool QFilePrivate::openExternalFile(int flags, FILE *fh, QFile::FileHandleFlags 
    QFSFileEngine *fe = new QFSFileEngine;
    fileEngine = fe;
 
-   return fe->open(QIODevice::OpenMode(flags), fh, handleFlags);
+   return fe->open(QIODevice::OpenMode(flags), fh, newHandleFlags);
 #endif
 }
 

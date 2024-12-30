@@ -636,10 +636,11 @@ QWindowsWindowData WindowCreationData::create(const QWindow *w, const WindowData
       result.hwnd = reinterpret_cast<HWND>(w->winId());
       Q_ASSERT(result.hwnd);
 
-      const LONG_PTR style   = GetWindowLongPtr(result.hwnd, GWL_STYLE);
-      const LONG_PTR exStyle = GetWindowLongPtr(result.hwnd, GWL_EXSTYLE);
+      const LONG_PTR newStyle   = GetWindowLongPtr(result.hwnd, GWL_STYLE);
+      const LONG_PTR newExStyle = GetWindowLongPtr(result.hwnd, GWL_EXSTYLE);
+
       result.embedded = false;
-      result.frame = QWindowsGeometryHint::frame(style, exStyle);
+      result.frame    = QWindowsGeometryHint::frame(newStyle, newExStyle);
       result.geometry = frameGeometry(result.hwnd, !GetParent(result.hwnd)).marginsRemoved(result.frame);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)

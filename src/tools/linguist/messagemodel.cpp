@@ -474,9 +474,9 @@ bool DataModel::setLanguageAndCountry(QLocale::Language lang, QLocale::Country c
          int tmpSize = data.size() - 2;
 
          if (index != tmpSize) {
-            const CountGuide *ptr = std::get_if<CountGuide>(&data.at(index + 2));
+            const CountGuide *ptrGuide = std::get_if<CountGuide>(&data.at(index + 2));
 
-            if (ptr != nullptr && *ptr != CountGuide::LastEntry) {
+            if (ptrGuide != nullptr && *ptrGuide != CountGuide::LastEntry) {
                x2 = true;
             }
          }
@@ -491,9 +491,9 @@ bool DataModel::setLanguageAndCountry(QLocale::Language lang, QLocale::Country c
             break;
          }
 
-         const CountGuide *ptr = std::get_if<CountGuide>(&data.at(index));
+         const CountGuide *ptrGuide = std::get_if<CountGuide>(&data.at(index));
 
-         if (ptr != nullptr && *ptr == CountGuide::LastEntry) {
+         if (ptrGuide != nullptr && *ptrGuide == CountGuide::LastEntry) {
             break;
          }
       }

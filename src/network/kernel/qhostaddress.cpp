@@ -190,27 +190,30 @@ bool QHostAddressPrivate::parse()
 {
    isParsed = true;
    protocol = QAbstractSocket::UnknownNetworkLayerProtocol;
-   QString a = ipString.simplified();
 
-   if (a.isEmpty()) {
+   QString hostAddress = ipString.simplified();
+
+   if (hostAddress.isEmpty()) {
       return false;
    }
 
    // All IPv6 addresses contain a ':', and may contain a '.'.
-   if (a.contains(':')) {
+   if (hostAddress.contains(':')) {
       quint8 maybeIp6[16];
 
-      if (parseIp6(a, maybeIp6, &scopeId)) {
+      if (parseIp6(hostAddress, maybeIp6, &scopeId)) {
          setAddress(maybeIp6);
          return true;
       }
    }
 
    quint32 maybeIp4 = 0;
-   if (QIPAddressUtils::parseIp4(maybeIp4, a.constBegin(), a.constEnd())) {
+
+   if (QIPAddressUtils::parseIp4(maybeIp4, hostAddress.constBegin(), hostAddress.constEnd())) {
       setAddress(maybeIp4);
       return true;
    }
+
    return false;
 }
 

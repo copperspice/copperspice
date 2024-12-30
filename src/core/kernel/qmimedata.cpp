@@ -149,23 +149,23 @@ QVariant QMimeDataPrivate::retrieveTypedData(const QString &format, QVariant::Ty
             [[fallthrough]];
 
          case QVariant::Url: {
-            QByteArray ba = data.toByteArray();
+            QByteArray tmpData = data.toByteArray();
 
             // legacy application will send text/uri-list with a trailing null-terminator
             // not sent for any other text mime-type, remove it
 
-            if (ba.endsWith('\0')) {
-               ba.chop(1);
+            if (tmpData.endsWith('\0')) {
+               tmpData.chop(1);
             }
 
-            QList<QByteArray> urls = ba.split('\n');
+            QList<QByteArray> urls = tmpData.split('\n');
             QList<QVariant> list;
 
             for (int i = 0; i < urls.size(); ++i) {
-               QByteArray ba = urls.at(i).trimmed();
+               QByteArray urlData = urls.at(i).trimmed();
 
-               if (!ba.isEmpty()) {
-                  list.append(QUrl::fromEncoded(ba));
+               if (! urlData.isEmpty()) {
+                  list.append(QUrl::fromEncoded(urlData));
                }
             }
 

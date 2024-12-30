@@ -244,9 +244,9 @@ class QMdiAreaPrivate : public QAbstractScrollAreaPrivate
       return subWindow->d_func()->isExplicitlyDeactivated;
    }
 
-   void setActive(QMdiSubWindow *subWindow, bool active = true, bool changeFocus = true) const {
+   void setActive(QMdiSubWindow *subWindow, bool isActive = true, bool changeFocus = true) const {
       if (subWindow) {
-         subWindow->d_func()->setActive(active, changeFocus);
+         subWindow->d_func()->setActive(isActive, changeFocus);
       }
    }
 

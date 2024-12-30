@@ -201,7 +201,7 @@ void QSharedMemoryPrivate::cleanHandle()
 #endif
 }
 
-bool QSharedMemoryPrivate::create(int size)
+bool QSharedMemoryPrivate::create(int newSize)
 {
 #ifndef QT_POSIX_IPC
    // build file if needed
@@ -225,7 +225,7 @@ bool QSharedMemoryPrivate::create(int size)
    }
 
    // create
-   if (-1 == shmget(unix_key, size, 0600 | IPC_CREAT | IPC_EXCL)) {
+   if (-1 == shmget(unix_key, newSize, 0600 | IPC_CREAT | IPC_EXCL)) {
       QString function = "QSharedMemory::create";
 
       switch (errno) {
@@ -275,7 +275,7 @@ bool QSharedMemoryPrivate::create(int size)
 
    // the size may only be set once; ignore errors
    int ret;
-   EINTR_LOOP(ret, ftruncate(fd, size));
+   EINTR_LOOP(ret, ftruncate(fd, newSize));
 
    if (ret == -1) {
       setErrorString(QLatin1String("QSharedMemory::create (ftruncate)"));

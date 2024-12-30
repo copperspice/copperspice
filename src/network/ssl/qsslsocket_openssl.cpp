@@ -1283,9 +1283,9 @@ bool QSslSocketBackendPrivate::startHandshake()
       // if we are the server, do not check CN
 
       if (mode == QSslSocket::SslClientMode) {
-         QString peerName = (verificationPeerName.isEmpty () ? q->peerName() : verificationPeerName);
+         QString newPeerName = (verificationPeerName.isEmpty () ? q->peerName() : verificationPeerName);
 
-         if (! isMatchingHostname(configuration.peerCertificate, peerName)) {
+         if (! isMatchingHostname(configuration.peerCertificate, newPeerName)) {
 
             // No matches in common names or alternate names.
             QSslError error(QSslError::HostNameMismatch, configuration.peerCertificate);

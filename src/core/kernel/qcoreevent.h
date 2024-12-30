@@ -34,8 +34,6 @@
 #warning "QCoreEvent should be included before any X11 header, issue with enum Expose"
 #endif
 
-class QEventPrivate;
-
 class Q_CORE_EXPORT QEvent           // event base class
 {
    CORE_CS_GADGET(QEvent)
@@ -165,21 +163,24 @@ class Q_CORE_EXPORT QEvent           // event base class
 #endif
 
       AcceptDropsChange                = 152,
-      ZeroTimerEvent                   = 154,           // Used for Windows Zero timer events
-      GraphicsSceneMouseMove           = 155,           // GraphicsView
-      GraphicsSceneMousePress          = 156,
-      GraphicsSceneMouseRelease        = 157,
-      GraphicsSceneMouseDoubleClick    = 158,
-      GraphicsSceneContextMenu         = 159,
-      GraphicsSceneHoverEnter          = 160,
-      GraphicsSceneHoverMove           = 161,
+      ZeroTimerEvent                   = 153,           // Used for Windows Zero timer events
+
+      GraphicsSceneLeave               = 154,           // GraphicsView
+      GraphicsSceneContextMenu         = 155,
+      GraphicsSceneDragEnter           = 156,
+      GraphicsSceneDragLeave           = 157,
+      GraphicsSceneDragMove            = 158,
+      GraphicsSceneDrop                = 159,
+      GraphicsSceneHelp                = 160,
+      GraphicsSceneHoverEnter          = 161,
       GraphicsSceneHoverLeave          = 162,
-      GraphicsSceneHelp                = 163,
-      GraphicsSceneDragEnter           = 164,
-      GraphicsSceneDragMove            = 165,
-      GraphicsSceneDragLeave           = 166,
-      GraphicsSceneDrop                = 167,
+      GraphicsSceneHoverMove           = 163,
+      GraphicsSceneMouseDoubleClick    = 164,
+      GraphicsSceneMouseMove           = 165,
+      GraphicsSceneMousePress          = 166,
+      GraphicsSceneMouseRelease        = 167,
       GraphicsSceneWheel               = 168,
+
       KeyboardLayoutChange             = 169,            // keyboard layout changed
       DynamicPropertyChange            = 170,            // A dynamic property was changed through setProperty/property
       TabletEnterProximity             = 171,
@@ -203,12 +204,12 @@ class Q_CORE_EXPORT QEvent           // event base class
       UngrabMouse          = 187,
       GrabKeyboard         = 188,
       UngrabKeyboard       = 189,
-      MacGLClearDrawable   = 191,             // Cocoa window has changed, must clear window
-      StateMachineSignal   = 192,
-      StateMachineWrapped  = 193,
-      TouchBegin           = 194,
-      TouchUpdate          = 195,
-      TouchEnd             = 196,
+      MacGLClearDrawable   = 190,             // Cocoa window has changed, must clear window
+      StateMachineSignal   = 191,
+      StateMachineWrapped  = 192,
+      TouchBegin           = 193,
+      TouchUpdate          = 194,
+      TouchEnd             = 195,
 
 #ifndef QT_NO_GESTURES
       NativeGesture        = 197,             // platform gesture support
@@ -275,7 +276,6 @@ class Q_CORE_EXPORT QEvent           // event base class
    static int registerEventType(int hint = -1);
 
  protected:
-   QEventPrivate *d;      // emerald (do not commit) should be QScopedPointer<QEventPrivate> d_ptr;
    ushort t;
 
  private:

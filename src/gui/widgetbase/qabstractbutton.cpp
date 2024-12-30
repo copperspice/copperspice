@@ -417,23 +417,23 @@ void QAbstractButtonPrivate::emitReleased()
 
 #endif
 }
-void QAbstractButtonPrivate::emitToggled(bool checked)
+
+void QAbstractButtonPrivate::emitToggled(bool isChecked)
 {
    Q_Q(QAbstractButton);
    QPointer<QAbstractButton> guard(q);
 
-   emit q->toggled(checked);
+   emit q->toggled(isChecked);
 
 #ifndef QT_NO_BUTTONGROUP
 
    if (guard && group) {
-      emit group->buttonToggled(group->id(q), checked);
+      emit group->buttonToggled(group->id(q), isChecked);
 
       if (guard && group) {
-         emit group->buttonToggled(q, checked);
+         emit group->buttonToggled(q, isChecked);
       }
    }
-
 #endif
 }
 

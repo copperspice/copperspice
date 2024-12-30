@@ -671,7 +671,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
             sp->m_proxyString = sp->autoConfigUrl.toStdWString();
             sp->m_autoProxyOptions.lpszAutoConfigUrl = sp->m_proxyString.c_str();
 
-            std::wstring tmp  = urlQueryString.toStdWString();
+            tmp = urlQueryString.toStdWString();
             getProxySucceeded = ptrWinHttpGetProxyForUrl(sp->hHttpSession, tmp.c_str(), &sp->m_autoProxyOptions, &proxyInfo);
 
             getProxyError = GetLastError();
@@ -684,7 +684,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
          // But now we've to enable it (http://msdn.microsoft.com/en-us/library/aa383153%28v=VS.85%29.aspx)
          sp->m_autoProxyOptions.fAutoLogonIfChallenged = TRUE;
 
-         std::wstring tmp  = urlQueryString.toStdWString();
+         tmp = urlQueryString.toStdWString();
          getProxySucceeded = ptrWinHttpGetProxyForUrl(sp->hHttpSession, tmp.c_str(), &sp->m_autoProxyOptions, &proxyInfo);
 
          getProxyError = GetLastError();

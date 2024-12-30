@@ -2064,12 +2064,12 @@ bool QGraphicsView::viewportEvent(QEvent *event)
          }
 
          d->useLastMouseEvent = false;
-         // a hack to pass a viewport pointer to the scene inside the leave event
-         Q_ASSERT(event->d == nullptr);
 
-         QScopedValueRollback<QEventPrivate *> rb(event->d);
-         event->d = reinterpret_cast<QEventPrivate *>(viewport());
+         QGraphicsSceneEvent newEvent(QEvent::GraphicsSceneLeave);
+         newEvent.setWidget(viewport());
+
          QApplication::sendEvent(d->scene, event);
+         event->setAccepted(newEvent.isAccepted());
 
          break;
       }

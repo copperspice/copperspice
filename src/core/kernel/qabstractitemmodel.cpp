@@ -1810,7 +1810,7 @@ bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction act
       int top = INT_MAX;
       int left = INT_MAX;
       QVector<int> rows, columns;
-      QVector<QMap<int, QVariant>> data;
+      QVector<QMap<int, QVariant>> modelData;
 
       while (!stream.atEnd()) {
          int r;
@@ -1820,18 +1820,18 @@ bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction act
          stream >> r >> c >> v;
          rows.append(r);
          columns.append(c);
-         data.append(v);
+         modelData.append(v);
 
          top  = qMin(r, top);
          left = qMin(c, left);
       }
 
-      for (int i = 0; i < data.size(); ++i) {
+      for (int i = 0; i < modelData.size(); ++i) {
          int r = (rows.at(i) - top) + parent.row();
          int c = (columns.at(i) - left) + parent.column();
 
          if (hasIndex(r, c)) {
-            setItemData(index(r, c), data.at(i));
+            setItemData(index(r, c), modelData.at(i));
          }
       }
 
@@ -1869,7 +1869,7 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
       int top = INT_MAX;
       int left = INT_MAX;
       QVector<int> rows, columns;
-      QVector<QMap<int, QVariant>> data;
+      QVector<QMap<int, QVariant>> modelData;
 
       while (!stream.atEnd()) {
          int r, c;
@@ -1877,17 +1877,17 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
          stream >> r >> c >> v;
          rows.append(r);
          columns.append(c);
-         data.append(v);
+         modelData.append(v);
 
          top  = qMin(r, top);
          left = qMin(c, left);
       }
 
-      for (int i = 0; i < data.size(); ++i) {
+      for (int i = 0; i < modelData.size(); ++i) {
          int r = (rows.at(i) - top) + parent.row();
 
          if (columns.at(i) == left && hasIndex(r, 0)) {
-            setItemData(index(r), data.at(i));
+            setItemData(index(r), modelData.at(i));
          }
       }
 

@@ -1128,7 +1128,6 @@ bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeD
       if (img.isNull()) {
          return false;
       }
-      QByteArray ba;
       if (cf == CF_DIB) {
          if (img.format() > QImage::Format_ARGB32) {
             img = img.convertToFormat(QImage::Format_RGB32);
@@ -1138,14 +1137,18 @@ bool QWindowsMimeImage::convertFromMime(const FORMATETC &formatetc, const QMimeD
             return setData(ba, pmedium);
          }
       } else if (cf == int(CF_PNG)) {
+         QByteArray ba;
          QBuffer buffer(&ba);
+
          const bool written = buffer.open(QIODevice::WriteOnly) && img.save(&buffer, "PNG");
          buffer.close();
          if (written) {
             return setData(ba, pmedium);
          }
       } else {
+         QByteArray ba;
          QDataStream s(&ba, QIODevice::WriteOnly);
+
          s.setByteOrder(QDataStream::LittleEndian);// Intel byte order ####
          if (qt_write_dibv5(s, img)) {
             return setData(ba, pmedium);

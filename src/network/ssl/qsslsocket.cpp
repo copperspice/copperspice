@@ -1060,11 +1060,11 @@ void QSslConfigurationPrivate::deepCopyDefaultConfiguration(QSslConfigurationPri
    ptr->ellipticCurves        = global->ellipticCurves;
 }
 
-void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode openMode)
+void QSslSocketPrivate::createPlainSocket(QIODevice::OpenMode newOpenMode)
 {
    Q_Q(QSslSocket);
 
-   q->setOpenMode(openMode); // <- from QIODevice
+   q->setOpenMode(newOpenMode); // <- from QIODevice
    q->setSocketState(QAbstractSocket::UnconnectedState);
    q->setSocketError(QAbstractSocket::UnknownSocketError);
    q->setLocalPort(0);
@@ -1122,7 +1122,7 @@ bool QSslSocketPrivate::isPaused() const
    return paused;
 }
 
-bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstractSocket::BindMode mode)
+bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 newPort, QAbstractSocket::BindMode newMode)
 {
    // called from QAbstractSocket::bind
    if (!initialized) {
@@ -1132,7 +1132,7 @@ bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstrac
    initialized = false;
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug() << "QSslSocket::bind(" << address << ',' << port << ',' << mode << ')';
+   qDebug() << "QSslSocket::bind(" << address << ',' << newPort << ',' << newMode << ')';
 #endif
 
    if (! plainSocket) {
@@ -1143,10 +1143,12 @@ bool QSslSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstrac
 
       createPlainSocket(QIODevice::ReadWrite);
    }
-   bool ret = plainSocket->bind(address, port, mode);
-   localPort = plainSocket->localPort();
+
+   bool ret     = plainSocket->bind(address, newPort, newMode);
+   localPort    = plainSocket->localPort();
    localAddress = plainSocket->localAddress();
    cachedSocketDescriptor = plainSocket->socketDescriptor();
+
    return ret;
 }
 
@@ -1205,16 +1207,16 @@ void QSslSocketPrivate::_q_disconnectedSlot()
    emit q->disconnected();
 }
 
-void QSslSocketPrivate::_q_stateChangedSlot(QAbstractSocket::SocketState state)
+void QSslSocketPrivate::_q_stateChangedSlot(QAbstractSocket::SocketState newState)
 {
    Q_Q(QSslSocket);
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug() << "QSslSocket::_q_stateChangedSlot(" << state << ')';
+   qDebug() << "QSslSocket::_q_stateChangedSlot(" << newState << ')';
 #endif
 
-   q->setSocketState(state);
-   emit q->stateChanged(state);
+   q->setSocketState(newState);
+   emit q->stateChanged(newState);
 }
 
 void QSslSocketPrivate::_q_errorSlot(QAbstractSocket::SocketError error)

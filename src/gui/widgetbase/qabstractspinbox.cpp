@@ -659,8 +659,8 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
          }
 
 #ifndef QT_NO_ACCESSIBILITY
-         QAccessibleValueChangeEvent event(this, d->value);
-         QAccessible::updateAccessibility(&event);
+         QAccessibleValueChangeEvent newEvent(this, d->value);
+         QAccessible::updateAccessibility(&newEvent);
 #endif
          return;
       }

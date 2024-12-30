@@ -2705,21 +2705,25 @@ TEST_CASE("QVariant enum_to_variant", "[qvariant]")
    // register enums
    Qt::staticMetaObject();
 
-   QVariant data = QVariant::fromValue(Qt::WheelFocus);
-
-   REQUIRE(data.isValid());
-   REQUIRE(data.type() == QVariant::UserType);
-
-   REQUIRE(data.value<Qt::FocusPolicy>() == Qt::WheelFocus);
-   REQUIRE(data.value<int>() == Qt::WheelFocus);
-   REQUIRE(data.toInt() == Qt::WheelFocus);
-
-   REQUIRE(data.toInt() != Qt::StrongFocus);
-
-   REQUIRE(data.typeName() == "Qt::FocusPolicy");      // name of the enum
+   QVariant data;
 
    {
-      QVariant data = QVariant::fromValue(Qt::NoFocus);
+      data = QVariant::fromValue(Qt::WheelFocus);
+
+      REQUIRE(data.isValid());
+      REQUIRE(data.type() == QVariant::UserType);
+
+      REQUIRE(data.value<Qt::FocusPolicy>() == Qt::WheelFocus);
+      REQUIRE(data.value<int>() == Qt::WheelFocus);
+      REQUIRE(data.toInt() == Qt::WheelFocus);
+
+      REQUIRE(data.toInt() != Qt::StrongFocus);
+
+      REQUIRE(data.typeName() == "Qt::FocusPolicy");      // name of the enum
+   }
+
+   {
+      data = QVariant::fromValue(Qt::NoFocus);
 
       REQUIRE(data.value<Qt::FocusPolicy>() == Qt::NoFocus);
       REQUIRE(data.value<int>() == Qt::NoFocus);

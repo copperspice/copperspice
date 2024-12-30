@@ -660,9 +660,9 @@ void QNetworkReplyImplPrivate::initCacheSaveDevice()
    // save the redirect request also in the cache
    QVariant redirectionTarget = q->attribute(QNetworkRequest::RedirectionTargetAttribute);
    if (redirectionTarget.isValid()) {
-      QNetworkCacheMetaData::AttributesMap attributes = metaData.attributes();
-      attributes.insert(QNetworkRequest::RedirectionTargetAttribute, redirectionTarget);
-      metaData.setAttributes(attributes);
+      QNetworkCacheMetaData::AttributesMap tmpAttributes = metaData.attributes();
+      tmpAttributes.insert(QNetworkRequest::RedirectionTargetAttribute, redirectionTarget);
+      metaData.setAttributes(tmpAttributes);
    }
 
    cacheSaveDevice = networkCache()->prepare(metaData);

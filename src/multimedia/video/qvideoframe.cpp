@@ -48,8 +48,8 @@ class QVideoFramePrivate : public QSharedData
       memset(bytesPerLine, 0, sizeof(bytesPerLine));
    }
 
-   QVideoFramePrivate(const QSize &size, QVideoFrame::PixelFormat format)
-      : size(size), startTime(-1), endTime(-1), mappedBytes(0), planeCount(0),
+   QVideoFramePrivate(const QSize &newSize, QVideoFrame::PixelFormat format)
+      : size(newSize), startTime(-1), endTime(-1), mappedBytes(0), planeCount(0),
         pixelFormat(format), fieldType(QVideoFrame::ProgressiveFrame),
         buffer(nullptr), mappedCount(0)
    {

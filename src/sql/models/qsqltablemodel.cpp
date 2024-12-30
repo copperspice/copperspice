@@ -144,7 +144,7 @@ void QSqlTableModelPrivate::revertCachedRow(int row)
 }
 
 bool QSqlTableModelPrivate::exec(const QString &stmt, bool prepStatement,
-   const QSqlRecord &rec, const QSqlRecord &whereValues)
+   const QSqlRecord &newRecord, const QSqlRecord &whereValues)
 {
    if (stmt.isEmpty()) {
       return false;
@@ -169,9 +169,9 @@ bool QSqlTableModelPrivate::exec(const QString &stmt, bool prepStatement,
          }
       }
       int i;
-      for (i = 0; i < rec.count(); ++i) {
-         if (rec.isGenerated(i)) {
-            editQuery.addBindValue(rec.value(i));
+      for (i = 0; i < newRecord.count(); ++i) {
+         if (newRecord.isGenerated(i)) {
+            editQuery.addBindValue(newRecord.value(i));
          }
       }
       for (i = 0; i < whereValues.count(); ++i) {

@@ -220,8 +220,8 @@ void QFactoryLoader::setup()
             int other_version = 0;
 
             if (lib_other) {
-               int index     = lib_other->m_metaObject->indexOfClassInfo("plugin_version");
-               other_version = lib_other->m_metaObject->classInfo(index).value().toInteger<int>();
+               int versionIndex = lib_other->m_metaObject->indexOfClassInfo("plugin_version");
+               other_version    = lib_other->m_metaObject->classInfo(versionIndex).value().toInteger<int>();
             }
 
             int lib_version = version.toInteger<int>();

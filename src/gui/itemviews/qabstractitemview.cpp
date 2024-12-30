@@ -1991,16 +1991,17 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
    if (editor) {
       bool isPersistent = d->persistent.contains(editor);
       bool hadFocus = editor->hasFocus();
-      QModelIndex index = d->indexForEditor(editor);
 
-      if (!index.isValid()) {
+      QModelIndex editorIndex = d->indexForEditor(editor);
+
+      if (! editorIndex.isValid()) {
          return;   // the editor was not registered
       }
 
       if (! isPersistent) {
          setState(NoState);
-         QModelIndex index = d->indexForEditor(editor);
-         editor->removeEventFilter(d->delegateForIndex(index));
+         QModelIndex tmpIndex = d->indexForEditor(editor);
+         editor->removeEventFilter(d->delegateForIndex(tmpIndex));
          d->removeEditor(editor);
       }
 
@@ -2019,7 +2020,7 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
       editor = ed;
 
       if (! isPersistent && editor) {
-         d->releaseEditor(editor, index);
+         d->releaseEditor(editor, editorIndex);
       }
    }
 

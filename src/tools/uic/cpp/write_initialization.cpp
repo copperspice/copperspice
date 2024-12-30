@@ -772,12 +772,13 @@ void WriteInitialization::acceptWidget(DomWidget *node)
 
    m_layoutWidget = false;
    if (className == "QWidget" && ! node->hasAttributeNative()) {
+      const DomWidget *topWidget = m_widgetChain.top();
 
-      if (const DomWidget *parentWidget = m_widgetChain.top()) {
-         const QString parentClass = parentWidget->attributeClass();
+      if (topWidget != nullptr) {
+         const QString topClass = topWidget->attributeClass();
 
-         if (parentClass != "QMainWindow" && !m_uic->isCustomWidgetContainer(parentClass)
-            && ! m_uic->isContainer(parentClass)) {
+         if (topClass != "QMainWindow" && ! m_uic->isCustomWidgetContainer(topClass)
+               && ! m_uic->isContainer(topClass)) {
             m_layoutWidget = true;
          }
       }

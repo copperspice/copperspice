@@ -1123,11 +1123,11 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
             qt_safe_execv(argv[0], argv);
          }
 
-         struct sigaction noaction;
+         struct sigaction tmpAction;
 
-         memset(&noaction, 0, sizeof(noaction));
+         memset(&tmpAction, 0, sizeof(tmpAction));
          noaction.sa_handler = SIG_IGN;
-         ::sigaction(SIGPIPE, &noaction, nullptr);
+         ::sigaction(SIGPIPE, &tmpAction, nullptr);
 
          // '\1' means execv failed
          char c = '\1';
@@ -1136,10 +1136,11 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
          ::_exit(1);
 
       } else if (doubleForkPid == -1) {
-         struct sigaction noaction;
-         memset(&noaction, 0, sizeof(noaction));
+         struct sigaction tmpAction;
+
+         memset(&tmpAction, 0, sizeof(tmpAction));
          noaction.sa_handler = SIG_IGN;
-         ::sigaction(SIGPIPE, &noaction, nullptr);
+         ::sigaction(SIGPIPE, &tmpAction, nullptr);
 
          // '\2' means internal error
          char c = '\2';

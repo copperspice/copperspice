@@ -52,23 +52,25 @@ TEST_CASE("QMetaEnum enum_count_b", "[qmetaenum]")
 {
    const QMetaObject &metaObject = Qt::staticMetaObject();
 
-   int index = metaObject.indexOfEnumerator("AlignmentFlag");
-   QMetaEnum enumObj = metaObject.enumerator(index);
+   {
+      int index = metaObject.indexOfEnumerator("AlignmentFlag");
+      QMetaEnum enumObj = metaObject.enumerator(index);
 
-   REQUIRE(enumObj.isValid() == true);
+      REQUIRE(enumObj.isValid() == true);
 
-   REQUIRE(enumObj.name()   == "AlignmentFlag");
-   REQUIRE(enumObj.scope()  == "Qt");
-   REQUIRE(enumObj.isFlag() == false);
+      REQUIRE(enumObj.name()   == "AlignmentFlag");
+      REQUIRE(enumObj.scope()  == "Qt");
+      REQUIRE(enumObj.isFlag() == false);
 
-   REQUIRE(enumObj.keyCount() == 14);
+      REQUIRE(enumObj.keyCount() == 14);
 
-   REQUIRE(enumObj.keyToValue("AlignLeft")    == 1);
-   REQUIRE(enumObj.keyToValue("AlignRight")   == 2);
-   REQUIRE(enumObj.keyToValue("AlignVCenter") == 128);
-   REQUIRE(enumObj.keyToValue("AlignHCenter") == 4);
-   REQUIRE(enumObj.keyToValue("AlignTop")     == 32);
-   REQUIRE(enumObj.keyToValue("AlignBottom")  == 64);
+      REQUIRE(enumObj.keyToValue("AlignLeft")    == 1);
+      REQUIRE(enumObj.keyToValue("AlignRight")   == 2);
+      REQUIRE(enumObj.keyToValue("AlignVCenter") == 128);
+      REQUIRE(enumObj.keyToValue("AlignHCenter") == 4);
+      REQUIRE(enumObj.keyToValue("AlignTop")     == 32);
+      REQUIRE(enumObj.keyToValue("AlignBottom")  == 64);
+   }
 
    {
       // part 2

@@ -2475,9 +2475,8 @@ bool QGraphicsScene::event(QEvent *event)
          break;
       }
 
-      case QEvent::Leave:
-         // hackieshly unpacking the viewport pointer from the leave event.
-         d->leaveScene(reinterpret_cast<QWidget *>(event->d));
+      case QEvent::GraphicsSceneLeave:
+         d->leaveScene(static_cast<QGraphicsSceneEvent *>(event)->widget());
          break;
 
       case QEvent::GraphicsSceneHelp:

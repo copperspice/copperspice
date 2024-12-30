@@ -116,8 +116,8 @@ class QHttpThreadDelegate : public QObject
 #endif
 
    NET_CS_SIGNAL_1(Public, void downloadMetaData(const QList <QPair <QByteArray,QByteArray>> &headers, int statusCode,
-         const QString &reason, bool isPipelined, QSharedPointer <char> downloadBuffer, qint64 contentLength, bool isSpdy))
-   NET_CS_SIGNAL_2(downloadMetaData, headers, statusCode, reason, isPipelined, downloadBuffer, contentLength, isSpdy)
+         const QString &reason, bool isPipelined, QSharedPointer <char> buffer, qint64 contentLength, bool isSpdy))
+   NET_CS_SIGNAL_2(downloadMetaData, headers, statusCode, reason, isPipelined, buffer, contentLength, isSpdy)
 
    NET_CS_SIGNAL_1(Public, void downloadProgress(qint64 bytesReceived, qint64 bytesTotal))
    NET_CS_SIGNAL_2(downloadProgress, bytesReceived, bytesTotal)

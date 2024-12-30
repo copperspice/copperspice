@@ -40,11 +40,11 @@ class QMediaServiceProviderHintPrivate : public QSharedData
 {
  public:
    QMediaServiceProviderHintPrivate(QMediaServiceProviderHint::Type type)
-      : type(type), cameraPosition(QCamera::UnspecifiedPosition), features(Qt::EmptyFlag) {
+      : m_type(type), cameraPosition(QCamera::UnspecifiedPosition), features(Qt::EmptyFlag) {
    }
 
    QMediaServiceProviderHintPrivate(const QMediaServiceProviderHintPrivate &other)
-      : QSharedData(other), type(other.type), device(other.device),
+      : QSharedData(other), m_type(other.m_type), device(other.device),
         cameraPosition(other.cameraPosition), mimeType(other.mimeType), codecs(other.codecs),
         features(other.features) {
    }
@@ -52,7 +52,7 @@ class QMediaServiceProviderHintPrivate : public QSharedData
    ~QMediaServiceProviderHintPrivate() {
    }
 
-   QMediaServiceProviderHint::Type type;
+   QMediaServiceProviderHint::Type m_type;
    QString device;
    QCamera::Position cameraPosition;
    QString mimeType;
@@ -108,7 +108,7 @@ QMediaServiceProviderHint &QMediaServiceProviderHint::operator=(const QMediaServ
 bool QMediaServiceProviderHint::operator == (const QMediaServiceProviderHint &other) const
 {
    return (d == other.d) ||
-      (d->type == other.d->type &&
+      (d->m_type == other.d->m_type &&
          d->device == other.d->device &&
          d->cameraPosition == other.d->cameraPosition &&
          d->mimeType == other.d->mimeType &&
@@ -123,12 +123,12 @@ bool QMediaServiceProviderHint::operator != (const QMediaServiceProviderHint &ot
 
 bool QMediaServiceProviderHint::isNull() const
 {
-   return d->type == Null;
+   return d->m_type == Null;
 }
 
 QMediaServiceProviderHint::Type QMediaServiceProviderHint::type() const
 {
-   return d->type;
+   return d->m_type;
 }
 
 QString QMediaServiceProviderHint::mimeType() const
@@ -377,13 +377,13 @@ class QPluginServiceProvider : public QMediaServiceProvider
       QMultimedia::SupportEstimate supportEstimate = QMultimedia::NotSupported;
 
       for (QObject *obj : plugins) {
-         QMediaServiceSupportedFormatsInterface *iface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
+         QMediaServiceSupportedFormatsInterface *formatInterface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
 
          if (flags) {
-            QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
+            QMediaServiceFeaturesInterface *featureInterface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
 
-            if (iface) {
-               QMediaServiceProviderHint::Features features = iface->supportedFeatures(serviceType);
+            if (featureInterface != nullptr) {
+               QMediaServiceProviderHint::Features features = featureInterface->supportedFeatures(serviceType);
 
                //if low latency playback was asked, skip services known
                //not to provide low latency playback
@@ -400,8 +400,8 @@ class QPluginServiceProvider : public QMediaServiceProvider
             }
          }
 
-         if (iface) {
-            supportEstimate = qMax(supportEstimate, iface->hasSupport(mimeType, codecs));
+         if (formatInterface != nullptr) {
+            supportEstimate = qMax(supportEstimate, formatInterface->hasSupport(mimeType, codecs));
          } else {
             allServicesProvideInterface = false;
          }
@@ -430,13 +430,13 @@ class QPluginServiceProvider : public QMediaServiceProvider
             continue;
          }
 
-         QMediaServiceSupportedFormatsInterface *iface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
+         QMediaServiceSupportedFormatsInterface *formatInterface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
 
          if (flags) {
-            QMediaServiceFeaturesInterface *iface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
+            QMediaServiceFeaturesInterface *featureInterface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
 
-            if (iface) {
-               QMediaServiceProviderHint::Features features = iface->supportedFeatures(serviceType);
+            if (featureInterface != nullptr) {
+               QMediaServiceProviderHint::Features features = featureInterface->supportedFeatures(serviceType);
 
                // If low latency playback was asked for, skip MIME types from services known
                // not to provide low latency playback
@@ -459,8 +459,8 @@ class QPluginServiceProvider : public QMediaServiceProvider
             }
          }
 
-         if (iface) {
-            supportedTypes << iface->supportedMimeTypes();
+         if (formatInterface) {
+            supportedTypes << formatInterface->supportedMimeTypes();
          }
       }
 

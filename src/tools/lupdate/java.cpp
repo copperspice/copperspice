@@ -50,8 +50,9 @@ class Scope
  public:
    enum Type {Clazz, Function, Other};
 
-   Scope(const QString &name, Type type, int line)
-      : name(name), type(type), line(line) {
+   Scope(const QString &newName, Type newType, int newLine)
+      : name(newName), type(newType), line(newLine)
+   {
    }
 
    ~Scope() {

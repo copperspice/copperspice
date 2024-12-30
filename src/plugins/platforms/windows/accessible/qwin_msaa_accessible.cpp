@@ -173,11 +173,11 @@ void accessibleDebugClientCalls_helper(const char* funcName, const QAccessibleIn
 
 
 // IUnknown
-HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID id, LPVOID *iface)
+HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID newId, LPVOID *iface)
 {
     *iface = nullptr;
 
-    QByteArray strIID = IIDToString(id);
+    QByteArray strIID = IIDToString(newId);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
     if (! strIID.isEmpty()) {
@@ -186,16 +186,16 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::QueryInterface(REFIID id, LPVO
     }
 #endif
 
-    if (id == IID_IUnknown) {
+    if (newId == IID_IUnknown) {
         *iface =  static_cast<IUnknown *>(static_cast<IDispatch *>(this));
 
-    } else if (id == IID_IDispatch) {
+    } else if (newId == IID_IDispatch) {
         *iface = static_cast<IDispatch *>(this);
 
-    } else if (id == IID_IAccessible) {
+    } else if (newId == IID_IAccessible) {
         *iface = static_cast<IAccessible *>(this);
 
-    } else if (id == IID_IOleWindow) {
+    } else if (newId == IID_IOleWindow) {
         *iface = static_cast<IOleWindow *>(this);
 
     }
@@ -1203,12 +1203,12 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::ContextSensitiveHelp(BOOL)
 
 #define IF_EQUAL_RETURN_IIDSTRING(id, iid) if (id == iid) return QByteArray(#iid)
 
-QByteArray QWindowsMsaaAccessible::IIDToString(REFIID id)
+QByteArray QWindowsMsaaAccessible::IIDToString(REFIID newId)
 {
-    IF_EQUAL_RETURN_IIDSTRING(id, IID_IUnknown);
-    IF_EQUAL_RETURN_IIDSTRING(id, IID_IDispatch);
-    IF_EQUAL_RETURN_IIDSTRING(id, IID_IAccessible);
-    IF_EQUAL_RETURN_IIDSTRING(id, IID_IOleWindow);
+    IF_EQUAL_RETURN_IIDSTRING(newId, IID_IUnknown);
+    IF_EQUAL_RETURN_IIDSTRING(newId, IID_IDispatch);
+    IF_EQUAL_RETURN_IIDSTRING(newId, IID_IAccessible);
+    IF_EQUAL_RETURN_IIDSTRING(newId, IID_IOleWindow);
 
     return QByteArray();
 }

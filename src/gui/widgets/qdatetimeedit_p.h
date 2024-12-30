@@ -163,8 +163,8 @@ class QCalendarPopup : public QWidget
    GUI_CS_SIGNAL_1(Public, void newDateSelected(const QDate &newDate))
    GUI_CS_SIGNAL_2(newDateSelected, newDate)
 
-   GUI_CS_SIGNAL_1(Public, void hidingCalendar(const QDate &oldDate))
-   GUI_CS_SIGNAL_2(hidingCalendar, oldDate)
+   GUI_CS_SIGNAL_1(Public, void hidingCalendar(const QDate &oldCalendarDate))
+   GUI_CS_SIGNAL_2(hidingCalendar, oldCalendarDate)
 
    GUI_CS_SIGNAL_1(Public, void resetButton())
    GUI_CS_SIGNAL_2(resetButton)

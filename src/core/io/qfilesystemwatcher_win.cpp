@@ -161,14 +161,14 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
          // now look for a thread to insert
          bool found = false;
 
-         for (QWindowsFileSystemWatcherEngineThread *thread : threads) {
-            QMutexLocker(&(thread->mutex));
+         for (QWindowsFileSystemWatcherEngineThread *threadItem : threads) {
+            QMutexLocker(&(threadItem->mutex));
 
-            if (thread->handles.count() < MAXIMUM_WAIT_OBJECTS) {
-               thread->handles.append(handle.handle);
-               thread->handleForDir.insert(absolutePath, handle);
+            if (threadItem->handles.count() < MAXIMUM_WAIT_OBJECTS) {
+               threadItem->handles.append(handle.handle);
+               threadItem->handleForDir.insert(absolutePath, handle);
 
-               thread->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
+               threadItem->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
 
                if (isDir) {
                   directories->append(path);
@@ -178,18 +178,19 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
 
                it.remove();
                found = true;
-               thread->wakeup();
+               threadItem->wakeup();
+
                break;
             }
          }
 
          if (!found) {
-            QWindowsFileSystemWatcherEngineThread *thread = new QWindowsFileSystemWatcherEngineThread();
+            QWindowsFileSystemWatcherEngineThread *threadItem = new QWindowsFileSystemWatcherEngineThread();
 
-            thread->handles.append(handle.handle);
-            thread->handleForDir.insert(absolutePath, handle);
+            threadItem->handles.append(handle.handle);
+            threadItem->handleForDir.insert(absolutePath, handle);
 
-            thread->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
+            threadItem->pathInfoForHandle[handle.handle].insert(fileInfo.absoluteFilePath(), pathInfo);
 
             if (isDir) {
                directories->append(path);
@@ -197,12 +198,12 @@ QStringList QWindowsFileSystemWatcherEngine::addPaths(const QStringList &paths,
                files->append(path);
             }
 
-            connect(thread, &QWindowsFileSystemWatcherEngineThread::fileChanged,      this, &QWindowsFileSystemWatcherEngine::fileChanged);
-            connect(thread, &QWindowsFileSystemWatcherEngineThread::directoryChanged, this, &QWindowsFileSystemWatcherEngine::directoryChanged);
+            connect(threadItem, &QWindowsFileSystemWatcherEngineThread::fileChanged,      this, &QWindowsFileSystemWatcherEngine::fileChanged);
+            connect(threadItem, &QWindowsFileSystemWatcherEngineThread::directoryChanged, this, &QWindowsFileSystemWatcherEngine::directoryChanged);
 
-            thread->msg = '@';
-            thread->start();
-            threads.append(thread);
+            threadItem->msg = '@';
+            threadItem->start();
+            threads.append(threadItem);
             it.remove();
          }
       }

@@ -221,14 +221,14 @@ void QHttpThreadDelegate::startRequestSynchronously()
 
    synchronous = true;
 
-   QEventLoop synchronousRequestLoop;
-   this->synchronousRequestLoop = &synchronousRequestLoop;
+   QEventLoop eventLoop;
+   this->synchronousRequestLoop = &eventLoop;
 
    // Worst case timeout
    QTimer::singleShot(30 * 1000, this, SLOT(abortRequest()));
 
    QMetaObject::invokeMethod(this, "startRequest", Qt::QueuedConnection);
-   synchronousRequestLoop.exec();
+   eventLoop.exec();
 
    connections.localData()->releaseEntry(cacheKey);
    connections.setLocalData(nullptr);

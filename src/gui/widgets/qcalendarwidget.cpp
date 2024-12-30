@@ -2299,17 +2299,19 @@ QSize QCalendarWidget::minimumSizeHint() const
       headerW += d->prevMonth->sizeHint().width();
       headerW += d->nextMonth->sizeHint().width();
 
-      QFontMetrics fm = d->monthButton->fontMetrics();
+      QFontMetrics fontMetrics = d->monthButton->fontMetrics();
       int monthW = 0;
+
       for (int i = 1; i < 12; i++) {
          QString monthName = locale().standaloneMonthName(i, QLocale::LongFormat);
-         monthW = qMax(monthW, fm.boundingRect(monthName).width());
+         monthW = qMax(monthW, fontMetrics.boundingRect(monthName).width());
       }
-      const int buttonDecoMargin = d->monthButton->sizeHint().width() - fm.boundingRect(d->monthButton->text()).width();
+
+      const int buttonDecoMargin = d->monthButton->sizeHint().width() - fontMetrics.boundingRect(d->monthButton->text()).width();
       headerW += monthW + buttonDecoMargin;
 
-      fm = d->yearButton->fontMetrics();
-      headerW += fm.boundingRect(QLatin1String("5555")).width() + buttonDecoMargin;
+      fontMetrics = d->yearButton->fontMetrics();
+      headerW += fontMetrics.boundingRect(QLatin1String("5555")).width() + buttonDecoMargin;
 
       headerSize = QSize(headerW, headerH);
    }

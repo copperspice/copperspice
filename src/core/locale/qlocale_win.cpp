@@ -203,9 +203,9 @@ QSystemLocalePrivate::SubstitutionType QSystemLocalePrivate::substitution()
             return substitutionType;
          }
 
-         const wchar_t zero = digits[0];
+         const wchar_t zeroW = digits[0];
 
-         if (buf[0] == zero + 2) {
+         if (buf[0] == zeroW + 2) {
             substitutionType = QSystemLocalePrivate::SAlways;
          } else {
             substitutionType = QSystemLocalePrivate::SNever;
@@ -218,12 +218,12 @@ QSystemLocalePrivate::SubstitutionType QSystemLocalePrivate::substitution()
 
 QString &QSystemLocalePrivate::substituteDigits(QString &string)
 {
-   ushort zero = zeroDigit().unicode();
+   ushort zeroU = zeroDigit().unicode();
    ushort *qch = (ushort *)string.data();
 
    for (ushort *end = qch + string.size(); qch != end; ++qch) {
       if (*qch >= '0' && *qch <= '9') {
-         *qch = zero + (*qch - '0');
+         *qch = zeroU + (*qch - '0');
       }
    }
 
@@ -1036,7 +1036,7 @@ static const char *winLangCodeToIsoName(int code)
       uint mid = (begin + end) / 2;
 
       const WindowsToISOListElt *elt = windows_to_iso_list + mid;
-      int cmp = code - elt->windows_code;
+      cmp = code - elt->windows_code;
 
       if (cmp < 0) {
          end = mid;
@@ -1104,15 +1104,15 @@ static QByteArray getWinLocaleName(LCID id)
       QString lang, script, cntry;
 
       if (result == "C" || (!result.isEmpty() && qt_splitLocaleName(QString::fromUtf8(result), lang, script, cntry)) ) {
-         long id = 0;
          bool ok = false;
-         id      = qstrtoll(result.data(), nullptr, 0, &ok);
 
-         if ( !ok || id == 0 || id < INT_MIN || id > INT_MAX ) {
+         long langCode = qstrtoll(result.data(), nullptr, 0, &ok);
+
+         if (! ok || langCode == 0 || langCode < INT_MIN || langCode > INT_MAX) {
             return result;
 
          } else {
-            return winLangCodeToIsoName( (int)id );
+            return winLangCodeToIsoName( (int)langCode );
          }
       }
    }
@@ -1121,10 +1121,10 @@ static QByteArray getWinLocaleName(LCID id)
       id = GetUserDefaultLCID();
    }
 
-   QString resultuage = winIso639LangName(id);
+   QString resultLang = winIso639LangName(id);
    QString country    = winIso3116CtryName(id);
 
-   result = resultuage.toLatin1();
+   result = resultLang.toLatin1();
 
    if (! country.isEmpty()) {
       result += '_';

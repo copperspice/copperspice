@@ -125,7 +125,7 @@ void QPollingFileSystemWatcherEngine::run()
 }
 
 QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
-      QStringList *files, QStringList *directories)
+      QStringList *newFiles, QStringList *newDirectories)
 {
    QMutexLocker locker(&mutex);
    QStringList p = paths;
@@ -140,8 +140,8 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
       }
 
       if (fi.isDir()) {
-         if (!directories->contains(path)) {
-            directories->append(path);
+         if (! newDirectories->contains(path)) {
+            newDirectories->append(path);
          }
 
          if (!path.endsWith('/')) {
@@ -151,8 +151,8 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
          this->directories.insert(path, fi);
 
       } else {
-         if (! files->contains(path)) {
-            files->append(path);
+         if (! newFiles->contains(path)) {
+            newFiles->append(path);
          }
 
          this->files.insert(path, fi);
@@ -167,7 +167,7 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
 }
 
 QStringList QPollingFileSystemWatcherEngine::removePaths(const QStringList &paths,
-      QStringList *files, QStringList *directories)
+      QStringList *newFiles, QStringList *newDirectories)
 {
    QMutexLocker locker(&mutex);
    QStringList p = paths;
@@ -177,10 +177,11 @@ QStringList QPollingFileSystemWatcherEngine::removePaths(const QStringList &path
       QString path = it.next();
 
       if (this->directories.remove(path)) {
-         directories->removeAll(path);
+         newDirectories->removeAll(path);
          it.remove();
+
       } else if (this->files.remove(path)) {
-         files->removeAll(path);
+         newFiles->removeAll(path);
          it.remove();
       }
    }

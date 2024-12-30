@@ -307,9 +307,9 @@ bool QHttpNetworkConnectionChannel::ensureConnection()
             value = request.headerField("user-agent");
          }
          if (!value.isEmpty()) {
-            QNetworkProxy proxy(socket->proxy());
-            proxy.setRawHeader("User-Agent", value); //detaches
-            socket->setProxy(proxy);
+            QNetworkProxy newProxy(socket->proxy());
+            newProxy.setRawHeader("User-Agent", value);    // detaches
+            socket->setProxy(newProxy);
          }
       }
 #endif
@@ -641,19 +641,20 @@ void QHttpNetworkConnectionChannel::pipelineInto(HttpMessagePair &pair)
 {
    // this is only called for simple GET
 
-   QHttpNetworkRequest &request = pair.first;
-   QHttpNetworkReply *reply = pair.second;
-   reply->d_func()->clear();
-   reply->d_func()->connection = connection;
-   reply->d_func()->connectionChannel = this;
-   reply->d_func()->autoDecompress = request.d->autoDecompress;
-   reply->d_func()->pipeliningUsed = true;
+   QHttpNetworkRequest &newRequest = pair.first;
+   QHttpNetworkReply *newReply     = pair.second;
+
+   newReply->d_func()->clear();
+   newReply->d_func()->connection = connection;
+   newReply->d_func()->connectionChannel = this;
+   newReply->d_func()->autoDecompress = newRequest.d->autoDecompress;
+   newReply->d_func()->pipeliningUsed = true;
 
 #ifndef QT_NO_NETWORKPROXY
-   pipeline.append(QHttpNetworkRequestPrivate::header(request,
-                   (connection->d_func()->networkProxy.type() != QNetworkProxy::NoProxy)));
+   pipeline.append(QHttpNetworkRequestPrivate::header(newRequest,
+         (connection->d_func()->networkProxy.type() != QNetworkProxy::NoProxy)));
 #else
-   pipeline.append(QHttpNetworkRequestPrivate::header(request, false));
+   pipeline.append(QHttpNetworkRequestPrivate::header(newRequest, false));
 #endif
 
    alreadyPipelinedRequests.append(pair);
@@ -1004,12 +1005,12 @@ void QHttpNetworkConnectionChannel::_q_error(QAbstractSocket::SocketError socket
 }
 
 #ifndef QT_NO_NETWORKPROXY
-void QHttpNetworkConnectionChannel::_q_proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *auth)
+void QHttpNetworkConnectionChannel::_q_proxyAuthenticationRequired(const QNetworkProxy &newProxy, QAuthenticator *auth)
 {
 
 #ifdef QT_SSL
    if (connection->connectionType() == QHttpNetworkConnection::ConnectionTypeSPDY) {
-      connection->d_func()->emitProxyAuthenticationRequired(this, proxy, auth);
+      connection->d_func()->emitProxyAuthenticationRequired(this, newProxy, auth);
    } else {
 #endif
 
@@ -1019,11 +1020,12 @@ void QHttpNetworkConnectionChannel::_q_proxyAuthenticationRequired(const QNetwor
       }
 
       if (reply) {
-         connection->d_func()->emitProxyAuthenticationRequired(this, proxy, auth);
+         connection->d_func()->emitProxyAuthenticationRequired(this, newProxy, auth);
       }
 #ifdef QT_SSL
    }
 #endif
+
 }
 #endif
 
@@ -1163,7 +1165,7 @@ void QHttpNetworkConnectionChannel::_q_sslErrors(const QList<QSslError> &errors)
    connection->d_func()->resumeConnection();
 }
 
-void QHttpNetworkConnectionChannel::_q_preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *authenticator)
+void QHttpNetworkConnectionChannel::_q_preSharedKeyAuthenticationRequired(QSslPreSharedKeyAuthenticator *newAuthenticator)
 {
    connection->d_func()->pauseConnection();
    if (pendingEncrypt && !reply) {
@@ -1172,7 +1174,7 @@ void QHttpNetworkConnectionChannel::_q_preSharedKeyAuthenticationRequired(QSslPr
 
    if (connection->connectionType() == QHttpNetworkConnection::ConnectionTypeHTTP) {
       if (reply) {
-         emit reply->preSharedKeyAuthenticationRequired(authenticator);
+         emit reply->preSharedKeyAuthenticationRequired(newAuthenticator);
       }
 
    } else {
@@ -1181,7 +1183,8 @@ void QHttpNetworkConnectionChannel::_q_preSharedKeyAuthenticationRequired(QSslPr
       for (int a = 0; a < spdyPairs.count(); ++a) {
          QHttpNetworkReply *currentReply = spdyPairs.at(a).second;
          Q_ASSERT(currentReply);
-         emit currentReply->preSharedKeyAuthenticationRequired(authenticator);
+
+         emit currentReply->preSharedKeyAuthenticationRequired(newAuthenticator);
       }
    }
 

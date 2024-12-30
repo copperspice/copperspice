@@ -119,12 +119,12 @@ static inline bool setCloseOnExec(int fd)
    return fd != -1 && fcntl(fd, F_SETFD, FD_CLOEXEC) != -1;
 }
 
-bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
+bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
 {
    Q_Q(QFSFileEngine);
 
-   if (openMode & QIODevice::Unbuffered) {
-      int flags = openModeToOpenFlags(openMode);
+   if (fileOpenMode & QIODevice::Unbuffered) {
+      int flags = openModeToOpenFlags(fileOpenMode);
 
       // Try to open the file in unbuffered mode.
       do {
@@ -138,7 +138,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
          return false;
       }
 
-      if (! (openMode & QIODevice::WriteOnly)) {
+      if (! (fileOpenMode & QIODevice::WriteOnly)) {
          // we don't need this check if we tried to open for writing because then
          // we had received EISDIR anyway.
          if (QFileSystemEngine::fillMetaData(fd, metaData)
@@ -165,8 +165,9 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
       }
 
       fh = nullptr;
+
    } else {
-      QByteArray fopenMode = openModeToFopenMode(openMode, fileEntry, metaData);
+      QByteArray fopenMode = openModeToFopenMode(fileOpenMode, fileEntry, metaData);
 
       // Try to open the file in buffered mode.
       do {
@@ -180,7 +181,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
          return false;
       }
 
-      if (! (openMode & QIODevice::WriteOnly)) {
+      if (! (fileOpenMode & QIODevice::WriteOnly)) {
          // we don't need this check if we tried to open for writing because then
          // we had received EISDIR anyway.
          if (QFileSystemEngine::fillMetaData(QT_FILENO(fh), metaData)
@@ -194,7 +195,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
       setCloseOnExec(fileno(fh)); // ignore failure
 
       // Seek to the end when in Append mode.
-      if (openMode & QIODevice::Append) {
+      if (fileOpenMode & QIODevice::Append) {
          int ret;
 
          do {

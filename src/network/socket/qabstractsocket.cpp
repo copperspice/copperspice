@@ -498,7 +498,7 @@ bool QAbstractSocketPrivate::flush()
 
 #ifndef QT_NO_NETWORKPROXY
 
-void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 port)
+void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 newPort)
 {
    QList<QNetworkProxy> proxies;
 
@@ -507,7 +507,7 @@ void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 port)
       proxies << proxy;
    } else {
       // try the application settings instead
-      QNetworkProxyQuery query(hostname, port, QString(),
+      QNetworkProxyQuery query(hostname, newPort, QString(),
             socketType == QAbstractSocket::TcpSocket ?
             QNetworkProxyQuery::TcpSocket : QNetworkProxyQuery::UdpSocket);
 
@@ -534,7 +534,7 @@ void QAbstractSocketPrivate::resolveProxy(const QString &hostname, quint16 port)
    proxyInUse = QNetworkProxy();
 }
 
-void QAbstractSocketPrivate::startConnectingByName(const QString &host)
+ void QAbstractSocketPrivate::startConnectingByName(const QString &newHost)
 {
    Q_Q(QAbstractSocket);
 
@@ -543,7 +543,7 @@ void QAbstractSocketPrivate::startConnectingByName(const QString &host)
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QAbstractSocketPrivate::startConnectingByName(host == %s)", csPrintable(host));
+   qDebug("QAbstractSocketPrivate::startConnectingByName(host == %s)", csPrintable(newHost));
 #endif
 
    // ### Let the socket engine drive this?
@@ -553,7 +553,7 @@ void QAbstractSocketPrivate::startConnectingByName(const QString &host)
    connectTimeElapsed = 0;
 
    if (cachedSocketDescriptor != -1 || initSocketLayer(QAbstractSocket::UnknownNetworkLayerProtocol)) {
-      if (socketEngine->connectToHostByName(host, port) ||
+      if (socketEngine->connectToHostByName(newHost, port) ||
             socketEngine->state() == QAbstractSocket::ConnectingState) {
          cachedSocketDescriptor = socketEngine->socketDescriptor();
 
@@ -949,11 +949,10 @@ void QAbstractSocketPrivate::setError(QAbstractSocket::SocketError errorCode, co
    errorString = errStr;
 }
 
-void QAbstractSocketPrivate::setErrorAndEmit(QAbstractSocket::SocketError errorCode,
-      const QString &errorString)
+void QAbstractSocketPrivate::setErrorAndEmit(QAbstractSocket::SocketError errorCode, const QString &errorMsg)
 {
    Q_Q(QAbstractSocket);
-   setError(errorCode, errorString);
+   setError(errorCode, errorMsg);
    emit q->error(errorCode);
 }
 
@@ -1016,14 +1015,14 @@ bool QAbstractSocket::bind(const QHostAddress &address, quint16 port, BindMode m
    return d->bind(address, port, mode);
 }
 
-bool QAbstractSocketPrivate::bind(const QHostAddress &address, quint16 port, QAbstractSocket::BindMode mode)
+bool QAbstractSocketPrivate::bind(const QHostAddress &address, quint16 newPort, QAbstractSocket::BindMode mode)
 {
    Q_Q(QAbstractSocket);
 
    // now check if the socket engine is initialized and to the right type
    if (! socketEngine || ! socketEngine->isValid()) {
       QHostAddress nullAddress;
-      resolveProxy(nullAddress.toString(), port);
+      resolveProxy(nullAddress.toString(), newPort);
 
       QAbstractSocket::NetworkLayerProtocol protocol = address.protocol();
       if (protocol == QAbstractSocket::UnknownNetworkLayerProtocol) {
@@ -1060,7 +1059,7 @@ bool QAbstractSocketPrivate::bind(const QHostAddress &address, quint16 port, QAb
 
    }
 
-   bool result = socketEngine->bind(address, port);
+   bool result = socketEngine->bind(address, newPort);
    cachedSocketDescriptor = socketEngine->socketDescriptor();
 
    if (! result) {
@@ -1076,6 +1075,7 @@ bool QAbstractSocketPrivate::bind(const QHostAddress &address, quint16 port, QAb
    if (socketType == QAbstractSocket::UdpSocket) {
       socketEngine->setReadNotificationEnabled(true);
    }
+
    return true;
 }
 

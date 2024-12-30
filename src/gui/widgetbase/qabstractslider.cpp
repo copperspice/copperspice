@@ -387,13 +387,13 @@ void QAbstractSlider::sliderChange(SliderChange)
    update();
 }
 
-bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation orientation, Qt::KeyboardModifiers modifiers, int delta)
+bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation newOrientation, Qt::KeyboardModifiers modifiers, int delta)
 {
    Q_Q(QAbstractSlider);
    int stepsToScroll = 0;
 
    // scrolling to the right gives negative values
-   if (orientation == Qt::Horizontal) {
+   if (newOrientation == Qt::Horizontal) {
       delta = -delta;
    }
 

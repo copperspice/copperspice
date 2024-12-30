@@ -320,15 +320,14 @@ QSqlRelation QSqlRelationalTableModel::relation(int column) const
    return d->relations.value(column).rel;
 }
 
-QString QSqlRelationalTableModelPrivate::fullyQualifiedFieldName(const QString &tableName,
+QString QSqlRelationalTableModelPrivate::fullyQualifiedFieldName(const QString &newTableName,
    const QString &fieldName) const
 {
-   QString retval;
-   retval.append(tableName).append(QLatin1Char('.')).append(fieldName);
+   QString retval = newTableName;
+   retval.append(QChar('.')).append(fieldName);
 
    return retval;
 }
-
 
 QString QSqlRelationalTableModel::selectStatement() const
 {
@@ -358,9 +357,10 @@ QString QSqlRelationalTableModel::selectStatement() const
          }
 
          const QSqlRecord rec = database().record(relation.tableName());
-         for (int i = 0; i < rec.count(); ++i) {
-            if (name.compare(rec.fieldName(i), Qt::CaseInsensitive) == 0) {
-               name = rec.fieldName(i);
+
+         for (int j = 0; j < rec.count(); ++j) {
+            if (name.compare(rec.fieldName(j), Qt::CaseInsensitive) == 0) {
+               name = rec.fieldName(j);
                break;
             }
          }
