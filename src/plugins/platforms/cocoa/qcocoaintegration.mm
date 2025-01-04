@@ -237,23 +237,31 @@ QPixmap QCocoaScreen::grabWindow(WId window, int x, int y, int width, int height
       const CGRect bounds = CGDisplayBounds(displays[i]);
       int w = (width < 0 ? bounds.size.width : width) * devicePixelRatio();
       int h = (height < 0 ? bounds.size.height : height) * devicePixelRatio();
+
       QRect displayRect = QRect(x, y, w, h);
       displayRect = displayRect.translated(qRound(-bounds.origin.x), qRound(-bounds.origin.y));
 
+      QPixmap pix(w, h);
+      pix.fill(Qt::transparent);
+
+#if __MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_VERSION_15
+      // display a rectangle of the correct size which is transparent
+
+#else
       QCFType<CGImageRef> image = CGDisplayCreateImageForRect(displays[i],
             CGRectMake(displayRect.x(), displayRect.y(), displayRect.width(), displayRect.height()));
 
-      QPixmap pix(w, h);
-      pix.fill(Qt::transparent);
       CGRect rect = CGRectMake(0, 0, w, h);
       CGContextRef ctx = qt_mac_cg_context(&pix);
 
       qt_mac_drawCGImage(ctx, &rect, image);
       CGContextRelease(ctx);
+#endif
 
       QPainter painter(&windowPixmap);
       painter.drawPixmap(0, 0, pix);
    }
+
    return windowPixmap;
 }
 
