@@ -57,7 +57,7 @@ SVGTextMetrics::SVGTextMetrics(RenderSVGInlineText* textRenderer, const TextRun&
     m_length = static_cast<unsigned>(length);
 }
 
-bool SVGTextMetrics::operator==(const SVGTextMetrics& other)
+bool SVGTextMetrics::operator==(const SVGTextMetrics& other) const
 {
     return m_width == other.m_width
         && m_height == other.m_height

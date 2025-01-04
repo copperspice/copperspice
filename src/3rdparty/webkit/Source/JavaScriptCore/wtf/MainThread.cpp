@@ -51,7 +51,8 @@ struct FunctionWithContext {
         , syncFlag(syncFlag)
     { 
     }
-    bool operator == (const FunctionWithContext& o)
+
+    bool operator == (const FunctionWithContext& o) const
     {
         return function == o.function
             && context == o.context

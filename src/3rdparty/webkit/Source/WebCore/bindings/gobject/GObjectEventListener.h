@@ -57,7 +57,7 @@ public:
             : 0;
     }
 
-    virtual bool operator==(const EventListener& other);
+    bool operator==(const EventListener& other) const override;
 
 private:
     GObjectEventListener(GObject*, EventTarget*, const char* domEventName, GCallback handler, bool capture, void* userData);

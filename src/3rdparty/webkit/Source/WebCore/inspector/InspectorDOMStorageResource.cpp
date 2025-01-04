@@ -113,7 +113,7 @@ void InspectorDOMStorageResource::handleEvent(ScriptExecutionContext*, Event* ev
         m_frontend->updateDOMStorage(m_id);
 }
 
-bool InspectorDOMStorageResource::operator==(const EventListener& listener)
+bool InspectorDOMStorageResource::operator==(const EventListener& listener) const
 {
     return (this == InspectorDOMStorageResource::cast(&listener));
 }

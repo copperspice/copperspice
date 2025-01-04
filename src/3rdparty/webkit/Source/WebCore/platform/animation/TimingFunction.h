@@ -41,8 +41,8 @@ public:
     bool isLinearTimingFunction() const { return m_type == LinearFunction; }
     bool isCubicBezierTimingFunction() const { return m_type == CubicBezierFunction; }
     bool isStepsTimingFunction() const { return m_type == StepsFunction; }
-    
-    virtual bool operator==(const TimingFunction& other) = 0;
+
+    virtual bool operator==(const TimingFunction& other) const = 0;
 
 protected:
     TimingFunction(TimingFunctionType type)
@@ -61,8 +61,8 @@ public:
     }
     
     ~LinearTimingFunction() { }
-    
-    virtual bool operator==(const TimingFunction& other)
+
+    bool operator==(const TimingFunction& other) const override
     {
         return other.isLinearTimingFunction();
     }
@@ -87,8 +87,8 @@ public:
     }
 
     ~CubicBezierTimingFunction() { }
-    
-    virtual bool operator==(const TimingFunction& other)
+
+    bool operator==(const TimingFunction& other) const override
     {
         if (other.isCubicBezierTimingFunction()) {
             const CubicBezierTimingFunction* ctf = static_cast<const CubicBezierTimingFunction*>(&other);
@@ -132,8 +132,8 @@ public:
     }
     
     ~StepsTimingFunction() { }
-    
-    virtual bool operator==(const TimingFunction& other)
+
+    bool operator==(const TimingFunction& other) const override
     {
         if (other.isStepsTimingFunction()) {
             const StepsTimingFunction* stf = static_cast<const StepsTimingFunction*>(&other);

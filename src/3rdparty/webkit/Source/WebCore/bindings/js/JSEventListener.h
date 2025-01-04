@@ -44,7 +44,7 @@ namespace WebCore {
 
         virtual ~JSEventListener();
 
-        virtual bool operator==(const EventListener& other);
+        bool operator==(const EventListener& other) const override;
 
         // Returns true if this event listener was created for an event handler attribute, like "onload" or "onclick".
         bool isAttribute() const { return m_isAttribute; }

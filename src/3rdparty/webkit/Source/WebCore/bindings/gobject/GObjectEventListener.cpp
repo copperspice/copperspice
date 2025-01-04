@@ -70,7 +70,7 @@ void GObjectEventListener::handleEvent(ScriptExecutionContext*, Event* event)
     g_object_unref(gobjectEvent);
 }
 
-bool GObjectEventListener::operator==(const EventListener& listener)
+bool GObjectEventListener::operator==(const EventListener& listener) const
 {
     if (const GObjectEventListener* gobjectEventListener = GObjectEventListener::cast(&listener))
         return m_object == gobjectEventListener->m_object && m_handler == gobjectEventListener->m_handler;

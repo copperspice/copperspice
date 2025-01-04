@@ -68,8 +68,8 @@ public:
             : 0;
     }
 
-    virtual bool operator==(const EventListener& other);
-    
+    bool operator==(const EventListener& other)  const override;
+
     void disconnectAnimation()
     {
         m_animation = 0;
@@ -89,7 +89,7 @@ private:
     SVGSMILElement::Condition* m_condition;
 };
 
-bool ConditionEventListener::operator==(const EventListener& listener)
+bool ConditionEventListener::operator==(const EventListener& listener) const
 {
     if (const ConditionEventListener* conditionEventListener = ConditionEventListener::cast(&listener))
         return m_animation == conditionEventListener->m_animation && m_condition == conditionEventListener->m_condition;

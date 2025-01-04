@@ -33,7 +33,7 @@ public:
     static SVGTextMetrics emptyMetrics();
     static SVGTextMetrics measureCharacterRange(RenderSVGInlineText*, unsigned position, unsigned length);
 
-    bool operator==(const SVGTextMetrics&);
+    bool operator==(const SVGTextMetrics&) const;
 
     float width() const { return m_width; }
     float height() const { return m_height; }
@@ -45,7 +45,7 @@ public:
         {
         }
 
-        bool operator==(const Glyph& other)
+        bool operator==(const Glyph& other) const
         {
             return isValid == other.isValid
                 && name == other.name

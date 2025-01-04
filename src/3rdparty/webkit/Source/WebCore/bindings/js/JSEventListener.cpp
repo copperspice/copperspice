@@ -161,7 +161,7 @@ bool JSEventListener::virtualisAttribute() const
     return m_isAttribute;
 }
 
-bool JSEventListener::operator==(const EventListener& listener)
+bool JSEventListener::operator==(const EventListener& listener) const
 {
     if (const JSEventListener* jsEventListener = JSEventListener::cast(&listener))
         return m_jsFunction == jsEventListener->m_jsFunction && m_isAttribute == jsEventListener->m_isAttribute;
