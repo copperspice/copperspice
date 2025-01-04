@@ -526,6 +526,7 @@ void QGridLayoutItem::setRowSpan(int rowSpan, Qt::Orientation orientation)
 int QGridLayoutItem::stretchFactor(Qt::Orientation orientation) const
 {
    int stretch = q_stretches[orientation == Qt::Vertical];
+
    if (stretch >= 0) {
       return stretch;
    }
@@ -536,8 +537,10 @@ int QGridLayoutItem::stretchFactor(Qt::Orientation orientation) const
       return 1;
    } else if (policy & QLayoutPolicy::GrowFlag) {
       return -1;  // because we max it up
+
    } else {
       return 0;
+
    }
 }
 
@@ -593,6 +596,7 @@ QGridLayoutBox QGridLayoutItem::box(Qt::Orientation orientation, qreal constrain
 
       if (alignment() & Qt::AlignBaseline) {
          result.q_minimumDescent = sizeHint(Qt::MinimumDescent, constraintSize).height();
+
          if (result.q_minimumDescent != -1.0) {
             const qreal minSizeHint = sizeHint(Qt::MinimumSize, constraintSize).height();
             result.q_minimumDescent -= (minSizeHint - result.q_minimumSize);

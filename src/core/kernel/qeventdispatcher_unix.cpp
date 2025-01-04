@@ -419,6 +419,7 @@ void QEventDispatcherUNIX::unregisterSocketNotifier(QSocketNotifier *notifier)
 #endif
 
    Q_D(QEventDispatcherUNIX);
+
    QSockNotType::List &list = d->sn_vec[type].list;
    fd_set *fds  =  &d->sn_vec[type].enabled_fds;
 
@@ -442,9 +443,10 @@ void QEventDispatcherUNIX::unregisterSocketNotifier(QSocketNotifier *notifier)
    FD_CLR(sockfd, sn->queue);
    d->sn_pending_list.removeAll(sn);                // remove from activation list
    list.removeAt(i);                                // remove notifier found above
+
    delete sn;
 
-   if (d->sn_highest == sockfd) {                // find highest fd
+   if (d->sn_highest == sockfd) {                   // find highest fd
       d->sn_highest = -1;
 
       for (int j = 0; j < 3; j++) {

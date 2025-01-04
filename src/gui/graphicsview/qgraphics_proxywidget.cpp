@@ -74,16 +74,17 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
 
    Q_Q(QGraphicsProxyWidget);
 
-   // Find widget position and receiver.
+   // Find widget position and receiver
    QPointF pos = event->pos();
    QPointer<QWidget> alienWidget = widget->childAt(pos.toPoint());
    QPointer<QWidget> receiver =  alienWidget ? alienWidget : widget;
 
    if (QWidgetPrivate::nearestGraphicsProxyWidget(receiver) != q) {
-      return;   //another proxywidget will handle the events
+      // another proxywidget will handle the events
+      return;
    }
 
-   // Translate QGraphicsSceneMouse events to QMouseEvents.
+   // Translate QGraphicsSceneMouse events to QMouseEvents
    QEvent::Type type = QEvent::None;
 
    switch (event->type()) {
@@ -1084,7 +1085,7 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    QPointF pos = event->pos();
    QPointer<QWidget> receiver = d->widget->childAt(pos.toPoint());
 
-   if (! receiver) {
+   if (receiver == nullptr) {
       receiver = d->widget;
    }
 

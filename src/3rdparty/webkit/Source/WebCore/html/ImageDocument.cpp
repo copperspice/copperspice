@@ -19,7 +19,7 @@
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "config.h"
@@ -71,7 +71,7 @@ private:
 
     ImageDocument* m_doc;
 };
-    
+
 class ImageDocumentParser : public RawDataDocumentParser {
 public:
     static PassRefPtr<ImageDocumentParser> create(ImageDocument* document)
@@ -83,7 +83,7 @@ public:
     {
         return static_cast<ImageDocument*>(RawDataDocumentParser::document());
     }
-    
+
 private:
     ImageDocumentParser(ImageDocument* document)
         : RawDataDocumentParser(document)
@@ -170,7 +170,7 @@ void ImageDocumentParser::finish()
 
     document()->finishedParsing();
 }
-    
+
 // --------
 
 ImageDocument::ImageDocument(Frame* frame, const KURL& url)
@@ -183,7 +183,7 @@ ImageDocument::ImageDocument(Frame* frame, const KURL& url)
     setCompatibilityMode(QuirksMode);
     lockCompatibilityMode();
 }
-    
+
 PassRefPtr<DocumentParser> ImageDocument::createParser()
 {
     return ImageDocumentParser::create(this);
@@ -192,7 +192,7 @@ PassRefPtr<DocumentParser> ImageDocument::createParser()
 void ImageDocument::createDocumentStructure()
 {
     ExceptionCode ec;
-    
+
     RefPtr<Element> rootElement = Document::createElement(htmlTag, false);
     appendChild(rootElement, ec);
 #if ENABLE(OFFLINE_WEB_APPLICATIONS)
@@ -201,20 +201,20 @@ void ImageDocument::createDocumentStructure()
 
     if (frame() && frame()->loader())
         frame()->loader()->dispatchDocumentElementAvailable();
-    
+
     RefPtr<Element> body = Document::createElement(bodyTag, false);
     body->setAttribute(styleAttr, "margin: 0px;");
-    
+
     rootElement->appendChild(body, ec);
-    
+
     RefPtr<ImageDocumentElement> imageElement = ImageDocumentElement::create(this);
-    
-    imageElement->setAttribute(styleAttr, "-webkit-user-select: none");        
+
+    imageElement->setAttribute(styleAttr, "-webkit-user-select: none");
     imageElement->setLoadManually(true);
     imageElement->setSrc(url().string());
-    
+
     body->appendChild(imageElement, ec);
-    
+
     if (shouldShrinkToFit()) {
         // Add event listeners
         RefPtr<EventListener> listener = ImageEventListener::create(this);
@@ -237,7 +237,7 @@ float ImageDocument::scale() const
 
     IntSize imageSize = m_imageElement->cachedImage()->imageSize(pageZoomFactor(this));
     IntSize windowSize = IntSize(view->width(), view->height());
-    
+
     float widthScale = (float)windowSize.width() / imageSize.width();
     float heightScale = (float)windowSize.height() / imageSize.height();
 
@@ -254,7 +254,7 @@ void ImageDocument::resizeImageToFit()
     float scale = this->scale();
     m_imageElement->setWidth(static_cast<int>(imageSize.width() * scale));
     m_imageElement->setHeight(static_cast<int>(imageSize.height() * scale));
-    
+
     ExceptionCode ec;
     m_imageElement->style()->setProperty("cursor", "-webkit-zoom-in", ec);
 }
@@ -265,19 +265,19 @@ void ImageDocument::imageClicked(int x, int y)
         return;
 
     m_shouldShrinkImage = !m_shouldShrinkImage;
-    
+
     if (m_shouldShrinkImage)
         windowSizeChanged();
     else {
         restoreImageSize();
-        
+
         updateLayout();
-        
+
         float scale = this->scale();
-        
+
         int scrollX = static_cast<int>(x / scale - (float)frame()->view()->width() / 2);
         int scrollY = static_cast<int>(y / scale - (float)frame()->view()->height() / 2);
-        
+
         frame()->view()->setScrollPosition(IntPoint(scrollX, scrollY));
     }
 }
@@ -285,15 +285,15 @@ void ImageDocument::imageClicked(int x, int y)
 void ImageDocument::imageUpdated()
 {
     ASSERT(m_imageElement);
-    
+
     if (m_imageSizeIsKnown)
         return;
 
     if (m_imageElement->cachedImage()->imageSize(pageZoomFactor(this)).isEmpty())
         return;
-    
+
     m_imageSizeIsKnown = true;
-    
+
     if (shouldShrinkToFit()) {
         // Force resizing of the image
         windowSizeChanged();
@@ -304,16 +304,16 @@ void ImageDocument::restoreImageSize()
 {
     if (!m_imageElement || !m_imageSizeIsKnown)
         return;
-    
+
     m_imageElement->setWidth(m_imageElement->cachedImage()->imageSize(pageZoomFactor(this)).width());
     m_imageElement->setHeight(m_imageElement->cachedImage()->imageSize(pageZoomFactor(this)).height());
-    
+
     ExceptionCode ec;
     if (imageFitsInWindow())
         m_imageElement->style()->removeProperty("cursor", ec);
     else
         m_imageElement->style()->setProperty("cursor", "-webkit-zoom-out", ec);
-        
+
     m_didShrinkImage = false;
 }
 
@@ -328,8 +328,8 @@ bool ImageDocument::imageFitsInWindow() const
 
     IntSize imageSize = m_imageElement->cachedImage()->imageSize(pageZoomFactor(this));
     IntSize windowSize = IntSize(view->width(), view->height());
-    
-    return imageSize.width() <= windowSize.width() && imageSize.height() <= windowSize.height();    
+
+    return imageSize.width() <= windowSize.width() && imageSize.height() <= windowSize.height();
 }
 
 void ImageDocument::windowSizeChanged()
@@ -338,19 +338,19 @@ void ImageDocument::windowSizeChanged()
         return;
 
     bool fitsInWindow = imageFitsInWindow();
-    
+
     // If the image has been explicitly zoomed in, restore the cursor if the image fits
     // and set it to a zoom out cursor if the image doesn't fit
     if (!m_shouldShrinkImage) {
         ExceptionCode ec;
-        
+
         if (fitsInWindow)
             m_imageElement->style()->removeProperty("cursor", ec);
         else
             m_imageElement->style()->setProperty("cursor", "-webkit-zoom-out", ec);
         return;
     }
-    
+
     if (m_didShrinkImage) {
         // If the window has been resized so that the image fits, restore the image size
         // otherwise update the restored image size.
@@ -368,10 +368,10 @@ void ImageDocument::windowSizeChanged()
 }
 
 CachedImage* ImageDocument::cachedImage()
-{ 
+{
     if (!m_imageElement)
         createDocumentStructure();
-    
+
     return m_imageElement->cachedImage();
 }
 

@@ -319,7 +319,10 @@ class Q_GUI_EXPORT QTextBlock
       }
 
     private:
-      friend class QTextBlock;
+      iterator(const QTextDocumentPrivate *priv, int begin, int end, int f)
+         : p(priv), b(begin), e(end), n(f)
+      {
+      }
 
       const QTextDocumentPrivate *p;
 
@@ -327,10 +330,7 @@ class Q_GUI_EXPORT QTextBlock
       int e;
       int n;
 
-      iterator(const QTextDocumentPrivate *priv, int begin, int end, int f)
-         : p(priv), b(begin), e(end), n(f)
-      {
-      }
+      friend class QTextBlock;
    };
 
    iterator begin() const;

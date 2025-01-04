@@ -61,9 +61,9 @@ class QMenuSloppyState
 {
  public:
    QMenuSloppyState()
-      : m_menu(nullptr), m_enabled(false), m_uni_directional(false), m_select_other_actions(false)
-      , m_first_mouse(true), m_init_guard(false), m_uni_dir_discarded_count(0), m_uni_dir_fail_at_count(0)
-      , m_timeout(0), m_reset_action(nullptr), m_origin_action(nullptr), m_parent(nullptr)
+      : m_menu(nullptr), m_enabled(false), m_uni_directional(false), m_select_other_actions(false),
+      m_first_mouse(true), m_init_guard(false), m_uni_dir_discarded_count(0), m_uni_dir_fail_at_count(0),
+      m_timeout(0), m_reset_action(nullptr), m_origin_action(nullptr), m_parent(nullptr)
    {
    }
 

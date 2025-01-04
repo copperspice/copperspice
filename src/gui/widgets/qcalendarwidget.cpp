@@ -2292,6 +2292,7 @@ QSize QCalendarWidget::minimumSizeHint() const
 
    //add the size of the header.
    QSize headerSize(0, 0);
+
    if (d->navBarVisible) {
       int headerH = d->navBarBackground->sizeHint().height();
       int headerW = 0;
@@ -2315,6 +2316,7 @@ QSize QCalendarWidget::minimumSizeHint() const
 
       headerSize = QSize(headerW, headerH);
    }
+
    w *= cols;
    w = qMax(headerSize.width(), w);
    h = (h * rows) + headerSize.height();

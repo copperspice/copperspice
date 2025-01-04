@@ -88,16 +88,17 @@ class QVectorPathConverter
 
    struct QVectorPathData {
       QVectorPathData(const QVector<QPainterPath::Element> &path, uint fillRule, bool convex)
-         : elements(path.size()),
-           points(path.size() * 2),
-           flags(0) {
+         : elements(path.size()), points(path.size() * 2), flags(0)
+      {
          int ptsPos = 0;
          bool isLines = true;
+
          for (int i = 0; i < path.size(); ++i) {
             const QPainterPath::Element &e = path.at(i);
             elements[i] = e.type;
             points[ptsPos++] = e.x;
             points[ptsPos++] = e.y;
+
             if (e.type == QPainterPath::CurveToElement) {
                flags |= QVectorPath::CurvedShapeMask;
             }
@@ -124,6 +125,7 @@ class QVectorPathConverter
          }
 
       }
+
       QVarLengthArray<QPainterPath::ElementType> elements;
       QVarLengthArray<qreal> points;
       uint flags;

@@ -69,8 +69,7 @@ QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(const QString &newH
      networkProxy(QNetworkProxy::NoProxy),
 #endif
 
-     preConnectRequests(0),
-     connectionType(type)
+     preConnectRequests(0), connectionType(type)
 {
    channels = new QHttpNetworkConnectionChannel[channelCount];
 }
@@ -83,8 +82,8 @@ QHttpNetworkConnectionPrivate::QHttpNetworkConnectionPrivate(quint16 newChannelC
 #ifndef QT_NO_NETWORKPROXY
      networkProxy(QNetworkProxy::NoProxy),
 #endif
-     preConnectRequests(0),
-     connectionType(type)
+
+     preConnectRequests(0), connectionType(type)
 {
    channels = new QHttpNetworkConnectionChannel[channelCount];
 }

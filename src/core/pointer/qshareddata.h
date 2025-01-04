@@ -316,7 +316,7 @@ class QExplicitlySharedDataPointer
       return d;
    }
 
-   operator bool () const {
+   operator bool() const {
       return d != nullptr;
    }
 

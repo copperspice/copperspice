@@ -57,10 +57,10 @@
 #    include <qeventdispatcher_unix_p.h>
 #  else
 #    if ! defined(QT_NO_GLIB)
-#    include <qeventdispatcher_glib_p.h>
+#       include <qeventdispatcher_glib_p.h>
 #    endif
 
-#include <qeventdispatcher_unix_p.h>
+#    include <qeventdispatcher_unix_p.h>
 #  endif
 #endif
 
@@ -1053,7 +1053,7 @@ void QCoreApplication::sendPostedEvents(QObject *receiver, int event_type)
 void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type, QThreadData *data)
 {
    if (event_type == -1) {
-      // we were called by an obsolete event dispatcher.
+      // called by an obsolete event dispatcher
       event_type = 0;
    }
 
@@ -1068,28 +1068,27 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
 
    QMutexLocker locker(&data->postEventList.mutex);
 
-   // by default, we assume that the event dispatcher can go to sleep after
-   // processing all events. if any new events are posted while we send
-   // events, canWait will be set to false.
+   // by default, we assume that the event dispatcher can go to sleep after processing all events
+   // if any new events are posted while we send events, canWait will be set to false.
    data->canWait = (data->postEventList.size() == 0);
 
    int peCount = CSInternalEvents::get_m_PostedEvents(receiver);
 
-   if (data->postEventList.size() == 0 || (receiver && peCount == 0)) {
+   if (data->postEventList.size() == 0 || (receiver != nullptr && peCount == 0)) {
       --data->postEventList.recursion;
       return;
    }
 
    data->canWait = true;
 
-   // okay. here is the tricky loop. be careful about optimizing
-   // this, it looks the way it does for good reasons.
+   // this is a tricky loop, careful about optimizing as there were good reason for this code
+
    int startOffset = data->postEventList.startOffset;
-   int &i = (!event_type && !receiver) ? data->postEventList.startOffset : startOffset;
+   int &i = (event_type == 0 && receiver == nullptr) ? data->postEventList.startOffset : startOffset;
    data->postEventList.insertionOffset = data->postEventList.size();
 
    while (i < data->postEventList.size()) {
-      // avoid live-lock
+      // avoid live lock
       if (i >= data->postEventList.insertionOffset) {
          break;
       }
@@ -1097,19 +1096,19 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
       const QPostEvent &pe = data->postEventList.at(i);
       ++i;
 
-      if (!pe.event) {
+      if (! pe.event) {
          continue;
       }
 
-      if ((receiver && receiver != pe.receiver) || (event_type && event_type != pe.event->type())) {
+      if ((receiver != nullptr && receiver != pe.receiver) || (event_type != 0 && event_type != pe.event->type())) {
          data->canWait = false;
          continue;
       }
 
       if (pe.event->type() == QEvent::DeferredDelete) {
-         // DeferredDelete events are only sent when we are explicitly asked to
-         // (s.a. QEvent::DeferredDelete), and then only if the event loop that
-         // posted the event has returned.
+         // DeferredDelete events are only sent when there is an explicit QEvent::DeferredDelete
+         // and then only if the event loop that posted the event has returned
+
          int eventLoopLevel = static_cast<QDeferredDeleteEvent *>(pe.event)->loopLevel();
 
          const bool tmp1 = eventLoopLevel > data->loopLevel;
@@ -1125,8 +1124,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
                // copy the event
                QPostEvent pe_copy = pe;
 
-               // null out the event so if sendPostedEvents recurses, it
-               // will ignore this one, as it's been re-posted
+               // null the event so if sendPostedEvents recurses, it will ignore this one, since it is has been re-posted
                const_cast<QPostEvent &>(pe).event = nullptr;
 
                // re-post the copied event so it is not lost
@@ -1137,8 +1135,7 @@ void QCoreApplicationPrivate::sendPostedEvents(QObject *receiver, int event_type
          }
       }
 
-      // first, adjust the event so that we can deliver it
-      // so no one will try to touch it later
+      // adjust the event so that we can deliver it and no one will try to touch it later
       pe.event->posted = false;
 
       QEvent *e  = pe.event;

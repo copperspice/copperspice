@@ -656,8 +656,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
       DWORD getProxyError = GetLastError();
 
-      if (!getProxySucceeded
-            && (ERROR_WINHTTP_AUTODETECTION_FAILED == getProxyError)) {
+      if (! getProxySucceeded && (ERROR_WINHTTP_AUTODETECTION_FAILED == getProxyError)) {
          // WPAD failed
          if (sp->autoConfigUrl.isEmpty()) {
             //No config file could be retrieved on the network.
@@ -678,8 +677,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
          }
       }
 
-      if (!getProxySucceeded
-            && (ERROR_WINHTTP_LOGIN_FAILURE == getProxyError)) {
+      if (! getProxySucceeded && (ERROR_WINHTTP_LOGIN_FAILURE == getProxyError)) {
          // We first tried without AutoLogon, because this might prevent caching the result.
          // But now we've to enable it (http://msdn.microsoft.com/en-us/library/aa383153%28v=VS.85%29.aspx)
          sp->m_autoProxyOptions.fAutoLogonIfChallenged = TRUE;
@@ -690,8 +688,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
          getProxyError = GetLastError();
       }
 
-      if (!getProxySucceeded
-            && (ERROR_WINHTTP_UNABLE_TO_DOWNLOAD_SCRIPT == getProxyError)) {
+      if (! getProxySucceeded && (ERROR_WINHTTP_UNABLE_TO_DOWNLOAD_SCRIPT == getProxyError)) {
          // PAC file url is not connectable, or server returned error (e.g. http 404)
          //Don't search for it next time again.
          sp->isAutoConfig = false;

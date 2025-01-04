@@ -344,7 +344,7 @@ static QString qt_create_commandline(const QString &program, const QStringList &
       // Quotes are escaped and their preceding backslashes are doubled.
       tmp.replace(QRegularExpression8("(\\\\*)\""), "\\1\\1\\\"");
 
-      if (tmp.isEmpty() || tmp.contains(QLatin1Char(' ')) || tmp.contains('\t')) {
+      if (tmp.isEmpty() || tmp.contains(QChar(' ')) || tmp.contains('\t')) {
 
          // The argument must not end with a \ since this would be interpreted
          // as escaping the quote -- rather put the \ behind the quote: e.g.
@@ -360,7 +360,7 @@ static QString qt_create_commandline(const QString &program, const QStringList &
          tmp.prepend(QChar('"'));
       }
 
-      args += QLatin1Char(' ') + tmp;
+      args += QChar(' ') + tmp;
    }
 
    return args;

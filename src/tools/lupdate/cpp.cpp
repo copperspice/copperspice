@@ -310,17 +310,15 @@ class CppParser
    bool matchExpression();
 
    QString transcode(const QString &str);
-   void recordMessage(
-      int line, const QString &context, const QString &text, const QString &comment,
-      const QString &extracomment, const QString &msgid, const QHash<QString, QString> &extra,
-      bool plural);
+   void recordMessage(int line, const QString &context, const QString &text, const QString &comment,
+         const QString &extracomment, const QString &msgid, const QHash<QString, QString> &extra, bool plural);
 
    void handleCsMarkTr(Group kind, QString prefix = QString());
    void handleTrId();
    void handleDeclareTrFunctions();
 
    void processInclude(const QString &file, ConversionData &cd,
-                       const QStringList &includeStack, QSet<QString> &inclusions);
+         const QStringList &includeStack, QSet<QString> &inclusions);
 
    void saveState(SavedState *state);
    void loadState(const SavedState *state);
@@ -335,29 +333,28 @@ class CppParser
    typedef bool (CppParser::*VisitNamespaceCallback)(const Namespace *ns, void *context) const;
 
    bool visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                       VisitNamespaceCallback callback, void *context,
-                       VisitRecorder &vr, const ParseResults *rslt) const;
+         VisitNamespaceCallback callback, void *context, VisitRecorder &vr, const ParseResults *rslt) const;
 
    bool visitNamespace(const QList<HashString> &namespaces, int nsCount,
-                       VisitNamespaceCallback callback, void *context) const;
+         VisitNamespaceCallback callback, void *context) const;
 
    bool qualifyOneCallbackOwn(const Namespace *ns, void *context) const;
    bool qualifyOneCallbackUsing(const Namespace *ns, void *context) const;
 
    bool qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-               QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const;
+         QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const;
 
    bool qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-               QList<HashString> *resolved) const;
+         QList<HashString> *resolved) const;
 
    bool fullyQualify(const QList<HashString> &namespaces, int nsCnt, const QList<HashString> &segments,
-               bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
+         bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
 
    bool fullyQualify(const QList<HashString> &namespaces, const QList<HashString> &segments,
-               bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
+         bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
 
    bool fullyQualify(const QList<HashString> &namespaces, const QString &segments,
-               bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
+         bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const;
 
    bool findNamespaceCallback(const Namespace *ns, void *context) const;
    const Namespace *findNamespace(const QList<HashString> &namespaces, int nsCount = -1) const;
@@ -1232,7 +1229,7 @@ QString CppParser::joinNamespaces(const QString &one, const QString &two)
 }
 
 bool CppParser::visitNamespace(const QList<HashString> &namespaces, int nsCount,
-               VisitNamespaceCallback callback, void *context, VisitRecorder &vr, const ParseResults *rslt) const
+      VisitNamespaceCallback callback, void *context, VisitRecorder &vr, const ParseResults *rslt) const
 {
    const Namespace *ns = &rslt->rootNamespace;
 
@@ -1258,7 +1255,7 @@ supers:
 }
 
 bool CppParser::visitNamespace(const QList<HashString> &namespaces, int nsCount,
-               VisitNamespaceCallback callback, void *context) const
+      VisitNamespaceCallback callback, void *context) const
 {
    VisitRecorder vr;
    return visitNamespace(namespaces, nsCount, callback, context, vr, results);
@@ -1332,7 +1329,7 @@ bool CppParser::qualifyOneCallbackUsing(const Namespace *ns, void *context) cons
 }
 
 bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                           QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const
+      QList<HashString> *resolved, QSet<HashStringList> *visitedUsings) const
 {
    QualifyOneData data(namespaces, nsCnt, segment, resolved, visitedUsings);
 
@@ -1344,7 +1341,7 @@ bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const
 }
 
 bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const HashString &segment,
-                           QList<HashString> *resolved) const
+      QList<HashString> *resolved) const
 {
    QSet<HashStringList> visitedUsings;
 
@@ -1352,8 +1349,8 @@ bool CppParser::qualifyOne(const QList<HashString> &namespaces, int nsCnt, const
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces, int nsCnt,
-               const QList<HashString> &segments, bool isDeclaration,
-               QList<HashString> *resolved, QList<HashString> *unresolved) const
+      const QList<HashString> &segments, bool isDeclaration,
+      QList<HashString> *resolved, QList<HashString> *unresolved) const
 {
    int nsIdx;
    int initSegIdx;
@@ -1406,13 +1403,13 @@ bool CppParser::fullyQualify(const QList<HashString> &namespaces, int nsCnt,
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces, const QList<HashString> &segments,
-               bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const
+      bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const
 {
    return fullyQualify(namespaces, namespaces.count(), segments, isDeclaration, resolved, unresolved);
 }
 
 bool CppParser::fullyQualify(const QList<HashString> &namespaces, const QString &quali,
-               bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const
+      bool isDeclaration, QList<HashString> *resolved, QList<HashString> *unresolved) const
 {
    static QString strColons("::");
 
@@ -1460,8 +1457,7 @@ void CppParser::truncateNamespaces(QList<HashString> *namespaces, int length)
    }
 }
 
-// Functions for processing include files.
-
+// Functions for processing include files
 IncludeCycleHash &CppFiles::includeCycles()
 {
    static IncludeCycleHash cycles;
@@ -1848,10 +1844,10 @@ QString CppParser::transcode(const QString &str)
 }
 
 void CppParser::recordMessage(int line, const QString &context, const QString &text, const QString &comment,
-                              const QString &extracomment, const QString &msgid, const QHash<QString, QString> &extra, bool plural)
+      const QString &extracomment, const QString &msgid, const QHash<QString, QString> &extra, bool plural)
 {
    TranslatorMessage msg(transcode(context), transcode(text), transcode(comment), QString(),
-                         yyFileName, line, QStringList(), TranslatorMessage::Type::Unfinished, plural);
+         yyFileName, line, QStringList(), TranslatorMessage::Type::Unfinished, plural);
 
    msg.setExtraComment(transcode(extracomment.simplified()));
    msg.setId(msgid);
@@ -1932,7 +1928,7 @@ void CppParser::handleCsMarkTr(Group kind, QString prefix)
             functionContextUnresolved = stringifyNamespace(0, unresolved);
 
             yyMsg() << csPrintable(QString("Trying to use unknown namespace or class %1 %2\n")
-                                   .formatArg(stringifyNamespace(functionContext)).formatArg(unresolved.first().value()));
+                  .formatArg(stringifyNamespace(functionContext)).formatArg(unresolved.first().value()));
          }
 
          pendingContext.clear();

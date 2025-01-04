@@ -119,7 +119,7 @@ static inline int registerEventTypeZeroBased(int id)
 int QEvent::registerEventType(int hint)
 {
    const int result = registerEventTypeZeroBased(QEvent::MaxUser - hint);
-   return result < 0 ? -1 : QEvent::MaxUser - result ;
+   return result < 0 ? -1 : QEvent::MaxUser - result;
 }
 
 QTimerEvent::QTimerEvent(int timerId)
@@ -151,7 +151,9 @@ QDynamicPropertyChangeEvent::~QDynamicPropertyChangeEvent()
 
 QDeferredDeleteEvent::QDeferredDeleteEvent()
    : QEvent(QEvent::DeferredDelete), level(0)
-{ }
+{
+}
 
 QDeferredDeleteEvent::~QDeferredDeleteEvent()
-{ }
+{
+}

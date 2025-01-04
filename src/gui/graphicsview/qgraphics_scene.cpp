@@ -5152,8 +5152,7 @@ void QGraphicsScenePrivate::gestureEventHandler(QGestureEvent *event)
             << "Conflicting gestures:" << conflictedGestures;
 #endif
 
-      // deliver conflicted gestures as override events AND remember
-      // initial gesture targets
+      // deliver conflicted gestures as override events AND remember initial gesture targets
       if (! conflictedGestures.isEmpty()) {
          for (int i = 0; i < cachedTargetItems.size(); ++i) {
             QPointer<QGraphicsObject> item = cachedTargetItems.at(i);
@@ -5313,7 +5312,7 @@ void QGraphicsScenePrivate::gestureEventHandler(QGestureEvent *event)
 
       // ignoredGestures list is only filled when delivering to the gesture
       // target item, so it is safe to assume item == target.
-      if (!ignoredGestures.isEmpty() && !isPanel) {
+      if (! ignoredGestures.isEmpty() && ! isPanel) {
          // look for new potential targets for gestures that were ignored
          // and should be propagated.
 

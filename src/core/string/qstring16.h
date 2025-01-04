@@ -223,8 +223,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       QString16(const char16_t *data)
          : CsString::CsString_utf16(data)
-      {
-      }
+      { }
 
       QString16(const QString16 &other) = default;
       QString16(QString16 &&other) = default;
@@ -796,12 +795,12 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 
       // static
       static QString16 fromLatin1(const QByteArray &str);
-      static QString16 fromLatin1(const char *str, size_type numOfChars = -1);
+      static QString16 fromLatin1(const char *data, size_type numOfChars = -1);
 
       static QString16 fromUtf8(const QByteArray &str);
-      static QString16 fromUtf8(const char *str, size_type numOfChars = -1);
+      static QString16 fromUtf8(const char *data, size_type numOfChars = -1);
 
-      static QString16 fromUtf16(const char16_t *str, size_type numOfChars = -1);
+      static QString16 fromUtf16(const char16_t *data, size_type numOfChars = -1);
       static QString16 fromUtf8(const QString8 &str);
 
       static QString16 fromStdWString(const std::wstring &str, size_type numOfChars = -1);

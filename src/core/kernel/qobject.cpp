@@ -432,7 +432,7 @@ bool QObject::disconnect(const QObject *sender,   const QString8 &signalMethod,
    const QMetaObject *senderMetaObject   = sender->metaObject();
    const QMetaObject *receiverMetaObject = nullptr;
 
-   if (receiver) {
+   if (receiver != nullptr) {
       receiverMetaObject = receiver->metaObject();
    }
 
@@ -972,11 +972,11 @@ int QObject::receivers(const QString8 &signalMethod) const
 
 void QObject::removeEventFilter(QObject *obj)
 {
-   for (int i = 0; i < m_eventFilters.count(); ++i) {
-
-      if (m_eventFilters.at(i) == obj) {
-         m_eventFilters[i] = nullptr;
+   for (auto &item : m_eventFilters) {
+      if (item == obj) {
+         item = nullptr;
       }
+
    }
 }
 

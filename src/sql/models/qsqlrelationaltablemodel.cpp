@@ -364,9 +364,11 @@ QString QSqlRelationalTableModel::selectStatement() const
                break;
             }
          }
+
       } else {
          name = d->baseRec.fieldName(i);
       }
+
       fieldNames[name] = fieldNames.value(name, 0) + 1;
       fieldList.append(name);
    }

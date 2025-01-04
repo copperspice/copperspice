@@ -6199,8 +6199,9 @@ static inline void qt_bitmapblit_template(QRasterBuffer *rasterBuffer, int x, in
          if (count != 0) {
             qt_memfill(dest + xStart, color, count);
          }
+
          dest += destStride;
-         map += mapStride;
+         map  += mapStride;
       }
    }
 }

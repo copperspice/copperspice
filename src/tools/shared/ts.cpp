@@ -454,7 +454,6 @@ bool TSReader::read(Translator &translator)
                               msg.setTranslation(readTransContents());
                            }
 
-
                         } else if (isStartElement() && name().toString().startsWith(text_extrans)) {
                            // <extra-...>
                            QString tag = name().toString();

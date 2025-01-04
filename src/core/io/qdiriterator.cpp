@@ -300,7 +300,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // filter system files
-   if (!includeSystem && (!(fi.isFile() || fi.isDir() || fi.isSymLink()) || (!fi.exists() && fi.isSymLink()))) {
+   if (!includeSystem && (! (fi.isFile() || fi.isDir() || fi.isSymLink()) || (!fi.exists() && fi.isSymLink()))) {
       return false;
    }
 

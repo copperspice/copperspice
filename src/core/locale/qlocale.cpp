@@ -2983,13 +2983,12 @@ QString QLocale::toCurrencyString(qint64 value, const QString &symbol) const
 
 #endif
 
-
-   quint8 idx = d->m_data->m_currency_format_idx;
+   quint8 idx  = d->m_data->m_currency_format_idx;
    quint8 size = d->m_data->m_currency_format_size;
 
    if (d->m_data->m_currency_negative_format_size && value < 0) {
-      idx = d->m_data->m_currency_negative_format_idx;
-      size = d->m_data->m_currency_negative_format_size;
+      idx   = d->m_data->m_currency_negative_format_idx;
+      size  = d->m_data->m_currency_negative_format_size;
       value = -value;
    }
 

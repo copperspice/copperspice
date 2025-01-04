@@ -1807,8 +1807,9 @@ bool QAbstractTableModel::dropMimeData(const QMimeData *data, Qt::DropAction act
 
    // if the drop is on an item, replace the data in the items
    if (parent.isValid() && row == -1 && column == -1) {
-      int top = INT_MAX;
+      int top  = INT_MAX;
       int left = INT_MAX;
+
       QVector<int> rows, columns;
       QVector<QMap<int, QVariant>> modelData;
 
@@ -1866,13 +1867,16 @@ bool QAbstractListModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
 
    // if the drop is on an item, replace the data in the items
    if (parent.isValid() && row == -1 && column == -1) {
-      int top = INT_MAX;
+      int top  = INT_MAX;
       int left = INT_MAX;
+
       QVector<int> rows, columns;
       QVector<QMap<int, QVariant>> modelData;
 
       while (!stream.atEnd()) {
-         int r, c;
+         int r;
+         int c;
+
          QMap<int, QVariant> v;
          stream >> r >> c >> v;
          rows.append(r);

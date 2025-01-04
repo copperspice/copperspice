@@ -2377,7 +2377,7 @@ void QStateMachinePrivate::registerEventTransition(QEventTransition *transition)
 
    QObject *object = QEventTransitionPrivate::get(transition)->object;
 
-   if (! object) {
+   if (object == nullptr) {
       return;
    }
 

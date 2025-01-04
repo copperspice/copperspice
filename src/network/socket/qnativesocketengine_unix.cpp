@@ -280,15 +280,18 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType new
          case EINVAL:
             setError(QAbstractSocket::UnsupportedSocketOperationError, ProtocolUnsupportedErrorString);
             break;
+
          case ENFILE:
          case EMFILE:
          case ENOBUFS:
          case ENOMEM:
             setError(QAbstractSocket::SocketResourceError, ResourceErrorString);
             break;
+
          case EACCES:
             setError(QAbstractSocket::SocketAccessError, AccessErrorString);
             break;
+
          default:
             break;
       }
@@ -311,12 +314,10 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType new
       this->socketProtocol = newSocketProtocol;
       this->socketType     = newSocketType;
    }
+
    return true;
 }
 
-/*
-    Returns the value of the socket option \a opt.
-*/
 int QNativeSocketEnginePrivate::option(QNativeSocketEngine::SocketOption opt) const
 {
    Q_Q(const QNativeSocketEngine);

@@ -284,7 +284,7 @@ bool QSharedMemoryPrivate::create(int newSize)
    }
 
    qt_safe_close(fd);
-#endif // QT_POSIX_IPC
+#endif
 
    return true;
 }

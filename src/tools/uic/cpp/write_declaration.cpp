@@ -108,12 +108,9 @@ void writeScriptContextClass(const QString &indent, QTextStream &str)
 
 namespace CPP {
 
-WriteDeclaration::WriteDeclaration(Uic *uic, bool activateScripts)  :
-   m_uic(uic),
-   m_driver(uic->driver()),
-   m_output(uic->output()),
-   m_option(uic->option()),
-   m_activateScripts(activateScripts)
+WriteDeclaration::WriteDeclaration(Uic *uic, bool activateScripts)
+   : m_uic(uic), m_driver(uic->driver()), m_output(uic->output()), m_option(uic->option()),
+     m_activateScripts(activateScripts)
 {
 }
 

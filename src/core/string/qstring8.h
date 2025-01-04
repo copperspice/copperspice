@@ -219,9 +219,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       using reverse_iterator       = CsString::CsStringReverseIterator<iterator>;
       using const_reverse_iterator = CsString::CsStringReverseIterator<const_iterator>;
 
-      QString8()
-      {
-      }
+      QString8() = default;
 
       QString8(std::nullptr_t) = delete;
 
@@ -802,12 +800,12 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       // static
       static QString8 fromLatin1(const QByteArray &str);
-      static QString8 fromLatin1(const char *str, size_type numOfChars = -1);
+      static QString8 fromLatin1(const char *data, size_type numOfChars = -1);
 
       static QString8 fromUtf8(const QByteArray &str);
-      static QString8 fromUtf8(const char *str, size_type numOfChars = -1);
+      static QString8 fromUtf8(const char *data, size_type numOfChars = -1);
 
-      static QString8 fromUtf16(const char16_t *str, size_type numOfChars = -1);
+      static QString8 fromUtf16(const char16_t *data, size_type numOfChars = -1);
       static QString8 fromUtf16(const QString16 &str);
 
       static QString8 fromStdWString(const std::wstring &str, size_type numOfChars = -1);

@@ -183,21 +183,21 @@ void QCameraImageProcessing::setDenoisingLevel(qreal level)
 QCameraImageProcessing::ColorFilter QCameraImageProcessing::colorFilter() const
 {
    return d_func()->imageControl->parameter(QCameraImageProcessingControl::ColorFilter)
-          .value<QCameraImageProcessing::ColorFilter>();
+         .value<QCameraImageProcessing::ColorFilter>();
 }
 
 void QCameraImageProcessing::setColorFilter(QCameraImageProcessing::ColorFilter filter)
 {
    d_func()->imageControl->setParameter(
-      QCameraImageProcessingControl::ColorFilter,
-      QVariant::fromValue<QCameraImageProcessing::ColorFilter>(filter));
+         QCameraImageProcessingControl::ColorFilter,
+         QVariant::fromValue<QCameraImageProcessing::ColorFilter>(filter));
 }
 
 bool QCameraImageProcessing::isColorFilterSupported(QCameraImageProcessing::ColorFilter filter) const
 {
    return d_func()->imageControl->isParameterValueSupported(
-             QCameraImageProcessingControl::ColorFilter,
-             QVariant::fromValue<QCameraImageProcessing::ColorFilter>(filter));
+         QCameraImageProcessingControl::ColorFilter,
+         QVariant::fromValue<QCameraImageProcessing::ColorFilter>(filter));
 
 }
 

@@ -97,9 +97,8 @@ void writeSpacerItem(const DomSpacer *node, QTextStream &output)
       output << sizeHint->elementWidth() << ", " << sizeHint->elementHeight() << ", ";
    }
 
-   // size type
    QString sizeType = properties.contains("sizeType")  ?
-      properties.value("sizeType")->elementEnum() : QString("Expanding");
+         properties.value("sizeType")->elementEnum() : QString("Expanding");
 
    if (! sizeType.startsWith("QSizePolicy::")) {
       sizeType.prepend("QSizePolicy::");
@@ -719,14 +718,18 @@ void WriteInitialization::addWizardPage(const QString &pageVarName, const DomWid
 void WriteInitialization::acceptWidget(DomWidget *node)
 {
    m_layoutMarginType = m_widgetChain.count() == 1 ? TopLevelMargin : ChildMargin;
+
    const QString className = node->attributeClass();
    const QString varName = m_driver->findOrInsertWidget(node);
+
    m_registeredWidgets.insert(varName, node); // register the current widget
 
-   QString parentWidget, parentClass;
+   QString parentWidget;
+   QString parentClass;
+
    if (m_widgetChain.top()) {
       parentWidget = m_driver->findOrInsertWidget(m_widgetChain.top());
-      parentClass = m_widgetChain.top()->attributeClass();
+      parentClass  = m_widgetChain.top()->attributeClass();
    }
 
    const QString savedParentWidget = parentWidget;
@@ -771,6 +774,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
    }
 
    m_layoutWidget = false;
+
    if (className == "QWidget" && ! node->hasAttributeNative()) {
       const DomWidget *topWidget = m_widgetChain.top();
 

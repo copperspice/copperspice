@@ -239,9 +239,11 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
       // already fetched
       Q_ASSERT(!initialFetch);
       skipRow = false;
+
       for (int i = 0; i < firstRow.count(); i++) {
          values[i] = firstRow[i];
       }
+
       return skippedStatus;
    }
    skipRow = initialFetch;
@@ -251,44 +253,49 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
       firstRow.resize(sqlite3_column_count(stmt));
    }
 
-   if (!stmt) {
+   if (! stmt) {
       q->setLastError(QSqlError(QCoreApplication::translate("QSQLiteResult", "Unable to fetch row"),
             QCoreApplication::translate("QSQLiteResult", "No query"), QSqlError::ConnectionError));
       q->setAt(QSql::AfterLastRow);
+
       return false;
    }
+
    res = sqlite3_step(stmt);
 
    switch (res) {
       case SQLITE_ROW:
          // check to see if should fill out columns
-         if (rInf.isEmpty())
-            // must be first call.
-         {
+         if (rInf.isEmpty()) {
+            // must be first call
             initColumns(false);
          }
-         if (idx < 0 && !initialFetch) {
+
+         if (idx < 0 && ! initialFetch) {
             return true;
          }
 
          for (int i = 0; i < rInf.count(); ++i) {
             switch (sqlite3_column_type(stmt, i)) {
                case SQLITE_BLOB:
-                  values[i + idx] = QByteArray(static_cast<const char *>(
-                           sqlite3_column_blob(stmt, i)),
+                  values[i + idx] = QByteArray(static_cast<const char *>(sqlite3_column_blob(stmt, i)),
                         sqlite3_column_bytes(stmt, i));
                   break;
+
                case SQLITE_INTEGER:
                   values[i + idx] = sqlite3_column_int64(stmt, i);
                   break;
+
                case SQLITE_FLOAT:
                   switch (q->numericalPrecisionPolicy()) {
                      case QSql::LowPrecisionInt32:
                         values[i + idx] = sqlite3_column_int(stmt, i);
                         break;
+
                      case QSql::LowPrecisionInt64:
                         values[i + idx] = sqlite3_column_int64(stmt, i);
                         break;
+
                      case QSql::LowPrecisionDouble:
                      case QSql::HighPrecision:
                      default:
@@ -310,9 +317,8 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
          return true;
 
       case SQLITE_DONE:
-         if (rInf.isEmpty())
-            // must be first call.
-         {
+         if (rInf.isEmpty()) {
+            // must be first call
             initColumns(true);
          }
 
@@ -322,23 +328,24 @@ bool QSQLiteResultPrivate::fetchNext(QSqlCachedResult::ValueCache &values, int i
 
       case SQLITE_CONSTRAINT:
       case SQLITE_ERROR:
-         // SQLITE_ERROR is a generic error code and we must call sqlite3_reset()
-         // to get the specific error message.
+         // SQLITE_ERROR is a generic error code, call sqlite3_reset() for the specific error message
          res = sqlite3_reset(stmt);
          q->setLastError(qMakeError(access, QCoreApplication::translate("QSQLiteResult",
                   "Unable to fetch row"), QSqlError::ConnectionError, res));
          q->setAt(QSql::AfterLastRow);
          return false;
+
       case SQLITE_MISUSE:
       case SQLITE_BUSY:
       default:
-         // something wrong, don't get col info, but still return false
+         // something is wrong, did not get col info
          q->setLastError(qMakeError(access, QCoreApplication::translate("QSQLiteResult",
                   "Unable to fetch row"), QSqlError::ConnectionError, res));
          sqlite3_reset(stmt);
          q->setAt(QSql::AfterLastRow);
          return false;
    }
+
    return false;
 }
 

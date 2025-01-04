@@ -172,8 +172,7 @@ QString QSqlDriver::sqlStatement(StatementType type, const QString &tableName,
 
       case WhereStatement: {
          const QString tableNamePrefix = tableName.isEmpty()
-            ? QString()
-            : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QChar('.');
+            ? QString() : prepareIdentifier(tableName, QSqlDriver::TableName, this) + QChar('.');
 
          for (int j = 0; j < rec.count(); ++j) {
             s.append(j ? QString(" AND ") : QString("WHERE "));

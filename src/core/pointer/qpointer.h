@@ -35,8 +35,7 @@ class QPointer
 {
  public:
    QPointer()
-   {
-   }
+   { }
 
 #if ! defined(CS_DOXYPRESS)
    template <class X = CSInternalRefCount>

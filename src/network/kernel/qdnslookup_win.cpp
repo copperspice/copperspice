@@ -36,7 +36,7 @@
 #include <qt_windows.h>
 
 void QDnsLookupRunnable::query(const int requestType, const QByteArray &name,
-                               const QHostAddress &nameserver, QDnsLookupReply *reply)
+      const QHostAddress &nameserver, QDnsLookupReply *reply)
 {
    // Perform DNS query
    const QString requestName = QString::fromUtf8(name.data(), name.size());

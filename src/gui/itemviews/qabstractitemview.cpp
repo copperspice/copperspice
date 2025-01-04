@@ -3379,19 +3379,21 @@ void QAbstractItemViewPrivate::clearOrRemove()
 {
 #ifndef QT_NO_DRAGANDDROP
    const QItemSelection selection = selectionModel->selection();
-   QList<QItemSelectionRange>::const_iterator it = selection.constBegin();
 
-   if (!overwrite) {
-      for (; it != selection.constEnd(); ++it) {
-         QModelIndex parent = (*it).parent();
-         if ((*it).left() != 0) {
+   if (! overwrite) {
+      for (auto iter = selection.constBegin(); iter != selection.constEnd(); ++iter) {
+         QModelIndex parent = (*iter).parent();
+
+         if ((*iter).left() != 0) {
             continue;
          }
-         if ((*it).right() != (model->columnCount(parent) - 1)) {
+
+         if ((*iter).right() != (model->columnCount(parent) - 1)) {
             continue;
          }
-         int count = (*it).bottom() - (*it).top() + 1;
-         model->removeRows((*it).top(), count, parent);
+
+         int count = (*iter).bottom() - (*iter).top() + 1;
+         model->removeRows((*iter).top(), count, parent);
       }
 
    } else {

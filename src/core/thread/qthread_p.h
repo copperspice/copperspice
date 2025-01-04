@@ -39,11 +39,6 @@ class QEventLoop;
 class QPostEvent
 {
  public:
-   QObject *receiver;
-   QEvent *event;
-
-   int priority;
-
    QPostEvent()
       : receiver(nullptr), event(nullptr), priority(0)
    { }
@@ -51,6 +46,11 @@ class QPostEvent
    QPostEvent(QObject *r, QEvent *e, int p)
       : receiver(r), event(e), priority(p)
    { }
+
+   QObject *receiver;
+   QEvent *event;
+
+   int priority;
 };
 
 inline bool operator<(const QPostEvent &first, const QPostEvent &second)
@@ -58,7 +58,7 @@ inline bool operator<(const QPostEvent &first, const QPostEvent &second)
    return first.priority > second.priority;
 }
 
-// this class holds the list of posted events and must be kept sorted by priority
+// holds the list of posted events and must be kept sorted by priority
 class QPostEventList : public QVector<QPostEvent>
 {
  public:
@@ -67,6 +67,7 @@ class QPostEventList : public QVector<QPostEvent>
 
    // sendOffset == the current event to start sending
    int startOffset;
+
    // insertionOffset == set by sendPostedEvents to tell postEvent() where to start insertions
    int insertionOffset;
 
@@ -120,7 +121,7 @@ class QThreadPrivate
 
    bool running;
    bool finished;
-   bool isInFinish;                   //when in QThreadPrivate::finish
+   bool isInFinish;                   // when in QThreadPrivate::finish
    bool interruptionRequested;
    bool exited;
 

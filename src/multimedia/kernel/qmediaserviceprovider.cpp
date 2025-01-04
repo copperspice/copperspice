@@ -379,22 +379,20 @@ class QPluginServiceProvider : public QMediaServiceProvider
       for (QObject *obj : plugins) {
          QMediaServiceSupportedFormatsInterface *formatInterface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
 
-         if (flags) {
+         if (flags != 0) {
             QMediaServiceFeaturesInterface *featureInterface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
 
             if (featureInterface != nullptr) {
                QMediaServiceProviderHint::Features features = featureInterface->supportedFeatures(serviceType);
 
-               //if low latency playback was asked, skip services known
-               //not to provide low latency playback
-               if ((flags & QMediaPlayer::LowLatency) &&
-                  !(features & QMediaServiceProviderHint::LowLatencyPlayback)) {
+               // if low latency playback was asked, skip services known
+               // not to provide low latency playback
+               if ((flags & QMediaPlayer::LowLatency) && ! (features & QMediaServiceProviderHint::LowLatencyPlayback)) {
                   continue;
                }
 
-               //the same for QIODevice based streams support
-               if ((flags & QMediaPlayer::StreamPlayback) &&
-                  !(features & QMediaServiceProviderHint::StreamPlayback)) {
+               // same for QIODevice based streams support
+               if ((flags & QMediaPlayer::StreamPlayback) && !(features & QMediaServiceProviderHint::StreamPlayback)) {
                   continue;
                }
             }
@@ -432,7 +430,7 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
          QMediaServiceSupportedFormatsInterface *formatInterface = dynamic_cast<QMediaServiceSupportedFormatsInterface *>(obj);
 
-         if (flags) {
+         if (flags != 0) {
             QMediaServiceFeaturesInterface *featureInterface = dynamic_cast<QMediaServiceFeaturesInterface *>(obj);
 
             if (featureInterface != nullptr) {
@@ -440,20 +438,17 @@ class QPluginServiceProvider : public QMediaServiceProvider
 
                // If low latency playback was asked for, skip MIME types from services known
                // not to provide low latency playback
-               if ((flags & QMediaPlayer::LowLatency) &&
-                  !(features & QMediaServiceProviderHint::LowLatencyPlayback)) {
+               if ((flags & QMediaPlayer::LowLatency) && ! (features & QMediaServiceProviderHint::LowLatencyPlayback)) {
                   continue;
                }
 
                //the same for QIODevice based streams support
-               if ((flags & QMediaPlayer::StreamPlayback) &&
-                  !(features & QMediaServiceProviderHint::StreamPlayback)) {
+               if ((flags & QMediaPlayer::StreamPlayback) && ! (features & QMediaServiceProviderHint::StreamPlayback)) {
                   continue;
                }
 
                //the same for QAbstractVideoSurface support
-               if ((flags & QMediaPlayer::VideoSurface) &&
-                  !(features & QMediaServiceProviderHint::VideoSurface)) {
+               if ((flags & QMediaPlayer::VideoSurface) && ! (features & QMediaServiceProviderHint::VideoSurface)) {
                   continue;
                }
             }

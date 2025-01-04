@@ -719,7 +719,6 @@ const char *QPdf::toHex(uchar u, char *buffer)
     return buffer;
 }
 
-
 QPdfPage::QPdfPage()
     : QPdf::ByteStream(true) // Enable file backing
 {
@@ -727,11 +726,12 @@ QPdfPage::QPdfPage()
 
 void QPdfPage::streamImage(int w, int h, int object)
 {
-    *this << w << "0 0 " << -h << "0 " << h << "cm /Im" << object << " Do\n";
-    if (!images.contains(object))
-        images.append(object);
-}
+   *this << w << "0 0 " << -h << "0 " << h << "cm /Im" << object << " Do\n";
 
+   if (! images.contains(object)) {
+      images.append(object);
+   }
+}
 
 QPdfEngine::QPdfEngine(QPdfEnginePrivate &dd)
     : QPaintEngine(dd, qt_pdf_decide_features())
@@ -748,7 +748,6 @@ void QPdfEngine::setOutputFilename(const QString &filename)
     Q_D(QPdfEngine);
     d->outputFileName = filename;
 }
-
 
 void QPdfEngine::drawPoints (const QPointF *points, int pointCount)
 {

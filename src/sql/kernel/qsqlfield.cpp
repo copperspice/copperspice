@@ -35,17 +35,9 @@ class QSqlFieldPrivate
    }
 
    QSqlFieldPrivate(const QSqlFieldPrivate &other)
-      : ref(1),
-        nm(other.nm),
-        ro(other.ro),
-        type(other.type),
-        req(other.req),
-        len(other.len),
-        prec(other.prec),
-        def(other.def),
-        tp(other.tp),
-        gen(other.gen),
-        autoval(other.autoval) {
+      : ref(1), nm(other.nm), ro(other.ro), type(other.type), req(other.req), len(other.len), prec(other.prec),
+        def(other.def), tp(other.tp), gen(other.gen), autoval(other.autoval)
+   {
    }
 
    bool operator==(const QSqlFieldPrivate &other) const {

@@ -129,6 +129,7 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
 {
    QMutexLocker locker(&mutex);
    QStringList p = paths;
+
    QMutableListIterator<QString> it(p);
 
    while (it.hasNext()) {
@@ -144,7 +145,7 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
             newDirectories->append(path);
          }
 
-         if (!path.endsWith('/')) {
+         if (! path.endsWith('/')) {
             fi = QFileInfo(path + QChar('/'));
          }
 
@@ -171,6 +172,7 @@ QStringList QPollingFileSystemWatcherEngine::removePaths(const QStringList &path
 {
    QMutexLocker locker(&mutex);
    QStringList p = paths;
+
    QMutableListIterator<QString> it(p);
 
    while (it.hasNext()) {

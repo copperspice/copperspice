@@ -744,9 +744,8 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
 
    Q_Q(QMdiArea);
    if (!q->isVisible()) {
-      // The window is only laid out when it's added to QMdiArea,
-      // so there's no need to check that we don't have it in the
-      // list already. appendChild() ensures that.
+      // window is only laid out when it it is added to QMdiArea
+      // no need to check if it was in the list already, appendChild() has the check
       pendingPlacements.append(child);
       return;
    }
@@ -927,8 +926,10 @@ void QMdiAreaPrivate::emitWindowActivated(QMdiSubWindow *activeWindow)
    // Put in front to update activation order.
    const int indexToActiveWindow = childWindows.indexOf(activeWindow);
    Q_ASSERT(indexToActiveWindow != -1);
+
    const int index = indicesToActivatedChildren.indexOf(indexToActiveWindow);
    Q_ASSERT(index != -1);
+
    indicesToActivatedChildren.move(index, 0);
    internalRaise(activeWindow);
 
@@ -1285,9 +1286,11 @@ QList<QMdiSubWindow *> QMdiAreaPrivate::subWindowList(QMdiArea::WindowOrder orde
    } else if (order == QMdiArea::StackingOrder) {
       for (QObject *object : viewport->children()) {
          QMdiSubWindow *child = qobject_cast<QMdiSubWindow *>(object);
-         if (!child || !childWindows.contains(child)) {
+
+         if (! child || ! childWindows.contains(child)) {
             continue;
          }
+
          if (!reversed) {
             list.append(child);
          } else {

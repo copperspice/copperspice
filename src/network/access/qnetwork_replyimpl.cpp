@@ -659,6 +659,7 @@ void QNetworkReplyImplPrivate::initCacheSaveDevice()
 
    // save the redirect request also in the cache
    QVariant redirectionTarget = q->attribute(QNetworkRequest::RedirectionTargetAttribute);
+
    if (redirectionTarget.isValid()) {
       QNetworkCacheMetaData::AttributesMap tmpAttributes = metaData.attributes();
       tmpAttributes.insert(QNetworkRequest::RedirectionTargetAttribute, redirectionTarget);
@@ -668,9 +669,10 @@ void QNetworkReplyImplPrivate::initCacheSaveDevice()
    cacheSaveDevice = networkCache()->prepare(metaData);
 
    if (! cacheSaveDevice || (cacheSaveDevice && !cacheSaveDevice->isOpen())) {
-      if (cacheSaveDevice && !cacheSaveDevice->isOpen())
+      if (cacheSaveDevice && !cacheSaveDevice->isOpen()) {
          qCritical("QNetworkReplyImpl::initCacheSaveDevice() Network cache returned a device that is not open -- "
                    "class %s probably needs to be fixed", csPrintable(networkCache()->metaObject()->className()));
+      }
 
       networkCache()->remove(url);
       cacheSaveDevice = nullptr;

@@ -55,7 +55,8 @@ class Scope
    {
    }
 
-   ~Scope() {
+   ~Scope()
+   {
    }
 
    QString name;
@@ -63,11 +64,7 @@ class Scope
    int line;
 };
 
-/*
-  The tokenizer maintains the following global variables. The names
-  should be self-explanatory.
-*/
-
+// tokenizer maintains the following global variables
 static QString yyFileName;
 static QChar yyCh;
 static QString yyIdent;
@@ -81,7 +78,7 @@ static int yyCurLineNo;
 static int yyParenLineNo;
 static int yyTok;
 
-// the string to read from and current position in the string
+// string to read from and current position in the string
 static QString yyInStr;
 static int yyInPos;
 

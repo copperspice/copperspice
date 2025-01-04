@@ -131,12 +131,11 @@ QWidget *QApplication::topLevelWidgetAt(const QPoint &pos)
    return nullptr;
 }
 
-QStyle *QApplicationPrivate::app_style = nullptr;           // default application style
-bool QApplicationPrivate::overrides_native_style = false;   // whether native QApplication style is
+QStyle *QApplicationPrivate::app_style = nullptr;              // default application style
+bool QApplicationPrivate::overrides_native_style = false;
 
-// overridden, i.e. not native
 #ifndef QT_NO_STYLE_STYLESHEET
-QString QApplicationPrivate::styleSheet;                // default application stylesheet
+QString QApplicationPrivate::styleSheet;                       // default application stylesheet
 #endif
 
 QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = nullptr;

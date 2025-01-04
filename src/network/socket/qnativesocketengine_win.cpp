@@ -471,9 +471,9 @@ inline uint QNativeSocketEnginePrivate::scopeIdFromString(const QString &scopeid
 bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType newSocketType,
       QAbstractSocket::NetworkLayerProtocol &newSocketProtocol)
 {
-   //### no ip6 support on winsocket 1.1 but we will try not to use this
-
    /*
+
+   // no ip6 support on winsocket 1.1 but we will try not to use this
    if (winsockVersion < 0x20 && newSocketProtocol == QAbstractSocket::IPv6Protocol) {
        //### no ip6 support
        return -1;
@@ -482,7 +482,7 @@ bool QNativeSocketEnginePrivate::createNewSocket(QAbstractSocket::SocketType new
 
    QSysInfo::WinVersion osver = QSysInfo::windowsVersion();
 
-   //Windows XP and 2003 support IPv6 but not dual stack sockets
+   // Windows XP and 2003 support IPv6 but not dual stack sockets
    int protocol = (newSocketProtocol == QAbstractSocket::IPv6Protocol
          || (newSocketProtocol == QAbstractSocket::AnyIPProtocol && osver >= QSysInfo::WV_6_0)) ? AF_INET6 : AF_INET;
 
@@ -1562,13 +1562,15 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
       // sending IPv6
       if (header.hopLimit != -1) {
          msg.Control.len += WSA_CMSG_SPACE(sizeof(int));
-         cmsgptr->cmsg_len = WSA_CMSG_LEN(sizeof(int));
+         cmsgptr->cmsg_len   = WSA_CMSG_LEN(sizeof(int));
          cmsgptr->cmsg_level = IPPROTO_IPV6;
-         cmsgptr->cmsg_type = IPV6_HOPLIMIT;
+         cmsgptr->cmsg_type  = IPV6_HOPLIMIT;
+
          memcpy(WSA_CMSG_DATA(cmsgptr), &header.hopLimit, sizeof(int));
          cmsgptr = reinterpret_cast<WSACMSGHDR *>(reinterpret_cast<char *>(cmsgptr)
                    + WSA_CMSG_SPACE(sizeof(int)));
       }
+
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
          struct in6_pktinfo *buffer = reinterpret_cast<in6_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
          memset(buffer, 0, sizeof(*buffer));
@@ -1585,17 +1587,20 @@ qint64 QNativeSocketEnginePrivate::nativeSendDatagram(const char *data, qint64 l
          cmsgptr = reinterpret_cast<WSACMSGHDR *>(reinterpret_cast<char *>(cmsgptr)
                    + WSA_CMSG_SPACE(sizeof(*buffer)));
       }
+
    } else {
       // sending IPv4
       if (header.hopLimit != -1) {
          msg.Control.len += WSA_CMSG_SPACE(sizeof(int));
-         cmsgptr->cmsg_len = WSA_CMSG_LEN(sizeof(int));
+         cmsgptr->cmsg_len   = WSA_CMSG_LEN(sizeof(int));
          cmsgptr->cmsg_level = IPPROTO_IP;
-         cmsgptr->cmsg_type = IP_TTL;
+         cmsgptr->cmsg_type  = IP_TTL;
+
          memcpy(WSA_CMSG_DATA(cmsgptr), &header.hopLimit, sizeof(int));
          cmsgptr = reinterpret_cast<WSACMSGHDR *>(reinterpret_cast<char *>(cmsgptr)
                    + WSA_CMSG_SPACE(sizeof(int)));
       }
+
       if (header.ifindex != 0 || !header.senderAddress.isNull()) {
          struct in_pktinfo *buffer = reinterpret_cast<in_pktinfo *>(WSA_CMSG_DATA(cmsgptr));
          memset(buffer, 0, sizeof(*buffer));

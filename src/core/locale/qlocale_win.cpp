@@ -99,14 +99,14 @@ struct QSystemLocalePrivate {
    void update();
 
  private:
-   QByteArray langEnvVar;
-
    enum SubstitutionType {
       SUnknown,
       SContext,
       SAlways,
       SNever
    };
+
+   QByteArray langEnvVar;
 
    // cached values
    LCID lcid;
@@ -219,7 +219,7 @@ QSystemLocalePrivate::SubstitutionType QSystemLocalePrivate::substitution()
 QString &QSystemLocalePrivate::substituteDigits(QString &string)
 {
    ushort zeroU = zeroDigit().unicode();
-   ushort *qch = (ushort *)string.data();
+   ushort *qch  = (ushort *)string.data();
 
    for (ushort *end = qch + string.size(); qch != end; ++qch) {
       if (*qch >= '0' && *qch <= '9') {
@@ -1040,15 +1040,16 @@ static const char *winLangCodeToIsoName(int code)
 
       if (cmp < 0) {
          end = mid;
+
       } else if (cmp > 0) {
          begin = mid;
+
       } else {
          return elt->iso_name;
       }
    }
 
    return nullptr;
-
 }
 
 static QString winIso639LangName(LCID id)
@@ -1101,7 +1102,9 @@ static QByteArray getWinLocaleName(LCID id)
       static QByteArray langEnvVar = qgetenv("LANG");
       result = langEnvVar;
 
-      QString lang, script, cntry;
+      QString lang;
+      QString script;
+      QString cntry;
 
       if (result == "C" || (!result.isEmpty() && qt_splitLocaleName(QString::fromUtf8(result), lang, script, cntry)) ) {
          bool ok = false;

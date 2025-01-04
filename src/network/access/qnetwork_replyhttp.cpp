@@ -1180,11 +1180,8 @@ void QNetworkReplyHttpImplPrivate::checkForRedirect(const int replyCode)
    }
 }
 
-void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
-(QList<QPair<QByteArray, QByteArray> > hm,
- int sc, QString rp, bool pu,
- QSharedPointer<char> db,
- qint64 contentLength, bool spdyWasUsed)
+void QNetworkReplyHttpImplPrivate::replyDownloadMetaData(QList<QPair<QByteArray, QByteArray> > hm, int sc, QString rp, bool pu,
+      QSharedPointer<char> db, qint64 contentLength, bool spdyWasUsed)
 {
    Q_Q(QNetworkReplyHttpImpl);
 
@@ -1200,7 +1197,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
       downloadBufferCurrentSize = 0;
 
       q->setAttribute(QNetworkRequest::DownloadBufferAttribute,
-                      QVariant::fromValue<QSharedPointer<char> > (downloadBufferPointer));
+            QVariant::fromValue<QSharedPointer<char> > (downloadBufferPointer));
    }
 
    q->setAttribute(QNetworkRequest::HttpPipeliningWasUsedAttribute, pu);
@@ -1243,8 +1240,10 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
 
    if (statusCode >= 500 && statusCode < 600) {
       QAbstractNetworkCache *nc = managerPrivate->networkCache;
+
       if (nc) {
          QNetworkCacheMetaData metaData = nc->metaData(httpRequest.url());
+
          QNetworkHeadersPrivate cacheHeaders;
          cacheHeaders.setAllRawHeaders(metaData.rawHeaders());
 
@@ -1257,7 +1256,8 @@ void QNetworkReplyHttpImplPrivate::replyDownloadMetaData
                mustReValidate = true;
             }
          }
-         if (!mustReValidate && sendCacheContents(metaData)) {
+
+         if (! mustReValidate && sendCacheContents(metaData)) {
             return;
          }
       }
@@ -1331,7 +1331,6 @@ void QNetworkReplyHttpImplPrivate::replyDownloadProgressSlot(qint64 bytesReceive
    }
 
    bytesDownloaded = bytesReceived;
-
    downloadBufferCurrentSize = bytesReceived;
 
    // Only emit readyRead when actual data is there
@@ -1340,6 +1339,7 @@ void QNetworkReplyHttpImplPrivate::replyDownloadProgressSlot(qint64 bytesReceive
    if (bytesDownloaded > 0) {
       emit q->readyRead();
    }
+
    if (downloadProgressSignalChoke.elapsed() >= progressSignalInterval) {
       downloadProgressSignalChoke.restart();
       emit q->downloadProgress(bytesDownloaded, bytesTotal);
@@ -1421,6 +1421,7 @@ void QNetworkReplyHttpImplPrivate::sentUploadDataSlot(qint64 newPos, qint64 amou
       error(QNetworkReply::UnknownNetworkError, QString());
       return;
    }
+
    uploadByteDevice->advanceReadPointer(amount);
    uploadByteDevicePosition += amount;
 }
@@ -1559,8 +1560,8 @@ QNetworkCacheMetaData QNetworkReplyHttpImplPrivate::fetchCacheMetaData(const QNe
       header = header.toLower();
 
       bool hop_by_hop = (header == "connection" || header == "keep-alive" || header == "proxy-authenticate"
-                         || header == "proxy-authorization"   || header == "te" || header == "trailers"
-                         || header == "transfer-encoding"     || header ==  "upgrade");
+            || header == "proxy-authorization"  || header == "te" || header == "trailers"
+            || header == "transfer-encoding"    || header ==  "upgrade");
 
       if (hop_by_hop) {
          continue;
