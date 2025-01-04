@@ -35,6 +35,10 @@ class CsUniquePointer
    using ElementType  = element_type;
    using DeleterType  = deleter_type;
 
+   constexpr CsUniquePointer(std::nullptr_t) noexcept
+   {
+   }
+
    explicit CsUniquePointer(Pointer p = nullptr) noexcept
       : m_ptr(p)
    {

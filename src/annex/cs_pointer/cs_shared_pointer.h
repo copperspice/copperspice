@@ -146,6 +146,9 @@ class CsSharedPointer
    explicit CsSharedPointer(const CsWeakPointer<U> &p)
       : m_ptr(p.m_ptr.lock())
    {
+      if (is_null()) {
+         throw std::bad_weak_ptr();
+      }
    }
 
    template <typename U>
