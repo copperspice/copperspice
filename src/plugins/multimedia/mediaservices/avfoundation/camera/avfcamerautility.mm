@@ -69,18 +69,16 @@ inline bool qt_area_sane(const QSize &size)
            && std::numeric_limits<int>::max() / size.width() >= size.height();
 }
 
-struct ResolutionPredicate : std::binary_function<AVCaptureDeviceFormat *, AVCaptureDeviceFormat *, bool>
+auto ResolutionTuple(AVCaptureDeviceFormat *format)
 {
-    bool operator() (AVCaptureDeviceFormat *f1, AVCaptureDeviceFormat *f2)const
-    {
-        Q_ASSERT(f1 && f2);
-        const QSize r1(qt_device_format_resolution(f1));
-        const QSize r2(qt_device_format_resolution(f2));
-        return r1.width() < r2.width() || (r2.width() == r1.width() && r1.height() < r2.height());
-    }
-};
+   Q_ASSERT(format != nullptr);
 
-struct FormatHasNoFPSRange : std::unary_function<AVCaptureDeviceFormat *, bool>
+   const QSize formatSize(qt_device_format_resolution(format));
+
+   return std::make_tuple(formatSize.width(), formatSize.height());
+}
+
+struct FormatHasNoFPSRange
 {
     bool operator() (AVCaptureDeviceFormat *format)
     {
@@ -127,7 +125,7 @@ QVector<AVCaptureDeviceFormat *> qt_unique_device_formats(AVCaptureDevice *captu
     if (!formats.size())
         return formats;
 
-    std::sort(formats.begin(), formats.end(), ResolutionPredicate());
+    std::sort(formats.begin(), formats.end(), [](auto a, auto b) { return ResolutionTuple(a) < ResolutionTuple(b); } );
 
     QSize size(qt_device_format_resolution(formats[0]));
     FourCharCode codec = CMVideoFormatDescriptionGetCodecType(formats[0].formatDescription);
@@ -294,8 +292,10 @@ AVCaptureDeviceFormat *qt_find_best_framerate_match(AVCaptureDevice *captureDevi
     const qreal epsilon = 0.1;
 
     QVector<AVCaptureDeviceFormat *>sorted(qt_unique_device_formats(captureDevice, filter));
+
     // Sort formats by their resolution in decreasing order:
-    std::sort(sorted.begin(), sorted.end(), std::not2(ResolutionPredicate()));
+    std::sort(sorted.begin(), sorted.end(), [](auto a, auto b) { return ResolutionTuple(a) > ResolutionTuple(b); } );
+
     // We can use only formats with framerate ranges:
     sorted.erase(std::remove_if(sorted.begin(), sorted.end(), FormatHasNoFPSRange()), sorted.end());
 
