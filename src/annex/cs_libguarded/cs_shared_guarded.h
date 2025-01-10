@@ -1,11 +1,11 @@
 /***********************************************************************
 *
-* Copyright (c) 2016-2024 Ansel Sermersheim
+* Copyright (c) 2016-2025 Ansel Sermersheim
 *
 * This file is part of CsLibGuarded.
 *
-* CsLibGuarded is free software, released under the BSD 2-Clause license.
-* For license details refer to LICENSE provided with this project.
+* CsLibGuarded is free software which is released under the BSD 2-Clause license.
+* For license details refer to the LICENSE provided with this project.
 *
 * CsLibGuarded is distributed in the hope that it will be useful,
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
