@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2024 Barbara Geller
-* Copyright (c) 2012-2024 Ansel Sermersheim
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -1263,7 +1263,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
 
    QLabel *msg3 = new QLabel;
 
-   msg3->setText("Copyright (c) 2012-2024 Ansel Sermersheim & Barbara Geller\n"
+   msg3->setText("Copyright (c) 2012-2025 Ansel Sermersheim & Barbara Geller\n"
          "CopperSpice is released under the terms of the GNU LGPL version 2.1\n"
          "\n"
          "Copyright (c) 2015 The Qt Company Ltd\n"
