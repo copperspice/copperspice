@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2024 Barbara Geller
-* Copyright (c) 2012-2024 Ansel Sermersheim
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
 *
 * Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
@@ -1478,7 +1478,7 @@ void MainWindow::about()
 
    box.setText(tr("<p>Linguist is a program to add or modify translations in a TS file. The compiled file "
             "can be used in CopperSpice applications to provide internationalization.</p>"
-            "<p>Copyright (c) 2012-2024 Barbara Geller and Ansel Sermersheim</p>"
+            "<p>Copyright (c) 2012-2025 Barbara Geller and Ansel Sermersheim</p>"
             "<p>Copyright (c) 2015 The Qt Company Ltd</p>"
             "<p>Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies)</p>"
             "<p>Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).").formatArg(version));
