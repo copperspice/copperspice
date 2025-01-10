@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2024 Barbara Geller
-* Copyright (c) 2012-2024 Ansel Sermersheim
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
 *
-* Copyright (C) 2015 The Qt Company Ltd.
+* Copyright (c) 2015 The Qt Company Ltd.
 * Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
 * Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
 *
