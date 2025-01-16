@@ -185,8 +185,8 @@ void QAbstractTransition::setTargetStates(const QList<QAbstractState *> &targets
    } else {
       QVector<QPointer<QAbstractState>> copy(d->targetStates);
 
-      for (int i = 0; i < targets.size(); ++i) {
-         sameList = sameList && copy.removeOne(targets.at(i));
+      for (auto item : targets) {
+         sameList = sameList && copy.removeOne(QPointer<QAbstractState>(item));
 
          if (! sameList) {
             break;   // we now know the lists are not the same, so stop the loop

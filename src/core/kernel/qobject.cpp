@@ -686,8 +686,8 @@ void QObject::installEventFilter(QObject *obj)
    // clean up unused items in the list
    m_eventFilters.removeAll( QPointer<QObject>(nullptr) );
 
-   m_eventFilters.removeAll(obj);
-   m_eventFilters.prepend(obj);
+   m_eventFilters.removeAll(QPointer<QObject>(obj));
+   m_eventFilters.prepend(QPointer<QObject>(obj));
 }
 
 bool QObject::inherits(const QString8 &classname) const

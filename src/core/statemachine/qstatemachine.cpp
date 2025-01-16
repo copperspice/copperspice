@@ -2383,7 +2383,7 @@ void QStateMachinePrivate::registerEventTransition(QEventTransition *transition)
 
    QList<QPointer<QObject>> &eventFilters = CSInternalEvents::get_m_EventFilters(object);
 
-   if (! eventFilters.contains(q)) {
+   if (! eventFilters.contains(QPointer<QObject>(q))) {
       object->installEventFilter(q);
    }
 

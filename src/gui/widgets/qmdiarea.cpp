@@ -471,7 +471,8 @@ void QMdiAreaTabBar::mousePressEvent(QMouseEvent *event)
 
 void QMdiAreaTabBar::contextMenuEvent(QContextMenuEvent *event)
 {
-   QPointer<QMdiSubWindow> subWindow = subWindowFromIndex(tabAt(event->pos()));
+   QPointer<QMdiSubWindow> subWindow = QPointer<QMdiSubWindow>(subWindowFromIndex(tabAt(event->pos())));
+
    if (!subWindow || subWindow->isHidden()) {
       event->ignore();
       return;
@@ -684,7 +685,7 @@ void QMdiAreaPrivate::_q_moveTab(int from, int to)
 void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
 {
    Q_Q(QMdiArea);
-   Q_ASSERT(child && childWindows.indexOf(child) == -1);
+   Q_ASSERT(child != nullptr && childWindows.indexOf(QPointer<QMdiSubWindow>(child)) == -1);
 
    if (child->parent() != viewport) {
       child->setParent(viewport, child->windowFlags());
@@ -746,7 +747,9 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
    if (!q->isVisible()) {
       // window is only laid out when it it is added to QMdiArea
       // no need to check if it was in the list already, appendChild() has the check
-      pendingPlacements.append(child);
+
+      pendingPlacements.append(QPointer<QMdiSubWindow>(child));
+
       return;
    }
 
@@ -924,7 +927,7 @@ void QMdiAreaPrivate::emitWindowActivated(QMdiSubWindow *activeWindow)
    }
 
    // Put in front to update activation order.
-   const int indexToActiveWindow = childWindows.indexOf(activeWindow);
+   const int indexToActiveWindow = childWindows.indexOf(QPointer<QMdiSubWindow>(activeWindow));
    Q_ASSERT(indexToActiveWindow != -1);
 
    const int index = indicesToActivatedChildren.indexOf(indexToActiveWindow);
@@ -1862,7 +1865,7 @@ void QMdiArea::removeSubWindow(QWidget *widget)
       }
 
       d->disconnectSubWindow(child);
-      d->childWindows.removeAll(child);
+      d->childWindows.removeAll(QPointer<QMdiSubWindow>(child));
       d->indicesToActivatedChildren.removeAll(index);
       d->updateActiveWindow(index, d->active == child);
       child->setParent(nullptr);

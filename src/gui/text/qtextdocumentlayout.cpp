@@ -2156,7 +2156,7 @@ void QTextDocumentLayoutPrivate::positionFloat(QTextFrame *frame, QTextLine *cur
    QTextLayoutStruct *layoutStruct = pd->currentLayoutStruct;
 
    if (! pd->floats.contains(frame)) {
-      pd->floats.append(frame);
+      pd->floats.append(QPointer<QTextFrame>(frame));
    }
 
    fd->layoutDirty = true;

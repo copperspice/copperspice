@@ -634,7 +634,7 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
 
    // sort gestures by types
    for (QGesture *gesture : gestures) {
-      QWidget *receiver = m_gestureTargets.value(gesture, nullptr);
+      QWidget *receiver = m_gestureTargets.value(gesture, QPointer<QWidget>(nullptr));
       Q_ASSERT(receiver);
 
       if (receiver != nullptr) {
@@ -693,7 +693,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
    for (QSet<QGesture *>::const_iterator it = gestures.begin(),
       e = gestures.end(); it != e; ++it) {
       QGesture *gesture = *it;
-      QWidget *target = m_gestureTargets.value(gesture, nullptr);
+      QWidget *target = m_gestureTargets.value(gesture, QPointer<QWidget>(nullptr));
 
       if (!target) {
          // the gesture has just started and doesn't have a target yet.
@@ -717,7 +717,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          }
 
          if (target) {
-            m_gestureTargets.insert(gesture, target);
+            m_gestureTargets.insert(gesture, QPointer<QWidget>(target));
          }
       }
 

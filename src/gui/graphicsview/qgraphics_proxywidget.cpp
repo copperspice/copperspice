@@ -76,8 +76,15 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
 
    // Find widget position and receiver
    QPointF pos = event->pos();
-   QPointer<QWidget> alienWidget = widget->childAt(pos.toPoint());
-   QPointer<QWidget> receiver =  alienWidget ? alienWidget : widget;
+
+   QPointer<QWidget> alienWidget = QPointer<QWidget>(widget->childAt(pos.toPoint()));
+   QPointer<QWidget> receiver;
+
+   if (alienWidget == nullptr) {
+      receiver = widget;
+   } else {
+      receiver = alienWidget;
+   }
 
    if (QWidgetPrivate::nearestGraphicsProxyWidget(receiver) != q) {
       // another proxywidget will handle the events
@@ -176,8 +183,8 @@ void QGraphicsProxyWidgetPrivate::sendWidgetKeyEvent(QKeyEvent *event)
       return;
    }
 
-   QPointer<QWidget> receiver = widget->focusWidget();
-   if (! receiver) {
+   QPointer<QWidget> receiver = QPointer<QWidget>(widget->focusWidget());
+   if (receiver == nullptr) {
       receiver = widget;
    }
    Q_ASSERT(receiver);
@@ -194,7 +201,7 @@ void QGraphicsProxyWidgetPrivate::sendWidgetKeyEvent(QKeyEvent *event)
 void QGraphicsProxyWidgetPrivate::removeSubFocusHelper(QWidget *widget, Qt::FocusReason reason)
 {
    QFocusEvent event(QEvent::FocusOut, reason);
-   QPointer<QWidget> widgetGuard = widget;
+   QPointer<QWidget> widgetGuard = QPointer<QWidget>(widget);
    QApplication::sendEvent(widget, &event);
 
    if (widgetGuard && event.isAccepted()) {
@@ -834,8 +841,15 @@ void QGraphicsProxyWidget::contextMenuEvent(QGraphicsSceneContextMenuEvent *even
 
    // Find widget position and receiver.
    QPointF pos = event->pos();
-   QPointer<QWidget> alienWidget = d->widget->childAt(pos.toPoint());
-   QPointer<QWidget> receiver =  alienWidget ? alienWidget : d->widget;
+   QPointer<QWidget> alienWidget = QPointer<QWidget>(d->widget->childAt(pos.toPoint()));
+
+   QPointer<QWidget> receiver;
+
+   if (alienWidget == nullptr) {
+      receiver = d->widget;
+   } else {
+      receiver = alienWidget;
+   }
 
    // Map event position from us to the receiver
    pos = d->mapToReceiver(pos, receiver);
@@ -907,8 +921,16 @@ void QGraphicsProxyWidget::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 
    QPointF p = event->pos();
    event->ignore();
-   QPointer<QWidget> subWidget = d->widget->childAt(p.toPoint());
-   QPointer<QWidget> receiver =  subWidget ? subWidget : d->widget;
+
+   QPointer<QWidget> subWidget = QPointer<QWidget>(d->widget->childAt(p.toPoint()));
+   QPointer<QWidget> receiver;
+
+   if (subWidget == nullptr) {
+      receiver = d->widget;
+   } else {
+      receiver = subWidget;
+   }
+
    bool eventDelivered = false;
 
    for (; receiver; receiver = receiver->parentWidget()) {
@@ -1083,7 +1105,7 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    }
 
    QPointF pos = event->pos();
-   QPointer<QWidget> receiver = d->widget->childAt(pos.toPoint());
+   QPointer<QWidget> receiver = QPointer<QWidget>(d->widget->childAt(pos.toPoint()));
 
    if (receiver == nullptr) {
       receiver = d->widget;
@@ -1094,8 +1116,10 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
 
    // Send mouse event.
    QWheelEvent wheelEvent(pos.toPoint(), event->screenPos(), event->delta(),
-      event->buttons(), event->modifiers(), event->orientation());
-   QPointer<QWidget> focusWidget = d->widget->focusWidget();
+         event->buttons(), event->modifiers(), event->orientation());
+
+   QPointer<QWidget> focusWidget = QPointer<QWidget>(d->widget->focusWidget());
+
    extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
    qt_sendSpontaneousEvent(receiver, &wheelEvent);
    event->setAccepted(wheelEvent.isAccepted());

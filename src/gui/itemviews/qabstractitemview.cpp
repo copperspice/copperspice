@@ -385,7 +385,7 @@ void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate *de
 {
    Q_D(QAbstractItemView);
 
-   if (QAbstractItemDelegate *rowDelegate = d->rowDelegates.value(row, nullptr)) {
+   if (QAbstractItemDelegate *rowDelegate = d->rowDelegates.value(row, QPointer<QAbstractItemDelegate>(nullptr))) {
 
       if (d->delegateRefCount(rowDelegate) == 1) {
          disconnect(rowDelegate, &QAbstractItemDelegate::closeEditor,     this, &QAbstractItemView::closeEditor);
@@ -401,7 +401,7 @@ void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate *de
          connect(delegate, &QAbstractItemDelegate::commitData,      this, &QAbstractItemView::commitData);
          connect(delegate, &QAbstractItemDelegate::sizeHintChanged, this, &QAbstractItemView::doItemsLayout, Qt::QueuedConnection);
       }
-      d->rowDelegates.insert(row, delegate);
+      d->rowDelegates.insert(row, QPointer<QAbstractItemDelegate>(delegate));
    }
 
    viewport()->update();
@@ -411,14 +411,14 @@ void QAbstractItemView::setItemDelegateForRow(int row, QAbstractItemDelegate *de
 QAbstractItemDelegate *QAbstractItemView::itemDelegateForRow(int row) const
 {
    Q_D(const QAbstractItemView);
-   return d->rowDelegates.value(row, nullptr);
+   return d->rowDelegates.value(row, QPointer<QAbstractItemDelegate>(nullptr));
 }
 
 void QAbstractItemView::setItemDelegateForColumn(int column, QAbstractItemDelegate *delegate)
 {
    Q_D(QAbstractItemView);
 
-   if (QAbstractItemDelegate *columnDelegate = d->columnDelegates.value(column, nullptr)) {
+   if (QAbstractItemDelegate *columnDelegate = d->columnDelegates.value(column, QPointer<QAbstractItemDelegate>(nullptr))) {
       if (d->delegateRefCount(columnDelegate) == 1) {
          disconnect(columnDelegate, &QAbstractItemDelegate::closeEditor,     this, &QAbstractItemView::closeEditor);
          disconnect(columnDelegate, &QAbstractItemDelegate::commitData,      this, &QAbstractItemView::commitData);
@@ -433,7 +433,7 @@ void QAbstractItemView::setItemDelegateForColumn(int column, QAbstractItemDelega
          connect(delegate, &QAbstractItemDelegate::commitData,      this, &QAbstractItemView::commitData);
          connect(delegate, &QAbstractItemDelegate::sizeHintChanged, this, &QAbstractItemView::doItemsLayout, Qt::QueuedConnection);
       }
-      d->columnDelegates.insert(column, delegate);
+      d->columnDelegates.insert(column, QPointer<QAbstractItemDelegate>(delegate));
    }
 
    viewport()->update();
@@ -443,7 +443,7 @@ void QAbstractItemView::setItemDelegateForColumn(int column, QAbstractItemDelega
 QAbstractItemDelegate *QAbstractItemView::itemDelegateForColumn(int column) const
 {
    Q_D(const QAbstractItemView);
-   return d->columnDelegates.value(column, nullptr);
+   return d->columnDelegates.value(column, QPointer<QAbstractItemDelegate>(nullptr));
 }
 
 QAbstractItemDelegate *QAbstractItemView::itemDelegate(const QModelIndex &index) const
@@ -2015,7 +2015,7 @@ void QAbstractItemView::closeEditor(QWidget *editor, QAbstractItemDelegate::EndE
          d->checkPersistentEditorFocus();
       }
 
-      QPointer<QWidget> ed = editor;
+      QPointer<QWidget> ed = QPointer<QWidget>(editor);
       QApplication::sendPostedEvents(editor, 0);
       editor = ed;
 

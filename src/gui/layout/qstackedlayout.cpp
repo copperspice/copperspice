@@ -180,7 +180,12 @@ void QStackedLayout::setCurrentIndex(int index)
       parent->setUpdatesEnabled(false);
    }
 
-   QPointer<QWidget> fw = parent ? parent->window()->focusWidget() : nullptr;
+   QPointer<QWidget> fw = QPointer<QWidget>(nullptr);
+
+   if (parent != nullptr) {
+      fw = parent->window()->focusWidget();
+   }
+
    const bool focusWasOnOldPage = fw && (prev && prev->isAncestorOf(fw));
 
    if (prev) {

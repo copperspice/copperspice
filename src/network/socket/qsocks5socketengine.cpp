@@ -984,7 +984,7 @@ void QSocks5SocketEnginePrivate::_q_emitPendingReadNotification()
    readNotificationPending = false;
    if (readNotificationEnabled) {
       QSOCKS5_D_DEBUG << "emitting readNotification";
-      QPointer<QSocks5SocketEngine> qq = q;
+      QPointer<QSocks5SocketEngine> qq = QPointer<QSocks5SocketEngine>(q);
       emit q->readNotification();
       if (!qq) {
          return;

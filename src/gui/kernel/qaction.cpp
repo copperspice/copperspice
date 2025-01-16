@@ -765,7 +765,7 @@ void QAction::activate(ActionEvent event)
    Q_D(QAction);
 
    if (event == Trigger) {
-      QPointer<QObject> guard = this;
+      QPointer<QObject> guard = QPointer<QObject>(this);
 
       if (d->checkable) {
          // the checked action of an exclusive group cannot be  unchecked

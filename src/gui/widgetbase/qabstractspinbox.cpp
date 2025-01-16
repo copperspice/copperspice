@@ -918,7 +918,7 @@ void QAbstractSpinBox::contextMenuEvent(QContextMenuEvent *event)
 #else
    Q_D(QAbstractSpinBox);
 
-   QPointer<QMenu> menu = d->edit->createStandardContextMenu();
+   QPointer<QMenu> menu = QPointer<QMenu>(d->edit->createStandardContextMenu());
 
    if (! menu) {
       return;
@@ -938,7 +938,8 @@ void QAbstractSpinBox::contextMenuEvent(QContextMenuEvent *event)
    down->setEnabled(se & StepDownEnabled);
    menu->addSeparator();
 
-   const QPointer<QAbstractSpinBox> that = this;
+   const QPointer<QAbstractSpinBox> that = QPointer<QAbstractSpinBox>(this);
+
    const QPoint pos = (event->reason() == QContextMenuEvent::Mouse)
          ? event->globalPos() : mapToGlobal(QPoint(event->pos().x(), 0)) + QPoint(width() / 2, height() / 2);
 

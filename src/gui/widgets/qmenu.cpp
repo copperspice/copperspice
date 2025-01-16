@@ -257,8 +257,10 @@ QRect QMenuPrivate::popupGeometry(int screen) const
 QVector<QPointer<QWidget>> QMenuPrivate::calcCausedStack() const
 {
    QVector<QPointer<QWidget>> ret;
+
    for (QWidget *widget = causedPopup.widget; widget; ) {
-      ret.append(widget);
+      ret.append(QPointer<QWidget>(widget));
+
       if (QTornOffMenu *qtmenu = qobject_cast<QTornOffMenu *>(widget)) {
          ret += qtmenu->d_func()->causedStack;
       }
@@ -1451,7 +1453,7 @@ void QMenuPrivate::_q_actionTriggered()
    Q_Q(QMenu);
 
    if (QAction *action = qobject_cast<QAction *>(q->sender())) {
-      QPointer<QAction> actionGuard = action;
+      QPointer<QAction> actionGuard = QPointer<QAction>(action);
 
       if (platformMenu && widgetItems.value(action)) {
          platformMenu->dismiss();
@@ -1471,7 +1473,7 @@ void QMenuPrivate::_q_actionTriggered()
 #else
             if (qobject_cast<QMenu *>(widget) || qobject_cast<QMenuBar *>(widget)) {
 #endif
-               list.append(widget);
+               list.append(QPointer<QWidget>(widget));
                widget = widget->parentWidget();
 
             } else {
@@ -2226,7 +2228,7 @@ QAction *QMenu::exec(const QPoint &p, QAction *action)
    d->eventLoop = &eventLoop;
    popup(p, action);
 
-   QPointer<QObject> guard = this;
+   QPointer<QObject> guard = QPointer<QObject>(this);
    (void) eventLoop.exec();
 
    if (guard.isNull()) {

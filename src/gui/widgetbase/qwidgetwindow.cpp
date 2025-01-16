@@ -365,7 +365,7 @@ bool QWidgetWindow::event(QEvent *event)
    return QWindow::event(event);
 }
 
-QPointer<QWidget> qt_last_mouse_receiver = nullptr;
+QPointer<QWidget> qt_last_mouse_receiver = QPointer<QWidget>(nullptr);
 
 void QWidgetWindow::handleEnterLeaveEvent(QEvent *event)
 {
@@ -1150,7 +1150,7 @@ bool QWidgetWindow::nativeEvent(const QByteArray &eventType, void *message, long
 #ifndef QT_NO_TABLETEVENT
 void QWidgetWindow::handleTabletEvent(QTabletEvent *event)
 {
-   static QPointer<QWidget> qt_tablet_target = nullptr;
+   static QPointer<QWidget> qt_tablet_target = QPointer<QWidget>(nullptr);
 
    if (event->type() == QEvent::TabletPress) {
       QWidget *widget = m_widget->childAt(event->pos());

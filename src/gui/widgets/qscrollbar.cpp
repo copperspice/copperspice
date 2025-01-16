@@ -242,7 +242,7 @@ void QScrollBar::contextMenuEvent(QContextMenuEvent *event)
 
 #ifndef QT_NO_MENU
    bool horiz = HORIZONTAL;
-   QPointer<QMenu> menu = new QMenu(this);
+   QPointer<QMenu> menu = QPointer<QMenu>(new QMenu(this));
    QAction *actScrollHere = menu->addAction(tr("Scroll here"));
 
    menu->addSeparator();

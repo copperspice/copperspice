@@ -3563,7 +3563,7 @@ void cs_internal_set_cursor(QWidget *w, bool force)
       return;
    }
 
-   static QPointer<QWidget> lastUnderMouse = nullptr;
+   static QPointer<QWidget> lastUnderMouse = QPointer<QWidget>(nullptr);
 
    if (force) {
       lastUnderMouse = w;
@@ -4950,7 +4950,7 @@ void QWidget::setFocus(Qt::FocusReason reason)
             if (previousProxyFocus && previousProxyFocus != f) {
                // Send event to self
                QFocusEvent event(QEvent::FocusOut, reason);
-               QPointer<QWidget> that = previousProxyFocus;
+               QPointer<QWidget> that = QPointer<QWidget>(previousProxyFocus);
                QApplication::sendEvent(previousProxyFocus, &event);
 
                if (that) {
@@ -4968,7 +4968,7 @@ void QWidget::setFocus(Qt::FocusReason reason)
 
                // Send event to self
                QFocusEvent event(QEvent::FocusIn, reason);
-               QPointer<QWidget> that = f;
+               QPointer<QWidget> that = QPointer<QWidget>(f);
                QApplication::sendEvent(f, &event);
 
                if (that) {
@@ -6548,8 +6548,8 @@ bool QWidgetPrivate::close_helper(CloseMode mode)
    Q_Q(QWidget);
    m_privateData.is_closing = 1;
 
-   QPointer<QWidget> that = q;
-   QPointer<QWidget> parentWidget = q->parentWidget();
+   QPointer<QWidget> that = QPointer<QWidget>(q);
+   QPointer<QWidget> parentWidget = QPointer<QWidget>(q->parentWidget());
 
    bool quitOnClose = q->testAttribute(Qt::WA_QuitOnClose);
 

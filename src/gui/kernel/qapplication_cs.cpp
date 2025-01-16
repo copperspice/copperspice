@@ -138,7 +138,7 @@ bool QApplicationPrivate::overrides_native_style = false;
 QString QApplicationPrivate::styleSheet;                       // default application stylesheet
 #endif
 
-QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = nullptr;
+QPointer<QWidget> QApplicationPrivate::leaveAfterRelease = QPointer<QWidget>(nullptr);
 
 int QApplicationPrivate::app_cspec = QApplication::NormalColor;
 
@@ -889,16 +889,19 @@ void QApplicationPrivate::setFocusWidget(QWidget *focus, Qt::FocusReason reason)
             }
 #endif
             QFocusEvent out(QEvent::FocusOut, reason);
-            QPointer<QWidget> that = prev;
+            QPointer<QWidget> that = QPointer<QWidget>(prev);
             QApplication::sendEvent(prev, &out);
+
             if (that) {
                QApplication::sendEvent(that->style(), &out);
             }
          }
+
          if (focus && QApplicationPrivate::focus_widget == focus) {
             QFocusEvent in(QEvent::FocusIn, reason);
-            QPointer<QWidget> that = focus;
+            QPointer<QWidget> that = QPointer<QWidget>(focus);
             QApplication::sendEvent(focus, &in);
+
             if (that) {
                QApplication::sendEvent(that->style(), &in);
             }
@@ -1688,10 +1691,11 @@ bool QApplicationPrivate::sendMouseEvent(QWidget *receiver, QMouseEvent *event, 
       alienWidget = nullptr;
    }
 
-   QPointer<QWidget> receiverGuard = receiver;
-   QPointer<QWidget> nativeGuard = nativeWidget;
-   QPointer<QWidget> alienGuard = alienWidget;
-   QPointer<QWidget> activePopupWidget = QApplication::activePopupWidget();
+   QPointer<QWidget> receiverGuard = QPointer<QWidget>(receiver);
+   QPointer<QWidget> nativeGuard   = QPointer<QWidget>(nativeWidget);
+   QPointer<QWidget> alienGuard    = QPointer<QWidget>(alienWidget);
+
+   QPointer<QWidget> activePopupWidget = QPointer<QWidget>(QApplication::activePopupWidget());
 
    const bool graphicsWidget = nativeWidget->testAttribute(Qt::WA_DontShowOnScreen);
 
@@ -2082,7 +2086,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
 #endif
             QKeyEvent *key = static_cast<QKeyEvent *>(e);
             bool def = key->isAccepted();
-            QPointer<QObject> pr = receiver;
+            QPointer<QObject> pr = QPointer<QObject>(receiver);
 
             while (receiver) {
                if (def) {
@@ -2166,7 +2170,7 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
             }
 
             bool eventAccepted = mouse->isAccepted();
-            QPointer<QWidget> pw = w;
+            QPointer<QWidget> pw = QPointer<QWidget>(w);
 
             while (w) {
                QMouseEvent me(mouse->type(), relpos, mouse->windowPos(), mouse->globalPos(),
@@ -2544,7 +2548,9 @@ bool QApplication::notify(QObject *receiver, QEvent *e)
                acceptTouchEvents = widget->testAttribute(Qt::WA_AcceptTouchEvents);
                touchEvent->setTarget(widget);
                touchEvent->setAccepted(acceptTouchEvents);
-               QPointer<QWidget> p = widget;
+
+               QPointer<QWidget> p = QPointer<QWidget>(widget);
+
                res = acceptTouchEvents && d->notify_helper(widget, touchEvent);
                eventAccepted = touchEvent->isAccepted();
 
@@ -3064,7 +3070,7 @@ void QApplicationPrivate::giveFocusAccordingToFocusPolicy(QWidget *widget, QEven
 {
    const bool setFocusOnRelease = QGuiApplication::styleHints()->setFocusOnTouchRelease();
    Qt::FocusPolicy focusPolicy = Qt::ClickFocus;
-   static QPointer<QWidget> focusedWidgetOnTouchBegin = nullptr;
+   static QPointer<QWidget> focusedWidgetOnTouchBegin = QPointer<QWidget>(nullptr);
 
    switch (event->type()) {
       case QEvent::MouseButtonPress:
@@ -3314,7 +3320,8 @@ bool QApplicationPrivate::translateRawTouchEvent(QWidget *window, QTouchDevice *
    auto end = widgetsNeedingEvents.constEnd();
 
    for (; it != end; ++it) {
-      const QPointer<QWidget> widget = it.key();
+      const QPointer<QWidget> widget = QPointer<QWidget>(it.key());
+
       if (! QApplicationPrivate::tryModalHelper(widget, nullptr)) {
          continue;
       }

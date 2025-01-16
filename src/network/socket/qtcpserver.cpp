@@ -134,7 +134,7 @@ void QTcpServerPrivate::readNotification()
 
       q->incomingConnection(descriptor);
 
-      QPointer<QTcpServer> that = q;
+      QPointer<QTcpServer> that = QPointer<QTcpServer>(q);
       emit q->newConnection();
 
       if (! that || ! q->isListening()) {
