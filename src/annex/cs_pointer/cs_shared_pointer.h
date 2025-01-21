@@ -253,13 +253,7 @@ class CsSharedPointer
    }
 
    CsWeakPointer<T> toWeakRef() const {
-      /* returns a CsWeakPointer to this CsSharedPointer
-
-         CsSharedPointer<T> sharedPtr = new T();
-         CsWeakPointer<T> weakPtr     = sharedPtr;
-      */
-
-       return *this;
+       return  CsWeakPointer<T>(*this);
    }
 
    bool unique() const noexcept {
