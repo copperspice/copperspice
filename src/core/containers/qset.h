@@ -413,6 +413,8 @@ class QSetIterator
       : c(set), i(c.constBegin())
    { }
 
+  ~QSetIterator() = default;
+
    QSetIterator &operator=(const QSet<T> &set) {
       c = set;
       i = c.constBegin();
@@ -493,8 +495,7 @@ class QMutableSetIterator
       n = c->end();
    }
 
-   ~QMutableSetIterator() {
-   }
+   ~QMutableSetIterator() = default;
 
    QMutableSetIterator &operator=(QSet<T> &set) {
       c = &set;

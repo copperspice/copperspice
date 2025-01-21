@@ -822,8 +822,7 @@ class QMultiMapIterator
    {
    }
 
-   ~QMultiMapIterator() {
-   }
+   ~QMultiMapIterator() = default;
 
    QMultiMapIterator &operator=(const QMultiMap<Key, Val, C> &map) {
       c = map;
@@ -924,9 +923,7 @@ class QMutableMultiMapIterator
    {
    }
 
-   ~QMutableMultiMapIterator()
-   {
-   }
+   ~QMutableMultiMapIterator() = default;
 
    QMutableMultiMapIterator &operator=(QMultiMap<Key, Val, C> &map) {
       c = &map;

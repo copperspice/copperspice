@@ -707,8 +707,7 @@ class QMultiHashIterator
    QMultiHashIterator(const QMultiHash<Key, Val, Hash, KeyEqual> &hash)
       : c(&hash), i(c->constBegin()), n(c->constEnd()) {}
 
-   ~QMultiHashIterator()
-   { }
+   ~QMultiHashIterator() = default;
 
    QMultiHashIterator &operator=(const QMultiHash<Key, Val, Hash, KeyEqual> &hash) {
       c = hash;
@@ -807,8 +806,7 @@ class QMutableMultiHashIterator
       : c(&hash), i(c->begin()), n(c->end())
    { }
 
-   ~QMutableMultiHashIterator()
-   { }
+   ~QMutableMultiHashIterator() = default;
 
    QMutableMultiHashIterator &operator=(QMultiHash<Key, Val, Hash, KeyEqual> &hash) {
       c = & hash;

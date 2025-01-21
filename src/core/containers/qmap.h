@@ -689,8 +689,7 @@ class QMapIterator
    QMapIterator(const QMap<Key, Val, C> &map)
       : c(&map), i(c->constBegin()), n(c->constEnd()) {}
 
-   ~QMapIterator() {
-   }
+   ~QMapIterator() = default;
 
    QMapIterator &operator=(const QMap<Key, Val, C> &map) {
       c = map;
@@ -789,8 +788,7 @@ class QMutableMapIterator
    QMutableMapIterator(QMap<Key, Val, C> &map)
       : c(&map), i(c->begin()), n(c->end()) {}
 
-   ~QMutableMapIterator() {
-   }
+   ~QMutableMapIterator() = default;
 
    QMutableMapIterator &operator=(QMap<Key, Val, C> &map) {
       c = &map;

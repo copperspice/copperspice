@@ -563,9 +563,7 @@ class QHashIterator
    {
    }
 
-   ~QHashIterator()
-   {
-   }
+   ~QHashIterator() = default;
 
    QHashIterator &operator=(const QHash<Key, Val, Hash, KeyEqual> &hash) {
       c = hash;
@@ -667,8 +665,7 @@ class QMutableHashIterator
    {
    }
 
-   ~QMutableHashIterator()
-   { }
+   ~QMutableHashIterator() = default;
 
    QMutableHashIterator &operator=(QHash<Key, Val, Hash, KeyEqual> &hash) {
       c = &hash;

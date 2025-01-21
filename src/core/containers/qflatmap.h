@@ -757,8 +757,7 @@ class QFlatMapIterator
    QFlatMapIterator(const QFlatMap<Key, Val, C> &flatmap)
       : c(&flatmap), i(c->constBegin()), n(c->constEnd()) {}
 
-   ~QFlatMapIterator() {
-   }
+   ~QFlatMapIterator() = default;
 
    QFlatMapIterator &operator=(const QFlatMap<Key, Val, C> &flatmap) {
       c = flatmap;
@@ -859,9 +858,7 @@ class QMutableFlatMapIterator
    {
    }
 
-   ~QMutableFlatMapIterator()
-   {
-   }
+   ~QMutableFlatMapIterator() = default;
 
    QMutableFlatMapIterator &operator=(QFlatMap<Key, Val, C> &flatmap) {
       c = &flatmap;

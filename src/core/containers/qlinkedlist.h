@@ -422,6 +422,8 @@ class QLinkedListIterator
    {
    }
 
+   ~QLinkedListIterator() = default;
+
    QLinkedListIterator &operator=(const QLinkedList<T> &list) {
       c = list;
       i = c.constBegin();
@@ -503,9 +505,7 @@ class QMutableLinkedListIterator
       n = c->end();
    }
 
-   ~QMutableLinkedListIterator()
-   {
-   }
+   ~QMutableLinkedListIterator() = default;
 
    QMutableLinkedListIterator &operator=(QLinkedList<T> &list) {
       c = &list;

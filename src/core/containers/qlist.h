@@ -673,6 +673,8 @@ class QListIterator
       : c(list), i(c.constBegin())
    { }
 
+   ~QListIterator() = default;
+
    QListIterator &operator=(const QList<T> &list) {
       c = list;
       i = c.constBegin();
@@ -754,8 +756,7 @@ class QMutableListIterator
       n = c->end();
    }
 
-   ~QMutableListIterator()
-   {  }
+   ~QMutableListIterator() = default;
 
    QMutableListIterator &operator=(QList<T> &list) {
       c = &list;

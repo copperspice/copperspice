@@ -700,6 +700,8 @@ class QVectorIterator
    {
    }
 
+   ~QVectorIterator() = default;
+
    QVectorIterator &operator=(const QVector<T> &vector) {
       c = vector;
       i = c.constBegin();
@@ -780,6 +782,8 @@ class QMutableVectorIterator
       i = c->begin();
       n = c->end();
    }
+
+   ~QMutableVectorIterator() = default;
 
    QMutableVectorIterator &operator=(QVector<T> &vector) {
       c = &vector;
