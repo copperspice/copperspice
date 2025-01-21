@@ -196,6 +196,7 @@ static void copyActionToPlatformItem(const QAction *action, QPlatformMenuItem *i
 void QMenuPrivate::syncPlatformMenu()
 {
    Q_Q(QMenu);
+
    if (platformMenu.isNull()) {
       return;
    }
@@ -216,6 +217,7 @@ void QMenuPrivate::syncPlatformMenu()
       platformMenu->insertMenuItem(menuItem, beforeItem);
       beforeItem = menuItem;
    }
+
    platformMenu->syncSeparatorsCollapsible(collapsibleSeparators);
    platformMenu->setEnabled(q->isEnabled());
 }
@@ -352,10 +354,10 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
 
       previousWasSeparator = isPlainSeparator;
 
-      //let the style modify the above size
-      QStyleOptionMenuItem opt;
-      q->initStyleOption(&opt, action);
-      const QFontMetrics &fm = opt.fontMetrics;
+      // let the style modify the above size
+      QStyleOptionMenuItem optionStyle;
+      q->initStyleOption(&optionStyle, action);
+      const QFontMetrics &fm = optionStyle.fontMetrics;
 
       QSize sz;
       if (QWidget *w = widgetItems.value(action)) {
@@ -399,7 +401,7 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
             }
          }
 
-         sz = style->sizeFromContents(QStyle::CT_MenuItem, &opt, sz, q);
+         sz = style->sizeFromContents(QStyle::CT_MenuItem, &optionStyle, sz, q);
       }
 
       if (! sz.isEmpty()) {
@@ -418,9 +420,10 @@ void QMenuPrivate::updateActionRects(const QRect &screen) const
       }
    }
 
-   max_column_width += tabWidth; //finally add in the tab width
+   max_column_width += tabWidth;       // finally add in the tab width
+
    const int sfcMargin = style->sizeFromContents(QStyle::CT_Menu, &opt,
-                  QApplication::globalStrut(), q).width() - QApplication::globalStrut().width();
+         QApplication::globalStrut(), q).width() - QApplication::globalStrut().width();
 
    const int min_column_width = q->minimumWidth() - (sfcMargin + leftmargin + rightmargin + 2 * (fw + hmargin));
    max_column_width = qMax(min_column_width, max_column_width);
@@ -552,20 +555,20 @@ void QMenuPrivate::hideMenu(QMenu *menu)
    aboutToHide = true;
 
    // Flash item which is about to trigger (if any)
-   if (menu->style()->styleHint(QStyle::SH_Menu_FlashTriggeredItem)
-         && currentAction && currentAction == actionAboutToTrigger
+   if (menu->style()->styleHint(QStyle::SH_Menu_FlashTriggeredItem) && currentAction && currentAction == actionAboutToTrigger
          && menu->actions().contains(currentAction)) {
-      QEventLoop eventLoop;
+
+      QEventLoop menuEventLoop;
       QAction *activeAction = currentAction;
 
       menu->setActiveAction(nullptr);
-      QTimer::singleShot(60, &eventLoop, SLOT(quit()));
-      eventLoop.exec();
+      QTimer::singleShot(60, &menuEventLoop, SLOT(quit()));
+      menuEventLoop.exec();
 
-      // Select and wait 20 ms
+      // select and wait 20 ms
       menu->setActiveAction(activeAction);
-      QTimer::singleShot(20, &eventLoop, SLOT(quit()));
-      eventLoop.exec();
+      QTimer::singleShot(20, &menuEventLoop, SLOT(quit()));
+      menuEventLoop.exec();
    }
 
    aboutToHide = false;
@@ -933,16 +936,16 @@ void QMenuPrivate::updateLayoutDirection()
 {
    Q_Q(QMenu);
 
-   //we need to mimic the cause of the popup's layout direction
-   //to allow setting it on a mainwindow for example
-   //we call setLayoutDirection_helper to not overwrite a user-defined value
+   // need to mimic the cause of the popup's layout direction
+   // to allow setting it on a mainwindow for example
+   // we call setLayoutDirection_helper to not overwrite a user-defined value
 
    if (! q->testAttribute(Qt::WA_SetLayoutDirection)) {
-      if (QWidget *w = causedPopup.widget) {
-         setLayoutDirection_helper(w->layoutDirection());
+      if (QWidget *w1 = causedPopup.widget) {
+         setLayoutDirection_helper(w1->layoutDirection());
 
-      } else if (QWidget *w = q->parentWidget()) {
-         setLayoutDirection_helper(w->layoutDirection());
+      } else if (QWidget *w2 = q->parentWidget()) {
+         setLayoutDirection_helper(w2->layoutDirection());
 
       } else {
          setLayoutDirection_helper(QApplication::layoutDirection());
@@ -2621,9 +2624,11 @@ bool QMenu::focusNextPrevChild(bool next)
 void QMenu::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QMenu);
+
    d->updateActionRects();
 
    int key = e->key();
+
    if (isRightToLeft()) {
       // in reverse mode open/close key for submenues are reversed
       if (key == Qt::Key_Left) {
@@ -2646,6 +2651,7 @@ void QMenu::keyPressEvent(QKeyEvent *e)
 #endif
 
    bool key_consumed = false;
+
    switch (key) {
       case Qt::Key_Home:
          key_consumed = true;
@@ -3019,9 +3025,9 @@ void QMenu::keyPressEvent(QKeyEvent *e)
                QAction *act = d->actions.at(i);
                QKeySequence sequence = QKeySequence::mnemonic(act->text());
 
-               char32_t key = sequence[0] & 0xFFFF;
+               char32_t tmpKey = sequence[0] & 0xFFFF;
 
-               if (key == c.unicode()) {
+               if (tmpKey == c.unicode()) {
                   ++clashCount;
 
                   if (! first) {

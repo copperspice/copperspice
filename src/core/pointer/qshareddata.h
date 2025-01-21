@@ -202,7 +202,8 @@ class QExplicitlySharedDataPointer
    using Type    = T;
    using pointer = T *;
 
-   QExplicitlySharedDataPointer() {
+   QExplicitlySharedDataPointer()
+   {
       d = nullptr;
    }
 
@@ -218,7 +219,8 @@ class QExplicitlySharedDataPointer
 
    template <class X>
    QExplicitlySharedDataPointer(const QExplicitlySharedDataPointer<X> &other)
-      : d(static_cast<T *>(other.data())) {
+      : d(static_cast<T *>(other.data()))
+   {
       if (d) {
          d->ref.ref();
       }

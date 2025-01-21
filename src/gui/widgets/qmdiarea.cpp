@@ -737,9 +737,9 @@ void QMdiAreaPrivate::appendChild(QMdiSubWindow *child)
    QObject::connect(child, &QMdiSubWindow::windowStateChanged, q, &QMdiArea::_q_processWindowStateChanged);
 }
 
-void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
+void QMdiAreaPrivate::place(Placer *newPlacer, QMdiSubWindow *child)
 {
-   if (! placer || ! child) {
+   if (! newPlacer || ! child) {
       return;
    }
 
@@ -759,9 +759,10 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
    QRect parentRect = q->rect();
    for (QMdiSubWindow *window : childWindows) {
       if (!sanityCheck(window, "QMdiArea::place") || window == child || !window->isVisibleTo(q)
-         || !window->testAttribute(Qt::WA_Moved)) {
+            || !window->testAttribute(Qt::WA_Moved)) {
          continue;
       }
+
       QRect occupiedGeometry;
       if (window->isMaximized()) {
          occupiedGeometry = QRect(window->d_func()->oldGeometry.topLeft(),
@@ -771,7 +772,9 @@ void QMdiAreaPrivate::place(Placer *placer, QMdiSubWindow *child)
       }
       rects.append(QStyle::visualRect(child->layoutDirection(), parentRect, occupiedGeometry));
    }
-   QPoint newPos = placer->place(child->size(), rects, parentRect);
+
+   QPoint newPos = newPlacer->place(child->size(), rects, parentRect);
+
    QRect newGeometry = QRect(newPos.x(), newPos.y(), child->width(), child->height());
    child->setGeometry(QStyle::visualRect(child->layoutDirection(), parentRect, newGeometry));
 }
@@ -1144,29 +1147,30 @@ void QMdiAreaPrivate::internalRaise(QMdiSubWindow *mdiChild) const
 QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, int subWindowCount)
 {
    Q_Q(QMdiArea);
+
    if (!minSubWindowSize.isValid() || subWindowCount <= 0) {
       return viewport->rect();
    }
 
-   // Calculate minimum size.
+   // Calculate minimum size
    const int columns = qMax(qCeil(qSqrt(qreal(subWindowCount))), 1);
    const int rows = qMax((subWindowCount % columns) ? (subWindowCount / columns + 1)
          : (subWindowCount / columns), 1);
    const int minWidth = minSubWindowSize.width() * columns;
    const int minHeight = minSubWindowSize.height() * rows;
 
-   // Increase area size if necessary. Scroll bars are provided if we're not able
-   // to resize to the minimum size.
-   if (!tileCalledFromResizeEvent) {
+   // Increase area size if necessary. Scroll bars are provided if we are not able
+   // to resize to the minimum size
+   if (! tileCalledFromResizeEvent) {
       QWidget *topLevel = q;
 
       // Find the topLevel for this area, either a real top-level or a sub-window.
-      while (topLevel && !topLevel->isWindow() && topLevel->windowType() != Qt::SubWindow) {
+      while (topLevel && ! topLevel->isWindow() && topLevel->windowType() != Qt::SubWindow) {
          topLevel = topLevel->parentWidget();
       }
 
-      // We don't want sub-subwindows to be placed at the edge, thus add 2 pixels.
       int minAreaWidth = minWidth + left + right + 2;
+      // do not want sub-subwindows to be placed at the edge, thus add 2 pixels
       int minAreaHeight = minHeight + top + bottom + 2;
 
       if (hbar->isVisible()) {
@@ -1179,7 +1183,7 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
 
       if (q->style()->styleHint(QStyle::SH_ScrollView_FrameOnlyAroundContents, nullptr, q)) {
          const int frame = q->style()->pixelMetric(QStyle::PM_DefaultFrameWidth, nullptr, q);
-         minAreaWidth += 2 * frame;
+         minAreaWidth  += 2 * frame;
          minAreaHeight += 2 * frame;
       }
 
@@ -1189,7 +1193,7 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
 
    QRect domain = viewport->rect();
 
-   // Adjust domain width and provide horizontal scroll bar.
+   // Adjust domain width and provide horizontal scroll bar
    if (domain.width() < minWidth) {
       domain.setWidth(minWidth);
 
@@ -1199,7 +1203,8 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
          hbar->setValue(0);
       }
    }
-   // Adjust domain height and provide vertical scroll bar.
+
+   // Adjust domain height and provide vertical scroll bar
    if (domain.height() < minHeight) {
       domain.setHeight(minHeight);
       if (vbarpolicy  == Qt::ScrollBarAlwaysOff) {

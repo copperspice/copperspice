@@ -81,11 +81,14 @@ int QDialPrivate::bound(int val) const
       if ((val >= minimum) && (val <= maximum)) {
          return val;
       }
+
       val = minimum + ((val - minimum) % (maximum - minimum));
+
       if (val < minimum) {
          val += maximum - minimum;
       }
       return val;
+
    } else {
       return QAbstractSliderPrivate::bound(val);
    }
@@ -101,21 +104,25 @@ void QDial::initStyleOption(QStyleOptionSlider *option) const
    option->initFrom(this);
    option->minimum = d->minimum;
    option->maximum = d->maximum;
+
    option->sliderPosition = d->position;
    option->sliderValue = d->value;
-   option->singleStep = d->singleStep;
-   option->pageStep = d->pageStep;
-   option->upsideDown = !d->invertedAppearance;
-   option->notchTarget = d->target;
-   option->dialWrapping = d->wrapping;
-   option->subControls = QStyle::SC_All;
+   option->singleStep     = d->singleStep;
+   option->pageStep       = d->pageStep;
+   option->upsideDown     = ! d->invertedAppearance;
+   option->notchTarget    = d->target;
+   option->dialWrapping   = d->wrapping;
+
+   option->subControls       = QStyle::SC_All;
    option->activeSubControls = QStyle::SC_None;
+
    if (!d->showNotches) {
       option->subControls &= ~QStyle::SC_DialTickmarks;
       option->tickPosition = QSlider::TicksAbove;
    } else {
       option->tickPosition = QSlider::NoTicks;
    }
+
    option->tickInterval = notchSize();
 }
 

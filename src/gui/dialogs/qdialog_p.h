@@ -62,7 +62,10 @@ class QDialogPrivate : public QWidgetPrivate
    Qt::Orientation orientation;
    QWidget *extension;
    bool doShowExtension;
-   QSize size, min, max;
+
+   QSize size;
+   QSize min;
+   QSize max;
 
 #ifndef QT_NO_SIZEGRIP
    QSizeGrip *resizer;

@@ -2492,20 +2492,20 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
       *hasEscapeSequences = false;
    }
 
-   QString::const_iterator i = output.begin();
+   QString::const_iterator iter = output.cbegin();
 
-   while (i != output.end()) {
+   while (iter != output.cend()) {
 
-      if ((*i) == '\\') {
-         ++i;
+      if ((*iter) == '\\') {
+         ++iter;
 
          // test for unicode hex escape
          int hexCount = 0;
-         const QString::const_iterator hexStart = i;
+         const QString::const_iterator hexStart = iter;
 
-         while (i != output.end() && isHexDigit(i->toLatin1()) && hexCount < 7) {
+         while (iter != output.cend() && isHexDigit(iter->toLatin1()) && hexCount < 7) {
             ++hexCount;
-            ++i;
+            ++iter;
          }
 
          if (hexCount == 0) {
@@ -2520,13 +2520,13 @@ QString Scanner::preprocess(const QString &input, bool *hasEscapeSequences)
          ushort code = output.mid(hexStart, hexCount).toInteger<ushort>(&ok, 16);
 
          if (ok) {
-            output.replace(hexStart - 1, i + 1, QChar(code));
+            output.replace(hexStart - 1, iter + 1, QChar(code));
          }
 
-         i = hexStart;
+         iter = hexStart;
 
       } else {
-         ++i;
+         ++iter;
       }
    }
 

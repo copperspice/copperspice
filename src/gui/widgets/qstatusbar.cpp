@@ -474,20 +474,24 @@ void QStatusBar::paintEvent(QPaintEvent *event)
    bool haveMessage = !d->tempItem.isEmpty();
 
    QPainter p(this);
-   QStyleOption opt;
-   opt.initFrom(this);
-   style()->drawPrimitive(QStyle::PE_PanelStatusBar, &opt, &p, this);
+
+   QStyleOption option;
+   option.initFrom(this);
+   style()->drawPrimitive(QStyle::PE_PanelStatusBar, &option, &p, this);
 
    for (int i = 0; i < d->items.size(); ++i) {
       QStatusBarPrivate::SBItem *item = d->items.at(i);
-      if (item && item->w->isVisible() && (!haveMessage || item->p)) {
+
+      if (item && item->w->isVisible() && (! haveMessage || item->p)) {
          QRect ir = item->w->geometry().adjusted(-2, -1, 2, 1);
+
          if (event->rect().intersects(ir)) {
-            QStyleOption opt(0);
-            opt.rect = ir;
-            opt.palette = palette();
-            opt.state = QStyle::State_None;
-            style()->drawPrimitive(QStyle::PE_FrameStatusBarItem, &opt, &p, item->w);
+            QStyleOption newOption(0);
+            newOption.rect = ir;
+            newOption.palette = palette();
+            newOption.state = QStyle::State_None;
+
+            style()->drawPrimitive(QStyle::PE_FrameStatusBarItem, &newOption, &p, item->w);
          }
       }
    }

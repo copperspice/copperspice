@@ -169,16 +169,19 @@ void QScrollBar::initStyleOption(QStyleOptionSlider *option) const
 
    Q_D(const QScrollBar);
    option->initFrom(this);
-   option->subControls = QStyle::SC_None;
-   option->activeSubControls = QStyle::SC_None;
-   option->orientation = d->orientation;
    option->minimum = d->minimum;
    option->maximum = d->maximum;
+
+   option->orientation    = d->orientation;
    option->sliderPosition = d->position;
    option->sliderValue = d->value;
-   option->singleStep = d->singleStep;
-   option->pageStep = d->pageStep;
-   option->upsideDown = d->invertedAppearance;
+   option->singleStep     = d->singleStep;
+   option->pageStep       = d->pageStep;
+   option->upsideDown     = d->invertedAppearance;
+
+   option->subControls       = QStyle::SC_None;
+   option->activeSubControls = QStyle::SC_None;
+
    if (d->orientation == Qt::Horizontal) {
       option->state |= QStyle::State_Horizontal;
    }

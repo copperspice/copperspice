@@ -223,8 +223,8 @@ class Q_GUI_EXPORT QTextBlock
    {
    }
 
-   inline QTextBlock(const QTextBlock &other) = default;
-   inline QTextBlock &operator=(const QTextBlock &other) = default;
+   QTextBlock(const QTextBlock &other) = default;
+   QTextBlock &operator=(const QTextBlock &other) = default;
 
    bool isValid() const;
 

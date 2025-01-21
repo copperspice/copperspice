@@ -710,7 +710,7 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
 
       if (currentRight == m_controllerWidget) {
          if (ControlElement<ControllerWidget> *ce = ptr<ControllerWidget>(previousRight)) {
-            if (! ce->mdiChild || !ce->mdiChild->isMaximized()) {
+            if (! ce->mdiChild || ! ce->mdiChild->isMaximized()) {
                previousRight = nullptr;
             } else {
                child = ce->mdiChild;
@@ -751,6 +751,7 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
    }
 
    m_menuBar->update();
+
    if (child) {
       child->d_func()->setNewWindowTitle();
    } else if (mdiChild) {
@@ -1676,7 +1677,7 @@ void QMdiSubWindowPrivate::ensureWindowState(Qt::WindowState state)
    q->overrideWindowState(windowStates);
 }
 
-int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &options) const
+int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &newOptions) const
 {
    Q_Q(const QMdiSubWindow);
 
@@ -1685,9 +1686,9 @@ int QMdiSubWindowPrivate::titleBarHeight(const QStyleOptionTitleBar &options) co
       return 0;
    }
 
-   int height = q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &options, q);
+   int height = q->style()->pixelMetric(QStyle::PM_TitleBarHeight, &newOptions, q);
 
-   if (hasBorder(options)) {
+   if (hasBorder(newOptions)) {
       height += q->isMinimized() ? 8 : 4;
    }
 

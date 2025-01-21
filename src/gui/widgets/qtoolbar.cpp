@@ -128,8 +128,9 @@ void QToolBarPrivate::updateWindowFlags(bool floating, bool unplug)
 void QToolBarPrivate::setWindowState(bool floating, bool unplug, const QRect &rect)
 {
    Q_Q(QToolBar);
+
    bool visible = !q->isHidden();
-   bool wasFloating = q->isFloating(); // ...is also currently using popup menus
+   bool wasFloating = q->isFloating();    // currently using popup menus
 
    q->hide();
 
@@ -347,6 +348,7 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
       q->move(pos);
       layout->hover(state->widgetItem, event->globalPos());
+
    } else if (state->moving) {
 
       const QPoint rtl(q->width() - state->pressPos.x(), state->pressPos.y()); //for RTL
@@ -366,12 +368,14 @@ bool QToolBarPrivate::mouseMoveEvent(QMouseEvent *event)
 
       layout->moveToolBar(q, pos);
    }
+
    return true;
 }
 
 void QToolBarPrivate::unplug(const QRect &_r)
 {
    Q_Q(QToolBar);
+
    QRect r = _r;
    r.moveTopLeft(q->mapToGlobal(QPoint(0, 0)));
    setWindowState(true, true, r);
@@ -491,7 +495,9 @@ QSize QToolBar::iconSize() const
 void QToolBar::setIconSize(const QSize &iconSize)
 {
    Q_D(QToolBar);
+
    QSize sz = iconSize;
+
    if (!sz.isValid()) {
       QMainWindow *mw = qobject_cast<QMainWindow *>(parentWidget());
       if (mw && mw->layout()) {
@@ -506,10 +512,12 @@ void QToolBar::setIconSize(const QSize &iconSize)
          } while (!sz.isValid() && item != nullptr);
       }
    }
+
    if (!sz.isValid()) {
       const int metric = style()->pixelMetric(QStyle::PM_ToolBarIconSize, nullptr, this);
       sz = QSize(metric, metric);
    }
+
    if (d->iconSize != sz) {
       d->iconSize = sz;
       setMinimumSize(0, 0);
@@ -646,6 +654,7 @@ QAction *QToolBar::actionAt(const QPoint &p) const
 void QToolBar::actionEvent(QActionEvent *event)
 {
    Q_D(QToolBar);
+
    QAction *action = event->action();
    QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(action);
 
@@ -691,6 +700,7 @@ void QToolBar::actionEvent(QActionEvent *event)
 void QToolBar::changeEvent(QEvent *event)
 {
    Q_D(QToolBar);
+
    switch (event->type()) {
       case QEvent::WindowTitleChange:
          d->toggleViewAction->setText(windowTitle());
@@ -698,7 +708,8 @@ void QToolBar::changeEvent(QEvent *event)
 
       case QEvent::StyleChange:
          d->layout->invalidate();
-         if (!d->explicitIconSize) {
+
+         if (! d->explicitIconSize) {
             setIconSize(QSize());
          }
          d->layout->updateMarginAndSpacing();
@@ -711,6 +722,7 @@ void QToolBar::changeEvent(QEvent *event)
       default:
          break;
    }
+
    QWidget::changeEvent(event);
 }
 
@@ -726,11 +738,14 @@ void QToolBar::paintEvent(QPaintEvent *)
    if (d->layout->expanded || d->layout->animating || isWindow()) {
       //if the toolbar is expended, we need to fill the background with the window color
       //because some styles may expects that.
+
       p.fillRect(opt.rect, palette().background());
       style->drawControl(QStyle::CE_ToolBar, &opt, &p, this);
       style->drawPrimitive(QStyle::PE_FrameMenu, &opt, &p, this);
+
    } else {
       style->drawControl(QStyle::CE_ToolBar, &opt, &p, this);
+
    }
 
    opt.rect = style->subElementRect(QStyle::SE_ToolBarHandle, &opt, this);
@@ -801,9 +816,10 @@ bool QToolBar::event(QEvent *event)
          if (d->waitForPopupTimer.timerId() == static_cast<QTimerEvent *>(event)->timerId()) {
             QWidget *w = QApplication::activePopupWidget();
 
-            if (!waitForPopup(this, w)) {
+            if (! waitForPopup(this, w)) {
                d->waitForPopupTimer.stop();
-               if (!this->underMouse()) {
+
+               if (! this->underMouse()) {
                   d->layout->setExpanded(false);
                }
             }
@@ -894,9 +910,11 @@ bool QToolBar::event(QEvent *event)
             d->layout->setExpanded(false);
             break;
          }
+
       default:
          break;
    }
+
    return QWidget::event(event);
 }
 

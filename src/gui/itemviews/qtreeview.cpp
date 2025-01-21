@@ -3605,17 +3605,18 @@ QList<QPair<int, int>> QTreeViewPrivate::columnRanges(const QModelIndex &topInde
       const QModelIndex &bottomIndex) const
 {
    const int topVisual = header->visualIndex(topIndex.column()),
-             bottomVisual = header->visualIndex(bottomIndex.column());
+         bottomVisual = header->visualIndex(bottomIndex.column());
 
    const int start = qMin(topVisual, bottomVisual);
-   const int end = qMax(topVisual, bottomVisual);
+   const int end   = qMax(topVisual, bottomVisual);
 
    QList<int> logicalIndexes;
 
-   //we iterate over the visual indexes to get the logical indexes
+   // iterate over the visual indexes to get the logical indexes
    for (int c = start; c <= end; c++) {
       const int logical = header->logicalIndex(c);
-      if (!header->isSectionHidden(logical)) {
+
+      if (! header->isSectionHidden(logical)) {
          logicalIndexes << logical;
       }
    }
@@ -3625,23 +3626,27 @@ QList<QPair<int, int>> QTreeViewPrivate::columnRanges(const QModelIndex &topInde
 
    QList<QPair<int, int>> ret;
    QPair<int, int> current;
-   current.first = -2; // -1 is not enough because -1+1 = 0
+   current.first  = -2;          // -1 is not enough because -1+1 = 0
    current.second = -2;
+
    for (int i = 0; i < logicalIndexes.count(); ++i) {
       const int logicalColumn = logicalIndexes.at(i);
+
       if (current.second + 1 != logicalColumn) {
          if (current.first != -2) {
             //let's save the current one
             ret += current;
          }
-         //let's start a new one
+
+         // start a new one
          current.first = current.second = logicalColumn;
+
       } else {
          current.second++;
       }
    }
 
-   //let's get the last range
+   // get the last range
    if (current.first != -2) {
       ret += current;
    }
@@ -3655,7 +3660,8 @@ void QTreeViewPrivate::select(const QModelIndex &topIndex, const QModelIndex &bo
    Q_Q(QTreeView);
 
    QItemSelection selection;
-   const int top = viewIndex(topIndex), bottom = viewIndex(bottomIndex);
+   const int top    = viewIndex(topIndex);
+   const int bottom = viewIndex(bottomIndex);
 
    const QList< QPair<int, int>> colRanges = columnRanges(topIndex, bottomIndex);
    QList< QPair<int, int>>::const_iterator it;
@@ -3674,21 +3680,22 @@ void QTreeViewPrivate::select(const QModelIndex &topIndex, const QModelIndex &bo
 
          if (previous.isValid() && parent == previousParent) {
             // same parent
+
             if (qAbs(previous.row() - index.row()) > 1) {
-               //a hole (hidden index inside a range) has been detected
+               // a hole (hidden index inside a range) has been detected
                if (currentRange.isValid()) {
                   selection.append(currentRange);
                }
 
-               //let's start a new range
+               // start a new range
                currentRange = QItemSelectionRange(index.sibling(index.row(), left), index.sibling(index.row(), right));
 
             } else {
-               QModelIndex tl = model->index(currentRange.top(), currentRange.left(),
-                     currentRange.parent());
+               QModelIndex tl = model->index(currentRange.top(), currentRange.left(), currentRange.parent());
 
                currentRange = QItemSelectionRange(tl, index.sibling(index.row(), right));
             }
+
          } else if (previous.isValid() && parent == model->index(previous.row(), 0, previousParent)) {
             // item is child of previous
             rangeStack.push(currentRange);
@@ -3705,7 +3712,7 @@ void QTreeViewPrivate::select(const QModelIndex &topIndex, const QModelIndex &bo
             } else {
                currentRange = rangeStack.pop();
                index = currentRange.bottomRight(); //let's resume the range
-               --i; //we process again the current item
+               --i;       // process again the current item
             }
          }
          previous = index;
@@ -3718,6 +3725,7 @@ void QTreeViewPrivate::select(const QModelIndex &topIndex, const QModelIndex &bo
          selection.append(rangeStack.at(i));
       }
    }
+
    q->selectionModel()->select(selection, command);
 }
 
@@ -3799,6 +3807,7 @@ void QTreeView::currentChanged(const QModelIndex &current, const QModelIndex &pr
          previousRect.setWidth(viewport()->width());
          viewport()->update(previousRect);
       }
+
       if (current.isValid()) {
          QRect currentRect = visualRect(current);
          currentRect.setX(0);

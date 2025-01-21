@@ -594,12 +594,13 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
 
       return cachedValue;
    }
+
    const double max = maximum.toDouble();
    const double min = minimum.toDouble();
 
    QString copy = stripped(input, &pos);
 
-   int len    = copy.size();
+   int len = copy.size();
    double num = min;
 
    const bool plus  = max >= 0;
@@ -683,8 +684,7 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
                goto end;
             }
 
-            const int len = copy.size();
-            for (int i = 0; i < len - 1; ++i) {
+            for (int i = 0; i < copy.size() - 1; ++i) {
                if (copy.at(i) == locale.groupSeparator() && copy.at(i + 1) == locale.groupSeparator()) {
                   state = QValidator::Invalid;
                   goto end;

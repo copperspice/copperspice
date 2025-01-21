@@ -97,9 +97,13 @@ class QAbstractSpinBoxPrivate : public QWidgetPrivate
    static QVariant variantBound(const QVariant &min, const QVariant &value, const QVariant &max);
 
    QLineEdit *edit;
-   QString prefix, suffix, specialValueText;
+
+   QString prefix;
+   QString suffix;
+   QString specialValueText;
    QVariant value, minimum, maximum, singleStep;
    QVariant::Type type;
+
    int spinClickTimerId, spinClickTimerInterval, spinClickThresholdTimerId, spinClickThresholdTimerInterval;
    int effectiveSpinRepeatRate;
    uint buttonState;

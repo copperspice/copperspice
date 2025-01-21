@@ -93,34 +93,54 @@ static bool matchesType(const SchemaType::Ptr &myType, const SchemaType::Ptr &ot
       } else {
          visitedTypes.insert(otherType);
       }
+
       // simple types can have different varieties, so we have to check each of them
       if (otherType->isSimpleType()) {
          const XsdSimpleType::Ptr simpleType = otherType;
+
          if (simpleType->category() == XsdSimpleType::SimpleTypeAtomic) {
             // for atomic type we use the same test as in SchemaType::wxsTypeMatches
-            retval = (myType == simpleType ? true : matchesType(myType, simpleType->wxsSuperType(), visitedTypes));
+
+            if (myType == simpleType) {
+               retval = true;
+
+            } else {
+               retval = matchesType(myType, simpleType->wxsSuperType(), visitedTypes);
+            }
+
          } else if (simpleType->category() == XsdSimpleType::SimpleTypeList) {
             // for list type we test against the itemType property
-            retval = (myType == simpleType->itemType() ? true : matchesType(myType, simpleType->itemType()->wxsSuperType(),
-                      visitedTypes));
+
+            if (myType == simpleType->itemType()) {
+               retval = true;
+
+            } else {
+               retval = matchesType(myType, simpleType->itemType()->wxsSuperType(), visitedTypes);
+            }
+
          } else if (simpleType->category() == XsdSimpleType::SimpleTypeUnion) {
             // for union type we test against each member type
             const XsdSimpleType::List members = simpleType->memberTypes();
+
             for (int i = 0; i < members.count(); ++i) {
                if (myType == members.at(i) ? true : matchesType(myType, members.at(i)->wxsSuperType(), visitedTypes)) {
                   retval = true;
                   break;
                }
             }
+
          } else {
             // reached xsAnySimple type whichs category is None
             retval = false;
          }
+
       } else {
          // if no simple type we handle it like in SchemaType::wxsTypeMatches
          retval = (myType == otherType ? true : matchesType(myType, otherType->wxsSuperType(), visitedTypes));
       }
-   } else { // if otherType is null it doesn't match
+
+   } else {
+      // if otherType is null it doesn't match
       retval = false;
    }
 

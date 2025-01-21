@@ -441,43 +441,43 @@ void QTabBarPrivate::layoutTabs()
    }
 
    if (useScrollButtons && tabList.count() && last > available) {
-      int extra = extraWidth();
+      int addedWidth = extraWidth();
 
       if (! vertTabs) {
          Qt::LayoutDirection ld = q->layoutDirection();
-         QRect arrows = QStyle::visualRect(ld, q->rect(), QRect(available - extra, 0, extra, size.height()));
+         QRect arrows = QStyle::visualRect(ld, q->rect(), QRect(available - addedWidth, 0, addedWidth, size.height()));
 
          int buttonOverlap = q->style()->pixelMetric(QStyle::PM_TabBar_ScrollButtonOverlap, nullptr, q);
 
          if (ld == Qt::LeftToRight) {
 
-            leftB->setGeometry(arrows.left(), arrows.top(), extra / 2, arrows.height());
-            rightB->setGeometry(arrows.right() - extra / 2 + buttonOverlap, arrows.top(),
-               extra / 2, arrows.height());
+            leftB->setGeometry(arrows.left(), arrows.top(), addedWidth / 2, arrows.height());
+            rightB->setGeometry(arrows.right() - addedWidth / 2 + buttonOverlap, arrows.top(), addedWidth / 2, arrows.height());
 
             leftB->setArrowType(Qt::LeftArrow);
             rightB->setArrowType(Qt::RightArrow);
+
          } else {
 
-            rightB->setGeometry(arrows.left(), arrows.top(), extra / 2, arrows.height());
-            leftB->setGeometry(arrows.right() - extra / 2 + buttonOverlap, arrows.top(),
-               extra / 2, arrows.height());
+            rightB->setGeometry(arrows.left(), arrows.top(), addedWidth / 2, arrows.height());
+            leftB->setGeometry(arrows.right() - addedWidth / 2 + buttonOverlap, arrows.top(), addedWidth / 2, arrows.height());
 
             rightB->setArrowType(Qt::LeftArrow);
             leftB->setArrowType(Qt::RightArrow);
          }
+
       } else {
 
-         QRect arrows = QRect(0, available - extra, size.width(), extra );
-         leftB->setGeometry(arrows.left(), arrows.top(), arrows.width(), extra / 2);
+         QRect arrows = QRect(0, available - addedWidth, size.width(), addedWidth);
+         leftB->setGeometry(arrows.left(), arrows.top(), arrows.width(), addedWidth / 2);
          leftB->setArrowType(Qt::UpArrow);
-         rightB->setGeometry(arrows.left(), arrows.bottom() - extra / 2 + 1,
-            arrows.width(), extra / 2);
+
+         rightB->setGeometry(arrows.left(), arrows.bottom() - addedWidth / 2 + 1, arrows.width(), addedWidth / 2);
          rightB->setArrowType(Qt::DownArrow);
       }
 
       leftB->setEnabled(scrollOffset > 0);
-      rightB->setEnabled(last - scrollOffset >= available - extra);
+      rightB->setEnabled(last - scrollOffset >= available - addedWidth);
       leftB->show();
       rightB->show();
 

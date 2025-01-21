@@ -314,10 +314,11 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
 {
    Q_Q(const QComboBox);
 
-   if (!sh.isValid()) {
+   if (! sh.isValid()) {
       bool hasIcon = sizeAdjustPolicy == QComboBox::AdjustToMinimumContentsLengthWithIcon ? true : false;
       int count = q->count();
-      QSize iconSize = q->iconSize();
+
+      QSize newIconSize = q->iconSize();
       const QFontMetrics &fm = q->fontMetrics();
 
       // text width
@@ -333,7 +334,7 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
                   for (int i = 0; i < count; ++i) {
                      if (!q->itemIcon(i).isNull()) {
                         hasIcon = true;
-                        sh.setWidth(qMax(sh.width(), fm.boundingRect(q->itemText(i)).width() + iconSize.width() + 4));
+                        sh.setWidth(qMax(sh.width(), fm.boundingRect(q->itemText(i)).width() + newIconSize.width() + 4));
                      } else {
                         sh.setWidth(qMax(sh.width(), fm.boundingRect(q->itemText(i)).width()));
                      }
@@ -352,13 +353,13 @@ QSize QComboBoxPrivate::recomputeSizeHint(QSize &sh) const
       }
 
       if (minimumContentsLength > 0) {
-         sh.setWidth(qMax(sh.width(), minimumContentsLength * fm.width('X') + (hasIcon ? iconSize.width() + 4 : 0)));
+         sh.setWidth(qMax(sh.width(), minimumContentsLength * fm.width('X') + (hasIcon ? newIconSize.width() + 4 : 0)));
       }
 
       // height
       sh.setHeight(qMax(qCeil(QFontMetricsF(fm).height()), 14) + 2);
       if (hasIcon) {
-         sh.setHeight(qMax(sh.height(), iconSize.height() + 2));
+         sh.setHeight(qMax(sh.height(), newIconSize.height() + 2));
       }
 
       // add style and strut values
@@ -2619,27 +2620,31 @@ void QComboBox::changeEvent(QEvent *e)
 #ifdef Q_OS_DARWIN
       case QEvent::MacSizeChange:
 #endif
-         d->sizeHint = QSize(); // invalidate size hint
+         d->sizeHint = QSize();          // invalidate size hint
          d->minimumSizeHint = QSize();
          d->updateLayoutDirection();
+
          if (d->lineEdit) {
             d->updateLineEditGeometry();
          }
          d->setLayoutItemMargins(QStyle::SE_ComboBoxLayoutItem);
 
          if (e->type() == QEvent::MacSizeChange) {
-            QPlatformTheme::Font f = QPlatformTheme::SystemFont;
+            QPlatformTheme::Font systemFont = QPlatformTheme::SystemFont;
 
             if (testAttribute(Qt::WA_MacSmallSize)) {
-               f = QPlatformTheme::SmallFont;
+               systemFont = QPlatformTheme::SmallFont;
             } else if (testAttribute(Qt::WA_MacMiniSize)) {
-               f = QPlatformTheme::MiniFont;
+               systemFont = QPlatformTheme::MiniFont;
             }
 
-            if (const QFont *platformFont = QApplicationPrivate::platformTheme()->font(f)) {
-               QFont f = font();
-               f.setPointSizeF(platformFont->pointSizeF());
-               setFont(f);
+            const QFont *platformFont = QApplicationPrivate::platformTheme()->font(systemFont);
+
+            if (platformFont != nullptr) {
+               QFont newFont = font();
+
+               newFont.setPointSizeF(platformFont->pointSizeF());
+               setFont(newFont);
             }
          }
 

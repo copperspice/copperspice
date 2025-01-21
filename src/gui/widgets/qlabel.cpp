@@ -904,21 +904,26 @@ void QLabelPrivate::_q_movieUpdated(const QRect &rect)
    Q_Q(QLabel);
    if (movie && movie->isValid()) {
       QRect r;
+
       if (scaledcontents) {
          QRect cr = q->contentsRect();
          QRect pixmapRect(cr.topLeft(), movie->currentPixmap().size());
+
          if (pixmapRect.isEmpty()) {
             return;
          }
+
          r.setRect(cr.left(), cr.top(),
             (rect.width() * cr.width()) / pixmapRect.width(),
             (rect.height() * cr.height()) / pixmapRect.height());
+
       } else {
          r = q->style()->itemPixmapRect(q->contentsRect(), align, movie->currentPixmap());
          r.translate(rect.x(), rect.y());
          r.setWidth(qMin(r.width(), rect.width()));
          r.setHeight(qMin(r.height(), rect.height()));
       }
+
       q->update(r);
    }
 }
@@ -926,8 +931,10 @@ void QLabelPrivate::_q_movieUpdated(const QRect &rect)
 void QLabelPrivate::_q_movieResized(const QSize &size)
 {
    Q_Q(QLabel);
-   q->update(); //we need to refresh the whole background in case the new size is smaler
+
+   q->update();    // we need to refresh the whole background in case the new size is smaler
    valid_hints = false;
+
    _q_movieUpdated(QRect(QPoint(0, 0), size));
    q->updateGeometry();
 }
@@ -1111,24 +1118,30 @@ QRect QLabelPrivate::documentRect() const
          : q->layoutDirection(), QFlag(this->align));
 
    int m = indent;
+
    if (m < 0 && q->frameWidth()) {
       // no indent, but we do have a frame
       m = q->fontMetrics().width('x') / 2 - margin;
    }
+
    if (m > 0) {
       if (align & Qt::AlignLeft) {
          cr.setLeft(cr.left() + m);
       }
+
       if (align & Qt::AlignRight) {
          cr.setRight(cr.right() - m);
       }
+
       if (align & Qt::AlignTop) {
          cr.setTop(cr.top() + m);
       }
+
       if (align & Qt::AlignBottom) {
          cr.setBottom(cr.bottom() - m);
       }
    }
+
    return cr;
 }
 
@@ -1181,7 +1194,9 @@ void QLabelPrivate::ensureTextLayouted() const
    if (!textLayoutDirty) {
       return;
    }
+
    ensureTextPopulated();
+
    if (control) {
       QTextDocument *doc = control->document();
       QTextOption opt = doc->defaultTextOption();
@@ -1201,6 +1216,7 @@ void QLabelPrivate::ensureTextLayouted() const
       doc->rootFrame()->setFrameFormat(fmt);
       doc->setTextWidth(documentRect().width());
    }
+
    textLayoutDirty = false;
 }
 
@@ -1255,13 +1271,16 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
       } else {
          q->unsetCursor();
       }
+
       onAnchor = false;
 
    } else if (!onAnchor) {
       validCursor = q->testAttribute(Qt::WA_SetCursor);
+
       if (validCursor) {
          cursor = q->cursor();
       }
+
       q->setCursor(Qt::PointingHandCursor);
       onAnchor = true;
    }
@@ -1276,10 +1295,13 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
 QRectF QLabelPrivate::layoutRect() const
 {
    QRectF cr = documentRect();
+
    if (!control) {
       return cr;
    }
+
    ensureTextLayouted();
+
    // Caculate y position manually
    qreal rh = control->document()->documentLayout()->documentSize().height();
    qreal yo = 0;
@@ -1288,6 +1310,7 @@ QRectF QLabelPrivate::layoutRect() const
    } else if (align & Qt::AlignBottom) {
       yo = qMax(cr.height() - rh, qreal(0));
    }
+
    return QRectF(cr.x(), yo + cr.y(), cr.width(), cr.height());
 }
 

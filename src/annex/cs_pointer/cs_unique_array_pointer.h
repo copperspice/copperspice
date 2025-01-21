@@ -21,6 +21,7 @@
 
 #include <cs_pointer_traits.h>
 #include <cs_unique_pointer.h>
+
 #include <memory>
 
 namespace CsPointer {

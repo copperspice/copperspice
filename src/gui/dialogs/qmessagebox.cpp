@@ -140,7 +140,8 @@ class QMessageBoxDetailsText : public QWidget
    };
 
    QMessageBoxDetailsText(QWidget *parent = nullptr)
-      : QWidget(parent), copyAvailable(false) {
+      : QWidget(parent), copyAvailable(false)
+   {
       QVBoxLayout *layout = new QVBoxLayout;
       layout->setMargin(0);
 
@@ -420,9 +421,6 @@ void QMessageBoxPrivate::updateSize()
    if (screenSize.width() <= 1024) {
       hardLimit = screenSize.width();
    }
-
-
-
 
 #ifdef Q_OS_DARWIN
    int softLimit = qMin(screenSize.width() / 2, 420);

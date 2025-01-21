@@ -495,13 +495,13 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
    bool nativeDeco = nativeWindowDeco();
 
    int fw = q->isFloating() && !nativeDeco
-      ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, q)
-      : 0;
+      ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, q) : 0;
 
    if (nativeDeco) {
       if (QLayoutItem *item = item_list[Content]) {
          item->setGeometry(geometry);
       }
+
    } else {
       int titleHeight = this->titleHeight();
 
@@ -520,21 +520,22 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
          QStyleOptionDockWidget opt;
          q->initStyleOption(&opt);
 
-         if (QLayoutItem *item = item_list[CloseButton]) {
-            if (!item->isEmpty()) {
+         if (QLayoutItem *itemCloseButton = item_list[CloseButton]) {
+            if (! itemCloseButton->isEmpty()) {
                QRect r = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
 
-               if (!r.isNull()) {
-                  item->setGeometry(r);
+               if (! r.isNull()) {
+                  itemCloseButton ->setGeometry(r);
                }
             }
          }
 
-         if (QLayoutItem *item = item_list[FloatButton]) {
-            if (!item->isEmpty()) {
+         if (QLayoutItem *itemFloatButton = item_list[FloatButton]) {
+            if (! itemFloatButton->isEmpty()) {
                QRect r = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton,&opt, q);
-               if (!r.isNull()) {
-                  item->setGeometry(r);
+
+               if (! r.isNull()) {
+                  itemFloatButton->setGeometry(r);
                }
             }
          }
@@ -856,8 +857,7 @@ bool QDockWidgetPrivate::mousePressEvent(QMouseEvent *event)
       // check if the tool window is movable... do nothing if it
       // is not (but allow moving if the window is floating)
 
-      if (event->button() != Qt::LeftButton ||
-            ! titleArea.contains(event->pos()) ||
+      if (event->button() != Qt::LeftButton || ! titleArea.contains(event->pos()) ||
             (! hasFeature(this, QDockWidget::DockWidgetMovable) && ! q->isFloating()) ||
             (qobject_cast<QMainWindow *>(q->parent()) == nullptr && ! floatingTab) || isAnimating() || state != nullptr) {
          return false;
@@ -1101,9 +1101,11 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect 
 
    if (nativeDeco) {
       flags |= Qt::CustomizeWindowHint | Qt::WindowTitleHint;
+
       if (hasFeature(this, QDockWidget::DockWidgetClosable)) {
          flags |= Qt::WindowCloseButtonHint;
       }
+
    } else {
       flags |= Qt::FramelessWindowHint;
    }

@@ -741,23 +741,22 @@ void QLineControl::removeSelectedText()
       cancelPasswordEchoTimer();
       separate();
 
-      int i ;
       addCommand(Command(SetSelection, m_cursor, 0, m_selstart, m_selend));
 
       if (m_selstart <= m_cursor && m_cursor < m_selend) {
          // cursor is within the selection. Split up the commands
          // to be able to restore the correct cursor position
 
-         for (i = m_cursor; i >= m_selstart; --i) {
+         for (int i = m_cursor; i >= m_selstart; --i) {
             addCommand (Command(DeleteSelection, i, m_text.at(i), -1, 1));
          }
 
-         for (i = m_selend - 1; i > m_cursor; --i) {
+         for (int i = m_selend - 1; i > m_cursor; --i) {
             addCommand (Command(DeleteSelection, i - m_cursor + m_selstart - 1, m_text.at(i), -1, -1));
          }
 
       } else {
-         for (i = m_selend - 1; i >= m_selstart; --i) {
+         for (int i = m_selend - 1; i >= m_selstart; --i) {
             addCommand (Command(RemoveSelection, i, m_text.at(i), -1, -1));
          }
       }
@@ -769,15 +768,19 @@ void QLineControl::removeSelectedText()
 
       if (m_maskData) {
          m_text.replace(m_selstart, m_selend - m_selstart,  clearString(m_selstart, m_selend - m_selstart));
+
          for (int i = 0; i < m_selend - m_selstart; ++i) {
             addCommand(Command(Insert, m_selstart + i, m_text.at(m_selstart + i), -1, -1));
          }
+
       } else {
          m_text.remove(m_selstart, m_selend - m_selstart);
       }
+
       if (m_cursor > m_selstart) {
          m_cursor -= qMin(m_cursor, m_selend) - m_selstart;
       }
+
       internalDeselect();
       m_textDirty = true;
    }

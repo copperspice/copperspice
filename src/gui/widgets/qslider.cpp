@@ -120,23 +120,24 @@ void QSlider::initStyleOption(QStyleOptionSlider *option) const
 
    Q_D(const QSlider);
    option->initFrom(this);
-   option->subControls = QStyle::SC_None;
-   option->activeSubControls = QStyle::SC_None;
-   option->orientation = d->orientation;
    option->maximum = d->maximum;
    option->minimum = d->minimum;
+
    option->tickPosition = (QSlider::TickPosition)d->tickPosition;
    option->tickInterval = d->tickInterval;
 
    option->upsideDown = (d->orientation == Qt::Horizontal) ?
-      (d->invertedAppearance != (option->direction == Qt::RightToLeft))
-      : (!d->invertedAppearance);
+      (d->invertedAppearance != (option->direction == Qt::RightToLeft)) : (!d->invertedAppearance);
 
-   option->direction = Qt::LeftToRight; // we use the upsideDown option instead
+   option->orientation    = d->orientation;
+   option->direction      = Qt::LeftToRight; // we use the upsideDown option instead
    option->sliderPosition = d->position;
    option->sliderValue = d->value;
-   option->singleStep = d->singleStep;
-   option->pageStep = d->pageStep;
+   option->singleStep     = d->singleStep;
+   option->pageStep       = d->pageStep;
+
+   option->subControls       = QStyle::SC_None;
+   option->activeSubControls = QStyle::SC_None;
 
    if (d->orientation == Qt::Horizontal) {
       option->state |= QStyle::State_Horizontal;
@@ -269,11 +270,14 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
    }
 #endif
    ev->accept();
+
    if ((ev->button() & style()->styleHint(QStyle::SH_Slider_AbsoluteSetButtons)) == ev->button()) {
       QStyleOptionSlider opt;
       initStyleOption(&opt);
+
       const QRect sliderRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
-      const QPoint center = sliderRect.center() - sliderRect.topLeft();
+      const QPoint center    = sliderRect.center() - sliderRect.topLeft();
+
       // to take half of the slider off for the setSliderPosition call we use the center - topLeft
 
       setSliderPosition(d->pixelPosToRangeValue(d->pick(ev->pos() - center)));
@@ -281,12 +285,14 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
       setRepeatAction(SliderNoAction);
       d->pressedControl = QStyle::SC_SliderHandle;
       update();
+
    } else if ((ev->button() & style()->styleHint(QStyle::SH_Slider_PageSetButtons)) == ev->button()) {
       QStyleOptionSlider opt;
       initStyleOption(&opt);
-      d->pressedControl = style()->hitTestComplexControl(QStyle::CC_Slider,
-            &opt, ev->pos(), this);
+
+      d->pressedControl = style()->hitTestComplexControl(QStyle::CC_Slider, &opt, ev->pos(), this);
       SliderAction action = SliderNoAction;
+
       if (d->pressedControl == QStyle::SC_SliderGroove) {
          const QRect sliderRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
          int pressValue = d->pixelPosToRangeValue(d->pick(ev->pos() - sliderRect.center() + sliderRect.topLeft()));
@@ -296,6 +302,7 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
          } else if (pressValue < d->value) {
             action = SliderPageStepSub;
          }
+
          if (action) {
             triggerAction(action);
             setRepeatAction(action);

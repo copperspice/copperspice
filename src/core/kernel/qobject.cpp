@@ -684,7 +684,7 @@ void QObject::installEventFilter(QObject *obj)
    }
 
    // clean up unused items in the list
-   m_eventFilters.removeAll( QPointer<QObject>(nullptr) );
+   m_eventFilters.removeAll(QPointer<QObject>(nullptr));
 
    m_eventFilters.removeAll(QPointer<QObject>(obj));
    m_eventFilters.prepend(QPointer<QObject>(obj));

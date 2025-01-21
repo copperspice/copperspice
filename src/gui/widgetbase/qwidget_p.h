@@ -501,7 +501,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void enforceNativeChildren() {
       Q_Q(QWidget);
 
-      if (!extra) {
+      if (! extra) {
          createExtra();
       }
 

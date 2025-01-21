@@ -275,7 +275,7 @@ QValidator::State QDoubleValidator::validate(QString &input, int &) const
 }
 
 QValidator::State QDoubleValidatorPrivate::validateWithLocale(QString &input, QLocaleData::NumberMode numMode,
-   const QLocale &locale) const
+      const QLocale &locale) const
 {
    Q_Q(const QDoubleValidator);
 
