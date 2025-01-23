@@ -543,7 +543,7 @@ void QXcbDrag::drop(const QPoint &globalPos)
    }
 
    Transaction t = { connection()->time(), current_target, current_proxy_target,
-         w, currentDrag(), QTime::currentTime() };
+         w, QPointer<QDrag>(currentDrag()), QTime::currentTime() };
 
    transactions.append(t);
 

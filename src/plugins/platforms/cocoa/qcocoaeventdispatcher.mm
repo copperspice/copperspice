@@ -776,7 +776,7 @@ void QCocoaEventDispatcherPrivate::beginModalSession(QWindow *window)
    // the window pointer is zero, and the session pointer is non-zero (it will be fully
    // stopped in cleanupModalSessions()).
 
-   QCocoaModalSessionInfo info = {window, nullptr, nullptr};
+   QCocoaModalSessionInfo info = {QPointer<QWindow>(window), nullptr, nullptr};
    cocoaModalSessionStack.push(info);
    updateChildrenWorksWhenModal();
    currentModalSessionCached = nullptr;
