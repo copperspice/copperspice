@@ -287,12 +287,16 @@ class Q_GUI_EXPORT QTextBlock
       }
 
       iterator(const iterator &other) = default;
+      iterator(iterator &&other) = default;
 
       QTextFragment fragment() const;
 
       bool atEnd() const {
          return n == e;
       }
+
+      iterator &operator=(const iterator &other) = default;
+      iterator &operator=(iterator &&other) = default;
 
       bool operator==(const iterator &other) const {
          return p == other.p && n == other.n;
