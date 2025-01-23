@@ -29,12 +29,11 @@
 #include <qstring.h>
 #include <qtimezone.h>
 
-class QDateTimePrivate;
-
 #include <chrono>
 #include <limits>
 #include <optional>
 
+class QDateTimePrivate;
 #if __cpp_lib_chrono >= 201907L
 #define CS_CHRONO_TYPES
 #endif

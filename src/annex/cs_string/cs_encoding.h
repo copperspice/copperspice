@@ -19,10 +19,10 @@
 #ifndef LIB_CS_ENCODING_H
 #define LIB_CS_ENCODING_H
 
+#include <cs_char.h>
+
 #include <stdint.h>
 #include <vector>
-
-#include <cs_char.h>
 
 namespace CsString {
 

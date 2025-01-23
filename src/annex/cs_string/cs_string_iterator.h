@@ -19,10 +19,10 @@
 #ifndef LIB_CS_STRING_ITERATOR_H
 #define LIB_CS_STRING_ITERATOR_H
 
+#include <cs_char.h>
+
 #include <cstddef>
 #include <vector>
-
-#include <cs_char.h>
 
 namespace CsString {
 

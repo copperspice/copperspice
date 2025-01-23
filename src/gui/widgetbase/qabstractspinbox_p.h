@@ -37,6 +37,8 @@
 #include <qdatetime_p.h>
 #include <qwidget_p.h>
 
+class QSpinBoxValidator;
+
 QVariant operator+(const QVariant &arg1, const QVariant &arg2);
 QVariant operator-(const QVariant &arg1, const QVariant &arg2);
 QVariant operator*(const QVariant &arg1, double multiplier);
@@ -59,7 +61,7 @@ enum Button {
    Down = 0x020,
    DirectionMask = 0x040
 };
-class QSpinBoxValidator;
+
 class QAbstractSpinBoxPrivate : public QWidgetPrivate
 {
    Q_DECLARE_PUBLIC(QAbstractSpinBox)

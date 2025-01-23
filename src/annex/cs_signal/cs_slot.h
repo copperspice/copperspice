@@ -19,15 +19,15 @@
 #ifndef LIB_CS_SLOT_H
 #define LIB_CS_SLOT_H
 
+#include <cs_macro.h>
+#include <cs_rcu_guarded.h>
+#include <cs_rcu_list.h>
+
 #include <atomic>
 #include <memory>
 #include <set>
 #include <thread>
 #include <vector>
-
-#include "cs_macro.h"
-#include "cs_rcu_guarded.h"
-#include "cs_rcu_list.h"
 
 namespace CsSignal {
 

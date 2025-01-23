@@ -19,9 +19,13 @@
 #ifndef LIB_CS_STRING_H
 #define LIB_CS_STRING_H
 
+#include <cs_char.h>
+#include <cs_encoding.h>
+#include <cs_string_iterator.h>
+
 #include <algorithm>
-#include <cstring>
 #include <cstddef>
+#include <cstring>
 #include <exception>
 #include <iterator>
 #include <stdexcept>
@@ -29,10 +33,6 @@
 #include <tuple>
 #include <type_traits>
 #include <vector>
-
-#include <cs_char.h>
-#include <cs_string_iterator.h>
-#include <cs_encoding.h>
 
 #define UCHAR(x)   (U ## x)
 
