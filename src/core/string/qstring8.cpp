@@ -599,14 +599,14 @@ QString8 QString8::fromUtf8(const QByteArray &str)
    return fromUtf8(str.constData(), str.size());
 }
 
-QString8 QString8::fromUtf8(const char *str, size_type numOfChars)
+QString8 QString8::fromUtf8(const char *data, size_type numOfChars)
 {
-   return CsString::CsString::fromUtf8(str, numOfChars);
+   return CsString::CsString::fromUtf8(data, numOfChars);
 }
 
-QString8 QString8::fromUtf16(const char16_t *str, size_type numOfChars)
+QString8 QString8::fromUtf16(const char16_t *data, size_type numOfChars)
 {
-   return CsString::CsString::fromUtf16(str, numOfChars);
+   return CsString::CsString::fromUtf16(data, numOfChars);
 }
 
 QString8 QString8::fromUtf16(const QString16 &str)
