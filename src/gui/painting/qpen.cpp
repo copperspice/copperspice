@@ -381,8 +381,7 @@ QDataStream &operator<<(QDataStream &s, const QPen &p)
 {
    QPenData *dd = static_cast<QPenData *>(p.d);
 
-
-   s << (quint16)(p.style() | p.capStyle() | p.joinStyle());
+   s << (quint16)(cs_enum_cast(p.style()) | cs_enum_cast(p.capStyle()) | cs_enum_cast(p.joinStyle()));
    s << (bool)(dd->cosmetic);
 
    s << double(p.widthF());

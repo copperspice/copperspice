@@ -303,9 +303,8 @@ void QToolBarLayout::updateGeomArray() const
 
       that->expanding = expanding || exp & o;
 
-
       if (item->widget()) {
-         if ((item->widget()->sizePolicy().horizontalPolicy() & QSizePolicy::ExpandFlag)) {
+         if (cs_enum_cast(item->widget()->sizePolicy().horizontalPolicy()) & cs_enum_cast(QSizePolicy::ExpandFlag)) {
             that->expandFlag = true;
          }
       }

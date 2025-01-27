@@ -204,7 +204,7 @@ void QAbstractScrollAreaPrivate::init()
    viewport->setFocusProxy(q);
 
    q->setFocusPolicy(Qt::StrongFocus);
-   q->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+   q->setFrameStyle(cs_enum_cast(QFrame::StyledPanel) | cs_enum_cast(QFrame::Sunken));
    q->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
    layoutChildren();

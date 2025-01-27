@@ -3923,9 +3923,8 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                   alignment |= Qt::TextHideMnemonic;
                }
 
-               proxy()->drawItemText(p, textRect,  Qt::TextShowMnemonic | Qt::AlignHCenter | alignment,
-                  groupBox->palette, groupBox->state & State_Enabled, groupBox->text,
-                  textColor.isValid() ? QPalette::NoRole : QPalette::WindowText);
+               proxy()->drawItemText(p, textRect,  cs_enum_cast(Qt::TextShowMnemonic) | cs_enum_cast(Qt::AlignHCenter) | alignment,
+                     groupBox->palette, groupBox->state & State_Enabled, groupBox->text, textColor.isValid() ? QPalette::NoRole : QPalette::WindowText);
 
                if (groupBox->state & State_HasFocus) {
                   QStyleOptionFocusRect fropt;
@@ -5468,7 +5467,7 @@ int QCommonStyle::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget
 
          break;
       case SH_ComboBox_PopupFrameStyle:
-         ret = QFrame::StyledPanel | QFrame::Plain;
+         ret = cs_enum_cast(QFrame::StyledPanel) | cs_enum_cast(QFrame::Plain);
          break;
 
       case SH_MessageBox_TextInteractionFlags:

@@ -475,6 +475,12 @@ using qptrdiff = qintptr;
 #define Q_INT64_C(c)   static_cast<int64_t>(c ## LL)
 #define Q_UINT64_C(c)  static_cast<uint64_t>(c ## ULL)
 
+inline quint64 cs_enum_cast(auto value)
+{
+   static_assert(std::is_enum_v<decltype(value)>, "Argument must be an enum");
+   return quint64(value);
+}
+
 #ifndef QT_POINTER_SIZE
 #define QT_POINTER_SIZE  sizeof(void *)
 #endif

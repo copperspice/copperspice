@@ -322,7 +322,7 @@ void QCommandLinkButton::paintEvent(QPaintEvent *)
       textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
 
    //Draw description
-   textflags |= Qt::TextWordWrap | Qt::ElideRight;
+   textflags |= cs_enum_cast(Qt::TextWordWrap) | cs_enum_cast(Qt::ElideRight);
    p.setFont(d->descriptionFont());
    p.drawItemText(d->descriptionRect().translated(hOffset, vOffset), textflags,
       option.palette, isEnabled(), description(), QPalette::ButtonText);

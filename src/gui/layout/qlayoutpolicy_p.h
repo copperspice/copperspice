@@ -103,10 +103,12 @@ class Q_GUI_EXPORT QLayoutPolicy
 
    Qt::Orientations expandingDirections() const {
       Qt::Orientations result;
-      if (verticalPolicy() & ExpandFlag) {
+
+      if (cs_enum_cast(verticalPolicy()) & cs_enum_cast(ExpandFlag)) {
          result |= Qt::Vertical;
       }
-      if (horizontalPolicy() & ExpandFlag) {
+
+      if (cs_enum_cast(horizontalPolicy()) & cs_enum_cast(ExpandFlag)) {
          result |= Qt::Horizontal;
       }
 

@@ -304,10 +304,12 @@ void QLCDNumberPrivate::init()
 {
    Q_Q(QLCDNumber);
 
-   q->setFrameStyle(QFrame::Box | QFrame::Raised);
+   q->setFrameStyle(cs_enum_cast(QFrame::Box) | cs_enum_cast(QFrame::Raised));
+
    val        = 0;
    base       = QLCDNumber::Dec;
    smallPoint = false;
+
    q->setDigitCount(ndigits);
    q->setSegmentStyle(QLCDNumber::Filled);
    q->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));

@@ -1050,7 +1050,7 @@ void QFileDialogPrivate::createMenuActions()
    QAction *goHomeAction = new QAction(q);
 
 #ifndef QT_NO_SHORTCUT
-   goHomeAction->setShortcut(Qt::ControlModifier + Qt::Key_H + Qt::ShiftModifier);
+   goHomeAction->setShortcut(cs_enum_cast(Qt::ControlModifier) + cs_enum_cast(Qt::Key_H) + cs_enum_cast(Qt::ShiftModifier));
 #endif
 
    QObject::connect(goHomeAction, &QAction::triggered, q, &QFileDialog::_q_goHome);
@@ -1062,7 +1062,7 @@ void QFileDialogPrivate::createMenuActions()
    goToParent->setObjectName("qt_goto_parent_action");
 
 #ifndef QT_NO_SHORTCUT
-   goToParent->setShortcut(Qt::ControlModifier + Qt::UpArrow);
+   goToParent->setShortcut(cs_enum_cast(Qt::ControlModifier) + cs_enum_cast(Qt::UpArrow));
 #endif
 
    QObject::connect(goToParent, &QAction::triggered, q, &QFileDialog::_q_navigateToParent);

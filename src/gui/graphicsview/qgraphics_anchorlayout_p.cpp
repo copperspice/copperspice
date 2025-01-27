@@ -121,20 +121,20 @@ static void applySizePolicy(QSizePolicy::Policy policy, qreal minSizeHint, qreal
    // QSizePolicy::Preferred     GrowFlag | ShrinkFlag
    // QSizePolicy::Ignored       GrowFlag | ShrinkFlag | IgnoreFlag
 
-   if (policy & QSizePolicy::ShrinkFlag) {
+   if (cs_enum_cast(policy) & cs_enum_cast(QSizePolicy::ShrinkFlag)) {
       *minSize = minSizeHint;
    } else {
       *minSize = prefSizeHint;
    }
 
-   if (policy & QSizePolicy::GrowFlag) {
+   if (cs_enum_cast(policy) & cs_enum_cast(QSizePolicy::GrowFlag)) {
       *maxSize = maxSizeHint;
    } else {
       *maxSize = prefSizeHint;
    }
 
    // Note that these two initializations are affected by the previous flags
-   if (policy & QSizePolicy::IgnoreFlag) {
+   if (cs_enum_cast(policy) & cs_enum_cast(QSizePolicy::IgnoreFlag)) {
       *prefSize = *minSize;
    } else {
       *prefSize = prefSizeHint;

@@ -1091,7 +1091,7 @@ class QColorShowLabel : public QFrame
 
  public:
    QColorShowLabel(QWidget *parent) : QFrame(parent) {
-      setFrameStyle(QFrame::Panel | QFrame::Sunken);
+      setFrameStyle(cs_enum_cast(QFrame::Panel) | cs_enum_cast(QFrame::Sunken));
       setAcceptDrops(true);
       mousePressed = false;
    }
@@ -1882,7 +1882,7 @@ void QColorDialogPrivate::initWidgets()
    pickLay->addLayout(cLay);
    cp = new QColorPicker(q);
 
-   cp->setFrameStyle(QFrame::Panel + QFrame::Sunken);
+   cp->setFrameStyle(cs_enum_cast(QFrame::Panel) + cs_enum_cast(QFrame::Sunken));
 
 #if defined(QT_SMALL_COLORDIALOG)
    cp->hide();

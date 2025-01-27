@@ -231,7 +231,7 @@ bool QWindowsMouseHandler::translateMouseEvent(QWindow *window, HWND hwnd,
 
    const QPoint winEventPosition(GET_X_LPARAM(msg.lParam), GET_Y_LPARAM(msg.lParam));
 
-   if (et & QtWindows::NonClientEventFlag) {
+   if (cs_enum_cast(et) & cs_enum_cast(QtWindows::WindowsEventFlags::NonClientEventFlag)) {
       const QPoint globalPosition = winEventPosition;
       const QPoint clientPosition = QWindowsGeometryHint::mapFromGlobal(hwnd, globalPosition);
       const Qt::MouseButtons buttons = QWindowsMouseHandler::queryMouseButtons();

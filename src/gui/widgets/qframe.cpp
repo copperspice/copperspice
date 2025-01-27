@@ -33,9 +33,8 @@
 #include <qstyleoption.h>
 
 QFramePrivate::QFramePrivate()
-   : frect(0, 0, 0, 0), frameStyle(QFrame::NoFrame | QFrame::Plain), lineWidth(1),
-     midLineWidth(0), frameWidth(0), leftFrameWidth(0), rightFrameWidth(0),
-     topFrameWidth(0), bottomFrameWidth(0)
+   : frect(0, 0, 0, 0), frameStyle(cs_enum_cast(QFrame::NoFrame) | cs_enum_cast(QFrame::Plain)), lineWidth(1),
+     midLineWidth(0), frameWidth(0), leftFrameWidth(0), rightFrameWidth(0), topFrameWidth(0), bottomFrameWidth(0)
 {
 }
 

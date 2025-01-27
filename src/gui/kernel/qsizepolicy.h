@@ -108,8 +108,10 @@ class Q_GUI_EXPORT QSizePolicy
    void setControlType(ControlType type);
 
    Qt::Orientations expandingDirections() const {
-      return ( (verticalPolicy()   & ExpandFlag) ? Qt::Vertical   : Qt::Orientations() )
-         | ( (horizontalPolicy() & ExpandFlag) ? Qt::Horizontal : Qt::Orientations() ) ;
+      auto a = (cs_enum_cast(verticalPolicy())   & cs_enum_cast(PolicyFlag::ExpandFlag)) ? Qt::Vertical   : Qt::Orientations();
+      auto b = (cs_enum_cast(horizontalPolicy()) & cs_enum_cast(PolicyFlag::ExpandFlag)) ? Qt::Horizontal : Qt::Orientations();
+
+      return a | b;
    }
 
    void setHeightForWidth(bool isHeightForWidth) {

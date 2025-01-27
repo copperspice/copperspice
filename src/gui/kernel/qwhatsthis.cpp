@@ -462,7 +462,7 @@ QWhatsThisAction::QWhatsThisAction(QObject *parent) : QAction(tr("What's This?")
    connect(this, &QWhatsThisAction::triggered, this, &QWhatsThisAction::actionTriggered);
 
 #ifndef QT_NO_SHORTCUT
-   setShortcut(Qt::ShiftModifier + Qt::Key_F1);
+   setShortcut(cs_enum_cast(Qt::ShiftModifier) + cs_enum_cast(Qt::Key_F1));
 #endif
 }
 

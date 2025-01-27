@@ -380,7 +380,7 @@ Q_GUI_EXPORT QSize qSmartMinSize(const QSize &sizeHint, const QSize &minSizeHint
    QSize s(0, 0);
 
    if (sizePolicy.horizontalPolicy() != QSizePolicy::Ignored) {
-      if (sizePolicy.horizontalPolicy() & QSizePolicy::ShrinkFlag) {
+      if (cs_enum_cast(sizePolicy.horizontalPolicy()) & cs_enum_cast(QSizePolicy::ShrinkFlag)) {
          s.setWidth(minSizeHint.width());
       } else {
          s.setWidth(qMax(sizeHint.width(), minSizeHint.width()));
@@ -388,7 +388,7 @@ Q_GUI_EXPORT QSize qSmartMinSize(const QSize &sizeHint, const QSize &minSizeHint
    }
 
    if (sizePolicy.verticalPolicy() != QSizePolicy::Ignored) {
-      if (sizePolicy.verticalPolicy() & QSizePolicy::ShrinkFlag) {
+      if (cs_enum_cast(sizePolicy.verticalPolicy()) & cs_enum_cast(QSizePolicy::ShrinkFlag)) {
          s.setHeight(minSizeHint.height());
       } else {
          s.setHeight(qMax(sizeHint.height(), minSizeHint.height()));
@@ -432,12 +432,12 @@ Q_GUI_EXPORT QSize qSmartMaxSize(const QSize &sizeHint,
    QSize s = maxSize;
    QSize hint = sizeHint.expandedTo(minSize);
    if (s.width() == QWIDGETSIZE_MAX && !(align & Qt::AlignHorizontal_Mask))
-      if (!(sizePolicy.horizontalPolicy() & QSizePolicy::GrowFlag)) {
+      if (! (cs_enum_cast(sizePolicy.horizontalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag))) {
          s.setWidth(hint.width());
       }
 
    if (s.height() == QWIDGETSIZE_MAX && !(align & Qt::AlignVertical_Mask))
-      if (!(sizePolicy.verticalPolicy() & QSizePolicy::GrowFlag)) {
+      if (! (cs_enum_cast(sizePolicy.verticalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag))) {
          s.setHeight(hint.height());
       }
 

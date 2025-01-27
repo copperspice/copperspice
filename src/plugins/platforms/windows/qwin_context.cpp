@@ -821,12 +821,14 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
    msg.lParam = lParam;
    msg.pt.x = msg.pt.y = 0;
 
-   if (et != QtWindows::CursorEvent && (et & (QtWindows::MouseEventFlag | QtWindows::NonClientEventFlag))) {
+   if (et != QtWindows::CursorEvent && (et & (QtWindows::WindowsEventFlags::MouseEventFlag | QtWindows::WindowsEventFlags::NonClientEventFlag))) {
       msg.pt.x = GET_X_LPARAM(lParam);
       msg.pt.y = GET_Y_LPARAM(lParam);
+
       // For non-client-area messages, these are screen coordinates (as expected
       // in the MSG structure), otherwise they are client coordinates.
-      if (! (et & QtWindows::NonClientEventFlag)) {
+
+      if (! (cs_enum_cast(et) & cs_enum_cast(QtWindows::WindowsEventFlags::NonClientEventFlag))) {
          ClientToScreen(msg.hwnd, &msg.pt);
       }
 
@@ -854,7 +856,7 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
       }
    }
 
-   if (et & QtWindows::InputMethodEventFlag) {
+   if (cs_enum_cast(et) & cs_enum_cast(QtWindows::WindowsEventFlags::InputMethodEventFlag)) {
       QWindowsInputContext *windowsInputContext = ::windowsInputContext();
 
       // Disable IME assuming this is a special implementation hooking into keyboard input.
@@ -880,7 +882,6 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
          default:
             break;
       }
-
    }
 
    switch (et) {

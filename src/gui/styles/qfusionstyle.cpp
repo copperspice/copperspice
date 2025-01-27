@@ -1963,7 +1963,7 @@ void QFusionStyle::drawComplexControl(ComplexControl control, const QStyleOption
                   alignment |= Qt::TextHideMnemonic;
                }
 
-               proxy()->drawItemText(painter, textRect,  Qt::TextShowMnemonic | Qt::AlignLeft | alignment,
+               proxy()->drawItemText(painter, textRect, cs_enum_cast(Qt::TextShowMnemonic) | cs_enum_cast(Qt::AlignLeft) | alignment,
                   groupBox->palette, groupBox->state & State_Enabled, groupBox->text, QPalette::NoRole);
 
                if (groupBox->state & State_HasFocus) {

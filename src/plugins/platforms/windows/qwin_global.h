@@ -29,7 +29,7 @@
 
 namespace QtWindows {
 
-enum {
+enum WindowsEventFlags {
    WindowEventFlag      = 0x10000,
    MouseEventFlag       = 0x20000,
    NonClientEventFlag   = 0x40000,

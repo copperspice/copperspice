@@ -128,7 +128,7 @@ void FormatTextEdit::setEditable(bool editable)
       setFrameStyle(framed);
       setFocusPolicy(defaultFocus);
    } else {
-      setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+      setFrameStyle(cs_enum_cast(QFrame::NoFrame) | cs_enum_cast(QFrame::Plain));
       setFocusPolicy(Qt::NoFocus);
    }
 

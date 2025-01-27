@@ -533,9 +533,10 @@ int QGridLayoutItem::stretchFactor(Qt::Orientation orientation) const
 
    QLayoutPolicy::Policy policy = sizePolicy(orientation);
 
-   if (policy & QLayoutPolicy::ExpandFlag) {
+   if (cs_enum_cast(policy) & cs_enum_cast(QLayoutPolicy::ExpandFlag)) {
       return 1;
-   } else if (policy & QLayoutPolicy::GrowFlag) {
+
+   } else if (cs_enum_cast(policy) & cs_enum_cast(QLayoutPolicy::GrowFlag)) {
       return -1;  // because we max it up
 
    } else {
@@ -565,13 +566,13 @@ QGridLayoutBox QGridLayoutItem::box(Qt::Orientation orientation, qreal constrain
 
       result.q_preferredSize = sizeHint(Qt::PreferredSize, constraintSize).width();
 
-      if (policy & QLayoutPolicy::ShrinkFlag) {
+      if (cs_enum_cast(policy) & cs_enum_cast(QLayoutPolicy::ShrinkFlag)) {
          result.q_minimumSize = sizeHint(Qt::MinimumSize, constraintSize).width();
       } else {
          result.q_minimumSize = result.q_preferredSize;
       }
 
-      if (policy & (QLayoutPolicy::GrowFlag | QLayoutPolicy::ExpandFlag)) {
+      if (cs_enum_cast(policy) & (QLayoutPolicy::GrowFlag | QLayoutPolicy::ExpandFlag)) {
          result.q_maximumSize = sizeHint(Qt::MaximumSize, constraintSize).width();
       } else {
          result.q_maximumSize = result.q_preferredSize;
@@ -582,13 +583,13 @@ QGridLayoutBox QGridLayoutItem::box(Qt::Orientation orientation, qreal constrain
 
       result.q_preferredSize = sizeHint(Qt::PreferredSize, constraintSize).height();
 
-      if (policy & QLayoutPolicy::ShrinkFlag) {
+      if (cs_enum_cast(policy) & cs_enum_cast(QLayoutPolicy::ShrinkFlag)) {
          result.q_minimumSize = sizeHint(Qt::MinimumSize, constraintSize).height();
       } else {
          result.q_minimumSize = result.q_preferredSize;
       }
 
-      if (policy & (QLayoutPolicy::GrowFlag | QLayoutPolicy::ExpandFlag)) {
+      if (cs_enum_cast(policy) & (QLayoutPolicy::GrowFlag | QLayoutPolicy::ExpandFlag)) {
          result.q_maximumSize = sizeHint(Qt::MaximumSize, constraintSize).height();
       } else {
          result.q_maximumSize = result.q_preferredSize;
@@ -605,7 +606,7 @@ QGridLayoutBox QGridLayoutItem::box(Qt::Orientation orientation, qreal constrain
       }
    }
 
-   if (policy & QLayoutPolicy::IgnoreFlag) {
+   if (cs_enum_cast(policy) & cs_enum_cast(QLayoutPolicy::IgnoreFlag)) {
       result.q_preferredSize = result.q_minimumSize;
    }
 
@@ -692,8 +693,8 @@ void QGridLayoutItem::insertOrRemoveRows(int row, int delta, Qt::Orientation ori
 QSizeF QGridLayoutItem::effectiveMaxSize(const QSizeF &constraint) const
 {
    QSizeF size = constraint;
-   bool vGrow = (sizePolicy(Qt::Vertical) & QLayoutPolicy::GrowFlag) == QLayoutPolicy::GrowFlag;
-   bool hGrow = (sizePolicy(Qt::Horizontal) & QLayoutPolicy::GrowFlag) == QLayoutPolicy::GrowFlag;
+   bool vGrow = (cs_enum_cast(sizePolicy(Qt::Vertical))   & cs_enum_cast(QLayoutPolicy::GrowFlag)) == QLayoutPolicy::GrowFlag;
+   bool hGrow = (cs_enum_cast(sizePolicy(Qt::Horizontal)) & cs_enum_cast(QLayoutPolicy::GrowFlag)) == QLayoutPolicy::GrowFlag;
 
    if (!vGrow || !hGrow) {
 
@@ -1468,7 +1469,7 @@ void QGridLayoutEngine::fillRowData(QGridLayoutRowData *rowData,
             if (itemRow == row && itemColumn == column) {
                int itemStretch = item->stretchFactor(orientation);
 
-               if (!(item->sizePolicy(orientation) & QLayoutPolicy::IgnoreFlag)) {
+               if (! (cs_enum_cast(item->sizePolicy(orientation)) & cs_enum_cast(QLayoutPolicy::IgnoreFlag))) {
                   hasIgnoreFlag = false;
                }
 

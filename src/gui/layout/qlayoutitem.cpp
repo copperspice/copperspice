@@ -278,13 +278,11 @@ Qt::Orientations QWidgetItem::expandingDirections() const
    //  its own size policy isn't expanding. This behavior should be reconsidered.
 
    if (wid->layout()) {
-      if (wid->sizePolicy().horizontalPolicy() & QSizePolicy::GrowFlag
-         && (wid->layout()->expandingDirections() & Qt::Horizontal)) {
+      if (cs_enum_cast(wid->sizePolicy().horizontalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag) && (wid->layout()->expandingDirections() & Qt::Horizontal)) {
          e |= Qt::Horizontal;
       }
 
-      if (wid->sizePolicy().verticalPolicy() & QSizePolicy::GrowFlag
-         && (wid->layout()->expandingDirections() & Qt::Vertical)) {
+      if (cs_enum_cast(wid->sizePolicy().verticalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag) && (wid->layout()->expandingDirections() & Qt::Vertical)) {
          e |= Qt::Vertical;
       }
    }
@@ -302,8 +300,8 @@ Qt::Orientations QWidgetItem::expandingDirections() const
 
 QSize QSpacerItem::minimumSize() const
 {
-   return QSize(sizeP.horizontalPolicy() & QSizePolicy::ShrinkFlag ? 0 : width,
-         sizeP.verticalPolicy() & QSizePolicy::ShrinkFlag ? 0 : height);
+   return QSize(cs_enum_cast(sizeP.horizontalPolicy()) & cs_enum_cast(QSizePolicy::ShrinkFlag) ? 0 : width,
+         cs_enum_cast(sizeP.verticalPolicy()) & cs_enum_cast(QSizePolicy::ShrinkFlag) ? 0 : height);
 }
 
 QSize QWidgetItem::minimumSize() const
@@ -318,8 +316,8 @@ QSize QWidgetItem::minimumSize() const
 
 QSize QSpacerItem::maximumSize() const
 {
-   return QSize(sizeP.horizontalPolicy() & QSizePolicy::GrowFlag ? QLAYOUTSIZE_MAX : width,
-         sizeP.verticalPolicy() & QSizePolicy::GrowFlag ? QLAYOUTSIZE_MAX : height);
+   return QSize(cs_enum_cast(sizeP.horizontalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag) ? QLAYOUTSIZE_MAX : width,
+         cs_enum_cast(sizeP.verticalPolicy()) & cs_enum_cast(QSizePolicy::GrowFlag) ? QLAYOUTSIZE_MAX : height);
 }
 
 QSize QWidgetItem::maximumSize() const

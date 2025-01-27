@@ -1236,7 +1236,14 @@ void QWizardPrivate::recreateLayout(const QWizardLayoutInfo &info)
    int hMargin = mac ? 1 : 0;
    int vMargin = hMargin;
 
-   pageFrame->setFrameStyle(mac ? (QFrame::Box | QFrame::Raised) : QFrame::NoFrame);
+   if (mac) {
+      pageFrame->setFrameStyle(cs_enum_cast(QFrame::Box) | cs_enum_cast(QFrame::Raised));
+
+   } else {
+      pageFrame->setFrameStyle(QFrame::NoFrame);
+
+   }
+
    pageFrame->setLineWidth(0);
    pageFrame->setMidLineWidth(hMargin);
 
