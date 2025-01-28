@@ -595,6 +595,11 @@ QString16 QString16::fromLatin1(const char *str, size_type numOfChars)
    return retval;
 }
 
+QString16 QString16::fromUtf8(const char8_t *data, size_type numOfChars)
+{
+   return CsString::CsString_utf16::fromUtf8(data, numOfChars);
+}
+
 QString16 QString16::fromUtf8(const QByteArray &str)
 {
    return fromUtf8(str.constData(), str.size());

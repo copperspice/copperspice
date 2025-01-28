@@ -221,6 +221,14 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8() = default;
 
+      QString8(const char8_t *data)
+        : CsString::CsString(data)
+      { }
+
+      QString8(const char8_t *data, size_type size)
+        : CsString::CsString(data, size)
+      { }
+
       QString8(std::nullptr_t) = delete;
 
       QString8(QChar32 c);
@@ -292,15 +300,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       ~QString8() = default;
 
-#if defined(__cpp_char8_t)
-      // support new data type added in C++20
-
-      inline QString8(const char8_t *str);
-      inline QString8(const char8_t *str, size_type size);
-
-      static inline QString8 fromUtf8(const char8_t *str, size_type numOfChars = -1);
-#endif
-
       using CsString::CsString::append;
       using CsString::CsString::operator=;
       using CsString::CsString::operator+=;
@@ -318,6 +317,11 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
       QString8 &append(const QString8 &other)  {
          CsString::CsString::append(other);
+         return *this;
+      }
+
+      QString8 &append(const char8_t *data)  {
+         CsString::CsString::append(data);
          return *this;
       }
 
@@ -802,6 +806,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       static QString8 fromLatin1(const QByteArray &str);
       static QString8 fromLatin1(const char *data, size_type numOfChars = -1);
 
+      static QString8 fromUtf8(const char8_t *data, size_type numOfChars = -1);
       static QString8 fromUtf8(const QByteArray &str);
       static QString8 fromUtf8(const char *data, size_type numOfChars = -1);
 
@@ -1234,24 +1239,5 @@ inline void swap(QString8 &a, QString8 &b) {
 
 QString8 cs_internal_string_normalize(const QString8 &data, QString8::NormalizationForm mode,
                   QChar32::UnicodeVersion version, int from);
-
-#if defined(__cpp_char8_t)
-   // support new data type added in C++20
-
-   inline QString8::QString8(const char8_t *str)
-   {
-      *this = QString8::fromUtf8(str, -1);
-   }
-
-   inline QString8::QString8(const char8_t *str, size_type size)
-   {
-      *this = QString8::fromUtf8(str, size);
-   }
-
-   inline QString8 QString8::fromUtf8(const char8_t *str, size_type numOfChars)
-   {
-      return CsString::CsString::fromUtf8(str, numOfChars);
-   }
-#endif
 
 #endif
