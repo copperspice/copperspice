@@ -120,8 +120,15 @@ static const QVariant::NamesAndTypes builtinTypes[] = {
    { "signed char",            QVariant::SChar,                typeid(signed char *) },
    { "unsigned char",          QVariant::UChar,                typeid(unsigned char *) },
 
-#if defined(__cpp_char8_t)
+#if defined( _LIBCPP_VERSION )
+   // libC++ does not support this typeid(), only used in getTypeId() for other
+   // standard libraries, dummy value is sufficient
+
+   { "char8_t",                QVariant::Char8_t,              typeid(char *) },
+
+#else
    { "char8_t",                QVariant::Char8_t,              typeid(char8_t *) },
+
 #endif
 
    { "char16_t",               QVariant::Char16_t,             typeid(char16_t *) },

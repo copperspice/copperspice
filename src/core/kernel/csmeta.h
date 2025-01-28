@@ -492,7 +492,7 @@ CS_REGISTER_TYPE(float)
 CS_REGISTER_TYPE(char)
 CS_REGISTER_TYPE(signed char)
 CS_REGISTER_TYPE(unsigned char)
-//  CS_REGISTER_TYPE(char8_t)          // add with C++20
+CS_REGISTER_TYPE(char8_t)
 CS_REGISTER_TYPE(char16_t)
 CS_REGISTER_TYPE(char32_t)
 CS_REGISTER_TYPE(void)
