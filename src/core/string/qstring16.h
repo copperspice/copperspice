@@ -233,6 +233,18 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          : CsString::CsString_utf16(data)
       { }
 
+      QString16(const char16_t *data, size_type size)
+         : CsString::CsString_utf16(data, size)
+      { }
+
+      QString16(const char32_t *data)
+         : CsString::CsString_utf16(data)
+      { }
+
+      QString16(const char32_t *data, size_type size)
+         : CsString::CsString_utf16(data, size)
+      { }
+
       QString16(const QString16 &other) = default;
       QString16(QString16 &&other) = default;
 
@@ -320,6 +332,16 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       }
 
       QString16 &append(const char8_t *data)  {
+         CsString::CsString_utf16::append(data);
+         return *this;
+      }
+
+      QString16 &append(const char16_t *data)  {
+         CsString::CsString_utf16::append(data);
+         return *this;
+      }
+
+      QString16 &append(const char32_t *data)  {
          CsString::CsString_utf16::append(data);
          return *this;
       }

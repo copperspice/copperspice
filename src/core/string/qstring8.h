@@ -229,6 +229,22 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
         : CsString::CsString(data, size)
       { }
 
+      QString8(const char16_t *data)
+        : CsString::CsString(data)
+      { }
+
+      QString8(const char16_t *data, size_type size)
+        : CsString::CsString(data, size)
+      { }
+
+      QString8(const char32_t *data)
+        : CsString::CsString(data)
+      { }
+
+      QString8(const char32_t *data, size_type size)
+        : CsString::CsString(data, size)
+      { }
+
       QString8(std::nullptr_t) = delete;
 
       QString8(QChar32 c);
@@ -321,6 +337,16 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       }
 
       QString8 &append(const char8_t *data)  {
+         CsString::CsString::append(data);
+         return *this;
+      }
+
+      QString8 &append(const char16_t *data)  {
+         CsString::CsString::append(data);
+         return *this;
+      }
+
+      QString8 &append(const char32_t *data)  {
          CsString::CsString::append(data);
          return *this;
       }
