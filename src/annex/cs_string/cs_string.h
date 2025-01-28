@@ -93,6 +93,9 @@ class CsBasicString
       CsBasicString(const char (&str)[N], size_type size, const A &a = A());
 
 
+      CsBasicString(const char8_t *str, const A &a = A());
+      CsBasicString(const char8_t *str, size_type size, const A &a = A());
+
       CsBasicString(const char16_t *str, const A &a = A());
       CsBasicString(const char16_t *str, size_type size, const A &a = A());
 
@@ -131,17 +134,6 @@ class CsBasicString
       // move constructor
       CsBasicString(CsBasicString && str) = default;
       CsBasicString(CsBasicString && str, const A &a);
-
-
-#if defined(__cpp_char8_t)
-      // support new data type added in C++20
-
-      CsBasicString(const char8_t *str, const A &a = A());
-      CsBasicString(const char8_t *str, size_type size, const A &a = A());
-
-      static CsBasicString fromUtf8(const char8_t *str, size_type numOfChars = -1, const A &a = A());
-#endif
-
 
       // ** operators
       CsBasicString &operator=(const CsBasicString &str) = default;
@@ -472,7 +464,9 @@ class CsBasicString
 
       CsChar front() const;
 
+      static CsBasicString fromUtf8(const char8_t *str, size_type numOfChars = -1, const A &a = A());
       static CsBasicString fromUtf8(const char *str, size_type numOfChars = -1, const A &a = A());
+
       static CsBasicString fromUtf16(const char16_t *str, size_type numOfChars = -1, const A &a = A());
 
       A getAllocator() const;
@@ -707,6 +701,18 @@ CsBasicString<E, A>::CsBasicString(const char (&str)[N], size_type size, const A
 #endif
 
    // make this safe by treating str as utf8
+   *this = CsBasicString::fromUtf8(str, size, a);
+}
+
+template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char8_t *str, const A &a)
+{
+   *this = CsBasicString::fromUtf8(str, -1, a);
+}
+
+template <typename E, typename A>
+CsBasicString<E, A>::CsBasicString(const char8_t *str, size_type size, const A &a)
+{
    *this = CsBasicString::fromUtf8(str, size, a);
 }
 
@@ -2511,9 +2517,6 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char *str, size_type numO
    return retval;
 }
 
-#if defined(__cpp_char8_t)
-   // support new data type added in C++20
-
 template <typename E, typename A>
 CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char8_t *str, size_type numOfChars, const A &a)
 {
@@ -2614,8 +2617,6 @@ CsBasicString<E,A> CsBasicString<E, A>::fromUtf8(const char8_t *str, size_type n
 
    return retval;
 }
-
-#endif
 
 template <typename E, typename A>
 CsBasicString<E,A> CsBasicString<E, A>::fromUtf16(const char16_t *str, size_type numOfChars, const A &a)
@@ -3632,23 +3633,6 @@ bool operator>=(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &
 {
    return ! (str1 < str2);
 }
-
-#if defined(__cpp_char8_t)
-   // support new data type added in C++20
-
-   template <typename E, typename A>
-   CsBasicString<E, A>::CsBasicString(const char8_t *str, const A &a)
-   {
-      *this = CsBasicString::fromUtf8(str, -1, a);
-   }
-
-   template <typename E, typename A>
-   CsBasicString<E, A>::CsBasicString(const char8_t *str, size_type size, const A &a)
-   {
-      *this = CsBasicString::fromUtf8(str, size, a);
-   }
-#endif
-
 
 }  // namespace
 
