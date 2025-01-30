@@ -19,6 +19,7 @@
 #ifndef LIB_CS_SHARED_POINTER_H
 #define LIB_CS_SHARED_POINTER_H
 
+#include <compare>
 #include <memory>
 
 namespace CsPointer {
@@ -264,6 +265,34 @@ class CsSharedPointer
       return m_ptr.use_count();
    }
 
+   template <typename U>
+   auto operator<=>(const CsSharedPointer<U> &ptr) const noexcept {
+      return this->m_ptr <=> ptr.m_ptr;
+   }
+
+   template <typename U>
+   bool operator==(const CsSharedPointer<U> &ptr) const noexcept {
+      return this->m_ptr == ptr.m_ptr;
+   }
+
+   template <typename U>
+   auto operator<=>(const U *ptr) const noexcept {
+      return this->get() <=> ptr;
+   }
+
+   template <typename U>
+   bool operator==(const U *ptr) const noexcept {
+      return this->get() == ptr;
+   }
+
+   auto operator<=>(std::nullptr_t) const noexcept {
+      return this->m_ptr <=> nullptr;
+   }
+
+   bool operator==(std::nullptr_t) const noexcept {
+      return this->m_ptr == nullptr;
+   }
+
  private:
    std::shared_ptr<T> m_ptr;
 
@@ -281,93 +310,6 @@ template <typename T, typename... Args, typename = typename std::enable_if_t<! s
 CsSharedPointer<T> make_shared(Args &&... args)
 {
    return std::make_shared<T>(std::forward<Args>(args)...);
-}
-
-// equal
-template <typename T1, typename T2>
-bool operator==(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() == ptr2.get();
-}
-
-template <typename T1, typename T2>
-bool operator==(const CsSharedPointer<T1> &ptr1, const T2 *ptr2) noexcept
-{
-   return ptr1.get() == ptr2;
-}
-
-template <typename T1, typename T2>
-bool operator==(const T1 *ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1 == ptr2.get();
-}
-
-template <typename T>
-bool operator==(const CsSharedPointer<T> &ptr1, std::nullptr_t) noexcept
-{
-   return ptr1.get() == nullptr;
-}
-
-template <typename T>
-bool operator==(std::nullptr_t, const CsSharedPointer<T> &ptr2) noexcept
-{
-   return nullptr == ptr2.get();
-}
-
-// not equal
-template <typename T1, typename T2>
-bool operator!=(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() != ptr2.get();
-}
-
-template <typename T1, typename T2>
-bool operator!=(const CsSharedPointer<T1> &ptr1, const T2 *ptr2) noexcept
-{
-   return ptr1.get() != ptr2;
-}
-
-template <typename T1, typename T2>
-bool operator!=(const T1 *ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1 != ptr2.get();
-}
-
-template <typename T>
-bool operator!=(const CsSharedPointer<T> &ptr1, std::nullptr_t) noexcept
-{
-   return ptr1.get() != nullptr;
-}
-
-template <typename T>
-bool operator!=(std::nullptr_t, const CsSharedPointer<T> &ptr2) noexcept
-{
-   return nullptr != ptr2.get();
-}
-
-// compare
-template <typename T1, typename T2>
-bool operator<(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() < ptr2.get();
-}
-
-template <typename T1, typename T2>
-bool operator<=(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() <= ptr2.get();
-}
-
-template <typename T1, typename T2>
-bool operator>(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() > ptr2.get();
-}
-
-template <typename T1, typename T2>
-bool operator>=(const CsSharedPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.get() >= ptr2.get();
 }
 
 template <typename T>

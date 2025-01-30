@@ -116,6 +116,20 @@ class CsWeakPointer
       return m_ptr.use_count();
    }
 
+   template <typename U>
+   bool operator==(const CsWeakPointer<U> &ptr) const noexcept {
+      return this->owner_before(ptr) == false && ptr.owner_before(*this) == false;
+   }
+
+   template <typename U>
+   bool operator==(const CsSharedPointer<U> &ptr) const noexcept {
+      return this->owner_before(ptr) == false && ptr.owner_before(*this) == false;
+   }
+
+   bool operator==(std::nullptr_t) const noexcept {
+      return this->expired();
+   }
+
  private:
    std::weak_ptr<T> m_ptr;
 
@@ -126,74 +140,11 @@ class CsWeakPointer
    friend class CsWeakPointer;
 };
 
-// equal
-template <typename T1, typename T2>
-bool operator==(const CsWeakPointer<T1> &ptr1, const CsWeakPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == false && ptr2.owner_before(ptr1) == false;
-}
-
-template <typename T1, typename T2>
-bool operator==(const CsSharedPointer<T1> &ptr1, const CsWeakPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == false && ptr2.owner_before(ptr1) == false;
-}
-
-template <typename T1, typename T2>
-bool operator==(const CsWeakPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == false && ptr2.owner_before(ptr1) == false;
-}
-
-template <typename T1>
-bool operator==(const CsWeakPointer<T1> &ptr1, std::nullptr_t) noexcept
-{
-   return ptr1.expired();
-}
-
-template <typename T1>
-bool operator==(std::nullptr_t, const CsWeakPointer<T1> &ptr2) noexcept
-{
-   return ptr2.expired();
-}
-
-// not equal
-template <typename T1, typename T2>
-bool operator!=(const CsWeakPointer<T1> &ptr1, const CsWeakPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == true || ptr2.owner_before(ptr1) == true;
-}
-
-template <typename T1, typename T2>
-bool operator!=(const CsSharedPointer<T1> &ptr1, const CsWeakPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == true || ptr2.owner_before(ptr1) == true;
-}
-
-template <typename T1, typename T2>
-bool operator!=(const CsWeakPointer<T1> &ptr1, const CsSharedPointer<T2> &ptr2) noexcept
-{
-   return ptr1.owner_before(ptr2) == true || ptr2.owner_before(ptr1) == true;
-}
-
-template <typename T1>
-bool operator!=(const CsWeakPointer<T1> &ptr1, std::nullptr_t) noexcept
-{
-   return ! ptr1.expired();
-}
-
-template <typename T1>
-bool operator!=(std::nullptr_t, const CsWeakPointer<T1> &ptr2) noexcept
-{
-   return ! ptr2.expired();
-}
-
 template <typename T>
 void swap(CsWeakPointer<T> &ptr1, CsWeakPointer<T> &ptr2) noexcept
 {
    ptr1.swap(ptr2);
 }
-
 
 }   // end namespace
 
