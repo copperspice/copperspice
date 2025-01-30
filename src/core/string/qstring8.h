@@ -64,10 +64,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
             : CsString::CsString::const_iterator(std::move(iter)) {
          }
 
-         const_iterator(iterator iter)
-            : CsString::CsString::const_iterator(std::move(iter)) {
-         }
-
          // operators
          const QChar32 operator*() const {
             return CsString::CsString::const_iterator::operator*();
@@ -83,10 +79,6 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
 
          bool operator==(const const_iterator &other) const {
             return CsString::CsString::const_iterator::operator==(other);
-         }
-
-         bool operator!=(const const_iterator &other) const {
-            return CsString::CsString::const_iterator::operator!=(other);
          }
 
          const_iterator &operator+=(size_type n) {

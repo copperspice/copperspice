@@ -64,10 +64,6 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
             : CsString::CsString_utf16::const_iterator(std::move(iter)) {
          }
 
-         const_iterator(iterator iter)
-            : CsString::CsString_utf16::const_iterator(std::move(iter)) {
-         }
-
          // operators
          const QChar32 operator*() const {
             return CsString::CsString_utf16::const_iterator::operator*();
@@ -81,12 +77,8 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
             return CsString::CsString_utf16::const_iterator::operator[](n);
          }
 
-         bool operator==(const_iterator other) const {
+         bool operator==(const const_iterator &other) const {
             return CsString::CsString_utf16::const_iterator::operator==(other);
-         }
-
-         bool operator!=(const_iterator other) const {
-            return CsString::CsString_utf16::const_iterator::operator!=(other);
          }
 
          const_iterator &operator+=(size_type n) {
