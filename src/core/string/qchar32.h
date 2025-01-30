@@ -30,6 +30,8 @@
 #include <cs_char.h>
 #include <cs_string.h>
 
+#include <compare>
+
 class QChar32;
 class QString8;
 class QString16;
@@ -511,6 +513,8 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       CsString::CsChar::operator=(c);
       return *this;
    }
+
+   auto operator<=>(const QChar32 &other) const = default;
 };
 
 class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
@@ -528,36 +532,6 @@ class Q_CORE_EXPORT QChar32Arrow : public CsString::CsCharArrow
       return reinterpret_cast<const QChar32 *>(CsString::CsCharArrow::operator->());
    }
 };
-
-inline bool operator==(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() == c2.unicode();
-}
-
-inline bool operator!=(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() != c2.unicode();
-}
-
-inline bool operator<=(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() <= c2.unicode();
-}
-
-inline bool operator>=(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() >= c2.unicode();
-}
-
-inline bool operator<(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() < c2.unicode();
-}
-
-inline bool operator>(QChar32 c1, QChar32 c2)
-{
-   return c1.unicode() > c2.unicode();
-}
 
 inline uint qHash(const QChar32 &key, uint seed)
 {
