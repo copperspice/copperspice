@@ -21,6 +21,7 @@
 
 #include <cs_char.h>
 
+#include <compare>
 #include <cstddef>
 #include <vector>
 
@@ -61,13 +62,23 @@ class CsStringIterator
 
       CsChar operator[](size_type n) const;
 
-      // comparisons
-      bool operator!=(const CsStringIterator &other) const;
-      bool operator==(const CsStringIterator &other) const;
-      bool operator<(const CsStringIterator &other) const;
-      bool operator<=(const CsStringIterator &other) const;
-      bool operator>(const CsStringIterator &other) const;
-      bool operator>=(const CsStringIterator &other) const;
+      std::strong_ordering operator<=>(const CsStringIterator &other) const {
+
+         if (m_iter < other.m_iter) {
+            return std::strong_ordering::less;
+
+         } else if (m_iter > other.m_iter) {
+            return std::strong_ordering::greater;
+
+         } else {
+            return std::strong_ordering::equal;
+
+         }
+      }
+
+      bool operator==(const CsStringIterator &other) const {
+         return m_iter == other.m_iter;
+      }
 
       // math
       CsStringIterator &operator+=(size_type n);
@@ -112,43 +123,6 @@ CsChar CsStringIterator<E,A>:: operator[](size_type n) const
 {
    // calls operator+()
    return *(*this + n);
-}
-
-// comparisons
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator!=(const CsStringIterator &other) const
-{
-   return m_iter != other.m_iter;
-}
-
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator==(const CsStringIterator &other) const
-{
-   return m_iter == other.m_iter;
-}
-
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator<(const CsStringIterator &other) const
-{
-   return m_iter < other.m_iter;
-}
-
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator<=(const CsStringIterator &other) const
-{
-   return m_iter <= other.m_iter;
-}
-
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator>(const CsStringIterator &other) const
-{
-   return m_iter > other.m_iter;
-}
-
-template <typename E, typename A>
-bool CsStringIterator <E,A>::operator>=(const CsStringIterator &other) const
-{
-   return m_iter >= other.m_iter;
 }
 
 // math

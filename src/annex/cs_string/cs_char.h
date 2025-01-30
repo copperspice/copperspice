@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 
+#include <compare>
 #include <functional>
 #include <memory>
 
@@ -79,13 +80,7 @@ class CsChar
       {
       }
 
-      inline bool operator!=(const CsChar &other) const;
-      inline bool operator==(const CsChar &other) const;
-
-      inline bool operator<(const CsChar &other) const;
-      inline bool operator<=(const CsChar &other) const;
-      inline bool operator>(const CsChar &other) const;
-      inline bool operator>=(const CsChar &other) const;
+      auto operator<=>(const CsChar &other) const = default;
 
       inline CsChar &operator=(char c) &;
       inline CsChar &operator=(char32_t c) &;
@@ -96,37 +91,6 @@ class CsChar
    private:
       uint32_t m_char;
 };
-
-// comparisons
-inline bool CsChar::operator!=(const CsChar &other) const
-{
-   return m_char != other.m_char;
-}
-
-inline bool CsChar::operator==(const CsChar &other) const
-{
-   return m_char == other.m_char;
-}
-
-inline bool CsChar::operator<(const CsChar &other) const
-{
-   return m_char < other.m_char;
-}
-
-inline bool CsChar::operator<=(const CsChar &other) const
-{
-   return m_char <= other.m_char;
-}
-
-inline bool CsChar::operator>(const CsChar &other) const
-{
-   return m_char > other.m_char;
-}
-
-inline bool CsChar::operator>=(const CsChar &other) const
-{
-   return m_char >= other.m_char;
-}
 
 inline CsChar &CsChar::operator=(char c) &
 {

@@ -175,6 +175,40 @@ class CsBasicString
 
       CsChar operator[](size_type index) const;
 
+      template <typename E2, typename A2>
+      bool operator==(const CsBasicString<E2, A2> &str2) const noexcept {
+         // E1 and E2 are different
+
+         auto iter1 = this->begin();
+         auto iter2 = str2.begin();
+
+         auto end1  = this->end();
+         auto end2  = str2.end();
+
+         while (iter1 != end1 && iter2 != end2) {
+
+            if (*iter1 != *iter2) {
+              return false;
+            }
+
+            ++iter1;
+            ++iter2;
+         }
+
+         if (iter1 == end1 && iter2 == end2) {
+            return true;
+         }
+
+         return false;
+      }
+
+      bool operator==(const CsBasicString<E, A> &str) const noexcept {
+         // E is the same
+
+         // are the vectors equal
+         return std::equal(this->storage_begin(), this->storage_end(), str.storage_begin(), str.storage_end());
+      }
+
       const_iterator advance(const_iterator begin, size_type count) const;
       iterator advance(iterator begin, size_type count);
 
@@ -3447,55 +3481,6 @@ void swap(CsBasicString<E, A> &str1, CsBasicString<E, A> &str2)
    str1.swap(str2);
 }
 
-template <typename E1, typename A1, typename E2, typename A2>
-bool operator==(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &str2)
-{
-   // E1 and E2 are different
-
-   auto iter1 = str1.begin();
-   auto iter2 = str2.begin();
-
-   auto end1 = str1.end();
-   auto end2 = str2.end();
-
-   while (iter1 != end1 && iter2 != end2) {
-
-      if (*iter1 != *iter2) {
-        return false;
-      }
-
-      ++iter1;
-      ++iter2;
-   }
-
-   if (iter1 == end1 && iter2 == end2) {
-      return true;
-   }
-
-   return false;
-}
-
-template <typename E, typename A>
-bool operator==(const CsBasicString<E, A> &str1, const CsBasicString<E, A> &str2)
-{
-   // E is the same
-
-   // are the vectors equal
-   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
-}
-
-inline bool operator==(const CsString_utf8 &str1, const CsString_utf8 &str2)
-{
-   // are the vectors equal
-   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
-}
-
-inline bool operator==(const CsString_utf16 &str1, const CsString_utf16 &str2)
-{
-   // are the vectors equal
-   return std::equal(str1.storage_begin(), str1.storage_end(), str2.storage_begin(), str2.storage_end());
-}
-
 template <int N>
 inline bool operator==(const CsString_utf8 &str1, const char (& str2)[N])
 {
@@ -3520,28 +3505,6 @@ template <int N>
 inline bool operator==(const char16_t (& str1)[N], const CsString_utf16 &str2)
 {
    return std::equal(str1, str1+N-1, str2.storage_begin(), str2.storage_end());
-}
-
-template <typename E1, typename A1, typename E2, typename A2>
-bool operator!=(const CsBasicString<E1, A1> &str1, const CsBasicString<E2, A2> &str2)
-{
-   return ! (str1 == str2);
-}
-
-template <typename E, typename A>
-bool operator!=(const CsBasicString<E, A> &str1, const CsBasicString<E, A> &str2)
-{
-   return ! (str1 == str2);
-}
-
-inline bool operator!=(const CsString_utf8 &str1, const CsString_utf8 &str2)
-{
-   return ! (str1 == str2);
-}
-
-inline bool operator!=(const CsString_utf16 &str1, const CsString_utf16 &str2)
-{
-   return ! (str1 == str2);
 }
 
 inline CsString_utf8 operator+(CsString_utf8 str1, const CsString_utf8 &str2)
