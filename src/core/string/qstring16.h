@@ -50,80 +50,6 @@ class QStringParser;
 class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
 {
    public:
-      class iterator : public CsString::CsString_utf16::iterator
-      {
-       public:
-         using value_type  = QChar32;
-         using pointer     = QChar32 *;
-         using reference   = QChar32 &;
-
-         iterator() = default;
-
-         iterator(CsString::CsString_utf16::iterator iter)
-            : CsString::CsString_utf16::iterator(std::move(iter)) {
-         }
-
-         // operators
-         QChar32 operator*() const {
-            return CsString::CsString_utf16::iterator::operator*();
-         }
-
-         QChar32Arrow operator->() const {
-            return CsString::CsString_utf16::iterator::operator->();
-         }
-
-         QChar32 operator[](size_type n) const {
-            return CsString::CsString_utf16::iterator::operator[](n);
-         }
-
-         bool operator==(iterator other) const {
-            return CsString::CsString_utf16::iterator::operator==(other);
-         }
-
-         bool operator!=(iterator other) const {
-            return CsString::CsString_utf16::iterator::operator!=(other);
-         }
-
-         iterator &operator+=(size_type n) {
-            CsString::CsString_utf16::iterator::operator+=(n);
-            return *this;
-         }
-
-         iterator &operator-=(size_type n) {
-            CsString::CsString_utf16::iterator::operator-=(n);
-            return *this;
-         }
-
-         iterator operator+(size_type n) const {
-            return CsString::CsString_utf16::iterator::operator+(n);
-         }
-
-         iterator operator-(size_type n) const {
-            return CsString::CsString_utf16::iterator::operator-(n);
-         }
-
-         size_type operator-(iterator other) const {
-            return CsString::CsString_utf16::iterator::operator-(other);
-         }
-
-         iterator &operator++() {
-            CsString::CsString_utf16::iterator::operator++();
-            return *this;
-         }
-
-         iterator operator++(int n) {
-            return CsString::CsString_utf16::iterator::operator++(n);
-         }
-
-         iterator &operator--() {
-            CsString::CsString_utf16::iterator::operator--();
-            return *this;
-         }
-
-         iterator operator--(int n) {
-            return CsString::CsString_utf16::iterator::operator--(n);
-         }
-      };
 
       class const_iterator : public CsString::CsString_utf16::const_iterator
       {
@@ -203,6 +129,13 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
             return CsString::CsString_utf16::const_iterator::operator--(n);
          }
       };
+
+      // strings can not be modified in place, disallow using an iterator to write to a string
+      // all iterators are actually a const_itertor
+
+#if ! defined (CS_DOXYPRESS)
+      using iterator = const_iterator;
+#endif
 
       enum NormalizationForm {
          NormalizationForm_D,
