@@ -40,7 +40,7 @@ class QPointer
 #if ! defined(CS_DOXYPRESS)
    template <class X = CSInternalRefCount>
 #endif
-   QPointer(T *ptr)
+   explicit QPointer(T *ptr)
       : wp( X::get_m_self(ptr).template staticCast<T>() )
    {
       static_assert( std::is_base_of_v<QObject, T>, "T must be a class which inherits from QObject");
@@ -88,68 +88,12 @@ class QPointer
       return wp.isNull();
    }
 
+   bool operator==(const QPointer<T> &other) const noexcept {
+      return this->data() == other.data();
+   }
+
  private:
    QWeakPointer<T> wp;
 };
-
-template <class T>
-inline bool operator==(const T *ptr1, const QPointer<T> &ptr2)
-{
-   return ptr1 == ptr2.operator->();
-}
-
-template<class T>
-inline bool operator==(const QPointer<T> &ptr1, const T *ptr2)
-{
-   return ptr1.operator->() == ptr2;
-}
-
-template <class T>
-inline bool operator==(T *o, const QPointer<T> &ptr2)
-{
-   return o == ptr2.operator->();
-}
-
-template<class T>
-inline bool operator==(const QPointer<T> &ptr1, T *ptr2)
-{
-   return ptr1.operator->() == ptr2;
-}
-
-template<class T>
-inline bool operator==(const QPointer<T> &ptr1, const QPointer<T> &ptr2)
-{
-   return ptr1.operator->() == ptr2.operator->();
-}
-
-template <class T>
-inline bool operator!=(const T *ptr1, const QPointer<T> &ptr2)
-{
-   return ptr1 != ptr2.operator->();
-}
-
-template<class T>
-inline bool operator!= (const QPointer<T> &ptr1, const T *ptr2)
-{
-   return ptr1.operator->() != ptr2;
-}
-
-template <class T>
-inline bool operator!=(T *ptr1, const QPointer<T> &ptr2)
-{
-   return ptr1 != ptr2.operator->();
-}
-
-template<class T>
-inline bool operator!= (const QPointer<T> &ptr1, T *ptr2)
-{
-   return ptr1.operator->() != ptr2;
-}
-
-template<class T>
-inline bool operator!= (const QPointer<T> &ptr1, const QPointer<T> &ptr2)
-{
-   return ptr1.operator->() != ptr2.operator->();
-}
 
 #endif

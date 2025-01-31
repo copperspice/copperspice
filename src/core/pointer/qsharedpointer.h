@@ -34,6 +34,9 @@
 class CSInternalRefCount;
 class QObject;
 
+template <typename T>
+class QWeakPointer;
+
 #if ! defined(CS_DOXYPRESS)
 
 template <typename T>
@@ -75,6 +78,13 @@ class QSharedPointer : public CsPointer::CsSharedPointer<T>
    template <typename U>
    QSharedPointer<U> staticCast() const {
       return CsPointer::static_pointer_cast<U>(*this);
+   }
+
+   template <typename U>
+   QSharedPointer &operator=(const QWeakPointer<U> &p)
+   {
+      CsPointer::CsSharedPointer<T>::operator=(p);
+      return *this;
    }
 };
 

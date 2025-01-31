@@ -27,6 +27,8 @@
 #include <qatomic.h>
 #include <qglobal.h>
 
+#include <compare>
+
 template <class T>
 class QSharedDataPointer;
 
@@ -149,10 +151,6 @@ class QSharedDataPointer
 
    bool operator==(const QSharedDataPointer<T> &other) const {
       return d == other.d;
-   }
-
-   bool operator!=(const QSharedDataPointer<T> &other) const {
-      return d != other.d;
    }
 
    T &operator*() {
@@ -322,20 +320,13 @@ class QExplicitlySharedDataPointer
       return d != nullptr;
    }
 
-   bool operator==(const QExplicitlySharedDataPointer<T> &other) const {
-      return d == other.d;
-   }
-
-   bool operator!=(const QExplicitlySharedDataPointer<T> &other) const {
-      return d != other.d;
+   template<class U>
+   bool operator==(const QExplicitlySharedDataPointer<U> &other) const {
+      return d == other.constData();
    }
 
    bool operator==(const T *ptr) const {
       return d == ptr;
-   }
-
-   bool operator!=(const T *ptr) const {
-      return d != ptr;
    }
 
    bool operator!() const {
