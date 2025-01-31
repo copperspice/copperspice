@@ -30,6 +30,7 @@
 #include <qtimezone.h>
 
 #include <chrono>
+#include <compare>
 #include <limits>
 #include <optional>
 
@@ -121,32 +122,10 @@ class Q_CORE_EXPORT QDate
       const QDate epoch(EPOCH_JD);
       return std::chrono::sys_days(std::chrono::days(epoch.daysTo(*this)));
    }
-   bool operator==(const QDate &other) const {
-      return jd == other.jd;
-   }
 
-   bool operator!=(const QDate &other) const {
-      return jd != other.jd;
-   }
-
-   bool operator<(const QDate &other) const {
-      return jd < other.jd;
-   }
-
-   bool operator<=(const QDate &other) const {
-      return jd <= other.jd;
-   }
-
-   bool operator>(const QDate &other) const {
-      return jd > other.jd;
-   }
-
-   bool operator>=(const QDate &other) const {
-      return jd >= other.jd;
-   }
+   auto operator<=>(const QDate &other) const = default;
 
    static QDate currentDate();
-
    static const QTimeZone &default_tz();
 
    static QDate fromStdSysDays(const std::chrono::sys_days &days) {
@@ -229,29 +208,7 @@ class Q_CORE_EXPORT QTime
    QString toString(Qt::DateFormat format = Qt::TextDate) const;
    QString toString(const QString &format) const;
 
-   bool operator==(const QTime &value) const {
-      return mds == value.mds;
-   }
-
-   bool operator!=(const QTime &value) const {
-      return mds != value.mds;
-   }
-
-   bool operator<(const QTime &value) const {
-      return mds < value.mds;
-   }
-
-   bool operator<=(const QTime &value) const {
-      return mds <= value.mds;
-   }
-
-   bool operator>(const QTime &value) const {
-      return mds > value.mds;
-   }
-
-   bool operator>=(const QTime &value) const {
-      return mds >= value.mds;
-   }
+   auto operator<=>(const QTime &other) const = default;
 
    static QTime fromMSecsSinceStartOfDay(int msecs) {
       return QTime(msecs);
@@ -368,23 +325,23 @@ class Q_CORE_EXPORT QDateTime
 
    QDateTime toUTC() const;
 
-   bool operator==(const QDateTime &value) const;
+   bool operator==(const QDateTime &other) const;
+   bool operator<(const QDateTime &other) const;
 
-   bool operator!=(const QDateTime &value) const {
-      return !(*this == value);
+   bool operator!=(const QDateTime &other) const {
+      return ! (*this == other);
    }
 
-   bool operator<(const QDateTime &value) const;
-   bool operator<=(const QDateTime &value) const {
-      return !(value < *this);
+   bool operator<=(const QDateTime &other) const {
+      return ! (other < *this);
    }
 
-   bool operator>(const QDateTime &value) const {
-      return value < *this;
+   bool operator>(const QDateTime &other) const {
+      return other < *this;
    }
 
-   bool operator>=(const QDateTime &value) const {
-      return !(*this < value);
+   bool operator>=(const QDateTime &other) const {
+      return ! (*this < other);
    }
 
    static QDateTime currentDateTime(const QTimeZone &zone = QDate::default_tz());
