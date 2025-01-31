@@ -31,6 +31,9 @@
 
 #include <string.h>
 #include <stdarg.h>
+
+#include <algorithm>
+#include <compare>
 #include <iterator>
 
 class QByteRef;
@@ -301,6 +304,50 @@ class Q_CORE_EXPORT QByteArray
    QByteArray toLower() const;
    QByteArray toUpper() const;
 
+   auto operator<=>(const QByteArray &other) const {
+      return std::lexicographical_compare_three_way(this->cbegin(), this->cend(), other.cbegin(), other.cend());
+   }
+
+   bool operator==(const QByteArray &other) const {
+      if (this->size() != other.size()) {
+         return false;
+      }
+
+      return std::equal(this->cbegin(), this->cend(), other.cbegin(), other.cend());
+   }
+
+   std::strong_ordering operator<=>(const char *value) const {
+
+      if (value == nullptr) {
+         if (this->isEmpty()){
+            return std::strong_ordering::equal;
+         } else {
+            return std::strong_ordering::greater;
+         }
+      }
+
+      const auto iterBegin = value;
+      const auto iterEnd   = iterBegin + std::strlen(value);
+
+      return std::lexicographical_compare_three_way(this->cbegin(), this->cend(), iterBegin, iterEnd);
+   }
+
+   bool operator==(const char *value) const {
+
+      if (value == nullptr) {
+         if (this->isEmpty()){
+            return true;
+         } else {
+            return false;
+         }
+      }
+
+      const auto iterBegin = value;
+      const auto iterEnd   = iterBegin + std::strlen(value);
+
+      return std::equal(this->cbegin(), this->cend(), iterBegin, iterEnd);
+   }
+
    // iterators
    inline iterator begin();
    inline const_iterator begin() const;
@@ -528,28 +575,12 @@ class Q_CORE_EXPORT QByteRef
       return *this;
    }
 
-   bool operator==(char c) const {
+   auto operator<=>(char c) const {
+      return a.d->data()[i] <=> c;
+   }
+
+   auto operator==(char c) const {
       return a.d->data()[i] == c;
-   }
-
-   bool operator!=(char c) const {
-      return a.d->data()[i] != c;
-   }
-
-   bool operator>(char c) const {
-      return a.d->data()[i] > c;
-   }
-
-   bool operator>=(char c) const {
-      return a.d->data()[i] >= c;
-   }
-
-   bool operator<(char c) const {
-      return a.d->data()[i] < c;
-   }
-
-   bool operator<=(char c) const {
-      return a.d->data()[i] <= c;
    }
 
  private:
@@ -670,96 +701,7 @@ inline bool QByteArray::contains(char ch) const
    return bool(indexOf(ch) != -1);
 }
 
-inline bool operator==(const QByteArray &a1, const QByteArray &a2)
-{
-   return (a1.size() == a2.size()) && (memcmp(a1.constData(), a2.constData(), a1.size()) == 0);
-}
-
-inline bool operator==(const QByteArray &a1, const char *a2)
-{
-   return a2 ? qstrcmp(a1, a2) == 0 : a1.isEmpty();
-}
-
-inline bool operator==(const char *a1, const QByteArray &a2)
-{
-   return a1 ? qstrcmp(a1, a2) == 0 : a2.isEmpty();
-}
-
-inline bool operator!=(const QByteArray &a1, const QByteArray &a2)
-{
-   return !(a1 == a2);
-}
-
-inline bool operator!=(const QByteArray &a1, const char *a2)
-{
-   return a2 ? qstrcmp(a1, a2) != 0 : !a1.isEmpty();
-}
-
-inline bool operator!=(const char *a1, const QByteArray &a2)
-{
-   return a1 ? qstrcmp(a1, a2) != 0 : !a2.isEmpty();
-}
-
-inline bool operator<(const QByteArray &a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) < 0;
-}
-
-inline bool operator<(const QByteArray &a1, const char *a2)
-{
-   return qstrcmp(a1, a2) < 0;
-}
-
-inline bool operator<(const char *a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) < 0;
-}
-
-inline bool operator<=(const QByteArray &a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) <= 0;
-}
-
-inline bool operator<=(const QByteArray &a1, const char *a2)
-{
-   return qstrcmp(a1, a2) <= 0;
-}
-
-inline bool operator<=(const char *a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) <= 0;
-}
-
-inline bool operator>(const QByteArray &a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) > 0;
-}
-
-inline bool operator>(const QByteArray &a1, const char *a2)
-{
-   return qstrcmp(a1, a2) > 0;
-}
-
-inline bool operator>(const char *a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) > 0;
-}
-
-inline bool operator>=(const QByteArray &a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) >= 0;
-}
-
-inline bool operator>=(const QByteArray &a1, const char *a2)
-{
-   return qstrcmp(a1, a2) >= 0;
-}
-
-inline bool operator>=(const char *a1, const QByteArray &a2)
-{
-   return qstrcmp(a1, a2) >= 0;
-}
-
+// other methods
 inline const QByteArray operator+(const QByteArray &a1, const QByteArray &a2)
 {
    return QByteArray(a1) += a2;
