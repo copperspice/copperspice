@@ -27,6 +27,8 @@
 #include <qcontainerfwd.h>
 #include <qlist.h>
 
+#include <compare>
+#include <concepts>
 #include <initializer_list>
 #include <vector>
 
@@ -122,6 +124,11 @@ class QVector
    }
 
    bool contains(const T &value) const;
+
+   template <typename U>
+   requires (std::equality_comparable_with<T, U> && ! std::integral<T>)
+   bool contains(const U &value) const;
+
    size_type count(const T &value) const;
 
    size_type count() const {
@@ -178,6 +185,20 @@ class QVector
    }
 
    size_type indexOf(const T &value, size_type from = 0) const {
+      size_type retval = -1;
+
+      auto iter = std::find(m_data.begin() + from, m_data.end(), value);
+
+      if (iter != m_data.end()) {
+         retval = iter - m_data.begin();
+      }
+
+      return retval;
+   }
+
+   template <typename U>
+   requires (std::equality_comparable_with<T, U> && ! std::integral<T>)
+   size_type indexOf(const U &value, size_type from = 0) const {
       size_type retval = -1;
 
       auto iter = std::find(m_data.begin() + from, m_data.end(), value);
@@ -433,14 +454,6 @@ class QVector
    QVector<T> &operator=(const QVector<T> &other) = default;
    QVector<T> &operator=(QVector<T> &&other)      = default;
 
-   bool operator==(const QVector<T> &other) const {
-      return (m_data == other.m_data);
-   }
-
-   bool operator!=(const QVector<T> &other) const {
-      return (m_data != other.m_data);
-   }
-
    reference operator[](size_type i);
    const_reference operator[](size_type i) const;
 
@@ -467,6 +480,10 @@ class QVector
       return *this;
    }
 
+   bool operator==(const QVector<T> &other) const {
+      return (m_data == other.m_data);
+   }
+
  private:
    std::vector<T> m_data;
 };
@@ -481,6 +498,20 @@ inline typename QVector<T>::const_reference QVector<T>::at(size_type i) const
 
 template <typename T>
 bool QVector<T>::contains(const T &value) const
+{
+   for (const auto &item : m_data) {
+      if (item == value) {
+         return true;
+      }
+   }
+
+   return false;
+}
+
+template <typename T>
+template <typename U>
+requires (std::equality_comparable_with<T, U> && ! std::integral<T>)
+bool QVector<T>::contains(const U &value) const
 {
    for (const auto &item : m_data) {
       if (item == value) {
