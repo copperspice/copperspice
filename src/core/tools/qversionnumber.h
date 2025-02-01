@@ -28,6 +28,8 @@
 #include <qstring.h>
 #include <qvector.h>
 
+#include <compare>
+
 class QVersionNumber;
 
 Q_CORE_EXPORT uint qHash(const QVersionNumber &key, uint seed = 0);
@@ -146,40 +148,28 @@ class QVersionNumber
 
    static uint hash(const QVersionNumber &key, uint seed = 0);
 
+   auto operator<=>(const QVersionNumber &other) const noexcept {
+      int tmp = compare(*this, other);
+
+      if (tmp < 0) {
+         return std::strong_ordering::less;
+
+      } else if (tmp > 0) {
+         return std::strong_ordering::greater;
+
+      } else {
+         return std::strong_ordering::equal;
+      }
+   }
+
+   bool operator==(const QVersionNumber &other) const noexcept {
+      return compare(*this, other) == 0;
+   }
+
  private:
    friend Q_CORE_EXPORT QDataStream &operator>>(QDataStream &stream, QVersionNumber &version);
 };
 
 Q_CORE_EXPORT QDebug operator<<(QDebug, const QVersionNumber &version);
-
-inline bool operator> (const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) > 0;
-}
-
-inline bool operator>=(const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) >= 0;
-}
-
-inline bool operator< (const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) < 0;
-}
-
-inline bool operator<=(const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) <= 0;
-}
-
-inline bool operator==(const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) == 0;
-}
-
-inline bool operator!=(const QVersionNumber &lhs, const QVersionNumber &rhs)
-{
-   return QVersionNumber::compare(lhs, rhs) != 0;
-}
 
 #endif
