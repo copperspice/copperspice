@@ -28,6 +28,8 @@
 #include <qpoint.h>
 #include <qsize.h>
 
+#include <compare>
+
 struct QFixed {
  public:
    QFixed()
@@ -150,30 +152,6 @@ struct QFixed {
       return fromFixed(-m_fixedValue);
    }
 
-   bool operator==(const QFixed &other) const {
-      return m_fixedValue == other.m_fixedValue;
-   }
-
-   bool operator!=(const QFixed &other) const {
-      return m_fixedValue != other.m_fixedValue;
-   }
-
-   bool operator<(const QFixed &other) const {
-      return m_fixedValue < other.m_fixedValue;
-   }
-
-   bool operator>(const QFixed &other) const {
-      return m_fixedValue > other.m_fixedValue;
-   }
-
-   bool operator<=(const QFixed &other) const {
-      return m_fixedValue <= other.m_fixedValue;
-   }
-
-   bool operator>=(const QFixed &other) const {
-      return m_fixedValue >= other.m_fixedValue;
-   }
-
    bool operator!() const {
       return ! m_fixedValue;
    }
@@ -268,6 +246,8 @@ struct QFixed {
       QFixed f = *this;
       return (f *= o);
    }
+
+   auto operator<=>(const QFixed &other) const = default;
 
  private:
    // 2nd int is just a dummy for disambiguation
