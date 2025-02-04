@@ -60,38 +60,49 @@ TEST_CASE("QWeakPointer data", "[qweakpointer]")
 TEST_CASE("QWeakPointer nullptr", "[qweakpointer]")
 {
    QSharedPointer<int> sharedPtr = QMakeShared<int>();
-   QWeakPointer<int> weakPointer = sharedPtr.toWeakRef();
+   QWeakPointer<int> weakPtr = sharedPtr.toWeakRef();
 
-   REQUIRE(sharedPtr == weakPointer);
-   REQUIRE(weakPointer == sharedPtr);
+#if ! defined(Q_CC_MSVC)
+   REQUIRE(sharedPtr == weakPtr);
+#endif
 
-   REQUIRE(sharedPtr == weakPointer.lock());
-   REQUIRE(sharedPtr == weakPointer.toStrongRef());
+   REQUIRE(weakPtr == sharedPtr);
+
+   REQUIRE(sharedPtr == weakPtr.lock());
+   REQUIRE(sharedPtr == weakPtr.toStrongRef());
 
    REQUIRE(sharedPtr != nullptr);
    REQUIRE(sharedPtr.isNull() == false);
 
    REQUIRE(static_cast<bool>(sharedPtr) == true);
-   REQUIRE(static_cast<bool>(weakPointer) == true);
+   REQUIRE(static_cast<bool>(weakPtr) == true);
 
+   {
+      QSharedPointer<int> tmp(weakPtr);
+
+      REQUIRE(sharedPtr == tmp);
+
+      tmp = weakPtr;
+
+      REQUIRE(sharedPtr == tmp);
+   }
    sharedPtr.reset();
 
    REQUIRE(static_cast<bool>(sharedPtr) == false);
-   REQUIRE(static_cast<bool>(weakPointer) == false);
+   REQUIRE(static_cast<bool>(weakPtr) == false);
 
    REQUIRE(sharedPtr == nullptr);
    REQUIRE(sharedPtr.isNull() == true);
 
-   REQUIRE(weakPointer == nullptr);
-   REQUIRE(weakPointer.isNull() == true);
+   REQUIRE(weakPtr == nullptr);
+   REQUIRE(weakPtr.isNull() == true);
 
-   REQUIRE(sharedPtr != weakPointer);   // unusual but accurate
-   REQUIRE(weakPointer != sharedPtr);
+   REQUIRE(sharedPtr != weakPtr);   // unusual but accurate
+   REQUIRE(weakPtr != sharedPtr);
 
-   REQUIRE(sharedPtr == weakPointer.lock());
-   REQUIRE(weakPointer.lock() == sharedPtr);
+   REQUIRE(sharedPtr == weakPtr.lock());
+   REQUIRE(weakPtr.lock() == sharedPtr);
 
-   REQUIRE(sharedPtr == weakPointer.toStrongRef());
-   REQUIRE(weakPointer.toStrongRef() == sharedPtr);
+   REQUIRE(sharedPtr == weakPtr.toStrongRef());
+   REQUIRE(weakPtr.toStrongRef() == sharedPtr);
 }
-

@@ -22,7 +22,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QSharedArrayPointer traits", "[QSharedArrayPointer]")
+TEST_CASE("QSharedArrayPointer traits", "[qsharedarraypointer]")
 {
    // without brackets
    REQUIRE(std::is_copy_constructible_v<QSharedArrayPointer<int>> == true);
@@ -43,7 +43,30 @@ TEST_CASE("QSharedArrayPointer traits", "[QSharedArrayPointer]")
    REQUIRE(std::has_virtual_destructor_v<QSharedArrayPointer<int[]>> == false);
 }
 
-TEST_CASE("QSharedArrayPointer empty", "[QSharedArrayPointer]")
+TEST_CASE("QSharedArrayPointer constructor", "[qsharedarraypointer]")
+{
+   QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
+   QSharedArrayPointer<int>   ptr2(ptr1);
+
+   ptr1[0] = 8;
+   ptr2[0] = 17;
+
+   REQUIRE(ptr1.is_null() == false);
+   REQUIRE(ptr2.is_null() == false);
+
+   REQUIRE(*ptr1 == 17);
+   REQUIRE(*ptr2 == 17);
+
+   QSharedArrayPointer<int[]> ptr3(ptr2);
+
+   REQUIRE(ptr2.is_null() == false);
+   REQUIRE(ptr3.is_null() == false);
+
+   REQUIRE(*ptr1 == 17);
+   REQUIRE(*ptr2 == 17);
+   REQUIRE(*ptr3 == 17);
+}
+TEST_CASE("QSharedArrayPointer empty", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr;
 
@@ -58,7 +81,42 @@ TEST_CASE("QSharedArrayPointer empty", "[QSharedArrayPointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
-TEST_CASE("QSharedArrayPointer reset", "[QSharedArrayPointer]")
+TEST_CASE("QSharedArrayPointer move_assign", "[qsharedarraypointer]")
+{
+   QSharedArrayPointer<int[]> ptr1;
+   int *rawPointer = nullptr;
+
+   {
+      QSharedArrayPointer<int[]> ptr2(new int[1]);
+      rawPointer = ptr2.data();
+      ptr1 = std::move(ptr2);
+
+      REQUIRE(ptr2.is_null());
+   }
+
+   REQUIRE(rawPointer == ptr1.get());
+}
+
+TEST_CASE("QSharedArrayPointer move_construct", "[qsharedarraypointer]")
+{
+   QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
+   QSharedArrayPointer<int>   ptr2(std::move(ptr1));
+
+   ptr2[0] = 17;
+
+   REQUIRE(ptr1.is_null() == true);
+   REQUIRE(ptr2.is_null() == false);
+
+   REQUIRE(*ptr2 == 17);
+
+   QSharedArrayPointer<int[]> ptr3(std::move(ptr2));
+
+   REQUIRE(ptr2.is_null() == true);
+   REQUIRE(ptr3.is_null() == false);
+
+   REQUIRE(*ptr3 == 17);
+}
+TEST_CASE("QSharedArrayPointer reset", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr = QMakeShared<int[]>(1);
    ptr.reset();
@@ -67,7 +125,7 @@ TEST_CASE("QSharedArrayPointer reset", "[QSharedArrayPointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
-TEST_CASE("QSharedArrayPointer swap", "[QSharedArrayPointer]")
+TEST_CASE("QSharedArrayPointer swap", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
    QSharedArrayPointer<int[]> ptr2 = QMakeShared<int[]>(1);

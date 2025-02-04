@@ -65,19 +65,72 @@ TEST_CASE("QScopedPointer empty", "[qscopedpointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
-TEST_CASE("QScopedPointer equality", "[qscopedpointer]")
+TEST_CASE("QScopedPointer nullptr", "[qscopedpointer]")
 {
-   QScopedPointer<int> ptr1 = QMakeScoped<int>();
-   QScopedPointer<int> ptr2(nullptr);
+   QScopedPointer<int> ptr = nullptr;
 
-   REQUIRE((ptr1 == ptr2) == false);
-   REQUIRE((ptr1 != ptr2) == true);
+   REQUIRE(ptr == nullptr);
+   REQUIRE(nullptr == ptr);
 
-   REQUIRE((ptr1 == ptr2.get()) == false);
-   REQUIRE((ptr1.get() == ptr2) == false);
+   REQUIRE(ptr.isNull() == true);
+}
 
-   REQUIRE((ptr1 != ptr2.get()) == true);
-   REQUIRE((ptr1.get() != ptr2) == true);
+TEST_CASE("QScopedPointer operators", "[qscopedpointer]]")
+{
+   QScopedPointer<int> ptr1 = nullptr;
+
+   QScopedPointer<int> ptr2 = QMakeScoped<int>();
+
+   int *ptr3 = ptr2.get();
+
+   REQUIRE( (ptr1 == ptr2) == false);
+   REQUIRE( (ptr1 != ptr2) == true);
+   REQUIRE( (ptr1 <  ptr2) == true);
+   REQUIRE( (ptr1 >  ptr2) == false);
+   REQUIRE( (ptr1 <= ptr2) == true);
+   REQUIRE( (ptr1 >= ptr2) == false);
+
+   REQUIRE( (ptr2 == ptr1) == false);
+   REQUIRE( (ptr2 != ptr1) == true);
+   REQUIRE( (ptr2 <  ptr1) == false);
+   REQUIRE( (ptr2 >  ptr1) == true);
+   REQUIRE( (ptr2 <= ptr1) == false);
+   REQUIRE( (ptr2 >= ptr1) == true);
+
+   REQUIRE( (ptr2 == ptr3) == true);
+   REQUIRE( (ptr2 != ptr3) == false);
+   REQUIRE( (ptr2 <  ptr3) == false);
+   REQUIRE( (ptr2 >  ptr3) == false);
+   REQUIRE( (ptr2 <= ptr3) == true);
+   REQUIRE( (ptr2 >= ptr3) == true);
+
+   REQUIRE( (ptr1 == nullptr) == true);
+   REQUIRE( (ptr1 != nullptr) == false);
+   REQUIRE( (ptr1 <  nullptr) == false);
+   REQUIRE( (ptr1 >  nullptr) == false);
+   REQUIRE( (ptr1 <= nullptr) == true);
+   REQUIRE( (ptr1 >= nullptr) == true);
+
+   REQUIRE( (ptr2 == nullptr) == false);
+   REQUIRE( (ptr2 != nullptr) == true);
+   REQUIRE( (ptr2 <  nullptr) == false);
+   REQUIRE( (ptr2 >  nullptr) == true);
+   REQUIRE( (ptr2 <= nullptr) == false);
+   REQUIRE( (ptr2 >= nullptr) == true);
+
+   REQUIRE( (ptr1 == ptr1) == true);
+   REQUIRE( (ptr1 != ptr1) == false);
+   REQUIRE( (ptr1 <  ptr1) == false);
+   REQUIRE( (ptr1 >  ptr1) == false);
+   REQUIRE( (ptr1 <= ptr1) == true);
+   REQUIRE( (ptr1 >= ptr1) == true);
+
+   REQUIRE( (ptr2 == ptr2) == true);
+   REQUIRE( (ptr2 != ptr2) == false);
+   REQUIRE( (ptr2 <  ptr2) == false);
+   REQUIRE( (ptr2 >  ptr2) == false);
+   REQUIRE( (ptr2 <= ptr2) == true);
+   REQUIRE( (ptr2 >= ptr2) == true);
 }
 
 TEST_CASE("QScopedPointer release", "[qscopedpointer]")
