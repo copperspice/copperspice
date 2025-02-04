@@ -2751,19 +2751,10 @@ TEST_CASE("QVariant flag_to_variant", "[qvariant]")
    REQUIRE(data.typeName() == "Qt::Alignment");      // name of the flag
 }
 
-TEST_CASE("QVariant type_char8_t", "[qvariant] [!mayfail]")
+TEST_CASE("QVariant type_char8_t", "[qvariant]")
 {
-#if defined(__cpp_char8_t)
-   // test one
-   // CHECK(QVariant::typeToName(QVariant::Char8_t) == "char8_t");
-
-   // test two
-   // CHECK(QVariant::nameToType("char8_t") == QVariant::Char8_t);
-
-#else
-   // printf("\nC++20 mode not enabled, char8_t checks omitted\n");
-
-#endif
+   REQUIRE(QVariant::typeToName(QVariant::Char8_t) == "char8_t");
+   REQUIRE(QVariant::nameToType("char8_t") == QVariant::Char8_t);
 }
 
 TEST_CASE("QVariant equality_string8", "[qvariant]")

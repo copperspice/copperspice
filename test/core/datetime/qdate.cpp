@@ -525,9 +525,6 @@ TEST_CASE("QDate various", "[qdate]")
 
 TEST_CASE("QDate duration", "[qdate]")
 {
-#if defined(CS_CHRONO_TYPES_CATCH)
-   // C++20 only
-
    QDate date = QDate(2023, 10, 31);
 
    SECTION ("days") {
@@ -535,26 +532,25 @@ TEST_CASE("QDate duration", "[qdate]")
 
       REQUIRE(date == QDate(2023, 11, 05));
    }
-#endif
 }
 
 TEST_CASE("QDate std_chrono", "[qdate]")
 {
-#if defined(CS_CHRONO_TYPES_CATCH_YMD)
-   // C++20 only
-
    QDate date1 = QDate(2021, 10, 31);
 
    std::chrono::sys_days result_1 = date1.toStdSysDays();
+
+#if defined(CS_CHRONO_TYPES_CATCH_YMD)
+   // unsupported on older compilers like gcc 10
 
    std::chrono::sys_days result_2 = std::chrono::year_month_day(
       std::chrono::year(2021), std::chrono::month(10), std::chrono::day(31));
 
    REQUIRE(result_1 == result_2);
+#endif
 
-   //
+
    QDate date2 = QDate::fromStdSysDays(result_1);
 
    REQUIRE(date1 == date2);
-#endif
 }

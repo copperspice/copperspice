@@ -534,16 +534,12 @@ TEST_CASE("QDateTime duration", "[qdatetime]")
       REQUIRE(dt.time() == QTime(15, 45, 25));
    }
 
-#if defined(CS_CHRONO_TYPES_CATCH)
-   // C++20 only
-
    SECTION ("days") {
       dt = dt.addDuration(std::chrono::days(5));
 
       REQUIRE(dt.date() == QDate(2023, 11, 05));
       REQUIRE(dt.time() == QTime(14, 45, 05));      // dst occured on 11/04/23
    }
-#endif
 }
 
 TEST_CASE("QDateTime std_chrono", "[qdatetime]")
@@ -553,22 +549,10 @@ TEST_CASE("QDateTime std_chrono", "[qdatetime]")
    {
       dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone::utc());
 
-#if defined(CS_CHRONO_TYPES_CATCH)
-      // C++20 only
-
       std::chrono::sys_time<std::chrono::milliseconds> dt_msec = dt.toStdSysMilliseconds();
 
       std::chrono::sys_time<std::chrono::milliseconds> chronoTime =
          std::chrono::sys_time<std::chrono::milliseconds>(std::chrono::milliseconds(1698767105000));
-
-#else
-      std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> dt_msec = dt.toStdSysMilliseconds();
-
-      // 10/31/1923 15:45:05
-      std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> chronoTime =
-         std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(std::chrono::milliseconds(1698767105000));
-
-#endif
 
       REQUIRE(dt_msec == chronoTime);
    }
@@ -576,27 +560,37 @@ TEST_CASE("QDateTime std_chrono", "[qdatetime]")
    {
       dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone::utc());
 
-#if defined(CS_CHRONO_TYPES_CATCH)
-      // C++20 only
+      std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> dt_msec = dt.toStdSysMilliseconds();
+
+      // 10/31/1923 15:45:05
+      std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> chronoTime =
+         std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(std::chrono::milliseconds(1698767105000));
+
+      REQUIRE(dt_msec == chronoTime);
+   }
+
+   {
+      dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone::utc());
 
       std::chrono::sys_time<std::chrono::seconds> dt_sec = dt.toStdSysSeconds();
 
       std::chrono::sys_time<std::chrono::seconds> chronoTime =
          std::chrono::sys_time<std::chrono::seconds>(std::chrono::seconds(1698767105));
 
-#else
+      REQUIRE(dt_sec == chronoTime);
+   }
+
+   {
+      dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone::utc());
+
       std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> dt_sec = dt.toStdSysSeconds();
 
       // 10/31/1923 15:45:05
       std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> chronoTime =
          std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds>(std::chrono::seconds(1698767105));
-#endif
 
       REQUIRE(dt_sec == chronoTime);
    }
-
-#if defined(CS_CHRONO_TYPES_CATCH)
-   // c++20
 
    {
       dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone("America/Los_Angeles"));
@@ -609,6 +603,4 @@ TEST_CASE("QDateTime std_chrono", "[qdatetime]")
 
       REQUIRE(dt == localTime);
    }
-#endif
-
 }
