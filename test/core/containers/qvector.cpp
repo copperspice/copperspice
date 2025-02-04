@@ -52,12 +52,23 @@ TEST_CASE("QVector clear", "[qvector]")
    REQUIRE(v.size() == 0);
 }
 
-TEST_CASE("QVector contains", "[qvector]")
+TEST_CASE("QVector contains_a", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
    REQUIRE(v.contains("pear"));
    REQUIRE(! v.contains("orange"));
+}
+
+TEST_CASE("QVector contains_b", "[qvector]")
+{
+   QVector<unsigned int> v = { 5, 11, 23 };
+
+   unsigned int data1 = 5;
+   int data2 = 5;
+
+   REQUIRE(v.contains(data1) == true);
+   REQUIRE(v.contains(data2) == true);
 }
 
 TEST_CASE("QVector empty", "[qvector]")
@@ -89,6 +100,25 @@ TEST_CASE("QVector erase", "[qvector]")
    REQUIRE(v.contains("grapefruit"));
 
    REQUIRE(v.length() == 3);
+}
+
+TEST_CASE("QVector indexOf_a", "[qvector]")
+{
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
+
+   REQUIRE(v.indexOf("apple") == 1);
+   REQUIRE(v.indexOf("berry") == -1);
+}
+
+TEST_CASE("QVector indexOf_b", "[qvector]")
+{
+   QVector<unsigned int> v = { 5, 11, 23 };
+
+   unsigned int data1 = 5;
+   int data2 = 5;
+
+   REQUIRE(v.indexOf(data1) == 0);
+   REQUIRE(v.indexOf(data2) == 0);
 }
 
 TEST_CASE("QVector insert", "[qvector]")
