@@ -128,7 +128,6 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qsharedarraypointer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/pointer/qweakpointer.cpp
 
-   ${CMAKE_CURRENT_SOURCE_DIR}/string/cs_string.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qchar.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qreqularexpression.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/string/qstring8.cpp
