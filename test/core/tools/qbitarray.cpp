@@ -21,7 +21,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QBitArray traits", "[QBitArray]")
+TEST_CASE("QBitArray traits", "[qbitarray]")
 {
    REQUIRE(std::is_copy_constructible_v<QBitArray> == true);
    REQUIRE(std::is_move_constructible_v<QBitArray> == true);
