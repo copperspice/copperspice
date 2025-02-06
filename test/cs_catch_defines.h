@@ -20,22 +20,15 @@
 #ifndef CS_CATCH_DEFINES_H
 #define CS_CATCH_DEFINES_H
 
-#if ( defined(__GNUC__) && ((__GNUC__ == 10 && __GNUC_MINOR__ >= 4) || __GNUC__ >= 11)) ||   \
-    ( defined(__apple_build_version__) && (__clang_major__ >= 11) ) ||   \
-    ( defined(__clang__) && (__clang_major >= 14) )
+#include <version>
 
-#define CS_CHRONO_TYPES_CATCH
-
-#endif
-
-
-#if ( defined(__GNUC__) && (__GNUC__ >= 11) ) ||   \
-    ( defined(__apple_build_version__) && (__clang_major__ >= 11) ) ||   \
-    ( defined(__clang__) && (__clang_major >= 14) )
+#if ( __cpp_lib_chrono >= 201907L ) ||  \
+    ( defined(__GNUC__) && (__GNUC__ >= 11) ) ||  \
+    ( defined(__apple_build_version__) && (__clang_major__>= 15) ) ||  \
+    ( defined(__clang__) && (__clang_major__ >= 14) )
 
 #define CS_CHRONO_TYPES_CATCH_YMD
 
 #endif
-
 
 #endif
