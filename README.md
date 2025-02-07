@@ -2,14 +2,15 @@
 
 ### Introduction
 
-CopperSpice is a set of individual libraries which can be used to develop cross platform software
-applications in C++. It is a totally open source project released under the LGPL V2.1 license and was
-initially derived from the Qt framework. Over the last several years CopperSpice has completely diverged,
-with a goal of providing a first class GUI library to unite the C++ community.
+CopperSpice is a set of individual libraries which can be used to develop cross platform software applications in C++.
+It is a true open source project released under the LGPL V2.1 license and was initially derived from the Qt framework.
 
-Our motivation for developing CopperSpice was to change the fundamental design and turn the existing
-framework into a set of libraries for C++ developers. We are accomplishing this by leveraging modern C++
-functionality, new technology, and modern tooling. CopperSpice currently requires C++17 or newer.
+CopperSpice has diverged to become a modern representation of what can be accomplished with C++. Our goal and intention
+is to provide a first class GUI library to unite the C++ community.
+
+Our motivation for developing CopperSpice was to change the fundamental design and turn the existing framework into a
+set of libraries for C++ developers. We are accomplishing this by leveraging modern C++ functionality, new technology,
+and modern tooling.
 
 The libraries available in CopperSpice include:
 
@@ -18,7 +19,6 @@ The libraries available in CopperSpice include:
  * CsMultimedia
  * CsNetwork
  * CsOpenGL
- * CsScript
  * CsSql
  * CsSvg
  * CsVulkan
@@ -39,23 +39,23 @@ alone libraries for anyone developing C++ applications.
 
 ### System Requirements
 
-To use the CopperSpice libraries a C++17 compiler and a C++17 standard library are required.
+Building CopperSpice requires a C++20 compiler and a C++20 standard library.
 
-CopperSpice CMake build files are provided with the source distribution. We recommend your projects should also use
-CMake and Ninja for the build system.
+CMake build files are provided with the source distribution to build this library. The unit test binary executable is
+an optional part of the build process.
 
-For additional information about building from source, refer to our CopperSpice Overview Documentation or the
-KitchenSink demo application for sample CMake project files.
-
-
-### Building
-
-The CopperSpice libraries are built using the CMake build system.
+This library has been tested with clang sanitizer and an extensive industry code review.
 
 
 ### Using the CopperSpice Libraries
+
  * Any C++ application using CopperSpice can be built with CMake or any build system which imports CMake files
+
+ * We recommend your software application use CMake and Ninja for the build system
+
  * CopperSpice can be linked directly into any standard C++ application
+
+ * KitchenSink is a demo application which contains over 30 examples of the basic functionality available in CopperSpice
 
 
 ### Documentation
@@ -87,11 +87,11 @@ https://download.copperspice.com/copperspice/documentation
 
 ### Major Enhancements
 
-* Reflection
+* Reflection (run time and compile time)
   * No Meta-Object Compiler is required for generating meta data, all references were removed
   * The functionality provided by moc was replaced with compile time templates
   * CopperSpice automatically generates meta data for processing Signals/ Slots and Introspection
-  * A template class can now inherit from QObject with no restrictions on types
+  * Template classes can inherit from QObject with no restrictions on types
   * Complex data types such as **QMap&lt;QString, int&gt;** can be used for signal or slot arguments
 <!-- -->
 * Enhanced Functionality
@@ -103,10 +103,11 @@ https://download.copperspice.com/copperspice/documentation
   * CopperSpice includes a majority of the Qt 5 classes
   * Platform independent plugin system based on standard C++
   * High DPI Rendering Support
-  * Redesigned pointer classes
+  * Full support for the Vulkan Graphics API
 <!-- -->
 * Integration of CsLibGuarded
   * Used to manage shared data
+  * Provides functionality to associate a mutex with the data it protects
 <!-- -->
 * Integration of CsSignal
   * Improved thread aware Signal/Slot delivery
@@ -117,18 +118,19 @@ https://download.copperspice.com/copperspice/documentation
   * Improved storage to properly represent Unicode strings
   * QString8 (UTF-8) and QString16 (UTF-16) classes
   * Added QStringView, QStringParser, and QRegularExpression
+<!-- -->
+* Integration of CsPointer
+  * Leverages the C++ pointer classes, adds additional functionality
 
 
 ### Presentations
 
-Our YouTube channel contains videos about C++, graphics, build systems, CopperSpice, DoxyPress, and other
-topics related to software development.
+Our YouTube channel contains over 75 videos about C++, programming fundamentals, Unicode/Strings, multithreading,
+graphics, CopperSpice, DoxyPress, and other software development topics.
 
 https://www.youtube.com/copperspice
 
-
-Links to technical presentations recorded at CppCon, CppNow, embBO++, MeetingC++, and code::dive, can be
-found on our presentation page.
+Links to additional videos can be found on our website.
 
 https://www.copperspice.com/presentations.html
 
