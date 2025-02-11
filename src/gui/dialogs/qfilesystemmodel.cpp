@@ -1109,9 +1109,7 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
 
    QVector<QFileSystemModelPrivate::QFileSystemNode *> values;
 
-
    for (auto item : indexNode->children) {
-
       if (filtersAcceptsNode(item)) {
          values.append(item);
 

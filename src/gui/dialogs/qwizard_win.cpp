@@ -181,6 +181,7 @@ QSize QVistaBackButton::sizeHint() const
    ensurePolished();
    int size = int(QStyleHelper::dpiScaled(32));
    int width = size, height = size;
+
    /*
        HANDLE theme = pOpenThemeData(0, L"Navigation");
        SIZE size;
@@ -189,6 +190,7 @@ QSize QVistaBackButton::sizeHint() const
            height = size.cy;
        }
    */
+
    return QSize(width, height);
 }
 
@@ -197,6 +199,7 @@ void QVistaBackButton::enterEvent(QEvent *event)
    if (isEnabled()) {
       update();
    }
+
    QAbstractButton::enterEvent(event);
 }
 
@@ -205,6 +208,7 @@ void QVistaBackButton::leaveEvent(QEvent *event)
    if (isEnabled()) {
       update();
    }
+
    QAbstractButton::leaveEvent(event);
 }
 
@@ -227,10 +231,10 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
    const int xoffsetDp = xoffset * dpr;
    const int yoffsetDp = yoffset * dpr;
 
-   clipRect.top = rDp.top() + yoffsetDp;
+   clipRect.top    = rDp.top() + yoffsetDp;
    clipRect.bottom = rDp.bottom() + yoffsetDp;
-   clipRect.left = rDp.left() + xoffsetDp;
-   clipRect.right = rDp.right()  + xoffsetDp;
+   clipRect.left   = rDp.left() + xoffsetDp;
+   clipRect.right  = rDp.right()  + xoffsetDp;
 
    int state = WIZ_NAV_BB_NORMAL;
    if (!isEnabled()) {
@@ -242,8 +246,7 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
    }
 
    WIZ_NAVIGATIONPARTS buttonType = (layoutDirection() == Qt::LeftToRight
-         ? WIZ_NAV_BACKBUTTON
-         : WIZ_NAV_FORWARDBUTTON);
+         ? WIZ_NAV_BACKBUTTON : WIZ_NAV_FORWARDBUTTON);
 
    pDrawThemeBackground(theme, hdc, buttonType, state, &clipRect, &clipRect);
 }
@@ -331,7 +334,7 @@ void QVistaHelper::disconnectBackButton()
 QColor QVistaHelper::basicWindowFrameColor()
 {
    DWORD rgb;
-   HWND handle = QApplicationPrivate::getHWNDForWidget(QApplication::desktop());
+   HWND handle   = QApplicationPrivate::getHWNDForWidget(QApplication::desktop());
    HANDLE hTheme = pOpenThemeData(handle, L"WINDOW");
 
    pGetThemeColor(
@@ -342,6 +345,7 @@ QColor QVistaHelper::basicWindowFrameColor()
    BYTE r = GetRValue(rgb);
    BYTE g = GetGValue(rgb);
    BYTE b = GetBValue(rgb);
+
    return QColor(r, g, b);
 }
 
@@ -430,12 +434,12 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
    const QRect brect = fontMetrics.boundingRect(text);
 
    int textHeight = brect.height();
-   int textWidth = brect.width();
+   int textWidth  = brect.width();
    int glowOffset = 0;
 
    if (vistaState() == VistaAero) {
       textHeight += 2 * glowSize();
-      textWidth += 2 * glowSize();
+      textWidth  += 2 * glowSize();
       glowOffset = glowSize();
    }
 
@@ -467,7 +471,6 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
       const HICON hIcon = qt_pixmapToWinHICON(windowIcon.pixmap(size * QVistaHelper::m_devicePixelRatio));
 
       DrawIconEx(hdc, posDp.x(), posDp.y(), hIcon, 0, 0, 0, nullptr, DI_NORMAL | DI_COMPAT);
-
       DestroyIcon(hIcon);
    }
 }
@@ -500,9 +503,11 @@ bool QVistaHelper::winEvent(MSG *msg, long *result)
          if (pDwmDefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam, &lResult)) {
             // DWM returned a hit, no further processing necessary
             *result = lResult;
+
          } else {
             // DWM didn't return a hit, process using DefWindowProc
             lResult = DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
+
             // If DefWindowProc returns a window caption button, just return HTCLIENT (client area).
             // This avoid unnecessary hits to Windows NT style caption buttons which are not visible but are
             // located just under the Aero style window close button.
@@ -517,12 +522,13 @@ bool QVistaHelper::winEvent(MSG *msg, long *result)
 
       default:
          LRESULT lResult;
+
          // Pass to DWM to handle
          if (pDwmDefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam, &lResult)) {
             *result = lResult;
-         }
-         // If the message wasn't handled by DWM, continue processing it as normal
-         else {
+
+         } else {
+            // If the message wasn't handled by DWM, continue processing it as normal
             return false;
          }
    }
@@ -547,12 +553,15 @@ void QVistaHelper::mouseEvent(QEvent *event)
       case QEvent::MouseMove:
          mouseMoveEvent(static_cast<QMouseEvent *>(event));
          break;
+
       case QEvent::MouseButtonPress:
          mousePressEvent(static_cast<QMouseEvent *>(event));
          break;
+
       case QEvent::MouseButtonRelease:
          mouseReleaseEvent(static_cast<QMouseEvent *>(event));
          break;
+
       default:
          break;
    }
@@ -616,12 +625,14 @@ void QVistaHelper::mouseMoveEvent(QMouseEvent *event)
             }
          }
          break;
+
          case movePosition: {
             QPoint newPos = event->pos() - pressedPos;
             rect.moveLeft(rect.left() + newPos.x());
             rect.moveTop(rect.top() + newPos.y());
             break;
          }
+
          default:
             break;
       }
@@ -630,6 +641,7 @@ void QVistaHelper::mouseMoveEvent(QMouseEvent *event)
    } else if (vistaState() == VistaAero) {
       setMouseCursor(event->pos());
    }
+
    event->ignore();
 }
 
@@ -662,6 +674,7 @@ void QVistaHelper::mousePressEvent(QMouseEvent *event)
 void QVistaHelper::mouseReleaseEvent(QMouseEvent *event)
 {
    change = noChange;
+
    if (pressed) {
       pressed = false;
       wizard->releaseMouse();
@@ -669,6 +682,7 @@ void QVistaHelper::mouseReleaseEvent(QMouseEvent *event)
          setMouseCursor(event->pos());
       }
    }
+
    event->ignore();
 }
 

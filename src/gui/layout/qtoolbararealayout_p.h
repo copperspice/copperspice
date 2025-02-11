@@ -85,7 +85,8 @@ class QToolBarAreaLayoutItem
 {
  public:
    QToolBarAreaLayoutItem(QLayoutItem *item = nullptr)
-      : widgetItem(item), pos(0), size(-1), preferredSize(-1), gap(false) {}
+      : widgetItem(item), pos(0), size(-1), preferredSize(-1), gap(false)
+   { }
 
    bool skip() const;
    QSize minimumSize() const;
@@ -95,6 +96,7 @@ class QToolBarAreaLayoutItem
    void resize(Qt::Orientation o, int newSize) {
       newSize = qMax(pick(o, minimumSize()), newSize);
       int sizeh = pick(o, sizeHint());
+
       if (newSize == sizeh) {
          preferredSize = -1;
          size = sizeh;

@@ -237,7 +237,7 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
    QFixed ypos;
 
    const bool transform = matrix.m11() != 1.0 || matrix.m12() != 0.0 ||
-                  matrix.m21() != 0.0 || matrix.m22() != 1.0;
+         matrix.m21() != 0.0 || matrix.m22() != 1.0;
 
    if (! transform) {
       xpos = QFixed::fromReal(matrix.dx());
@@ -295,6 +295,7 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
             g.numGlyphs = 1;
             g.glyphs = &kashidaGlyph;
             g.advances = &kashidaWidth;
+
             recalcAdvances(&g, Qt::EmptyFlag);
 
             for (uint k = 0; k < glyphs.justifications[i].nKashidas; ++k) {
@@ -1021,8 +1022,8 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
 
    {
       int offset = 4;
-      for (int i = 0; i < numTables; ++i) {
 
+      for (int i = 0; i < numTables; ++i) {
          const uchar *header = table + offset;
 
          quint16 version;
@@ -1036,7 +1037,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
          }
 
          quint16 coverage;
-         if (!qSafeFromBigEndian(header + 4, end, &coverage)) {
+         if (! qSafeFromBigEndian(header + 4, end, &coverage)) {
             goto end;
          }
 
@@ -1084,7 +1085,6 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
          }
 
          offset += length;
-
       }
    }
 

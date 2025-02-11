@@ -1351,7 +1351,7 @@ void QAbstractSpinBoxPrivate::updateEdit()
    }
 
    const bool empty = edit->text().isEmpty();
-   int cursor = edit->cursorPosition();
+   int cursor  = edit->cursorPosition();
    int selsize = edit->selectedText().size();
 
    const bool sb = edit->blockSignals(true);
@@ -1387,6 +1387,7 @@ void QAbstractSpinBoxPrivate::setRange(const QVariant &min, const QVariant &max)
       setValue(bound(value), EmitIfChanged);
    } else if (value == minimum && !specialValueText.isEmpty()) {
       updateEdit();
+
    }
 
    q->updateGeometry();
@@ -1394,22 +1395,22 @@ void QAbstractSpinBoxPrivate::setRange(const QVariant &min, const QVariant &max)
 
 QVariant QAbstractSpinBoxPrivate::getZeroVariant() const
 {
-   QVariant ret;
+   QVariant retval;
 
    switch (type) {
       case QVariant::Int:
-         ret = QVariant((int)0);
+         retval = QVariant((int)0);
          break;
 
       case QVariant::Double:
-         ret = QVariant((double)0.0);
+         retval = QVariant((double)0.0);
          break;
 
       default:
          break;
    }
 
-   return ret;
+   return retval;
 }
 
 QString QAbstractSpinBoxPrivate::textFromValue(const QVariant &) const

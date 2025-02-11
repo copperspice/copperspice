@@ -550,9 +550,8 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
 
       case QTextCursor::EndOfLine: {
          if (!line.isValid() || line.textLength() == 0) {
-            if (blockIt.length() >= 1)
+            if (blockIt.length() >= 1) {
                // position right before the block separator
-            {
                newPosition = blockIt.position() + blockIt.length() - 1;
             }
             break;
@@ -582,16 +581,19 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          if (relativePos >= len) {
             return false;
          }
+
          if (engine->atWordSeparator(relativePos)) {
             ++relativePos;
             while (relativePos < len && engine->atWordSeparator(relativePos)) {
                ++relativePos;
             }
+
          } else {
             while (relativePos < len && !attributes[relativePos].whiteSpace && !engine->atWordSeparator(relativePos)) {
                ++relativePos;
             }
          }
+
          newPosition = blockIt.position() + relativePos;
          break;
       }
@@ -665,16 +667,20 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
             if (blockIt == priv->blocksEnd()) {
                return false;
             }
+
             layout = blockLayout(blockIt);
             i = 0;
          }
+
          if (layout->lineCount()) {
             QTextLine line = layout->lineAt(i);
             newPosition = line.xToCursor(x) + blockIt.position();
          } else {
             newPosition = blockIt.position();
          }
+
          adjustX = false;
+
          break;
       }
 

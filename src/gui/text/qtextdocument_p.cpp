@@ -694,11 +694,11 @@ void QTextDocumentPrivate::remove(int pos, int length, QTextUndoCommand::Operati
          curs->changed = true;
       }
    }
+
    finishEdit();
 }
 
-void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFormat &newFormat,
-   FormatChangeMode mode)
+void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFormat &newFormat, FormatChangeMode mode)
 {
    beginEditBlock();
 
@@ -756,12 +756,14 @@ void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFor
          QTextFormat format = formats.format(fragment->format);
          format.merge(newFormat);
          fragment->format = formats.indexForFormat(format);
-      } else if (mode == SetFormatAndPreserveObjectIndices
-         && formats.format(oldFormat).objectIndex() != -1) {
+
+      } else if (mode == SetFormatAndPreserveObjectIndices && formats.format(oldFormat).objectIndex() != -1) {
          QTextCharFormat f = newFormat;
          f.setObjectIndex(formats.format(oldFormat).objectIndex());
          fragment->format = formats.indexForFormat(f);
+
       } else {
+
          fragment->format = newFormatIdx;
       }
 
@@ -1107,6 +1109,7 @@ int QTextDocumentPrivate::undoRedo(bool undo)
          break;
       }
    }
+
    undoEnabled = true;
 
    int newCursorPos = -1;
@@ -1200,8 +1203,7 @@ void QTextDocumentPrivate::appendUndoItem(const QTextUndoCommand &c)
    }
 }
 
-void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToClear,
-   bool emitSignals)
+void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToClear, bool emitSignals)
 {
    bool undoCommandsAvailable = undoState != 0;
    bool redoCommandsAvailable = undoState != undoStack.size();
@@ -1238,6 +1240,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
       && !undoStack.isEmpty()) {
       for (int i = 0; i < undoStack.size(); ++i) {
          QTextUndoCommand c = undoStack[i];
+
          if (c.command & QTextUndoCommand::Custom) {
             delete c.custom;
          }
@@ -1245,6 +1248,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
 
       undoState = 0;
       undoStack.resize(0);
+
       if (emitSignals && undoCommandsAvailable) {
          emitUndoAvailable(false);
       }
@@ -1305,6 +1309,7 @@ void QTextDocumentPrivate::joinPreviousEditBlock()
 void QTextDocumentPrivate::endEditBlock()
 {
    Q_ASSERT(editBlock > 0);
+
    if (--editBlock) {
       return;
    }
@@ -1313,6 +1318,7 @@ void QTextDocumentPrivate::endEditBlock()
       const bool wasBlocking = !undoStack[undoState - 1].block_end;
       if (undoStack[undoState - 1].block_part) {
          undoStack[undoState - 1].block_end = true;
+
          if (wasBlocking) {
             emit document()->undoCommandAdded();
          }
@@ -1809,6 +1815,7 @@ void QTextDocumentPrivate::deleteObject(QTextObject *object)
 void QTextDocumentPrivate::contentsChanged()
 {
    Q_Q(QTextDocument);
+
    if (editBlock) {
       return;
    }
@@ -1853,11 +1860,13 @@ void QTextDocumentPrivate::compressPieceTable()
 void QTextDocumentPrivate::setModified(bool m)
 {
    Q_Q(QTextDocument);
+
    if (m == modified) {
       return;
    }
 
    modified = m;
+
    if (!modified) {
       modifiedState = undoState;
    } else {

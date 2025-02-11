@@ -118,12 +118,12 @@ class Q_GUI_EXPORT QPlatformPixmap
 
    qint64 cacheKey() const {
       int classKey = id;
+
       if (classKey >= 1024) {
          classKey = -(classKey >> 10);
       }
-      return ((((qint64) classKey) << 56)
-            | (((qint64) ser_no) << 32)
-            | ((qint64) detach_no));
+
+      return ((((qint64) classKey) << 56) | (((qint64) ser_no) << 32) | ((qint64) detach_no));
    }
 
    static QPlatformPixmap *create(int w, int h, PixelType type);

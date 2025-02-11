@@ -1225,8 +1225,7 @@ QString QTextHtmlExporter::toHtml(const QString &encoding, ExportMode mode)
    fragmentMarkers = (mode == ExportFragment);
 
    if (! encoding.isEmpty()) {
-      html += QString::fromLatin1("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%1\" />")
-         .formatArg(encoding);
+      html += QString::fromLatin1("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%1\" />").formatArg(encoding);
    }
 
    QString title  = doc->metaInformation(QTextDocument::DocumentTitle);
@@ -1290,6 +1289,7 @@ QString QTextHtmlExporter::toHtml(const QString &encoding, ExportMode mode)
    }
 
    html += "</body></html>";
+
    return html;
 }
 
@@ -1843,8 +1843,10 @@ void QTextHtmlExporter::emitBlockAttributes(const QTextBlock &block)
 void QTextHtmlExporter::emitBlock(const QTextBlock &block)
 {
    if (block.begin().atEnd()) {
-      // ### HACK, remove once QTextFrame::iterator is fixed
+      // ### remove once QTextFrame::iterator is fixed
+
       int p = block.position();
+
       if (p > 0) {
          --p;
       }
@@ -1863,10 +1865,14 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
    QTextCharFormat oldDefaultCharFormat = defaultCharFormat;
 
    QTextList *list = block.textList();
+
    if (list) {
-      if (list->itemNumber(block) == 0) { // first item? emit <ul> or appropriate
+      if (list->itemNumber(block) == 0) {
+         // first item? emit <ul> or appropriate
+
          const QTextListFormat format = list->format();
          const int style = format.style();
+
          switch (style) {
             case QTextListFormat::ListDecimal:
                html += "<ol";
@@ -2080,10 +2086,13 @@ void QTextHtmlExporter::emitBackgroundAttribute(const QTextFormat &format)
    if (format.hasProperty(QTextFormat::BackgroundImageUrl)) {
       QString url = format.property(QTextFormat::BackgroundImageUrl).toString();
       emitAttribute("background", url);
+
    } else {
       const QBrush &brush = format.background();
+
       if (brush.style() == Qt::SolidPattern) {
          emitAttribute("bgcolor", colorValue(brush.color()));
+
       } else if (brush.style() == Qt::TexturePattern) {
          const bool isPixmap = qHasPixmapTexture(brush);
          const qint64 cacheKey = isPixmap ? brush.texture().cacheKey() : brush.textureImage().cacheKey();
@@ -2115,6 +2124,7 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
    if (format.hasProperty(QTextFormat::TableCellSpacing)) {
       emitAttribute("cellspacing", QString::number(format.cellSpacing()));
    }
+
    if (format.hasProperty(QTextFormat::TableCellPadding)) {
       emitAttribute("cellpadding", QString::number(format.cellPadding()));
    }
@@ -2251,14 +2261,15 @@ void QTextHtmlExporter::emitFrame(QTextFrame::iterator frameIt)
       }
    }
 
-   for (QTextFrame::iterator it = frameIt;
-      !it.atEnd(); ++it) {
+   for (QTextFrame::iterator it = frameIt; ! it.atEnd(); ++it) {
       if (QTextFrame *f = it.currentFrame()) {
+
          if (QTextTable *table = qobject_cast<QTextTable *>(f)) {
             emitTable(table);
          } else {
             emitTextFrame(f);
          }
+
       } else if (it.currentBlock().isValid()) {
          emitBlock(it.currentBlock());
       }

@@ -42,7 +42,9 @@ class QTextControlPrivate
 
  public:
    QTextControlPrivate();
-   virtual ~QTextControlPrivate() {}
+
+   virtual ~QTextControlPrivate()
+   { }
 
    bool cursorMoveKeyEvent(QKeyEvent *e);
 
@@ -94,6 +96,7 @@ class QTextControlPrivate
    QRectF cursorRectPlusUnicodeDirectionMarkers(const QTextCursor &cursor) const;
    QRectF rectForPosition(int position) const;
    QRectF selectionRect(const QTextCursor &cursor) const;
+
    QRectF selectionRect() const {
       return selectionRect(this->cursor);
    }

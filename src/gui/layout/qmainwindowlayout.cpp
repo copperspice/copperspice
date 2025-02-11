@@ -149,11 +149,10 @@ QDebug operator<<(QDebug debug, const QMainWindowLayout *layout)
 
 class QDockWidgetGroupLayout : public QLayout
 {
-   QDockAreaLayoutInfo info;
-   QWidgetResizeHandler *resizer;
-
  public:
-   QDockWidgetGroupLayout(QWidget *parent) : QLayout(parent) {
+   QDockWidgetGroupLayout(QWidget *parent)
+      : QLayout(parent)
+   {
       setSizeConstraint(QLayout::SetMinAndMaxSize);
       resizer = new QWidgetResizeHandler(parent);
       resizer->setMovingEnabled(false);
@@ -170,32 +169,41 @@ class QDockWidgetGroupLayout : public QLayout
    int count() const override {
       return 0;
    }
+
    QLayoutItem *itemAt(int index) const override {
       int x = 0;
       return info.itemAt(&x, index);
    }
+
    QLayoutItem *takeAt(int index) override {
       int x = 0;
       return info.takeAt(&x, index);
    }
+
    QSize sizeHint() const override {
       int fw = frameWidth();
       return info.sizeHint() + QSize(fw, fw);
    }
+
    QSize minimumSize() const override {
       int fw = frameWidth();
       return info.minimumSize() + QSize(fw, fw);
    }
+
    QSize maximumSize() const override {
       int fw = frameWidth();
       return info.maximumSize() + QSize(fw, fw);
    }
+
    void setGeometry(const QRect &r) override {
       static_cast<QDockWidgetGroupWindow *>(parent())->destroyOrHideIfEmpty();
+
       QDockAreaLayoutInfo *li = layoutInfo();
+
       if (li->isEmpty()) {
          return;
       }
+
       int fw = frameWidth();
       li->reparentWidgets(parentWidget());
       li->rect = r.adjusted(fw, fw, -fw, -fw);
@@ -216,6 +224,10 @@ class QDockWidgetGroupLayout : public QLayout
       return nativeWindowDeco() ? 0 :
          parentWidget()->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, nullptr, parentWidget());
    }
+
+ private:
+   QDockAreaLayoutInfo info;
+   QWidgetResizeHandler *resizer;
 };
 
 bool QDockWidgetGroupWindow::event(QEvent *e)
@@ -466,6 +478,7 @@ void QMainWindowLayoutState::apply(bool animated)
 void QMainWindowLayoutState::fitLayout()
 {
    QRect r;
+
 #ifdef QT_NO_TOOLBAR
    r = rect;
 #else

@@ -96,7 +96,6 @@ QFileIconProvider *QFileInfoGatherer::iconProvider() const
    return m_iconProvider;
 }
 
-
 void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStringList &files)
 {
    QMutexLocker locker(&mutex);
@@ -125,7 +124,6 @@ void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStr
 #endif
 }
 
-
 void QFileInfoGatherer::updateFile(const QString &filePath)
 {
    QString dir = filePath.mid(0, filePath.lastIndexOf(QDir::separator()));
@@ -133,11 +131,6 @@ void QFileInfoGatherer::updateFile(const QString &filePath)
    fetchExtendedInformation(dir, QStringList(fileName));
 }
 
-/*
-    List all files in \a directoryPath
-
-    \sa listed()
-*/
 void QFileInfoGatherer::clear()
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
@@ -147,11 +140,6 @@ void QFileInfoGatherer::clear()
 #endif
 }
 
-/*
-    Remove a \a path from the watcher
-
-    \sa listed()
-*/
 void QFileInfoGatherer::removePath(const QString &path)
 {
 #ifndef QT_NO_FILESYSTEMWATCHER
@@ -160,19 +148,11 @@ void QFileInfoGatherer::removePath(const QString &path)
 #endif
 }
 
-/*
-    List all files in \a directoryPath
-
-    \sa listed()
-*/
 void QFileInfoGatherer::list(const QString &directoryPath)
 {
    fetchExtendedInformation(directoryPath, QStringList());
 }
 
-/*
-    Until aborted wait to fetch a directory or files
-*/
 void QFileInfoGatherer::run()
 {
    while (true) {
@@ -204,7 +184,7 @@ QExtendedInformation QFileInfoGatherer::getInfo(const QFileInfo &fileInfo) const
    info.displayType = m_iconProvider->type(fileInfo);
 
 #ifdef Q_OS_WIN
-   if (m_resolveSymlinks && info.isSymLink(/* ignoreNtfsSymLinks = */ true)) {
+   if (m_resolveSymlinks && info.isSymLink(true)) {
       QFileInfo resolvedInfo(fileInfo.symLinkTarget());
       resolvedInfo = resolvedInfo.canonicalFilePath();
 
@@ -235,7 +215,6 @@ static QString translateDriveName(const QFileInfo &drive)
 
    return driveName;
 }
-
 
 void QFileInfoGatherer::getFileInfos(const QString &path, const QStringList &files)
 {

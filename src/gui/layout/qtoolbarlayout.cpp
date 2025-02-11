@@ -249,7 +249,9 @@ bool QToolBarLayout::movable() const
    if (!tb) {
       return false;
    }
+
    QMainWindow *win = qobject_cast<QMainWindow *>(tb->parentWidget());
+
    return tb->isMovable() && win != nullptr;
 }
 
@@ -271,11 +273,11 @@ void QToolBarLayout::updateGeomArray() const
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
 
-   const int handleExtent = movable()
-      ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+   const int handleExtent = movable() ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
 
-   const int margin = this->margin();
+   const int margin  = this->margin();
    const int spacing = this->spacing();
+
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
    Qt::Orientation o = tb->orientation();
 
@@ -320,6 +322,7 @@ void QToolBarLayout::updateGeomArray() const
 
          // only add spacing before item, not before the first one
          rpick(o, that->hint) += (count == 0 ? 0 : spacing) + pick(o, hint);
+
 
          s = perp(o, that->hint);
          rperp(o, that->hint) = qMax(s, perp(o, hint));
@@ -489,19 +492,24 @@ bool QToolBarLayout::layoutActions(const QSize &size)
    }
 
    bool ranOutOfSpace = false;
-   int rows = 0;
+   int rows   = 0;
    int rowPos = perp(o, rect.topLeft()) + margin;
+
    int i = 0;
+
    while (i < items.count()) {
       QVector<QLayoutStruct> a = geomArray;
 
       int start = i;
-      int size = 0;
-      int prev = -1;
+      int size  = 0;
+      int prev  = -1;
+
       int rowHeight = 0;
-      int count = 0;
-      int maximumSize = 0;
+      int count     = 0;
+
+      int maximumSize   = 0;
       bool expansiveRow = false;
+
       for (; i < items.count(); ++i) {
          if (a[i].empty) {
             continue;
@@ -512,17 +520,21 @@ bool QToolBarLayout::layoutActions(const QSize &size)
             if (rows == 0) {
                ranOutOfSpace = true;
             }
+
             // do we have to move the previous item to the next line to make space for
             // the extension button?
+
             if (count > 1 && size + spacing + extensionExtent > space) {
                i = prev;
             }
+
             break;
          }
 
          if (expanded) {
             rowHeight = qMax(rowHeight, perp(o, items.at(i)->sizeHint()));
          }
+
          expansiveRow = expansiveRow || a[i].expansive;
          size = newSize;
          maximumSize += spacing + (a[i].expansive ? a[i].maximumSize : a[i].smartSizeHint());
@@ -544,8 +556,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
       }
 
       qGeomCalc(a, start, i - start + (expansiveRow ? 0 : 1), 0,
-         space - (ranOutOfSpace ? (extensionExtent + spacing) : 0),
-         spacing);
+         space - (ranOutOfSpace ? (extensionExtent + spacing) : 0), spacing);
 
       for (int j = start; j < i; ++j) {
          QToolBarItem *item = items.at(j);
@@ -560,8 +571,10 @@ bool QToolBarLayout::layoutActions(const QSize &size)
          QPoint pos;
          rpick(o, pos) = margin + handleExtent + a[j].pos;
          rperp(o, pos) = rowPos;
+
          QSize size;
          rpick(o, size) = a[j].size;
+
          if (expanded) {
             rperp(o, size) = rowHeight;
          } else {
@@ -629,34 +642,41 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    if (!tb) {
       return QSize(0, 0);
    }
+
    QMainWindow *win = qobject_cast<QMainWindow *>(tb->parentWidget());
    Qt::Orientation o = tb->orientation();
+
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
    tb->initStyleOption(&opt);
-   const int handleExtent = movable()
-      ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
-   const int margin = this->margin();
+
+   const int handleExtent = movable() ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+   const int margin  = this->margin();
    const int spacing = this->spacing();
+
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
 
    int total_w = 0;
-   int count = 0;
+   int count   = 0;
+
    for (int x = 0; x < items.count(); ++x) {
       if (!geomArray[x].empty) {
          total_w += (count == 0 ? 0 : spacing) + geomArray[x].minimumSize;
          ++count;
       }
    }
+
    if (count == 0) {
       return QSize(0, 0);
    }
 
    int min_w = pick(o, size);
-   int rows = (int)qSqrt(qreal(count));
+   int rows  = (int)qSqrt(qreal(count));
+
    if (rows == 1) {
       ++rows;   // we want to expand to at least two rows
    }
+
    int space = total_w / rows + spacing + extensionExtent;
    space = qMax(space, min_w - 2 * margin - handleExtent);
 
@@ -670,9 +690,11 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
 
    while (i < items.count()) {
       int count = 0;
-      int size = 0;
-      int prev = -1;
+
+      int size     = 0;
+      int prev     = -1;
       int rowHeight = 0;
+
       for (; i < items.count(); ++i) {
          if (geomArray[i].empty) {
             continue;
@@ -680,11 +702,13 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
 
          int newSize = size + (count == 0 ? 0 : spacing) + geomArray[i].minimumSize;
          rowHeight = qMax(rowHeight, perp(o, items.at(i)->sizeHint()));
+
          if (prev != -1 && newSize > space) {
             if (count > 1 && size + spacing + extensionExtent > space) {
                size -= spacing + geomArray[prev].minimumSize;
                i = prev;
             }
+
             break;
          }
 
@@ -732,10 +756,12 @@ void QToolBarLayout::setExpanded(bool exp)
       animating = !tb->isWindow() && win->isAnimated();
 #endif
       QMainWindowLayout *layout = qt_mainwindow_layout(win);
+
       if (expanded) {
          tb->raise();
       } else {
          QList<int> path = layout->layoutState.indexOf(tb);
+
          if (!path.isEmpty()) {
             QRect rect = layout->layoutState.itemRect(path);
             layoutActions(rect.size());
@@ -750,6 +776,7 @@ QSize QToolBarLayout::minimumSize() const
    if (dirty) {
       updateGeomArray();
    }
+
    return minSize;
 }
 
@@ -775,6 +802,7 @@ QToolBarItem *QToolBarLayout::createItem(QAction *action)
 
    if (QWidgetAction *widgetAction = qobject_cast<QWidgetAction *>(action)) {
       widget = widgetAction->requestWidget(tb);
+
       if (widget != nullptr) {
          widget->setAttribute(Qt::WA_LayoutUsesWidgetRect);
          customWidget = true;

@@ -169,8 +169,8 @@ class QVistaHelper : public QObject
    QVistaBackButton *backButton_;
 
    int titleBarOffset;  // Extra spacing above the text
-   int iconSpacing;    // Space between button and icon
-   int textSpacing;    // Space between icon and text
+   int iconSpacing;     // Space between button and icon
+   int textSpacing;     // Space between icon and text
    static int m_devicePixelRatio;
 };
 

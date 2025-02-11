@@ -37,11 +37,12 @@ QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &
       bool forceCharFormat, const QTextCharFormat &fmt)
    : formatCollection(*_destination.d->priv->formatCollection()), originalText(_source.d->priv->buffer())
 {
-   src = _source.d->priv;
-   dst = _destination.d->priv;
+   src       = _source.d->priv;
+   dst       = _destination.d->priv;
    insertPos = _destination.position();
    this->forceCharFormat = forceCharFormat;
    primaryCharFormatIndex = convertFormatIndex(fmt);
+
    cursor = _source;
 }
 
@@ -51,8 +52,10 @@ int QTextCopyHelper::convertFormatIndex(const QTextFormat &oldFormat, int object
 
    if (objectIndexToSet != -1) {
       fmt.setObjectIndex(objectIndexToSet);
+
    } else if (fmt.objectIndex() != -1) {
       int newObjectIndex = objectIndexMap.value(fmt.objectIndex(), -1);
+
       if (newObjectIndex == -1) {
          QTextFormat objFormat = src->formatCollection()->objectFormat(fmt.objectIndex());
          Q_ASSERT(objFormat.objectIndex() == -1);
@@ -102,8 +105,7 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
    QStringView txtToInsert = originalText.midView(frag->stringPosition + inFragmentOffset, charsToCopy);
 
    if (txtToInsert.length() == 1 && (txtToInsert.at(0) == QChar::ParagraphSeparator
-         || txtToInsert.at(0) == QTextBeginningOfFrame
-         || txtToInsert.at(0) == QTextEndOfFrame) ) {
+         || txtToInsert.at(0) == QTextBeginningOfFrame || txtToInsert.at(0) == QTextEndOfFrame) ) {
 
       dst->insertBlock(txtToInsert.at(0), insertPos, blockIdx, charFormatIndex);
       ++insertPos;
@@ -384,6 +386,7 @@ QTextHtmlImporter::QTextHtmlImporter(QTextDocument *_doc, const QString &_html, 
 void QTextHtmlImporter::import()
 {
    cursor.beginEditBlock();
+
    hasBlock = true;
    forceBlockMerging = false;
    compressNextWhitespace = RemoveWhiteSpace;
@@ -411,6 +414,7 @@ void QTextHtmlImporter::import()
        *  2) the current node not being a child of the previous node
        *      means there was a tag closing in the input html
        */
+
       if (currentNodeIdx > 0 && (currentNode->parent != currentNodeIdx - 1)) {
          blockTagClosed = closeTag();
          // visually collapse subsequent block tags, but if the element after the closed block tag
@@ -426,16 +430,18 @@ void QTextHtmlImporter::import()
             blockFormat.setIndent(indent);
 
             QTextBlockFormat oldFormat = cursor.blockFormat();
+
             if (oldFormat.hasProperty(QTextFormat::PageBreakPolicy)) {
                QTextFormat::PageBreakFlags pageBreak = oldFormat.pageBreakPolicy();
-               if (pageBreak == QTextFormat::PageBreak_AlwaysAfter)
-                  /* We remove an empty paragrah that requested a page break after.
-                     moving that request to the next paragraph means we also need to make
-                      that a pagebreak before to keep the same visual appearance.
-                  */
-               {
+
+               if (pageBreak == QTextFormat::PageBreak_AlwaysAfter) {
+                  // We remove an empty paragrah that requested a page break after.
+                  // moving that request to the next paragraph means we also need to make
+                  // that a pagebreak before to keep the same visual appearance.
+
                   pageBreak = QTextFormat::PageBreak_AlwaysBefore;
                }
+
                blockFormat.setPageBreakPolicy(pageBreak);
             }
 
@@ -703,16 +709,17 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processSpecialNodes()
    return ContinueWithCurrentNode;
 }
 
-// returns true if a block tag was closed
 bool QTextHtmlImporter::closeTag()
 {
    const QTextHtmlParserNode *closedNode = &at(currentNodeIdx - 1);
    const int endDepth = depth(currentNodeIdx) - 1;
    int depth = this->depth(currentNodeIdx - 1);
+
    bool blockTagClosed = false;
 
    while (depth > endDepth) {
       Table *t = nullptr;
+
       if (!tables.isEmpty()) {
          t = &tables.last();
       }
@@ -756,6 +763,7 @@ bool QTextHtmlImporter::closeTag()
             // in import()
             blockTagClosed = false;
             compressNextWhitespace = RemoveWhiteSpace;
+
             break;
 
          case Html_th:
@@ -763,8 +771,10 @@ bool QTextHtmlImporter::closeTag()
             if (t && !t->isTextFrame) {
                ++t->currentCell;
             }
+
             blockTagClosed = true;
             compressNextWhitespace = RemoveWhiteSpace;
+
             break;
 
          case Html_ol:
@@ -772,9 +782,11 @@ bool QTextHtmlImporter::closeTag()
             if (lists.isEmpty()) {
                break;
             }
+
             lists.resize(lists.size() - 1);
             --indent;
             blockTagClosed = true;
+
             break;
 
          case Html_br:
