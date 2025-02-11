@@ -123,7 +123,7 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
       };
 
       // strings can not be modified in place, disallow using an iterator to write to a string
-      // all iterators are actually a const_itertor
+      // all iterators are actually a const_iterator
 
 #if ! defined (CS_DOXYPRESS)
       using iterator = const_iterator;
@@ -1164,6 +1164,6 @@ inline void swap(QString16 &a, QString16 &b) {
 }
 
 QString16 cs_internal_string_normalize(const QString16 &data, QString16::NormalizationForm mode,
-                  QChar32::UnicodeVersion version, int from);
+      QChar32::UnicodeVersion version, int from);
 
 #endif

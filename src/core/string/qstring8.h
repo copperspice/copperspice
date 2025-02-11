@@ -123,7 +123,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
       };
 
       // strings can not be modified in place, disallow using an iterator to write to a string
-      // all iterators are actually a const_itertor
+      // all iterators are actually a const_iterator
 
 #if ! defined (CS_DOXYPRESS)
       using iterator = const_iterator;
@@ -753,7 +753,7 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          return CsString::CsString::constData();
       }
 
-      // static
+      // static methods
       static QString8 fromLatin1(const QByteArray &str);
       static QString8 fromLatin1(const char *data, size_type numOfChars = -1);
 
@@ -1189,6 +1189,6 @@ inline void swap(QString8 &a, QString8 &b) {
 }
 
 QString8 cs_internal_string_normalize(const QString8 &data, QString8::NormalizationForm mode,
-                  QChar32::UnicodeVersion version, int from);
+      QChar32::UnicodeVersion version, int from);
 
 #endif

@@ -53,6 +53,9 @@ class CsBasicString
       using size_type              = std::ptrdiff_t;
       using value_type             = CsChar;
 
+      // strings can not be modified in place, disallow using an iterator to write to a string
+      // all iterators are actually a const_iterator
+
       using const_iterator         = CsStringIterator<E, A>;
       using iterator               = CsStringIterator<E, A>;
       using const_reverse_iterator = CsStringReverseIterator<const_iterator>;
@@ -75,17 +78,16 @@ class CsBasicString
 
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
-                  std::is_same<T, char *>::value>::type>
+            std::is_same<T, char *>::value>::type>
       CsBasicString(const T &str, const A &a = A());
 
       // for an array of chars
       template <int N>
       CsBasicString(const char (&str)[N], const A &a = A());
 
-
       // for a const char * and char *
       template <typename T, typename  = typename std::enable_if<std::is_same<T, const char *>::value ||
-                  std::is_same<T, char *>::value>::type>
+            std::is_same<T, char *>::value>::type>
       CsBasicString(const T &str, size_type size, const A &a = A());
 
       // for an array of chars
@@ -707,7 +709,7 @@ template <int N>
 CsBasicString<E, A>::CsBasicString(const char (&str)[N], const A &a)
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -731,7 +733,7 @@ template <int N>
 CsBasicString<E, A>::CsBasicString(const char (&str)[N], size_type size, const A &a)
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1088,7 +1090,7 @@ template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const char (&str)[N], size_type size)
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1121,7 +1123,7 @@ template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::append(const char (&str)[N])
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1358,7 +1360,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const CsBasicString &str,
-                  const_iterator iter_begin) const
+      const_iterator iter_begin) const
 {
    const_iterator iter_end = end();
 
@@ -1407,7 +1409,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const T &str, const_iterator iter_begin,
-                  size_type size) const
+      size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -1431,10 +1433,10 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N], const_iterator iter_begin,
-                  size_type size) const
+      size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1483,10 +1485,11 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(cons
 // for an array of chars
 template <typename E, typename A>
 template <int N>
-typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N], const_iterator iter_begin) const
+typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::find_fast(const char (&str)[N],
+      const_iterator iter_begin) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1559,7 +1562,7 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(con
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::rfind_fast(const CsBasicString &str,
-                  const_iterator iter_end) const
+      const_iterator iter_end) const
 {
    const_iterator iter_begin = begin();
 
@@ -1638,7 +1641,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(CsChar c, size
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const T &str, size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -1651,10 +1654,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const T &str, 
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const char (&str)[N], size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1694,7 +1697,7 @@ template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find(const char (&str)[N], size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1763,7 +1766,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(CsCha
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const T &str, size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -1781,10 +1784,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const char (&str)[N], size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1811,10 +1814,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const char (&str)[N],
-                  size_type indexStart) const
+      size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1823,7 +1826,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_of(const CsBasicString &str,
-                  size_type indexStart) const
+      size_type indexStart) const
 {
    if (str.empty() || indexStart >= this->size()) {
       return -1;
@@ -1877,10 +1880,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const 
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const char (&str)[N],
-                  size_type indexStart, size_type size) const
+      size_type indexStart, size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1909,10 +1912,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const 
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const char (&str)[N],
-                  size_type indexStart) const
+      size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -1921,7 +1924,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const 
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_of(const CsBasicString &str,
-                  size_type indexStart) const
+      size_type indexStart) const
 {
    size_type stringLen = this->size();
 
@@ -1984,7 +1987,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(C
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(const T &str,
-                  size_type indexStart, size_type size) const
+      size_type indexStart, size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -2013,10 +2016,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(const char (&str)[N],
-                  size_type indexStart, size_type size) const
+      size_type indexStart, size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2026,7 +2029,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(const T &str,
-                  size_type indexStart) const
+      size_type indexStart) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -2055,10 +2058,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(const char (&str)[N],
-                  size_type indexStart) const
+      size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2067,7 +2070,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(c
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_first_not_of(const CsBasicString &str,
-                  size_type indexStart) const
+      size_type indexStart) const
 {
    size_type stringLen = this->size();
 
@@ -2151,7 +2154,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(Cs
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(const T &str, size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -2176,10 +2179,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(const char (&str)[N],
-                  size_type indexStart, size_type size) const
+      size_type indexStart, size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2213,10 +2216,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(const char (&str)[N],
-                  size_type indexStart) const
+      size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2225,7 +2228,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(co
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::find_last_not_of(const CsBasicString &str,
-                  size_type indexStart) const
+      size_type indexStart) const
 {
    size_type stringLen = this->size();
 
@@ -2311,7 +2314,7 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::rfind(CsChar c, siz
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::rfind(const T &str, size_type indexStart,
-                  size_type size) const
+      size_type size) const
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -2336,10 +2339,10 @@ typename CsBasicString<E, A>::size_type CsBasicString<E, A>::rfind(const T &str,
 template <typename E, typename A>
 template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::rfind(const char (&str)[N],
-                  size_type indexStart, size_type size) const
+      size_type indexStart, size_type size) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2375,7 +2378,7 @@ template <int N>
 typename CsBasicString<E, A>::size_type CsBasicString<E, A>::rfind(const char (&str)[N], size_type indexStart) const
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2776,7 +2779,7 @@ template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const char (&str)[N])
 {
 #if defined(Q_CC_MSVC)
- static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
+   static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
 #endif
 
    // make this safe by treating str as utf8
@@ -2838,7 +2841,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const CsB
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::insert(size_type indexStart, const CsBasicString &str,
-                  size_type srcStart, size_type size)
+      size_type srcStart, size_type size)
 {
    const_iterator iter_begin = cbegin();
    size_type i;
@@ -2900,7 +2903,7 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
 template <typename E, typename A>
 template <typename T,  typename>
 typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart, const T &str,
-                  size_type size)
+      size_type size)
 {
 #ifndef CS_STRING_ALLOW_UNSAFE
    static_assert(! std::is_same<E, E>::value, "Unsafe operations not allowed, unknown encoding for this operation");
@@ -2917,7 +2920,8 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
 
 template <typename E, typename A>
 template <int N>
-typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart, const char (&str)[N], size_type size)
+typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart, const char (&str)[N],
+      size_type size)
 {
 #if defined(Q_CC_MSVC)
  static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
@@ -2930,7 +2934,7 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterato
 template <typename E, typename A>
 template <typename Iterator>
 typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(const_iterator posStart,
-                  Iterator begin, Iterator end)
+      Iterator begin, Iterator end)
 {
    const_iterator iter = posStart;
    size_type count = 0;
@@ -2981,7 +2985,7 @@ typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type ind
 template <typename E, typename A>
 template <typename U,  typename>
 typename CsBasicString<E, A>::iterator CsBasicString<E, A>::insert(size_type indexStart, CsBasicStringView<U> str,
-                  size_type srcStart, size_type size)
+      size_type srcStart, size_type size)
 {
    static_assert(std::is_base_of<CsBasicString<E,A>, U>::value,
       "Unable to construct a CsBasicString using a CsBasicStringView, encoding E is "
@@ -3079,7 +3083,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type count, const CsBasicString &str,
-                  size_type srcStart, size_type size)
+      size_type srcStart, size_type size)
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
@@ -3117,7 +3121,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 template <typename E, typename A>
 template <class Iterator>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first1, const_iterator last1,
-                  Iterator first2, Iterator last2)
+      Iterator first2, Iterator last2)
 {
    auto iter = erase(first1, last1);
    insert(iter, first2, last2);
@@ -3128,7 +3132,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first1, const_i
 template <typename E, typename A>
 template <typename T,  typename>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type count,
-                  const T &str, size_type size)
+      const T &str, size_type size)
 {
    // str is a const char *
 
@@ -3138,7 +3142,8 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 
 template <typename E, typename A>
 template <int N>
-CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type count, const char (&str)[N], size_type size)
+CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type count, const char (&str)[N],
+      size_type size)
 {
 #if defined(Q_CC_MSVC)
  static_assert("¿"[0] == static_cast<char>(0xC2), "Compiler runtime encoding was not set to UTF-8");
@@ -3151,7 +3156,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 template <typename E, typename A>
 template <typename T,  typename>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_iterator last,
-                  const T &str, size_type size)
+      const T &str, size_type size)
 {
    // str is a const char *
 
@@ -3164,7 +3169,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 template <typename E, typename A>
 template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_iterator last,
-                  const char (&str)[N], size_type size )
+      const char (&str)[N], size_type size )
 {
    auto iter = erase(first, last);
    insert(iter, str, size);
@@ -3209,7 +3214,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 template <typename E, typename A>
 template <int N>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_iterator last,
-                  const char (&str)[N])
+      const char (&str)[N])
 {
    auto iter = erase(first, last);
    insert(iter, str);
@@ -3219,7 +3224,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type size,
-                  size_type count, CsChar c)
+      size_type count, CsChar c)
 {
    const_iterator iter_begin = cbegin();
    const_iterator iter_end;
@@ -3253,7 +3258,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 
 template <typename E, typename A>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_iterator last,
-                  size_type count, CsChar c)
+      size_type count, CsChar c)
 {
    auto iter = erase(first, last);
    insert(iter, count, c);
@@ -3264,7 +3269,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_it
 template <typename E, typename A>
 template <class T>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_type count, const T &str,
-                  size_type srcStart, size_type size)
+      size_type srcStart, size_type size)
 {
    // str is a const char *
 
@@ -3275,7 +3280,7 @@ CsBasicString<E, A> &CsBasicString<E, A>::replace(size_type indexStart, size_typ
 template <typename E, typename A>
 template <class T>
 CsBasicString<E, A> &CsBasicString<E, A>::replace(const_iterator first, const_iterator last, const T &str,
-                  size_type srcStart, size_type size)
+      size_type srcStart, size_type size)
 {
    auto iter = erase(first, last);
    insert(iter, str, srcStart, size);
@@ -3409,14 +3414,12 @@ typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::cbegin() const
 template <typename E, typename A>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::end() const
 {
-
    return CsStringIterator<E, A> (m_string.end() - 1);
 }
 
 template <typename E, typename A>
 typename CsBasicString<E, A>::const_iterator CsBasicString<E, A>::cend() const
 {
-
    return CsStringIterator<E, A> (m_string.cend() - 1);
 }
 
@@ -3554,7 +3557,7 @@ CsBasicString<E, A> operator+(CsChar c, CsBasicString<E, A> &&str)
 }
 
 template <typename E, typename A, typename T, typename = typename std::enable_if<std::is_array<T>::value &&
-                  std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
+      std::is_same<char, typename std::remove_extent<T>::type>::value>::type>
 CsBasicString<E, A> operator+(const CsBasicString<E, A> &str1, const T &str2)
 {
    CsBasicString<E, A> retval = str1;
