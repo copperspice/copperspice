@@ -22,21 +22,20 @@
 ***********************************************************************/
 
 #include <qevent.h>
+#include <qevent_p.h>
 
 #include <qcursor.h>
 #include <qdebug.h>
 #include <qgesture.h>
 #include <qmath.h>
 #include <qmimedata.h>
-#include <qplatform_integration.h>
 #include <qplatform_drag.h>
+#include <qplatform_integration.h>
 #include <qwidget.h>
 
 #include <qapplication_p.h>
 #include <qdebug_p.h>
-#include <qevent_p.h>
 #include <qdnd_p.h>
-#include <qevent_p.h>
 
 QEnterEvent::QEnterEvent(const QPointF &localPos, const QPointF &windowPos, const QPointF &screenPos)
    : QEvent(QEvent::Enter), l(localPos), w(windowPos), s(screenPos)

@@ -29,6 +29,7 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/animation
    ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
    ${CMAKE_CURRENT_SOURCE_DIR}/effects
+   ${CMAKE_CURRENT_SOURCE_DIR}/events
    ${CMAKE_CURRENT_SOURCE_DIR}/graphicsview
    ${CMAKE_CURRENT_SOURCE_DIR}/image
    ${CMAKE_CURRENT_SOURCE_DIR}/itemviews
@@ -69,6 +70,7 @@ include(accessible/accessible.cmake)
 include(animation/animation.cmake)
 include(dialogs/dialogs.cmake)
 include(effects/effects.cmake)
+include(events/events.cmake)
 include(graphicsview/graphicsview.cmake)
 include(image/image.cmake)
 include(itemviews/itemviews.cmake)

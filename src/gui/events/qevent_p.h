@@ -24,9 +24,9 @@
 #ifndef QEVENT_P_H
 #define QEVENT_P_H
 
+#include <qevent.h>
 #include <qglobal.h>
 #include <qurl.h>
-#include <qevent.h>
 
 class QTouchEventTouchPointPrivate
 {

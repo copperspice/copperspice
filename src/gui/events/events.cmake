@@ -1,0 +1,85 @@
+list(APPEND GUI_PUBLIC_INCLUDES
+   QActionEvent
+   QClipboardEvent
+   QCloseEvent
+   QContextMenuEvent
+   QDragEnterEvent
+   QDragLeaveEvent
+   QDragMoveEvent
+   QDragResponseEvent
+   QDropEvent
+   QEvent
+   QFileOpenEvent
+   QFocusEvent
+   QGestureEvent
+   QHelpEvent
+   QHideEvent
+   QHoverEvent
+   QIconDragEvent
+   QInputEvent
+   QInputMethodEvent
+   QKeyEvent
+   QMenubarUpdatedEvent
+   QMouseEvent
+   QMoveEvent
+   QPaintEvent
+   QResizeEvent
+   QShortcutEvent
+   QShowEvent
+   QStatusTipEvent
+   QTabletEvent
+   QToolBarChangeEvent
+   QTouchEvent
+   QUpdateLaterEvent
+   QWhatsThisClickedEvent
+   QWheelEvent
+   QWindowStateChangeEvent
+)
+
+list(APPEND GUI_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qactionevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qclipboardevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qcloseevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qcontextmenuevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qdragenterevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qdragleaveevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qdragmoveevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qdragresponseevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qdropevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qfileopenevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qfocusevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qgestureevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qhelpevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qhideevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qhoverevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qicondragevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qinputevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qinputmethodevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qkeyevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qmenubarupdatedevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qmouseevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qmoveevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qpaintevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qresizeevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qshortcutevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qshowevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qstatustipevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qtabletevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qtevents.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qtoolbarchangeevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qtouchevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qupdatelaterevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qwhatsthisclickedevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qwheelevent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qwindowstatechangeevent.h
+)
+
+list(APPEND GUI_PRIVATE_INCLUDES
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qevent_p.h
+)
+
+target_sources(CsGui
+   PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}/events/qevent.cpp
+)
