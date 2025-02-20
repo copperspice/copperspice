@@ -95,12 +95,12 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QSt
    const QSize minSize = layout.minimumSize();
 
    qout << indent << "QDockAreaLayoutInfo: "
-      << layout.rect.left() << ','
-      << layout.rect.top() << ' '
-      << layout.rect.width() << 'x'
-      << layout.rect.height()
+      << layout.m_dockAreaInfoRect.left() << ','
+      << layout.m_dockAreaInfoRect.top() << ' '
+      << layout.m_dockAreaInfoRect.width() << 'x'
+      << layout.m_dockAreaInfoRect.height()
       << " min size: " << minSize.width() << ',' << minSize.height()
-      << " orient:"  << layout.o
+      << " orient:"  << layout.m_dockAreaOrientation
       << " tabbed:"  << layout.tabbed
       << " tbshape:" << layout.tabBarShape << '\n';
 
@@ -116,19 +116,22 @@ static void dumpLayout(QTextStream &qout, const QDockAreaLayoutInfo &layout, QSt
 static void dumpLayout(QTextStream &qout, const QDockAreaLayout &layout)
 {
    qout << "QDockAreaLayout: "
-      << layout.rect.left() << ','
-      << layout.rect.top() << ' '
-      << layout.rect.width() << 'x'
-      << layout.rect.height() << '\n';
+      << layout.m_dockAreaRect.left() << ','
+      << layout.m_dockAreaRect.top() << ' '
+      << layout.m_dockAreaRect.width() << 'x'
+      << layout.m_dockAreaRect.height() << '\n';
 
    qout << "TopDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::TopDock],    "  ");
+   dumpLayout(qout, layout.m_docks[QInternal::TopDock],    "  ");
+
    qout << "LeftDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::LeftDock],   "  ");
+   dumpLayout(qout, layout.m_docks[QInternal::LeftDock],   "  ");
+
    qout << "RightDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::RightDock],  "  ");
+   dumpLayout(qout, layout.m_docks[QInternal::RightDock],  "  ");
+
    qout << "BottomDockArea:\n";
-   dumpLayout(qout, layout.docks[QInternal::BottomDock], "  ");
+   dumpLayout(qout, layout.m_docks[QInternal::BottomDock], "  ");
 }
 
 QDebug operator<<(QDebug debug, const QDockAreaLayout &layout)
@@ -206,7 +209,7 @@ class QDockWidgetGroupLayout : public QLayout
 
       int fw = frameWidth();
       li->reparentWidgets(parentWidget());
-      li->rect = r.adjusted(fw, fw, -fw, -fw);
+      li->m_dockAreaInfoRect = r.adjusted(fw, fw, -fw, -fw);
       li->fitItems();
       li->apply(false);
       resizer->setActive(QWidgetResizeHandler::Resize, !nativeWindowDeco());
@@ -487,7 +490,7 @@ void QMainWindowLayoutState::fitLayout()
 #endif
 
 #ifndef QT_NO_DOCKWIDGET
-   dockAreaLayout.rect = r;
+   dockAreaLayout.m_dockAreaRect = r;
    dockAreaLayout.fitLayout();
 #else
    centralWidgetRect = r;
@@ -1566,7 +1569,7 @@ void QMainWindowLayout::updateTabBarShapes()
       QTabBar::Shape shape = verticalTabsEnabled ? vertical[i] : QTabBar::RoundedSouth;
 #endif
 
-      layout.docks[i].setTabBarShape(shape);
+      layout.m_docks[i].setTabBarShape(shape);
    }
 }
 #endif // QT_NO_TABBAR
@@ -2475,7 +2478,7 @@ QLayoutItem *QMainWindowLayout::unplug(QWidget *widget, bool group)
             delete parentItem.subinfo;
             parentItem.subinfo = nullptr;
 
-            floatingTabs->setGeometry(info->rect.translated(parentWidget()->pos()));
+            floatingTabs->setGeometry(info->m_dockAreaInfoRect.translated(parentWidget()->pos()));
             floatingTabs->show();
             floatingTabs->raise();
             item = new QDockWidgetGroupWindowItem(floatingTabs);
@@ -2709,7 +2712,7 @@ void QMainWindowLayout::applyState(QMainWindowLayoutState &newState, bool animat
    }
 
    for (int i = 0; i < QInternal::DockCount; ++i) {
-      newState.dockAreaLayout.docks[i].reparentWidgets(parentWidget());
+      newState.dockAreaLayout.m_docks[i].reparentWidgets(parentWidget());
    }
 
 #endif // QT_NO_TABBAR

@@ -90,8 +90,9 @@ class QToolBarLayout : public QLayout
 
  private:
    QList<QToolBarItem *> items;
-   QSize hint, minSize;
    bool dirty, expanding, empty, expandFlag;
+   QSize m_toolBarLayoutHint;
+   QSize minSize;
    QVector<QLayoutStruct> geomArray;
    QRect handRect;
    QToolBarExtension *extension;

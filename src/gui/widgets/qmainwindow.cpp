@@ -790,7 +790,7 @@ QCursor QMainWindowPrivate::separatorCursor(const QList<int> &path) const
 
    // it is a splitter inside a dock area, separating two dock widgets
 
-   return info->o == Qt::Horizontal
+   return info->m_dockAreaOrientation == Qt::Horizontal
       ? Qt::SplitHCursor : Qt::SplitVCursor;
 }
 

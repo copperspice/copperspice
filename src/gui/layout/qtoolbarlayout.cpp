@@ -282,9 +282,10 @@ void QToolBarLayout::updateGeomArray() const
    Qt::Orientation o = tb->orientation();
 
    that->minSize = QSize(0, 0);
-   that->hint = QSize(0, 0);
+   that->m_toolBarLayoutHint = QSize(0, 0);
+
    rperp(o, that->minSize) = style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb);
-   rperp(o, that->hint) = style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb);
+   rperp(o, that->m_toolBarLayoutHint) = style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb);
 
    that->expanding = false;
    that->empty = false;
@@ -321,11 +322,11 @@ void QToolBarLayout::updateGeomArray() const
          rperp(o, that->minSize) = qMax(s, perp(o, min));
 
          // only add spacing before item, not before the first one
-         rpick(o, that->hint) += (count == 0 ? 0 : spacing) + pick(o, hint);
+         rpick(o, that->m_toolBarLayoutHint) += (count == 0 ? 0 : spacing) + pick(o, hint);
 
+         s = perp(o, that->m_toolBarLayoutHint);
+         rperp(o, that->m_toolBarLayoutHint) = qMax(s, perp(o, hint));
 
-         s = perp(o, that->hint);
-         rperp(o, that->hint) = qMax(s, perp(o, hint));
          ++count;
       }
 
@@ -353,8 +354,8 @@ void QToolBarLayout::updateGeomArray() const
       rpick(o, that->minSize) += spacing + extensionExtent;
    }
 
-   rpick(o, that->hint) += handleExtent;
-   that->hint += QSize(2 * margin, 2 * margin);
+   rpick(o, that->m_toolBarLayoutHint) += handleExtent;
+   that->m_toolBarLayoutHint += QSize(2 * margin, 2 * margin);
    that->dirty = false;
 }
 
@@ -786,7 +787,8 @@ QSize QToolBarLayout::sizeHint() const
    if (dirty) {
       updateGeomArray();
    }
-   return hint;
+
+   return m_toolBarLayoutHint;
 }
 
 QToolBarItem *QToolBarLayout::createItem(QAction *action)

@@ -112,8 +112,9 @@ class QDockAreaLayoutInfo
    };
 
    QDockAreaLayoutInfo();
-   QDockAreaLayoutInfo(const int *_sep, QInternal::DockPosition _dockPos, Qt::Orientation _o,
-      int tbhape, QMainWindow *window);
+
+   QDockAreaLayoutInfo(const int *sep, QInternal::DockPosition dockPos, Qt::Orientation orientation,
+         int tbhape, QMainWindow *window);
 
    QSize minimumSize() const;
    QSize maximumSize() const;
@@ -167,12 +168,7 @@ class QDockAreaLayoutInfo
 
    QMainWindowLayout *mainWindowLayout() const;
 
-   const int *sep;
    mutable QVector<QWidget *> separatorWidgets;
-   QInternal::DockPosition dockPos;
-   Qt::Orientation o;
-   QRect rect;
-   QMainWindow *mainWindow;
    QList<QDockAreaLayoutItem> item_list;
 
 #ifndef QT_NO_TABBAR
@@ -199,6 +195,15 @@ class QDockAreaLayoutInfo
    int tabIndexToListIndex(int) const;
    void moveTab(int from, int to);
 #endif
+
+   const int *m_dockAreaSep;
+   QInternal::DockPosition m_dockPos;
+
+   Qt::Orientation m_dockAreaOrientation;
+
+   QMainWindow *mainWindow;
+
+   QRect m_dockAreaInfoRect;
 };
 
 class QDockAreaLayout
@@ -213,12 +218,10 @@ class QDockAreaLayout
    };
 
    Qt::DockWidgetArea corners[4];      // use a Qt::Corner for indexing
-   QRect rect;
    QLayoutItem *centralWidgetItem;
    QMainWindow *mainWindow;
    QRect centralWidgetRect;
    QDockAreaLayout(QMainWindow *win);
-   QDockAreaLayoutInfo docks[4];
    int sep;                            // separator extent
 
    // determines if we should use the sizehint for the dock areas
@@ -295,6 +298,8 @@ class QDockAreaLayout
 #endif
 
    void styleChangedEvent();
+   QRect m_dockAreaRect;
+   QDockAreaLayoutInfo m_docks[4];
 };
 
 #endif // QT_NO_QDOCKWIDGET
